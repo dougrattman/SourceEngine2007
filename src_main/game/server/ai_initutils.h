@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		AI Utility classes for building the initial AI Networks
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_INITUTILS_H
 #define AI_INITUTILS_H
@@ -34,16 +34,16 @@ struct HintNodeData
 	string_t	strEntityName;
 	Vector		vecPosition;
 	short		nHintType;
-	int			nNodeID;
+	int nNodeID;
 	string_t	strGroup;
-	int			iDisabled;
+	int iDisabled;
 	string_t	iszActivityName;
-	int			nTargetWCNodeID;
+	int nTargetWCNodeID;
 	HintIgnoreFacing_t fIgnoreFacing;
 	NPC_STATE	minState;
 	NPC_STATE	maxState;
 
-	int			nWCNodeID;			// Node ID assigned by worldcraft (not same as engine!)
+	int nWCNodeID; // Node ID assigned by worldcraft (not same as engine!)
 
 	DECLARE_SIMPLE_DATADESC();
 };
@@ -62,14 +62,14 @@ class CNodeEnt : public CServerOnlyPointEntity
 public:
 	virtual void SetOwnerEntity( CBaseEntity* pOwner ) { BaseClass::SetOwnerEntity( NULL ); }
 
-	static int			m_nNodeCount;
+	static int m_nNodeCount;
 
 	void	Spawn( void );
 	int		Spawn( const char *pMapData );
 
 	DECLARE_DATADESC();
 
-	CNodeEnt(void);
+	CNodeEnt();
 
 public:
 	HintNodeData		m_NodeData;
@@ -85,20 +85,20 @@ class CAI_TestHull : public CAI_BaseNPC
 {
 	DECLARE_CLASS( CAI_TestHull, CAI_BaseNPC );
 private:
-	static CAI_TestHull*	pTestHull;								// Hull for testing connectivity
+	static CAI_TestHull*	pTestHull;  		// Hull for testing connectivity
 
 public:
-	static CAI_TestHull*	GetTestHull(void);						// Get the test hull
-	static void				ReturnTestHull(void);					// Return the test hull
+	static CAI_TestHull*	GetTestHull();  // Get the test hull
+	static void 	ReturnTestHull(); 		// Return the test hull
 
-	bool					bInUse;
-	virtual void			Precache();
-	void					Spawn(void);
-	virtual int				ObjectCaps( void ) { return BaseClass::ObjectCaps() & ~(FCAP_ACROSS_TRANSITION|FCAP_DONT_SAVE); }
+	bool 		bInUse;
+	virtual void Precache();
+	void 		Spawn();
+	virtual int 	ObjectCaps( void ) { return BaseClass::ObjectCaps() & ~(FCAP_ACROSS_TRANSITION|FCAP_DONT_SAVE); }
 
-	virtual bool			IsJumpLegal(const Vector &startPos, const Vector &apex, const Vector &endPos) const;
+	virtual bool IsJumpLegal(const Vector &startPos, const Vector &apex, const Vector &endPos) const;
 
-	~CAI_TestHull(void);
+	~CAI_TestHull();
 };
 
 

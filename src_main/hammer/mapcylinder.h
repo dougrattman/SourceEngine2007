@@ -1,6 +1,7 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved.
+//============//
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -12,87 +13,88 @@
 #pragma once
 #endif
 
-
 #include "MapHelper.h"
 
-
 class CRender3D;
+class CHelperInfo;
 
+#define MAX_KEYNAME_SIZE 32
 
-#define MAX_KEYNAME_SIZE	32
+class CMapCylinder : public CMapHelper {
+ public:
+  DECLARE_MAPCLASS(CMapCylinder, CMapHelper)
 
+  //
+  // Factory for building from a list of string parameters.
+  //
+  static CMapClass *Create(CHelperInfo *pInfo, CMapEntity *pParent);
 
-class CMapCylinder : public CMapHelper
-{
-	public:
+  //
+  // Construction/destruction:
+  //
+  CMapCylinder(void);
+  CMapCylinder(const char *pszStartValueKey, const char *pszStartKey,
+               const char *pszStartRadiusKey, const char *pszEndValueKey,
+               const char *pszEndKey, const char *pszEndRadiusKey);
+  ~CMapCylinder(void);
 
-		DECLARE_MAPCLASS(CMapCylinder, CMapHelper)
+  void Initialize(void);
 
-		//
-		// Factory for building from a list of string parameters.
-		//
-		static CMapClass *Create(CHelperInfo *pInfo, CMapEntity *pParent);
+  void CalcBounds(BOOL bFullUpdate = FALSE);
 
-		//
-		// Construction/destruction:
-		//
-		CMapCylinder(void);
-		CMapCylinder(const char *pszStartValueKey, const char *pszStartKey, const char *pszStartRadiusKey,
-			const char *pszEndValueKey, const char *pszEndKey, const char *pszEndRadiusKey );
-		~CMapCylinder(void);
+  virtual CMapClass *Copy(bool bUpdateDependencies);
+  virtual CMapClass *CopyFrom(CMapClass *pFrom, bool bUpdateDependencies);
 
-		void Initialize(void);
+  void Render3D(CRender3D *pRender);
+  void Render2D(CRender2D *pRender);
 
-		void CalcBounds(BOOL bFullUpdate = FALSE);
+  int SerializeRMF(std::fstream &File, BOOL bRMF);
+  int SerializeMAP(std::fstream &File, BOOL bRMF);
 
-		virtual CMapClass *Copy(bool bUpdateDependencies);
-		virtual CMapClass *CopyFrom(CMapClass *pFrom, bool bUpdateDependencies);
+  bool IsVisualElement(void) { return (true); }
+  bool IsCulledByCordon(const Vector &vecMins, const Vector &vecMaxs) {
+    return false;
+  }  // We don't hide unless our parent hides.
 
-		void Render3D(CRender3D *pRender);
-		void Render2D(CRender2D *pRender);
+  virtual CMapClass *PrepareSelection(SelectMode_t eSelectMode);
 
-		int SerializeRMF(std::fstream &File, BOOL bRMF);
-		int SerializeMAP(std::fstream &File, BOOL bRMF);
+  const char *GetDescription() { return ("Cylinder helper"); }
 
-		bool IsVisualElement(void) { return(true); }
-		bool IsCulledByCordon(const Vector &vecMins, const Vector &vecMaxs) { return false; } // We don't hide unless our parent hides.
+  void OnAddToWorld(CMapWorld *pWorld);
+  void OnNotifyDependent(CMapClass *pObject, Notify_Dependent_t eNotifyType);
+  void OnParentKeyChanged(const char *key, const char *value);
+  void OnRemoveFromWorld(CMapWorld *pWorld, bool bNotifyChildren);
 
-		virtual CMapClass *PrepareSelection(SelectMode_t eSelectMode);
-		
-		const char* GetDescription() { return("Cylinder helper"); }
+  virtual void UpdateDependencies(CMapWorld *pWorld, CMapClass *pObject);
 
-		void OnAddToWorld(CMapWorld *pWorld);
-		void OnNotifyDependent(CMapClass *pObject, Notify_Dependent_t eNotifyType);
-		void OnParentKeyChanged( const char* key, const char* value );
-		void OnRemoveFromWorld(CMapWorld *pWorld, bool bNotifyChildren);
+ protected:
+  void BuildCylinder(void);
 
-		virtual void UpdateDependencies(CMapWorld *pWorld, CMapClass *pObject);
+  // Computes the vertices of the cylinder
+  void ComputeCylinderPoints(int nCount, Vector *pStartVerts,
+                             Vector *pEndVerts);
 
-	protected:
-		void BuildCylinder(void);
+  // How do we draw it?
+  bool ShouldDrawAsLine();
 
-		// Computes the vertices of the cylinder
-		void ComputeCylinderPoints( int nCount, Vector *pStartVerts, Vector *pEndVerts );
+  // Implements CMapAtom transformation functions.
+  void DoTransform(const VMatrix &matrix);
 
-		// How do we draw it?
-		bool ShouldDrawAsLine();
+  char m_szStartValueKey[80];  // The key in our parent entity to look at for
+                               // our start target.
+  char m_szStartKey[80];  // The value in our parent entity to look at for our
+                          // start target.
+  char m_szStartRadiusKey[80];  // The key in our parent entity to look at for
+                                // the cylinder Radius
 
-		// Implements CMapAtom transformation functions.
-		void DoTransform(const VMatrix &matrix);
-		
-		char m_szStartValueKey[80];		// The key in our parent entity to look at for our start target.
-		char m_szStartKey[80];			// The value in our parent entity to look at for our start target.
-		char m_szStartRadiusKey[80];		// The key in our parent entity to look at for the cylinder Radius
+  char m_szEndValueKey[80];   //
+  char m_szEndKey[80];        //
+  char m_szEndRadiusKey[80];  //
 
-		char m_szEndValueKey[80];		// 
-		char m_szEndKey[80];			// 
-		char m_szEndRadiusKey[80];		// 
-
-		CMapEntity *m_pStartEntity;		// Our start target.
-		CMapEntity *m_pEndEntity;		// Our end target.
-		float	m_flStartRadius;
-		float	m_flEndRadius;
+  CMapEntity *m_pStartEntity;  // Our start target.
+  CMapEntity *m_pEndEntity;    // Our end target.
+  float m_flStartRadius;
+  float m_flEndRadius;
 };
 
-
-#endif // MAPCYLINDER_H
+#endif  // MAPCYLINDER_H

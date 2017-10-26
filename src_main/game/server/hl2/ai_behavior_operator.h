@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Operate consoles/machinery in the world.
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #ifndef AI_BEHAVIOR_OPERATOR_H
@@ -65,8 +65,8 @@ public:
 	DECLARE_DATADESC();
 
 protected:
-	int			m_iState;
-	int			m_iMoveTo;
+	int m_iState;
+	int m_iMoveTo;
 	string_t	m_iszContextTarget;
 };
 

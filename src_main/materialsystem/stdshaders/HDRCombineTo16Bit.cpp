@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include "hdrcombineto16bit_ps20.inc"
 #include "hdrcombineto16bit_ps20b.inc"
 #include "hdrcombineto16bit_vs20.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 BEGIN_VS_SHADER_FLAGS( HDRCombineTo16Bit, "Help for HDRCombineTo16Bit", SHADER_NOT_EDITABLE )
 	BEGIN_SHADER_PARAMS

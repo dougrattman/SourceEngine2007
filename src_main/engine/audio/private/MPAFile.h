@@ -1,6 +1,7 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: Uses mp3 code from:  http://www.codeproject.com/audio/MPEGAudioInfo.asp
+// Purpose: Uses mp3 code from:
+// http://www.codeproject.com/audio/MPEGAudioInfo.asp
 //
 // There don't appear to be any licensing restrictions for using this code:
 //
@@ -18,7 +19,7 @@ This tool was written as an example on how to use the classes:
 CMPAFile, CMPAHeader, CVBRHeader and CMPAException.
 
 The article MPEG Audio Frame Header on Sourceproject
-[http://www.codeproject.com/audio/MPEGAudioInfo.asp] 
+[http://www.codeproject.com/audio/MPEGAudioInfo.asp]
 provides additional information about these classes and the frame header
 in general.
 
@@ -29,97 +30,90 @@ statically linked.
 
 #ifndef MPAFILE_H
 #define MPAFILE_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#pragma once
-
-#include "vbrheader.h"
-#include "mpaheader.h"
 #include "FileSystem.h"
+#include "mpaheader.h"
+#include "vbrheader.h"
 
 // exception class
-class CMPAException
-{
-public:
-	
-	enum ErrorIDs
-	{
-		ErrOpenFile,
-		ErrSetPosition,
-		ErrReadFile,
-		EndOfBuffer,
-		NoVBRHeader,
-		IncompleteVBRHeader,
-		NoFrameInTolerance,
-		NoFrame
-	};
+class CMPAException {
+ public:
+  enum ErrorIDs {
+    ErrOpenFile,
+    ErrSetPosition,
+    ErrReadFile,
+    EndOfBuffer,
+    NoVBRHeader,
+    IncompleteVBRHeader,
+    NoFrameInTolerance,
+    NoFrame
+  };
 
-	CMPAException(ErrorIDs ErrorID, LPCTSTR szFile, LPCTSTR szFunction = NULL, bool bGetLastError=false );
-	// copy constructor (necessary because of LPSTR members)
-	CMPAException(const CMPAException& Source);
-	~CMPAException(void);
+  CMPAException(ErrorIDs ErrorID, const char* szFile,
+                const char* szFunction = nullptr, bool bGetLastError = false);
+  // copy constructor (necessary because of LPSTR members)
+  CMPAException(const CMPAException& Source);
+  ~CMPAException();
 
-	ErrorIDs GetErrorID() { return m_ErrorID; }
+  ErrorIDs GetErrorID() { return m_ErrorID; }
 
-	void ShowError();
+  void ShowError();
 
-private:
-	ErrorIDs m_ErrorID;
-	bool m_bGetLastError;
-	LPTSTR m_szFunction;
-	LPTSTR m_szFile;
+ private:
+  ErrorIDs m_ErrorID;
+  bool m_bGetLastError;
+  const char* m_szFunction;
+  const char* m_szFile;
 };
 
+class CMPAFile {
+ public:
+  CMPAFile(const char* szFile, DWORD dwFileOffset,
+           FileHandle_t hFile = FILESYSTEM_INVALID_HANDLE);
+  ~CMPAFile();
 
-class CMPAFile
-{
-public:
-	CMPAFile(LPCTSTR szFile, DWORD dwFileOffset, FileHandle_t hFile = FILESYSTEM_INVALID_HANDLE );
-	~CMPAFile(void);
+  DWORD ExtractBytes(DWORD& dwOffset, DWORD dwNumBytes,
+                     bool bMoveOffset = true);
+  const char* GetFilename() const { return m_szFile; };
 
-	DWORD CMPAFile::ExtractBytes( DWORD& dwOffset, DWORD dwNumBytes, bool bMoveOffset = true );
-	LPCTSTR GetFilename() const { return m_szFile; };
+  bool GetNextFrame();
+  bool GetPrevFrame();
+  bool GetFirstFrame();
+  bool GetLastFrame();
 
-	bool CMPAFile::GetNextFrame();
-	bool CMPAFile::GetPrevFrame();
-	bool CMPAFile::GetFirstFrame();
-	bool CMPAFile::GetLastFrame();
+ private:
+  static const DWORD m_dwInitBufferSize;
 
-private:
-	static const DWORD m_dwInitBufferSize;
+  // methods for file access
+  void Open(const char* szFilename);
+  void SetPosition(int offset);
+  DWORD Read(void* pData, DWORD dwSize, DWORD dwOffset);
 
-	// methods for file access
-	void Open( LPCTSTR szFilename );
-	void SetPosition( int offset );
-	DWORD Read( LPVOID pData, DWORD dwSize, DWORD dwOffset );
+  void FillBuffer(DWORD dwOffsetToRead);
 
-	void FillBuffer( DWORD dwOffsetToRead );
+  static DWORD m_dwBufferSizes[MAXTIMESREAD];
 
-	static DWORD m_dwBufferSizes[MAXTIMESREAD];
+  // concerning file itself
+  FileHandle_t m_hFile;
+  char* m_szFile;
+  bool m_bMustReleaseFile;
 
-	// concerning file itself
-	FileHandle_t m_hFile;
-	LPTSTR m_szFile;
-	bool m_bMustReleaseFile;
+ public:
+  DWORD m_dwBegin;  // offset of first MPEG Audio frame
+  DWORD m_dwEnd;    // offset of last MPEG Audio frame (estimated)
+  bool m_bVBRFile;
 
-public:	
-	DWORD m_dwBegin;	// offset of first MPEG Audio frame
-	DWORD m_dwEnd;		// offset of last MPEG Audio frame (estimated)
-	bool m_bVBRFile;
+  DWORD m_dwBytesPerSec;
 
-	DWORD m_dwBytesPerSec;
+  CMPAHeader* m_pMPAHeader;
+  DWORD m_dwFrameNo;
 
-	CMPAHeader* m_pMPAHeader;
-	DWORD m_dwFrameNo;
+  CVBRHeader* m_pVBRHeader;  // XING or VBRI
 
-	CVBRHeader* m_pVBRHeader;		// XING or VBRI
-
-	// concerning read-buffer
-	DWORD m_dwNumTimesRead;
-	BYTE* m_pBuffer;
-	DWORD m_dwBufferSize;
+  // concerning read-buffer
+  DWORD m_dwNumTimesRead;
+  BYTE* m_pBuffer;
+  DWORD m_dwBufferSize;
 };
 
-#endif // MPAFILE_H
+#endif  // MPAFILE_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VARIANT_T_H
 #define VARIANT_T_H
@@ -41,13 +41,13 @@ public:
 	// constructor
 	variant_t() : fieldType(FIELD_VOID), iVal(0) {}
 
-	inline bool Bool( void ) const						{ return( fieldType == FIELD_BOOLEAN ) ? bVal : false; }
-	inline const char *String( void ) const				{ return( fieldType == FIELD_STRING ) ? STRING(iszVal) : ToString(); }
-	inline string_t StringID( void ) const				{ return( fieldType == FIELD_STRING ) ? iszVal : NULL_STRING; }
-	inline int Int( void ) const						{ return( fieldType == FIELD_INTEGER ) ? iVal : 0; }
-	inline float Float( void ) const					{ return( fieldType == FIELD_FLOAT ) ? flVal : 0; }
+	inline bool Bool( void ) const  { return( fieldType == FIELD_BOOLEAN ) ? bVal : false; }
+	inline const char *String( void ) const 	{ return( fieldType == FIELD_STRING ) ? STRING(iszVal) : ToString(); }
+	inline string_t StringID( void ) const 	{ return( fieldType == FIELD_STRING ) ? iszVal : NULL_STRING; }
+	inline int Int( void ) const  { return( fieldType == FIELD_INTEGER ) ? iVal : 0; }
+	inline float Float( void ) const 		{ return( fieldType == FIELD_FLOAT ) ? flVal : 0; }
 	inline const CHandle<CBaseEntity> &Entity(void) const;
-	inline color32 Color32(void) const					{ return rgbaVal; }
+	inline color32 Color32(void) const 		{ return rgbaVal; }
 	inline void Vector3D(Vector &vec) const;
 
 	fieldtype_t FieldType( void ) { return fieldType; }

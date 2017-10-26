@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for object upgrading objects
 //
-//=============================================================================//
+
 
 #ifndef TF_OBJ_BASEUPGRADE_H
 #define TF_OBJ_BASEUPGRADE_H
@@ -31,7 +31,7 @@ public:
 	CBaseObjectUpgrade();
 
 	virtual void	Spawn( void );
-	virtual bool	IsAnUpgrade( void )			{ return true; }
+	virtual bool	IsAnUpgrade( void ) { return true; }
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
 
 private:

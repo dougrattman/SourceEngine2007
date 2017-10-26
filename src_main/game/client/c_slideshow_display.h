@@ -1,20 +1,20 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef C_SLIDESHOW_DISPLAY_H
 #define C_SLIDESHOW_DISPLAY_H
 
 #include "cbase.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 
 struct SlideMaterialList_t
 {
-	char				szSlideKeyword[64];
+	char 	szSlideKeyword[64];
 	CUtlVector<int>		iSlideMaterials;
 	CUtlVector<int>		iSlideIndex;
 };
@@ -56,9 +56,9 @@ private:
 	char	m_szSlideshowDirectory[ 128 ];
 
 	CUtlVector<SlideMaterialList_t*>	m_SlideMaterialLists;
-	unsigned char						m_chCurrentSlideLists[ 16 ];
-	int									m_iCurrentMaterialIndex;
-	int									m_iCurrentSlideIndex;
+	unsigned char  m_chCurrentSlideLists[ 16 ];
+	int   m_iCurrentMaterialIndex;
+	int   m_iCurrentSlideIndex;
 
 	float	m_fMinSlideTime;
 	float	m_fMaxSlideTime;

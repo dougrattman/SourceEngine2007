@@ -1,15 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 /*
-	profiling.h
+        profiling.h
 
-	This is a way to pass defines to the .s files
+        This is a way to pass defines to the .s files
 
-	All files that need to do special stuff for profiling should include this.
-	This acts as the switch, rather than a project define
+        All files that need to do special stuff for profiling should include
+   this. This acts as the switch, rather than a project define
 */

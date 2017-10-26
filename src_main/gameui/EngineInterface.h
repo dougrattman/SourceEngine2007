@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Includes all the headers/declarations necessary to access the
-//			engine interface
+// engine interface
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ENGINEINTERFACE_H
 #define ENGINEINTERFACE_H

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_SPOTLIGHT_H
 #define AI_SPOTLIGHT_H
@@ -41,17 +41,17 @@ public:
 
 	// Create, destroy the spotlight
 	void SpotlightCreate( int nAttachment, const Vector &vecInitialDir );
-	void SpotlightDestroy(void);
+	void SpotlightDestroy();
 
 	// Controls the spotlight target position + direction
 	void SetSpotlightTargetPos( const Vector &vSpotlightTargetPos );
 	void SetSpotlightTargetDirection( const Vector &vSpotlightTargetDir );
 
 	// Updates the spotlight. Call every frame!
-	void Update(void);
+	void Update();
 
 private:
-	void Precache(void);
+	void Precache();
 	void CreateSpotlightEntities( void );
 	void UpdateSpotlightDirection( void );
 	void UpdateSpotlightEndpoint( void );
@@ -66,14 +66,14 @@ private:
 	CHandle<CBeam>	m_hSpotlight;
 	CHandle<CSpotlightEnd>	m_hSpotlightTarget;
 
-	Vector			m_vSpotlightTargetPos;
-	Vector			m_vSpotlightDir;
-	float			m_flSpotlightCurLength;
-	float			m_flSpotlightMaxLength;
-	float			m_flConstraintAngle;
-	int				m_nHaloSprite;
-	int				m_nSpotlightAttachment;
-	int				m_nFlags;
+	Vector m_vSpotlightTargetPos;
+	Vector m_vSpotlightDir;
+	float m_flSpotlightCurLength;
+	float m_flSpotlightMaxLength;
+	float m_flConstraintAngle;
+	int 	m_nHaloSprite;
+	int 	m_nSpotlightAttachment;
+	int 	m_nFlags;
 	Quaternion		m_vAngularVelocity;
 };
 

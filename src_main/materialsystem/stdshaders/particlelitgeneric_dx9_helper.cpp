@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include "basevsshader.h"
 #include "particlelit_generic_vs30.inc"
 #include "particlelit_generic_ps30.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "smokegrenade_projectile.h"
 #include "sendproxy.h"
 #include "particle_smokegrenade.h"
 #include "cs_player.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "bot_manager.h"
 
 #define GRENADE_MODEL "models/Weapons/w_eq_smokegrenade_thrown.mdl"

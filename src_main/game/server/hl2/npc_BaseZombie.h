@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef NPC_BASEZOMBIE_H
 #define NPC_BASEZOMBIE_H
@@ -41,7 +41,7 @@ extern int AE_ZOMBIE_POUND;
 #define ZOMBIE_BLOOD_LEFT_HAND		0
 #define ZOMBIE_BLOOD_RIGHT_HAND		1
 #define ZOMBIE_BLOOD_BOTH_HANDS		2
-#define ZOMBIE_BLOOD_BITE			3
+#define ZOMBIE_BLOOD_BITE 3
 	
 
 enum HeadcrabRelease_t
@@ -199,7 +199,7 @@ public:
 	virtual bool CanSwatPhysicsObjects( void ) { return true; }
 
 	// Returns whether we must be very near our enemy to attack them.
-	virtual bool MustCloseToAttack(void) { return true; }
+	virtual bool MustCloseToAttack() { return true; }
 
 	virtual CBaseEntity *ClawAttack( float flDist, int iDamage, QAngle &qaViewPunch, Vector &vecVelocityPunch, int BloodOrigin );
 
@@ -245,17 +245,17 @@ protected:
 
 	CSoundPatch	*m_pMoanSound;
 
-	bool	m_fIsTorso;			// is this is a half-zombie?
+	bool	m_fIsTorso; // is this is a half-zombie?
 	bool	m_fIsHeadless;		// is this zombie headless
 
 	float	m_flNextFlinch;
 
-	bool m_bHeadShot;			// Used to determine the survival of our crab beyond our death.
+	bool m_bHeadShot; // Used to determine the survival of our crab beyond our death.
 
 	//
 	// Zombies catch on fire if they take too much burn damage in a given time period.
 	//
-	float	m_flBurnDamage;				// Keeps track of how much burn damage we've incurred in the last few seconds.
+	float	m_flBurnDamage; 	// Keeps track of how much burn damage we've incurred in the last few seconds.
 	float	m_flBurnDamageResetTime;	// Time at which we reset the burn damage.
 
 	EHANDLE m_hPhysicsEnt;

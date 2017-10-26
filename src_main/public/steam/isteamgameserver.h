@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: interface to steam for game servers
 //
@@ -27,17 +27,17 @@ public:
 	virtual CSteamID GetSteamID() = 0;
 
 	// user authentication functions
-	virtual bool GSGetSteam2GetEncryptionKeyToSendToNewClient( void *pvEncryptionKey, uint32 *pcbEncryptionKey, uint32 cbMaxEncryptionKey ) = 0;
+	virtual bool GSGetSteam2GetEncryptionKeyToSendToNewClient( void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey ) = 0;
 	// the IP address and port should be in host order, i.e 127.0.0.1 == 0x7f000001
-	virtual bool GSSendUserConnect(  uint32 unUserID, uint32 unIPPublic, uint16 usPort, const void *pvCookie, uint32 cubCookie ) = 0; // Both Steam2 and Steam3 authentication
+	virtual bool GSSendUserConnect(  uint32_t unUserID, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie ) = 0; // Both Steam2 and Steam3 authentication
 	// the IP address should be in host order, i.e 127.0.0.1 == 0x7f000001
-	virtual bool GSRemoveUserConnect( uint32 unUserID ) = 0;
+	virtual bool GSRemoveUserConnect( uint32_t unUserID ) = 0;
 	// do this call once you have a GSClientSteam2Accept_t message about a user
-	virtual bool GSSendUserDisconnect( CSteamID steamID, uint32 unUserID ) = 0;
+	virtual bool GSSendUserDisconnect( CSteamID steamID, uint32_t unUserID ) = 0;
 
 	// Note that unGameIP is in host order
-	virtual void GSSetSpawnCount( uint32 ucSpawn ) = 0;
-	virtual bool GSSetServerType( int32 nGameAppId, uint32 unServerFlags, uint32 unGameIP, uint16 unGamePort, uint16 unSpectatorPort, uint16 usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode ) = 0;
+	virtual void GSSetSpawnCount( uint32_t ucSpawn ) = 0;
+	virtual bool GSSetServerType( int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode ) = 0;
 	// Same as GSUpdateStatus, but lets you specify a name for the spectator server (which shows up in the server browser).
 	virtual bool GSUpdateStatus( int cPlayers, int cPlayersMax, int cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName ) = 0;
 
@@ -48,10 +48,10 @@ public:
 
 	// (Only can do this on auth'd users - i.e. you've gotten a GSClientSteam2Accept_t message OR
 	//  clients created with GSCreateUnauthenticatedUser).
-	virtual bool GSSetUserData( CSteamID steamID, const char *pPlayerName, uint32 nFrags ) = 0;
+	virtual bool GSSetUserData( CSteamID steamID, const char *pPlayerName, uint32_t nFrags ) = 0;
 	
 	// This can be called if spectator goes away or comes back (passing 0 means there is no spectator server now).
-	virtual void GSUpdateSpectatorPort( uint16 unSpectatorPort ) = 0;
+	virtual void GSUpdateSpectatorPort( uint16_t unSpectatorPort ) = 0;
 
 	// (Optional) a string describing the game type for this server, can be searched for by client 
 	// if they use the "gametype" filter option
@@ -61,16 +61,16 @@ public:
 #define STEAMGAMESERVER_INTERFACE_VERSION "SteamGameServer003"
 
 // game server flags
-const uint32 k_unServerFlagNone			= 0x00;
-const uint32 k_unServerFlagActive		= 0x01;		// server has users playing
-const uint32 k_unServerFlagSecure		= 0x02;		// server wants to be secure
-const uint32 k_unServerFlagDedicated	= 0x04;		// server is dedicated
-const uint32 k_unServerFlagLinux		= 0x08;		// linux build
-const uint32 k_unServerFlagPassworded	= 0x10;		// password protected
-const uint32 k_unServerFlagPrivate		= 0x20;		// server shouldn't list on master server and
-													// won't enforce authentication of users that connect to the server.
-													// Useful when you run a server where the clients may not
-													// be connected to the internet but you want them to play (i.e LANs)
+const uint32_t k_unServerFlagNone = 0x00;
+const uint32_t k_unServerFlagActive		= 0x01;		// server has users playing
+const uint32_t k_unServerFlagSecure		= 0x02;		// server wants to be secure
+const uint32_t k_unServerFlagDedicated	= 0x04;		// server is dedicated
+const uint32_t k_unServerFlagLinux		= 0x08;		// linux build
+const uint32_t k_unServerFlagPassworded	= 0x10;		// password protected
+const uint32_t k_unServerFlagPrivate		= 0x20;		// server shouldn't list on master server and
+    	// won't enforce authentication of users that connect to the server.
+    	// Useful when you run a server where the clients may not
+    	// be connected to the internet but you want them to play (i.e LANs)
 
 
 
@@ -107,8 +107,8 @@ struct GSClientKick_t
 struct GSClientSteam2Deny_t
 {
 	enum { k_iCallback = k_iSteamGameServerCallbacks + 4 };
-	uint32 m_UserID;
-	uint32 m_eSteamError;
+	uint32_t m_UserID;
+	uint32_t m_eSteamError;
 };
 
 
@@ -116,26 +116,26 @@ struct GSClientSteam2Deny_t
 struct GSClientSteam2Accept_t
 {
 	enum { k_iCallback = k_iSteamGameServerCallbacks + 5 };
-	uint32 m_UserID;
-	uint64 m_SteamID;
+	uint32_t m_UserID;
+	uint64_t m_SteamID;
 };
 
 
 // C-API versions of the interface functions
 DLL_EXPORT void *Steam_GetGSHandle( HSteamUser hUser, HSteamPipe hSteamPipe );
-DLL_EXPORT bool Steam_GSSendSteam2UserConnect( void *phSteamHandle, uint32 unUserID, const void *pvRawKey, uint32 unKeyLen, uint32 unIPPublic, uint16 usPort, const void *pvCookie, uint32 cubCookie );
-DLL_EXPORT bool Steam_GSSendSteam3UserConnect( void *phSteamHandle, uint64 ulSteamID, uint32 unIPPublic, const void *pvCookie, uint32 cubCookie );
-DLL_EXPORT bool Steam_GSSendUserDisconnect( void *phSteamHandle, uint64 ulSteamID, uint32 unUserID );
-DLL_EXPORT bool Steam_GSSendUserStatusResponse( void *phSteamHandle, uint64 ulSteamID, int nSecondsConnected, int nSecondsSinceLast );
+DLL_EXPORT bool Steam_GSSendSteam2UserConnect( void *phSteamHandle, uint32_t unUserID, const void *pvRawKey, uint32_t unKeyLen, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie );
+DLL_EXPORT bool Steam_GSSendSteam3UserConnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unIPPublic, const void *pvCookie, uint32_t cubCookie );
+DLL_EXPORT bool Steam_GSSendUserDisconnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unUserID );
+DLL_EXPORT bool Steam_GSSendUserStatusResponse( void *phSteamHandle, uint64_t ulSteamID, int nSecondsConnected, int nSecondsSinceLast );
 DLL_EXPORT bool Steam_GSUpdateStatus( void *phSteamHandle, int cPlayers, int cPlayersMax, int cBotPlayers, const char *pchServerName, const char *pchMapName );
-DLL_EXPORT bool Steam_GSRemoveUserConnect( void *phSteamHandle, uint32 unUserID );
-DLL_EXPORT void Steam_GSSetSpawnCount( void *phSteamHandle, uint32 ucSpawn );
-DLL_EXPORT bool Steam_GSGetSteam2GetEncryptionKeyToSendToNewClient( void *phSteamHandle, void *pvEncryptionKey, uint32 *pcbEncryptionKey, uint32 cbMaxEncryptionKey );
+DLL_EXPORT bool Steam_GSRemoveUserConnect( void *phSteamHandle, uint32_t unUserID );
+DLL_EXPORT void Steam_GSSetSpawnCount( void *phSteamHandle, uint32_t ucSpawn );
+DLL_EXPORT bool Steam_GSGetSteam2GetEncryptionKeyToSendToNewClient( void *phSteamHandle, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey );
 DLL_EXPORT void Steam_GSLogOn( void *phSteamHandle );
 DLL_EXPORT void Steam_GSLogOff( void *phSteamHandle );
 DLL_EXPORT bool Steam_GSBLoggedOn( void *phSteamHandle );
-DLL_EXPORT bool Steam_GSSetServerType( void *phSteamHandle, int32 nAppIdServed, uint32 unServerFlags, uint32 unGameIP, uint32 unGamePort, const char *pchGameDir, const char *pchVersion );
+DLL_EXPORT bool Steam_GSSetServerType( void *phSteamHandle, int32_t nAppIdServed, uint32_t unServerFlags, uint32_t unGameIP, uint32_t unGamePort, const char *pchGameDir, const char *pchVersion );
 DLL_EXPORT bool Steam_GSBSecure( void *phSteamHandle );
-DLL_EXPORT uint64 Steam_GSGetSteamID( void *phSteamHandle );
+DLL_EXPORT uint64_t Steam_GSGetSteamID( void *phSteamHandle );
 
 #endif // ISTEAMGAMESERVER_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_BASENPC_FLYER_NEW_H
 #define AI_BASENPC_FLYER_NEW_H
@@ -40,7 +40,7 @@ public:
 	virtual void	RunTask( const Task_t *pTask );
 
 	virtual float	GetIdealSpeed( ) const;
-	virtual float	MinGroundDist(void);
+	virtual float	MinGroundDist();
 
 	CAI_BaseNPCFlyerNew();
 
@@ -49,7 +49,7 @@ protected:
 	void SpawnFlyer();
 
 	// Yarg! Must be chained down from leaf classes...
-	void ClearFlyerConditions(void);
+	void ClearFlyerConditions();
 
 	// Override this when we had to abort movement
 	virtual void AbortedMovement( void ) {}

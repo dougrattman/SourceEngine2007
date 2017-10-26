@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_OBJ_TELEPORTER_H
 #define C_OBJ_TELEPORTER_H
@@ -59,13 +59,13 @@ private:
 
 	int m_iDirectionArrowPoseParam;
 
-	CNewParticleEffect			*m_pChargedEffect;
-	CNewParticleEffect			*m_pDirectionEffect;
+	CNewParticleEffect *m_pChargedEffect;
+	CNewParticleEffect *m_pDirectionEffect;
 
-	CNewParticleEffect			*m_pChargedLeftArmEffect;
-	CNewParticleEffect			*m_pChargedRightArmEffect;
+	CNewParticleEffect *m_pChargedLeftArmEffect;
+	CNewParticleEffect *m_pChargedRightArmEffect;
 
-	CNewParticleEffect			*m_pDamageEffects;
+	CNewParticleEffect *m_pDamageEffects;
 
 	CSoundPatch		*m_pSpinSound;
 

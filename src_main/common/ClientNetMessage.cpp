@@ -1,19 +1,3 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// ClientNetMessage.cpp: implementation of the CClientNetMessage class.
-//
-//////////////////////////////////////////////////////////////////////
+// Copyright © 1996-2005, Valve Corporation, All rights reserved.
 
 #include "ClientNetMessage.h"
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-
-

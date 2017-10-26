@@ -1,26 +1,13 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//===========================================================================//
-	   
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #ifndef CHEATCODES_H
 #define CHEATCODES_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-
 #include "inputsystem/ButtonCode.h"
 
+void ClearCheatCommands(void);
+void ReadCheatCommandsFromFile(const char *pchFileName);
+void LogKeyPress(ButtonCode_t code);
+void CheckCheatCodes();
 
-void	ClearCheatCommands( void );
-void	ReadCheatCommandsFromFile( char *pchFileName );
-void	LogKeyPress( ButtonCode_t code );
-void	CheckCheatCodes();
-
-
-#endif // CHEATCODES_H
+#endif  // CHEATCODES_H

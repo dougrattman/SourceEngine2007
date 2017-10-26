@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for humanoid NPCs intended to fight along side player in close
 // environments
 //
-//=============================================================================//
+
 
 #ifndef NPC_PLAYERCOMPANION_H
 #define NPC_PLAYERCOMPANION_H
@@ -59,22 +59,22 @@ public:
 	// could be encapsulated into this class, but we'll probably move away from this model and closer to something
 	// more akin to the response rules -- jdw
 
-	int				m_fUsageBits;
+	int 	m_fUsageBits;
 
 	AIReadiness_t	m_readiness;
-	bool			m_bAiming;
-	bool			m_bWeaponRequired;
-	bool			m_bInVehicle;		// For future expansion, this needs to speak more to the exact seat, role, and vehicle
+	bool m_bAiming;
+	bool m_bWeaponRequired;
+	bool m_bInVehicle;		// For future expansion, this needs to speak more to the exact seat, role, and vehicle
 };
 
 // Usage bits for remap "extra" parsing - if these bits are set, the associated data has changed
 #define bits_REMAP_READINESS		(1<<0)
-#define bits_REMAP_AIMING			(1<<1)
+#define bits_REMAP_AIMING (1<<1)
 #define bits_REMAP_WEAPON_REQUIRED	(1<<2)
 #define bits_REMAP_IN_VEHICLE		(1<<3)
 
 // Readiness modes that only change due to mapmaker scripts
-#define READINESS_MIN_VALUE			-2
+#define READINESS_MIN_VALUE -2
 #define READINESS_MODE_PANIC		-2
 #define READINESS_MODE_STEALTH		-1
 
@@ -97,69 +97,69 @@ class CNPC_PlayerCompanion : public CAI_PlayerAlly
 
 public:
 	//---------------------------------
-	bool			CreateBehaviors();
-	void			Precache();
-	void			Spawn();
+	bool CreateBehaviors();
+	void Precache();
+	void Spawn();
 	virtual void	SelectModel() {};
 
 	virtual int		Restore( IRestore &restore );
 	virtual void	DoCustomSpeechAI( void );
 
 	//---------------------------------
-	int 			ObjectCaps();
-	bool 			ShouldAlwaysThink();
+	int  ObjectCaps();
+	bool  ShouldAlwaysThink();
 
 	Disposition_t	IRelationType( CBaseEntity *pTarget );
 	
-	bool			IsSilentSquadMember() const;
+	bool IsSilentSquadMember() const;
 
 	//---------------------------------
 	// Behavior
 	//---------------------------------
-	void 			GatherConditions();
+	void  GatherConditions();
 	virtual void	PredictPlayerPush();
-	void			BuildScheduleTestBits();
+	void BuildScheduleTestBits();
 
-	CSound			*GetBestSound( int validTypes = ALL_SOUNDS );
-	bool			QueryHearSound( CSound *pSound );
-	bool			QuerySeeEntity( CBaseEntity *pEntity, bool bOnlyHateOrFearIfNPC = false );
-	bool			ShouldIgnoreSound( CSound * );
+	CSound *GetBestSound( int validTypes = ALL_SOUNDS );
+	bool QueryHearSound( CSound *pSound );
+	bool QuerySeeEntity( CBaseEntity *pEntity, bool bOnlyHateOrFearIfNPC = false );
+	bool ShouldIgnoreSound( CSound * );
 	
-	int 			SelectSchedule();
+	int  SelectSchedule();
 
 	virtual int 	SelectScheduleDanger();
 	virtual int 	SelectSchedulePriorityAction();
-	virtual int 	SelectScheduleNonCombat()			{ return SCHED_NONE; }
+	virtual int 	SelectScheduleNonCombat() { return SCHED_NONE; }
 	virtual int 	SelectScheduleCombat();
-	int 			SelectSchedulePlayerPush();
+	int  SelectSchedulePlayerPush();
 
 	virtual bool	CanReload( void );
 
 	virtual bool	ShouldDeferToFollowBehavior();
-	bool			ShouldDeferToPassengerBehavior( void );
+	bool ShouldDeferToPassengerBehavior( void );
 
-	bool			IsValidReasonableFacing( const Vector &vecSightDir, float sightDist );
+	bool IsValidReasonableFacing( const Vector &vecSightDir, float sightDist );
 	
-	int 			TranslateSchedule( int scheduleType );
+	int  TranslateSchedule( int scheduleType );
 	
-	void 			StartTask( const Task_t *pTask );
-	void 			RunTask( const Task_t *pTask );
+	void  StartTask( const Task_t *pTask );
+	void  RunTask( const Task_t *pTask );
 	
 	Activity		TranslateActivityReadiness( Activity activity );
 	Activity		NPC_TranslateActivity( Activity eNewActivity );
-	void 			HandleAnimEvent( animevent_t *pEvent );
-	bool			HandleInteraction(int interactionType, void *data, CBaseCombatCharacter* sourceEnt);
+	void  HandleAnimEvent( animevent_t *pEvent );
+	bool HandleInteraction(int interactionType, void *data, CBaseCombatCharacter* sourceEnt);
 
-	int				GetSoundInterests();
+	int 	GetSoundInterests();
 	
-	void 			Touch( CBaseEntity *pOther );
+	void  Touch( CBaseEntity *pOther );
 
 	virtual bool	IgnorePlayerPushing( void );
 
-	void			ModifyOrAppendCriteria( AI_CriteriaSet& set );
-	void			Activate( void );
+	void ModifyOrAppendCriteria( AI_CriteriaSet& set );
+	void Activate( void );
 
-	void			PrepareReadinessRemap( void );
+	void PrepareReadinessRemap( void );
 	
 	virtual bool	IsNavigationUrgent( void );
 
@@ -169,39 +169,39 @@ public:
 
 protected:
 	virtual bool	IsReadinessCapable();
-	bool			IsReadinessLocked() { return gpGlobals->curtime < m_flReadinessLockedUntil; }
-	void			AddReadiness( float flAdd, bool bOverrideLock = false );
-	void			SubtractReadiness( float flAdd, bool bOverrideLock = false );
-	void			SetReadinessValue( float flSet );
-	void			SetReadinessSensitivity( float flSensitivity ) { m_flReadinessSensitivity = flSensitivity; }
+	bool IsReadinessLocked() { return gpGlobals->curtime < m_flReadinessLockedUntil; }
+	void AddReadiness( float flAdd, bool bOverrideLock = false );
+	void SubtractReadiness( float flAdd, bool bOverrideLock = false );
+	void SetReadinessValue( float flSet );
+	void SetReadinessSensitivity( float flSensitivity ) { m_flReadinessSensitivity = flSensitivity; }
 	virtual void	UpdateReadiness();
 	virtual float	GetReadinessDecay();
-	bool			IsInScriptedReadinessState( void ) { return (m_flReadiness < 0 ); }
+	bool IsInScriptedReadinessState( void ) { return (m_flReadiness < 0 ); }
 
 	CUtlVector< CCompanionActivityRemap > m_activityMappings;
 
 public:
-	float			GetReadinessValue()	{ return m_flReadiness; }
-	int				GetReadinessLevel();
-	void			SetReadinessLevel( int iLevel, bool bOverrideLock, bool bSlam );
-	void			LockReadiness( float duration = -1.0f ); // Defaults to indefinitely locked
-	void			UnlockReadiness( void );
+	float GetReadinessValue()	{ return m_flReadiness; }
+	int 	GetReadinessLevel();
+	void SetReadinessLevel( int iLevel, bool bOverrideLock, bool bSlam );
+	void LockReadiness( float duration = -1.0f ); // Defaults to indefinitely locked
+	void UnlockReadiness( void );
 
-	virtual			void ReadinessLevelChanged( int iPriorLevel ) { 	}
+	virtual void ReadinessLevelChanged( int iPriorLevel ) { 	}
 
-	void			InputGiveWeapon( inputdata_t &inputdata );
+	void InputGiveWeapon( inputdata_t &inputdata );
 
 #ifdef HL2_EPISODIC
 	//---------------------------------
 	// Vehicle passenger
 	//---------------------------------
-	void			InputEnterVehicle( inputdata_t &inputdata );
-	void			InputEnterVehicleImmediately( inputdata_t &inputdata );
-	void			InputCancelEnterVehicle( inputdata_t &inputdata );
-	void			InputExitVehicle( inputdata_t &inputdata );
-	bool			CanEnterVehicle( void );
-	bool			CanExitVehicle( void );
-	void			EnterVehicle( CBaseEntity *pEntityVehicle, bool bImmediately );
+	void InputEnterVehicle( inputdata_t &inputdata );
+	void InputEnterVehicleImmediately( inputdata_t &inputdata );
+	void InputCancelEnterVehicle( inputdata_t &inputdata );
+	void InputExitVehicle( inputdata_t &inputdata );
+	bool CanEnterVehicle( void );
+	bool CanExitVehicle( void );
+	void EnterVehicle( CBaseEntity *pEntityVehicle, bool bImmediately );
 	virtual bool	ExitVehicle( void );
 
 	virtual void	UpdateEfficiency( bool bInPVS );
@@ -226,14 +226,14 @@ public:
 	// Aiming
 	//---------------------------------
 	CBaseEntity		*GetAimTarget() { return m_hAimTarget; }
-	void			SetAimTarget( CBaseEntity *pTarget );
-	void			StopAiming( char *pszReason = NULL );
-	bool			FindNewAimTarget();
-	void			OnNewLookTarget();
-	bool			ShouldBeAiming();
+	void SetAimTarget( CBaseEntity *pTarget );
+	void StopAiming( char *pszReason = NULL );
+	bool FindNewAimTarget();
+	void OnNewLookTarget();
+	bool ShouldBeAiming();
 	virtual bool	IsAllowedToAim();
-	bool			HasAimLOS( CBaseEntity *pAimTarget );
-	void			AimGun();
+	bool HasAimLOS( CBaseEntity *pAimTarget );
+	void AimGun();
 	CBaseEntity		*GetAlternateMoveShootTarget();
 
 	//---------------------------------
@@ -241,29 +241,29 @@ public:
 	//---------------------------------
 	virtual void 	LocateEnemySound() {};
 
-	bool			IsValidEnemy( CBaseEntity *pEnemy );
+	bool IsValidEnemy( CBaseEntity *pEnemy );
 
-	bool 			IsSafeFromFloorTurret( const Vector &vecLocation, CBaseEntity *pTurret );
+	bool  IsSafeFromFloorTurret( const Vector &vecLocation, CBaseEntity *pTurret );
 
-	bool			ShouldMoveAndShoot( void );
-	void			OnUpdateShotRegulator();
+	bool ShouldMoveAndShoot( void );
+	void OnUpdateShotRegulator();
 
-	void			DecalTrace( trace_t *pTrace, char const *decalName );
-	bool 			FCanCheckAttacks();
-	Vector 			GetActualShootPosition( const Vector &shootOrigin );
+	void DecalTrace( trace_t *pTrace, char const *decalName );
+	bool  FCanCheckAttacks();
+	Vector  GetActualShootPosition( const Vector &shootOrigin );
 	WeaponProficiency_t CalcWeaponProficiency( CBaseCombatWeapon *pWeapon );
-	bool			ShouldLookForBetterWeapon();
-	bool			Weapon_CanUse( CBaseCombatWeapon *pWeapon );
-	void			Weapon_Equip( CBaseCombatWeapon *pWeapon );
-	void			PickupWeapon( CBaseCombatWeapon *pWeapon );
+	bool ShouldLookForBetterWeapon();
+	bool Weapon_CanUse( CBaseCombatWeapon *pWeapon );
+	void Weapon_Equip( CBaseCombatWeapon *pWeapon );
+	void PickupWeapon( CBaseCombatWeapon *pWeapon );
 	
-	bool 			FindCoverPos( CBaseEntity *pEntity, Vector *pResult);
-	bool			FindCoverPosInRadius( CBaseEntity *pEntity, const Vector &goalPos, float coverRadius, Vector *pResult );
-	bool			FindCoverPos( CSound *pSound, Vector *pResult );
-	bool			FindMortarCoverPos( CSound *pSound, Vector *pResult );
-	bool 			IsCoverPosition( const Vector &vecThreat, const Vector &vecPosition );
+	bool  FindCoverPos( CBaseEntity *pEntity, Vector *pResult);
+	bool FindCoverPosInRadius( CBaseEntity *pEntity, const Vector &goalPos, float coverRadius, Vector *pResult );
+	bool FindCoverPos( CSound *pSound, Vector *pResult );
+	bool FindMortarCoverPos( CSound *pSound, Vector *pResult );
+	bool  IsCoverPosition( const Vector &vecThreat, const Vector &vecPosition );
 
-	bool			IsEnemyTurret() { return ( GetEnemy() && IsTurret(GetEnemy()) ); }
+	bool IsEnemyTurret() { return ( GetEnemy() && IsTurret(GetEnemy()) ); }
 	
 	static bool		IsMortar( CBaseEntity *pEntity );
 	static bool		IsSniper( CBaseEntity *pEntity );
@@ -273,40 +273,40 @@ public:
 	//---------------------------------
 	// Damage handling
 	//---------------------------------
-	int 			OnTakeDamage_Alive( const CTakeDamageInfo &info );
-	void 			OnFriendDamaged( CBaseCombatCharacter *pSquadmate, CBaseEntity *pAttacker );
+	int  OnTakeDamage_Alive( const CTakeDamageInfo &info );
+	void  OnFriendDamaged( CBaseCombatCharacter *pSquadmate, CBaseEntity *pAttacker );
 
 	//---------------------------------
 	// Hints
 	//---------------------------------
-	bool			FValidateHintType ( CAI_Hint *pHint );
+	bool FValidateHintType ( CAI_Hint *pHint );
 
 	//---------------------------------
 	// Navigation
 	//---------------------------------
-	bool			IsValidMoveAwayDest( const Vector &vecDest );
-	bool 			ValidateNavGoal();
-	bool 			OverrideMove( float flInterval );				// Override to take total control of movement (return true if done so)
-	bool			MovementCost( int moveType, const Vector &vecStart, const Vector &vecEnd, float *pCost );
-	float			GetIdealSpeed() const;
-	float			GetIdealAccel() const;
-	bool			OnObstructionPreSteer( AILocalMoveGoal_t *pMoveGoal, float distClear, AIMoveResult_t *pResult );
+	bool IsValidMoveAwayDest( const Vector &vecDest );
+	bool  ValidateNavGoal();
+	bool  OverrideMove( float flInterval ); 	// Override to take total control of movement (return true if done so)
+	bool MovementCost( int moveType, const Vector &vecStart, const Vector &vecEnd, float *pCost );
+	float GetIdealSpeed() const;
+	float GetIdealAccel() const;
+	bool OnObstructionPreSteer( AILocalMoveGoal_t *pMoveGoal, float distClear, AIMoveResult_t *pResult );
 
 	//---------------------------------
 	// Inputs
 	//---------------------------------
-	void 			InputOutsideTransition( inputdata_t &inputdata );
-	void			InputSetReadinessPanic( inputdata_t &inputdata );
-	void			InputSetReadinessStealth( inputdata_t &inputdata );
-	void			InputSetReadinessLow( inputdata_t &inputdata );
-	void			InputSetReadinessMedium( inputdata_t &inputdata );
-	void			InputSetReadinessHigh( inputdata_t &inputdata );
-	void			InputLockReadiness( inputdata_t &inputdata );
+	void  InputOutsideTransition( inputdata_t &inputdata );
+	void InputSetReadinessPanic( inputdata_t &inputdata );
+	void InputSetReadinessStealth( inputdata_t &inputdata );
+	void InputSetReadinessLow( inputdata_t &inputdata );
+	void InputSetReadinessMedium( inputdata_t &inputdata );
+	void InputSetReadinessHigh( inputdata_t &inputdata );
+	void InputLockReadiness( inputdata_t &inputdata );
 #if HL2_EPISODIC
-	void			InputClearAllOuputs( inputdata_t &inputdata ); ///< annihilate every output on this npc
+	void InputClearAllOuputs( inputdata_t &inputdata ); ///< annihilate every output on this npc
 #endif
 
-	bool			AllowReadinessValueChange( void );
+	bool AllowReadinessValueChange( void );
 
 protected:
 	//-----------------------------------------------------
@@ -339,8 +339,8 @@ private:
 
 	//-----------------------------------------------------
 	
-	bool			m_bMovingAwayFromPlayer;
-	bool			m_bWeightPathsInCover;
+	bool m_bMovingAwayFromPlayer;
+	bool m_bWeightPathsInCover;
 
 	enum eCoverType
 	{
@@ -362,15 +362,15 @@ protected:
 
 	virtual CAI_FollowBehavior &GetFollowBehavior( void ) { return m_FollowBehavior; }
 
-	CAI_AssaultBehavior				m_AssaultBehavior;
-	CAI_FollowBehavior				m_FollowBehavior;
-	CAI_StandoffBehavior			m_StandoffBehavior;
-	CAI_LeadBehavior				m_LeadBehavior;
-	CAI_ActBusyBehavior				m_ActBusyBehavior;
+	CAI_AssaultBehavior 	m_AssaultBehavior;
+	CAI_FollowBehavior 	m_FollowBehavior;
+	CAI_StandoffBehavior m_StandoffBehavior;
+	CAI_LeadBehavior 	m_LeadBehavior;
+	CAI_ActBusyBehavior 	m_ActBusyBehavior;
 #ifdef HL2_EPISODIC
-	CAI_OperatorBehavior			m_OperatorBehavior;
+	CAI_OperatorBehavior m_OperatorBehavior;
 	CAI_PassengerBehaviorCompanion	m_PassengerBehavior;
-	CAI_FearBehavior				m_FearBehavior;
+	CAI_FearBehavior 	m_FearBehavior;
 #endif
 	//-----------------------------------------------------
 

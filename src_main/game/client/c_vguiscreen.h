@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_VGUISCREEN_H
 #define C_VGUISCREEN_H

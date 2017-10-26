@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -25,16 +25,16 @@ struct WeaponData_t
 	float	m_flRange;
 	float	m_flSpread;
 	float	m_flPunchAngle;
-	float	m_flTimeFireDelay;				// Time to delay between firing
-	float	m_flTimeIdle;					// Time to idle after firing
-	float	m_flTimeIdleEmpty;				// Time to idle after firing last bullet in clip
-	float	m_flTimeReloadStart;			// Time to start into a reload (ie. shotgun)
-	float	m_flTimeReload;					// Time to reload
-	bool	m_bDrawCrosshair;				// Should the weapon draw a crosshair
-	int		m_iProjectile;					// The type of projectile this mode fires
-	int		m_iAmmoPerShot;					// How much ammo each shot consumes
-	float	m_flProjectileSpeed;			// Start speed for projectiles (nail, etc.); NOTE: union with something non-projectile
-	float	m_flSmackDelay;					// how long after swing should damage happen for melee weapons
+	float	m_flTimeFireDelay; 	// Time to delay between firing
+	float	m_flTimeIdle; 		// Time to idle after firing
+	float	m_flTimeIdleEmpty; 	// Time to idle after firing last bullet in clip
+	float	m_flTimeReloadStart; // Time to start into a reload (ie. shotgun)
+	float	m_flTimeReload; 		// Time to reload
+	bool	m_bDrawCrosshair; 	// Should the weapon draw a crosshair
+	int		m_iProjectile; 		// The type of projectile this mode fires
+	int		m_iAmmoPerShot; 		// How much ammo each shot consumes
+	float	m_flProjectileSpeed; // Start speed for projectiles (nail, etc.); NOTE: union with something non-projectile
+	float	m_flSmackDelay; 		// how long after swing should damage happen for melee weapons
 	bool	m_bUseRapidFireCrits;
 
 	void Init( void )

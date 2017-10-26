@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // nav_node.cpp
 // AI Navigation Nodes
 // Author: Michael S. Booth (mike@turtlerockstudios.com), January 2003

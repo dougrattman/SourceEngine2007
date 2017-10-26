@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ROPE_H
 #define ROPE_H
@@ -23,8 +23,8 @@ public:
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
 
-					CRopeKeyframe();
-	virtual			~CRopeKeyframe();
+ 		CRopeKeyframe();
+	virtual ~CRopeKeyframe();
 
 	// Create a rope and attach it to two entities.
 	// Attachment points on the entities are optional.
@@ -35,8 +35,8 @@ public:
 		int iEndAttachment=0,
 		int ropeWidth = 2,
 		const char *pMaterialName = "cable/cable.vmt",		// Note: whoever creates the rope must
-															// use PrecacheModel for whatever material
-															// it specifies here.
+     // use PrecacheModel for whatever material
+     // it specifies here.
 		int numSegments = 5
 		);
 
@@ -46,8 +46,8 @@ public:
 		int ropeLength = 20,
 		int ropeWidth = 2,
 		const char *pMaterialName = "cable/cable.vmt",		// Note: whoever creates the rope
-															// use PrecacheModel for whatever material
-															// it specifies here.
+     // use PrecacheModel for whatever material
+     // it specifies here.
 		int numSegments = 5,
 		bool bInitialHang = false
 		);
@@ -71,15 +71,15 @@ public:
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
 	virtual bool	KeyValue( const char *szKeyName, const char *szValue );
 
-	void			PropagateForce(CBaseEntity *pActivator, CBaseEntity *pCaller, CBaseEntity *pFirstLink, float x, float y, float z);
+	void PropagateForce(CBaseEntity *pActivator, CBaseEntity *pCaller, CBaseEntity *pFirstLink, float x, float y, float z);
 
 	// Once-off length recalculation
-	void			RecalculateLength( void );
+	void RecalculateLength( void );
 
 	// Kill myself when I next come to rest
-	void			DieAtNextRest( void );
+	void DieAtNextRest( void );
 
-	virtual int		UpdateTransmitState(void);
+	virtual int		UpdateTransmitState();
 	virtual void	SetTransmit( CCheckTransmitInfo *pInfo, bool bAlways );
 	virtual void	SetParent( CBaseEntity *pParentEntity, int iAttachment );
 
@@ -92,29 +92,29 @@ public:
 
 public:
 
-	bool			Break( void );
-	void			DetachPoint( int iPoint );
+	bool Break( void );
+	void DetachPoint( int iPoint );
 	
-	void			EndpointsChanged();
+	void EndpointsChanged();
 
 	// By default, ropes don't collide with the world. Call this to enable it.
-	void			EnableCollision();
+	void EnableCollision();
 
 	// Toggle wind.
-	void			EnableWind( bool bEnable );
+	void EnableWind( bool bEnable );
 
 	// Unless this is called during initialization, the caller should have done
 	// PrecacheModel on whatever material they specify in here.
-	void			SetMaterial( const char *pName );
+	void SetMaterial( const char *pName );
 
 	CBaseEntity*	GetEndPoint() { return m_hEndPoint.Get(); }
-	int				GetEndAttachment() { return m_iStartAttachment; };
+	int 	GetEndAttachment() { return m_iStartAttachment; };
 
-	void			SetStartPoint( CBaseEntity *pStartPoint, int attachment = 0 );
-	void			SetEndPoint( CBaseEntity *pEndPoint, int attachment = 0 );
+	void SetStartPoint( CBaseEntity *pStartPoint, int attachment = 0 );
+	void SetEndPoint( CBaseEntity *pEndPoint, int attachment = 0 );
 
 	// See ROPE_PLAYER_WPN_ATTACH for info.
-	void			EnablePlayerWeaponAttach( bool bAttach );
+	void EnablePlayerWeaponAttach( bool bAttach );
 
 
 	// IPositionWatcher
@@ -122,17 +122,17 @@ public:
 
 private:
 
-	void			SetAttachmentPoint( CBaseHandle &hOutEnt, short &iOutAttachment, CBaseEntity *pEnt, int iAttachment );
+	void SetAttachmentPoint( CBaseHandle &hOutEnt, short &iOutAttachment, CBaseEntity *pEnt, int iAttachment );
 
 	// This is normally called by Activate but if you create the rope at runtime,
 	// you must call it after you have setup its variables.
-	void			Init();
+	void Init();
 
 	// These work just like the client-side versions.
-	bool			GetEndPointPos2( CBaseEntity *pEnt, int iAttachment, Vector &v );
-	bool			GetEndPointPos( int iPt, Vector &v );
+	bool GetEndPointPos2( CBaseEntity *pEnt, int iAttachment, Vector &v );
+	bool GetEndPointPos( int iPt, Vector &v );
 
-	void			UpdateBBox( bool bForceRelink );
+	void UpdateBBox( bool bForceRelink );
 
 
 public:

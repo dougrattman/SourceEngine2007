@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side CTFTeam class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_DOD_TEAM_H
 #define C_DOD_TEAM_H
@@ -29,8 +29,8 @@ class C_DODTeam : public C_Team
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_DODTeam();
-	virtual			~C_DODTeam();
+ 		C_DODTeam();
+	virtual ~C_DODTeam();
 
 	CDODPlayerClassInfo const &GetPlayerClassInfo( int iPlayerClass ) const;
 	const unsigned char *GetEncryptionKey( void ) { return g_pGameRules->GetEncryptionKey(); }
@@ -53,7 +53,7 @@ class C_DODTeam_Allies : public C_DODTeam
 public:
 	DECLARE_CLIENTCLASS();
 
-				     C_DODTeam_Allies();
+ 	     C_DODTeam_Allies();
 	 virtual		~C_DODTeam_Allies() {}
 };
 
@@ -63,8 +63,8 @@ class C_DODTeam_Axis : public C_DODTeam
 public:
 	DECLARE_CLIENTCLASS();
 
-					 C_DODTeam_Axis();
-	virtual			~C_DODTeam_Axis() {}
+ 		 C_DODTeam_Axis();
+	virtual ~C_DODTeam_Axis() {}
 };
 
 #endif // C_DOD_TEAM_H

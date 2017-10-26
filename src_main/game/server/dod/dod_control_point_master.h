@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef DOD_CONTROL_POINT_MASTER_H
 #define DOD_CONTROL_POINT_MASTER_H
@@ -84,7 +84,7 @@ private:
 
 	DECLARE_DATADESC();
 
-	bool m_bDisabled;				//is this CPM active or not
+	bool m_bDisabled; 	//is this CPM active or not
 	void InputEnable( inputdata_t &inputdata ) { BecomeInactive(); }	
 	void InputDisable( inputdata_t &inputdata ) { BecomeActive(); }
 
@@ -123,18 +123,18 @@ public:
 
 		if ( !Q_strcmp( eventName, "dod_round_win" ) )
 		{
-			int team = event->GetInt( "team" );
-			if ( team == m_iPointTeam )
-			{
-				GiveRemainingPoints();
-			}
+ int team = event->GetInt( "team" );
+ if ( team == m_iPointTeam )
+ {
+ 	GiveRemainingPoints();
+ }
 
-			// stop giving points, round is over
-			SetThink( NULL );	// think no more!
+ // stop giving points, round is over
+ SetThink( NULL );	// think no more!
 		}
 		else if ( !Q_strcmp( eventName, "dod_round_active" ) )
 		{
-			StartGivingPoints();
+ StartGivingPoints();
 		}
 	}
 
@@ -142,10 +142,10 @@ public:
 	void StartGivingPoints( void )
 	{
 		if ( m_iNumPointGives <= 0 )
-			return;
+ return;
 
 		if ( m_iPointsToGive <= 0 )
-			return;
+ return;
 
 		m_iRemainingPoints = m_iNumPointGives * m_iPointsToGive;
 
@@ -181,27 +181,27 @@ private:
 
 		if ( points > 0 )
 		{
-			if ( points == 1 )
-			{
-				UTIL_ClientPrintAll( HUD_PRINTTALK, "#game_score_allie_point" );
-			}
-			else
-			{
-				char buf[8];
-				Q_snprintf( buf, sizeof(buf), "%d", points );
-				UTIL_ClientPrintAll( HUD_PRINTTALK, "#game_score_allie_points", buf );
-			}
+ if ( points == 1 )
+ {
+ 	UTIL_ClientPrintAll( HUD_PRINTTALK, "#game_score_allie_point" );
+ }
+ else
+ {
+ 	char buf[8];
+ 	Q_snprintf( buf, sizeof(buf), "%d", points );
+ 	UTIL_ClientPrintAll( HUD_PRINTTALK, "#game_score_allie_points", buf );
+ }
 
-			IGameEvent *event = gameeventmanager->CreateEvent( "dod_tick_points" );
+ IGameEvent *event = gameeventmanager->CreateEvent( "dod_tick_points" );
 
-			if ( event )
-			{
-				event->SetInt( "team", m_iPointTeam );
-				event->SetInt( "score", points );
-				event->SetInt( "totalscore", GetGlobalTeam(m_iPointTeam)->GetScore() );
+ if ( event )
+ {
+ 	event->SetInt( "team", m_iPointTeam );
+ 	event->SetInt( "score", points );
+ 	event->SetInt( "totalscore", GetGlobalTeam(m_iPointTeam)->GetScore() );
 
-				gameeventmanager->FireEvent( event );
-			}
+ 	gameeventmanager->FireEvent( event );
+ }
 		}		
 	}
 
@@ -212,10 +212,10 @@ private:
 		SetNextThink( gpGlobals->curtime + m_iTickLength );	
 	}
 
-	int m_iPointTeam;			// team to give points to
+	int m_iPointTeam; // team to give points to
 	int m_iPointsToGive;		// points to give per tick
 	int m_iRemainingPoints;		// total number of points we have left to give
-	int m_iTickLength;			// time between point gives
+	int m_iTickLength; // time between point gives
 	int m_iNumPointGives;		// number of times we're planning on giving out points
 };
 

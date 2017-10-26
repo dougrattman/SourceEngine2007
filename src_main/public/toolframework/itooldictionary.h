@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -30,7 +30,7 @@ class IToolDictionary : public IAppSystem
 {
 public:
 	virtual void		CreateTools() = 0;
-	virtual int			GetToolCount() const = 0;
+	virtual int GetToolCount() const = 0;
 	virtual IToolSystem	*GetTool( int index ) = 0;
 };
 

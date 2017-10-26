@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 // This file defines the C_TEParticleSystem class, which handles most of the
 // interfacing with the particle manager, simulation, and rendering.
@@ -48,13 +48,13 @@ public:
 	DECLARE_CLASS( C_TEParticleSystem, C_BaseTempEntity );
 	DECLARE_CLIENTCLASS();
 
-					C_TEParticleSystem();
+ 		C_TEParticleSystem();
 
 
 public:
 
 	// particle effect sort origin
-	Vector			m_vecOrigin;
+	Vector m_vecOrigin;
 };
 
 
@@ -68,22 +68,22 @@ class CTEParticleRenderer : public CParticleEffect
 {
 public:
 	DECLARE_CLASS( CTEParticleRenderer, CParticleEffect );
-	virtual						~CTEParticleRenderer();
+	virtual  ~CTEParticleRenderer();
 
 	// Create a CTEParticleRenderer. Pass in your sort origin (m_vecOrigin).
 	static CSmartPtr<CTEParticleRenderer>	Create( const char *pDebugName, const Vector &vOrigin );
 
 	StandardParticle_t*		AddParticle();
 
-	CParticleMgr*			GetParticleMgr();
+	CParticleMgr* GetParticleMgr();
 
-	void					SetParticleType( StandardParticle_t *pParticle, ptype_t type );
-	ptype_t					GetParticleType( StandardParticle_t *pParticle );
+	void 		SetParticleType( StandardParticle_t *pParticle, ptype_t type );
+	ptype_t 		GetParticleType( StandardParticle_t *pParticle );
 
 	// Get/set lifetime. Note: lifetime here is a counter. You set it to a value and it 
 	// counts down and disappears after that long.
-	void					SetParticleLifetime( StandardParticle_t *pParticle, float lifetime );
-	float					GetParticleLifetime( StandardParticle_t *pParticle );
+	void 		SetParticleLifetime( StandardParticle_t *pParticle, float lifetime );
+	float 		GetParticleLifetime( StandardParticle_t *pParticle );
 
 
 // IParticleEffect overrides.	
@@ -92,11 +92,11 @@ public:
 	virtual void SimulateParticles( CParticleSimulateIterator *pIterator );
 
 private:
-					CTEParticleRenderer( const char *pDebugName );
-					CTEParticleRenderer( const CTEParticleRenderer & ); // not defined, not accessible
+ 		CTEParticleRenderer( const char *pDebugName );
+ 		CTEParticleRenderer( const CTEParticleRenderer & ); // not defined, not accessible
 
-	int				m_nActiveParticles;
-	float			m_ParticleSize;
+	int 	m_nActiveParticles;
+	float m_ParticleSize;
 	PMaterialHandle	m_MaterialHandle;
 };
 

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -11,8 +11,8 @@
 #pragma once
 #endif
 
-#include "UtlVector.h"
-#include "UtlSymbol.h"
+#include "tier1/UtlVector.h"
+#include "tier1/utlsymbol.h"
 
 #include <vgui_controls/PropertyPage.h>
 class VControlsListPanel;
@@ -48,35 +48,35 @@ private:
 	};
 
 	// Create the key binding list control
-	void			CreateKeyBindingList( void );
+	void CreateKeyBindingList( void );
 
 	virtual void	OnCommand( const char *command );
 
 	// Tell engine to bind/unbind a key
-	void			BindKey( const char *key, const char *binding );
-	void			UnbindKey( const char *key );
+	void BindKey( const char *key, const char *binding );
+	void UnbindKey( const char *key );
 
 	// Save/restore/cleanup engine's current bindings ( for handling cancel button )
-	void			SaveCurrentBindings( void );
-	void			DeleteSavedBindings( void );
+	void SaveCurrentBindings( void );
+	void DeleteSavedBindings( void );
 
 	// Get column 0 action descriptions for all keys
-	void			ParseActionDescriptions( void );
+	void ParseActionDescriptions( void );
 
 	// Populate list of actions with current engine keybindings
-	void			FillInCurrentBindings( void );
+	void FillInCurrentBindings( void );
 	// Remove all current bindings from list of bindings
-	void			ClearBindItems( void );
+	void ClearBindItems( void );
 	// Fill in bindings with mod-specified defaults
-	void			FillInDefaultBindings( void );
+	void FillInDefaultBindings( void );
 	// Copy bindings out of list and set them in the engine
-	void			ApplyAllBindings( void );
+	void ApplyAllBindings( void );
 
 	// Bind a key to the item
-	void			AddBinding( KeyValues *item, const char *keyname );
+	void AddBinding( KeyValues *item, const char *keyname );
 
 	// Remove all instances of a key from all bindings
-	void			RemoveKeyFromBindItems( KeyValues *org_item, const char *key );
+	void RemoveKeyFromBindItems( KeyValues *org_item, const char *key );
 
 	// Find item by binding name
 	KeyValues *GetItemForBinding( const char *binding );

@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: An effect for a single bullet passing through a body of water.
 //			The slug quickly decelerates, leaving a trail of bubbles behind it.
 //
 //			TODO: make clientside
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "waterbullet.h"
 #include "ndebugoverlay.h"

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SHOT_MANIPULATOR_H
 #define SHOT_MANIPULATOR_H
@@ -40,9 +40,9 @@ public:
 	const Vector &ApplySpread( const Vector &vecSpread, float bias = 1.0 );
 
 	const Vector &GetShotDirection()	{ return m_vecShotDirection; }
-	const Vector &GetResult()			{ return m_vecResult; }
+	const Vector &GetResult() { return m_vecResult; }
 	const Vector &GetRightVector()		{ return m_vecRight; }
-	const Vector &GetUpVector()			{ return m_vecUp;}
+	const Vector &GetUpVector() { return m_vecUp;}
 
 private:
 	Vector m_vecShotDirection;
@@ -80,8 +80,8 @@ inline const Vector &CShotManipulator::ApplySpread( const Vector &vecSpread, flo
 		y = random->RandomFloat(-1,1) * flatness + random->RandomFloat(-1,1) * (1 - flatness);
 		if ( shotBias < 0 )
 		{
-			x = ( x >= 0 ) ? 1.0 - x : -1.0 - x;
-			y = ( y >= 0 ) ? 1.0 - y : -1.0 - y;
+ x = ( x >= 0 ) ? 1.0 - x : -1.0 - x;
+ y = ( y >= 0 ) ? 1.0 - y : -1.0 - y;
 		}
 		z = x*x+y*y;
 	} while (z > 1);

@@ -151,14 +151,14 @@ typedef unsigned int UINT16;
 
 /* INT16 must hold at least the values -32768..32767. */
 
-#ifndef XMD_H			/* X11/xmd.h correctly defines INT16 */
+#ifndef XMD_H /* X11/xmd.h correctly defines INT16 */
 typedef short INT16;
 #endif
 
 /* INT32 must hold at least signed 32-bit values. */
 
 #ifndef _BASETSD_H_
-#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
+#ifndef XMD_H /* X11/xmd.h correctly defines INT32 */
 typedef long INT32;
 #endif
 #endif	//	#ifndef _BASETSD_H_
@@ -229,7 +229,7 @@ typedef unsigned int JDIMENSION;
 #ifndef HAVE_BOOLEAN
 typedef int boolean;
 #endif
-#ifndef FALSE			/* in case these macros already exist */
+#ifndef FALSE /* in case these macros already exist */
 #define FALSE	0		/* values of boolean */
 #endif
 #ifndef TRUE
@@ -256,7 +256,7 @@ typedef int boolean;
  * Undefining some of these symbols will produce a smaller but less capable
  * library.  Note that you can leave certain source files out of the
  * compilation/linking process if you've #undef'd the corresponding symbols.
- * (You may HAVE to do that if your compiler doesn't like null source files.)
+ * (You may HAVE to do that if your compiler doesn't like 0 source files.)
  */
 
 /* Arithmetic coding is unsupported for legal reasons.  Complaints to IBM. */
@@ -303,7 +303,7 @@ typedef int boolean;
  * Ordering of RGB data in scanlines passed to or from the application.
  * If your application wants to deal with data in the order B,G,R, just
  * change these macros.  You can also deal with formats such as R,G,B,X
- * (one extra byte per pixel) by changing RGB_PIXELSIZE.  Note that changing
+ * (one extra uint8_t per pixel) by changing RGB_PIXELSIZE.  Note that changing
  * the offsets will also change the order in which colormap data is organized.
  * RESTRICTIONS:
  * 1. The sample applications cjpeg,djpeg do NOT support modified RGB formats.
@@ -328,11 +328,11 @@ typedef int boolean;
  */
 
 #ifndef INLINE
-#ifdef __GNUC__			/* for instance, GNU C knows about inline */
+#ifdef __GNUC__ /* for instance, GNU C knows about inline */
 #define INLINE __inline__
 #endif
 #ifndef INLINE
-#define INLINE			/* default is to define it as empty */
+#define INLINE /* default is to define it as empty */
 #endif
 #endif
 

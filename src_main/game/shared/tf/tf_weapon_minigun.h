@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
 //=============================================================================
@@ -50,10 +50,10 @@ public:
 	~CTFMinigun();
 
 	virtual void	Precache( void );
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_MINIGUN; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_MINIGUN; }
 	virtual void	PrimaryAttack();
 	virtual void	SecondaryAttack();
-	void			SharedAttack();
+	void SharedAttack();
 	virtual void	WeaponIdle();
 	virtual bool	SendWeaponAnim( int iActivity );
 	virtual bool	CanHolster( void );
@@ -69,7 +69,7 @@ public:
 
 	virtual int GetCustomDamageType() const { return TF_DMG_CUSTOM_MINIGUN; }
 
-	float			GetFiringTime( void ) { return (m_flStartedFiringAt >= 0) ? (gpGlobals->curtime - m_flStartedFiringAt) : 0; }
+	float GetFiringTime( void ) { return (m_flStartedFiringAt >= 0) ? (gpGlobals->curtime - m_flStartedFiringAt) : 0; }
 
 
 #ifdef CLIENT_DLL
@@ -91,16 +91,16 @@ private:
 	
 	virtual void		UpdateOnRemove( void );
 
-	void				CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles );
+	void 	CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles );
 
-	void				OnDataChanged( DataUpdateType_t type );
+	void 	OnDataChanged( DataUpdateType_t type );
 		
 	virtual void	ItemPreFrame( void );
 	
 	// Firing sound
-	void				WeaponSoundUpdate( void );
+	void 	WeaponSoundUpdate( void );
 
-	void				UpdateBarrelMovement( void );
+	void 	UpdateBarrelMovement( void );
 	virtual void		SetDormant( bool bDormant );
 
 
@@ -112,14 +112,14 @@ private:
 	CNetworkVar( MinigunState_t, m_iWeaponState );
 	CNetworkVar( bool, m_bCritShot );
 
-	float			m_flNextFiringSpeech;
-	float			m_flStartedFiringAt;
+	float m_flNextFiringSpeech;
+	float m_flStartedFiringAt;
 	float	m_flBarrelCurrentVelocity;
 	float	m_flBarrelTargetVelocity;
 	int		m_iBarrelBone;
 	float	m_flBarrelAngle;
-	CSoundPatch		*m_pSoundCur;				// the weapon sound currently being played
-	int				m_iMinigunSoundCur;			// the enum value of the weapon sound currently being played
+	CSoundPatch		*m_pSoundCur; 	// the weapon sound currently being played
+	int 	m_iMinigunSoundCur; // the enum value of the weapon sound currently being played
 
 #ifdef CLIENT_DLL
 	void StartBrassEffect();
@@ -127,14 +127,14 @@ private:
 	void HandleBrassEffect();
 
 	CNewParticleEffect *m_pEjectBrassEffect;
-	int					m_iEjectBrassAttachment;
+	int 		m_iEjectBrassAttachment;
 
 	void StartMuzzleEffect();
 	void StopMuzzleEffect();
 	void HandleMuzzleEffect();
 
 	CNewParticleEffect *m_pMuzzleEffect;
-	int					m_iMuzzleAttachment;
+	int 		m_iMuzzleAttachment;
 #endif
 };
 

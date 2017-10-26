@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #define PROTECTED_THINGS_DISABLE
 
@@ -13,12 +13,12 @@
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/MouseCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/ScrollBarSlider.h>
 #include <vgui_controls/Controls.h>
 
-#include <math.h>
+#include <cmath>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
@@ -521,7 +521,7 @@ void ScrollBarSlider::OnMouseDoublePressed(MouseCode code)
 void ScrollBarSlider::OnMouseReleased(MouseCode code)
 {
 	_dragging = false;
-	input()->SetMouseCapture(null);
+	input()->SetMouseCapture(0);
 }
 
 //-----------------------------------------------------------------------------

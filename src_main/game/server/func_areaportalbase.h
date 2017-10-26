@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FUNC_AREAPORTALBASE_H
 #define FUNC_AREAPORTALBASE_H
@@ -13,7 +13,7 @@
 
 
 #include "baseentity.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 
 
 // Shared stuff between door portals and window portals.
@@ -23,8 +23,8 @@ class CFuncAreaPortalBase : public CBaseEntity
 public:
 	DECLARE_DATADESC();
 
-					CFuncAreaPortalBase();
-	virtual			~CFuncAreaPortalBase();
+ 		CFuncAreaPortalBase();
+	virtual ~CFuncAreaPortalBase();
 
 	// Areaportals must be placed in each map for preprocess, they can't use transitions
 	virtual int	ObjectCaps( void ) { return BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -59,7 +59,7 @@ public:
 	// - An illustration:
 	//
 	//	 --------------------
-	//	 |					|
+	//	 | 		|
 	//	 |	|--------|aaaaaa|
 	//	 |	|		 |bbbbbb| <---- aaaa and bbbb area both for PortalKey1
 	//	 |**|   	 |     	|
@@ -68,7 +68,7 @@ public:
 	//	 |	|		 |------|
 	//	 |	|		 |		|
 	//	 |	---------- area |
-	//	 |				1   |
+	//	 | 	1   |
 	//	 |------------------|
 	//
 	// "aaaa" and "bbbb" each represent a different dareaportal_t, (aaa leads into area 2 and
@@ -99,9 +99,9 @@ public:
 public:
 
 	// This matches two dareaportal_t::m_PortalKeys.	
-	int				m_portalNumber;
+	int 	m_portalNumber;
 	
-	int				m_iPortalVersion;
+	int 	m_iPortalVersion;
 
 private:
 	

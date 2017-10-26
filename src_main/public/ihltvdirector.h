@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef IHLTVDIRECTOR_H
 #define IHLTVDIRECTOR_H
@@ -14,7 +14,7 @@ class IHLTVServer;
 class KeyValues;
 class Vector;
 
-#define INTERFACEVERSION_HLTVDIRECTOR			"HLTVDirector001"
+#define INTERFACEVERSION_HLTVDIRECTOR "HLTVDirector001"
 
 class IHLTVDirector
 {

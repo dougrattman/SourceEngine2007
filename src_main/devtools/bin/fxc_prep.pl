@@ -99,7 +99,7 @@ sub CreateCCodeToSpewDynamicCombo
 	local( $out ) = "";
 
 	$out .= "\t\tOutputDebugString( \"src:$fxc_filename vcs:$fxc_basename dynamic index\" );\n";
-	$out .= "\t\tchar tmp[128];\n";
+	$out .= "\t\char tmp[128];\n";
 	$out .= "\t\tint shaderID = ";
 	local( $scale ) = 1;
 	for( $i = 0; $i < scalar( @dynamicDefineNames ); $i++ )
@@ -139,7 +139,7 @@ sub CreateCCodeToSpewStaticCombo
 	local( $out ) = "";
 
 	$out .= "\t\tOutputDebugString( \"src:$fxc_filename vcs:$fxc_basename static index\" );\n";
-	$out .= "\t\tchar tmp[128];\n";
+	$out .= "\t\char tmp[128];\n";
 	$out .= "\t\tint shaderID = ";
 
 	local( $scale ) = 1;
@@ -581,7 +581,7 @@ sub CreateCFuncToCreateCompileCommandLine
 	local( $out ) = "";
 
 	$out .= "\t\tOutputDebugString( \"compiling src:$fxc_filename vcs:$fxc_basename \" );\n";
-	$out .= "\t\tchar tmp[128];\n";
+	$out .= "\t\char tmp[128];\n";
 	$out .= "\t\tsprintf( tmp, \"\%d\\n\", shaderID );\n";
 	$out .= "\t\tOutputDebugString( tmp );\n";
 	$out .= "\t\tstatic PrecompiledShaderByteCode_t byteCode;\n";
@@ -599,8 +599,8 @@ sub CreateCFuncToCreateCompileCommandLine
 	$out .= "];\n";
 	if( scalar( @dynamicDefineNames ) + scalar( @staticDefineNames ) > 0 )
 	{
-		$out .= "\t\tchar tmpStringBuf[1024];\n";
-		$out .= "\t\tchar *pTmpString = tmpStringBuf;\n\n";
+		$out .= "\t\char tmpStringBuf[1024];\n";
+		$out .= "\t\char *pTmpString = tmpStringBuf;\n\n";
 	}
 
 	local( $i );

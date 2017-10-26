@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SAVERESTORE_UTLVECTOR_H
 #define SAVERESTORE_UTLVECTOR_H
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "isaverestore.h"
 #include "saverestore_utlclass.h"
 
@@ -32,29 +32,29 @@ public:
 		datamap_t *pArrayTypeDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLVECTOR *)NULL );
 		typedescription_t dataDesc = 
 		{
-			(fieldtype_t)FIELD_TYPE, 
-			"elems", 
-			{ 0, 0 },
-			1, 
-			FTYPEDESC_SAVE, 
-			NULL, 
-			NULL, 
-			NULL,
-			pArrayTypeDatamap,
-			-1,
+ (fieldtype_t)FIELD_TYPE, 
+ "elems", 
+ { 0, 0 },
+ 1, 
+ FTYPEDESC_SAVE, 
+ NULL, 
+ NULL, 
+ NULL,
+ pArrayTypeDatamap,
+ -1,
 		};
 		
 		datamap_t dataMap = 
 		{
-			&dataDesc,
-			1,
-			"uv",
-			NULL,
-			false,
-			false,
-			0,
+ &dataDesc,
+ 1,
+ "uv",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 		
@@ -64,19 +64,19 @@ public:
 		pSave->WriteInt( &nElems, 1 );
 		if ( pArrayTypeDatamap == NULL )
 		{
-			if ( nElems )
-			{
-				dataDesc.fieldSize = nElems;
-				dataDesc.fieldSizeInBytes = nElems * CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
-				pSave->WriteFields("elems", &((*pUtlVector)[0]), &dataMap, &dataDesc, 1 );
-			}
+ if ( nElems )
+ {
+ 	dataDesc.fieldSize = nElems;
+ 	dataDesc.fieldSizeInBytes = nElems * CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
+ 	pSave->WriteFields("elems", &((*pUtlVector)[0]), &dataMap, &dataDesc, 1 );
+ }
 		}
 		else
 		{
-			// @Note (toml 11-21-02): Save load does not support arrays of user defined types (embedded)
-			dataDesc.fieldSizeInBytes = CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
-			for ( int i = 0; i < nElems; i++ )
-				pSave->WriteAll( &((*pUtlVector)[i]), &dataMap );
+ // @Note (toml 11-21-02): Save load does not support arrays of user defined types (embedded)
+ dataDesc.fieldSizeInBytes = CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
+ for ( int i = 0; i < nElems; i++ )
+ 	pSave->WriteAll( &((*pUtlVector)[i]), &dataMap );
 		}
 	}
 	
@@ -85,29 +85,29 @@ public:
 		datamap_t *pArrayTypeDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLVECTOR *)NULL );
 		typedescription_t dataDesc = 
 		{
-			(fieldtype_t)FIELD_TYPE, 
-			"elems", 
-			{ 0, 0 },
-			1, 
-			FTYPEDESC_SAVE, 
-			NULL, 
-			NULL, 
-			NULL,
-			pArrayTypeDatamap,
-			-1,
+ (fieldtype_t)FIELD_TYPE, 
+ "elems", 
+ { 0, 0 },
+ 1, 
+ FTYPEDESC_SAVE, 
+ NULL, 
+ NULL, 
+ NULL,
+ pArrayTypeDatamap,
+ -1,
 		};
 		
 		datamap_t dataMap = 
 		{
-			&dataDesc,
-			1,
-			"uv",
-			NULL,
-			false,
-			false,
-			0,
+ &dataDesc,
+ 1,
+ "uv",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 		
@@ -118,19 +118,19 @@ public:
 		pUtlVector->SetCount( nElems );
 		if ( pArrayTypeDatamap == NULL )
 		{
-			if ( nElems )
-			{
-				dataDesc.fieldSize = nElems;
-				dataDesc.fieldSizeInBytes = nElems * CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
-				pRestore->ReadFields("elems", &((*pUtlVector)[0]), &dataMap, &dataDesc, 1 );
-			}
+ if ( nElems )
+ {
+ 	dataDesc.fieldSize = nElems;
+ 	dataDesc.fieldSizeInBytes = nElems * CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
+ 	pRestore->ReadFields("elems", &((*pUtlVector)[0]), &dataMap, &dataDesc, 1 );
+ }
 		}
 		else
 		{
-			// @Note (toml 11-21-02): Save load does not support arrays of user defined types (embedded)
-			dataDesc.fieldSizeInBytes = CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
-			for ( int i = 0; i < nElems; i++ )
-				pRestore->ReadAll( &((*pUtlVector)[i]), &dataMap );
+ // @Note (toml 11-21-02): Save load does not support arrays of user defined types (embedded)
+ dataDesc.fieldSizeInBytes = CDatamapFieldSizeDeducer<FIELD_TYPE>::FieldSize();
+ for ( int i = 0; i < nElems; i++ )
+ 	pRestore->ReadAll( &((*pUtlVector)[i]), &dataMap );
 		}		
 	}
 	

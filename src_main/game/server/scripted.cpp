@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of entities that cause NPCs to participate in
 //			scripted events. These entities find and temporarily possess NPCs
@@ -11,7 +11,7 @@
 //			new script may enqueue itself unless there is already a non critical
 //			script in the queue.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_schedule.h"

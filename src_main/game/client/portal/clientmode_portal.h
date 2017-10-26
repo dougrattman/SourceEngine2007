@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PORTAL_CLIENTMODE_H
 #define PORTAL_CLIENTMODE_H
@@ -30,8 +30,8 @@ private:
 // IClientMode overrides.
 public:
 
-					ClientModePortalNormal();
-	virtual			~ClientModePortalNormal();
+ 		ClientModePortalNormal();
+	virtual ~ClientModePortalNormal();
 
 	virtual void	Init();
 	virtual void	InitViewport();

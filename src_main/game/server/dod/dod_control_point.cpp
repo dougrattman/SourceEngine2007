@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "dod_shareddefs.h"
@@ -349,7 +349,7 @@ void CControlPoint::SendCapString( int team, int iNumCappers, int *pCappingPlaye
 
 		cappers[i] = '\0';
 
-		// pCappingPlayers is a null terminated list of player indeces
+		// pCappingPlayers is a 0 terminated list of player indeces
 		event->SetString( "cappers", cappers );
 		event->SetInt( "priority", 9 );
 
@@ -671,7 +671,7 @@ void CControlPoint::BombExploded( CDODPlayer *pPlantingPlayer /* = NULL */, int 
 				cappers[0] = iCappingPlayer;
 				cappers[1] = '\0';
 
-				// pCappingPlayers is a null terminated list of player indeces
+				// pCappingPlayers is a 0 terminated list of player indeces
 				event->SetString( "cappers", cappers );
 				event->SetInt( "priority", 9 );
 

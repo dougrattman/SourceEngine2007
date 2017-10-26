@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #include "motion_blur_vs20.inc"
 #include "motion_blur_ps20.inc"
 #include "motion_blur_ps20b.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{bb82363a-b8d5-4cfd-b6e5-bc49fef471e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Link Libraries">
+      <UniqueIdentifier>{b7f4e5d8-cf46-481f-a86c-0e1c814495bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Link Libraries\Maya">
+      <UniqueIdentifier>{fa14ead2-e44d-44ff-a3df-2b2359fca20f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{cca66ad7-1973-4160-b1aa-b9a4296ebc5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{96e5e494-fbe4-4e1b-9949-99b5d18bfda6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{d08d54b7-b1e3-4d25-8d05-c01535b2eba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mel">
+      <UniqueIdentifier>{002643aa-aee2-4151-b231-61a0ba5529a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CVsDmxIOCmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CVsDmxIOTranslator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DmeExport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DmeImport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\public\tier0\memoverride.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsDmxIOInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\public\interpolatortypes.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\public\movieobjects\movieobjects.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\public\vgui_controls\vgui_controls.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\lib\public\datamodel.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\dmserializers.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\mathlib.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\movieobjects.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\tier0.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\tier1.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\tier2.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\tier3.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\maya\8.0\valveMaya.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\vgui_controls.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\public\vstdlib.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\common\maya\8.0\Foundation.lib">
+      <Filter>Link Libraries\Maya</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\common\maya\8.0\OpenMaya.lib">
+      <Filter>Link Libraries\Maya</Filter>
+    </Library>
+    <Library Include="..\..\..\lib\common\maya\8.0\OpenMayaAnim.lib">
+      <Filter>Link Libraries\Maya</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vsDmxIO_Maya8.vpc">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="..\..\..\..\game\sdktools\maya\8.0\modules\valvesource\scripts\vsDmxIOTranslatorOptions.mel">
+      <Filter>mel</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DmeExport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DmeImport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\public\interpolatortypes.h">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

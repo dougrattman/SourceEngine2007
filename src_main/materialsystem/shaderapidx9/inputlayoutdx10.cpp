@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -33,7 +33,7 @@ struct FieldInfo_t
 {
 	const char *m_pSemanticString;
 	unsigned int m_nSemanticIndex;
-	uint64 m_nFormatMask;
+	uint64_t m_nFormatMask;
 	int m_nFieldSize;
 };
 

@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BOT_UTIL_H
 #define BOT_UTIL_H
 
 
-#include "convar.h"
+#include "tier1/convar.h"
 #include "util.h"
 
 //--------------------------------------------------------------------------------------------------------------
@@ -58,8 +58,8 @@ extern ConVar cv_bot_flipout;
 
 
 #define CREATE_FAKE_CLIENT		( *g_engfuncs.pfnCreateFakeClient )
-#define GET_USERINFO			( *g_engfuncs.pfnGetInfoKeyBuffer )
-#define SET_KEY_VALUE			( *g_engfuncs.pfnSetKeyValue )
+#define GET_USERINFO ( *g_engfuncs.pfnGetInfoKeyBuffer )
+#define SET_KEY_VALUE ( *g_engfuncs.pfnSetKeyValue )
 #define SET_CLIENT_KEY_VALUE	( *g_engfuncs.pfnSetClientKeyValue )
 
 class BotProfile;
@@ -123,8 +123,8 @@ inline bool IsEntityValid( CBaseEntity *entity )
  * Note that this computes the intersection of the 2D (x,y) projection of the line segments.
  */
 inline bool IsIntersecting2D( const Vector &startA, const Vector &endA, 
-															const Vector &startB, const Vector &endB, 
-															Vector *result = NULL )
+     const Vector &startB, const Vector &endB, 
+     Vector *result = NULL )
 {
 	float denom = (endA.x - startA.x) * (endB.y - startB.y) - (endA.y - startA.y) * (endB.x - startB.x);
 	if (denom == 0.0f)

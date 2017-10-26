@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_TF_WEAPON_BUILDER_H
 #define C_TF_WEAPON_BUILDER_H
@@ -62,7 +62,7 @@ public:
 
 	virtual bool HasAmmo( void );
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_BUILDER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_BUILDER; }
 
 	int GetObjectType( void ) { return m_iObjectType; }
 
@@ -72,7 +72,7 @@ public:
 
 public:
 	// Builder Data
-	int			m_iBuildState;
+	int m_iBuildState;
 	unsigned int m_iObjectType;
 	float		m_flStartTime;
 	float		m_flTotalTime;

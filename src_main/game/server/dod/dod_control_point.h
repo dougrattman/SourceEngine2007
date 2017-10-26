@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef DOD_CONTROL_POINT_H
 #define DOD_CONTROL_POINT_H
@@ -49,7 +49,7 @@ public:
 	void		InputShowModel( inputdata_t &input );
 	void		InputHideModel( inputdata_t &input );
 
-	int			PointValue( void );
+	int PointValue( void );
 	
 	void		RoundRespawn( void );	//Mugsy - resetting
 	void		TriggerTargets( void );
@@ -61,22 +61,22 @@ public:
 	void		SendCapString( int team, int iNumCappers, int *pCappingPlayers );
 
 	void		SetOwner( int team, bool bMakeSound = true, int iNumCappers = 0, int *iCappingPlayers = NULL );
-	int			GetOwner( void ) const;
+	int GetOwner( void ) const;
 
-	int			GetDefaultOwner( void ) const;
+	int GetDefaultOwner( void ) const;
 
 	inline const char *GetName( void ) { return STRING(m_iszPrintName); }
-	int			GetCPGroup( void );
-	int			GetPointIndex( void ) { return m_iPointIndex; }	//the mapper set index
+	int GetCPGroup( void );
+	int GetPointIndex( void ) { return m_iPointIndex; }	//the mapper set index
 	void		SetPointIndex( int index ) { m_iPointIndex = index; }
-	int			GetAlliesIcon( void ) { return m_iAlliesIcon; }
-	int			GetAxisIcon( void ) { return m_iAxisIcon; }
-	int			GetNeutralIcon( void ) { return m_iNeutralIcon; }
+	int GetAlliesIcon( void ) { return m_iAlliesIcon; }
+	int GetAxisIcon( void ) { return m_iAxisIcon; }
+	int GetNeutralIcon( void ) { return m_iNeutralIcon; }
 
-	int			GetCurrentHudIconIndex( void );
-	int			GetHudIconIndexForTeam( int team );
-	int			GetTimerCapHudIcon( void );
-	int			GetBombedHudIcon( void );
+	int GetCurrentHudIconIndex( void );
+	int GetHudIconIndexForTeam( int team );
+	int GetTimerCapHudIcon( void );
+	int GetBombedHudIcon( void );
 
 	inline bool	IsActive( void ) { return m_bActive; }
 
@@ -90,15 +90,15 @@ public:
 	void		BombDisarmed( CDODPlayer *pDisarmingPlayer );
 	void		CancelBombPlanted( void );
 
-	int			GetBombsRemaining( void ) { return m_iBombsRemaining; }	// total bombs required
-	int			GetBombsRequired( void ) { return m_iBombsRequired; }		// number of bombs remaining
+	int GetBombsRemaining( void ) { return m_iBombsRemaining; }	// total bombs required
+	int GetBombsRequired( void ) { return m_iBombsRequired; }		// number of bombs remaining
 
 private:
 	void		InternalSetOwner( int team, bool bMakeSound = true, int iNumCappers = 0, int *iCappingPlayers = NULL );
 
-	int			m_iTeam;			//0 - clear, 2 - allies, 3 - axis
-	int			m_iDefaultOwner;	//team that initially owns the cap point
-	int			m_iIndex;			//the index of this point in the controlpointArray
+	int m_iTeam; //0 - clear, 2 - allies, 3 - axis
+	int m_iDefaultOwner;	//team that initially owns the cap point
+	int m_iIndex; //the index of this point in the controlpointArray
 
 	string_t	m_iszPrintName;
 	
@@ -110,9 +110,9 @@ private:
 	string_t	m_iszAxisModel;
 	string_t	m_iszResetModel;
 
-	int			m_iAlliesModelBodygroup;//which bodygroup to use in the model
-	int			m_iAxisModelBodygroup;
-	int			m_iResetModelBodygroup;
+	int m_iAlliesModelBodygroup;//which bodygroup to use in the model
+	int m_iAxisModelBodygroup;
+	int m_iResetModelBodygroup;
 
 	COutputEvent	m_AlliesCapOutput;	//outputs to fire when capped
 	COutputEvent	m_AxisCapOutput;
@@ -121,11 +121,11 @@ private:
 	COutputEvent m_OwnerChangedToAllies;
 	COutputEvent m_OwnerChangedToAxis;
 
-	int			m_iAlliesIcon;			//custom hud sprites for cap point
-	int			m_iAxisIcon;
-	int			m_iNeutralIcon;
-	int			m_iTimerCapIcon;
-	int			m_iBombedIcon;
+	int m_iAlliesIcon; //custom hud sprites for cap point
+	int m_iAxisIcon;
+	int m_iNeutralIcon;
+	int m_iTimerCapIcon;
+	int m_iBombedIcon;
 
 	string_t	m_iszAlliesIcon;
 	string_t	m_iszAxisIcon;
@@ -133,13 +133,13 @@ private:
 	string_t	m_iszTimerCapIcon;
 	string_t    m_iszBombedIcon;
 
-	int			m_bPointVisible;		//should this capture point be visible on the hud?
-	int			m_iPointIndex;			//the mapper set index value of this control point
+	int m_bPointVisible;		//should this capture point be visible on the hud?
+	int m_iPointIndex; //the mapper set index value of this control point
 
-	int			m_iCPGroup;			//the group that this control point belongs to
-	bool		m_bActive;			//
+	int m_iCPGroup; //the group that this control point belongs to
+	bool		m_bActive; //
 
-	string_t	m_iszName;				//Name used in cap messages
+	string_t	m_iszName; 	//Name used in cap messages
 
 	bool		m_bStartDisabled;
 

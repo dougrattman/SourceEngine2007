@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A hideous, putrescent, pus-filled undead carcass atop which a vile
 //			nest of filthy poisonous headcrabs lurks.
@@ -7,7 +7,7 @@
 //			will leap from the nest to attack. At long range he will wrench a
 //			headcrab from his back to throw it at his enemy.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_basenpc.h"

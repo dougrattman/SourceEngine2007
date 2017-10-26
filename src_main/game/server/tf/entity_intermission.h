@@ -2,7 +2,7 @@
 //
 // Purpose: Triggers an intermission
 //
-//=============================================================================//
+
 #ifndef ENTITY_INTERMISSION_H
 #define ENTITY_INTERMISSION_H
 

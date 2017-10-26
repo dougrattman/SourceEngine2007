@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <assert.h>
+
+#include <cassert>
 
 #define PROTECTED_THINGS_DISABLE
 
@@ -17,7 +17,7 @@
 #include <vgui/ISystem.h>
 #include <vgui/IVgui.h>
 #include <vgui/KeyCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/MouseCode.h>
 
 #include <vgui_controls/TreeView.h>
@@ -781,7 +781,8 @@ int TreeNode::FindChild( TreeNode *pChild )
 {
 	if ( !m_pTreeView->m_pSortFunc )
 	{
-		for ( int i = 0; i < GetChildrenCount(); --i )
+		AssertMsg( 0, "This code has never been tested. Is it correct?" );
+		for ( int i = 0; i < GetChildrenCount(); ++i )
 		{
 			if ( m_Children[i] == pChild )
 				return i;

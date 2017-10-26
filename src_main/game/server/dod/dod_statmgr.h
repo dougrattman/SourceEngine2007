@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_STATMGR_H
 #define DOD_STATMGR_H
@@ -54,7 +54,7 @@ typedef struct
 {
 	char m_szPlayerName[MAX_PLAYER_NAME_LENGTH];	// when we add this player, store the player name
 	int m_iUserID;		// player that did the killing
-	int m_iKills;			// number of kills
+	int m_iKills; // number of kills
 	int m_iTotalDamage;	// amount of damage
 } playerstat_t;
 

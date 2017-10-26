@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for helicopters & helicopter-type vehicles
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CBASEHELICOPTER_H
 #define CBASEHELICOPTER_H
@@ -21,7 +21,7 @@
 //---------------------------------------------------------
 enum HelicopterFlags_t
 {
-	BITS_HELICOPTER_GUN_ON			= 0x00000001,	// Gun is on and aiming
+	BITS_HELICOPTER_GUN_ON = 0x00000001,	// Gun is on and aiming
 	BITS_HELICOPTER_MISSILE_ON		= 0x00000002,	// Missile turrets are on and aiming
 };
 
@@ -35,18 +35,18 @@ enum HelicopterFlags_t
 //---------------------------------------------------------
 //---------------------------------------------------------
 // Pathing data
-#define BASECHOPPER_LEAD_DISTANCE			800.0f
+#define BASECHOPPER_LEAD_DISTANCE 800.0f
 #define	BASECHOPPER_MIN_CHASE_DIST_DIFF		128.0f	// Distance threshold used to determine when a target has moved enough to update our navigation to it
-#define BASECHOPPER_AVOID_DIST				256.0f
+#define BASECHOPPER_AVOID_DIST 	256.0f
 
-#define BASECHOPPER_MAX_SPEED				400.0f
+#define BASECHOPPER_MAX_SPEED 	400.0f
 #define BASECHOPPER_MAX_FIRING_SPEED		250.0f
-#define BASECHOPPER_MIN_ROCKET_DIST			1000.0f
-#define BASECHOPPER_MAX_GUN_DIST			2000.0f
+#define BASECHOPPER_MIN_ROCKET_DIST 1000.0f
+#define BASECHOPPER_MAX_GUN_DIST 2000.0f
 
 //---------------------------------------------------------
 // Physics rotor pushing
-#define BASECHOPPER_WASH_RADIUS			256
+#define BASECHOPPER_WASH_RADIUS 256
 #define BASECHOPPER_WASH_PUSH_MIN		30		// Initial force * their mass applied to objects in the wash
 #define BASECHOPPER_WASH_PUSH_MAX		40		// Maximum force * their mass applied to objects in the wash
 #define BASECHOPPER_WASH_RAMP_TIME		1.0		// Time it takes to ramp from the initial to the max force on an object in the wash (at the center of the wash)
@@ -62,7 +62,7 @@ struct washentity_t
 	float		flWashStartTime;
 };
 
-#define BASECHOPPER_WASH_ALTITUDE			1024.0f
+#define BASECHOPPER_WASH_ALTITUDE 1024.0f
 
 //=========================================================
 //=========================================================
@@ -88,7 +88,7 @@ public:
 	void GibMonster( void );
 
 	Class_T Classify ( void ) { return CLASS_COMBINE; }
-			 
+  
 	void CallDyingThink( void ) { DyingThink(); }
 
 	bool HasEnemy( void ) { return GetEnemy() != NULL; }
@@ -124,35 +124,35 @@ public:
 	virtual void InitializeRotorSound( void );
 	virtual void UpdateRotorSoundPitch( int iPitch );
 
-	virtual void AimRocketGun(void) {};
+	virtual void AimRocketGun() {};
 	virtual void FireRocket(  Vector vLaunchPos, Vector vLaunchDir  ) {};
 
 	virtual bool	GetTrackPatherTarget( Vector *pPos );
 	virtual CBaseEntity *GetTrackPatherTargetEnt();
 
-	void	DrawDebugGeometryOverlays(void);
+	void	DrawDebugGeometryOverlays();
 
 	// Rotor washes
 	virtual void	DrawRotorWash( float flAltitude, const Vector &vecRotorOrigin );
-	void			DoRotorPhysicsPush( const Vector &vecRotorOrigin, float flAltitude );
-	bool			DoWashPush( washentity_t *pWash, const Vector &vecWashOrigin );
-	void			StopRotorWash( void );
+	void DoRotorPhysicsPush( const Vector &vecRotorOrigin, float flAltitude );
+	bool DoWashPush( washentity_t *pWash, const Vector &vecWashOrigin );
+	void StopRotorWash( void );
 
 	// Purpose: Marks the entity for deletion
-	void			InputKill( inputdata_t &inputdata );
-	void			DelayedKillThink( );
+	void InputKill( inputdata_t &inputdata );
+	void DelayedKillThink( );
 
-	virtual			void SetTransmit( CCheckTransmitInfo *pInfo, bool bAlways );
+	virtual void SetTransmit( CCheckTransmitInfo *pInfo, bool bAlways );
 
 	// Helicopters never burn
 	virtual void	Ignite( float flFlameLifetime, bool bNPCOnly, float flSize, bool bCalledByLevelDesigner ) { return; }
 
 
 protected:
-	void			HelicopterMove( );
+	void HelicopterMove( );
 
 	// Updates the enemy
-	void			UpdateEnemy();
+	void UpdateEnemy();
 
 	// Override the desired position if your derived helicopter is doing something special
 	virtual void	UpdateDesiredPosition( void );
@@ -161,10 +161,10 @@ protected:
 	virtual void	UpdateFacingDirection();
 
 	// Fire weapons
-	void			FireWeapons();
+	void FireWeapons();
 
 	// Computes the actual position to fly to
-	void			ComputeActualTargetPosition( float flSpeed, float flTime, float flPerpDist, Vector *pDest, bool bApplyNoise = true );
+	void ComputeActualTargetPosition( float flSpeed, float flTime, float flPerpDist, Vector *pDest, bool bApplyNoise = true );
 
 	// Gets the max speed of the helicopter
 	virtual float	GetMaxSpeed();
@@ -174,10 +174,10 @@ protected:
 	virtual float	EnemySearchDistance( );
 
 	// Rotor wash think
-	void			RotorWashThink( void );
+	void RotorWashThink( void );
 
 	// Purpose: Push an airboat in our wash
-	void			DoWashPushOnAirboat( CBaseEntity *pAirboat, const Vector &vecWashToAirboat, float flWashAmount );
+	void DoWashPushOnAirboat( CBaseEntity *pAirboat, const Vector &vecWashToAirboat, float flWashAmount );
 
 	// Updates the rotor wash volume
 	virtual void	UpdateRotorWashVolume();
@@ -187,52 +187,52 @@ protected:
 	void	InputDisableRotorSound( inputdata_t &inputdata );
 
 protected:
-	CSoundPatch		*m_pRotorSound;				// Rotor loop played when the player can see the helicopter
-	CSoundPatch		*m_pRotorBlast;				// Sound played when the helicopter's pushing around physics objects
+	CSoundPatch		*m_pRotorSound; 	// Rotor loop played when the player can see the helicopter
+	CSoundPatch		*m_pRotorBlast; 	// Sound played when the helicopter's pushing around physics objects
 
-	float			m_flForce;
-	int				m_fHelicopterFlags;
+	float m_flForce;
+	int 	m_fHelicopterFlags;
 
-	Vector			m_vecDesiredFaceDir;
+	Vector m_vecDesiredFaceDir;
 
-	float			m_flLastSeen;
-	float			m_flPrevSeen;
+	float m_flLastSeen;
+	float m_flPrevSeen;
 
-	int				m_iSoundState;		// don't save this
+	int 	m_iSoundState;		// don't save this
 
-	Vector			m_vecTargetPosition;
+	Vector m_vecTargetPosition;
 
-	float			m_flMaxSpeed;		// Maximum speed of the helicopter.
-	float			m_flMaxSpeedFiring;	// Maximum speed of the helicopter whilst firing guns.
+	float m_flMaxSpeed;		// Maximum speed of the helicopter.
+	float m_flMaxSpeedFiring;	// Maximum speed of the helicopter whilst firing guns.
 
-	float			m_flGoalSpeed;		// Goal speed
-	float			m_flInitialSpeed;
+	float m_flGoalSpeed;		// Goal speed
+	float m_flInitialSpeed;
 
-	float			m_flRandomOffsetTime;
-	Vector			m_vecRandomOffset;
-	float			m_flRotorWashEntitySearchTime;
-	bool			m_bSuppressSound;
+	float m_flRandomOffsetTime;
+	Vector m_vecRandomOffset;
+	float m_flRotorWashEntitySearchTime;
+	bool m_bSuppressSound;
 
-	EHANDLE			m_hRotorWash;	// Attached rotorwash entity
-
-	// Inputs
-	void			InputActivate( inputdata_t &inputdata );
+	EHANDLE m_hRotorWash;	// Attached rotorwash entity
 
 	// Inputs
-	void			InputGunOn( inputdata_t &inputdata );
-	void			InputGunOff( inputdata_t &inputdata );
-	void			InputMissileOn( inputdata_t &inputdata );
-	void			InputMissileOff( inputdata_t &inputdata );
-	void			InputEnableRotorWash( inputdata_t &inputdata );
-	void			InputDisableRotorWash( inputdata_t &inputdata );
-	void			InputMoveTopSpeed( inputdata_t &inputdata );	// Causes the helicopter to immediately accelerate to its desired velocity
-	void			InputMoveSpecifiedSpeed( inputdata_t &inputdata );
-	void			InputSetAngles( inputdata_t &inputdata );	// Sets the angles of the helicopter
+	void InputActivate( inputdata_t &inputdata );
+
+	// Inputs
+	void InputGunOn( inputdata_t &inputdata );
+	void InputGunOff( inputdata_t &inputdata );
+	void InputMissileOn( inputdata_t &inputdata );
+	void InputMissileOff( inputdata_t &inputdata );
+	void InputEnableRotorWash( inputdata_t &inputdata );
+	void InputDisableRotorWash( inputdata_t &inputdata );
+	void InputMoveTopSpeed( inputdata_t &inputdata );	// Causes the helicopter to immediately accelerate to its desired velocity
+	void InputMoveSpecifiedSpeed( inputdata_t &inputdata );
+	void InputSetAngles( inputdata_t &inputdata );	// Sets the angles of the helicopter
 
 protected:	
 	// Custom conservative collision volumes
-	Vector			m_cullBoxMins;
-	Vector			m_cullBoxMaxs;
+	Vector m_cullBoxMins;
+	Vector m_cullBoxMaxs;
 
 	// Wash physics pushing
 	CUtlVector< washentity_t >	m_hEntitiesPushedByWash;

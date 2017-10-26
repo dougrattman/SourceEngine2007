@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "tier1/utllinkedlist.h"
 #include "bitstring.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "ai_navigator.h"
 #include "scripted.h"
 #include "ai_hint.h"

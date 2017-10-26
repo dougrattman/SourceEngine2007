@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SCROLLBAR_H
 #define SCROLLBAR_H
@@ -23,7 +23,7 @@ class ScrollBarSlider;
 
 //-----------------------------------------------------------------------------
 // Purpose: Generic scrollbar
-//			Uses Buttons & SliderBars for the main functionality
+// Uses Buttons & SliderBars for the main functionality
 //-----------------------------------------------------------------------------
 class ScrollBar : public Panel
 {
@@ -87,7 +87,7 @@ public:
 
 	/* MESSAGES SENT:
 		"ScrollBarSliderMoved"
-			"position" - new value of the slider
+ "position" - new value of the slider
 	*/
 
 protected:

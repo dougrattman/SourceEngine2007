@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYERANDOBJECTENUMERATOR_H
 #define PLAYERANDOBJECTENUMERATOR_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 #include "ehandle.h"
 #include "ISpatialPartition.h"
 

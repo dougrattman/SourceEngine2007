@@ -42,10 +42,10 @@ private:
 
 private:
 	char	m_szModelPanel[64];		// the panel we'll send messages to
-	int		m_iTeam;				// the team we're associated with (if any)
+	int		m_iTeam; 	// the team we're associated with (if any)
 
 	float	m_flHoverTimeToWait;	// length of time to wait before reporting a "hover" message (-1 = no hover)
-	float	m_flHoverTime;			// when should a "hover" message be sent?
+	float	m_flHoverTime; // when should a "hover" message be sent?
 	bool	m_bMouseEntered;		// used to track when the mouse is over a button
 	bool	m_bTeamDisabled;		// used to keep track of whether our team is a valid team for selection
 };

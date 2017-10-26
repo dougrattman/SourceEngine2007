@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef C_PLANTEDC4_H
 #define C_PLANTEDC4_H
 
@@ -14,7 +14,7 @@
 
 #include "c_cs_player.h"
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 // ------------------------------------------------------------------------------------------ //
 // CPlantedC4 class.
@@ -56,14 +56,14 @@ public:
 
 		if( m_flDefuseLength > 0.0 )
 		{
-			flProgress = ( ( m_flDefuseCountDown - gpGlobals->curtime ) / m_flDefuseLength );
+ flProgress = ( ( m_flDefuseCountDown - gpGlobals->curtime ) / m_flDefuseLength );
 		}
 
 		return flProgress;
 	}
 
 	float	m_flNextRadarFlashTime;	// next time to change flash state
-	bool	m_bRadarFlash;			// is the flash on or off
+	bool	m_bRadarFlash; // is the flash on or off
 };
 
 extern CUtlVector< C_PlantedC4* > g_PlantedC4s;

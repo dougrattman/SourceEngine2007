@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VGUI_MODELPANEL_H
 #define VGUI_MODELPANEL_H
@@ -46,20 +46,20 @@ public:
 	{
 		if ( m_pszName && m_pszName[0] )
 		{
-			delete [] m_pszName;
-			m_pszName = NULL;
+ delete [] m_pszName;
+ m_pszName = NULL;
 		}
 
 		if ( m_pszSequence && m_pszSequence[0] )
 		{
-			delete [] m_pszSequence;
-			m_pszSequence = NULL;
+ delete [] m_pszSequence;
+ m_pszSequence = NULL;
 		}
 
 		if ( m_pPoseParameters )
 		{
-			m_pPoseParameters->deleteThis();
-			m_pPoseParameters = NULL;
+ m_pPoseParameters->deleteThis();
+ m_pPoseParameters = NULL;
 		}
 	}
 
@@ -86,14 +86,14 @@ public:
 	{
 		if ( m_pszModelName && m_pszModelName[0] )
 		{
-			delete [] m_pszModelName;
-			m_pszModelName = NULL;
+ delete [] m_pszModelName;
+ m_pszModelName = NULL;
 		}
 	}
 
 public:
 	const char	*m_pszModelName;
-	int			m_nSkin;
+	int m_nSkin;
 };
 
 //-----------------------------------------------------------------------------
@@ -116,20 +116,20 @@ public:
 	{
 		if ( m_pszModelName && m_pszModelName[0] )
 		{
-			delete [] m_pszModelName;
-			m_pszModelName = NULL;
+ delete [] m_pszModelName;
+ m_pszModelName = NULL;
 		}
 
 		if ( m_pszModelName_HWM && m_pszModelName_HWM[0] )
 		{
-			delete [] m_pszModelName_HWM;
-			m_pszModelName_HWM = NULL;
+ delete [] m_pszModelName_HWM;
+ m_pszModelName_HWM = NULL;
 		}
 
 		if ( m_pszVCD && m_pszVCD[0] )
 		{
-			delete [] m_pszVCD;
-			m_pszVCD = NULL;
+ delete [] m_pszVCD;
+ m_pszVCD = NULL;
 		}
 
 		m_Animations.PurgeAndDeleteElements();
@@ -139,7 +139,7 @@ public:
 public:
 	const char	*m_pszModelName;
 	const char	*m_pszModelName_HWM;
-	int			m_nSkin;
+	int m_nSkin;
 	const char	*m_pszVCD;
 	Vector		m_vecAbsAngles;
 	Vector		m_vecOriginOffset;
@@ -186,13 +186,13 @@ private:
 	void InitCubeMaps();
 
 public:
-	int								m_nFOV;
-	CModelPanelModelInfo			*m_pModelInfo;
+	int  		m_nFOV;
+	CModelPanelModelInfo *m_pModelInfo;
 
-	CHandle<CModelPanelModel>				m_hModel;
+	CHandle<CModelPanelModel> 	m_hModel;
 	CUtlVector<CHandle<C_BaseAnimating> >	m_AttachedModels;
 
-	CHandle<C_SceneEntity>			m_hScene;
+	CHandle<C_SceneEntity> m_hScene;
 
 private:
 	bool	m_bPanelDirty;

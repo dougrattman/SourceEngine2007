@@ -15,7 +15,7 @@
 #include <vgui/IScheme.h>
 #include <game/client/iviewport.h>
 #include <vgui/IVGUI.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <FileSystem.h>
 
 #include "vguicenterprint.h"

@@ -1,16 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #ifndef GL_WATER_H
 #define GL_WATER_H
-#pragma once
 
 // sky
-extern void			R_DrawSkyBox (float zFar, int nDrawFlags = 0x3F );
+extern void R_DrawSkyBox(float zFar, int nDrawFlags = 0x3F);
 
-#endif		// GL_WATER_H
-
+#endif  // GL_WATER_H

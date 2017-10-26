@@ -1,11 +1,11 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 //=============================================================================
 
 #if !defined( _X360 )
-#include <windows.h>
+#include "winlite.h"
 #endif
 #include "filesystem.h"
 #include "filesystem_init.h"

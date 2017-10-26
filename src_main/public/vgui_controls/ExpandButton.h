@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A button with no borders that shows a left-pointing or down-pointing triangle
 //
@@ -47,7 +47,7 @@ protected:
 
 	/* MESSAGES SENT
 		"Expanded" - sent when the expand button state is changed
-			"state"	- button state: 1 is expanded, 0 is unexpanded
+ "state"	- button state: 1 is expanded, 0 is unexpanded
 	*/
 
 private:

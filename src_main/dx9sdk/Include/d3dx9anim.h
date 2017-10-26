@@ -947,7 +947,7 @@ D3DXFrameFind
 //----------------------------------------------------------------------------
 // D3DXFrameRegisterNamedMatrices:
 // -------------------------------
-// Finds all frames that have non-null names and registers each of those frame
+// Finds all frames that have non-0 names and registers each of those frame
 // matrices to the given animation controller
 //
 // Parameters:
@@ -967,7 +967,7 @@ D3DXFrameRegisterNamedMatrices
 //----------------------------------------------------------------------------
 // D3DXFrameNumNamedMatrices:
 // --------------------------
-// Counts number of frames in a subtree that have non-null names 
+// Counts number of frames in a subtree that have non-0 names 
 //
 // Parameters:
 //	pFrameRoot

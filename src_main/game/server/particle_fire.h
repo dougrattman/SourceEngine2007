@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef PARTICLE_FIRE_H
 #define PARTICLE_FIRE_H
@@ -22,7 +22,7 @@ public:
 
 	DECLARE_CLASS( CParticleFire, CBaseParticleEntity );
 
-					DECLARE_SERVERCLASS();
+ 		DECLARE_SERVERCLASS();
 
 	// The client shoots a ray out and starts creating fire where it hits.
 	CNetworkVector( m_vOrigin );

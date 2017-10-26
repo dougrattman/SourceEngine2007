@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PORTAL_SHAREDDEFS_H
 #define PORTAL_SHAREDDEFS_H
@@ -32,7 +32,7 @@
 
 enum PortalFizzleType_t
 {
-	PORTAL_FIZZLE_SUCCESS = 0,			// Placed fine (no fizzle)
+	PORTAL_FIZZLE_SUCCESS = 0, // Placed fine (no fizzle)
 	PORTAL_FIZZLE_CANT_FIT,
 	PORTAL_FIZZLE_OVERLAPPED_LINKED,
 	PORTAL_FIZZLE_BAD_VOLUME,

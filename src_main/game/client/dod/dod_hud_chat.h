@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_HUD_CHAT_H
 #define DOD_HUD_CHAT_H
@@ -32,9 +32,9 @@ public:
 	CHudChatLine( vgui::Panel *parent, const char *panelName );
 
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
-	void			MsgFunc_SayText(bf_read &msg);
+	void MsgFunc_SayText(bf_read &msg);
 
-	void InsertAndColorizeText( wchar_t *buf, int clientIndex );			///< Parses the color markup and calls Colorize()
+	void InsertAndColorizeText( wchar_t *buf, int clientIndex ); ///< Parses the color markup and calls Colorize()
 
 private:
 	CHudChatLine( const CHudChatLine & ); // not defined, not accessible
@@ -68,12 +68,12 @@ public:
 	virtual void	Reset( void );
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
 
-	void			MsgFunc_SayText( bf_read &msg );
+	void MsgFunc_SayText( bf_read &msg );
 	virtual void	MsgFunc_VoiceSubtitle( bf_read &msg );
-	void			MsgFunc_HandSignalSubtitle( bf_read &msg );
-	int				GetChatInputOffset( void );
+	void MsgFunc_HandSignalSubtitle( bf_read &msg );
+	int 	GetChatInputOffset( void );
 
-	void			FindLocalizableSubstrings( char *szChat, int chatLength );
+	void FindLocalizableSubstrings( char *szChat, int chatLength );
 
 
 	virtual Color	GetTextColorForClient( TextColor colorNum, int clientIndex );

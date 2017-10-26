@@ -1,17 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #ifndef TMESSAGE_H
 #define TMESSAGE_H
-#pragma once
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  // __cplusplus
 
 #define DEMO_MESSAGE "__DEMOMESSAGE__"
 #define NETWORK_MESSAGE1 "__NETMESSAGE__1"
@@ -21,27 +15,29 @@ extern "C" {
 #define NETWORK_MESSAGE5 "__NETMESSAGE__5"
 #define NETWORK_MESSAGE6 "__NETMESSAGE__6"
 
-#define MAX_NETMESSAGE	6
+#define MAX_NETMESSAGE 6
 
 #include "client_textmessage.h"
 
-extern client_textmessage_t	*gMessageTable;
-extern int					gMessageTableCount;
+extern client_textmessage_t *gMessageTable;
+extern int gMessageTableCount;
 
-extern client_textmessage_t	gNetworkTextMessage[MAX_NETMESSAGE];
-extern char					gNetworkTextMessageBuffer[MAX_NETMESSAGE][512];
-extern const char			*gNetworkMessageNames[MAX_NETMESSAGE];
+extern client_textmessage_t gNetworkTextMessage[MAX_NETMESSAGE];
+extern char gNetworkTextMessageBuffer[MAX_NETMESSAGE][512];
+extern const char *gNetworkMessageNames[MAX_NETMESSAGE];
 
 // text message system
-void					TextMessageInit( void );
-client_textmessage_t *TextMessageGet( const char *pName );
-void					TextMessageShutdown( void );
+void TextMessageInit(void);
+client_textmessage_t *TextMessageGet(const char *pName);
+void TextMessageShutdown(void);
 
-void TextMessage_DemoMessage( const char *pszMessage, float fFadeInTime, float fFadeOutTime, float fHoldTime );
-void TextMessage_DemoMessageFull( const char *pszMessage, client_textmessage_t const *message );
+void TextMessage_DemoMessage(const char *pszMessage, float fFadeInTime,
+                             float fFadeOutTime, float fHoldTime);
+void TextMessage_DemoMessageFull(const char *pszMessage,
+                                 client_textmessage_t const *message);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  // __cplusplus
 
-#endif		//TMESSAGE_H
+#endif  // TMESSAGE_H

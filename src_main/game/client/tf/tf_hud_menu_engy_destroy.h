@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_HUD_MENU_ENGY_DESTROY_H
 #define TF_HUD_MENU_ENGY_DESTROY_H

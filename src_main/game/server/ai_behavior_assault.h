@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_BEHAVIOR_ASSAULT_H
 #define AI_BEHAVIOR_ASSAULT_H
@@ -67,8 +67,8 @@ public:
 	{
 		if( IsLocked() )
 		{
-			// Already locked.
-			return false;
+ // Already locked.
+ return false;
 		}
 
 		m_hLockedBy.Set( pLocker );
@@ -79,11 +79,11 @@ public:
 	{
 		if( IsLocked() )
 		{
-			if( m_hLockedBy.Get() != pUnlocker )
-			{
-				// Refuse! Only the locker may unlock.
-				return false;
-			}
+ if( m_hLockedBy.Get() != pUnlocker )
+ {
+ 	// Refuse! Only the locker may unlock.
+ 	return false;
+ }
 		}
 
 		m_hLockedBy.Set( NULL );
@@ -105,8 +105,8 @@ public:
 	string_t	m_AssaultPointName;
 	string_t	m_RallySequenceName;
 	float		m_flAssaultDelay;
-	int			m_iPriority;
-	int			m_iStrictness;
+	int m_iPriority;
+	int m_iStrictness;
 	bool		m_bForceCrouch;
 	bool		m_bIsUrgent;
 	short		m_sExclusivity;
@@ -134,17 +134,17 @@ public:
 		m_flAssaultPointTolerance = CUE_POINT_TOLERANCE;
 	}
 
-	void 			InputSetClearOnContact( inputdata_t &inputdata )
+	void  InputSetClearOnContact( inputdata_t &inputdata )
 	{
 		m_bClearOnContact = inputdata.value.Bool();
 	}
 
-	void 			InputSetAllowDiversion( inputdata_t &inputdata )
+	void  InputSetAllowDiversion( inputdata_t &inputdata )
 	{
 		m_bAllowDiversion = inputdata.value.Bool();
 	}
 
-	void 			InputSetForceClear( inputdata_t &inputdata )
+	void  InputSetForceClear( inputdata_t &inputdata )
 	{
 		m_bInputForcedClear = inputdata.value.Bool();
 	}
@@ -153,17 +153,17 @@ public:
 	string_t		m_AssaultHintGroup;
 	string_t		m_NextAssaultPointName;
 	COutputEvent	m_OnAssaultClear;
-	float			m_flAssaultTimeout;
-	bool			m_bClearOnContact;
-	bool			m_bAllowDiversion;
-	float			m_flAllowDiversionRadius;
-	bool			m_bNeverTimeout;
-	int				m_iStrictness;
-	bool			m_bForceCrouch;
-	bool			m_bIsUrgent;
-	bool			m_bInputForcedClear;
-	float			m_flAssaultPointTolerance;
-	float			m_flTimeLastUsed;
+	float m_flAssaultTimeout;
+	bool m_bClearOnContact;
+	bool m_bAllowDiversion;
+	float m_flAllowDiversionRadius;
+	bool m_bNeverTimeout;
+	int 	m_iStrictness;
+	bool m_bForceCrouch;
+	bool m_bIsUrgent;
+	bool m_bInputForcedClear;
+	float m_flAssaultPointTolerance;
+	float m_flTimeLastUsed;
 
 	COutputEvent	m_OnArrival;
 
@@ -271,23 +271,23 @@ public:
 	CHandle<CRallyPoint> m_hRallyPoint;
 
 public:
-	void			UnlockRallyPoint( void );
+	void UnlockRallyPoint( void );
 
 private:
-	void			OnScheduleChange();
+	void OnScheduleChange();
 	virtual int		SelectSchedule();
 
-	AssaultCue_t	m_AssaultCue;			// the cue we're waiting for to begin the assault
+	AssaultCue_t	m_AssaultCue; // the cue we're waiting for to begin the assault
 	AssaultCue_t	m_ReceivedAssaultCue;	// the last assault cue we received from someone/thing external.
 
-	bool			m_bHitRallyPoint;
-	bool			m_bHitAssaultPoint;
+	bool m_bHitRallyPoint;
+	bool m_bHitAssaultPoint;
 
 	// Diversion
-	bool			m_bDiverting;
-	float			m_flLastSawAnEnemyAt;
+	bool m_bDiverting;
+	float m_flLastSawAnEnemyAt;
 
-	float			m_flTimeDeferScheduleSelection;
+	float m_flTimeDeferScheduleSelection;
 
 	string_t		m_AssaultPointName;
 

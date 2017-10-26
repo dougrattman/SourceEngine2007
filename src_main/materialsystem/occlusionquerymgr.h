@@ -1,4 +1,4 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -71,10 +71,10 @@ private:
 
 		OcclusionQueryObject_t(void)
 		{
-			m_QueryHandle = INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE;
-			m_LastResult = -1;
-			m_nFrameIssued = -1;
-			m_bHasBeenIssued = false;
+ m_QueryHandle = INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE;
+ m_LastResult = -1;
+ m_nFrameIssued = -1;
+ m_bHasBeenIssued = false;
 		}
 	};
 

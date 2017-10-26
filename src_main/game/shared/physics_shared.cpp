@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Game & Client shared functions moved from physics.cpp
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "vcollide_parse.h"
 #include "filesystem.h"
@@ -15,7 +15,7 @@
 #include "vphysics/object_hash.h"
 #include "vphysics/friction.h"
 #include "coordsize.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "decals.h"
 #include "IEffects.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
@@ -501,10 +501,6 @@ void AddSurfacepropFile( const char *pFileName, IPhysicsSurfaceProps *pProps, IF
 
 		// read the file
 		int nBufSize = len+1;
-		if ( IsXbox() )
-		{
-			nBufSize = AlignValue( nBufSize , 512 );
-		}
 		char *buffer = (char *)stackalloc( nBufSize );
 		pFileSystem->ReadEx( buffer, nBufSize, len, file );
 		pFileSystem->Close( file );

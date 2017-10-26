@@ -1,10 +1,10 @@
 
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "winerror.h"
@@ -494,7 +494,7 @@ bool CTFStatPanel::ReadStats( void )
 	{		
 		// does the file Steam ID match current Steam ID (so you can't hand around files)
 		/*CSteamID steamID = SteamUser()->GetSteamID();
-		if ( steamID.GetAccountID() == (uint32) iSteamID )
+		if ( steamID.GetAccountID() == (uint32_t) iSteamID )
 		{
 			m_bLocalFileTrusted = true;
 		}*/

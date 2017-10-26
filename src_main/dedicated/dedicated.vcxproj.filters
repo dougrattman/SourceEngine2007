@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0a34c0e2-6d72-4b1b-a3dc-eea24b0d8fa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Console">
+      <UniqueIdentifier>{3e1bd793-1e62-4cda-9f66-e07f2b2f5444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VGUI">
+      <UniqueIdentifier>{a6d1f641-7aaf-4253-b984-6dd9c0437e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem">
+      <UniqueIdentifier>{b440da2f-3905-42c5-aa06-41401bec34b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{89c6841d-676a-44e7-8df5-756da5eb28b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{849dfbef-66ee-4250-bc10-6aef2ec77c58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\console">
+      <UniqueIdentifier>{856a77de-dc8c-4b98-8eea-485f4b586992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\vgui">
+      <UniqueIdentifier>{272c6228-a9bb-44ea-b83d-fc1b8bd3572c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="filesystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\filesystem_init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\tier0\memoverride.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\netapi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\SteamAppStartup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_ded.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="console\conproc.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="console\textconsole.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="console\TextConsoleWin32.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui\CreateMultiplayerGameServerPage.cpp">
+      <Filter>Source Files\VGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui\MainPanel.cpp">
+      <Filter>Source Files\VGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\vgui_controls\vgui_controls.cpp">
+      <Filter>Source Files\VGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui\vguihelpers.cpp">
+      <Filter>Source Files\VGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\basefilesystem.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\filesystem_async.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\filesystem_stdio.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\filesystem_steam.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\filetracker.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\zip_utils.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_main_windows.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sys.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="dedicated.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dedicated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="isys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="console\conproc.h">
+      <Filter>Header Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="console\textconsole.h">
+      <Filter>Header Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="console\TextConsoleUnix.h">
+      <Filter>Header Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="console\TextConsoleWin32.h">
+      <Filter>Header Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui\CreateMultiplayerGameServerPage.h">
+      <Filter>Header Files\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui\MainPanel.h">
+      <Filter>Header Files\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui\vguihelpers.h">
+      <Filter>Header Files\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\windows\include\product_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

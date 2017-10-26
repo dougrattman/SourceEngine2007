@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: returns the module handle of the game dll
 //			this is in its own file to protect it from tier0 PROTECTED_THINGS
-//=============================================================================//
+
 
 
 #if defined(_WIN32)
 #include "winlite.h"
 extern HMODULE win32DLLHandle;
 #elif defined(_LINUX)
-#include <stdio.h>
+#include <cstdio>
 #include "tier0/dbg.h"
 #endif
 

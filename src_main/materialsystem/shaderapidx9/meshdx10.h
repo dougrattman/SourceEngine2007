@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -66,7 +66,7 @@ protected:
 	int m_nFirstUnwrittenOffset;
 	bool m_bIsLocked : 1;
 	bool m_bIsDynamic : 1;
-	bool m_bFlush : 1;				// Used only for dynamic buffers, indicates to discard the next time
+	bool m_bFlush : 1; 	// Used only for dynamic buffers, indicates to discard the next time
 
 #ifdef _DEBUG
 	static int s_nBufferCount;
@@ -135,7 +135,7 @@ protected:
 	int m_nFirstUnwrittenOffset;	// Used only for dynamic buffers, indicates where it's safe to write (nooverwrite)
 	bool m_bIsLocked : 1;
 	bool m_bIsDynamic : 1;
-	bool m_bFlush : 1;				// Used only for dynamic buffers, indicates to discard the next time
+	bool m_bFlush : 1; 	// Used only for dynamic buffers, indicates to discard the next time
 
 #ifdef _DEBUG
 	static int s_nBufferCount;

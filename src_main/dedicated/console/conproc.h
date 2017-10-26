@@ -1,30 +1,26 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// conproc.h -- support for external server monitoring programs
-#ifndef INC_CONPROCH
-#define INC_CONPROCH
+// Purpose: Support for external server monitoring programs.
 
-#define CCOM_WRITE_TEXT		0x2
+#ifndef SOURCE_DEDICATED_CONPROCH_H_
+#define SOURCE_DEDICATED_CONPROCH_H_
+
+#define CCOM_WRITE_TEXT 0x2
 // Param1 : Text
 
-#define CCOM_GET_TEXT		0x3
+#define CCOM_GET_TEXT 0x3
 // Param1 : Begin line
 // Param2 : End line
 
-#define CCOM_GET_SCR_LINES	0x4
+#define CCOM_GET_SCR_LINES 0x4
 // No params
 
-#define CCOM_SET_SCR_LINES	0x5
+#define CCOM_SET_SCR_LINES 0x5
 // Param1 : Number of lines
 
-void InitConProc ( void );
-void DeinitConProc ( void );
+void InitConProc();
+void DeinitConProc();
 
-void WriteStatusText( char *psz );
+void WriteStatusText(char *psz);
 
-#endif // !INC_CONPROCH
+#endif  // SOURCE_DEDICATED_CONPROCH_H_

@@ -1,14 +1,9 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2004, Valve Corporation, All rights reserved.
 //
 // Purpose: packfile manipulation functions
-//
-//=============================================================================
 
 #ifndef PACKFILE_H
 #define PACKFILE_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "tier0/platform.h"
 
@@ -32,4 +27,4 @@ int Pack_GetSizeMB();
 void Pack_FinishAppendingFile();
 int Pack_GetFileSizeMB(const char *pakfile);
 
-#endif // PACKFILE_H
+#endif  // PACKFILE_H

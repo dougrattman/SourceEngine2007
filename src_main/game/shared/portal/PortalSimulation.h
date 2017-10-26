@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Provides structures and classes necessary to simulate a portal.
 //
@@ -128,17 +128,17 @@ struct PS_SD_Static_World_Brushes_t
 struct PS_SD_Static_World_StaticProps_ClippedProp_t
 {
 	StaticPropPolyhedronGroups_t	PolyhedronGroup;
-	CPhysCollide *					pCollide;
+	CPhysCollide * 		pCollide;
 #ifndef CLIENT_DLL
-	IPhysicsObject *				pPhysicsObject;
+	IPhysicsObject * 	pPhysicsObject;
 #endif
-	IHandleEntity *					pSourceProp;
+	IHandleEntity * 		pSourceProp;
 
-	int								iTraceContents;
-	short							iTraceSurfaceProps;
-	static CBaseEntity *			pTraceEntity;
-	static const char *				szTraceSurfaceName; //same for all static props, here just for easy reference
-	static const int				iTraceSurfaceFlags; //same for all static props, here just for easy reference
+	int  		iTraceContents;
+	short  	iTraceSurfaceProps;
+	static CBaseEntity * pTraceEntity;
+	static const char * 	szTraceSurfaceName; //same for all static props, here just for easy reference
+	static const int 	iTraceSurfaceFlags; //same for all static props, here just for easy reference
 };
 
 struct PS_SD_Static_World_StaticProps_t
@@ -232,7 +232,7 @@ class CPhysicsShadowClone;
 struct PS_SD_Dynamic_PhysicsShadowClones_t
 {
 	CUtlVector<CBaseEntity *> ShouldCloneFromMain; //a list of entities that should be cloned from main if physics simulation is enabled
-													//in single-environment mode, this helps us track who should collide with who
+    	//in single-environment mode, this helps us track who should collide with who
 	
 	CUtlVector<CPhysicsShadowClone *> FromLinkedPortal;
 };
@@ -280,115 +280,115 @@ public:
 	CPortalSimulator( void );
 	~CPortalSimulator( void );
 
-	void				MoveTo( const Vector &ptCenter, const QAngle &angles );
-	void				ClearEverything( void );
+	void 	MoveTo( const Vector &ptCenter, const QAngle &angles );
+	void 	ClearEverything( void );
 
-	void				AttachTo( CPortalSimulator *pLinkedPortalSimulator );
-	void				DetachFromLinked( void ); //detach portals to sever the connection, saves work when planning on moving both portals
+	void 	AttachTo( CPortalSimulator *pLinkedPortalSimulator );
+	void 	DetachFromLinked( void ); //detach portals to sever the connection, saves work when planning on moving both portals
 	CPortalSimulator	*GetLinkedPortalSimulator( void ) const;
 
-	void				SetPortalSimulatorCallbacks( CPortalSimulatorEventCallbacks *pCallbacks );
+	void 	SetPortalSimulatorCallbacks( CPortalSimulatorEventCallbacks *pCallbacks );
 	
-	bool				IsReadyToSimulate( void ) const; //is active and linked to another portal
+	bool 	IsReadyToSimulate( void ) const; //is active and linked to another portal
 	
-	void				SetCollisionGenerationEnabled( bool bEnabled ); //enable/disable collision generation for the hole in the wall, needed for proper vphysics simulation
-	bool				IsCollisionGenerationEnabled( void ) const;
+	void 	SetCollisionGenerationEnabled( bool bEnabled ); //enable/disable collision generation for the hole in the wall, needed for proper vphysics simulation
+	bool 	IsCollisionGenerationEnabled( void ) const;
 
-	void				SetVPhysicsSimulationEnabled( bool bEnabled ); //enable/disable vphysics simulation. Will automatically update the linked portal to be the same
-	bool				IsSimulatingVPhysics( void ) const; //this portal is setup to handle any physically simulated object, false means the portal is handling player movement only
+	void 	SetVPhysicsSimulationEnabled( bool bEnabled ); //enable/disable vphysics simulation. Will automatically update the linked portal to be the same
+	bool 	IsSimulatingVPhysics( void ) const; //this portal is setup to handle any physically simulated object, false means the portal is handling player movement only
 	
-	bool				EntityIsInPortalHole( CBaseEntity *pEntity ) const; //true if the entity is within the portal cutout bounds and crossing the plane. Not just *near* the portal
-	bool				EntityHitBoxExtentIsInPortalHole( CBaseAnimating *pBaseAnimating ) const; //true if the entity is within the portal cutout bounds and crossing the plane. Not just *near* the portal
-	void				RemoveEntityFromPortalHole( CBaseEntity *pEntity ); //if the entity is in the portal hole, this forcibly moves it out by any means possible
+	bool 	EntityIsInPortalHole( CBaseEntity *pEntity ) const; //true if the entity is within the portal cutout bounds and crossing the plane. Not just *near* the portal
+	bool 	EntityHitBoxExtentIsInPortalHole( CBaseAnimating *pBaseAnimating ) const; //true if the entity is within the portal cutout bounds and crossing the plane. Not just *near* the portal
+	void 	RemoveEntityFromPortalHole( CBaseEntity *pEntity ); //if the entity is in the portal hole, this forcibly moves it out by any means possible
 
-	bool				RayIsInPortalHole( const Ray_t &ray ) const; //traces a ray against the same detector for EntityIsInPortalHole(), bias is towards false positives
+	bool 	RayIsInPortalHole( const Ray_t &ray ) const; //traces a ray against the same detector for EntityIsInPortalHole(), bias is towards false positives
 
 #ifndef CLIENT_DLL
-	int				GetMoveableOwnedEntities( CBaseEntity **pEntsOut, int iEntOutLimit ); //gets owned entities that aren't either world or static props. Excludes fake portal ents such as physics clones
+	int 	GetMoveableOwnedEntities( CBaseEntity **pEntsOut, int iEntOutLimit ); //gets owned entities that aren't either world or static props. Excludes fake portal ents such as physics clones
 
 	static CPortalSimulator *GetSimulatorThatOwnsEntity( const CBaseEntity *pEntity ); //fairly cheap to call
 	static CPortalSimulator *GetSimulatorThatCreatedPhysicsObject( const IPhysicsObject *pObject, PS_PhysicsObjectSourceType_t *pOut_SourceType = NULL );
-	static void			Pre_UTIL_Remove( CBaseEntity *pEntity );
-	static void			Post_UTIL_Remove( CBaseEntity *pEntity );
+	static void Pre_UTIL_Remove( CBaseEntity *pEntity );
+	static void Post_UTIL_Remove( CBaseEntity *pEntity );
 
 	//these three really should be made internal and the public interface changed to a "watch this entity" setup
-	void				TakeOwnershipOfEntity( CBaseEntity *pEntity ); //general ownership, not necessarily physics ownership
-	void				ReleaseOwnershipOfEntity( CBaseEntity *pEntity, bool bMovingToLinkedSimulator = false ); //if bMovingToLinkedSimulator is true, the code skips some steps that are going to be repeated when the entity is added to the other simulator
-	void				ReleaseAllEntityOwnership( void ); //go back to not owning any entities
+	void 	TakeOwnershipOfEntity( CBaseEntity *pEntity ); //general ownership, not necessarily physics ownership
+	void 	ReleaseOwnershipOfEntity( CBaseEntity *pEntity, bool bMovingToLinkedSimulator = false ); //if bMovingToLinkedSimulator is true, the code skips some steps that are going to be repeated when the entity is added to the other simulator
+	void 	ReleaseAllEntityOwnership( void ); //go back to not owning any entities
 
-	//void				TeleportEntityToLinkedPortal( CBaseEntity *pEntity );
-	void				StartCloningEntity( CBaseEntity *pEntity );
-	void				StopCloningEntity( CBaseEntity *pEntity );
+	//void 	TeleportEntityToLinkedPortal( CBaseEntity *pEntity );
+	void 	StartCloningEntity( CBaseEntity *pEntity );
+	void 	StopCloningEntity( CBaseEntity *pEntity );
 
-	bool				OwnsEntity( const CBaseEntity *pEntity ) const;
-	bool				OwnsPhysicsForEntity( const CBaseEntity *pEntity ) const;
+	bool 	OwnsEntity( const CBaseEntity *pEntity ) const;
+	bool 	OwnsPhysicsForEntity( const CBaseEntity *pEntity ) const;
 
-	bool				CreatedPhysicsObject( const IPhysicsObject *pObject, PS_PhysicsObjectSourceType_t *pOut_SourceType = NULL ) const; //true if the physics object was generated by this portal simulator
+	bool 	CreatedPhysicsObject( const IPhysicsObject *pObject, PS_PhysicsObjectSourceType_t *pOut_SourceType = NULL ) const; //true if the physics object was generated by this portal simulator
 
-	static void			PrePhysFrame( void );
-	static void			PostPhysFrame( void );
+	static void PrePhysFrame( void );
+	static void PostPhysFrame( void );
 
 #endif //#ifndef CLIENT_DLL
 
 #ifdef PORTAL_SIMULATORS_EMBED_GUID
-	int					GetPortalSimulatorGUID( void ) const { return m_iPortalSimulatorGUID; };
+	int 		GetPortalSimulatorGUID( void ) const { return m_iPortalSimulatorGUID; };
 #endif
 
 protected:
-	bool				m_bLocalDataIsReady; //this side of the portal is properly setup, no guarantees as to linkage to another portal
-	bool				m_bSimulateVPhysics;
-	bool				m_bGenerateCollision;
-	bool				m_bSharedCollisionConfiguration; //when portals are in certain configurations, they need to cross-clip and share some collision data and things get nasty. For the love of all that is holy, pray that this is false.
+	bool 	m_bLocalDataIsReady; //this side of the portal is properly setup, no guarantees as to linkage to another portal
+	bool 	m_bSimulateVPhysics;
+	bool 	m_bGenerateCollision;
+	bool 	m_bSharedCollisionConfiguration; //when portals are in certain configurations, they need to cross-clip and share some collision data and things get nasty. For the love of all that is holy, pray that this is false.
 	CPortalSimulator	*m_pLinkedPortal;
-	bool				m_bInCrossLinkedFunction; //A flag to mark that we're already in a linked function and that the linked portal shouldn't call our side
+	bool 	m_bInCrossLinkedFunction; //A flag to mark that we're already in a linked function and that the linked portal shouldn't call our side
 	CPortalSimulatorEventCallbacks *m_pCallbacks; 
 #ifdef PORTAL_SIMULATORS_EMBED_GUID
-	int					m_iPortalSimulatorGUID;
+	int 		m_iPortalSimulatorGUID;
 #endif
 
 	struct
 	{
-		bool			bPolyhedronsGenerated;
-		bool			bLocalCollisionGenerated;
-		bool			bLinkedCollisionGenerated;
-		bool			bLocalPhysicsGenerated;
-		bool			bLinkedPhysicsGenerated;
+		bool bPolyhedronsGenerated;
+		bool bLocalCollisionGenerated;
+		bool bLinkedCollisionGenerated;
+		bool bLocalPhysicsGenerated;
+		bool bLinkedPhysicsGenerated;
 	} m_CreationChecklist;
 
 	friend class CPSCollisionEntity;
 
 #ifndef CLIENT_DLL //physics handled purely by server side
-	void				TakePhysicsOwnership( CBaseEntity *pEntity );
-	void				ReleasePhysicsOwnership( CBaseEntity *pEntity, bool bContinuePhysicsCloning = true, bool bMovingToLinkedSimulator = false );
+	void 	TakePhysicsOwnership( CBaseEntity *pEntity );
+	void 	ReleasePhysicsOwnership( CBaseEntity *pEntity, bool bContinuePhysicsCloning = true, bool bMovingToLinkedSimulator = false );
 
-	void				CreateAllPhysics( void );
-	void				CreateMinimumPhysics( void ); //stuff needed by any part of physics simulations
-	void				CreateLocalPhysics( void );
-	void				CreateLinkedPhysics( void );
+	void 	CreateAllPhysics( void );
+	void 	CreateMinimumPhysics( void ); //stuff needed by any part of physics simulations
+	void 	CreateLocalPhysics( void );
+	void 	CreateLinkedPhysics( void );
 
-	void				ClearAllPhysics( void );
-	void				ClearMinimumPhysics( void );
-	void				ClearLocalPhysics( void );
-	void				ClearLinkedPhysics( void );
+	void 	ClearAllPhysics( void );
+	void 	ClearMinimumPhysics( void );
+	void 	ClearLocalPhysics( void );
+	void 	ClearLinkedPhysics( void );
 
-	void				ClearLinkedEntities( void ); //gets rid of transformed shadow clones
+	void 	ClearLinkedEntities( void ); //gets rid of transformed shadow clones
 #endif
 
-	void				CreateAllCollision( void );
-	void				CreateLocalCollision( void );
-	void				CreateLinkedCollision( void );
+	void 	CreateAllCollision( void );
+	void 	CreateLocalCollision( void );
+	void 	CreateLinkedCollision( void );
 
-	void				ClearAllCollision( void );
-	void				ClearLinkedCollision( void );
-	void				ClearLocalCollision( void );
+	void 	ClearAllCollision( void );
+	void 	ClearLinkedCollision( void );
+	void 	ClearLocalCollision( void );
 
-	void				CreatePolyhedrons( void ); //carves up the world around the portal's position into sets of polyhedrons
-	void				ClearPolyhedrons( void );
+	void 	CreatePolyhedrons( void ); //carves up the world around the portal's position into sets of polyhedrons
+	void 	ClearPolyhedrons( void );
 
-	void				UpdateLinkMatrix( void );
+	void 	UpdateLinkMatrix( void );
 
-	void				MarkAsOwned( CBaseEntity *pEntity );
-	void				MarkAsReleased( CBaseEntity *pEntity );
+	void 	MarkAsOwned( CBaseEntity *pEntity );
+	void 	MarkAsReleased( CBaseEntity *pEntity );
 
 	PS_InternalData_t m_InternalData;
 

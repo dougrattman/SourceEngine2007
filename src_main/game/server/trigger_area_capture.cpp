@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -761,7 +761,7 @@ void CTriggerAreaCapture::EndCapture( int team )
 
 	if ( numcappers < MAX_AREA_CAPPERS )
 	{
-		cappingplayers[numcappers] = 0;	//null terminate :)
+		cappingplayers[numcappers] = 0;	//0 terminate :)
 	}
 
 	// Handle this before we assign the new team as the owner of this area

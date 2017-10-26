@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -11,7 +11,7 @@
 #include "ai_navigator.h"
 #include "ai_hint.h"
 #include "ai_behavior_follow.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "filesystem.h"
 #include "eventqueue.h"
 #include "ai_playerally.h"

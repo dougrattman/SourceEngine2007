@@ -1,33 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $Date:         $
-//
-//-----------------------------------------------------------------------------
-// $Log: $
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef CRTMEMDEBUG_H
-#define CRTMEMDEBUG_H
-#pragma once
+#ifndef SOURCE_CRTMEMDEBUG_H_
+#define SOURCE_CRTMEMDEBUG_H_
 
 #ifdef USECRTMEMDEBUG
-
 #include <crtdbg.h>
 #define MEMCHECK CheckHeap()
-void CheckHeap( void );
-
+void CheckHeap();
 #else
-
 #define MEMCHECK
-
 #endif
 
-void InitCRTMemDebug( void );
+void InitCRTMemDebug();
 
-
-#endif // CRTMEMDEBUG_H
+#endif  // SOURCE_CRTMEMDEBUG_H_

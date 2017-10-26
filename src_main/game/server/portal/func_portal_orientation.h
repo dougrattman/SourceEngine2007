@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Volume entity which overrides the placement angles of a portal placed within its bounds.
 //
@@ -26,7 +26,7 @@ public:
 	// Overloads from base entity
 	virtual void	Spawn( void );
 	
-	void			OnActivate ( void );
+	void OnActivate ( void );
 
 	// Inputs to flip functionality on and off
 	void InputEnable( inputdata_t &inputdata );
@@ -34,13 +34,13 @@ public:
 
 	bool IsActive() { return !m_bDisabled; }	// is this area causing portals to lock orientation
 
-	bool					m_bMatchLinkedAngles;
-	QAngle					m_vecAnglesToFace;
+	bool 		m_bMatchLinkedAngles;
+	QAngle 		m_vecAnglesToFace;
 
-	CFuncPortalOrientation		*m_pNext;			// Needed for the template list
-	unsigned int				m_iListIndex;
+	CFuncPortalOrientation		*m_pNext; // Needed for the template list
+	unsigned int 	m_iListIndex;
 private:
-	bool					m_bDisabled;				// are we currently locking portal orientations
+	bool 		m_bDisabled; 	// are we currently locking portal orientations
 };
 
 CFuncPortalOrientation* GetPortalOrientationVolumeList();

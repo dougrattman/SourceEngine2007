@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client Side Effects for the env_portal_path_track.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "env_portal_path_track_shared.h"

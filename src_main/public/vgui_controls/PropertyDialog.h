@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PROPERTYDIALOG_H
 #define PROPERTYDIALOG_H
@@ -49,7 +49,7 @@ public:
 	void SetApplyButtonVisible(bool state);
 
 	/* MESSAGES SENT
-		"ResetData"			- sent when page is loaded.  Data should be reloaded from document into controls.
+		"ResetData" - sent when page is loaded.  Data should be reloaded from document into controls.
 		"ApplyChanges"		- sent when the OK / Apply button is pressed.  Changed data should be written into document.
 	*/
 

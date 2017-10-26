@@ -1,19 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef SV_USER_H
 #define SV_USER_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-
-// Send a command to the specified client (as though the client typed the command in their console).
+// Send a command to the specified client (as though the client typed the
+// command in their console).
 class client_t;
-void SV_FinishParseStringCommand( client_t *cl, const char *pCommand );
+void SV_FinishParseStringCommand(client_t *cl, const char *pCommand);
 
-
-#endif // SV_USER_H
+#endif  // SV_USER_H

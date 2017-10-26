@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A base class for all material proxies in the client dll
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PROXY_ENTITY_H
 #define PROXY_ENTITY_H

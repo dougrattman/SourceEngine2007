@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Weapon selection handling
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( WEAPON_SELECTION_H )
 #define WEAPON_SELECTION_H
 #ifdef _WIN32
@@ -18,10 +18,10 @@ class C_BasePlayer;
 extern ConVar hud_fastswitch;
 
 // weapon switch types for Convar hud_fastswitch
-#define HUDTYPE_BUCKETS					0	// PC buckets
-#define HUDTYPE_FASTSWITCH				1	// PC fastswitch
-#define	HUDTYPE_PLUS					2	// console buckets
-#define HUDTYPE_CAROUSEL				3	// console carousel scroll
+#define HUDTYPE_BUCKETS 		0	// PC buckets
+#define HUDTYPE_FASTSWITCH 	1	// PC fastswitch
+#define	HUDTYPE_PLUS 		2	// console buckets
+#define HUDTYPE_CAROUSEL 	3	// console carousel scroll
 
 //-----------------------------------------------------------------------------
 // Purpose: Base class for tf2 & hl2 weapon selection hud elements
@@ -35,13 +35,13 @@ public:
 	virtual void Init( void );
 	virtual void VidInit( void );
 	virtual void ProcessInput();
-	virtual void Reset(void);
-	virtual void OnThink(void);
+	virtual void Reset();
+	virtual void OnThink();
 
 	virtual void OpenSelection( void );
 	virtual void HideSelection( void );
 
-	virtual void				CancelWeaponSelection( void );
+	virtual void 	CancelWeaponSelection( void );
 
 	// Game specific overrides
 	virtual void CycleToNextWeapon( void ) = 0;
@@ -51,8 +51,8 @@ public:
 	virtual void SelectWeaponSlot( int iSlot ) = 0;
 	virtual C_BaseCombatWeapon	*GetFirstPos( int iSlot );
 	virtual C_BaseCombatWeapon	*GetNextActivePos( int iSlot, int iSlotPos );
-	virtual void				SetWeaponSelected( void );
-	virtual void				SelectWeapon( void );
+	virtual void 	SetWeaponSelected( void );
+	virtual void 	SelectWeapon( void );
 
 	virtual C_BaseCombatWeapon	*GetSelectedWeapon( void ) = 0;
 

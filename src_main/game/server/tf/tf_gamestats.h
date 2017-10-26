@@ -2,7 +2,7 @@
 //
 // Purpose: 
 //
-//=============================================================================//
+
 #ifndef TF_GAMESTATS_H
 #define TF_GAMESTATS_H
 #ifdef _WIN32
@@ -80,25 +80,25 @@ public:
 	bool ShouldSendToClient( TFStatType_t statType );
 
 	// Utilities.
-	TF_Gamestats_LevelStats_t	*GetCurrentMap( void )			{ return m_reportedStats.m_pCurrentGame; }
+	TF_Gamestats_LevelStats_t	*GetCurrentMap( void ) { return m_reportedStats.m_pCurrentGame; }
 
 	struct PlayerStats_t *		FindPlayerStats( CBasePlayer *pPlayer );
-	void						ResetPlayerStats( CTFPlayer *pPlayer );
-	void						ResetKillHistory( CTFPlayer *pPlayer );
-	void						ResetRoundStats();
+	void  ResetPlayerStats( CTFPlayer *pPlayer );
+	void  ResetKillHistory( CTFPlayer *pPlayer );
+	void  ResetRoundStats();
 protected:	
-	void						IncrementStat( CTFPlayer *pPlayer, TFStatType_t statType, int iValue );
-	void						SendStatsToPlayer( CTFPlayer *pPlayer, int iMsgType );
-	void						AccumulateAndResetPerLifeStats( CTFPlayer *pPlayer );
-	void						TrackKillStats( CBasePlayer *pAttacker, CBasePlayer *pVictim );
+	void  IncrementStat( CTFPlayer *pPlayer, TFStatType_t statType, int iValue );
+	void  SendStatsToPlayer( CTFPlayer *pPlayer, int iMsgType );
+	void  AccumulateAndResetPerLifeStats( CTFPlayer *pPlayer );
+	void  TrackKillStats( CBasePlayer *pAttacker, CBasePlayer *pVictim );
 
 protected:
 
 public:
-	TFReportedStats_t			m_reportedStats;		// Stats which are uploaded from TF server to Steam
+	TFReportedStats_t m_reportedStats;		// Stats which are uploaded from TF server to Steam
 protected:
 
-	PlayerStats_t				m_aPlayerStats[MAX_PLAYERS+1];	// List of stats for each player for current life - reset after each death or class change
+	PlayerStats_t 	m_aPlayerStats[MAX_PLAYERS+1];	// List of stats for each player for current life - reset after each death or class change
 };
 
 extern CTFGameStats CTF_GameStats;

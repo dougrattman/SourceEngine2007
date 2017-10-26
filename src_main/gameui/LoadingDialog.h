@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef LOADINGDIALOG_H
 #define LOADINGDIALOG_H
@@ -51,10 +51,10 @@ private:
 
 	vgui::ProgressBar	*m_pProgress;
 	vgui::ProgressBar	*m_pProgress2;
-	vgui::Label			*m_pInfoLabel;
-	vgui::Label			*m_pTimeRemainingLabel;
+	vgui::Label *m_pInfoLabel;
+	vgui::Label *m_pTimeRemainingLabel;
 	vgui::Button		*m_pCancelButton;
-	vgui::Panel			*m_pLoadingBackground;
+	vgui::Panel *m_pLoadingBackground;
 
 	bool	m_bShowingSecondaryProgress;
 	float	m_flSecondaryProgress;

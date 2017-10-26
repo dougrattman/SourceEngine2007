@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "dodclassmenu.h"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <FileSystem.h>
 #include <vgui_controls/Button.h>
 #include <vgui_controls/RichText.h>

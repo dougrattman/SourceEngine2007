@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef PROPS_H
 #define PROPS_H
 #ifdef _WIN32
@@ -84,7 +84,7 @@ public:
 	virtual bool   HasPreferredCarryAnglesForPlayer( CBasePlayer *pPlayer )
 	{
 		if ( HasInteraction( PROPINTER_PHYSGUN_LAUNCH_SPIN_Z ) )
-			return true;
+ return true;
 
 		return false; 
 	}
@@ -106,42 +106,42 @@ public:
 	COutputFloat	m_OnHealthChanged;
 	COutputEvent	m_OnTakeDamage;
 
-	float			m_impactEnergyScale;
+	float m_impactEnergyScale;
 
-	int				m_iMinHealthDmg;
+	int 	m_iMinHealthDmg;
 
-	QAngle			m_preferredCarryAngles;
+	QAngle m_preferredCarryAngles;
 
 public:
 // IBreakableWithPropData
-	void			SetDmgModBullet( float flDmgMod ) { m_flDmgModBullet = flDmgMod; }
-	void			SetDmgModClub( float flDmgMod ) { m_flDmgModClub = flDmgMod; }
-	void			SetDmgModExplosive( float flDmgMod ) { m_flDmgModExplosive = flDmgMod; }
-	float			GetDmgModBullet( void ) { return m_flDmgModBullet; }
-	float			GetDmgModClub( void ) { return m_flDmgModClub; }
-	float			GetDmgModExplosive( void ) { return m_flDmgModExplosive; }
-	void			SetExplosiveRadius( float flRadius ) { m_explodeRadius = flRadius; }
-	void			SetExplosiveDamage( float flDamage ) { m_explodeDamage = flDamage; }
-	float			GetExplosiveRadius( void ) { return m_explodeRadius; }
-	float			GetExplosiveDamage( void ) { return m_explodeDamage; }
-	void			SetPhysicsDamageTable( string_t iszTableName ) { m_iszPhysicsDamageTableName = iszTableName; }
+	void SetDmgModBullet( float flDmgMod ) { m_flDmgModBullet = flDmgMod; }
+	void SetDmgModClub( float flDmgMod ) { m_flDmgModClub = flDmgMod; }
+	void SetDmgModExplosive( float flDmgMod ) { m_flDmgModExplosive = flDmgMod; }
+	float GetDmgModBullet( void ) { return m_flDmgModBullet; }
+	float GetDmgModClub( void ) { return m_flDmgModClub; }
+	float GetDmgModExplosive( void ) { return m_flDmgModExplosive; }
+	void SetExplosiveRadius( float flRadius ) { m_explodeRadius = flRadius; }
+	void SetExplosiveDamage( float flDamage ) { m_explodeDamage = flDamage; }
+	float GetExplosiveRadius( void ) { return m_explodeRadius; }
+	float GetExplosiveDamage( void ) { return m_explodeDamage; }
+	void SetPhysicsDamageTable( string_t iszTableName ) { m_iszPhysicsDamageTableName = iszTableName; }
 	string_t		GetPhysicsDamageTable( void ) { return m_iszPhysicsDamageTableName; }
-	void			SetBreakableModel( string_t iszModel ) { m_iszBreakableModel = iszModel; }
+	void SetBreakableModel( string_t iszModel ) { m_iszBreakableModel = iszModel; }
 	string_t 		GetBreakableModel( void ) { return m_iszBreakableModel; }
-	void			SetBreakableSkin( int iSkin ) { m_iBreakableSkin = iSkin; }
-	int				GetBreakableSkin( void ) { return m_iBreakableSkin; }
-	void			SetBreakableCount( int iCount ) { m_iBreakableCount = iCount; }
-	int				GetBreakableCount( void ) { return m_iBreakableCount; }
-	void			SetMaxBreakableSize( int iSize ) { m_iMaxBreakableSize = iSize; }
-	int				GetMaxBreakableSize( void ) { return m_iMaxBreakableSize; }
-	void			SetPropDataBlocksLOS( bool bBlocksLOS ) { m_bBlockLOSSetByPropData = true; SetBlocksLOS( bBlocksLOS ); }
-	void			SetPropDataIsAIWalkable( bool b ) { m_bIsWalkableSetByPropData = true; SetAIWalkable( b ); }
-	void			SetBasePropData( string_t iszBase ) { m_iszBasePropData = iszBase; }
+	void SetBreakableSkin( int iSkin ) { m_iBreakableSkin = iSkin; }
+	int 	GetBreakableSkin( void ) { return m_iBreakableSkin; }
+	void SetBreakableCount( int iCount ) { m_iBreakableCount = iCount; }
+	int 	GetBreakableCount( void ) { return m_iBreakableCount; }
+	void SetMaxBreakableSize( int iSize ) { m_iMaxBreakableSize = iSize; }
+	int 	GetMaxBreakableSize( void ) { return m_iMaxBreakableSize; }
+	void SetPropDataBlocksLOS( bool bBlocksLOS ) { m_bBlockLOSSetByPropData = true; SetBlocksLOS( bBlocksLOS ); }
+	void SetPropDataIsAIWalkable( bool b ) { m_bIsWalkableSetByPropData = true; SetAIWalkable( b ); }
+	void SetBasePropData( string_t iszBase ) { m_iszBasePropData = iszBase; }
 	string_t		GetBasePropData( void ) { return m_iszBasePropData; }
-	void			SetInteraction( propdata_interactions_t Interaction ) { m_iInteractions |= (1 << Interaction); }
-	void			RemoveInteraction( propdata_interactions_t Interaction ) { m_iInteractions &= ~(1 << Interaction); }
-	bool			HasInteraction( propdata_interactions_t Interaction ) { return ( m_iInteractions & (1 << Interaction) ) != 0; }
-	void			SetMultiplayerBreakMode( mp_break_t mode ) { m_mpBreakMode = mode; }
+	void SetInteraction( propdata_interactions_t Interaction ) { m_iInteractions |= (1 << Interaction); }
+	void RemoveInteraction( propdata_interactions_t Interaction ) { m_iInteractions &= ~(1 << Interaction); }
+	bool HasInteraction( propdata_interactions_t Interaction ) { return ( m_iInteractions & (1 << Interaction) ) != 0; }
+	void SetMultiplayerBreakMode( mp_break_t mode ) { m_mpBreakMode = mode; }
 	mp_break_t		GetMultiplayerBreakMode( void ) const { return m_mpBreakMode; }
 
 // derived by multiplayer phys props:
@@ -153,37 +153,37 @@ public:
 
 protected:
 
-	bool			UpdateHealth( int iNewHealth, CBaseEntity *pActivator );
+	bool UpdateHealth( int iNewHealth, CBaseEntity *pActivator );
 	virtual void	OnBreak( const Vector &vecVelocity, const AngularImpulse &angVel, CBaseEntity *pBreaker ) {}
 
 protected:
 
 	unsigned int	m_createTick;
-	float			m_flPressureDelay;
-	EHANDLE			m_hBreaker;
+	float m_flPressureDelay;
+	EHANDLE m_hBreaker;
 
 	PerformanceMode_t m_PerformanceMode;
 
 	// Prop data storage
-	float			m_flDmgModBullet;
-	float			m_flDmgModClub;
-	float			m_flDmgModExplosive;
+	float m_flDmgModBullet;
+	float m_flDmgModClub;
+	float m_flDmgModExplosive;
 	string_t		m_iszPhysicsDamageTableName;
 	string_t		m_iszBreakableModel;
-	int				m_iBreakableSkin;
-	int				m_iBreakableCount;
-	int				m_iMaxBreakableSize;
+	int 	m_iBreakableSkin;
+	int 	m_iBreakableCount;
+	int 	m_iMaxBreakableSize;
 	string_t		m_iszBasePropData;	
-	int				m_iInteractions;
-	float			m_explodeDamage;
-	float			m_explodeRadius;
+	int 	m_iInteractions;
+	float m_explodeDamage;
+	float m_explodeRadius;
 
 	// Count of how many pieces we'll break into, custom or generic
-	int				m_iNumBreakableChunks;
+	int 	m_iNumBreakableChunks;
 
-	void			SetEnableMotionPosition( const Vector &position, const QAngle &angles );
-	bool			GetEnableMotionPosition( Vector *pPosition, QAngle *pAngles );
-	void			ClearEnableMotionPosition();
+	void SetEnableMotionPosition( const Vector &position, const QAngle &angles );
+	bool GetEnableMotionPosition( Vector *pPosition, QAngle *pAngles );
+	void ClearEnableMotionPosition();
 private:
 	CBaseEntity		*FindEnableMotionFixup();
 
@@ -218,7 +218,7 @@ private:
 	{
 		PHYSGUN_MUST_BE_DETACHED = 0,
 		PHYSGUN_IS_DETACHING,
-		PHYSGUN_CAN_BE_GRABBED,					
+		PHYSGUN_CAN_BE_GRABBED, 		
 		PHYSGUN_ANIMATE_ON_PULL,
 		PHYSGUN_ANIMATE_IS_ANIMATING,
 		PHYSGUN_ANIMATE_FINISHED,
@@ -227,30 +227,30 @@ private:
 	};
 
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
-	bool					m_bBlockLOSSetByPropData;
-	bool					m_bIsWalkableSetByPropData;
-	bool					m_bOriginalBlockLOS;	// BlockLOS state before physgun pickup
-	char					m_nPhysgunState;		// Ripped-off state
-	COutputEvent			m_OnPhysCannonDetach;	// We've ripped it off!
-	COutputEvent			m_OnPhysCannonAnimatePreStarted;	// Started playing the pre-pull animation
-	COutputEvent			m_OnPhysCannonAnimatePullStarted;	// Player started the pull anim
-	COutputEvent			m_OnPhysCannonAnimatePostStarted;	// Started playing the post-pull animation
-	COutputEvent			m_OnPhysCannonPullAnimFinished; // We've had our pull anim finished, or the post-pull has finished if there is one
-	float					m_flDefaultFadeScale;	// Things may temporarily change the fade scale, but this is its steady-state condition
+	float 		m_flLastPhysicsInfluenceTime;
+	bool 		m_bBlockLOSSetByPropData;
+	bool 		m_bIsWalkableSetByPropData;
+	bool 		m_bOriginalBlockLOS;	// BlockLOS state before physgun pickup
+	char 		m_nPhysgunState;		// Ripped-off state
+	COutputEvent m_OnPhysCannonDetach;	// We've ripped it off!
+	COutputEvent m_OnPhysCannonAnimatePreStarted;	// Started playing the pre-pull animation
+	COutputEvent m_OnPhysCannonAnimatePullStarted;	// Player started the pull anim
+	COutputEvent m_OnPhysCannonAnimatePostStarted;	// Started playing the post-pull animation
+	COutputEvent m_OnPhysCannonPullAnimFinished; // We've had our pull anim finished, or the post-pull has finished if there is one
+	float 		m_flDefaultFadeScale;	// Things may temporarily change the fade scale, but this is its steady-state condition
 
 	mp_break_t m_mpBreakMode;
 
-	EHANDLE					m_hLastAttacker;		// Last attacker that harmed me.
-	EHANDLE					m_hFlareEnt;
-	string_t				m_iszPuntSound;
-	bool					m_bUsePuntSound;
+	EHANDLE 		m_hLastAttacker;		// Last attacker that harmed me.
+	EHANDLE 		m_hFlareEnt;
+	string_t 	m_iszPuntSound;
+	bool 		m_bUsePuntSound;
 };
 
 // Spawnflags
 #define SF_DYNAMICPROP_USEHITBOX_FOR_RENDERBOX		64
-#define SF_DYNAMICPROP_NO_VPHYSICS					128
-#define SF_DYNAMICPROP_DISABLE_COLLISION			256
+#define SF_DYNAMICPROP_NO_VPHYSICS 		128
+#define SF_DYNAMICPROP_DISABLE_COLLISION 256
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -277,7 +277,7 @@ public:
 
 	// baseentity - watch dynamic hierarchy updates
 	virtual void	SetParent( CBaseEntity* pNewParent, int iAttachment = -1 );
-	bool			TestCollision( const Ray_t &ray, unsigned int mask, trace_t& trace );
+	bool TestCollision( const Ray_t &ray, unsigned int mask, trace_t& trace );
 
 	// breakable prop
 	virtual IPhysicsObject *GetRootPhysicsObjectForBreak();
@@ -297,19 +297,19 @@ public:
 	COutputEvent		m_pOutputAnimBegun;
 	COutputEvent		m_pOutputAnimOver;
 
-	string_t			m_iszDefaultAnim;
+	string_t m_iszDefaultAnim;
 
-	int					m_iGoalSequence;
-	int					m_iTransitionDirection;
+	int 		m_iGoalSequence;
+	int 		m_iTransitionDirection;
 
 	// Random animations
-	bool				m_bRandomAnimator;
-	float				m_flNextRandAnim;
-	float				m_flMinRandAnimTime;
-	float				m_flMaxRandAnimTime;
-	short				m_nPendingSequence;
+	bool 	m_bRandomAnimator;
+	float 	m_flNextRandAnim;
+	float 	m_flMinRandAnimTime;
+	float 	m_flMaxRandAnimTime;
+	short 	m_nPendingSequence;
 
-	bool				m_bStartDisabled;
+	bool 	m_bStartDisabled;
 
 	CNetworkVar( bool, m_bUseHitboxesForRenderBox );
 
@@ -367,7 +367,7 @@ public:
 	void ClearFlagsThink( void );
 
 	virtual int OnTakeDamage( const CTakeDamageInfo &info );
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 	bool IsGib();
 	DECLARE_DATADESC();
 
@@ -390,9 +390,9 @@ private:
 
 	float		m_massScale;
 	float		m_inertiaScale;
-	int			m_damageType;
+	int m_damageType;
 	string_t	m_iszOverrideScript;
-	int			m_damageToEnableMotion;
+	int m_damageToEnableMotion;
 	float		m_flForceToEnableMotion;
 
 	bool		m_bThrownByPlayer;

@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Satchel Charge
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	SATCHEL_H
 #define	SATCHEL_H
@@ -25,23 +25,23 @@ class CSatchelCharge : public CBaseGrenade
 public:
 	DECLARE_CLASS( CSatchelCharge, CBaseGrenade );
 
-	void			Spawn( void );
-	void			Precache( void );
-	void			BounceSound( void );
-	void			SatchelTouch( CBaseEntity *pOther );
-	void			SatchelThink( void );
+	void Spawn( void );
+	void Precache( void );
+	void BounceSound( void );
+	void SatchelTouch( CBaseEntity *pOther );
+	void SatchelThink( void );
 	
 	// Input handlers
-	void			InputExplode( inputdata_t &inputdata );
+	void InputExplode( inputdata_t &inputdata );
 
-	float			m_flNextBounceSoundTime;
-	bool			m_bInAir;
-	Vector			m_vLastPosition;
+	float m_flNextBounceSoundTime;
+	bool m_bInAir;
+	Vector m_vLastPosition;
 
 public:
 	CWeapon_SLAM*	m_pMyWeaponSLAM;	// Who shot me..
-	bool			m_bIsAttached;
-	void			Deactivate( void );
+	bool m_bIsAttached;
+	void Deactivate( void );
 
 	CSatchelCharge();
 	~CSatchelCharge();
@@ -49,7 +49,7 @@ public:
 	DECLARE_DATADESC();
 
 private:
-	void				CreateEffects( void );
+	void 	CreateEffects( void );
 	CHandle<CSprite>	m_hGlowSprite;
 };
 

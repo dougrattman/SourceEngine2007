@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_DOD_CROSSHAIR_H
 #define HUD_DOD_CROSSHAIR_H
@@ -41,13 +41,13 @@ public:
 	void ResetCrosshair() {}
 
 private:
-	int					m_iCrosshairTextureID;
+	int 		m_iCrosshairTextureID;
 	IVguiMatInfo		*m_pCrosshair;
-	IVguiMatInfoVar		*m_pFrameVar;				// interface for material frame
-	int					m_nNumFrames;				// how many frames this crosshair has
+	IVguiMatInfoVar		*m_pFrameVar; 	// interface for material frame
+	int 		m_nNumFrames; 	// how many frames this crosshair has
 
-	char				m_szPreviousCrosshair[256];	// name of the current crosshair
-	float				m_flAccuracy;
+	char 	m_szPreviousCrosshair[256];	// name of the current crosshair
+	float 	m_flAccuracy;
 };
 
 

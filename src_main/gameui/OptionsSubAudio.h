@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef OPTIONS_SUB_AUDIO_H
 #define OPTIONS_SUB_AUDIO_H
@@ -43,14 +43,14 @@ private:
 
 	MESSAGE_FUNC( RunTestSpeakers, "RunTestSpeakers" );
 
-	vgui::ComboBox				*m_pSpeakerSetupCombo;
-	vgui::ComboBox				*m_pSoundQualityCombo;
-	CCvarSlider					*m_pSFXSlider;
-	CCvarSlider					*m_pMusicSlider;
-	vgui::ComboBox				*m_pCloseCaptionCombo;
-	bool						   m_bRequireRestart;
+	vgui::ComboBox 	*m_pSpeakerSetupCombo;
+	vgui::ComboBox 	*m_pSoundQualityCombo;
+	CCvarSlider 		*m_pSFXSlider;
+	CCvarSlider 		*m_pMusicSlider;
+	vgui::ComboBox 	*m_pCloseCaptionCombo;
+	bool     m_bRequireRestart;
    
-   vgui::ComboBox				*m_pSpokenLanguageCombo;
+   vgui::ComboBox 	*m_pSpokenLanguageCombo;
    MESSAGE_FUNC( OpenThirdPartySoundCreditsDialog, "OpenThirdPartySoundCreditsDialog" );
    vgui::DHANDLE<class COptionsSubAudioThirdPartyCreditsDlg> m_OptionsSubAudioThirdPartyCreditsDlg;
    ELanguage         m_nCurrentAudioLanguage;

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifdef CLIENT_DLL
 	#include "c_portal_player.h"
@@ -37,7 +37,7 @@ public:
 
 	virtual bool	WeaponShouldBeLowered( void );
 
-			bool	CanLower( void );
+ bool	CanLower( void );
 	virtual bool	Ready( void );
 	virtual bool	Lower( void );
 	virtual bool	Deploy( void );
@@ -57,9 +57,9 @@ public:
 
 protected:
 
-	bool			m_bLowered;			// Whether the viewmodel is raised or lowered
-	float			m_flRaiseTime;		// If lowered, the time we should raise the viewmodel
-	float			m_flHolsterTime;	// When the weapon was holstered
+	bool m_bLowered; // Whether the viewmodel is raised or lowered
+	float m_flRaiseTime;		// If lowered, the time we should raise the viewmodel
+	float m_flHolsterTime;	// When the weapon was holstered
 
 private:
 	

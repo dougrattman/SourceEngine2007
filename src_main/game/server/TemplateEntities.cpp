@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Template entities are used by spawners to create copies of entities
 //			that were configured by the level designer. This allows us to spawn
@@ -13,7 +13,7 @@
 //			and restored). Once all the entities in the map have been activated,
 //			the template database is freed.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "igamesystem.h"
@@ -88,7 +88,7 @@ int Templates_Add(CBaseEntity *pEntity, const char *pszMapData, int nLen)
 	int iKeys = MapEntity_GetNumKeysInEntity( pszMapData );
 	int iExtraSpace = (strlen(ENTITYIO_FIXUP_STRING)+1) * iKeys;
 
-	// Extra 1 because the mapdata passed in isn't null terminated
+	// Extra 1 because the mapdata passed in isn't 0 terminated
 	pEntData->iMapDataLength = nLen + iExtraSpace + 1;
 	pEntData->pszMapData = (char *)malloc( pEntData->iMapDataLength );
 	memcpy(pEntData->pszMapData, pszMapData, nLen + 1);
@@ -143,7 +143,7 @@ int Templates_GetStringSize( int iIndex )
 
 //-----------------------------------------------------------------------------
 // Purpose: Looks up a template entity by name, returning the map data blob as
-//			a null-terminated string containing key/value pairs.
+//			a 0-terminated string containing key/value pairs.
 //			NOTE: This can't handle multiple templates with the same targetname.
 //-----------------------------------------------------------------------------
 string_t Templates_FindByTargetName(const char *pszName)

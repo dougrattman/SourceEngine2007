@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEAMFORTRESSVIEWPORT_H
 #define TEAMFORTRESSVIEWPORT_H
@@ -86,36 +86,36 @@ protected:
 	public:
 		CBackGroundPanel( vgui::Panel *parent) : Frame( parent, "ViewPortBackGround" ) 
 		{
-			SetScheme("ClientScheme");
+ SetScheme("ClientScheme");
 
-			SetTitleBarVisible( false );
-			SetMoveable(false);
-			SetSizeable(false);
-			SetProportional(true);
+ SetTitleBarVisible( false );
+ SetMoveable(false);
+ SetSizeable(false);
+ SetProportional(true);
 		}
 	private:
 
 		virtual void ApplySchemeSettings(IScheme *pScheme)
 		{
-			BaseClass::ApplySchemeSettings(pScheme);
-			SetBgColor(pScheme->GetColor("ViewportBG", Color( 0,0,0,0 ) )); 
+ BaseClass::ApplySchemeSettings(pScheme);
+ SetBgColor(pScheme->GetColor("ViewportBG", Color( 0,0,0,0 ) )); 
 		}
 
 		virtual void PerformLayout() 
 		{
-			int w,h;
-			GetHudSize(w, h);
+ int w,h;
+ GetHudSize(w, h);
 
-			// fill the screen
-			SetBounds(0,0,w,h);
+ // fill the screen
+ SetBounds(0,0,w,h);
 
-			BaseClass::PerformLayout();
+ BaseClass::PerformLayout();
 		}
 
 		virtual void OnMousePressed(MouseCode code) { }// don't respond to mouse clicks
 		virtual vgui::VPANEL IsWithinTraverse( int x, int y, bool traversePopups )
 		{
-			return NULL;
+ return NULL;
 		}
 
 	};
@@ -135,13 +135,13 @@ protected:
 #endif
 	CUtlVector<IViewPortPanel*> m_Panels;
 	
-	bool				m_bHasParent; // Used to track if child windows have parents or not.
-	bool				m_bInitialized;
+	bool 	m_bHasParent; // Used to track if child windows have parents or not.
+	bool 	m_bInitialized;
 	IViewPortPanel		*m_pActivePanel;
 	IViewPortPanel		*m_pLastActivePanel;
 	vgui::HCursor		m_hCursorNone;
 	vgui::AnimationController *m_pAnimController;
-	int					m_OldSize[2];
+	int 		m_OldSize[2];
 };
 
 

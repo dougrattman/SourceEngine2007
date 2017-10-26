@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FOGCONTROLLER_H
 #define FOGCONTROLLER_H
@@ -54,18 +54,18 @@ public:
 
 	void InputStartFogTransition(inputdata_t &data);
 
-	int CFogController::DrawDebugTextOverlays(void);
+	int CFogController::DrawDebugTextOverlays();
 
 	void SetLerpValues( void );
 	void Spawn( void );
 
-	bool IsMaster( void )					{ return HasSpawnFlags( SF_FOG_MASTER ); }
+	bool IsMaster( void ) 		{ return HasSpawnFlags( SF_FOG_MASTER ); }
 
 public:
 
 	CNetworkVarEmbedded( fogparams_t, m_fog );
-	bool					m_bUseAngles;
-	int						m_iChangedVariables;
+	bool 		m_bUseAngles;
+	int  m_iChangedVariables;
 };
 
 //=============================================================================
@@ -89,7 +89,7 @@ public:
 
 	virtual void LevelInitPreEntity();
 	virtual void LevelInitPostEntity();
-	CFogController *GetMasterFogController( void )			{ return m_pMasterController; }
+	CFogController *GetMasterFogController( void ) { return m_pMasterController; }
 
 private:
 

@@ -2,7 +2,7 @@
 //
 // Purpose: CTF Flag Capture Zone.
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "func_capture_zone.h"
 #include "tf_player.h"

@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
 #include "common_hlsl_cpp_consts.h"
-#include "convar.h"
+#include "tier1/convar.h"
 
 #include "downsample_nohdr_ps20.inc"
 #include "downsample_nohdr_ps20b.inc"

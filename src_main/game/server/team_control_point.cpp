@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -398,7 +398,7 @@ void CTeamControlPoint::CaptureStart( void )
 		event->SetString( "cpname", STRING(m_iszPrintName) );
 		event->SetInt( "team", m_iTeam );
 
-		// pCappingPlayers is a null terminated list of player indices
+		// pCappingPlayers is a 0 terminated list of player indices
 
 		char capper[8];
 
@@ -613,7 +613,7 @@ void CTeamControlPoint::SendCapString( int iCapTeam, int iNumCappers, int *pCapp
 
 		cappers[i] = '\0';
 
-		// pCappingPlayers is a null terminated list of player indices
+		// pCappingPlayers is a 0 terminated list of player indices
 		event->SetString( "cappers", cappers );
 		event->SetInt( "priority", 9 );
 

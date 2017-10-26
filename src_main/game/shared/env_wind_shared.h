@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements visual effects entities: sprites, beams, bubbles, etc.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ENV_WIND_SHARED_H
 #define ENV_WIND_SHARED_H
 
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 #include "vstdlib/random.h"
 #include "tier0/dbg.h"
 #include "mathlib/vector.h"
@@ -155,10 +155,10 @@ public:
 
 	CNetworkVar( int, m_iWindSeed );		// random number seed...
 
-	CNetworkVar( int, m_iMinWind );			// the slowest the wind can normally blow
-	CNetworkVar( int, m_iMaxWind );			// the fastest the wind can normally blow
-	CNetworkVar( int, m_iMinGust );			// the slowest that a gust can be
-	CNetworkVar( int, m_iMaxGust );			// the fastest that a gust can be
+	CNetworkVar( int, m_iMinWind ); // the slowest the wind can normally blow
+	CNetworkVar( int, m_iMaxWind ); // the fastest the wind can normally blow
+	CNetworkVar( int, m_iMinGust ); // the slowest that a gust can be
+	CNetworkVar( int, m_iMaxGust ); // the fastest that a gust can be
 
 	CNetworkVar( float, m_flMinGustDelay );	// min time between gusts
 	CNetworkVar( float, m_flMaxGustDelay );	// max time between gusts
@@ -167,7 +167,7 @@ public:
 
 	CNetworkVar( int, m_iGustDirChange );	// max number of degrees wind dir changes on gusts.
 	int m_iszGustSound;		// name of the wind sound to play for gusts.
-	int m_iWindDir;			// wind direction (yaw)
+	int m_iWindDir; // wind direction (yaw)
 	float m_flWindSpeed;	// the wind speed
 
 	CNetworkVar( int, m_iInitialWindDir );
@@ -200,7 +200,7 @@ private:
 	float	m_flSimTime;		// What's the time I last simulated up to?
 	float	m_flSwitchTime;		// when do I actually switch from gust to not gust
 	float	m_flAveWindSpeed;	// the average wind speed
-	bool	m_bGusting;			// is the wind gusting right now?
+	bool	m_bGusting; // is the wind gusting right now?
 
 	float m_flWindAngleVariation;
 	float m_flWindSpeedVariation;

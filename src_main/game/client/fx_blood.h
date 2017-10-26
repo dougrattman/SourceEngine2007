@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FX_BLOOD_H
 #define FX_BLOOD_H
@@ -38,7 +38,7 @@ public:
 		/*
 		if ( fabs( pParticle->m_flRollDelta ) < 0.5f )
 		{
-			pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.5f : -0.5f;
+ pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.5f : -0.5f;
 		}
 		*/
 
@@ -49,18 +49,18 @@ public:
 	{
 		if ( !( pParticle->m_iFlags & SIMPLE_PARTICLE_FLAG_NO_VEL_DECAY ) )
 		{
-			//Decelerate
-			static float dtime;
-			static float decay;
+ //Decelerate
+ static float dtime;
+ static float decay;
 
-			if ( dtime != timeDelta )
-			{
-				decay = ExponentialDecay( 0.1, 0.4f, dtime );
-				dtime = timeDelta;
-			}
+ if ( dtime != timeDelta )
+ {
+ 	decay = ExponentialDecay( 0.1, 0.4f, dtime );
+ 	dtime = timeDelta;
+ }
 
-			pParticle->m_vecVelocity *= decay;
-			pParticle->m_vecVelocity[2] -= ( m_flGravity * timeDelta );
+ pParticle->m_vecVelocity *= decay;
+ pParticle->m_vecVelocity[2] -= ( m_flGravity * timeDelta );
 		}
 	}
 

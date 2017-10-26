@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_ACTIVITY_H
 #define AI_ACTIVITY_H
@@ -15,13 +15,13 @@
 
 typedef enum
 {
-	ACT_INVALID = -1,			// So we have something more succint to check for than '-1'
-	ACT_RESET = 0,				// Set m_Activity to this invalid value to force a reset to m_IdealActivity
+	ACT_INVALID = -1, // So we have something more succint to check for than '-1'
+	ACT_RESET = 0, 	// Set m_Activity to this invalid value to force a reset to m_IdealActivity
 	ACT_IDLE,
 	ACT_TRANSITION,
-	ACT_COVER,					// FIXME: obsolete? redundant with ACT_COVER_LOW?
-	ACT_COVER_MED,				// FIXME: unsupported?
-	ACT_COVER_LOW,				// FIXME: rename ACT_IDLE_CROUCH?
+	ACT_COVER, 		// FIXME: obsolete? redundant with ACT_COVER_LOW?
+	ACT_COVER_MED, 	// FIXME: unsupported?
+	ACT_COVER_LOW, 	// FIXME: rename ACT_IDLE_CROUCH?
 	ACT_WALK,
 	ACT_WALK_AIM,
 	ACT_WALK_CROUCH,
@@ -41,13 +41,13 @@ typedef enum
 	ACT_DIEFORWARD,
 	ACT_DIEVIOLENT,
 	ACT_DIERAGDOLL,
-	ACT_FLY,				// Fly (and flap if appropriate)
+	ACT_FLY, 	// Fly (and flap if appropriate)
 	ACT_HOVER,
 	ACT_GLIDE,
 	ACT_SWIM,
 	ACT_JUMP,
-	ACT_HOP,				// vertical jump
-	ACT_LEAP,				// long forward jump
+	ACT_HOP, 	// vertical jump
+	ACT_LEAP, 	// long forward jump
 	ACT_LAND,
 	ACT_CLIMB_UP,
 	ACT_CLIMB_DOWN,
@@ -56,13 +56,13 @@ typedef enum
 	ACT_SHIPLADDER_DOWN,
 	ACT_STRAFE_LEFT,
 	ACT_STRAFE_RIGHT,
-	ACT_ROLL_LEFT,			// tuck and roll, left
-	ACT_ROLL_RIGHT,			// tuck and roll, right
-	ACT_TURN_LEFT,			// turn quickly left (stationary)
-	ACT_TURN_RIGHT,			// turn quickly right (stationary)
-	ACT_CROUCH,				// FIXME: obsolete? only used be soldier (the act of crouching down from a standing position)
-	ACT_CROUCHIDLE,			// FIXME: obsolete? only used be soldier (holding body in crouched position (loops))
-	ACT_STAND,				// FIXME: obsolete? should be transition (the act of standing from a crouched position)
+	ACT_ROLL_LEFT, // tuck and roll, left
+	ACT_ROLL_RIGHT, // tuck and roll, right
+	ACT_TURN_LEFT, // turn quickly left (stationary)
+	ACT_TURN_RIGHT, // turn quickly right (stationary)
+	ACT_CROUCH, 	// FIXME: obsolete? only used be soldier (the act of crouching down from a standing position)
+	ACT_CROUCHIDLE, // FIXME: obsolete? only used be soldier (holding body in crouched position (loops))
+	ACT_STAND, 	// FIXME: obsolete? should be transition (the act of standing from a crouched position)
 	ACT_USE,
 	ACT_SIGNAL1,
 	ACT_SIGNAL2,
@@ -78,7 +78,7 @@ typedef enum
 
 	ACT_LOOKBACK_RIGHT,		// look back over shoulder without turning around.
 	ACT_LOOKBACK_LEFT,
-	ACT_COWER,				// FIXME: unused, should be more extreme version of crouching
+	ACT_COWER, 	// FIXME: unused, should be more extreme version of crouching
 	ACT_SMALL_FLINCH,		// FIXME: needed? shouldn't flinching be down with overlays?
 	ACT_BIG_FLINCH,		
 	ACT_MELEE_ATTACK1,
@@ -87,13 +87,13 @@ typedef enum
 	ACT_RELOAD_START,
 	ACT_RELOAD_FINISH,
 	ACT_RELOAD_LOW,
-	ACT_ARM,				// pull out gun, for instance
-	ACT_DISARM,				// reholster gun
+	ACT_ARM, 	// pull out gun, for instance
+	ACT_DISARM, 	// reholster gun
 	ACT_DROP_WEAPON,
 	ACT_DROP_WEAPON_SHOTGUN,
 	ACT_PICKUP_GROUND,		// pick up something in front of you on the ground
 	ACT_PICKUP_RACK,		// pick up something from a rack or shelf in front of you.
-	ACT_IDLE_ANGRY,			// FIXME: being used as an combat ready idle?  alternate idle animation in which the monster is clearly agitated. (loop)
+	ACT_IDLE_ANGRY, // FIXME: being used as an combat ready idle?  alternate idle animation in which the monster is clearly agitated. (loop)
 
 	ACT_IDLE_RELAXED,
 	ACT_IDLE_STIMULATED,
@@ -130,8 +130,8 @@ typedef enum
 	ACT_CROUCHIDLE_AIM_STIMULATED,
 	ACT_CROUCHIDLE_AGITATED,
 
-	ACT_WALK_HURT,			// limp  (loop)
-	ACT_RUN_HURT,			// limp  (loop)
+	ACT_WALK_HURT, // limp  (loop)
+	ACT_RUN_HURT, // limp  (loop)
 	ACT_SPECIAL_ATTACK1,	// very monster specific special attacks.
 	ACT_SPECIAL_ATTACK2,	
 	ACT_COMBAT_IDLE,		// FIXME: unused?  agitated idle.
@@ -157,13 +157,13 @@ typedef enum
 
 	ACT_RAPPEL_LOOP,		// Rappel down a rope!
 
-	ACT_180_LEFT,			// 180 degree left turn
+	ACT_180_LEFT, // 180 degree left turn
 	ACT_180_RIGHT,
 
-	ACT_90_LEFT,			// 90 degree turns
+	ACT_90_LEFT, // 90 degree turns
 	ACT_90_RIGHT,
 
-	ACT_STEP_LEFT,			// Single steps
+	ACT_STEP_LEFT, // Single steps
 	ACT_STEP_RIGHT,
 	ACT_STEP_BACK,
 	ACT_STEP_FORE,
@@ -179,7 +179,7 @@ typedef enum
 
 	ACT_GESTURE_SMALL_FLINCH,
 	ACT_GESTURE_BIG_FLINCH,
-	ACT_GESTURE_FLINCH_BLAST,			// Startled by an explosion
+	ACT_GESTURE_FLINCH_BLAST, // Startled by an explosion
 	ACT_GESTURE_FLINCH_BLAST_SHOTGUN,
 	ACT_GESTURE_FLINCH_BLAST_DAMAGED,	// Damaged by an explosion
 	ACT_GESTURE_FLINCH_BLAST_DAMAGED_SHOTGUN,
@@ -227,22 +227,22 @@ typedef enum
 	ACT_VM_PULLPIN,
 	ACT_VM_PRIMARYATTACK,		// fire
 	ACT_VM_SECONDARYATTACK,		// alt. fire
-	ACT_VM_RELOAD,			
-	ACT_VM_DRYFIRE,				// fire with no ammo loaded.
-	ACT_VM_HITLEFT,				// bludgeon, swing to left - hit (primary attk)
-	ACT_VM_HITLEFT2,			// bludgeon, swing to left - hit (secondary attk)
-	ACT_VM_HITRIGHT,			// bludgeon, swing to right - hit (primary attk)
-	ACT_VM_HITRIGHT2,			// bludgeon, swing to right - hit (secondary attk)
-	ACT_VM_HITCENTER,			// bludgeon, swing center - hit (primary attk)
-	ACT_VM_HITCENTER2,			// bludgeon, swing center - hit (secondary attk)
-	ACT_VM_MISSLEFT,			// bludgeon, swing to left - miss (primary attk)
-	ACT_VM_MISSLEFT2,			// bludgeon, swing to left - miss (secondary attk)
-	ACT_VM_MISSRIGHT,			// bludgeon, swing to right - miss (primary attk)
-	ACT_VM_MISSRIGHT2,			// bludgeon, swing to right - miss (secondary attk)
-	ACT_VM_MISSCENTER,			// bludgeon, swing center - miss (primary attk)
-	ACT_VM_MISSCENTER2,			// bludgeon, swing center - miss (secondary attk)
-	ACT_VM_HAULBACK,			// bludgeon, haul the weapon back for a hard strike (secondary attk)
-	ACT_VM_SWINGHARD,			// bludgeon, release the hard strike (secondary attk)
+	ACT_VM_RELOAD, 
+	ACT_VM_DRYFIRE, 	// fire with no ammo loaded.
+	ACT_VM_HITLEFT, 	// bludgeon, swing to left - hit (primary attk)
+	ACT_VM_HITLEFT2, // bludgeon, swing to left - hit (secondary attk)
+	ACT_VM_HITRIGHT, // bludgeon, swing to right - hit (primary attk)
+	ACT_VM_HITRIGHT2, // bludgeon, swing to right - hit (secondary attk)
+	ACT_VM_HITCENTER, // bludgeon, swing center - hit (primary attk)
+	ACT_VM_HITCENTER2, // bludgeon, swing center - hit (secondary attk)
+	ACT_VM_MISSLEFT, // bludgeon, swing to left - miss (primary attk)
+	ACT_VM_MISSLEFT2, // bludgeon, swing to left - miss (secondary attk)
+	ACT_VM_MISSRIGHT, // bludgeon, swing to right - miss (primary attk)
+	ACT_VM_MISSRIGHT2, // bludgeon, swing to right - miss (secondary attk)
+	ACT_VM_MISSCENTER, // bludgeon, swing center - miss (primary attk)
+	ACT_VM_MISSCENTER2, // bludgeon, swing center - miss (secondary attk)
+	ACT_VM_HAULBACK, // bludgeon, haul the weapon back for a hard strike (secondary attk)
+	ACT_VM_SWINGHARD, // bludgeon, release the hard strike (secondary attk)
 	ACT_VM_SWINGMISS,
 	ACT_VM_SWINGHIT,
 	ACT_VM_IDLE_TO_LOWERED,
@@ -615,7 +615,7 @@ typedef enum
 
 	ACT_VM_PRIMARYATTACK_SILENCED,		// fire
 	ACT_VM_RELOAD_SILENCED,
-	ACT_VM_DRYFIRE_SILENCED,				// fire with no ammo loaded.
+	ACT_VM_DRYFIRE_SILENCED, 	// fire with no ammo loaded.
 	ACT_VM_IDLE_SILENCED,
 	ACT_VM_DRAW_SILENCED,
 	ACT_VM_IDLE_EMPTY_LEFT,

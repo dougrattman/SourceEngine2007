@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_WEAPON_BUILDER_H
 #define TF_WEAPON_BUILDER_H
@@ -51,7 +51,7 @@ public:
 	void	StartPlacement( void );
 	void	StopPlacement( void );
 	void	UpdatePlacementState( void );		// do a check for valid placement
-	bool	IsValidPlacement( void );			// is this a valid placement pos?
+	bool	IsValidPlacement( void ); // is this a valid placement pos?
 
 
 	// Building
@@ -63,7 +63,7 @@ public:
 	int		GetPosition( void ) const;
 	const char *GetPrintName( void ) const;
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_BUILDER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_BUILDER; }
 
 	virtual void	WeaponReset( void );
 

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for all animating characters and objects.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "baseanimating.h"
@@ -18,7 +18,7 @@
 #include "tier1/strtools.h"
 #include "npcevent.h"
 #include "isaverestore.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier0/vprof.h"
 #include "EntityFlame.h"
 #include "EntityDissolve.h"
@@ -2527,7 +2527,7 @@ void CBaseAnimating::LockStudioHdr()
 
 			if ( pStudioHdrContainer && pStudioHdrContainer->GetVirtualModel() )
 			{
-				MDLHandle_t hVirtualModel = (MDLHandle_t)pStudioHdrContainer->GetRenderHdr()->virtualModel;
+				MDLHandle_t hVirtualModel = (MDLHandle_t)(uintptr_t)pStudioHdrContainer->GetRenderHdr()->virtualModel;
 				mdlcache->LockStudioHdr( hVirtualModel );
 			}
 			m_pStudioHdr = pStudioHdrContainer; // must be last to ensure virtual model correctly set up
@@ -2545,7 +2545,7 @@ void CBaseAnimating::UnlockStudioHdr()
 			mdlcache->UnlockStudioHdr( modelinfo->GetCacheHandle( mdl ) );
 			if ( m_pStudioHdr->GetVirtualModel() )
 			{
-				MDLHandle_t hVirtualModel = (MDLHandle_t)m_pStudioHdr->GetRenderHdr()->virtualModel;
+				MDLHandle_t hVirtualModel = (MDLHandle_t)(uintptr_t)m_pStudioHdr->GetRenderHdr()->virtualModel;
 				mdlcache->UnlockStudioHdr( hVirtualModel );
 			}
 		}

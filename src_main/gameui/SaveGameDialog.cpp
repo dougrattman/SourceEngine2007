@@ -1,163 +1,138 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "SaveGameDialog.h"
+
+#include <cstdio>
+#include <cstdlib>
 #include "EngineInterface.h"
+#include "FileSystem.h"
 #include "GameUI_Interface.h"
-
-#include "vgui/ISystem.h"
+#include "tier1/keyvalues.h"
 #include "vgui/ISurface.h"
+#include "vgui/ISystem.h"
 #include "vgui/IVGui.h"
-
 #include "vgui_controls/Button.h"
 #include "vgui_controls/ListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
-#include "KeyValues.h"
-#include "FileSystem.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-
-using namespace vgui;
-
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#define NEW_SAVE_GAME_TIMESTAMP	0xFFFFFFFF
+#define NEW_SAVE_GAME_TIMESTAMP 0xFFFFFFFF
 
+using namespace vgui;
 //-----------------------------------------------------------------------------
 // Purpose:Constructor
 //-----------------------------------------------------------------------------
-CSaveGameDialog::CSaveGameDialog(vgui::Panel *parent) : BaseClass(parent, "SaveGameDialog")
-{
-	SetDeleteSelfOnClose(true);
-	SetBounds(0, 0, 512, 384);
-	SetSizeable( true );
+CSaveGameDialog::CSaveGameDialog(vgui::Panel *parent)
+    : BaseClass(parent, "SaveGameDialog") {
+  SetDeleteSelfOnClose(true);
+  SetBounds(0, 0, 512, 384);
+  SetSizeable(true);
 
-	SetTitle("#GameUI_SaveGame", true);
+  SetTitle("#GameUI_SaveGame", true);
 
-	vgui::Button *cancel = new vgui::Button( this, "Cancel", "#GameUI_Cancel" );
-	cancel->SetCommand( "Close" );
+  vgui::Button *cancel = new vgui::Button(this, "Cancel", "#GameUI_Cancel");
+  cancel->SetCommand("Close");
 
-	LoadControlSettings("Resource\\SaveGameDialog.res");
+  LoadControlSettings("Resource\\SaveGameDialog.res");
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
-CSaveGameDialog::~CSaveGameDialog()
-{
-}
+CSaveGameDialog::~CSaveGameDialog() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Saves game
 //-----------------------------------------------------------------------------
-void CSaveGameDialog::OnCommand( const char *command )
-{
-	if ( !stricmp( command, "loadsave" )  )
-	{
-		int saveIndex = GetSelectedItemSaveIndex();
-		if ( m_SaveGames.IsValidIndex(saveIndex) )
-		{
-			// see if we're overwriting
-			if ( m_SaveGames[saveIndex].iTimestamp == NEW_SAVE_GAME_TIMESTAMP )
-			{
-				// new save game, proceed
-				OnCommand( "SaveOverwriteConfirmed" );
-			}
-			else
-			{
-				// open confirmation dialog
-				QueryBox *box = new QueryBox( "#GameUI_ConfirmOverwriteSaveGame_Title", "#GameUI_ConfirmOverwriteSaveGame_Info" );
-				box->AddActionSignalTarget(this);
-				box->SetOKButtonText("#GameUI_ConfirmOverwriteSaveGame_OK");
-				box->SetOKCommand(new KeyValues("Command", "command", "SaveOverwriteConfirmed"));
-				box->DoModal();
-			}
-		}
-	}
-	else if ( !stricmp( command, "SaveOverwriteConfirmed" ) )
-	{
-		int saveIndex = GetSelectedItemSaveIndex();
-		if ( m_SaveGames.IsValidIndex(saveIndex) )
-		{
-			// delete any existing save
-			DeleteSaveGame( m_SaveGames[saveIndex].szFileName );
+void CSaveGameDialog::OnCommand(const char *command) {
+  if (!stricmp(command, "loadsave")) {
+    int saveIndex = GetSelectedItemSaveIndex();
+    if (m_SaveGames.IsValidIndex(saveIndex)) {
+      // see if we're overwriting
+      if (m_SaveGames[saveIndex].iTimestamp == NEW_SAVE_GAME_TIMESTAMP) {
+        // new save game, proceed
+        OnCommand("SaveOverwriteConfirmed");
+      } else {
+        // open confirmation dialog
+        QueryBox *box = new QueryBox("#GameUI_ConfirmOverwriteSaveGame_Title",
+                                     "#GameUI_ConfirmOverwriteSaveGame_Info");
+        box->AddActionSignalTarget(this);
+        box->SetOKButtonText("#GameUI_ConfirmOverwriteSaveGame_OK");
+        box->SetOKCommand(
+            new KeyValues("Command", "command", "SaveOverwriteConfirmed"));
+        box->DoModal();
+      }
+    }
+  } else if (!stricmp(command, "SaveOverwriteConfirmed")) {
+    int saveIndex = GetSelectedItemSaveIndex();
+    if (m_SaveGames.IsValidIndex(saveIndex)) {
+      // delete any existing save
+      DeleteSaveGame(m_SaveGames[saveIndex].szFileName);
 
-			// save to a new name
-			char saveName[128];
-			FindSaveSlot( saveName, sizeof(saveName) );
-			if ( saveName && saveName[ 0 ] )
-			{
-				// Load the game, return to top and switch to engine
-				char sz[ 256 ];
-				Q_snprintf(sz, sizeof( sz ), "save %s\n", saveName );
+      // save to a new name
+      char saveName[128];
+      FindSaveSlot(saveName, sizeof(saveName));
+      if (saveName && saveName[0]) {
+        // Load the game, return to top and switch to engine
+        char sz[256];
+        Q_snprintf(sz, sizeof(sz), "save %s\n", saveName);
 
-				engine->ClientCmd_Unrestricted( sz );
+        engine->ClientCmd_Unrestricted(sz);
 
-				// Close this dialog
-				Close();
+        // Close this dialog
+        Close();
 
-				// hide the UI
-				GameUI().HideGameUI();
-			}
-		}
-	}
-	else
-	{
-		BaseClass::OnCommand( command );
-	}
+        // hide the UI
+        GameUI().HideGameUI();
+      }
+    }
+  } else {
+    BaseClass::OnCommand(command);
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Opens the dialog and rebuilds the save list
 //-----------------------------------------------------------------------------
-void CSaveGameDialog::Activate()
-{
-	BaseClass::Activate();
-	ScanSavedGames();
+void CSaveGameDialog::Activate() {
+  BaseClass::Activate();
+  ScanSavedGames();
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: scans for save games
 //-----------------------------------------------------------------------------
-void CSaveGameDialog::OnScanningSaveGames()
-{
-	// create dummy item for current saved game
-	SaveGameDescription_t save = { "NewSavedGame", "", "", "#GameUI_NewSaveGame", "", "", "Current", NEW_SAVE_GAME_TIMESTAMP };
-	m_SaveGames.AddToTail(save);
+void CSaveGameDialog::OnScanningSaveGames() {
+  // create dummy item for current saved game
+  SaveGameDescription_t save = {
+      "NewSavedGame",         "", "", "#GameUI_NewSaveGame", "", "", "Current",
+      NEW_SAVE_GAME_TIMESTAMP};
+  m_SaveGames.AddToTail(save);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: generates a new save game name
 //-----------------------------------------------------------------------------
-void CSaveGameDialog::FindSaveSlot( char *buffer, int bufsize )
-{
-	buffer[0] = 0;
-	char szFileName[512];
-	for (int i = 0; i < 1000; i++)
-	{
-		Q_snprintf(szFileName, sizeof( szFileName ), "save/Half-Life-%03i.sav", i );
+void CSaveGameDialog::FindSaveSlot(char *buffer, int bufsize) {
+  buffer[0] = 0;
+  char szFileName[512];
+  for (int i = 0; i < 1000; i++) {
+    Q_snprintf(szFileName, sizeof(szFileName), "save/Half-Life-%03i.sav", i);
 
-		FileHandle_t fp = g_pFullFileSystem->Open( szFileName, "rb" );
-		if (!fp)
-		{
-			// clean up name
-			Q_strncpy( buffer, szFileName + 5, bufsize );
-			char *ext = strstr( buffer, ".sav" );
-			if ( ext )
-			{
-			 *ext = 0;
-			}
-			return;
-		}
-		g_pFullFileSystem->Close(fp);
-	}
+    FileHandle_t fp = g_pFullFileSystem->Open(szFileName, "rb");
+    if (!fp) {
+      // clean up name
+      Q_strncpy(buffer, szFileName + 5, bufsize);
+      char *ext = strstr(buffer, ".sav");
+      if (ext) {
+        *ext = 0;
+      }
+      return;
+    }
+    g_pFullFileSystem->Close(fp);
+  }
 
-	Assert(!("Could not generate new save game file"));
+  Assert(!("Could not generate new save game file"));
 }

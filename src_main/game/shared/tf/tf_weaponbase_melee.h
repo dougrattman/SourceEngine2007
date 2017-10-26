@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Weapon Base Melee 
 //
@@ -36,16 +36,16 @@ public:
 	CTFWeaponBaseMelee();
 
 	// We say yes to this so the weapon system lets us switch to it.
-	virtual bool	HasPrimaryAmmo()								{ return true; }
-	virtual bool	CanBeSelected()									{ return true; }
+	virtual bool	HasPrimaryAmmo()  		{ return true; }
+	virtual bool	CanBeSelected()   { return true; }
 	virtual void	Precache();
 	virtual void	ItemPostFrame();
 	virtual void	Spawn();
 	virtual void	PrimaryAttack();
 	virtual void	SecondaryAttack();
 	virtual bool	Holster( CBaseCombatWeapon *pSwitchingTo );
-	virtual int		GetWeaponID( void ) const						{ return TF_WEAPON_NONE; }
-	virtual bool	ShouldDrawCrosshair( void )						{ return true; }
+	virtual int		GetWeaponID( void ) const  { return TF_WEAPON_NONE; }
+	virtual bool	ShouldDrawCrosshair( void )  { return true; }
 	virtual void	WeaponReset( void );
 
 	virtual bool	CalcIsAttackCriticalHelper( void );
@@ -62,8 +62,8 @@ public:
 
 	virtual void	SendPlayerAnimEvent( CTFPlayer *pPlayer );
 
-	bool			IsCurrentAttackACritical( void ) { return m_bCurrentAttackIsCrit; }
-	bool			ConnectedHit( void ) { return m_bConnected; }
+	bool IsCurrentAttackACritical( void ) { return m_bCurrentAttackIsCrit; }
+	bool ConnectedHit( void ) { return m_bConnected; }
 
 public:	
 
@@ -71,7 +71,7 @@ public:
 
 protected:
 
-	void			Swing( CTFPlayer *pPlayer );
+	void Swing( CTFPlayer *pPlayer );
 
 protected:
 

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that simulates bullets that are underwater.
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_WATERBULLET_H
 #define WEAPON_WATERBULLET_H

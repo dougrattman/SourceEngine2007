@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "basehlcombatweapon.h"
 #include "soundenvelope.h"
@@ -68,7 +68,7 @@ public:
 	static CFlare *activeFlares;
 
 	CBaseEntity *m_pOwner;
-	int			m_nBounces;			// how many times has this flare bounced?
+	int m_nBounces; // how many times has this flare bounced?
 	CNetworkVar( float, m_flTimeBurnOut );	// when will the flare burn out?
 	CNetworkVar( float, m_flScale );
 	float		m_flDuration;

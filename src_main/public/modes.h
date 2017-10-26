@@ -1,21 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
-#if !defined( MODES_H )
-#define MODES_H
-#ifdef _WIN32
-#pragma once
-#endif
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-typedef struct vmode_s
-{
-	int			width;
-	int			height;
-	int			bpp;
-	int			refreshRate;
+#if !defined(MODES_H)
+#define MODES_H
+
+typedef struct vmode_s {
+  int width;
+  int height;
+  int bpp;
+  int refreshRate;
 } vmode_t;
 
-#endif // MODES_H
+#endif  // MODES_H

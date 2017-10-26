@@ -1,17 +1,17 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef C_PROP_PORTAL_STATS_DISPLAY_H
 #define C_PROP_PORTAL_STATS_DISPLAY_H
 
 #include "cbase.h"
 #include "c_portal_player.h"
 #include "portal_shareddefs.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 
 class C_PropPortalStatsDisplay : public C_BaseAnimating

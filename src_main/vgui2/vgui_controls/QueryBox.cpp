@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 // This class is a message box that has two buttons, ok and cancel instead of
@@ -6,7 +6,7 @@
 // and implement another button here.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include <vgui/KeyCode.h>
 

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Deal with weapon being out
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #ifndef AI_BEHAVIOR_RAPPEL_H

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef NPC_COMBINE_H
 #define NPC_COMBINE_H
@@ -42,14 +42,14 @@ public:
 	// Create components
 	virtual bool	CreateComponents();
 
-	bool			CanThrowGrenade( const Vector &vecTarget );
-	bool			CheckCanThrowGrenade( const Vector &vecTarget );
+	bool CanThrowGrenade( const Vector &vecTarget );
+	bool CheckCanThrowGrenade( const Vector &vecTarget );
 	virtual	bool	CanGrenadeEnemy( bool bUseFreeKnowledge = true );
 	virtual bool	CanAltFireEnemy( bool bUseFreeKnowledge );
-	int				GetGrenadeConditions( float flDot, float flDist );
-	int				RangeAttack2Conditions( float flDot, float flDist ); // For innate grenade attack
-	int				MeleeAttack1Conditions( float flDot, float flDist ); // For kick/punch
-	bool			FVisible( CBaseEntity *pEntity, int traceMask = MASK_BLOCKLOS, CBaseEntity **ppBlocker = NULL );
+	int 	GetGrenadeConditions( float flDot, float flDist );
+	int 	RangeAttack2Conditions( float flDot, float flDist ); // For innate grenade attack
+	int 	MeleeAttack1Conditions( float flDot, float flDist ); // For kick/punch
+	bool FVisible( CBaseEntity *pEntity, int traceMask = MASK_BLOCKLOS, CBaseEntity **ppBlocker = NULL );
 	virtual bool	IsCurTaskContinuousMove();
 
 	virtual float	GetJumpGravity() const		{ return 1.8f; }
@@ -71,86 +71,86 @@ public:
 	void InputHitByBugbait( inputdata_t &inputdata );
 	void InputThrowGrenadeAtTarget( inputdata_t &inputdata );
 
-	bool			UpdateEnemyMemory( CBaseEntity *pEnemy, const Vector &position, CBaseEntity *pInformer = NULL );
+	bool UpdateEnemyMemory( CBaseEntity *pEnemy, const Vector &position, CBaseEntity *pInformer = NULL );
 
-	void			Spawn( void );
-	void			Precache( void );
-	void			Activate();
+	void Spawn( void );
+	void Precache( void );
+	void Activate();
 
-	Class_T			Classify( void );
-	bool			IsElite() { return m_fIsElite; }
-	void			DelayAltFireAttack( float flDelay );
-	void			DelaySquadAltFireAttack( float flDelay );
-	float			MaxYawSpeed( void );
-	bool			ShouldMoveAndShoot();
-	bool			OverrideMoveFacing( const AILocalMoveGoal_t &move, float flInterval );;
-	void			HandleAnimEvent( animevent_t *pEvent );
-	Vector			Weapon_ShootPosition( );
+	Class_T Classify( void );
+	bool IsElite() { return m_fIsElite; }
+	void DelayAltFireAttack( float flDelay );
+	void DelaySquadAltFireAttack( float flDelay );
+	float MaxYawSpeed( void );
+	bool ShouldMoveAndShoot();
+	bool OverrideMoveFacing( const AILocalMoveGoal_t &move, float flInterval );;
+	void HandleAnimEvent( animevent_t *pEvent );
+	Vector Weapon_ShootPosition( );
 
-	Vector			EyeOffset( Activity nActivity );
-	Vector			EyePosition( void );
-	Vector			BodyTarget( const Vector &posSrc, bool bNoisy = true );
-	Vector			GetAltFireTarget();
+	Vector EyeOffset( Activity nActivity );
+	Vector EyePosition( void );
+	Vector BodyTarget( const Vector &posSrc, bool bNoisy = true );
+	Vector GetAltFireTarget();
 
-	void			StartTask( const Task_t *pTask );
-	void			RunTask( const Task_t *pTask );
-	void			PostNPCInit();
-	void			GatherConditions();
+	void StartTask( const Task_t *pTask );
+	void RunTask( const Task_t *pTask );
+	void PostNPCInit();
+	void GatherConditions();
 	virtual void	PrescheduleThink();
 
 	Activity		NPC_TranslateActivity( Activity eNewActivity );
-	void			BuildScheduleTestBits( void );
+	void BuildScheduleTestBits( void );
 	virtual int		SelectSchedule( void );
 	virtual int		SelectFailSchedule( int failedSchedule, int failedTask, AI_TaskFailureCode_t taskFailCode );
-	int				SelectScheduleAttack();
+	int 	SelectScheduleAttack();
 
-	bool			CreateBehaviors();
+	bool CreateBehaviors();
 
-	bool			OnBeginMoveAndShoot();
-	void			OnEndMoveAndShoot();
+	bool OnBeginMoveAndShoot();
+	void OnEndMoveAndShoot();
 
 	// Combat
 	WeaponProficiency_t CalcWeaponProficiency( CBaseCombatWeapon *pWeapon );
-	bool			HasShotgun();
-	bool			ActiveWeaponIsFullyLoaded();
+	bool HasShotgun();
+	bool ActiveWeaponIsFullyLoaded();
 
-	bool			HandleInteraction(int interactionType, void *data, CBaseCombatCharacter *sourceEnt);
+	bool HandleInteraction(int interactionType, void *data, CBaseCombatCharacter *sourceEnt);
 	const char*		GetSquadSlotDebugName( int iSquadSlot );
 
-	bool			IsUsingTacticalVariant( int variant );
-	bool			IsUsingPathfindingVariant( int variant ) { return m_iPathfindingVariant == variant; }
+	bool IsUsingTacticalVariant( int variant );
+	bool IsUsingPathfindingVariant( int variant ) { return m_iPathfindingVariant == variant; }
 
-	bool			IsRunningApproachEnemySchedule();
+	bool IsRunningApproachEnemySchedule();
 
 	// -------------
 	// Sounds
 	// -------------
-	void			DeathSound( void );
-	void			PainSound( void );
-	void			IdleSound( void );
-	void			AlertSound( void );
-	void			LostEnemySound( void );
-	void			FoundEnemySound( void );
-	void			AnnounceAssault( void );
-	void			AnnounceEnemyType( CBaseEntity *pEnemy );
-	void			AnnounceEnemyKill( CBaseEntity *pEnemy );
+	void DeathSound( void );
+	void PainSound( void );
+	void IdleSound( void );
+	void AlertSound( void );
+	void LostEnemySound( void );
+	void FoundEnemySound( void );
+	void AnnounceAssault( void );
+	void AnnounceEnemyType( CBaseEntity *pEnemy );
+	void AnnounceEnemyKill( CBaseEntity *pEnemy );
 
-	void			NotifyDeadFriend( CBaseEntity* pFriend );
+	void NotifyDeadFriend( CBaseEntity* pFriend );
 
 	virtual float	HearingSensitivity( void ) { return 1.0; };
-	int				GetSoundInterests( void );
+	int 	GetSoundInterests( void );
 	virtual bool	QueryHearSound( CSound *pSound );
 
 	// Speaking
-	void			SpeakSentence( int sentType );
+	void SpeakSentence( int sentType );
 
 	virtual int		TranslateSchedule( int scheduleType );
-	void			OnStartSchedule( int scheduleType );
+	void OnStartSchedule( int scheduleType );
 
 	virtual bool	ShouldPickADeathPose( void );
 
 protected:
-	void			SetKickDamage( int nDamage ) { m_nKickDamage = nDamage; }
+	void SetKickDamage( int nDamage ) { m_nKickDamage = nDamage; }
 	CAI_Sentence< CNPC_Combine > *GetSentences() { return &m_Sentences; }
 
 private:
@@ -244,10 +244,10 @@ private:
 
 		virtual int SelectScheduleAttack()
 		{
-			int result = GetOuter()->SelectScheduleAttack();
-			if ( result == SCHED_NONE )
-				result = BaseClass::SelectScheduleAttack();
-			return result;
+ int result = GetOuter()->SelectScheduleAttack();
+ if ( result == SCHED_NONE )
+ 	result = BaseClass::SelectScheduleAttack();
+ return result;
 		}
 	};
 
@@ -256,41 +256,41 @@ private:
 	void BeginRappel() { m_RappelBehavior.BeginRappel(); }
 
 private:
-	int				m_nKickDamage;
-	Vector			m_vecTossVelocity;
-	EHANDLE			m_hForcedGrenadeTarget;
-	bool			m_bShouldPatrol;
-	bool			m_bFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	int 	m_nKickDamage;
+	Vector m_vecTossVelocity;
+	EHANDLE m_hForcedGrenadeTarget;
+	bool m_bShouldPatrol;
+	bool m_bFirstEncounter;// only put on the handsign show in the squad's first encounter.
 
 	// Time Variables
-	float			m_flNextPainSoundTime;
-	float			m_flNextAlertSoundTime;
-	float			m_flNextGrenadeCheck;	
-	float			m_flNextLostSoundTime;
-	float			m_flAlertPatrolTime;		// When to stop doing alert patrol
-	float			m_flNextAltFireTime;		// Elites only. Next time to begin considering alt-fire attack.
+	float m_flNextPainSoundTime;
+	float m_flNextAlertSoundTime;
+	float m_flNextGrenadeCheck;	
+	float m_flNextLostSoundTime;
+	float m_flAlertPatrolTime;		// When to stop doing alert patrol
+	float m_flNextAltFireTime;		// Elites only. Next time to begin considering alt-fire attack.
 
-	int				m_nShots;
-	float			m_flShotDelay;
-	float			m_flStopMoveShootTime;
+	int 	m_nShots;
+	float m_flShotDelay;
+	float m_flStopMoveShootTime;
 
 	CAI_Sentence< CNPC_Combine > m_Sentences;
 
-	int			m_iNumGrenades;
-	CAI_AssaultBehavior			m_AssaultBehavior;
+	int m_iNumGrenades;
+	CAI_AssaultBehavior m_AssaultBehavior;
 	CCombineStandoffBehavior	m_StandoffBehavior;
-	CAI_FollowBehavior			m_FollowBehavior;
+	CAI_FollowBehavior m_FollowBehavior;
 	CAI_FuncTankBehavior		m_FuncTankBehavior;
-	CAI_RappelBehavior			m_RappelBehavior;
-	CAI_ActBusyBehavior			m_ActBusyBehavior;
+	CAI_RappelBehavior m_RappelBehavior;
+	CAI_ActBusyBehavior m_ActBusyBehavior;
 
 public:
-	int				m_iLastAnimEventHandled;
-	bool			m_fIsElite;
-	Vector			m_vecAltFireTarget;
+	int 	m_iLastAnimEventHandled;
+	bool m_fIsElite;
+	Vector m_vecAltFireTarget;
 
-	int				m_iTacticalVariant;
-	int				m_iPathfindingVariant;
+	int 	m_iTacticalVariant;
+	int 	m_iPathfindingVariant;
 };
 
 

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A shader that builds the shadow using render-to-texture
 //
 // $Header: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
 #include "mathlib/VMatrix.h"

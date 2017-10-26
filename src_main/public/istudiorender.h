@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -102,14 +102,14 @@ enum
 	STUDIORENDER_DRAW_TRANSLUCENT_ONLY	= 0x02,
 	STUDIORENDER_DRAW_GROUP_MASK		= 0x03,
 
-	STUDIORENDER_DRAW_NO_FLEXES			= 0x04,
+	STUDIORENDER_DRAW_NO_FLEXES = 0x04,
 	STUDIORENDER_DRAW_STATIC_LIGHTING	= 0x08,
 
 	STUDIORENDER_DRAW_ACCURATETIME		= 0x10,		// Use accurate timing when drawing the model.
 	STUDIORENDER_DRAW_NO_SHADOWS		= 0x20,
 	STUDIORENDER_DRAW_GET_PERF_STATS	= 0x40,
 
-	STUDIORENDER_DRAW_WIREFRAME			= 0x80,
+	STUDIORENDER_DRAW_WIREFRAME = 0x80,
 
 	STUDIORENDER_DRAW_ITEM_BLINK		= 0x100,
 
@@ -123,14 +123,14 @@ enum
 // FIXME: remove these (materials/shaders should drive vertex format). Need to
 //        list required forcedmaterialoverrides in models/bsps (rather than
 //        all models supporting all possible overrides, as they do currently).
-#define VERTEX_TEXCOORD0_2D ( ( (uint64) 2 ) << ( TEX_COORD_SIZE_BIT + ( 3*0 ) ) )
+#define VERTEX_TEXCOORD0_2D ( ( (uint64_t) 2 ) << ( TEX_COORD_SIZE_BIT + ( 3*0 ) ) )
 enum MaterialVertexFormat_t
 {
 	MATERIAL_VERTEX_FORMAT_MODEL_SKINNED		= (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D | VERTEX_BONEWEIGHT(2) | VERTEX_BONE_INDEX | VERTEX_USERDATA_SIZE(4),
 	MATERIAL_VERTEX_FORMAT_MODEL_SKINNED_DX7	= (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D | VERTEX_BONEWEIGHT(2) | VERTEX_BONE_INDEX,
-	MATERIAL_VERTEX_FORMAT_MODEL				= (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D | VERTEX_USERDATA_SIZE(4),
-	MATERIAL_VERTEX_FORMAT_MODEL_DX7			= (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D,
-	MATERIAL_VERTEX_FORMAT_COLOR				= (VertexFormat_t) VERTEX_SPECULAR
+	MATERIAL_VERTEX_FORMAT_MODEL 	= (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D | VERTEX_USERDATA_SIZE(4),
+	MATERIAL_VERTEX_FORMAT_MODEL_DX7 = (VertexFormat_t) VERTEX_POSITION | VERTEX_COLOR | VERTEX_NORMAL | VERTEX_TEXCOORD0_2D,
+	MATERIAL_VERTEX_FORMAT_COLOR 	= (VertexFormat_t) VERTEX_SPECULAR
 };
 
 
@@ -177,10 +177,10 @@ struct ColorMeshInfo_t
 {
 	// A given color mesh can own a unique Mesh, or it can use a shared Mesh
 	// (in which case it uses a sub-range defined by m_nVertOffset and m_nNumVerts)
-	IMesh				*	m_pMesh;
+	IMesh 	*	m_pMesh;
 	IPooledVBAllocator	*	m_pPooledVBAllocator;
-	int						m_nVertOffsetInBytes;
-	int						m_nNumVerts;
+	int  m_nVertOffsetInBytes;
+	int  m_nNumVerts;
 };
 
 struct DrawModelInfo_t
@@ -188,15 +188,15 @@ struct DrawModelInfo_t
 	studiohdr_t		*m_pStudioHdr;
 	studiohwdata_t	*m_pHardwareData;
 	StudioDecalHandle_t m_Decals;
-	int				m_Skin;
-	int				m_Body;
-	int				m_HitboxSet;
-	void			*m_pClientEntity;
-	int				m_Lod;
+	int 	m_Skin;
+	int 	m_Body;
+	int 	m_HitboxSet;
+	void *m_pClientEntity;
+	int 	m_Lod;
 	ColorMeshInfo_t	*m_pColorMeshes;
-	bool			m_bStaticLighting;
-	Vector			m_vecAmbientCube[6];		// ambient, and lights that aren't in locallight[]
-	int				m_nLocalLightCount;
+	bool m_bStaticLighting;
+	Vector m_vecAmbientCube[6];		// ambient, and lights that aren't in locallight[]
+	int 	m_nLocalLightCount;
 	LightDesc_t		m_LocalLightDescs[4];
 };
 
@@ -284,7 +284,7 @@ public:
 		const Vector& viewUp, const Vector& viewPlaneNormal ) = 0;
 	
 	// Allocates flex weights for use in rendering
-	// NOTE: Pass in a non-null second parameter to lock delayed flex weights
+	// NOTE: Pass in a non-0 second parameter to lock delayed flex weights
 	virtual void LockFlexWeights( int nWeightCount, float **ppFlexWeights, float **ppFlexDelayedWeights = NULL ) = 0;
 	virtual void UnlockFlexWeights() = 0;
 	

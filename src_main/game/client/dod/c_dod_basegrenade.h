@@ -21,8 +21,8 @@ public:
 	virtual void Spawn();
 
 public:
-			C_DODBaseGrenade() {}
-			C_DODBaseGrenade( const C_DODBaseGrenade& ) {}
+ C_DODBaseGrenade() {}
+ C_DODBaseGrenade( const C_DODBaseGrenade& ) {}
 	virtual ~C_DODBaseGrenade();
 
 	virtual int DrawModel( int flags );

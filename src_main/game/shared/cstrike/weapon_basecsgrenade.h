@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_BASECSGRENADE_H
 #define WEAPON_BASECSGRENADE_H
@@ -32,17 +32,17 @@ public:
 
 	virtual void	Precache();
 
-	bool			Deploy();
-	bool			Holster( CBaseCombatWeapon *pSwitchingTo );
+	bool Deploy();
+	bool Holster( CBaseCombatWeapon *pSwitchingTo );
 
-	void			PrimaryAttack();
-	void			SecondaryAttack();
+	void PrimaryAttack();
+	void SecondaryAttack();
 
-	bool			Reload();
+	bool Reload();
 
 	virtual void	ItemPostFrame();
 	
-	void			DecrementAmmo( CBaseCombatCharacter *pOwner );
+	void DecrementAmmo( CBaseCombatCharacter *pOwner );
 	virtual void	StartGrenadeThrow();
 	virtual void	ThrowGrenade();
 	virtual void	DropGrenade();

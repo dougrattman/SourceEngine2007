@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 // Particle system entities can derive from this to handle some of the mundane
 // functionality of hooking into the engine's entity system.
@@ -60,20 +60,20 @@ public:
 	// NOTE: Ths enclosed particle effect binding will do all the drawing
 	virtual bool	ShouldDraw() { return false; }
 
-	int				AllocateToolParticleEffectId();
-	int				GetToolParticleEffectId() const;
+	int 	AllocateToolParticleEffectId();
+	int 	GetToolParticleEffectId() const;
 
 private:
-	int				m_nToolParticleEffectId;
-	bool			m_bSimulate;
+	int 	m_nToolParticleEffectId;
+	bool m_bSimulate;
 #endif
 
 public:
-	void			FollowEntity(CBaseEntity *pEntity);
+	void FollowEntity(CBaseEntity *pEntity);
 	
 	// UTIL_Remove will be called after the specified amount of time.
 	// If you pass in -1, the entity will never go away automatically.
-	void			SetLifetime(float lifetime);
+	void SetLifetime(float lifetime);
 
 private:
 	CBaseParticleEntity( const CBaseParticleEntity & ); // not defined, not accessible

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SCRATCHPAD_GAMEDLL_HELPERS_H
 #define SCRATCHPAD_GAMEDLL_HELPERS_H
@@ -14,13 +14,13 @@
 class IScratchPad3D;
 
 
-#define SPDRAWWORLD_DRAW_WORLD				0x001
-#define SPDRAWWORLD_DRAW_PLAYERS			0x002	// Draw player entities?
-#define SPDRAWWORLD_DRAW_ENTITIES			0x004	// Draw entities other than players?
+#define SPDRAWWORLD_DRAW_WORLD 	0x001
+#define SPDRAWWORLD_DRAW_PLAYERS 0x002	// Draw player entities?
+#define SPDRAWWORLD_DRAW_ENTITIES 0x004	// Draw entities other than players?
 #define SPDRAWWORLD_DRAW_ENTITY_CLASSNAMES	0x008
 #define SPDRAWWORLD_DRAW_EDICT_INDICES		0x010
 
-#define SPDRAWWORLD_DRAW_ALL			0xFFFFFFFF
+#define SPDRAWWORLD_DRAW_ALL 0xFFFFFFFF
 
 
 // Draws the world and various things in it into the scratchpad.

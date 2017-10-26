@@ -1,25 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// view.h
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef VIEW_H
 #define VIEW_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
 class CViewSetup;
 class CViewSetupV1;
 
+void V_Init();
+void V_Shutdown(void);
+void ConvertViewSetup(const CViewSetup &setup, CViewSetupV1 &setupV1,
+                      int nFlags);
 
-void V_Init (void);
-void V_Shutdown( void );
-void ConvertViewSetup( const CViewSetup &setup, CViewSetupV1 &setupV1, int nFlags );
-
-#endif // VIEW_H
+#endif  // VIEW_H

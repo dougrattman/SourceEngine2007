@@ -1,21 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef SV_LOGOFILE_H
 #define SV_LOGOFILE_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-
-#include "checksum_crc.h"
-
+#include "tier1/checksum_crc.h"
 
 class CGameClient;
-class CPerClientLogoInfo;	// (private to this module)
+class CPerClientLogoInfo;  // (private to this module)
 class CServerLogoInfo;
 
 // Create per-client logo info.
@@ -26,11 +17,11 @@ class CServerLogoInfo;
 // void SV_LogoFile_HandleClientDisconnect( CGameClient *pClient );
 
 // Register whatever messages the logo files use.
-// void SV_LogoFile_NewConnection( INetChannel *chan, CGameClient *pGameClient );
+// void SV_LogoFile_NewConnection( INetChannel *chan, CGameClient *pGameClient
+// );
 
-// Called when the client connects. The client sends its logo file CRC to the server. If the server
-// already has it, then it's fine.
-// void SV_LogoFile_OnConnect( CGameClient *pClient, bool bValid, CRC32_t crcValue );
+// Called when the client connects. The client sends its logo file CRC to the
+// server. If the server already has it, then it's fine. void
+// SV_LogoFile_OnConnect( CGameClient *pClient, bool bValid, CRC32_t crcValue );
 
-
-#endif // SV_LOGOFILE_H
+#endif  // SV_LOGOFILE_H

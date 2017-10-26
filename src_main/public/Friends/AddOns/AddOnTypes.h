@@ -1,18 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved.
 
 #ifndef ADDONTYPES_H
 #define ADDONTYPES_H
-#pragma once
 
 #ifndef WIN32
-  typedef unsigned long long SessionInt64;
+typedef unsigned long long SessionInt64;
 #else
-  typedef unsigned __int64 SessionInt64;
+typedef unsigned __int64 SessionInt64;
 #endif
 
-#endif // ADDONTYPES_H
-
+#endif  // ADDONTYPES_H

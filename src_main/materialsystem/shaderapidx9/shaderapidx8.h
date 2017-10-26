@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 #define ATI_FETCH4_ENABLE		MAKEFOURCC('G','E','T','4')
 #define ATI_FETCH4_DISABLE		MAKEFOURCC('G','E','T','1')
-#define ATISAMP_FETCH4			D3DSAMP_MIPMAPLODBIAS
+#define ATISAMP_FETCH4 D3DSAMP_MIPMAPLODBIAS
 
 
 //-----------------------------------------------------------------------------

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 
 
@@ -24,12 +24,12 @@ public:
 	DECLARE_CLASS( C_PhysBox, C_BaseEntity );
 	DECLARE_CLIENTCLASS();
 
-					C_PhysBox();
-	virtual			~C_PhysBox();
+ 		C_PhysBox();
+	virtual ~C_PhysBox();
 	virtual ShadowType_t ShadowCastType();
 	
 public:
-	float			m_mass;	// TEST..
+	float m_mass;	// TEST..
 };
 
 

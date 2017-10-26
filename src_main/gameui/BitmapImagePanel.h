@@ -1,37 +1,29 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef BITMAPIMAGEPANEL_H
 #define BITMAPIMAGEPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/Panel.h>
+#include "vgui_controls/Panel.h"
 
-class CBitmapImagePanel : public vgui::Panel
-{
-public:
-	CBitmapImagePanel( vgui::Panel *parent, char const *panelName, char const *filename = NULL );
+class CBitmapImagePanel : public vgui::Panel {
+ public:
+  CBitmapImagePanel(vgui::Panel *parent, char const *panelName,
+                    char const *filename = NULL);
 
-	virtual void	PaintBackground();
+  virtual void PaintBackground();
 
-	virtual void	setTexture( char const *filename );
+  virtual void setTexture(char const *filename);
 
-	virtual void	forceReload( void );
+  virtual void forceReload(void);
 
-private:
-	typedef vgui::Panel BaseClass;
+ private:
+  typedef vgui::Panel BaseClass;
 
-	void			forceUpload();
+  void forceUpload();
 
-	bool			m_bUploaded;
-	int				m_nTextureId;
-	char			m_szTexture[ 128 ];
+  bool m_bUploaded;
+  int m_nTextureId;
+  char m_szTexture[128];
 };
 
-#endif // BITMAPIMAGEPANEL_H
+#endif  // BITMAPIMAGEPANEL_H

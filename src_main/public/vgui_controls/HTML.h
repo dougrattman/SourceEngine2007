@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Creates a HTML control
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HTML_H
 #define HTML_H
@@ -23,9 +23,9 @@ namespace vgui
 
 //-----------------------------------------------------------------------------
 // Purpose: Control to display HTML content
-//			This control utilises a hidden IE window to render a HTML page for you.
-//			It can load any valid URL (i.e local files or web pages), you cannot dynamically change the
-//			content however (internally to the control that is).
+// This control utilises a hidden IE window to render a HTML page for you.
+// It can load any valid URL (i.e local files or web pages), you cannot dynamically change the
+// content however (internally to the control that is).
 //-----------------------------------------------------------------------------
 class HTML: public Panel, public IHTMLEvents
 {

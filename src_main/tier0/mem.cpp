@@ -1,16 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Memory allocation!
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #include "pch_tier0.h"
+
 #include "tier0/mem.h"
+
 #include <malloc.h>
+#include <limits>
 #include "tier0/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
 #ifndef STEAM
@@ -19,61 +18,55 @@
 #define PvExpand _expand
 #endif
 
-enum 
-{
-	MAX_STACK_DEPTH = 32
-};
+#undef max
 
-static uint8 *s_pBuf = NULL;
-static int s_pBufStackDepth[MAX_STACK_DEPTH];
-static int s_nBufDepth = -1;
-static int s_nBufCurSize = 0;
-static int s_nBufAllocSize = 0;
+namespace {
+static constexpr size_t MAX_STACK_DEPTH = 64;
+static uint8_t *s_stack = nullptr;
+static size_t s_stack_depth[MAX_STACK_DEPTH];
+static size_t s_depth = std::numeric_limits<size_t>::max();
+static size_t s_stack_size = 0;
+static size_t s_stack_alloc_size = 0;
+}  // namespace
 
-//-----------------------------------------------------------------------------
-// Other DLL-exported methods for particular kinds of memory
-//-----------------------------------------------------------------------------
-void *MemAllocScratch( int nMemSize )
-{	
-	// Minimally allocate 1M scratch
-	if (s_nBufAllocSize < s_nBufCurSize + nMemSize)
-	{
-		s_nBufAllocSize = s_nBufCurSize + nMemSize;
-		if (s_nBufAllocSize < 1024 * 1024)
-		{
-			s_nBufAllocSize = 1024 * 1024;
-		}
+// Other DLL-exported methods for particular kinds of memory.
+void *MemAllocScratch(size_t memory_size) {
+  // Minimally allocate 1M scratch.
+  if (s_stack_alloc_size < s_stack_size + memory_size) {
+    s_stack_alloc_size = s_stack_size + memory_size;
+    if (s_stack_alloc_size < 1024 * 1024) {
+      s_stack_alloc_size = 1024 * 1024;
+    }
 
-		if (s_pBuf)
-		{
-			s_pBuf = (uint8*)PvRealloc( s_pBuf, s_nBufAllocSize );
-			Assert( s_pBuf );	
-		}
-		else
-		{
-			s_pBuf = (uint8*)PvAlloc( s_nBufAllocSize );
-		}
-	}
+    if (s_stack) {
+      auto *new_stack = (uint8_t *)PvRealloc(s_stack, s_stack_alloc_size);
+      if (!new_stack) {
+        Assert(0);
+        return nullptr;
+      }
+      s_stack = new_stack;
+    } else {
+      s_stack = (uint8_t *)PvAlloc(s_stack_alloc_size);
+    }
+  }
 
-	int nBase = s_nBufCurSize;
-	s_nBufCurSize += nMemSize;
-	++s_nBufDepth;
-	Assert( s_nBufDepth < MAX_STACK_DEPTH );
-	s_pBufStackDepth[s_nBufDepth] = nMemSize;
+  if (s_stack == nullptr) return nullptr;
 
-	return &s_pBuf[nBase];
+  const size_t base_stack_size = s_stack_size;
+  s_stack_size += memory_size;
+  ++s_depth;
+
+  Assert(s_depth < MAX_STACK_DEPTH);
+  s_stack_depth[s_depth] = memory_size;
+
+  return &s_stack[base_stack_size];
 }
 
-void MemFreeScratch()
-{
-	Assert( s_nBufDepth >= 0 );
-	s_nBufCurSize -= s_pBufStackDepth[s_nBufDepth];
-	--s_nBufDepth;
+void MemFreeScratch() {
+  s_stack_size -= s_stack_depth[s_depth];
+  --s_depth;
 }
 
 #ifdef _LINUX
-void ZeroMemory( void *mem, size_t length )
-{
-	memset( mem, 0x0, length );
-}
+void ZeroMemory(void *mem, size_t length) { memset(mem, 0x0, length); }
 #endif

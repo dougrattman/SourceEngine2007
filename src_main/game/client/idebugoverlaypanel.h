@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IDEBUGOVERLAYPANEL_H )
 #define IDEBUGOVERLAYPANEL_H
 #ifdef _WIN32

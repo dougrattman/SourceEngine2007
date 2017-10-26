@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef DOD_AREA_CAPTURE_H
 #define DOD_AREA_CAPTURE_H
@@ -17,7 +17,7 @@
 
 #define AREA_THINK_TIME 0.1f
 
-#define CAPTURE_NORMAL					0
+#define CAPTURE_NORMAL 		0
 #define CAPTURE_CATCHUP_ALIVEPLAYERS	1
 
 #define MAX_CLIENT_AREAS 128
@@ -54,7 +54,7 @@ private:
 	void	InputRoundInit( inputdata_t &inputdata );
 
 private:
-	int		m_iCapMode;			//which capture mode we're in
+	int		m_iCapMode; //which capture mode we're in
 	int		m_bCapturing;
 	int		m_nCapturingTeam;	//the team that is capturing this point
 	int		m_nOwningTeam;	//the team that has captured this point
@@ -94,7 +94,7 @@ private:
 
 	bool	m_bRequiresObject;
 
-	string_t m_iszCapPointName;			//name of the cap point that we're linked to
+	string_t m_iszCapPointName; //name of the cap point that we're linked to
 
 	int	m_iCapAttemptNumber;	// number used to keep track of discrete cap attempts, for block tracking
 

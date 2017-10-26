@@ -148,7 +148,7 @@ public:
 	void Disable( void );
 	void FireTimer( void );
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// outputs
 	COutputEvent m_OnTimer;
@@ -472,7 +472,7 @@ class CLogicLineToEntity : public CLogicalEntity
 public:
 	DECLARE_CLASS( CLogicLineToEntity, CLogicalEntity );
 
-	void Activate(void);
+	void Activate();
 	void Spawn( void );
 	void Think( void );
 
@@ -593,7 +593,7 @@ public:
 
 	DECLARE_CLASS( CMathRemap, CLogicalEntity );
 
-	void Spawn(void);
+	void Spawn();
 
 	// Keys
 	float m_flInMin;
@@ -719,7 +719,7 @@ public:
 
 	DECLARE_CLASS( CMathColorBlend, CLogicalEntity );
 
-	void Spawn(void);
+	void Spawn();
 
 	// Keys
 	float m_flInMin;
@@ -861,7 +861,7 @@ public:
 	void InputAddToCounter( inputdata_t &inputdata );
 	void InputGetCounter( inputdata_t &inputdata );
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	DECLARE_DATADESC();
 
@@ -1300,9 +1300,9 @@ private:
 	bool m_bDisabled;
 
 	bool KeyValue(const char *szKeyName, const char *szValue);
-	void Spawn(void);
+	void Spawn();
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	void UpdateOutValue(CBaseEntity *pActivator, float fNewValue);
 
@@ -1676,7 +1676,7 @@ private:
 	int m_nLastShuffleCase;
 	unsigned char m_uchShuffleCaseMap[MAX_LOGIC_CASES];
 
-	void Spawn(void);
+	void Spawn();
 
 	int BuildCaseMap(unsigned char *puchMap);
 
@@ -1908,7 +1908,7 @@ class CLogicCompare : public CLogicalEntity
 	DECLARE_CLASS( CLogicCompare, CLogicalEntity );
 
 public:
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 private:
 	// Inputs

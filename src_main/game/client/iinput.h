@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #if !defined( IINPUT_H )
 #define IINPUT_H
 #ifdef _WIN32
@@ -34,7 +34,7 @@ public:
 	virtual	void		Init_All( void ) = 0;
 	virtual void		Shutdown_All( void ) = 0;
 	// Latching button states
-	virtual int			GetButtonBits( int ) = 0;
+	virtual int GetButtonBits( int ) = 0;
 	// Create movement command
 	virtual void		CreateMove ( int sequence_number, float input_sample_frametime, bool active ) = 0;
 	virtual void		ExtraMouseSample( float frametime, bool active ) = 0;
@@ -49,7 +49,7 @@ public:
 	// Retrieve key state
 	virtual float		KeyState ( kbutton_t *key ) = 0;
 	// Issue key event
-	virtual int			KeyEvent( int eventcode, ButtonCode_t keynum, const char *pszCurrentBinding ) = 0;
+	virtual int KeyEvent( int eventcode, ButtonCode_t keynum, const char *pszCurrentBinding ) = 0;
 	// Look for key
 	virtual kbutton_t	*FindKey( const char *name ) = 0;
 
@@ -79,7 +79,7 @@ public:
 
 	// Third Person camera ( TODO/FIXME:  Move this to a separate interface? )
 	virtual void		CAM_Think( void ) = 0;
-	virtual int			CAM_IsThirdPerson( void ) = 0;
+	virtual int CAM_IsThirdPerson( void ) = 0;
 	virtual void		CAM_GetCameraOffset( Vector& ofs ) = 0;
 	virtual void		CAM_ToThirdPerson(void) = 0;
 	virtual void		CAM_ToFirstPerson(void) = 0;
@@ -87,7 +87,7 @@ public:
 	virtual void		CAM_EndMouseMove(void) = 0;
 	virtual void		CAM_StartDistance(void) = 0;
 	virtual void		CAM_EndDistance(void) = 0;
-	virtual int			CAM_InterceptingMouse( void ) = 0;
+	virtual int CAM_InterceptingMouse( void ) = 0;
 
 	// orthographic camera info	( TODO/FIXME:  Move this to a separate interface? )
 	virtual void		CAM_ToOrthographic() = 0;

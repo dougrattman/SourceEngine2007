@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -15,8 +15,8 @@
 #include "tier0/dbg.h"
 #include "icliententitylist.h"
 #include "iclientunknown.h"
-#include "UtlLinkedList.h"
-#include "UtlVector.h"
+#include "tier1/UtlLinkedList.h"
+#include "tier1/UtlVector.h"
 #include "icliententityinternal.h"
 #include "ispatialpartition.h"
 #include "cdll_util.h"
@@ -28,11 +28,11 @@ class C_BaseViewModel;
 class C_BaseEntity;
 
 
-#define INPVS_YES			0x0001		// The entity thinks it's in the PVS.
+#define INPVS_YES 0x0001		// The entity thinks it's in the PVS.
 #define INPVS_THISFRAME		0x0002		// Accumulated as different views are rendered during the frame and used to notify the entity if
-										// it is not in the PVS anymore (at the end of the frame).
+   	// it is not in the PVS anymore (at the end of the frame).
 #define INPVS_NEEDSNOTIFY	0x0004		// The entity thinks it's in the PVS.
-							   
+  	   
 class IClientEntityListener;
 
 abstract_class C_BaseEntityClassList
@@ -63,13 +63,13 @@ public:
 		T *pCur = *pPrev;
 		while ( pCur )
 		{
-			if ( pCur == pEntity )
-			{
-				*pPrev = pCur->m_pNext;
-				return;
-			}
-			pPrev = &pCur->m_pNext;
-			pCur = *pPrev;
+ if ( pCur == pEntity )
+ {
+ 	*pPrev = pCur->m_pNext;
+ 	return;
+ }
+ pPrev = &pCur->m_pNext;
+ pCur = *pPrev;
 		}
 	}
 
@@ -99,10 +99,10 @@ friend class C_AllBaseEntityIterator;
 
 public:
 	// Constructor, destructor
-								CClientEntityList( void );
-	virtual 					~CClientEntityList( void );
+  		CClientEntityList( void );
+	virtual  		~CClientEntityList( void );
 
-	void						Release();		// clears everything and releases entities
+	void  Release();		// clears everything and releases entities
 
 
 // Implement IClientEntityList
@@ -111,16 +111,16 @@ public:
 	virtual IClientNetworkable*	GetClientNetworkable( int entnum );
 	virtual IClientEntity*		GetClientEntity( int entnum );
 
-	virtual int					NumberOfEntities( bool bIncludeNonNetworkable = false );
+	virtual int 		NumberOfEntities( bool bIncludeNonNetworkable = false );
 
 	virtual IClientUnknown*		GetClientUnknownFromHandle( ClientEntityHandle_t hEnt );
 	virtual IClientNetworkable*	GetClientNetworkableFromHandle( ClientEntityHandle_t hEnt );
 	virtual IClientEntity*		GetClientEntityFromHandle( ClientEntityHandle_t hEnt );
 
-	virtual int					GetHighestEntityIndex( void );
+	virtual int 		GetHighestEntityIndex( void );
 
-	virtual void				SetMaxEntities( int maxents );
-	virtual int					GetMaxEntities( );
+	virtual void 	SetMaxEntities( int maxents );
+	virtual int 		GetMaxEntities( );
 
 
 // CBaseEntityList overrides.
@@ -134,28 +134,28 @@ protected:
 public:
 
 	// All methods of accessing specialized IClientUnknown's go through here.
-	IClientUnknown*			GetListedEntity( int entnum );
+	IClientUnknown* GetListedEntity( int entnum );
 	
 	// Simple wrappers for convenience..
-	C_BaseEntity*			GetBaseEntity( int entnum );
-	ICollideable*			GetCollideable( int entnum );
+	C_BaseEntity* GetBaseEntity( int entnum );
+	ICollideable* GetCollideable( int entnum );
 
 	IClientRenderable*		GetClientRenderableFromHandle( ClientEntityHandle_t hEnt );
-	C_BaseEntity*			GetBaseEntityFromHandle( ClientEntityHandle_t hEnt );
-	ICollideable*			GetCollideableFromHandle( ClientEntityHandle_t hEnt );
+	C_BaseEntity* GetBaseEntityFromHandle( ClientEntityHandle_t hEnt );
+	ICollideable* GetCollideableFromHandle( ClientEntityHandle_t hEnt );
 	IClientThinkable*		GetClientThinkableFromHandle( ClientEntityHandle_t hEnt );
 
 	// Convenience methods to convert between entindex + ClientEntityHandle_t
 	ClientEntityHandle_t	EntIndexToHandle( int entnum );
-	int						HandleToEntIndex( ClientEntityHandle_t handle );
+	int  HandleToEntIndex( ClientEntityHandle_t handle );
 
 	// Is a handle valid?
-	bool					IsHandleValid( ClientEntityHandle_t handle ) const;
+	bool 		IsHandleValid( ClientEntityHandle_t handle ) const;
 
 	// For backwards compatibility...
-	C_BaseEntity*			GetEnt( int entnum ) { return GetBaseEntity( entnum ); }
+	C_BaseEntity* GetEnt( int entnum ) { return GetBaseEntity( entnum ); }
 
-	void					RecomputeHighestEntityUsed( void );
+	void 		RecomputeHighestEntityUsed( void );
 
 
 	// Use this to iterate over all the C_BaseEntities.
@@ -167,8 +167,8 @@ public:
 	public:
 		IPVSNotify *m_pNotify;
 		IClientRenderable *m_pRenderable;
-		unsigned char m_InPVSStatus;				// Combination of the INPVS_ flags.
-		unsigned short m_PVSNotifiersLink;			// Into m_PVSNotifyInfos.
+		unsigned char m_InPVSStatus; 	// Combination of the INPVS_ flags.
+		unsigned short m_PVSNotifiersLink; // Into m_PVSNotifyInfos.
 	};
 
 	// Get the list of all PVS notifiers.
@@ -194,14 +194,14 @@ private:
 	};
 
 	// Current count
-	int					m_iNumServerEnts;
+	int 		m_iNumServerEnts;
 	// Max allowed
-	int					m_iMaxServerEnts;
+	int 		m_iMaxServerEnts;
 
-	int					m_iNumClientNonNetworkable;
+	int 		m_iNumClientNonNetworkable;
 
 	// Current last used slot
-	int					m_iMaxUsedServerIndex;
+	int 		m_iMaxUsedServerIndex;
 
 	// This holds fast lookups for special edicts.
 	EntityCacheInfo_t	m_EntityCacheInfo[NUM_ENT_ENTRIES];
@@ -230,7 +230,7 @@ public:
 	C_AllBaseEntityIterator();
 
 	void Restart();
-	C_BaseEntity* Next();	// keep calling this until it returns null.
+	C_BaseEntity* Next();	// keep calling this until it returns 0.
 
 private:
 	unsigned short m_CurBaseEntity;
@@ -242,7 +242,7 @@ public:
 	C_BaseEntityIterator();
 
 	void Restart();
-	C_BaseEntity* Next();	// keep calling this until it returns null.
+	C_BaseEntity* Next();	// keep calling this until it returns 0.
 
 private:
 	unsigned short m_CurBaseEntity;

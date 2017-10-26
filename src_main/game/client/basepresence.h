@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base implementation of the IPresence interface
 //
@@ -31,18 +31,18 @@ public:
 	virtual void 		UserSetProperty( unsigned int nUserIndex, unsigned int nPropertyId, unsigned int nBytes, const void *pvValue, bool bAsync = false );
 	virtual void		SetupGameProperties( CUtlVector< XUSER_CONTEXT > &contexts, CUtlVector< XUSER_PROPERTY > &properties );
 	virtual uint		GetPresenceID( const char *pIdName );
-	virtual void		GetPropertyDisplayString( uint id, uint value, char *pOutput, int nBytes );
-	virtual const char	*GetPropertyIdString( const uint id );
+	virtual void		GetPropertyDisplayString( uint32_t id, uint32_t value, char *pOutput, int nBytes );
+	virtual const char	*GetPropertyIdString( const uint32_t id );
 
 	// Stats reporting
 	virtual void		StartStatsReporting( HANDLE handle, bool bArbitrated );
-	virtual void		SetStat( uint iPropertyId, int iPropertyValue, int dataType );
+	virtual void		SetStat( uint32_t iPropertyId, int iPropertyValue, int dataType );
 	virtual void		UploadStats();
 
 protected:
-	bool							m_bArbitrated;
-	bool							m_bReportingStats;
-	HANDLE							m_hSession;
+	bool  	m_bArbitrated;
+	bool  	m_bReportingStats;
+	HANDLE  	m_hSession;
 	CUtlVector< XUSER_PROPERTY >	m_PlayerStats;	
 
 	//---------------------------------------------------------

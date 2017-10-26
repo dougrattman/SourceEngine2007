@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // bot_hide.cpp
 // Mechanisms for using Hiding Spots in the Navigation Mesh
 // Author: Michael Booth, 2003-2004

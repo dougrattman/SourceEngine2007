@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -74,20 +74,20 @@ private:
 	void OnKillEvent( CBaseEntity *pVictim, CBaseEntity *pAttacker, CBaseEntity *pInflictor, IGameEvent *event );
 	void ResetAchievement_Internal( CBaseAchievement *pAchievement );
 
-	CUtlMap<int, CBaseAchievement *> m_mapAchievement;					// map of all achievements
-	CUtlVector<CBaseAchievement *>	 m_vecAchievement;					// vector of all achievements for accessing by index
-	CUtlVector<CBaseAchievement *> m_vecKillEventListeners;				// vector of achievements that are listening for kill events
-	CUtlVector<CBaseAchievement *> m_vecMapEventListeners;				// vector of achievements that are listening for map events
-	CUtlVector<CBaseAchievement *> m_vecComponentListeners;				// vector of achievements that are listening for components that make up an achievement
+	CUtlMap<int, CBaseAchievement *> m_mapAchievement; 		// map of all achievements
+	CUtlVector<CBaseAchievement *>	 m_vecAchievement; 		// vector of all achievements for accessing by index
+	CUtlVector<CBaseAchievement *> m_vecKillEventListeners; 	// vector of achievements that are listening for kill events
+	CUtlVector<CBaseAchievement *> m_vecMapEventListeners; 	// vector of achievements that are listening for map events
+	CUtlVector<CBaseAchievement *> m_vecComponentListeners; 	// vector of achievements that are listening for components that make up an achievement
 
 	float m_flLevelInitTime;
 
 	float m_flLastClassChangeTime;		// Time when player last changed class
 	float m_flTeamplayStartTime;		// Time when player joined a non-spectating team.  Not updated if she switches game teams; cleared if she joins spectator
 	float m_iMiniroundsCompleted;		// # of minirounds played since game start (for maps that have minirounds)
-	char  m_szMap[MAX_PATH];			// file base of map name, cached since we access it frequently in this form
-	bool  m_bDirty;						// do we have interesting state that needs to be saved
-	bool  m_bGlobalStateLoaded;			// have we loaded global state
+	char  m_szMap[MAX_PATH]; // file base of map name, cached since we access it frequently in this form
+	bool  m_bDirty;  // do we have interesting state that needs to be saved
+	bool  m_bGlobalStateLoaded; // have we loaded global state
 
 	CUtlVector<int> m_AchievementsAwarded;
 };

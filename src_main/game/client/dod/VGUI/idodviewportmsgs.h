@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: interface class between viewport msg funcs and "c" based client dll
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IDODVIEWPORTMSGS_H )
 #define IDODVIEWPORTMSGS_H
 #ifdef _WIN32

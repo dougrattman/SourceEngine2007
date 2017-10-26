@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef BASESAVEGAMEDIALOG_H
 #define BASESAVEGAMEDIALOG_H
@@ -12,8 +12,8 @@
 
 #include "vgui_controls/Frame.h"
 #include "vgui/MouseCode.h"
-#include "KeyValues.h"
-#include "UtlVector.h"
+#include "tier1/keyvalues.h"
+#include "tier1/UtlVector.h"
 
 
 #define SAVEGAME_MAPNAME_LEN 32

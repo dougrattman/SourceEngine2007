@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -107,56 +107,56 @@ struct EntityTeleportedRecordingState_t
 
 struct PortalRecordingState_t
 {
-	int				m_nPortalId;
-	int				m_nLinkedPortalId;
-	float			m_fStaticAmount;
-	float			m_fSecondaryStaticAmount;
-	float			m_fOpenAmount;
-	bool			m_bIsPortal2; //for any set of portals, one must be portal 1, and the other portal 2. Uses different render targets
+	int 	m_nPortalId;
+	int 	m_nLinkedPortalId;
+	float m_fStaticAmount;
+	float m_fSecondaryStaticAmount;
+	float m_fOpenAmount;
+	bool m_bIsPortal2; //for any set of portals, one must be portal 1, and the other portal 2. Uses different render targets
 };
 
 struct ParticleSystemCreatedState_t
 {
-	int				m_nParticleSystemId;
+	int 	m_nParticleSystemId;
 	const char *	m_pName;
-	float			m_flTime;
-	int				m_nOwner;
+	float m_flTime;
+	int 	m_nOwner;
 };
 
 struct ParticleSystemDestroyedState_t
 {
-	int				m_nParticleSystemId;
-	float			m_flTime;
+	int 	m_nParticleSystemId;
+	float m_flTime;
 };
 
 struct ParticleSystemStopEmissionState_t
 {
-	int				m_nParticleSystemId;
-	float			m_flTime;
-	bool			m_bInfiniteOnly;
+	int 	m_nParticleSystemId;
+	float m_flTime;
+	bool m_bInfiniteOnly;
 };
 
 struct ParticleSystemSetControlPointObjectState_t
 {
-	int				m_nParticleSystemId;
-	float			m_flTime;
-	int				m_nControlPoint;
-	int				m_nObject;
+	int 	m_nParticleSystemId;
+	float m_flTime;
+	int 	m_nControlPoint;
+	int 	m_nObject;
 };
 
 struct ParticleSystemSetControlPointPositionState_t
 {
-	int				m_nParticleSystemId;
-	float			m_flTime;
-	int				m_nControlPoint;
-	Vector			m_vecPosition;
+	int 	m_nParticleSystemId;
+	float m_flTime;
+	int 	m_nControlPoint;
+	Vector m_vecPosition;
 };
 
 struct ParticleSystemSetControlPointOrientationState_t
 {
-	int				m_nParticleSystemId;
-	float			m_flTime;
-	int				m_nControlPoint;
+	int 	m_nParticleSystemId;
+	float m_flTime;
+	int 	m_nControlPoint;
 	Quaternion		m_qOrientation;
 };
 
@@ -247,7 +247,7 @@ public:  // Other Hooks
 	virtual IMaterialProxy *LookupProxy( const char *proxyName ) = 0;
 
 public:  // general framework hooks
-	virtual int			GetToolCount() = 0;
+	virtual int GetToolCount() = 0;
 	virtual char const	*GetToolName( int index ) = 0;
 	virtual void		SwitchToTool( int index ) = 0;
 	virtual IToolSystem *SwitchToTool( const char *pToolName ) = 0;

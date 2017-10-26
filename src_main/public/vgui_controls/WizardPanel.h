@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WIZARDPANEL_H
 #define WIZARDPANEL_H
@@ -21,7 +21,7 @@ class WizardSubPanel;
 
 //-----------------------------------------------------------------------------
 // Purpose: Type of dialog that supports moving back and forth through a series
-//			of sub-dialogs, WizardSubPanels
+// of sub-dialogs, WizardSubPanels
 //-----------------------------------------------------------------------------
 class WizardPanel : public Frame
 {

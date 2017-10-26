@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <stdio.h>
+
+#include <cstdio>
 
 #define PROTECTED_THINGS_DISABLE
 
@@ -18,7 +18,7 @@
 #include <vgui/ISurface.h>
 #include <vgui/IVGui.h>
 #include <vgui/KeyCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/MouseCode.h>
 
 #include <vgui_controls/Button.h>

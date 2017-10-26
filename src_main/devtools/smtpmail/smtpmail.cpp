@@ -10,7 +10,6 @@
 // <LF> = Line Feed	( Newline )		C: \n	Dec: 10 Hex: 0x0a Oct: 0012
 //
 //=============================================================================//
-#pragma warning( disable : 4530 )
 
 #include <string>
 #include <stdio.h>

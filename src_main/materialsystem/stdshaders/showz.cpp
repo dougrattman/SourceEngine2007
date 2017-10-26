@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Visualize shadow z buffers.  Designed to be used when drawing a screen-aligned
 //          quad with a floating-point z-buffer so that the large z-range is divided down
 //          into visual range of grayscale colors.
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include "convar.h"
+
+#include "tier1/convar.h"
 #include "BaseVSShader.h"
 
 #include "showz_vs11.inc"

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: DOD's objective resource, transmits all objective states to players
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_OBJECTIVE_RESOURCE_H
 #define TF_OBJECTIVE_RESOURCE_H

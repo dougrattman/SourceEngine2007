@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base Object built by a player
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_OBJ_H
 #define TF_OBJ_H
@@ -25,10 +25,10 @@ class CVGuiScreen;
 class KeyValues;
 struct animevent_t;
 
-#define OBJECT_REPAIR_RATE		10			// Health healed per second while repairing
+#define OBJECT_REPAIR_RATE		10 // Health healed per second while repairing
 
 // Construction
-#define OBJECT_CONSTRUCTION_INTERVAL			0.1
+#define OBJECT_CONSTRUCTION_INTERVAL 0.1
 #define OBJECT_CONSTRUCTION_STARTINGHEALTH		0.1
 
 
@@ -36,11 +36,11 @@ extern ConVar object_verbose;
 extern ConVar obj_child_range_factor;
 
 #if defined( _DEBUG )
-#define TRACE_OBJECT( str )										\
-if ( object_verbose.GetInt() )									\
-{																\
-	Msg( "%s", str );					\
-}																
+#define TRACE_OBJECT( str )   	\
+if ( object_verbose.GetInt() )   \
+{     	\
+	Msg( "%s", str ); 		\
+}     	
 #else
 #define TRACE_OBJECT( string )
 #endif
@@ -74,39 +74,39 @@ public:
 
 	virtual void	SetBuilder( CTFPlayer *pBuilder );
 	virtual void	SetType( int iObjectType );
-	int				ObjectType( ) const;
+	int 	ObjectType( ) const;
 
 	virtual int		BloodColor( void ) { return BLOOD_COLOR_MECH; }
 
 	// Building
 	virtual float	GetTotalTime( void );
 	virtual void	StartPlacement( CTFPlayer *pPlayer );
-	void			StopPlacement( void );
-	bool			FindNearestBuildPoint( CBaseEntity *pEntity, CBasePlayer *pBuilder, float &flNearestPoint, Vector &vecNearestBuildPoint );
-	bool			VerifyCorner( const Vector &vBottomCenter, float xOffset, float yOffset );
+	void StopPlacement( void );
+	bool FindNearestBuildPoint( CBaseEntity *pEntity, CBasePlayer *pBuilder, float &flNearestPoint, Vector &vecNearestBuildPoint );
+	bool VerifyCorner( const Vector &vBottomCenter, float xOffset, float yOffset );
 	virtual float	GetNearbyObjectCheckRadius( void ) { return 30.0; }
-	bool			UpdatePlacement( void );
-	bool			UpdateAttachmentPlacement( void );
-	bool			IsValidPlacement( void ) const;
-	bool			EstimateValidBuildPos( void );
+	bool UpdatePlacement( void );
+	bool UpdateAttachmentPlacement( void );
+	bool IsValidPlacement( void ) const;
+	bool EstimateValidBuildPos( void );
 
-	bool			CalculatePlacementPos( void );
+	bool CalculatePlacementPos( void );
 	virtual bool	IsPlacementPosValid( void );
-	bool			FindSnapToBuildPos( void );
+	bool FindSnapToBuildPos( void );
 
-	void			ReattachChildren( void );
+	void ReattachChildren( void );
 	
 	// I've finished building the specified object on the specified build point
 	virtual int		FindObjectOnBuildPoint( CBaseObject *pObject );
 	
 	virtual bool	StartBuilding( CBaseEntity *pPlayer );
-	void			BuildingThink( void );
-	void			SetControlPanelsActive( bool bState );
+	void BuildingThink( void );
+	void SetControlPanelsActive( bool bState );
 	virtual void	FinishedBuilding( void );
-	bool			IsBuilding( void ) { return m_bBuilding; };
-	bool			IsPlacing( void ) { return m_bPlacing; };
+	bool IsBuilding( void ) { return m_bBuilding; };
+	bool IsPlacing( void ) { return m_bPlacing; };
 	virtual bool	IsUpgrading( void ) const { return false; }
-	bool			MustBeBuiltOnAttachmentPoint( void ) const;
+	bool MustBeBuiltOnAttachmentPoint( void ) const;
 
 	// Returns information about the various control panels
 	virtual void 	GetControlPanelInfo( int nPanelIndex, const char *&pPanelName );
@@ -117,14 +117,14 @@ public:
 	virtual bool	ClientCommand( CTFPlayer *pSender, const CCommand &args );
 
 	// Damage
-	void			SetHealth( float flHealth );
+	void SetHealth( float flHealth );
 	virtual void	TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
-	bool			PassDamageOntoChildren( const CTakeDamageInfo &info, float *flDamageLeftOver );
+	bool PassDamageOntoChildren( const CTakeDamageInfo &info, float *flDamageLeftOver );
 	virtual bool	Repair( float flHealth );
 
-	void			OnRepairHit( CTFPlayer *pPlayer );
-	float			GetRepairMultiplier( void );
+	void OnRepairHit( CTFPlayer *pPlayer );
+	float GetRepairMultiplier( void );
 
 	// Destruction
 	virtual void	DetonateObject( void );
@@ -139,45 +139,45 @@ public:
 	virtual Class_T	Classify( void );
 	virtual int		GetType( void );
 	virtual CTFPlayer *GetBuilder( void );
-	CTFTeam			*GetTFTeam( void ) { return (CTFTeam*)GetTeam(); };
+	CTFTeam *GetTFTeam( void ) { return (CTFTeam*)GetTeam(); };
 	
 	// ID functions
-	virtual bool	IsAnUpgrade( void )			{ return false; }
+	virtual bool	IsAnUpgrade( void ) { return false; }
 	virtual bool	IsHostileUpgrade( void )	{ return false; }	// Attaches to enemy buildings
 
 	// Inputs
-	void			InputSetHealth( inputdata_t &inputdata );
-	void			InputAddHealth( inputdata_t &inputdata );
-	void			InputRemoveHealth( inputdata_t &inputdata );
-	void			InputSetSolidToPlayer( inputdata_t &inputdata );
+	void InputSetHealth( inputdata_t &inputdata );
+	void InputAddHealth( inputdata_t &inputdata );
+	void InputRemoveHealth( inputdata_t &inputdata );
+	void InputSetSolidToPlayer( inputdata_t &inputdata );
 
 	// Wrench hits
-	bool			InputWrenchHit( CTFPlayer *pPlayer );
+	bool InputWrenchHit( CTFPlayer *pPlayer );
 	virtual bool	OnWrenchHit( CTFPlayer *pPlayer );
 	virtual bool	Command_Repair( CTFPlayer *pActivator );
 
-	virtual void	ChangeTeam( int iTeamNum );			// Assign this entity to a team.
+	virtual void	ChangeTeam( int iTeamNum ); // Assign this entity to a team.
 
 	// Handling object inactive
 	virtual bool	ShouldBeActive( void );
 
 	// Sappers
-	bool			HasSapper( void );
-	void			OnAddSapper( void );
-	void			OnRemoveSapper( void );
+	bool HasSapper( void );
+	void OnAddSapper( void );
+	void OnRemoveSapper( void );
 
 	// Returns the object flags
-	int				GetObjectFlags() const { return m_fObjectFlags; }
-	void			SetObjectFlags( int flags ) { m_fObjectFlags = flags; }
+	int 	GetObjectFlags() const { return m_fObjectFlags; }
+	void SetObjectFlags( int flags ) { m_fObjectFlags = flags; }
 
-	void			AttemptToGoActive( void );
+	void AttemptToGoActive( void );
 	virtual void	OnGoActive( void );
 	virtual void	OnGoInactive( void );
 
 	// Disabling
-	bool			IsDisabled( void ) { return m_bDisabled; }
-	void			UpdateDisabledState( void );
-	void			SetDisabled( bool bDisabled );
+	bool IsDisabled( void ) { return m_bDisabled; }
+	void UpdateDisabledState( void );
+	void SetDisabled( bool bDisabled );
 	virtual void	OnStartDisabled( void );
 	virtual void	OnEndDisabled( void );
 
@@ -185,25 +185,25 @@ public:
 	virtual void	PlayStartupAnimation( void );
 
 	Activity		GetActivity( ) const;
-	void			SetActivity( Activity act );
-	void			SetObjectSequence( int sequence );
+	void SetActivity( Activity act );
+	void SetObjectSequence( int sequence );
 	
 	// Object points
-	void			SpawnObjectPoints( void );
+	void SpawnObjectPoints( void );
 
 	// Derive to customize an object's attached version
 	virtual	void	SetupAttachedVersion( void ) { return; }
 
 	virtual int		DrawDebugTextOverlays( void );
 
-	void			RotateBuildAngles( void );
+	void RotateBuildAngles( void );
 
 	virtual bool	ShouldPlayersAvoid( void );
 
-	void			IncrementKills( void ) { m_iKills++; }
-	int				GetKills() { return m_iKills; }
+	void IncrementKills( void ) { m_iKills++; }
+	int 	GetKills() { return m_iKills; }
 
-	void			CreateObjectGibs( void );
+	void CreateObjectGibs( void );
 	virtual void	SetModel( const char *pModel );
 
 	const char		*GetResponseRulesModifier( void );
@@ -219,26 +219,26 @@ public:
 
 public:
 	// Client/Server shared build point code
-	void				CreateBuildPoints( void );
-	void				AddAndParseBuildPoint( int iAttachmentNumber, KeyValues *pkvBuildPoint );
-	virtual int			AddBuildPoint( int iAttachmentNum );
+	void 	CreateBuildPoints( void );
+	void 	AddAndParseBuildPoint( int iAttachmentNumber, KeyValues *pkvBuildPoint );
+	virtual int AddBuildPoint( int iAttachmentNum );
 	virtual void		AddValidObjectToBuildPoint( int iPoint, int iObjectType );
 	virtual CBaseObject *GetBuildPointObject( int iPoint );
-	bool				IsBuiltOnAttachment( void ) { return (m_hBuiltOnEntity.Get() != NULL); }
-	void				AttachObjectToObject( CBaseEntity *pEntity, int iPoint, Vector &vecOrigin );
+	bool 	IsBuiltOnAttachment( void ) { return (m_hBuiltOnEntity.Get() != NULL); }
+	void 	AttachObjectToObject( CBaseEntity *pEntity, int iPoint, Vector &vecOrigin );
 	virtual void		DetachObjectFromObject( void );
-	CBaseObject			*GetParentObject( void );
+	CBaseObject *GetParentObject( void );
 
 // IHasBuildPoints
 public:
-	virtual int			GetNumBuildPoints( void ) const;
+	virtual int GetNumBuildPoints( void ) const;
 	virtual bool		GetBuildPoint( int iPoint, Vector &vecOrigin, QAngle &vecAngles );
-	virtual int			GetBuildPointAttachmentIndex( int iPoint ) const;
+	virtual int GetBuildPointAttachmentIndex( int iPoint ) const;
 	virtual bool		CanBuildObjectOnBuildPoint( int iPoint, int iObjectType );
 	virtual void		SetObjectOnBuildPoint( int iPoint, CBaseObject *pObject );
 	virtual float		GetMaxSnapDistance( int iBuildPoint );
 	virtual bool		ShouldCheckForMovement( void ) { return true; }
-	virtual int			GetNumObjectsOnMe();
+	virtual int GetNumObjectsOnMe();
 	virtual CBaseEntity	*GetFirstFriendlyObjectOnMe( void );
 	virtual CBaseObject *GetObjectOfTypeOnMe( int iObjectType );
 	virtual void		RemoveAllObjects( void );
@@ -288,11 +288,11 @@ protected:
 	CNetworkHandle( CTFPlayer,	m_hBuilder );
 
 	// Placement
-	Vector			m_vecBuildOrigin;
+	Vector m_vecBuildOrigin;
 	CNetworkVector( m_vecBuildMaxs );
 	CNetworkVector( m_vecBuildMins );
 	CNetworkHandle( CBaseEntity, m_hBuiltOnEntity );
-	int				m_iBuiltOnPoint;
+	int 	m_iBuiltOnPoint;
 
 	bool	m_bDying;
 
@@ -328,14 +328,14 @@ private:
 	CNetworkVar( bool, m_bDisabled );
 
 	// Building
-	CNetworkVar( bool, m_bPlacing );					// True while the object's being placed
-	CNetworkVar( bool, m_bBuilding );				// True while the object's still constructing itself
+	CNetworkVar( bool, m_bPlacing ); 		// True while the object's being placed
+	CNetworkVar( bool, m_bBuilding ); 	// True while the object's still constructing itself
 	float	m_flConstructionTimeLeft;	// Current time left in construction
 	float	m_flTotalConstructionTime;	// Total construction time (the value of GetTotalTime() at the time construction 
-										// started, ie, incase you teleport out of a construction yard)
+   	// started, ie, incase you teleport out of a construction yard)
 
 	CNetworkVar( float, m_flPercentageConstructed );	// Used to send to client
-	float	m_flHealth;					// Health during construction. Needed a float due to small increases in health.
+	float	m_flHealth; 		// Health during construction. Needed a float due to small increases in health.
 
 	// Sapper on me
 	CNetworkVar( bool, m_bHasSapper );
@@ -347,7 +347,7 @@ private:
 	CUtlMap<int, float>	m_RepairerList;
 
 	// Result of last placement test
-	bool		m_bPlacementOK;				// last placement state
+	bool		m_bPlacementOK; 	// last placement state
 
 	CNetworkVar( int, m_iKills );
 

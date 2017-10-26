@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PHYSICS_PROP_RAGDOLL_H
 #define PHYSICS_PROP_RAGDOLL_H
@@ -50,7 +50,7 @@ public:
 	virtual void VPhysicsUpdate( IPhysicsObject *pPhysics );
 	virtual int VPhysicsGetObjectList( IPhysicsObject **pList, int listMax );
 
-	virtual int DrawDebugTextOverlays(void);
+	virtual int DrawDebugTextOverlays();
 
 	// Response system stuff
 	virtual IResponseSystem *GetResponseSystem();
@@ -85,68 +85,68 @@ public:
 	bool HasPhysgunInteraction( const char *pszKeyName, const char *pszValue );
 	void HandleFirstCollisionInteractions( int index, gamevcollisionevent_t *pEvent );
 
-	void			SetUnragdoll( CBaseAnimating *pOther );
+	void SetUnragdoll( CBaseAnimating *pOther );
 
-	void			SetBlendWeight( float weight ) { m_flBlendWeight = weight; }
-	void			SetOverlaySequence( Activity activity );
-	void			FadeOut( float flDelay = 0, float fadeTime = -1 );
-	bool			IsFading();
+	void SetBlendWeight( float weight ) { m_flBlendWeight = weight; }
+	void SetOverlaySequence( Activity activity );
+	void FadeOut( float flDelay = 0, float fadeTime = -1 );
+	bool IsFading();
 	CBaseEntity*	GetKiller() { return m_hKiller; }
-	void			SetKiller( CBaseEntity *pKiller ) { m_hKiller = pKiller; }
-	void			GetAngleOverrideFromCurrentState( char *pOut, int size );
+	void SetKiller( CBaseEntity *pKiller ) { m_hKiller = pKiller; }
+	void GetAngleOverrideFromCurrentState( char *pOut, int size );
 
-	void			DisableMotion( void );
+	void DisableMotion( void );
 
 	// Input/Output
-	void			InputStartRadgollBoogie( inputdata_t &inputdata );
-	void			InputEnableMotion( inputdata_t &inputdata );
-	void			InputDisableMotion( inputdata_t &inputdata );
-	void			InputTurnOn( inputdata_t &inputdata );
-	void			InputTurnOff( inputdata_t &inputdata );
-	void			InputFadeAndRemove( inputdata_t &inputdata );
+	void InputStartRadgollBoogie( inputdata_t &inputdata );
+	void InputEnableMotion( inputdata_t &inputdata );
+	void InputDisableMotion( inputdata_t &inputdata );
+	void InputTurnOn( inputdata_t &inputdata );
+	void InputTurnOff( inputdata_t &inputdata );
+	void InputFadeAndRemove( inputdata_t &inputdata );
 
 	DECLARE_DATADESC();
 
 protected:
 	void CalcRagdollSize( void );
-	ragdoll_t			m_ragdoll;
+	ragdoll_t m_ragdoll;
 
 private:
 	void UpdateNetworkDataFromVPhysics( IPhysicsObject *pPhysics, int index );
 	void FadeOutThink();
 
-	bool				m_bStartDisabled;
+	bool 	m_bStartDisabled;
 
 	CNetworkArray( Vector, m_ragPos, RAGDOLL_MAX_ELEMENTS );
 	CNetworkArray( QAngle, m_ragAngles, RAGDOLL_MAX_ELEMENTS );
 
-	string_t			m_anglesOverrideString;
+	string_t m_anglesOverrideString;
 
 	typedef CHandle<CBaseAnimating> CBaseAnimatingHandle;
 	CNetworkVar( CBaseAnimatingHandle, m_hUnragdoll );
 
 
 	unsigned int		m_lastUpdateTickCount;
-	bool				m_allAsleep;
-	bool				m_bFirstCollisionAfterLaunch;
-	EHANDLE				m_hDamageEntity;
-	EHANDLE				m_hKiller;	// Who killed me?
+	bool 	m_allAsleep;
+	bool 	m_bFirstCollisionAfterLaunch;
+	EHANDLE 	m_hDamageEntity;
+	EHANDLE 	m_hKiller;	// Who killed me?
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
-	float				m_flFadeOutStartTime;
-	float				m_flFadeTime;
+	float 		m_flLastPhysicsInfluenceTime;
+	float 	m_flFadeOutStartTime;
+	float 	m_flFadeTime;
 
 
-	string_t			m_strSourceClassName;
-	bool				m_bHasBeenPhysgunned;
+	string_t m_strSourceClassName;
+	bool 	m_bHasBeenPhysgunned;
 
 	// If not 1, then allow underlying sequence to blend in with simulated bone positions
 	CNetworkVar( float, m_flBlendWeight );
 	CNetworkVar( int, m_nOverlaySequence );
 	float	m_flDefaultFadeScale;
 	
-	Vector				m_ragdollMins[RAGDOLL_MAX_ELEMENTS];
-	Vector				m_ragdollMaxs[RAGDOLL_MAX_ELEMENTS];
+	Vector 	m_ragdollMins[RAGDOLL_MAX_ELEMENTS];
+	Vector 	m_ragdollMaxs[RAGDOLL_MAX_ELEMENTS];
 };
 
 CBaseEntity *CreateServerRagdoll( CBaseAnimating *pAnimating, int forceBone, const CTakeDamageInfo &info, int collisionGroup, bool bUseLRURetirement = false );

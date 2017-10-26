@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HL2MP_GAMERULES_H
 #define HL2MP_GAMERULES_H
@@ -60,16 +60,16 @@ public:
 		Vector vDeadViewHeight,
 		Vector vCrouchTraceMin,
 		Vector vCrouchTraceMax ) :
-			CViewVectors( 
-				vView,
-				vHullMin,
-				vHullMax,
-				vDuckHullMin,
-				vDuckHullMax,
-				vDuckView,
-				vObsHullMin,
-				vObsHullMax,
-				vDeadViewHeight )
+ CViewVectors( 
+ 	vView,
+ 	vHullMin,
+ 	vHullMax,
+ 	vDuckHullMin,
+ 	vDuckHullMax,
+ 	vDuckView,
+ 	vObsHullMin,
+ 	vObsHullMax,
+ 	vDeadViewHeight )
 	{
 		m_vCrouchTraceMin = vCrouchTraceMin;
 		m_vCrouchTraceMax = vCrouchTraceMax;

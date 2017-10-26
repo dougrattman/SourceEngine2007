@@ -1,16 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef PREDICTABLE_ENTITY_H
 #define PREDICTABLE_ENTITY_H
-#ifdef _WIN32
-#pragma once
-#endif
 
+#include "tier0/compiler_specific_macroses.h"
 // For introspection
 #include "tier0/platform.h"
 #include "predictioncopy.h"
@@ -39,18 +32,18 @@ class SendTable;
 
 #if defined( CLIENT_DLL )
 
-#define DECLARE_NETWORKCLASS()											\
+#define DECLARE_NETWORKCLASS()   		\
 		DECLARE_CLIENTCLASS()
 
-#define DECLARE_NETWORKCLASS_NOBASE()									\
-		DECLARE_CLIENTCLASS_NOBASE()							
+#define DECLARE_NETWORKCLASS_NOBASE()   \
+		DECLARE_CLIENTCLASS_NOBASE()  	
 
 #else
 
-#define DECLARE_NETWORKCLASS()											\
+#define DECLARE_NETWORKCLASS()   		\
 		DECLARE_SERVERCLASS()
 
-#define DECLARE_NETWORKCLASS_NOBASE()									\
+#define DECLARE_NETWORKCLASS_NOBASE()   \
 		DECLARE_SERVERCLASS_NOBASE()	
 
 #endif
@@ -58,11 +51,11 @@ class SendTable;
 #if defined( CLIENT_DLL )
 
 #ifndef NO_ENTITY_PREDICTION
-#define DECLARE_PREDICTABLE()											\
-	public:																\
-		static typedescription_t m_PredDesc[];							\
-		static datamap_t m_PredMap;										\
-		virtual datamap_t *GetPredDescMap( void );						\
+#define DECLARE_PREDICTABLE()   		\
+	public:     	\
+		static typedescription_t m_PredDesc[];  	\
+		static datamap_t m_PredMap;   	\
+		virtual datamap_t *GetPredDescMap( void );  \
 		template <typename T> friend datamap_t *PredMapInit(T *)
 #else
 #define DECLARE_PREDICTABLE()	template <typename T> friend datamap_t *PredMapInit(T *)
@@ -97,15 +90,15 @@ class SendTable;
 #define END_PREDICTION_DATA() \
 		}; \
 		\
-		if ( sizeof( predDesc ) > sizeof( predDesc[0] ) ) \
+		MSVC_SCOPED_DISABLE_WARNING(4127, if (sizeof(predDesc) > sizeof(predDesc[0]))) \
 		{ \
-			classNameTypedef::m_PredMap.dataNumFields = ARRAYSIZE( predDesc ) - 1; \
-			classNameTypedef::m_PredMap.dataDesc 	  = &predDesc[1]; \
+ classNameTypedef::m_PredMap.dataNumFields = ARRAYSIZE( predDesc ) - 1; \
+ classNameTypedef::m_PredMap.dataDesc 	  = &predDesc[1]; \
 		} \
 		else \
 		{ \
-			classNameTypedef::m_PredMap.dataNumFields = 1; \
-			classNameTypedef::m_PredMap.dataDesc 	  = predDesc; \
+ classNameTypedef::m_PredMap.dataNumFields = 1; \
+ classNameTypedef::m_PredMap.dataDesc 	  = predDesc; \
 		} \
 		return &classNameTypedef::m_PredMap; \
 	}
@@ -115,16 +108,16 @@ class SendTable;
 	{ \
 		if ( 0 ) \
 		{ \
-			typedef className classNameTypedef; \
-			typedescription_t predDesc[] = \
-			{ \
-				{ FIELD_VOID,0, {0,0},0,0,0,0,0,0},
+ typedef className classNameTypedef; \
+ typedescription_t predDesc[] = \
+ { \
+ 	{ FIELD_VOID,0, {0,0},0,0,0,0,0,0},
 
 #define BEGIN_PREDICTION_DATA_NO_BASE( className ) BEGIN_PREDICTION_DATA( className )
 
 #define END_PREDICTION_DATA() \
-			}; \
-			predDesc[0].flags = 0; /* avoid compiler warning of unused data */ \
+ }; \
+ predDesc[0].flags = 0; /* avoid compiler warning of unused data */ \
 		} \
 	}
 #endif
@@ -143,20 +136,20 @@ class SendTable;
 // On the client .dll this creates a mapping between a classname and
 //  a client side class.  Probably could be templatized at some point.
 
-#define LINK_ENTITY_TO_CLASS( localName, className )						\
-	static C_BaseEntity *C##className##Factory( void )						\
-	{																		\
-		return static_cast< C_BaseEntity * >( new className );				\
-	};																		\
-	class C##localName##Foo													\
-	{																		\
-	public:																	\
-		C##localName##Foo( void )											\
-		{																	\
-			GetClassMap().Add( #localName, #className, sizeof( className ),	\
-				&C##className##Factory );									\
-		}																	\
-	};																		\
+#define LINK_ENTITY_TO_CLASS( localName, className )  \
+	static C_BaseEntity *C##className##Factory( void )  \
+	{      \
+		return static_cast< C_BaseEntity * >( new className ); 	\
+	};      \
+	class C##localName##Foo    	\
+	{      \
+	public:     		\
+		C##localName##Foo( void )   		\
+		{     		\
+ GetClassMap().Add( #localName, #className, sizeof( className ),	\
+ 	&C##className##Factory );   \
+		}     		\
+	};      \
 	static C##localName##Foo g_C##localName##Foo;
 
 #define BEGIN_NETWORK_TABLE( className, tableName ) BEGIN_RECV_TABLE( className, tableName )
@@ -164,11 +157,11 @@ class SendTable;
 
 #define END_NETWORK_TABLE	END_RECV_TABLE
 
-#define IMPLEMENT_NETWORKCLASS_ALIASED(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS_ALIASED(className, dataTable) \
 	IMPLEMENT_CLIENTCLASS( C_##className, dataTable, C##className )
-#define IMPLEMENT_NETWORKCLASS(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS(className, dataTable) \
 	IMPLEMENT_CLIENTCLASS(className, dataTable, className)
-#define IMPLEMENT_NETWORKCLASS_DT(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS_DT(className, dataTable) \
 	IMPLEMENT_CLIENTCLASS_DT(className, dataTable, className)
 
 #else
@@ -178,14 +171,14 @@ class SendTable;
 
 #define END_NETWORK_TABLE	END_SEND_TABLE
 
-#define IMPLEMENT_NETWORKCLASS_ALIASED(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS_ALIASED(className, dataTable) \
 	IMPLEMENT_SERVERCLASS( C##className, dataTable )
-#define IMPLEMENT_NETWORKCLASS(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS(className, dataTable) \
 	IMPLEMENT_SERVERCLASS(className, dataTable)
-#define IMPLEMENT_NETWORKCLASS_DT(className, dataTable)			\
+#define IMPLEMENT_NETWORKCLASS_DT(className, dataTable) \
 	IMPLEMENT_SERVERCLASS_ST(className, dataTable)
 
-#endif																	
+#endif     		
 
 // Interface used by client and server to track predictable entities
 abstract_class IPredictableList
@@ -194,7 +187,7 @@ public:
 	// Get predictables by index
 	virtual CBaseEntity		*GetPredictable( int slot ) = 0;
 	// Get count of predictables
-	virtual int				GetPredictableCount( void ) = 0;
+	virtual int 	GetPredictableCount( void ) = 0;
 };
 
 // Expose interface to rest of .dll

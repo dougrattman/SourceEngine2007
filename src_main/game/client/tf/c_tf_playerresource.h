@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF's custom C_PlayerResource
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_TF_PLAYERRESOURCE_H
 #define C_TF_PLAYERRESOURCE_H

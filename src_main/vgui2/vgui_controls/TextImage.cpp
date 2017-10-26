@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of vgui::TextImage control
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <string.h>
-#include <stdio.h>
+
+#include <cstring>
+#include <cstdio>
 #include <ctype.h>
-#include <assert.h>
+#include <cassert>
 #include <malloc.h>
 
 #include <vgui/IPanel.h>
@@ -16,7 +16,7 @@
 #include <vgui/IScheme.h>
 #include <vgui/IInput.h>
 #include <vgui/ILocalize.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/TextImage.h>
 #include <vgui_controls/Controls.h>

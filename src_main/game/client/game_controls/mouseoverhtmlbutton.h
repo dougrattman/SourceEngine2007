@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MOUSEOVERHTMLBUTTON_H
 #define MOUSEOVERHTMLBUTTON_H
@@ -19,7 +19,7 @@ class MouseOverHTMLButton : public vgui::Button
 {
 public:
 	MouseOverHTMLButton(vgui::Panel *parent, const char *panelName, vgui::HTML *html, const char *page) :
-					Button( parent, panelName, "MouseOverHTMLButton")
+ 		Button( parent, panelName, "MouseOverHTMLButton")
 	{
 		m_pHTML = html;
 		m_iClass = 0;
@@ -27,11 +27,11 @@ public:
 		m_bAddShortCut = true;
 		if ( page )
 		{
-			Q_strncpy( m_sPage, page, sizeof( m_sPage ) );
+ Q_strncpy( m_sPage, page, sizeof( m_sPage ) );
 		}
 		else
 		{
-			memset(m_sPage, 0x0, sizeof( m_sPage ) );
+ memset(m_sPage, 0x0, sizeof( m_sPage ) );
 		}
 	}
 
@@ -44,11 +44,11 @@ public:
 	{
 		if ( page )
 		{
-			Q_strncpy( m_sPage, page, sizeof( m_sPage ) );
+ Q_strncpy( m_sPage, page, sizeof( m_sPage ) );
 		}
 		else
 		{
-			memset(m_sPage, 0x0, sizeof( m_sPage ) );
+ memset(m_sPage, 0x0, sizeof( m_sPage ) );
 		}
 	}
 
@@ -65,7 +65,7 @@ private:
 		Button::OnCursorEntered();
 		if ( m_pHTML && strlen(m_sPage) > 0 )
 		{
-			m_pHTML->OpenURL(m_sPage);
+ m_pHTML->OpenURL(m_sPage);
 		}
 	}
 
@@ -73,33 +73,33 @@ private:
 	{
 		if ( m_iIndex != -1 )
 		{
-			wchar_t newText[ 128 ];
-			wchar_t localizeText[ 128 ];
-			wchar_t *ansiLocal;
-			if ( text[0] == '#' && ( ansiLocal = g_pVGuiLocalize->Find( text ) ) )
-			{
-				// wcsncpy will crash if ansiLocal is null... *sigh*
-				wcsncpy(localizeText, ansiLocal, sizeof(localizeText)/sizeof(wchar_t));
-			}
-			else
-			{
-				g_pVGuiLocalize->ConvertANSIToUnicode( text, localizeText, sizeof( localizeText ) );
-			}
+ wchar_t newText[ 128 ];
+ wchar_t localizeText[ 128 ];
+ wchar_t *ansiLocal;
+ if ( text[0] == '#' && ( ansiLocal = g_pVGuiLocalize->Find( text ) ) )
+ {
+ 	// wcsncpy will crash if ansiLocal is 0... *sigh*
+ 	wcsncpy(localizeText, ansiLocal, sizeof(localizeText)/sizeof(wchar_t));
+ }
+ else
+ {
+ 	g_pVGuiLocalize->ConvertANSIToUnicode( text, localizeText, sizeof( localizeText ) );
+ }
 
-			if ( m_bAddShortCut )
-			{
-				_snwprintf( newText, sizeof( newText )/ sizeof( wchar_t ), L"&%i %s", m_iIndex, localizeText);
-			}
-			else
-			{
-				memcpy( newText, localizeText, sizeof( newText ) );
-			}
+ if ( m_bAddShortCut )
+ {
+ 	_snwprintf( newText, sizeof( newText )/ sizeof( wchar_t ), L"&%i %s", m_iIndex, localizeText);
+ }
+ else
+ {
+ 	memcpy( newText, localizeText, sizeof( newText ) );
+ }
 
-			Button::SetText( newText );
+ Button::SetText( newText );
 		}
 		else
 		{
-			Button::SetText( text );
+ Button::SetText( text );
 		}
 	}
 

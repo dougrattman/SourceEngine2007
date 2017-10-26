@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #include <vgui_controls/AnimationController.h>
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "soundenvelope.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "hud_closecaption.h"
 #include "in_buttons.h"
 

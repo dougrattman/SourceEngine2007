@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A base class that deals with four-wheel vehicles
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FOUR_WHEEL_VEHICLE_PHYSICS_H
 #define FOUR_WHEEL_VEHICLE_PHYSICS_H
@@ -74,7 +74,7 @@ public:
 
 	// Engine
 	void SetDisableEngine( bool bDisable );
-	bool IsEngineDisabled( void )							{ return m_pVehicle->IsEngineDisabled(); }
+	bool IsEngineDisabled( void )  	{ return m_pVehicle->IsEngineDisabled(); }
 
 	// Enable/Disable Motion
 	void EnableMotion( void );
@@ -83,7 +83,7 @@ public:
 	// Shared code to compute the vehicle view position
 	void GetVehicleViewPosition( const char *pViewAttachment, float flPitchFactor, Vector *pAbsPosition, QAngle *pAbsAngles );
 
-	IPhysicsObject *GetWheel( int iWheel )				{ return m_pWheels[iWheel]; }
+	IPhysicsObject *GetWheel( int iWheel ) 	{ return m_pWheels[iWheel]; }
 
 	int	GetSpeed() const;
 	int GetMaxSpeed() const;
@@ -95,7 +95,7 @@ public:
 	float GetHLSpeed() const;
 	float GetSteering() const;
 	float GetSteeringDegrees() const;
-	IPhysicsVehicleController* GetVehicle(void) { return m_pVehicle; } 
+	IPhysicsVehicleController* GetVehicle() { return m_pVehicle; } 
 	float GetWheelBaseHeight(int wheelIndex) { return m_wheelBaseHeight[wheelIndex]; }
 	float GetWheelTotalHeight(int wheelIndex) { return m_wheelTotalHeight[wheelIndex]; }
 
@@ -132,39 +132,39 @@ private:
 	IPhysicsVehicleController	*m_pVehicle;
 
 	// Vehicle state info
-	int					m_nSpeed;
-	int					m_nLastSpeed;
-	int					m_nRPM;
-	float				m_fLastBoost;
-	int					m_nBoostTimeLeft;
-	int					m_nHasBoost;
+	int 		m_nSpeed;
+	int 		m_nLastSpeed;
+	int 		m_nRPM;
+	float 	m_fLastBoost;
+	int 		m_nBoostTimeLeft;
+	int 		m_nHasBoost;
 
-	float				m_maxThrottle;
-	float				m_flMaxRevThrottle;
-	float				m_flMaxSpeed;
-	float				m_actionSpeed;
+	float 	m_maxThrottle;
+	float 	m_flMaxRevThrottle;
+	float 	m_flMaxSpeed;
+	float 	m_actionSpeed;
 	IPhysicsObject		*m_pWheels[4];
 
-	int					m_wheelCount;
+	int 		m_wheelCount;
 
-	Vector				m_wheelPosition[4];
-	QAngle				m_wheelRotation[4];
-	float				m_wheelBaseHeight[4];
-	float				m_wheelTotalHeight[4];
-	int					m_poseParameters[12];
-	float				m_actionValue;
-	float				m_actionScale;
-	float				m_debugRadius;
-	float				m_throttleRate;
-	float				m_throttleStartTime;
-	float				m_throttleActiveTime;
-	float				m_turboTimer;
+	Vector 	m_wheelPosition[4];
+	QAngle 	m_wheelRotation[4];
+	float 	m_wheelBaseHeight[4];
+	float 	m_wheelTotalHeight[4];
+	int 		m_poseParameters[12];
+	float 	m_actionValue;
+	float 	m_actionScale;
+	float 	m_debugRadius;
+	float 	m_throttleRate;
+	float 	m_throttleStartTime;
+	float 	m_throttleActiveTime;
+	float 	m_turboTimer;
 
-	float				m_flVehicleVolume;		// NPC driven vehicles used louder sounds
-	bool				m_bIsOn;
-	bool				m_bLastThrottle;
-	bool				m_bLastBoost;
-	bool				m_bLastSkid;
+	float 	m_flVehicleVolume;		// NPC driven vehicles used louder sounds
+	bool 	m_bIsOn;
+	bool 	m_bLastThrottle;
+	bool 	m_bLastBoost;
+	bool 	m_bLastSkid;
 };
 
 

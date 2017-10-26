@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B8632E92-9A8D-4315-9A38-907D8BA0D91F}</ProjectGuid>
+    <RootNamespace>vpc</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26919.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>E:\se2008\src\src\public\;E:\se2008\src\src\public\tier1\;E:\se2008\src\src\public\tier0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\se2008\src\src\public\;E:\se2008\src\src\public\tier1\;E:\se2008\src\src\public\tier0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TIER0_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\tier0\assert_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\commandline.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\cpu.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\dbg.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\extendedtrace.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\fasttimer.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\mem.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\memdbg.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\meminit.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\memstd.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\memvalidate.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\mem_helpers.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\minidump.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\pch_tier0.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\platform.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\pme.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\PMELib.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\security.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\systeminformation.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\thread.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\threadtools.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\tslist.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\valobject.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\vcrmode.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\vprof.cpp" />
+    <ClCompile Include="..\..\..\..\tier0\win32consoleio.cpp" />
+    <ClCompile Include="..\..\..\..\tier1\checksum_crc.cpp" />
+    <ClCompile Include="..\..\..\..\tier1\strtools.cpp" />
+    <ClCompile Include="..\..\..\..\tier1\utlbuffer.cpp" />
+    <ClCompile Include="..\..\..\..\tier1\utlstring.cpp" />
+    <ClCompile Include="..\..\configuration.cpp" />
+    <ClCompile Include="..\..\config_browseinfo.cpp" />
+    <ClCompile Include="..\..\config_buildevents.cpp" />
+    <ClCompile Include="..\..\config_compiler.cpp" />
+    <ClCompile Include="..\..\config_custombuild.cpp" />
+    <ClCompile Include="..\..\config_debugging.cpp" />
+    <ClCompile Include="..\..\config_general.cpp" />
+    <ClCompile Include="..\..\config_librarian.cpp" />
+    <ClCompile Include="..\..\config_linker.cpp" />
+    <ClCompile Include="..\..\config_manifest.cpp" />
+    <ClCompile Include="..\..\config_resources.cpp" />
+    <ClCompile Include="..\..\config_xmldoc.cpp" />
+    <ClCompile Include="..\..\ExprSimplifier.cpp" />
+    <ClCompile Include="..\..\GroupScript.cpp" />
+    <ClCompile Include="..\..\main.cpp" />
+    <ClCompile Include="..\..\ProjectScript.cpp" />
+    <ClCompile Include="..\..\sys_utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\sys_utils.h" />
+    <ClInclude Include="..\..\vpc.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

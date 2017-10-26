@@ -1,157 +1,138 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "CvarToggleCheckButton.h"
+
 #include "EngineInterface.h"
-#include <vgui/IVGui.h>
+#include "IGameUIFuncs.h"
 #include "tier1/KeyValues.h"
 #include "tier1/convar.h"
-#include "IGameUIFuncs.h"
+#include "vgui/IVGui.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
 
 using namespace vgui;
 
-vgui::Panel *CvarToggleCheckButton_Factory()
-{
-	return new CCvarToggleCheckButton( NULL, NULL, "CvarToggleCheckButton", NULL );
+vgui::Panel *CvarToggleCheckButton_Factory() {
+  return new CCvarToggleCheckButton(NULL, NULL, "CvarToggleCheckButton", NULL);
 }
-DECLARE_BUILD_FACTORY_CUSTOM( CCvarToggleCheckButton, CvarToggleCheckButton_Factory );
+DECLARE_BUILD_FACTORY_CUSTOM(CCvarToggleCheckButton,
+                             CvarToggleCheckButton_Factory);
 
-CCvarToggleCheckButton::CCvarToggleCheckButton( Panel *parent, const char *panelName, const char *text, 
-	char const *cvarname )
- : CheckButton( parent, panelName, text )
-{
-	m_pszCvarName = cvarname ? strdup( cvarname ) : NULL;
+CCvarToggleCheckButton::CCvarToggleCheckButton(Panel *parent,
+                                               const char *panelName,
+                                               const char *text,
+                                               char const *cvarname)
+    : CheckButton(parent, panelName, text) {
+  m_pszCvarName = cvarname ? strdup(cvarname) : NULL;
 
-	if (m_pszCvarName)
-	{
-		Reset();
-	}
-	AddActionSignalTarget( this );
-}
-
-CCvarToggleCheckButton::~CCvarToggleCheckButton()
-{
-	if ( m_pszCvarName )
-	{
-		free( m_pszCvarName );
-	}
+  if (m_pszCvarName) {
+    Reset();
+  }
+  AddActionSignalTarget(this);
 }
 
-void CCvarToggleCheckButton::Paint()
-{
-	if ( !m_pszCvarName || !m_pszCvarName[ 0 ] ) 
-	{
-		BaseClass::Paint();
-		return;
-	}
-
-	// Look up current value
-//	bool value = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true : false;
-	ConVarRef var( m_pszCvarName );
-	if ( !var.IsValid() )
-		return;
-	bool value = var.GetBool();
-	
-	if ( value != m_bStartValue )
-	//if ( value != IsSelected() )
-	{
-		SetSelected( value );
-		m_bStartValue = value;
-	}
-	BaseClass::Paint();
+CCvarToggleCheckButton::~CCvarToggleCheckButton() {
+  if (m_pszCvarName) {
+    free(m_pszCvarName);
+  }
 }
 
-void CCvarToggleCheckButton::ApplyChanges()
-{
-	if ( !m_pszCvarName || !m_pszCvarName[ 0 ] ) 
-		return;
+void CCvarToggleCheckButton::Paint() {
+  if (!m_pszCvarName || !m_pszCvarName[0]) {
+    BaseClass::Paint();
+    return;
+  }
 
-	m_bStartValue = IsSelected();
-//	engine->Cvar_SetValue( m_pszCvarName, m_bStartValue ? 1.0f : 0.0f );
-	ConVarRef var( m_pszCvarName );
-	var.SetValue( m_bStartValue );
+  // Look up current value
+  //	bool value = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true :
+  //false;
+  ConVarRef var(m_pszCvarName);
+  if (!var.IsValid()) return;
+  bool value = var.GetBool();
+
+  if (value != m_bStartValue)
+  // if ( value != IsSelected() )
+  {
+    SetSelected(value);
+    m_bStartValue = value;
+  }
+  BaseClass::Paint();
 }
 
-void CCvarToggleCheckButton::Reset()
-{
-//	m_bStartValue = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true : false;
+void CCvarToggleCheckButton::ApplyChanges() {
+  if (!m_pszCvarName || !m_pszCvarName[0]) return;
 
-	if ( !m_pszCvarName || !m_pszCvarName[ 0 ] ) 
-		return;
-
-	ConVarRef var( m_pszCvarName );
-	if ( !var.IsValid() )
-		return;
-	m_bStartValue = var.GetBool();
-	SetSelected(m_bStartValue);
+  m_bStartValue = IsSelected();
+  //	engine->Cvar_SetValue( m_pszCvarName, m_bStartValue ? 1.0f : 0.0f );
+  ConVarRef var(m_pszCvarName);
+  var.SetValue(m_bStartValue);
 }
 
-bool CCvarToggleCheckButton::HasBeenModified()
-{
-	return IsSelected() != m_bStartValue;
+void CCvarToggleCheckButton::Reset() {
+  //	m_bStartValue = engine->pfnGetCvarFloat( m_pszCvarName ) > 0.0f ? true :
+  //false;
+
+  if (!m_pszCvarName || !m_pszCvarName[0]) return;
+
+  ConVarRef var(m_pszCvarName);
+  if (!var.IsValid()) return;
+  m_bStartValue = var.GetBool();
+  SetSelected(m_bStartValue);
+}
+
+bool CCvarToggleCheckButton::HasBeenModified() {
+  return IsSelected() != m_bStartValue;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *panel - 
+// Purpose:
+// Input  : *panel -
 //-----------------------------------------------------------------------------
-void CCvarToggleCheckButton::SetSelected( bool state )
-{
-	BaseClass::SetSelected( state );
+void CCvarToggleCheckButton::SetSelected(bool state) {
+  BaseClass::SetSelected(state);
 
-	if ( !m_pszCvarName || !m_pszCvarName[ 0 ] ) 
-		return;
-/*
-	// Look up current value
-	bool value = state;
+  if (!m_pszCvarName || !m_pszCvarName[0]) return;
+  /*
+          // Look up current value
+          bool value = state;
 
-	engine->Cvar_SetValue( m_pszCvarName, value ? 1.0f : 0.0f );*/
-}
-
-
-//-----------------------------------------------------------------------------
-void CCvarToggleCheckButton::OnButtonChecked()
-{
-	if (HasBeenModified())
-	{
-		PostActionSignal(new KeyValues("ControlModified"));
-	}
+          engine->Cvar_SetValue( m_pszCvarName, value ? 1.0f : 0.0f );*/
 }
 
 //-----------------------------------------------------------------------------
-void CCvarToggleCheckButton::ApplySettings( KeyValues *inResourceData )
-{
-	BaseClass::ApplySettings( inResourceData );
+void CCvarToggleCheckButton::OnButtonChecked() {
+  if (HasBeenModified()) {
+    PostActionSignal(new KeyValues("ControlModified"));
+  }
+}
 
-	const char *cvarName = inResourceData->GetString("cvar_name", "");
-	const char *cvarValue = inResourceData->GetString("cvar_value", "");
+//-----------------------------------------------------------------------------
+void CCvarToggleCheckButton::ApplySettings(KeyValues *inResourceData) {
+  BaseClass::ApplySettings(inResourceData);
 
-	if( Q_stricmp( cvarName, "") == 0 )
-		return;// Doesn't have cvar set up in res file, must have been constructed with it.
+  const char *cvarName = inResourceData->GetString("cvar_name", "");
+  const char *cvarValue = inResourceData->GetString("cvar_value", "");
 
-	if( m_pszCvarName )
-		free( m_pszCvarName );// got a "", not a NULL from the create-control call
+  if (Q_stricmp(cvarName, "") == 0)
+    return;  // Doesn't have cvar set up in res file, must have been constructed
+             // with it.
 
-	m_pszCvarName = cvarName ? strdup( cvarName ) : NULL;
+  if (m_pszCvarName)
+    free(m_pszCvarName);  // got a "", not a NULL from the create-control call
 
-	if( Q_stricmp( cvarValue, "1") == 0 )
-		m_bStartValue = true;
-	else
-		m_bStartValue = false;
+  m_pszCvarName = cvarName ? strdup(cvarName) : NULL;
 
-	const ConVar *var = cvar->FindVar( m_pszCvarName );
-	if ( var )
-	{
-		if( var->GetBool() )
-			SetSelected( true );
-		else
-			SetSelected( false );
-	}
+  if (Q_stricmp(cvarValue, "1") == 0)
+    m_bStartValue = true;
+  else
+    m_bStartValue = false;
+
+  const ConVar *var = cvar->FindVar(m_pszCvarName);
+  if (var) {
+    if (var->GetBool())
+      SetSelected(true);
+    else
+      SetSelected(false);
+  }
 }

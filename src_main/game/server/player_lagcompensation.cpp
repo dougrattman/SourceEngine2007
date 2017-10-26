@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "usercmd.h"
 #include "igamesystem.h"
 #include "ilagcompensationmanager.h"
 #include "inetchannelinfo.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 #include "BaseAnimatingOverlay.h"
 #include "tier0/vprof.h"
 

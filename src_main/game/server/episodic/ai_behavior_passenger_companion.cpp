@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Companion NPCs riding in cars
 //
@@ -794,13 +794,13 @@ bool CAI_PassengerBehaviorCompanion::CanEnterVehicleImmediately( int *pResultSeq
 	// Get a list of all our animations
 	const PassengerSeatAnims_t *pEntryAnims = m_hVehicle->GetServerVehicle()->NPC_GetPassengerSeatAnims( GetOuter(), PASSENGER_SEAT_ENTRY );
 	if ( pEntryAnims == NULL )
-		return -1;
+		return false;
 
 	// Get the ultimate position we'll end up at
 	Vector vecStartPos, vecEndPos;
 	QAngle vecStartAngles;
 	if ( m_hVehicle->GetServerVehicle()->NPC_GetPassengerSeatPosition( GetOuter(), &vecEndPos, NULL ) == false )
-		return -1;
+		return false;
 
 	// Categorize the passenger in terms of being on the left or right side of the vehicle
 	Vector vecRight;

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: CS's custom C_PlayerResource
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_CS_PLAYERRESOURCE_H
 #define C_CS_PLAYERRESOURCE_H
@@ -20,22 +20,22 @@ class C_CS_PlayerResource : public C_PlayerResource
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_CS_PlayerResource();
-	virtual			~C_CS_PlayerResource();
+ 		C_CS_PlayerResource();
+	virtual ~C_CS_PlayerResource();
 
-	bool			IsVIP(int iIndex );
-	bool			HasC4(int iIndex );
-	bool			IsHostageAlive(int iIndex);
-	bool			IsHostageFollowingSomeone(int iIndex);
+	bool IsVIP(int iIndex );
+	bool HasC4(int iIndex );
+	bool IsHostageAlive(int iIndex);
+	bool IsHostageFollowingSomeone(int iIndex);
 	const Vector	GetHostagePosition( int index );
-	int				GetHostageEntityID(int iIndex);
+	int 	GetHostageEntityID(int iIndex);
 	const Vector	GetC4Postion();
 	const Vector	GetBombsiteAPosition();
 	const Vector	GetBombsiteBPosition();
 	const Vector	GetHostageRescuePosition( int index );
 
-	bool			IsBombSpotted( void ) const;
-	bool			IsPlayerSpotted( int iIndex );
+	bool IsBombSpotted( void ) const;
+	bool IsPlayerSpotted( int iIndex );
 
 protected:
 

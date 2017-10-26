@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef USERMESSAGES_H
 #define USERMESSAGES_H
@@ -11,7 +11,7 @@
 #endif
 
 #include <utldict.h>
-#include <utlvector.h>
+#include "tier1/UtlVector.h"
 #include <bitbuf.h>
 
 
@@ -25,7 +25,7 @@ class CUserMessage
 {
 	public:
 		// byte size of message, or -1 for variable sized
-		int				size;	
+		int 	size;	
 		const char		*name;
 		// Client only dispatch function for message
 		CUtlVector<pfnUserMsgHook>	clienthooks;

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ITEMS_H
 #define ITEMS_H
@@ -21,18 +21,18 @@
 #define MAX_NORMAL_BATTERY	100
 
 // Ammo counts given by ammo items
-#define SIZE_AMMO_PISTOL			20
+#define SIZE_AMMO_PISTOL 20
 #define SIZE_AMMO_PISTOL_LARGE		100
-#define SIZE_AMMO_SMG1				45
+#define SIZE_AMMO_SMG1 	45
 #define SIZE_AMMO_SMG1_LARGE		225
-#define SIZE_AMMO_AR2				20
-#define SIZE_AMMO_AR2_LARGE			100
-#define SIZE_AMMO_RPG_ROUND			1
+#define SIZE_AMMO_AR2 	20
+#define SIZE_AMMO_AR2_LARGE 100
+#define SIZE_AMMO_RPG_ROUND 1
 #define SIZE_AMMO_SMG1_GRENADE		1
-#define SIZE_AMMO_BUCKSHOT			20
-#define SIZE_AMMO_357				6
-#define SIZE_AMMO_357_LARGE			20
-#define SIZE_AMMO_CROSSBOW			6
+#define SIZE_AMMO_BUCKSHOT 20
+#define SIZE_AMMO_357 	6
+#define SIZE_AMMO_357_LARGE 20
+#define SIZE_AMMO_CROSSBOW 6
 #define	SIZE_AMMO_AR2_ALTFIRE		1
 
 #define SF_ITEM_START_CONSTRAINED	0x00000001

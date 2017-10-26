@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MENU_H
 #define MENU_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 #include "hudelement.h"
 #include <vgui_controls/Panel.h>
 
@@ -57,17 +57,17 @@ private:
 
 	CUtlVector< ProcessedLine >	m_Processed;
 
-	int				m_nMaxPixels;
-	int				m_nHeight;
+	int 	m_nMaxPixels;
+	int 	m_nHeight;
 
-	bool			m_bMenuDisplayed;
-	int				m_bitsValidSlots;
-	float			m_flShutoffTime;
-	int				m_fWaitingForMore;
-	int				m_nSelectedItem;
-	bool			m_bMenuTakesInput;
+	bool m_bMenuDisplayed;
+	int 	m_bitsValidSlots;
+	float m_flShutoffTime;
+	int 	m_fWaitingForMore;
+	int 	m_nSelectedItem;
+	bool m_bMenuTakesInput;
 
-	float			m_flSelectionTime;
+	float m_flSelectionTime;
 
 	CPanelAnimationVar( float, m_flOpenCloseTime, "OpenCloseTime", "1" );
 

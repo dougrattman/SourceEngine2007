@@ -1,50 +1,44 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose:  baseclientstate.cpp: implementation of the CBaseClientState class.
-//
-//=============================================================================//
+// Purpose: the plugin message handler.
 
-//-----------------------------------------------------------------------------
-// Purpose: the plugin message handler
-//-----------------------------------------------------------------------------
-#include <vgui_controls/Panel.h>
 #include "engine/iserverplugin.h"
 #include "netmessages.h"
+#include "vgui_controls/Panel.h"
 
 class CPluginGameUIDialog;
 class CPluginHudMessage;
 
-class CPluginUIManager : public vgui::Panel
-{
-private:
-	DECLARE_CLASS_SIMPLE( CPluginUIManager, vgui::Panel );
+class CPluginUIManager : public vgui::Panel {
+ private:
+  DECLARE_CLASS_SIMPLE(CPluginUIManager, vgui::Panel);
 
-public:
-	CPluginUIManager();
-	~CPluginUIManager();
+ public:
+  CPluginUIManager();
+  ~CPluginUIManager();
 
-	void Show( DIALOG_TYPE type, KeyValues *kv );
-	void OnPanelClosed();
-	void Shutdown();
+  void Show(DIALOG_TYPE type, KeyValues *kv);
+  void OnPanelClosed();
+  void Shutdown();
 
-	void GetHudMessagePosition( int &x, int &y, int &wide, int &tall ); // Gets the position of the plugin HUD message. The askconnect dialog is placed here.
+  void GetHudMessagePosition(
+      int &x, int &y, int &wide,
+      int &tall);  // Gets the position of the plugin HUD message. The
+                   // askconnect dialog is placed here.
 
-protected:
-	void OnTick();
+ protected:
+  void OnTick();
 
+  int m_iCurPriority;
+  int m_iMessageDisplayUntil;
+  int m_iHudDisplayUntil;
 
-	int m_iCurPriority;
-	int m_iMessageDisplayUntil;
-	int m_iHudDisplayUntil;
+  bool m_bShutdown;
 
-	bool m_bShutdown;
-
-	CPluginGameUIDialog *m_pGameUIDialog;
-	CPluginHudMessage *m_pHudMessage;
+  CPluginGameUIDialog *m_pGameUIDialog;
+  CPluginHudMessage *m_pHudMessage;
 };
 
 extern CPluginUIManager *g_PluginManager;
 
-
-void PluginHelpers_Menu( SVC_Menu *msg );
-
+void PluginHelpers_Menu(SVC_Menu *msg);

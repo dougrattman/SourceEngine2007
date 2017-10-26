@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "voice_gamemgr.h"
-#include <string.h>
-#include <stdarg.h>
-#include <assert.h>
+#include <cstring>
+#include <cstdarg>
+#include <cassert>
 #include "player.h"
 #include "ivoiceserver.h"
 #include "usermessages.h"
@@ -46,29 +46,6 @@ CVoiceGameMgr g_VoiceGameMgr;
 // ------------------------------------------------------------------------ //
 // Static helpers.
 // ------------------------------------------------------------------------ //
-
-// Find a player with a case-insensitive name search.
-static CBasePlayer* FindPlayerByName(const char *pTestName)
-{
-	for(int i=1; i <= gpGlobals->maxClients; i++)
-	{
-		edict_t *pEdict = engine->PEntityOfEntIndex(i);
-		if(pEdict)
-		{
-			CBaseEntity *pEnt = CBaseEntity::Instance(pEdict);
-			if(pEnt && pEnt->IsPlayer())
-			{			
-				const char *pNetName = STRING(pEnt->GetEntityName());
-				if(stricmp(pNetName, pTestName) == 0)
-				{
-					return (CBasePlayer*)pEnt;
-				}
-			}
-		}
-	}
-
-	return NULL;
-}
 
 static void VoiceServerDebug( const char *pFmt, ... )
 {

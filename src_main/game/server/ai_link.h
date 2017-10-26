@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Base combat character with no AI
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_LINK_H
 #define AI_LINK_H
@@ -22,7 +22,7 @@ struct edict_t;
 enum Link_Info_t
 {
 	bits_LINK_STALE_SUGGESTED	=	0x01,		// NPC found this link to be blocked
-	bits_LINK_OFF				=	0x02,		// This link has been turned off
+	bits_LINK_OFF 	=	0x02,		// This link has been turned off
 };
 
 //=============================================================================
@@ -37,14 +37,14 @@ class CAI_Link
 {
 public:
 
-	short	m_iSrcID;							// the node that 'owns' this link
-	short	m_iDestID;							// the node on the other end of the link. 
+	short	m_iSrcID;  	// the node that 'owns' this link
+	short	m_iDestID;  	// the node on the other end of the link. 
 	
-	int		DestNodeID(int srcID);				// Given the source node ID, returns the destination ID
+	int		DestNodeID(int srcID); 	// Given the source node ID, returns the destination ID
 
 	byte 	m_iAcceptedMoveTypes[NUM_HULLS];	// Capability_T of motions acceptable for each hull type
 
-	byte	m_LinkInfo;							// other information about this link
+	byte	m_LinkInfo;  	// other information about this link
 
 	float	m_timeStaleExpires;
 
@@ -59,7 +59,7 @@ public:
 
 private:
 	friend class CAI_Network;
-	CAI_Link(void);
+	CAI_Link();
 };
 
 #endif // AI_LINK_H

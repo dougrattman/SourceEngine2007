@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "simtimer.h"
 
 #ifdef GAME_DLL
@@ -34,9 +34,9 @@ public:
 	bool IsEquivalent( const char *hintString, CUtlVector< const char * > * args ) const;
 
 private:
-	const char * m_hintString;					///< hintString is a pointer to a string that should never be deleted.
-	CUtlVector< char * > m_args;				///< list of arguments.  The memory for these strings is internal to the CHintMessage.
-	float m_duration;							///< time until the next message can be displayed
+	const char * m_hintString; 		///< hintString is a pointer to a string that should never be deleted.
+	CUtlVector< char * > m_args; 	///< list of arguments.  The memory for these strings is internal to the CHintMessage.
+	float m_duration;  	///< time until the next message can be displayed
 };
 
 
@@ -78,36 +78,36 @@ public:
 	void		StopTimer( int iHintID );
 
 private:
-	int			GetTimerIndex( int iHintID );
+	int GetTimerIndex( int iHintID );
 
 private:
 	struct hintmessagetime_t
 	{
 		hintmessagetime_t( float flTimerDuration ) :
-			timer(flTimerDuration)
+ timer(flTimerDuration)
 		{
-			iHintID = 0;
-			flMessageDuration = 6.0;
+ iHintID = 0;
+ flMessageDuration = 6.0;
 		}
 
 		~hintmessagetime_t()
 		{
-			for ( int i=0; i<args.Count(); ++i )
-			{
-				delete[] args[i];
-			}
-			args.RemoveAll();
+ for ( int i=0; i<args.Count(); ++i )
+ {
+ 	delete[] args[i];
+ }
+ args.RemoveAll();
 		}
 
-		int						iHintID;
-		CStopwatch				timer;
-		float					flMessageDuration;
+		int  iHintID;
+		CStopwatch 	timer;
+		float 		flMessageDuration;
 		CUtlVector< char * >	args;
 	};
 
 	CUtlVector< hintmessagetime_t* >  m_Timers;
-	CHintMessageQueue				  *m_pQueue;
-	CHintSystem						  *m_pHintSystem;
+	CHintMessageQueue 	  *m_pQueue;
+	CHintSystem    *m_pHintSystem;
 };
 
 #endif // HINTMESSAGE_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "baseentity.h"
@@ -29,7 +29,7 @@ public:
 	void InputSetMaxRagdollCount(inputdata_t &data);
 	void InputSetMaxRagdollCountDX8(inputdata_t &data);
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 public:
 

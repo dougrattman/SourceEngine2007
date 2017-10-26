@@ -15,8 +15,6 @@
 #include "tier0/platform.h"
 #include <hash_map>
 
-#pragma warning ( disable : 4200 )
-
 class CachedFileData
 {
 	friend class FileCache;

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,14 +9,14 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IVGUICENTERPRINT_H )
 #define IVGUICENTERPRINT_H
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1/interface.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Engine Center Print Interface

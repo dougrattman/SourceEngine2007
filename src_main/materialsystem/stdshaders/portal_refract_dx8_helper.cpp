@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 #include "BaseVSShader.h"
 #include "mathlib/VMatrix.h"
 #include "portal_refract_dx8_helper.h"
-#include "convar.h"
+#include "tier1/convar.h"
 
 // Auto generated inc files
 #include "portal_refract_vs11.inc"

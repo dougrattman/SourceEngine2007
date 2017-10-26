@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef OPTIONS_SUB_MOUSE_H
 #define OPTIONS_SUB_MOUSE_H
@@ -59,13 +59,13 @@ private:
 	CCvarToggleCheckButton		*m_pQuickInfoCheckBox;
 	CCvarToggleCheckButton		*m_pReverseJoystickCheckBox;
 
-	CCvarSlider					*m_pMouseSensitivitySlider;
+	CCvarSlider 		*m_pMouseSensitivitySlider;
     vgui::TextEntry             *m_pMouseSensitivityLabel;
 
-	CCvarSlider					*m_pJoyYawSensitivitySlider;
-	vgui::Label					*m_pJoyYawSensitivityPreLabel;
-	CCvarSlider					*m_pJoyPitchSensitivitySlider;
-	vgui::Label					*m_pJoyPitchSensitivityPreLabel;
+	CCvarSlider 		*m_pJoyYawSensitivitySlider;
+	vgui::Label 		*m_pJoyYawSensitivityPreLabel;
+	CCvarSlider 		*m_pJoyPitchSensitivitySlider;
+	vgui::Label 		*m_pJoyPitchSensitivityPreLabel;
 };
 
 

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_BASEGRENADE_H
 #define DOD_BASEGRENADE_H
@@ -52,7 +52,7 @@ public:
 
 	virtual void	Detonate();
 
-	bool			CreateVPhysics();
+	bool CreateVPhysics();
 	virtual void	VPhysicsUpdate( IPhysicsObject *pPhysics );
 	virtual void VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );
 
@@ -63,7 +63,7 @@ public:
 
 	void CreateSmokeTrail( void );
 
-	CGrenadeController			m_GrenadeController;
+	CGrenadeController m_GrenadeController;
 	IPhysicsMotionController	*m_pMotionController;
 
 	virtual bool CanBePickedUp( void ) { return true; }

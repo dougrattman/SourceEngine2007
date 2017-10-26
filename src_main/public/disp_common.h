@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DISP_COMMON_H
 #define DISP_COMMON_H
@@ -13,7 +13,7 @@
 
 #include "disp_vertindex.h"
 #include "bspfile.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 class CPowerInfo;
 class CCoreDispInfo;
@@ -28,18 +28,18 @@ abstract_class CDispUtilsHelper
 // Derived classes must implement these.
 public:
 	virtual const CPowerInfo*		GetPowerInfo() const = 0;
-	virtual CDispNeighbor*			GetEdgeNeighbor( int index ) = 0;
+	virtual CDispNeighbor* GetEdgeNeighbor( int index ) = 0;
 	virtual CDispCornerNeighbors*	GetCornerNeighbors( int index ) = 0;
 	virtual CDispUtilsHelper*		GetDispUtilsByIndex( int index ) = 0;
 
 // Helper functions.
 public:
 
-	int					GetPower() const;
-	int					GetSideLength() const;
+	int 		GetPower() const;
+	int 		GetSideLength() const;
 	const CVertIndex&	GetCornerPointIndex( int iCorner ) const;
-	int					VertIndexToInt( const CVertIndex &i ) const;
-	CVertIndex			GetEdgeMidPoint( int iEdge ) const;
+	int 		VertIndexToInt( const CVertIndex &i ) const;
+	CVertIndex GetEdgeMidPoint( int iEdge ) const;
 };
 
 
@@ -48,33 +48,33 @@ public:
 class CDispSubEdgeIterator
 {
 public:
-						
-						CDispSubEdgeIterator();
+  
+  CDispSubEdgeIterator();
 
 	// Normally, this will iterate all shared verts along the edge except the corners.
 	// If you want the corners to be touched too, then pass in bTouchCorners=true.
-	void				Start( CDispUtilsHelper *pDisp, int iEdge, int iSub, bool bTouchCorners = false );
-	bool				Next();
+	void 	Start( CDispUtilsHelper *pDisp, int iEdge, int iSub, bool bTouchCorners = false );
+	bool 	Next();
 
 	const CVertIndex&	GetVertIndex() const	{ return m_Index; }		// Get the vert index for the displacement in pUtils.
 	const CVertIndex&	GetNBVertIndex() const	{ return m_NBIndex; }	// Get the neighbor's vert index.
 	CDispUtilsHelper*	GetNeighbor() const		{ return m_pNeighbor; }
 
 	// Returns true if you're on the last vert (ie: the next Next() call will return false).ssssss
-	bool				IsLastVert() const;
+	bool 	IsLastVert() const;
 
 
 private:
 	CDispUtilsHelper	*m_pNeighbor;	// The neighbor to the edge we were setup on.
 
-	CVertIndex			m_Index;
-	CVertIndex			m_Inc;
+	CVertIndex m_Index;
+	CVertIndex m_Inc;
 	
-	CVertIndex			m_NBIndex;
-	CVertIndex			m_NBInc;
+	CVertIndex m_NBIndex;
+	CVertIndex m_NBInc;
 
-	int					m_End;
-	int					m_FreeDim;
+	int 		m_End;
+	int 		m_FreeDim;
 };
 
 
@@ -84,10 +84,10 @@ private:
 class CDispEdgeIterator
 {
 public:
-						CDispEdgeIterator( CDispUtilsHelper *pDisp, int iEdge );
+  CDispEdgeIterator( CDispUtilsHelper *pDisp, int iEdge );
 
 	// Seek to the next point on the edge.
-	bool				Next();
+	bool 	Next();
 
 	const CVertIndex&	GetVertIndex() const	{ return m_It.GetVertIndex(); }		// Get the vert index for the displacement in pUtils.
 	const CVertIndex&	GetNBVertIndex() const	{ return m_It.GetNBVertIndex(); }	// Get the neighbor's vert index.
@@ -98,8 +98,8 @@ public:
 
 private:
 	CDispUtilsHelper		*m_pDisp;
-	int						m_iEdge;
-	int						m_iCurSub;
+	int  m_iEdge;
+	int  m_iCurSub;
 
 	CDispSubEdgeIterator	m_It;
 };
@@ -114,18 +114,18 @@ private:
 class CDispCircumferenceIterator
 {
 public:
-						CDispCircumferenceIterator( int sideLength );
+  CDispCircumferenceIterator( int sideLength );
 
 	// Seek to the next point. Returns false when there are no more points.
-	bool				Next();
+	bool 	Next();
 
 	const CVertIndex&	GetVertIndex() const	{ return m_VertIndex; }
 
 
 private:
-	int					m_SideLengthM1;
-	int					m_iCurEdge;
-	CVertIndex			m_VertIndex;
+	int 		m_SideLengthM1;
+	int 		m_iCurEdge;
+	CVertIndex m_VertIndex;
 };
 
 
@@ -150,9 +150,9 @@ public:
 // ----------------------------------------------------------------------------- //
 
 
-extern int			g_EdgeDims[4];		// This tells which dimension (0 or 1) is locked on an edge for each NEIGHBOREDGE_ enum.
+extern int g_EdgeDims[4];		// This tells which dimension (0 or 1) is locked on an edge for each NEIGHBOREDGE_ enum.
 extern CShiftInfo	g_ShiftInfos[3][3];	// See CShiftInfo.
-extern int			g_EdgeSideLenMul[4];// Multiply these by the side length to get the index of the edge.
+extern int g_EdgeSideLenMul[4];// Multiply these by the side length to get the index of the edge.
 
 
 // ----------------------------------------------------------------------------- //

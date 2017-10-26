@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SECTIONEDLISTPANEL_H
 #define SECTIONEDLISTPANEL_H
@@ -12,8 +12,8 @@
 #pragma once
 #endif
 
-#include <UtlVector.h>
-#include <UtlLinkedList.h>
+#include "tier1/UtlVector.h"
+#include "tier1/UtlLinkedList.h"
 #include <vgui/VGUI.h>
 #include <vgui_controls/Panel.h>
 #include <vgui_controls/PHandle.h>
@@ -84,11 +84,11 @@ public:
 
 	/* MESSAGES SENT:
 		"RowSelected"
-			"itemID" - the selected item id, -1 if nothing selected
+ "itemID" - the selected item id, -1 if nothing selected
 
 		// when an item has been clicked on
 		"RowContextMenu"		"itemID"
-		"RowLeftClick"			"itemID"
+		"RowLeftClick" "itemID"
 		"RowDoubleLeftClick"	"itemID"
 	*/
 	
@@ -171,7 +171,7 @@ protected:
 	virtual void OnMouseWheeled(int delta);
 	virtual void OnMousePressed( MouseCode code);
 	virtual void OnKeyCodeTyped( KeyCode code);
-	virtual void OnSetFocus();						// called after the panel receives the keyboard focus
+	virtual void OnSetFocus();  // called after the panel receives the keyboard focus
 
 private:
 	MESSAGE_FUNC( OnSliderMoved, "ScrollBarSliderMoved" );
@@ -204,10 +204,10 @@ private:
 		SectionSortFunc_t m_pSortFunc;
 	};
 
-	CUtlVector<section_t> 				m_Sections;
+	CUtlVector<section_t>  	m_Sections;
 	CUtlLinkedList<CItemButton *, int> 	m_Items;
 	CUtlLinkedList<CItemButton *, int> 	m_FreeItems;
-    CUtlVector<CItemButton *> 			m_SortedItems;
+    CUtlVector<CItemButton *>  m_SortedItems;
 
 	PHandle m_hEditModePanel;
 	int m_iEditModeItemID;

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -65,35 +65,35 @@ public:
 
 	// Set after the first time the event has been configured ( allows
 	//  bumping markov index only at start of event playback, not every frame )
-	bool			m_bStarted;
+	bool m_bStarted;
 
 public:
 	//	EVENT local data...
 	// FIXME: Evil, make accessors or figure out better place
 	// FIXME: This won't work, scenes don't save and restore...
-	int						m_iLayer;
-	int						m_iPriority;
-	int						m_nSequence;
-	bool					m_bIsGesture;
-	float					m_flWeight; // used for suppressions of posture while moving
+	int  m_iLayer;
+	int  m_iPriority;
+	int  m_nSequence;
+	bool 		m_bIsGesture;
+	float 		m_flWeight; // used for suppressions of posture while moving
 
 	// movement, faceto targets?
-	EHANDLE					m_hTarget;
-	bool					m_bIsMoving;
-	bool					m_bHasArrived;
-	float					m_flInitialYaw;
-	float					m_flTargetYaw;
-	float					m_flFacingYaw;
+	EHANDLE 		m_hTarget;
+	bool 		m_bIsMoving;
+	bool 		m_bHasArrived;
+	float 		m_flInitialYaw;
+	float 		m_flTargetYaw;
+	float 		m_flFacingYaw;
 
 	// generic AI events
-	int						m_nType;
-	float					m_flNext;
+	int  m_nType;
+	float 		m_flNext;
 
 	// is this event only client side?
-	bool					m_bClientSide; 
+	bool 		m_bClientSide; 
 
-	void					InitWeight( CBaseFlex *pActor );
-	float					UpdateWeight( CBaseFlex *pActor );
+	void 		InitWeight( CBaseFlex *pActor );
+	float 		UpdateWeight( CBaseFlex *pActor );
 };
 
 //-----------------------------------------------------------------------------

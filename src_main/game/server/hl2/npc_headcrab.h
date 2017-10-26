@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the headcrab, a tiny, jumpy alien parasite.
 //
-//=============================================================================//
+
 
 #ifndef NPC_HEADCRAB_H
 #define NPC_HEADCRAB_H
@@ -70,7 +70,7 @@ public:
 
 	virtual float	GetReactionDelay( CBaseEntity *pEnemy ) { return 0.0; }
 
-	bool			HandleInteraction(int interactionType, void *data, CBaseCombatCharacter* sourceEnt);
+	bool HandleInteraction(int interactionType, void *data, CBaseCombatCharacter* sourceEnt);
 
 	void	CrawlFromCanister();
 
@@ -144,7 +144,7 @@ protected:
 	bool	m_bAttackFailed;		// whether we ran into a wall during a jump.
 
 	float	m_flBurrowTime;
-	int		m_nContext;			// for FValidateHintType context
+	int		m_nContext; // for FValidateHintType context
 	int		m_nJumpFromCanisterDir;
 
 	bool	m_bHangingFromCeiling;

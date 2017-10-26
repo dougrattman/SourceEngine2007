@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -76,8 +76,8 @@ public:
 	enum ActivationType_t
 	{
 		ACTIVATE_ONPRESSEDANDRELEASED,	// normal button behaviour
-		ACTIVATE_ONPRESSED,				// menu buttons, toggle buttons
-		ACTIVATE_ONRELEASED,			// menu items
+		ACTIVATE_ONPRESSED, 	// menu buttons, toggle buttons
+		ACTIVATE_ONRELEASED, // menu items
 	};
 	virtual void SetButtonActivationType(ActivationType_t activationType);
 
@@ -88,7 +88,7 @@ public:
 
 	virtual bool RequestInfo(KeyValues *data);
 
-    virtual bool CanBeDefaultButton(void);
+    virtual bool CanBeDefaultButton();
 
 	// Set this button to be the button that is accessed by default when the user hits ENTER or SPACE
 	MESSAGE_FUNC_INT( SetAsDefaultButton, "SetAsDefaultButton", state );
@@ -137,7 +137,7 @@ public:
 
 	/* CUSTOM MESSAGE HANDLING
 		"PressButton"	- makes the button act as if it had just been pressed by the user (just like DoClick())
-			input: none		
+ input: none		
 	*/
 
 	virtual void OnCursorEntered();
@@ -156,7 +156,7 @@ protected:
 	virtual void DrawFocusBorder(int tx0, int ty0, int tx1, int ty1);
 
 	// Paint button on screen
-	virtual void Paint(void);
+	virtual void Paint();
 	// Get button border attributes.
 	virtual IBorder *GetBorder(bool depressed, bool armed, bool selected, bool keyfocus);
 
@@ -180,17 +180,17 @@ protected:
 private:
 	enum ButtonFlags_t
 	{
-		ARMED					= 0x0001,
-		DEPRESSED				= 0x0002,
-		FORCE_DEPRESSED			= 0x0004,
+		ARMED 		= 0x0001,
+		DEPRESSED 	= 0x0002,
+		FORCE_DEPRESSED = 0x0004,
 		BUTTON_BORDER_ENABLED	= 0x0008,
 		USE_CAPTURE_MOUSE		= 0x0010,
-		BUTTON_KEY_DOWN			= 0x0020,
-		DEFAULT_BUTTON			= 0x0040,
-		SELECTED				= 0x0080,
-		DRAW_FOCUS_BOX			= 0x0100,
-		BLINK					= 0x0200,
-		ALL_FLAGS				= 0xFFFF,
+		BUTTON_KEY_DOWN = 0x0020,
+		DEFAULT_BUTTON = 0x0040,
+		SELECTED 	= 0x0080,
+		DRAW_FOCUS_BOX = 0x0100,
+		BLINK 		= 0x0200,
+		ALL_FLAGS 	= 0xFFFF,
 	};
 
 	CUtlFlags< unsigned short > _buttonFlags;	// see ButtonFlags_t
@@ -198,17 +198,17 @@ private:
 	KeyValues		  *_actionMessage;
 	ActivationType_t   _activationType;
 
-	IBorder			  *_defaultBorder;
-	IBorder			  *_depressedBorder;
-	IBorder			  *_keyFocusBorder;
+	IBorder   *_defaultBorder;
+	IBorder   *_depressedBorder;
+	IBorder   *_keyFocusBorder;
 
-	Color			   _defaultFgColor, _defaultBgColor;
-	Color			   _armedFgColor, _armedBgColor;
+	Color    _defaultFgColor, _defaultBgColor;
+	Color    _armedFgColor, _armedBgColor;
 	Color              _depressedFgColor, _depressedBgColor;
 	Color              _keyboardFocusColor;
-	Color			   _blinkFgColor;
+	Color    _blinkFgColor;
 
-	bool				_paint;
+	bool 	_paint;
 
 	unsigned short	   m_sArmedSoundName, m_sDepressedSoundName, m_sReleasedSoundName;
 	bool m_bSelectionStateSaved;

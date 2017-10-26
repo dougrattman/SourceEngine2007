@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <string.h>
+#include <cstring>
 
 //-----------------------------------------------------------------------------
 // Forward declarations
@@ -55,9 +55,9 @@ struct Cloak_DX9_Vars_t
 };
 
 void InitParamsCloak_DX9( CBaseVSShader *pShader, IMaterialVar** params, const char *pMaterialName, 
-						   Cloak_DX9_Vars_t &info );
+     Cloak_DX9_Vars_t &info );
 void InitCloak_DX9( CBaseVSShader *pShader, IMaterialVar** params, Cloak_DX9_Vars_t &info );
 void DrawCloak_DX9( CBaseVSShader *pShader, IMaterialVar** params, IShaderDynamicAPI *pShaderAPI,
-				   IShaderShadow* pShaderShadow, Cloak_DX9_Vars_t &info, VertexCompressionType_t vertexCompression );
+ 	   IShaderShadow* pShaderShadow, Cloak_DX9_Vars_t &info, VertexCompressionType_t vertexCompression );
 
 #endif // CLOAK_DX9_HELPER_H

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( PARTICLE_COLLISION_H )
 #define PARTICLE_COLLISION_H
@@ -63,8 +63,8 @@ public:
 	virtual void	Setup( const Vector &origin, const Vector *dir, float angularSpread, float minSpeed, float maxSpeed, float gravity, float dampen );
 	virtual bool	MoveParticle( Vector &origin, Vector &velocity, float *rollDelta, float timeDelta, trace_t *pTrace );
 
-	void	SetGravity( float gravity )					{	m_flGravity = gravity;			}
-	void	SetCollisionDampen( float dampen )			{	m_flCollisionDampen = dampen;	}
+	void	SetGravity( float gravity ) 		{	m_flGravity = gravity; }
+	void	SetCollisionDampen( float dampen ) {	m_flCollisionDampen = dampen;	}
 	void	SetAngularCollisionDampen( float dampen )	{	m_flAngularCollisionDampen = dampen;}
 
 protected:

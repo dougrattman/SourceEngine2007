@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #include "cbase.h"
@@ -18,7 +18,7 @@
 #include <vgui/ILocalize.h>
 #include "iclientmode.h"
 #include "hud_macros.h"
-#include "checksum_crc.h"
+#include "tier1/checksum_crc.h"
 #include "filesystem.h"
 #include "datacache/idatacache.h"
 #include "soundemittersystem/isoundemittersystembase.h"
@@ -1957,20 +1957,6 @@ bool CHudCloseCaption::CaptionTokenLessFunc( const CaptionRepeat &lhs, const Cap
 	return ( lhs.m_nTokenIndex < rhs.m_nTokenIndex );	
 }
 
-static bool CaptionTrace( const char *token )
-{
-	static CUtlSymbolTable s_MissingCloseCaptions;
-
-	// Make sure we only show the message once
-	if ( UTL_INVAL_SYMBOL == s_MissingCloseCaptions.Find( token ) )
-	{
-		s_MissingCloseCaptions.AddString( token );
-		return true;
-	}
-
-	return false;
-}
-
 static ConVar cc_sentencecaptionnorepeat( "cc_sentencecaptionnorepeat", "4", 0, "How often a sentence can repeat." );
 
 int CRCString( const char *str )
@@ -2569,25 +2555,12 @@ void CHudCloseCaption::InitCaptionDictionary( const char *dbfile )
 
 	for ( char *path = strtok( searchPaths, ";" ); path; path = strtok( NULL, ";" ) )
 	{
-		if ( IsX360() && ( filesystem->GetDVDMode() == DVDMODE_STRICT ) && !V_stristr( path, ".zip" ) )
-		{
-			// only want zip paths
-			continue;
-		} 
-
 		char fullpath[MAX_PATH];
 		Q_snprintf( fullpath, sizeof( fullpath ), "%s%s", path, dbfile );
 		Q_FixSlashes( fullpath );
 		Q_strlower( fullpath );
 
-		if ( IsX360() )
-		{
-			char fullpath360[MAX_PATH];
-			UpdateOrCreateCaptionFile( fullpath, fullpath360, sizeof( fullpath360 ) );
-			Q_strncpy( fullpath, fullpath360, sizeof( fullpath ) );
-		}
-
-        FileHandle_t fh = filesystem->Open( fullpath, "rb" );
+    FileHandle_t fh = filesystem->Open( fullpath, "rb" );
 		if ( FILESYSTEM_INVALID_HANDLE != fh )
 		{
 			MEM_ALLOC_CREDIT();

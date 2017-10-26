@@ -1,136 +1,126 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
-#include "client_pch.h"
-#include "dt_recv_eng.h"
-#include "client_class.h"
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-// memdbgon must be the last include file in a .cpp file!!!
+#include "client_pch.h"
+
+#include "cl_parse_event.h"
+
+#include "client_class.h"
+#include "dt_recv_eng.h"
+
 #include "tier0/memdbgon.h"
 
-static ConVar cl_showevents	( "cl_showevents", "0", FCVAR_CHEAT, "Print event firing info in the console" );
+static ConVar cl_showevents("cl_showevents", "0", FCVAR_CHEAT,
+                            "Print event firing info in the console");
 
 //-----------------------------------------------------------------------------
 // Purpose: Show descriptive info about an event in the numbered console area
-// Input  : slot - 
-//			*eventname - 
+// Input  : slot -
+//			*eventname -
 //-----------------------------------------------------------------------------
-void CL_DescribeEvent( int slot, CEventInfo *event, const char *eventname )
-{
-	int idx = (slot & 31);
+void CL_DescribeEvent(int slot, CEventInfo *event, const char *eventname) {
+  int idx = (slot & 31);
 
-	if ( !cl_showevents.GetInt() )
-		return;
+  if (!cl_showevents.GetInt()) return;
 
-	if ( !eventname )
-		return;
+  if (!eventname) return;
 
-	con_nprint_t n;
-	n.index = idx;
-	n.fixed_width_font = true;
-	n.time_to_live = 4.0f;
-	n.color[0] = 0.8;
-	n.color[1] = 0.8;
-	n.color[2] = 1.0;
+  con_nprint_t n;
+  n.index = idx;
+  n.fixed_width_font = true;
+  n.time_to_live = 4.0f;
+  n.color[0] = 0.8;
+  n.color[1] = 0.8;
+  n.color[2] = 1.0;
 
-	Con_NXPrintf( &n, "%02i %6.3ff %20s %03i bytes", slot, cl.GetTime(), eventname, Bits2Bytes( event->bits ) );
+  Con_NXPrintf(&n, "%02i %6.3ff %20s %03i bytes", slot, cl.GetTime(), eventname,
+               Bits2Bytes(event->bits));
 
-	if ( cl_showevents.GetInt() == 2 )
-	{
-		DevMsg( "%02i %6.3ff %20s %03i bytes\n", slot, cl.GetTime(), eventname, Bits2Bytes( event->bits ) );
-	}
+  if (cl_showevents.GetInt() == 2) {
+    DevMsg("%02i %6.3ff %20s %03i bytes\n", slot, cl.GetTime(), eventname,
+           Bits2Bytes(event->bits));
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Decode raw event data into underlying class structure using the specified data table
-// Input  : *RawData - 
-//			*pToData - 
-//			*pRecvTable - 
+// Purpose: Decode raw event data into underlying class structure using the
+// specified data table Input  : *RawData -
+//			*pToData -
+//			*pRecvTable -
 //-----------------------------------------------------------------------------
-void CL_ParseEventDelta( void *RawData, void *pToData, RecvTable *pRecvTable )
-{
-	// Make sure we have a decoder
-	assert(pRecvTable->m_pDecoder);
+void CL_ParseEventDelta(void *RawData, void *pToData, RecvTable *pRecvTable) {
+  // Make sure we have a decoder
+  assert(pRecvTable->m_pDecoder);
 
-	// Only so much data allowed
-	bf_read fromBuf( "CL_ParseEventDelta->fromBuf", RawData, CEventInfo::MAX_EVENT_DATA );
+  // Only so much data allowed
+  bf_read fromBuf("CL_ParseEventDelta->fromBuf", RawData,
+                  CEventInfo::MAX_EVENT_DATA);
 
-	// First, decode all properties as zeros since temp ents are delta'd from zeros.
-	RecvTable_DecodeZeros( pRecvTable, pToData, -1 );
+  // First, decode all properties as zeros since temp ents are delta'd from
+  // zeros.
+  RecvTable_DecodeZeros(pRecvTable, pToData, -1);
 
-	// Now decode the data from the network on top of that.
-	RecvTable_Decode( pRecvTable, pToData, &fromBuf, -1 );
+  // Now decode the data from the network on top of that.
+  RecvTable_Decode(pRecvTable, pToData, &fromBuf, -1);
 
-	// Make sure the server, etc. didn't try to send too much
-	assert(!fromBuf.IsOverflowed());
+  // Make sure the server, etc. didn't try to send too much
+  assert(!fromBuf.IsOverflowed());
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Once per frame, walk the client's event slots and look for any events
+// Purpose: Once per frame, walk the client's event slots and look for any
+// events
 //  that are ready for playing.
 //-----------------------------------------------------------------------------
-void CL_FireEvents( void )
-{
-	VPROF("CL_FireEvents");
-	if ( !cl.IsActive() )
-	{
-		cl.events.RemoveAll();
-		return;
-	}
+void CL_FireEvents(void) {
+  VPROF("CL_FireEvents");
+  if (!cl.IsActive()) {
+    cl.events.RemoveAll();
+    return;
+  }
 
-	int i, next;
-	for ( i = cl.events.Head(); i != cl.events.InvalidIndex(); i = next )
-	{
-		next = cl.events.Next( i );
+  int i, next;
+  for (i = cl.events.Head(); i != cl.events.InvalidIndex(); i = next) {
+    next = cl.events.Next(i);
 
-		CEventInfo *ei = &cl.events[ i ];
-		if ( ei->classID == 0 )
-		{
-			cl.events.Remove( i );
-			continue;
-		}
+    CEventInfo *ei = &cl.events[i];
+    if (ei->classID == 0) {
+      cl.events.Remove(i);
+      continue;
+    }
 
-		// Delayed event!
-		if ( ei->fire_delay && ( ei->fire_delay > cl.GetTime() ) )
-			continue;
+    // Delayed event!
+    if (ei->fire_delay && (ei->fire_delay > cl.GetTime())) continue;
 
-		bool success = false;
+    bool success = false;
 
-		// Get the receive table if it exists
-		Assert( ei->pClientClass );
-				
-		// Get pointer to the event.
-		if( ei->pClientClass->m_pCreateEventFn )
-		{
-			IClientNetworkable *pCE = ei->pClientClass->m_pCreateEventFn();
-			if(pCE)
-			{
-				// Prepare to copy in the data
-				pCE->PreDataUpdate( DATA_UPDATE_CREATED );
+    // Get the receive table if it exists
+    Assert(ei->pClientClass);
 
-				// Decode data into client event object
-				CL_ParseEventDelta( ei->pData, pCE->GetDataTableBasePtr(), ei->pClientClass->m_pRecvTable );
+    // Get pointer to the event.
+    if (ei->pClientClass->m_pCreateEventFn) {
+      IClientNetworkable *pCE = ei->pClientClass->m_pCreateEventFn();
+      if (pCE) {
+        // Prepare to copy in the data
+        pCE->PreDataUpdate(DATA_UPDATE_CREATED);
 
-				// Fire the event!!!
-				pCE->PostDataUpdate( DATA_UPDATE_CREATED );
+        // Decode data into client event object
+        CL_ParseEventDelta(ei->pData, pCE->GetDataTableBasePtr(),
+                           ei->pClientClass->m_pRecvTable);
 
-				// Spew to debug area if needed
-				CL_DescribeEvent( i, ei, ei->pClientClass->m_pNetworkName );
+        // Fire the event!!!
+        pCE->PostDataUpdate(DATA_UPDATE_CREATED);
 
-				success = true;
-			}
-		}
+        // Spew to debug area if needed
+        CL_DescribeEvent(i, ei, ei->pClientClass->m_pNetworkName);
 
-		if ( !success )
-		{
-			ConDMsg( "Failed to execute event for classId %i\n", ei->classID - 1 );
-		}
+        success = true;
+      }
+    }
 
-		cl.events.Remove( i );
-	}
+    if (!success) {
+      ConDMsg("Failed to execute event for classId %i\n", ei->classID - 1);
+    }
+
+    cl.events.Remove(i);
+  }
 }
-
-

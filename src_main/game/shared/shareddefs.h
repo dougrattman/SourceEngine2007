@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Definitions that are shared by the game DLL and the client DLL.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SHAREDDEFS_H
 #define SHAREDDEFS_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#define TICK_INTERVAL			(gpGlobals->interval_per_tick)
+#define TICK_INTERVAL (gpGlobals->interval_per_tick)
 
 
 #define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
@@ -71,7 +71,7 @@ public:
 };
 
 // Height above entity position where the viewer's eye is.
-#define VEC_VIEW			g_pGameRules->GetViewVectors()->m_vView
+#define VEC_VIEW g_pGameRules->GetViewVectors()->m_vView
 #define VEC_HULL_MIN		g_pGameRules->GetViewVectors()->m_vHullMin
 #define VEC_HULL_MAX		g_pGameRules->GetViewVectors()->m_vHullMax
 
@@ -85,7 +85,7 @@ public:
 #define VEC_DEAD_VIEWHEIGHT	g_pGameRules->GetViewVectors()->m_vDeadViewHeight
 
 
-#define WATERJUMP_HEIGHT			8
+#define WATERJUMP_HEIGHT 8
 
 #define MAX_CLIMB_SPEED		200
 
@@ -98,12 +98,12 @@ public:
 
 #define MAX_WEAPON_SLOTS		6	// hud item selection slots
 #define MAX_WEAPON_POSITIONS	20	// max number of items within a slot
-#define MAX_ITEM_TYPES			6	// hud item selection slots
-#define MAX_WEAPONS				48	// Max number of weapons available
+#define MAX_ITEM_TYPES 6	// hud item selection slots
+#define MAX_WEAPONS 	48	// Max number of weapons available
 
-#define MAX_ITEMS				5	// hard coded item types
+#define MAX_ITEMS 	5	// hard coded item types
 
-#define WEAPON_NOCLIP			-1	// clip sizes set to this tell the weapon it doesn't use a clip
+#define WEAPON_NOCLIP -1	// clip sizes set to this tell the weapon it doesn't use a clip
 
 #define	MAX_AMMO_TYPES	32		// ???
 #define MAX_AMMO_SLOTS  32		// not really slots
@@ -123,19 +123,19 @@ public:
 //===================================================================================================================
 // Hud Element hiding flags
 #define	HIDEHUD_WEAPONSELECTION		( 1<<0 )	// Hide ammo count & weapon selection
-#define	HIDEHUD_FLASHLIGHT			( 1<<1 )
-#define	HIDEHUD_ALL					( 1<<2 )
-#define HIDEHUD_HEALTH				( 1<<3 )	// Hide health & armor / suit battery
-#define HIDEHUD_PLAYERDEAD			( 1<<4 )	// Hide when local player's dead
-#define HIDEHUD_NEEDSUIT			( 1<<5 )	// Hide when the local player doesn't have the HEV suit
-#define HIDEHUD_MISCSTATUS			( 1<<6 )	// Hide miscellaneous status elements (trains, pickup history, death notices, etc)
-#define HIDEHUD_CHAT				( 1<<7 )	// Hide all communication elements (saytext, voice icon, etc)
-#define	HIDEHUD_CROSSHAIR			( 1<<8 )	// Hide crosshairs
+#define	HIDEHUD_FLASHLIGHT ( 1<<1 )
+#define	HIDEHUD_ALL 		( 1<<2 )
+#define HIDEHUD_HEALTH 	( 1<<3 )	// Hide health & armor / suit battery
+#define HIDEHUD_PLAYERDEAD ( 1<<4 )	// Hide when local player's dead
+#define HIDEHUD_NEEDSUIT ( 1<<5 )	// Hide when the local player doesn't have the HEV suit
+#define HIDEHUD_MISCSTATUS ( 1<<6 )	// Hide miscellaneous status elements (trains, pickup history, death notices, etc)
+#define HIDEHUD_CHAT 	( 1<<7 )	// Hide all communication elements (saytext, voice icon, etc)
+#define	HIDEHUD_CROSSHAIR ( 1<<8 )	// Hide crosshairs
 #define	HIDEHUD_VEHICLE_CROSSHAIR	( 1<<9 )	// Hide vehicle crosshair
-#define HIDEHUD_INVEHICLE			( 1<<10 )
+#define HIDEHUD_INVEHICLE ( 1<<10 )
 #define HIDEHUD_BONUS_PROGRESS		( 1<<11 )	// Hide bonus progress display (for bonus map challenges)
 
-#define HIDEHUD_BITCOUNT			12
+#define HIDEHUD_BITCOUNT 12
 
 //===================================================================================================================
 // suit usage bits
@@ -143,7 +143,7 @@ public:
 #define bits_SUIT_DEVICE_FLASHLIGHT	0x00000002
 #define bits_SUIT_DEVICE_BREATHER	0x00000004
 
-#define MAX_SUIT_DEVICES			3
+#define MAX_SUIT_DEVICES 3
 
 
 //===================================================================================================================
@@ -154,33 +154,33 @@ public:
 //  and have a good answer for a bunch of perf question related to player simulation, thinking logic, tracelines, networking overhead, etc.
 // But if you are brave or are doing something interesting, go for it...   ywb 9/22/03
 #if defined( CSTRIKE_DLL )
-	#define MAX_PLAYERS				64  // Absolute max players supported
+	#define MAX_PLAYERS 	64  // Absolute max players supported
 #else
-	#define MAX_PLAYERS				32  // Absolute max players supported
+	#define MAX_PLAYERS 	32  // Absolute max players supported
 #endif
 
 #define MAX_PLACE_NAME_LENGTH		18
 
 //===================================================================================================================
 // Team Defines
-#define	TEAM_INVALID			-1
-#define TEAM_UNASSIGNED			0	// not assigned to a team
-#define TEAM_SPECTATOR			1	// spectator team
+#define	TEAM_INVALID -1
+#define TEAM_UNASSIGNED 0	// not assigned to a team
+#define TEAM_SPECTATOR 1	// spectator team
 // Start your team numbers after this
 #define LAST_SHARED_TEAM		TEAM_SPECTATOR
 
 // The first team that's game specific (i.e. not unassigned / spectator)
-#define FIRST_GAME_TEAM			(LAST_SHARED_TEAM+1)
+#define FIRST_GAME_TEAM (LAST_SHARED_TEAM+1)
 
-#define MAX_TEAMS				32	// Max number of teams in a game
+#define MAX_TEAMS 	32	// Max number of teams in a game
 #define MAX_TEAM_NAME_LENGTH	32	// Max length of a team's name
 
 // Weapon m_iState
-#define WEAPON_IS_ONTARGET				0x40
+#define WEAPON_IS_ONTARGET 	0x40
 
-#define WEAPON_NOT_CARRIED				0	// Weapon is on the ground
+#define WEAPON_NOT_CARRIED 	0	// Weapon is on the ground
 #define WEAPON_IS_CARRIED_BY_PLAYER		1	// This client is carrying this weapon.
-#define WEAPON_IS_ACTIVE				2	// This client is carrying this weapon and it's the currently held weapon
+#define WEAPON_IS_ACTIVE 	2	// This client is carrying this weapon and it's the currently held weapon
 
 // -----------------------------------------
 // Skill Level
@@ -207,9 +207,9 @@ public:
 
 // Humans only have left and right hands, though we might have aliens with more
 //  than two, sigh
-#define MAX_VIEWMODELS			2
+#define MAX_VIEWMODELS 2
 
-#define MAX_BEAM_ENTS			10
+#define MAX_BEAM_ENTS 10
 
 #define TRACER_TYPE_DEFAULT		0x00000001
 #define TRACER_TYPE_GUNSHIP		0x00000002
@@ -224,7 +224,7 @@ public:
 // Muzzle flash definitions (for the flags field of the "MuzzleFlash" DispatchEffect)
 enum
 {
-	MUZZLEFLASH_AR2				= 0,
+	MUZZLEFLASH_AR2 	= 0,
 	MUZZLEFLASH_SHOTGUN,
 	MUZZLEFLASH_SMG1,
 	MUZZLEFLASH_SMG2,
@@ -238,7 +238,7 @@ enum
 };
 
 // Tracer Flags
-#define TRACER_FLAG_WHIZ			0x0001
+#define TRACER_FLAG_WHIZ 0x0001
 #define TRACER_FLAG_USEATTACHMENT	0x0002
 
 #define TRACER_DONT_USE_ATTACHMENT	-1
@@ -266,7 +266,7 @@ enum
 #define HITGROUP_RIGHTARM	5
 #define HITGROUP_LEFTLEG	6
 #define HITGROUP_RIGHTLEG	7
-#define HITGROUP_GEAR		10			// alerts NPC, but doesn't do damage or bleed (1/100th damage)
+#define HITGROUP_GEAR		10 // alerts NPC, but doesn't do damage or bleed (1/100th damage)
 
 //
 // Enumerations for setting player animation.
@@ -319,44 +319,44 @@ enum PLAYER_ANIM
 
 // For a means of resolving these consts into debug string text, see function
 // CTakeDamageInfo::DebugGetDamageTypeString(unsigned int DamageType, char *outbuf, unsigned int outbuflength )
-#define DMG_GENERIC			0			// generic damage was done
-#define DMG_CRUSH			(1 << 0)	// crushed by falling or moving object. 
-										// NOTE: It's assumed crush damage is occurring as a result of physics collision, so no extra physics force is generated by crush damage.
-										// DON'T use DMG_CRUSH when damaging entities unless it's the result of a physics collision. You probably want DMG_CLUB instead.
-#define DMG_BULLET			(1 << 1)	// shot
-#define DMG_SLASH			(1 << 2)	// cut, clawed, stabbed
-#define DMG_BURN			(1 << 3)	// heat burned
-#define DMG_VEHICLE			(1 << 4)	// hit by a vehicle
-#define DMG_FALL			(1 << 5)	// fell too far
-#define DMG_BLAST			(1 << 6)	// explosive blast damage
-#define DMG_CLUB			(1 << 7)	// crowbar, punch, headbutt
-#define DMG_SHOCK			(1 << 8)	// electric shock
-#define DMG_SONIC			(1 << 9)	// sound pulse shockwave
+#define DMG_GENERIC 0 // generic damage was done
+#define DMG_CRUSH (1 << 0)	// crushed by falling or moving object. 
+   	// NOTE: It's assumed crush damage is occurring as a result of physics collision, so no extra physics force is generated by crush damage.
+   	// DON'T use DMG_CRUSH when damaging entities unless it's the result of a physics collision. You probably want DMG_CLUB instead.
+#define DMG_BULLET (1 << 1)	// shot
+#define DMG_SLASH (1 << 2)	// cut, clawed, stabbed
+#define DMG_BURN (1 << 3)	// heat burned
+#define DMG_VEHICLE (1 << 4)	// hit by a vehicle
+#define DMG_FALL (1 << 5)	// fell too far
+#define DMG_BLAST (1 << 6)	// explosive blast damage
+#define DMG_CLUB (1 << 7)	// crowbar, punch, headbutt
+#define DMG_SHOCK (1 << 8)	// electric shock
+#define DMG_SONIC (1 << 9)	// sound pulse shockwave
 #define DMG_ENERGYBEAM		(1 << 10)	// laser or other high energy beam 
 #define DMG_PREVENT_PHYSICS_FORCE		(1 << 11)	// Prevent a physics force 
 #define DMG_NEVERGIB		(1 << 12)	// with this bit OR'd in, no damage type will be able to gib victims upon death
 #define DMG_ALWAYSGIB		(1 << 13)	// with this bit OR'd in, any damage type can be made to gib victims upon death.
-#define DMG_DROWN			(1 << 14)	// Drowning
+#define DMG_DROWN (1 << 14)	// Drowning
 
 
 #define DMG_PARALYZE		(1 << 15)	// slows affected creature down
 #define DMG_NERVEGAS		(1 << 16)	// nerve toxins, very bad
-#define DMG_POISON			(1 << 17)	// blood poisoning - heals over time like drowning damage
+#define DMG_POISON (1 << 17)	// blood poisoning - heals over time like drowning damage
 #define DMG_RADIATION		(1 << 18)	// radiation exposure
 #define DMG_DROWNRECOVER	(1 << 19)	// drowning recovery
-#define DMG_ACID			(1 << 20)	// toxic chemicals or acid burns
+#define DMG_ACID (1 << 20)	// toxic chemicals or acid burns
 #define DMG_SLOWBURN		(1 << 21)	// in an oven
 
 #define DMG_REMOVENORAGDOLL	(1<<22)		// with this bit OR'd in, no ragdoll will be created, and the target will be quietly removed.
-										// use this to kill an entity that you've already got a server-side ragdoll for
+   	// use this to kill an entity that you've already got a server-side ragdoll for
 
-#define DMG_PHYSGUN			(1<<23)		// Hit by manipulator. Usually doesn't do any damage.
-#define DMG_PLASMA			(1<<24)		// Shot by Cremator
-#define DMG_AIRBOAT			(1<<25)		// Hit by the airboat's gun
+#define DMG_PHYSGUN (1<<23)		// Hit by manipulator. Usually doesn't do any damage.
+#define DMG_PLASMA (1<<24)		// Shot by Cremator
+#define DMG_AIRBOAT (1<<25)		// Hit by the airboat's gun
 
 #define DMG_DISSOLVE		(1<<26)		// Dissolving!
 #define DMG_BLAST_SURFACE	(1<<27)		// A blast on the surface of water that cannot harm things underwater
-#define DMG_DIRECT			(1<<28)
+#define DMG_DIRECT (1<<28)
 #define DMG_BUCKSHOT		(1<<29)		// not quite a bullet. Little, rounder, different.
 
 // NOTE: DO NOT ADD ANY MORE CUSTOM DMG_ TYPES. MODS USE THE DMG_LASTGENERICFLAG BELOW, AND
@@ -368,10 +368,10 @@ enum PLAYER_ANIM
 
 
 // settings for m_takedamage
-#define	DAMAGE_NO				0
+#define	DAMAGE_NO 	0
 #define DAMAGE_EVENTS_ONLY		1		// Call damage functions, but don't modify health
-#define	DAMAGE_YES				2
-#define	DAMAGE_AIM				3
+#define	DAMAGE_YES 	2
+#define	DAMAGE_AIM 	3
 
 // Spectator Movement modes
 enum {
@@ -389,9 +389,9 @@ enum {
 #define LAST_PLAYER_OBSERVERMODE	OBS_MODE_ROAMING
 
 // Force Camera Restrictions with mp_forcecamera
-#define OBS_ALLOW_ALL			0	// allow all modes, all targets
-#define OBS_ALLOW_TEAM			1	// allow only own team & first person, no PIP
-#define OBS_ALLOW_NONE			2	// don't allow any spectating after death (fixed & fade to black)
+#define OBS_ALLOW_ALL 0	// allow all modes, all targets
+#define OBS_ALLOW_TEAM 1	// allow only own team & first person, no PIP
+#define OBS_ALLOW_NONE 2	// don't allow any spectating after death (fixed & fade to black)
 #define OBS_ALLOW_TEAM_ALL		3	// allow only own team, but any mode (currently only used by TF2)
 
 enum
@@ -441,7 +441,7 @@ enum
 
 #if defined( HL2_EPISODIC )
 	BLOOD_COLOR_ANTLION,		// FIXME: Move to Base HL2
-	BLOOD_COLOR_ZOMBIE,			// FIXME: Move to Base HL2
+	BLOOD_COLOR_ZOMBIE, // FIXME: Move to Base HL2
 	BLOOD_COLOR_ANTLION_WORKER,
 #endif // HL2_EPISODIC
 };
@@ -475,16 +475,16 @@ enum
 // entity flags, CBaseEntity::m_iEFlags
 enum
 {
-	EFL_KILLME	=				(1<<0),	// This entity is marked for death -- This allows the game to actually delete ents at a safe time
-	EFL_DORMANT	=				(1<<1),	// Entity is dormant, no updates to client
-	EFL_NOCLIP_ACTIVE =			(1<<2),	// Lets us know when the noclip command is active.
+	EFL_KILLME	= 	(1<<0),	// This entity is marked for death -- This allows the game to actually delete ents at a safe time
+	EFL_DORMANT	= 	(1<<1),	// Entity is dormant, no updates to client
+	EFL_NOCLIP_ACTIVE = (1<<2),	// Lets us know when the noclip command is active.
 	EFL_SETTING_UP_BONES =		(1<<3),	// Set while a model is setting up its bones.
 	EFL_KEEP_ON_RECREATE_ENTITIES = (1<<4), // This is a special entity that should not be deleted when we restart entities only
 
 	EFL_HAS_PLAYER_CHILD=		(1<<4),	// One of the child entities is a player.
 
 	EFL_DIRTY_SHADOWUPDATE =	(1<<5),	// Client only- need shadow manager to update the shadow...
-	EFL_NOTIFY =				(1<<6),	// Another entity is watching events on this entity (used by teleport)
+	EFL_NOTIFY = 	(1<<6),	// Another entity is watching events on this entity (used by teleport)
 
 	// The default behavior in ShouldTransmit is to not send an entity if it doesn't
 	// have a model. Certain entities want to be sent anyway because all the drawing logic
@@ -492,8 +492,8 @@ enum
 	// if they don't have a model.
 	EFL_FORCE_CHECK_TRANSMIT =	(1<<7),
 
-	EFL_BOT_FROZEN =			(1<<8),	// This is set on bots that are frozen.
-	EFL_SERVER_ONLY =			(1<<9),	// Non-networked entity.
+	EFL_BOT_FROZEN = (1<<8),	// This is set on bots that are frozen.
+	EFL_SERVER_ONLY = (1<<9),	// Non-networked entity.
 	EFL_NO_AUTO_EDICT_ATTACH =	(1<<10), // Don't attach the edict; we're doing it explicitly
 	
 	// Some dirty bits with respect to abs computations
@@ -502,10 +502,10 @@ enum
 	EFL_DIRTY_ABSANGVELOCITY =	(1<<13),
 	EFL_DIRTY_SURROUNDING_COLLISION_BOUNDS	= (1<<14),
 	EFL_DIRTY_SPATIAL_PARTITION = (1<<15),
-//	UNUSED						= (1<<16),
+//	UNUSED  = (1<<16),
 
-	EFL_IN_SKYBOX =				(1<<17),	// This is set if the entity detects that it's in the skybox.
-											// This forces it to pass the "in PVS" for transmission.
+	EFL_IN_SKYBOX = 	(1<<17),	// This is set if the entity detects that it's in the skybox.
+   		// This forces it to pass the "in PVS" for transmission.
 	EFL_USE_PARTITION_WHEN_NOT_SOLID = (1<<18),	// Entities with this flag set show up in the partition even when not solid
 	EFL_TOUCHING_FLUID =		(1<<19),	// Used to determine if an entity is floating
 
@@ -515,10 +515,10 @@ enum
 	EFL_NO_THINK_FUNCTION =		(1<<22),
 	EFL_NO_GAME_PHYSICS_SIMULATION = (1<<23),
 
-	EFL_CHECK_UNTOUCH =			(1<<24),
-	EFL_DONTBLOCKLOS =			(1<<25),		// I shouldn't block NPC line-of-sight
-	EFL_DONTWALKON =			(1<<26),		// NPC;s should not walk on this entity
-	EFL_NO_DISSOLVE =			(1<<27),		// These guys shouldn't dissolve
+	EFL_CHECK_UNTOUCH = (1<<24),
+	EFL_DONTBLOCKLOS = (1<<25),		// I shouldn't block NPC line-of-sight
+	EFL_DONTWALKON = (1<<26),		// NPC;s should not walk on this entity
+	EFL_NO_DISSOLVE = (1<<27),		// These guys shouldn't dissolve
 	EFL_NO_MEGAPHYSCANNON_RAGDOLL = (1<<28),	// Mega physcannon can't ragdoll these guys.
 	EFL_NO_WATER_VELOCITY_CHANGE  =	(1<<29),	// Don't adjust this entity's velocity when transitioning into water
 	EFL_NO_PHYSCANNON_INTERACTION =	(1<<30),	// Physcannon can't pick these up or punt them
@@ -618,7 +618,7 @@ struct FireBulletsInfo_t
 	int m_iTracerFreq;
 	int m_iDamage;
 	int m_iPlayerDamage;	// Damage to be used instead of m_iDamage if we hit a player
-	int m_nFlags;			// See FireBulletsFlags_t
+	int m_nFlags; // See FireBulletsFlags_t
 	float m_flDamageForceScale;
 	CBaseEntity *m_pAttacker;
 	CBaseEntity *m_pAdditionalIgnoreEnt;
@@ -633,7 +633,7 @@ struct FireBulletsInfo_t
 //-----------------------------------------------------------------------------
 struct StepSimulationStep
 {
-	int			nTickCount;
+	int nTickCount;
 	Vector		vecOrigin;
 	Quaternion	qRotation;
 };
@@ -659,7 +659,7 @@ struct StepSimulationData
 	QAngle		m_angNextRotation;
 
 	// This variable is used so that we only compute networked origin/angles once per tick
-	int			m_nLastProcessTickCount;
+	int m_nLastProcessTickCount;
 	// The computed/interpolated network origin/angles to use
 	Vector		m_vecNetworkOrigin;
 	QAngle		m_angNetworkAngles;
@@ -706,19 +706,19 @@ struct EmitSound_t
 
 	EmitSound_t( const CSoundParameters &src );
 
-	int							m_nChannel;
-	char const					*m_pSoundName;
-	float						m_flVolume;
-	soundlevel_t				m_SoundLevel;
-	int							m_nFlags;
-	int							m_nPitch;
-	const Vector				*m_pOrigin;
-	float						m_flSoundTime; ///< NOT DURATION, but rather, some absolute time in the future until which this sound should be delayed
-	float						*m_pflSoundDuration;
-	bool						m_bEmitCloseCaption;
-	bool						m_bWarnOnMissingCloseCaption;
-	bool						m_bWarnOnDirectWaveReference;
-	int							m_nSpeakerEntity;
+	int  	m_nChannel;
+	char const 		*m_pSoundName;
+	float  m_flVolume;
+	soundlevel_t 	m_SoundLevel;
+	int  	m_nFlags;
+	int  	m_nPitch;
+	const Vector 	*m_pOrigin;
+	float  m_flSoundTime; ///< NOT DURATION, but rather, some absolute time in the future until which this sound should be delayed
+	float  *m_pflSoundDuration;
+	bool  m_bEmitCloseCaption;
+	bool  m_bWarnOnMissingCloseCaption;
+	bool  m_bWarnOnDirectWaveReference;
+	int  	m_nSpeakerEntity;
 	mutable CUtlVector< Vector >	m_UtlVecSoundOrigin;  ///< Actual sound origin(s) (can be multiple if sound routed through speaker entity(ies) )
 	mutable HSOUNDSCRIPTHANDLE		m_hSoundScriptHandle;
 };
@@ -728,11 +728,11 @@ struct EmitSound_t
 //-----------------------------------------------------------------------------
 // Multiplayer specific defines
 //-----------------------------------------------------------------------------
-#define MAX_CONTROL_POINTS			8
+#define MAX_CONTROL_POINTS 8
 #define MAX_CONTROL_POINT_GROUPS	8
 
 // Maximum number of points that a control point may need owned to be cappable
-#define MAX_PREVIOUS_POINTS			3
+#define MAX_PREVIOUS_POINTS 3
 
 // The maximum number of teams the control point system knows how to deal with
 #define MAX_CONTROL_POINT_TEAMS		8
@@ -741,7 +741,7 @@ struct EmitSound_t
 #define MAX_CAPLAYOUT_LENGTH		32
 
 // Maximum length of the current round printname
-#define MAX_ROUND_NAME				32
+#define MAX_ROUND_NAME 	32
 
 // Maximum length of the current round name
 #define MAX_ROUND_IMAGE_NAME		64

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PREDICTED_VIEWMODEL_H
 #define PREDICTED_VIEWMODEL_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "predictable_entity.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "baseplayer_shared.h"
 #include "shared_classnames.h"
 
@@ -29,14 +29,14 @@ public:
 
 	CPredictedViewModel( void );
 	virtual ~CPredictedViewModel( void );
-							
+  	
 	virtual void CalcViewModelLag( Vector& origin, QAngle& angles, QAngle& original_angles );
 
 #if defined( CLIENT_DLL )
 	virtual bool ShouldPredict( void )
 	{
 		if ( GetOwner() && GetOwner() == C_BasePlayer::GetLocalPlayer() )
-			return true;
+ return true;
 
 		return BaseClass::ShouldPredict();
 	}

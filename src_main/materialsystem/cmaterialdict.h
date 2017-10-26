@@ -1,4 +1,4 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -39,9 +39,9 @@ public:
 
 	void Shutdown();
 
-	int					GetNumMaterials( void ) const;
+	int 		GetNumMaterials( void ) const;
 
-	IMaterial*			GetMaterial( MaterialHandle_t h ) const;
+	IMaterial* GetMaterial( MaterialHandle_t h ) const;
 	IMaterialInternal * GetMaterialInternal( MaterialHandle_t idx ) const;
 
 	MaterialHandle_t	FirstMaterial() const;
@@ -50,22 +50,22 @@ public:
 
 	IMaterialInternal *	FindMaterial( const char *pszName, bool bManuallyCreated ) const;
 
-	void				AddMaterialToMaterialList( IMaterialInternal *pMaterial );
-	void				RemoveMaterialFromMaterialList( IMaterialInternal *pMaterial );
+	void 	AddMaterialToMaterialList( IMaterialInternal *pMaterial );
+	void 	RemoveMaterialFromMaterialList( IMaterialInternal *pMaterial );
 
-	void				RemoveMaterial( IMaterialInternal *pMaterial );
-	void				RemoveMaterialSubRect( IMaterialInternal *pMaterial );
+	void 	RemoveMaterial( IMaterialInternal *pMaterial );
+	void 	RemoveMaterialSubRect( IMaterialInternal *pMaterial );
 
 	IMaterialInternal*	AddMaterial( const char* pName, const char *pTextureGroupName );
 	// pKeyValues and pPatchKeyValues should come from LoadVMTFile()
 	IMaterialInternal*  AddMaterialSubRect( const char* pName, const char *pTextureGroupName, KeyValues *pKeyValues, KeyValues *pPatchKeyValues ); 
 
-	bool				NoteMissing( const char *pszName );
+	bool 	NoteMissing( const char *pszName );
 
 protected: /*private:*/
-	void				RemoveAllMaterials();
-	void				RemoveAllMaterialsFromMaterialList();
-	void				RemoveMaterialFromMaterialList( MaterialHandle_t h );
+	void 	RemoveAllMaterials();
+	void 	RemoveAllMaterialsFromMaterialList();
+	void 	RemoveMaterialFromMaterialList( MaterialHandle_t h );
 
 
 	// Stores a dictionary of materials, searched by name

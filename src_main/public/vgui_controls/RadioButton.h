@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef RADIOBUTTON_H
 #define RADIOBUTTON_H
@@ -22,7 +22,7 @@ namespace vgui
 
 //-----------------------------------------------------------------------------
 // Purpose: Radio buttons are automatically selected into groups by who their
-//			parent is. At most one radio button is active at any time.
+// parent is. At most one radio button is active at any time.
 //-----------------------------------------------------------------------------
 class RadioButton : public ToggleButton
 {

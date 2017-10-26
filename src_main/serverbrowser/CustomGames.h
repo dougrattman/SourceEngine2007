@@ -1,72 +1,75 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2003, Valve Corporation, All rights reserved.
 
 #ifndef CUSTOMGAMES_H
 #define CUSTOMGAMES_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#define MAX_TAG_CHARACTERS			128
+#include "InternetGames.h"
+#include "vgui_controls/MenuButton.h"
+#include "vgui_controls/URLLabel.h"
 
-class TagInfoLabel : public vgui::URLLabel
-{
-	DECLARE_CLASS_SIMPLE( TagInfoLabel, vgui::URLLabel );
-public:
-	TagInfoLabel(Panel *parent, const char *panelName);
-	TagInfoLabel(Panel *parent, const char *panelName, const char *text, const char *pszURL);
+#define MAX_TAG_CHARACTERS 128
 
-	virtual void	OnMousePressed(vgui::MouseCode code);
+class TagInfoLabel : public vgui::URLLabel {
+  DECLARE_CLASS_SIMPLE(TagInfoLabel, vgui::URLLabel);
 
-	MESSAGE_FUNC( DoOpenCustomServerInfoURL, "DoOpenCustomServerInfoURL" );
+ public:
+  TagInfoLabel(Panel *parent, const char *panelName);
+  TagInfoLabel(Panel *parent, const char *panelName, const char *text,
+               const char *pszURL);
+
+  virtual void OnMousePressed(vgui::MouseCode code);
+
+  MESSAGE_FUNC(DoOpenCustomServerInfoURL, "DoOpenCustomServerInfoURL");
 };
 
-class TagMenuButton : public vgui::MenuButton
-{
-	DECLARE_CLASS_SIMPLE( TagMenuButton, vgui::MenuButton );
-public:
-	TagMenuButton( Panel *parent, const char *panelName, const char *text);
+class TagMenuButton : public vgui::MenuButton {
+  DECLARE_CLASS_SIMPLE(TagMenuButton, vgui::MenuButton);
 
-	virtual void OnShowMenu(vgui::Menu *menu);
+ public:
+  TagMenuButton(Panel *parent, const char *panelName, const char *text);
+
+  virtual void OnShowMenu(vgui::Menu *menu);
 };
 
 //-----------------------------------------------------------------------------
 // Purpose: Internet games with tags
 //-----------------------------------------------------------------------------
-class CCustomGames : public CInternetGames
-{
-	DECLARE_CLASS_SIMPLE( CCustomGames, CInternetGames );
-public:
-	CCustomGames(vgui::Panel *parent);
-	~CCustomGames();
+class CCustomGames : public CInternetGames {
+  DECLARE_CLASS_SIMPLE(CCustomGames, CInternetGames);
 
-	virtual void	UpdateDerivedLayouts( void );
-	virtual void	OnLoadFilter(KeyValues *filter);
-	virtual void	OnSaveFilter(KeyValues *filter);
-	bool	CheckTagFilter( gameserveritem_t &server );
-	virtual void	SetRefreshing(bool state);
-	virtual void	ServerResponded( int iServer, gameserveritem_t *pServerItem );
+ public:
+  CCustomGames(vgui::Panel *parent);
+  ~CCustomGames();
 
-	virtual const char *GetStringNoUnfilteredServers() { return "#ServerBrowser_NoCustomGames"; }
-	virtual const char *GetStringNoUnfilteredServersOnMaster() { return "#ServerBrowser_MasterServerHasNoCustomServersListed"; }
-	virtual const char *GetStringNoServersResponded() { return "#ServerBrowser_NoCustomGamesResponded"; }
+  virtual void UpdateDerivedLayouts(void);
+  virtual void OnLoadFilter(KeyValues *filter);
+  virtual void OnSaveFilter(KeyValues *filter);
+  bool CheckTagFilter(gameserveritem_t &server);
+  virtual void SetRefreshing(bool state);
+  virtual void ServerResponded(int iServer, gameserveritem_t *pServerItem);
 
-	MESSAGE_FUNC_PARAMS( OnAddTag, "AddTag", params );
-	MESSAGE_FUNC( OnTagMenuButtonOpened, "TagMenuButtonOpened" );
+  virtual const char *GetStringNoUnfilteredServers() {
+    return "#ServerBrowser_NoCustomGames";
+  }
+  virtual const char *GetStringNoUnfilteredServersOnMaster() {
+    return "#ServerBrowser_MasterServerHasNoCustomServersListed";
+  }
+  virtual const char *GetStringNoServersResponded() {
+    return "#ServerBrowser_NoCustomGamesResponded";
+  }
 
-	void			RecalculateCommonTags( void );
-	void			AddTagToFilterList( const char *pszTag );
+  MESSAGE_FUNC_PARAMS(OnAddTag, "AddTag", params);
+  MESSAGE_FUNC(OnTagMenuButtonOpened, "TagMenuButtonOpened");
 
-private:
-	TagInfoLabel	*m_pTagInfoURL;
-	TagMenuButton	*m_pAddTagList;
-	vgui::Menu		*m_pTagListMenu;
-	vgui::TextEntry	*m_pTagFilter;
-	char			m_szTagFilter[MAX_TAG_CHARACTERS];
+  void RecalculateCommonTags(void);
+  void AddTagToFilterList(const char *pszTag);
+
+ private:
+  TagInfoLabel *m_pTagInfoURL;
+  TagMenuButton *m_pAddTagList;
+  vgui::Menu *m_pTagListMenu;
+  vgui::TextEntry *m_pTagFilter;
+  char m_szTagFilter[MAX_TAG_CHARACTERS];
 };
 
-
-#endif // CUSTOMGAMES_H
+#endif  // CUSTOMGAMES_H

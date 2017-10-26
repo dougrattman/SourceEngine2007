@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains all texture state for the material system surface to use
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEXTUREDICTIONARY_H
 #define TEXTUREDICTIONARY_H

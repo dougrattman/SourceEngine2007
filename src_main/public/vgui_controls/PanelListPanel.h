@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PANELLISTPANEL_H
 #define PANELLISTPANEL_H
@@ -12,8 +12,8 @@
 #pragma once
 #endif
 
-#include <utllinkedlist.h>
-#include <utlvector.h>
+#include "tier1/UtlLinkedList.h"
+#include "tier1/UtlVector.h"
 #include <vgui/VGUI.h>
 #include <vgui_controls/Panel.h>
 
@@ -68,7 +68,7 @@ public:
 	Panel *GetSelectedPanel();
 	/*
 		On a panel being selected, a message gets sent to it
-			"PanelSelected"		int "state"
+ "PanelSelected"		int "state"
 		where state is 1 on selection, 0 on deselection
 	*/
 
@@ -99,16 +99,16 @@ private:
 	// list of the column headers
 
 	CUtlLinkedList<DATAITEM, int>		m_DataItems;
-	CUtlVector<int>						m_SortedItems;
+	CUtlVector<int>  m_SortedItems;
 
-	ScrollBar				*m_vbar;
-	Panel					*m_pPanelEmbedded;
+	ScrollBar 	*m_vbar;
+	Panel 		*m_pPanelEmbedded;
 
-	PHandle					m_hSelectedItem;
-	int						m_iFirstColumnWidth;
-	int						m_iNumColumns;
-	int						m_iDefaultHeight;
-	int						m_iPanelBuffer;
+	PHandle 		m_hSelectedItem;
+	int  m_iFirstColumnWidth;
+	int  m_iNumColumns;
+	int  m_iDefaultHeight;
+	int  m_iPanelBuffer;
 };
 
 }

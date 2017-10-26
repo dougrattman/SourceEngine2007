@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -28,7 +28,7 @@
 #include <imapoverview.h>
 #include "c_playerresource.h"
 #include "c_soundscape.h"
-#include <keyvalues.h>
+#include "tier1/keyvalues.h"
 #include "text_message.h"
 #include "panelmetaclassmgr.h"
 #include "vguicenterprint.h"
@@ -37,7 +37,7 @@
 #include <engine/IEngineSound.h>
 #include "c_cs_hostage.h"
 #include "buy_presets/buy_presets.h"
-#include "bitbuf.h"
+#include "tier1/bitbuf.h"
 #include "usermessages.h"
 #include "prediction.h"
 #include "datacache/imdlcache.h"

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Shared player code.
 //
@@ -91,13 +91,13 @@ public:
 	void Init( OuterClass *pOuter );
 
 	// State (TF_STATE_*).
-	int		GetState() const					{ return m_nPlayerState; }
-	void	SetState( int nState )				{ m_nPlayerState = nState; }
-	bool	InState( int nState )				{ return ( m_nPlayerState == nState ); }
+	int		GetState() const 		{ return m_nPlayerState; }
+	void	SetState( int nState ) 	{ m_nPlayerState = nState; }
+	bool	InState( int nState ) 	{ return ( m_nPlayerState == nState ); }
 
 	// Condition (TF_COND_*).
-	int		GetCond() const						{ return m_nPlayerCond; }
-	void	SetCond( int nCond )				{ m_nPlayerCond = nCond; }
+	int		GetCond() const  { return m_nPlayerCond; }
+	void	SetCond( int nCond ) 	{ m_nPlayerCond = nCond; }
 	void	AddCond( int nCond, float flDuration = PERMANENT_CONDITION );
 	void	RemoveCond( int nCond );
 	bool	InCond( int nCond );
@@ -127,21 +127,21 @@ public:
 	void	CompleteDisguise( void );
 	void	RemoveDisguise( void );
 	void	FindDisguiseTarget( void );
-	int		GetDisguiseTeam( void )				{ return m_nDisguiseTeam; }
-	int		GetDisguiseClass( void ) 			{ return m_nDisguiseClass; }
+	int		GetDisguiseTeam( void ) 	{ return m_nDisguiseTeam; }
+	int		GetDisguiseClass( void )  { return m_nDisguiseClass; }
 	int		GetDesiredDisguiseClass( void )		{ return m_nDesiredDisguiseClass; }
 	int		GetDesiredDisguiseTeam( void )		{ return m_nDesiredDisguiseTeam; }
 	EHANDLE GetDisguiseTarget( void ) 	
 	{
 #ifdef CLIENT_DLL
 		if ( m_iDisguiseTargetIndex == TF_DISGUISE_TARGET_INDEX_NONE )
-			return NULL;
+ return NULL;
 		return cl_entitylist->GetNetworkableHandle( m_iDisguiseTargetIndex );
 #else
 		return m_hDisguiseTarget.Get();
 #endif
 	}
-	int		GetDisguiseHealth( void )			{ return m_iDisguiseHealth; }
+	int		GetDisguiseHealth( void ) { return m_iDisguiseHealth; }
 	void	SetDisguiseHealth( int iDisguiseHealth );
 
 #ifdef CLIENT_DLL
@@ -234,15 +234,15 @@ private:
 private:
 
 	// Vars that are networked.
-	CNetworkVar( int, m_nPlayerState );			// Player state.
-	CNetworkVar( int, m_nPlayerCond );			// Player condition flags.
+	CNetworkVar( int, m_nPlayerState ); // Player state.
+	CNetworkVar( int, m_nPlayerCond ); // Player condition flags.
 	float m_flCondExpireTimeLeft[TF_COND_LAST];		// Time until each condition expires
 
 //TFTODO: What if the player we're disguised as leaves the server?
 //...maybe store the name instead of the index?
 	CNetworkVar( int, m_nDisguiseTeam );		// Team spy is disguised as.
 	CNetworkVar( int, m_nDisguiseClass );		// Class spy is disguised as.
-	EHANDLE m_hDisguiseTarget;					// Playing the spy is using for name disguise.
+	EHANDLE m_hDisguiseTarget; 		// Playing the spy is using for name disguise.
 	CNetworkVar( int, m_iDisguiseTargetIndex );
 	CNetworkVar( int, m_iDisguiseHealth );		// Health to show our enemies in player id
 	CNetworkVar( int, m_nDesiredDisguiseClass );
@@ -258,7 +258,7 @@ private:
 	CNetworkVar( int, m_nNumHealers );
 
 	// Vars that are not networked.
-	OuterClass			*m_pOuter;					// C_TFPlayer or CTFPlayer (client/server).
+	OuterClass *m_pOuter; 		// C_TFPlayer or CTFPlayer (client/server).
 
 #ifdef GAME_DLL
 	// Healer handling
@@ -269,8 +269,8 @@ private:
 		bool	bDispenserHeal;
 	};
 	CUtlVector< healers_t >	m_aHealers;	
-	float					m_flHealFraction;	// Store fractional health amounts
-	float					m_flDisguiseHealFraction;	// Same for disguised healing
+	float 		m_flHealFraction;	// Store fractional health amounts
+	float 		m_flDisguiseHealFraction;	// Same for disguised healing
 
 	float m_flInvulnerableOffTime;
 #endif
@@ -278,9 +278,9 @@ private:
 	// Burn handling
 	CHandle<CTFPlayer>		m_hBurnAttacker;
 	CNetworkVar( int,		m_nNumFlames );
-	float					m_flFlameBurnTime;
-	float					m_flFlameRemoveTime;
-	float					m_flTauntRemoveTime;
+	float 		m_flFlameBurnTime;
+	float 		m_flFlameRemoveTime;
+	float 		m_flTauntRemoveTime;
 
 
 	float m_flDisguiseCompleteTime;
@@ -315,11 +315,11 @@ private:
 
 	WEAPON_FILE_INFO_HANDLE	m_hDisguiseWeaponInfo;
 #endif
-};			   
+};    
 
-#define TF_DEATH_DOMINATION				0x0001	// killer is dominating victim
+#define TF_DEATH_DOMINATION 	0x0001	// killer is dominating victim
 #define TF_DEATH_ASSISTER_DOMINATION	0x0002	// assister is dominating victim
-#define TF_DEATH_REVENGE				0x0004	// killer got revenge on victim
+#define TF_DEATH_REVENGE 	0x0004	// killer got revenge on victim
 #define TF_DEATH_ASSISTER_REVENGE		0x0008	// assister got revenge on victim
 
 extern const char *g_pszBDayGibs[22];

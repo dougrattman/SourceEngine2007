@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( C_HL2_PLAYERLOCALDATA_H )
 #define C_HL2_PLAYERLOCALDATA_H
@@ -47,7 +47,7 @@ public:
 #endif
 
 	// Ladder related data
-	EHANDLE			m_hLadder;
+	EHANDLE m_hLadder;
 	LadderMove_t	m_LadderMove;
 };
 

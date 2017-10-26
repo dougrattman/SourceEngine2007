@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A shotgun.
 //
 //			Primary attack: single barrel shot.
 //			Secondary attack: double barrel shot.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "NPCEvent.h"
@@ -85,7 +85,7 @@ public:
 
 	DECLARE_ACTTABLE();
 
-	CWeaponShotgun(void);
+	CWeaponShotgun();
 };
 
 IMPLEMENT_SERVERCLASS_ST(CWeaponShotgun, DT_WeaponShotgun)

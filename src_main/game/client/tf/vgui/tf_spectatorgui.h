@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -59,7 +59,7 @@ protected:
 	int		m_nLastSpecMode;
 	CBaseEntity	*m_nLastSpecTarget;
 	float	m_flNextTipChangeTime;		// time at which to next change the tip
-	int		m_iTipClass;				// class that current tip is for
+	int		m_iTipClass; 	// class that current tip is for
 
 	// used to store the x and y position of the Engy and Spy build panels so we can reset them when the spec panel goes away
 	int		m_nEngBuilds_xpos;
@@ -67,12 +67,12 @@ protected:
 	int		m_nSpyBuilds_xpos;
 	int		m_nSpyBuilds_ypos;
 
-	vgui::Label				*m_pReinforcementsLabel;
-	vgui::Label				*m_pClassOrTeamLabel;
-	vgui::Label				*m_pSwitchCamModeKeyLabel;
-	vgui::Label				*m_pCycleTargetFwdKeyLabel;
-	vgui::Label				*m_pCycleTargetRevKeyLabel;
-	vgui::Label				*m_pMapLabel;
+	vgui::Label 	*m_pReinforcementsLabel;
+	vgui::Label 	*m_pClassOrTeamLabel;
+	vgui::Label 	*m_pSwitchCamModeKeyLabel;
+	vgui::Label 	*m_pCycleTargetFwdKeyLabel;
+	vgui::Label 	*m_pCycleTargetRevKeyLabel;
+	vgui::Label 	*m_pMapLabel;
 };
 
 #endif // TF_SPECTATORGUI_H

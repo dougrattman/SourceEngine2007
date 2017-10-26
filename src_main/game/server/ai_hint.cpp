@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hint node utilities and functions
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // @TODO (toml 03-04-03): there is far too much duplicate code in here
 

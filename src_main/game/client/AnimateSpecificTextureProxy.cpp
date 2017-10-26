@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Acts exactly like "AnimatedTexture", but ONLY if the texture 
 //			it's working on matches the desired texture to work on.
@@ -6,7 +6,7 @@
 //			This assumes that some other proxy will be switching out the textures.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "materialsystem/IMaterialProxy.h"
 #include "materialsystem/IMaterialVar.h"
@@ -14,7 +14,7 @@
 #include "materialsystem/ITexture.h"
 #include "BaseAnimatedTextureProxy.h"
 #include "utlstring.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

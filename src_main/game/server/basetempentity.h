@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( BASETEMPENTITY_H )
 #define BASETEMPENTITY_H
 #ifdef _WIN32
@@ -26,10 +26,10 @@ public:
 	DECLARE_CLASS_NOBASE( CBaseTempEntity );
 	DECLARE_SERVERCLASS();
 
-						CBaseTempEntity( const char *name );
-	virtual				~CBaseTempEntity( void );
+  CBaseTempEntity( const char *name );
+	virtual 	~CBaseTempEntity( void );
 
-	const char			*GetName( void );
+	const char *GetName( void );
 
 	// Force all derived classes to implement a test
 	virtual void		Test( const Vector& current_origin, const QAngle& current_angles );
@@ -44,15 +44,15 @@ public:
 	static CBaseTempEntity *GetList( void );
 
 	// Called at startup to allow temp entities to precache any models/sounds that they need
-	static void			PrecacheTempEnts( void );
+	static void PrecacheTempEnts( void );
 
 	void NetworkStateChanged() {}	// TE's are sent out right away so we don't track whether state changes or not,
-									// but we want to allow CNetworkVars.
+   // but we want to allow CNetworkVars.
 	void NetworkStateChanged( void *pVar ) {}
 
 private:
 	// Descriptive name, for when running tests
-	const char			*m_pszName;
+	const char *m_pszName;
 
 	// Next in chain
 	CBaseTempEntity		*m_pNext;

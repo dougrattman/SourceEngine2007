@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Arbitrary length bit string
 //				** NOTE: This class does NOT override the bitwise operators
@@ -12,14 +12,14 @@
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
-#include <limits.h>
+#include <climits>
 
 #include "bitstring.h"
-#include "utlbuffer.h"
+#include "tier1/utlbuffer.h"
 #include "tier0/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

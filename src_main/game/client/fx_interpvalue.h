@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -20,8 +20,8 @@ enum InterpType_t
 class CInterpolatedValue 
 {
 public:
-			CInterpolatedValue( void );
-			CInterpolatedValue( float startTime, float endTime, float startValue, float endValue, InterpType_t type );
+ CInterpolatedValue( void );
+ CInterpolatedValue( float startTime, float endTime, float startValue, float endValue, InterpType_t type );
 
 	void	SetTime( float start, float end );
 	void	SetRange( float start, float end );

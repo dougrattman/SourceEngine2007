@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -146,11 +146,11 @@ class TextImage;
 #define VGUI_HOTKEYS_ENABLED
 // #define VGUI_DRAW_HOTKEYS_ENABLED
 
-#define USING_BUILD_FACTORY( className )				\
+#define USING_BUILD_FACTORY( className ) 	\
 	extern className *g_##className##LinkerHack;		\
 	className *g_##className##PullInModule = g_##className##LinkerHack;
 
-#define USING_BUILD_FACTORY_ALIAS( className, factoryName )				\
+#define USING_BUILD_FACTORY_ALIAS( className, factoryName ) 	\
 	extern className *g_##factoryName##LinkerHack;		\
 	className *g_##factoryName##PullInModule = g_##factoryName##LinkerHack;
 

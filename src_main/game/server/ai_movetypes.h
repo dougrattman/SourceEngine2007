@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_MOVETYPES_H
 #define AI_MOVETYPES_H
@@ -30,12 +30,12 @@ extern void DebugNoteMovementFailure();
 
 enum AIMoveResult_t
 {
-	AIMR_BLOCKED_ENTITY			= -1,	         // Move was blocked by an entity
-	AIMR_BLOCKED_WORLD			= -2,	         // Move was blocked by the world
-	AIMR_BLOCKED_NPC			= -3,	         // Move was blocked by an NPC
-	AIMR_ILLEGAL				= -4,	         // Move is illegal for some reason
+	AIMR_BLOCKED_ENTITY = -1,	         // Move was blocked by an entity
+	AIMR_BLOCKED_WORLD = -2,	         // Move was blocked by the world
+	AIMR_BLOCKED_NPC = -3,	         // Move was blocked by an NPC
+	AIMR_ILLEGAL 	= -4,	         // Move is illegal for some reason
 
-	AIMR_OK						= 0,
+	AIMR_OK  = 0,
 	
 	AIMR_CHANGE_TYPE,	                         // Locomotion method has changed
 };
@@ -80,20 +80,20 @@ struct AIMoveTrace_t
 		memset( this, 0, sizeof(*this) );
 	}
 	
-	AIMoveResult_t 	fStatus;				// See AIMoveResult_t
-	Vector 			vEndPosition;			// The last point that could be moved to
-	Vector			vHitNormal;				// The normal of a hit, if any. vec3_origin if none. Can be none even if "hit"
-	CBaseEntity* 	pObstruction;			// The obstruction I bumped into (if any)
-	float			flTotalDist;
-	float 			flDistObstructed; 	// FIXME: This is a strange number. In the case
-											// of calling MoveLimit with navtype NAV_GROUND,
-											// it represents a 2D distance to the obstruction.
-											// In the case of other navtypes, it represents a
-											// 3D distance to the obstruction
-	Vector 			vJumpVelocity;			// FIXME: Remove this; it's bogus
-											// It's only returned by JumpMoveLimit
-											// which seems to be a bogus concept to begin with
-	float			flStepUpDistance;
+	AIMoveResult_t 	fStatus; 	// See AIMoveResult_t
+	Vector  vEndPosition; // The last point that could be moved to
+	Vector vHitNormal; 	// The normal of a hit, if any. vec3_origin if none. Can be none even if "hit"
+	CBaseEntity* 	pObstruction; // The obstruction I bumped into (if any)
+	float flTotalDist;
+	float  flDistObstructed; 	// FIXME: This is a strange number. In the case
+   		// of calling MoveLimit with navtype NAV_GROUND,
+   		// it represents a 2D distance to the obstruction.
+   		// In the case of other navtypes, it represents a
+   		// 3D distance to the obstruction
+	Vector  vJumpVelocity; // FIXME: Remove this; it's bogus
+   		// It's only returned by JumpMoveLimit
+   		// which seems to be a bogus concept to begin with
+	float flStepUpDistance;
 };
 
 inline bool IsMoveBlocked( const AIMoveTrace_t &moveTrace )
@@ -116,7 +116,7 @@ enum AILocalMoveGoalFlags_t
 	AILMG_TARGET_IS_GOAL		= 0x01,
 	AILMG_CONSUME_INTERVAL		= 0x02,
 	AILMG_TARGET_IS_TRANSITION 	= 0x04,
-	AILMG_NO_STEER 				= 0x08,
+	AILMG_NO_STEER  	= 0x08,
 	AILMG_NO_AVOIDANCE_PATHS 	= 0x10,
 };
 
@@ -128,18 +128,18 @@ struct AILocalMoveGoal_t
 	}
 	
 	// Object of the goal
-	Vector			target;
+	Vector target;
 
 	// The actual move. Note these need not always agree with "target"
-	Vector			dir; 
-	Vector			facing;
-	float			speed;
+	Vector dir; 
+	Vector facing;
+	float speed;
 	
 	// The distance maximum distance intended to travel in path length
-	float			maxDist;
+	float maxDist;
 
 	// The distance expected to move this think
-	float			curExpectedDist;
+	float curExpectedDist;
 
 	Navigation_t	navType;
 	CBaseEntity *	pMoveTarget;
@@ -150,12 +150,12 @@ struct AILocalMoveGoal_t
 	CAI_Path *		pPath;
 
 	// The result if a forward probing trace has been done
-	bool			bHasTraced;
+	bool bHasTraced;
 	AIMoveTrace_t	directTrace;
 	AIMoveTrace_t	thinkTrace;
 
 #ifdef DEBUG
-	int				solveCookie;
+	int 	solveCookie;
 #endif
 };
 
@@ -176,7 +176,7 @@ enum AIMotorMoveResult_t
 
 //-----------------------------------------------------------------------------
 // Purpose: The set of callbacks used by lower-level movement classes to
-//			notify and receive guidance from higher level-classes
+// notify and receive guidance from higher level-classes
 //-----------------------------------------------------------------------------
 
 abstract_class IAI_MovementSink
@@ -193,24 +193,24 @@ public:
 	// Local navigation notifications, each allows services provider to overridde default result
 	//
 	virtual bool OnCalcBaseMove( AILocalMoveGoal_t *pMoveGoal, 
-								float distClear, 
-								AIMoveResult_t *pResult ) = 0;
+  		float distClear, 
+  		AIMoveResult_t *pResult ) = 0;
 
 	virtual bool OnObstructionPreSteer( AILocalMoveGoal_t *pMoveGoal, 
-											float distClear, 
-											AIMoveResult_t *pResult ) = 0;
+   		float distClear, 
+   		AIMoveResult_t *pResult ) = 0;
 
 	virtual bool OnFailedSteer( AILocalMoveGoal_t *pMoveGoal, 
-									float distClear, 
-									AIMoveResult_t *pResult ) = 0;
+   float distClear, 
+   AIMoveResult_t *pResult ) = 0;
 
 	virtual bool OnFailedLocalNavigation( AILocalMoveGoal_t *pMoveGoal,
-									float distClear, 
-									AIMoveResult_t *pResult ) = 0;
+   float distClear, 
+   AIMoveResult_t *pResult ) = 0;
 	
 	virtual bool OnInsufficientStopDist( AILocalMoveGoal_t *pMoveGoal, 
-											 float distClear, 
-											 AIMoveResult_t *pResult ) = 0;
+   		 float distClear, 
+   		 AIMoveResult_t *pResult ) = 0;
 
 
 	virtual bool OnMoveBlocked( AIMoveResult_t *pResult ) = 0;
@@ -221,9 +221,9 @@ public:
 	//
 	virtual bool OnMoveStalled( const AILocalMoveGoal_t &move ) = 0;
 	virtual bool OnMoveExecuteFailed( const AILocalMoveGoal_t &move, 
-									const AIMoveTrace_t &trace, 
-									AIMotorMoveResult_t fMotorResult, 
-									AIMoveResult_t *pResult ) = 0;
+   const AIMoveTrace_t &trace, 
+   AIMotorMoveResult_t fMotorResult, 
+   AIMoveResult_t *pResult ) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -285,21 +285,21 @@ public:
 	// Local navigation notifications, each allows services provider to overridde default result
 	//
 	virtual bool OnCalcBaseMove( AILocalMoveGoal_t *pMoveGoal, 
-								float distClear, 
-								AIMoveResult_t *pResult );
+  		float distClear, 
+  		AIMoveResult_t *pResult );
 
 	virtual bool OnObstructionPreSteer( AILocalMoveGoal_t *pMoveGoal, 
-											float distClear, 
-											AIMoveResult_t *pResult );
+   		float distClear, 
+   		AIMoveResult_t *pResult );
 	virtual bool OnFailedSteer( AILocalMoveGoal_t *pMoveGoal, 
-									float distClear, 
-									AIMoveResult_t *pResult );
+   float distClear, 
+   AIMoveResult_t *pResult );
 	virtual bool OnFailedLocalNavigation( AILocalMoveGoal_t *pMoveGoal, 
-									float distClear, 
-									AIMoveResult_t *pResult );
+   float distClear, 
+   AIMoveResult_t *pResult );
 	virtual bool OnInsufficientStopDist( AILocalMoveGoal_t *pMoveGoal, 
-											 float distClear, 
-											 AIMoveResult_t *pResult );
+   		 float distClear, 
+   		 AIMoveResult_t *pResult );
 	virtual bool OnMoveBlocked( AIMoveResult_t *pResult );
 	
 	//---------------------------------

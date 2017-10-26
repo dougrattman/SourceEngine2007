@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef SAVERESTORE_UTLMAP_H
 #define SAVERESTORE_UTLMAP_H
@@ -30,44 +30,44 @@ public:
 		datamap_t *pFieldDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLMAP *)NULL );
 		typedescription_t dataDesc[] = 
 		{
-			{
-				(fieldtype_t)KEY_TYPE, 
-				"K", 
-				{ 0, 0 },
-				1, 
-				FTYPEDESC_SAVE, 
-				NULL, 
-				NULL, 
-				NULL,
-				pKeyDatamap,
-				sizeof(KEY_TYPE),
-			},
-			
-			{
-				(fieldtype_t)FIELD_TYPE, 
-				"T", 
-				{ offsetof(typename UTLMAP::Node_t, elem), 0 },
-				1, 
-				FTYPEDESC_SAVE, 
-				NULL, 
-				NULL, 
-				NULL,
-				pFieldDatamap,
-				sizeof(FIELD_TYPE),
-			}
+ {
+ 	(fieldtype_t)KEY_TYPE, 
+ 	"K", 
+ 	{ 0, 0 },
+ 	1, 
+ 	FTYPEDESC_SAVE, 
+ 	NULL, 
+ 	NULL, 
+ 	NULL,
+ 	pKeyDatamap,
+ 	sizeof(KEY_TYPE),
+ },
+ 
+ {
+ 	(fieldtype_t)FIELD_TYPE, 
+ 	"T", 
+ 	{ offsetof(typename UTLMAP::Node_t, elem), 0 },
+ 	1, 
+ 	FTYPEDESC_SAVE, 
+ 	NULL, 
+ 	NULL, 
+ 	NULL,
+ 	pFieldDatamap,
+ 	sizeof(FIELD_TYPE),
+ }
 		};
 		
 		datamap_t dataMap = 
 		{
-			dataDesc,
-			2,
-			"um",
-			NULL,
-			false,
-			false,
-			0,
+ dataDesc,
+ 2,
+ "um",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 
@@ -81,11 +81,11 @@ public:
 		typename UTLMAP::CTree::IndexType_t i = pUtlRBTree->FirstInorder();
 		while ( i != pUtlRBTree->InvalidIndex() )
 		{
-			typename UTLMAP::CTree::ElemType_t &elem = pUtlRBTree->Element( i );
+ typename UTLMAP::CTree::ElemType_t &elem = pUtlRBTree->Element( i );
 
-			pSave->WriteAll( &elem, &dataMap );
+ pSave->WriteAll( &elem, &dataMap );
 
-			i = pUtlRBTree->NextInorder( i );
+ i = pUtlRBTree->NextInorder( i );
 		}
 		pSave->EndBlock();
 	}
@@ -96,44 +96,44 @@ public:
 		datamap_t *pFieldDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLMAP *)NULL );
 		typedescription_t dataDesc[] = 
 		{
-			{
-				(fieldtype_t)KEY_TYPE, 
-				"K", 
-				{ 0, 0 },
-				1, 
-				FTYPEDESC_SAVE, 
-				NULL, 
-				NULL, 
-				NULL,
-				pKeyDatamap,
-				sizeof(KEY_TYPE),
-			},
-			
-			{
-				(fieldtype_t)FIELD_TYPE, 
-				"T", 
-				{ offsetof(typename UTLMAP::Node_t, elem), 0 },
-				1, 
-				FTYPEDESC_SAVE, 
-				NULL, 
-				NULL, 
-				NULL,
-				pFieldDatamap,
-				sizeof(FIELD_TYPE),
-			}
+ {
+ 	(fieldtype_t)KEY_TYPE, 
+ 	"K", 
+ 	{ 0, 0 },
+ 	1, 
+ 	FTYPEDESC_SAVE, 
+ 	NULL, 
+ 	NULL, 
+ 	NULL,
+ 	pKeyDatamap,
+ 	sizeof(KEY_TYPE),
+ },
+ 
+ {
+ 	(fieldtype_t)FIELD_TYPE, 
+ 	"T", 
+ 	{ offsetof(typename UTLMAP::Node_t, elem), 0 },
+ 	1, 
+ 	FTYPEDESC_SAVE, 
+ 	NULL, 
+ 	NULL, 
+ 	NULL,
+ 	pFieldDatamap,
+ 	sizeof(FIELD_TYPE),
+ }
 		};
 		
 		datamap_t dataMap = 
 		{
-			dataDesc,
-			2,
-			"um",
-			NULL,
-			false,
-			false,
-			0,
+ dataDesc,
+ 2,
+ "um",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 
@@ -146,8 +146,8 @@ public:
 
 		while ( nElems-- )
 		{
-			pRestore->ReadAll( &temp, &dataMap );
-			pUtlMap->Insert( temp.key, temp.elem );
+ pRestore->ReadAll( &temp, &dataMap );
+ pUtlMap->Insert( temp.key, temp.elem );
 		}
 		
 		pRestore->EndBlock();

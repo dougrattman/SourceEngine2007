@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Provides access to cvars that are bounded in the client DLL.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CDLL_BOUNDED_CVARS_H
 #define CDLL_BOUNDED_CVARS_H

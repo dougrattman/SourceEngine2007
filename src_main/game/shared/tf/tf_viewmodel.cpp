@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -69,7 +69,7 @@ void CTFViewModel::AddViewModelBob( CBasePlayer *owner, Vector& eyePosition, QAn
 #ifdef CLIENT_DLL
 	// if we are an off hand view model (index 1) and we have a model, add head bob.
 	// (Head bob for main hand model added by the weapon itself.)
-	if ( ViewModelIndex() == 1 && GetModel() != null )
+	if ( ViewModelIndex() == 1 && GetModel() != 0 )
 	{
 		CalcViewModelBobHelper( owner, &m_BobState );
 		AddViewModelBobHelper( eyePosition, eyeAngles, &m_BobState );

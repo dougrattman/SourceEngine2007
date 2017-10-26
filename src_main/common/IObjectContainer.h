@@ -1,32 +1,27 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: IObjectContainer.h: interface for the ObjectContainer class.
-//
-// $NoKeywords: $
-//=============================================================================//
+// Purpose: Interface for the ObjectContainer class.
 
 #ifndef IOBJECTCONTAINER_H
 #define IOBJECTCONTAINER_H
 
-#pragma once
+#include "tier1/interface.h"
 
-class IObjectContainer  
-{
-public:
-	virtual ~IObjectContainer() {};
-	
-	virtual void		Init() = 0;
+abstract_class IObjectContainer {
+ public:
+  virtual void Init() = 0;
 
-	virtual bool		Add(void * newObject) = 0;
-	virtual bool		Remove(void * object) = 0;
-	virtual void		Clear(bool freeElementsMemory) = 0;
-	
-	virtual void *		GetFirst() = 0;
-	virtual void *		GetNext() = 0;
+  virtual bool Add(void* newObject) = 0;
+  virtual bool Remove(void* object) = 0;
+  virtual void Clear(bool freeElementsMemory) = 0;
 
-	virtual int			CountElements() = 0;;
-	virtual bool		Contains(void * object) = 0;
-	virtual bool		IsEmpty() = 0;
+  virtual void* GetFirst() = 0;
+  virtual void* GetNext() = 0;
+
+  virtual int CountElements() = 0;
+
+  virtual bool Contains(void* object) = 0;
+  virtual bool IsEmpty() = 0;
 };
 
-#endif // !defined IOBJECTCONTAINER_H
+#endif  // IOBJECTCONTAINER_H

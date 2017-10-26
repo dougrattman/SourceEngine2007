@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef RECORDING_H
 #define RECORDING_H
@@ -149,34 +149,34 @@ inline void RecordFloat( float f )
 }
 
 #	define RECORD_COMMAND( _cmd, _numargs )		RecordCommand( _cmd, _numargs )
-#	define RECORD_INT( _int )					RecordInt( _int )
-#	define RECORD_FLOAT( _float )				RecordFloat( _float )
-#	define RECORD_STRING( _string )				RecordArgument( _string, strlen(_string) + 1 )
+#	define RECORD_INT( _int ) 		RecordInt( _int )
+#	define RECORD_FLOAT( _float ) 	RecordFloat( _float )
+#	define RECORD_STRING( _string ) 	RecordArgument( _string, strlen(_string) + 1 )
 #	define RECORD_STRUCT( _struct, _size )		RecordArgument( _struct, _size )
 
 #	define RECORD_RENDER_STATE( _state, _val )		\
 		RECORD_COMMAND( DX8_SET_RENDER_STATE, 2 );	\
-		RECORD_INT( _state );						\
+		RECORD_INT( _state );  \
 		RECORD_INT( _val )
 
 #	define RECORD_TEXTURE_STAGE_STATE( _stage, _state, _val )	\
 		RECORD_COMMAND( DX8_SET_TEXTURE_STAGE_STATE, 3 );		\
-		RECORD_INT( _stage );									\
-		RECORD_INT( _state );									\
+		RECORD_INT( _stage );   \
+		RECORD_INT( _state );   \
 		RECORD_INT( _val )
 
 #	define RECORD_SAMPLER_STATE( _stage, _state, _val )	\
 		RECORD_COMMAND( DX8_SET_SAMPLER_STATE, 3 );		\
-		RECORD_INT( _stage );									\
-		RECORD_INT( _state );									\
+		RECORD_INT( _stage );   \
+		RECORD_INT( _state );   \
 		RECORD_INT( _val )
 
 #	ifdef RECORD_DEBUG_STRINGS
-#		define RECORD_DEBUG_STRING( _str )			\
-			RECORD_COMMAND( DX8_DEBUG_STRING, 1 );	\
-			RECORD_STRING( _str )
+#		define RECORD_DEBUG_STRING( _str ) \
+ RECORD_COMMAND( DX8_DEBUG_STRING, 1 );	\
+ RECORD_STRING( _str )
 #	else
-#		define RECORD_DEBUG_STRING( _str )			0
+#		define RECORD_DEBUG_STRING( _str ) 0
 #	endif
 
 #else // not RECORDING
@@ -184,14 +184,14 @@ inline void RecordFloat( float f )
 #	undef RECORD_TEXTURES
 
 #	define RECORD_COMMAND( _cmd, _numargs )		0
-#	define RECORD_INT( _int )					0
-#	define RECORD_FLOAT( _float )				0
-#	define RECORD_STRING( _string )				0
+#	define RECORD_INT( _int ) 		0
+#	define RECORD_FLOAT( _float ) 	0
+#	define RECORD_STRING( _string ) 	0
 #	define RECORD_STRUCT( _struct, _size )		0
 #	define RECORD_RENDER_STATE( _state, _val )	0
 #	define RECORD_TEXTURE_STAGE_STATE( _stage, _state, _val )	0
 #	define RECORD_SAMPLER_STATE( _stage, _state, _val )	0
-#	define RECORD_DEBUG_STRING( _str )			0
+#	define RECORD_DEBUG_STRING( _str ) 0
 
 #endif // RECORDING
 

@@ -1,8 +1,7 @@
-//===== Copyright © 1996-2007, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2007, Valve Corporation, All rights reserved.
 //
-// Purpose: tracks VB allocations (and compressed/uncompressed vertex memory usage)
-//
-//===========================================================================//
+// Purpose: tracks VB allocations (and compressed/uncompressed vertex memory
+// usage)
 
 #ifndef IVBALLOCTRACKER_H
 #define IVBALLOCTRACKER_H
@@ -21,15 +20,15 @@
 #define VB_ALLOC_TRACKER_INTERFACE_VERSION "VBAllocTracker001"
 
 // Interface to the VB mem alloc tracker
-abstract_class IVBAllocTracker
-{
-public:
-	// This should be called wherever VertexBuffers are allocated
-	virtual void CountVB(   void * buffer, bool isDynamic, int bufferSize, int vertexSize, VertexFormat_t fmt ) = 0;
-	// This should be called wherever VertexBuffers are freed
-	virtual void UnCountVB( void * buffer ) = 0;
-	// Track mesh allocations (set this before an allocation, clear it after)
-	virtual void TrackMeshAllocations( const char * allocatorName ) = 0;
+abstract_class IVBAllocTracker {
+ public:
+  // This should be called wherever VertexBuffers are allocated
+  virtual void CountVB(void* buffer, bool isDynamic, int bufferSize,
+                       int vertexSize, VertexFormat_t fmt) = 0;
+  // This should be called wherever VertexBuffers are freed
+  virtual void UnCountVB(void* buffer) = 0;
+  // Track mesh allocations (set this before an allocation, clear it after)
+  virtual void TrackMeshAllocations(const char* allocatorName) = 0;
 };
 
 #endif IVBALLOCTRACKER_H

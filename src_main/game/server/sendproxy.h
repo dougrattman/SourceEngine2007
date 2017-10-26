@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: implements various common send proxies
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SENDPROXY_H
 #define SENDPROXY_H

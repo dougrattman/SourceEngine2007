@@ -2,7 +2,7 @@
 //
 // Purpose: CTF ChangeClass Zone.
 //
-//=============================================================================//
+
 #ifndef FUNC_CHANGECLASS_ZONE_H
 #define FUNC_CHANGECLASS_ZONE_H
 

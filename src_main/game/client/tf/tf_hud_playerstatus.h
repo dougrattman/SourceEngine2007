@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_HUD_PLAYERSTATUS_H
 #define TF_HUD_PLAYERSTATUS_H
@@ -54,17 +54,17 @@ protected:
 
 private:
 
-	float				m_flNextThink;
+	float 	m_flNextThink;
 
 	CTFClassImage		*m_pClassImage;
 	CTFImagePanel		*m_pSpyImage; // used when spies are disguised
 	CTFImagePanel		*m_pSpyOutlineImage;
 
-	int					m_nTeam;
-	int					m_nClass;
-	int					m_nDisguiseTeam;
-	int					m_nDisguiseClass;
-	int					m_nCloakLevel;
+	int 		m_nTeam;
+	int 		m_nClass;
+	int 		m_nDisguiseTeam;
+	int 		m_nDisguiseClass;
+	int 		m_nCloakLevel;
 };
 
 //-----------------------------------------------------------------------------
@@ -109,20 +109,20 @@ protected:
 	virtual void OnThink();
 
 protected:
-	float				m_flNextThink;
+	float 	m_flNextThink;
 
 private:
 	CTFHealthPanel		*m_pHealthImage;
 	CTFImagePanel		*m_pHealthBonusImage;
 	vgui::ImagePanel	*m_pHealthImageBG;
 
-	int					m_nHealth;
-	int					m_nMaxHealth;
+	int 		m_nHealth;
+	int 		m_nMaxHealth;
 
-	int					m_nBonusHealthOrigX;
-	int					m_nBonusHealthOrigY;
-	int					m_nBonusHealthOrigW;
-	int					m_nBonusHealthOrigH;
+	int 		m_nBonusHealthOrigX;
+	int 		m_nBonusHealthOrigY;
+	int 		m_nBonusHealthOrigW;
+	int 		m_nBonusHealthOrigH;
 
 	CPanelAnimationVar( int, m_nHealthBonusPosAdj, "HealthBonusPosAdj", "25" );
 	CPanelAnimationVar( float, m_flHealthDeathWarning, "HealthDeathWarning", "0.49" );

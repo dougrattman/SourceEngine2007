@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Used to fire events based on the orientation of a given entity.
 //
@@ -8,7 +8,7 @@
 //
 //			It also fires an output whenever the target's angles change.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "entityinput.h"
@@ -27,11 +27,11 @@ class CPointAngleSensor : public CPointEntity
 public:
 
 	bool KeyValue(const char *szKeyName, const char *szValue);
-	void Activate(void);
-	void Spawn(void);
-	void Think(void);
+	void Activate();
+	void Spawn();
+	void Think();
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 protected:
 

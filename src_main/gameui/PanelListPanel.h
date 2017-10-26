@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( PANELLISTPANEL_H )
 #define PANELLISTPANEL_H
 #ifdef _WIN32
@@ -69,11 +69,11 @@ private:
 	// list of the column headers
 	vgui::Dar<DATAITEM *>	_dataItems;
 	vgui::ScrollBar		*_vbar;
-	vgui::Panel			*_embedded;
+	vgui::Panel *_embedded;
 
-	int					_tableStartX;
-	int					_tableStartY;
-	int					_sliderYOffset;
+	int 		_tableStartX;
+	int 		_tableStartY;
+	int 		_sliderYOffset;
 };
 
 #endif // PANELLISTPANEL_H

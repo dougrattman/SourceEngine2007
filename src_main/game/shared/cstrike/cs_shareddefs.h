@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Shared CS definitions.
 //
-//=============================================================================//
+
 
 #ifndef CS_SHAREDDEFS_H
 #define CS_SHAREDDEFS_H
@@ -19,20 +19,20 @@
 #include <game/client/iviewport.h>
 
 // CS-specific viewport panels
-#define PANEL_CLASS_CT				"class_ct"
-#define PANEL_CLASS_TER				"class_ter"
+#define PANEL_CLASS_CT 	"class_ct"
+#define PANEL_CLASS_TER 	"class_ter"
 
 // Buy sub menus
-#define MENU_PISTOL					"menu_pistol"
-#define MENU_SHOTGUN				"menu_shotgun"
-#define MENU_RIFLE					"menu_rifle"
-#define MENU_SMG					"menu_smg"
-#define MENU_MACHINEGUN				"menu_mg"
-#define MENU_EQUIPMENT				"menu_equip"
+#define MENU_PISTOL 		"menu_pistol"
+#define MENU_SHOTGUN 	"menu_shotgun"
+#define MENU_RIFLE 		"menu_rifle"
+#define MENU_SMG 		"menu_smg"
+#define MENU_MACHINEGUN 	"menu_mg"
+#define MENU_EQUIPMENT 	"menu_equip"
 
 
-#define MAX_HOSTAGES				12
-#define MAX_HOSTAGE_RESCUES			4
+#define MAX_HOSTAGES 	12
+#define MAX_HOSTAGE_RESCUES 4
 
 
 template< class T >
@@ -55,12 +55,12 @@ extern CUtlVectorInitialized< const char * > TerroristPlayerModels;
 #define ADDON_FLASHBANG_2		0x002
 #define ADDON_HE_GRENADE		0x004
 #define ADDON_SMOKE_GRENADE		0x008
-#define ADDON_C4				0x010
-#define ADDON_DEFUSEKIT			0x020
-#define ADDON_PRIMARY			0x040
-#define ADDON_PISTOL			0x080
-#define ADDON_PISTOL2			0x100
-#define NUM_ADDON_BITS			9
+#define ADDON_C4 	0x010
+#define ADDON_DEFUSEKIT 0x020
+#define ADDON_PRIMARY 0x040
+#define ADDON_PISTOL 0x080
+#define ADDON_PISTOL2 0x100
+#define NUM_ADDON_BITS 9
 
 
 // Indices of each weapon slot.
@@ -68,16 +68,16 @@ extern CUtlVectorInitialized< const char * > TerroristPlayerModels;
 #define WEAPON_SLOT_PISTOL		1	// (secondary slot)
 #define WEAPON_SLOT_KNIFE		2
 #define WEAPON_SLOT_GRENADES	3
-#define WEAPON_SLOT_C4			4
+#define WEAPON_SLOT_C4 4
 
 #define WEAPON_SLOT_FIRST		0
 #define WEAPON_SLOT_LAST		4
 
 
 // CS Team IDs.
-#define TEAM_TERRORIST			2
-#define	TEAM_CT					3
-#define TEAM_MAXCOUNT			4	// update this if we ever add teams (unlikely)
+#define TEAM_TERRORIST 2
+#define	TEAM_CT 		3
+#define TEAM_MAXCOUNT 4	// update this if we ever add teams (unlikely)
 
 
 //--------------
@@ -97,15 +97,15 @@ enum CSPlayerState
 	// This is the state you're in when you first enter the server.
 	// It's switching between intro cameras every few seconds, and there's a level info 
 	// screen up.
-	STATE_WELCOME,			// Show the level intro screen.
+	STATE_WELCOME, // Show the level intro screen.
 	
 	// During these states, you can either be a new player waiting to join, or
 	// you can be a live player in the game who wants to change teams.
 	// Either way, you can't move while choosing team or class (or while any menu is up).
-	STATE_PICKINGTEAM,			// Choosing team.
-	STATE_PICKINGCLASS,			// Choosing class.
+	STATE_PICKINGTEAM, // Choosing team.
+	STATE_PICKINGCLASS, // Choosing class.
 	
-	STATE_DEATH_ANIM,			// Playing death anim, waiting for that to finish.
+	STATE_DEATH_ANIM, // Playing death anim, waiting for that to finish.
 	STATE_DEATH_WAIT_FOR_KEY,	// Done playing death anim. Waiting for keypress to go into observer mode.
 	STATE_OBSERVER_MODE,		// Noclipping around, watching players, etc.
 	NUM_PLAYER_STATES

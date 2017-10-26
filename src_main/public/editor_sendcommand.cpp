@@ -1,18 +1,18 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements an interface to the map editor for the execution of
 //			editor shell commands from another application. Commands allow the
 //			creation and deletion of entities, AI nodes, and AI node connections.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
 
 #if !defined(_X360) && defined(_WIN32)
-#include <windows.h>
+#include "winlite.h"
 #endif
-#include <stdio.h>
+#include <cstdio>
 #include "editor_sendcommand.h"
 #include "tier1/strtools.h"
 #include "mathlib/vector.h"

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #endif
 
 #include "mathlib/mathlib.h"
-#include "interface.h"
+#include "tier1/interface.h"
 #include "iclientunknown.h"
 #include "client_render_handle.h"
 #include "engine/ivmodelrender.h"
@@ -70,12 +70,12 @@ public:
 	virtual IClientUnknown*	GetIClientUnknown() = 0;
 
 	// Data accessors
-	virtual Vector const&			GetRenderOrigin( void ) = 0;
-	virtual QAngle const&			GetRenderAngles( void ) = 0;
-	virtual bool					ShouldDraw( void ) = 0;
-	virtual bool					IsTransparent( void ) = 0;
-	virtual bool					UsesPowerOfTwoFrameBufferTexture() = 0;
-	virtual bool					UsesFullFrameBufferTexture() = 0;
+	virtual Vector const& GetRenderOrigin( void ) = 0;
+	virtual QAngle const& GetRenderAngles( void ) = 0;
+	virtual bool 		ShouldDraw( void ) = 0;
+	virtual bool 		IsTransparent( void ) = 0;
+	virtual bool 		UsesPowerOfTwoFrameBufferTexture() = 0;
+	virtual bool 		UsesFullFrameBufferTexture() = 0;
 
 	virtual ClientShadowHandle_t	GetShadowHandle() const = 0;
 
@@ -83,8 +83,8 @@ public:
 	virtual ClientRenderHandle_t&	RenderHandle() = 0;
 
 	// Render baby!
-	virtual const model_t*			GetModel( ) const = 0;
-	virtual int						DrawModel( int flags ) = 0;
+	virtual const model_t* GetModel( ) const = 0;
+	virtual int  DrawModel( int flags ) = 0;
 
 	// Get the body parameter
 	virtual int		GetBody() = 0;
@@ -181,15 +181,15 @@ public:
 		m_hRenderHandle = INVALID_CLIENT_RENDER_HANDLE;
 	}
 
-	virtual const Vector &			GetRenderOrigin( void ) = 0;
-	virtual const QAngle &			GetRenderAngles( void ) = 0;
+	virtual const Vector & GetRenderOrigin( void ) = 0;
+	virtual const QAngle & GetRenderAngles( void ) = 0;
 	virtual const matrix3x4_t &		RenderableToWorldTransform() = 0;
-	virtual bool					ShouldDraw( void ) = 0;
-	virtual bool					IsTransparent( void ) = 0;
-	virtual bool					IsTwoPass( void ) { return false; }
-	virtual void					OnThreadedDrawSetup() {}
-	virtual bool					UsesPowerOfTwoFrameBufferTexture( void ) { return false; }
-	virtual bool					UsesFullFrameBufferTexture( void ) { return false; }
+	virtual bool 		ShouldDraw( void ) = 0;
+	virtual bool 		IsTransparent( void ) = 0;
+	virtual bool 		IsTwoPass( void ) { return false; }
+	virtual void 		OnThreadedDrawSetup() {}
+	virtual bool 		UsesPowerOfTwoFrameBufferTexture( void ) { return false; }
+	virtual bool 		UsesFullFrameBufferTexture( void ) { return false; }
 
 	virtual ClientShadowHandle_t	GetShadowHandle() const
 	{
@@ -201,20 +201,20 @@ public:
 		return m_hRenderHandle;
 	}
 
-	virtual int						GetBody() { return 0; }
-	virtual int						GetSkin() { return 0; }
-	virtual bool					UsesFlexDelayedWeights() { return false; }
+	virtual int  GetBody() { return 0; }
+	virtual int  GetSkin() { return 0; }
+	virtual bool 		UsesFlexDelayedWeights() { return false; }
 
-	virtual const model_t*			GetModel( ) const		{ return NULL; }
-	virtual int						DrawModel( int flags )	{ return 0; }
-	virtual void					ComputeFxBlend( )		{ return; }
-	virtual int						GetFxBlend( )			{ return 255; }
-	virtual bool					LODTest()				{ return true; }
-	virtual bool					SetupBones( matrix3x4_t *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime )	{ return true; }
-	virtual void					SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights, float *pFlexDelayedWeights ) {}
-	virtual void					DoAnimationEvents( void )						{}
-	virtual IPVSNotify*				GetPVSNotifyInterface() { return NULL; }
-	virtual void					GetRenderBoundsWorldspace( Vector& absMins, Vector& absMaxs ) { DefaultRenderBoundsWorldspace( this, absMins, absMaxs ); }
+	virtual const model_t* GetModel( ) const		{ return NULL; }
+	virtual int  DrawModel( int flags )	{ return 0; }
+	virtual void 		ComputeFxBlend( )		{ return; }
+	virtual int  GetFxBlend( ) { return 255; }
+	virtual bool 		LODTest() 	{ return true; }
+	virtual bool 		SetupBones( matrix3x4_t *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime )	{ return true; }
+	virtual void 		SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights, float *pFlexDelayedWeights ) {}
+	virtual void 		DoAnimationEvents( void )  {}
+	virtual IPVSNotify* 	GetPVSNotifyInterface() { return NULL; }
+	virtual void 		GetRenderBoundsWorldspace( Vector& absMins, Vector& absMaxs ) { DefaultRenderBoundsWorldspace( this, absMins, absMaxs ); }
 
 	// Determine the color modulation amount
 	virtual void	GetColorModulation( float* color )
@@ -230,7 +230,7 @@ public:
 	}
 
 	// These methods return true if we want a per-renderable shadow cast direction + distance
-	virtual bool	GetShadowCastDistance( float *pDist, ShadowType_t shadowType ) const			{ return false; }
+	virtual bool	GetShadowCastDistance( float *pDist, ShadowType_t shadowType ) const { return false; }
 	virtual bool	GetShadowCastDirection( Vector *pDirection, ShadowType_t shadowType ) const	{ return false; }
 
 	virtual void	GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType )
@@ -238,13 +238,13 @@ public:
 		GetRenderBounds( mins, maxs );
 	}
 
-	virtual bool IsShadowDirty( )			     { return false; }
+	virtual bool IsShadowDirty( )      { return false; }
 	virtual void MarkShadowDirty( bool bDirty )  {}
 	virtual IClientRenderable *GetShadowParent() { return NULL; }
 	virtual IClientRenderable *FirstShadowChild(){ return NULL; }
 	virtual IClientRenderable *NextShadowPeer()  { return NULL; }
 	virtual ShadowType_t ShadowCastType()		 { return SHADOWS_NONE; }
-	virtual void CreateModelInstance()			 {}
+	virtual void CreateModelInstance()  {}
 	virtual ModelInstanceHandle_t GetModelInstance() { return MODEL_INSTANCE_INVALID; }
 
 	// Attachments
@@ -267,7 +267,7 @@ public:
 	virtual IClientRenderable*	GetClientRenderable()	{ return this; }
 	virtual IClientNetworkable*	GetClientNetworkable()	{ return 0; }
 	virtual IClientEntity*		GetIClientEntity()		{ return 0; }
-	virtual C_BaseEntity*		GetBaseEntity()			{ return 0; }
+	virtual C_BaseEntity*		GetBaseEntity() { return 0; }
 	virtual IClientThinkable*	GetClientThinkable()	{ return 0; }
 
 

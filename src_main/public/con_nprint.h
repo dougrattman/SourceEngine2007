@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Debug overlay / notfication printing 
 //
-//=============================================================================//
+
 
 #ifndef CON_NPRINT_H
 #define CON_NPRINT_H
@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 typedef struct con_nprint_s
 {
-	int		index;			// Row #
+	int		index; // Row #
 	float	time_to_live;	// # of seconds before it disappears. -1 means to display for 1 frame then go away.
 	float	color[ 3 ];		// RGB colors ( 0.0 -> 1.0 scale )
 	bool	fixed_width_font;

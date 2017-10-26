@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Author: Michael Booth (mike@turtlerockstudios.com), 2003
 // Author: Matthew D. Campbell (matt@turtlerockstudios.com), 2003

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: PDA Weapon
 //
@@ -38,14 +38,14 @@ public:
 	virtual void	HideThink( void );
 	virtual bool	Holster( CBaseCombatWeapon *pSwitchingTo );
 
-	virtual int		GetWeaponID( void ) const						{ return TF_WEAPON_INVIS; }
-	virtual bool	ShouldDrawCrosshair( void )						{ return false; }
-	virtual bool	HasPrimaryAmmo()								{ return true; }
-	virtual bool	CanBeSelected()									{ return true; }
+	virtual int		GetWeaponID( void ) const  { return TF_WEAPON_INVIS; }
+	virtual bool	ShouldDrawCrosshair( void )  { return false; }
+	virtual bool	HasPrimaryAmmo()  		{ return true; }
+	virtual bool	CanBeSelected()   { return true; }
 
-	virtual bool	VisibleInWeaponSelection( void )				{ return false; }
+	virtual bool	VisibleInWeaponSelection( void ) 	{ return false; }
 
-	virtual bool	ShouldShowControlPanels( void )					{ return true; }
+	virtual bool	ShouldShowControlPanels( void ) 		{ return true; }
 
 	virtual void	SetWeaponVisible( bool visible );
 

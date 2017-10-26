@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ENV_ALYXEMP_SHARED_H
 #define ENV_ALYXEMP_SHARED_H
@@ -47,12 +47,12 @@ public:
 private:
 
 	void	SetTargetEntity( const char *szEntityName );
-	CHandle<CBeam>			m_hBeam;
+	CHandle<CBeam> m_hBeam;
 	CHandle<CBaseEntity>	m_hTargetEnt;
-	string_t				m_strTargetName;
-	int						m_nType;			// What type of effect this is (small, large)
-	int						m_iState;
-	bool					m_bAutomated;
+	string_t 	m_strTargetName;
+	int  m_nType; // What type of effect this is (small, large)
+	int  m_iState;
+	bool 		m_bAutomated;
 
 	CNetworkVar( int, m_nState );
 	CNetworkVar( float, m_flDuration );

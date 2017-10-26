@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef CS_WEAPON_PARSE_H
 #define CS_WEAPON_PARSE_H
@@ -125,11 +125,11 @@ public:
 
 public:
 
-	float m_flMaxSpeed;			// How fast the player can run while this is his primary weapon.
+	float m_flMaxSpeed; // How fast the player can run while this is his primary weapon.
 
 	CSWeaponType m_WeaponType;
 
-	int m_iTeam;				// Which team can have this weapon. TEAM_UNASSIGNED if both can have it.
+	int m_iTeam; 	// Which team can have this weapon. TEAM_UNASSIGNED if both can have it.
 	float m_flBotAudibleRange;	// How far away a bot can hear this weapon.
 	float m_flArmorRatio;
 
@@ -139,8 +139,8 @@ public:
 	bool  m_bCanUseWithShield;
 	
 	char m_WrongTeamMsg[32];	// Reference to a string describing the error if someone tries to buy
-								// this weapon but they're on the wrong team to have it.
-								// Zero-length if no specific message for this weapon.
+  		// this weapon but they're on the wrong team to have it.
+  		// Zero-length if no specific message for this weapon.
 
 	char m_szAnimExtension[16];
 	char m_szShieldViewModel[64];

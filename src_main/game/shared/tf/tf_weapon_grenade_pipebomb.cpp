@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF Pipebomb Grenade.
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "tf_weaponbase.h"
 #include "tf_gamerules.h"
@@ -21,7 +21,7 @@
 #include "items.h"
 #include "tf_weaponbase_grenadeproj.h"
 #include "soundent.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "IEffects.h"
 #include "props.h"
 #include "func_respawnroom.h"

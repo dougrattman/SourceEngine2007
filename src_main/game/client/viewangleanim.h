@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
 
-#include "utlvector.h"
+
+#include "tier1/UtlVector.h"
 
 #define VIEWANIM_RELATIVE (1<<0)	// angles in keyframe are relative, add anim to current angles
 #define VIEWANIM_IGNORE_X (1<<1)	// ignore the x component of this animation

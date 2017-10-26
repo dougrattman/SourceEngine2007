@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MAPENTITIES_H
 #define MAPENTITIES_H
@@ -37,8 +37,8 @@ void MapEntity_PrecacheEntity( const char *pEntData, int &nStringSize );
 struct HierarchicalSpawn_t
 {
 	CBaseEntity *m_pEntity;
-	int			m_nDepth;
-	CBaseEntity	*m_pDeferredParent;			// attachment parents can't be set until the parents are spawned
+	int m_nDepth;
+	CBaseEntity	*m_pDeferredParent; // attachment parents can't be set until the parents are spawned
 	const char	*m_pDeferredParentAttachment; // so defer setting them up until the second pass
 };
 

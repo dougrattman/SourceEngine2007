@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef FIRE_SMOKE_H
 #define FIRE_SMOKE_H
 #pragma once
@@ -44,9 +44,9 @@ public:
 //==================================================
 
 //NOTENOTE: Mirrored in cl_dll/c_fire_smoke.cpp
-#define	bitsFIRESMOKE_SMOKE					0x00000002
+#define	bitsFIRESMOKE_SMOKE 		0x00000002
 #define	bitsFIRESMOKE_SMOKE_COLLISION		0x00000004
-#define	bitsFIRESMOKE_GLOW					0x00000008
+#define	bitsFIRESMOKE_GLOW 		0x00000008
 #define	bitsFIRESMOKE_VISIBLE_FROM_ABOVE	0x00000010
 
 class CFireSmoke : public CBaseFire

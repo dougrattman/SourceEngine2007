@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Game rules for Portal.
 //
-//=============================================================================//
+
 
 #ifdef PORTAL_MP
 
@@ -70,20 +70,20 @@ private:
 	CPortalGameRules();
 	virtual ~CPortalGameRules() {}
 
-	virtual void			Think( void );
+	virtual void Think( void );
 
-	virtual bool			ClientCommand( CBaseEntity *pEdict, const CCommand &args );
-	virtual void			PlayerSpawn( CBasePlayer *pPlayer );
+	virtual bool ClientCommand( CBaseEntity *pEdict, const CCommand &args );
+	virtual void PlayerSpawn( CBasePlayer *pPlayer );
 
-	virtual void			InitDefaultAIRelationships( void );
+	virtual void InitDefaultAIRelationships( void );
 	virtual const char*		AIClassText(int classType);
 	virtual const char *GetGameDescription( void ) { return "Portal"; }
 
 	// Ammo
-	virtual void			PlayerThink( CBasePlayer *pPlayer );
-	virtual float			GetAmmoDamage( CBaseEntity *pAttacker, CBaseEntity *pVictim, int nAmmoType );
+	virtual void PlayerThink( CBasePlayer *pPlayer );
+	virtual float GetAmmoDamage( CBaseEntity *pAttacker, CBaseEntity *pVictim, int nAmmoType );
 
-	virtual bool			ShouldBurningPropsEmitLight();
+	virtual bool ShouldBurningPropsEmitLight();
 	
 public:
 
@@ -93,7 +93,7 @@ public:
 
 private:
 
-	int						DefaultFOV( void ) { return 75; }
+	int  DefaultFOV( void ) { return 75; }
 #endif
 };
 

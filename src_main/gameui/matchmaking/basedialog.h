@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: All matchmaking dialogs inherit from this
 //
-//=============================================================================//
+
 
 #ifndef BASEDIALOG_H
 #define BASEDIALOG_H
@@ -13,7 +13,7 @@
 #include "dialogmenu.h"
 #include "vgui_controls/Label.h"
 #include "vgui_controls/KeyRepeat.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "BasePanel.h"
 
 #if !defined( _X360 )
@@ -42,7 +42,7 @@ public:
 		const char *pString = pResourceData->GetString( "PropertyString", NULL );
 		if ( pString )
 		{
-			Q_strncpy( m_szPropertyString, pString, sizeof( m_szPropertyString ) );
+ Q_strncpy( m_szPropertyString, pString, sizeof( m_szPropertyString ) );
 		}
 	}
 
@@ -78,15 +78,15 @@ public:
 	virtual void		HandleKeyRepeated( vgui::KeyCode code );
 
 protected:
-	int				m_nBorderWidth;
-	int				m_nMinWide;
+	int 	m_nBorderWidth;
+	int 	m_nMinWide;
 
 	CDialogMenu		m_Menu;
 	vgui::Label		*m_pTitle;
 	vgui::Panel		*m_pParent;
 
 	KeyValues		*m_pFooterInfo;
-	int				m_nButtonGap;
+	int 	m_nButtonGap;
 
 	vgui::CKeyRepeatHandler	m_KeyRepeat;
 };

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PORTAL_UTIL_SHARED_H
 #define PORTAL_UTIL_SHARED_H
@@ -51,7 +51,7 @@ bool UTIL_DidTraceTouchPortals ( const Ray_t& ray, const trace_t& trace, CProp_P
 
 // Version of the TraceEntity functions which trace through portals
 void UTIL_Portal_TraceEntity( CBaseEntity *pEntity, const Vector &vecAbsStart, const Vector &vecAbsEnd, 
-							 unsigned int mask, ITraceFilter *pFilter, trace_t *ptr );
+  	 unsigned int mask, ITraceFilter *pFilter, trace_t *ptr );
 
 void UTIL_Portal_PointTransform( const VMatrix matThisToLinked, const Vector &ptSource, Vector &ptTransformed );
 void UTIL_Portal_VectorTransform( const VMatrix matThisToLinked, const Vector &vSource, Vector &vTransformed );

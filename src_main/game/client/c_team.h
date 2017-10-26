@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side CTeam class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_TEAM_H
 #define C_TEAM_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "shareddefs.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "client_thinklist.h"
 
 
@@ -25,8 +25,8 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
-					C_Team();
-	virtual			~C_Team();
+ 		C_Team();
+	virtual ~C_Team();
 
 	virtual void	PreDataUpdate( DataUpdateType_t updateType );
 
@@ -46,7 +46,7 @@ public:
 
 	int		GetTeamNumber() const;
 
-	int		GetRoundsWon(void) { return m_iRoundsWon; }
+	int		GetRoundsWon() { return m_iRoundsWon; }
 
 	void	RemoveAllPlayers();
 
@@ -54,7 +54,7 @@ public:
 // IClientThinkable overrides.
 public:
 
-	virtual	void				ClientThink();
+	virtual	void 	ClientThink();
 
 
 public:

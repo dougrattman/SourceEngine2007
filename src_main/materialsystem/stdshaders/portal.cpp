@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
 #include "portal_vs20.inc"
 #include "portal_ps20.inc"
 #include "portal_ps20b.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "cpp_shader_constant_register_map.h"
 
 

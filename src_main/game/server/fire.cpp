@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //---------------------------------------------------------
 //---------------------------------------------------------
 #include "cbase.h"
@@ -80,7 +80,7 @@ class CFire : public CBaseEntity
 public:
 	DECLARE_CLASS( CFire, CBaseEntity );
 	
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	CFire( void );
 	

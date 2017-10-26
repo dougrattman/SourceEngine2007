@@ -370,7 +370,7 @@ void CEnvMicrophone::SetSpeakerName( string_t iszSpeakerName )
 {
 	m_iszSpeakerName = iszSpeakerName;
 
-	// Set the speaker to null. This will force it to find the speaker next time a sound is routed.
+	// Set the speaker to 0. This will force it to find the speaker next time a sound is routed.
 	m_hSpeaker = NULL;
 	ActivateSpeaker();
 }

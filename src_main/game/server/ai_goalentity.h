@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_GOALENTITY_H
 #define AI_GOALENTITY_H
 
 #include "ai_basenpc.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 #if defined( _WIN32 )
 #pragma once
@@ -19,12 +19,12 @@
 // CAI_GoalEntity
 //
 // Purpose: Serves as the base class for all entities the designer may place
-// 			that establish an NPC goal. Provides standard input, output &
-//			fields common to all goals.
+//  that establish an NPC goal. Provides standard input, output &
+// fields common to all goals.
 //
 
 class CAI_GoalEntity : public CBaseEntity,
-					   public IEntityListener
+ 		   public IEntityListener
 {
 	DECLARE_CLASS( CAI_GoalEntity, CBaseEntity );
 public:
@@ -51,15 +51,15 @@ public:
 	
 	// Goal entities can become Dormant if they're left behind on previous maps.
 	// Transitioning back to the map with cause a dormant goal entity to reactivate itself.
-	void			EnterDormant( void );
-	void			ExitDormant( void );
+	void EnterDormant( void );
+	void ExitDormant( void );
 
-	bool 			IsActive();
+	bool  IsActive();
 	
-	int 			NumActors();
+	int  NumActors();
 	CAI_BaseNPC *	GetActor( int iActor = 0 );
 
-	void			SetGoalEntity( CBaseEntity *pGoalEntity );
+	void SetGoalEntity( CBaseEntity *pGoalEntity );
 	CBaseEntity *	GetGoalEntity();
 	const char *	GetGoalEntityName();
 
@@ -84,9 +84,9 @@ protected:
 private:
 	enum Flags_t
 	{
-		ACTIVE			= 0x01,
+		ACTIVE = 0x01,
 		RESOLVED_NAME 	= 0x02,
-		DORMANT			= 0x04,
+		DORMANT = 0x04,
 	};
 	
 	enum SearchType_t	
@@ -100,15 +100,15 @@ private:
 	void ResolveNames();
 	
 	// From Worldcraft
-	string_t				m_iszActor;
-	string_t 				m_iszGoal;
-	bool					m_fStartActive;
-	SearchType_t			m_SearchType;
-	string_t				m_iszConceptModifiers;
+	string_t 	m_iszActor;
+	string_t  	m_iszGoal;
+	bool 		m_fStartActive;
+	SearchType_t m_SearchType;
+	string_t 	m_iszConceptModifiers;
 	
 	CUtlVector<AIHANDLE>	m_actors;
-	EHANDLE					m_hGoalEntity;
-	unsigned 				m_flags;
+	EHANDLE 		m_hGoalEntity;
+	unsigned  	m_flags;
 	
 	
 protected:

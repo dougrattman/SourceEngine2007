@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <stdarg.h>
-#include <stdio.h>
+
+#include <cstdarg>
+#include <cstdio>
 
 #include <vgui/IInput.h>
 #include <vgui/IPanel.h>
@@ -14,7 +14,7 @@
 #include <vgui/ISystem.h>
 #include <vgui/IVGui.h>
 #include <vgui/KeyCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/FocusNavGroup.h>
 #include <vgui_controls/Image.h>

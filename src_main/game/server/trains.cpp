@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Spawn, think, and touch functions for trains, etc.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_basenpc.h"

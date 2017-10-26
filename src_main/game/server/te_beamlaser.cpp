@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Beam used for Laser sights. Fades out when it's perpendicular to the viewpoint.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "basetempentity.h"
 #include "te_basebeam.h"

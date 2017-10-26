@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( VGUICENTERPRINT_H )
 #define VGUICENTERPRINT_H
 #ifdef _WIN32
@@ -30,7 +30,7 @@ private:
 	CCenterStringLabel	*vguiCenterString;
 
 public:
-						CCenterPrint( void );
+  CCenterPrint( void );
 
 	virtual void		Create( vgui::VPANEL parent );
 	virtual void		Destroy( void );

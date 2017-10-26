@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that propagates general data needed by clients for every player.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYER_RESOURCE_H
 #define PLAYER_RESOURCE_H
@@ -24,7 +24,7 @@ public:
 	virtual	int	 ObjectCaps( void ) { return BaseClass::ObjectCaps() | FCAP_DONT_SAVE; }
 	virtual void ResourceThink( void );
 	virtual void UpdatePlayerData( void );
-	virtual int  UpdateTransmitState(void);
+	virtual int  UpdateTransmitState();
 
 protected:
 	// Data for each player that's propagated to all clients

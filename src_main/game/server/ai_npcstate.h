@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_NPCSTATE_H
 #define AI_NPCSTATE_H
@@ -21,7 +21,7 @@ enum NPC_STATE
 	NPC_STATE_COMBAT,
 	NPC_STATE_SCRIPT,
 	NPC_STATE_PLAYDEAD,
-	NPC_STATE_PRONE,				// When in clutches of barnacle
+	NPC_STATE_PRONE, 	// When in clutches of barnacle
 	NPC_STATE_DEAD
 
 };

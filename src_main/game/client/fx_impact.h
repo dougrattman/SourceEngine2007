@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FX_IMPACT_H
 #define FX_IMPACT_H
@@ -61,9 +61,9 @@ public:
 	bool Hit( void ) const { return m_bHit; }
 
 private:
-	Ray_t			m_rayShot;
-	int				m_iDamageType;
-	bool			m_bHit;
+	Ray_t m_rayShot;
+	int 	m_iDamageType;
+	bool m_bHit;
 };
 
 #endif // FX_IMPACT_H

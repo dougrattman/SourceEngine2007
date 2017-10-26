@@ -91,9 +91,9 @@ enum PostProcessingCondition {
 struct PostProcessingPass {
 	PostProcessingCondition ppp_test;
 	ConVar const *cvar_to_test;
-	char const *material_name;								// terminate list with null
+	char const *material_name;								// terminate list with 0
 	char const *dest_rendering_target;
-	char const *src_rendering_target;						// can be null. needed for source scaling
+	char const *src_rendering_target;						// can be 0. needed for source scaling
 	int xdest_scale,ydest_scale;							// allows scaling down
 	int xsrc_scale,ysrc_scale;								// allows scaling down
 	CMaterialReference m_mat_ref;							// so we don't have to keep searching
@@ -326,45 +326,6 @@ static void SetRenderTargetAndViewPort(ITexture *rt)
 	CMatRenderContextPtr pRenderContext( materials );
 	pRenderContext->SetRenderTarget(rt);
 	pRenderContext->Viewport(0,0,rt->GetActualWidth(),rt->GetActualHeight());
-}
-
-#define FILTER_KERNEL_SLOP 20
-
-// Note carefully about the downsampling: the first downsampling samples from the full rendertarget
-// down to a temp. When doing this sampling, the texture source clamping will take care of the out
-// of bounds sampling done because of the filter kernels's width. However, on any of the subsequent
-// sampling operations, we will be sampling from a partially filled render target. So, texture
-// coordinate clamping cannot help us here. So, we need to always render a few more pixels to the
-// destination than we actually intend to, so as to replicate the border pixels so that garbage
-// pixels do not get sucked into the sampling. To deal with this, we always add FILTER_KERNEL_SLOP
-// to our widths/heights if there is room for them in the destination.
-static void DrawScreenSpaceRectangleWithSlop( 
-	ITexture *dest_rt,
-	IMaterial *pMaterial,
-	int destx, int desty,
-	int width, int height,
-	float src_texture_x0, float src_texture_y0,			// which texel you want to appear at
-	// destx/y
-	float src_texture_x1, float src_texture_y1,			// which texel you want to appear at
-	// destx+width-1, desty+height-1
-	int src_texture_width, int src_texture_height		// needed for fixup
-	)
-{
-	// add slop
-	int slopwidth = width + FILTER_KERNEL_SLOP; //min(dest_rt->GetActualWidth()-destx,width+FILTER_KERNEL_SLOP);
-	int slopheight = height + FILTER_KERNEL_SLOP; //min(dest_rt->GetActualHeight()-desty,height+FILTER_KERNEL_SLOP);
-
-	// adjust coordinates for slop
-	src_texture_x1 = FLerp( src_texture_x0, src_texture_x1, destx, destx + width - 1, destx + slopwidth - 1 );
-	src_texture_y1 = FLerp( src_texture_y0, src_texture_y1, desty, desty + height - 1, desty + slopheight - 1 );
-	width = slopwidth;
-	height = slopheight;
-
-	CMatRenderContextPtr pRenderContext( materials );
-	pRenderContext->DrawScreenSpaceRectangle( pMaterial, destx, desty, width, height,
-											  src_texture_x0, src_texture_y0,
-											  src_texture_x1, src_texture_y1,
-											  src_texture_width, src_texture_height );
 }
 
 enum Histogram_entry_state_t
@@ -1598,10 +1559,6 @@ void DoEnginePostProcessing( int x, int y, int w, int h, bool bFlashlightIsOn, b
 {
 	CMatRenderContextPtr pRenderContext( materials );
 
-#if defined( _X360 )
-	pRenderContext->PushVertexShaderGPRAllocation( 16 ); //max out pixel shader threads
-#endif
-
 	if ( r_queued_post_processing.GetInt() )
 	{
 		ICallQueue *pCallQueue = pRenderContext->GetCallQueue();
@@ -1644,49 +1601,19 @@ void DoEnginePostProcessing( int x, int y, int w, int h, bool bFlashlightIsOn, b
 			// Set software-AA on by default for 360
 			if ( mat_software_aa_strength.GetFloat() == -1.0f )
 			{
-				if ( IsX360() )
-				{
-					mat_software_aa_strength.SetValue( 1.0f );
-					if ( g_pMaterialSystem->GetCurrentConfigForVideoCard().m_VideoMode.m_Height > 480 )
-					{
-						mat_software_aa_quality.SetValue( 0 );
-					}
-					else
-					{
-						// For standard-def, we have fewer pixels so we can afford 'high quality' mode (5->9 taps/pixel)
-						mat_software_aa_quality.SetValue( 1 );
-					}
-				}
-				else
-				{
-					mat_software_aa_strength.SetValue( 0.0f );
-				}
+        mat_software_aa_strength.SetValue(0.0f);
 			}
 
 			// Same trick for setting up the vgui aa strength
 			if ( mat_software_aa_strength_vgui.GetFloat() == -1.0f )
 			{
-				if ( IsX360() && (g_pMaterialSystem->GetCurrentConfigForVideoCard().m_VideoMode.m_Height == 720) )
-				{
-					mat_software_aa_strength_vgui.SetValue( 2.0f );
-				}
-				else
-				{
-					mat_software_aa_strength_vgui.SetValue( 1.0f );
-				}
+        mat_software_aa_strength_vgui.SetValue(1.0f);
 			}
 
 			float flAAStrength;
 
 			// We do a second AA blur pass over the TF intro menus. use mat_software_aa_strength_vgui there instead
-			if ( IsX360() && bPostVGui )
-			{
-				flAAStrength = mat_software_aa_strength_vgui.GetFloat();
-			}
-			else
-			{
-				flAAStrength = mat_software_aa_strength.GetFloat();
-			}
+      flAAStrength = mat_software_aa_strength.GetFloat();
 
 			// bloom, software-AA and colour-correction (applied in 1 pass, after generation of the bloom texture)
 			bool  bPerformSoftwareAA	= ( engine->GetDXSupportLevel() >= 90 ) && ( flAAStrength != 0.0f );
@@ -1881,10 +1808,6 @@ void DoEnginePostProcessing( int x, int y, int w, int h, bool bFlashlightIsOn, b
 			break;
 		}
 	}
-
-#if defined( _X360 )
-	pRenderContext->PopVertexShaderGPRAllocation();
-#endif
 }
 
 // Motion Blur Material Proxy =========================================================================================

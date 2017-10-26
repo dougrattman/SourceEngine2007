@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 /*
 Entity Data Descriptions
 
@@ -80,7 +80,7 @@ OUTPUTS:
 #include "eventqueue.h"
 #include "entityinput.h"
 #include "entityoutput.h"
-#include "mempool.h"
+#include "tier1/mempool.h"
 #include "tier1/strtools.h"
 #include "datacache/imdlcache.h"
 #include "env_debughistory.h"
@@ -441,7 +441,7 @@ void CBaseEntityOutput::DeleteAllElements( void )
 	m_ActionList = NULL;
 	while (pNext)
 	{
-		register CEventAction *strikeThis = pNext;
+		CEventAction *strikeThis = pNext;
 		pNext = pNext->m_pNext;
 		delete strikeThis;
 	}
@@ -1241,7 +1241,7 @@ bool variant_t::Convert( fieldtype_t newType )
 	}
 
 	//
-	// Converting to a null value is easy.
+	// Converting to a 0 value is easy.
 	//
 	if ( newType == FIELD_VOID )
 	{
@@ -1475,7 +1475,7 @@ const char *variant_t::ToString( void ) const
 
 	case FIELD_EHANDLE:
 		{
-			const char *pszName = (Entity()) ? STRING(Entity()->GetEntityName()) : "<<null entity>>";
+			const char *pszName = (Entity()) ? STRING(Entity()->GetEntityName()) : "<<0 entity>>";
 			Q_strncpy( szBuf, pszName, 512 );
 			return (szBuf);
 		}

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains entities for implementing/changing game rules dynamically within each BSP.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "datamap.h"

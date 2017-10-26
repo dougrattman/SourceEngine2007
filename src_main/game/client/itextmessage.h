@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( ITEXTMESSAGE_H )
 #define ITEXTMESSAGE_H
 #ifdef _WIN32
@@ -26,7 +26,7 @@ public:
 	virtual void		AddChar( int r, int g, int b, int a, wchar_t ch ) = 0;
 
 	virtual void		GetLength( int *wide, int *tall, const char *string ) = 0;
-	virtual int			GetFontInfo( FONTABC *pABCs, vgui::HFont hFont ) = 0;
+	virtual int GetFontInfo( FONTABC *pABCs, vgui::HFont hFont ) = 0;
 
 	virtual void		SetFont( vgui::HFont hCustomFont ) = 0;
 	virtual void		SetDefaultFont( void ) = 0;

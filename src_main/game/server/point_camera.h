@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CAMERA_H
 #define CAMERA_H
@@ -29,7 +29,7 @@ public:
 
 	// Tell the client that this camera needs to be rendered
 	void SetActive( bool bActive );
-	int  UpdateTransmitState(void);
+	int  UpdateTransmitState();
 
 	void ChangeFOVThink( void );
 

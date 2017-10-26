@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "basecombatweapon.h"
@@ -50,8 +50,8 @@ public:
 	void InputActivate( inputdata_t &inputdata );
 	void InputDeactivate( inputdata_t &inputdata );
 
-	void ActivateRocketGuidance(void);
-	void DeactivateRocketGuidance(void);
+	void ActivateRocketGuidance();
+	void DeactivateRocketGuidance();
 
 	bool		InRange( float range );
 

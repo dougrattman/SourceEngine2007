@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A version of path_track which draws.
 //
-//=============================================================================//
+
 
 #ifndef ENV_PORTAL_PATH_TRACK_SHARED_H
 #define ENV_PORTAL_PATH_TRACK_SHARED_H
@@ -62,15 +62,15 @@ public:
 protected:
 	CNetworkVar( bool, m_bTrackActive );
 	CNetworkVar( bool, m_bEndpointActive );
-//	CNetworkVar( float, m_fScaleEndpoint );				// Scale of the endpoint for this beam
-//	CNetworkVar( float, m_fScaleTrack );				// Scale of the track effect
-//	CNetworkVar( float, m_fFadeOutEndpoint );			// Scale of the track effect
-//	CNetworkVar( float, m_fFadeInEndpoint );			// Scale of the track effect
-	CNetworkVar( int, m_nState );						// particle emmision state
+//	CNetworkVar( float, m_fScaleEndpoint ); 	// Scale of the endpoint for this beam
+//	CNetworkVar( float, m_fScaleTrack ); 	// Scale of the track effect
+//	CNetworkVar( float, m_fFadeOutEndpoint ); // Scale of the track effect
+//	CNetworkVar( float, m_fFadeInEndpoint ); // Scale of the track effect
+	CNetworkVar( int, m_nState );  // particle emmision state
 
 	COutputEvent m_OnActivatedEndpoint;
 
-	CBeam		*m_pBeam;								// Pointer to look at a cbeam object for the track fx
+	CBeam		*m_pBeam;  		// Pointer to look at a cbeam object for the track fx
 
 };
 

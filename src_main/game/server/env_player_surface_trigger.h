@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ENV_PLAYER_SURFACE_TRIGGER_H
 #define ENV_PLAYER_SURFACE_TRIGGER_H

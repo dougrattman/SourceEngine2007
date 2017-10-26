@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Headers and defines for Autobuy and Rebuy 
 //
-//=============================================================================//
+
 
 /**
  * Weapon classes as used by the AutoBuy
@@ -39,15 +39,15 @@ struct RebuyStruct
 	char m_szPrimaryWeapon[64];		//"weapon_" string of the primary weapon
 	char m_szSecondaryWeapon[64];	//"weapon_" string of the secondary weapon
 
-	int m_primaryAmmo;				// number of rounds the player had (not including rounds in the gun)
-	int m_secondaryAmmo;			// number of rounds the player had (not including rounds in the gun)
-	int m_heGrenade;				// number of grenades to buy
-	int m_flashbang;				// number of grenades to buy
-	int m_smokeGrenade;				// number of grenades to buy
-	int m_armor;					// 0, 1, or 2 (0 = none, 1 = vest, 2 = vest + helmet)
+	int m_primaryAmmo; 	// number of rounds the player had (not including rounds in the gun)
+	int m_secondaryAmmo; // number of rounds the player had (not including rounds in the gun)
+	int m_heGrenade; 	// number of grenades to buy
+	int m_flashbang; 	// number of grenades to buy
+	int m_smokeGrenade; 	// number of grenades to buy
+	int m_armor; 		// 0, 1, or 2 (0 = none, 1 = vest, 2 = vest + helmet)
 
-	bool m_defuser;					// do we want a defuser
-	bool m_nightVision;				// do we want night vision
+	bool m_defuser; 		// do we want a defuser
+	bool m_nightVision; 	// do we want night vision
 };
 
 extern AutoBuyInfoStruct g_autoBuyInfo[];

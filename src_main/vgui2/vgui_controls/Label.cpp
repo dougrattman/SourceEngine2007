@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
+
+#include <cassert>
+#include <cstdarg>
+#include <cstdio>
 #include <ctype.h>
 
 #include <vgui/IInput.h>
@@ -15,7 +15,7 @@
 #include <vgui/IPanel.h>
 #include <vgui/ISurface.h>
 #include <vgui/IScheme.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/Label.h>
 #include <vgui_controls/Image.h>
@@ -271,7 +271,7 @@ void Label::GetText(wchar_t *textOut, int bufLenInBytes)
 //-----------------------------------------------------------------------------
 void Label::SetText(const char *text)
 {
-	// if set to null, just make blank
+	// if set to 0, just make blank
 	if (!text)
 	{
 		text = "";
@@ -371,7 +371,7 @@ void Label::ComputeAlignment(int &tx0, int &ty0, int &tx1, int &ty1)
 		TImageInfo &imageInfo = _imageDar[i];
 		IImage *image = imageInfo.image;
 		if (!image)
-			continue; // skip over null images
+			continue; // skip over 0 images
 
 		// add up the bounds
 		int iWide, iTall;
@@ -479,7 +479,7 @@ void Label::Paint()
 		TImageInfo &imageInfo = _imageDar[i];
 		IImage *image = imageInfo.image;
 		if (!image)
-			continue; // skip over null images
+			continue; // skip over 0 images
 
 		// add the offset to x
 		x += imageInfo.offset;
@@ -983,7 +983,7 @@ void Label::ApplySchemeSettings(IScheme *pScheme)
 	{
 		IImage *image = _imageDar[i].image;
 		if (!image)
-			continue; // skip over null images
+			continue; // skip over 0 images
 
 		if (i == _textImageIndex)
 			continue;
@@ -1244,7 +1244,7 @@ void Label::PerformLayout()
 		TImageInfo &imageInfo = _imageDar[i];
 		IImage *image = imageInfo.image;
 		if (!image)
-			continue; // skip over null images
+			continue; // skip over 0 images
 
 		if (i == _textImageIndex)
 			continue;

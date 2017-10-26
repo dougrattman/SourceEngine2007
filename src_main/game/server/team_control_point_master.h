@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -18,7 +18,7 @@
 #include "team_objectiveresource.h"
 #include "team_control_point_round.h"
 
-#define CPM_THINK			"CTeamControlPointMasterCPMThink"
+#define CPM_THINK "CTeamControlPointMasterCPMThink"
 #define CPM_POSTINITTHINK	"CTeamControlPointMasterCPMPostInitThink"
 
 //-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ public:
 	{
 		if ( !PlayingMiniRounds() || m_iCurrentRoundIndex == -1 )
 		{
-			return NULL;
+ return NULL;
 		}
 
 		return m_ControlPointRounds[m_iCurrentRoundIndex];
@@ -88,14 +88,14 @@ public:
 
 		if ( PlayingMiniRounds() && GetCurrentRound() )
 		{
-			nCurrentPriority = GetCurrentRound()->GetPriorityValue();
-			nHighestPriority = GetHighestRoundPriorityValue();
+ nCurrentPriority = GetCurrentRound()->GetPriorityValue();
+ nHighestPriority = GetHighestRoundPriorityValue();
 
-			// if the current round has the highest priority, then use it again
-			if ( nCurrentPriority == nHighestPriority )
-			{
-				nRetVal = GetCurrentRound()->GetEntityName();
-			}
+ // if the current round has the highest priority, then use it again
+ if ( nCurrentPriority == nHighestPriority )
+ {
+ 	nRetVal = GetCurrentRound()->GetEntityName();
+ }
 		}
 
 		return nRetVal;
@@ -128,15 +128,15 @@ private:
 		// rounds are sorted with the higher priority rounds first
 		for ( int i = 0 ; i < m_ControlPointRounds.Count() ; ++i )
 		{
-			CTeamControlPointRound *pRound = m_ControlPointRounds[i];
+ CTeamControlPointRound *pRound = m_ControlPointRounds[i];
 
-			if ( pRound )
-			{
-				if ( pRound->GetPriorityValue() > nRetVal )
-				{
-					nRetVal = pRound->GetPriorityValue();
-				}
-			}
+ if ( pRound )
+ {
+ 	if ( pRound->GetPriorityValue() > nRetVal )
+ 	{
+ 		nRetVal = pRound->GetPriorityValue();
+ 	}
+ }
 		}
 
 		return nRetVal;

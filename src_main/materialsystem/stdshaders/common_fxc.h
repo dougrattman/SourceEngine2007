@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef COMMON_FXC_H_
 #define COMMON_FXC_H_
 
@@ -91,9 +91,9 @@ HALF2 ComputeLightmapCoordinates( HALF4 Lightmap1and2Coord, HALF2 Lightmap3Coord
 }
 
 void ComputeBumpedLightmapCoordinates( HALF4 Lightmap1and2Coord, HALF2 Lightmap3Coord,
-									  out HALF2 bumpCoord1,
-									  out HALF2 bumpCoord2,
-									  out HALF2 bumpCoord3 ) 
+     out HALF2 bumpCoord1,
+     out HALF2 bumpCoord2,
+     out HALF2 bumpCoord3 ) 
 {
     HALF2 result = saturate(Lightmap1and2Coord.xy) * Lightmap1and2Coord.wz * 0.99;
     result += Lightmap3Coord;
@@ -108,9 +108,9 @@ HALF2 ComputeLightmapCoordinates( HALF4 Lightmap1and2Coord, HALF2 Lightmap3Coord
 }
 
 void ComputeBumpedLightmapCoordinates( HALF4 Lightmap1and2Coord, HALF2 Lightmap3Coord,
-									  out HALF2 bumpCoord1,
-									  out HALF2 bumpCoord2,
-									  out HALF2 bumpCoord3 ) 
+     out HALF2 bumpCoord1,
+     out HALF2 bumpCoord2,
+     out HALF2 bumpCoord3 ) 
 {
     bumpCoord1 = Lightmap1and2Coord.xy;
     bumpCoord2 = Lightmap1and2Coord.wz; // reversed order!!!
@@ -224,25 +224,25 @@ float X360GammaToLinear( float fl360GammaValue )
 	{
 		if ( fl360GammaValue < ( 64.0f / 255.0f ) )
 		{
-			flLinearValue = fl360GammaValue * 255.0f;
+ flLinearValue = fl360GammaValue * 255.0f;
 		}
 		else
 		{
-			flLinearValue = fl360GammaValue * ( 255.0f * 2.0f ) - 64.0f;
-			flLinearValue += floor( flLinearValue * ( 1.0f / 512.0f ) );
+ flLinearValue = fl360GammaValue * ( 255.0f * 2.0f ) - 64.0f;
+ flLinearValue += floor( flLinearValue * ( 1.0f / 512.0f ) );
 		}
 	}
 	else
 	{
 		if( fl360GammaValue < ( 192.0f / 255.0f ) )
 		{
-			flLinearValue = fl360GammaValue * ( 255.0f * 4.0f ) - 256.0f;
-			flLinearValue += floor( flLinearValue * ( 1.0f / 256.0f ) );
+ flLinearValue = fl360GammaValue * ( 255.0f * 4.0f ) - 256.0f;
+ flLinearValue += floor( flLinearValue * ( 1.0f / 256.0f ) );
 		}
 		else
 		{
-			flLinearValue = fl360GammaValue * ( 255.0f * 8.0f ) - 1024.0f;
-			flLinearValue += floor( flLinearValue * ( 1.0f / 128.0f ) );
+ flLinearValue = fl360GammaValue * ( 255.0f * 8.0f ) - 1024.0f;
+ flLinearValue += floor( flLinearValue * ( 1.0f / 128.0f ) );
 		}
 	}
 
@@ -261,26 +261,26 @@ float X360LinearToGamma( float flLinearValue )
 	{
 		if ( flLinearValue < ( 64.0f / 1023.0f ) )
 		{
-			fl360GammaValue = flLinearValue * ( 1023.0f * ( 1.0f / 255.0f ) );
+ fl360GammaValue = flLinearValue * ( 1023.0f * ( 1.0f / 255.0f ) );
 		}
 		else
 		{
-			fl360GammaValue = flLinearValue * ( ( 1023.0f / 2.0f ) * ( 1.0f / 255.0f ) ) + ( 32.0f / 255.0f );
+ fl360GammaValue = flLinearValue * ( ( 1023.0f / 2.0f ) * ( 1.0f / 255.0f ) ) + ( 32.0f / 255.0f );
 		}
 	}
 	else
 	{
 		if ( flLinearValue < ( 512.0f / 1023.0f ) )
 		{
-			fl360GammaValue = flLinearValue * ( ( 1023.0f / 4.0f ) * ( 1.0f / 255.0f ) ) + ( 64.0f / 255.0f );
+ fl360GammaValue = flLinearValue * ( ( 1023.0f / 4.0f ) * ( 1.0f / 255.0f ) ) + ( 64.0f / 255.0f );
 		}
 		else
 		{
-			fl360GammaValue = flLinearValue * ( ( 1023.0f /8.0f ) * ( 1.0f / 255.0f ) ) + ( 128.0f /255.0f ); // 1.0 -> 1.0034313725490196078431372549016
-			if ( fl360GammaValue > 1.0f )
-			{
-				fl360GammaValue = 1.0f;
-			}
+ fl360GammaValue = flLinearValue * ( ( 1023.0f /8.0f ) * ( 1.0f / 255.0f ) ) + ( 128.0f /255.0f ); // 1.0 -> 1.0034313725490196078431372549016
+ if ( fl360GammaValue > 1.0f )
+ {
+ 	fl360GammaValue = 1.0f;
+ }
 		}
 	}
 

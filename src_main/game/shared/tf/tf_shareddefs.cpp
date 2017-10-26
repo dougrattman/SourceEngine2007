@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #include "tf_shareddefs.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "takedamageinfo.h"
 #include "tf_gamerules.h"
 

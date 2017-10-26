@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -20,7 +20,7 @@
 #include <vgui_controls/SectionedListPanel.h>
 #include <vgui_controls/ImageList.h>
 #include <game/client/iviewport.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <FileSystem.h>
 #include "IGameUIFuncs.h" // for key bindings
 
@@ -346,7 +346,7 @@ void CTFClientScoreBoardDialog::UpdatePlayerList()
 				pPlayerList = m_pPlayerListRed;
 				break;
 			}
-			if ( null == pPlayerList )
+			if ( 0 == pPlayerList )
 				continue;			
 
 			const char *szName = tf_PR->GetPlayerName( playerIndex );
@@ -862,7 +862,7 @@ int	CTFClientScoreBoardDialog::HudElementKeyInput( int down, ButtonCode_t keynum
 
 					DevMsg( 1, "XShowGamerCardUI for player '%s'\n", pInfo->GetString( "name" ) );
 
-					uint64 xuid = matchmaking->PlayerIdToXuid( pInfo->GetInt( "playerIndex" ) );
+					uint64_t xuid = matchmaking->PlayerIdToXuid( pInfo->GetInt( "playerIndex" ) );
 					XShowGamerCardUI( XBX_GetPrimaryUserId(), xuid );
 				}
 			}
@@ -881,7 +881,7 @@ int	CTFClientScoreBoardDialog::HudElementKeyInput( int down, ButtonCode_t keynum
 
 					DevMsg( 1, "XShowPlayerReviewUI for player '%s'\n", pInfo->GetString( "name" ) );
 
-					uint64 xuid = matchmaking->PlayerIdToXuid( pInfo->GetInt( "playerIndex" ) );
+					uint64_t xuid = matchmaking->PlayerIdToXuid( pInfo->GetInt( "playerIndex" ) );
 					XShowPlayerReviewUI( XBX_GetPrimaryUserId(), xuid );
 				}
 			}

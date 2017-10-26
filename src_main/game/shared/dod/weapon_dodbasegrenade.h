@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_DODBASEGRENADE_H
 #define WEAPON_DODBASEGRENADE_H
@@ -81,7 +81,7 @@ protected:
 
 	bool m_bRedraw;	// Draw the weapon again after throwing a grenade
 	CNetworkVar( bool, m_bPinPulled );	// Set to true when the pin has been pulled but the grenade hasn't been thrown yet.
-	CNetworkVar( bool, m_bArmed );			// is the grenade armed?
+	CNetworkVar( bool, m_bArmed ); // is the grenade armed?
 	float m_flDetonateTime;	// what time the grenade will explode ( if > 0 )
 	CWeaponDODBaseGrenade( const CWeaponDODBaseGrenade & ) {}
 };

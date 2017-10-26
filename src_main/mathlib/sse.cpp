@@ -1,52 +1,56 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: SSE Math primitives.
-//
-//=====================================================================================//
 
-#include <math.h>
-#include <float.h>	// Needed for FLT_EPSILON
-#include "basetypes.h"
+#include "sse.h"
+
+#include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
-#include "tier0/dbg.h"
+#include <cmath>
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "sse.h"
+#include "tier0/basetypes.h"
+#include "tier0/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-static const uint32 _sincos_masks[]	  = { (uint32)0x0,  (uint32)~0x0 };
-static const uint32 _sincos_inv_masks[] = { (uint32)~0x0, (uint32)0x0 };
+#if !defined X64BITS
+
+static const uint32_t _sincos_masks[] = {(uint32_t)0x0, (uint32_t)~0x0};
+static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
 
 //-----------------------------------------------------------------------------
 // Macros and constants required by some of the SSE assembly:
 //-----------------------------------------------------------------------------
 
 #ifdef _WIN32
-	#define _PS_EXTERN_CONST(Name, Val) \
-		const __declspec(align(16)) float _ps_##Name[4] = { Val, Val, Val, Val }
+#define _PS_EXTERN_CONST(Name, Val) \
+  const __declspec(align(16)) float _ps_##Name[4] = {Val, Val, Val, Val}
 
-	#define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
-		const __declspec(align(16)) Type _ps_##Name[4] = { Val, Val, Val, Val }; \
+#define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
+  const __declspec(align(16)) Type _ps_##Name[4] = {Val, Val, Val, Val};
 
-	#define _EPI32_CONST(Name, Val) \
-		static const __declspec(align(16)) __int32 _epi32_##Name[4] = { Val, Val, Val, Val }
+#define _EPI32_CONST(Name, Val)                                            \
+  static const __declspec(align(16)) __int32 _epi32_##Name[4] = {Val, Val, \
+                                                                 Val, Val}
 
-	#define _PS_CONST(Name, Val) \
-		static const __declspec(align(16)) float _ps_##Name[4] = { Val, Val, Val, Val }
+#define _PS_CONST(Name, Val) \
+  static const __declspec(align(16)) float _ps_##Name[4] = {Val, Val, Val, Val}
 #elif _LINUX
-	#define _PS_EXTERN_CONST(Name, Val) \
-		const __attribute__((aligned(16))) float _ps_##Name[4] = { Val, Val, Val, Val }
+#define _PS_EXTERN_CONST(Name, Val) \
+  const __attribute__((aligned(16))) float _ps_##Name[4] = {Val, Val, Val, Val}
 
-	#define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
-		const __attribute__((aligned(16))) Type _ps_##Name[4] = { Val, Val, Val, Val }; \
+#define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
+  const __attribute__((aligned(16))) Type _ps_##Name[4] = {Val, Val, Val, Val};
 
-	#define _EPI32_CONST(Name, Val) \
-		static const __attribute__((aligned(16))) int32 _epi32_##Name[4] = { Val, Val, Val, Val }
+#define _EPI32_CONST(Name, Val)             \
+  static const __attribute__((aligned(16))) \
+      int32_t _epi32_##Name[4] = {Val, Val, Val, Val}
 
-	#define _PS_CONST(Name, Val) \
-		static const __attribute__((aligned(16))) float _ps_##Name[4] = { Val, Val, Val, Val }
+#define _PS_CONST(Name, Val) \
+  static const               \
+      __attribute__((aligned(16))) float _ps_##Name[4] = {Val, Val, Val, Val}
 #endif
 
 _PS_EXTERN_CONST(am_0, 0.0f);
@@ -59,11 +63,11 @@ _PS_EXTERN_CONST(am_pi_o_2, (float)(M_PI / 2.0));
 _PS_EXTERN_CONST(am_2_o_pi, (float)(2.0 / M_PI));
 _PS_EXTERN_CONST(am_pi_o_4, (float)(M_PI / 4.0));
 _PS_EXTERN_CONST(am_4_o_pi, (float)(4.0 / M_PI));
-_PS_EXTERN_CONST_TYPE(am_sign_mask, int32, 0x80000000);
-_PS_EXTERN_CONST_TYPE(am_inv_sign_mask, int32, ~0x80000000);
-_PS_EXTERN_CONST_TYPE(am_min_norm_pos,int32, 0x00800000);
-_PS_EXTERN_CONST_TYPE(am_mant_mask, int32, 0x7f800000);
-_PS_EXTERN_CONST_TYPE(am_inv_mant_mask, int32, ~0x7f800000);
+_PS_EXTERN_CONST_TYPE(am_sign_mask, int32_t, 0x80000000);
+_PS_EXTERN_CONST_TYPE(am_inv_sign_mask, int32_t, ~0x80000000);
+_PS_EXTERN_CONST_TYPE(am_min_norm_pos, int32_t, 0x00800000);
+_PS_EXTERN_CONST_TYPE(am_mant_mask, int32_t, 0x7f800000);
+_PS_EXTERN_CONST_TYPE(am_inv_mant_mask, int32_t, ~0x7f800000);
 
 _EPI32_CONST(1, 1);
 _EPI32_CONST(2, 2);
@@ -74,62 +78,42 @@ _PS_CONST(sincos_p2, 0.7969262624561800806e-1f);
 _PS_CONST(sincos_p3, -0.468175413106023168e-2f);
 
 #ifdef PFN_VECTORMA
-void  __cdecl _SSE_VectorMA( const float *start, float scale, const float *direction, float *dest );
+void __cdecl _SSE_VectorMA(const float *start, float scale,
+                           const float *direction, float *dest);
 #endif
 
 //-----------------------------------------------------------------------------
 // SSE implementations of optimized routines:
 //-----------------------------------------------------------------------------
-float _SSE_Sqrt(float x)
-{
-	Assert( s_bMathlibInitialized );
-	float	root = 0.f;
+float _SSE_Sqrt(float x) {
+  Assert(s_bMathlibInitialized);
+  float root = 0.f;
 #ifdef _WIN32
-	_asm
-	{
+  _asm
+  {
 		sqrtss		xmm0, x
 		movss		root, xmm0
-	}
+  }
 #elif _LINUX
-	__asm__ __volatile__(
-		"movss %1,%%xmm2\n"
-		"sqrtss %%xmm2,%%xmm1\n"
-		"movss %%xmm1,%0"
-       	: "=m" (root)
-		: "m" (x)
-	);
+  __asm__ __volatile__(
+      "movss %1,%%xmm2\n"
+      "sqrtss %%xmm2,%%xmm1\n"
+      "movss %%xmm1,%0"
+      : "=m"(root)
+      : "m"(x));
 #endif
-	return root;
+  return root;
 }
 
-// Single iteration NewtonRaphson reciprocal square root:
-// 0.5 * rsqrtps * (3 - x * rsqrtps(x) * rsqrtps(x)) 	
-// Very low error, and fine to use in place of 1.f / sqrtf(x).	
-#if 0
-float _SSE_RSqrtAccurate(float x)
-{
-	Assert( s_bMathlibInitialized );
-
-	float rroot;
-	_asm
-	{
-		rsqrtss	xmm0, x
-		movss	rroot, xmm0
-	}
-
-	return (0.5f * rroot) * (3.f - (x * rroot) * rroot);
-}
-#else
 // Intel / Kipps SSE RSqrt.  Significantly faster than above.
-float _SSE_RSqrtAccurate(float a)
-{
-	float x;
-	float half = 0.5f;
-	float three = 3.f;
+float _SSE_RSqrtAccurate(float a) {
+  float x;
+  float half = 0.5f;
+  float three = 3.f;
 
 #ifdef _WIN32
-	__asm
-	{
+  __asm
+  {
 		movss   xmm3, a;
 		movss   xmm1, half;
 		movss   xmm2, three;
@@ -142,205 +126,195 @@ float _SSE_RSqrtAccurate(float a)
 		mulss   xmm1, xmm2;
 
 		movss   x,    xmm1;
-	}
+  }
 #elif _LINUX
-	__asm__ __volatile__(
-		"movss   %1, %%xmm3 \n\t"
-        "movss   %2, %%xmm1 \n\t"
-        "movss   %3, %%xmm2 \n\t"
-        "rsqrtss %%xmm3, %%xmm0 \n\t"
-        "mulss   %%xmm0, %%xmm3 \n\t"
-        "mulss   %%xmm0, %%xmm1 \n\t"
-        "mulss   %%xmm0, %%xmm3 \n\t"
-        "subss   %%xmm3, %%xmm2 \n\t"
-        "mulss   %%xmm2, %%xmm1 \n\t"
-        "movss   %%xmm1, %0 \n\t"
-		: "=m" (x)
-		: "m" (a), "m" (half), "m" (three)
-);
+  __asm__ __volatile__(
+      "movss   %1, %%xmm3 \n\t"
+      "movss   %2, %%xmm1 \n\t"
+      "movss   %3, %%xmm2 \n\t"
+      "rsqrtss %%xmm3, %%xmm0 \n\t"
+      "mulss   %%xmm0, %%xmm3 \n\t"
+      "mulss   %%xmm0, %%xmm1 \n\t"
+      "mulss   %%xmm0, %%xmm3 \n\t"
+      "subss   %%xmm3, %%xmm2 \n\t"
+      "mulss   %%xmm2, %%xmm1 \n\t"
+      "movss   %%xmm1, %0 \n\t"
+      : "=m"(x)
+      : "m"(a), "m"(half), "m"(three));
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 
-	return x;
+  return x;
 }
-#endif
 
-// Simple SSE rsqrt.  Usually accurate to around 6 (relative) decimal places 
+// Simple SSE rsqrt.  Usually accurate to around 6 (relative) decimal places
 // or so, so ok for closed transforms.  (ie, computing lighting normals)
-float _SSE_RSqrtFast(float x)
-{
-	Assert( s_bMathlibInitialized );
+float _SSE_RSqrtFast(float x) {
+  Assert(s_bMathlibInitialized);
 
-	float rroot;
+  float rroot;
 #ifdef _WIN32
-	_asm
-	{
+  _asm
+  {
 		rsqrtss	xmm0, x
 		movss	rroot, xmm0
-	}
+  }
 #elif _LINUX
-	 __asm__ __volatile__(
-		"rsqrtss %1, %%xmm0 \n\t"
-		"movss %%xmm0, %0 \n\t"
-		: "=m" (x)
-		: "m" (rroot)
-		: "%xmm0"
-	);
+  __asm__ __volatile__(
+      "rsqrtss %1, %%xmm0 \n\t"
+      "movss %%xmm0, %0 \n\t"
+      : "=m"(x)
+      : "m"(rroot)
+      : "%xmm0");
 #else
 #error
 #endif
 
-	return rroot;
+  return rroot;
 }
 
-float FASTCALL _SSE_VectorNormalize (Vector& vec)
-{
-	Assert( s_bMathlibInitialized );
+float FASTCALL _SSE_VectorNormalize(Vector &vec) {
+  Assert(s_bMathlibInitialized);
 
-	// NOTE: This is necessary to prevent an memory overwrite...
-	// sice vec only has 3 floats, we can't "movaps" directly into it.
+  // NOTE: This is necessary to prevent an memory overwrite...
+  // sice vec only has 3 floats, we can't "movaps" directly into it.
 #ifdef _WIN32
-	__declspec(align(16)) float result[4];
+  __declspec(align(16)) float result[4];
 #elif _LINUX
-	__attribute__((aligned(16))) float result[4];
+  __attribute__((aligned(16))) float result[4];
 #endif
 
-	float *v = &vec[0];
-	float *r = &result[0];
+  float *v = &vec[0];
+  float *r = &result[0];
 
-	float	radius = 0.f;
-	// Blah, get rid of these comparisons ... in reality, if you have all 3 as zero, it shouldn't 
-	// be much of a performance win, considering you will very likely miss 3 branch predicts in a row.
-	if ( v[0] || v[1] || v[2] )
-	{
+  float radius = 0.f;
+  // Blah, get rid of these comparisons ... in reality, if you have all 3 as
+  // zero, it shouldn't be much of a performance win, considering you will very
+  // likely miss 3 branch predicts in a row.
+  if (v[0] || v[1] || v[2]) {
 #ifdef _WIN32
-	_asm
-		{
+    _asm
+    {
 			mov			eax, v
 			mov			edx, r
 #ifdef ALIGNED_VECTOR
-			movaps		xmm4, [eax]			// r4 = vx, vy, vz, X
-			movaps		xmm1, xmm4			// r1 = r4
+			movaps		xmm4, [eax]  // r4 = vx, vy, vz, X
+			movaps		xmm1, xmm4  // r1 = r4
 #else
-			movups		xmm4, [eax]			// r4 = vx, vy, vz, X
-			movaps		xmm1, xmm4			// r1 = r4
+			movups		xmm4, [eax]  // r4 = vx, vy, vz, X
+			movaps		xmm1, xmm4  // r1 = r4
 #endif
-			mulps		xmm1, xmm4			// r1 = vx * vx, vy * vy, vz * vz, X
-			movhlps		xmm3, xmm1			// r3 = vz * vz, X, X, X
-			movaps		xmm2, xmm1			// r2 = r1
-			shufps		xmm2, xmm2, 1		// r2 = vy * vy, X, X, X
-			addss		xmm1, xmm2			// r1 = (vx * vx) + (vy * vy), X, X, X
-			addss		xmm1, xmm3			// r1 = (vx * vx) + (vy * vy) + (vz * vz), X, X, X
-			sqrtss		xmm1, xmm1			// r1 = sqrt((vx * vx) + (vy * vy) + (vz * vz)), X, X, X
-			movss		radius, xmm1		// radius = sqrt((vx * vx) + (vy * vy) + (vz * vz))
-			rcpss		xmm1, xmm1			// r1 = 1/radius, X, X, X
-			shufps		xmm1, xmm1, 0		// r1 = 1/radius, 1/radius, 1/radius, X
-			mulps		xmm4, xmm1			// r4 = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
-			movaps		[edx], xmm4			// v = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
-		}
+			mulps		xmm1, xmm4  // r1 = vx * vx, vy * vy, vz * vz, X
+			movhlps		xmm3, xmm1  // r3 = vz * vz, X, X, X
+			movaps		xmm2, xmm1  // r2 = r1
+			shufps		xmm2, xmm2, 1  // r2 = vy * vy, X, X, X
+			addss		xmm1, xmm2  // r1 = (vx * vx) + (vy * vy), X, X, X
+			addss		xmm1, xmm3  // r1 = (vx * vx) + (vy * vy) + (vz * vz), X, X, X
+			sqrtss		xmm1, xmm1  // r1 = sqrt((vx * vx) + (vy * vy) + (vz * vz)), X, X, X
+			movss		radius, xmm1  // radius = sqrt((vx * vx) + (vy * vy) + (vz * vz))
+			rcpss		xmm1, xmm1  // r1 = 1/radius, X, X, X
+			shufps		xmm1, xmm1, 0  // r1 = 1/radius, 1/radius, 1/radius, X
+			mulps		xmm4, xmm1  // r4 = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
+			movaps		[edx], xmm4  // v = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
+    }
 #elif _LINUX
-		__asm__ __volatile__(
+    __asm__ __volatile__(
 #ifdef ALIGNED_VECTOR
-            "movaps          %2, %%xmm4 \n\t"
-            "movaps          %%xmm4, %%xmm1 \n\t"
-#else
-            "movups          %2, %%xmm4 \n\t"
-            "movaps          %%xmm4, %%xmm1 \n\t"
-#endif
-            "mulps           %%xmm4, %%xmm1 \n\t"
-            "movhlps         %%xmm1, %%xmm3 \n\t"
-            "movaps          %%xmm1, %%xmm2 \n\t"
-            "shufps          $1, %%xmm2, %%xmm2 \n\t"
-            "addss           %%xmm2, %%xmm1 \n\t"
-            "addss           %%xmm3, %%xmm1 \n\t"
-            "sqrtss          %%xmm1, %%xmm1 \n\t"
-            "movss           %%xmm1, %0 \n\t"
-            "rcpss           %%xmm1, %%xmm1 \n\t"
-            "shufps          $0, %%xmm1, %%xmm1 \n\t"
-            "mulps           %%xmm1, %%xmm4 \n\t"
-            "movaps          %%xmm4, %1 \n\t"
-            : "=m" (radius), "=m" (result)
-            : "m" (*v)
- 		);
-#else
-	#error "Not Implemented"
-#endif
-		vec.x = result[0];
-		vec.y = result[1];
-		vec.z = result[2];
-
-	}
-
-	return radius;
-}
-
-void FASTCALL _SSE_VectorNormalizeFast (Vector& vec)
-{
-	float ool = _SSE_RSqrtAccurate( FLT_EPSILON + vec.x * vec.x + vec.y * vec.y + vec.z * vec.z );
-
-	vec.x *= ool;
-	vec.y *= ool;
-	vec.z *= ool;
-}
-
-float _SSE_InvRSquared(const float* v)
-{
-	float	inv_r2 = 1.f;
-#ifdef _WIN32
-	_asm { // Intel SSE only routine
-		mov			eax, v
-		movss		xmm5, inv_r2		// x5 = 1.0, 0, 0, 0
-#ifdef ALIGNED_VECTOR
-		movaps		xmm4, [eax]			// x4 = vx, vy, vz, X
-#else
-		movups		xmm4, [eax]			// x4 = vx, vy, vz, X
-#endif
-		movaps		xmm1, xmm4			// x1 = x4
-		mulps		xmm1, xmm4			// x1 = vx * vx, vy * vy, vz * vz, X
-		movhlps		xmm3, xmm1			// x3 = vz * vz, X, X, X
-		movaps		xmm2, xmm1			// x2 = x1
-		shufps		xmm2, xmm2, 1		// x2 = vy * vy, X, X, X
-		addss		xmm1, xmm2			// x1 = (vx * vx) + (vy * vy), X, X, X
-		addss		xmm1, xmm3			// x1 = (vx * vx) + (vy * vy) + (vz * vz), X, X, X
-		maxss		xmm1, xmm5			// x1 = max( 1.0, x1 )
-		rcpss		xmm0, xmm1			// x0 = 1 / max( 1.0, x1 )
-		movss		inv_r2, xmm0		// inv_r2 = x0
-	}
-#elif _LINUX
-		__asm__ __volatile__(
-#ifdef ALIGNED_VECTOR
-		"movaps          %1, %%xmm4 \n\t"
-#else
-		"movups          %1, %%xmm4 \n\t"
-#endif
+        "movaps          %2, %%xmm4 \n\t"
         "movaps          %%xmm4, %%xmm1 \n\t"
+#else
+        "movups          %2, %%xmm4 \n\t"
+        "movaps          %%xmm4, %%xmm1 \n\t"
+#endif
         "mulps           %%xmm4, %%xmm1 \n\t"
-		"movhlps         %%xmm1, %%xmm3 \n\t"
-		"movaps          %%xmm1, %%xmm2 \n\t"
+        "movhlps         %%xmm1, %%xmm3 \n\t"
+        "movaps          %%xmm1, %%xmm2 \n\t"
         "shufps          $1, %%xmm2, %%xmm2 \n\t"
         "addss           %%xmm2, %%xmm1 \n\t"
         "addss           %%xmm3, %%xmm1 \n\t"
-		"maxss           %%xmm5, %%xmm1 \n\t"
-        "rcpss           %%xmm1, %%xmm0 \n\t"
-		"movss           %%xmm0, %0 \n\t" 
-        : "=m" (inv_r2)
-        : "m" (*v), "0" (inv_r2)
- 		);
+        "sqrtss          %%xmm1, %%xmm1 \n\t"
+        "movss           %%xmm1, %0 \n\t"
+        "rcpss           %%xmm1, %%xmm1 \n\t"
+        "shufps          $0, %%xmm1, %%xmm1 \n\t"
+        "mulps           %%xmm1, %%xmm4 \n\t"
+        "movaps          %%xmm4, %1 \n\t"
+        : "=m"(radius), "=m"(result)
+        : "m"(*v));
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
+    vec.x = result[0];
+    vec.y = result[1];
+    vec.z = result[2];
+  }
 
-	return inv_r2;
+  return radius;
 }
 
-void _SSE_SinCos(float x, float* s, float* c)
-{
-#ifdef _WIN32
-	float t4, t8, t12;
+void FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
+  float ool = _SSE_RSqrtAccurate(FLT_EPSILON + vec.x * vec.x + vec.y * vec.y +
+                                 vec.z * vec.z);
 
-	__asm
-	{
+  vec.x *= ool;
+  vec.y *= ool;
+  vec.z *= ool;
+}
+
+float _SSE_InvRSquared(const float *v) {
+  float inv_r2 = 1.f;
+#ifdef _WIN32
+  _asm {  // Intel SSE only routine
+		mov			eax, v
+		movss		xmm5, inv_r2  // x5 = 1.0, 0, 0, 0
+#ifdef ALIGNED_VECTOR
+		movaps		xmm4, [eax]   // x4 = vx, vy, vz, X
+#else
+		movups		xmm4, [eax]  // x4 = vx, vy, vz, X
+#endif
+		movaps		xmm1, xmm4  // x1 = x4
+		mulps		xmm1, xmm4  // x1 = vx * vx, vy * vy, vz * vz, X
+		movhlps		xmm3, xmm1  // x3 = vz * vz, X, X, X
+		movaps		xmm2, xmm1  // x2 = x1
+		shufps		xmm2, xmm2, 1  // x2 = vy * vy, X, X, X
+		addss		xmm1, xmm2  // x1 = (vx * vx) + (vy * vy), X, X, X
+		addss		xmm1, xmm3  // x1 = (vx * vx) + (vy * vy) + (vz * vz), X, X, X
+		maxss		xmm1, xmm5  // x1 = max( 1.0, x1 )
+		rcpss		xmm0, xmm1  // x0 = 1 / max( 1.0, x1 )
+		movss		inv_r2, xmm0  // inv_r2 = x0
+  }
+#elif _LINUX
+  __asm__ __volatile__(
+#ifdef ALIGNED_VECTOR
+      "movaps          %1, %%xmm4 \n\t"
+#else
+      "movups          %1, %%xmm4 \n\t"
+#endif
+      "movaps          %%xmm4, %%xmm1 \n\t"
+      "mulps           %%xmm4, %%xmm1 \n\t"
+      "movhlps         %%xmm1, %%xmm3 \n\t"
+      "movaps          %%xmm1, %%xmm2 \n\t"
+      "shufps          $1, %%xmm2, %%xmm2 \n\t"
+      "addss           %%xmm2, %%xmm1 \n\t"
+      "addss           %%xmm3, %%xmm1 \n\t"
+      "maxss           %%xmm5, %%xmm1 \n\t"
+      "rcpss           %%xmm1, %%xmm0 \n\t"
+      "movss           %%xmm0, %0 \n\t"
+      : "=m"(inv_r2)
+      : "m"(*v), "0"(inv_r2));
+#else
+#error "Not Implemented"
+#endif
+
+  return inv_r2;
+}
+
+void _SSE_SinCos(float x, float *s, float *c) {
+#ifdef _WIN32
+  float t4, t8, t12;
+
+  __asm
+  {
 		movss	xmm0, x
 		movss	t12, xmm0
 		movss	xmm1, _ps_am_inv_sign_mask
@@ -380,8 +354,8 @@ void _SSE_SinCos(float x, float* s, float* c)
 		mov		t4, edx
 		orps	xmm4, xmm3
 
-		mov		eax, s     //mov eax, [esp + 4 + 16]
-		mov		edx, c //mov edx, [esp + 4 + 16 + 4]
+		mov		eax, s  // mov eax, [esp + 4 + 16]
+		mov		edx, c  // mov edx, [esp + 4 + 16 + 4]
 
 		andnps	xmm2, xmm6
 		orps	xmm0, xmm2
@@ -417,23 +391,22 @@ void _SSE_SinCos(float x, float* s, float* c)
 		mulss	xmm0, xmm1
 		mulss	xmm4, xmm5
 
-		// use full stores since caller might reload with full loads
+        // use full stores since caller might reload with full loads
 		movss	[eax], xmm0
 		movss	[edx], xmm4
-	}
+  }
 #elif _LINUX
-	#warning "_SSE_sincos NOT implemented!"
+#warning "_SSE_sincos NOT implemented!"
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 }
 
-float _SSE_cos( float x )
-{
+float _SSE_cos(float x) {
 #ifdef _WIN32
-	float temp;
-	__asm
-	{
+  float temp;
+  __asm
+  {
 		movss	xmm0, x
 		movss	xmm1, _ps_am_inv_sign_mask
 		andps	xmm0, xmm1
@@ -478,24 +451,24 @@ float _SSE_cos( float x )
 		
 		movss   x,    xmm0
 
-	}
+  }
 #elif _LINUX
-	#warning "_SSE_cos NOT implemented!"
+#warning "_SSE_cos NOT implemented!"
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 
-	return x;
+  return x;
 }
 
 //-----------------------------------------------------------------------------
 // SSE2 implementations of optimized routines:
 //-----------------------------------------------------------------------------
-void _SSE2_SinCos(float x, float* s, float* c)  // any x
+void _SSE2_SinCos(float x, float *s, float *c)  // any x
 {
 #ifdef _WIN32
-	__asm
-	{
+  __asm
+  {
 		movss	xmm0, x
 		movaps	xmm7, xmm0
 		movss	xmm1, _ps_am_inv_sign_mask
@@ -522,8 +495,8 @@ void _SSE2_SinCos(float x, float* s, float* c)  // any x
 		pslld	xmm2, (31 - 1)
 		minss	xmm0, xmm4
 
-		mov		eax, s     // mov eax, [esp + 4 + 16]
-		mov		edx, c	   // mov edx, [esp + 4 + 16 + 4]
+		mov		eax, s  // mov eax, [esp + 4 + 16]
+		mov		edx, c  // mov edx, [esp + 4 + 16 + 4]
 
 		subss	xmm4, xmm0
 		pslld	xmm3, (31 - 1)
@@ -565,22 +538,21 @@ void _SSE2_SinCos(float x, float* s, float* c)  // any x
 		mulss	xmm0, xmm1
 		mulss	xmm6, xmm7
 
-		// use full stores since caller might reload with full loads
+        // use full stores since caller might reload with full loads
 		movss	[eax], xmm0
 		movss	[edx], xmm6
-	}
+  }
 #elif _LINUX
-	#warning "_SSE2_SinCos NOT implemented!"
+#warning "_SSE2_SinCos NOT implemented!"
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 }
 
-float _SSE2_cos(float x)  
-{
+float _SSE2_cos(float x) {
 #ifdef _WIN32
-	__asm
-	{
+  __asm
+  {
 		movss	xmm0, x
 		movss	xmm1, _ps_am_inv_sign_mask
 		movss	xmm2, _ps_am_pi_o_2
@@ -623,25 +595,24 @@ float _SSE2_cos(float x)
 		addss	xmm0, xmm6
 		mulss	xmm0, xmm1
 		movss   x,    xmm0
-	}
+  }
 #elif _LINUX
-	#warning "_SSE2_cos NOT implemented!"
+#warning "_SSE2_cos NOT implemented!"
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 
-	return x;
+  return x;
 }
 
 // SSE Version of VectorTransform
-void VectorTransformSSE(const float *in1, const matrix3x4_t& in2, float *out1)
-{
-	Assert( s_bMathlibInitialized );
-	Assert( in1 != out1 );
+void VectorTransformSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
+  Assert(s_bMathlibInitialized);
+  Assert(in1 != out1);
 
 #ifdef _WIN32
-	__asm
-	{
+  __asm
+  {
 		mov eax, in1;
 		mov ecx, in2;
 		mov edx, out1;
@@ -680,25 +651,24 @@ void VectorTransformSSE(const float *in1, const matrix3x4_t& in2, float *out1)
 		addss xmm0, xmm2;
 		addss xmm0, [ecx+12]
 		movss [edx+8], xmm0;
-	}
+  }
 #elif _LINUX
-	#warning "VectorTransformSSE C implementation only"
-		out1[0] = DotProduct(in1, in2[0]) + in2[0][3];
-		out1[1] = DotProduct(in1, in2[1]) + in2[1][3];
-		out1[2] = DotProduct(in1, in2[2]) + in2[2][3];
+#warning "VectorTransformSSE C implementation only"
+  out1[0] = DotProduct(in1, in2[0]) + in2[0][3];
+  out1[1] = DotProduct(in1, in2[1]) + in2[1][3];
+  out1[2] = DotProduct(in1, in2[2]) + in2[2][3];
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 }
 
-void VectorRotateSSE( const float *in1, const matrix3x4_t& in2, float *out1 )
-{
-	Assert( s_bMathlibInitialized );
-	Assert( in1 != out1 );
+void VectorRotateSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
+  Assert(s_bMathlibInitialized);
+  Assert(in1 != out1);
 
 #ifdef _WIN32
-	__asm
-	{
+  __asm
+  {
 		mov eax, in1;
 		mov ecx, in2;
 		mov edx, out1;
@@ -734,25 +704,25 @@ void VectorRotateSSE( const float *in1, const matrix3x4_t& in2, float *out1 )
 		addss xmm0, xmm1;
 		addss xmm0, xmm2;
 		movss [edx+8], xmm0;
-	}
+  }
 #elif _LINUX
-	#warning "VectorRotateSSE C implementation only"
-		out1[0] = DotProduct( in1, in2[0] );
-		out1[1] = DotProduct( in1, in2[1] );
-		out1[2] = DotProduct( in1, in2[2] );
+#warning "VectorRotateSSE C implementation only"
+  out1[0] = DotProduct(in1, in2[0]);
+  out1[1] = DotProduct(in1, in2[1]);
+  out1[2] = DotProduct(in1, in2[2]);
 #else
-	#error "Not Implemented"
+#error "Not Implemented"
 #endif
 }
 
 #ifdef _WIN32
-void _declspec(naked) _SSE_VectorMA( const float *start, float scale, const float *direction, float *dest )
-{
-	// FIXME: This don't work!! It will overwrite memory in the write to dest
-	Assert(0);
+void _declspec(naked) _SSE_VectorMA(const float *start, float scale,
+                                    const float *direction, float *dest) {
+  // FIXME: This don't work!! It will overwrite memory in the write to dest
+  Assert(0);
 
-	Assert( s_bMathlibInitialized );
-	_asm {  // Intel SSE only routine
+  Assert(s_bMathlibInitialized);
+  _asm {  // Intel SSE only routine
 		mov	eax, DWORD PTR [esp+0x04]	; *start, s0..s2
 		mov ecx, DWORD PTR [esp+0x0c]	; *direction, d0..d2
 		mov edx, DWORD PTR [esp+0x10]	; *dest
@@ -772,21 +742,22 @@ void _declspec(naked) _SSE_VectorMA( const float *start, float scale, const floa
 		addps	xmm3, xmm1				; x3 += x1
 		movups	[edx], xmm3				; *dest = x3
 #endif
-	}
+  }
 }
 #endif
 
 #ifdef _WIN32
 #ifdef PFN_VECTORMA
-void _declspec(naked) __cdecl _SSE_VectorMA( const Vector &start, float scale, const Vector &direction, Vector &dest )
-{
-	// FIXME: This don't work!! It will overwrite memory in the write to dest
-	Assert(0);
+void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, float scale,
+                                            const Vector &direction,
+                                            Vector &dest) {
+  // FIXME: This don't work!! It will overwrite memory in the write to dest
+  Assert(0);
 
-	Assert( s_bMathlibInitialized );
-	_asm 
-	{  
-		// Intel SSE only routine
+  Assert(s_bMathlibInitialized);
+  _asm
+  {
+    // Intel SSE only routine
 		mov	eax, DWORD PTR [esp+0x04]	; *start, s0..s2
 		mov ecx, DWORD PTR [esp+0x0c]	; *direction, d0..d2
 		mov edx, DWORD PTR [esp+0x10]	; *dest
@@ -806,40 +777,10 @@ void _declspec(naked) __cdecl _SSE_VectorMA( const Vector &start, float scale, c
 		addps	xmm3, xmm1				; x3 += x1
 		movups	[edx], xmm3				; *dest = x3
 #endif
-	}
+  }
 }
-float (__cdecl *pfVectorMA)(Vector& v) = _VectorMA;
+float(__cdecl *pfVectorMA)(Vector &v) = _VectorMA;
 #endif
 #endif
 
-
-// SSE DotProduct -- it's a smidgen faster than the asm DotProduct...
-//   Should be validated too!  :)
-//   NJS: (Nov 1 2002) -NOT- faster.  may time a couple cycles faster in a single function like 
-//   this, but when inlined, and instruction scheduled, the C version is faster.  
-//   Verified this via VTune
-/*
-vec_t DotProduct (const vec_t *a, const vec_t *c)
-{
-	vec_t temp;
-
-	__asm
-	{
-		mov eax, a;
-		mov ecx, c;
-		mov edx, DWORD PTR [temp]
-		movss xmm0, [eax];
-		mulss xmm0, [ecx];
-		movss xmm1, [eax+4];
-		mulss xmm1, [ecx+4];
-		movss xmm2, [eax+8];
-		mulss xmm2, [ecx+8];
-		addss xmm0, xmm1;
-		addss xmm0, xmm2;
-		movss [edx], xmm0;
-		fld DWORD PTR [edx];
-		ret
-	}
-}
-*/
-
+#endif  // defined _WIN32 && !defined X64BITS

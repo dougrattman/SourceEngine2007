@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -34,42 +34,42 @@ typedef enum
 class CBaseTurret : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	virtual void Precache(void);
+	void Spawn();
+	virtual void Precache();
 	void KeyValue( KeyValueData *pkvd );
 	void EXPORT TurretUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	
 	virtual void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int	 TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
-	virtual int	 Classify(void);
+	virtual int	 Classify();
 
 	int BloodColor( void ) { return DONT_BLEED; }
 	void GibMonster( void ) {}	// UNDONE: Throw turret gibs?
 
 	// Think functions
 
-	void EXPORT ActiveThink(void);
-	void EXPORT SearchThink(void);
-	void EXPORT AutoSearchThink(void);
-	void EXPORT TurretDeath(void);
+	void EXPORT ActiveThink();
+	void EXPORT SearchThink();
+	void EXPORT AutoSearchThink();
+	void EXPORT TurretDeath();
 
-	virtual void EXPORT SpinDownCall(void) { m_iSpin = 0; }
-	virtual void EXPORT SpinUpCall(void) { m_iSpin = 1; }
+	virtual void EXPORT SpinDownCall() { m_iSpin = 0; }
+	virtual void EXPORT SpinUpCall() { m_iSpin = 1; }
 
-	// void SpinDown(void);
+	// void SpinDown();
 	// float EXPORT SpinDownCall( void ) { return SpinDown(); }
 
-	// virtual float SpinDown(void) { return 0;}
-	// virtual float Retire(void) { return 0;}
+	// virtual float SpinDown() { return 0;}
+	// virtual float Retire() { return 0;}
 
-	void EXPORT Deploy(void);
-	void EXPORT Retire(void);
+	void EXPORT Deploy();
+	void EXPORT Retire();
 	
-	void EXPORT Initialize(void);
+	void EXPORT Initialize();
 
-	virtual void Ping(void);
-	virtual void EyeOn(void);
-	virtual void EyeOff(void);
+	virtual void Ping();
+	virtual void EyeOn();
+	virtual void EyeOff();
 
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
@@ -78,7 +78,7 @@ public:
 
 	// other functions
 	void SetTurretAnim(TURRET_ANIM anim);
-	int MoveTurret(void);
+	int MoveTurret();
 	virtual void Shoot(Vector &vecSrc, Vector &vecDirToEnemy) { };
 
 	float m_flMaxSpin;		// Max time to spin the barrel w/o a target
@@ -152,11 +152,11 @@ IMPLEMENT_SAVERESTORE( CBaseTurret, CBaseMonster );
 class CTurret : public CBaseTurret
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	// Think functions
-	void SpinUpCall(void);
-	void SpinDownCall(void);
+	void SpinUpCall();
+	void SpinDownCall();
 
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
@@ -182,7 +182,7 @@ class CMiniTurret : public CBaseTurret
 {
 public:
 	void Spawn( );
-	void Precache(void);
+	void Precache();
 	// other functions
 	void Shoot(Vector &vecSrc, Vector &vecDirToEnemy);
 };
@@ -1172,7 +1172,7 @@ class CSentry : public CBaseTurret
 {
 public:
 	void Spawn( );
-	void Precache(void);
+	void Precache();
 	// other functions
 	void Shoot(Vector &vecSrc, Vector &vecDirToEnemy);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_ENTITY_DISSOLVE_H
 #define C_ENTITY_DISSOLVE_H
@@ -31,11 +31,11 @@ public:
 	// Inherited from IMotionEvent
 	virtual simresult_e	Simulate( IPhysicsMotionController *pController, IPhysicsObject *pObject, float deltaTime, Vector &linear, AngularImpulse &angular );
 	
-	void			SetupEmitter( void );
+	void SetupEmitter( void );
 
-	void			ClientThink( void );
+	void ClientThink( void );
 
-	void			SetServerLinkState( bool state ) { m_bLinkedToServerEnt = state; }
+	void SetServerLinkState( bool state ) { m_bLinkedToServerEnt = state; }
 
 	float	m_flStartTime;
 	float	m_flFadeOutStart;
@@ -60,7 +60,7 @@ protected:
 
 	// Compute the bounding box's center, size, and basis
 	void ComputeRenderInfo( mstudiobbox_t *pHitBox, const matrix3x4_t &hitboxToWorld, 
-								Vector *pVecAbsOrigin, Vector *pXVec, Vector *pYVec );
+  		Vector *pVecAbsOrigin, Vector *pXVec, Vector *pYVec );
 	void BuildTeslaEffect( mstudiobbox_t *pHitBox, const matrix3x4_t &hitboxToWorld, bool bRandom, float flYawOffset );
 
 	void DoSparks( mstudiohitboxset_t *set, matrix3x4_t *hitboxbones[MAXSTUDIOBONES] );

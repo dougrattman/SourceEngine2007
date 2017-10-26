@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hooks and classes for the support of humanoid NPCs with 
 //			groovy facial animation capabilities, aka, "Actors"
 //
-//=============================================================================//
+
 
 
 #include "cbase.h"

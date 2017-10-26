@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "basecombatweapon.h"
@@ -38,7 +38,7 @@ public:
 	void	Spawn( void );
 	void	Activate( void );
 	void	Think( void );
-	void	DrawOverlays(void);
+	void	DrawOverlays();
 
 	virtual void UpdateOnRemove();
 

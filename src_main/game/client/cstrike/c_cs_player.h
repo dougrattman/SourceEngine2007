@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_CS_PLAYER_H
 #define C_CS_PLAYER_H
@@ -26,8 +26,8 @@ class CAddonModel
 {
 public:
 	CHandle<C_BaseAnimating> m_hEnt;	// The model for the addon.
-	int m_iAddon;						// One of the ADDON_ bits telling which model this is.
-	int m_iAttachmentPoint;				// Which attachment point on the player model this guy is on.
+	int m_iAddon;  // One of the ADDON_ bits telling which model this is.
+	int m_iAttachmentPoint; 	// Which attachment point on the player model this guy is on.
 };
 
 
@@ -73,9 +73,9 @@ public:
 	virtual const QAngle& GetRenderAngles();
 	virtual void CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
 
-	virtual void			GetRenderBounds( Vector& theMins, Vector& theMaxs );
-	virtual void			GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType );
-	virtual bool			GetShadowCastDirection( Vector *pDirection, ShadowType_t shadowType ) const;
+	virtual void GetRenderBounds( Vector& theMins, Vector& theMaxs );
+	virtual void GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType );
+	virtual bool GetShadowCastDirection( Vector *pDirection, ShadowType_t shadowType ) const;
 
 	virtual void VPhysicsUpdate( IPhysicsObject *pPhysics );
 
@@ -203,9 +203,9 @@ public:
 
 	// Predicted variables.
 	bool m_bResumeZoom;
-	int m_iLastZoom;			// after firing a shot, set the FOV to 90, and after showing the animation, bring the FOV back to last zoom level.
+	int m_iLastZoom; // after firing a shot, set the FOV to 90, and after showing the animation, bring the FOV back to last zoom level.
 	CNetworkVar( CSPlayerState, m_iPlayerState );	// SupraFiend: this gives the current state in the joining process, the states are listed above
-	CNetworkVar( bool, m_bIsDefusing );			// tracks whether this player is currently defusing a bomb
+	CNetworkVar( bool, m_bIsDefusing ); // tracks whether this player is currently defusing a bomb
 	CNetworkVar( bool, m_bInBombZone );
 	CNetworkVar( bool, m_bInBuyZone );	
 	CNetworkVar( int, m_iThrowGrenadeCounter );	// used to trigger grenade throw animations.
@@ -302,11 +302,11 @@ private:
 	CInterpolatedVar< QAngle >	m_iv_angEyeAngles;
 
 	// ID Target
-	int					m_iIDEntIndex;
+	int 		m_iIDEntIndex;
 	CountdownTimer		m_delayTargetIDTimer;
 
 	// Show the ID target after the cursor leaves the entity
-	int					m_iOldIDEntIndex;
+	int 		m_iOldIDEntIndex;
 	CountdownTimer		m_holdTargetIDTimer;
 
 	void ReleaseFlashlight( void );
@@ -327,7 +327,7 @@ private:
 	int m_iLastPrimaryAddon;
 	int m_iLastSecondaryAddon;
 
-	int m_cycleLatch;				// server periodically updates this to fix up our anims, here it is a 4 bit fixed point
+	int m_cycleLatch; 	// server periodically updates this to fix up our anims, here it is a 4 bit fixed point
 	float m_serverIntendedCycle;	// server periodically updates this to fix up our anims, here it is the float we want, or -1 for no override
 
 	C_CSPlayer( const C_CSPlayer & );

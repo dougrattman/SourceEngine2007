@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Namespace for functions having to do with WC Edit mode
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "mathlib/mathlib.h"
@@ -29,7 +29,7 @@
 // UNDONE: Reduce some dependency here!
 #include "physics_prop_ragdoll.h"
 #include "items.h"
-#include "utlsymbol.h"
+#include "tier1/utlsymbol.h"
 #include "physobj.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -782,7 +782,7 @@ CON_COMMAND( hammer_update_safe_entities, "Updates entities in the map that can 
 		CWC_UpdateIgnoreList *piglist = static_cast<CWC_UpdateIgnoreList *>(pEnt);
 		for (int ii = 0 ; ii < CWC_UpdateIgnoreList::MAX_IGNORELIST_NAMES ; ++ii )
 		{
-			if (!!piglist->GetName(ii))  // if not null
+			if (!!piglist->GetName(ii))  // if not 0
 			{	// add to symtab
 				ignoredNames.AddString(piglist->GetName(ii).ToCStr());
 			}

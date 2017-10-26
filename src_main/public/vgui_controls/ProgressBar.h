@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PROGRESSBAR_H
 #define PROGRESSBAR_H
@@ -20,7 +20,7 @@ namespace vgui
 
 //-----------------------------------------------------------------------------
 // Purpose: Status bar that visually displays discrete progress in the form
-//			of a segmented strip
+// of a segmented strip
 //-----------------------------------------------------------------------------
 class ProgressBar : public Panel
 {
@@ -67,7 +67,7 @@ protected:
 	MESSAGE_FUNC_PARAMS( OnDialogVariablesChanged, "DialogVariables", dialogVariables );
 	/* CUSTOM MESSAGE HANDLING
 		"SetProgress"
-			input:	"progress"	- float value of the progress to set
+ input:	"progress"	- float value of the progress to set
 	*/
 
 protected:

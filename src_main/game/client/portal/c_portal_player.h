@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -64,32 +64,32 @@ public:
 	// Should this object cast shadows?
 	virtual ShadowType_t	ShadowCastType( void );
 	virtual C_BaseAnimating* BecomeRagdollOnClient();
-	virtual bool			ShouldDraw( void );
+	virtual bool ShouldDraw( void );
 	virtual const QAngle&	EyeAngles();
-	virtual void			OnPreDataChanged( DataUpdateType_t type );
-	virtual void			OnDataChanged( DataUpdateType_t type );
-	bool					DetectAndHandlePortalTeleportation( void ); //detects if the player has portalled and fixes views
-	virtual float			GetFOV( void );
+	virtual void OnPreDataChanged( DataUpdateType_t type );
+	virtual void OnDataChanged( DataUpdateType_t type );
+	bool 		DetectAndHandlePortalTeleportation( void ); //detects if the player has portalled and fixes views
+	virtual float GetFOV( void );
 	virtual CStudioHdr*		OnNewModel( void );
-	virtual void			TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
-	virtual void			ItemPreFrame( void );
-	virtual void			ItemPostFrame( void );
-	virtual float			GetMinFOV()	const { return 5.0f; }
-	virtual Vector			GetAutoaimVector( float flDelta );
-	virtual bool			ShouldReceiveProjectedTextures( int flags );
-	virtual void			PostDataUpdate( DataUpdateType_t updateType );
-	virtual void			GetStepSoundVelocities( float *velwalk, float *velrun );
-	virtual void			PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force );
-	virtual void			PreThink( void );
-	virtual void			DoImpactEffect( trace_t &tr, int nDamageType );
+	virtual void TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
+	virtual void ItemPreFrame( void );
+	virtual void ItemPostFrame( void );
+	virtual float GetMinFOV()	const { return 5.0f; }
+	virtual Vector GetAutoaimVector( float flDelta );
+	virtual bool ShouldReceiveProjectedTextures( int flags );
+	virtual void PostDataUpdate( DataUpdateType_t updateType );
+	virtual void GetStepSoundVelocities( float *velwalk, float *velrun );
+	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force );
+	virtual void PreThink( void );
+	virtual void DoImpactEffect( trace_t &tr, int nDamageType );
 
-	virtual Vector			EyePosition();
-	Vector					EyeFootPosition( const QAngle &qEyeAngles );//interpolates between eyes and feet based on view angle roll
-	inline Vector			EyeFootPosition( void ) { return EyeFootPosition( EyeAngles() ); }; 
-	void					PlayerPortalled( C_Prop_Portal *pEnteredPortal );
+	virtual Vector EyePosition();
+	Vector 		EyeFootPosition( const QAngle &qEyeAngles );//interpolates between eyes and feet based on view angle roll
+	inline Vector EyeFootPosition( void ) { return EyeFootPosition( EyeAngles() ); }; 
+	void 		PlayerPortalled( C_Prop_Portal *pEnteredPortal );
 
 	virtual void	CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, float &zFar, float &fov );
-	void			CalcPortalView( Vector &eyeOrigin, QAngle &eyeAngles );
+	void CalcPortalView( Vector &eyeOrigin, QAngle &eyeAngles );
 	virtual void	CalcViewModelView( const Vector& eyeOrigin, const QAngle& eyeAngles);
 
 	CBaseEntity*	FindUseEntity( void );
@@ -180,8 +180,8 @@ private:
 	{
 		CHandle<C_Prop_Portal>	m_hPortalEnvironment;
 		CHandle<C_Func_LiquidPortal>	m_hSurroundingLiquidPortal;
-		//Vector					m_ptPlayerPosition;
-		QAngle					m_qEyeAngles;
+		//Vector 		m_ptPlayerPosition;
+		QAngle 		m_qEyeAngles;
 	} PreDataChanged_Backup;
 
 	Vector	m_ptEyePosition_LastCalcView;
@@ -189,7 +189,7 @@ private:
 	C_Prop_Portal *m_pPortalEnvironment_LastCalcView;
 
 	ClientCCHandle_t	m_CCDeathHandle;	// handle to death cc effect
-	float				m_flDeathCCWeight;	// for fading in cc effect	
+	float 	m_flDeathCCWeight;	// for fading in cc effect	
 
 	bool	m_bPortalledMessagePending; //Player portalled. It's easier to wait until we get a OnDataChanged() event or a CalcView() before we do anything about it. Otherwise bits and pieces can get undone
 	VMatrix m_PendingPortalMatrix;

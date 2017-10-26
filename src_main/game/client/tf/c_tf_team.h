@@ -29,14 +29,14 @@ class C_TFTeam : public C_Team
 
 public:
 
-					C_TFTeam();
-	virtual			~C_TFTeam();
+ 		C_TFTeam();
+	virtual ~C_TFTeam();
 
-	int				GetFlagCaptures( void ) { return m_nFlagCaptures; }
-	int				GetRole( void ) { return m_iRole; }
-	char			*Get_Name( void );
+	int 	GetFlagCaptures( void ) { return m_nFlagCaptures; }
+	int 	GetRole( void ) { return m_iRole; }
+	char *Get_Name( void );
 
-	int				GetNumObjects( int iObjectType = -1 );
+	int 	GetNumObjects( int iObjectType = -1 );
 	CBaseObject		*GetObject( int num );
 
 	CUtlVector< CHandle<C_BaseObject> > m_aObjects;

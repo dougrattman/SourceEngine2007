@@ -1,20 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef NETWORKSTRINGTABLECLIENT_H
 #define NETWORKSTRINGTABLECLIENT_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 class CUtlBuffer;
 
-void CL_PrintStringTables( void );
-void CL_WriteStringTables( CUtlBuffer& buf );
-bool CL_ReadStringTables( CUtlBuffer& buf );
+void CL_PrintStringTables(void);
+void CL_WriteStringTables(CUtlBuffer& buf);
+bool CL_ReadStringTables(CUtlBuffer& buf);
 
-#endif // NETWORKSTRINGTABLECLIENT_H
+#endif  // NETWORKSTRINGTABLECLIENT_H

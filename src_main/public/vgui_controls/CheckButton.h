@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CHECKBUTTON_H
 #define CHECKBUTTON_H
@@ -52,7 +52,7 @@ protected:
 
 	/* MESSAGES SENT
 		"CheckButtonChecked" - sent when the check button state is changed
-			"state"	- button state: 1 is checked, 0 is unchecked
+ "state"	- button state: 1 is checked, 0 is unchecked
 	*/
 
 private:

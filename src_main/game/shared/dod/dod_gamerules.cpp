@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The TF Game rules 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "dod_gamerules.h"
 #include "ammodef.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "weapon_dodbase.h"
 #include "filesystem.h"		// for WriteStatsFile
 
@@ -3444,7 +3444,7 @@ const CDODViewVectors *CDODGameRules::GetDODViewVectors() const
 
 			cappers[i] = '\0';
 
-			// pCappingPlayers is a null terminated list of player indeces
+			// pCappingPlayers is a 0 terminated list of player indeces
 			event2->SetString( "cappers", cappers );
 			event2->SetBool( "bomb", true );
 
@@ -4757,7 +4757,7 @@ CBaseCombatWeapon *CDODGameRules::GetNextBestWeapon( CBaseCombatCharacter *pPlay
 	// if we make it here, we've checked all the weapons and found no useable 
 	// weapon in the same catagory as the current weapon. 
 
-	// if pBest is null, we didn't find ANYTHING. Shouldn't be possible- should always 
+	// if pBest is 0, we didn't find ANYTHING. Shouldn't be possible- should always 
 	// at least get the crowbar, but ya never know.
 	return pBest;
 }

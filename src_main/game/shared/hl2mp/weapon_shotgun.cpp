@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "npcevent.h"
@@ -65,7 +65,7 @@ public:
 	DECLARE_ACTTABLE();
 #endif
 
-	CWeaponShotgun(void);
+	CWeaponShotgun();
 
 private:
 	CWeaponShotgun( const CWeaponShotgun & );

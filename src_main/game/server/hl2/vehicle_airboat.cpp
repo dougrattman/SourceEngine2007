@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "vehicle_base.h"
@@ -87,7 +87,7 @@ public:
 	bool			ShouldThink() { return true; }
 
 	// CBaseEntity
-	void			Think(void);
+	void			Think();
 	void			Precache( void );
 	void			Spawn( void );
 	virtual void	OnRestore();

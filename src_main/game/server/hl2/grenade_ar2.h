@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Projectile shot from the AR2 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	GRENADEAR2_H
 #define	GRENADEAR2_H
@@ -27,8 +27,8 @@ public:
 	DECLARE_CLASS( CGrenadeAR2, CBaseGrenade );
 
 	CHandle< SmokeTrail > m_hSmokeTrail;
-	float				 m_fSpawnTime;
-	float				m_fDangerRadius;
+	float 	 m_fSpawnTime;
+	float 	m_fDangerRadius;
 
 
 	void		Spawn( void );
@@ -38,8 +38,8 @@ public:
 	void		Event_Killed( const CTakeDamageInfo &info );
 
 public:
-	void EXPORT				Detonate(void);
-	CGrenadeAR2(void);
+	void EXPORT 	Detonate();
+	CGrenadeAR2();
 
 	DECLARE_DATADESC();
 };

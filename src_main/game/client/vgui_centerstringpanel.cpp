@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
-#include <stdarg.h>
+#include <cstdarg>
 #include "vguicenterprint.h"
 #include "ivrenderview.h"
 #include <vgui/IVgui.h>
@@ -72,7 +72,7 @@ CCenterStringLabel::CCenterStringLabel( vgui::VPANEL parent ) :
 	SetParent( parent );
 	ComputeSize();
 	SetVisible( false );
-	SetCursor( null );
+	SetCursor( 0 );
 	SetKeyBoardInputEnabled( false );
 	SetMouseInputEnabled( false );
 	SetContentAlignment( vgui::Label::a_center );

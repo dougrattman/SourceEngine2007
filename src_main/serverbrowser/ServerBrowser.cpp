@@ -243,7 +243,6 @@ void CServerBrowser::Shutdown()
 //-----------------------------------------------------------------------------
 bool CServerBrowser::OpenGameInfoDialog( uint64 ulSteamIDFriend )
 {
-#if !defined( _X360 ) // X360TBD: SteamFriends()
 	if ( m_hInternetDlg.Get() )
 	{
 		// activate an already-existing dialog
@@ -254,12 +253,12 @@ bool CServerBrowser::OpenGameInfoDialog( uint64 ulSteamIDFriend )
 			return true;
 		}
 
+#ifndef NO_STEAM
 		// none yet, create a new dialog
 		uint64 nGameID;
 		uint32 unGameIP;
 		uint16 usGamePort;
 		uint16 usQueryPort;
-#ifndef NO_STEAM
 		if ( SteamFriends()->GetFriendGamePlayed( ulSteamIDFriend, &nGameID, &unGameIP, &usGamePort, &usQueryPort ) )
 		{
 			uint16 usConnPort = usGamePort;
@@ -271,7 +270,6 @@ bool CServerBrowser::OpenGameInfoDialog( uint64 ulSteamIDFriend )
 		}
 #endif
 	}
-#endif
 	return false;
 }
 

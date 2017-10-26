@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
@@ -76,9 +76,9 @@ protected:
 	virtual void ApplySchemeSettings(IScheme *pScheme);
 
 protected:
-	Button				*m_pOkButton;
-	Button				*m_pCancelButton;
-	Label				*m_pMessageLabel;
+	Button 	*m_pOkButton;
+	Button 	*m_pCancelButton;
+	Label 	*m_pMessageLabel;
 
 private:
 	MESSAGE_FUNC( OnShutdownRequest, "ShutdownRequest" );

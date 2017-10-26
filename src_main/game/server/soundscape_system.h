@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SOUNDSCAPE_SYSTEM_H
 #define SOUNDSCAPE_SYSTEM_H
@@ -42,10 +42,10 @@ public:
 	void PrecacheSounds( int soundscapeIndex );
 
 private:
-	CStringRegistry							m_soundscapes;
-	int										m_soundscapeCount;
-	CUtlVector< CEnvSoundscape * >			m_soundscapeEntities;
-	int										m_activeIndex;
+	CStringRegistry  	m_soundscapes;
+	int   	m_soundscapeCount;
+	CUtlVector< CEnvSoundscape * > m_soundscapeEntities;
+	int   	m_activeIndex;
 	CUtlVector< CUtlVector< CUtlString > >	m_soundscapeSounds;
 };
 

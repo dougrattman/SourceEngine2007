@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IPREDICTIONSYSTEM_H
 #define IPREDICTIONSYSTEM_H
@@ -55,7 +55,7 @@ public:
 	{
 		if ( DisableFiltering() )
 		{
-			return NULL;
+ return NULL;
 		}
 
 		return m_pSuppressHost;
@@ -65,7 +65,7 @@ public:
 	{
 		if ( DisableFiltering() )
 		{
-			return false;
+ return false;
 		}
 
 		return !m_bSuppressEvent;
@@ -78,8 +78,8 @@ public:
 		IPredictionSystem *sys = g_pPredictionSystems;
 		while ( sys )
 		{
-			sys->SetSuppressEvent( state );
-			sys = sys->GetNext();
+ sys->SetSuppressEvent( state );
+ sys = sys->GetNext();
 		}
 	}
 
@@ -88,8 +88,8 @@ public:
 		IPredictionSystem *sys = g_pPredictionSystems;
 		while ( sys )
 		{
-			sys->SetSuppressHost( host );
-			sys = sys->GetNext();
+ sys->SetSuppressHost( host );
+ sys = sys->GetNext();
 		}
 	}
 
@@ -100,8 +100,8 @@ private:
 		IPredictionSystem *sys = g_pPredictionSystems;
 		while ( sys )
 		{
-			sys->_Push();
-			sys = sys->GetNext();
+ sys->_Push();
+ sys = sys->GetNext();
 		}
 	}
 
@@ -110,8 +110,8 @@ private:
 		IPredictionSystem *sys = g_pPredictionSystems;
 		while ( sys )
 		{
-			sys->_Pop();
-			sys = sys->GetNext();
+ sys->_Pop();
+ sys = sys->GetNext();
 		}
 	}
 
@@ -130,10 +130,10 @@ private:
 	}
 
 	IPredictionSystem	*m_pNextSystem;
-	bool				m_bSuppressEvent;
-	CBaseEntity			*m_pSuppressHost;
+	bool 	m_bSuppressEvent;
+	CBaseEntity *m_pSuppressHost;
 
-	int					m_nStatusPushed;
+	int 		m_nStatusPushed;
 
 	friend class CDisablePredictionFiltering;
 };
@@ -146,7 +146,7 @@ public:
 		m_bDisabled = disable;
 		if ( m_bDisabled )
 		{
-			IPredictionSystem::Push();
+ IPredictionSystem::Push();
 		}
 	}
 
@@ -154,7 +154,7 @@ public:
 	{
 		if ( m_bDisabled )
 		{
-			IPredictionSystem::Pop();
+ IPredictionSystem::Pop();
 		}
 	}
 private:

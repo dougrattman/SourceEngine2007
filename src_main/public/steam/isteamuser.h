@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: interface to user account information in Steam
 //
@@ -17,12 +17,12 @@ struct CallbackMsg_t
 {
 	HSteamUser m_hSteamUser;
 	int m_iCallback;
-	uint8 *m_pubParam;
+	uint8_t *m_pubParam;
 	int m_cubParam;
 };
 
 // reference to a steam call, to filter results by
-typedef int32 HSteamCall;
+typedef int32_t HSteamCall;
 
 enum ERegistrySubTree
 {
@@ -49,7 +49,7 @@ enum EAppUsageEvent
 
 //-----------------------------------------------------------------------------
 // Purpose: Functions for accessing and manipulating a steam account
-//			associated with one client instance
+// associated with one client instance
 //-----------------------------------------------------------------------------
 class ISteamUser
 {
@@ -62,9 +62,9 @@ public:
 	virtual CSteamID GetSteamID() = 0;
 
 	// notify of connection to game server
-	virtual int InitiateGameConnection( void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void *pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey ) = 0;
+	virtual int InitiateGameConnection( void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32_t unIPServer, uint16_t usPortServer, bool bSecure, void *pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey ) = 0;
 	// notify of disconnect
-	virtual void TerminateGameConnection( uint32 unIPServer, uint16 usPortServer ) = 0;
+	virtual void TerminateGameConnection( uint32_t unIPServer, uint16_t usPortServer ) = 0;
 
 	// game info
 	virtual void TrackAppUsageEvent( CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo = "" ) = 0;
@@ -124,17 +124,17 @@ struct ClientGameServerDeny_t
 {
 	enum { k_iCallback = k_iSteamUserCallbacks + 13 };
 
-	uint32 m_uAppID;
-	uint32 m_unGameServerIP;
-	uint16 m_usGameServerPort;
-	uint16 m_bSecure;
-	uint32 m_uReason;
+	uint32_t m_uAppID;
+	uint32_t m_unGameServerIP;
+	uint16_t m_usGameServerPort;
+	uint16_t m_bSecure;
+	uint32_t m_uReason;
 };
 
 
 //-----------------------------------------------------------------------------
 // Purpose: called when the callback system for this client is in an error state (and has flushed pending callbacks)
-//			When getting this message the client should disconnect from Steam, reset any stored Steam state and reconnect
+// When getting this message the client should disconnect from Steam, reset any stored Steam state and reconnect
 //-----------------------------------------------------------------------------
 struct CallbackPipeFailure_t
 {
@@ -148,7 +148,7 @@ struct CallbackPipeFailure_t
 struct GSPolicyResponse_t
 {
 	enum { k_iCallback = k_iSteamUserCallbacks + 15 };
-	uint8 m_bSecure;
+	uint8_t m_bSecure;
 };
 
 
@@ -156,15 +156,15 @@ struct GSPolicyResponse_t
 extern "C"
 {	
 	// C functions we export for the C API, maps to ISteamUser functions 
-	DLL_EXPORT void Steam_LogOn( HSteamUser hUser, HSteamPipe hSteamPipe, uint64 ulSteamID );
+	DLL_EXPORT void Steam_LogOn( HSteamUser hUser, HSteamPipe hSteamPipe, uint64_t ulSteamID );
 	DLL_EXPORT void Steam_LogOff( HSteamUser hUser, HSteamPipe hSteamPipe );
 	DLL_EXPORT bool Steam_BLoggedOn( HSteamUser hUser, HSteamPipe hSteamPipe );
 	DLL_EXPORT bool Steam_BConnected( HSteamUser hUser, HSteamPipe hSteamPipe );
 	DLL_EXPORT bool Steam_BGetCallback( HSteamPipe hSteamPipe, CallbackMsg_t *pCallbackMsg, HSteamCall *phSteamCall );
 	DLL_EXPORT void Steam_FreeLastCallback( HSteamPipe hSteamPipe );
 	DLL_EXPORT int Steam_GSGetSteamGameConnectToken( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbBlobMax );
-	DLL_EXPORT int Steam_InitiateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbMaxBlob, uint64 steamID, int nGameAppID, uint32 unIPServer, uint16 usPortServer, bool bSecure );
-	DLL_EXPORT void Steam_TerminateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, uint32 unIPServer, uint16 usPortServer );
+	DLL_EXPORT int Steam_InitiateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbMaxBlob, uint64_t steamID, int nGameAppID, uint32_t unIPServer, uint16_t usPortServer, bool bSecure );
+	DLL_EXPORT void Steam_TerminateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, uint32_t unIPServer, uint16_t usPortServer );
 
 
 	typedef bool (*PFNSteam_BGetCallback)( HSteamPipe hSteamPipe, CallbackMsg_t *pCallbackMsg, HSteamCall *phSteamCall );

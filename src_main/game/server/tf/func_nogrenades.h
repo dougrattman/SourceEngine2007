@@ -2,7 +2,7 @@
 //
 // Purpose: CTF NoGrenades Zone.
 //
-//=============================================================================//
+
 #ifndef FUNC_NOGRENADES_ZONE_H
 #define FUNC_NOGRENADES_ZONE_H
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HL2_SHAREDDEFS_H
 #define HL2_SHAREDDEFS_H
@@ -41,7 +41,7 @@ enum
 //--------------
 // HL2 SPECIFIC
 //--------------
-#define DMG_SNIPER			(DMG_LASTGENERICFLAG<<1)	// This is sniper damage
+#define DMG_SNIPER (DMG_LASTGENERICFLAG<<1)	// This is sniper damage
 #define DMG_MISSILEDEFENSE	(DMG_LASTGENERICFLAG<<2)	// The only kind of damage missiles take. (special missile defense)
 
 

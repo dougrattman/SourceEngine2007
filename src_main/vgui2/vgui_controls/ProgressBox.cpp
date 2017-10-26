@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include <vgui/IInput.h>
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
 #include <vgui/IVGui.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/Button.h>
 #include <vgui_controls/Controls.h>
@@ -18,7 +18,7 @@
 #include <vgui_controls/ProgressBar.h>
 #include <vgui_controls/ProgressBox.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

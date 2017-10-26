@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Special handling for hl2 usable ladders
 //
-//=============================================================================//
+
 
 #include "gamemovement.h"
 #include "func_ladder.h"
@@ -23,7 +23,7 @@ class CInfoLadderDismount;
 struct NearbyDismount_t
 {
 	CInfoLadderDismount		*dismount;
-	float					distSqr;
+	float 		distSqr;
 };
 
 //-----------------------------------------------------------------------------

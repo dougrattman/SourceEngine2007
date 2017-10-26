@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef RAGDOLL_SHARED_H
 #define RAGDOLL_SHARED_H
@@ -28,7 +28,7 @@ class CBoneAccessor;
 
 // UNDONE: Remove and make dynamic?
 #define RAGDOLL_MAX_ELEMENTS	24
-#define RAGDOLL_INDEX_BITS		5			// NOTE 1<<RAGDOLL_INDEX_BITS >= RAGDOLL_MAX_ELEMENTS
+#define RAGDOLL_INDEX_BITS		5 // NOTE 1<<RAGDOLL_INDEX_BITS >= RAGDOLL_MAX_ELEMENTS
 
 #define CORE_DISSOLVE_FADE_START 0.2f
 #define CORE_DISSOLVE_MODEL_FADE_START 0.1f
@@ -37,30 +37,30 @@ class CBoneAccessor;
 
 struct ragdollelement_t
 {
-	Vector				originParentSpace;
+	Vector 	originParentSpace;
 	IPhysicsObject		*pObject;		// all valid elements have an object
 	IPhysicsConstraint	*pConstraint;	// all valid elements have a constraint (except the root)
-	int					parentIndex;
+	int 		parentIndex;
 };
 
 struct ragdollanimatedfriction_t
 {
-	float					flFrictionTimeIn;
-	float					flFrictionTimeOut;
-	float					flFrictionTimeHold;
-	int						iMinAnimatedFriction;
-	int						iMaxAnimatedFriction;
+	float 		flFrictionTimeIn;
+	float 		flFrictionTimeOut;
+	float 		flFrictionTimeHold;
+	int  iMinAnimatedFriction;
+	int  iMaxAnimatedFriction;
 };
 
 struct ragdoll_t
 {
-	int						listCount;
-	bool					allowStretch;
-	bool					unused;
+	int  listCount;
+	bool 		allowStretch;
+	bool 		unused;
 	IPhysicsConstraintGroup *pGroup;
 	// store these in separate arrays for save/load
 	ragdollelement_t 	list[RAGDOLL_MAX_ELEMENTS];
-	int					boneIndex[RAGDOLL_MAX_ELEMENTS];
+	int 		boneIndex[RAGDOLL_MAX_ELEMENTS];
 	ragdollanimatedfriction_t animfriction;
 };
 
@@ -69,10 +69,10 @@ struct ragdollparams_t
 	void		*pGameData;
 	vcollide_t	*pCollide;
 	CStudioHdr	*pStudioHdr;
-	int			modelIndex;
+	int modelIndex;
 	Vector		forcePosition;
 	Vector		forceVector;
-	int			forceBoneIndex;
+	int forceBoneIndex;
 	const matrix3x4_t *pCurrentBones;
 	float		jointFrictionScale;
 	bool		allowStretch;

@@ -1,23 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $Date:         $
-//
-//-----------------------------------------------------------------------------
-// $Log: $
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef DEBUG_LEAFVIS_H
 #define DEBUG_LEAFVIS_H
-#pragma once
 
+extern void LeafVisBuild(const Vector& p);
+extern void LeafVisDraw(void);
 
-extern void LeafVisBuild( const Vector& p );
-extern void LeafVisDraw( void );
-
-
-#endif // DEBUG_LEAFVIS_H
+#endif  // DEBUG_LEAFVIS_H

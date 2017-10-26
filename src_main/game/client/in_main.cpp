@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: builds an intended movement command to send to the server
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #include "cbase.h"
@@ -16,8 +16,8 @@
 #include "iviewrender.h"
 #include "iclientmode.h"
 #include "prediction.h"
-#include "bitbuf.h"
-#include "checksum_md5.h"
+#include "tier1/bitbuf.h"
+#include "tier1/checksum_md5.h"
 #include "hltvcamera.h"
 #include <ctype.h> // isalnum()
 #include <voice_status.h>

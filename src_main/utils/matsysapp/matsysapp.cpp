@@ -19,8 +19,6 @@
 
 #include "stdafx.h"
 
-#pragma warning(disable:4305)
-#pragma warning(disable:4244)
 #include <windows.h>
 #include <math.h>
 #include <stdarg.h>
@@ -579,11 +577,11 @@ bool MaterialSystemApp::InitMaterialSystem()
 	}
 	
 	// Load the material system DLL and get its interface.
-	char *pDLLName = "MaterialSystem.dll";
+	char *pDLLName = "materialsystem.dll";
 	m_hMaterialSystemInst = LoadLibrary( pDLLName );
 	if( !m_hMaterialSystemInst )
 	{
-		return Sys_Error( "Can't load MaterialSystem.dll\n" );
+		return Sys_Error( "Can't load materialsystem.dll\n" );
 	}
 
 	CreateInterfaceFn clientFactory = Sys_GetFactory( pDLLName );
@@ -830,20 +828,20 @@ void MaterialSystemApp::MouseRelease()
 void MaterialSystemApp::GetParameters()
 {
    int   count;
-   char *s, *tstring;
+   char *s, *str;
    
    // Make a copy of the command line to count the parameters - strtok is destructive
-   tstring = (char *)malloc(sizeof(char)*(strlen(m_szCmdLine)+1));
-   strcpy(tstring, m_szCmdLine);
+   str = (char *)malloc(sizeof(char)*(strlen(m_szCmdLine)+1));
+   strcpy(str, m_szCmdLine);
    
    // Count the parameters
-   s = strtok(tstring, " ");
+   s = strtok(str, " ");
    count = 1;
    while (strtok(NULL, " ") != NULL)
    {
 	   count++;
    }
-   free(tstring);
+   free(str);
    
    // Allocate "pockets" for the parameters
    m_argv = (char **)malloc(sizeof(char*)*(count+1));

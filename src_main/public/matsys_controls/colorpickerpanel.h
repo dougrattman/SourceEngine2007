@@ -133,11 +133,11 @@ class CColorPickerButton : public vgui::Button
 
 	/*
 	NOTE: Sends ColorPickerPicked message when a color is picked
-			color - picked color
+ color - picked color
 		  Sends ColorPickerPreview message when a color is previewed
-				color - current preview color
+ 	color - current preview color
 		  Sends ColorPickerCancelled message when the cancel button was hit
-				startingColor - color before the picking occurred
+ 	startingColor - color before the picking occurred
 	*/
 
 public:

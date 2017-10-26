@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -50,7 +50,7 @@ public:
 	//Fog workarounds
 	//-----------------------------------------------------------------------------
 	virtual const Vector&	GetFogOrigin( void ) const { return vec3_origin; };
-	virtual void			ShiftFogForExitPortalView() const;
+	virtual void ShiftFogForExitPortalView() const;
 
 	//-----------------------------------------------------------------------------
 	//Portal visibility testing
@@ -71,13 +71,13 @@ public:
 	virtual void	DrawPortal( void ) { }; //sort of like what you'd expect to happen in C_BaseAnimating::DrawModel() if portals were fully compatible with models
 
 	virtual C_BaseEntity *PortalRenderable_GetPairedEntity( void ) { return NULL; }; //Pairing a portal with an entity is common but not required. Accessing that entity allows the CPortalRender system to better optimize.
-	VMatrix			m_matrixThisToLinked; //Always going to need a matrix
+	VMatrix m_matrixThisToLinked; //Always going to need a matrix
 
 
 	//-----------------------------------------------------------------------------
 	//SFM related
 	//-----------------------------------------------------------------------------
-	bool			m_bIsPlaybackPortal;
+	bool m_bIsPlaybackPortal;
 	virtual void	GetToolRecordingState( bool bActive, KeyValues *msg ) { };
 	virtual void	HandlePortalPlaybackMessage( KeyValues *pKeyValues ) { };
 
@@ -132,7 +132,7 @@ struct PortalRenderableCreationFunction_t
 
 struct PortalViewIDNode_t
 {
-	CUtlVector<PortalViewIDNode_t *> ChildNodes; //links will only be non-null if they're useful (can see through the portal at that depth and view setup)
+	CUtlVector<PortalViewIDNode_t *> ChildNodes; //links will only be non-0 if they're useful (can see through the portal at that depth and view setup)
 	int iPrimaryViewID;
 	//skybox view id is always primary + 1
 
@@ -249,11 +249,11 @@ private:
 
 private:
 	PortalRenderingMaterials_t	m_Materials;
-	int							m_iViewRecursionLevel;
-	int							m_iRemainingPortalViewDepth; //let's portals know that they should do "end of the line" kludges to cover up that portals don't go infinitely recursive
+	int  	m_iViewRecursionLevel;
+	int  	m_iRemainingPortalViewDepth; //let's portals know that they should do "end of the line" kludges to cover up that portals don't go infinitely recursive
 		
-	CPortalRenderable			*m_pRenderingViewForPortal; //the specific pointer for the portal that we're rending a view for
-	CPortalRenderable			*m_pRenderingViewExitPortal; //the specific pointer for the portal that our view exits from
+	CPortalRenderable *m_pRenderingViewForPortal; //the specific pointer for the portal that we're rending a view for
+	CPortalRenderable *m_pRenderingViewExitPortal; //the specific pointer for the portal that our view exits from
 
 	CUtlVector<CPortalRenderable *>		m_AllPortals; //All portals currently in memory, active or not
 	CUtlVector<CPortalRenderable *>		m_ActivePortals;
@@ -263,7 +263,7 @@ public:
 	//frustums with more (or less) than 6 planes. Store each recursion level's custom frustum here so further recursions can be better optimized.
 	//When going into further recursions, if you've failed to fill in a complex frustum, the standard frustum will be copied in.
 	//So all parent levels are guaranteed to contain valid data
-	CUtlVector<VPlane>					m_RecursiveViewComplexFrustums[MAX_PORTAL_RECURSIVE_VIEWS]; 
+	CUtlVector<VPlane> 		m_RecursiveViewComplexFrustums[MAX_PORTAL_RECURSIVE_VIEWS]; 
 	const PortalRenderingMaterials_t& m_MaterialsAccess;
 
 	friend class CPortalRenderable;

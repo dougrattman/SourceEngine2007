@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Deals with precaching requests from client effects
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "fx.h"
 #include "ClientEffectPrecacheSystem.h"

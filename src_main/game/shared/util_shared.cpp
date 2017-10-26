@@ -1,18 +1,18 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "mathlib/mathlib.h"
 #include "util_shared.h"
 #include "model_types.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "IEffects.h"
 #include "vphysics/object_hash.h"
 #include "mathlib/IceKey.H"
-#include "checksum_crc.h"
+#include "tier1/checksum_crc.h"
 #include "particle_parse.h"
 
 #ifdef CLIENT_DLL

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IMOVEHELPER_H
 #define IMOVEHELPER_H
@@ -89,7 +89,7 @@ protected:
 	static void SetSingleton( IMoveHelper* pMoveHelper ) { sm_pSingleton = pMoveHelper; }
 
 	// Clients shouldn't call delete directly
-	virtual			~IMoveHelper() {}
+	virtual ~IMoveHelper() {}
 
 	// The global instance
 	static IMoveHelper* sm_pSingleton;

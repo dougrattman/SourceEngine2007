@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 
 #include "cbase.h"
@@ -10,7 +10,7 @@
 #include "AI_ResponseSystem.h"
 #include "igamesystem.h"
 #include "AI_Criteria.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "filesystem.h"
 #include "utldict.h"
 #include "ai_speech.h"
@@ -18,8 +18,8 @@
 #include <ctype.h>
 #include "sceneentity.h"
 #include "isaverestore.h"
-#include "utlbuffer.h"
-#include "stringpool.h"
+#include "tier1/utlbuffer.h"
+#include "tier1/stringpool.h"
 #include "fmtstr.h"
 #include "multiplay_gamerules.h"
 
@@ -701,7 +701,7 @@ public:
 	bool		IsRootCommand();
 
 	void		PushScript( const char *scriptfile, unsigned char *buffer );
-	void		PopScript(void);
+	void		PopScript();
 
 	void		ResponseWarning( const char *fmt, ... );
 

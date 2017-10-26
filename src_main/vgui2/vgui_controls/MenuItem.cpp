@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include <vgui/IScheme.h>
 #include <vgui/IVGui.h>
 #include "vgui/ISurface.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/Controls.h>
 #include <vgui_controls/Menu.h>
@@ -481,7 +481,7 @@ Menu *MenuItem::GetMenu()
 
 //-----------------------------------------------------------------------------
 // Purpose: Get the border style for the button. Menu items have no border so
-//			return null.
+//			return 0.
 //-----------------------------------------------------------------------------
 IBorder *MenuItem::GetBorder(bool depressed, bool armed, bool selected, bool keyfocus)
 {

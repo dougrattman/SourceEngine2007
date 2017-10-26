@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SIMTIMER_H
 #define SIMTIMER_H
@@ -54,16 +54,16 @@ public:
 	void Set( float minInterval, float maxInterval )
 	{ 
 		if ( maxInterval > 0.0 )
-			m_next = gpGlobals->curtime + random->RandomFloat( minInterval, maxInterval );
+ m_next = gpGlobals->curtime + random->RandomFloat( minInterval, maxInterval );
 		else
-			m_next = gpGlobals->curtime + minInterval;
+ m_next = gpGlobals->curtime + minInterval;
 	}
 
 	float GetRemaining() const
 	{
 		float result = m_next - gpGlobals->curtime;
 		if (result < 0 )
-			return 0;
+ return 0;
 		return result;
 	}
 
@@ -93,11 +93,11 @@ public:
 	{
 		if ( interval == -1.0 )
 		{
-			m_next = gpGlobals->curtime + m_interval;
+ m_next = gpGlobals->curtime + m_interval;
 		}
 		else
 		{
-			m_next = gpGlobals->curtime + interval;
+ m_next = gpGlobals->curtime + interval;
 		}
 	}
 
@@ -131,23 +131,23 @@ public:
 		
 		if (startExpired)
 		{
-			m_next = -1;
+ m_next = -1;
 		}
 		else
 		{
-			if ( m_maxInterval == 0 )
-				m_next = gpGlobals->curtime + m_minInterval;
-			else
-				m_next = gpGlobals->curtime + random->RandomFloat( m_minInterval, m_maxInterval );
+ if ( m_maxInterval == 0 )
+ 	m_next = gpGlobals->curtime + m_minInterval;
+ else
+ 	m_next = gpGlobals->curtime + random->RandomFloat( m_minInterval, m_maxInterval );
 		}
 	}
 
 	void Reset()
 	{
 		if ( m_maxInterval == 0 )
-			m_next = gpGlobals->curtime + m_minInterval;
+ m_next = gpGlobals->curtime + m_minInterval;
 		else
-			m_next = gpGlobals->curtime + random->RandomFloat( m_minInterval, m_maxInterval );
+ m_next = gpGlobals->curtime + random->RandomFloat( m_minInterval, m_maxInterval );
 	}
 
 	float GetMinInterval() const
@@ -276,9 +276,9 @@ public:
 	{ 
 		m_fIsRunning = true;
 		if ( maxOverride == 0 )
-			m_next = gpGlobals->curtime + minOverride;
+ m_next = gpGlobals->curtime + minOverride;
 		else
-			m_next = gpGlobals->curtime + random->RandomFloat( minOverride, maxOverride );
+ m_next = gpGlobals->curtime + random->RandomFloat( minOverride, maxOverride );
 	}
 
 	void Start()
@@ -321,7 +321,7 @@ public:
 	bool EnterThink()
 	{
 		if ( m_lastTime == gpGlobals->curtime )
-			return false;
+ return false;
 		m_lastTime = gpGlobals->curtime;
 		return true;
 	}

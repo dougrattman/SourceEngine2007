@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_DOD_PLAYER_H
 #define C_DOD_PLAYER_H
@@ -89,11 +89,11 @@ public:
 	bool IsWeaponLowered( void );
 
 	virtual ShadowType_t	ShadowCastType( void );
-	virtual void			GetRenderBounds( Vector& theMins, Vector& theMaxs );
-	virtual void			GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType );
-	virtual bool			GetShadowCastDirection( Vector *pDirection, ShadowType_t shadowType ) const;
+	virtual void GetRenderBounds( Vector& theMins, Vector& theMaxs );
+	virtual void GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType );
+	virtual bool GetShadowCastDirection( Vector *pDirection, ShadowType_t shadowType ) const;
 
-	virtual int				DrawModel( int flags );
+	virtual int 	DrawModel( int flags );
 	virtual void Simulate();
 
 	virtual float GetMinFOV() const { return 20; }
@@ -128,8 +128,8 @@ public:
 
 protected:
 	virtual void		CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
-	void				CalcDODDeathCamView( Vector &eyeOrigin, QAngle& eyeAngles, float& fov );
-	void				CalcChaseCamView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov);
+	void 	CalcDODDeathCamView( Vector &eyeOrigin, QAngle& eyeAngles, float& fov );
+	void 	CalcChaseCamView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov);
 
 
 	// Called by shared code.
@@ -219,7 +219,7 @@ private:
 	Vector m_vecRagdollVelocity;
 
 	// ID Target
-	int					m_iIDEntIndex;
+	int 		m_iIDEntIndex;
 
 	bool	m_bWeaponLowered;	// should our weapon be lowered right now
 
@@ -242,17 +242,17 @@ private:
 	bool m_bPlayingLowStaminaSound;
 
 	// Cold Breath
-	bool			CreateColdBreathEmitter( void );
-	void			DestroyColdBreathEmitter( void );
-	void			UpdateColdBreath( void );
-	void			EmitColdBreathParticles( void );
+	bool CreateColdBreathEmitter( void );
+	void DestroyColdBreathEmitter( void );
+	void UpdateColdBreath( void );
+	void EmitColdBreathParticles( void );
 
-	bool						m_bColdBreathOn;
-	float						m_flColdBreathTimeStart;
-	float						m_flColdBreathTimeEnd;
+	bool  m_bColdBreathOn;
+	float  m_flColdBreathTimeStart;
+	float  m_flColdBreathTimeEnd;
 	CSmartPtr<CSimpleEmitter>	m_hColdBreathEmitter;	
-	PMaterialHandle				m_hColdBreathMaterial;
-	int							m_iHeadAttach;
+	PMaterialHandle 	m_hColdBreathMaterial;
+	int  	m_iHeadAttach;
 
 	virtual void CalculateIKLocks( float currentTime );
 };

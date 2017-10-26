@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WEAPON_RPG_H
 #define WEAPON_RPG_H
@@ -81,9 +81,9 @@ protected:
 	void GetShootPosition( CLaserDot *pLaserDot, Vector *pShootPosition );
 
 	CHandle<RocketTrail>	m_hRocketTrail;
-	float					m_flAugerTime;		// Amount of time to auger before blowing up anyway
-	float					m_flMarkDeadTime;
-	float					m_flDamage;
+	float 		m_flAugerTime;		// Amount of time to auger before blowing up anyway
+	float 		m_flMarkDeadTime;
+	float 		m_flDamage;
 
 	struct CustomDetonator_t
 	{
@@ -95,8 +95,8 @@ protected:
 	static CUtlVector<CustomDetonator_t> gm_CustomDetonators;
 
 private:
-	float					m_flGracePeriodEndsAt;
-	bool					m_bCreateDangerSounds;
+	float 		m_flGracePeriodEndsAt;
+	bool 		m_bCreateDangerSounds;
 
 	DECLARE_DATADESC();
 };
@@ -136,7 +136,7 @@ public:
 
 	void	APCSeekThink( void );
 
-	CAPCMissile			*m_pNext;
+	CAPCMissile *m_pNext;
 
 protected:
 	virtual void DoExplosion();	
@@ -243,10 +243,10 @@ public:
 	
 protected:
 
-	bool				m_bInitialStateUpdate;
-	bool				m_bGuiding;
-	bool				m_bHideGuiding;		//User to override the player's wish to guide under certain circumstances
-	Vector				m_vecNPCLaserDot;
+	bool 	m_bInitialStateUpdate;
+	bool 	m_bGuiding;
+	bool 	m_bHideGuiding;		//User to override the player's wish to guide under certain circumstances
+	Vector 	m_vecNPCLaserDot;
 	CHandle<CLaserDot>	m_hLaserDot;
 	CHandle<CMissile>	m_hMissile;
 	CHandle<CSprite>	m_hLaserMuzzleSprite;

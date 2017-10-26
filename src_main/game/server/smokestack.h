@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the server side of a steam jet particle system entity.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SMOKESTACK_H
 #define SMOKESTACK_H
@@ -34,8 +34,8 @@ public:
 	DECLARE_DATADESC();
 	DECLARE_SERVERCLASS();
 
-					CSmokeStack();
-					~CSmokeStack();
+ 		CSmokeStack();
+ 		~CSmokeStack();
 
 	virtual void	Spawn( void );
 	virtual void	Activate();
@@ -74,11 +74,11 @@ public:
 	string_t		m_strMaterialModel;
 	CNetworkVar( int, m_iMaterialModel );
 
-	int				m_WindAngle;
-	int				m_WindSpeed;
+	int 	m_WindAngle;
+	int 	m_WindSpeed;
 	CNetworkVector( m_vWind );		// m_vWind is just calculated from m_WindAngle and m_WindSpeed.
 
-	bool			m_InitialState;
+	bool m_InitialState;
 };
 
 #endif // SMOKESTACK_H

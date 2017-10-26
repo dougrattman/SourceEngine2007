@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef COMBOBOX_H
 #define COMBOBOX_H
@@ -119,7 +119,7 @@ protected:
 
 	// custom message handlers
 	MESSAGE_FUNC_WCHARPTR( OnSetText, "SetText", text );
-	virtual void OnSetFocus();						// called after the panel receives the keyboard focus
+	virtual void OnSetFocus();  // called after the panel receives the keyboard focus
     virtual void OnKeyCodeTyped(KeyCode code);
 	virtual void OnKeyTyped(wchar_t unichar);
 
@@ -129,13 +129,13 @@ protected:
 private:
 	void DoMenuLayout();
 
-	Menu 				*m_pDropDown;
+	Menu  	*m_pDropDown;
 	ComboBoxButton 		*m_pButton;
 
-	bool 				m_bAllowEdit;
-	bool 				m_bHighlight;
+	bool  	m_bAllowEdit;
+	bool  	m_bHighlight;
 	Menu::MenuDirection_e 	m_iDirection;
-	int 				m_iOpenOffsetY;
+	int  	m_iOpenOffsetY;
 };
 
 } // namespace vgui

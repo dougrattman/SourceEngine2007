@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -51,8 +51,8 @@ public:
 	// Owner handling
 	void		ForceOwner( int iTeam ); // used when selecting a specific round to play
 	void		SetOwner( int iCapTeam, bool bMakeSound = true, int iNumCappers = 0, int *iCappingPlayers = NULL );
-	int			GetOwner( void ) const;
-	int			GetDefaultOwner( void ) const;
+	int GetOwner( void ) const;
+	int GetDefaultOwner( void ) const;
 	bool		RandomOwnerOnRestart( void ){ return m_bRandomOwnerOnRestart; }
 
 	void		SetActive( bool active );
@@ -62,25 +62,25 @@ public:
 	bool		PointIsVisible( void ) { return !( FBitSet( m_spawnflags, SF_CAP_POINT_HIDEFLAG ) ); }
 
 	inline const char *GetName( void ) { return STRING(m_iszPrintName); }
-	int			GetCPGroup( void );
-	int			GetPointIndex( void ) { return m_iPointIndex; }
+	int GetCPGroup( void );
+	int GetPointIndex( void ) { return m_iPointIndex; }
 	void		SetPointIndex( int index ) { m_iPointIndex = index; }
 
 	bool		GetWarnOnCap( void ) { return m_bWarnOnCap; }
 	string_t	GetWarnSound( void ) { return m_iszWarnSound; }
 
-	int			GetTeamIcon( int iTeam );
+	int GetTeamIcon( int iTeam );
 
-	int			GetCurrentHudIconIndex( void );
-	int			GetHudIconIndexForTeam( int iGameTeam );
-	int			GetHudOverlayIndexForTeam( int iGameTeam );
-	int			GetPreviousPointForTeam( int iGameTeam, int iPrevPoint );
+	int GetCurrentHudIconIndex( void );
+	int GetHudIconIndexForTeam( int iGameTeam );
+	int GetHudOverlayIndexForTeam( int iGameTeam );
+	int GetPreviousPointForTeam( int iGameTeam, int iPrevPoint );
 
 	void		SetCappersRequiredForTeam( int iGameTeam, int iCappers );
 
 	void		CaptureBlocked( CBaseMultiplayerPlayer *pPlayer );
 
-	int			PointValue( void );
+	int PointValue( void );
 
 	float		LastContestedAt( void );
 	void		SetLastContestedAt( float flTime );
@@ -104,12 +104,12 @@ private:
 	void		InternalSetOwner( int iCapTeam, bool bMakeSound = true, int iNumCappers = 0, int *iCappingPlayers = NULL );
 	float		GetTeamCapPercentage( int iTeam );
 
-	int			m_iTeam;			
-	int			m_iDefaultOwner;			// Team that initially owns the cap point
-	int			m_iIndex;					// The index of this point in the controlpointArray
-	bool		m_bWarnOnCap;				// Warn the team that owns the control point when the opposing team starts to capture it.
+	int m_iTeam; 
+	int m_iDefaultOwner; // Team that initially owns the cap point
+	int m_iIndex; 		// The index of this point in the controlpointArray
+	bool		m_bWarnOnCap; 	// Warn the team that owns the control point when the opposing team starts to capture it.
 	string_t	m_iszPrintName;
-	string_t	m_iszWarnSound;				// Sound played if the team needs to be warned about this point being captured
+	string_t	m_iszWarnSound; 	// Sound played if the team needs to be warned about this point being captured
 	bool		m_bRandomOwnerOnRestart;	// Do we want to randomize the owner after a restart?
 
 	// We store a copy of this data for each team, +1 for the un-owned state.
@@ -117,32 +117,32 @@ private:
 	{
 		perteamdata_t()
 		{
-			iszCapSound = NULL_STRING;
-			iszModel = NULL_STRING;
-			iModelBodygroup = -1;
-			iIcon = 0;
-			iszIcon = NULL_STRING;
-			iOverlay = 0;
-			iszOverlay = NULL_STRING;
-			iPlayersRequired = 0;
-			iTimedPoints = 0;
-			for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
-			{
-				iszPreviousPoint[i] = NULL_STRING;
-			}
-			iTeamPoseParam = 0;
+ iszCapSound = NULL_STRING;
+ iszModel = NULL_STRING;
+ iModelBodygroup = -1;
+ iIcon = 0;
+ iszIcon = NULL_STRING;
+ iOverlay = 0;
+ iszOverlay = NULL_STRING;
+ iPlayersRequired = 0;
+ iTimedPoints = 0;
+ for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
+ {
+ 	iszPreviousPoint[i] = NULL_STRING;
+ }
+ iTeamPoseParam = 0;
 		}
 
 		string_t	iszCapSound;
 		string_t	iszModel;
-		int			iModelBodygroup;
-		int			iTeamPoseParam;
-		int			iIcon;
+		int iModelBodygroup;
+		int iTeamPoseParam;
+		int iIcon;
 		string_t	iszIcon;
-		int			iOverlay;
+		int iOverlay;
 		string_t	iszOverlay;
-		int			iPlayersRequired;
-		int			iTimedPoints;
+		int iPlayersRequired;
+		int iTimedPoints;
 		string_t	iszPreviousPoint[MAX_PREVIOUS_POINTS];
 	};
 	CUtlVector<perteamdata_t>	m_TeamData;
@@ -158,13 +158,13 @@ private:
 	COutputEvent	m_OnRoundStartOwnedByTeam1;
 	COutputEvent	m_OnRoundStartOwnedByTeam2;
 
-	int			m_bPointVisible;		//should this capture point be visible on the hud?
-	int			m_iPointIndex;			//the mapper set index value of this control point
+	int m_bPointVisible;		//should this capture point be visible on the hud?
+	int m_iPointIndex; //the mapper set index value of this control point
 
-	int			m_iCPGroup;			//the group that this control point belongs to
-	bool		m_bActive;			//
+	int m_iCPGroup; //the group that this control point belongs to
+	bool		m_bActive; //
 
-	string_t	m_iszName;				//Name used in cap messages
+	string_t	m_iszName; 	//Name used in cap messages
 
 	bool		m_bStartDisabled;
 

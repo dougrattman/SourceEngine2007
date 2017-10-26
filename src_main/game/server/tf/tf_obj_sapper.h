@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Upgrade that damages the object over time
 //
-//=============================================================================//
+
 
 #ifndef TF_OBJ_SAPPER_H
 #define TF_OBJ_SAPPER_H

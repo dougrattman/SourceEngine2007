@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -108,7 +108,7 @@ public:
 		NEXT_CONDITION
 	};
 
-			bool	ForceVehicleInteraction( const char *lpszInteractionName, CBaseCombatCharacter *pOther );
+ bool	ForceVehicleInteraction( const char *lpszInteractionName, CBaseCombatCharacter *pOther );
 
 	virtual bool	CanSelectSchedule( void );
 	virtual int		SelectSchedule( void );
@@ -149,11 +149,11 @@ protected:
 	
 	virtual int		SelectTransitionSchedule( void );
 
-	bool			SpeakIfAllowed( AIConcept_t concept, const char *modifiers = NULL, bool bRespondingToPlayer = false, char *pszOutResponseChosen = NULL, size_t bufsize = 0 );
+	bool SpeakIfAllowed( AIConcept_t concept, const char *modifiers = NULL, bool bRespondingToPlayer = false, char *pszOutResponseChosen = NULL, size_t bufsize = 0 );
 
-	bool			CanExitVehicle( void );
-	void			SetTransitionSequence( int nSequence );
-	void			AttachToVehicle( void );
+	bool CanExitVehicle( void );
+	void SetTransitionSequence( int nSequence );
+	void AttachToVehicle( void );
 
 	virtual void	OnExitVehicleFailed( void ) { }	// NPC attempted to leave vehicle, but was unable to
 	virtual void	GatherVehicleStateConditions( void );
@@ -194,20 +194,20 @@ protected:
 
 	bool	IsPassengerHostile( void );
 
-	passengerVehicleState_t			m_vehicleState;			// Internal vehicle state
+	passengerVehicleState_t m_vehicleState; // Internal vehicle state
 
-	CHandle	<CPropVehicleDriveable>	m_hVehicle;				// The vehicle we're bound to
-	CHandle <CEntityBlocker>		m_hBlocker;				// Blocking entity for space reservation
-	Vector							m_vecTargetPosition;	// Target destination for exiting the vehicle
-	QAngle							m_vecTargetAngles;		// Target angles for exiting the vehicle
-	bool							m_bEnabled;				// If the behavior is running
+	CHandle	<CPropVehicleDriveable>	m_hVehicle; 	// The vehicle we're bound to
+	CHandle <CEntityBlocker>		m_hBlocker; 	// Blocking entity for space reservation
+	Vector  	m_vecTargetPosition;	// Target destination for exiting the vehicle
+	QAngle  	m_vecTargetAngles;		// Target angles for exiting the vehicle
+	bool  	m_bEnabled; 	// If the behavior is running
 	passesngerVehicleIntent_e		m_PassengerIntent;		// Gives us information about whether we're meant to get in/out, etc.
 
-	int								m_nTransitionSequence;		// Animation we're using to transition with
-	float							m_flOriginStartFrame;
-	float							m_flOriginEndFrame;
-	float							m_flAnglesStartFrame;
-	float							m_flAnglesEndFrame;
+	int  		m_nTransitionSequence;		// Animation we're using to transition with
+	float  	m_flOriginStartFrame;
+	float  	m_flOriginEndFrame;
+	float  	m_flAnglesStartFrame;
+	float  	m_flAnglesEndFrame;
 
 protected:
 	DEFINE_CUSTOM_SCHEDULE_PROVIDER;
@@ -228,14 +228,14 @@ public:
 		CBaseEntity *pEntity = EntityFromEntityHandle( pServerEntity );
 		if ( pEntity )
 		{
-			IPhysicsObject *pPhys = pEntity->VPhysicsGetObject();
-			if ( pPhys )
-			{
-				// Ignore physics objects
-				// TODO: This will have to be fleshed out more as cases arise
-				if ( pPhys->IsMoveable() && pPhys->GetMass() < 80.0f )
-					return false;
-			}
+ IPhysicsObject *pPhys = pEntity->VPhysicsGetObject();
+ if ( pPhys )
+ {
+ 	// Ignore physics objects
+ 	// TODO: This will have to be fleshed out more as cases arise
+ 	if ( pPhys->IsMoveable() && pPhys->GetMass() < 80.0f )
+ 		return false;
+ }
 		}
 
 		return bRet;

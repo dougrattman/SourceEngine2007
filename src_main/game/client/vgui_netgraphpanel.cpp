@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "hud.h"
 #include "inetGraphpanel.h"
@@ -215,7 +215,7 @@ CNetGraphPanel::CNetGraphPanel( VPANEL parent )
 	SetSize( w, h );
 	SetPos( 0, 0 );
 	SetVisible( false );
-	SetCursor( null );
+	SetCursor( 0 );
 
 	m_hFont = 0;
 	m_hFontProportional = 0;

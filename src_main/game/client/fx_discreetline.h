@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( FXDISCREETLINE_H )
 #define FXDISCREETLINE_H
@@ -38,13 +38,13 @@ public:
 protected:
 
 	IMaterial		*m_pMaterial;
-	float			m_fLife;
-	Vector			m_vecOrigin, m_vecDirection;
-	float			m_fVelocity;
-	float			m_fStartTime;
-	float			m_fClipLength;
-	float			m_fScale;
-	float			m_fLength;
+	float m_fLife;
+	Vector m_vecOrigin, m_vecDirection;
+	float m_fVelocity;
+	float m_fStartTime;
+	float m_fClipLength;
+	float m_fScale;
+	float m_fLength;
 };
 
 #endif	//FXDISCREETLINE_H

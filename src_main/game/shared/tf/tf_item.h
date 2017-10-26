@@ -1,7 +1,7 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
-//=============================================================================//
+
 #ifndef TF_ITEM_H
 #define TF_ITEM_H
 #ifdef _WIN32

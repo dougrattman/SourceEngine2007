@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEXTSTATSMGR_H
 #define TEXTSTATSMGR_H
@@ -13,7 +13,7 @@
 
 
 #include "filesystem.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 
 
 // Text stats get to print their stuff by implementing this type of function.
@@ -28,13 +28,13 @@ public:
 	CTextStatsMgr( void );
 
 	// Write a file with all the registered stats.
-	bool				WriteFile( IFileSystem *pFileSystem, const char *pFilename = NULL );
+	bool 	WriteFile( IFileSystem *pFileSystem, const char *pFilename = NULL );
 
 	// Get the preset filename to write stats to, if none is specified when writing
-	char				*GetStatsFilename( void );
+	char 	*GetStatsFilename( void );
 
 	// Set the filename to write stats to, if none is specified when writing
-	void				SetStatsFilename( char *sFilename );
+	void 	SetStatsFilename( char *sFilename );
 
 private:
 	char	m_szStatFilename[ MAX_PATH ];
@@ -52,9 +52,9 @@ class CTextStat
 friend class CTextStatsMgr;
 
 public:
-				CTextStat();
-				CTextStat( TextStatPrintFn fn, void *pUserData, CTextStatsMgr *pMgr=&g_TextStatsMgr );
-				~CTextStat();
+ 	CTextStat();
+ 	CTextStat( TextStatPrintFn fn, void *pUserData, CTextStatsMgr *pMgr=&g_TextStatsMgr );
+ 	~CTextStat();
 
 	// This can be called if you don't want to pass parameters into the constructor.
 	void		Init( TextStatPrintFn printFn, void *pUserData, CTextStatsMgr *pMgr=&g_TextStatsMgr );
@@ -63,8 +63,8 @@ public:
 
 private:
 
-				// Special constructor to just tie off the linked list.
-						CTextStat( bool bGlobalListHead );
+ 	// Special constructor to just tie off the linked list.
+  CTextStat( bool bGlobalListHead );
 
 	// The global list of CTextStats.
 	static CTextStat*	GetTextStatsList();
@@ -78,7 +78,7 @@ private:
 	CTextStatsMgr	*m_pMgr;
 	
 	TextStatPrintFn	m_PrintFn;
-	void			*m_pUserData;
+	void *m_pUserData;
 };
 
 
@@ -87,17 +87,17 @@ private:
 class CTextStatInt
 {
 public:
-				CTextStatInt( const char *pName, int initialValue=0, CTextStatsMgr *pMgr=&g_TextStatsMgr );
+ 	CTextStatInt( const char *pName, int initialValue=0, CTextStatsMgr *pMgr=&g_TextStatsMgr );
 
-				operator int() const	{ return m_Value; }
-	int			operator=( int val )	{ m_Value = val; return m_Value; }
+ 	operator int() const	{ return m_Value; }
+	int operator=( int val )	{ m_Value = val; return m_Value; }
 
-	int			operator++()			{ m_Value++; return m_Value; }
-	int			operator--()			{ m_Value--; return m_Value; }
-	int			operator+=( int val )	{ m_Value += val; return m_Value; }
-	int			operator-=( int val )	{ m_Value -= val; return m_Value; }
-	int			operator*=( int val )	{ m_Value *= val; return m_Value; }
-	int			operator/=( int val )	{ m_Value /= val; return m_Value; }
+	int operator++() { m_Value++; return m_Value; }
+	int operator--() { m_Value--; return m_Value; }
+	int operator+=( int val )	{ m_Value += val; return m_Value; }
+	int operator-=( int val )	{ m_Value -= val; return m_Value; }
+	int operator*=( int val )	{ m_Value *= val; return m_Value; }
+	int operator/=( int val )	{ m_Value /= val; return m_Value; }
 
 
 private:
@@ -108,7 +108,7 @@ private:
 private:
 	
 	const char		*m_pName;
-	int				m_Value;
+	int 	m_Value;
 
 	CTextStat	m_Reg;	// Use to register ourselves.
 };

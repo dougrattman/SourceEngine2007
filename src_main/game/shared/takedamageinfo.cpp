@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "takedamageinfo.h"
@@ -397,7 +397,7 @@ void CTakeDamageInfo::DebugGetDamageTypeString(unsigned int damageType, char *ou
 		int charsWrit = Q_snprintf(outbuf, outbuflength, "%s", s_DamageTypeToStrTable[0]);
 		
 		outbuflength -= charsWrit;
-		outbuf += charsWrit; // advance the output pointer (now it sits on the null terminator)
+		outbuf += charsWrit; // advance the output pointer (now it sits on the 0 terminator)
 	}
 
 	// loop through the other entries in the table
@@ -412,7 +412,7 @@ void CTakeDamageInfo::DebugGetDamageTypeString(unsigned int damageType, char *ou
 			int charsWrit = Q_snprintf(outbuf, outbuflength, "%s ", s_DamageTypeToStrTable[i + 1]); 
 
 			outbuflength -= charsWrit; // reduce the chars left
-			outbuf += charsWrit; // advance the output pointer (now it sits on the null terminator)
+			outbuf += charsWrit; // advance the output pointer (now it sits on the 0 terminator)
 		}
 	}
 }

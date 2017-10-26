@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The TF Game rules 
 //
@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "tf_gamerules.h"
 #include "ammodef.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tf_weaponbase.h"
 #include "time.h"
 #ifdef CLIENT_DLL

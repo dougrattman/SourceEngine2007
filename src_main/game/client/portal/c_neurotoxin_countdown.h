@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef C_NEUROTOXIN_COUNTDOWN_H
 #define C_NEUROTOXIN_COUNTDOWN_H
 
 #include "cbase.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 
 class C_NeurotoxinCountdown : public C_BaseEntity

@@ -8,7 +8,7 @@
 #define FD_SETSIZE 1024
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include "winlite.h"
 #if !defined( _X360 )
 #include "winsock.h"

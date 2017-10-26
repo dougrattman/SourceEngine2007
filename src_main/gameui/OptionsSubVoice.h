@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef OPTIONS_SUB_VOICE_H
 #define OPTIONS_SUB_VOICE_H
@@ -32,7 +32,7 @@ public:
 	virtual void OnApplyChanges();
 
 protected:
-	virtual void OnThink();							// called every frame before painting, but only if panel is visible
+	virtual void OnThink();  	// called every frame before painting, but only if panel is visible
 
 private:
     virtual void    OnCommand( const char *command );
@@ -48,14 +48,14 @@ private:
     void            UseCurrentVoiceParameters();
     void            ResetVoiceParameters();
 
-	IVoiceTweak				*m_pVoiceTweak;		// Engine voice tweak API.
+	IVoiceTweak 	*m_pVoiceTweak;		// Engine voice tweak API.
 	vgui::CheckButton		*m_pMicBoost;
 
     vgui::ImagePanel        *m_pMicMeter;
     vgui::ImagePanel        *m_pMicMeter2;
     vgui::Button            *m_pTestMicrophoneButton;
     vgui::Label             *m_pMicrophoneSliderLabel;
-	vgui::Slider			*m_pMicrophoneVolume;
+	vgui::Slider *m_pMicrophoneVolume;
     vgui::Label             *m_pReceiveSliderLabel;
     CCvarSlider             *m_pReceiveVolume;
     CCvarToggleCheckButton  *m_pVoiceEnableCheckButton;

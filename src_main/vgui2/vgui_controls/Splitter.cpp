@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include <vgui/iinput.h>
 #include <vgui_controls/Splitter.h>
 #include "tier1/keyvalues.h"
-#include <limits.h>
+#include <climits>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

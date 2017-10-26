@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ACHIEVEMENTSDIALOG_H
 #define ACHIEVEMENTSDIALOG_H
@@ -62,11 +62,11 @@ private:
 	CFooterPanel *m_pFooter;
 
 	bool		m_bCenterOnScreen;
-	int			m_iNumItems;
-	int			m_nTotalAchievements;	// Total achievements for this title
-	int			m_nUnlocked;
-	int			m_iSelection;
-	int			m_iScroll;
+	int m_iNumItems;
+	int m_nTotalAchievements;	// Total achievements for this title
+	int m_nUnlocked;
+	int m_iSelection;
+	int m_iScroll;
 };
 
 
@@ -98,7 +98,7 @@ public:
 	vgui::ImagePanel		*m_pPercentageBarBackground;
 	vgui::ImagePanel		*m_pPercentageBar;
 
-	vgui::ComboBox			*m_pAchievementPackCombo;
+	vgui::ComboBox *m_pAchievementPackCombo;
 
 	int m_nUnlocked;
 
@@ -147,7 +147,7 @@ private:
 	vgui::ImagePanel		*m_pPercentageBarBackground;
 	vgui::ImagePanel		*m_pPercentageBar;
 
-	vgui::IScheme			*m_pSchemeSettings;
+	vgui::IScheme *m_pSchemeSettings;
 
 	CPanelAnimationVar( Color, m_clrProgressBar, "ProgressBarColor", "140 140 140 255" );
 

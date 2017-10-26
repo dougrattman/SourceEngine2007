@@ -1,27 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $Date:         $
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef VGUI_VPROFGRAPHPANEL_H
 #define VGUI_VPROFGRAPHPANEL_H
 
-namespace vgui
-{
-	class Panel;
+namespace vgui {
+class Panel;
 }
 
-
-//-----------------------------------------------------------------------------
 // Creates/destroys the vprof graph panel
-//-----------------------------------------------------------------------------
-void CreateVProfGraphPanel( vgui::Panel *pParent );
+void CreateVProfGraphPanel(vgui::Panel *pParent);
 void DestroyVProfGraphPanel();
 
-
-#endif // VGUI_VPROFGRAPHPANEL_H
-
+#endif  // VGUI_VPROFGRAPHPANEL_H

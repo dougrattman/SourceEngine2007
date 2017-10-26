@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #include "iclientmode.h"
 #include "history_resource.h"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
@@ -19,7 +19,7 @@
 
 #include "vgui/ILocalize.h"
 
-#include <string.h>
+#include <cstring>
 #include "baseobject_shared.h"
 #include "tf_imagepanel.h"
 #include "c_tf_player.h"

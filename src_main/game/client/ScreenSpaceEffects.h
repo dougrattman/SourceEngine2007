@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -72,7 +72,7 @@ class CScreenSpaceEffectRegistration
 public:
 	CScreenSpaceEffectRegistration( const char *pName, IScreenSpaceEffect *pEffect );
 
-	const char			*m_pEffectName;
+	const char *m_pEffectName;
 	IScreenSpaceEffect	*m_pEffect;
 
 	CScreenSpaceEffectRegistration *m_pNext;
@@ -80,8 +80,8 @@ public:
 	static CScreenSpaceEffectRegistration *s_pHead;
 };
 
-#define ADD_SCREENSPACE_EFFECT( CEffect, pEffectName )			CEffect pEffectName##_effect;														\
-																CScreenSpaceEffectRegistration pEffectName##_reg( #pEffectName, &pEffectName##_effect );	
+#define ADD_SCREENSPACE_EFFECT( CEffect, pEffectName ) CEffect pEffectName##_effect;    		\
+     	CScreenSpaceEffectRegistration pEffectName##_reg( #pEffectName, &pEffectName##_effect );	
 
 
 

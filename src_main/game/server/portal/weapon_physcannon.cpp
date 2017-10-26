@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Physics cannon
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "player.h"
@@ -1368,7 +1368,7 @@ public:
 	virtual void	Spawn();
 	virtual void	OnRestore();
 	virtual void	StopLoopingSounds();
-	virtual void	UpdateOnRemove(void);
+	virtual void	UpdateOnRemove();
 	void	PrimaryAttack();
 	void	SecondaryAttack();
 	void	WeaponIdle();

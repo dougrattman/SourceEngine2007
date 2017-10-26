@@ -7,7 +7,7 @@
 //===========================================================================//
 #include "basevsshader.h"
 #include "skin_dx9_helper.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "cpp_shader_constant_register_map.h"
 #include "skin_vs20.inc"
 #include "skin_ps20b.inc"

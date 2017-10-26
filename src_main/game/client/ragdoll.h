@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef RAGDOLL_H
 #define RAGDOLL_H
@@ -78,8 +78,8 @@ public:
 
 private:
 
-	void			CheckSettleStationaryRagdoll();
-	void			PhysForceRagdollToSleep();
+	void CheckSettleStationaryRagdoll();
+	void PhysForceRagdollToSleep();
 
 	ragdoll_t	m_ragdoll;
 	Vector		m_mins, m_maxs;
@@ -91,9 +91,9 @@ private:
 	float		m_flLastOriginChangeTime;
 
 #if RAGDOLL_VISUALIZE
-	matrix3x4_t			m_savedBone1[MAXSTUDIOBONES];
-	matrix3x4_t			m_savedBone2[MAXSTUDIOBONES];
-	matrix3x4_t			m_savedBone3[MAXSTUDIOBONES];
+	matrix3x4_t m_savedBone1[MAXSTUDIOBONES];
+	matrix3x4_t m_savedBone2[MAXSTUDIOBONES];
+	matrix3x4_t m_savedBone3[MAXSTUDIOBONES];
 #endif
 
 public:

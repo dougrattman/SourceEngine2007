@@ -1,43 +1,33 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright © 1996-2001, Valve LLC, All rights reserved.
 
 #ifndef RAWLOGPANEL_H
 #define RAWLOGPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
-
-#include <vgui_controls/PropertyPage.h>
 
 #include "RemoteServer.h"
+#include "vgui_controls/PropertyPage.h"
 
-namespace vgui
-{
-	class CConsolePanel;
+namespace vgui {
+class CConsolePanel;
 }
 //-----------------------------------------------------------------------------
 // Purpose: Dialog for displaying information about a game server
 //-----------------------------------------------------------------------------
-class CRawLogPanel : public vgui::PropertyPage
-{
-	DECLARE_CLASS_SIMPLE( CRawLogPanel, vgui::PropertyPage );
-public:
-	CRawLogPanel(vgui::Panel *parent, const char *name);
-	~CRawLogPanel();
+class CRawLogPanel : public vgui::PropertyPage {
+  DECLARE_CLASS_SIMPLE(CRawLogPanel, vgui::PropertyPage);
 
-	// property page handlers
-	virtual void OnPageShow();
-	virtual void OnPageHide();
-	void DoInsertString(const char *str);
+ public:
+  CRawLogPanel(vgui::Panel *parent, const char *name);
+  ~CRawLogPanel();
 
-private:
-	MESSAGE_FUNC_CHARPTR( OnCommandSubmitted, "CommandSubmitted", command );
+  // property page handlers
+  virtual void OnPageShow();
+  virtual void OnPageHide();
+  void DoInsertString(const char *str);
 
-	vgui::CConsolePanel *m_pConsole;
+ private:
+  MESSAGE_FUNC_CHARPTR(OnCommandSubmitted, "CommandSubmitted", command);
+
+  vgui::CConsolePanel *m_pConsole;
 };
 
-#endif // RAWLOGPANEL_H
+#endif  // RAWLOGPANEL_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Shadow control entity.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

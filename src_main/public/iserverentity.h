@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ISERVERENTITY_H
 #define ISERVERENTITY_H
@@ -29,13 +29,13 @@ class QAngle;
 class IServerEntity	: public IServerUnknown
 {
 public:
-	virtual					~IServerEntity() {}
+	virtual 		~IServerEntity() {}
 
 // Previously in pev
-	virtual int				GetModelIndex( void ) const = 0;
+	virtual int 	GetModelIndex( void ) const = 0;
  	virtual string_t		GetModelName( void ) const = 0;
 
-	virtual void			SetModelIndex( int index ) = 0;
+	virtual void SetModelIndex( int index ) = 0;
 };
 
 

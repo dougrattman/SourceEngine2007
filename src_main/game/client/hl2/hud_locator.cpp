@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hud locator element, helps direct the player to objects in the world
 //
-//=============================================================================//
+
 
 #include "hudelement.h"
 #include "hud_numericdisplay.h"

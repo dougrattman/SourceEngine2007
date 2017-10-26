@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CSSPECTATORGUI_H
 #define CSSPECTATORGUI_H
@@ -126,11 +126,11 @@ protected:	// private structures & types
 
 		enum BombState
 		{
-			BOMB_PLANTED,	//planted and ticking down
-			BOMB_DROPPED,	//dropped and lying loose
-			BOMB_CARRIED,	//in the arms of a player
-			BOMB_GONE,		//defused or exploded, but was planted
-			BOMB_INVALID	//no bomb
+ BOMB_PLANTED,	//planted and ticking down
+ BOMB_DROPPED,	//dropped and lying loose
+ BOMB_CARRIED,	//in the arms of a player
+ BOMB_GONE,		//defused or exploded, but was planted
+ BOMB_INVALID	//no bomb
 		};
 		BombState state;
 
@@ -188,29 +188,29 @@ protected:
 	virtual void	DrawCamera();
 	virtual void	DrawMapTexture();
 	virtual void	DrawMapPlayers();
-	void			DrawHostages();
-	void			DrawBomb();
-	void			DrawGoalIcons();
+	void DrawHostages();
+	void DrawBomb();
+	void DrawGoalIcons();
 	virtual void	ResetRound();
 	virtual void	InitTeamColorsAndIcons();
 	virtual void	UpdateSizeAndPosition();
-	void			UpdateGoalIcons();
-	void			ClearGoalIcons();
+	void UpdateGoalIcons();
+	void ClearGoalIcons();
 	virtual bool	IsRadarLocked();
 	Vector2D		PanelToMap( const Vector2D &panelPos );
 
-	bool			AdjustPointToPanel(Vector2D *pos);
+	bool AdjustPointToPanel(Vector2D *pos);
 	MapPlayer_t*	GetPlayerByEntityID( int entityID );
 	MapPlayer_t*	GetHostageByEntityID( int entityID );
 	virtual void	UpdatePlayers();
-	void			UpdateHostages();///< Update hostages in the MapPlayer list
-	void			UpdateBomb();
-	void			UpdateFlashes();
-	bool			CreateRadarImage(const char *mapName, const char *radarFileName);
+	void UpdateHostages();///< Update hostages in the MapPlayer list
+	void UpdateBomb();
+	void UpdateFlashes();
+	bool CreateRadarImage(const char *mapName, const char *radarFileName);
 	virtual bool	RunHudAnimations(){ return false; }
 
 private:
-	bool			DrawIconCS(	int textureID,
+	bool DrawIconCS(	int textureID,
 		int offscreenTextureID,
 		Vector pos,
 		float scale,

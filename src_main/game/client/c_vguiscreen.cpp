@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "networkstringtable_clientdll.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "PanelMetaClassMgr.h"
 #include <vgui_controls/Controls.h>
 #include "mathlib/VMatrix.h"

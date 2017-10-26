@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A planar textured surface that breaks into increasingly smaller fragments
 //			as it takes damage. Undamaged pieces remain attached to the world
 //			until they are damaged. Used for window panes.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ndebugoverlay.h"

@@ -1,15 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
-#if !defined( MEM_FGETS_H )
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
+#if !defined(MEM_FGETS_H)
 #define MEM_FGETS_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-char *memfgets( unsigned char *pMemFile, int fileSize, int *pFilePos, char *pBuffer, int bufferSize );
+char *memfgets(unsigned char *pMemFile, int fileSize, int *pFilePos,
+               char *pBuffer, int bufferSize);
 
-#endif // MEM_FGETS_H
+#endif  // MEM_FGETS_H

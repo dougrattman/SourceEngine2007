@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: dod game stats
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Some tricky business here - we don't want to include the precompiled header for the statreader
 // and trying to #ifdef it out does funky things like ignoring the #endif. Define our header file
@@ -15,7 +15,7 @@
 	#include "weapon_dodbase.h"
 #endif
 
-#include <tier0/platform.h>
+#include "tier0/platform.h"
 #include "dod_gamestats.h"
 
 int iDistanceStatWeapons[DOD_NUM_DISTANCE_STAT_WEAPONS] = 

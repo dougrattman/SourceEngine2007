@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -19,8 +19,8 @@
 
 //-----------------------------------------------------------------------------
 // Purpose: An entity that networks the state of the game's objectives.
-//			May contain data for objectives that aren't used by your mod, but
-//			the extra data will never be networked as long as it's zeroed out.
+// May contain data for objectives that aren't used by your mod, but
+// the extra data will never be networked as long as it's zeroed out.
 //-----------------------------------------------------------------------------
 class C_BaseTeamObjectiveResource : public C_BaseEntity
 {
@@ -28,8 +28,8 @@ class C_BaseTeamObjectiveResource : public C_BaseEntity
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_BaseTeamObjectiveResource();
-	virtual			~C_BaseTeamObjectiveResource();
+ 		C_BaseTeamObjectiveResource();
+	virtual ~C_BaseTeamObjectiveResource();
 
 public:
 	virtual void	ClientThink();
@@ -67,7 +67,7 @@ public:
 	int GetOwningTeam( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iOwner[index];
 	}	
@@ -75,7 +75,7 @@ public:
 	int GetCappingTeam( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iCappingTeam[index];
 	}
@@ -83,7 +83,7 @@ public:
 	int GetTeamInZone( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iTeamInZone[index];
 	}
@@ -218,14 +218,14 @@ protected:
 	bool		m_bCPIsVisible[MAX_CONTROL_POINTS];
 	float		m_flLazyCapPerc[MAX_CONTROL_POINTS];
 	float		m_flOldLazyCapPerc[MAX_CONTROL_POINTS];
-	int			m_iTeamIcons[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
-	int			m_iTeamOverlays[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
-	int			m_iTeamReqCappers[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
+	int m_iTeamIcons[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
+	int m_iTeamOverlays[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
+	int m_iTeamReqCappers[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
 	float		m_flTeamCapTime[MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS];
-	int			m_iPreviousPoints[ MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS * MAX_PREVIOUS_POINTS ];
+	int m_iPreviousPoints[ MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS * MAX_PREVIOUS_POINTS ];
 	bool		m_bTeamCanCap[ MAX_CONTROL_POINTS * MAX_CONTROL_POINT_TEAMS ];
-	int			m_iTeamBaseIcons[MAX_TEAMS];
-	int			m_iBaseControlPoints[MAX_TEAMS];
+	int m_iTeamBaseIcons[MAX_TEAMS];
+	int m_iBaseControlPoints[MAX_TEAMS];
 	bool		m_bInMiniRound[MAX_CONTROL_POINTS];
 	bool		m_bWarnOnCap[MAX_CONTROL_POINTS];
 	char		m_iszWarnSound[MAX_CONTROL_POINTS][255];

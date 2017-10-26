@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MEMORYBITMAP_H
 #define MEMORYBITMAP_H
@@ -52,10 +52,10 @@ private:
 	bool        _uploaded;
 	bool		_valid;
 	unsigned char		*_texture;
-	int			_pos[2];
+	int _pos[2];
 	Color		_color;
-	int			_w,_h; // size of the texture
-	int			m_iTextureID;
+	int _w,_h; // size of the texture
+	int m_iTextureID;
 };
 
 } // namespace vgui

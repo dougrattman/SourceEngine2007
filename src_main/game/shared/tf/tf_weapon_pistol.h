@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
 //=============================================================================
@@ -47,7 +47,7 @@ public:
 	virtual void	ItemPostFrame( void );
 	virtual void	PrimaryAttack( void );
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_PISTOL; }
 	CNetworkVar( float,	m_flSoonestPrimaryAttack );
 
 private:
@@ -62,7 +62,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PISTOL_SCOUT; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_PISTOL_SCOUT; }
 };
 
 #endif // TF_WEAPON_PISTOL_H

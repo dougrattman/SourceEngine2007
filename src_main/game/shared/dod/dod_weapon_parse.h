@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_WEAPON_PARSE_H
 #define DOD_WEAPON_PARSE_H
@@ -14,21 +14,21 @@
 #include "weapon_parse.h"
 #include "networkvar.h"
 
-#define WPN_TYPE_MELEE			(1<<0)
-#define WPN_TYPE_GRENADE		(1<<1)			
+#define WPN_TYPE_MELEE (1<<0)
+#define WPN_TYPE_GRENADE		(1<<1) 
 //#define WPN_TYPE_GRENADE_LIVE	(1<<2)	//exploding grenades, unused
-#define WPN_TYPE_PISTOL			(1<<3)			
-#define WPN_TYPE_RIFLE			(1<<4)			
-#define WPN_TYPE_SNIPER			(1<<5)		
-#define WPN_TYPE_SUBMG			(1<<6)			
-#define WPN_TYPE_MG				(1<<7)	//mg42, 30cal
+#define WPN_TYPE_PISTOL (1<<3) 
+#define WPN_TYPE_RIFLE (1<<4) 
+#define WPN_TYPE_SNIPER (1<<5)		
+#define WPN_TYPE_SUBMG (1<<6) 
+#define WPN_TYPE_MG 	(1<<7)	//mg42, 30cal
 #define WPN_TYPE_BAZOOKA		(1<<8)
 #define WPN_TYPE_BANDAGE		(1<<9)
 #define WPN_TYPE_SIDEARM		(1<<10)	//carbine - secondary weapons
 #define WPN_TYPE_RIFLEGRENADE	(1<<11)
-#define WPN_TYPE_BOMB			(1<<12)
+#define WPN_TYPE_BOMB (1<<12)
 #define WPN_TYPE_UNKNOWN		(1<<13)
-#define WPN_TYPE_CAMERA			(1<<12)
+#define WPN_TYPE_CAMERA (1<<12)
 
 #define WPN_MASK_GUN	( WPN_TYPE_PISTOL | WPN_TYPE_RIFLE | WPN_TYPE_SNIPER | WPN_TYPE_SUBMG | WPN_TYPE_MG | WPN_TYPE_SIDEARM )
 
@@ -76,7 +76,7 @@ public:
 
 	//timers
 	float	m_flTimeToIdleAfterFire;	//wait this long until idling after fire
-	float	m_flIdleInterval;			//wait this long after idling to idle again
+	float	m_flIdleInterval; //wait this long after idling to idle again
 
 	//ammo
 	int		m_iDefaultAmmoClips;

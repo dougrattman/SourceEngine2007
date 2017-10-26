@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYERLOCALDATA_H
 #define PLAYERLOCALDATA_H
@@ -35,13 +35,13 @@ public:
 
 public:
 
-	CNetworkArray( unsigned char, m_chAreaBits, MAX_AREA_STATE_BYTES );								// Which areas are potentially visible to the client?
+	CNetworkArray( unsigned char, m_chAreaBits, MAX_AREA_STATE_BYTES );  		// Which areas are potentially visible to the client?
 	CNetworkArray( unsigned char, m_chAreaPortalBits, MAX_AREA_PORTAL_STATE_BYTES );	// Which area portals are open?
 
 	CNetworkVar( int,	m_iHideHUD );		// bitfields containing sections of the HUD to hide
 	CNetworkVar( float, m_flFOVRate );		// rate at which the FOV changes (defaults to 0)
 		
-	Vector				m_vecOverViewpoint;			// Viewpoint overriding the real player's viewpoint
+	Vector 	m_vecOverViewpoint; // Viewpoint overriding the real player's viewpoint
 	
 	// Fully ducked
 	CNetworkVar( bool, m_bDucked );
@@ -79,7 +79,7 @@ public:
 	CNetworkVarEmbedded( sky3dparams_t, m_skybox3d );
 	// world fog
 	CNetworkVarEmbedded( fogplayerparams_t, m_PlayerFog );
-	fogparams_t			m_fog;
+	fogparams_t m_fog;
 	// audio environment
 	CNetworkVarEmbedded( audioparams_t, m_audio );
 

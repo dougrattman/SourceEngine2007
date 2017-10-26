@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -7,13 +7,13 @@
 #include "materialsystem/imaterialvar.h"
 #include "materialsystem/imaterialsystem.h"
 #include "materialsystem/itexture.h"
-#include <string.h>
+#include <cstring>
 #include "materialsystem_global.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include "shaderapi/ishaderapi.h"
 #include "imaterialinternal.h"
-#include "utlsymbol.h"
-#include "mempool.h"
+#include "tier1/utlsymbol.h"
+#include "tier1/mempool.h"
 #include "itextureinternal.h"
 #include "tier0/dbg.h"
 #include "tier1/callqueue.h"

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef TEXTUREDX8_H
 #define TEXTUREDX8_H
@@ -65,19 +65,19 @@ int TextureCount();
 struct TextureLoadInfo_t
 {
 	ShaderAPITextureHandle_t	m_TextureHandle;
-	int							m_nCopy;
+	int  	m_nCopy;
 	IDirect3DBaseTexture		*m_pTexture;
-	int							m_nLevel; 
-	D3DCUBEMAP_FACES			m_CubeFaceID;
-	int							m_nWidth;
-	int							m_nHeight;
-	int							m_nZOffset;				// What z-slice of the volume texture are we loading?
-	ImageFormat					m_SrcFormat;
-	unsigned char				*m_pSrcData;
+	int  	m_nLevel; 
+	D3DCUBEMAP_FACES m_CubeFaceID;
+	int  	m_nWidth;
+	int  	m_nHeight;
+	int  	m_nZOffset; 	// What z-slice of the volume texture are we loading?
+	ImageFormat 		m_SrcFormat;
+	unsigned char 	*m_pSrcData;
 
 #if defined( _X360 )
-	bool						m_bSrcIsTiled;			// format may not be, but data could be
-	bool						m_bCanConvertFormat;	// allow format conversion
+	bool  m_bSrcIsTiled; // format may not be, but data could be
+	bool  m_bCanConvertFormat;	// allow format conversion
 #endif
 };
 

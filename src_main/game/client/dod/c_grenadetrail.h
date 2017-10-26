@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // This defines the client-side SmokeTrail entity. It can also be used without
 // an entity, in which case you must pass calls to it and set its position each frame.
 
@@ -30,19 +30,19 @@ public:
 	DECLARE_CLASS( C_GrenadeTrail, C_BaseParticleEntity );
 	DECLARE_CLIENTCLASS();
 	
-					C_GrenadeTrail();
-	virtual			~C_GrenadeTrail();
+ 		C_GrenadeTrail();
+	virtual ~C_GrenadeTrail();
 
 public:
 
 	//For attachments
-	void			GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
+	void GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
 
 	// Enable/disable emission.
-	void			SetEmit(bool bEmit);
+	void SetEmit(bool bEmit);
 
 	// Change the spawn rate.
-	void			SetSpawnRate(float rate);
+	void SetSpawnRate(float rate);
 
 // C_BaseEntity.
 public:
@@ -61,31 +61,31 @@ public:
 
 public:
 	// Effect parameters. These will assume default values but you can change them.
-	float			m_SpawnRate;			// How many particles per second.
+	float m_SpawnRate; // How many particles per second.
 
-	Vector			m_StartColor;			// Fade between these colors.
-	Vector			m_EndColor;
-	float			m_Opacity;
+	Vector m_StartColor; // Fade between these colors.
+	Vector m_EndColor;
+	float m_Opacity;
 
-	float			m_ParticleLifetime;		// How long do the particles live?
-	float			m_StopEmitTime;			// When do I stop emitting particles? (-1 = never)
+	float m_ParticleLifetime;		// How long do the particles live?
+	float m_StopEmitTime; // When do I stop emitting particles? (-1 = never)
 	
-	float			m_MinSpeed;				// Speed range.
-	float			m_MaxSpeed;
+	float m_MinSpeed; 	// Speed range.
+	float m_MaxSpeed;
 	
-	float			m_MinDirectedSpeed;		// Directed speed range.
-	float			m_MaxDirectedSpeed;
+	float m_MinDirectedSpeed;		// Directed speed range.
+	float m_MaxDirectedSpeed;
 
-	float			m_StartSize;			// Size ramp.
-	float			m_EndSize;
+	float m_StartSize; // Size ramp.
+	float m_EndSize;
 
-	float			m_SpawnRadius;
+	float m_SpawnRadius;
 
-	Vector			m_VelocityOffset;		// Emit the particles in a certain direction.
+	Vector m_VelocityOffset;		// Emit the particles in a certain direction.
 
-	bool			m_bEmit;				// Keep emitting particles?
+	bool m_bEmit; 	// Keep emitting particles?
 
-	int				m_nAttachment;
+	int 	m_nAttachment;
 
 private:
 	PMaterialHandle	m_MaterialHandle[2];

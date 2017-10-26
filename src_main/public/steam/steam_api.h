@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -47,7 +47,7 @@
 S_API bool SteamAPI_Init();
 S_API void SteamAPI_Shutdown();
 
-S_API void SteamAPI_WriteMiniDump( uint32 uStructuredExceptionCode, void* pvExceptionInfo, uint32 uBuildID );
+S_API void SteamAPI_WriteMiniDump( uint32_t uStructuredExceptionCode, void* pvExceptionInfo, uint32_t uBuildID );
 S_API void SteamAPI_SetMiniDumpComment( const char *pchMsg );
 
 // interface pointers, configured by SteamAPI_Init()
@@ -82,7 +82,7 @@ S_API void SteamAPI_UnregisterCallback( class CCallbackBase *pCallback );
 
 //-----------------------------------------------------------------------------
 // Purpose: base for callbacks, 
-//			used only by CCallback, shouldn't be used directly
+// used only by CCallback, shouldn't be used directly
 //-----------------------------------------------------------------------------
 class CCallbackBase
 {
@@ -93,7 +93,7 @@ public:
 
 protected:
 	enum { k_ECallbackFlagsRegistered = 0x01, k_ECallbackFlagsGameServer = 0x02 };
-	uint8 m_nCallbackFlags;
+	uint8_t m_nCallbackFlags;
 private:
 	int m_iCallback;
 	friend class CCallbackMgr;
@@ -102,7 +102,7 @@ private:
 
 //-----------------------------------------------------------------------------
 // Purpose: maps a steam callback to a class member function
-//			template params: T = local class, P = parameter struct
+// template params: T = local class, P = parameter struct
 //-----------------------------------------------------------------------------
 template< class T, class P, bool bGameServer >
 class CCallback : private CCallbackBase
@@ -120,7 +120,7 @@ public:
 	{
 		if ( bGameServer )
 		{
-			m_nCallbackFlags |= k_ECallbackFlagsGameServer;
+ m_nCallbackFlags |= k_ECallbackFlagsGameServer;
 		}
 
 		Register( pObj, func );

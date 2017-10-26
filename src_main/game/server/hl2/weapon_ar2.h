@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Projectile shot from the AR2 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	WEAPONAR2_H
 #define	WEAPONAR2_H
@@ -67,9 +67,9 @@ public:
 
 protected:
 
-	float					m_flDelayedFire;
-	bool					m_bShotDelayed;
-	int						m_nVentPose;
+	float 		m_flDelayedFire;
+	bool 		m_bShotDelayed;
+	int  m_nVentPose;
 	
 	DECLARE_ACTTABLE();
 	DECLARE_DATADESC();

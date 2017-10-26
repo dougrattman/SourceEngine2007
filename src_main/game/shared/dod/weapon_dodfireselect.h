@@ -2,7 +2,7 @@
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_DODFIRESELECT_H
 #define WEAPON_DODFIRESELECT_H

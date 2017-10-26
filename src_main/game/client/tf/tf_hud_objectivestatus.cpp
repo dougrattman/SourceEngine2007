@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "hudelement.h"
 #include "iclientmode.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
@@ -20,7 +20,7 @@
 
 #include "c_playerresource.h"
 #include "teamplay_round_timer.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "entity_capture_flag.h"
 #include "c_tf_player.h"
 #include "c_team.h"

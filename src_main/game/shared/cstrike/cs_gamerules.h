@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The TF Game rules object
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_GAMERULES_H
 #define CS_GAMERULES_H
@@ -16,7 +16,7 @@
 
 
 #include "teamplay_gamerules.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "cs_shareddefs.h"
 #include "gamevars_shared.h"
 
@@ -34,22 +34,22 @@
 #define CS_GAMERULES_BLACKMARKET_TABLE_NAME "BlackMarketTable"
 
 // used for EndRoundMessage() logged messages
-#define Target_Bombed							1
-#define VIP_Escaped								2
-#define VIP_Assassinated						3
-#define Terrorists_Escaped						4
-#define CTs_PreventEscape						5
-#define Escaping_Terrorists_Neutralized			6
-#define Bomb_Defused							7
-#define CTs_Win									8
-#define Terrorists_Win							9
-#define Round_Draw								10
-#define All_Hostages_Rescued					11
-#define Target_Saved							12
-#define Hostages_Not_Rescued					13
-#define Terrorists_Not_Escaped					14
-#define VIP_Not_Escaped							15
-#define Game_Commencing							16
+#define Target_Bombed  	1
+#define VIP_Escaped  		2
+#define VIP_Assassinated  3
+#define Terrorists_Escaped  4
+#define CTs_PreventEscape  5
+#define Escaping_Terrorists_Neutralized 6
+#define Bomb_Defused  	7
+#define CTs_Win   8
+#define Terrorists_Win  	9
+#define Round_Draw  		10
+#define All_Hostages_Rescued 		11
+#define Target_Saved  	12
+#define Hostages_Not_Rescued 		13
+#define Terrorists_Not_Escaped 		14
+#define VIP_Not_Escaped  	15
+#define Game_Commencing  	16
 
 #define	WINNER_NONE		0
 #define WINNER_DRAW		1
@@ -101,7 +101,7 @@ public:
 	float GetBuyTimeLength() const;
 	int GetRoundLength() const { return m_iRoundTime; }
 	int   SelectDefaultTeam( bool ignoreBots = false );
-	int   GetHumanTeam();			// TEAM_UNASSIGNED if no restrictions
+	int   GetHumanTeam(); // TEAM_UNASSIGNED if no restrictions
 
 	bool IsVIPMap() const;
 	bool IsBombDefuseMap() const;
@@ -175,7 +175,7 @@ public:
 
 	virtual bool ClientCommand( CBaseEntity *pEdict, const CCommand &args );
 	virtual void PlayerSpawn( CBasePlayer *pPlayer );
-			void ShowSpawnPoints();
+ void ShowSpawnPoints();
 
 	virtual bool PlayTextureSounds( void ) { return true; }
 	// Let the game rules specify if fall death should fade screen to black
@@ -189,7 +189,7 @@ public:
 	// Death notices
 	virtual void		DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &info );
 
-	virtual void			InitDefaultAIRelationships( void );
+	virtual void InitDefaultAIRelationships( void );
 
 	virtual const char *GetGameDescription( void ) { return "Counter-Strike: Source"; }  // this is the game name that gets seen in the server browser
 	virtual const char *AIClassText(int classType);
@@ -320,7 +320,7 @@ public:
 	float m_flRestartRoundTime;	// the global time when the round is supposed to end, if this is not 0
 
 	int m_iNumTerrorist;		// The number of terrorists on the team (this is generated at the end of a round)
-	int m_iNumCT;				// The number of CTs on the team (this is generated at the end of a round)
+	int m_iNumCT; 	// The number of CTs on the team (this is generated at the end of a round)
 	int m_iNumSpawnableTerrorist;
 	int m_iNumSpawnableCT;
 
@@ -337,13 +337,13 @@ public:
 	int m_iNumConsecutiveTerroristLoses;//SupraFiend: the number of rounds the Terrorists have lost in a row.
 
 	int m_iSpawnPointCount_Terrorist;		// Number of Terrorist spawn points
-	int m_iSpawnPointCount_CT;				// Number of CT spawn points
+	int m_iSpawnPointCount_CT; 	// Number of CT spawn points
 
-	bool m_bTCantBuy;			// Who can and can't buy.
+	bool m_bTCantBuy; // Who can and can't buy.
 	bool m_bCTCantBuy;
 	bool m_bMapHasBuyZone;
 
-	int m_iLoserBonus;			// SupraFiend: the amount of money the losing team gets. This scales up as they lose more rounds in a row
+	int m_iLoserBonus; // SupraFiend: the amount of money the losing team gets. This scales up as they lose more rounds in a row
 	float m_tmNextPeriodicThink;
 	
 	
@@ -356,7 +356,7 @@ public:
 	// PRISON ESCAPE VARIABLES
 	int		m_iHaveEscaped;
 	bool	m_bMapHasEscapeZone;
-	int		m_iNumEscapers;			
+	int		m_iNumEscapers; 
 	int		m_iNumEscapeRounds;		// keeps track of the # of consecutive rounds of escape played.. Teams will be swapped after 8 rounds
 
 	
@@ -377,7 +377,7 @@ public:
 private:
 
 	// Don't allow switching weapons while gaining new technologies
-	bool			m_bAllowWeaponSwitch;
+	bool m_bAllowWeaponSwitch;
 
 public:
 	

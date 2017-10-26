@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -26,14 +26,14 @@
 #include "dlight.h"
 #include <imapoverview.h>
 #include "c_playerresource.h"
-#include <keyvalues.h>
+#include "tier1/keyvalues.h"
 #include "text_message.h"
 #include "panelmetaclassmgr.h"
 #include "dod_shareddefs.h"
 #include "c_dod_player.h"
 #include "physpropclientside.h"
 #include "engine/IEngineSound.h"
-#include "bitbuf.h"
+#include "tier1/bitbuf.h"
 #include "usermessages.h"
 #include "prediction.h"
 #include "vgui/ILocalize.h"

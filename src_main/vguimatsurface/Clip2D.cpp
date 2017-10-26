@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains 2D clipping routines
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include <vgui/isurface.h>
 #include "Clip2D.h"
 #include "tier0/dbg.h"
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 #if defined( _X360 )
 #include "materialsystem/imaterialsystem.h"
 #endif
@@ -380,16 +380,6 @@ bool ClipRect( const vgui::Vertex_t &inUL, const vgui::Vertex_t &inLR,
 //	Assert( inUL.m_Position.x <= inLR.m_Position.x );
 //	Assert( inUL.m_Position.y <= inLR.m_Position.y );
  
-	if ( IsX360() && ( !g_bScissor || g_bFullScreenScissor || 
-		( inUL.m_Position.x >= g_ScissorRect.left && inLR.m_Position.x <= g_ScissorRect.right && inUL.m_Position.y >= g_ScissorRect.top && inLR.m_Position.y <= g_ScissorRect.bottom ) ) )
-	{
-		// clipping is not needed
-		// either full screen, and hw will do it or rect is inscribed, and operation is meaningless
-		*pOutUL = inUL;
-		*pOutLR = inLR;
-		return true;
-	}
-
 	if ( g_bScissor )
 	{
 		// Pick whichever left side is larger

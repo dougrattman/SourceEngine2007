@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -16,7 +16,7 @@
 // 3) In general, we try to cache off expensive state pre-processing in
 //		the shader shadow phase (like texture stage pipeline).
 //
-//=============================================================================//
+
 
 #ifndef SHADERSYSTEM_H
 #define SHADERSYSTEM_H
@@ -58,18 +58,18 @@ enum
 
 /*
 	// lighting flags
-	SHADER_UNLIT					= 0x0000,
-	SHADER_VERTEX_LIT				= 0x0001,
-	SHADER_NEEDS_LIGHTMAP			= 0x0002, 
+	SHADER_UNLIT 		= 0x0000,
+	SHADER_VERTEX_LIT 	= 0x0001,
+	SHADER_NEEDS_LIGHTMAP = 0x0002, 
 	SHADER_NEEDS_BUMPED_LIGHTMAPS	= 0x0004,
-	SHADER_LIGHTING_MASK			= 0x0007,
+	SHADER_LIGHTING_MASK = 0x0007,
 */
 
 	// opacity flags
 	SHADER_OPACITY_ALPHATEST		= 0x0010,
-	SHADER_OPACITY_OPAQUE			= 0x0020,
+	SHADER_OPACITY_OPAQUE = 0x0020,
 	SHADER_OPACITY_TRANSLUCENT		= 0x0040,
-	SHADER_OPACITY_MASK				= 0x0070,
+	SHADER_OPACITY_MASK 	= 0x0070,
 };
 
 
@@ -93,7 +93,7 @@ struct RenderPassList_t
 struct ShaderRenderState_t
 {
 	// These are the same, regardless of whether alpha or color mod is used
-	int				m_Flags;	// Can't shrink this to a short
+	int 	m_Flags;	// Can't shrink this to a short
 	VertexFormat_t	m_VertexFormat;
 	VertexFormat_t	m_VertexUsage;
 	MorphFormat_t	m_MorphFormat;
@@ -205,7 +205,7 @@ public:
 
 	// Draws the shader
 	virtual void DrawElements( IShader *pShader, IMaterialVar **params, ShaderRenderState_t* pShaderState, VertexCompressionType_t vertexCompression,
-							   uint32 nMaterialVarTimeStamp ) = 0;
+  	   uint32_t nMaterialVarTimeStamp ) = 0;
 
 	// Used to iterate over all shaders for editing purposes
 	virtual int	 ShaderCount() const = 0;

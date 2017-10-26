@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_BASETEMPENTITY_H
 #define C_BASETEMPENTITY_H
@@ -29,8 +29,8 @@ public:
 	DECLARE_CLASS_NOBASE( C_BaseTempEntity );
 	DECLARE_CLIENTCLASS();
 	
-									C_BaseTempEntity( void );
-	virtual							~C_BaseTempEntity( void );
+   C_BaseTempEntity( void );
+	virtual  	~C_BaseTempEntity( void );
 
 
 // IClientUnknown implementation.
@@ -44,25 +44,25 @@ public:
 	virtual IClientNetworkable*	GetClientNetworkable()	{ return this; }
 	virtual IClientRenderable*	GetClientRenderable()	{ return 0; }
 	virtual IClientEntity*		GetIClientEntity()		{ return 0; }
-	virtual C_BaseEntity*		GetBaseEntity()			{ return 0; }
+	virtual C_BaseEntity*		GetBaseEntity() { return 0; }
 	virtual IClientThinkable*	GetClientThinkable()	{ return 0; }
 
 
 // IClientNetworkable overrides.
 public:
 
-	virtual void					Release();	
-	virtual void					NotifyShouldTransmit( ShouldTransmitState_t state );
-	virtual void					PreDataUpdate( DataUpdateType_t updateType );
-	virtual void					PostDataUpdate( DataUpdateType_t updateType );
-	virtual void					OnPreDataChanged( DataUpdateType_t updateType );
-	virtual void					OnDataChanged( DataUpdateType_t updateType );
-	virtual void					SetDormant( bool bDormant );
-	virtual bool					IsDormant( void );
-	virtual int						entindex( void ) const;
-	virtual void					ReceiveMessage( int classID, bf_read &msg );
-	virtual void*					GetDataTableBasePtr();
-	virtual void					SetDestroyedOnRecreateEntities( void );
+	virtual void 		Release();	
+	virtual void 		NotifyShouldTransmit( ShouldTransmitState_t state );
+	virtual void 		PreDataUpdate( DataUpdateType_t updateType );
+	virtual void 		PostDataUpdate( DataUpdateType_t updateType );
+	virtual void 		OnPreDataChanged( DataUpdateType_t updateType );
+	virtual void 		OnDataChanged( DataUpdateType_t updateType );
+	virtual void 		SetDormant( bool bDormant );
+	virtual bool 		IsDormant( void );
+	virtual int  entindex( void ) const;
+	virtual void 		ReceiveMessage( int classID, bf_read &msg );
+	virtual void* 		GetDataTableBasePtr();
+	virtual void 		SetDestroyedOnRecreateEntities( void );
 
 public:
 
@@ -70,19 +70,19 @@ public:
 	void NetworkStateChanged() {}
 	void NetworkStateChanged( void *pVar ) {}
 
-	virtual bool					Init(int entnum, int iSerialNum);
+	virtual bool 		Init(int entnum, int iSerialNum);
 
-	virtual void					Precache( void );
+	virtual void 		Precache( void );
 
 	// For dynamic entities, return true to allow destruction
-	virtual bool					ShouldDestroy( void ) { return false; };
+	virtual bool 		ShouldDestroy( void ) { return false; };
 
-	C_BaseTempEntity				*GetNext( void );
+	C_BaseTempEntity 	*GetNext( void );
 
 	// Get list of tempentities
-	static C_BaseTempEntity			*GetList( void );
+	static C_BaseTempEntity *GetList( void );
 
-	C_BaseTempEntity				*GetNextDynamic( void );
+	C_BaseTempEntity 	*GetNextDynamic( void );
 
 	// Determine the color modulation amount
 	void	GetColorModulation( float* color )
@@ -97,14 +97,14 @@ public:
 // Static members
 public:
 	// List of dynamically allocated temp entis
-	static C_BaseTempEntity			*GetDynamicList();
+	static C_BaseTempEntity *GetDynamicList();
 
 	// Called at startup to allow temp entities to precache any models/sounds that they need
-	static void						PrecacheTempEnts( void );
+	static void  PrecacheTempEnts( void );
 
-	static void						ClearDynamicTempEnts( void );
+	static void  ClearDynamicTempEnts( void );
 
-	static void						CheckDynamicTempEnts( void );
+	static void  CheckDynamicTempEnts( void );
 
 private:
 

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -916,7 +916,7 @@ CTeamControlPoint *CTeamControlPointMaster::GetControlPoint( int point )
 //			If its not the case that one team owns them all, it returns 0.
 //			CPs are broken into groups. A team can win by owning all flags within a single group.
 //			
-//			Can be passed an overriding team. If this is not null, the passed team
+//			Can be passed an overriding team. If this is not 0, the passed team
 //			number will be used for that cp. Used to predict if that CP changing would
 //			win the game.
 //-----------------------------------------------------------------------------

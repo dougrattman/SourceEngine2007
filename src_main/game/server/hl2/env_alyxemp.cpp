@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Alyx's EMP effect
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "env_alyxemp_shared.h"

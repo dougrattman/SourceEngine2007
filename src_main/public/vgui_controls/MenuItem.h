@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MENUITEM_H
 #define MENUITEM_H
@@ -26,7 +26,7 @@ class Image;
 
 //-----------------------------------------------------------------------------
 // Purpose: The items in a menu
-//			MenuItems MUST have the Menu class as parents.
+// MenuItems MUST have the Menu class as parents.
 //-----------------------------------------------------------------------------
 class MenuItem : public Button
 {
@@ -42,7 +42,7 @@ public:
 	// Activate the menu item as if it had been selected by the user
 	virtual void FireActionSignal();
 
-    virtual bool CanBeDefaultButton(void);
+    virtual bool CanBeDefaultButton();
 
 	// Handle mouse cursor entering a MenuItem.
 	void OnCursorEntered();

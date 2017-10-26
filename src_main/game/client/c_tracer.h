@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef C_TRACER_H
 #define C_TRACER_H
@@ -24,7 +24,7 @@ class CMeshBuilder;
 //		[in] float* : r, g, b, a (0 - 1)
 //-----------------------------------------------------------------------------
 void Tracer_Draw( ParticleDraw* pDraw, Vector& start, Vector& delta, 
-				 float width, float* color, float startV = 0.0, float endV = 1.0 );
+ 	 float width, float* color, float startV = 0.0, float endV = 1.0 );
 
 void Tracer_Draw( CMeshBuilder *pMeshBuilder, Vector& start, Vector& delta, float width, float* color, float startV = 0.0, float endV = 1.0 );
 

@@ -1,18 +1,6 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef SV_PRECACHE_H
 #define SV_PRECACHE_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-
-
-
-
-#endif // SV_PRECACHE_H
+#endif  // SV_PRECACHE_H

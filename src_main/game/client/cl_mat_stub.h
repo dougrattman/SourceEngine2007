@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MAT_STUB_H
 #define MAT_STUB_H
@@ -21,10 +21,10 @@ class IMaterialSystem;
 class CMatStubHandler
 {
 public:
-						CMatStubHandler();
-						~CMatStubHandler();
+  CMatStubHandler();
+  ~CMatStubHandler();
 
-	void				End();
+	void 	End();
 
 public:
 

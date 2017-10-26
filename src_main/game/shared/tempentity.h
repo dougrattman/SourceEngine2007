@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef TEMPENTITY_H
 #define TEMPENTITY_H
@@ -21,11 +21,11 @@
 #define TE_EXPLFLAG_NOFIREBALLSMOKE	0x80	// do not draw smoke with the fireball
 
 #define	TE_BEAMPOINTS		0		// beam effect between two points
-#define TE_SPRITE			1	// additive sprite, plays 1 cycle
-#define TE_BEAMDISK			2	// disk that expands to max radius over lifetime
+#define TE_SPRITE 1	// additive sprite, plays 1 cycle
+#define TE_BEAMDISK 2	// disk that expands to max radius over lifetime
 #define TE_BEAMCYLINDER		3		// cylinder that expands to max radius over lifetime
 #define TE_BEAMFOLLOW		4		// create a line of decaying beam segments until entity stops moving
-#define TE_BEAMRING			5		// connect a beam ring to two entities
+#define TE_BEAMRING 5		// connect a beam ring to two entities
 #define TE_BEAMSPLINE		6		
 #define TE_BEAMRINGPOINT	7
 #define	TE_BEAMLASER		8		// Fades according to viewpoint

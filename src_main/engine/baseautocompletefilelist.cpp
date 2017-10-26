@@ -1,96 +1,78 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
+#include "baseautocompletefilelist.h"
 
 #include "qlimits.h"
 #include "sys.h"
-#include "baseautocompletefilelist.h"
-#include "utlsymbol.h"
+#include "tier1/utlsymbol.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Purpose: Fills in a list of commands based on specified subdirectory and extension into the format:
+// Purpose: Fills in a list of commands based on specified subdirectory and
+// extension into the format:
 //  commandname subdir/filename.ext
 //  commandname subdir/filename2.ext
 // Returns number of files in list for autocompletion
-//-----------------------------------------------------------------------------
-int CBaseAutoCompleteFileList::AutoCompletionFunc( char const *partial, char commands[ COMMAND_COMPLETION_MAXITEMS ][ COMMAND_COMPLETION_ITEM_LENGTH ] )
-{
-	char const *cmdname = m_pszCommandName;
+int CBaseAutoCompleteFileList::AutoCompletionFunc(
+    char const *partial, char commands[COMMAND_COMPLETION_MAXITEMS]
+                                      [COMMAND_COMPLETION_ITEM_LENGTH]) {
+  char const *command_name = m_pszCommandName;
 
-	char *substring = (char *)partial;
-	if ( Q_strstr( partial, cmdname ) )
-	{
-		substring = (char *)partial + strlen( cmdname ) + 1;
-	}
+  char *substring = (char *)partial;
+  if (Q_strstr(partial, command_name)) {
+    substring = (char *)partial + strlen(command_name) + 1;
+  }
 
-	// Search the directory structure.
-	char searchpath[MAX_QPATH];
-	if ( m_pszSubDir && m_pszSubDir[0] && Q_strcasecmp( m_pszSubDir, "NULL" ) )
-	{
-		Q_snprintf(searchpath,sizeof(searchpath),"%s/*.%s", m_pszSubDir, m_pszExtension );
-	}
-	else
-	{
-		Q_snprintf(searchpath,sizeof(searchpath),"*.%s", m_pszExtension );
-	}
+  // Search the directory structure.
+  char search_path[MAX_QPATH];
+  if (m_pszSubDir && m_pszSubDir[0] && Q_strcasecmp(m_pszSubDir, "NULL")) {
+    Q_snprintf(search_path, ARRAYSIZE(search_path), "%s/*.%s", m_pszSubDir,
+               m_pszExtension);
+  } else {
+    Q_snprintf(search_path, ARRAYSIZE(search_path), "*.%s", m_pszExtension);
+  }
 
-	CUtlSymbolTable entries( 0, 0, true );
-	CUtlVector< CUtlSymbol > symbols;
+  CUtlSymbolTable entries{0, 0, true};
+  CUtlVector<CUtlSymbol> symbols;
+  const size_t substring_length{strlen(substring)};
 
-	char const *findfn = Sys_FindFirst( searchpath, NULL, 0 );
-	while ( findfn )
-	{
-		char sz[ MAX_QPATH ];
-		Q_snprintf( sz, sizeof( sz ), "%s", findfn );
+  char const *file_name = Sys_FindFirst(search_path, nullptr, 0);
+  while (file_name) {
+    bool do_add = false;
+    // Insert into lookup
+    if (substring[0]) {
+      if (!Q_strncasecmp(file_name, substring, substring_length)) {
+        do_add = true;
+      }
+    } else {
+      do_add = true;
+    }
 
-		bool add = false;
-		// Insert into lookup
-		if ( substring[0] )
-		{
-			if ( !Q_strncasecmp( findfn, substring, strlen( substring ) ) )
-			{
-				add = true;
-			}
-		}
-		else
-		{
-			add = true;
-		}
+    if (do_add) {
+      CUtlSymbol symbol = entries.AddString(file_name);
 
-		if ( add )
-		{
-			CUtlSymbol sym = entries.AddString( findfn );
+      int idx = symbols.Find(symbol);
+      if (idx == symbols.InvalidIndex()) {
+        symbols.AddToTail(symbol);
+      }
+    }
 
-			int idx = symbols.Find( sym );
-			if ( idx == symbols.InvalidIndex() )
-			{
-				symbols.AddToTail( sym );
-			}
-		}
+    file_name = Sys_FindNext(nullptr, 0);
 
-		findfn = Sys_FindNext( NULL, 0 );
+    // Too many
+    if (symbols.Count() >= COMMAND_COMPLETION_MAXITEMS) break;
+  }
 
-		// Too many
-		if ( symbols.Count() >= COMMAND_COMPLETION_MAXITEMS )
-			break;
-	}
+  Sys_FindClose();
 
-	Sys_FindClose();
+  for (int i = 0; i < symbols.Count(); i++) {
+    char const *filename = entries.String(symbols[i]);
 
-	for ( int i = 0; i < symbols.Count(); i++ )
-	{
-		char const *filename = entries.String( symbols[ i ] );
+    Q_snprintf(commands[i], ARRAYSIZE(commands[i]), "%s %s", command_name,
+               filename);
+    // Remove .dem
+    commands[i][strlen(commands[i]) - 4] = 0;
+  }
 
-		Q_snprintf( commands[ i ], sizeof( commands[ i ] ), "%s %s", cmdname, filename );
-		// Remove .dem
-		commands[ i ][ strlen( commands[ i ] ) - 4 ] = 0;
-	}
-
-	return symbols.Count();
+  return symbols.Count();
 }

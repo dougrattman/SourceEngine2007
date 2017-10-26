@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that propagates general data needed by clients for every player.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_DOD_OBJECTIVE_RESOURCE_H
 #define C_DOD_OBJECTIVE_RESOURCE_H
@@ -23,8 +23,8 @@ class C_DODObjectiveResource : public C_BaseEntity
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_DODObjectiveResource();
-	virtual			~C_DODObjectiveResource();
+ 		C_DODObjectiveResource();
+	virtual ~C_DODObjectiveResource();
 
 public:
 
@@ -52,7 +52,7 @@ public:
 	int GetOwningTeam( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iOwner[index];
 	}	
@@ -60,7 +60,7 @@ public:
 	int GetCappingTeam( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iCappingTeam[index];
 	}
@@ -107,17 +107,17 @@ public:
 		switch ( team )
 		{
 		case TEAM_ALLIES:
-			icon = m_iAlliesIcons[index];
-			break;
+ icon = m_iAlliesIcons[index];
+ break;
 		case TEAM_AXIS:
-			icon = m_iAxisIcons[index];
-			break;
+ icon = m_iAxisIcons[index];
+ break;
 		case TEAM_UNASSIGNED:
-			icon = m_iNeutralIcons[index];
-			break;
+ icon = m_iNeutralIcons[index];
+ break;
 		default:
-			Assert(0);
-			break;
+ Assert(0);
+ break;
 		}
 
 		return icon;
@@ -133,14 +133,14 @@ public:
 		switch ( team )
 		{
 		case TEAM_ALLIES:
-			num = m_iNumAllies[index];
-			break;
+ num = m_iNumAllies[index];
+ break;
 		case TEAM_AXIS:
-			num = m_iNumAxis[index];
-			break;
+ num = m_iNumAxis[index];
+ break;
 		default:
-			Assert(0);
-			break;
+ Assert(0);
+ break;
 		}
 
 		return num;
@@ -156,14 +156,14 @@ public:
 		switch ( team )
 		{
 		case TEAM_ALLIES:
-			num = m_iAlliesReqCappers[index];
-			break;
+ num = m_iAlliesReqCappers[index];
+ break;
 		case TEAM_AXIS:
-			num = m_iAxisReqCappers[index];
-			break;
+ num = m_iAxisReqCappers[index];
+ break;
 		default:
-			Assert(0);
-			break;
+ Assert(0);
+ break;
 		}
 
 		return num;

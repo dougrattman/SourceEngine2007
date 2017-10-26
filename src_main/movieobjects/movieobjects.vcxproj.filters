@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{e3019963-7a93-4455-853b-ec85a4b3b71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{d279f9cd-ae98-4c2f-9eff-e1df998bfafb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5903c9f9-222c-43ab-b523-494f2d79a6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{c6258b46-49ec-4fab-838c-507b1408c0fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{9a665a79-bb51-4ffe-bd79-e0efae7bed5d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dmeanimationlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeanimationset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeattachment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmebalancetostereocalculatoroperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmebookmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmecamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmechannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeclip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmecombinationoperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmedag.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmedccmakefile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmedrawsettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeeditortypedictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeexpressionoperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeeyeball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeeyeposition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmefaceset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmegamemodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmegamemodelinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmejoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmekeyboardinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmelight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmelog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemakefile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemakefileutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmematerial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmematerialoverlayfxclip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemdl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemdlmakefile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemorphoperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmemouseinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeoperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmepackoperators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeparticlesystemdefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmephonememapping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeselection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeshape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmesound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetimeframe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetimeselection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetrack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetrackgroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetransforminput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetransformlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmetransformoperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmeunpackoperators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmevertexdata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmmeshcomp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmmeshutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmobjserializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="movieobjects_interfaces.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timeutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\bone_setup.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\collisionutils.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\phonemeconverter.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\studio.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="movieobjects.vpc">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="movieobjects_interfaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeanimationlist.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeanimationset.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeattachment.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmebalancetostereocalculatoroperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmebookmark.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmecamera.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmechannel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeclip.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmecombinationoperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmedag.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmedccmakefile.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmedrawsettings.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeeditortypedictionary.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeexpressionoperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeeyeball.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeeyeposition.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmefaceset.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmegamemodel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmegamemodelinput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeinput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmejoint.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmekeyboardinput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmelight.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmelog.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemakefile.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemakefileutils.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmematerial.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmematerialoverlayfxclip.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemdl.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemdlmakefile.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemesh.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemodel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemorphoperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmemouseinput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeoperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmepackoperators.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeparticlesystemdefinition.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmephonememapping.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeselection.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeshape.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmesound.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetestmesh.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetimeframe.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetimeselection.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetimeselectiontimes.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetrack.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetrackgroup.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetransform.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetransforminput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetransformlist.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmetransformoperator.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmeunpackoperators.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmevertexdata.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmmeshcomp.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmmeshutils.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\dmobjserializer.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\idmemakefileutils.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\movieobjects.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\movieobjects\timeutils.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\mathlib\mathlib.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\phonemeconverter.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\mathlib\vector.h">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

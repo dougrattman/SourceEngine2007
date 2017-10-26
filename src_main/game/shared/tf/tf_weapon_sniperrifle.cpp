@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF Sniper Rifle
 //
-//=============================================================================//
+
 #include "cbase.h" 
 #include "tf_fx_shared.h"
 #include "tf_weapon_sniperrifle.h"

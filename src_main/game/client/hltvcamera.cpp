@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "hltvcamera.h"
@@ -16,7 +16,7 @@
 #include "vgui/ILocalize.h"
 #include "vguicenterprint.h"
 #include "game/client/iviewport.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #ifdef CSTRIKE_DLL
 	#include "c_cs_player.h"

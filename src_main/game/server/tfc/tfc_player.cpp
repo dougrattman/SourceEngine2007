@@ -473,7 +473,7 @@ void CTFCPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		// do we have fadetoblack on? (need to fade their screen back in)
 		if ( mp_fadetoblack.GetInt() )
 		{
-			color32_s clr = { 0,0,0,0 };
+			color32 clr = { 0,0,0,0 };
 			UTIL_ScreenFade( this, clr, 0.001, 0, FFADE_IN );
 		}
 	}

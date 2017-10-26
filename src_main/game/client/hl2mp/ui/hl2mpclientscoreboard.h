@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CHL2MPCLIENTSCOREBOARDDIALOG_H
 #define CHL2MPCLIENTSCOREBOARDDIALOG_H
@@ -55,8 +55,8 @@ private:
 	};
 
 	// rounded corners
-	Color					 m_bgColor;
-	Color					 m_borderColor;
+	Color 		 m_bgColor;
+	Color 		 m_borderColor;
 };
 
 

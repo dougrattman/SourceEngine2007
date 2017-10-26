@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -50,24 +50,24 @@ public:
 	// Also, you may not get a texture with the requested size or format;
 	// you'll get something close though.
 	virtual ITextureInternal *CreateProceduralTexture( 
-		const char			*pTextureName, 
-		const char			*pTextureGroupName,
-		int					w,
-		int					h, 
-		int					d,
-		ImageFormat			fmt,
-		int					nFlags ) = 0;
+		const char *pTextureName, 
+		const char *pTextureGroupName,
+		int 		w,
+		int 		h, 
+		int 		d,
+		ImageFormat fmt,
+		int 		nFlags ) = 0;
 
 	// Creates a texture which is a render target
 	virtual ITextureInternal *CreateRenderTargetTexture( 
-		const char				*pRTName,	// NULL for auto-generated name
-		int						w, 
-		int						h, 
+		const char 	*pRTName,	// NULL for auto-generated name
+		int  w, 
+		int  h, 
 		RenderTargetSizeMode_t	sizeMode, 
-		ImageFormat				fmt, 
+		ImageFormat 	fmt, 
 		RenderTargetType_t		type, 
-		unsigned int			textureFlags,
-		unsigned int			renderTargetFlags ) = 0;
+		unsigned int textureFlags,
+		unsigned int renderTargetFlags ) = 0;
 
 	// Loads a texture from disk
 	virtual ITextureInternal *FindOrLoadTexture( const char *pTextureName, const char *pTextureGroupName ) = 0;

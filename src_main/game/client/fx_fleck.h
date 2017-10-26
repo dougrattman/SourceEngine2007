@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( FXFLECKS_H )
 #define FXFLECKS_H
@@ -43,8 +43,8 @@ class CFleckParticles : public CSimpleEmitter
 {
 public:
 
-							CFleckParticles( const char *pDebugName );
-							~CFleckParticles();
+  	CFleckParticles( const char *pDebugName );
+  	~CFleckParticles();
 	static CSmartPtr<CFleckParticles> Create( const char *pDebugName, const Vector &vCenter, const Vector &extents );
 
 	virtual void RenderParticles( CParticleRenderIterator *pIterator );

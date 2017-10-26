@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_basenpc.h"
@@ -74,7 +74,7 @@ public:
 	void InputClearEnemy( inputdata_t &inputdata );
 	void InputFireOnce( inputdata_t &inputdata );
 
-	void LauncherTurnOn(void);
+	void LauncherTurnOn();
 	
 	void				Precache( void );
 	void				Spawn( void );
@@ -84,7 +84,7 @@ public:
 	void				LauncherThink(void );
 	bool				FInViewCone( CBaseEntity *pEntity );
 
-	int					DrawDebugTextOverlays(void);
+	int					DrawDebugTextOverlays();
 
 	DECLARE_DATADESC();
 };

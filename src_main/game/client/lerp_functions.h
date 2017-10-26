@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef LERP_FUNCTIONS_H
 #define LERP_FUNCTIONS_H
@@ -24,9 +24,9 @@ inline float LoopingLerp( float flPercent, float flFrom, float flTo )
 	if ( fabs( flTo - flFrom ) >= 0.5f )
 	{
 		if (flFrom < flTo)
-			flFrom += 1.0f;
+ flFrom += 1.0f;
 		else
-			flTo += 1.0f;
+ flTo += 1.0f;
 	}
 
 	float s = flTo * flPercent + flFrom * (1.0f - flPercent);
@@ -119,31 +119,31 @@ inline float LoopingLerp_Hermite( float t, float p0, float p1, float p2 )
 	if ( fabs( p1 - p0 ) > 0.5f )
 	{
 		if ( p0 < p1 )
-			p0 += 1.0f;
+ p0 += 1.0f;
 		else
-			p1 += 1.0f;
+ p1 += 1.0f;
 	}
 
 	if ( fabs( p2 - p1 ) > 0.5f )
 	{
 		if ( p1 < p2 )
 		{
-			p1 += 1.0f;
+ p1 += 1.0f;
 
-			// see if we need to fix up p0
-			// important for vars that are decreasing from p0->p1->p2 where
-			// p1 is fixed up relative to p2, eg p0 = 0.2, p1 = 0.1, p2 = 0.9
-			if ( abs( p1 - p0 ) > 0.5 )
-			{
-				if ( p0 < p1 )
-					p0 += 1.0f;
-				else
-					p1 += 1.0f;
-			}
+ // see if we need to fix up p0
+ // important for vars that are decreasing from p0->p1->p2 where
+ // p1 is fixed up relative to p2, eg p0 = 0.2, p1 = 0.1, p2 = 0.9
+ if ( abs( p1 - p0 ) > 0.5 )
+ {
+ 	if ( p0 < p1 )
+ 		p0 += 1.0f;
+ 	else
+ 		p1 += 1.0f;
+ }
 		}
 		else
 		{
-			p2 += 1.0f;
+ p2 += 1.0f;
 		}
 	}
 		

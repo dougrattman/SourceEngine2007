@@ -19,10 +19,6 @@
 #include "qfiles.h"
 #include "utilmatlib.h"
 
-#ifdef WIN32
-#pragma warning( disable: 4706 )
-#endif
-
 class CUtlBuffer;
 
 #define	MAX_BRUSH_SIDES	128

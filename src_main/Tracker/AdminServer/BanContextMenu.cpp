@@ -1,57 +1,51 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright © 1996-2001, Valve LLC, All rights reserved.
 
 #include "BanContextMenu.h"
 
-#include <vgui/IInput.h>
-#include <vgui/IPanel.h>
-#include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include "tier1/KeyValues.h"
+#include "vgui/IInput.h"
+#include "vgui/IPanel.h"
+#include "vgui/ISurface.h"
 
 using namespace vgui;
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CBanContextMenu::CBanContextMenu(Panel *parent) : Menu(parent, "BanContextMenu")
-{
-	CBanContextMenu::parent=parent;
+CBanContextMenu::CBanContextMenu(Panel *parent)
+    : Menu(parent, "BanContextMenu") {
+  CBanContextMenu::parent = parent;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
-CBanContextMenu::~CBanContextMenu()
-{
-}
+CBanContextMenu::~CBanContextMenu() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Activates the menu
 //-----------------------------------------------------------------------------
-void CBanContextMenu::ShowMenu(Panel *target, unsigned int banID)
-{
-	DeleteAllItems();
+void CBanContextMenu::ShowMenu(Panel *target, unsigned int banID) {
+  DeleteAllItems();
 
-	if(banID==-1) 
-	{
-		AddMenuItem("ban", "#Ban_Menu_Add", new KeyValues("addban", "banID", banID), CBanContextMenu::parent);
-	} 
-	else
-	{
-		AddMenuItem("ban", "#Ban_Menu_Remove", new KeyValues("removeban", "banID", banID), CBanContextMenu::parent);
-		AddMenuItem("ban", "#Ban_Menu_Change", new KeyValues("changeban", "banID", banID), CBanContextMenu::parent);
-	}
+  if (banID == -1) {
+    AddMenuItem("ban", "#Ban_Menu_Add", new KeyValues("addban", "banID", banID),
+                CBanContextMenu::parent);
+  } else {
+    AddMenuItem("ban", "#Ban_Menu_Remove",
+                new KeyValues("removeban", "banID", banID),
+                CBanContextMenu::parent);
+    AddMenuItem("ban", "#Ban_Menu_Change",
+                new KeyValues("changeban", "banID", banID),
+                CBanContextMenu::parent);
+  }
 
-	MakePopup();
-	int x, y, gx, gy;
-	input()->GetCursorPos(x, y);
-	ipanel()->GetPos(surface()->GetEmbeddedPanel(), gx, gy);
-	SetPos(x - gx, y - gy);
-	MoveToFront();
-	RequestFocus();
-	SetVisible(true);
+  MakePopup();
+  int x, y, gx, gy;
+  input()->GetCursorPos(x, y);
+  ipanel()->GetPos(surface()->GetEmbeddedPanel(), gx, gy);
+  SetPos(x - gx, y - gy);
+  MoveToFront();
+  RequestFocus();
+  SetVisible(true);
 }

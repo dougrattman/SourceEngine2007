@@ -1,5 +1,5 @@
 
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: interface to friends data in Steam
 //
@@ -32,11 +32,11 @@ enum EFriendRelationship
 //-----------------------------------------------------------------------------
 enum EPersonaState
 {
-	k_EPersonaStateOffline = 0,			// friend is not currently logged on
-	k_EPersonaStateOnline = 1,			// friend is logged on
-	k_EPersonaStateBusy = 2,			// user is on, but busy
-	k_EPersonaStateAway = 3,			// auto-away feature
-	k_EPersonaStateSnooze = 4,			// auto-away for a long time
+	k_EPersonaStateOffline = 0, // friend is not currently logged on
+	k_EPersonaStateOnline = 1, // friend is logged on
+	k_EPersonaStateBusy = 2, // user is on, but busy
+	k_EPersonaStateAway = 3, // auto-away feature
+	k_EPersonaStateSnooze = 4, // auto-away for a long time
 	k_EPersonaStateMax,
 };
 
@@ -44,24 +44,24 @@ enum EPersonaState
 // for enumerating friends list
 enum k_EFriendFlags
 {
-	k_EFriendFlagNone			= 0x00,
+	k_EFriendFlagNone = 0x00,
 	k_EFriendFlagBlocked		= 0x01,
 	k_EFriendFlagFriendshipRequested	= 0x02,
-	k_EFriendFlagImmediate		= 0x04,			// "regular" friend
+	k_EFriendFlagImmediate		= 0x04, // "regular" friend
 	k_EFriendFlagClanMember		= 0x08,
 	k_EFriendFlagOnGameServer	= 0x10,	
 	//	k_EFriendFlagHasPlayedWith	= 0x20,
 	//	k_EFriendFlagFriendOfFriend	= 0x40,
 	k_EFriendFlagRequestingFriendship = 0x80,
 	k_EFriendFlagRequestingInfo = 0x100,
-	k_EFriendFlagAll			= 0xFFFF,
+	k_EFriendFlagAll = 0xFFFF,
 };
 
 
 enum { k_cchPersonaNameMax = 128 };
 
 // size limit on chat room or member metadata
-const uint32 k_cubChatMetadataMax = 4096;
+const uint32_t k_cubChatMetadataMax = 4096;
 
 //-----------------------------------------------------------------------------
 // Purpose: interface to friends
@@ -89,7 +89,7 @@ public:
 	// gets the avatar of the current user, which is a handle to be used in IClientUtils::GetImageRGBA(), or 0 if none set
 	virtual int GetFriendAvatar( CSteamID steamIDFriend ) = 0;
 	// returns true if the friend is actually in a game
-	virtual bool GetFriendGamePlayed( CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort ) = 0;
+	virtual bool GetFriendGamePlayed( CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort ) = 0;
 	// accesses old friends names - returns an empty string when their are no more items in the history
 	virtual const char *GetFriendPersonaNameHistory( CSteamID steamIDFriend, int iPersonaName ) = 0;
 
@@ -122,7 +122,7 @@ struct PersonaStateChange_t
 {
 	enum { k_iCallback = k_iSteamFriendsCallbacks + 4 };
 	
-	uint64 m_ulSteamID;		// steamID of the friend who changed
+	uint64_t m_ulSteamID;		// steamID of the friend who changed
 	int m_nChangeFlags;		// what's changed
 };
 
@@ -151,7 +151,7 @@ enum EPersonaChange
 struct GameOverlayActivated_t
 {
 	enum { k_iCallback = k_iSteamFriendsCallbacks + 31 };
-	uint8 m_bActive;	// true if it's just been activated, false otherwise
+	uint8_t m_bActive;	// true if it's just been activated, false otherwise
 };
 
 

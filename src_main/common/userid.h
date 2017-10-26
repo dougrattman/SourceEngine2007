@@ -1,34 +1,21 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef USERID_H
 #define USERID_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#if !defined( INCLUDED_STEAM_STEAMUSERIDTYPES_H )
-	#include "SteamCommon.h"
-#endif
+#include "SteamCommon.h"
 
-#define IDTYPE_WON		0
-#define IDTYPE_STEAM	1
-#define IDTYPE_VALVE	2
-#define IDTYPE_HLTV		3		
-typedef struct USERID_s
-{
-	int			idtype;
+#define IDTYPE_WON 0
+#define IDTYPE_STEAM 1
+#define IDTYPE_VALVE 2
+#define IDTYPE_HLTV 3
 
-	union
-	{
-		TSteamGlobalUserID	steamid;
-	} uid;
+typedef struct USERID_s {
+  int idtype;
 
-//	unsigned int		clientip;
+  union {
+    TSteamGlobalUserID steamid;
+  } uid;
 } USERID_t;
 
-#endif // USERID_H
+#endif  // USERID_H

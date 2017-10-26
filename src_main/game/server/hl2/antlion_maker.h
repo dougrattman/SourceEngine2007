@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ANTLION_MAKER_H
 #define ANTLION_MAKER_H
@@ -30,8 +30,8 @@ class CAntlionTemplateMaker : public CTemplateNPCMaker
 
 	DECLARE_CLASS( CAntlionTemplateMaker, CTemplateNPCMaker );
 
-			CAntlionTemplateMaker( void );
-			~CAntlionTemplateMaker( void );
+ CAntlionTemplateMaker( void );
+ ~CAntlionTemplateMaker( void );
 
 	virtual int DrawDebugTextOverlays( void );
 	virtual void DrawDebugGeometryOverlays( void );
@@ -132,20 +132,20 @@ protected:
 
 	EHANDLE		m_hFightTarget;		// A normal entity pointer for fight position
 	EHANDLE		m_hProxyTarget;		// This is a self-held target that is created and used when a vector is passed in as a fight
-									// goal, instead of an entity
+   // goal, instead of an entity
 	EHANDLE		m_hFollowTarget;	// Target to follow
 
 	CUtlVector< CHandle< CNPC_Antlion > >	m_Children;
 
 	// Pool behavior for coast
-	int			m_iPool;
-	int			m_iMaxPool;
-	int			m_iPoolRegenAmount;
+	int m_iPool;
+	int m_iMaxPool;
+	int m_iPoolRegenAmount;
 	float		m_flPoolRegenTime;
 
 	float		m_flVehicleSpawnDistance;
 	
-	int			m_iSkinCount;
+	int m_iSkinCount;
 
 	float		m_flBlockedBumpTime;
 

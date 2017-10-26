@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -16,8 +16,8 @@
 
 //-----------------------------------------------------------------------------
 // Purpose: An entity that networks the state of the game's objectives.
-//			May contain data for objectives that aren't used by your mod, but
-//			the extra data will never be networked as long as it's zeroed out.
+// May contain data for objectives that aren't used by your mod, but
+// the extra data will never be networked as long as it's zeroed out.
 //-----------------------------------------------------------------------------
 class CBaseTeamObjectiveResource : public CBaseEntity
 {
@@ -30,7 +30,7 @@ public:
 	~CBaseTeamObjectiveResource();
 
 	virtual void Spawn( void );
-	virtual int  UpdateTransmitState(void);
+	virtual int  UpdateTransmitState();
 
 	virtual void ObjectiveThink( void );
 
@@ -84,7 +84,7 @@ public:
 	int GetCappingTeam( int index )
 	{
 		if ( index >= m_iNumControlPoints )
-			return TEAM_UNASSIGNED;
+ return TEAM_UNASSIGNED;
 
 		return m_iCappingTeam[index];
 	}
@@ -135,10 +135,10 @@ private:
 	CNetworkArray(	int,	m_iCappingTeam,		MAX_CONTROL_POINTS );
 
 	CNetworkArray(	int,	m_iTeamInZone,		MAX_CONTROL_POINTS );
-	CNetworkArray(	bool,	m_bBlocked,			MAX_CONTROL_POINTS );
+	CNetworkArray(	bool,	m_bBlocked, MAX_CONTROL_POINTS );
 
 	// changes when a point is successfully captured
-	CNetworkArray(  int,    m_iOwner,			MAX_CONTROL_POINTS );
+	CNetworkArray(  int,    m_iOwner, MAX_CONTROL_POINTS );
 
 	// describes how to lay out the cap points in the hud
 	CNetworkString(  m_pszCapLayoutInHUD,		MAX_CAPLAYOUT_LENGTH );

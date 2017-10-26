@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_LOCALNAVIGATOR_H
 #define AI_LOCALNAVIGATOR_H
@@ -23,11 +23,11 @@ class CAI_MoveProbe;
 // CAI_LocalNavigator
 //
 // Purpose: Handles all the immediate tasks of navigation, independent of
-//			path. Implements steering.
+// path. Implements steering.
 //-----------------------------------------------------------------------------
 
 class CAI_LocalNavigator : public CAI_Component,
-						   public CAI_ProxyMovementSink
+     public CAI_ProxyMovementSink
 {
 public:
 	CAI_LocalNavigator(CAI_BaseNPC *pOuter);
@@ -38,18 +38,18 @@ public:
 	//---------------------------------
 	
 	AIMoveResult_t		MoveCalc( AILocalMoveGoal_t *pResult, bool bPreviouslyValidated = false );
-	void				ResetMoveCalculations();
+	void 	ResetMoveCalculations();
 
 	//---------------------------------
 	
-	void 				AddObstacle( const Vector &pos, float radius, AI_MoveSuggType_t type = AIMST_AVOID_OBJECT );
-	bool				HaveObstacles();
+	void  	AddObstacle( const Vector &pos, float radius, AI_MoveSuggType_t type = AIMST_AVOID_OBJECT );
+	bool 	HaveObstacles();
 
 protected:
 
 	AIMoveResult_t		MoveCalcRaw( AILocalMoveGoal_t *pResult, bool bOnlyCurThink );
-	bool 				MoveCalcDirect( AILocalMoveGoal_t *pMoveGoal, bool bOnlyCurThink, float *pDistClear, AIMoveResult_t *pResult );
-	bool 				MoveCalcSteer(  AILocalMoveGoal_t *pMoveGoal, float distClear, AIMoveResult_t *pResult );
+	bool  	MoveCalcDirect( AILocalMoveGoal_t *pMoveGoal, bool bOnlyCurThink, float *pDistClear, AIMoveResult_t *pResult );
+	bool  	MoveCalcSteer(  AILocalMoveGoal_t *pMoveGoal, float distClear, AIMoveResult_t *pResult );
 	bool		 		MoveCalcStop( AILocalMoveGoal_t *pMoveGoal, float distClear, AIMoveResult_t *pResult );
 
 	CAI_MoveProbe *		GetMoveProbe()		  { return m_pMoveProbe; }
@@ -59,7 +59,7 @@ private:
 
 	// --------------------------------
 
-	bool				m_fLastWasClear;
+	bool 	m_fLastWasClear;
 	AILocalMoveGoal_t	m_LastMoveGoal;
 	CSimpleSimTimer		m_FullDirectTimer;
 	

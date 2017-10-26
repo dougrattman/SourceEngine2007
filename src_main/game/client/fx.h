@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -24,12 +24,12 @@ typedef CGameTrace trace_t;
 enum
 {
 	FX_ENERGYSPLASH_EXPLOSIVE		= 0x1,
-	FX_ENERGYSPLASH_SMOKE			= 0x2,
+	FX_ENERGYSPLASH_SMOKE = 0x2,
 	FX_ENERGYSPLASH_LITTLESPARKS	= 0x4,
 	FX_ENERGYSPLASH_BIGSPARKS		= 0x8,
 	FX_ENERGYSPLASH_BIGSPARKSCOLLIDE = 0x10,
 	FX_ENERGYSPLASH_ENERGYBALLS		= 0x20,
-	FX_ENERGYSPLASH_DLIGHT			= 0x40,
+	FX_ENERGYSPLASH_DLIGHT = 0x40,
 	
 	FX_ENERGYSPLASH_DEFAULT = ~FX_ENERGYSPLASH_EXPLOSIVE,
 	FX_ENERGYSPLASH_DEFAULT_EXPLOSIVE = ~0,
@@ -80,15 +80,15 @@ bool EffectOccluded( const Vector &pos, pixelvis_handle_t *queryHandle = 0 );
 class CTeslaInfo
 {
 public:
-	Vector			m_vPos;
-	QAngle			m_vAngles;
-	int				m_nEntIndex;
-	char			*m_pszSpriteName;
-	float			m_flBeamWidth;
-	int				m_nBeams;
-	Vector			m_vColor;
-	float			m_flTimeVisible;
-	float			m_flRadius;
+	Vector m_vPos;
+	QAngle m_vAngles;
+	int 	m_nEntIndex;
+	char *m_pszSpriteName;
+	float m_flBeamWidth;
+	int 	m_nBeams;
+	Vector m_vColor;
+	float m_flTimeVisible;
+	float m_flRadius;
 };
 
 void FX_Tesla( const CTeslaInfo &teslaInfo );

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_AI_BASENPC_H
 #define C_AI_BASENPC_H
@@ -24,22 +24,22 @@ public:
 
 	C_AI_BaseNPC();
 	virtual unsigned int	PhysicsSolidMaskForEntity( void ) const;
-	virtual bool			IsNPC( void ) { return true; }
-	bool					IsMoving( void ){ return m_bIsMoving; }
-	bool					ShouldAvoidObstacle( void ){ return m_bPerformAvoidance; }
-	virtual bool			AddRagdollToFadeQueue( void ) { return m_bFadeCorpse; }
+	virtual bool IsNPC( void ) { return true; }
+	bool 		IsMoving( void ){ return m_bIsMoving; }
+	bool 		ShouldAvoidObstacle( void ){ return m_bPerformAvoidance; }
+	virtual bool AddRagdollToFadeQueue( void ) { return m_bFadeCorpse; }
 
-	virtual void			GetRagdollInitBoneArrays( matrix3x4_t *pDeltaBones0, matrix3x4_t *pDeltaBones1, matrix3x4_t *pCurrentBones, float boneDt );
+	virtual void GetRagdollInitBoneArrays( matrix3x4_t *pDeltaBones0, matrix3x4_t *pDeltaBones1, matrix3x4_t *pCurrentBones, float boneDt );
 
-	int						GetDeathPose( void ) { return m_iDeathPose; }
+	int  GetDeathPose( void ) { return m_iDeathPose; }
 
-	bool					ShouldModifyPlayerSpeed( void ) { return m_bSpeedModActive;	}
-	int						GetSpeedModifyRadius( void ) { return m_iSpeedModRadius; }
-	int						GetSpeedModifySpeed( void ) { return m_iSpeedModSpeed;	}
+	bool 		ShouldModifyPlayerSpeed( void ) { return m_bSpeedModActive;	}
+	int  GetSpeedModifyRadius( void ) { return m_iSpeedModRadius; }
+	int  GetSpeedModifySpeed( void ) { return m_iSpeedModSpeed;	}
 
-	void					ClientThink( void );
-	void					OnDataChanged( DataUpdateType_t type );
-	bool					ImportantRagdoll( void ) { return m_bImportanRagdoll;	}
+	void 		ClientThink( void );
+	void 		OnDataChanged( DataUpdateType_t type );
+	bool 		ImportantRagdoll( void ) { return m_bImportanRagdoll;	}
 
 private:
 	C_AI_BaseNPC( const C_AI_BaseNPC & ); // not defined, not accessible

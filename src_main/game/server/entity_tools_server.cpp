@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #include "toolframework/itoolentity.h"
 #include "entitylist.h"
 #include "toolframework/itoolsystem.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "icliententity.h"
 #include "iserverentity.h"
 #include "sceneentity.h"

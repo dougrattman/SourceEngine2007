@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: particle system code
 //
@@ -25,12 +25,12 @@ class C_OP_ConstrainDistance : public CParticleOperatorInstance
 	DECLARE_PARTICLE_OPERATOR( C_OP_ConstrainDistance );
 
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
@@ -142,12 +142,12 @@ class C_OP_ConstrainDistanceToPath : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_ConstrainDistanceToPath );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
 	}
@@ -322,17 +322,17 @@ class C_OP_PlanarConstraint : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_PlanarConstraint );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
 	}
 
-	virtual uint64 GetReadControlPointMask() const 
+	virtual uint64_t GetReadControlPointMask() const 
 	{ 
 		return 1ULL << m_nControlPointNumber; 
 	}
@@ -466,17 +466,17 @@ class C_OP_WorldCollideConstraint : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_WorldCollideConstraint );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
 	}
 
-	virtual uint64 GetReadControlPointMask() const 
+	virtual uint64_t GetReadControlPointMask() const 
 	{ 
 		return 1ULL << 0; 
 	}
@@ -556,17 +556,17 @@ class C_OP_WorldTraceConstraint : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_WorldTraceConstraint );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK | PARTICLE_ATTRIBUTE_RADIUS_MASK;
 	}
 
-	virtual uint64 GetReadControlPointMask() const 
+	virtual uint64_t GetReadControlPointMask() const 
 	{ 
 		return 1ULL << 0; 
 	}

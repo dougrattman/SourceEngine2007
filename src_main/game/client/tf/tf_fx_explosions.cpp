@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Game-specific explosion effects
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "c_te_effect_dispatch.h"
 #include "tempent.h"

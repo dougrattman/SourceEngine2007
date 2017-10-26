@@ -1,27 +1,22 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose:	This file sets all of our debugging flags.  It should be 
-//			called before all other header files.
-//
-// $NoKeywords: $
-//=============================================================================//
+// Purpose:	This file sets all of our debugging flags.  It should be called
+// before all other header files.
 
-#ifndef DBGFLAG_H
-#define DBGFLAG_H
-#ifdef _WIN32
-#pragma once
-#endif
-
+#ifndef SOURCE_TIER0_DBGFLAG_H_
+#define SOURCE_TIER0_DBGFLAG_H_
 
 // Here are all the flags we support:
-// DBGFLAG_MEMORY:			Enables our memory debugging system, which overrides malloc & free
-// DBGFLAG_MEMORY_NEWDEL:	Enables new / delete tracking for memory debug system.  Requires DBGFLAG_MEMORY to be enabled.
-// DBGFLAG_VALIDATE:		Enables our recursive validation system for checking integrity and memory leaks
-// DBGFLAG_ASSERT:			Turns Assert on or off (when off, it isn't compiled at all)
-// DBGFLAG_ASSERTFATAL:		Turns AssertFatal on or off (when off, it isn't compiled at all)
-// DBGFLAG_ASSERTDLG:		Turns assert dialogs on or off and debug breaks on or off when not under the debugger.
-//								(Dialogs will always be on when process is being debugged.)
-// DBGFLAG_STRINGS:			Turns on hardcore string validation (slow but safe)
+// DBGFLAG_MEMORY: Enables our memory debugging system, which overrides malloc &
+// free DBGFLAG_MEMORY_NEWDEL:	Enables new / delete tracking for memory
+// debug system.  Requires DBGFLAG_MEMORY to be enabled. DBGFLAG_VALIDATE:
+// Enables our recursive validation system for checking integrity and memory
+// leaks DBGFLAG_ASSERT: Turns Assert on or off (when off, it isn't compiled at
+// all) DBGFLAG_ASSERTFATAL:		Turns AssertFatal on or off (when
+// off, it isn't compiled at all) DBGFLAG_ASSERTDLG:		Turns assert
+// dialogs on or off and debug breaks on or off when not under the debugger.
+//  		(Dialogs will always be on when process is being debugged.)
+// DBGFLAG_STRINGS: Turns on hardcore string validation (slow but safe)
 
 #undef DBGFLAG_MEMORY
 #undef DBGFLAG_MEMORY_NEWDEL
@@ -31,14 +26,14 @@
 #undef DBGFLAG_ASSERTDLG
 #undef DBGFLAG_STRINGS
 
-//-----------------------------------------------------------------------------
-// Default flags for debug builds
-//-----------------------------------------------------------------------------
+// Default flags for debug builds.
 #ifdef _DEBUG
 
 #define DBGFLAG_MEMORY
-#ifdef _SERVER	// only enable new & delete tracking for server; on client it conflicts with CRT mem leak tracking
-#define DBGFLAG_MEMORY_NEWDEL	
+// Only enable new & delete tracking for server; on client it conflicts with CRT
+// mem leak tracking.
+#ifdef _SERVER
+#define DBGFLAG_MEMORY_NEWDEL
 #endif
 #ifdef STEAM
 #define DBGFLAG_VALIDATE
@@ -48,18 +43,17 @@
 #define DBGFLAG_ASSERTDLG
 #define DBGFLAG_STRINGS
 
-
-//-----------------------------------------------------------------------------
-// Default flags for release builds
-//-----------------------------------------------------------------------------
-#else // _DEBUG
+// Default flags for release builds.
+#else  // _DEBUG
 
 #ifdef STEAM
 #define DBGFLAG_ASSERT
 #endif
-#define DBGFLAG_ASSERTFATAL		// note: fatal asserts are enabled in release builds
+
+// NOTE: fatal asserts are enabled in release builds.
+#define DBGFLAG_ASSERTFATAL
 #define DBGFLAG_ASSERTDLG
 
-#endif // _DEBUG
+#endif  // _DEBUG
 
-#endif // DBGFLAG_H
+#endif  // SOURCE_TIER0_DBGFLAG_H_

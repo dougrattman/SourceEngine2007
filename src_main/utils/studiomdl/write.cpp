@@ -10,11 +10,6 @@
 // write.c: writes a studio .mdl file
 //
 
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4237 )
-#pragma warning( disable : 4305 )
-
-
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>

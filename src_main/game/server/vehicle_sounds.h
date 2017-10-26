@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef VEHICLE_SOUNDS_H
 #define VEHICLE_SOUNDS_H
@@ -54,7 +54,7 @@ struct vehicle_crashsound_t
 
 	float		flMinSpeed;
 	float		flMinDeltaSpeed;
-	int			gearLimit;
+	int gearLimit;
 	string_t	iszCrashSound;
 };
 
@@ -97,13 +97,13 @@ struct vehiclesounds_t
 		
 		for ( int i = 0; i < VS_NUM_SOUNDS; i++ )
 		{
-			iszSound[i] = NULL_STRING;
+ iszSound[i] = NULL_STRING;
 		}
 
 		for ( int i = 0; i < SS_NUM_STATES; i++ )
 		{
-			iszStateSounds[i] = NULL_STRING;
-			minStateTime[i] = 0.0f;
+ iszStateSounds[i] = NULL_STRING;
+ minStateTime[i] = 0.0f;
 		}
 	}
 
@@ -111,9 +111,9 @@ struct vehiclesounds_t
 
 	CUtlVector<vehicle_gear_t>	pGears;
 	CUtlVector<vehicle_crashsound_t> crashSounds;
-	string_t					iszSound[ VS_NUM_SOUNDS ];
-	string_t					iszStateSounds[SS_NUM_STATES];
-	float						minStateTime[SS_NUM_STATES];
+	string_t 		iszSound[ VS_NUM_SOUNDS ];
+	string_t 		iszStateSounds[SS_NUM_STATES];
+	float  minStateTime[SS_NUM_STATES];
 };
 
 //-----------------------------------------------------------------------------

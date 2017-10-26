@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #include "cbase.h"
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "saverestore.h"
 #include "saverestore_utlvector.h"
 #include "saverestore_utlsymbol.h"

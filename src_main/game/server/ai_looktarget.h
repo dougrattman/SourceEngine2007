@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 #pragma once
 #ifndef AI_LOOKTARGET_H
 #define AI_LOOKTARGET_H
@@ -20,7 +20,7 @@ public:
 	CAI_LookTarget() { m_flTimeNextAvailable = -1; }
 
 	// Debugging
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Accessors & Availability
 	bool IsEligible( CBaseEntity *pLooker );

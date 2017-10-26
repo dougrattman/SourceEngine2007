@@ -4,7 +4,7 @@
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef COMMON_PS_FXC_H_
 #define COMMON_PS_FXC_H_
 
@@ -71,7 +71,7 @@ const float4 cLightScale : register( c30 );
 
 // If you change these, make the corresponding change in hardwareconfig.cpp
 #define NVIDIA_PCF_POISSON	0
-#define ATI_NOPCF			1
+#define ATI_NOPCF 1
 #define ATI_NO_PCF_FETCH4	2
 
 struct LPREVIEW_PS_OUT
@@ -120,8 +120,8 @@ HALF4 DiffuseBump( sampler lightmapSampler,
 
 	HALF3 diffuseLighting;
 	diffuseLighting = saturate( dot( normal, bumpBasis[0] ) ) * lightmapColor1 +
-					  saturate( dot( normal, bumpBasis[1] ) ) * lightmapColor2 +
-					  saturate( dot( normal, bumpBasis[2] ) ) * lightmapColor3;
+ 		  saturate( dot( normal, bumpBasis[1] ) ) * lightmapColor2 +
+ 		  saturate( dot( normal, bumpBasis[2] ) ) * lightmapColor3;
 
 	return HALF4( diffuseLighting, LuminanceScaled( diffuseLighting ) );
 }
@@ -154,8 +154,8 @@ HALF4 GetNormal( sampler normalSampler,
 */
 
 // Needs to match NormalDecodeMode_t enum in imaterialsystem.h
-#define NORM_DECODE_NONE			0
-#define NORM_DECODE_ATI2N			1
+#define NORM_DECODE_NONE 0
+#define NORM_DECODE_ATI2N 1
 #define NORM_DECODE_ATI2N_ALPHA		2
 
 float4 DecompressNormal( sampler NormalSampler, float2 tc, int nDecompressionMode, sampler AlphaSampler )
@@ -177,7 +177,7 @@ float4 DecompressNormal( sampler NormalSampler, float2 tc, int nDecompressionMod
 	{
 		result.xy = normalTexel.xy * 2.0f - 1.0f;
 		result.z = sqrt( 1.0f - dot(result.xy, result.xy) );
-		result.a = tex2D( AlphaSampler, tc ).x;					// Note that this comes in on the X channel
+		result.a = tex2D( AlphaSampler, tc ).x; 		// Note that this comes in on the X channel
 	}
 
 	return result;
@@ -197,10 +197,10 @@ HALF3 NormalizeWithCubemap( sampler normalizeSampler, HALF3 input )
 
 /*
 HALF4 EnvReflect( sampler envmapSampler,
-				 sampler normalizeSampler,
-				 HALF3 normal,
-				 float3 eye,
-				 HALF2 fresnelScaleBias )
+ 	 sampler normalizeSampler,
+ 	 HALF3 normal,
+ 	 float3 eye,
+ 	 HALF2 fresnelScaleBias )
 {
 	HALF3 normEye = NormalizeWithCubemap( normalizeSampler, eye );
 	HALF fresnel = Fresnel( normal, normEye, fresnelScaleBias );
@@ -258,7 +258,7 @@ float CalcPixelFogFactor( int iPIXELFOGTYPE, const float4 fogParams, const float
 
 //g_FogParams not defined by default, but this is the same layout for every shader that does define it
 #define g_FogEndOverRange	g_FogParams.x
-#define g_WaterZ			g_FogParams.y
+#define g_WaterZ g_FogParams.y
 #define g_FogMaxDensity		g_FogParams.z
 #define g_FogOORange		g_FogParams.w
 
@@ -386,25 +386,25 @@ float RemapValClamped( float val, float A, float B, float C, float D)
 //===================================================================================//
 // INPUT:
 //		inTexCoord: 
-//			the texcoord for the height/displacement map before parallaxing
+// the texcoord for the height/displacement map before parallaxing
 //
 //		vParallax:
-//			Compute initial parallax displacement direction:
-//			float2 vParallaxDirection = normalize( vViewTS.xy );
-//			float fLength = length( vViewTS );
-//			float fParallaxLength = sqrt( fLength * fLength - vViewTS.z * vViewTS.z ) / vViewTS.z; 
-//			Out.vParallax = vParallaxDirection * fParallaxLength * fProjectedBumpHeight;
+// Compute initial parallax displacement direction:
+// float2 vParallaxDirection = normalize( vViewTS.xy );
+// float fLength = length( vViewTS );
+// float fParallaxLength = sqrt( fLength * fLength - vViewTS.z * vViewTS.z ) / vViewTS.z; 
+// Out.vParallax = vParallaxDirection * fParallaxLength * fProjectedBumpHeight;
 //
 //		vNormal:
-//			tangent space normal
+// tangent space normal
 //
 //		vViewW: 
-//			float3 vViewW = /*normalize*/(mul( matViewInverse, float4( 0, 0, 0, 1)) - inPosition );
+// float3 vViewW = /*normalize*/(mul( matViewInverse, float4( 0, 0, 0, 1)) - inPosition );
 //
 // OUTPUT:
 //		the new texcoord after parallaxing
 float2 CalcParallaxedTexCoord( float2 inTexCoord, float2 vParallax, float3 vNormal, 
-							   float3 vViewW, sampler HeightMapSampler )
+  	   float3 vViewW, sampler HeightMapSampler )
 {
 	const int nMinSamples = 8;
 	const int nMaxSamples = 50;
@@ -663,21 +663,21 @@ float4 HSLtoRGB( float4 hsl )
 
 
 // texture combining modes for combining base and detail/basetexture2
-#define TCOMBINE_RGB_EQUALS_BASE_x_DETAILx2 0				// original mode
-#define TCOMBINE_RGB_ADDITIVE 1								// base.rgb+detail.rgb*fblend
+#define TCOMBINE_RGB_EQUALS_BASE_x_DETAILx2 0 	// original mode
+#define TCOMBINE_RGB_ADDITIVE 1  		// base.rgb+detail.rgb*fblend
 #define TCOMBINE_DETAIL_OVER_BASE 2
-#define TCOMBINE_FADE 3										// straight fade between base and detail.
+#define TCOMBINE_FADE 3   	// straight fade between base and detail.
 #define TCOMBINE_BASE_OVER_DETAIL 4                         // use base alpha for blend over detail
 #define TCOMBINE_RGB_ADDITIVE_SELFILLUM 5                   // add detail color post lighting
 #define TCOMBINE_RGB_ADDITIVE_SELFILLUM_THRESHOLD_FADE 6
-#define TCOMBINE_MOD2X_SELECT_TWO_PATTERNS 7				// use alpha channel of base to select between mod2x channels in r+a of detail
+#define TCOMBINE_MOD2X_SELECT_TWO_PATTERNS 7 	// use alpha channel of base to select between mod2x channels in r+a of detail
 #define TCOMBINE_MULTIPLY 8
 #define TCOMBINE_MASK_BASE_BY_DETAIL_ALPHA 9                // use alpha channel of detail to mask base
-#define TCOMBINE_SSBUMP_BUMP 10								// use detail to modulate lighting as an ssbump
-#define TCOMBINE_SSBUMP_NOBUMP 11					// detail is an ssbump but use it as an albedo. shader does the magic here - no user needs to specify mode 11
+#define TCOMBINE_SSBUMP_BUMP 10  		// use detail to modulate lighting as an ssbump
+#define TCOMBINE_SSBUMP_NOBUMP 11 		// detail is an ssbump but use it as an albedo. shader does the magic here - no user needs to specify mode 11
 
 float4 TextureCombine( float4 baseColor, float4 detailColor, int combine_mode,
-					   float fBlendFactor )
+ 		   float fBlendFactor )
 {
 	if ( combine_mode == TCOMBINE_MOD2X_SELECT_TWO_PATTERNS)
 	{
@@ -725,7 +725,7 @@ float3 lerp5(float3 f1, float3 f2, float i1, float i2, float x)
 }
 
 float3 TextureCombinePostLighting( float3 lit_baseColor, float4 detailColor, int combine_mode,
-								   float fBlendFactor )
+  		   float fBlendFactor )
 {
 	if ( combine_mode == TCOMBINE_RGB_ADDITIVE_SELFILLUM )
  		lit_baseColor += fBlendFactor * detailColor.rgb;
@@ -734,9 +734,9 @@ float3 TextureCombinePostLighting( float3 lit_baseColor, float4 detailColor, int
  		// fade in an unusual way - instead of fading out color, remap an increasing band of it from
  		// 0..1
 		if ( fBlendFactor > 0.5)
-			lit_baseColor += min(1, (1.0/fBlendFactor)*max(0, detailColor.rgb-(1-fBlendFactor) ) );
+ lit_baseColor += min(1, (1.0/fBlendFactor)*max(0, detailColor.rgb-(1-fBlendFactor) ) );
 		else
-			lit_baseColor += 2*fBlendFactor*2*max(0, detailColor.rgb-.5);
+ lit_baseColor += 2*fBlendFactor*2*max(0, detailColor.rgb-.5);
 	}
 	return lit_baseColor;
 }
@@ -753,34 +753,34 @@ float DepthFeathering( sampler DepthSampler, const float2 vScreenPos, float fPro
 
 #		if ( defined( _X360 ) )
 		{
-			//Get depth from the depth texture. Need to sample with the offset of (0.5, 0.5) to fix rounding errors
-			asm {
-				tfetch2D flDepths.x___, vScreenPos, DepthSampler, OffsetX=0.5, OffsetY=0.5, MinFilter=point, MagFilter=point, MipFilter=point
-			};
+ //Get depth from the depth texture. Need to sample with the offset of (0.5, 0.5) to fix rounding errors
+ asm {
+ 	tfetch2D flDepths.x___, vScreenPos, DepthSampler, OffsetX=0.5, OffsetY=0.5, MinFilter=point, MagFilter=point, MipFilter=point
+ };
 
-#			if(	!defined( REVERSE_DEPTH_ON_X360 ) )
-				flSceneDepth = 1.0f - flSceneDepth;
-#			endif
+# if(	!defined( REVERSE_DEPTH_ON_X360 ) )
+ 	flSceneDepth = 1.0f - flSceneDepth;
+# endif
 
-			//get the sprite depth into the same range as the texture depth
-			flSpriteDepth = fProjZ / fProjW;
+ //get the sprite depth into the same range as the texture depth
+ flSpriteDepth = fProjZ / fProjW;
 
-			//unproject to get at the pre-projection z. This value is much more linear than depth
-			flDepths = vDepthBlendConstants.z / flDepths;
-			flDepths = vDepthBlendConstants.y - flDepths;
+ //unproject to get at the pre-projection z. This value is much more linear than depth
+ flDepths = vDepthBlendConstants.z / flDepths;
+ flDepths = vDepthBlendConstants.y - flDepths;
 
-			flFeatheredAlpha = flSceneDepth - flSpriteDepth;
-			flFeatheredAlpha *= vDepthBlendConstants.x;
-			flFeatheredAlpha = saturate( flFeatheredAlpha );
+ flFeatheredAlpha = flSceneDepth - flSpriteDepth;
+ flFeatheredAlpha *= vDepthBlendConstants.x;
+ flFeatheredAlpha = saturate( flFeatheredAlpha );
 		}
 #		else
 		{
-			flSceneDepth = tex2D( DepthSampler, vScreenPos ).a;	// PC uses dest alpha of the frame buffer
-			flSpriteDepth = SoftParticleDepth( fProjZ );
+ flSceneDepth = tex2D( DepthSampler, vScreenPos ).a;	// PC uses dest alpha of the frame buffer
+ flSpriteDepth = SoftParticleDepth( fProjZ );
 
-			flFeatheredAlpha = abs(flSceneDepth - flSpriteDepth) * vDepthBlendConstants.x;
-			flFeatheredAlpha = max( smoothstep( 0.75f, 1.0f, flSceneDepth ), flFeatheredAlpha ); //as the sprite approaches the edge of our compressed depth space, the math stops working. So as the sprite approaches the far depth, smoothly remove feathering.
-			flFeatheredAlpha = saturate( flFeatheredAlpha );
+ flFeatheredAlpha = abs(flSceneDepth - flSpriteDepth) * vDepthBlendConstants.x;
+ flFeatheredAlpha = max( smoothstep( 0.75f, 1.0f, flSceneDepth ), flFeatheredAlpha ); //as the sprite approaches the edge of our compressed depth space, the math stops working. So as the sprite approaches the far depth, smoothly remove feathering.
+ flFeatheredAlpha = saturate( flFeatheredAlpha );
 		}
 #		endif
 

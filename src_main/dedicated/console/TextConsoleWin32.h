@@ -1,54 +1,39 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// TextConsoleWin32.h: Win32 interface for the TextConsole class.
-//
-//////////////////////////////////////////////////////////////////////
+// Purpose: Win32 interface for the TextConsole class.
 
-#if !defined TEXTCONSOLE_WIN32_H
-#define TEXTCONSOLE_WIN32_H
-#pragma once
-
+#ifndef SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEWIN32_H_
+#define SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEWIN32_H_
 
 #ifdef _WIN32
 
-
-#include <windows.h>
 #include "TextConsole.h"
+#include "winlite.h"
 
-class CTextConsoleWin32 : public CTextConsole
-{
-public:
-	virtual ~CTextConsoleWin32()
-	{
-	};
+class CTextConsoleWin32 : public CTextConsole {
+ public:
+  virtual ~CTextConsoleWin32(){};
 
-	bool		Init( /*IBaseSystem * system*/ );
-	void		ShutDown( void );
-	void		PrintRaw( char * pszMsz, int nChars = 0 );
-	void		Echo( char * pszMsz, int nChars = 0 );
-	char *		GetLine( void );
-	int			GetWidth( void );
-	void		SetTitle( char * pszTitle );
-	void		SetStatusLine( char * pszStatus );
-	void		UpdateStatus( void );
-	void		SetColor( WORD );
-	void		SetVisible( bool visible );
+  bool Init();
+  void ShutDown(void);
+  void PrintRaw(const char* pszMsz, int nChars = 0);
+  void Echo(const char* pszMsz, int nChars = 0);
+  char* GetLine(void);
+  int GetWidth(void);
+  void SetTitle(const char* pszTitle);
+  void SetStatusLine(const char* pszStatus);
+  void UpdateStatus(void);
+  void SetColor(WORD);
+  void SetVisible(bool visible);
 
-private:
-	HANDLE	hinput;		// standard input handle
-	HANDLE	houtput;	// standard output handle
-	WORD	Attrib;		// attrib colours for status bar
-	
-	char	statusline[81];			// first line in console is status line
+ private:
+  HANDLE hinput;   // standard input handle
+  HANDLE houtput;  // standard output handle
+  WORD Attrib;     // attrib colours for status bar
+
+  char statusline[81];  // first line in console is status line
 };
 
+#endif  // _WIN32
 
-#endif // _WIN32
-
-
-#endif // !defined
+#endif  // SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEWIN32_H_

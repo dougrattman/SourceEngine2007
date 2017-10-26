@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -13,7 +13,7 @@
 #include "bone_setup.h"
 #include "soundinfo.h"
 #include "tools/bonelist.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tier0/vprof.h"
 #include "toolframework/itoolframework.h"
 #include "choreoevent.h"

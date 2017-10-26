@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef NPC_COMBINES_H
 #define NPC_COMBINES_H
@@ -28,7 +28,7 @@ public:
 	void		DeathSound( const CTakeDamageInfo &info );
 	void		PrescheduleThink( void );
 	void		BuildScheduleTestBits( void );
-	int			SelectSchedule ( void );
+	int SelectSchedule ( void );
 	float		GetHitgroupDamageMultiplier( int iHitGroup, const CTakeDamageInfo &info );
 	void		HandleAnimEvent( animevent_t *pEvent );
 	void		OnChangeActivity( Activity eNewActivity );
@@ -53,7 +53,7 @@ public:
 
 protected:
 	/// whether to use the more casual march anim in ep2_outland_05
-	int			m_iUseMarch;
+	int m_iUseMarch;
 #endif
 
 };

@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The TF Game rules 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "cs_gamerules.h"
 #include "cs_ammodef.h"
 #include "weapon_csbase.h"
 #include "cs_shareddefs.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
 
 #ifdef CLIENT_DLL
@@ -3365,7 +3365,7 @@ ConVar cl_autohelp(
 			{
 				//If this player just connected and fadetoblack is on, then maybe
 				//the server admin doesn't want him peeking around.
-				color32_s clr = {0,0,0,255};
+				color32 clr = {0,0,0,255};
 				if ( mp_fadetoblack.GetBool() )
 				{
 					UTIL_ScreenFade( pPlayer, clr, 3, 3, FFADE_OUT | FFADE_STAYOUT );

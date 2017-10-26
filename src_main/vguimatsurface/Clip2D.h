@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains 2D clipping routines
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CLIP2D_H
 #define CLIP2D_H
@@ -36,7 +36,7 @@ bool ClipLine( const vgui::Vertex_t *pInVerts, vgui::Vertex_t* pOutVerts );
 // Returns false if it is completely clipped off.
 //-----------------------------------------------------------------------------
 bool ClipRect( const vgui::Vertex_t &inUL, const vgui::Vertex_t &inLR, 
-			   vgui::Vertex_t *pOutUL, vgui::Vertex_t *pOutLR );
+    vgui::Vertex_t *pOutUL, vgui::Vertex_t *pOutLR );
 
 //-----------------------------------------------------------------------------
 // Clips a polygon to the screen area

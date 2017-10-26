@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FUNC_BREAKABLESURF_H
 #define FUNC_BREAKABLESURF_H
@@ -28,10 +28,10 @@ public:
 
 	static CWindowPane* CreateWindowPane(  const Vector &vecOrigin, const QAngle &vecAngles );
 
-	void			Spawn( void );
-	void			Precache( void );
-	void			PaneTouch( CBaseEntity *pOther );
-	void			Die( void );
+	void Spawn( void );
+	void Precache( void );
+	void PaneTouch( CBaseEntity *pOther );
+	void Die( void );
 	DECLARE_DATADESC();
 };
 
@@ -55,44 +55,44 @@ public:
 	CNetworkVector( m_vCorner );
 	CNetworkVar( bool, m_bIsBroken );
 	CNetworkVar( ShatterSurface_t, m_nSurfaceType );
-	int					m_nNumBrokenPanes;
-	float				m_flSupport[MAX_NUM_PANELS][MAX_NUM_PANELS]; //UNDONE: allocate dynamically?
+	int 		m_nNumBrokenPanes;
+	float 	m_flSupport[MAX_NUM_PANELS][MAX_NUM_PANELS]; //UNDONE: allocate dynamically?
 
-	int					m_nFragility;
-	Vector				m_vLLVertex;
-	Vector				m_vULVertex;
-	Vector				m_vLRVertex;
-	Vector				m_vURVertex;
-	int					m_nQuadError;
+	int 		m_nFragility;
+	Vector 	m_vLLVertex;
+	Vector 	m_vULVertex;
+	Vector 	m_vLRVertex;
+	Vector 	m_vURVertex;
+	int 		m_nQuadError;
 
-	void			SurfaceTouch( CBaseEntity *pOther );
-	void			PanePos(const Vector &vPos, float *flWidth, float *flHeight);
+	void SurfaceTouch( CBaseEntity *pOther );
+	void PanePos(const Vector &vPos, float *flWidth, float *flHeight);
 
-	bool			IsBroken(int nWidth, int nHeight);
-	void			SetSupport(int w, int h, float support);
+	bool IsBroken(int nWidth, int nHeight);
+	void SetSupport(int w, int h, float support);
 
-	float			GetSupport(int nWidth, int nHeight);
-	float			RecalcSupport(int nWidth, int nHeight);
+	float GetSupport(int nWidth, int nHeight);
+	float RecalcSupport(int nWidth, int nHeight);
 
-	void			BreakPane(int nWidth, int nHeight);
-	void			DropPane(int nWidth, int nHeight);
-	bool			ShatterPane(int nWidth, int nHeight, const Vector &force, const Vector &vForcePos);
-	void			BreakAllPanes(void);
+	void BreakPane(int nWidth, int nHeight);
+	void DropPane(int nWidth, int nHeight);
+	bool ShatterPane(int nWidth, int nHeight, const Vector &force, const Vector &vForcePos);
+	void BreakAllPanes();
 
-	void			CreateShards(const Vector &vBreakPos, const QAngle &vAngles,
-								 const Vector &vForce,	  const Vector &vForcePos,
-								 float flWidth,			  float flHeight,
-								 int   nShardSize);
+	void CreateShards(const Vector &vBreakPos, const QAngle &vAngles,
+  		 const Vector &vForce,	  const Vector &vForcePos,
+  		 float flWidth,   float flHeight,
+  		 int   nShardSize);
 
-	void			Spawn(void);
-	void			Precache(void);
-	void			Die( CBaseEntity *pBreaker, const Vector &vAttackDir );
-	void			BreakThink(void);
-	void			Event_Killed( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType );
-	void			TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
-	int				OnTakeDamage( const CTakeDamageInfo &info );
-	void			InputShatter( inputdata_t &inputdata );
-	void			VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );
+	void Spawn();
+	void Precache();
+	void Die( CBaseEntity *pBreaker, const Vector &vAttackDir );
+	void BreakThink();
+	void Event_Killed( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType );
+	void TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
+	int 	OnTakeDamage( const CTakeDamageInfo &info );
+	void InputShatter( inputdata_t &inputdata );
+	void VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );
 private:
 	// One bit per pane
 	CNetworkArray( bool, m_RawPanelBitVec, MAX_NUM_PANELS * MAX_NUM_PANELS );

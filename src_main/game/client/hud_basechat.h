@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_BASECHAT_H
 #define HUD_BASECHAT_H
@@ -97,48 +97,48 @@ public:
 	CBaseHudChatLine( vgui::Panel *parent, const char *panelName );
 	~CBaseHudChatLine();
 
-	void			SetExpireTime( void );
+	void SetExpireTime( void );
 
-	bool			IsReadyToExpire( void );
+	bool IsReadyToExpire( void );
 
-	void			Expire( void );
+	void Expire( void );
 
-	float			GetStartTime( void );
+	float GetStartTime( void );
 
-	int				GetCount( void );
+	int 	GetCount( void );
 
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
 
 	vgui::HFont		GetFont() { return m_hFont; }
 
-	Color			GetTextColor( void ) { return m_clrText; }
-	void			SetNameLength( int iLength ) { m_iNameLength = iLength;	}
-	void			SetNameColor( Color cColor ){ m_clrNameColor = cColor; 	}
+	Color GetTextColor( void ) { return m_clrText; }
+	void SetNameLength( int iLength ) { m_iNameLength = iLength;	}
+	void SetNameColor( Color cColor ){ m_clrNameColor = cColor; 	}
 		
 	virtual void	PerformFadeout( void );
 	virtual void	InsertAndColorizeText( wchar_t *buf, int clientIndex );
-	virtual			void Colorize( int alpha = 255 );								///< Re-inserts the text in the appropriate colors at the given alpha
+	virtual void Colorize( int alpha = 255 );  		///< Re-inserts the text in the appropriate colors at the given alpha
 
 
-	void			SetNameStart( int iStart ) { m_iNameStart = iStart;	}
+	void SetNameStart( int iStart ) { m_iNameStart = iStart;	}
 
 protected:
-	int				m_iNameLength;
+	int 	m_iNameLength;
 	vgui::HFont		m_hFont;
 
-	Color			m_clrText;
-	Color			m_clrNameColor;
+	Color m_clrText;
+	Color m_clrNameColor;
 
-	float			m_flExpireTime;
+	float m_flExpireTime;
 
 	CUtlVector< TextRange > m_textRanges;
-	wchar_t					*m_text;
+	wchar_t 		*m_text;
 
-	int				m_iNameStart;
+	int 	m_iNameStart;
 	
 private:
-	float			m_flStartTime;
-	int				m_nCount;
+	float m_flStartTime;
+	int 	m_nCount;
 
 	vgui::HFont		m_hFontMarlett;
 
@@ -207,17 +207,17 @@ public:
 	
 	virtual void	Init( void );
 
-	void			LevelInit( const char *newmap );
-	void			LevelShutdown( void );
+	void LevelInit( const char *newmap );
+	void LevelShutdown( void );
 
-	void			MsgFunc_TextMsg(const char *pszName, int iSize, void *pbuf);
+	void MsgFunc_TextMsg(const char *pszName, int iSize, void *pbuf);
 	
 	virtual void	Printf( int iFilter, const char *fmt, ... );
 	virtual void	ChatPrintf( int iPlayerIndex, int iFilter, const char *fmt, ... );
 	
-	void			StartMessageMode( int iMessageModeType );
-	void			StopMessageMode( void );
-	void			Send( void );
+	void StartMessageMode( int iMessageModeType );
+	void StopMessageMode( void );
+	void Send( void );
 
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
 	virtual void	Paint( void );
@@ -235,23 +235,23 @@ public:
 	// IGameEventListener interface:
 	virtual void FireGameEvent( IGameEvent *event);
 
-	CHudChatHistory			*GetChatHistory();
+	CHudChatHistory *GetChatHistory();
 
-	void					FadeChatHistory();
-	float					m_flHistoryFadeTime;
-	float					m_flHistoryIdleTime;
+	void 		FadeChatHistory();
+	float 		m_flHistoryFadeTime;
+	float 		m_flHistoryIdleTime;
 
-	virtual void			MsgFunc_SayText( bf_read &msg );
-	virtual void			MsgFunc_SayText2( bf_read &msg );
-	virtual void			MsgFunc_TextMsg( bf_read &msg );
-	virtual void			MsgFunc_VoiceSubtitle( bf_read &msg );
+	virtual void MsgFunc_SayText( bf_read &msg );
+	virtual void MsgFunc_SayText2( bf_read &msg );
+	virtual void MsgFunc_TextMsg( bf_read &msg );
+	virtual void MsgFunc_VoiceSubtitle( bf_read &msg );
 
 	
 	CBaseHudChatInputLine	*GetChatInput( void ) { return m_pChatInput; }
 	CHudChatFilterPanel		*GetChatFilterPanel( void );
 
-	int						GetFilterFlags( void ) { return m_iFilterFlags; }
-	void					SetFilterFlag( int iFilter );
+	int  GetFilterFlags( void ) { return m_iFilterFlags; }
+	void 		SetFilterFlag( int iFilter );
 
 	virtual Color	GetTextColorForClient( TextColor colorNum, int clientIndex );
 	virtual Color	GetClientColor( int clientIndex );
@@ -260,34 +260,34 @@ public:
 
 	virtual const char *GetDisplayedSubtitlePlayerName( int clientIndex );
 
-	bool			IsVoiceSubtitle( void ) { return m_bEnteringVoice; }
-	void			SetVoiceSubtitleState( bool bState ) { m_bEnteringVoice = bState; }
+	bool IsVoiceSubtitle( void ) { return m_bEnteringVoice; }
+	void SetVoiceSubtitleState( bool bState ) { m_bEnteringVoice = bState; }
 
 protected:
 	CBaseHudChatLine		*FindUnusedChatLine( void );
 
 	CBaseHudChatInputLine	*m_pChatInput;
 	CBaseHudChatLine		*m_ChatLine;
-	int					m_iFontHeight;
+	int 		m_iFontHeight;
 
-	CHudChatHistory			*m_pChatHistory;
+	CHudChatHistory *m_pChatHistory;
 
 	CHudChatFilterButton	*m_pFiltersButton;
 	CHudChatFilterPanel		*m_pFilterPanel;
 
 private:	
-	void			Clear( void );
+	void Clear( void );
 
-	int				ComputeBreakChar( int width, const char *text, int textlen );
+	int 	ComputeBreakChar( int width, const char *text, int textlen );
 
-	int				m_nMessageMode;
+	int 	m_nMessageMode;
 
-	int				m_nVisibleHeight;
+	int 	m_nVisibleHeight;
 
 	vgui::HFont		m_hChatFont;
 
-	int				m_iFilterFlags;
-	bool			m_bEnteringVoice;
+	int 	m_iFilterFlags;
+	bool m_bEnteringVoice;
 };
 
 class CBaseHudChatEntry : public vgui::TextEntry
@@ -314,28 +314,28 @@ public:
 	{
 		if ( code == KEY_ENTER || code == KEY_PAD_ENTER || code == KEY_ESCAPE )
 		{
-			if ( code != KEY_ESCAPE )
-			{
-				if ( m_pHudChat )
-				{
-					m_pHudChat->Send();
-				}
-			}
+ if ( code != KEY_ESCAPE )
+ {
+ 	if ( m_pHudChat )
+ 	{
+ 		m_pHudChat->Send();
+ 	}
+ }
 		
-			// End message mode.
-			if ( m_pHudChat )
-			{
-				m_pHudChat->StopMessageMode();
-			}
+ // End message mode.
+ if ( m_pHudChat )
+ {
+ 	m_pHudChat->StopMessageMode();
+ }
 		}
 		else if ( code == KEY_TAB )
 		{
-			// Ignore tab, otherwise vgui will screw up the focus.
-			return;
+ // Ignore tab, otherwise vgui will screw up the focus.
+ return;
 		}
 		else
 		{
-			BaseClass::OnKeyCodeTyped( code );
+ BaseClass::OnKeyCodeTyped( code );
 		}
 	}
 
@@ -353,10 +353,10 @@ class CBaseHudChatInputLine : public vgui::Panel
 public:
 	CBaseHudChatInputLine( CBaseHudChat *parent, char const *panelName );
 
-	void			SetPrompt( const wchar_t *prompt );
-	void			ClearEntry( void );
-	void			SetEntry( const wchar_t *entry );
-	void			GetMessageText( wchar_t *buffer, int buffersizebytes );
+	void SetPrompt( const wchar_t *prompt );
+	void ClearEntry( void );
+	void SetEntry( const wchar_t *entry );
+	void GetMessageText( wchar_t *buffer, int buffersizebytes );
 
 	virtual void	PerformLayout();
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);

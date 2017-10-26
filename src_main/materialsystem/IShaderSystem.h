@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -15,7 +15,7 @@
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1/interface.h"
 #include <materialsystem/IShader.h>
 
 //-----------------------------------------------------------------------------
@@ -39,9 +39,9 @@ enum
 {
 	SHADER_USING_COLOR_MODULATION		= 0x1,
 	SHADER_USING_ALPHA_MODULATION		= 0x2,
-	SHADER_USING_FLASHLIGHT				= 0x4,
+	SHADER_USING_FLASHLIGHT 	= 0x4,
 	SHADER_USING_FIXED_FUNCTION_BAKED_LIGHTING		= 0x8,
-	SHADER_USING_EDITOR					= 0x10,
+	SHADER_USING_EDITOR 		= 0x10,
 };
 
 

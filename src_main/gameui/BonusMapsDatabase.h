@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BONUSMAPSDATABASE_H
 #define BONUSMAPSDATABASE_H
@@ -12,7 +12,7 @@
 #endif
 
 
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 
 
 struct ChallengeDescription_t

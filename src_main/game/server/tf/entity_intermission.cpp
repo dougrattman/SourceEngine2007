@@ -2,7 +2,7 @@
 //
 // Purpose: CTF Intermission.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "tf_gamerules.h"

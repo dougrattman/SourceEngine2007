@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SAVERESTORE_UTLSYMBOL_H
 #define SAVERESTORE_UTLSYMBOL_H
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "utlsymbol.h"
+#include "tier1/utlsymbol.h"
 
 class CUtlSymbolDataOps : public CDefSaveRestoreOps
 {

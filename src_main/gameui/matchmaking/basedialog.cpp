@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: All matchmaking dialogs inherit from this
 //
-//=============================================================================//
+
 
 #include "vgui_controls/Label.h"
 #include "gameui_interface.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "basedialog.h"
 #include "basepanel.h"
 #include "matchmakingbasepanel.h"

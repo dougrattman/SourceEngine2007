@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef TRAINS_H
 #define TRAINS_H
@@ -20,12 +20,12 @@
 #define SF_CORNER_TELEPORT		0x002
 
 // Tracktrain spawn flags
-#define SF_TRACKTRAIN_NOPITCH					0x0001
-#define SF_TRACKTRAIN_NOCONTROL					0x0002
-#define SF_TRACKTRAIN_FORWARDONLY				0x0004
-#define SF_TRACKTRAIN_PASSABLE					0x0008
-#define SF_TRACKTRAIN_FIXED_ORIENTATION			0x0010
-#define SF_TRACKTRAIN_HL1TRAIN					0x0080
+#define SF_TRACKTRAIN_NOPITCH 		0x0001
+#define SF_TRACKTRAIN_NOCONTROL 		0x0002
+#define SF_TRACKTRAIN_FORWARDONLY 	0x0004
+#define SF_TRACKTRAIN_PASSABLE 		0x0008
+#define SF_TRACKTRAIN_FIXED_ORIENTATION 0x0010
+#define SF_TRACKTRAIN_HL1TRAIN 		0x0080
 #define SF_TRACKTRAIN_USE_MAXSPEED_FOR_PITCH	0x0100
 #define SF_TRACKTRAIN_UNBLOCKABLE_BY_PLAYER		0x0200
 
@@ -130,7 +130,7 @@ public:
 	
 #ifdef HL1_DLL	
 	bool		m_bOnTrackChange;		// we don't want to find a new node if we restore while 
-										// riding on a func_trackchange
+   	// riding on a func_trackchange
 #endif
 
 private:
@@ -149,28 +149,28 @@ private:
 
 	Vector		m_controlMins;
 	Vector		m_controlMaxs;
-	Vector		m_lastBlockPos;				// These are used to build a heuristic decision about being temporarily blocked by physics objects
-	int			m_lastBlockTick;			// ^^^^^^^
+	Vector		m_lastBlockPos; 	// These are used to build a heuristic decision about being temporarily blocked by physics objects
+	int m_lastBlockTick; // ^^^^^^^
 	float		m_flVolume;
 	float		m_flBank;
 	float		m_oldSpeed;
-	float		m_flBlockDamage;			// Damage to inflict when blocked.
+	float		m_flBlockDamage; // Damage to inflict when blocked.
 	float		m_height;
 	float		m_maxSpeed;
 	float		m_dir;
 
 
-	string_t	m_iszSoundMove;				// Looping sound to play while moving. Pitch shifted based on speed.
-	string_t	m_iszSoundMovePing;			// Ping sound to play while moving. Interval decreased based on speed.
-	string_t	m_iszSoundStart;			// Sound to play when starting to move.
-	string_t	m_iszSoundStop;				// Sound to play when stopping.
+	string_t	m_iszSoundMove; 	// Looping sound to play while moving. Pitch shifted based on speed.
+	string_t	m_iszSoundMovePing; // Ping sound to play while moving. Interval decreased based on speed.
+	string_t	m_iszSoundStart; // Sound to play when starting to move.
+	string_t	m_iszSoundStop; 	// Sound to play when stopping.
 
 	float		m_flMoveSoundMinTime;		// The most often to play the move 'ping' sound (used at max speed)
 	float		m_flMoveSoundMaxTime;		// The least often to play the move 'ping' sound (used approaching zero speed)
 	float		m_flNextMoveSoundTime;
 
-	int			m_nMoveSoundMinPitch;		// The sound pitch to approach as we come to a stop
-	int			m_nMoveSoundMaxPitch;		// The sound pitch to approach as we approach our max speed (actually, it's hardcoded to 1000 in/sec)
+	int m_nMoveSoundMinPitch;		// The sound pitch to approach as we come to a stop
+	int m_nMoveSoundMaxPitch;		// The sound pitch to approach as we approach our max speed (actually, it's hardcoded to 1000 in/sec)
 
 	TrainOrientationType_t m_eOrientationType;
 	TrainVelocityType_t m_eVelocityType;

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF implementation of the IPresence interface
 //
@@ -31,7 +31,7 @@ public:
 	virtual void		SetupGameProperties( CUtlVector< XUSER_CONTEXT > &contexts, CUtlVector< XUSER_PROPERTY > &properties );
 	virtual uint		GetPresenceID( const char *pIDName );
 	virtual const char 	*GetPropertyIdString( const unsigned int id );
-	virtual void		GetPropertyDisplayString( uint id, uint value, char *pOutput, int nBytes );
+	virtual void		GetPropertyDisplayString( uint32_t id, uint32_t value, char *pOutput, int nBytes );
 	virtual void		UploadStats();
 
 private:

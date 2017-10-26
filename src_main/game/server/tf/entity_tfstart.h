@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: CTF Spawn Point.
 //
-//=============================================================================//
+
 #ifndef ENTITY_TFSTART_H
 #define ENTITY_TFSTART_H
 
@@ -35,7 +35,7 @@ public:
 	void InputDisable( inputdata_t &inputdata );
 	void InputRoundSpawn( inputdata_t &inputdata );
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	CHandle<CTeamControlPoint> GetControlPoint( void ) { return m_hControlPoint; }
 	CHandle<CTeamControlPointRound> GetRoundBlueSpawn( void ) { return m_hRoundBlueSpawn; }
@@ -44,9 +44,9 @@ public:
 private:
 	bool	m_bDisabled;		// Enabled/Disabled?
 
-	string_t						m_iszControlPointName;
-	string_t						m_iszRoundBlueSpawn;
-	string_t						m_iszRoundRedSpawn;
+	string_t  m_iszControlPointName;
+	string_t  m_iszRoundBlueSpawn;
+	string_t  m_iszRoundRedSpawn;
 
 	CHandle<CTeamControlPoint>		m_hControlPoint;
 	CHandle<CTeamControlPointRound>	m_hRoundBlueSpawn;

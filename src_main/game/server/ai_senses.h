@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_SENSES_H
 #define AI_SENSES_H
@@ -36,7 +36,7 @@ enum seentype_t
 	SEEN_MISC
 };
 
-#define SENSING_FLAGS_NONE			0x00000000
+#define SENSING_FLAGS_NONE 0x00000000
 #define SENSING_FLAGS_DONT_LOOK		0x00000001 // Effectively makes the NPC blind
 #define SENSING_FLAGS_DONT_LISTEN	0x00000002 // Effectively makes the NPC deaf
 
@@ -64,21 +64,21 @@ public:
 		m_iSensingFlags = SENSING_FLAGS_NONE;
 	}
 	
-	float			GetDistLook() const				{ return m_LookDist; }
-	void			SetDistLook( float flDistLook ) { m_LookDist = flDistLook; }
+	float GetDistLook() const 	{ return m_LookDist; }
+	void SetDistLook( float flDistLook ) { m_LookDist = flDistLook; }
 
-	void			PerformSensing();
+	void PerformSensing();
 
-	void			Listen( void );
-	void			Look( int iDistance );// basic sight function for npcs
+	void Listen( void );
+	void Look( int iDistance );// basic sight function for npcs
 
-	bool			ShouldSeeEntity( CBaseEntity *pEntity ); // logical query
-	bool			CanSeeEntity( CBaseEntity *pSightEnt ); // more expensive cone & raycast test
+	bool ShouldSeeEntity( CBaseEntity *pEntity ); // logical query
+	bool CanSeeEntity( CBaseEntity *pSightEnt ); // more expensive cone & raycast test
 #ifdef PORTAL
-	bool			CanSeeEntityThroughPortal( const CProp_Portal *pPortal, CBaseEntity *pSightEnt ); // more expensive cone & raycast test
+	bool CanSeeEntityThroughPortal( const CProp_Portal *pPortal, CBaseEntity *pSightEnt ); // more expensive cone & raycast test
 #endif
 	
-	bool			DidSeeEntity( CBaseEntity *pSightEnt ) const; //  a less expensive query that looks at cached results from recent conditionsa gathering
+	bool DidSeeEntity( CBaseEntity *pSightEnt ) const; //  a less expensive query that looks at cached results from recent conditionsa gathering
 
 	CBaseEntity *	GetFirstSeenEntity( AISightIter_t *pIter, seentype_t iSeenType = SEEN_ALL ) const;
 	CBaseEntity *	GetNextSeenEntity( AISightIter_t *pIter ) const;
@@ -87,45 +87,45 @@ public:
 	CSound *		GetNextHeardSound( AISoundIter_t *pIter );
 	CSound *		GetClosestSound( bool fScent = false, int validTypes = ALL_SOUNDS | ALL_SCENTS, bool bUsePriority = true );
 
-	bool 			CanHearSound( CSound *pSound );
+	bool  CanHearSound( CSound *pSound );
 
 	//---------------------------------
 	
-	float			GetTimeLastUpdate( CBaseEntity *pEntity );
+	float GetTimeLastUpdate( CBaseEntity *pEntity );
 
 	//---------------------------------
 
-	void			AddSensingFlags( int iFlags )		{ m_iSensingFlags |= iFlags; }
-	void			RemoveSensingFlags( int iFlags )	{ m_iSensingFlags &= ~iFlags; }
-	bool			HasSensingFlags( int iFlags )		{ return (m_iSensingFlags & iFlags) == iFlags; }
+	void AddSensingFlags( int iFlags )		{ m_iSensingFlags |= iFlags; }
+	void RemoveSensingFlags( int iFlags )	{ m_iSensingFlags &= ~iFlags; }
+	bool HasSensingFlags( int iFlags )		{ return (m_iSensingFlags & iFlags) == iFlags; }
 
 	DECLARE_SIMPLE_DATADESC();
 
 private:
-	int				GetAudibleList() const { return m_iAudibleList; }
+	int 	GetAudibleList() const { return m_iAudibleList; }
 
-	bool			WaitingUntilSeen( CBaseEntity *pSightEnt );
+	bool WaitingUntilSeen( CBaseEntity *pSightEnt );
 
-	void			BeginGather();
-	void 			NoteSeenEntity( CBaseEntity *pSightEnt );
-	void			EndGather( int nSeen, CUtlVector<EHANDLE> *pResult );
+	void BeginGather();
+	void  NoteSeenEntity( CBaseEntity *pSightEnt );
+	void EndGather( int nSeen, CUtlVector<EHANDLE> *pResult );
 	
-	bool 			Look( CBaseEntity *pSightEnt );
+	bool  Look( CBaseEntity *pSightEnt );
 #ifdef PORTAL
-	bool 			LookThroughPortal( const CProp_Portal *pPortal, CBaseEntity *pSightEnt );
+	bool  LookThroughPortal( const CProp_Portal *pPortal, CBaseEntity *pSightEnt );
 #endif
 
-	int 			LookForHighPriorityEntities( int iDistance );
-	int 			LookForNPCs( int iDistance );
-	int 			LookForObjects( int iDistance );
+	int  LookForHighPriorityEntities( int iDistance );
+	int  LookForNPCs( int iDistance );
+	int  LookForObjects( int iDistance );
 	
-	bool			SeeEntity( CBaseEntity *pEntity );
+	bool SeeEntity( CBaseEntity *pEntity );
 	
-	float			m_LookDist;				// distance npc sees (Default 2048)
-	float			m_LastLookDist;
-	float			m_TimeLastLook;
+	float m_LookDist; 	// distance npc sees (Default 2048)
+	float m_LastLookDist;
+	float m_TimeLastLook;
 	
-	int				m_iAudibleList;				// first index of a linked list of sounds that the npc can hear.
+	int 	m_iAudibleList; 	// first index of a linked list of sounds that the npc can hear.
 	
 	CUtlVector<EHANDLE> m_SeenHighPriority;
 	CUtlVector<EHANDLE> m_SeenNPCs;
@@ -133,11 +133,11 @@ private:
 	
 	CUtlVector<EHANDLE> *m_SeenArrays[3];
 	
-	float			m_TimeLastLookHighPriority;
-	float			m_TimeLastLookNPCs;
-	float			m_TimeLastLookMisc;
+	float m_TimeLastLookHighPriority;
+	float m_TimeLastLookNPCs;
+	float m_TimeLastLookMisc;
 
-	int				m_iSensingFlags;
+	int 	m_iSensingFlags;
 };
 
 //-----------------------------------------------------------------------------

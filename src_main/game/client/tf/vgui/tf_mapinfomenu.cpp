@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -11,7 +11,7 @@
 #include <vgui_controls/RichText.h>
 #include <game/client/iviewport.h>
 #include <vgui/ILocalize.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <FileSystem.h>
 #include "IGameUIFuncs.h" // for key bindings
 
@@ -404,7 +404,7 @@ void CTFMapInfoMenu::LoadMapPage( const char *mapName )
 		data[ bytesRead+1 ] = 0;
 	}
 
-	// null-terminate the stream (redundant, since we memset & then trimmed the transformed buffer already)
+	// 0-terminate the stream (redundant, since we memset & then trimmed the transformed buffer already)
 	memBlock[dataSize / sizeof(wchar_t) - 1] = 0x0000;
 
 	// check the first character, make sure this a little-endian unicode file

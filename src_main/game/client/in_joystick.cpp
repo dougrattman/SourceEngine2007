@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Joystick handling function
 //
@@ -7,11 +7,11 @@
 // $NoKeywords: $
 //===========================================================================//
 #if !defined( _X360 )
-#include <windows.h>
+#include "winlite.h"
 #endif
 #include "cbase.h"
 #include "basehandle.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "cdll_client_int.h"
 #include "cdll_util.h"
 #include "kbutton.h"
@@ -19,7 +19,7 @@
 #include "iclientvehicle.h"
 #include "input.h"
 #include "iviewrender.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "hud.h"
 #include "vgui/isurface.h"
 #include "vgui_controls/controls.h"
@@ -560,8 +560,6 @@ char const *CInput::DescribeAxis( int index )
 	default:
 		return "Unknown";
 	}
-
-	return "Unknown";
 }
 
 

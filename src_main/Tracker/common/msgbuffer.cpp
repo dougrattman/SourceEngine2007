@@ -1,421 +1,354 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
-#include <string.h>
-#include <assert.h>
-#include "msgbuffer.h"
-// memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+// Copyright © 1996-2001, Valve LLC, All rights reserved.
 
-#pragma warning(disable: 4244) // warning C4244: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+#include "msgbuffer.h"
+
+#include <cassert>
+#include <cstring>
+
+// memdbgon must be the last include file in a .cpp file!!!
+#include "tier0/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Allocate message buffer
-// Input  : *buffername - 
-//			*ef - 
+// Input  : *buffername -
+//			*ef -
 //-----------------------------------------------------------------------------
-CMsgBuffer::CMsgBuffer( const char *buffername, void (*ef)( const char *fmt, ... ) /*= NULL*/ )
-{
-	m_pszBufferName		= buffername;
-	m_pfnErrorFunc		= ef;
-	m_bAllowOverflow	= false;	// if false, Error
-	m_bOverFlowed		= false;	// set to true if the buffer size failed
-	m_nMaxSize			= NET_MAXMESSAGE;
-	m_nPushedCount		= 0;
-	m_bPushed			= false;
-	m_nReadCount		= 0;
-	m_bBadRead			= false;
+CMsgBuffer::CMsgBuffer(const char *buffername,
+                       void (*ef)(const char *fmt, ...) /*= NULL*/) {
+  m_pszBufferName = buffername;
+  m_pfnErrorFunc = ef;
+  m_bAllowOverflow = false;  // if false, Error
+  m_bOverFlowed = false;     // set to true if the buffer size failed
+  m_nMaxSize = NET_MAXMESSAGE;
+  m_nPushedCount = 0;
+  m_bPushed = false;
+  m_nReadCount = 0;
+  m_bBadRead = false;
 
-	Clear();
+  Clear();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CMsgBuffer::~CMsgBuffer( void )
-{
-}
+CMsgBuffer::~CMsgBuffer() {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Temporarily remember the read position so we can reset it
 //-----------------------------------------------------------------------------
-void CMsgBuffer::Push( void )
-{
-	// ??? Allow multiple pushes without matching pops ???
-	assert( !m_bPushed );
+void CMsgBuffer::Push() {
+  // ??? Allow multiple pushes without matching pops ???
+  assert(!m_bPushed);
 
-	m_nPushedCount	= m_nReadCount;
-	m_bPushed		= true;
+  m_nPushedCount = m_nReadCount;
+  m_bPushed = true;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CMsgBuffer::Pop( void )
-{
-	assert( m_bPushed );
+void CMsgBuffer::Pop() {
+  assert(m_bPushed);
 
-	m_nReadCount	= m_nPushedCount;
-	m_bPushed		= false;
+  m_nReadCount = m_nPushedCount;
+  m_bPushed = false;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : allowed - 
+// Purpose:
+// Input  : allowed -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::SetOverflow( bool allowed )
-{
-	m_bAllowOverflow = allowed;
-}
+void CMsgBuffer::SetOverflow(bool allowed) { m_bAllowOverflow = allowed; }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CMsgBuffer::GetMaxSize( void )
-{
-	return m_nMaxSize;
-}
+int CMsgBuffer::GetMaxSize() { return m_nMaxSize; }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : void *
 //-----------------------------------------------------------------------------
-void * CMsgBuffer::GetData( void )
-{
-	return m_rgData;
-}
+void *CMsgBuffer::GetData() { return m_rgData; }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CMsgBuffer::GetCurSize( void )
-{
-	return m_nCurSize;
-}
+int CMsgBuffer::GetCurSize() { return m_nCurSize; }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
-int CMsgBuffer::GetReadCount( void )
-{
-	return m_nReadCount;
-}
+int CMsgBuffer::GetReadCount() { return m_nReadCount; }
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-void CMsgBuffer::SetTime(float time)
-{
-	m_fRecvTime = time;
-}
+void CMsgBuffer::SetTime(float time) { m_fRecvTime = time; }
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-float CMsgBuffer::GetTime()
-{
-	return m_fRecvTime;
-}
+float CMsgBuffer::GetTime() { return m_fRecvTime; }
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-void CMsgBuffer::SetNetAddress(netadr_t &adr)
-{
-	m_NetAddr = adr;
-}
+void CMsgBuffer::SetNetAddress(netadr_t &adr) { m_NetAddr = adr; }
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
 //-----------------------------------------------------------------------------
-netadr_t &CMsgBuffer::GetNetAddress()
-{
-	return m_NetAddr;
+netadr_t &CMsgBuffer::GetNetAddress() { return m_NetAddr; }
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void CMsgBuffer::WriteByte(int c) {
+  unsigned char *buf = (unsigned char *)GetSpace(1);
+  if (buf) {
+    buf[0] = c;
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
+// Input  : c -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteByte( int c )
-{
-	unsigned char    *buf;
-	buf = (unsigned char *)GetSpace( 1 );
-	buf[0] = c;
+void CMsgBuffer::WriteShort(int c) {
+  unsigned char *buf = (unsigned char *)GetSpace(2);
+  if (buf) {
+    buf[0] = c & 0xff;
+    buf[1] = c >> 8;
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : c - 
+// Purpose:
+// Input  : c -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteShort ( int c )
-{
-	unsigned char    *buf;
-	buf = (unsigned char *)GetSpace( 2 );
-	buf[0] = c&0xff;
-	buf[1] = c>>8;
+void CMsgBuffer::WriteLong(int c) {
+  unsigned char *buf = (unsigned char *)GetSpace(4);
+  if (buf) {
+    buf[0] = c & 0xff;
+    buf[1] = (c >> 8) & 0xff;
+    buf[2] = (c >> 16) & 0xff;
+    buf[3] = c >> 24;
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : c - 
+// Purpose:
+// Input  : f -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteLong (int c)
-{
-	unsigned char    *buf;
-	
-	buf = (unsigned char *)GetSpace( 4 );
-	buf[0] = c&0xff;
-	buf[1] = (c>>8)&0xff;
-	buf[2] = (c>>16)&0xff;
-	buf[3] = c>>24;
+void CMsgBuffer::WriteFloat(float f) {
+  union {
+    float f;
+    int l;
+  } dat;
+
+  dat.f = f;
+  Write(&dat.l, 4);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : f - 
+// Purpose:
+// Input  : *s -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteFloat (float f)
-{
-	union
-	{
-		float   f;
-		int     l;
-	} dat;
-	
-	dat.f = f;
-	Write( &dat.l, 4 );
+void CMsgBuffer::WriteString(const char *s) {
+  if (!s) {
+    Write("", 1);
+  } else {
+    Write(s, strlen(s) + 1);
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *s - 
+// Purpose:
+// Input  : iSize -
+//			*buf -
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteString (const char *s)
-{
-	if ( !s )
-	{
-		Write ("", 1);
-	}
-	else
-	{
-		Write ( s, strlen( s ) + 1 );
-	}
+void CMsgBuffer::WriteBuf(int iSize, void *buf) {
+  if (!buf) {
+    return;
+  }
+
+  Write(buf, iSize);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : iSize - 
-//			*buf - 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CMsgBuffer::WriteBuf( int iSize, void *buf )
-{
-	if ( !buf )
-	{
-		return;
-	}
-
-	Write( buf, iSize );
+void CMsgBuffer::BeginReading() {
+  m_nReadCount = 0;
+  m_bBadRead = false;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CMsgBuffer::BeginReading (void)
-{
-	m_nReadCount		= 0;
-	m_bBadRead		= false;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int CMsgBuffer::ReadByte
 //-----------------------------------------------------------------------------
-int CMsgBuffer::ReadByte (void)
-{
-	int     c;
-	
-	if ( m_nReadCount + 1 > m_nCurSize )
-	{
-		m_bBadRead = true;
-		return -1;
-	}
-		
-	c = ( unsigned char )m_rgData[ m_nReadCount ];
-	m_nReadCount++;
-	return c;
+int CMsgBuffer::ReadByte() {
+  int c;
+
+  if (m_nReadCount + 1 > m_nCurSize) {
+    m_bBadRead = true;
+    return -1;
+  }
+
+  c = (unsigned char)m_rgData[m_nReadCount];
+  m_nReadCount++;
+  return c;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int CMsgBuffer::ReadShort
 //-----------------------------------------------------------------------------
-int CMsgBuffer::ReadShort (void)
-{
-	int     c;
-	
-	if ( m_nReadCount + 2 > m_nCurSize )
-	{
-		m_bBadRead = true;
-		return -1;
-	}
-		
-	c = (short)(m_rgData[m_nReadCount] + (m_rgData[m_nReadCount+1]<<8));
-	m_nReadCount += 2;
-	
-	return c;
+int CMsgBuffer::ReadShort() {
+  int c;
+
+  if (m_nReadCount + 2 > m_nCurSize) {
+    m_bBadRead = true;
+    return -1;
+  }
+
+  c = (short)(m_rgData[m_nReadCount] + (m_rgData[m_nReadCount + 1] << 8));
+  m_nReadCount += 2;
+
+  return c;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int CMsgBuffer::ReadLong
 //-----------------------------------------------------------------------------
-int CMsgBuffer::ReadLong (void)
-{
-	int     c;
-	
-	if (m_nReadCount+4 > m_nCurSize)
-	{
-		m_bBadRead = true;
-		return -1;
-	}
-		
-	c = m_rgData[m_nReadCount]
-	+ (m_rgData[m_nReadCount+1]<<8)
-	+ (m_rgData[m_nReadCount+2]<<16)
-	+ (m_rgData[m_nReadCount+3]<<24);
-	
-	m_nReadCount += 4;
-	
-	return c;
+int CMsgBuffer::ReadLong() {
+  int c;
+
+  if (m_nReadCount + 4 > m_nCurSize) {
+    m_bBadRead = true;
+    return -1;
+  }
+
+  c = m_rgData[m_nReadCount] + (m_rgData[m_nReadCount + 1] << 8) +
+      (m_rgData[m_nReadCount + 2] << 16) + (m_rgData[m_nReadCount + 3] << 24);
+
+  m_nReadCount += 4;
+
+  return c;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : float CMsgBuffer::ReadFloat
 //-----------------------------------------------------------------------------
-float CMsgBuffer::ReadFloat (void)
-{
-	union
-	{
-		unsigned char    b[4];
-		float   f;
-	} dat;
-	
-	dat.b[0] =      m_rgData[m_nReadCount];
-	dat.b[1] =      m_rgData[m_nReadCount+1];
-	dat.b[2] =      m_rgData[m_nReadCount+2];
-	dat.b[3] =      m_rgData[m_nReadCount+3];
-	m_nReadCount += 4;
-	return dat.f;   
+float CMsgBuffer::ReadFloat() {
+  union {
+    unsigned char b[4];
+    float f;
+  } dat;
+
+  dat.b[0] = m_rgData[m_nReadCount];
+  dat.b[1] = m_rgData[m_nReadCount + 1];
+  dat.b[2] = m_rgData[m_nReadCount + 2];
+  dat.b[3] = m_rgData[m_nReadCount + 3];
+  m_nReadCount += 4;
+  return dat.f;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : iSize - 
-//			*pbuf - 
+// Purpose:
+// Input  : iSize -
+//			*pbuf -
 // Output : int
 //-----------------------------------------------------------------------------
-int CMsgBuffer::ReadBuf( int iSize, void *pbuf )
-{
-	if (m_nReadCount + iSize > m_nCurSize)
-	{
-		m_bBadRead = true;
-		return -1;
-	}
-		
-	memcpy( pbuf, &m_rgData[m_nReadCount], iSize );
-	m_nReadCount += iSize;
-	
-	return 1;
+int CMsgBuffer::ReadBuf(int iSize, void *pbuf) {
+  if (m_nReadCount + iSize > m_nCurSize) {
+    m_bBadRead = true;
+    return -1;
+  }
+
+  memcpy(pbuf, &m_rgData[m_nReadCount], iSize);
+  m_nReadCount += iSize;
+
+  return 1;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : char *
 //-----------------------------------------------------------------------------
-char *CMsgBuffer::ReadString (void)
-{
-	static char     string[ NET_MAXMESSAGE ];
-	int             l,c;
-	
-	l = 0;
-	do
-	{
-		c = (char)ReadByte();
-		if ( c == -1 || c == 0 )
-			break;
-		string[l] = c;
-		l++;
-	} while ( l < sizeof(string)-1 );
-	
-	string[ l ] = 0;
-	
-	return string;
+char *CMsgBuffer::ReadString() {
+  static char string[NET_MAXMESSAGE];
+  int l, c;
+
+  l = 0;
+  do {
+    c = (char)ReadByte();
+    if (c == -1 || c == 0) break;
+    string[l] = c;
+    l++;
+  } while (l < sizeof(string) - 1);
+
+  string[l] = 0;
+
+  return string;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CMsgBuffer::Clear( void )
-{
-	m_nCurSize		= 0;
-	m_bOverFlowed	= false;
-	m_nReadCount	= 0;
-	m_bBadRead		= false;
-	memset( m_rgData, 0, sizeof( m_rgData ) );
+void CMsgBuffer::Clear() {
+  m_nCurSize = 0;
+  m_bOverFlowed = false;
+  m_nReadCount = 0;
+  m_bBadRead = false;
+  memset(m_rgData, 0, sizeof(m_rgData));
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : length - 
+// Purpose:
+// Input  : length -
 //-----------------------------------------------------------------------------
-void *CMsgBuffer::GetSpace( int length )
-{
-	void    *d;
-	
-	if (m_nCurSize + length > m_nMaxSize)
-	{
-		if ( !m_bAllowOverflow )
-		{
-			if ( m_pfnErrorFunc )
-			{
-				( *m_pfnErrorFunc )( "CMsgBuffer(%s), no room for %i bytes, %i / %i already in use\n",
-					m_pszBufferName, length, m_nCurSize, m_nMaxSize );
-			}
-			return NULL;
-		}
-		
-		if (length > m_nMaxSize)
-		{
-			if ( m_pfnErrorFunc )
-			{
-				( *m_pfnErrorFunc )( "CMsgBuffer(%s), no room for %i bytes, %i is max\n",
-					m_pszBufferName, length, m_nMaxSize );
-			}
-			return NULL;
-		}
-			
-		m_bOverFlowed = true;
-		Clear(); 
-	}
+void *CMsgBuffer::GetSpace(int length) {
+  void *d;
 
-	d = m_rgData + m_nCurSize;
-	m_nCurSize += length;
-	return d;
+  if (m_nCurSize + length > m_nMaxSize) {
+    if (!m_bAllowOverflow) {
+      if (m_pfnErrorFunc) {
+        (*m_pfnErrorFunc)(
+            "CMsgBuffer(%s), no room for %i bytes, %i / %i already in use\n",
+            m_pszBufferName, length, m_nCurSize, m_nMaxSize);
+      }
+      return NULL;
+    }
+
+    if (length > m_nMaxSize) {
+      if (m_pfnErrorFunc) {
+        (*m_pfnErrorFunc)("CMsgBuffer(%s), no room for %i bytes, %i is max\n",
+                          m_pszBufferName, length, m_nMaxSize);
+      }
+      return NULL;
+    }
+
+    m_bOverFlowed = true;
+    Clear();
+  }
+
+  d = m_rgData + m_nCurSize;
+  m_nCurSize += length;
+  return d;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *m_rgData - 
-//			length - 
-//-----------------------------------------------------------------------------
-void CMsgBuffer::Write(const void *m_rgData, int length)
-{
-	memcpy( GetSpace(length), m_rgData, length );         
+// Purpose:
+void CMsgBuffer::Write(const void *data, int length) {
+  void *space = GetSpace(length);
+  if (space) {
+    memcpy(space, data, length);
+  }
 }

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: "Force-field" obstacle avoidance & steering
 //
@@ -7,7 +7,7 @@
 // acceleration.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_MOVESOLVER_H
 #define AI_MOVESOLVER_H
@@ -16,7 +16,7 @@
 #pragma once
 #endif
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "ai_obstacle_type.h"
 
 
@@ -99,16 +99,16 @@ struct AI_MoveSuggestion_t
 	AI_MoveSuggType_t	type;
 
 	// The unadjusted weight of the suggestion [0..1], although [-1..1] within the solver
-	float 				weight;
+	float  	weight;
 
 	// The desired direction to move/avoid
-	AI_Arc_t			arc;
+	AI_Arc_t arc;
 
 	// The causing entity, if any
-	EHANDLE				hObstacleEntity;
+	EHANDLE 	hObstacleEntity;
 	
 	// Flags
-	unsigned			flags;
+	unsigned flags;
 
 };
 
@@ -145,7 +145,7 @@ struct AI_MoveSolution_t
 // class CAI_MoveSolver
 //
 // Purpose: Given a set of precalculated "regulations" (typically negative),
-//			and a set of instantaneous suggestions (usually positive)
+// and a set of instantaneous suggestions (usually positive)
 //-----------------------------------------------------------------------------
 
 class CAI_MoveSolver
@@ -155,7 +155,7 @@ public:
 
 	//---------------------------------
 	// Purpose: A regulation is a suggestion that is kept around as a rule until
-	//			cleared. They are generally negative suggestions.
+	// cleared. They are generally negative suggestions.
 	//---------------------------------
 	void AddRegulation( const AI_MoveSuggestion_t &suggestion );
 	void AddRegulations( const AI_MoveSuggestion_t *pSuggestion, int nSuggestions );
@@ -165,7 +165,7 @@ public:
 
 	//---------------------------------
 	// Purpose: Solve the move, picking the best direction from a set of suggestions,
-	//			after applying the regulations
+	// after applying the regulations
 	//---------------------------------
 	bool Solve( const AI_MoveSuggestion_t *pSuggestions, int nSuggestions, AI_MoveSolution_t *pResult );
 	bool Solve( const AI_MoveSuggestion_t &suggestion, AI_MoveSolution_t *pResult );

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains the set of functions for manipulating entity hierarchies.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // UNDONE: Reconcile this with SetParent()
 

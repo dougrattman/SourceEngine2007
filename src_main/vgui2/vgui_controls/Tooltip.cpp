@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 // This class is a message box that has two buttons, ok and cancel instead of
 // just the ok button of a message box. We use a message box class for the ok button
 // and implement another button here.
-//=============================================================================//
 
-#include <math.h>
+
+#include <cmath>
 #define PROTECTED_THINGS_DISABLE
 
 #include <vgui/IInput.h>

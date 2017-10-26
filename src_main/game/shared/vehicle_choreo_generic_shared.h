@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef VEHICLE_CHOREO_GENERIC_SHARED_H
 #define VEHICLE_CHOREO_GENERIC_SHARED_H
@@ -32,7 +32,7 @@ struct vehicleview_t
 	CNetworkVar( float,	flRollCurveZero );	// Pitch values below this are clamped to zero.
 	CNetworkVar( float,	flRollCurveLinear );	// Roll values above this are mapped directly.
 	//		Spline in between.
-	CNetworkVar( float,	flFOV );				// FOV when in the vehicle.
+	CNetworkVar( float,	flFOV ); 	// FOV when in the vehicle.
 
 	CNetworkVar( float, flYawMin );
 	CNetworkVar( float, flYawMax );

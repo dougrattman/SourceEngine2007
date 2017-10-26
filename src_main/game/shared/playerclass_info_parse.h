@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Player class data file parsing, shared by game & client dlls.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYERCLASS_INFO_PARSE_H
 #define PLAYERCLASS_INFO_PARSE_H
@@ -60,7 +60,7 @@ PLAYERCLASS_FILE_INFO_HANDLE LookupPlayerClassInfoSlot( const char *name );
 // Given a handle to the player class info, return the class data
 FilePlayerClassInfo_t *GetFilePlayerClassInfoFromHandle( PLAYERCLASS_FILE_INFO_HANDLE handle );
 
-// Get the null Player Class object
+// Get the 0 Player Class object
 PLAYERCLASS_FILE_INFO_HANDLE GetInvalidPlayerClassInfoHandle( void );
 
 // Initialize all player class info

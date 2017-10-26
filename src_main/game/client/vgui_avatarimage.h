@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -59,7 +59,7 @@ public:
 	}
 
 	// Set the draw color 
-	virtual void SetColor(Color col)			
+	virtual void SetColor(Color col) 
 	{ 
 		m_Color = col; 
 	}

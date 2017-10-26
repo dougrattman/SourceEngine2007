@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // nav_generate.cpp
 // Auto-generate a Navigation Mesh by sampling the current map
 // Author: Michael S. Booth (mike@turtlerockstudios.com), 2003
@@ -1887,7 +1887,7 @@ bool CNavMesh::UpdateGeneration( float maxTime )
 				else
 				{
 					const char *filename = GetFilename();
-					Msg( "ERROR: Cannot save navigation map '%s'.\n", (filename) ? filename : "(null)" );
+					Msg( "ERROR: Cannot save navigation map '%s'.\n", (filename) ? filename : "(0)" );
 				}
 
 				engine->ChangeLevel( STRING( gpGlobals->mapname ), NULL );

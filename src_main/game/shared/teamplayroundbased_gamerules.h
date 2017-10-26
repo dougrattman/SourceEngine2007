@@ -91,7 +91,7 @@ class CGameRulesRoundStateInfo
 {
 public:
 	gamerules_roundstate_t	m_iRoundState;
-	const char				*m_pStateName;
+	const char 	*m_pStateName;
 
 	void (CTeamplayRoundBasedRules::*pfnEnterState)();	// Init and deinit the state.
 	void (CTeamplayRoundBasedRules::*pfnLeaveState)();
@@ -115,8 +115,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Client specific
 #ifdef CLIENT_DLL
-	void			OnPreDataChanged( DataUpdateType_t updateType );
-	void			OnDataChanged( DataUpdateType_t updateType );
+	void OnPreDataChanged( DataUpdateType_t updateType );
+	void OnDataChanged( DataUpdateType_t updateType );
 #endif // CLIENT_DLL
 };
 
@@ -249,7 +249,7 @@ protected:
 	void		 CheckWaitingForPlayers( void );
 	void		 CheckRestartRound( void );
 	bool		 CheckTimeLimit( void );
-	int			 GetTimeLeft( void );
+	int  GetTimeLeft( void );
 	bool		 CheckWinLimit( void );
 	bool		 CheckMaxRounds( void );
 
@@ -258,8 +258,8 @@ protected:
 	
 	// State machine handling
 	void State_Enter( gamerules_roundstate_t newState );	// Initialize the new state.
-	void State_Leave();										// Cleanup the previous state.
-	void State_Think();										// Update the current state.
+	void State_Leave();   	// Cleanup the previous state.
+	void State_Think();   	// Update the current state.
 	static CGameRulesRoundStateInfo* State_LookupInfo( gamerules_roundstate_t state );	// Find the state info for the specified state.
 
 	// State Functions
@@ -312,42 +312,42 @@ protected:
 	virtual void InternalHandleTeamWin( int iWinningTeam ){ return; }
 
 protected:
-	CGameRulesRoundStateInfo	*m_pCurStateInfo;			// Per-state data 
-	float						m_flStateTransitionTime;	// Timer for round states
+	CGameRulesRoundStateInfo	*m_pCurStateInfo; // Per-state data 
+	float  m_flStateTransitionTime;	// Timer for round states
 
-	float						m_flWaitingForPlayersTimeEnds;
+	float  m_flWaitingForPlayersTimeEnds;
 	CHandle<CTeamRoundTimer>	m_hWaitingForPlayersTimer;
 
-	float						m_flNextPeriodicThink;
-	bool						m_bChangeLevelOnRoundEnd;
+	float  m_flNextPeriodicThink;
+	bool  m_bChangeLevelOnRoundEnd;
 
-	bool						m_bResetTeamScores;
-	bool						m_bResetPlayerScores;
-	bool						m_bResetRoundsPlayed;
+	bool  m_bResetTeamScores;
+	bool  m_bResetPlayerScores;
+	bool  m_bResetRoundsPlayed;
 
 	// Stalemate
-	EHANDLE						m_hPreviousActiveTimer;
+	EHANDLE  m_hPreviousActiveTimer;
 	CHandle<CTeamRoundTimer>	m_hStalemateTimer;
-	float						m_flStalemateStartTime;
+	float  m_flStalemateStartTime;
 
-	bool						m_bForceMapReset; // should the map be reset when a team wins and the round is restarted?
-	bool						m_bPrevRoundWasWaitingForPlayers;	// was the previous map reset after a waiting for players period
+	bool  m_bForceMapReset; // should the map be reset when a team wins and the round is restarted?
+	bool  m_bPrevRoundWasWaitingForPlayers;	// was the previous map reset after a waiting for players period
 
-	bool						m_bTeamReady[ MAX_TEAMS ];
-	bool						m_bInitialSpawn;
+	bool  m_bTeamReady[ MAX_TEAMS ];
+	bool  m_bInitialSpawn;
 
-	string_t					m_iszRoundToPlayNext;
+	string_t 		m_iszRoundToPlayNext;
 	CUtlVector<string_t>		m_iszPreviousRounds; // we'll store the two previous rounds so we won't play them again right away if there are other rounds that can be played first
-	string_t					m_iszFirstRoundPlayed; // store the first round played after a full restart so we can pick a different one next time if we have other options
+	string_t 		m_iszFirstRoundPlayed; // store the first round played after a full restart so we can pick a different one next time if we have other options
 
-	float						m_flOriginalTeamRespawnWaveTime[ MAX_TEAMS ];
+	float  m_flOriginalTeamRespawnWaveTime[ MAX_TEAMS ];
 
-	bool						m_bAllowStalemateAtTimelimit;
-	bool						m_bChangelevelAfterStalemate;
+	bool  m_bAllowStalemateAtTimelimit;
+	bool  m_bChangelevelAfterStalemate;
 
-	float						m_flRoundStartTime;		// time the current round started
+	float  m_flRoundStartTime;		// time the current round started
 
-	int							m_nRoundsPlayed;
+	int  	m_nRoundsPlayed;
 #endif
 	// End server specific
 	//----------------------------------------------------------------------------------
@@ -361,9 +361,9 @@ public:
 	virtual void	HandleOvertimeBegin(){}
 
 private:
-	bool			m_bOldInWaitingForPlayers;
-	bool			m_bOldInOvertime;
-	bool			m_bOldInSetup;
+	bool m_bOldInWaitingForPlayers;
+	bool m_bOldInOvertime;
+	bool m_bOldInSetup;
 #endif // CLIENT_DLL
 
 public:
@@ -377,12 +377,12 @@ protected:
 	CNetworkVar( bool, m_bSwitchedTeamsThisRound );
 
 protected:
-	CNetworkVar( int,			m_iWinningTeam );				// Set before entering GR_STATE_TEAM_WIN
-	CNetworkVar( int,			m_iWinReason );
-	CNetworkVar( bool,			m_bInWaitingForPlayers );
-	CNetworkVar( bool,			m_bAwaitingReadyRestart );
-	CNetworkVar( float,			m_flRestartRoundTime );
-	CNetworkVar( float,			m_flMapResetTime );						// Time that the map was reset
+	CNetworkVar( int, m_iWinningTeam ); 	// Set before entering GR_STATE_TEAM_WIN
+	CNetworkVar( int, m_iWinReason );
+	CNetworkVar( bool, m_bInWaitingForPlayers );
+	CNetworkVar( bool, m_bAwaitingReadyRestart );
+	CNetworkVar( float, m_flRestartRoundTime );
+	CNetworkVar( float, m_flMapResetTime );  // Time that the map was reset
 	CNetworkArray( float,		m_flNextRespawnWave, MAX_TEAMS );		// Minor waste, but cleaner code
 
 public:

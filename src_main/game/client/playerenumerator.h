@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYERENUMERATOR_H
 #define PLAYERENUMERATOR_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 #include "ehandle.h"
 #include "ISpatialPartition.h"
 
@@ -34,7 +34,7 @@ public:
 	C_BaseEntity *GetObject( int index )
 	{
 		if ( index < 0 || index >= GetObjectCount() )
-			return NULL;
+ return NULL;
 
 		return m_Objects[ index ];
 	}
@@ -44,14 +44,14 @@ public:
 	{
 		C_BaseEntity *pEnt = ClientEntityList().GetBaseEntityFromHandle( pHandleEntity->GetRefEHandle() );
 		if ( pEnt == NULL )
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 
 		if ( !pEnt->IsPlayer() )
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 
 		Vector	deltaPos = pEnt->GetAbsOrigin() - m_vecOrigin;
 		if ( deltaPos.LengthSqr() > m_flRadiusSquared )
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 
 		CHandle< C_BaseEntity > h;
 		h = pEnt;

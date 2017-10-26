@@ -1,19 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef VGUI_DRAWTREEPANEL_H
 #define VGUI_DRAWTREEPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-
-void VGui_CreateDrawTreePanel( vgui::Panel *parent );
+void VGui_CreateDrawTreePanel(vgui::Panel *parent);
 void VGui_MoveDrawTreePanelToFront();
 void VGui_UpdateDrawTreePanel();
 
-
-#endif // VGUI_DRAWTREEPANEL_H
+#endif  // VGUI_DRAWTREEPANEL_H

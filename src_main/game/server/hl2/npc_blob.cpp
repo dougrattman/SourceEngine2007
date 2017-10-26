@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // npc_blob - experimental, cpu-intensive monster made of lots of smaller elements
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "ai_default.h"
 #include "ai_task.h"
@@ -71,7 +71,7 @@ class CBlobElement : public CBaseAnimating
 public:
 	void Precache();
 	void Spawn();
-	int	DrawDebugTextOverlays(void); 
+	int	DrawDebugTextOverlays(); 
 
 	void	SetElementVelocity( Vector vecVelocity, bool bPlanarOnly );
 	void	AddElementVelocity( Vector vecVelocityAdd, bool bPlanarOnly );

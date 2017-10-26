@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_HUD_AMMOSTATUS_H
 #define TF_HUD_AMMOSTATUS_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#define TF_MAX_GRENADES			4
+#define TF_MAX_GRENADES 4
 #define TF_MAX_FILENAME_LENGTH	128
 
 //-----------------------------------------------------------------------------
@@ -40,18 +40,18 @@ private:
 
 private:
 
-	float							m_flNextThink;
+	float  	m_flNextThink;
 
 	CHandle<C_BaseCombatWeapon>		m_hCurrentActiveWeapon;
-	int								m_nAmmo;
-	int								m_nAmmo2;
+	int  		m_nAmmo;
+	int  		m_nAmmo2;
 
-	CTFLabel						*m_pInClip;
-	CTFLabel						*m_pInClipShadow;
-	CTFLabel						*m_pInReserve;
-	CTFLabel						*m_pInReserveShadow;
-	CTFLabel						*m_pNoClip;
-	CTFLabel						*m_pNoClipShadow;
+	CTFLabel  *m_pInClip;
+	CTFLabel  *m_pInClipShadow;
+	CTFLabel  *m_pInReserve;
+	CTFLabel  *m_pInReserveShadow;
+	CTFLabel  *m_pNoClip;
+	CTFLabel  *m_pNoClipShadow;
 };
 
 #endif	// TF_HUD_AMMOSTATUS_H

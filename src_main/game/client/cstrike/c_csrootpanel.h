@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_CSRootPanel_H
 #define C_CSRootPanel_H
@@ -13,7 +13,7 @@
 
 #include <vgui_controls/Panel.h>
 #include <vgui_controls/EditablePanel.h>
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 
 class CPanelEffect;
 class ITFHintItem;
@@ -29,8 +29,8 @@ class C_CSRootPanel : public vgui::Panel
 {
 	typedef vgui::Panel BaseClass;
 public:
-						C_CSRootPanel( vgui::VPANEL parent );
-	virtual				~C_CSRootPanel( void );
+  C_CSRootPanel( vgui::VPANEL parent );
+	virtual 	~C_CSRootPanel( void );
 
 	// Draw Panel effects here
 	virtual void		PostChildPaint();
@@ -40,7 +40,7 @@ public:
 	virtual void		LevelShutdown( void );
 
 	// Run effects and let them decide whether to remove themselves
-	void				OnTick( void );
+	void 	OnTick( void );
 
 private:
 

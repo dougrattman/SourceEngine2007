@@ -5,9 +5,6 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#pragma warning( disable : 4786 )
-
-#pragma warning( disable : 4748 )		// buffer overrun with optimizations off
 // This file has tons of problems with global optimizations. . turn 'em off.
 // NOTE: Would be nice to have a test case for this! - not verified in vs2005
 #pragma optimize( "g", off )

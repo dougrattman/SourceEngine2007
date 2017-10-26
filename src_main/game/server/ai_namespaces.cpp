@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -63,7 +63,7 @@ const char *CAI_GlobalNamespace::IdToSymbol( int symbolID ) const
 {
 	AssertMsg( AI_IdIsGlobal( symbolID ), ("Local symbol ID passed to CAI_GlobalNamespace::IdToSymbol()") );
 	if ( symbolID == -1 )
-		return "<<null>>";
+		return "<<0>>";
 	return (const_cast<CStringRegistry *>(m_pSymbols))->GetStringText( symbolID );
 }
 

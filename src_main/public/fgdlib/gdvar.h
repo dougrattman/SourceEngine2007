@@ -46,6 +46,12 @@ enum GDIV_TYPE
 	ivAxis,			// The axis of rotation for a rotating entity, in the form "x0 y0 z0, x1 y1 z1".
 	ivPointEntityClass,
 	ivNodeDest,
+	ivInstanceFile,			// used for hammer to know this field should display a browse button to find map files
+	ivAngleNegativePitch,	// used for instance rotating when just a pitch value is present
+	ivInstanceVariable,		// used for instance variables for easy hammer editing
+	ivInstanceParm,			// used for instance parameter declaration
+
+	ivMax					// count of types
 };
 
 
@@ -66,8 +72,9 @@ class GDinputvariable
 {
 	public:
 
-		~GDinputvariable();
 		GDinputvariable();
+		GDinputvariable( const char *szType, const char *szName );
+		~GDinputvariable();
 
 		BOOL InitFromTokens(TokenReader& tr);
 		
@@ -116,6 +123,7 @@ class GDinputvariable
 		GDinputvariable &operator =(GDinputvariable &Other);
 		void Merge(GDinputvariable &Other);
 
+		static const char *GetVarTypeName( GDIV_TYPE eType );
 	private:
 
 		// for choices/flags:

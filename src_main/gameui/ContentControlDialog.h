@@ -1,66 +1,56 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef CONTENTCONTROLDIALOG_H
 #define CONTENTCONTROLDIALOG_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "vgui_controls/Frame.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-class CContentControlDialog : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CContentControlDialog, vgui::Frame );
+class CContentControlDialog : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CContentControlDialog, vgui::Frame);
 
-public:
-	CContentControlDialog(vgui::Panel *parent);
-	~CContentControlDialog();
+ public:
+  CContentControlDialog(vgui::Panel *parent);
+  ~CContentControlDialog();
 
-	virtual void OnCommand( const char *command );
-	virtual void OnClose();
-	virtual void Activate();
+  virtual void OnCommand(const char *command);
+  virtual void OnClose();
+  virtual void Activate();
 
-    void        ResetPassword();
-    void        ApplyPassword();
-    bool        IsPasswordEnabledInDialog();
-    bool        IsPasswordEnabled()             { return ( m_szGorePW[0] != 0 ); }
+  void ResetPassword();
+  void ApplyPassword();
+  bool IsPasswordEnabledInDialog();
+  bool IsPasswordEnabled() { return (m_szGorePW[0] != 0); }
 
-protected:
-	void			WriteToken( const char *str );
-	bool			CheckPassword( char const *oldPW, char const *newPW, bool enableContentControl );
-	void			UpdateContentControlStatus( void );
+ protected:
+  void WriteToken(const char *str);
+  bool CheckPassword(char const *oldPW, char const *newPW,
+                     bool enableContentControl);
+  void UpdateContentControlStatus(void);
 
-	void			Explain( char const *fmt, ... );
+  void Explain(char const *fmt, ...);
 
-    void            HashPassword(const char *newPW, char *hashBuffer, int maxlen );
-    bool            EnablePassword(const char *newPW);
-    bool            DisablePassword(const char *oldPW);
+  void HashPassword(const char *newPW, char *hashBuffer, int maxlen);
+  bool EnablePassword(const char *newPW);
+  bool DisablePassword(const char *oldPW);
 
-	enum
-	{
-		MAX_GORE_PW = 64,
-	};
+  enum {
+    MAX_GORE_PW = 64,
+  };
 
-	char			m_szGorePW[ MAX_GORE_PW ];
+  char m_szGorePW[MAX_GORE_PW];
 
-    bool            m_bDefaultPassword;
-	vgui::Label		*m_pStatus;
-	vgui::Button	*m_pOK;
-	vgui::TextEntry	*m_pPassword;
-    vgui::Label     *m_pPasswordLabel;
-    vgui::Label     *m_pPassword2Label;
-	vgui::TextEntry	*m_pPassword2;
+  bool m_bDefaultPassword;
+  vgui::Label *m_pStatus;
+  vgui::Button *m_pOK;
+  vgui::TextEntry *m_pPassword;
+  vgui::Label *m_pPasswordLabel;
+  vgui::Label *m_pPassword2Label;
+  vgui::TextEntry *m_pPassword2;
 
-	vgui::Label		*m_pExplain;
+  vgui::Label *m_pExplain;
 };
 
-
-#endif // CONTENTCONTROLDIALOG_H
+#endif  // CONTENTCONTROLDIALOG_H

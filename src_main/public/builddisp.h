@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BUILDDISP_H
 #define BUILDDISP_H
@@ -14,7 +14,7 @@
 #pragma once
 #endif
 
-#include "commonmacros.h"
+#include "tier0/commonmacros.h"
 #include "tier0/dbg.h"
 #include "bspfile.h"
 #include "mathlib/mathlib.h"
@@ -79,10 +79,10 @@ public:
 	inline void SetLuxelCoords( int bumpIndex, Vector2D const coords[4] );
 	inline void GetLuxelCoords( int bumpIndex, Vector2D coords[4] ) const;
 
-	inline void SetLuxelU( int nU )			{ m_nLuxelU = nU; }
-	inline int	GetLuxelU( void )			{ return m_nLuxelU; }
-	inline void SetLuxelV( int nV )			{ m_nLuxelV = nV; }
-	inline int	GetLuxelV( void )			{ return m_nLuxelV; }
+	inline void SetLuxelU( int nU ) { m_nLuxelU = nU; }
+	inline int	GetLuxelU( void ) { return m_nLuxelU; }
+	inline void SetLuxelV( int nV ) { m_nLuxelV = nV; }
+	inline int	GetLuxelV( void ) { return m_nLuxelV; }
 	bool		CalcLuxelCoords( int nLuxels, bool bAdjust, const Vector &vecU, const Vector &vecV );
 
 	inline void SetAlpha( int index, float alpha );
@@ -125,10 +125,10 @@ public:
 	const CDispCornerNeighbors*	GetCornerNeighbors( int iCorner ) const { Assert( iCorner >= 0 && iCorner < ARRAYSIZE( m_CornerNeighbors ) ); return &m_CornerNeighbors[iCorner]; }
 	
 	// Indexed by CORNER_ defines.
-	int							GetCornerNeighborCount( int iCorner ) const				{ return GetCornerNeighbors( iCorner )->m_nNeighbors; }
-	int							GetCornerNeighbor( int iCorner, int iNeighbor ) const	{ Assert( iNeighbor >= 0 && iNeighbor < GetCornerNeighbors(iCorner)->m_nNeighbors ); return GetCornerNeighbors( iCorner )->m_Neighbors[iNeighbor]; }
+	int  	GetCornerNeighborCount( int iCorner ) const 	{ return GetCornerNeighbors( iCorner )->m_nNeighbors; }
+	int  	GetCornerNeighbor( int iCorner, int iNeighbor ) const	{ Assert( iNeighbor >= 0 && iNeighbor < GetCornerNeighbors(iCorner)->m_nNeighbors ); return GetCornerNeighbors( iCorner )->m_Neighbors[iNeighbor]; }
 	
-	CDispNeighbor*			GetEdgeNeighbor( int iEdge )		{ Assert( iEdge >= 0 && iEdge < ARRAYSIZE( m_EdgeNeighbors ) ); return &m_EdgeNeighbors[iEdge]; }
+	CDispNeighbor* GetEdgeNeighbor( int iEdge )		{ Assert( iEdge >= 0 && iEdge < ARRAYSIZE( m_EdgeNeighbors ) ); return &m_EdgeNeighbors[iEdge]; }
 	const CDispNeighbor*	GetEdgeNeighbor( int iEdge ) const	{ Assert( iEdge >= 0 && iEdge < ARRAYSIZE( m_EdgeNeighbors ) ); return &m_EdgeNeighbors[iEdge]; }
 
 
@@ -138,30 +138,30 @@ protected:
 	bool		LongestInU( const Vector &vecU, const Vector &vecV );
 
 
-	int			m_Index;																// parent face (CMapFace, dface_t, msurface_t) index "handle"
+	int m_Index;     	// parent face (CMapFace, dface_t, msurface_t) index "handle"
 	
-	int			m_PointCount;															// number of points in the face (should be 4!)
-	Vector		m_Points[QUAD_POINT_COUNT];												// points
-	Vector		m_Normals[QUAD_POINT_COUNT];											// normals at points
-	Vector2D	m_TexCoords[QUAD_POINT_COUNT];											// texture coordinates at points
-	Vector2D	m_LuxelCoords[NUM_BUMP_VECTS+1][QUAD_POINT_COUNT];						// lightmap coordinates at points
-	float		m_Alphas[QUAD_POINT_COUNT];												// alpha at points
+	int m_PointCount;     // number of points in the face (should be 4!)
+	Vector		m_Points[QUAD_POINT_COUNT];    // points
+	Vector		m_Normals[QUAD_POINT_COUNT];   		// normals at points
+	Vector2D	m_TexCoords[QUAD_POINT_COUNT];   		// texture coordinates at points
+	Vector2D	m_LuxelCoords[NUM_BUMP_VECTS+1][QUAD_POINT_COUNT];  // lightmap coordinates at points
+	float		m_Alphas[QUAD_POINT_COUNT];    // alpha at points
 
 	// Luxels sizes
-	int					m_nLuxelU;
-	int					m_nLuxelV;
+	int 		m_nLuxelU;
+	int 		m_nLuxelV;
 
 	// Straight from the BSP file.	
-	CDispNeighbor			m_EdgeNeighbors[4];
+	CDispNeighbor m_EdgeNeighbors[4];
 	CDispCornerNeighbors	m_CornerNeighbors[4];
 
-    int			m_Flags;																// surface flags - inherited from the "parent" face
-	int			m_Contents;																// contents flags - inherited from the "parent" face
+    int m_Flags;     	// surface flags - inherited from the "parent" face
+	int m_Contents;     	// contents flags - inherited from the "parent" face
 
-	Vector		sAxis;																	// used to generate start disp orientation (old method)
-	Vector		tAxis;																	// used to generate start disp orientation (old method)
-	int			m_PointStartIndex;														// index to the starting point -- for saving starting point
-	Vector		m_PointStart;															// starting point used to determine the orientation of the displacement map on the surface
+	Vector		sAxis;     		// used to generate start disp orientation (old method)
+	Vector		tAxis;     		// used to generate start disp orientation (old method)
+	int m_PointStartIndex;    		// index to the starting point -- for saving starting point
+	Vector		m_PointStart;     // starting point used to determine the orientation of the displacement map on the surface
 };
 
 
@@ -512,14 +512,14 @@ public:
 
 protected:	
 		
-	Vector		m_BBox[2];											// displacement node bounding box (take into account size of children)
-	float		m_ErrorTerm;										// LOD error term (the "precision" of the representation of the surface at this node's level)
-	int			m_VertIndex;										// the node's vertex index (center vertex of node)
-	int			m_NeighborVertIndices[MAX_NEIGHBOR_VERT_COUNT];		// all other vertex indices in node (maximally creates 8 trianglar surfaces)
-	Vector		m_SurfBBoxes[MAX_SURF_AT_NODE_COUNT][2];			// surface bounding boxes - old method
-	cplane_t	m_SurfPlanes[MAX_SURF_AT_NODE_COUNT];				// surface plane info - old method
+	Vector		m_BBox[2];   		// displacement node bounding box (take into account size of children)
+	float		m_ErrorTerm;   	// LOD error term (the "precision" of the representation of the surface at this node's level)
+	int m_VertIndex;   	// the node's vertex index (center vertex of node)
+	int m_NeighborVertIndices[MAX_NEIGHBOR_VERT_COUNT];		// all other vertex indices in node (maximally creates 8 trianglar surfaces)
+	Vector		m_SurfBBoxes[MAX_SURF_AT_NODE_COUNT][2]; // surface bounding boxes - old method
+	cplane_t	m_SurfPlanes[MAX_SURF_AT_NODE_COUNT]; 	// surface plane info - old method
 
-	Vector		m_RayBBoxes[4][2];									// bounding boxes for ray traces
+	Vector		m_RayBBoxes[4][2];   // bounding boxes for ray traces
 };
 
 
@@ -668,37 +668,37 @@ inline void CCoreDispNode::GetRayBoundingBox( int index, Vector& bMin, Vector& b
 
 struct CoreDispVert_t
 {
-	Vector			m_FieldVector;						// displacement vector field
-	float			m_FieldDistance;					// the distances along the displacement vector normal
+	Vector m_FieldVector;  // displacement vector field
+	float m_FieldDistance; 		// the distances along the displacement vector normal
 
-	Vector			m_SubdivNormal;
-	Vector			m_SubdivPos;						// used the create curvature of displacements
+	Vector m_SubdivNormal;
+	Vector m_SubdivPos;  // used the create curvature of displacements
 
 	// generated displacement surface data
-	Vector			m_Vert;								// displacement surface vertices
-	Vector			m_FlatVert;
-	Vector			m_Normal;							// displacement surface normals
-	Vector			m_TangentS;							// use in calculating the tangent space axes
-	Vector			m_TangentT;							// use in calculating the tangent space axes
-	Vector2D		m_TexCoord;							// displacement surface texture coordinates
+	Vector m_Vert;  		// displacement surface vertices
+	Vector m_FlatVert;
+	Vector m_Normal;  	// displacement surface normals
+	Vector m_TangentS;  	// use in calculating the tangent space axes
+	Vector m_TangentT;  	// use in calculating the tangent space axes
+	Vector2D		m_TexCoord;  	// displacement surface texture coordinates
 	Vector2D		m_LuxelCoords[NUM_BUMP_VECTS+1];	// displacement surface lightmap coordinates
 
 	// additional per-vertex data
-	float			m_Alpha;							// displacement alpha values (per displacement vertex)
+	float m_Alpha;  	// displacement alpha values (per displacement vertex)
 };
 
 // New, need to use this at the node level
-#define	COREDISPTRI_TAG_WALKABLE				(1<<0)
+#define	COREDISPTRI_TAG_WALKABLE 	(1<<0)
 #define COREDISPTRI_TAG_FORCE_WALKABLE_BIT		(1<<1)
 #define COREDISPTRI_TAG_FORCE_WALKABLE_VAL		(1<<2)
-#define COREDISPTRI_TAG_BUILDABLE				(1<<3)
+#define COREDISPTRI_TAG_BUILDABLE 	(1<<3)
 #define COREDISPTRI_TAG_FORCE_BUILDABLE_BIT		(1<<4)
 #define COREDISPTRI_TAG_FORCE_BUILDABLE_VAL		(1<<5)
 
 struct CoreDispTri_t
 {
-	unsigned short  m_iIndex[3];						// the three indices that make up a triangle
-	unsigned short	m_uiTags;							// walkable, buildable, etc.
+	unsigned short  m_iIndex[3];  // the three indices that make up a triangle
+	unsigned short	m_uiTags;  	// walkable, buildable, etc.
 };
 
 class CCoreDispInfo : public CDispUtilsHelper
@@ -732,10 +732,10 @@ public:
 	//
 	// surface info flags
 	//
-	enum { SURF_BUMPED				= 0x1,  
+	enum { SURF_BUMPED 	= 0x1,  
 		   SURF_NOPHYSICS_COLL		= 0x2,
-		   SURF_NOHULL_COLL			= 0x4,
-		   SURF_NORAY_COLL			= 0x8 };
+		   SURF_NOHULL_COLL = 0x4,
+		   SURF_NORAY_COLL = 0x8 };
 
 	enum { MAX_DISP_POWER = MAX_MAP_DISP_POWER };
 	enum { MAX_VERT_COUNT = MAX_DISPVERTS };
@@ -745,13 +745,13 @@ public:
 // Convert from a CDispUtilsHelper.
 public:
 	
-	static CCoreDispInfo*			FromDispUtils( CDispUtilsHelper *p )	{ return (CCoreDispInfo*)p; }
+	static CCoreDispInfo* FromDispUtils( CDispUtilsHelper *p )	{ return (CCoreDispInfo*)p; }
 
 
 // CDispUtilsHelper implementation.
 public:
 
-	virtual CDispNeighbor*			GetEdgeNeighbor( int index );
+	virtual CDispNeighbor* GetEdgeNeighbor( int index );
 	virtual CDispCornerNeighbors*	GetCornerNeighbors( int index );
 	virtual const CPowerInfo* 		GetPowerInfo() const;
 	virtual CDispUtilsHelper*		GetDispUtilsByIndex( int index );
@@ -768,15 +768,15 @@ public:
 
 	void InitSurf( int parentIndex, Vector points[4], Vector normals[4],
 		           Vector2D texCoords[4], Vector2D lightCoords[4][4], int contents, int flags,
-				   bool bGenerateSurfPointStart, Vector& startPoint, 
-				   bool bHasMappingAxes, Vector& uAxis, Vector& vAxis );
+ 	   bool bGenerateSurfPointStart, Vector& startPoint, 
+ 	   bool bHasMappingAxes, Vector& uAxis, Vector& vAxis );
 
 	void InitDispInfo( int power, int minTess, float smoothingAngle, 
 		               float *alphas, Vector *dispVectorField, float *dispDistances );
 
 	// This just unpacks the contents of the verts into arrays and calls InitDispInfo.
 	void InitDispInfo( int power, int minTess, float smoothingAngle, const CDispVert *pVerts, const CDispTri *pTris );
-					   
+ 		   
 //	bool Create( int creationFlags );
 	bool Create( void );
 	bool CreateWithoutLOD( void );
@@ -845,7 +845,7 @@ public:
 	inline void ResetTriTag( int iTri, unsigned short nTag )	{ m_pTris[iTri].m_uiTags &= ~nTag; }
 	inline void ToggleTriTag( int iTri, unsigned short nTag )   { m_pTris[iTri].m_uiTags ^= nTag; }
 	inline bool IsTriTag( int iTri, unsigned short nTag )       { return ( ( m_pTris[iTri].m_uiTags & nTag ) != 0 ); }
-	inline unsigned short GetTriTagValue( int iTri )			{ return m_pTris[iTri].m_uiTags; }
+	inline unsigned short GetTriTagValue( int iTri ) { return m_pTris[iTri].m_uiTags; }
 	inline void SetTriTagValue( int iTri, unsigned short nVal ) { m_pTris[iTri].m_uiTags = nVal; }
 
 	bool IsTriWalkable( int iTri );
@@ -874,7 +874,7 @@ public:
 	inline void SetRenderIndex( int index, int triIndex );
 	inline int GetRenderIndex( int index );
 
-	inline CoreDispVert_t *GetDispVert( int iVert )					{ return &m_pVerts[iVert]; }
+	inline CoreDispVert_t *GetDispVert( int iVert ) 		{ return &m_pVerts[iVert]; }
 	inline CoreDispVert_t *GetDispVertList();
 	inline unsigned short *GetRenderIndexList( void );
 
@@ -892,12 +892,12 @@ public:
 	const CDispNeighbor*	GetEdgeNeighbor( int iEdge ) const	{ return GetSurface()->GetEdgeNeighbor( iEdge ); }
 
 	void SetListIndex( int nIndex )		{ m_nListIndex = nIndex; } 
-	int GetListIndex( void )			{ return m_nListIndex; }
+	int GetListIndex( void ) { return m_nListIndex; }
 
-	CBitVec<MAX_DISPVERTS>&			GetAllowedVerts()		{ return m_AllowedVerts; }
+	CBitVec<MAX_DISPVERTS>& GetAllowedVerts()		{ return m_AllowedVerts; }
 	const CBitVec<MAX_DISPVERTS>&	GetAllowedVerts() const	{ return m_AllowedVerts; }
-	void AllowedVerts_Clear( void )							{ m_AllowedVerts.SetAll(); }
-	int	 AllowedVerts_GetNumDWords() const					{ return m_AllowedVerts.GetNumDWords(); }
+	void AllowedVerts_Clear( void )  	{ m_AllowedVerts.SetAll(); }
+	int	 AllowedVerts_GetNumDWords() const 		{ return m_AllowedVerts.GetNumDWords(); }
 	unsigned long AllowedVerts_GetDWord(int i) const        { return m_AllowedVerts.GetDWord( i ); }
 	void AllowedVerts_SetDWord(int i, unsigned long val)    { m_AllowedVerts.SetDWord( i, val ); }
 
@@ -911,17 +911,17 @@ public:
 	friend void SmoothNeighboringDispSurfNormals( CCoreDispInfo **ppCoreDispInfoList, int listSize );
 
 private:
-																				// be changed to match the paint normal next pass)
+      		// be changed to match the paint normal next pass)
 	// LOD/collision node data
 	CCoreDispNode		*m_Nodes;		// LOD quad-tree nodes
 
-	float				m_Elevation;	// distance along the subdivision normal (should
+	float 	m_Elevation;	// distance along the subdivision normal (should
 
 	// defines the size of the displacement surface
-	int					m_Power;		// "size" of the displacement map
+	int 		m_Power;		// "size" of the displacement map
 
 	// base surface data
-	CCoreDispSurface	m_Surf;			// surface containing displacement data
+	CCoreDispSurface	m_Surf; // surface containing displacement data
 	                                    // be changed to match the paint normal next pass)
 	// Vertex data..
 	CoreDispVert_t		*m_pVerts;
@@ -930,21 +930,21 @@ private:
 	CoreDispTri_t		*m_pTris;
 
 	// render specific data
-	int					m_RenderIndexCount;		// number of indices used in rendering
+	int 		m_RenderIndexCount;		// number of indices used in rendering
 	unsigned short		*m_RenderIndices;		// rendering index list (list of triangles)
-	int					m_RenderCounter;		// counter to verify surfaces are renderered/collided with only once per frame
+	int 		m_RenderCounter;		// counter to verify surfaces are renderered/collided with only once per frame
 
 	// utility data
-	bool				m_bTouched;				// touched flag
-	CCoreDispInfo		*m_pNext;				// used for chaining
+	bool 	m_bTouched; 	// touched flag
+	CCoreDispInfo		*m_pNext; 	// used for chaining
 
 	// The list that this disp is in (used for CDispUtils::IHelper implementation).
 	CCoreDispInfo		**m_ppListBase;
-	int					m_ListSize;
+	int 		m_ListSize;
 
 	CBitVec<MAX_DISPVERTS>	m_AllowedVerts;		// Built in VBSP. Defines which verts are allowed to exist based on what the neighbors are.
 
-	int					m_nListIndex;
+	int 		m_nListIndex;
 
 	//=========================================================================
 	//
@@ -1453,6 +1453,6 @@ inline CCoreDispNode *CCoreDispInfo::GetNode( int index )
 }
 
 bool CalcBarycentricCooefs( Vector const &v0, Vector const &v1, Vector const &v2,
-						    Vector const &pt, float &c0, float &c1, float &c2 );
+      Vector const &pt, float &c0, float &c1, float &c2 );
 
 #endif // BUILDDISP_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VGUITEXTWINDOW_H
 #define VGUITEXTWINDOW_H
@@ -67,7 +67,7 @@ protected:
 	char		m_szTitle[255];
 	char		m_szMessage[2048];
 	char		m_szExitCommand[255];
-	int			m_nContentType;
+	int m_nContentType;
 
 	vgui::TextEntry	*m_pTextMessage;
 	vgui::HTML		*m_pHTMLMessage;

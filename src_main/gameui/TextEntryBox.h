@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Author: Matthew D. Campbell (matt@turtlerockstudios.com), 2003
 
@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include <vgui_controls/QueryBox.h>
 
 class vgui::Frame;
@@ -32,7 +32,7 @@ public:
 
 	virtual ~CTextEntryBox();
  
-	virtual void PerformLayout();						///< Layout override to position the label and text entry
+	virtual void PerformLayout();  ///< Layout override to position the label and text entry
 	virtual void ShowWindow(vgui::Frame *pFrameOver);	///< Show window override to give focus to text entry
 
 private:
@@ -43,7 +43,7 @@ protected:
 	vgui::TextEntry	*m_pEntry;
 
 	virtual void OnKeyCodeTyped(vgui::KeyCode code);
-	void OnCommand( const char *command);			///< Handle button presses
+	void OnCommand( const char *command); ///< Handle button presses
 };
 
 #endif // CVARTEXTENTRYBOX_H

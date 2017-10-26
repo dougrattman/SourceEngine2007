@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The base class from which all game entities are derived.
 //
@@ -51,7 +51,7 @@
 #include "scriptevent.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "UtlCachedFileData.h"
-#include "utlbuffer.h"
+#include "tier1/utlbuffer.h"
 #include "positionwatcher.h"
 #include "movetype_push.h"
 #include "tier0/icommandline.h"
@@ -364,7 +364,7 @@ CBaseEntity::~CBaseEntity( )
 
 	VPhysicsDestroyObject();
 
-	// Need to remove references to this entity before EHANDLES go null
+	// Need to remove references to this entity before EHANDLES go 0
 	{
 		g_bDisableEhandleAccess = false;
 		CBaseEntity::PhysicsRemoveTouchedList( this );
@@ -1189,7 +1189,7 @@ void CBaseEntity::Activate( void )
 		m_hDamageFilter = gEntList.FindEntityByName( NULL, m_iszDamageFilterName );
 	}
 
-	// Add any non-null context strings to our context vector
+	// Add any non-0 context strings to our context vector
 	if ( m_iszResponseContext != NULL_STRING ) 
 	{
 		AddContext( m_iszResponseContext.ToCStr() );
@@ -3524,7 +3524,7 @@ void CBaseEntity::ComputeWorldSpaceSurroundingBox( Vector *pMins, Vector *pMaxs 
 const char *CBaseEntity::GetDebugName(void)
 {
 	if ( this == NULL )
-		return "<<null>>";
+		return "<<0>>";
 
 	if ( m_iName != NULL_STRING ) 
 	{
@@ -3733,8 +3733,8 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 								// bad conversion
 								Warning( "!! ERROR: bad input/output link:\n!! %s(%s,%s) doesn't match type from %s(%s)\n", 
 									STRING(m_iClassname), GetDebugName(), szInputName, 
-									( pCaller != NULL ) ? STRING(pCaller->m_iClassname) : "<null>",
-									( pCaller != NULL ) ? STRING(pCaller->m_iName) : "<null>" );
+									( pCaller != NULL ) ? STRING(pCaller->m_iClassname) : "<0>",
+									( pCaller != NULL ) ? STRING(pCaller->m_iName) : "<0>" );
 								return false;
 							}
 						}

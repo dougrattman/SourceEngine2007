@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ENVMESSAGE_H
 #define ENVMESSAGE_H
@@ -15,8 +15,8 @@
 #include "entityoutput.h"
 
 
-#define SF_MESSAGE_ONCE			0x0001		// Fade in, not out
-#define SF_MESSAGE_ALL			0x0002		// Send to all clients
+#define SF_MESSAGE_ONCE 0x0001		// Fade in, not out
+#define SF_MESSAGE_ALL 0x0002		// Send to all clients
 
 class CMessage : public CPointEntity
 {

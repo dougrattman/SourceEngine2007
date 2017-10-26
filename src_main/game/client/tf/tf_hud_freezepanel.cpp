@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "tf_hud_freezepanel.h"
@@ -621,7 +621,7 @@ void CTFFreezePanel::ShowSnapshotPanel( bool bShow )
 
 	const char *key = engine->Key_LookupBinding( "screenshot" );
 
-	if ( key == NULL || FStrEq( key, "(null)" ) )
+	if ( key == NULL || FStrEq( key, "(0)" ) )
 	{
 		bShow = false;
 		key = " ";

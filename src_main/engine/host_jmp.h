@@ -1,20 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #ifndef HOST_JMP_H
 #define HOST_JMP_H
-#pragma once
 
-#ifndef _INC_SETJMP
 #include <setjmp.h>
+
+extern jmp_buf host_abortserver;
+extern jmp_buf host_enddemo;
+
 #endif
-
-extern jmp_buf 		host_abortserver;
-extern jmp_buf     host_enddemo;
-
-#endif
-

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 //
 // Author: Michael S. Booth (mike@turtlerockstudios.com), 2003
@@ -100,7 +100,7 @@ template < class T > T * CreateBot( const BotProfile *profile, int team )
 
 	if ( botEdict == NULL )
 	{
-		CONSOLE_ECHO( "Unable to create bot: CreateFakeClient() returned null.\n" );
+		CONSOLE_ECHO( "Unable to create bot: CreateFakeClient() returned 0.\n" );
 		return NULL;
 	}
 
@@ -134,7 +134,7 @@ class CBot : public PlayerType
 public:
 	DECLARE_CLASS( CBot, PlayerType );
 
-	CBot( void );												///< constructor initializes all values to zero
+	CBot( void );    ///< constructor initializes all values to zero
 	virtual ~CBot();
 	virtual bool Initialize( const BotProfile *profile, int team );		///< (EXTEND) prepare bot for action
 
@@ -143,10 +143,10 @@ public:
 	virtual bool IsBot( void ) const { return true; }	
 	virtual bool IsNetClient( void ) const { return false; }	// Bots should return FALSE for this, they can't receive NET messages
 
-	virtual void Spawn( void );									///< (EXTEND) spawn the bot into the game
+	virtual void Spawn( void );   ///< (EXTEND) spawn the bot into the game
 
-	virtual void Upkeep( void ) = 0;							///< lightweight maintenance, invoked frequently
-	virtual void Update( void ) = 0;							///< heavyweight algorithms, invoked less often
+	virtual void Upkeep( void ) = 0;  	///< lightweight maintenance, invoked frequently
+	virtual void Update( void ) = 0;  	///< heavyweight algorithms, invoked less often
 
 
 	virtual void Run( void );
@@ -157,8 +157,8 @@ public:
 	virtual void StandUp( void );
 	bool IsCrouching( void ) const	{ return m_isCrouching; }
 
-	void PushPostureContext( void );							///< push the current posture context onto the top of the stack
-	void PopPostureContext( void );								///< restore the posture context to the next context on the stack
+	void PushPostureContext( void );  	///< push the current posture context onto the top of the stack
+	void PopPostureContext( void );  		///< restore the posture context to the next context on the stack
 
 	virtual void MoveForward( void );
 	virtual void MoveBackward( void );
@@ -166,13 +166,13 @@ public:
 	virtual void StrafeRight( void );
 
 	#define MUST_JUMP true
-	virtual bool Jump( bool mustJump = false );					///< returns true if jump was started
-	bool IsJumping( void );										///< returns true if we are in the midst of a jump
+	virtual bool Jump( bool mustJump = false ); 		///< returns true if jump was started
+	bool IsJumping( void );   	///< returns true if we are in the midst of a jump
 	float GetJumpTimestamp( void ) const	{ return m_jumpTimestamp; }	///< return time last jump began
 
-	virtual void ClearMovement( void );						///< zero any MoveForward(), Jump(), etc
+	virtual void ClearMovement( void );  ///< zero any MoveForward(), Jump(), etc
 
-	const Vector &GetViewVector( void );						///< return the actual view direction
+	const Vector &GetViewVector( void );  ///< return the actual view direction
 
 
 	//------------------------------------------------------------------------------------
@@ -185,11 +185,11 @@ public:
 	virtual void SecondaryAttack( void );
 	virtual void Reload( void );
 
-	float GetActiveWeaponAmmoRatio( void ) const;				///< returns ratio of ammo left to max ammo (1 = full clip, 0 = empty)
-	bool IsActiveWeaponClipEmpty( void ) const;					///< return true if active weapon has any empty clip
-	bool IsActiveWeaponOutOfAmmo( void ) const;					///< return true if active weapon has no ammo at all
-	bool IsActiveWeaponRecoilHigh( void ) const;				///< return true if active weapon's bullet spray has become large and inaccurate
-	bool IsUsingScope( void );									///< return true if looking thru weapon's scope
+	float GetActiveWeaponAmmoRatio( void ) const; 	///< returns ratio of ammo left to max ammo (1 = full clip, 0 = empty)
+	bool IsActiveWeaponClipEmpty( void ) const; 		///< return true if active weapon has any empty clip
+	bool IsActiveWeaponOutOfAmmo( void ) const; 		///< return true if active weapon has no ammo at all
+	bool IsActiveWeaponRecoilHigh( void ) const; 	///< return true if active weapon's bullet spray has become large and inaccurate
+	bool IsUsingScope( void );   ///< return true if looking thru weapon's scope
 
 
 	//------------------------------------------------------------------------------------
@@ -208,54 +208,54 @@ public:
 		PlayerType::Event_Killed( info );
 	}
 
-	bool IsEnemy( CBaseEntity *ent ) const;						///< returns TRUE if given entity is our enemy
-	int GetEnemiesRemaining( void ) const;						///< return number of enemies left alive
-	int GetFriendsRemaining( void ) const;						///< return number of friends left alive
+	bool IsEnemy( CBaseEntity *ent ) const;  ///< returns TRUE if given entity is our enemy
+	int GetEnemiesRemaining( void ) const;  ///< return number of enemies left alive
+	int GetFriendsRemaining( void ) const;  ///< return number of friends left alive
 
-	bool IsPlayerFacingMe( CBasePlayer *enemy ) const;			///< return true if player is facing towards us
+	bool IsPlayerFacingMe( CBasePlayer *enemy ) const; ///< return true if player is facing towards us
 	bool IsPlayerLookingAtMe( CBasePlayer *enemy, float cosTolerance = 0.9f ) const;		///< returns true if other player is pointing right at us
 	bool IsLookingAtPosition( const Vector &pos, float angleTolerance = 20.0f ) const;	///< returns true if looking (roughly) at given position
 
-	bool IsLocalPlayerWatchingMe( void ) const;					///< return true if local player is observing this bot
+	bool IsLocalPlayerWatchingMe( void ) const; 		///< return true if local player is observing this bot
 
-	void PrintIfWatched( char *format, ... ) const;				///< output message to console if we are being watched by the local player
+	void PrintIfWatched( char *format, ... ) const; 	///< output message to console if we are being watched by the local player
 
-	virtual void UpdatePlayer( void );							///< update player physics, movement, weapon firing commands, etc
+	virtual void UpdatePlayer( void );  	///< update player physics, movement, weapon firing commands, etc
 	virtual void BuildUserCmd( CUserCmd& cmd, const QAngle& viewangles, float forwardmove, float sidemove, float upmove, int buttons, byte impulse );
 	virtual void SetModel( const char *modelName );
 
-	int Save( CSave &save )	const						{ return 0; }
+	int Save( CSave &save )	const  { return 0; }
 	int Restore( CRestore &restore ) const	{ return 0; }
 	virtual void Think( void ) { }
 
 	const BotProfile *GetProfile( void ) const		{ return m_profile; }	///< return our personality profile
 
-	virtual bool ClientCommand( const CCommand &args );			///< Do a "client command" - useful for invoking menu choices, etc.
-	virtual int Cmd_Argc( void );								///< Returns the number of tokens in the command string
-	virtual char *Cmd_Argv( int argc );							///< Retrieves a specified token
+	virtual bool ClientCommand( const CCommand &args ); ///< Do a "client command" - useful for invoking menu choices, etc.
+	virtual int Cmd_Argc( void );  		///< Returns the number of tokens in the command string
+	virtual char *Cmd_Argv( int argc );  	///< Retrieves a specified token
 
 private:
 	CUtlVector< char * > m_args;
 
 protected:
-	const BotProfile *m_profile;								///< the "personality" profile of this bot
+	const BotProfile *m_profile;  		///< the "personality" profile of this bot
 
 private:
 	friend class CBotManager;
 
-	unsigned int m_id;											///< unique bot ID
+	unsigned int m_id;   		///< unique bot ID
 
 	CUserCmd m_userCmd;
-	bool m_isRunning;											///< run/walk mode
-	bool m_isCrouching;											///< true if crouching (ducking)
+	bool m_isRunning;   		///< run/walk mode
+	bool m_isCrouching;   		///< true if crouching (ducking)
 	float m_forwardSpeed;
 	float m_strafeSpeed;
 	float m_verticalSpeed;
-	int m_buttonFlags;											///< bitfield of movement buttons
+	int m_buttonFlags;   		///< bitfield of movement buttons
 
-	float m_jumpTimestamp;										///< time when we last began a jump
+	float m_jumpTimestamp;   	///< time when we last began a jump
 
-	Vector m_viewForward;										///< forward view direction (only valid when GetViewVector() is used)
+	Vector m_viewForward;   	///< forward view direction (only valid when GetViewVector() is used)
 
 	/// the PostureContext represents the current settings of walking and crouching
 	struct PostureContext
@@ -265,13 +265,13 @@ private:
 	};
 	enum { MAX_POSTURE_STACK = 8 };
 	PostureContext m_postureStack[ MAX_POSTURE_STACK ];
-	int m_postureStackIndex;									///< index of top of stack
+	int m_postureStackIndex;   ///< index of top of stack
 
 	void ResetCommand( void );
 	//byte ThrottledMsec( void ) const;
 
 protected:
-	virtual float GetMoveSpeed( void );									///< returns current movement speed (for walk/run)
+	virtual float GetMoveSpeed( void );   ///< returns current movement speed (for walk/run)
 };
 
 
@@ -557,7 +557,7 @@ inline bool CBot< PlayerType >::Jump( bool mustJump )
 	{
 		const float minJumpInterval = 0.9f; // 1.5f;
 		if (gpGlobals->curtime - m_jumpTimestamp < minJumpInterval)
-			return false;
+ return false;
 	}
 
 	// still need sanity check for jumping frequency
@@ -835,21 +835,21 @@ inline bool CBot< PlayerType >::ClientCommand( const CCommand &args )
 		// skip whitespace up to a /n
 		while (*cmd && *cmd <= ' ' && *cmd != '\n')
 		{
-			cmd++;
+ cmd++;
 		}
 		
 		if (*cmd == '\n')
 		{	// a newline seperates commands in the buffer
-			cmd++;
-			break;
+ cmd++;
+ break;
 		}
 
 		if (!*cmd)
-			break;
+ break;
 	
 		cmd = SharedParse (cmd);
 		if (!cmd)
-			break;
+ break;
 
 		m_args.AddToTail( CloneString( SharedGetToken() ) );
 	}
@@ -922,13 +922,13 @@ inline int CBot< PlayerType >::GetEnemiesRemaining( void ) const
 		CBaseEntity *player = UTIL_PlayerByIndex( i );
 
 		if (player == NULL)
-			continue;
+ continue;
 
 		if (!IsEnemy( player ))
-			continue;
+ continue;
 
 		if (!player->IsAlive())
-			continue;
+ continue;
 
 		count++;
 	}
@@ -950,16 +950,16 @@ inline int CBot< PlayerType >::GetFriendsRemaining( void ) const
 		CBaseEntity *player = UTIL_PlayerByIndex( i );
 
 		if (player == NULL)
-			continue;
+ continue;
 
 		if (IsEnemy( player ))
-			continue;
+ continue;
 
 		if (!player->IsAlive())
-			continue;
+ continue;
 
 		if (player == static_cast<CBaseEntity *>( const_cast<CBot *>( this ) ))
-			continue;
+ continue;
 
 		count++;
 	}
@@ -990,12 +990,12 @@ inline bool CBot< PlayerType >::IsLocalPlayerWatchingMe( void ) const
 	{
 		if ( const_cast< CBot< PlayerType > * >(this) == player->GetObserverTarget() )
 		{
-			switch( player->GetObserverMode() )
-			{
-				case OBS_MODE_IN_EYE:
-				case OBS_MODE_CHASE:
-					return true;
-			}
+ switch( player->GetObserverMode() )
+ {
+ 	case OBS_MODE_IN_EYE:
+ 	case OBS_MODE_CHASE:
+ 		return true;
+ }
 		}
 	}
 
@@ -1028,9 +1028,9 @@ inline void CBot< PlayerType >::PrintIfWatched( char *format, ... ) const
 
 		// prefix the console message with the bot's name (this can be NULL if bot was just added)
 		ClientPrint( UTIL_GetListenServerHost(),
-			HUD_PRINTCONSOLE,
-			UTIL_VarArgs( "%s: %s",
-			(name) ? name : "(NULL netname)", buffer ) );
+ HUD_PRINTCONSOLE,
+ UTIL_VarArgs( "%s: %s",
+ (name) ? name : "(NULL netname)", buffer ) );
 
 		TheBots->AddDebugMessage( buffer );
 	}

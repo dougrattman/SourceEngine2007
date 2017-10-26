@@ -1,56 +1,52 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=====================================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#include "quakedef.h"
-#include "gl_model_private.h"
-#include "console.h"
-#include "cdll_engine_int.h"
-#include "gl_cvars.h"
-#include "ivrenderview.h"
-#include "gl_matsysiface.h"
-#include "gl_drawlights.h"
-#include "gl_rsurf.h"
-#include "r_local.h"
-#include "debugoverlay.h"
-#include "vgui_baseui_interface.h"
-#include "materialsystem/imaterialsystemhardwareconfig.h"
-#include "demo.h"
-#include "istudiorender.h"
-#include "materialsystem/imesh.h"
-#include "tier0/vprof.h"
-#include "host.h"
 #include "view.h"
-#include "client.h"
-#include "sys.h"
-#include "cl_main.h"
-#include "l_studio.h"
-#include "IOcclusionSystem.h"
-#include "cl_demouipanel.h"
-#include "mod_vis.h"
-#include "ivideomode.h"
-#include "gl_shader.h"
-#include "gl_rmain.h"
-#include "engine/view_sharedv1.h"
-#include "ispatialpartitioninternal.h"
-#include "toolframework/itoolframework.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+#include "IOcclusionSystem.h"
+#include "cdll_engine_int.h"
+#include "cl_demouipanel.h"
+#include "cl_main.h"
+#include "client.h"
+#include "console.h"
+#include "debugoverlay.h"
+#include "demo.h"
+#include "engine/view_sharedv1.h"
+#include "gl_cvars.h"
+#include "gl_drawlights.h"
+#include "gl_matsysiface.h"
+#include "gl_model_private.h"
+#include "gl_rmain.h"
+#include "gl_rsurf.h"
+#include "gl_shader.h"
+#include "host.h"
+#include "ispatialpartitioninternal.h"
+#include "istudiorender.h"
+#include "ivideomode.h"
+#include "ivrenderview.h"
+#include "l_studio.h"
+#include "materialsystem/imaterialsystemhardwareconfig.h"
+#include "materialsystem/imesh.h"
+#include "mod_vis.h"
+#include "quakedef.h"
+#include "r_local.h"
+#include "sys.h"
+#include "tier0/vprof.h"
+#include "toolframework/itoolframework.h"
+#include "vgui_baseui_interface.h"
+
 #include "tier0/memdbgon.h"
 
 class IClientEntity;
 
 float r_blend;
-float r_colormod[3] = { 1, 1, 1 };
+float r_colormod[3] = {1, 1, 1};
 bool g_bIsBlendingOrModulating = false;
 
 bool g_bIsRenderingVGuiOnly = false;
 
-colorVec R_LightPoint (Vector& p);
-void R_DrawLightmaps( IWorldRenderList *pList, int pageId );
-void R_DrawIdentityBrushModel( IWorldRenderList *pRenderList, model_t *model );
+colorVec R_LightPoint(Vector &p);
+void R_DrawLightmaps(IWorldRenderList *pList, int pageId);
+void R_DrawIdentityBrushModel(IWorldRenderList *pRenderList, model_t *model);
 
 /*
 
@@ -67,469 +63,387 @@ extern ConVar r_avglightmap;
 =================
 V_CheckGamma
 
-FIXME:  Define this as a change function to the ConVar's below rather than polling it
- every frame.  Note, still need to make sure it gets called very first time through frame loop.
+FIXME:  Define this as a change function to the ConVar's below rather than
+polling it every frame.  Note, still need to make sure it gets called very first
+time through frame loop.
 =================
 */
-bool V_CheckGamma( void )
-{
-	if ( IsX360() )
-		return false;
+bool V_CheckGamma(void) {
+  if (IsX360()) return false;
 
-	static int lastLightmap = -1;
-	extern void GL_RebuildLightmaps( void );
-	
-	// Refresh all lightmaps if r_avglightmap changes
-	if ( r_avglightmap.GetInt() != lastLightmap )
-	{
-		lastLightmap = r_avglightmap.GetInt();
-		GL_RebuildLightmaps();
-	}
+  static int lastLightmap = -1;
+  extern void GL_RebuildLightmaps(void);
 
-	return true;
+  // Refresh all lightmaps if r_avglightmap changes
+  if (r_avglightmap.GetInt() != lastLightmap) {
+    lastLightmap = r_avglightmap.GetInt();
+    GL_RebuildLightmaps();
+  }
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Initializes the view renderer
 // Output : void V_Init
 //-----------------------------------------------------------------------------
-void V_Init( void )
-{
-	BuildGammaTable( 2.2f, 2.2f, 0.0f, 2 );
+void V_Init(void) { BuildGammaTable(2.2f, 2.2f, 0.0f, 2); }
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void V_Shutdown(void) {
+  // TODO, cleanup
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
+// Input  :  -
 //-----------------------------------------------------------------------------
-void V_Shutdown( void )
-{
-	// TODO, cleanup
+void V_RenderVGuiOnly_NoSwap() {
+  // Need to clear the screen in this case, cause we're not drawing
+  // the loading screen.
+  UpdateMaterialSystemConfig();
+
+  CMatRenderContextPtr pRenderContext(materials);
+
+  pRenderContext->ClearBuffers(true, true);
+
+  EngineVGui()->Paint(PAINT_UIPANELS);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  :  - 
+// Purpose: Renders only vgui (for loading progress) including buffer swapping
+// and vgui simulation
 //-----------------------------------------------------------------------------
-void V_RenderVGuiOnly_NoSwap()
-{
-	// Need to clear the screen in this case, cause we're not drawing
-	// the loading screen.
-	UpdateMaterialSystemConfig();
+void V_RenderVGuiOnly(void) {
+  materials->BeginFrame(host_frametime);
+  EngineVGui()->Simulate();
 
-	CMatRenderContextPtr pRenderContext( materials );
-		   
-	pRenderContext->ClearBuffers( true, true );
+  g_EngineRenderer->FrameBegin();
 
-	EngineVGui()->Paint( PAINT_UIPANELS );
+  toolframework->RenderFrameBegin();
+
+  V_RenderVGuiOnly_NoSwap();
+
+  toolframework->RenderFrameEnd();
+
+  g_EngineRenderer->FrameEnd();
+  materials->EndFrame();
+
+  Shader_SwapBuffers();
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Renders only vgui (for loading progress) including buffer swapping and vgui simulation
-//-----------------------------------------------------------------------------
-void V_RenderVGuiOnly( void )
-{
-	materials->BeginFrame( host_frametime );
-	EngineVGui()->Simulate();
-
-	g_EngineRenderer->FrameBegin();
-
-	toolframework->RenderFrameBegin();
-
-	V_RenderVGuiOnly_NoSwap();
-
-	toolframework->RenderFrameEnd();
-
-	g_EngineRenderer->FrameEnd( );
-	materials->EndFrame();
-
-	Shader_SwapBuffers();
-}
-
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Render the world
 //-----------------------------------------------------------------------------
-void V_RenderView( void )
-{
-	VPROF( "V_RenderView" );
-	MDLCACHE_COARSE_LOCK_(g_pMDLCache);
+void V_RenderView(void) {
+  VPROF("V_RenderView");
+  MDLCACHE_COARSE_LOCK_(g_pMDLCache);
 
-	bool bCanRenderWorld = ( host_state.worldmodel != NULL ) && cl.IsActive();
+  bool bCanRenderWorld = (host_state.worldmodel != NULL) && cl.IsActive();
 
-	bCanRenderWorld = bCanRenderWorld && toolframework->ShouldGameRenderView();
+  bCanRenderWorld = bCanRenderWorld && toolframework->ShouldGameRenderView();
 
-	if ( IsPC() && bCanRenderWorld && g_bTextMode )
-	{	
-		// Sleep to let the other textmode clients get some cycles.
-		Sys_Sleep( 15 );
-		bCanRenderWorld = false;
-	}
+  if (IsPC() && bCanRenderWorld && g_bTextMode) {
+    // Sleep to let the other textmode clients get some cycles.
+    Sys_Sleep(15);
+    bCanRenderWorld = false;
+  }
 
-	if ( !bCanRenderWorld )
-	{
-		// Because we now do a lot of downloading before spawning map, don't render anything world related 
-		// until we are an active client.
-		V_RenderVGuiOnly_NoSwap();
-	}
-	else if ( !g_LostVideoMemory )
-	{
-		// We can get into situations where some other material system app
-		// is trying to start up; in those cases, we shouldn't render...
-		vrect_t scr_vrect = videomode->GetClientViewRect();
-		g_ClientDLL->View_Render( &scr_vrect );
-	}
+  if (!bCanRenderWorld) {
+    // Because we now do a lot of downloading before spawning map, don't render
+    // anything world related until we are an active client.
+    V_RenderVGuiOnly_NoSwap();
+  } else if (!g_LostVideoMemory) {
+    // We can get into situations where some other material system app
+    // is trying to start up; in those cases, we shouldn't render...
+    vrect_t scr_vrect = videomode->GetClientViewRect();
+    g_ClientDLL->View_Render(&scr_vrect);
+  }
 }
 
-void Linefile_Draw( void );
-
+void Linefile_Draw(void);
 
 //-----------------------------------------------------------------------------
 // Purpose: Expose rendering interface to client .dll
 //-----------------------------------------------------------------------------
-class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator
-{
-public:
-	void TouchLight( dlight_t *light )
-	{
-		int i;
-		
-		i = light - cl_dlights;
-		if (i >= 0 && i < MAX_DLIGHTS)
-		{
-			r_dlightchanged |= (1 << i);
-		}
-	}
+class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
+ public:
+  void TouchLight(dlight_t *light) {
+    int i;
 
-	void DrawBrushModel( 
-		IClientEntity *baseentity, 
-		model_t *model, 
-		const Vector& origin, 
-		const QAngle& angles, 
-		bool bSort )
-	{
-		R_DrawBrushModel( baseentity, model, origin, angles, bSort, false );
-	}
+    i = light - cl_dlights;
+    if (i >= 0 && i < MAX_DLIGHTS) {
+      r_dlightchanged |= (1 << i);
+    }
+  }
 
-	// Draw brush model shadow
-	void DrawBrushModelShadow( IClientRenderable *pRenderable )
-	{
-		R_DrawBrushModelShadow( pRenderable );
-	}
+  void DrawBrushModel(IClientEntity *baseentity, model_t *model,
+                      const Vector &origin, const QAngle &angles, bool bSort) {
+    R_DrawBrushModel(baseentity, model, origin, angles, bSort, false);
+  }
 
-	void DrawIdentityBrushModel( IWorldRenderList *pList, model_t *model )
-	{
-		R_DrawIdentityBrushModel( pList, model );
-	}
+  // Draw brush model shadow
+  void DrawBrushModelShadow(IClientRenderable *pRenderable) {
+    R_DrawBrushModelShadow(pRenderable);
+  }
 
-	void Draw3DDebugOverlays( void )
-	{
-		DrawSavedModelDebugOverlays();
+  void DrawIdentityBrushModel(IWorldRenderList *pList, model_t *model) {
+    R_DrawIdentityBrushModel(pList, model);
+  }
 
-		if ( g_pDemoUI )
-		{
-			g_pDemoUI->DrawDebuggingInfo();
-		}
+  void Draw3DDebugOverlays(void) {
+    DrawSavedModelDebugOverlays();
 
-		if ( g_pDemoUI2 )
-		{
-			g_pDemoUI2->DrawDebuggingInfo();
-		}
+    if (g_pDemoUI) {
+      g_pDemoUI->DrawDebuggingInfo();
+    }
 
-		SpatialPartition()->DrawDebugOverlays();
+    if (g_pDemoUI2) {
+      g_pDemoUI2->DrawDebuggingInfo();
+    }
 
-		CDebugOverlay::Draw3DOverlays();
+    SpatialPartition()->DrawDebugOverlays();
 
-		// Render occlusion debugging info
-		OcclusionSystem()->DrawDebugOverlays();
-	}
+    CDebugOverlay::Draw3DOverlays();
 
-	FORCEINLINE void CheckBlend( void )
-	{
-		g_bIsBlendingOrModulating = ( r_blend != 1.0 ) || 
-			( r_colormod[0] != 1.0 ) || ( r_colormod[1] != 1.0 ) || ( r_colormod[2] != 1.0 );
+    // Render occlusion debugging info
+    OcclusionSystem()->DrawDebugOverlays();
+  }
 
-	}
-	void SetBlend( float blend )
-	{
-		r_blend = blend;
-		CheckBlend();
-	}
+  FORCEINLINE void CheckBlend(void) {
+    g_bIsBlendingOrModulating = (r_blend != 1.0) || (r_colormod[0] != 1.0) ||
+                                (r_colormod[1] != 1.0) ||
+                                (r_colormod[2] != 1.0);
+  }
+  void SetBlend(float blend) {
+    r_blend = blend;
+    CheckBlend();
+  }
 
-	float GetBlend( void )
-	{
-		return r_blend;
-	}
+  float GetBlend(void) { return r_blend; }
 
-	void SetColorModulation( float const* blend )
-	{
-		VectorCopy( blend, r_colormod );
-		CheckBlend();
-	}
+  void SetColorModulation(float const *blend) {
+    VectorCopy(blend, r_colormod);
+    CheckBlend();
+  }
 
-	void GetColorModulation( float* blend )
-	{
-		VectorCopy( r_colormod, blend );
-	}
+  void GetColorModulation(float *blend) { VectorCopy(r_colormod, blend); }
 
-	void SceneBegin( void )
-	{
-		g_EngineRenderer->DrawSceneBegin();
-	}
+  void SceneBegin(void) { g_EngineRenderer->DrawSceneBegin(); }
 
-	void SceneEnd( void )
-	{
-		g_EngineRenderer->DrawSceneEnd();
-	}
-	 
-	void GetVisibleFogVolume( const Vector& vEyePoint, VisibleFogVolumeInfo_t *pInfo )
-	{
-		R_GetVisibleFogVolume( vEyePoint, pInfo );
-	}
-	
-	IWorldRenderList * CreateWorldList()
-	{
-		return g_EngineRenderer->CreateWorldList();
-	}
+  void SceneEnd(void) { g_EngineRenderer->DrawSceneEnd(); }
 
-	void BuildWorldLists( IWorldRenderList *pList, WorldListInfo_t* pInfo, int iForceFViewLeaf, const VisOverrideData_t* pVisData, bool bShadowDepth, float *pReflectionWaterHeight )
-	{
-		g_EngineRenderer->BuildWorldLists( pList, pInfo, iForceFViewLeaf, pVisData, bShadowDepth, pReflectionWaterHeight );
-	}
+  void GetVisibleFogVolume(const Vector &vEyePoint,
+                           VisibleFogVolumeInfo_t *pInfo) {
+    R_GetVisibleFogVolume(vEyePoint, pInfo);
+  }
 
-	void DrawWorldLists( IWorldRenderList *pList, unsigned long flags, float waterZAdjust )
-	{
-		g_EngineRenderer->DrawWorldLists( pList, flags, waterZAdjust );
-	}
+  IWorldRenderList *CreateWorldList() {
+    return g_EngineRenderer->CreateWorldList();
+  }
 
-	// Optimization for top view
-	void DrawTopView( bool enable )
-	{
-		R_DrawTopView( enable );
-	}
+  void BuildWorldLists(IWorldRenderList *pList, WorldListInfo_t *pInfo,
+                       int iForceFViewLeaf, const VisOverrideData_t *pVisData,
+                       bool bShadowDepth, float *pReflectionWaterHeight) {
+    g_EngineRenderer->BuildWorldLists(pList, pInfo, iForceFViewLeaf, pVisData,
+                                      bShadowDepth, pReflectionWaterHeight);
+  }
 
-	void TopViewBounds( Vector2D const& mins, Vector2D const& maxs )
-	{
-		R_TopViewBounds( mins, maxs );
-	}
+  void DrawWorldLists(IWorldRenderList *pList, unsigned long flags,
+                      float waterZAdjust) {
+    g_EngineRenderer->DrawWorldLists(pList, flags, waterZAdjust);
+  }
 
-	void DrawLights( void )
-	{
-		DrawLightSprites();
+  // Optimization for top view
+  void DrawTopView(bool enable) { R_DrawTopView(enable); }
+
+  void TopViewBounds(Vector2D const &mins, Vector2D const &maxs) {
+    R_TopViewBounds(mins, maxs);
+  }
+
+  void DrawLights(void) {
+    DrawLightSprites();
 
 #ifdef USE_CONVARS
-		DrawLightDebuggingInfo();
+    DrawLightDebuggingInfo();
 #endif
-	}
+  }
 
-	void DrawMaskEntities( void )
-	{
-		// UNDONE: Don't do this with masked brush models, they should probably be in a separate list
-		// R_DrawMaskEntities()
-	}
+  void DrawMaskEntities(void) {
+    // UNDONE: Don't do this with masked brush models, they should probably be
+    // in a separate list R_DrawMaskEntities()
+  }
 
-	void DrawTranslucentSurfaces( IWorldRenderList *pList, int sortIndex, unsigned long flags, bool bShadowDepth )
-	{
-		Shader_DrawTranslucentSurfaces( pList, sortIndex, flags, bShadowDepth );
-	}
+  void DrawTranslucentSurfaces(IWorldRenderList *pList, int sortIndex,
+                               unsigned long flags, bool bShadowDepth) {
+    Shader_DrawTranslucentSurfaces(pList, sortIndex, flags, bShadowDepth);
+  }
 
-	bool LeafContainsTranslucentSurfaces( IWorldRenderList *pList, int sortIndex, unsigned long flags )
-	{
-		return Shader_LeafContainsTranslucentSurfaces( pList, sortIndex, flags );
-	}
+  bool LeafContainsTranslucentSurfaces(IWorldRenderList *pList, int sortIndex,
+                                       unsigned long flags) {
+    return Shader_LeafContainsTranslucentSurfaces(pList, sortIndex, flags);
+  }
 
-	void DrawLineFile( void )
-	{
-		Linefile_Draw();
-	}
+  void DrawLineFile(void) { Linefile_Draw(); }
 
-	void DrawLightmaps( IWorldRenderList *pList, int pageId )
-	{
-		R_DrawLightmaps( pList, pageId );
-	}
+  void DrawLightmaps(IWorldRenderList *pList, int pageId) {
+    R_DrawLightmaps(pList, pageId);
+  }
 
-	void ViewSetupVis( bool novis, int numorigins, const Vector origin[] )
-	{
-		g_EngineRenderer->ViewSetupVis( novis, numorigins, origin );
-	}
+  void ViewSetupVis(bool novis, int numorigins, const Vector origin[]) {
+    g_EngineRenderer->ViewSetupVis(novis, numorigins, origin);
+  }
 
-	void ViewSetupVisEx( bool novis, int numorigins, const Vector origin[], unsigned int &returnFlags )
-	{
-		g_EngineRenderer->ViewSetupVisEx( novis, numorigins, origin, returnFlags );
-	}
+  void ViewSetupVisEx(bool novis, int numorigins, const Vector origin[],
+                      unsigned int &returnFlags) {
+    g_EngineRenderer->ViewSetupVisEx(novis, numorigins, origin, returnFlags);
+  }
 
-	bool AreAnyLeavesVisible( int *leafList, int nLeaves )
-	{
-		return Map_AreAnyLeavesVisible( *host_state.worldbrush, leafList, nLeaves );
-	}
+  bool AreAnyLeavesVisible(int *leafList, int nLeaves) {
+    return Map_AreAnyLeavesVisible(*host_state.worldbrush, leafList, nLeaves);
+  }
 
-	// For backward compatibility only!!!
-	void VguiPaint( void )
-	{
-		EngineVGui()->BackwardCompatibility_Paint();
-	}
+  // For backward compatibility only!!!
+  void VguiPaint(void) { EngineVGui()->BackwardCompatibility_Paint(); }
 
-	void VGui_Paint( int mode )
-	{
-		EngineVGui()->Paint( (PaintMode_t)mode );
-	}
+  void VGui_Paint(int mode) { EngineVGui()->Paint((PaintMode_t)mode); }
 
-	void ViewDrawFade( byte *color, IMaterial* pFadeMaterial )
-	{
-		VPROF_BUDGET( "ViewDrawFade", VPROF_BUDGETGROUP_WORLD_RENDERING );
-		g_EngineRenderer->ViewDrawFade( color, pFadeMaterial );
-	}
+  void ViewDrawFade(uint8_t *color, IMaterial *pFadeMaterial) {
+    VPROF_BUDGET("ViewDrawFade", VPROF_BUDGETGROUP_WORLD_RENDERING);
+    g_EngineRenderer->ViewDrawFade(color, pFadeMaterial);
+  }
 
-	void OLD_SetProjectionMatrix( float fov, float zNear, float zFar )
-	{
-		// Here to preserve backwards compat
-	}
+  void OLD_SetProjectionMatrix(float fov, float zNear, float zFar) {
+    // Here to preserve backwards compat
+  }
 
-	void OLD_SetOffCenterProjectionMatrix( float fov, float zNear, float zFar, float flAspectRatio,
-		float flBottom, float flTop, float flLeft, float flRight )
-	{
-		// Here to preserve backwards compat
-	}
+  void OLD_SetOffCenterProjectionMatrix(float fov, float zNear, float zFar,
+                                        float flAspectRatio, float flBottom,
+                                        float flTop, float flLeft,
+                                        float flRight) {
+    // Here to preserve backwards compat
+  }
 
-	void OLD_SetProjectionMatrixOrtho( float left, float top, float right, float bottom, float zNear, float zFar )
-	{
-		// Here to preserve backwards compat
-	}
+  void OLD_SetProjectionMatrixOrtho(float left, float top, float right,
+                                    float bottom, float zNear, float zFar) {
+    // Here to preserve backwards compat
+  }
 
-	colorVec GetLightAtPoint( Vector& pos )
-	{
-		return R_LightPoint( pos );
-	}
+  colorVec GetLightAtPoint(Vector &pos) { return R_LightPoint(pos); }
 
-	int GetViewEntity( void )
-	{
-		return cl.m_nViewEntity;
-	}
+  int GetViewEntity(void) { return cl.m_nViewEntity; }
 
-	float GetFieldOfView( void )
-	{
-		return g_EngineRenderer->GetFov();
-	}
+  float GetFieldOfView(void) { return g_EngineRenderer->GetFov(); }
 
-	unsigned char **GetAreaBits( void )
-	{
-		return cl.GetAreaBits_BackwardCompatibility();
-	}
+  unsigned char **GetAreaBits(void) {
+    return cl.GetAreaBits_BackwardCompatibility();
+  }
 
-	virtual void SetAreaState( 
-			unsigned char chAreaBits[MAX_AREA_STATE_BYTES],
-			unsigned char chAreaPortalBits[MAX_AREA_PORTAL_STATE_BYTES] )
-	{
-		*cl.GetAreaBits_BackwardCompatibility() = 0; // Clear the b/w compatibiltiy thing.
-		memcpy( cl.m_chAreaBits, chAreaBits, MAX_AREA_STATE_BYTES );
-		memcpy( cl.m_chAreaPortalBits, chAreaPortalBits, MAX_AREA_PORTAL_STATE_BYTES );
-		cl.m_bAreaBitsValid = true;
-	}
+  virtual void SetAreaState(
+      unsigned char chAreaBits[MAX_AREA_STATE_BYTES],
+      unsigned char chAreaPortalBits[MAX_AREA_PORTAL_STATE_BYTES]) {
+    *cl.GetAreaBits_BackwardCompatibility() =
+        0;  // Clear the b/w compatibiltiy thing.
+    memcpy(cl.m_chAreaBits, chAreaBits, MAX_AREA_STATE_BYTES);
+    memcpy(cl.m_chAreaPortalBits, chAreaPortalBits,
+           MAX_AREA_PORTAL_STATE_BYTES);
+    cl.m_bAreaBitsValid = true;
+  }
 
-	// World fog for world rendering
-	void SetFogVolumeState( int fogVolume, bool useHeightFog )
-	{
-		R_SetFogVolumeState(fogVolume, useHeightFog );
-	}
+  // World fog for world rendering
+  void SetFogVolumeState(int fogVolume, bool useHeightFog) {
+    R_SetFogVolumeState(fogVolume, useHeightFog);
+  }
 
-	virtual void InstallBrushSurfaceRenderer( IBrushRenderer* pBrushRenderer )
-	{
-		R_InstallBrushRenderOverride( pBrushRenderer );
-	}
+  virtual void InstallBrushSurfaceRenderer(IBrushRenderer *pBrushRenderer) {
+    R_InstallBrushRenderOverride(pBrushRenderer);
+  }
 
-	struct BoxIntersectWaterContext_t
-	{
-		bool m_bFoundWaterLeaf;
-		int m_nLeafWaterDataID;
-	};
-	
-	bool EnumerateLeaf( int leaf, int context )
-	{
-		BoxIntersectWaterContext_t *pSearchContext = ( BoxIntersectWaterContext_t * )context;
-		mleaf_t *pLeaf = &host_state.worldmodel->brush.pShared->leafs[leaf];
-		if( pLeaf->leafWaterDataID == pSearchContext->m_nLeafWaterDataID )
-		{
-			pSearchContext->m_bFoundWaterLeaf = true;
-			// found it . . stop enumeration
-			return false;
-		}
-		return true;
-	}
+  struct BoxIntersectWaterContext_t {
+    bool m_bFoundWaterLeaf;
+    int m_nLeafWaterDataID;
+  };
 
-	bool DoesBoxIntersectWaterVolume( const Vector &mins, const Vector &maxs, int leafWaterDataID )
-	{
-		BoxIntersectWaterContext_t context;
-		context.m_bFoundWaterLeaf = false;
-		context.m_nLeafWaterDataID = leafWaterDataID;
-		g_pToolBSPTree->EnumerateLeavesInBox( mins, maxs, this, ( int )&context );
-		return context.m_bFoundWaterLeaf;
-	}
+  bool EnumerateLeaf(int leaf, int context) {
+    BoxIntersectWaterContext_t *pSearchContext =
+        (BoxIntersectWaterContext_t *)context;
+    mleaf_t *pLeaf = &host_state.worldmodel->brush.pShared->leafs[leaf];
+    if (pLeaf->leafWaterDataID == pSearchContext->m_nLeafWaterDataID) {
+      pSearchContext->m_bFoundWaterLeaf = true;
+      // found it . . stop enumeration
+      return false;
+    }
+    return true;
+  }
 
-	// Push, pop views
-	virtual void Push3DView( const CViewSetup &view, int nFlags, ITexture* pRenderTarget, Frustum frustumPlanes )
-	{
-		g_EngineRenderer->Push3DView( view, nFlags, pRenderTarget, frustumPlanes, NULL );
-	}
+  bool DoesBoxIntersectWaterVolume(const Vector &mins, const Vector &maxs,
+                                   int leafWaterDataID) {
+    BoxIntersectWaterContext_t context;
+    context.m_bFoundWaterLeaf = false;
+    context.m_nLeafWaterDataID = leafWaterDataID;
+    g_pToolBSPTree->EnumerateLeavesInBox(mins, maxs, this, (int)&context);
+    return context.m_bFoundWaterLeaf;
+  }
 
-	virtual void Push2DView( const CViewSetup &view, int nFlags, ITexture* pRenderTarget, Frustum frustumPlanes )
-	{
-		g_EngineRenderer->Push2DView( view, nFlags, pRenderTarget, frustumPlanes );
-	}
+  // Push, pop views
+  virtual void Push3DView(const CViewSetup &view, int nFlags,
+                          ITexture *pRenderTarget, Frustum frustumPlanes) {
+    g_EngineRenderer->Push3DView(view, nFlags, pRenderTarget, frustumPlanes,
+                                 NULL);
+  }
 
-	virtual void PopView( Frustum frustumPlanes )
- 	{
-		g_EngineRenderer->PopView( frustumPlanes );
-	}
+  virtual void Push2DView(const CViewSetup &view, int nFlags,
+                          ITexture *pRenderTarget, Frustum frustumPlanes) {
+    g_EngineRenderer->Push2DView(view, nFlags, pRenderTarget, frustumPlanes);
+  }
 
-	virtual void SetMainView( const Vector &vecOrigin, const QAngle &angles )
-	{
-		g_EngineRenderer->SetMainView( vecOrigin, angles );
-	}
+  virtual void PopView(Frustum frustumPlanes) {
+    g_EngineRenderer->PopView(frustumPlanes);
+  }
 
-	void OverrideViewFrustum( Frustum custom )
-	{
-		g_EngineRenderer->OverrideViewFrustum( custom );
-	}
+  virtual void SetMainView(const Vector &vecOrigin, const QAngle &angles) {
+    g_EngineRenderer->SetMainView(vecOrigin, angles);
+  }
 
-	void DrawBrushModelShadowDepth( 
-		IClientEntity *baseentity, 
-		model_t *model, 
-		const Vector& origin, 
-		const QAngle& angles, 
-		bool bSort )
-	{
-		R_DrawBrushModel( baseentity, model, origin, angles, bSort, true );
-	}
+  void OverrideViewFrustum(Frustum custom) {
+    g_EngineRenderer->OverrideViewFrustum(custom);
+  }
 
-	void UpdateBrushModelLightmap( model_t *model, IClientRenderable *pRenderable )
-	{
-		g_EngineRenderer->UpdateBrushModelLightmap( model, pRenderable );
-	}
-	
-	void BeginUpdateLightmaps( void )
-	{
-		g_EngineRenderer->BeginUpdateLightmaps();
-	}
+  void DrawBrushModelShadowDepth(IClientEntity *baseentity, model_t *model,
+                                 const Vector &origin, const QAngle &angles,
+                                 bool bSort) {
+    R_DrawBrushModel(baseentity, model, origin, angles, bSort, true);
+  }
 
-	void EndUpdateLightmaps( void )
-	{
-		g_EngineRenderer->EndUpdateLightmaps();
-	}
+  void UpdateBrushModelLightmap(model_t *model,
+                                IClientRenderable *pRenderable) {
+    g_EngineRenderer->UpdateBrushModelLightmap(model, pRenderable);
+  }
 
-	virtual void Push3DView( const CViewSetup &view, int nFlags, ITexture* pRenderTarget, Frustum frustumPlanes, ITexture* pDepthTexture )
-	{
-		g_EngineRenderer->Push3DView( view, nFlags, pRenderTarget, frustumPlanes, pDepthTexture );
-	}
+  void BeginUpdateLightmaps(void) { g_EngineRenderer->BeginUpdateLightmaps(); }
 
-	void GetMatricesForView( const CViewSetup &view, VMatrix *pWorldToView, VMatrix *pViewToProjection, VMatrix *pWorldToProjection, VMatrix *pWorldToPixels )
-	{
-		ComputeViewMatrices( pWorldToView, pViewToProjection, pWorldToProjection, view );
-		ComputeWorldToScreenMatrix( pWorldToPixels, *pWorldToProjection, view );
-	}
+  void EndUpdateLightmaps(void) { g_EngineRenderer->EndUpdateLightmaps(); }
+
+  virtual void Push3DView(const CViewSetup &view, int nFlags,
+                          ITexture *pRenderTarget, Frustum frustumPlanes,
+                          ITexture *pDepthTexture) {
+    g_EngineRenderer->Push3DView(view, nFlags, pRenderTarget, frustumPlanes,
+                                 pDepthTexture);
+  }
+
+  void GetMatricesForView(const CViewSetup &view, VMatrix *pWorldToView,
+                          VMatrix *pViewToProjection,
+                          VMatrix *pWorldToProjection,
+                          VMatrix *pWorldToPixels) {
+    ComputeViewMatrices(pWorldToView, pViewToProjection, pWorldToProjection,
+                        view);
+    ComputeWorldToScreenMatrix(pWorldToPixels, *pWorldToProjection, view);
+  }
 };
 
 static CVRenderView s_RenderView;
-EXPOSE_SINGLE_INTERFACE_GLOBALVAR( CVRenderView, IVRenderView, VENGINE_RENDERVIEW_INTERFACE_VERSION, s_RenderView );
-
-
-
+EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CVRenderView, IVRenderView,
+                                  VENGINE_RENDERVIEW_INTERFACE_VERSION,
+                                  s_RenderView);

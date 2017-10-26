@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #ifndef SKIN_DX9_HELPER_H
 #define SKIN_DX9_HELPER_H
 
-#include <string.h>
+#include <cstring>
 
 #include "vertexlitgeneric_dx9_helper.h"
 
@@ -23,6 +23,6 @@ class IShaderShadow;
 void InitParamsSkin_DX9( CBaseVSShader *pShader, IMaterialVar** params, const char *pMaterialName, VertexLitGeneric_DX9_Vars_t &info );
 void InitSkin_DX9( CBaseVSShader *pShader, IMaterialVar** params, VertexLitGeneric_DX9_Vars_t &info );
 void DrawSkin_DX9( CBaseVSShader *pShader, IMaterialVar** params, IShaderDynamicAPI *pShaderAPI, IShaderShadow* pShaderShadow,
-				  VertexLitGeneric_DX9_Vars_t &info, VertexCompressionType_t vertexCompression );
+ 	  VertexLitGeneric_DX9_Vars_t &info, VertexCompressionType_t vertexCompression );
 
 #endif // SKIN_DX9_HELPER_H

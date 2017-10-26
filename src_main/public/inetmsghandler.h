@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( INETMSGHANDLER_H )
 #define INETMSGHANDLER_H
 #ifdef _WIN32
@@ -54,25 +54,25 @@ public:
 	virtual bool Process##name( MM_##name *msg )
 
 
-#define REGISTER_NET_MSG( name )				\
+#define REGISTER_NET_MSG( name ) 	\
 	NET_##name * p##name = new NET_##name();	\
-	p##name->m_pMessageHandler = this;			\
-	chan->RegisterMessage( p##name );			\
+	p##name->m_pMessageHandler = this; \
+	chan->RegisterMessage( p##name ); \
 
-#define REGISTER_SVC_MSG( name )				\
+#define REGISTER_SVC_MSG( name ) 	\
 	SVC_##name * p##name = new SVC_##name();	\
-	p##name->m_pMessageHandler = this;			\
-	chan->RegisterMessage( p##name );			\
+	p##name->m_pMessageHandler = this; \
+	chan->RegisterMessage( p##name ); \
 
-#define REGISTER_CLC_MSG( name )				\
+#define REGISTER_CLC_MSG( name ) 	\
 	CLC_##name * p##name = new CLC_##name();	\
-	p##name->m_pMessageHandler = this;			\
-	chan->RegisterMessage( p##name );			\
+	p##name->m_pMessageHandler = this; \
+	chan->RegisterMessage( p##name ); \
 
-#define REGISTER_MM_MSG( name )					\
+#define REGISTER_MM_MSG( name ) 		\
 	MM_##name * p##name = new MM_##name();		\
-	p##name->m_pMessageHandler = this;			\
-	chan->RegisterMessage( p##name );			\
+	p##name->m_pMessageHandler = this; \
+	chan->RegisterMessage( p##name ); \
 
 class NET_Tick;
 class NET_StringCmd;

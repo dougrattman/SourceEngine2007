@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DT_UTLVECTOR_COMMON_H
 #define DT_UTLVECTOR_COMMON_H
@@ -11,7 +11,7 @@
 #endif
 
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 
 typedef void (*EnsureCapacityFn)( void *pVoid, int offsetToUtlVector, int len );
@@ -31,9 +31,9 @@ public:
 	{
 		CUtlVector<T,A> *pVec = (CUtlVector<T,A>*)((char*)pStruct + offsetToUtlVector);
 		if ( pVec->Count() < len )
-			pVec->AddMultipleToTail( len - pVec->Count() );
+ pVec->AddMultipleToTail( len - pVec->Count() );
 		else if ( pVec->Count() > len )
-			pVec->RemoveMultiple( len, pVec->Count()-len );
+ pVec->RemoveMultiple( len, pVec->Count()-len );
 	}
 
 	static void EnsureCapacity( void *pStruct, int offsetToUtlVector, int len )
@@ -44,12 +44,12 @@ public:
 
 		if ( oldNumAllocated < len )
 		{
-			pVec->EnsureCapacity( len );
-			
-			// This is important to do because EnsureCapacity doesn't actually call the constructors
-			// on the elements, but we need them to be initialized, otherwise it'll have out-of-range
-			// values which will piss off the datatable encoder.
-			UtlVector_InitializeAllocatedElements( pVec->Base() + oldNumAllocated, len - oldNumAllocated );
+ pVec->EnsureCapacity( len );
+ 
+ // This is important to do because EnsureCapacity doesn't actually call the constructors
+ // on the elements, but we need them to be initialized, otherwise it'll have out-of-range
+ // values which will piss off the datatable encoder.
+ UtlVector_InitializeAllocatedElements( pVec->Base() + oldNumAllocated, len - oldNumAllocated );
 		}
 	}
 };

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SIMPLE_KEYS_H
 #define SIMPLE_KEYS_H
@@ -32,7 +32,7 @@ public:
 	// out = t*start + (1-t) * end (may be splinear or linear)
 	static void Interp( Vector &out, float t, const CSimpleKeyInterp &start, const CSimpleKeyInterp &end );
 
-	float				m_keyTime;
+	float 	m_keyTime;
 	simplekeyinterp_t	m_interp;
 };
 

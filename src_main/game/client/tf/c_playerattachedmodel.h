@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,12 +10,12 @@
 #pragma once
 #endif
 
-#define PAM_PERMANENT			-1
+#define PAM_PERMANENT -1
 
 // Flags
-#define PAM_SPIN_Z				(1<<0)
+#define PAM_SPIN_Z 	(1<<0)
 #define PAM_ROTATE_RANDOMLY		(1<<1)
-#define PAM_SCALEUP				(1<<2)
+#define PAM_SCALEUP 	(1<<2)
 #define PAM_ANIMATE_RANDOMLY	(1<<3)
 
 //-----------------------------------------------------------------------------

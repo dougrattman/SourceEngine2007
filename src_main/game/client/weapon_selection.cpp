@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Weapon selection handling
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "weapon_selection.h"
 #include "hud_macros.h"
 #include "history_resource.h"
 #include "menu.h"
 #include "in_buttons.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "filesystem.h"
 #include "iinput.h"
 

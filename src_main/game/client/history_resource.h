@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Item pickup history displayed onscreen when items are picked up.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HISTORY_RESOURCE_H
 #define HISTORY_RESOURCE_H
@@ -41,9 +41,9 @@ private:
 	{
 		HIST_ITEM() 
 		{ 
-			// init this here, because the code that overwrites previous history items will use this
-			// to check to see if the item is empty
-			DisplayTime = 0.0f; 
+ // init this here, because the code that overwrites previous history items will use this
+ // to check to see if the item is empty
+ DisplayTime = 0.0f; 
 		}
 		int type;
 		float DisplayTime;  // the time at which this item should be removed from the history

@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "hl2mp_gamerules.h"
 #include "viewport_panel_names.h"
 #include "gameeventdefs.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "ammodef.h"
 
 #ifdef CLIENT_DLL

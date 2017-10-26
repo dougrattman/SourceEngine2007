@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_NETWORK_H
 #define AI_NETWORK_H
@@ -90,38 +90,38 @@ public:
 	CAI_Network();
 	~CAI_Network();
 
-	CAI_Node *		AddNode( const Vector &origin, float yaw );						// Returns a new node in the network
+	CAI_Node *		AddNode( const Vector &origin, float yaw );  // Returns a new node in the network
 	CAI_Link *		CreateLink( int srcID, int destID, CAI_DynamicLink *pDynamicLink = NULL );
 
-	bool			IsConnected(int srcID, int destID);	// Use during run time
-	void			TestIsConnected(int startID, int endID);	// Use only for initialization!
+	bool IsConnected(int srcID, int destID);	// Use during run time
+	void TestIsConnected(int startID, int endID);	// Use only for initialization!
 	
-	Vector			GetNodePosition( CBaseCombatCharacter *pNPC, int nodeID );
-	Vector			GetNodePosition( Hull_t hull, int nodeID );
-	float			GetNodeYaw( int nodeID );
+	Vector GetNodePosition( CBaseCombatCharacter *pNPC, int nodeID );
+	Vector GetNodePosition( Hull_t hull, int nodeID );
+	float GetNodeYaw( int nodeID );
 
 	static int		FindBSSmallest(CVarBitVec *bitString, float *float_array, int array_size); 
 
-	int				NearestNodeToPoint( CAI_BaseNPC* pNPC, const Vector &vecOrigin, bool bCheckVisiblity, INearestNodeFilter *pFilter );
-	int				NearestNodeToPoint( CAI_BaseNPC* pNPC, const Vector &vecOrigin, bool bCheckVisiblity = true ) { return NearestNodeToPoint( pNPC, vecOrigin, bCheckVisiblity, NULL ); }
-	int				NearestNodeToPoint(const Vector &vPosition, bool bCheckVisiblity = true );
+	int 	NearestNodeToPoint( CAI_BaseNPC* pNPC, const Vector &vecOrigin, bool bCheckVisiblity, INearestNodeFilter *pFilter );
+	int 	NearestNodeToPoint( CAI_BaseNPC* pNPC, const Vector &vecOrigin, bool bCheckVisiblity = true ) { return NearestNodeToPoint( pNPC, vecOrigin, bCheckVisiblity, NULL ); }
+	int 	NearestNodeToPoint(const Vector &vPosition, bool bCheckVisiblity = true );
 	
-	int				NumNodes() const 	{ return m_iNumNodes; }
+	int 	NumNodes() const 	{ return m_iNumNodes; }
 	CAI_Node*		GetNode( int id, bool bHandleError = true )
 	{ 
 		if ( id >= 0 && 
-			 id < m_iNumNodes ) 
+  id < m_iNumNodes ) 
 		{
-			return m_pAInode[id]; 
+ return m_pAInode[id]; 
 		}
 
 		if ( bHandleError )
 		{
-			static int warningCount = 0;
-			if ( ++warningCount < 10 )
-			{
-				AssertMsg2( 0, "Node (%i) out of range (%i total)\n", id, m_iNumNodes ); 
-			}
+ static int warningCount = 0;
+ if ( ++warningCount < 10 )
+ {
+ 	AssertMsg2( 0, "Node (%i) out of range (%i total)\n", id, m_iNumNodes ); 
+ }
 		}
 		return NULL; 
 	}
@@ -133,11 +133,11 @@ private:
 
 	virtual IterationRetval_t EnumElement( IHandleEntity *pHandleEntity );
 
-	int				GetCachedNearestNode(const Vector &checkPos, CAI_BaseNPC *pNPC, int *pCachePos );
-	void			SetCachedNearestNode(const Vector &checkPos, int nodeID, Hull_t nHull);
-	int				GetCachedNode(const Vector &checkPos, Hull_t nHull, int *pCachePos);
+	int 	GetCachedNearestNode(const Vector &checkPos, CAI_BaseNPC *pNPC, int *pCachePos );
+	void SetCachedNearestNode(const Vector &checkPos, int nodeID, Hull_t nHull);
+	int 	GetCachedNode(const Vector &checkPos, Hull_t nHull, int *pCachePos);
 
-	int				ListNodesInBox( CNodeList &list, int maxListCount, const Vector &mins, const Vector &maxs, INodeListFilter *pFilter );
+	int 	ListNodesInBox( CNodeList &list, int maxListCount, const Vector &mins, const Vector &maxs, INodeListFilter *pFilter );
 
 	//---------------------------------
 
@@ -150,14 +150,14 @@ private:
 	struct NearNodeCache_T
 	{
 		Vector	vTestPosition;		
-		float	expiration;				// Time tested
-		int		node;					// Nearest Node to position
-		int		hull;					// Hull	type tested (or HULL_NONE is only visibility tested)
+		float	expiration; 	// Time tested
+		int		node; 		// Nearest Node to position
+		int		hull; 		// Hull	type tested (or HULL_NONE is only visibility tested)
 
 	};
 
-	int					m_iNumNodes;				// Number of nodes in this network
-	CAI_Node**			m_pAInode;					// Array of all nodes in this network
+	int 		m_iNumNodes; 	// Number of nodes in this network
+	CAI_Node** m_pAInode; 		// Array of all nodes in this network
 
 	enum
 	{
@@ -165,7 +165,7 @@ private:
 	};
 
 	NearNodeCache_T		m_NearestCache[NEARNODE_CACHE_SIZE];	// Cache of nearest nodes
-	int					m_iNearestCacheNext;					// Oldest record in the cache
+	int 		m_iNearestCacheNext; 		// Oldest record in the cache
 
 #ifdef AI_NODE_TREE
 	ISpatialPartition * m_pNodeTree;
@@ -177,7 +177,7 @@ private:
 // CAI_NetworkEditTools
 //
 // Purpose: Provides the operations used when building levels, whether in-game
-//			debugging tools or editor related items.
+// debugging tools or editor related items.
 //
 //-----------------------------------------------------------------------------
 
@@ -187,19 +187,19 @@ private:
 
 enum DebugNetOverlayBits_e
 {
-	bits_debugOverlayNodes			=	0x00000001,		// show node
+	bits_debugOverlayNodes =	0x00000001,		// show node
 	bits_debugOverlayNodesLev2		=	0x00000002,		// show nodes and text
 
-	bits_debugOverlayHulls			=	0x00000004,		// show hulls
+	bits_debugOverlayHulls =	0x00000004,		// show hulls
 	bits_debugOverlayConnections	=	0x00000008,		// show connections
 	bits_debugOverlayVisibility		=	0x00000010,		// show visibility
 	bits_debugOverlayGraphConnect	=   0x00000020,		// show graph connectivity
-	bits_debugOverlayGrid			=   0x00000040,		// show grid
-	bits_debugOverlayHints			=	0x00000080,		// show hints
+	bits_debugOverlayGrid =   0x00000040,		// show grid
+	bits_debugOverlayHints =	0x00000080,		// show hints
 	bits_debugOverlayJumpConnections=	0x00000100,		// show jump connections
 	bits_debugOverlayFlyConnections	=	0x00000200,		// show fly connections
 
-	bits_debugNeedRebuild			=	0x10000000,		// network needs rebuilding
+	bits_debugNeedRebuild =	0x10000000,		// network needs rebuilding
 };
 
 // ------------------------------------
@@ -213,8 +213,8 @@ Vector PointOnLineNearestPoint(const Vector& vStartPos, const Vector& vEndPos, c
 //-----------------------------------------------------------------------------
 
 // For now just using one big AI network
-extern CAI_NetworkManager *	g_pAINetworkManager;			
-extern CAI_Network * 		g_pBigAINet;			
+extern CAI_NetworkManager *	g_pAINetworkManager; 
+extern CAI_Network * 		g_pBigAINet; 
 
 //=============================================================================
 

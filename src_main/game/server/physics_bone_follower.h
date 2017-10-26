@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PHYSICS_BONE_FOLLOWER_H
 #define PHYSICS_BONE_FOLLOWER_H
@@ -51,14 +51,14 @@ public:
 	void DestroyBoneFollowers( void );
 
 	physfollower_t *GetBoneFollower( int iFollowerIndex );
-	int				GetBoneFollowerIndex( CBoneFollower *pFollower );
-	int				GetNumBoneFollowers( void ) const { return m_iNumBones; }
+	int 	GetBoneFollowerIndex( CBoneFollower *pFollower );
+	int 	GetNumBoneFollowers( void ) const { return m_iNumBones; }
 
 private:
 	bool CreatePhysicsFollower( CBaseAnimating *pParentEntity, physfollower_t &follow, const char *pBoneName, solid_t *pSolid );
 
 private:
-	int							m_iNumBones;
+	int  	m_iNumBones;
 	CUtlVector<physfollower_t>	m_physBones;
 };
 
@@ -71,7 +71,7 @@ class CBoneFollower : public CBaseEntity
 public:
 	// CBaseEntity
 	void VPhysicsUpdate( IPhysicsObject *pPhysics );
-	int  UpdateTransmitState(void);
+	int  UpdateTransmitState();
 
 	// NOTE: These are forwarded to the parent object!
 	void VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );

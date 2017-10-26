@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Encapsulation of the current scenario/game state. Allows each bot imperfect knowledge.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Author: Michael S. Booth (mike@turtlerockstudios.com), 2003
 
 #include "cbase.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
 #include "cs_bot.h"
 #include "cs_gamestate.h"

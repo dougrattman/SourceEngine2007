@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_CLASSMENU_H
 #define TF_CLASSMENU_H
@@ -48,19 +48,19 @@ public:
 		CModelPanel *pModelPanel = dynamic_cast<CModelPanel *>(FindChildByName( "classModel" ) );
 		if ( pModelPanel )
 		{
-			pModelPanel->SetPanelDirty();
+ pModelPanel->SetPanelDirty();
 
-			if ( !state )
-			{
-				// stop the panel from running any VCD data
-				pModelPanel->DeleteVCDData();
-			}
+ if ( !state )
+ {
+ 	// stop the panel from running any VCD data
+ 	pModelPanel->DeleteVCDData();
+ }
 		}
 
 		CTFRichText *pRichText = dynamic_cast<CTFRichText *>(FindChildByName( "classInfo" ) );
 		if ( pRichText )
 		{
-			pRichText->InvalidateLayout( true, false );
+ pRichText->InvalidateLayout( true, false );
 		}
 
 		BaseClass::SetVisible( state );
@@ -112,7 +112,7 @@ private:
 #endif
 
 	ButtonCode_t	m_iClassMenuKey;
-	int				m_iCurrentClassIndex;
+	int 	m_iCurrentClassIndex;
 	vgui::CKeyRepeatHandler	m_KeyRepeat;
 
 #ifndef _X360
@@ -153,13 +153,13 @@ public:
 
 		for( int i = 0; i < GetChildCount(); i++ ) 
 		{
-			CImageMouseOverButton<CTFClassInfoPanel> *button = dynamic_cast<CImageMouseOverButton<CTFClassInfoPanel> *>( GetChild( i ) );
+ CImageMouseOverButton<CTFClassInfoPanel> *button = dynamic_cast<CImageMouseOverButton<CTFClassInfoPanel> *>( GetChild( i ) );
 
-			if ( button )
-			{
-				button->SetPreserveArmedButtons( true );
-				button->SetUpdateDefaultButtons( true );
-			}
+ if ( button )
+ {
+ 	button->SetPreserveArmedButtons( true );
+ 	button->SetUpdateDefaultButtons( true );
+ }
 		}
 	}
 
@@ -167,11 +167,11 @@ public:
 	{
 		if ( bShow )
 		{
-			// make sure the Red class menu isn't open
-			if ( gViewPortInterface )
-			{
-				gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
-			}
+ // make sure the Red class menu isn't open
+ if ( gViewPortInterface )
+ {
+ 	gViewPortInterface->ShowPanel( PANEL_CLASS_RED, false );
+ }
 		}
 
 		BaseClass::ShowPanel( bShow );
@@ -222,13 +222,13 @@ public:
 
 		for( int i = 0; i < GetChildCount(); i++ ) 
 		{
-			CImageMouseOverButton<CTFClassInfoPanel> *button = dynamic_cast<CImageMouseOverButton<CTFClassInfoPanel> *>( GetChild( i ) );
+ CImageMouseOverButton<CTFClassInfoPanel> *button = dynamic_cast<CImageMouseOverButton<CTFClassInfoPanel> *>( GetChild( i ) );
 
-			if ( button )
-			{
-				button->SetPreserveArmedButtons( true );
-				button->SetUpdateDefaultButtons( true );
-			}
+ if ( button )
+ {
+ 	button->SetPreserveArmedButtons( true );
+ 	button->SetUpdateDefaultButtons( true );
+ }
 		}
 	}
 
@@ -236,11 +236,11 @@ public:
 	{
 		if ( bShow )
 		{
-			// make sure the Red class menu isn't open
-			if ( gViewPortInterface )
-			{
-				gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
-			}
+ // make sure the Red class menu isn't open
+ if ( gViewPortInterface )
+ {
+ 	gViewPortInterface->ShowPanel( PANEL_CLASS_BLUE, false );
+ }
 		}
 
 		BaseClass::ShowPanel( bShow );

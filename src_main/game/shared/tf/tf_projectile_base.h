@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // TF Base Projectile
 //
@@ -33,9 +33,9 @@ CTFBaseProjectile
 	|-	CTFProjectile_Nail
 	|-	CTFProjectile_Dart
 	|-  CTFBaseRocket
-			|
-			|- Soldier rocket
-			|- Pyro rocket
+ |
+ |- Soldier rocket
+ |- Pyro rocket
 */
 
 //=============================================================================
@@ -61,13 +61,13 @@ public:
 	virtual int   GetWeaponID( void ) const { return m_iWeaponID; }
 	void		  SetWeaponID( int iID ) { m_iWeaponID = iID; }
 
-	bool		  IsCritical( void )				{ return m_bCritical; }
+	bool		  IsCritical( void ) 	{ return m_bCritical; }
 	virtual void  SetCritical( bool bCritical )		{ m_bCritical = bCritical; }
 
 private:
 
-	int				m_iWeaponID;
-	bool			m_bCritical;
+	int 	m_iWeaponID;
+	bool m_bCritical;
 
 protected:
 
@@ -115,14 +115,14 @@ public:
 
 	unsigned int	PhysicsSolidMaskForEntity( void ) const;
 
-	void			SetupInitialTransmittedGrenadeVelocity( const Vector &velocity )	{ m_vInitialVelocity = velocity; }
+	void SetupInitialTransmittedGrenadeVelocity( const Vector &velocity )	{ m_vInitialVelocity = velocity; }
 
 protected:
 
-	void			FlyThink( void );
+	void FlyThink( void );
 
 protected:
-	float			m_flDamage;
+	float m_flDamage;
 
 	CBaseHandle		m_Scorer;
 

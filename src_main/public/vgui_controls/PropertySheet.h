@@ -1,24 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef PROPERTYSHEET_H
 #define PROPERTYSHEET_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
+#include "tier1/utlvector.h"
 #include "vgui/VGUI.h"
 #include "vgui_controls/EditablePanel.h"
 #include "vgui_controls/PHandle.h"
-#include "utlvector.h"
 
-namespace vgui
-{
+namespace vgui {
 
 class PageTab;
 class ImagePanel;
@@ -26,156 +16,155 @@ class ImagePanel;
 //-----------------------------------------------------------------------------
 // Purpose: Tabbed property sheet.  Holds and displays a set of Panel's
 //-----------------------------------------------------------------------------
-class PropertySheet : public EditablePanel
-{
-	DECLARE_CLASS_SIMPLE( PropertySheet, EditablePanel );
+class PropertySheet : public EditablePanel {
+  DECLARE_CLASS_SIMPLE(PropertySheet, EditablePanel);
 
-public:
-	PropertySheet(Panel *parent, const char *panelName, bool draggableTabs = false );
-	PropertySheet(Panel *parent, const char *panelName,ComboBox *combo);
-	~PropertySheet();
+ public:
+  PropertySheet(Panel *parent, const char *panelName,
+                bool draggableTabs = false);
+  PropertySheet(Panel *parent, const char *panelName, ComboBox *combo);
+  ~PropertySheet();
 
-	virtual bool IsDraggableTab() const;
-	void		SetDraggableTabs( bool state );
+  virtual bool IsDraggableTab() const;
+  void SetDraggableTabs(bool state);
 
-	// Adds a page to the sheet.  The first page added becomes the active sheet.
-	virtual void AddPage(Panel *page, const char *title, char const *imageName = NULL, bool showContextMenu = false );
+  // Adds a page to the sheet.  The first page added becomes the active sheet.
+  virtual void AddPage(Panel *page, const char *title,
+                       char const *imageName = NULL,
+                       bool showContextMenu = false);
 
-	// sets the current page
-	virtual void SetActivePage(Panel *page);
+  // sets the current page
+  virtual void SetActivePage(Panel *page);
 
-	// sets the width, in pixels, of the page tab buttons.
-	virtual void SetTabWidth(int pixels);
+  // sets the width, in pixels, of the page tab buttons.
+  virtual void SetTabWidth(int pixels);
 
-	// Gets a pointer to the currently active page.
-	virtual Panel *GetActivePage();
+  // Gets a pointer to the currently active page.
+  virtual Panel *GetActivePage();
 
-	// Removes (but doesn't delete) all pages
-	virtual void	RemoveAllPages();
+  // Removes (but doesn't delete) all pages
+  virtual void RemoveAllPages();
 
-	// reloads the data in all the property page
-	virtual void ResetAllData();
+  // reloads the data in all the property page
+  virtual void ResetAllData();
 
-	// writes out any changed data to the doc
-	virtual void ApplyChanges();
+  // writes out any changed data to the doc
+  virtual void ApplyChanges();
 
-	// focus handling - passed on to current active page
-	virtual void RequestFocus(int direction = 0);
-	virtual bool RequestFocusPrev(VPANEL panel = NULL);
-	virtual bool RequestFocusNext(VPANEL panel = NULL);
+  // focus handling - passed on to current active page
+  virtual void RequestFocus(int direction = 0);
+  virtual bool RequestFocusPrev(VPANEL panel = NULL);
+  virtual bool RequestFocusNext(VPANEL panel = NULL);
 
-	// returns the ith panel 
-	virtual Panel *GetPage(int i);
+  // returns the ith panel
+  virtual Panel *GetPage(int i);
 
-	// deletes this panel from the sheet
-	virtual void DeletePage(Panel *panel);
-	// removes this panel from the sheet, sets its parent to NULL, but does not delete it
-	virtual void RemovePage(Panel *panel);
+  // deletes this panel from the sheet
+  virtual void DeletePage(Panel *panel);
+  // removes this panel from the sheet, sets its parent to NULL, but does not
+  // delete it
+  virtual void RemovePage(Panel *panel);
 
-	// returns the current activated tab
-	virtual Panel *GetActiveTab();
+  // returns the current activated tab
+  virtual Panel *GetActiveTab();
 
-	// returns the title text of the tab
-	virtual void GetActiveTabTitle(char *textOut, int bufferLen);
+  // returns the title text of the tab
+  virtual void GetActiveTabTitle(char *textOut, int bufferLen);
 
-	// returns the title of tab "i"
-	virtual bool GetTabTitle(int i,char *textOut, int bufferLen);
+  // returns the title of tab "i"
+  virtual bool GetTabTitle(int i, char *textOut, int bufferLen);
 
-	// returns the index of the active page
-	virtual int GetActivePageNum();
+  // returns the index of the active page
+  virtual int GetActivePageNum();
 
-	// returns the number of pages in the sheet
-	virtual int GetNumPages();
+  // returns the number of pages in the sheet
+  virtual int GetNumPages();
 
-	// disable the page with title "title" 
-	virtual void DisablePage(const char *title);
+  // disable the page with title "title"
+  virtual void DisablePage(const char *title);
 
-	// enable the page with title "title" 
-	virtual void EnablePage(const char *title);
+  // enable the page with title "title"
+  virtual void EnablePage(const char *title);
 
-	virtual void SetSmallTabs( bool state );
-	virtual bool IsSmallTabs() const;
+  virtual void SetSmallTabs(bool state);
+  virtual bool IsSmallTabs() const;
 
-	/* MESSAGES SENT TO PAGES
-		"PageShow"	- sent when a page is shown
-		"PageHide"	- sent when a page is hidden
-		"ResetData"	- sent when the data should be reloaded from doc
-		"ApplyChanges" - sent when data should be written to doc
-	*/
+  /* MESSAGES SENT TO PAGES
+          "PageShow"	- sent when a page is shown
+          "PageHide"	- sent when a page is hidden
+          "ResetData"	- sent when the data should be reloaded from doc
+          "ApplyChanges" - sent when data should be written to doc
+  */
 
-	virtual void OnPanelDropped( CUtlVector< KeyValues * >& msglist );
-	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist );
-	// Mouse is now over a droppable panel
-	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
-	
-	void		ShowContextButtons( bool state );
-	bool		ShouldShowContextButtons() const;
+  virtual void OnPanelDropped(CUtlVector<KeyValues *> &msglist);
+  virtual bool IsDroppable(CUtlVector<KeyValues *> &msglist);
+  // Mouse is now over a droppable panel
+  virtual void OnDroppablePanelPaint(CUtlVector<KeyValues *> &msglist,
+                                     CUtlVector<Panel *> &dragPanels);
 
-	int			FindPage( Panel *page ) const;
+  void ShowContextButtons(bool state);
+  bool ShouldShowContextButtons() const;
 
-	bool		PageHasContextMenu( Panel *page ) const;
+  int FindPage(Panel *page) const;
 
-	void		SetKBNavigationEnabled( bool state );
-	bool		IsKBNavigationEnabled() const;
+  bool PageHasContextMenu(Panel *page) const;
 
-	virtual bool HasUserConfigSettings() { return true; }
+  void SetKBNavigationEnabled(bool state);
+  bool IsKBNavigationEnabled() const;
 
-protected:
-	virtual void PaintBorder();
-	virtual void PerformLayout();
-	virtual Panel *HasHotkey(wchar_t key);
-	virtual void ChangeActiveTab(int index);
-	virtual void OnKeyCodeTyped(KeyCode code);
-	virtual void OnCommand(const char *command);
-	virtual void ApplySchemeSettings(IScheme *pScheme);
+  virtual bool HasUserConfigSettings() { return true; }
 
-	// internal message handlers
-	MESSAGE_FUNC_PTR( OnTabPressed, "TabPressed", panel );
-	MESSAGE_FUNC_PTR_WCHARPTR( OnTextChanged, "TextChanged", panel, text );
-	MESSAGE_FUNC_PARAMS( OnOpenContextMenu, "OpenContextMenu", params );
-	MESSAGE_FUNC( OnApplyButtonEnable, "ApplyButtonEnable" );
-	// called when default button has been set
-	MESSAGE_FUNC_PTR( OnDefaultButtonSet, "DefaultButtonSet", button );
-	// called when the current default button has been set
-	MESSAGE_FUNC_PTR( OnCurrentDefaultButtonSet, "CurrentDefaultButtonSet", button);
-    MESSAGE_FUNC( OnFindDefaultButton, "FindDefaultButton" );
+ protected:
+  virtual void PaintBorder();
+  virtual void PerformLayout();
+  virtual Panel *HasHotkey(wchar_t key);
+  virtual void ChangeActiveTab(int index);
+  virtual void OnKeyCodeTyped(KeyCode code);
+  virtual void OnCommand(const char *command);
+  virtual void ApplySchemeSettings(IScheme *pScheme);
 
-private:
-	
-	// enable/disable the page with title "title" 
-	virtual void SetPageEnabled(const char *title,bool state);
+  // internal message handlers
+  MESSAGE_FUNC_PTR(OnTabPressed, "TabPressed", panel);
+  MESSAGE_FUNC_PTR_WCHARPTR(OnTextChanged, "TextChanged", panel, text);
+  MESSAGE_FUNC_PARAMS(OnOpenContextMenu, "OpenContextMenu", params);
+  MESSAGE_FUNC(OnApplyButtonEnable, "ApplyButtonEnable");
+  // called when default button has been set
+  MESSAGE_FUNC_PTR(OnDefaultButtonSet, "DefaultButtonSet", button);
+  // called when the current default button has been set
+  MESSAGE_FUNC_PTR(OnCurrentDefaultButtonSet, "CurrentDefaultButtonSet",
+                   button);
+  MESSAGE_FUNC(OnFindDefaultButton, "FindDefaultButton");
 
-	struct Page_t
-	{
-		Page_t() :
-			page( 0 ),
-			contextMenu( false )
-		{
-		}
+ private:
+  // enable/disable the page with title "title"
+  virtual void SetPageEnabled(const char *title, bool state);
 
-		Panel	*page;
-		bool	contextMenu;
-	};
+  struct Page_t {
+    Page_t() : page(0), contextMenu(false) {}
 
-	CUtlVector<Page_t> m_Pages;
-	CUtlVector<PageTab *> m_PageTabs;
-	Panel *_activePage;
-	PageTab *_activeTab;
-	int _tabWidth;
-	int _activeTabIndex;
-	ComboBox *_combo;
-	bool _showTabs;
-    bool _tabFocus;
+    Panel *page;
+    bool contextMenu;
+  };
 
-	PHandle m_hPreviouslyActivePage;
-	float m_flPageTransitionEffectTime;
-	bool	m_bSmallTabs;
-	HFont	m_tabFont;
-	bool	m_bDraggableTabs;
-	bool	m_bContextButton;
-	bool	m_bKBNavigationEnabled;
+  CUtlVector<Page_t> m_Pages;
+  CUtlVector<PageTab *> m_PageTabs;
+  Panel *_activePage;
+  PageTab *_activeTab;
+  int _tabWidth;
+  int _activeTabIndex;
+  ComboBox *_combo;
+  bool _showTabs;
+  bool _tabFocus;
+
+  PHandle m_hPreviouslyActivePage;
+  float m_flPageTransitionEffectTime;
+  bool m_bSmallTabs;
+  HFont m_tabFont;
+  bool m_bDraggableTabs;
+  bool m_bContextButton;
+  bool m_bKBNavigationEnabled;
 };
 
-}; // namespace vgui
+};  // namespace vgui
 
-#endif // PROPERTYSHEET_H
+#endif  // PROPERTYSHEET_H

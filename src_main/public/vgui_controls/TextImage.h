@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEXTIMAGE_H
 #define TEXTIMAGE_H
@@ -16,7 +16,7 @@
 #include <vgui/ILocalize.h>
 #include <vgui_controls/Image.h>
 
-#include <utlvector.h>
+#include "tier1/UtlVector.h"
 
 class KeyValues;
 
@@ -89,7 +89,7 @@ private:
 	vgui::HFont _font;	// font of the text string
 	vgui::HFont _fallbackFont;
 	int _drawWidth;		// this is the width of the window we are drawing into. 
-						// if there is not enough room truncate the txt	and add an elipsis
+  // if there is not enough room truncate the txt	and add an elipsis
 
 	StringIndex_t _unlocalizedTextSymbol;	// store off the unlocalized text index for build mode
 	wchar_t *m_pwszEllipsesPosition;

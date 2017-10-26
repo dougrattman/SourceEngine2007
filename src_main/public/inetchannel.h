@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef INETCHANNEL_H
 #define INETCHANNEL_H
@@ -41,7 +41,7 @@ public:
 	virtual void	ProcessPlayback( void ) = 0;
 	virtual bool	ProcessStream( void ) = 0;
 	virtual void	ProcessPacket( struct netpacket_s* packet, bool bHasHeader ) = 0;
-			
+ 
 	virtual bool	SendNetMsg(INetMessage &msg, bool bForceReliable = false, bool bVoice = false ) = 0;
 #ifdef _LINUX
 	FORCEINLINE bool SendNetMsg(INetMessage const &msg, bool bForceReliable = false, bool bVoice = false ) { SendNetMsg( *( (INetMessage *) &msg ), bForceReliable, bVoice ); }
@@ -56,11 +56,11 @@ public:
 
 	virtual const netadr_t	&GetRemoteAddress( void ) const = 0;
 	virtual INetChannelHandler *GetMsgHandler( void ) const = 0;
-	virtual int				GetDropNumber( void ) const = 0;
-	virtual int				GetSocket( void ) const = 0;
+	virtual int 	GetDropNumber( void ) const = 0;
+	virtual int 	GetSocket( void ) const = 0;
 	virtual unsigned int	GetChallengeNr( void ) const = 0;
-	virtual void			GetSequenceData( int &nOutSequenceNr, int &nInSequenceNr, int &nOutSequenceNrAck ) = 0;
-	virtual void			SetSequenceData( int nOutSequenceNr, int nInSequenceNr, int nOutSequenceNrAck ) = 0;
+	virtual void GetSequenceData( int &nOutSequenceNr, int &nInSequenceNr, int &nOutSequenceNrAck ) = 0;
+	virtual void SetSequenceData( int nOutSequenceNr, int nInSequenceNr, int nOutSequenceNrAck ) = 0;
 		
 	virtual void	UpdateMessageStats( int msggroup, int bits) = 0;
 	virtual bool	CanPacket( void ) const = 0;

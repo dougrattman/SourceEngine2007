@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Physics cannon
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "player.h"
@@ -326,20 +326,6 @@ static QAngle AlignAngles( const QAngle &angles, float cosineAlignAngle )
 	QAngle out;
 	MatrixAngles( alignMatrix, out );
 	return out;
-}
-
-
-static void TraceCollideAgainstBBox( const CPhysCollide *pCollide, const Vector &start, const Vector &end, const QAngle &angles, const Vector &boxOrigin, const Vector &mins, const Vector &maxs, trace_t *ptr )
-{
-	physcollision->TraceBox( boxOrigin, boxOrigin + (start-end), mins, maxs, pCollide, start, angles, ptr );
-
-	if ( ptr->DidHit() )
-	{
-		ptr->endpos = start * (1-ptr->fraction) + end * ptr->fraction;
-		ptr->startpos = start;
-		ptr->plane.dist = -ptr->plane.dist;
-		ptr->plane.normal *= -1;
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1207,7 +1193,7 @@ public:
 	virtual void	Spawn();
 	virtual void	OnRestore();
 	virtual void	StopLoopingSounds();
-	virtual void	UpdateOnRemove(void);
+	virtual void	UpdateOnRemove();
 	void	PrimaryAttack();
 	void	SecondaryAttack();
 	void	WeaponIdle();

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client-server neutral effects interface
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IEFFECTS_H
 #define IEFFECTS_H
@@ -12,9 +12,9 @@
 #pragma once
 #endif
 
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "mathlib/vector.h"
-#include "interface.h"
+#include "tier1/interface.h"
 #include "ipredictionsystem.h"
 
 //-----------------------------------------------------------------------------
@@ -45,8 +45,8 @@ public:
 	//-----------------------------------------------------------------------------
 	// Purpose: Emits smoke sprites.
 	// Input  : origin - Where to emit the sprites.
-	//			scale - Sprite scale * 10.
-	//			framerate - Framerate at which to animate the smoke sprites.
+	// scale - Sprite scale * 10.
+	// framerate - Framerate at which to animate the smoke sprites.
 	//-----------------------------------------------------------------------------
 	virtual void Smoke( const Vector &origin, int modelIndex, float scale, float framerate ) = 0;
 
@@ -77,6 +77,6 @@ public:
 // Client-server neutral effects interface accessor
 //-----------------------------------------------------------------------------
 extern IEffects *g_pEffects;
-			   
+    
 
 #endif // IEFFECTS_H

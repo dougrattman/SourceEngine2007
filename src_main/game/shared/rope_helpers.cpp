@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "rope_helpers.h"
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "rope_shared.h"
 #include "rope_physics.h"

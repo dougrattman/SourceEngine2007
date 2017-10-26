@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MODINFO_H
 #define MODINFO_H
@@ -28,7 +28,7 @@ public:
 	// loads mod info from gameinfo.txt
 	void LoadCurrentGameInfo();
 
-	// loads gameinfo from null-terminated string
+	// loads gameinfo from 0-terminated string
 	void LoadGameInfoFromBuffer( const char *buffer );
 
 	// data accessors

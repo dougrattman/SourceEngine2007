@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ANIMATIONLAYER_H
 #define ANIMATIONLAYER_H
@@ -11,7 +11,7 @@
 #endif
 
 
-#include "rangecheckedvar.h"
+#include "tier1/rangecheckedvar.h"
 #include "lerp_functions.h"
 
 class C_AnimationLayer
@@ -85,13 +85,13 @@ inline float C_AnimationLayer::GetFadeout( float flCurTime )
 		s = 1.0 - (flCurTime - m_flLayerAnimtime) / m_flLayerFadeOuttime;
 		if (s > 0 && s <= 1.0)
 		{
-			// do a nice spline curve
-			s = 3 * s * s - 2 * s * s * s;
+ // do a nice spline curve
+ s = 3 * s * s - 2 * s * s * s;
 		}
 		else if ( s > 1.0f )
 		{
-			// Shouldn't happen, but maybe curtime is behind animtime?
-			s = 1.0f;
+ // Shouldn't happen, but maybe curtime is behind animtime?
+ s = 1.0f;
 		}
 	}
 	return s;

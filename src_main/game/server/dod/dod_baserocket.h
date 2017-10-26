@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_BASEROCKET_H
 #define DOD_BASEROCKET_H
@@ -56,7 +56,7 @@ protected:
 	void FlyThink( void );
 
 	CHandle<SmokeTrail>	m_hRocketTrail;
-	float					m_flDamage;
+	float 		m_flDamage;
 
 	CNetworkVector( m_vInitialVelocity );
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: DOD's objective resource, transmits all objective states to players
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_OBJECTIVE_RESOURCE_H
 #define DOD_OBJECTIVE_RESOURCE_H
@@ -21,7 +21,7 @@ public:
 	DECLARE_DATADESC();
 
 	virtual void Spawn( void );
-	virtual int  UpdateTransmitState(void);
+	virtual int  UpdateTransmitState();
 
 	void ResetControlPoints( void );
 
@@ -72,13 +72,13 @@ private:
 
 	// change when players enter/exit an area
 	CNetworkArray(  int,	m_iNumAllies,		MAX_CONTROL_POINTS );
-	CNetworkArray(  int,	m_iNumAxis,			MAX_CONTROL_POINTS );
+	CNetworkArray(  int,	m_iNumAxis, MAX_CONTROL_POINTS );
 
 	// changes when a cap starts. start and end times are calculated on client
 	CNetworkArray(	int,	m_iCappingTeam,		MAX_CONTROL_POINTS );
 
 	// changes when a point is successfully captured
-	CNetworkArray(  int,    m_iOwner,			MAX_CONTROL_POINTS );
+	CNetworkArray(  int,    m_iOwner, MAX_CONTROL_POINTS );
 };
 
 extern CDODObjectiveResource *g_pObjectiveResource;

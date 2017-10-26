@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WEAPON_OBJECTSELECTION_H
 #define WEAPON_OBJECTSELECTION_H
@@ -58,12 +58,12 @@ protected:
 
 #ifdef CLIENT_DLL
 	CHudTexture		*m_pSelectionTexture;
-	bool			m_bNeedSpriteSetup;
+	bool m_bNeedSpriteSetup;
 	vgui::HFont		m_hNumberFont;
 #endif
 
-private:														
-	CWeaponObjectSelection( const CWeaponObjectSelection & );						
+private:    		
+	CWeaponObjectSelection( const CWeaponObjectSelection & );  
 };
 
 #endif // WEAPON_OBJECTSELECTION_H

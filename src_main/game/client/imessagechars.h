@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IMESSAGECHARS_H )
 #define IMESSAGECHARS_H
 #ifdef _WIN32
@@ -38,11 +38,11 @@ public:
 
 	// messageID can be MESSAGESTRINGID_NONE or MESSAGESTRINGID_BASE plus some offset. You can refer to the message by
 	// its ID later.
-	virtual int			DrawString( vgui::HFont pCustomFont, int x, int y, int r, int g, int b, int a, const char *fmt, int messageID, ... ) = 0;
-	virtual int			DrawString( vgui::HFont pCustomFont, int x, int y, const char *fmt, int messageID, ... ) = 0;
+	virtual int DrawString( vgui::HFont pCustomFont, int x, int y, int r, int g, int b, int a, const char *fmt, int messageID, ... ) = 0;
+	virtual int DrawString( vgui::HFont pCustomFont, int x, int y, const char *fmt, int messageID, ... ) = 0;
 	
-	virtual int			DrawStringForTime( float flTime, vgui::HFont pCustomFont, int x, int y, int r, int g, int b, int a, const char *fmt, int messageID,  ... ) = 0;
-	virtual int			DrawStringForTime( float flTime, vgui::HFont pCustomFont, int x, int y, const char *fmt, int messageID, ... ) = 0;
+	virtual int DrawStringForTime( float flTime, vgui::HFont pCustomFont, int x, int y, int r, int g, int b, int a, const char *fmt, int messageID,  ... ) = 0;
+	virtual int DrawStringForTime( float flTime, vgui::HFont pCustomFont, int x, int y, const char *fmt, int messageID, ... ) = 0;
 	
 	// Remove all messages with the specified ID (passed into DrawStringForTime).
 	virtual void		RemoveStringsByID( int messageID ) = 0;

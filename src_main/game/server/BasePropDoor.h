@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A base class for model-based doors. The exact movement required to
-//			open or close the door is not dictated by this class, only that
-//			the door has open, closed, opening, and closing states.
+// open or close the door is not dictated by this class, only that
+// the door has open, closed, opening, and closing states.
 //
-//			Doors must satisfy these requirements:
+// Doors must satisfy these requirements:
 //
-//			- Derived classes must support being opened by NPCs.
-//			- Never autoclose in the face of a player.
-//			- Never close into an NPC.
+// - Derived classes must support being opened by NPCs.
+// - Never autoclose in the face of a player.
+// - Never close into an NPC.
 //
-//=============================================================================//
+
 
 #ifndef BASEPROPDOOR_H
 #define BASEPROPDOOR_H
@@ -151,7 +151,7 @@ private:
 	void MasterStartBlocked( CBaseEntity *pOther );
 
 	void Blocked(CBaseEntity *pOther);
-	void EndBlocked(void);
+	void EndBlocked();
 	void OnEndBlocked( void );
 
 	void UpdateAreaPortals(bool bOpen);
@@ -175,21 +175,21 @@ private:
 	
 	DoorState_t m_eDoorState;	// Holds whether the door is open, closed, opening, or closing.
 
-	locksound_t m_ls;			// The sounds the door plays when being locked, unlocked, etc.
+	locksound_t m_ls; // The sounds the door plays when being locked, unlocked, etc.
 	EHANDLE		m_hActivator;		
 	
-	bool	m_bLocked;				// True if the door is locked.
-	EHANDLE	m_hBlocker;				// Entity blocking the door currently
+	bool	m_bLocked; 	// True if the door is locked.
+	EHANDLE	m_hBlocker; 	// Entity blocking the door currently
 	bool	m_bFirstBlocked;		// Marker for being the first door (in a group) to be blocked (needed for motion control)
 
-	bool m_bForceClosed;			// True if this door must close no matter what.
+	bool m_bForceClosed; // True if this door must close no matter what.
 
 	string_t m_SoundMoving;
 	string_t m_SoundOpen;
 	string_t m_SoundClose;
 
 	// dvs: FIXME: can we remove m_flSpeed from CBaseEntity?
-	//float m_flSpeed;			// Rotation speed when opening or closing in degrees per second.
+	//float m_flSpeed; // Rotation speed when opening or closing in degrees per second.
 
 	DECLARE_DATADESC();
 
@@ -204,11 +204,11 @@ private:
 	COutputEvent m_OnBlockedOpening;		// Triggered when the door becomes blocked while opening.
 	COutputEvent m_OnUnblockedClosing;		// Triggered when the door becomes unblocked while closing.
 	COutputEvent m_OnUnblockedOpening;		// Triggered when the door becomes unblocked while opening.
-	COutputEvent m_OnFullyClosed;			// Triggered when the door reaches the fully closed position.
-	COutputEvent m_OnFullyOpen;				// Triggered when the door reaches the fully open position.
-	COutputEvent m_OnClose;					// Triggered when the door is told to close.
-	COutputEvent m_OnOpen;					// Triggered when the door is told to open.
-	COutputEvent m_OnLockedUse;				// Triggered when the user tries to open a locked door.
+	COutputEvent m_OnFullyClosed; // Triggered when the door reaches the fully closed position.
+	COutputEvent m_OnFullyOpen; 	// Triggered when the door reaches the fully open position.
+	COutputEvent m_OnClose; 		// Triggered when the door is told to close.
+	COutputEvent m_OnOpen; 		// Triggered when the door is told to open.
+	COutputEvent m_OnLockedUse; 	// Triggered when the user tries to open a locked door.
 };
 
 

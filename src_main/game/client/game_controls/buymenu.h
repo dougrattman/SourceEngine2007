@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BUYMENU_H
 #define BUYMENU_H
@@ -54,8 +54,8 @@ protected:
 	CBuySubMenu *m_pMainMenu;
 	IViewPort	*m_pViewPort;
 	
-	int			m_iTeam;
-	int			m_iClass;
+	int m_iTeam;
+	int m_iClass;
 };
 
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Holds the enumerated list of default cursors
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DAR_H
 #define DAR_H
@@ -12,8 +12,8 @@
 #pragma once
 #endif
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <vgui/VGUI.h>
 #include "tier1/utlvector.h"
 
@@ -54,15 +54,15 @@ public:
 	void MoveElementToEnd( ELEMTYPE elem )
 	{
 		if ( Count() == 0 )
-			return;
+ return;
 
 		// quick check to see if it's already at the end
 		if ( Element( Count() - 1 ) == elem )
-			return;
+ return;
 
 		int idx = Find( elem );
 		if ( idx == InvalidIndex() )
-			return;
+ return;
 
 		Remove( idx );
 		AddToTail( elem );
@@ -76,7 +76,7 @@ public:
 	{
 		if ( FindElement(elem) != InvalidIndex() )
 		{
-			return true;
+ return true;
 		}
 		return false;
 	}
@@ -85,7 +85,7 @@ public:
 		int index = FindElement(elem);
 		if (index >= 0)
 		{
-			return index;
+ return index;
 		}
 		return AddElement(elem);
 	}
@@ -107,7 +107,7 @@ public:
 	void RemoveElementsBefore(int index)
 	{
 		if ( index <= 0 )
-			return;
+ return;
 		RemoveMultiple( 0, index - 1 );
 	}  
 

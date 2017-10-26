@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // This is a helper class designed to help with the chains of modal dialogs
 // encountered when trying to open or save a particular file
@@ -56,17 +56,17 @@ class FileOpenStateMachine : public Panel
 public:
 	enum CompletionState_t
 	{
-		IN_PROGRESS = 0,				// Still not finished, not successful or error
-		SUCCESSFUL,						// Operation finished successfully
-		FILE_SAVE_CANCELLED,			// The user chose 'cancel' in the dialog asking if he wanted to save
+		IN_PROGRESS = 0, 	// Still not finished, not successful or error
+		SUCCESSFUL,  // Operation finished successfully
+		FILE_SAVE_CANCELLED, // The user chose 'cancel' in the dialog asking if he wanted to save
 		FILE_SAVE_NAME_NOT_SPECIFIED,	// User hit cancel in the SaveAs dialog
-		FILE_NOT_OVERWRITTEN,			// Operation aborted; existed file and user chose to not write over it
-		FILE_NOT_CHECKED_OUT,			// Operation aborted; file wasn't checked out so couldn't be written over
-		ERROR_WRITING_FILE,				// Error occurred writing the file out
+		FILE_NOT_OVERWRITTEN, // Operation aborted; existed file and user chose to not write over it
+		FILE_NOT_CHECKED_OUT, // Operation aborted; file wasn't checked out so couldn't be written over
+		ERROR_WRITING_FILE, 	// Error occurred writing the file out
 		ERROR_MAKING_FILE_WRITEABLE,	// Error occurred when making the file writeable
 		FILE_NOT_MADE_WRITEABLE,		// User chose to not make the file be writeable
 		FILE_OPEN_NAME_NOT_SPECIFIED,	// User hit cancel in the Open dialog
-		ERROR_READING_FILE,				// Error occurred reading the file in
+		ERROR_READING_FILE, 	// Error occurred reading the file in
 	};
 
 	FileOpenStateMachine( vgui::Panel *pParent, IFileOpenStateMachineClient *pClient );
@@ -87,12 +87,12 @@ public:
 
 	/* MESSAGES SENT
 		"FileStateMachineFinished" - Called when we exit the state machine for any reason
-			"completionState" - See the CompletionState_t enum above
-			"wroteFile" - Indicates whether a file was written or not
-			"fullPath" - Indicates the full path of the file read for OpenFile or written for SaveFile
-			"fileType" - Indicates the file type of the file read for OpenFile or written for SaveFile
-			Use GetFirstTrueSubKey() to get the context passed into the OpenFile/SaveFile methods
-	*/									  
+ "completionState" - See the CompletionState_t enum above
+ "wroteFile" - Indicates whether a file was written or not
+ "fullPath" - Indicates the full path of the file read for OpenFile or written for SaveFile
+ "fileType" - Indicates the file type of the file read for OpenFile or written for SaveFile
+ Use GetFirstTrueSubKey() to get the context passed into the OpenFile/SaveFile methods
+	*/     
 
 private:
 	enum FOSMState_t

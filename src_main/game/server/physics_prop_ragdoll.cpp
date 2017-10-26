@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "baseanimating.h"
@@ -14,7 +14,7 @@
 #include "datacache/imdlcache.h"
 #include "bone_setup.h"
 #include "physics_prop_ragdoll.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "props.h"
 #include "RagdollBoogie.h"
 #include "AI_Criteria.h"
@@ -256,7 +256,7 @@ void CRagdollProp::UpdateOnRemove( void )
 		}
 	}
 
-	// Set to null so that the destructor's call to DestroyObject won't destroy
+	// Set to 0 so that the destructor's call to DestroyObject won't destroy
 	//  m_pObjects[ 0 ] twice since that's the physics object for the prop
 	VPhysicsSetObject( NULL );
 

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PORTAL_PLAYERANIMSTATE_H
 #define PORTAL_PLAYERANIMSTATE_H
@@ -11,7 +11,7 @@
 #endif
 
 
-#include "convar.h"
+#include "tier1/convar.h"
 #include "multiplayer_animstate.h"
 
 
@@ -51,7 +51,7 @@ public:
 	~CPortalPlayerAnimState();
 
 	void InitPortal( CPortal_Player *pPlayer );
-	CPortal_Player *GetPortalPlayer( void )							{ return m_pPortalPlayer; }
+	CPortal_Player *GetPortalPlayer( void )  	{ return m_pPortalPlayer; }
 
 	virtual void ClearAnimationState();
 

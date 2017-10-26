@@ -170,7 +170,7 @@ typedef D3DXMATERIAL *LPD3DXMATERIAL;
 
 typedef enum _D3DXEFFECTDEFAULTTYPE
 {
-    D3DXEDT_STRING = 0x1,       // pValue points to a null terminated ASCII string 
+    D3DXEDT_STRING = 0x1,       // pValue points to a 0 terminated ASCII string 
     D3DXEDT_FLOATS = 0x2,       // pValue points to an array of floats - number of floats is NumBytes / sizeof(float)
     D3DXEDT_DWORD  = 0x3,       // pValue points to a DWORD
 

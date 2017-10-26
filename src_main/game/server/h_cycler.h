@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef H_CYCLER_H
 #define H_CYCLER_H
@@ -35,7 +35,7 @@ public:
 
 	DECLARE_DATADESC();
 
-	int			m_animate;
+	int m_animate;
 };
 
 #endif // H_CYCLER_H

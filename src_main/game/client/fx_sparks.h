@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "particles_simple.h"
 #include "particlemgr.h"
@@ -19,20 +19,20 @@
 #include "tier0/memdbgon.h"
 
 #define	bitsPARTICLE_TRAIL_VELOCITY_DAMPEN	0x00000001	//Dampen the velocity as the particles move
-#define	bitsPARTICLE_TRAIL_COLLIDE			0x00000002	//Do collision with simulation
-#define	bitsPARTICLE_TRAIL_FADE				0x00000004	//Fade away
-#define	bitsPARTICLE_TRAIL_FADE_IN			0x00000008	//Fade in
+#define	bitsPARTICLE_TRAIL_COLLIDE 0x00000002	//Do collision with simulation
+#define	bitsPARTICLE_TRAIL_FADE 	0x00000004	//Fade away
+#define	bitsPARTICLE_TRAIL_FADE_IN 0x00000008	//Fade in
 
 class TrailParticle : public Particle
 {
 public:
 
 	Vector		m_vecVelocity;
-	color32		m_color;				// Particle color
-	float		m_flDieTime;			// How long it lives for.
-	float		m_flLifetime;			// How long it has been alive for so far.
-	float		m_flLength;				// Length of the tail (in seconds!)
-	float		m_flWidth;				// Width of the spark
+	color32		m_color; 	// Particle color
+	float		m_flDieTime; // How long it lives for.
+	float		m_flLifetime; // How long it has been alive for so far.
+	float		m_flLength; 	// Length of the tail (in seconds!)
+	float		m_flWidth; 	// Width of the spark
 };
 
 inline void Color32ToFloat4( float colorOut[4], const color32 & colorIn )
@@ -84,7 +84,7 @@ public:
 	//Setup for point emission
 	virtual void	Setup( const Vector &origin, const Vector *direction, float angularSpread, float minSpeed, float maxSpeed, float gravity, float dampen, int flags, bool bNotCollideable = false );
 	
-	void SetFlag( int flags )				{	m_fFlags |= flags;	}
+	void SetFlag( int flags ) 	{	m_fFlags |= flags;	}
 	void SetVelocityDampen( float dampen )	{	m_flVelocityDampen = dampen;	}
 	void SetGravity( float gravity )		{	m_ParticleCollision.SetGravity( gravity );	}
 	void SetCollisionDamped( float dampen )	{	m_ParticleCollision.SetCollisionDampen( dampen );	}
@@ -94,8 +94,8 @@ public:
 
 protected:
 
-	int					m_fFlags;
-	float				m_flVelocityDampen;
+	int 		m_fFlags;
+	float 	m_flVelocityDampen;
 
 private:
 	CTrailParticles( const CTrailParticles & ); // not defined, not accessible
@@ -154,8 +154,8 @@ protected:
 	void SetVisibleInView( unsigned char viewMask, bool bVisible );
 	unsigned char CurrentViewMask() const;
 
-	float				m_flDeathTime;			// How long it has been alive for so far.
-	float				m_startTime;
+	float 	m_flDeathTime; // How long it has been alive for so far.
+	float 	m_startTime;
 	pixelvis_handle_t	m_queryHandle;
 private:
 	unsigned char		m_wasTested;

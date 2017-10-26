@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FUNC_AREAPORTALWINDOW_H
 #define FUNC_AREAPORTALWINDOW_H
@@ -13,7 +13,7 @@
 
 
 #include "baseentity.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 #include "func_areaportalbase.h"
 
 
@@ -25,8 +25,8 @@ public:
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
 
-					CFuncAreaPortalWindow();
-					~CFuncAreaPortalWindow();
+ 		CFuncAreaPortalWindow();
+ 		~CFuncAreaPortalWindow();
 
 
 // Overrides.

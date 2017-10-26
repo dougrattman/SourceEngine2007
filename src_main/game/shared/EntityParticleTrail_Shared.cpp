@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Drops particles where the entity was.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "entityparticletrail_shared.h"

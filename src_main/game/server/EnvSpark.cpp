@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A point entity that periodically emits sparks and "bzzt" sounds.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "IEffects.h"
@@ -41,9 +41,9 @@ class CEnvSpark : public CPointEntity
 public:
 	CEnvSpark( void );
 
-	void	Spawn(void);
-	void	Precache(void);
-	void	SparkThink(void);
+	void	Spawn();
+	void	Precache();
+	void	SparkThink();
 
 	// Input handlers
 	void InputStartSpark( inputdata_t &inputdata );

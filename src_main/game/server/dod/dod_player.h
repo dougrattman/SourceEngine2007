@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Player for HL1.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_PLAYER_H
 #define DOD_PLAYER_H
@@ -89,11 +89,11 @@ public:
 	static CDODPlayer* Instance( int iEnt );
 
 	// This passes the event to the client's and server's CPlayerAnimState.
-	void			DoAnimationEvent( PlayerAnimEvent_t event, int nData = 0 );
-	void			SetupBones( matrix3x4_t *pBoneToWorld, int boneMask );
+	void DoAnimationEvent( PlayerAnimEvent_t event, int nData = 0 );
+	void SetupBones( matrix3x4_t *pBoneToWorld, int boneMask );
 
 	virtual void	Precache();
-	void			PrecachePlayerModel( const char *szPlayerModel );
+	void PrecachePlayerModel( const char *szPlayerModel );
 	virtual void	Spawn();
 	virtual void	InitialSpawn( void );
 		
@@ -108,10 +108,10 @@ public:
 
 	virtual void	Event_Killed( const CTakeDamageInfo &info );
 	virtual void	TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
-	void			Pain( void );
-	void			OnDamagedByExplosion( const CTakeDamageInfo &info );
-	void			OnDamageByStun( const CTakeDamageInfo &info );
-	void			DeafenThink( void );
+	void Pain( void );
+	void OnDamagedByExplosion( const CTakeDamageInfo &info );
+	void OnDamageByStun( const CTakeDamageInfo &info );
+	void DeafenThink( void );
 
 	virtual void	UpdateGeigerCounter( void ) {}
 	virtual void	CheckTrainUpdate( void ) {}
@@ -121,13 +121,13 @@ public:
 	virtual bool	SetObserverMode(int mode); // sets new observer mode, returns true if successful
 		
 	// from CBasePlayer
-	void			SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs, int pvssize );
+	void SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs, int pvssize );
 
 	CBaseEntity*	EntSelectSpawnPoint();
 
-	void			ChangeTeam( int iTeamNum );
+	void ChangeTeam( int iTeamNum );
 
-	bool			CanMove( void ) const;
+	bool CanMove( void ) const;
 
 	virtual void	SharedSpawn();
 
@@ -138,38 +138,38 @@ public:
 	virtual const Vector	GetPlayerMins( void ) const; // uses local player
 	virtual const Vector	GetPlayerMaxs( void ) const; // uses local player
 
-	void			DODRespawn( void );
+	void DODRespawn( void );
 
 	virtual void	SetAnimation( PLAYER_ANIM playerAnim );
 
 	CBaseEntity	*	GiveNamedItem( const char *pszName, int iSubType = 0 );
 
-	bool			Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon );
+	bool Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon );
 
-	void			SetScore( int score );
-	void			AddScore( int num );
-	int				GetScore( void ) { return m_iScore; }
-	int				m_iScore;
+	void SetScore( int score );
+	void AddScore( int num );
+	int 	GetScore( void ) { return m_iScore; }
+	int 	m_iScore;
 
 	// Simulates a single frame of movement for a player
 	void RunPlayerMove( const QAngle& viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, byte impulse, float frametime );
 
 
 	//Damage record functions
-	void			RecordDamageTaken( CDODPlayer *pAttacker, int iDamageTaken );
-	void			RecordWorldDamageTaken( int iDamageTaken );
-	void			RecordDamageGiven( CDODPlayer *pVictim, int iDamageGiven );
-	void			ResetDamageCounters();	//Reset all lists
+	void RecordDamageTaken( CDODPlayer *pAttacker, int iDamageTaken );
+	void RecordWorldDamageTaken( int iDamageTaken );
+	void RecordDamageGiven( CDODPlayer *pVictim, int iDamageGiven );
+	void ResetDamageCounters();	//Reset all lists
 
-	void			OutputDamageTaken( void );
-	void			OutputDamageGiven( void );
+	void OutputDamageTaken( void );
+	void OutputDamageGiven( void );
 
 	// Voice Commands
 	//============
-	void HandleCommand_Voice( const char *pcmd );			// player submitted a raw voice_ command
+	void HandleCommand_Voice( const char *pcmd ); // player submitted a raw voice_ command
 	void HandleCommand_HandSignal( const char *pcmd );		// player wants to show a hand signal
-	void VoiceCommand( int iVoiceCommand );					// internal voice command function
-	void HandSignal( int iSignal );							// same for hand signals
+	void VoiceCommand( int iVoiceCommand ); 		// internal voice command function
+	void HandSignal( int iSignal );  	// same for hand signals
 
 	float m_flNextVoice;
 	float m_flNextHandSignal;
@@ -199,31 +199,31 @@ public:
 	//Area Signals
 	//============
 	//to determine if the player is in a sandbag trigger
-	CUnifiedSignals		m_signals;				// Player signals (buy zone, bomb zone, etc.)
+	CUnifiedSignals		m_signals; 	// Player signals (buy zone, bomb zone, etc.)
 
-	int					m_iCapAreaIconIndex;	//which area's icon to show - we are not necessarily capping it.
-	int					m_iObjectAreaIndex;		//if the player is in an object cap area, which one?
+	int 		m_iCapAreaIconIndex;	//which area's icon to show - we are not necessarily capping it.
+	int 		m_iObjectAreaIndex;		//if the player is in an object cap area, which one?
 
-	void				SetCapAreaIndex( int index );
-	int					GetCapAreaIndex( void );
-	void				ClearCapAreaIndex() { SetCapAreaIndex(-1); }
+	void 	SetCapAreaIndex( int index );
+	int 		GetCapAreaIndex( void );
+	void 	ClearCapAreaIndex() { SetCapAreaIndex(-1); }
 
-	void				SetCPIndex( int index );
+	void 	SetCPIndex( int index );
 		
-	float				m_fHandleSignalsTime;	//time to next check the area signals
-	void				HandleSignals( void );	//check if signals need to do anything, like turn icons on or off
+	float 	m_fHandleSignalsTime;	//time to next check the area signals
+	void 	HandleSignals( void );	//check if signals need to do anything, like turn icons on or off
 
-	bool				ShouldAutoReload( void ) { return m_bAutoReload; }
-	void				SetAutoReload( bool bAutoReload ) { m_bAutoReload = bAutoReload; }
+	bool 	ShouldAutoReload( void ) { return m_bAutoReload; }
+	void 	SetAutoReload( bool bAutoReload ) { m_bAutoReload = bAutoReload; }
 
-	bool				ShouldAutoRezoom( void ) { return m_bAutoRezoom; }
-	void				SetAutoRezoom( bool bAutoRezoom ) { m_bAutoRezoom = bAutoRezoom; }
+	bool 	ShouldAutoRezoom( void ) { return m_bAutoRezoom; }
+	void 	SetAutoRezoom( bool bAutoRezoom ) { m_bAutoRezoom = bAutoRezoom; }
 
 	// Hints
 	virtual CHintSystem	*Hints( void ) { return &m_Hints; }
 	
 	// Reset all scores
-	void				ResetScores( void );
+	void 	ResetScores( void );
 
 	int GetHealthAsString( char *pDest, int iDestSize );
 	int GetLastPlayerIDAsString( char *pDest, int iDestSize );
@@ -263,7 +263,7 @@ public:
 public:
 
 	void State_Transition( DODPlayerState newState );
-	DODPlayerState State_Get() const;				// Get the current state.
+	DODPlayerState State_Get() const; 	// Get the current state.
 
 	void MoveToNextIntroCamera();	//Cycle view through available intro cameras
  
@@ -361,8 +361,8 @@ private:
 	void CheckRotateIntroCam( void );
 
 	void State_Enter( DODPlayerState newState );	// Initialize the new state.
-	void State_Leave();								// Cleanup the previous state.
-	void State_PreThink();							// Update the current state.
+	void State_Leave();  		// Cleanup the previous state.
+	void State_PreThink();  	// Update the current state.
 
 	// Specific state handler functions.
 	void State_Enter_WELCOME();
@@ -422,7 +422,7 @@ private:
 	bool HandleCommand_JoinTeam( int iTeam );
 	bool HandleCommand_JoinClass( int iClass );
 	
-	CDODPlayerStateInfo *m_pCurStateInfo;			// This can be NULL if no state info is defined for m_iPlayerState.
+	CDODPlayerStateInfo *m_pCurStateInfo; // This can be NULL if no state info is defined for m_iPlayerState.
 
 	bool	m_bTeamChanged;		//have we changed teams this spawn? Used to enforce one team switch per death rule
 
@@ -459,7 +459,7 @@ private:
 
 	float m_flMinNextStepSoundTime;
 	
-	int m_LastHitGroup;			// the last body region that took damage
+	int m_LastHitGroup; // the last body region that took damage
 	int m_LastDamageType;		// the type of damage we last took
 
 	bool m_bPlayingProneMoveSound;

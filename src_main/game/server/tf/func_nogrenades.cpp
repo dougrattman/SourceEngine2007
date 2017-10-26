@@ -2,7 +2,7 @@
 //
 // Purpose: CTF NoGrenades Zone.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "tf_player.h"

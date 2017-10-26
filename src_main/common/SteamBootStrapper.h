@@ -1,35 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-
-//*********** (C) Copyright 2000 Valve, L.L.C. All rights reserved. ***********
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
-//
-//*****************************************************************************
-//
-// Contents:
-//
-//		
-//
-// Authors:
-//
-// Target restrictions:
-//
-// Tool restrictions:
-//
-// Things to do:
-//
-//		
-//
-//*****************************************************************************
 
 #ifndef INCLUDED_STEAM_BOOTSTRAPPER_H
 #define INCLUDED_STEAM_BOOTSTRAPPER_H
@@ -38,40 +12,33 @@
 #pragma once
 #endif
 
-
 //*****************************************************************************
 //
 // 'Local' build control section.
 //
 //*****************************************************************************
 
-#if  (BUILD_MODE == BUILD_MODE_RELEASE_NORMAL)  ||  (BUILD_MODE == BUILD_MODE_RELEASE_TEST)
-
+#if (BUILD_MODE == BUILD_MODE_RELEASE_NORMAL) || \
+    (BUILD_MODE == BUILD_MODE_RELEASE_TEST)
 
 #elif BUILD_MODE == BUILD_MODE_DEBUG_NORMAL
 
-
 #else
-	// 'Safe' default settings.  This allows new build modes to be added to the 
-	// project without requiring the manual updating of all 'local build control' 
-	// sections in every module and header file.
+// 'Safe' default settings.  This allows new build modes to be added to the
+// project without requiring the manual updating of all 'local build control'
+// sections in every module and header file.
 
 #endif
-
-
 
 //*****************************************************************************
 //
 // Include files required by this header.
 //
-// Note: Do NOT place any 'using' directives or declarations in header files - 
-// put them at the top of the source files that require them.  
-// Use fully-qualified names in header files. 
+// Note: Do NOT place any 'using' directives or declarations in header files -
+// put them at the top of the source files that require them.
+// Use fully-qualified names in header files.
 //
 //*****************************************************************************
-
-
-
 
 //*****************************************************************************
 //
@@ -80,13 +47,11 @@
 //
 //*****************************************************************************
 
-
-namespace 
-{
-	// constant definitions here
+namespace {
+// constant definitions here
 }
 
-#define szSteamBootStrapperIconIdEnvVar  "__STEAM_BOOTSTRAPPER_ICON_ID__"
+#define szSteamBootStrapperIconIdEnvVar "__STEAM_BOOTSTRAPPER_ICON_ID__"
 
 //*****************************************************************************
 //
@@ -95,13 +60,9 @@ namespace
 //
 //*****************************************************************************
 
-
-namespace 
-{
+namespace {
 // scalar and enumerated type definitions here
 }
-
-
 
 //*****************************************************************************
 //
@@ -110,13 +71,9 @@ namespace
 //
 //*****************************************************************************
 
-
-namespace 
-{
-	// class, structure, and complex type definitions here
+namespace {
+// class, structure, and complex type definitions here
 }
-
-
 
 //*****************************************************************************
 //
@@ -126,13 +83,9 @@ namespace
 //
 //*****************************************************************************
 
-
-namespace 
-{
-	// function prototypes here
+namespace {
+// function prototypes here
 }
-
-
 
 //*****************************************************************************
 //
@@ -142,21 +95,14 @@ namespace
 //
 //*****************************************************************************
 
-
-namespace 
-{
-	// variable and data declarations here
+namespace {
+// variable and data declarations here
 }
-
-
 
 //*****************************************************************************
 //
 // Inline function definitions.
 //
 //*****************************************************************************
-
-
-
 
 #endif

@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "BuySubMenu.h"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/WizardPanel.h>
 #include <FileSystem.h>
 #include <game/client/iviewport.h>

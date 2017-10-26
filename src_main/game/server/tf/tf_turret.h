@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -38,42 +38,42 @@ typedef enum
 class CBaseTurret : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	virtual void Precache(void);
+	void Spawn();
+	virtual void Precache();
 	void KeyValue( KeyValueData *pkvd );
 	void EXPORT TurretUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	
 	virtual void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int	 TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
-	virtual int	 Classify(void);
+	virtual int	 Classify();
 
 	int BloodColor( void ) { return DONT_BLEED; }
 	void GibMonster( void ) {}	// UNDONE: Throw turret gibs?
 
 	// Think functions
 
-	void EXPORT ActiveThink(void);
-	void EXPORT SearchThink(void);
-	void EXPORT AutoSearchThink(void);
-	void EXPORT TurretDeath(void);
+	void EXPORT ActiveThink();
+	void EXPORT SearchThink();
+	void EXPORT AutoSearchThink();
+	void EXPORT TurretDeath();
 
-	virtual void EXPORT SpinDownCall(void) { m_iSpin = 0; }
-	virtual void EXPORT SpinUpCall(void) { m_iSpin = 1; }
+	virtual void EXPORT SpinDownCall() { m_iSpin = 0; }
+	virtual void EXPORT SpinUpCall() { m_iSpin = 1; }
 
-	// void SpinDown(void);
+	// void SpinDown();
 	// float EXPORT SpinDownCall( void ) { return SpinDown(); }
 
-	// virtual float SpinDown(void) { return 0;}
-	// virtual float Retire(void) { return 0;}
+	// virtual float SpinDown() { return 0;}
+	// virtual float Retire() { return 0;}
 
-	void EXPORT Deploy(void);
-	void EXPORT Retire(void);
+	void EXPORT Deploy();
+	void EXPORT Retire();
 	
-	void EXPORT Initialize(void);
+	void EXPORT Initialize();
 
-	virtual void Ping(void);
-	virtual void EyeOn(void);
-	virtual void EyeOff(void);
+	virtual void Ping();
+	virtual void EyeOn();
+	virtual void EyeOff();
 
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
@@ -82,7 +82,7 @@ public:
 
 	// other functions
 	void SetTurretAnim(TURRET_ANIM anim);
-	int MoveTurret(void);
+	int MoveTurret();
 	virtual void Shoot(Vector &vecSrc, Vector &vecDirToEnemy) { };
 
 	float m_flMaxSpin;		// Max time to spin the barrel w/o a target
@@ -99,9 +99,9 @@ public:
 	float m_fTurnRate;		// actual turn rate
 	int m_iOrientation;		// 0 = floor, 1 = Ceiling
 	int	m_iOn;
-	int m_fBeserk;			// Sometimes this bitch will just freak out
+	int m_fBeserk; // Sometimes this bitch will just freak out
 	int m_iAutoStart;		// true if the turret auto deploys when a target
-							// enters its range
+  	// enters its range
 
 	Vector m_vecLastSight;
 	float m_flLastSight;	// Last time we saw a target
@@ -156,11 +156,11 @@ IMPLEMENT_SAVERESTORE( CBaseTurret, CBaseMonster );
 class CTurret : public CBaseTurret
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	// Think functions
-	void SpinUpCall(void);
-	void SpinDownCall(void);
+	void SpinUpCall();
+	void SpinDownCall();
 
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
@@ -186,7 +186,7 @@ class CMiniTurret : public CBaseTurret
 {
 public:
 	void Spawn( );
-	void Precache(void);
+	void Precache();
 	// other functions
 	void Shoot(Vector &vecSrc, Vector &vecDirToEnemy);
 };
@@ -220,10 +220,10 @@ void CBaseTurret::KeyValue( KeyValueData *pkvd )
 		pkvd->fHandled = TRUE;
 	}
 	else if (FStrEq(pkvd->szKeyName, "style") ||
-			 FStrEq(pkvd->szKeyName, "height") ||
-			 FStrEq(pkvd->szKeyName, "value1") ||
-			 FStrEq(pkvd->szKeyName, "value2") ||
-			 FStrEq(pkvd->szKeyName, "value3"))
+  FStrEq(pkvd->szKeyName, "height") ||
+  FStrEq(pkvd->szKeyName, "value1") ||
+  FStrEq(pkvd->szKeyName, "value2") ||
+  FStrEq(pkvd->szKeyName, "value3"))
 		pkvd->fHandled = TRUE;
 	else
 		CBaseMonster::KeyValue( pkvd );
@@ -236,8 +236,8 @@ void CBaseTurret::Spawn()
 	pev->nextthink		= gpGlobals->time + 1;
 	pev->movetype		= MOVETYPE_FLY;
 	pev->sequence		= 0;
-	pev->frame			= 0;
-	pev->solid			= SOLID_SLIDEBOX;
+	pev->frame = 0;
+	pev->solid = SOLID_SLIDEBOX;
 
 	// Make turrets invulnerable in multiplayer
 	if (gpGlobals->deathmatch)
@@ -288,7 +288,7 @@ void CTurret::Spawn()
 { 
 	Precache( );
 	SET_MODEL(ENT(pev), "models/turret.mdl");
-	pev->health			= gSkillData.turretHealth;
+	pev->health = gSkillData.turretHealth;
 	m_HackedGunPos		= Vector( 0, 0, 12.75 );
 	m_flMaxSpin =		TURRET_MAXSPIN;
 	pev->view_ofs.z = 12.75;
@@ -321,7 +321,7 @@ void CMiniTurret::Spawn()
 { 
 	Precache( );
 	SET_MODEL(ENT(pev), "models/miniturret.mdl");
-	pev->health			= gSkillData.miniturretHealth;
+	pev->health = gSkillData.miniturretHealth;
 	m_HackedGunPos		= Vector( 0, 0, 12.75 );
 	m_flMaxSpin = 0;
 	pev->view_ofs.z = 12.75;
@@ -359,17 +359,17 @@ void CBaseTurret::Initialize(void)
 	{
 		// Make turrets turn faster in multiplayer
 		if (gpGlobals->deathmatch)
-			m_iBaseTurnRate = TURRET_TURNRATE * 2;
+ m_iBaseTurnRate = TURRET_TURNRATE * 2;
 		else
-			m_iBaseTurnRate = TURRET_TURNRATE;
+ m_iBaseTurnRate = TURRET_TURNRATE;
 	}
 	if (m_flMaxWait == 0) 
 	{
 		// Make turrets retarget faster
 		//if (gpGlobals->deathmatch)
-			//m_flMaxWait = 1;
+ //m_flMaxWait = 1;
 		//else
-			m_flMaxWait = TURRET_MAXWAIT;
+ m_flMaxWait = TURRET_MAXWAIT;
 	}
 	m_flStartYaw = pev->angles.y;
 	if (m_iOrientation == 1)
@@ -380,7 +380,7 @@ void CBaseTurret::Initialize(void)
 		pev->effects |= EF_INVLIGHT;
 		pev->angles.y = pev->angles.y + 180;
 		if (pev->angles.y > 360)
-			pev->angles.y = pev->angles.y - 360;
+ pev->angles.y = pev->angles.y - 360;
 	}
 
 	m_vecGoalAngles.x = 0;
@@ -415,7 +415,7 @@ void CBaseTurret::TurretUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 		// if the turret is flagged as an autoactivate turret, re-enable it's ability open self.
 		if ( pev->spawnflags & SF_MONSTER_TURRET_AUTOACTIVATE )
 		{
-			m_iAutoStart = TRUE;
+ m_iAutoStart = TRUE;
 		}
 		
 		SetThink(&CBaseTurret::Deploy);
@@ -447,7 +447,7 @@ void CBaseTurret::EyeOn( )
 	{
 		if (m_eyeBrightness != 255)
 		{
-			m_eyeBrightness = 255;
+ m_eyeBrightness = 255;
 		}
 		m_pEyeGlow->SetBrightness( m_eyeBrightness );
 	}
@@ -460,8 +460,8 @@ void CBaseTurret::EyeOff( )
 	{
 		if (m_eyeBrightness > 0)
 		{
-			m_eyeBrightness = max( 0, m_eyeBrightness - 30 );
-			m_pEyeGlow->SetBrightness( m_eyeBrightness );
+ m_eyeBrightness = max( 0, m_eyeBrightness - 30 );
+ m_pEyeGlow->SetBrightness( m_eyeBrightness );
 		}
 	}
 }
@@ -488,17 +488,17 @@ void CBaseTurret::ActiveThink(void)
 	{
 		if (!m_flLastSight)
 		{
-			m_flLastSight = gpGlobals->time + 0.5; // continue-shooting timeout
+ m_flLastSight = gpGlobals->time + 0.5; // continue-shooting timeout
 		}
 		else
 		{
-			if (gpGlobals->time > m_flLastSight)
-			{	
-				m_hEnemy = NULL;
-				m_flLastSight = gpGlobals->time + m_flMaxWait;
-				SetThink(&CBaseTurret::SearchThink);
-				return;
-			}
+ if (gpGlobals->time > m_flLastSight)
+ {	
+ 	m_hEnemy = NULL;
+ 	m_flLastSight = gpGlobals->time + m_flMaxWait;
+ 	SetThink(&CBaseTurret::SearchThink);
+ 	return;
+ }
 		}
 	}
 
@@ -518,18 +518,18 @@ void CBaseTurret::ActiveThink(void)
 	{
 		if (!m_flLastSight)
 		{
-			m_flLastSight = gpGlobals->time + 0.5;
+ m_flLastSight = gpGlobals->time + 0.5;
 		}
 		else
 		{
-			// Should we look for a new target?
-			if (gpGlobals->time > m_flLastSight)
-			{
-				m_hEnemy = NULL;
-				m_flLastSight = gpGlobals->time + m_flMaxWait;
-				SetThink(&CBaseTurret::SearchThink);
-				return;
-			}
+ // Should we look for a new target?
+ if (gpGlobals->time > m_flLastSight)
+ {
+ 	m_hEnemy = NULL;
+ 	m_flLastSight = gpGlobals->time + m_flMaxWait;
+ 	SetThink(&CBaseTurret::SearchThink);
+ 	return;
+ }
 		}
 		fEnemyVisible = 0;
 	}
@@ -564,14 +564,14 @@ void CBaseTurret::ActiveThink(void)
 		// In deathmatch, they just shoot right at you
 		if (gpGlobals->deathmatch)
 		{
-			// Adjust for feigning spies
-			vecAng = m_hEnemy->Center() - vecSrc;
-			UTIL_MakeVectors(vecAng);
-			Shoot(vecSrc,  vecAng);
+ // Adjust for feigning spies
+ vecAng = m_hEnemy->Center() - vecSrc;
+ UTIL_MakeVectors(vecAng);
+ Shoot(vecSrc,  vecAng);
 		}
 		else
 		{
-			Shoot(vecSrc, gpGlobals->v_forward );
+ Shoot(vecSrc, gpGlobals->v_forward );
 		}
 	} 
 	else
@@ -584,44 +584,44 @@ void CBaseTurret::ActiveThink(void)
 	{
 		if (RANDOM_LONG(0,9) == 0)
 		{
-			m_vecGoalAngles.y = RANDOM_FLOAT(0,360);
-			m_vecGoalAngles.x = RANDOM_FLOAT(0,90) - 90 * m_iOrientation;
-			TakeDamage(pev,pev,1, DMG_GENERIC); // don't beserk forever
-			return;
+ m_vecGoalAngles.y = RANDOM_FLOAT(0,360);
+ m_vecGoalAngles.x = RANDOM_FLOAT(0,90) - 90 * m_iOrientation;
+ TakeDamage(pev,pev,1, DMG_GENERIC); // don't beserk forever
+ return;
 		}
 	} 
 	else if (fEnemyVisible)
 	{
 		if (vec.y > 360)
-			vec.y -= 360;
+ vec.y -= 360;
 
 		if (vec.y < 0)
-			vec.y += 360;
+ vec.y += 360;
 
 		//ALERT(at_console, "[%.2f]", vec.x);
 		
 		if (vec.x < -180)
-			vec.x += 360;
+ vec.x += 360;
 
 		if (vec.x > 180)
-			vec.x -= 360;
+ vec.x -= 360;
 
 		// now all numbers should be in [1...360]
 		// pin to turret limitations to [-90...15]
 
 		if (m_iOrientation == 0)
 		{
-			if (vec.x > 90)
-				vec.x = 90;
-			else if (vec.x < m_iMinPitch)
-				vec.x = m_iMinPitch;
+ if (vec.x > 90)
+ 	vec.x = 90;
+ else if (vec.x < m_iMinPitch)
+ 	vec.x = m_iMinPitch;
 		}
 		else
 		{
-			if (vec.x < -90)
-				vec.x = -90;
-			else if (vec.x > -m_iMinPitch)
-				vec.x = -m_iMinPitch;
+ if (vec.x < -90)
+ 	vec.x = -90;
+ else if (vec.x > -m_iMinPitch)
+ 	vec.x = -m_iMinPitch;
 		}
 
 		// ALERT(at_console, "->[%.2f]\n", vec.x);
@@ -689,11 +689,11 @@ void CBaseTurret::Deploy(void)
 
 		if (m_iOrientation == 1)
 		{
-			m_vecCurAngles.y = UTIL_AngleMod( pev->angles.y + 180 );
+ m_vecCurAngles.y = UTIL_AngleMod( pev->angles.y + 180 );
 		}
 		else
 		{
-			m_vecCurAngles.y = UTIL_AngleMod( pev->angles.y );
+ m_vecCurAngles.y = UTIL_AngleMod( pev->angles.y );
 		}
 
 		SetTurretAnim(TURRET_ANIM_SPIN);
@@ -720,29 +720,29 @@ void CBaseTurret::Retire(void)
 	{
 		if (m_iSpin)
 		{
-			SpinDownCall();
+ SpinDownCall();
 		}
 		else if (pev->sequence != TURRET_ANIM_RETIRE)
 		{
-			SetTurretAnim(TURRET_ANIM_RETIRE);
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "turret/tu_deploy.wav", TURRET_MACHINE_VOLUME, ATTN_NORM, 0, 120);
-			SUB_UseTargets( this, USE_OFF, 0 );
+ SetTurretAnim(TURRET_ANIM_RETIRE);
+ EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "turret/tu_deploy.wav", TURRET_MACHINE_VOLUME, ATTN_NORM, 0, 120);
+ SUB_UseTargets( this, USE_OFF, 0 );
 		}
 		else if (m_fSequenceFinished) 
 		{	
-			m_iOn = 0;
-			m_flLastSight = 0;
-			SetTurretAnim(TURRET_ANIM_NONE);
-			pev->maxs.z = m_iRetractHeight;
-			pev->mins.z = -m_iRetractHeight;
-			UTIL_SetSize(pev, pev->mins, pev->maxs);
-			if (m_iAutoStart)
-			{
-				SetThink(&CBaseTurret::AutoSearchThink);		
-				pev->nextthink = gpGlobals->time + .1;
-			}
-			else
-				SetThink(&CBaseTurret::SUB_DoNothing);
+ m_iOn = 0;
+ m_flLastSight = 0;
+ SetTurretAnim(TURRET_ANIM_NONE);
+ pev->maxs.z = m_iRetractHeight;
+ pev->mins.z = -m_iRetractHeight;
+ UTIL_SetSize(pev, pev->mins, pev->maxs);
+ if (m_iAutoStart)
+ {
+ 	SetThink(&CBaseTurret::AutoSearchThink);		
+ 	pev->nextthink = gpGlobals->time + .1;
+ }
+ else
+ 	SetThink(&CBaseTurret::SUB_DoNothing);
 		}
 	}
 	else
@@ -764,23 +764,23 @@ void CTurret::SpinUpCall(void)
 		// for the first pass, spin up the the barrel
 		if (!m_iStartSpin)
 		{
-			pev->nextthink = gpGlobals->time + 1.0; // spinup delay
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_spinup.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
-			m_iStartSpin = 1;
-			pev->framerate = 0.1;
+ pev->nextthink = gpGlobals->time + 1.0; // spinup delay
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_spinup.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
+ m_iStartSpin = 1;
+ pev->framerate = 0.1;
 		}
 		// after the barrel is spun up, turn on the hum
 		else if (pev->framerate >= 1.0)
 		{
-			pev->nextthink = gpGlobals->time + 0.1; // retarget delay
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
-			SetThink(&CTurret::ActiveThink);
-			m_iStartSpin = 0;
-			m_iSpin = 1;
+ pev->nextthink = gpGlobals->time + 0.1; // retarget delay
+ EMIT_SOUND(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
+ SetThink(&CTurret::ActiveThink);
+ m_iStartSpin = 0;
+ m_iSpin = 1;
 		} 
 		else
 		{
-			pev->framerate += 0.075;
+ pev->framerate += 0.075;
 		}
 	}
 
@@ -798,14 +798,14 @@ void CTurret::SpinDownCall(void)
 		SetTurretAnim( TURRET_ANIM_SPIN );
 		if (pev->framerate == 1.0)
 		{
-			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", 0, 0, SND_STOP, 100);
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "turret/tu_spindown.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
+ EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", 0, 0, SND_STOP, 100);
+ EMIT_SOUND(ENT(pev), CHAN_ITEM, "turret/tu_spindown.wav", TURRET_MACHINE_VOLUME, ATTN_NORM);
 		}
 		pev->framerate -= 0.02;
 		if (pev->framerate <= 0)
 		{
-			pev->framerate = 0;
-			m_iSpin = 0;
+ pev->framerate = 0;
+ m_iSpin = 0;
 		}
 	}
 }
@@ -819,14 +819,14 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 		{
 		case TURRET_ANIM_FIRE:
 		case TURRET_ANIM_SPIN:
-			if (pev->sequence != TURRET_ANIM_FIRE && pev->sequence != TURRET_ANIM_SPIN)
-			{
-				pev->frame = 0;
-			}
-			break;
+ if (pev->sequence != TURRET_ANIM_FIRE && pev->sequence != TURRET_ANIM_SPIN)
+ {
+ 	pev->frame = 0;
+ }
+ break;
 		default:
-			pev->frame = 0;
-			break;
+ pev->frame = 0;
+ break;
 		}
 
 		pev->sequence = anim;
@@ -835,12 +835,12 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 		switch(anim)
 		{
 		case TURRET_ANIM_RETIRE:
-			pev->frame			= 255;
-			pev->framerate		= -1.0;
-			break;
+ pev->frame = 255;
+ pev->framerate		= -1.0;
+ break;
 		case TURRET_ANIM_DIE:
-			pev->framerate		= 1.0;
-			break;
+ pev->framerate		= 1.0;
+ break;
 		}
 		//ALERT(at_console, "Turret anim #%d\n", anim);
 	}
@@ -868,7 +868,7 @@ void CBaseTurret::SearchThink(void)
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive() )
-			m_hEnemy = NULL;// Dead enemy forces a search for new one
+ m_hEnemy = NULL;// Dead enemy forces a search for new one
 	}
 
 
@@ -891,21 +891,21 @@ void CBaseTurret::SearchThink(void)
 		// Are we out of time, do we need to retract?
  		if (gpGlobals->time > m_flLastSight)
 		{
-			//Before we retrace, make sure that we are spun down.
-			m_flLastSight = 0;
-			m_flSpinUpTime = 0;
-			SetThink(&CBaseTurret::Retire);
+ //Before we retrace, make sure that we are spun down.
+ m_flLastSight = 0;
+ m_flSpinUpTime = 0;
+ SetThink(&CBaseTurret::Retire);
 		}
 		// should we stop the spin?
 		else if ((m_flSpinUpTime) && (gpGlobals->time > m_flSpinUpTime))
 		{
-			SpinDownCall();
+ SpinDownCall();
 		}
 		
 		// generic hunt for new victims
 		m_vecGoalAngles.y = (m_vecGoalAngles.y + 0.1 * m_fTurnRate);
 		if (m_vecGoalAngles.y >= 360)
-			m_vecGoalAngles.y -= 360;
+ m_vecGoalAngles.y -= 360;
 		MoveTurret();
 	}
 }
@@ -928,7 +928,7 @@ void CBaseTurret::AutoSearchThink(void)
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive() )
-			m_hEnemy = NULL;// Dead enemy forces a search for new one
+ m_hEnemy = NULL;// Dead enemy forces a search for new one
 	}
 
 	// Acquire Target
@@ -961,18 +961,18 @@ void CBaseTurret ::	TurretDeath( void )
 		float flRndSound = RANDOM_FLOAT ( 0 , 1 );
 
 		if ( flRndSound <= 0.33 )
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die.wav", 1.0, ATTN_NORM);
 		else if ( flRndSound <= 0.66 )
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die2.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die2.wav", 1.0, ATTN_NORM);
 		else 
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die3.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die3.wav", 1.0, ATTN_NORM);
 
 		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", 0, 0, SND_STOP, 100);
 
 		if (m_iOrientation == 0)
-			m_vecGoalAngles.x = -15;
+ m_vecGoalAngles.x = -15;
 		else
-			m_vecGoalAngles.x = -90;
+ m_vecGoalAngles.x = -90;
 
 		SetTurretAnim(TURRET_ANIM_DIE); 
 
@@ -985,13 +985,13 @@ void CBaseTurret ::	TurretDeath( void )
 	{
 		// lots of smoke
 		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_SMOKE );
-			WRITE_COORD( RANDOM_FLOAT( pev->absmin.x, pev->absmax.x ) );
-			WRITE_COORD( RANDOM_FLOAT( pev->absmin.y, pev->absmax.y ) );
-			WRITE_COORD( pev->origin.z - m_iOrientation * 64 );
-			WRITE_SHORT( g_sModelIndexSmoke );
-			WRITE_BYTE( 25 ); // scale * 10
-			WRITE_BYTE( 10 - m_iOrientation * 5); // framerate
+ WRITE_BYTE( TE_SMOKE );
+ WRITE_COORD( RANDOM_FLOAT( pev->absmin.x, pev->absmax.x ) );
+ WRITE_COORD( RANDOM_FLOAT( pev->absmin.y, pev->absmax.y ) );
+ WRITE_COORD( pev->origin.z - m_iOrientation * 64 );
+ WRITE_SHORT( g_sModelIndexSmoke );
+ WRITE_BYTE( 25 ); // scale * 10
+ WRITE_BYTE( 10 - m_iOrientation * 5); // framerate
 		MESSAGE_END();
 	}
 	
@@ -999,9 +999,9 @@ void CBaseTurret ::	TurretDeath( void )
 	{
 		Vector vecSrc = Vector( RANDOM_FLOAT( pev->absmin.x, pev->absmax.x ), RANDOM_FLOAT( pev->absmin.y, pev->absmax.y ), 0 );
 		if (m_iOrientation == 0)
-			vecSrc = vecSrc + Vector( 0, 0, RANDOM_FLOAT( pev->origin.z, pev->absmax.z ) );
+ vecSrc = vecSrc + Vector( 0, 0, RANDOM_FLOAT( pev->origin.z, pev->absmax.z ) );
 		else
-			vecSrc = vecSrc + Vector( 0, 0, RANDOM_FLOAT( pev->absmin.z, pev->origin.z ) );
+ vecSrc = vecSrc + Vector( 0, 0, RANDOM_FLOAT( pev->absmin.z, pev->origin.z ) );
 
 		UTIL_Sparks( vecSrc );
 	}
@@ -1022,8 +1022,8 @@ void CBaseTurret :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 		// hit armor
 		if ( pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0,10) < 1) )
 		{
-			UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT( 1, 2) );
-			pev->dmgtime = gpGlobals->time;
+ UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT( 1, 2) );
+ pev->dmgtime = gpGlobals->time;
 		}
 
 		flDamage = 0.1;// don't hurt the monster much, but allow bits_COND_LIGHT_DAMAGE to be generated
@@ -1066,8 +1066,8 @@ int CBaseTurret::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	{
 		if (m_iOn && (1 || RANDOM_LONG(0, 0x7FFF) > 800))
 		{
-			m_fBeserk = 1;
-			SetThink(&CBaseTurret::SearchThink);
+ m_fBeserk = 1;
+ SetThink(&CBaseTurret::SearchThink);
 		}
 	}
 
@@ -1088,19 +1088,19 @@ int CBaseTurret::MoveTurret(void)
 		// if we started below the goal, and now we're past, peg to goal
 		if (flDir == 1)
 		{
-			if (m_vecCurAngles.x > m_vecGoalAngles.x)
-				m_vecCurAngles.x = m_vecGoalAngles.x;
+ if (m_vecCurAngles.x > m_vecGoalAngles.x)
+ 	m_vecCurAngles.x = m_vecGoalAngles.x;
 		} 
 		else
 		{
-			if (m_vecCurAngles.x < m_vecGoalAngles.x)
-				m_vecCurAngles.x = m_vecGoalAngles.x;
+ if (m_vecCurAngles.x < m_vecGoalAngles.x)
+ 	m_vecCurAngles.x = m_vecGoalAngles.x;
 		}
 
 		if (m_iOrientation == 0)
-			SetBoneController(1, -m_vecCurAngles.x);
+ SetBoneController(1, -m_vecCurAngles.x);
 		else
-			SetBoneController(1, m_vecCurAngles.x);
+ SetBoneController(1, m_vecCurAngles.x);
 		state = 1;
 	}
 
@@ -1111,40 +1111,40 @@ int CBaseTurret::MoveTurret(void)
 		
 		if (flDist > 180)
 		{
-			flDist = 360 - flDist;
-			flDir = -flDir;
+ flDist = 360 - flDist;
+ flDir = -flDir;
 		}
 		if (flDist > 30)
 		{
-			if (m_fTurnRate < m_iBaseTurnRate * 10)
-			{
-				m_fTurnRate += m_iBaseTurnRate;
-			}
+ if (m_fTurnRate < m_iBaseTurnRate * 10)
+ {
+ 	m_fTurnRate += m_iBaseTurnRate;
+ }
 		}
 		else if (m_fTurnRate > 45)
 		{
-			m_fTurnRate -= m_iBaseTurnRate;
+ m_fTurnRate -= m_iBaseTurnRate;
 		}
 		else
 		{
-			m_fTurnRate += m_iBaseTurnRate;
+ m_fTurnRate += m_iBaseTurnRate;
 		}
 
 		m_vecCurAngles.y += 0.1 * m_fTurnRate * flDir;
 
 		if (m_vecCurAngles.y < 0)
-			m_vecCurAngles.y += 360;
+ m_vecCurAngles.y += 360;
 		else if (m_vecCurAngles.y >= 360)
-			m_vecCurAngles.y -= 360;
+ m_vecCurAngles.y -= 360;
 
 		if (flDist < (0.05 * m_iBaseTurnRate))
-			m_vecCurAngles.y = m_vecGoalAngles.y;
+ m_vecCurAngles.y = m_vecGoalAngles.y;
 
 		//ALERT(at_console, "%.2f -> %.2f\n", m_vecCurAngles.y, y);
 		if (m_iOrientation == 0)
-			SetBoneController(0, m_vecCurAngles.y - pev->angles.y );
+ SetBoneController(0, m_vecCurAngles.y - pev->angles.y );
 		else 
-			SetBoneController(0, pev->angles.y - 180 - m_vecCurAngles.y );
+ SetBoneController(0, pev->angles.y - 180 - m_vecCurAngles.y );
 		state = 1;
 	}
 
@@ -1176,7 +1176,7 @@ class CSentry : public CBaseTurret
 {
 public:
 	void Spawn( );
-	void Precache(void);
+	void Precache();
 	// other functions
 	void Shoot(Vector &vecSrc, Vector &vecDirToEnemy);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
@@ -1197,7 +1197,7 @@ void CSentry::Spawn()
 { 
 	Precache( );
 	SET_MODEL(ENT(pev), "models/sentry.mdl");
-	pev->health			= gSkillData.sentryHealth;
+	pev->health = gSkillData.sentryHealth;
 	m_HackedGunPos		= Vector( 0, 0, 48 );
 	pev->view_ofs.z		= 48;
 	m_flMaxWait = 1E6;
@@ -1287,11 +1287,11 @@ void CSentry ::	SentryDeath( void )
 		float flRndSound = RANDOM_FLOAT ( 0 , 1 );
 
 		if ( flRndSound <= 0.33 )
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die.wav", 1.0, ATTN_NORM);
 		else if ( flRndSound <= 0.66 )
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die2.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die2.wav", 1.0, ATTN_NORM);
 		else 
-			EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die3.wav", 1.0, ATTN_NORM);
+ EMIT_SOUND(ENT(pev), CHAN_BODY, "turret/tu_die3.wav", 1.0, ATTN_NORM);
 
 		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "turret/tu_active2.wav", 0, 0, SND_STOP, 100);
 
@@ -1315,13 +1315,13 @@ void CSentry ::	SentryDeath( void )
 	{
 		// lots of smoke
 		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_SMOKE );
-			WRITE_COORD( vecSrc.x + RANDOM_FLOAT( -16, 16 ) );
-			WRITE_COORD( vecSrc.y + RANDOM_FLOAT( -16, 16 ) );
-			WRITE_COORD( vecSrc.z - 32 );
-			WRITE_SHORT( g_sModelIndexSmoke );
-			WRITE_BYTE( 15 ); // scale * 10
-			WRITE_BYTE( 8 ); // framerate
+ WRITE_BYTE( TE_SMOKE );
+ WRITE_COORD( vecSrc.x + RANDOM_FLOAT( -16, 16 ) );
+ WRITE_COORD( vecSrc.y + RANDOM_FLOAT( -16, 16 ) );
+ WRITE_COORD( vecSrc.z - 32 );
+ WRITE_SHORT( g_sModelIndexSmoke );
+ WRITE_BYTE( 15 ); // scale * 10
+ WRITE_BYTE( 8 ); // framerate
 		MESSAGE_END();
 	}
 	

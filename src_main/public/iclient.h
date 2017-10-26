@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ICLIENT_H
 #define ICLIENT_H
@@ -29,17 +29,17 @@ public:
 	virtual void	Inactivate( void ) = 0;
 	
 	// Reconnect without dropiing the netchannel
-	virtual	void	Reconnect( void ) = 0;				// froce reconnect
+	virtual	void	Reconnect( void ) = 0; 	// froce reconnect
 
 	// disconnects a client with a given reason
 	virtual void	Disconnect( const char *reason, ... ) = 0;
 
-	virtual int				GetPlayerSlot() const = 0; // returns client slot (usually entity number-1)
-	virtual int				GetUserID() const = 0; // unique ID on this server 
+	virtual int 	GetPlayerSlot() const = 0; // returns client slot (usually entity number-1)
+	virtual int 	GetUserID() const = 0; // unique ID on this server 
 	virtual const USERID_t	GetNetworkID() const = 0; // network wide ID
 	virtual const char		*GetClientName() const = 0;	// returns client name
 	virtual INetChannel		*GetNetChannel() = 0; // returns client netchannel
-	virtual IServer			*GetServer() = 0; // returns the object server the client belongs to
+	virtual IServer *GetServer() = 0; // returns the object server the client belongs to
 	virtual const char		*GetUserSetting(const char *cvar) const = 0; // returns a clients FCVAR_USERINFO setting
 	virtual const char		*GetNetworkIDString() const = 0; // returns a human readable representation of the network id
 

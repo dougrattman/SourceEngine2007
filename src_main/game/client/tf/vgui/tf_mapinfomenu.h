@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_MAPINFOMENU_H
 #define TF_MAPINFOMENU_H
@@ -59,21 +59,21 @@ private:
 	void CheckBackContinueButtons();
 
 protected:
-	IViewPort			*m_pViewPort;
-	CTFLabel			*m_pTitle;
-	CTFRichText			*m_pMapInfo;
+	IViewPort *m_pViewPort;
+	CTFLabel *m_pTitle;
+	CTFRichText *m_pMapInfo;
 
 #ifdef _X360
-	CTFFooter			*m_pFooter;
+	CTFFooter *m_pFooter;
 #else
-	CTFButton			*m_pContinue;
-	CTFButton			*m_pBack;
-	CTFButton			*m_pIntro;
+	CTFButton *m_pContinue;
+	CTFButton *m_pBack;
+	CTFButton *m_pIntro;
 #endif
 
 	vgui::ImagePanel	*m_pMapImage;
 
-	char				m_szMapName[MAX_PATH];
+	char 	m_szMapName[MAX_PATH];
 
 	vgui::CKeyRepeatHandler	m_KeyRepeat;
 };

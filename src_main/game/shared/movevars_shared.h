@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef MOVEVARS_SHARED_H
 #define MOVEVARS_SHARED_H
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "convar.h"
+#include "tier1/convar.h"
 
 extern ConVar sv_gravity;
 extern ConVar sv_stopspeed;

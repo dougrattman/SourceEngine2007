@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef OPTIONS_SUB_PORTAL_H
 #define OPTIONS_SUB_PORTAL_H
@@ -51,7 +51,7 @@ private:
 	}
 
 	CCvarToggleCheckButton		*m_pPortalFunnelCheckBox;
-	vgui::ComboBox				*m_pPortalDepthCombo;
+	vgui::ComboBox 	*m_pPortalDepthCombo;
 };
 
 

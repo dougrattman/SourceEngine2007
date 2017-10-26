@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IENGINEVGUI_H )
 #define IENGINEVGUI_H
 
@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1/interface.h"
 #include "vgui/VGUI.h"
 
 // Forward declarations.
@@ -43,11 +43,11 @@ enum PaintMode_t
 abstract_class IEngineVGui
 {
 public:
-	virtual					~IEngineVGui( void ) { }
+	virtual 		~IEngineVGui( void ) { }
 
 	virtual vgui::VPANEL	GetPanel( VGuiPanel_t type ) = 0;
 
-	virtual bool			IsGameUIVisible() = 0;
+	virtual bool IsGameUIVisible() = 0;
 };
 
 #define VENGINE_VGUI_VERSION	"VEngineVGui001"

@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Basic button control
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <stdio.h>
+
+#include <cstdio>
 #include <UtlSymbol.h>
 
 #include <vgui/IBorder.h>
@@ -16,7 +16,7 @@
 #include <vgui/IVGui.h>
 #include <vgui/MouseCode.h>
 #include <vgui/KeyCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/Button.h>
 #include <vgui_controls/FocusNavGroup.h>

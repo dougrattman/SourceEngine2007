@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #define PROTECTED_THINGS_DISABLE
 
@@ -13,13 +13,13 @@
 #include <vgui_controls/ImageList.h>
 #include <vgui_controls/MessageBox.h>
 #include <vgui/Cursor.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IInput.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
 
 #include <direct.h>
-#include <stdio.h>
+#include <cstdio>
 #include <io.h>
 #include <sys/types.h>
 #include <sys/stat.h>

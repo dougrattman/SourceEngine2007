@@ -24,7 +24,7 @@
 
 #include "screenspaceeffects.h"
 #include "dod_view_scene.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "dod_gamerules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

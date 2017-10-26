@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -79,13 +79,13 @@ public:
 	static ITextureInternal *CreateFileTexture( const char *pFileName, const char *pTextureGroupName );
 	
 	static ITextureInternal *CreateProceduralTexture( 
-		const char			*pTextureName,
-		const char			*pTextureGroupName, 
-		int					w, 
-		int					h,
-		int					d,
-		ImageFormat			fmt, 
-		int					nFlags );
+		const char *pTextureName,
+		const char *pTextureGroupName, 
+		int 		w, 
+		int 		h,
+		int 		d,
+		ImageFormat fmt, 
+		int 		nFlags );
 
 	static ITextureInternal *CreateRenderTarget( 
 		const char *pRTName, // NULL for an auto-generated name.

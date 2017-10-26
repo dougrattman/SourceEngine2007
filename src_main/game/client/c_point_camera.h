@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_POINTCAMERA_H
 #define C_POINTCAMERA_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "c_baseentity.h"
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 
 class C_PointCamera : public C_BaseEntity
 {
@@ -29,14 +29,14 @@ public:
 	// C_BaseEntity.
 	virtual bool	ShouldDraw();
 
-	float			GetFOV();
-	float			GetResolution();
-	bool			IsFogEnabled();
-	void			GetFogColor( unsigned char &r, unsigned char &g, unsigned char &b );
-	float			GetFogStart();
-	float			GetFogMaxDensity();
-	float			GetFogEnd();
-	bool			UseScreenAspectRatio() const { return m_bUseScreenAspectRatio; }
+	float GetFOV();
+	float GetResolution();
+	bool IsFogEnabled();
+	void GetFogColor( unsigned char &r, unsigned char &g, unsigned char &b );
+	float GetFogStart();
+	float GetFogMaxDensity();
+	float GetFogEnd();
+	bool UseScreenAspectRatio() const { return m_bUseScreenAspectRatio; }
 
 	virtual void	GetToolRecordingState( KeyValues *msg );
 

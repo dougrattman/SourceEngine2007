@@ -51,6 +51,10 @@ static TypeMap_t TypeMap[] =
 	{ ivVecLine,			"vecline",				STRING },
 	{ ivPointEntityClass,	"pointentityclass",		STRING },
 	{ ivNodeDest,			"node_dest",			INTEGER },
+	{ ivInstanceFile,		"instance_file",		STRING },
+	{ ivAngleNegativePitch,	"angle_negative_pitch",	STRING },
+	{ ivInstanceVariable,	"instance_variable",	STRING },
+	{ ivInstanceParm,		"instance_parm",		STRING },
 };
 
 
@@ -71,11 +75,30 @@ GDinputvariable::GDinputvariable(void)
 
 
 //-----------------------------------------------------------------------------
+// Purpose: construct generally used for creating a temp instance parm type
+// Input  : szType - the textual type of this variable
+//			szName - the name description of this variable
+//-----------------------------------------------------------------------------
+GDinputvariable::GDinputvariable( const char *szType, const char *szName )
+{
+	m_szDefault[0] = 0;
+	m_nDefault = 0;
+	m_szValue[0] = 0;
+	m_bReportable = FALSE;
+	m_bReadOnly = false;
+	m_pszDescription = NULL;
+
+	m_eType = GetTypeFromToken( szType );
+	strcpy( m_szName, szName );
+}
+
+
+//-----------------------------------------------------------------------------
 // Purpose: Destructor.
 //-----------------------------------------------------------------------------
 GDinputvariable::~GDinputvariable(void)
 {
-	delete m_pszDescription;
+	delete [] m_pszDescription;
 	m_Items.RemoveAll();
 }
 
@@ -93,7 +116,7 @@ GDinputvariable &GDinputvariable::operator =(GDinputvariable &Other)
 	//
 	// Copy the description.
 	//
-	delete m_pszDescription;
+	delete [] m_pszDescription;
 	if (Other.m_pszDescription != NULL)
 	{
 		m_pszDescription = new char[strlen(Other.m_pszDescription) + 1];
@@ -346,6 +369,13 @@ BOOL GDinputvariable::InitFromTokens(TokenReader& tr)
 			//
 			// Read the description.
 			//
+
+			// If we've already read a description then free it to avoid memory leaks.
+			if ( m_pszDescription )
+			{
+				delete [] m_pszDescription;
+				m_pszDescription = NULL;
+			}
 			if (!GDGetTokenDynamic(tr, &m_pszDescription, STRING))
 			{
 				return(FALSE);
@@ -683,6 +713,17 @@ const char *GDinputvariable::ItemValueForString(const char *szString)
 	}
 
 	return(NULL);
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: this function will let you iterate through the text names of the variable types
+// Input  : eType - the type to get the text of
+// Output : returns the textual name
+//-----------------------------------------------------------------------------
+const char *GDinputvariable::GetVarTypeName( GDIV_TYPE eType )
+{
+	return TypeMap[ eType ].pszName;
 }
 
 

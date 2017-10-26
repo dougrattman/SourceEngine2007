@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Utility functions for using debug overlays to visualize information
 //			in the world.  Uses the IVDebugOverlay interface.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "debugoverlay_shared.h"

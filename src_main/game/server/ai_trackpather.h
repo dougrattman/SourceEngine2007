@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_TRACKPATHER_H
 #define AI_TRACKPATHER_H
@@ -25,31 +25,31 @@ class CAI_TrackPather : public CAI_BaseNPC
 	DECLARE_DATADESC();
 public:
 
-	bool			IsOnPathTrack()							{ return (m_pCurrentPathTarget != NULL); }
+	bool IsOnPathTrack()  	{ return (m_pCurrentPathTarget != NULL); }
 
 protected:	
-	void			InitPathingData( float flTrackArrivalTolerance, float flTargetDistance, float flAvoidDistance );
+	void InitPathingData( float flTrackArrivalTolerance, float flTargetDistance, float flAvoidDistance );
 	virtual bool	GetTrackPatherTarget( Vector *pPos ) { return false; }
 	virtual CBaseEntity *GetTrackPatherTargetEnt()	{ return NULL; }
 
-	const Vector &	GetDesiredPosition() const				{ return m_vecDesiredPosition; 	}
-	void 			SetDesiredPosition( const Vector &v )	{ m_vecDesiredPosition = v; 	}
-	const Vector &	GetGoalOrientation() const				{ return m_vecGoalOrientation; 	}
-	void 			SetGoalOrientation( const Vector &v )	{ m_vecGoalOrientation = v; 	}
+	const Vector &	GetDesiredPosition() const 	{ return m_vecDesiredPosition; 	}
+	void  SetDesiredPosition( const Vector &v )	{ m_vecDesiredPosition = v; 	}
+	const Vector &	GetGoalOrientation() const 	{ return m_vecGoalOrientation; 	}
+	void  SetGoalOrientation( const Vector &v )	{ m_vecGoalOrientation = v; 	}
 
-	bool			CurPathTargetIsDest()					{ return ( m_pDestPathTarget == m_pCurrentPathTarget ); }
+	bool CurPathTargetIsDest() 		{ return ( m_pDestPathTarget == m_pCurrentPathTarget ); }
 
-	virtual bool	HasReachedTarget( void ) 				{ return (WorldSpaceCenter() - m_vecDesiredPosition).Length() < 128; }
+	virtual bool	HasReachedTarget( void )  	{ return (WorldSpaceCenter() - m_vecDesiredPosition).Length() < 128; }
 
-	CPathTrack *	GetDestPathTarget()						{ return m_pDestPathTarget;		}
+	CPathTrack *	GetDestPathTarget()  { return m_pDestPathTarget;		}
 
-	bool			IsInForcedMove() const					{ return m_bForcedMove;			}
-	void			ClearForcedMove()						{ m_bForcedMove = false;		}
+	bool IsInForcedMove() const 		{ return m_bForcedMove; }
+	void ClearForcedMove()  { m_bForcedMove = false;		}
 
-	float			GetPathMaxSpeed() const					{ return m_flPathMaxSpeed;		}
+	float GetPathMaxSpeed() const 		{ return m_flPathMaxSpeed;		}
 
-	void			OnSave( IEntitySaveUtils *pUtils );
-	void			OnRestore( void );
+	void OnSave( IEntitySaveUtils *pUtils );
+	void OnRestore( void );
 
 protected:
 	enum PauseState_t
@@ -222,8 +222,8 @@ private:
 
 private:
 	//---------------------------------
-	Vector			m_vecDesiredPosition;
-	Vector			m_vecGoalOrientation; // orientation of the goal entity.
+	Vector m_vecDesiredPosition;
+	Vector m_vecGoalOrientation; // orientation of the goal entity.
 
 	// NOTE: CurrentPathTarget changes meaning based on movement direction
 	// For this *after* means the "next" (m_pnext) side of the line segment
@@ -242,29 +242,29 @@ private:
 	string_t		m_strLastPathName;
 	string_t		m_strTargetNearestPathName;
 
-	Vector			m_vecLastGoalCheckPosition;	// Last position checked for moving towards
-	float			m_flEnemyPathUpdateTime;	// Next time to update our enemies position
-	bool			m_bForcedMove;				// Means the destination point must be reached regardless of enemy position
-	bool			m_bPatrolling;				// If set, move back and forth along the current track until we see an enemy
-	bool			m_bPatrolBreakable;			// If set, I'll stop patrolling if I see an enemy
-	bool			m_bLeading;					// If set, we can lead our enemies
+	Vector m_vecLastGoalCheckPosition;	// Last position checked for moving towards
+	float m_flEnemyPathUpdateTime;	// Next time to update our enemies position
+	bool m_bForcedMove; 	// Means the destination point must be reached regardless of enemy position
+	bool m_bPatrolling; 	// If set, move back and forth along the current track until we see an enemy
+	bool m_bPatrolBreakable; // If set, I'll stop patrolling if I see an enemy
+	bool m_bLeading; 		// If set, we can lead our enemies
 
 	// Derived class pathing data
-	float			m_flTargetDistanceThreshold;// Distance threshold used to determine when a target has moved enough to update our navigation to it
-	float			m_flAvoidDistance;			//
+	float m_flTargetDistanceThreshold;// Distance threshold used to determine when a target has moved enough to update our navigation to it
+	float m_flAvoidDistance; //
 	
-	float			m_flTargetTolerance;		// How far from a path track do we need to be before we 'reached' it?
-	Vector			m_vecSegmentStartPoint;		// Starting point for the current segment
-	Vector			m_vecSegmentStartSplinePoint;	// Used to define a spline which is used to compute path velocity
-	bool			m_bMovingForward;
-	bool			m_bChooseFarthestPoint;
-	float			m_flFarthestPathDist;		// How far from a path track do we need to be before we 'reached' it?
+	float m_flTargetTolerance;		// How far from a path track do we need to be before we 'reached' it?
+	Vector m_vecSegmentStartPoint;		// Starting point for the current segment
+	Vector m_vecSegmentStartSplinePoint;	// Used to define a spline which is used to compute path velocity
+	bool m_bMovingForward;
+	bool m_bChooseFarthestPoint;
+	float m_flFarthestPathDist;		// How far from a path track do we need to be before we 'reached' it?
 
-	float			m_flPathMaxSpeed;
-	float			m_flTargetDistFromPath;		// How far is the target from the closest point on the path?
-	float			m_flLeadDistance;
-	Vector			m_vecTargetPathDir;
-	Vector			m_vecTargetPathPoint;		// What point on the path is closest to the target?
+	float m_flPathMaxSpeed;
+	float m_flTargetDistFromPath;		// How far is the target from the closest point on the path?
+	float m_flLeadDistance;
+	Vector m_vecTargetPathDir;
+	Vector m_vecTargetPathPoint;		// What point on the path is closest to the target?
 
 	PauseState_t	m_nPauseState;
 };

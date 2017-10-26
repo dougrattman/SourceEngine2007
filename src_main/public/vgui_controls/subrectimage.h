@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -37,10 +37,10 @@ public:
 
 private:
 	vgui::HTexture _id;
-	int			sub[ 4 ];
+	int sub[ 4 ];
 	char		*_filename;
-	int			_pos[2];
-	int			_wide,_tall;
+	int _pos[2];
+	int _wide,_tall;
 	Color		_color;
 	bool        _uploaded;
 	bool		_valid;

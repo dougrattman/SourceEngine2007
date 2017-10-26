@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entities relating to in-level sound effects.
 //
@@ -9,7 +9,7 @@
 //
 //			env_soundscape: controls what sound script an area uses.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "player.h"
@@ -25,7 +25,7 @@
 #include "ndebugoverlay.h"
 #include "soundscape.h"
 #include "igamesystem.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "filesystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -160,7 +160,7 @@ public:
 	void Precache( void );
 	void Activate( void );
 	void RampThink( void );
-	void InitModulationParms(void);
+	void InitModulationParms();
 	void ComputeMaxAudibleDistance( );
 
 	// Rules about which entities need to transmit along with me

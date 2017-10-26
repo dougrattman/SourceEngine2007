@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VEHICLES_H
 #define VEHICLES_H
@@ -14,7 +14,7 @@
 #include "datamap.h"
 
 
-#define VEHICLE_TYPE_CAR_WHEELS			(1<<0)
+#define VEHICLE_TYPE_CAR_WHEELS (1<<0)
 #define VEHICLE_TYPE_CAR_RAYCAST		(1<<1)
 #define VEHICLE_TYPE_JETSKI_RAYCAST		(1<<2)
 #define VEHICLE_TYPE_AIRBOAT_RAYCAST	(1<<3)
@@ -107,9 +107,9 @@ struct vehicle_bodyparams_t
 	DECLARE_SIMPLE_DATADESC();
 
 	Vector		massCenterOverride;		// leave at vec3_origin for no override
-	float		massOverride;			// leave at 0 for no override
-	float		addGravity;				// keeps car down
-	float		tiltForce;				// keeps car down when not on flat ground
+	float		massOverride; // leave at 0 for no override
+	float		addGravity; 	// keeps car down
+	float		tiltForce; 	// keeps car down when not on flat ground
 	float		tiltForceHeight;		// where the tilt force pulls relative to center of mass
 	float		counterTorqueFactor;
 	float		keepUprightTorque;
@@ -128,9 +128,9 @@ struct vehicle_wheelparams_t
 	float		damping;		// usually 0
 	float		rotdamping;		// usually 0
 	float		frictionScale;	// 1.5 front, 1.8 rear
-	int			materialIndex;
-	int			brakeMaterialIndex;
-	int			skidMaterialIndex;
+	int materialIndex;
+	int brakeMaterialIndex;
+	int skidMaterialIndex;
 	float		springAdditionalLength;	// 0 means the spring is at it's rest length
 };
 
@@ -150,30 +150,30 @@ struct vehicle_axleparams_t
 {
 	DECLARE_SIMPLE_DATADESC();
 
-	Vector						offset;					// center of this axle in vehicle object space
-	Vector						wheelOffset;			// offset to wheel (assume other wheel is symmetric at -wheelOffset) from axle center
-	Vector						raytraceCenterOffset;	// offset to center of axle for the raytrace data.
-	Vector						raytraceOffset;			// offset to raytrace for non-wheel (some wheeled) vehicles
+	Vector  offset; 		// center of this axle in vehicle object space
+	Vector  wheelOffset; // offset to wheel (assume other wheel is symmetric at -wheelOffset) from axle center
+	Vector  raytraceCenterOffset;	// offset to center of axle for the raytrace data.
+	Vector  raytraceOffset; // offset to raytrace for non-wheel (some wheeled) vehicles
 	vehicle_wheelparams_t		wheels;
 	vehicle_suspensionparams_t	suspension;
-	float						torqueFactor;		// normalized to 1 across all axles 
-													// e.g. 0,1 for rear wheel drive - 0.5,0.5 for 4 wheel drive
-	float						brakeFactor;		// normalized to 1 across all axles
+	float  torqueFactor;		// normalized to 1 across all axles 
+    	// e.g. 0,1 for rear wheel drive - 0.5,0.5 for 4 wheel drive
+	float  brakeFactor;		// normalized to 1 across all axles
 };
 
 struct vehicle_steeringparams_t
 {
 	DECLARE_SIMPLE_DATADESC();
 
-	float		degreesSlow;			// angle in degrees of steering at slow speed
-	float		degreesFast;			// angle in degrees of steering at fast speed
-	float		degreesBoost;			// angle in degrees of steering at fast speed
+	float		degreesSlow; // angle in degrees of steering at slow speed
+	float		degreesFast; // angle in degrees of steering at fast speed
+	float		degreesBoost; // angle in degrees of steering at fast speed
 	float		steeringRateSlow;		// this is the speed the wheels are steered when the vehicle is slow
 	float		steeringRateFast;		// this is the speed the wheels are steered when the vehicle is "fast"
 	float		steeringRestRateSlow;	// this is the speed at which the wheels move toward their resting state (straight ahead) at slow speed
 	float		steeringRestRateFast;	// this is the speed at which the wheels move toward their resting state (straight ahead) at fast speed
-	float		speedSlow;				// this is the max speed of "slow"
-	float		speedFast;				// this is the min speed of "fast"
+	float		speedSlow; 	// this is the max speed of "slow"
+	float		speedFast; 	// this is the min speed of "fast"
 	float		turnThrottleReduceSlow;		// this is the amount of throttle reduction to apply at the maximum steering angle
 	float		turnThrottleReduceFast;		// this is the amount of throttle reduction to apply at the maximum steering angle
 	float		brakeSteeringRateFactor;	// this scales the steering rate when the brake/handbrake is down
@@ -183,8 +183,8 @@ struct vehicle_steeringparams_t
 	float		boostSteeringRateFactor;	// this scales the steering rest rate when boosting
 	float		steeringExponent;		// this makes the steering response non-linear.  The steering function is linear, then raised to this power
 
-	bool		isSkidAllowed;			// true/false skid flag
-	bool		dustCloud;				// flag for creating a dustcloud behind vehicle
+	bool		isSkidAllowed; // true/false skid flag
+	bool		dustCloud; 	// flag for creating a dustcloud behind vehicle
 };
 
 struct vehicle_engineparams_t
@@ -194,17 +194,17 @@ struct vehicle_engineparams_t
 	float		horsepower;
 	float		maxSpeed;
 	float		maxRevSpeed;
-	float		maxRPM;					// redline RPM limit
-	float		axleRatio;				// ratio of engine rev to axle rev
-	float		throttleTime;			// time to reach full throttle in seconds
+	float		maxRPM; 		// redline RPM limit
+	float		axleRatio; 	// ratio of engine rev to axle rev
+	float		throttleTime; // time to reach full throttle in seconds
 
 	// transmission
-	int			gearCount;				// gear count - max 10
+	int gearCount; 	// gear count - max 10
 	float		gearRatio[VEHICLE_MAX_GEAR_COUNT];	// ratio for each gear
 
 	// automatic transmission (simple auto-shifter - switches at fixed RPM limits)
-	float		shiftUpRPM;				// max RPMs to switch to a higher gear
-	float		shiftDownRPM;			// min RPMs to switch to a lower gear
+	float		shiftUpRPM; 	// max RPMs to switch to a higher gear
+	float		shiftDownRPM; // min RPMs to switch to a lower gear
 	float		boostForce;
 	float		boostDuration;
 	float		boostDelay;
@@ -219,8 +219,8 @@ struct vehicleparams_t
 {
 	DECLARE_SIMPLE_DATADESC();
 
-	int							axleCount;
-	int							wheelsPerAxle;
+	int  	axleCount;
+	int  	wheelsPerAxle;
 	vehicle_bodyparams_t		body;
 	vehicle_axleparams_t		axles[VEHICLE_MAX_AXLE_COUNT];
 	vehicle_engineparams_t		engine;
@@ -234,7 +234,7 @@ typedef CUtlVector< CPassengerSeatTransition> PassengerSeatAnims_t;
 // Seat query types
 enum VehicleSeatQuery_e
 {
-	VEHICLE_SEAT_ANY,			// Any available seat for our role
+	VEHICLE_SEAT_ANY, // Any available seat for our role
 	VEHICLE_SEAT_NEAREST,		// Seat closest to our starting point
 };
 

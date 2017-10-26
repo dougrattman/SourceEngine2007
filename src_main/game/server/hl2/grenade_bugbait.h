@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GRENADE_BUGBAIT_H
 #define GRENADE_BUGBAIT_H
@@ -42,7 +42,7 @@ public:
 	bool Baited( CBaseEntity *pOther )
 	{
 		if ( !m_bEnabled )
-			return false;
+ return false;
 
 		m_OnBaited.FireOutput( pOther, this );
 		return true;
@@ -81,7 +81,7 @@ public:
 	float GetRadius( void ) const 
 	{ 
 		if ( m_flRadius == 0 )
-			return bugbait_radius.GetFloat();
+ return bugbait_radius.GetFloat();
 
 		return m_flRadius; 
 	}
@@ -93,8 +93,8 @@ public:
 
 protected:
 
-	float			m_flRadius;
-	bool			m_bEnabled;
+	float m_flRadius;
+	bool m_bEnabled;
 	COutputEvent	m_OnBaited;
 
 public:

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PARTICLESPHERERENDERER_H
 #define PARTICLESPHERERENDERER_H
@@ -20,7 +20,7 @@ class CParticleSphereRenderer
 {
 public:
 
-				CParticleSphereRenderer();
+ 	CParticleSphereRenderer();
 
 	// Initialize and tell it the material you'll be using.
 	void		Init( CParticleMgr *pParticleMgr, IMaterial *pMaterial );
@@ -33,7 +33,7 @@ public:
 		ParticleDraw *pDraw, 
 		const Vector &vOriginalPos,
 		const Vector &vTransformedPos,
-		float flAlpha,			// value 0 - 255.4
+		float flAlpha, // value 0 - 255.4
 		float flParticleSize,
 		float flAngle = 0.0f ); 
 
@@ -41,14 +41,14 @@ public:
 		ParticleDraw *pDraw, 
 		const Vector &vOriginalPos,
 		const Vector &vTransformedPos,
-		float flAlpha,				// value 0 - 255.4
+		float flAlpha, 	// value 0 - 255.4
 		float flParticleSize,
 		const Vector &vToAdd0to1	// Add this to the color (value 0-1)
 		); 
 
 	
 	// Lighting is (base color) + (ambient / dist^2) + bump(directional / dist^2)
-	const Vector& GetBaseColor() const;			// Specified as 0-1
+	const Vector& GetBaseColor() const; // Specified as 0-1
 	void SetBaseColor( const Vector &vColor );
 	
 	const CParticleLightInfo& GetAmbientLight() const;
@@ -76,10 +76,10 @@ private:
 	
 	CParticleMgr *m_pParticleMgr;
 	
-	Vector			m_vBaseColor;
+	Vector m_vBaseColor;
 	CParticleLightInfo m_AmbientLight;
 	CParticleLightInfo m_DirectionalLight;
-	bool			m_bUsingPixelShaders;
+	bool m_bUsingPixelShaders;
 };
 
 
@@ -99,9 +99,9 @@ inline void CParticleSphereRenderer::AddLightColor(
 		float fDist = pPos->DistToSqr( *pLightPos );
 		float fAmt;
 		if( fDist > 0.0001f )
-			fAmt = flLightIntensity / fDist;
+ fAmt = flLightIntensity / fDist;
 		else
-			fAmt = 1000.f;
+ fAmt = 1000.f;
 
 		*pOutColor += *pLightColor * fAmt;
 	}
@@ -182,7 +182,7 @@ inline void CParticleSphereRenderer::RenderParticle(
 	RenderParticle_Color255SizeNormalAngle(
 		pDraw,
 		vTransformedPos,
-		vColor,			// ambient color
+		vColor, // ambient color
 		flAlpha,		// alpha
 		flParticleSize,
 		vec3_origin,
@@ -220,7 +220,7 @@ inline void CParticleSphereRenderer::RenderParticle_AddColor(
 	RenderParticle_Color255Size(
 		pDraw,
 		vTransformedPos,
-		vColor,			// ambient color
+		vColor, // ambient color
 		flAlpha,		// alpha
 		flParticleSize );
 }

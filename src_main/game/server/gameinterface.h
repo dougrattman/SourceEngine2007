@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Expose things from GameInterface.cpp. Mostly the engine interfaces.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GAMEINTERFACE_H
 #define GAMEINTERFACE_H
@@ -21,90 +21,90 @@ extern INetworkStringTable *g_pStringTableInfoPanel;
 class CServerGameClients : public IServerGameClients
 {
 public:
-	virtual bool			ClientConnect( edict_t *pEntity, char const* pszName, char const* pszAddress, char *reject, int maxrejectlen );
-	virtual void			ClientActive( edict_t *pEntity, bool bLoadGame );
-	virtual void			ClientDisconnect( edict_t *pEntity );
-	virtual void			ClientPutInServer( edict_t *pEntity, const char *playername );
-	virtual void			ClientCommand( edict_t *pEntity, const CCommand &args );
-	virtual void			ClientSettingsChanged( edict_t *pEntity );
-	virtual void			ClientSetupVisibility( edict_t *pViewEntity, edict_t *pClient, unsigned char *pvs, int pvssize );
-	virtual float			ProcessUsercmds( edict_t *player, bf_read *buf, int numcmds, int totalcmds,
-								int dropped_packets, bool ignore, bool paused );
+	virtual bool ClientConnect( edict_t *pEntity, char const* pszName, char const* pszAddress, char *reject, int maxrejectlen );
+	virtual void ClientActive( edict_t *pEntity, bool bLoadGame );
+	virtual void ClientDisconnect( edict_t *pEntity );
+	virtual void ClientPutInServer( edict_t *pEntity, const char *playername );
+	virtual void ClientCommand( edict_t *pEntity, const CCommand &args );
+	virtual void ClientSettingsChanged( edict_t *pEntity );
+	virtual void ClientSetupVisibility( edict_t *pViewEntity, edict_t *pClient, unsigned char *pvs, int pvssize );
+	virtual float ProcessUsercmds( edict_t *player, bf_read *buf, int numcmds, int totalcmds,
+  		int dropped_packets, bool ignore, bool paused );
 	// Player is running a command
-	virtual void			PostClientMessagesSent( void );
-	virtual void			SetCommandClient( int index );
+	virtual void PostClientMessagesSent( void );
+	virtual void SetCommandClient( int index );
 	virtual CPlayerState	*GetPlayerState( edict_t *player );
-	virtual void			ClientEarPosition( edict_t *pEntity, Vector *pEarOrigin );
+	virtual void ClientEarPosition( edict_t *pEntity, Vector *pEarOrigin );
 
-	virtual void			GetPlayerLimits( int& minplayers, int& maxplayers, int &defaultMaxPlayers ) const;
+	virtual void GetPlayerLimits( int& minplayers, int& maxplayers, int &defaultMaxPlayers ) const;
 	
 	// returns number of delay ticks if player is in Replay mode (0 = no delay)
-	virtual int				GetReplayDelay( edict_t *player, int& entity );
+	virtual int 	GetReplayDelay( edict_t *player, int& entity );
 	// Anything this game .dll wants to add to the bug reporter text (e.g., the entity/model under the picker crosshair)
 	//  can be added here
-	virtual void			GetBugReportInfo( char *buf, int buflen );
-	virtual void			NetworkIDValidated( const char *pszUserName, const char *pszNetworkID );
+	virtual void GetBugReportInfo( char *buf, int buflen );
+	virtual void NetworkIDValidated( const char *pszUserName, const char *pszNetworkID );
 };
 
 
 class CServerGameDLL : public IServerGameDLL
 {
 public:
-	virtual bool			DLLInit(CreateInterfaceFn engineFactory, CreateInterfaceFn physicsFactory, 
-										CreateInterfaceFn fileSystemFactory, CGlobalVars *pGlobals);
-	virtual void			DLLShutdown( void );
+	virtual bool DLLInit(CreateInterfaceFn engineFactory, CreateInterfaceFn physicsFactory, 
+   	CreateInterfaceFn fileSystemFactory, CGlobalVars *pGlobals);
+	virtual void DLLShutdown( void );
 	// Get the simulation interval (must be compiled with identical values into both client and game .dll for MOD!!!)
-	virtual float			GetTickInterval( void ) const;
-	virtual bool			GameInit( void );
-	virtual void			GameShutdown( void );
-	virtual bool			LevelInit( const char *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background );
-	virtual void			ServerActivate( edict_t *pEdictList, int edictCount, int clientMax );
-	virtual void			LevelShutdown( void );
-	virtual void			GameFrame( bool simulating ); // could be called multiple times before sending data to clients
-	virtual void			PreClientUpdate( bool simulating ); // called after all GameFrame() calls, before sending data to clients
+	virtual float GetTickInterval( void ) const;
+	virtual bool GameInit( void );
+	virtual void GameShutdown( void );
+	virtual bool LevelInit( const char *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background );
+	virtual void ServerActivate( edict_t *pEdictList, int edictCount, int clientMax );
+	virtual void LevelShutdown( void );
+	virtual void GameFrame( bool simulating ); // could be called multiple times before sending data to clients
+	virtual void PreClientUpdate( bool simulating ); // called after all GameFrame() calls, before sending data to clients
 
 	virtual ServerClass*	GetAllServerClasses( void );
 	virtual const char     *GetGameDescription( void );      
-	virtual void			CreateNetworkStringTables( void );
+	virtual void CreateNetworkStringTables( void );
 	
 	// Save/restore system hooks
 	virtual CSaveRestoreData  *SaveInit( int size );
-	virtual void			SaveWriteFields( CSaveRestoreData *, char const* , void *, datamap_t *, typedescription_t *, int );
-	virtual void			SaveReadFields( CSaveRestoreData *, char const* , void *, datamap_t *, typedescription_t *, int );
-	virtual void			SaveGlobalState( CSaveRestoreData * );
-	virtual void			RestoreGlobalState( CSaveRestoreData * );
-	virtual int				CreateEntityTransitionList( CSaveRestoreData *, int );
-	virtual void			BuildAdjacentMapList( void );
+	virtual void SaveWriteFields( CSaveRestoreData *, char const* , void *, datamap_t *, typedescription_t *, int );
+	virtual void SaveReadFields( CSaveRestoreData *, char const* , void *, datamap_t *, typedescription_t *, int );
+	virtual void SaveGlobalState( CSaveRestoreData * );
+	virtual void RestoreGlobalState( CSaveRestoreData * );
+	virtual int 	CreateEntityTransitionList( CSaveRestoreData *, int );
+	virtual void BuildAdjacentMapList( void );
 
-	virtual void			PreSave( CSaveRestoreData * );
-	virtual void			Save( CSaveRestoreData * );
-	virtual void			GetSaveComment( char *comment, int maxlength, float flMinutes, float flSeconds, bool bNoTime = false );
+	virtual void PreSave( CSaveRestoreData * );
+	virtual void Save( CSaveRestoreData * );
+	virtual void GetSaveComment( char *comment, int maxlength, float flMinutes, float flSeconds, bool bNoTime = false );
 #ifdef _XBOX
-	virtual void			GetTitleName( const char *pMapName, char* pTitleBuff, int titleBuffSize );
+	virtual void GetTitleName( const char *pMapName, char* pTitleBuff, int titleBuffSize );
 #endif
-	virtual void			WriteSaveHeaders( CSaveRestoreData * );
+	virtual void WriteSaveHeaders( CSaveRestoreData * );
 
-	virtual void			ReadRestoreHeaders( CSaveRestoreData * );
-	virtual void			Restore( CSaveRestoreData *, bool );
-	virtual bool			IsRestoring();
+	virtual void ReadRestoreHeaders( CSaveRestoreData * );
+	virtual void Restore( CSaveRestoreData *, bool );
+	virtual bool IsRestoring();
 
 	// Retrieve info needed for parsing the specified user message
-	virtual bool			GetUserMessageInfo( int msg_type, char *name, int maxnamelength, int& size );
+	virtual bool GetUserMessageInfo( int msg_type, char *name, int maxnamelength, int& size );
 
 	virtual CStandardSendProxies*	GetStandardSendProxies();
 
-	virtual void			PostInit();
-	virtual void			Think( bool finalTick );
+	virtual void PostInit();
+	virtual void Think( bool finalTick );
 
-	virtual void			OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_t *pPlayerEntity, EQueryCvarValueStatus eStatus, const char *pCvarName, const char *pCvarValue );
+	virtual void OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_t *pPlayerEntity, EQueryCvarValueStatus eStatus, const char *pCvarName, const char *pCvarValue );
 
-	virtual void			PreSaveGameLoaded( char const *pSaveName, bool bInGame );
+	virtual void PreSaveGameLoaded( char const *pSaveName, bool bInGame );
 
 	// Returns true if the game DLL wants the server not to be made public.
 	// Used by commentary system to hide multiplayer commentary servers from the master.
-	virtual bool			ShouldHideServer( void );
+	virtual bool ShouldHideServer( void );
 
-	virtual void			InvalidateMdlCache();
+	virtual void InvalidateMdlCache();
 
 	float	m_fAutoSaveDangerousTime;
 	float	m_fAutoSaveDangerousMinHealthToCommit;
@@ -131,7 +131,7 @@ void ClientPutInServerOverride( ClientPutInServerOverrideFn fn );
 class CMapEntityRef
 {
 public:
-	int		m_iEdict;			// Which edict slot this entity got. -1 if CreateEntityByName failed.
+	int		m_iEdict; // Which edict slot this entity got. -1 if CreateEntityByName failed.
 	int		m_iSerialNumber;	// The edict serial number. TODO used anywhere ?
 };
 
@@ -159,9 +159,9 @@ public:
 
 		if ( pRet )
 		{
-			ref.m_iEdict = pRet->entindex();
-			if ( pRet->edict() )
-				ref.m_iSerialNumber = pRet->edict()->m_NetworkSerialNumber;
+ ref.m_iEdict = pRet->entindex();
+ if ( pRet->edict() )
+ 	ref.m_iSerialNumber = pRet->edict()->m_NetworkSerialNumber;
 		}
 
 		g_MapEntityRefs.AddToTail( ref );

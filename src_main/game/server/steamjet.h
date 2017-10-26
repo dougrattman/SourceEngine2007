@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the server side of a steam jet particle system entity.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef STEAMJET_H
 #define STEAMJET_H
@@ -48,7 +48,7 @@ public:
 
 	CNetworkVar( int, m_bEmit );		// Emit particles?
 	CNetworkVar( bool, m_bFaceLeft );	// For support of legacy env_steamjet, which faced left instead of forward.
-	bool			m_InitialState;
+	bool m_InitialState;
 
 	CNetworkVar( int, m_nType );		// Type of steam (normal, heatwave)
 	CNetworkVar( float, m_flRollSpeed );

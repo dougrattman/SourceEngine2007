@@ -26,13 +26,13 @@ struct DrawWater_params_t
 
 void DrawWater( in DrawWater_params_t i, 
 #if BASETEXTURE
-				in sampler BaseTextureSampler,
-			    in sampler LightmapSampler,
+ 	in sampler BaseTextureSampler,
+     in sampler LightmapSampler,
 #endif
-				in sampler NormalSampler,
-			    in sampler RefractSampler,
-			    in sampler ReflectSampler,
-			    out float4 result, out float fogFactor )
+ 	in sampler NormalSampler,
+     in sampler RefractSampler,
+     in sampler ReflectSampler,
+     out float4 result, out float fogFactor )
 {
 	bool bReflect = REFLECT ? true : false;
 	bool bRefract = REFRACT ? true : false;
@@ -102,9 +102,9 @@ void DrawWater( in DrawWater_params_t i,
 	{
 		for(int iy=-2;iy<=2;iy++)
 		{
-			float weight=1; ///(1+abs(ix)+abs(iy));
-			vRefractColor += weight*tex2D( RefractSampler, vRefractTexCoord+ix*ddx1+iy*ddy1);
-			sumweights+=weight;
+ float weight=1; ///(1+abs(ix)+abs(iy));
+ vRefractColor += weight*tex2D( RefractSampler, vRefractTexCoord+ix*ddx1+iy*ddy1);
+ sumweights+=weight;
 		}
 	}
 #else

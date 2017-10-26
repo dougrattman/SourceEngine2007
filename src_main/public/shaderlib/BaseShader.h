@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -59,11 +59,11 @@ enum BlendType_t
 	// src * srcAlpha + dst * (1-srcAlpha)
 	// two passes for HDR:
 	//		pass 1:
-	//			color: src * srcAlpha + dst * (1-srcAlpha)
-	//			alpha: srcAlpha * zero + dstAlpha * (1-srcAlpha)
+	// color: src * srcAlpha + dst * (1-srcAlpha)
+	// alpha: srcAlpha * zero + dstAlpha * (1-srcAlpha)
 	//		pass 2:
-	//			color: none
-	//			alpha: srcAlpha * one + dstAlpha * one
+	// color: none
+	// alpha: srcAlpha * one + dstAlpha * one
 	//
 	BT_BLEND,
 
@@ -79,11 +79,11 @@ enum BlendType_t
 	// src * srcAlpha + dst * one
 	// two passes for HDR
 	//		pass 1:
-	//			color: src * srcAlpha + dst * one
-	//			alpha: srcAlpha * one + dstAlpha * one
+	// color: src * srcAlpha + dst * one
+	// alpha: srcAlpha * one + dstAlpha * one
 	//		pass 2:
-	//			color: none
-	//			alpha: srcAlpha * one + dstAlpha * one
+	// color: none
+	// alpha: srcAlpha * one + dstAlpha * one
 	BT_BLENDADD
 };
 
@@ -109,7 +109,7 @@ public:
 	virtual void InitShaderParams( IMaterialVar** ppParams, const char *pMaterialName );
 	virtual void InitShaderInstance( IMaterialVar** ppParams, IShaderInit *pShaderInit, const char *pMaterialName, const char *pTextureGroupName );
 	virtual void DrawElements( IMaterialVar **params, int nModulationFlags, IShaderShadow* pShaderShadow, IShaderDynamicAPI* pShaderAPI,
-								VertexCompressionType_t vertexCompression, CBasePerMaterialContextData **pContext );
+  		VertexCompressionType_t vertexCompression, CBasePerMaterialContextData **pContext );
 
 	virtual	const SoftwareVertexShader_t GetSoftwareVertexShader() const { return m_SoftwareVertexShader; }
 
@@ -258,9 +258,9 @@ public:
 	bool UsingEditor( IMaterialVar **params ) const;
 
 	void DrawFlashlight_dx70( IMaterialVar** params, IShaderDynamicAPI *pShaderAPI, 
-							  IShaderShadow* pShaderShadow, 
-							  int flashlightTextureVar, int flashlightTextureFrameVar, 
-							  bool suppress_lighting = false );
+  	  IShaderShadow* pShaderShadow, 
+  	  int flashlightTextureVar, int flashlightTextureFrameVar, 
+  	  bool suppress_lighting = false );
 
 	void SetFlashlightFixedFunctionTextureTransform( MaterialMatrixMode_t matrix );
 
@@ -316,11 +316,11 @@ inline bool CBaseShader::IsWhite( int colorVar )
 }
 
 
-class CBasePerMaterialContextData								// shaders can keep per material data in classes descended from this
+class CBasePerMaterialContextData  		// shaders can keep per material data in classes descended from this
 {
  public:
-	uint32 m_nVarChangeID;
-	bool m_bMaterialVarsChanged;							// set by mat system when material vars change. shader should rehtink and then clear the var
+	uint32_t m_nVarChangeID;
+	bool m_bMaterialVarsChanged;  	// set by mat system when material vars change. shader should rehtink and then clear the var
 
 	FORCEINLINE CBasePerMaterialContextData( void )
 	{

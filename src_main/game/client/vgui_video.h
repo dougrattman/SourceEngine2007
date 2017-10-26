@@ -36,7 +36,7 @@ public:
 	{
 		if ( pExitCommand && pExitCommand[0] )
 		{
-			Q_strncpy( m_szExitCommand, pExitCommand, MAX_PATH );
+ Q_strncpy( m_szExitCommand, pExitCommand, MAX_PATH );
 		}
 	}
 
@@ -53,21 +53,21 @@ protected:
 protected:
 	BIKMaterial_t	m_BIKHandle;
 	IMaterial		*m_pMaterial;
-	int				m_nPlaybackHeight;			// Calculated to address ratio changes
-	int				m_nPlaybackWidth;
-	char			m_szExitCommand[MAX_PATH];	// This call is fired at the engine when the video finishes or is interrupted
+	int 	m_nPlaybackHeight; // Calculated to address ratio changes
+	int 	m_nPlaybackWidth;
+	char m_szExitCommand[MAX_PATH];	// This call is fired at the engine when the video finishes or is interrupted
 
-	float			m_flU;	// U,V ranges for video on its sheet
-	float			m_flV;
+	float m_flU;	// U,V ranges for video on its sheet
+	float m_flV;
 
-	bool			m_bBlackBackground;
+	bool m_bBlackBackground;
 };
 
 
 // Creates a VGUI panel which plays a video and executes a client command at its finish (if specified)
 extern bool VideoPanel_Create( unsigned int nXPos, unsigned int nYPos, 
-							   unsigned int nWidth, unsigned int nHeight, 
-							   const char *pVideoFilename, 
-							   const char *pExitCommand = NULL );
+  	   unsigned int nWidth, unsigned int nHeight, 
+  	   const char *pVideoFilename, 
+  	   const char *pExitCommand = NULL );
 
 #endif // VGUI_VIDEO_H

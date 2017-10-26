@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The TF Game rules object
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_GAMERULES_H
 #define DOD_GAMERULES_H
@@ -15,7 +15,7 @@
 #endif
 
 #include "teamplay_gamerules.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "dod_shareddefs.h"
 #include "gamevars_shared.h"
 #include "weapon_dodbase.h"
@@ -98,11 +98,11 @@ public:
 	}
 	
 	//Respawn Factors
-	float			m_fAlliesRespawnFactor;	//How delayed are respawning players 
-	float			m_fAxisRespawnFactor;	//1.0 is normal, 2.0 is twice as long
+	float m_fAlliesRespawnFactor;	//How delayed are respawning players 
+	float m_fAxisRespawnFactor;	//1.0 is normal, 2.0 is twice as long
 
-	int				m_iAlliesStartRoundVoice;	// Which voice to play at round start
-	int				m_iAxisStartRoundVoice;
+	int 	m_iAlliesStartRoundVoice;	// Which voice to play at round start
+	int 	m_iAxisStartRoundVoice;
 };
 
 
@@ -140,16 +140,16 @@ public:
 		Vector vDeadViewHeight,
 		Vector vProneHullMin,
 		Vector vProneHullMax ) :
-			CViewVectors( 
-				vView,
-				vHullMin,
-				vHullMax,
-				vDuckHullMin,
-				vDuckHullMax,
-				vDuckView,
-				vObsHullMin,
-				vObsHullMax,
-				vDeadViewHeight )
+ CViewVectors( 
+ 	vView,
+ 	vHullMin,
+ 	vHullMax,
+ 	vDuckHullMin,
+ 	vDuckHullMax,
+ 	vDuckView,
+ 	vObsHullMin,
+ 	vObsHullMax,
+ 	vDeadViewHeight )
 	{
 		m_vProneHullMin = vProneHullMin;
 		m_vProneHullMax = vProneHullMax;
@@ -237,11 +237,11 @@ public:
 	//Round state machine
 	void State_Transition( DODRoundState newState );
 	void State_Enter( DODRoundState newState );	// Initialize the new state.
-	void State_Leave();							// Cleanup the previous state.
-	void State_Think();						// Update the current state.
+	void State_Leave();  	// Cleanup the previous state.
+	void State_Think();  // Update the current state.
 
 	CDODRoundStateInfo *m_pCurStateInfo;	//Fn ptrs for the current state
-	float m_flStateTransitionTime;			//Timer for round states
+	float m_flStateTransitionTime; //Timer for round states
 	
 	// Find the state info for the specified state.
 	static CDODRoundStateInfo* State_LookupInfo( DODRoundState state );
@@ -381,18 +381,18 @@ private:
 	//BELOW HERE NEED TO BE HOOKED UP
 
 
-	int				m_iNumAlliesAlive;	//the number of players alive on each team
-	int				m_iNumAxisAlive;
-	int				m_iNumAlliesOnTeam;	//the number of players on each team
-	int				m_iNumAxisOnTeam;
+	int 	m_iNumAlliesAlive;	//the number of players alive on each team
+	int 	m_iNumAxisAlive;
+	int 	m_iNumAlliesOnTeam;	//the number of players on each team
+	int 	m_iNumAxisOnTeam;
 
-	bool			m_bClanMatch;
-	bool			m_bClanMatchActive;
+	bool m_bClanMatch;
+	bool m_bClanMatchActive;
 
-	float			GetMaxWaveTime( int iTeam );
-	float			GetWaveTime( int iTeam );
-	void 			AddWaveTime( int team, float flTime );
-	void 			PopWaveTime( int team );
+	float GetMaxWaveTime( int iTeam );
+	float GetWaveTime( int iTeam );
+	void  AddWaveTime( int team, float flTime );
+	void  PopWaveTime( int team );
 
 	void DetectGameRules( void );
 

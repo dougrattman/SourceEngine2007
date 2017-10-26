@@ -1,24 +1,16 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: this is a map for virtual key codes
-//			virtual key codes may exist outside this range for other languages
-// NOTE: Button codes also contain mouse codes, but we won't worry about that
-//
-// $NoKeywords: $
-//===========================================================================//
+// virtual key codes may exist outside this range for other languages
+// NOTE: Button codes also contain mouse codes, but we won't worry about that.
 
-#ifndef KEYCODE_H
-#define KEYCODE_H
-
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_VGUI_KEYCODE_H_
+#define SOURCE_VGUI_KEYCODE_H_
 
 #include "inputsystem/ButtonCode.h"
 
-namespace vgui
-{
-typedef ButtonCode_t KeyCode;
+namespace vgui {
+using KeyCode = ButtonCode_t;
 }
 
-#endif // KEYCODE_H
+#endif  // SOURCE_VGUI_KEYCODE_H_

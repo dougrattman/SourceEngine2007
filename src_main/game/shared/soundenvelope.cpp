@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "sharedInterface.h"
 #include "soundenvelope.h"
@@ -16,7 +16,7 @@
 #include "gamestringpool.h"
 #include "igamesystem.h"
 #include "utlpriorityqueue.h"
-#include "mempool.h"
+#include "tier1/mempool.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "tier0/vprof.h"
 

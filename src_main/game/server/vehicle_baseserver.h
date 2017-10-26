@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef VEHICLE_BASESERVER_H
 #define VEHICLE_BASESERVER_H
@@ -54,10 +54,10 @@ public:
 	CBaseCombatCharacter *GetPassenger( void ) const { return m_hPassenger; }
 
 private:
-	int									m_nRole;		// Role (by index)
-	int									m_nSeat;		// Seat (by index)
-	string_t							m_strRoleName;	// Used in restoration for fix-up
-	string_t							m_strSeatName;	// Used in restoration for fix-up
+	int   m_nRole;		// Role (by index)
+	int   m_nSeat;		// Seat (by index)
+	string_t  	m_strRoleName;	// Used in restoration for fix-up
+	string_t  	m_strSeatName;	// Used in restoration for fix-up
 	CHandle<CBaseCombatCharacter>		m_hPassenger;	// Actual passenger
 
 	friend class CBaseServerVehicle;
@@ -77,7 +77,7 @@ public:
 
 private:
 	string_t	m_strAnimationName;	// Name of animation to play
-	int			m_nPriority;		// Priority of the transition
+	int m_nPriority;		// Priority of the transition
 
 	friend class CBaseServerVehicle;
 };
@@ -92,8 +92,8 @@ public:
 	int GetAttachmentID( void ) const { return m_nAttachmentID; }
 
 private:
-	string_t								m_strSeatName;			// Used for save/load fixup
-	int										m_nAttachmentID;		// Goal attachment
+	string_t  		m_strSeatName; // Used for save/load fixup
+	int   	m_nAttachmentID;		// Goal attachment
 	CUtlVector<CPassengerSeatTransition>	m_EntryTransitions;		// Entry information
 	CUtlVector<CPassengerSeatTransition>	m_ExitTransitions;		// Exit information
 
@@ -110,7 +110,7 @@ public:
 	string_t GetName( void ) const { return m_strName; }
 
 private:
-	string_t						m_strName;			// Name of the set
+	string_t  m_strName; // Name of the set
 	CUtlVector<CPassengerSeat>		m_PassengerSeats;	// Passenger info
 
 	friend class CBaseServerVehicle;
@@ -118,7 +118,7 @@ private:
 
 //-----------------------------------------------------------------------------
 // Purpose: Base class for drivable vehicle handling. Contain it in your 
-//			drivable vehicle.
+// drivable vehicle.
 //-----------------------------------------------------------------------------
 class CBaseServerVehicle : public IServerVehicle
 {
@@ -129,79 +129,79 @@ public:
 	CBaseServerVehicle( void );
 	~CBaseServerVehicle( void );
 
-	virtual void			Precache( void );
+	virtual void Precache( void );
 
 // IVehicle
 public:
 	virtual CBaseCombatCharacter *GetPassenger( int nRole = VEHICLE_ROLE_DRIVER );
 
-	virtual int				GetPassengerRole( CBaseCombatCharacter *pPassenger );
-	virtual void			GetVehicleViewPosition( int nRole, Vector *pOrigin, QAngle *pAngles, float *pFOV = NULL );
-	virtual bool			IsPassengerUsingStandardWeapons( int nRole = VEHICLE_ROLE_DRIVER ) { return false; }
-	virtual void			SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper *pHelper, CMoveData *move );
-	virtual void			ProcessMovement( CBasePlayer *pPlayer, CMoveData *pMoveData );
-	virtual void			FinishMove( CBasePlayer *player, CUserCmd *ucmd, CMoveData *move );
-	virtual void			ItemPostFrame( CBasePlayer *pPlayer );
+	virtual int 	GetPassengerRole( CBaseCombatCharacter *pPassenger );
+	virtual void GetVehicleViewPosition( int nRole, Vector *pOrigin, QAngle *pAngles, float *pFOV = NULL );
+	virtual bool IsPassengerUsingStandardWeapons( int nRole = VEHICLE_ROLE_DRIVER ) { return false; }
+	virtual void SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper *pHelper, CMoveData *move );
+	virtual void ProcessMovement( CBasePlayer *pPlayer, CMoveData *pMoveData );
+	virtual void FinishMove( CBasePlayer *player, CUserCmd *ucmd, CMoveData *move );
+	virtual void ItemPostFrame( CBasePlayer *pPlayer );
 
 // IServerVehicle
 public:
 	virtual CBaseEntity		*GetVehicleEnt( void ) { return m_pVehicle; }
-	virtual void			SetPassenger( int nRole, CBaseCombatCharacter *pPassenger );
-	virtual bool			IsPassengerVisible( int nRole = VEHICLE_ROLE_DRIVER ) { return false; }
-	virtual bool			IsPassengerDamagable( int nRole  = VEHICLE_ROLE_DRIVER ) { return true; }
-	virtual bool			PassengerShouldReceiveDamage( CTakeDamageInfo &info );
+	virtual void SetPassenger( int nRole, CBaseCombatCharacter *pPassenger );
+	virtual bool IsPassengerVisible( int nRole = VEHICLE_ROLE_DRIVER ) { return false; }
+	virtual bool IsPassengerDamagable( int nRole  = VEHICLE_ROLE_DRIVER ) { return true; }
+	virtual bool PassengerShouldReceiveDamage( CTakeDamageInfo &info );
 
-	virtual bool			IsVehicleUpright( void ) { return true; }
-	virtual bool			IsPassengerEntering( void ) { Assert( 0 ); return false; }
-	virtual bool			IsPassengerExiting( void ) { Assert( 0 ); return false; }
+	virtual bool IsVehicleUpright( void ) { return true; }
+	virtual bool IsPassengerEntering( void ) { Assert( 0 ); return false; }
+	virtual bool IsPassengerExiting( void ) { Assert( 0 ); return false; }
 	
-	virtual void			HandlePassengerEntry( CBaseCombatCharacter *pPassenger, bool bAllowEntryOutsideZone = false );
-	virtual bool			HandlePassengerExit( CBaseCombatCharacter *pPassenger );
+	virtual void HandlePassengerEntry( CBaseCombatCharacter *pPassenger, bool bAllowEntryOutsideZone = false );
+	virtual bool HandlePassengerExit( CBaseCombatCharacter *pPassenger );
 
-	virtual void			GetPassengerSeatPoint( int nRole, Vector *pPoint, QAngle *pAngles );
-	virtual bool			GetPassengerExitPoint( int nRole, Vector *pPoint, QAngle *pAngles );
-	virtual Class_T			ClassifyPassenger( CBaseCombatCharacter *pPassenger, Class_T defaultClassification ) { return defaultClassification; }
-	virtual float			PassengerDamageModifier( const CTakeDamageInfo &info ) { return 1.0; }
+	virtual void GetPassengerSeatPoint( int nRole, Vector *pPoint, QAngle *pAngles );
+	virtual bool GetPassengerExitPoint( int nRole, Vector *pPoint, QAngle *pAngles );
+	virtual Class_T ClassifyPassenger( CBaseCombatCharacter *pPassenger, Class_T defaultClassification ) { return defaultClassification; }
+	virtual float PassengerDamageModifier( const CTakeDamageInfo &info ) { return 1.0; }
 	virtual const vehicleparams_t	*GetVehicleParams( void ) { return NULL; }
-	virtual bool			IsVehicleBodyInWater( void ) { return false; }
+	virtual bool IsVehicleBodyInWater( void ) { return false; }
 	virtual IPhysicsVehicleController *GetVehicleController() { return NULL; }
 
 	// NPC Driving
-	virtual bool			NPC_CanDrive( void ) { return true; }
-	virtual void			NPC_SetDriver( CNPC_VehicleDriver *pDriver ) { return; }
-	virtual void			NPC_DriveVehicle( void ) { return; }
-	virtual void			NPC_ThrottleCenter( void );
-	virtual void			NPC_ThrottleReverse( void );
-	virtual void			NPC_ThrottleForward( void );
-	virtual void			NPC_Brake( void );
-	virtual void			NPC_TurnLeft( float flDegrees );
-	virtual void			NPC_TurnRight( float flDegrees );
-	virtual void			NPC_TurnCenter( void );
-	virtual void			NPC_PrimaryFire( void );
-	virtual void			NPC_SecondaryFire( void );
-	virtual bool			NPC_HasPrimaryWeapon( void ) { return false; }
-	virtual bool			NPC_HasSecondaryWeapon( void ) { return false; }
-	virtual void			NPC_AimPrimaryWeapon( Vector vecTarget ) { return; }
-	virtual void			NPC_AimSecondaryWeapon( Vector vecTarget ) { return; }
+	virtual bool NPC_CanDrive( void ) { return true; }
+	virtual void NPC_SetDriver( CNPC_VehicleDriver *pDriver ) { return; }
+	virtual void NPC_DriveVehicle( void ) { return; }
+	virtual void NPC_ThrottleCenter( void );
+	virtual void NPC_ThrottleReverse( void );
+	virtual void NPC_ThrottleForward( void );
+	virtual void NPC_Brake( void );
+	virtual void NPC_TurnLeft( float flDegrees );
+	virtual void NPC_TurnRight( float flDegrees );
+	virtual void NPC_TurnCenter( void );
+	virtual void NPC_PrimaryFire( void );
+	virtual void NPC_SecondaryFire( void );
+	virtual bool NPC_HasPrimaryWeapon( void ) { return false; }
+	virtual bool NPC_HasSecondaryWeapon( void ) { return false; }
+	virtual void NPC_AimPrimaryWeapon( Vector vecTarget ) { return; }
+	virtual void NPC_AimSecondaryWeapon( Vector vecTarget ) { return; }
 
 	// Weapon handling
-	virtual void			Weapon_PrimaryRanges( float *flMinRange, float *flMaxRange );
-	virtual void			Weapon_SecondaryRanges( float *flMinRange, float *flMaxRange );	
-	virtual float			Weapon_PrimaryCanFireAt( void );		// Return the time at which this vehicle's primary weapon can fire again
-	virtual float			Weapon_SecondaryCanFireAt( void );		// Return the time at which this vehicle's secondary weapon can fire again
+	virtual void Weapon_PrimaryRanges( float *flMinRange, float *flMaxRange );
+	virtual void Weapon_SecondaryRanges( float *flMinRange, float *flMaxRange );	
+	virtual float Weapon_PrimaryCanFireAt( void );		// Return the time at which this vehicle's primary weapon can fire again
+	virtual float Weapon_SecondaryCanFireAt( void );		// Return the time at which this vehicle's secondary weapon can fire again
 
 	// ----------------------------------------------------------------------------
 	// NPC passenger data
 
 public:
 
-	bool			NPC_AddPassenger( CBaseCombatCharacter *pPassenger, string_t strRoleName, int nSeat );
-	bool			NPC_RemovePassenger( CBaseCombatCharacter *pPassenger );
+	bool NPC_AddPassenger( CBaseCombatCharacter *pPassenger, string_t strRoleName, int nSeat );
+	bool NPC_RemovePassenger( CBaseCombatCharacter *pPassenger );
 	virtual bool	NPC_GetPassengerSeatPosition( CBaseCombatCharacter *pPassenger, Vector *vecResultPos, QAngle *vecResultAngle );
 	virtual bool	NPC_GetPassengerSeatPositionLocal( CBaseCombatCharacter *pPassenger, Vector *vecResultPos, QAngle *vecResultAngles );
 	virtual int		NPC_GetPassengerSeatAttachment( CBaseCombatCharacter *pPassenger );
 	virtual int		NPC_GetAvailableSeat( CBaseCombatCharacter *pPassenger, string_t strRoleName, VehicleSeatQuery_e nQueryType );
-	bool			NPC_HasAvailableSeat( string_t strRoleName );
+	bool NPC_HasAvailableSeat( string_t strRoleName );
 
 
 	virtual const PassengerSeatAnims_t	*NPC_GetPassengerSeatAnims( CBaseCombatCharacter *pPassenger, PassengerSeatAnimType_t nType );
@@ -232,43 +232,43 @@ protected:
 	void	ReloadScript();	// debug/tuning
 public:
 
-	void					UseLegacyExitChecks( bool bState ) { m_bUseLegacyExitChecks = bState; }
-	void					RestorePassengerInfo( void );
+	void 		UseLegacyExitChecks( bool bState ) { m_bUseLegacyExitChecks = bState; }
+	void 		RestorePassengerInfo( void );
 
 	virtual CBaseEntity		*GetDriver( void );	// Player Driving
-	virtual void			ParseEntryExitAnims( void );
-	void					ParseExitAnim( KeyValues *pkvExitList, bool bEscapeExit );
-	virtual bool			CheckExitPoint( float yaw, int distance, Vector *pEndPoint );
-	virtual int				GetEntryAnimForPoint( const Vector &vecPoint );
-	virtual int				GetExitAnimToUse( Vector &vecEyeExitEndpoint, bool &bAllPointsBlocked );
-	virtual void			HandleEntryExitFinish( bool bExitAnimOn, bool bResetAnim );
+	virtual void ParseEntryExitAnims( void );
+	void 		ParseExitAnim( KeyValues *pkvExitList, bool bEscapeExit );
+	virtual bool CheckExitPoint( float yaw, int distance, Vector *pEndPoint );
+	virtual int 	GetEntryAnimForPoint( const Vector &vecPoint );
+	virtual int 	GetExitAnimToUse( Vector &vecEyeExitEndpoint, bool &bAllPointsBlocked );
+	virtual void HandleEntryExitFinish( bool bExitAnimOn, bool bResetAnim );
 
-	virtual void			SetVehicle( CBaseEntity *pVehicle );
+	virtual void SetVehicle( CBaseEntity *pVehicle );
 	IDrivableVehicle 		*GetDrivableVehicle( void );
 
 	// Sound handling
-	bool					Initialize( const char *pScriptName );
-	virtual void			SoundStart();
-	virtual void			SoundStartDisabled();
-	virtual void			SoundShutdown( float flFadeTime = 0.0 );
-	virtual void			SoundUpdate( vbs_sound_update_t &params );
-	virtual void			PlaySound( vehiclesound iSound );
-	virtual void			StopSound( vehiclesound iSound );
-	virtual void 			RecalculateSoundGear( vbs_sound_update_t &params );
-	void					SetVehicleVolume( float flVolume ) { m_flVehicleVolume = clamp( flVolume, 0.0, 1.0 ); }
+	bool 		Initialize( const char *pScriptName );
+	virtual void SoundStart();
+	virtual void SoundStartDisabled();
+	virtual void SoundShutdown( float flFadeTime = 0.0 );
+	virtual void SoundUpdate( vbs_sound_update_t &params );
+	virtual void PlaySound( vehiclesound iSound );
+	virtual void StopSound( vehiclesound iSound );
+	virtual void  RecalculateSoundGear( vbs_sound_update_t &params );
+	void 		SetVehicleVolume( float flVolume ) { m_flVehicleVolume = clamp( flVolume, 0.0, 1.0 ); }
 
 	// Rumble
-	virtual void			StartEngineRumble();
-	virtual void			StopEngineRumble();
+	virtual void StartEngineRumble();
+	virtual void StopEngineRumble();
 
 public:
-	CBaseEntity			*m_pVehicle;
+	CBaseEntity *m_pVehicle;
 	IDrivableVehicle 	*m_pDrivableVehicle;
 
 	// NPC Driving
-	int								m_nNPCButtons;
-	int								m_nPrevNPCButtons;
-	float							m_flTurnDegrees;
+	int  		m_nNPCButtons;
+	int  		m_nPrevNPCButtons;
+	float  	m_flTurnDegrees;
 
 	// Entry / Exit anims
 	struct entryanim_t
@@ -288,27 +288,27 @@ public:
 	};
 
 	CUtlVector< exitanim_t >		m_ExitAnimations;
-	bool							m_bParsedAnimations;
-	bool							m_bUseLegacyExitChecks;	// HACK: Choreo vehicles use non-sensical setups to move the player, we need to poll their attachment point positions
-	int								m_iCurrentExitAnim;
-	Vector							m_vecCurrentExitEndPoint;
-	Vector							m_savedViewOffset;
-	CHandle<CEntityBlocker>			m_hExitBlocker;				// Entity to prevent other entities blocking the player's exit point during the exit animation
+	bool  	m_bParsedAnimations;
+	bool  	m_bUseLegacyExitChecks;	// HACK: Choreo vehicles use non-sensical setups to move the player, we need to poll their attachment point positions
+	int  		m_iCurrentExitAnim;
+	Vector  	m_vecCurrentExitEndPoint;
+	Vector  	m_savedViewOffset;
+	CHandle<CEntityBlocker> m_hExitBlocker; 	// Entity to prevent other entities blocking the player's exit point during the exit animation
 
-	char							m_chPreviousTextureType;
+	char  	m_chPreviousTextureType;
 
 // sound state
-	vehiclesounds_t					m_vehicleSounds;
+	vehiclesounds_t 		m_vehicleSounds;
 private:
-	float							m_flVehicleVolume;
-	int								m_iSoundGear;			// The sound "gear" that we're currently in
-	float							m_flSpeedPercentage;
+	float  	m_flVehicleVolume;
+	int  		m_iSoundGear; // The sound "gear" that we're currently in
+	float  	m_flSpeedPercentage;
 
-	CSoundPatch						*m_pStateSound;
-	CSoundPatch						*m_pStateSoundFade;
-	sound_states					m_soundState;
-	float							m_soundStateStartTime;
-	float							m_lastSpeed;
+	CSoundPatch  *m_pStateSound;
+	CSoundPatch  *m_pStateSoundFade;
+	sound_states 		m_soundState;
+	float  	m_soundStateStartTime;
+	float  	m_lastSpeed;
 	
 	void	SoundState_OnNewState( sound_states lastState );
 	void	SoundState_Update( vbs_sound_update_t &params );

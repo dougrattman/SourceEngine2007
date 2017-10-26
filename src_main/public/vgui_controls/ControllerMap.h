@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CONTROLLERMAP_H
 #define CONTROLLERMAP_H
@@ -13,7 +13,7 @@
 
 #include "Panel.h"
 #include "UtlMap.h"
-#include "UtlSymbol.h"
+#include "tier1/utlsymbol.h"
 
 class CControllerMap : public vgui::Panel
 {

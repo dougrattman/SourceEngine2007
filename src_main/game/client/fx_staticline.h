@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "clientsideeffects.h"
 
@@ -37,10 +37,10 @@ public:
 protected:
 
 	IMaterial		*m_pMaterial;
-	Vector			m_vecStart, m_vecEnd;
+	Vector m_vecStart, m_vecEnd;
 	unsigned int	m_uiFlags;
-	float			m_fLife;
-	float			m_fScale;
+	float m_fLife;
+	float m_fScale;
 };
 
 #endif

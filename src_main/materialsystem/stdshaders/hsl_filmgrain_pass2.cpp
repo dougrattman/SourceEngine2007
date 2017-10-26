@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 //=============================================================================
 
 #include "BaseVSShader.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "filmgrain_vs20.inc"
 #include "hsl_filmgrain_pass2_ps20.inc"
 #include "hsl_filmgrain_pass2_ps20b.inc"

@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
 #include "portal_vs11.inc"
 #include "portal_ps11.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 
 DEFINE_FALLBACK_SHADER( Portal, Portal_DX80 )

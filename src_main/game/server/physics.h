@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is the abstraction layer for the physics simulation system
 // Any calls to the external physics library (ipion) should be made through this
@@ -8,7 +8,7 @@
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PHYSICS_H
 #define PHYSICS_H
@@ -48,8 +48,8 @@ const float VPHYSICS_LARGE_OBJECT_MASS = 500.0f;
 
 struct gamevcollisionevent_t : public vcollisionevent_t
 {
-	Vector			preVelocity[2];
-	Vector			postVelocity[2];
+	Vector preVelocity[2];
+	Vector postVelocity[2];
 	AngularImpulse	preAngularVelocity[2];
 	CBaseEntity		*pEntities[2];
 
@@ -67,7 +67,7 @@ struct triggerevent_t
 	IPhysicsObject	*pTriggerPhysics;
 	CBaseEntity		*pEntity;
 	IPhysicsObject	*pObject;
-	bool			bStart;
+	bool bStart;
 
 	inline void Init( CBaseEntity *triggerEntity, IPhysicsObject *triggerPhysics, CBaseEntity *entity, IPhysicsObject *object, bool startTouch )
 	{
@@ -174,7 +174,7 @@ struct masscenteroverride_t
 
 	Vector		center;
 	Vector		axis;
-	int			alignType;
+	int alignType;
 	string_t	entityName;
 };
 

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 // This is a skeleton file for use when creating a new 
 // NPC. Copy and rename this file for the new
 // NPC and add the copy to the build.
@@ -21,7 +21,7 @@
 //
 // You're making a human-sized NPC that walks.
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "ai_default.h"
 #include "ai_task.h"

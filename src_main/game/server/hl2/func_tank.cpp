@@ -3750,7 +3750,7 @@ public:
 	void Precache( void );
 	void FiringSequence( const Vector &barrelEnd, const Vector &forward, CBaseEntity *pAttacker );
 	void Fire( int bulletCount, const Vector &barrelEnd, const Vector &vecForward, CBaseEntity *pAttacker, bool bIgnoreSpread );
-	void ShootGun(void);
+	void ShootGun();
 	void Spawn();
 	void SetNextAttack( float flWait );
 	

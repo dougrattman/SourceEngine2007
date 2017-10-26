@@ -1,11 +1,6 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
-//
-// Purpose:
-//
-//=============================================================================
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "enginethreads.h"
-
 
 bool g_bThreadedEngine = false;
 int g_nMaterialSystemThread = 0;

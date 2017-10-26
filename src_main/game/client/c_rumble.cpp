@@ -4,7 +4,7 @@
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "c_rumble.h"
 #include "rumble_shared.h"

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 //=====================================================================================//
 
-#include <math.h>
+#include <cmath>
 #include "mathlib/bumpvects.h"
 #include "colorspace.h"
 #include "materialsystem_global.h"
@@ -200,9 +200,9 @@ int ColorSpace::LinearToScreenGamma( float f )
 }
 
 
-uint16 ColorSpace::LinearFloatToCorrectedShort( float in )
+uint16_t ColorSpace::LinearFloatToCorrectedShort( float in )
 {
-	uint16 out;
+	uint16_t out;
 	in = min( in * 4096.0, 65535.0 );
 	out = max( in, 0.0f );
 

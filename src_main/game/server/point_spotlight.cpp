@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -27,19 +27,19 @@ public:
 
 	CPointSpotlight();
 
-	void	Precache(void);
-	void	Spawn(void);
+	void	Precache();
+	void	Spawn();
 	virtual void Activate();
 
 	virtual void OnEntityEvent( EntityEvent_t event, void *pEventData );
 
 private:
 	int 	UpdateTransmitState();
-	void	SpotlightThink(void);
-	void	SpotlightUpdate(void);
-	Vector	SpotlightCurrentPos(void);
-	void	SpotlightCreate(void);
-	void	SpotlightDestroy(void);
+	void	SpotlightThink();
+	void	SpotlightUpdate();
+	Vector	SpotlightCurrentPos();
+	void	SpotlightCreate();
+	void	SpotlightDestroy();
 
 	// ------------------------------
 	//  Inputs

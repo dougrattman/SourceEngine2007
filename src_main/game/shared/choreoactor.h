@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef CHOREOACTOR_H
 #define CHOREOACTOR_H
 #ifdef _WIN32
@@ -27,46 +27,46 @@ class CChoreoActor
 public:
 
 	// Construction
-					CChoreoActor( void );
-					CChoreoActor( const char *name );
+ 		CChoreoActor( void );
+ 		CChoreoActor( const char *name );
 	// Assignment
 	CChoreoActor&	operator = ( const CChoreoActor& src );
 
 	// Serialization
-	void			SaveToBuffer( CUtlBuffer& buf, CChoreoScene *pScene, IChoreoStringPool *pStringPool );
-	bool			RestoreFromBuffer( CUtlBuffer& buf, CChoreoScene *pScene, IChoreoStringPool *pStringPool );
+	void SaveToBuffer( CUtlBuffer& buf, CChoreoScene *pScene, IChoreoStringPool *pStringPool );
+	bool RestoreFromBuffer( CUtlBuffer& buf, CChoreoScene *pScene, IChoreoStringPool *pStringPool );
 
 	// Accessors
-	void			SetName( const char *name );
+	void SetName( const char *name );
 	const char		*GetName( void );
 
 	// Iteration
-	int				GetNumChannels( void );
+	int 	GetNumChannels( void );
 	CChoreoChannel	*GetChannel( int channel );
 
 	CChoreoChannel	*FindChannel( const char *name );
 
 	// Manipulate children
-	void			AddChannel( CChoreoChannel *channel );
-	void			RemoveChannel( CChoreoChannel *channel );
-	int				FindChannelIndex( CChoreoChannel *channel );
-	void			SwapChannels( int c1, int c2 );
-	void			RemoveAllChannels();
+	void AddChannel( CChoreoChannel *channel );
+	void RemoveChannel( CChoreoChannel *channel );
+	int 	FindChannelIndex( CChoreoChannel *channel );
+	void SwapChannels( int c1, int c2 );
+	void RemoveAllChannels();
 
-	void			SetFacePoserModelName( const char *name );
+	void SetFacePoserModelName( const char *name );
 	char const		*GetFacePoserModelName( void ) const;
 
-	void						SetActive( bool active );
-	bool						GetActive( void ) const;
+	void  SetActive( bool active );
+	bool  GetActive( void ) const;
 
-	bool			IsMarkedForSave() const { return m_bMarkedForSave; }
-	void			SetMarkedForSave( bool mark ) { m_bMarkedForSave = mark; }
+	bool IsMarkedForSave() const { return m_bMarkedForSave; }
+	void SetMarkedForSave( bool mark ) { m_bMarkedForSave = mark; }
 
-	void			MarkForSaveAll( bool mark );
+	void MarkForSaveAll( bool mark );
 
 private:
 	// Clear structure out
-	void			Init( void );
+	void Init( void );
 
 	enum
 	{
@@ -74,16 +74,16 @@ private:
 		MAX_FACEPOSER_MODEL_NAME = 128
 	};
 
-	char			m_szName[ MAX_ACTOR_NAME ];
-	char			m_szFacePoserModelName[ MAX_FACEPOSER_MODEL_NAME ];
+	char m_szName[ MAX_ACTOR_NAME ];
+	char m_szFacePoserModelName[ MAX_FACEPOSER_MODEL_NAME ];
 
 	// Children
 	CUtlVector < CChoreoChannel * >	m_Channels;
 
-	bool			m_bActive;
+	bool m_bActive;
 
 	// Purely for save/load
-	bool			m_bMarkedForSave;
+	bool m_bMarkedForSave;
 };
 
 #endif // CHOREOACTOR_H

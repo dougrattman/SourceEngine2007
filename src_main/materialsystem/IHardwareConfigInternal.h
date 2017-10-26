@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Header: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IHARDWARECONFIGINTERNAL_H
 #define IHARDWARECONFIGINTERNAL_H

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Deal intelligently with an enemy that we're afraid of
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #ifndef AI_BEHAVIOR_FEAR_H
@@ -70,7 +70,7 @@ public:
 		NEXT_TASK,
 
 		COND_FEAR_ENEMY_CLOSE = BaseClass::NEXT_CONDITION,	// within 30 feet
-		COND_FEAR_ENEMY_TOO_CLOSE,							// within 5 feet
+		COND_FEAR_ENEMY_TOO_CLOSE,  	// within 5 feet
 		COND_FEAR_SEPARATED_FROM_PLAYER,
 		NEXT_CONDITION,
 	};
@@ -82,9 +82,9 @@ public:
 private:
 	virtual int		SelectSchedule();
 
-	float			m_flTimeToSafety;
-	float			m_flTimePlayerLastVisible;
-	float			m_flDeferUntil;
+	float m_flTimeToSafety;
+	float m_flTimePlayerLastVisible;
+	float m_flDeferUntil;
 
 	CAI_MoveMonitor		m_SafePlaceMoveMonitor;
 	CHandle<CAI_Hint>	m_hSafePlaceHint;

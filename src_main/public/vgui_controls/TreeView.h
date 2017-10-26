@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TREEVIEW_H
 #define TREEVIEW_H
@@ -12,8 +12,8 @@
 #pragma once
 #endif
 
-#include <utllinkedlist.h>
-#include <utlvector.h>
+#include "tier1/UtlLinkedList.h"
+#include "tier1/UtlVector.h"
 #include <vgui/VGUI.h>
 #include <vgui_controls/Panel.h>
 
@@ -45,7 +45,7 @@ public:
 	virtual int GetNumChildren( int itemIndex );
 	virtual int GetChild( int iParentItemIndex, int iChild ); // between 0 and GetNumChildren( iParentItemIndex ).
 
-    virtual int GetItemCount(void);
+    virtual int GetItemCount();
     virtual KeyValues *GetItemData(int itemIndex);
      virtual void RemoveItem(int itemIndex, bool bPromoteChildren, bool bRecursivelyRemove = false );
     virtual void RemoveAll();
@@ -110,9 +110,9 @@ public:
 	/* message sent
 
 		"TreeViewItemSelected"  int "itemIndex"
-			called when the selected item changes
+ called when the selected item changes
 		"TreeViewItemDeselected" int "itemIndex"
-			called when item is deselected
+ called when item is deselected
 	*/
     int GetRowHeight();
 	int GetVisibleMaxWidth();
@@ -141,7 +141,7 @@ public:
 	void		SetMultipleItemDragEnabled( bool state ); // if this is set, then clicking on one row and dragging will select a run or items, etc.
 	bool		IsMultipleItemDragEnabled() const;
 
-	int			FindItemUnderMouse( int mx, int my );
+	int FindItemUnderMouse( int mx, int my );
 
 protected:
 	// functions to override
@@ -183,19 +183,19 @@ private:
 
     // cross reference - no hierarchy ordering in this list
     CUtlLinkedList<TreeNode *, int>   m_NodeList;
-   	ScrollBar					*m_pHorzScrollBar, *m_pVertScrollBar;
-	int							m_nRowHeight;
+   	ScrollBar 		*m_pHorzScrollBar, *m_pVertScrollBar;
+	int  	m_nRowHeight;
 
-	ImageList					*m_pImageList;
-    TreeNode					*m_pRootNode;
-    TreeViewSortFunc_t			m_pSortFunc;
-    HFont						m_Font;
+	ImageList 		*m_pImageList;
+    TreeNode 		*m_pRootNode;
+    TreeViewSortFunc_t m_pSortFunc;
+    HFont  m_Font;
 
     CUtlVector< TreeNode * >	m_SelectedItems;
-    TreeViewSubPanel			*m_pSubPanel;
+    TreeViewSubPanel *m_pSubPanel;
 
-	int							m_nMostRecentlySelectedItem;
-	bool						m_bScrollbarExternal[ 2 ]; // 0 = vert, 1 = horz
+	int  	m_nMostRecentlySelectedItem;
+	bool  m_bScrollbarExternal[ 2 ]; // 0 = vert, 1 = horz
 };
 
 }

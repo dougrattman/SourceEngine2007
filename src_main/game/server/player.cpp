@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Functions dealing with the player.
 //
@@ -50,7 +50,7 @@
 #include "gamevars_shared.h"
 #include "world.h"
 #include "physobj.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "coordsize.h"
 #include "vphysics/player_controller.h"
 #include "saverestore_utlvector.h"
@@ -4655,7 +4655,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 		// Randomize the start spot
 		for ( int i = random->RandomInt(1,5); i > 0; i-- )
 			pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
-		if ( !pSpot )  // skip over the null point
+		if ( !pSpot )  // skip over the 0 point
 			pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
 
 		CBaseEntity *pFirstSpot = pSpot;

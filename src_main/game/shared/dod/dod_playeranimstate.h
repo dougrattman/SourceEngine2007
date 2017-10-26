@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_PLAYERANIMSTATE_H
 #define DOD_PLAYERANIMSTATE_H
@@ -11,7 +11,7 @@
 #endif
 
 
-#include "convar.h"
+#include "tier1/convar.h"
 #include "iplayeranimstate.h"
 
 

@@ -6,17 +6,11 @@
 
 #ifndef GOLDSRC_STANDIN_H
 #define GOLDSRC_STANDIN_H
-#ifdef _WIN32
-#pragma once
-#endif
-
 
 typedef float vec_t;
 typedef float vec3_t[3];
 
 typedef unsigned char byte;
-typedef int qboolean;
-
 
 void Msg( const char *pMsg, ... );
 void Warning( const char *pMsg, ... );

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the tasks for default AI.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_TASK_H
 #define AI_TASK_H
@@ -68,11 +68,11 @@ inline int MakeFailCode( const char *pszGeneralError ) { return (int)pszGeneralE
 
 enum TaskStatus_e 
 {
-	TASKSTATUS_NEW =			 	0,			// Just started
-	TASKSTATUS_RUN_MOVE_AND_TASK =	1,			// Running task & movement
-	TASKSTATUS_RUN_MOVE	=			2,			// Just running movement
-	TASKSTATUS_RUN_TASK	=			3,			// Just running task
-	TASKSTATUS_COMPLETE	=			4,			// Completed, get next task
+	TASKSTATUS_NEW =  	0, // Just started
+	TASKSTATUS_RUN_MOVE_AND_TASK =	1, // Running task & movement
+	TASKSTATUS_RUN_MOVE	= 2, // Just running movement
+	TASKSTATUS_RUN_TASK	= 3, // Just running task
+	TASKSTATUS_COMPLETE	= 4, // Completed, get next task
 };
 
 // an array of tasks is a task list
@@ -94,7 +94,7 @@ enum sharedtasks_e
 		TASK_RESET_ACTIVITY,
 
 		// Waits for the specified number of seconds.
-		TASK_WAIT,					
+		TASK_WAIT, 		
 
 		// Make announce attack sound
 		TASK_ANNOUNCE_ATTACK,

@@ -60,7 +60,7 @@ public:
 
 	virtual bool CreateMove( float flInputSampleTime, CUserCmd *pCmd );
 
-	virtual bool				IsAllowedToSwitchWeapons( void );
+	virtual bool 	IsAllowedToSwitchWeapons( void );
 
 	virtual void ClientThink();
 
@@ -112,9 +112,9 @@ public:
 	// Taunts/VCDs
 	virtual bool	StartSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event, CChoreoActor *actor, C_BaseEntity *pTarget );
 	virtual void	CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, float &zFar, float &fov );
-	bool			StartGestureSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event, CChoreoActor *actor, CBaseEntity *pTarget );
-	void			TurnOnTauntCam( void );
-	void			TurnOffTauntCam( void );
+	bool StartGestureSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event, CChoreoActor *actor, CBaseEntity *pTarget );
+	void TurnOnTauntCam( void );
+	void TurnOffTauntCam( void );
 
 	virtual void	InitPhonemeMappings();
 
@@ -146,46 +146,47 @@ public:
 	virtual bool	IsOverridingViewmodel( void );
 	virtual int		DrawOverriddenViewmodel( C_BaseViewModel *pViewmodel, int flags );
 
-	void			SetHealer( C_TFPlayer *pHealer, float flChargeLevel );
-	void			GetHealer( C_TFPlayer **pHealer, float *flChargeLevel ) { *pHealer = m_hHealer; *flChargeLevel = m_flHealerChargeLevel; }
-	float			MedicGetChargeLevel( void );
+	void SetHealer( C_TFPlayer *pHealer, float flChargeLevel );
+	void GetHealer( C_TFPlayer **pHealer, float *flChargeLevel ) { *pHealer = m_hHealer; *flChargeLevel = m_flHealerChargeLevel; }
+	float MedicGetChargeLevel( void );
 	CBaseEntity		*MedicGetHealTarget( void );
 
-	void			StartBurningSound( void );
-	void			StopBurningSound( void );
-	void			OnAddTeleported( void );
-	void			OnRemoveTeleported( void );
+	void StartBurningSound( void );
+	void StopBurningSound( void );
+	void OnAddTeleported( void );
+	void OnRemoveTeleported( void );
 
-	bool			CanShowClassMenu( void );
+	bool CanShowClassMenu( void );
 
-	void			InitializePoseParams( void );
-	void			UpdateLookAt( void );
+	void InitializePoseParams( void );
+	void UpdateLookAt( void );
 
-	bool			IsEnemyPlayer( void );
-	void			ShowNemesisIcon( bool bShow );
+	bool IsEnemyPlayer( void );
+	void ShowNemesisIcon( bool bShow );
 
 	CUtlVector<EHANDLE>		*GetSpawnedGibs( void ) { return &m_hSpawnedGibs; }
 
 	const Vector& 	GetClassEyeHeight( void );
 
-	void			ForceUpdateObjectHudState( void );
+	void ForceUpdateObjectHudState( void );
 
-	bool			GetMedigunAutoHeal( void ){ return tf_medigun_autoheal.GetBool(); }
-	bool			ShouldAutoRezoom( void ){ return cl_autorezoom.GetBool(); }
+	bool GetMedigunAutoHeal( void ){ return tf_medigun_autoheal.GetBool(); }
+	bool ShouldAutoRezoom( void ){ return cl_autorezoom.GetBool(); }
+
 
 public:
 	// Shared functions
-	void			TeamFortress_SetSpeed();
-	bool			HasItem( void );					// Currently can have only one item at a time.
-	void			SetItem( C_TFItem *pItem );
+	void TeamFortress_SetSpeed();
+	bool HasItem( void ); 		// Currently can have only one item at a time.
+	void SetItem( C_TFItem *pItem );
 	C_TFItem		*GetItem( void );
-	bool			HasTheFlag( void );
-	float			GetCritMult( void ) { return m_Shared.GetCritMult(); }
+	bool HasTheFlag( void );
+	float GetCritMult( void ) { return m_Shared.GetCritMult(); }
 
 	virtual void	ItemPostFrame( void );
 
-	void			SetOffHandWeapon( CTFWeaponBase *pWeapon );
-	void			HolsterOffHandWeapon( void );
+	void SetOffHandWeapon( CTFWeaponBase *pWeapon );
+	void HolsterOffHandWeapon( void );
 
 	virtual int GetSkin();
 
@@ -214,7 +215,7 @@ public:
 
 	virtual CStudioHdr *OnNewModel( void );
 
-	void				DisplaysHintsForTarget( C_BaseEntity *pTarget );
+	void 	DisplaysHintsForTarget( C_BaseEntity *pTarget );
 
 	// Shadows
 	virtual ShadowType_t ShadowCastType( void ) ;
@@ -241,30 +242,30 @@ private:
 
 	void InitInvulnerableMaterial( void );
 
-	bool				m_bWasTaunting;
+	bool 	m_bWasTaunting;
 	CameraThirdData_t	m_TauntCameraData;
 
-	QAngle				m_angTauntPredViewAngles;
-	QAngle				m_angTauntEngViewAngles;
+	QAngle 	m_angTauntPredViewAngles;
+	QAngle 	m_angTauntEngViewAngles;
 
 private:
 
 	C_TFPlayerClass		m_PlayerClass;
 
 	// ID Target
-	int					m_iIDEntIndex;
-	int					m_iForcedIDTarget;
+	int 		m_iIDEntIndex;
+	int 		m_iForcedIDTarget;
 
 	CNewParticleEffect	*m_pTeleporterEffect;
-	bool				m_bToolRecordingVisibility;
+	bool 	m_bToolRecordingVisibility;
 
-	int					m_iOldState;
-	int					m_iOldSpawnCounter;
+	int 		m_iOldState;
+	int 		m_iOldSpawnCounter;
 
 	// Healer
 	CHandle<C_TFPlayer>	m_hHealer;
-	float				m_flHealerChargeLevel;
-	int					m_iOldHealth;
+	float 	m_flHealerChargeLevel;
+	int 		m_iOldHealth;
 
 	CNetworkVar( int, m_iPlayerModelIndex );
 
@@ -307,47 +308,47 @@ public:
 
 	CNetworkHandle( C_TFWeaponBase, m_hOffHandWeapon );
 
-	int				m_iOldPlayerClass;	// Used to detect player class changes
-	bool			m_bIsDisplayingNemesisIcon;
+	int 	m_iOldPlayerClass;	// Used to detect player class changes
+	bool m_bIsDisplayingNemesisIcon;
 
-	int				m_iSpawnCounter;
+	int 	m_iSpawnCounter;
 
-	bool			m_bSaveMeParity;
-	bool			m_bOldSaveMeParity;
+	bool m_bSaveMeParity;
+	bool m_bOldSaveMeParity;
 
-	int				m_nOldWaterLevel;
-	float			m_flWaterEntryTime;
-	bool			m_bWaterExitEffectActive;
+	int 	m_nOldWaterLevel;
+	float m_flWaterEntryTime;
+	bool m_bWaterExitEffectActive;
 
 	CMaterialReference	m_InvulnerableMaterial;
 
 
 	// Burning
-	CSoundPatch			*m_pBurningSound;
+	CSoundPatch *m_pBurningSound;
 	CNewParticleEffect	*m_pBurningEffect;
-	float				m_flBurnEffectStartTime;
-	float				m_flBurnEffectEndTime;
+	float 	m_flBurnEffectStartTime;
+	float 	m_flBurnEffectEndTime;
 
 	CNewParticleEffect	*m_pDisguisingEffect;
 	float m_flDisguiseEffectStartTime;
 	float m_flDisguiseEndEffectStartTime;
 
-	EHANDLE					m_hFirstGib;
+	EHANDLE 		m_hFirstGib;
 	CUtlVector<EHANDLE>		m_hSpawnedGibs;
 
-	int				m_iOldTeam;
-	int				m_iOldClass;
-	int				m_iOldDisguiseTeam;
-	int				m_iOldDisguiseClass;
+	int 	m_iOldTeam;
+	int 	m_iOldClass;
+	int 	m_iOldDisguiseTeam;
+	int 	m_iOldDisguiseClass;
 
-	bool			m_bDisguised;
-	int				m_iPreviousMetal;
+	bool m_bDisguised;
+	int 	m_iPreviousMetal;
 
 	int GetNumActivePipebombs( void );
 
-	int				m_iSpyMaskBodygroup;
+	int 	m_iSpyMaskBodygroup;
 
-	bool			m_bUpdatePartyHat;
+	bool m_bUpdatePartyHat;
 	CHandle<C_PlayerAttachedModel>	m_hPartyHat;
 
 private:

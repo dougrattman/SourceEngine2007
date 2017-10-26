@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_ROUNDINFO_H
 #define TF_ROUNDINFO_H
@@ -48,18 +48,18 @@ protected:
 	void UpdateImage( vgui::ImagePanel *pImagePanel, const char *pszImageName );
 
 protected:
-	IViewPort			*m_pViewPort;
+	IViewPort *m_pViewPort;
 
-	CTFLabel			*m_pTitle;
+	CTFLabel *m_pTitle;
 	vgui::ImagePanel	*m_pMapImage;
 	
 #ifdef _X360
-	CTFFooter			*m_pFooter;
+	CTFFooter *m_pFooter;
 #else
-	CTFButton			*m_pContinue;
+	CTFButton *m_pContinue;
 #endif
 
-	char				m_szMapImage[MAX_ROUND_IMAGE_NAME];
+	char 	m_szMapImage[MAX_ROUND_IMAGE_NAME];
 
 	RoundInfoOverlay	*m_pOverlay;
 

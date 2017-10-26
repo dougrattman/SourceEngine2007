@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( INETGRAPHPANEL_H )
 #define INETGRAPHPANEL_H
@@ -23,8 +23,8 @@ namespace vgui
 abstract_class INetGraphPanel
 {
 public:
-	virtual void			Create( vgui::VPANEL parent ) = 0;
-	virtual void			Destroy( void ) = 0;
+	virtual void Create( vgui::VPANEL parent ) = 0;
+	virtual void Destroy( void ) = 0;
 };
 
 extern INetGraphPanel *netgraphpanel;

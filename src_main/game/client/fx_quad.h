@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "clientsideeffects.h"
 
@@ -29,15 +29,15 @@ struct FXQuadData_t
 		m_uiFlags		= 0;
 	}
 
-	void SetFlags( unsigned int flags )			{ m_uiFlags |= flags; }
+	void SetFlags( unsigned int flags ) { m_uiFlags |= flags; }
 	void SetOrigin( const Vector &origin )		{ m_vecOrigin = origin; }
 	void SetNormal( const Vector &normal )		{ m_vecNormal = normal; }
 	void SetScale( float start, float end )		{ m_flStartScale = start; m_flEndScale = end; }
 	void SetAlpha( float start, float end )		{ m_flStartAlpha = start; m_flEndAlpha = end; }
-	void SetLifeTime( float lifetime )			{ m_flDieTime = lifetime; }
+	void SetLifeTime( float lifetime ) { m_flDieTime = lifetime; }
 	void SetColor( float r, float g, float b )	{ m_Color = Vector( r, g, b ); }
-	void SetAlphaBias( float bias )				{ m_flAlphaBias = bias; }
-	void SetScaleBias( float bias )				{ m_flScaleBias = bias; }
+	void SetAlphaBias( float bias ) 	{ m_flAlphaBias = bias; }
+	void SetScaleBias( float bias ) 	{ m_flScaleBias = bias; }
 	void SetYaw( float yaw, float delta = 0.0f ){ m_flYaw = yaw; m_flDeltaYaw = delta; }
 
 	void SetMaterial( const char *shader )	
@@ -46,27 +46,27 @@ struct FXQuadData_t
 
 		if ( m_pMaterial != NULL )
 		{
-			m_pMaterial->IncrementReferenceCount();
+ m_pMaterial->IncrementReferenceCount();
 		}
 	}
 
 	unsigned int	m_uiFlags;
 	IMaterial		*m_pMaterial;
-	Vector			m_vecOrigin;
-	Vector			m_vecNormal;
-	float			m_flStartScale;
-	float			m_flEndScale;
-	float			m_flDieTime;
-	float			m_flLifeTime;
-	float			m_flStartAlpha;
-	float			m_flEndAlpha;
-	Vector			m_Color;
-	float			m_flYaw;
-	float			m_flDeltaYaw;
+	Vector m_vecOrigin;
+	Vector m_vecNormal;
+	float m_flStartScale;
+	float m_flEndScale;
+	float m_flDieTime;
+	float m_flLifeTime;
+	float m_flStartAlpha;
+	float m_flEndAlpha;
+	Vector m_Color;
+	float m_flYaw;
+	float m_flDeltaYaw;
 	
 	// Only used with FXQUAD_BIAS_ALPHA and FXQUAD_BIAS_SCALE
-	float			m_flScaleBias;
-	float			m_flAlphaBias;
+	float m_flScaleBias;
+	float m_flAlphaBias;
 };
 
 class CFXQuad : public CClientSideEffect

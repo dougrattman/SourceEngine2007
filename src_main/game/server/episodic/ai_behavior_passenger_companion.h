@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -102,7 +102,7 @@ public:
 
 private:
 
-	void			SpeakVehicleConditions( void );
+	void SpeakVehicleConditions( void );
 	virtual void	OnExitVehicleFailed( void );
 
 	bool	CanFidget( void );
@@ -131,24 +131,24 @@ private:
 	bool	GetStuckExitPos( Vector *vecResult );
 	bool	ExitStuckVehicle( void );
 
-	bool			UpdateVehicleEntrancePath( void );
-	bool			PointIsWithinEntryFailureRadius( const Vector &vecPosition );
-	void			ResetVehicleEntryFailedState( void );
-	void			MarkVehicleEntryFailed( const Vector &vecPosition );
+	bool UpdateVehicleEntrancePath( void );
+	bool PointIsWithinEntryFailureRadius( const Vector &vecPosition );
+	void ResetVehicleEntryFailedState( void );
+	void MarkVehicleEntryFailed( const Vector &vecPosition );
 	virtual int		FindEntrySequence( bool bNearest = false );
-	void			CalculateBodyLean( void );
+	void CalculateBodyLean( void );
 
 	float	m_flNextJostleTime;
 	float	m_flNextOverturnWarning;	// The next time the NPC may complained about being upside-down
 	float	m_flOverturnedDuration;		// Amount of time we've been stuck in the vehicle (unable to exit)
-	float	m_flUnseenDuration;			// Amount of time we've been hidden from the player's view
+	float	m_flUnseenDuration; // Amount of time we've been hidden from the player's view
 
-	float	m_flEnterBeginTime;			// Time the NPC started to try and enter the vehicle
-	int		m_nExitAttempts;			// Number of times we've attempted to exit the vehicle but failed
-	int		m_nVisibleEnemies;			// Keeps a record of how many enemies I know about
+	float	m_flEnterBeginTime; // Time the NPC started to try and enter the vehicle
+	int		m_nExitAttempts; // Number of times we've attempted to exit the vehicle but failed
+	int		m_nVisibleEnemies; // Keeps a record of how many enemies I know about
 	float	m_flLastLateralLean;		// Our last lean value
 
-	CAI_MoveMonitor				m_VehicleMonitor;		// Used to keep track of the vehicle's movement relative to a mark
+	CAI_MoveMonitor 	m_VehicleMonitor;		// Used to keep track of the vehicle's movement relative to a mark
 	CUtlVector<FailPosition_t>	m_FailedEntryPositions;	// Used to keep track of the vehicle's movement relative to a mark
 
 protected:

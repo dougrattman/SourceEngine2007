@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains all texture state for the material system surface to use
 //
@@ -6,13 +6,13 @@
 
 #include "bitmap/imageformat.h"
 #include "TextureDictionary.h"
-#include "UtlLinkedList.h"
-#include "checksum_crc.h"
+#include "tier1/UtlLinkedList.h"
+#include "tier1/checksum_crc.h"
 #include "materialsystem/IMaterial.h"
 #include "VguiMatSurface.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "tier0/dbg.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "PixelWriter.h"
 #include "materialsystem/IMaterialVar.h"
 #include "materialsystem/ITexture.h"

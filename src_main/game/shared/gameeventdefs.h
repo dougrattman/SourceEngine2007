@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef GAMEEVENTDEFS_H
 #define GAMEEVENTDEFS_H
@@ -16,6 +16,6 @@
 // 256 is the maximum number of game events
 
 #define GAME_EVENT_PLAYER_DEATH		"player_death"
-#define GAME_EVENT_SAY_TEXT			"say_text"
+#define GAME_EVENT_SAY_TEXT "say_text"
 
 #endif // GAMEEVENTDEFS_H

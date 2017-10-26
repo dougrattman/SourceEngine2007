@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_SENTENCE_H
 #define AI_SENTENCE_H
@@ -140,10 +140,10 @@ void CAI_Sentence< NPC_CLASS >::Init( NPC_CLASS *pOuter, const char *pGameSound 
 		CSoundParameters params;
 		if ( GetOuter()->GetParametersForSound( pGameSound, params, NULL ) )
 		{
-			m_sentenceVolume = params.volume;
-			m_sentenceSoundlevel = params.soundlevel;
-			m_voicePitchMin = params.pitchlow;
-			m_voicePitchMax = params.pitchhigh;
+ m_sentenceVolume = params.volume;
+ m_sentenceSoundlevel = params.soundlevel;
+ m_voicePitchMin = params.pitchlow;
+ m_voicePitchMax = params.pitchhigh;
 		}
 	}
 	

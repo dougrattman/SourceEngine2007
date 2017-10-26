@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 /*
 
 ===== h_battery.cpp ========================================================
@@ -36,9 +36,9 @@ public:
 
 	void Spawn( );
 	bool CreateVPhysics();
-	int DrawDebugTextOverlays(void);
-	void Off(void);
-	void Recharge(void);
+	int DrawDebugTextOverlays();
+	void Off();
+	void Recharge();
 	bool KeyValue( const char *szKeyName, const char *szValue );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return (BaseClass::ObjectCaps() | FCAP_CONTINUOUS_USE); }
@@ -338,9 +338,9 @@ public:
 
 	void Spawn( );
 	bool CreateVPhysics();
-	int DrawDebugTextOverlays(void);
-	void Off(void);
-	void Recharge(void);
+	int DrawDebugTextOverlays();
+	void Off();
+	void Recharge();
 	bool KeyValue( const char *szKeyName, const char *szValue );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return (BaseClass::ObjectCaps() | m_iCaps ); }

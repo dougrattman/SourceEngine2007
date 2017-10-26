@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_HUD_OBJECTIVESTATUS_H
 #define TF_HUD_OBJECTIVESTATUS_H
@@ -88,25 +88,25 @@ private:
 
 private:
 
-	float				m_flNextThink;
-	int					m_iTimerIndex;
-	bool				m_bSuddenDeath;
-	bool				m_bOvertime;
+	float 	m_flNextThink;
+	int 		m_iTimerIndex;
+	bool 	m_bSuddenDeath;
+	bool 	m_bOvertime;
 
-	CTFLabel			*m_pTimeValue;
+	CTFLabel *m_pTimeValue;
 	CTFProgressBar		*m_pProgressBar;
 
-	CTFLabel			*m_pWaitingForPlayersLabel;
+	CTFLabel *m_pWaitingForPlayersLabel;
 	CTFImagePanel		*m_pWaitingForPlayersBG;
 
-	CTFLabel			*m_pOvertimeLabel;
+	CTFLabel *m_pOvertimeLabel;
 	CTFImagePanel		*m_pOvertimeBG;
 
-	CTFLabel			*m_pSetupLabel;
+	CTFLabel *m_pSetupLabel;
 	CTFImagePanel		*m_pSetupBG;
 
 	// we'll have a second label/bg set for the SuddenDeath panel in case we want to change the look from the Overtime label
-	CTFLabel			*m_pSuddenDeathLabel;
+	CTFLabel *m_pSuddenDeathLabel;
 	CTFImagePanel		*m_pSuddenDeathBG;
 
 	// delta stuff
@@ -150,7 +150,7 @@ private:
 
 private:
 
-	float					m_flNextThink;
+	float 		m_flNextThink;
 
 	CTFHudFlagObjectives	*m_pFlagPanel;
 	CTFHudTimeStatus		*m_pTimePanel;

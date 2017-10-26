@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -35,8 +35,8 @@
  */
 
 #include "weapon_csbase.h"
-#include <KeyValues.h>
-#include <UtlVector.h>
+#include "tier1/keyvalues.h"
+#include "tier1/UtlVector.h"
 
 class BuyPreset;
 class CCSWeaponInfo;
@@ -71,24 +71,24 @@ public:
 	BuyPresetWeapon( CSWeaponID weaponID );
 	BuyPresetWeapon& operator= (const BuyPresetWeapon& other);
 
-	const wchar_t*	GetName() const { return m_name; }				///< Returns the display name corresponding to the weapon ID
+	const wchar_t*	GetName() const { return m_name; } 	///< Returns the display name corresponding to the weapon ID
 	CSWeaponID		GetWeaponID() const { return m_weaponID; }		///< Returns the WEAPON_* weapon ID
-	void			SetWeaponID( CSWeaponID weaponID );				///< Sets the WEAPON_* weapon ID (and resets ammo, etc)
+	void SetWeaponID( CSWeaponID weaponID ); 	///< Sets the WEAPON_* weapon ID (and resets ammo, etc)
 
-	void			SetAmmoType( AmmoSizeType ammoType ) { m_ammoType = ammoType; }	///< Sets the ammo type - percent (unused), clips, or rounds (unused)
-	void			SetAmmoAmount( int ammoAmount ) { m_ammoAmount = ammoAmount; }	///< Sets the amount of ammo, in units relevant to the ammo type
-	void			SetFillAmmo( bool fill ) { m_fillAmmo = fill; }	///< Sets whether the weapon's ammo should be topped off
+	void SetAmmoType( AmmoSizeType ammoType ) { m_ammoType = ammoType; }	///< Sets the ammo type - percent (unused), clips, or rounds (unused)
+	void SetAmmoAmount( int ammoAmount ) { m_ammoAmount = ammoAmount; }	///< Sets the amount of ammo, in units relevant to the ammo type
+	void SetFillAmmo( bool fill ) { m_fillAmmo = fill; }	///< Sets whether the weapon's ammo should be topped off
 
 	AmmoSizeType	GetAmmoType() const { return m_ammoType; }		///< Returns ammo type - percent (unused), clips, or rounds (unused)
-	int				GetAmmoAmount() const { return m_ammoAmount; }	///< Returns the amount of ammo, in units relevant to the ammo type
-	bool			GetFillAmmo() const { return m_fillAmmo; }		///< Returns true if the weapon's ammo should be topped off
+	int 	GetAmmoAmount() const { return m_ammoAmount; }	///< Returns the amount of ammo, in units relevant to the ammo type
+	bool GetFillAmmo() const { return m_fillAmmo; }		///< Returns true if the weapon's ammo should be topped off
 
 protected:
 	const wchar_t	*m_name;
 	CSWeaponID		m_weaponID;
 	AmmoSizeType	m_ammoType;
-	int				m_ammoAmount;
-	bool			m_fillAmmo;
+	int 	m_ammoAmount;
+	bool m_fillAmmo;
 };
 
 typedef CUtlVector< BuyPresetWeapon > BuyPresetWeaponList;
@@ -103,12 +103,12 @@ class WeaponSet
 public:
 	WeaponSet();
 
-	void GetCurrent( int& cost, WeaponSet& ws ) const;								///< Generates a WeaponSet containing only items that would be bought right now
-	void GetFromScratch( int& cost, WeaponSet& ws ) const;							///< Generates a WeaponSet containing everything that would be bought from scratch
+	void GetCurrent( int& cost, WeaponSet& ws ) const;  		///< Generates a WeaponSet containing only items that would be bought right now
+	void GetFromScratch( int& cost, WeaponSet& ws ) const;  	///< Generates a WeaponSet containing everything that would be bought from scratch
 
-	void GenerateBuyCommands( char command[BUY_PRESET_COMMAND_LEN] ) const;			///< Generates a list of commands to buy the current WeaponSet.
+	void GenerateBuyCommands( char command[BUY_PRESET_COMMAND_LEN] ) const; ///< Generates a list of commands to buy the current WeaponSet.
 
-	int FullCost() const;															///< Calculates the full cost of the WeaponSet, including all optional items
+	int FullCost() const;     ///< Calculates the full cost of the WeaponSet, including all optional items
 
 	void Reset( void );
 
@@ -145,17 +145,17 @@ public:
 	void SetName( const wchar_t *name );
 	const wchar_t * GetName() const { return m_name; }
 
-	void Parse( KeyValues *data );								///< Populates data from a KeyValues structure, for loading
-	void Save( KeyValues *data );								///< Fills in a KeyValues structure with data, for saving
+	void Parse( KeyValues *data );  		///< Populates data from a KeyValues structure, for loading
+	void Save( KeyValues *data );  		///< Fills in a KeyValues structure with data, for saving
 
 	int GetNumSets() const { return m_weaponList.Count(); }		///< Returns the number of fallback WeaponSets
-	const WeaponSet * GetSet( int index ) const;				///< Returns the specified fallback WeaponSet, or NULL if it doesn't exist
+	const WeaponSet * GetSet( int index ) const; 	///< Returns the specified fallback WeaponSet, or NULL if it doesn't exist
 
-	int FullCost() const;										///< Calculates the full cost of the preset, which is exactly the full cost of the first fallback WeaponSet
+	int FullCost() const;   	///< Calculates the full cost of the preset, which is exactly the full cost of the first fallback WeaponSet
 
 	// editing functions --------------------
-	void DeleteSet( int index );								///< Deletes a fallback
-	void SwapSet( int firstIndex, int secondIndex );			///< Switches the order of two fallbacks
+	void DeleteSet( int index );  		///< Deletes a fallback
+	void SwapSet( int firstIndex, int secondIndex ); ///< Switches the order of two fallbacks
 	void ReplaceSet( int index, const WeaponSet& weaponSet );	///< Replaces a fallback with the supplied WeaponSet
 
 private:
@@ -181,10 +181,10 @@ public:
 
 	void Save();
 
-	void PurchasePreset( int presetIndex );							///< Generates and sends buy commands to buy a specific preset
+	void PurchasePreset( int presetIndex );  	///< Generates and sends buy commands to buy a specific preset
 
 	int GetNumPresets() { VerifyLoadedTeam(); return m_presets.Count(); }
-	const BuyPreset * GetPreset( int index ) const;					///< Returns the specified "live" preset, or NULL if it doesn't exist
+	const BuyPreset * GetPreset( int index ) const; 		///< Returns the specified "live" preset, or NULL if it doesn't exist
 	void SetPreset( int index, const BuyPreset *preset );
 
 	void SetPresets( const BuyPresetList& presets ) { m_presets = presets; }
@@ -192,11 +192,11 @@ public:
 	void SetEditPresets( const BuyPresetList& presets ) { m_editPresets = presets; }
 	int GetNumEditPresets() const { return m_editPresets.Count(); }
 
-	BuyPreset * GetEditPreset( int index );							///< Returns the specified editing preset, or NULL if it doesn't exist
+	BuyPreset * GetEditPreset( int index );  	///< Returns the specified editing preset, or NULL if it doesn't exist
 	const CUtlVector< BuyPreset >& GetEditPresets() const { return m_editPresets; }
 
-	void ResetEditPresets() { m_editPresets = m_presets; }			///< Resets the editing presets to the live presets (e.g. when starting editing)
-	void ResetEditToDefaults( void );							///< Loads the default presets into the editing presets (e.g. when hitting the "Use Defaults" button)
+	void ResetEditPresets() { m_editPresets = m_presets; } ///< Resets the editing presets to the live presets (e.g. when starting editing)
+	void ResetEditToDefaults( void );  	///< Loads the default presets into the editing presets (e.g. when hitting the "Use Defaults" button)
 
 	void GetCurrentLoadout( WeaponSet *weaponSet );
 
@@ -216,9 +216,9 @@ extern BuyPresetManager *TheBuyPresets;
  *  Functions for controlling the display of the various buy preset editing menus.  Opening one closes any
  *  others open.
  */
-enum { REOPEN_YES, REOPEN_NO, REOPEN_DONTCHANGE };					///< Determines if we need to re-open the buy menu when done editing.
+enum { REOPEN_YES, REOPEN_NO, REOPEN_DONTCHANGE }; 		///< Determines if we need to re-open the buy menu when done editing.
 void ShowBuyPresetMainMenu( bool runUpdate, int reopenBuyMenu );	///< Open the main preset editing menu
-void ShowBuyPresetEditMenu( int presetIndex );						///< Open the menu for editing the list of fallbacks for an individual preset
+void ShowBuyPresetEditMenu( int presetIndex );  ///< Open the menu for editing the list of fallbacks for an individual preset
 
 //--------------------------------------------------------------------------------------------------------------
 /**

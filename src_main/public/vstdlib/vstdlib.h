@@ -1,33 +1,20 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-	   
-#ifndef VSTDLIB_H
-#define VSTDLIB_H
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_VSTDLIB_VSTDLIB_H_
+#define SOURCE_VSTDLIB_VSTDLIB_H_
 
 #include "tier0/platform.h"
 
-//-----------------------------------------------------------------------------
-// dll export stuff
-//-----------------------------------------------------------------------------
 #ifdef VSTDLIB_DLL_EXPORT
-#define VSTDLIB_INTERFACE	DLL_EXPORT
-#define VSTDLIB_OVERLOAD	DLL_GLOBAL_EXPORT
-#define VSTDLIB_CLASS		DLL_CLASS_EXPORT
-#define VSTDLIB_GLOBAL		DLL_GLOBAL_EXPORT
+#define VSTDLIB_INTERFACE DLL_EXPORT
+#define VSTDLIB_OVERLOAD DLL_GLOBAL_EXPORT
+#define VSTDLIB_CLASS DLL_CLASS_EXPORT
+#define VSTDLIB_GLOBAL DLL_GLOBAL_EXPORT
 #else
-#define VSTDLIB_INTERFACE	DLL_IMPORT
-#define VSTDLIB_OVERLOAD	DLL_GLOBAL_IMPORT
-#define VSTDLIB_CLASS		DLL_CLASS_IMPORT
-#define VSTDLIB_GLOBAL		DLL_GLOBAL_IMPORT
+#define VSTDLIB_INTERFACE DLL_IMPORT
+#define VSTDLIB_OVERLOAD DLL_GLOBAL_IMPORT
+#define VSTDLIB_CLASS DLL_CLASS_IMPORT
+#define VSTDLIB_GLOBAL DLL_GLOBAL_IMPORT
 #endif
- 
-#endif // VSTDLIB_H
+
+#endif  // SOURCE_VSTDLIB_VSTDLIB_H_

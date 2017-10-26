@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FUNC_MOVELINEAR_H
 #define FUNC_MOVELINEAR_H
@@ -34,7 +34,7 @@ public:
 	void		Blocked( CBaseEntity *pOther );
 	void		SetPosition( float flPosition );
 
-	int			DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Input handlers
 	void InputOpen( inputdata_t &inputdata );
@@ -44,11 +44,11 @@ public:
 	
 	DECLARE_DATADESC();
 
-	Vector		m_vecMoveDir;			// Move direction.
+	Vector		m_vecMoveDir; // Move direction.
 
-	string_t	m_soundStart;			// start and looping sound
-	string_t	m_soundStop;			// stop sound
-	string_t	m_currentSound;			// sound I'm playing
+	string_t	m_soundStart; // start and looping sound
+	string_t	m_soundStop; // stop sound
+	string_t	m_currentSound; // sound I'm playing
 
 	float		m_flBlockDamage;		// Damage inflicted when blocked.
 	float		m_flStartPosition;		// Position of brush when spawned

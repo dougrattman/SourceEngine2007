@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A volume which fires an output when a portal is placed in it.
 //
@@ -41,7 +41,7 @@ public:
 	DECLARE_DATADESC();
 
 private:
-	bool	m_bActive;			// are we currently detecting portals
+	bool	m_bActive; // are we currently detecting portals
 	int		m_iLinkageGroupID;	// what set of portals are we testing for?
 	
 };

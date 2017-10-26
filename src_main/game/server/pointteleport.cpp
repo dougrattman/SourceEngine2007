@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Teleports a named entity to a given position and restores
 //			it's physics state
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 

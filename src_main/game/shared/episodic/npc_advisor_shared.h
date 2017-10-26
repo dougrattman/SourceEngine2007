@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Shared data between client and server side npc_advisor classes.
 //
 // Catchphrase: "It's advising us!!!"
 //
-//=============================================================================//
+
 
 #ifndef NPC_ADVISOR_SHARED_H
 #define NPC_ADVISOR_SHARED_H

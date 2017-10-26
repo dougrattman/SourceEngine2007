@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Declaration of FileOpenDialog class, a generic open/save as file dialog
 //
@@ -68,10 +68,10 @@ public:
 
 	/*
 		messages sent:
-			"FileSelected"
-				"fullpath"	// specifies the fullpath of the file
-				"filterinfo"	// Returns the filter info associated with the active filter
-			"FileSelectionCancelled"
+ "FileSelected"
+ 	"fullpath"	// specifies the fullpath of the file
+ 	"filterinfo"	// Returns the filter info associated with the active filter
+ "FileSelectionCancelled"
 	*/
 
 protected:
@@ -142,16 +142,16 @@ private:
 	vgui::Button		*m_pNewFolderButton;
 	vgui::Button		*m_pOpenInExplorerButton;
 	vgui::ImagePanel 	*m_pFolderIcon;
-	vgui::Label			*m_pFileTypeLabel;
+	vgui::Label *m_pFileTypeLabel;
 
-	KeyValues			*m_pContextKeyValues;
+	KeyValues *m_pContextKeyValues;
 
 	char m_szLastPath[1024];
 	unsigned short m_nStartDirContext;
 	FileOpenDialogType_t m_DialogType;
 	bool m_bFileSelected : 1;
 
-	VPANEL				m_SaveModal;
+	VPANEL 	m_SaveModal;
 	vgui::DHANDLE< vgui::InputDialog >	m_hInputDialog;
 };
 

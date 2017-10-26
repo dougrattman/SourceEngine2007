@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FX_EXPLOSION_H
 #define FX_EXPLOSION_H
@@ -27,14 +27,14 @@ private:
 	static C_BaseExplosionEffect	m_instance;
 
 public:
-			~C_BaseExplosionEffect( void ) {}
+ ~C_BaseExplosionEffect( void ) {}
 
 	static	C_BaseExplosionEffect &Instance( void )	{	return m_instance;	}
 
 	virtual void	Create( const Vector &position, float force, float scale, int flags );
 
 protected:
-					C_BaseExplosionEffect( void );
+ 		C_BaseExplosionEffect( void );
 
 	virtual void	PlaySound( void );
 
@@ -43,10 +43,10 @@ protected:
 	virtual void	CreateMisc( void );
 	virtual void	CreateDynamicLight( void );
 
-	float			ScaleForceByDeviation( Vector &deviant, Vector &source, float spread, float *force = NULL );
+	float ScaleForceByDeviation( Vector &deviant, Vector &source, float spread, float *force = NULL );
 
-	float			Probe( const Vector &origin, Vector *direction, float strength );
-	void			GetForceDirection( const Vector &origin, float magnitude, Vector *resultDirection, float *resultForce );
+	float Probe( const Vector &origin, Vector *direction, float strength );
+	void GetForceDirection( const Vector &origin, float magnitude, Vector *resultDirection, float *resultForce );
 
 protected:
 
@@ -100,9 +100,9 @@ protected:
 
 private:
 	Vector	m_vecWaterSurface;
-	float	m_flDepth;				// Depth below the water surface (used for surface effect)
-	Vector	m_vecColor;				// Lighting tint information
-	float	m_flLuminosity;			// Luminosity information
+	float	m_flDepth; 	// Depth below the water surface (used for surface effect)
+	Vector	m_vecColor; 	// Lighting tint information
+	float	m_flLuminosity; // Luminosity information
 
 	static C_WaterExplosionEffect	m_waterinstance;
 };

@@ -1,59 +1,42 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2005, Valve Corporation, All rights reserved.
 //
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// TextConsoleUnix.h: Unix interface for the TextConsole class.
-//
-//////////////////////////////////////////////////////////////////////
+// Purpose: Unix interface for the TextConsole class.
 
-#if !defined TEXTCONSOLE_UNIX_H
-#define TEXTCONSOLE_UNIX_H
-
+#ifndef SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEUNIX_H_
+#define SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEUNIX_H_
 
 #ifndef _WIN32
 
-
-#include <termios.h>
 #include <stdio.h>
+#include <termios.h>
 #include "textconsole.h"
 
-
-typedef enum
-{
-    ESCAPE_CLEAR = 0,
-    ESCAPE_RECEIVED,
-    ESCAPE_BRACKET_RECEIVED
+typedef enum {
+  ESCAPE_CLEAR = 0,
+  ESCAPE_RECEIVED,
+  ESCAPE_BRACKET_RECEIVED
 } escape_sequence_t;
 
+class CTextConsoleUnix : public CTextConsole {
+ public:
+  virtual ~CTextConsoleUnix(){};
 
-class CTextConsoleUnix : public CTextConsole
-{
-public:
-	virtual ~CTextConsoleUnix()
-	{
-	};
+  bool Init();
+  void ShutDown(void);
+  void PrintRaw(char *pszMsg, int nChars = 0);
+  void Echo(char *pszMsg, int nChars = 0);
+  char *GetLine(void);
+  int GetWidth(void);
 
-	bool		Init();
-	void		ShutDown( void );
-	void		PrintRaw( char * pszMsg, int nChars = 0 );
-	void		Echo( char * pszMsg, int nChars = 0 );
-	char *		GetLine( void );
-	int			GetWidth( void );
+ private:
+  int kbhit(void);
 
-private:
-	int kbhit( void );
+  bool m_bConDebug;
 
-	bool m_bConDebug;
-
-	struct termios termStored;
-	FILE *tty;
+  struct termios termStored;
+  FILE *tty;
 };
 
+#endif  // _WIN32
 
-#endif // _ndef WIN32
-
-
-#endif // !defined
+#endif  // SOURCE_DEDICATED_CONSOLE_TEXTCONSOLEUNIX_H_

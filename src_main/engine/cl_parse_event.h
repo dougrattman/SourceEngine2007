@@ -1,17 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef CL_PARSE_EVENT_H
 #define CL_PARSE_EVENT_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-void CL_Parse_ReliableEvent( void );
-void CL_Parse_Event( void );
+void CL_Parse_ReliableEvent();
+void CL_Parse_Event();
 
-#endif // CL_PARSE_EVENT_H
+#endif  // CL_PARSE_EVENT_H

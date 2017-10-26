@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_CONTROLS_H
 #define TF_CONTROLS_H
@@ -13,7 +13,7 @@
 
 #include <vgui/IScheme.h>
 #include <vgui/KeyCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IVGUI.h>
 #include <vgui_controls/ScrollBar.h>
 #include <vgui_controls/EditablePanel.h>
@@ -106,9 +106,9 @@ public:
 	virtual void	Paint( void );
 	virtual void	PaintBackground( void );
 
-	void			ShowButtonLabel( const char *name, bool show = true );
-	void			AddNewButtonLabel( const char *name, const char *text, const char *icon );
-	void			ClearButtons();
+	void ShowButtonLabel( const char *name, bool show = true );
+	void AddNewButtonLabel( const char *name, const char *text, const char *icon );
+	void ClearButtons();
 
 private:
 	struct FooterButton_t
@@ -116,24 +116,24 @@ private:
 		bool	bVisible;
 		char	name[MAX_PATH];
 		wchar_t	text[MAX_PATH];
-		wchar_t	icon[3];			// icon can be one or two characters
+		wchar_t	icon[3]; // icon can be one or two characters
 	};
 
 	CUtlVector< FooterButton_t* > m_Buttons;
 
-	bool			m_bPaintBackground;		// fill the background?
-	int				m_nButtonGap;			// space between buttons
-	int				m_FooterTall;			// height of the footer
-	int				m_ButtonOffsetFromTop;	// how far below the top the buttons should be drawn
-	int				m_ButtonSeparator;		// space between the button icon and text
-	int				m_TextAdjust;			// extra adjustment for the text (vertically)...text is centered on the button icon and then this value is applied
-	bool			m_bCenterHorizontal;	// center buttons horizontally?
-	int				m_ButtonPinRight;		// if not centered, this is the distance from the right margin that we use to start drawing buttons (right to left)
+	bool m_bPaintBackground;		// fill the background?
+	int 	m_nButtonGap; // space between buttons
+	int 	m_FooterTall; // height of the footer
+	int 	m_ButtonOffsetFromTop;	// how far below the top the buttons should be drawn
+	int 	m_ButtonSeparator;		// space between the button icon and text
+	int 	m_TextAdjust; // extra adjustment for the text (vertically)...text is centered on the button icon and then this value is applied
+	bool m_bCenterHorizontal;	// center buttons horizontally?
+	int 	m_ButtonPinRight;		// if not centered, this is the distance from the right margin that we use to start drawing buttons (right to left)
 
-	char			m_szTextFont[64];		// font for the button text
-	char			m_szButtonFont[64];		// font for the button icon
-	char			m_szFGColor[64];		// foreground color (text)
-	char			m_szBGColor[64];		// background color (fill color)
+	char m_szTextFont[64];		// font for the button text
+	char m_szButtonFont[64];		// font for the button icon
+	char m_szFGColor[64];		// foreground color (text)
+	char m_szBGColor[64];		// background color (fill color)
 
 	vgui::HFont		m_hButtonFont;
 	vgui::HFont		m_hTextFont;

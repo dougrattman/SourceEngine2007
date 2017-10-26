@@ -41,7 +41,7 @@ private:
 
 	ClientCCHandle_t		m_SpectatorLookupHandle;
 	ClientCCHandle_t		m_DeathLookupHandle;
-	bool					m_bLookupActive;
+	bool 		m_bLookupActive;
 };
 
 #endif //DOD_VIEW_SCENE_H

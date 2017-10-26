@@ -9,7 +9,7 @@
 #include "lightmappedgeneric_dx9_helper.h"
 #include "BaseVSShader.h"
 #include "commandbuilder.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "lightmappedgeneric_ps20.inc"
 #include "lightmappedgeneric_vs20.inc"
 #include "lightmappedgeneric_ps20b.inc"
@@ -24,7 +24,7 @@ extern ConVar r_flashlight_version2;
 class CLightmappedGeneric_DX9_Context : public CBasePerMaterialContextData
 {
 public:
-	uint8 *m_pStaticCmds;
+	uint8_t *m_pStaticCmds;
 	CCommandBufferBuilder< CFixedCommandStorageBuffer< 1000 > > m_SemiStaticCmdsOut;
 
 	bool m_bVertexShaderFastPath;
@@ -430,7 +430,7 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 				staticCmdsBuf.SetPixelShaderFogParams( 11 );
 				staticCmdsBuf.End();
 				// now, copy buf
-				pContextData->m_pStaticCmds = new uint8[staticCmdsBuf.Size()];
+				pContextData->m_pStaticCmds = new uint8_t[staticCmdsBuf.Size()];
 				memcpy( pContextData->m_pStaticCmds, staticCmdsBuf.Base(), staticCmdsBuf.Size() );
 			}
 			if ( pShaderShadow )

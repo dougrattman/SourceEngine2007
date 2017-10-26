@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DATATABLE_RECV_ENG_H
 #define DATATABLE_RECV_ENG_H
@@ -13,7 +13,7 @@
 
 
 #include "dt_recv.h"
-#include "bitbuf.h"
+#include "tier1/bitbuf.h"
 #include "dt.h"
 
 class CStandardSendProxies;
@@ -53,12 +53,12 @@ void RecvTable_DecodeZeros( RecvTable *pTable, void *pStruct, int objectID );
 
 // This writes all pNewState properties into pOut.
 //
-// If pOldState is non-null and contains any properties that aren't in pNewState, then
+// If pOldState is non-0 and contains any properties that aren't in pNewState, then
 // those properties are written to the output as well. Returns # of changed props
 int RecvTable_MergeDeltas(
 	RecvTable *pTable,
 
-	bf_read *pOldState,		// this can be null
+	bf_read *pOldState,		// this can be 0
 	bf_read *pNewState,
 
 	bf_write *pOut,

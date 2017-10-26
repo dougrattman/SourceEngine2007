@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 /*
 
 ===== client.cpp ========================================================
@@ -196,7 +196,7 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 		Q_snprintf( text, sizeof(text), "%s: ", pszPlayerName );
 	}
 
-	j = sizeof(text) - 2 - strlen(text);  // -2 for /n and null terminator
+	j = sizeof(text) - 2 - strlen(text);  // -2 for /n and 0 terminator
 	if ( (int)strlen(p) > j )
 		p[j] = 0;
 
@@ -289,7 +289,7 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 
 	IGameEvent * event = gameeventmanager->CreateEvent( "player_say" );
 
-	if ( event )	// will be null if there are no listeners!
+	if ( event )	// will be 0 if there are no listeners!
 	{
 		event->SetInt("userid", userid );
 		event->SetString("text", p );
@@ -1306,6 +1306,7 @@ void CC_HurtMe_f(const CCommand &args)
 
 static ConCommand hurtme("hurtme", CC_HurtMe_f, "Hurts the player.\n\tArguments: <health to lose>", FCVAR_CHEAT);
 
+#ifdef _DEBUG
 static bool IsInGroundList( CBaseEntity *ent, CBaseEntity *ground )
 {
 	if ( !ground || !ent )
@@ -1327,6 +1328,7 @@ static bool IsInGroundList( CBaseEntity *ent, CBaseEntity *ground )
 	return false;
 
 }
+#endif
 
 static int DescribeGroundList( CBaseEntity *ent )
 {

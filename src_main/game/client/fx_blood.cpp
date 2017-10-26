@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A blood spray effect, like a big exit wound, used when people are
 //			violently impaled, skewered, eviscerated, etc.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ClientEffectPrecacheSystem.h"

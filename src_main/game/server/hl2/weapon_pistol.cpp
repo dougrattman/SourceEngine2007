@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Pistol - hand gun
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "NPCEvent.h"
@@ -40,7 +40,7 @@ class CWeaponPistol : public CBaseHLCombatWeapon
 public:
 	DECLARE_CLASS( CWeaponPistol, CBaseHLCombatWeapon );
 
-	CWeaponPistol(void);
+	CWeaponPistol();
 
 	DECLARE_SERVERCLASS();
 

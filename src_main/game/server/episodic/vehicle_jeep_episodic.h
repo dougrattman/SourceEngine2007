@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -30,7 +30,7 @@ class CPropJeepEpisodic : public CPropJeep
 	DECLARE_SERVERCLASS();
 
 public:
-					CPropJeepEpisodic( void );
+ 		CPropJeepEpisodic( void );
 
 	virtual void	Spawn( void );
 	virtual void	Activate( void );
@@ -52,7 +52,7 @@ public:
 	virtual bool	PassengerShouldReceiveDamage( CTakeDamageInfo &info ) 
 	{ 
 		if ( GetServerVehicle() && GetServerVehicle()->IsPassengerExiting() )
-			return false;
+ return false;
 
 		return ( info.GetDamageType() & DMG_VEHICLE ) != 0; 
 	}
@@ -63,7 +63,7 @@ public:
 	void	DestroyRadarPanel();
 	int		NumRadarContacts() { return m_iNumRadarContacts; }
 
-	void			AddPropToCargoHold( CPhysicsProp *pProp );
+	void AddPropToCargoHold( CPhysicsProp *pProp );
 
 	virtual CBaseEntity *OnFailedPhysGunPickup( Vector vPhysgunPos );
 	virtual void	DriveVehicle( float flFrameTime, CUserCmd *ucmd, int iButtonsDown, int iButtonsReleased );
@@ -72,21 +72,21 @@ public:
 	DECLARE_DATADESC();
 
 protected:
-			void			HazardBlinkThink( void );
-			void			CreateHazardLights( void );
-			void			DestroyHazardLights( void );
+ void HazardBlinkThink( void );
+ void CreateHazardLights( void );
+ void DestroyHazardLights( void );
 
-			void			UpdateCargoEntry( void );
-			void			ReleasePropFromCargoHold( void );
-			void			CreateCargoTrigger( void );
-	virtual float			GetUprightTime( void ) { return 1.0f; }
-	virtual float			GetUprightStrength( void );
-	virtual bool			ShouldPuntUseLaunchForces( PhysGunForce_t reason ) { return ( reason == PHYSGUN_FORCE_PUNTED ); }
-	virtual void			HandleWater( void );
+ void UpdateCargoEntry( void );
+ void ReleasePropFromCargoHold( void );
+ void CreateCargoTrigger( void );
+	virtual float GetUprightTime( void ) { return 1.0f; }
+	virtual float GetUprightStrength( void );
+	virtual bool ShouldPuntUseLaunchForces( PhysGunForce_t reason ) { return ( reason == PHYSGUN_FORCE_PUNTED ); }
+	virtual void HandleWater( void );
 
 	virtual AngularImpulse	PhysGunLaunchAngularImpulse( void );
-	virtual Vector			PhysGunLaunchVelocity( const Vector &forward, float flMass );
-	bool					PassengerInTransition( void );
+	virtual Vector PhysGunLaunchVelocity( const Vector &forward, float flMass );
+	bool 		PassengerInTransition( void );
 
 	void	SetBusterHopperVisibility(bool visible);
 
@@ -124,13 +124,13 @@ private:
 	COutputEvent	m_OnHostileEnteredVehicle;	// Passenger has completed entering the vehicle
 	COutputEvent	m_OnHostileExitedVehicle;		// Passenger has completed exited the vehicle
 
-	CHandle< CParticleSystem >			m_hWheelDust[NUM_WHEEL_EFFECTS];
-	CHandle< CParticleSystem >			m_hWheelWater[NUM_WHEEL_EFFECTS];
+	CHandle< CParticleSystem > m_hWheelDust[NUM_WHEEL_EFFECTS];
+	CHandle< CParticleSystem > m_hWheelWater[NUM_WHEEL_EFFECTS];
 	CHandle< CVehicleCargoTrigger >		m_hCargoTrigger;
-	CHandle< CPhysicsProp >				m_hCargoProp;
+	CHandle< CPhysicsProp > 	m_hCargoProp;
 
-	CHandle< CSprite >					m_hHazardLights[NUM_HAZARD_LIGHTS];
-	float								m_flNextWaterSound;
+	CHandle< CSprite > 		m_hHazardLights[NUM_HAZARD_LIGHTS];
+	float  		m_flNextWaterSound;
 
 	bool	m_bRadarEnabled;
 	bool	m_bRadarDetectsEnemies;

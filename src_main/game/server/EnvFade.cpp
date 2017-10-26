@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements visual effects entities: sprites, beams, bubbles, etc.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "shake.h"
@@ -33,7 +33,7 @@ public:
 	inline void SetDuration( float duration ) { m_Duration = duration; }
 	inline void SetHoldTime( float hold ) { m_HoldTime = hold; }
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Inputs
 	void InputFade( inputdata_t &inputdata );

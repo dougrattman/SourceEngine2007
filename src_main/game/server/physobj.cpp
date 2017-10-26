@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "player.h"
@@ -57,8 +57,8 @@ public:
 	void InputSetSpringLength( inputdata_t &inputdata );
 
 	// Debug
-	int		DrawDebugTextOverlays(void);
-	void	DrawDebugGeometryOverlays(void);
+	int		DrawDebugTextOverlays();
+	void	DrawDebugGeometryOverlays();
 
 	void GetSpringObjectConnections( string_t nameStart, string_t nameEnd, IPhysicsObject **pStart, IPhysicsObject **pEnd );
 	void NotifySystemEvent( CBaseEntity *pNotify, notify_system_event_t eventType, const notify_system_event_params_t &params );

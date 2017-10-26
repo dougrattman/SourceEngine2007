@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -43,7 +43,7 @@ public:
 
 	CTFShotgun();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_PRIMARY; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SHOTGUN_PRIMARY; }
 	virtual void	PrimaryAttack();
 
 protected:
@@ -64,7 +64,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SCATTERGUN; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SCATTERGUN; }
 };
 
 class CTFShotgun_Soldier : public CTFShotgun
@@ -74,7 +74,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_SOLDIER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SHOTGUN_SOLDIER; }
 };
 
 // Secondary version. Different weapon slot, different ammo
@@ -85,7 +85,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_HWG; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SHOTGUN_HWG; }
 };
 
 class CTFShotgun_Pyro : public CTFShotgun
@@ -95,7 +95,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SHOTGUN_PYRO; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SHOTGUN_PYRO; }
 };
 
 #endif // TF_WEAPON_SHOTGUN_H

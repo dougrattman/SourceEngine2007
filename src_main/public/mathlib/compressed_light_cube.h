@@ -1,24 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef COMPRESSED_LIGHT_CUBE_H
-#define COMPRESSED_LIGHT_CUBE_H
-#ifdef _WIN32
-#pragma once
-#endif
-
+#ifndef SOURCE_MATHLIB_COMPRESSED_LIGHT_CUBE_H_
+#define SOURCE_MATHLIB_COMPRESSED_LIGHT_CUBE_H_
 
 #include "mathlib/mathlib.h"
 
-
-struct CompressedLightCube
-{
-	DECLARE_BYTESWAP_DATADESC();
-	ColorRGBExp32 m_Color[6];
+struct CompressedLightCube {
+  DECLARE_BYTESWAP_DATADESC();
+  ColorRGBExp32 m_Color[6];
 };
 
-
-#endif // COMPRESSED_LIGHT_CUBE_H
+#endif  // SOURCE_MATHLIB_COMPRESSED_LIGHT_CUBE_H_

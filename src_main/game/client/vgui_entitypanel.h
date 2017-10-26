@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is a panel which is rendered on top of an entity
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VGUI_ENTITYPANEL_H
 #define VGUI_ENTITYPANEL_H
@@ -66,19 +66,19 @@ public:
 	// Offset from entity that we should draw
 	int m_OffsetX, m_OffsetY;
 
-	char			m_szMouseOverText[ MAX_ENTITY_MOUSEOVER ];
+	char m_szMouseOverText[ MAX_ENTITY_MOUSEOVER ];
 
-	bool			m_bShowInNormal;
+	bool m_bShowInNormal;
 
-	int				m_iOrgWidth;
-	int				m_iOrgHeight;
-	int				m_iOrgOffsetX;
-	int				m_iOrgOffsetY;
-	float			m_flScale;
+	int 	m_iOrgWidth;
+	int 	m_iOrgHeight;
+	int 	m_iOrgOffsetX;
+	int 	m_iOrgOffsetY;
+	float m_flScale;
 
 private:
 	// This is the entity to which we're attached
-	EHANDLE			m_pBaseEntity;
+	EHANDLE m_pBaseEntity;
 };
 
 #endif //  VGUI_ENTITYPANEL_H

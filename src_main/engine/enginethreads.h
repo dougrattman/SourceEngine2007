@@ -1,18 +1,10 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
-//
-// Purpose:
-//
-//=============================================================================
+// Copyright © 2005, Valve Corporation, All rights reserved.
 
 #ifndef ENGINETHREADS_H
 #define ENGINETHREADS_H
 
-#include "tier0/threadtools.h"
 #include "const.h"
-
-#if defined( _WIN32 )
-#pragma once
-#endif
+#include "tier0/threadtools.h"
 
 #ifdef SOURCE_MT
 
@@ -28,4 +20,4 @@ extern int g_nServerThread;
 
 #endif
 
-#endif // ENGINETHREADS_H
+#endif  // ENGINETHREADS_H

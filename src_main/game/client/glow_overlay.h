@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GLOW_OVERLAY_H
 #define GLOW_OVERLAY_H
@@ -25,10 +25,10 @@ extern float g_flOverlayRange;
 class CGlowSprite
 {
 public:
-	Vector				m_vColor;		// 0-1
-	float				m_flHorzSize;	// Horizontal and vertical sizes.
-	float				m_flVertSize;	// 1 = size of the sun
-	IMaterial			*m_pMaterial;	// Material to use
+	Vector 	m_vColor;		// 0-1
+	float 	m_flHorzSize;	// Horizontal and vertical sizes.
+	float 	m_flVertSize;	// 1 = size of the sun
+	IMaterial *m_pMaterial;	// Material to use
 };
 
 
@@ -36,8 +36,8 @@ class CGlowOverlay
 {
 public:
 
-					CGlowOverlay();
-	virtual			~CGlowOverlay();
+ 		CGlowOverlay();
+	virtual ~CGlowOverlay();
 
 	// Return false to remove (and delete) the overlay.
 	virtual bool	Update();
@@ -63,7 +63,7 @@ public:
 #endif
 
 	CGlowSprite	m_Sprites[MAX_SUN_LAYERS];
-	int			m_nSprites;
+	int m_nSprites;
 
 	float		m_flProxyRadius;
 
@@ -73,8 +73,8 @@ public:
 
 	// After creating the overlay, call this to add it to the active list.
 	// You can also call Activate and Deactivate as many times as you want.
-	void			Activate();
-	void			Deactivate();
+	void Activate();
+	void Deactivate();
 	
 	// Render all the active overlays.
 	static void		DrawOverlays( bool bCacheFullSceneState );
@@ -87,8 +87,8 @@ public:
 
 protected:
 
-	void			UpdateGlowObstruction( const Vector &vToGlow, bool bCacheFullSceneState );
-	void			UpdateSkyGlowObstruction( float zFar, bool bCacheFullSceneState );
+	void UpdateGlowObstruction( const Vector &vToGlow, bool bCacheFullSceneState );
+	void UpdateSkyGlowObstruction( float zFar, bool bCacheFullSceneState );
 
 	virtual void	CalcSpriteColorAndSize( 
 		float flDot,
@@ -106,14 +106,14 @@ protected:
 		Vector &vRight );
 
 	virtual void	Draw( bool bCacheFullSceneState );
-	float			CalcGlowAspect();
+	float CalcGlowAspect();
 	
-	float			m_flGlowObstructionScale;	
-	bool			m_bCacheGlowObstruction;			// Flags to cache obstruction scales
-	bool			m_bCacheSkyObstruction;				// Used in IFM poster rendering
+	float m_flGlowObstructionScale;	
+	bool m_bCacheGlowObstruction; // Flags to cache obstruction scales
+	bool m_bCacheSkyObstruction; 	// Used in IFM poster rendering
 
 private:
-	short			m_bActivated;
+	short m_bActivated;
 	unsigned short	m_ListIndex; // index into s_GlowOverlays.
 	pixelvis_handle_t m_queryHandle;
 };

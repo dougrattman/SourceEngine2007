@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Engineer's Teleporter
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_OBJ_TELEPORTER_H
 #define TF_OBJ_TELEPORTER_H

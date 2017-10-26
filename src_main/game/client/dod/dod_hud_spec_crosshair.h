@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_SPEC_CROSSHAIR_H
 #define HUD_SPEC_CROSSHAIR_H
@@ -28,8 +28,8 @@ class CHudSpecCrosshair : public CHudElement, public vgui::Panel
 public:
 	CHudSpecCrosshair( const char *pElementName );
 
-	void				DrawCrosshair( void );
-  	bool				HasCrosshair( void )		{ return ( m_pCrosshair != NULL ); }
+	void 	DrawCrosshair( void );
+  	bool 	HasCrosshair( void )		{ return ( m_pCrosshair != NULL ); }
 
 protected:
 	virtual void	ApplySchemeSettings( vgui::IScheme *scheme );
@@ -37,8 +37,8 @@ protected:
 
 private:
 	// Crosshair sprite and colors
-	CHudTexture			*m_pCrosshair;
-	Color				m_clrCrosshair;
+	CHudTexture *m_pCrosshair;
+	Color 	m_clrCrosshair;
 };
 
 

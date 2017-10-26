@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Displays a leaderboard
 //
-//=============================================================================//
+
 
 #ifndef LEADERBOARDDIALOG_H
 #define LEADERBOARDDIALOG_H
@@ -30,10 +30,10 @@ public:
 	virtual void	OnKeyCodePressed( vgui::KeyCode code );
 	virtual void	HandleKeyRepeated( vgui::KeyCode code );
 
-	bool			GetPlayerStats( int rank, bool bFriends = false );
-	void			UpdateLeaderboard( int iNewRank );
-	void			AddLeaderboardEntry( const char **pEntries, int ct );
-	void			CleanupStats();
+	bool GetPlayerStats( int rank, bool bFriends = false );
+	void UpdateLeaderboard( int iNewRank );
+	void AddLeaderboardEntry( const char **pEntries, int ct );
+	void CleanupStats();
 
 private:
 	vgui::Panel		*m_pProgressBg;
@@ -44,11 +44,11 @@ private:
 	vgui::Label		*m_pDownArrow;
 	vgui::Label		*m_pBestMoments;
 
-	int			m_iBaseRank;
-	int			m_iActiveRank;
-	int			m_iMaxRank;
-	int			m_cColumns;
-	int			m_iRangeBase;
+	int m_iBaseRank;
+	int m_iActiveRank;
+	int m_iMaxRank;
+	int m_cColumns;
+	int m_iRangeBase;
 
 #if defined( _X360 )
 	XUSER_STATS_READ_RESULTS *m_pStats;

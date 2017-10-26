@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -19,7 +19,7 @@
 
 #define PLAYER_HINT_DISTANCE	150
 #define PLAYER_HINT_DISTANCE_SQ	(PLAYER_HINT_DISTANCE*PLAYER_HINT_DISTANCE)
-#define MAX_ID_STRING			256
+#define MAX_ID_STRING 256
 #define MAX_PREPEND_STRING		32
 
 //-----------------------------------------------------------------------------
@@ -30,38 +30,38 @@ class CTargetID : public CHudElement, public vgui::EditablePanel
 	DECLARE_CLASS_SIMPLE( CTargetID, vgui::EditablePanel );
 public:
 	CTargetID( const char *pElementName );
-	void			Reset( void );
-	void			VidInit( void );
+	void Reset( void );
+	void VidInit( void );
 	virtual bool	ShouldDraw( void );
 	virtual void	PerformLayout( void );
 	virtual void	ApplySettings( KeyValues *inResourceData );
 	virtual void	ApplySchemeSettings( vgui::IScheme *scheme );
 
-	void			UpdateID( void );
+	void UpdateID( void );
 
 	virtual int		CalculateTargetIndex( C_TFPlayer *pLocalTFPlayer );
 	virtual wchar_t	*GetPrepend( void ) { return NULL; }
 
-	int				GetTargetIndex( void ) { return m_iTargetEntIndex; }
+	int 	GetTargetIndex( void ) { return m_iTargetEntIndex; }
 
 	virtual int		GetRenderGroupPriority( void );
 
 protected:
-	Color			GetColorForTargetTeam( int iTeamNumber );
+	Color GetColorForTargetTeam( int iTeamNumber );
 
 	vgui::HFont		m_hFont;
-	int				m_iLastEntIndex;
-	float			m_flLastChangeTime;
-	int				m_iTargetEntIndex;
-	bool			m_bLayoutOnUpdate;
+	int 	m_iLastEntIndex;
+	float m_flLastChangeTime;
+	int 	m_iTargetEntIndex;
+	bool m_bLayoutOnUpdate;
 
-	Color			m_cBlueColor;
-	Color			m_cRedColor;
-	Color			m_cSpecColor;
+	Color m_cBlueColor;
+	Color m_cRedColor;
+	Color m_cSpecColor;
 
-	vgui::Label				*m_pTargetNameLabel;
-	vgui::Label				*m_pTargetDataLabel;
-	CTFImagePanel			*m_pBGPanel;
+	vgui::Label 	*m_pTargetNameLabel;
+	vgui::Label 	*m_pTargetDataLabel;
+	CTFImagePanel *m_pBGPanel;
 	CTFSpectatorGUIHealth	*m_pTargetHealth;
 
 	int m_iRenderPriority;

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_PATHFINDER_H
 #define AI_PATHFINDER_H
@@ -27,15 +27,15 @@ class CAI_Node;
 // The type of route to build
 enum RouteBuildFlags_e 
 {
-	bits_BUILD_GROUND		=			0x00000001, // 
-	bits_BUILD_JUMP			=			0x00000002, //
-	bits_BUILD_FLY			=			0x00000004, // 
-	bits_BUILD_CLIMB		=			0x00000008, //
-	bits_BUILD_GIVEWAY		=			0x00000010, //
-	bits_BUILD_TRIANG		=			0x00000020, //
-	bits_BUILD_IGNORE_NPCS	=			0x00000040, // Ignore collisions with NPCs
-	bits_BUILD_COLLIDE_NPCS	=			0x00000080, // Use    collisions with NPCs (redundant for argument clarity)
-	bits_BUILD_GET_CLOSE	=			0x00000100, // the route will be built even if it can't reach the destination
+	bits_BUILD_GROUND		= 0x00000001, // 
+	bits_BUILD_JUMP = 0x00000002, //
+	bits_BUILD_FLY = 0x00000004, // 
+	bits_BUILD_CLIMB		= 0x00000008, //
+	bits_BUILD_GIVEWAY		= 0x00000010, //
+	bits_BUILD_TRIANG		= 0x00000020, //
+	bits_BUILD_IGNORE_NPCS	= 0x00000040, // Ignore collisions with NPCs
+	bits_BUILD_COLLIDE_NPCS	= 0x00000080, // Use    collisions with NPCs (redundant for argument clarity)
+	bits_BUILD_GET_CLOSE	= 0x00000100, // the route will be built even if it can't reach the destination
 };
 
 //-----------------------------------------------------------------------------
@@ -59,15 +59,15 @@ public:
 	
 	//---------------------------------
 	
-	int				NearestNodeToNPC();
-	int				NearestNodeToPoint( const Vector &vecOrigin );
+	int 	NearestNodeToNPC();
+	int 	NearestNodeToPoint( const Vector &vecOrigin );
 
 	AI_Waypoint_t*	FindBestPath		(int startID, int endID);
 	AI_Waypoint_t*	FindShortRandomPath	(int startID, float minPathLength, const Vector &vDirection = vec3_origin);
 
 	// --------------------------------
 
-	bool			IsLinkUsable(CAI_Link *pLink, int startID);
+	bool IsLinkUsable(CAI_Link *pLink, int startID);
 
 	// --------------------------------
 	
@@ -85,18 +85,18 @@ public:
 	virtual AI_Waypoint_t *BuildRadialRoute( const Vector &vStartPos, const Vector &vCenterPos, const Vector &vGoalPos, float flRadius, float flArc, float flStepDist, bool bClockwise, float goalTolerance, bool bAirRoute );	
 	
 	virtual AI_Waypoint_t *BuildTriangulationRoute( const Vector &vStart, 
-													const Vector &vEnd, CBaseEntity const *pTarget, int endFlags, int nodeID,
-													float flYaw, float flDistToBlocker, Navigation_t navType);
+    	const Vector &vEnd, CBaseEntity const *pTarget, int endFlags, int nodeID,
+    	float flYaw, float flDistToBlocker, Navigation_t navType);
 
 	virtual AI_Waypoint_t *BuildOBBAvoidanceRoute(  const Vector &vStart, const Vector &vEnd, 
-													const CBaseEntity *pObstruction, const CBaseEntity *pTarget, 
-													Navigation_t navType );
+    	const CBaseEntity *pObstruction, const CBaseEntity *pTarget, 
+    	Navigation_t navType );
 
 	// --------------------------------
 	
 	bool Triangulate( Navigation_t navType, const Vector &vecStart, const Vector &vecEnd, 
-						float flDistToBlocker, CBaseEntity const *pTargetEnt, Vector *pApex );
-						
+  float flDistToBlocker, CBaseEntity const *pTargetEnt, Vector *pApex );
+  
 	// --------------------------------
 	
 	void DrawDebugGeometryOverlays( int m_debugOverlays );
@@ -121,7 +121,7 @@ private:
 	
 	AI_Waypoint_t*	BuildRouteThroughPoints( Vector *vecPoints, int nNumPoints, int nDirection, int nStartIndex, int nEndIndex, Navigation_t navType, CBaseEntity *pTarget );
 
-	bool			IsLinkStillStale(int moveType, CAI_Link *nodeLink);
+	bool IsLinkStillStale(int moveType, CAI_Link *nodeLink);
 
 	// --------------------------------
 	
@@ -149,16 +149,16 @@ private:
 
 	// --------------------------------
 	
-	bool			CheckStaleRoute( const Vector &vStart, const Vector &vEnd, int moveTypes);
-	bool			CheckStaleNavTypeRoute( Navigation_t navType, const Vector &vStart, const Vector &vEnd );
+	bool CheckStaleRoute( const Vector &vStart, const Vector &vEnd, int moveTypes);
+	bool CheckStaleNavTypeRoute( Navigation_t navType, const Vector &vStart, const Vector &vEnd );
 
 	// --------------------------------
 	
-	bool			CanGiveWay( const Vector& vStart, const Vector& vEnd, CBaseEntity *pNPCBlocker );
+	bool CanGiveWay( const Vector& vStart, const Vector& vEnd, CBaseEntity *pNPCBlocker );
 
 	// --------------------------------
 
-	bool			UseStrongOptimizations();
+	bool UseStrongOptimizations();
 
 	// --------------------------------
 	// Debugging fields and functions
@@ -171,8 +171,8 @@ private:
 		{
 		}
 		void AddTriOverlayLines( const Vector &vecStart, const Vector &vecApex, const Vector &vecEnd, const AIMoveTrace_t &startTrace, const AIMoveTrace_t &endTrace, bool bPathClear );
-		void ClearTriOverlayLines(void);
-		void FadeTriOverlayLines(void);
+		void ClearTriOverlayLines();
+		void FadeTriOverlayLines();
 
 		void Draw(int npcDebugOverlays);
 	private:
@@ -190,7 +190,7 @@ private:
 
 	//---------------------------------
 	
-	CAI_Network *GetNetwork()				{ return m_pNetwork; }
+	CAI_Network *GetNetwork() 	{ return m_pNetwork; }
 	const CAI_Network *GetNetwork() const	{ return m_pNetwork; }
 	
 	CAI_Network *m_pNetwork;

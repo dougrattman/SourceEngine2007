@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 // menu.cpp
 //
@@ -19,7 +19,7 @@
 #include <vgui/vgui.h>
 #include <vgui/ISurface.h>
 #include <vgui/ilocalize.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/AnimationController.h>
 
 #define MAX_MENU_STRING	512

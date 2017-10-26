@@ -1,23 +1,23 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
 
-#include <stdio.h>
+
+#include <cstdio>
 
 #include "GameConsole.h"
 #include "GameConsoleDialog.h"
 #include "LoadingDialog.h"
 #include "vgui/ISurface.h"
 
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui/VGUI.h"
 #include "vgui/IVGUI.h"
 #include "vgui_controls/Panel.h"
-#include "convar.h"
+#include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

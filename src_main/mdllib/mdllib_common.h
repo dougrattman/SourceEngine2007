@@ -7,17 +7,9 @@
 #ifndef MDLLIB_COMMON_H
 #define MDLLIB_COMMON_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
 #include "mdllib/mdllib.h"
 
 #include "platform.h"
-#pragma warning( disable : 4018 )
-#pragma warning( disable : 4389 )
-
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Interface to accessing P4 commands

@@ -1,30 +1,13 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
+#ifndef SOURCE_AVI_AVI_H_
+#define SOURCE_AVI_AVI_H_
 
-#ifndef AVI_H
-#define AVI_H
-
-#ifdef _WIN32
-#pragma once
-#endif
-
-
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 class IFileSystem;
 class IMaterialSystem;
 
-
-//-----------------------------------------------------------------------------
-// Global interfaces
-//-----------------------------------------------------------------------------
+// Global interfaces.
 extern IFileSystem *g_pFileSystem;
 extern IMaterialSystem *materials;
 
-
-#endif // AVI_H
+#endif  // SOURCE_AVI_AVI_H_

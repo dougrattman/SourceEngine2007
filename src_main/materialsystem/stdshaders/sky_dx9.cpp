@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Header: $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "BaseVSShader.h"
 #include "sky_vs20.inc"
 #include "sky_ps20.inc"
 #include "sky_ps20b.inc"
 
-#include "ConVar.h"
+#include "tier1/convar.h"
 
 BEGIN_VS_SHADER( Sky_DX9, "Help for Sky_DX9 shader" )
 

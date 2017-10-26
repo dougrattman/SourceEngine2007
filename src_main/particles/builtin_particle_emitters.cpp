@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: particle system code
 //
@@ -32,24 +32,24 @@ class C_OP_InstantaneousEmitter : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_InstantaneousEmitter );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}
 
-	virtual uint64 GetReadControlPointMask() const 
+	virtual uint64_t GetReadControlPointMask() const 
 	{
 		if ( m_nScaleControlPoint >= 0 )
 			return ( 1ULL << m_nScaleControlPoint );
 		return 0; 
 	}
 
-	virtual uint32 Emit( CParticleCollection *pParticles, float flCurStrength, 
+	virtual uint32_t Emit( CParticleCollection *pParticles, float flCurStrength, 
 						 void *pContext ) const;
 
 	// unpack structure will be applied by creator. add extra initialization needed here
@@ -158,7 +158,7 @@ BEGIN_PARTICLE_OPERATOR_UNPACK( C_OP_InstantaneousEmitter )
 END_PARTICLE_OPERATOR_UNPACK( C_OP_InstantaneousEmitter )
 
 
-uint32 C_OP_InstantaneousEmitter::Emit( CParticleCollection *pParticles, float flCurStrength, 
+uint32_t C_OP_InstantaneousEmitter::Emit( CParticleCollection *pParticles, float flCurStrength, 
 										void *pContext ) const
 {
 	// Don't emit any more if the particle system has emitted all it's supposed to.
@@ -241,12 +241,12 @@ class C_OP_ContinuousEmitter : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_ContinuousEmitter );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}
@@ -264,7 +264,7 @@ class C_OP_ContinuousEmitter : public CParticleOperatorInstance
 		m_flEmitRate *= g_nParticle_Multiplier;
 	}
 
-	virtual uint32 Emit( CParticleCollection *pParticles, float flCurStrength,
+	virtual uint32_t Emit( CParticleCollection *pParticles, float flCurStrength,
 						 void *pContext ) const ;
 
 	inline bool IsInfinitelyEmitting() const
@@ -436,7 +436,7 @@ BEGIN_PARTICLE_OPERATOR_UNPACK( C_OP_ContinuousEmitter )
 	DMXELEMENT_UNPACK_FIELD( "use parent particles for emission scaling", "0", bool, m_bScalePerParticle )
 END_PARTICLE_OPERATOR_UNPACK( C_OP_ContinuousEmitter )
 
-uint32 C_OP_ContinuousEmitter::Emit( CParticleCollection *pParticles, float flCurStrength,
+uint32_t C_OP_ContinuousEmitter::Emit( CParticleCollection *pParticles, float flCurStrength,
 									 void *pContext ) const
 {
 	// Have we emitted all the particles we're going to emit?
@@ -561,12 +561,12 @@ class C_OP_NoiseEmitter : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_NoiseEmitter );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_CREATION_TIME_MASK;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}
@@ -584,7 +584,7 @@ class C_OP_NoiseEmitter : public CParticleOperatorInstance
 		m_flEmitRate *= g_nParticle_Multiplier;
 	}
 
-	virtual uint32 Emit( CParticleCollection *pParticles, float flCurStrength,
+	virtual uint32_t Emit( CParticleCollection *pParticles, float flCurStrength,
 		void *pContext ) const ;
 
 	inline bool IsInfinitelyEmitting() const
@@ -715,7 +715,7 @@ BEGIN_PARTICLE_OPERATOR_UNPACK( C_OP_NoiseEmitter )
 	DMXELEMENT_UNPACK_FIELD( "world time noise coordinate scale","0", float, m_flWorldTimeScale )
 END_PARTICLE_OPERATOR_UNPACK( C_OP_NoiseEmitter )
 
-uint32 C_OP_NoiseEmitter::Emit( CParticleCollection *pParticles, float flCurStrength,
+uint32_t C_OP_NoiseEmitter::Emit( CParticleCollection *pParticles, float flCurStrength,
 									void *pContext ) const
 {
 	// Have we emitted all the particles we're going to emit?

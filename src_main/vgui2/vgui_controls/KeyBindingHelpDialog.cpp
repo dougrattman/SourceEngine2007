@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include "vgui/ILocalize.h"
 #include "vgui/IInput.h"
 #include "vgui/ISystem.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui/Cursor.h"
 #include "tier1/UtlDict.h"
 #include "vgui_controls/KeyBoardEditorDialog.h"

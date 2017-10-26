@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "utlstring.h"
 
 //-----------------------------------------------------------------------------
@@ -18,13 +18,13 @@
 //-----------------------------------------------------------------------------
 enum ParticleAttachment_t
 {
-	PATTACH_ABSORIGIN = 0,			// Create at absorigin, but don't follow
+	PATTACH_ABSORIGIN = 0, // Create at absorigin, but don't follow
 	PATTACH_ABSORIGIN_FOLLOW,		// Create at absorigin, and update to follow the entity
-	PATTACH_CUSTOMORIGIN,			// Create at a custom origin, but don't follow
-	PATTACH_POINT,					// Create on attachment point, but don't follow
-	PATTACH_POINT_FOLLOW,			// Create on attachment point, and update to follow the entity
+	PATTACH_CUSTOMORIGIN, // Create at a custom origin, but don't follow
+	PATTACH_POINT, 		// Create on attachment point, but don't follow
+	PATTACH_POINT_FOLLOW, // Create on attachment point, and update to follow the entity
 
-	PATTACH_WORLDORIGIN,			// Used for control points that don't attach to an entity
+	PATTACH_WORLDORIGIN, // Used for control points that don't attach to an entity
 
 	MAX_PATTACH_TYPES,
 };

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base presence implementation for PC
 //
@@ -50,17 +50,17 @@ unsigned int CBasePresence::GetPresenceID( const char *pIDName )
 {
 	return 0;
 }
-const char *CBasePresence::GetPropertyIdString( const uint id )
+const char *CBasePresence::GetPropertyIdString( const uint32_t id )
 {
 	return NULL;
 }
-void CBasePresence::GetPropertyDisplayString( uint id, uint value, char *pOutput, int nBytes )
+void CBasePresence::GetPropertyDisplayString( uint32_t id, uint32_t value, char *pOutput, int nBytes )
 {
 }
 void CBasePresence::StartStatsReporting( HANDLE handle, bool bArbitrated )
 {
 }
-void CBasePresence::SetStat( uint iPropertyId, int iPropertyValue, int dataType )
+void CBasePresence::SetStat( uint32_t iPropertyId, int iPropertyValue, int dataType )
 {
 }
 void CBasePresence::UploadStats()

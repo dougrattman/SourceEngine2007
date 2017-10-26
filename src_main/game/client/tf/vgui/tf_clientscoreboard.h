@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_SCOREBOARD_H
 #define TF_SCOREBOARD_H
@@ -61,13 +61,13 @@ private:
 
 	vgui::SectionedListPanel	*m_pPlayerListBlue;
 	vgui::SectionedListPanel	*m_pPlayerListRed;
-	CTFLabel					*m_pLabelPlayerName;
-	vgui::ImagePanel			*m_pImagePanelHorizLine;
-	CTFClassImage				*m_pClassImage;
+	CTFLabel 		*m_pLabelPlayerName;
+	vgui::ImagePanel *m_pImagePanelHorizLine;
+	CTFClassImage 	*m_pClassImage;
 
-	int							m_iImageDead;
-	int							m_iImageDominated;
-	int							m_iImageNemesis;
+	int  	m_iImageDead;
+	int  	m_iImageDominated;
+	int  	m_iImageNemesis;
 	
 	CPanelAnimationVarAliasType( int, m_iStatusWidth, "status_width", "12", "proportional_int" );
 	CPanelAnimationVarAliasType( int, m_iNemesisWidth, "nemesis_width", "20", "proportional_int" );

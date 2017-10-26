@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //=============================================================================
 
 #include "cbase.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "tf_playerclass_shared.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "tier2/tier2.h"

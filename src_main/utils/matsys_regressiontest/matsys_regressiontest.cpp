@@ -221,12 +221,12 @@ void LoadMaterialSystem( void )
 
 	Assert( !g_MaterialsDLL );
 
-	g_MaterialsDLL = Sys_LoadModule( "MaterialSystem.dll" );
+	g_MaterialsDLL = Sys_LoadModule( "materialsystem.dll" );
 
 	g_MaterialsFactory = Sys_GetFactory( g_MaterialsDLL );
 	if ( !g_MaterialsFactory )
 	{
-		DisplayError( "LoadMaterialSystem:  Failed to load MaterialSystem.DLL\n" );
+		DisplayError( "LoadMaterialSystem:  Failed to load materialsystem.dll\n" );
 		return;
 	}
 

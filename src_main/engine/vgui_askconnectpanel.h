@@ -1,23 +1,16 @@
 //====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
 
 #ifndef VGUI_ASKCONNECTPANEL_H
 #define VGUI_ASKCONNECTPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
+#include "vgui_controls/Panel.h"
 
 void SetupDefaultAskConnectAcceptKey();
-vgui::Panel* CreateAskConnectPanel( vgui::VPANEL parent );
+vgui::Panel *CreateAskConnectPanel(vgui::VPANEL parent);
 
-void ShowAskConnectPanel( const char *pConnectToHostName, float flDuration );
+void ShowAskConnectPanel(const char *pConnectToHostName, float flDuration);
 void HideAskConnectPanel();
 
-bool IsAskConnectPanelActive( char *pHostName, int maxHostNameBytes );
+bool IsAskConnectPanelActive(char *pHostName, int maxHostNameBytes);
 
-
-#endif // VGUI_ASKCONNECTPANEL_H
+#endif  // VGUI_ASKCONNECTPANEL_H

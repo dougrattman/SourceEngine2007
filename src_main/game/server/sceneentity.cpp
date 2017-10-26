@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
-#include <stdarg.h>
+#include <cstdarg>
 #include "baseflex.h"
 #include "entitylist.h"
 #include "choreoevent.h"
@@ -21,9 +21,9 @@
 #include "ai_baseactor.h"
 #include "AI_Criteria.h"
 #include "tier1/strtools.h"
-#include "checksum_crc.h"
+#include "tier1/checksum_crc.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
-#include "utlbuffer.h"
+#include "tier1/utlbuffer.h"
 #include "tier0/icommandline.h"
 #include "sceneentity.h"
 #include "datacache/idatacache.h"
@@ -1456,7 +1456,7 @@ void CSceneEntity::DispatchEndFlexAnimation( CChoreoScene *scene, CBaseFlex *act
 //-----------------------------------------------------------------------------
 void CSceneEntity::DispatchStartGesture( CChoreoScene *scene, CBaseFlex *actor, CChoreoEvent *event )
 {
-	// Ingore null gestures
+	// Ingore 0 gestures
 	if ( !Q_stricmp( event->GetName(), "NULL" ) )
 		return;
 
@@ -1471,7 +1471,7 @@ void CSceneEntity::DispatchStartGesture( CChoreoScene *scene, CBaseFlex *actor, 
 //-----------------------------------------------------------------------------
 void CSceneEntity::DispatchEndGesture( CChoreoScene *scene, CBaseFlex *actor, CChoreoEvent *event )
 {
-	// Ingore null gestures
+	// Ingore 0 gestures
 	if ( !Q_stricmp( event->GetName(), "NULL" ) )
 		return;
 

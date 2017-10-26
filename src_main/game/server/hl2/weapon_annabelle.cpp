@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Grigori's personal shotgun (npc_monk)
 //
-//=============================================================================//
+
 
 #include	"cbase.h"
 #include	"npcevent.h"
@@ -63,7 +63,7 @@ public:
 
 	DECLARE_ACTTABLE();
 
-	CWeaponAnnabelle(void);
+	CWeaponAnnabelle();
 };
 
 IMPLEMENT_SERVERCLASS_ST(CWeaponAnnabelle, DT_WeaponAnnabelle)

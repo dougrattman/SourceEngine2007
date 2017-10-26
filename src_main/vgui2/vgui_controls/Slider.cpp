@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <stdio.h>
+
+#include <cstdio>
 #define PROTECTED_THINGS_DISABLE
 
 #include <vgui/MouseCode.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IBorder.h>
 #include <vgui/IInput.h>
 #include <vgui/ISystem.h>
@@ -835,7 +835,7 @@ void Slider::OnMouseReleased(MouseCode code)
 	if ( _dragging )
 	{
 		_dragging=false;
-		input()->SetMouseCapture(null);
+		input()->SetMouseCapture(0);
 		SendSliderDragEndMessage();
 	}
 }

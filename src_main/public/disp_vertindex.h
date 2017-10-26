@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DISP_VERTINDEX_H
 #define DISP_VERTINDEX_H
@@ -22,8 +22,8 @@
 class CVertIndex
 {
 public:
-				CVertIndex();
-				CVertIndex( short ix, short iy );
+ 	CVertIndex();
+ 	CVertIndex( short ix, short iy );
 	
 	void		Init( short ix, short iy );
 
@@ -41,7 +41,7 @@ public:
 
 public:
 
-	short			x, y;
+	short x, y;
 };
 
 

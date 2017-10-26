@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "vgui_controls/MessageDialog.h"
 #include "vgui/ILocalize.h"
@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 // CMessageDialog
 //-----------------------------------------------------------------------------
-CMessageDialog::CMessageDialog( vgui::Panel *pParent, const uint nType, const char *pTitle, const char *pMsg, const char *pCmdA, const char *pCmdB, vgui::Panel *pCreator, bool bShowActivity  ) 
+CMessageDialog::CMessageDialog( vgui::Panel *pParent, const uint32_t nType, const char *pTitle, const char *pMsg, const char *pCmdA, const char *pCmdB, vgui::Panel *pCreator, bool bShowActivity  ) 
 	: BaseClass( pParent, "MessageDialog" )
 {
 	SetSize( 500, 200 );
@@ -264,7 +264,7 @@ void CMessageDialog::ApplySettings( KeyValues *inResourceData )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-uint CMessageDialog::GetType( void )
+uint32_t CMessageDialog::GetType( void )
 {
 	return m_nType;
 }

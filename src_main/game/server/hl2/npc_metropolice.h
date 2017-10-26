@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef NPC_METROPOLICE_H
 #define NPC_METROPOLICE_H
@@ -54,7 +54,7 @@ public:
 	virtual void OnScheduleChange();
 
 	float		GetIdealAccel( void ) const;
-	int			ObjectCaps( void ) { return UsableNPCObjectCaps(BaseClass::ObjectCaps()); }
+	int ObjectCaps( void ) { return UsableNPCObjectCaps(BaseClass::ObjectCaps()); }
 	void		PrecriminalUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
 	// These are overridden so that the cop can shove and move a non-criminal player safely
@@ -142,9 +142,9 @@ private:
 	// Burst mode!
 	void		SetBurstMode( bool bEnable );
 
-	int			OnTakeDamage_Alive( const CTakeDamageInfo &info );
+	int OnTakeDamage_Alive( const CTakeDamageInfo &info );
 
-	int			GetSoundInterests( void );
+	int GetSoundInterests( void );
 
 	void		BuildScheduleTestBits( void );
 
@@ -391,52 +391,52 @@ private:
 
 private:
 
-	int				m_iPistolClips;		// How many clips the cop has in reserve
-	int				m_iManhacks;		// How many manhacks the cop has
-	bool			m_fWeaponDrawn;		// Is my weapon drawn? (ready to use)
-	bool			m_bSimpleCops;		// The easy version of the cops
-	int				m_LastShootSlot;
+	int 	m_iPistolClips;		// How many clips the cop has in reserve
+	int 	m_iManhacks;		// How many manhacks the cop has
+	bool m_fWeaponDrawn;		// Is my weapon drawn? (ready to use)
+	bool m_bSimpleCops;		// The easy version of the cops
+	int 	m_LastShootSlot;
 	CRandSimTimer	m_TimeYieldShootSlot;
 	CSimpleSimTimer m_BatonSwingTimer;
 	CSimpleSimTimer m_NextChargeTimer;
 
 	// All related to burst firing
-	Vector			m_vecBurstTargetPos;
-	Vector			m_vecBurstDelta;
-	int				m_nBurstHits;
-	int				m_nMaxBurstHits;
-	int				m_nBurstReloadCount;
-	Vector			m_vecBurstLineOfDeathDelta;
-	Vector			m_vecBurstLineOfDeathOrigin;
-	int				m_nBurstMode;
-	int				m_nBurstSteerMode;
-	float			m_flBurstSteerDistance;
-	float			m_flBurstPredictTime;
-	Vector			m_vecBurstPredictedVelocityDir;
-	float			m_vecBurstPredictedSpeed;
-	float			m_flValidStitchTime;
-	float			m_flNextLedgeCheckTime;
-	float			m_flTaskCompletionTime;
+	Vector m_vecBurstTargetPos;
+	Vector m_vecBurstDelta;
+	int 	m_nBurstHits;
+	int 	m_nMaxBurstHits;
+	int 	m_nBurstReloadCount;
+	Vector m_vecBurstLineOfDeathDelta;
+	Vector m_vecBurstLineOfDeathOrigin;
+	int 	m_nBurstMode;
+	int 	m_nBurstSteerMode;
+	float m_flBurstSteerDistance;
+	float m_flBurstPredictTime;
+	Vector m_vecBurstPredictedVelocityDir;
+	float m_vecBurstPredictedSpeed;
+	float m_flValidStitchTime;
+	float m_flNextLedgeCheckTime;
+	float m_flTaskCompletionTime;
 	
-	bool			m_bShouldActivateBaton;
-	float			m_flBatonDebounceTime;	// Minimum amount of time before turning the baton off
-	float			m_flLastPhysicsFlinchTime;
-	float			m_flLastDamageFlinchTime;
+	bool m_bShouldActivateBaton;
+	float m_flBatonDebounceTime;	// Minimum amount of time before turning the baton off
+	float m_flLastPhysicsFlinchTime;
+	float m_flLastDamageFlinchTime;
 	
 	// Sentences
-	float			m_flNextPainSoundTime;
-	float			m_flNextLostSoundTime;
-	int				m_nIdleChatterType;
-	bool			m_bPlayerIsNear;
+	float m_flNextPainSoundTime;
+	float m_flNextLostSoundTime;
+	int 	m_nIdleChatterType;
+	bool m_bPlayerIsNear;
 
 	// Policing state
-	bool			m_bPlayerTooClose;
-	bool			m_bKeepFacingPlayer;
-	float			m_flChasePlayerTime;
-	Vector			m_vecPreChaseOrigin;
-	float			m_flPreChaseYaw;
-	int				m_nNumWarnings;
-	int				m_iNumPlayerHits;
+	bool m_bPlayerTooClose;
+	bool m_bKeepFacingPlayer;
+	float m_flChasePlayerTime;
+	Vector m_vecPreChaseOrigin;
+	float m_flPreChaseYaw;
+	int 	m_nNumWarnings;
+	int 	m_iNumPlayerHits;
 
 	// Outputs
 	COutputEvent	m_OnStunnedPlayer;
@@ -455,11 +455,11 @@ private:
 
 	CAI_Sentence< CNPC_MetroPolice > m_Sentences;
 
-	int				m_nRecentDamage;
-	float			m_flRecentDamageTime;
+	int 	m_nRecentDamage;
+	float m_flRecentDamageTime;
 
 	// The last hit direction, measured as a yaw relative to our orientation
-	float			m_flLastHitYaw;
+	float m_flLastHitYaw;
 
 	static float	gm_flTimeLastSpokePeek;
 

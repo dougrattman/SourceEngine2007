@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_BLENDED_MOVEMENT_H
 #define AI_BLENDED_MOVEMENT_H
@@ -100,12 +100,12 @@ private:
 	// --------------------------------
 
 	// helpers to simplify code
-	float	GetCycle()														{ return GetOuter()->GetCycle();								}
-	int		AddLayeredSequence( int sequence, int iPriority )				{ return GetOuter()->AddLayeredSequence( sequence, iPriority ); }
-	void	SetLayerWeight( int iLayer, float flWeight )					{ GetOuter()->SetLayerWeight( iLayer, flWeight );				}
+	float	GetCycle()    		{ return GetOuter()->GetCycle();  		}
+	int		AddLayeredSequence( int sequence, int iPriority ) 	{ return GetOuter()->AddLayeredSequence( sequence, iPriority ); }
+	void	SetLayerWeight( int iLayer, float flWeight ) 		{ GetOuter()->SetLayerWeight( iLayer, flWeight ); 	}
 	void	SetLayerPlaybackRate( int iLayer, float flPlaybackRate )		{ GetOuter()->SetLayerPlaybackRate( iLayer, flPlaybackRate );	}
-	void	SetLayerNoRestore( int iLayer, bool bNoRestore )				{ GetOuter()->SetLayerNoRestore( iLayer, bNoRestore );			}
-	void	SetLayerCycle( int iLayer, float flCycle )						{ GetOuter()->SetLayerCycle( iLayer, flCycle );					}
+	void	SetLayerNoRestore( int iLayer, bool bNoRestore ) 	{ GetOuter()->SetLayerNoRestore( iLayer, bNoRestore ); }
+	void	SetLayerCycle( int iLayer, float flCycle )  { GetOuter()->SetLayerCycle( iLayer, flCycle ); 		}
 	void	SetLayerCycle( int iLayer, float flCycle, float flPrevCycle )	{ GetOuter()->SetLayerCycle( iLayer, flCycle, flPrevCycle );	}
 	void	RemoveLayer( int iLayer, float flKillRate, float flKillDelay )	{ GetOuter()->RemoveLayer( iLayer, flKillRate, flKillDelay );	}
 
@@ -116,18 +116,18 @@ private:
 	public:
 		AI_Movementscript_t( )
 		{
-			Init( );
+ Init( );
 		};
 
 		void Init( void )
 		{
-			memset( this, 0, sizeof(*this) );
+ memset( this, 0, sizeof(*this) );
 		};
 
-		float	flTime;			// time till next entry
+		float	flTime; // time till next entry
 		float	flElapsedTime;	// time since first entry
 
-		float	flDist;			// distance to next entry
+		float	flDist; // distance to next entry
 
 		float	flMaxVelocity;
 
@@ -156,41 +156,41 @@ private:
 
 	//---------------------------------
 
-	bool			m_bDeceleratingToGoal;
+	bool m_bDeceleratingToGoal;
 
-	int				m_iPrimaryLayer;
-	int				m_iSecondaryLayer;
+	int 	m_iPrimaryLayer;
+	int 	m_iSecondaryLayer;
 
-	int				m_nPrimarySequence;
-	int				m_nSecondarySequence;
-	float			m_flSecondaryWeight;
+	int 	m_nPrimarySequence;
+	int 	m_nSecondarySequence;
+	float m_flSecondaryWeight;
 
 	Activity		m_nSavedGoalActivity;
 	Activity		m_nSavedTranslatedGoalActivity;
-	int				m_nGoalSequence;
+	int 	m_nGoalSequence;
 
-	int				m_nPrevMovementSequence;
-	int				m_nInteriorSequence;
+	int 	m_nPrevMovementSequence;
+	int 	m_nInteriorSequence;
 
-	float			m_flStartCycle;
+	float m_flStartCycle;
 
-	float			m_flCurrRate;
+	float m_flCurrRate;
 
-	float			m_flPredictiveSpeedAdjust;		// predictive speed adjust from probing slope 
-	float			m_flReactiveSpeedAdjust;		// reactive speed adjust when slope movement detected
-	Vector			m_vecPrevOrigin1;
-	Vector			m_vecPrevOrigin2;
-
-	//---------------------------------
-
-	float			m_flNextTurnGesture;	// next time for large turn gesture
+	float m_flPredictiveSpeedAdjust;		// predictive speed adjust from probing slope 
+	float m_flReactiveSpeedAdjust;		// reactive speed adjust when slope movement detected
+	Vector m_vecPrevOrigin1;
+	Vector m_vecPrevOrigin2;
 
 	//---------------------------------
-	float			m_prevYaw;
-	float			m_doTurn;
-	float			m_doLeft;
-	float			m_doRight;
-	float			m_flNextTurnAct;		// next time for small turn gesture
+
+	float m_flNextTurnGesture;	// next time for large turn gesture
+
+	//---------------------------------
+	float m_prevYaw;
+	float m_doTurn;
+	float m_doLeft;
+	float m_doRight;
+	float m_flNextTurnAct;		// next time for small turn gesture
 
 	
 	float	GetMoveScriptDist( float &flNewSpeed );
@@ -234,7 +234,7 @@ public:
 	{
 		float override = GetBlendedMotor()->OverrideMaxYawSpeed( GetActivity() );
 		if ( override != -1 )
-			return override;
+ return override;
 		return BaseClass::MaxYawSpeed();
 	}
 
@@ -242,7 +242,7 @@ public:
 	{
 		float result = GetBlendedMotor()->GetMoveScriptTotalTime();
 		if ( result != -1 )
-			return result;
+ return result;
 		return BaseClass::GetTimeToNavGoal();
 	}
 

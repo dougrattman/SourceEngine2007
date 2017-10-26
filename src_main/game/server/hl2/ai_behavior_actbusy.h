@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_BEHAVIOR_ACTBUSY_H
 #define AI_BEHAVIOR_ACTBUSY_H
@@ -42,14 +42,14 @@ enum busyanimparts_t
 
 struct busyanim_t
 {
-	string_t			iszName;
-	Activity			iActivities[BA_MAX_ANIMS];
-	string_t			iszSequences[BA_MAX_ANIMS];
-	string_t			iszSounds[BA_MAX_ANIMS];
-	float				flMinTime;		// Min time spent in this busy animation
-	float				flMaxTime;		// Max time spent in this busy animation. 0 means continue until interrupted.
+	string_t iszName;
+	Activity iActivities[BA_MAX_ANIMS];
+	string_t iszSequences[BA_MAX_ANIMS];
+	string_t iszSounds[BA_MAX_ANIMS];
+	float 	flMinTime;		// Min time spent in this busy animation
+	float 	flMaxTime;		// Max time spent in this busy animation. 0 means continue until interrupted.
 	busyinterrupt_t		iBusyInterruptType;
-	bool				bUseAutomovement;
+	bool 	bUseAutomovement;
 };
 
 struct busysafezone_t
@@ -152,45 +152,45 @@ public:
 
 private:
 	virtual int		SelectSchedule( void );
-	int				SelectScheduleForLeaving( void );
-	int				SelectScheduleWhileNotBusy( int iBase );
-	int				SelectScheduleWhileBusy( void );
+	int 	SelectScheduleForLeaving( void );
+	int 	SelectScheduleWhileNotBusy( int iBase );
+	int 	SelectScheduleWhileBusy( void );
 	virtual void	StartTask( const Task_t *pTask );
 	virtual void	RunTask( const Task_t *pTask );
-	void			NotifyBusyEnding( void );
-	bool			HasAnimForActBusy( int iActBusy, busyanimparts_t AnimPart );
-	bool			PlayAnimForActBusy( busyanimparts_t AnimPart );
-	void			PlaySoundForActBusy( busyanimparts_t AnimPart ); 
+	void NotifyBusyEnding( void );
+	bool HasAnimForActBusy( int iActBusy, busyanimparts_t AnimPart );
+	bool PlayAnimForActBusy( busyanimparts_t AnimPart );
+	void PlaySoundForActBusy( busyanimparts_t AnimPart ); 
 
 private:
-	bool			m_bEnabled;
-	bool			m_bForceActBusy;
+	bool m_bEnabled;
+	bool m_bForceActBusy;
 	Activity		m_ForcedActivity;
-	bool			m_bTeleportToBusy;
-	bool			m_bUseNearestBusy;
-	bool			m_bLeaving;
-	bool			m_bVisibleOnly;
-	bool			m_bUseRenderBoundsForCollision;
-	float			m_flForcedMaxTime;
-	bool			m_bBusy;
-	bool			m_bMovingToBusy;
-	bool			m_bNeedsToPlayExitAnim;
-	float			m_flNextBusySearchTime;	
-	float			m_flEndBusyAt;
-	float			m_flBusySearchRange;
-	bool			m_bInQueue;
-	int				m_iCurrentBusyAnim;
+	bool m_bTeleportToBusy;
+	bool m_bUseNearestBusy;
+	bool m_bLeaving;
+	bool m_bVisibleOnly;
+	bool m_bUseRenderBoundsForCollision;
+	float m_flForcedMaxTime;
+	bool m_bBusy;
+	bool m_bMovingToBusy;
+	bool m_bNeedsToPlayExitAnim;
+	float m_flNextBusySearchTime;	
+	float m_flEndBusyAt;
+	float m_flBusySearchRange;
+	bool m_bInQueue;
+	int 	m_iCurrentBusyAnim;
 	CHandle<CAI_ActBusyGoal> m_hActBusyGoal;
-	bool			m_bNeedToSetBounds;
-	EHANDLE			m_hSeeEntity;
-	float			m_fTimeLastSawSeeEntity;
-	bool			m_bExitedBusyToDueLostSeeEntity;
-	bool			m_bExitedBusyToDueSeeEnemy;
+	bool m_bNeedToSetBounds;
+	EHANDLE m_hSeeEntity;
+	float m_fTimeLastSawSeeEntity;
+	bool m_bExitedBusyToDueLostSeeEntity;
+	bool m_bExitedBusyToDueSeeEnemy;
 
-	int				m_iNumConsecutivePathFailures; // Count how many times we failed to find a path to a node, so we can consider teleporting.
-	bool			m_bAutoFireWeapon;
-	float			m_flDeferUntil;
-	int				m_iNumEnemiesInSafeZone;
+	int 	m_iNumConsecutivePathFailures; // Count how many times we failed to find a path to a node, so we can consider teleporting.
+	bool m_bAutoFireWeapon;
+	float m_flDeferUntil;
+	int 	m_iNumEnemiesInSafeZone;
 
 	CUtlVector<busysafezone_t>m_SafeZones;
 
@@ -242,17 +242,17 @@ protected:
 	DECLARE_DATADESC();
 
 protected:
-	float			m_flBusySearchRange;
-	bool			m_bVisibleOnly;
-	int				m_iType;
-	bool			m_bAllowCombatActBusyTeleport;
+	float m_flBusySearchRange;
+	bool m_bVisibleOnly;
+	int 	m_iType;
+	bool m_bAllowCombatActBusyTeleport;
 
 public:
 	// Let the actbusy behavior query these so we don't have to duplicate the data.
 	string_t		m_iszSeeEntityName;
-	float			m_flSeeEntityTimeout;
+	float m_flSeeEntityTimeout;
 	string_t		m_iszSafeZoneVolume;
-	int				m_iSightMethod;
+	int 	m_iSightMethod;
 
 protected:
 	COutputEHANDLE	m_OnNPCStartedBusy;
@@ -292,18 +292,18 @@ public:
   	void		 MoveQueueUp( void );
   	void		 MoveQueueUpThink( void );
 	bool		 NodeIsOccupied( int i );
-	CAI_BaseNPC			*GetNPCOnNode( int iNode );
+	CAI_BaseNPC *GetNPCOnNode( int iNode );
 	CAI_ActBusyBehavior *GetQueueBehaviorForNPC( CAI_BaseNPC	*pNPC );
 
 	DECLARE_DATADESC();
 
 private:
-	int						m_iCurrentQueueCount;
+	int  m_iCurrentQueueCount;
 	CHandle<CAI_Hint>		m_hNodes[ MAX_QUEUE_NODES ];
-	bool					m_bPlayerBlockedNodes[ MAX_QUEUE_NODES ];
-	EHANDLE					m_hExitNode;
-	EHANDLE					m_hExitingNPC;
-	bool					m_bForceReachFront;
+	bool 		m_bPlayerBlockedNodes[ MAX_QUEUE_NODES ];
+	EHANDLE 		m_hExitNode;
+	EHANDLE 		m_hExitingNPC;
+	bool 		m_bForceReachFront;
 
 	// Read from mapdata
 	string_t		m_iszNodes[ MAX_QUEUE_NODES ];

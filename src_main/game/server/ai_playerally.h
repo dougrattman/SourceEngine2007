@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_PLAYERALLY_H
 #define AI_PLAYERALLY_H
@@ -27,34 +27,34 @@
 
 //-----------------------------------------------------------------------------
 
-#define TLK_ANSWER 			"TLK_ANSWER"
+#define TLK_ANSWER  "TLK_ANSWER"
 #define TLK_ANSWER_HELLO	"TLK_ANSWER_HELLO"
 #define TLK_QUESTION 		"TLK_QUESTION"
-#define TLK_IDLE 			"TLK_IDLE"
-#define TLK_STARE 			"TLK_STARE"
-#define TLK_LOOK 			"TLK_LOOK"	// player looking at player for a second
-#define TLK_USE				"TLK_USE"
+#define TLK_IDLE  "TLK_IDLE"
+#define TLK_STARE  "TLK_STARE"
+#define TLK_LOOK  "TLK_LOOK"	// player looking at player for a second
+#define TLK_USE 	"TLK_USE"
 #define TLK_STARTFOLLOW 	"TLK_STARTFOLLOW"
 #define TLK_STOPFOLLOW		"TLK_STOPFOLLOW"
 #define TLK_JOINPLAYER		"TLK_JOINPLAYER"
-#define TLK_STOP 			"TLK_STOP"
-#define TLK_NOSHOOT			"TLK_NOSHOOT"
-#define TLK_HELLO 			"TLK_HELLO"
-#define TLK_PHELLO 			"TLK_PHELLO"
+#define TLK_STOP  "TLK_STOP"
+#define TLK_NOSHOOT "TLK_NOSHOOT"
+#define TLK_HELLO  "TLK_HELLO"
+#define TLK_PHELLO  "TLK_PHELLO"
 #define TLK_HELLO_NPC		"TLK_HELLO_NPC"
-#define TLK_PIDLE 			"TLK_PIDLE"
+#define TLK_PIDLE  "TLK_PIDLE"
 #define TLK_PQUESTION 		"TLK_PQUESTION"
 #define TLK_PLHURT1 		"TLK_PLHURT1"
 #define TLK_PLHURT2 		"TLK_PLHURT2"
 #define TLK_PLHURT3 		"TLK_PLHURT3"
-#define TLK_PLHURT			"TLK_PLHURT"
-#define TLK_PLPUSH 			"TLK_PLPUSH"
+#define TLK_PLHURT "TLK_PLHURT"
+#define TLK_PLPUSH  "TLK_PLPUSH"
 #define TLK_PLRELOAD		"TLK_PLRELOAD"
-#define TLK_SMELL 			"TLK_SMELL"
-#define TLK_SHOT			"TLK_SHOT"
-#define TLK_WOUND 			"TLK_WOUND"
-#define TLK_MORTAL 			"TLK_MORTAL"
-#define TLK_DANGER			"TLK_DANGER"
+#define TLK_SMELL  "TLK_SMELL"
+#define TLK_SHOT "TLK_SHOT"
+#define TLK_WOUND  "TLK_WOUND"
+#define TLK_MORTAL  "TLK_MORTAL"
+#define TLK_DANGER "TLK_DANGER"
 #define TLK_SEE_COMBINE		"TLK_SEE_COMBINE"
 #define TLK_ENEMY_DEAD		"TLK_ENEMY_DEAD"
 #define TLK_ALYX_ENEMY_DEAD "TLK_ALYX_ENEMY_DEAD"
@@ -65,45 +65,45 @@
 #define TLK_BETRAYED		"TLK_BETRAYED"	// player killed an ally in front of me.
 #define TLK_ALLY_KILLED		"TLK_ALLY_KILLED" // witnessed an ally die some other way.
 #define TLK_ATTACKING		"TLK_ATTACKING" // about to fire my weapon at a target
-#define TLK_HEAL			"TLK_HEAL" // healing someone
+#define TLK_HEAL "TLK_HEAL" // healing someone
 #define TLK_GIVEAMMO		"TLK_GIVEAMMO" // giving ammo to someone
-#define TLK_DEATH			"TLK_DEATH"	// Death rattle
-#define TLK_HELP_ME			"TLK_HELP_ME" // call out to the player for help
+#define TLK_DEATH "TLK_DEATH"	// Death rattle
+#define TLK_HELP_ME "TLK_HELP_ME" // call out to the player for help
 #define TLK_PLYR_PHYSATK	"TLK_PLYR_PHYSATK"	// Player's attacked me with a thrown physics object
 #define TLK_NEWWEAPON		"TLK_NEWWEAPON"
-#define TLK_PLDEAD			"TLK_PLDEAD"
+#define TLK_PLDEAD "TLK_PLDEAD"
 #define TLK_HIDEANDRELOAD	"TLK_HIDEANDRELOAD"
 #define TLK_STARTCOMBAT		"TLK_STARTCOMBAT"
 #define TLK_WATCHOUT		"TLK_WATCHOUT"
-#define TLK_MOBBED			"TLK_MOBBED"
+#define TLK_MOBBED "TLK_MOBBED"
 #define TLK_MANY_ENEMIES	"TLK_MANY_ENEMIES"
 #define TLK_FLASHLIGHT_ILLUM		"TLK_FLASHLIGHT_ILLUM"
-#define TLK_FLASHLIGHT_ON			"TLK_FLASHLIGHT_ON"		// player turned on flashlight
-#define TLK_FLASHLIGHT_OFF			"TLK_FLASHLIGHT_OFF"	// player turned off flashlight
+#define TLK_FLASHLIGHT_ON "TLK_FLASHLIGHT_ON"		// player turned on flashlight
+#define TLK_FLASHLIGHT_OFF "TLK_FLASHLIGHT_OFF"	// player turned off flashlight
 #define TLK_DARKNESS_LOSTPLAYER		"TLK_DARKNESS_LOSTPLAYER"
 #define TLK_DARKNESS_FOUNDPLAYER	"TLK_DARKNESS_FOUNDPLAYER"
 #define TLK_DARKNESS_UNKNOWN_WOUND	"TLK_DARKNESS_UNKNOWN_WOUND"
 #define TLK_DARKNESS_HEARDSOUND		"TLK_DARKNESS_HEARDSOUND"
-#define TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT			"TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT"
+#define TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT "TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT"
 #define TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT_EXPIRED	"TLK_DARKNESS_LOSTENEMY_BY_FLASHLIGHT_EXPIRED"
-#define TLK_DARKNESS_FOUNDENEMY_BY_FLASHLIGHT			"TLK_DARKNESS_FOUNDENEMY_BY_FLASHLIGHT"
-#define TLK_DARKNESS_FLASHLIGHT_EXPIRED					"TLK_DARKNESS_FLASHLIGHT_EXPIRED"	// flashlight expired while not in combat
-#define TLK_DARKNESS_ENEMY_IN_DARKNESS					"TLK_DARKNESS_ENEMY_IN_DARKNESS"	// have an enemy, but it's in the darkness
-#define TLK_SPOTTED_INCOMING_HEADCRAB					"TLK_SPOTTED_INCOMING_HEADCRAB"
-#define TLK_CANT_INTERACT_NOW				"TLK_CANT_INTERACT_NOW" // to busy to interact with an object the player is holding up to me
-#define TLK_ALLY_IN_BARNACLE				"TLK_ALLY_IN_BARNACLE"	// Barnacle is lifting my buddy!
-#define TLK_SELF_IN_BARNACLE				"TLK_SELF_IN_BARNACLE" // I was grabbed by a barnacle!
-#define TLK_FOUNDPLAYER						"TLK_FOUNDPLAYER"
-#define TLK_PLAYER_KILLED_NPC				"TLK_PLAYER_KILLED_NPC"
-#define TLK_ENEMY_BURNING					"TLK_ENEMY_BURNING"
-#define TLK_SPOTTED_ZOMBIE_WAKEUP			"TLK_SPOTTED_ZOMBIE_WAKEUP"
+#define TLK_DARKNESS_FOUNDENEMY_BY_FLASHLIGHT "TLK_DARKNESS_FOUNDENEMY_BY_FLASHLIGHT"
+#define TLK_DARKNESS_FLASHLIGHT_EXPIRED 		"TLK_DARKNESS_FLASHLIGHT_EXPIRED"	// flashlight expired while not in combat
+#define TLK_DARKNESS_ENEMY_IN_DARKNESS 		"TLK_DARKNESS_ENEMY_IN_DARKNESS"	// have an enemy, but it's in the darkness
+#define TLK_SPOTTED_INCOMING_HEADCRAB 		"TLK_SPOTTED_INCOMING_HEADCRAB"
+#define TLK_CANT_INTERACT_NOW 	"TLK_CANT_INTERACT_NOW" // to busy to interact with an object the player is holding up to me
+#define TLK_ALLY_IN_BARNACLE 	"TLK_ALLY_IN_BARNACLE"	// Barnacle is lifting my buddy!
+#define TLK_SELF_IN_BARNACLE 	"TLK_SELF_IN_BARNACLE" // I was grabbed by a barnacle!
+#define TLK_FOUNDPLAYER  "TLK_FOUNDPLAYER"
+#define TLK_PLAYER_KILLED_NPC 	"TLK_PLAYER_KILLED_NPC"
+#define TLK_ENEMY_BURNING 		"TLK_ENEMY_BURNING"
+#define TLK_SPOTTED_ZOMBIE_WAKEUP "TLK_SPOTTED_ZOMBIE_WAKEUP"
 #define TLK_SPOTTED_HEADCRAB_LEAVING_ZOMBIE	"TLK_SPOTTED_HEADCRAB_LEAVING_ZOMBIE"
-#define TLK_DANGER_ZOMBINE_GRENADE			"TLK_DANGER_ZOMBINE_GRENADE"
-#define TLK_BALLSOCKETED					"TLK_BALLSOCKETED"
+#define TLK_DANGER_ZOMBINE_GRENADE "TLK_DANGER_ZOMBINE_GRENADE"
+#define TLK_BALLSOCKETED 		"TLK_BALLSOCKETED"
 
 // Vehicle passenger
 #define	TLK_PASSENGER_WARN_COLLISION	"TLK_PASSENGER_WARN_COLLISION"	// About to collide with something
-#define	TLK_PASSENGER_IMPACT			"TLK_PASSENGER_IMPACT"			// Just hit something
+#define	TLK_PASSENGER_IMPACT "TLK_PASSENGER_IMPACT" // Just hit something
 #define	TLK_PASSENGER_OVERTURNED		"TLK_PASSENGER_OVERTURNED"		// Vehicle has just overturned
 #define	TLK_PASSENGER_REQUEST_UPRIGHT	"TLK_PASSENGER_REQUEST_UPRIGHT" // Vehicle needs to be put upright
 #define TLK_PASSENGER_ERRATIC_DRIVING	"TLK_PASSENGER_ERRATIC_DRIVING"	// Vehicle is moving erratically
@@ -116,7 +116,7 @@
 #define TLK_PASSENGER_PLAYER_ENTERED	"TLK_PASSENGER_PLAYER_ENTERED"	// Player entered the vehicle
 #define TLK_PASSENGER_PLAYER_EXITED		"TLK_PASSENGER_PLAYER_EXITED"	// Player exited the vehicle
 #define TLK_PASSENGER_NEW_RADAR_CONTACT	"TLK_PASSENGER_NEW_RADAR_CONTACT"	// Noticed a brand new contact on the radar
-#define TLK_PASSENGER_PUNTED			"TLK_PASSENGER_PUNTED"			// The player has punted us while we're sitting in the vehicle
+#define TLK_PASSENGER_PUNTED "TLK_PASSENGER_PUNTED" // The player has punted us while we're sitting in the vehicle
 
 // Vortigaunt
 #define TLK_VORTIGAUNT_DISPEL	"TLK_VORTIGAUNT_DISPEL"	// Dispel attack starting
@@ -134,11 +134,11 @@
 
 //-----------------------------------------------------------------------------
 
-#define TALKRANGE_MIN 500.0				// don't talk to anyone farther away than this
+#define TALKRANGE_MIN 500.0 	// don't talk to anyone farther away than this
 
 //-----------------------------------------------------------------------------
 
-#define TALKER_STARE_DIST	128				// anyone closer than this and looking at me is probably staring at me.
+#define TALKER_STARE_DIST	128 	// anyone closer than this and looking at me is probably staring at me.
 
 #define TALKER_DEFER_IDLE_SPEAK_MIN		10
 #define TALKER_DEFER_IDLE_SPEAK_MAX		20
@@ -172,25 +172,25 @@ struct ConceptCategoryInfo_t
 
 enum AIConceptFlags_t
 {
-	AICF_DEFAULT 			= 0,
-	AICF_SPEAK_ONCE			= 0x01,
+	AICF_DEFAULT  = 0,
+	AICF_SPEAK_ONCE = 0x01,
 	AICF_PROPAGATE_SPOKEN	= 0x02,
 	AICF_TARGET_PLAYER		= 0x04,
-	AICF_QUESTION			= 0x08,
-	AICF_ANSWER				= 0x10,
+	AICF_QUESTION = 0x08,
+	AICF_ANSWER 	= 0x10,
 }; 
 
 struct ConceptInfo_t
 {
-	AIConcept_t			concept;
+	AIConcept_t concept;
 	ConceptCategory_t   category;
-	float				minGlobalCategoryDelay;
-	float				maxGlobalCategoryDelay;
-	float				minPersonalCategoryDelay;
-	float				maxPersonalCategoryDelay;
-	float				minConceptDelay;
-	float				maxConceptDelay;
-	int 				flags;
+	float 	minGlobalCategoryDelay;
+	float 	maxGlobalCategoryDelay;
+	float 	minPersonalCategoryDelay;
+	float 	maxPersonalCategoryDelay;
+	float 	minConceptDelay;
+	float 	maxConceptDelay;
+	int  	flags;
 };
 
 //-------------------------------------
@@ -239,11 +239,11 @@ class CAI_AllySpeechManager;
 
 enum AISpeechTargetSearchFlags_t
 {
-	AIST_PLAYERS 				= (1<<0),
-	AIST_NPCS					= (1<<1),
+	AIST_PLAYERS  	= (1<<0),
+	AIST_NPCS 		= (1<<1),
 	AIST_IGNORE_RELATIONSHIP	= (1<<2),
-	AIST_ANY_QUALIFIED			= (1<<3),
-	AIST_FACING_TARGET			= (1<<4),
+	AIST_ANY_QUALIFIED = (1<<3),
+	AIST_FACING_TARGET = (1<<4),
 };
 
 struct AISpeechSelection_t
@@ -262,7 +262,7 @@ struct AISpeechSelection_t
 	
 	std::string 		concept;
 	AI_Response *		pResponse;
-	EHANDLE			hSpeechTarget;				
+	EHANDLE hSpeechTarget; 	
 };
 
 //-------------------------------------
@@ -274,8 +274,8 @@ class CAI_PlayerAlly : public CAI_BaseActor
 public:
 	//---------------------------------
 
-	int			ObjectCaps( void ) { return UsableNPCObjectCaps(BaseClass::ObjectCaps()); }
-	void		TalkInit( void );				
+	int ObjectCaps( void ) { return UsableNPCObjectCaps(BaseClass::ObjectCaps()); }
+	void		TalkInit( void ); 	
 
 	//---------------------------------
 	// Behavior
@@ -284,10 +284,10 @@ public:
 	void		GatherEnemyConditions( CBaseEntity *pEnemy );
 	void		OnStateChange( NPC_STATE OldState, NPC_STATE NewState );
 	void		PrescheduleThink( void );
-	int			SelectSchedule( void );
-	int			SelectNonCombatSpeech( AISpeechSelection_t *pSelection );
+	int SelectSchedule( void );
+	int SelectNonCombatSpeech( AISpeechSelection_t *pSelection );
 	virtual int	SelectNonCombatSpeechSchedule();
-	int			TranslateSchedule( int scheduleType );
+	int TranslateSchedule( int scheduleType );
 	void		OnStartSchedule( int scheduleType );
 	void		StartTask( const Task_t *pTask );
 	void		RunTask( const Task_t *pTask );
@@ -305,8 +305,8 @@ public:
 	// Damage handling
 	//---------------------------------
 	void		TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
-	int			OnTakeDamage_Alive( const CTakeDamageInfo &info );
-	int			TakeHealth( float flHealth, int bitsDamageType );
+	int OnTakeDamage_Alive( const CTakeDamageInfo &info );
+	int TakeHealth( float flHealth, int bitsDamageType );
 	void		Event_Killed( const CTakeDamageInfo &info );
 	bool		CreateVPhysics();
 
@@ -323,11 +323,11 @@ public:
 	CBaseEntity *FindSpeechTarget( int flags );
 	virtual bool IsValidSpeechTarget( int flags, CBaseEntity *pEntity );
 	
-	CBaseEntity *GetSpeechTarget()								{ return m_hTalkTarget.Get(); }
+	CBaseEntity *GetSpeechTarget()  		{ return m_hTalkTarget.Get(); }
 	void		SetSpeechTarget( CBaseEntity *pSpeechTarget ) 	{ m_hTalkTarget = pSpeechTarget; }
 	
 	void		SetSpeechFilter( CAI_SpeechFilter *pFilter )	{ m_hSpeechFilter = pFilter; }
-	CAI_SpeechFilter *GetSpeechFilter( void )					{ return m_hSpeechFilter; }
+	CAI_SpeechFilter *GetSpeechFilter( void ) 		{ return m_hSpeechFilter; }
 
 	//---------------------------------
 	
@@ -354,7 +354,7 @@ public:
 	//---------------------------------
 	
 	bool		CanPlaySentence( bool fDisregardState );
-	int			PlayScriptedSentence( const char *pszSentence, float delay, float volume, soundlevel_t soundlevel, bool bConcurrent, CBaseEntity *pListener );
+	int PlayScriptedSentence( const char *pszSentence, float delay, float volume, soundlevel_t soundlevel, bool bConcurrent, CBaseEntity *pListener );
 
 	//---------------------------------
 	
@@ -394,16 +394,16 @@ public:
 	void InputSpeakResponseConcept( inputdata_t &inputdata );
 	virtual bool SpeakMapmakerInterruptConcept( string_t iszConcept );
 
-	void			DisplayDeathMessage( void );
+	void DisplayDeathMessage( void );
 	virtual const char		*GetDeathMessageText( void ) { return "GAMEOVER_ALLY"; }
-	void			InputMakeGameEndAlly( inputdata_t &inputdata );
-	void			InputMakeRegularAlly( inputdata_t &inputdata );
-	void			InputAnswerQuestion( inputdata_t &inputdata );
-	void			InputAnswerQuestionHello( inputdata_t &inputdata );
-	void			InputEnableSpeakWhileScripting( inputdata_t &inputdata );
-	void			InputDisableSpeakWhileScripting( inputdata_t &inputdata );
+	void InputMakeGameEndAlly( inputdata_t &inputdata );
+	void InputMakeRegularAlly( inputdata_t &inputdata );
+	void InputAnswerQuestion( inputdata_t &inputdata );
+	void InputAnswerQuestionHello( inputdata_t &inputdata );
+	void InputEnableSpeakWhileScripting( inputdata_t &inputdata );
+	void InputDisableSpeakWhileScripting( inputdata_t &inputdata );
 	
-	void			AnswerQuestion( CAI_PlayerAlly *pQuestioner, int iQARandomNum, bool bAnsweringHello );
+	void AnswerQuestion( CAI_PlayerAlly *pQuestioner, int iQARandomNum, bool bAnsweringHello );
 
 protected:
 	
@@ -441,7 +441,7 @@ protected:
 
 private:
 	void SetCategoryDelay( ConceptCategory_t category, float minDelay, float maxDelay = 0.0 )	{ m_ConceptCategoryTimers[category].Set( minDelay, maxDelay ); }
-	bool CategoryDelayExpired( ConceptCategory_t category )										{ return m_ConceptCategoryTimers[category].Expired(); }
+	bool CategoryDelayExpired( ConceptCategory_t category )   	{ return m_ConceptCategoryTimers[category].Expired(); }
 
 	friend class CAI_AllySpeechManager;
 
@@ -449,16 +449,16 @@ private:
 	
 	AI_Response		m_PendingResponse;
 	std::string		m_PendingConcept;
-	float			m_TimePendingSet;
+	float m_TimePendingSet;
 
 	//---------------------------------
 	
-	EHANDLE			m_hTalkTarget;	// who to look at while talking
-	float			m_flNextRegenTime;
-	float			m_flTimePlayerStartStare;
-	EHANDLE			m_hPotentialSpeechTarget;	// NPC to tell the response rules about when trying to find a response to talk to them with
-	float			m_flNextIdleSpeechTime;
-	int				m_iQARandomNumber;
+	EHANDLE m_hTalkTarget;	// who to look at while talking
+	float m_flNextRegenTime;
+	float m_flTimePlayerStartStare;
+	EHANDLE m_hPotentialSpeechTarget;	// NPC to tell the response rules about when trying to find a response to talk to them with
+	float m_flNextIdleSpeechTime;
+	int 	m_iQARandomNumber;
 
 	//---------------------------------
 

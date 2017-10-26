@@ -1,17 +1,17 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This module defines the IVoiceServer interface, which is used by
-//			game code to control which clients are listening to which other
-//			clients' voice streams.
+// game code to control which clients are listening to which other
+// clients' voice streams.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IVOICESERVER_H
 #define IVOICESERVER_H
 
 
-#include "interface.h"
+#include "tier1/interface.h"
 
 
 #define INTERFACEVERSION_VOICESERVER	"VoiceServer002"
@@ -20,7 +20,7 @@
 abstract_class IVoiceServer
 {
 public:
-	virtual			~IVoiceServer()	{}
+	virtual ~IVoiceServer()	{}
 
 	// Use these to setup who can hear whose voice.
 	// Pass in client indices (which are their ent indices - 1).

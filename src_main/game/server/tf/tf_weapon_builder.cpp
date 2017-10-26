@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:			The "weapon" used to build objects
 //					
@@ -6,7 +6,7 @@
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "tf_player.h"
 #include "entitylist.h"

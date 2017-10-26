@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 
 #ifndef __UNISIGNALS_H__
@@ -29,13 +29,13 @@ class CUnifiedSignals
 {
 public:
 	inline CUnifiedSignals();
-	inline int Update();				// Returns a mask for the changed state bits; signals are cleared after this update is performed
+	inline int Update(); 	// Returns a mask for the changed state bits; signals are cleared after this update is performed
 	inline void Signal( int flSignal );	// ORed combo of BPSIG_xxx bits
-	inline int GetState();				// Returns the current state (ORed combo of BPSIG_xxx flags)
+	inline int GetState(); 	// Returns the current state (ORed combo of BPSIG_xxx flags)
 
 private:
-	int m_flSignal;						// States to trigger
-	int m_flState;						// States after the previous update
+	int m_flSignal;  // States to trigger
+	int m_flState;  // States after the previous update
 };
 
 

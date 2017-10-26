@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This module defines the CPowerInfo class, which contains a 
 //          whole bunch of precalculated data for each displacement power.
@@ -6,7 +6,7 @@
 //          neighbor displacements, etc.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DISP_POWERINFO_H
 #define DISP_POWERINFO_H
@@ -19,7 +19,7 @@
 #include "bspfile.h"
 
 
-#define NUM_POWERINFOS				(MAX_MAP_DISP_POWER+1)
+#define NUM_POWERINFOS 	(MAX_MAP_DISP_POWER+1)
 
 
 struct DispNodeInfo_t
@@ -45,10 +45,10 @@ struct DispNodeInfo_t
 class CTesselateVert
 {
 public:
-				CTesselateVert( CVertIndex const &index, int iNode );
+ 	CTesselateVert( CVertIndex const &index, int iNode );
 
 	CVertIndex	m_Index;
-	short			m_iNode;	// Which node this vert is a part of (-1 on left, right, up, and down).
+	short m_iNode;	// Which node this vert is a part of (-1 on left, right, up, and down).
 };
 
 
@@ -56,7 +56,7 @@ class CTesselateWinding
 {
 public:
 	CTesselateVert	*m_Verts;
-	short			m_nVerts;	// (includes the last vert)
+	short m_nVerts;	// (includes the last vert)
 };
 
 
@@ -69,7 +69,7 @@ public:
 
 
 public:
-			
+ 
 	// The vert index is in the same power as the source displacement.
 	// It is also wrapped, so for example, on the middle of the right edge
 	// of a 3x3, it will have a dependency on the 3x3's root node (1,1), and it
@@ -86,19 +86,19 @@ public:
 class CVertInfo
 {
 public:
-					CVertInfo();
+ 		CVertInfo();
 
 	// These are the vertices that this vertex depends on (vertices that must be 
 	// active for this vert to exist).
 	CVertDependency	m_Dependencies[2];
 
 	// These are the vertices that have this vert in their m_Dependencies.
-	enum			{ NUM_REVERSE_DEPENDENCIES=4 };
+	enum { NUM_REVERSE_DEPENDENCIES=4 };
 	CVertDependency	m_ReverseDependencies[NUM_REVERSE_DEPENDENCIES];
 
-	short			m_iNodeLevel;		// -1 if this is not a node. Otherwise, the recursion level
-										// of this node (root node = 1).
-	CVertIndex		m_iParent;			// x=-1 if this is a not a node or if it's the root node.
+	short m_iNodeLevel;		// -1 if this is not a node. Otherwise, the recursion level
+   	// of this node (root node = 1).
+	CVertIndex		m_iParent; // x=-1 if this is a not a node or if it's the root node.
 };
 
 
@@ -128,25 +128,25 @@ public:
 class CPowerInfo
 {
 public:
-						CPowerInfo( 
-							CVertInfo *pVertInfo, 
-							CFourVerts *pSideVerts,
-							CFourVerts *pChildVerts,
-							CFourVerts *pSideVertCorners,
-							CTwoUShorts *pErrorEdges,
-							CTriInfo *pTriInfos );
+  CPowerInfo( 
+  	CVertInfo *pVertInfo, 
+  	CFourVerts *pSideVerts,
+  	CFourVerts *pChildVerts,
+  	CFourVerts *pSideVertCorners,
+  	CTwoUShorts *pErrorEdges,
+  	CTriInfo *pTriInfos );
 
-	int					GetPower() const		{ return m_Power; }
-	int					GetSideLength() const	{ return m_SideLength; }
+	int 		GetPower() const		{ return m_Power; }
+	int 		GetSideLength() const	{ return m_SideLength; }
 	const CVertIndex&	GetRootNode() const		{ return m_RootNode; }
-	int					GetMidPoint() const		{ return m_MidPoint; } // Half the edge length.
+	int 		GetMidPoint() const		{ return m_MidPoint; } // Half the edge length.
 
 	// Get at the tri list.
-	int					GetNumTriInfos() const		{ return m_nTriInfos; }
+	int 		GetNumTriInfos() const		{ return m_nTriInfos; }
 	const CTriInfo*		GetTriInfo( int i ) const	{ return &m_pTriInfos[i]; }
 
 	// Get the number of vertices in a displacement of this power.
-	int					GetNumVerts() const			{ return m_MaxVerts; }
+	int 		GetNumVerts() const { return m_MaxVerts; }
 	
 	// Return a corner point index. Indexed by the CORNER_ defines.
 	const CVertIndex&	GetCornerPointIndex( int iCorner ) const;
@@ -154,43 +154,43 @@ public:
 
 public:
 
-	CVertInfo			*m_pVertInfo;
-	CFourVerts			*m_pSideVerts;	// The 4 side verts for each node.
-	CFourVerts			*m_pChildVerts;	// The 4 children for each node.
-	CFourVerts			*m_pSideVertCorners;
-	CTwoUShorts			*m_pErrorEdges;			// These are the edges
-												// that are used to measure the screenspace
-												// error with respect to each vert.
+	CVertInfo *m_pVertInfo;
+	CFourVerts *m_pSideVerts;	// The 4 side verts for each node.
+	CFourVerts *m_pChildVerts;	// The 4 children for each node.
+	CFourVerts *m_pSideVertCorners;
+	CTwoUShorts *m_pErrorEdges; // These are the edges
+    // that are used to measure the screenspace
+    // error with respect to each vert.
 
-	CTriInfo			*m_pTriInfos;
-	int					m_nTriInfos;
+	CTriInfo *m_pTriInfos;
+	int 		m_nTriInfos;
 	
-	int					m_Power;
+	int 		m_Power;
 
-	CVertIndex			m_RootNode;
-	int					m_SideLength;
-	int					m_SideLengthM1;			// Side length minus 1.
-	int					m_MidPoint;				// Side length / 2.
-	int					m_MaxVerts;				// m_SideLength * m_SideLength
-	int					m_NodeCount;			// total # of nodes, including children
+	CVertIndex m_RootNode;
+	int 		m_SideLength;
+	int 		m_SideLengthM1; // Side length minus 1.
+	int 		m_MidPoint; 	// Side length / 2.
+	int 		m_MaxVerts; 	// m_SideLength * m_SideLength
+	int 		m_NodeCount; // total # of nodes, including children
 
 	// Precalculated increments if you're using a bit vector to represent nodes.
 	// Starting at level 0 of the tree, this stores the increment between the nodes at this
 	// level. Vectors holding node data are stored in preorder traversal, and these
 	// increments tell the number of elements between nodes at each level.
-	int					m_NodeIndexIncrements[MAX_MAP_DISP_POWER];
+	int 		m_NodeIndexIncrements[MAX_MAP_DISP_POWER];
 
-	CVertIndex			m_EdgeStartVerts[4];
-	CVertIndex			m_EdgeIncrements[4];
+	CVertIndex m_EdgeStartVerts[4];
+	CVertIndex m_EdgeIncrements[4];
 
-	CVertIndex			m_NeighborStartVerts[4][4];	// [side][orientation]
-	CVertIndex			m_NeighborIncrements[4][4];	// [side][orientation]
+	CVertIndex m_NeighborStartVerts[4][4];	// [side][orientation]
+	CVertIndex m_NeighborIncrements[4][4];	// [side][orientation]
 
 
 private:
 	friend void InitPowerInfo( CPowerInfo *pInfo, int iMaxPower );
 
-	CVertIndex			m_CornerPointIndices[4];
+	CVertIndex m_CornerPointIndices[4];
 };
 
 

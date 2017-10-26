@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side C_CHostage class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "c_cs_hostage.h"
 #include <bitbuf.h>

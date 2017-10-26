@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef PARTICLE_UTIL_H
 #define PARTICLE_UTIL_H
@@ -51,7 +51,7 @@ inline Vector GetGravityVector()
 // Color and alpha range is 0 to 254.9
 // You also get an extra texture coordinate to pass in.
 inline void RenderParticle_Color255SizeSpecularTCoord3(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -104,7 +104,7 @@ inline void RenderParticle_Color255SizeSpecularTCoord3(
 // Render a quad on the screen where you pass in color and size.
 // Color and alpha range is 0 to 254.9
 inline void RenderParticle_Color255Size(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -150,7 +150,7 @@ inline void RenderParticle_Color255Size(
 // Render a quad on the screen where you pass in color and size.
 // Color and alpha range is 0 to 254.9
 inline void RenderParticle_Color255SizeNormal(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -202,7 +202,7 @@ inline void RenderParticle_Color255SizeNormal(
 // Color and alpha range is 0 to 254.9
 // Angle is in radians.
 inline void RenderParticle_Color255SizeNormalAngle(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -256,7 +256,7 @@ inline void RenderParticle_Color255SizeNormalAngle(
 
 // Render a quad on the screen where you pass in color and size.
 inline void RenderParticle_ColorSize(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -301,7 +301,7 @@ inline void RenderParticle_ColorSize(
 
 
 inline void RenderParticle_ColorSizeAngle(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,
@@ -347,7 +347,7 @@ inline void RenderParticle_ColorSizeAngle(
 }
 
 inline void RenderParticle_ColorSizeAngles(
-	ParticleDraw* pDraw,									
+	ParticleDraw* pDraw,   
 	const Vector &pos,
 	const Vector &color,
 	const float alpha,

@@ -1,105 +1,67 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef TOKENREADER_H
-#define TOKENREADER_H
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_TIER1_TOKENREADER_H_
+#define SOURCE_TIER1_TOKENREADER_H_
 
 #include "tier0/basetypes.h"
 
-#ifdef _WIN32
-#pragma warning(push, 1)
-#pragma warning(disable:4701 4702 4530)
-#endif
-
+#include <cassert>
 #include <fstream>
 
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
-
-#include <assert.h>
-
-
-typedef enum
-{
-	TOKENSTRINGTOOLONG = -4,
-	TOKENERROR = -3,
-	TOKENNONE = -2,
-	TOKENEOF = -1,
-	OPERATOR,
-	INTEGER,
-	STRING,
-	IDENT
+typedef enum {
+  TOKENSTRINGTOOLONG = -4,
+  TOKENERROR = -3,
+  TOKENNONE = -2,
+  TOKENEOF = -1,
+  OPERATOR,
+  INTEGER,
+  STRING,
+  IDENT
 } trtoken_t;
 
-
-#define IsToken(s1, s2)	!strcmpi(s1, s2)
+#define IsToken(s1, s2) !strcmpi(s1, s2)
 
 #define MAX_TOKEN 128 + 1
 #define MAX_IDENT 64 + 1
 #define MAX_STRING 128 + 1
 
+class TokenReader : private std::ifstream {
+ public:
+  TokenReader();
 
-class TokenReader : private std::ifstream
-{
-public:
+  bool Open(const char *pszFilename);
+  trtoken_t NextToken(char *pszStore, int nSize);
+  trtoken_t NextTokenDynamic(char **ppszStore);
+  void Close();
 
-	TokenReader();
+  void IgnoreTill(trtoken_t ttype, const char *pszToken);
+  void Stuff(trtoken_t ttype, const char *pszToken);
+  bool Expecting(trtoken_t ttype, const char *pszToken);
+  const char *Error(char *error, ...);
+  trtoken_t PeekTokenType(char * = NULL, int maxlen = 0);
 
-	bool Open(const char *pszFilename);
-	trtoken_t NextToken(char *pszStore, int nSize);
-	trtoken_t NextTokenDynamic(char **ppszStore);
-	void Close();
+  inline int GetErrorCount();
 
-	void IgnoreTill(trtoken_t ttype, const char *pszToken);
-	void Stuff(trtoken_t ttype, const char *pszToken);
-	bool Expecting(trtoken_t ttype, const char *pszToken);
-	const char *Error(char *error, ...);
-	trtoken_t PeekTokenType(char* = NULL, int maxlen = 0);
+  inline TokenReader(TokenReader const &) = delete;
+  inline int operator=(TokenReader const &) = delete;
 
-	inline int GetErrorCount(void);
+ private:
+  trtoken_t GetString(char *pszStore, int nSize);
+  bool SkipWhiteSpace();
 
-	inline TokenReader(TokenReader const &)
-	{
-		// prevent vc7 warning. compiler can't generate a copy constructor since descended from
-		// std::ifstream
-		assert(0);
-	}
-	inline int operator=(TokenReader const &)
-	{
-		// prevent vc7 warning. compiler can't generate an assignment operator since descended from
-		// std::ifstream
-		assert(0);
-	}
-private:
+  int m_nLine;
+  int m_nErrorCount;
 
-	trtoken_t GetString(char *pszStore, int nSize);
-	bool SkipWhiteSpace(void);
-
-	int m_nLine;
-	int m_nErrorCount;
-
-	char m_szFilename[128];
-	char m_szStuffed[128];
-	bool m_bStuffed;
-	trtoken_t m_eStuffed;
+  char m_szFilename[128];
+  char m_szStuffed[128];
+  bool m_bStuffed;
+  trtoken_t m_eStuffed;
 };
 
-
 //-----------------------------------------------------------------------------
-// Purpose: Returns the total number of parsing errors since this file was opened.
+// Purpose: Returns the total number of parsing errors since this file was
+// opened.
 //-----------------------------------------------------------------------------
-int TokenReader::GetErrorCount(void)
-{
-	return(m_nErrorCount);
-}
+int TokenReader::GetErrorCount() { return m_nErrorCount; }
 
-
-#endif // TOKENREADER_H
+#endif  // SOURCE_TIER1_TOKENREADER_H_

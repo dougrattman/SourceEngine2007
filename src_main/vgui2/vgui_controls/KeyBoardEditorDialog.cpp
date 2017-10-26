@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -11,22 +11,11 @@
 #include "vgui/IInput.h"
 #include "vgui/IVGui.h"
 #include "vgui/ILocalize.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "vgui/Cursor.h"
 #include "tier1/UtlDict.h"
 
 using namespace vgui;
-
-static char *CopyString( const char *in )
-{
-	if ( !in )
-		return NULL;
-
-	int len = strlen( in );
-	char *n = new char[ len + 1 ];
-	Q_strncpy( n, in, len  + 1 );
-	return n;
-}
 
 CKeyBoardEditorPage::SaveMapping_t::SaveMapping_t() : map( 0 )
 {

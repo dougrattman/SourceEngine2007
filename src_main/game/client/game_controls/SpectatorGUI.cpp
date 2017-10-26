@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include <cdll_client_int.h>
 #include <globalvars_base.h>
 #include <cdll_util.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include "spectatorgui.h"
 
@@ -21,7 +21,7 @@
 #include <vgui_controls/MenuItem.h>
 #include <vgui_controls/TextImage.h>
 
-#include <stdio.h> // _snprintf define
+#include <cstdio> // _snprintf define
 
 #include <game/client/iviewport.h>
 #include "commandmenu.h"

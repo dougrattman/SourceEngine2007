@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef TIMEDEVENT_H
 #define TIMEDEVENT_H
@@ -20,14 +20,14 @@
 class TimedEvent
 {
 public:
-				TimedEvent()
-				{
-					m_TimeBetweenEvents = -1;
-					m_fNextEvent = 0;
-				}
+ 	TimedEvent()
+ 	{
+ 		m_TimeBetweenEvents = -1;
+ 		m_fNextEvent = 0;
+ 	}
 
 	// Rate is in events per second (ie: rate of 15 will trigger 15 events per second).
-	inline void	Init(float rate)			
+	inline void	Init(float rate) 
 	{
 		m_TimeBetweenEvents = 1.0f / rate;
 		m_fNextEvent = 0;
@@ -45,15 +45,15 @@ public:
 
 		if(curDelta >= m_fNextEvent)
 		{
-			curDelta -= m_fNextEvent;
-			
-			m_fNextEvent = m_TimeBetweenEvents;
-			return true;
+ curDelta -= m_fNextEvent;
+ 
+ m_fNextEvent = m_TimeBetweenEvents;
+ return true;
 		}
 		else
 		{
-			m_fNextEvent -= curDelta;
-			return false;
+ m_fNextEvent -= curDelta;
+ return false;
 		}
 	}
 

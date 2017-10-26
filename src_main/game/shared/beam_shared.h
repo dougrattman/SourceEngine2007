@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BEAM_H
 #define BEAM_H
@@ -19,18 +19,18 @@
 
 #include "beam_flags.h"
 
-#define MAX_BEAM_WIDTH			102.3f
+#define MAX_BEAM_WIDTH 102.3f
 #define MAX_BEAM_SCROLLSPEED	100.0f
 #define MAX_BEAM_NOISEAMPLITUDE		64
 
-#define SF_BEAM_STARTON			0x0001
-#define SF_BEAM_TOGGLE			0x0002
-#define SF_BEAM_RANDOM			0x0004
-#define SF_BEAM_RING			0x0008
+#define SF_BEAM_STARTON 0x0001
+#define SF_BEAM_TOGGLE 0x0002
+#define SF_BEAM_RANDOM 0x0004
+#define SF_BEAM_RING 0x0008
 #define SF_BEAM_SPARKSTART		0x0010
 #define SF_BEAM_SPARKEND		0x0020
-#define SF_BEAM_DECALS			0x0040
-#define SF_BEAM_SHADEIN			0x0080
+#define SF_BEAM_DECALS 0x0040
+#define SF_BEAM_SHADEIN 0x0080
 #define SF_BEAM_SHADEOUT		0x0100
 #define	SF_BEAM_TAPEROUT		0x0200	// Tapers to zero
 #define SF_BEAM_TEMPORARY		0x8000
@@ -66,7 +66,7 @@ public:
 	int		ShouldTransmit( const CCheckTransmitInfo *pInfo );
 #endif
 
-	virtual int DrawDebugTextOverlays(void);
+	virtual int DrawDebugTextOverlays();
 
 	// These functions are here to show the way beams are encoded as entities.
 	// Encoding beams as entities simplifies their management in the client/server architecture
@@ -169,7 +169,7 @@ public:
 #if defined( CLIENT_DLL )
 // IClientEntity overrides.
 public:
-	virtual int			DrawModel( int flags );
+	virtual int DrawModel( int flags );
 	virtual bool		IsTransparent( void );
 	virtual bool		ShouldDraw();
 	virtual void		OnDataChanged( DataUpdateType_t updateType );
@@ -197,7 +197,7 @@ protected:
 	CNetworkVar( float, m_flFrameRate );
 	CNetworkVar( float, m_flHDRColorScale );
 	float		m_flFireTime;
-	float		m_flDamage;			// Damage per second to touchers.
+	float		m_flDamage; // Damage per second to touchers.
 	CNetworkVar( int, m_nNumBeamEnts );
 #if defined( CLIENT_DLL )
 	pixelvis_handle_t	m_queryHandleHalo;
@@ -233,7 +233,7 @@ private:
 	EHANDLE		m_hEndEntity;
 
 #if !defined( CLIENT_DLL )
-	int			m_nDissolveType;
+	int m_nDissolveType;
 #endif
 
 public:
@@ -313,7 +313,7 @@ inline void CBeam::SetHaloScale( float haloScale )
 	m_fHaloScale = haloScale; 
 }
 
-inline void CBeam::SetWidth( float width )				
+inline void CBeam::SetWidth( float width ) 	
 {
 	Assert( width <= MAX_BEAM_WIDTH );
 	m_fWidth = min( MAX_BEAM_WIDTH, width );
@@ -330,7 +330,7 @@ inline void CBeam::SetFadeLength( float fadeLength )
 	m_fFadeLength = fadeLength; 
 }
 
-inline void CBeam::SetNoise( float amplitude )			
+inline void CBeam::SetNoise( float amplitude ) 
 { 
 	m_fAmplitude = amplitude; 
 }
@@ -345,12 +345,12 @@ inline void CBeam::SetBrightness( int brightness )
 	SetRenderColorA( brightness ); 
 }
 
-inline void CBeam::SetFrame( float frame )				
+inline void CBeam::SetFrame( float frame ) 	
 { 
 	m_fStartFrame = frame; 
 }
 
-inline void CBeam::SetScrollRate( int speed )			
+inline void CBeam::SetScrollRate( int speed ) 
 { 
 	m_fSpeed = speed; 
 }

@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. ========//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.=//
 //
 // Purpose: TF Pipebomb Grenade.
 //
-//=============================================================================//
+
 #ifndef TF_WEAPON_GRENADE_PIPEBOMB_H
 #define TF_WEAPON_GRENADE_PIPEBOMB_H
 #ifdef _WIN32
@@ -31,12 +31,12 @@ public:
 	~CTFGrenadePipebombProjectile();
 
 	// Unique identifier.
-	virtual int			GetWeaponID( void ) const	{ return ( m_iType == TF_GL_MODE_REMOTE_DETONATE ) ? TF_WEAPON_GRENADE_PIPEBOMB : TF_WEAPON_GRENADE_DEMOMAN; }
+	virtual int GetWeaponID( void ) const	{ return ( m_iType == TF_GL_MODE_REMOTE_DETONATE ) ? TF_WEAPON_GRENADE_PIPEBOMB : TF_WEAPON_GRENADE_DEMOMAN; }
 
 	int GetType( void ){ return m_iType; } 
-	virtual int			GetDamageType();
+	virtual int GetDamageType();
 
-	void			SetChargeTime( float flChargeTime )				{ m_flChargeTime = flChargeTime; }
+	void SetChargeTime( float flChargeTime ) 	{ m_flChargeTime = flChargeTime; }
 
 	CNetworkVar( bool, m_bTouched );
 	CNetworkVar( int, m_iType ); // TF_GL_MODE_REGULAR or TF_GL_MODE_REMOTE_DETONATE
@@ -76,7 +76,7 @@ public:
 
 	virtual void	SetLauncher( CBaseEntity *pLauncher ) { m_hLauncher = pLauncher; }
 
-	void			SetPipebombMode( bool bRemoteDetonate );
+	void SetPipebombMode( bool bRemoteDetonate );
 
 	virtual void	PipebombTouch( CBaseEntity *pOther );
 	virtual void	VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );

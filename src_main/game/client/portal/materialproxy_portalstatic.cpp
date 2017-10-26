@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #include "portalrenderable_flatbasic.h"
 #include "c_prop_portal.h"
 #include "toolframework_client.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

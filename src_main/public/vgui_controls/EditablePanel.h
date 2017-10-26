@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef EDITABLEPANEL_H
 #define EDITABLEPANEL_H
@@ -96,16 +96,16 @@ public:
 	virtual bool RequestInfo(KeyValues *data);
 	/* INFO HANDLING
 		"BuildDialog"
-			input:
-				"BuildGroupPtr" - pointer to the panel/dialog to edit
-			returns:
-				"PanelPtr" - pointer to a new BuildModeDialog()
+ input:
+ 	"BuildGroupPtr" - pointer to the panel/dialog to edit
+ returns:
+ 	"PanelPtr" - pointer to a new BuildModeDialog()
 
 		"ControlFactory"
-			input:
-				"ControlName" - class name of the control to create
-			returns:
-				"PanelPtr" - pointer to the newly created panel, or NULL if no such class exists
+ input:
+ 	"ControlName" - class name of the control to create
+ returns:
+ 	"PanelPtr" - pointer to the newly created panel, or NULL if no such class exists
 	*/	
 	// registers a file in the list of control settings, so the vgui dialog can choose between them to edit
 	virtual void RegisterControlSettingsFile(const char *dialogResourceName, const char *pathID = NULL);

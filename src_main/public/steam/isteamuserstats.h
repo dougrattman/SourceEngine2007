@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: interface to user account information in Steam
 //
@@ -13,7 +13,7 @@
 #include "isteamclient.h"
 
 // size limit on stat or achievement name
-const uint32 k_cchStatNameMax = 128;
+const uint32_t k_cchStatNameMax = 128;
 
 class ISteamUserStats
 {
@@ -23,27 +23,27 @@ public:
 	// the game should know it before accessing this interface. These top
 	// three functions are mostly provided for iteration / testing purposes.
 	// Get the number of stats fields for nGameID
-	virtual uint32 GetNumStats( CGameID nGameID ) = 0;
+	virtual uint32_t GetNumStats( CGameID nGameID ) = 0;
 	// Get stat name iStat in [0,GetNumStats)
-	virtual const char *GetStatName( CGameID nGameID, uint32 iStat ) = 0;
+	virtual const char *GetStatName( CGameID nGameID, uint32_t iStat ) = 0;
 	// Get type of this field
 	virtual ESteamUserStatType GetStatType( CGameID nGameID, const char *pchName ) = 0;
 	// Get the number of achievements for nGameID
-	virtual uint32 GetNumAchievements( CGameID nGameID ) = 0;
+	virtual uint32_t GetNumAchievements( CGameID nGameID ) = 0;
 	// Get achievement name iAchievement in [0,GetNumAchievements)
-	virtual const char *GetAchievementName( CGameID nGameID, uint32 iAchievement ) = 0;
+	virtual const char *GetAchievementName( CGameID nGameID, uint32_t iAchievement ) = 0;
 
 	// Ask the server to send down this user's data and achievements for nGameID
 	virtual bool RequestCurrentStats( CGameID nGameID ) = 0;
 
 	// Data accessors
-	virtual bool GetStat( CGameID nGameID, const char *pchName, int32 *pData ) = 0;
+	virtual bool GetStat( CGameID nGameID, const char *pchName, int32_t *pData ) = 0;
 	virtual bool GetStat( CGameID nGameID, const char *pchName, float *pData ) = 0;
 
 	// Set / update data
-	virtual bool SetStat( CGameID nGameID, const char *pchName, int32 nData ) = 0;
+	virtual bool SetStat( CGameID nGameID, const char *pchName, int32_t nData ) = 0;
 	virtual bool SetStat( CGameID nGameID, const char *pchName, float fData ) = 0;
-	virtual bool UpdateAvgRateStat( CGameID nGameID, const char *pchName, uint32 nCountThisSession, double dSessionLength ) = 0;
+	virtual bool UpdateAvgRateStat( CGameID nGameID, const char *pchName, uint32_t nCountThisSession, double dSessionLength ) = 0;
 
 	// Achievement flag accessors
 	virtual bool GetAchievement( CGameID nGameID, const char *pchName, bool *pbAchieved ) = 0;
@@ -63,7 +63,7 @@ public:
 
 	// Achievement progress - triggers an AchievementProgress callback, that is all.
 	// Calling this w/ N out of N progress will NOT set the achievement, the game must still do that.
-	virtual bool IndicateAchievementProgress( CGameID nGameID, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress ) = 0;
+	virtual bool IndicateAchievementProgress( CGameID nGameID, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress ) = 0;
 
 };
 
@@ -72,7 +72,7 @@ public:
 
 //-----------------------------------------------------------------------------
 // Purpose: called when the latests stats and achievements have been received
-//			from the server
+// from the server
 //-----------------------------------------------------------------------------
 struct UserStatsReceived_t
 {
@@ -94,18 +94,18 @@ struct UserStatsStored_t
 
 //-----------------------------------------------------------------------------
 // Purpose: result of a request to store the achievements for a game, or an 
-//			"indicate progress" call. If both m_nCurProgress and m_nMaxProgress
-//			are zero, that means the achievement has been fully unlocked.
+// "indicate progress" call. If both m_nCurProgress and m_nMaxProgress
+// are zero, that means the achievement has been fully unlocked.
 //-----------------------------------------------------------------------------
 struct UserAchievementStored_t
 {
 	enum { k_iCallback = k_iSteamUserStatsCallbacks + 3 };
 
-	uint64		m_nGameID;				// Game this is for
+	uint64		m_nGameID; 	// Game this is for
 	bool		m_bGroupAchievement;	// if this is a "group" achievement
 	char		m_rgchAchievementName[k_cchStatNameMax];		// name of the achievement
-	uint32		m_nCurProgress;			// current progress towards the achievement
-	uint32		m_nMaxProgress;			// "out of" this many
+	uint32		m_nCurProgress; // current progress towards the achievement
+	uint32		m_nMaxProgress; // "out of" this many
 };
 
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Author: Matthew D. Campbell (matt@turtlerockstudios.com), 2003
 
@@ -11,8 +11,8 @@
 #define BOT_CONSTANTS_H
 
 /// version number is MAJOR.MINOR
-#define BOT_VERSION_MAJOR			1
-#define BOT_VERSION_MINOR			50
+#define BOT_VERSION_MAJOR 1
+#define BOT_VERSION_MINOR 50
 
 //--------------------------------------------------------------------------------------------------------
 /**

@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CMODEL_H
 #define CMODEL_H
@@ -42,7 +42,7 @@ struct cmodel_t
 {
 	Vector		mins, maxs;
 	Vector		origin;		// for sounds or lights
-	int			headnode;
+	int headnode;
 
 	vcollide_t	vcollisionData;
 };
@@ -106,14 +106,14 @@ struct Ray_t
 		Vector vecInvDelta;
 		for ( int iAxis = 0; iAxis < 3; ++iAxis )
 		{
-			if ( m_Delta[iAxis] != 0.0f )
-			{
-				vecInvDelta[iAxis] = 1.0f / m_Delta[iAxis];
-			}
-			else
-			{
-				vecInvDelta[iAxis] = FLT_MAX;
-			}
+ if ( m_Delta[iAxis] != 0.0f )
+ {
+ 	vecInvDelta[iAxis] = 1.0f / m_Delta[iAxis];
+ }
+ else
+ {
+ 	vecInvDelta[iAxis] = FLT_MAX;
+ }
 		}
 		return vecInvDelta;
 	}

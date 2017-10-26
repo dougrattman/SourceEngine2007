@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -16,10 +16,10 @@
 #define random random_valve// stdlib.h defined random()..., and so does vstdlib/random.h
 #endif
 
-class IFileSystem;				// include FileSystem.h
+class IFileSystem; 	// include FileSystem.h
 class IUniformRandomStream;		// include vstdlib/random.h
-class IEngineSound;				// include engine/IEngineSound.h
-class IVEngineServer;			
+class IEngineSound; 	// include engine/IEngineSound.h
+class IVEngineServer; 
 class IVoiceServer;
 class IStaticPropMgrServer;
 class ISpatialPartition;
@@ -32,21 +32,21 @@ class IMDLCache;
 class IServerEngineTools;
 class IXboxSystem;
 
-extern IVEngineServer			*engine;
-extern IVoiceServer				*g_pVoiceServer;
-extern IFileSystem				*filesystem;
+extern IVEngineServer *engine;
+extern IVoiceServer 	*g_pVoiceServer;
+extern IFileSystem 	*filesystem;
 extern IStaticPropMgrServer		*staticpropmgr;
 extern ISpatialPartition		*partition;
-extern IEngineSound				*enginesound;
+extern IEngineSound 	*enginesound;
 extern IUniformRandomStream		*random;
-extern IVModelInfo				*modelinfo;
-extern IEngineTrace				*enginetrace;
+extern IVModelInfo 	*modelinfo;
+extern IEngineTrace 	*enginetrace;
 extern IGameEventManager2		*gameeventmanager;
-extern IVDebugOverlay			*debugoverlay;
-extern IDataCache				*datacache;
-extern IMDLCache				*mdlcache;
+extern IVDebugOverlay *debugoverlay;
+extern IDataCache 	*datacache;
+extern IMDLCache 	*mdlcache;
 extern IServerEngineTools		*serverenginetools;
-extern IXboxSystem				*xboxsystem; // 360 only
+extern IXboxSystem 	*xboxsystem; // 360 only
 
 
 //-----------------------------------------------------------------------------

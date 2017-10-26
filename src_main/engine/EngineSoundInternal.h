@@ -1,16 +1,7 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose:
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef ENGINESOUNDINTERNAL_H
 #define ENGINESOUNDINTERNAL_H
-
-#if defined( _WIN32 )
-#pragma once
-#endif
 
 #include "engine/IEngineSound.h"
 
@@ -20,4 +11,4 @@
 IEngineSound* EngineSoundClient();
 IEngineSound* EngineSoundServer();
 
-#endif // SOUNDENGINEINTERNAL_H
+#endif  // SOUNDENGINEINTERNAL_H

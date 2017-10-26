@@ -1533,10 +1533,6 @@ FORCEINLINE CAudioSource* Voice_SetupAudioSource( int soundsource, int entchanne
 // snd_wave_source.cpp
 FORCEINLINE float GetMP3Duration_Helper( char const *filename ) { return 0.f; }
 
-// host.cpp
-FORCEINLINE void InitPME() {}
-FORCEINLINE void ShutdownPME() {}
-
 // Steam API stubs
 class ISteamClient;
 class ISteamGameServer;

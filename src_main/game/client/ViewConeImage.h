@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is a panel which draws a viewcone
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VIEWCONEIMAGE_H
 #define VIEWCONEIMAGE_H

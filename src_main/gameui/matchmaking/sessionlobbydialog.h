@@ -1,8 +1,7 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: 
+// Purpose:
 //
-//=============================================================================//
 
 #ifndef SESSIONLOBBYDIALOG_H
 #define SESSIONLOBBYDIALOG_H
@@ -15,71 +14,69 @@
 //-----------------------------------------------------------------------------
 // Purpose: Simple menu to choose a matchmaking session type
 //-----------------------------------------------------------------------------
-class CSessionLobbyDialog : public CBaseDialog
-{
-	DECLARE_CLASS_SIMPLE( CSessionLobbyDialog, CBaseDialog ); 
+class CSessionLobbyDialog : public CBaseDialog {
+  DECLARE_CLASS_SIMPLE(CSessionLobbyDialog, CBaseDialog);
 
-public:
-	CSessionLobbyDialog( vgui::Panel *parent );
-	~CSessionLobbyDialog();
+ public:
+  CSessionLobbyDialog(vgui::Panel *parent);
+  ~CSessionLobbyDialog();
 
-	virtual void	OnCommand( const char *pCommand );
-	virtual void	OnKeyCodePressed( vgui::KeyCode code );
+  virtual void OnCommand(const char *pCommand);
+  virtual void OnKeyCodePressed(vgui::KeyCode code);
 
-	virtual void	PerformLayout();
-	virtual void	ApplySettings( KeyValues *inResourceData );
-	virtual void	ApplySchemeSettings( vgui::IScheme *pScheme );
+  virtual void PerformLayout();
+  virtual void ApplySettings(KeyValues *inResourceData);
+  virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
 
-	void			SetDialogKeys( KeyValues *pKeys );
-	void			UpdatePlayerInfo( uint64 nPlayerId, const char *pName, int nTeam, byte cVoiceState, int nPlayersNeeded, bool bHost );
-	void			UpdateCountdown( int seconds );
+  void SetDialogKeys(KeyValues *pKeys);
+  void UpdatePlayerInfo(uint64_t nPlayerId, const char *pName, int nTeam,
+                        uint8_t cVoiceState, int nPlayersNeeded, bool bHost);
+  void UpdateCountdown(int seconds);
 
-private:
-	void			ActivateNextMenu();
-	void			ActivatePreviousMenu();
-	void			UpdatePlayerCountDisplay( int iTeam );
-	void			SetLobbyReadyState( int nPlayersNeeded );
-	void			PositionTeamInfos();
+ private:
+  void ActivateNextMenu();
+  void ActivatePreviousMenu();
+  void UpdatePlayerCountDisplay(int iTeam);
+  void SetLobbyReadyState(int nPlayersNeeded);
+  void PositionTeamInfos();
 
-	void			SetTextFromKeyvalues( CPropertyLabel *pLabel );
+  void SetTextFromKeyvalues(CPropertyLabel *pLabel);
 
-	void			SetStartGame( bool bStartGame );
+  void SetStartGame(bool bStartGame);
 
-	enum
-	{
-		BLUE_TEAM_LOBBY,
-		RED_TEAM_LOBBY,
-		TOTAL_LOBBY_TEAMS,
-	};
+  enum {
+    BLUE_TEAM_LOBBY,
+    RED_TEAM_LOBBY,
+    TOTAL_LOBBY_TEAMS,
+  };
 
-	CDialogMenu			m_Menus[TOTAL_LOBBY_TEAMS];
+  CDialogMenu m_Menus[TOTAL_LOBBY_TEAMS];
 
-	vgui::Panel			*m_pLobbyStateBg;
-	CPropertyLabel		*m_pLobbyStateLabel;
-	CPropertyLabel		*m_pLobbyStateIcon;
-	CPropertyLabel		*m_pHostLabel;
-	vgui::EditablePanel	*m_pHostOptionsPanel;
+  vgui::Panel *m_pLobbyStateBg;
+  CPropertyLabel *m_pLobbyStateLabel;
+  CPropertyLabel *m_pLobbyStateIcon;
+  CPropertyLabel *m_pHostLabel;
+  vgui::EditablePanel *m_pHostOptionsPanel;
 
-	KeyValues			*m_pDialogKeys;
+  KeyValues *m_pDialogKeys;
 
-	CScenarioInfoPanel	*m_pScenarioInfo;
-	CScenarioInfoPanel	*m_pTeamInfos[TOTAL_LOBBY_TEAMS];
+  CScenarioInfoPanel *m_pScenarioInfo;
+  CScenarioInfoPanel *m_pTeamInfos[TOTAL_LOBBY_TEAMS];
 
-	int					m_nMinInfoHeight[TOTAL_LOBBY_TEAMS];
+  int m_nMinInfoHeight[TOTAL_LOBBY_TEAMS];
 
-	uint64				m_nHostId;
-	bool				m_bReady;
-	bool				m_bHostLobby;
-	bool				m_bCenterOnScreen;
-	int					m_iLocalTeam;
-	int					m_iActiveMenu;
-	int					m_nImageBorderWidth;
-	int					m_nTeamspacing;
-	char				m_szCommand[MAX_COMMAND_LEN];
+  uint64_t m_nHostId;
+  bool m_bReady;
+  bool m_bHostLobby;
+  bool m_bCenterOnScreen;
+  int m_iLocalTeam;
+  int m_iActiveMenu;
+  int m_nImageBorderWidth;
+  int m_nTeamspacing;
+  char m_szCommand[MAX_COMMAND_LEN];
 
-	bool				m_bStartingGame;
-	int					m_nLastPlayersNeeded;
+  bool m_bStartingGame;
+  int m_nLastPlayersNeeded;
 };
 
-
-#endif // SESSIONLOBBYDIALOG_H
+#endif  // SESSIONLOBBYDIALOG_H

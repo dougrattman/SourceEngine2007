@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PROGRESSBOX_H
 #define PROGRESSBOX_H
@@ -59,7 +59,7 @@ public:
 	/* custom messages:
 
 		"ProgressBoxCancelled"
-			sent if the user pressed the cancel button (must be enabled & visible for this to happen)
+ sent if the user pressed the cancel button (must be enabled & visible for this to happen)
 
 	*/
 

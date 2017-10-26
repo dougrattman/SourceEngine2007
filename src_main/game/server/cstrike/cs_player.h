@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Player for HL1.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_PLAYER_H
 #define CS_PLAYER_H
@@ -30,8 +30,8 @@ void UTIL_AwardMoneyToTeam( int iAmount, int iTeam, CBaseEntity *pIgnore );
 
 enum
 {
-	MIN_NAME_CHANGE_INTERVAL = 10,			// minimum number of seconds between name changes
-	NAME_CHANGE_HISTORY_SIZE = 5,			// number of times a player can change names in NAME_CHANGE_HISTORY_INTERVAL
+	MIN_NAME_CHANGE_INTERVAL = 10, // minimum number of seconds between name changes
+	NAME_CHANGE_HISTORY_SIZE = 5, // number of times a player can change names in NAME_CHANGE_HISTORY_INTERVAL
 	NAME_CHANGE_HISTORY_INTERVAL = 600,	// no more than NAME_CHANGE_HISTORY_SIZE name changes can be made in this many seconds
 };
 
@@ -73,7 +73,7 @@ public:
 		m_iDamage += iDamage;
 
 		if ( m_iLastBulletUpdate != iCounter )
-			m_iNumHits++;
+ m_iNumHits++;
 
 		m_iLastBulletUpdate = iCounter;
 	}
@@ -99,8 +99,8 @@ private:
 #define DHF_HOSTAGE_USED		( 1 << 4 )
 #define DHF_HOSTAGE_INJURED		( 1 << 5 )
 #define DHF_HOSTAGE_KILLED		( 1 << 6 )
-#define DHF_FRIEND_SEEN			( 1 << 7 )
-#define DHF_ENEMY_SEEN			( 1 << 8 )
+#define DHF_FRIEND_SEEN ( 1 << 7 )
+#define DHF_ENEMY_SEEN ( 1 << 8 )
 #define DHF_FRIEND_INJURED		( 1 << 9 )
 #define DHF_FRIEND_KILLED		( 1 << 10 )
 #define DHF_ENEMY_KILLED		( 1 << 11 )
@@ -110,9 +110,9 @@ private:
 #define DHF_IN_RESCUE_ZONE		( 1 << 17 )
 #define DHF_IN_ESCAPE_ZONE		( 1 << 18 ) // unimplemented
 #define DHF_IN_VIPSAFETY_ZONE	( 1 << 19 ) // unimplemented
-#define	DHF_NIGHTVISION			( 1 << 20 )
+#define	DHF_NIGHTVISION ( 1 << 20 )
 #define	DHF_HOSTAGE_CTMOVE		( 1 << 21 )
-#define	DHF_SPEC_DUCK			( 1 << 22 )
+#define	DHF_SPEC_DUCK ( 1 << 22 )
 
 // DHF_xxx bits to clear when the round restarts
 
@@ -147,7 +147,7 @@ enum RadioType
 {
 	RADIO_INVALID = 0,
 
-	RADIO_START_1,							///< radio messages between this and RADIO_START_2 and part of Radio1()
+	RADIO_START_1,  	///< radio messages between this and RADIO_START_2 and part of Radio1()
 
 	RADIO_COVER_ME,
 	RADIO_YOU_TAKE_THE_POINT,
@@ -156,7 +156,7 @@ enum RadioType
 	RADIO_FOLLOW_ME,
 	RADIO_TAKING_FIRE,
 
-	RADIO_START_2,							///< radio messages between this and RADIO_START_3 are part of Radio2()
+	RADIO_START_2,  	///< radio messages between this and RADIO_START_3 are part of Radio2()
 
 	RADIO_GO_GO_GO,
 	RADIO_TEAM_FALL_BACK,
@@ -165,7 +165,7 @@ enum RadioType
 	RADIO_STORM_THE_FRONT,
 	RADIO_REPORT_IN_TEAM,
 
-	RADIO_START_3,							///< radio messages above this are part of Radio3()
+	RADIO_START_3,  	///< radio messages above this are part of Radio3()
 
 	RADIO_AFFIRMATIVE,
 	RADIO_ENEMY_SPOTTED,
@@ -224,8 +224,8 @@ public:
 	virtual void		PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper );
 	virtual void		PostThink();
 
-	virtual int			OnTakeDamage( const CTakeDamageInfo &inputInfo );
-	virtual int			OnTakeDamage_Alive( const CTakeDamageInfo &info );
+	virtual int OnTakeDamage( const CTakeDamageInfo &inputInfo );
+	virtual int OnTakeDamage_Alive( const CTakeDamageInfo &info );
 
 	virtual void		Event_Killed( const CTakeDamageInfo &info );
 	virtual void		TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &vecDir, trace_t *ptr );
@@ -323,7 +323,7 @@ public:
 	bool HasPrimaryWeapon( void );
 	bool HasSecondaryWeapon( void );
 
-	bool IsReloading( void ) const;				// returns true if current weapon is reloading
+	bool IsReloading( void ) const; 	// returns true if current weapon is reloading
 
 	void GiveDefaultItems();
 	void RemoveAllItems( bool removeSuit );	//overridden to remove the defuser
@@ -363,12 +363,12 @@ public:
 
 	void Deafen( float flDistance );		//make the player deaf / apply dsp preset to muffle sound
 
-	void ApplyDeafnessEffect();				// apply the deafness effect for a nearby explosion.
+	void ApplyDeafnessEffect(); 	// apply the deafness effect for a nearby explosion.
 
 	bool IsAutoFollowAllowed( void ) const;		// return true if this player will allow bots to auto follow
 	void InhibitAutoFollow( float duration );	// prevent bots from auto-following for given duration
-	void AllowAutoFollow( void );				// allow bots to auto-follow immediately
-	float m_allowAutoFollowTime;				// bots can auto-follow after this time
+	void AllowAutoFollow( void ); 	// allow bots to auto-follow immediately
+	float m_allowAutoFollowTime; 	// bots can auto-follow after this time
 
 	// Have this guy speak a message into his radio.
 	void Radio( const char *szRadioSound, const char *szRadioText = NULL );
@@ -451,13 +451,13 @@ public:
 public:
 
 	void State_Transition( CSPlayerState newState );	// Cleanup the previous state and enter a new state.
-	CSPlayerState State_Get() const;				// Get the current state.
+	CSPlayerState State_Get() const; 	// Get the current state.
 
 
 private:
 	void State_Enter( CSPlayerState newState );		// Initialize the new state.
-	void State_Leave();								// Cleanup the previous state.
-	void State_PreThink();							// Update the current state.
+	void State_Leave();  		// Cleanup the previous state.
+	void State_PreThink();  	// Update the current state.
 	
 	// Find the state info for the specified state.
 	static CCSPlayerStateInfo* State_LookupInfo( CSPlayerState state );
@@ -467,7 +467,7 @@ private:
 	// invisible, etc).
 	CNetworkVar( CSPlayerState, m_iPlayerState );
 
-	CCSPlayerStateInfo *m_pCurStateInfo;			// This can be NULL if no state info is defined for m_iPlayerState.
+	CCSPlayerStateInfo *m_pCurStateInfo; // This can be NULL if no state info is defined for m_iPlayerState.
 
 	// tells us whether or not this player gets money at the start of the next round.
 	bool m_receivesMoneyNextRound;
@@ -501,10 +501,10 @@ private:
 
 public:
 
-	void				SetDeathPose( const int &iDeathPose ) { m_iDeathPose = iDeathPose; }
-	void				SetDeathPoseFrame( const int &iDeathPoseFrame ) { m_iDeathFrame = iDeathPoseFrame; }
+	void 	SetDeathPose( const int &iDeathPose ) { m_iDeathPose = iDeathPose; }
+	void 	SetDeathPoseFrame( const int &iDeathPoseFrame ) { m_iDeathFrame = iDeathPoseFrame; }
 	
-	void				SelectDeathPose( const CTakeDamageInfo &info );
+	void 	SelectDeathPose( const CTakeDamageInfo &info );
 
 private:
 	int	m_iDeathPose;
@@ -514,17 +514,17 @@ public:
 
 	// Predicted variables.
 	bool m_bResumeZoom;
-	int m_iLastZoom;			// after firing a shot, set the FOV to 90, and after showing the animation, bring the FOV back to last zoom level.
-	CNetworkVar( bool, m_bIsDefusing );			// tracks whether this player is currently defusing a bomb
-	int m_LastHitGroup;			// the last body region that took damage
-	CNetworkVar( bool, m_bHasHelmet );				// Does the player have helmet armor
-	bool m_bEscaped;			// Has this terrorist escaped yet?
+	int m_iLastZoom; // after firing a shot, set the FOV to 90, and after showing the animation, bring the FOV back to last zoom level.
+	CNetworkVar( bool, m_bIsDefusing ); // tracks whether this player is currently defusing a bomb
+	int m_LastHitGroup; // the last body region that took damage
+	CNetworkVar( bool, m_bHasHelmet ); 	// Does the player have helmet armor
+	bool m_bEscaped; // Has this terrorist escaped yet?
 	
 	
 	// Other variables.
-	bool m_bIsVIP;				// Are we the VIP?
-	int m_iNumSpawns;			// Number of times player has spawned this round
-	int m_iOldTeam;				// Keep what team they were last on so we can allow joining spec and switching back to their real team
+	bool m_bIsVIP; 	// Are we the VIP?
+	int m_iNumSpawns; // Number of times player has spawned this round
+	int m_iOldTeam; 	// Keep what team they were last on so we can allow joining spec and switching back to their real team
 	bool m_bTeamChanged;		// Just allow one team change per round
 	CNetworkVar( int, m_iAccount );	// How much cash this player has.
 	int m_iShouldHaveCash;
@@ -540,7 +540,7 @@ public:
 	bool CanChangeName( void );	// Checks if the player can change his name
 	void ChangeName( const char *pszNewName );
 
-	CNetworkVar( bool, m_bHasDefuser );			// Does this player have a defuser kit?
+	CNetworkVar( bool, m_bHasDefuser ); // Does this player have a defuser kit?
 	CNetworkVar( bool, m_bHasNightVision );		// Does this player have night vision?
 	CNetworkVar( bool, m_bNightVisionOn );		// Is the NightVision turned on ?
 
@@ -650,13 +650,13 @@ private:
 	ICSPlayerAnimState *m_PlayerAnimState;
 
 	// Aiming heuristics code
-	float						m_flIdleTime;		//Amount of time we've been motionless
-	float						m_flMoveTime;		//Amount of time we've been in motion
-	float						m_flLastDamageTime;	//Last time we took damage
-	float						m_flTargetFindTime;
+	float  m_flIdleTime;		//Amount of time we've been motionless
+	float  m_flMoveTime;		//Amount of time we've been in motion
+	float  m_flLastDamageTime;	//Last time we took damage
+	float  m_flTargetFindTime;
 
-	int							m_lastDamageHealth;		// Last damage given to our health
-	int							m_lastDamageArmor;		// Last damage given to our armor
+	int  	m_lastDamageHealth;		// Last damage given to our health
+	int  	m_lastDamageArmor;		// Last damage given to our armor
 
 	// Last usercmd we shot a bullet on.
 	int m_iLastWeaponFireUsercmd;
@@ -668,28 +668,28 @@ private:
 
 // AutoBuy functions.
 public:
-	void			AutoBuy(); // this should take into account what the player can afford and should buy the best equipment for them.
+	void AutoBuy(); // this should take into account what the player can afford and should buy the best equipment for them.
 
-	bool			IsInAutoBuy( void ) { return m_bIsInAutoBuy; }
-	bool			IsInReBuy( void ) { return m_bIsInRebuy; }
+	bool IsInAutoBuy( void ) { return m_bIsInAutoBuy; }
+	bool IsInReBuy( void ) { return m_bIsInRebuy; }
 
 private:
-	bool			ShouldExecuteAutoBuyCommand(const AutoBuyInfoStruct *commandInfo, bool boughtPrimary, bool boughtSecondary);
-	void			PostAutoBuyCommandProcessing(const AutoBuyInfoStruct *commandInfo, bool &boughtPrimary, bool &boughtSecondary);
-	void			ParseAutoBuyString(const char *string, bool &boughtPrimary, bool &boughtSecondary);
+	bool ShouldExecuteAutoBuyCommand(const AutoBuyInfoStruct *commandInfo, bool boughtPrimary, bool boughtSecondary);
+	void PostAutoBuyCommandProcessing(const AutoBuyInfoStruct *commandInfo, bool &boughtPrimary, bool &boughtSecondary);
+	void ParseAutoBuyString(const char *string, bool &boughtPrimary, bool &boughtSecondary);
 	AutoBuyInfoStruct *GetAutoBuyCommandInfo(const char *command);
-	void			PrioritizeAutoBuyString(char *autobuyString, const char *priorityString); // reorders the tokens in autobuyString based on the order of tokens in the priorityString.
+	void PrioritizeAutoBuyString(char *autobuyString, const char *priorityString); // reorders the tokens in autobuyString based on the order of tokens in the priorityString.
 	BuyResult_e	CombineBuyResults( BuyResult_e prevResult, BuyResult_e newResult );
 
-	bool			m_bIsInAutoBuy;
-	bool			m_bAutoReload;
+	bool m_bIsInAutoBuy;
+	bool m_bAutoReload;
 
 //ReBuy functions
 
 public:
-	void			Rebuy();
+	void Rebuy();
 private:
-	void			BuildRebuyStruct();
+	void BuildRebuyStruct();
 
 	BuyResult_e	RebuyPrimaryWeapon();
 	BuyResult_e	RebuyPrimaryAmmo();
@@ -702,11 +702,11 @@ private:
 	BuyResult_e	RebuyNightVision();
 	BuyResult_e	RebuyArmor();
 
-	bool			m_bIsInRebuy;
+	bool m_bIsInRebuy;
 	RebuyStruct		m_rebuyStruct;
-	bool			m_bUsingDefaultPistol;
+	bool m_bUsingDefaultPistol;
 
-	bool			m_bIsBeingGivenItem;
+	bool m_bIsBeingGivenItem;
 
 #ifdef CS_SHIELD_ENABLED
 	CNetworkVar( bool, m_bHasShield );

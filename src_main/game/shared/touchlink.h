@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Shared data definition file for touch links
 //
-//=============================================================================//
+
 
 #ifndef TOUCHLINK_H
 #define TOUCHLINK_H
@@ -24,12 +24,12 @@ struct touchlink_t
 #if defined( CLIENT_DLL )
 	C_BaseEntity		*entityTouched;
 #else
-	EHANDLE				entityTouched;
+	EHANDLE 	entityTouched;
 #endif
-	int					touchStamp;
-	touchlink_t			*nextLink;
-	touchlink_t			*prevLink;
-	int					flags;
+	int 		touchStamp;
+	touchlink_t *nextLink;
+	touchlink_t *prevLink;
+	int 		flags;
 };
 
 // means this touchlink is managed external to the main physics system

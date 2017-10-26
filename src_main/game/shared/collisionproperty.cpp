@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "collisionproperty.h"
 #include "igamesystem.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "tier0/threadtools.h"
 
 #ifdef CLIENT_DLL

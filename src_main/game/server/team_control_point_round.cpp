@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -158,7 +158,7 @@ int CTeamControlPointRound::GetPointOwner( int point )
 // Purpose: This function returns the team that owns all the cap points. 
 //			If its not the case that one team owns them all, it returns 0.
 //			
-//			Can be passed an overriding team. If this is not null, the passed team
+//			Can be passed an overriding team. If this is not 0, the passed team
 //			number will be used for that cp. Used to predict if that CP changing would
 //			win the game.
 //-----------------------------------------------------------------------------

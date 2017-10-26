@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef STUBD3DDEVICE_H
 #define STUBD3DDEVICE_H
@@ -17,7 +17,7 @@
 #include "FileSystem.h"
 
 #ifdef USE_FOPEN
-#include <stdio.h>
+#include <cstdio>
 #define FPRINTF fprintf
 #else
 #define FPRINTF s_pFileSystem->FPrintf
@@ -330,12 +330,12 @@ public:
 		HRESULT ret = m_pD3DDevice->CreateTexture( Width, Height, Levels, Usage, Format, Pool, ppTexture );
 		if( ret == D3D_OK )
 		{
-			*ppTexture = new CStubD3DTexture( *ppTexture, this );
-			return ret;
+ *ppTexture = new CStubD3DTexture( *ppTexture, this );
+ return ret;
 		}
 		else
 		{
-			return ret;
+ return ret;
 		}
 #else
 		return m_pD3DDevice->CreateTexture( Width, Height, Levels, Usage, Format, Pool, ppTexture );

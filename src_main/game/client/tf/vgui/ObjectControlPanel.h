@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Clients CBaseObject
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef OBJECTCONTROLPANEL_H
 #define OBJECTCONTROLPANEL_H
@@ -79,7 +79,7 @@ public:
 		BaseClass::OnCommand( command );
 		if (GetParent())
 		{
-			GetParent()->OnCommand(command);
+ GetParent()->OnCommand(command);
 		}
 	}
 };

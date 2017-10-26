@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hint node utilities and functions.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	AI_HINT_H
 #define	AI_HINT_H
@@ -13,20 +13,20 @@
 #include "tier1/utlmap.h"
 
 //Flags for FindHintNode
-#define bits_HINT_NODE_NONE						0x00000000
-#define bits_HINT_NODE_VISIBLE					0x00000001
-#define	bits_HINT_NODE_NEAREST					0x00000002		// Choose the node nearest me
-#define bits_HINT_NODE_RANDOM					0x00000004		// Find a random hintnode meeting other criteria
-#define bits_HINT_NODE_CLEAR					0x00000008		// Only choose nodes that have clear room for my bounding box (requires NPC)
-#define bits_HINT_NODE_USE_GROUP				0x00000010		// Use the NPC's hintgroup when searching for a node (requires NPC)
+#define bits_HINT_NODE_NONE  0x00000000
+#define bits_HINT_NODE_VISIBLE 		0x00000001
+#define	bits_HINT_NODE_NEAREST 		0x00000002		// Choose the node nearest me
+#define bits_HINT_NODE_RANDOM 		0x00000004		// Find a random hintnode meeting other criteria
+#define bits_HINT_NODE_CLEAR 		0x00000008		// Only choose nodes that have clear room for my bounding box (requires NPC)
+#define bits_HINT_NODE_USE_GROUP 	0x00000010		// Use the NPC's hintgroup when searching for a node (requires NPC)
 #define	bits_HINT_NODE_VISIBLE_TO_PLAYER		0x00000020
 #define	bits_HINT_NODE_NOT_VISIBLE_TO_PLAYER	0x00000040
-#define bits_HINT_NODE_REPORT_FAILURES			0x00000080
-#define bits_HINT_NODE_IN_VIEWCONE				0x00000100
-#define bits_HINT_NODE_IN_AIMCONE				0x00000200
-#define bits_HINT_NPC_IN_NODE_FOV				0x00000400		// Is the searcher inside the hint node's FOV?
-#define bits_HINT_NOT_CLOSE_TO_ENEMY			0x00000800		// Hint must not be within 30 feet of my enemy
-#define bits_HINT_HAS_LOS_TO_PLAYER				0x00001000		// Like VISIBLE_TO_PLAYER but doesn't care about player's facing
+#define bits_HINT_NODE_REPORT_FAILURES 0x00000080
+#define bits_HINT_NODE_IN_VIEWCONE 	0x00000100
+#define bits_HINT_NODE_IN_AIMCONE 	0x00000200
+#define bits_HINT_NPC_IN_NODE_FOV 	0x00000400		// Is the searcher inside the hint node's FOV?
+#define bits_HINT_NOT_CLOSE_TO_ENEMY 0x00000800		// Hint must not be within 30 feet of my enemy
+#define bits_HINT_HAS_LOS_TO_PLAYER 	0x00001000		// Like VISIBLE_TO_PLAYER but doesn't care about player's facing
 #define bits_HAS_EYEPOSITION_LOS_TO_PLAYER		0x00002000		// Like HAS LOS TO PLAYER, but checks NPC's eye position at the node, not node origin.
 
 //-----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ enum Hint_e
 	HINT_TACTICAL_COVER_MED	= 100,
 	HINT_TACTICAL_COVER_LOW,
 	HINT_TACTICAL_SPAWN,
-	HINT_TACTICAL_PINCH,				// Exit / entrance to an arena
+	HINT_TACTICAL_PINCH, 	// Exit / entrance to an arena
 	HINT_NOT_USED_TACTICAL_GUARD,
 	HINT_TACTICAL_ENEMY_DISADVANTAGED,	//Disadvantageous position for the enemy
 	HINT_NOT_USED_HEALTH_KIT,
@@ -134,8 +134,8 @@ public:
 	void		SetGroup( string_t group );
 	string_t	GetGroup( void )	const	{ return m_strGroup;	}
 
-	int			GetFirstHintType( void ) const	{ return m_iFirstHintType; }
-	int			GetLastHintType( void ) const	{ return m_iLastHintType; }
+	int GetFirstHintType( void ) const	{ return m_iFirstHintType; }
+	int GetLastHintType( void ) const	{ return m_iLastHintType; }
 	bool		MatchesHintType( int hintType ) const;
 	bool		MatchesSingleHintType() const;
 
@@ -151,8 +151,8 @@ public:
 	bool		InIncludedZone( const Vector &testPosition ) const;
 	bool		InExcludedZone( const Vector &testPosition ) const;
 
-	int			NumHintTypes() const;
-	int			GetHintType( int idx ) const;
+	int NumHintTypes() const;
+	int GetHintType( int idx ) const;
 
 private:
 
@@ -169,9 +169,9 @@ private:
 
 	CUtlVector<int> m_HintTypes;
 
-	int			m_iFlags;
-	int			m_iFirstHintType;
-	int			m_iLastHintType;
+	int m_iFlags;
+	int m_iFirstHintType;
+	int m_iLastHintType;
 	string_t	m_strGroup;
 	
 	zoneList_t	m_zoneInclude;
@@ -210,12 +210,12 @@ class CAI_HintManager
 public:
 	// Hint node creation
 	static CAI_Hint		*CreateHint( HintNodeData *pNodeData, const char *pMapData = NULL );
-	static void			DrawHintOverlays(float flDrawDuration);
+	static void DrawHintOverlays(float flDrawDuration);
 
-	static void			AddHint( CAI_Hint *pTestHint );
-	static void			RemoveHint( CAI_Hint *pTestHint );
-	static void			AddHintByType( CAI_Hint *pHint );
-	static void			RemoveHintByType( CAI_Hint *pHintToRemove );
+	static void AddHint( CAI_Hint *pTestHint );
+	static void RemoveHint( CAI_Hint *pTestHint );
+	static void AddHintByType( CAI_Hint *pHint );
+	static void RemoveHintByType( CAI_Hint *pHintToRemove );
 
 	// Interface for searching the hint node list
 	static CAI_Hint		*FindHint( CAI_BaseNPC *pNPC, const Vector &position, const CHintCriteria &hintCriteria );
@@ -225,12 +225,12 @@ public:
 
 	// Purpose: Finds a random suitable hint within the requested radious of the npc
 	static CAI_Hint		*FindHintRandom( CAI_BaseNPC *pNPC, const Vector &position, const CHintCriteria &hintCriteria );
-	static int			FindAllHints( CAI_BaseNPC *pNPC, const Vector &position, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult );
-	static int			FindAllHints( const Vector &position, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult )	{ return FindAllHints( NULL, position, hintCriteria, pResult ); }
-	static int			FindAllHints( CAI_BaseNPC *pNPC, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult )		{ return FindAllHints( pNPC, pNPC->GetAbsOrigin(), hintCriteria, pResult ); }
-	static int			GetFlags( const char *token );
+	static int FindAllHints( CAI_BaseNPC *pNPC, const Vector &position, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult );
+	static int FindAllHints( const Vector &position, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult )	{ return FindAllHints( NULL, position, hintCriteria, pResult ); }
+	static int FindAllHints( CAI_BaseNPC *pNPC, const CHintCriteria &hintCriteria, CUtlVector<CAI_Hint *> *pResult )		{ return FindAllHints( pNPC, pNPC->GetAbsOrigin(), hintCriteria, pResult ); }
+	static int GetFlags( const char *token );
 
-	static CAI_Hint		*GetFirstHint( AIHintIter_t *pIter );					
+	static CAI_Hint		*GetFirstHint( AIHintIter_t *pIter ); 		
 	static CAI_Hint		*GetNextHint( AIHintIter_t *pIter );
 
 	static void DumpHints();
@@ -246,15 +246,15 @@ private:
 	};
 
 	static CAI_Hint		*AddFoundHint( CAI_Hint *hint );
-	static int			GetFoundHintCount();
+	static int GetFoundHintCount();
 	static CAI_Hint		*GetFoundHint( int index );
 	static CAI_Hint		*GetLastFoundHint();
-	static void			ResetFoundHints();
-	static bool			IsInFoundHintList( CAI_Hint *hint );
+	static void ResetFoundHints();
+	static bool IsInFoundHintList( CAI_Hint *hint );
 
-	static int			gm_nFoundHintIndex;
-	static CAI_Hint		*gm_pLastFoundHints[ HINT_HISTORY ];			// Last used hint 
-	static CAIHintVector gm_AllHints;				// A linked list of all hints
+	static int gm_nFoundHintIndex;
+	static CAI_Hint		*gm_pLastFoundHints[ HINT_HISTORY ]; // Last used hint 
+	static CAIHintVector gm_AllHints; 	// A linked list of all hints
 	static CUtlMap< int,  CAIHintVector >	gm_TypedHints;
 };
 
@@ -270,63 +270,63 @@ public:
 	~CAI_Hint( void );
 
 	// Interface for specific nodes
-	bool				Lock( CBaseEntity *pNPC );			// Makes unavailable for hints
-	void				Unlock( float delay = 0.0 );		// Makes available for hints after delay
-	bool				IsLocked(void);						// Whether this node is available for use.
-	bool				IsLockedBy( CBaseEntity *pNPC );	// Whether this node is available for use.
-	void				GetPosition(CBaseCombatCharacter *pBCC, Vector *vPosition);
-	void				GetPosition( Hull_t hull, Vector *vPosition );
-	Vector				GetDirection( void );
-	float				Yaw( void );
-	CAI_Node			*GetNode( void );
-	string_t			GetGroup( void ) const			{ return m_NodeData.strGroup;	}
-	CBaseEntity			*User( void ) const				{ return m_hHintOwner; };
-	Hint_e				HintType( void ) const			{ return (Hint_e)m_NodeData.nHintType;  };
-	void				SetHintType( int hintType, bool force = false );
-	string_t			HintActivityName( void ) const	{ return m_NodeData.iszActivityName; }
-	int					GetTargetNode( void ) const		{ return m_nTargetNodeID; }
-	bool				IsDisabled( void ) const		{ return (m_NodeData.iDisabled != 0); }
-	void				SetDisabled( bool bDisabled	)	{ m_NodeData.iDisabled = bDisabled; }
-	void				DisableForSeconds( float flSeconds );
-	void				EnableThink();
-	void				FixupTargetNode();
-	void				NPCStartedUsing( CAI_BaseNPC *pNPC );
-	void				NPCStoppedUsing( CAI_BaseNPC *pNPC );
+	bool 	Lock( CBaseEntity *pNPC ); // Makes unavailable for hints
+	void 	Unlock( float delay = 0.0 );		// Makes available for hints after delay
+	bool 	IsLocked();  // Whether this node is available for use.
+	bool 	IsLockedBy( CBaseEntity *pNPC );	// Whether this node is available for use.
+	void 	GetPosition(CBaseCombatCharacter *pBCC, Vector *vPosition);
+	void 	GetPosition( Hull_t hull, Vector *vPosition );
+	Vector 	GetDirection( void );
+	float 	Yaw( void );
+	CAI_Node *GetNode( void );
+	string_t GetGroup( void ) const { return m_NodeData.strGroup;	}
+	CBaseEntity *User( void ) const 	{ return m_hHintOwner; };
+	Hint_e 	HintType( void ) const { return (Hint_e)m_NodeData.nHintType;  };
+	void 	SetHintType( int hintType, bool force = false );
+	string_t HintActivityName( void ) const	{ return m_NodeData.iszActivityName; }
+	int 		GetTargetNode( void ) const		{ return m_nTargetNodeID; }
+	bool 	IsDisabled( void ) const		{ return (m_NodeData.iDisabled != 0); }
+	void 	SetDisabled( bool bDisabled	)	{ m_NodeData.iDisabled = bDisabled; }
+	void 	DisableForSeconds( float flSeconds );
+	void 	EnableThink();
+	void 	FixupTargetNode();
+	void 	NPCStartedUsing( CAI_BaseNPC *pNPC );
+	void 	NPCStoppedUsing( CAI_BaseNPC *pNPC );
 
-	HintIgnoreFacing_t	GetIgnoreFacing() const			{ return m_NodeData.fIgnoreFacing; }
+	HintIgnoreFacing_t	GetIgnoreFacing() const { return m_NodeData.fIgnoreFacing; }
 
-	NPC_STATE			GetMinState() const				{ return m_NodeData.minState; }
-	NPC_STATE			GetMaxState() const				{ return m_NodeData.maxState; }
+	NPC_STATE GetMinState() const 	{ return m_NodeData.minState; }
+	NPC_STATE GetMaxState() const 	{ return m_NodeData.maxState; }
 
-	int					GetNodeId()	{ return m_NodeData.nNodeID; }
-	int					GetWCId()	{ return m_NodeData.nWCNodeID; }
+	int 		GetNodeId()	{ return m_NodeData.nNodeID; }
+	int 		GetWCId()	{ return m_NodeData.nWCNodeID; }
 
-	bool				HintMatchesCriteria( CAI_BaseNPC *pNPC, const CHintCriteria &hintCriteria, const Vector &position, float *flNearestDistance, bool bIgnoreLock = false, bool bIgnoreHintType = false );
-	bool				IsInNodeFOV( CBaseEntity *pOther );
+	bool 	HintMatchesCriteria( CAI_BaseNPC *pNPC, const CHintCriteria &hintCriteria, const Vector &position, float *flNearestDistance, bool bIgnoreLock = false, bool bIgnoreHintType = false );
+	bool 	IsInNodeFOV( CBaseEntity *pOther );
 
 private:
-	void				Spawn( void );
+	void 	Spawn( void );
 	virtual void		Activate();
 	virtual void		UpdateOnRemove( void );
-	int					DrawDebugTextOverlays(void);
-	virtual int			ObjectCaps( void ) { return (BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int 		DrawDebugTextOverlays();
+	virtual int ObjectCaps( void ) { return (BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 	virtual void		OnRestore();
-	bool				IsViewable( void );
+	bool 	IsViewable( void );
 
 	// Input handlers
-	void				InputEnableHint( inputdata_t &inputdata );
-	void				InputDisableHint( inputdata_t &inputdata );
+	void 	InputEnableHint( inputdata_t &inputdata );
+	void 	InputDisableHint( inputdata_t &inputdata );
 
 private:
 
 	HintNodeData		m_NodeData;
-	int					m_nTargetNodeID;
-	EHANDLE				m_hHintOwner;			// Is hint locked (being used by NPC / NPC en-route to use it)
-	float				m_flNextUseTime;		// When can I be used again?
+	int 		m_nTargetNodeID;
+	EHANDLE 	m_hHintOwner; // Is hint locked (being used by NPC / NPC en-route to use it)
+	float 	m_flNextUseTime;		// When can I be used again?
 	COutputEHANDLE		m_OnNPCStartedUsing;	// Triggered when an NPC has actively begun to use the node.
 	COutputEHANDLE		m_OnNPCStoppedUsing;	// Triggered when an NPC has finished using this node.
-	float				m_nodeFOV;
-	Vector				m_vecForward;
+	float 	m_nodeFOV;
+	Vector 	m_vecForward;
 
 	// The next hint in list of all hints
 	friend class CAI_HintManager;

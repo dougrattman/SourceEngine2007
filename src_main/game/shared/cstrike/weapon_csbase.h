@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_CSBASE_H
 #define WEAPON_CSBASE_H
@@ -114,7 +114,7 @@ public:
 	virtual bool	IsPredicted() const;
 
 	// Pistols reset m_iShotsFired to 0 when the attack button is released.
-	bool			IsPistol() const;
+	bool IsPistol() const;
 
 	// Is this an awp?
 	virtual bool	IsAwp() const;
@@ -130,13 +130,13 @@ public:
 	virtual CSWeaponID GetWeaponID( void ) const		{ return WEAPON_NONE; }
 
 	// return true if this weapon is an instance of the given weapon type (ie: "IsA" WEAPON_GLOCK)
-	bool IsA( CSWeaponID id ) const						{ return GetWeaponID() == id; }
+	bool IsA( CSWeaponID id ) const  { return GetWeaponID() == id; }
 
 	// return true if this weapon is a kinf of the given weapon type (ie: "IsKindOf" WEAPONTYPE_RIFLE )
-	bool IsKindOf( CSWeaponType type ) const			{ return GetCSWpnData().m_WeaponType == type; }
+	bool IsKindOf( CSWeaponType type ) const { return GetCSWpnData().m_WeaponType == type; }
 
 	// return true if this weapon has a silencer equipped
-	virtual bool IsSilenced( void ) const				{ return false; }
+	virtual bool IsSilenced( void ) const 	{ return false; }
 
 	virtual void SetWeaponModelIndex( const char *pName );
 	virtual void OnPickedUp( CBaseCombatCharacter *pNewOwner );
@@ -153,11 +153,11 @@ public:
 		virtual int		GetMuzzleAttachment( void );
 		virtual bool	HideViewModelWhenZoomed( void ) { return true; }
 
-		float			m_flCrosshairDistance;
-		int				m_iAmmoLastCheck;
-		int				m_iAlpha;
-		int				m_iScopeTextureID;
-		int				m_iCrosshairTextureID; // for white additive texture
+		float m_flCrosshairDistance;
+		int 	m_iAmmoLastCheck;
+		int 	m_iAlpha;
+		int 	m_iScopeTextureID;
+		int 	m_iCrosshairTextureID; // for white additive texture
 
 		virtual int GetMuzzleFlashStyle( void );
 
@@ -191,7 +191,7 @@ public:
 	virtual const char		*GetViewModel( int viewmodelindex = 0 ) const;
 
 
-	bool	m_bDelayFire;			// This variable is used to delay the time between subsequent button pressing.
+	bool	m_bDelayFire; // This variable is used to delay the time between subsequent button pressing.
 	float	m_flAccuracy;
 	
 	void SetExtraAmmoCount( int count ) { m_iExtraPrimaryAmmo = count; }

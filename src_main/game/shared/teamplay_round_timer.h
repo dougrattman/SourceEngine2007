@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Round timer for team gamerules
 //
-//=============================================================================//
+
 
 #ifndef TEAM_ROUND_TIMER_H
 #define TEAM_ROUND_TIMER_H
@@ -94,32 +94,32 @@ private:
 	CNetworkVar( float, m_flTimerEndTime );	
 	CNetworkVar( bool, m_bIsDisabled );
 	CNetworkVar( bool, m_bShowInHUD );
-	CNetworkVar( int, m_nTimerLength );			// current timer's length (used in the timer panel if no max length is set)
+	CNetworkVar( int, m_nTimerLength ); // current timer's length (used in the timer panel if no max length is set)
 	CNetworkVar( int, m_nTimerInitialLength );	// initial length of the timer
 	CNetworkVar( int, m_nTimerMaxLength );		// max time the timer can have (0 is no max)
 	CNetworkVar( bool, m_bAutoCountdown );		// automatically count down the end of a round
 	CNetworkVar( int, m_nSetupTimeLength );		// current timer's setup time length (setup time is the time before the round begins)
-	CNetworkVar( int, m_nState );				// RT_STATE_SETUP or RT_STATE_NORMAL
+	CNetworkVar( int, m_nState ); 	// RT_STATE_SETUP or RT_STATE_NORMAL
 	CNetworkVar( bool, m_bStartPaused );		// start the timer paused when it spawns
 
-	bool			m_bFireFinished;
-	bool			m_bFire5MinRemain;
-	bool			m_bFire4MinRemain;
-	bool			m_bFire3MinRemain;
-	bool			m_bFire2MinRemain;
-	bool			m_bFire1MinRemain;
-	bool			m_bFire30SecRemain;
-	bool			m_bFire10SecRemain;
-	bool			m_bFire5SecRemain;
-	bool			m_bFire4SecRemain;
-	bool			m_bFire3SecRemain;
-	bool			m_bFire2SecRemain;
-	bool			m_bFire1SecRemain;
+	bool m_bFireFinished;
+	bool m_bFire5MinRemain;
+	bool m_bFire4MinRemain;
+	bool m_bFire3MinRemain;
+	bool m_bFire2MinRemain;
+	bool m_bFire1MinRemain;
+	bool m_bFire30SecRemain;
+	bool m_bFire10SecRemain;
+	bool m_bFire5SecRemain;
+	bool m_bFire4SecRemain;
+	bool m_bFire3SecRemain;
+	bool m_bFire2SecRemain;
+	bool m_bFire1SecRemain;
 
 #ifdef CLIENT_DLL 
 
-	int				m_nOldTimerLength;
-	int				m_nOldTimerState;
+	int 	m_nOldTimerLength;
+	int 	m_nOldTimerState;
 
 #else
 	COutputEvent	m_OnRoundStart;
@@ -142,9 +142,9 @@ private:
 
 	DECLARE_DATADESC();
 
-	bool			m_bPauseDueToWin;
-	bool			m_bResetTimeOnRoundStart;
-	int				m_nTimeToUseAfterSetupFinished;
+	bool m_bPauseDueToWin;
+	bool m_bResetTimeOnRoundStart;
+	int 	m_nTimeToUseAfterSetupFinished;
 #endif 
 };
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PHYSOBJ_H
 #define PHYSOBJ_H
@@ -25,17 +25,17 @@
 //
 // ---------------------------------------------------------------------
 // Physbox Spawnflags. Start at 0x01000 to avoid collision with CBreakable's
-#define SF_PHYSBOX_ASLEEP					0x01000
-#define SF_PHYSBOX_IGNOREUSE				0x02000
-#define SF_PHYSBOX_DEBRIS					0x04000
-#define SF_PHYSBOX_MOTIONDISABLED			0x08000
-#define SF_PHYSBOX_USEPREFERRED				0x10000
+#define SF_PHYSBOX_ASLEEP 		0x01000
+#define SF_PHYSBOX_IGNOREUSE 	0x02000
+#define SF_PHYSBOX_DEBRIS 		0x04000
+#define SF_PHYSBOX_MOTIONDISABLED 0x08000
+#define SF_PHYSBOX_USEPREFERRED 	0x10000
 #define SF_PHYSBOX_ENABLE_ON_PHYSCANNON		0x20000
 #define SF_PHYSBOX_NO_ROTORWASH_PUSH		0x40000		// The rotorwash doesn't push these
 #define SF_PHYSBOX_ENABLE_PICKUP_OUTPUT		0x80000
 #define SF_PHYSBOX_ALWAYS_PICK_UP		    0x100000		// Physcannon can always pick this up, no matter what mass or constraints may apply.
-#define SF_PHYSBOX_NEVER_PICK_UP			0x200000		// Physcannon will never be able to pick this up.
-#define SF_PHYSBOX_NEVER_PUNT				0x400000		// Physcannon will never be able to punt this object.
+#define SF_PHYSBOX_NEVER_PICK_UP 0x200000		// Physcannon will never be able to pick this up.
+#define SF_PHYSBOX_NEVER_PUNT 	0x400000		// Physcannon will never be able to punt this object.
 #define SF_PHYSBOX_PREVENT_PLAYER_TOUCH_ENABLE 0x800000		// If set, the player will not cause the object to enable its motion when bumped into
 
 // UNDONE: Hook collisions into the physics system to generate touch functions and take damage on falls
@@ -53,7 +53,7 @@ public:
 	virtual int ObjectCaps();
 	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	
-	virtual int DrawDebugTextOverlays(void);
+	virtual int DrawDebugTextOverlays();
 
 	virtual void VPhysicsUpdate( IPhysicsObject *pPhysics );
 	virtual void VPhysicsCollision( int index, gamevcollisionevent_t *pEvent );
@@ -80,13 +80,13 @@ public:
 	DECLARE_DATADESC();
 	
 protected:
-	int				m_damageType;
-	float			m_massScale;
+	int 	m_damageType;
+	float m_massScale;
 	string_t		m_iszOverrideScript;
-	int				m_damageToEnableMotion;
-	float			m_flForceToEnableMotion;
-	QAngle			m_angPreferredCarryAngles;
-	bool			m_bNotSolidToWorld;
+	int 	m_damageToEnableMotion;
+	float m_flForceToEnableMotion;
+	QAngle m_angPreferredCarryAngles;
+	bool m_bNotSolidToWorld;
 
 	// Outputs
 	COutputEvent	m_OnDamaged;
@@ -116,7 +116,7 @@ public:
 
 	CBaseEntity *FindEntity( CBaseEntity *pEntity, CBaseEntity *pActivator, CBaseEntity *pCaller );
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Input handlers
 	void InputExplode( inputdata_t &inputdata );
@@ -168,7 +168,7 @@ private:
 struct magnetted_objects_t
 {
 	IPhysicsConstraint *pConstraint;
-	EHANDLE			   hEntity;
+	EHANDLE    hEntity;
 
 	DECLARE_SIMPLE_DATADESC();
 };
@@ -218,20 +218,20 @@ protected:
 	COutputEvent	m_OnMagnetDetach;
 
 	// Keys
-	float			m_massScale;
+	float m_massScale;
 	string_t		m_iszOverrideScript;
-	float			m_forceLimit;
-	float			m_torqueLimit;
+	float m_forceLimit;
+	float m_torqueLimit;
 
 	CUtlVector< magnetted_objects_t >	m_MagnettedEntities;
-	IPhysicsConstraintGroup				*m_pConstraintGroup;
+	IPhysicsConstraintGroup 	*m_pConstraintGroup;
 
-	bool			m_bActive;
-	bool			m_bHasHitSomething;
-	float			m_flTotalMass;
-	float			m_flRadius;
-	float			m_flNextSuckTime;
-	int				m_iMaxObjectsAttached;
+	bool m_bActive;
+	bool m_bHasHitSomething;
+	float m_flTotalMass;
+	float m_flRadius;
+	float m_flNextSuckTime;
+	int 	m_iMaxObjectsAttached;
 };
 
 #endif // PHYSOBJ_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BASEOBJECT_SHARED_H
 #define BASEOBJECT_SHARED_H
@@ -24,11 +24,11 @@ struct BuildPoint_t
 	// If this is true, then objects are parented to the attachment point instead of 
 	// parented to the entity's abs origin + angles. That way, they'll move if the 
 	// attachment point animates.
-	bool			m_bPutInAttachmentSpace;	
+	bool m_bPutInAttachmentSpace;	
 
-	int				m_iAttachmentNum;
+	int 	m_iAttachmentNum;
 	ObjectHandle	m_hObject;
-	bool			m_bValidObjects[ OBJ_LAST ];
+	bool m_bValidObjects[ OBJ_LAST ];
 };
 
 #define TF_OBJ_GROUND_CLEARANCE	32

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "dod_area_capture.h"
@@ -448,7 +448,7 @@ void CAreaCapture::EndCapture( int team )
 
 	if ( numcappers < MAX_AREA_CAPPERS )
 	{
-		cappingplayers[numcappers] = 0;	//null terminate :)
+		cappingplayers[numcappers] = 0;	//0 terminate :)
 	}
 			
 	m_nOwningTeam = team;
@@ -541,7 +541,7 @@ bool CAreaCapture::CheckIfDeathCausesBlock( CDODPlayer *pVictim, CDODPlayer *pKi
 	// This shouldn't happen
 	if ( !pVictim || !pKiller )
 	{
-		Assert( !"Why are null players getting here?" );
+		Assert( !"Why are 0 players getting here?" );
 		return false;
 	}
 

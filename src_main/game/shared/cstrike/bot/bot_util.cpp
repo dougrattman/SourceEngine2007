@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 // Author: Michael S. Booth (mike@turtlerockstudios.com), 2003
 
 #include "cbase.h"
 #include "cs_shareddefs.h"
 #include "engine/IEngineSound.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
 #include "bot.h"
 #include "bot_util.h"

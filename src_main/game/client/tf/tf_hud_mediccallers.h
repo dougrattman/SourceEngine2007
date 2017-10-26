@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -47,11 +47,11 @@ public:
 
 private:
 	IMaterial		*m_pArrowMaterial;
-	float			m_flRemoveAt;
-	Vector			m_vecOffset;
+	float m_flRemoveAt;
+	Vector m_vecOffset;
 	CHandle<C_TFPlayer> m_hPlayer;
-	int				m_iDrawArrow;
-	bool			m_bOnscreen;
+	int 	m_iDrawArrow;
+	bool m_bOnscreen;
 };
 
 #endif // TF_HUD_MEDICCALLERS_H

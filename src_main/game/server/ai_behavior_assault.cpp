@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "ai_behavior_assault.h"
 #include "ai_navigator.h"
@@ -367,7 +367,7 @@ void CAI_AssaultBehavior::ClearAssaultPoint( void )
 	UnlockRallyPoint();
 
 	// If this assault behavior has changed the NPC's hint group,
-	// slam that NPC's hint group back to null.
+	// slam that NPC's hint group back to 0.
 	// !!!TODO: if the NPC had a different hint group before the 
 	// assault began, we're slamming that, too! We might want
 	// to cache it off if this becomes a problem (sjb)

@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Dialog for setting customizable game options
 //
-//=============================================================================//
+
 
 #include "sessionoptionsdialog.h"
 #include "engine/imatchmaking.h"
 #include "EngineInterface.h"
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/Label.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

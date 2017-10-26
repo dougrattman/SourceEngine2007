@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IMAGE_MOUSE_OVER_BUTTON_H
 #define IMAGE_MOUSE_OVER_BUTTON_H
@@ -145,15 +145,15 @@ void CImageMouseOverButton<T>::SetActiveImage( vgui::IImage *image )
 		int wide, tall;
 		if ( m_bScaleImage )
 		{
-			// scaling, force the image size to be our size
-			GetSize( wide, tall );
-			m_pActiveImage->SetSize( wide, tall );
+ // scaling, force the image size to be our size
+ GetSize( wide, tall );
+ m_pActiveImage->SetSize( wide, tall );
 		}
 		else
 		{
-			// not scaling, so set our size to the image size
-			m_pActiveImage->GetSize( wide, tall );
-			SetSize( wide, tall );
+ // not scaling, so set our size to the image size
+ m_pActiveImage->GetSize( wide, tall );
+ SetSize( wide, tall );
 		}
 	}
 
@@ -170,15 +170,15 @@ void CImageMouseOverButton<T>::SetInactiveImage( vgui::IImage *image )
 		int wide, tall;
 		if ( m_bScaleImage)
 		{
-			// scaling, force the image size to be our size
-			GetSize( wide, tall );
-			m_pInactiveImage->SetSize( wide, tall );
+ // scaling, force the image size to be our size
+ GetSize( wide, tall );
+ m_pInactiveImage->SetSize( wide, tall );
 		}
 		else
 		{
-			// not scaling, so set our size to the image size
-			m_pInactiveImage->GetSize( wide, tall );
-			SetSize( wide, tall );
+ // not scaling, so set our size to the image size
+ m_pInactiveImage->GetSize( wide, tall );
+ SetSize( wide, tall );
 		}
 	}
 
@@ -193,10 +193,10 @@ void CImageMouseOverButton<T>::OnSizeChanged( int newWide, int newTall )
 		// scaling, force the image size to be our size
 
 		if ( m_pActiveImage )
-			m_pActiveImage->SetSize( newWide, newTall );
+ m_pActiveImage->SetSize( newWide, newTall );
 
 		if ( m_pInactiveImage )
-			m_pInactiveImage->SetSize( newWide, newTall );
+ m_pInactiveImage->SetSize( newWide, newTall );
 	}
 	MouseOverButton<T>::OnSizeChanged( newWide, newTall );
 }
@@ -209,9 +209,9 @@ void CImageMouseOverButton<T>::Paint()
 		// draw the active image
 		if ( m_pActiveImage )
 		{
-			vgui::surface()->DrawSetColor( 255, 255, 255, 255 );
-			m_pActiveImage->SetPos( 0, 0 );
-			m_pActiveImage->Paint();
+ vgui::surface()->DrawSetColor( 255, 255, 255, 255 );
+ m_pActiveImage->SetPos( 0, 0 );
+ m_pActiveImage->Paint();
 		}
 	}
 	else 
@@ -219,9 +219,9 @@ void CImageMouseOverButton<T>::Paint()
 		// draw the inactive image
 		if ( m_pInactiveImage )
 		{
-			vgui::surface()->DrawSetColor( 255, 255, 255, 255 );
-			m_pInactiveImage->SetPos( 0, 0 );
-			m_pInactiveImage->Paint();
+ vgui::surface()->DrawSetColor( 255, 255, 255, 255 );
+ m_pInactiveImage->SetPos( 0, 0 );
+ m_pInactiveImage->Paint();
 		}
 	}
 	

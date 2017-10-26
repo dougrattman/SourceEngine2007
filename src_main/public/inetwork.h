@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef INETWORK_H
 #define INETWORK_H
@@ -38,7 +38,7 @@ public:
 	// Address conversion
 	virtual bool StringToAdr ( const char *s, netadr_t *a) = 0;
 
-	// Convert from host to network byte ordering
+	// Convert from host to network uint8_t ordering
 	virtual unsigned short HostToNetShort( unsigned short us_in );
 
 	// and vice versa

@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		The class from which all bludgeon melee
-//				weapons are derived. 
+// 	weapons are derived. 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "basehlcombatweapon.h"
 
@@ -37,8 +37,8 @@ public:
 	virtual Activity	GetPrimaryAttackActivity( void )	{	return	ACT_VM_HITCENTER;	}
 	virtual Activity	GetSecondaryAttackActivity( void )	{	return	ACT_VM_HITCENTER2;	}
 
-	virtual	float	GetFireRate( void )								{	return	0.2f;	}
-	virtual float	GetRange( void )								{	return	32.0f;	}
+	virtual	float	GetFireRate( void )  		{	return	0.2f;	}
+	virtual float	GetRange( void )  		{	return	32.0f;	}
 	virtual	float	GetDamageForActivity( Activity hitActivity )	{	return	1.0f;	}
 
 	virtual int		CapabilitiesGet( void );
@@ -48,9 +48,9 @@ protected:
 	virtual	void	ImpactEffect( trace_t &trace );
 
 private:
-	bool			ImpactWater( const Vector &start, const Vector &end );
-	void			Swing( int bIsSecondary );
-	void			Hit( trace_t &traceHit, Activity nHitActivity, bool bIsSecondary );
+	bool ImpactWater( const Vector &start, const Vector &end );
+	void Swing( int bIsSecondary );
+	void Hit( trace_t &traceHit, Activity nHitActivity, bool bIsSecondary );
 	Activity		ChooseIntersectionPointAndActivity( trace_t &hitTrace, const Vector &mins, const Vector &maxs, CBasePlayer *pOwner );
 };
 

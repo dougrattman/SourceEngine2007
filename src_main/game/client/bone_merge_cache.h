@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef BONE_MERGE_CACHE_H
 #define BONE_MERGE_CACHE_H
@@ -52,7 +52,7 @@ private:
 	CStudioHdr		*m_pOwnerHdr;
 
 	// This is the mask we need to use to set up bones on the followed entity to do the bone merge
-	int				m_nFollowBoneSetupMask;
+	int 	m_nFollowBoneSetupMask;
 
 	// Cache data.
 	class CMergedBone

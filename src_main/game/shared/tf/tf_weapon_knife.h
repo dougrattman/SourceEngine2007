@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Weapon Knife Class
 //
@@ -29,18 +29,18 @@ public:
 
 	CTFKnife();
 	virtual void		PrimaryAttack( void );
-	virtual int			GetWeaponID( void ) const			{ return TF_WEAPON_KNIFE; }
+	virtual int GetWeaponID( void ) const { return TF_WEAPON_KNIFE; }
 
 	virtual float		GetMeleeDamage( CBaseEntity *pTarget, int &iCustomDamage );
 
 	virtual void		SendPlayerAnimEvent( CTFPlayer *pPlayer );
 
-	bool				IsBehindTarget( CBaseEntity *pTarget );
+	bool 	IsBehindTarget( CBaseEntity *pTarget );
 
 	virtual bool		CalcIsAttackCriticalHelper( void );
 
 private:
-	EHANDLE				m_hBackstabVictim;
+	EHANDLE 	m_hBackstabVictim;
 
 	CTFKnife( const CTFKnife & ) {}
 };

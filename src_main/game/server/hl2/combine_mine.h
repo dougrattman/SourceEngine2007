@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "Color.h"
 
@@ -34,7 +34,7 @@ public:
 	void Precache();
 	void Spawn();
 	void OnRestore();
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 	void SetMineState( int iState );
 	int GetMineState() { return m_iMineState; }
 	bool IsValidLocation();
@@ -113,11 +113,11 @@ private:
 	int     m_iModification;
 
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
+	float 		m_flLastPhysicsInfluenceTime;
 
-	float					m_flTimeGrabbed;
+	float 		m_flTimeGrabbed;
 	IPhysicsConstraint		*m_pConstraint;
-	int						m_iMineState;
+	int  m_iMineState;
 
 	COutputEvent	m_OnPulledUp;
 	void InputDisarm( inputdata_t &inputdata );

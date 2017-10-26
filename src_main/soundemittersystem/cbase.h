@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef CBASE_H
 #define CBASE_H
@@ -11,7 +11,7 @@
 #endif
 
 // Shared header file
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 

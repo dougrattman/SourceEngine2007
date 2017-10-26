@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef TESLA_H
 #define TESLA_H
@@ -42,7 +42,7 @@ public:
 	
 	// Tesla parameters.
 	string_t m_SourceEntityName;	// Which entity the arcs come from.
-	CNetworkVar( string_t, m_SoundName );			// What sound to play when arcing.
+	CNetworkVar( string_t, m_SoundName ); // What sound to play when arcing.
 
 	color32 m_Color;
 	int m_NumBeams[2];		// Number of beams per spark.

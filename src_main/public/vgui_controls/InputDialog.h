@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef INPUTDIALOG_H
 #define INPUTDIALOG_H
@@ -64,7 +64,7 @@ protected:
 	virtual void PerformLayout( int x, int y, int w, int h );
 
 private:
-	vgui::Label			*m_pPrompt;
+	vgui::Label *m_pPrompt;
 };
 
 //-----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public:
 	/* action signals
 
 		"InputCompleted"
-			"text"	- the text entered
+ "text"	- the text entered
 
 		"InputCanceled"
 	*/
@@ -96,7 +96,7 @@ protected:
 	virtual void OnCommand(const char *command);
 
 private:
-	vgui::Label			*m_pPrompt;
+	vgui::Label *m_pPrompt;
 	vgui::TextEntry		*m_pInput;
 };
 

@@ -8,10 +8,6 @@
 #ifndef MESSAGEMAP_H
 #define MESSAGEMAP_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
 #include "tier1/utlvector.h"
 
 // more flexible than default pointers to members code required for casting member function pointers
@@ -57,7 +53,6 @@ typedef void (Panel::*MessageFunc_t)(void);
 //			Contains the information to map a string message name with parameters
 //			to a function call
 //-----------------------------------------------------------------------------
-#pragma warning(disable:4121)
 struct MessageMapItem_t
 {
 	const char *name;

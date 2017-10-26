@@ -2,7 +2,7 @@
 //
 // Purpose: CTeamplayRoundWin Entity
 //
-//=============================================================================//
+
 #ifndef ENTITY_ROUND_WIN_H
 #define ENTITY_ROUND_WIN_H
 

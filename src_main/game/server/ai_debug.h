@@ -1,26 +1,36 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
 
 #ifndef AI_DEBUG_H
 #define AI_DEBUG_H
 
-#include "fmtstr.h"
 #include "ai_debug_shared.h"
+#include "fmtstr.h"
 
-#if defined( _WIN32 )
+#if defined(_WIN32)
 #pragma once
 #endif
 
 // This dumps a summary result on exit
 //#define PROFILE_AI 1
 
-#define AI_PROFILE_SCOPE_BEGIN( tag )	if (0) ; else { AI_PROFILE_SCOPE( tag )
-#define AI_PROFILE_SCOPE_BEGIN_( pszName )	if (0) ; else { AI_PROFILE_SCOPE_( pszName )
-#define AI_PROFILE_SCOPE_END()			} do {} while (0)
+#define AI_PROFILE_SCOPE_BEGIN(tag) \
+  if (0)                            \
+    ;                               \
+  else {                            \
+    AI_PROFILE_SCOPE(tag)
+#define AI_PROFILE_SCOPE_BEGIN_(pszName) \
+  if (0)                                 \
+    ;                                    \
+  else {                                 \
+    AI_PROFILE_SCOPE_(pszName)
+#define AI_PROFILE_SCOPE_END() \
+  }                            \
+  do {                         \
+  } while (0)
 
 #if defined(VPROF_AI)
 #define VProfAI() true
@@ -29,37 +39,34 @@
 #endif
 #if defined(VPROF_AI)
 #include "tier0/vprof.h"
-#define AI_PROFILE_SCOPE( tag )			VPROF( #tag )
-#define AI_PROFILE_SCOPE_( pszName )	VPROF( pszName )
-#define AI_PROFILE_MEASURE_SCOPE( tag )	VPROF( #tag )
+#define AI_PROFILE_SCOPE(tag) VPROF(#tag)
+#define AI_PROFILE_SCOPE_(pszName) VPROF(pszName)
+#define AI_PROFILE_MEASURE_SCOPE(tag) VPROF(#tag)
 #elif defined(PROFILE_AI)
 #include "tier0/fasttimer.h"
-#define AI_PROFILE_SCOPE( tag )			PROFILE_SCOPE( tag )
-#define AI_PROFILE_MEASURE_SCOPE( tag )	PROFILE_SCOPE( tag )
+#define AI_PROFILE_SCOPE(tag) PROFILE_SCOPE(tag)
+#define AI_PROFILE_MEASURE_SCOPE(tag) PROFILE_SCOPE(tag)
 #else
-#define AI_PROFILE_MEASURE_SCOPE( tag )	((void)0)
-#define AI_PROFILE_SCOPE( tag )			((void)0)
+#define AI_PROFILE_MEASURE_SCOPE(tag) ((void)0)
+#define AI_PROFILE_SCOPE(tag) ((void)0)
 #endif
 
 #ifndef AI_PROFILE_SCOPE_
-#define AI_PROFILE_SCOPE_( pszName ) 	((void)0)
+#define AI_PROFILE_SCOPE_(pszName) ((void)0)
 #endif
 
+enum AIMsgFlags { AIMF_IGNORE_SELECTED = 0x01 };
 
-enum AIMsgFlags
-{
-	AIMF_IGNORE_SELECTED = 0x01
-};
-
-void DevMsg( CAI_BaseNPC *pAI, unsigned flags, const char *pszFormat, ... );
-void DevMsg( CAI_BaseNPC *pAI, const char *pszFormat, ... );
-
+void DevMsg(CAI_BaseNPC *pAI, unsigned flags, const char *pszFormat, ...);
+void DevMsg(CAI_BaseNPC *pAI, const char *pszFormat, ...);
 
 //-----------------------------------------------------------------------------
-// Purpose: Use this to perform AI tracelines that are trying to determine LOS between points.
-//			LOS checks between entities should use FVisible.
+// Purpose: Use this to perform AI tracelines that are trying to determine LOS
+// between points. LOS checks between entities should use FVisible.
 //-----------------------------------------------------------------------------
-void AI_TraceLOS( const Vector& vecAbsStart, const Vector& vecAbsEnd, CBaseEntity *pLooker, trace_t *ptr, ITraceFilter *pFilter = NULL );
+void AI_TraceLOS(const Vector &vecAbsStart, const Vector &vecAbsEnd,
+                 CBaseEntity *pLooker, trace_t *ptr,
+                 ITraceFilter *pFilter = NULL);
 
 //-----------------------------------------------------------------------------
 
@@ -72,17 +79,19 @@ extern bool g_fTestSteering;
 
 //-----------------------------------------------------------------------------
 
-
 #ifdef _DEBUG
 extern ConVar ai_debug_doors;
-#define AIIsDebuggingDoors( pNPC ) ( ai_debug_doors.GetBool() && pNPC->m_bSelected )
-#define AIDoorDebugMsg( pNPC, msg )	if ( !AIIsDebuggingDoors( pNPC ) ) ; else Msg( msg )
+#define AIIsDebuggingDoors(pNPC) (ai_debug_doors.GetBool() && pNPC->m_bSelected)
+#define AIDoorDebugMsg(pNPC, msg) \
+  if (!AIIsDebuggingDoors(pNPC))  \
+    ;                             \
+  else                            \
+    Msg(msg)
 #else
-#define AIIsDebuggingDoors( pNPC ) (false)
-#define AIDoorDebugMsg( pNPC, msg )	((void)(0)) 
+#define AIIsDebuggingDoors(pNPC) (false)
+#define AIDoorDebugMsg(pNPC, msg) ((void)(0))
 #endif
-
 
 //-----------------------------------------------------------------------------
 
-#endif // AI_DEBUG_H
+#endif  // AI_DEBUG_H

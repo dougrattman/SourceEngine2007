@@ -1,29 +1,25 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: 
-//
-// $NoKeywords: $
-//
-// Serialization/unserialization buffer
-//=============================================================================//
+// Purpose: Serialization/unserialization buffer.
 
-#ifndef DIFF_H
-#define DIFF_H
-#pragma once
+#ifndef SOURCE_TIER1_DIFF_H_
+#define SOURCE_TIER1_DIFF_H_
 
-int FindDiffs(uint8 const *NewBlock, uint8 const *OldBlock,
-			  int NewSize, int OldSize, int &DiffListSize,uint8 *Output,uint32 OutSize);
+#include "tier0/basetypes.h"
 
-int FindDiffsForLargeFiles(uint8 const *NewBlock, uint8 const *OldBlock,
-						   int NewSize, int OldSize, int &DiffListSize,uint8 *Output,
-						   uint32 OutSize,
-						   int hashsize=65536);
+int FindDiffs(uint8_t const *NewBlock, uint8_t const *OldBlock, int NewSize,
+              int OldSize, int &DiffListSize, uint8_t *Output, uint32_t OutSize);
 
-void ApplyDiffs(uint8 const *OldBlock, uint8 const *DiffList,
-                int OldSize, int DiffListSize, int &ResultListSize,uint8 *Output,uint32 OutSize);
+int FindDiffsForLargeFiles(uint8_t const *NewBlock, uint8_t const *OldBlock,
+                           int NewSize, int OldSize, int &DiffListSize,
+                           uint8_t *Output, uint32_t OutSize, int hashsize = 65536);
 
-int FindDiffsLowMemory(uint8 const *NewBlock, uint8 const *OldBlock,
-					   int NewSize, int OldSize, int &DiffListSize,uint8 *Output,uint32 OutSize);
+void ApplyDiffs(uint8_t const *OldBlock, uint8_t const *DiffList, int OldSize,
+                int DiffListSize, int &ResultListSize, uint8_t *Output,
+                uint32_t OutSize);
 
-#endif
+int FindDiffsLowMemory(uint8_t const *NewBlock, uint8_t const *OldBlock,
+                       int NewSize, int OldSize, int &DiffListSize,
+                       uint8_t *Output, uint32_t OutSize);
 
+#endif  // SOURCE_TIER1_DIFF_H_

@@ -1,71 +1,54 @@
-//=========== (C) Copyright 1999 Valve, L.L.C. All rights reserved. ===========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// The copyright to the contents herein is the property of Valve, L.L.C.
-// The contents may be used and/or copied only with the written permission of
-// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
-// the agreement/contract under which the contents have been supplied.
-//
-// $Header: $
-// $NoKeywords: $
-//
-// Material editor
-//=============================================================================
+// Purpose: Material editor.
 
-#ifndef VGUIMATSYSAPP_H
-#define VGUIMATSYSAPP_H
-
-#ifdef _WIN32
-#pragma once
-#endif
-
+#ifndef SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
+#define SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
 
 #include "appframework/tier3app.h"
 
+// The application object.
+class CVguiMatSysApp : public CVguiSteamApp {
+  using BaseClass = CVguiSteamApp;
 
-//-----------------------------------------------------------------------------
-// The application object
-//-----------------------------------------------------------------------------
-class CVguiMatSysApp : public CVguiSteamApp
-{
-	typedef CVguiSteamApp BaseClass;
+ public:
+  CVguiMatSysApp();
 
-public:
-	CVguiMatSysApp();
+  // Methods of IApplication.
+  bool Create() override;
+  bool PreInit() override;
+  void PostShutdown() override;
+  void Destroy() override;
 
-	// Methods of IApplication
-	virtual bool Create();
-	virtual bool PreInit();
-	virtual void PostShutdown();
-	virtual void Destroy();
+ protected:
+  void AppPumpMessages();
 
-protected:
-	void AppPumpMessages();
+  // Sets the video mode.
+  bool SetVideoMode();
 
-	// Sets the video mode
-	bool SetVideoMode( );
+  // Returns the window.
+  void *GetAppWindow();
 
-	// Returns the window
-	void* GetAppWindow();
+  // Gets the window size.
+  int GetWindowWidth() const;
+  int GetWindowHeight() const;
 
-	// Gets the window size
-	int GetWindowWidth() const;
-	int GetWindowHeight() const;
+  // Sets up the game path.
+  bool SetupSearchPaths(const char *start_dir, bool use_only_start_dir,
+                        bool is_tool);
 
-	// Sets up the game path
-	bool SetupSearchPaths( const char *pStartingDir, bool bOnlyUseStartingDir, bool bIsTool );
+ private:
+  // Returns the app name.
+  virtual const char *GetAppName() = 0;
+  virtual bool AppUsesReadPixels() { return false; }
 
-private:
-	// Returns the app name
-	virtual const char *GetAppName() = 0;
-	virtual bool AppUsesReadPixels() { return false; }
+  // Creates the app window.
+  virtual void *CreateAppWindow(char const *title, bool is_windowed, int width,
+                                int height);
 
-	// Creates the app window
-	virtual void *CreateAppWindow( char const *pTitle, bool bWindowed, int w, int h );
-
-	void *m_HWnd;
-	int m_nWidth;
-	int m_nHeight;
+  void *m_HWnd;
+  int m_nWidth;
+  int m_nHeight;
 };
 
-
-#endif // VGUIMATSYSAPP_H
+#endif  // SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_

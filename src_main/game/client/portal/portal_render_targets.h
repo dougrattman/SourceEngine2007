@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Portal mod render targets are specified by and accessable through this singleton
 //
@@ -6,7 +6,7 @@
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef PORTALRENDERTARGETS_H_
 #define PORTALRENDERTARGETS_H_
 #ifdef _WIN32

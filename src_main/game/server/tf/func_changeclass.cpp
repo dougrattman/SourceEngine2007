@@ -2,7 +2,7 @@
 //
 // Purpose: CTF ChangeClass Zone.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "viewport_panel_names.h"

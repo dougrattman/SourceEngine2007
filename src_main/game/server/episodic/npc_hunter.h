@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Expose an IsAHunter function
 //
-//=============================================================================//
+
 
 #ifndef NPC_HUNTER_H
 #define NPC_HUNTER_H

@@ -1,17 +1,17 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <assert.h>
+
+#include <cassert>
 
 #include <vgui/ISurface.h>
 #include <vgui/IVGui.h>
 #include <vgui/IPanel.h>
 #include <vgui/VGUI.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <tier0/dbg.h>
 
 #include <vgui_controls/Controls.h>

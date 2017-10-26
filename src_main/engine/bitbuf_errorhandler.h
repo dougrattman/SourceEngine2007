@@ -1,18 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef BITBUF_ERRORHANDLER_H
 #define BITBUF_ERRORHANDLER_H
-#ifdef _WIN32
-#pragma once
-#endif
-
 
 void InstallBitBufErrorHandler();
 
-
-#endif // BITBUF_ERRORHANDLER_H
+#endif  // BITBUF_ERRORHANDLER_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ICONPANEL_H
 #define ICONPANEL_H
@@ -31,9 +31,9 @@ public:
 
 private:
 	CHudTexture		*m_icon;
-	char			m_szIcon[128];
+	char m_szIcon[128];
 
-	bool			m_bScaleImage;
+	bool m_bScaleImage;
 
 	CPanelAnimationVar( Color, m_IconColor, "iconColor", "255 255 255 255" );
 };

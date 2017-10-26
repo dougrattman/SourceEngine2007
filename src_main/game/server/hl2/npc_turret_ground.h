@@ -15,11 +15,11 @@ public:
 	DECLARE_CLASS( CNPC_GroundTurret, CAI_BaseNPC );
 	DECLARE_DATADESC();
 
-	void			Precache( void );
+	void Precache( void );
 	virtual void	Spawn( void );
-	bool			CreateVPhysics( void );
-	void			PrescheduleThink();
-	Class_T			Classify( void );
+	bool CreateVPhysics( void );
+	void PrescheduleThink();
+	Class_T Classify( void );
 
 	void PostNPCInit();
 
@@ -56,10 +56,10 @@ public:
 	virtual int TranslateSchedule( int scheduleType );
 
 	// Activities & Animation
-	Activity			NPC_TranslateActivity( Activity eNewActivity );
+	Activity NPC_TranslateActivity( Activity eNewActivity );
 	virtual void		Shoot();
 	virtual void		Scan();
-	void				ProjectBeam( const Vector &vecStart, const Vector &vecDir, int width, int brightness, float duration );
+	void 	ProjectBeam( const Vector &vecStart, const Vector &vecDir, int width, int brightness, float duration );
 
 	// Local
 	void SetActive( bool bActive ) {}
@@ -85,7 +85,7 @@ protected:
 		TASK_GROUNDTURRET_SCAN = BaseClass::NEXT_TASK,
 	};
 
-	int			m_iAmmoType;
+	int m_iAmmoType;
 	SmokeTrail	*m_pSmoke;
 
 	bool		m_bEnabled;
@@ -94,7 +94,7 @@ protected:
 	float		m_flTimeLastSawEnemy;
 	Vector		m_vecSpread;
 	bool		m_bHasExploded;
-	int			m_iDeathSparks;
+	int m_iDeathSparks;
 	float		m_flSensingDist;
 	bool		m_bSeeEnemy;
 	float		m_flTimeNextPing;

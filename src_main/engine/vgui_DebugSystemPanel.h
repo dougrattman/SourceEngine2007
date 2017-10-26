@@ -1,18 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef VGUI_DEBUGSYSTEMPANEL_H
 #define VGUI_DEBUGSYSTEMPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/Panel.h>
 #include <vgui_controls/PHandle.h>
+#include <vgui_controls/Panel.h>
 
 class CDebugMenuButton;
 class CDebugOptionsPanel;
@@ -20,21 +12,20 @@ class CDebugOptionsPanel;
 //-----------------------------------------------------------------------------
 // Purpose: A simple panel to contain a debug menu button w/ cascading menus
 //-----------------------------------------------------------------------------
-class CDebugSystemPanel : public vgui::Panel
-{
-	typedef vgui::Panel BaseClass;
-public:
+class CDebugSystemPanel : public vgui::Panel {
+  typedef vgui::Panel BaseClass;
 
-	CDebugSystemPanel( vgui::Panel *parent, char const *panelName );
+ public:
+  CDebugSystemPanel(vgui::Panel *parent, char const *panelName);
 
-	// Trap visibility so that we can force the cursor on
-	virtual void SetVisible( bool state );
-	virtual void OnCommand( char const *command );
+  // Trap visibility so that we can force the cursor on
+  virtual void SetVisible(bool state);
+  virtual void OnCommand(char const *command);
 
-private:
-	CDebugMenuButton	*m_pDebugMenu;
+ private:
+  CDebugMenuButton *m_pDebugMenu;
 
-	vgui::DHANDLE< CDebugOptionsPanel >	m_hDebugOptions;
+  vgui::DHANDLE<CDebugOptionsPanel> m_hDebugOptions;
 };
 
-#endif // VGUI_DEBUGSYSTEMPANEL_H
+#endif  // VGUI_DEBUGSYSTEMPANEL_H

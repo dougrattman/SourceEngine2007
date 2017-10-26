@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_BEHAVIOR_FUNCTANK_H
 #define AI_BEHAVIOR_FUNCTANK_H
@@ -89,7 +89,7 @@ public:
 	CBaseEntity *BestEnemy( void );
 	void Event_Killed( const CTakeDamageInfo &info );
 
-	bool HasFuncTank( void )							{ return ( m_hFuncTank != NULL ); }
+	bool HasFuncTank( void )  	{ return ( m_hFuncTank != NULL ); }
 	void SetFuncTank( CHandle<CFuncTank> hFuncTank );
 	CFuncTank *GetFuncTank() { return m_hFuncTank; }
 	void AimGun( void );
@@ -100,21 +100,21 @@ public:
 
 	// Time.
 	void SetBusy( float flTime )		{ m_flBusyTime = flTime; }
-	bool IsBusy( void )					{ return ( gpGlobals->curtime < m_flBusyTime ); }
+	bool IsBusy( void ) 		{ return ( gpGlobals->curtime < m_flBusyTime ); }
 
-	bool IsMounted( void )				{ return m_bMounted; }
+	bool IsMounted( void ) 	{ return m_bMounted; }
 
 private:
 	
 	// Schedule 
-	int			SelectSchedule();
+	int SelectSchedule();
 	
 private:
 
 	CHandle<CFuncTank>	m_hFuncTank;
-	bool				m_bMounted;
-	float				m_flBusyTime;
-	bool				m_bSpottedPlayerOutOfCover;
+	bool 	m_bMounted;
+	float 	m_flBusyTime;
+	bool 	m_bSpottedPlayerOutOfCover;
 };
 
 #endif // AI_BEHAVIOR_FUNCTANK_H

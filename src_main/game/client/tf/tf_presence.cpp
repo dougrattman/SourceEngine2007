@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Rich Presence support.
 // HACK: This file has also become the client wing of matchmaking. Matchmaking should
@@ -104,7 +104,7 @@ static unsigned int GetMapID( const char *pMapName )
 //-----------------------------------------------------------------------------
 // Convert a session property string to a display string for gameUI.
 //-----------------------------------------------------------------------------
-void CTF_Presence::GetPropertyDisplayString( uint id, uint value, char *pOutput, int nBytes )
+void CTF_Presence::GetPropertyDisplayString( uint32_t id, uint32_t value, char *pOutput, int nBytes )
 {
 	const char *pDisplayString = "";
 
@@ -173,7 +173,7 @@ void CTF_Presence::GetPropertyDisplayString( uint id, uint value, char *pOutput,
 //-----------------------------------------------------------------------------
 // Convert a presence ID to a string.
 //-----------------------------------------------------------------------------
-const char *CTF_Presence::GetPropertyIdString( const uint id )
+const char *CTF_Presence::GetPropertyIdString( const uint32_t id )
 {
 	for ( int i = 0; i < ARRAYSIZE( s_PresenceIds ); ++i )
 	{
@@ -188,7 +188,7 @@ const char *CTF_Presence::GetPropertyIdString( const uint id )
 //-----------------------------------------------------------------------------
 // Convert a session property string to an ID.
 //-----------------------------------------------------------------------------
-uint CTF_Presence::GetPresenceID( const char *pIDName )
+uint32_t CTF_Presence::GetPresenceID( const char *pIDName )
 {
 	for ( int i = 0; i < ARRAYSIZE( s_PresenceIds ); ++i )
 	{

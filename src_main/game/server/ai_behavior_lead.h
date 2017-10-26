@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef AI_BEHAVIOR_LEAD_H
 #define AI_BEHAVIOR_LEAD_H
@@ -17,17 +17,17 @@
 typedef const char *AIConcept_t;
 
 // Speak concepts
-#define TLK_LEAD_START				"TLK_LEAD_START"
-#define TLK_LEAD_ARRIVAL			"TLK_LEAD_ARRIVAL"
-#define TLK_LEAD_SUCCESS			"TLK_LEAD_SUCCESS"
-#define TLK_LEAD_FAILURE			"lead_fail"
-#define TLK_LEAD_COMINGBACK			"TLK_LEAD_COMINGBACK"
-#define TLK_LEAD_CATCHUP			"TLK_LEAD_CATCHUP"
-#define TLK_LEAD_RETRIEVE			"TLK_LEAD_RETRIEVE"
+#define TLK_LEAD_START 	"TLK_LEAD_START"
+#define TLK_LEAD_ARRIVAL "TLK_LEAD_ARRIVAL"
+#define TLK_LEAD_SUCCESS "TLK_LEAD_SUCCESS"
+#define TLK_LEAD_FAILURE "lead_fail"
+#define TLK_LEAD_COMINGBACK "TLK_LEAD_COMINGBACK"
+#define TLK_LEAD_CATCHUP "TLK_LEAD_CATCHUP"
+#define TLK_LEAD_RETRIEVE "TLK_LEAD_RETRIEVE"
 #define TLK_LEAD_ATTRACTPLAYER		"TLK_LEAD_ATTRACTPLAYER"
-#define TLK_LEAD_WAITOVER			"TLK_LEAD_WAITOVER"
+#define TLK_LEAD_WAITOVER "TLK_LEAD_WAITOVER"
 #define TLK_LEAD_MISSINGWEAPON		"TLK_LEAD_MISSING_WEAPON"
-#define TLK_LEAD_IDLE				"TLK_LEAD_IDLE"
+#define TLK_LEAD_IDLE 	"TLK_LEAD_IDLE"
 
 //-----------------------------------------------------------------------------
 // class CAI_LeadBehavior
@@ -77,9 +77,9 @@ struct AI_LeadArgs_t
 	float		flRetrieveDistance;
 	float		flSuccessDistance;
 	bool		bRun;
-	int			iRetrievePlayer;
-	int			iRetrieveWaitForSpeak;
-	int			iComingBackWaitForSpeak;
+	int iRetrievePlayer;
+	int iRetrieveWaitForSpeak;
+	int iComingBackWaitForSpeak;
 	bool		bStopScenesWhenPlayerLost;
 	bool		bDontSpeakStart;
 	bool		bLeadDuringCombat;
@@ -118,9 +118,9 @@ public:
 	virtual bool IsCurTaskContinuousMove();
 
 	bool SetGoal( const AI_LeadArgs_t &args );
-	void ClearGoal()										{ m_goal = vec3_origin; m_waitpoint = vec3_origin; m_pSink = NULL; m_weaponname = NULL_STRING; }
-	bool HasGoal() const 									{ return (m_goal != vec3_origin); }
-	bool HasWaitPoint() const 								{ return (m_waitpoint != vec3_origin); }
+	void ClearGoal()   	{ m_goal = vec3_origin; m_waitpoint = vec3_origin; m_pSink = NULL; m_weaponname = NULL_STRING; }
+	bool HasGoal() const    { return (m_goal != vec3_origin); }
+	bool HasWaitPoint() const   		{ return (m_waitpoint != vec3_origin); }
 
 	bool Connect( CAI_LeadBehaviorHandler *);
 	bool Disconnect( CAI_LeadBehaviorHandler *);
@@ -193,14 +193,14 @@ private:
 	// provide debugging pinch pount, and allow for class-local logic
 	// in addition to sink logic
 	//
-	void NotifyEvent( int event )								{ if ( m_pSink ) m_pSink->OnEvent( event ) ; }
+	void NotifyEvent( int event )  		{ if ( m_pSink ) m_pSink->OnEvent( event ) ; }
 	const char * GetConceptModifiers( const char *pszConcept )	{ return ( m_pSink ) ? m_pSink->GetConceptModifiers( pszConcept ) : NULL; }
 	
 	// --------------------------------
 
-	AI_LeadArgs_t			m_args;
+	AI_LeadArgs_t m_args;
 	CAI_LeadBehaviorHandler *m_pSink;
-	EHANDLE					m_hSinkImplementor;
+	EHANDLE 		m_hSinkImplementor;
 	
 	// --------------------------------
 	

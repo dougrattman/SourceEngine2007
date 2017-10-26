@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BASEPLAYER_SHARED_H
 #define BASEPLAYER_SHARED_H
@@ -33,7 +33,7 @@
 #define DEATH_ANIMATION_TIME	3.0f
 
 // multiplayer only
-#define NOINTERP_PARITY_MAX			4
+#define NOINTERP_PARITY_MAX 4
 #define NOINTERP_PARITY_MAX_BITS	2
 
 typedef struct 

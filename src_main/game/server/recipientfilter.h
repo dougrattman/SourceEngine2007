@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef RECIPIENTFILTER_H
 #define RECIPIENTFILTER_H
@@ -23,7 +23,7 @@
 class CRecipientFilter : public IRecipientFilter
 {
 public:
-					CRecipientFilter();
+ 		CRecipientFilter();
 	virtual 		~CRecipientFilter();
 
 	virtual bool	IsReliable( void ) const;
@@ -34,46 +34,46 @@ public:
 
 public:
 
-	void			CopyFrom( const CRecipientFilter& src );
+	void CopyFrom( const CRecipientFilter& src );
 
-	void			Reset( void );
+	void Reset( void );
 
-	void			MakeInitMessage( void );
+	void MakeInitMessage( void );
 
-	void			MakeReliable( void );
+	void MakeReliable( void );
 	
-	void			AddAllPlayers( void );
-	void			AddRecipientsByPVS( const Vector& origin );
-	void			RemoveRecipientsByPVS( const Vector& origin );
-	void			AddRecipientsByPAS( const Vector& origin );
-	void			AddRecipient( CBasePlayer *player );
-	void			RemoveAllRecipients( void );
-	void			RemoveRecipient( CBasePlayer *player );
-	void			RemoveRecipientByPlayerIndex( int playerindex );
-	void			AddRecipientsByTeam( CTeam *team );
-	void			RemoveRecipientsByTeam( CTeam *team );
-	void			RemoveRecipientsNotOnTeam( CTeam *team );
+	void AddAllPlayers( void );
+	void AddRecipientsByPVS( const Vector& origin );
+	void RemoveRecipientsByPVS( const Vector& origin );
+	void AddRecipientsByPAS( const Vector& origin );
+	void AddRecipient( CBasePlayer *player );
+	void RemoveAllRecipients( void );
+	void RemoveRecipient( CBasePlayer *player );
+	void RemoveRecipientByPlayerIndex( int playerindex );
+	void AddRecipientsByTeam( CTeam *team );
+	void RemoveRecipientsByTeam( CTeam *team );
+	void RemoveRecipientsNotOnTeam( CTeam *team );
 
-	void			UsePredictionRules( void );
-	bool			IsUsingPredictionRules( void ) const;
+	void UsePredictionRules( void );
+	bool IsUsingPredictionRules( void ) const;
 
-	bool			IgnorePredictionCull( void ) const;
-	void			SetIgnorePredictionCull( bool ignore );
+	bool IgnorePredictionCull( void ) const;
+	void SetIgnorePredictionCull( bool ignore );
 
-	void			AddPlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits );
-	void			RemovePlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits );
+	void AddPlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits );
+	void RemovePlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits );
 
 private:
 
-	bool				m_bReliable;
-	bool				m_bInitMessage;
+	bool 	m_bReliable;
+	bool 	m_bInitMessage;
 	CUtlVector< int >	m_Recipients;
 	
 	// If using prediction rules, the filter itself suppresses local player
-	bool				m_bUsingPredictionRules;
+	bool 	m_bUsingPredictionRules;
 	// If ignoring prediction cull, then external systems can determine
 	//  whether this is a special case where culling should not occur
-	bool				m_bIgnorePredictionCull;
+	bool 	m_bIgnorePredictionCull;
 };
 
 //-----------------------------------------------------------------------------

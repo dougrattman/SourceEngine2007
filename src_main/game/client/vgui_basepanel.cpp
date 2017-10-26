@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "vgui_BasePanel.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui/IVGui.h>
 

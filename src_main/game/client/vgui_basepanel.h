@@ -1,17 +1,17 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( VGUI_BASEPANEL_H )
 #define VGUI_BASEPANEL_H
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include <stdarg.h>
+#include <cstdarg>
 #include <vgui_controls/Panel.h>
 #include <vgui_controls/Label.h>
 #include <vgui_controls/Controls.h>
@@ -29,9 +29,9 @@ class CBasePanel : public vgui::Panel
 public:
 	DECLARE_CLASS_GAMEROOT( CBasePanel, vgui::Panel );
 
-					CBasePanel( vgui::Panel *pParent, const char *panelName );
-					CBasePanel( vgui::Panel *pParent, const char *panelName, int x, int y, int w, int h );
-	virtual			~CBasePanel( void );
+ 		CBasePanel( vgui::Panel *pParent, const char *panelName );
+ 		CBasePanel( vgui::Panel *pParent, const char *panelName, int x, int y, int w, int h );
+	virtual ~CBasePanel( void );
 
 	// should this panel be drawn this frame?
 	virtual bool	ShouldDraw( void ) { return true;}
@@ -51,13 +51,13 @@ public:
 	virtual void	OnTick( void );
 
 protected:
-	bool			m_bTexturedBackground;
-	int				m_nBackgroundMaterial;
-	char			m_szBgTexture[ 256 ];
-	bool			m_bTiled;
-	int				m_nTextureSize[ 2 ];
+	bool m_bTexturedBackground;
+	int 	m_nBackgroundMaterial;
+	char m_szBgTexture[ 256 ];
+	bool m_bTiled;
+	int 	m_nTextureSize[ 2 ];
 
-	bool			m_bReflectMouse;
+	bool m_bReflectMouse;
 };
 
 //-----------------------------------------------------------------------------

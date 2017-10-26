@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "npcevent.h"
@@ -35,7 +35,7 @@ class CWeaponPistol : public CBaseHL2MPCombatWeapon
 public:
 	DECLARE_CLASS( CWeaponPistol, CBaseHL2MPCombatWeapon );
 
-	CWeaponPistol(void);
+	CWeaponPistol();
 
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();

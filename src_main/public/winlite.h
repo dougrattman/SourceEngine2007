@@ -1,31 +1,39 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef WINLITE_H
 #define WINLITE_H
-#pragma once
 
-// 
-// Prevent tons of unused windows definitions
-//
+// Prevent tons of unused windows definitions.
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
+
+// Strict types mode.
+#ifndef STRICT
+#define STRICT
+#endif
+
 #define NOWINRES
 #define NOSERVICE
 #define NOMCX
 #define NOIME
-#if !defined( _X360 )
-#pragma warning(push, 1)
-#pragma warning(disable: 4005)
-#include <windows.h>
-#pragma warning(pop)
+
+// Windows 10 features.
+#define _WIN32_WINNT 0x0A00
+
+// Windows doesn't protect itself from redefinition, but macro is same.
+#ifdef RTL_NUMBER_OF_V1
+#undef RTL_NUMBER_OF_V1
 #endif
+
+#include <Windows.h>
+
+#include <Versionhelpers.h>
+
+#undef Yield
+
+#ifndef USE_WINDOWS_POSTMESSAGE
 #undef PostMessage
+#endif
 
-#pragma warning( disable: 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
-
-#endif // WINLITE_H
+#endif  // WINLITE_H

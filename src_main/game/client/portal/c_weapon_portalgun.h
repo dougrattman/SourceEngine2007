@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_WEAPON_PORTALGUN_H
 #define C_WEAPON_PORTALGUN_H
@@ -65,10 +65,10 @@ private:
 	CInterpolatedValue	m_Alpha;
 	CInterpolatedValue	m_Scale;
 
-	Vector				m_vecColor;
-	bool				m_bVisibleViewModel;
-	bool				m_bVisible3rdPerson;
-	int					m_nAttachment;
+	Vector 	m_vecColor;
+	bool 	m_bVisibleViewModel;
+	bool 	m_bVisible3rdPerson;
+	int 		m_nAttachment;
 	CMaterialReference	m_hMaterial;
 };
 
@@ -234,22 +234,22 @@ protected:
 
 	#define	NUM_PORTALGUN_BEAMS	6
 
-	void			DrawEffects( bool b3rdPerson );
-	Vector			GetEffectColor( int iPalletIndex );
-	void			GetEffectParameters( EffectType_t effectID, color32 &color, float &scale, IMaterial **pMaterial, Vector &vecAttachment, bool b3rdPerson );
-	void			DrawEffectSprite( EffectType_t effectID, bool b3rdPerson );
+	void DrawEffects( bool b3rdPerson );
+	Vector GetEffectColor( int iPalletIndex );
+	void GetEffectParameters( EffectType_t effectID, color32 &color, float &scale, IMaterial **pMaterial, Vector &vecAttachment, bool b3rdPerson );
+	void DrawEffectSprite( EffectType_t effectID, bool b3rdPerson );
 	inline bool		IsEffectVisible( EffectType_t effectID, bool b3rdPerson );
-	void			UpdateElementPosition( void );
+	void UpdateElementPosition( void );
 
 	CPortalgunEffect		m_Parameters[NUM_PORTALGUN_PARAMETERS];	// Interpolated parameters for the effects
-	CPortalgunEffectBeam	m_Beams[NUM_PORTALGUN_BEAMS];				// Beams
+	CPortalgunEffectBeam	m_Beams[NUM_PORTALGUN_BEAMS]; 	// Beams
 
-	int				m_nOldEffectState;	// Used for parity checks
-	bool			m_bOldCanFirePortal1;
-	bool			m_bOldCanFirePortal2;
+	int 	m_nOldEffectState;	// Used for parity checks
+	bool m_bOldCanFirePortal1;
+	bool m_bOldCanFirePortal2;
 
-	bool			m_bPulseUp;
-	float			m_fPulse;
+	bool m_bPulseUp;
+	float m_fPulse;
 
 	CNetworkVar( int,	m_EffectState );		// Current state of the effects on the gun
 
@@ -267,7 +267,7 @@ public:
 
 	DECLARE_ACTTABLE();
 
-	C_WeaponPortalgun(void);
+	C_WeaponPortalgun();
 
 private:
 	C_WeaponPortalgun( const C_WeaponPortalgun & );

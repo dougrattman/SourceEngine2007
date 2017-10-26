@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 #ifndef PARTICLELITGENERIC_DX9_HELPER_H
 #define PARTICLELITGENERIC_DX9_HELPER_H
 
-#include <string.h>
+#include <cstring>
 
 
 //-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ class IShaderShadow;
 // Init params/ init/ draw methods
 //-----------------------------------------------------------------------------
 struct ParticleLitGeneric_DX9_Vars_t
-{												
+{    
 	ParticleLitGeneric_DX9_Vars_t() { memset( this, 0xFF, sizeof(ParticleLitGeneric_DX9_Vars_t) ); }
 
 	int m_nBaseTexture;

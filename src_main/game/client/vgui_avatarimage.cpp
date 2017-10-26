@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -38,7 +38,7 @@ bool CAvatarImage::SetAvatarSteamID( CSteamID steamIDUser )
 		// See if it's in our list already
 		*/
 
-		uint32 wide, tall;
+		uint32_t wide, tall;
 		if ( SteamUtils()->GetImageSize( iAvatar, &wide, &tall ) )
 		{
 			int cubImage = wide * tall * 4;

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SCRIPT_INTRO_H
 #define SCRIPT_INTRO_H
@@ -27,7 +27,7 @@ public:
 	virtual void	Spawn( void );
 	virtual void	Precache();
 	virtual void	Activate( void );
-	virtual int 	UpdateTransmitState(void);
+	virtual int 	UpdateTransmitState();
 
 	// Inputs
 	void	InputSetPlayerViewEntity( inputdata_t &inputdata );

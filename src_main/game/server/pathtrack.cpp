@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Used to create a path that can be followed by NPCs and trains.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "pathtrack.h"

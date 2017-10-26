@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Pool of all per-level strings. Allocates memory for strings, 
-//			consolodating duplicates. The memory is freed on behalf of clients
-//			at level transition. Strings are of type string_t.
+// consolodating duplicates. The memory is freed on behalf of clients
+// at level transition. Strings are of type string_t.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GAMESTRINGPOOL_H
 #define GAMESTRINGPOOL_H

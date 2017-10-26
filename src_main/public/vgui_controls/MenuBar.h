@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MENUBAR_H
 #define MENUBAR_H
@@ -13,7 +13,7 @@
 #endif
 
 #include <vgui_controls/Panel.h>
-#include <UtlVector.h>
+#include "tier1/UtlVector.h"
 
 namespace vgui
 {
@@ -45,7 +45,7 @@ protected:
 
 private:
 	CUtlVector<MenuButton *> m_pMenuButtons;
-	int						m_nRightEdge;
+	int  m_nRightEdge;
 };
 
 } // namespace vgui

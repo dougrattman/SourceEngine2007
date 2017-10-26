@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #if !defined( _X360 )
-#include <windows.h>
+#include "winlite.h"
 #endif
-#include <stdio.h>
-#include "UtlBuffer.h"
+#include <cstdio>
+#include "tier1/utlbuffer.h"
 #include <vgui/VGUI.h>
 #include <vgui_controls/Controls.h>
 #include "FileSystem.h"
@@ -41,7 +41,7 @@ typedef struct
 	char		type;
 	char		compression;
 	char		pad1, pad2;
-	char		name[16];				// must be null terminated
+	char		name[16];				// must be 0 terminated
 } lumpinfo_t;
 
 typedef struct

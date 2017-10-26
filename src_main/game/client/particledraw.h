@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // FIXME: Should we just pass the Particle draw members directly as
 // arguments to IParticleEffect::SimulateAndRender?
 
@@ -28,12 +28,12 @@ friend class CParticleEffectBinding;
 
 public:
 
-					ParticleDraw();
+ 		ParticleDraw();
 
-	void			Init( CMeshBuilder *pMeshBuilder, IMaterial *pMaterial, float fTimeDelta );
+	void Init( CMeshBuilder *pMeshBuilder, IMaterial *pMaterial, float fTimeDelta );
 
 	// Time delta..
-	float			GetTimeDelta() const;
+	float GetTimeDelta() const;
 
 	// Get the material being used (mostly useful for getting the tcoord padding).
 	//IMaterial*		GetPMaterial();
@@ -46,7 +46,7 @@ public:
 private:
 	CMeshBuilder	*m_pMeshBuilder;
 	IMaterial		*m_pMaterial;
-	float			m_fTimeDelta;
+	float m_fTimeDelta;
 };
 
 

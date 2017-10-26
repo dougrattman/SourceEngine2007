@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #endif
 
 #include "itoolentity.h"
-#include "interface.h"
+#include "tier1/interface.h"
 #include "materialsystem/imaterialproxy.h"
 #include "inputsystem/iinputsystem.h"
 

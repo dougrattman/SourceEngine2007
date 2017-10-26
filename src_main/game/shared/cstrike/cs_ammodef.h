@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Holds defintion for game ammo types
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_AMMODEF_H
 #define CS_AMMODEF_H
@@ -35,7 +35,7 @@ public:
 
 	void AddAmmoCost( char const* name, int cost, int buySize );
 
-	CCSAmmoDef(void);
+	CCSAmmoDef();
 	~CCSAmmoDef( void );
 
 	int GetBuySize( int nAmmoIndex ) const;

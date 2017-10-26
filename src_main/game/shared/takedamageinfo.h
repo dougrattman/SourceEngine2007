@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TAKEDAMAGEINFO_H
 #define TAKEDAMAGEINFO_H
@@ -26,57 +26,57 @@ class CTakeDamageInfo
 public:
 	DECLARE_CLASS_NOBASE( CTakeDamageInfo );
 
-					CTakeDamageInfo();
-					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
-					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
+ 		CTakeDamageInfo();
+ 		CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
+ 		CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 	
 
 	// Inflictor is the weapon or rocket (or player) that is dealing the damage.
 	CBaseEntity*	GetInflictor() const;
-	void			SetInflictor( CBaseEntity *pInflictor );
+	void SetInflictor( CBaseEntity *pInflictor );
 
 	// Attacker is the character who originated the attack (like a player or an AI).
 	CBaseEntity*	GetAttacker() const;
-	void			SetAttacker( CBaseEntity *pAttacker );
+	void SetAttacker( CBaseEntity *pAttacker );
 
-	float			GetDamage() const;
-	void			SetDamage( float flDamage );
-	float			GetMaxDamage() const;
-	void			SetMaxDamage( float flMaxDamage );
-	void			ScaleDamage( float flScaleAmount );
-	void			AddDamage( float flAddAmount );
-	void			SubtractDamage( float flSubtractAmount );
+	float GetDamage() const;
+	void SetDamage( float flDamage );
+	float GetMaxDamage() const;
+	void SetMaxDamage( float flMaxDamage );
+	void ScaleDamage( float flScaleAmount );
+	void AddDamage( float flAddAmount );
+	void SubtractDamage( float flSubtractAmount );
 
-	float			GetBaseDamage() const;
-	bool			BaseDamageIsValid() const;
+	float GetBaseDamage() const;
+	bool BaseDamageIsValid() const;
 
-	Vector			GetDamageForce() const;
-	void			SetDamageForce( const Vector &damageForce );
-	void			ScaleDamageForce( float flScaleAmount );
+	Vector GetDamageForce() const;
+	void SetDamageForce( const Vector &damageForce );
+	void ScaleDamageForce( float flScaleAmount );
 
-	Vector			GetDamagePosition() const;
-	void			SetDamagePosition( const Vector &damagePosition );
+	Vector GetDamagePosition() const;
+	void SetDamagePosition( const Vector &damagePosition );
 
-	Vector			GetReportedPosition() const;
-	void			SetReportedPosition( const Vector &reportedPosition );
+	Vector GetReportedPosition() const;
+	void SetReportedPosition( const Vector &reportedPosition );
 
-	int				GetDamageType() const;
-	void			SetDamageType( int bitsDamageType );
-	void			AddDamageType( int bitsDamageType );
-	int				GetDamageCustom( void ) const;
-	void			SetDamageCustom( int iDamageCustom );
-	int				GetDamageStats( void ) const;
-	void			SetDamageStats( int iDamageStats );
+	int 	GetDamageType() const;
+	void SetDamageType( int bitsDamageType );
+	void AddDamageType( int bitsDamageType );
+	int 	GetDamageCustom( void ) const;
+	void SetDamageCustom( int iDamageCustom );
+	int 	GetDamageStats( void ) const;
+	void SetDamageStats( int iDamageStats );
 
-	int				GetAmmoType() const;
-	void			SetAmmoType( int iAmmoType );
+	int 	GetAmmoType() const;
+	void SetAmmoType( int iAmmoType );
 	const char *	GetAmmoName() const;
 
-	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
-	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
+	void Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
+	void Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 
-	void			AdjustPlayerDamageInflictedForSkillLevel();
-	void			AdjustPlayerDamageTakenForSkillLevel();
+	void AdjustPlayerDamageInflictedForSkillLevel();
+	void AdjustPlayerDamageTakenForSkillLevel();
 
 	// Given a damage type (composed of the #defines above), fill out a string with the appropriate text.
 	// For designer debug output.
@@ -84,23 +84,23 @@ public:
 
 
 //private:
-	void			CopyDamageToBaseDamage();
+	void CopyDamageToBaseDamage();
 
 protected:
-	void			Init( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType );
+	void Init( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType );
 
-	Vector			m_vecDamageForce;
-	Vector			m_vecDamagePosition;
-	Vector			m_vecReportedPosition;	// Position players are told damage is coming from
-	EHANDLE			m_hInflictor;
-	EHANDLE			m_hAttacker;
-	float			m_flDamage;
-	float			m_flMaxDamage;
-	float			m_flBaseDamage;			// The damage amount before skill leve adjustments are made. Used to get uniform damage forces.
-	int				m_bitsDamageType;
-	int				m_iDamageCustom;
-	int				m_iDamageStats;
-	int				m_iAmmoType;			// AmmoType of the weapon used to cause this damage, if any
+	Vector m_vecDamageForce;
+	Vector m_vecDamagePosition;
+	Vector m_vecReportedPosition;	// Position players are told damage is coming from
+	EHANDLE m_hInflictor;
+	EHANDLE m_hAttacker;
+	float m_flDamage;
+	float m_flMaxDamage;
+	float m_flBaseDamage; // The damage amount before skill leve adjustments are made. Used to get uniform damage forces.
+	int 	m_bitsDamageType;
+	int 	m_iDamageCustom;
+	int 	m_iDamageStats;
+	int 	m_iAmmoType; // AmmoType of the weapon used to cause this damage, if any
 
 	DECLARE_SIMPLE_DATADESC();
 };
@@ -114,14 +114,14 @@ class CMultiDamage : public CTakeDamageInfo
 public:
 	CMultiDamage();
 
-	bool			IsClear( void ) { return (m_hTarget == NULL); }
+	bool IsClear( void ) { return (m_hTarget == NULL); }
 	CBaseEntity		*GetTarget() const;
-	void			SetTarget( CBaseEntity *pTarget );
+	void SetTarget( CBaseEntity *pTarget );
 
-	void			Init( CBaseEntity *pTarget, CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType );
+	void Init( CBaseEntity *pTarget, CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType );
 
 protected:
-	EHANDLE			m_hTarget;
+	EHANDLE m_hTarget;
 
 	DECLARE_SIMPLE_DATADESC();
 };

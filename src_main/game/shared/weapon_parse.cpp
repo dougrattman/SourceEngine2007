@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Weapon data file parsing, shared by game & client dlls.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <tier0/mem.h>
 #include "filesystem.h"
 #include "utldict.h"
@@ -212,14 +212,14 @@ KeyValues* ReadEncryptedKVFile( IFileSystem *filesystem, const char *szFilenameW
 				pKV->deleteThis();
 				return NULL;
 			}
-			// load file into a null-terminated buffer
+			// load file into a 0-terminated buffer
 			int fileSize = filesystem->Size(f);
 			char *buffer = (char*)MemAllocScratch(fileSize + 1);
 		
 			Assert(buffer);
 		
 			filesystem->Read(buffer, fileSize, f); // read into local buffer
-			buffer[fileSize] = 0; // null terminate file as EOF
+			buffer[fileSize] = 0; // 0 terminate file as EOF
 			filesystem->Close( f );	// close file after reading
 
 			UTIL_DecodeICE( (unsigned char*)buffer, fileSize, pICEKey );

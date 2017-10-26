@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "model_types.h"
 #include "view_shared.h"
@@ -2108,7 +2108,7 @@ void CTempEnts::PlaySound ( C_LocalTempEntity *pTemp, float damp )
 	switch ( pTemp->hitSound )
 	{
 	default:
-		return;	// null sound
+		return;	// 0 sound
 
 	case BOUNCE_GLASS:
 		{

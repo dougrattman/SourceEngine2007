@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Father Grigori, a benevolent monk who is the last remaining human
 //			in Ravenholm. He keeps to the rooftops and uses a big ole elephant
 //			gun to send his zombified former friends to a peaceful death.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_baseactor.h"

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_RANDOM_BUTTON_H
 #define DOD_RANDOM_BUTTON_H
@@ -28,7 +28,7 @@ private:
 
 public:
 	CDODRandomButton(vgui::Panel *parent, const char *panelName, T *templatePanel ) :
-					CDODMouseOverButton<T>( parent, panelName, templatePanel )
+ 		CDODMouseOverButton<T>( parent, panelName, templatePanel )
 	{
 	}
 

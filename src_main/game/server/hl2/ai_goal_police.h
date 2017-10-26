@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_GOAL_POLICE_H
 #define AI_GOAL_POLICE_H
@@ -16,13 +16,13 @@ public:
 
 	DECLARE_CLASS( CAI_PoliceGoal, CBaseEntity );
 
-				CAI_PoliceGoal( void );
+ 	CAI_PoliceGoal( void );
 
 	float		GetRadius( void );
 	CBaseEntity *GetTarget( void );
 
 	bool		ShouldKnockOutTarget( const Vector &targetPos, bool bTargetVisible );	// If the target should be knocked out
-	void		KnockOutTarget( CBaseEntity *pTarget );									// Send an output that we've knocked out this target
+	void		KnockOutTarget( CBaseEntity *pTarget );   // Send an output that we've knocked out this target
 	bool		ShouldRemainAtPost( void );
 
 	void		InputEnableKnockOut( inputdata_t &data );

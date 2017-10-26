@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 /* Example how to plug this into an existing shader:
 
@@ -120,7 +120,7 @@
 
 #include "BaseVSShader.h"
 #include "mathlib/VMatrix.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "flesh_interior_blended_pass_helper.h"
 
 // Auto generated inc files

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VOICE_BANMGR_H
 #define VOICE_BANMGR_H
@@ -17,8 +17,8 @@ class CVoiceBanMgr
 {
 public:
 
-				CVoiceBanMgr();
-				~CVoiceBanMgr();	
+ 	CVoiceBanMgr();
+ 	~CVoiceBanMgr();	
 
 	// Init loads the list of squelched players from disk.
 	bool		Init(const char *pGameDir);
@@ -36,11 +36,11 @@ protected:
 	class BannedPlayer
 	{
 	public:
-		char			m_PlayerID[SIGNED_GUID_LEN];
+		char m_PlayerID[SIGNED_GUID_LEN];
 		BannedPlayer	*m_pPrev, *m_pNext;
 	};
 
-	void			Clear();
+	void Clear();
 	BannedPlayer*	InternalFindPlayerSquelch(char const playerID[SIGNED_GUID_LEN]);
 	BannedPlayer*	AddBannedPlayer(char const playerID[SIGNED_GUID_LEN]);
 

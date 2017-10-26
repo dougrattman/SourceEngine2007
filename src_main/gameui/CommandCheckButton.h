@@ -1,30 +1,23 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef COMMANDCHECKBUTTON_H
 #define COMMANDCHECKBUTTON_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/CheckButton.h>
+#include "vgui_controls/CheckButton.h"
 
-class CCommandCheckButton : public vgui::CheckButton
-{
-public:
-	CCommandCheckButton( vgui::Panel *parent, const char *panelName, const char *text, const char *downcmd, const char *upcmd );
-	~CCommandCheckButton();
+class CCommandCheckButton : public vgui::CheckButton {
+ public:
+  CCommandCheckButton(vgui::Panel *parent, const char *panelName,
+                      const char *text, const char *downcmd, const char *upcmd);
+  ~CCommandCheckButton();
 
-//	virtual void	OnCheckButtonChecked(vgui::Panel *panel);
-	virtual void	SetSelected( bool state );
-private:
-	typedef vgui::CheckButton BaseClass;
+  //	virtual void	OnCheckButtonChecked(vgui::Panel *panel);
+  virtual void SetSelected(bool state);
 
-	char			*m_pszDown;
-	char			*m_pszUp;
+ private:
+  typedef vgui::CheckButton BaseClass;
+
+  char *m_pszDown;
+  char *m_pszUp;
 };
-#endif // COMMANDCHECKBUTTON_H
+#endif  // COMMANDCHECKBUTTON_H

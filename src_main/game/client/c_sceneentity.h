@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_SCENEENTITY_H
 #define C_SCENEENTITY_H
@@ -25,10 +25,10 @@ public:
 	~C_SceneEntity( void );
 
 	// From IChoreoEventCallback
-	virtual void			StartEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
-	virtual void			EndEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
-	virtual void			ProcessEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
-	virtual bool			CheckEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
+	virtual void StartEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
+	virtual void EndEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
+	virtual void ProcessEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
+	virtual bool CheckEvent( float currenttime, CChoreoScene *scene, CChoreoEvent *event );
 
 
 	virtual void PostDataUpdate( DataUpdateType_t updateType );
@@ -39,58 +39,58 @@ public:
 
 	virtual void ClientThink();
 
-	void					OnResetClientTime();
+	void 		OnResetClientTime();
 
 	CHandle< C_BaseFlex >	GetActor( int i ){ return ( i < m_hActorList.Count() ) ? m_hActorList[i] : NULL; }
 
-	virtual	void			DispatchStartSpeak( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event, soundlevel_t iSoundlevel );
-	virtual void			DispatchEndSpeak( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual	void DispatchStartSpeak( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event, soundlevel_t iSoundlevel );
+	virtual void DispatchEndSpeak( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
 
 	bool IsClientOnly( void ){ return m_bClientOnly; }
 
 private:
 
-	void					ResetActorFlexesForScene();
+	void 		ResetActorFlexesForScene();
 
 	// Scene load/unload
-	CChoreoScene			*LoadScene( const char *filename );
-	void					LoadSceneFromFile( const char *filename );
-	void					UnloadScene( void );
-	void					PrefetchAnimBlocks( CChoreoScene *pScene );
+	CChoreoScene *LoadScene( const char *filename );
+	void 		LoadSceneFromFile( const char *filename );
+	void 		UnloadScene( void );
+	void 		PrefetchAnimBlocks( CChoreoScene *pScene );
 
-	C_BaseFlex				*FindNamedActor( CChoreoActor *pChoreoActor );
+	C_BaseFlex 	*FindNamedActor( CChoreoActor *pChoreoActor );
 
-	virtual void			DispatchStartFlexAnimation( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchEndFlexAnimation( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchStartExpression( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchEndExpression( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchStartGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchEndGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchStartSequence( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	virtual void			DispatchEndSequence( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
-	void					DispatchProcessLoop( CChoreoScene *scene, CChoreoEvent *event );
+	virtual void DispatchStartFlexAnimation( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchEndFlexAnimation( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchStartExpression( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchEndExpression( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchStartGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchEndGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchStartSequence( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	virtual void DispatchEndSequence( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event );
+	void 		DispatchProcessLoop( CChoreoScene *scene, CChoreoEvent *event );
 
-	char const				*GetSceneFileName();
+	char const 	*GetSceneFileName();
 
-	void					DoThink( float frametime );
+	void 		DoThink( float frametime );
 
-	void					ClearSceneEvents( CChoreoScene *scene, bool canceled );
-	void					SetCurrentTime( float t, bool forceClientSync );
+	void 		ClearSceneEvents( CChoreoScene *scene, bool canceled );
+	void 		SetCurrentTime( float t, bool forceClientSync );
 
-	bool					GetHWMorphSceneFileName( const char *pFilename, char *pHWMFilename );
+	bool 		GetHWMorphSceneFileName( const char *pFilename, char *pHWMFilename );
 
 private:
 
-	void					CheckQueuedEvents();
-	void					WipeQueuedEvents();
-	void					QueueStartEvent( float starttime, CChoreoScene *scene, CChoreoEvent *event );
+	void 		CheckQueuedEvents();
+	void 		WipeQueuedEvents();
+	void 		QueueStartEvent( float starttime, CChoreoScene *scene, CChoreoEvent *event );
 
 	bool		m_bIsPlayingBack;
 	bool		m_bPaused;
 	bool		m_bMultiplayer;
 	float		m_flCurrentTime;
 	float		m_flForceClientTime;
-	int			m_nSceneStringIndex;
+	int m_nSceneStringIndex;
 	bool		m_bClientOnly;
 
 	CHandle< C_BaseFlex >	m_hOwner; // if set, this overrides the m_hActorList in FindNamedActor()
@@ -104,7 +104,7 @@ private:
 
 	struct QueuedEvents_t
 	{
-		float			starttime;
+		float starttime;
 		CChoreoScene	*scene;
 		CChoreoEvent	*event;
 	};

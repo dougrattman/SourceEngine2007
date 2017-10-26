@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_WAYPOINT_H
 #define AI_WAYPOINT_H
@@ -24,11 +24,11 @@
 enum WaypointFlags_t 
 {
 	// The type of waypoint
-	bits_WP_TO_DETOUR =			0x01, // move to detour point.
+	bits_WP_TO_DETOUR = 0x01, // move to detour point.
 	bits_WP_TO_PATHCORNER =		0x02, // move to a path corner
-	bits_WP_TO_NODE =			0x04, // move to a node
-	bits_WP_TO_GOAL =			0x08, // move to an arbitrary point
-	bits_WP_TO_DOOR =			0x10, // move to position to open a door
+	bits_WP_TO_NODE = 0x04, // move to a node
+	bits_WP_TO_GOAL = 0x08, // move to an arbitrary point
+	bits_WP_TO_DOOR = 0x10, // move to position to open a door
 
 	// Other flags for waypoint
 	bits_WP_DONT_SIMPLIFY =		0x20, // Don't let the route code simplify this waypoint
@@ -62,13 +62,13 @@ public:
 		AssertValid();
 		if ( pNext )
 		{
-			pNext->AssertValid();
-			pNext->pPrev = pPrev;
+ pNext->AssertValid();
+ pNext->pPrev = pPrev;
 		}
 		if ( pPrev )
 		{
-			pPrev->AssertValid();
-			pPrev->pNext = pNext;
+ pPrev->AssertValid();
+ pPrev->pNext = pNext;
 		}
 	}
 
@@ -85,61 +85,61 @@ public:
 
 	//---------------------------------
 	
-	int					Flags() const;
+	int 		Flags() const;
 	Navigation_t		NavType() const;
 
 	// Flag modification method
-	void				ModifyFlags( int fFlags, bool bEnable );
+	void 	ModifyFlags( int fFlags, bool bEnable );
 
-	bool				IsReducible() { return (pNext && m_iWPType == pNext->m_iWPType && !(m_fWaypointFlags & (bits_WP_TO_GOAL | bits_WP_TO_PATHCORNER | bits_WP_DONT_SIMPLIFY)) ); }
+	bool 	IsReducible() { return (pNext && m_iWPType == pNext->m_iWPType && !(m_fWaypointFlags & (bits_WP_TO_GOAL | bits_WP_TO_PATHCORNER | bits_WP_DONT_SIMPLIFY)) ); }
 
 	//---------------------------------
 	
-	void				SetNext( AI_Waypoint_t *p );
-	AI_Waypoint_t *		GetNext()					{ return pNext; }
-	const AI_Waypoint_t *GetNext() const			{ return pNext; }
+	void 	SetNext( AI_Waypoint_t *p );
+	AI_Waypoint_t *		GetNext() 		{ return pNext; }
+	const AI_Waypoint_t *GetNext() const { return pNext; }
 	
-	AI_Waypoint_t *		GetPrev()					{ return pPrev; }
-	const AI_Waypoint_t *GetPrev() const			{ return pPrev; }
+	AI_Waypoint_t *		GetPrev() 		{ return pPrev; }
+	const AI_Waypoint_t *GetPrev() const { return pPrev; }
 	
 	AI_Waypoint_t *		GetLast();
 
 	//---------------------------------
 	
-	const Vector &		GetPos() const				{ return vecLocation; }
-	void 				SetPos(const Vector &newPos) { vecLocation = newPos; }
+	const Vector &		GetPos() const 	{ return vecLocation; }
+	void  	SetPos(const Vector &newPos) { vecLocation = newPos; }
 
-	EHANDLE				GetEHandleData() { return m_hData; }
+	EHANDLE 	GetEHandleData() { return m_hData; }
 	
 	//---------------------------------
 	//
 	// Basic info
 	//
-	Vector			vecLocation;
-	float			flYaw;				// Waypoint facing dir 
-	int				iNodeID;			// If waypoint is a node, which one
+	Vector vecLocation;
+	float flYaw; 	// Waypoint facing dir 
+	int 	iNodeID; // If waypoint is a node, which one
 	
 	//---------------------------------
 	//
 	// Precalculated distances
 	//
-	float			flPathDistGoal;
+	float flPathDistGoal;
 
 	//---------------------------------
 	//
 	// If following a designer laid path, the path-corner entity (if any)
 	//
-	EHANDLE			hPathCorner;
+	EHANDLE hPathCorner;
 
 	// Data specific to the waypoint type:
 	//
 	// PATHCORNER:	The path corner entity.
 	// DOOR:		If moving to position to open a door, the handle of the door to open.
-	EHANDLE			m_hData;
+	EHANDLE m_hData;
 
 private:
-	int				m_fWaypointFlags;	// See WaypointFlags_t
-	Navigation_t	m_iWPType;			// The type of waypoint
+	int 	m_fWaypointFlags;	// See WaypointFlags_t
+	Navigation_t	m_iWPType; // The type of waypoint
 
 	AI_Waypoint_t *pNext;
 	AI_Waypoint_t *pPrev;
@@ -184,7 +184,7 @@ inline void AI_Waypoint_t::SetNext( AI_Waypoint_t *p )
 	if ( pNext ) 
 	{
 		if ( pNext->pPrev )
-			pNext->pPrev->pNext = NULL;
+ pNext->pPrev->pNext = NULL;
 
 		pNext->pPrev = this; 
 	}
@@ -207,24 +207,24 @@ public:
 	{
 	}
 	
-	void			Set(AI_Waypoint_t* route);
+	void Set(AI_Waypoint_t* route);
 
-	void 			PrependWaypoints( AI_Waypoint_t *pWaypoints );
-	void 			PrependWaypoint( const Vector &newPoint, Navigation_t navType, unsigned waypointFlags, float flYaw = 0 );
+	void  PrependWaypoints( AI_Waypoint_t *pWaypoints );
+	void  PrependWaypoint( const Vector &newPoint, Navigation_t navType, unsigned waypointFlags, float flYaw = 0 );
 	
-	bool 			IsEmpty() const				{ return ( m_pFirstWaypoint == NULL ); }
+	bool  IsEmpty() const 	{ return ( m_pFirstWaypoint == NULL ); }
 	
-	AI_Waypoint_t *		 GetFirst()				{ return m_pFirstWaypoint; }
+	AI_Waypoint_t *		 GetFirst() 	{ return m_pFirstWaypoint; }
 	const AI_Waypoint_t *GetFirst() const	{ return m_pFirstWaypoint; }
 
 	AI_Waypoint_t *		 GetLast();
 	const AI_Waypoint_t *GetLast() const;
 
-	void 			RemoveAll();
+	void  RemoveAll();
 
 private:
 
-	AI_Waypoint_t*	m_pFirstWaypoint;					// Linked list of waypoints
+	AI_Waypoint_t*	m_pFirstWaypoint; 		// Linked list of waypoints
 };
 
 // ----------------------------------------------------------------------------

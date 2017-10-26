@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef HUD_RADAR_H
 #define HUD_RADAR_H
@@ -27,8 +27,8 @@ public:
 		m_bRadarFlash = false;
 	}
 	float m_flNextRadarFlashTime;	// when to next toggle the flash on the radar
-	int	m_iNumRadarFlashes;			// how many flashes more to do
-	bool m_bRadarFlash;				// flash or do not, there is no try
+	int	m_iNumRadarFlashes; // how many flashes more to do
+	bool m_bRadarFlash; 	// flash or do not, there is no try
 };
 
 
@@ -47,8 +47,8 @@ public:
 	virtual void SetVisible(bool state);
 	virtual void Reset();
 
-	void DrawRadar(void) { m_bHideRadar = false; }
-	void HideRadar(void) { m_bHideRadar = true; }
+	void DrawRadar() { m_bHideRadar = false; }
+	void HideRadar() { m_bHideRadar = true; }
 	void MsgFunc_UpdateRadar(bf_read &msg );
 
 private:

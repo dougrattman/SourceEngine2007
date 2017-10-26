@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that propagates general data needed by clients for every player.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_TF_OBJECTIVE_RESOURCE_H
 #define C_TF_OBJECTIVE_RESOURCE_H
@@ -23,13 +23,13 @@ class C_TFObjectiveResource : public C_BaseTeamObjectiveResource
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_TFObjectiveResource();
-	virtual			~C_TFObjectiveResource();
+ 		C_TFObjectiveResource();
+	virtual ~C_TFObjectiveResource();
 
 	const char		*GetGameSpecificCPCappingSwipe( int index, int iCappingTeam );
 	const char		*GetGameSpecificCPBarFG( int index, int iOwningTeam );
 	const char		*GetGameSpecificCPBarBG( int index, int iCappingTeam );
-	void			SetCappingTeam( int index, int team );
+	void SetCappingTeam( int index, int team );
 
 };
 

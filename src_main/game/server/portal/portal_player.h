@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef PORTAL_PLAYER_H
 #define PORTAL_PLAYER_H
 #pragma once
@@ -22,7 +22,7 @@ class CPortal_Player;
 #include "weapon_portalbase.h"
 #include "in_buttons.h"
 #include "func_liquidportal.h"
-#include "ai_speech.h"			// For expresser host
+#include "ai_speech.h" // For expresser host
 
 struct PortalPlayerStatistics_t
 {
@@ -204,13 +204,13 @@ private:
 
 	int		m_iNumCamerasDetatched;
 
-	QAngle						m_qPrePortalledViewAngles;
-	bool						m_bFixEyeAnglesFromPortalling;
-	VMatrix						m_matLastPortalled;
-	CAI_Expresser				*m_pExpresser;
-	string_t					m_iszExpressionScene;
-	EHANDLE						m_hExpressionSceneEnt;
-	float						m_flExpressionLoopTime;
+	QAngle  m_qPrePortalledViewAngles;
+	bool  m_bFixEyeAnglesFromPortalling;
+	VMatrix  m_matLastPortalled;
+	CAI_Expresser 	*m_pExpresser;
+	string_t 		m_iszExpressionScene;
+	EHANDLE  m_hExpressionSceneEnt;
+	float  m_flExpressionLoopTime;
 
 	
 

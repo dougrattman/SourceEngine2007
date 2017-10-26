@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TRIGGERS_H
 #define TRIGGERS_H
@@ -20,17 +20,17 @@
 
 enum
 {
-	SF_TRIGGER_ALLOW_CLIENTS				= 0x01,		// Players can fire this trigger
-	SF_TRIGGER_ALLOW_NPCS					= 0x02,		// NPCS can fire this trigger
-	SF_TRIGGER_ALLOW_PUSHABLES				= 0x04,		// Pushables can fire this trigger
-	SF_TRIGGER_ALLOW_PHYSICS				= 0x08,		// Physics objects can fire this trigger
+	SF_TRIGGER_ALLOW_CLIENTS 	= 0x01,		// Players can fire this trigger
+	SF_TRIGGER_ALLOW_NPCS 		= 0x02,		// NPCS can fire this trigger
+	SF_TRIGGER_ALLOW_PUSHABLES 	= 0x04,		// Pushables can fire this trigger
+	SF_TRIGGER_ALLOW_PHYSICS 	= 0x08,		// Physics objects can fire this trigger
 	SF_TRIGGER_ONLY_PLAYER_ALLY_NPCS		= 0x10,		// *if* NPCs can fire this trigger, this flag means only player allies do so
 	SF_TRIGGER_ONLY_CLIENTS_IN_VEHICLES		= 0x20,		// *if* Players can fire this trigger, this flag means only players inside vehicles can 
-	SF_TRIGGER_ALLOW_ALL					= 0x40,		// Everything can fire this trigger EXCEPT DEBRIS!
+	SF_TRIGGER_ALLOW_ALL 		= 0x40,		// Everything can fire this trigger EXCEPT DEBRIS!
 	SF_TRIGGER_ONLY_CLIENTS_OUT_OF_VEHICLES	= 0x200,	// *if* Players can fire this trigger, this flag means only players outside vehicles can 
-	SF_TRIG_PUSH_ONCE						= 0x80,		// trigger_push removes itself after firing once
+	SF_TRIG_PUSH_ONCE  = 0x80,		// trigger_push removes itself after firing once
 	SF_TRIG_PUSH_AFFECT_PLAYER_ON_LADDER	= 0x100,	// if pushed object is player on a ladder, then this disengages them from the ladder (HL2only)
-	SF_TRIG_TOUCH_DEBRIS 					= 0x400,	// Will touch physics debris objects
+	SF_TRIG_TOUCH_DEBRIS  		= 0x400,	// Will touch physics debris objects
 	SF_TRIGGER_ONLY_NPCS_IN_VEHICLES		= 0X800,	// *if* NPCs can fire this trigger, only NPCs in vehicles do so (respects player ally flag too)
 };
 
@@ -71,7 +71,7 @@ public:
 
 	CBaseEntity *GetTouchedEntityOfType( const char *sClassName );
 
-	int	 DrawDebugTextOverlays(void);
+	int	 DrawDebugTextOverlays();
 
 	// by default, triggers don't deal with TraceAttack
 	void TraceAttack(CBaseEntity *pAttacker, float flDamage, const Vector &vecDir, trace_t *ptr, int bitsDamageType) {}
@@ -98,8 +98,8 @@ protected:
 
 //-----------------------------------------------------------------------------
 // Purpose: Variable sized repeatable trigger.  Must be targeted at one or more entities.
-//			If "delay" is set, the trigger waits some time after activating before firing.
-//			"wait" : Seconds between triggerings. (.2 default/minimum)
+// If "delay" is set, the trigger waits some time after activating before firing.
+// "wait" : Seconds between triggerings. (.2 default/minimum)
 //-----------------------------------------------------------------------------
 class CTriggerMultiple : public CBaseTrigger
 {
@@ -152,14 +152,14 @@ public:
 	
 
 protected:
-	bool						m_bDisabled;
-	string_t					m_iFilterName;
+	bool  m_bDisabled;
+	string_t 		m_iFilterName;
 	CHandle<class CBaseFilter>	m_hFilter;
 };
 
 //-----------------------------------------------------------------------------
 // Purpose: Hurts anything that touches it. If the trigger has a targetname,
-//			firing it will toggle state.
+// firing it will toggle state.
 //-----------------------------------------------------------------------------
 class CTriggerHurt : public CBaseTrigger
 {
@@ -183,7 +183,7 @@ public:
 	DECLARE_DATADESC();
 
 	float	m_flOriginalDamage;	// Damage as specified by the level designer.
-	float	m_flDamage;			// Damage per second.
+	float	m_flDamage; // Damage per second.
 	float	m_flDamageCap;		// Maximum damage per second.
 	float	m_flLastDmgTime;	// Time that we last applied damage.
 	float	m_flDmgResetTime;	// For forgiveness, the time to reset the counter that accumulates damage.

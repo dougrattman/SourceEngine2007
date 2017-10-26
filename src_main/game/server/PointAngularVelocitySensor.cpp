@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Used to fire events based on the orientation of a given entity.
 //
 //			Looks at its target's anglular velocity every frame and fires outputs
 //			as the angular velocity passes a given threshold value.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "entityinput.h"
@@ -30,9 +30,9 @@ class CPointAngularVelocitySensor : public CPointEntity
 public:
 
 	CPointAngularVelocitySensor();
-	void Activate(void);
-	void Spawn(void);
-	void Think(void);
+	void Activate();
+	void Spawn();
+	void Think();
 
 private:
 

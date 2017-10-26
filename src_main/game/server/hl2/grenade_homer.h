@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Projectile shot by city scanner 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	GRENADEHOMER_H
 #define	GRENADEHOMER_H
@@ -19,8 +19,8 @@
 
 enum HomerRocketTrail_t
 {
-	HOMER_SMOKE_TRAIL_OFF,			// No smoke trail
-	HOMER_SMOKE_TRAIL_ON,			// Smoke trail always on
+	HOMER_SMOKE_TRAIL_OFF, // No smoke trail
+	HOMER_SMOKE_TRAIL_ON, // Smoke trail always on
 	HOMER_SMOKE_TRAIL_ON_HOMING,	// Smoke trail on when homing turned on
 	HOMER_SMOKE_TRAIL_ALIEN,		// Alien colors on smoke trail
 };
@@ -46,36 +46,36 @@ private:
 
 	// Input Parameters
 	float		m_flHomingStrength;
-	float		m_flHomingDelay;				// How long before homing starts
-	float		m_flHomingRampUp;				// How long it take to reach full strength
-	float		m_flHomingDuration;				// How long does homing last
-	float		m_flHomingRampDown;				// How long to reach no homing again
+	float		m_flHomingDelay; 	// How long before homing starts
+	float		m_flHomingRampUp; 	// How long it take to reach full strength
+	float		m_flHomingDuration; 	// How long does homing last
+	float		m_flHomingRampDown; 	// How long to reach no homing again
 	float		m_flHomingSpeed;
 	float		m_flSpinMagnitude;
 	float		m_flSpinSpeed;
-	int			m_nRocketTrailType;
-	int			m_spriteTexture;
+	int m_nRocketTrailType;
+	int m_spriteTexture;
 
 	// In flight data
 	float		m_flHomingLaunchTime;
 	float		m_flHomingStartTime;
 	float		m_flHomingEndTime;
-	float		m_flSpinOffset;				// For randomization
+	float		m_flSpinOffset; 	// For randomization
 
 	EHANDLE		m_hTarget;
 
 	void		AimThink( void );
-	void		StartRocketTrail(void);
+	void		StartRocketTrail();
 	void		UpdateRocketTrail(float fScale);
-	void		StopRocketTrail(void);
+	void		StopRocketTrail();
 	void		PlayFlySound( void );
 	void 		GrenadeHomerTouch( CBaseEntity *pOther );
 	void		Event_Killed( const CTakeDamageInfo &info );
-	int			OnTakeDamage( const CTakeDamageInfo &info );
+	int OnTakeDamage( const CTakeDamageInfo &info );
 
 public:
-	void EXPORT				Detonate(void);
-	CGrenadeHomer(void);
+	void EXPORT 	Detonate();
+	CGrenadeHomer();
 
 	DECLARE_DATADESC();
 };

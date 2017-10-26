@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FX_ENVELOPE_H
 #define FX_ENVELOPE_H
@@ -27,13 +27,13 @@ public:
 	virtual void Update( void );
 
 	// IClientRenderable
-	virtual const Vector&			GetRenderOrigin( void ) { return m_worldPosition; }
-	virtual void					SetRenderOrigin( const Vector &origin ) { m_worldPosition = origin; }
-	virtual const QAngle&			GetRenderAngles( void ) { return vec3_angle; }
+	virtual const Vector& GetRenderOrigin( void ) { return m_worldPosition; }
+	virtual void 		SetRenderOrigin( const Vector &origin ) { m_worldPosition = origin; }
+	virtual const QAngle& GetRenderAngles( void ) { return vec3_angle; }
 	virtual const matrix3x4_t &		RenderableToWorldTransform();
-	virtual bool					ShouldDraw( void ) { return true; }
-	virtual bool					IsTransparent( void ) { return true; }
-	virtual bool					ShouldReceiveProjectedTextures( int flags ) { return false; }
+	virtual bool 		ShouldDraw( void ) { return true; }
+	virtual bool 		IsTransparent( void ) { return true; }
+	virtual bool 		ShouldReceiveProjectedTextures( int flags ) { return false; }
 
 	void	SetTime( float t ) { m_t = t; }
 	void	LimitTime( float tmax ) { m_tMax = tmax; }
@@ -48,12 +48,12 @@ protected:
 	void RemoveRenderable();
 
 
-	int						m_entityIndex;
-	int						m_attachment;
-	bool					m_active;
-	float					m_t;
-	float					m_tMax;
-	Vector					m_worldPosition;
+	int  m_entityIndex;
+	int  m_attachment;
+	bool 		m_active;
+	float 		m_t;
+	float 		m_tMax;
+	Vector 		m_worldPosition;
 };
 
 #endif // FX_ENVELOPE_H

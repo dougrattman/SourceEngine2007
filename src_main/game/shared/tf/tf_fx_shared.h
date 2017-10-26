@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //  
 //
@@ -26,6 +26,6 @@ void EndGroupingSounds( void );
 // On the server, it only does the damage calculations.
 // On the client, it does all the effects.
 void FX_FireBullets( int iPlayer, const Vector &vecOrigin, const QAngle &vecAngles,
-					 int iWeapon, int iMode, int iSeed, float flSpread, float flDamage = -1.0f, bool bCritical = false );
+ 		 int iWeapon, int iMode, int iSeed, float flSpread, float flDamage = -1.0f, bool bCritical = false );
 
 #endif // TF_FX_SHARED_H

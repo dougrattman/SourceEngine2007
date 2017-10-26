@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( PREDICTION_PRIVATE_H )
 #define PREDICTION_PRIVATE_H
 #ifdef _WIN32
@@ -17,7 +17,7 @@
 #endif
 
 // point on plane side epsilon
-#define	ON_EPSILON		0.1			
+#define	ON_EPSILON		0.1 
 
 #define	MAX_FORWARD	6
 

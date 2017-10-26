@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -211,7 +211,7 @@ public:
 	{
 		if ( m_pBlob )
 		{
-			m_pBlob->Release();
+ m_pBlob->Release();
 		}
 		delete this;
 	}

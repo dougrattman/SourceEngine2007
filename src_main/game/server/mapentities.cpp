@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Controls the loading, parsing and creation of the entities from the BSP.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "entitylist.h"

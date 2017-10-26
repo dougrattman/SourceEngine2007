@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/Frame.h>
 #include <vgui_controls/Label.h>
 #include <vgui_controls/Button.h>
@@ -51,16 +51,16 @@ private:
 	vgui::Dar<vgui::Button *> m_buttons;
 	vgui::Dar<ConVarToggleCheckButton *> m_conVarCheckButtons;
 
-	Color					 m_bgColor;
-	Color					 m_borderColor;
-	vgui::Label				*m_pTextLabel;
-	bool					 m_cancelFocus;
+	Color 		 m_bgColor;
+	Color 		 m_borderColor;
+	vgui::Label 	*m_pTextLabel;
+	bool 		 m_cancelFocus;
 
 protected:
 	void SetLabelVisible( bool visible ) { m_pTextLabel->SetVisible( visible ); }
 	virtual void OnKeyCodeTyped( vgui::KeyCode code );
-	virtual void OnCommand( const char *command );			///< Handle button presses
-	void AddButton( vgui::Button *pButton );				///< Add a button to our list of buttons for rollover sounds
+	virtual void OnCommand( const char *command ); ///< Handle button presses
+	void AddButton( vgui::Button *pButton ); 	///< Add a button to our list of buttons for rollover sounds
 };
 
 //--------------------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ private:
 	vgui::Label *m_pBullets;	///< Label showing "M of N Bullets"
 
 	WeaponSet *m_pWeaponSet;	///< WeaponSet being edited
-	bool m_isSecondary;			///< is this weapon primary or secondary?
+	bool m_isSecondary; ///< is this weapon primary or secondary?
 	BuyPresetListBox *m_pListBox;	///< List of weapons from which to choose
 
 	int m_numWeapons;
@@ -150,15 +150,15 @@ private:
 	// Equipment controls
 	vgui::ComboBox		*m_pHEGrenade;
 	EquipmentLabel		*m_pHEGrenadeImage;
-	vgui::Label			*m_pHELabel;
+	vgui::Label *m_pHELabel;
 
 	vgui::ComboBox		*m_pSmokeGrenade;
 	EquipmentLabel		*m_pSmokeGrenadeImage;
-	vgui::Label			*m_pSmokeLabel;
+	vgui::Label *m_pSmokeLabel;
 
 	vgui::ComboBox		*m_pFlashbangs;
 	EquipmentLabel		*m_pFlashbangImage;
-	vgui::Label			*m_pFlashLabel;
+	vgui::Label *m_pFlashLabel;
 
 	virtual void OnCommand( const char *command );
 };
@@ -181,19 +181,19 @@ private:
 
 	// Equipment controls
 	vgui::ComboBox		*m_pKevlar;
-	vgui::Label			*m_pKevlarLabel;
+	vgui::Label *m_pKevlarLabel;
 	EquipmentLabel		*m_pKevlarImage;
 
 	vgui::ComboBox		*m_pHelmet;
-	vgui::Label			*m_pHelmetLabel;
+	vgui::Label *m_pHelmetLabel;
 	EquipmentLabel		*m_pHelmetImage;
 
 	vgui::ComboBox		*m_pDefuser;
-	vgui::Label			*m_pDefuserLabel;
+	vgui::Label *m_pDefuserLabel;
 	EquipmentLabel		*m_pDefuserImage;
 
 	vgui::ComboBox		*m_pNightvision;
-	vgui::Label			*m_pNightvisionLabel;
+	vgui::Label *m_pNightvisionLabel;
 	EquipmentLabel		*m_pNightvisionImage;
 
 	virtual void OnCommand( const char *command );

@@ -1,23 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #ifndef PROGS_H
 #define PROGS_H
-
-#pragma once
 
 // Forward declare this type to avoid problems
 class CSaveRestoreData;
 struct edict_t;
 
-//============================================================================
-
-
-//============================================================================
-
-
-#endif // PROGS_H
+#endif  // PROGS_H

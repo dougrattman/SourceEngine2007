@@ -1,41 +1,32 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef CVARTOGGLECHECKBUTTON_H
 #define CVARTOGGLECHECKBUTTON_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/CheckButton.h>
+#include "vgui_controls/CheckButton.h"
 
-class CCvarToggleCheckButton : public vgui::CheckButton
-{
-	DECLARE_CLASS_SIMPLE( CCvarToggleCheckButton, vgui::CheckButton );
+class CCvarToggleCheckButton : public vgui::CheckButton {
+  DECLARE_CLASS_SIMPLE(CCvarToggleCheckButton, vgui::CheckButton);
 
-public:
-	CCvarToggleCheckButton( vgui::Panel *parent, const char *panelName, const char *text, 
-		char const *cvarname );
-	~CCvarToggleCheckButton();
+ public:
+  CCvarToggleCheckButton(vgui::Panel *parent, const char *panelName,
+                         const char *text, char const *cvarname);
+  ~CCvarToggleCheckButton();
 
-	virtual void	SetSelected( bool state );
+  virtual void SetSelected(bool state);
 
-	virtual void	Paint();
+  virtual void Paint();
 
-	void			Reset();
-	void			ApplyChanges();
-	bool			HasBeenModified();
-	virtual void	ApplySettings( KeyValues *inResourceData );
+  void Reset();
+  void ApplyChanges();
+  bool HasBeenModified();
+  virtual void ApplySettings(KeyValues *inResourceData);
 
-private:
-	MESSAGE_FUNC( OnButtonChecked, "CheckButtonChecked" );
+ private:
+  MESSAGE_FUNC(OnButtonChecked, "CheckButtonChecked");
 
-	char			*m_pszCvarName;
-	bool			m_bStartValue;
+  char *m_pszCvarName;
+  bool m_bStartValue;
 };
 
-#endif // CVARTOGGLECHECKBUTTON_H
+#endif  // CVARTOGGLECHECKBUTTON_H

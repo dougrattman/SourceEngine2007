@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -383,7 +383,7 @@ public:
 						DevMsg( "Failed to restore physics object\n" );
 				}
 				else
-					DevMsg( "Physics object pointer unexpectedly non-null before restore. Should be creating physics object in CreatePhysics()?\n" );
+					DevMsg( "Physics object pointer unexpectedly non-0 before restore. Should be creating physics object in CreatePhysics()?\n" );
 			}
 			else
 				DevMsg( "Failed to reestablish collision model for object\n" );

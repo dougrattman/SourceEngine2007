@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: NPC that drives vehicles
 //
-//=============================================================================//
+
 
 #ifndef NPC_VEHICLEDRIVER_H
 #define NPC_VEHICLEDRIVER_H
@@ -73,11 +73,11 @@ public:
 		const int iDivs = 10;
 		for ( int i = 1; i <= iDivs; i++ )
 		{
-			Vector vecCurr;
-			float flT = (float)i / (float)iDivs;
-			Catmull_Rom_Spline( splinePoints[0], splinePoints[1], splinePoints[2], splinePoints[3], flT, vecCurr );
-			flSplineLength += (vecCurr - vecPrev).Length();
-			vecPrev = vecCurr;
+ Vector vecCurr;
+ float flT = (float)i / (float)iDivs;
+ Catmull_Rom_Spline( splinePoints[0], splinePoints[1], splinePoints[2], splinePoints[3], flT, vecCurr );
+ flSplineLength += (vecCurr - vecPrev).Length();
+ vecPrev = vecCurr;
 		}
 	}
 
@@ -101,7 +101,7 @@ public:
 	}
 
 public:
-	int			iInitialPlaneSide;
+	int iInitialPlaneSide;
 	float		flSplineLength;
 	Vector		splinePoints[4];
 	cplane_t	planeWaypoint;
@@ -128,7 +128,7 @@ public:
 	virtual void	UpdateOnRemove( void );
 	
 	// AI
-	void			UpdateEfficiency( bool bInPVS )	{ SetEfficiency( ( GetSleepState() != AISS_AWAKE ) ? AIE_DORMANT : AIE_NORMAL ); SetMoveEfficiency( AIME_NORMAL ); }
+	void UpdateEfficiency( bool bInPVS )	{ SetEfficiency( ( GetSleepState() != AISS_AWAKE ) ? AIE_DORMANT : AIE_NORMAL ); SetMoveEfficiency( AIME_NORMAL ); }
 	virtual void	PrescheduleThink( void );
 	virtual int		TranslateSchedule( int scheduleType );
 	virtual int		SelectSchedule( void );
@@ -141,57 +141,57 @@ public:
 	// Driving
 	virtual void	DriveVehicle( void );
 	virtual bool	OverrideMove( float flInterval );
-	bool			OverridePathMove( float flInterval );
-	void			CalculatePostPoints( void );
-	bool			WaypointReached( void );
-	float			GetDefaultNavGoalTolerance();
-	void			RecalculateSpeeds( void );
-	void			ClearWaypoints( void );
-	void			CheckForTeleport( void );
+	bool OverridePathMove( float flInterval );
+	void CalculatePostPoints( void );
+	bool WaypointReached( void );
+	float GetDefaultNavGoalTolerance();
+	void RecalculateSpeeds( void );
+	void ClearWaypoints( void );
+	void CheckForTeleport( void );
 
-	int				BloodColor( void ) { return DONT_BLEED; }
+	int 	BloodColor( void ) { return DONT_BLEED; }
 
 #ifdef HL2_DLL
-	Class_T			Classify( void ) { return CLASS_METROPOLICE; }
+	Class_T Classify( void ) { return CLASS_METROPOLICE; }
 #else
-	Class_T			Classify( void ) { return CLASS_NONE; }
+	Class_T Classify( void ) { return CLASS_NONE; }
 #endif
 
 	Disposition_t	IRelationType( CBaseEntity *pTarget );
 
 	// Inputs
-	void			InputSetDriversMaxSpeed( inputdata_t &inputdata );
-	void			InputSetDriversMinSpeed( inputdata_t &inputdata );
-	void			InputStartForward( inputdata_t &inputdata );
-	void			InputStop( inputdata_t &inputdata );
-	void			InputStartFiring( inputdata_t &inputdata );
-	void			InputStopFiring( inputdata_t &inputdata );
-	void			InputGotoPathCorner( inputdata_t &inputdata );
+	void InputSetDriversMaxSpeed( inputdata_t &inputdata );
+	void InputSetDriversMinSpeed( inputdata_t &inputdata );
+	void InputStartForward( inputdata_t &inputdata );
+	void InputStop( inputdata_t &inputdata );
+	void InputStartFiring( inputdata_t &inputdata );
+	void InputStopFiring( inputdata_t &inputdata );
+	void InputGotoPathCorner( inputdata_t &inputdata );
 
 public:
 	string_t		m_iszVehicleName;
 	IServerVehicle	*m_pVehicleInterface;
-	EHANDLE			m_hVehicleEntity;
+	EHANDLE m_hVehicleEntity;
 
 	// Path driving
 	CVehicleWaypoint	*m_Waypoints[2];
 	CVehicleWaypoint	*m_pCurrentWaypoint;
 	CVehicleWaypoint	*m_pNextWaypoint;
-	Vector				m_vecDesiredVelocity;
-	Vector				m_vecDesiredPosition;
-	Vector				m_vecPrevPoint;
-	Vector				m_vecPrevPrevPoint;
-	Vector				m_vecPostPoint;
-	Vector				m_vecPostPostPoint;
-	float				m_flDistanceAlongSpline;
-	float				m_flDriversMaxSpeed;
-	float				m_flDriversMinSpeed;
+	Vector 	m_vecDesiredVelocity;
+	Vector 	m_vecDesiredPosition;
+	Vector 	m_vecPrevPoint;
+	Vector 	m_vecPrevPrevPoint;
+	Vector 	m_vecPostPoint;
+	Vector 	m_vecPostPostPoint;
+	float 	m_flDistanceAlongSpline;
+	float 	m_flDriversMaxSpeed;
+	float 	m_flDriversMinSpeed;
 
 	// Speed
-	float				m_flMaxSpeed;		// Maximum speed this driver will go
-	float				m_flGoalSpeed;		// Desired speed
-	float				m_flInitialSpeed;	
-	float				m_flSteering;
+	float 	m_flMaxSpeed;		// Maximum speed this driver will go
+	float 	m_flGoalSpeed;		// Desired speed
+	float 	m_flInitialSpeed;	
+	float 	m_flSteering;
 };
 
 #endif // NPC_VEHICLEDRIVER_H

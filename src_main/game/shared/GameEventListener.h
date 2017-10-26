@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GAME_EVENT_LISTENER_H
 #define GAME_EVENT_LISTENER_H
@@ -47,8 +47,8 @@ public:
 		// remove me from list
 		if ( m_bRegisteredForEvents )
 		{
-			gameeventmanager->RemoveListener( this );
-			m_bRegisteredForEvents = false;
+ gameeventmanager->RemoveListener( this );
+ m_bRegisteredForEvents = false;
 		}
 	}
 

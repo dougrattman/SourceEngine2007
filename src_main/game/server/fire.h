@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FIRE_H
 #define FIRE_H
@@ -16,12 +16,12 @@
 #include "plasma.h"
 
 //Spawnflags
-#define	SF_FIRE_INFINITE			0x00000001
-#define	SF_FIRE_SMOKELESS			0x00000002
-#define	SF_FIRE_START_ON			0x00000004
-#define	SF_FIRE_START_FULL			0x00000008
-#define SF_FIRE_DONT_DROP			0x00000010
-#define	SF_FIRE_NO_GLOW				0x00000020
+#define	SF_FIRE_INFINITE 0x00000001
+#define	SF_FIRE_SMOKELESS 0x00000002
+#define	SF_FIRE_START_ON 0x00000004
+#define	SF_FIRE_START_FULL 0x00000008
+#define SF_FIRE_DONT_DROP 0x00000010
+#define	SF_FIRE_NO_GLOW 	0x00000020
 #define SF_FIRE_DIE_PERMANENT		0x00000080
 #define SF_FIRE_VISIBLE_FROM_ABOVE	0x00000100
 

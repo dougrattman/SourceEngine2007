@@ -1,152 +1,111 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-#include "quakedef.h"
-#include "server.h"
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
 #include "enginesingleuserfilter.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+#include "quakedef.h"
+#include "server.h"
+
 #include "tier0/memdbgon.h"
 
-void SV_DetermineMulticastRecipients( bool usepas, const Vector& origin, CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits );
+void SV_DetermineMulticastRecipients(
+    bool usepas, const Vector& origin,
+    CBitVec<ABSOLUTE_PLAYER_LIMIT>& playerbits);
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CEngineRecipientFilter::CEngineRecipientFilter()
-{
-	Reset();
-}
+CEngineRecipientFilter::CEngineRecipientFilter() { Reset(); }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CEngineRecipientFilter::Reset( void )
-{
-	m_bReliable			= false;
-	m_bInit				= false;
-	m_Recipients.RemoveAll();
+void CEngineRecipientFilter::Reset(void) {
+  m_bReliable = false;
+  m_bInit = false;
+  m_Recipients.RemoveAll();
 }
 
-void CEngineRecipientFilter::MakeReliable( void )
-{
-	m_bReliable = true;
+void CEngineRecipientFilter::MakeReliable(void) { m_bReliable = true; }
+
+void CEngineRecipientFilter::MakeInitMessage(void) { m_bInit = true; }
+
+int CEngineRecipientFilter::GetRecipientCount(void) const {
+  return m_Recipients.Size();
 }
 
+int CEngineRecipientFilter::GetRecipientIndex(int slot) const {
+  if (slot < 0 || slot >= GetRecipientCount()) return -1;
 
-void CEngineRecipientFilter::MakeInitMessage( void )
-{
-	m_bInit = true;
+  return m_Recipients[slot];
 }
 
-int CEngineRecipientFilter::GetRecipientCount( void ) const
-{
-	return m_Recipients.Size();
+void CEngineRecipientFilter::AddAllPlayers(void) {
+  m_Recipients.RemoveAll();
+
+  for (int i = 0; i < sv.GetClientCount(); i++) {
+    IClient* cl = sv.GetClient(i);
+
+    if (!cl->IsActive()) continue;
+
+    m_Recipients.AddToTail(i + 1);
+  }
 }
 
-int	CEngineRecipientFilter::GetRecipientIndex( int slot ) const
-{
-	if ( slot < 0 || slot >= GetRecipientCount() )
-		return -1;
+void CEngineRecipientFilter::AddRecipient(int index) {
+  // Already in list
+  if (m_Recipients.Find(index) != m_Recipients.InvalidIndex()) return;
 
-	return m_Recipients[ slot ];
+  m_Recipients.AddToTail(index);
 }
 
-void CEngineRecipientFilter::AddAllPlayers( void )
-{
-	m_Recipients.RemoveAll();
-
-	for ( int i = 0; i < sv.GetClientCount(); i++ )
-	{
-		IClient *cl = sv.GetClient( i );
-
-		if ( !cl->IsActive() )
-			continue;
-
-		m_Recipients.AddToTail( i+1 );
-	}
+void CEngineRecipientFilter::RemoveRecipient(int index) {
+  // Remove it if it's in the list
+  m_Recipients.FindAndRemove(index);
 }
 
+void CEngineRecipientFilter::AddPlayersFromBitMask(
+    CBitVec<ABSOLUTE_PLAYER_LIMIT>& playerbits) {
+  for (int i = 0; i < sv.GetClientCount(); i++) {
+    if (!playerbits[i]) continue;
 
-void CEngineRecipientFilter::AddRecipient( int index )
-{
-	// Already in list
-	if ( m_Recipients.Find( index ) != m_Recipients.InvalidIndex() )
-		return;
+    IClient* cl = sv.GetClient(i);
+    if (!cl->IsActive()) continue;
 
-	m_Recipients.AddToTail( index );
+    AddRecipient(i + 1);
+  }
 }
 
-void CEngineRecipientFilter::RemoveRecipient( int index )
-{
-	// Remove it if it's in the list
-	m_Recipients.FindAndRemove( index );
+bool CEngineRecipientFilter::IncludesPlayer(int playerindex) {
+  for (int i = 0; i < GetRecipientCount(); i++) {
+    if (playerindex == GetRecipientIndex(i)) return true;
+  }
+
+  return false;
 }
 
-void CEngineRecipientFilter::AddPlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits )
-{
-	for( int i = 0; i < sv.GetClientCount(); i++ )
-	{
-		if ( !playerbits[i] )
-			continue;
-
-		IClient *cl = sv.GetClient( i );
-		if ( !cl->IsActive() )
-			continue;
-
-		AddRecipient( i + 1 );
-	}
+void CEngineRecipientFilter::AddPlayersFromFilter(
+    const IRecipientFilter* filter) {
+  for (int i = 0; i < filter->GetRecipientCount(); i++) {
+    AddRecipient(filter->GetRecipientIndex(i));
+  }
 }
 
-bool CEngineRecipientFilter::IncludesPlayer(int playerindex)
-{
-	for( int i = 0; i < GetRecipientCount(); i++ )
-	{
-		if ( playerindex ==	GetRecipientIndex(i) )
-			return true;
-	}
-
-	return false;
+void CEngineRecipientFilter::AddRecipientsByPVS(const Vector& origin) {
+  if (sv.GetMaxClients() == 1) {
+    AddAllPlayers();
+  } else {
+    CBitVec<ABSOLUTE_PLAYER_LIMIT> playerbits;
+    SV_DetermineMulticastRecipients(false, origin, playerbits);
+    AddPlayersFromBitMask(playerbits);
+  }
 }
 
-void CEngineRecipientFilter::AddPlayersFromFilter(const IRecipientFilter *filter )
-{
-	for( int i = 0; i < filter->GetRecipientCount(); i++ )
-	{
-		AddRecipient( filter->GetRecipientIndex(i) );
-	}
+void CEngineRecipientFilter::AddRecipientsByPAS(const Vector& origin) {
+  if (sv.GetMaxClients() == 1) {
+    AddAllPlayers();
+  } else {
+    CBitVec<ABSOLUTE_PLAYER_LIMIT> playerbits;
+    SV_DetermineMulticastRecipients(true, origin, playerbits);
+    AddPlayersFromBitMask(playerbits);
+  }
 }
-
-void CEngineRecipientFilter::AddRecipientsByPVS( const Vector& origin )
-{
-	if ( sv.GetMaxClients() == 1 )
-	{
-		AddAllPlayers();
-	}
-	else
-	{
-		CBitVec< ABSOLUTE_PLAYER_LIMIT > playerbits;
-		SV_DetermineMulticastRecipients( false, origin, playerbits );
-		AddPlayersFromBitMask( playerbits );
-	}
-}
-
-void CEngineRecipientFilter::AddRecipientsByPAS( const Vector& origin )
-{
-	if ( sv.GetMaxClients() == 1 )
-	{
-		AddAllPlayers();
-	}
-	else
-	{
-		CBitVec< ABSOLUTE_PLAYER_LIMIT > playerbits;
-		SV_DetermineMulticastRecipients( true, origin, playerbits );
-		AddPlayersFromBitMask( playerbits );
-	}
-}
-
-

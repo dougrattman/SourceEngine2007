@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MOUSEOVERPANELBUTTON_H
 #define MOUSEOVERPANELBUTTON_H
@@ -35,7 +35,7 @@ private:
 	
 public:
 	MouseOverButton(vgui::Panel *parent, const char *panelName, T *templatePanel ) :
-					Button( parent, panelName, "MouseOverButton")
+ 		Button( parent, panelName, "MouseOverButton")
 	{
 		m_pPanel = new T( parent, NULL );
 		m_pPanel ->SetVisible( false );
@@ -62,9 +62,9 @@ public:
 	{
 		if( m_pPanel )
 		{
-			m_pPanel->SetVisible( true );
-			m_pPanel->MoveToFront();
-			g_lastPanel = m_pPanel;
+ m_pPanel->SetVisible( true );
+ m_pPanel->MoveToFront();
+ g_lastPanel = m_pPanel;
 		}
 	}
 	
@@ -72,7 +72,7 @@ public:
 	{
 		if ( m_pPanel )
 		{
-			m_pPanel->SetVisible( false );
+ m_pPanel->SetVisible( false );
 		}
 	}
 
@@ -86,11 +86,11 @@ public:
 		}
 		else if (g_pFullFileSystem->FileExists( "classes/default.res", "MOD" ) )
 		{
-			Q_snprintf ( classPanel, sizeof( classPanel ), "classes/default.res" );
+ Q_snprintf ( classPanel, sizeof( classPanel ), "classes/default.res" );
 		}
 		else
 		{
-			return NULL;
+ return NULL;
 		}
 
 		return classPanel;
@@ -120,7 +120,7 @@ public:
 	{
 		if ( !m_bPreserveArmedButtons )
 		{
-			BaseClass::OnCursorExited();
+ BaseClass::OnCursorExited();
 		}
 	}
 
@@ -129,35 +129,35 @@ public:
 		BaseClass::OnCursorEntered();
 
 		if ( !IsEnabled() )
-			return;
+ return;
 
 		// are we updating the default buttons?
 		if ( m_bUpdateDefaultButtons )
 		{
-			SetAsDefaultButton( 1 );
+ SetAsDefaultButton( 1 );
 		}
 
 		// are we preserving the armed state (and need to turn off the old button)?
 		if ( m_bPreserveArmedButtons )
 		{
-			if ( g_lastButton && g_lastButton != this )
-			{
-				g_lastButton->SetArmed( false );
-			}
+ if ( g_lastButton && g_lastButton != this )
+ {
+ 	g_lastButton->SetArmed( false );
+ }
 
-			g_lastButton = this;
+ g_lastButton = this;
 		}
 
 		// turn on our panel (if it isn't already)
 		if ( m_pPanel && ( !m_pPanel->IsVisible() ) )
 		{
-			// turn off the previous panel
-			if ( g_lastPanel && g_lastPanel->IsVisible() )
-			{
-				g_lastPanel->SetVisible( false );
-			}
+ // turn off the previous panel
+ if ( g_lastPanel && g_lastPanel->IsVisible() )
+ {
+ 	g_lastPanel->SetVisible( false );
+ }
 
-			ShowPage();
+ ShowPage();
 		}
 	}
 
@@ -167,10 +167,10 @@ public:
 
 		if ( m_bPreserveArmedButtons )
 		{
-			if ( g_lastButton )
-			{
-				g_lastButton->SetArmed( true );
-			}
+ if ( g_lastButton )
+ {
+ 	g_lastButton->SetArmed( true );
+ }
 		}
 	}
 

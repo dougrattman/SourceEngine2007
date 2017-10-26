@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "toggletextureproxy.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialVar.h"
 #include "materialsystem/ITexture.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "FunctionProxy.h"
 #include "toolframework_client.h"
 

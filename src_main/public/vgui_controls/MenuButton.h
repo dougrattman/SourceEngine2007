@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MENUBUTTON_H
 #define MENUBUTTON_H
@@ -38,14 +38,14 @@ public:
 	virtual int	 OnCheckMenuItemCount() { return 0; }
 
 	virtual void SetMenu(Menu *menu);
-	virtual void HideMenu(void);
+	virtual void HideMenu();
 	virtual void DrawFocusBorder(int tx0, int ty0, int tx1, int ty1);
 	MESSAGE_FUNC( OnMenuClose, "MenuClose" );
 	MESSAGE_FUNC_PARAMS( OnKillFocus, "KillFocus", kv );		// called after the panel loses the keyboard focus
 	virtual void DoClick();
 	virtual void SetOpenOffsetY(int yOffset);
 
-    virtual bool CanBeDefaultButton(void);
+    virtual bool CanBeDefaultButton();
 
 	// sets the direction in which the menu opens from the button, defaults to down
 	virtual void SetOpenDirection(Menu::MenuDirection_e direction);
@@ -74,7 +74,7 @@ private:
 
 	bool		m_bDropMenuButtonStyle : 1;
 	TextImage	*m_pDropMenuImage;
-	int			m_nImageIndex;
+	int m_nImageIndex;
 };
 
 }; // namespace vgui

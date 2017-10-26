@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Deals with singleton  
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "igamesystem.h"
 #include "datacache/imdlcache.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "vprof.h"
 #if defined( _X360 )
 #include "xbox/xbox_console.h"

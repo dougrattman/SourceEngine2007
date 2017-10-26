@@ -10,11 +10,9 @@
 //
 //=============================================================================
 
-
 // Standard includes
 #include <ctype.h>
 #include <io.h>
-
 
 // Valve includes
 #include "appframework/AppFramework.h"
@@ -23,383 +21,332 @@
 #include "icommandline.h"
 #include "materialsystem/imaterialsystem.h"
 #include "mathlib/mathlib.h"
+#include "p4lib/ip4.h"
+#include "tier1/UtlStringMap.h"
 #include "tier1/tier1.h"
+#include "tier2/p4helpers.h"
 #include "tier2/tier2.h"
 #include "tier2/tier2dm.h"
 #include "tier3/tier3.h"
-#include "tier1/UtlStringMap.h"
-#include "vstdlib/vstdlib.h"
 #include "vstdlib/iprocessutils.h"
-#include "tier2/p4helpers.h"
-#include "p4lib/ip4.h"
-
+#include "vstdlib/vstdlib.h"
 
 // Lua includes
-#include <lua.h>
 #include <lauxlib.h>
+#include <lua.h>
 #include <lualib.h>
-
 
 // Local includes
 #include "dmxedit.h"
 
-
 //-----------------------------------------------------------------------------
 // Standard spew functions
 //-----------------------------------------------------------------------------
-static SpewRetval_t SpewStdout( SpewType_t spewType, char const *pMsg )
-{
-	if ( !pMsg )
-		return SPEW_CONTINUE;
+static SpewRetval_t SpewStdout(SpewType_t spewType, char const *pMsg) {
+  if (!pMsg) return SPEW_CONTINUE;
 
-	printf( pMsg );
-	fflush( stdout );
+  printf(pMsg);
+  fflush(stdout);
 
-	return ( spewType == SPEW_ASSERT ) ? SPEW_DEBUGGER : SPEW_CONTINUE; 
+  return (spewType == SPEW_ASSERT) ? SPEW_DEBUGGER : SPEW_CONTINUE;
 }
-
 
 //-----------------------------------------------------------------------------
 // The application object
 //-----------------------------------------------------------------------------
-class CDmxEditApp : public CDefaultAppSystemGroup< CSteamAppSystemGroup >
-{
-public:
-	// Methods of IApplication
-	virtual bool Create();
-	virtual bool PreInit( );
-	virtual int Main();
-	virtual void PostShutdown();
+class CDmxEditApp : public CDefaultAppSystemGroup<CSteamAppSystemGroup> {
+ public:
+  // Methods of IApplication
+  virtual bool Create();
+  virtual bool PreInit();
+  virtual int Main();
+  virtual void PostShutdown();
 
-	void PrintHelp( bool bWiki = false );
+  void PrintHelp(bool bWiki = false);
 };
 
-
-DEFINE_CONSOLE_STEAM_APPLICATION_OBJECT( CDmxEditApp );
-
-//-----------------------------------------------------------------------------
-// The application object
-//-----------------------------------------------------------------------------
-bool CDmxEditApp::Create()
-{
-	SpewOutputFunc( SpewStdout );
-
-	AppSystemInfo_t appSystems[] = 
-	{
-		{ "vstdlib.dll",			PROCESS_UTILS_INTERFACE_VERSION },
-		{ "materialsystem.dll",		MATERIAL_SYSTEM_INTERFACE_VERSION },
-		{ "p4lib.dll",				P4_INTERFACE_VERSION },
-		{ "", "" }	// Required to terminate the list
-	};
-
-	AddSystems( appSystems );
-
-	IMaterialSystem *pMaterialSystem = reinterpret_cast< IMaterialSystem * >( FindSystem( MATERIAL_SYSTEM_INTERFACE_VERSION ) );
-	if ( !pMaterialSystem )
-	{
-		Error( "// ERROR: Unable to connect to material system interface!\n" );
-		return false;
-	}
-
-	pMaterialSystem->SetShaderAPI( "shaderapiempty.dll" );
-	return true;
-}
-
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-bool CDmxEditApp::PreInit( )
-{
-	CreateInterfaceFn factory = GetFactory();
-
-	MathLib_Init( 2.2f, 2.2f, 0.0f, 2.0f, false, false, false, false );
-
-	ConnectTier1Libraries( &factory, 1 );
-	ConnectTier2Libraries( &factory, 1 );
-	ConnectTier3Libraries( &factory, 1 );
-
-	if ( !ConnectDataModel( factory ) )
-		return false;
-
-	if ( InitDataModel( ) != INIT_OK )
-		return false;
-
-	if ( !g_pFullFileSystem || !g_pDataModel )
-	{
-		Error( "// ERROR: dmxedit is missing a required interface!\n" );
-		return false;
-	}
-
-	return true;
-}
-
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void CDmxEditApp::PostShutdown()
-{
-	ShutdownDataModel();
-	DisconnectDataModel();
-
-	DisconnectTier3Libraries();
-	DisconnectTier2Libraries();
-	DisconnectTier1Libraries();
-}
-
+DEFINE_CONSOLE_STEAM_APPLICATION_OBJECT(CDmxEditApp);
 
 //-----------------------------------------------------------------------------
 // The application object
 //-----------------------------------------------------------------------------
-int CDmxEditApp::Main()
-{
-	// This bit of hackery allows us to access files on the harddrive
-	g_pFullFileSystem->AddSearchPath( "", "LOCAL", PATH_ADD_TO_HEAD ); 
+bool CDmxEditApp::Create() {
+  SpewOutputFunc(SpewStdout);
 
-	if ( CommandLine()->CheckParm( "-h" ) || CommandLine()->CheckParm( "-help" ) )
-	{
-		PrintHelp();
-		return 0;
-	}
+  AppSystemInfo_t appSystems[] = {
+      {"vstdlib.dll", PROCESS_UTILS_INTERFACE_VERSION},
+      {"materialsystem.dll", MATERIAL_SYSTEM_INTERFACE_VERSION},
+      {"p4lib.dll", P4_INTERFACE_VERSION},
+      {"", ""}  // Required to terminate the list
+  };
 
-	if ( CommandLine()->CheckParm( "-wiki" ) )
-	{
-		PrintHelp( true );
-		return 0;
-	}
+  AddSystems(appSystems);
 
-	CUtlStringMap< CUtlString > setVars;
-	CUtlString sGame;
+  IMaterialSystem *pMaterialSystem = reinterpret_cast<IMaterialSystem *>(
+      FindSystem(MATERIAL_SYSTEM_INTERFACE_VERSION));
+  if (!pMaterialSystem) {
+    Error("// ERROR: Unable to connect to material system interface!\n");
+    return false;
+  }
 
-	const int nParamCount = CommandLine()->ParmCount();
-	for ( int i = 0; i < nParamCount - 1; ++i )
-	{
-		const char *pCmd = CommandLine()->GetParm( i );
-		const char *pArg = CommandLine()->GetParm( i + 1 );
-
-		if ( StringHasPrefix( pCmd, "-s" ) )
-		{
-			const char *const pEquals = strchr( pArg, '=' );
-			if ( !pEquals )
-			{
-				Warning( "Warning: Invalid command line args, no ='s in -set argument: %s %s\n", pCmd, pArg );
-			}
-
-			char buf[ BUFSIZ ];
-			Q_strncpy( buf, pArg, pEquals - pArg + 1 );
-
-			const CUtlString sKey( buf );
-			CUtlString sVal( pEquals + 1 );
-
-			if ( !isdigit( *sVal.Get() ) && *sVal.Get() != '-' && *sVal.Get() != '"' )
-			{
-				CUtlString sqVal( "\"" );
-				sqVal += sVal;
-				sqVal += "\"";
-				sVal = sqVal;
-			}
-
-			setVars[ sKey ] = sVal;
-
-			if ( !Q_stricmp( sKey.Get(), "game" ) && sGame.IsEmpty() )
-			{
-				sGame = sKey;
-			}
-
-			++i;
-		}
-		else if ( StringHasPrefix( pCmd, "-g" ) )
-		{
-			if ( *pArg == '"' )
-			{
-				sGame = pArg;
-			}
-			else
-			{
-				sGame = ( "\"" );
-				sGame += pArg;
-				sGame += "\"";
-			}
-		}
-		else if ( StringHasPrefix( pCmd, "-nop4" ) )
-		{
-			// Don't issue warning on -nop4
-		}
-		else if ( StringHasPrefix( pCmd, "-" ) )
-		{
-			Warning( "Warning: Unknown command line argument: %s\n", pCmd );
-		}
-	}
-
-	// Do Perforce Stuff
-	if ( CommandLine()->FindParm( "-nop4" ) )
-		g_p4factory->SetDummyMode( true );
-
-	g_p4factory->SetOpenFileChangeList( "dmxedit" );
-
-	for ( int i = CommandLine()->ParmCount() - 1; i >= 1; --i )
-	{
-		const char *pParam = CommandLine()->GetParm( i );
-		if ( _access( pParam, 04 ) == 0 )
-		{
-			CDmxEditLua dmxEditLua;
-			for ( int i = 0; i < setVars.GetNumStrings(); ++i )
-			{
-				dmxEditLua.SetVar( setVars.String( i ), setVars[ i ] );
-			}
-
-			if ( !sGame.IsEmpty() )
-			{
-				dmxEditLua.SetGame( sGame );
-			}
-
-			return dmxEditLua.DoIt( pParam );
-		}
-	}
-
-	Error( "Cannot find any file to execute from passed command line arguments\n\n" );
-	PrintHelp();
-
-	return -1;
+  pMaterialSystem->SetShaderAPI("shaderapiempty.dll");
+  return true;
 }
-
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-CUtlString Wikize( lua_State *pLuaState, const char *pWikiString )
-{
-	CUtlString retVal( pWikiString );
+bool CDmxEditApp::PreInit() {
+  CreateInterfaceFn factory = GetFactory();
 
-	lua_pushstring( pLuaState, "string");
-	lua_gettable( pLuaState, LUA_GLOBALSINDEX );
-	lua_pushstring( pLuaState, "gsub");
-	lua_gettable( pLuaState, -2);
-	lua_pushstring( pLuaState, pWikiString );
-	lua_pushstring( pLuaState, "([$#]%w+)" );
-	lua_pushstring( pLuaState, "'''%0'''" );
+  MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f, false, false, false, false);
 
-	if ( lua_pcall( pLuaState, 3, 1, 0 ) == 0 )
-	{
-		if ( lua_isstring( pLuaState, -1 ) )
-		{
-			retVal = lua_tostring( pLuaState, -1 );
-		}
-		lua_pop( pLuaState, 1 );
-	}
+  ConnectTier1Libraries(&factory, 1);
+  ConnectTier2Libraries(&factory, 1);
+  ConnectTier3Libraries(&factory, 1);
 
-	return retVal;
+  if (!ConnectDataModel(factory)) return false;
+
+  if (InitDataModel() != INIT_OK) return false;
+
+  if (!g_pFullFileSystem || !g_pDataModel) {
+    Error("// ERROR: dmxedit is missing a required interface!\n");
+    return false;
+  }
+
+  return true;
 }
-
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void CDmxEditApp::PrintHelp( bool bWiki /* = false */ )
-{
-	const CDmxEditLua::LuaFunc_s *pLuaFuncs = CDmxEditLua::GetFunctionList();
+void CDmxEditApp::PostShutdown() {
+  ShutdownDataModel();
+  DisconnectDataModel();
 
-	if ( bWiki && pLuaFuncs )
-	{
-		lua_State *pLuaState = lua_open();
-		if ( pLuaState )
-		{
-			luaL_openlibs( pLuaState );
+  DisconnectTier3Libraries();
+  DisconnectTier2Libraries();
+  DisconnectTier1Libraries();
+}
 
-			CUtlString wikiString;
+//-----------------------------------------------------------------------------
+// The application object
+//-----------------------------------------------------------------------------
+int CDmxEditApp::Main() {
+  // This bit of hackery allows us to access files on the harddrive
+  g_pFullFileSystem->AddSearchPath("", "LOCAL", PATH_ADD_TO_HEAD);
 
-			for ( int i = 0; i < CDmxEditLua::FunctionCount(); ++i )
-			{
-				if ( i != 0 )
-				{
-					Msg( "\n" );
-				}
-				Msg( ";%s( %s );\n", pLuaFuncs[ i ].m_pFuncName, pLuaFuncs[ i ].m_pFuncPrototype );
-				Msg( ":%s\n", Wikize( pLuaState, pLuaFuncs[ i ].m_pFuncDesc ) );
-			}
+  if (CommandLine()->CheckParm("-h") || CommandLine()->CheckParm("-help")) {
+    PrintHelp();
+    return 0;
+  }
 
-			return;
-		}
-	}
+  if (CommandLine()->CheckParm("-wiki")) {
+    PrintHelp(true);
+    return 0;
+  }
 
-	Msg( "\n" );
-	Msg( "NAME\n" );
-	Msg( "    dmxedit - Edit dmx files\n" );
-	Msg( "\n" );
-	Msg( "SYNOPSIS\n" );
-	Msg( "    dmxedit [ -h | -help ] [ -game <$game> ] [ -set $var=val ] [ script.lua ]\n" );
-	Msg( "\n" );
-	Msg( "    -h | -help :           Prints this information\n" );
-	Msg( "    -g | -game <$game> :   Sets the VPROJECT environment variable to the specified game.\n" );
-	Msg( "    -s | -set <$var=val> : Sets the lua variable var to the specified val before the script is run.\n" );
-	Msg( "\n" );
-	Msg( "DESCRIPTION\n" );
-	Msg( "    Edits dmx files by executing a lua script of dmx editing functions\n" );
-	Msg( "\n" );
+  CUtlStringMap<CUtlString> setVars;
+  CUtlString sGame;
 
-	if ( !pLuaFuncs )
-		return;
+  const size_t nParamCount = CommandLine()->ParmCount();
+  for (size_t i = 0; i + 1 < nParamCount; ++i) {
+    const char *pCmd = CommandLine()->GetParm(i);
+    const char *pArg = CommandLine()->GetParm(i + 1);
 
-	Msg( "FUNCTIONS\n" );
+    if (StringHasPrefix(pCmd, "-s")) {
+      const char *const pEquals = strchr(pArg, '=');
+      if (!pEquals) {
+        Warning(
+            "Warning: Invalid command line args, no ='s in -set argument: %s "
+            "%s\n",
+            pCmd, pArg);
+      }
 
-	const char *pWhitespace = " \t";
+      char buf[BUFSIZ];
+      Q_strncpy(buf, pArg, pEquals - pArg + 1);
 
-	for ( int i = 0; i < CDmxEditLua::FunctionCount(); ++i )
-	{
-		Msg( "    %s( %s );\n", pLuaFuncs[ i ].m_pFuncName, pLuaFuncs[ i ].m_pFuncPrototype );
-		Msg( "      * " );
-		
-		CUtlString tmpStr;
+      const CUtlString sKey(buf);
+      CUtlString sVal(pEquals + 1);
 
-		const char *pWordBegin = pLuaFuncs[ i ].m_pFuncDesc + strspn( pLuaFuncs[ i ].m_pFuncDesc, pWhitespace );
-		const char *pWhiteSpaceBegin = pWordBegin;
-		const char *pWordEnd = pWordBegin + strcspn( pWordBegin, pWhitespace );
+      if (!isdigit(*sVal.Get()) && *sVal.Get() != '-' && *sVal.Get() != '"') {
+        CUtlString sqVal("\"");
+        sqVal += sVal;
+        sqVal += "\"";
+        sVal = sqVal;
+      }
 
-		bool bNewline = false;
-		while ( *pWordBegin )
-		{
-			if ( pWordEnd - pWhiteSpaceBegin + tmpStr.Length() > 70 )
-			{
-				if ( bNewline )
-				{
-					Msg( "        " );
-				}
-				else
-				{
-					bNewline = true;
-				}
-				Msg( "%s\n", tmpStr );
-				tmpStr.Set( "" );
-			}
+      setVars[sKey] = sVal;
 
-			if ( tmpStr.Length() )
-			{
-				tmpStr += CUtlString( pWhiteSpaceBegin, pWordEnd - pWhiteSpaceBegin + 1);
-			}
-			else
-			{
-				tmpStr += CUtlString( pWordBegin, pWordEnd - pWordBegin + 1 );
-			}
+      if (!Q_stricmp(sKey.Get(), "game") && sGame.IsEmpty()) {
+        sGame = sKey;
+      }
 
-			pWhiteSpaceBegin = pWordEnd;
-			pWordBegin = pWhiteSpaceBegin + strspn( pWhiteSpaceBegin, pWhitespace );
-			pWordEnd = pWordBegin + strcspn( pWordBegin, pWhitespace );
-		}
+      ++i;
+    } else if (StringHasPrefix(pCmd, "-g")) {
+      if (*pArg == '"') {
+        sGame = pArg;
+      } else {
+        sGame = ("\"");
+        sGame += pArg;
+        sGame += "\"";
+      }
+    } else if (StringHasPrefix(pCmd, "-nop4")) {
+      // Don't issue warning on -nop4
+    } else if (StringHasPrefix(pCmd, "-")) {
+      Warning("Warning: Unknown command line argument: %s\n", pCmd);
+    }
+  }
 
-		if ( tmpStr.Length() )
-		{
-			if ( bNewline )
-			{
-				Msg( "        " );
-			}
-			Msg( "%s\n", tmpStr );
-		}
-		Msg( "\n" );
-	}
+  // Do Perforce Stuff
+  if (CommandLine()->FindParm("-nop4")) g_p4factory->SetDummyMode(true);
 
-	Msg( "CREDITS\n" );
-	Msg( "    Lua Copyright © 1994-2006 Lua.org, PUC-Rio.\n ");
+  g_p4factory->SetOpenFileChangeList("dmxedit");
 
-	Msg( "\n" );
+  for (int i = CommandLine()->ParmCount() - 1; i >= 1; --i) {
+    const char *pParam = CommandLine()->GetParm(i);
+    if (_access(pParam, 04) == 0) {
+      CDmxEditLua dmxEditLua;
+      for (int i = 0; i < setVars.GetNumStrings(); ++i) {
+        dmxEditLua.SetVar(setVars.String(i), setVars[i]);
+      }
+
+      if (!sGame.IsEmpty()) {
+        dmxEditLua.SetGame(sGame);
+      }
+
+      return dmxEditLua.DoIt(pParam);
+    }
+  }
+
+  Error(
+      "Cannot find any file to execute from passed command line arguments\n\n");
+  PrintHelp();
+
+  return -1;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+CUtlString Wikize(lua_State *pLuaState, const char *pWikiString) {
+  CUtlString retVal(pWikiString);
+
+  lua_pushstring(pLuaState, "string");
+  lua_gettable(pLuaState, LUA_GLOBALSINDEX);
+  lua_pushstring(pLuaState, "gsub");
+  lua_gettable(pLuaState, -2);
+  lua_pushstring(pLuaState, pWikiString);
+  lua_pushstring(pLuaState, "([$#]%w+)");
+  lua_pushstring(pLuaState, "'''%0'''");
+
+  if (lua_pcall(pLuaState, 3, 1, 0) == 0) {
+    if (lua_isstring(pLuaState, -1)) {
+      retVal = lua_tostring(pLuaState, -1);
+    }
+    lua_pop(pLuaState, 1);
+  }
+
+  return retVal;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void CDmxEditApp::PrintHelp(bool bWiki /* = false */) {
+  const CDmxEditLua::LuaFunc_s *pLuaFuncs = CDmxEditLua::GetFunctionList();
+
+  if (bWiki && pLuaFuncs) {
+    lua_State *pLuaState = lua_open();
+    if (pLuaState) {
+      luaL_openlibs(pLuaState);
+
+      CUtlString wikiString;
+
+      for (int i = 0; i < CDmxEditLua::FunctionCount(); ++i) {
+        if (i != 0) {
+          Msg("\n");
+        }
+        Msg(";%s( %s );\n", pLuaFuncs[i].m_pFuncName,
+            pLuaFuncs[i].m_pFuncPrototype);
+        Msg(":%s\n", Wikize(pLuaState, pLuaFuncs[i].m_pFuncDesc));
+      }
+
+      return;
+    }
+  }
+
+  Msg("\n");
+  Msg("NAME\n");
+  Msg("    dmxedit - Edit dmx files\n");
+  Msg("\n");
+  Msg("SYNOPSIS\n");
+  Msg("    dmxedit [ -h | -help ] [ -game <$game> ] [ -set $var=val ] [ "
+      "script.lua ]\n");
+  Msg("\n");
+  Msg("    -h | -help :           Prints this information\n");
+  Msg("    -g | -game <$game> :   Sets the VPROJECT environment variable to "
+      "the specified game.\n");
+  Msg("    -s | -set <$var=val> : Sets the lua variable var to the specified "
+      "val before the script is run.\n");
+  Msg("\n");
+  Msg("DESCRIPTION\n");
+  Msg("    Edits dmx files by executing a lua script of dmx editing "
+      "functions\n");
+  Msg("\n");
+
+  if (!pLuaFuncs) return;
+
+  Msg("FUNCTIONS\n");
+
+  const char *pWhitespace = " \t";
+
+  for (int i = 0; i < CDmxEditLua::FunctionCount(); ++i) {
+    Msg("    %s( %s );\n", pLuaFuncs[i].m_pFuncName,
+        pLuaFuncs[i].m_pFuncPrototype);
+    Msg("      * ");
+
+    CUtlString tmpStr;
+
+    const char *pWordBegin = pLuaFuncs[i].m_pFuncDesc +
+                             strspn(pLuaFuncs[i].m_pFuncDesc, pWhitespace);
+    const char *pWhiteSpaceBegin = pWordBegin;
+    const char *pWordEnd = pWordBegin + strcspn(pWordBegin, pWhitespace);
+
+    bool bNewline = false;
+    while (*pWordBegin) {
+      if (pWordEnd - pWhiteSpaceBegin + tmpStr.Length() > 70) {
+        if (bNewline) {
+          Msg("        ");
+        } else {
+          bNewline = true;
+        }
+        Msg("%s\n", tmpStr);
+        tmpStr.Set("");
+      }
+
+      if (tmpStr.Length()) {
+        tmpStr += CUtlString(pWhiteSpaceBegin, pWordEnd - pWhiteSpaceBegin + 1);
+      } else {
+        tmpStr += CUtlString(pWordBegin, pWordEnd - pWordBegin + 1);
+      }
+
+      pWhiteSpaceBegin = pWordEnd;
+      pWordBegin = pWhiteSpaceBegin + strspn(pWhiteSpaceBegin, pWhitespace);
+      pWordEnd = pWordBegin + strcspn(pWordBegin, pWhitespace);
+    }
+
+    if (tmpStr.Length()) {
+      if (bNewline) {
+        Msg("        ");
+      }
+      Msg("%s\n", tmpStr);
+    }
+    Msg("\n");
+  }
+
+  Msg("CREDITS\n");
+  Msg("    Lua Copyright © 1994-2006 Lua.org, PUC-Rio.\n ");
+
+  Msg("\n");
 }

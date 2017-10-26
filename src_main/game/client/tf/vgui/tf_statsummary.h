@@ -75,18 +75,18 @@ private:
 	vgui::Button *m_pCloseButton;
 #endif
 
-	bool m_bInteractive;							// are we in interactive mode
-	bool m_bControlsLoaded;							// have we loaded controls yet
-	CUtlVector<ClassStats_t> m_aClassStats;			// stats data
-	int m_xStartLHBar;								// x min of bars in left hand bar chart
-	int m_xStartRHBar;								// x min of bars in right hand bar chart
-	int m_iBarMaxWidth;								// width of bars in bar charts
-	int m_iBarHeight;								// height of bars in bar charts
+	bool m_bInteractive;  	// are we in interactive mode
+	bool m_bControlsLoaded;  	// have we loaded controls yet
+	CUtlVector<ClassStats_t> m_aClassStats; // stats data
+	int m_xStartLHBar;  		// x min of bars in left hand bar chart
+	int m_xStartRHBar;  		// x min of bars in right hand bar chart
+	int m_iBarMaxWidth;  		// width of bars in bar charts
+	int m_iBarHeight;  		// height of bars in bar charts
 
-	int m_iSelectedClass;							// what class is selected, if any
-	int m_iTotalSpawns;								// how many spawns of all classes does this player have
-	TFStatType_t m_statBarGraph[2];					// what stat is displayed in the left hand and right hand bar graphs
-	StatDisplay_t m_displayBarGraph[2];				// the display type for the left hand and right hand bar graphs
+	int m_iSelectedClass;  	// what class is selected, if any
+	int m_iTotalSpawns;  		// how many spawns of all classes does this player have
+	TFStatType_t m_statBarGraph[2]; 		// what stat is displayed in the left hand and right hand bar graphs
+	StatDisplay_t m_displayBarGraph[2]; 	// the display type for the left hand and right hand bar graphs
 
 #ifdef _X360
 	bool m_bShowBackButton;

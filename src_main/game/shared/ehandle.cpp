@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This module implements functions to support ehandles.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 

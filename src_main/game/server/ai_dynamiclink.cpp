@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		A link that can be turned on and off.  Unlike normal links
 //				dyanimc links must be entities so they can receive messages.
@@ -6,7 +6,7 @@
 //				a lot of memory by not making all links into entities
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "collisionutils.h"
@@ -555,7 +555,7 @@ CAI_DynamicLink::CAI_DynamicLink(void)
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
-CAI_DynamicLink::~CAI_DynamicLink(void) {
+CAI_DynamicLink::~CAI_DynamicLink() {
 
 	// ----------------------------------------------
 	//  Remove from linked list of all dynamic links

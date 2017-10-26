@@ -1,14 +1,14 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Base combat character with no AI
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "ai_basenpc.h"
 #include "tier1/strtools.h"
 #include "ai_activity.h"

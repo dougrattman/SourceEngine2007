@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A global class that holds a prioritized queue of entity I/O events.
-//			Events can be posted with a nonzero delay, which determines how long
-//			they are held before being dispatched to their recipients.
+// Events can be posted with a nonzero delay, which determines how long
+// they are held before being dispatched to their recipients.
 //
-//			The queue is serviced once per server frame.
+// The queue is serviced once per server frame.
 //
-//=============================================================================//
+
 
 #ifndef EVENTQUEUE_H
 #define EVENTQUEUE_H
@@ -14,7 +14,7 @@
 #pragma once
 #endif
 
-#include "mempool.h"
+#include "tier1/mempool.h"
 
 struct EventQueuePrioritizedEvent_t
 {

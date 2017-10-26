@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_HUD_CHAT_H
 #define CS_HUD_CHAT_H
@@ -22,7 +22,7 @@ public:
 
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
 
-	void			MsgFunc_SayText(bf_read &msg);
+	void MsgFunc_SayText(bf_read &msg);
 
 
 
@@ -57,7 +57,7 @@ public:
 	virtual void	Reset( void );
 	virtual void	ApplySchemeSettings(vgui::IScheme *pScheme);
 
-	int				GetChatInputOffset( void );
+	int 	GetChatInputOffset( void );
 
 	virtual Color	GetClientColor( int clientIndex );
 };

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements an explosion entity and a support spark shower entity.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "decals.h"
@@ -107,7 +107,7 @@ public:
 	void SetCustomDamageType( int iType ) { m_iCustomDamageType = iType; }
 	bool KeyValue( const char *szKeyName, const char *szValue );
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Input handlers
 	void InputExplode( inputdata_t &inputdata );

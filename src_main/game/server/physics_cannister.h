@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PHYSICS_CANNISTER_H
 #define PHYSICS_CANNISTER_H
@@ -35,9 +35,9 @@ public:
 		pPhys->WorldToLocalVector( &m_thrustVector, m_thrustVector );
 	}
 
-	Vector			m_thrustVector;
+	Vector m_thrustVector;
 	AngularImpulse	m_torqueVector;
-	float			m_thrust;
+	float m_thrust;
 };
 
 class CPhysicsCannister : public CBaseCombatCharacter, public CDefaultPlayerPickupVPhysics
@@ -78,7 +78,7 @@ public:
 		CBasePlayer *pPlayer = ToBasePlayer( pActivator );
 		if ( pPlayer )
 		{
-			pPlayer->PickupObject( this );
+ pPlayer->PickupObject( this );
 		}
 	}
 
@@ -105,8 +105,8 @@ public:
 	virtual bool ShouldPuntUseLaunchForces( PhysGunForce_t reason ) 
 	{ 
 		if ( reason == PHYSGUN_FORCE_LAUNCHED ) 
-			return (m_thrustTime!=0);
-			
+ return (m_thrustTime!=0);
+ 
 		return false; 
 	}
 	virtual AngularImpulse PhysGunLaunchAngularImpulse( void ) { return vec3_origin; }
@@ -117,26 +117,26 @@ protected:
 
 
 public:
-	Vector				m_thrustOrigin;
+	Vector 	m_thrustOrigin;
 	CThrustController	m_thruster;
 	IPhysicsMotionController *m_pController;
-	CSteamJet			*m_pJet;
-	bool				m_active;
-	float				m_thrustTime;
-	float				m_damage;
-	float				m_damageRadius;
+	CSteamJet *m_pJet;
+	bool 	m_active;
+	float 	m_thrustTime;
+	float 	m_damage;
+	float 	m_damageRadius;
 
-	float				m_activateTime;
-	string_t			m_gasSound;
+	float 	m_activateTime;
+	string_t m_gasSound;
 
-	bool				m_bFired;		// True if this cannister was fire by a weapon
+	bool 	m_bFired;		// True if this cannister was fire by a weapon
 
 	COutputEvent		m_onActivate;
 	COutputEvent		m_OnAwakened;
 
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
-	EHANDLE					m_hLauncher;	// Entity that caused this cannister to launch
+	float 		m_flLastPhysicsInfluenceTime;
+	EHANDLE 		m_hLauncher;	// Entity that caused this cannister to launch
 
 private:
 	Vector CalcLocalThrust( const Vector &offset );

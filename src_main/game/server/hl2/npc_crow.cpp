@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Crows. Simple ambient birds that fly away when they hear gunfire or
 //			when anything gets too close to them.
@@ -7,7 +7,7 @@
 // TODO: death
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "game.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IPREDICTION_H )
 #define IPREDICTION_H
 #ifdef _WIN32
@@ -17,7 +17,7 @@
 #endif
 
 
-#include "interface.h"
+#include "tier1/interface.h"
 #include "mathlib/vector.h" // Solely to get at define for QAngle
 
 
@@ -29,19 +29,19 @@ class IMoveHelper;
 abstract_class IPrediction
 {
 public:
-	virtual			~IPrediction( void ) {};
+	virtual ~IPrediction( void ) {};
 
 	virtual void	Init( void ) = 0;
 	virtual void	Shutdown( void ) = 0;
 
 	// Run prediction
 	virtual void	Update
-					( 
-						int startframe,				// World update ( un-modded ) most recently received
-						bool validframe,			// Is frame data valid
-						int incoming_acknowledged,	// Last command acknowledged to have been run by server (un-modded)
-						int outgoing_command		// Last command (most recent) sent to server (un-modded)
-					) = 0;
+ 		( 
+  int startframe, 	// World update ( un-modded ) most recently received
+  bool validframe, // Is frame data valid
+  int incoming_acknowledged,	// Last command acknowledged to have been run by server (un-modded)
+  int outgoing_command		// Last command (most recent) sent to server (un-modded)
+ 		) = 0;
 
 	// We are about to get a network update from the server.  We know the update #, so we can pull any
 	//  data purely predicted on the client side and transfer it to the new from data state.

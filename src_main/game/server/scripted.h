@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SCRIPTED_H
 #define SCRIPTED_H
@@ -21,22 +21,22 @@
 // The number of unique outputs that a script can fire from animation events.
 // These are fired via SCRIPT_EVENT_FIREEVENT in CAI_BaseNPC::HandleAnimEvent.
 //
-#define MAX_SCRIPT_EVENTS				8
+#define MAX_SCRIPT_EVENTS 	8
 
 
-#define SF_SCRIPT_WAITTILLSEEN			1
-#define SF_SCRIPT_EXITAGITATED			2
-#define SF_SCRIPT_REPEATABLE			4		// Whether the script can be played more than once.
-#define SF_SCRIPT_LEAVECORPSE			8
+#define SF_SCRIPT_WAITTILLSEEN 1
+#define SF_SCRIPT_EXITAGITATED 2
+#define SF_SCRIPT_REPEATABLE 4		// Whether the script can be played more than once.
+#define SF_SCRIPT_LEAVECORPSE 8
 #define SF_SCRIPT_START_ON_SPAWN		16
-#define SF_SCRIPT_NOINTERRUPT			32
-#define SF_SCRIPT_OVERRIDESTATE			64
+#define SF_SCRIPT_NOINTERRUPT 32
+#define SF_SCRIPT_OVERRIDESTATE 64
 #define SF_SCRIPT_DONT_TELEPORT_AT_END	128		// Don't fixup end position with a teleport when the SS is finished
 #define SF_SCRIPT_LOOP_IN_POST_IDLE		256		// Loop in the post idle animation after playing the action animation.
-#define SF_SCRIPT_HIGH_PRIORITY			512		// If set, we don't allow other scripts to steal our spot in the queue.
+#define SF_SCRIPT_HIGH_PRIORITY 512		// If set, we don't allow other scripts to steal our spot in the queue.
 #define SF_SCRIPT_SEARCH_CYCLICALLY		1024	// Start search from last entity found.
-#define SF_SCRIPT_NO_COMPLAINTS			2048	// doesn't bitch if it can't find anything
-#define SF_SCRIPT_ALLOW_DEATH			4096	// the actor using this scripted sequence may die without interrupting the scene (used for scripted deaths)
+#define SF_SCRIPT_NO_COMPLAINTS 2048	// doesn't bitch if it can't find anything
+#define SF_SCRIPT_ALLOW_DEATH 4096	// the actor using this scripted sequence may die without interrupting the scene (used for scripted deaths)
 
 
 enum script_moveto_t
@@ -63,7 +63,7 @@ enum SCRIPT_PLAYER_DEATH
 enum SS_INTERRUPT
 {
 	SS_INTERRUPT_BY_CLASS = 0,		// Indicates that we are asking for this NPC by class
-	SS_INTERRUPT_BY_NAME,			// Indicates that we are asking for this NPC by name
+	SS_INTERRUPT_BY_NAME, // Indicates that we are asking for this NPC by name
 };
 
 
@@ -152,7 +152,7 @@ private:
 
 	string_t m_iszEntry;		// String index for animation that must be played before entering the main action anim
 	string_t m_iszPreIdle;		// String index for idle animation to play before playing the action anim (only played while waiting for the script to begin)
-	string_t m_iszPlay;			// String index for scripted action animation
+	string_t m_iszPlay; // String index for scripted action animation
 	string_t m_iszPostIdle;		// String index for idle animation to play before playing the action anim
 	string_t m_iszCustomMove;	// String index for custom movement animation
 	string_t m_iszNextScript;	// Name of the script to run immediately after this one.
@@ -165,18 +165,18 @@ private:
 	bool m_bIgnoreGravity;
 	bool m_bDisableNPCCollisions;	// Used when characters must interpenetrate while riding on elevators, trains, etc.
 
-	float m_flRadius;			// Range to search for an NPC to possess.
-	float m_flRepeat;			// Repeat rate
+	float m_flRadius; // Range to search for an NPC to possess.
+	float m_flRepeat; // Repeat rate
 
-	int m_iDelay;					// A counter indicating how many scripts are NOT ready to start.
+	int m_iDelay; 		// A counter indicating how many scripts are NOT ready to start.
 
-	bool m_bDelayed;				// This moderately hacky hack ensures that we don't calls to DelayStart(true) or DelayStart(false)
-									// twice in succession. This is necessary because we didn't want to remove the call to DelayStart(true)
-									// from StartScript, even though DelayStart(true) is called from TASK_PRE_SCRIPT.
-									// All of this is necessary in case the NPCs schedule gets cleared during the script and then they
-									// reselect the schedule to play the script. Without this you can get NPCs stuck with m_iDelay = -1
+	bool m_bDelayed; 	// This moderately hacky hack ensures that we don't calls to DelayStart(true) or DelayStart(false)
+   // twice in succession. This is necessary because we didn't want to remove the call to DelayStart(true)
+   // from StartScript, even though DelayStart(true) is called from TASK_PRE_SCRIPT.
+   // All of this is necessary in case the NPCs schedule gets cleared during the script and then they
+   // reselect the schedule to play the script. Without this you can get NPCs stuck with m_iDelay = -1
 
-	float m_startTime;				// Time when script actually started, used for synchronization
+	float m_startTime; 	// Time when script actually started, used for synchronization
 	bool m_bWaitForBeginSequence;	// Set to true when we are told to MoveToPosition. Holds the actor in the pre-action idle until BeginSequence is called.
 
 	int m_saved_effects;
@@ -222,7 +222,7 @@ private:
 	VMatrix		m_matInteractionPosition;
 	EHANDLE		m_hInteractionRelativeEntity;
 
-	int			m_iPlayerDeathBehavior;
+	int m_iPlayerDeathBehavior;
 };
 
 

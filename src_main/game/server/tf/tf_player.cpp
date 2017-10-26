@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+﻿//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose:		Player for HL1.
 //
@@ -9,7 +9,7 @@
 #include "tf_player.h"
 #include "tf_gamerules.h"
 #include "tf_gamestats.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "viewport_panel_names.h"
 #include "client.h"
 #include "team.h"
@@ -1324,7 +1324,7 @@ void CTFPlayer::HandleCommand_JoinTeam( const char *pTeamName )
 		// do we have fadetoblack on? (need to fade their screen back in)
 		if ( mp_fadetoblack.GetBool() )
 		{
-			color32_s clr = { 0,0,0,255 };
+			color32 clr = { 0,0,0,255 };
 			UTIL_ScreenFade( this, clr, 0, 0, FFADE_IN | FFADE_PURGE );
 		}
 	}
@@ -1433,7 +1433,7 @@ void CTFPlayer::HandleFadeToBlack( void )
 {
 	if ( mp_fadetoblack.GetBool() )
 	{
-		color32_s clr = { 0,0,0,255 };
+		color32 clr = { 0,0,0,255 };
 		UTIL_ScreenFade( this, clr, 0.75, 0, FFADE_OUT | FFADE_STAYOUT );
 	}
 }
@@ -6051,8 +6051,8 @@ bool CTFPlayer::SetPowerplayEnabled( bool bOn )
 	return true;
 }
 
-uint64 powerplaymask = 0xFAB2423BFFA352AF;
-uint64 powerplay_ids[] =
+uint64_t powerplaymask = 0xFAB2423BFFA352AF;
+uint64_t powerplay_ids[] =
 {
 	76561197960435530 ^ powerplaymask,
 	76561197960265731 ^ powerplaymask,

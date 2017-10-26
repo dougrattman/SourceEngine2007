@@ -1,37 +1,39 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (CStrike)", "game\client\client_cstrike.vcproj", "{7E0D3B39-8FBA-4E6F-82BD-54FE90014D26}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (CStrike)", "game\client\client_cstrike.vcxproj", "{7E0D3B39-8FBA-4E6F-82BD-54FE90014D26}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (DOD)", "game\client\client_dod.vcproj", "{977106A3-2D42-4959-B693-63B797E12EE7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (DOD)", "game\client\client_dod.vcxproj", "{977106A3-2D42-4959-B693-63B797E12EE7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (Episodic)", "game\client\client_episodic.vcproj", "{50D70B88-2F2F-421F-B204-24DE344D3802}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (Episodic)", "game\client\client_episodic.vcxproj", "{50D70B88-2F2F-421F-B204-24DE344D3802}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL2)", "game\client\client_hl2.vcproj", "{4FEEDB5C-54D5-41F5-A52A-ED738B40D932}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL2)", "game\client\client_hl2.vcxproj", "{4FEEDB5C-54D5-41F5-A52A-ED738B40D932}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL2MP)", "game\client\client_hl2mp.vcproj", "{F4E17C3D-7219-4F5D-B69B-06DC7024A96E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL2MP)", "game\client\client_hl2mp.vcxproj", "{F4E17C3D-7219-4F5D-B69B-06DC7024A96E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (Portal)", "game\client\client_portal.vcproj", "{1CC700F0-D7FB-445F-B34F-3FE08552161E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (Portal)", "game\client\client_portal.vcxproj", "{1CC700F0-D7FB-445F-B34F-3FE08552161E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (TF)", "game\client\client_tf.vcproj", "{5A97BCF5-D852-4196-8A80-70C50E8E5488}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (TF)", "game\client\client_tf.vcxproj", "{5A97BCF5-D852-4196-8A80-70C50E8E5488}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (CStrike)", "game\server\server_cstrike.vcproj", "{4030D8D8-28D7-432B-9A01-9DB163B2CB59}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (CStrike)", "game\server\server_cstrike.vcxproj", "{4030D8D8-28D7-432B-9A01-9DB163B2CB59}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (DoD)", "game\server\server_dod.vcproj", "{8753CC40-864A-445B-B282-D5AA5AA2600A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (DoD)", "game\server\server_dod.vcxproj", "{8753CC40-864A-445B-B282-D5AA5AA2600A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (Episodic)", "game\server\server_episodic.vcproj", "{468C4E3D-D34D-417F-82E8-9F4178C7F79D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (Episodic)", "game\server\server_episodic.vcxproj", "{468C4E3D-D34D-417F-82E8-9F4178C7F79D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL2)", "game\server\server_hl2.vcproj", "{BC4B9D31-3815-4C37-9224-736E27D147C4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL2)", "game\server\server_hl2.vcxproj", "{BC4B9D31-3815-4C37-9224-736E27D147C4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL2MP)", "game\server\server_hl2mp.vcproj", "{7AB8117A-3FD9-4A78-841A-B55FBDB6E793}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL2MP)", "game\server\server_hl2mp.vcxproj", "{7AB8117A-3FD9-4A78-841A-B55FBDB6E793}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (Portal)", "game\server\server_portal.vcproj", "{68775368-D56B-465A-AF08-36DCF21FC7DF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (Portal)", "game\server\server_portal.vcxproj", "{68775368-D56B-465A-AF08-36DCF21FC7DF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (TF)", "game\server\server_tf.vcproj", "{CFEA7F22-B281-4910-8DFF-BD07E4701207}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (TF)", "game\server\server_tf.vcxproj", "{CFEA7F22-B281-4910-8DFF-BD07E4701207}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL1)", "game\client\client_hl1.vcproj", "{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client (HL1)", "game\client\client_hl1.vcxproj", "{9CC7461F-2A18-49B6-9B82-69AEA157E006}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL1)", "game\server\server_hl1.vcproj", "{DD9AB057-CE23-4952-A506-5F6DCD3A86F9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (HL1)", "game\server\server_hl1.vcxproj", "{DD9AB057-CE23-4952-A506-5F6DCD3A86F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,12 +114,12 @@ Global
 		{CFEA7F22-B281-4910-8DFF-BD07E4701207}.Ep2 Release|Win32.ActiveCfg = Release|Win32
 		{CFEA7F22-B281-4910-8DFF-BD07E4701207}.Release|Win32.ActiveCfg = Release|Win32
 		{CFEA7F22-B281-4910-8DFF-BD07E4701207}.Release|Win32.Build.0 = Release|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Debug|Win32.Build.0 = Debug|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Ep2 Release|Win32.ActiveCfg = Release|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Ep2 Release|Win32.Build.0 = Release|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Release|Win32.ActiveCfg = Release|Win32
-		{EFE0CBA4-9A88-4EE1-89C3-D92D3B0E1F88}.Release|Win32.Build.0 = Release|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Debug|Win32.Build.0 = Debug|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Ep2 Release|Win32.ActiveCfg = Release|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Ep2 Release|Win32.Build.0 = Release|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Release|Win32.ActiveCfg = Release|Win32
+		{9CC7461F-2A18-49B6-9B82-69AEA157E006}.Release|Win32.Build.0 = Release|Win32
 		{DD9AB057-CE23-4952-A506-5F6DCD3A86F9}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DD9AB057-CE23-4952-A506-5F6DCD3A86F9}.Debug|Win32.Build.0 = Debug|Win32
 		{DD9AB057-CE23-4952-A506-5F6DCD3A86F9}.Ep2 Release|Win32.ActiveCfg = Release|Win32
@@ -127,5 +129,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CDB4E658-A49E-423F-B083-8695D1843378}
 	EndGlobalSection
 EndGlobal

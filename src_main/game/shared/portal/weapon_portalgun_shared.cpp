@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "weapon_portalgun_shared.h"
@@ -221,7 +221,7 @@ void CWeaponPortalgun::PrimaryAttack( void )
 	inputdata_t inputdata;
 	inputdata.pActivator = this;
 	inputdata.pCaller = this;
-	inputdata.value;//null
+	inputdata.value;//0
 	FirePortal1( inputdata );
 	m_OnFiredPortal1.FireOutput( pPlayer, this );
 
@@ -262,7 +262,7 @@ void CWeaponPortalgun::SecondaryAttack( void )
 	inputdata_t inputdata;
 	inputdata.pActivator = this;
 	inputdata.pCaller = this;
-	inputdata.value;//null
+	inputdata.value;//0
 	FirePortal2( inputdata );
 	m_OnFiredPortal2.FireOutput( pPlayer, this );
 	pPlayer->RumbleEffect( RUMBLE_PORTALGUN_RIGHT, 0, RUMBLE_FLAGS_NONE );

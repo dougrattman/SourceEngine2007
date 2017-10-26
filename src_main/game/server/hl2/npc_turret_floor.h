@@ -26,12 +26,12 @@ enum turretState_e
 //Eye states
 enum eyeState_t
 {
-	TURRET_EYE_SEE_TARGET,			//Sees the target, bright and big
+	TURRET_EYE_SEE_TARGET, //Sees the target, bright and big
 	TURRET_EYE_SEEKING_TARGET,		//Looking for a target, blinking (bright)
-	TURRET_EYE_DORMANT,				//Not active
-	TURRET_EYE_DEAD,				//Completely invisible
-	TURRET_EYE_DISABLED,			//Turned off, must be reactivated before it'll deploy again (completely invisible)
-	TURRET_EYE_ALARM,				// On side, but warning player to pick it back up
+	TURRET_EYE_DORMANT, 	//Not active
+	TURRET_EYE_DEAD, 	//Completely invisible
+	TURRET_EYE_DISABLED, //Turned off, must be reactivated before it'll deploy again (completely invisible)
+	TURRET_EYE_ALARM, 	// On side, but warning player to pick it back up
 };
 
 //Spawnflags
@@ -39,9 +39,9 @@ enum eyeState_t
 //		this class may have undesired side effects due to these being set.
 #define SF_FLOOR_TURRET_AUTOACTIVATE		0x00000020
 #define SF_FLOOR_TURRET_STARTINACTIVE		0x00000040
-#define SF_FLOOR_TURRET_FASTRETIRE			0x00000080
-#define SF_FLOOR_TURRET_OUT_OF_AMMO			0x00000100
-#define SF_FLOOR_TURRET_CITIZEN				0x00000200	// Citizen modified turret
+#define SF_FLOOR_TURRET_FASTRETIRE 0x00000080
+#define SF_FLOOR_TURRET_OUT_OF_AMMO 0x00000100
+#define SF_FLOOR_TURRET_CITIZEN 	0x00000200	// Citizen modified turret
 
 class CTurretTipController;
 class CBeam;
@@ -119,7 +119,7 @@ public:
 		CBasePlayer *pPlayer = ToBasePlayer( pActivator );
 		if ( pPlayer )
 		{
-			pPlayer->PickupObject( this, false );
+ pPlayer->PickupObject( this, false );
 		}
 	}
 
@@ -132,9 +132,9 @@ public:
 	void	InputSelfDestruct( inputdata_t &inputdata );
 
 	virtual bool	IsValidEnemy( CBaseEntity *pEnemy );
-	bool			CanBeAnEnemyOf( CBaseEntity *pEnemy );
-	bool			IsBeingCarriedByPlayer( void ) { return m_bCarriedByPlayer; }
-	bool			WasJustDroppedByPlayer( void );
+	bool CanBeAnEnemyOf( CBaseEntity *pEnemy );
+	bool IsBeingCarriedByPlayer( void ) { return m_bCarriedByPlayer; }
+	bool WasJustDroppedByPlayer( void );
 
 	int		BloodColor( void ) { return DONT_BLEED; }
 	float	MaxYawSpeed( void );
@@ -184,12 +184,12 @@ protected:
 	virtual bool	PreThink( turretState_e state );
 	virtual void	Shoot( const Vector &vecSrc, const Vector &vecDirToEnemy, bool bStrict = false );
 	virtual void	SetEyeState( eyeState_t state );
-	void			Ping( void );	
-	void			Toggle( void );
-	void			Enable( void );
-	void			Disable( void );
-	void			SpinUp( void );
-	void			SpinDown( void );
+	void Ping( void );	
+	void Toggle( void );
+	void Enable( void );
+	void Disable( void );
+	void SpinUp( void );
+	void SpinDown( void );
 
 	virtual bool	OnSide( void );
 
@@ -222,15 +222,15 @@ protected:
 	int		m_iKeySkin;
 
 	CHandle<CBaseCombatCharacter> m_hLastNPCToKickMe;		// Stores the last NPC who tried to knock me over
-	float	m_flKnockOverFailedTime;						// Time at which we should tell the NPC that he failed to knock me over
+	float	m_flKnockOverFailedTime;  // Time at which we should tell the NPC that he failed to knock me over
 
 	QAngle	m_vecGoalAngles;
 
-	int						m_iEyeAttachment;
-	int						m_iMuzzleAttachment;
-	eyeState_t				m_iEyeState;
+	int  m_iEyeAttachment;
+	int  m_iMuzzleAttachment;
+	eyeState_t 	m_iEyeState;
 	CHandle<CSprite>		m_hEyeGlow;
-	CHandle<CBeam>			m_hLaser;
+	CHandle<CBeam> m_hLaser;
 	CHandle<CTurretTipController>	m_pMotionController;
 
 	CHandle<CParticleSystem>	m_hFizzleEffect;
@@ -238,7 +238,7 @@ protected:
 
 	// physics influence
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
+	float 		m_flLastPhysicsInfluenceTime;
 
 	static const char		*m_pShotSounds[];
 
@@ -249,7 +249,7 @@ protected:
 	COutputEvent m_OnPhysGunDrop;
 
 	bool	m_bHackedByAlyx;
-	HSOUNDSCRIPTHANDLE			m_ShotSounds;
+	HSOUNDSCRIPTHANDLE m_ShotSounds;
 
 	DECLARE_DATADESC();
 	DEFINE_CUSTOM_AI;
@@ -278,13 +278,13 @@ public:
 	static CTurretTipController	*CreateTipController( CNPC_FloorTurret *pOwner )
 	{
 		if ( pOwner == NULL )
-			return NULL;
+ return NULL;
 
 		CTurretTipController *pController = (CTurretTipController *) Create( "floorturret_tipcontroller", pOwner->GetAbsOrigin(), pOwner->GetAbsAngles() );
 
 		if ( pController != NULL )
 		{
-			pController->m_pParentTurret = pOwner;
+ pController->m_pParentTurret = pOwner;
 		}
 
 		return pController;
@@ -294,13 +294,13 @@ public:
 	virtual simresult_e	Simulate( IPhysicsMotionController *pController, IPhysicsObject *pObject, float deltaTime, Vector &linear, AngularImpulse &angular );
 
 private:
-	bool						m_bEnabled;
-	float						m_flSuspendTime;
-	Vector						m_worldGoalAxis;
-	Vector						m_localTestAxis;
+	bool  m_bEnabled;
+	float  m_flSuspendTime;
+	Vector  m_worldGoalAxis;
+	Vector  m_localTestAxis;
 	IPhysicsMotionController	*m_pController;
-	float						m_angularLimit;
-	CNPC_FloorTurret			*m_pParentTurret;
+	float  m_angularLimit;
+	CNPC_FloorTurret *m_pParentTurret;
 };
 
 #endif //#ifndef NPC_TURRET_FLOOR_H

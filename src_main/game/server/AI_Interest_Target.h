@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hooks and classes for the support of humanoid NPCs with 
-//			groovy facial animation capabilities, aka, "Actors"
+// groovy facial animation capabilities, aka, "Actors"
 //
-//=============================================================================//
+
 
 #ifndef AI_INTEREST_TARGET_H
 #define AI_INTEREST_TARGET_H
@@ -31,10 +31,10 @@ public:
 	};
 
 public:
-	bool			IsThis( CBaseEntity *pThis );
+	bool IsThis( CBaseEntity *pThis );
 	const Vector	&GetPosition( void );
-	bool			IsActive( void );
-	float			Interest( void );
+	bool IsActive( void );
+	float Interest( void );
 
 public:
 	CAI_InterestTarget_e	m_eType; // ????
@@ -61,8 +61,8 @@ public:
 		int i;
 		for ( i = 0; i < Count(); i++)
 		{
-			if (pTarget == (*this)[i].m_hTarget)
-				return i;
+ if (pTarget == (*this)[i].m_hTarget)
+ 	return i;
 		}
 		return InvalidIndex();
 	}
@@ -72,10 +72,10 @@ public:
 		int i;
 		for (i = Count() - 1; i >= 0; i--)
 		{
-			if (!Element(i).IsActive())
-			{
-				Remove( i );
-			}
+ if (!Element(i).IsActive())
+ {
+ 	Remove( i );
+ }
 		}
 	};
 

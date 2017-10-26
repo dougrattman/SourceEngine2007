@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -62,7 +62,7 @@ struct RoundStats_t
 	void Reset() {
 		for ( int i = 0; i < ARRAYSIZE( m_iStat ); i++ )
 		{
-			m_iStat[i] = 0;
+ m_iStat[i] = 0;
 		}
 	};
 
@@ -70,7 +70,7 @@ struct RoundStats_t
 	{
 		for ( int i = 0; i < ARRAYSIZE( m_iStat ); i++ )
 		{
-			m_iStat[i] += other.m_iStat[i];
+ m_iStat[i] += other.m_iStat[i];
 		}
 	};
 };
@@ -95,20 +95,20 @@ enum TFGameStatsLumpIds_t
 
 struct TF_Gamestats_Version_t
 {
-	int m_iMagic;			// always TF_GAMESTATS_MAGIC
+	int m_iMagic; // always TF_GAMESTATS_MAGIC
 	int m_iVersion;
 };
 
 struct TF_Gamestats_ClassStats_t
 {
 	static const unsigned short LumpId = TFSTATS_LUMP_CLASS;	// Lump ids.
-	int iSpawns;												// total # of spawns of this class
-	int iTotalTime;												// aggregate player time in seconds in this class
-	int iScore;													// total # of points scored by this class
-	int iKills;													// total # of kills by this class
-	int iDeaths;												// total # of deaths by this class
-	int iAssists;												// total # of assists by this class
-	int iCaptures;												// total # of captures by this class
+	int iSpawns;    // total # of spawns of this class
+	int iTotalTime;    // aggregate player time in seconds in this class
+	int iScore;    	// total # of points scored by this class
+	int iKills;    	// total # of kills by this class
+	int iDeaths;    // total # of deaths by this class
+	int iAssists;    // total # of assists by this class
+	int iCaptures;    // total # of captures by this class
 
 	void Accumulate( TF_Gamestats_ClassStats_t &other )
 	{
@@ -130,7 +130,7 @@ struct TF_Gamestats_WeaponStats_t
 	int	iHits;
 	int iTotalDamage;
 	int iHitsWithKnownDistance;
-	int64 iTotalDistance;
+	int64_t iTotalDistance;
 
 	void Accumulate( TF_Gamestats_WeaponStats_t &other )
 	{
@@ -167,11 +167,11 @@ public:
 		int i;
 		for ( i = 0; i < ARRAYSIZE( m_aClassStats ); i++ )
 		{
-			m_aClassStats[i].Accumulate( pOther->m_aClassStats[i] );
+ m_aClassStats[i].Accumulate( pOther->m_aClassStats[i] );
 		}
 		for ( i = 0; i < ARRAYSIZE( m_aWeaponStats ); i++ )
 		{
-			m_aWeaponStats[i].Accumulate( pOther->m_aWeaponStats[i] );
+ m_aWeaponStats[i].Accumulate( pOther->m_aWeaponStats[i] );
 		}
 
 	}
@@ -181,26 +181,26 @@ public:
 	struct LevelHeader_t
 	{
 		static const unsigned short LumpId = TFSTATS_LUMP_MAPHEADER;	// Lump ids.
-		char			m_szMapName[64];							// Name of the map.
-		unsigned int	m_nIPAddr;									// IP Address of the server - 4 bytes stored as an int.
-		unsigned short	m_nPort;									// Port the server is using.	
-		int				m_iRoundsPlayed;							// # of rounds played
-		int				m_iTotalTime;								// total # of seconds of all rounds
-		int				m_iBlueWins;								// # of blue team wins
-		int				m_iRedWins;									// # of red team wins
-		int				m_iStalemates;								// # of stalemates
-		int				m_iBlueSuddenDeathWins;						// # of blue team wins during sudden death
-		int				m_iRedSuddenDeathWins;						// # of red team wins during sudden death
+		char m_szMapName[64];  	// Name of the map.
+		unsigned int	m_nIPAddr;   // IP Address of the server - 4 bytes stored as an int.
+		unsigned short	m_nPort;   // Port the server is using.	
+		int 	m_iRoundsPlayed;  	// # of rounds played
+		int 	m_iTotalTime;  		// total # of seconds of all rounds
+		int 	m_iBlueWins;  		// # of blue team wins
+		int 	m_iRedWins;   // # of red team wins
+		int 	m_iStalemates;  		// # of stalemates
+		int 	m_iBlueSuddenDeathWins;  // # of blue team wins during sudden death
+		int 	m_iRedSuddenDeathWins;  // # of red team wins during sudden death
 
 		void Accumulate( LevelHeader_t &other )
 		{
-			m_iRoundsPlayed += other.m_iRoundsPlayed;
-			m_iTotalTime += other.m_iTotalTime;
-			m_iBlueWins += other.m_iBlueWins;
-			m_iRedWins += other.m_iRedWins;
-			m_iStalemates += other.m_iStalemates;
-			m_iBlueSuddenDeathWins += other.m_iBlueSuddenDeathWins;
-			m_iRedSuddenDeathWins += other.m_iRedSuddenDeathWins;
+ m_iRoundsPlayed += other.m_iRoundsPlayed;
+ m_iTotalTime += other.m_iTotalTime;
+ m_iBlueWins += other.m_iBlueWins;
+ m_iRedWins += other.m_iRedWins;
+ m_iStalemates += other.m_iStalemates;
+ m_iBlueSuddenDeathWins += other.m_iBlueSuddenDeathWins;
+ m_iRedSuddenDeathWins += other.m_iRedSuddenDeathWins;
 		}
 	};
 
@@ -208,38 +208,38 @@ public:
 	struct PlayerDeathsLump_t
 	{
 		static const unsigned short LumpId = TFSTATS_LUMP_MAPDEATH;	// Lump ids.
-		short			nPosition[3];								// Position of death.
-		short			iWeapon;									// Weapon that killed the player.
-		unsigned short	iDistance;									// Distance the attacker was from the player.
-		byte			iAttackClass;								// Class that killed the player.
-		byte			iTargetClass;								// Class of the player killed.
+		short nPosition[3];  		// Position of death.
+		short iWeapon;   // Weapon that killed the player.
+		unsigned short	iDistance;   // Distance the attacker was from the player.
+		byte iAttackClass;  		// Class that killed the player.
+		byte iTargetClass;  		// Class of the player killed.
 	};
 
 	// Player damage.
 	struct PlayerDamageLump_t
 	{
 		static const unsigned short LumpId = TFSTATS_LUMP_MAPDAMAGE;	// Lump ids.
-		float			fTime;										// Time of the damage event
-		short			nTargetPosition[3];							// Position of target.
-		short			nAttackerPosition[3];						// Position of attacker.
-		short			iDamage;									// Total damage.
-		short			iWeapon;									// Weapon used.
-		byte			iAttackClass;								// Class of the attacker
-		byte			iTargetClass;								// Class of the target
-		byte			iCrit;										// was the shot a crit?
-		byte			iKill;										// did the shot kill the target?
+		float fTime;   	// Time of the damage event
+		short nTargetPosition[3];  	// Position of target.
+		short nAttackerPosition[3];  // Position of attacker.
+		short iDamage;   // Total damage.
+		short iWeapon;   // Weapon used.
+		byte iAttackClass;  		// Class of the attacker
+		byte iTargetClass;  		// Class of the target
+		byte iCrit;   	// was the shot a crit?
+		byte iKill;   	// did the shot kill the target?
 	};
 
 	// Data.
-	LevelHeader_t					m_Header;							// Level header.
-	CUtlVector<PlayerDeathsLump_t>	m_aPlayerDeaths;					// Vector of player deaths.
-	CUtlVector<PlayerDamageLump_t>	m_aPlayerDamage;					// Vector of player damage.	
+	LevelHeader_t 		m_Header;  	// Level header.
+	CUtlVector<PlayerDeathsLump_t>	m_aPlayerDeaths; 		// Vector of player deaths.
+	CUtlVector<PlayerDamageLump_t>	m_aPlayerDamage; 		// Vector of player damage.	
 	TF_Gamestats_ClassStats_t		m_aClassStats[TF_CLASS_COUNT_ALL];	// Vector of class data
 	TF_Gamestats_WeaponStats_t		m_aWeaponStats[TF_WEAPON_COUNT];	// Vector of weapon data
 	// Temporary data.
-	bool							m_bInitialized;		// Has the map Map Stat Data been initialized.
-	float							m_flRoundStartTime;
-	int								m_iPeakPlayerCount[TF_TEAM_COUNT];
+	bool  	m_bInitialized;		// Has the map Map Stat Data been initialized.
+	float  	m_flRoundStartTime;
+	int  		m_iPeakPlayerCount[TF_TEAM_COUNT];
 };
 
 struct KillStats_t
@@ -253,8 +253,8 @@ struct KillStats_t
 		Q_memset( iNumKilledByUnanswered, 0, sizeof( iNumKilledByUnanswered ) );
 	}
 
-	int iNumKilled[MAX_PLAYERS+1];					// how many times this player has killed every other player
-	int iNumKilledBy[MAX_PLAYERS+1];				// how many times this player has been killed by every other player
+	int iNumKilled[MAX_PLAYERS+1]; 		// how many times this player has killed every other player
+	int iNumKilledBy[MAX_PLAYERS+1]; 	// how many times this player has been killed by every other player
 	int iNumKilledByUnanswered[MAX_PLAYERS+1];		// how many unanswered kills this player has been dealt by every other player
 };
 
@@ -288,8 +288,8 @@ struct PlayerStats_t
 	RoundStats_t	statsCurrentLife;
 	RoundStats_t	statsCurrentRound;
 	RoundStats_t	statsAccumulated;
-	int				iStatsChangedBits;			// bit mask of which stats have changed
-	float			m_flTimeLastSend;			// time we last sent stat update to this player
+	int 	iStatsChangedBits; // bit mask of which stats have changed
+	float m_flTimeLastSend; // time we last sent stat update to this player
 
 	KillStats_t		statsKills;
 };
@@ -307,7 +307,7 @@ struct TFReportedStats_t
 	bool LoadCustomDataFromBuffer( CUtlBuffer &LoadBuffer );
 #endif 
 
-	TF_Gamestats_LevelStats_t								*m_pCurrentGame;
+	TF_Gamestats_LevelStats_t  		*m_pCurrentGame;
 	CUtlDict<TF_Gamestats_LevelStats_t, unsigned short>		m_dictMapStats;
 };
 

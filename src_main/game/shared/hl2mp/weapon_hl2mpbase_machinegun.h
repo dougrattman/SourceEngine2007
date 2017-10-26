@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "weapon_hl2mpbase.h"
 
@@ -39,7 +39,7 @@ public:
 
 	virtual const Vector &GetBulletSpread( void );
 
-	int				WeaponSoundRealtime( WeaponSound_t shoot_type );
+	int 	WeaponSoundRealtime( WeaponSound_t shoot_type );
 
 	// utility function
 	static void DoMachineGunKick( CBasePlayer *pPlayer, float dampEasy, float maxVerticleKickAngle, float fireDurationTime, float slideLimitTime );

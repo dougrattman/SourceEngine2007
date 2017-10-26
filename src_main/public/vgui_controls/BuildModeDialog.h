@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef BUILDMODEDIALOG_H
 #define BUILDMODEDIALOG_H
@@ -44,7 +44,7 @@ public:
 
 	/* CUSTOM MESSAGE HANDLING
 		"SetActiveControl"
-			input:	"PanelPtr"	- panel to set active control to edit to
+ input:	"PanelPtr"	- panel to set active control to edit to
 	*/	
 
 	MESSAGE_FUNC( OnShowNewControlMenu, "ShowNewControlMenu" );
@@ -103,7 +103,7 @@ private:
 	KeyValues *_undoSettings; // settings for the Undo command
 	KeyValues *_copySettings; // settings for the Copy/Paste command
 	char _copyClassName[255];
-	int			m_nClick[ 2 ];
+	int m_nClick[ 2 ];
 
 	void RemoveAllControls( void );
 	void UpdateEditControl(PanelItem_t &panelItem, const char *datstring);

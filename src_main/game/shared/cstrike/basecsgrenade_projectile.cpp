@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "basecsgrenade_projectile.h"
@@ -20,7 +20,7 @@ extern ConVar sv_gravity;
 	#include "cs_player.h"
 	#include "soundent.h"
 	#include "te_effect_dispatch.h"
-	#include "KeyValues.h"
+	#include "tier1/keyvalues.h"
 
 	BEGIN_DATADESC( CBaseCSGrenadeProjectile )
 		DEFINE_THINKFUNC( DangerSoundThink ),

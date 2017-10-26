@@ -1,17 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef MOD_VIS_H
 #define MOD_VIS_H
-#ifdef _WIN32
-#pragma once
-#endif
 
+bool Map_AreAnyLeavesVisible(const struct worldbrushdata_t &worldBrush,
+                             int *leafList, int nLeaves);
 
-bool Map_AreAnyLeavesVisible( const struct worldbrushdata_t &worldBrush, int *leafList, int nLeaves );
-
-
-#endif // MOD_VIS_H
+#endif  // MOD_VIS_H

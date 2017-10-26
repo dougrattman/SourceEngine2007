@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //=========================================================
 // Generic NPC - purely for scripted sequence work.
 //=========================================================
@@ -12,7 +12,7 @@
 #include "npcevent.h"
 #include "ai_basenpc.h"
 #include "ai_hull.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "engine/IEngineSound.h"
 #include "physics_bone_follower.h"
 #include "ai_baseactor.h"
@@ -223,7 +223,7 @@ public:
 		return BaseClass::OnTakeDamage(info);
 	}
 
-	void DrawDebugGeometryOverlays(void);
+	void DrawDebugGeometryOverlays();
 
 	void SetPlayerAvoidState( void );
 	void InputDisablePlayerCollision( inputdata_t &inputdata );

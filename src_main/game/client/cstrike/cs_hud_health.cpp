@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 // Health.cpp
 //
@@ -19,7 +19,7 @@
 
 #define PAIN_NAME "sprites/%d_pain.vmt"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
 #include <vgui_controls/AnimationController.h>
@@ -30,7 +30,7 @@ using namespace vgui;
 #include "hud_numericdisplay.h"
 #include "cs_gamerules.h"
 
-#include "ConVar.h"
+#include "tier1/convar.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Health panel

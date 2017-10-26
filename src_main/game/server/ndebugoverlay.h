@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Namespace for functions dealing with Debug Overlays
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef NDEBUGOVERLAY_H
 #define NDEBUGOVERLAY_H
 
@@ -16,13 +16,13 @@
 // An overlay line
 struct OverlayLine_t 
 {
-	Vector			origin;
-	Vector			dest;
-	int				r;
-	int				g;
-	int				b;
-	bool			noDepthTest;
-	bool			draw;
+	Vector origin;
+	Vector dest;
+	int 	r;
+	int 	g;
+	int 	b;
+	bool noDepthTest;
+	bool draw;
 };
 
 extern void	UTIL_AddDebugLine( const Vector &startPos, const Vector &endPos, bool noDepthTest, bool testLOS );

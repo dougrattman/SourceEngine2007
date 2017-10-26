@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "cs_gamerules.h"
 #include "cs_blackmarket.h"
 #include "weapon_csbase.h"
 #include "filesystem.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "cs_gamestats.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

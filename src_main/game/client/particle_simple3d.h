@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined( SIMPLE3D_H )
 #define SIMPLE3D_H
@@ -37,9 +37,9 @@ public:
 public:
 	
 	byte		m_uchFrontColor[3];	
-	byte		m_uchSize;			
+	byte		m_uchSize; 
 	byte		m_uchBackColor[3];	
-	byte		m_pad;				// Pad to 8 bytes.
+	byte		m_pad; 	// Pad to 8 bytes.
 };
 
 //

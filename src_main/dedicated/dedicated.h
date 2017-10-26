@@ -1,75 +1,49 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: 
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines a group of app systems that all have the same lifetime
-// that need to be connected/initialized, etc. in a well-defined order
-//
-// $NoKeywords: $
-//
-//===========================================================================//
+// that need to be connected/initialized, etc. in a well-defined order.
 
-#ifndef DEDICATED_H
-#define DEDICATED_H
-
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_DEDICATED_DEDICATED_H_
+#define SOURCE_DEDICATED_DEDICATED_H_
 
 #include "appframework/tier3app.h"
 
-
-//-----------------------------------------------------------------------------
-// Forward declarations 
-//-----------------------------------------------------------------------------
 class IDedicatedServerAPI;
 
-
-//-----------------------------------------------------------------------------
-// Singleton interfaces 
-//-----------------------------------------------------------------------------
 extern IDedicatedServerAPI *engine;
 
-
-//-----------------------------------------------------------------------------
-// Inner loop: initialize, shutdown main systems, load steam to 
-//-----------------------------------------------------------------------------
+// Inner loop: initialize, shutdown main systems, load steam to
 #ifdef _LINUX
 #define DEDICATED_BASECLASS CTier2SteamApp
 #else
 #define DEDICATED_BASECLASS CVguiSteamApp
 #endif
 
-class CDedicatedAppSystemGroup : public DEDICATED_BASECLASS
-{
-	typedef DEDICATED_BASECLASS BaseClass;
+class CDedicatedAppSystemGroup : public DEDICATED_BASECLASS {
+  using BaseClass = DEDICATED_BASECLASS;
 
-public:
-	// Methods of IApplication
-	virtual bool Create( );
-	virtual bool PreInit( );
-	virtual int Main( );
-	virtual void PostShutdown();
-	virtual void Destroy();
+ public:
+  // Methods of IApplication.
+  bool Create() override;
+  bool PreInit() override;
+  int Main() override;
+  void PostShutdown() override;
+  void Destroy() override;
 
-	// Used to chain to base class
-	AppModule_t LoadModule( CreateInterfaceFn factory )
-	{
-		return CSteamAppSystemGroup::LoadModule( factory );
-	}
+  // Used to chain to base class.
+  AppModule_t LoadModule(CreateInterfaceFn factory) {
+    return CSteamAppSystemGroup::LoadModule(factory);
+  }
 
-	// Method to add various global singleton systems 
-	bool AddSystems( AppSystemInfo_t *pSystems )
-	{
-		return CSteamAppSystemGroup::AddSystems( pSystems );
-	}
+  // Method to add various global singleton systems.
+  bool AddSystems(AppSystemInfo_t *systems) {
+    return CSteamAppSystemGroup::AddSystems(systems);
+  }
 
-	void *FindSystem( const char *pInterfaceName )
-	{
-		return CSteamAppSystemGroup::FindSystem( pInterfaceName );
-	}
+  // Find system by interface name.
+  void *FindSystem(const char *interface_name) {
+    return CSteamAppSystemGroup::FindSystem(interface_name);
+  }
 };
 
-
-
-#endif // DEDICATED_H
+#endif  // SOURCE_DEDICATED_DEDICATED_H_

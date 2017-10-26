@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include <cdll_client_int.h>
@@ -13,7 +13,7 @@
 #include <vgui/IScheme.h>
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/ImageList.h>
 #include <FileSystem.h>
 
@@ -25,9 +25,9 @@
 #include "IGameUIFuncs.h" // for key bindings
 #include <igameresources.h>
 #include <game/client/iviewport.h>
-#include <stdlib.h> // MAX_PATH define
-#include <stdio.h>
-#include "byteswap.h"
+#include <cstdlib> // MAX_PATH define
+#include <cstdio>
+#include "tier1/byteswap.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -274,7 +274,7 @@ void CTeamMenu::LoadMapPage( const char *mapName )
 		data[ bytesRead+1 ] = 0;
 	}
 
-	// null-terminate the stream (redundant, since we memset & then trimmed the transformed buffer already)
+	// 0-terminate the stream (redundant, since we memset & then trimmed the transformed buffer already)
 	memBlock[dataSize / sizeof(wchar_t) - 1] = 0x0000;
 
 	// ensure little-endian unicode reads correctly on all platforms

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_BASEDEATHNOTICE_H
 #define HUD_BASEDEATHNOTICE_H
@@ -20,7 +20,7 @@ struct DeathNoticePlayer
 		iTeam = TEAM_UNASSIGNED;
 	}
 	char		szName[MAX_PLAYER_NAME_LENGTH*2];	// big enough for player name and additional information
-	int			iTeam;								// team #	
+	int iTeam;  		// team #	
 };
 
 // Contents of each entry in our list of death notices

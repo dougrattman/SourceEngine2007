@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
 //=============================================================================
@@ -39,7 +39,7 @@ public:
 	~CTFGrenadeLauncher();
 
 	virtual void	Spawn( void );
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_GRENADELAUNCHER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_GRENADELAUNCHER; }
 	virtual void	SecondaryAttack();
 
 	virtual bool	Holster( CBaseCombatWeapon *pSwitchingTo );

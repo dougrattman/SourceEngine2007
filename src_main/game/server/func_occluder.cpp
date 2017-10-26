@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: area portal entity: toggles visibility areas on/off
 //
@@ -7,7 +7,7 @@
 // brush model is gone and this is, in effect, a point entity.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 

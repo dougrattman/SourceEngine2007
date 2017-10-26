@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -27,14 +27,14 @@ public:
 	virtual void	RenderPortalViewToBackBuffer( CViewRender *pViewRender, const CViewSetup &cameraView );
 	virtual void	RenderPortalViewToTexture( CViewRender *pViewRender, const CViewSetup &cameraView );
 	
-	void			AddToVisAsExitPortal( ViewCustomVisibility_t *pCustomVisibility );
+	void AddToVisAsExitPortal( ViewCustomVisibility_t *pCustomVisibility );
 	virtual bool	DoesExitViewIntersectWaterPlane( float waterZ, int leafWaterDataID ) const;
 	virtual SkyboxVisibility_t	SkyBoxVisibleFromPortal( void );
 
-	bool			CalcFrustumThroughPortal( const Vector &ptCurrentViewOrigin, Frustum OutputFrustum, const VPlane *pInputFrustum = NULL, int iInputFrustumPlaneCount = 0 );
+	bool CalcFrustumThroughPortal( const Vector &ptCurrentViewOrigin, Frustum OutputFrustum, const VPlane *pInputFrustum = NULL, int iInputFrustumPlaneCount = 0 );
 
 	virtual const Vector&	GetFogOrigin( void ) const;
-	virtual void			ShiftFogForExitPortalView() const;
+	virtual void ShiftFogForExitPortalView() const;
 
 	virtual bool	ShouldUpdatePortalView_BasedOnView( const CViewSetup &currentView, Frustum currentFrustum ); //portal is both visible, and will display at least some portion of a remote view
 	virtual CPortalRenderable* GetLinkedPortal() const;
@@ -44,14 +44,14 @@ public:
 	virtual void	GetToolRecordingState( bool bActive, KeyValues *msg );
 	virtual void	HandlePortalPlaybackMessage( KeyValues *pKeyValues );
 
-	void			DrawOutwardBox( const IMaterial *pMaterial = NULL );
-	void			DrawInwardBox( const IMaterial *pMaterial = NULL );
-	void			DrawInnerLiquid( bool bClipToBounds = true, float fOpacity = 1.0f, const IMaterial *pMaterial = NULL ); //quads in front of camera clipped to box dimensions
+	void DrawOutwardBox( const IMaterial *pMaterial = NULL );
+	void DrawInwardBox( const IMaterial *pMaterial = NULL );
+	void DrawInnerLiquid( bool bClipToBounds = true, float fOpacity = 1.0f, const IMaterial *pMaterial = NULL ); //quads in front of camera clipped to box dimensions
 
-	float			GetFillInterpolationAmount( void );
-	bool			IsFillingNow( void );
+	float GetFillInterpolationAmount( void );
+	bool IsFillingNow( void );
 
-	void			UpdateBoundingPlanes( void );
+	void UpdateBoundingPlanes( void );
 
 	float m_fFillStartTime;
 	float m_fFillEndTime;
@@ -119,12 +119,12 @@ public:
 	bool IsEnabled( void ) { return m_bEnable; };
 
 private:
-	bool				m_bEnable;
+	bool 	m_bEnable;
 
 public:
 	C_Func_LiquidPortal* m_pImmersionPortal; //portal that did the filling + teleporting
-	bool				m_bFadeBackToReality;
-	float				m_fFadeBackTimeLeft;
+	bool 	m_bFadeBackToReality;
+	float 	m_fFadeBackTimeLeft;
 	static const float	s_fFadeBackEffectTime; //how long the effect should take
 };
 

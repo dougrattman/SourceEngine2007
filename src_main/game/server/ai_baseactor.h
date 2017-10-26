@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Hooks and classes for the support of humanoid NPCs with 
-//			groovy facial animation capabilities, aka, "Actors"
+// groovy facial animation capabilities, aka, "Actors"
 //
-//=============================================================================//
+
 
 #ifndef AI_BASEACTOR_H
 #define AI_BASEACTOR_H
@@ -11,7 +11,7 @@
 #include "ai_basehumanoid.h"
 #include "ai_speech.h"
 #include "AI_Interest_Target.h"
-#include <limits.h>
+#include <climits>
 
 
 #if defined( _WIN32 )
@@ -29,12 +29,12 @@ enum FlexWeight_t { FLEX_END=INT_MAX };
 
 struct AILookTargetArgs_t
 {
-	EHANDLE 			hTarget;
-	Vector				vTarget;
-	float				flDuration;
-	float				flInfluence;
-	float				flRamp;
-	bool 				bExcludePlayers;
+	EHANDLE  hTarget;
+	Vector 	vTarget;
+	float 	flDuration;
+	float 	flInfluence;
+	float 	flRamp;
+	bool  	bExcludePlayers;
 	CAI_InterestTarget *pQueue;
 };
 
@@ -63,7 +63,7 @@ public:
 		// Make this fatal!!!
 		if ( !IsServerSideFlexController( szName ) )
 		{
-			Error( "You forgot to add flex controller %s to list in CAI_BaseActor::IsServerSideFlexController()." );
+ Error( "You forgot to add flex controller %s to list in CAI_BaseActor::IsServerSideFlexController()." );
 		}
 
 		index = (FlexWeight_t)FindFlexController( szName ); 
@@ -95,76 +95,76 @@ public:
 		delete m_pExpresser;
 	}
 
-	virtual void			StudioFrameAdvance();
+	virtual void StudioFrameAdvance();
 
-	virtual void			Precache();
+	virtual void Precache();
 
-	virtual void			SetModel( const char *szModelName );
+	virtual void SetModel( const char *szModelName );
 
-	virtual	bool			StartSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event, CChoreoActor *actor, CBaseEntity *pTarget );
-	virtual bool			ProcessSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event );
-	virtual	bool			ClearSceneEvent( CSceneEventInfo *info, bool fastKill, bool canceled );
-	virtual bool			CheckSceneEventCompletion( CSceneEventInfo *info, float currenttime, CChoreoScene *scene, CChoreoEvent *event );
+	virtual	bool StartSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event, CChoreoActor *actor, CBaseEntity *pTarget );
+	virtual bool ProcessSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, CChoreoEvent *event );
+	virtual	bool ClearSceneEvent( CSceneEventInfo *info, bool fastKill, bool canceled );
+	virtual bool CheckSceneEventCompletion( CSceneEventInfo *info, float currenttime, CChoreoScene *scene, CChoreoEvent *event );
 
-	Vector					EyePosition( );
-	virtual Vector			HeadDirection2D( void );
-	virtual Vector			HeadDirection3D( void );
-	virtual Vector			EyeDirection2D( void );
-	virtual Vector			EyeDirection3D( void );
+	Vector 		EyePosition( );
+	virtual Vector HeadDirection2D( void );
+	virtual Vector HeadDirection3D( void );
+	virtual Vector EyeDirection2D( void );
+	virtual Vector EyeDirection3D( void );
 
-	CBaseEntity				*GetLooktarget() { return m_hLookTarget.Get(); }
-	virtual void			OnNewLookTarget() {};
+	CBaseEntity 	*GetLooktarget() { return m_hLookTarget.Get(); }
+	virtual void OnNewLookTarget() {};
 
 	// CBaseFlex
-	virtual	void			SetViewtarget( const Vector &viewtarget );
+	virtual	void SetViewtarget( const Vector &viewtarget );
 	
 	// CAI_BaseNPC
-	virtual float			PickLookTarget( bool bExcludePlayers = false, float minTime = 1.5, float maxTime = 2.5 );
-	virtual float			PickLookTarget( CAI_InterestTarget &queue, bool bExcludePlayers = false, float minTime = 1.5, float maxTime = 2.5 );
-	virtual bool 			PickTacticalLookTarget( AILookTargetArgs_t *pArgs );
-	virtual bool 			PickRandomLookTarget( AILookTargetArgs_t *pArgs );
-	virtual void			MakeRandomLookTarget( AILookTargetArgs_t *pArgs, float minTime, float maxTime );
-	virtual bool			HasActiveLookTargets( void );
-	virtual void 			OnSelectedLookTarget( AILookTargetArgs_t *pArgs ) { return; }
-	virtual void 			ClearLookTarget( CBaseEntity *pTarget );
-	virtual void			ExpireCurrentRandomLookTarget() { m_flNextRandomLookTime = gpGlobals->curtime - 0.1f; }
+	virtual float PickLookTarget( bool bExcludePlayers = false, float minTime = 1.5, float maxTime = 2.5 );
+	virtual float PickLookTarget( CAI_InterestTarget &queue, bool bExcludePlayers = false, float minTime = 1.5, float maxTime = 2.5 );
+	virtual bool  PickTacticalLookTarget( AILookTargetArgs_t *pArgs );
+	virtual bool  PickRandomLookTarget( AILookTargetArgs_t *pArgs );
+	virtual void MakeRandomLookTarget( AILookTargetArgs_t *pArgs, float minTime, float maxTime );
+	virtual bool HasActiveLookTargets( void );
+	virtual void  OnSelectedLookTarget( AILookTargetArgs_t *pArgs ) { return; }
+	virtual void  ClearLookTarget( CBaseEntity *pTarget );
+	virtual void ExpireCurrentRandomLookTarget() { m_flNextRandomLookTime = gpGlobals->curtime - 0.1f; }
 
-	virtual void			StartTaskRangeAttack1( const Task_t *pTask );
+	virtual void StartTaskRangeAttack1( const Task_t *pTask );
 
-	virtual void			AddLookTarget( CBaseEntity *pTarget, float flImportance, float flDuration, float flRamp = 0.0 );
-	virtual void			AddLookTarget( const Vector &vecPosition, float flImportance, float flDuration, float flRamp = 0.0 );
+	virtual void AddLookTarget( CBaseEntity *pTarget, float flImportance, float flDuration, float flRamp = 0.0 );
+	virtual void AddLookTarget( const Vector &vecPosition, float flImportance, float flDuration, float flRamp = 0.0 );
 
-	virtual void			SetHeadDirection( const Vector &vTargetPos, float flInterval );
+	virtual void SetHeadDirection( const Vector &vTargetPos, float flInterval );
 
-	void					UpdateBodyControl( void );
-	void					UpdateHeadControl( const Vector &vHeadTarget, float flHeadInfluence );
-	virtual	float			GetHeadDebounce( void ) { return 0.3; } // how much of previous head turn to use
+	void 		UpdateBodyControl( void );
+	void 		UpdateHeadControl( const Vector &vHeadTarget, float flHeadInfluence );
+	virtual	float GetHeadDebounce( void ) { return 0.3; } // how much of previous head turn to use
 
-	virtual void			MaintainLookTargets( float flInterval );
-	virtual bool			ValidEyeTarget(const Vector &lookTargetPos);
-	virtual bool			ValidHeadTarget(const Vector &lookTargetPos);
-	virtual float			HeadTargetValidity(const Vector &lookTargetPos);
+	virtual void MaintainLookTargets( float flInterval );
+	virtual bool ValidEyeTarget(const Vector &lookTargetPos);
+	virtual bool ValidHeadTarget(const Vector &lookTargetPos);
+	virtual float HeadTargetValidity(const Vector &lookTargetPos);
 
-	virtual bool			ShouldBruteForceFailedNav()	{ return true; }
+	virtual bool ShouldBruteForceFailedNav()	{ return true; }
 
-	void					AccumulateIdealYaw( float flYaw, float flIntensity );
-	bool					SetAccumulatedYawAndUpdate( void );
+	void 		AccumulateIdealYaw( float flYaw, float flIntensity );
+	bool 		SetAccumulatedYawAndUpdate( void );
 
-	float					m_flAccumYawDelta;
-	float					m_flAccumYawScale;
-
-	//---------------------------------
-
-	virtual	void 			OnStateChange( NPC_STATE OldState, NPC_STATE NewState );
+	float 		m_flAccumYawDelta;
+	float 		m_flAccumYawScale;
 
 	//---------------------------------
 
-	virtual void			PlayExpressionForState( NPC_STATE state );
+	virtual	void  OnStateChange( NPC_STATE OldState, NPC_STATE NewState );
+
+	//---------------------------------
+
+	virtual void PlayExpressionForState( NPC_STATE state );
 	virtual const char		*SelectRandomExpressionForState( NPC_STATE state );
 
-	float					SetExpression( const char * );
-	void					ClearExpression();
-	const char *			GetExpression();
+	float 		SetExpression( const char * );
+	void 		ClearExpression();
+	const char * GetExpression();
 
 	enum
 	{
@@ -191,87 +191,87 @@ private:
 
 	//---------------------------------
 
-	void					UpdateLatchedValues( void );
+	void 		UpdateLatchedValues( void );
 
 	// Input handlers.
 	void InputSetExpressionOverride( inputdata_t &inputdata );
 
 	//---------------------------------
 
-	int						m_fLatchedPositions;
-	Vector					m_latchedEyeOrigin;
-	Vector 					m_latchedEyeDirection;		// direction eyes are looking
-	Vector 					m_latchedHeadDirection;		// direction head is aiming
+	int  m_fLatchedPositions;
+	Vector 		m_latchedEyeOrigin;
+	Vector  		m_latchedEyeDirection;		// direction eyes are looking
+	Vector  		m_latchedHeadDirection;		// direction head is aiming
 
-	void					ClearHeadAdjustment( void );
-	Vector					m_goalHeadDirection;
-	float					m_goalHeadInfluence;
-
-	//---------------------------------
-
-	float					m_goalSpineYaw;
-	float					m_goalBodyYaw;
-	Vector					m_goalHeadCorrection;
+	void 		ClearHeadAdjustment( void );
+	Vector 		m_goalHeadDirection;
+	float 		m_goalHeadInfluence;
 
 	//---------------------------------
 
-	float					m_flBlinktime;
-	EHANDLE					m_hLookTarget;
+	float 		m_goalSpineYaw;
+	float 		m_goalBodyYaw;
+	Vector 		m_goalHeadCorrection;
+
+	//---------------------------------
+
+	float 		m_flBlinktime;
+	EHANDLE 		m_hLookTarget;
 	CAI_InterestTarget		m_lookQueue;
 	CAI_InterestTarget		m_syntheticLookQueue;
 
 	CAI_InterestTarget		m_randomLookQueue;
-	float					m_flNextRandomLookTime;	// FIXME: move to scene
+	float 		m_flNextRandomLookTime;	// FIXME: move to scene
 
 	//---------------------------------
 
-	string_t				m_iszExpressionScene;
-	EHANDLE					m_hExpressionSceneEnt;
-	float					m_flNextRandomExpressionTime;
+	string_t 	m_iszExpressionScene;
+	EHANDLE 		m_hExpressionSceneEnt;
+	float 		m_flNextRandomExpressionTime;
 
-	string_t				m_iszExpressionOverride;
+	string_t 	m_iszExpressionOverride;
 
 protected:
-	string_t				m_iszIdleExpression;
-	string_t				m_iszAlertExpression;
-	string_t				m_iszCombatExpression;
-	string_t				m_iszDeathExpression;
+	string_t 	m_iszIdleExpression;
+	string_t 	m_iszAlertExpression;
+	string_t 	m_iszCombatExpression;
+	string_t 	m_iszDeathExpression;
 
 private:
 	//---------------------------------
 
-	//PoseParameter_t			m_ParameterBodyTransY;		// "body_trans_Y"
-	//PoseParameter_t			m_ParameterBodyTransX;		// "body_trans_X"
-	//PoseParameter_t			m_ParameterBodyLift;		// "body_lift"
-	PoseParameter_t			m_ParameterBodyYaw;			// "body_yaw"
-	//PoseParameter_t			m_ParameterBodyPitch;		// "body_pitch"
-	//PoseParameter_t			m_ParameterBodyRoll;		// "body_roll"
-	PoseParameter_t			m_ParameterSpineYaw;		// "spine_yaw"
-	//PoseParameter_t			m_ParameterSpinePitch;		// "spine_pitch"
-	//PoseParameter_t			m_ParameterSpineRoll;		// "spine_roll"
-	PoseParameter_t			m_ParameterNeckTrans;		// "neck_trans"
-	PoseParameter_t			m_ParameterHeadYaw;			// "head_yaw"
-	PoseParameter_t			m_ParameterHeadPitch;		// "head_pitch"
-	PoseParameter_t			m_ParameterHeadRoll;		// "head_roll"
+	//PoseParameter_t m_ParameterBodyTransY;		// "body_trans_Y"
+	//PoseParameter_t m_ParameterBodyTransX;		// "body_trans_X"
+	//PoseParameter_t m_ParameterBodyLift;		// "body_lift"
+	PoseParameter_t m_ParameterBodyYaw; // "body_yaw"
+	//PoseParameter_t m_ParameterBodyPitch;		// "body_pitch"
+	//PoseParameter_t m_ParameterBodyRoll;		// "body_roll"
+	PoseParameter_t m_ParameterSpineYaw;		// "spine_yaw"
+	//PoseParameter_t m_ParameterSpinePitch;		// "spine_pitch"
+	//PoseParameter_t m_ParameterSpineRoll;		// "spine_roll"
+	PoseParameter_t m_ParameterNeckTrans;		// "neck_trans"
+	PoseParameter_t m_ParameterHeadYaw; // "head_yaw"
+	PoseParameter_t m_ParameterHeadPitch;		// "head_pitch"
+	PoseParameter_t m_ParameterHeadRoll;		// "head_roll"
 
-	//FlexWeight_t			m_FlexweightMoveRightLeft;	// "move_rightleft"
-	//FlexWeight_t			m_FlexweightMoveForwardBack;// "move_forwardback"
-	//FlexWeight_t			m_FlexweightMoveUpDown;		// "move_updown"
-	FlexWeight_t			m_FlexweightBodyRightLeft;	// "body_rightleft"
-	//FlexWeight_t			m_FlexweightBodyUpDown;		// "body_updown"
-	//FlexWeight_t			m_FlexweightBodyTilt;		// "body_tilt"
-	FlexWeight_t			m_FlexweightChestRightLeft;	// "chest_rightleft"
-	//FlexWeight_t			m_FlexweightChestUpDown;	// "chest_updown"
-	//FlexWeight_t			m_FlexweightChestTilt;		// "chest_tilt"
-	FlexWeight_t			m_FlexweightHeadForwardBack;// "head_forwardback"
-	FlexWeight_t			m_FlexweightHeadRightLeft;	// "head_rightleft"
-	FlexWeight_t			m_FlexweightHeadUpDown;		// "head_updown"
-	FlexWeight_t			m_FlexweightHeadTilt;		// "head_tilt"
+	//FlexWeight_t m_FlexweightMoveRightLeft;	// "move_rightleft"
+	//FlexWeight_t m_FlexweightMoveForwardBack;// "move_forwardback"
+	//FlexWeight_t m_FlexweightMoveUpDown;		// "move_updown"
+	FlexWeight_t m_FlexweightBodyRightLeft;	// "body_rightleft"
+	//FlexWeight_t m_FlexweightBodyUpDown;		// "body_updown"
+	//FlexWeight_t m_FlexweightBodyTilt;		// "body_tilt"
+	FlexWeight_t m_FlexweightChestRightLeft;	// "chest_rightleft"
+	//FlexWeight_t m_FlexweightChestUpDown;	// "chest_updown"
+	//FlexWeight_t m_FlexweightChestTilt;		// "chest_tilt"
+	FlexWeight_t m_FlexweightHeadForwardBack;// "head_forwardback"
+	FlexWeight_t m_FlexweightHeadRightLeft;	// "head_rightleft"
+	FlexWeight_t m_FlexweightHeadUpDown;		// "head_updown"
+	FlexWeight_t m_FlexweightHeadTilt;		// "head_tilt"
 
-	PoseParameter_t			m_ParameterGestureHeight;		// "gesture_height"
-	PoseParameter_t			m_ParameterGestureWidth;		// "gesture_width"
-	FlexWeight_t			m_FlexweightGestureUpDown;		// "gesture_updown"
-	FlexWeight_t			m_FlexweightGestureRightLeft;	// "gesture_rightleft"
+	PoseParameter_t m_ParameterGestureHeight;		// "gesture_height"
+	PoseParameter_t m_ParameterGestureWidth;		// "gesture_width"
+	FlexWeight_t m_FlexweightGestureUpDown;		// "gesture_updown"
+	FlexWeight_t m_FlexweightGestureRightLeft;	// "gesture_rightleft"
 
 private:
 	//---------------------------------

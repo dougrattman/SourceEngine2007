@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #if !defined( CLIENTSTATS_H )
 #define CLIENTSTATS_H
@@ -12,8 +12,8 @@
 #pragma once
 #endif
 
-#include "interface.h"
-#include <limits.h>
+#include "tier1/interface.h"
+#include <climits>
 #include "tier0/dbg.h"
 
 #define INTERFACEVERSION_CLIENTSTATS "ClientStats004"

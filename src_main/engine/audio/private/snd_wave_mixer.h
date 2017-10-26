@@ -1,24 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $Date:         $
-//
-//-----------------------------------------------------------------------------
-// $Log: $
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef SND_WAVE_MIXER_H
 #define SND_WAVE_MIXER_H
-#pragma once
 
 class IWaveData;
 class CAudioMixer;
 
-CAudioMixer *CreateWaveMixer( IWaveData *data, int format, int channels, int bits, int initialStreamPosition );
+CAudioMixer *CreateWaveMixer(IWaveData *data, int format, int channels,
+                             int bits, int initialStreamPosition);
 
-
-#endif // SND_WAVE_MIXER_H
+#endif  // SND_WAVE_MIXER_H

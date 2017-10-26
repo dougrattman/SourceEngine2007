@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose:			A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
+// Purpose: A gib is a chunk of a body, or a piece of wood/metal/rocks/etc.
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GIB_H
 #define GIB_H
@@ -21,8 +21,8 @@
 extern CBaseEntity *CreateRagGib( const char *szModel, const Vector &vecOrigin, const QAngle &vecAngles, const Vector &vecForce, float flFadeTime = 0.0, bool bShouldIgnite = false );
 
 #define GERMAN_GIB_COUNT		4
-#define	HUMAN_GIB_COUNT			6
-#define ALIEN_GIB_COUNT			4
+#define	HUMAN_GIB_COUNT 6
+#define ALIEN_GIB_COUNT 4
 
 enum GibType_e
 {
@@ -31,7 +31,7 @@ enum GibType_e
 };
 
 class CGib : public CBaseAnimating,
-			 public CDefaultPlayerPickupVPhysics
+  public CDefaultPlayerPickupVPhysics
 {
 public:
 	DECLARE_CLASS( CGib, CBaseAnimating );
@@ -92,7 +92,7 @@ public:
 	bool	m_bForceRemove;
 
 	CHandle<CBasePlayer>	m_hPhysicsAttacker;
-	float					m_flLastPhysicsInfluenceTime;
+	float 		m_flLastPhysicsInfluenceTime;
 
 private:
 	// A little piece of duplicated code

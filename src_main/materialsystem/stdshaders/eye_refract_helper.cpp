@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "BaseVSShader.h"
 #include "mathlib/VMatrix.h"
@@ -18,7 +18,7 @@
 #include "eye_refract_ps30.inc"
 #endif
 
-#include "convar.h"
+#include "tier1/convar.h"
 
 static ConVar r_lightwarpidentity( "r_lightwarpidentity","0", FCVAR_CHEAT );
 

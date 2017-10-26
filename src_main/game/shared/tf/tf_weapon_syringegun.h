@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -38,7 +38,7 @@ public:
 	~CTFSyringeGun() {}
 
 	virtual void Precache();
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SYRINGEGUN_MEDIC; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SYRINGEGUN_MEDIC; }
 
 private:
 

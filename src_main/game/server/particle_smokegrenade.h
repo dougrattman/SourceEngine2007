@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef PARTICLE_SMOKEGRENADE_H
 #define PARTICLE_SMOKEGRENADE_H
@@ -23,20 +23,20 @@ public:
 	DECLARE_CLASS( ParticleSmokeGrenade, CBaseParticleEntity );
 	DECLARE_SERVERCLASS();
 
-						ParticleSmokeGrenade();
+  ParticleSmokeGrenade();
 
-	virtual int			UpdateTransmitState( void );
+	virtual int UpdateTransmitState( void );
 
 public:
 
 	// Tell the client entity to start filling the volume.
-	void				FillVolume();
+	void 	FillVolume();
 
 	// Set the times it fades out at.
-	void				SetFadeTime(float startTime, float endTime);
+	void 	SetFadeTime(float startTime, float endTime);
 
 	// Set time to fade out relative to current time
-	void				SetRelativeFadeTime(float startTime, float endTime);
+	void 	SetRelativeFadeTime(float startTime, float endTime);
 
 
 public:

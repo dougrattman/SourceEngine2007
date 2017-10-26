@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ANIMATIONCONTROLLER_H
 #define ANIMATIONCONTROLLER_H
@@ -21,7 +21,7 @@ namespace vgui
 
 //-----------------------------------------------------------------------------
 // Purpose: Handles controlling panel animation
-//			It is never visible, but needs to be a panel so that can receive messages
+// It is never visible, but needs to be a panel so that can receive messages
 //-----------------------------------------------------------------------------
 class AnimationController : public Panel
 {
@@ -124,8 +124,8 @@ private:
 	struct AnimAlign_t
 	{
 		// For Position, Xpos, YPos
-		bool				relativePosition;
-		UtlSymId_t			alignPanel;
+		bool 	relativePosition;
+		UtlSymId_t alignPanel;
 		RelativeAlignment	alignment;
 	};
 
@@ -159,8 +159,8 @@ private:
 		AnimCommandType_e commandType;
 		union
 		{
-			AnimCmdAnimate_t animate;
-			AnimCmdEvent_t runEvent;
+ AnimCmdAnimate_t animate;
+ AnimCmdEvent_t runEvent;
 		} cmdData;
 	};
 
@@ -213,7 +213,7 @@ private:
 	
 		bool operator==( const RanEvent_t &other ) const
 		{
-			return ( event == other.event && pParent == other.pParent );
+ return ( event == other.event && pParent == other.pParent );
 		}
 	};
 
@@ -255,8 +255,8 @@ private:
 
 	int		GetRelativeOffset( AnimAlign_t& cmd, bool xcoord );
 
-	VPANEL			m_hSizePanel;
-	int				m_nScreenBounds[ 4 ];
+	VPANEL m_hSizePanel;
+	int 	m_nScreenBounds[ 4 ];
 };
 
 // singleton accessor for use only by other vgui_controls

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
 // @TODO (toml 06-26-02): The entry points in this file need to be organized
-//=============================================================================//
+
 
 #include "cbase.h"
 

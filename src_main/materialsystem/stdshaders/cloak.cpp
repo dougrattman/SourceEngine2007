@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Cloaking shader for Spy in TF2 (and probably many other things to come)
 //
@@ -6,7 +6,7 @@
 //=====================================================================================//
 
 #include "BaseVSShader.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "cloak_dx9_helper.h"
 
 DEFINE_FALLBACK_SHADER( Cloak, Cloak_DX90 )

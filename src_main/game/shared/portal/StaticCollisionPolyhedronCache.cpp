@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -128,10 +128,10 @@ void CStaticCollisionPolyhedronCache::Update( void )
 	//So we're going to allocated temporary workspaces as we need them and consolidate into one allocation at the end.
 	const size_t workSpaceSize = 1024 * 1024; //1MB. Fairly arbitrary size for a workspace. Brushes usually use 1-3MB in the end. Static props usually use about half as much as brushes.
 
-	uint8 *workSpaceAllocations[256];
+	uint8_t *workSpaceAllocations[256];
 	size_t usedSpaceInWorkspace[256];
 	unsigned int workSpacesAllocated = 0;
-	uint8 *pCurrentWorkSpace = new uint8 [workSpaceSize];
+	uint8_t *pCurrentWorkSpace = new uint8_t [workSpaceSize];
 	size_t roomLeftInWorkSpace = workSpaceSize;
 	workSpaceAllocations[workSpacesAllocated] = pCurrentWorkSpace;
 	usedSpaceInWorkspace[workSpacesAllocated] = 0;
@@ -198,7 +198,7 @@ void CStaticCollisionPolyhedronCache::Update( void )
 				{
 					usedSpaceInWorkspace[workSpacesAllocated - 1] = workSpaceSize - roomLeftInWorkSpace;
 
-					pCurrentWorkSpace = new uint8 [workSpaceSize];
+					pCurrentWorkSpace = new uint8_t [workSpaceSize];
 					roomLeftInWorkSpace = workSpaceSize;
 					workSpaceAllocations[workSpacesAllocated] = pCurrentWorkSpace;
 					usedSpaceInWorkspace[workSpacesAllocated] = 0;
@@ -242,7 +242,7 @@ void CStaticCollisionPolyhedronCache::Update( void )
 				totalMemoryNeeded += usedSpaceInWorkspace[i];
 			}
 
-			uint8 *pFinalDest = new uint8 [totalMemoryNeeded];
+			uint8_t *pFinalDest = new uint8_t [totalMemoryNeeded];
 			s_BrushPolyhedronMemory = pFinalDest;
 
 			DevMsg( 2, "CStaticCollisionPolyhedronCache: Used %.2f KB to cache %d brush polyhedrons.\n", ((float)totalMemoryNeeded) / 1024.0f, m_BrushPolyhedrons.Count() );
@@ -265,14 +265,14 @@ void CStaticCollisionPolyhedronCache::Update( void )
 				m_BrushPolyhedrons[i] = pDest;
 				pFinalDest += memRequired;
 
-				int memoryOffset = ((uint8 *)pDest) - ((uint8 *)pSource);
+				int memoryOffset = ((uint8_t *)pDest) - ((uint8_t *)pSource);
 
 				memcpy( pDest, pSource, memRequired );
 				//move all the pointers to their new location.
-				pDest->pVertices = (Vector *)(((uint8 *)(pDest->pVertices)) + memoryOffset);
-				pDest->pLines = (Polyhedron_IndexedLine_t *)(((uint8 *)(pDest->pLines)) + memoryOffset);
-				pDest->pIndices = (Polyhedron_IndexedLineReference_t *)(((uint8 *)(pDest->pIndices)) + memoryOffset);
-				pDest->pPolygons = (Polyhedron_IndexedPolygon_t *)(((uint8 *)(pDest->pPolygons)) + memoryOffset);
+				pDest->pVertices = (Vector *)(((uint8_t *)(pDest->pVertices)) + memoryOffset);
+				pDest->pLines = (Polyhedron_IndexedLine_t *)(((uint8_t *)(pDest->pLines)) + memoryOffset);
+				pDest->pIndices = (Polyhedron_IndexedLineReference_t *)(((uint8_t *)(pDest->pIndices)) + memoryOffset);
+				pDest->pPolygons = (Polyhedron_IndexedPolygon_t *)(((uint8_t *)(pDest->pPolygons)) + memoryOffset);
 			}
 		}
 	}
@@ -343,7 +343,7 @@ void CStaticCollisionPolyhedronCache::Update( void )
 									else
 									{
 										//allocate a new workspace
-										pCurrentWorkSpace = new uint8 [workSpaceSize];
+										pCurrentWorkSpace = new uint8_t [workSpaceSize];
 										workSpaceAllocations[workSpacesAllocated] = pCurrentWorkSpace;
 										usedSpaceInWorkspace[workSpacesAllocated] = 0;
 									}
@@ -405,7 +405,7 @@ void CStaticCollisionPolyhedronCache::Update( void )
 					totalMemoryNeeded += usedSpaceInWorkspace[i];
 				}
 
-				uint8 *pFinalDest = new uint8 [totalMemoryNeeded];
+				uint8_t *pFinalDest = new uint8_t [totalMemoryNeeded];
 				s_StaticPropPolyhedronMemory = pFinalDest;
 
 				DevMsg( 2, "CStaticCollisionPolyhedronCache: Used %.2f KB to cache %d static prop polyhedrons.\n", ((float)totalMemoryNeeded) / 1024.0f, m_StaticPropPolyhedrons.Count() );
@@ -425,14 +425,14 @@ void CStaticCollisionPolyhedronCache::Update( void )
 					m_StaticPropPolyhedrons[i] = pDest;
 					pFinalDest += memRequired;
 
-					int memoryOffset = ((uint8 *)pDest) - ((uint8 *)pSource);
+					int memoryOffset = ((uint8_t *)pDest) - ((uint8_t *)pSource);
 
 					memcpy( pDest, pSource, memRequired );
 					//move all the pointers to their new location.
-					pDest->pVertices = (Vector *)(((uint8 *)(pDest->pVertices)) + memoryOffset);
-					pDest->pLines = (Polyhedron_IndexedLine_t *)(((uint8 *)(pDest->pLines)) + memoryOffset);
-					pDest->pIndices = (Polyhedron_IndexedLineReference_t *)(((uint8 *)(pDest->pIndices)) + memoryOffset);
-					pDest->pPolygons = (Polyhedron_IndexedPolygon_t *)(((uint8 *)(pDest->pPolygons)) + memoryOffset);
+					pDest->pVertices = (Vector *)(((uint8_t *)(pDest->pVertices)) + memoryOffset);
+					pDest->pLines = (Polyhedron_IndexedLine_t *)(((uint8_t *)(pDest->pLines)) + memoryOffset);
+					pDest->pIndices = (Polyhedron_IndexedLineReference_t *)(((uint8_t *)(pDest->pIndices)) + memoryOffset);
+					pDest->pPolygons = (Polyhedron_IndexedPolygon_t *)(((uint8_t *)(pDest->pPolygons)) + memoryOffset);
 				}
 			}
 		}

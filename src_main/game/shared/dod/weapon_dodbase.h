@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_DODBASE_H
 #define WEAPON_DODBASE_H
@@ -170,38 +170,38 @@ typedef enum
 	|		|--> CWeaponPschreck
 	|
 	|--> CWeaponDODBaseGun
-			|
-			|--> CDODFullAutoWeapon
-			|		|
-			|		|--> CWeaponC96
-			|		|
-			|		|--> CDODFullAutoPunchWeapon
-			|		|		|
-			|		|		|--> CWeaponThompson
-			|		|		|--> CWeaponMP40
-			|		|
-			|		|--> CDODBipodWeapon
-			|				|
-			|				|->	CWeapon30Cal
-			|				|->	CWeaponMG42
-			|
-			|--> CDODFireSelectWeapon
-			|		|
-			|		|--> CWeaponMP44
-			|		|--> CWeaponBAR
-			|
-			|
-			|--> CDODSemiAutoWeapon
-					|
-					|--> CWeaponColt
-					|--> CWeaponP38
-					|--> CWeaponM1Carbine
-					|--> CDODSniperWeapon
-						|
-						|--> CWeaponSpring
-						|--> CWeaponScopedK98
-						|--> CWeaponGarand
-						|--> CWeaponK98
+ |
+ |--> CDODFullAutoWeapon
+ |		|
+ |		|--> CWeaponC96
+ |		|
+ |		|--> CDODFullAutoPunchWeapon
+ |		|		|
+ |		|		|--> CWeaponThompson
+ |		|		|--> CWeaponMP40
+ |		|
+ |		|--> CDODBipodWeapon
+ | 	|
+ | 	|->	CWeapon30Cal
+ | 	|->	CWeaponMG42
+ |
+ |--> CDODFireSelectWeapon
+ |		|
+ |		|--> CWeaponMP44
+ |		|--> CWeaponBAR
+ |
+ |
+ |--> CDODSemiAutoWeapon
+ 		|
+ 		|--> CWeaponColt
+ 		|--> CWeaponP38
+ 		|--> CWeaponM1Carbine
+ 		|--> CDODSniperWeapon
+  |
+  |--> CWeaponSpring
+  |--> CWeaponScopedK98
+  |--> CWeaponGarand
+  |--> CWeaponK98
 
 */
 
@@ -270,10 +270,10 @@ public:
 	virtual DODWeaponID GetAltWeaponID( void ) const	{ return WEAPON_NONE; }
 
 	// return true if this weapon is an instance of the given weapon type (ie: "IsA" WEAPON_GLOCK)
-	bool IsA( DODWeaponID id ) const						{ return GetWeaponID() == id; }
+	bool IsA( DODWeaponID id ) const  { return GetWeaponID() == id; }
 
 	// return true if this weapon has a silencer equipped
-	virtual bool IsSilenced( void ) const				{ return false; }
+	virtual bool IsSilenced( void ) const 	{ return false; }
 
 	void KickBack( float up_base, float lateral_base, float up_modifier, float lateral_modifier, float up_max, float lateral_max, int direction_change );
 
@@ -322,19 +322,19 @@ public:
 
 		virtual bool ShouldDraw( void );
 
-		float			m_flCrosshairDistance;
-		int				m_iAmmoLastCheck;
-		int				m_iAlpha;
-		int				m_iScopeTextureID;
+		float m_flCrosshairDistance;
+		int 	m_iAmmoLastCheck;
+		int 	m_iAlpha;
+		int 	m_iScopeTextureID;
 
-		bool			m_bUseAltWeaponModel;	//use alternate left handed world model? reset on new sequence
+		bool m_bUseAltWeaponModel;	//use alternate left handed world model? reset on new sequence
 	#else
 
 		virtual bool	Reload();
 		virtual void	Spawn();
 
-		void			SetDieThink( bool bDie );
-		void			Die( void );
+		void SetDieThink( bool bDie );
+		void Die( void );
 
 		void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 

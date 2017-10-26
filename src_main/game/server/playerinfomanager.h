@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: implementation of player info manager
 //
-//=============================================================================//
+
 #ifndef PLAYERINFOMANAGER_H
 #define PLAYERINFOMANAGER_H
 #ifdef _WIN32

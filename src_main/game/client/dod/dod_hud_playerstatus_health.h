@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_HUD_PLAYERSTATUS_HEALTH_H
 #define DOD_HUD_PLAYERSTATUS_HEALTH_H
@@ -27,14 +27,14 @@ public:
 	virtual void Paint( void );
 
 private:
-	float				m_flPercentage;
+	float 	m_flPercentage;
 
-	int					m_iMaterialIndex;
-	Color				m_clrHealthHigh;
-	Color 				m_clrHealthMed;
-	Color 				m_clrHealthLow;
-	Color				m_clrBackground;
-	Color				m_clrBorder;
+	int 		m_iMaterialIndex;
+	Color 	m_clrHealthHigh;
+	Color  	m_clrHealthMed;
+	Color  	m_clrHealthLow;
+	Color 	m_clrBackground;
+	Color 	m_clrBorder;
 	
 	CPanelAnimationVar( float, m_flFirstWarningLevel, "FirstWarning", "0.50" );
 	CPanelAnimationVar( float, m_flSecondWarningLevel, "SecondWarning", "0.25" );
@@ -54,8 +54,8 @@ public:
 	virtual void OnScreenSizeChanged(int iOldWide, int iOldTall);
 
 private:
-	int					m_nPrevClass;		// used to store the player's class so we don't have to keep setting the image
-	int					m_nPrevTeam;
+	int 		m_nPrevClass;		// used to store the player's class so we don't have to keep setting the image
+	int 		m_nPrevTeam;
 
 	CDoDHudHealthBar	*m_pHealthBar;
 

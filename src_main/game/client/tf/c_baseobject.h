@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Clients CBaseObject
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_BASEOBJECT_H
 #define C_BASEOBJECT_H
@@ -49,18 +49,18 @@ public:
 	virtual void	AddEntity();
 	virtual void	Select( void );
 
-	void			SetActivity( Activity act );
+	void SetActivity( Activity act );
 	Activity		GetActivity( ) const;
-	void			SetObjectSequence( int sequence );
+	void SetObjectSequence( int sequence );
 
 	virtual void	PreDataUpdate( DataUpdateType_t updateType );
 	virtual void	OnDataChanged( DataUpdateType_t updateType );
 
 	virtual int		GetHealth() const { return m_iHealth; }
-	void			SetHealth( int health ) { m_iHealth = health; }
+	void SetHealth( int health ) { m_iHealth = health; }
 	virtual int		GetMaxHealth() const { return m_iMaxHealth; }
-	int				GetObjectFlags( void ) { return m_fObjectFlags; }
-	void			SetObjectFlags( int flags ) { m_fObjectFlags = flags; }
+	int 	GetObjectFlags( void ) { return m_fObjectFlags; }
+	void SetObjectFlags( int flags ) { m_fObjectFlags = flags; }
 
 	// Derive to customize an object's attached version
 	virtual	void	SetupAttachedVersion( void ) { return; }
@@ -72,7 +72,7 @@ public:
 	virtual void	GetTargetIDString( wchar_t *sIDString, int iMaxLenInBytes );
 	virtual void	GetTargetIDDataString( wchar_t *sDataString, int iMaxLenInBytes );
 
-	void			AttemptToGoActive( void );
+	void AttemptToGoActive( void );
 	virtual bool	ShouldBeActive( void );
 	virtual void	OnGoActive( void );
 	virtual void	OnGoInactive( void );
@@ -83,14 +83,14 @@ public:
 
 	virtual void	SetDormant( bool bDormant );
 
-	void			SendClientCommand( const char *pCmd );
+	void SendClientCommand( const char *pCmd );
 
 	virtual void FireEvent( const Vector& origin, const QAngle& angles, int event, const char *options );
 
 	// Builder preview...
-	void			ActivateYawPreview( bool enable );
-	void			PreviewYaw( float yaw );
-	bool			IsPreviewingYaw() const;
+	void ActivateYawPreview( bool enable );
+	void PreviewYaw( float yaw );
+	bool IsPreviewingYaw() const;
 	
 	virtual void	RecalculateIDString( void );
 
@@ -102,10 +102,10 @@ public:
 
 	virtual int		DrawModel( int flags );
 
-	float			GetPercentageConstructed( void ) { return m_flPercentageConstructed; }
+	float GetPercentageConstructed( void ) { return m_flPercentageConstructed; }
 
-	bool			IsPlacing( void ) const { return m_bPlacing; }
-	bool			IsBuilding( void ) const { return m_bBuilding; }
+	bool IsPlacing( void ) const { return m_bPlacing; }
+	bool IsBuilding( void ) const { return m_bBuilding; }
 	virtual bool	IsUpgrading( void ) const { return false; }
 
 	virtual void	FinishedBuilding( void ) { return; }
@@ -114,9 +114,9 @@ public:
 	virtual void	GetStatusText( wchar_t *pStatus, int iMaxStatusLen );
 
 	// Object Previews
-	void			HighlightBuildPoints( int flags );
+	void HighlightBuildPoints( int flags );
 
-	bool			HasSapper( void );
+	bool HasSapper( void );
 
 	virtual void	OnStartDisabled( void );
 	virtual void	OnEndDisabled( void );
@@ -124,7 +124,7 @@ public:
 	virtual bool	ShouldCollide( int collisionGroup, int contentsMask ) const;
 	virtual bool	ShouldPlayersAvoid( void );
 
-	bool			MustBeBuiltOnAttachmentPoint( void ) const;
+	bool MustBeBuiltOnAttachmentPoint( void ) const;
 
 	virtual bool	IsHostileUpgrade( void ) { return false; }
 
@@ -140,46 +140,46 @@ private:
 
 public:
 	// Client/Server shared build point code
-	void				CreateBuildPoints( void );
-	void				AddAndParseBuildPoint( int iAttachmentNumber, KeyValues *pkvBuildPoint );
-	virtual int			AddBuildPoint( int iAttachmentNum );
+	void 	CreateBuildPoints( void );
+	void 	AddAndParseBuildPoint( int iAttachmentNumber, KeyValues *pkvBuildPoint );
+	virtual int AddBuildPoint( int iAttachmentNum );
 	virtual void		AddValidObjectToBuildPoint( int iPoint, int iObjectType );
 	virtual CBaseObject *GetBuildPointObject( int iPoint );
-	bool				IsBuiltOnAttachment( void ) { return m_hBuiltOnEntity.IsValid(); }
-	void				AttachObjectToObject( CBaseEntity *pEntity, int iPoint, Vector &vecOrigin );
-	CBaseObject			*GetParentObject( void );
-	void				SetBuildPointPassenger( int iPoint, int iPassenger );
+	bool 	IsBuiltOnAttachment( void ) { return m_hBuiltOnEntity.IsValid(); }
+	void 	AttachObjectToObject( CBaseEntity *pEntity, int iPoint, Vector &vecOrigin );
+	CBaseObject *GetParentObject( void );
+	void 	SetBuildPointPassenger( int iPoint, int iPassenger );
 
 	// Build points
 	CUtlVector<BuildPoint_t>	m_BuildPoints;
 
-	bool				IsDisabled( void ) { return m_bDisabled; }
+	bool 	IsDisabled( void ) { return m_bDisabled; }
 
 	// Shared placement
-	bool 				VerifyCorner( const Vector &vBottomCenter, float xOffset, float yOffset );
-	bool				CalculatePlacementPos( void );
+	bool  	VerifyCorner( const Vector &vBottomCenter, float xOffset, float yOffset );
+	bool 	CalculatePlacementPos( void );
 	virtual bool		IsPlacementPosValid( void );
 	virtual float		GetNearbyObjectCheckRadius( void ) { return 30.0; }
 
 	virtual void		OnPlacementStateChanged( bool bValidPlacement );
 
-	bool				ServerValidPlacement( void );		// allow server to trump our placement state
+	bool 	ServerValidPlacement( void );		// allow server to trump our placement state
 
-	bool				WasLastPlacementPosValid( void );	// query if we're in a valid place, when we last tried to calculate it
+	bool 	WasLastPlacementPosValid( void );	// query if we're in a valid place, when we last tried to calculate it
 
 // IHasBuildPoints
 public:
-	virtual int			GetNumBuildPoints( void ) const;
+	virtual int GetNumBuildPoints( void ) const;
 	virtual bool		GetBuildPoint( int iPoint, Vector &vecOrigin, QAngle &vecAngles );
-	virtual int			GetBuildPointAttachmentIndex( int iPoint ) const;
+	virtual int GetBuildPointAttachmentIndex( int iPoint ) const;
 	virtual bool		CanBuildObjectOnBuildPoint( int iPoint, int iObjectType );
 	virtual void		SetObjectOnBuildPoint( int iPoint, CBaseObject *pObject );
 	virtual float		GetMaxSnapDistance( int iBuildPoint );
 	virtual bool		ShouldCheckForMovement( void ) { return true; }
-	virtual int			GetNumObjectsOnMe( void );
+	virtual int GetNumObjectsOnMe( void );
 	virtual CBaseObject *GetObjectOfTypeOnMe( int iObjectType );
 	virtual void		RemoveAllObjects( void );
-	virtual int			FindObjectOnBuildPoint( CBaseObject *pObject );
+	virtual int FindObjectOnBuildPoint( CBaseObject *pObject );
 
 	virtual bool TestHitboxes( const Ray_t &ray, unsigned int fContentsMask, trace_t& tr );
 
@@ -190,13 +190,13 @@ public:
 protected:
 	virtual void		UpdateDamageEffects( BuildingDamageLevel_t damageLevel ) {}	// default is no effects
 
-	void				UpdateDesiredBuildRotation( float flFrameTime );
+	void 	UpdateDesiredBuildRotation( float flFrameTime );
 
 protected:
 
 	BuildingDamageLevel_t CalculateDamageLevel( void );
 
-	char			m_szIDString[ MAX_ID_STRING ];
+	char m_szIDString[ MAX_ID_STRING ];
 
 	BuildingDamageLevel_t m_damageLevel;
 
@@ -212,26 +212,26 @@ private:
 
 	Activity		m_Activity;
 
-	int				m_fObjectFlags;
-	float			m_fYawPreview;
-	char			m_YawPreviewState;
+	int 	m_fObjectFlags;
+	float m_fYawPreview;
+	char m_YawPreviewState;
 	CHandle< C_TFPlayer > m_hOldOwner;
 	CHandle< C_TFPlayer > m_hBuilder;
-	bool			m_bWasActive;
-	int				m_iOldHealth;
-	bool			m_bHasSapper;
-	bool			m_bOldSapper;
-	int				m_iObjectType;
-	int				m_iHealth;
-	int				m_iMaxHealth;
-	bool			m_bWasBuilding;
-	bool			m_bBuilding;
-	bool			m_bWasPlacing;
-	bool			m_bPlacing;
-	bool			m_bDisabled;
-	bool			m_bOldDisabled;
-	float			m_flPercentageConstructed;
-	EHANDLE			m_hBuiltOnEntity;
+	bool m_bWasActive;
+	int 	m_iOldHealth;
+	bool m_bHasSapper;
+	bool m_bOldSapper;
+	int 	m_iObjectType;
+	int 	m_iHealth;
+	int 	m_iMaxHealth;
+	bool m_bWasBuilding;
+	bool m_bBuilding;
+	bool m_bWasPlacing;
+	bool m_bPlacing;
+	bool m_bDisabled;
+	bool m_bOldDisabled;
+	float m_flPercentageConstructed;
+	EHANDLE m_hBuiltOnEntity;
 
 	CNetworkVector( m_vecBuildMaxs );
 	CNetworkVector( m_vecBuildMins );

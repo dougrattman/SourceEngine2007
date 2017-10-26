@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef MONSTERMAKER_H
 #define MONSTERMAKER_H
@@ -17,10 +17,10 @@
 // Spawnflags
 //-----------------------------------------------------------------------------
 #define	SF_NPCMAKER_START_ON		1	// start active ( if has targetname )
-#define SF_NPCMAKER_NPCCLIP			8	// Children are blocked by NPCclip
-#define SF_NPCMAKER_FADE			16	// Children's corpses fade
+#define SF_NPCMAKER_NPCCLIP 8	// Children are blocked by NPCclip
+#define SF_NPCMAKER_FADE 16	// Children's corpses fade
 #define SF_NPCMAKER_INF_CHILD		32	// Infinite number of children
-#define	SF_NPCMAKER_NO_DROP			64	// Do not adjust for the ground's position when checking for spawn
+#define	SF_NPCMAKER_NO_DROP 64	// Do not adjust for the ground's position when checking for spawn
 #define SF_NPCMAKER_HIDEFROMPLAYER	128 // Don't spawn if the player's looking at me
 #define SF_NPCMAKER_ALWAYSUSERADIUS	256	// Use radius spawn whenever spawning
 #define SF_NPCMAKER_NOPRELOADMODELS 512	// Suppress preloading into the cache of all referenced .mdl files
@@ -33,7 +33,7 @@ class CNPCSpawnDestination : public CPointEntity
 
 public:
 	CNPCSpawnDestination();
-	bool IsAvailable();						// Is this spawn destination available for selection?
+	bool IsAvailable();  // Is this spawn destination available for selection?
 	void OnSpawnedNPC( CAI_BaseNPC *pNPC );	// Notify this spawn destination that an NPC has spawned here.
 
 	float		m_ReuseDelay;		// How long to be unavailable after being selected
@@ -62,7 +62,7 @@ public:
 	virtual	void ChildPreSpawn( CAI_BaseNPC *pChild ) {};
 	virtual	void ChildPostSpawn( CAI_BaseNPC *pChild );
 
-	CBaseNPCMaker(void) {}
+	CBaseNPCMaker() {}
 
 	// Input handlers
 	void InputSpawnNPC( inputdata_t &inputdata );
@@ -83,7 +83,7 @@ public:
 
 	DECLARE_DATADESC();
 	
-	int			m_nMaxNumNPCs;			// max number of NPCs this ent can create
+	int m_nMaxNumNPCs; // max number of NPCs this ent can create
 	float		m_flSpawnFrequency;		// delay (in secs) between spawns 
 
 	COutputEHANDLE m_OnSpawnNPC;
@@ -114,7 +114,7 @@ public:
 
 	DECLARE_DATADESC();
 	
-	string_t m_iszNPCClassname;			// classname of the NPC(s) that will be created.
+	string_t m_iszNPCClassname; // classname of the NPC(s) that will be created.
 	string_t m_SquadName;
 	string_t m_strHintGroup;
 	string_t m_spawnEquipment;

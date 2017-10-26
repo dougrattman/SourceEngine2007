@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef NPC_BULLSEYE_H
 #define NPC_BULLSEYE_H
@@ -21,7 +21,7 @@ class CNPC_Bullseye : public CAI_BaseNPC
 	DECLARE_CLASS( CNPC_Bullseye, CAI_BaseNPC );
 
 public:
-	CNPC_Bullseye(void);
+	CNPC_Bullseye();
 	~CNPC_Bullseye();
 
 	virtual void Precache( void );
@@ -55,12 +55,12 @@ public:
 
 protected:
 
-	EHANDLE			m_hPainPartner;	//Entity that the bullseye will pass any damage it take to
+	EHANDLE m_hPainPartner;	//Entity that the bullseye will pass any damage it take to
 	COutputEvent	m_OnTargeted;
 	COutputEvent	m_OnReleased;
-	bool			m_bPerfectAccuracy;	// Entities that shoot at me should be perfectly accurate
-	float			m_fAutoaimRadius;	// How much to influence player's autoaim.
-	float			m_flMinDistValidEnemy;
+	bool m_bPerfectAccuracy;	// Entities that shoot at me should be perfectly accurate
+	float m_fAutoaimRadius;	// How much to influence player's autoaim.
+	float m_flMinDistValidEnemy;
 
 	DECLARE_DATADESC();
 };
@@ -70,7 +70,7 @@ int FindBullseyesInCone( CBaseEntity **pList, int listMax, const Vector &coneOri
 #define SF_BULLSEYE_NONSOLID		(1 << 16)
 #define SF_BULLSEYE_NODAMAGE		(1 << 17)
 #define	SF_BULLSEYE_ENEMYDAMAGEONLY	(1 << 18)
-#define	SF_BULLSEYE_BLEED			(1 << 19)
+#define	SF_BULLSEYE_BLEED (1 << 19)
 #define SF_BULLSEYE_PERFECTACC		(1 << 20)
 #define SF_BULLSEYE_VPHYSICSSHADOW  (1 << 21)
 

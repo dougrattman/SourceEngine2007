@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
 //=============================================================================
@@ -70,14 +70,14 @@ public:
 	virtual void	SetDormant( bool bDormant );
 
 	//	Start/stop flame sound and particle effects
-	void			StartFlame();
-	void			StopFlame( bool bAbrupt = false );
+	void StartFlame();
+	void StopFlame( bool bAbrupt = false );
 
-	void			RestartParticleEffect();	
+	void RestartParticleEffect();	
 
 	// constant pilot light sound
-	void 			StartPilotLight();
-	void 			StopPilotLight();
+	void  StartPilotLight();
+	void  StopPilotLight();
 #endif
 
 private:
@@ -88,7 +88,7 @@ private:
 	float m_flStartFiringTime;
 	float m_flNextPrimaryAttackAnim;
 
-	int			m_iParticleWaterLevel;
+	int m_iParticleWaterLevel;
 	float		m_flAmmoUseRemainder;
 
 #if defined( CLIENT_DLL )
@@ -103,8 +103,8 @@ private:
 };
 
 //=============================================================================
-#define	TF_FLAMETHROWER_ROCKET_DAMAGE				15
-#define TF_FLAMETHROWER_ROCKET_BURN_RADIUS			198
+#define	TF_FLAMETHROWER_ROCKET_DAMAGE 	15
+#define TF_FLAMETHROWER_ROCKET_BURN_RADIUS 198
 
 // Generic flame rocket.
 class CTFFlameRocket : public CTFProjectile_Rocket
@@ -143,16 +143,16 @@ public:
 private:
 	void OnCollide( CBaseEntity *pOther );
 
-	Vector					m_vecInitialPos;		// position the flame was fired from
-	Vector					m_vecPrevPos;			// position from previous frame
-	Vector					m_vecBaseVelocity;		// base velocity vector of the flame (ignoring rise effect)
-	Vector					m_vecAttackerVelocity;	// velocity of attacking player at time flame was fired
-	float					m_flTimeRemove;			// time at which the flame should be removed
-	int						m_iDmgType;				// damage type
-	float					m_flDmgAmount;			// amount of base damage
+	Vector 		m_vecInitialPos;		// position the flame was fired from
+	Vector 		m_vecPrevPos; // position from previous frame
+	Vector 		m_vecBaseVelocity;		// base velocity vector of the flame (ignoring rise effect)
+	Vector 		m_vecAttackerVelocity;	// velocity of attacking player at time flame was fired
+	float 		m_flTimeRemove; // time at which the flame should be removed
+	int  m_iDmgType; 	// damage type
+	float 		m_flDmgAmount; // amount of base damage
 	CUtlVector<EHANDLE>		m_hEntitiesBurnt;		// list of entities this flame has burnt
-	EHANDLE					m_hAttacker;			// attacking player
-	int						m_iAttackerTeam;		// team of attacking player
+	EHANDLE 		m_hAttacker; // attacking player
+	int  m_iAttackerTeam;		// team of attacking player
 };
 
 #endif // GAME_DLL

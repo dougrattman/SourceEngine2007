@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_FUNC_DUST_H
 #define C_FUNC_DUST_H
@@ -60,8 +60,8 @@ public:
 	DECLARE_CLASS( C_Func_Dust, C_BaseEntity );
 	DECLARE_CLIENTCLASS();
 
-						C_Func_Dust();
-	virtual				~C_Func_Dust();
+  C_Func_Dust();
+	virtual 	~C_Func_Dust();
 	virtual void		OnDataChanged( DataUpdateType_t updateType );
 	virtual void		ClientThink();
 	virtual bool		ShouldDraw();
@@ -69,39 +69,39 @@ public:
 
 private:
 
-	void				AttemptSpawnNewParticle();
+	void 	AttemptSpawnNewParticle();
 
 
 
 // Vars from server.
 public:
 
-	color32			m_Color;
-	int				m_SpawnRate;
+	color32 m_Color;
+	int 	m_SpawnRate;
 	
-	float			m_flSizeMin;
-	float			m_flSizeMax;
+	float m_flSizeMin;
+	float m_flSizeMax;
 
-	int				m_SpeedMax;
+	int 	m_SpeedMax;
 
-	int				m_LifetimeMin;
-	int				m_LifetimeMax;
+	int 	m_LifetimeMin;
+	int 	m_LifetimeMax;
 
-	int				m_DistMax;
+	int 	m_DistMax;
 
-	float			m_FallSpeed;	// extra 'gravity'
+	float m_FallSpeed;	// extra 'gravity'
 
 
 public:
 
-	int				m_DustFlags;	// Combination of DUSTFLAGS_
+	int 	m_DustFlags;	// Combination of DUSTFLAGS_
 
 
 
 public:
 	CDustEffect		m_Effect;
 	PMaterialHandle		m_hMaterial;
-	TimedEvent			m_Spawner;
+	TimedEvent m_Spawner;
 
 private:
 	C_Func_Dust( const C_Func_Dust & ); // not defined, not accessible

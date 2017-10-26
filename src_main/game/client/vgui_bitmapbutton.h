@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is a panel which is rendered image on top of an entity
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VGUI_BITMAPBUTTON_H
 #define VGUI_BITMAPBUTTON_H

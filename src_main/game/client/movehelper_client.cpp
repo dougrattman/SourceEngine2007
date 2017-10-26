@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
-#include <stdarg.h>
+#include <cstdarg>
 #include "engine/ienginesound.h"
 #include "filesystem.h"
 #include "igamemovement.h"
@@ -33,7 +33,7 @@ public:
 	// Numbered line printf
 	virtual void	Con_NPrintf( int idx, char const* fmt, ... );
 		
-	virtual bool	PlayerFallingDamage(void);
+	virtual bool	PlayerFallingDamage();
 	virtual void	PlayerSetAnimation( PLAYER_ANIM eAnim );
 
 	// These have separate server vs client impementations

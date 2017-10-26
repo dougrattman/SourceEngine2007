@@ -339,7 +339,7 @@ void CEP2GameStats::Event_PlayerTraveled( CBasePlayer *pBasePlayer, float distan
 	}
 
 	m_flInchesRemainder[ iIndex ] += distanceInInches;
-	uint64 intPart = (uint64)m_flInchesRemainder[ iIndex ];
+	uint64_t intPart = (uint64_t)m_flInchesRemainder[ iIndex ];
 	m_flInchesRemainder[ iIndex ] -= intPart;
 	if ( intPart > 0 )
 	{

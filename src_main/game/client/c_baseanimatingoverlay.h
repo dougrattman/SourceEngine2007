@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef C_BASEANIMATINGOVERLAY_H
 #define C_BASEANIMATINGOVERLAY_H
@@ -35,7 +35,7 @@ public:
 
 	virtual void	GetRenderBounds( Vector& theMins, Vector& theMaxs );
 
-	void			CheckForLayerChanges( CStudioHdr *hdr, float currentTime );
+	void CheckForLayerChanges( CStudioHdr *hdr, float currentTime );
 
 	// model specific
 	virtual void	AccumulateLayers( CStudioHdr *hdr, Vector pos[], Quaternion q[], float poseparam[], float currentTime, int boneMask );

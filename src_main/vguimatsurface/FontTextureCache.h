@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FONTTEXTURECACHE_H
 #define FONTTEXTURECACHE_H
@@ -55,9 +55,9 @@ private:
 	struct CacheEntry_t
 	{
 		vgui::HFont		font;
-		wchar_t			wch;
+		wchar_t wch;
 		unsigned char	page;
-		float			texCoords[4];
+		float texCoords[4];
 
 		// doubly-linked list for use in the LRU
 		HCacheEntry		nextEntry;
@@ -89,9 +89,9 @@ private:
 
 	// cache
 	typedef CUtlVector<Page_t>	FontPageList_t;
-	FontPageList_t				m_PageList;
+	FontPageList_t 	m_PageList;
 	
-	int			m_pCurrPage[FONT_PAGE_SIZE_COUNT];
+	int m_pCurrPage[FONT_PAGE_SIZE_COUNT];
 	HCacheEntry	m_LRUListHeadIndex;
 	static int	s_pFontPageSize[FONT_PAGE_SIZE_COUNT];
 	CUtlMap< vgui::HFont, Page_t >	m_FontPages;

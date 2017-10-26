@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF Sniper Rifle
 //
-//=============================================================================//
+
 #ifndef TF_WEAPON_SNIPERRIFLE_H
 #define TF_WEAPON_SNIPERRIFLE_H
 #ifdef _WIN32
@@ -37,23 +37,23 @@ public:
 	void		ResetChargeTime( void ) { m_flChargeStartTime = gpGlobals->curtime; }
 
 	// Attributes.
-	int			ObjectCaps()							{ return (BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
+	int ObjectCaps()  	{ return (BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
 
 	// Targeting.
 	void        Update( CBaseEntity *pTarget, const Vector &vecOrigin, const Vector &vecNormal );
-	CBaseEntity	*GetTargetEntity( void )				{ return m_hTargetEnt; }
+	CBaseEntity	*GetTargetEntity( void ) 	{ return m_hTargetEnt; }
 
 // Client specific.
 #ifdef CLIENT_DLL
 
 	// Rendering.
-	virtual bool			IsTransparent( void )		{ return true; }
+	virtual bool IsTransparent( void )		{ return true; }
 	virtual RenderGroup_t	GetRenderGroup( void )		{ return RENDER_GROUP_TRANSLUCENT_ENTITY; }
-	virtual int				DrawModel( int flags );
-	virtual bool			ShouldDraw( void );
+	virtual int 	DrawModel( int flags );
+	virtual bool ShouldDraw( void );
 
 	//
-	virtual void			OnDataChanged( DataUpdateType_t updateType );
+	virtual void OnDataChanged( DataUpdateType_t updateType );
 
 	CMaterialReference		m_hSpriteMaterial;
 
@@ -61,8 +61,8 @@ public:
 
 protected:
 
-	Vector					m_vecSurfaceNormal;
-	EHANDLE					m_hTargetEnt;
+	Vector 		m_vecSurfaceNormal;
+	EHANDLE 		m_hTargetEnt;
 
 	CNetworkVar( float, m_flChargeStartTime );
 };
@@ -82,7 +82,7 @@ public:
 	CTFSniperRifle();
 	~CTFSniperRifle();
 
-	virtual int	GetWeaponID( void ) const			{ return TF_WEAPON_SNIPERRIFLE; }
+	virtual int	GetWeaponID( void ) const { return TF_WEAPON_SNIPERRIFLE; }
 
 	virtual void Spawn();
 	virtual void Precache();

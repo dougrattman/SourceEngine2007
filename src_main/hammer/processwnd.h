@@ -1,6 +1,7 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved.
+//============//
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //
@@ -11,56 +12,54 @@
 /////////////////////////////////////////////////////////////////////////////
 // CProcessWnd window
 
-class CProcessWnd : public CWnd
-{
-// Construction
-public:
-	CProcessWnd();
+class CProcessWnd : public CWnd {
+  // Construction
+ public:
+  CProcessWnd();
 
-// Attributes
-public:
-	// pipes:
-	HANDLE hChildStdoutRd; 
-	HANDLE hProcess;
-	char *pEditBuf;
-	UINT uBufLen;
+  // Attributes
+ public:
+  // pipes:
+  HANDLE hChildStdoutRd;
+  HANDLE hProcess;
+  char* pEditBuf;
+  UINT uBufLen;
 
-	CEdit Edit;
-	CFont Font;
+  CEdit Edit;
+  CFont Font;
 
-// Operations
-public:
-	int Execute(LPCTSTR pszCmd, LPCTSTR pszCmdLine);
-	int Execute(LPCTSTR pszCmd, ...);
+  // Operations
+ public:
+  int Execute(LPCTSTR pszCmd, LPCTSTR pszCmdLine);
+  int Execute(LPCTSTR pszCmd, ...);
 
-	void Clear();
-	void Append(CString str);
-	void GetReady();
+  void Clear();
+  void Append(CString str);
+  void GetReady();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProcessWnd)
-	//}}AFX_VIRTUAL
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CProcessWnd)
+  //}}AFX_VIRTUAL
 
-// Implementation
-public:
-	virtual ~CProcessWnd();
+  // Implementation
+ public:
+  virtual ~CProcessWnd();
 
-	// Generated message map functions
-protected:
+  // Generated message map functions
+ protected:
+  BOOL PreTranslateMessage(MSG* pMsg);
 
-	BOOL PreTranslateMessage(MSG* pMsg);
+  CString m_EditText;
+  CButton m_btnCopyAll;
 
-	CString m_EditText;
-	CButton m_btnCopyAll;
-
-	//{{AFX_MSG(CProcessWnd)
-	afx_msg void OnTimer(UINT nIDEvent);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void CProcessWnd::OnCopyAll();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  //{{AFX_MSG(CProcessWnd)
+  afx_msg void OnTimer(UINT nIDEvent);
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnCopyAll();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

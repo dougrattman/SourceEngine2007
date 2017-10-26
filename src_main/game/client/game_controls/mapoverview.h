@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: MiniMap.h: interface for the CMiniMap class.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #if !defined HLTVPANEL_H
 #define HLTVPANEL_H
@@ -198,36 +198,36 @@ protected:
 	virtual void	UpdateSizeAndPosition();
 	virtual bool	RunHudAnimations(){ return true; }
 
-	bool			IsInPanel(Vector2D &pos);
+	bool IsInPanel(Vector2D &pos);
 	MapPlayer_t*	GetPlayerByUserID( int userID );
-	int				AddIconTexture(const char *filename);
+	int 	AddIconTexture(const char *filename);
 	Vector2D		MapToPanel( const Vector2D &mappos );
-	int				GetPixelOffset( float height );
-	void			UpdateFollowEntity();
+	int 	GetPixelOffset( float height );
+	void UpdateFollowEntity();
 	virtual void	UpdatePlayers();
-	void			UpdateObjects(); // objects bound to entities 
+	void UpdateObjects(); // objects bound to entities 
 	MapObject_t*	FindObjectByID(int objectID);
 	virtual bool	IsRadarLocked() {return false;}
 
 	virtual bool	DrawIcon( MapObject_t *obj );
 
 	/*virtual bool	DrawIcon(	int textureID,
-								int offscreenTextureID,
-								Vector pos,
-								float scale,
-								float angle,
-								int alpha = 255,
-								const char *text = NULL,
-								Color *textColor = NULL,
-								float status = -1,
-								Color *statusColor = NULL,
-								int objectType = OBJECT_TYPE_NORMAL );*/
+  		int offscreenTextureID,
+  		Vector pos,
+  		float scale,
+  		float angle,
+  		int alpha = 255,
+  		const char *text = NULL,
+  		Color *textColor = NULL,
+  		float status = -1,
+  		Color *statusColor = NULL,
+  		int objectType = OBJECT_TYPE_NORMAL );*/
 	
-	int				m_nMode;
+	int 	m_nMode;
 	Vector2D		m_vPosition;
 	Vector2D		m_vSize;
-	float			m_flChangeSpeed;
-	float			m_flIconSize;
+	float m_flChangeSpeed;
+	float m_flIconSize;
 
 
 	IViewPort *		m_pViewPort;

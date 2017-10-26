@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Team management class. Contains all the details for a specific team
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "cs_team.h"
 #include "entitylist.h"

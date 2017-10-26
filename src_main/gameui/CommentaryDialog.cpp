@@ -1,18 +1,14 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "CommentaryDialog.h"
+
+#include <cstdio>
 #include "BasePanel.h"
-#include "convar.h"
 #include "EngineInterface.h"
 #include "GameUI_Interface.h"
-#include "vgui/ISurface.h"
+#include "tier1/convar.h"
 #include "vgui/IInput.h"
-
-#include <stdio.h>
+#include "vgui/ISurface.h"
 
 using namespace vgui;
 
@@ -20,208 +16,176 @@ using namespace vgui;
 #include "tier0/memdbgon.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CCommentaryDialog::CCommentaryDialog(vgui::Panel *parent) : BaseClass(parent, "CommentaryDialog")
-{
-	SetDeleteSelfOnClose(true);
-	SetSizeable( false );
+CCommentaryDialog::CCommentaryDialog(vgui::Panel *parent)
+    : BaseClass(parent, "CommentaryDialog") {
+  SetDeleteSelfOnClose(true);
+  SetSizeable(false);
 
-	input()->SetAppModalSurface(GetVPanel());
-	vgui::surface()->RestrictPaintToSinglePanel(GetVPanel());
-	GameUI().PreventEngineHideGameUI();
+  input()->SetAppModalSurface(GetVPanel());
+  vgui::surface()->RestrictPaintToSinglePanel(GetVPanel());
+  GameUI().PreventEngineHideGameUI();
 
-	SetTitle("#GameUI_CommentaryDialogTitle", true);
+  SetTitle("#GameUI_CommentaryDialogTitle", true);
 
-	LoadControlSettings("Resource/CommentaryDialog.res");
+  LoadControlSettings("Resource/CommentaryDialog.res");
 
-	MoveToCenterOfScreen();
+  MoveToCenterOfScreen();
 
-	bool bCommentaryOn = false;
-	ConVarRef commentary( "commentary" );
-	if ( commentary.IsValid() )
-	{
-		bCommentaryOn = commentary.GetBool();
-	}
+  bool bCommentaryOn = false;
+  ConVarRef commentary("commentary");
+  if (commentary.IsValid()) {
+    bCommentaryOn = commentary.GetBool();
+  }
 
-	// Setup the buttons & labels to reflect the current state of the commentary
-	if ( bCommentaryOn )
-	{
-		SetControlString( "ModeLabel", "#GAMEUI_Commentary_LabelOn" );
-		SetControlString( "TurnOnButton", "#GAMEUI_Commentary_LeaveOn" );
-		SetControlString( "TurnOffButton", "#GAMEUI_Commentary_TurnOff" );
-	}
-	else
-	{
-		SetControlString( "ModeLabel", "#GAMEUI_Commentary_LabelOff" );
-		SetControlString( "TurnOnButton", "#GAMEUI_Commentary_TurnOn" );
-		SetControlString( "TurnOffButton", "#GAMEUI_Commentary_LeaveOff" );
-	}
+  // Setup the buttons & labels to reflect the current state of the commentary
+  if (bCommentaryOn) {
+    SetControlString("ModeLabel", "#GAMEUI_Commentary_LabelOn");
+    SetControlString("TurnOnButton", "#GAMEUI_Commentary_LeaveOn");
+    SetControlString("TurnOffButton", "#GAMEUI_Commentary_TurnOff");
+  } else {
+    SetControlString("ModeLabel", "#GAMEUI_Commentary_LabelOff");
+    SetControlString("TurnOnButton", "#GAMEUI_Commentary_TurnOn");
+    SetControlString("TurnOffButton", "#GAMEUI_Commentary_LeaveOff");
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CCommentaryDialog::~CCommentaryDialog()
-{
+CCommentaryDialog::~CCommentaryDialog() {}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void CCommentaryDialog::OnClose(void) {
+  BaseClass::OnClose();
+
+  vgui::surface()->RestrictPaintToSinglePanel(NULL);
+  GameUI().AllowEngineHideGameUI();
+
+  // Bring up the post dialog
+  DHANDLE<CPostCommentaryDialog> hPostCommentaryDialog;
+  if (!hPostCommentaryDialog.Get()) {
+    hPostCommentaryDialog = new CPostCommentaryDialog(BasePanel());
+  }
+  hPostCommentaryDialog->Activate();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
+// Input  : *command -
 //-----------------------------------------------------------------------------
-void CCommentaryDialog::OnClose( void )
-{
-	BaseClass::OnClose();
-
-	vgui::surface()->RestrictPaintToSinglePanel(NULL);
-	GameUI().AllowEngineHideGameUI();
-
-	// Bring up the post dialog
-	DHANDLE<CPostCommentaryDialog> hPostCommentaryDialog;
-	if ( !hPostCommentaryDialog.Get() )
-	{
-		hPostCommentaryDialog = new CPostCommentaryDialog( BasePanel() );
-	}
-	hPostCommentaryDialog->Activate();
+void CCommentaryDialog::OnCommand(const char *command) {
+  if (!Q_stricmp(command, "TurnOn")) {
+    ConVarRef commentary("commentary");
+    commentary.SetValue(1);
+    Close();
+  } else if (!Q_stricmp(command, "TurnOff")) {
+    ConVarRef commentary("commentary");
+    commentary.SetValue(0);
+    Close();
+  } else {
+    BaseClass::OnCommand(command);
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *command - 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CCommentaryDialog::OnCommand( const char *command )
-{
-	if ( !Q_stricmp( command, "TurnOn" ) )
-	{
-		ConVarRef commentary("commentary");
-		commentary.SetValue( 1 );
-		Close();
-	}
-	else if ( !Q_stricmp( command, "TurnOff" ) )
-	{
-		ConVarRef commentary("commentary");
-		commentary.SetValue( 0 );
-		Close();
-	}
-	else
-	{
-		BaseClass::OnCommand( command );
-	}
+void CCommentaryDialog::OnKeyCodePressed(KeyCode code) {
+  // Ignore escape key
+  if (code == KEY_ESCAPE) return;
+
+  BaseClass::OnKeyCodePressed(code);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CCommentaryDialog::OnKeyCodePressed(KeyCode code)
-{
-	// Ignore escape key
-	if (code == KEY_ESCAPE)
-		return;
+void OpenCommentaryDialog(void) {
+  DHANDLE<CCommentaryDialog> hCommentaryDialog;
+  if (!hCommentaryDialog.Get()) {
+    hCommentaryDialog = new CCommentaryDialog(BasePanel());
+  }
 
-	BaseClass::OnKeyCodePressed(code);
+  GameUI().ActivateGameUI();
+  hCommentaryDialog->Activate();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void OpenCommentaryDialog( void )
-{
-	DHANDLE<CCommentaryDialog> hCommentaryDialog;
-	if ( !hCommentaryDialog.Get() )
-	{
-		hCommentaryDialog = new CCommentaryDialog( BasePanel() );
-	}
+ConVar commentary_firstrun("commentary_firstrun", "0", FCVAR_ARCHIVE);
+void CC_CommentaryTestFirstRun(void) {
+  if (!commentary_firstrun.GetBool()) {
+    commentary_firstrun.SetValue(1);
+    OpenCommentaryDialog();
+  }
+}
+static ConCommand commentary_testfirstrun("commentary_testfirstrun",
+                                          CC_CommentaryTestFirstRun, 0);
 
-	GameUI().ActivateGameUI();
-	hCommentaryDialog->Activate();
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+CPostCommentaryDialog::CPostCommentaryDialog(vgui::Panel *parent)
+    : BaseClass(parent, "PostCommentaryDialog") {
+  SetDeleteSelfOnClose(true);
+  SetSizeable(false);
+
+  input()->SetAppModalSurface(GetVPanel());
+  vgui::surface()->RestrictPaintToSinglePanel(GetVPanel());
+  m_bResetPaintRestrict = false;
+
+  SetTitle("#GameUI_CommentaryDialogTitle", true);
+
+  LoadControlSettings("Resource/PostCommentaryDialog.res");
+
+  MoveToCenterOfScreen();
+
+  bool bCommentaryOn = false;
+  ConVarRef commentary("commentary");
+  if (commentary.IsValid()) {
+    bCommentaryOn = commentary.GetBool();
+  }
+
+  // Setup the buttons & labels to reflect the current state of the commentary
+  if (bCommentaryOn) {
+    SetControlString("PostModeLabel", "#GAMEUI_PostCommentary_ModeLabelOn");
+  } else {
+    SetControlString("PostModeLabel", "#GAMEUI_PostCommentary_ModeLabelOff");
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-ConVar commentary_firstrun("commentary_firstrun", "0", FCVAR_ARCHIVE );
-void CC_CommentaryTestFirstRun( void )
-{
-	if ( !commentary_firstrun.GetBool() )
-	{
-		commentary_firstrun.SetValue(1);
-		OpenCommentaryDialog();
-	}
-}
-static ConCommand commentary_testfirstrun("commentary_testfirstrun", CC_CommentaryTestFirstRun, 0 );
-
+CPostCommentaryDialog::~CPostCommentaryDialog() {}
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CPostCommentaryDialog::CPostCommentaryDialog(vgui::Panel *parent) : BaseClass(parent, "PostCommentaryDialog")
-{
-	SetDeleteSelfOnClose(true);
-	SetSizeable( false );
+void CPostCommentaryDialog::OnFinishedClose(void) {
+  BaseClass::OnFinishedClose();
 
-	input()->SetAppModalSurface(GetVPanel());
-	vgui::surface()->RestrictPaintToSinglePanel(GetVPanel());
-	m_bResetPaintRestrict = false;
-
-	SetTitle("#GameUI_CommentaryDialogTitle", true);
-
-	LoadControlSettings("Resource/PostCommentaryDialog.res");
-
-	MoveToCenterOfScreen();
-
-	bool bCommentaryOn = false;
-	ConVarRef commentary("commentary");
-	if ( commentary.IsValid() )
-	{
-		bCommentaryOn = commentary.GetBool();
-	}
- 
-	// Setup the buttons & labels to reflect the current state of the commentary
-	if ( bCommentaryOn )
-	{
-		SetControlString( "PostModeLabel", "#GAMEUI_PostCommentary_ModeLabelOn" );
-	}
-	else
-	{
-		SetControlString( "PostModeLabel", "#GAMEUI_PostCommentary_ModeLabelOff" );
-	}
+  if (!m_bResetPaintRestrict) {
+    m_bResetPaintRestrict = true;
+    vgui::surface()->RestrictPaintToSinglePanel(NULL);
+    GameUI().HideGameUI();
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CPostCommentaryDialog::~CPostCommentaryDialog()
-{
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CPostCommentaryDialog::OnFinishedClose( void )
-{
-	BaseClass::OnFinishedClose();
-
-	if ( !m_bResetPaintRestrict )
-	{
-		m_bResetPaintRestrict = true;
-		vgui::surface()->RestrictPaintToSinglePanel(NULL);
-		GameUI().HideGameUI();
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CPostCommentaryDialog::OnKeyCodePressed(KeyCode code)
-{
-   	if (code == KEY_ESCAPE)
-	{
-		Close();
-		vgui::surface()->RestrictPaintToSinglePanel(NULL);
-		m_bResetPaintRestrict = true;
-	}
-	else
-	{
-		BaseClass::OnKeyCodePressed(code);
-	}
+void CPostCommentaryDialog::OnKeyCodePressed(KeyCode code) {
+  if (code == KEY_ESCAPE) {
+    Close();
+    vgui::surface()->RestrictPaintToSinglePanel(NULL);
+    m_bResetPaintRestrict = true;
+  } else {
+    BaseClass::OnKeyCodePressed(code);
+  }
 }

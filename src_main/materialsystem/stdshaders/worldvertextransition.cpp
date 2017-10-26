@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Header: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
-#include "convar.h"
+#include "tier1/convar.h"
 
 #include "worldvertextransition_dx8_helper.h"
 #include "lightmappedgeneric_dx9_helper.h"

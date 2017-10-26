@@ -1,417 +1,372 @@
-//====== Copyright © 1996-2007, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2007, Valve Corporation, All rights reserved.
 //
 // Purpose: VGUI panel which can play back video, in-engine
-//
-//=============================================================================
 
 #include "cbase.h"
-#include <vgui/IVGui.h>
-#include "vgui/IInput.h"
-#include <vgui/ISurface.h>
-#include "ienginevgui.h"
-#include "iclientmode.h"
+
 #include "vgui_video.h"
+
 #include "engine/ienginesound.h"
+#include "iclientmode.h"
+#include "ienginevgui.h"
+#include "vgui/IInput.h"
+#include "vgui/ISurface.h"
+#include "vgui/IVGui.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+VideoPanel::VideoPanel(unsigned int nXPos, unsigned int nYPos,
+                       unsigned int nHeight, unsigned int nWidth)
+    : BaseClass(NULL, "VideoPanel"),
+      m_BIKHandle(BIKHANDLE_INVALID),
+      m_nPlaybackWidth(0),
+      m_nPlaybackHeight(0) {
+  vgui::VPANEL pParent = enginevgui->GetPanel(PANEL_GAMEUIDLL);
+  SetParent(pParent);
+  SetVisible(false);
 
-VideoPanel::VideoPanel( unsigned int nXPos, unsigned int nYPos, unsigned int nHeight, unsigned int nWidth ) : 
-	BaseClass( NULL, "VideoPanel" ),
-	m_BIKHandle( BIKHANDLE_INVALID ),
-	m_nPlaybackWidth( 0 ),
-	m_nPlaybackHeight( 0 )
-{
-	vgui::VPANEL pParent = enginevgui->GetPanel( PANEL_GAMEUIDLL );
-	SetParent( pParent );
-	SetVisible( false );
-	
-	// Must be passed in, off by default
-	m_szExitCommand[0] = '\0';
+  // Must be passed in, off by default
+  m_szExitCommand[0] = '\0';
 
-	m_bBlackBackground = true;
+  m_bBlackBackground = true;
 
-	SetKeyBoardInputEnabled( true );
-	SetMouseInputEnabled( false );
+  SetKeyBoardInputEnabled(true);
+  SetMouseInputEnabled(false);
 
-	SetProportional( false );
-	SetVisible( true );
-	SetPaintBackgroundEnabled( false );
-	SetPaintBorderEnabled( false );
-	
-	// Set us up
-	SetTall( nHeight );
-	SetWide( nWidth );
-	SetPos( nXPos, nYPos );
+  SetProportional(false);
+  SetVisible(true);
+  SetPaintBackgroundEnabled(false);
+  SetPaintBorderEnabled(false);
 
-	SetScheme(vgui::scheme()->LoadSchemeFromFile( "resource/VideoPanelScheme.res", "VideoPanelScheme"));
-	LoadControlSettings("resource/UI/VideoPanel.res");
+  // Set us up
+  SetTall(nHeight);
+  SetWide(nWidth);
+  SetPos(nXPos, nYPos);
+
+  SetScheme(vgui::scheme()->LoadSchemeFromFile("resource/VideoPanelScheme.res",
+                                               "VideoPanelScheme"));
+  LoadControlSettings("resource/UI/VideoPanel.res");
 }
 
 //-----------------------------------------------------------------------------
 // Properly shutdown out materials
 //-----------------------------------------------------------------------------
-VideoPanel::~VideoPanel( void )
-{
-	SetParent( (vgui::Panel *) NULL );
+VideoPanel::~VideoPanel(void) {
+  SetParent((vgui::Panel *)NULL);
 
-	// Shut down this video
-	if ( m_BIKHandle != BIKHANDLE_INVALID )
-	{
-		bik->DestroyMaterial( m_BIKHandle );
-		m_BIKHandle = BIKHANDLE_INVALID;
-	}
+  // Shut down this video
+  if (m_BIKHandle != BIKHANDLE_INVALID) {
+    bik->DestroyMaterial(m_BIKHandle);
+    m_BIKHandle = BIKHANDLE_INVALID;
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Begins playback of a movie
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool VideoPanel::BeginPlayback( const char *pFilename )
-{
-#ifdef _X360
-	XVIDEO_MODE videoMode;
-	XGetVideoMode( &videoMode );
+bool VideoPanel::BeginPlayback(const char *pFilename) {
+  // Destroy any previously allocated video
+  if (m_BIKHandle != BIKHANDLE_INVALID) {
+    bik->DestroyMaterial(m_BIKHandle);
+    m_BIKHandle = BIKHANDLE_INVALID;
+  }
 
-	// for 50Hz PAL, load a 25Hz version of the ep1_recap movie.
-	if( ( videoMode.RefreshRate < 59.0f ) && ( Q_stricmp( pFilename, "media/ep1_recap.bik" ) == 0 ) )
-	{
-		pFilename = "media/ep1_recap_25fps.bik";
-	}
-#endif
+  // Load and create our BINK video
+  m_BIKHandle = bik->CreateMaterial("VideoBIKMaterial", pFilename, "GAME");
+  if (m_BIKHandle == BIKHANDLE_INVALID) return false;
 
-	// Destroy any previously allocated video
-	if ( m_BIKHandle != BIKHANDLE_INVALID )
-	{
-		bik->DestroyMaterial( m_BIKHandle );
-		m_BIKHandle = BIKHANDLE_INVALID;
-	}
+  // We want to be the sole audio source
+  // FIXME: This may not always be true!
+  enginesound->NotifyBeginMoviePlayback();
 
-	// Load and create our BINK video
-	m_BIKHandle = bik->CreateMaterial( "VideoBIKMaterial", pFilename, "GAME" );
-	if ( m_BIKHandle == BIKHANDLE_INVALID )
-		return false;
+  int nWidth, nHeight;
+  bik->GetFrameSize(m_BIKHandle, &nWidth, &nHeight);
+  bik->GetTexCoordRange(m_BIKHandle, &m_flU, &m_flV);
+  m_pMaterial = bik->GetMaterial(m_BIKHandle);
 
-	// We want to be the sole audio source
-	// FIXME: This may not always be true!
-	enginesound->NotifyBeginMoviePlayback();
+  float flFrameRatio = ((float)GetWide() / (float)GetTall());
+  float flVideoRatio = ((float)nWidth / (float)nHeight);
 
-	int nWidth, nHeight;
-	bik->GetFrameSize( m_BIKHandle, &nWidth, &nHeight );
-	bik->GetTexCoordRange( m_BIKHandle, &m_flU, &m_flV );
-	m_pMaterial = bik->GetMaterial( m_BIKHandle );
+  if (flVideoRatio > flFrameRatio) {
+    m_nPlaybackWidth = GetWide();
+    m_nPlaybackHeight = (GetWide() / flVideoRatio);
+  } else if (flVideoRatio < flFrameRatio) {
+    m_nPlaybackWidth = (GetTall() * flVideoRatio);
+    m_nPlaybackHeight = GetTall();
+  } else {
+    m_nPlaybackWidth = GetWide();
+    m_nPlaybackHeight = GetTall();
+  }
 
-	float flFrameRatio = ( (float) GetWide() / (float) GetTall() );
-	float flVideoRatio = ( (float) nWidth / (float) nHeight );
-
-	if ( flVideoRatio > flFrameRatio )
-	{
-		m_nPlaybackWidth = GetWide();
-		m_nPlaybackHeight = ( GetWide() / flVideoRatio );
-	}
-	else if ( flVideoRatio < flFrameRatio )
-	{
-		m_nPlaybackWidth = ( GetTall() * flVideoRatio );
-		m_nPlaybackHeight = GetTall();
-	}
-	else
-	{
-		m_nPlaybackWidth = GetWide();
-		m_nPlaybackHeight = GetTall();
-	}
-
-	return true;
+  return true;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void VideoPanel::Activate( void )
-{
-	MoveToFront();
-	RequestFocus();
-	SetVisible( true );
-	SetEnabled( true );
+void VideoPanel::Activate(void) {
+  MoveToFront();
+  RequestFocus();
+  SetVisible(true);
+  SetEnabled(true);
 
-	vgui::surface()->SetMinimized( GetVPanel(), false );
+  vgui::surface()->SetMinimized(GetVPanel(), false);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void VideoPanel::DoModal( void )
-{
-	MakePopup();
-	Activate();
+void VideoPanel::DoModal(void) {
+  MakePopup();
+  Activate();
 
-	vgui::input()->SetAppModalSurface( GetVPanel() );
-	vgui::surface()->RestrictPaintToSinglePanel( GetVPanel() );
+  vgui::input()->SetAppModalSurface(GetVPanel());
+  vgui::surface()->RestrictPaintToSinglePanel(GetVPanel());
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void VideoPanel::OnKeyCodeTyped( vgui::KeyCode code )
-{
-	if ( code == KEY_ESCAPE	)
-	{
-		OnClose();
-	}
-	else
-	{
-		BaseClass::OnKeyCodeTyped( code );
-	}
+void VideoPanel::OnKeyCodeTyped(vgui::KeyCode code) {
+  if (code == KEY_ESCAPE) {
+    OnClose();
+  } else {
+    BaseClass::OnKeyCodeTyped(code);
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Handle keys that should cause us to close
 //-----------------------------------------------------------------------------
-void VideoPanel::OnKeyCodePressed( vgui::KeyCode code )
-{
-	// These keys cause the panel to shutdown
-	if ( code == KEY_ESCAPE || 
-		 code == KEY_BACKQUOTE || 
-		 code == KEY_SPACE || 
-		 code == KEY_ENTER ||
-		 code == KEY_XBUTTON_A || 
-		 code == KEY_XBUTTON_B ||
-		 code == KEY_XBUTTON_X || 
-		 code == KEY_XBUTTON_Y || 
-		 code == KEY_XBUTTON_START || 
-		 code == KEY_XBUTTON_BACK )
-	{
-		OnClose();
-	}
-	else
-	{
-		BaseClass::OnKeyCodePressed( code );
-	}
+void VideoPanel::OnKeyCodePressed(vgui::KeyCode code) {
+  // These keys cause the panel to shutdown
+  if (code == KEY_ESCAPE || code == KEY_BACKQUOTE || code == KEY_SPACE ||
+      code == KEY_ENTER || code == KEY_XBUTTON_A || code == KEY_XBUTTON_B ||
+      code == KEY_XBUTTON_X || code == KEY_XBUTTON_Y ||
+      code == KEY_XBUTTON_START || code == KEY_XBUTTON_BACK) {
+    OnClose();
+  } else {
+    BaseClass::OnKeyCodePressed(code);
+  }
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void VideoPanel::OnClose( void )
-{
-	enginesound->NotifyEndMoviePlayback();
-	BaseClass::OnClose();
+void VideoPanel::OnClose(void) {
+  enginesound->NotifyEndMoviePlayback();
+  BaseClass::OnClose();
 
-	if ( vgui::input()->GetAppModalSurface() == GetVPanel() )
-	{
-		vgui::input()->ReleaseAppModalSurface();
-	}
+  if (vgui::input()->GetAppModalSurface() == GetVPanel()) {
+    vgui::input()->ReleaseAppModalSurface();
+  }
 
-	vgui::surface()->RestrictPaintToSinglePanel( NULL );
+  vgui::surface()->RestrictPaintToSinglePanel(NULL);
 
-	// Fire an exit command if we're asked to do so
-	if ( m_szExitCommand[0] )
-	{
-		engine->ClientCmd( m_szExitCommand );
-	}
+  // Fire an exit command if we're asked to do so
+  if (m_szExitCommand[0]) {
+    engine->ClientCmd(m_szExitCommand);
+  }
 
-	SetVisible( false );
-	MarkForDeletion();
+  SetVisible(false);
+  MarkForDeletion();
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-void VideoPanel::GetPanelPos( int &xpos, int &ypos )
-{
-	xpos = ( (float) ( GetWide() - m_nPlaybackWidth ) / 2 );
-	ypos = ( (float) ( GetTall() - m_nPlaybackHeight ) / 2 );
+void VideoPanel::GetPanelPos(int &xpos, int &ypos) {
+  xpos = ((float)(GetWide() - m_nPlaybackWidth) / 2);
+  ypos = ((float)(GetTall() - m_nPlaybackHeight) / 2);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Update and draw the frame
 //-----------------------------------------------------------------------------
-void VideoPanel::Paint( void )
-{
-	BaseClass::Paint();
+void VideoPanel::Paint(void) {
+  BaseClass::Paint();
 
-	// No video to play, so do nothing
-	if ( m_BIKHandle == BIKHANDLE_INVALID )
-		return;
+  // No video to play, so do nothing
+  if (m_BIKHandle == BIKHANDLE_INVALID) return;
 
-	// Update our frame
-	if ( bik->Update( m_BIKHandle ) == false )
-	{
-		// Issue a close command
-		OnVideoOver();
-		OnClose();
-	}
+  // Update our frame
+  if (bik->Update(m_BIKHandle) == false) {
+    // Issue a close command
+    OnVideoOver();
+    OnClose();
+  }
 
-	// Sit in the "center"
-	int xpos, ypos;
-	GetPanelPos( xpos, ypos );
+  // Sit in the "center"
+  int xpos, ypos;
+  GetPanelPos(xpos, ypos);
 
-	// Black out the background (we could omit drawing under the video surface, but this is straight-forward)
-	if ( m_bBlackBackground )
-	{
-		vgui::surface()->DrawSetColor(  0, 0, 0, 255 );
-		vgui::surface()->DrawFilledRect( 0, 0, GetWide(), GetTall() );
-	}
+  // Black out the background (we could omit drawing under the video surface,
+  // but this is straight-forward)
+  if (m_bBlackBackground) {
+    vgui::surface()->DrawSetColor(0, 0, 0, 255);
+    vgui::surface()->DrawFilledRect(0, 0, GetWide(), GetTall());
+  }
 
-	// Draw the polys to draw this out
-	CMatRenderContextPtr pRenderContext( materials );
-	
-	pRenderContext->MatrixMode( MATERIAL_VIEW );
-	pRenderContext->PushMatrix();
-	pRenderContext->LoadIdentity();
+  // Draw the polys to draw this out
+  CMatRenderContextPtr pRenderContext(materials);
 
-	pRenderContext->MatrixMode( MATERIAL_PROJECTION );
-	pRenderContext->PushMatrix();
-	pRenderContext->LoadIdentity();
+  pRenderContext->MatrixMode(MATERIAL_VIEW);
+  pRenderContext->PushMatrix();
+  pRenderContext->LoadIdentity();
 
-	pRenderContext->Bind( m_pMaterial, NULL );
+  pRenderContext->MatrixMode(MATERIAL_PROJECTION);
+  pRenderContext->PushMatrix();
+  pRenderContext->LoadIdentity();
 
-	CMeshBuilder meshBuilder;
-	IMesh* pMesh = pRenderContext->GetDynamicMesh( true );
-	meshBuilder.Begin( pMesh, MATERIAL_QUADS, 1 );
+  pRenderContext->Bind(m_pMaterial, NULL);
 
-	float flLeftX = xpos;
-	float flRightX = xpos + (m_nPlaybackWidth-1);
+  CMeshBuilder meshBuilder;
+  IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
+  meshBuilder.Begin(pMesh, MATERIAL_QUADS, 1);
 
-	float flTopY = ypos;
-	float flBottomY = ypos + (m_nPlaybackHeight-1);
+  float flLeftX = xpos;
+  float flRightX = xpos + (m_nPlaybackWidth - 1);
 
-	// Map our UVs to cut out just the portion of the video we're interested in
-	float flLeftU = 0.0f;
-	float flTopV = 0.0f;
+  float flTopY = ypos;
+  float flBottomY = ypos + (m_nPlaybackHeight - 1);
 
-	// We need to subtract off a pixel to make sure we don't bleed
-	float flRightU = m_flU - ( 1.0f / (float) m_nPlaybackWidth );
-	float flBottomV = m_flV - ( 1.0f / (float) m_nPlaybackHeight );
+  // Map our UVs to cut out just the portion of the video we're interested in
+  float flLeftU = 0.0f;
+  float flTopV = 0.0f;
 
-	// Get the current viewport size
-	int vx, vy, vw, vh;
-	pRenderContext->GetViewport( vx, vy, vw, vh );
+  // We need to subtract off a pixel to make sure we don't bleed
+  float flRightU = m_flU - (1.0f / (float)m_nPlaybackWidth);
+  float flBottomV = m_flV - (1.0f / (float)m_nPlaybackHeight);
 
-	// map from screen pixel coords to -1..1
-	flRightX = FLerp( -1, 1, 0, vw, flRightX );
-	flLeftX = FLerp( -1, 1, 0, vw, flLeftX );
-	flTopY = FLerp( 1, -1, 0, vh ,flTopY );
-	flBottomY = FLerp( 1, -1, 0, vh, flBottomY );
+  // Get the current viewport size
+  int vx, vy, vw, vh;
+  pRenderContext->GetViewport(vx, vy, vw, vh);
 
-	float alpha = ((float)GetFgColor()[3]/255.0f);
+  // map from screen pixel coords to -1..1
+  flRightX = FLerp(-1, 1, 0, vw, flRightX);
+  flLeftX = FLerp(-1, 1, 0, vw, flLeftX);
+  flTopY = FLerp(1, -1, 0, vh, flTopY);
+  flBottomY = FLerp(1, -1, 0, vh, flBottomY);
 
-	for ( int corner=0; corner<4; corner++ )
-	{
-		bool bLeft = (corner==0) || (corner==3);
-		meshBuilder.Position3f( (bLeft) ? flLeftX : flRightX, (corner & 2) ? flBottomY : flTopY, 0.0f );
-		meshBuilder.Normal3f( 0.0f, 0.0f, 1.0f );
-		meshBuilder.TexCoord2f( 0, (bLeft) ? flLeftU : flRightU, (corner & 2) ? flBottomV : flTopV );
-		meshBuilder.TangentS3f( 0.0f, 1.0f, 0.0f );
-		meshBuilder.TangentT3f( 1.0f, 0.0f, 0.0f );
-		meshBuilder.Color4f( 1.0f, 1.0f, 1.0f, alpha );
-		meshBuilder.AdvanceVertex();
-	}
-	
-	meshBuilder.End();
-	pMesh->Draw();
+  float alpha = ((float)GetFgColor()[3] / 255.0f);
 
-	pRenderContext->MatrixMode( MATERIAL_VIEW );
-	pRenderContext->PopMatrix();
+  for (int corner = 0; corner < 4; corner++) {
+    bool bLeft = (corner == 0) || (corner == 3);
+    meshBuilder.Position3f((bLeft) ? flLeftX : flRightX,
+                           (corner & 2) ? flBottomY : flTopY, 0.0f);
+    meshBuilder.Normal3f(0.0f, 0.0f, 1.0f);
+    meshBuilder.TexCoord2f(0, (bLeft) ? flLeftU : flRightU,
+                           (corner & 2) ? flBottomV : flTopV);
+    meshBuilder.TangentS3f(0.0f, 1.0f, 0.0f);
+    meshBuilder.TangentT3f(1.0f, 0.0f, 0.0f);
+    meshBuilder.Color4f(1.0f, 1.0f, 1.0f, alpha);
+    meshBuilder.AdvanceVertex();
+  }
 
-	pRenderContext->MatrixMode( MATERIAL_PROJECTION );
-	pRenderContext->PopMatrix();
+  meshBuilder.End();
+  pMesh->Draw();
+
+  pRenderContext->MatrixMode(MATERIAL_VIEW);
+  pRenderContext->PopMatrix();
+
+  pRenderContext->MatrixMode(MATERIAL_PROJECTION);
+  pRenderContext->PopMatrix();
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Create and playback a video in a panel
-// Input  : nWidth - Width of panel (in pixels) 
+// Input  : nWidth - Width of panel (in pixels)
 //			nHeight - Height of panel
 //			*pVideoFilename - Name of the file to play
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool VideoPanel_Create( unsigned int nXPos, unsigned int nYPos, 
-						unsigned int nWidth, unsigned int nHeight, 
-						const char *pVideoFilename, 
-						const char *pExitCommand /*= NULL*/)
-{
-	// Create the base video panel
-	VideoPanel *pVideoPanel = new VideoPanel( nXPos, nYPos, nHeight, nWidth  );
-	if ( pVideoPanel == NULL )
-		return false;
+bool VideoPanel_Create(unsigned int nXPos, unsigned int nYPos,
+                       unsigned int nWidth, unsigned int nHeight,
+                       const char *pVideoFilename,
+                       const char *pExitCommand /*= NULL*/) {
+  // Create the base video panel
+  VideoPanel *pVideoPanel = new VideoPanel(nXPos, nYPos, nHeight, nWidth);
+  if (pVideoPanel == NULL) return false;
 
-	// Set the command we'll call (if any) when the video is interrupted or completes
-	pVideoPanel->SetExitCommand( pExitCommand );
+  // Set the command we'll call (if any) when the video is interrupted or
+  // completes
+  pVideoPanel->SetExitCommand(pExitCommand);
 
-	// Start it going
-	if ( pVideoPanel->BeginPlayback( pVideoFilename ) == false )
-	{
-		delete pVideoPanel;
-		return false;
-	}
+  // Start it going
+  if (pVideoPanel->BeginPlayback(pVideoFilename) == false) {
+    delete pVideoPanel;
+    return false;
+  }
 
-	// Take control
-	pVideoPanel->DoModal();
+  // Take control
+  pVideoPanel->DoModal();
 
-	return true;
+  return true;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Used to launch a video playback (Debug)
 //-----------------------------------------------------------------------------
 
-CON_COMMAND( playvideo, "Plays a video: <filename> [width height]" )
-{
-	if ( args.ArgC() < 2 )
-		return;
+CON_COMMAND(playvideo, "Plays a video: <filename> [width height]") {
+  if (args.ArgC() < 2) return;
 
-	unsigned int nScreenWidth = Q_atoi( args[2] );
-	unsigned int nScreenHeight = Q_atoi( args[3] );
-	
-	char strFullpath[MAX_PATH];
-	Q_strncpy( strFullpath, "media/", MAX_PATH );	// Assume we must play out of the media directory
-	char strFilename[MAX_PATH];
-	Q_StripExtension( args[1], strFilename, MAX_PATH );
-	Q_strncat( strFullpath, args[1], MAX_PATH );
-	Q_strncat( strFullpath, ".bik", MAX_PATH );		// Assume we're a .bik extension type
+  unsigned int nScreenWidth = Q_atoi(args[2]);
+  unsigned int nScreenHeight = Q_atoi(args[3]);
 
-	if ( nScreenWidth == 0 )
-	{
-		nScreenWidth = ScreenWidth();
-	}
-	
-	if ( nScreenHeight == 0 )
-	{
-		nScreenHeight = ScreenHeight();
-	}
+  char strFullpath[MAX_PATH];
+  Q_strncpy(strFullpath, "media/",
+            MAX_PATH);  // Assume we must play out of the media directory
+  char strFilename[MAX_PATH];
+  Q_StripExtension(args[1], strFilename, MAX_PATH);
+  Q_strncat(strFullpath, args[1], MAX_PATH);
+  Q_strncat(strFullpath, ".bik",
+            MAX_PATH);  // Assume we're a .bik extension type
 
-	// Create the panel and go!
-	if ( VideoPanel_Create( 0, 0, nScreenWidth, nScreenHeight, strFullpath ) == false )
-	{
-		Warning( "Unable to play video: %s\n", strFullpath );
-	}
+  if (nScreenWidth == 0) {
+    nScreenWidth = ScreenWidth();
+  }
+
+  if (nScreenHeight == 0) {
+    nScreenHeight = ScreenHeight();
+  }
+
+  // Create the panel and go!
+  if (VideoPanel_Create(0, 0, nScreenWidth, nScreenHeight, strFullpath) ==
+      false) {
+    Warning("Unable to play video: %s\n", strFullpath);
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Used to launch a video playback and fire a command on completion
 //-----------------------------------------------------------------------------
 
-CON_COMMAND( playvideo_exitcommand, "Plays a video and fires and exit command when it is stopped or finishes: <filename> <exit command>" )
-{
-	if ( args.ArgC() < 2 )
-		return;
+CON_COMMAND(playvideo_exitcommand,
+            "Plays a video and fires and exit command when it is stopped or "
+            "finishes: <filename> <exit command>") {
+  if (args.ArgC() < 2) return;
 
-	unsigned int nScreenWidth = ScreenWidth();
-	unsigned int nScreenHeight = ScreenHeight();
+  unsigned int nScreenWidth = ScreenWidth();
+  unsigned int nScreenHeight = ScreenHeight();
 
-	char strFullpath[MAX_PATH];
-	Q_strncpy( strFullpath, "media/", MAX_PATH );	// Assume we must play out of the media directory
-	char strFilename[MAX_PATH];
-	Q_StripExtension( args[1], strFilename, MAX_PATH );
-	Q_strncat( strFullpath, args[1], MAX_PATH );
-	Q_strncat( strFullpath, ".bik", MAX_PATH );		// Assume we're a .bik extension type
+  char strFullpath[MAX_PATH];
+  Q_strncpy(strFullpath, "media/",
+            MAX_PATH);  // Assume we must play out of the media directory
+  char strFilename[MAX_PATH];
+  Q_StripExtension(args[1], strFilename, MAX_PATH);
+  Q_strncat(strFullpath, args[1], MAX_PATH);
+  Q_strncat(strFullpath, ".bik",
+            MAX_PATH);  // Assume we're a .bik extension type
 
-	char *pExitCommand = Q_strstr( args.GetCommandString(), args[2] );
+  char *pExitCommand = Q_strstr(args.GetCommandString(), args[2]);
 
-	// Create the panel and go!
-	if ( VideoPanel_Create( 0, 0, nScreenWidth, nScreenHeight, strFullpath, pExitCommand ) == false )
-	{
-		Warning( "Unable to play video: %s\n", strFullpath );
-		engine->ClientCmd( pExitCommand );
-	}
+  // Create the panel and go!
+  if (VideoPanel_Create(0, 0, nScreenWidth, nScreenHeight, strFullpath,
+                        pExitCommand) == false) {
+    Warning("Unable to play video: %s\n", strFullpath);
+    engine->ClientCmd(pExitCommand);
+  }
 }

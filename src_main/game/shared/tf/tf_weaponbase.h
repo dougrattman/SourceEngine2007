@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //	Weapons.
 //
@@ -108,7 +108,7 @@ class CTFWeaponBase : public CBaseCombatWeapon
 
 	virtual void Spawn();
 	virtual void Precache();
-	virtual bool IsPredicted() const			{ return true; }
+	virtual bool IsPredicted() const { return true; }
 	virtual void FallInit( void );
 
 	// Weapon Data.
@@ -173,7 +173,7 @@ class CTFWeaponBase : public CBaseCombatWeapon
 	bool CanAttack( void );
 
 	// Raising & Lowering for grenade throws
-	bool			WeaponShouldBeLowered( void );
+	bool WeaponShouldBeLowered( void );
 	virtual bool	Ready( void );
 	virtual bool	Lower( void );
 
@@ -248,25 +248,25 @@ protected:
 
 protected:
 
-	int				m_iWeaponMode;
+	int 	m_iWeaponMode;
 	CNetworkVar(	int,	m_iReloadMode );
 	CTFWeaponInfo	*m_pWeaponInfo;
-	bool			m_bInAttack;
-	bool			m_bInAttack2;
-	bool			m_bCurrentAttackIsCrit;
+	bool m_bInAttack;
+	bool m_bInAttack2;
+	bool m_bCurrentAttackIsCrit;
 
 	CNetworkVar(	bool,	m_bLowered );
 
-	int				m_iAltFireHint;
+	int 	m_iAltFireHint;
 
-	int				m_iReloadStartClipAmount;
+	int 	m_iReloadStartClipAmount;
 
-	float			m_flCritTime;
-	float			m_flLastCritCheckTime;
-	int				m_iLastCritCheckFrame;
-	int				m_iCurrentSeed;
+	float m_flCritTime;
+	float m_flLastCritCheckTime;
+	int 	m_iLastCritCheckFrame;
+	int 	m_iCurrentSeed;
 
-	char			m_szTracerName[MAX_TRACER_NAME];
+	char m_szTracerName[MAX_TRACER_NAME];
 
 	CNetworkVar(	bool, m_bResetParity );
 

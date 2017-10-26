@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Projectile shot by mortar synth
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	GRENADEBEAM_H
 #define	GRENADEBEAM_H
@@ -31,8 +31,8 @@ public:
 
 	static CGrenadeBeamChaser* ChaserCreate( CGrenadeBeam *pTarget );
 
-	void			Spawn( void );
-	void 			ChaserThink();
+	void Spawn( void );
+	void  ChaserThink();
 
 	CGrenadeBeam*	m_pTarget;
 };
@@ -51,12 +51,12 @@ public:
 	void		Format( color32 clrColor, float flWidth);
 	void 		GrenadeBeamTouch( CBaseEntity *pOther );
 	void 		KillBeam();
-	void		CreateBeams(void);
-	void		UpdateBeams(void);
-	//void		DebugBeams(void);
+	void		CreateBeams();
+	void		UpdateBeams();
+	//void		DebugBeams();
 	void		GetChaserTargetPos(Vector *vPosition);
 	void		GetNextTargetPos(Vector *vPosition);
-	int			UpdateTransmitState(void);
+	int UpdateTransmitState();
 	void		Shoot(Vector vDirection, float flSpeed, float flLifetime, float flLag, float flDamage );
 
 	Vector		m_vLaunchPos;
@@ -66,7 +66,7 @@ public:
 	float		m_flLaunchTime;
 	float		m_flLastTouchTime;
 	EHANDLE		m_hBeamChaser;
-	int			m_nNumHits;
+	int m_nNumHits;
 	Vector		m_pHitLocation[GRENADEBEAM_MAXHITS];
 	CBeam*		m_pBeam[GRENADEBEAM_MAXBEAMS];
 };

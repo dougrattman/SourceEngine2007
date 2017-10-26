@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_SHAREDDEFS_H
 #define DOD_SHAREDDEFS_H
@@ -16,8 +16,8 @@
 #define DOD_PLAYER_VIEW_OFFSET	Vector( 0, 0, 54 )
 
 // DOD Team IDs.
-#define TEAM_ALLIES			2
-#define	TEAM_AXIS			3
+#define TEAM_ALLIES 2
+#define	TEAM_AXIS 3
 #define TEAM_MAXCOUNT		4	// update this if we ever add teams (unlikely)
 
 enum SubTeam
@@ -64,21 +64,21 @@ enum
 
 // careful when reusing HL2 DMG_ flags, some of them cancel out the damage, eg if they are in DMG_TIMEBASED
 
-#define DMG_STUN			(DMG_PARALYZE)				//(1<<15)
+#define DMG_STUN (DMG_PARALYZE) 	//(1<<15)
 #define DMG_MACHINEGUN		(DMG_LASTGENERICFLAG<<1)	//(1<<30)
-#define DMG_BOMB			(DMG_LASTGENERICFLAG<<2)	//(1<<31)
+#define DMG_BOMB (DMG_LASTGENERICFLAG<<2)	//(1<<31)
 
 //END OF THE EXTENDABLE LIST!! Start reusing HL2 specific flags
 
 #define MELEE_DMG_SECONDARYATTACK	(1<<0)
-#define MELEE_DMG_FIST				(1<<1)
-#define MELEE_DMG_EDGE				(1<<2)
+#define MELEE_DMG_FIST 	(1<<1)
+#define MELEE_DMG_EDGE 	(1<<2)
 #define MELEE_DMG_STRONGATTACK		(1<<3)
 
 #define SANDBAG_NOT_TOUCHING		0
-#define SANDBAG_TOUCHING			1
+#define SANDBAG_TOUCHING 1
 #define SANDBAG_TOUCHING_ALIGNED	2
-#define SANDBAG_DEPLOYED			3
+#define SANDBAG_DEPLOYED 3
 
 #define PRONE_DEPLOY_HEIGHT	-1
 
@@ -101,13 +101,13 @@ enum
 #define GRENADE_FUSE_LENGTH	5.0
 #define RIFLEGRENADE_FUSE_LENGTH 3.5
 
-#define CONTENTS_PRONE_HELPER			0x80000000
+#define CONTENTS_PRONE_HELPER 0x80000000
 
 #define PASS_OUT_CHANGE_TIME	1.5
 #define PASS_OUT_GET_UP_TIME	1.5
 
 // DOD-specific viewport panels
-#define PANEL_TEAM				"team"
+#define PANEL_TEAM 	"team"
 #define PANEL_CLASS_ALLIES		"class_us"
 #define PANEL_CLASS_AXIS		"class_ger"
 #define PANEL_BACKGROUND		"background"
@@ -127,15 +127,15 @@ enum DODPlayerState
 	// This is the state you're in when you first enter the server.
 	// It's switching between intro cameras every few seconds, and there's a level info 
 	// screen up.
-	STATE_WELCOME,			// Show the level intro screen.
+	STATE_WELCOME, // Show the level intro screen.
 	
 	// During these states, you can either be a new player waiting to join, or
 	// you can be a live player in the game who wants to change teams.
 	// Either way, you can't move while choosing team or class (or while any menu is up).
-	STATE_PICKINGTEAM,			// Choosing team.
-	STATE_PICKINGCLASS,			// Choosing class.
+	STATE_PICKINGTEAM, // Choosing team.
+	STATE_PICKINGCLASS, // Choosing class.
 	
-	STATE_DEATH_ANIM,			// Playing death anim, waiting for that to finish.
+	STATE_DEATH_ANIM, // Playing death anim, waiting for that to finish.
 	STATE_DEATH_OBSERVING,		// Done playing death anim. Waiting for keypress to go into observer mode.
 	STATE_OBSERVER_MODE,		// Noclipping around, watching players, etc.
 
@@ -180,14 +180,14 @@ enum DODRoundState
 #define DOD_PLAYERMODEL_AXIS_ASSAULT	"models/player/german_assault.mdl"	
 #define DOD_PLAYERMODEL_AXIS_SUPPORT	"models/player/german_support.mdl"
 #define DOD_PLAYERMODEL_AXIS_SNIPER		"models/player/german_sniper.mdl"
-#define DOD_PLAYERMODEL_AXIS_MG			"models/player/german_mg.mdl"	
+#define DOD_PLAYERMODEL_AXIS_MG "models/player/german_mg.mdl"	
 #define DOD_PLAYERMODEL_AXIS_ROCKET		"models/player/german_rocket.mdl"	
 
 #define DOD_PLAYERMODEL_US_RIFLEMAN		"models/player/american_rifleman.mdl"
 #define DOD_PLAYERMODEL_US_ASSAULT		"models/player/american_assault.mdl"
 #define DOD_PLAYERMODEL_US_SUPPORT		"models/player/american_support.mdl"
 #define DOD_PLAYERMODEL_US_SNIPER		"models/player/american_sniper.mdl"	
-#define DOD_PLAYERMODEL_US_MG			"models/player/american_mg.mdl"
+#define DOD_PLAYERMODEL_US_MG "models/player/american_mg.mdl"
 #define DOD_PLAYERMODEL_US_ROCKET		"models/player/american_rocket.mdl"
 
 typedef struct DodClassInfo_s
@@ -328,12 +328,12 @@ enum
 #define BODYGROUP_AXIS_HAIR6	7
 
 //battle gear groups
-#define BODYGROUP_TOMMYGEAR			0
+#define BODYGROUP_TOMMYGEAR 0
 #define BODYGROUP_SPRINGGEAR		1
 #define BODYGROUP_GARANDGEAR		2
-#define BODYGROUP_MGGEAR			3
-#define BODYGROUP_BARGEAR			4
-#define BODYGROUP_CARBGEAR			5
+#define BODYGROUP_MGGEAR 3
+#define BODYGROUP_BARGEAR 4
+#define BODYGROUP_CARBGEAR 5
 #define BODYGROUP_GREASEGUNGEAR		6
 
 //jump gear
@@ -352,7 +352,7 @@ extern const char *m_pszHelmetModels[NUM_HELMETS];
 
 //Materials
 /*
-#define CHAR_TEX_CONCRETE	'C'			// texture types
+#define CHAR_TEX_CONCRETE	'C' // texture types
 #define CHAR_TEX_METAL		'M'
 #define CHAR_TEX_DIRT		'D'
 #define CHAR_TEX_GRATE		'G'
@@ -386,21 +386,21 @@ extern const char *m_pszHelmetModels[NUM_HELMETS];
 #define VM_BODYGROUP_GUN	0
 #define VM_BODYGROUP_SLEEVE	1
 
-#define PLAYER_SPEED_FROZEN				1
-#define PLAYER_SPEED_PRONE				50
+#define PLAYER_SPEED_FROZEN 	1
+#define PLAYER_SPEED_PRONE 	50
 #define PLAYER_SPEED_PRONE_ZOOMED		30
 #define PLAYER_SPEED_PRONE_BAZOOKA_DEPLOYED		30
-#define PLAYER_SPEED_ZOOMED				42
+#define PLAYER_SPEED_ZOOMED 	42
 #define PLAYER_SPEED_BAZOOKA_DEPLOYED	50
-#define PLAYER_SPEED_NORMAL				600.0f
+#define PLAYER_SPEED_NORMAL 	600.0f
 
-#define PLAYER_SPEED_SLOWED				120
-#define PLAYER_SPEED_RUN				220
-#define PLAYER_SPEED_SPRINT				330
+#define PLAYER_SPEED_SLOWED 	120
+#define PLAYER_SPEED_RUN 	220
+#define PLAYER_SPEED_SPRINT 	330
 
 #define PUSHAWAY_THINK_INTERVAL		(1.0f / 20.0f)
 
-#define VEC_PRONE_VIEW			Vector(0,0,10)
+#define VEC_PRONE_VIEW Vector(0,0,10)
 
 #define TIME_TO_PRONE	1.2f	// should be 1.5!
 
@@ -408,64 +408,64 @@ extern const char *m_pszHelmetModels[NUM_HELMETS];
 #define LOW_STAMINA_THRESHOLD	35
 
 // changed to 80% of goldsrc values, gives the same end result
-#define ZOOM_SWAY_PRONE				0.1
-#define ZOOM_SWAY_DUCKING			0.2
-#define ZOOM_SWAY_STANDING			0.5
+#define ZOOM_SWAY_PRONE 	0.1
+#define ZOOM_SWAY_DUCKING 0.2
+#define ZOOM_SWAY_STANDING 0.5
 #define ZOOM_SWAY_MOVING_PENALTY	0.4
 
 extern const char * s_WeaponAliasInfo[];
 
 enum
 {
-	//Dod hint messages					
-	HINT_FRIEND_SEEN = 0,				// #Hint_spotted_a_friend
-	HINT_ENEMY_SEEN,					// #Hint_spotted_an_enemy
-	HINT_FRIEND_INJURED,				// #Hint_try_not_to_injure_teammates
-	HINT_FRIEND_KILLED,					// #Hint_careful_around_teammates
-	HINT_ENEMY_KILLED,					// #Hint_killing_enemies_is_good
-	HINT_IN_AREA_CAP,					// #Hint_touched_area_capture
-	HINT_FLAG_TOUCH,					// #Hint_touched_control_point
-	HINT_OBJECT_PICKUP,					// #Hint_picked_up_object
-	HINT_MG_FIRE_UNDEPLOYED,			// #Hint_mgs_fire_better_deployed
-	HINT_SANDBAG_AREA,					// #Hint_sandbag_area_touch
-	HINT_BAZOOKA_PICKUP,				// #Hint_rocket_weapon_pickup
-	HINT_AMMO_EXHAUSTED,				// #Hint_out_of_ammo
-	HINT_PRONE,							// #Hint_prone
-	HINT_LOW_STAMINA,					// #Hint_low_stamina
-	HINT_OBJECT_REQUIRED,				// #Hint_area_requires_object	
+	//Dod hint messages 		
+	HINT_FRIEND_SEEN = 0, 	// #Hint_spotted_a_friend
+	HINT_ENEMY_SEEN, 		// #Hint_spotted_an_enemy
+	HINT_FRIEND_INJURED, 	// #Hint_try_not_to_injure_teammates
+	HINT_FRIEND_KILLED, 		// #Hint_careful_around_teammates
+	HINT_ENEMY_KILLED, 		// #Hint_killing_enemies_is_good
+	HINT_IN_AREA_CAP, 		// #Hint_touched_area_capture
+	HINT_FLAG_TOUCH, 		// #Hint_touched_control_point
+	HINT_OBJECT_PICKUP, 		// #Hint_picked_up_object
+	HINT_MG_FIRE_UNDEPLOYED, // #Hint_mgs_fire_better_deployed
+	HINT_SANDBAG_AREA, 		// #Hint_sandbag_area_touch
+	HINT_BAZOOKA_PICKUP, 	// #Hint_rocket_weapon_pickup
+	HINT_AMMO_EXHAUSTED, 	// #Hint_out_of_ammo
+	HINT_PRONE,  	// #Hint_prone
+	HINT_LOW_STAMINA, 		// #Hint_low_stamina
+	HINT_OBJECT_REQUIRED, 	// #Hint_area_requires_object	
 	HINT_PLAYER_KILLED_WAVETIME,		// #Hint_player_killed_wavetime 
-	HINT_WEAPON_OVERHEAT,				// #Hint_mg_overheat
-	HINT_SHOULDER_WEAPON,				// #game_shoulder_rpg
+	HINT_WEAPON_OVERHEAT, 	// #Hint_mg_overheat
+	HINT_SHOULDER_WEAPON, 	// #game_shoulder_rpg
 
-	HINT_PICK_UP_WEAPON,				// #Hint_pick_up_weapon
-	HINT_PICK_UP_GRENADE,				// #Hint_pick_up_grenade
-	HINT_DEATHCAM,						// #Hint_death_cam
-	HINT_CLASSMENU,						// #Hint_class_menu
+	HINT_PICK_UP_WEAPON, 	// #Hint_pick_up_weapon
+	HINT_PICK_UP_GRENADE, 	// #Hint_pick_up_grenade
+	HINT_DEATHCAM,  // #Hint_death_cam
+	HINT_CLASSMENU,  // #Hint_class_menu
 
-	HINT_USE_MELEE,						// #Hint_use_2e_melee
-	HINT_USE_ZOOM,						// #Hint_use_zoom
-	HINT_USE_IRON_SIGHTS,				// #Hint_use_iron_sights
-	HINT_USE_SEMI_AUTO,					// #Hint_use_semi_auto
-	HINT_USE_SPRINT,					// #Hint_use_sprint
-	HINT_USE_DEPLOY,					// #Hint_use_deploy
-	HINT_USE_PRIME,						// #Hint_use_prime
+	HINT_USE_MELEE,  // #Hint_use_2e_melee
+	HINT_USE_ZOOM,  // #Hint_use_zoom
+	HINT_USE_IRON_SIGHTS, 	// #Hint_use_iron_sights
+	HINT_USE_SEMI_AUTO, 		// #Hint_use_semi_auto
+	HINT_USE_SPRINT, 		// #Hint_use_sprint
+	HINT_USE_DEPLOY, 		// #Hint_use_deploy
+	HINT_USE_PRIME,  // #Hint_use_prime
 
-	HINT_MG_DEPLOY_USAGE,				// #Hint_mg_deploy_usage
+	HINT_MG_DEPLOY_USAGE, 	// #Hint_mg_deploy_usage
 
-	HINT_MG_DEPLOY_TO_RELOAD,			// #Dod_mg_reload
-	HINT_GARAND_RELOAD,					// #Hint_garand_reload
+	HINT_MG_DEPLOY_TO_RELOAD, // #Dod_mg_reload
+	HINT_GARAND_RELOAD, 		// #Hint_garand_reload
 
-	HINT_TURN_OFF_HINTS,				// #Hint_turn_off_hints
+	HINT_TURN_OFF_HINTS, 	// #Hint_turn_off_hints
 
-	HINT_NEED_BOMB,						// #Hint_need_bomb_to_plant
-	HINT_BOMB_PLANTED,					// #Hint_bomb_planted
-	HINT_DEFUSE_BOMB,					// #Hint_defuse_bomb
-	HINT_BOMB_TARGET,					// #Hint_bomb_target
-	HINT_BOMB_PICKUP,					// #Hint_bomb_pickup
-	HINT_BOMB_DEFUSE_ONGROUND,			// #Hint_bomb_defuse_onground
+	HINT_NEED_BOMB,  // #Hint_need_bomb_to_plant
+	HINT_BOMB_PLANTED, 		// #Hint_bomb_planted
+	HINT_DEFUSE_BOMB, 		// #Hint_defuse_bomb
+	HINT_BOMB_TARGET, 		// #Hint_bomb_target
+	HINT_BOMB_PICKUP, 		// #Hint_bomb_pickup
+	HINT_BOMB_DEFUSE_ONGROUND, // #Hint_bomb_defuse_onground
 
-	HINT_BOMB_PLANT_MAP,				// #Hint_bomb_plant_map
-	HINT_BOMB_FIRST_SELECT,				// #Hint_bomb_first_select
+	HINT_BOMB_PLANT_MAP, 	// #Hint_bomb_plant_map
+	HINT_BOMB_FIRST_SELECT, 	// #Hint_bomb_first_select
 
 	NUM_HINTS
 };
@@ -476,19 +476,19 @@ extern const char *g_pszHintMessages[];
 #define HINT_MASK_SPAWN_CLEAR ( 1 << HINT_FRIEND_KILLED )
 
 // criteria for when a weapon model wants to use an alt model
-#define ALTWPN_CRITERIA_NONE			0
-#define ALTWPN_CRITERIA_FIRING			(1 << 0)
+#define ALTWPN_CRITERIA_NONE 0
+#define ALTWPN_CRITERIA_FIRING (1 << 0)
 #define ALTWPN_CRITERIA_RELOADING		(1 << 1)
 #define ALTWPN_CRITERIA_DEPLOYED		(1 << 2)
 #define ALTWPN_CRITERIA_DEPLOYED_RELOAD	(1 << 3)
-#define ALTWPN_CRITERIA_PRONE			(1 << 4)	// player is prone
+#define ALTWPN_CRITERIA_PRONE (1 << 4)	// player is prone
 #define ALTWPN_CRITERIA_PRONE_DEPLOYED_RELOAD (1 << 5)	// player should use special alt model when prone deployed reloading
 
 // eject brass shells
 #define EJECTBRASS_PISTOL		0
 #define EJECTBRASS_RIFLE		1
-#define EJECTBRASS_MG			2
-#define EJECTBRASS_MG_2			3	// ?
+#define EJECTBRASS_MG 2
+#define EJECTBRASS_MG_2 3	// ?
 #define EJECTBRASS_GARANDCLIP	4
 
 extern const char *pszTeamAlliesClasses[];

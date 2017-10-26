@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Security cameras will track a default target (if they have one)
 //			until they either acquire an enemy to track or are told to track
@@ -20,7 +20,7 @@
 //			alarm and snap a few pictures of whatever they are tracking. They
 //			can also be set to become angry anytime they acquire an enemy.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_basenpc.h"
@@ -132,7 +132,7 @@ public:
 	void InputSetAngry(inputdata_t &inputdata);
 	void InputSetIdle(inputdata_t &inputdata);
 
-	void DrawDebugGeometryOverlays(void);
+	void DrawDebugGeometryOverlays();
 	
 	float MaxYawSpeed();
 

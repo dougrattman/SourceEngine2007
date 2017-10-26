@@ -1,17 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2005, Valve Corporation, All rights reserved.
 //
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-//
-// quakeasm.h: general asm header file
-//
+// general asm header file
 
 // #define GLQUAKE	1
 
-#if defined(_WIN32) && !defined(WINDED)
+#if defined(_WIN32)
 
 #if defined(_M_IX86)
 #define __i386__	1

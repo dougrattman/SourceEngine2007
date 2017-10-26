@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c1321528-ff2a-4b8c-b2ad-4b428ec5defc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{773d0c08-3cb6-409f-9f9c-4f364d8e118a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{292af076-2a73-4986-b923-435784593ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{dc40ebac-cd48-4fdd-85cd-a4f50500b8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Link Libraries">
+      <UniqueIdentifier>{e2133855-e2b7-4309-861c-dbfec56161e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{3e32d204-b73e-4f1c-ae81-41e8c0680194}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="clipboardmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="datamodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencygraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmattribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmelement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmelementdictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmelementfactoryhelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DmElementFramework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmserializerbinary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmserializerkeyvalues.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmserializerkeyvalues2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dmserializerxml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="undomanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dmserializerxml.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clipboardmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="datamodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencygraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dmattributeinternal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dmelementdictionary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmelementfactoryhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DmElementFramework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmelementhandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmelementinternal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dmserializerbinary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dmserializerkeyvalues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dmserializerkeyvalues2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="undomanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier0\basetypes.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\commonmacros.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier0\dbg.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier0\fasttimer.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\appframework\IAppSystem.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\interface.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier0\platform.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\protected_things.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\string_t.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\attributeflags.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmattributetypes.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmattributevar.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmehandle.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\dmelement.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\idatamodel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\datamodel\idmattribute.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="datamodel.vpc">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\lib\common\parsifal.lib">
+      <Filter>Link Libraries</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

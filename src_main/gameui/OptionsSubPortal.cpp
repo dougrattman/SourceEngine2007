@@ -1,20 +1,20 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #include "OptionsSubPortal.h"
 #include "CvarToggleCheckButton.h"
 #include "vgui_controls/ComboBox.h"
 
 #include "EngineInterface.h"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include "tier1/convar.h"
-#include <stdio.h>
+#include <cstdio>
 #include <vgui_controls/TextEntry.h>
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

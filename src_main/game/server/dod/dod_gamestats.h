@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The dod game stats header
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_GAMESTATS_H
 #define DOD_GAMESTATS_H
@@ -116,7 +116,7 @@ typedef struct
 typedef struct
 {
 	short iNumAttacks;		// times fired
-	short iNumHits;			// times hit
+	short iNumHits; // times hit
 
 	// distance buckets - distances are defined per-weapon ( 0 is closest, buckets-1 farthest )
 	short iDistanceBuckets[DOD_NUM_WEAPON_DISTANCE_BUCKETS];
@@ -127,7 +127,7 @@ typedef struct
 typedef struct
 {
 	short iNumAttacks;		// times fired
-	short iNumHits;			// times hit	
+	short iNumHits; // times hit	
 } dod_gamestats_weapon_nodist_t;
 
 typedef struct
@@ -141,7 +141,7 @@ typedef struct
 	short iAlliesTickPoints;
 	short iAxisTickPoints;
 
-	short iMinutesPlayed;			// time spent on the map rotation
+	short iMinutesPlayed; // time spent on the map rotation
 
 	// Player Data
 	short iMinutesPlayedPerClass_Allies[7];		// includes random
@@ -166,7 +166,7 @@ typedef struct
 
 	// Weapon Data
 	dod_gamestats_weapon_distance_t weaponStatsDistance[DOD_NUM_DISTANCE_STAT_WEAPONS];		// 14 * 22 = 308 bytes
-	dod_gamestats_weapon_nodist_t weaponStats[DOD_NUM_NODIST_STAT_WEAPONS];					// 4 * 14 = 56 bytes
+	dod_gamestats_weapon_nodist_t weaponStats[DOD_NUM_NODIST_STAT_WEAPONS]; 		// 4 * 14 = 56 bytes
 
 	// how many times a weapon was picked up ?
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The worldspawn entity. This spawns first when each level begins.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WORLD_H
 #define WORLD_H

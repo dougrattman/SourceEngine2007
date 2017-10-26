@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CLASSMENU_H
 #define CLASSMENU_H
@@ -14,7 +14,7 @@
 #include <vgui_controls/Frame.h>
 #include <vgui_controls/Button.h>
 #include <vgui_controls/HTML.h>
-#include <UtlVector.h>
+#include "tier1/UtlVector.h"
 #include <vgui/ILocalize.h>
 #include <vgui/KeyCode.h>
 #include <game/client/iviewport.h>
@@ -69,7 +69,7 @@ protected:
 
 	IViewPort	*m_pViewPort;
 	ButtonCode_t m_iScoreBoardKey;
-	int			m_iTeam;
+	int m_iTeam;
 	vgui::EditablePanel *m_pPanel;
 
 	CUtlVector< MouseOverPanelButton * > m_mouseoverButtons;

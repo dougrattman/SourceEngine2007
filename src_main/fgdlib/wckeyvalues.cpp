@@ -23,8 +23,8 @@ MDkeyvalue::~MDkeyvalue(void)
 //-----------------------------------------------------------------------------
 MDkeyvalue &MDkeyvalue::operator =(const MDkeyvalue &other)
 {
-	strcpy(szKey, other.szKey);
-	strcpy(szValue, other.szValue);
+	V_strcpy_safe(szKey, other.szKey);
+	V_strcpy_safe(szValue, other.szValue);
 
 	return(*this);
 }
@@ -59,8 +59,8 @@ void WCKVBase_Vector::AddKeyValue(const char *pszKey, const char *pszValue)
 	char szTmpKey[KEYVALUE_MAX_KEY_LENGTH];
 	char szTmpValue[KEYVALUE_MAX_VALUE_LENGTH];
 
-	strcpy(szTmpKey, pszKey);
-	strcpy(szTmpValue, pszValue);
+	V_strcpy_safe(szTmpKey, pszKey);
+	V_strcpy_safe(szTmpValue, pszValue);
 
 	StripEdgeWhiteSpace(szTmpKey);
 	StripEdgeWhiteSpace(szTmpValue);
@@ -69,8 +69,8 @@ void WCKVBase_Vector::AddKeyValue(const char *pszKey, const char *pszValue)
 	// Add the keyvalue to our list.
 	//
 	MDkeyvalue newkv;
-	strcpy(newkv.szKey, szTmpKey);
-	strcpy(newkv.szValue, szTmpValue);
+	V_strcpy_safe(newkv.szKey, szTmpKey);
+	V_strcpy_safe(newkv.szValue, szTmpValue);
 	m_KeyValues.AddToTail(newkv);
 }
 
@@ -186,7 +186,7 @@ void StripEdgeWhiteSpace(char *psz)
 
 	char *pszBase = psz;
 
-	while (isspace(*psz))
+	while (V_isspace(*psz))
 	{
 		psz++;
 	}
@@ -195,7 +195,7 @@ void StripEdgeWhiteSpace(char *psz)
 	
 	if ( iLen >= 0 )
 	{
-		while (isspace(psz[iLen]))
+		while (V_isspace(psz[iLen]))
 		{
 			psz[iLen--] = 0;
 		}
@@ -219,11 +219,11 @@ void WCKeyValuesT<Base>::SetValue(const char *pszKey, const char *pszValue)
 	char szTmpKey[KEYVALUE_MAX_KEY_LENGTH];
 	char szTmpValue[KEYVALUE_MAX_VALUE_LENGTH];
 
-	strcpy(szTmpKey, pszKey);
+	V_strcpy_safe(szTmpKey, pszKey);
 
 	if (pszValue != NULL)
 	{
-		strcpy(szTmpValue, pszValue);
+		V_strcpy_safe(szTmpValue, pszValue);
 	}
 	else
 	{

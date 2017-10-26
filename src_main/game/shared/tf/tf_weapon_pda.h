@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: PDA Weapon
 //
@@ -47,10 +47,10 @@ public:
 
 	virtual void	PrimaryAttack();
 	virtual void	SecondaryAttack();
-	virtual int		GetWeaponID( void ) const						{ return TF_WEAPON_PDA; }
-	virtual bool	ShouldDrawCrosshair( void )						{ return false; }
-	virtual bool	HasPrimaryAmmo()								{ return true; }
-	virtual bool	CanBeSelected()									{ return true; }
+	virtual int		GetWeaponID( void ) const  { return TF_WEAPON_PDA; }
+	virtual bool	ShouldDrawCrosshair( void )  { return false; }
+	virtual bool	HasPrimaryAmmo()  		{ return true; }
+	virtual bool	CanBeSelected()   { return true; }
 
 	virtual const char *GetPanelName() { return "pda_panel"; }
 
@@ -94,11 +94,11 @@ public:
 	{
 		if ( IsConsole()
 #ifdef CLIENT_DLL
-			|| tf_build_menu_controller_mode.GetBool() 
+ || tf_build_menu_controller_mode.GetBool() 
 #endif 
-			)
+ )
 		{
-			return false;
+ return false;
 		}
 
 		return BaseClass::VisibleInWeaponSelection();

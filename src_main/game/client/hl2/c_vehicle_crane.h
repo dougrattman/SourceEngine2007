@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "IClientVehicle.h"
 #include "vehicle_viewblend_shared.h"
@@ -66,15 +66,15 @@ private:
 	CHandle<C_BasePlayer>	m_hPlayer;
 	CHandle<C_BasePlayer>	m_hPrevPlayer;
 
-	bool					m_bEnterAnimOn;
-	bool					m_bExitAnimOn;
-	Vector					m_vecEyeExitEndpoint;
+	bool 		m_bEnterAnimOn;
+	bool 		m_bExitAnimOn;
+	Vector 		m_vecEyeExitEndpoint;
 
-	bool					m_bMagnetOn;
+	bool 		m_bMagnetOn;
 
-	Vector					m_vecOldShadowDir;
+	Vector 		m_vecOldShadowDir;
 
-	ViewSmoothingData_t			m_ViewSmoothingData;
+	ViewSmoothingData_t m_ViewSmoothingData;
 };
 
 #endif // C_VEHICLE_CRANE_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_PLANE_SOLVER_H
 #define AI_PLANE_SOLVER_H
@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "ai_movesolver.h"
 #include "ehandle.h"
 #include "mathlib/vector.h"
@@ -61,9 +61,9 @@ private:
 
 	enum 
 	{
-		DEGREES_POSITIVE_ARC				   = 270,
+		DEGREES_POSITIVE_ARC 	   = 270,
 		DEGREES_POSITIVE_ARC_CLOSE_OBSTRUCTION = 340,
-		NUM_PROBES 							   = 5
+		NUM_PROBES   	   = 5
 	};
 
 	// How far ahead does the ground solver look (seconds)
@@ -93,16 +93,16 @@ private:
 
 	// --------------------------------
 	
-	void				 GenerateObstacleNpcs( const AILocalMoveGoal_t &goal, float probeDist );
+	void 	 GenerateObstacleNpcs( const AILocalMoveGoal_t &goal, float probeDist );
 	AI_SuggestorResult_t GenerateObstacleSuggestions( const AILocalMoveGoal_t &goal, const AIMoveTrace_t &directTrace, float distClear, float probeDist, float degreesToProbe, int nProbes );
 	AI_SuggestorResult_t GenerateObstacleSuggestion( const AILocalMoveGoal_t &goal, float yawScanCenter, float probeDist, float spanPerProbe, int probeOffset );
-	void				 GenerateSuggestionFromTrace( const AILocalMoveGoal_t &goal,
-													  const AIMoveTrace_t &moveTrace, float probeDist, 
-													  float arcCenter, float arcSpan, int probeOffset );
-	bool				 GenerateCircleObstacleSuggestions( const AILocalMoveGoal_t &moveGoal, float probeDist );
+	void 	 GenerateSuggestionFromTrace( const AILocalMoveGoal_t &goal,
+    	  const AIMoveTrace_t &moveTrace, float probeDist, 
+    	  float arcCenter, float arcSpan, int probeOffset );
+	bool 	 GenerateCircleObstacleSuggestions( const AILocalMoveGoal_t &moveGoal, float probeDist );
 
-	void				 CalcYawsFromOffset( float yawScanCenter, float spanPerProbe, int probeOffset,
-											 float *pYawTest, float *pYawCenter );
+	void 	 CalcYawsFromOffset( float yawScanCenter, float spanPerProbe, int probeOffset,
+   		 float *pYawTest, float *pYawCenter );
 	
 	float CalculateRegulationWeight( const AIMoveTrace_t &moveTrace, float pctBlockedt );
 	float AdjustRegulationWeight( CBaseEntity *pEntity, float weight );
@@ -110,25 +110,25 @@ private:
 
 
 	bool RunMoveSolver( const AILocalMoveGoal_t &goal, const AIMoveTrace_t &directTrace, 
-						float degreesPositiveArc, bool fDeterOscillation, 
-						Vector *pResult );
+  float degreesPositiveArc, bool fDeterOscillation, 
+  Vector *pResult );
 	bool DetectUnsolvable( const AILocalMoveGoal_t &goal );
 
 	// --------------------------------
 	
 	CAI_BaseNPC *		m_pNpc;
 
-	Vector				m_PrevTarget;
-	bool				m_fSolvedPrev;
-	float 				m_PrevSolution;
-	Vector				m_PrevSolutionVector;
+	Vector 	m_PrevTarget;
+	bool 	m_fSolvedPrev;
+	float  	m_PrevSolution;
+	Vector 	m_PrevSolutionVector;
 	
-	float				m_ClosestHaveBeenToCurrent;
-	float 				m_TimeLastProgress;
+	float 	m_ClosestHaveBeenToCurrent;
+	float  	m_TimeLastProgress;
 
-	bool				m_fCannotSolveCurrent;
+	bool 	m_fCannotSolveCurrent;
 	
-	CSimTimer			m_RefreshSamplesTimer;
+	CSimTimer m_RefreshSamplesTimer;
 	
 	// --------------------------------
 	
@@ -136,16 +136,16 @@ private:
 	{
 		CircleObstacles_t( const Vector &center, float radius, CBaseEntity *pEntity, AI_MoveSuggType_t type )
 		 :	center(center), 
-			radius(radius), 
-			hEntity(pEntity),
-			type(type)
+ radius(radius), 
+ hEntity(pEntity),
+ type(type)
 		{
 		}
 		
-		Vector				center;
-		float				radius;
+		Vector 	center;
+		float 	radius;
 		AI_MoveSuggType_t 	type;
-		EHANDLE				hEntity;
+		EHANDLE 	hEntity;
 	};
 	
 	CUtlVector<CircleObstacles_t> m_Obstacles;

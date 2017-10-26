@@ -60,40 +60,40 @@ typedef void (STEAM_CALL  *KeyValueIteratorCallback_t )(const char *Key, const c
 ******************************************************************************/
 
 /* DEPRECATED -- these are ignored now, all API access is granted on SteamStartup */
-#define STEAM_USING_FILESYSTEM							(0x00000001)
-#define STEAM_USING_LOGGING								(0x00000002)
-#define STEAM_USING_USERID								(0x00000004)
-#define STEAM_USING_ACCOUNT								(0x00000008)
-#define STEAM_USING_ALL									(0x0000000f)
+#define STEAM_USING_FILESYSTEM  	(0x00000001)
+#define STEAM_USING_LOGGING  		(0x00000002)
+#define STEAM_USING_USERID  		(0x00000004)
+#define STEAM_USING_ACCOUNT  		(0x00000008)
+#define STEAM_USING_ALL   (0x0000000f)
 /* END DEPRECATED */
 
-#define STEAM_MAX_PATH									(255)
-#define STEAM_QUESTION_MAXLEN							(255)
-#define STEAM_SALT_SIZE									(8)
-#define STEAM_PROGRESS_PERCENT_SCALE					(0x00001000)
+#define STEAM_MAX_PATH   (255)
+#define STEAM_QUESTION_MAXLEN  	(255)
+#define STEAM_SALT_SIZE   (8)
+#define STEAM_PROGRESS_PERCENT_SCALE 		(0x00001000)
 
 /* These are maximum significant string lengths, excluding nul-terminator. */
-#define STEAM_CARD_NUMBER_SIZE							(17)
-#define STEAM_CARD_HOLDERNAME_SIZE						(100)
-#define STEAM_CARD_EXPYEAR_SIZE							(4)
-#define STEAM_CARD_EXPMONTH_SIZE						(2)
-#define STEAM_CARD_CVV2_SIZE							(5)
-#define STEAM_BILLING_ADDRESS1_SIZE						(128)
-#define STEAM_BILLING_ADDRESS2_SIZE						(128)
-#define STEAM_BILLING_CITY_SIZE							(50)
-#define STEAM_BILLING_ZIP_SIZE							(16)
-#define STEAM_BILLING_STATE_SIZE						(32)
-#define STEAM_BILLING_COUNTRY_SIZE						(32)
-#define STEAM_BILLING_PHONE_SIZE						(20)
-#define STEAM_BILLING_EMAIL_ADDRESS_SIZE				(100)
-#define STEAM_TYPE_OF_PROOF_OF_PURCHASE_SIZE			(20)
-#define STEAM_PROOF_OF_PURCHASE_TOKEN_SIZE				(200)
-#define STEAM_EXTERNAL_ACCOUNTNAME_SIZE					(100)
-#define STEAM_EXTERNAL_ACCOUNTPASSWORD_SIZE				(80)
-#define STEAM_BILLING_CONFIRMATION_CODE_SIZE			(22)
-#define STEAM_BILLING_CARD_APPROVAL_CODE_SIZE			(100)
-#define STEAM_BILLING_TRANS_DATE_SIZE					(9) // mm/dd/yy
-#define STEAM_BILLING_TRANS_TIME_SIZE					(9) // hh:mm:ss
+#define STEAM_CARD_NUMBER_SIZE  	(17)
+#define STEAM_CARD_HOLDERNAME_SIZE  (100)
+#define STEAM_CARD_EXPYEAR_SIZE  	(4)
+#define STEAM_CARD_EXPMONTH_SIZE  (2)
+#define STEAM_CARD_CVV2_SIZE  	(5)
+#define STEAM_BILLING_ADDRESS1_SIZE  (128)
+#define STEAM_BILLING_ADDRESS2_SIZE  (128)
+#define STEAM_BILLING_CITY_SIZE  	(50)
+#define STEAM_BILLING_ZIP_SIZE  	(16)
+#define STEAM_BILLING_STATE_SIZE  (32)
+#define STEAM_BILLING_COUNTRY_SIZE  (32)
+#define STEAM_BILLING_PHONE_SIZE  (20)
+#define STEAM_BILLING_EMAIL_ADDRESS_SIZE 	(100)
+#define STEAM_TYPE_OF_PROOF_OF_PURCHASE_SIZE (20)
+#define STEAM_PROOF_OF_PURCHASE_TOKEN_SIZE 	(200)
+#define STEAM_EXTERNAL_ACCOUNTNAME_SIZE 		(100)
+#define STEAM_EXTERNAL_ACCOUNTPASSWORD_SIZE 	(80)
+#define STEAM_BILLING_CONFIRMATION_CODE_SIZE (22)
+#define STEAM_BILLING_CARD_APPROVAL_CODE_SIZE (100)
+#define STEAM_BILLING_TRANS_DATE_SIZE 		(9) // mm/dd/yy
+#define STEAM_BILLING_TRANS_TIME_SIZE 		(9) // hh:mm:ss
 
 /******************************************************************************
 **
@@ -129,71 +129,71 @@ typedef enum
 
 typedef enum
 {
-	eSteamErrorNone													= 0,
-	eSteamErrorUnknown												= 1,
-	eSteamErrorLibraryNotInitialized								= 2,
-	eSteamErrorLibraryAlreadyInitialized							= 3,
-	eSteamErrorConfig												= 4,
-	eSteamErrorContentServerConnect									= 5,
-	eSteamErrorBadHandle											= 6,
-	eSteamErrorHandlesExhausted										= 7,
-	eSteamErrorBadArg												= 8,
-	eSteamErrorNotFound												= 9,
-	eSteamErrorRead													= 10,
-	eSteamErrorEOF													= 11,
-	eSteamErrorSeek													= 12,
-	eSteamErrorCannotWriteNonUserConfigFile							= 13,
-	eSteamErrorCacheOpen											= 14,
-	eSteamErrorCacheRead											= 15,
-	eSteamErrorCacheCorrupted										= 16,
-	eSteamErrorCacheWrite											= 17,
-	eSteamErrorCacheSession											= 18,
-	eSteamErrorCacheInternal										= 19,
-	eSteamErrorCacheBadApp											= 20,
-	eSteamErrorCacheVersion											= 21,
-	eSteamErrorCacheBadFingerPrint									= 22,
+	eSteamErrorNone    	= 0,
+	eSteamErrorUnknown    = 1,
+	eSteamErrorLibraryNotInitialized  		= 2,
+	eSteamErrorLibraryAlreadyInitialized  	= 3,
+	eSteamErrorConfig    = 4,
+	eSteamErrorContentServerConnect   = 5,
+	eSteamErrorBadHandle   		= 6,
+	eSteamErrorHandlesExhausted   	= 7,
+	eSteamErrorBadArg    = 8,
+	eSteamErrorNotFound    = 9,
+	eSteamErrorRead    	= 10,
+	eSteamErrorEOF    	= 11,
+	eSteamErrorSeek    	= 12,
+	eSteamErrorCannotWriteNonUserConfigFile  	= 13,
+	eSteamErrorCacheOpen   		= 14,
+	eSteamErrorCacheRead   		= 15,
+	eSteamErrorCacheCorrupted   	= 16,
+	eSteamErrorCacheWrite   		= 17,
+	eSteamErrorCacheSession   		= 18,
+	eSteamErrorCacheInternal   	= 19,
+	eSteamErrorCacheBadApp   		= 20,
+	eSteamErrorCacheVersion   		= 21,
+	eSteamErrorCacheBadFingerPrint   = 22,
 
-	eSteamErrorNotFinishedProcessing								= 23,
-	eSteamErrorNothingToDo											= 24,
-	eSteamErrorCorruptEncryptedUserIDTicket							= 25,
-	eSteamErrorSocketLibraryNotInitialized							= 26,
+	eSteamErrorNotFinishedProcessing  		= 23,
+	eSteamErrorNothingToDo   		= 24,
+	eSteamErrorCorruptEncryptedUserIDTicket  	= 25,
+	eSteamErrorSocketLibraryNotInitialized  	= 26,
 	eSteamErrorFailedToConnectToUserIDTicketValidationServer		= 27,
-	eSteamErrorBadProtocolVersion									= 28,
-	eSteamErrorReplayedUserIDTicketFromClient						= 29,
-	eSteamErrorReceiveResultBufferTooSmall							= 30,
-	eSteamErrorSendFailed											= 31,
-	eSteamErrorReceiveFailed										= 32,
+	eSteamErrorBadProtocolVersion   = 28,
+	eSteamErrorReplayedUserIDTicketFromClient  = 29,
+	eSteamErrorReceiveResultBufferTooSmall  	= 30,
+	eSteamErrorSendFailed   		= 31,
+	eSteamErrorReceiveFailed   	= 32,
 	eSteamErrorReplayedReplyFromUserIDTicketValidationServer		= 33,
-	eSteamErrorBadSignatureFromUserIDTicketValidationServer			= 34,
-	eSteamErrorValidationStalledSoAborted							= 35,
-	eSteamErrorInvalidUserIDTicket									= 36,
-	eSteamErrorClientLoginRateTooHigh								= 37,
-	eSteamErrorClientWasNeverValidated								= 38,
-	eSteamErrorInternalSendBufferTooSmall							= 39,
-	eSteamErrorInternalReceiveBufferTooSmall						= 40,
-	eSteamErrorUserTicketExpired									= 41,
-	eSteamErrorCDKeyAlreadyInUseOnAnotherClient						= 42,
+	eSteamErrorBadSignatureFromUserIDTicketValidationServer = 34,
+	eSteamErrorValidationStalledSoAborted  	= 35,
+	eSteamErrorInvalidUserIDTicket   = 36,
+	eSteamErrorClientLoginRateTooHigh  		= 37,
+	eSteamErrorClientWasNeverValidated  		= 38,
+	eSteamErrorInternalSendBufferTooSmall  	= 39,
+	eSteamErrorInternalReceiveBufferTooSmall  = 40,
+	eSteamErrorUserTicketExpired   = 41,
+	eSteamErrorCDKeyAlreadyInUseOnAnotherClient  = 42,
 
-	eSteamErrorNotLoggedIn											= 101,
-	eSteamErrorAlreadyExists										= 102,
-	eSteamErrorAlreadySubscribed									= 103,
-	eSteamErrorNotSubscribed										= 104,
-	eSteamErrorAccessDenied											= 105,
-	eSteamErrorFailedToCreateCacheFile								= 106,
-	eSteamErrorCallStalledSoAborted									= 107,
-	eSteamErrorEngineNotRunning										= 108,
-	eSteamErrorEngineConnectionLost									= 109,
-	eSteamErrorLoginFailed											= 110,
-	eSteamErrorAccountPending										= 111,
-	eSteamErrorCacheWasMissingRetry									= 112,
-	eSteamErrorLocalTimeIncorrect									= 113,
-	eSteamErrorCacheNeedsDecryption									= 114,
-	eSteamErrorAccountDisabled										= 115,
-	eSteamErrorCacheNeedsRepair										= 116,
-	eSteamErrorRebootRequired										= 117,
+	eSteamErrorNotLoggedIn   		= 101,
+	eSteamErrorAlreadyExists   	= 102,
+	eSteamErrorAlreadySubscribed   = 103,
+	eSteamErrorNotSubscribed   	= 104,
+	eSteamErrorAccessDenied   		= 105,
+	eSteamErrorFailedToCreateCacheFile  		= 106,
+	eSteamErrorCallStalledSoAborted   = 107,
+	eSteamErrorEngineNotRunning   	= 108,
+	eSteamErrorEngineConnectionLost   = 109,
+	eSteamErrorLoginFailed   		= 110,
+	eSteamErrorAccountPending   	= 111,
+	eSteamErrorCacheWasMissingRetry   = 112,
+	eSteamErrorLocalTimeIncorrect   = 113,
+	eSteamErrorCacheNeedsDecryption   = 114,
+	eSteamErrorAccountDisabled   	= 115,
+	eSteamErrorCacheNeedsRepair   	= 116,
+	eSteamErrorRebootRequired   	= 117,
 
-	eSteamErrorNetwork												= 200,
-	eSteamErrorOffline												= 201
+	eSteamErrorNetwork    = 200,
+	eSteamErrorOffline    = 201
 
 
 } ESteamError;
@@ -208,11 +208,11 @@ typedef enum
 	eDetailedPlatformErrorCount
 } EDetailedPlatformErrorType;
 
-typedef enum						/* Filter elements returned by SteamFind{First,Next} */
+typedef enum  /* Filter elements returned by SteamFind{First,Next} */
 {
-	eSteamFindLocalOnly,			/* limit search to local filesystem */
-	eSteamFindRemoteOnly,			/* limit search to remote repository */
-	eSteamFindAll					/* do not limit search (duplicates allowed) */
+	eSteamFindLocalOnly, /* limit search to local filesystem */
+	eSteamFindRemoteOnly, /* limit search to remote repository */
+	eSteamFindAll 		/* do not limit search (duplicates allowed) */
 } ESteamFindFilter;
 
 
@@ -235,13 +235,13 @@ typedef struct
 
 typedef struct
 {
-	int bIsDir;						/* If non-zero, element is a directory; if zero, element is a file */
+	int bIsDir;  /* If non-zero, element is a directory; if zero, element is a file */
 	unsigned int uSizeOrCount;		/* If element is a file, this contains size of file in bytes */
-	int bIsLocal;					/* If non-zero, reported item is a standalone element on local filesystem */
+	int bIsLocal; 		/* If non-zero, reported item is a standalone element on local filesystem */
 	char cszName[STEAM_MAX_PATH];	/* Base element name (no path) */
-	long lLastAccessTime;			/* Seconds since 1/1/1970 (like time_t) when element was last accessed */
+	long lLastAccessTime; /* Seconds since 1/1/1970 (like time_t) when element was last accessed */
 	long lLastModificationTime;		/* Seconds since 1/1/1970 (like time_t) when element was last modified */
-	long lCreationTime;				/* Seconds since 1/1/1970 (like time_t) when element was created */
+	long lCreationTime; 	/* Seconds since 1/1/1970 (like time_t) when element was created */
 } TSteamElemInfo;
 
 
@@ -316,11 +316,11 @@ typedef struct
 
 typedef enum 
 {
-	eNoCost				= 0,
+	eNoCost 	= 0,
 	eBillOnceOnly		= 1,
 	eBillMonthly		= 2,
 	eProofOfPrepurchaseOnly	= 3,
-	eGuestPass			= 4,
+	eGuestPass = 4,
 	eHardwarePromo		= 5,
 	eNumBillingTypes,
 } EBillingType;
@@ -400,12 +400,12 @@ typedef struct
 
 typedef enum
 {
-	eVisa				= 1,
-	eMaster				= 2,
+	eVisa 	= 1,
+	eMaster 	= 2,
 	eAmericanExpress	= 3,
-	eDiscover			= 4,
+	eDiscover = 4,
 	eDinnersClub		= 5,
-	eJCB				= 6
+	eJCB 	= 6
 } ESteamPaymentCardType;
 
 typedef struct
@@ -427,7 +427,7 @@ typedef struct
 	unsigned int uExpectedCostInCents;
 	unsigned int uExpectedTaxInCents;
 	/* If the TSteamSubscription says that shipping info is required,	*/
-	/* then the following fields must be filled out.					*/
+	/* then the following fields must be filled out. 		*/
 	/* If szShippingName is empty, then assumes so are the rest.		*/
 	char szShippingName[ STEAM_CARD_HOLDERNAME_SIZE + 1];
 	char szShippingAddress1[ STEAM_BILLING_ADDRESS1_SIZE + 1 ];
@@ -443,12 +443,12 @@ typedef struct
 
 typedef struct
 {
-	char					szTypeOfProofOfPurchase[ STEAM_TYPE_OF_PROOF_OF_PURCHASE_SIZE + 1 ];
+	char 		szTypeOfProofOfPurchase[ STEAM_TYPE_OF_PROOF_OF_PURCHASE_SIZE + 1 ];
 
 	/* A ProofOfPurchase token is not necessarily a nul-terminated string; it may be binary data
-	   (perhaps encrypted). Hence we need a length and an array of bytes.							*/
-	unsigned int			uLengthOfBinaryProofOfPurchaseToken;	
-	char					cBinaryProofOfPurchaseToken[ STEAM_PROOF_OF_PURCHASE_TOKEN_SIZE + 1 ];
+	   (perhaps encrypted). Hence we need a length and an array of bytes.  	*/
+	unsigned int uLengthOfBinaryProofOfPurchaseToken;	
+	char 		cBinaryProofOfPurchaseToken[ STEAM_PROOF_OF_PURCHASE_TOKEN_SIZE + 1 ];
 } TSteamPrepurchaseInfo;
 
 typedef struct
@@ -465,17 +465,17 @@ typedef enum
 	eExternalBillingInfo	= 4,		/* indirect billing via ISP etc (not supported yet) */
 	ePaymentCardReceipt		= 5,
 	ePrepurchaseReceipt		= 6,
-	eEmptyReceipt			= 7
+	eEmptyReceipt = 7
 } ESteamSubscriptionBillingInfoType;
 
 typedef struct
 {
 	ESteamSubscriptionBillingInfoType	eBillingInfoType;
 	union {
-		TSteamPaymentCardInfo			PaymentCardInfo;
-		TSteamPrepurchaseInfo			PrepurchaseInfo;
+		TSteamPaymentCardInfo PaymentCardInfo;
+		TSteamPrepurchaseInfo PrepurchaseInfo;
 		TSteamExternalBillingInfo		ExternalBillingInfo;
-		char							bUseAccountBillingInfo;
+		char  	bUseAccountBillingInfo;
 	};
 
 } TSteamSubscriptionBillingInfo;
@@ -483,23 +483,23 @@ typedef struct
 typedef enum
 {
 	/* Subscribed */
-	eSteamSubscriptionOK							= 0,	/* Subscribed */
-	eSteamSubscriptionPending						= 1,	/* Awaiting	transaction	completion */
-	eSteamSubscriptionPreorder						= 2,	/* Is currently	a pre-order */
+	eSteamSubscriptionOK  	= 0,	/* Subscribed */
+	eSteamSubscriptionPending  = 1,	/* Awaiting	transaction	completion */
+	eSteamSubscriptionPreorder  = 2,	/* Is currently	a pre-order */
 	eSteamSubscriptionPrepurchaseTransferred		= 3,	/* hop to this account */
 	/* Unusbscribed */
-	eSteamSubscriptionPrepurchaseInvalid			= 4,	/* Invalid cd-key */
-	eSteamSubscriptionPrepurchaseRejected			= 5,	/* hopped out / banned / etc */
-	eSteamSubscriptionPrepurchaseRevoked			= 6,	/* hop away from this account */
-	eSteamSubscriptionPaymentCardDeclined			= 7,	/* CC txn declined */
-	eSteamSubscriptionCancelledByUser				= 8,	/* Cancelled by	client */
-	eSteamSubscriptionCancelledByVendor				= 9,	/* Cancelled by us */
-	eSteamSubscriptionPaymentCardUseLimit			= 10,	/* Card used too many times, potential fraud */
-	eSteamSubscriptionPaymentCardAlert				= 11,	/* Got a "pick up card" or the like from bank */
-	eSteamSubscriptionFailed						= 12,	/* Other Error in subscription data or transaction failed/lost */
-	eSteamSubscriptionPaymentCardAVSFailure			= 13,	/* Card failed Address Verification check */
+	eSteamSubscriptionPrepurchaseInvalid = 4,	/* Invalid cd-key */
+	eSteamSubscriptionPrepurchaseRejected = 5,	/* hopped out / banned / etc */
+	eSteamSubscriptionPrepurchaseRevoked = 6,	/* hop away from this account */
+	eSteamSubscriptionPaymentCardDeclined = 7,	/* CC txn declined */
+	eSteamSubscriptionCancelledByUser 	= 8,	/* Cancelled by	client */
+	eSteamSubscriptionCancelledByVendor 	= 9,	/* Cancelled by us */
+	eSteamSubscriptionPaymentCardUseLimit = 10,	/* Card used too many times, potential fraud */
+	eSteamSubscriptionPaymentCardAlert 	= 11,	/* Got a "pick up card" or the like from bank */
+	eSteamSubscriptionFailed  = 12,	/* Other Error in subscription data or transaction failed/lost */
+	eSteamSubscriptionPaymentCardAVSFailure = 13,	/* Card failed Address Verification check */
 	eSteamSubscriptionPaymentCardInsufficientFunds	= 14,	/* Card failed due to insufficient funds */
-	eSteamSubscriptionRestrictedCountry				= 15	/* The subscription is not available in the user's country */
+	eSteamSubscriptionRestrictedCountry 	= 15	/* The subscription is not available in the user's country */
 
 } ESteamSubscriptionStatus;
 
@@ -532,8 +532,8 @@ typedef struct
 
 typedef struct
 {
-	ESteamSubscriptionStatus			eStatus;
-	ESteamSubscriptionStatus			ePreviousStatus;
+	ESteamSubscriptionStatus eStatus;
+	ESteamSubscriptionStatus ePreviousStatus;
 	ESteamSubscriptionBillingInfoType	eReceiptInfoType;
 	char szConfirmationCode[ STEAM_BILLING_CONFIRMATION_CODE_SIZE +	1];
 	union {
@@ -563,21 +563,21 @@ typedef enum
 	eSteamUserAdministrator	=	0x00000001, /* May subscribe, unsubscribe, etc */
 	eSteamUserDeveloper		=	0x00000002, /* Steam or App developer */
 	eSteamUserCyberCafe		=	0x00000004  /* CyberCafe, school, etc -- UI should ask for password */
-											/* before allowing logout, unsubscribe, etc             */
+   		/* before allowing logout, unsubscribe, etc             */
 } ESteamUserTypeFlags;
 
 typedef enum 
 {
-	eSteamAccountStatusDefault			=	0x00000000,
+	eSteamAccountStatusDefault =	0x00000000,
 	eSteamAccountStatusEmailVerified	=	0x00000001,
 	/* Note: Mask value 0x2 is reserved for future use. (Some, but not all, public accounts already have this set.) */
-	eSteamAccountDisabled				=	0x00000004
+	eSteamAccountDisabled 	=	0x00000004
 } ESteamAccountStatusBitFields ;
 
 
 typedef enum
 {
-	eSteamBootstrapperError						= -1,
+	eSteamBootstrapperError  = -1,
 	eSteamBootstrapperDontCheckForUpdate		= 0,
 	eSteamBootstrapperCheckForUpdateAndRerun	= 7
 
@@ -606,7 +606,7 @@ typedef struct
 
 typedef enum
 {
-	eSteamOpenFileRegular =			0x0,
+	eSteamOpenFileRegular = 0x0,
 	eSteamOpenFileIgnoreLocal =		0x1,
 	eSteamOpenFileChecksumReads =	0x2
 } ESteamOpenFileFlags;
@@ -631,17 +631,17 @@ typedef enum
 
 #ifdef __cplusplus
 
-const SteamHandle_t										STEAM_INVALID_HANDLE = 0;
-const SteamCallHandle_t									STEAM_INVALID_CALL_HANDLE = 0;
-const SteamUserIDTicketValidationHandle_t				STEAM_INACTIVE_USERIDTICKET_VALIDATION_HANDLE = 0;
-const unsigned int										STEAM_USE_LATEST_VERSION = 0xFFFFFFFF;
+const SteamHandle_t   	STEAM_INVALID_HANDLE = 0;
+const SteamCallHandle_t   STEAM_INVALID_CALL_HANDLE = 0;
+const SteamUserIDTicketValidationHandle_t 	STEAM_INACTIVE_USERIDTICKET_VALIDATION_HANDLE = 0;
+const unsigned int   	STEAM_USE_LATEST_VERSION = 0xFFFFFFFF;
 
 #else
 
-#define STEAM_INVALID_HANDLE							((SteamHandle_t)(0))
-#define STEAM_INVALID_CALL_HANDLE						((SteamCallHandle_t)(0))
+#define STEAM_INVALID_HANDLE  	((SteamHandle_t)(0))
+#define STEAM_INVALID_CALL_HANDLE  ((SteamCallHandle_t)(0))
 #define	STEAM_INACTIVE_USERIDTICKET_VALIDATION_HANDLE	((SteamUserIDTicketValidationHandle_t)(0))
-#define STEAM_USE_LATEST_VERSION						(0xFFFFFFFFu);
+#define STEAM_USE_LATEST_VERSION  (0xFFFFFFFFu);
 
 #endif
 
@@ -690,7 +690,7 @@ typedef struct
 	{
 		SteamLocalUserID_t		As64bits;
 		TSteamSplitLocalUserID	Split;
-	}						m_SteamLocalUserID;
+	}  m_SteamLocalUserID;
 
 } TSteamGlobalUserID;
 

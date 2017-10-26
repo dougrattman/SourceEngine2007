@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_ROPE_H
 #define C_ROPE_H
@@ -50,8 +50,8 @@ private:
 
 public:
 
-					C_RopeKeyframe();
-					~C_RopeKeyframe();
+ 		C_RopeKeyframe();
+ 		~C_RopeKeyframe();
 
 	// This can be used for client-only ropes.
 	static C_RopeKeyframe* Create(
@@ -61,8 +61,8 @@ public:
 		int iEndAttachment=0,
 		float ropeWidth = 2,
 		const char *pMaterialName = "cable/cable",		// Note: whoever creates the rope must
-														// use PrecacheModel for whatever material
-														// it specifies here.
+    		// use PrecacheModel for whatever material
+    		// it specifies here.
 		int numSegments = 5,
 		int ropeFlags = ROPE_SIMULATE
 		);
@@ -95,15 +95,15 @@ public:
 	// Attach to things (you can also just lock the endpoints down yourself if you hook the physics).
 
 	// Client-only right now. This could be moved to the server if there was a good reason.
-	void			SetColorMod( const Vector &vColorMod );
+	void SetColorMod( const Vector &vColorMod );
 
 	// Use this when rope length and slack change to recompute the spring length.
-	void			RecomputeSprings();
+	void RecomputeSprings();
 
 	void ShakeRope( const Vector &vCenter, float flRadius, float flMagnitude );
 
 	// Get the attachment position of one of the endpoints.
-	bool			GetEndPointPos( int iPt, Vector &vPos );
+	bool GetEndPointPos( int iPt, Vector &vPos );
 
 	// Get the rope material data.
 	IMaterial		*GetSolidMaterial( void )		{ return m_pMaterial; }
@@ -119,7 +119,7 @@ public:
 		float	m_Slack;
 	};
 
-	void			BuildRope( RopeSegData_t *pRopeSegment, const Vector &vCurrentViewForward, const Vector &vCurrentViewOrigin, BuildRopeQueuedData_t *pQueuedData );
+	void BuildRope( RopeSegData_t *pRopeSegment, const Vector &vCurrentViewForward, const Vector &vCurrentViewOrigin, BuildRopeQueuedData_t *pQueuedData );
 
 // C_BaseEntity overrides.
 public:
@@ -138,97 +138,97 @@ public:
 
 private:
 	
-	void			FinishInit( const char *pMaterialName );
+	void FinishInit( const char *pMaterialName );
 
-	void			RunRopeSimulation( float flSeconds );
-	Vector			ConstrainNode( const Vector &vNormal, const Vector &vNodePosition, const Vector &vMidpiont, float fNormalLength );
-	void			ConstrainNodesBetweenEndpoints( void );
+	void RunRopeSimulation( float flSeconds );
+	Vector ConstrainNode( const Vector &vNormal, const Vector &vNodePosition, const Vector &vMidpiont, float fNormalLength );
+	void ConstrainNodesBetweenEndpoints( void );
 
-	bool			AnyPointsMoved();
+	bool AnyPointsMoved();
 
-	bool			DidEndPointMove( int iPt );
-	bool			DetectRestingState( bool &bApplyWind );
+	bool DidEndPointMove( int iPt );
+	bool DetectRestingState( bool &bApplyWind );
 
-	void			UpdateBBox();
-	bool			InitRopePhysics();
+	void UpdateBBox();
+	bool InitRopePhysics();
 	
-	bool			GetEndPointAttachment( int iPt, Vector &vPos, QAngle &angle );
+	bool GetEndPointAttachment( int iPt, Vector &vPos, QAngle &angle );
 	
-	Vector			*GetRopeSubdivVectors( int *nSubdivs );
-	void			CalcLightValues();
+	Vector *GetRopeSubdivVectors( int *nSubdivs );
+	void CalcLightValues();
 
-	void			ReceiveMessage( int classID, bf_read &msg );
-	bool			CalculateEndPointAttachment( C_BaseEntity *pEnt, int iAttachment, Vector &vPos, QAngle *pAngles );
+	void ReceiveMessage( int classID, bf_read &msg );
+	bool CalculateEndPointAttachment( C_BaseEntity *pEnt, int iAttachment, Vector &vPos, QAngle *pAngles );
 
 
 private:
 	// Track which links touched something last frame. Used to prevent wind from gusting on them.
 	CBitVec<ROPE_MAX_SEGMENTS>		m_LinksTouchingSomething;
-	int								m_nLinksTouchingSomething;
-	bool							m_bApplyWind;
-	int								m_fPrevLockedPoints;	// Which points are locked down.
-	int								m_iForcePointMoveCounter;
+	int  		m_nLinksTouchingSomething;
+	bool  	m_bApplyWind;
+	int  		m_fPrevLockedPoints;	// Which points are locked down.
+	int  		m_iForcePointMoveCounter;
 
 	// Used to control resting state.
-	bool			m_bPrevEndPointPos[2];
-	Vector			m_vPrevEndPointPos[2];
+	bool m_bPrevEndPointPos[2];
+	Vector m_vPrevEndPointPos[2];
 
-	float			m_flCurScroll;		// for scrolling texture.
-	float			m_flScrollSpeed;
+	float m_flCurScroll;		// for scrolling texture.
+	float m_flScrollSpeed;
 
-	int				m_RopeFlags;			// Combo of ROPE_ flags.
-	int				m_iRopeMaterialModelIndex;	// Index of sprite model with the rope's material.
+	int 	m_RopeFlags; // Combo of ROPE_ flags.
+	int 	m_iRopeMaterialModelIndex;	// Index of sprite model with the rope's material.
 		
 	CRopePhysics<ROPE_MAX_SEGMENTS>	m_RopePhysics;
-	Vector			m_LightValues[ROPE_MAX_SEGMENTS]; // light info when the rope is created.
+	Vector m_LightValues[ROPE_MAX_SEGMENTS]; // light info when the rope is created.
 
-	int				m_nSegments;		// Number of segments.
+	int 	m_nSegments;		// Number of segments.
 	
-	EHANDLE			m_hStartPoint;		// StartPoint/EndPoint are entities
-	EHANDLE			m_hEndPoint;
-	short			m_iStartAttachment;	// StartAttachment/EndAttachment are attachment points.
-	short			m_iEndAttachment;
+	EHANDLE m_hStartPoint;		// StartPoint/EndPoint are entities
+	EHANDLE m_hEndPoint;
+	short m_iStartAttachment;	// StartAttachment/EndAttachment are attachment points.
+	short m_iEndAttachment;
 
-	unsigned char	m_Subdiv;			// Number of subdivions in between segments.
+	unsigned char	m_Subdiv; // Number of subdivions in between segments.
 
-	int				m_RopeLength;		// Length of the rope, used for tension.
-	int				m_Slack;			// Extra length the rope is given.
-	float			m_TextureScale;		// pixels per inch
+	int 	m_RopeLength;		// Length of the rope, used for tension.
+	int 	m_Slack; // Extra length the rope is given.
+	float m_TextureScale;		// pixels per inch
 	
-	int				m_fLockedPoints;	// Which points are locked down.
+	int 	m_fLockedPoints;	// Which points are locked down.
 
-	float				m_Width;
+	float 	m_Width;
 
 	CPhysicsDelegate	m_PhysicsDelegate;
 
 	IMaterial		*m_pMaterial;
-	IMaterial		*m_pBackMaterial;			// Optional translucent background material for the rope to help reduce aliasing.
+	IMaterial		*m_pBackMaterial; // Optional translucent background material for the rope to help reduce aliasing.
 
-	int				m_TextureHeight;	// Texture height, for texture scale calculations.
+	int 	m_TextureHeight;	// Texture height, for texture scale calculations.
 
 	// Instantaneous force
-	Vector			m_flImpulse;
-	Vector			m_flPreviousImpulse;
+	Vector m_flImpulse;
+	Vector m_flPreviousImpulse;
 
 	// Simulated wind gusts.
-	float			m_flCurrentGustTimer;
-	float			m_flCurrentGustLifetime;	// How long will the current gust last?
+	float m_flCurrentGustTimer;
+	float m_flCurrentGustLifetime;	// How long will the current gust last?
 
-	float			m_flTimeToNextGust;			// When will the next wind gust be?
-	Vector			m_vWindDir;					// What direction does the current gust go in?
+	float m_flTimeToNextGust; // When will the next wind gust be?
+	Vector m_vWindDir; 		// What direction does the current gust go in?
 
-	Vector			m_vColorMod;				// Color modulation on all verts?
+	Vector m_vColorMod; 	// Color modulation on all verts?
 
-	Vector			m_vCachedEndPointAttachmentPos[2];
-	QAngle			m_vCachedEndPointAttachmentAngle[2];
+	Vector m_vCachedEndPointAttachmentPos[2];
+	QAngle m_vCachedEndPointAttachmentAngle[2];
 
 	// In network table, can't bit-compress
-	bool			m_bConstrainBetweenEndpoints;	// Simulated segment points won't stretch beyond the endpoints
+	bool m_bConstrainBetweenEndpoints;	// Simulated segment points won't stretch beyond the endpoints
 
-	bool			m_bEndPointAttachmentPositionsDirty : 1;
-	bool			m_bEndPointAttachmentAnglesDirty : 1;
-	bool			m_bNewDataThisFrame : 1;			// Set to true in OnDataChanged so that we simulate that frame
-	bool			m_bPhysicsInitted : 1;				// It waits until all required entities are 
+	bool m_bEndPointAttachmentPositionsDirty : 1;
+	bool m_bEndPointAttachmentAnglesDirty : 1;
+	bool m_bNewDataThisFrame : 1; // Set to true in OnDataChanged so that we simulate that frame
+	bool m_bPhysicsInitted : 1; 	// It waits until all required entities are 
 	// present to start simulating and rendering.
 
 	friend class CRopeManager;
@@ -246,11 +246,11 @@ void Rope_ResetCounters();
 abstract_class IRopeManager
 {
 public:
-	virtual						~IRopeManager() {}
-	virtual void				ResetRenderCache( void ) = 0;
-	virtual void				AddToRenderCache( C_RopeKeyframe *pRope ) = 0;
-	virtual void				DrawRenderCache( bool bShadowDepth ) = 0;
-	virtual void				OnRenderStart( void ) = 0;
+	virtual  ~IRopeManager() {}
+	virtual void 	ResetRenderCache( void ) = 0;
+	virtual void 	AddToRenderCache( C_RopeKeyframe *pRope ) = 0;
+	virtual void 	DrawRenderCache( bool bShadowDepth ) = 0;
+	virtual void 	OnRenderStart( void ) = 0;
 };
 
 IRopeManager *RopeManager();

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Game rules for Half-Life 2.
 //
-//=============================================================================//
+
 
 #ifndef HL2_GAMERULES_H
 #define HL2_GAMERULES_H
@@ -34,17 +34,17 @@ public:
 	DECLARE_CLASS( CHalfLife2, CSingleplayRules );
 
 	// Damage Query Overrides.
-	virtual bool			Damage_IsTimeBased( int iDmgType );
+	virtual bool Damage_IsTimeBased( int iDmgType );
 	// TEMP:
-	virtual int				Damage_GetTimeBased( void );
+	virtual int 	Damage_GetTimeBased( void );
 	
-	virtual bool			ShouldCollide( int collisionGroup0, int collisionGroup1 );
-	virtual bool			ShouldUseRobustRadiusDamage(CBaseEntity *pEntity);
+	virtual bool ShouldCollide( int collisionGroup0, int collisionGroup1 );
+	virtual bool ShouldUseRobustRadiusDamage(CBaseEntity *pEntity);
 #ifndef CLIENT_DLL
-	virtual bool			ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target );
-	virtual float			GetAutoAimScale( CBasePlayer *pPlayer );
-	virtual float			GetAmmoQuantityScale( int iAmmoIndex );
-	virtual void			LevelInitPreEntity();
+	virtual bool ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target );
+	virtual float GetAutoAimScale( CBasePlayer *pPlayer );
+	virtual float GetAmmoQuantityScale( int iAmmoIndex );
+	virtual void LevelInitPreEntity();
 #endif
 
 private:
@@ -62,20 +62,20 @@ private:
 	CHalfLife2();
 	virtual ~CHalfLife2() {}
 
-	virtual void			Think( void );
+	virtual void Think( void );
 
-	virtual bool			ClientCommand( CBaseEntity *pEdict, const CCommand &args );
-	virtual void			PlayerSpawn( CBasePlayer *pPlayer );
+	virtual bool ClientCommand( CBaseEntity *pEdict, const CCommand &args );
+	virtual void PlayerSpawn( CBasePlayer *pPlayer );
 
-	virtual void			InitDefaultAIRelationships( void );
+	virtual void InitDefaultAIRelationships( void );
 	virtual const char*		AIClassText(int classType);
 	virtual const char *GetGameDescription( void ) { return "Half-Life 2"; }
 
 	// Ammo
-	virtual void			PlayerThink( CBasePlayer *pPlayer );
-	virtual float			GetAmmoDamage( CBaseEntity *pAttacker, CBaseEntity *pVictim, int nAmmoType );
+	virtual void PlayerThink( CBasePlayer *pPlayer );
+	virtual float GetAmmoDamage( CBaseEntity *pAttacker, CBaseEntity *pVictim, int nAmmoType );
 
-	virtual bool			ShouldBurningPropsEmitLight();
+	virtual bool ShouldBurningPropsEmitLight();
 public:
 
 	bool AllowDamage( CBaseEntity *pVictim, const CTakeDamageInfo &info );
@@ -96,7 +96,7 @@ private:
 	void AdjustPlayerDamageTaken( CTakeDamageInfo *pInfo );
 	float AdjustPlayerDamageInflicted( float damage );
 
-	int						DefaultFOV( void ) { return 75; }
+	int  DefaultFOV( void ) { return 75; }
 #endif
 };
 

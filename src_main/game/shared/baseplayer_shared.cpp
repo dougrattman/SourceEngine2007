@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements shared baseplayer class functionality
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "movevars_shared.h"
@@ -1383,17 +1383,6 @@ void CBasePlayer::SmoothViewOnStairs( Vector& eyeOrigin )
 		m_flOldPlayerZ = flCurrentPlayerZ;
 		m_flOldPlayerViewOffsetZ = flCurrentPlayerViewOffsetZ;
 	}
-}
-
-static bool IsWaterContents( int contents )
-{
-	if ( contents & MASK_WATER )
-		return true;
-
-//	if ( contents & CONTENTS_TESTFOGVOLUME )
-//		return true;
-
-	return false;
 }
 
 void CBasePlayer::ResetObserverMode()

@@ -70,8 +70,8 @@ private:
 	void InputRoundSpawn( inputdata_t &inputdata );
 
 	string_t	m_iszCPNames;
-	int			m_nPriority;
-	int			m_iInvalidCapWinner;
+	int m_nPriority;
+	int m_iInvalidCapWinner;
 	string_t	m_iszPrintName;
 
 	COutputEvent m_OnStart;

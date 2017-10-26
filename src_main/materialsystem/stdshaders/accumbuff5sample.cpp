@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -10,7 +10,7 @@
 #include "screenspaceeffect_vs20.inc"
 #include "accumbuff5sample_ps20.inc"
 #include "accumbuff5sample_ps20b.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 BEGIN_VS_SHADER_FLAGS( accumbuff5sample, "Help for AccumBuff5Sample", SHADER_NOT_EDITABLE )
 	BEGIN_SHADER_PARAMS

@@ -57,14 +57,14 @@ protected:
 	
 	DECLARE_DATADESC();
 
-	virtual int	ObjectCaps(void);
+	virtual int	ObjectCaps();
 
 	Vector m_vecMoveDir;
 
 	bool	m_fStayPushed;		// button stays pushed in until touched again?
 	bool	m_fRotating;		// a rotating button?  default is a sliding button.
 
-	locksound_t m_ls;			// door lock sounds
+	locksound_t m_ls; // door lock sounds
 	
 	byte	m_bLockedSound;		// ordinals from entity selection
 	byte	m_bLockedSentence;	
@@ -76,7 +76,7 @@ protected:
 
 	bool	m_bSolidBsp;
 
-	string_t	m_sNoise;			// The actual WAV file name of the sound.
+	string_t	m_sNoise; // The actual WAV file name of the sound.
 
 	COutputEvent m_OnDamaged;
 	COutputEvent m_OnPressed;
@@ -113,14 +113,14 @@ public:
 	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	void	UseMoveDone( void );
 	void	ReturnMoveDone( void );
-	void	OutputMovementComplete(void);
-	void	SetPositionMoveDone(void);
+	void	OutputMovementComplete();
+	void	SetPositionMoveDone();
 	void	UpdateSelf( float value, bool bPlaySound );
 
 	void	PlaySound( void );
 	void	UpdateTarget( float value, CBaseEntity *pActivator );
 
-	int		DrawDebugTextOverlays(void);
+	int		DrawDebugTextOverlays();
 
 	static CMomentaryRotButton *Instance( edict_t *pent ) { return (CMomentaryRotButton *)GetContainingEntity(pent); }
 
@@ -151,7 +151,7 @@ public:
 	COutputEvent m_OnFullyClosed;
 	COutputEvent m_OnReachedPosition;
 
-	int			m_lastUsed;
+	int m_lastUsed;
 	QAngle		m_start;
 	QAngle		m_end;
 	float		m_IdealYaw;
@@ -159,7 +159,7 @@ public:
 
 	bool		m_bUpdateTarget;		// Used when jiggling so that we don't jiggle the target (door, etc)
 
-	int			m_direction;
+	int m_direction;
 	float		m_returnSpeed;
 	float		m_flStartPosition;
 

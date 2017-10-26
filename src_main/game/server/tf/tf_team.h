@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //=============================================================================
 #ifndef TF_TEAM_H
@@ -7,7 +7,7 @@
 #pragma once
 #endif
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "team.h"
 #include "tf_shareddefs.h"
 
@@ -26,36 +26,36 @@ public:
 	CTFTeam();
 
 	// Classes.
-//	int				GetNumOfClass( TFClass iClass );
+//	int 	GetNumOfClass( TFClass iClass );
 
 	// TF Teams.
-//	CTFTeam			*GetEnemyTeam();
-	void			SetColor( color32 color );
-	color32			GetColor( void );
+//	CTFTeam *GetEnemyTeam();
+	void SetColor( color32 color );
+	color32 GetColor( void );
 
 	// Score.
-	void			ShowScore( CBasePlayer *pPlayer );
+	void ShowScore( CBasePlayer *pPlayer );
 
 	// Objects.
-	void			AddObject( CBaseObject *pObject );
-	void			RemoveObject( CBaseObject *pObject );
-	bool			IsObjectOnTeam( CBaseObject *pObject ) const;
-	int				GetNumObjects( int iObjectType = -1 );
+	void AddObject( CBaseObject *pObject );
+	void RemoveObject( CBaseObject *pObject );
+	bool IsObjectOnTeam( CBaseObject *pObject ) const;
+	int 	GetNumObjects( int iObjectType = -1 );
 	CBaseObject		*GetObject( int num );
 
 	// Flag Captures
-	int				GetFlagCaptures( void ) { return m_nFlagCaptures; }
-	void			SetFlagCaptures( int nCaptures ) { m_nFlagCaptures = nCaptures; }
-	void			IncrementFlagCaptures( void ) { m_nFlagCaptures++; }
+	int 	GetFlagCaptures( void ) { return m_nFlagCaptures; }
+	void SetFlagCaptures( int nCaptures ) { m_nFlagCaptures = nCaptures; }
+	void IncrementFlagCaptures( void ) { m_nFlagCaptures++; }
 
 	// Roles
-	void			SetRole( int iTeamRole ) { m_iRole = iTeamRole; }
-	int				GetRole( void ) { return m_iRole; }
+	void SetRole( int iTeamRole ) { m_iRole = iTeamRole; }
+	int 	GetRole( void ) { return m_iRole; }
 
 private:
 	
-	color32						m_TeamColor;
-	CUtlVector< CHandle<CBaseObject> >	m_aObjects;			// List of team objects.
+	color32  m_TeamColor;
+	CUtlVector< CHandle<CBaseObject> >	m_aObjects; // List of team objects.
 
 	CNetworkVar( int, m_nFlagCaptures );
 	CNetworkVar( int, m_iRole );

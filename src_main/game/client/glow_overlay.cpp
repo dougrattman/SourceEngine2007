@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "view.h"
 #include "iviewrender.h"
@@ -12,7 +12,7 @@
 #include "clienteffectprecachesystem.h"
 #include "c_pixel_visibility.h"
 #include "glow_overlay.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 #include "view_shared.h"
 #include "tier0/vprof.h"
 #include "materialsystem/imaterialvar.h"

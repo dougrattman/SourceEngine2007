@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_BOMBTARGET_H
 #define DOD_BOMBTARGET_H
@@ -15,7 +15,7 @@
 #include "baseanimating.h"
 #include "dod_control_point.h"
 
-#define DOD_BOMB_TARGET_MODEL_ARMED			"models/weapons/w_tnt.mdl"
+#define DOD_BOMB_TARGET_MODEL_ARMED "models/weapons/w_tnt.mdl"
 #define DOD_BOMB_TARGET_MODEL_TARGET		"models/weapons/w_tnt_red.mdl"
 #define DOD_BOMB_TARGET_MODEL_UNAVAILABLE	"models/weapons/w_tnt_grey.mdl"
 

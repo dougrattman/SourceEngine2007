@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Dissolve entity to be attached to target entity. Serves two purposes:
 //
@@ -7,7 +7,7 @@
 //
 //			2) An entity that can be created at runtime to ignite a target entity.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "EntityDissolve.h"

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef CS_CLIENTMODE_H
 #define CS_CLIENTMODE_H
@@ -22,7 +22,7 @@ private:
 // IClientMode overrides.
 public:
 
-					ClientModeCSNormal();
+ 		ClientModeCSNormal();
 
 	virtual void	Init();
 	virtual void	InitViewport();
@@ -32,7 +32,7 @@ public:
 
 	virtual float	GetViewModelFOV( void );
 
-	int				GetDeathMessageStartHeight( void );
+	int 	GetDeathMessageStartHeight( void );
 
 	virtual void	FireGameEvent( IGameEvent *event );
 	virtual void	PostRenderVGui();

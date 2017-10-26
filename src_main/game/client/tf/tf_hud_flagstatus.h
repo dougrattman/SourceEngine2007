@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_HUD_FLAGSTATUS_H
 #define TF_HUD_FLAGSTATUS_H
@@ -32,7 +32,7 @@ public:
 
 private:
 
-	EHANDLE				m_hEntity;	
+	EHANDLE 	m_hEntity;	
 
 	CMaterialReference	m_RedMaterial;
 	CMaterialReference	m_BlueMaterial;
@@ -62,13 +62,13 @@ public:
 
 		if ( m_pArrow )
 		{
-			m_pArrow->SetEntity( hEntity );
+ m_pArrow->SetEntity( hEntity );
 		}
 	}
 
 private:
 
-	EHANDLE			m_hEntity;
+	EHANDLE m_hEntity;
 
 	CTFArrowPanel	*m_pArrow;
 	CTFImagePanel	*m_pStatusIcon;
@@ -102,17 +102,17 @@ private:
 
 private:
 
-	CTFImagePanel			*m_pCarriedImage;
+	CTFImagePanel *m_pCarriedImage;
 
-	CTFLabel				*m_pPlayingTo;
-	CTFImagePanel			*m_pPlayingToBG;
+	CTFLabel 	*m_pPlayingTo;
+	CTFImagePanel *m_pPlayingToBG;
 
-	CTFFlagStatus			*m_pRedFlag;
-	CTFFlagStatus			*m_pBlueFlag;
-	CTFArrowPanel			*m_pCapturePoint;
+	CTFFlagStatus *m_pRedFlag;
+	CTFFlagStatus *m_pBlueFlag;
+	CTFArrowPanel *m_pCapturePoint;
 
-	bool					m_bFlagAnimationPlayed;
-	bool					m_bCarryingFlag;
+	bool 		m_bFlagAnimationPlayed;
+	bool 		m_bCarryingFlag;
 
 	vgui::ImagePanel		*m_pSpecCarriedImage;
 };

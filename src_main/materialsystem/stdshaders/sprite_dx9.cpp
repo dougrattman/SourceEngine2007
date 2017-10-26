@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
-#include <string.h>
+#include <cstring>
 #include "const.h"
 
 #include "cpp_shader_constant_register_map.h"

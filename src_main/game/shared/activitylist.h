@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ACTIVITYLIST_H
 #define ACTIVITYLIST_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 typedef struct activityentry_s activityentry_t;
 
@@ -53,19 +53,19 @@ public:
 		int c = src.m_cachedActivityRemaps.Count();
 		for ( int i = 0; i < c; i++ )
 		{
-			m_cachedActivityRemaps.AddToTail( src.m_cachedActivityRemaps[ i ] );
+ m_cachedActivityRemaps.AddToTail( src.m_cachedActivityRemaps[ i ] );
 		}
 	}
 
 	CActivityRemapCache& operator = ( const CActivityRemapCache& src )
 	{
 		if ( this == &src )
-			return *this;
+ return *this;
 
 		int c = src.m_cachedActivityRemaps.Count();
 		for ( int i = 0; i < c; i++ )
 		{
-			m_cachedActivityRemaps.AddToTail( src.m_cachedActivityRemaps[ i ] );
+ m_cachedActivityRemaps.AddToTail( src.m_cachedActivityRemaps[ i ] );
 		}
 
 		return *this;

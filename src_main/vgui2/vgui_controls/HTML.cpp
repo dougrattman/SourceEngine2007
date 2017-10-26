@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 // This class is a message box that has two buttons, ok and cancel instead of
@@ -6,7 +6,7 @@
 // and implement another button here.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "OfflineMode.h"
 #include "vgui/Cursor.h"
@@ -22,9 +22,9 @@
 #include "vgui_controls/Label.h"
 #include "vgui_controls/Image.h"
 #include "vgui_controls/ScrollBar.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"

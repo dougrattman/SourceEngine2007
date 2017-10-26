@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 // Purpose: 
 //
@@ -22,7 +22,7 @@
 #include "physics_bone_follower.h"
 
 #define CRANE_EXTENSION_RATE_MAX	0.01
-#define CRANE_TURN_RATE_MAX			1.2
+#define CRANE_TURN_RATE_MAX 1.2
 #define MAXIMUM_CRANE_PICKUP_MASS	10000
 #define MINIMUM_CRANE_PICKUP_MASS	500
 
@@ -30,8 +30,8 @@
 #define MIN_CRANE_FLAT_REACH		700.0
 #define CRANE_EXTENSION_ACCEL		0.006
 #define CRANE_EXTENSION_DECEL		0.02
-#define CRANE_TURN_ACCEL			0.2
-#define CRANE_DECEL					0.5
+#define CRANE_TURN_ACCEL 0.2
+#define CRANE_DECEL 		0.5
 
 #define CRANE_SLOWRAISE_TIME		5.0
 
@@ -58,18 +58,18 @@ public:
 	{
 		if ( m_pSpring )
 		{
-			physenv->DestroySpring( m_pSpring );
+ physenv->DestroySpring( m_pSpring );
 		}
 	}
 
 	void	Spawn( void );
 	void	Precache( void );
 
-	bool				CreateConstraint( CBaseAnimating *pMagnet, IPhysicsConstraintGroup *pGroup );
+	bool 	CreateConstraint( CBaseAnimating *pMagnet, IPhysicsConstraintGroup *pGroup );
 	static CCraneTip	*Create( CBaseAnimating *pCraneMagnet, IPhysicsConstraintGroup *pGroup, const Vector &vecOrigin, const QAngle &vecAngles );
 
 public:
-	IPhysicsSpring			*m_pSpring;
+	IPhysicsSpring *m_pSpring;
 };
 
 //-----------------------------------------------------------------------------
@@ -115,12 +115,12 @@ public:
 
 	// CBaseEntity
 	virtual void	Precache( void );
-	void			Spawn( void );
-	void			Activate( void );
-	void			UpdateOnRemove( void );
-	bool			CreateVPhysics( void );
-	void			InitCraneSpeeds( void );
-	void			Think(void);
+	void Spawn( void );
+	void Activate( void );
+	void UpdateOnRemove( void );
+	bool CreateVPhysics( void );
+	void InitCraneSpeeds( void );
+	void Think();
 	virtual int		ObjectCaps( void ) { return BaseClass::ObjectCaps() | FCAP_IMPULSE_USE; };
 	virtual void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual void	DrawDebugGeometryOverlays( void );
@@ -128,7 +128,7 @@ public:
 	virtual bool PassengerShouldReceiveDamage( CTakeDamageInfo &info ) 
 	{ 
 		if ( info.GetDamageType() & DMG_VEHICLE )
-			return true;
+ return true;
 
 		return (info.GetDamageType() & (DMG_RADIATION|DMG_BLAST) ) == 0; 
 	}
@@ -137,34 +137,34 @@ public:
 	virtual void	TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
 
-	void			PlayerControlInit( CBasePlayer *pPlayer );
-	void			PlayerControlShutdown( void );
-	void			ResetUseKey( CBasePlayer *pPlayer );
+	void PlayerControlInit( CBasePlayer *pPlayer );
+	void PlayerControlShutdown( void );
+	void ResetUseKey( CBasePlayer *pPlayer );
 
-	void			DriveCrane( int iDriverButtons, int iButtonsPressed, float flNPCSteering = 0.0 );
-	void			RunCraneMovement( float flTime );
+	void DriveCrane( int iDriverButtons, int iButtonsPressed, float flNPCSteering = 0.0 );
+	void RunCraneMovement( float flTime );
 
-	void			TurnMagnetOn( void );
-	void			TurnMagnetOff( void );
+	void TurnMagnetOn( void );
+	void TurnMagnetOff( void );
 	const Vector	&GetCraneTipPosition( void );
-	float			GetExtensionRate( void ) { return m_flExtensionRate; }
-	float			GetTurnRate( void ) { return m_flTurn; }
-	float			GetMaxTurnRate( void ) { return m_flMaxTurnSpeed; }
+	float GetExtensionRate( void ) { return m_flExtensionRate; }
+	float GetTurnRate( void ) { return m_flTurn; }
+	float GetMaxTurnRate( void ) { return m_flMaxTurnSpeed; }
 	CPhysMagnet		*GetMagnet( void ) { return m_hCraneMagnet; }
-	float			GetTotalMassOnCrane( void ) { return m_hCraneMagnet->GetTotalMassAttachedObjects(); }
-	bool			IsDropping( void ) { return m_bDropping; }
+	float GetTotalMassOnCrane( void ) { return m_hCraneMagnet->GetTotalMassAttachedObjects(); }
+	bool IsDropping( void ) { return m_bDropping; }
 
 	// Inputs
-	void			InputLock( inputdata_t &inputdata );
-	void			InputUnlock( inputdata_t &inputdata );
-	void			InputForcePlayerIn( inputdata_t &inputdata );
+	void InputLock( inputdata_t &inputdata );
+	void InputUnlock( inputdata_t &inputdata );
+	void InputForcePlayerIn( inputdata_t &inputdata );
 
 	// Crane handling
-	void			GetCraneTipPosition( Vector *vecOrigin, QAngle *vecAngles );
-	void			RecalculateCraneTip( void );
-	void			GetVectors(Vector* pForward, Vector* pRight, Vector* pUp) const;
+	void GetCraneTipPosition( Vector *vecOrigin, QAngle *vecAngles );
+	void RecalculateCraneTip( void );
+	void GetVectors(Vector* pForward, Vector* pRight, Vector* pUp) const;
 
-	void			SetNPCDriver( CNPC_VehicleDriver *pDriver );
+	void SetNPCDriver( CNPC_VehicleDriver *pDriver );
 
 // IDrivableVehicle
 public:
@@ -201,10 +201,10 @@ private:
 
 	// NPC Driving
 	CHandle<CNPC_VehicleDriver>		m_hNPCDriver;
-	int								m_nNPCButtons;
+	int  		m_nNPCButtons;
 
 	// Entering / Exiting
-	bool				m_bLocked;
+	bool 	m_bLocked;
 	CNetworkVar( bool,	m_bEnterAnimOn );
 	CNetworkVar( bool,	m_bExitAnimOn );
 	CNetworkVector(		m_vecEyeExitEndpoint );
@@ -212,32 +212,32 @@ private:
 	COutputEvent		m_playerOff;
 
 	// Turning
-	int				m_iTurning;
-	bool			m_bStartSoundAtCrossover;
-	float			m_flTurn;
+	int 	m_iTurning;
+	bool m_bStartSoundAtCrossover;
+	float m_flTurn;
 
 	// Crane arm extension / retraction
-	bool			m_bExtending;
-	float			m_flExtension;
-	float			m_flExtensionRate;
+	bool m_bExtending;
+	float m_flExtension;
+	float m_flExtensionRate;
 
 	// Magnet movement	
-	bool			m_bDropping;
-	float			m_flNextDangerSoundTime;
-	float			m_flNextCreakSound;
-	float			m_flNextDropAllowedTime;
-	float			m_flSlowRaiseTime;
+	bool m_bDropping;
+	float m_flNextDangerSoundTime;
+	float m_flNextCreakSound;
+	float m_flNextDropAllowedTime;
+	float m_flSlowRaiseTime;
 
 	// Speeds
-	float			m_flMaxExtensionSpeed;
-	float			m_flMaxTurnSpeed;
-	float			m_flExtensionAccel;
-	float			m_flExtensionDecel;
-	float			m_flTurnAccel;
-	float			m_flTurnDecel;
+	float m_flMaxExtensionSpeed;
+	float m_flMaxTurnSpeed;
+	float m_flExtensionAccel;
+	float m_flExtensionDecel;
+	float m_flTurnAccel;
+	float m_flTurnDecel;
 
 	// Cable Tip & Magnet
-	string_t				m_iszMagnetName;
+	string_t 	m_iszMagnetName;
 	CHandle<CPhysMagnet>	m_hCraneMagnet;
 	CHandle<CCraneTip>		m_hCraneTip;
 	CHandle<CRopeKeyframe>	m_hRope;

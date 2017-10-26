@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SPRITE_H
 #define SPRITE_H
@@ -15,7 +15,7 @@
 #include "baseentity_shared.h"
 
 #define SF_SPRITE_STARTON		0x0001
-#define SF_SPRITE_ONCE			0x0002
+#define SF_SPRITE_ONCE 0x0002
 #define SF_SPRITE_TEMPORARY		0x8000
 
 class CBasePlayer;
@@ -36,46 +36,46 @@ public:
 	typedef enum
 	{
 		SPR_VP_PARALLEL_UPRIGHT		= 0,
-		SPR_FACING_UPRIGHT			= 1,
-		SPR_VP_PARALLEL				= 2,
-		SPR_ORIENTED				= 3,
+		SPR_FACING_UPRIGHT = 1,
+		SPR_VP_PARALLEL 	= 2,
+		SPR_ORIENTED 	= 3,
 		SPR_VP_PARALLEL_ORIENTED	= 4
 	} SPRITETYPE;
 	
 	// Determine sprite orientation
-	static void							GetSpriteAxes( SPRITETYPE type, 
-										const Vector& origin,
-										const QAngle& angles,
-										Vector& forward, 
-										Vector& right, 
-										Vector& up );
+	static void  	GetSpriteAxes( SPRITETYPE type, 
+   	const Vector& origin,
+   	const QAngle& angles,
+   	Vector& forward, 
+   	Vector& right, 
+   	Vector& up );
 
 	// Sprites can alter blending amount
-	virtual float					GlowBlend( CEngineSprite *psprite, const Vector& entorigin, int rendermode, int renderfx, int alpha, float *scale );
+	virtual float 		GlowBlend( CEngineSprite *psprite, const Vector& entorigin, int rendermode, int renderfx, int alpha, float *scale );
 
 	// Draws tempent as a sprite
-	int								DrawSprite( 
-										IClientEntity *entity,
-										const model_t *model, 
-										const Vector& origin, 
-										const QAngle& angles,
-										float frame,
-										IClientEntity *attachedto,
-										int attachmentindex,
-										int rendermode,
-										int renderfx,
-										int alpha,
-										int r, 
-										int g, 
-										int b,
-										float scale,
-										float flHDRColorScale = 1.0f
-										);
+	int  		DrawSprite( 
+   	IClientEntity *entity,
+   	const model_t *model, 
+   	const Vector& origin, 
+   	const QAngle& angles,
+   	float frame,
+   	IClientEntity *attachedto,
+   	int attachmentindex,
+   	int rendermode,
+   	int renderfx,
+   	int alpha,
+   	int r, 
+   	int g, 
+   	int b,
+   	float scale,
+   	float flHDRColorScale = 1.0f
+   	);
 
 protected:
 	pixelvis_handle_t	m_queryHandle;
-	float				m_flGlowProxySize;
-	float				m_flHDRColorScale;
+	float 	m_flGlowProxySize;
+	float 	m_flHDRColorScale;
 };
 
 #endif
@@ -113,7 +113,7 @@ public:
 		
 		if ( IsTemporary() )
 		{
-			flags = FCAP_DONT_SAVE;
+ flags = FCAP_DONT_SAVE;
 		}
 		
 		return (BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags; 
@@ -143,9 +143,9 @@ public:
 	{
 		if ( pEntity )
 		{
-			m_hAttachedToEntity = pEntity;
-			m_nAttachment = attachment;
-			FollowEntity( pEntity );
+ m_hAttachedToEntity = pEntity;
+ m_nAttachment = attachment;
+ FollowEntity( pEntity );
 		}
 	}
 
@@ -269,8 +269,8 @@ private:
 	float		m_flStartScale;
 	float		m_flDestScale;		//Destination scale
 	float		m_flScaleTimeStart;	//Real time for start of scale
-	int			m_nStartBrightness;
-	int			m_nDestBrightness;		//Destination brightness
+	int m_nStartBrightness;
+	int m_nDestBrightness;		//Destination brightness
 	float		m_flBrightnessTimeStart;//Real time for brightness
 };
 

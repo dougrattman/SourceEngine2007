@@ -1,4 +1,4 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -48,20 +48,20 @@ public:
 	void		BeginLightmapAllocation( void );
 	void		EndLightmapAllocation( void );
 
-	int			AllocateLightmap( int width, int height, 
+	int AllocateLightmap( int width, int height, 
 		                                  int offsetIntoLightmapPage[2],
-										  IMaterial *pMaterial );
-	int			AllocateWhiteLightmap( IMaterial *pMaterial );
+   	  IMaterial *pMaterial );
+	int AllocateWhiteLightmap( IMaterial *pMaterial );
 	// NOTE: This returns a lightmap page ID, not a sortID like AllocateLightmap!!!!
-	int			AllocateDynamicLightmap( int lightmapSize[2], int *pOutOffsetIntoPage, int frameID );
+	int AllocateDynamicLightmap( int lightmapSize[2], int *pOutOffsetIntoPage, int frameID );
 
-	int			GetNumSortIDs( void );
+	int GetNumSortIDs( void );
 	void		GetSortInfo( MaterialSystem_SortInfo_t *sortInfoArray );
 
 	void		UpdateLightmap( int lightmapPageID, int lightmapSize[2],
-								int offsetIntoLightmapPage[2], 
-								float *pFloatImage, float *pFloatImageBump1,
-								float *pFloatImageBump2, float *pFloatImageBump3 );
+  		int offsetIntoLightmapPage[2], 
+  		float *pFloatImage, float *pFloatImageBump1,
+  		float *pFloatImageBump2, float *pFloatImageBump3 );
 
 	void		GetLightmapPageSize( int lightmapPageID, int *width, int *height ) const;
 
@@ -70,8 +70,8 @@ public:
 	//------------------------------------------------------------
 	// Methods exposed in IMaterialSystemInternal
 	//------------------------------------------------------------
-	int			GetLightmapWidth( int lightmap ) const;
-	int			GetLightmapHeight( int lightmap ) const;
+	int GetLightmapWidth( int lightmap ) const;
+	int GetLightmapHeight( int lightmap ) const;
 
 	//------------------------------------------------------------
 	// Methods used by other material system components
@@ -83,7 +83,7 @@ public:
 
 	void		EnableLightmapFiltering( bool enabled );
 
-	int			GetNumLightmapPages() const									{ return m_NumLightmapPages;}
+	int GetNumLightmapPages() const   { return m_NumLightmapPages;}
 	ShaderAPITextureHandle_t GetLightmapPageTextureHandle( int lightmap )	{ return m_LightmapPageTextureHandles[lightmap];	}
 	bool		IsDynamicLightmap( int lightmap ) const { return (lightmap >= m_firstDynamicLightmap ) ? true : false; }
 
@@ -95,8 +95,8 @@ public:
 private:
 
 	// Gets the maximum lightmap page size...
-	int			GetMaxLightmapPageWidth() const;
-	int			GetMaxLightmapPageHeight() const;
+	int GetMaxLightmapPageWidth() const;
+	int GetMaxLightmapPageHeight() const;
 
 	void		CleanupLightmaps();
 
@@ -108,7 +108,7 @@ private:
 
 	// assumes m_LightmapPixelWriter is already set up - results written there
 	void		BumpedLightmapBitsToPixelWriter_LDR( float* pFloatImage, float *pFloatImageBump1, float *pFloatImageBump2, 
-													float *pFloatImageBump3, int pLightmapSize[2], int pOffsetIntoLightmapPage[2], FloatBitMap_t *pfmOut );
+    	float *pFloatImageBump3, int pLightmapSize[2], int pOffsetIntoLightmapPage[2], FloatBitMap_t *pfmOut );
 	void		BumpedLightmapBitsToPixelWriter_HDRF( float* pFloatImage, float *pFloatImageBump1, float *pFloatImageBump2, 
 		float *pFloatImageBump3, int pLightmapSize[2], int pOffsetIntoLightmapPage[2], FloatBitMap_t *pfmOut );
 
@@ -155,13 +155,13 @@ private:
 	{
 		void Init()
 		{
-			lightmapLocked = -1;
-			frameID = 0;
-			currentDynamicIndex = 0;
-			for ( int i = 0; i < COUNT_DYNAMIC_LIGHTMAP_PAGES; i++ )
-			{
-				lightmapLockFrame[i] = 0;
-			}
+ lightmapLocked = -1;
+ frameID = 0;
+ currentDynamicIndex = 0;
+ for ( int i = 0; i < COUNT_DYNAMIC_LIGHTMAP_PAGES; i++ )
+ {
+ 	lightmapLockFrame[i] = 0;
+ }
 		}
 
 		int lightmapLocked;
@@ -172,26 +172,26 @@ private:
 	};
 
 
-	CUtlVector<CImagePacker>			m_ImagePackers;
-	int									m_numSortIDs;
-	IMaterialInternal					*m_currentWhiteLightmapMaterial;
+	CUtlVector<CImagePacker> m_ImagePackers;
+	int   m_numSortIDs;
+	IMaterialInternal 		*m_currentWhiteLightmapMaterial;
 
-	LightmapPageInfo_t					*m_pLightmapPages;
+	LightmapPageInfo_t 		*m_pLightmapPages;
 	CUtlVector<ShaderAPITextureHandle_t> m_LightmapPageTextureHandles;
-	int									m_NumLightmapPages;
-	int									m_nUpdatingLightmapsStackDepth;
-	int									m_firstDynamicLightmap;
-	CPixelWriter						m_LightmapPixelWriter;
-	int									m_nLockedLightmap; // -1 for nothing locked.
-	dynamiclightmap_t					m_dynamic;
-	FloatBitMap_t						**m_pLightmapDataPtrArray;
+	int   m_NumLightmapPages;
+	int   m_nUpdatingLightmapsStackDepth;
+	int   m_firstDynamicLightmap;
+	CPixelWriter  m_LightmapPixelWriter;
+	int   m_nLockedLightmap; // -1 for nothing locked.
+	dynamiclightmap_t 		m_dynamic;
+	FloatBitMap_t  **m_pLightmapDataPtrArray;
 
 	enum LightmapsState
 	{
 		STATE_DEFAULT,		//	Lightmaps in default state - all operations allowed
 		STATE_RELEASED		//	Lightmaps in released state - usually due to lost/released D3D device, D3D operations disallowed, Restore() call to follow
 	};
-	LightmapsState						m_eLightmapsState;
+	LightmapsState  m_eLightmapsState;
 };
 
 //-----------------------------------------------------------------------------

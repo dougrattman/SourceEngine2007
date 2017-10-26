@@ -1,4 +1,4 @@
-//=========== (C) Copyright 1999 Valve, L.L.C. All rights reserved. ===========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
@@ -21,7 +21,7 @@
 
 
 #include "teamplayroundbased_gamerules.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "gamevars_shared.h"
 #include "GameEventListener.h"
 #include "tf_gamestats_shared.h"
@@ -88,22 +88,22 @@ public:
 	CTFGameRules();
 
 	// Damage Queries.
-	virtual bool	Damage_IsTimeBased( int iDmgType );			// Damage types that are time-based.
-	virtual bool	Damage_ShowOnHUD( int iDmgType );				// Damage types that have client HUD art.
-	virtual bool	Damage_ShouldNotBleed( int iDmgType );			// Damage types that don't make the player bleed.
+	virtual bool	Damage_IsTimeBased( int iDmgType ); // Damage types that are time-based.
+	virtual bool	Damage_ShowOnHUD( int iDmgType ); 	// Damage types that have client HUD art.
+	virtual bool	Damage_ShouldNotBleed( int iDmgType ); // Damage types that don't make the player bleed.
 	// TEMP:
 	virtual int		Damage_GetTimeBased( void );		
 	virtual int		Damage_GetShowOnHud( void );
 	virtual int		Damage_GetShouldNotBleed( void );
 
-	int				GetFarthestOwnedControlPoint( int iTeam, bool bWithSpawnpoints );
+	int 	GetFarthestOwnedControlPoint( int iTeam, bool bWithSpawnpoints );
 	virtual bool	TeamMayCapturePoint( int iTeam, int iPointIndex );
 	virtual bool	PlayerMayCapturePoint( CBasePlayer *pPlayer, int iPointIndex, char *pszReason = NULL, int iMaxReasonLength = 0 );
 	virtual bool	PlayerMayBlockPoint( CBasePlayer *pPlayer, int iPointIndex, char *pszReason = NULL, int iMaxReasonLength = 0 );
 	
 	static int		CalcPlayerScore( RoundStats_t *pRoundStats );
 
-	bool			IsBirthday( void );
+	bool IsBirthday( void );
 
 	virtual const unsigned char *GetEncryptionKey( void ) { return (unsigned char *)"E2NcUkG2"; }
 
@@ -138,11 +138,11 @@ public:
 	virtual void	SetupOnStalemateStart( void );
 	virtual void	SetupOnStalemateEnd( void );
 
-	void			RecalculateControlPointState( void );
+	void RecalculateControlPointState( void );
 
 	virtual void	HandleSwitchTeams( void );
 	virtual void	HandleScrambleTeams( void );
-	bool			CanChangeClassInStalemate( void );
+	bool CanChangeClassInStalemate( void );
 
 	virtual void	SetRoundOverlayDetails( void );	
 	virtual void	ShowRoundInfoPanel( CTFPlayer *pPlayer = NULL ); // NULL pPlayer means show the panel to everyone
@@ -153,7 +153,7 @@ public:
 
 	virtual bool	AllowDamage( CBaseEntity *pVictim, const CTakeDamageInfo &info );
 
-	void			SetTeamGoalString( int iTeam, const char *pszGoal );
+	void SetTeamGoalString( int iTeam, const char *pszGoal );
 
 	// Speaking, vcds, voice commands.
 	virtual void	InitCustomResponseRulesDicts();
@@ -161,7 +161,7 @@ public:
 
 	virtual bool	HasPassedMinRespawnTime( CBasePlayer *pPlayer );
 
-	bool			ShouldScorePerRound( void );
+	bool ShouldScorePerRound( void );
 
 protected:
 	virtual void	InitTeams( void );
@@ -208,7 +208,7 @@ public:
 	virtual void	OnDataChanged( DataUpdateType_t updateType );
 	virtual void	HandleOvertimeBegin();
 
-	bool			ShouldShowTeamGoal( void );
+	bool ShouldShowTeamGoal( void );
 
 	const char *GetVideoFileForMap( bool bWithExtension = true );
 
@@ -295,7 +295,7 @@ private:
 	CUtlVector<CHandle<CHealthKit> > m_hDisabledHealthKits;	
 	
 	char	m_szMostRecentCappers[MAX_PLAYERS+1];	// list of players who made most recent capture.  Stored as string so it can be passed in events.
-	int		m_iNumCaps[TF_TEAM_COUNT];				// # of captures ever by each team during a round
+	int		m_iNumCaps[TF_TEAM_COUNT]; 	// # of captures ever by each team during a round
 
 	int SetCurrentRoundStateBitString();
 	void SetMiniRoundBitMask( int iMask );

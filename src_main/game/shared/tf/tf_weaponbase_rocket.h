@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF Base Rockets.
 //
-//=============================================================================//
+
 #ifndef TF_WEAPONBASE_ROCKET_H
 #define TF_WEAPONBASE_ROCKET_H
 #ifdef _WIN32
@@ -42,8 +42,8 @@ public:
 	DECLARE_CLASS( CTFBaseRocket, CBaseAnimating );
 	DECLARE_NETWORKCLASS();
 
-			CTFBaseRocket();
-			~CTFBaseRocket();
+ CTFBaseRocket();
+ ~CTFBaseRocket();
 
 	void	Precache( void );
 	void	Spawn( void );
@@ -81,35 +81,35 @@ public:
 	static CTFBaseRocket *Create( const char *szClassname, const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner = NULL );	
 
 	virtual void	RocketTouch( CBaseEntity *pOther );
-	void			Explode( trace_t *pTrace, CBaseEntity *pOther );
+	void Explode( trace_t *pTrace, CBaseEntity *pOther );
 
 	virtual float	GetDamage() { return m_flDamage; }
 	virtual int		GetDamageType() { return g_aWeaponDamageTypes[ GetWeaponID() ]; }
 	virtual void	SetDamage(float flDamage) { m_flDamage = flDamage; }
 	virtual float	GetRadius() { return TF_ROCKET_RADIUS; }	
-	void			DrawRadius( float flRadius );
+	void DrawRadius( float flRadius );
 
 	unsigned int	PhysicsSolidMaskForEntity( void ) const;
 
-	void			SetupInitialTransmittedGrenadeVelocity( const Vector &velocity )	{ m_vInitialVelocity = velocity; }
+	void SetupInitialTransmittedGrenadeVelocity( const Vector &velocity )	{ m_vInitialVelocity = velocity; }
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_ROCKETLAUNCHER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_ROCKETLAUNCHER; }
 
-	virtual CBaseEntity		*GetEnemy( void )			{ return m_hEnemy; }
+	virtual CBaseEntity		*GetEnemy( void ) { return m_hEnemy; }
 
-	void			SetHomingTarget( CBaseEntity *pHomingTarget );
+	void SetHomingTarget( CBaseEntity *pHomingTarget );
 
 protected:
 
-	void			FlyThink( void );
+	void FlyThink( void );
 
 protected:
 
 	// Not networked.
-	float					m_flDamage;
+	float 		m_flDamage;
 
-	float					m_flCollideWithTeammatesTime;
-	bool					m_bCollideWithTeammates;
+	float 		m_flCollideWithTeammatesTime;
+	bool 		m_bCollideWithTeammates;
 
 
 	CHandle<CBaseEntity>	m_hEnemy;

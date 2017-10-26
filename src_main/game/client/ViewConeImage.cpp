@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is a panel which is rendered image on top of an entity
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "ViewConeImage.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/Panel.h>
 #include "vguimatsurface/IMatSystemSurface.h"
 

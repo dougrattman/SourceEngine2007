@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base class for object upgrading objects
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "baseobject_shared.h"
 #include "tf_obj_baseupgrade_shared.h"

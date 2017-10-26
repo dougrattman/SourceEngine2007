@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+﻿// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The system for handling director's commentary style production info in-game.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -11,7 +11,7 @@
 #include "tier0/icommandline.h"
 #include "igamesystem.h"
 #include "filesystem.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "in_buttons.h"
 #include "engine/IEngineSound.h"
 #include "soundenvelope.h"
@@ -487,7 +487,7 @@ public:
 					m_iTeleportStage = TELEPORT_TELEPORT;
 					m_flNextTeleportTime = gpGlobals->curtime + 0.35;
 
-					color32_s clr = { 0,0,0,255 };
+					color32 clr = { 0,0,0,255 };
 					UTIL_ScreenFade( pPlayer, clr, 0.3, 0, FFADE_OUT | FFADE_PURGE | FFADE_STAYOUT );
 				}
 				else if ( m_iTeleportStage == TELEPORT_TELEPORT )
@@ -505,7 +505,7 @@ public:
 					m_iTeleportStage = TELEPORT_NONE;
 					m_flNextTeleportTime = gpGlobals->curtime + 0.25;
 
-					color32_s clr = { 0,0,0,255 };
+					color32 clr = { 0,0,0,255 };
 					UTIL_ScreenFade( pPlayer, clr, 0.3, 0, FFADE_IN | FFADE_PURGE );
 				}
 			}
@@ -1581,8 +1581,8 @@ class CCommentaryAuto : public CBaseEntity
 public:
 	DECLARE_DATADESC();
 
-	void Spawn(void);
-	void Think(void);
+	void Spawn();
+	void Think();
 
 	void InputMultiplayerSpawned( inputdata_t &inputdata );
 

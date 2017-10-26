@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "weapon_c4.h"
@@ -10,7 +10,7 @@
 #include "cs_gamerules.h"
 #include "decals.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "fx_cs_shared.h"
 #include "obstacle_pushaway.h"
 
@@ -25,7 +25,7 @@
 	#include "vguiscreen.h"
 	#include "bot.h"
 	#include "cs_player.h"
-	#include <KeyValues.h>
+	#include "tier1/keyvalues.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

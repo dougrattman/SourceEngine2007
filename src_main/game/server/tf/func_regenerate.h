@@ -2,7 +2,7 @@
 //
 // Purpose: CTF Regenerate Zone.
 //
-//=============================================================================//
+
 #ifndef FUNC_REGENERATE_ZONE_H
 #define FUNC_REGENERATE_ZONE_H
 
@@ -39,9 +39,9 @@ public:
 	void	InputToggle( inputdata_t &inputdata );
 
 private:
-	bool					m_bDisabled;
+	bool 		m_bDisabled;
 	CHandle<CDynamicProp>	m_hAssociatedModel;
-	string_t				m_iszAssociatedModel;
+	string_t 	m_iszAssociatedModel;
 
 	DECLARE_DATADESC();
 };

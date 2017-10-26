@@ -39,13 +39,13 @@ extern "C"
 */
 STEAM_API void STEAM_CALL	SteamWriteMiniDumpUsingExceptionInfo
 	( 
-	unsigned int			uStructuredExceptionCode, 
+	unsigned int uStructuredExceptionCode, 
 	struct _EXCEPTION_POINTERS * pExceptionInfo
 	);
 
 STEAM_API void STEAM_CALL	SteamWriteMiniDumpUsingExceptionInfoWithBuildId
 	( 
-	unsigned int			uStructuredExceptionCode, 
+	unsigned int uStructuredExceptionCode, 
 	struct _EXCEPTION_POINTERS * pExceptionInfo,
 	unsigned int uBuildID
 	);

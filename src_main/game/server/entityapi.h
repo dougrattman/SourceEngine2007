@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef ENTITYAPI_H
 #define ENTITYAPI_H
 
@@ -30,4 +30,4 @@ class ISaveRestoreBlockHandler;
 ISaveRestoreBlockHandler *GetEntitySaveRestoreBlockHandler();
 
 
-#endif			// ENTITYAPI_H
+#endif // ENTITYAPI_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: DOD's custom CPlayerResource
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "dod_player.h"
 #include "player_resource.h"

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef SAVERESTORE_UTLRBTREE_H
 #define SAVERESTORE_UTLRBTREE_H
@@ -31,29 +31,29 @@ public:
 		datamap_t *pTreeTypeDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLRBTREE *)NULL );
 		typedescription_t dataDesc = 
 		{
-			(fieldtype_t)FIELD_TYPE, 
-			"elem", 
-			{ 0, 0 },
-			1, 
-			FTYPEDESC_SAVE, 
-			NULL, 
-			NULL, 
-			NULL,
-			pTreeTypeDatamap,
-			-1,
+ (fieldtype_t)FIELD_TYPE, 
+ "elem", 
+ { 0, 0 },
+ 1, 
+ FTYPEDESC_SAVE, 
+ NULL, 
+ NULL, 
+ NULL,
+ pTreeTypeDatamap,
+ -1,
 		};
 		
 		datamap_t dataMap = 
 		{
-			&dataDesc,
-			1,
-			"urb",
-			NULL,
-			false,
-			false,
-			0,
+ &dataDesc,
+ 1,
+ "urb",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 		
@@ -67,11 +67,11 @@ public:
 		typename UTLRBTREE::IndexType_t i = pUtlRBTree->FirstInorder();
 		while ( i != pUtlRBTree->InvalidIndex() )
 		{
-			typename UTLRBTREE::ElemType_t &elem = pUtlRBTree->Element( i );
+ typename UTLRBTREE::ElemType_t &elem = pUtlRBTree->Element( i );
 
-			pSave->WriteAll( &elem, &dataMap );
+ pSave->WriteAll( &elem, &dataMap );
 
-			i = pUtlRBTree->NextInorder( i );
+ i = pUtlRBTree->NextInorder( i );
 		}
 		pSave->EndBlock();
 	}
@@ -81,29 +81,29 @@ public:
 		datamap_t *pTreeTypeDatamap = CTypedescDeducer<FIELD_TYPE>::Deduce( (UTLRBTREE *)NULL );
 		typedescription_t dataDesc = 
 		{
-			(fieldtype_t)FIELD_TYPE, 
-			"elems", 
-			{ 0, 0 },
-			1, 
-			FTYPEDESC_SAVE, 
-			NULL, 
-			NULL, 
-			NULL,
-			pTreeTypeDatamap,
-			-1,
+ (fieldtype_t)FIELD_TYPE, 
+ "elems", 
+ { 0, 0 },
+ 1, 
+ FTYPEDESC_SAVE, 
+ NULL, 
+ NULL, 
+ NULL,
+ pTreeTypeDatamap,
+ -1,
 		};
 		
 		datamap_t dataMap = 
 		{
-			&dataDesc,
-			1,
-			"uv",
-			NULL,
-			false,
-			false,
-			0,
+ &dataDesc,
+ 1,
+ "uv",
+ NULL,
+ false,
+ false,
+ 0,
 #ifdef _DEBUG
-			true
+ true
 #endif
 		};
 		
@@ -116,8 +116,8 @@ public:
 
 		while ( nElems-- )
 		{
-			pRestore->ReadAll( &temp, &dataMap );
-			pUtlRBTree->Insert( temp );
+ pRestore->ReadAll( &temp, &dataMap );
+ pUtlRBTree->Insert( temp );
 		}
 		
 		pRestore->EndBlock();

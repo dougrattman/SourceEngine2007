@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_MG42_H
 #define WEAPON_MG42_H
@@ -44,9 +44,9 @@ public:
 	virtual DODWeaponID GetStatsWeaponID( void )
 	{
 		if ( !IsDeployed() )
-			return WEAPON_MG42_UNDEPLOYED;
+ return WEAPON_MG42_UNDEPLOYED;
 		else 
-			return WEAPON_MG42;
+ return WEAPON_MG42;
 	}
 
 	virtual void Spawn();
@@ -96,7 +96,7 @@ private:
 
 	CSmartPtr<CSimpleEmitter> m_pEmitter;
 
-	float			m_flParticleAccumulator;
+	float m_flParticleAccumulator;
 	PMaterialHandle m_hParticleMaterial;
 
 #endif

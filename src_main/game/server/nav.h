@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // nav.h
 // Data structures and constants for the Navigation Mesh system
 // Author: Michael S. Booth (mike@turtlerockstudios.com), January 2003
@@ -18,26 +18,26 @@
  * Below are several constants used by the navigation system.
  * @todo Move these into TheNavMesh singleton.
  */
-const float GenerationStepSize = 25.0f;			///< (30) was 20, but bots can't fit always fit
-const float StepHeight = 18.0f;					///< if delta Z is greater than this, we have to jump to get up
-const float JumpHeight = 41.8f;					///< if delta Z is less than this, we can jump up on it
-const float JumpCrouchHeight = 58.0f;			///< (48) if delta Z is less than or equal to this, we can jumpcrouch up on it
+const float GenerationStepSize = 25.0f; ///< (30) was 20, but bots can't fit always fit
+const float StepHeight = 18.0f; 		///< if delta Z is greater than this, we have to jump to get up
+const float JumpHeight = 41.8f; 		///< if delta Z is less than this, we can jump up on it
+const float JumpCrouchHeight = 58.0f; ///< (48) if delta Z is less than or equal to this, we can jumpcrouch up on it
 
-const float BotRadius = 10.0f;					///< circular extent that contains bot
-const float DeathDrop = 200.0f;					///< (300) distance at which we will die if we fall - should be about 600, and pay attention to fall damage during pathfind
+const float BotRadius = 10.0f; 		///< circular extent that contains bot
+const float DeathDrop = 200.0f; 		///< (300) distance at which we will die if we fall - should be about 600, and pay attention to fall damage during pathfind
 
 const float HalfHumanWidth = 16.0f;
 const float HalfHumanHeight = 36.0f;
 const float HumanHeight = 72.0f;
 
 
-#define NAV_MAGIC_NUMBER 0xFEEDFACE				///< to help identify nav files
+#define NAV_MAGIC_NUMBER 0xFEEDFACE 	///< to help identify nav files
 
 /**
  * A place is a named group of navigation areas
  */
 typedef unsigned int Place;
-#define UNDEFINED_PLACE 0				// ie: "no place"
+#define UNDEFINED_PLACE 0 	// ie: "no place"
 #define ANY_PLACE 0xFFFF
 
 enum NavErrorType
@@ -52,18 +52,18 @@ enum NavErrorType
 
 enum NavAttributeType
 {
-	NAV_MESH_CROUCH			= 0x0001,				///< must crouch to use this node/area
-	NAV_MESH_JUMP			= 0x0002,				///< must jump to traverse this area
-	NAV_MESH_PRECISE		= 0x0004,				///< do not adjust for obstacles, just move along area
-	NAV_MESH_NO_JUMP		= 0x0008,				///< inhibit discontinuity jumping
-	NAV_MESH_STOP			= 0x0010,				///< must stop when entering this area
-	NAV_MESH_RUN			= 0x0020,				///< must run to traverse this area
-	NAV_MESH_WALK			= 0x0040,				///< must walk to traverse this area
-	NAV_MESH_AVOID			= 0x0080,				///< avoid this area unless alternatives are too dangerous
-	NAV_MESH_TRANSIENT		= 0x0100,				///< area may become blocked, and should be periodically checked
-	NAV_MESH_DONT_HIDE		= 0x0200,				///< area should not be considered for hiding spot generation
-	NAV_MESH_STAND			= 0x0400,				///< bots hiding in this area should stand
-	NAV_MESH_NO_HOSTAGES	= 0x0800,				///< hostages shouldn't use this area
+	NAV_MESH_CROUCH = 0x0001, 	///< must crouch to use this node/area
+	NAV_MESH_JUMP = 0x0002, 	///< must jump to traverse this area
+	NAV_MESH_PRECISE		= 0x0004, 	///< do not adjust for obstacles, just move along area
+	NAV_MESH_NO_JUMP		= 0x0008, 	///< inhibit discontinuity jumping
+	NAV_MESH_STOP = 0x0010, 	///< must stop when entering this area
+	NAV_MESH_RUN = 0x0020, 	///< must run to traverse this area
+	NAV_MESH_WALK = 0x0040, 	///< must walk to traverse this area
+	NAV_MESH_AVOID = 0x0080, 	///< avoid this area unless alternatives are too dangerous
+	NAV_MESH_TRANSIENT		= 0x0100, 	///< area may become blocked, and should be periodically checked
+	NAV_MESH_DONT_HIDE		= 0x0200, 	///< area should not be considered for hiding spot generation
+	NAV_MESH_STAND = 0x0400, 	///< bots hiding in this area should stand
+	NAV_MESH_NO_HOSTAGES	= 0x0800, 	///< hostages shouldn't use this area
 };
 
 enum NavDirType
@@ -135,14 +135,14 @@ struct Extent
 	{
 		for ( int i=0; i<3; ++i )
 		{
-			if ( pos[i] < lo[i] )
-			{
-				lo[i] = pos[i];
-			}
-			else if ( pos[i] > hi[i] )
-			{
-				hi[i] = pos[i];
-			}
+ if ( pos[i] < lo[i] )
+ {
+ 	lo[i] = pos[i];
+ }
+ else if ( pos[i] > hi[i] )
+ {
+ 	hi[i] = pos[i];
+ }
 		}
 	}
 
@@ -150,8 +150,8 @@ struct Extent
 	bool Contains( const Vector &pos ) const
 	{
 		return (pos.x >= lo.x && pos.x <= hi.x &&
-				pos.y >= lo.y && pos.y <= hi.y &&
-				pos.z >= lo.z && pos.z <= hi.z);
+ 	pos.y >= lo.y && pos.y <= hi.y &&
+ 	pos.z >= lo.z && pos.z <= hi.z);
 	}
 };
 
@@ -286,7 +286,7 @@ inline void CornerToVector2D( NavCornerType dir, Vector2D *v )
 /**
  * Return true if given entity can be ignored when moving
  */
-#define WALK_THRU_DOORS				0x01
+#define WALK_THRU_DOORS 	0x01
 #define WALK_THRU_BREAKABLES		0x02
 #define WALK_THRU_TOGGLE_BRUSHES	0x04
 #define WALK_THRU_EVERYTHING		(WALK_THRU_DOORS | WALK_THRU_BREAKABLES | WALK_THRU_TOGGLE_BRUSHES)
@@ -309,11 +309,11 @@ inline bool IsEntityWalkable( CBaseEntity *entity, unsigned int flags )
 		switch ( brush->m_iSolidity )
 		{
 		case CFuncBrush::BRUSHSOLID_ALWAYS:
-			return false;
+ return false;
 		case CFuncBrush::BRUSHSOLID_NEVER:
-			return true;
+ return true;
 		case CFuncBrush::BRUSHSOLID_TOGGLE:
-			return (flags & WALK_THRU_TOGGLE_BRUSHES) ? true : false;
+ return (flags & WALK_THRU_TOGGLE_BRUSHES) ? true : false;
 		}
 	}
 
@@ -344,8 +344,8 @@ public:
 	{
 		if ( CTraceFilterNoNPCsOrPlayer::ShouldHitEntity(pServerEntity, contentsMask) )
 		{
-			CBaseEntity *pEntity = EntityFromEntityHandle( pServerEntity );
-			return ( !IsEntityWalkable( pEntity, m_flags ) );
+ CBaseEntity *pEntity = EntityFromEntityHandle( pServerEntity );
+ return ( !IsEntityWalkable( pEntity, m_flags ) );
 		}
 		return false;
 	}

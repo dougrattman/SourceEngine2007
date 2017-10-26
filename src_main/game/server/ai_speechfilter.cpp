@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: An entity that can be used to control speech behaviour for a group
 //			of NPCs.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_speechfilter.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Definition for client-side advisor.
 //
@@ -219,7 +219,7 @@ void C_NPC_Advisor::StartElight()
 			SetNextClientThink( CLIENT_THINK_ALWAYS );
 		}
 		else
-		{	// null out the light value
+		{	// 0 out the light value
 			m_ElightKey = 0;
 		}
 	}

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ENTITYFLAME_H
 #define ENTITYFLAME_H
@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#define FLAME_DAMAGE_INTERVAL			0.2f // How often to deal damage.
+#define FLAME_DAMAGE_INTERVAL 0.2f // How often to deal damage.
 #define FLAME_DIRECT_DAMAGE_PER_SEC		5.0f
 #define FLAME_RADIUS_DAMAGE_PER_SEC		4.0f
 

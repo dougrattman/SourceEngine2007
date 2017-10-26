@@ -1,145 +1,100 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: class for keeping track of all the references that exist to an object.  When the object
-// being referenced is freed, all of the pointers pointing at it will become null.
-//
-// $Revision: $
-// $NoKeywords: $
-//===========================================================================//
+// Purpose: class for keeping track of all the references that exist to an
+// object.  When the object being referenced is freed, all of the pointers
+// pointing at it will become 0.
 
-#ifndef UTLOBJECTREFERENCE_H
-#define UTLOBJECTREFERENCE_H
+#ifndef SOURCE_TIER1_UTLOBJECTREFERENCE_H_
+#define SOURCE_TIER1_UTLOBJECTREFERENCE_H_
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-#include "tier1/utlintrusivelist.h"
 #include "mathlib/mathlib.h"
+#include "tier1/utlintrusivelist.h"
 
+template <class T>
+class CUtlReference {
+ public:
+  CUtlReference(void) {
+    m_pNext = m_pPrev = NULL;
+    m_pObject = NULL;
+  }
 
-template<class T> class CUtlReference
-{
-public:
-	CUtlReference(void)
-	{
-		m_pNext = m_pPrev = NULL;
-		m_pObject = NULL;
-	}
-  
-	CUtlReference(T *pObj)
-	{
-		m_pNext = m_pPrev = NULL;
-		AddRef( pObj );
-	}
+  CUtlReference(T *pObj) {
+    m_pNext = m_pPrev = NULL;
+    AddRef(pObj);
+  }
 
-	~CUtlReference(void)
-	{
-		KillRef();
-	}
-  
-	void Set(T *pObj)
-	{
-		if ( m_pObject != pObj )
-		{
-			KillRef();
-			AddRef( pObj );
-		}
-	}
-  
-	T * operator()(void) const
-	{
-		return m_pObject;
-	}
+  ~CUtlReference(void) { KillRef(); }
 
-	operator T*()
-	{
-		return m_pObject;
-	}
+  void Set(T *pObj) {
+    if (m_pObject != pObj) {
+      KillRef();
+      AddRef(pObj);
+    }
+  }
 
-	operator const T*() const
-	{
-		return m_pObject;
-	}
+  T *operator()(void) const { return m_pObject; }
 
-	T* operator->()
-	{ 
-		return m_pObject; 
-	}
+  operator T *() { return m_pObject; }
 
-	const T* operator->() const
-	{ 
-		return m_pObject; 
-	}
+  operator const T *() const { return m_pObject; }
 
-	CUtlReference &operator=( const CUtlReference& otherRef )
-	{
-		Set( otherRef.m_pObject );
-		return *this;
-	}
+  T *operator->() { return m_pObject; }
 
-	bool operator==( const CUtlReference& o ) const
-	{
-		return ( o.m_pObject == m_pObject );
-	}	
+  const T *operator->() const { return m_pObject; }
 
-public:
-	CUtlReference *m_pNext;
-	CUtlReference *m_pPrev;
+  CUtlReference &operator=(const CUtlReference &otherRef) {
+    Set(otherRef.m_pObject);
+    return *this;
+  }
 
-	T *m_pObject;
+  bool operator==(const CUtlReference &o) const {
+    return (o.m_pObject == m_pObject);
+  }
 
-	void AddRef( T *pObj )
-	{
-		m_pObject = pObj;
-		if ( pObj )
-		{
-			pObj->m_References.AddToHead( this );
-		}
-	}
+ public:
+  CUtlReference *m_pNext;
+  CUtlReference *m_pPrev;
 
-	void KillRef(void)
-	{
-		if ( m_pObject )
-		{
-			m_pObject->m_References.RemoveNode( this );
-			m_pObject = NULL;
-		}
-	}
+  T *m_pObject;
 
+  void AddRef(T *pObj) {
+    m_pObject = pObj;
+    if (pObj) {
+      pObj->m_References.AddToHead(this);
+    }
+  }
+
+  void KillRef(void) {
+    if (m_pObject) {
+      m_pObject->m_References.RemoveNode(this);
+      m_pObject = NULL;
+    }
+  }
 };
 
-template<class T> class CUtlReferenceList : public CUtlIntrusiveDList< CUtlReference<T> >
-{
-public:
-	~CUtlReferenceList( void )
-	{
-		CUtlReference<T> *i = CUtlIntrusiveDList<CUtlReference<T> >::m_pHead;
-		while( i )
-		{
-			CUtlReference<T> *n = i->m_pNext;
-			i->m_pNext = NULL;
-			i->m_pPrev = NULL;
-			i->m_pObject = NULL;
-			i = n;
-		}
-		CUtlIntrusiveDList<CUtlReference<T> >::m_pHead = NULL;
-	}
+template <class T>
+class CUtlReferenceList : public CUtlIntrusiveDList<CUtlReference<T> > {
+ public:
+  ~CUtlReferenceList(void) {
+    CUtlReference<T> *i = CUtlIntrusiveDList<CUtlReference<T> >::m_pHead;
+    while (i) {
+      CUtlReference<T> *n = i->m_pNext;
+      i->m_pNext = NULL;
+      i->m_pPrev = NULL;
+      i->m_pObject = NULL;
+      i = n;
+    }
+    CUtlIntrusiveDList<CUtlReference<T> >::m_pHead = NULL;
+  }
 };
-
 
 //-----------------------------------------------------------------------------
 // Put this macro in classes that are referenced by CUtlReference
 //-----------------------------------------------------------------------------
-#define DECLARE_REFERENCED_CLASS( _className )				\
-	private:												\
-		CUtlReferenceList< _className > m_References;		\
-		template<class T> friend class CUtlReference;
+#define DECLARE_REFERENCED_CLASS(_className)  \
+ private:                                     \
+  CUtlReferenceList<_className> m_References; \
+  template <class T>                          \
+  friend class CUtlReference;
 
-
-#endif
-
-
-
-
-
+#endif  // SOURCE_TIER1_UTLOBJECTREFERENCE_H_

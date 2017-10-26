@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PHANDLE_H
 #define PHANDLE_H
@@ -31,12 +31,12 @@ public:
 	Panel *Set( Panel *pPanel );
 	Panel *Set( HPanel hPanel );
 
-	operator Panel *()						{ return Get(); }
-	Panel * operator ->()					{ return Get(); }
+	operator Panel *()  { return Get(); }
+	Panel * operator ->() 		{ return Get(); }
 	Panel * operator = (Panel *pPanel)		{ return Set(pPanel); }
 
 	bool operator == (Panel *pPanel)		{ return (Get() == pPanel); }
-	operator bool ()						{ return Get() != 0; }
+	operator bool ()  { return Get() != 0; }
 
 private:
 	HPanel m_iPanelID;
@@ -53,11 +53,11 @@ public:
 	VPANEL Get();
 	VPANEL Set( VPANEL pPanel );
 
-	operator VPANEL ()						{ return Get(); }
+	operator VPANEL ()  { return Get(); }
 	VPANEL operator = (VPANEL pPanel)		{ return Set(pPanel); }
 
 	bool operator == (VPANEL pPanel)		{ return (Get() == pPanel); }
-	operator bool ()						{ return Get() != 0; }
+	operator bool ()  { return Get() != 0; }
 
 private:
 	HPanel m_iPanelID;
@@ -70,15 +70,15 @@ template< class PanelType >
 class DHANDLE : public PHandle
 {
 public:
-	PanelType *Get()					{ return (PanelType *)PHandle::Get(); }
+	PanelType *Get() 		{ return (PanelType *)PHandle::Get(); }
 	PanelType *Set( PanelType *pPanel )	{ return (PanelType *)PHandle::Set(pPanel); }
 	PanelType *Set( HPanel hPanel )		{ return (PanelType *)PHandle::Set(hPanel); }
 
-	operator PanelType *()						{ return (PanelType *)PHandle::Get(); }
-	PanelType * operator ->()					{ return (PanelType *)PHandle::Get(); }
+	operator PanelType *()  { return (PanelType *)PHandle::Get(); }
+	PanelType * operator ->() 		{ return (PanelType *)PHandle::Get(); }
 	PanelType * operator = (PanelType *pPanel)	{ return (PanelType *)PHandle::Set(pPanel); }
-	bool operator == (Panel *pPanel)			{ return (PHandle::Get() == pPanel); }
-	operator bool ()							{ return PHandle::Get() != NULL; }
+	bool operator == (Panel *pPanel) { return (PHandle::Get() == pPanel); }
+	operator bool ()  	{ return PHandle::Get() != NULL; }
 };
 
 };

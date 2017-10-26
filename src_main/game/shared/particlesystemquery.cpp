@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: particle system definitions
 //
@@ -173,11 +173,12 @@ bool CParticleSystemQuery::MovePointInsideControllingObject(
 #endif
 }
 
+#ifndef GAME_DLL
 static float GetSurfaceCoord( float flRand, float flMinX, float flMaxX )
 {
 	return Lerp( flRand, flMinX, flMaxX );
-
 }
+#endif
 
 
 void CParticleSystemQuery::GetRandomPointsOnControllingObjectHitBox( 

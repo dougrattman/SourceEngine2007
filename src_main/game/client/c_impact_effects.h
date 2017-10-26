@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_IMPACT_EFFECTS_H
 #define C_IMPACT_EFFECTS_H
@@ -38,12 +38,12 @@ public:
 		//Cap the minimum roll
 		if ( fabs( pParticle->m_flRollDelta ) < 0.1f )
 		{
-			pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.1f : -0.1f;
+ pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.1f : -0.1f;
 		}
 #else
 		if ( fabs( pParticle->m_flRollDelta ) < 0.5f )
 		{
-			pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.5f : -0.5f;
+ pParticle->m_flRollDelta = ( pParticle->m_flRollDelta > 0.0f ) ? 0.5f : -0.5f;
 		}
 #endif // _XBOX
 
@@ -61,9 +61,9 @@ public:
 
 		if ( dtime != timeDelta )
 		{
-			dtime = timeDelta;
-			float expected = 0.5;
-			decay = exp( log( 0.0001f ) * dtime / expected );
+ dtime = timeDelta;
+ float expected = 0.5;
+ decay = exp( log( 0.0001f ) * dtime / expected );
 		}
 
 		pParticle->m_vecVelocity = pParticle->m_vecVelocity * decay;
@@ -72,14 +72,14 @@ public:
 		//Cap the minimum speed
 		if ( pParticle->m_vecVelocity.LengthSqr() < (8.0f*8.0f) )
 		{
-			VectorNormalize( saveVelocity );
-			pParticle->m_vecVelocity = saveVelocity * 8.0f;
+ VectorNormalize( saveVelocity );
+ pParticle->m_vecVelocity = saveVelocity * 8.0f;
 		}
 #else
 		if ( pParticle->m_vecVelocity.LengthSqr() < (32.0f*32.0f) )
 		{
-			VectorNormalize( saveVelocity );
-			pParticle->m_vecVelocity = saveVelocity * 32.0f;
+ VectorNormalize( saveVelocity );
+ pParticle->m_vecVelocity = saveVelocity * 32.0f;
 		}
 #endif // _XBOX
 	}
@@ -92,7 +92,7 @@ public:
 
 		//Non-linear fade
 		if ( ramp < 0.75f )
-			ramp *= ramp;
+ ramp *= ramp;
 
 		return ramp;
 	}

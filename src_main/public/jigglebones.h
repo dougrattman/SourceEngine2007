@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef C_JIGGLEBONES_H
 #define C_JIGGLEBONES_H
 
@@ -13,8 +13,8 @@
 #endif
 
 #include "studio.h"
-#include "UtlVector.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlVector.h"
+#include "tier1/UtlLinkedList.h"
 
 //-----------------------------------------------------------------------------
 /**

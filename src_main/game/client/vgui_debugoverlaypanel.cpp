@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "idebugoverlaypanel.h"
 #include "overlaytext.h"
@@ -50,7 +50,7 @@ CDebugOverlay::CDebugOverlay( vgui::VPANEL parent ) :
 	SetSize( w, h );
 	SetPos( 0, 0 );
 	SetVisible( false );
-	SetCursor( null );
+	SetCursor( 0 );
 
 	m_hFont = 0;
 	SetFgColor( Color( 0, 0, 0, 0 ) );

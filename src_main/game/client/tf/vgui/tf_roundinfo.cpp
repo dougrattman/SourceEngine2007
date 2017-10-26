@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 
@@ -13,7 +13,7 @@
 #include <vgui_controls/RichText.h>
 #include <vgui_controls/Frame.h>
 #include <game/client/iviewport.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <FileSystem.h>
 #include "materialsystem/IMaterialVar.h"
 #include "IGameUIFuncs.h" // for key bindings

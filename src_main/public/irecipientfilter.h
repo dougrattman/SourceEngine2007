@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IRECIPIENTFILTER_H
 #define IRECIPIENTFILTER_H
@@ -17,7 +17,7 @@
 class IRecipientFilter
 {
 public:
-	virtual			~IRecipientFilter() {}
+	virtual ~IRecipientFilter() {}
 
 	virtual bool	IsReliable( void ) const = 0;
 	virtual bool	IsInitMessage( void ) const = 0;

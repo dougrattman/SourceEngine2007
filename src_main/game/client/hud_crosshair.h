@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_CROSSHAIR_H
 #define HUD_CROSSHAIR_H
@@ -28,12 +28,12 @@ class CHudCrosshair : public CHudElement, public vgui::Panel
 public:
 	CHudCrosshair( const char *pElementName );
 
-	void			SetCrosshairAngle( const QAngle& angle );
-	void			SetCrosshair( CHudTexture *texture, Color& clr );
-	void			ResetCrosshair();
-	void			DrawCrosshair( void );
-  	bool			HasCrosshair( void ) { return ( m_pCrosshair != NULL ); }
-	bool			ShouldDraw();
+	void SetCrosshairAngle( const QAngle& angle );
+	void SetCrosshair( CHudTexture *texture, Color& clr );
+	void ResetCrosshair();
+	void DrawCrosshair( void );
+  	bool HasCrosshair( void ) { return ( m_pCrosshair != NULL ); }
+	bool ShouldDraw();
 
 protected:
 	virtual void	ApplySchemeSettings( vgui::IScheme *scheme );
@@ -43,11 +43,11 @@ private:
 	// Crosshair sprite and colors
 	CHudTexture		*m_pCrosshair;
 	CHudTexture		*m_pDefaultCrosshair;
-	Color			m_clrCrosshair;
-	QAngle			m_vecCrossHairOffsetAngle;
+	Color m_clrCrosshair;
+	QAngle m_vecCrossHairOffsetAngle;
 
-	QAngle			m_curViewAngles;
-	Vector			m_curViewOrigin;
+	QAngle m_curViewAngles;
+	Vector m_curViewOrigin;
 
 	CPanelAnimationVar( bool, m_bHideCrosshair, "never_draw", "false" );
 };

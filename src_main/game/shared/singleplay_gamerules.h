@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SINGLEPLAY_GAMERULES_H
 #define SINGLEPLAY_GAMERULES_H
@@ -36,11 +36,11 @@ public:
 	virtual bool IsMultiplayer( void );
 
 	// Damage query implementations.
-	virtual bool	Damage_IsTimeBased( int iDmgType );			// Damage types that are time-based.
+	virtual bool	Damage_IsTimeBased( int iDmgType ); // Damage types that are time-based.
 	virtual bool	Damage_ShouldGibCorpse( int iDmgType );		// Damage types that gib the corpse.
-	virtual bool	Damage_ShowOnHUD( int iDmgType );				// Damage types that have client HUD art.
+	virtual bool	Damage_ShowOnHUD( int iDmgType ); 	// Damage types that have client HUD art.
 	virtual bool	Damage_NoPhysicsForce( int iDmgType );		// Damage types that don't have to supply a physics force & position.
-	virtual bool	Damage_ShouldNotBleed( int iDmgType );			// Damage types that don't make the player bleed.
+	virtual bool	Damage_ShouldNotBleed( int iDmgType ); // Damage types that don't make the player bleed.
 	// TEMP: These will go away once DamageTypes become enums.
 	virtual int		Damage_GetTimeBased( void );		
 	virtual int		Damage_GetShouldGibCorpse( void );

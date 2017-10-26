@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include	"ai_basenpc.h"
@@ -51,7 +51,7 @@ public:
 	int		GetSoundInterests( void ) { return SOUND_NONE; }
 	float	MaxYawSpeed( void ) { return 90.f; }
 
-	void	RunAI(void);
+	void	RunAI();
 	void	FireCannons( void );
 	void	AimGun( void );
 	void	EnemyShootPosition(CBaseEntity* pEnemy, Vector *vPosition);

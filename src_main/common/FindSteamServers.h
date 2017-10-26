@@ -40,9 +40,9 @@
 
 	#ifndef STEAM_API
 		#ifdef STEAM_EXPORTS
-			#define STEAM_API __declspec(dllexport)
+ #define STEAM_API __declspec(dllexport)
 		#else
-			#define STEAM_API __declspec(dllimport)
+ #define STEAM_API __declspec(dllimport)
 		#endif
 	#endif
 
@@ -54,7 +54,7 @@
 	#define STEAM_FSS_API STEAM_API
 #endif
 
-#include <limits.h>
+#include <climits>
 #include "SteamCommon.h"
 
 /******************************************************************************
@@ -80,7 +80,7 @@ enum
 STEAM_FSS_API int STEAM_FSS_CALL SteamFindServersNumServers(ESteamServerType eServerType);
 
 // Get nth ipaddr:port for this server type
-// buffer needs to be 22 chars long: aaa.bbb.ccc.ddd:12345 plus null
+// buffer needs to be 22 chars long: aaa.bbb.ccc.ddd:12345 plus 0
 //
 // returns 0 if succsessful, negative is error
 STEAM_FSS_API int STEAM_FSS_CALL SteamFindServersIterateServer(ESteamServerType eServerType, unsigned int nServer, char *szIpAddrPort, int szIpAddrPortLen);

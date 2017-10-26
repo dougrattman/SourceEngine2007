@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 // Information about algorithmic stuff that can occur on both client + server
@@ -63,7 +63,7 @@
 // env_wind_shared.h) which I plan to use to solve my problem (getting wind to
 // blow players).
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "env_wind_shared.h"
 #include "soundenvelope.h"

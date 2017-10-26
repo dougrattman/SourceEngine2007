@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef C_FIRE_SMOKE_H
 #define C_FIRE_SMOKE_H
 
@@ -25,24 +25,24 @@ private:
 	{
 		if ( m_bFadeFromAbove )
 		{
-			// The sprites become less visible the more you look down or up at them
-			Vector vToPos = GetLocalOrigin() - CurrentViewOrigin();
-			VectorNormalize( vToPos );
+ // The sprites become less visible the more you look down or up at them
+ Vector vToPos = GetLocalOrigin() - CurrentViewOrigin();
+ VectorNormalize( vToPos );
 
-			float fUpAmount = vToPos.z;
+ float fUpAmount = vToPos.z;
 
-			int iAlpha = 255;
+ int iAlpha = 255;
 
-			if ( fUpAmount < -0.75f )
-				iAlpha = 0;
-			else if ( fUpAmount < -0.65f )
-				iAlpha = 255 - (int)( ( fUpAmount + 0.65f ) * 10.0f * -255.0f );
-			else if ( fUpAmount > 0.85f )
-				iAlpha = 0;
-			else if ( fUpAmount > 0.75f )
-				iAlpha = 255 - (int)( ( fUpAmount - 0.75f ) * 10.0f * 255.0f );
+ if ( fUpAmount < -0.75f )
+ 	iAlpha = 0;
+ else if ( fUpAmount < -0.65f )
+ 	iAlpha = 255 - (int)( ( fUpAmount + 0.65f ) * 10.0f * -255.0f );
+ else if ( fUpAmount > 0.85f )
+ 	iAlpha = 0;
+ else if ( fUpAmount > 0.75f )
+ 	iAlpha = 255 - (int)( ( fUpAmount - 0.75f ) * 10.0f * 255.0f );
 
-			SetColor( iAlpha, iAlpha, iAlpha );
+ SetColor( iAlpha, iAlpha, iAlpha );
 		}
 
 		return BaseClass::DrawModel( flags );
@@ -68,13 +68,13 @@ class C_FireFromAboveSprite : public C_Sprite
 		int iAlpha = 0;
 
 		if ( fUpAmount < -0.85f )
-			iAlpha = 255;
+ iAlpha = 255;
 		else if ( fUpAmount < -0.65f )
-			iAlpha = (int)( ( fUpAmount + 0.65f ) * 5.0f * -255.0f );
+ iAlpha = (int)( ( fUpAmount + 0.65f ) * 5.0f * -255.0f );
 		else if ( fUpAmount > 0.75f )
-			iAlpha = 255;
+ iAlpha = 255;
 		else if ( fUpAmount > 0.55f )
-			iAlpha = (int)( ( fUpAmount - 0.55f ) * 5.0f * 255.0f );
+ iAlpha = (int)( ( fUpAmount - 0.55f ) * 5.0f * 255.0f );
 
 		SetColor( iAlpha, iAlpha, iAlpha );
 
@@ -102,11 +102,11 @@ class C_FireFromAboveSprite : public C_Sprite
 //==================================================
 
 //NOTENOTE: Mirrored in dlls/fire_smoke.h
-#define	bitsFIRESMOKE_NONE					0x00000000
-#define	bitsFIRESMOKE_ACTIVE				0x00000001
-#define	bitsFIRESMOKE_SMOKE					0x00000002
+#define	bitsFIRESMOKE_NONE 		0x00000000
+#define	bitsFIRESMOKE_ACTIVE 	0x00000001
+#define	bitsFIRESMOKE_SMOKE 		0x00000002
 #define	bitsFIRESMOKE_SMOKE_COLLISION		0x00000004
-#define	bitsFIRESMOKE_GLOW					0x00000008
+#define	bitsFIRESMOKE_GLOW 		0x00000008
 #define	bitsFIRESMOKE_VISIBLE_FROM_ABOVE	0x00000010
 
 #define	OVERLAY_MAX_VISIBLE_RANGE	512.0f
@@ -175,11 +175,11 @@ protected:
 	//CSmartPtr<CEmberEffect> m_pEmberEmitter;
 	CSmartPtr<CLitSmokeEmitter> m_pSmokeEmitter;
 
-	C_FireSprite			m_entFlames[NUM_CHILD_FLAMES];
+	C_FireSprite m_entFlames[NUM_CHILD_FLAMES];
 	C_FireFromAboveSprite	m_entFlamesFromAbove[NUM_CHILD_FLAMES];
-	float					m_entFlameScales[NUM_CHILD_FLAMES];
+	float 		m_entFlameScales[NUM_CHILD_FLAMES];
 
-	TimedEvent			m_tParticleSpawn;
+	TimedEvent m_tParticleSpawn;
 
 	CFireOverlay		*m_pFireOverlay;
 
@@ -225,7 +225,7 @@ public:
 	virtual bool Update( void )
 	{
 		if ( m_pOwner == NULL )
-			return false;
+ return false;
 
 		float scale	 = m_pOwner->GetScale();
 		float dscale = scale - m_flScale;
@@ -247,11 +247,11 @@ public:
 		C_BasePlayer *local = C_BasePlayer::GetLocalPlayer();
 		if ( local )
 		{
-			cameraDistance *= local->GetFOVDistanceAdjustFactor();
+ cameraDistance *= local->GetFOVDistanceAdjustFactor();
 		}
 
 		if ( cameraDistance > OVERLAY_MAX_VISIBLE_RANGE )
-			cameraDistance = OVERLAY_MAX_VISIBLE_RANGE;
+ cameraDistance = OVERLAY_MAX_VISIBLE_RANGE;
 
 		float alpha = 1.0f - ( cameraDistance / OVERLAY_MAX_VISIBLE_RANGE );
 
@@ -266,7 +266,7 @@ public:
 	C_FireSmoke	*m_pOwner;
 	Vector		m_vBaseColors[MAX_SUN_LAYERS];
 	float		m_flScale;
-	int			m_nGUID;
+	int m_nGUID;
 };
 
 //
@@ -290,8 +290,8 @@ public:
 	virtual void	ClientThink( void );
 
 	CNewParticleEffect *m_hEffect;
-	EHANDLE				m_hEntAttached;		// The entity that we are burning (attached to).
-	EHANDLE				m_hOldAttached;
+	EHANDLE 	m_hEntAttached;		// The entity that we are burning (attached to).
+	EHANDLE 	m_hOldAttached;
 
 protected:
 

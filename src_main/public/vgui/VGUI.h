@@ -1,44 +1,27 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: Basic header for using vgui
-//
-// $NoKeywords: $
-//=============================================================================//
+// Purpose: Basic header for using vgui.
 
-#ifndef VGUI_H
-#define VGUI_H
-
-#ifdef _WIN32
-#pragma once
-#endif
-
-#define null 0L
+#ifndef SOURCE_VGUI_VGUI_H_
+#define SOURCE_VGUI_VGUI_H_
 
 #ifndef NULL
 #ifdef __cplusplus
-#define NULL    0
+#define NULL 0
 #else
-#define NULL    ((void *)0)
+#define NULL ((void *)0)
 #endif
 #endif
 
-#pragma warning( disable: 4800 )	// disables 'performance warning converting int to bool'
-#pragma warning( disable: 4786 )	// disables 'identifier truncated in browser information' warning
-#pragma warning( disable: 4355 )	// disables 'this' : used in base member initializer list
-#pragma warning( disable: 4097 )	// warning C4097: typedef-name 'BaseClass' used as synonym for class-name
-#pragma warning( disable: 4514 )	// warning C4514: 'Color::Color' : unreferenced inline function has been removed
-#pragma warning( disable: 4100 )	// warning C4100: 'code' : unreferenced formal parameter
-#pragma warning( disable: 4127 )	// warning C4127: conditional expression is constant
-
-typedef unsigned char  uchar;
-typedef unsigned short ushort;
-typedef unsigned int   uint;
-typedef unsigned long  ulong;
+using uchar = unsigned char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
 
 #ifndef _WCHAR_T_DEFINED
 // DAL - wchar_t is a built in define in gcc 3.2 with a size of 4 bytes
-#if !defined( __x86_64__ ) && !defined( __WCHAR_TYPE__  )
-typedef unsigned short wchar_t;
+#if !defined(__x86_64__) && !defined(__WCHAR_TYPE__)
+using wchar_t = unsigned short;
 #define _WCHAR_T_DEFINED
 #endif
 #endif
@@ -46,24 +29,24 @@ typedef unsigned short wchar_t;
 // do this in GOLDSRC only!!!
 //#define Assert assert
 
-namespace vgui
-{
+namespace vgui {
 // handle to an internal vgui panel
 // this is the only handle to a panel that is valid across dll boundaries
-typedef unsigned int VPANEL;
+using VPANEL = unsigned int;
 
 // handles to vgui objects
 // NULL values signify an invalid value
-typedef unsigned long HScheme;
-typedef unsigned long HTexture;
-typedef unsigned long HCursor;
-typedef unsigned long HPanel;
+using HScheme = unsigned long;
+using HTexture = unsigned long;
+using HCursor = unsigned long;
+
+using HPanel = unsigned long;
 const HPanel INVALID_PANEL = 0xffffffff;
-typedef unsigned long HFont;
-const HFont INVALID_FONT = 0; // the value of an invalid font handle
-}
+
+using HFont = unsigned long;
+const HFont INVALID_FONT = 0;  // the value of an invalid font handle
+}  // namespace vgui
 
 #include "tier1/strtools.h"
 
-
-#endif // VGUI_H
+#endif  // SOURCE_VGUI_VGUI_H_

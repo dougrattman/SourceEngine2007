@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements two types of doors: linear and rotating.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "doors.h"
@@ -18,7 +18,7 @@
 #endif
 
 #ifdef CSTRIKE_DLL
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -22,8 +22,8 @@
 #define closesocket close
 #endif
 #include "tier1/strtools.h"
-#include "KeyValues.h"
-#include "utlbuffer.h"
+#include "tier1/keyvalues.h"
+#include "tier1/utlbuffer.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/convar.h"
 #include "cbase.h"
@@ -62,7 +62,7 @@ bool SendHTTPRequest( const char *pchRequestURL, SOCKET socketHTML )
 //-----------------------------------------------------------------------------
 // Purpose: Given a previous HTTP request parse the response into a key values buffer
 //-----------------------------------------------------------------------------
-bool ParseHTTPResponse( SOCKET socketHTML, uint32 *unPageHash = NULL )
+bool ParseHTTPResponse( SOCKET socketHTML, uint32_t *unPageHash = NULL )
 {
 	char szHeaderBuf[ MED_BUFFER_SIZE ];
 	char szBodyBuf[ MED_BUFFER_SIZE ];
@@ -134,7 +134,7 @@ bool ProcessURL( const char *pchURL, void *pSockAddrIn, char *pchRequest, int cc
 {
 	char rgchHost[ MAX_DNS_NAME ];
 	char rgchRequest[ MED_BUFFER_SIZE ];
-	uint16 iPort;
+	uint16_t iPort;
 
 	if ( Q_strnicmp( pchURL, "http://", 7 ) != 0 )
 	{
@@ -171,7 +171,7 @@ bool ProcessURL( const char *pchURL, void *pSockAddrIn, char *pchRequest, int cc
 	}
 	else
 	{
-		uint32 addr = inet_addr( rgchHost );
+		uint32_t addr = inet_addr( rgchHost );
 		hp = gethostbyaddr( ( char* )&addr, sizeof( addr ), AF_INET );
 	}
 
@@ -209,7 +209,7 @@ bool BlackMarket_DownloadPrices( void )
 				bConnected = true;
 				if ( SendHTTPRequest( szRequest, socketHTML ) )
 				{
-					uint32 unHash = 0;
+					uint32_t unHash = 0;
 					bool bRet = ParseHTTPResponse( socketHTML, &unHash );
 
 					closesocket( socketHTML );

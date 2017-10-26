@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef APPARENT_VELOCITY_HELPER_H
 #define APPARENT_VELOCITY_HELPER_H
@@ -56,7 +56,7 @@ public:
 		float flRet = 0;
 		if ( m_LastTime != -1 )
 		{
-			flRet = Functor::CalcDistance(value, m_LastValue) / (time - m_LastTime);
+ flRet = Functor::CalcDistance(value, m_LastValue) / (time - m_LastTime);
 		}
 
 		m_LastTime = time;

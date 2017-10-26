@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_HUD_CAPTUREPANEL_H
 #define DOD_HUD_CAPTUREPANEL_H
@@ -73,17 +73,17 @@ public:
 
 private:
     
-	CDoDCapturePanelProgressBar			*m_pProgressBar;
+	CDoDCapturePanelProgressBar *m_pProgressBar;
 
 	CUtlVector<CDoDCapturePanelIcon *>	m_PlayerIcons;
 
-	vgui::ImagePanel					*m_pAlliesFlag;
-	vgui::ImagePanel					*m_pAxisFlag;
-	vgui::ImagePanel					*m_pNeutralFlag;
+	vgui::ImagePanel 		*m_pAlliesFlag;
+	vgui::ImagePanel 		*m_pAxisFlag;
+	vgui::ImagePanel 		*m_pNeutralFlag;
 
-	vgui::Label							*m_pMessage;
+	vgui::Label  	*m_pMessage;
 
-	vgui::Panel							*m_pBackground;
+	vgui::Panel  	*m_pBackground;
 
 	CPanelAnimationVarAliasType( float, m_nSpaceBetweenIcons, "icon_space", "2", "proportional_float" );
 };

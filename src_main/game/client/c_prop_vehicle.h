@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_PROP_VEHICLE_H
 #define C_PROP_VEHICLE_H
@@ -87,42 +87,42 @@ protected:
 protected:
 
 	CHandle<C_BasePlayer>		m_hPlayer;
-	int							m_nSpeed;
-	int							m_nRPM;
-	float						m_flThrottle;
-	int							m_nBoostTimeLeft;
-	int							m_nHasBoost;
-	int							m_nScannerDisabledWeapons;
-	int							m_nScannerDisabledVehicle;
+	int  	m_nSpeed;
+	int  	m_nRPM;
+	float  m_flThrottle;
+	int  	m_nBoostTimeLeft;
+	int  	m_nHasBoost;
+	int  	m_nScannerDisabledWeapons;
+	int  	m_nScannerDisabledVehicle;
 
 	// timers/flags for flashing icons on hud
-	int							m_iFlashTimer;
-	bool						m_bLockedDim;
-	bool						m_bLockedIcon;
+	int  	m_iFlashTimer;
+	bool  m_bLockedDim;
+	bool  m_bLockedIcon;
 
-	int							m_iScannerWepFlashTimer;
-	bool						m_bScannerWepDim;
-	bool						m_bScannerWepIcon;
+	int  	m_iScannerWepFlashTimer;
+	bool  m_bScannerWepDim;
+	bool  m_bScannerWepIcon;
 
-	int							m_iScannerVehicleFlashTimer;
-	bool						m_bScannerVehicleDim;
-	bool						m_bScannerVehicleIcon;
+	int  	m_iScannerVehicleFlashTimer;
+	bool  m_bScannerVehicleDim;
+	bool  m_bScannerVehicleIcon;
 
-	float						m_flSequenceChangeTime;
-	bool						m_bEnterAnimOn;
-	bool						m_bExitAnimOn;
-	float						m_flFOV;
+	float  m_flSequenceChangeTime;
+	bool  m_bEnterAnimOn;
+	bool  m_bExitAnimOn;
+	float  m_flFOV;
 
-	Vector						m_vecGunCrosshair;
+	Vector  m_vecGunCrosshair;
 	CInterpolatedVar<Vector>	m_iv_vecGunCrosshair;
-	Vector						m_vecEyeExitEndpoint;
-	bool						m_bHasGun;
-	bool						m_bUnableToFire;
+	Vector  m_vecEyeExitEndpoint;
+	bool  m_bHasGun;
+	bool  m_bUnableToFire;
 
 	// Used to smooth view entry
 	CHandle<C_BasePlayer>		m_hPrevPlayer;
 
-	ViewSmoothingData_t			m_ViewSmoothingData;
+	ViewSmoothingData_t m_ViewSmoothingData;
 };
 
 

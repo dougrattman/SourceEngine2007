@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains a list of files, determines their perforce status
 //
@@ -82,7 +82,7 @@ public:
 
 	/*
 		messages sent:
-			"ItemDoubleClicked"	// Called when an item is double-clicked
+ "ItemDoubleClicked"	// Called when an item is double-clicked
 	*/
 
 protected:

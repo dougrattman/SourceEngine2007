@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -12,7 +12,7 @@
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <FileSystem.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <convar.h>
 #include <game/client/iviewport.h>
 #include "spectatorgui.h"

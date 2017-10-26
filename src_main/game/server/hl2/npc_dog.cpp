@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements d0g, the loving and caring head crushing Alyx companion.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "npcevent.h"

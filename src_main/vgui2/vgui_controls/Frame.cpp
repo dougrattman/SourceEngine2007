@@ -1,12 +1,12 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //===========================================================================//
 
-#include <assert.h>
-#include <math.h> // for ceil()
+#include <cassert>
+#include <cmath> // for ceil()
 #define PROTECTED_THINGS_DISABLE
 
 #include "tier1/utlstring.h"
@@ -28,9 +28,9 @@
 #include "vgui_controls/MenuButton.h"
 #include "vgui_controls/TextImage.h"
 
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -758,7 +758,7 @@ Frame::Frame(Panel *parent, const char *panelName, bool showTaskbarIcon) : Edita
 
 	m_hPreviousModal = 0;
 
-	_title=null;
+	_title=0;
 	_moveable=true;
 	_sizeable=true;
 	m_bHasFocus=false;

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_default.h"
@@ -1079,7 +1079,7 @@ void CProtoSniper::InputSweepGroupRandomly( inputdata_t &inputdata )
 
 		pTarget = dynamic_cast<CSniperTarget*>(pEnt);
 
-		// If the pointer is null, this isn't a sniper target.
+		// If the pointer is 0, this isn't a sniper target.
 		if( pTarget )
 		{
 			if( !strcmp( inputdata.value.String(), STRING( pTarget->m_iszGroupName ) ) )

@@ -1,22 +1,13 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//===========================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef FILESYSTEM_HELPERS_H
 #define FILESYSTEM_HELPERS_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-
 // Call until it returns NULL. Each time you call it, it will parse out a token.
 struct characterset_t;
-const char* ParseFile( const char* pFileBytes, char* pToken, bool* pWasQuoted, characterset_t *pCharSet = NULL );
-char* ParseFile( char* pFileBytes, char* pToken, bool* pWasQuoted );	// (same exact thing as the const version)
+const char* ParseFile(const char* pFileBytes, char* pToken, bool* pWasQuoted,
+                      characterset_t* pCharSet = nullptr);
+char* ParseFile(char* pFileBytes, char* pToken,
+                bool* pWasQuoted);  // (same exact thing as the const version)
 
-
-#endif // FILESYSTEM_HELPERS_H
+#endif  // FILESYSTEM_HELPERS_H

@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements a screen shake effect that can also shake physics objects.
 //
 // NOTE: UTIL_ScreenShake() will only shake players who are on the ground
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "shake.h"
@@ -74,7 +74,7 @@ public:
 	inline	void	SetDuration( float duration ) { m_Duration = duration; }
 	inline	void	SetRadius( float radius ) { m_Radius = radius; }
 
-	int DrawDebugTextOverlays(void);
+	int DrawDebugTextOverlays();
 
 	// Input handlers
 	void InputStartShake( inputdata_t &inputdata );

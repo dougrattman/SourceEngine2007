@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef INPUTVAR_H
 #define INPUTVAR_H
@@ -18,7 +18,7 @@
 
 //-----------------------------------------------------------------------------
 // Purpose: Used to request a value, or a set of values, from a set of entities.
-//			used when a multi-input variable needs to refresh it's inputs
+// used when a multi-input variable needs to refresh it's inputs
 //-----------------------------------------------------------------------------
 class CMultiInputVar
 {

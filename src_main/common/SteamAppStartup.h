@@ -1,25 +1,17 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: used by all .exe's that run under steam and out, 
-//			so they can be launched indirectly by steam and launch steam themselves
-//
-//=============================================================================//
+// Purpose: used by all .exe's that run under steam and out,
+// so they can be launched indirectly by steam and launch steam themselves
 
-#ifndef STEAMAPPSTARTUP_H
-#define STEAMAPPSTARTUP_H
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_STEAMAPPSTARTUP_H_
+#define SOURCE_STEAMAPPSTARTUP_H_
 
-//-----------------------------------------------------------------------------
-// Purpose: Call this first thing at startup
-//			Works out if the app is a steam app that is being ran outside of steam,
-//			and if so, launches steam and tells it to run us as a steam app
-//
-//			if it returns true, then exit
-//			if it ruturns false, then continue with normal startup
-//-----------------------------------------------------------------------------
-bool ShouldLaunchAppViaSteam(const char *cmdLine, const char *steamFilesystemDllName, const char *stdioFilesystemDllName);
+// Purpose: Call this first thing at startup. Works out if the app is a steam
+// app that is being ran outside of steam, and if so, launches steam and tells
+// it to run us as a steam app.
+// When true, then exit, else continue with normal startup.
+bool ShouldLaunchAppViaSteam(const char *command_line,
+                             const char *steam_file_system_dll_name,
+                             const char *stdio_file_system_dll_name);
 
-
-#endif // STEAMAPPSTARTUP_H
+#endif  // SOURCE_STEAMAPPSTARTUP_H_

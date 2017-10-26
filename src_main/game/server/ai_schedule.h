@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		A schedule
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "bitstring.h"
 
@@ -36,9 +36,9 @@ typedef CBitVec<MAX_CONDITIONS> CAI_ScheduleBits;
 enum goalType_t
 {
 	GOAL_NONE = -1,
-	GOAL_ENEMY,				//Our current enemy's position
-	GOAL_TARGET,			//Our current target's position
-	GOAL_ENEMY_LKP,			//Our current enemy's last known position
+	GOAL_ENEMY, 	//Our current enemy's position
+	GOAL_TARGET, //Our current target's position
+	GOAL_ENEMY_LKP, //Our current enemy's last known position
 	GOAL_SAVED_POSITION,	//Our saved position
 };
 
@@ -49,12 +49,12 @@ enum goalType_t
 enum pathType_t
 {
 	PATH_NONE = -1,
-	PATH_TRAVEL,			//Path that will take us to the goal
-	PATH_LOS,				//Path that gives us line of sight to our goal
-	//PATH_FLANK,				//Path that will take us to a flanking position of our goal
-	//PATH_FLANK_LOS,			//Path that will take us to within line of sight to the flanking position of our goal
-	PATH_COVER,				//Path that will give us cover from our goal
-	//PATH_COVER_LOS,			//Path that will give us line of sight to cover from our goal
+	PATH_TRAVEL, //Path that will take us to the goal
+	PATH_LOS, 	//Path that gives us line of sight to our goal
+	//PATH_FLANK, 	//Path that will take us to a flanking position of our goal
+	//PATH_FLANK_LOS, //Path that will take us to within line of sight to the flanking position of our goal
+	PATH_COVER, 	//Path that will give us cover from our goal
+	//PATH_COVER_LOS, //Path that will give us line of sight to cover from our goal
 };
 
 //=============================================================================
@@ -72,11 +72,11 @@ public:
 		m_CurLoadSig = 0;		// Note when schedules reset
 	}
 
-	int				GetScheduleLoadSignature() { return m_CurLoadSig; }
+	int 	GetScheduleLoadSignature() { return m_CurLoadSig; }
 	CAI_Schedule*	GetScheduleFromID( int schedID );	// Function to return schedule from linked list 
 	CAI_Schedule*	GetScheduleByName( const char *name );
 
-	bool LoadAllSchedules(void);
+	bool LoadAllSchedules();
 
 	bool LoadSchedules( const char* prefix, CAI_ClassScheduleIdSpace *pIdSpace  );
 	bool LoadSchedulesFromBuffer( const char *prefix, char *pfile, CAI_ClassScheduleIdSpace *pIdSpace );
@@ -84,18 +84,18 @@ public:
 private:
 	friend class CAI_SystemHook;
 	
-	int				m_CurLoadSig;					// Note when schedules reset
-	CAI_Schedule*	allSchedules;						// A linked list of all schedules
+	int 	m_CurLoadSig; 		// Note when schedules reset
+	CAI_Schedule*	allSchedules;  // A linked list of all schedules
 
 	CAI_Schedule *	CreateSchedule(char *name, int schedule_id);
 
 	void CreateStringRegistries( void );
 	void DestroyStringRegistries( void );
-	void DeleteAllSchedules(void);
+	void DeleteAllSchedules();
 
 	//static bool	LoadSchedules( char* prefix,	int taskIDOffset,	int taskENOffset,
-	//											int schedIDOffset,  int schedENOffset,
-	//											int condIDOffset,	int condENOffset);
+	//   		int schedIDOffset,  int schedENOffset,
+	//   		int condIDOffset,	int condENOffset);
 
 	// parsing helpers
 	int	GetStateID(const char *state_name);
@@ -147,15 +147,15 @@ public:
 private:
 	friend class CAI_SchedulesManager;
 
-	int			m_iScheduleID;				// The id number of this schedule
+	int m_iScheduleID; 	// The id number of this schedule
 
 	Task_t		*m_pTaskList;
-	int			m_iNumTasks;	 
+	int m_iNumTasks;	 
 
-	CAI_ScheduleBits m_InterruptMask;			// a bit mask of conditions that can interrupt this schedule 
+	CAI_ScheduleBits m_InterruptMask; // a bit mask of conditions that can interrupt this schedule 
 	char		*m_pName;
 
-	CAI_Schedule *nextSchedule;				// The next schedule in the list of schedules
+	CAI_Schedule *nextSchedule; 	// The next schedule in the list of schedules
 
 	CAI_Schedule(char *name,int schedule_id, CAI_Schedule *pNext);
 	~CAI_Schedule( void );
@@ -180,7 +180,7 @@ private:
 		extern const char * g_psz##name; \
 		if ( classname::gm_SchedLoadStatus.fValid ) \
 		{ \
-			classname::gm_SchedLoadStatus.fValid = g_AI_SchedulesManager.LoadSchedulesFromBuffer( #classname,(char *)g_psz##name,&classname::gm_ClassScheduleIdSpace ); \
+ classname::gm_SchedLoadStatus.fValid = g_AI_SchedulesManager.LoadSchedulesFromBuffer( #classname,(char *)g_psz##name,&classname::gm_ClassScheduleIdSpace ); \
 		} \
 	} while (false)
 
@@ -191,7 +191,7 @@ private:
 	{ \
 		extern const char * g_psz##name; \
 		if (!g_AI_SchedulesManager.LoadSchedulesFromBuffer( #classname,(char *)g_psz##name,&classname::gm_ClassScheduleIdSpace )) \
-			return false; \
+ return false; \
 	} while (false)
 
 

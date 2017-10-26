@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 // hud.cpp
 //
@@ -18,10 +18,10 @@
 #include "in_buttons.h"
 #include <vgui_controls/Controls.h>
 #include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "itextmessage.h"
-#include "mempool.h"
-#include <KeyValues.h>
+#include "tier1/mempool.h"
+#include "tier1/keyvalues.h"
 #include "filesystem.h"
 #include <vgui_controls/AnimationController.h>
 #include <vgui/iSurface.h>
@@ -452,18 +452,7 @@ CHud::~CHud()
 	}
 }
 
-void CHudTexture::Precache( void )
-{
-	// costly function, used selectively on specific hud elements to get font pages built out at load time
-	if ( IsX360() && bRenderUsingFont && !bPrecached && hFont != vgui::INVALID_FONT )
-	{
-		wchar_t wideChars[2];
-		wideChars[0] = (wchar_t)cCharacterInFont;
-		wideChars[1] = 0;
-		vgui::surface()->PrecacheFontCharacters( hFont, wideChars );
-		bPrecached = true;
-	}
-}
+void CHudTexture::Precache( void ) {}
 
 void CHudTexture::DrawSelf( int x, int y, Color& clr ) const
 {

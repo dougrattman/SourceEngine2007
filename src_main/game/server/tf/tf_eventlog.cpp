@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "../EventLog.h"
 #include "team.h"
@@ -13,7 +13,7 @@
 #include "team_control_point_master.h"
 #include "team_control_point_round.h"
 #include "tf_team.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 
 extern ConVar tf_flag_caps_per_round;
 

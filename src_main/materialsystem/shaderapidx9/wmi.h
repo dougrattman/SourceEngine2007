@@ -1,17 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef WMI_H
 #define WMI_H
-#ifdef _WIN32
-#pragma once
-#endif
 
+int GetVidMemBytes();
 
-int GetVidMemBytes( void );
-
-
-#endif // WMI_H
+#endif  // WMI_H

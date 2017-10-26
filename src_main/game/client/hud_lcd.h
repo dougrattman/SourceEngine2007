@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: CLCD Manages the Logitech G-Series Gaming Keyboard LCD
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #ifndef HUD_LCD_H
 #define HUD_LCD_H
 #ifdef _WIN32
@@ -58,11 +58,11 @@ public:
 	virtual void Wipe( IG15 *lcd );
 
 	bool		m_bActive;
-	int			m_Type;
+	int m_Type;
 	void		*m_Handle;
-	int			x, y, w, h;
+	int x, y, w, h;
 
-	int			m_nSubPage;
+	int m_nSubPage;
 
 	CUtlVector< CLCDItem * >	m_Children;
 };
@@ -83,8 +83,8 @@ public:
 
 	CUtlString	m_OriginalText;
 	bool		m_bHasWildcard;
-	int			m_iSize;
-	int			m_iAlign;
+	int m_iSize;
+	int m_iAlign;
 };
 
 class CLCDItemIcon : public CLCDItem
@@ -122,10 +122,10 @@ public:
 
 	void WipeChildrenOnly( IG15 *lcd );
 
-	unsigned int				m_dwNextUpdateTime;
-	int							m_AggType;
+	unsigned int 	m_dwNextUpdateTime;
+	int  	m_AggType;
 	
-	int							m_yincrement;
+	int  	m_yincrement;
 
 	// Representative row
 	CUtlVector< CLCDItem * >	m_Definition;
@@ -158,24 +158,24 @@ public:
 		switch ( type )
 		{
 		default:
-			break;
+ break;
 		case LCDITEM_PAGE:
-			// This shouldn't occur
-			break;
+ // This shouldn't occur
+ break;
 		case LCDITEM_TEXT:
-			item = new CLCDItemText();
-			break;
+ item = new CLCDItemText();
+ break;
 		case LCDITEM_ICON:
-			item = new CLCDItemIcon();
-			break;
+ item = new CLCDItemIcon();
+ break;
 		case LCDITEM_AGGREGATE:
-			item = new CLCDItemAggregate();
-			break;
+ item = new CLCDItemAggregate();
+ break;
 		}
 
 		if ( item )
 		{
-			return item;
+ return item;
 		}
 
 		Assert( 0 );
@@ -184,10 +184,10 @@ public:
 
 	void InitFromKeyValues( KeyValues *kv );
 
-	bool						m_bSubItem;
-	bool						m_bTitlePage;
-	bool						m_bRequiresPlayer;
-	int							m_nSubPageCount;
+	bool  m_bSubItem;
+	bool  m_bTitlePage;
+	bool  m_bRequiresPlayer;
+	int  	m_nSubPageCount;
 };
 
 //-----------------------------------------------------------------------------
@@ -196,58 +196,58 @@ public:
 class CLCD : public IHudLCD
 {
 public:
-						CLCD();
-						~CLCD();
+  CLCD();
+  ~CLCD();
 
 	// Implement IHudLCD
 	virtual void	SetGlobalStat( char const *name, char const *value );
 	virtual void	AddChatLine( char const *txt );
 
 	// Exposed as a ConCommand
-	void				Reload();
-	void				DumpPlayer();
+	void 	Reload();
+	void 	DumpPlayer();
 
 public:
 
 	// Init's called when the HUD's created at DLL load
-	void				Init( void );	
-	void				Shutdown();
-	void				Update( void );
-	bool				IsConnected() const;
+	void 	Init( void );	
+	void 	Shutdown();
+	void 	Update( void );
+	bool 	IsConnected() const;
 
 private:
 
 	CLCDItemIcon		*ParseItemIcon( CLCDPage *page, bool bCreateHandles, KeyValues *sub );
 	CLCDItemText		*ParseItemText( CLCDPage *page, bool bCreateHandles, KeyValues *sub );
-	void				ParseItems_R( CLCDPage *page, bool bCreateHandles, KeyValues *kv, CUtlVector< CLCDItem * >& list );
+	void 	ParseItems_R( CLCDPage *page, bool bCreateHandles, KeyValues *kv, CUtlVector< CLCDItem * >& list );
 
-	void				ParsePage( KeyValues *kv );
-	void				ParseIconMappings( KeyValues *kv );
-	void				ParseReplacements( KeyValues *kv );
-	void				DisplayCurrentPage( unsigned int dwCurTime );
+	void 	ParsePage( KeyValues *kv );
+	void 	ParseIconMappings( KeyValues *kv );
+	void 	ParseReplacements( KeyValues *kv );
+	void 	DisplayCurrentPage( unsigned int dwCurTime );
 
-	void				ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCDItem * >& list, bool show );
+	void 	ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCDItem * >& list, bool show );
 
-	int					FindTitlePage();
-	void				BuildUpdatedText( char const *in, CUtlString& out );
-	void				LookupToken( char const *token, CUtlString& value );
-	bool				ExtractArrayIndex( char *str, size_t bufsize, int *index );
+	int 		FindTitlePage();
+	void 	BuildUpdatedText( char const *in, CUtlString& out );
+	void 	LookupToken( char const *token, CUtlString& value );
+	bool 	ExtractArrayIndex( char *str, size_t bufsize, int *index );
 
-	bool				Replace( CUtlString& str, char const *search, char const *replace );
-	void				DoGlobalReplacements( CUtlString& str );
-	void				ReduceParentheses( CUtlString& str );
+	bool 	Replace( CUtlString& str, char const *search, char const *replace );
+	void 	DoGlobalReplacements( CUtlString& str );
+	void 	ReduceParentheses( CUtlString& str );
 
-	bool				IsPageValid( int currentPage, C_BasePlayer *player );
-	void				UpdateChat();
+	bool 	IsPageValid( int currentPage, C_BasePlayer *player );
+	void 	UpdateChat();
 
-	IG15					*m_lcd ;
+	IG15 		*m_lcd ;
 
-	CUtlString				m_Title;
-	int						m_Size[ 2 ];
+	CUtlString 	m_Title;
+	int  m_Size[ 2 ];
 	CUtlVector< CLCDPage * >	m_Pages;
-	int						m_nCurrentPage;
-	int						m_nSubPage;
-	int						m_nMaxChatHistory;
+	int  m_nCurrentPage;
+	int  m_nSubPage;
+	int  m_nMaxChatHistory;
 
 	CUtlDict< int, int >	m_TextSizes;
 	CUtlDict< int, int >	m_TextAlignments;
@@ -258,13 +258,13 @@ private:
 	};
 
 	CUtlDict< IconInfo_t, int >	m_Icons;
-	bool					m_bHadPlayer;
+	bool 		m_bHadPlayer;
 
 	CUtlDict< CUtlString, int >		m_GlobalStats;
 	CUtlVector< CUtlString >		m_ChatHistory;
 
-	unsigned int			m_dwNextUpdateTime;
-	CSysModule				*m_pG15Module;
+	unsigned int m_dwNextUpdateTime;
+	CSysModule 	*m_pG15Module;
 	CreateInterfaceFn		m_G15Factory;
 };
 

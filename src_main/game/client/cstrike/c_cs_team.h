@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side CTFTeam class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_CS_TEAM_H
 #define C_CS_TEAM_H
@@ -27,8 +27,8 @@ class C_CSTeam : public C_Team
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_CSTeam();
-	virtual			~C_CSTeam();
+ 		C_CSTeam();
+	virtual ~C_CSTeam();
 };
 
 

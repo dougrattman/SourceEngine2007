@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef DATATABLE_COMMON_H
 #define DATATABLE_COMMON_H
@@ -13,10 +13,10 @@
 #pragma once
 #endif	
 
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "tier0/dbg.h"
 #include "tier1/strtools.h"
-#include <stddef.h>
+#include <cstddef>
 
 // Max number of properties in a datatable and its children.
 #define MAX_DATATABLES		1024	// must be a power of 2.
@@ -29,7 +29,7 @@
 #define BITS_FULLRES	-1	// Use the full resolution of the type being encoded.
 #define BITS_WORLDCOORD	-2	// Encode as a world coordinate.
 
-#define DT_MAX_STRING_BITS			9
+#define DT_MAX_STRING_BITS 9
 #define DT_MAX_STRING_BUFFERSIZE	(1<<DT_MAX_STRING_BITS)	// Maximum length of a string that can be sent.
 
 #define STRINGBUFSIZE(className, varName)	sizeof( ((className*)0)->varName )
@@ -39,41 +39,41 @@
 
 
 // SendProp::m_Flags.
-#define SPROP_UNSIGNED			(1<<0)	// Unsigned integer data.
+#define SPROP_UNSIGNED (1<<0)	// Unsigned integer data.
 
-#define SPROP_COORD				(1<<1)	// If this is set, the float/vector is treated like a world coordinate.
-										// Note that the bit count is ignored in this case.
+#define SPROP_COORD 	(1<<1)	// If this is set, the float/vector is treated like a world coordinate.
+   	// Note that the bit count is ignored in this case.
 
-#define SPROP_NOSCALE			(1<<2)	// For floating point, don't scale into range, just take value as is.
+#define SPROP_NOSCALE (1<<2)	// For floating point, don't scale into range, just take value as is.
 
-#define SPROP_ROUNDDOWN			(1<<3)	// For floating point, limit high value to range minus one bit unit
+#define SPROP_ROUNDDOWN (1<<3)	// For floating point, limit high value to range minus one bit unit
 
-#define SPROP_ROUNDUP			(1<<4)	// For floating point, limit low value to range minus one bit unit
+#define SPROP_ROUNDUP (1<<4)	// For floating point, limit low value to range minus one bit unit
 
-#define SPROP_NORMAL			(1<<5)	// If this is set, the vector is treated like a normal (only valid for vectors)
-							
-#define SPROP_EXCLUDE			(1<<6)	// This is an exclude prop (not excludED, but it points at another prop to be excluded).
+#define SPROP_NORMAL (1<<5)	// If this is set, the vector is treated like a normal (only valid for vectors)
+  	
+#define SPROP_EXCLUDE (1<<6)	// This is an exclude prop (not excludED, but it points at another prop to be excluded).
 
-#define SPROP_XYZE				(1<<7)	// Use XYZ/Exponent encoding for vectors.
+#define SPROP_XYZE 	(1<<7)	// Use XYZ/Exponent encoding for vectors.
 
 #define SPROP_INSIDEARRAY		(1<<8)	// This tells us that the property is inside an array, so it shouldn't be put into the
-										// flattened property list. Its array will point at it when it needs to.
+   	// flattened property list. Its array will point at it when it needs to.
 
 #define SPROP_PROXY_ALWAYS_YES	(1<<9)	// Set for datatable props using one of the default datatable proxies like
-										// SendProxy_DataTableToDataTable that always send the data to all clients.
+   	// SendProxy_DataTableToDataTable that always send the data to all clients.
 
 #define SPROP_CHANGES_OFTEN		(1<<10)	// this is an often changed field, moved to head of sendtable so it gets a small index
 
 #define SPROP_IS_A_VECTOR_ELEM	(1<<11)	// Set automatically if SPROP_VECTORELEM is used.
 
 #define SPROP_COLLAPSIBLE		(1<<12)	// Set automatically if it's a datatable with an offset of 0 that doesn't change the pointer
-										// (ie: for all automatically-chained base classes).
-										// In this case, it can get rid of this SendPropDataTable altogether and spare the
-										// trouble of walking the hierarchy more than necessary.
+   	// (ie: for all automatically-chained base classes).
+   	// In this case, it can get rid of this SendPropDataTable altogether and spare the
+   	// trouble of walking the hierarchy more than necessary.
 
-#define SPROP_COORD_MP					(1<<13) // Like SPROP_COORD, but special handling for multiplayer games
+#define SPROP_COORD_MP 		(1<<13) // Like SPROP_COORD, but special handling for multiplayer games
 #define SPROP_COORD_MP_LOWPRECISION 	(1<<14) // Like SPROP_COORD, but special handling for multiplayer games where the fractional component only gets a 3 bits instead of 5
-#define SPROP_COORD_MP_INTEGRAL			(1<<15) // SPROP_COORD_MP, but coordinates are rounded to integral boundaries
+#define SPROP_COORD_MP_INTEGRAL (1<<15) // SPROP_COORD_MP, but coordinates are rounded to integral boundaries
 #define SPROP_NUMFLAGBITS_NETWORKED		16
 
 // This is server side only, it's used to mark properties whose SendProxy_* functions encode against gpGlobals->tickcount (the only ones that currently do this are
@@ -81,7 +81,7 @@
 #define SPROP_ENCODED_AGAINST_TICKCOUNT	(1<<16)
 
 // See SPROP_NUMFLAGBITS_NETWORKED for the ones which are networked
-#define SPROP_NUMFLAGBITS				17
+#define SPROP_NUMFLAGBITS 	17
 
 // Used by the SendProp and RecvProp functions to disable debug checks on type sizes.
 #define SIZEOF_IGNORE		-1
@@ -116,50 +116,50 @@ typedef enum
 class DVariant
 {
 public:
-				DVariant()				{m_Type = DPT_Float;}
-				DVariant(float val)		{m_Type = DPT_Float; m_Float = val;}
-				
-				const char *ToString()
-				{
-					static char text[128];
+ 	DVariant() 	{m_Type = DPT_Float;}
+ 	DVariant(float val)		{m_Type = DPT_Float; m_Float = val;}
+ 	
+ 	const char *ToString()
+ 	{
+ 		static char text[128];
 
-					switch ( m_Type )
-					{
-						case DPT_Int : 
-							Q_snprintf( text, sizeof(text), "%i", m_Int );
-							break;
-						case DPT_Float :
-							Q_snprintf( text, sizeof(text), "%.3f", m_Float );
-							break;
-						case DPT_Vector :
-							Q_snprintf( text, sizeof(text), "(%.3f,%.3f,%.3f)", 
-								m_Vector[0], m_Vector[1], m_Vector[2] );
-							break;
+ 		switch ( m_Type )
+ 		{
+  case DPT_Int : 
+  	Q_snprintf( text, sizeof(text), "%i", m_Int );
+  	break;
+  case DPT_Float :
+  	Q_snprintf( text, sizeof(text), "%.3f", m_Float );
+  	break;
+  case DPT_Vector :
+  	Q_snprintf( text, sizeof(text), "(%.3f,%.3f,%.3f)", 
+  		m_Vector[0], m_Vector[1], m_Vector[2] );
+  	break;
 #if 0 // We can't ship this since it changes the size of DTVariant to be 20 bytes instead of 16 and that breaks MODs!!!
-						case DPT_Quaternion :
-							Q_snprintf( text, sizeof(text), "(%.3f,%.3f,%.3f %.3f)", 
-								m_Vector[0], m_Vector[1], m_Vector[2], m_Vector[3] );
-							break;
+  case DPT_Quaternion :
+  	Q_snprintf( text, sizeof(text), "(%.3f,%.3f,%.3f %.3f)", 
+  		m_Vector[0], m_Vector[1], m_Vector[2], m_Vector[3] );
+  	break;
 #endif
-						case DPT_String : 
-							if ( m_pString ) 
-								return m_pString;
-							else
-								return "NULL";
-							break;
-						case DPT_Array :
-							Q_snprintf( text, sizeof(text), "Array" ); 
-							break;
-						case DPT_DataTable :
-							Q_snprintf( text, sizeof(text), "DataTable" ); 
-							break;
-						default :
-							Q_snprintf( text, sizeof(text), "DVariant type %i unknown", m_Type ); 
-							break;
-					}
+  case DPT_String : 
+  	if ( m_pString ) 
+  		return m_pString;
+  	else
+  		return "NULL";
+  	break;
+  case DPT_Array :
+  	Q_snprintf( text, sizeof(text), "Array" ); 
+  	break;
+  case DPT_DataTable :
+  	Q_snprintf( text, sizeof(text), "DataTable" ); 
+  	break;
+  default :
+  	Q_snprintf( text, sizeof(text), "DVariant type %i unknown", m_Type ); 
+  	break;
+ 		}
 
-					return text;
-				}
+ 		return text;
+ 	}
 
 	union
 	{

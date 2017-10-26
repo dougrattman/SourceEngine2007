@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: DOD's custom C_PlayerResource
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_DOD_PLAYERRESOURCE_H
 #define C_DOD_PLAYERRESOURCE_H
@@ -20,8 +20,8 @@ class C_DOD_PlayerResource : public C_PlayerResource
 public:
 	DECLARE_CLIENTCLASS();
 
-					C_DOD_PlayerResource();
-	virtual			~C_DOD_PlayerResource();
+ 		C_DOD_PlayerResource();
+	virtual ~C_DOD_PlayerResource();
 
 	int GetScore( int iIndex );
 	int GetPlayerClass( int iIndex );

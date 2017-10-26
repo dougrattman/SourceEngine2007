@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_GAMEVARS_SHARED_H
 #define CS_GAMEVARS_SHARED_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "convar.h"
+#include "tier1/convar.h"
 
 extern ConVar mp_forcecamera;
 extern ConVar mp_allowspectators;

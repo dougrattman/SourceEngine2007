@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef ENTITYDATAINSTANTIATOR_H
 #define ENTITYDATAINSTANTIATOR_H
@@ -51,7 +51,7 @@ public:
 
 		if ( handle != m_HashTable.InvalidHandle() )
 		{
-			return (void *)m_HashTable[ handle ].data;
+ return (void *)m_HashTable[ handle ].data;
 		}
 
 		return NULL;
@@ -67,12 +67,12 @@ public:
 		// Create it if not already present
 		if ( handle == m_HashTable.InvalidHandle() )
 		{
-			handle = m_HashTable.Insert( entry );
-			Assert( handle != m_HashTable.InvalidHandle() );
-			m_HashTable[ handle ].data = new T;
+ handle = m_HashTable.Insert( entry );
+ Assert( handle != m_HashTable.InvalidHandle() );
+ m_HashTable[ handle ].data = new T;
 	
-			// FIXME: We'll have to remove this if any objects we instance have vtables!!!
-			Q_memset( m_HashTable[ handle ].data, 0, sizeof( T ) );
+ // FIXME: We'll have to remove this if any objects we instance have vtables!!!
+ Q_memset( m_HashTable[ handle ].data, 0, sizeof( T ) );
 		}
 
 		return (void *)m_HashTable[ handle ].data;
@@ -87,8 +87,8 @@ public:
 
 		if ( handle != m_HashTable.InvalidHandle() )
 		{
-			delete m_HashTable[ handle ].data;
-			m_HashTable.Remove( handle );
+ delete m_HashTable[ handle ].data;
+ m_HashTable.Remove( handle );
 		}
 	}
 
@@ -98,12 +98,12 @@ private:
 	{
 		HashEntry()
 		{
-			key = NULL;
-			data = NULL;
+ key = NULL;
+ data = NULL;
 		}
 
 		const CBaseEntity *key;
-		T				*data;
+		T 	*data;
 	};
 
 	static bool CompareFunc( const HashEntry &src1, const HashEntry &src2 )

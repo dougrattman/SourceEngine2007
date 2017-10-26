@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef HUD_CLOSECAPTION_H
 #define HUD_CLOSECAPTION_H
@@ -36,23 +36,23 @@ struct AsyncCaption_t
 
 	struct BlockInfo_t
 	{
-		int			fileindex;
-		int			blocknum;
+		int fileindex;
+		int blocknum;
 		memhandle_t handle;
 
 		static bool Less( const BlockInfo_t& lhs, const BlockInfo_t& rhs )
 		{
-			if ( lhs.fileindex != rhs.fileindex )
-				return lhs.fileindex < rhs.fileindex;
+ if ( lhs.fileindex != rhs.fileindex )
+ 	return lhs.fileindex < rhs.fileindex;
 
-			return lhs.blocknum < rhs.blocknum;
+ return lhs.blocknum < rhs.blocknum;
 		}
 	};
 
 	AsyncCaption_t& operator =( const AsyncCaption_t& rhs )
 	{
 		if ( this == &rhs )
-			return *this;
+ return *this;
 
 		m_CaptionDirectory = rhs.m_CaptionDirectory;
 		m_Header = rhs.m_Header;
@@ -60,7 +60,7 @@ struct AsyncCaption_t
 
 		for ( int i = rhs.m_RequestedBlocks.FirstInorder(); i != rhs.m_RequestedBlocks.InvalidIndex(); i = rhs.m_RequestedBlocks.NextInorder( i ) )
 		{
-			m_RequestedBlocks.Insert( rhs.m_RequestedBlocks[ i ] );
+ m_RequestedBlocks.Insert( rhs.m_RequestedBlocks[ i ] );
 		}
 
 		return *this;
@@ -70,7 +70,7 @@ struct AsyncCaption_t
 
 	CaptionDictionary_t		m_CaptionDirectory;
 	CompiledCaptionHeader_t	m_Header;
-	CUtlSymbol				m_DataBaseFile;
+	CUtlSymbol 	m_DataBaseFile;
 };
 
 //-----------------------------------------------------------------------------
@@ -82,7 +82,7 @@ class CHudCloseCaption : public CHudElement, public vgui::Panel
 public:
 	DECLARE_MULTIPLY_INHERITED();
 
-					CHudCloseCaption( const char *pElementName );
+ 		CHudCloseCaption( const char *pElementName );
 	virtual 		~CHudCloseCaption();
 
 	// Expire lingering items
@@ -101,20 +101,20 @@ public:
 	void MsgFunc_CloseCaption(bf_read &msg);
 
 	// Clear all CC data
-	void			Reset( void );
-	void			Process( const wchar_t *stream, float duration, char const *tokenstream, bool fromplayer, bool direct = false );
+	void Reset( void );
+	void Process( const wchar_t *stream, float duration, char const *tokenstream, bool fromplayer, bool direct = false );
 	
-	bool			ProcessCaption( char const *tokenname, float duration, bool fromplayer = false, bool direct = false );
-	void			ProcessCaptionDirect( char const *tokenname, float duration, bool fromplayer = false );
+	bool ProcessCaption( char const *tokenname, float duration, bool fromplayer = false, bool direct = false );
+	void ProcessCaptionDirect( char const *tokenname, float duration, bool fromplayer = false );
 
-	void			ProcessSentenceCaptionStream( char const *tokenstream );
-	void			PlayRandomCaption();
+	void ProcessSentenceCaptionStream( char const *tokenstream );
+	void PlayRandomCaption();
 
-	void				InitCaptionDictionary( char const *dbfile );
-	void				OnFinishAsyncLoad( int nFileIndex, int nBlockNum, AsyncCaptionData_t *pData );
+	void 	InitCaptionDictionary( char const *dbfile );
+	void 	OnFinishAsyncLoad( int nFileIndex, int nBlockNum, AsyncCaptionData_t *pData );
 
-	void			Flush();
-	void			TogglePaintDebug();
+	void Flush();
+	void TogglePaintDebug();
 
 	enum
 	{
@@ -128,20 +128,20 @@ public:
 
 	static int GetFontNumber( bool bold, bool italic );
 
-	void			Lock( void );
-	void			Unlock( void );
+	void Lock( void );
+	void Unlock( void );
 
-	void			FindSound( char const *pchANSI );
+	void FindSound( char const *pchANSI );
 
 public:
 
 	struct CaptionRepeat
 	{
 		CaptionRepeat() :
-			m_nTokenIndex( 0 ),
-			m_flLastEmitTime( 0 ),
-			m_flInterval( 0 ),
-			m_nLastEmitTick( 0 )
+ m_nTokenIndex( 0 ),
+ m_flLastEmitTime( 0 ),
+ m_flInterval( 0 ),
+ m_nLastEmitTick( 0 )
 		{
 		}
 		int		m_nTokenIndex;
@@ -189,12 +189,12 @@ private:
 
 	vgui::HFont		m_hFonts[CCFONT_MAX];
 
-	void			CreateFonts( void );
+	void CreateFonts( void );
 
-	int			m_nLineHeight;
+	int m_nLineHeight;
 
-	int			m_nGoalHeight;
-	int			m_nCurrentHeight;
+	int m_nGoalHeight;
+	int m_nCurrentHeight;
 	float		m_flGoalAlpha;
 	float		m_flCurrentAlpha;
 	float		m_flGoalHeightStartTime;

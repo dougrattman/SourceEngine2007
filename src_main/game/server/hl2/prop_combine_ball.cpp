@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: combine ball -	can be held by the super physcannon and launched
 //							by the AR2's alt-fire
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "prop_combine_ball.h"

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that propagates general data needed by clients for every player.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "tf_objective_resource.h"
 #include "shareddefs.h"

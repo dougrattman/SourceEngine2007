@@ -225,10 +225,6 @@ SOURCE=..\Public\tier0\fasttimer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\tier0\l2cache.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\Public\tier0\mem.h
 # End Source File
 # Begin Source File

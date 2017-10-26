@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PLAYERNET_VARS_H
 #define PLAYERNET_VARS_H
@@ -63,15 +63,15 @@ struct fogplayerparams_t
 #endif
 
 	CNetworkHandle( CFogController, m_hCtrl );
-	float					m_flTransitionTime;
+	float 		m_flTransitionTime;
 
-	color32					m_OldColor;
-	float					m_flOldStart;
-	float					m_flOldEnd;
+	color32 		m_OldColor;
+	float 		m_flOldStart;
+	float 		m_flOldEnd;
 
-	color32					m_NewColor;
-	float					m_flNewStart;
-	float					m_flNewEnd;
+	color32 		m_NewColor;
+	float 		m_flNewStart;
+	float 		m_flNewEnd;
 
 	fogplayerparams_t()
 	{
@@ -115,7 +115,7 @@ struct audioparams_t
 
 	CNetworkArray( Vector, localSound, NUM_AUDIO_LOCAL_SOUNDS )
 	CNetworkVar( int, soundscapeIndex );	// index of the current soundscape from soundscape.txt
-	CNetworkVar( int, localBits );			// if bits 0,1,2,3 are set then position 0,1,2,3 are valid/used
+	CNetworkVar( int, localBits ); // if bits 0,1,2,3 are set then position 0,1,2,3 are valid/used
 	CNetworkHandle( CBaseEntity, ent );		// the entity setting the soundscape
 };
 

@@ -1,402 +1,348 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved.
+//============//
 //
-// Purpose: 
+// Purpose:
 //
 //=============================================================================//
 
 #include "stdafx.h"
+
 #include "Box3D.h"
 #include "GlobalFunctions.h"
-#include "fgdlib/HelperInfo.h"
-#include "materialsystem/IMaterialSystem.h"
-#include "MainFrm.h"			// For refreshing the object properties dialog
+#include "MainFrm.h"  // For refreshing the object properties dialog
 #include "MapDoc.h"
 #include "MapPlayerHullHandle.h"
 #include "MapSweptPlayerHull.h"
 #include "MapView2D.h"
 #include "Material.h"
+#include "ObjectProperties.h"  // For refreshing the object properties dialog
 #include "Options.h"
-#include "ObjectProperties.h"	// For refreshing the object properties dialog
 #include "Render2D.h"
 #include "Render3D.h"
-#include "StatusBarIDs.h"		// For updating status bar text
+#include "StatusBarIDs.h"  // For updating status bar text
 #include "ToolManager.h"
+#include "fgdlib/HelperInfo.h"
+#include "materialsystem/IMaterialSystem.h"
 #include "vgui/Cursor.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
 
-
 IMPLEMENT_MAPCLASS(CMapPlayerHullHandle);
 
-
 //-----------------------------------------------------------------------------
-// Purpose: Factory function. Used for creating a CMapPlayerHullHandle from a set
+// Purpose: Factory function. Used for creating a CMapPlayerHullHandle from a
+// set
 //			of string parameters from the FGD file.
 // Input  : pInfo - Pointer to helper info class which gives us information
 //				about how to create the class.
 // Output : Returns a pointer to the class, NULL if an error occurs.
 //-----------------------------------------------------------------------------
-CMapClass *CMapPlayerHullHandle::Create(CHelperInfo *pHelperInfo, CMapEntity *pParent)
-{
-	static char *pszDefaultKeyName = "origin";
+CMapClass *CMapPlayerHullHandle::Create(CHelperInfo *pHelperInfo,
+                                        CMapEntity *pParent) {
+  static const char *pszDefaultKeyName = "origin";
 
-	bool bDrawLineToParent = !stricmp(pHelperInfo->GetName(), "vecline");
+  bool bDrawLineToParent = !stricmp(pHelperInfo->GetName(), "vecline");
 
-	const char *pszKey = pHelperInfo->GetParameter(0);
-	if (pszKey == NULL)
-	{
-		pszKey = pszDefaultKeyName;
-	}
+  const char *pszKey = pHelperInfo->GetParameter(0);
+  if (pszKey == NULL) {
+    pszKey = pszDefaultKeyName;
+  }
 
-	CMapPlayerHullHandle *pBox = new CMapPlayerHullHandle(pszKey, bDrawLineToParent);
-	pBox->SetRenderColor(255, 255, 255);
-	return(pBox);
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pfMins - 
-//			pfMaxs - 
-//-----------------------------------------------------------------------------
-CMapPlayerHullHandle::CMapPlayerHullHandle(void)
-{
-	Initialize();
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pszKey - 
-//			bDrawLineToParent - 
-//-----------------------------------------------------------------------------
-CMapPlayerHullHandle::CMapPlayerHullHandle(const char *pszKey, bool bDrawLineToParent)
-{
-	Initialize();
-	strcpy(m_szKeyName, pszKey);
-	m_bDrawLineToParent = bDrawLineToParent;
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::Initialize(void)
-{
-	m_szKeyName[0] = '\0';
-
-	m_bDrawLineToParent = 0;
-
-	r = 255;
-	g = 255;
-	b = 255;
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-CMapPlayerHullHandle::~CMapPlayerHullHandle(void)
-{
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: Sets a backlink to our owner so we can call them in PrepareSelection.
-//-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::Attach( CMapSweptPlayerHull *pOwner )
-{
-	m_pOwner = pOwner;
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : bFullUpdate - 
-//-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::CalcBounds(BOOL bFullUpdate)
-{
-	// We don't affect our parent's 2D render bounds.
-	m_Render2DBox.ResetBounds();
-
-	// Calculate 3D culling box.
-	Vector Mins = m_Origin + Vector(-16, -16, -36);
-	Vector Maxs = m_Origin + Vector(16, 16, 36);
-
-	m_Render2DBox.UpdateBounds(Mins, Maxs);
-	m_CullBox = m_Render2DBox;
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Output : 
-//-----------------------------------------------------------------------------
-CMapClass *CMapPlayerHullHandle::Copy(bool bUpdateDependencies)
-{
-	CMapPlayerHullHandle *pCopy = new CMapPlayerHullHandle;
-
-	if (pCopy != NULL)
-	{
-		pCopy->CopyFrom(this, bUpdateDependencies);
-	}
-
-	return(pCopy);
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pObject - 
-// Output : 
-//-----------------------------------------------------------------------------
-CMapClass *CMapPlayerHullHandle::CopyFrom(CMapClass *pObject, bool bUpdateDependencies)
-{
-	Assert(pObject->IsMapClass(MAPCLASS_TYPE(CMapPlayerHullHandle)));
-	CMapPlayerHullHandle *pFrom = (CMapPlayerHullHandle *)pObject;
-
-	CMapClass::CopyFrom(pObject, bUpdateDependencies);
-
-	strcpy(m_szKeyName, pFrom->m_szKeyName);
-
-	return(this);
+  CMapPlayerHullHandle *pBox =
+      new CMapPlayerHullHandle(pszKey, bDrawLineToParent);
+  pBox->SetRenderColor(255, 255, 255);
+  return (pBox);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pView - 
-//			point - 
-//			nData - 
-// Output : 
+// Purpose:
+// Input  : pfMins -
+//			pfMaxs -
 //-----------------------------------------------------------------------------
-bool CMapPlayerHullHandle::HitTest2D(CMapView2D *pView, const Vector2D &point, HitInfo_t &HitData)
-{
-	if ( IsVisible() )
-	{
-		Vector2D vecClient;
-		pView->WorldToClient(vecClient, m_Origin);
-		if (pView->CheckDistance(point, vecClient, HANDLE_RADIUS))
-		{
-			HitData.pObject = this;
-			HitData.uData = 0;
-			HitData.nDepth = 0; // // handles have no depth
-			return true;
-		}
-	}
+CMapPlayerHullHandle::CMapPlayerHullHandle(void) { Initialize(); }
 
-	return false;
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : pszKey -
+//			bDrawLineToParent -
+//-----------------------------------------------------------------------------
+CMapPlayerHullHandle::CMapPlayerHullHandle(const char *pszKey,
+                                           bool bDrawLineToParent) {
+  Initialize();
+  strcpy(m_szKeyName, pszKey);
+  m_bDrawLineToParent = bDrawLineToParent;
 }
 
-
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pRender - 
+// Purpose:
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::Render2D(CRender2D *pRender)
-{
-	SelectionState_t eState = GetSelectionState();
-	if (eState == SELECT_MODIFY)
-	{
-        pRender->PushRenderMode( RENDER_MODE_DOTTED );
-		pRender->SetDrawColor( GetRValue(Options.colors.clrSelection), GetGValue(Options.colors.clrSelection), GetBValue(Options.colors.clrSelection) );
-	}
-	else
-	{
-		pRender->PushRenderMode( RENDER_MODE_FLAT );
-		pRender->SetDrawColor( GetRValue(Options.colors.clrToolHandle), GetGValue(Options.colors.clrToolHandle), GetBValue(Options.colors.clrToolHandle) );
-	}
+void CMapPlayerHullHandle::Initialize(void) {
+  m_szKeyName[0] = '\0';
 
-	Vector vecMins, vecMaxs;
-	GetRender2DBox(vecMins, vecMaxs);
+  m_bDrawLineToParent = 0;
 
-
-	pRender->DrawBox( vecMins, vecMaxs );
-
-	pRender->PopRenderMode();
-
-	// Draw center handle.
-	
-	color32 rgbColor = GetRenderColor();
-	
-	pRender->SetDrawColor( rgbColor.r, rgbColor.g, rgbColor.b );
-
-	if (eState == SELECT_NONE)
-	{
-		pRender->SetHandleStyle( HANDLE_RADIUS, CRender::HANDLE_CROSS );
-		
-	}
-	else
-	{
-		pRender->SetHandleStyle( HANDLE_RADIUS, CRender::HANDLE_CIRCLE );
-	}
-
-	pRender->DrawHandle( (vecMins+vecMaxs)/2 );
+  r = 255;
+  g = 255;
+  b = 255;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+CMapPlayerHullHandle::~CMapPlayerHullHandle(void) {}
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pRender - 
+// Purpose: Sets a backlink to our owner so we can call them in
+// PrepareSelection.
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::Render3D(CRender3D *pRender)
-{
-	if (GetSelectionState() == SELECT_NONE)
-	{
-		pRender->SetDrawColor( 200,180,0 );
-	}
-	else
-	{
-		pRender->SetDrawColor( 255,0,0 );
-	}
-
-	Vector Mins, Maxs;
-	m_Render2DBox.GetBounds( Mins, Maxs );
-
-	pRender->BeginRenderHitTarget(this);
-	pRender->RenderBox( Mins, Maxs, 200, 180, 0, SELECT_NONE );
-	pRender->EndRenderHitTarget();
-
-	if ((m_pParent != NULL) && (m_bDrawLineToParent))
-	{
-		Vector vecOrigin;
-		GetParent()->GetOrigin(vecOrigin);
-		pRender->DrawLine( m_Origin, vecOrigin );
-	}
+void CMapPlayerHullHandle::Attach(CMapSweptPlayerHull *pOwner) {
+  m_pOwner = pOwner;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : bFullUpdate -
+//-----------------------------------------------------------------------------
+void CMapPlayerHullHandle::CalcBounds(BOOL bFullUpdate) {
+  // We don't affect our parent's 2D render bounds.
+  m_Render2DBox.ResetBounds();
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-int CMapPlayerHullHandle::SerializeRMF(std::fstream &File, BOOL bRMF)
-{
-	return(0);
+  // Calculate 3D culling box.
+  Vector Mins = m_Origin + Vector(-16, -16, -36);
+  Vector Maxs = m_Origin + Vector(16, 16, 36);
+
+  m_Render2DBox.UpdateBounds(Mins, Maxs);
+  m_CullBox = m_Render2DBox;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose:
+// Output :
+//-----------------------------------------------------------------------------
+CMapClass *CMapPlayerHullHandle::Copy(bool bUpdateDependencies) {
+  CMapPlayerHullHandle *pCopy = new CMapPlayerHullHandle;
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-int CMapPlayerHullHandle::SerializeMAP(std::fstream &File, BOOL bRMF)
-{
-	return(0);
+  if (pCopy != NULL) {
+    pCopy->CopyFrom(this, bUpdateDependencies);
+  }
+
+  return (pCopy);
 }
 
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : pObject -
+// Output :
+//-----------------------------------------------------------------------------
+CMapClass *CMapPlayerHullHandle::CopyFrom(CMapClass *pObject,
+                                          bool bUpdateDependencies) {
+  Assert(pObject->IsMapClass(MAPCLASS_TYPE(CMapPlayerHullHandle)));
+  CMapPlayerHullHandle *pFrom = (CMapPlayerHullHandle *)pObject;
+
+  CMapClass::CopyFrom(pObject, bUpdateDependencies);
+
+  strcpy(m_szKeyName, pFrom->m_szKeyName);
+
+  return (this);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : pView -
+//			point -
+//			nData -
+// Output :
+//-----------------------------------------------------------------------------
+bool CMapPlayerHullHandle::HitTest2D(CMapView2D *pView, const Vector2D &point,
+                                     HitInfo_t &HitData) {
+  if (IsVisible()) {
+    Vector2D vecClient;
+    pView->WorldToClient(vecClient, m_Origin);
+    if (pView->CheckDistance(point, vecClient, HANDLE_RADIUS)) {
+      HitData.pObject = this;
+      HitData.uData = 0;
+      HitData.nDepth = 0;  // // handles have no depth
+      return true;
+    }
+  }
+
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : pRender -
+//-----------------------------------------------------------------------------
+void CMapPlayerHullHandle::Render2D(CRender2D *pRender) {
+  SelectionState_t eState = GetSelectionState();
+  if (eState == SELECT_MODIFY) {
+    pRender->PushRenderMode(RENDER_MODE_DOTTED);
+    pRender->SetDrawColor(GetRValue(Options.colors.clrSelection),
+                          GetGValue(Options.colors.clrSelection),
+                          GetBValue(Options.colors.clrSelection));
+  } else {
+    pRender->PushRenderMode(RENDER_MODE_FLAT);
+    pRender->SetDrawColor(GetRValue(Options.colors.clrToolHandle),
+                          GetGValue(Options.colors.clrToolHandle),
+                          GetBValue(Options.colors.clrToolHandle));
+  }
+
+  Vector vecMins, vecMaxs;
+  GetRender2DBox(vecMins, vecMaxs);
+
+  pRender->DrawBox(vecMins, vecMaxs);
+
+  pRender->PopRenderMode();
+
+  // Draw center handle.
+
+  color32 rgbColor = GetRenderColor();
+
+  pRender->SetDrawColor(rgbColor.r, rgbColor.g, rgbColor.b);
+
+  if (eState == SELECT_NONE) {
+    pRender->SetHandleStyle(HANDLE_RADIUS, CRender::HANDLE_CROSS);
+
+  } else {
+    pRender->SetHandleStyle(HANDLE_RADIUS, CRender::HANDLE_CIRCLE);
+  }
+
+  pRender->DrawHandle((vecMins + vecMaxs) / 2);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : pRender -
+//-----------------------------------------------------------------------------
+void CMapPlayerHullHandle::Render3D(CRender3D *pRender) {
+  if (GetSelectionState() == SELECT_NONE) {
+    pRender->SetDrawColor(200, 180, 0);
+  } else {
+    pRender->SetDrawColor(255, 0, 0);
+  }
+
+  Vector Mins, Maxs;
+  m_Render2DBox.GetBounds(Mins, Maxs);
+
+  pRender->BeginRenderHitTarget(this);
+  pRender->RenderBox(Mins, Maxs, 200, 180, 0, SELECT_NONE);
+  pRender->EndRenderHitTarget();
+
+  if ((m_pParent != NULL) && (m_bDrawLineToParent)) {
+    Vector vecOrigin;
+    GetParent()->GetOrigin(vecOrigin);
+    pRender->DrawLine(m_Origin, vecOrigin);
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+int CMapPlayerHullHandle::SerializeRMF(std::fstream &File, BOOL bRMF) {
+  return (0);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+int CMapPlayerHullHandle::SerializeMAP(std::fstream &File, BOOL bRMF) {
+  return (0);
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: Overridden because origin helpers don't take the color of their
 //			parent entity.
-// Input  : red, green, blue - 
+// Input  : red, green, blue -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::SetRenderColor(unsigned char red, unsigned char green, unsigned char blue)
-{
-}
-
+void CMapPlayerHullHandle::SetRenderColor(unsigned char red,
+                                          unsigned char green,
+                                          unsigned char blue) {}
 
 //-----------------------------------------------------------------------------
 // Purpose: Overridden because origin helpers don't take the color of their
 //			parent entity.
-// Input  : red, green, blue - 
+// Input  : red, green, blue -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::SetRenderColor(color32 rgbColor)
-{
+void CMapPlayerHullHandle::SetRenderColor(color32 rgbColor) {}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+// Input  : szKey -
+//			szValue -
+//-----------------------------------------------------------------------------
+void CMapPlayerHullHandle::OnParentKeyChanged(const char *szKey,
+                                              const char *szValue) {
+  if (stricmp(szKey, m_szKeyName) == 0) {
+    sscanf(szValue, "%f %f %f", &m_Origin.x, &m_Origin.y, &m_Origin.z);
+    CalcBounds();
+  }
 }
 
-
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : szKey - 
-//			szValue - 
+// Purpose:
+// Input  : vecOrigin -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::OnParentKeyChanged(const char *szKey, const char *szValue)
-{
-	if (stricmp(szKey, m_szKeyName) == 0)
-	{
-		sscanf(szValue, "%f %f %f", &m_Origin.x, &m_Origin.y, &m_Origin.z);
-		CalcBounds();
-	}
+void CMapPlayerHullHandle::UpdateOrigin(const Vector &vecOrigin) {
+  m_Origin = vecOrigin;
+  CalcBounds();
+  UpdateParentKey();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void CMapPlayerHullHandle::UpdateParentKey(void) {
+  // Snap to prevent error creep.
+  for (int i = 0; i < 3; i++) {
+    m_Origin[i] = rint(m_Origin[i] / 0.01f) * 0.01f;
+  }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : vecOrigin - 
-//-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::UpdateOrigin(const Vector &vecOrigin)
-{
-	m_Origin = vecOrigin;
-	CalcBounds();
-	UpdateParentKey();
+  if (m_szKeyName[0]) {
+    CMapEntity *pEntity = dynamic_cast<CMapEntity *>(m_pParent);
+    if (pEntity != NULL) {
+      char szValue[KEYVALUE_MAX_VALUE_LENGTH];
+      sprintf(szValue, "%g %g %g", (double)m_Origin.x, (double)m_Origin.y,
+              (double)m_Origin.z);
+      pEntity->NotifyChildKeyChanged(this, m_szKeyName, szValue);
+    }
+  }
 }
 
-
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
+// Input  : pTransBox -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::UpdateParentKey(void)
-{
-	// Snap to prevent error creep.
-	for (int i = 0; i < 3; i++)
-	{
-		m_Origin[i] = rint(m_Origin[i] / 0.01f) * 0.01f;
-	}
-
-	if (m_szKeyName[0])
-	{
-		CMapEntity *pEntity = dynamic_cast <CMapEntity *> (m_pParent);
-		if (pEntity != NULL)
-		{
-			char szValue[KEYVALUE_MAX_VALUE_LENGTH];
-			sprintf(szValue, "%g %g %g", (double)m_Origin.x, (double)m_Origin.y, (double)m_Origin.z);
-			pEntity->NotifyChildKeyChanged(this, m_szKeyName, szValue);
-
-		}
-	}
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : pTransBox - 
-//-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::DoTransform(const VMatrix &matrix)
-{
-	BaseClass::DoTransform(matrix);
-	UpdateParentKey();
+void CMapPlayerHullHandle::DoTransform(const VMatrix &matrix) {
+  BaseClass::DoTransform(matrix);
+  UpdateParentKey();
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the keyvalue in our parent when we are	added to the world.
-// Input  : pWorld - 
+// Input  : pWorld -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::OnAddToWorld(CMapWorld *pWorld)
-{
-	BaseClass::OnAddToWorld(pWorld);
-	UpdateParentKey();
+void CMapPlayerHullHandle::OnAddToWorld(CMapWorld *pWorld) {
+  BaseClass::OnAddToWorld(pWorld);
+  UpdateParentKey();
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when we change because of an Undo or Redo.
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::OnUndoRedo(void)
-{
-	// We've changed but our parent entity may not have. Update our parent.
-	UpdateParentKey();
+void CMapPlayerHullHandle::OnUndoRedo(void) {
+  // We've changed but our parent entity may not have. Update our parent.
+  UpdateParentKey();
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the keyvalue in our parent after the map is loaded.
-// Input  : pWorld - 
+// Input  : pWorld -
 //-----------------------------------------------------------------------------
-void CMapPlayerHullHandle::PostloadWorld(CMapWorld *pWorld)
-{
-	BaseClass::PostloadWorld(pWorld);
-	UpdateParentKey();
+void CMapPlayerHullHandle::PostloadWorld(CMapWorld *pWorld) {
+  BaseClass::PostloadWorld(pWorld);
+  UpdateParentKey();
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the appropriate object to the selection code.
@@ -404,8 +350,7 @@ void CMapPlayerHullHandle::PostloadWorld(CMapWorld *pWorld)
 // Output : Returns a pointer to the object that should be selected, based on
 //			the selection mode.
 //-----------------------------------------------------------------------------
-CMapClass *CMapPlayerHullHandle::PrepareSelection(SelectMode_t eSelectMode)
-{
-	Assert(m_pOwner);
-	return m_pOwner->PrepareSelection(eSelectMode);
+CMapClass *CMapPlayerHullHandle::PrepareSelection(SelectMode_t eSelectMode) {
+  Assert(m_pOwner);
+  return m_pOwner->PrepareSelection(eSelectMode);
 }

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the interface that the GameUI dll exports
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef GAMEUI_INTERFACE_H
 #define GAMEUI_INTERFACE_H
@@ -60,10 +60,10 @@ public:
 	virtual void OnGameUIHidden();
 	virtual void OLD_OnConnectToServer( const char *game, int IP, int port );	// OLD: use OnConnectToServer2
 	virtual void OnConnectToServer2( const char *game, int IP, int connectionPort, int queryPort );
-	virtual void OnDisconnectFromServer( uint8 eSteamLoginFailure );
+	virtual void OnDisconnectFromServer( uint8_t eSteamLoginFailure );
 	virtual void OnLevelLoadingStarted( bool bShowProgressDialog );
 	virtual void OnLevelLoadingFinished( bool bError, const char *failureReason, const char *extendedReason );
-	virtual void OnDisconnectFromServer_OLD( uint8 eSteamLoginFailure, const char *username ) { OnDisconnectFromServer( eSteamLoginFailure ); }
+	virtual void OnDisconnectFromServer_OLD( uint8_t eSteamLoginFailure, const char *username ) { OnDisconnectFromServer( eSteamLoginFailure ); }
 
 	// progress
 	virtual bool UpdateProgressBar(float progress, const char *statusText);
@@ -78,16 +78,16 @@ public:
 	// Xbox 360
 	virtual void SessionNotification( const int notification, const int param = 0 );
 	virtual void SystemNotification( const int notification );
-	virtual void ShowMessageDialog( const uint nType, vgui::Panel *pOwner = NULL );
-	virtual void CloseMessageDialog( const uint nType = 0 );
-	virtual void UpdatePlayerInfo( uint64 nPlayerId, const char *pName, int nTeam, byte cVoiceState, int nPlayersNeeded, bool bHost );
+	virtual void ShowMessageDialog( const uint32_t nType, vgui::Panel *pOwner = NULL );
+	virtual void CloseMessageDialog( const uint32_t nType = 0 );
+	virtual void UpdatePlayerInfo( uint64_t nPlayerId, const char *pName, int nTeam, uint8_t cVoiceState, int nPlayersNeeded, bool bHost );
 	virtual void SessionSearchResult( int searchIdx, void *pHostData, XSESSION_SEARCHRESULT *pResult, int ping );
 	virtual void OnCreditsFinished( void );
 
 	// X360 Storage device validation:
 	//		returns true right away if storage device has been previously selected.
 	//		otherwise returns false and will set the variable pointed by pStorageDeviceValidated to 1
-	//				  once the storage device is selected by user.
+	// 	  once the storage device is selected by user.
 	virtual bool ValidateStorageDevice( int *pStorageDeviceValidated );
 
 	virtual void SetProgressOnStart();

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Resource collection entity
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SKYCAMERA_H
 #define SKYCAMERA_H
@@ -32,7 +32,7 @@ public:
 
 public:
 	sky3dparams_t	m_skyboxData;
-	bool			m_bUseAngles;
+	bool m_bUseAngles;
 	CSkyCamera		*m_pNext;
 };
 

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 // Initializers are a way to register your object to be initialized at startup time.
 // They're a good way to have global variables without worrying about dependent
@@ -26,7 +26,7 @@ typedef void (*DeleteInitializerObjectFn)(void *ptr);
 class Initializer
 {
 public:
-					Initializer(void **pVar, CreateInitializerObjectFn createFn, DeleteInitializerObjectFn deleteFn);
+ 		Initializer(void **pVar, CreateInitializerObjectFn createFn, DeleteInitializerObjectFn deleteFn);
 
 	// Allocates all the global objects.
 	static bool		InitializeAllObjects();
@@ -36,22 +36,22 @@ public:
 
 
 private:
-	static Initializer			*s_pInitializers;
+	static Initializer *s_pInitializers;
 	
-	void						**m_pVar;
+	void  **m_pVar;
 	CreateInitializerObjectFn	m_CreateFn;
 	DeleteInitializerObjectFn	m_DeleteFn;
-	Initializer					*m_pNext;
+	Initializer 		*m_pNext;
 };
 
 
-#define REGISTER_INITIALIZER(className, varPointer)												\
-	static void* __Initializer__Create##className##Fn()				{return new className;}		\
+#define REGISTER_INITIALIZER(className, varPointer)    \
+	static void* __Initializer__Create##className##Fn() 	{return new className;}		\
 	static void* __Initializer__Delete##className##Fn(void *ptr)	{delete (className*)ptr;}	\
 	static Initializer g_Initializer_##className##(varPointer, __Initializer__Create##className##Fn, __Initializer__Delete##className##Fn);
 
 #define REGISTER_FUNCTION_INITIALIZER(functionName)	\
-	static void* __Initializer__Create##functionName##Fn()			{ functionName(); return 0; } \
+	static void* __Initializer__Create##functionName##Fn() { functionName(); return 0; } \
 	static Initializer g_Initializer_##functionName##(0, __Initializer__Create##functionName##Fn, 0);
 
 #endif

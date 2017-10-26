@@ -4,7 +4,7 @@
 //
 //=============================================================================
 #include "cbase.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "tf_weapon_parse.h"
 #include "tf_shareddefs.h"
 #include "tf_playerclass_shared.h"

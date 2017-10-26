@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef ANTLION_DUST_H
 #define ANTLION_DUST_H
 
@@ -17,8 +17,8 @@ public:
 	DECLARE_CLASS( CTEAntlionDust, CTEParticleSystem );
 	DECLARE_SERVERCLASS();
 
-					CTEAntlionDust( const char *name );
-	virtual			~CTEAntlionDust( void );
+ 		CTEAntlionDust( const char *name );
+	virtual ~CTEAntlionDust( void );
 
 	virtual void	Test( const Vector& current_origin, const QAngle& current_angles ) { };
 

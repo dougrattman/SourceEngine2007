@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DISP_TESSELATE_H
 #define DISP_TESSELATE_H
@@ -67,22 +67,22 @@ inline void TesselateDisplacementNode(
 		bool bNode = (iVertNode != -1) && pActiveChildren[iVertNode];
 		if( bNode )
 		{
-			if( iCurTriVert == 2 )
-				InternalEndTriangle( pHelper, nodeIndex, iCurTriVert );
-			
-			iCurTriVert = 0;
+ if( iCurTriVert == 2 )
+ 	InternalEndTriangle( pHelper, nodeIndex, iCurTriVert );
+ 
+ iCurTriVert = 0;
 		}
 		else
 		{
-			int iVertBit = InternalVertIndex( pHelper->m_pPowerInfo, sideVert );
-			if( pHelper->m_pActiveVerts[iVertBit>>5] & (1 << (iVertBit & 31)) )
-			{
-				// Ok, add a vert here.
-				pHelper->m_TempIndices[iCurTriVert] = (unsigned short)InternalVertIndex( pHelper->m_pPowerInfo, sideVert );
-				iCurTriVert++;
-				if( iCurTriVert == 2 )
-					InternalEndTriangle( pHelper, nodeIndex, iCurTriVert );
-			}
+ int iVertBit = InternalVertIndex( pHelper->m_pPowerInfo, sideVert );
+ if( pHelper->m_pActiveVerts[iVertBit>>5] & (1 << (iVertBit & 31)) )
+ {
+ 	// Ok, add a vert here.
+ 	pHelper->m_TempIndices[iCurTriVert] = (unsigned short)InternalVertIndex( pHelper->m_pPowerInfo, sideVert );
+ 	iCurTriVert++;
+ 	if( iCurTriVert == 2 )
+ 		InternalEndTriangle( pHelper, nodeIndex, iCurTriVert );
+ }
 		}
 	}
 }
@@ -120,27 +120,27 @@ inline void TesselateDisplacement_R(
 		int iChildNodeBit = iNodeBitIndex + 1;
 		for( int iChild=0; iChild < 4; iChild++ )
 		{
-			CVertIndex const &childNode = pHelper->m_pPowerInfo->m_pChildVerts[iNodeIndex].m_Verts[iChild];
+ CVertIndex const &childNode = pHelper->m_pPowerInfo->m_pChildVerts[iNodeIndex].m_Verts[iChild];
 
-			// Make sure we really can tesselate here (a smaller neighbor displacement could
-			// have inactivated certain edge verts.
-			int iVertBit = InternalVertIndex( pHelper->m_pPowerInfo, childNode );
-			bActiveChildren[iChild] = ( pHelper->m_pActiveVerts[iVertBit>>5] & (1 << (iVertBit & 31)) );
+ // Make sure we really can tesselate here (a smaller neighbor displacement could
+ // have inactivated certain edge verts.
+ int iVertBit = InternalVertIndex( pHelper->m_pPowerInfo, childNode );
+ bActiveChildren[iChild] = ( pHelper->m_pActiveVerts[iVertBit>>5] & (1 << (iVertBit & 31)) );
 
-			if( bActiveChildren[iChild] )
-			{
-				TesselateDisplacement_R( pHelper, childNode, iChildNodeBit, iLevel+1 );
-			}
-			else
-			{
-				// Make sure the triangle counts are cleared on this one because it may visit this
-				// node in GenerateDecalFragments_R if nodeInfo's CHILDREN_HAVE_TRIANGLES flag is set.
-				DispNodeInfo_t &childInfo = pHelper->GetNodeInfo( iChildNodeBit );
-				childInfo.m_Count = 0;
-				childInfo.m_Flags = 0;
-			}
+ if( bActiveChildren[iChild] )
+ {
+ 	TesselateDisplacement_R( pHelper, childNode, iChildNodeBit, iLevel+1 );
+ }
+ else
+ {
+ 	// Make sure the triangle counts are cleared on this one because it may visit this
+ 	// node in GenerateDecalFragments_R if nodeInfo's CHILDREN_HAVE_TRIANGLES flag is set.
+ 	DispNodeInfo_t &childInfo = pHelper->GetNodeInfo( iChildNodeBit );
+ 	childInfo.m_Count = 0;
+ 	childInfo.m_Flags = 0;
+ }
 
-			iChildNodeBit += pHelper->m_pPowerInfo->m_NodeIndexIncrements[iLevel];
+ iChildNodeBit += pHelper->m_pPowerInfo->m_NodeIndexIncrements[iLevel];
 		}
 	}
 
@@ -170,17 +170,17 @@ class CBaseTesselateHelper
 public:
 
 	// Functions your derived class must implement:
-	// void EndTriangle();								// (the 3 indices are in m_TempIndices).
+	// void EndTriangle();  		// (the 3 indices are in m_TempIndices).
 	// DispNodeInfo_t& GetNodeInfo( int iNodeBit );
 
 	
 	// Set these before calling TesselateDisplacement.
-	uint32 *m_pActiveVerts;		// These bits control the tesselation.
-	const CPowerInfo *m_pPowerInfo;								// Lots of precalculated data about a displacement this size.
+	uint32_t *m_pActiveVerts;		// These bits control the tesselation.
+	const CPowerInfo *m_pPowerInfo;  		// Lots of precalculated data about a displacement this size.
 	
 	
 	// Used internally by TesselateDisplacement.
-	int m_nIndices;						// After calling TesselateDisplacement, this is set to the # of indices generated.
+	int m_nIndices;  // After calling TesselateDisplacement, this is set to the # of indices generated.
 	unsigned short m_TempIndices[6];
 };
 
@@ -198,7 +198,7 @@ inline void TesselateDisplacement( TesselateHelper *pHelper )
 	TesselateDisplacement_R<TesselateHelper>(
 		pHelper,
 		pHelper->m_pPowerInfo->m_RootNode,
-		0,			// node bit indexing CDispDecal::m_NodeIntersects
+		0, // node bit indexing CDispDecal::m_NodeIntersects
 		0 );
 }
 

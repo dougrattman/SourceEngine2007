@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -94,24 +94,24 @@ protected:
 private:
 	void ShowNemesisPanel( bool bShow );
 
-	int						m_iYBase;
-	int						m_iKillerIndex;
+	int  m_iYBase;
+	int  m_iKillerIndex;
 	CTFHudPlayerHealth		*m_pKillerHealth;
-	int						m_iShowNemesisPanel;
+	int  m_iShowNemesisPanel;
 	CUtlVector<CTFFreezePanelCallout*>	m_pCalloutPanels;
-	float					m_flShowCalloutsAt;
-	float					m_flShowSnapshotReminderAt;
-	EditablePanel			*m_pNemesisSubPanel;
-	vgui::Label				*m_pFreezeLabel;
-	CTFImagePanel			*m_pFreezePanelBG;
+	float 		m_flShowCalloutsAt;
+	float 		m_flShowSnapshotReminderAt;
+	EditablePanel *m_pNemesisSubPanel;
+	vgui::Label 	*m_pFreezeLabel;
+	CTFImagePanel *m_pFreezePanelBG;
 	CAvatarImagePanel		*m_pAvatar;
 	vgui::EditablePanel		*m_pScreenshotPanel;
 	vgui::EditablePanel		*m_pBasePanel;
 
-	int 					m_iBasePanelOriginalX;
-	int 					m_iBasePanelOriginalY;
+	int  		m_iBasePanelOriginalX;
+	int  		m_iBasePanelOriginalY;
 
-	bool					m_bHoldingAfterScreenshot;
+	bool 		m_bHoldingAfterScreenshot;
 
 	enum 
 	{

@@ -1,26 +1,18 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: Wraps pointers to basic vgui interfaces
-//
-// $NoKeywords: $
-//===========================================================================//
+// Purpose: Wraps pointers to basic vgui interfaces.
 
-#ifndef VGUI_INTERNAL_H
-#define VGUI_INTERNAL_H
+#ifndef SOURCE_VGUI_INTERNAL_H_
+#define SOURCE_VGUI_INTERNAL_H_
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-#include <vgui/VGUI.h>
-#include "interface.h"
+#include "tier1/interface.h"
 #include "tier3/tier3.h"
+#include "vgui/VGUI.h"
 #include "xbox/xboxstubs.h"
 
-namespace vgui
-{
-
-bool VGui_InternalLoadInterfaces( CreateInterfaceFn *factoryList, int numFactories );
+namespace vgui {
+bool VGui_InternalLoadInterfaces(CreateInterfaceFn *factoryList,
+                                 int numFactories);
 
 // <vgui/IInputInternal.h> header
 extern class IInputInternal *g_pInput;
@@ -42,9 +34,6 @@ extern class IPanel *g_pIPanel;
 
 // methods
 void vgui_strcpy(char *dst, int dstLen, const char *src);
-} // namespace vgui
+}  // namespace vgui
 
-
-
-
-#endif // VGUI_INTERNAL_H
+#endif  // SOURCE_VGUI_INTERNAL_H_

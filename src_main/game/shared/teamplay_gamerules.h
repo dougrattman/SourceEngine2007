@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEAMPLAY_GAMERULES_H
 #define TEAMPLAY_GAMERULES_H
@@ -35,7 +35,7 @@
 
 
 #define MAX_TEAMNAME_LENGTH	16
-#define MAX_TEAMS			32
+#define MAX_TEAMS 32
 
 #define TEAMPLAY_TEAMLISTLENGTH		MAX_TEAMS*MAX_TEAMNAME_LENGTH
 
@@ -107,7 +107,7 @@ private:
 	const char *TeamWithFewestPlayers( void );
 
 	bool m_DisableDeathPenalty;
-	bool m_teamLimit;				// This means the server set only some teams as valid
+	bool m_teamLimit; 	// This means the server set only some teams as valid
 	char m_szTeamList[TEAMPLAY_TEAMLISTLENGTH];
 	bool m_bSwitchTeams;
 	bool m_bScrambleTeams;

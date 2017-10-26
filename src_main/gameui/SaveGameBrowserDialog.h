@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef SAVEGAMEBROWSERDIALOG_H
 #define SAVEGAMEBROWSERDIALOG_H
@@ -34,8 +34,8 @@ class CGameSavePanel : public vgui::EditablePanel
 
 public:
 	
-					CGameSavePanel( CSaveGameBrowserDialog *parent, SaveGameDescription_t *pSaveDesc, bool bCommandPanel = false );
-					~CGameSavePanel( void );
+ 		CGameSavePanel( CSaveGameBrowserDialog *parent, SaveGameDescription_t *pSaveDesc, bool bCommandPanel = false );
+ 		~CGameSavePanel( void );
 
 	virtual	void	ApplySchemeSettings( IScheme *pScheme );
 	
@@ -107,24 +107,24 @@ public:
 	virtual void	RefreshSaveGames( void );
 	
 	unsigned int	GetNumPanels( void ) { return m_SavePanels.Count(); }
-	bool			HasActivePanels( void ) { return ( m_SavePanels.Count() != 0 ); }
+	bool HasActivePanels( void ) { return ( m_SavePanels.Count() != 0 ); }
 	CGameSavePanel	*GetActivePanel( void );
-	int				GetActivePanelIndex( void ) { return m_iSelectedSave; }
+	int 	GetActivePanelIndex( void ) { return m_iSelectedSave; }
 	CFooterPanel	*GetFooterPanel( void ) { return m_pFooter; }
 	const SaveGameDescription_t *GetPanelSaveDecription( int idx ) { return ( IsValidPanel(idx) ? m_SavePanels[idx]->GetSaveInfo() : NULL ); }
 	const SaveGameDescription_t *GetActivePanelSaveDescription( void ) { return GetPanelSaveDecription( m_iSelectedSave ); }
 
-	uint			GetStorageSpaceUsed( void ) { return m_nUsedStorageSpace; }
+	uint32_t GetStorageSpaceUsed( void ) { return m_nUsedStorageSpace; }
 
-	void			SetSelectedSaveIndex( int index );
-	void			SetSelectedSave( const char *chapter );
-	void			AddPanel( CGameSavePanel *pPanel ) { m_SavePanels.AddToHead( pPanel ); }
+	void SetSelectedSaveIndex( int index );
+	void SetSelectedSave( const char *chapter );
+	void AddPanel( CGameSavePanel *pPanel ) { m_SavePanels.AddToHead( pPanel ); }
 	
-	void			RemoveActivePanel( void );
-	void			AnimateInsertNewPanel( const SaveGameDescription_t *pDesc );
-	void			AnimateOverwriteActivePanel( const SaveGameDescription_t *pNewDesc );
+	void RemoveActivePanel( void );
+	void AnimateInsertNewPanel( const SaveGameDescription_t *pDesc );
+	void AnimateOverwriteActivePanel( const SaveGameDescription_t *pNewDesc );
 
-	void			SetControlDisabled( bool bState ) { m_bControlDisabled = bState; }
+	void SetControlDisabled( bool bState ) { m_bControlDisabled = bState; }
 
 	// Xbox: Defined values are also used to shift the slot indices
 	enum EScrollDirection
@@ -137,23 +137,23 @@ public:
 
 protected:
 
-	bool				m_bFilterAutosaves;
+	bool 	m_bFilterAutosaves;
 	CKeyRepeatHandler	m_KeyRepeat;
 
-	bool				ParseSaveData( char const *pszFileName, char const *pszShortName, SaveGameDescription_t *save );
+	bool 	ParseSaveData( char const *pszFileName, char const *pszShortName, SaveGameDescription_t *save );
 
 private:
 	
 	CUtlVector<CGameSavePanel *>	m_SavePanels;
-	int								m_iSelectedSave;
-	float							m_ScrollSpeedSlow;
-	float							m_ScrollSpeedFast;
-	int								m_nDeletedPanel;	// Panel being subtracted
-	int								m_nAddedPanel;		// Panel being added
-	SaveGameDescription_t			m_NewSaveGameDesc;	// Held for panel animations
-	uint							m_nUsedStorageSpace;	// Amount of disk space used by save games 
+	int  		m_iSelectedSave;
+	float  	m_ScrollSpeedSlow;
+	float  	m_ScrollSpeedFast;
+	int  		m_nDeletedPanel;	// Panel being subtracted
+	int  		m_nAddedPanel;		// Panel being added
+	SaveGameDescription_t m_NewSaveGameDesc;	// Held for panel animations
+	uint32_t  	m_nUsedStorageSpace;	// Amount of disk space used by save games 
 	
-	vgui::Panel			*m_pCenterBg;
+	vgui::Panel *m_pCenterBg;
 	CFooterPanel		*m_pFooter;
 
 	// Xbox

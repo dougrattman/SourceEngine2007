@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_SCRIPTCONDITIONS_H
 #define AI_SCRIPTCONDITIONS_H
@@ -38,10 +38,10 @@ public:
 	{
 		if ( m_distSq != 0 )
 		{
-			float distSq = ( pEntity1->GetAbsOrigin() - pEntity2->GetAbsOrigin() ).LengthSqr();
-			bool fInside = ( distSq < m_distSq );
+ float distSq = ( pEntity1->GetAbsOrigin() - pEntity2->GetAbsOrigin() ).LengthSqr();
+ bool fInside = ( distSq < m_distSq );
 
-			return ( m_fInside == fInside );
+ return ( m_fInside == fInside );
 		}
 		return true;
 	}
@@ -61,17 +61,17 @@ public:
 
 	DECLARE_SIMPLE_DATADESC();
 
-	void			SetActor( CBaseEntity *pEntity ) { m_hActor = pEntity; }
+	void SetActor( CBaseEntity *pEntity ) { m_hActor = pEntity; }
 	CBaseEntity		*GetActor( void ){ return m_hActor.Get(); }
 
-	void			SetTimer( CSimTimer timer ) { m_Timer = timer;	}
+	void SetTimer( CSimTimer timer ) { m_Timer = timer;	}
 	CSimTimer		*GetTimer( void ) { return &m_Timer;	}
 	
-	void			SetTimeOut( CSimTimer timeout) { m_Timeout = timeout;	}
+	void SetTimeOut( CSimTimer timeout) { m_Timeout = timeout;	}
 	CSimTimer		*GetTimeOut( void ) { return &m_Timeout;	}
 
 private:
-	EHANDLE			m_hActor;
+	EHANDLE m_hActor;
 	CSimTimer		m_Timer;
 	CSimTimer		m_Timeout;
 };
@@ -80,7 +80,7 @@ private:
 // class CAI_ScriptConditions
 //
 // Purpose: Watches a set of conditions relative to a given NPC, and when they
-//			are all satisfied, fires the relevant output
+// are all satisfied, fires the relevant output
 //-----------------------------------------------------------------------------
 
 class CAI_ScriptConditions : public CBaseEntity, public IEntityListener
@@ -124,7 +124,7 @@ private:
 	void Enable();
 	void Disable();
 
-	void SetThinkTime()			{ SetNextThink( gpGlobals->curtime + 0.250 ); }
+	void SetThinkTime() { SetNextThink( gpGlobals->curtime + 0.250 ); }
 
 	// Evaluators
 	struct EvalArgs_t
@@ -168,7 +168,7 @@ private:
 	//---------------------------------
 
 #ifndef HL2_EPISODIC
-	CBaseEntity *GetActor()		{ return m_hActor.Get();			}
+	CBaseEntity *GetActor()		{ return m_hActor.Get(); }
 #endif
 	CBasePlayer *GetPlayer()	{ return UTIL_GetLocalPlayer();	}
 
@@ -181,7 +181,7 @@ private:
 	struct EvaluatorInfo_t
 	{
 		EvaluationFunc_t	pfnEvaluator;
-		const char			*pszName;
+		const char *pszName;
 	};
 
 	static EvaluatorInfo_t gm_Evaluators[];
@@ -198,15 +198,15 @@ private:
 	//---------------------------------
 	// General conditions info
 
-	bool			m_fDisabled;
-	bool			m_bLeaveAsleep;
-	EHANDLE			m_hTarget;
+	bool m_fDisabled;
+	bool m_bLeaveAsleep;
+	EHANDLE m_hTarget;
 
-	float			m_flRequiredTime;	// How long should the conditions me true
+	float m_flRequiredTime;	// How long should the conditions me true
 
 #ifndef HL2_EPISODIC
 	EHANDLE 		m_hActor;
-	CSimTimer		m_Timer; 			// @TODO (toml 07-16-02): save/load of timer once Jay has save/load of contained objects
+	CSimTimer		m_Timer;  // @TODO (toml 07-16-02): save/load of timer once Jay has save/load of contained objects
 	CSimTimer		m_Timeout;
 #endif
 
@@ -218,28 +218,28 @@ private:
 	ThreeState_t 	m_fActorSeePlayer;
 	string_t		m_Actor;
 
-	float 			m_flPlayerActorProximity;
+	float  m_flPlayerActorProximity;
 	CAI_ProxTester	m_PlayerActorProxTester;
 
-	float			m_flPlayerActorFOV;
-	bool			m_bPlayerActorFOVTrueCone;
+	float m_flPlayerActorFOV;
+	bool m_bPlayerActorFOVTrueCone;
 	ThreeState_t	m_fPlayerActorLOS;
 	ThreeState_t 	m_fActorSeeTarget;
 
-	float 			m_flActorTargetProximity;
+	float  m_flActorTargetProximity;
 	CAI_ProxTester	m_ActorTargetProxTester;
 
-	float 			m_flPlayerTargetProximity;
+	float  m_flPlayerTargetProximity;
 	CAI_ProxTester	m_PlayerTargetProxTester;
 
-	float 			m_flPlayerTargetFOV;
-	bool			m_bPlayerTargetFOVTrueCone;
+	float  m_flPlayerTargetFOV;
+	bool m_bPlayerTargetFOVTrueCone;
 	ThreeState_t	m_fPlayerTargetLOS;
 	ThreeState_t	m_fPlayerBlockingActor;
 	ThreeState_t	m_fActorInPVS;
 
-	float			m_flMinTimeout;
-	float			m_flMaxTimeout;
+	float m_flMinTimeout;
+	float m_flMaxTimeout;
 
 	ThreeState_t	m_fActorInVehicle;
 	ThreeState_t	m_fPlayerInVehicle;

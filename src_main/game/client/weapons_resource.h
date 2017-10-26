@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WEAPONS_RESOURCE_H
 #define WEAPONS_RESOURCE_H
@@ -19,7 +19,7 @@ class CHudTexture;
 
 //-----------------------------------------------------------------------------
 // Purpose: Stores data about the Weapon Definitions passed to the client when
-//			the client first connects to a server. 
+// the client first connects to a server. 
 //-----------------------------------------------------------------------------
 class WeaponsResource
 {
@@ -35,7 +35,7 @@ public:
 	void LoadAllWeaponSprites( void );
 
 	// Ammo Handling
-	CHudTexture					*GetAmmoIconFromWeapon( int iAmmoId );
+	CHudTexture 		*GetAmmoIconFromWeapon( int iAmmoId );
 	const FileWeaponInfo_t		*GetWeaponFromAmmo( int iAmmoId );
 };
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef INIT_FACTORY_H
 #define INIT_FACTORY_H
@@ -12,7 +12,7 @@
 #endif
 
 
-#include "interface.h"
+#include "tier1/interface.h"
 
 struct factorylist_t
 {

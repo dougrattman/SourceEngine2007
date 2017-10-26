@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8c19b7be-d839-4284-a871-9465538258d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\7Zip Common">
+      <UniqueIdentifier>{b38f8c4a-ce45-4cc4-9574-c362fc1f5bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{989fea7c-67b1-46c2-b5d0-c434aa69ff26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress">
+      <UniqueIdentifier>{d1a712bd-7d2d-40bc-ab22-a3422e4cec33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\LZ">
+      <UniqueIdentifier>{7ac2a80c-fd9b-47ea-93e7-2b551968a435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\LZ\BT">
+      <UniqueIdentifier>{915c9d39-98c1-4434-94cb-6eb8beec6ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\LZ\HC">
+      <UniqueIdentifier>{3431d8bb-f96a-4bd8-949b-c4dc18f8be19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\LZMA">
+      <UniqueIdentifier>{3bfbac3f-da6d-4733-be0a-162890f174cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\LZMA_C">
+      <UniqueIdentifier>{4d04c969-b925-4050-817c-d59d992a1e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compress\RangeCoder">
+      <UniqueIdentifier>{59032065-0650-491a-b739-729bfabaa313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{dc6e0204-8d2d-4431-808c-3c4146ba019d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lzma.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Common\OutBuffer.cpp">
+      <Filter>Source Files\7Zip Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Common\StreamUtils.cpp">
+      <Filter>Source Files\7Zip Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C\Common\Alloc.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C\Common\CRC.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\LZ\LZInWindow.cpp">
+      <Filter>Source Files\Compress\LZ</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\LZ\LZOutWindow.cpp">
+      <Filter>Source Files\Compress\LZ</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\LZMA\LZMADecoder.cpp">
+      <Filter>Source Files\Compress\LZMA</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\LZMA\LZMAEncoder.cpp">
+      <Filter>Source Files\Compress\LZMA</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\LZMA_C\LzmaDecode.c">
+      <Filter>Source Files\Compress\LZMA_C</Filter>
+    </ClCompile>
+    <ClCompile Include="C\7zip\Compress\RangeCoder\RangeCoderBit.cpp">
+      <Filter>Source Files\Compress\RangeCoder</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C\7zip\Common\OutBuffer.h">
+      <Filter>Source Files\7Zip Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Common\StreamUtils.h">
+      <Filter>Source Files\7Zip Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\Alloc.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\CRC.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\Defs.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\MyCom.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\MyWindows.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\Common\Types.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\IMatchFinder.h">
+      <Filter>Source Files\Compress\LZ</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\LZInWindow.h">
+      <Filter>Source Files\Compress\LZ</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\LZOutWindow.h">
+      <Filter>Source Files\Compress\LZ</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree2.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree3.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree3Z.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTree4.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\BinTree\BinTreeMain.h">
+      <Filter>Source Files\Compress\LZ\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\HashChain\HC4.h">
+      <Filter>Source Files\Compress\LZ\HC</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZ\HashChain\HCMain.h">
+      <Filter>Source Files\Compress\LZ\HC</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZMA\LZMA.h">
+      <Filter>Source Files\Compress\LZMA</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZMA\LZMADecoder.h">
+      <Filter>Source Files\Compress\LZMA</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZMA\LZMAEncoder.h">
+      <Filter>Source Files\Compress\LZMA</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZMA_C\LzmaDecode.h">
+      <Filter>Source Files\Compress\LZMA_C</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\LZMA_C\LzmaTypes.h">
+      <Filter>Source Files\Compress\LZMA_C</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoder.h">
+      <Filter>Source Files\Compress\RangeCoder</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderBit.h">
+      <Filter>Source Files\Compress\RangeCoder</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderBitTree.h">
+      <Filter>Source Files\Compress\RangeCoder</Filter>
+    </ClInclude>
+    <ClInclude Include="C\7zip\Compress\RangeCoder\RangeCoderOpt.h">
+      <Filter>Source Files\Compress\RangeCoder</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lzma.vpc">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Engineer's Sentrygun
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_OBJ_SENTRYGUN_H
 #define TF_OBJ_SENTRYGUN_H
@@ -42,7 +42,7 @@ public:
 	virtual void	Spawn();
 	virtual void	Precache();
 	virtual void	OnGoActive( void );
-	virtual int		DrawDebugTextOverlays(void);
+	virtual int		DrawDebugTextOverlays();
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
 	virtual void	Killed( const CTakeDamageInfo &info );
 	virtual void	SetModel( const char *pModel );
@@ -58,10 +58,10 @@ public:
 
 	virtual int		GetTracerAttachment( void );
 
-	void			UpgradeThink( void );
+	void UpgradeThink( void );
 	virtual bool	IsUpgrading( void ) const;
 
-	int				GetUpgradeLevel( void ) { return m_iUpgradeLevel; }
+	int 	GetUpgradeLevel( void ) { return m_iUpgradeLevel; }
 
 private:
 

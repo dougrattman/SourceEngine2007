@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Base combat character with no AI
 //
@@ -70,7 +70,7 @@ public:
 	void	DoCustomSpeechAI( void );
 
 	Disposition_t	IRelationType( CBaseEntity *pTarget );
-	int				IRelationPriority( CBaseEntity *pTarget );
+	int 	IRelationPriority( CBaseEntity *pTarget );
 
 	CAI_FollowBehavior &GetFollowBehavior( void );
 
@@ -171,8 +171,8 @@ public:
 
 	PassengerState_e	GetPassengerState( void );
 
-	void				Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	bool				PlayerInSpread( const Vector &sourcePos, const Vector &targetPos, float flSpread, float maxDistOffCenter, bool ignoreHatedPlayers );
+	void 	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	bool 	PlayerInSpread( const Vector &sourcePos, const Vector &targetPos, float flSpread, float maxDistOffCenter, bool ignoreHatedPlayers );
 
 private:
 	EHANDLE	m_hEmpTool;
@@ -225,8 +225,8 @@ private:
 
 	CAI_FuncTankBehavior	m_FuncTankBehavior;
 
-	COutputEvent			m_OnFinishInteractWithObject;
-	COutputEvent			m_OnPlayerUse;
+	COutputEvent m_OnFinishInteractWithObject;
+	COutputEvent m_OnPlayerUse;
 
 	bool	RunningPassengerBehavior( void );
 
@@ -246,7 +246,7 @@ private:
 		COND_ALYX_PLAYER_TURNED_ON_FLASHLIGHT,
 		COND_ALYX_PLAYER_TURNED_OFF_FLASHLIGHT,
 		COND_ALYX_PLAYER_FLASHLIGHT_EXPIRED,
-		COND_ALYX_IN_DARK,					// lights are out and she can't see
+		COND_ALYX_IN_DARK, 		// lights are out and she can't see
 	};
 
 	enum

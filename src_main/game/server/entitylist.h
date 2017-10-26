@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 #ifndef ENTITYLIST_H
 #define ENTITYLIST_H
@@ -45,13 +45,13 @@ public:
 		T *pCur = *pPrev;
 		while ( pCur )
 		{
-			if ( pCur == pEntity )
-			{
-				*pPrev = pCur->m_pNext;
-				return;
-			}
-			pPrev = &pCur->m_pNext;
-			pCur = *pPrev;
+ if ( pCur == pEntity )
+ {
+ 	*pPrev = pCur->m_pNext;
+ 	return;
+ }
+ pPrev = &pCur->m_pNext;
+ pCur = *pPrev;
 		}
 	}
 
@@ -68,7 +68,7 @@ public:
 
 //-----------------------------------------------------------------------------
 // Purpose: a global list of all the entities in the game.  All iteration through
-//			entities is done through this object.
+// entities is done through this object.
 //-----------------------------------------------------------------------------
 class CGlobalEntityList : public CBaseEntityList
 {
@@ -127,9 +127,9 @@ public:
 	{
 		for ( CBaseEntity *x = NextEnt( start ); x; x = NextEnt( x ) )
 		{
-			start = dynamic_cast<T*>( x );
-			if ( start )
-				return start;
+ start = dynamic_cast<T*>( x );
+ if ( start )
+ 	return start;
 		}
 		return NULL;
 	}
@@ -273,7 +273,7 @@ public:
 	~CEntityList();
 
 	int m_iNumItems;
-	entitem_t *m_pItemList;	// null terminated singly-linked list
+	entitem_t *m_pItemList;	// 0 terminated singly-linked list
 
 	void AddEntity( CBaseEntity * );
 	void DeleteEntity( CBaseEntity * );

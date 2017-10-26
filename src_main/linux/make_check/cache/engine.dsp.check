@@ -3026,10 +3026,6 @@ SOURCE=.\KEYS.H
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\tier0\l2cache.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\l_studio.h
 # End Source File
 # Begin Source File

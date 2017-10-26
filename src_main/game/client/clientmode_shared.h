@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( CLIENTMODE_NORMAL_H )
 #define CLIENTMODE_NORMAL_H
 #ifdef _WIN32
@@ -38,8 +38,8 @@ class ClientModeShared : public IClientMode, public CGameEventListener
 public:
 	DECLARE_CLASS_NOBASE( ClientModeShared );
 
-					ClientModeShared();
-	virtual			~ClientModeShared();
+ 		ClientModeShared();
+	virtual ~ClientModeShared();
 	
 	virtual void	Init();
 	virtual void	InitViewport();
@@ -95,15 +95,15 @@ public:
 	virtual int HandleSpectatorKeyInput( int down, ButtonCode_t keynum, const char *pszCurrentBinding );
 
 protected:
-	CBaseViewport			*m_pViewport;
+	CBaseViewport *m_pViewport;
 
 private:
 	// Message mode handling
 	// All modes share a common chat interface
-	CBaseHudChat			*m_pChatElement;
-	vgui::HCursor			m_CursorNone;
+	CBaseHudChat *m_pChatElement;
+	vgui::HCursor m_CursorNone;
 	CBaseHudWeaponSelection *m_pWeaponSelection;
-	int						m_nRootSize[2];
+	int  m_nRootSize[2];
 };
 
 #endif // CLIENTMODE_NORMAL_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity that propagates general data needed by clients for every player.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_PLAYERRESOURCE_H
 #define C_PLAYERRESOURCE_H
@@ -23,8 +23,8 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
-					C_PlayerResource();
-	virtual			~C_PlayerResource();
+ 		C_PlayerResource();
+	virtual ~C_PlayerResource();
 
 public : // IGameResources intreface
 

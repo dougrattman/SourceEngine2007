@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( VGUI_INT_H )
 #define VGUI_INT_H
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1/interface.h"
 
 #include <vgui/VGUI.h>
 

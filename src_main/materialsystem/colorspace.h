@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef COLORSPACE_H
 #define COLORSPACE_H
@@ -54,16 +54,16 @@ namespace ColorSpace
 		int i, j;
 		for( j = 0; j < 3; j++ )
 		{
-			i = RoundFloatToInt( pSrcRGB[j] * 1024 );	// assume 0..4 range
-			if (i < 0)
-			{
-				i = 0;
-			}
-			if (i > 4091)
-			{
-				i = 4091;
-			}
-			tmpVect[j] = g_LinearToVertex[i];
+ i = RoundFloatToInt( pSrcRGB[j] * 1024 );	// assume 0..4 range
+ if (i < 0)
+ {
+ 	i = 0;
+ }
+ if (i > 4091)
+ {
+ 	i = 4091;
+ }
+ tmpVect[j] = g_LinearToVertex[i];
 		}
 #else		
 		tmpVect[0] = LinearToVertexLight( pSrcRGB[0] );
@@ -100,19 +100,19 @@ namespace ColorSpace
 		int i;
 		for( i = 0; i < 3; i++ )
 		{
-			float max = VectorMaximum( *colors[order[i]] );
-			if( max <= 1.0f )
-			{
-				continue;
-			}
-			// This channel is too bright. . take half of the amount that we are over and 
-			// add it to the other two channel.
-			float factorToRedist = ( max - 1.0f ) / max;
-			Vector colorToRedist = factorToRedist * *colors[order[i]];
-			*colors[order[i]] -= colorToRedist;
-			colorToRedist *= 0.5f;
-			*colors[order[(i+1)%3]] += colorToRedist;
-			*colors[order[(i+2)%3]] += colorToRedist;
+ float max = VectorMaximum( *colors[order[i]] );
+ if( max <= 1.0f )
+ {
+ 	continue;
+ }
+ // This channel is too bright. . take half of the amount that we are over and 
+ // add it to the other two channel.
+ float factorToRedist = ( max - 1.0f ) / max;
+ Vector colorToRedist = factorToRedist * *colors[order[i]];
+ *colors[order[i]] -= colorToRedist;
+ colorToRedist *= 0.5f;
+ *colors[order[(i+1)%3]] += colorToRedist;
+ *colors[order[(i+2)%3]] += colorToRedist;
 		}
 
 		ColorClamp( color1 );
@@ -152,25 +152,25 @@ namespace ColorSpace
 		Vector correctionScale;
 		if( *( int * )&bumpAverage[0] != 0 && *( int * )&bumpAverage[1] != 0 && *( int * )&bumpAverage[2] != 0 )
 		{
-			// fast path when we know that we don't have to worry about divide by zero.
-			VectorDivide( gammaGoal, bumpAverage, correctionScale );
-//			correctionScale = gammaGoal / bumpSum;
+ // fast path when we know that we don't have to worry about divide by zero.
+ VectorDivide( gammaGoal, bumpAverage, correctionScale );
+// correctionScale = gammaGoal / bumpSum;
 		}
 		else
 		{
-			correctionScale.Init( 0.0f, 0.0f, 0.0f );
-			if( bumpAverage[0] != 0.0f )
-			{
-				correctionScale[0] = gammaGoal[0] / bumpAverage[0];
-			}
-			if( bumpAverage[1] != 0.0f )
-			{
-				correctionScale[1] = gammaGoal[1] / bumpAverage[1];
-			}
-			if( bumpAverage[2] != 0.0f )
-			{
-				correctionScale[2] = gammaGoal[2] / bumpAverage[2];
-			}
+ correctionScale.Init( 0.0f, 0.0f, 0.0f );
+ if( bumpAverage[0] != 0.0f )
+ {
+ 	correctionScale[0] = gammaGoal[0] / bumpAverage[0];
+ }
+ if( bumpAverage[1] != 0.0f )
+ {
+ 	correctionScale[1] = gammaGoal[1] / bumpAverage[1];
+ }
+ if( bumpAverage[2] != 0.0f )
+ {
+ 	correctionScale[2] = gammaGoal[2] / bumpAverage[2];
+ }
 		}
 		Vector correctedBumpColor1;
 		Vector correctedBumpColor2;
@@ -198,7 +198,7 @@ namespace ColorSpace
 	}
 
 	
-	uint16 LinearFloatToCorrectedShort( float in );
+	uint16_t LinearFloatToCorrectedShort( float in );
 
 	inline unsigned short LinearToUnsignedShort( float in, int nFractionalBits )
 	{
@@ -244,27 +244,27 @@ namespace ColorSpace
 		Vector correctionScale;
 
 		if( *( int * )&bumpAverage[0] != 0 &&
-			*( int * )&bumpAverage[1] != 0 &&
-			*( int * )&bumpAverage[2] != 0 )
+ *( int * )&bumpAverage[1] != 0 &&
+ *( int * )&bumpAverage[2] != 0 )
 		{
-			// fast path when we know that we don't have to worry about divide by zero.
-			VectorDivide( linearUnbumped, bumpAverage, correctionScale );
+ // fast path when we know that we don't have to worry about divide by zero.
+ VectorDivide( linearUnbumped, bumpAverage, correctionScale );
 		}
 		else
 		{
-			correctionScale.Init( 0.0f, 0.0f, 0.0f );
-			if( bumpAverage[0] != 0.0f )
-			{
-				correctionScale[0] = linearUnbumped[0] / bumpAverage[0];
-			}
-			if( bumpAverage[1] != 0.0f )
-			{
-				correctionScale[1] = linearUnbumped[1] / bumpAverage[1];
-			}
-			if( bumpAverage[2] != 0.0f )
-			{
-				correctionScale[2] = linearUnbumped[2] / bumpAverage[2];
-			}
+ correctionScale.Init( 0.0f, 0.0f, 0.0f );
+ if( bumpAverage[0] != 0.0f )
+ {
+ 	correctionScale[0] = linearUnbumped[0] / bumpAverage[0];
+ }
+ if( bumpAverage[1] != 0.0f )
+ {
+ 	correctionScale[1] = linearUnbumped[1] / bumpAverage[1];
+ }
+ if( bumpAverage[2] != 0.0f )
+ {
+ 	correctionScale[2] = linearUnbumped[2] / bumpAverage[2];
+ }
 		}
 		linearBump1 *= correctionScale;
 		linearBump2 *= correctionScale;
@@ -303,7 +303,7 @@ namespace ColorSpace
 
 		// divide unbumped linear by the average to get the correction scale
 		correctionScale = MulSIMD( AndNotSIMD(zeroTerms, linearColor), // crush values that were zero in bumpAverage. (saves on dep latency)
-								   correctionScale);				   // still has an extra 1/3 factor multiplied in
+  		   correctionScale); 	   // still has an extra 1/3 factor multiplied in
 
 		// multiply this against three to get the return values
 		ret = linearColor;

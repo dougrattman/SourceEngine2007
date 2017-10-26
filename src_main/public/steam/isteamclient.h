@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -14,9 +14,9 @@
 #include "steamclientpublic.h"
 
 // handle to a communication pipe to the Steam client
-typedef int32 HSteamPipe;
+typedef int32_t HSteamPipe;
 // handle to single instance of a steam user
-typedef int32 HSteamUser;
+typedef int32_t HSteamUser;
 
 #ifndef DLL_EXPORT
 #define DLL_EXPORT 
@@ -37,8 +37,8 @@ class ISteamApps;
 
 //-----------------------------------------------------------------------------
 // Purpose: Interface to creating a new steam instance, or to
-//			connect to an existing steam instance, whether it's in a
-//			different process or is local
+// connect to an existing steam instance, whether it's in a
+// different process or is local
 //-----------------------------------------------------------------------------
 class ISteamClient
 {
@@ -67,7 +67,7 @@ public:
 
 	// set the local IP and Port to bind to
 	// this must be set before CreateLocalUser()
-	virtual void SetLocalIPBinding( uint32 unIP, uint16 usPort ) = 0; 
+	virtual void SetLocalIPBinding( uint32_t unIP, uint16_t usPort ) = 0; 
 
 	// returns the ISteamFriends interface
 	virtual ISteamFriends *GetISteamFriends( HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
@@ -96,7 +96,7 @@ public:
 	// Used for perf debugging so you can understand how many IPC calls your game makes per frame
 	// Every IPC call is at minimum a thread context switch if not a process one so you want to rate
 	// control how often you do them.
-	virtual uint32 GetIPCCallCount() = 0;
+	virtual uint32_t GetIPCCallCount() = 0;
 
 	// returns the ISteamUserStats interface
 	virtual ISteamUserStats *GetISteamUserStats( HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
@@ -109,7 +109,7 @@ public:
 
 //-----------------------------------------------------------------------------
 // Purpose: Base values for callback identifiers, each callback must
-//			have a unique ID.
+// have a unique ID.
 //-----------------------------------------------------------------------------
 enum { k_iSteamUserCallbacks = 100 };
 enum { k_iSteamGameServerCallbacks = 200 };
@@ -131,7 +131,7 @@ DLL_EXPORT bool Steam_BReleaseSteamPipe( HSteamPipe hSteamPipe );
 DLL_EXPORT HSteamUser Steam_CreateLocalUser( HSteamPipe *phSteamPipe );
 DLL_EXPORT HSteamUser Steam_ConnectToGlobalUser( HSteamPipe hSteamPipe );
 DLL_EXPORT void Steam_ReleaseUser( HSteamPipe hSteamPipe, HSteamUser hUser );
-DLL_EXPORT void Steam_SetLocalIPBinding( uint32 unIP, uint16 usLocalPort );
+DLL_EXPORT void Steam_SetLocalIPBinding( uint32_t unIP, uint16_t usLocalPort );
 
 
 #endif // ISTEAMCLIENT_H

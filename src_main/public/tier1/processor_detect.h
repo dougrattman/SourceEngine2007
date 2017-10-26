@@ -1,12 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: functions to expose CPU capabilities
-//
-// $NoKeywords: $
-//=============================================================================//
+// Purpose: functions to expose CPU capabilities.
 
-bool CheckMMXTechnology(void);
-bool CheckSSETechnology(void);
-bool CheckSSE2Technology(void);
-bool Check3DNowTechnology(void);
-
+bool CheckMMXTechnology();
+bool CheckSSETechnology();
+bool CheckSSE2Technology();
+bool Check3DNowTechnology();

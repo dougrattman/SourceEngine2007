@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef OBSTACLE_PUSHAWAY_H
 #define OBSTACLE_PUSHAWAY_H
@@ -49,8 +49,8 @@ public:
 
 		if ( IsPushAwayEntity( pEnt ) && m_nAlreadyHit < m_nMaxHits )
 		{
-			m_AlreadyHit[m_nAlreadyHit] = pEnt;
-			m_nAlreadyHit++;
+ m_AlreadyHit[m_nAlreadyHit] = pEnt;
+ m_nAlreadyHit++;
 		}
 
 		return ITERATION_CONTINUE;
@@ -82,18 +82,18 @@ public:
 		CBaseEntity *pEnt = gEntList.GetBaseEntity( pHandleEntity->GetRefEHandle() );
 
 		if ( !IsBreakableEntity( pEnt ) )
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 
 		// ignore breakables parented to doors
 		if ( pEnt->GetParent() &&
-			( FClassnameIs( pEnt->GetParent(), "func_door*" ) ||
-			FClassnameIs( pEnt, "prop_door*" ) ) )
-			return ITERATION_CONTINUE;
+ ( FClassnameIs( pEnt->GetParent(), "func_door*" ) ||
+ FClassnameIs( pEnt, "prop_door*" ) ) )
+ return ITERATION_CONTINUE;
 
 		if ( m_nAlreadyHit < m_nMaxHits )
 		{
-			m_AlreadyHit[m_nAlreadyHit] = pEnt;
-			m_nAlreadyHit++;
+ m_AlreadyHit[m_nAlreadyHit] = pEnt;
+ m_nAlreadyHit++;
 		}
 
 		return ITERATION_CONTINUE;
@@ -117,48 +117,48 @@ public:
 		CBaseEntity *pEnt = gEntList.GetBaseEntity( pHandleEntity->GetRefEHandle() );
 
 		if ( pEnt == NULL )
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 
 		if ( ( pEnt->ObjectCaps() & FCAP_IMPULSE_USE ) == 0 )
 		{
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 		}
 
 		if ( FClassnameIs( pEnt, "func_door*" ) )
 		{
-			CBaseDoor *door = dynamic_cast<CBaseDoor *>(pEnt);
-			if ( !door )
-			{
-				return ITERATION_CONTINUE;
-			}
+ CBaseDoor *door = dynamic_cast<CBaseDoor *>(pEnt);
+ if ( !door )
+ {
+ 	return ITERATION_CONTINUE;
+ }
 
-			if ( door->m_toggle_state == TS_GOING_UP || door->m_toggle_state == TS_GOING_DOWN )
-			{
-				return ITERATION_CONTINUE;
-			}
+ if ( door->m_toggle_state == TS_GOING_UP || door->m_toggle_state == TS_GOING_DOWN )
+ {
+ 	return ITERATION_CONTINUE;
+ }
 		}
 		else if ( FClassnameIs( pEnt, "prop_door*" ) )
 		{
-			CBasePropDoor *door = dynamic_cast<CBasePropDoor *>(pEnt);
-			if ( !door )
-			{
-				return ITERATION_CONTINUE;
-			}
+ CBasePropDoor *door = dynamic_cast<CBasePropDoor *>(pEnt);
+ if ( !door )
+ {
+ 	return ITERATION_CONTINUE;
+ }
 
-			if ( door->IsDoorOpening() || door->IsDoorClosing() )
-			{
-				return ITERATION_CONTINUE;
-			}
+ if ( door->IsDoorOpening() || door->IsDoorClosing() )
+ {
+ 	return ITERATION_CONTINUE;
+ }
 		}
 		else
 		{
-			return ITERATION_CONTINUE;
+ return ITERATION_CONTINUE;
 		}
 
 		if ( m_nAlreadyHit < m_nMaxHits )
 		{
-			m_AlreadyHit[m_nAlreadyHit] = pEnt;
-			m_nAlreadyHit++;
+ m_AlreadyHit[m_nAlreadyHit] = pEnt;
+ m_nAlreadyHit++;
 		}
 
 		return ITERATION_CONTINUE;

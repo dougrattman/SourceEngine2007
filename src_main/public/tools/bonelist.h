@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -24,7 +24,7 @@ public:
 
 public:
 
-	int			m_nBones;
+	int m_nBones;
 	Vector		m_vecPos[ MAXSTUDIOBONES ];
 	Quaternion	m_quatRot[ MAXSTUDIOBONES ];
 
@@ -44,7 +44,7 @@ public:
 
 public:
 
-	int			m_nNumFlexes;
+	int m_nNumFlexes;
 	float		m_flexWeights[ MAXSTUDIOFLEXCTRL ];
 
 private:

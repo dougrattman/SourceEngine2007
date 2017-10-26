@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 //
 //=============================================================================
@@ -35,7 +35,7 @@ public:
 	CTFSMG() {}
 	~CTFSMG() {}
 
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_SMG; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_SMG; }
 
 private:
 

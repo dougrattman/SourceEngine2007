@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: FIXME: This will ultimately become a more generic implementation
 //
@@ -40,15 +40,15 @@ class CAI_BehaviorAlyxInjured : public CAI_FollowBehavior
 	DECLARE_DATADESC();
 
 public:
-						CAI_BehaviorAlyxInjured( void );
+  CAI_BehaviorAlyxInjured( void );
 
 	virtual const char *GetName( void ) { return "AlyxInjuredFollow"; }
 	virtual	Activity	NPC_TranslateActivity( Activity nActivity );
-	virtual int			TranslateSchedule( int scheduleType );
+	virtual int TranslateSchedule( int scheduleType );
 	virtual void		Spawn( void );
 	virtual void		OnRestore( void );
 	virtual void		StartTask( const Task_t *pTask );
-	virtual int			SelectFailSchedule( int failedSchedule, int failedTask, AI_TaskFailureCode_t taskFailCode );
+	virtual int SelectFailSchedule( int failedSchedule, int failedTask, AI_TaskFailureCode_t taskFailCode );
 	virtual	void		GatherConditions( void );
 	virtual Activity	GetFlinchActivity( bool bHeavyDamage, bool bGesture );
 

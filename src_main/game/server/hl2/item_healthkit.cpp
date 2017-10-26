@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements health kits and wall mounted health chargers.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "gamerules.h"
@@ -160,10 +160,10 @@ public:
 
 	void Spawn( );
 	void Precache( void );
-	int  DrawDebugTextOverlays(void);
-	bool CreateVPhysics(void);
-	void Off(void);
-	void Recharge(void);
+	int  DrawDebugTextOverlays();
+	bool CreateVPhysics();
+	void Off();
+	void Recharge();
 	bool KeyValue(  const char *szKeyName, const char *szValue );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return BaseClass::ObjectCaps() | m_iCaps; }
@@ -424,10 +424,10 @@ public:
 
 	void Spawn( );
 	void Precache( void );
-	int  DrawDebugTextOverlays(void);
-	bool CreateVPhysics(void);
-	void Off(void);
-	void Recharge(void);
+	int  DrawDebugTextOverlays();
+	bool CreateVPhysics();
+	void Off();
+	void Recharge();
 	bool KeyValue(  const char *szKeyName, const char *szValue );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return BaseClass::ObjectCaps() | m_iCaps; }

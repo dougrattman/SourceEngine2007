@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:	Antlion Guard
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "ai_hint.h"
@@ -390,7 +390,7 @@ private:
 	CSprite			*m_hCaveGlow[2];
 
 #if ANTLIONGUARD_BLOOD_EFFECTS
-	CNetworkVar( uint8, m_iBleedingLevel );
+	CNetworkVar( uint8_t, m_iBleedingLevel );
 
 	unsigned char GetBleedingLevel( void ) const;
 #endif

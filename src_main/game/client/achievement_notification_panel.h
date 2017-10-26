@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ACHIEVEMENT_NOTIFICATION_PANEL_H
 #define ACHIEVEMENT_NOTIFICATION_PANEL_H

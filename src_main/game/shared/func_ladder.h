@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FUNC_LADDER_H
 #define FUNC_LADDER_H
@@ -27,7 +27,7 @@ public:
 typedef CHandle< CInfoLadderDismount > CInfoLadderDismountHandle;
 
 // Spawnflags
-#define SF_LADDER_DONTGETON			1			// Set for ladders that are acting as automount points, but not really ladders
+#define SF_LADDER_DONTGETON 1 // Set for ladders that are acting as automount points, but not really ladders
 
 //-----------------------------------------------------------------------------
 // Purpose: A player-climbable ladder
@@ -45,9 +45,9 @@ public:
 
 	virtual void Spawn();
 
-	virtual void DrawDebugGeometryOverlays(void);
+	virtual void DrawDebugGeometryOverlays();
 
-	int					GetDismountCount() const;
+	int 		GetDismountCount() const;
 	CInfoLadderDismount	*GetDismount( int index );
 
 	void	GetTopPosition( Vector& org );

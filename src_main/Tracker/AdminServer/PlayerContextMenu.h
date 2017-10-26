@@ -1,32 +1,23 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright © 1996-2001, Valve LLC, All rights reserved.
 
 #ifndef PLAYERCONTEXTMENU_H
 #define PLAYERCONTEXTMENU_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/Menu.h>
+#include "vgui_controls/Menu.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Basic right-click context menu for servers
 //-----------------------------------------------------------------------------
-class CPlayerContextMenu : public vgui::Menu
-{
-public:
-	CPlayerContextMenu(vgui::Panel *parent);
-	~CPlayerContextMenu();
+class CPlayerContextMenu : public vgui::Menu {
+ public:
+  CPlayerContextMenu(vgui::Panel *parent);
+  ~CPlayerContextMenu();
 
-	// call this to activate the menu
-	void ShowMenu(vgui::Panel *target, unsigned int serverID);
-private:
-	vgui::Panel *parent; // so we can send it messages
+  // call this to activate the menu
+  void ShowMenu(vgui::Panel *target, unsigned int serverID);
+
+ private:
+  vgui::Panel *parent;  // so we can send it messages
 };
 
-
-#endif // PLAYERCONTEXTMENU_H
+#endif  // PLAYERCONTEXTMENU_H

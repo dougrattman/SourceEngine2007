@@ -1,20 +1,20 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include <vgui/ISurface.h>
 #include "memorybitmap.h"
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #include "MatSystemSurface.h"
 #include "materialsystem/IMaterialVar.h"
 #include "materialsystem/ITexture.h"
 #include "bitmap/imageformat.h"
 #include "vtf/vtf.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "TextureDictionary.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

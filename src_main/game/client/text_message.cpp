@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 // text_message.cpp
 //
@@ -96,7 +96,7 @@ char *CHudTextMessage::LocaliseTextString( const char *msg, char *dst_buffer, in
 	}
 
 	//
-// ensure null termination
+// ensure 0 termination
 	dst_buffer[buffer_size-1] = 0; 
 	return dst_buffer;
 }

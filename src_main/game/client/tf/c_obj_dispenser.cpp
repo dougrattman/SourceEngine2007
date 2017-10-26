@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client's CObjectSentrygun
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "c_baseobject.h"
 #include "c_tf_player.h"

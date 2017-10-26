@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <assert.h>
+
+#include <cassert>
 
 #include <vgui/IScheme.h>
 #include <vgui/ISystem.h>
 #include <vgui/IInput.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #include <vgui_controls/ScrollBar.h>
 #include <vgui_controls/ScrollBarSlider.h>
@@ -129,9 +129,9 @@ DECLARE_BUILD_FACTORY_CUSTOM( ScrollBar, ScrollBar_Horizontal_Factory );
 //-----------------------------------------------------------------------------
 ScrollBar::ScrollBar(Panel *parent, const char *panelName, bool vertical) : Panel(parent, panelName)
 {
-	_slider=null;
-	_button[0]=null;
-	_button[1]=null;
+	_slider=0;
+	_button[0]=0;
+	_button[1]=0;
 	_scrollDelay = SCROLL_BAR_DELAY;
 	_respond = true;
 
@@ -334,7 +334,7 @@ bool ScrollBar::HasFullRange()
 //LEAK: new and old slider will leak
 void ScrollBar::SetButton(Button *button, int index)
 {
-	if(_button[index]!=null)
+	if(_button[index]!=0)
 	{
 		_button[index]->SetParent((Panel *)NULL);
 	}
@@ -362,7 +362,7 @@ Button* ScrollBar::GetButton(int index)
 //LEAK: new and old slider will leak
 void ScrollBar::SetSlider(ScrollBarSlider *slider)
 {
-	if(_slider!=null)
+	if(_slider!=0)
 	{
 		_slider->SetParent((Panel *)NULL);
 	}
@@ -489,13 +489,13 @@ int ScrollBar::GetRangeWindow()
 //-----------------------------------------------------------------------------
 void ScrollBar::Validate()
 {
-	if ( _slider != null )
+	if ( _slider != 0 )
 	{
 		int buttonOffset = 0;
 
 		for( int i=0; i<2; i++ )
 		{
-			if( _button[i] != null )
+			if( _button[i] != 0 )
 			{
 				if( _button[i]->IsVisible() )
 				{
@@ -522,7 +522,7 @@ void ScrollBar::SetScrollbarButtonsVisible(bool visible)
 {
 	for( int i=0; i<2; i++ )
 	{
-		if( _button[i] != null )
+		if( _button[i] != 0 )
 		{
 			_button[i]->SetShouldPaint( visible );
 		}

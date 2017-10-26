@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VEHICLE_APC_H
 #define VEHICLE_APC_H
@@ -46,7 +46,7 @@ public:
 	// CBaseEntity
 	virtual void Precache( void );
 	void	Think( void );
-	virtual void Spawn(void);
+	virtual void Spawn();
 	virtual void Activate();
 	virtual void UpdateOnRemove( void );
 	virtual void OnRestore( void );
@@ -61,20 +61,20 @@ public:
 
 	// Weaponry
 	const Vector	&GetPrimaryGunOrigin( void );
-	void			AimPrimaryWeapon( const Vector &vecForward );
-	void			AimSecondaryWeaponAt( CBaseEntity *pTarget );
-	float			PrimaryWeaponFireTime( void ) { return m_flMachineGunTime; }
-	float			SecondaryWeaponFireTime( void ) { return m_flRocketTime; }
-	float			MaxAttackRange() const;
-	bool			IsInPrimaryFiringCone() const { return m_bInFiringCone; }
+	void AimPrimaryWeapon( const Vector &vecForward );
+	void AimSecondaryWeaponAt( CBaseEntity *pTarget );
+	float PrimaryWeaponFireTime( void ) { return m_flMachineGunTime; }
+	float SecondaryWeaponFireTime( void ) { return m_flRocketTime; }
+	float MaxAttackRange() const;
+	bool IsInPrimaryFiringCone() const { return m_bInFiringCone; }
 
 	// Muzzle flashes
 	const char		*GetTracerType( void ) ;
-	void			DoImpactEffect( trace_t &tr, int nDamageType );
-	void			DoMuzzleFlash( void );
+	void DoImpactEffect( trace_t &tr, int nDamageType );
+	void DoMuzzleFlash( void );
 
-	virtual Vector	EyePosition( );				// position of eyes
-	Vector			BodyTarget( const Vector &posSrc, bool bNoisy );
+	virtual Vector	EyePosition( ); 	// position of eyes
+	Vector BodyTarget( const Vector &posSrc, bool bNoisy );
 
 	
 	virtual void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );

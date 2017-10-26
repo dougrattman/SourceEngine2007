@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -455,7 +455,7 @@ CStudioHdr *C_ServerRagdoll::OnNewModel( void )
 		if ( !pCollide )
 		{
 			const char *pszName = modelinfo->GetModelName( modelinfo->GetModel( GetModelIndex() ) );
-			Msg( "*** ERROR: C_ServerRagdoll::InitModel: %s missing vcollide data ***\n", (pszName) ? pszName : "<null>" );
+			Msg( "*** ERROR: C_ServerRagdoll::InitModel: %s missing vcollide data ***\n", (pszName) ? pszName : "<0>" );
 			m_elementCount = 0;
 		}
 		else

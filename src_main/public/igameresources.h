@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: IGameResources interface
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef IGAMERESOURCES_H
 #define IGAMERESOURCES_H
@@ -19,7 +19,7 @@ public:
 
 	// Team data access 
 	virtual const char		*GetTeamName( int index ) = 0;
-	virtual int				GetTeamScore( int index ) = 0;
+	virtual int 	GetTeamScore( int index ) = 0;
 	virtual const Color&	GetTeamColor( int index ) = 0;
 
 	// Player data access

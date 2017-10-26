@@ -1,13 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 
 #include "cbase.h"
-#include <stdio.h>
+#include <cstdio>
 
 #include <cdll_client_int.h>
 
@@ -16,7 +16,7 @@
 #include <vgui/IScheme.h>
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui_controls/ImageList.h>
 #include <FileSystem.h>
 
@@ -31,7 +31,7 @@ extern IGameUIFuncs *gameuifuncs; // for key binding details
 #endif
 #include <game/client/iviewport.h>
 
-#include <stdlib.h> // MAX_PATH define
+#include <cstdlib> // MAX_PATH define
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

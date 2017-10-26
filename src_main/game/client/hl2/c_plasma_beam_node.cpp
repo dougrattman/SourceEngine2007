@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "particles_simple.h"
@@ -58,10 +58,10 @@ public:
 	DECLARE_CLIENTCLASS();
 
 	C_PlasmaBeamNode();
-	~C_PlasmaBeamNode(void);
+	~C_PlasmaBeamNode();
 
 public:
-	void			ClientThink(void);
+	void			ClientThink();
 	void			AddEntity( void );
 	void			OnDataChanged(DataUpdateType_t updateType);
 	bool			ShouldDraw();

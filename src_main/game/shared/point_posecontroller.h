@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Controls the pose parameters of a model
 //
@@ -75,17 +75,17 @@ public:
 
 private:
 
-	CNetworkArray( EHANDLE, m_hProps, MAX_POSE_CONTROLLED_PROPS );				// Handles to controlled models
+	CNetworkArray( EHANDLE, m_hProps, MAX_POSE_CONTROLLED_PROPS ); 	// Handles to controlled models
 	CNetworkArray( unsigned char, m_chPoseIndex, MAX_POSE_CONTROLLED_PROPS );	// Pose parameter indices for each model
 
 	bool		m_bDisablePropLookup;
 
 	CNetworkVar( bool, m_bPoseValueParity );
 
-	string_t	m_iszPropName;				// Targetname of the models to control
+	string_t	m_iszPropName; 	// Targetname of the models to control
 	string_t	m_iszPoseParameterName;		// Pose parameter name to control
 
-	CNetworkVar( float, m_fPoseValue );			// Normalized pose parameter value (maps to each pose parameter's min and max range)
+	CNetworkVar( float, m_fPoseValue ); // Normalized pose parameter value (maps to each pose parameter's min and max range)
 	CNetworkVar( float, m_fInterpolationTime );	// Interpolation speed for client matching absolute pose values
 	CNetworkVar( bool, m_bInterpolationWrap );	// Interpolation for the client wraps 0 to 1.
 
@@ -127,21 +127,21 @@ private:
 
 
 	// Networked variables
-	EHANDLE						m_hProps[MAX_POSE_CONTROLLED_PROPS];
-	unsigned char				m_chPoseIndex[MAX_POSE_CONTROLLED_PROPS];
-	bool						m_bPoseValueParity;
-	float						m_fPoseValue;
-	float						m_fInterpolationTime;
-	bool						m_bInterpolationWrap;
-	float						m_fCycleFrequency;
+	EHANDLE  m_hProps[MAX_POSE_CONTROLLED_PROPS];
+	unsigned char 	m_chPoseIndex[MAX_POSE_CONTROLLED_PROPS];
+	bool  m_bPoseValueParity;
+	float  m_fPoseValue;
+	float  m_fInterpolationTime;
+	bool  m_bInterpolationWrap;
+	float  m_fCycleFrequency;
 	PoseController_FModType_t	m_nFModType;
-	float						m_fFModTimeOffset;
-	float						m_fFModRate;
-	float						m_fFModAmplitude;
+	float  m_fFModTimeOffset;
+	float  m_fFModRate;
+	float  m_fFModAmplitude;
 	bool	m_bOldPoseValueParity;
 
 	float	m_fCurrentPoseValue;	// Actual pose value cycled by the frequency and modulation
-	float	m_fCurrentFMod;			// The current fequency modulation amount (stored for noise walk)
+	float	m_fCurrentFMod; // The current fequency modulation amount (stored for noise walk)
 
 	CInterpolatedValue	m_PoseTransitionValue;
 };

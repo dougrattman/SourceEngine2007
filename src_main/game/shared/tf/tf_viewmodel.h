@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_VIEWMODEL_H
 #define TF_VIEWMODEL_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "predictable_entity.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "baseplayer_shared.h"
 #include "shared_classnames.h"
 #include "tf_weaponbase.h"
@@ -39,7 +39,7 @@ public:
 	virtual bool ShouldPredict( void )
 	{
 		if ( GetOwner() && GetOwner() == C_BasePlayer::GetLocalPlayer() )
-			return true;
+ return true;
 
 		return BaseClass::ShouldPredict();
 	}

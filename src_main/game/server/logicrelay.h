@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 #ifndef LOGICRELAY_H
 #define LOGICRELAY_H
 
@@ -40,7 +40,7 @@ public:
 private:
 
 	bool m_bDisabled;
-	bool m_bWaitForRefire;			// Set to disallow a refire while we are waiting for our outputs to finish firing.
+	bool m_bWaitForRefire; // Set to disallow a refire while we are waiting for our outputs to finish firing.
 };
 
 #endif //LOGICRELAY_H

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "basecombatweapon_shared.h"
 
@@ -35,7 +35,7 @@ public:
 
 	virtual bool	WeaponShouldBeLowered( void );
 
-			bool	CanLower();
+ bool	CanLower();
 	virtual bool	Ready( void );
 	virtual bool	Lower( void );
 	virtual bool	Deploy( void );
@@ -53,14 +53,14 @@ public:
 
 	virtual void	ItemHolsterFrame( void );
 
-	int				m_iPrimaryAttacks;		// # of primary attacks performed with this weapon
-	int				m_iSecondaryAttacks;	// # of secondary attacks performed with this weapon
+	int 	m_iPrimaryAttacks;		// # of primary attacks performed with this weapon
+	int 	m_iSecondaryAttacks;	// # of secondary attacks performed with this weapon
 
 protected:
 
-	bool			m_bLowered;			// Whether the viewmodel is raised or lowered
-	float			m_flRaiseTime;		// If lowered, the time we should raise the viewmodel
-	float			m_flHolsterTime;	// When the weapon was holstered
+	bool m_bLowered; // Whether the viewmodel is raised or lowered
+	float m_flRaiseTime;		// If lowered, the time we should raise the viewmodel
+	float m_flHolsterTime;	// When the weapon was holstered
 };
 
 #endif // BASEHLCOMBATWEAPON_SHARED_H

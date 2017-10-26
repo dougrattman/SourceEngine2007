@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DAMAGEMODIFIER_H
 #define DAMAGEMODIFIER_H
@@ -23,7 +23,7 @@ class CBaseEntity;
 class CDamageModifier
 {
 public:
-				CDamageModifier();
+ 	CDamageModifier();
 
 	void		AddModifierToEntity( CBaseEntity *pChar );
 	void		RemoveModifier();
@@ -37,9 +37,9 @@ public:
 	CBaseEntity	*GetCharacter() const;
 
 private:
-	float							m_flModifier;
-	CHandle<CBaseEntity>			m_hEnt;
-	bool							m_bDoneToMe;	// True = modifies damage done to the entity, false = damage done by the entity
+	float  	m_flModifier;
+	CHandle<CBaseEntity> m_hEnt;
+	bool  	m_bDoneToMe;	// True = modifies damage done to the entity, false = damage done by the entity
 };
 
 

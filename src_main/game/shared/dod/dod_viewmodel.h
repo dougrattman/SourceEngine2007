@@ -12,7 +12,7 @@
 #endif
 
 #include "predictable_entity.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "baseplayer_shared.h"
 #include "shared_classnames.h"
 
@@ -37,7 +37,7 @@ public:
 	virtual bool ShouldPredict( void )
 	{
 		if ( GetOwner() && GetOwner() == C_BasePlayer::GetLocalPlayer() )
-			return true;
+ return true;
 
 		return BaseClass::ShouldPredict();
 	}

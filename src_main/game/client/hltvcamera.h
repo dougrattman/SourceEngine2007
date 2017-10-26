@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef HLTVCAMERA_H
 #define HLTVCAMERA_H
@@ -42,7 +42,7 @@ public:
 	void PostEntityPacketReceived();
 	const char* GetTitleText() { return m_szTitleText; }
 	int  GetNumSpectators() { return m_nNumSpectators; }
-			
+ 
 protected:
 
 	void CalcChaseCamView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
@@ -54,12 +54,12 @@ protected:
 	void SetCameraAngle( QAngle& targetAngle );
 	void Accelerate( Vector& wishdir, float wishspeed, float accel );
 
-	int			m_nCameraMode; // current camera mode
-	int			m_iCameraMan; // camera man entindex or 0
+	int m_nCameraMode; // current camera mode
+	int m_iCameraMan; // camera man entindex or 0
 	Vector		m_vCamOrigin;  //current camera origin
 	QAngle		m_aCamAngle;   //current camera angle
-	int			m_iTraget1;	// first tracked target or 0
-	int			m_iTraget2; // second tracked target or 0
+	int m_iTraget1;	// first tracked target or 0
+	int m_iTraget2; // second tracked target or 0
 	float		m_flFOV; // current FOV
 	float		m_flOffset;  // z-offset from target origin
 	float		m_flDistance; // distance to traget origin+offset
@@ -69,7 +69,7 @@ protected:
 	float		m_flInertia; // camera inertia 0..100
 	float		m_flLastAngleUpdateTime;
 	bool		m_bEntityPacketReceived;	// true after a new packet was received
-	int			m_nNumSpectators;
+	int m_nNumSpectators;
 	char		m_szTitleText[64];
 	CUserCmd	m_LastCmd;
 	Vector		m_vecVelocity;

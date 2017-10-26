@@ -4,16 +4,6 @@
 //
 //=============================================================================
 
-#if _MSC_VER >= 1300
-#pragma warning(disable : 4511)	// warning C4511: copy constructor could not be generated
-#pragma warning(disable : 4512)	// warning C4512: assignment operator could not be generated
-#pragma warning(disable : 4127)	// warning C4127: conditional expression is constant
-#pragma warning(disable : 4701)	// warning C4701: local variable 'result' may be used without having been initialized
-#pragma warning(disable : 4702)	// warning C4702: unreachable code
-#pragma warning(disable : 4996) // warning C4966: 'foo' was declared deprecated
-#endif //_MSV_VER >= 1300
-
-
 // Standard includes
 #include <io.h>
 #include <fstream>

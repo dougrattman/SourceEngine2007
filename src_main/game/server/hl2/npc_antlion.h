@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef NPC_ANTLION_H
 #define NPC_ANTLION_H
@@ -44,10 +44,10 @@ public:
 	bool ShouldFollow( void )
 	{
 		if ( GetFollowTarget() == NULL )
-			return false;
+ return false;
 		
 		if ( GetEnemy() != NULL )
-			return false;
+ return false;
 
 		return true;
 	}
@@ -66,7 +66,7 @@ enum AntlionMoveState_e
 
 #define	SF_ANTLION_BURROW_ON_ELUDED		( 1 << 16 )
 #define	SF_ANTLION_USE_GROUNDCHECKS		( 1 << 17 )
-#define	SF_ANTLION_WORKER				( 1 << 18 ) // Use the "worker" model
+#define	SF_ANTLION_WORKER 	( 1 << 18 ) // Use the "worker" model
 
 typedef CAI_BlendingHost< CAI_BehaviorHost<CAI_BlendedNPC> > CAI_BaseAntlionBase;
 
@@ -87,7 +87,7 @@ public:
 	float		MaxYawSpeed( void );
 	bool		FInViewCone( CBaseEntity *pEntity );
 	bool		FInViewCone( const Vector &vecSpot );
-				
+ 	
 	void		Activate( void );
 	void		HandleAnimEvent( animevent_t *pEvent );
 	void		StartTask( const Task_t *pTask );
@@ -96,7 +96,7 @@ public:
 	void		PainSound( const CTakeDamageInfo &info );
 	void		Precache( void );
 	void		Spawn( void );
-	int			OnTakeDamage_Alive( const CTakeDamageInfo &info );
+	int OnTakeDamage_Alive( const CTakeDamageInfo &info );
 	void		TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr );
 	void		BuildScheduleTestBits( void );
 	void		GatherConditions( void );
@@ -104,7 +104,7 @@ public:
 	void		ZapThink( void );
 	void		BurrowUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	bool		CreateVPhysics();
-				
+ 	
 	bool		IsJumpLegal( const Vector &startPos, const Vector &apex, const Vector &endPos ) const;
 	bool		HandleInteraction( int interactionType, void *data, CBaseCombatCharacter *sender = NULL );
 	bool		QuerySeeEntity( CBaseEntity *pEntity, bool bOnlyHateOrFearIfNPC = false );
@@ -115,7 +115,7 @@ public:
 	bool		IsLightDamage( const CTakeDamageInfo &info );
 	bool		CreateBehaviors( void );
 	bool		ShouldHearBugbait( void ) { return ( m_bIgnoreBugbait == false ); }
-	int			SelectSchedule( void );
+	int SelectSchedule( void );
 
 	void		Touch( CBaseEntity *pOther );
 
@@ -143,7 +143,7 @@ public:
 	void		InputJumpAtTarget( inputdata_t &inputdata );
 
 	void		SetFollowTarget( CBaseEntity *pTarget );
-	int			TranslateSchedule( int scheduleType );
+	int TranslateSchedule( int scheduleType );
 
 	virtual		Activity NPC_TranslateActivity( Activity baseAct );
 
@@ -151,7 +151,7 @@ public:
 	bool		ShouldAbandonFollow( void );
 
 	void		SetMoveState( AntlionMoveState_e state );
-	int			ChooseMoveSchedule( void );
+	int ChooseMoveSchedule( void );
 
 	DECLARE_DATADESC();
 
@@ -178,7 +178,7 @@ public:
 private:
 
 	inline CBaseEntity *EntityToWatch( void );
-	void				UpdateHead( void );
+	void 	UpdateHead( void );
 
 	bool	FindChasePosition( const Vector &targetPos, Vector &result );
 	bool	GetGroundPosition( const Vector &testPos, Vector &result );
@@ -241,12 +241,12 @@ private:
 
 	float	m_flPounceTime;
 	int		m_iUnBurrowAttempts;
-	int		m_iContext;			//for FValidateHintType context
+	int		m_iContext; //for FValidateHintType context
 
 	Vector	m_vecSaveSpitVelocity;	// Saved when we start to attack and used if we failed to get a clear shot once we release
 
 	CAI_AntlionFollowBehavior	m_FollowBehavior;
-	CAI_AssaultBehavior			m_AssaultBehavior;
+	CAI_AssaultBehavior m_AssaultBehavior;
 
 	AntlionMoveState_e	m_MoveState;
 
@@ -259,7 +259,7 @@ private:
 	float		m_flIgnoreSoundTime;		// Sound time to ignore if earlier than
 	float		m_flNextAcknowledgeTime;	// Next time an antlion can make an acknowledgement noise
 	float		m_flSuppressFollowTime;		// Amount of time to suppress our follow time
-	float		m_flObeyFollowTime;			// A range of time the antlions must be obedient
+	float		m_flObeyFollowTime; // A range of time the antlions must be obedient
 
 	Vector		m_vecHeardSound;
 	bool		m_bHasHeardSound;
@@ -275,7 +275,7 @@ private:
 	bool		m_bDisableJump;
 	float		m_flTimeDrown;
 	float		m_flTimeDrownSplash;
-	bool		m_bDontExplode;			// Suppresses worker poison burst when drowning, failing to unburrow, etc.
+	bool		m_bDontExplode; // Suppresses worker poison burst when drowning, failing to unburrow, etc.
 	bool		m_bLoopingStarted;
 	bool		m_bSuppressUnburrowEffects;	// Don't kick up dust when spawning
 #if HL2_EPISODIC
@@ -283,10 +283,10 @@ private:
 #endif
 
 	bool		m_bForcedStuckJump;
-	int			m_nBodyBone;
+	int m_nBodyBone;
 
 	// Used to trigger a heavy damage interrupt if sustained damage is taken
-	int			m_nSustainedDamage;
+	int m_nSustainedDamage;
 	float		m_flLastDamageTime;
 	float		m_flZapDuration;
 

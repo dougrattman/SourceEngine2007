@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Beam that's used for the sniper's laser sight
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "tempentity.h"
 #include "c_te_basebeam.h"

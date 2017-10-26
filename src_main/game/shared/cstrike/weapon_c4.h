@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_C4_H
 #define WEAPON_C4_H
@@ -12,7 +12,7 @@
 
 
 #include "weapon_csbase.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 #define NUM_BEEPS 7
 
@@ -73,9 +73,9 @@
 
 		// Info for defusing.
 		CHandle<CCSPlayer> m_pBombDefuser;
-		float			m_flNextDefuse;
-		bool			m_bStartDefuse;
-		int				m_iBombSiteIndex;
+		float m_flNextDefuse;
+		bool m_bStartDefuse;
+		int 	m_iBombSiteIndex;
 
 		CNetworkVar( float, m_flDefuseLength );		//How long does the defuse take? Depends on if a defuser was used
 		CNetworkVar( float, m_flDefuseCountDown );	//What time does the defuse complete?

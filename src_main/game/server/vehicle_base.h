@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VEHICLE_BASE_H
 #define VEHICLE_BASE_H
@@ -42,21 +42,21 @@ public:
 	{
 	}
 
-							CFourWheelServerVehicle( void );
-	virtual bool			IsVehicleUpright( void );
-	virtual bool			IsVehicleBodyInWater( void );
-	virtual void			GetVehicleViewPosition( int nRole, Vector *pOrigin, QAngle *pAngles, float *pFOV = NULL );
+  	CFourWheelServerVehicle( void );
+	virtual bool IsVehicleUpright( void );
+	virtual bool IsVehicleBodyInWater( void );
+	virtual void GetVehicleViewPosition( int nRole, Vector *pOrigin, QAngle *pAngles, float *pFOV = NULL );
 	IPhysicsVehicleController *GetVehicleController();
 	const vehicleparams_t	*GetVehicleParams( void );
 	const vehicle_controlparams_t *GetVehicleControlParams( void );
 	const vehicle_operatingparams_t	*GetVehicleOperatingParams( void );
 
 	// NPC Driving
-	void					NPC_SetDriver( CNPC_VehicleDriver *pDriver );
-	void					NPC_DriveVehicle( void );
+	void 		NPC_SetDriver( CNPC_VehicleDriver *pDriver );
+	void 		NPC_DriveVehicle( void );
 
 	CPropVehicleDriveable	*GetFourWheelVehicle( void );
-	bool					GetWheelContactPoint( int nWheelIndex, Vector &vecPos );
+	bool 		GetWheelContactPoint( int nWheelIndex, Vector &vecPos );
 
 public:
 	virtual void	SetVehicle( CBaseEntity *pVehicle );
@@ -82,20 +82,20 @@ public:
 	CPropVehicle();
 	virtual ~CPropVehicle();
 
-	void SetVehicleType( unsigned int nVehicleType )			{ m_nVehicleType = nVehicleType; }
-	unsigned int GetVehicleType( void )							{ return m_nVehicleType; }
+	void SetVehicleType( unsigned int nVehicleType ) { m_nVehicleType = nVehicleType; }
+	unsigned int GetVehicleType( void )  	{ return m_nVehicleType; }
 
 	// CBaseEntity
-	void			Spawn( void );
+	void Spawn( void );
 	virtual int		Restore( IRestore &restore );
-	void			VPhysicsUpdate( IPhysicsObject *pPhysics );
-	void			DrawDebugGeometryOverlays();
-	int				DrawDebugTextOverlays();
-	void			Teleport( const Vector *newPosition, const QAngle *newAngles, const Vector *newVelocity );
+	void VPhysicsUpdate( IPhysicsObject *pPhysics );
+	void DrawDebugGeometryOverlays();
+	int 	DrawDebugTextOverlays();
+	void Teleport( const Vector *newPosition, const QAngle *newAngles, const Vector *newVelocity );
 	virtual void	Think( void );
 	CFourWheelVehiclePhysics *GetPhysics( void ) { return &m_VehiclePhysics; }
 	CBasePlayer		*HasPhysicsAttacker( float dt );
-	void			OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t reason );
+	void OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t reason );
 
 	Vector GetSmoothedVelocity( void );	//Save and update our smoothed velocity for prediction
 
@@ -129,19 +129,19 @@ protected:
 
 protected:
 	CFourWheelVehiclePhysics		m_VehiclePhysics;
-	unsigned int					m_nVehicleType;
-	string_t						m_vehicleScript;
+	unsigned int 		m_nVehicleType;
+	string_t  m_vehicleScript;
 
 #ifdef HL2_EPISODIC
-	CUtlVector<EHANDLE>				m_hPhysicsChildren;	// List of entities who wish to get physics callbacks from the vehicle
+	CUtlVector<EHANDLE> 	m_hPhysicsChildren;	// List of entities who wish to get physics callbacks from the vehicle
 #endif //HL2_EPISODIC
 
 private:
-	Vector							m_vecSmoothedVelocity;
+	Vector  	m_vecSmoothedVelocity;
 
-	CHandle<CBasePlayer>			m_hPhysicsAttacker;
+	CHandle<CBasePlayer> m_hPhysicsAttacker;
 
-	float							m_flLastPhysicsInfluenceTime;
+	float  	m_flLastPhysicsInfluenceTime;
 };
 
 //=============================================================================
@@ -270,7 +270,7 @@ public:
 
 	// NPC Driver
 	CHandle<CNPC_VehicleDriver>	 m_hNPCDriver;
-	EHANDLE						 m_hKeepUpright;
+	EHANDLE   m_hKeepUpright;
 
 	// --------------------------------
 	// NPC Passengers

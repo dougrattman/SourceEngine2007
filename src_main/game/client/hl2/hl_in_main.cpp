@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: HL2 specific input handling
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "kbutton.h"
 #include "input.h"

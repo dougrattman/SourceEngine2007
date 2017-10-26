@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PROP_COMBINE_BALL_H
 #define PROP_COMBINE_BALL_H
@@ -172,7 +172,7 @@ private:
 	bool	m_bFiredGrabbedOutput;
 	bool	m_bStruckEntity;		// Has hit an entity already (control accuracy)
 	bool	m_bWeaponLaunched;		// Means this was fired from the AR2
-	bool	m_bForward;				// Movement direction in ball spawner
+	bool	m_bForward; 	// Movement direction in ball spawner
 
 	unsigned char m_nState;
 	bool	m_bCaptureInProgress;
@@ -283,7 +283,7 @@ public:
 
 private:
 
-	int			m_iBounces;
+	int m_iBounces;
 	float		m_flConeDegrees;
 	string_t	m_iszBullseyeName;
 };

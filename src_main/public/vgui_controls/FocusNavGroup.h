@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef FOCUSNAVGROUP_H
 #define FOCUSNAVGROUP_H
@@ -31,8 +31,8 @@ public:
 	virtual Panel *GetDefaultPanel();	// returns a pointer to the panel with the default focus
 
 	virtual void SetDefaultButton(Panel *panel);	// sets which panel should receive input when ENTER is hit
-	virtual VPANEL GetDefaultButton();				    // panel which receives default input when ENTER is hit, if current focused item cannot accept ENTER
-	virtual VPANEL GetCurrentDefaultButton();			// panel which receives input when ENTER is hit
+	virtual VPANEL GetDefaultButton(); 	    // panel which receives default input when ENTER is hit, if current focused item cannot accept ENTER
+	virtual VPANEL GetCurrentDefaultButton(); // panel which receives input when ENTER is hit
 	virtual Panel *FindPanelByHotkey(wchar_t key);		// finds the panel which is activated by the specified key
 	virtual bool RequestFocusPrev(VPANEL panel = NULL); // if panel is NULL, then the tab increment is based last known panel that had key focus
 	virtual bool RequestFocusNext(VPANEL panel = NULL);	

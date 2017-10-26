@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef MAPDATA_SHARED_H
 #define MAPDATA_SHARED_H
@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1/interface.h"
 #include "mathlib/vector.h"
 
 #define INTERFACEVERSION_MAPDATA	"MapData001"

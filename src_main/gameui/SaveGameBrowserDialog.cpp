@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "BasePanel.h"
 #include "SavegameDialog.h"
@@ -16,7 +16,7 @@
 #include "vgui_controls/AnimationController.h"
 #include "vgui_controls/ImagePanel.h"
 #include "filesystem.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include "ModInfo.h"
 #include "EngineInterface.h"
 #include "GameUI_Interface.h"

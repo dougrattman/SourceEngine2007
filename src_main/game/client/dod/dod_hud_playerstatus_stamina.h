@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_HUD_PLAYERSTATUS_STAMINA_H
 #define DOD_HUD_PLAYERSTATUS_STAMINA_H
@@ -27,12 +27,12 @@ public:
 
 private:
 
-	float			m_flPercentage;
+	float m_flPercentage;
 
-	Color			m_clrActive;
-	Color			m_clrActiveLow;
-	Color			m_clrInactive;
-	Color			m_clrInactiveLow;
+	Color m_clrActive;
+	Color m_clrActiveLow;
+	Color m_clrInactive;
+	Color m_clrInactiveLow;
 
 	CPanelAnimationVarAliasType( float, m_flSliceWidth, "slice_width", "5", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flSliceSpacer, "slice_spacer", "2", "proportional_float" );
@@ -57,15 +57,15 @@ public:
 
 private:
 
-	float			m_flPercentage;
+	float m_flPercentage;
 	CHudTexture		*m_icon;
 
 	CPanelAnimationVar( float, m_flWarningLevel, "warning_level", "0.25" );
 
-	char			m_szIcon[128];
+	char m_szIcon[128];
 
-	Color			m_clrActive;
-	Color			m_clrActiveLow;
+	Color m_clrActive;
+	Color m_clrActiveLow;
 };
 
 //-----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
 private:
 
 	CDoDCutEditablePanel		*m_pBackground;
-	CDoDHudStaminaIcon			*m_pIcon;
+	CDoDHudStaminaIcon *m_pIcon;
 	CDoDHudStaminaProgressBar	*m_pProgressBar;
 };	
 

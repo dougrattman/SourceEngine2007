@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -32,7 +32,7 @@ public:
 
 	/* messages sent (get via AddActionSignalTarget()):
 		"ButtonToggled"
-			int "state"
+ int "state"
 	*/
 
 protected:
@@ -42,7 +42,7 @@ protected:
 	virtual Color GetButtonFgColor();
 	virtual void ApplySchemeSettings(IScheme *pScheme);
 
-    virtual bool CanBeDefaultButton(void);
+    virtual bool CanBeDefaultButton();
     virtual void OnKeyCodePressed(KeyCode code);
 
 private:

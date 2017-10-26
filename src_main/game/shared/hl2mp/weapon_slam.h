@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		SLAM 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	WEAPONSLAM_H
 #define	WEAPONSLAM_H
@@ -37,43 +37,43 @@ public:
 	DECLARE_PREDICTABLE();
 
 	CNetworkVar( int,	m_tSlamState );
-	CNetworkVar( bool,				m_bDetonatorArmed );
-	CNetworkVar( bool,				m_bNeedDetonatorDraw);
-	CNetworkVar( bool,				m_bNeedDetonatorHolster);
-	CNetworkVar( bool,				m_bNeedReload);
-	CNetworkVar( bool,				m_bClearReload);
-	CNetworkVar( bool,				m_bThrowSatchel);
-	CNetworkVar( bool,				m_bAttachSatchel);
-	CNetworkVar( bool,				m_bAttachTripmine);
-	float				m_flWallSwitchTime;
+	CNetworkVar( bool, 	m_bDetonatorArmed );
+	CNetworkVar( bool, 	m_bNeedDetonatorDraw);
+	CNetworkVar( bool, 	m_bNeedDetonatorHolster);
+	CNetworkVar( bool, 	m_bNeedReload);
+	CNetworkVar( bool, 	m_bClearReload);
+	CNetworkVar( bool, 	m_bThrowSatchel);
+	CNetworkVar( bool, 	m_bAttachSatchel);
+	CNetworkVar( bool, 	m_bAttachTripmine);
+	float 	m_flWallSwitchTime;
 
-	void				Spawn( void );
-	void				Precache( void );
+	void 	Spawn( void );
+	void 	Precache( void );
 
-	void				PrimaryAttack( void );
-	void				SecondaryAttack( void );
-	void				WeaponIdle( void );
-	void				Weapon_Switch( void );
-	void				SLAMThink( void );
+	void 	PrimaryAttack( void );
+	void 	SecondaryAttack( void );
+	void 	WeaponIdle( void );
+	void 	Weapon_Switch( void );
+	void 	SLAMThink( void );
 	
-	void				SetPickupTouch( void );
-	void				SlamTouch( CBaseEntity *pOther );	// default weapon touch
-	void				ItemPostFrame( void );	
-	bool				Reload( void );
-	void				SetSlamState( int newState );
-	bool				CanAttachSLAM(void);		// In position where can attach SLAM?
-	bool				AnyUndetonatedCharges(void);
-	void				StartTripmineAttach( void );
-	void				TripmineAttach( void );
+	void 	SetPickupTouch( void );
+	void 	SlamTouch( CBaseEntity *pOther );	// default weapon touch
+	void 	ItemPostFrame( void );	
+	bool 	Reload( void );
+	void 	SetSlamState( int newState );
+	bool 	CanAttachSLAM();		// In position where can attach SLAM?
+	bool 	AnyUndetonatedCharges();
+	void 	StartTripmineAttach( void );
+	void 	TripmineAttach( void );
 
-	void				StartSatchelDetonate( void );
-	void				SatchelDetonate( void );
-	void				StartSatchelThrow( void );
-	void				StartSatchelAttach( void );
-	void				SatchelThrow( void );
-	void				SatchelAttach( void );
-	bool				Deploy( void );
-	bool				Holster( CBaseCombatWeapon *pSwitchingTo = NULL );
+	void 	StartSatchelDetonate( void );
+	void 	SatchelDetonate( void );
+	void 	StartSatchelThrow( void );
+	void 	StartSatchelAttach( void );
+	void 	SatchelThrow( void );
+	void 	SatchelAttach( void );
+	bool 	Deploy( void );
+	bool 	Holster( CBaseCombatWeapon *pSwitchingTo = NULL );
 
 
 	CWeapon_SLAM();

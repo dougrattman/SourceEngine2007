@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DEBUGOVERLAY_SHARED_H
 #define DEBUGOVERLAY_SHARED_H
@@ -34,7 +34,7 @@ namespace NDebugOverlay
 	void	Cross3D(const Vector &position, float size, int r, int g, int b, bool noDepthTest, float flDuration );
 	void	Cross3DOriented( const Vector &position, const QAngle &angles, float size, int r, int g, int b, bool noDepthTest, float flDuration );
 	void	Cross3DOriented( const matrix3x4_t &m, float size, int c, bool noDepthTest, float flDuration );
-	void	DrawOverlayLines(void);
+	void	DrawOverlayLines();
 	void	DrawTickMarkedLine(const Vector &startPos, const Vector &endPos, float tickDist, int tickTextDist, int r, int g, int b, bool noDepthTest, float flDuration );
 	void	DrawGroundCrossHairOverlay();
 	void	HorzArrow( const Vector &startPos, const Vector &endPos, float width, int r, int g, int b, int a, bool noDepthTest, float flDuration);

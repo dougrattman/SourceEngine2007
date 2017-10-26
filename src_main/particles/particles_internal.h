@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: sheet code for particles and other sprite functions
 //
@@ -37,7 +37,7 @@ struct CWorldCollideContextData
 	void operator delete( void* p, int nBlockUse, const char *pFileName, int nLine );
 
 	void CalculatePlanes( CParticleCollection *pParticles, int nCollisionMode, int nCollisionGroupNumber,
-						  Vector const *pCpOffset = NULL, float flMovementTolerance = 0.  );
+    Vector const *pCpOffset = NULL, float flMovementTolerance = 0.  );
 };
 
 #endif // PARTICLES_INTERNAL_H	

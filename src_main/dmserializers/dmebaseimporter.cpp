@@ -1,42 +1,31 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
-#include "dmserializers.h"
+// Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+
 #include "dmebaseimporter.h"
+#include "dmserializers.h"
 
-CDmeBaseImporter::CDmeBaseImporter( char const *formatName, char const *nextFormatName ) :
-	m_pFormatName( formatName ),
-	m_pNextSerializer( nextFormatName )
-{
+CDmeBaseImporter::CDmeBaseImporter(char const *formatName,
+                                   char const *nextFormatName)
+    : m_pFormatName(formatName), m_pNextSerializer(nextFormatName) {}
+
+bool CDmeBaseImporter::IsLatestVersion() const {
+  return g_pDataModel->FindLegacyUpdater(m_pNextSerializer) == NULL;
 }
 
-bool CDmeBaseImporter::IsLatestVersion() const
-{
-	return g_pDataModel->FindLegacyUpdater( m_pNextSerializer ) == NULL;
+// Updates ppRoot to first non-legacy generic dmx format, returns false if the
+// conversion fails
+bool CDmeBaseImporter::Update(CDmElement **ppRoot) {
+  if (!DoFixup(*ppRoot)) return false;
+
+  if (!m_pNextSerializer) return true;
+
+  // Chain
+  IDmLegacyUpdater *pUpdater =
+      g_pDataModel->FindLegacyUpdater(m_pNextSerializer);
+  if (!pUpdater) return true;
+
+  return pUpdater->Update(ppRoot);
 }
 
-// Updates ppRoot to first non-legacy generic dmx format, returns false if the conversion fails
-bool CDmeBaseImporter::Update( CDmElement **ppRoot )
-{
-	if ( !DoFixup( *ppRoot ) )
-		return false;
-
-	if ( !m_pNextSerializer )
-		return true;
-
-	// Chain
-	IDmLegacyUpdater *pUpdater = g_pDataModel->FindLegacyUpdater( m_pNextSerializer );
-	if ( !pUpdater )
-		return true;
-
-	return pUpdater->Update( ppRoot );
-}
-
-
-
-CSFMBaseImporter::CSFMBaseImporter( char const *formatName, char const *nextFormatName ) :
-	BaseClass( formatName, nextFormatName )
-{
-}
+CSFMBaseImporter::CSFMBaseImporter(char const *formatName,
+                                   char const *nextFormatName)
+    : BaseClass(formatName, nextFormatName) {}

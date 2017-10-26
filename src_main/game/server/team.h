@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Team management class. Contains all the details for a specific team
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEAM_H
 #define TEAM_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "shareddefs.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 class CBasePlayer;
 class CTeamSpawnPoint;
@@ -39,7 +39,7 @@ public:
 	//-----------------------------------------------------------------------------
 	// Data Handling
 	//-----------------------------------------------------------------------------
-	virtual int			GetTeamNumber( void ) const;
+	virtual int GetTeamNumber( void ) const;
 	virtual const char *GetName( void );
 	virtual void		UpdateClientData( CBasePlayer *pPlayer );
 	virtual bool		ShouldTransmitToPlayer( CBasePlayer* pRecipient, CBaseEntity* pEntity );
@@ -89,7 +89,7 @@ public:
 	// Spawnpoints
 	int		m_iLastSpawn;		// Index of the last spawnpoint used
 
-	CNetworkVar( int, m_iTeamNum );			// Which team is this?
+	CNetworkVar( int, m_iTeamNum ); // Which team is this?
 };
 
 extern CUtlVector< CTeam * > g_Teams;

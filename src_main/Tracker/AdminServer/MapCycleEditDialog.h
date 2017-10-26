@@ -1,45 +1,38 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright © 1996-2002, Valve LLC, All rights reserved.
 
 #ifndef MAPCYCLEEDITDIALOG_H
 #define MAPCYCLEEDITDIALOG_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include <vgui_controls/Frame.h>
-#include "UtlVector.h"
-#include "UtlSymbol.h"
+#include "tier1/UtlSymbol.h"
+#include "tier1/UtlVector.h"
+#include "vgui_controls/Frame.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Dialog for editing the game server map cycle list
 //-----------------------------------------------------------------------------
-class CMapCycleEditDialog : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CMapCycleEditDialog, vgui::Frame ); 
-public:
-	CMapCycleEditDialog(vgui::Panel *parent, const char *name);
-	~CMapCycleEditDialog();
-	virtual void Activate(vgui::Panel *updateTarget, CUtlVector<CUtlSymbol> &availableMaps, CUtlVector<CUtlSymbol> &mapCycle);
+class CMapCycleEditDialog : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CMapCycleEditDialog, vgui::Frame);
 
-protected:
-	virtual void OnCommand(const char *command);
-	virtual void PerformLayout();
+ public:
+  CMapCycleEditDialog(vgui::Panel *parent, const char *name);
+  ~CMapCycleEditDialog();
+  virtual void Activate(vgui::Panel *updateTarget,
+                        CUtlVector<CUtlSymbol> &availableMaps,
+                        CUtlVector<CUtlSymbol> &mapCycle);
 
-private:
-	MESSAGE_FUNC_PTR( OnItemSelected, "ItemSelected", panel );
+ protected:
+  virtual void OnCommand(const char *command);
+  virtual void PerformLayout();
 
-	vgui::ListPanel *m_pAvailableMapList;
-	vgui::ListPanel *m_pMapCycleList;
-	vgui::Button *m_RightArrow;
-	vgui::Button *m_LeftArrow;
-	vgui::Button *m_UpArrow;
-	vgui::Button *m_DownArrow;
+ private:
+  MESSAGE_FUNC_PTR(OnItemSelected, "ItemSelected", panel);
+
+  vgui::ListPanel *m_pAvailableMapList;
+  vgui::ListPanel *m_pMapCycleList;
+  vgui::Button *m_RightArrow;
+  vgui::Button *m_LeftArrow;
+  vgui::Button *m_UpArrow;
+  vgui::Button *m_DownArrow;
 };
 
-
-#endif // MAPCYCLEEDITDIALOG_H
+#endif  // MAPCYCLEEDITDIALOG_H

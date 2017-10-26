@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -48,16 +48,16 @@ public:
 
 	  // Data
 public:
-	int			m_nCount;
-	int			m_nSeconds;
+	int m_nCount;
+	int m_nSeconds;
 
-	int			m_nCommentary;
-	int			m_nHDR;
-	int			m_nCaptions;
-	int			m_nSkill[ 3 ];
+	int m_nCommentary;
+	int m_nHDR;
+	int m_nCaptions;
+	int m_nSkill[ 3 ];
 	bool		m_bSteam;
 	bool		m_bCyberCafe;
-	int			m_nDeaths;
+	int m_nDeaths;
 };
 
 struct BasicGameStats_t
@@ -72,23 +72,23 @@ public:
 	  {
 	  }
 
-	  void						Clear();
+	  void  Clear();
 
-	  void						SaveToBuffer( CUtlBuffer& buf );
-	  bool						ParseFromBuffer( CUtlBuffer& buf, int iBufferStatsVersion );
+	  void  SaveToBuffer( CUtlBuffer& buf );
+	  bool  ParseFromBuffer( CUtlBuffer& buf, int iBufferStatsVersion );
 
 	  BasicGameStatsRecord_t	*FindOrAddRecordForMap( char const *mapname );
 
 	  // Data
 public:
-	int							m_nSecondsToCompleteGame; // 0 means they haven't finished playing yet
+	int  	m_nSecondsToCompleteGame; // 0 means they haven't finished playing yet
 
-	BasicGameStatsRecord_t		m_Summary;			// Summary record
+	BasicGameStatsRecord_t		m_Summary; // Summary record
 	CUtlDict< BasicGameStatsRecord_t, unsigned short > m_MapTotals;
-	bool						m_bSteam;
-	bool						m_bCyberCafe;
-	int							m_nHL2ChaptureUnlocked;
-	int							m_nDXLevel;
+	bool  m_bSteam;
+	bool  m_bCyberCafe;
+	int  	m_nHL2ChaptureUnlocked;
+	int  	m_nDXLevel;
 };
 
 class CBasePlayer;
@@ -199,15 +199,15 @@ public:
 
 public:
 	BasicGameStats_t m_BasicStats; //exposed in case you do a complete overhaul and still want to save it
-	bool			m_bLogging : 1;
-	bool			m_bLoggingToFile : 1;
+	bool m_bLogging : 1;
+	bool m_bLoggingToFile : 1;
 };
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : &SaveBuffer - 
-//			iLump - 
-//			iLumpCount - 
+// iLump - 
+// iLumpCount - 
 //-----------------------------------------------------------------------------
 inline bool CBaseGameStats::AppendLump( int nMaxLumpCount, CUtlBuffer &SaveBuffer, unsigned short iLump, unsigned short iLumpCount, size_t nSize, void *pData )
 {
@@ -234,8 +234,8 @@ inline bool CBaseGameStats::AppendLump( int nMaxLumpCount, CUtlBuffer &SaveBuffe
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : &LoadBuffer - 
-//			&iLump - 
-//			&iLumpCount - 
+// &iLump - 
+// &iLumpCount - 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 inline bool CBaseGameStats::GetLumpHeader( int nMaxLumpCount, CUtlBuffer &LoadBuffer, unsigned short &iLump, unsigned short &iLumpCount, bool bPermissive /*= false*/ )
@@ -269,9 +269,9 @@ inline bool CBaseGameStats::GetLumpHeader( int nMaxLumpCount, CUtlBuffer &LoadBu
 //-----------------------------------------------------------------------------
 // Purpose: Loads 1 or more lumps of raw data
 // Input  : &LoadBuffer - buffer to be read from
-//			iLumpCount - # of lumps to read
-//			nSize - size of each lump
-//			pData - where to store the data
+// iLumpCount - # of lumps to read
+// nSize - size of each lump
+// pData - where to store the data
 //-----------------------------------------------------------------------------
 inline void CBaseGameStats::LoadLump( CUtlBuffer &LoadBuffer, unsigned short iLumpCount, size_t nSize, void *pData )
 {

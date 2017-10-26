@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef BASEANIMATING_H
 #define BASEANIMATING_H
@@ -24,7 +24,7 @@ class KeyValues;
 FORWARD_DECLARE_HANDLE( memhandle_t );
 
 #define	BCF_NO_ANIMATION_SKIP	( 1 << 0 )	// Do not allow PVS animation skipping (mostly for attachments being critical to an entity)
-#define	BCF_IS_IN_SPAWN			( 1 << 1 )	// Is currently inside of spawn, always evaluate animations
+#define	BCF_IS_IN_SPAWN ( 1 << 1 )	// Is currently inside of spawn, always evaluate animations
 
 class CBaseAnimating : public CBaseEntity
 {
@@ -82,8 +82,8 @@ public:
 	void StudioFrameAdvanceManual( float flInterval );
 	bool	IsValidSequence( int iSequence );
 
-	inline float					GetPlaybackRate();
-	inline void						SetPlaybackRate( float rate );
+	inline float 		GetPlaybackRate();
+	inline void  SetPlaybackRate( float rate );
 
 	inline int GetSequence() { return m_nSequence; }
 	// inline void SetSequence(int nSequence) { Assert( GetModelPtr( ) && nSequence >= 0 && nSequence < GetModelPtr( )->GetNumSeq() );  m_nSequence = nSequence; }
@@ -203,13 +203,13 @@ public:
 	int GetBodygroupCount( int iGroup );
 	int GetNumBodyGroups( void );
 
-	void					SetHitboxSet( int setnum );
-	void					SetHitboxSetByName( const char *setname );
-	int						GetHitboxSet( void );
-	char const				*GetHitboxSetName( void );
-	int						GetHitboxSetCount( void );
-	int						GetHitboxBone( int hitboxIndex );
-	bool					LookupHitbox( const char *szName, int& outSet, int& outBox );
+	void 		SetHitboxSet( int setnum );
+	void 		SetHitboxSetByName( const char *setname );
+	int  GetHitboxSet( void );
+	char const 	*GetHitboxSetName( void );
+	int  GetHitboxSetCount( void );
+	int  GetHitboxBone( int hitboxIndex );
+	bool 		LookupHitbox( const char *szName, int& outSet, int& outBox );
 
 	// Computes a box that surrounds all hitboxes
 	bool ComputeHitboxSurroundingBox( Vector *pVecWorldMins, Vector *pVecWorldMaxs );
@@ -225,15 +225,15 @@ public:
 	void	ResetClientsideFrame( void );
 
 // Controllers.
-	virtual	void			InitBoneControllers ( void );
+	virtual	void InitBoneControllers ( void );
 	
 	// Return's the controller's angle/position in bone space.
-	float					GetBoneController ( int iController );
+	float 		GetBoneController ( int iController );
 
 	// Maps the angle/position value you specify into the bone's start/end and sets the specified controller to the value.
-	float					SetBoneController ( int iController, float flValue );
+	float 		SetBoneController ( int iController, float flValue );
 	
-	void					GetVelocity(Vector *vVelocity, AngularImpulse *vAngVelocity);
+	void 		GetVelocity(Vector *vVelocity, AngularImpulse *vAngVelocity);
 
 	// these two need to move somewhere else
 	LocalFlexController_t GetNumFlexControllers( void );
@@ -260,13 +260,13 @@ public:
 	virtual int DrawDebugTextOverlays( void );
 	
 	// See note in code re: bandwidth usage!!!
-	void				DrawServerHitboxes( float duration = 0.0f, bool monocolor = false );
-	void				DrawRawSkeleton( matrix3x4_t boneToWorld[], int boneMask, bool noDepthTest = true, float duration = 0.0f, bool monocolor = false );
+	void 	DrawServerHitboxes( float duration = 0.0f, bool monocolor = false );
+	void 	DrawRawSkeleton( matrix3x4_t boneToWorld[], int boneMask, bool noDepthTest = true, float duration = 0.0f, bool monocolor = false );
 
-	void				SetModelWidthScale( float scale, float change_duration = 0.0f );
-	float				GetModelWidthScale() const;
+	void 	SetModelWidthScale( float scale, float change_duration = 0.0f );
+	float 	GetModelWidthScale() const;
 
-	void				UpdateModelWidthScale();
+	void 	UpdateModelWidthScale();
 	
 	// also calculate IK on server? (always done on client)
 	void EnableServerIK();
@@ -302,8 +302,8 @@ public:
 	void TransferDissolveFrom( CBaseAnimating *pAnim );
 
 	// animation needs
-	float				m_flGroundSpeed;	// computed linear movement rate for current sequence
-	float				m_flLastEventCheck;	// cycle index of when events were last checked
+	float 	m_flGroundSpeed;	// computed linear movement rate for current sequence
+	float 	m_flLastEventCheck;	// cycle index of when events were last checked
 
 	virtual void SetLightingOriginRelative( CBaseEntity *pLightingOriginRelative );
 	void SetLightingOriginRelative( string_t strLightingOriginRelative );
@@ -359,24 +359,24 @@ public:
 	void UpdateStepOrigin( void );
 
 protected:
-	float				m_flIKGroundContactTime;
-	float				m_flIKGroundMinHeight;
-	float				m_flIKGroundMaxHeight;
+	float 	m_flIKGroundContactTime;
+	float 	m_flIKGroundMinHeight;
+	float 	m_flIKGroundMaxHeight;
 
-	float				m_flEstIkFloor; // debounced
-	float				m_flEstIkOffset;
+	float 	m_flEstIkFloor; // debounced
+	float 	m_flEstIkOffset;
 
-  	CIKContext			*m_pIk;
-	int					m_iIKCounter;
+  	CIKContext *m_pIk;
+	int 		m_iIKCounter;
 
 public:
 	Vector	GetStepOrigin( void ) const;
 	QAngle	GetStepAngles( void ) const;
 
 private:
-	bool				m_bSequenceFinished;// flag set when StudioAdvanceFrame moves across a frame boundry
-	bool				m_bSequenceLoops;	// true if the sequence loops
-	float				m_flDissolveStartTime;
+	bool 	m_bSequenceFinished;// flag set when StudioAdvanceFrame moves across a frame boundry
+	bool 	m_bSequenceLoops;	// true if the sequence loops
+	float 	m_flDissolveStartTime;
 
 	// was pev->frame
 	CNetworkVar( float, m_flCycle );
@@ -399,7 +399,7 @@ private:
 	CNetworkHandle( CBaseEntity, m_hLightingOriginRelative );
 
 	string_t m_iszLightingOriginRelative;	// for reading from the file only
-	string_t m_iszLightingOrigin;			// for reading from the file only
+	string_t m_iszLightingOrigin; // for reading from the file only
 
 	memhandle_t		m_boneCacheHandle;
 	unsigned short	m_fBoneCacheFlags;		// Used for bone cache state on model
@@ -413,7 +413,7 @@ public:
 	COutputEvent m_OnIgnite;
 
 private:
-	CStudioHdr			*m_pStudioHdr;
+	CStudioHdr *m_pStudioHdr;
 	CThreadFastMutex	m_StudioHdrInitLock;
 	CThreadFastMutex	m_BoneSetupMutex;
 
@@ -510,9 +510,9 @@ EXTERN_SEND_TABLE(DT_BaseAnimating);
 
 
 
-#define ANIMATION_SEQUENCE_BITS			12	// 4096 sequences
-#define ANIMATION_SKIN_BITS				10	// 1024 body skin selections FIXME: this seems way high
-#define ANIMATION_BODY_BITS				32	// body combinations
+#define ANIMATION_SEQUENCE_BITS 12	// 4096 sequences
+#define ANIMATION_SKIN_BITS 	10	// 1024 body skin selections FIXME: this seems way high
+#define ANIMATION_BODY_BITS 	32	// body combinations
 #define ANIMATION_HITBOXSET_BITS		2	// hit box sets 
 #if defined( TF_DLL )
 #define ANIMATION_POSEPARAMETER_BITS	8	// pose parameter resolution

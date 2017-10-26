@@ -1,63 +1,55 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright © 1996-2001, Valve LLC, All rights reserved.
 
 #ifndef SERVERINFOPANEL_H
 #define SERVERINFOPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "VarListPropertyPage.h"
-#include "UtlBuffer.h"
-#include "UtlVector.h"
-#include "UtlSymbol.h"
+#include "tier1/UtlBuffer.h"
+#include "tier1/UtlSymbol.h"
+#include "tier1/UtlVector.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Dialog for displaying information about a game server
 //-----------------------------------------------------------------------------
-class CServerInfoPanel : public CVarListPropertyPage
-{
-public:
-	CServerInfoPanel(vgui::Panel *parent, const char *name);
-	~CServerInfoPanel();
+class CServerInfoPanel : public CVarListPropertyPage {
+ public:
+  CServerInfoPanel(vgui::Panel *parent, const char *name);
+  ~CServerInfoPanel();
 
-	// gets the current hostname
-	const char *GetHostname();
+  // gets the current hostname
+  const char *GetHostname();
 
-	// Called when page is loaded.  Data should be reloaded from document into controls.
-	virtual void OnResetData();
+  // Called when page is loaded.  Data should be reloaded from document into
+  // controls.
+  virtual void OnResetData();
 
-protected:
-	// vgui overrides
-	virtual void OnThink();
+ protected:
+  // vgui overrides
+  virtual void OnThink();
 
-	// special editing of map cycle list
-	virtual void OnEditVariable(KeyValues *rule);
+  // special editing of map cycle list
+  virtual void OnEditVariable(KeyValues *rule);
 
-	// handles responses from the server
-	virtual void OnServerDataResponse(const char *value, const char *response);
+  // handles responses from the server
+  virtual void OnServerDataResponse(const char *value, const char *response);
 
-private:
-	void UpdateMapCycleValue();
+ private:
+  void UpdateMapCycleValue();
 
-	float m_flUpdateTime;
-	int m_iPlayerCount, m_iMaxPlayers;
-	float m_flLastUptimeReceiveTime;
-	long m_iLastUptimeReceived;
-	long m_iLastUptimeDisplayed;
+  float m_flUpdateTime;
+  int m_iPlayerCount, m_iMaxPlayers;
+  float m_flLastUptimeReceiveTime;
+  long m_iLastUptimeReceived;
+  long m_iLastUptimeDisplayed;
 
-	bool m_bMapListRetrieved;
+  bool m_bMapListRetrieved;
 
-	// used to store some strings for mapcycle
-	CUtlVector<CUtlSymbol> m_AvailableMaps;
-	CUtlVector<CUtlSymbol> m_MapCycle;
-	void ParseIntoMapList(const char *maplist, CUtlVector<CUtlSymbol> &mapArray);
+  // used to store some strings for mapcycle
+  CUtlVector<CUtlSymbol> m_AvailableMaps;
+  CUtlVector<CUtlSymbol> m_MapCycle;
+  void ParseIntoMapList(const char *maplist, CUtlVector<CUtlSymbol> &mapArray);
 
-	typedef CVarListPropertyPage BaseClass;
+  typedef CVarListPropertyPage BaseClass;
 };
 
-#endif // SERVERINFOPANEL_H
+#endif  // SERVERINFOPANEL_H

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Base class for simple projectiles
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CBASESPRITEPROJECTILE_H
 #define CBASESPRITEPROJECTILE_H
@@ -32,14 +32,14 @@ public:
 	virtual void HandleThink();
 
 	void CBaseSpriteProjectile::Spawn(	char *pszModel,
-									const Vector &vecOrigin,
-									const Vector &vecVelocity,
-									edict_t *pOwner,
-									MoveType_t	iMovetype,
-									MoveCollide_t nMoveCollide,
-									int	iDamage,
-									int iDamageType,
-									CBaseEntity *pIntendedTarget = NULL );
+   const Vector &vecOrigin,
+   const Vector &vecVelocity,
+   edict_t *pOwner,
+   MoveType_t	iMovetype,
+   MoveCollide_t nMoveCollide,
+   int	iDamage,
+   int iDamageType,
+   CBaseEntity *pIntendedTarget = NULL );
 
 	virtual void Precache( void ) {};
 

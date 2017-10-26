@@ -1,36 +1,23 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $Date:         $
-//
-//-----------------------------------------------------------------------------
-// $Log: $
-//
-// $NoKeywords: $
-//=============================================================================//
-#if !defined( SV_FILTER_H )
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+
+#if !defined(SV_FILTER_H)
 #define SV_FILTER_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include "utlvector.h"
+#include "filters.h"
+#include "tier1/UtlVector.h"
 #include "userid.h"
-#include "filter.h"
 
-void Filter_Init( void );
-void Filter_Shutdown( void );
+void Filter_Init(void);
+void Filter_Shutdown(void);
 
-bool Filter_ShouldDiscardID( unsigned int userid );
-bool Filter_ShouldDiscard( const netadr_t& adr );
-void Filter_SendBan( const netadr_t& adr );
-const char *GetUserIDString( const USERID_t& id );
+bool Filter_ShouldDiscardID(unsigned int userid);
+bool Filter_ShouldDiscard(const netadr_t& adr);
+void Filter_SendBan(const netadr_t& adr);
+const char* GetUserIDString(const USERID_t& id);
 
-bool Filter_IsUserBanned( const USERID_t& userid );
+bool Filter_IsUserBanned(const USERID_t& userid);
 
-extern CUtlVector< ipfilter_t > g_IPFilters;
-extern CUtlVector< userfilter_t > g_UserFilters;
+extern CUtlVector<ipfilter_t> g_IPFilters;
+extern CUtlVector<userfilter_t> g_UserFilters;
 
-#endif // SV_FILTER_H
+#endif  // SV_FILTER_H

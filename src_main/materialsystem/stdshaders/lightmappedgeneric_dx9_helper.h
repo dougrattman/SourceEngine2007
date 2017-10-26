@@ -8,7 +8,7 @@
 #ifndef LIGHTMAPPEDGENERIC_DX9_HELPER_H
 #define LIGHTMAPPEDGENERIC_DX9_HELPER_H
 
-#include <string.h>
+#include <cstring>
 #include "BaseVSShader.h"
 
 
@@ -90,8 +90,8 @@ struct LightmappedGeneric_DX9_Vars_t
 void InitParamsLightmappedGeneric_DX9( CBaseVSShader *pShader, IMaterialVar** params, const char *pMaterialName, LightmappedGeneric_DX9_Vars_t &info );
 void InitLightmappedGeneric_DX9( CBaseVSShader *pShader, IMaterialVar** params, LightmappedGeneric_DX9_Vars_t &info );
 void DrawLightmappedGeneric_DX9( CBaseVSShader *pShader, IMaterialVar** params, 
-								 IShaderDynamicAPI *pShaderAPI, IShaderShadow* pShaderShadow, 
-								 LightmappedGeneric_DX9_Vars_t &info, CBasePerMaterialContextData **pContextDataPtr	 );
+  		 IShaderDynamicAPI *pShaderAPI, IShaderShadow* pShaderShadow, 
+  		 LightmappedGeneric_DX9_Vars_t &info, CBasePerMaterialContextData **pContextDataPtr	 );
 
 
 #endif // LIGHTMAPPEDGENERIC_DX9_HELPER_H

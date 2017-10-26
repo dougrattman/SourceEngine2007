@@ -1,8 +1,8 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF Base Rockets.
 //
-//=============================================================================//
+
 #include "cbase.h"
 #include "tf_projectile_base.h"
 #include "effect_dispatch_data.h"

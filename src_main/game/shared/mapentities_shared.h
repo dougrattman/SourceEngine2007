@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef MAPENTITIES_SHARED_H
 #define MAPENTITIES_SHARED_H
@@ -15,8 +15,8 @@
 
 //-----------------------------------------------------------------------------
 // Purpose: encapsulates the data string in the map file 
-//			that is used to initialise entities.  The data
-//			string contains a set of key/value pairs.
+// that is used to initialise entities.  The data
+// string contains a set of key/value pairs.
 //-----------------------------------------------------------------------------
 class CEntityMapData
 {

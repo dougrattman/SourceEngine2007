@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef HUD_RADAR_H
 #define HUD_RADAR_H
@@ -33,7 +33,7 @@ public:
 	~CHudRadar();
 
 	virtual void Paint();
-	void VidInit(void);
+	void VidInit();
 	virtual bool Init( KeyValues* pKeyValues, VGuiScreenInitData_t* pInitData );
 	virtual void SetVisible(bool state);
 
@@ -48,10 +48,10 @@ public:
 	void ClearAllRadarContacts()	{ m_iNumRadarContacts = 0; }
 
 public:
-	bool			m_bUseFastUpdate;
-	int				m_ghostAlpha;			// How intense the alpha channel is for CRT ghosts
-	float			m_flTimeStopGhosting;	
-	float			m_flTimeStartGhosting;
+	bool m_bUseFastUpdate;
+	int 	m_ghostAlpha; // How intense the alpha channel is for CRT ghosts
+	float m_flTimeStopGhosting;	
+	float m_flTimeStartGhosting;
 
 private:
 
@@ -64,14 +64,14 @@ private:
 	void DrawRadarDot( int x, int y, float z_diff, int iBaseDotSize, int flags, int r, int g, int b, int a );
 
 	CRadarContact	m_radarContacts[RADAR_MAX_CONTACTS];
-	int				m_iNumRadarContacts;
+	int 	m_iNumRadarContacts;
 	C_BaseEntity	*m_pVehicle;
-	int				m_iImageID;
-	int				m_textureID_IconLambda;
-	int				m_textureID_IconBuster;
-	int				m_textureID_IconStrider;
-	int				m_textureID_IconDog;
-	int				m_textureID_IconBase;
+	int 	m_iImageID;
+	int 	m_textureID_IconLambda;
+	int 	m_textureID_IconBuster;
+	int 	m_textureID_IconStrider;
+	int 	m_textureID_IconDog;
+	int 	m_textureID_IconBase;
 };
 
 extern CHudRadar *GetHudRadar();

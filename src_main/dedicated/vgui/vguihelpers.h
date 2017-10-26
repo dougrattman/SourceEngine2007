@@ -1,26 +1,17 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: 
-//
-//===========================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef VGUIHELPERS_H
-#define VGUIHELPERS_H
-
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_DEDICATED_VGUIHELPERS_H_
+#define SOURCE_DEDICATED_VGUIHELPERS_H_
 
 #include "tier1/interface.h"
 
-int StartVGUI( CreateInterfaceFn dedicatedFactory );
+int StartVGUI(CreateInterfaceFn dedicatedFactory);
 void StopVGUI();
 void RunVGUIFrame();
 bool VGUIIsRunning();
 bool VGUIIsStopping();
 bool VGUIIsInConfig();
 void VGUIFinishedConfig();
-void VGUIPrintf( const char *msg );
+void VGUIPrintf(const char *msg);
 
-#endif // VGUIHELPERS_H
-
+#endif  // SOURCE_DEDICATED_VGUIHELPERS_H_

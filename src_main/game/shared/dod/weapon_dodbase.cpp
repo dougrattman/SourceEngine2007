@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "in_buttons.h"
@@ -1316,7 +1316,7 @@ void CWeaponDODBase::Smack()
 				pPlayer->HintMessage( "You got an error, check your console\n" );
 			}
 
-			Warning( "BADNESS! Tell Matt that the weapon '%s' tried to draw with a null model ( %d, %d, %s ) \n",
+			Warning( "BADNESS! Tell Matt that the weapon '%s' tried to draw with a 0 model ( %d, %d, %s ) \n",
 				GetDODWpnData().szClassName,
 				m_iWorldModelIndex, m_iReloadModelIndex, m_bUseAltWeaponModel ? "alt" : "not alt" );
 

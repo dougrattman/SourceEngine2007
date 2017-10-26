@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Dispatches a beam ring between two entities
@@ -31,8 +31,8 @@ public:
 
 
 public:
-					CTEBaseBeam( const char *name );
-	virtual			~CTEBaseBeam( void );
+ 		CTEBaseBeam( const char *name );
+	virtual ~CTEBaseBeam( void );
 
 	virtual void	Test( const Vector& current_origin, const QAngle& current_angles ) = 0;
 	

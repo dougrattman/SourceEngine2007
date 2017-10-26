@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_HUD_PLAYERSTATUS_MGHEAT_H
 #define DOD_HUD_PLAYERSTATUS_MGHEAT_H
@@ -27,12 +27,12 @@ public:
 
 private:
 
-	float			m_flPercentage;
+	float m_flPercentage;
 
-	Color			m_clrActive;
-	Color			m_clrActiveLow;
-	Color			m_clrInactive;
-	Color			m_clrInactiveLow;
+	Color m_clrActive;
+	Color m_clrActiveLow;
+	Color m_clrInactive;
+	Color m_clrInactiveLow;
 
 	CPanelAnimationVarAliasType( float, m_flSliceWidth, "slice_width", "5", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flSliceSpacer, "slice_spacer", "2", "proportional_float" );
@@ -58,17 +58,17 @@ public:
 
 private:
 
-	float			m_flPercentage;
+	float m_flPercentage;
 	CHudTexture		*m_icon;
 
 	CPanelAnimationVar( float, m_flWarningLevel, "warning_level", "0.75" );
 
-//	char			m_szIcon30cal[128];
-	char			m_szIconMg42[128];
+//	char m_szIcon30cal[128];
+	char m_szIconMg42[128];
 
-	int				m_nType;
-	Color			m_clrActive;
-	Color			m_clrActiveLow;
+	int 	m_nType;
+	Color m_clrActive;
+	Color m_clrActiveLow;
 };
 
 //-----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
 private:
 
 	CDoDCutEditablePanel		*m_pBackground;
-	CDoDHudMGHeatIcon			*m_pIcon;
+	CDoDHudMGHeatIcon *m_pIcon;
 	CDoDHudMGHeatProgressBar	*m_pProgressBar;
 };	
 

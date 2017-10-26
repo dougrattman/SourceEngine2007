@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SOUNDENVELOPE_H
 #define SOUNDENVELOPE_H
@@ -37,7 +37,7 @@ struct envelopePoint_t
 struct envelopeDescription_t
 {
 	envelopePoint_t	*pPoints;
-	int				nNumPoints;
+	int 	nNumPoints;
 };
 
 class IRecipientFilter;
@@ -54,9 +54,9 @@ public:
 
 	virtual CSoundPatch	*SoundCreate( IRecipientFilter& filter, int nEntIndex, const char *pSoundName ) = 0;
 	virtual CSoundPatch	*SoundCreate( IRecipientFilter& filter, int nEntIndex, int channel, const char *pSoundName, 
-							float attenuation ) = 0;
+  	float attenuation ) = 0;
 	virtual CSoundPatch	*SoundCreate( IRecipientFilter& filter, int nEntIndex, int channel, const char *pSoundName, 
-							soundlevel_t soundlevel ) = 0;
+  	soundlevel_t soundlevel ) = 0;
 	virtual CSoundPatch	*SoundCreate( IRecipientFilter& filter, int nEntIndex, const EmitSound_t &es ) = 0;
 	virtual void		SoundDestroy( CSoundPatch	* ) = 0;
 	virtual void		SoundChangePitch( CSoundPatch *pSound, float pitchTarget, float deltaTime ) = 0;

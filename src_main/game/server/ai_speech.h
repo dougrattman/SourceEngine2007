@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_SPEECH_H
 #define AI_SPEECH_H
@@ -23,7 +23,7 @@ class AI_CriteriaSet;
 
 //-----------------------------------------------------------------------------
 // Purpose: Used to share a global resource or prevent a system stepping on
-//			own toes.
+// own toes.
 //-----------------------------------------------------------------------------
 
 class CAI_TimedSemaphore
@@ -36,7 +36,7 @@ public:
 	}
 	
 	void Acquire( float time, CBaseEntity *pTalker )		{ m_ReleaseTime = gpGlobals->curtime + time; m_hCurrentTalker = pTalker; }
-	void Release()					{ m_ReleaseTime = 0; m_hCurrentTalker = NULL; }
+	void Release() 		{ m_ReleaseTime = 0; m_hCurrentTalker = NULL; }
 	
 	// Current owner of the semaphore is always allowed to talk
 	bool IsAvailable( CBaseEntity *pTalker ) const		{ return ((gpGlobals->curtime > m_ReleaseTime) || (m_hCurrentTalker == pTalker)); }
@@ -73,12 +73,12 @@ const soundlevel_t AIS_DEF_SNDLVL 	 	= SNDLVL_TALKING;
 
 // Sentence prefix constants
 #define AI_SP_SPECIFIC_SENTENCE	'!'
-#define AI_SP_WAVFILE			'^'
+#define AI_SP_WAVFILE '^'
 #define AI_SP_SCENE_GROUP		'='
 #define AI_SP_SPECIFIC_SCENE	'?'
 
 #define AI_SPECIFIC_SENTENCE(str_constant)	"!" str_constant
-#define AI_WAVFILE(str_constant)			"^" str_constant
+#define AI_WAVFILE(str_constant) "^" str_constant
 // @Note (toml 09-12-02): as scene groups are not currently implemented, the string is a semi-colon delimited list
 #define AI_SCENE_GROUP(str_constant)		"=" str_constant
 #define AI_SPECIFIC_SCENE(str_constant)		"?" str_constant
@@ -108,7 +108,7 @@ class AI_Response;
 // CAI_Expresser
 //
 // Purpose: Provides the functionality of going from abstract concept ("hello")
-//			to specific sentence/scene/wave
+// to specific sentence/scene/wave
 //
 
 //-------------------------------------
@@ -118,8 +118,8 @@ class CAI_ExpresserSink
 {
 public:
 	virtual void OnSpokeConcept( AIConcept_t concept, AI_Response *response )	{};
-	virtual void OnStartSpeaking()						{}
-	virtual bool UseSemaphore()							{ return true; }
+	virtual void OnStartSpeaking()  {}
+	virtual bool UseSemaphore()  	{ return true; }
 };
 
 struct ConceptHistory_t
@@ -230,11 +230,11 @@ private:
 	// Speaking states
 	//
 
-	float				m_flStopTalkTime;				// when in the future that I'll be done saying this sentence.
-	float				m_flStopTalkTimeWithoutDelay;	// same as the above, but minus the delay before other people can speak
-	float				m_flBlockedTalkTime;
-	int					m_voicePitch;					// pitch of voice for this head
-	float				m_flLastTimeAcceptedSpeak;		// because speech may not be blocked until NoteSpeaking called by scene ent, this handles in-think blocking
+	float 	m_flStopTalkTime; 	// when in the future that I'll be done saying this sentence.
+	float 	m_flStopTalkTimeWithoutDelay;	// same as the above, but minus the delay before other people can speak
+	float 	m_flBlockedTalkTime;
+	int 		m_voicePitch; 		// pitch of voice for this head
+	float 	m_flLastTimeAcceptedSpeak;		// because speech may not be blocked until NoteSpeaking called by scene ent, this handles in-think blocking
 	
 	DECLARE_SIMPLE_DATADESC();
 
@@ -243,7 +243,7 @@ private:
 public:
 	virtual void SetOuter( CBaseFlex *pOuter )	{ m_pOuter = pOuter; }
 
-	CBaseFlex *		GetOuter() 			{ return m_pOuter; }
+	CBaseFlex *		GetOuter()  { return m_pOuter; }
 	const CBaseFlex *	GetOuter() const 	{ return m_pOuter; }
 
 private:
@@ -284,22 +284,22 @@ public:
 
 	// These two methods allow looking up a response and dispatching it to be two different steps
 	AI_Response *	SpeakFindResponse( AIConcept_t concept, const char *modifiers = NULL );
-	bool 			SpeakDispatchResponse( AIConcept_t concept, AI_Response *response );
+	bool  SpeakDispatchResponse( AIConcept_t concept, AI_Response *response );
 	virtual void	PostSpeakDispatchResponse( AIConcept_t concept, AI_Response *response ) { return; }
-	float 			GetResponseDuration( AI_Response *response );
+	float  GetResponseDuration( AI_Response *response );
 
 	float GetTimeSpeechComplete() const 	{ return GetExpresser()->GetTimeSpeechComplete(); }
 
-	bool IsSpeaking()				{ return GetExpresser()->IsSpeaking(); }
-	bool CanSpeak()					{ return GetExpresser()->CanSpeak(); }
+	bool IsSpeaking() 	{ return GetExpresser()->IsSpeaking(); }
+	bool CanSpeak() 		{ return GetExpresser()->CanSpeak(); }
 	bool CanSpeakAfterMyself()		{ return GetExpresser()->CanSpeakAfterMyself(); }
 
 	void SetSpokeConcept( AIConcept_t concept, AI_Response *response, bool bCallback = true ) 		{ GetExpresser()->SetSpokeConcept( concept, response, bCallback ); }
-	float GetTimeSpokeConcept( AIConcept_t concept )												{ return GetExpresser()->GetTimeSpokeConcept( concept ); }
-	bool SpokeConcept( AIConcept_t concept )														{ return GetExpresser()->SpokeConcept( concept ); }
+	float GetTimeSpokeConcept( AIConcept_t concept )    { return GetExpresser()->GetTimeSpokeConcept( concept ); }
+	bool SpokeConcept( AIConcept_t concept )    		{ return GetExpresser()->SpokeConcept( concept ); }
 
 protected:
-	int 			PlaySentence( const char *pszSentence, float delay, float volume = VOL_NORM, soundlevel_t soundlevel = SNDLVL_TALKING, CBaseEntity *pListener = NULL );
+	int  PlaySentence( const char *pszSentence, float delay, float volume = VOL_NORM, soundlevel_t soundlevel = SNDLVL_TALKING, CBaseEntity *pListener = NULL );
 	virtual void	ModifyOrAppendCriteria( AI_CriteriaSet& set );
 
 	virtual IResponseSystem *GetResponseSystem();

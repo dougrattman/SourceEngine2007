@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_HUD_CHAT_H
 #define CS_HUD_CHAT_H
@@ -54,11 +54,11 @@ public:
 	virtual void	Init( void );
 	virtual void	Reset( void );
 
-	void			MsgFunc_SayText2( bf_read &msg );
-	void			MsgFunc_RadioText( bf_read &msg );
-	void			MsgFunc_RawAudio( bf_read &msg );
+	void MsgFunc_SayText2( bf_read &msg );
+	void MsgFunc_RadioText( bf_read &msg );
+	void MsgFunc_RawAudio( bf_read &msg );
 
-	int				GetChatInputOffset( void );
+	int 	GetChatInputOffset( void );
 
 
 	virtual Color	GetTextColorForClient( TextColor colorNum, int clientIndex );

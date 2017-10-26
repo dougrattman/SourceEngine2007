@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef BASE_PLAYERANIMSTATE_H
 #define BASE_PLAYERANIMSTATE_H
@@ -29,7 +29,7 @@
 
 
 #define MAIN_IDLE_SEQUENCE_LAYER 0	// For 8-way blended models, this layer blends an idle on top of the run/walk animation to simulate a 9-way blend.
-									// For 9-way blended models, we don't use this layer.
+   // For 9-way blended models, we don't use this layer.
 
 #define AIMSEQUENCE_LAYER		1	// Aim sequence uses layers 0 and 1 for the weapon idle animation (needs 2 layers so it can blend).
 #define NUM_AIMSEQUENCE_LAYERS	4	// Then it uses layers 2 and 3 to blend in the weapon run/walk/crouchwalk animation.
@@ -68,7 +68,7 @@ public:
 		TURN_RIGHT
 	};
 
-						CBasePlayerAnimState();
+  CBasePlayerAnimState();
 	virtual ~CBasePlayerAnimState();
 
 	void Init( CBaseAnimatingOverlay *pPlayer, const CModAnimConfig &config );
@@ -156,11 +156,11 @@ public:
 
 public:
 	
-	void				GetPoseParameters( CStudioHdr *pStudioHdr, float poseParameter[MAXSTUDIOPOSEPARAM] );
+	void 	GetPoseParameters( CStudioHdr *pStudioHdr, float poseParameter[MAXSTUDIOPOSEPARAM] );
 
 	CBaseAnimatingOverlay	*GetOuter() const;
 
-	void				RestartMainSequence();
+	void 	RestartMainSequence();
 
 
 // Helpers for the derived classes to use.
@@ -172,13 +172,13 @@ protected:
 
 	Activity GetCurrentMainSequenceActivity() const;
 
-	void				GetOuterAbsVelocity( Vector& vel ) const;
-	float				GetOuterXYSpeed() const;
+	void 	GetOuterAbsVelocity( Vector& vel ) const;
+	float 	GetOuterXYSpeed() const;
 
 	// How long has it been since we cleared the animation state?
-	float				TimeSinceLastAnimationStateClear() const;
+	float 	TimeSinceLastAnimationStateClear() const;
 
-	float				GetEyeYaw() const { return m_flEyeYaw; }
+	float 	GetEyeYaw() const { return m_flEyeYaw; }
 
 protected:
 	
@@ -186,7 +186,7 @@ protected:
 	CBaseAnimatingOverlay	*m_pOuter;
 
 protected:
-	int					ConvergeAngles( float goal,float maxrate, float maxgap, float dt, float& current );
+	int 		ConvergeAngles( float goal,float maxrate, float maxgap, float dt, float& current );
 	virtual void		ComputePoseParam_MoveYaw( CStudioHdr *pStudioHdr );
 	virtual void		ComputePoseParam_BodyPitch( CStudioHdr *pStudioHdr );
 	virtual void		ComputePoseParam_BodyYaw();
@@ -201,23 +201,23 @@ protected:
 	// The following variables are used for tweaking the yaw of the upper body when standing still and
 	//  making sure that it smoothly blends in and out once the player starts moving
 	// Direction feet were facing when we stopped moving
-	float				m_flGoalFeetYaw;
+	float 	m_flGoalFeetYaw;
 
-	float				m_flCurrentFeetYaw;
-	bool				m_bCurrentFeetYawInitialized;
+	float 	m_flCurrentFeetYaw;
+	bool 	m_bCurrentFeetYawInitialized;
 
-	float				m_flCurrentTorsoYaw;
+	float 	m_flCurrentTorsoYaw;
 
 	// To check if they are rotating in place
-	float				m_flLastYaw;
+	float 	m_flLastYaw;
 
 	// Time when we stopped moving
-	float				m_flLastTurnTime;
+	float 	m_flLastTurnTime;
 
 	// One of the above enums
-	int					m_nTurningInPlace;
+	int 		m_nTurningInPlace;
 
-	QAngle				m_angRender;
+	QAngle 	m_angRender;
 
 private:
 
@@ -227,17 +227,17 @@ private:
 	// Get the string that's appended to animation names for the player's current weapon.
 	const char* GetWeaponSuffix();
 
-	Activity			BodyYawTranslateActivity( Activity activity );
+	Activity BodyYawTranslateActivity( Activity activity );
 
-	void				SetOuterPoseParameter( int iParam, float flValue );
+	void 	SetOuterPoseParameter( int iParam, float flValue );
 
 
-	void				EstimateYaw();
+	void 	EstimateYaw();
 
-	void				ComputeMainSequence();
-	void				ComputeAimSequence();
+	void 	ComputeMainSequence();
+	void 	ComputeAimSequence();
 
-	void				ComputePlaybackRate();
+	void 	ComputePlaybackRate();
 
 	void UpdateInterpolators();
 	float GetInterpolatedGroundSpeed();
@@ -254,11 +254,11 @@ private:
 
 	// Last activity we've used on the lower body. Used to determine if animations should restart.
 	Activity m_eCurrentMainSequenceActivity;	
-												
-	float				m_flGaitYaw;
-	float				m_flStoredCycle;
+    
+	float 	m_flGaitYaw;
+	float 	m_flStoredCycle;
 
-	Vector2D			m_vLastMovePose;
+	Vector2D m_vLastMovePose;
 
 	void UpdateAimSequenceLayers(
 		float flCycle,

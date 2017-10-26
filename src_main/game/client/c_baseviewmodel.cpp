@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side view model implementation. Responsible for drawing
 //			the view model.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "c_baseviewmodel.h"
 #include "model_types.h"
@@ -16,7 +16,7 @@
 #include "cl_animevent.h"
 #include "eventlist.h"
 #include "tools/bonelist.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "hltvcamera.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

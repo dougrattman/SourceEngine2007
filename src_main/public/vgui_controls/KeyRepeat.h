@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -33,7 +33,7 @@ public:
 		Reset();
 		for ( int i = 0; i < FM_NUM_KEYREPEAT_ALIASES; i++ )
 		{
-			m_flRepeatTimes[i] = 0.16;
+ m_flRepeatTimes[i] = 0.16;
 		}
 	}
 
@@ -44,33 +44,33 @@ public:
 	void		SetKeyRepeatTime( vgui::KeyCode code, float flRepeat );
 
 private:
-	int			GetIndexForCode( vgui::KeyCode code )
+	int GetIndexForCode( vgui::KeyCode code )
 	{ 
 		switch ( code )
 		{
 		case KEY_XBUTTON_DOWN: 
 		case KEY_XSTICK1_DOWN:
-			return KR_ALIAS_DOWN; break;
+ return KR_ALIAS_DOWN; break;
 		case KEY_XBUTTON_UP: 
 		case KEY_XSTICK1_UP:
-			return KR_ALIAS_UP; break;
+ return KR_ALIAS_UP; break;
 		case KEY_XBUTTON_LEFT: 
 		case KEY_XSTICK1_LEFT:
-			return KR_ALIAS_LEFT; break;
+ return KR_ALIAS_LEFT; break;
 		case KEY_XBUTTON_RIGHT: 
 		case KEY_XSTICK1_RIGHT:
-			return KR_ALIAS_RIGHT; break;
+ return KR_ALIAS_RIGHT; break;
 		default:
-			break;
+ break;
 		}
 		return -1;
 	}
 
 private:
-	bool			m_bAliasDown[FM_NUM_KEYREPEAT_ALIASES];
-	float			m_flRepeatTimes[FM_NUM_KEYREPEAT_ALIASES];
-	float			m_flNextKeyRepeat;
-	bool			m_bHaveKeyDown;
+	bool m_bAliasDown[FM_NUM_KEYREPEAT_ALIASES];
+	float m_flRepeatTimes[FM_NUM_KEYREPEAT_ALIASES];
+	float m_flNextKeyRepeat;
+	bool m_bHaveKeyDown;
 };
 
 

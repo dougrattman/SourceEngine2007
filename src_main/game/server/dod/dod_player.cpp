@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Player for HL1.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "dod_player.h"
@@ -23,7 +23,7 @@
 #include "tier0/vprof.h"
 #include "te_effect_dispatch.h"
 #include "vphysics/player_controller.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "engine/IEngineSound.h"
 #include "studio.h"
 #include "dod_viewmodel.h"
@@ -2637,7 +2637,7 @@ bool CDODPlayer::SelectSpawnSpot( const char *pEntClassName, CBaseEntity* &pSpot
 {
 	// Find the next spawn spot.
 	pSpot = gEntList.FindEntityByClassname( pSpot, pEntClassName );
-	if ( pSpot == NULL ) // skip over the null point
+	if ( pSpot == NULL ) // skip over the 0 point
 		pSpot = gEntList.FindEntityByClassname( pSpot, pEntClassName );
 
 	CBaseEntity *pFirstSpot = pSpot;
@@ -2673,7 +2673,7 @@ bool CDODPlayer::SelectSpawnSpot( const char *pEntClassName, CBaseEntity* &pSpot
 
 	// Increment pSpot
 	pSpot = gEntList.FindEntityByClassname( pSpot, pEntClassName );
-	if ( pSpot == NULL ) // skip over the null point
+	if ( pSpot == NULL ) // skip over the 0 point
 		pSpot = gEntList.FindEntityByClassname( pSpot, pEntClassName );
 
 	Vector vecForward, vecRight, vecUp;

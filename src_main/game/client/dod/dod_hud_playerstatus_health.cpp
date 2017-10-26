@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 //
 
 #include "cbase.h"
@@ -12,14 +12,14 @@
 
 #include "iclientmode.h"
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
 #include <vgui_controls/AnimationController.h>
 #include <vgui_controls/EditablePanel.h>
 #include <vgui_controls/ImagePanel.h>
 
-#include "ConVar.h"
+#include "tier1/convar.h"
 #include "c_dod_team.h"
 #include "c_dod_playerresource.h"
 #include "c_dod_player.h"

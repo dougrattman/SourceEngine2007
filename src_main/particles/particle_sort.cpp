@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: particle system code
 //
@@ -98,7 +98,7 @@ void CParticleCollection::GenerateFirstSortPassData( Vector CameraPos )
 
 		for(int nSub = 0; nSub < min( 4, nParticles ); nSub++)
 		{
-			uint32 nDistanceKey = SubInt( Distance_squared, nSub );
+			uint32_t nDistanceKey = SubInt( Distance_squared, nSub );
 			// now, do some bit-twiddling to get it the way we like the addition of 2.0 to the
 			// distance^2 allows us to remove the exponent bias because now we will have no
 			// negative exponents

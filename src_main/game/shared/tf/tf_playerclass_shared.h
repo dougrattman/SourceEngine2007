@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -39,12 +39,12 @@ struct TFPlayerClassData_t
 	char		m_szHWMModelName[TF_NAME_LENGTH];
 	char		m_szLocalizableName[TF_NAME_LENGTH];
 	float		m_flMaxSpeed;
-	int			m_nMaxHealth;
-	int			m_nMaxArmor;
-	int			m_aWeapons[TF_PLAYER_WEAPON_COUNT];
-	int			m_aGrenades[TF_PLAYER_GRENADE_COUNT];
-	int			m_aAmmoMax[TF_AMMO_COUNT];
-	int			m_aBuildable[TF_PLAYER_BUILDABLE_COUNT];
+	int m_nMaxHealth;
+	int m_nMaxArmor;
+	int m_aWeapons[TF_PLAYER_WEAPON_COUNT];
+	int m_aGrenades[TF_PLAYER_GRENADE_COUNT];
+	int m_aAmmoMax[TF_AMMO_COUNT];
+	int m_aBuildable[TF_PLAYER_BUILDABLE_COUNT];
 
 	bool		m_bDontDoAirwalk;
 	bool		m_bDontDoNewJump;
@@ -85,16 +85,16 @@ public:
 	DECLARE_CLASS_NOBASE( CTFPlayerClassShared );
 
 	bool		Init( int iClass );
-	bool		IsClass( int iClass ) const						{ return ( m_iClass == iClass ); }
-	int			GetClassIndex( void )							{ return m_iClass; }
+	bool		IsClass( int iClass ) const  { return ( m_iClass == iClass ); }
+	int GetClassIndex( void )  	{ return m_iClass; }
 
-	const char	*GetName( void ) const							{ return GetPlayerClassData( m_iClass )->m_szClassName; }
-	const char	*GetModelName( void ) const						{ return GetPlayerClassData( m_iClass )->GetModelName(); }		
-	float		GetMaxSpeed( void )								{ return GetPlayerClassData( m_iClass )->m_flMaxSpeed; }
-	int			GetMaxHealth( void )							{ return GetPlayerClassData( m_iClass )->m_nMaxHealth; }
-	int			GetMaxArmor( void )								{ return GetPlayerClassData( m_iClass )->m_nMaxArmor; }
+	const char	*GetName( void ) const  	{ return GetPlayerClassData( m_iClass )->m_szClassName; }
+	const char	*GetModelName( void ) const  { return GetPlayerClassData( m_iClass )->GetModelName(); }		
+	float		GetMaxSpeed( void )  		{ return GetPlayerClassData( m_iClass )->m_flMaxSpeed; }
+	int GetMaxHealth( void )  	{ return GetPlayerClassData( m_iClass )->m_nMaxHealth; }
+	int GetMaxArmor( void )  		{ return GetPlayerClassData( m_iClass )->m_nMaxArmor; }
 
-	TFPlayerClassData_t  *GetData( void )						{ return GetPlayerClassData( m_iClass ); }
+	TFPlayerClassData_t  *GetData( void )  { return GetPlayerClassData( m_iClass ); }
 
 	// If needed, put this into playerclass scripts
 	bool CanBuildObject( int iObjectType );

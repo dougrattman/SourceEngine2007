@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of vgui generic open file dialog
 //
@@ -21,7 +21,7 @@
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IVGui.h>
 #include <vgui/ILocalize.h>
 #include <vgui/IInput.h>
@@ -156,12 +156,12 @@ static int ListBaseInteger64SortFunc(ListPanel *pPanel, const ListPanelItem &ite
 		return dir1 ? -1 : 1;
 	}
 
-	uint32 l1 = item1.kv->GetInt(lowfield);
-	uint32 h1 = item1.kv->GetInt(highfield);
-	uint32 l2 = item2.kv->GetInt(lowfield);
-	uint32 h2 = item2.kv->GetInt(highfield);
-	uint64 i1 = (uint64)( (uint64)l1 | ( (uint64)h1 << 32 ) );
-	uint64 i2 = (uint64)( (uint64)l2 | ( (uint64)h2 << 32 ) );
+	uint32_t l1 = item1.kv->GetInt(lowfield);
+	uint32_t h1 = item1.kv->GetInt(highfield);
+	uint32_t l2 = item2.kv->GetInt(lowfield);
+	uint32_t h2 = item2.kv->GetInt(highfield);
+	uint64_t i1 = (uint64_t)( (uint64_t)l1 | ( (uint64_t)h1 << 32 ) );
+	uint64_t i2 = (uint64_t)( (uint64_t)l2 | ( (uint64_t)h2 << 32 ) );
 
 	if ( i1 == i2 )
 	{
@@ -238,8 +238,8 @@ public:
 	virtual void PerformLayout();
 	void OnSetText(const wchar_t *newtext);
 	virtual void OnKillFocus();
-	void HideMenu(void);
-	void ShowMenu(void);
+	void HideMenu();
+	void ShowMenu();
 	virtual void OnKeyCodeTyped(KeyCode code);
 	MESSAGE_FUNC_INT( OnMenuItemHighlight, "MenuItemHighlight", itemID );
 

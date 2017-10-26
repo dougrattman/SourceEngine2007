@@ -1,8 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef COMMENTARYDIALOG_H
 #define COMMENTARYDIALOG_H
@@ -10,9 +6,9 @@
 #pragma once
 #endif
 
-#include "vgui_controls/Frame.h"
-#include "UtlVector.h"
 #include <vgui/KeyCode.h>
+#include "tier1/UtlVector.h"
+#include "vgui_controls/Frame.h"
 
 class CGameChapterPanel;
 class CSkillSelectionDialog;
@@ -20,35 +16,33 @@ class CSkillSelectionDialog;
 //-----------------------------------------------------------------------------
 // Purpose: Handles selection of commentary mode on/off
 //-----------------------------------------------------------------------------
-class CCommentaryDialog : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CCommentaryDialog, vgui::Frame );
+class CCommentaryDialog : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CCommentaryDialog, vgui::Frame);
 
-public:
-	CCommentaryDialog(vgui::Panel *parent);
-	~CCommentaryDialog();
+ public:
+  CCommentaryDialog(vgui::Panel *parent);
+  ~CCommentaryDialog();
 
-	virtual void OnClose( void );
-	virtual void OnCommand( const char *command );
-	virtual void OnKeyCodePressed(vgui::KeyCode code);
+  virtual void OnClose(void);
+  virtual void OnCommand(const char *command);
+  virtual void OnKeyCodePressed(vgui::KeyCode code);
 };
 
 //-----------------------------------------------------------------------------
 // Purpose: Small dialog to remind players on method of changing commentary mode
 //-----------------------------------------------------------------------------
-class CPostCommentaryDialog : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CPostCommentaryDialog, vgui::Frame );
+class CPostCommentaryDialog : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CPostCommentaryDialog, vgui::Frame);
 
-public:
-	CPostCommentaryDialog(vgui::Panel *parent);
-	~CPostCommentaryDialog();
+ public:
+  CPostCommentaryDialog(vgui::Panel *parent);
+  ~CPostCommentaryDialog();
 
-	virtual void OnFinishedClose( void );
-	virtual void OnKeyCodePressed(vgui::KeyCode code);
+  virtual void OnFinishedClose(void);
+  virtual void OnKeyCodePressed(vgui::KeyCode code);
 
-private:
-	bool m_bResetPaintRestrict;
+ private:
+  bool m_bResetPaintRestrict;
 };
 
-#endif // COMMENTARYDIALOG_H
+#endif  // COMMENTARYDIALOG_H

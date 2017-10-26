@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: A volume in which no portal can be placed. Keeps a global list loaded in from the map
-//			and provides an interface with which prop_portal can get this list and avoid successfully
-//			creating portals wholly or partially inside the volume.
+// and provides an interface with which prop_portal can get this list and avoid successfully
+// creating portals wholly or partially inside the volume.
 //
 // $NoKeywords: $
 //======================================================================================//
@@ -38,13 +38,13 @@ public:
 	unsigned int GetIndex () { return m_iListIndex; } // returns the list index of this camera
 	bool IsActive() { return m_bActive; }	// is this area currently blocking portals
 
-	CFuncNoPortalVolume		*m_pNext;			// Needed for the template list	
+	CFuncNoPortalVolume		*m_pNext; // Needed for the template list	
 
 	DECLARE_DATADESC();
 
 private:
-	bool					m_bActive;			// are we currently blocking portals
-	unsigned int			m_iListIndex;		// what is my index into the global noportal_volume list
+	bool 		m_bActive; // are we currently blocking portals
+	unsigned int m_iListIndex;		// what is my index into the global noportal_volume list
 	
 	
 };

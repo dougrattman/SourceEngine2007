@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #include "particle_property.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 #ifdef CLIENT_DLL
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef EVENTLIST_H
 #define EVENTLIST_H
@@ -11,11 +11,11 @@
 #pragma once
 #endif
 
-#define AE_TYPE_SERVER			( 1 << 0 )
+#define AE_TYPE_SERVER ( 1 << 0 )
 #define AE_TYPE_SCRIPTED		( 1 << 1 )		// see scriptevent.h
-#define AE_TYPE_SHARED			( 1 << 2 )
-#define AE_TYPE_WEAPON			( 1 << 3 )
-#define AE_TYPE_CLIENT			( 1 << 4 )
+#define AE_TYPE_SHARED ( 1 << 2 )
+#define AE_TYPE_WEAPON ( 1 << 3 )
+#define AE_TYPE_CLIENT ( 1 << 4 )
 #define AE_TYPE_FACEPOSER		( 1 << 5 )
 
 #define AE_TYPE_NEWEVENTSYSTEM  ( 1 << 10 ) //Temporary flag.
@@ -24,24 +24,24 @@
 
 typedef enum
 {
-	AE_INVALID = -1,			// So we have something more succint to check for than '-1'
+	AE_INVALID = -1, // So we have something more succint to check for than '-1'
 	AE_EMPTY,
-	AE_NPC_LEFTFOOT, // #define	NPC_EVENT_LEFTFOOT			2050
-	AE_NPC_RIGHTFOOT, // #define NPC_EVENT_RIGHTFOOT			2051
+	AE_NPC_LEFTFOOT, // #define	NPC_EVENT_LEFTFOOT 2050
+	AE_NPC_RIGHTFOOT, // #define NPC_EVENT_RIGHTFOOT 2051
 	AE_NPC_BODYDROP_LIGHT, //#define NPC_EVENT_BODYDROP_LIGHT	2001
 	AE_NPC_BODYDROP_HEAVY, //#define NPC_EVENT_BODYDROP_HEAVY	2002
 	AE_NPC_SWISHSOUND, //#define NPC_EVENT_SWISHSOUND		2010
-	AE_NPC_180TURN, //#define NPC_EVENT_180TURN			2020
-	AE_NPC_ITEM_PICKUP, //#define NPC_EVENT_ITEM_PICKUP					2040
-	AE_NPC_WEAPON_DROP, //#define NPC_EVENT_WEAPON_DROP					2041
+	AE_NPC_180TURN, //#define NPC_EVENT_180TURN 2020
+	AE_NPC_ITEM_PICKUP, //#define NPC_EVENT_ITEM_PICKUP 		2040
+	AE_NPC_WEAPON_DROP, //#define NPC_EVENT_WEAPON_DROP 		2041
 	AE_NPC_WEAPON_SET_SEQUENCE_NAME, //#define NPC_EVENT_WEAPON_SET_SEQUENCE_NAME		2042
 	AE_NPC_WEAPON_SET_SEQUENCE_NUMBER, //#define NPC_EVENT_WEAPON_SET_SEQUENCE_NUMBER	2043
-	AE_NPC_WEAPON_SET_ACTIVITY, //#define NPC_EVENT_WEAPON_SET_ACTIVITY			2044
+	AE_NPC_WEAPON_SET_ACTIVITY, //#define NPC_EVENT_WEAPON_SET_ACTIVITY 2044
 	AE_NPC_HOLSTER,
 	AE_NPC_DRAW,
 	AE_NPC_WEAPON_FIRE,
 
-	AE_CL_PLAYSOUND, // #define CL_EVENT_SOUND				5004	// Emit a sound 
+	AE_CL_PLAYSOUND, // #define CL_EVENT_SOUND 	5004	// Emit a sound 
 	AE_SV_PLAYSOUND,
 	AE_CL_STOPSOUND,
 
@@ -50,7 +50,7 @@ typedef enum
 
 	AE_CLIENT_EFFECT_ATTACH,
 	
-	AE_MUZZLEFLASH,			// Muzzle flash from weapons held by the player
+	AE_MUZZLEFLASH, // Muzzle flash from weapons held by the player
 	AE_NPC_MUZZLEFLASH,		// Muzzle flash from weapons held by NPCs
 	
 	AE_THUMPER_THUMP,		//Thumper Thump!

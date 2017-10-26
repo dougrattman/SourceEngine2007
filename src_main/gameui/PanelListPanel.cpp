@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
-#include <assert.h>
+
+#include <cassert>
 #include <vgui_controls/ScrollBar.h>
 #include <vgui_controls/Label.h>
 #include <vgui_controls/Button.h>
 
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/MouseCode.h>
 #include <vgui/KeyCode.h>
 #include <vgui/IInput.h>

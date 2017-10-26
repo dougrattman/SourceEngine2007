@@ -32,8 +32,8 @@ private:
 // IClientMode overrides.
 public:
 
-					ClientModeTFNormal();
-	virtual			~ClientModeTFNormal();
+ 		ClientModeTFNormal();
+	virtual ~ClientModeTFNormal();
 
 	virtual void	Init();
 	virtual void	InitViewport();
@@ -44,7 +44,7 @@ public:
 	virtual float	GetViewModelFOV( void );
 	virtual bool	ShouldDrawViewModel();
 
-	int				GetDeathMessageStartHeight( void );
+	int 	GetDeathMessageStartHeight( void );
 
 	virtual void	FireGameEvent( IGameEvent *event );
 	virtual void	PostRenderVGui();
@@ -64,7 +64,7 @@ private:
 	CHudMenuEngyDestroy *m_pMenuEngyDestroy;
 	CHudMenuSpyDisguise *m_pMenuSpyDisguise;
 	CTFFreezePanel		*m_pFreezePanel;
-	IGameUI			*m_pGameUI;
+	IGameUI *m_pGameUI;
 
 #if defined( _X360 )
 	CTFClientScoreBoardDialog	*m_pScoreboard;

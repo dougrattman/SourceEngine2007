@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TEST_STRESSENTITIES_H
 #define TEST_STRESSENTITIES_H
@@ -24,22 +24,22 @@ class CStressEntityReg
 {
 public:
 
-							CStressEntityReg( StressEntityFn fn )
-							{
-								m_pFn = fn;
-								m_pNext = s_pHead;
-								s_pHead = this;
-							}
+  	CStressEntityReg( StressEntityFn fn )
+  	{
+  		m_pFn = fn;
+  		m_pNext = s_pHead;
+  		s_pHead = this;
+  	}
 
 	static CStressEntityReg*GetListHead()	{ return s_pHead; }
 	CStressEntityReg*		GetNext()		{ return m_pNext; }
-	StressEntityFn			GetFn()			{ return m_pFn; }
+	StressEntityFn GetFn() { return m_pFn; }
 
 
 private:
 	static CStressEntityReg	*s_pHead;	// List of all CStressEntityReg's.
 	CStressEntityReg		*m_pNext;
-	StressEntityFn			m_pFn;
+	StressEntityFn m_pFn;
 };
 
 
@@ -50,7 +50,7 @@ private:
 // Helper function for the functions that create the stress entities.
 // Moves the entity to a random place in the level and returns the entity.
 CBaseEntity*	MoveToRandomSpot( CBaseEntity *pEnt );
-Vector			GetRandomSpot();
+Vector GetRandomSpot();
 
 
 #endif // TEST_STRESSENTITIES_H

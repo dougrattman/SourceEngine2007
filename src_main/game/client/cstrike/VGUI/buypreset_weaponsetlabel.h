@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -34,11 +34,11 @@ public:
 		m_image = realImage;
 		if ( m_image )
 		{
-			m_image->GetSize( m_wide, m_tall );
+ m_image->GetSize( m_wide, m_tall );
 		}
 		else
 		{
-			m_wide = m_tall = 0;
+ m_wide = m_tall = 0;
 		}
 	}
 
@@ -47,7 +47,7 @@ public:
 	virtual void Paint()
 	{
 		if ( !m_image )
-			return;
+ return;
 
 		m_image->Paint();
 	}
@@ -56,7 +56,7 @@ public:
 	virtual void SetPos(int x, int y)
 	{
 		if ( !m_image )
-			return;
+ return;
 
 		m_image->SetPos( x, y );
 	}
@@ -65,7 +65,7 @@ public:
 	virtual void GetContentSize(int &wide, int &tall)
 	{
 		if ( !m_image )
-			return;
+ return;
 
 		m_image->GetSize( wide, tall );
 	}
@@ -75,8 +75,8 @@ public:
 	{
 		if ( !m_image )
 		{
-			wide = tall = 0;
-			return;
+ wide = tall = 0;
+ return;
 		}
 
 		wide = m_wide;
@@ -89,7 +89,7 @@ public:
 		m_wide = wide;
 		m_tall = tall;
 		if ( !m_image )
-			return;
+ return;
 
 		m_image->SetSize( wide, tall );
 	}
@@ -98,7 +98,7 @@ public:
 	virtual void SetColor(Color col)
 	{
 		if ( !m_image )
-			return;
+ return;
 
 		m_image->SetColor( col );
 	}
@@ -241,7 +241,7 @@ public:
 	virtual void SetText( const wchar_t *text );
 
 	virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
-	void OnCommand( const char *command);					///< Handle command callbacks
+	void OnCommand( const char *command); 		///< Handle command callbacks
 
 	virtual void OnSizeChanged( int wide, int tall );
 

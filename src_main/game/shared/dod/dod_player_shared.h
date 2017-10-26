@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef DOD_PLAYER_SHARED_H
 #define DOD_PLAYER_SHARED_H
@@ -66,12 +66,12 @@ public:
 	void Think( void )
 	{
 		if ( !m_bActive )
-			return;
+ return;
 
 		if ( IsFinished() )
 		{
-			m_bActive = false;
-			return;
+ m_bActive = false;
+ return;
 		}
 
 		float flFraction = ( m_flEndTime - gpGlobals->curtime ) / m_flLength;
@@ -80,27 +80,27 @@ public:
 
 		if ( m_pPlayer )
 		{
-			Vector vecCurrentView = m_pPlayer->GetViewOffset();
+ Vector vecCurrentView = m_pPlayer->GetViewOffset();
 
-			switch ( m_eViewAnimType )
-			{
-			case VIEW_ANIM_LINEAR_Z_ONLY:
-				vecCurrentView.z = flFraction * m_vecStart.z + ( 1.0 - flFraction ) * m_vecDest.z;
-				break;
+ switch ( m_eViewAnimType )
+ {
+ case VIEW_ANIM_LINEAR_Z_ONLY:
+ 	vecCurrentView.z = flFraction * m_vecStart.z + ( 1.0 - flFraction ) * m_vecDest.z;
+ 	break;
 
-			case VIEW_ANIM_SPLINE_Z_ONLY:
-				vecCurrentView.z = SimpleSplineRemapVal( flFraction, 1.0, 0.0, m_vecStart.z, m_vecDest.z );
-				break;
+ case VIEW_ANIM_SPLINE_Z_ONLY:
+ 	vecCurrentView.z = SimpleSplineRemapVal( flFraction, 1.0, 0.0, m_vecStart.z, m_vecDest.z );
+ 	break;
 
-			case VIEW_ANIM_EXPONENTIAL_Z_ONLY:
-				{
-					float flBias = Bias( flFraction, 0.2 );
-					vecCurrentView.z = flBias * m_vecStart.z + ( 1.0 - flBias ) * m_vecDest.z;
-				}
-				break;
-			}
+ case VIEW_ANIM_EXPONENTIAL_Z_ONLY:
+ 	{
+ 		float flBias = Bias( flFraction, 0.2 );
+ 		vecCurrentView.z = flBias * m_vecStart.z + ( 1.0 - flBias ) * m_vecDest.z;
+ 	}
+ 	break;
+ }
 
-			m_pPlayer->SetViewOffset( vecCurrentView );
+ m_pPlayer->SetViewOffset( vecCurrentView );
 		}		
 	}
 
@@ -270,7 +270,7 @@ public:
 private:
 	
 	OuterClass *m_pOuter;
-};			   
+};    
 
 
 

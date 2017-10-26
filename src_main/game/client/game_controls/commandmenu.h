@@ -13,8 +13,8 @@
 #include <game/client/iviewport.h>
 #include <filesystem.h>
 #include "UtlStack.h"
-#include "UtlVector.h"
-#include <KeyValues.h>
+#include "tier1/UtlVector.h"
+#include "tier1/keyvalues.h"
 
 using namespace vgui;
 
@@ -25,8 +25,8 @@ private:
 	
 		typedef struct
 		{
-			Menu *	menu;
-			int		itemnr;
+ Menu *	menu;
+ int		itemnr;
 		} CommandMenuItem;
 
 	public:
@@ -50,7 +50,7 @@ private:
 	// DON'T touch anything below !
 
 	protected:
-				
+ 	
 		void	OnMessage(const KeyValues *params, VPANEL fromPanel);
 		void	StartNewSubMenu(KeyValues * params);
 		void	FinishSubMenu();

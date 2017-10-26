@@ -9,9 +9,7 @@
 
 #pragma once
 
-#ifndef _CERT
 #pragma comment( lib, "xbdm.lib" )
-#endif
 
 // id and version are used to tag the data blob, currently only need a singe hardcoded id
 // when the version and id don't match, the data blob is not ours
@@ -111,12 +109,10 @@ public:
 		}
 
 		flags |= LF_INTERNALLAUNCH;
-#if !defined( _CERT )
 		if ( DmIsDebuggerPresent() )
 		{
 			flags |= LF_ISDEBUGGING;
 		}
-#endif
 		m_Launch.header.id = VALVE_LAUNCH_ID;
 		m_Launch.header.version = VALVE_LAUNCH_VERSION;
 		m_Launch.header.flags = flags;

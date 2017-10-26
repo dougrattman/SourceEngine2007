@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -25,9 +25,9 @@ class CKeyboardKey
 {
 public:
 	// Name for key
-	char				name[ 32 ];
+	char 	name[ 32 ];
 	// Pointer to the underlying structure
-	kbutton_t			*pkey;
+	kbutton_t *pkey;
 	// Next key in key list.
 	CKeyboardKey		*next;
 };
@@ -38,12 +38,12 @@ class CInput : public IInput
 {
 // Interface
 public:
-							CInput( void );
-							~CInput( void );
+  	CInput( void );
+  	~CInput( void );
 
 	virtual		void		Init_All( void );
 	virtual		void		Shutdown_All( void );
-	virtual		int			GetButtonBits( int );
+	virtual		int GetButtonBits( int );
 	virtual		void		CreateMove ( int sequence_number, float input_sample_frametime, bool active );
 	virtual		void		ExtraMouseSample( float frametime, bool active );
 	virtual		bool		WriteUsercmdDeltaToBuffer( bf_write *buf, int from, int to, bool isnewcommand );
@@ -55,7 +55,7 @@ public:
 	virtual		void		MakeWeaponSelection( C_BaseCombatWeapon *weapon );
 
 	virtual		float		KeyState( kbutton_t *key );
-	virtual		int			KeyEvent( int down, ButtonCode_t keynum, const char *pszCurrentBinding );
+	virtual		int KeyEvent( int down, ButtonCode_t keynum, const char *pszCurrentBinding );
 	virtual		kbutton_t	*FindKey( const char *name );
 
 	virtual		void		ControllerCommands( void );
@@ -79,15 +79,15 @@ public:
 	virtual		void		ClearInputButton( int bits );
 
 	virtual		void		CAM_Think( void );
-	virtual		int			CAM_IsThirdPerson( void );
+	virtual		int CAM_IsThirdPerson( void );
 	virtual		void		CAM_GetCameraOffset( Vector& ofs );
-	virtual		void		CAM_ToThirdPerson(void);
-	virtual		void		CAM_ToFirstPerson(void);
-	virtual		void		CAM_StartMouseMove(void);
-	virtual		void		CAM_EndMouseMove(void);
-	virtual		void		CAM_StartDistance(void);
-	virtual		void		CAM_EndDistance(void);
-	virtual		int			CAM_InterceptingMouse( void );
+	virtual		void		CAM_ToThirdPerson();
+	virtual		void		CAM_ToFirstPerson();
+	virtual		void		CAM_StartMouseMove();
+	virtual		void		CAM_EndMouseMove();
+	virtual		void		CAM_StartDistance();
+	virtual		void		CAM_EndDistance();
+	virtual		int CAM_InterceptingMouse( void );
 
 	// orthographic camera info
 	virtual		void		CAM_ToOrthographic();
@@ -173,7 +173,7 @@ private:
 	{
 		MOUSE_ACCEL_THRESHHOLD1 = 0,	// if mouse moves > this many mickey's double it
 		MOUSE_ACCEL_THRESHHOLD2,		// if mouse moves > this many mickey's double it a second time
-		MOUSE_SPEED_FACTOR,				// 1 - 20 (default 10) scale factor to accelerated mouse setting
+		MOUSE_SPEED_FACTOR, 	// 1 - 20 (default 10) scale factor to accelerated mouse setting
 
 		NUM_MOUSE_PARAMS,
 	};
@@ -195,9 +195,9 @@ private:
 	// Flag to restore systemparameters when exiting
 	bool		m_fRestoreSPI;
 	// Original mouse parameters
-	int			m_rgOrigMouseParms[ NUM_MOUSE_PARAMS ];
+	int m_rgOrigMouseParms[ NUM_MOUSE_PARAMS ];
 	// Current mouse parameters.
-	int			m_rgNewMouseParms[ NUM_MOUSE_PARAMS ];
+	int m_rgNewMouseParms[ NUM_MOUSE_PARAMS ];
 	bool		m_rgCheckMouseParam[ NUM_MOUSE_PARAMS ];
 	// Are the parameters valid
 	bool		m_fMouseParmsValid;
@@ -217,10 +217,10 @@ private:
 	// Is the camera in distance moving mode?
 	bool		m_fCameraDistanceMove;
 	// Old and current mouse position readings.
-	int			m_nCameraOldX;
-	int			m_nCameraOldY;
-	int			m_nCameraX;
-	int			m_nCameraY;
+	int m_nCameraOldX;
+	int m_nCameraOldY;
+	int m_nCameraX;
+	int m_nCameraY;
 
 	// orthographic camera settings
 	bool		m_CameraIsOrthographic;

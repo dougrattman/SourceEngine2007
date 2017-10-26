@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: particle system code
 //
@@ -25,12 +25,12 @@ class C_OP_RandomForce : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_RandomForce );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return 0;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}
@@ -81,12 +81,12 @@ class C_OP_TwistAroundAxis : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_TwistAroundAxis );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return 0;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return PARTICLE_ATTRIBUTE_XYZ_MASK;
 	}
@@ -155,12 +155,12 @@ class C_OP_AttractToControlPoint : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_AttractToControlPoint );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return 0;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}
@@ -225,12 +225,12 @@ class C_OP_LennardJonesForce : public CParticleOperatorInstance
 {
 	DECLARE_PARTICLE_OPERATOR( C_OP_LennardJonesForce );
 
-	uint32 GetWrittenAttributes( void ) const
+	uint32_t GetWrittenAttributes( void ) const
 	{
 		return 0;
 	}
 
-	uint32 GetReadAttributes( void ) const
+	uint32_t GetReadAttributes( void ) const
 	{
 		return 0;
 	}

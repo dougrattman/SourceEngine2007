@@ -1,29 +1,13 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef VMODES_H
 #define VMODES_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-struct viddef_t
-{
-	unsigned int	width;		
-	unsigned int	height;
-	int				recalc_refdef;	// if non-zero, recalc vid-based stuff
-	int				bits;
+struct viddef_t {
+  unsigned int width;
+  unsigned int height;
+  int recalc_refdef;  // if non-zero, recalc vid-based stuff
+  int bits;
 };
 
-
-#endif //VMODES_H
+#endif  // VMODES_H

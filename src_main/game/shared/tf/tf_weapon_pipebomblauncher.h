@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -43,7 +43,7 @@ public:
 	~CTFPipebombLauncher();
 
 	virtual void	Spawn( void );
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_PIPEBOMBLAUNCHER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_PIPEBOMBLAUNCHER; }
 	virtual CBaseEntity *FireProjectile( CTFPlayer *pPlayer );
 	virtual void	ItemBusyFrame( void );
 	virtual void	SecondaryAttack();
@@ -65,23 +65,23 @@ public:
 	void LaunchGrenade( void );
 	bool DetonateRemotePipebombs( bool bFizzle );
 	void AddPipeBomb( CTFGrenadePipebombProjectile *pBomb );
-	void			DeathNotice( CBaseEntity *pVictim );
+	void DeathNotice( CBaseEntity *pVictim );
 
 
 
 #ifdef GAME_DLL
-	void			UpdateOnRemove( void );
+	void UpdateOnRemove( void );
 	
 	
 
 private:
 
 	// This is here so we can network the pipebomb count for prediction purposes
-	CNetworkVar( int,				m_iPipebombCount );	
+	CNetworkVar( int, 	m_iPipebombCount );	
 #endif
 
 #ifdef CLIENT_DLL
-	int				m_iPipebombCount;
+	int 	m_iPipebombCount;
 #endif
 
 	// List of active pipebombs

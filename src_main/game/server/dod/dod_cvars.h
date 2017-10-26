@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:  
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_CVARS_H
 #define DOD_CVARS_H
@@ -35,8 +35,8 @@ extern ConVar	mp_limitAlliesRocket;
 extern ConVar	mp_limitAxisRifleman;	
 extern ConVar	mp_limitAxisAssault;		
 extern ConVar	mp_limitAxisSupport;		
-extern ConVar	mp_limitAxisSniper;			
+extern ConVar	mp_limitAxisSniper; 
 extern ConVar	mp_limitAxisMachinegun;		
-extern ConVar	mp_limitAxisRocket;			
+extern ConVar	mp_limitAxisRocket; 
 
 #endif //DOD_CVARS_H

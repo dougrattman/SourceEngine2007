@@ -764,12 +764,10 @@ public\tier0\minidump.h
 public\tier0\P4PerformanceCounters.h
 public\tier0\P5P6PerformanceCounters.h
 public\tier0\platform.h
-public\tier0\pmc360.h
 public\tier0\PMELib.h
 public\tier0\progressbar.h
 public\tier0\protected_things.h
 public\tier0\systeminformation.h
-public\tier0\testthread.h
 public\tier0\threadtools.h
 public\tier0\tslist.h
 public\tier0\validator.h
@@ -782,7 +780,6 @@ public\tier0\vcrmode.h
 public\tier0\vcr_shared.h
 public\tier0\vprof.h
 public\tier0\wchartypes.h
-public\tier0\xbox_codeline_defines.h
 public\tier1\bitbuf.h
 public\tier1\byteswap.h
 public\tier1\callqueue.h

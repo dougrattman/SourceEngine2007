@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef C_TESLA_H
 #define C_TESLA_H
@@ -13,7 +13,7 @@
 
 #include "c_baseentity.h"
 #include "fx.h"
-#include "utllinkedlist.h"
+#include "tier1/UtlLinkedList.h"
 
 
 class C_Tesla : public C_BaseEntity

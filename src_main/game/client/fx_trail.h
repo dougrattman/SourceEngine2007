@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef FX_TRAIL_H
 #define FX_TRAIL_H
@@ -20,7 +20,7 @@ public:
 
 	DECLARE_CLASS( C_ParticleTrail, C_BaseParticleEntity );
 
-				C_ParticleTrail( void );
+ 	C_ParticleTrail( void );
 	virtual		~C_ParticleTrail( void );
 
 	void		GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
@@ -37,13 +37,13 @@ public:
 
 	virtual void	Start( CParticleMgr *pParticleMgr, IPrototypeArgAccess *pArgs );
 
-	int				m_nAttachment;
-	float			m_flLifetime;			// How long this effect will last
+	int 	m_nAttachment;
+	float m_flLifetime; // How long this effect will last
 
 private:
 
-	float			m_SpawnRate;			// How many particles per second.
-	bool			m_bEmit;				// Keep emitting particles?
+	float m_SpawnRate; // How many particles per second.
+	bool m_bEmit; 	// Keep emitting particles?
 
 	TimedEvent		m_ParticleSpawn;
 	CParticleMgr	*m_pParticleMgr;

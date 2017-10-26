@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "ProxyEntity.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialVar.h"
 #include "materialsystem/IMaterialSystem.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

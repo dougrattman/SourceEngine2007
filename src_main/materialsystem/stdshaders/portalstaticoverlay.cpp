@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "BaseVSShader.h"
-#include "convar.h"
+#include "tier1/convar.h"
 #include "portalstaticoverlay_vs20.inc"
 #include "portalstaticoverlay_ps20.inc"
 #include "portalstaticoverlay_ps20b.inc"

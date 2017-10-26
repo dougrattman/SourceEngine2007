@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
 
-#include <math.h>
+
+#include <cmath>
 
 #include <vgui_controls/GraphPanel.h>
 #include <vgui/IScheme.h>

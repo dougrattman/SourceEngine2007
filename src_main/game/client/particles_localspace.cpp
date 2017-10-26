@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Particles which are simulated locally to some space (attachment, bone, etc)
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "particles_simple.h"

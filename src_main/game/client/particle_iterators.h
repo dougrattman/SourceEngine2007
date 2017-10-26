@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side CTFTeam class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef PARTICLE_ITERATORS_H
 #define PARTICLE_ITERATORS_H
@@ -178,11 +178,11 @@ inline const Particle* CParticleRenderIterator::GetNext( float sortKey )
 		// Swap with the previous particle (incremental sort)?
 		if( m_pCur != m_pMaterial->m_Particles.m_pNext && m_flPrevZ > sortKey )
 		{
-			SwapParticles( m_pCur->m_pPrev, m_pCur );
+ SwapParticles( m_pCur->m_pPrev, m_pCur );
 		}
 		else
 		{
-			m_flPrevZ = sortKey;
+ m_flPrevZ = sortKey;
 		}
 	}
 

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation for CBaseClientRenderTargets class.
 //			Provides Init functions for common render textures used by the engine.
 //			Mod makers can inherit from this class, and call the Create functions for
 //			only the render textures the want for their mod.
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "baseclientrendertargets.h"						// header	

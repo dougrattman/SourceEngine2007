@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{98f731d4-3c3b-49d8-a3a9-8fa223152bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\remove me when VAC2 is out">
+      <UniqueIdentifier>{c53a41a9-3ed1-4f65-9016-f8fc57a215cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="filmdust_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="filmgrain_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\public\tier0\memoverride.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shatteredglass_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vertexlitgeneric_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vortwarp_dx7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tier1\checksum_crc.cpp">
+      <Filter>Source Files\remove me when VAC2 is out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tier1\checksum_md5.cpp">
+      <Filter>Source Files\remove me when VAC2 is out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shader_dll_verify.cpp">
+      <Filter>Source Files\remove me when VAC2 is out</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\shader_dll_verify.h">
+      <Filter>Source Files\remove me when VAC2 is out</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef NPC_CROW_H
 #define NPC_CROW_H
@@ -20,7 +20,7 @@
 #define SF_CROW_FLYING		16
 
 #define CROW_TAKEOFF_SPEED		170
-#define CROW_AIRSPEED			220 // FIXME: should be about 440, but I need to add acceleration
+#define CROW_AIRSPEED 220 // FIXME: should be about 440, but I need to add acceleration
 
 //
 // Custom schedules.
@@ -154,7 +154,7 @@ public:
 	DEFINE_CUSTOM_AI;
 	DECLARE_DATADESC();
 
-	int			m_iBirdType;
+	int m_iBirdType;
 	bool		m_bOnJeep;
 
 protected:
@@ -173,7 +173,7 @@ protected:
 	float m_flGroundIdleMoveTime;
 
 	float m_flEnemyDist;		// Distance to GetEnemy(), cached in GatherEnemyConditions.
-	int m_nMorale;				// Used to determine which avoidance schedule to pick. Degrades as I pick avoidance schedules.
+	int m_nMorale; 	// Used to determine which avoidance schedule to pick. Degrades as I pick avoidance schedules.
 	
 	bool m_bReachedMoveGoal;
 
@@ -185,17 +185,17 @@ private:
 
 	Activity NPC_TranslateActivity( Activity eNewActivity );
 
-	float				m_flSoarTime;
-	bool				m_bSoar;
-	Vector				m_vLastStoredOrigin;
-	float				m_flLastStuckCheck;
+	float 	m_flSoarTime;
+	bool 	m_bSoar;
+	Vector 	m_vLastStoredOrigin;
+	float 	m_flLastStuckCheck;
 	
-	float				m_flDangerSoundTime;
+	float 	m_flDangerSoundTime;
 
-	Vector				m_vDesiredTarget;
-	Vector				m_vCurrentTarget;
+	Vector 	m_vDesiredTarget;
+	Vector 	m_vCurrentTarget;
 
-	bool				m_bIsDeaf;
+	bool 	m_bIsDeaf;
 };
 
 //-----------------------------------------------------------------------------

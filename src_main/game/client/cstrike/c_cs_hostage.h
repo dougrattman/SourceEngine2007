@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Client side CHostage class
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_CHOSTAGE_H
 #define C_CHOSTAGE_H
@@ -12,7 +12,7 @@
 #endif
 
 #include "c_ai_basenpc.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "util_shared.h"
 #include "cs_playeranimstate.h"
 #include "c_cs_player.h"
@@ -55,7 +55,7 @@ public:
 
 	virtual void ClientThink( void );
 
-	C_CSPlayer *GetLeader( void ) const;			// return who we are following or NULL
+	C_CSPlayer *GetLeader( void ) const; // return who we are following or NULL
 
 	virtual C_BaseAnimating * BecomeRagdollOnClient();
 	virtual bool ShouldDraw( void );
@@ -67,7 +67,7 @@ private:
 
 	ICSPlayerAnimState *m_PlayerAnimState;
 
-	CNetworkVar( EHANDLE, m_leader );				// who we are following, or NULL
+	CNetworkVar( EHANDLE, m_leader ); 	// who we are following, or NULL
 
 	CNetworkVar( bool, m_isRescued );
 	float m_flDeadOrRescuedTime;
@@ -77,11 +77,11 @@ private:
 
 	Vector m_lookAt;		// point in space we are looking at
 	void UpdateLookAt( CStudioHdr *pStudioHdr );	// orient head and eyes towards m_lookAt
-	void LookAround( void );										// look around at various interesting things
+	void LookAround( void );   	// look around at various interesting things
 	CountdownTimer m_lookAroundTimer;
 
 	bool m_isInit;
-	void Initialize( void );						// set up attachment and pose param indices
+	void Initialize( void );  // set up attachment and pose param indices
 
 	int m_eyeAttachment;
 	int m_chestAttachment;
@@ -106,7 +106,7 @@ private:
 	bool m_createdLowViolenceRagdoll;
 	
 private:
-	C_CHostage( const C_CHostage & );				// not defined, not accessible
+	C_CHostage( const C_CHostage & ); 	// not defined, not accessible
 };
 
 

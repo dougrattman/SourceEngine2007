@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Simple, small, free-standing tools for building AIs
 //
-//=============================================================================//
+
 
 #ifndef AI_UTILS_H
 #define AI_UTILS_H
@@ -58,8 +58,8 @@ public:
 	{
 		if ( pEntity )
 		{
-			m_vMark = pEntity->GetAbsOrigin();
-			m_flMarkTolerance = tolerance;
+ m_vMark = pEntity->GetAbsOrigin();
+ m_flMarkTolerance = tolerance;
 		}
 	}
 	
@@ -77,9 +77,9 @@ public:
 	{
 		if ( IsMarkSet() && pEntity != NULL )
 		{
-			float distance = ( m_vMark - pEntity->GetAbsOrigin() ).Length();
-			if ( distance > m_flMarkTolerance )
-				return true;
+ float distance = ( m_vMark - pEntity->GetAbsOrigin() ).Length();
+ if ( distance > m_flMarkTolerance )
+ 	return true;
 		}
 		return false;
 	}
@@ -88,9 +88,9 @@ public:
 	{
 		if ( IsMarkSet() && pEntity != NULL )
 		{
-			float distance = ( m_vMark.AsVector2D() - pEntity->GetAbsOrigin().AsVector2D() ).Length();
-			if ( distance > m_flMarkTolerance )
-				return true;
+ float distance = ( m_vMark.AsVector2D() - pEntity->GetAbsOrigin().AsVector2D() ).Length();
+ if ( distance > m_flMarkTolerance )
+ 	return true;
 		}
 		return false;
 	}
@@ -103,8 +103,8 @@ private:
 		NO_MARK = -1
 	};
 	
-	Vector			   m_vMark;
-	float			   m_flMarkTolerance;
+	Vector    m_vMark;
+	float    m_flMarkTolerance;
 
 	DECLARE_SIMPLE_DATADESC();
 };
@@ -223,15 +223,15 @@ private:
 struct AI_FreePassParams_t
 {
 	float timeToTrigger;		// How long after not detected to issue pass
-	float duration;				// How long in the open pass before revoked
+	float duration; 	// How long in the open pass before revoked
 	float moveTolerance;		// How far in open needed to move to revoke pass
-	float refillRate;			// After hiding again during pass, how quickly to reinstitute pass(seconds per second)
-	float coverDist;			// When hiding, how far from an obstructing object needed to be considered in cover
+	float refillRate; // After hiding again during pass, how quickly to reinstitute pass(seconds per second)
+	float coverDist; // When hiding, how far from an obstructing object needed to be considered in cover
 	
-	float peekTime;				// How long allowed to peek
+	float peekTime; 	// How long allowed to peek
 	float peekTimeAfterDamage;	// How long allowed to peek after damaged by
-	float peekEyeDist;			// how far spaced out the eyes are
-	float peekEyeDistZ;			// how far below eye position to test eyes (handles peek up)
+	float peekEyeDist; // how far spaced out the eyes are
+	float peekEyeDistZ; // how far below eye position to test eyes (handles peek up)
 
 	DECLARE_SIMPLE_DATADESC();
 };
@@ -246,31 +246,31 @@ public:
 	{
 	}
 
-	void			Reset( float passTime = -1, float moveTolerance = -1 );
+	void Reset( float passTime = -1, float moveTolerance = -1 );
 
-	void			SetPassTarget( CBaseEntity *pTarget )		{ m_hTarget = pTarget; m_FreePassTimeRemaining = 0; }
-	CBaseEntity *	GetPassTarget()								{ return m_hTarget; }
+	void SetPassTarget( CBaseEntity *pTarget )		{ m_hTarget = pTarget; m_FreePassTimeRemaining = 0; }
+	CBaseEntity *	GetPassTarget()  		{ return m_hTarget; }
 	
-	void			SetParams( const AI_FreePassParams_t &params )	{ m_Params = params; }
-	const AI_FreePassParams_t &GetParams() const					{ return m_Params; }
+	void SetParams( const AI_FreePassParams_t &params )	{ m_Params = params; }
+	const AI_FreePassParams_t &GetParams() const 		{ return m_Params; }
 	
 	//---------------------------------
 	//	Free pass
 	//---------------------------------
-	void			Update();
+	void Update();
 	
-	bool			HasPass();
-	void 			Revoke( bool bUpdateMemory = false );
+	bool HasPass();
+	void  Revoke( bool bUpdateMemory = false );
 	
-	float			GetTimeRemaining()					{ return m_FreePassTimeRemaining; }
-	void			SetTimeRemaining( float passTime )	{ m_FreePassTimeRemaining = passTime; }
+	float GetTimeRemaining() 		{ return m_FreePassTimeRemaining; }
+	void SetTimeRemaining( float passTime )	{ m_FreePassTimeRemaining = passTime; }
 
-	bool			ShouldAllowFVisible( bool bBaseResult );
+	bool ShouldAllowFVisible( bool bBaseResult );
 
 private:
-	EHANDLE			m_hTarget;
+	EHANDLE m_hTarget;
 
-	float			m_FreePassTimeRemaining;
+	float m_FreePassTimeRemaining;
 	CAI_MoveMonitor m_FreePassMoveMonitor;
 	
 	AI_FreePassParams_t m_Params;

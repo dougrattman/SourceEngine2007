@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef TF_INTROMENU_H
 #define TF_INTROMENU_H
@@ -31,8 +31,8 @@ public:
 	{
 		if ( m_pszString && m_pszString[0] )
 		{
-			delete [] m_pszString;
-			m_pszString = NULL;
+ delete [] m_pszString;
+ m_pszString = NULL;
 		}
 	}
 
@@ -83,12 +83,12 @@ private:
 	CTFButton		*m_pOK;
 #endif
 
-	float			m_flActionThink;
-	int				m_iAction;
+	float m_flActionThink;
+	int 	m_iAction;
 
 	CUtlVector< CVideoCaption* > m_Captions;
-	int				m_iCurrentCaption;
-	float			m_flVideoStartTime;
+	int 	m_iCurrentCaption;
+	float m_flVideoStartTime;
 };
 
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WEAPON_RPG_H
 #define WEAPON_RPG_H
@@ -82,12 +82,12 @@ protected:
 	void GetShootPosition( CLaserDot *pLaserDot, Vector *pShootPosition );
 
 	CHandle<RocketTrail>	m_hRocketTrail;
-	float					m_flAugerTime;		// Amount of time to auger before blowing up anyway
-	float					m_flMarkDeadTime;
-	float					m_flDamage;
+	float 		m_flAugerTime;		// Amount of time to auger before blowing up anyway
+	float 		m_flMarkDeadTime;
+	float 		m_flDamage;
 
 private:
-	float					m_flGracePeriodEndsAt;
+	float 		m_flGracePeriodEndsAt;
 
 	DECLARE_DATADESC();
 };
@@ -125,7 +125,7 @@ public:
 	void	AimAtSpecificTarget( CBaseEntity *pTarget );
 	void	SetGuidanceHint( const char *pHintName );
 
-	CAPCMissile			*m_pNext;
+	CAPCMissile *m_pNext;
 
 protected:
 	virtual void DoExplosion();	
@@ -229,14 +229,14 @@ public:
 	virtual void	ViewModelDrawn( C_BaseViewModel *pBaseViewModel );
 	virtual bool	IsTranslucent( void );
 
-	void			InitBeam( void );
-	void			GetWeaponAttachment( int attachmentId, Vector &outVector, Vector *dir = NULL );
-	void			DrawEffects( void );
-//	void			DrawLaserDot( void );
+	void InitBeam( void );
+	void GetWeaponAttachment( int attachmentId, Vector &outVector, Vector *dir = NULL );
+	void DrawEffects( void );
+//	void DrawLaserDot( void );
 
 	CMaterialReference	m_hSpriteMaterial;	// Used for the laser glint
 	CMaterialReference	m_hBeamMaterial;	// Used for the laser beam
-	Beam_t				*m_pBeam;			// Laser beam temp entity
+	Beam_t 	*m_pBeam; // Laser beam temp entity
 
 #endif	//CLIENT_DLL
 
@@ -253,7 +253,7 @@ protected:
 	CNetworkVar( bool, m_bHideGuiding );
 
 	CNetworkHandle( CBaseEntity,	m_hMissile );
-	CNetworkVar(	Vector,			m_vecLaserDot );
+	CNetworkVar(	Vector, m_vecLaserDot );
 
 #ifndef CLIENT_DLL
 	CHandle<CLaserDot>	m_hLaserDot;

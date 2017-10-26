@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Projectile shot by bullsquid 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef	GRENADESPIT_H
 #define	GRENADESPIT_H
@@ -32,7 +32,7 @@ class CGrenadeSpit : public CBaseGrenade
 	DECLARE_CLASS( CGrenadeSpit, CBaseGrenade );
 
 public:
-						CGrenadeSpit( void );
+  CGrenadeSpit( void );
 
 	virtual void		Spawn( void );
 	virtual void		Precache( void );
@@ -40,10 +40,10 @@ public:
 
 	virtual	unsigned int	PhysicsSolidMaskForEntity( void ) const { return ( BaseClass::PhysicsSolidMaskForEntity() | CONTENTS_WATER ); }
 
-	void 				GrenadeSpitTouch( CBaseEntity *pOther );
-	void				SetSpitSize( int nSize );
-	void				Detonate( void );
-	void				Think( void );
+	void  	GrenadeSpitTouch( CBaseEntity *pOther );
+	void 	SetSpitSize( int nSize );
+	void 	Detonate( void );
+	void 	Think( void );
 
 private:
 	DECLARE_DATADESC();
@@ -52,7 +52,7 @@ private:
 	
 	CHandle< CParticleSystem >	m_hSpitEffect;
 	CSoundPatch		*m_pHissSound;
-	bool			m_bPlaySound;
+	bool m_bPlaySound;
 };
 
 #endif	//GRENADESPIT_H

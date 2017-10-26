@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -130,7 +130,7 @@ bool CBaseGameStats::StatTrackingAllowed( void )
 #undef asctime
 #undef time
 
-#include <time.h>
+#include <ctime>
 
 void CBaseGameStats::StatsLog( char const *fmt, ... )
 {

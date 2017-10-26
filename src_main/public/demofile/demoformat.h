@@ -1,238 +1,209 @@
 //====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
 
 #ifndef DEMOFORMAT_H
 #define DEMOFORMAT_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "mathlib/vector.h"
-#include "utlvector.h"
 #include "tier0/platform.h"
+#include "utlvector.h"
 
-#define DEMO_HEADER_ID		"HL2DEMO"
-#define DEMO_PROTOCOL		3
+#define DEMO_HEADER_ID "HL2DEMO"
+#define DEMO_PROTOCOL 3
 
-#if !defined( MAX_OSPATH )
-#define	MAX_OSPATH		260			// max length of a filesystem pathname
+#if !defined(MAX_OSPATH)
+#define MAX_OSPATH 260  // max length of a filesystem pathname
 #endif
 
 // Demo messages
-enum
-{
-	// it's a startup message, process as fast as possible
-	dem_signon	= 1,
-	// it's a normal network packet that we stored off
-	dem_packet,
-	// sync client clock to demo tick
-	dem_synctick,
-	// console command 
-	dem_consolecmd,
-	// user input command
-	dem_usercmd,
-	// network data tables
-	dem_datatables,
-	// end of time.
-	dem_stop,
+enum {
+  // it's a startup message, process as fast as possible
+  dem_signon = 1,
+  // it's a normal network packet that we stored off
+  dem_packet,
+  // sync client clock to demo tick
+  dem_synctick,
+  // console command
+  dem_consolecmd,
+  // user input command
+  dem_usercmd,
+  // network data tables
+  dem_datatables,
+  // end of time.
+  dem_stop,
 
-	// Last command
-	dem_lastcmd		= dem_stop
+  // Last command
+  dem_lastcmd = dem_stop
 };
 
-struct demoheader_t
-{
-	char	demofilestamp[8];				// Should be HL2DEMO
-	int		demoprotocol;					// Should be DEMO_PROTOCOL
-	int		networkprotocol;				// Should be PROTOCOL_VERSION
-	char	servername[ MAX_OSPATH ];		// Name of server
-	char	clientname[ MAX_OSPATH ];		// Name of client who recorded the game
-	char	mapname[ MAX_OSPATH ];			// Name of map
-	char	gamedirectory[ MAX_OSPATH ];	// Name of game directory (com_gamedir)
-	float	playback_time;					// Time of track
-	int     playback_ticks;					// # of ticks in track
-	int     playback_frames;				// # of frames in track
-	int		signonlength;					// lenght of sigondata in bytes
+struct demoheader_t {
+  char demofilestamp[8];           // Should be HL2DEMO
+  int demoprotocol;                // Should be DEMO_PROTOCOL
+  int networkprotocol;             // Should be PROTOCOL_VERSION
+  char servername[MAX_OSPATH];     // Name of server
+  char clientname[MAX_OSPATH];     // Name of client who recorded the game
+  char mapname[MAX_OSPATH];        // Name of map
+  char gamedirectory[MAX_OSPATH];  // Name of game directory (com_gamedir)
+  float playback_time;             // Time of track
+  int playback_ticks;              // # of ticks in track
+  int playback_frames;             // # of frames in track
+  int signonlength;                // lenght of sigondata in bytes
 };
 
-#define FDEMO_NORMAL		0
-#define FDEMO_USE_ORIGIN2	(1<<0)
-#define FDEMO_USE_ANGLES2	(1<<1)
-#define FDEMO_NOINTERP		(1<<2)	// don't interpolate between this an last view
+#define FDEMO_NORMAL 0
+#define FDEMO_USE_ORIGIN2 (1 << 0)
+#define FDEMO_USE_ANGLES2 (1 << 1)
+#define FDEMO_NOINTERP (1 << 2)  // don't interpolate between this an last view
 
-struct democmdinfo_t
-{
-	// Default constructor
-	democmdinfo_t()
-	{
-		flags = FDEMO_NORMAL;
-		viewOrigin.Init();
-		viewAngles.Init();
-		localViewAngles.Init();
+struct democmdinfo_t {
+  // Default constructor
+  democmdinfo_t() {
+    flags = FDEMO_NORMAL;
+    viewOrigin.Init();
+    viewAngles.Init();
+    localViewAngles.Init();
 
-		// Resampled origin/angles
-		viewOrigin2.Init();
-		viewAngles2.Init();
-		localViewAngles2.Init();
-	}
+    // Resampled origin/angles
+    viewOrigin2.Init();
+    viewAngles2.Init();
+    localViewAngles2.Init();
+  }
 
-	// Copy constructor
-	// Assignment
-	democmdinfo_t&	operator=(const democmdinfo_t& src )
-	{
-		if ( this == &src )
-			return *this;
+  // Copy constructor
+  // Assignment
+  democmdinfo_t& operator=(const democmdinfo_t& src) {
+    if (this == &src) return *this;
 
-		flags = src.flags;
-		viewOrigin = src.viewOrigin;
-		viewAngles = src.viewAngles;
-		localViewAngles = src.localViewAngles;
-		viewOrigin2 = src.viewOrigin2;
-		viewAngles2 = src.viewAngles2;
-		localViewAngles2 = src.localViewAngles2;
+    flags = src.flags;
+    viewOrigin = src.viewOrigin;
+    viewAngles = src.viewAngles;
+    localViewAngles = src.localViewAngles;
+    viewOrigin2 = src.viewOrigin2;
+    viewAngles2 = src.viewAngles2;
+    localViewAngles2 = src.localViewAngles2;
 
-		return *this;
-	}
+    return *this;
+  }
 
-	const Vector& GetViewOrigin()
-	{
-		if ( flags & FDEMO_USE_ORIGIN2 )
-		{
-			return viewOrigin2;
-		}
-		return viewOrigin;
-	}
+  const Vector& GetViewOrigin() {
+    if (flags & FDEMO_USE_ORIGIN2) {
+      return viewOrigin2;
+    }
+    return viewOrigin;
+  }
 
-	const QAngle& GetViewAngles()
-	{
-		if ( flags & FDEMO_USE_ANGLES2 )
-		{
-			return viewAngles2;
-		}
-		return viewAngles;
-	}
-	const QAngle& GetLocalViewAngles()
-	{
-		if ( flags & FDEMO_USE_ANGLES2 )
-		{
-			return localViewAngles2;
-		}
-		return localViewAngles;
-	}
+  const QAngle& GetViewAngles() {
+    if (flags & FDEMO_USE_ANGLES2) {
+      return viewAngles2;
+    }
+    return viewAngles;
+  }
+  const QAngle& GetLocalViewAngles() {
+    if (flags & FDEMO_USE_ANGLES2) {
+      return localViewAngles2;
+    }
+    return localViewAngles;
+  }
 
-	void Reset( void )
-	{
-		flags = 0;
-		viewOrigin2 = viewOrigin;
-		viewAngles2 = viewAngles;
-		localViewAngles2 = localViewAngles;
-	}
+  void Reset(void) {
+    flags = 0;
+    viewOrigin2 = viewOrigin;
+    viewAngles2 = viewAngles;
+    localViewAngles2 = localViewAngles;
+  }
 
-	int			flags;
+  int flags;
 
-	// original origin/viewangles
-	Vector		viewOrigin;
-	QAngle		viewAngles;
-	QAngle		localViewAngles;
+  // original origin/viewangles
+  Vector viewOrigin;
+  QAngle viewAngles;
+  QAngle localViewAngles;
 
-	// Resampled origin/viewangles
-	Vector		viewOrigin2;
-	QAngle		viewAngles2;
-	QAngle		localViewAngles2;
+  // Resampled origin/viewangles
+  Vector viewOrigin2;
+  QAngle viewAngles2;
+  QAngle localViewAngles2;
 };
 
-struct demosmoothing_t
-{
-	demosmoothing_t()
-	{
-		file_offset = 0;
-		frametick = 0;
-		selected = false;
-		samplepoint = false;
+struct demosmoothing_t {
+  demosmoothing_t() {
+    file_offset = 0;
+    frametick = 0;
+    selected = false;
+    samplepoint = false;
 
-		vecmoved.Init();
-		angmoved.Init();
+    vecmoved.Init();
+    angmoved.Init();
 
-		targetpoint = false;
-		vectarget.Init();
-	}
+    targetpoint = false;
+    vectarget.Init();
+  }
 
-	demosmoothing_t&	operator=(const demosmoothing_t& src )
-	{
-		if ( this == &src )
-			return *this;
+  demosmoothing_t& operator=(const demosmoothing_t& src) {
+    if (this == &src) return *this;
 
-		file_offset = src.file_offset;
-		frametick = src.frametick;
-		selected = src.selected;
-		samplepoint = src.samplepoint;
-		vecmoved = src.vecmoved;
-		angmoved = src.angmoved;
+    file_offset = src.file_offset;
+    frametick = src.frametick;
+    selected = src.selected;
+    samplepoint = src.samplepoint;
+    vecmoved = src.vecmoved;
+    angmoved = src.angmoved;
 
-		targetpoint = src.targetpoint;
-		vectarget = src.vectarget;
+    targetpoint = src.targetpoint;
+    vectarget = src.vectarget;
 
-		info = src.info;
+    info = src.info;
 
-		return *this;
-	}
+    return *this;
+  }
 
-	int					file_offset;
+  int file_offset;
 
-	int					frametick;
+  int frametick;
 
-	bool				selected;
+  bool selected;
 
-	// For moved sample points
-	bool				samplepoint;
-	Vector				vecmoved;
-	QAngle				angmoved;
+  // For moved sample points
+  bool samplepoint;
+  Vector vecmoved;
+  QAngle angmoved;
 
-	bool				targetpoint;
-	Vector				vectarget;
+  bool targetpoint;
+  Vector vectarget;
 
-	democmdinfo_t		info;
+  democmdinfo_t info;
 };
 
-struct CSmoothingContext
-{
-	CSmoothingContext()
-	{
-		active = false;
-		filename[ 0 ] = 0;
-		m_nFirstSelectableSample = 0;
-	}
+struct CSmoothingContext {
+  CSmoothingContext() {
+    active = false;
+    filename[0] = 0;
+    m_nFirstSelectableSample = 0;
+  }
 
-	CSmoothingContext&	operator=(const CSmoothingContext& src )
-	{
-		if ( this == &src )
-			return *this;
+  CSmoothingContext& operator=(const CSmoothingContext& src) {
+    if (this == &src) return *this;
 
-		active = src.active;
-		Q_strncpy( filename, src.filename, sizeof( filename ) );
+    active = src.active;
+    Q_strncpy(filename, src.filename, sizeof(filename));
 
-		smooth.RemoveAll();
-		int c = src.smooth.Count();
-		int i;
-		for ( i = 0; i < c; i++ )
-		{
-			demosmoothing_t newitem;
-			newitem = src.smooth[ i ];
-			smooth.AddToTail( newitem );
-		}
+    smooth.RemoveAll();
+    int c = src.smooth.Count();
+    int i;
+    for (i = 0; i < c; i++) {
+      demosmoothing_t newitem;
+      newitem = src.smooth[i];
+      smooth.AddToTail(newitem);
+    }
 
-		m_nFirstSelectableSample = src.m_nFirstSelectableSample;
+    m_nFirstSelectableSample = src.m_nFirstSelectableSample;
 
-		return *this;
-	}
+    return *this;
+  }
 
-	bool							active;
-	char							filename[ 512 ];
-	CUtlVector< demosmoothing_t >	smooth;
-	int								m_nFirstSelectableSample;
+  bool active;
+  char filename[512];
+  CUtlVector<demosmoothing_t> smooth;
+  int m_nFirstSelectableSample;
 };
 
-#endif // DEMOFORMAT_H
+#endif  // DEMOFORMAT_H

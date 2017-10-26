@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "networkstringtable_clientdll.h"
 #include "dt_utlvector_recv.h"
@@ -893,7 +893,7 @@ void C_SceneEntity::DispatchEndExpression( CChoreoScene *scene, C_BaseFlex *acto
 //-----------------------------------------------------------------------------
 void C_SceneEntity::DispatchStartGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event )
 {
-	// Ingore null gestures
+	// Ingore 0 gestures
 	if ( !Q_stricmp( event->GetName(), "NULL" ) )
 		return;
 
@@ -925,7 +925,7 @@ void C_SceneEntity::DispatchEndSequence( CChoreoScene *scene, CBaseFlex *actor, 
 //-----------------------------------------------------------------------------
 void C_SceneEntity::DispatchEndGesture( CChoreoScene *scene, C_BaseFlex *actor, CChoreoEvent *event )
 {
-	// Ingore null gestures
+	// Ingore 0 gestures
 	if ( !Q_stricmp( event->GetName(), "NULL" ) )
 		return;
 

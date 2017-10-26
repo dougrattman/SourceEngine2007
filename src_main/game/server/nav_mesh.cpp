@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 // NavMesh.cpp
 // Implementation of Navigation Mesh interface
 // Author: Michael S. Booth, 2003-2004
@@ -14,7 +14,7 @@
 #include "nav_mesh.h"
 #include "nav_node.h"
 #include "fmtstr.h"
-#include "utlbuffer.h"
+#include "tier1/utlbuffer.h"
 #include "tier0/vprof.h"
 
 #define DrawLine( from, to, duration, red, green, blue )		NDebugOverlay::Line( from, to, red, green, blue, true, 0.1f )
@@ -1375,7 +1375,7 @@ void CommandNavSave( void )
 	else
 	{
 		const char *filename = TheNavMesh->GetFilename();
-		Msg( "ERROR: Cannot save navigation map '%s'.\n", (filename) ? filename : "(null)" );
+		Msg( "ERROR: Cannot save navigation map '%s'.\n", (filename) ? filename : "(0)" );
 	}
 }
 static ConCommand nav_save( "nav_save", CommandNavSave, "Saves the current Navigation Mesh to disk.", FCVAR_GAMEDLL | FCVAR_CHEAT );

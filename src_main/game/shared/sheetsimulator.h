@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SHEETSIMULATOR_H
 #define SHEETSIMULATOR_H
@@ -13,7 +13,7 @@
 
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 
 
 // Uncomment this for client-side simulation
@@ -27,10 +27,10 @@ class CGameTrace;
 typedef CGameTrace trace_t;
 //struct trace_t;
 typedef void (*TraceLineFunc_t)(const Vector &vecStart, const Vector &vecEnd, 
-								unsigned int mask, int collisionGroup, trace_t *ptr);
+  		unsigned int mask, int collisionGroup, trace_t *ptr);
 typedef void (*TraceHullFunc_t)(const Vector &vecStart, const Vector &vecEnd, 
-								const Vector &hullMin, const Vector &hullMax, 
-								unsigned int mask, int collisionGroup, trace_t *ptr);
+  		const Vector &hullMin, const Vector &hullMax, 
+  		unsigned int mask, int collisionGroup, trace_t *ptr);
 
 
 class CSheetSimulator
@@ -117,14 +117,14 @@ protected:
 	}
 
 	// simulator
-	void			EulerStep( float dt );
-	void			ComputeControlPoints();
-	void			ClearForces();
-	void			ComputeForces();
-	void			TestVertAgainstPlane( int vert, int plane, bool bFarTest = true );
-	void			SatisfyCollisionConstraints();
-	void			DetermineBestCollisionPlane( bool bFarTest = true );
-	void			ClampPointsToCollisionPlanes();
+	void EulerStep( float dt );
+	void ComputeControlPoints();
+	void ClearForces();
+	void ComputeForces();
+	void TestVertAgainstPlane( int vert, int plane, bool bFarTest = true );
+	void SatisfyCollisionConstraints();
+	void DetermineBestCollisionPlane( bool bFarTest = true );
+	void ClampPointsToCollisionPlanes();
 
 	// How many particles horiz + vert?
 	int m_HorizontalCount;
@@ -142,7 +142,7 @@ protected:
 	Vector* m_ControlPoints;
 	
 	CUtlVector<Spring_t>	m_Springs;
-	CUtlVector<int>			m_Gravity;
+	CUtlVector<int> m_Gravity;
 
 	// raycasting methods
 	TraceLineFunc_t		m_TraceLine;

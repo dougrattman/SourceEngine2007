@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef SAVERESTORE_BITSTRING_H
 #define SAVERESTORE_BITSTRING_H
@@ -38,11 +38,11 @@ public:
 		BITSTRING *pBitString = (BITSTRING *)fieldInfo.pField;
 		int numBits = pRestore->ReadInt();
 		if ( !pBitString->IsFixedSize() )
-			pBitString->Resize( numBits );
+ pBitString->Resize( numBits );
 		else
 		{
-			Assert( pBitString->GetNumBits() >= numBits );
-			pBitString->ClearAll();
+ Assert( pBitString->GetNumBits() >= numBits );
+ pBitString->ClearAll();
 		}
 		int numIntsInStream = CalcNumIntsForBits( numBits );
 		int readSize = min( pBitString->GetNumDWords(), numIntsInStream );
@@ -51,8 +51,8 @@ public:
 		numIntsInStream -= readSize;
 		while ( numIntsInStream-- > 0 )
 		{
-			int ignored;
-			pRestore->ReadInt( &ignored, 1 );
+ int ignored;
+ pRestore->ReadInt( &ignored, 1 );
 		}
 	}
 	

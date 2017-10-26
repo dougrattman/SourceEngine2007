@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "filters.h"
@@ -98,7 +98,7 @@ class CFilterMultiple : public CBaseFilter
 
 	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity );
 	bool PassesDamageFilterImpl(const CTakeDamageInfo &info);
-	void Activate(void);
+	void Activate();
 };
 
 LINK_ENTITY_TO_CLASS(filter_multi, CFilterMultiple);

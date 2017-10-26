@@ -1,43 +1,24 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef IMESSAGELISTENER_H
-#define IMESSAGELISTENER_H
+#ifndef SOURCE_VGUI_IMESSAGELISTENER_H_
+#define SOURCE_VGUI_IMESSAGELISTENER_H_
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-#include <vgui/VGUI.h>
+#include "vgui/VGUI.h"
 
 class KeyValues;
 
-namespace vgui
-{
-
-enum MessageSendType_t
-{
-	MESSAGE_SENT = 0,
-	MESSAGE_POSTED,
-	MESSAGE_RECEIVED
-};
+namespace vgui {
+enum MessageSendType_t { MESSAGE_SENT = 0, MESSAGE_POSTED, MESSAGE_RECEIVED };
 
 class VPanel;
 
-
-class IMessageListener
-{
-public:
-	virtual void Message( VPanel* pSender, VPanel* pReceiver, 
-		KeyValues* pKeyValues, MessageSendType_t type ) = 0;
+class IMessageListener {
+ public:
+  virtual void Message(VPanel* pSender, VPanel* pReceiver,
+                       KeyValues* pKeyValues, MessageSendType_t type) = 0;
 };
 
 IMessageListener* MessageListener();
+}  // namespace vgui
 
-}
-
-#endif // IMESSAGELISTENER_H
+#endif  // SOURCE_VGUI_IMESSAGELISTENER_H_

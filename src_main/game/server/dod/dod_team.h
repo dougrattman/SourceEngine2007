@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Team management class. Contains all the details for a specific team
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_TEAM_H
 #define DOD_TEAM_H
@@ -13,7 +13,7 @@
 #endif
 
 
-#include "utlvector.h"
+#include "tier1/UtlVector.h"
 #include "team.h"
 #include "playerclass_info_parse.h"
 #include "dod_playerclass_info_parse.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Namespace for functions having to do with WC Edit mode
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef WCEDIT_H
 #define WCEDIT_H
@@ -23,12 +23,12 @@ class CBaseEntity;
 namespace NWCEdit
 {
 	Vector	AirNodePlacementPosition( void );
-	bool	IsWCVersionValid(void);
+	bool	IsWCVersionValid();
 	void	CreateAINode(   CBasePlayer *pPlayer );
 	void	DestroyAINode(  CBasePlayer *pPlayer );
 	void	CreateAILink(	CBasePlayer *pPlayer );
 	void	DestroyAILink(  CBasePlayer *pPlayer );
-	void	UndoDestroyAINode(void);
+	void	UndoDestroyAINode();
 	void	RememberEntityPosition( CBaseEntity *pEntity );
 	void	UpdateEntityPosition( CBaseEntity *pEntity );
 };

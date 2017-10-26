@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2004, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #pragma once
 #endif
 
-#include "convar.h"
+#include "tier1/convar.h"
 #include "multiplayer_animstate.h"
 
 #if defined( CLIENT_DLL )
@@ -33,7 +33,7 @@ public:
 	~CTFPlayerAnimState();
 
 	void InitTF( CTFPlayer *pPlayer );
-	CTFPlayer *GetTFPlayer( void )							{ return m_pTFPlayer; }
+	CTFPlayer *GetTFPlayer( void )  	{ return m_pTFPlayer; }
 
 	virtual void ClearAnimationState();
 	virtual Activity TranslateActivity( Activity actDesired );

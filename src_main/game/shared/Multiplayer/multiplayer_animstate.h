@@ -1,15 +1,15 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 #ifndef MULTIPLAYERANIMSTATE_H
 #define MULTIPLAYERANIMSTATE_H
 #ifdef _WIN32
 #pragma once
 #endif
 
-#include "convar.h"
+#include "tier1/convar.h"
 #include "basecombatweapon_shared.h"
 
 #if defined( CLIENT_DLL )
@@ -45,7 +45,7 @@ enum PlayerAnimEvent_t
 	// Snap to current yaw exactly
 	PLAYERANIMEVENT_SNAP_YAW,
 
-	PLAYERANIMEVENT_CUSTOM,				// Used to play specific activities
+	PLAYERANIMEVENT_CUSTOM, 	// Used to play specific activities
 	PLAYERANIMEVENT_CUSTOM_GESTURE,
 	PLAYERANIMEVENT_CUSTOM_SEQUENCE,	// Used to play specific sequences
 	PLAYERANIMEVENT_CUSTOM_GESTURE_SEQUENCE,
@@ -80,10 +80,10 @@ enum
 
 struct GestureSlot_t
 {
-	int					m_iGestureSlot;
-	Activity			m_iActivity;
-	bool				m_bAutoKill;
-	bool				m_bActive;
+	int 		m_iGestureSlot;
+	Activity m_iActivity;
+	bool 	m_bAutoKill;
+	bool 	m_bActive;
 	CAnimationLayer		*m_pAnimLayer;
 };
 
@@ -95,11 +95,11 @@ inline bool IsCustomPlayerAnimEvent( PlayerAnimEvent_t event )
 
 struct MultiPlayerPoseData_t
 {
-	int			m_iMoveX;
-	int			m_iMoveY;
-	int			m_iAimYaw;
-	int			m_iAimPitch;
-	int			m_iBodyHeight;
+	int m_iMoveX;
+	int m_iMoveY;
+	int m_iAimYaw;
+	int m_iAimPitch;
+	int m_iBodyHeight;
 
 	float		m_flEstimateYaw;
 	float		m_flLastAimTurnTime;
@@ -194,7 +194,7 @@ public:
 protected:
 
 	virtual void Init( CBasePlayer *pPlayer, MultiPlayerMovementData_t &movementData ); 
-	CBasePlayer *GetBasePlayer( void )				{ return m_pPlayer; }
+	CBasePlayer *GetBasePlayer( void ) 	{ return m_pPlayer; }
 
 	// Allow inheriting classes to override SelectWeightedSequence
 	virtual int SelectWeightedSequence( Activity activity ) { return GetBasePlayer()->SelectWeightedSequence( activity ); }
@@ -230,13 +230,13 @@ protected:
 	virtual float CalcMovementPlaybackRate( bool *bIsMoving );
 
 	// Pose paramters.
-	bool				SetupPoseParameters( CStudioHdr *pStudioHdr );
+	bool 	SetupPoseParameters( CStudioHdr *pStudioHdr );
 	virtual void		ComputePoseParam_MoveYaw( CStudioHdr *pStudioHdr );
 	virtual void		ComputePoseParam_AimPitch( CStudioHdr *pStudioHdr );
 	virtual void		ComputePoseParam_AimYaw( CStudioHdr *pStudioHdr );
-	void				ComputePoseParam_BodyHeight( CStudioHdr *pStudioHdr );
+	void 	ComputePoseParam_BodyHeight( CStudioHdr *pStudioHdr );
 	virtual void		EstimateYaw( void );
-	void				ConvergeYawAngles( float flGoalYaw, float flYawRate, float flDeltaTime, float &flCurrentYaw );
+	void 	ConvergeYawAngles( float flGoalYaw, float flYawRate, float flDeltaTime, float &flCurrentYaw );
 
 	virtual float GetCurrentMaxGroundSpeed();
 	virtual void ComputeSequences( CStudioHdr *pStudioHdr );
@@ -250,14 +250,14 @@ protected:
 
 	bool ShouldUpdateAnimState();
 
-	void				DebugShowAnimStateForPlayer( bool bIsServer );
-	void				DebugShowEyeYaw( void );
+	void 	DebugShowAnimStateForPlayer( bool bIsServer );
+	void 	DebugShowEyeYaw( void );
 
 // Client specific.
 #ifdef CLIENT_DLL
 
 	// Debug.
-	void				DebugShowActivity( Activity activity );
+	void 	DebugShowActivity( Activity activity );
 
 #endif
 
@@ -265,15 +265,15 @@ protected:
 
 	CBasePlayer	*m_pPlayer;
 
-	QAngle				m_angRender;
+	QAngle 	m_angRender;
 
 	// Pose parameters.
-	bool						m_bPoseParameterInit;
+	bool  m_bPoseParameterInit;
 	MultiPlayerPoseData_t		m_PoseParameterData;
 	DebugPlayerAnimData_t		m_DebugAnimData;
 
-	bool						m_bCurrentFeetYawInitialized;
-	float						m_flLastAnimationStateClearTime;
+	bool  m_bCurrentFeetYawInitialized;
+	float  m_flLastAnimationStateClearTime;
 	
 	float m_flEyeYaw;
 	float m_flEyePitch;

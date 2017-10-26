@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -23,12 +23,12 @@ enum RemapAngleRange_CurvePart_t
 // randomly between different parts of the remapping curve.
 struct ViewLockData_t
 {
-	float	flLockInterval;			// The duration to lock the view when we lock it for this degree of freedom.
+	float	flLockInterval; // The duration to lock the view when we lock it for this degree of freedom.
 	// 0 = never lock this degree of freedom.
 
-	bool	bLocked;				// True if this DOF was locked because of the above condition.
+	bool	bLocked; 	// True if this DOF was locked because of the above condition.
 
-	float	flUnlockTime;			// If this DOF is locked, the time when we will unlock it.
+	float	flUnlockTime; // If this DOF is locked, the time when we will unlock it.
 
 	float	flUnlockBlendInterval;	// If this DOF is locked, how long to spend blending out of the locked view when we unlock.
 };
@@ -50,7 +50,7 @@ struct ViewSmoothingData_t
 	float	flRollCurveZero;	// Pitch values below this are clamped to zero.
 	float	flRollCurveLinear;	// Roll values above this are mapped directly.
 	//		Spline in between.
-	float	flFOV;				// FOV when in the vehicle.
+	float	flFOV; 	// FOV when in the vehicle.
 
 	ViewLockData_t pitchLockData;
 	ViewLockData_t rollLockData;
@@ -70,10 +70,10 @@ struct ViewSmoothingData_t
 
 // TEMP: Shared vehicle view smoothing
 void SharedVehicleViewSmoothing(CBasePlayer *pPlayer, 
-								Vector *pAbsOrigin, QAngle *pAbsAngles, 
-								bool bEnterAnimOn, bool bExitAnimOn, 
-								const Vector &vecEyeExitEndpoint, 
-								ViewSmoothingData_t *pData, 
-								float *pFOV );
+  		Vector *pAbsOrigin, QAngle *pAbsAngles, 
+  		bool bEnterAnimOn, bool bExitAnimOn, 
+  		const Vector &vecEyeExitEndpoint, 
+  		ViewSmoothingData_t *pData, 
+  		float *pFOV );
 
 #endif // VEHICLE_VIEWBLEND_SHARED_H

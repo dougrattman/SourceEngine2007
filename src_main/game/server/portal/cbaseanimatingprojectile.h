@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:		Base class for simple projectiles
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CBASEANIMATINGPROJECTILE_H
 #define CBASEANIMATINGPROJECTILE_H
@@ -26,13 +26,13 @@ public:
 	void Touch( CBaseEntity *pOther );
 
 	void CBaseAnimatingProjectile::Spawn(	char *pszModel,
-											const Vector &vecOrigin,
-											const Vector &vecVelocity,
-											edict_t *pOwner,
-											MoveType_t	iMovetype,
-											MoveCollide_t nMoveCollide,
-											int	iDamage,
-											int iDamageType );
+   		const Vector &vecOrigin,
+   		const Vector &vecVelocity,
+   		edict_t *pOwner,
+   		MoveType_t	iMovetype,
+   		MoveCollide_t nMoveCollide,
+   		int	iDamage,
+   		int iDamageType );
 
 	virtual void Precache( void ) {};
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CLIENTSCOREBOARDDIALOG_H
 #define CLIENTSCOREBOARDDIALOG_H
@@ -15,11 +15,11 @@
 #include <game/client/iviewport.h>
 #include "gameeventlistener.h"
 
-#define TYPE_NOTEAM			0	// NOTEAM must be zero :)
-#define TYPE_TEAM			1	// a section for a single team	
+#define TYPE_NOTEAM 0	// NOTEAM must be zero :)
+#define TYPE_TEAM 1	// a section for a single team	
 #define TYPE_PLAYERS		2
 #define TYPE_SPECTATORS		3	// a section for a spectator group
-#define TYPE_BLANK			4
+#define TYPE_BLANK 4
 
 
 //-----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public:
 	virtual void FireGameEvent( IGameEvent *event);
 
 	virtual void UpdatePlayerAvatar( int playerIndex, KeyValues *kv );
-			
+ 
 protected:
 	MESSAGE_FUNC_INT( OnPollHideCode, "PollHideCode", code );
 
@@ -85,7 +85,7 @@ protected:
 	int m_iNumTeams;
 
 	vgui::SectionedListPanel *m_pPlayerList;
-	int				m_iSectionId; // the current section we are entering into
+	int 	m_iSectionId; // the current section we are entering into
 
 	int s_VoiceImage[5];
 	int TrackerImage;
@@ -95,9 +95,9 @@ protected:
 	void MoveLabelToFront(const char *textEntryName);
 	void MoveToCenterOfScreen();
 
-	vgui::ImageList				*m_pImageList;
-	int							m_iImageAvatars[MAX_PLAYERS+1];
-	CUtlMap<int,int>			m_mapAvatarsToImageList;
+	vgui::ImageList 	*m_pImageList;
+	int  	m_iImageAvatars[MAX_PLAYERS+1];
+	CUtlMap<int,int> m_mapAvatarsToImageList;
 
 	CPanelAnimationVarAliasType( int, m_iAvatarWidth, "avatar_width", "34", "proportional_int" );
 	CPanelAnimationVarAliasType( int, m_iNameWidth, "name_width", "136", "proportional_int" );
@@ -107,8 +107,8 @@ protected:
 	CPanelAnimationVarAliasType( int, m_iPingWidth, "ping_width", "23", "proportional_int" );
 
 private:
-	int			m_iPlayerIndexSymbol;
-	int			m_iDesiredHeight;
+	int m_iPlayerIndexSymbol;
+	int m_iDesiredHeight;
 	IViewPort	*m_pViewPort;
 	ButtonCode_t m_nCloseKey;
 

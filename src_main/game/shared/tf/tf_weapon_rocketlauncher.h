@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // TF Rocket Launcher
 //
@@ -40,7 +40,7 @@ public:
 #ifndef CLIENT_DLL
 	virtual void	Precache();
 #endif
-	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_ROCKETLAUNCHER; }
+	virtual int		GetWeaponID( void ) const { return TF_WEAPON_ROCKETLAUNCHER; }
 	virtual CBaseEntity *FireProjectile( CTFPlayer *pPlayer );
 	virtual void	ItemPostFrame( void );
 	virtual bool	Deploy( void );

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // Define local cl_dll hooks to the renderable textures in material system
 //
-//=============================================================================//
+
 
 #ifndef RENDERTARGETS_H
 #define RENDERTARGETS_H
@@ -21,12 +21,12 @@ ITexture *GetFullFrameDepthTexture( void );
 ITexture *GetSmallBufferHDR0( void );
 ITexture *GetSmallBufferHDR1( void );
 
-ITexture *GetSmallBuffer0( void );							// quarter-sized texture, same fmt as screen
-ITexture *GetSmallBuffer1( void );							// quarter-sized texture, same fmt as screen
+ITexture *GetSmallBuffer0( void );  	// quarter-sized texture, same fmt as screen
+ITexture *GetSmallBuffer1( void );  	// quarter-sized texture, same fmt as screen
 
 #define MAX_TEENY_TEXTURES 3
 
-ITexture *GetTeenyTexture(int which);						// tiny 32x32 texture, always 8888
+ITexture *GetTeenyTexture(int which);  // tiny 32x32 texture, always 8888
 
 void ReleaseRenderTargets( void );
 

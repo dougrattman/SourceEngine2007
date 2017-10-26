@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef DOD_BUTTON_H
 #define DOD_BUTTON_H
 
 #include "mouseoverpanelbutton.h"
-#include "KeyValues.h"
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui_controls/ProgressBar.h>
 #include <vgui_controls/EditablePanel.h>
@@ -46,7 +46,7 @@ private:
 	
 public:
 	CDODButton(vgui::Panel *parent ) :
-					vgui::Button( parent, "DODButton", "" )
+ 		vgui::Button( parent, "DODButton", "" )
 	{
 	}
 

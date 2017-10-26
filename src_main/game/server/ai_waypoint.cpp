@@ -1,12 +1,12 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
-#include "mempool.h"
+#include "tier1/mempool.h"
 #include "ai_navtype.h"
 #include "ai_node.h"
 #include "ai_waypoint.h"

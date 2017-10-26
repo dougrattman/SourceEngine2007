@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "vehicle_base.h"
@@ -114,7 +114,7 @@ public:
 	virtual bool	IsVehicleBodyInWater() { return m_WaterData.m_bBodyInWater; }
 
 	// CBaseEntity
-	void			Think(void);
+	void			Think();
 	void			Precache( void );
 	void			Spawn( void ); 
 

@@ -1,18 +1,18 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
 
-#include <stdio.h>
+
+#include <cstdio>
 
 #include <vgui/IInput.h>
 #include <vgui/IPanel.h>
 #include <vgui/ILocalize.h>
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/MouseCode.h>
 
 #include <vgui_controls/SectionedListPanel.h>
@@ -23,7 +23,7 @@
 #include <vgui_controls/TextImage.h>
 #include <vgui_controls/ImageList.h>
 
-#include "UtlVector.h"
+#include "tier1/UtlVector.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

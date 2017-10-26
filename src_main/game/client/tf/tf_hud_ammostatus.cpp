@@ -1,15 +1,15 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "hud.h"
 #include "hudelement.h"
 #include "hud_macros.h"
 #include "hud_numericdisplay.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include <vgui/ISystem.h>

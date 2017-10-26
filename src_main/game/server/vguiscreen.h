@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: This is an entity that represents a vgui screen
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef VGUISCREEN_H
 #define VGUISCREEN_H

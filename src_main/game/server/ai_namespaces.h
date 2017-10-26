@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef AI_NAMESPACES_H
 #define AI_NAMESPACES_H
@@ -19,18 +19,18 @@ const int GLOBAL_IDS_BASE = 1000000000; // decimal for debugging readability
 
 //-----------------------------------------------------------------------------
 
-inline bool AI_IdIsGlobal( int id )			{ return ( id >= GLOBAL_IDS_BASE || id == -1 ); }
-inline bool AI_IdIsLocal( int id )			{ return ( id < GLOBAL_IDS_BASE || id == -1 );  }
+inline bool AI_IdIsGlobal( int id ) { return ( id >= GLOBAL_IDS_BASE || id == -1 ); }
+inline bool AI_IdIsLocal( int id ) { return ( id < GLOBAL_IDS_BASE || id == -1 );  }
 inline int  AI_RemapToGlobal( int id )		{ return ( id != -1 ) ? id + GLOBAL_IDS_BASE : -1; }
 inline int  AI_RemapFromGlobal( int id )	{ return ( id != -1 ) ? id - GLOBAL_IDS_BASE : -1; }
 
-inline int	AI_MakeGlobal( int id )			{ return AI_IdIsLocal( id ) ? AI_RemapToGlobal( id ) : id; }
+inline int	AI_MakeGlobal( int id ) { return AI_IdIsLocal( id ) ? AI_RemapToGlobal( id ) : id; }
 
 //-----------------------------------------------------------------------------
 // CAI_GlobalNamespace
 //
 // Purpose: Symbol table for all symbols across a given namespace, a
-//			bi-directional mapping of "text" to global ID
+// bi-directional mapping of "text" to global ID
 //
 
 class CAI_GlobalNamespace
@@ -49,15 +49,15 @@ public:
 
 private:
 	CStringRegistry * 	m_pSymbols;
-	int					m_NextGlobalBase;
+	int 		m_NextGlobalBase;
 };
 
 //-----------------------------------------------------------------------------
 // CAI_LocalIdSpace
 //
 // Purpose: Maps per class IDs to global IDs, so that various classes can use
-//			the same integer in local space to represent different globally
-//			unique integers. Used for schedules, tasks, conditions and squads
+// the same integer in local space to represent different globally
+// unique integers. Used for schedules, tasks, conditions and squads
 //
 
 class CAI_LocalIdSpace
@@ -87,10 +87,10 @@ private:
 
 	// --------------------------------
 
-	int 					m_globalBase;
-	int 					m_localBase;
-	int 					m_localTop;
-	int 					m_globalTop;
+	int  		m_globalBase;
+	int  		m_localBase;
+	int  		m_localTop;
+	int  		m_globalTop;
 
 	CAI_LocalIdSpace *		m_pParentIDSpace;
 	CAI_GlobalNamespace *	m_pGlobalNamespace;
@@ -123,7 +123,7 @@ public:
 	void 		AddCondition( const char *pszCondition, int conditionID );
 	const char *ConditionIdToSymbol( int conditionID ) const;
 	int 		ConditionSymbolToId( const char *pszCondition ) const;
-	int			NumConditions() const;
+	int NumConditions() const;
 
 private:
 	friend class CAI_ClassScheduleIdSpace;
@@ -226,8 +226,8 @@ inline bool CAI_ClassScheduleIdSpace::Init( const char *pszClassName, CAI_Global
 {
 	m_pszClassName = pszClassName;
 	return ( m_ScheduleIds.Init( &pGlobalNamespace->m_ScheduleNamespace, ( pParentIDSpace ) ? &pParentIDSpace->m_ScheduleIds : NULL ) &&
-			 m_TaskIds.Init( &pGlobalNamespace->m_TaskNamespace, ( pParentIDSpace ) ? &pParentIDSpace->m_TaskIds : NULL ) &&
-			 m_ConditionIds.Init( &pGlobalNamespace->m_ConditionNamespace, ( pParentIDSpace ) ? &pParentIDSpace->m_ConditionIds : NULL ) );
+  m_TaskIds.Init( &pGlobalNamespace->m_TaskNamespace, ( pParentIDSpace ) ? &pParentIDSpace->m_TaskIds : NULL ) &&
+  m_ConditionIds.Init( &pGlobalNamespace->m_ConditionNamespace, ( pParentIDSpace ) ? &pParentIDSpace->m_ConditionIds : NULL ) );
 }
 
 //-----------------------------------------------------------------------------

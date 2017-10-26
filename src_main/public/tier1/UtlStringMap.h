@@ -1,99 +1,71 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: 
-//
-//===========================================================================//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#ifndef UTLSTRINGMAP_H
-#define UTLSTRINGMAP_H
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef SOURCE_TIER1_UTLSTRINGMAP_H_
+#define SOURCE_TIER1_UTLSTRINGMAP_H_
 
-#include "utlsymbol.h"
+#include "tier1/utlsymbol.h"
 
 template <class T>
-class CUtlStringMap
-{
-public:
-	CUtlStringMap( bool caseInsensitive = true ) : m_SymbolTable( 0, 32, caseInsensitive )
-	{
-	}
+class CUtlStringMap {
+ public:
+  CUtlStringMap(bool is_case_insensitive = true)
+      : symbol_table_{0, 32, is_case_insensitive} {}
 
-	// Get data by the string itself:
-	T& operator[]( const char *pString )
-	{
-		CUtlSymbol symbol = m_SymbolTable.AddString( pString );
-		int index = ( int )( UtlSymId_t )symbol;
-		if( m_Vector.Count() <= index )
-		{
-			m_Vector.EnsureCount( index + 1 );
-		}
-		return m_Vector[index];
-	}
+  // Get data by the string itself:
+  T &operator[](const char *the_string) {
+    CUtlSymbol symbol = symbol_table_.AddString(the_string);
+    int index = (int)(UtlSymId_t)symbol;
+    if (vector_.Count() <= index) {
+      vector_.EnsureCount(index + 1);
+    }
+    return vector_[index];
+  }
 
-	// Get data by the string's symbol table ID - only used to retrieve a pre-existing symbol, not create a new one!
-	T& operator[]( UtlSymId_t n )
-	{
-		Assert( n >=0 && n <= m_Vector.Count() );
-		return m_Vector[n];
-	}
+  // Get data by the string's symbol table ID - only used to retrieve a
+  // pre-existing symbol, not create a new one!
+  T &operator[](UtlSymId_t n) {
+    Assert(n >= 0 && n <= vector_.Count());
+    return vector_[n];
+  }
 
-	const T& operator[]( UtlSymId_t n ) const
-	{
-		Assert( n >=0 && n <= m_Vector.Count() );
-		return m_Vector[n];
-	}
+  const T &operator[](UtlSymId_t n) const {
+    Assert(n >= 0 && n <= vector_.Count());
+    return vector_[n];
+  }
 
-	bool Defined( const char *pString ) const
-	{
-		return m_SymbolTable.Find( pString ) != UTL_INVAL_SYMBOL;
-	}
+  bool Defined(const char *pString) const {
+    return symbol_table_.Find(pString) != UTL_INVAL_SYMBOL;
+  }
 
-	UtlSymId_t Find( const char *pString ) const
-	{
-		return m_SymbolTable.Find( pString );
-	}
+  UtlSymId_t Find(const char *pString) const {
+    return symbol_table_.Find(pString);
+  }
 
-	static UtlSymId_t InvalidIndex()
-	{
-		return UTL_INVAL_SYMBOL;
-	}
+  static UtlSymId_t InvalidIndex() { return UTL_INVAL_SYMBOL; }
 
-	int GetNumStrings( void ) const
-	{
-		return m_SymbolTable.GetNumStrings();
-	}
+  int GetNumStrings(void) const { return symbol_table_.GetNumStrings(); }
 
-	const char *String( int n )	const
-	{
-		return m_SymbolTable.String( n );
-	}
+  const char *String(int n) const { return symbol_table_.String(n); }
 
-	// Clear all of the data from the map
-	void Clear()
-	{
-		m_Vector.RemoveAll();
-		m_SymbolTable.RemoveAll();
-	}
+  // Clear all of the data from the map
+  void Clear() {
+    vector_.RemoveAll();
+    symbol_table_.RemoveAll();
+  }
 
-	void Purge()
-	{
-		m_Vector.Purge();
-		m_SymbolTable.RemoveAll();
-	}
+  void Purge() {
+    vector_.Purge();
+    symbol_table_.RemoveAll();
+  }
 
-	void PurgeAndDeleteElements()
-	{
-		m_Vector.PurgeAndDeleteElements();
-		m_SymbolTable.RemoveAll();
-	}
+  void PurgeAndDeleteElements() {
+    vector_.PurgeAndDeleteElements();
+    symbol_table_.RemoveAll();
+  }
 
-
-
-private:
-	CUtlVector<T> m_Vector;
-	CUtlSymbolTable m_SymbolTable;
+ private:
+  CUtlVector<T> vector_;
+  CUtlSymbolTable symbol_table_;
 };
 
-#endif // UTLSTRINGMAP_H
+#endif  // SOURCE_TIER1_UTLSTRINGMAP_H_

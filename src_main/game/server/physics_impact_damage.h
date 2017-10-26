@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef PHYSICS_IMPACT_DAMAGE_H
 #define PHYSICS_IMPACT_DAMAGE_H
@@ -22,8 +22,8 @@ struct impactdamagetable_t
 {
 	impactentry_t	*linearTable;
 	impactentry_t	*angularTable;
-	int			linearCount;	// array size of linearTable
-	int			angularCount;	// array size of angularTable
+	int linearCount;	// array size of linearTable
+	int angularCount;	// array size of angularTable
 
 	float		minSpeedSqr;	// minimum squared impact speed for damage
 	float		minRotSpeedSqr;
@@ -38,7 +38,7 @@ struct impactdamagetable_t
 	float		largeMassMin;
 	float		largeMassScale;
 	float		largeMassFallingScale;	// emphasize downward impacts so that this will kill instead of stress (we have more information here than there)
-	float		myMinVelocity;			// filter out any energy lost by me unless my velocity is greater than this
+	float		myMinVelocity; // filter out any energy lost by me unless my velocity is greater than this
 };
 
 

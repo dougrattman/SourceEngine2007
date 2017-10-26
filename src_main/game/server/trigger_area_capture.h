@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -18,17 +18,17 @@
 
 #define AREA_THINK_TIME 0.1f
 
-#define CAPTURE_NORMAL					0
+#define CAPTURE_NORMAL 		0
 #define CAPTURE_CATCHUP_ALIVEPLAYERS	1
 
-#define MAX_CLIENT_AREAS				128
-#define MAX_AREA_CAPPERS				9
+#define MAX_CLIENT_AREAS 	128
+#define MAX_AREA_CAPPERS 	9
 
 //-----------------------------------------------------------------------------
 // Purpose: An area entity that players must remain in in order to active another entity
-//			Triggers are fired on start of capture, on end of capture and on broken capture
-//			Can either be capped by both teams at once, or just by one
-//			Time to capture and number of people required to capture are both passed by the mapper
+// Triggers are fired on start of capture, on end of capture and on broken capture
+// Can either be capped by both teams at once, or just by one
+// Time to capture and number of people required to capture are both passed by the mapper
 //-----------------------------------------------------------------------------
 class CTriggerAreaCapture : public CBaseTrigger
 {
@@ -87,7 +87,7 @@ private:
 	void	HandleRespawnTimeAdjustments( int oldTeam, int newTeam );
 
 private:
-	int		m_iCapMode;			//which capture mode we're in
+	int		m_iCapMode; //which capture mode we're in
 	bool	m_bCapturing;
 	int		m_nCapturingTeam;	//the team that is capturing this point
 	int		m_nOwningTeam;		//the team that has captured this point
@@ -101,11 +101,11 @@ private:
 	{
 		perteamdata_t()
 		{
-			iNumRequiredToCap = 0;
-			iNumTouching = 0;
-			iBlockedTouching = 0;
-			bCanCap = false;
-			iSpawnAdjust = 0;
+ iNumRequiredToCap = 0;
+ iNumTouching = 0;
+ iBlockedTouching = 0;
+ bCanCap = false;
+ iSpawnAdjust = 0;
 		}
 
 		int		iNumRequiredToCap;
@@ -119,7 +119,7 @@ private:
 	struct blockers_t
 	{
 		CHandle<CBaseMultiplayerPlayer>	hPlayer;
-		int						iCapAttemptNumber;
+		int  iCapAttemptNumber;
 	};
 	CUtlVector<blockers_t>	m_Blockers;
 
@@ -142,7 +142,7 @@ private:
 
 	bool	m_bRequiresObject;
 
-	string_t m_iszCapPointName;			//name of the cap point that we're linked to
+	string_t m_iszCapPointName; //name of the cap point that we're linked to
 
 	int	m_iCapAttemptNumber;	// number used to keep track of discrete cap attempts, for block tracking
 

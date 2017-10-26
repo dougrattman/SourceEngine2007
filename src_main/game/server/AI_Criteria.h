@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef AI_CRITERIA_H
 #define AI_CRITERIA_H
@@ -31,7 +31,7 @@ public:
 	void Describe();
 
 	int GetCount() const;
-	int			FindCriterionIndex( const char *name ) const;
+	int FindCriterionIndex( const char *name ) const;
 
 	const char *GetName( int index ) const;
 	const char *GetValue( int index ) const;
@@ -42,49 +42,49 @@ private:
 	struct CritEntry_t
 	{
 		CritEntry_t() :
-				criterianame( UTL_INVAL_SYMBOL ),
-				weight( 0.0f )
+ 	criterianame( UTL_INVAL_SYMBOL ),
+ 	weight( 0.0f )
 		{
-			value[ 0 ] = 0;
+ value[ 0 ] = 0;
 		}
 
 		CritEntry_t( const CritEntry_t& src )
 		{
-			criterianame = src.criterianame;
-			value[ 0 ] = 0;
-			weight = src.weight;
-			SetValue( src.value );
+ criterianame = src.criterianame;
+ value[ 0 ] = 0;
+ weight = src.weight;
+ SetValue( src.value );
 		}
 
 		CritEntry_t& operator=( const CritEntry_t& src )
 		{
-			if ( this == &src )
-				return *this;
+ if ( this == &src )
+ 	return *this;
 
-			criterianame = src.criterianame;
-			weight = src.weight;
-			SetValue( src.value );
+ criterianame = src.criterianame;
+ weight = src.weight;
+ SetValue( src.value );
 
-			return *this;
+ return *this;
 		}
 
 		static bool LessFunc( const CritEntry_t& lhs, const CritEntry_t& rhs )
 		{
-			return Q_stricmp( lhs.criterianame.String(), rhs.criterianame.String() ) < 0 ? true : false;
+ return Q_stricmp( lhs.criterianame.String(), rhs.criterianame.String() ) < 0 ? true : false;
 		}
 
 		void SetValue( char const *str )
 		{
-			if ( !str )
-			{
-				value[ 0 ] = 0;
-			}
-			else
-			{
-				Q_strncpy( value, str, sizeof( value ) );
-			}
+ if ( !str )
+ {
+ 	value[ 0 ] = 0;
+ }
+ else
+ {
+ 	Q_strncpy( value, str, sizeof( value ) );
+ }
 		}
-				
+ 	
 		CUtlSymbol criterianame;
 		char		value[ 64 ];
 		float		weight;
@@ -101,8 +101,8 @@ struct response_interval_t
 	T range;
 
 	interval_t &ToInterval( interval_t &dest ) const	{ dest.start = start; dest.range = range; return dest; }
-	void FromInterval( const interval_t &from )			{ start = from.start; range = from.range; }
-	float Random() const								{ interval_t temp = { start, range }; return RandomInterval( temp ); }
+	void FromInterval( const interval_t &from ) { start = from.start; range = from.range; }
+	float Random() const  		{ interval_t temp = { start, range }; return RandomInterval( temp ); }
 };
 
 typedef response_interval_t<float16_with_assign> responseparams_interval_t;
@@ -114,10 +114,10 @@ struct AI_ResponseParams
 	enum
 	{
 		RG_DELAYAFTERSPEAK =	(1<<0),
-		RG_SPEAKONCE =			(1<<1),
-		RG_ODDS =				(1<<2),
+		RG_SPEAKONCE = (1<<1),
+		RG_ODDS = 	(1<<2),
 		RG_RESPEAKDELAY =		(1<<3),
-		RG_SOUNDLEVEL =			(1<<4),
+		RG_SOUNDLEVEL = (1<<4),
 		RG_DONT_USE_SCENE =		(1<<5),
 		RG_STOP_ON_NONIDLE =	(1<<6),
 		RG_WEAPONDELAY =		(1<<7),
@@ -139,16 +139,16 @@ struct AI_ResponseParams
 		predelay.range = 0;
 	}
 
-	responseparams_interval_t				delay;			//4
-	responseparams_interval_t				respeakdelay;	//8
-	responseparams_interval_t				weapondelay;	//12
+	responseparams_interval_t 	delay; //4
+	responseparams_interval_t 	respeakdelay;	//8
+	responseparams_interval_t 	weapondelay;	//12
 
-	short					odds;							//14
+	short 		odds;  	//14
 
-	short					flags;							//16
-	byte 					soundlevel;						//17
+	short 		flags;  	//16
+	byte  		soundlevel;  //17
 
-	responseparams_interval_t				predelay;		//21
+	responseparams_interval_t 	predelay;		//21
 };
 #pragma pack()
 
@@ -180,36 +180,36 @@ public:
 
 	void	Release();
 
-	void			GetName( char *buf, size_t buflen ) const;
-	void			GetResponse( char *buf, size_t buflen ) const;
+	void GetName( char *buf, size_t buflen ) const;
+	void GetResponse( char *buf, size_t buflen ) const;
 	const AI_ResponseParams *GetParams() const { return &m_Params; }
 	ResponseType_t	GetType() const { return (ResponseType_t)m_Type; }
 	soundlevel_t	GetSoundLevel() const;
-	float			GetRespeakDelay() const;
-	float			GetWeaponDelay() const;
-	bool			GetSpeakOnce() const;
-	bool			ShouldntUseScene( ) const;
-	bool			ShouldBreakOnNonIdle( void ) const;
-	int				GetOdds() const;
-	float			GetDelay() const;
-	float			GetPreDelay() const;
+	float GetRespeakDelay() const;
+	float GetWeaponDelay() const;
+	bool GetSpeakOnce() const;
+	bool ShouldntUseScene( ) const;
+	bool ShouldBreakOnNonIdle( void ) const;
+	int 	GetOdds() const;
+	float GetDelay() const;
+	float GetPreDelay() const;
 
-	void			SetContext( const char *context );
+	void SetContext( const char *context );
 	const char *	GetContext( void ) const { return m_szContext; }
 
-	bool			IsApplyContextToWorld( void ) { return m_bApplyContextToWorld; }
+	bool IsApplyContextToWorld( void ) { return m_bApplyContextToWorld; }
 
 	void Describe();
 
 	const AI_CriteriaSet* GetCriteria();
 
 	void	Init( ResponseType_t type, 
-				const char *responseName, 
-				const AI_CriteriaSet& criteria, 
-				const AI_ResponseParams& responseparams,
-				const char *matchingRule,
-				const char *applyContext,
-				bool bApplyContextToWorld );
+ 	const char *responseName, 
+ 	const AI_CriteriaSet& criteria, 
+ 	const AI_ResponseParams& responseparams,
+ 	const char *matchingRule,
+ 	const char *applyContext,
+ 	bool bApplyContextToWorld );
 
 	static const char *DescribeResponse( ResponseType_t type );
 
@@ -221,17 +221,17 @@ public:
 
 
 private:
-	byte			m_Type;
-	char			m_szResponseName[ MAX_RESPONSE_NAME ];
-	char			m_szMatchingRule[ MAX_RULE_NAME ];
+	byte m_Type;
+	char m_szResponseName[ MAX_RESPONSE_NAME ];
+	char m_szMatchingRule[ MAX_RULE_NAME ];
 
 	// The initial criteria to which we are responsive
 	AI_CriteriaSet	*m_pCriteria;
 
 	AI_ResponseParams m_Params;
 
-	char *			m_szContext;
-	bool			m_bApplyContextToWorld;
+	char * m_szContext;
+	bool m_bApplyContextToWorld;
 };
 
 #endif // AI_CRITERIA_H

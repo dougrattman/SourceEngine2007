@@ -1,9 +1,9 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 //=============================================================================
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 #include "tier1/strtools.h"
 #include "interpolatortypes.h"
 #include "tier0/dbg.h"

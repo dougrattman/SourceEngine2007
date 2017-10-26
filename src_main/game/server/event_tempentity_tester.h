@@ -1,11 +1,11 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( EVENT_TEMPENTITY_TESTER_H )
 #define EVENT_TEMPENTITY_TESTER_H
 #ifdef _WIN32
@@ -23,8 +23,8 @@ class CTempEntTester : public CPointEntity
 public:
 	DECLARE_CLASS( CTempEntTester, CPointEntity );
 
-	void				Spawn( void );
-	void				Think( void );
+	void 	Spawn( void );
+	void 	Think( void );
 
 	static	CBaseEntity *Create( const Vector &vecOrigin, const QAngle &vecAngles, const char *lifetime, const char *single_te );
 private:
@@ -32,9 +32,9 @@ private:
 	CBaseTempEntity		*m_pCurrent;
 
 	// Lifetime
-	float				m_fLifeTime;
+	float 	m_fLifeTime;
 
-	char				m_szClass[ 64 ];
+	char 	m_szClass[ 64 ];
 };
 
 #endif // EVENT_TEMPENTITY_TESTER_H

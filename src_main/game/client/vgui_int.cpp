@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "vgui_int.h"
 #include "ienginevgui.h"
@@ -20,7 +20,7 @@
 #include "tier0/vprof.h"
 #include "iclientmode.h"
 #include <vgui_controls/Panel.h>
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "FileSystem.h"
 
 using namespace vgui;

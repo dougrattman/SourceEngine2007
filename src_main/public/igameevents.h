@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 // $Log: $
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #if !defined( IGAMEEVENTS_H )
 #define IGAMEEVENTS_H
 #ifdef _WIN32
@@ -38,7 +38,7 @@ have to specify all data fields and there data types in an public resource
 file which is parsed by server and broadcasted to it's clients. A typical game 
 event is defined like this:
 
-	"game_start"				// a new game starts
+	"game_start" 	// a new game starts
 	{
 		"roundslimit"	"long"		// max round
 		"timelimit"		"long"		// time limit
@@ -49,15 +49,15 @@ event is defined like this:
 All events must have unique names (case sensitive) and may have a list
 of data fields. each data field must specify a data type, so the engine
 knows how to serialize/unserialize that event for network transmission.
-Valid data types are string, float, long, short, byte & bool. If a 
+Valid data types are string, float, long, short, uint8_t & bool. If a 
 data field should not be broadcasted to clients, use the type "local".
 */
 
 
 #define MAX_EVENT_NAME_LENGTH	32		// max game event name length
-#define MAX_EVENT_BITS			9		// max bits needed for an event index
+#define MAX_EVENT_BITS 9		// max bits needed for an event index
 #define MAX_EVENT_NUMBER		(1<<MAX_EVENT_BITS)		// max number of events allowed
-#define MAX_EVENT_BYTES			1024	// max size in bytes for a serialized event
+#define MAX_EVENT_BYTES 1024	// max size in bytes for a serialized event
 
 class KeyValues;
 class CGameEvent;
@@ -158,7 +158,7 @@ public:
 
 	// removes all and anything
 	virtual void  Reset() = 0;	
-				
+ 	
 	virtual KeyValues *GetEvent(const char * name) = 0; // returns keys for event
 	
 	// adds a listener for a particular event

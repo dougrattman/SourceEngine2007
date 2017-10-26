@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef CS_HUD_CHAT_H
 #define CS_HUD_CHAT_H
@@ -51,8 +51,8 @@ public:
 
 	virtual void	Init( void );
 	virtual void	Reset( void );
-	int				GetChatInputOffset( void );
-	void			CreateChatLines( void );
+	int 	GetChatInputOffset( void );
+	void CreateChatLines( void );
 
 	virtual bool	ShouldDraw( void );
 

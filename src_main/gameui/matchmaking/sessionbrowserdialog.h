@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Present a list of sessions from which the player can choose a game to join.
 //
@@ -29,17 +29,17 @@ public:
 
 	virtual void	SwapMenuItems( int iOne, int iTwo );
 
-	void			UpdateScenarioDisplay( void );
-	void			SessionSearchResult( int searchIdx, void *pHostData, XSESSION_SEARCHRESULT *pResult, int ping );
+	void UpdateScenarioDisplay( void );
+	void SessionSearchResult( int searchIdx, void *pHostData, XSESSION_SEARCHRESULT *pResult, int ping );
 
 	KeyValues	*m_pDialogKeys;
 
 	CUtlVector< CScenarioInfoPanel* >	m_pScenarioInfos;
-	CUtlVector< int >					m_ScenarioIndices;
-	CUtlVector< int >					m_SearchIndices;
-	CUtlVector< int >					m_GameStates;
-	CUtlVector< int >					m_GameTimes;
-	CUtlVector< XUID >					m_XUIDs;
+	CUtlVector< int > 		m_ScenarioIndices;
+	CUtlVector< int > 		m_SearchIndices;
+	CUtlVector< int > 		m_GameStates;
+	CUtlVector< int > 		m_GameTimes;
+	CUtlVector< XUID > 		m_XUIDs;
 };
 
 

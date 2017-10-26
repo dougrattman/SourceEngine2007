@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Controls the loading, parsing and creation of the entities from the BSP.
 //
-//=============================================================================//
+
 
 
 #include "cbase.h"
@@ -323,7 +323,7 @@ bool CEntityMapData::SetValue( const char *keyName, char *NewValue, int nKeyInst
 
 				// prevData has a space at the start, seperating the value from the key.
 				// Add 1 to prevData when pasting in the new Value, to account for the space.
-				Q_strncpy( prevData+1, newvaluebuf, iNewValueLen+1 );	// +1 for the null terminator
+				Q_strncpy( prevData+1, newvaluebuf, iNewValueLen+1 );	// +1 for the 0 terminator
 				Q_strcat( prevData, postData, m_nEntDataSize - ((prevData-m_pEntData)+1) );
 
 				m_pCurrentKey += iPadding;

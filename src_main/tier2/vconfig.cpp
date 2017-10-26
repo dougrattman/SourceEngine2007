@@ -1,22 +1,16 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
-// Purpose: Utilities for setting vproject settings
-//
-//===========================================================================//
+// Purpose: Utilities for setting vproject settings.
+
+#include "tier2/vconfig.h"
 
 #ifdef _WIN32
-#if !defined( _X360 )
-#include <windows.h>
-#endif
+#include "winlite.h"
+
 #include <direct.h>
-#include <io.h> // _chmod
+#include <io.h>  // _chmod
 #include <process.h>
 #endif
-#if defined( _X360 )
-#include "xbox/xbox_win32stubs.h"
-#endif
-#include "vconfig.h"
-
 
 #ifdef _WIN32
 //-----------------------------------------------------------------------------
@@ -25,33 +19,36 @@
 //			*pReturn - string buffer to receive read string
 //			size - size of specified buffer
 //-----------------------------------------------------------------------------
-bool GetVConfigRegistrySetting( const char *pName, char *pReturn, int size )
-{
-	// Open the key
-	HKEY hregkey; 
-	if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, VPROJECT_REG_KEY, 0, KEY_QUERY_VALUE, &hregkey ) != ERROR_SUCCESS )
-		return false;
-	
-	// Get the value
-	DWORD dwSize = size;
-	if ( RegQueryValueEx( hregkey, pName, NULL, NULL,(LPBYTE) pReturn, &dwSize ) != ERROR_SUCCESS )
-		return false;
-	
-	// Close the key
-	RegCloseKey( hregkey );
+bool GetVConfigRegistrySetting(const char *pName, char *pReturn, int size) {
+  // Open the key
+  HKEY hregkey;
+  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, VPROJECT_REG_KEY, 0, KEY_QUERY_VALUE,
+                   &hregkey) != ERROR_SUCCESS)
+    return false;
 
-	return true;
+  // Get the value
+  DWORD dwSize = size;
+  if (RegQueryValueEx(hregkey, pName, NULL, NULL, (LPBYTE)pReturn, &dwSize) !=
+      ERROR_SUCCESS)
+    return false;
+
+  // Close the key
+  RegCloseKey(hregkey);
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Sends a global system message to alert programs to a changed environment variable
+// Purpose: Sends a global system message to alert programs to a changed
+// environment variable
 //-----------------------------------------------------------------------------
-void NotifyVConfigRegistrySettingChanged( void )
-{
-	DWORD dwReturnValue = 0;
-	
-	// Propagate changes so that environment variables takes immediate effect!
-	SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) "Environment", SMTO_ABORTIFHUNG, 5000, &dwReturnValue );
+void NotifyVConfigRegistrySettingChanged(void) {
+  DWORD_PTR dwReturnValue = 0;
+
+  // Propagate changes so that environment variables takes immediate effect!
+  SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+                      (LPARAM)L"Environment", SMTO_ABORTIFHUNG, 5000,
+                      &dwReturnValue);
 }
 
 //-----------------------------------------------------------------------------
@@ -59,38 +56,37 @@ void NotifyVConfigRegistrySettingChanged( void )
 // Input  : *pName - name of the subKey to set
 //			*pValue - string value
 //-----------------------------------------------------------------------------
-void SetVConfigRegistrySetting( const char *pName, const char *pValue, bool bNotify )
-{
-	HKEY hregkey; 
+void SetVConfigRegistrySetting(const char *pName, const char *pValue,
+                               bool bNotify) {
+  HKEY hregkey;
 
-	// Open the key
-	if ( RegCreateKeyEx( 
-		HKEY_LOCAL_MACHINE,		// base key
-		VPROJECT_REG_KEY,		// subkey
-		0,						// reserved
-		0,						// lpClass
-		0,						// options
-		(REGSAM)KEY_ALL_ACCESS,	// access desired
-		NULL,					// security attributes
-		&hregkey,				// result
-		NULL					// tells if it created the key or not (which we don't care)
-		) != ERROR_SUCCESS )
-	{
-		return;
-	}
-	
-	// Set the value to the string passed in
-	int nType = strchr( pValue, '%' ) ? REG_EXPAND_SZ : REG_SZ;
-	RegSetValueEx( hregkey, pName, 0, nType, (const unsigned char *)pValue, (int) strlen(pValue) );
+  // Open the key
+  if (RegCreateKeyEx(
+          HKEY_LOCAL_MACHINE,      // base key
+          VPROJECT_REG_KEY,        // subkey
+          0,                       // reserved
+          0,                       // lpClass
+          0,                       // options
+          (REGSAM)KEY_ALL_ACCESS,  // access desired
+          NULL,                    // security attributes
+          &hregkey,                // result
+          NULL  // tells if it created the key or not (which we don't care)
+          ) != ERROR_SUCCESS) {
+    return;
+  }
 
-	// Notify other programs
-	if ( bNotify )
-	{
-		NotifyVConfigRegistrySettingChanged();
-	}
-	
-	// Close the key
-	RegCloseKey( hregkey );
+  // Set the value to the string passed in
+  int nType = strchr(pValue, '%') ? REG_EXPAND_SZ : REG_SZ;
+  RegSetValueEx(hregkey, pName, 0, nType, (const unsigned char *)pValue,
+                (int)strlen(pValue));
+
+  // Notify other programs
+  if (bNotify) {
+    NotifyVConfigRegistrySettingChanged();
+  }
+
+  // Close the key
+  RegCloseKey(hregkey);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,50 +94,50 @@ void SetVConfigRegistrySetting( const char *pName, const char *pValue, bool bNot
 // Input  : *pName - name of the subKey to set
 //			*pValue - string value
 //-----------------------------------------------------------------------------
-bool RemoveObsoleteVConfigRegistrySetting( const char *pValueName, char *pOldValue, int size )
-{
-	// Open the key
-	HKEY hregkey; 
-	if ( RegOpenKeyEx( HKEY_CURRENT_USER, "Environment", 0, (REGSAM)KEY_ALL_ACCESS, &hregkey ) != ERROR_SUCCESS )
-		return false;
+bool RemoveObsoleteVConfigRegistrySetting(const char *pValueName,
+                                          char *pOldValue, int size) {
+  // Open the key
+  HKEY hregkey;
+  if (RegOpenKeyEx(HKEY_CURRENT_USER, "Environment", 0, (REGSAM)KEY_ALL_ACCESS,
+                   &hregkey) != ERROR_SUCCESS)
+    return false;
 
-	// Return the old state if they've requested it
-	if ( pOldValue != NULL )
-	{
-		DWORD dwSize = size;
+  // Return the old state if they've requested it
+  if (pOldValue != NULL) {
+    DWORD dwSize = size;
 
-		// Get the value
-		if ( RegQueryValueEx( hregkey, pValueName, NULL, NULL,(LPBYTE) pOldValue, &dwSize ) != ERROR_SUCCESS )
-			return false;
-	}
-	
-	// Remove the value
-	if ( RegDeleteValue( hregkey, pValueName ) != ERROR_SUCCESS )
-		return false;
+    // Get the value
+    if (RegQueryValueEx(hregkey, pValueName, NULL, NULL, (LPBYTE)pOldValue,
+                        &dwSize) != ERROR_SUCCESS)
+      return false;
+  }
 
-	// Close the key
-	RegCloseKey( hregkey );
+  // Remove the value
+  if (RegDeleteValue(hregkey, pValueName) != ERROR_SUCCESS) return false;
 
-	// Notify other programs
-	NotifyVConfigRegistrySettingChanged();
+  // Close the key
+  RegCloseKey(hregkey);
 
-	return true;
+  // Notify other programs
+  NotifyVConfigRegistrySettingChanged();
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Take a user-defined environment variable and swap it out for the internally used one
+// Purpose: Take a user-defined environment variable and swap it out for the
+// internally used one
 //-----------------------------------------------------------------------------
 
-bool ConvertObsoleteVConfigRegistrySetting( const char *pValueName )
-{
-	char szValue[MAX_PATH];
-	if ( RemoveObsoleteVConfigRegistrySetting( pValueName, szValue, sizeof( szValue ) ) )
-	{
-		// Set it up the correct way
-		SetVConfigRegistrySetting( pValueName, szValue );
-		return true;
-	}
+bool ConvertObsoleteVConfigRegistrySetting(const char *pValueName) {
+  char szValue[MAX_PATH];
+  if (RemoveObsoleteVConfigRegistrySetting(pValueName, szValue,
+                                           sizeof(szValue))) {
+    // Set it up the correct way
+    SetVConfigRegistrySetting(pValueName, szValue);
+    return true;
+  }
 
-	return false;
+  return false;
 }
 #endif

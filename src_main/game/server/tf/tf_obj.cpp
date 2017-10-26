@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Base Object built by players
 //
 // $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
 #include "tf_player.h"
 #include "tf_team.h"
@@ -25,7 +25,7 @@
 #include "hierarchy.h"
 #include "func_no_build.h"
 #include "func_respawnroom.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 #include "ihasbuildpoints.h"
 #include "utldict.h"
 #include "filesystem.h"

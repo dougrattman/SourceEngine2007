@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: TF implementation of the IPresence interface
 //
@@ -29,9 +29,9 @@ private:
 	const wchar_t *GetTip( int iClass, int iTip );
 
 	int m_iTipCount[TF_LAST_NORMAL_CLASS+1];		// how many tips there are for each class
-	int m_iTipCountAll;								// how many tips there are total
-	int m_iCurrentClassTip;							// index of current per-class tip
-	bool m_bInited;									// have we been initialized
+	int m_iTipCountAll;  		// how many tips there are total
+	int m_iCurrentClassTip;  	// index of current per-class tip
+	bool m_bInited;   // have we been initialized
 };
 
 extern CTFTips g_TFTips;

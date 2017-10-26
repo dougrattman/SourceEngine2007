@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -11,7 +11,7 @@
 #include "vortwarp_vs20.inc"
 #include "vortwarp_ps20.inc"
 #include "vortwarp_ps20b.inc"
-#include "convar.h"
+#include "tier1/convar.h"
 
 #ifndef _X360
 #include "vortwarp_vs30.inc"

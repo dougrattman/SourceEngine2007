@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef HUD_PDUMP_H
 #define HUD_PDUMP_H
@@ -66,7 +66,7 @@ private:
 
 	CUtlVector< DumpInfo > m_DumpEntityInfo;
 
-	EHANDLE			m_hDumpEntity;
+	EHANDLE m_hDumpEntity;
 
 	CPanelAnimationVar( vgui::HFont, m_FontSmall, "ItemFont", "DefaultVerySmall" );
 	CPanelAnimationVar( vgui::HFont, m_FontMedium, "LabelFont", "DefaultSmall" );

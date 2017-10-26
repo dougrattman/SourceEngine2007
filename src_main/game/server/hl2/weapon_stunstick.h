@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
-//=============================================================================//
+
 
 #ifndef WEAPON_STUNSTICK_H
 #define WEAPON_STUNSTICK_H
@@ -34,7 +34,7 @@ public:
 	float		GetRange( void )		{ return STUNSTICK_RANGE; }
 	float		GetFireRate( void )		{ return STUNSTICK_REFIRE; }
 
-	int			WeaponMeleeAttack1Condition( float flDot, float flDist );
+	int WeaponMeleeAttack1Condition( float flDot, float flDist );
 
 	bool		Deploy( void );
 	bool		Holster( CBaseCombatWeapon *pSwitchingTo = NULL );

@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The various ammo types for HL2	
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "props.h"
@@ -100,7 +100,7 @@ void CItem_ItemCrate::Precache( void )
 	{
 		if ( NULL_STRING != m_strItemClass )
 		{
-			// Don't precache if this is a null string. 
+			// Don't precache if this is a 0 string. 
 			UTIL_PrecacheOther( STRING(m_strItemClass) );
 		}
 	}

@@ -6,7 +6,7 @@
 #include "ammodef.h"
 #include "hl2_shareddefs.h"
 #include "filesystem.h"
-#include <KeyValues.h>
+#include "tier1/keyvalues.h"
 
 #ifdef CLIENT_DLL
 

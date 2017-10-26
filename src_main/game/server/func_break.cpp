@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements breakables and pushables. func_breakable is a bmodel
 //			that breaks into pieces after taking damage.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "player.h"

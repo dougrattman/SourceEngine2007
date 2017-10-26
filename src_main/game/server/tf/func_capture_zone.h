@@ -2,7 +2,7 @@
 //
 // Purpose: CTF Flag Capture Zone.
 //
-//=============================================================================//
+
 #ifndef FUNC_CAPTURE_ZONE_H
 #define FUNC_CAPTURE_ZONE_H
 #ifdef _WIN32
@@ -36,15 +36,15 @@ public:
 
 private:
 
-	bool			m_bDisabled;		// Enabled/Disabled?
+	bool m_bDisabled;		// Enabled/Disabled?
 	
-	int				m_nCapturePoint;	// Used in non-CTF maps to identify this capture point
+	int 	m_nCapturePoint;	// Used in non-CTF maps to identify this capture point
 
 	COutputEvent	m_outputOnCapture;	// Fired a flag is captured on this point.
 
 	DECLARE_DATADESC();
 
-	float			m_flNextTouchingEnemyZoneWarning;	// don't spew warnings to the player who is touching the wrong cap
+	float m_flNextTouchingEnemyZoneWarning;	// don't spew warnings to the player who is touching the wrong cap
 };
 
 #endif // FUNC_CAPTURE_ZONE_H

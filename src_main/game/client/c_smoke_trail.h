@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -30,19 +30,19 @@ public:
 	DECLARE_CLASS( C_SmokeTrail, C_BaseParticleEntity );
 	DECLARE_CLIENTCLASS();
 	
-					C_SmokeTrail();
-	virtual			~C_SmokeTrail();
+ 		C_SmokeTrail();
+	virtual ~C_SmokeTrail();
 
 public:
 
 	//For attachments
-	void			GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
+	void GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
 
 	// Enable/disable emission.
-	void			SetEmit(bool bEmit);
+	void SetEmit(bool bEmit);
 
 	// Change the spawn rate.
-	void			SetSpawnRate(float rate);
+	void SetSpawnRate(float rate);
 
 
 // C_BaseEntity.
@@ -64,31 +64,31 @@ public:
 
 public:
 	// Effect parameters. These will assume default values but you can change them.
-	float			m_SpawnRate;			// How many particles per second.
+	float m_SpawnRate; // How many particles per second.
 
-	Vector			m_StartColor;			// Fade between these colors.
-	Vector			m_EndColor;
-	float			m_Opacity;
+	Vector m_StartColor; // Fade between these colors.
+	Vector m_EndColor;
+	float m_Opacity;
 
-	float			m_ParticleLifetime;		// How long do the particles live?
-	float			m_StopEmitTime;			// When do I stop emitting particles? (-1 = never)
+	float m_ParticleLifetime;		// How long do the particles live?
+	float m_StopEmitTime; // When do I stop emitting particles? (-1 = never)
 	
-	float			m_MinSpeed;				// Speed range.
-	float			m_MaxSpeed;
+	float m_MinSpeed; 	// Speed range.
+	float m_MaxSpeed;
 	
-	float			m_MinDirectedSpeed;		// Directed speed range.
-	float			m_MaxDirectedSpeed;
+	float m_MinDirectedSpeed;		// Directed speed range.
+	float m_MaxDirectedSpeed;
 
-	float			m_StartSize;			// Size ramp.
-	float			m_EndSize;
+	float m_StartSize; // Size ramp.
+	float m_EndSize;
 
-	float			m_SpawnRadius;
+	float m_SpawnRadius;
 
-	Vector			m_VelocityOffset;		// Emit the particles in a certain direction.
+	Vector m_VelocityOffset;		// Emit the particles in a certain direction.
 
-	bool			m_bEmit;				// Keep emitting particles?
+	bool m_bEmit; 	// Keep emitting particles?
 
-	int				m_nAttachment;
+	int 	m_nAttachment;
 
 private:
 	C_SmokeTrail( const C_SmokeTrail & );
@@ -110,19 +110,19 @@ public:
 	DECLARE_CLASS( C_RocketTrail, C_BaseParticleEntity );
 	DECLARE_CLIENTCLASS();
 	
-					C_RocketTrail();
-	virtual			~C_RocketTrail();
+ 		C_RocketTrail();
+	virtual ~C_RocketTrail();
 
 public:
 
 	//For attachments
-	void			GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
+	void GetAimEntOrigin( IClientEntity *pAttachedTo, Vector *pAbsOrigin, QAngle *pAbsAngles );
 
 	// Enable/disable emission.
-	void			SetEmit(bool bEmit);
+	void SetEmit(bool bEmit);
 
 	// Change the spawn rate.
-	void			SetSpawnRate(float rate);
+	void SetSpawnRate(float rate);
 
 
 // C_BaseEntity.
@@ -142,32 +142,32 @@ public:
 
 public:
 	// Effect parameters. These will assume default values but you can change them.
-	float			m_SpawnRate;			// How many particles per second.
+	float m_SpawnRate; // How many particles per second.
 
-	Vector			m_StartColor;			// Fade between these colors.
-	Vector			m_EndColor;
-	float			m_Opacity;
+	Vector m_StartColor; // Fade between these colors.
+	Vector m_EndColor;
+	float m_Opacity;
 
-	float			m_ParticleLifetime;		// How long do the particles live?
-	float			m_StopEmitTime;			// When do I stop emitting particles? (-1 = never)
+	float m_ParticleLifetime;		// How long do the particles live?
+	float m_StopEmitTime; // When do I stop emitting particles? (-1 = never)
 	
-	float			m_MinSpeed;				// Speed range.
-	float			m_MaxSpeed;
+	float m_MinSpeed; 	// Speed range.
+	float m_MaxSpeed;
 	
-	float			m_StartSize;			// Size ramp.
-	float			m_EndSize;
+	float m_StartSize; // Size ramp.
+	float m_EndSize;
 
-	float			m_SpawnRadius;
+	float m_SpawnRadius;
 
-	Vector			m_VelocityOffset;		// Emit the particles in a certain direction.
+	Vector m_VelocityOffset;		// Emit the particles in a certain direction.
 
-	bool			m_bEmit;				// Keep emitting particles?
-	bool			m_bDamaged;				// Has been shot down (should be on fire, etc)
+	bool m_bEmit; 	// Keep emitting particles?
+	bool m_bDamaged; 	// Has been shot down (should be on fire, etc)
 
-	int				m_nAttachment;
+	int 	m_nAttachment;
 
-	Vector			m_vecLastPosition;		// Last known position of the rocket
-	float			m_flFlareScale;			// Size of the flare
+	Vector m_vecLastPosition;		// Last known position of the rocket
+	float m_flFlareScale; // Size of the flare
 
 private:
 	C_RocketTrail( const C_RocketTrail & );
@@ -189,12 +189,12 @@ class SporeSmokeEffect;
 class SporeEffect : public CSimpleEmitter
 {
 public:
-							SporeEffect( const char *pDebugName );
+  	SporeEffect( const char *pDebugName );
 	static SporeEffect*		Create( const char *pDebugName );
 
-	virtual void			UpdateVelocity( SimpleParticle *pParticle, float timeDelta );
-	virtual Vector			UpdateColor( const SimpleParticle *pParticle );
-	virtual float			UpdateAlpha( const SimpleParticle *pParticle );
+	virtual void UpdateVelocity( SimpleParticle *pParticle, float timeDelta );
+	virtual Vector UpdateColor( const SimpleParticle *pParticle );
+	virtual float UpdateAlpha( const SimpleParticle *pParticle );
 
 private:
 	SporeEffect( const SporeEffect & );
@@ -247,9 +247,9 @@ private:
 	void	AddParticles( void );
 
 	PMaterialHandle		m_hMaterial;
-	TimedEvent			m_teParticleSpawn;
+	TimedEvent m_teParticleSpawn;
 
-	SporeEffect			*m_pSporeEffect;
+	SporeEffect *m_pSporeEffect;
 	CParticleMgr		*m_pParticleMgr;
 };
 
@@ -292,9 +292,9 @@ private:
 	CSmartPtr<CSimpleEmitter>	m_pTrailEmitter;
 	CSmartPtr<CSmokeParticle>	m_pSmokeEmitter;
 
-	PMaterialHandle				m_hMaterial[NUM_FTRAIL_MATERIALS];
+	PMaterialHandle 	m_hMaterial[NUM_FTRAIL_MATERIALS];
 
-	Vector						m_vecLastPosition;
+	Vector  m_vecLastPosition;
 
 	C_FireTrail( const C_FireTrail & );
 };
@@ -321,16 +321,16 @@ public:
 	DECLARE_CLASS( C_DustTrail, C_BaseParticleEntity );
 	DECLARE_CLIENTCLASS();
 	
-					C_DustTrail();
-	virtual			~C_DustTrail();
+ 		C_DustTrail();
+	virtual ~C_DustTrail();
 
 public:
 
 	// Enable/disable emission.
-	void			SetEmit(bool bEmit);
+	void SetEmit(bool bEmit);
 
 	// Change the spawn rate.
-	void			SetSpawnRate(float rate);
+	void SetSpawnRate(float rate);
 
 
 // C_BaseEntity.
@@ -352,29 +352,29 @@ public:
 
 public:
 	// Effect parameters. These will assume default values but you can change them.
-	float			m_SpawnRate;			// How many particles per second.
+	float m_SpawnRate; // How many particles per second.
 
-	Vector			m_Color;
-	float			m_Opacity;
+	Vector m_Color;
+	float m_Opacity;
 
-	float			m_ParticleLifetime;		// How long do the particles live?
-	float			m_StartEmitTime;		// When did I start emitting particles?
-	float			m_StopEmitTime;			// When do I stop emitting particles? (-1 = never)
+	float m_ParticleLifetime;		// How long do the particles live?
+	float m_StartEmitTime;		// When did I start emitting particles?
+	float m_StopEmitTime; // When do I stop emitting particles? (-1 = never)
 	
-	float			m_MinSpeed;				// Speed range.
-	float			m_MaxSpeed;
+	float m_MinSpeed; 	// Speed range.
+	float m_MaxSpeed;
 	
-	float			m_MinDirectedSpeed;		// Directed speed range.
-	float			m_MaxDirectedSpeed;
+	float m_MinDirectedSpeed;		// Directed speed range.
+	float m_MaxDirectedSpeed;
 
-	float			m_StartSize;			// Size ramp.
-	float			m_EndSize;
+	float m_StartSize; // Size ramp.
+	float m_EndSize;
 
-	float			m_SpawnRadius;
+	float m_SpawnRadius;
 
-	Vector			m_VelocityOffset;		// Emit the particles in a certain direction.
+	Vector m_VelocityOffset;		// Emit the particles in a certain direction.
 
-	bool			m_bEmit;				// Keep emitting particles?
+	bool m_bEmit; 	// Keep emitting particles?
 
 private:
 	C_DustTrail( const C_DustTrail & );

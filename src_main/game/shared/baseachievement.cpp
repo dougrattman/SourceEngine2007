@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -336,7 +336,7 @@ void CBaseAchievement::EnsureComponentBitSetAndEvaluate( int iBitNumber )
 		return;
 
 	// calculate which bit this component corresponds to
-	uint64 iBitMask = ( (uint64) 1 ) << iBitNumber;
+	uint64_t iBitMask = ( (uint64_t) 1 ) << iBitNumber;
 
 	// see if we already have gotten this component
 	if ( 0 == ( iBitMask & m_iComponentBits ) )
@@ -422,7 +422,7 @@ void CBaseAchievement::PostRestoreSavedGame()
 //-----------------------------------------------------------------------------
 // Purpose: sets component bits for this achievement
 //-----------------------------------------------------------------------------
-void CBaseAchievement::SetComponentBits( uint64 iComponentBits ) 
+void CBaseAchievement::SetComponentBits( uint64_t iComponentBits ) 
 { 
 	Assert( m_iFlags & ACH_HAS_COMPONENTS );
 	// set the bit field

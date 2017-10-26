@@ -1,16 +1,16 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: MapOverview.cpp: implementation of the CMapOverview class.
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "mapoverview.h"
 #include <vgui/isurface.h>
 #include <vgui/ILocalize.h>
 #include <filesystem.h>
-#include <keyvalues.h>
+#include "tier1/keyvalues.h"
 #include <convar.h>
 #include "mathlib/mathlib.h"
 #include <game/client/iviewport.h>
@@ -33,26 +33,6 @@ ConVar overview_locked( "overview_locked", "1", FCVAR_ARCHIVE | FCVAR_CLIENTCMD_
 ConVar overview_alpha( "overview_alpha",  "1.0", FCVAR_ARCHIVE | FCVAR_CLIENTCMD_CAN_EXECUTE, "Overview map translucency.\n" );
 
 IMapOverviewPanel *g_pMapOverview = NULL; // we assume only one overview is created
-
-static int AdjustValue( int curValue, int targetValue, int amount )
-{
-	if ( curValue > targetValue )
-	{
-		curValue -= amount;
-
-		if ( curValue < targetValue )
-			curValue = targetValue;
-	}
-	else if ( curValue < targetValue )
-	{
-		curValue += amount;
-
-		if ( curValue > targetValue )
-			curValue = targetValue;
-	}
-
-	return curValue;
-}
 
 CON_COMMAND( overview_zoom, "Sets overview map zoom: <zoom> [<time>] [rel]" )
 {

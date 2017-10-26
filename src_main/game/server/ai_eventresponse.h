@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: AI system that makes NPCs verbally respond to game events
 //
-//=============================================================================//
+
 
 #ifndef	AI_EVENTRESPONSE_H
 #define	AI_EVENTRESPONSE_H
@@ -11,7 +11,7 @@
 
 #define NPCEVENTRESPONSE_DISTANCE_SQR		(768 * 768) // Maximum distance for responding to NPCs
 #define NPCEVENTRESPONSE_REFIRE_TIME		15.0		// Time after giving a response before giving any more
-#define NPCEVENTRESPONSE_GIVEUP_TIME		4.0			// Time after a response trigger was fired before discarding it without responding
+#define NPCEVENTRESPONSE_GIVEUP_TIME		4.0 // Time after a response trigger was fired before discarding it without responding
 
 //-----------------------------------------------------------------------------
 // Purpose: AI system that makes NPCs verbally respond to game events

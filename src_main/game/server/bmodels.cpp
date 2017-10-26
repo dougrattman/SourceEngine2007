@@ -1,8 +1,8 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Spawn, think, and use functions for common brush entities.
 //
-//=============================================================================//
+
 
 #include "cbase.h"
 #include "doors.h"
@@ -415,7 +415,7 @@ public:
 	void SetTargetSpeed( float flSpeed );
 	void UpdateSpeed( float flNewSpeed );
 	
-	int	 DrawDebugTextOverlays(void);
+	int	 DrawDebugTextOverlays();
 
 	DECLARE_DATADESC();
 	DECLARE_SERVERCLASS();
@@ -742,7 +742,7 @@ void CFuncRotating::Precache( void )
 	char *szSoundFile = ( char * )STRING( m_NoiseRunning );
 	if ( !m_NoiseRunning || strlen( szSoundFile ) == 0 )
 	{
-		// No sound set up, use the null sound.
+		// No sound set up, use the 0 sound.
 		m_NoiseRunning = AllocPooledString("DoorSound.Null");
 	}
 	PrecacheScriptSound( STRING( m_NoiseRunning ) );

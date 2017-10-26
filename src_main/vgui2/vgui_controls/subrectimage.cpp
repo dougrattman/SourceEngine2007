@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -9,6 +9,8 @@
 #include "vgui/isurface.h"
 #include "vgui_controls/controls.h"
 
+// NOTE: This has to be the last file included!
+#include "tier0/memdbgon.h"
 
 using namespace vgui;
 

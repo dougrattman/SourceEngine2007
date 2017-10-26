@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>VsMDLPreview_Maya7</ProjectName>
+    <ProjectGuid>{8E777D15-F94C-499D-8045-6C5EF612A307}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.27130.2010</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug_Maya7\</OutDir>
+    <IntDir>Debug_Maya7\</IntDir>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release_Maya7\</OutDir>
+    <IntDir>Release_Maya7\</IntDir>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>if EXIST ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName) for /f "delims=" %25%25A in (%27attrib "..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName)"%27) do set valveTmpIsReadOnly="%25%25A"
+set valveTmpIsReadOnlyLetter=%25valveTmpIsReadOnly:~6,1%25
+if "%25valveTmpIsReadOnlyLetter%25"=="R" del /q "$(TargetDir)"$(TargetFileName)
+set path=..\..\..\..\game\bin%3b%25path%25
+if exist ..\..\..\devtools\bin\vpc.exe ..\..\..\devtools\bin\vpc.exe -crc vsmdlpreview_maya7.vpc 8a359b5e -crc vsMDLPreview_base.vpc 7cc104ee -crc ..\..\..\vpc_scripts\source_dll_win32_base.vpc a763463a -crc ..\..\..\vpc_scripts\version.vpc 26d8e8a7 -crc ..\..\..\vpc_scripts\loadaddress.vpc 49fd4a9f -crc ..\..\..\vpc_scripts\source_dll_win32_debug.vpc 5f68c24a -crc ..\..\..\vpc_scripts\source_dll_win32_release.vpc 4275ffe4
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\common;..\..\..\public;..\..\..\public\tier0;..\..\..\public\tier1;..\..\..\utils\common;..\..\..\public\maya;..\..\..\common\maya\7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation />
+      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ErrorReporting>Prompt</ErrorReporting>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>comctl32.lib;Foundation.lib;OpenMaya.lib;OpenMayaUI.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>Debug_Maya7\vsMDLPreview.mll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\..\..\lib\common;..\..\..\lib\public;..\..\..\lib\common\maya\7.0;..\..\..\lib\public\maya\7.0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <BaseAddress>
+      </BaseAddress>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+    </Link>
+    <Xdcmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Xdcmake>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(OutDir)vsmdlpreview_maya7.bsc</OutputFile>
+    </Bscmake>
+    <PostBuildEvent>
+      <Message>Publishing to ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource</Message>
+      <Command>call ..\..\..\vpc_scripts\valve_p4_edit.cmd ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName) ..\..\..
+copy "$(TargetDir)"$(TargetFileName) ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName)
+if ERRORLEVEL 1 goto BuildEventFailed
+if exist "$(TargetDir)"$(TargetName).map copy "$(TargetDir)"$(TargetName).map ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).map
+call ..\..\..\vpc_scripts\valve_p4_edit.cmd ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).pdb ..\..\..
+copy "$(TargetDir)"$(TargetName).pdb ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).pdb
+if ERRORLEVEL 1 goto BuildEventFailed
+goto BuildEventOK
+:BuildEventFailed
+echo *** ERROR! PostBuildStep FAILED for $(ProjectName)! EXE or DLL is probably running. ***
+del /q "$(TargetDir)"$(TargetFileName)
+exit 1
+:BuildEventOK
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>if EXIST ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName) for /f "delims=" %25%25A in (%27attrib "..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName)"%27) do set valveTmpIsReadOnly="%25%25A"
+set valveTmpIsReadOnlyLetter=%25valveTmpIsReadOnly:~6,1%25
+if "%25valveTmpIsReadOnlyLetter%25"=="R" del /q "$(TargetDir)"$(TargetFileName)
+set path=..\..\..\..\game\bin%3b%25path%25
+if exist ..\..\..\devtools\bin\vpc.exe ..\..\..\devtools\bin\vpc.exe -crc vsmdlpreview_maya7.vpc 8a359b5e -crc vsMDLPreview_base.vpc 7cc104ee -crc ..\..\..\vpc_scripts\source_dll_win32_base.vpc a763463a -crc ..\..\..\vpc_scripts\version.vpc 26d8e8a7 -crc ..\..\..\vpc_scripts\loadaddress.vpc 49fd4a9f -crc ..\..\..\vpc_scripts\source_dll_win32_debug.vpc 5f68c24a -crc ..\..\..\vpc_scripts\source_dll_win32_release.vpc 4275ffe4
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>..\..\..\common;..\..\..\public;..\..\..\public\tier0;..\..\..\public\tier1;..\..\..\utils\common;..\..\..\public\maya;..\..\..\common\maya\7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_AFXDLL;_MBCS;NT_PLUGIN;REQUIRE_IOSTREAM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation />
+      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ErrorReporting>Prompt</ErrorReporting>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>comctl32.lib;Foundation.lib;OpenMaya.lib;OpenMayaUI.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>Release_Maya7\vsMDLPreview.mll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\..\..\lib\common;..\..\..\lib\public;..\..\..\lib\common\maya\7.0;..\..\..\lib\public\maya\7.0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(IntDir)$(TargetName).map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <BaseAddress>
+      </BaseAddress>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+    </Link>
+    <Xdcmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Xdcmake>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(OutDir)vsmdlpreview_maya7.bsc</OutputFile>
+    </Bscmake>
+    <PostBuildEvent>
+      <Message>Publishing to ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource</Message>
+      <Command>md ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource
+call ..\..\..\vpc_scripts\valve_p4_edit.cmd ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName) ..\..\..
+copy "$(TargetDir)"$(TargetFileName) ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName)
+if ERRORLEVEL 1 goto BuildEventFailed
+if exist "$(TargetDir)"$(TargetName).map copy "$(TargetDir)"$(TargetName).map ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).map
+call ..\..\..\vpc_scripts\valve_p4_edit.cmd ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).pdb ..\..\..
+copy "$(TargetDir)"$(TargetName).pdb ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetName).pdb
+if ERRORLEVEL 1 goto BuildEventFailed
+goto BuildEventOK
+:BuildEventFailed
+echo *** ERROR! PostBuildStep FAILED for $(ProjectName)! EXE or DLL is probably running. ***
+del /q "$(TargetDir)"$(TargetFileName)
+exit 1
+:BuildEventOK
+call ..\..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\..\game\sdktools\maya\7.0\modules\valveSource\plug-ins\valveSource\$(TargetFileName)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\public\interpolatortypes.cpp" />
+    <ClCompile Include="..\..\..\public\tier0\memoverride.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\public\vgui_controls\vgui_controls.cpp" />
+    <ClCompile Include="vsAssetBuilder.cpp" />
+    <ClCompile Include="vsCombinationEditor.cpp" />
+    <ClCompile Include="vsMDLPreview.cpp" />
+    <ClCompile Include="vsMDLPreviewInit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\lib\public\datamodel.lib" />
+    <Library Include="..\..\..\lib\public\dme_controls.lib" />
+    <Library Include="..\..\..\lib\public\dmserializers.lib" />
+    <Library Include="..\..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\..\lib\public\matsys_controls.lib" />
+    <Library Include="..\..\..\lib\public\maya\7.0\valveMaya.lib" />
+    <Library Include="..\..\..\lib\public\movieobjects.lib" />
+    <Library Include="..\..\..\lib\public\sfmobjects.lib" />
+    <Library Include="..\..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\..\lib\public\tier3.lib" />
+    <Library Include="..\..\..\lib\public\vgui_controls.lib" />
+    <Library Include="..\..\..\lib\public\vstdlib.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\game\sdktools\maya\7.0\modules\utilities\scripts\vsAssetBuilder.mel" />
+    <None Include="..\..\..\..\game\sdktools\maya\7.0\modules\utilities\scripts\vsMDLPreview.mel" />
+    <None Include="..\..\..\..\game\sdktools\maya\7.0\modules\vsmdlpreview\icons\out_vsMDLPreviewLocator.xpm" />
+    <None Include="vsMDLPreview_Maya7.vpc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\flib.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\ilib.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\M3dView.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAngle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimControl.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimCurveChange.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimCurveClipboard.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimCurveClipboardItem.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimCurveClipboardItemArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAnimUtil.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MApiVersion.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MArgDatabase.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MArgList.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MArgParser.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MArrayDataBuilder.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MArrayDataHandle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAttributeIndex.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAttributeSpec.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MAttributeSpecArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MBoundingBox.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MCallbackIdArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothConstraint.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothConstraintBridge.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothConstraintCmd.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothControl.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothEdge.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothForce.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothMaterial.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothParticle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothPolyhedron.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothSolverRegister.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothSystem.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothTriangle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MClothTypes.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MColor.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MColorArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MCommandMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MCommandResult.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MCommonRenderSettingsData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MComputation.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MConditionMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MCursor.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDagMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDagModifier.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDagPath.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDagPathArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDataBlock.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDataHandle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDeviceChannel.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDeviceState.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDGContext.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDGMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDGModifier.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDistance.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDoubleArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDrawData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDrawInfo.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDrawProcedureBase.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDrawRequest.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDrawRequestQueue.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDynSweptLine.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MDynSweptTriangle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MEulerRotation.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MEvent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MEventMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFeedbackLine.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFileIO.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFileObject.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatMatrix.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatPoint.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatPointArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatVector.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFloatVectorArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFn.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAirField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAmbientLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAnimCurve.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAnisotropyShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAreaLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnArrayAttrsData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnBase.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnBlendShapeDeformer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnBlinnShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnCamera.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnCharacter.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnCircleSweepManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnClip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnComponent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnComponentListData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnCompoundAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnCurveSegmentManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDagNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDependencyNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDirectionalLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDirectionManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDiscManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDistanceManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDoubleArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDoubleIndexedComponent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDragField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnDynSweptGeometryData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnEnumAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnExpression.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnFluid.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnFreePointTriadManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnGenericAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnGeometryData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnGeometryFilter.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnGravityField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnHikEffector.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnIkEffector.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnIkHandle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnIkJoint.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnIkSolver.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnIntArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDelta.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaAddRemove.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaBlockAddRemove.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaBreakdown.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaInfType.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaMove.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaScale.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaTangent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnKeyframeDeltaWeighted.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLambertShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLattice.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLatticeData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLatticeDeformer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLayeredShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnLightDataAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnManip3D.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMatrixAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMatrixData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMesh.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMeshData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMessageAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnMotionPath.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNewtonField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNonAmbientLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNonExtendedLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNumericAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNumericData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNurbsCurve.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNurbsCurveData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNurbsSurface.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnNurbsSurfaceData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnParticleSystem.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPartition.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPfxGeometry.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPhongEShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPhongShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPlugin.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPluginData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPointArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPointLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPointOnCurveManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnPointOnSurfaceManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnRadialField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnReflectShader.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnRenderLayer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnRotateManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnScaleManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSet.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSingleIndexedComponent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSkinCluster.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSphereData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSpotLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnStateManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnStringArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnStringData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSubd.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSubdData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnSubdNames.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnToggleManip.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnTransform.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnTripleIndexedComponent.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnTurbulenceField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnTypedAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnUInt64ArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnUniformField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnUnitAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnVectorArrayData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnVolumeAxisField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnVolumeLight.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnVortexField.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnWeightGeometryFilter.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFnWireDeformer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MFStream.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MGeometryData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MGlobal.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MHardwareRenderer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MHWShaderSwatchGenerator.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIkHandleGroup.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIkSystem.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MImage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIntArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIOStream.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIOStreamFwd.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItCurveCV.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItDag.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItDependencyGraph.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItDependencyNodes.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MIteratorType.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItGeometry.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItInstancer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItKeyframe.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItMeshEdge.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItMeshFaceVertex.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItMeshPolygon.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItMeshVertex.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItSelectionList.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItSubdEdge.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItSubdFace.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItSubdVertex.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MItSurfaceCV.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MLibrary.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MLightLinks.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MLockMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MManipData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MMaterial.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MMatrix.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MModelMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MNodeMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MObject.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MObjectArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MObjectHandle.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MObjectSetMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\mocapserial.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\mocapserver.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\mocaptcp.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPlug.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPlugArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPoint.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPointArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPolyMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MProgressWindow.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPx3dModelView.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxCommand.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxComponentShape.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxContext.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxContextCommand.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxDeformerNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxDragAndDropBehavior.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxEmitterNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxFieldNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxFileTranslator.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxFluidEmitterNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxGeometryData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxGeometryIterator.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxGlBuffer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxHwShaderNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxIkSolver.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxIkSolverNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxLocatorNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxManipContainer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxMidiInputDevice.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxModelEditorCommand.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxObjectSet.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxPolyTrg.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxPolyTweakUVCommand.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxSelectionContext.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxSpringNode.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxSurfaceShape.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxSurfaceShapeUI.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxToolCommand.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxTransform.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MPxTransformationMatrix.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MQuaternion.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRampAttribute.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderCallback.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderLine.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderLineArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderShadowData.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderUtil.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MRenderView.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSceneMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSelectInfo.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSelectionList.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSelectionMask.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSimple.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MStatus.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MString.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MStringArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSwatchRenderBase.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSwatchRenderRegister.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MSyntax.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTesselationParams.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTime.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTimeArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTimer.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTimerMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MToolsInfo.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTransformationMatrix.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTrimBoundaryArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTypeId.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MTypes.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MUiMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MUint64Array.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MUintArray.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MUserEventMessage.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MVector.h" />
+    <ClInclude Include="..\..\..\common\maya\7.0\maya\MVectorArray.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\dmserializers\dmserializers.vcxproj">
+      <Project>{e800d21e-dd8c-4cfa-9ccb-ae3c841dc975}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\tier0\tier0.vcxproj">
+      <Project>{c503fc17-bc81-4434-abf9-e5b00d39365c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\vgui2\vgui_controls\vgui_controls.vcxproj">
+      <Project>{78768610-44cc-47aa-9064-95449328075c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

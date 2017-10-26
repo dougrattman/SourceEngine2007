@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $Revision: $
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef ICLIENTMODE_H
 #define ICLIENTMODE_H
@@ -35,7 +35,7 @@ abstract_class IClientMode
 // Misc.
 public:
 
-	virtual			~IClientMode() {}
+	virtual ~IClientMode() {}
 
 	// Called before the HUD is initialized.
 	virtual void	InitViewport()=0;

@@ -1,10 +1,10 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 
 // This defines things that allow particle effects to hook into the particle app.
 #ifndef PARTICLE_PROTOTYPE_H
@@ -28,7 +28,7 @@ public:
 class IPrototypeAppEffect
 {
 public:
-	virtual				~IPrototypeAppEffect()	{}
+	virtual 	~IPrototypeAppEffect()	{}
 	
 	// Start the effect. You can get command-line args with pArgs.
 	virtual void		Start(CParticleMgr *pParticleMgr, IPrototypeArgAccess *pArgs)=0;
@@ -44,10 +44,10 @@ typedef IPrototypeAppEffect* (*PrototypeEffectCreateFn)();
 class PrototypeEffectLink
 {
 public:
-							PrototypeEffectLink(PrototypeEffectCreateFn fn, const char *pName);								
+  	PrototypeEffectLink(PrototypeEffectCreateFn fn, const char *pName);  		
 
 	PrototypeEffectCreateFn	m_CreateFn;
-	const char				*m_pEffectName;
+	const char 	*m_pEffectName;
 	PrototypeEffectLink		*m_pNext;
 };
 
@@ -57,7 +57,7 @@ public:
 
 
 	// Expose your effect with this macro.
-	#define EXPOSE_PROTOTYPE_EFFECT(effectName, className)								\
+	#define EXPOSE_PROTOTYPE_EFFECT(effectName, className)  		\
 		static IPrototypeAppEffect* ___Create##effectName##() {return new className;}	\
 		static PrototypeEffectLink ___effectlink_##effectName##(___Create##effectName##, #effectName);
 #else

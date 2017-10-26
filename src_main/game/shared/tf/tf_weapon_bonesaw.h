@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -29,7 +29,7 @@ public:
 	DECLARE_PREDICTABLE();
 
 	CTFBonesaw() {}
-	virtual int			GetWeaponID( void ) const			{ return TF_WEAPON_BONESAW; }
+	virtual int GetWeaponID( void ) const { return TF_WEAPON_BONESAW; }
 
 private:
 

@@ -1,4 +1,4 @@
-//=========== (C) Copyright 1999 Valve, L.L.C. All rights reserved. ===========
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
@@ -31,7 +31,7 @@
 #include "dlight.h"
 #include <imapoverview.h>
 #include "c_playerresource.h"
-#include <keyvalues.h>
+#include "tier1/keyvalues.h"
 #include "text_message.h"
 #include "panelmetaclassmgr.h"
 #include "c_tf_player.h"

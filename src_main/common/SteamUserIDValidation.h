@@ -1,11 +1,11 @@
 
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+
 /*******************************************************************************
 **
 ** Contents:
@@ -41,74 +41,74 @@ extern "C"
 
 /* Client calls this (see also ValidateNewValveCDKeyClient.h if appropriate) */
 STEAM_API ESteamError	STEAM_CALL	SteamGetEncryptedUserIDTicket
-									(
-										const void *							pEncryptionKeyReceivedFromAppServer, 
-										unsigned int							uEncryptionKeyLength, 
-										void *									pOutputBuffer, 
-										unsigned int							uSizeOfOutputBuffer, 
-										unsigned int *							pReceiveSizeOfEncryptedTicket,
-										TSteamError *							pReceiveErrorCode
-									);
+   (
+   	const void *  	pEncryptionKeyReceivedFromAppServer, 
+   	unsigned int  	uEncryptionKeyLength, 
+   	void *   pOutputBuffer, 
+   	unsigned int  	uSizeOfOutputBuffer, 
+   	unsigned int *  	pReceiveSizeOfEncryptedTicket,
+   	TSteamError *  	pReceiveErrorCode
+   );
 
 
 /* Game/Application server calls these */
 STEAM_API ESteamError	STEAM_CALL	SteamInitializeUserIDTicketValidator
-									(
-										const char *							pszOptionalPublicEncryptionKeyFilename,
-										const char *							pszOptionalPrivateDecryptionKeyFilename,
-										unsigned int							ClientClockSkewToleranceInSeconds,
-										unsigned int							ServerClockSkewToleranceInSeconds,
-										unsigned int							MaxNumLoginsWithinClientClockSkewTolerancePerClient,
-										unsigned int							HintPeakSimultaneousValidations,
-										unsigned int							AbortValidationAfterStallingForNProcessSteps
-									);
+   (
+   	const char *  	pszOptionalPublicEncryptionKeyFilename,
+   	const char *  	pszOptionalPrivateDecryptionKeyFilename,
+   	unsigned int  	ClientClockSkewToleranceInSeconds,
+   	unsigned int  	ServerClockSkewToleranceInSeconds,
+   	unsigned int  	MaxNumLoginsWithinClientClockSkewTolerancePerClient,
+   	unsigned int  	HintPeakSimultaneousValidations,
+   	unsigned int  	AbortValidationAfterStallingForNProcessSteps
+   );
 
 STEAM_API ESteamError	STEAM_CALL	SteamShutdownUserIDTicketValidator();
 
 STEAM_API const char *	STEAM_CALL	SteamGetEncryptionKeyToSendToNewClient
-									(
-										unsigned int *							pReceiveSizeOfEncryptionKey
-									);
+   (
+   	unsigned int *  	pReceiveSizeOfEncryptionKey
+   );
 
 STEAM_API ESteamError	STEAM_CALL	SteamStartValidatingUserIDTicket
-									( 
-										void *									pEncryptedUserIDTicketFromClient,
-										unsigned int							uSizeOfEncryptedUserIDTicketFromClient,
-										unsigned int							ObservedClientIPAddr,
-										SteamUserIDTicketValidationHandle_t *	pReceiveHandle
-									);
+   ( 
+   	void *   pEncryptedUserIDTicketFromClient,
+   	unsigned int  	uSizeOfEncryptedUserIDTicketFromClient,
+   	unsigned int  	ObservedClientIPAddr,
+   	SteamUserIDTicketValidationHandle_t *	pReceiveHandle
+   );
 
 STEAM_API ESteamError	STEAM_CALL	SteamStartValidatingNewValveCDKey
-									( 
-										void *									pEncryptedNewValveCDKeyFromClient,
-										unsigned int							uSizeOfEncryptedNewValveCDKeyFromClient,
-										unsigned int							ObservedClientIPAddr,
-										struct sockaddr *						pPrimaryValidateNewCDKeyServerSockAddr,
-										struct sockaddr *						pSecondaryValidateNewCDKeyServerSockAddr,
-										SteamUserIDTicketValidationHandle_t *	pReceiveHandle
-									);
+   ( 
+   	void *   pEncryptedNewValveCDKeyFromClient,
+   	unsigned int  	uSizeOfEncryptedNewValveCDKeyFromClient,
+   	unsigned int  	ObservedClientIPAddr,
+   	struct sockaddr *  pPrimaryValidateNewCDKeyServerSockAddr,
+   	struct sockaddr *  pSecondaryValidateNewCDKeyServerSockAddr,
+   	SteamUserIDTicketValidationHandle_t *	pReceiveHandle
+   );
 
 
 STEAM_API ESteamError	STEAM_CALL	SteamProcessOngoingUserIDTicketValidation
-									( 
-										SteamUserIDTicketValidationHandle_t		Handle,
-										TSteamGlobalUserID *					pReceiveValidSteamGlobalUserID,
-										unsigned int *							pReceiveClientLocalIPAddr,
-										unsigned char *							pOptionalReceiveProofOfAuthenticationToken,
-										size_t									SizeOfOptionalAreaToReceiveProofOfAuthenticationToken,
-										size_t *								pOptionalReceiveSizeOfProofOfAuthenticationToken
-									);
+   ( 
+   	SteamUserIDTicketValidationHandle_t		Handle,
+   	TSteamGlobalUserID * 		pReceiveValidSteamGlobalUserID,
+   	unsigned int *  	pReceiveClientLocalIPAddr,
+   	unsigned char *  	pOptionalReceiveProofOfAuthenticationToken,
+   	size_t   SizeOfOptionalAreaToReceiveProofOfAuthenticationToken,
+   	size_t *  		pOptionalReceiveSizeOfProofOfAuthenticationToken
+   );
 
-STEAM_API void			STEAM_CALL	SteamAbortOngoingUserIDTicketValidation
-									(
-										SteamUserIDTicketValidationHandle_t		Handle
-									);
+STEAM_API void STEAM_CALL	SteamAbortOngoingUserIDTicketValidation
+   (
+   	SteamUserIDTicketValidationHandle_t		Handle
+   );
 
 STEAM_API ESteamError	STEAM_CALL	SteamOptionalCleanUpAfterClientHasDisconnected
-									( 
-										unsigned int							ObservedClientIPAddr,
-										unsigned int							ClientLocalIPAddr
-									);
+   ( 
+   	unsigned int  	ObservedClientIPAddr,
+   	unsigned int  	ClientLocalIPAddr
+   );
 
 
 #ifdef __cplusplus

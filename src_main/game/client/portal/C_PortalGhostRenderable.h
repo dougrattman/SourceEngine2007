@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+
 
 #ifndef C_PORTALGHOSTRENDERABLE_H
 #define C_PORTALGHOSTRENDERABLE_H
@@ -39,9 +39,9 @@ public:
 	void PerFrameUpdate( void ); //called once per frame for misc updating
 
 	// Data accessors
-	virtual Vector const&			GetRenderOrigin( void );
-	virtual QAngle const&			GetRenderAngles( void );
-	virtual bool					ShouldDraw( void ) { return true; }
+	virtual Vector const& GetRenderOrigin( void );
+	virtual QAngle const& GetRenderAngles( void );
+	virtual bool 		ShouldDraw( void ) { return true; }
 
 	// Call this to get the current bone transforms for the model.
 	// currentTime parameter will affect interpolation
@@ -84,44 +84,44 @@ public:
 	//------------------------------------------
 	//IClientRenderable - Trivial or redirection
 	//------------------------------------------
-	virtual IClientUnknown*			GetIClientUnknown() { return this; };
-	virtual bool					IsTransparent( void );
-	virtual bool					UsesPowerOfTwoFrameBufferTexture();
+	virtual IClientUnknown* GetIClientUnknown() { return this; };
+	virtual bool 		IsTransparent( void );
+	virtual bool 		UsesPowerOfTwoFrameBufferTexture();
 	//virtual ClientShadowHandle_t	GetShadowHandle() const { return m_hShadowHandle; };
 	//virtual ClientRenderHandle_t&	RenderHandle() { return m_hRenderHandle; };
-	//virtual const model_t*			GetModel( ) const;
-	//virtual int						GetBody();
-	//virtual void					ComputeFxBlend( ) { return m_pGhostedRenderable->ComputeFxBlend(); };
-	//virtual int						GetFxBlend( void ) { return m_pGhostedRenderable->GetFxBlend(); };
-	virtual void					GetColorModulation( float* color );
-	//virtual bool					LODTest() { return true; };
-	//virtual void					SetupWeights( void ) { NULL; };
-	//virtual void					DoAnimationEvents( void ) { NULL; }; //TODO: find out if there's something we should be doing with this
-	//virtual IPVSNotify*				GetPVSNotifyInterface() { return NULL; };
-	//virtual bool					ShouldReceiveProjectedTextures( int flags ) { return false; };//{ return m_pGhostedRenderable->ShouldReceiveProjectedTextures( flags ); };
-	//virtual bool					IsShadowDirty( ) { return m_bDirtyShadow; };
-	//virtual void					MarkShadowDirty( bool bDirty ) { m_bDirtyShadow = bDirty; };
+	//virtual const model_t* GetModel( ) const;
+	//virtual int  GetBody();
+	//virtual void 		ComputeFxBlend( ) { return m_pGhostedRenderable->ComputeFxBlend(); };
+	//virtual int  GetFxBlend( void ) { return m_pGhostedRenderable->GetFxBlend(); };
+	virtual void 		GetColorModulation( float* color );
+	//virtual bool 		LODTest() { return true; };
+	//virtual void 		SetupWeights( void ) { NULL; };
+	//virtual void 		DoAnimationEvents( void ) { NULL; }; //TODO: find out if there's something we should be doing with this
+	//virtual IPVSNotify* 	GetPVSNotifyInterface() { return NULL; };
+	//virtual bool 		ShouldReceiveProjectedTextures( int flags ) { return false; };//{ return m_pGhostedRenderable->ShouldReceiveProjectedTextures( flags ); };
+	//virtual bool 		IsShadowDirty( ) { return m_bDirtyShadow; };
+	//virtual void 		MarkShadowDirty( bool bDirty ) { m_bDirtyShadow = bDirty; };
 	//virtual IClientRenderable *		GetShadowParent() { return NULL; };
 	//virtual IClientRenderable *		FirstShadowChild() { return NULL; };
 	//virtual IClientRenderable *		NextShadowPeer() { return NULL; };
-	//virtual ShadowType_t			ShadowCastType();
-	//virtual void					CreateModelInstance() { NULL; };
+	//virtual ShadowType_t ShadowCastType();
+	//virtual void 		CreateModelInstance() { NULL; };
 	//virtual ModelInstanceHandle_t	GetModelInstance() { return m_pGhostedRenderable->GetModelInstance(); }; //TODO: find out if sharing an instance causes bugs
-	virtual int						LookupAttachment( const char *pAttachmentName );
-	//virtual int						GetSkin();
-	//virtual bool					IsTwoPass( void );
-	//virtual void					OnThreadedDrawSetup() { NULL; };
+	virtual int  LookupAttachment( const char *pAttachmentName );
+	//virtual int  GetSkin();
+	//virtual bool 		IsTwoPass( void );
+	//virtual void 		OnThreadedDrawSetup() { NULL; };
 
 	//IHandleEntity
-	//virtual void					SetRefEHandle( const CBaseHandle &handle ) { m_RefEHandle = handle; };
-	//virtual const					CBaseHandle& GetRefEHandle() const { return m_RefEHandle; };
+	//virtual void 		SetRefEHandle( const CBaseHandle &handle ) { m_RefEHandle = handle; };
+	//virtual const 		CBaseHandle& GetRefEHandle() const { return m_RefEHandle; };
 
 	//IClientUnknown
-	virtual ICollideable*			GetCollideable() { return NULL; };
+	virtual ICollideable* GetCollideable() { return NULL; };
 	virtual IClientNetworkable*		GetClientNetworkable() { return NULL; };
 	virtual IClientRenderable*		GetClientRenderable() { return this; };
-	virtual IClientEntity*			GetIClientEntity() { return NULL; };
-	virtual C_BaseEntity*			GetBaseEntity() { return NULL; };
+	virtual IClientEntity* GetIClientEntity() { return NULL; };
+	virtual C_BaseEntity* GetBaseEntity() { return NULL; };
 	virtual IClientThinkable*		GetClientThinkable() { return NULL; };
 };
 
