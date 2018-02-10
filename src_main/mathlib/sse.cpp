@@ -15,7 +15,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#if !defined X64BITS
+#ifndef ARCH_CPU_X86_64
 
 static const uint32_t _sincos_masks[] = {(uint32_t)0x0, (uint32_t)~0x0};
 static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
@@ -783,4 +783,4 @@ float(__cdecl *pfVectorMA)(Vector &v) = _VectorMA;
 #endif
 #endif
 
-#endif  // defined _WIN32 && !defined X64BITS
+#endif  // !defined ARCH_CPU_X86_64

@@ -3,14 +3,14 @@
 // Purpose:	This turns on all Valve-specific #defines.  Because we sometimes
 // call external include files from inside .cpp files, we need to
 // wrap those includes like this:
-// #include "tier0/valve_off.h"
+// #include "tier0/include/valve_off.h"
 // #include <external.h>
-// #include "tier0/valve_on.h"
+// #include "tier0/include/valve_on.h"
 
 #ifdef STEAM
 // Unicode-related #defines (see wchartypes.h)
 #ifdef ENFORCE_WCHAR
-#define char DontUseChar_SeeWcharOn.h
+#define ch DontUseChar_SeeWcharOn.h
 #endif
 
 // Memory-related #defines

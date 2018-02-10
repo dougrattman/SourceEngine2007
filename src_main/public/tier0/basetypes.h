@@ -3,50 +3,17 @@
 #ifndef SOURCE_TIER0_BASETYPES_H_
 #define SOURCE_TIER0_BASETYPES_H_
 
-#include <cstdint>
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
 
-#include "tier0/commonmacros.h"
-#include "tier0/floattypes.h"
-#include "tier0/wchartypes.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/floattypes.h"
+#include "tier0/include/wchartypes.h"
 
-#include "tier0/protected_things.h"
-#include "tier0/valve_off.h"
+#include "tier0/include/protected_things.h"
+#include "tier0/include/valve_off.h"
 
-#if (defined(__x86_64__) || defined(_WIN64)) && !defined(X64BITS)
-#define X64BITS
-#endif
-
-#ifdef _WIN32
-
-#ifdef X64BITS
-using size_t = unsigned __int64;
-using ptrdiff_t = __int64;
-using intptr_t = __int64;
-using uintptr_t = unsigned __int64;
-#else
-using size_t = unsigned int;
-using ptrdiff_t = int;
-using intptr_t = int;
-using uintptr_t = unsigned int;
-#endif  // X64BITS
-
-#else
-
-#ifdef X64BITS
-using size_t = unsigned long long;
-using ptrdiff_t = long long;
-using intptr_t = long long;
-using uintptr_t = unsigned long long;
-#else
-using size_t = unsigned int;
-using ptrdiff_t = int;
-using intptr_t = int;
-using uintptr_t = unsigned int;
-#endif
-
-#endif  // _WIN32
-
-using BOOL = int;
+using BOOL = i32;
 
 #ifndef FALSE
 #define FALSE 0
@@ -60,11 +27,11 @@ enum ThreeState_t {
 };
 
 template <typename T>
-constexpr inline T AlignValue(T value, size_t alignment) {
-  return (T)(((uintptr_t)(value) + alignment - 1) & ~(alignment - 1));
+constexpr inline T AlignValue(T value, usize alignment) {
+  return (T)(((usize)(value) + alignment - 1) & ~(alignment - 1));
 }
 
-template <class T>
+template <typename T>
 constexpr inline T clamp(T const &value, T const &min, T const &max) {
   if (value < min) return min;
   if (value > max) return max;
@@ -75,7 +42,7 @@ constexpr inline T clamp(T const &value, T const &min, T const &max) {
 // NOTE: This macro is the same as windows uses; so don't change the guts of it.
 #define DECLARE_POINTER_HANDLE(name) \
   struct name##__ {                  \
-    int unused;                      \
+    i32 unused;                      \
   };                                 \
   using name = struct name##__ *
 #define FORWARD_DECLARE_HANDLE(name) using name = struct name##__ *
@@ -89,7 +56,7 @@ constexpr inline T clamp(T const &value, T const &min, T const &max) {
 
 // FIXME: why are these here? Hardly anyone actually needs them.
 struct color24 {
-  uint8_t r, g, b;
+  u8 r, g, b;
 };
 
 struct color32 {
@@ -100,30 +67,30 @@ struct color32 {
     return !(*this == other);
   }
 
-  uint8_t r, g, b, a;
+  u8 r, g, b, a;
 };
 
 struct colorVec {
-  uint32_t r, g, b, a;
+  u32 r, g, b, a;
 };
 
 struct vrect_t {
-  int32_t x, y, width, height;
+  i32 x, y, width, height;
   vrect_t *pnext;
 };
 
 // Used for DrawDebugText.
 struct Rect_t {
-  int32_t x, y;
-  int32_t width, height;
+  i32 x, y;
+  i32 width, height;
 };
 
 // Used by soundemittersystem + the game.
 struct interval_t {
-  float32_t start;
-  float32_t range;
+  f32 start;
+  f32 range;
 };
 
-#include "tier0/valve_on.h"
+#include "tier0/include/valve_on.h"
 
 #endif  // SOURCE_TIER0_BASETYPES_H_

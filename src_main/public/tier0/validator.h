@@ -3,7 +3,10 @@
 #ifndef SOURCE_TIER0_VALIDATOR_H_
 #define SOURCE_TIER0_VALIDATOR_H_
 
-#include "tier0/valobject.h"
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
+#include "tier0/include/valobject.h"
 
 #ifdef DBGFLAG_VALIDATE
 
@@ -14,7 +17,7 @@ class CValidator {
   ~CValidator();
 
   // Call this each time we enter a new Validate function
-  void Push(char *pchType, void *pvObj, char *pchName);
+  void Push(ch *pchType, void *pvObj, ch *pchName);
 
   // Call this each time we exit a Validate function
   void Pop();
@@ -26,7 +29,7 @@ class CValidator {
   void Finalize();
 
   // Render our results to the console
-  void RenderObjects(int cubThreshold);  // Render all reported objects
+  void RenderObjects(i32 cubThreshold);  // Render all reported objects
   void RenderLeaks();                    // Render all memory leaks
 
   // List manipulation functions:
@@ -41,7 +44,7 @@ class CValidator {
   CValObject *PValObjectFirst() { return m_pValObjectFirst; };
 
   void Validate(CValidator &validator,
-                char *pchName);  // Validate our internal structures
+                ch *pchName);  // Validate our internal structures
 
  private:
   CValObject *m_pValObjectFirst;  // Linked list of all ValObjects
@@ -49,10 +52,10 @@ class CValidator {
 
   CValObject *m_pValObjectCur;  // Object we're current processing
 
-  int m_cpvOwned;  // Total # of blocks owned
+  i32 m_cpvOwned;  // Total # of blocks owned
 
-  int m_cpubLeaked;  // # of leaked memory blocks
-  int m_cubLeaked;   // Amount of leaked memory
+  i32 m_cpubLeaked;  // # of leaked memory blocks
+  i32 m_cubLeaked;   // Amount of leaked memory
   bool m_bMemLeaks;  // Has any memory leaked?
 };
 

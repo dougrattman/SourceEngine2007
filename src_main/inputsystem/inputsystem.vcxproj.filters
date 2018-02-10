@@ -10,6 +10,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{1fea7b8c-687e-4f80-93d0-c4096611af0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{8e4c90e3-838e-4ce5-a192-3cc4d98d4d82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="inputsystem.cc">
@@ -46,6 +49,18 @@
     </ClInclude>
     <ClInclude Include="inputsystem.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AnalogCode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ButtonCode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\iinputsystem.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InputEnums.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

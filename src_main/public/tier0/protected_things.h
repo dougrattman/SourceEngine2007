@@ -120,7 +120,7 @@
 
 #endif
 
-#if defined(PROTECT_FILEIO_FUNCTIONS) && (!defined(_LINUX))
+#if defined(PROTECT_FILEIO_FUNCTIONS) && (!defined(OS_POSIX))
 #if defined(fopen)
 #undef fopen
 #endif

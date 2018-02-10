@@ -95,8 +95,8 @@ struct sound_interval_t {
     range = from.range;
   }
   T Random() const {
-    interval_t temp = {static_cast<float32_t>(start),
-                       static_cast<float32_t>(range)};
+    interval_t temp = {static_cast<f32>(start),
+                       static_cast<f32>(range)};
     return static_cast<T>(RandomInterval(temp));
   }
 };

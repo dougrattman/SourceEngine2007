@@ -3,13 +3,15 @@
 #ifndef SOURCE_TIER0_PLATFORM_DETECTION_H_
 #define SOURCE_TIER0_PLATFORM_DETECTION_H_
 
+#include "build/include/build_config.h"
+
 #ifdef _RETAIL
 #define IsRetail() true
 #else
 #define IsRetail() false
 #endif
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 #define IsRelease() false
 #define IsDebug() true
 #else
@@ -21,7 +23,7 @@
 // after confidence of xbox 1 code flush
 #define IsXbox() false
 
-#ifdef _WIN32
+#ifdef OS_WIN
 
 #define IsLinux() false
 #define IsPC() true
@@ -30,7 +32,7 @@
 #define IsPS3() false
 #define IS_WINDOWS_PC
 
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 
 #define IsPC() true
 #define IsConsole() false

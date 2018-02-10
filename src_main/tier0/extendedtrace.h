@@ -17,7 +17,7 @@
 #ifndef SOURCE_TIER0_EXTENDEDTRACE_H_
 #define SOURCE_TIER0_EXTENDEDTRACE_H_
 
-#if defined(_DEBUG) && defined(WIN32)
+#if !defined(NDEBUG) && defined(WIN32)
 
 #pragma comment(lib, "imagehlp.lib")
 

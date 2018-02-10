@@ -3,19 +3,21 @@
 #ifndef SOURCE_TIER0_COMMAND_LINE_SWITCHES_H_
 #define SOURCE_TIER0_COMMAND_LINE_SWITCHES_H_
 
+#include "base/include/base_types.h"
+
 namespace source {
 namespace tier0 {
 namespace command_line_switches {
 // Allows to override base directory.
-constexpr const char *baseDirectory = "-basedir";
+constexpr const ch *baseDirectory = "-basedir";
 // Run in text mode? (No graphics or sound).
-constexpr const char *textMode = "-textmode";
+constexpr const ch *textMode = "-textmode";
 // Change process priority to low.
-constexpr const char *priority_low = "-low";
+constexpr const ch *priority_low = "-low";
 // Change process priority to high.
-constexpr const char *priority_high = "-high";
+constexpr const ch *priority_high = "-high";
 // Path to game directory to run.
-constexpr const char *game_path = "-game";
+constexpr const ch *game_path = "-game";
 }  // namespace command_line_switches
 }  // namespace tier0
 }  // namespace source

@@ -1,47 +1,46 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Insert this file into all projects using the memory system
-// It will cause that project to use the shader memory allocator
+// It will cause that project to use the shader memory allocator.
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 #undef PROTECTED_THINGS_ENABLE  // allow use of _vsnprintf
 
-#ifdef _WIN32
-#include "winlite.h"
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
+// ARG: crtdbg is necessary for certain definitions below,
+// but it also redefines malloc as a macro in release.
+// To disable this, we gotta define _DEBUG before including it.. BLEAH!
+#define _DEBUG 1
+#include <crtdbg.h>
+#ifdef NDEBUG
+#undef _DEBUG
 #endif
 
-#include "memdbgoff.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
+#elif OS_POSIX
+#define __cdecl
+#endif
 
 #include <cstdio>
 #include <cstring>
+
+#ifdef OS_WIN
+#include "base/include/windows/windows_light.h"
+#endif
+
+#include "tier0/include/memdbgoff.h"
+
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
 
 // Tags this DLL as debug
 #if defined(_DEBUG)
 DLL_EXPORT void BuiltDebug() {}
 #endif
 
-#ifdef _WIN32
-// ARG: crtdbg is necessary for certain definitions below,
-// but it also redefines malloc as a macro in release.
-// To disable this, we gotta define _DEBUG before including it.. BLEAH!
-#define _DEBUG 1
-#include "crtdbg.h"
-#ifdef NDEBUG
-#undef _DEBUG
-#endif
-
-// Turn this back off in release mode.
-#ifdef NDEBUG
-#undef _DEBUG
-#endif
-#elif _LINUX
-#define __cdecl
-#endif
-
-#if defined(_WIN32) && !defined(_X360)
+#if defined(OS_WIN)
 const char *MakeModuleFileName() {
   if (g_pMemAlloc->IsDebugHeap()) {
     char *pszModuleName = (char *)HeapAlloc(
@@ -100,7 +99,7 @@ inline void *ReallocUnattributed(void *pMem, size_t nSize) {
 // Standard functions in the CRT that we're going to override to call our
 // allocator
 //-----------------------------------------------------------------------------
-#if defined(_WIN32) && !defined(_STATIC_LINKED)
+#if defined(OS_WIN) && !defined(_STATIC_LINKED)
 // this magic only works under win32
 // under linux this malloc() overrides the libc malloc() and so we
 // end up in a recursion (as g_pMemAlloc->Alloc() calls malloc)
@@ -135,45 +134,6 @@ ALLOC_CALL void *calloc(size_t nCount, size_t nElementSize) {
 // allocator
 //-----------------------------------------------------------------------------
 extern "C" {
-
-//// 64-bit
-//#ifdef _WIN64
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _malloc_base(size_t nSize) {
-//  return AllocUnattributed(nSize);
-//}
-//#else
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _malloc_base(size_t nSize) {
-//  return AllocUnattributed(nSize);
-//}
-//#endif
-//
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _calloc_base(size_t _Count,
-//                                                      size_t _Size) {
-//  void *pMem = AllocUnattributed(_Count * _Size);
-//  memset(pMem, 0, _Count * _Size);
-//  return pMem;
-//}
-//
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _realloc_base(void *pMem,
-//                                                       size_t nSize) {
-//  return ReallocUnattributed(pMem, nSize);
-//}
-//
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _recalloc_base(void *_Block,
-//                                                        size_t _Count,
-//                                                        size_t _Size) {
-//  void *pMemOut = ReallocUnattributed(_Block, _Count * _Size);
-//  memset(pMemOut, 0, _Count * _Size);
-//  return pMemOut;
-//}
-
-// void __cdecl _free_base(void *pMem) { g_pMemAlloc->Free(pMem); }
-
-// void *__cdecl _expand_base(void *pMem, size_t nNewSize, int nBlockUse) {
-//  Assert(0);
-//  return NULL;
-//}
-
 // crt
 void *__cdecl _malloc_crt(size_t size) { return AllocUnattributed(size); }
 
@@ -188,14 +148,6 @@ void *__cdecl _realloc_crt(void *ptr, size_t size) {
 void *__cdecl _recalloc_crt(void *ptr, size_t count, size_t size) {
   return _recalloc_base(ptr, count, size);
 }
-
-//_CRTALLOCATOR _CRTRESTRICT void *__cdecl _recalloc(void *memblock, size_t
-// count,
-//                                                   size_t size) {
-//  void *pMem = ReallocUnattributed(memblock, size * count);
-//  memset(pMem, 0, size * count);
-//  return pMem;
-//}
 
 size_t __cdecl _msize_base(void *pMem) { return g_pMemAlloc->GetSize(pMem); }
 
@@ -233,7 +185,7 @@ int __cdecl _heapset(unsigned int) { return 0; }
 
 size_t __cdecl _heapused(size_t *, size_t *) { return 0; }
 
-#ifdef _WIN32
+#ifdef OS_WIN
 int __cdecl _heapwalk(_HEAPINFO *) { return 0; }
 #endif
 
@@ -265,12 +217,9 @@ void *realloc_db(void *pMem, size_t nSize, const char *pFileName, int nLine) {
 // These methods are standard MSVC heap initialization + shutdown methods
 //-----------------------------------------------------------------------------
 extern "C" {
-
-#if !defined(_X360)
-int __cdecl _heap_init() { return g_pMemAlloc != NULL; }
+int __cdecl _heap_init() { return g_pMemAlloc != nullptr; }
 
 void __cdecl _heap_term() {}
-#endif
 }
 #endif
 
@@ -332,7 +281,7 @@ void __cdecl operator delete[](void *pMem)
 // link to a debug static lib!!!
 //-----------------------------------------------------------------------------
 #ifndef _STATIC_LINKED
-#ifdef _WIN32
+#ifdef OS_WIN
 
 // This here just hides the internal file names, etc of allocations
 // made in the c runtime library
@@ -357,9 +306,9 @@ class CAttibCRT {
 };
 
 #define AttribIfCrt() CAttibCRT _attrib(nBlockUse)
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #define AttribIfCrt()
-#endif  // _WIN32
+#endif  // OS_WIN
 
 extern "C" {
 
@@ -374,14 +323,6 @@ void *__cdecl _malloc_dbg(size_t nSize, int nBlockUse, const char *pFileName,
   AttribIfCrt();
   return g_pMemAlloc->Alloc(nSize, pFileName, nLine);
 }
-
-#if defined(_X360)
-void *__cdecl _calloc_dbg_impl(size_t nNum, size_t nSize, int nBlockUse,
-                               const char *szFileName, int nLine,
-                               int *errno_tmp) {
-  return _calloc_dbg(nNum, nSize, nBlockUse, szFileName, nLine);
-}
-#endif
 
 void *__cdecl _calloc_dbg(size_t nNum, size_t nSize, int nBlockUse,
                           const char *pFileName, int nLine) {
@@ -415,15 +356,15 @@ void __cdecl _free_dbg(void *pMem, int nBlockUse) {
 }
 
 size_t __cdecl _msize_dbg(void *pMem, int nBlockUse) {
-#ifdef _WIN32
+#ifdef OS_WIN
   return _msize(pMem);
-#elif _LINUX
+#elif OS_POSIX
   Assert("_msize_dbg unsupported");
   return 0;
 #endif
 }
 
-#ifdef _WIN32
+#ifdef OS_WIN
 
 #if defined(_DEBUG) && _MSC_VER >= 1300
 // X360TBD: aligned and offset allocations may be important on the 360
@@ -512,7 +453,7 @@ ALLOC_CALL void *__cdecl _aligned_offset_recalloc(void *memblock, size_t count,
 //-----------------------------------------------------------------------------
 // Override some the _CRT debugging allocation methods in MSVC
 //-----------------------------------------------------------------------------
-#ifdef _WIN32
+#ifdef OS_WIN
 
 extern "C" {
 
@@ -798,11 +739,11 @@ _CRT_REPORT_HOOK __cdecl _CrtGetReportHook() { return NULL; }
 int __cdecl _CrtReportBlockType(const void *pUserData) { return 0; }
 
 }  // end extern "C"
-#endif  // _WIN32
+#endif  // OS_WIN
 
 // Most files include this file, so when it's used it adds an extra .ValveDbg
 // section, to help identify debug binaries.
-#ifdef _WIN32
+#ifdef OS_WIN
 #ifndef NDEBUG  // _DEBUG
 #pragma data_seg("ValveDBG")
 volatile const char *DBG = "*** DEBUG STUB ***";
@@ -812,7 +753,7 @@ volatile const char *DBG = "*** DEBUG STUB ***";
 #endif
 
 // Extras added prevent dbgheap.obj from being included - DAL
-#ifdef _WIN32
+#ifdef OS_WIN
 
 extern "C" {
 size_t __crtDebugFillThreshold = 0;
@@ -905,4 +846,4 @@ wchar_t *__cdecl _wcsdup(const wchar_t *string) {
 
 #endif  // !STEAM && !NO_MALLOC_OVERRIDE
 
-#endif  // _WIN32
+#endif  // OS_WIN

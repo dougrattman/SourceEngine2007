@@ -6,13 +6,15 @@
 #ifndef SOURCE_TIER0_PROGRESSBAR_H_
 #define SOURCE_TIER0_PROGRESSBAR_H_
 
-#include "tier0/platform.h"
+#include "base/include/base_types.h"
 
-PLATFORM_INTERFACE void ReportProgress(char const *job_name,
-                                       int total_units_to_do,
-                                       int n_units_completed);
+#include "tier0/include/platform.h"
 
-typedef void (*ProgressReportHandler_t)(char const *, int, int);
+PLATFORM_INTERFACE void ReportProgress(ch const *job_name,
+                                       i32 total_units_to_do,
+                                       i32 n_units_completed);
+
+typedef void (*ProgressReportHandler_t)(ch const *, i32, i32);
 
 // install your own handler. returns previous handler
 PLATFORM_INTERFACE ProgressReportHandler_t

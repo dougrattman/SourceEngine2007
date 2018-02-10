@@ -7,7 +7,7 @@
 #include "mathlib/vector.h"
 #include "tier0/calling_conventions.h"
 
-#if !defined X64BITS
+#ifndef ARCH_CPU_X86_64
 
 float _SSE_Sqrt(float x);
 float _SSE_RSqrtAccurate(float a);
@@ -22,6 +22,6 @@ float _SSE2_cos(float x);
 void VectorTransformSSE(const float* in1, const matrix3x4_t& in2, float* out1);
 void VectorRotateSSE(const float* in1, const matrix3x4_t& in2, float* out1);
 
-#endif  // X64BITS
+#endif  // ARCH_CPU_X86_64
 
 #endif  // SOURCE_MATHLIB_SSE_H_

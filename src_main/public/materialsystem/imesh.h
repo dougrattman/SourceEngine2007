@@ -5,6 +5,10 @@
 
 #include <cfloat>
 #include <cstring>
+
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
 #include "materialsystem/imaterial.h"
 #include "tier0/basetypes.h"
 #include "tier0/compiler_specific_macroses.h"
@@ -532,7 +536,7 @@ class CVertexBuilder : private VertexDesc_t {
   template <VertexCompressionType_t T>
   void CompressedUserData(const float *pData);
 
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
   // Fast Vertex! No need to call advance vertex, and no random access allowed.
   // WARNING - these are low level functions that are intended only for use
   // in the software vertex skinner.
@@ -547,7 +551,7 @@ class CVertexBuilder : private VertexDesc_t {
 
   void FastVertex(const ModelVertexDX8_t &vertex);
   void FastVertexSSE(const ModelVertexDX8_t &vertex);
-#endif  // X64BITS
+#endif  // ARCH_CPU_X86_64
 
   // Add number of verts and current vert since FastVertex routines do not
   // update.
@@ -1084,7 +1088,7 @@ inline void CVertexBuilder::FastAdvanceNVertices(int n) {
   m_nVertexCount = m_nCurrentVertex;
 }
 
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
 //-----------------------------------------------------------------------------
 // Fast Vertex! No need to call advance vertex, and no random access allowed
 //-----------------------------------------------------------------------------
@@ -1312,7 +1316,7 @@ inline void CVertexBuilder::FastVertexSSE(const ModelVertexDX8_t &vertex) {
   m_bWrittenUserData = false;
 #endif
 }
-#endif  // X64BITS
+#endif  // ARCH_CPU_X86_64
 
 //-----------------------------------------------------------------------------
 // Returns the current vertex
@@ -2801,7 +2805,7 @@ class CMeshBuilder : public MeshDesc_t {
   // Fast Index! No need to call advance index, and no random access allowed
   void FastIndex(unsigned short index);
 
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
   // Fast Vertex! No need to call advance vertex, and no random access allowed.
   // WARNING - these are low level functions that are intended only for use
   // in the software vertex skinner.
@@ -2816,7 +2820,7 @@ class CMeshBuilder : public MeshDesc_t {
 
   void FastVertex(const ModelVertexDX8_t &vertex);
   void FastVertexSSE(const ModelVertexDX8_t &vertex);
-#endif  // X64BITS
+#endif  // ARCH_CPU_X86_64
 
   // Add number of verts and current vert since FastVertexxx routines do not
   // update.
@@ -3332,7 +3336,7 @@ FORCEINLINE void CMeshBuilder::FastAdvanceNVertices(int nVertexCount) {
   m_VertexBuilder.FastAdvanceNVertices(nVertexCount);
 }
 
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
 //-----------------------------------------------------------------------------
 // Fast Vertex! No need to call advance vertex, and no random access allowed
 //-----------------------------------------------------------------------------
@@ -3358,7 +3362,7 @@ FORCEINLINE void CMeshBuilder::FastVertex(const ModelVertexDX8_t &vertex) {
 FORCEINLINE void CMeshBuilder::FastVertexSSE(const ModelVertexDX8_t &vertex) {
   m_VertexBuilder.FastVertexSSE(vertex);
 }
-#endif  // X64BITS
+#endif  // ARCH_CPU_X86_64
 
 //-----------------------------------------------------------------------------
 // Vertex field setting methods

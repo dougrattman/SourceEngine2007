@@ -27,7 +27,7 @@
 #undef DBGFLAG_STRINGS
 
 // Default flags for debug builds.
-#ifdef _DEBUG
+#ifndef NDEBUG
 
 #define DBGFLAG_MEMORY
 // Only enable new & delete tracking for server; on client it conflicts with CRT
@@ -44,7 +44,7 @@
 #define DBGFLAG_STRINGS
 
 // Default flags for release builds.
-#else  // _DEBUG
+#else  // !NDEBUG
 
 #ifdef STEAM
 #define DBGFLAG_ASSERT
@@ -54,6 +54,6 @@
 #define DBGFLAG_ASSERTFATAL
 #define DBGFLAG_ASSERTDLG
 
-#endif  // _DEBUG
+#endif  // !NDEBUG
 
 #endif  // SOURCE_TIER0_DBGFLAG_H_

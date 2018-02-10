@@ -3,40 +3,43 @@
 #ifndef SOURCE_TIER0_PLATFORM_H_
 #define SOURCE_TIER0_PLATFORM_H_
 
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
 #define NO_STEAM
 
 #include <malloc.h>
 #include <new.h>
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #include <intrin.h>
 #endif
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <alloca.h>
 #endif
 
 #include <cstdlib>  // bswap instrinsic-like functions.
 #include <cstring>  // need this for memset
 
-#include "tier0/basetypes.h"
-#include "tier0/calling_conventions.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/platform_detection.h"
-#include "tier0/valve_off.h"
-#include "tier0/wchartypes.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/calling_conventions.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/platform_detection.h"
+#include "tier0/include/valve_off.h"
+#include "tier0/include/wchartypes.h"
 
 // portability / compiler settings
-#if defined(_WIN32)
+#ifdef OS_WIN
 #if defined(_M_IX86)
 #define __i386__ 1
 #endif
-#elif _LINUX
-typedef unsigned int DWORD;
-typedef unsigned short WORD;
+#elif OS_POSIX
+typedef u32 DWORD;
+typedef u16 WORD;
 typedef void *HINSTANCE;
 #define _MAX_PATH PATH_MAX
-#endif  // defined(_WIN32) && !defined(WINDED)
+#endif  // defined(OS_WIN) && !defined(WINDED)
 
 // Defines MAX_PATH
 #ifndef MAX_PATH
@@ -47,7 +50,7 @@ typedef void *HINSTANCE;
 #define ALIGN_VALUE(val, alignment) (((val) + (alignment)-1) & ~((alignment)-1))
 
 // Used to step into the debugger
-#if defined(_WIN32)
+#ifdef OS_WIN
 #define DebuggerBreak() __debugbreak()
 #else
 #define DebuggerBreak() \
@@ -62,8 +65,8 @@ typedef void *HINSTANCE;
 
 // C functions for external declarations that call the appropriate C++ methods
 #ifndef EXPORT
-#ifdef _WIN32
-#define EXPORT _declspec(dllexport)
+#ifdef OS_WIN
+#define EXPORT __declspec(dllexport)
 #else
 #define EXPORT
 #endif
@@ -76,10 +79,10 @@ typedef void *HINSTANCE;
 #endif  // __i386__
 
 // decls for aligning data
-#ifdef _WIN32
+#ifdef OS_WIN
 #define DECL_ALIGN(x) __declspec(align(x))
 
-#elif _LINUX
+#elif OS_POSIX
 #define DECL_ALIGN(x) __attribute__((aligned(x)))
 #elif
 #define DECL_ALIGN(x) /* */
@@ -93,21 +96,21 @@ typedef void *HINSTANCE;
 // Linux had a few areas where it didn't construct objects in the same order
 // that Windows does. So when CVProfile::CVProfile() would access g_pMemAlloc,
 // it would crash because the allocator wasn't initalized yet.
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define CONSTRUCT_EARLY __attribute__((init_priority(101)))
 #else
 #define CONSTRUCT_EARLY
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #define SELECTANY __declspec(selectany)
-#elif _LINUX
+#elif OS_POSIX
 #define SELECTANY __attribute__((weak))
 #else
 #define SELECTANY static
 #endif
 
-#if defined(_WIN32)
+#ifdef OS_WIN
 
 // Used for dll exporting and importing
 #define DLL_EXPORT extern "C" __declspec(dllexport)
@@ -121,7 +124,7 @@ typedef void *HINSTANCE;
 #define DLL_GLOBAL_EXPORT extern __declspec(dllexport)
 #define DLL_GLOBAL_IMPORT extern __declspec(dllimport)
 
-#elif defined _LINUX
+#elif defined OS_POSIX
 // Used for dll exporting and importing
 #define DLL_EXPORT extern "C"
 #define DLL_IMPORT extern "C"
@@ -139,7 +142,7 @@ typedef void *HINSTANCE;
 #endif
 
 // Force a function call site -not- to inlined. (useful for profiling)
-#define DONT_INLINE(a) (((int)(a) + 1) ? (a) : (a))
+#define DONT_INLINE(a) (((i32)(a) + 1) ? (a) : (a))
 
 // Pass hints to the compiler to prevent it from generating unnessecary / stupid
 // code in certain situations.  Several compilers other than MSVC also have an
@@ -149,7 +152,7 @@ typedef void *HINSTANCE;
 // at that point in the compilation.  If '0' is passed, then the compiler
 // assumes that any subsequent code in the same 'basic block' is unreachable,
 // and thus usually removed.
-#ifdef _MSC_VER
+#ifdef COMPILER_MSVC
 #define HINT(THE_HINT) __assume((THE_HINT))
 #else
 #define HINT(THE_HINT) 0
@@ -169,19 +172,19 @@ typedef void *HINSTANCE;
   default:         \
     UNREACHABLE();
 
-#ifdef _WIN32
+#ifdef OS_WIN
 // Alloca defined for this platform
 #define stackalloc(_size) _alloca(ALIGN_VALUE(_size, 16))
 #define stackfree(_p) 0
 #define securestackalloc(_size) _malloca(ALIGN_VALUE(_size, 16))
 #define securestackfree(_p) _freea(_p)
-#elif _LINUX
+#elif OS_POSIX
 // Alloca defined for this platform
 #define stackalloc(_size) _alloca(ALIGN_VALUE(_size, 16))
 #define stackfree(_p) 0
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #define RESTRICT __restrict
 #define RESTRICT_FUNC __declspec(restrict)
 #else
@@ -192,10 +195,10 @@ typedef void *HINSTANCE;
 //-----------------------------------------------------------------------------
 // fsel
 //-----------------------------------------------------------------------------
-static FORCEINLINE float fsel(float fComparand, float fValGE, float fLT) {
+static FORCEINLINE f32 fsel(f32 fComparand, f32 fValGE, f32 fLT) {
   return fComparand >= 0 ? fValGE : fLT;
 }
-static FORCEINLINE double fsel(double fComparand, double fValGE, double fLT) {
+static FORCEINLINE f64 fsel(f64 fComparand, f64 fValGE, f64 fLT) {
   return fComparand >= 0 ? fValGE : fLT;
 }
 
@@ -203,11 +206,11 @@ static FORCEINLINE double fsel(double fComparand, double fValGE, double fLT) {
 // FP exception handling
 //-----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(COMPILER_MSVC)
 inline void SetupFPUControlWord() {
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
   // use local to get and store control word
-  uint16_t tmpCtrlW;
+  u16 tmpCtrlW;
   __asm
   {
 		fnstcw word ptr [tmpCtrlW] /* get current control word */
@@ -219,13 +222,13 @@ inline void SetupFPUControlWord() {
 }
 #else
 inline void SetupFPUControlWord() {
-  __volatile unsigned short int __cw;
+  __volatile u16 __cw;
   __asm __volatile("fnstcw %0" : "=m"(__cw));
   __cw = __cw & 0x0FCC0;  // keep infinity control, keep rounding mode
   __cw = __cw | 0x023F;   // set 53-bit, no exceptions
   __asm __volatile("fldcw %0" : : "m"(__cw));
 }
-#endif  // _MSC_VER
+#endif  // COMPILER_MSVC
 
 //-----------------------------------------------------------------------------
 // Purpose: Standard functions for handling endian-ness
@@ -237,17 +240,17 @@ inline void SetupFPUControlWord() {
 
 template <typename T>
 inline T WordSwapC(T w) {
-  uint16_t temp = ((*((uint16_t *)&w) & 0xff00) >> 8);
-  temp |= ((*((uint16_t *)&w) & 0x00ff) << 8);
+  u16 temp = ((*((u16 *)&w) & 0xff00) >> 8);
+  temp |= ((*((u16 *)&w) & 0x00ff) << 8);
   return *((T *)&temp);
 }
 
 template <typename T>
 inline T DWordSwapC(T dw) {
-  uint32_t temp = *((uint32_t *)&dw) >> 24;
-  temp |= ((*((uint32_t *)&dw) & 0x00FF0000) >> 8);
-  temp |= ((*((uint32_t *)&dw) & 0x0000FF00) << 8);
-  temp |= ((*((uint32_t *)&dw) & 0x000000FF) << 24);
+  u32 temp = *((u32 *)&dw) >> 24;
+  temp |= ((*((u32 *)&dw) & 0x00FF0000) >> 8);
+  temp |= ((*((u32 *)&dw) & 0x0000FF00) << 8);
+  temp |= ((*((u32 *)&dw) & 0x000000FF) << 24);
   return *((T *)&temp);
 }
 
@@ -255,20 +258,20 @@ inline T DWordSwapC(T dw) {
 // Fast swaps
 //-------------------------------------
 
-#if defined(_MSC_VER)
+#ifdef COMPILER_MSVC
 #define WordSwap WordSwapAsm
 #define DWordSwap DWordSwapAsm
 
 template <typename T>
 inline T WordSwapAsm(T w) {
-  static_assert(sizeof(T) == sizeof(unsigned short));
+  static_assert(sizeof(T) == sizeof(u16));
   static_assert(sizeof(T) == 2);
   return _byteswap_ushort(w);
 }
 
 template <typename T>
 inline T DWordSwapAsm(T dw) {
-  static_assert(sizeof(T) == sizeof(unsigned long));
+  static_assert(sizeof(T) == sizeof(u32));
   static_assert(sizeof(T) == 4);
   return _byteswap_ulong(dw);
 }
@@ -289,10 +292,9 @@ inline T DWordSwapAsm(T dw) {
 #define BIG_ENDIAN 1
 #endif
 
-// If a swapped float passes through the fpu, the bytes may get changed.
+// If a swapped f32 passes through the fpu, the bytes may get changed.
 // Prevent this by swapping floats as DWORDs.
-#define SafeSwapFloat(pOut, pIn) \
-  (*((uint32_t *)pOut) = DWordSwap(*((uint32_t *)pIn)))
+#define SafeSwapFloat(pOut, pIn) (*((u32 *)pOut) = DWordSwap(*((u32 *)pIn)))
 
 #if defined(LITTLE_ENDIAN)
 
@@ -340,62 +342,60 @@ inline T DWordSwapAsm(T dw) {
 // optimize the expression and eliminate the other path. On any new
 // platform/compiler this should be tested.
 inline short BigShort(short val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? WordSwap(val) : val;
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? WordSwap(val) : val;
 }
-inline uint16_t BigWord(uint16_t val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? WordSwap(val) : val;
+inline u16 BigWord(u16 val) {
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? WordSwap(val) : val;
 }
 inline long BigLong(long val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? DWordSwap(val) : val;
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? DWordSwap(val) : val;
 }
-inline uint32_t BigDWord(uint32_t val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? DWordSwap(val) : val;
+inline u32 BigDWord(u32 val) {
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? DWordSwap(val) : val;
 }
 inline short LittleShort(short val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? val : WordSwap(val);
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? val : WordSwap(val);
 }
-inline uint16_t LittleWord(uint16_t val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? val : WordSwap(val);
+inline u16 LittleWord(u16 val) {
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? val : WordSwap(val);
 }
 inline long LittleLong(long val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? val : DWordSwap(val);
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? val : DWordSwap(val);
 }
-inline uint32_t LittleDWord(uint32_t val) {
-  int test = 1;
-  return (*(char *)&test == 1) ? val : DWordSwap(val);
+inline u32 LittleDWord(u32 val) {
+  i32 test = 1;
+  return (*(ch *)&test == 1) ? val : DWordSwap(val);
 }
 inline short SwapShort(short val) { return WordSwap(val); }
-inline uint16_t SwapWord(uint16_t val) { return WordSwap(val); }
+inline u16 SwapWord(u16 val) { return WordSwap(val); }
 inline long SwapLong(long val) { return DWordSwap(val); }
-inline uint32_t SwapDWord(uint32_t val) { return DWordSwap(val); }
+inline u32 SwapDWord(u32 val) { return DWordSwap(val); }
 
 // Pass floats by pointer for swapping to avoid truncation in the fpu
-inline void BigFloat(float *pOut, const float *pIn) {
-  int test = 1;
-  (*(char *)&test == 1) ? SafeSwapFloat(pOut, pIn) : (*pOut = *pIn);
+inline void BigFloat(f32 *pOut, const f32 *pIn) {
+  i32 test = 1;
+  (*(ch *)&test == 1) ? SafeSwapFloat(pOut, pIn) : (*pOut = *pIn);
 }
-inline void LittleFloat(float *pOut, const float *pIn) {
-  int test = 1;
-  (*(char *)&test == 1) ? (*pOut = *pIn) : SafeSwapFloat(pOut, pIn);
+inline void LittleFloat(f32 *pOut, const f32 *pIn) {
+  i32 test = 1;
+  (*(ch *)&test == 1) ? (*pOut = *pIn) : SafeSwapFloat(pOut, pIn);
 }
-inline void SwapFloat(float *pOut, const float *pIn) {
-  SafeSwapFloat(pOut, pIn);
-}
+inline void SwapFloat(f32 *pOut, const f32 *pIn) { SafeSwapFloat(pOut, pIn); }
 
 #endif
 
-inline unsigned long LoadLittleDWord(unsigned long *base, size_t dwordIndex) {
+inline unsigned long LoadLittleDWord(unsigned long *base, usize dwordIndex) {
   return LittleDWord(base[dwordIndex]);
 }
 
-inline void StoreLittleDWord(unsigned long *base, size_t dwordIndex,
+inline void StoreLittleDWord(unsigned long *base, usize dwordIndex,
                              unsigned long dword) {
   base[dwordIndex] = LittleDWord(dword);
 }
@@ -421,18 +421,18 @@ inline void StoreLittleDWord(unsigned long *base, size_t dwordIndex,
 #endif  // BUILD_AS_DLL
 
 // Returns time in seconds since the module was loaded.
-PLATFORM_INTERFACE double Plat_FloatTime();
+PLATFORM_INTERFACE f64 Plat_FloatTime();
 // Time in milliseconds.
 PLATFORM_INTERFACE unsigned long Plat_MSTime();
 // Query timer frequency.
-PLATFORM_INTERFACE uint64_t Plat_PerformanceFrequency();
+PLATFORM_INTERFACE u64 Plat_PerformanceFrequency();
 
 // b/w compatibility
 #define Sys_FloatTime Plat_FloatTime
 
 // Processor Information:
 struct CPUInformation {
-  int m_Size;  // Size of this structure, for forward compatibility.
+  i32 m_Size;  // Size of this structure, for forward compatibility.
 
   bool m_bRDTSC : 1,  // Is RDTSC supported?
       m_bCMOV : 1,    // Is CMOV supported?
@@ -443,23 +443,23 @@ struct CPUInformation {
       m_bMMX : 1,     // Is MMX supported?
       m_bHT : 1;      // Is HyperThreading supported?
 
-  uint8_t m_nLogicalProcessors;   // Number op logical processors.
-  uint8_t m_nPhysicalProcessors;  // Number of physical processors
+  u8 m_nLogicalProcessors;   // Number op logical processors.
+  u8 m_nPhysicalProcessors;  // Number of physical processors
 
-  int64_t m_Speed;  // In cycles per second.
+  i64 m_Speed;  // In cycles per second.
 
-  char *m_szProcessorID;  // Processor vendor Identification.
+  ch *m_szProcessorID;  // Processor vendor Identification.
 };
 
 PLATFORM_INTERFACE const CPUInformation &GetCPUInformation();
 
-PLATFORM_INTERFACE void GetCurrentDate(int *pDay, int *pMonth, int *pYear);
+PLATFORM_INTERFACE void GetCurrentDate(i32 *pDay, i32 *pMonth, i32 *pYear);
 
 // Thread related functions
 // Registers the current thread with Tier0's thread management system.
 // This should be called on every thread created in the game.
 PLATFORM_INTERFACE unsigned long Plat_RegisterThread(
-    const char *pName = "Source Thread");
+    const ch *pName = "Source Thread");
 
 // Registers the current thread as the primary thread.
 PLATFORM_INTERFACE unsigned long Plat_RegisterPrimaryThread();
@@ -468,7 +468,7 @@ PLATFORM_INTERFACE unsigned long Plat_RegisterPrimaryThread();
 // debugger. This should generally only be handled by Plat_RegisterThread and
 // Plat_RegisterPrimaryThread
 PLATFORM_INTERFACE void Plat_SetThreadName(unsigned long dwThreadID,
-                                           const char *pName);
+                                           const ch *pName);
 
 // These would be private if it were possible to export private variables from a
 // .DLL. They need to be variables because they are checked by inline functions
@@ -490,24 +490,24 @@ inline bool Plat_IsPrimaryThread() {
 //-----------------------------------------------------------------------------
 // Process related functions
 //-----------------------------------------------------------------------------
-PLATFORM_INTERFACE const char *Plat_GetCommandLine();
-#ifndef _WIN32
+PLATFORM_INTERFACE const ch *Plat_GetCommandLine();
+#ifndef OS_WIN
 // helper function for OS's that don't have a ::GetCommandLine() call
-PLATFORM_INTERFACE void Plat_SetCommandLine(const char *cmdLine);
+PLATFORM_INTERFACE void Plat_SetCommandLine(const ch *cmdLine);
 #endif
-PLATFORM_INTERFACE const char *Plat_GetCommandLineA();
+PLATFORM_INTERFACE const ch *Plat_GetCommandLineA();
 
 //-----------------------------------------------------------------------------
 // Just logs file and line to simple.log
 //-----------------------------------------------------------------------------
-PLATFORM_INTERFACE bool Plat_SimpleLog(const char *file, int line);
+PLATFORM_INTERFACE bool Plat_SimpleLog(const ch *file, i32 line);
 
 //-----------------------------------------------------------------------------
 // Returns true if debugger attached, false otherwise
 //-----------------------------------------------------------------------------
-#if defined(_WIN32)
+#ifdef OS_WIN
 PLATFORM_INTERFACE bool Plat_IsInDebugSession();
-PLATFORM_INTERFACE void Plat_DebugString(const char *);
+PLATFORM_INTERFACE void Plat_DebugString(const ch *);
 #else
 #define Plat_IsInDebugSession() (false)
 #define Plat_DebugString(s) ((void)0)
@@ -547,7 +547,7 @@ PLATFORM_INTERFACE void Plat_DebugString(const char *);
 #define WM_XMP_PLAYBACKBEHAVIORCHANGED (WM_USER + 122)
 #define WM_XMP_PLAYBACKCONTROLLERCHANGED (WM_USER + 123)
 
-inline const char *GetPlatformExt() { return IsX360() ? ".360" : ""; }
+inline const ch *GetPlatformExt() { return IsX360() ? ".360" : ""; }
 
 // flat view, 6 hw threads
 #define XBOX_PROCESSOR_0 (1 << 0)
@@ -566,7 +566,7 @@ inline const char *GetPlatformExt() { return IsX360() ? ".360" : ""; }
 #define XBOX_CORE_2_HWTHREAD_1 XBOX_PROCESSOR_5
 
 // Include additional dependant header components.
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 // Methods to invoke the constructor, copy constructor, and destructor
 template <class T>
@@ -583,7 +583,7 @@ template <class T>
 inline void Destruct(T *pMemory) {
   pMemory->~T();
 
-#ifdef _DEBUG
+#ifndef NDEBUG
   memset(pMemory, 0xDD, sizeof(T));
 #endif
 }
@@ -612,7 +612,7 @@ inline void Destruct(T *pMemory) {
 //	};
 
 #define GET_OUTER(OuterType, OuterMember) \
-  ((OuterType *)((uint8_t *)this - offsetof(OuterType, OuterMember)))
+  ((OuterType *)((u8 *)this - offsetof(OuterType, OuterMember)))
 
 /*	TEMPLATE_FUNCTION_TABLE()
 
@@ -626,7 +626,7 @@ inline void Destruct(T *pMemory) {
 
         For example, using TEMPLATE_FUNCTION_TABLE, this:
 
-        TEMPLATE_FUNCTION_TABLE(int, Function, ( int blah, int blah ), 10)
+        TEMPLATE_FUNCTION_TABLE(i32, Function, ( i32 blah, i32 blah ), 10)
         {
                 return argument * argument;
         }
@@ -637,17 +637,17 @@ inline void Destruct(T *pMemory) {
         generation bugs involved with directly specializing a function
         based on a constant.)
 
-        template<int argument>
+        template<i32 argument>
         class FunctionWrapper
         {
         public:
-                int Function( int blah, int blah )
+                i32 Function( i32 blah, i32 blah )
                 {
  return argument*argument;
                 }
         }
 
-        typedef int (*FunctionType)( int blah, int blah );
+        typedef i32 (*FunctionType)( i32 blah, i32 blah );
 
         class FunctionName
         {
@@ -677,13 +677,13 @@ PLATFORM_INTERFACE bool vtune(bool resume);
                                                                        \
   typedef RETURN_TYPE(FASTCALL *__Type_##NAME) ARGS;                   \
                                                                        \
-  template <const int nArgument>                                       \
+  template <const i32 nArgument>                                       \
                                                                        \
   struct __Function_##NAME {                                           \
     static RETURN_TYPE FASTCALL Run ARGS;                              \
   };                                                                   \
                                                                        \
-  template <const int i>                                               \
+  template <const i32 i>                                               \
                                                                        \
   struct __MetaLooper_##NAME : __MetaLooper_##NAME<i - 1> {            \
     __Type_##NAME func;                                                \
@@ -710,7 +710,7 @@ PLATFORM_INTERFACE bool vtune(bool resume);
                                                                        \
   const __Type_##NAME *NAME::functions = (__Type_##NAME *)&m;          \
                                                                        \
-  template <const int nArgument>                                       \
+  template <const i32 nArgument>                                       \
                                                                        \
   RETURN_TYPE FASTCALL __Function_##NAME<nArgument>::Run ARGS
 
@@ -721,11 +721,11 @@ PLATFORM_INTERFACE bool vtune(bool resume);
     CODE;                               \
   }
 
-#if defined(_INC_WINDOWS) && defined(_WIN32)
+#if defined(_INC_WINDOWS) && defined(OS_WIN)
 template <typename FUNCPTR_TYPE>
 class CDynamicFunction {
  public:
-  CDynamicFunction(const char *pszModule, const char *pszName,
+  CDynamicFunction(const ch *pszModule, const ch *pszName,
                    FUNCPTR_TYPE pfnFallback = nullptr) {
     m_pfn = pfnFallback;
 
@@ -750,6 +750,6 @@ class CDynamicFunction {
 };
 #endif
 
-#include "tier0/valve_on.h"
+#include "tier0/include/valve_on.h"
 
 #endif  // SOURCE_TIER0_PLATFORM_H_

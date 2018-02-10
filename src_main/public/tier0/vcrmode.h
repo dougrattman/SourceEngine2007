@@ -10,16 +10,19 @@
 #ifndef SOURCE_TIER0_VCRMODE_H_
 #define SOURCE_TIER0_VCRMODE_H_
 
-#ifdef _WIN32
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
 #include <process.h>
 #endif
 
-#include "tier0/platform.h"
-#include "tier0/vcr_shared.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vcr_shared.h"
 
-#ifdef _LINUX
-void BuildCmdLine(int argc, char **argv);
-char *GetCommandLine();
+#ifdef OS_POSIX
+void BuildCmdLine(i32 argc, ch **argv);
+ch *GetCommandLine();
 #endif
 
 // Enclose lines of code in this if you don't want anything in them written to
@@ -44,7 +47,7 @@ enum VCRMode_t { VCR_Invalid = -1, VCR_Disabled = 0, VCR_Record, VCR_Playback };
 
 abstract_class IVCRHelpers {
  public:
-  virtual void ErrorMessage(const char *pMsg) = 0;
+  virtual void ErrorMessage(const ch *pMsg) = 0;
   virtual void *GetMainWindow() = 0;
 };
 
@@ -52,12 +55,12 @@ abstract_class IVCRHelpers {
 abstract_class IVCRTrace {
  public:
   virtual VCREvent ReadEvent() = 0;
-  virtual void Read(void *pDest, int size) = 0;
+  virtual void Read(void *pDest, i32 size) = 0;
 };
 
 typedef struct VCR_s {
   // Start VCR record or play.
-  BOOL (*Start)(char const *pFilename, bool bRecord, IVCRHelpers *pHelpers);
+  BOOL (*Start)(ch const *pFilename, bool bRecord, IVCRHelpers *pHelpers);
   void (*End)();
 
   // Used by the VCR trace app.
@@ -71,21 +74,20 @@ typedef struct VCR_s {
   // mode usage on a PER-THREAD basis. The assumption is that you're marking out
   // specific sections of code that you don't want to use VCR mode inside of,
   // but you're not intending to stop all the other threads from using VCR mode.
-  void (*SetEnabled)(int bEnabled);
+  void (*SetEnabled)(i32 bEnabled);
 
   // This can be called any time to put in a debug check to make sure things are
   // synchronized.
-  void (*SyncToken)(char const *pToken);
+  void (*SyncToken)(ch const *pToken);
 
   // Hook for Sys_FloatTime().
-  double (*Hook_Sys_FloatTime)(double time);
+  f64 (*Hook_Sys_FloatTime)(f64 time);
 
   // Note: this makes no guarantees about msg.hwnd being the same on playback.
   // If it needs to be, then we need to add an ID system for Windows and store
   // the ID like in Goldsrc.
-  int (*Hook_PeekMessage)(struct tagMSG *msg, void *hWnd,
-                          unsigned int wMsgFilterMin,
-                          unsigned int wMsgFilterMax, unsigned int wRemoveMsg);
+  i32 (*Hook_PeekMessage)(struct tagMSG *msg, void *hWnd, u32 wMsgFilterMin,
+                          u32 wMsgFilterMax, u32 wRemoveMsg);
 
   // Call this to record game messages.
   void (*Hook_RecordGameMsg)(const InputEvent_t &event);
@@ -95,60 +97,60 @@ typedef struct VCR_s {
   bool (*Hook_PlaybackGameMsg)(InputEvent_t *pEvent);
 
   // Hook for recvfrom() calls. This replaces the recvfrom() call.
-  int (*Hook_recvfrom)(int s, char *buf, int len, int flags,
-                       struct sockaddr *from, int *fromlen);
+  i32 (*Hook_recvfrom)(i32 s, ch *buf, i32 len, i32 flags,
+                       struct sockaddr *from, i32 *fromlen);
 
   void (*Hook_GetCursorPos)(struct tagPOINT *pt);
   void (*Hook_ScreenToClient)(void *hWnd, struct tagPOINT *pt);
 
-  void (*Hook_Cmd_Exec)(char **f);
+  void (*Hook_Cmd_Exec)(ch **f);
 
-  char *(*Hook_GetCommandLine)();
+  ch *(*Hook_GetCommandLine)();
 
   // Registry hooks.
-  long (*Hook_RegOpenKeyEx)(void *hKey, const char *lpSubKey,
+  long (*Hook_RegOpenKeyEx)(void *hKey, const ch *lpSubKey,
                             unsigned long ulOptions, unsigned long samDesired,
                             void *pHKey);
-  long (*Hook_RegSetValueEx)(void *hKey, char const *lpValueName,
+  long (*Hook_RegSetValueEx)(void *hKey, ch const *lpValueName,
                              unsigned long Reserved, unsigned long dwType,
-                             uint8_t const *lpData, unsigned long cbData);
-  long (*Hook_RegQueryValueEx)(void *hKey, char const *lpValueName,
+                             u8 const *lpData, unsigned long cbData);
+  long (*Hook_RegQueryValueEx)(void *hKey, ch const *lpValueName,
                                unsigned long *lpReserved, unsigned long *lpType,
-                               uint8_t *lpData, unsigned long *lpcbData);
-  long (*Hook_RegCreateKeyEx)(void *hKey, char const *lpSubKey,
-                              unsigned long Reserved, char *lpClass,
+                               u8 *lpData, unsigned long *lpcbData);
+  long (*Hook_RegCreateKeyEx)(void *hKey, ch const *lpSubKey,
+                              unsigned long Reserved, ch *lpClass,
                               unsigned long dwOptions, unsigned long samDesired,
                               void *lpSecurityAttributes, void *phkResult,
                               unsigned long *lpdwDisposition);
   void (*Hook_RegCloseKey)(void *hKey);
 
   // hInput is a HANDLE.
-  int (*Hook_GetNumberOfConsoleInputEvents)(void *hInput,
+  i32 (*Hook_GetNumberOfConsoleInputEvents)(void *hInput,
                                             unsigned long *pNumEvents);
 
   // hInput is a HANDLE.
   // pRecs is an INPUT_RECORD pointer.
-  int (*Hook_ReadConsoleInput)(void *hInput, void *pRecs, int nMaxRecs,
+  i32 (*Hook_ReadConsoleInput)(void *hInput, void *pRecs, i32 nMaxRecs,
                                unsigned long *pNumRead);
 
   // This calls time() then gives you localtime()'s result.
   void (*Hook_LocalTime)(struct tm *today);
 
-  short (*Hook_GetKeyState)(int nVirtKey);
+  short (*Hook_GetKeyState)(i32 nVirtKey);
 
   // TCP calls.
-  int (*Hook_recv)(int s, char *buf, int len, int flags);
-  int (*Hook_send)(int s, const char *buf, int len, int flags);
+  i32 (*Hook_recv)(i32 s, ch *buf, i32 len, i32 flags);
+  i32 (*Hook_send)(i32 s, const ch *buf, i32 len, i32 flags);
 
   // These can be used to add events without having to modify VCR mode.
   // pEventName is used for verification to make sure it's playing back
   // correctly. If pEventName is 0, then verification is not performed.
-  void (*GenericRecord)(const char *pEventName, const void *pData, int len);
+  void (*GenericRecord)(const ch *pEventName, const void *pData, i32 len);
 
   // Returns the number of bytes written in the generic event.
   // If bForceLenSame is true, then it will error out unless the value in the
   // VCR file is the same as maxLen.
-  int (*GenericPlayback)(const char *pEventName, void *pOutData, int maxLen,
+  i32 (*GenericPlayback)(const ch *pEventName, void *pOutData, i32 maxLen,
                          bool bForceLenSame);
 
   // If you just want to record and playback a value and not worry about whether
@@ -158,11 +160,11 @@ typedef struct VCR_s {
   // NOTE: also see GenericValueVerify, which allows you to have it VERIFY that
   // pData's contents are the same upon playback (rather than just copying
   // whatever is in the VCR file into pData).
-  void (*GenericValue)(const char *pEventName, void *pData, int maxLen);
+  void (*GenericValue)(const ch *pEventName, void *pData, i32 maxLen);
 
   // Get the current percent (0.0 - 1.0) that it's played back through the file
   // (only valid in playback).
-  double (*GetPercentCompleted)();
+  f64 (*GetPercentCompleted)();
 
   // If you use this, then any VCR stuff the thread does will work with VCR
   // mode. This mirrors the Windows API CreateThread function and returns a
@@ -181,17 +183,17 @@ typedef struct VCR_s {
 
   // String value. Playback just verifies that the incoming string is the same
   // as it was when recording.
-  void (*GenericString)(const char *pEventName, const char *pString);
+  void (*GenericString)(const ch *pEventName, const ch *pString);
 
   // Works like GenericValue, except upon playback it will verify that pData's
   // contents are the same as it was during recording.
-  void (*GenericValueVerify)(const char *pEventName, const void *pData,
-                             int maxLen);
+  void (*GenericValueVerify)(const ch *pEventName, const void *pData,
+                             i32 maxLen);
 
-  unsigned long (*Hook_WaitForMultipleObjects)(uint32_t handles_count,
+  unsigned long (*Hook_WaitForMultipleObjects)(u32 handles_count,
                                                const void **handles,
                                                BOOL is_wait_all,
-                                               uint32_t milliseconds);
+                                               u32 milliseconds);
 
 } VCR_t;
 

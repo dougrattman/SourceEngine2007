@@ -8,21 +8,24 @@
 #ifndef SOURCE_TIER0_TSLIST_H_
 #define SOURCE_TIER0_TSLIST_H_
 
-#if defined(_WIN64)
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
+#if defined(ARCH_CPU_X86_64)
 #define USE_NATIVE_SLIST
 #endif
 
 #if defined(USE_NATIVE_SLIST)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
-#if defined(_WIN64)
+#if defined(ARCH_CPU_X86_64)
 #define TSLIST_HEAD_ALIGNMENT MEMORY_ALLOCATION_ALIGNMENT
 #define TSLIST_NODE_ALIGNMENT MEMORY_ALLOCATION_ALIGNMENT
 
@@ -37,8 +40,8 @@
 #define TSLIST_HEAD_ALIGN DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
 #define TSLIST_NODE_ALIGN DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
 
-PLATFORM_INTERFACE bool RunTSQueueTests(int nListSize = 10000, int nTests = 1);
-PLATFORM_INTERFACE bool RunTSListTests(int nListSize = 10000, int nTests = 1);
+PLATFORM_INTERFACE bool RunTSQueueTests(i32 nListSize = 10000, i32 nTests = 1);
+PLATFORM_INTERFACE bool RunTSListTests(i32 nListSize = 10000, i32 nTests = 1);
 
 // Lock free list.
 
@@ -60,11 +63,11 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 union TSLHead_t {
   struct Value_t {
     TSLNodeBase_t *Next;
-    int16_t Depth;
-    int16_t Sequence;
+    i16 Depth;
+    i16 Sequence;
   } value;
 
-  int64_t value64;
+  i64 value64;
 };
 #endif
 
@@ -73,7 +76,7 @@ union TSLHead_t {
 class TSLIST_HEAD_ALIGN CTSListBase {
  public:
   CTSListBase() {
-    if (((size_t)&m_Head) % TSLIST_HEAD_ALIGNMENT != 0) {
+    if (((usize)&m_Head) % TSLIST_HEAD_ALIGNMENT != 0) {
       Error("CTSListBase: Misaligned list\n");
       DebuggerBreak();
     }
@@ -81,14 +84,14 @@ class TSLIST_HEAD_ALIGN CTSListBase {
 #ifdef USE_NATIVE_SLIST
     InitializeSListHead(&m_Head);
 #else
-    m_Head.value64 = (int64_t)0;
+    m_Head.value64 = (i64)0;
 #endif
   }
 
   ~CTSListBase() { Detach(); }
 
   TSLNodeBase_t *Push(TSLNodeBase_t *pNode) {
-    if ((size_t)pNode % TSLIST_NODE_ALIGNMENT != 0) {
+    if ((usize)pNode % TSLIST_NODE_ALIGNMENT != 0) {
       Error("CTSListBase: Misaligned node\n");
       DebuggerBreak();
     }
@@ -103,8 +106,7 @@ class TSLIST_HEAD_ALIGN CTSListBase {
       oldHead.value64 = m_Head.value64;
       pNode->Next = oldHead.value.Next;
       newHead.value.Next = pNode;
-      *((uint32_t *)&newHead.value.Depth) =
-          *((uint32_t *)&oldHead.value.Depth) + 0x10001;
+      *((u32 *)&newHead.value.Depth) = *((u32 *)&oldHead.value.Depth) + 0x10001;
 
       if (ThreadInterlockedAssignIf64(&m_Head.value64, newHead.value64,
                                       oldHead.value64)) {
@@ -130,8 +132,7 @@ class TSLIST_HEAD_ALIGN CTSListBase {
       if (!oldHead.value.Next) return nullptr;
 
       newHead.value.Next = oldHead.value.Next->Next;
-      *((uint32_t *)&newHead.value.Depth) =
-          *((uint32_t *)&oldHead.value.Depth) - 1;
+      *((u32 *)&newHead.value.Depth) = *((u32 *)&oldHead.value.Depth) - 1;
 
       if (ThreadInterlockedAssignIf64(&m_Head.value64, newHead.value64,
                                       oldHead.value64)) {
@@ -159,8 +160,8 @@ class TSLIST_HEAD_ALIGN CTSListBase {
       if (!oldHead.value.Next) return nullptr;
 
       newHead.value.Next = nullptr;
-      *((uint32_t *)&newHead.value.Depth) =
-          *((uint32_t *)&oldHead.value.Depth) & 0xffff0000;
+      *((u32 *)&newHead.value.Depth) =
+          *((u32 *)&oldHead.value.Depth) & 0xffff0000;
 
     } while (!ThreadInterlockedAssignIf64(&m_Head.value64, newHead.value64,
                                           oldHead.value64));
@@ -169,7 +170,7 @@ class TSLIST_HEAD_ALIGN CTSListBase {
 #endif
   }
 
-  unsigned short Count() {
+  u16 Count() {
 #ifdef USE_NATIVE_SLIST
     return QueryDepthSList(&m_Head);
 #else
@@ -260,7 +261,7 @@ class TSLIST_HEAD_ALIGN CTSPool : public CTSListBase {
   }
 
   void PutObject(T *pInfo) {
-    char *pElem = (char *)pInfo;
+    ch *pElem = (ch *)pInfo;
     pElem -= offsetof(simpleTSPoolStruct_t, elem);
     simpleTSPoolStruct_t *pNode = (simpleTSPoolStruct_t *)pElem;
 
@@ -307,19 +308,19 @@ class TSLIST_HEAD_ALIGN CTSQueue {
   union TSLIST_HEAD_ALIGN NodeLink_t {
     struct Value_t {
       Node_t *pNode;
-      int32_t sequence;
+      i32 sequence;
     } value;
 
-    int64_t value64;
+    i64 value64;
   };
 
   CTSQueue() {
     COMPILE_TIME_ASSERT(sizeof(Node_t) >= sizeof(TSLNodeBase_t));
-    if (((size_t)&m_Head) % TSLIST_HEAD_ALIGNMENT != 0) {
+    if (((usize)&m_Head) % TSLIST_HEAD_ALIGNMENT != 0) {
       Error("CTSQueue: Misaligned queue\n");
       DebuggerBreak();
     }
-    if (((size_t)&m_Tail) % TSLIST_HEAD_ALIGNMENT != 0) {
+    if (((usize)&m_Tail) % TSLIST_HEAD_ALIGNMENT != 0) {
       Error("CTSQueue: Misaligned queue\n");
       DebuggerBreak();
     }
@@ -373,7 +374,7 @@ class TSLIST_HEAD_ALIGN CTSQueue {
 
   bool Validate() {
     bool bResult = true;
-    int nNodes = 0;
+    i32 nNodes = 0;
     if (m_Tail.value.pNode->pNext != End()) {
       DebuggerBreakIfDebugging();
       bResult = false;
@@ -416,8 +417,8 @@ class TSLIST_HEAD_ALIGN CTSQueue {
   }
 
   Node_t *Push(Node_t *pNode) {
-#ifdef _DEBUG
-    if ((size_t)pNode % TSLIST_NODE_ALIGNMENT != 0) {
+#ifndef NDEBUG
+    if ((usize)pNode % TSLIST_NODE_ALIGNMENT != 0) {
       Error("CTSListBase: Misaligned node\n");
       DebuggerBreak();
     }
@@ -449,13 +450,13 @@ class TSLIST_HEAD_ALIGN CTSQueue {
     NodeLink_t *volatile pHead = &m_Head;
     NodeLink_t *volatile pTail = &m_Tail;
     Node_t *volatile *pHeadNode = &m_Head.value.pNode;
-    volatile int *volatile pHeadSequence = &m_Head.value.sequence;
+    volatile i32 *volatile pHeadSequence = &m_Head.value.sequence;
     Node_t *volatile *pTailNode = &pTail->value.pNode;
 
     NodeLink_t head;
     NodeLink_t newHead;
     Node_t *pNext;
-    int tailSequence;
+    i32 tailSequence;
     T elem;
 
     for (;;) {
@@ -528,12 +529,12 @@ class TSLIST_HEAD_ALIGN CTSQueue {
     return true;
   }
 
-  int Count() { return m_Count; }
+  i32 Count() { return m_Count; }
 
  private:
   Node_t *End() { return (Node_t *)this; }  // just need a unique signifier
 
-#ifndef _WIN64
+#ifndef ARCH_CPU_X86_64
   Node_t *InterlockedCompareExchangeNode(Node_t *volatile *ppNode,
                                          Node_t *value, Node_t *comperand) {
     return (Node_t *)::ThreadInterlockedCompareExchangePointer(
@@ -543,7 +544,7 @@ class TSLIST_HEAD_ALIGN CTSQueue {
   bool InterlockedCompareExchangeNodeLink(NodeLink_t volatile *pLink,
                                           const NodeLink_t &value,
                                           const NodeLink_t &comperand) {
-    return ThreadInterlockedAssignIf64((int64_t *)pLink, value.value64,
+    return ThreadInterlockedAssignIf64((i64 *)pLink, value.value64,
                                        comperand.value64);
   }
 
@@ -580,6 +581,6 @@ class TSLIST_HEAD_ALIGN CTSQueue {
 
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER0_TSLIST_H_

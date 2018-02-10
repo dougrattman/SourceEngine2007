@@ -1,0 +1,23 @@
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+//
+// Purpose: Thread management routines
+
+#include "pch_tier0.h"
+
+#include "tier0/include/threadtools.h"
+
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
+
+#include "tier0/include/valve_off.h"
+
+void Plat_SetThreadName(u32 dwThreadID, const ch *pszName) {
+  ThreadSetDebugName(dwThreadID, pszName);
+}
+
+unsigned long Plat_RegisterThread(const ch *pszName) {
+  ThreadSetDebugName(pszName);
+  return ThreadGetCurrentId();
+}
+
+unsigned long Plat_GetCurrentThreadID() { return ThreadGetCurrentId(); }

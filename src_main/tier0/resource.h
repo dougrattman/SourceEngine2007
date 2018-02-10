@@ -1,5 +1,9 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
+#include "base/include/windows/product_version.h"
+
+#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome platform level 0 library"
+
 #define IDD_ASSERT_DIALOG 101
 #define IDC_FILENAME_CONTROL 1000
 #define IDC_LINE_CONTROL 1001
@@ -13,14 +17,3 @@
 #define IDC_IGNORE_NUMTIMES 1010
 #define IDC_ASSERT_MSG_CTRL 1011
 #define IDC_NOID -1
-
-// Next default values for new objects
-//
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE 103
-#define _APS_NEXT_COMMAND_VALUE 40001
-#define _APS_NEXT_CONTROL_VALUE 1005
-#define _APS_NEXT_SYMED_VALUE 101
-#endif
-#endif

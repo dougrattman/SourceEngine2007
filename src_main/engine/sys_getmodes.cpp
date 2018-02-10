@@ -1175,7 +1175,7 @@ void CVideoMode_Common::TakeSnapshotPFMRect(const char *pFilename, int x, int y,
   // Restore the render target.
   pRenderContext->SetRenderTarget(pSaveRenderTarget);
 
-  // convert from float16 to float32_t
+  // convert from float16 to float32
   ImageLoader::ConvertImageFormat(
       (unsigned char *)pImage, IMAGE_FORMAT_RGBA16161616F,
       (unsigned char *)pImage1, IMAGE_FORMAT_RGB323232F, w, h);

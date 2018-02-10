@@ -15,7 +15,7 @@
 #include "mathlib/ssemath.h"
 #include "mathlib/ssequaternion.h"
 #include "mathlib/vector.h"
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
 #include "sse.h"
 #endif
 #include "tier0/basetypes.h"
@@ -2887,7 +2887,7 @@ void MathLib_Init(float gamma, float texGamma, float brightness, int overbright,
   if (bAllowSSE && pi.m_bSSE) {
     s_bSSEEnabled = true;
 
-#ifndef X64BITS
+#ifndef ARCH_CPU_X86_64
     // Select the SSE specific routines if available
     pfVectorNormalize = _VectorNormalize;
     pfVectorNormalizeFast = _SSE_VectorNormalizeFast;
@@ -2897,7 +2897,7 @@ void MathLib_Init(float gamma, float texGamma, float brightness, int overbright,
     pfRSqrtFast = _SSE_RSqrtFast;
 #endif
 
-#if defined _WIN32 && !defined X64BITS
+#if defined _WIN32 && !defined ARCH_CPU_X86_64
     pfFastSinCos = _SSE_SinCos;
     pfFastCos = _SSE_cos;
 #endif
@@ -2907,7 +2907,7 @@ void MathLib_Init(float gamma, float texGamma, float brightness, int overbright,
 
   if (bAllowSSE2 && pi.m_bSSE2) {
     s_bSSE2Enabled = true;
-#if defined _WIN32 && !defined X64BITS
+#if defined _WIN32 && !defined ARCH_CPU_X86_64
     pfFastSinCos = _SSE2_SinCos;
     pfFastCos = _SSE2_cos;
 #endif
@@ -3520,7 +3520,7 @@ void RGBtoHSV(const Vector &rgb, Vector &hsv) {
   if (hsv.y == 0.0F) {
     hsv.x = -1.0f;
   } else {
-    float32_t d = flMax - flMin;
+    f32 d = flMax - flMin;
     if (rgb.x == flMax) {
       hsv.x = (rgb.y - rgb.z) / d;
     } else if (rgb.y == flMax) {
@@ -3544,16 +3544,16 @@ void HSVtoRGB(const Vector &hsv, Vector &rgb) {
     return;
   }
 
-  float32_t hue = hsv.x;
+  f32 hue = hsv.x;
   if (hue == 360.0F) {
     hue = 0.0F;
   }
   hue /= 60.0F;
   int i = hue;            // integer part
-  float32_t f = hue - i;  // fractional part
-  float32_t p = hsv.z * (1.0F - hsv.y);
-  float32_t q = hsv.z * (1.0F - hsv.y * f);
-  float32_t t = hsv.z * (1.0F - hsv.y * (1.0F - f));
+  f32 f = hue - i;  // fractional part
+  f32 p = hsv.z * (1.0F - hsv.y);
+  f32 q = hsv.z * (1.0F - hsv.y * f);
+  f32 t = hsv.z * (1.0F - hsv.y * (1.0F - f));
   switch (i) {
     case 0:
       rgb.Init(hsv.z, t, p);

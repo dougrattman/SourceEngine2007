@@ -5,17 +5,21 @@
 #ifndef SOURCE_TIER0_MEMSTD_H_
 #define SOURCE_TIER0_MEMSTD_H_
 
-#ifdef _WIN32
-#include "winlite.h"
-#endif
-
 #include <malloc.h>
 #include <algorithm>
+
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
+#include "base/include/windows/windows_light.h"
+#endif
+
 #include "mem_helpers.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
-#include "tier0/threadtools.h"
-#include "tier0/tslist.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/threadtools.h"
+#include "tier0/include/tslist.h"
 
 #pragma pack(4)
 
@@ -29,32 +33,31 @@
 
 class CSmallBlockPool {
  public:
-  void Init(size_t nBlockSize, uint8_t *pBase, size_t initialCommit = 0);
-  size_t GetBlockSize();
+  void Init(usize nBlockSize, u8 *pBase, usize initialCommit = 0);
+  usize GetBlockSize();
   bool IsOwner(void *p);
   void *Alloc();
   void Free(void *p);
-  size_t CountFreeBlocks();
-  size_t GetCommittedSize();
-  size_t CountCommittedBlocks();
-  size_t CountAllocatedBlocks();
-  size_t Compact();
+  usize CountFreeBlocks();
+  usize GetCommittedSize();
+  usize CountCommittedBlocks();
+  usize CountAllocatedBlocks();
+  usize Compact();
 
  private:
-  typedef TSLNodeBase_t FreeBlock_t;
+  using FreeBlock_t = TSLNodeBase_t;
   class CFreeList : public CTSListBase {
    public:
     void Push(void *p) { CTSListBase::Push((TSLNodeBase_t *)p); }
   };
 
   CFreeList m_FreeList;
+  usize m_nBlockSize;
 
-  size_t m_nBlockSize;
-
-  CInterlockedPtr<uint8_t> m_pNextAlloc;
-  uint8_t *m_pCommitLimit;
-  uint8_t *m_pAllocLimit;
-  uint8_t *m_pBase;
+  CInterlockedPtr<u8> m_pNextAlloc;
+  u8 *m_pCommitLimit;
+  u8 *m_pAllocLimit;
+  u8 *m_pBase;
 
   CThreadFastMutex m_CommitMutex;
 };
@@ -62,104 +65,103 @@ class CSmallBlockPool {
 class CSmallBlockHeap {
  public:
   CSmallBlockHeap();
-  bool ShouldUse(size_t nBytes);
+  bool ShouldUse(usize nBytes);
   bool IsOwner(void *p);
-  void *Alloc(size_t nBytes);
-  void *Realloc(void *p, size_t nBytes);
+  void *Alloc(usize nBytes);
+  void *Realloc(void *p, usize nBytes);
   void Free(void *p);
-  size_t GetSize(void *p);
+  usize GetSize(void *p);
   void DumpStats(FILE *pFile = nullptr);
-  size_t Compact();
+  usize Compact();
 
  private:
-  CSmallBlockPool *FindPool(size_t nBytes);
+  CSmallBlockPool *FindPool(usize nBytes);
   CSmallBlockPool *FindPool(void *p);
 
   CSmallBlockPool *m_PoolLookup[MAX_SBH_BLOCK >> 2];
   CSmallBlockPool m_Pools[NUM_POOLS];
-  uint8_t *m_pBase;
-  uint8_t *m_pLimit;
+  u8 *m_pBase;
+  u8 *m_pLimit;
 };
 
 class CStdMemAlloc : public IMemAlloc {
  public:
   CStdMemAlloc()
-      : m_pfnFailHandler(DefaultFailHandler), m_sMemoryAllocFailed((size_t)0) {}
+      : m_pfnFailHandler(DefaultFailHandler), m_sMemoryAllocFailed((usize)0) {}
   // Release versions
-  virtual void *Alloc(size_t nSize);
-  virtual void *Realloc(void *pMem, size_t nSize);
+  virtual void *Alloc(usize nSize);
+  virtual void *Realloc(void *pMem, usize nSize);
   virtual void Free(void *pMem);
-  virtual void *Expand_NoLongerSupported(void *pMem, size_t nSize);
+  virtual void *Expand_NoLongerSupported(void *pMem, usize nSize);
 
   // Debug versions
-  virtual void *Alloc(size_t nSize, const char *pFileName, int nLine);
-  virtual void *Realloc(void *pMem, size_t nSize, const char *pFileName,
-                        int nLine);
-  virtual void Free(void *pMem, const char *pFileName, int nLine);
-  virtual void *Expand_NoLongerSupported(void *pMem, size_t nSize,
-                                         const char *pFileName, int nLine);
+  virtual void *Alloc(usize nSize, const ch *pFileName, i32 nLine);
+  virtual void *Realloc(void *pMem, usize nSize, const ch *pFileName,
+                        i32 nLine);
+  virtual void Free(void *pMem, const ch *pFileName, i32 nLine);
+  virtual void *Expand_NoLongerSupported(void *pMem, usize nSize,
+                                         const ch *pFileName, i32 nLine);
 
   // Returns size of a particular allocation
-  virtual size_t GetSize(void *pMem);
+  virtual usize GetSize(void *pMem);
 
   // Force file + line information for an allocation
-  virtual void PushAllocDbgInfo(const char *pFileName, int nLine);
+  virtual void PushAllocDbgInfo(const ch *pFileName, i32 nLine);
   virtual void PopAllocDbgInfo();
 
   virtual long CrtSetBreakAlloc(long lNewBreakAlloc);
-  virtual int CrtSetReportMode(int nReportType, int nReportMode);
-  virtual int CrtIsValidHeapPointer(const void *pMem);
-  virtual int CrtIsValidPointer(const void *pMem, unsigned int size,
-                                int access);
-  virtual int CrtCheckMemory(void);
-  virtual int CrtSetDbgFlag(int nNewFlag);
+  virtual i32 CrtSetReportMode(i32 nReportType, i32 nReportMode);
+  virtual i32 CrtIsValidHeapPointer(const void *pMem);
+  virtual i32 CrtIsValidPointer(const void *pMem, u32 size, i32 access);
+  virtual i32 CrtCheckMemory();
+  virtual i32 CrtSetDbgFlag(i32 nNewFlag);
   virtual void CrtMemCheckpoint(_CrtMemState *pState);
-  void *CrtSetReportFile(int nRptType, void *hFile);
+  void *CrtSetReportFile(i32 nRptType, void *hFile);
   void *CrtSetReportHook(void *pfnNewHook);
-  int CrtDbgReport(int nRptType, const char *szFile, int nLine,
-                   const char *szModule, const char *pMsg);
-  virtual int heapchk();
+  i32 CrtDbgReport(i32 nRptType, const ch *szFile, i32 nLine,
+                   const ch *szModule, const ch *pMsg);
+  virtual i32 heapchk();
 
   virtual void DumpStats();
-  virtual void DumpStatsFileBase(char const *pchFileBase);
+  virtual void DumpStatsFileBase(ch const *pchFileBase);
 
   virtual bool IsDebugHeap() { return false; }
 
-  virtual void GetActualDbgInfo(const char *&pFileName, int &nLine) {}
-  virtual void RegisterAllocation(const char *pFileName, int nLine,
-                                  size_t nLogicalSize, size_t nActualSize,
-                                  unsigned nTime) {}
-  virtual void RegisterDeallocation(const char *pFileName, int nLine,
-                                    size_t nLogicalSize, size_t nActualSize,
-                                    unsigned nTime) {}
+  virtual void GetActualDbgInfo(const ch *&pFileName, i32 &nLine) {}
+  virtual void RegisterAllocation(const ch *pFileName, i32 nLine,
+                                  usize nLogicalSize, usize nActualSize,
+                                  u32 nTime) {}
+  virtual void RegisterDeallocation(const ch *pFileName, i32 nLine,
+                                    usize nLogicalSize, usize nActualSize,
+                                    u32 nTime) {}
 
-  virtual int GetVersion() { return MEMALLOC_VERSION; }
+  virtual i32 GetVersion() { return MEMALLOC_VERSION; }
 
   virtual void CompactHeap();
 
   virtual MemAllocFailHandler_t SetAllocFailHandler(
       MemAllocFailHandler_t pfnMemAllocFailHandler);
-  size_t CallAllocFailHandler(size_t nBytes) {
+  usize CallAllocFailHandler(usize nBytes) {
     return (*m_pfnFailHandler)(nBytes);
   }
 
-  static size_t DefaultFailHandler(size_t);
+  static usize DefaultFailHandler(usize);
   void DumpBlockStats(void *p) {}
 
-#ifdef _WIN32
+#ifdef OS_WIN
   CSmallBlockHeap m_SmallBlockHeap;
 #endif
 
-#if defined(_MEMTEST)
-  virtual void SetStatsExtraInfo(const char *pMapName, const char *pComment);
+#ifdef _MEMTEST
+  virtual void SetStatsExtraInfo(const ch *pMapName, const ch *pComment);
 #endif
 
-  virtual size_t MemoryAllocFailed();
+  virtual usize MemoryAllocFailed();
 
-  void SetCRTAllocFailed(size_t nMemSize);
+  void SetCRTAllocFailed(usize nMemSize);
 
   MemAllocFailHandler_t m_pfnFailHandler;
-  size_t m_sMemoryAllocFailed;
+  usize m_sMemoryAllocFailed;
 };
 
 #endif  // !SOURCE_TIER0_MEMSTD_H_

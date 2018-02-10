@@ -3,15 +3,13 @@
 #include "pch_tier0.h"
 
 #include <cassert>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
-#ifdef _WIN32
 HINSTANCE g_hTier0Instance = nullptr;
-#endif
 
 #ifndef STATIC_TIER0
 BOOL WINAPI DllMain(_In_ HINSTANCE instance, _In_ DWORD call_reason,
-                    _In_ LPVOID) {
+                    _In_ void *) {
   switch (call_reason) {
     case DLL_PROCESS_ATTACH:
       ::DisableThreadLibraryCalls(instance);

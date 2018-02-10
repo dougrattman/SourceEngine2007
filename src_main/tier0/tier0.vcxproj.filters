@@ -13,66 +13,12 @@
     <Filter Include="Interface Header Files">
       <UniqueIdentifier>{252b0438-8a34-475b-98aa-456d4c15d10a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{a588bcfb-ce21-4f13-84fd-07af0bc52f6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dbg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fasttimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mem_helpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="memdbg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="memstd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="memvalidate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="minidump.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch_tier0.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="platform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="progressbar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="systeminformation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="threadtools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tslist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="vcrmode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="vprof.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="win32consoleio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assert_dialog.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="commandline.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpu.cc">
@@ -81,11 +27,66 @@
     <ClCompile Include="dll_main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="assert_dialog.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <ClCompile Include="base_types.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="command_line.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dbg.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fast_timer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem_helpers.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minidump.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch_tier0.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platform.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thread.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tslist.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vprof.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem_dbg.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem_std.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem_validate.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="progress_bar.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="system_information.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_tools.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vcr_mode.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="win32_console_io.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extendedtrace.h">
@@ -190,8 +191,106 @@
     <ClInclude Include="..\public\tier0\wchartypes.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="include\wchartypes.h">
+      <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="include\basetypes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calling_conventions.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\command_line_switches.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\commonmacros.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\compiler_specific_macroses.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbg.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbgflag.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fasttimer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\floattypes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\icommandline.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mem.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\memalloc.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\memdbgoff.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\memdbgon.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\minidump.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\platform.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\platform_detection.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\progressbar.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protected_things.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\systeminformation.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threadtools.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tslist.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\validator.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\valobject.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\valve_off.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\valve_on.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vcr_shared.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vcrmode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vprof.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\tier0.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="res\assert_dialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

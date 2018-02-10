@@ -10,26 +10,29 @@
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
 // SPECIAL NOTE #2: This must be the final include in a .cpp or .h file!!!
 
-#if defined(_DEBUG) && !defined(USE_MEM_DEBUG)
+#if !defined(NDEBUG) && !defined(USE_MEM_DEBUG)
 #define USE_MEM_DEBUG 1
 #endif
 
 // If debug build or ndebug and not already included MS custom alloc files, or
 // already included this file
-#if (defined(_DEBUG) || !defined(_INC_CRTDBG)) || defined(MEMDBGON_H)
+#if (!defined(NDEBUG) || !defined(_INC_CRTDBG)) || defined(MEMDBGON_H)
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 #include <malloc.h>
 #include <cstring>
 #include <cwchar>
-#include "tier0/commonmacros.h"
-#include "tier0/memalloc.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/memalloc.h"
 
 #if defined(USE_MEM_DEBUG)
-#if defined(_LINUX)
+#if defined(OS_POSIX)
 
 #define _NORMAL_BLOCK 1
 
@@ -40,31 +43,31 @@
 
 #if !defined(DID_THE_OPERATOR_NEW)
 #define DID_THE_OPERATOR_NEW
-inline void *operator new(size_t nSize, int blah, const char *pFileName,
-                          int nLine) {
+inline void *operator new(usize nSize, i32 blah, const ch *pFileName,
+                          i32 nLine) {
   return g_pMemAlloc->Alloc(nSize, pFileName, nLine);
 }
-inline void *operator new[](size_t nSize, int blah, const char *pFileName,
-                            int nLine) {
+inline void *operator new[](usize nSize, i32 blah, const ch *pFileName,
+                            i32 nLine) {
   return g_pMemAlloc->Alloc(nSize, pFileName, nLine);
 }
 #endif
 
-#else  // defined(_LINUX)
+#else  // defined(OS_POSIX)
 
 // Include crtdbg.h and make sure _DEBUG is set to 1.
-#if !defined(_DEBUG)
+#if defined(NDEBUG)
 #define _DEBUG 1
 #include <crtdbg.h>
 #undef _DEBUG
 #else
 #include <crtdbg.h>
-#endif  // !defined(_DEBUG)
+#endif  // defined(NDEBUG)
 
-#endif  // defined(_LINUX)
+#endif  // defined(OS_POSIX)
 #endif
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 // Debug/non-debug agnostic elements
 
@@ -80,8 +83,8 @@ inline void *operator new[](size_t nSize, int blah, const char *pFileName,
 #undef _aligned_free
 
 #ifndef MEMDBGON_H
-inline void *MemAlloc_InlineCallocMemset(void *pMem, size_t nCount,
-                                         size_t nElementSize) {
+inline void *MemAlloc_InlineCallocMemset(void *pMem, usize nCount,
+                                         usize nElementSize) {
   memset(pMem, 0, nElementSize * nCount);
   return pMem;
 }
@@ -123,30 +126,28 @@ inline void *MemAlloc_InlineCallocMemset(void *pMem, size_t nCount,
 // Make sure we don't define strdup twice
 #if !defined(MEMDBGON_H)
 
-inline char *MemAlloc_StrDup(const char *pString, const char *pFileName,
-                             unsigned nLine) {
-  char *pMemory;
+inline ch *MemAlloc_StrDup(const ch *pString, const ch *pFileName, u32 nLine) {
+  ch *pMemory;
 
   if (!pString) return nullptr;
 
-  size_t len = strlen(pString) + 1;
-  if ((pMemory = (char *)g_pMemAlloc->Alloc(len, pFileName, nLine)) !=
-      nullptr) {
+  usize len = strlen(pString) + 1;
+  if ((pMemory = (ch *)g_pMemAlloc->Alloc(len, pFileName, nLine)) != nullptr) {
     return strcpy(pMemory, pString);
   }
 
   return nullptr;
 }
 
-inline wchar_t *MemAlloc_WcStrDup(const wchar_t *pString, const char *pFileName,
-                                  unsigned nLine) {
-  wchar_t *pMemory;
+inline wch *MemAlloc_WcStrDup(const wch *pString, const ch *pFileName,
+                              u32 nLine) {
+  wch *pMemory;
 
   if (!pString) return nullptr;
 
-  size_t len = (wcslen(pString) + 1);
-  if ((pMemory = (wchar_t *)g_pMemAlloc->Alloc(len * sizeof(wchar_t), pFileName,
-                                               nLine)) != nullptr) {
+  usize len = (wcslen(pString) + 1);
+  if ((pMemory = (wch *)g_pMemAlloc->Alloc(len * sizeof(wch), pFileName,
+                                           nLine)) != nullptr) {
     return wcscpy(pMemory, pString);
   }
 
@@ -181,13 +182,13 @@ inline wchar_t *MemAlloc_WcStrDup(const wchar_t *pString, const char *pFileName,
 // Make sure we don't define strdup twice
 #if !defined(MEMDBGON_H)
 
-inline char *MemAlloc_StrDup(const char *pString) {
-  char *pMemory;
+inline ch *MemAlloc_StrDup(const ch *pString) {
+  ch *pMemory;
 
   if (!pString) return nullptr;
 
-  size_t len = strlen(pString) + 1;
-  if ((pMemory = (char *)g_pMemAlloc->Alloc(len)) != nullptr) {
+  usize len = strlen(pString) + 1;
+  if ((pMemory = (ch *)g_pMemAlloc->Alloc(len)) != nullptr) {
     strcpy_s(pMemory, len, pString);
     return pMemory;
   }
@@ -195,14 +196,13 @@ inline char *MemAlloc_StrDup(const char *pString) {
   return nullptr;
 }
 
-inline wchar_t *MemAlloc_WcStrDup(const wchar_t *pString) {
-  wchar_t *pMemory;
+inline wch *MemAlloc_WcStrDup(const wch *pString) {
+  wch *pMemory;
 
   if (!pString) return nullptr;
 
-  size_t len = (wcslen(pString) + 1);
-  if ((pMemory = (wchar_t *)g_pMemAlloc->Alloc(len * sizeof(wchar_t))) !=
-      nullptr) {
+  usize len = (wcslen(pString) + 1);
+  if ((pMemory = (wch *)g_pMemAlloc->Alloc(len * sizeof(wch))) != nullptr) {
     wcscpy_s(pMemory, len, pString);
     return pMemory;
   }
