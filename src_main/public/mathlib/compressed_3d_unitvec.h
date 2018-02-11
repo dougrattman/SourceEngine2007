@@ -4,7 +4,7 @@
 #define SOURCE_MATHLIB_COMPRESSED_3D_UNITVEC_H_
 
 #include "mathlib/vector.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #define UNITVEC_DECLARE_STATICS             \
   float cUnitVector::mUVAdjustment[0x2000]; \

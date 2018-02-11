@@ -6,7 +6,7 @@
 #include "mathlib/vector.h"
 #include "tier1/strtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if !defined(_STATIC_LINKED) || defined(CLIENT_DLL)
 

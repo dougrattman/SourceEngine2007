@@ -120,14 +120,12 @@
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <BrowseInformation>false</BrowseInformation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>$(TargetPath)</OutputFile>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <DelayLoadDLLs>user32.dll</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
@@ -165,13 +163,11 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <BrowseInformation>false</BrowseInformation>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>$(TargetPath)</OutputFile>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <DelayLoadDLLs>user32.dll</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
@@ -213,7 +209,6 @@
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <EnablePREfast>false</EnablePREfast>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <BrowseInformation>false</BrowseInformation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
@@ -224,7 +219,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <OutputFile>$(TargetPath)</OutputFile>
       <DelayLoadDLLs>user32.dll</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
@@ -263,7 +257,6 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <EnablePREfast>false</EnablePREfast>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <BrowseInformation>false</BrowseInformation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -273,7 +266,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <OutputFile>$(TargetPath)</OutputFile>
       <DelayLoadDLLs>user32.dll</DelayLoadDLLs>
       <AdditionalDependencies>delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>

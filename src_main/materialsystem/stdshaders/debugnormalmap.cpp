@@ -25,7 +25,7 @@
 
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_VS_SHADER_FLAGS( DebugNormalMap, "Help for DebugNormalMap", SHADER_NOT_EDITABLE )
 			  

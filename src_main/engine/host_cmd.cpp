@@ -37,9 +37,9 @@
 #include "sv_steamauth.h"
 #include "sys_dll.h"
 #include "testscriptmgr.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "vengineserver_impl.h"
 #include "world.h"
 #include "zone.h"
@@ -58,7 +58,7 @@
 extern IXboxSystem *g_pXboxSystem;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define STEAM_PREFIX "STEAM_"
 

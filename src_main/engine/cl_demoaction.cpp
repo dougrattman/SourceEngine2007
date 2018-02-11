@@ -6,7 +6,7 @@
 
 #include "cl_demoactionmanager.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CBaseDemoAction::CBaseDemoAction() {}
 
@@ -39,7 +39,7 @@ bool CBaseDemoAction::HasActionFinished(void) const {
   return m_bActionFinished;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 void *CBaseDemoAction::operator new(size_t sz) {
   Assert(sz != 0);
@@ -57,7 +57,7 @@ void CBaseDemoAction::operator delete(void *pMem) {
   free(pMem);
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 struct DemoActionDictionary {
   DEMOACTION actiontype;

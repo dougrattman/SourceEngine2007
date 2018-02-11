@@ -30,7 +30,7 @@
 #include "modes.h"
 #include "sys_dll.h"
 #include "sysexternal.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier2/renderutils.h"
 #include "tier2/tier2.h"
 #include "vgui/ISurface.h"
@@ -40,7 +40,7 @@
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
                                bool bMapName);

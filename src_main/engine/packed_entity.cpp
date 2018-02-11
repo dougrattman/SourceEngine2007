@@ -9,9 +9,9 @@
 #include "dt_send.h"
 #include "dt_send_eng.h"
 #include "server_class.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 PackedEntity::PackedEntity() {
   m_pData = NULL;

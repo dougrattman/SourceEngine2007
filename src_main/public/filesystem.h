@@ -6,8 +6,8 @@
 #include <climits>
 
 #include "appframework/IAppSystem.h"
-#include "tier0/memalloc.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/interface.h"
 #include "tier1/utlsymbol.h"

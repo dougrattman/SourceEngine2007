@@ -7,7 +7,7 @@
 
 #include "snd_wave_temp.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
 // FIXME: shouldn't this API be part of IFileSystem?

@@ -12,7 +12,7 @@
 #include "datacache/imdlcache.h"
 #include "istudiorender.h"
 #include "movieobjects/idmemakefileutils.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui/IInput.h"
 #include "vgui/ILocalize.h"
 #include "vgui/IPanel.h"

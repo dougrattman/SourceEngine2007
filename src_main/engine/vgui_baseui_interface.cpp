@@ -33,9 +33,9 @@
 #include "soundflags.h"
 #include "sys.h"  // Sys_GetRegKeyValue()
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vprof.h"
 #include "vgui/Cursor.h"
 #include "vgui/IInput.h"
 #include "vgui/IInputInternal.h"
@@ -82,7 +82,7 @@
 #include "vgui_askconnectpanel.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
 extern HWND *pmainwindow;

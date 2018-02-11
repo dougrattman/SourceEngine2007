@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _LINUX
 #define __cdecl

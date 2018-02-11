@@ -3,7 +3,7 @@
 #ifndef VGUI_TEXTUREBUDGETPANEL_H
 #define VGUI_TEXTUREBUDGETPANEL_H
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "vgui/vgui_basebudgetpanel.h"
 
 #ifdef VPROF_ENABLED

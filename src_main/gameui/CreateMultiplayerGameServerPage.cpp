@@ -14,7 +14,7 @@
 #include "vstdlib/random.h"  // for SRC
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define RANDOM_MAP "#GameUI_RandomMap"
 

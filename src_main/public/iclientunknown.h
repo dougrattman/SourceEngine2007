@@ -12,7 +12,7 @@
 #endif
 
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "ihandleentity.h"
 
 class IClientNetworkable;

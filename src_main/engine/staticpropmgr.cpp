@@ -30,9 +30,9 @@
 #include "render.h"
 #include "server.h"
 #include "sys_dll.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlVector.h"
 #include "tier1/convar.h"
 #include "tier1/generichash.h"
@@ -41,7 +41,7 @@
 #include "vcollide_parse.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Convars!

@@ -7,7 +7,7 @@
 
 #include "appframework/AppFramework.h"
 #include "isys.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 
 #include "base/windows/include/scoped_winsock_initializer.h"

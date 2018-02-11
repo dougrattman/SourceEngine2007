@@ -5,7 +5,7 @@
 #include "mpafile.h"
 #include "tier1/UtlRBTree.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IFileSystem* g_pFullFileSystem;
 

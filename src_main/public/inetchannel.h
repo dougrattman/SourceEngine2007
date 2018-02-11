@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "inetchannelinfo.h"
 #include "tier1/bitbuf.h"
 

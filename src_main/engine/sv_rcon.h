@@ -15,7 +15,7 @@
 #include "tier1/netadr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define RCON_MAX_OUTSTANDING_SENDS \
   100  // max packets to queue before dropping connection

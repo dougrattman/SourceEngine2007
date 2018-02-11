@@ -36,17 +36,17 @@
 #include "snd_audio_source.h"
 #include "sound.h"
 #include "steam/steam_api.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/fmtstr.h"
 #include "vgui/ILocalize.h"
 #include "vgui_baseui_interface.h"
 #include "vgui_controls/Controls.h"
 
-#include "tier0/platform.h"
-#include "tier0/systeminformation.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/systeminformation.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar cl_timeout("cl_timeout", "30", FCVAR_ARCHIVE,
                          "After this many seconds without receiving a packet "

@@ -5,14 +5,14 @@
 #include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
 #include <cmath>
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // see knuth volume 3 for insight.
 

@@ -4,7 +4,7 @@
 #define DATATABLE_RECV_H
 
 #include "dt_common.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #define ADDRESSPROXY_NONE -1
 

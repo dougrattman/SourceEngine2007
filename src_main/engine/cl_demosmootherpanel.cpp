@@ -24,7 +24,7 @@
 #include "demofile/demoformat.h"
 #include "tier2/renderutils.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

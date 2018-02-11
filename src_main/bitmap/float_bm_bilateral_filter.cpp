@@ -6,9 +6,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
+#include "tier0/include/threadtools.h"
 #include "tier2/tier2.h"
 
 struct TBFCalculationContext {

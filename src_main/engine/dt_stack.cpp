@@ -2,7 +2,7 @@
 
 #include "dt_stack.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CDatatableStack::CDatatableStack(CSendTablePrecalc *pPrecalc,
                                  unsigned char *pStructBase, int objectID) {

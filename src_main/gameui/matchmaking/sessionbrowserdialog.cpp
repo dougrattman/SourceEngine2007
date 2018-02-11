@@ -12,7 +12,7 @@
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/Label.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CSessionBrowserDialog *g_pBrowserDialog;
 

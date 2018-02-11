@@ -15,15 +15,15 @@
 #include "optimize.h"
 #include "studio.h"
 #include "studiorendercontext.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/vprof.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/vprof.h"
 #include "tier2/tier2.h"
 
 //#define PROFILE_STUDIO VPROF
 #define PROFILE_STUDIO
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 typedef void (*SoftwareProcessMeshFunc_t)(
     const mstudio_meshvertexdata_t *, matrix3x4_t *pPoseToWorld,

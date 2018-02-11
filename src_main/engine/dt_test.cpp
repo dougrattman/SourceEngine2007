@@ -45,9 +45,9 @@
 #include "dt_utlvector_recv.h"
 #include "dt_utlvector_send.h"
 #include "quakedef.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // If datatables support these again, then uncomment this to have them tested.
 //#define SUPPORT_ARRAYS_OF_DATATABLES

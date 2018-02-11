@@ -5,7 +5,7 @@
 #include "vaudio/ivaudio.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static S32 AILCALLBACK AudioStreamEventCB(U32 user, void FAR *dest,
                                           S32 bytes_requested, S32 offset) {

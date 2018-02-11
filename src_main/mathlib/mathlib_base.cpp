@@ -18,12 +18,12 @@
 #ifndef ARCH_CPU_X86_64
 #include "sse.h"
 #endif
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool s_bMathlibInitialized = false;
 

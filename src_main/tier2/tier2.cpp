@@ -15,7 +15,7 @@
 #include "mdllib/mdllib.h"
 #include "networksystem/inetworksystem.h"
 #include "p4lib/ip4.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // These tier2 libraries must be set by any users of this library.

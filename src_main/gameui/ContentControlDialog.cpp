@@ -7,7 +7,7 @@
 #include "winlite.h"
 
 #include "EngineInterface.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/KeyValues.h"
 #include "tier1/checksum_md5.h"
 #include "tier1/convar.h"
@@ -226,7 +226,10 @@ bool enableContentControl )
 {
         char digestedPW[ 128 ];
     HashPassword(newPW, digestedPW, sizeof( digestedPW ) );
-        
+        
+
+
+
     // Compute the md5 hash and save it.
         unsigned char md5_hash[16];
         MD5Context_t ctx;

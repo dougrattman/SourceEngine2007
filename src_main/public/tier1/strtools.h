@@ -400,11 +400,6 @@ bool V_GenerateUniqueName(char *name, int memsize, const char *prefix,
   return true;
 }
 
-// NOTE: This is for backward compatability!
-// We need to DLL-export the Q methods in vstdlib but not link to them in other
-// projects
-#if !defined(VSTDLIB_BACKWARD_COMPAT)
-
 #define Q_memset V_memset
 #define Q_memcpy V_memcpy
 #define Q_memmove V_memmove
@@ -470,7 +465,5 @@ bool V_GenerateUniqueName(char *name, int memsize, const char *prefix,
 #define Q_GenerateUniqueNameIndex V_GenerateUniqueNameIndex
 #define Q_GenerateUniqueName V_GenerateUniqueName
 #define Q_MakeRelativePath V_MakeRelativePath
-
-#endif  // !defined( VSTDLIB_DLL_EXPORT )
 
 #endif  // SOURCE_TIER1_STRTOOLS_H_

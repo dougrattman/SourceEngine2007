@@ -6,12 +6,12 @@
 #define SOURCE_TIER1_UTLMEMORY_H_
 
 #include <cstring>
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 
@@ -882,6 +882,6 @@ void CUtlMemoryAligned<T, nAlignment>::Purge() {
   }
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLMEMORY_H_

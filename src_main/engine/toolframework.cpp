@@ -4,7 +4,7 @@
 
 #include "filesystem_engine.h"
 #include "quakedef.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/tier1.h"
 #include "tier1/utlvector.h"

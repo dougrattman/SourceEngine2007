@@ -7,7 +7,7 @@
 
 #include "datamap.h"
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 //-----------------------------------------------------------------------------
 // This enumerations defines all the four-CC codes for the client lump names

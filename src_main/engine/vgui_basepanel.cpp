@@ -4,7 +4,7 @@
 
 #include "vgui_basepanel.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Purpose: Determine length of text string
 int DrawTextLen(vgui::HFont font, const wchar_t *text) {

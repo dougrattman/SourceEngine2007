@@ -13,7 +13,7 @@
 #include "vgui_baseui_interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 enum KeyUpTarget_t {
   KEY_UP_ANYTARGET = 0,

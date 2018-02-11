@@ -11,7 +11,7 @@
 #include "r_efxextern.h"
 #include "r_local.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Effects API object.
 static CVEfx efx;

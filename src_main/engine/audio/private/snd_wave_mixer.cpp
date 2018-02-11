@@ -4,7 +4,7 @@
 
 #include "snd_wave_mixer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool FUseHighQualityPitch(channel_t *pChannel);
 

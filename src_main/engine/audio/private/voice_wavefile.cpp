@@ -6,7 +6,7 @@
 
 #include <cstdio>
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static unsigned long ReadDWord(FILE *fp) {
   unsigned long ret;

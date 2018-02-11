@@ -2,9 +2,9 @@
 
 #include "simple_physics.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CSimplePhysics::CSimplePhysics() {
   Init(1.0f / 30.0f);  // default is 30 steps per second

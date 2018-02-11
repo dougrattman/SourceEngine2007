@@ -5,8 +5,8 @@
 
 #include "const.h"
 #include "mempool.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/UtlVector.h"
 
 #include "common.h"

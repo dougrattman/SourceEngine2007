@@ -4,7 +4,7 @@
 
 #include "snd_dev_wave.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool snd_firsttime;
 extern bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,

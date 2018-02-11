@@ -4,7 +4,7 @@
 #define BASEHANDLE_H
 
 #include "const.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 class IHandleEntity;
 

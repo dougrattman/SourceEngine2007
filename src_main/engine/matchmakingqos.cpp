@@ -2,9 +2,9 @@
 
 #include "matchmakingqos.h"
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Default implementation of QOS
 static struct Default_MM_QOS_t : public MM_QOS_t {

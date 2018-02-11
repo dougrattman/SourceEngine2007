@@ -4,7 +4,7 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "particles/particles.h"
 #include "filesystem.h"
 #include "tier2/tier2.h"
@@ -13,7 +13,7 @@
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern int g_nParticle_Multiplier;
 

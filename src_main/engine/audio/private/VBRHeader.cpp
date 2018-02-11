@@ -5,7 +5,7 @@
 #include "VBRHeader.h"
 
 #include "mpafile.h"  // also includes vbrheader.h
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #ifndef MAKEFOURCC
 #define MAKEFOURCC(ch0, ch1, ch2, ch3)              \
@@ -128,7 +128,8 @@ bool CVBRHeader::ExtractXINGHeader(DWORD dwOffset) {
    4		bytes (optional)
    100	toc (optional)
    4		a VBR quality indicator: 0=best 100=worst (optional)
-  
+  
+
 
 
 
@@ -178,7 +179,8 @@ bool CVBRHeader::ExtractVBRIHeader(DWORD dwOffset) {
   2		table scale (for TOC)
   2		size of table entry (max. size = 4 uint8_t (must be stored in an
   integer)) 2		frames per table entry
-  
+  
+
 
 
 

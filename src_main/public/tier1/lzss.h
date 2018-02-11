@@ -7,7 +7,7 @@
 #ifndef SOURCE_TIER1_LZSS_H_
 #define SOURCE_TIER1_LZSS_H_
 
-#include "tier0/calling_conventions.h"
+#include "tier0/include/calling_conventions.h"
 
 #define LZSS_ID (('S' << 24) | ('S' << 16) | ('Z' << 8) | ('L'))
 

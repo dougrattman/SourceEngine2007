@@ -23,7 +23,7 @@
 #include "modes.h"
 #include "r_local.h"
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 #include "traceinit.h"
@@ -36,7 +36,7 @@
 #include "igame.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static CMaterialProxyFactory s_MaterialProxyFactory;
 

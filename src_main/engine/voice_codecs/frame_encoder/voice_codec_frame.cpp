@@ -4,9 +4,9 @@
 
 #include <cstring>
 #include "iframeencoder.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef min
 #define min(a, b) ((a) < (b) ? (a) : (b))

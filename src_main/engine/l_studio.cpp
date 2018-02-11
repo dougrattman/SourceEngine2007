@@ -35,7 +35,7 @@
 #include "studio.h"
 #include "studio_internal.h"
 #include "sys_dll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "vphysics_interface.h"
 #include "vstdlib/random.h"
@@ -52,7 +52,7 @@
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // #define VISUALIZE_TIME_AVERAGE 1
 

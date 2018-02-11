@@ -9,7 +9,7 @@
 #include "jigglebones.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 ConVar JiggleBoneDebug( "cl_jiggle_bone_debug", "0", FCVAR_CHEAT, "Display physics-based 'jiggle bone' debugging information" );

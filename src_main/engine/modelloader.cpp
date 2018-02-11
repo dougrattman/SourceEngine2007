@@ -26,7 +26,7 @@
 #include "materialsystem/materialsystem_config.h"
 #include "r_decal.h"
 #include "sysexternal.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/mempool.h"
 #include "utldict.h"
 #include "zone.h"
@@ -55,7 +55,7 @@
 #include "vphysics_interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar mat_loadtextures("mat_loadtextures", "1", FCVAR_CHEAT);
 static ConVar mod_touchalldata("mod_touchalldata", "1", 0,

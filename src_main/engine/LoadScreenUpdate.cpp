@@ -7,9 +7,9 @@
 #include "LoadScreenUpdate.h"
 
 #include "materialsystem/imaterialsystem.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/delegates.h"
 #include "tier2/tier2.h"
 

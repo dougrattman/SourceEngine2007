@@ -4,7 +4,7 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "particles/particles.h"
 #include "filesystem.h"
 #include "tier2/tier2.h"
@@ -17,7 +17,7 @@
 #include "particles_internal.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 class C_OP_ConstrainDistance : public CParticleOperatorInstance

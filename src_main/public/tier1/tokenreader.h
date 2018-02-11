@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_TOKENREADER_H_
 #define SOURCE_TIER1_TOKENREADER_H_
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 #include <cassert>
 #include <fstream>

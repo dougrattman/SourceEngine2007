@@ -11,7 +11,7 @@
 #include "precache.h"
 #include "quakedef.h"
 #include "sv_client.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/bitbuf.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/netadr.h"

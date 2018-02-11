@@ -5,13 +5,13 @@
 #include "dt_recv_decoder.h"
 #include "filesystem.h"
 #include "filesystem_engine.h"
-#include "tier0/dbg.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 #include "tier1/utlstring.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool g_bDTIEnabled = false;
 const char *g_pDTIFilename = NULL;

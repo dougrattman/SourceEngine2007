@@ -5,11 +5,11 @@
 #ifndef SOURCE_TIER1_UTLFIXEDMEMORY_H_
 #define SOURCE_TIER1_UTLFIXEDMEMORY_H_
 
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 
@@ -319,6 +319,6 @@ void CUtlFixedMemory<T>::Purge() {
   m_nAllocationCount = 0;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLFIXEDMEMORY_H_

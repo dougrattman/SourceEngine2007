@@ -9,7 +9,7 @@
 #include "cl_demoaction.h"
 #include "cl_demouipanel.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

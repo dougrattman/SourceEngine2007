@@ -4,7 +4,7 @@
 
 #include "SourceAppInfo.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 struct SourceAppInfo_t {
   const char *m_pchFullName;

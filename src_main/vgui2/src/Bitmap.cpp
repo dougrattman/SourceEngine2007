@@ -6,13 +6,13 @@
 #include <cstdlib>
 #include <cstring>
 #include "filesystem.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "vgui/ISurface.h"
 #include "vgui_internal.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

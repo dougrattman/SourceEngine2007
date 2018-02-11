@@ -6,7 +6,7 @@
 #include "sys.h"
 #include "tier1/utlsymbol.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Purpose: Fills in a list of commands based on specified subdirectory and
 // extension into the format:

@@ -6,7 +6,7 @@
 #include "iscratchpad3d.h"
 #include "mathlib/mathlib.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CScratchPadGraph::CScratchPadGraph() { m_pPad = NULL; }
 

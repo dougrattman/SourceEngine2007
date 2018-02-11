@@ -21,7 +21,7 @@
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "sys.h"
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "traceinit.h"
 #include "vstdlib/random.h"
@@ -33,7 +33,7 @@
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Things in other C files.
 #define MAX_LOG_DIRECTORIES 10000

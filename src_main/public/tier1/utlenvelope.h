@@ -6,7 +6,7 @@
 #ifndef SOURCE_TIER1_UTLENVELOPE_H_
 #define SOURCE_TIER1_UTLENVELOPE_H_
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/utlstring.h"
 
 class CUtlDataEnvelope {
@@ -79,7 +79,7 @@ class CUtlEnvelope<const char *> {
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 inline void CUtlDataEnvelope::Assign(const void *pData, int nBytes) {
   if (pData) {
@@ -177,6 +177,6 @@ inline CUtlEnvelope<T>::operator void *() const {
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLENVELOPE_H_

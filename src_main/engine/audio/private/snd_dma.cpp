@@ -29,8 +29,8 @@
 #include "host.h"
 #include "icliententity.h"
 #include "icliententitylist.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/mempool.h"
 #include "toolframework/itoolframework.h"
 #include "vaudio/ivaudio.h"
@@ -41,7 +41,7 @@
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ///////////////////////////////////
 // DEBUGGING

@@ -8,13 +8,13 @@
 #include "globalvars_base.h"
 #include "iclientnetworkable.h"
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
-#include "tier0/tslist.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/tslist.h"
 #include "tier1/convar.h"
 #include "tier1/utlmap.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engine;
 extern CGlobalVarsBase *gpGlobals;

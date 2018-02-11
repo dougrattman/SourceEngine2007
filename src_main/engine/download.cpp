@@ -19,12 +19,12 @@
 #include "filesystem.h"
 #include "filesystem_engine.h"
 #include "server.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 #include "vgui_baseui_interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
 static const char *CacheDirectory = "cache";

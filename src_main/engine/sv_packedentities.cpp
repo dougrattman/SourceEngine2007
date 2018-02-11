@@ -21,8 +21,8 @@
 #include "networkstringtableserver.h"
 #include "smooth_average.h"
 #include "sv_main.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/utlbuffer.h"
 #include "vengineserver_impl.h"
 #include "vstdlib/jobthread.h"
@@ -32,7 +32,7 @@ IClientEntityList *entitylist = NULL;
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar sv_debugmanualmode("sv_debugmanualmode", "0", 0,
                           "Make sure entities correctly report whether or not "

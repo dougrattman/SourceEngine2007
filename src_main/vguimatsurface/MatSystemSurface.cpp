@@ -39,8 +39,8 @@
 #include "materialsystem/itexture.h"
 #include "mathlib/VMatrix.h"
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/UtlVector.h"
 #include "tier1/strtools.h"
 #include "vgui/htmlwindow.h"
@@ -48,7 +48,7 @@
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define VPANEL_NORMAL ((vgui::SurfacePlat *)NULL)
 #define VPANEL_MINIMIZED ((vgui::SurfacePlat *)0x00000001)

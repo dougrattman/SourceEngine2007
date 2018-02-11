@@ -9,13 +9,13 @@
 #include "bitmap/imageformat.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 struct S3Palette {
   S3RGBA m_Colors[4];

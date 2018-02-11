@@ -10,7 +10,7 @@
 #include "dt_localtransfer.h"
 #include "iclientnetworkable.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static CLocalNetworkBackdoor s_LocalNetworkBackdoor;
 

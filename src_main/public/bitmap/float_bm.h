@@ -4,8 +4,8 @@
 #define FLOAT_BM_H
 
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 struct PixRGBAF {
   float Red;

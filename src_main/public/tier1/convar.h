@@ -4,7 +4,7 @@
 #define SOURCE_TIER1_CONVAR_H_
 
 #include "icvar.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/iconvar.h"
 #include "tier1/utlstring.h"
 #include "tier1/utlvector.h"

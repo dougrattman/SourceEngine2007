@@ -18,7 +18,7 @@
 #include "vgui_controls\ImagePanel.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------
 // Base class representing a generic menu item. Supports two text labels,

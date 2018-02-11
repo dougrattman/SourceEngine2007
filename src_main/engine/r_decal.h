@@ -8,7 +8,7 @@
 #include "tier1/UtlLinkedList.h"
 #include "utlrbtree.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Initialize and shutdown the decal stuff.
 // R_DecalTerm unlinks all the active decals (which frees their counterparts in
@@ -146,6 +146,6 @@ void R_DecalFlushDestroyList(void);
 extern VMatrix g_BrushToWorldMatrix;
 extern CUtlVector<SurfaceHandle_t> s_DecalSurfaces[MAX_MAT_SORT_GROUPS + 1];
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // R_DECAL_H

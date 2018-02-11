@@ -5,7 +5,7 @@
 #include "quakedef.h"
 #include "server.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void SV_DetermineMulticastRecipients(
     bool usepas, const Vector& origin,

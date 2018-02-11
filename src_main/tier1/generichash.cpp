@@ -7,8 +7,8 @@
 
 #include <ctype.h>
 #include <cstdlib>
-#include "tier0/basetypes.h"
-#include "tier0/platform.h"
+
+#include "base/include/base_types.h"
 
 // Table of randomly shuffled values from 0-255.
 
@@ -37,7 +37,7 @@ static unsigned g_nRandomValues[256] = {
 // String
 //-----------------------------------------------------------------------------
 unsigned FASTCALL HashString(const char *pszKey) {
-  const uint8_t *k = (const uint8_t *)pszKey;
+  const u8 *k = (const u8 *)pszKey;
   unsigned even = 0, odd = 0, n;
 
   while ((n = *k++) != 0) {
@@ -55,7 +55,7 @@ unsigned FASTCALL HashString(const char *pszKey) {
 // Case-insensitive string
 //-----------------------------------------------------------------------------
 unsigned FASTCALL HashStringCaseless(const char *pszKey) {
-  const uint8_t *k = (const uint8_t *)pszKey;
+  const u8 *k = (const u8 *)pszKey;
   unsigned even = 0, odd = 0, n;
 
   while ((n = toupper(*k++)) != 0) {
@@ -77,7 +77,7 @@ unsigned FASTCALL HashStringCaselessConventional(const char *pszKey) {
                                // of the later multiply and add
 
   for (; *pszKey; pszKey++) {
-    hash = ((hash << 5) + hash) + (uint8_t)tolower(*pszKey);
+    hash = ((hash << 5) + hash) + (u8)tolower(*pszKey);
   }
 
   return hash;
@@ -210,7 +210,7 @@ unsigned FASTCALL Hash16(const void *pKey) {
 // Arbitrary fixed length hash
 //-----------------------------------------------------------------------------
 unsigned FASTCALL HashBlock(const void *pKey, unsigned size) {
-  const uint8_t *k = (const uint8_t *)pKey;
+  const u8 *k = (const u8 *)pKey;
   unsigned even = 0, odd = 0, n;
 
   while (size) {

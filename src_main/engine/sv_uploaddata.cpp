@@ -19,7 +19,7 @@
 #include "tier1/bitbuf.h"
 #include "tier1/keyvalues.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static int CountFields(KeyValues *fields) {
   int c = 0;

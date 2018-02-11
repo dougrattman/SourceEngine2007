@@ -7,7 +7,7 @@
 #include "minmax.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CAutoGain::CAutoGain() { Reset(128, 5.0f, 0.5f, 1); }
 

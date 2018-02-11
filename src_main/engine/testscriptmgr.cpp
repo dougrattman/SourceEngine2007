@@ -6,13 +6,13 @@
 #include "cmd.h"
 #include "filesystem_engine.h"
 #include "sys.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CTestScriptMgr g_TestScriptMgr;
 

@@ -14,7 +14,7 @@
 
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 #include "cloak_blended_pass_helper.h"
 
 DEFINE_FALLBACK_SHADER( Modulate, Modulate_DX9 )

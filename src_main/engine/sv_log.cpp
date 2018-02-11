@@ -11,11 +11,11 @@
 #include "filesystem_engine.h"
 #include "server.h"
 #include "sv_main.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/netadr.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar sv_logsdir(
     "sv_logsdir", "logs", FCVAR_ARCHIVE,

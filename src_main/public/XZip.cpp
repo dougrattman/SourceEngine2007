@@ -103,7 +103,7 @@
 #endif
 
 #include <ctime>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "zip/XZip.h"
 
 #include "tier1/strtools.h"

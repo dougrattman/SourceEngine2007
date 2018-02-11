@@ -32,9 +32,9 @@
 #include "stdstring.h"
 #include "steam.h"
 #include "sv_main.h"
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/UtlString.h"
 #include "tier1/callqueue.h"
 #include "tier1/keyvalues.h"
@@ -68,7 +68,7 @@
 #include "zip/XZip.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef GetUserName
 #undef GetUserName

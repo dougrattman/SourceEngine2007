@@ -2,7 +2,7 @@
 //
 // Purpose: The BSP tree leaf data system
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #if !defined(BSPTREEDATA)
 #define BSPTREEDATA

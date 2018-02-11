@@ -5,7 +5,7 @@
 
 #include "mathlib/vector.h"
 #include "quakedef.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #define FDEMO_NORMAL 0
 #define FDEMO_USE_ORIGIN2 (1 << 0)

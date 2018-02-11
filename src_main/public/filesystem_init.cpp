@@ -24,13 +24,13 @@
 #endif
 
 #include "appframework/iappsystemgroup.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "tier1/smartptr.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define GAMEINFO_FILENAME "gameinfo.txt"
 #define GAMEINFO_FILENAME_ALTERNATE "gameinfo.txt"

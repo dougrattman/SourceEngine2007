@@ -5,7 +5,7 @@
 #include <memory.h>
 #include <cstdio>
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Copied from sound.cpp in the DLL
 char *memfgets(unsigned char *pMemFile, int fileSize, int *pFilePos,

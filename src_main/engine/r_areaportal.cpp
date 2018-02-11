@@ -8,10 +8,10 @@
 #include "cmodel_engine.h"
 #include "con_nprint.h"
 #include "debug_leafvis.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar r_ClipAreaPortals("r_ClipAreaPortals", "1", FCVAR_CHEAT);
 ConVar r_DrawPortals("r_DrawPortals", "0", FCVAR_CHEAT);

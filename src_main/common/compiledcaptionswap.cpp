@@ -9,7 +9,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_BYTESWAP_DATADESC(CompiledCaptionHeader_t)
   DEFINE_FIELD(magic, FIELD_INTEGER), DEFINE_FIELD(version, FIELD_INTEGER),

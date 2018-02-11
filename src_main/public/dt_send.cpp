@@ -5,9 +5,9 @@
 #include "dt_utlvector_common.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if !defined(_STATIC_LINKED) || defined(GAME_DLL)
 

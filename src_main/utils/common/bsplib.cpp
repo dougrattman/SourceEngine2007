@@ -12,7 +12,7 @@
 #include "mathlib/mathlib.h"
 #include "physdll.h"
 #include "scriplib.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlRBTree.h"
 #include "tier1/UtlString.h"

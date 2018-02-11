@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include "netinet/in.h"
 #include "sys/ioctl.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #define closesocket close
 #define ioctlsocket ioctl
 #define WSAGetLastError() errno
@@ -27,14 +27,14 @@
 
 #include "cmd.h"
 #include "proto_oob.h"  // PORT_RCON define
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 #include "vprof_engine.h"
 #include "zip/xunzip.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CRPTClient : public CRConClient {
   typedef CRConClient BaseClass;

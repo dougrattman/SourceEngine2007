@@ -23,7 +23,7 @@
 #include "filesystem.h"
 #include "tier1/keyvalues.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

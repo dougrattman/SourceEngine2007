@@ -14,7 +14,7 @@
 #include <ctime>
 #include "bugreporter/bugreporter.h"
 #include "filesystem_tools.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/keyvalues.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"

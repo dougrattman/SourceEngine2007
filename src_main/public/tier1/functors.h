@@ -33,7 +33,7 @@
 #ifndef SOURCE_TIER1_FUNCTORS_H_
 #define SOURCE_TIER1_FUNCTORS_H_
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/refcount.h"
 #include "tier1/utlenvelope.h"
 
@@ -755,7 +755,7 @@ FUNC_GENERATE_ALL(DEFINE_MEMBER_FUNC_PROXY);
 //
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 typedef CRefCounted1<CFunctor, CRefCountServiceMT> CFunctorBase;
 
@@ -942,7 +942,7 @@ FUNC_GENERATE_ALL(DEFINE_MEMBER_FUNCTOR_DIRECT);
 
 FUNC_GENERATE_ALL(DEFINE_CONST_MEMBER_FUNCTOR_DIRECT);
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Factory class useable as templated traits

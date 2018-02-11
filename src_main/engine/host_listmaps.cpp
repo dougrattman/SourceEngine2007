@@ -13,7 +13,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Imported from other .cpp files
 void Host_Map_f(const CCommand &args);

@@ -14,12 +14,12 @@
 #include <cstdio>
 
 // Next, include public.
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
-#include "tier0/valobject.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/valobject.h"
 
 // Next, include vstdlib.
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/mempool.h"
 #include "tier1/netadr.h"
@@ -36,4 +36,4 @@
 #include "vstdlib/random.h"
 #include "vstdlib/vstdlib.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"

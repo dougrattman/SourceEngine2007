@@ -7,7 +7,7 @@
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Purpose: Generate a lump file name for a given bsp & index
 void GenerateLumpFileName(const char *bspfilename, char *lumpfilename,

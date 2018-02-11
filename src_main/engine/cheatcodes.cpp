@@ -9,7 +9,7 @@
 #include "tier1/keyvalues.h"
 #include "tier2/tier2.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Cheat Codes
 #define CHEAT_NAME_MAX_LEN 32

@@ -9,8 +9,8 @@
 
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"  // For vec_t, put this somewhere else?
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"  // For vec_t, put this somewhere else?
+#include "tier0/include/dbg.h"
 
 //=========================================================
 // fit a 3D vector into 32 bits

@@ -11,9 +11,9 @@
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector2d.h"
 #include "minmax.h"
-#include "tier0/basetypes.h"  // For vec_t, put this somewhere else?
-#include "tier0/dbg.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/basetypes.h"  // For vec_t, put this somewhere else?
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 
 // Uncomment this to add extra Asserts to check for NANs, uninitialized vecs,
 // etc.

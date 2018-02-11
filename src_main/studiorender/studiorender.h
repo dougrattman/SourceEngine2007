@@ -16,7 +16,7 @@
 #include "mathlib/compressed_vector.h"
 #include "mathlib/mathlib.h"
 #include "r_studiolight.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utllinkedlist.h"
 #include "tier1/utlvector.h"
 

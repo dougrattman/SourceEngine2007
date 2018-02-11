@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_RESOURCEMANAGER_H_
 #define SOURCE_TIER1_RESOURCEMANAGER_H_
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/utlmultilist.h"
 #include "tier1/utlvector.h"
 

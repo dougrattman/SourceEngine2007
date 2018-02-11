@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 static float ScaleValue(float f, float overbright) {
   // map a value between 0..255 to the scale factor

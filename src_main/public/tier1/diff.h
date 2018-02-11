@@ -5,7 +5,7 @@
 #ifndef SOURCE_TIER1_DIFF_H_
 #define SOURCE_TIER1_DIFF_H_
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 int FindDiffs(uint8_t const *NewBlock, uint8_t const *OldBlock, int NewSize,
               int OldSize, int &DiffListSize, uint8_t *Output, uint32_t OutSize);

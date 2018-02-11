@@ -12,9 +12,9 @@
 class ITexture;
 struct MaterialSystem_Config_t;
 struct ImageFormatInfo_t;
-enum Sampler_t;
-enum VertexTextureSampler_t;
-enum StandardTextureId_t;
+enum Sampler_t : int;
+enum VertexTextureSampler_t : int;
+enum StandardTextureId_t : int;
 class CPrimList;
 struct ShaderColorCorrectionInfo_t;
 

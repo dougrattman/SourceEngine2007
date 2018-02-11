@@ -11,14 +11,14 @@
 #include "icliententitylist.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "materialsystem/materialsystem_config.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/callqueue.h"
 #include "tier1/mempool.h"
 #include "tier1/memstack.h"
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DECAL_CACHEENTRY \
   256  // MUST BE POWER OF 2 or code below needs to change!

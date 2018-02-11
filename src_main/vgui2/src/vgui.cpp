@@ -11,9 +11,9 @@
 #include <cstring>
 #include "IMessageListener.h"
 #include "VPanel.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlPriorityQueue.h"
 #include "tier1/UtlVector.h"
@@ -35,7 +35,7 @@
                      // can't access g_pInput->GetCursorPos.
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 static const int WARN_PANEL_NUMBER = 32768;  // in DEBUG if more panels than

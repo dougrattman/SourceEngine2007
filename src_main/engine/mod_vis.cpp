@@ -8,12 +8,12 @@
 #include "gl_model_private.h"
 #include "ivrenderview.h"
 #include "quakedef.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "view_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar r_novis("r_novis", "0", FCVAR_CHEAT, "Turn off the PVS.");
 static ConVar r_lockpvs(

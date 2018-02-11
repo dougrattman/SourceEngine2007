@@ -5,7 +5,7 @@
 #include <ctime>
 #include "FileSystem.h"
 #include "PanelListPanel.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 #include "vgui/IInput.h"
 #include "vgui/ILocalize.h"
@@ -19,7 +19,7 @@
 #include "vgui_controls/TextEntry.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

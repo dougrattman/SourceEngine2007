@@ -7,11 +7,11 @@
 #include <cstring>
 #include "mathlib/mathlib.h"
 #include "mathlib/vector4d.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // -------------------------------------------------------------------------------------------
 // // Helper functions.

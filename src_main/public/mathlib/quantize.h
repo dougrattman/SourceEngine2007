@@ -4,7 +4,7 @@
 #define SOURCE_MATHLIB_QUANTIZE_H_
 
 #include <cstring>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #define MAXDIMS 768
 #define MAXQUANT 16000

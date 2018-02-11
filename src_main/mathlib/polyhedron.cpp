@@ -49,7 +49,7 @@ static VMatrix s_matIdentity(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CPolyhedron_AllocByNew::Release(void) { delete this; }
 
@@ -66,9 +66,9 @@ CPolyhedron_AllocByNew *CPolyhedron_AllocByNew::Allocate(
                         (iIndices * sizeof(Polyhedron_IndexedLineReference_t)) +
                         (iPolygons * sizeof(Polyhedron_IndexedPolygon_t))];
 
-#include "tier0/memdbgoff.h"  //the following placement new doesn't compile with memory debugging
+#include "tier0/include/memdbgoff.h"  //the following placement new doesn't compile with memory debugging
   CPolyhedron_AllocByNew *pAllocated = new (pMemory) CPolyhedron_AllocByNew;
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
   pAllocated->iVertexCount = iVertices;
   pAllocated->iLineCount = iLines;

@@ -46,7 +46,7 @@ enum TextureStage_t {
   SHADER_TEXTURE_STAGE1,
 };
 
-enum Sampler_t {
+enum Sampler_t : int {
   SHADER_SAMPLER0 = 0,
   SHADER_SAMPLER1,
   SHADER_SAMPLER2,
@@ -68,7 +68,7 @@ enum Sampler_t {
 //-----------------------------------------------------------------------------
 // Vertex texture sampler identifiers
 //-----------------------------------------------------------------------------
-enum VertexTextureSampler_t {
+enum VertexTextureSampler_t : int {
   SHADER_VERTEXTEXTURE_SAMPLER0 = 0,
   SHADER_VERTEXTEXTURE_SAMPLER1,
   SHADER_VERTEXTEXTURE_SAMPLER2,

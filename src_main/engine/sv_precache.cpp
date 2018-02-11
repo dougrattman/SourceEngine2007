@@ -8,12 +8,12 @@
 #include "MapReslistGenerator.h"
 #include "host.h"
 #include "soundchars.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #ifndef SWDS
 #include "vgui_baseui_interface.h"
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar sv_forcepreload("sv_forcepreload", "0", FCVAR_ARCHIVE,
                               "Force server side preloading.");

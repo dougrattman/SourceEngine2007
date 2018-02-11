@@ -9,7 +9,7 @@
 #include "tier1/utlbuffer.h"
 #include "utlrbtree.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // If you change to serialization protocols, this must be bumped...
 #define UTL_CACHE_SYSTEM_VERSION 2
@@ -868,6 +868,6 @@ void CUtlCachedFileData<T>::CheckDiskInfo(bool forcerebuild,
   }
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // UTLCACHEDFILEDATA_H

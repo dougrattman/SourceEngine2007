@@ -41,7 +41,7 @@
 #include "matchmaking/matchmakingbasepanel.h"
 #include "steam/steam_api.h"
 #include "threadtools.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/UtlString.h"
 #include "tier1/bitbuf.h"
 #include "tier1/convar.h"
@@ -65,7 +65,7 @@
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Windows helpfully #define's this to MessageBoxA, we're using vgui::MessageBox
 #undef MessageBox

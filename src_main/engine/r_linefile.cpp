@@ -10,7 +10,7 @@
 #include "tier1/utlvector.h"
 #include "tier2/renderutils.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CUtlVector<Vector> g_Points;
 //-----------------------------------------------------------------------------

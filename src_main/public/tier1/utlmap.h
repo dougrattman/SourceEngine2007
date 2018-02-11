@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_UTLMAP_H_
 #define SOURCE_TIER1_UTLMAP_H_
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlrbtree.h"
 
 //-----------------------------------------------------------------------------

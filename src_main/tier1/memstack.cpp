@@ -11,11 +11,11 @@
 #define VA_RESERVE_FLAGS (MEM_RESERVE | MEM_LARGE_PAGES)
 #endif
 
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlmap.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _WIN32
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()

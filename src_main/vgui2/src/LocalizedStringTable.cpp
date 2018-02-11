@@ -7,7 +7,7 @@
 
 #include "FileSystem.h"
 #include "UnicodeFileHelpers.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/UtlRBTree.h"
 #include "tier1/UtlString.h"
 #include "tier1/UtlSymbol.h"
@@ -18,7 +18,7 @@
 #include "vgui_internal.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

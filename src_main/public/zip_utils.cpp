@@ -6,7 +6,7 @@
 
 #include "zip_utils.h"
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/byteswap.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/utlbuffer.h"

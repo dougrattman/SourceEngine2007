@@ -19,7 +19,7 @@
 #include "tier1/lzss.h"
 #include "tier1/utlbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar save_spew;
 extern IXboxSystem *g_pXboxSystem;

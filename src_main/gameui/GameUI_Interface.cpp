@@ -23,7 +23,7 @@
 #include "GameUI_Interface.h"
 #include "Sys_Utils.h"
 #include "string.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 // interface to engine
 #include "EngineInterface.h"
@@ -59,7 +59,7 @@
 #include <vgui/IVGui.h>
 #include <vgui_controls/Menu.h>
 #include <vgui_controls/PHandle.h>
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 #include "tier3/tier3.h"
 
@@ -68,7 +68,7 @@
 #endif
 
 #include "engine/IEngineSound.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

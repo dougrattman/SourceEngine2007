@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 #include "vstdlib/vstdlib.h"

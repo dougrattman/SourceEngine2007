@@ -5,12 +5,12 @@
 #ifndef SOURCE_TIER1_UTLDICT_H_
 #define SOURCE_TIER1_UTLDICT_H_
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlmap.h"
 #include "tier1/utlsymbol.h"  // Include this because tons of code was implicitly
                               // getting utlsymbol or utlvector via utldict.h
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 enum EDictCompareType {
   k_eDictCompareTypeCaseSensitive = 0,
@@ -267,6 +267,6 @@ I CUtlDict<T, I>::Next(I i) const {
   return m_Elements.NextInorder(i);
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLDICT_H_

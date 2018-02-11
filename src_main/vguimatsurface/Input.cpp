@@ -26,11 +26,11 @@
 #include "input.h"
 #include "inputsystem/buttoncode.h"
 #include "inputsystem/iinputsystem.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

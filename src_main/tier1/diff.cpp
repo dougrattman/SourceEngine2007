@@ -3,11 +3,11 @@
 #include "tier1/diff.h"
 
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // format of diff output:
 // 0NN (N=1..127)  copy next N literaly

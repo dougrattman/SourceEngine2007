@@ -5,7 +5,7 @@
 
 #include "dt_send.h"
 #include "networkstringtabledefs.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 class ServerClass;
 class SendTable;

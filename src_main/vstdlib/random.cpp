@@ -5,8 +5,8 @@
 #include "vstdlib/random.h"
 
 #include <cmath>
-#include "tier0/dbg.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memdbgon.h"
 
 #define IA 16807
 #define IM 2147483647

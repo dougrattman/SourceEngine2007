@@ -7,7 +7,7 @@
 
 #include "tier1/strtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ObjectList::ObjectList() {
   head = tail = current = nullptr;

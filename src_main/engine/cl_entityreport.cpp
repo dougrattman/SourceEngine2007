@@ -6,7 +6,7 @@
 
 #include "ivideomode.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar cl_entityreport("cl_entityreport", "0", FCVAR_CHEAT,
                        "For debugging, draw entity states to console");

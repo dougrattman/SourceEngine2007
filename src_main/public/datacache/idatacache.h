@@ -4,7 +4,7 @@
 #define IDATACACHE_H
 
 #include "appframework/IAppSystem.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 class IDataCache;
 

@@ -1,11 +1,11 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 #ifdef _WIN32
 #include <crtdbg.h>  // For getting at current heap size
-#include "tier0/memdbgoff.h"
-#include "tier0/memdbgon.h"  // needed because in release builds crtdbg.h is handled specially if USE_MEM_DEBUG is defined
+#include "tier0/include/memdbgoff.h"
+#include "tier0/include/memdbgon.h"  // needed because in release builds crtdbg.h is handled specially if USE_MEM_DEBUG is defined
 #endif
 
 #include "LoadScreenUpdate.h"
@@ -81,9 +81,9 @@
 #include "staticpropmgr.h"
 #include "sys_mainwind.h"
 #include "testscriptmgr.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/strtools.h"
 #include "tmessage.h"
 #include "traceinit.h"
@@ -109,7 +109,7 @@
 #include "ixboxsystem.h"
 extern IXboxSystem *g_pXboxSystem;
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CL_SetPagedPoolInfo();
 extern char *CM_EntityString();

@@ -2,7 +2,7 @@
 
 #include "dt_utlvector_recv.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern const char *s_ClientElementNames[MAX_ARRAY_ELEMENTS];
 

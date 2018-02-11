@@ -5,14 +5,14 @@
 #include <cmath>
 #include <cstdio>
 #include "filesystem.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 namespace TGALoader {
 

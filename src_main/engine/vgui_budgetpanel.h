@@ -3,7 +3,7 @@
 #ifndef VGUI_BUDGETPANEL_H
 #define VGUI_BUDGETPANEL_H
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "vgui/vgui_budgetpanelshared.h"
 
 #define NUM_BUDGET_FPS_LABELS 3

@@ -13,8 +13,8 @@
 #include "host_state.h"
 #include "quakedef.h"
 #include "sys.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/characterset.h"
 #include "tier1/fmtstr.h"
 #include "tier1/strtools.h"
@@ -22,7 +22,7 @@
 #include "vengineserver_impl.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PAUSE_FRAMES_BETWEEN_MAPS 300
 #define PAUSE_TIME_BETWEEN_MAPS 2.0f

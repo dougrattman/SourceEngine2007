@@ -23,7 +23,7 @@
 #include <vgui_controls/Controls.h>
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Singleton CCvarUtilities

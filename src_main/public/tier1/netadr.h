@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_NETADR_H_
 #define SOURCE_TIER1_NETADR_H_
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #undef SetPort
 
 typedef enum {

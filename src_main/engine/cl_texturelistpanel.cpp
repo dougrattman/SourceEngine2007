@@ -29,7 +29,7 @@
 #include "materialsystem/imesh.h"
 #include "materialsystem/itexture.h"
 #include "smartptr.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlStringMap.h"
 #include "tier1/keyvalues.h"
 #include "tier1/utlsymbol.h"
@@ -44,7 +44,7 @@
 #include <ctype.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define KEYNAME_NAME "Name"
 #define KEYNAME_BINDS_MAX "BindsMax"

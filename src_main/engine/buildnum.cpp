@@ -3,7 +3,7 @@
 #include "quakedef.h"
 #include "tier1/strtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // char *date = "Nov 07 1998"; // "Oct 24 1996";
 const char *now_date = __DATE__;

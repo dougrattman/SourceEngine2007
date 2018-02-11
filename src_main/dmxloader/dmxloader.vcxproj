@@ -68,16 +68,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
@@ -86,16 +80,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
@@ -108,7 +96,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;DMXLOADER_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -122,17 +110,8 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>
       </MultiProcessorCompilation>
@@ -142,7 +121,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <SmallerTypeCheck>false</SmallerTypeCheck>
-      <BrowseInformation>false</BrowseInformation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -151,18 +129,10 @@
       </Command>
     </PreLinkEvent>
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmxloader.bsc</OutputFile>
-    </Bscmake>
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
@@ -171,7 +141,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;DMXLOADER_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -185,17 +155,8 @@
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>
       </MultiProcessorCompilation>
@@ -205,7 +166,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
       <SmallerTypeCheck>false</SmallerTypeCheck>
-      <BrowseInformation>false</BrowseInformation>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <PreLinkEvent>
@@ -213,18 +173,10 @@
       </Command>
     </PreLinkEvent>
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmxloader.bsc</OutputFile>
-    </Bscmake>
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -236,7 +188,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;DMXLOADER_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -249,18 +201,8 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
@@ -278,18 +220,10 @@
       </Command>
     </PreLinkEvent>
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmxloader.bsc</OutputFile>
-    </Bscmake>
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
@@ -301,7 +235,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\common;..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_ALLOW_RTCc_IN_STL;WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;DMXLOADER_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -315,18 +249,8 @@
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
@@ -342,18 +266,10 @@
       </Command>
     </PreLinkEvent>
     <Lib>
-      <UseUnicodeResponseFiles>false</UseUnicodeResponseFiles>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmxloader.bsc</OutputFile>
-    </Bscmake>
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dmxattribute.cpp" />

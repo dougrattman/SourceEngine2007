@@ -14,7 +14,7 @@
 #include "bitmap/imageformat.h"
 #include "mathlib/compressed_vector.h"
 #include "mathlib/ssemath.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Color writing class

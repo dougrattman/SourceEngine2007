@@ -22,10 +22,10 @@
 #include "sv_packedentities.h"
 #include "sv_plugin.h"
 #include "testscriptmgr.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/commandbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern CNetworkStringTableContainer *networkStringTableContainerServer;
 

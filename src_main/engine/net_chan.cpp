@@ -14,13 +14,13 @@
 #include "mathlib/mathlib.h"
 #include "netmessages.h"
 #include "protocol.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar net_showudp("net_showudp", "0", 0,
                    "Dump UDP packets summary to console");

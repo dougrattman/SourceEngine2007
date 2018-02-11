@@ -6,17 +6,17 @@
 #include "winlite.h"
 #endif
 
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/tslist.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/tslist.h"
 #include "tier1/fmtstr.h"
 #include "tier1/functors.h"
 #include "tier1/generichash.h"
 #include "tier1/utlvector.h"
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _WIN32
 

@@ -6,10 +6,8 @@
 #ifndef SOURCE_TIER1_GENERICHASH_H_
 #define SOURCE_TIER1_GENERICHASH_H_
 
-#include "tier0/calling_conventions.h"
-#include "tier0/compiler_specific_macroses.h"
-
-//-----------------------------------------------------------------------------
+#include "tier0/include/calling_conventions.h"
+#include "tier0/include/compiler_specific_macroses.h"
 
 unsigned FASTCALL HashString(const char *pszKey);
 unsigned FASTCALL HashStringCaseless(const char *pszKey);
@@ -37,15 +35,6 @@ inline unsigned HashIntConventional(const int n)  // faster but less effective
 
   /* this is the old version, which would cause a load-hit-store on every
      line on a PowerPC, and therefore took hundreds of clocks to execute!
-    
-
-
-
-
-
-
-
-
   byte *p = (byte *)&n;
   unsigned hash = 0xAAAAAAAA + *p++;
   hash = ( ( hash << 5 ) + hash ) + *p++;
@@ -53,8 +42,6 @@ inline unsigned HashIntConventional(const int n)  // faster but less effective
   return ( ( hash << 5 ) + hash ) + *p;
   */
 }
-
-//-----------------------------------------------------------------------------
 
 template <typename T>
 inline unsigned HashItem(const T &item) {
@@ -91,7 +78,5 @@ template <>
 inline unsigned HashItem<char *>(char *const &pszKey) {
   return HashString(pszKey);
 }
-
-//-----------------------------------------------------------------------------
 
 #endif  // SOURCE_TIER1_GENERICHASH_H_

@@ -17,7 +17,7 @@
 #include "FileSystem.h"
 #include "filesystem.h"
 #include "filesystem_helpers.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 #include "vgui/IInputInternal.h"
 #include "vgui/ISurface.h"
@@ -27,7 +27,7 @@
 
 #define PROTECTED_THINGS_DISABLE
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef ShellExecute
 #undef ShellExecute

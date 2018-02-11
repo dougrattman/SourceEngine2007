@@ -8,14 +8,14 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "nvtc.h"
-#include "tier0/basetypes.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
 
 // Should be last include
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 namespace ImageLoader {
 //-----------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 #include "cl_demoactioneditors.h"
 #include "cl_demoactionmanager.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

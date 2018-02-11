@@ -8,7 +8,7 @@
 #include "tier1/utllinkedlist.h"
 
 // memdbgon must be the last include file in a .h file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // This is a useful macro to iterate from head to tail in a linked list.
 #define FOR_EACH_LL(listName, iteratorName)     \
@@ -630,6 +630,6 @@ void CUtlMultiList<T, I>::RemoveAll() {
   m_TotalElements = 0;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLMULTILIST_H_

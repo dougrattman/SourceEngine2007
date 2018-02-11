@@ -109,7 +109,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <BrowseInformation>false</BrowseInformation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -135,7 +134,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <BrowseInformation>false</BrowseInformation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <ConformanceMode>true</ConformanceMode>
@@ -163,7 +161,6 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <BrowseInformation>false</BrowseInformation>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -196,7 +193,6 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <BrowseInformation>false</BrowseInformation>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>

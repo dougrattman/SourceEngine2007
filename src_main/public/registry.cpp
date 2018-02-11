@@ -6,12 +6,12 @@
 #include "iregistry.h"
 
 #include <cstdio>
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/strtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Purpose: Exposes registry interface to rest of launcher
 class CRegistry : public IRegistry {

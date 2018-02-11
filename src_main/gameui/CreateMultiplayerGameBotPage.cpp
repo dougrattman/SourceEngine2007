@@ -7,7 +7,7 @@
 #include "FileSystem.h"
 #include "PanelListPanel.h"
 #include "ScriptObject.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/convar.h"
 #include "tier1/keyvalues.h"
 #include "vgui_controls/CheckButton.h"

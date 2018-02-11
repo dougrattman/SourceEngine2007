@@ -12,7 +12,7 @@
 #include "vprof_engine.h"
 #include "vprof_record.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

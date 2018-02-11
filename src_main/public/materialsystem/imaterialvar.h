@@ -4,7 +4,7 @@
 #define IMATERIALVAR_H
 
 #include "mathlib/vector4d.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlsymbol.h"
 
 class IMaterial;

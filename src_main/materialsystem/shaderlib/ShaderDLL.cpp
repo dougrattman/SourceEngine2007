@@ -9,12 +9,12 @@
 #include "materialsystem/materialsystem_config.h"
 #include "mathlib/mathlib.h"
 #include "shaderlib_cvar.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/tier1.h"
 #include "tier1/utlvector.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // The standard implementation of CShaderDLL

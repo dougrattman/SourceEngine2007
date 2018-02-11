@@ -2,12 +2,12 @@
 
 #include "vgui_surfacelib/FontAmalgam.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui/ISurface.h"
 #include "vgui/VGUI.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor

@@ -22,8 +22,8 @@
 #include "sound.h"
 #include "steam/steam_api.h"
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/fmtstr.h"
 #include "toolframework/itoolframework.h"
 #include "vgui/ILocalize.h"
@@ -33,7 +33,7 @@
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void Snd_Restart_f();
 

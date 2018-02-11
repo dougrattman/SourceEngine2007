@@ -2,7 +2,7 @@
 
 #include "dt_recv_decoder.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CRecvDecoder::CRecvDecoder() {
   m_pTable = 0;

@@ -12,7 +12,7 @@
 #include "mainpanel.h"
 #include "netapi.h"
 #include "steam.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "vgui/IVGui.h"
 #include "vgui_controls/CheckButton.h"
@@ -23,7 +23,7 @@
 #include "vstdlib/random.h"  // for SRC
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

@@ -5,10 +5,10 @@
 #include "cmd.h"
 #include "fmtstr.h"
 #include "host.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PAUSE_FRAMES_BETWEEN_MAPS 300
 #define PAUSE_TIME_BETWEEN_MAPS 2.0f

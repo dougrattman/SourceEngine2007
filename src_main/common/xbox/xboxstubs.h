@@ -5,7 +5,7 @@
 #ifndef SOURCE_TIER1_XBOXSTUBS_H_
 #define SOURCE_TIER1_XBOXSTUBS_H_
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 //  Content creation/open flags
 #define XCONTENTFLAG_NONE 0x00

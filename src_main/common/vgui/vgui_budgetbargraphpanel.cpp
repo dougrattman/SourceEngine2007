@@ -8,7 +8,7 @@
 #include "vgui_controls/Label.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar budget_bargraph_background_alpha("budget_bargraph_background_alpha",
                                         "128", FCVAR_ARCHIVE,

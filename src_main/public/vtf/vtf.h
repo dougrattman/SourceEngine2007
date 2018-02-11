@@ -4,7 +4,7 @@
 #define SOURCE_VTF_VTF_H_
 
 #include "bitmap/imageformat.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // #define VTF_FILE_FORMAT_ONLY to just include the vtf header and none of the
 // code declaration

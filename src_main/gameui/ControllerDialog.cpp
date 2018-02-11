@@ -7,7 +7,7 @@
 using namespace vgui;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CControllerDialog::CControllerDialog(vgui::Panel *parent)
     : BaseClass(parent,

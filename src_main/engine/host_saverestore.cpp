@@ -50,8 +50,8 @@
 #include "sv_main.h"
 #include "sys.h"
 #include "testscriptmgr.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/callqueue.h"
 #include "tier1/memstack.h"
 #include "tmessage.h"
@@ -68,7 +68,7 @@
 extern IXboxSystem *g_pXboxSystem;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IBaseClientDLL *g_ClientDLL;
 

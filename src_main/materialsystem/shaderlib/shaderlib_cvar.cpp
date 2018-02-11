@@ -5,7 +5,7 @@
 #include "tier1/tier1.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // ConVar stuff.
 class CShaderLibConVarAccessor : public IConCommandBaseAccessor {

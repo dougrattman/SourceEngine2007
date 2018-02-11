@@ -23,7 +23,7 @@
 #include "r_decal.h"
 #include "server.h"
 #include "staticpropmgr.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "traceinit.h"
 #include "view.h"
@@ -31,7 +31,7 @@
 #include "vtf/vtf.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void Linefile_Read_f();
 

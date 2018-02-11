@@ -19,11 +19,11 @@
 #include "mathlib/IceKey.H"
 #include "net.h"
 #include "quakedef.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PHONE_HOME_TIMEOUT 1.5f
 #define PHONE_HOME_RETRIES 3

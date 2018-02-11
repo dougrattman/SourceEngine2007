@@ -43,7 +43,7 @@
 #include "world.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define MAX_MESSAGE_SIZE 2500
 #define MAX_TOTAL_ENT_LEAFS 128
@@ -490,7 +490,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   EmitAmbientSound
-  
+  
+
+
 
 
 
@@ -666,7 +668,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ServerCommand
-  
+  
+
+
 
 
 
@@ -675,7 +679,9 @@ class CVEngineServer : public IVEngineServer {
 
 
     Sends text to servers execution buffer
-    
+    
+
+
 
 
 
@@ -700,7 +706,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ServerExecute
-  
+  
+
+
 
 
 
@@ -709,7 +717,9 @@ class CVEngineServer : public IVEngineServer {
 
 
     Executes all commands in server buffer
-    
+    
+
+
 
 
 
@@ -725,7 +735,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   ClientCommand
-  
+  
+
+
 
 
 
@@ -734,7 +746,9 @@ class CVEngineServer : public IVEngineServer {
 
 
     Sends text over to the client's execution buffer
-    
+    
+
+
 
 
 
@@ -775,7 +789,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   ===============
   LightStyle
-  
+  
+
+
 
 
 
@@ -823,7 +839,9 @@ class CVEngineServer : public IVEngineServer {
 
   /*
   ===============================================================================
-  
+  
+
+
 
 
 
@@ -832,7 +850,9 @@ class CVEngineServer : public IVEngineServer {
 
 
     MESSAGE WRITING
-    
+    
+
+
 
 
 
@@ -1227,7 +1247,9 @@ class CVEngineServer : public IVEngineServer {
   /*
   =================
   InsertServerCommand
-  
+  
+
+
 
 
 
@@ -1236,7 +1258,9 @@ class CVEngineServer : public IVEngineServer {
 
 
     Sends text to servers execution buffer
-    
+    
+
+
 
 
 

@@ -13,7 +13,7 @@
 #include "sprite_vs11.inc"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // WARNING!  Change these in engine/SpriteGn.h if you change them here!
 #define SPR_VP_PARALLEL_UPRIGHT		0

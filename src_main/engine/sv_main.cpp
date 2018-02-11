@@ -33,8 +33,8 @@
 #include "sv_packedentities.h"
 #include "sys_dll.h"
 #include "testscriptmgr.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/checksum_crc.h"
 #include "vengineserver_impl.h"
 #include "vox.h"
@@ -63,7 +63,7 @@
 #include "tier1/keyvalues.h"
 #include "vstdlib/jobthread.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern CNetworkStringTableContainer *networkStringTableContainerServer;
 extern CNetworkStringTableContainer *networkStringTableContainerClient;
@@ -1652,7 +1652,7 @@ bool SV_ActivateServer() {
   return true;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 static void SV_AllocateEdicts() {
   sv.edicts =
@@ -1667,7 +1667,7 @@ static void SV_AllocateEdicts() {
       sv.max_edicts * sizeof(IChangeInfoAccessor), "edictchangeinfo");
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CGameServer::ReloadWhitelist(const char *pMapName) {
   // Always return - until we get the whilelist stuff resolved for TF2.

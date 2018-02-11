@@ -2,13 +2,13 @@
 
 #include "tier1/stringpool.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/generichash.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Comparison function for string sorted associative data structures

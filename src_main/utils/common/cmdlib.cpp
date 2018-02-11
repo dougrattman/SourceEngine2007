@@ -12,8 +12,8 @@
 #include <sys/types.h>
 #include "filesystem_helpers.h"
 #include "filesystem_tools.h"
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
 #include "tier1/keyvalues.h"
 #include "tier1/strtools.h"
 #include "tier1/utllinkedlist.h"

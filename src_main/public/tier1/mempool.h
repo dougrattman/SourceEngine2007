@@ -3,9 +3,9 @@
 #ifndef SOURCE_TIER1_MEMPOOL_H_
 #define SOURCE_TIER1_MEMPOOL_H_
 
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
-#include "tier0/tslist.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/tslist.h"
 #include "tier1/utlrbtree.h"
 #include "tier1/utlvector.h"
 

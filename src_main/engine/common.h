@@ -6,7 +6,7 @@
 #include "filesystem.h"
 #include "mathlib/vector.h"  // @Note (toml 05-01-02): solely for definition of QAngle
 #include "qlimits.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "worldsize.h"
 
 class Vector;

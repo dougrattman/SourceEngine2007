@@ -9,7 +9,7 @@
 #include "bitmap/imageformat.h"
 #include "bitmap/tgaloader.h"
 #include "filesystem.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 

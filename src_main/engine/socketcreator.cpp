@@ -26,7 +26,7 @@
 #include "server.h"
 #include "socketcreator.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool SocketWouldBlock() {
 #ifdef _WIN32

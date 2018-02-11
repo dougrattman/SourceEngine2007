@@ -8,13 +8,13 @@
 #include "cmodel_private.h"
 #include "collisionutils.h"
 #include "dispcoll_common.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "vphysics/virtualmesh.h"
 #include "vphysics_interface.h"
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 int g_DispCollTreeCount = 0;
 CDispCollTree *g_pDispCollTrees = NULL;

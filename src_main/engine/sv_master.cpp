@@ -11,10 +11,10 @@
 #include "sv_main.h"  // SV_GetFakeClientCount()
 #include "sv_master_legacy.h"
 #include "sv_steamauth.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool g_bEnableMasterServerUpdater = true;
 

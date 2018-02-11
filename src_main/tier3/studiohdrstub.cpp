@@ -6,11 +6,11 @@
 #include "datacache/imdlcache.h"
 #include "datamodel/dmelementfactoryhelper.h"
 #include "istudiorender.h"
-#include "tier0/compiler_specific_macroses.h"
+#include "tier0/include/compiler_specific_macroses.h"
 #include "tier3/tier3.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // FIXME: This trashy glue code is really not acceptable. Figure out a way of

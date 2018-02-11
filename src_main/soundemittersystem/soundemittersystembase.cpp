@@ -14,7 +14,7 @@
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define MANIFEST_FILE "scripts/game_sounds_manifest.txt"
 #define GAME_SOUNDS_HEADER_BLOCK "scripts/game_sounds_header.txt"

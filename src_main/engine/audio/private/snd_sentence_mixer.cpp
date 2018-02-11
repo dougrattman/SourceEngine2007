@@ -5,7 +5,7 @@
 #include "audio_pch.h"
 #include "vox_private.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: This replaces the old sentence logic that was integrated with the

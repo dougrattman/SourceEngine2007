@@ -21,7 +21,7 @@
 #include <vgui_controls/TextImage.h>
 #include <vgui_controls/Controls.h>
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
 

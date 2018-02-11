@@ -6,11 +6,11 @@
 #define SOURCE_TIER1_UTLBLOCKMEMORY_H_
 
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 
@@ -328,6 +328,6 @@ void CUtlBlockMemory<T, I>::Purge(int numElements) {
   ChangeSize(nBlocks);
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_TIER1_UTLBLOCKMEMORY_H_

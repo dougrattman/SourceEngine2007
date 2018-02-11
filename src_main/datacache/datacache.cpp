@@ -8,8 +8,8 @@
 
 #include "datacache.h"
 #include "filesystem.h"
-#include "tier0/basetypes.h"
-#include "tier0/vprof.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/datamanager.h"
 #include "tier1/fmtstr.h"
@@ -20,7 +20,7 @@
 #include "tier1/utlrbtree.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Singleton
 CDataCache g_DataCache;

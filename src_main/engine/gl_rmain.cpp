@@ -28,11 +28,11 @@
 #include "staticpropmgr.h"
 #include "studio.h"
 #include "sys_dll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/utlstack.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef _X360
 extern ConVar r_waterforceexpensive;

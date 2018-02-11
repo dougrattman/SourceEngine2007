@@ -15,10 +15,10 @@
 #include "server.h"
 #include "sv_plugin.h"
 #include "sys.h"
-#include "tier0/icommandline.h"
-#include "tier0/memalloc.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/commandbuffer.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
@@ -26,7 +26,7 @@
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // This denotes an execution marker in the command stream.
 #define CMDSTR_ADD_EXECUTION_MARKER "[$&*,`]"

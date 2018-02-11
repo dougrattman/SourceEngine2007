@@ -15,13 +15,13 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "modelloader.h"
-#include "tier0/dbg.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/fasttimer.h"
 #include "tier2/tier2.h"
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void BuildTagData(CCoreDispInfo *pCoreDisp, CDispInfo *pDisp);
 void SmoothDispSurfNormals(CCoreDispInfo **ppListBase, int nListSize);
@@ -518,7 +518,7 @@ void UpdateDispBBoxes(model_t *pWorld, int nDisplacements) {
   }
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 bool DispInfo_LoadDisplacements(model_t *pWorld, bool bRestoring) {
   const MaterialSystem_SortInfo_t *pSortInfos = materialSortInfoArray;
 
@@ -704,7 +704,7 @@ bool DispInfo_LoadDisplacements(model_t *pWorld, bool bRestoring) {
 
   return true;
 }
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void DispInfo_ReleaseMaterialSystemObjects(model_t *pWorld) {
   CMatRenderContextPtr pRenderContext(materials);

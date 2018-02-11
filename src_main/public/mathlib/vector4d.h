@@ -9,8 +9,8 @@
 #include <cstdlib>  // For rand(). We really need a library!
 
 #include "mathlib/math_pfns.h"
-#include "tier0/basetypes.h"  // For vec_t, put this somewhere else?
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"  // For vec_t, put this somewhere else?
+#include "tier0/include/dbg.h"
 
 // forward declarations
 class Vector;

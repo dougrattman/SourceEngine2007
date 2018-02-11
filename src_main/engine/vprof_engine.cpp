@@ -10,8 +10,8 @@
 #include "materialsystem/imaterialsystem.h"
 #include "sv_main.h"
 #include "sys.h"
-#include "tier0/basetypes.h"
-#include "tier0/vprof.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 #ifndef SWDS
@@ -27,7 +27,7 @@
 #include "vprof_record.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef VPROF_ENABLED
 void VProfExport_StartOrStop();

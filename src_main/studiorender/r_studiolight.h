@@ -5,7 +5,7 @@
 #ifndef R_STUDIOLIGHT_H
 #define R_STUDIOLIGHT_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #if defined(_WIN32) && !defined(_X360)
 #include <xmmintrin.h>

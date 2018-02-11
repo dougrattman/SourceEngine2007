@@ -7,7 +7,7 @@
 #include "tier1/convar.h"  // ConVar define
 #include "view.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static bool s_bAllow3DNow = true;
 static bool s_bAllowSSE2 = true;

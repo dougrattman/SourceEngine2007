@@ -10,8 +10,8 @@
 #define OEMRESOURCE //for OCR_* cursor junk
 #include "winlite.h"
 #endif
-#include "tier0/dbg.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/UtlDict.h"
 #include "cursor.h"
 #include "vguimatsurface.h"
@@ -23,7 +23,7 @@
 #include "inputsystem/iinputsystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 static HICON s_pDefaultCursor[20];

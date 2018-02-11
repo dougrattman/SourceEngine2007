@@ -36,8 +36,8 @@
 #include "r_areaportal.h"
 #include "r_decal.h"
 #include "r_local.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/mempool.h"
 #include "tier2/tier2.h"
@@ -48,7 +48,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define BACKFACE_EPSILON -0.01f
 

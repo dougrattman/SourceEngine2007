@@ -13,8 +13,8 @@
 #pragma once
 #endif	
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include <cstddef>
 

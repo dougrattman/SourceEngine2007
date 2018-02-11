@@ -9,14 +9,14 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "s3tc_decode.h"
-#include "tier0/dbg.h"
-#include "tier0/mem.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/mem.h"
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // byteswap data descriptions
 BEGIN_BYTESWAP_DATADESC(VTFFileBaseHeader_t)

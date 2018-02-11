@@ -9,8 +9,8 @@
 #include "materialsystem/itexture.h"
 #include "particles/particles.h"
 #include "psheet.h"
-#include "tier0/platform.h"
-#include "tier0/vprof.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlStringMap.h"
 #include "tier1/strtools.h"
 #include "tier2/beamsegdraw.h"
@@ -26,7 +26,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Vertex instancing (1 vert submitted per particle, duplicated to 4 (a quad) on
 // the GPU) is supported only on 360

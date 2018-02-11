@@ -6,14 +6,14 @@
 
 #include "tier1/lzss.h"
 
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 #define LZSS_LOOKSHIFT 4
 #define LZSS_LOOKAHEAD (1 << LZSS_LOOKSHIFT)
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Returns true if buffer is compressed.

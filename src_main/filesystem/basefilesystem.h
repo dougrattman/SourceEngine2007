@@ -22,7 +22,7 @@
 #undef GetJob
 #undef AddJob
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/utldict.h"
 #elif defined(_LINUX)
 #include <unistd.h>  // unlink
@@ -54,7 +54,7 @@
 #include "tier1/utlsymbol.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _WIN32
 #define CORRECT_PATH_SEPARATOR '\\'
@@ -1191,6 +1191,6 @@ class CAutoBlockReporter {
 // singleton accessor
 CBaseFileSystem *BaseFileSystem();
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // BASEFILESYSTEM_H

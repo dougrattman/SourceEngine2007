@@ -18,7 +18,7 @@
 #include "msgbuffer.h"
 #include "socket.h"
 #include "inetapi.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 
 #include <VGUI/IVGui.h>
 

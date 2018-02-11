@@ -18,8 +18,8 @@
 #include "icliententitylist.h"
 #include "client.h"
 #include "host_jmp.h"
-#include "tier0/vprof.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/vprof.h"
+#include "tier0/include/icommandline.h"
 #include "filesystem_engine.h"
 #include "zone.h"
 #include "iengine.h"
@@ -36,7 +36,7 @@
 #include "testscriptmgr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool		g_bAbortServerSet;
 #ifndef SWDS

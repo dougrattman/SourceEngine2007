@@ -8,11 +8,11 @@
 #include "icliententitylist.h"
 #include "snd_audio_source.h"
 #include "sound.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "vox.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // HACK:  expose in sound.h maybe?
 void DSP_FastReset(int dsp);

@@ -15,9 +15,9 @@
 #include "datacache/idatacache.h"
 #include "host.h"
 #include "sys_dll.h"
-#include "tier0/basetypes.h"
-#include "tier0/icommandline.h"
-#include "tier0/memalloc.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/memalloc.h"
 #include "tier1/memstack.h"
 #include "tier1/strtools.h"
 

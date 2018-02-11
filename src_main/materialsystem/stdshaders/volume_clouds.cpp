@@ -4,7 +4,7 @@
 #include "volume_clouds_helper.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( VolumeClouds, VolumeClouds_dx9 )
 BEGIN_VS_SHADER( VolumeClouds_dx9, "VolumeClouds" )

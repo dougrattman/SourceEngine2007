@@ -11,14 +11,14 @@
 #include <cstring>
 #include "filesystem.h"
 #include "materialsystem/ITexture.h"
-#include "tier0/dbg.h"
-#include "tier0/mem.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/mem.h"
 #include "tier1/utlbuffer.h"
 #include "vgui/ISurface.h"
 #include "vgui_surfacelib/FontManager.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 struct BitmapFontTable_t {
   BitmapFontTable_t() {

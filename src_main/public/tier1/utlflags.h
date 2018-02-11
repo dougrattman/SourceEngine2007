@@ -5,7 +5,7 @@
 #ifndef SOURCE_TIER1_UTLFLAGS_H_
 #define SOURCE_TIER1_UTLFLAGS_H_
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Simple class to make it easier to deal with flags

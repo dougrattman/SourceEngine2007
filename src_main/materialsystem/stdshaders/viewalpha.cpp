@@ -3,7 +3,7 @@
 #include "shaderlib/CShader.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_SHADER_FLAGS(ViewAlpha, "Help for ViewAlpha", SHADER_NOT_EDITABLE)
 

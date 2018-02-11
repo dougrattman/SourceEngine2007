@@ -3,10 +3,10 @@
 #include "changeframelist.h"
 
 #include "dt.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/UtlVector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CChangeFrameList : public IChangeFrameList {
  public:

@@ -5,8 +5,8 @@
 
 #include <float.h>
 #include "mathlib/vector.h"
-#include "tier0/dbg.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 
 // Use this to disable range checks within a scope.
 class CDisableRangeChecks {

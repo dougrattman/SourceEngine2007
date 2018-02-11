@@ -7,6 +7,12 @@
     <Filter Include="Public Header Files">
       <UniqueIdentifier>{ebac33fa-30c2-404c-a2a0-9b429e0d8601}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{970c5778-7ac3-4ca3-80c3-f8eccd74634d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{777cbb7a-78c8-4786-9835-659053e8b07a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cvar.cpp">
@@ -56,5 +62,13 @@
     <ClInclude Include="..\public\vstdlib\pch_vstdlib.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\vstdlib.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

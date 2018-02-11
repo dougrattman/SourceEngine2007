@@ -9,7 +9,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <type_traits>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
 // Purpose: String formatter with specified size

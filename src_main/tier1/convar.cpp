@@ -7,9 +7,9 @@
 #include <cstring>
 #include "Color.h"
 #include "icvar.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memdbgon.h"
 #include "tier1/characterset.h"
 #include "tier1/convar_serverbounded.h"
 #include "tier1/strtools.h"

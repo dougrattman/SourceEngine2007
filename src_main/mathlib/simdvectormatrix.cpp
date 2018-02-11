@@ -5,10 +5,10 @@
 
 #include "mathlib/simdvectormatrix.h"
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 void CSIMDVectorMatrix::CreateFromRGBA_FloatImageData(int srcwidth,
                                                       int srcheight,

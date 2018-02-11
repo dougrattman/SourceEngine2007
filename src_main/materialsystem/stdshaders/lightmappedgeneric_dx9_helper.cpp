@@ -14,7 +14,7 @@
 #include "lightmappedgeneric_vs20.inc"
 #include "lightmappedgeneric_ps20b.inc"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar mat_disable_lightwarp( "mat_disable_lightwarp", "0" );
 ConVar mat_disable_fancy_blending( "mat_disable_fancy_blending", "0" );

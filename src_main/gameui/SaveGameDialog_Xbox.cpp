@@ -20,7 +20,7 @@
 #include "winlite.h"  // FILETIME
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #include "tier1/UtlVector.h"
 #include "vgui_controls/Frame.h"

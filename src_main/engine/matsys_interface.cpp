@@ -29,8 +29,8 @@
 #include "materialsystem/materialsystem_config.h"
 #include "server.h"
 #include "sys_dll.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "tier2/tier2.h"
 #include "utldict.h"
@@ -51,7 +51,7 @@ extern IFileSystem *g_pFileSystem;
 #include "igame.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Start the frame count at one so stuff gets updated the first frame
 int r_framecount = 1;  // used for dlight + lightstyle push checking

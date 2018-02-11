@@ -11,7 +11,7 @@
 #include "shake.h"
 #include "tmessage.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CBaseActionEditDialog::CBaseActionEditDialog(CDemoEditorPanel *parent,
                                              CBaseDemoAction *action,

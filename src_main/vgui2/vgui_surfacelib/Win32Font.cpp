@@ -8,13 +8,13 @@
 #include <cstdio>
 #include <cstring>
 #include "FontEffects.h"
-#include "tier0/dbg.h"
-#include "tier0/mem.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/mem.h"
 #include "utlbuffer.h"
 #include "vgui/ISurface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool s_bSupportsUnicode = false;
 

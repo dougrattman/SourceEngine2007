@@ -11,7 +11,7 @@
 #include "vengineserver_impl.h"
 #include "world.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Edicts won't get reallocated for this many seconds after being freed.
 #define EDICT_FREETIME 1.0

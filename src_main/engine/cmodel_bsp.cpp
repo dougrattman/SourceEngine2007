@@ -21,7 +21,7 @@ extern IMaterialSystem *materials;
 #include "vphysics_interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool g_bServerGameDLLGreaterThanV4;
 IPhysicsSurfaceProps *physprop = NULL;

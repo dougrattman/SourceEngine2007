@@ -6,7 +6,7 @@
 #include "dt.h"
 #include "quakedef.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern void DataTable_Warning(const char *pInMessage, ...);
 extern bool ShouldWatchThisProp(const SendTable *pTable, int objectID,

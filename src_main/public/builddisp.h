@@ -14,8 +14,8 @@
 #pragma once
 #endif
 
-#include "tier0/commonmacros.h"
-#include "tier0/dbg.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/dbg.h"
 #include "bspfile.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/bumpvects.h"

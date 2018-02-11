@@ -2,7 +2,7 @@
 
 #include <vstdlib/IKeyValuesSystem.h>
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/keyvalues.h"
 #include "tier1/mempool.h"
 #include "tier1/memstack.h"

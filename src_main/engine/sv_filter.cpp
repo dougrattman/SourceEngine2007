@@ -10,7 +10,7 @@
 #include "sv_steamauth.h"
 #include "tier1/commandbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar sv_filterban("sv_filterban", "1", 0,
                            "Set packet filtering by IP mode");

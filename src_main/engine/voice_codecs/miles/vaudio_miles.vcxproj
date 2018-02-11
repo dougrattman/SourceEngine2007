@@ -99,20 +99,15 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;_USRDLL;MILES_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>.\Release/speex.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <CompileAs>Default</CompileAs>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -123,6 +118,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
       <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
@@ -134,7 +130,6 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\Release/speex.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
@@ -142,6 +137,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -160,7 +156,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;_USRDLL;MILES_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -168,13 +164,8 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/speex.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <CompileAs>Default</CompileAs>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -184,6 +175,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
       <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
@@ -195,13 +187,13 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\Release/speex.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -219,20 +211,15 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;_USRDLL;MILES_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>.\Debug/speex.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <StringPooling>true</StringPooling>
@@ -242,6 +229,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
       <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
@@ -253,8 +241,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/speex.pdb</ProgramDatabaseFile>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -277,21 +264,16 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);..\frame_encoder;..\..\..\public;..\..;..\..\..\common;..\..\audio\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;_USRDLL;MILES_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/speex.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -300,6 +282,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
       <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
@@ -311,8 +294,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/speex.pdb</ProgramDatabaseFile>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>

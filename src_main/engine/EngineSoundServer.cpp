@@ -11,12 +11,12 @@
 #include "sound.h"
 #include "soundchars.h"
 #include "sv_main.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "vengineserver_impl.h"
 #include "vox.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Server-side implementation of the engine sound interface
 class CEngineSoundServer : public IEngineSound {

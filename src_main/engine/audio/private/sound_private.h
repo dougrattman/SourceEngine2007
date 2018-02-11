@@ -4,7 +4,7 @@
 #define SOUND_PRIVATE_H
 
 #include "snd_fixedint.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // Forward declarations
 struct portable_samplepair_t;

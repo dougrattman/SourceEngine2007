@@ -11,10 +11,10 @@
 #include "avi/ibik.h"
 #include "eax.h"
 #include "iprediction.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool snd_firsttime;
 

@@ -7,7 +7,7 @@
 #include "SteamCommon.h"
 #include "steam/steamclientpublic.h"
 #include "strtools.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #endif
 
 #ifdef HL1

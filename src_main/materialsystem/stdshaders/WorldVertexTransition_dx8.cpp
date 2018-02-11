@@ -17,7 +17,7 @@
 #include "worldvertextransition_dx8_helper.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( WorldVertexTransition, WorldVertexTransition_DX8 )
 

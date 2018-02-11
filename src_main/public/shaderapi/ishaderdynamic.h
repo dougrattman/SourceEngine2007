@@ -42,7 +42,7 @@ struct ShaderColorCorrectionInfo_t {
 // the 3D shader API interface
 // This interface is all that shaders see.
 //-----------------------------------------------------------------------------
-enum StandardTextureId_t {
+enum StandardTextureId_t : int {
   // Lightmaps
   TEXTURE_LIGHTMAP = 0,
   TEXTURE_LIGHTMAP_FULLBRIGHT,
@@ -249,10 +249,9 @@ abstract_class IShaderDynamicAPI {
   virtual float GetAmbientLightCubeLuminance() = 0;
 
   virtual void GetDX9LightState(LightState_t * state) const = 0;
-  virtual int
-  GetPixelFogCombo() = 0;  // 0 is either range fog, or no fog
-                           // simulated with rigged range fog values.
-                           // 1 is height fog
+  virtual int GetPixelFogCombo() = 0;  // 0 is either range fog, or no fog
+                                       // simulated with rigged range fog
+                                       // values. 1 is height fog
 
   virtual void BindStandardVertexTexture(VertexTextureSampler_t sampler,
                                          StandardTextureId_t id) = 0;

@@ -4,7 +4,7 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "particles/particles.h"
 #include "filesystem.h"
 #include "tier2/tier2.h"
@@ -18,7 +18,7 @@
 #include "const.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 void CParticleOperatorInstance::InitScalarAttributeRandomRangeBlock( 

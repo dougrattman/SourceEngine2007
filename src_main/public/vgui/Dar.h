@@ -17,7 +17,7 @@
 #include <vgui/VGUI.h>
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 namespace vgui
 {
@@ -129,6 +129,6 @@ public:
 
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif // DAR_H

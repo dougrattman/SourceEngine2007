@@ -4,9 +4,9 @@
 #define BITVEC_H
 
 #include <climits>
-#include "tier0/basetypes.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
 
 class CBitVecAccessor {
  public:
@@ -1158,7 +1158,7 @@ inline void CBitVecT<CFixedBitVecBase<32> >::Set(int bitNum, bool bNewVal) {
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Resizes the bit string to a new number of bits
@@ -1260,7 +1260,7 @@ inline void CVarBitVecBase::FreeInts(void) {
   m_pInt = NULL;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 // ------------------------------------------------------------------------ //
 // CBitVecAccessor inlines.

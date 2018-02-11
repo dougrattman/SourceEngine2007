@@ -11,19 +11,19 @@
 #include <io.h>
 #endif
 
-#include "tier0/dbg.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 #ifdef _WIN32
-#include "tier0/tslist.h"
+#include "tier0/include/tslist.h"
 #endif
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/fmtstr.h"
 #include "tier1/utlrbtree.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 COMPILE_TIME_ASSERT(SEEK_CUR == FILESYSTEM_SEEK_CURRENT);
 COMPILE_TIME_ASSERT(SEEK_SET == FILESYSTEM_SEEK_HEAD);

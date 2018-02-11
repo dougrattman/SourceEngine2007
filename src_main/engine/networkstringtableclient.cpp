@@ -6,7 +6,7 @@
 #include "networkstringtable.h"
 #include "quakedef.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef SHARED_NET_STRING_TABLES
 static CNetworkStringTableContainer s_NetworkStringTableClient;

@@ -3,7 +3,7 @@
 #include "vgui_surfacelib/FontManager.h"
 
 #include <locale.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui/ISurface.h"
 #include "vgui_surfacelib/BitmapFont.h"
 

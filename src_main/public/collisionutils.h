@@ -8,7 +8,7 @@
 #ifndef COLLISIONUTILS_H
 #define COLLISIONUTILS_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #ifdef _WIN32
 #pragma once

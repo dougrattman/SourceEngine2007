@@ -21,14 +21,14 @@
 #undef PROTECTED_THINGS_ENABLE  // from protected_things.h
 #endif
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // InterfaceReg.
 InterfaceReg *InterfaceReg::s_pInterfaceRegs = nullptr;

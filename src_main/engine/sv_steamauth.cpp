@@ -29,11 +29,11 @@
 #include "sv_log.h"
 #include "sv_master_legacy.h"
 #include "sv_plugin.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar sv_lan;
 

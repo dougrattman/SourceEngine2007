@@ -5,12 +5,12 @@
 //=============================================================================
 
 #include "vgui_controls/subrectimage.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui/isurface.h"
 #include "vgui_controls/controls.h"
 
 // NOTE: This has to be the last file included!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

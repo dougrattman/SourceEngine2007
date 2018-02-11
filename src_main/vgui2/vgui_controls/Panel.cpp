@@ -26,11 +26,11 @@
 
 #include "FileSystem.h"
 #include "UtlDict.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/mempool.h"
 #include "tier1/utlbuffer.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

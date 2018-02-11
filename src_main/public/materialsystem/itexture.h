@@ -4,7 +4,7 @@
 #define ITEXTURE_H
 
 #include "bitmap/imageformat.h"  // ImageFormat defn.
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 class IVTFTexture;
 class ITexture;

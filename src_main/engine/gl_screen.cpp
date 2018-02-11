@@ -23,12 +23,12 @@
 #include "sound.h"
 #include "sys_dll.h"
 #include "sys_mainwind.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "toolframework/itoolframework.h"
 #include "vgui_baseui_interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // In other C files.
 extern bool V_CheckGamma(void);

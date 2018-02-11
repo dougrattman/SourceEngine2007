@@ -4,7 +4,7 @@
 
 #include "GameEventManager.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CGameEventManagerOld : public IGameEventManager {
  public:  // IGameEventManager wrapper

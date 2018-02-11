@@ -14,7 +14,7 @@
 #endif
 
 #include "trace.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "basehandle.h"
 
 struct edict_t;

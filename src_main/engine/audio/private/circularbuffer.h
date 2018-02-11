@@ -14,7 +14,7 @@
 #ifndef CIRCULARBUFFER_H
 #define CIRCULARBUFFER_H
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 class CCircularBuffer {
  public:

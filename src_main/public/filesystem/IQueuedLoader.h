@@ -4,7 +4,7 @@
 #define QUEUEDLOADER_H
 
 #include "appframework/IAppSystem.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 enum LoaderError_t {
   LOADERERROR_NONE = 0,

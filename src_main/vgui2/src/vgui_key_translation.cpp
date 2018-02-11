@@ -5,7 +5,7 @@
 #include "xbox/xboxstubs.h"
 #endif
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui_key_translation.h"
 
 #ifdef POSIX
@@ -16,7 +16,7 @@
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 vgui::KeyCode KeyCode_VirtualKeyToVGUI(int key) {
   // Some tools load vgui for localization and never use input

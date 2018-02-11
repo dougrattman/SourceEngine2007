@@ -7,8 +7,8 @@
 #include "hl2orange.spa.h"
 #include "matchmaking.h"
 #include "strtools.h"
-#include "tier0/dbg.h"
-#include "tier0/tslist.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/tslist.h"
 #include "tier1/UtlLinkedList.h"
 
 #ifdef IS_WINDOWS_PC
@@ -16,7 +16,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IXboxSystem *g_pXboxSystem;
 

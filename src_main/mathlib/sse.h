@@ -5,7 +5,7 @@
 
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/calling_conventions.h"
+#include "tier0/include/calling_conventions.h"
 
 #ifndef ARCH_CPU_X86_64
 

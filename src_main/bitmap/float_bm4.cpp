@@ -9,9 +9,9 @@
 #include "mathlib/bumpvects.h"
 #include "mathlib/halton.h"
 #include "raytrace.h"
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
+#include "tier0/include/threadtools.h"
 #include "vstdlib/vstdlib.h"
 
 // In order to handle intersections with wrapped copies, we repeat the bitmap

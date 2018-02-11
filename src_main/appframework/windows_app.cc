@@ -12,14 +12,14 @@
 #include "appframework/iappsystemgroup.h"
 #include "filesystem.h"
 #include "filesystem_init.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/interface.h"
 #include "vstdlib/cvar.h"
 #include "xbox/xbox_console.h"
 
 // memdbgon must be the last include file in a .cc file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Globals...

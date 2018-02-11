@@ -2,7 +2,7 @@
 
 #include "audio_pch.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool snd_firsttime = true;
 

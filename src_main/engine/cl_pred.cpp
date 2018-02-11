@@ -7,7 +7,7 @@
 #include "demo.h"
 #include "host.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CL_Predict(int world_start_state, bool validframe, int start_command,
                 int stop_command) {

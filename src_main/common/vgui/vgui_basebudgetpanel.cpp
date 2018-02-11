@@ -5,7 +5,7 @@
 #include "vgui_controls/Label.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CBaseBudgetPanel::CBaseBudgetPanel(vgui::Panel *pParent,
                                    const char *pElementName)

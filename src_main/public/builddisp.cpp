@@ -5,10 +5,10 @@
 #include <malloc.h>
 #include <cstdlib>
 #include "collisionutils.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Node Functions (friend functions)
 

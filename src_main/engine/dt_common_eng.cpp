@@ -12,7 +12,7 @@
 #include "sv_packedentities.h"
 #include "tier1/UtlLinkedList.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern CUtlLinkedList<CClientSendTable *, unsigned short> g_ClientSendTables;
 extern CUtlLinkedList<CRecvDecoder *, unsigned short> g_RecvDecoders;

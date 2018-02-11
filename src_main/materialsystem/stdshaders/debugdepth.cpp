@@ -13,7 +13,7 @@
 #include "debugdrawdepth_ps20b.inc"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar mat_debugdepthmode( "mat_debugdepthmode", "0" );
 static ConVar mat_debugdepthval( "mat_debugdepthval", "128.0f" );

@@ -4,7 +4,7 @@
 
 #include "quakedef.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CFileTransferMgr::CFileTransferMgr() {}
 

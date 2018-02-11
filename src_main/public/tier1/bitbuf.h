@@ -7,8 +7,8 @@
 
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Forward declarations.

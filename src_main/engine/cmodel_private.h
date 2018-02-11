@@ -209,7 +209,7 @@ inline T *CRangeValidatedArray<T>::Base() {
 //-----------------------------------------------------------------------------
 // A dumpable version of RangeValidatedArray
 //-----------------------------------------------------------------------------
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 template <class T>
 class CDiscardableArray {
  public:
@@ -258,7 +258,7 @@ class CDiscardableArray {
   char m_pFilename[256];
   int m_nOffset;
 };
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 const int SURFACE_INDEX_INVALID = 0xFFFF;
 

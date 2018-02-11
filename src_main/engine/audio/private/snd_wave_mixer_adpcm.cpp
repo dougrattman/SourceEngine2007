@@ -4,7 +4,7 @@
 
 #include "snd_wave_mixer_adpcm.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // max size of ADPCM block in bytes
 #define MAX_BLOCK_SIZE 4096

@@ -11,7 +11,7 @@
 #include "materialsystem/IMaterial.h"
 #include "VguiMatSurface.h"
 #include "materialsystem/IMaterialSystem.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/keyvalues.h"
 #include "PixelWriter.h"
 #include "materialsystem/IMaterialVar.h"
@@ -19,7 +19,7 @@
 #include "vtf/vtf.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define TEXTURE_ID_UNKNOWN	-1
 

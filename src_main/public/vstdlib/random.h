@@ -5,8 +5,8 @@
 #ifndef SOURCE_VSTDLIB_RANDOM_H_
 #define SOURCE_VSTDLIB_RANDOM_H_
 
-#include "tier0/basetypes.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/interface.h"
 #include "vstdlib/vstdlib.h"
 

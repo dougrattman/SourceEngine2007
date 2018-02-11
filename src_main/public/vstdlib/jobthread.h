@@ -30,7 +30,7 @@
 
 #include <climits>
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/functors.h"
 #include "tier1/refcount.h"
 #include "tier1/utllinkedlist.h"

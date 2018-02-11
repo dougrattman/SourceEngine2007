@@ -46,10 +46,10 @@
 #include "sys.h"
 #include "sys_dll.h"
 #include "testscriptmgr.h"
-#include "tier0/icommandline.h"
-#include "tier0/systeminformation.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/systeminformation.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier2/tier2.h"
 #include "traceinit.h"
 #include "vgui/ISystem.h"
@@ -58,7 +58,7 @@
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
 

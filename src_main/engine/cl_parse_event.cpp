@@ -7,7 +7,7 @@
 #include "client_class.h"
 #include "dt_recv_eng.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar cl_showevents("cl_showevents", "0", FCVAR_CHEAT,
                             "Print event firing info in the console");

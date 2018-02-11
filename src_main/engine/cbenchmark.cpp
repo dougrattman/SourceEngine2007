@@ -15,11 +15,11 @@
 #include "steam/steam_api.h"
 #include "sv_uploaddata.h"
 #include "sys.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DEFAULT_RESULTS_FOLDER "results"
 #define DEFAULT_RESULTS_FILENAME "results.txt"

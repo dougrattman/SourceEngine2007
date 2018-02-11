@@ -8,7 +8,7 @@
 
 #include <type_traits>
 #include "appframework/iappsystem.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/interface.h"
 #include "tier1/utldict.h"
 #include "tier1/utlvector.h"

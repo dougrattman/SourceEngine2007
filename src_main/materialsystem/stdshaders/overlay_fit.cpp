@@ -10,7 +10,7 @@
 #include "overlay_fit_vs11.inc"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // FIXME: Need to make a dx9 version so that "CENTROID" works.
 

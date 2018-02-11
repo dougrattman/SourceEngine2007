@@ -6,11 +6,11 @@
 #include <malloc.h>
 #include <memory.h>
 #include <cstdio>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
 // Should be last include
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 MemoryPoolReportFunc_t CMemoryPool::g_ReportFunc = 0;
 

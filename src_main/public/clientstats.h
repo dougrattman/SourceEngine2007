@@ -14,7 +14,7 @@
 
 #include "tier1/interface.h"
 #include <climits>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #define INTERFACEVERSION_CLIENTSTATS "ClientStats004"
 

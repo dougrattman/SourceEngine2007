@@ -17,10 +17,10 @@
 #include "server.h"
 #include "sv_main.h"  // SV_GetFakeClientCount()
 #include "sv_steamauth.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar sv_master_legacy_mode(
     "sv_master_legacy_mode", "1", 0,

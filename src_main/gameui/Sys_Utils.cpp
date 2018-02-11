@@ -3,10 +3,10 @@
 #include "winlite.h"
 #include "Sys_Utils.h"
 #include "EngineInterface.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const unsigned int SYS_NO_ERROR = NO_ERROR;
 const unsigned int SYS_ERROR_INVALID_HANDLE = ERROR_INVALID_HANDLE;

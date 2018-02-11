@@ -21,7 +21,7 @@
 #include "session.h"
 #include "tier1/utllinkedlist.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Assuming worst case 5fps = 200ms @ 44.1Khz = ~8K samples.
 #define XAUDIO_BUFFER_SAMPLES 8192

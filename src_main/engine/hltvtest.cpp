@@ -9,7 +9,7 @@
 #include "host.h"
 #include "tier1/convar.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CHLTVTestSystem *hltvtest = NULL;
 

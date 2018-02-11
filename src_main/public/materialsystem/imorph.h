@@ -13,7 +13,7 @@
 #include <cfloat>
 #include "materialsystem/imaterial.h"
 #include "mathlib/vector.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Single morph data

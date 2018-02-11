@@ -22,7 +22,7 @@
 #include "server.h"
 #include "sys.h"
 #include "sys_dll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "toolframework/itoolframework.h"
 #include "toolframework/itoolsystem.h"
 #include "vmodes.h"
@@ -32,7 +32,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Forward declarations

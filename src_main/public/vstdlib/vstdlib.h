@@ -3,7 +3,7 @@
 #ifndef SOURCE_VSTDLIB_VSTDLIB_H_
 #define SOURCE_VSTDLIB_VSTDLIB_H_
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #ifdef VSTDLIB_DLL_EXPORT
 #define VSTDLIB_INTERFACE DLL_EXPORT

@@ -5,9 +5,9 @@
 #include "vstdlib/random.h"
 
 #include "cdll_int.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 //

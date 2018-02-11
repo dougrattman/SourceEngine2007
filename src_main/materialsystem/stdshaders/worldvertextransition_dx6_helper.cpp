@@ -5,7 +5,7 @@
 #include "worldvertextransition_dx6_helper.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void InitParamsWorldVertexTransition_DX6(
     IMaterialVar **params, WorldVertexTransition_DX6_Vars_t &info) {

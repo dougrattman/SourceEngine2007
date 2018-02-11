@@ -18,13 +18,13 @@
 #include "server_class.h"
 #include "staticpropmgr.h"
 #include "sys_dll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "vphysics/virtualmesh.h"
 #include "vphysics_interface.h"
 #include "world.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Various statistics to gather

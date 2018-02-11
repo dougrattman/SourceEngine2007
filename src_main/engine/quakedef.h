@@ -8,7 +8,7 @@
 // OPTIONAL DEFINES
 // #define	PARANOID  // speed sapping error checking
 #include "qlimits.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // FIXME, remove more of these?
 #include "cmd.h"

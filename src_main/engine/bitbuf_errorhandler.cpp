@@ -2,11 +2,11 @@
 
 #include "bitbuf_errorhandler.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/bitbuf.h"
 #include "tier1/utlsymbol.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void EngineBitBufErrorHandler(BitBufErrorType errorType,
                               const char *pDebugName) {

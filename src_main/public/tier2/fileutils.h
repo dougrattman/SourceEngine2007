@@ -6,7 +6,7 @@
 #define SOURCE_TIER2_FILEUTILS_H_
 
 #include "filesystem.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier2/tier2.h"
 
 // Builds a directory which is a subdirectory of the current mod

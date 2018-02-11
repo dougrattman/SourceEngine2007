@@ -19,8 +19,8 @@
 #include "inputsystem/iinputsystem.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "materialsystem/MaterialSystem_Config.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier3/tier3.h"
 #include "vgui/ILocalize.h"
 #include "vgui/IScheme.h"
@@ -29,7 +29,7 @@
 #include "vgui_controls/controls.h"
 
 // memdbgon must be the last include file in a .cc file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Constructor

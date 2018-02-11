@@ -13,7 +13,7 @@
 #include "xwvfile.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // This determines how much data to pre-cache (will invalidate per-map caches if
 // changed).

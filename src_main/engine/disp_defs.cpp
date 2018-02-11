@@ -2,7 +2,7 @@
 
 #include "disp_defs.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // ---------------------------------------------------------------------- //
 // Global tables.

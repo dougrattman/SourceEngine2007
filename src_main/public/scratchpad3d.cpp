@@ -3,10 +3,10 @@
 #include "scratchpad3d.h"
 
 #include <cstdio>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _LINUX
 #define __stdcall

@@ -43,7 +43,7 @@
 #endif
 
 // TODO: move interface.cpp into tier0 library.
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // All interfaces derive from this.
 class IBaseInterface {

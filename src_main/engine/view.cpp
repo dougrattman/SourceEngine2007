@@ -30,11 +30,11 @@
 #include "quakedef.h"
 #include "r_local.h"
 #include "sys.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "toolframework/itoolframework.h"
 #include "vgui_baseui_interface.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class IClientEntity;
 

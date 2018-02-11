@@ -11,7 +11,7 @@
 #include "dlight.h"
 #include "idispinfo.h"
 #include "mathlib/vmatrix.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 #include "zone.h"

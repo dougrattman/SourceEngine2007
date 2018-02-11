@@ -9,7 +9,7 @@
 #include "tier1/UtlLinkedList.h"
 #include "tier1/utlstring.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DELTA_DISTANCE_BAND 200
 #define NUM_DELTA_DISTANCE_BANDS (8000 / DELTA_DISTANCE_BAND)

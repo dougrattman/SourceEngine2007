@@ -8,12 +8,12 @@
 #include "dt_instrumentation_server.h"
 #include "dt_stack.h"
 #include "packed_entity.h"
-#include "tier0/commonmacros.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern int host_framecount;
 CRC32_t SendTable_ComputeCRC();

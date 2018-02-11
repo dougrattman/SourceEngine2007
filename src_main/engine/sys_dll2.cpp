@@ -31,9 +31,9 @@
 #include "quakedef.h"
 #include "server.h"
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
-#include "tier0/systeminformation.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/systeminformation.h"
+#include "tier0/include/vcrmode.h"
 #include "tier3/tier3.h"
 #include "toolframework/itoolframework.h"
 #include "traceinit.h"
@@ -61,7 +61,7 @@
 
 #include "xbox/xboxstubs.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Globals
 IDedicatedExports *dedicated = NULL;

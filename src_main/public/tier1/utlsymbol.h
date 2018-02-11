@@ -5,7 +5,7 @@
 #ifndef SOURCE_TIER1_UTLSYMBOL_H_
 #define SOURCE_TIER1_UTLSYMBOL_H_
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier1/stringpool.h"
 #include "tier1/utlrbtree.h"
 #include "tier1/utlvector.h"

@@ -30,7 +30,7 @@
 #include "xbox/xbox_win32stubs.h"
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

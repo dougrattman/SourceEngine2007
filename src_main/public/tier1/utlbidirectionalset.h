@@ -6,7 +6,7 @@
 #ifndef SOURCE_TIER1_UTLBIDIRECTIONALSET_H_
 #define SOURCE_TIER1_UTLBIDIRECTIONALSET_H_
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utllinkedlist.h"
 
 //-----------------------------------------------------------------------------

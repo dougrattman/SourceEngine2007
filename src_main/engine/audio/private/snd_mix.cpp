@@ -12,7 +12,7 @@
 #include "mouthinfo.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if defined(_WIN32) && id386
 #endif

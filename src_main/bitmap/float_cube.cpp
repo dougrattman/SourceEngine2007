@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 static Vector face_xvector[6] = {
     // direction of x pixels on face

@@ -15,8 +15,8 @@
 #include "psheet.h"
 #include "random_floats.h"
 #include "studio.h"
-#include "tier0/platform.h"
-#include "tier0/vprof.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/UtlStringMap.h"
 #include "tier1/lzmaDecoder.h"
@@ -27,7 +27,7 @@
 #include "vtf/vtf.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Default implementation of particle system mgr
@@ -671,7 +671,7 @@ void CParticleOperatorInstance::InitNewParticles(
 //------------------------------------------------------------------------------
 // need custom new/delete for alignment for simd
 //------------------------------------------------------------------------------
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 void *CParticleCollection::operator new(size_t nSize) {
   return MemAlloc_AllocAligned(nSize, 16);
 }
@@ -717,7 +717,7 @@ void CWorldCollideContextData::operator delete(void *pData, int nBlockUse,
   }
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Constructor, destructor
@@ -2516,7 +2516,7 @@ CParticleSystemMgr::GetParticleSystemDefinitionUnpackStructure() {
 //------------------------------------------------------------------------------
 // custom allocators for operators so simd aligned
 //------------------------------------------------------------------------------
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 void *CParticleOperatorInstance::operator new(size_t nSize) {
   return MemAlloc_AllocAligned(nSize, 16);
 }
@@ -2541,7 +2541,7 @@ void CParticleOperatorInstance::operator delete(void *pData, int nBlockUse,
   }
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Read the particle config file from a utlbuffer

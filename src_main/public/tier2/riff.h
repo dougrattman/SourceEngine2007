@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER2_RIFF_H_
 #define SOURCE_TIER2_RIFF_H_
 
-#include "tier0/commonmacros.h"
+#include "tier0/include/commonmacros.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: This is a simple abstraction that the RIFF classes use to read from

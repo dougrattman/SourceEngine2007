@@ -3,14 +3,14 @@
 // Purpose: 
 //
 //=============================================================================
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/strtools.h"
 #include "interpolatortypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "mathlib/mathlib.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 struct InterpolatorNameMap_t
 {

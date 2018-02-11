@@ -14,7 +14,7 @@
 #include "bspfile.h"
 #include "const.h"
 #include "ihandleentity.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // Entities can span this many clusters before we revert to a slower area
 // checking algorithm

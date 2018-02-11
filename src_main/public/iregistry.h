@@ -3,7 +3,7 @@
 #ifndef UTIL_REGISTRY_H
 #define UTIL_REGISTRY_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // Purpose: Interface to registry
 abstract_class IRegistry {

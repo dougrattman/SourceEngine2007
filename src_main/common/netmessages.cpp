@@ -9,11 +9,11 @@
 #include "mathlib/mathlib.h"
 #include "networkstringtabledefs.h"
 #include "sound.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/bitbuf.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static char s_text[1024];
 

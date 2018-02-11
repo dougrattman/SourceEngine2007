@@ -15,7 +15,7 @@
 #include "bitvec.h"
 #include "const.h"
 #include "dt_common.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // ------------------------------------------------------------------------ //
 // Send proxies can be used to convert a variable into a networkable type

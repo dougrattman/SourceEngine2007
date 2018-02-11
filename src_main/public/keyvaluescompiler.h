@@ -3,7 +3,7 @@
 #ifndef KEYVALUESCOMPILER_H
 #define KEYVALUESCOMPILER_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
 #include "tier1/utlsymbol.h"

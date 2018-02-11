@@ -2,14 +2,14 @@
 
 #include "key_translation.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 #include "winlite.h"
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ButtonCode_t s_pVirtualKeyToButtonCode[256];
 static ButtonCode_t s_pXKeyTrans[XK_MAX_KEYS];

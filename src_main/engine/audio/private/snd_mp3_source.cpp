@@ -4,7 +4,7 @@
 
 #include "snd_mp3_source.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CAudioSourceMP3::CAudioSourceMP3(CSfxTable *pSfx) {
   m_sampleRate = 44100;

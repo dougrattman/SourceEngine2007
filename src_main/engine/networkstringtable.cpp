@@ -8,12 +8,12 @@
 #include "net.h"
 #include "netmessages.h"
 #include "sysexternal.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/bitbuf.h"
 #include "tier1/utlbuffer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SUBSTRING_BITS 5
 struct StringHistoryEntry {

@@ -4,8 +4,8 @@
 
 #include "cmodel.h"
 #include "collisionutils.h"
-#include "tier0/fasttimer.h"
-#include "tier0/vprof.h"
+#include "tier0/include/fasttimer.h"
+#include "tier0/include/vprof.h"
 #include "tier1/datamanager.h"
 #include "tier1/fmtstr.h"
 #include "tier1/generichash.h"
@@ -14,7 +14,7 @@
 #include "vphysics/virtualmesh.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //	Cache
 

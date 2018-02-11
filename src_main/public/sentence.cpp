@@ -9,12 +9,12 @@
 #include <cstdlib>
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
-#include "tier0/commonmacros.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/commonmacros.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/utlbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: converts an english string to unicode

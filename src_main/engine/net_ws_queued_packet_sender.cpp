@@ -10,7 +10,7 @@
 #include "tier1/utlpriorityqueue.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar net_queued_packet_thread("net_queued_packet_thread", "1", 0,
                                 "Use a high priority thread to send queued "

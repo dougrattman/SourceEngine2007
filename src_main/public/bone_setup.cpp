@@ -8,9 +8,9 @@
 #include "collisionutils.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssequaternion.h"
-#include "tier0/dbg.h"
-#include "tier0/tslist.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/tslist.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/datamanager.h"
 #include "vphysics_interface.h"
@@ -20,7 +20,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // -----------------------------------------------------------------
 template <typename T>

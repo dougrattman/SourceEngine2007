@@ -11,7 +11,7 @@
 #endif
 
 // Shared header file
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 

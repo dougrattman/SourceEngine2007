@@ -22,13 +22,13 @@
 #include "r_decal.h"
 #include "render.h"
 #include "sys_dll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 #include "tier1/interface.h"
 #include "utlbidirectionalset.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Shadow-related functionality exported by the engine

@@ -1,8 +1,8 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "bitmap/imageformat.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 #ifdef IS_WINDOWS_PC
 #include "winlite.h"
@@ -25,7 +25,7 @@ typedef int32_t *DWORD_PTR;
 #include "bitmap/float_bm.h"
 
 // Should be last include
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Various important function types for each color format

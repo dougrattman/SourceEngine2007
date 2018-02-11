@@ -13,7 +13,7 @@
 
 #include <sys/stat.h>
 #include <cstdio>
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"

@@ -9,7 +9,7 @@
 #include "materialsystem/imesh.h"
 #include "materialsystem/shadersystem.h"
 #include "shaderapi/ishaderutil.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlvector.h"
 
 IVertexBuffer::~IVertexBuffer() {}

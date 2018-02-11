@@ -17,7 +17,7 @@
 #include "tier1/netadr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 abstract_class IVProfData {
  public:

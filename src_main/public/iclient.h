@@ -11,7 +11,7 @@
 #endif
 
 #include <inetmsghandler.h>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "userid.h"
 
 class IServer;

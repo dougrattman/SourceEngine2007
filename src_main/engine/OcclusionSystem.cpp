@@ -11,12 +11,12 @@
 #include "gl_shader.h"
 #include "materialsystem/imesh.h"
 #include "mathlib/vector.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Uncomment this if you want to get a whole bunch of paranoid error checking
 // #define DEBUG_OCCLUSION_SYSTEM 1

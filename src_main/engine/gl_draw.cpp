@@ -15,7 +15,7 @@
 #include "view.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 Vector g_CurrentViewOrigin(0, 0, 0), g_CurrentViewForward(1, 0, 0),
     g_CurrentViewRight(0, -1, 0), g_CurrentViewUp(0, 0, 1);

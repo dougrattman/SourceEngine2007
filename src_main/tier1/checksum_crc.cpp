@@ -4,11 +4,12 @@
 
 #include "tier1/checksum_crc.h"
 
-#include "tier0/basetypes.h"
-#include "tier0/commonmacros.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/platform.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define CRC32_INIT_VALUE 0xFFFFFFFFUL
 #define CRC32_XOR_VALUE 0xFFFFFFFFUL

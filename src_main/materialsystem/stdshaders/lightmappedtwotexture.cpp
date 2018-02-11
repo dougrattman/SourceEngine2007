@@ -5,7 +5,7 @@
 #include "shaderlib/CShader.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // FIXME!!  Need to make dx9 version so that "CENTROID" flags can be added!
 BEGIN_SHADER(LightmappedTwoTexture, "Help for LightmappedTwoTexture")

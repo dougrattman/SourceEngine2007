@@ -11,7 +11,7 @@
 #include "datamap.h"
 #include "inputsystem/ButtonCode.h"
 #include "mathlib/mathlib.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/bitbuf.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/interface.h"

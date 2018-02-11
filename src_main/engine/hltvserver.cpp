@@ -27,12 +27,12 @@
 #include "sv_main.h"
 #include "sv_master_legacy.h"
 #include "sv_steamauth.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -1014,7 +1014,10 @@ Vector CHLTVServer::GetOriginFromPackedEntity(PackedEntity* pe)
                 if ( Q_strcmp( pProp->GetName(), "m_vecOrigin" ) == 0 )
                 {
                         Assert( pProp->GetType() == DPT_Vector );
-                
+                
+
+
+
 
 
 

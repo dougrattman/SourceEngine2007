@@ -12,10 +12,10 @@
 #include "framesnapshot.h"
 #include "hltvserver.h"
 #include "net_synctags.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/UtlLinkedList.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar g_CV_DTWatchEnt;
 

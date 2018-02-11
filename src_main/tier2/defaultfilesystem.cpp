@@ -4,7 +4,7 @@
 
 #include "filesystem_init.h"
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier2/tier2.h"
 
 static CSysModule *g_pFullFileSystemModule = NULL;

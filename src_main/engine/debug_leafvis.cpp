@@ -4,7 +4,7 @@
 
 #include "debug_leafvis.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Leaf visualization routines
 

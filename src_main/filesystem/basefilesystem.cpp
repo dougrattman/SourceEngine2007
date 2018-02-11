@@ -7,8 +7,8 @@
 #include "basefilesystem.h"
 
 #include "filesystem/IQueuedLoader.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/characterset.h"
 #include "tier1/convar.h"
@@ -36,7 +36,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar fs_report_sync_opens("fs_report_sync_opens", "0", 0,
                             "0:Off, 1:Always, 2:Not during load");

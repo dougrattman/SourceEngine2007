@@ -16,7 +16,7 @@
 
 #include "blockingudpsocket.h"
 
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 
 class CBlockingUDPSocket::CImpl {
  public:

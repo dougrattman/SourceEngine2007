@@ -19,7 +19,7 @@
 #define SOURCE_MATHLIB_HALTON_H_
 
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 class HaltonSequenceGenerator_t {
   int seed;

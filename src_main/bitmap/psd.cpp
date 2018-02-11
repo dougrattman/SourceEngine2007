@@ -5,13 +5,13 @@
 #include "bitmap/bitmap.h"
 #include "bitmap/imageformat.h"
 #include "filesystem.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/tier2.h"
 #include "tier2/utlstreambuffer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // The PSD signature bytes

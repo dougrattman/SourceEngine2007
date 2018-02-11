@@ -4,7 +4,7 @@
 
 #include "matchmaking.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Start a Matchmaking session as the host

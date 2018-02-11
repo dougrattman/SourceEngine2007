@@ -11,11 +11,11 @@
 #include "mathlib/mathlib.h"
 #include "optimize.h"
 #include "studiorendercontext.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static int g_nTotalDecalVerts;
 

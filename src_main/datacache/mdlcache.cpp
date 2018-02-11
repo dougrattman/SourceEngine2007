@@ -16,8 +16,8 @@
 #include "phyfile.h"
 #include "studio.h"
 #include "studiobyteswap.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/lzmaDecoder.h"
 #include "tier1/mempool.h"
@@ -114,7 +114,7 @@ struct studiodata_t {
 DEFINE_FIXEDSIZE_ALLOCATOR_MT(studiodata_t, 128, CMemoryPool::GROW_SLOW);
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CTempAllocHelper {
  public:

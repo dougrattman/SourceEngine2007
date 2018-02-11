@@ -10,13 +10,13 @@
 #include "shaderDLL_Global.h"
 #include "shaderlib/ShaderDLL.h"
 #include "shaderlib/cshader.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
 // NOTE: This must be the last include file in a .cpp file!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Globals

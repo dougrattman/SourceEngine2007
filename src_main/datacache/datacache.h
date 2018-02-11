@@ -4,7 +4,7 @@
 #define DATACACHE_H
 
 #include "datacache_common.h"
-#include "tier0/tslist.h"
+#include "tier0/include/tslist.h"
 #include "tier1/datamanager.h"
 #include "tier1/mempool.h"
 #include "tier1/utlhash.h"

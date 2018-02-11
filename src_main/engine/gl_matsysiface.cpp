@@ -18,8 +18,8 @@
 #include "p4lib/ip4.h"
 #include "sys_dll.h"
 #include "sysexternal.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/keyvalues.h"
 #include "tier2/p4helpers.h"
 #include "toolframework/itoolframework.h"
@@ -36,7 +36,7 @@ extern ConVar developer;
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef SWDS
 extern IMaterialSystem *materials;

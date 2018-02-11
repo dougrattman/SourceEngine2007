@@ -4,10 +4,10 @@
 #define SOURCE_DATAMAP_H_
 
 #include "mathlib/vector.h"
-#include "tier0/compiler_specific_macroses.h"
+#include "tier0/include/compiler_specific_macroses.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // SINGLE_INHERITANCE restricts the size of CBaseEntity
 // pointers-to-member-functions to 4 bytes
@@ -568,6 +568,6 @@ class CDatadescGeneratedNameHolder {
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // SOURCE_DATAMAP_H_

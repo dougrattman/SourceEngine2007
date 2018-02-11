@@ -10,7 +10,7 @@
 #include "FileSystem.h"
 #include "GameUI_Interface.h"
 #include "ModInfo.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/convar.h"
 #include "tier1/keyvalues.h"
 #include "vgui/IInput.h"
@@ -28,7 +28,7 @@
 #include "vgui_controls/RadioButton.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

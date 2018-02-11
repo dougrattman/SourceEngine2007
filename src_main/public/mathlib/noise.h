@@ -5,8 +5,8 @@
 
 #include <cmath>
 #include "mathlib/vector.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 // The following code is the c-ification of Ken Perlin's new noise algorithm
 // "JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN"

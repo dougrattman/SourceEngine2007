@@ -9,15 +9,15 @@
 #include "materialsystem/imorph.h"
 #include "materialsystem/ivballoctracker.h"
 #include "optimize.h"
-#include "tier0/platform.h"
-#include "tier0/tslist.h"
-#include "tier0/vprof.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/tslist.h"
+#include "tier0/include/vprof.h"
 #include "tier1/callqueue.h"
 #include "tier1/refcount.h"
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // garymcthack - this should go elsewhere
 #define MAX_NUM_BONE_INDICES 4

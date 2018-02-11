@@ -8,7 +8,7 @@
 #include "filesystem.h"
 #include "filesystem_engine.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: For proxy protecting

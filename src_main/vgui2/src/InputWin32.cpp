@@ -8,8 +8,8 @@
 #include <cstring>
 
 #include "VPanel.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 #include "tier1/keyvalues.h"
@@ -24,7 +24,7 @@
 #include "vgui_internal.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 SHORT System_GetKeyState(int virtualKeyCode);  // in System.cpp, a hack to only
                                                // have g_pVCR in system.cpp

@@ -30,8 +30,8 @@
 #include "r_decal.h"
 #include "server.h"
 #include "staticpropmgr.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
@@ -41,7 +41,7 @@
 #include "vtf/vtf.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // putting this here so that it is replicated to the client.dll and
 // materialsystem.dll

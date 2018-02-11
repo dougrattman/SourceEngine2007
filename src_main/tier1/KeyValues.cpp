@@ -12,8 +12,8 @@
 #include <cstdlib>
 #include "Color.h"
 #include "filesystem.h"
-#include "tier0/dbg.h"
-#include "tier0/mem.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/mem.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 #include "vstdlib/IKeyValuesSystem.h"
@@ -1987,7 +1987,7 @@ bool KeyValues::ReadAsBinary(CUtlBuffer &buffer) {
   return buffer.IsValid();
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: memory allocator

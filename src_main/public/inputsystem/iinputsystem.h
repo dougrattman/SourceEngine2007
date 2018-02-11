@@ -4,7 +4,7 @@
 #define SOURCE_INPUTSYSTEM_IINPUTSYSTEM_H_
 
 #include "appframework/IAppSystem.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #include "inputsystem/AnalogCode.h"
 #include "inputsystem/ButtonCode.h"

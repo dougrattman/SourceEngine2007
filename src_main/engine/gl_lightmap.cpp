@@ -16,14 +16,14 @@
 #include "materialsystem/imesh.h"
 #include "mathlib/bumpvects.h"
 #include "r_local.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "tier1/callqueue.h"
 #include "view.h"
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // globals
@@ -621,7 +621,8 @@ static void AccumulateBumpedLightstyles(ColorRGBExp32 *pLightmap,
 // into four. Can't do this as a function coz you can't return four
 // values and even the inliner falls down on pass-by-ref.
 #define UNPACK_COLORRGBEXP(fromVec, toVec0, toVec1, toVec2, toVec3) {\
-        
+        
+
 
 
 

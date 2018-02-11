@@ -28,15 +28,15 @@
 #include "net.h"
 #include "quakedef.h"
 #include "steam/steam_api.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/bitbuf.h"
 #include "tier1/checksum_md5.h"
 #include "tier1/utlbuffer.h"
 #include "tier2/tier2.h"
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern int g_iSteamAppID;
 

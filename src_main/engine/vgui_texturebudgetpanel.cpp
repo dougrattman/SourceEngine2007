@@ -9,7 +9,7 @@
 #include "vgui_controls/label.h"
 #include "vguimatsurface/imatsystemsurface.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef VPROF_ENABLED
 

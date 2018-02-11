@@ -5,10 +5,10 @@
 #include "tier2/tier2.h"
 
 #include "mathlib/mathlib.h"
-#include "tier0/icommandline.h"
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
 #include "tier1/strtools.h"
 
 static void PrintFReportHandler(char const *job_name, int total_units_to_do,

@@ -23,8 +23,8 @@
 #include "sound.h"
 #include "sv_main.h"
 #include "sys_dll.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier3/tier3.h"
 #include "vgui_baseui_interface.h"
 #include "vgui_controls/Controls.h"
@@ -33,7 +33,7 @@
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void S_BlockSound();
 void S_UnblockSound();

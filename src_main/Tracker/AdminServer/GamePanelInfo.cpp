@@ -14,7 +14,7 @@
 #include "DialogCvarChange.h"
 #include "IRunGameEngine.h"
 #include "proto_oob.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/netadr.h"
 #include "tokenline.h"

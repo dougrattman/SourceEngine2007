@@ -3,12 +3,12 @@
 // The BSP tree leaf data system
 
 #include "bsptreedata.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlVector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // The BSP tree leaf data system

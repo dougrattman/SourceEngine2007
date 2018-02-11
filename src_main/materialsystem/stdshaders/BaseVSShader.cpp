@@ -42,7 +42,7 @@
 #include "vertexlitgeneric_flashlight_vs11.inc"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar mat_fullbright("mat_fullbright", "0", FCVAR_CHEAT);
 

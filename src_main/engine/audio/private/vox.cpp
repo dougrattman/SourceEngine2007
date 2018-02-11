@@ -54,7 +54,7 @@
 #include "utldict.h"
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // In other C files.
 // Globals

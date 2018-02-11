@@ -7,7 +7,7 @@
 #include "cl_rcon.h"
 #include "steam/steam_api.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Remote perf testing

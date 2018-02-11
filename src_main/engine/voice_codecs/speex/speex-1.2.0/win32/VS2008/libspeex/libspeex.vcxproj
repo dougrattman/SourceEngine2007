@@ -253,7 +253,6 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libspeex.lib</OutputFile>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
   </ItemDefinitionGroup>
@@ -278,7 +277,6 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libspeex.lib</OutputFile>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
   </ItemDefinitionGroup>
@@ -307,7 +305,6 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libspeex.lib</OutputFile>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
   </ItemDefinitionGroup>
@@ -337,7 +334,6 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libspeex.lib</OutputFile>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
   </ItemDefinitionGroup>

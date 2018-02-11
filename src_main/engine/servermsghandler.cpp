@@ -36,14 +36,14 @@
 #include "screen.h"
 #include "server.h"
 #include "sound.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/convar.h"
 #include "vgui_baseui_interface.h"
 #include "voice.h"
 #include "vox.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
 

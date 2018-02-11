@@ -22,7 +22,7 @@
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "materialsystem/materialsystem_config.h"
 #include "net_chan.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier2/tier2.h"
 #include "vengineserver_impl.h"
 #include "vgui_baseui_interface.h"
@@ -32,7 +32,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar demo_recordcommands(
     "demo_recordcommands", "1", FCVAR_CHEAT,

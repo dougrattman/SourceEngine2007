@@ -6,8 +6,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Adds center line to font

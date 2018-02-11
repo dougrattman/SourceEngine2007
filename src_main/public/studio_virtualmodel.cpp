@@ -4,13 +4,13 @@
 
 #include <climits>
 #include "filesystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
 #include "tier1/utlmap.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
 

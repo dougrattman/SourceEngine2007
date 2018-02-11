@@ -19,7 +19,7 @@
 #include <winerror.h>
 #include <cassert>
 #include <cstdio>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/UtlVector.h"
 #include "vgui/ISurface.h"  // for surface()
 #include "vgui/iinputinternal.h"
@@ -27,7 +27,7 @@
 #include "vgui_key_translation.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef UNICODE
 #define GetClassName GetClassNameW

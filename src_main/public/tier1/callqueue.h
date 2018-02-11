@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_CALLQUEUE_H_
 #define SOURCE_TIER1_CALLQUEUE_H_
 
-#include "tier0/tslist.h"
+#include "tier0/include/tslist.h"
 #include "tier1/functors.h"
 
 //-----------------------------------------------------

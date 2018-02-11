@@ -7,7 +7,7 @@
 #include "tier1/strtools.h"
 #include "tier2/riff.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Purpose: Implements Audio IO on the engine's COMMON filesystem
 class COM_IOReadBinary : public IFileReadBinary {

@@ -43,9 +43,9 @@
 
 #include "basefilesystem.h"
 #include "filesystem/IQueuedLoader.h"
-#include "tier0/icommandline.h"
-#include "tier0/tslist.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/tslist.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/UtlSortVector.h"
 #include "tier1/characterset.h"
@@ -59,7 +59,7 @@
 #include "xbox/xboxstubs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PRIORITY_HIGH 1
 #define PRIORITY_NORMAL 0

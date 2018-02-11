@@ -3,7 +3,7 @@
 #ifndef NETWORKVAR_H
 #define NETWORKVAR_H
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 
 #if defined(CLIENT_DLL) || defined(GAME_DLL)

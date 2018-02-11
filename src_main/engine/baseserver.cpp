@@ -40,11 +40,11 @@
 #include "sys.h"
 #include "sys_dll.h"
 #include "sysexternal.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/keyvalues.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Give new data to Steam's master server updater every N seconds.
 // This is NOT how often packets are sent to master servers, only how often the

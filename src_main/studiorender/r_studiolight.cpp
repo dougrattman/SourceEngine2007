@@ -9,10 +9,10 @@
 #include "studio.h"
 #include "studiorender.h"
 #include "studiorendercontext.h"
-#include "tier0/compiler_specific_macroses.h"
+#include "tier0/include/compiler_specific_macroses.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void R_WorldLightDelta(const LightDesc_t* wl, const Vector& org, Vector& delta);
 

@@ -4,7 +4,7 @@
 #define DATATABLE_INSTRUMENTATION_SERVER_H
 
 #include "iservernetworkable.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 class CDTISendTable;
 class SendTable;

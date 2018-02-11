@@ -3,7 +3,7 @@
 #if !defined(MEASURE_SECTION_H)
 #define MEASURE_SECTION_H
 
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/convar.h"
 
 // This is the macro to use in your code to measure until the code goes

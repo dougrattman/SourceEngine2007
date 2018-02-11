@@ -2,7 +2,7 @@
 
 #include "decal_clip.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Template classes for the clipper.
 class CPlane_Top {

@@ -3,10 +3,10 @@
 #include "clientframe.h"
 
 #include "framesnapshot.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CClientFrame::CClientFrame(CFrameSnapshot *pSnapshot) {
   last_entity = 0;

@@ -9,7 +9,7 @@
 
 #include "filesystem_tools.h"
 #include "steamcommon.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/keyvalues.h"
 #include "tier1/netadr.h"
 #include "tier1/utlbuffer.h"

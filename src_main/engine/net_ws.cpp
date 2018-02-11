@@ -7,7 +7,7 @@
 #include "tier1/lzss.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define NET_COMPRESSION_STACKBUF_SIZE 4096
 
@@ -90,7 +90,7 @@ typedef struct {
   netadr_t addr;
 } pendingsocket_t;
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 struct loopback_t {
   char *data;   // loopback buffer
@@ -100,7 +100,7 @@ struct loopback_t {
   DECLARE_FIXEDSIZE_ALLOCATOR(loopback_t);
 };
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FIXEDSIZE_ALLOCATOR(loopback_t, 2, CMemoryPool::GROW_SLOW);
 

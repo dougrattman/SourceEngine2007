@@ -11,15 +11,15 @@
 #include "mathlib/vmatrix.h"
 #include "optimize.h"
 #include "studiorendercontext.h"
-#include "tier0/memalloc.h"
-#include "tier0/vprof.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Singleton instance

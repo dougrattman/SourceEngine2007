@@ -8,7 +8,7 @@
 #include "sys_dll.h"
 #include "tier1/UtlLinkedList.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FIXEDSIZE_ALLOCATOR(CFrameSnapshot, 64, 64);
 

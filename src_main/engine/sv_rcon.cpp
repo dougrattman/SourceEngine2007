@@ -27,10 +27,10 @@
 #include "server.h"
 #include "sv_rcon.h"
 #include "sv_remoteaccess.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CRPTServer : public CRConServer {
   typedef CRConServer BaseClass;

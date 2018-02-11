@@ -8,7 +8,7 @@
 #include "vgui_controls/pch_vgui_controls.h"
 
 // memdbgon must be the last include file in a .cpp file
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 enum {
   MAX_BUFFER_SIZE = 999999,  // maximum size of text buffer
@@ -1812,7 +1812,8 @@ void RichText::OpenEditMenu() {
   int x, y;
   // get base panel's postition
   panel->GetPos(x, y);
-  
+  
+
   // adjust our cursor position accordingly
   cursorX += x;
   cursorY += y;

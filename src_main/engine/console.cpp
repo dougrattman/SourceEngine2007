@@ -14,12 +14,12 @@
 #include "ivideomode.h"
 #include "server.h"
 #include "sv_main.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define MAXPRINTMSG 8192
 

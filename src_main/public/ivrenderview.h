@@ -6,7 +6,7 @@
 #include "const.h"
 #include "materialsystem/imaterialsystem.h"
 #include "mathlib/vplane.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/interface.h"
 #include "tier1/refcount.h"
 

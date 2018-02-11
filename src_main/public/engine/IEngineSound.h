@@ -8,7 +8,7 @@
 #include "engine/SndInfo.h"
 #include "irecipientfilter.h"
 #include "soundflags.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/interface.h"
 #include "tier1/utlvector.h"
 

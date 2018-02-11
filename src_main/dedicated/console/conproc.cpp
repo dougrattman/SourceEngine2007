@@ -6,7 +6,7 @@
 #include <process.h>
 #include <cstdio>
 #include "isys.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "winlite.h"
 
 static HANDLE heventDone;

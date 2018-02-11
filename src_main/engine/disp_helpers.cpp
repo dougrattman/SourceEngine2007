@@ -2,7 +2,7 @@
 
 #include "disp_helpers.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CalcMaxNumVertsAndIndices(int power, int *nVerts, int *nIndices) {
   int sideLength = (1 << power) + 1;

@@ -8,11 +8,11 @@
 #include <dsound.h>
 #include <cassert>
 #include "ivoicerecord.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "voice.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Static helpers
 

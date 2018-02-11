@@ -3,8 +3,8 @@
 #ifndef THREADSAFEREFCOUNTEDOBJECT_H
 #define THREADSAFEREFCOUNTEDOBJECT_H
 
-#include "tier0/dbg.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 
 // This class can be used for fast access to an object from multiple threads,
 // and the main thread can wait until the threads are done using the object

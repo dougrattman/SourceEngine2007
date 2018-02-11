@@ -8,11 +8,11 @@
 #endif
 
 #include "bitmap/imageformat.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 // Should be last include
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 namespace ImageLoader {
 //-----------------------------------------------------------------------------

@@ -2,13 +2,13 @@
 
 #include "vgui_budgethistorypanel.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "vgui/ISurface.h"
 #include "vgui_basebudgetpanel.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar budget_show_history(
     "budget_show_history", "1", FCVAR_ARCHIVE,

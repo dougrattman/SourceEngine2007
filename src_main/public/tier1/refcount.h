@@ -6,7 +6,7 @@
 #ifndef SOURCE_TIER1_REFCOUNT_H_
 #define SOURCE_TIER1_REFCOUNT_H_
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
 //-----------------------------------------------------------------------------
 // Purpose:	Implement a standard reference counted interface. Use of this

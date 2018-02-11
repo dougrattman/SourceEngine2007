@@ -25,7 +25,7 @@
 #include "tier2/renderutils.h"
 #include "vphysics_interface.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern edict_t* EDICT_NUM(int n);
 

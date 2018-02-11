@@ -20,15 +20,15 @@
 #include "quakedef.h"
 #include "sys_dll.h"
 #include "sysexternal.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/tslist.h"
-#include "tier0/vprof.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/tslist.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlVector.h"
 #include "vphysics_interface.h"
 #include "zone.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CCollisionBSPData g_BSPData;  // the global collision bsp
 #define g_BSPData dont_use_g_BSPData_directly

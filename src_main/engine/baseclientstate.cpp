@@ -32,10 +32,10 @@
 #include "snd_audio_source.h"
 #include "steam/steam_api.h"
 #include "sv_steamauth.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CL_NotifyRPTOfDisconnect();
 

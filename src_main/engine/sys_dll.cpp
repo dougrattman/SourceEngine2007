@@ -31,20 +31,20 @@
 #include "sv_log.h"
 #include "sv_main.h"
 #include "sys.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "toolframework/itoolframework.h"
 #include "traceinit.h"
 #include "vengineserver_impl.h"
 
 #ifdef _WIN32
 #include <io.h>
-#include "tier0/systeminformation.h"
+#include "tier0/include/systeminformation.h"
 #include "vgui_baseui_interface.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define ONE_HUNDRED_TWENTY_EIGHT_MB (128 * 1024 * 1024)
 

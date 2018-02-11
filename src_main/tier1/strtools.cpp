@@ -65,11 +65,11 @@
 #endif
 #endif
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utldict.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void _V_memset(const char *file, int line, void *dest, int fill, int count) {
   Assert(count >= 0);

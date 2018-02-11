@@ -7,13 +7,13 @@
 #include "dt_recv.h"
 #include "dt_send.h"
 #include "dt_stack.h"
-#include "tier0/commonmacros.h"
-#include "tier0/dbg.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PROPINDEX_NUMBITS 12
 #define MAX_TOTAL_SENDTABLE_PROPS (1 << PROPINDEX_NUMBITS)

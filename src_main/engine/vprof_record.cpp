@@ -2,14 +2,14 @@
 
 #include "vprof_record.h"
 
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 
 #undef PROTECT_FILEIO_FUNCTIONS
 
 #include "client.h"
 #include "cmd.h"
 #include "filesystem_engine.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "utldict.h"
 
 #ifdef VPROF_ENABLED
@@ -17,7 +17,7 @@
 CVProfile *g_pVProfileForDisplay = &g_VProfCurrentProfile;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 long GetFileSize(FILE *fp) {
   int curPos = ftell(fp);

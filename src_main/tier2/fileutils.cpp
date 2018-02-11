@@ -5,7 +5,7 @@
 #include "tier2/fileutils.h"
 
 #include "filesystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 

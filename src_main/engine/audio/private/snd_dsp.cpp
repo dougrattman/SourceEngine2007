@@ -8,7 +8,7 @@
 #include "iprediction.h"
 #include "vstdlib/random.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SIGN(d) ((d) < 0 ? -1 : 1)
 #define ABS(a) abs(a)

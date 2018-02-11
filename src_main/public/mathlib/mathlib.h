@@ -8,8 +8,8 @@
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector2d.h"
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!

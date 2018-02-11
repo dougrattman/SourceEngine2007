@@ -5,8 +5,8 @@
 #ifndef SOURCE_TIER1_UTLLINKEDLIST_H_
 #define SOURCE_TIER1_UTLLINKEDLIST_H_
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlblockmemory.h"
 #include "tier1/utlfixedmemory.h"
 #include "tier1/utlmemory.h"
