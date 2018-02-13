@@ -11,12 +11,12 @@
 #include "c_te_particlesystem.h"
 #include "env_wind_shared.h"
 #include "engine/IEngineTrace.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "ClientEffectPrecacheSystem.h"
 #include "particles_ez.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 IMPLEMENT_CLIENTCLASS_DT_NOBASE( C_Func_Dust, DT_Func_Dust, CFunc_Dust )
 	RecvPropInt( RECVINFO(m_Color) ),

@@ -8,7 +8,7 @@
 #include "particles_simple.h"
 #include "particles_localspace.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Constructor

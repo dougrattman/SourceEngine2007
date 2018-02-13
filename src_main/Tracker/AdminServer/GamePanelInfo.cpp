@@ -4,7 +4,7 @@
 
 #include <cstdio>
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock.h>  // this BUGGER defines PropertySheet to PropertySheetA ....
 #undef PropertySheet

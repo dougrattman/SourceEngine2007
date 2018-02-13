@@ -7,9 +7,7 @@
 
 #ifdef _WIN32
 
-#if defined(_WIN32)
-#include "winlite.h"
-#endif
+#include "base/include/windows/windows_light.h"
 
 #include "appframework/vguimatsysapp.h"
 

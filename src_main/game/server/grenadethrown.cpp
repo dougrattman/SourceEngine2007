@@ -18,7 +18,7 @@
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Precaches a grenade and ensures clients know of it's "ammo"
 void UTIL_PrecacheOtherGrenade( const char *szClassname )

@@ -33,7 +33,7 @@
 #include "physobj.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern CAI_Node*		FindPickerAINode( CBasePlayer* pPlayer, NodeType_e nNodeType );
 extern CAI_Link*		FindPickerAILink( CBasePlayer* pPlayer );

@@ -120,31 +120,33 @@ void CCreateMultiplayerGameServerPage::OnApplyChanges() {
 // Purpose: loads the list of available maps into the map list
 //-----------------------------------------------------------------------------
 void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
-  FileFindHandle_t findHandle = NULL;
-
   KeyValues *hiddenMaps = ModInfo().GetHiddenMaps();
 
-  const char *pszFilename =
-      g_pFullFileSystem->FindFirst("maps/*.bsp", &findHandle);
-  while (pszFilename) {
-    char mapname[256];
+  FileFindHandle_t map_finder = NULL;
+  const char *map_path =
+      g_pFullFileSystem->FindFirst("maps/*.bsp", &map_finder);
+  const char *str = nullptr;
+  char *ext = nullptr;
+
+  while (map_path) {
+    char map_name[256];
 
     // FindFirst ignores the pszPathID, so check it here
     // TODO: this doesn't find maps in fallback dirs
-    _snprintf(mapname, sizeof(mapname), "maps/%s", pszFilename);
-    if (!g_pFullFileSystem->FileExists(mapname, pszPathID)) {
+    _snprintf(map_name, ARRAYSIZE(map_name), "maps/%s", map_path);
+    if (!g_pFullFileSystem->FileExists(map_name, pszPathID)) {
       goto nextFile;
     }
 
     // remove the text 'maps/' and '.bsp' from the file name to get the map name
 
-    const char *str = Q_strstr(pszFilename, "maps");
+    str = Q_strstr(map_path, "maps");
     if (str) {
-      strncpy(mapname, str + 5, sizeof(mapname) - 1);  // maps + \\ = 5
+      strncpy(map_name, str + 5, ARRAYSIZE(map_name) - 1);  // maps + \\ = 5
     } else {
-      strncpy(mapname, pszFilename, sizeof(mapname) - 1);
+      strncpy(map_name, map_path, ARRAYSIZE(map_name) - 1);
     }
-    char *ext = Q_strstr(mapname, ".bsp");
+    ext = Q_strstr(map_name, ".bsp");
     if (ext) {
       *ext = 0;
     }
@@ -152,26 +154,26 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
     //!! hack: strip out single player HL maps
     // this needs to be specified in a seperate file
     if (!stricmp(ModInfo().GetGameName(), "Half-Life") &&
-        (mapname[0] == 'c' || mapname[0] == 't') && mapname[2] == 'a' &&
-        mapname[1] >= '0' && mapname[1] <= '5') {
+        (map_name[0] == 'c' || map_name[0] == 't') && map_name[2] == 'a' &&
+        map_name[1] >= '0' && map_name[1] <= '5') {
       goto nextFile;
     }
 
     // strip out maps that shouldn't be displayed
     if (hiddenMaps) {
-      if (hiddenMaps->GetInt(mapname, 0)) {
+      if (hiddenMaps->GetInt(map_name, 0)) {
         goto nextFile;
       }
     }
 
     // add to the map list
-    m_pMapList->AddItem(mapname, new KeyValues("data", "mapname", mapname));
+    m_pMapList->AddItem(map_name, new KeyValues("data", "mapname", map_name));
 
     // get the next file
   nextFile:
-    pszFilename = g_pFullFileSystem->FindNext(findHandle);
+    map_path = g_pFullFileSystem->FindNext(map_finder);
   }
-  g_pFullFileSystem->FindClose(findHandle);
+  g_pFullFileSystem->FindClose(map_finder);
 }
 
 //-----------------------------------------------------------------------------

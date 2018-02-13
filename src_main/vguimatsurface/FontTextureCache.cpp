@@ -5,7 +5,7 @@
 // $NoKeywords: $
 
 #if !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include <vgui/IVGui.h>
 #include <vgui_controls/Controls.h>

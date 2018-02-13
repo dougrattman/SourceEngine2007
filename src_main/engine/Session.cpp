@@ -1,6 +1,6 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "Session.h"
 
@@ -12,7 +12,7 @@
 #include "tier1/UtlLinkedList.h"
 
 #ifdef IS_WINDOWS_PC
-#include "winlite.h"  // for CloseHandle()
+#include "base/include/windows/windows_light.h"  // for CloseHandle()
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

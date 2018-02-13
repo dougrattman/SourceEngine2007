@@ -15,7 +15,7 @@
 #include "tier1/utlsymbol.h"
 #include "tier1/mempool.h"
 #include "itextureinternal.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/callqueue.h"
 #include "mathlib/vmatrix.h"
 #include "tier1/strtools.h"
@@ -137,7 +137,7 @@ private:
 };
 
 // Has to exist *after* fixed size allocator declaration
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 typedef CMaterialVar *CMaterialVarPtr;
 

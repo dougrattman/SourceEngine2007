@@ -12,7 +12,7 @@
 #include "IEffects.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar    sk_plr_dmg_stunstick	( "sk_plr_dmg_stunstick","0");
 ConVar    sk_npc_dmg_stunstick	( "sk_npc_dmg_stunstick","0");

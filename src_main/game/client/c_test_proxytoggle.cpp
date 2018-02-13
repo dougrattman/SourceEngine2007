@@ -8,7 +8,7 @@
 #include "c_baseentity.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class C_Test_ProxyToggle_Networkable;
 static C_Test_ProxyToggle_Networkable *g_pTestObj = 0;

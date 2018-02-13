@@ -9,7 +9,7 @@
 #include "ai_basenpc.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_RELATIONSHIP_NOTIFY_SUBJECT	(1<<0)	// Alert the subject of the change and give them a memory of the target entity
 #define SF_RELATIONSHIP_NOTIFY_TARGET	(1<<1)	// Alert the target of the change and give them a memory of the subject entity

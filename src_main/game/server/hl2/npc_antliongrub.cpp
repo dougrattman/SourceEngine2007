@@ -17,7 +17,7 @@
 #include "npc_vortigaunt_episodic.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	sk_grubnugget_health_small( "sk_grubnugget_health_small", "1" );
 ConVar	sk_grubnugget_health_medium( "sk_grubnugget_health_medium", "4" );

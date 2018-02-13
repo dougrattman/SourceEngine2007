@@ -21,7 +21,7 @@
 #include "debugoverlay_shared.h"
 #include "tf_gamerules.h"
 #include "c_basetempentity.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Intercepts the blood spray message.

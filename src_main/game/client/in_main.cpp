@@ -30,7 +30,7 @@ extern ConVar cam_idealyaw;
 #include <game/client/iviewport.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // FIXME, tie to entity state parsing for player!!!
 int g_iAlive = 1;

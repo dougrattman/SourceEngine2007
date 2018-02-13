@@ -18,7 +18,7 @@
 #include "ai_hint.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar ai_find_lateral_cover( "ai_find_lateral_cover", "1" );
 ConVar ai_find_lateral_los( "ai_find_lateral_los", "1" );

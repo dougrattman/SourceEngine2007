@@ -7,7 +7,7 @@
 #include "ShaderAPIDX8_Global.h"
 #include "locald3dtypes.h"
 #include "materialsystem/ivballoctracker.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 /////////////////////////////
 // D. Sim Dietrich Jr.

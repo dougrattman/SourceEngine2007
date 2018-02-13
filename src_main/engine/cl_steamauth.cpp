@@ -3,7 +3,7 @@
 // Purpose: steam state machine that handles authenticating steam users
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>  // INADDR_ANY defn
 #elif _LINUX

@@ -9,7 +9,7 @@
 #include "FX_Fleck.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 // enable this to have the fleck_merge cvar as well as the current system count displayed as it changes (for profiling)

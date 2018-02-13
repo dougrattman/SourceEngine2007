@@ -19,7 +19,7 @@
 #include "ai_senses.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // For holograms, make them not solid so the player can walk through them
 #define	SF_GENERICNPC_NOTSOLID					(1 << 16) 

@@ -14,7 +14,7 @@
 #include "soundinfo.h"
 #include "tools/bonelist.h"
 #include "tier1/keyvalues.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "toolframework/itoolframework.h"
 #include "choreoevent.h"
 #include "choreoscene.h"
@@ -22,7 +22,7 @@
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool UseHWMorphVCDs();
 

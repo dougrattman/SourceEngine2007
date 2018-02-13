@@ -17,7 +17,7 @@
 #include "vgui_controls/AnimationController.h"
 #include "vgui_controls/ImagePanel.h"
 #include "vstdlib/random.h"
-#include "winlite.h"  // FILETIME
+#include "base/include/windows/windows_light.h"  // FILETIME
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"

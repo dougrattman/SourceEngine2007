@@ -3,7 +3,7 @@
 // baseserver.cpp: implementation of the CBaseServer class.
 
 #if defined(_WIN32)
-#include "winlite.h"  // FILETIME
+#include "base/include/windows/windows_light.h"  // FILETIME
 #elif defined(_LINUX)
 #include <asm/param.h>  // for HZ
 #include <netinet/in.h>

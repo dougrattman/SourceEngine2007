@@ -15,7 +15,7 @@
 #include "nav_node.h"
 #include "nav_colors.h"
 #include "Color.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "collisionutils.h"
 
 ConVar nav_show_area_info( "nav_show_area_info", "0.5", FCVAR_GAMEDLL, "Duration in seconds to show nav area ID and attributes while editing" );

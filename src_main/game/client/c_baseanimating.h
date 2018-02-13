@@ -24,7 +24,7 @@
 #include "bone_accessor.h"
 #include "bone_merge_cache.h"
 #include "ragdoll_shared.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "datacache/idatacache.h"
 
 #define LIPSYNC_POSEPARAM_NAME "mouth"

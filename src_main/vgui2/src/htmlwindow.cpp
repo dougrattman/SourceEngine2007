@@ -9,7 +9,7 @@
 #include "vgui/HtmlWindow.h"  // in common/vgui/
 
 #define USE_WINDOWS_POSTMESSAGE
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <comdef.h>
 #include <mshtmdid.h>
@@ -775,24 +775,22 @@ static const CLSID CLSID_MozillaBrowser = {
 // Purpose: Create the webbrowser object via COM calls and initialises it
 //-----------------------------------------------------------------------------
 void HtmlWindow::CreateBrowser(bool AllowJavaScript) {
-  HRESULT hret;
-
-  IUnknown *p;
+  IUnknown *browser;
   // Get IUnknown Interface
-  hret = CoCreateInstance(CLSID_WebBrowser, NULL, CLSCTX_ALL, IID_IUnknown,
-                          (void **)(&p));
+  HRESULT hr = CoCreateInstance(CLSID_WebBrowser, NULL, CLSCTX_ALL,
+                                IID_PPV_ARGS(&browser));
 
   // this is the mozilla browser rather than the IE one, doesn't work too well
   // tho...
   // hret = CoCreateInstance(CLSID_MozillaBrowser, NULL,
   //		CLSCTX_ALL, IID_IUnknown, (void**)(&p));
-  ASSERT(SUCCEEDED(hret));
+  ASSERT(SUCCEEDED(hr));
 
   // Get IOleObject interface
-  hret = p->QueryInterface(IID_IViewObject, (void **)(&m_viewObject));
-  ASSERT(SUCCEEDED(hret));
-  hret = p->QueryInterface(IID_IOleObject, (void **)(&m_oleObject));
-  ASSERT(SUCCEEDED(hret));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&m_viewObject));
+  ASSERT(SUCCEEDED(hr));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&m_oleObject));
+  ASSERT(SUCCEEDED(hr));
 
   // make our container class for the object
   FrameSite *c = new FrameSite(this, AllowJavaScript);
@@ -820,17 +818,16 @@ void HtmlWindow::CreateBrowser(bool AllowJavaScript) {
 
   // setup its persistant storage class
   IPersistStreamInit *psInit = NULL;
-  hret = p->QueryInterface(IID_IPersistStreamInit, (void **)(&psInit));
-  if (SUCCEEDED(hret) && psInit != NULL) {
-    hret = psInit->InitNew();
-    ASSERT(SUCCEEDED(hret));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&psInit));
+  if (SUCCEEDED(hr) && psInit != NULL) {
+    hr = psInit->InitNew();
+    ASSERT(SUCCEEDED(hr));
   }
   psInit->Release();
 
   // Get IOleInPlaceObject interface
-  hret =
-      p->QueryInterface(IID_IOleInPlaceObject, (void **)(&m_oleInPlaceObject));
-  assert(SUCCEEDED(hret));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&m_oleInPlaceObject));
+  assert(SUCCEEDED(hr));
 
   RECT posRect;
   posRect.left = 0;
@@ -843,33 +840,32 @@ void HtmlWindow::CreateBrowser(bool AllowJavaScript) {
   MSG msg;
 
   if (m_bVisibleAtRuntime) {
-    hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, &msg,
-                               c->m_IOleClientSite, 0, m_parent, &posRect);
-    assert(SUCCEEDED(hret));
+    hr = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, &msg,
+                             c->m_IOleClientSite, 0, m_parent, &posRect);
+    assert(SUCCEEDED(hr));
   }
 
   // get a NEW handle, cause we hide this window
-  hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
-  ASSERT(SUCCEEDED(hret));
+  hr = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
+  ASSERT(SUCCEEDED(hr));
 
   if (!m_bSetClientSiteFirst) m_oleObject->SetClientSite(c->m_IOleClientSite);
 
   // Get IWebBrowser2 Interface
-  hret = p->QueryInterface(IID_IWebBrowser2, (void **)(&m_webBrowser));
-  assert(SUCCEEDED(hret));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&m_webBrowser));
+  assert(SUCCEEDED(hr));
 
   IConnectionPointContainer *cpContainer;
-  hret =
-      p->QueryInterface(IID_IConnectionPointContainer, (void **)(&cpContainer));
-  assert(SUCCEEDED(hret));
-  hret = cpContainer->FindConnectionPoint(DIID_DWebBrowserEvents2,
-                                          &m_connectionPoint);
-  assert(SUCCEEDED(hret));
+  hr = browser->QueryInterface(IID_PPV_ARGS(&cpContainer));
+  assert(SUCCEEDED(hr));
+  hr = cpContainer->FindConnectionPoint(DIID_DWebBrowserEvents2,
+                                        &m_connectionPoint);
+  assert(SUCCEEDED(hr));
   // connect the object to our sink
   m_connectionPoint->Advise(c->m_DWebBrowserEvents2, &m_adviseCookie);
   cpContainer->Release();
 
-  p->Release();
+  browser->Release();
 
   // setup the webbrowser object
   m_webBrowser->put_MenuBar(VARIANT_FALSE);
@@ -1288,7 +1284,7 @@ void HtmlWindow::Clear() {
   if (pDisp != NULL) {
     IHTMLDocument2 *pHTMLDocument2;
     HRESULT hr;
-    hr = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
+    hr = pDisp->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
     if (hr == S_OK) {
       pHTMLDocument2->close();
       pHTMLDocument2->Release();
@@ -1301,31 +1297,33 @@ void HtmlWindow::Clear() {
 // Purpose: adds the string "text" to the end of the current HTML page.
 //-----------------------------------------------------------------------------
 void HtmlWindow::AddText(const char *text) {
-  IDispatch *pDisp;
-  m_webBrowser->get_Document(&pDisp);
+  IDispatch *html_document;
+  HRESULT hr = m_webBrowser->get_Document(&html_document);
+  if (FAILED(hr)) {
+    return;
+  }
 
-  IHTMLDocument2 *pHTMLDocument2;
-  HRESULT hret;
-  hret = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
-  if (hret == S_OK) {
+  IHTMLDocument2 *html_document2;
+  hr = html_document->QueryInterface(IID_PPV_ARGS(&html_document2));
+  if (SUCCEEDED(hr)) {
     wchar_t *tmp = new wchar_t[strlen(text) + 1];
     // Creates a new one-dimensional array
     if (tmp) {
-      IHTMLElement *pElement;
       ::MultiByteToWideChar(CP_ACP, 0, text, strlen(text) + 1, tmp,
                             strlen(text) + 1);
-      SysAllocString(tmp);
+      BSTR t = SysAllocString(tmp);
 
-      HRESULT hret = pHTMLDocument2->get_body(&pElement);
-      if (hret == S_OK && pElement) {
-        BSTR where = L"beforeEnd";
-        pElement->insertAdjacentHTML(where, tmp);
+      IHTMLElement *pElement;
+      hr = html_document2->get_body(&pElement);
+      if (hr == S_OK && pElement) {
+        BSTR where = SysAllocString(L"beforeEnd");
+        pElement->insertAdjacentHTML(where, t);
         pElement->Release();
       }
     }
-    pHTMLDocument2->Release();
+    html_document2->Release();
   }
-  pDisp->Release();
+  html_document->Release();
 }
 
 //-----------------------------------------------------------------------------
@@ -1445,12 +1443,11 @@ void HtmlWindow::OnUpdate() {
   if (pDisp) {
     IHTMLDocument2 *pHTMLDocument2;
     HRESULT hret;
-    hret = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
+    hret = pDisp->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
     if (hret == S_OK) {
       FrameSite *c = reinterpret_cast<FrameSite *>(m_fs);
       IConnectionPointContainer *cpContainer;
-      hret = pDisp->QueryInterface(IID_IConnectionPointContainer,
-                                   (void **)(&cpContainer));
+      hret = pDisp->QueryInterface(IID_PPV_ARGS(&cpContainer));
       assert(SUCCEEDED(hret));
       hret = cpContainer->FindConnectionPoint(DIID_HTMLDocumentEvents,
                                               &m_connectionPoint);
@@ -1494,20 +1491,22 @@ void HtmlWindow::OffLink() {
 //-----------------------------------------------------------------------------
 // Purpose: returns whether the HTML element is a <a href></a> element
 //-----------------------------------------------------------------------------
-bool HtmlWindow::CheckIsLink(IHTMLElement *el, char *type) {
-  BSTR bstr;
-  bool IsLink = false;
-  el->get_tagName(&bstr);
-  _bstr_t p = _bstr_t(bstr);
-  if (bstr) {
+bool HtmlWindow::CheckIsLink(IHTMLElement *el, const char *type) {
+  bool is_link = false;
+
+  BSTR tag;
+  HRESULT hr = el->get_tagName(&tag);
+
+  if (SUCCEEDED(hr) && tag) {
+    _bstr_t p = _bstr_t{tag, false};
     const char *tag = static_cast<char *>(p);
     if (!Q_stricmp(tag, type)) {
       // its a link
-      IsLink = true;
+      is_link = true;
     }
-    SysFreeString(bstr);
   }
-  return IsLink;
+
+  return is_link;
 }
 
 //-----------------------------------------------------------------------------
@@ -1521,13 +1520,12 @@ void HtmlWindow::CalculateHTMLSize(void *pVoid) {
   pHTMLDocument2->get_body(&piElem);
   if (!piElem) return;
 
-  piElem->QueryInterface(IID_IHTMLBodyElement, (void **)&piBody);
+  piElem->QueryInterface(IID_PPV_ARGS(&piBody));
   if (!piBody) return;
 
   piBody->put_scroll(_bstr_t("no"));
 
-  HRESULT hret =
-      piBody->QueryInterface(IID_IHTMLTextContainer, (void **)&piCont);
+  HRESULT hret = piBody->QueryInterface(IID_PPV_ARGS(&piCont));
   if (hret == S_OK && piCont) {
     piCont->get_scrollWidth(&html_w);
     piCont->get_scrollHeight(&html_h);
@@ -1542,18 +1540,18 @@ void HtmlWindow::CalculateHTMLSize(void *pVoid) {
 // Purpose: scrolls the html element by x pixels down and y pixels across
 //-----------------------------------------------------------------------------
 void HtmlWindow::ScrollHTML(int x, int y) {
-  IDispatch *pDisp;
-  m_webBrowser->get_Document(&pDisp);
+  IDispatch *html_document;
+  HRESULT hr = m_webBrowser->get_Document(&html_document);
+
+  if (FAILED(hr) || !html_document) return;
+
   bool bIECSSCompatMode = false;  // yes, IE really does suck
 
-  if (!pDisp) return;
-
-  IHTMLDocument5 *pHTMLDocument5 = NULL;
-  HRESULT hret;
-  hret = pDisp->QueryInterface(IID_IHTMLDocument5, (void **)&pHTMLDocument5);
-  if (hret == S_OK && pHTMLDocument5) {
+  IHTMLDocument5 *html_document5 = NULL;
+  hr = html_document->QueryInterface(IID_PPV_ARGS(&html_document5));
+  if (hr == S_OK && html_document5) {
     BSTR bStr;
-    pHTMLDocument5->get_compatMode(&bStr);
+    html_document5->get_compatMode(&bStr);
     if (!wcscmp(bStr, L"CSS1Compat")) {
       bIECSSCompatMode = true;
     }
@@ -1561,16 +1559,15 @@ void HtmlWindow::ScrollHTML(int x, int y) {
 
   if (bIECSSCompatMode) {
     IHTMLDocument3 *pHTMLDocument2;
-    HRESULT hret;
-    hret = pDisp->QueryInterface(IID_IHTMLDocument3, (void **)&pHTMLDocument2);
-    if (hret == S_OK && pHTMLDocument2) {
+    hr = html_document->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
+    if (hr == S_OK && pHTMLDocument2) {
       IHTMLElement *pElement;
-      hret = pHTMLDocument2->get_documentElement(&pElement);
+      hr = pHTMLDocument2->get_documentElement(&pElement);
 
-      if (hret == S_OK && pElement) {
+      if (hr == S_OK && pElement) {
         IHTMLElement2 *piElem2 = NULL;
-        hret = pElement->QueryInterface(IID_IHTMLElement2, (void **)&piElem2);
-        if (hret == S_OK && piElem2) {
+        hr = pElement->QueryInterface(IID_PPV_ARGS(&piElem2));
+        if (hr == S_OK && piElem2) {
           piElem2->put_scrollLeft(x);
           piElem2->put_scrollTop(y);
           piElem2->Release();
@@ -1580,21 +1577,19 @@ void HtmlWindow::ScrollHTML(int x, int y) {
       }
       pHTMLDocument2->Release();
     }
-    pDisp->Release();
+    html_document->Release();
   } else {
     IHTMLDocument2 *pHTMLDocument2;
-    HRESULT hret;
-    hret = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
-    if (hret == S_OK && pHTMLDocument2) {
+    hr = html_document->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
+    if (hr == S_OK && pHTMLDocument2) {
       IHTMLElement *pElement = NULL;
-      hret = pHTMLDocument2->get_body(&pElement);
+      hr = pHTMLDocument2->get_body(&pElement);
 
-      if (hret == S_OK && pElement) {
+      if (hr == S_OK && pElement) {
         IHTMLTextContainer *piCont = NULL;
 
-        hret =
-            pElement->QueryInterface(IID_IHTMLTextContainer, (void **)&piCont);
-        if (hret == S_OK && piCont) {
+        hr = pElement->QueryInterface(IID_PPV_ARGS(&piCont));
+        if (hr == S_OK && piCont) {
           piCont->put_scrollLeft(x);
           piCont->put_scrollTop(y);
 
@@ -1605,7 +1600,7 @@ void HtmlWindow::ScrollHTML(int x, int y) {
       }
       pHTMLDocument2->Release();
     }
-    pDisp->Release();
+    html_document->Release();
   }
 }
 
@@ -1619,12 +1614,10 @@ bool HtmlWindow::OnMouseOver() {
   m_webBrowser->get_Document(&pDisp);
 
   IHTMLDocument2 *pHTMLDocument2;
-  HRESULT hret;
-  hret = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
-  if (hret == S_OK) {
+  HRESULT hr = pDisp->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
+  if (hr == S_OK) {
     IHTMLWindow2 *pParentWindow;
-
-    HRESULT hr = pHTMLDocument2->get_parentWindow(&pParentWindow);
+    hr = pHTMLDocument2->get_parentWindow(&pParentWindow);
 
     if (SUCCEEDED(hr)) {
       IHTMLEventObj *pEvtObj;
@@ -1701,12 +1694,11 @@ void HtmlWindow::OnFinishURL(const char *url) {
   if (pDisp) {
     IHTMLDocument2 *pHTMLDocument2;
     HRESULT hret;
-    hret = pDisp->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDocument2);
+    hret = pDisp->QueryInterface(IID_PPV_ARGS(&pHTMLDocument2));
     if (hret == S_OK) {
       FrameSite *c = reinterpret_cast<FrameSite *>(m_fs);
       IConnectionPointContainer *cpContainer;
-      hret = pDisp->QueryInterface(IID_IConnectionPointContainer,
-                                   (void **)(&cpContainer));
+      hret = pDisp->QueryInterface(IID_PPV_ARGS(&cpContainer));
       assert(SUCCEEDED(hret));
       hret = cpContainer->FindConnectionPoint(DIID_HTMLDocumentEvents,
                                               &m_connectionPoint);
@@ -2345,7 +2337,7 @@ HRESULT FS_IOleClientSite::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker,
 HRESULT FS_IOleClientSite::GetContainer(LPOLECONTAINER *ppContainer) {
   DEBUG("IOleClientSite::GetContainer");
   if (ppContainer == NULL) return E_INVALIDARG;
-  this->QueryInterface(IID_IOleContainer, (void **)(ppContainer));
+  this->QueryInterface(IID_PPV_ARGS(ppContainer));
   return S_OK;
 }
 

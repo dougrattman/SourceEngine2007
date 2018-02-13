@@ -1,7 +1,7 @@
 // Copyright © 1996-2007, Valve Corporation, All rights reserved.
 
 #if defined(WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <mmreg.h>
 #include <mmsystem.h>

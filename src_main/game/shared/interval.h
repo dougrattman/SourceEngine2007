@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 
 interval_t ReadInterval( const char *pString );

@@ -12,13 +12,13 @@
 #include "iviewrender.h"
 #include "view_shared.h"
 #include "texture_group_names.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "keyvalues.h"
 #include "ScreenSpaceEffects.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

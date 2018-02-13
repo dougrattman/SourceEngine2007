@@ -4,7 +4,7 @@
 
 #include <memory.h>
 #include <cstdio>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "EngineInterface.h"
 #include "tier0/include/vcrmode.h"

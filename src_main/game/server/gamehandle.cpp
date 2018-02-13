@@ -6,15 +6,15 @@
 
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 extern HMODULE win32DLLHandle;
 #elif defined(_LINUX)
 #include <cstdio>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void *GetGameModuleHandle()
 {

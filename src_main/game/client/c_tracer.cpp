@@ -10,7 +10,7 @@
 #include "materialsystem/IMesh.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Sees if the tracer is behind the camera or should be culled

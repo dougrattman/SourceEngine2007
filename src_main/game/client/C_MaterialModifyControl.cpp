@@ -15,7 +15,7 @@
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define MATERIAL_MODIFY_STRING_SIZE			255
 #define MATERIAL_MODIFY_ANIMATION_UNSET		-1

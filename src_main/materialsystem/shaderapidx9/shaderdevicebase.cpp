@@ -2,7 +2,7 @@
 
 #include "shaderdevicebase.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "datacache/idatacache.h"
 #include "filesystem.h"
@@ -10,7 +10,7 @@
 #include "shaderapi/ishaderutil.h"
 #include "shaderapi_global.h"
 #include "shaderapibase.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/convar.h"
 #include "tier1/keyvalues.h"
 #include "tier1/utlbuffer.h"

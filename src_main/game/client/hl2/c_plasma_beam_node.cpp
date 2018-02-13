@@ -13,7 +13,7 @@
 #include "ClientEffectPrecacheSystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	PLASMASPARK_LIFETIME 0.5
 #define SPRAYS_PER_THINK		12

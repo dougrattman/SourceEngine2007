@@ -33,7 +33,7 @@
 #include "eventqueue.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Spawnflags
 #define SF_DROPSHIP_WAIT_FOR_DROPOFF_INPUT		( 1 << 15 )	

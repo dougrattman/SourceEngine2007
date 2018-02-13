@@ -1,14 +1,16 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
+#include "base/include/windows/windows_light.h"
+
 #include "IMeshDX8.h"
 
 #include "ShaderAPIDX8_Global.h"
 #include "locald3dtypes.h"
 #include "materialsystem/ishader.h"
 #include "studio.h"
-#include "tier0/platform.h"
-#include "tier0/systeminformation.h"
-#include "tier0/vprof.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/systeminformation.h"
+#include "tier0/include/vprof.h"
 #include "tier1/fmtstr.h"
 
 // fixme - stick this in a header file.
@@ -36,7 +38,7 @@
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Uncomment this to test buffered state
@@ -346,10 +348,6 @@ abstract_class CBaseMeshDX8 : public CMeshBase {
 
   // Operation to do pre-lock
   virtual void PreLock() {}
-
-#if defined(_X360)
-  virtual unsigned ComputeMemoryUsed();
-#endif
 
   bool m_bMeshLocked;
 
@@ -1157,7 +1155,6 @@ bool CIndexBufferDx8::Allocate() {
   HRESULT hr = Dx9Device()->CreateIndexBuffer(
       m_nBufferSize, usage, format, D3DPOOL_DEFAULT, &m_pIndexBuffer, NULL);
 
-#if !defined(_X360)
   if ((hr == D3DERR_OUTOFVIDEOMEMORY) || (hr == E_OUTOFMEMORY)) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
@@ -1166,7 +1163,6 @@ bool CIndexBufferDx8::Allocate() {
     hr = Dx9Device()->CreateIndexBuffer(m_nBufferSize, usage, format,
                                         D3DPOOL_DEFAULT, &m_pIndexBuffer, NULL);
   }
-#endif  // !X360
 
   if (FAILED(hr) || (m_pIndexBuffer == NULL)) {
     Warning("CIndexBufferDx8::Allocate: CreateIndexBuffer failed!\n");
@@ -1203,11 +1199,8 @@ void CIndexBufferDx8::Free() {
     --s_nBufferCount;
 #endif
 
-#if !defined(_X360)
     Dx9Device()->Release(m_pIndexBuffer);
-#else
-    m_pIndexBuffer->Release();
-#endif
+
     m_pIndexBuffer = NULL;
 
     if (!m_bIsDynamic) {
@@ -1326,6 +1319,10 @@ bool CIndexBufferDx8::Lock(int nMaxIndexCount, bool bAppend,
   void *pLockedData = NULL;
   HRESULT hr;
 
+  int nMemoryRequired;
+  bool bHasEnoughMemory;
+  UINT nLockFlags = D3DLOCK_NOSYSLOCK;
+
   // This can happen if the buffer was locked but a type wasn't bound
   if (m_IndexFormat == MATERIAL_INDEX_FORMAT_UNKNOWN)
     goto indexBufferLockFailed;
@@ -1347,11 +1344,10 @@ bool CIndexBufferDx8::Lock(int nMaxIndexCount, bool bAppend,
   }
 
   // Check to see if we have enough memory
-  int nMemoryRequired = nMaxIndexCount * IndexSize();
-  bool bHasEnoughMemory =
+  nMemoryRequired = nMaxIndexCount * IndexSize();
+  bHasEnoughMemory =
       (m_nFirstUnwrittenOffset + nMemoryRequired <= m_nBufferSize);
 
-  UINT nLockFlags = D3DLOCK_NOSYSLOCK;
   if (bAppend) {
     // Can't have the first lock after a flush be an appending lock
     Assert(!m_bFlush);
@@ -1375,13 +1371,8 @@ bool CIndexBufferDx8::Lock(int nMaxIndexCount, bool bAppend,
     }
   }
 
-#if !defined(_X360)
   hr = Dx9Device()->Lock(m_pIndexBuffer, m_nFirstUnwrittenOffset,
                          nMemoryRequired, &pLockedData, nLockFlags);
-#else
-  hr = m_pIndexBuffer->Lock(0, 0, &pLockedData, nLockFlags);
-  pLockedData = ((unsigned char *)pLockedData + m_nFirstUnwrittenOffset);
-#endif
 
   if (FAILED(hr)) {
     Warning(
@@ -1433,11 +1424,7 @@ void CIndexBufferDx8::Unlock(int nWrittenIndexCount, IndexDesc_t &desc) {
 #endif  // CHECK_INDICES
 
   if (m_pIndexBuffer) {
-#if !defined(_X360)
     Dx9Device()->Unlock(m_pIndexBuffer);
-#else
-    m_pIndexBuffer->Unlock();
-#endif
   }
 
   m_nFirstUnwrittenOffset += nWrittenIndexCount * IndexSize();
@@ -1529,7 +1516,6 @@ bool CVertexBufferDx8::Allocate() {
   HRESULT hr = Dx9Device()->CreateVertexBuffer(m_nBufferSize, usage, 0, pool,
                                                &m_pVertexBuffer, NULL);
 
-#if !defined(_X360)
   if ((hr == D3DERR_OUTOFVIDEOMEMORY) || (hr == E_OUTOFMEMORY)) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
@@ -1538,7 +1524,6 @@ bool CVertexBufferDx8::Allocate() {
     hr = Dx9Device()->CreateVertexBuffer(m_nBufferSize, usage, 0, pool,
                                          &m_pVertexBuffer, NULL);
   }
-#endif  // !X360
 
   if (FAILED(hr) || (m_pVertexBuffer == NULL)) {
     Warning("CVertexBufferDx8::Allocate: CreateVertexBuffer failed!\n");
@@ -1580,11 +1565,7 @@ void CVertexBufferDx8::Free() {
     }
 #endif
 
-#if !defined(_X360)
     Dx9Device()->Release(m_pVertexBuffer);
-#else
-    m_pVertexBuffer->Release();
-#endif
     m_pVertexBuffer = NULL;
   }
 }
@@ -1681,6 +1662,10 @@ bool CVertexBufferDx8::Lock(int nMaxVertexCount, bool bAppend,
   void *pLockedData = NULL;
   HRESULT hr;
 
+  int nMemoryRequired;
+  bool bHasEnoughMemory;
+  UINT nLockFlags = D3DLOCK_NOSYSLOCK;
+
   // This can happen if the buffer was locked but a type wasn't bound
   if (m_VertexFormat == VERTEX_FORMAT_UNKNOWN) goto vertexBufferLockFailed;
 
@@ -1702,11 +1687,10 @@ bool CVertexBufferDx8::Lock(int nMaxVertexCount, bool bAppend,
   }
 
   // Check to see if we have enough memory
-  int nMemoryRequired = nMaxVertexCount * VertexSize();
-  bool bHasEnoughMemory =
+  nMemoryRequired = nMaxVertexCount * VertexSize();
+  bHasEnoughMemory =
       (m_nFirstUnwrittenOffset + nMemoryRequired <= m_nBufferSize);
 
-  UINT nLockFlags = D3DLOCK_NOSYSLOCK;
   if (bAppend) {
     // Can't have the first lock after a flush be an appending lock
     Assert(!m_bFlush);
@@ -1730,13 +1714,8 @@ bool CVertexBufferDx8::Lock(int nMaxVertexCount, bool bAppend,
     }
   }
 
-#if !defined(_X360)
   hr = Dx9Device()->Lock(m_pVertexBuffer, m_nFirstUnwrittenOffset,
                          nMemoryRequired, &pLockedData, nLockFlags);
-#else
-  hr = m_pVertexBuffer->Lock(0, 0, &pLockedData, nLockFlags);
-  pLockedData = (unsigned char *)pLockedData + m_nFirstUnwrittenOffset;
-#endif
 
   if (FAILED(hr)) {
     Warning("Failed to lock vertex buffer in CVertexBufferDx8::Lock\n");
@@ -1770,11 +1749,7 @@ void CVertexBufferDx8::Unlock(int nWrittenVertexCount, VertexDesc_t &desc) {
   if (!m_bIsLocked) return;
 
   if (m_pVertexBuffer) {
-#if !defined(_X360)
     Dx9Device()->Unlock(m_pVertexBuffer);
-#else
-    m_pVertexBuffer->Unlock();
-#endif
   }
 
   m_nFirstUnwrittenOffset += nWrittenVertexCount * VertexSize();
@@ -1926,25 +1901,6 @@ bool CBaseMeshDX8::HasEnoughRoom(int nVertexCount, int nIndexCount) const {
   // by default, we do
   return true;
 }
-
-//-----------------------------------------------------------------------------
-// Estimate the memory used
-//-----------------------------------------------------------------------------
-#if defined(_X360)
-unsigned CBaseMeshDX8::ComputeMemoryUsed() {
-  unsigned size = 0;
-
-  if (GetVertexBuffer()) {
-    size += GetVertexBuffer()->VertexCount() * GetVertexBuffer()->VertexSize();
-  }
-
-  if (GetIndexBuffer()) {
-    size += GetIndexBuffer()->IndexCount() * GetIndexBuffer()->IndexSize();
-  }
-
-  return size;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // Locks mesh for modifying
@@ -4505,14 +4461,12 @@ void CMeshMgr::DestroyVertexBuffers() {
   RECORD_INT(0);
   D3DSetStreamSource(2, 0, 0, 0);
 
-#ifndef _X360
   RECORD_COMMAND(DX8_SET_STREAM_SOURCE, 4);
   RECORD_INT(-1);
   RECORD_INT(3);
   RECORD_INT(0);
   RECORD_INT(0);
   D3DSetStreamSource(3, 0, 0, 0);
-#endif
 
   for (int i = m_DynamicVertexBuffers.Count(); --i >= 0;) {
     delete m_DynamicVertexBuffers[i].m_pBuffer;
@@ -4525,11 +4479,7 @@ void CMeshMgr::DestroyVertexBuffers() {
 //-----------------------------------------------------------------------------
 // Flushes the dynamic mesh
 //-----------------------------------------------------------------------------
-void CMeshMgr::Flush() {
-  if (IsPC()) {
-    m_BufferedMesh.Flush();
-  }
-}
+void CMeshMgr::Flush() { m_BufferedMesh.Flush(); }
 
 //-----------------------------------------------------------------------------
 // Creates, destroys static meshes

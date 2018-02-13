@@ -20,8 +20,8 @@
 #include "env_detail_controller.h"
 #include "materialsystem/IMesh.h"
 #include "model_types.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlmap.h"
 #include "view.h"
@@ -38,7 +38,7 @@
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DETAIL_SPRITE_MATERIAL "detail/detailsprites"
 

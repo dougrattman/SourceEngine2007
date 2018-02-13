@@ -3,8 +3,8 @@
 #ifndef LAUNCHER_SCOPED_MEMORY_LEAK_DUMPER_
 #define LAUNCHER_SCOPED_MEMORY_LEAK_DUMPER_
 
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
 
 class ScopedMemoryLeakDumper {
  public:

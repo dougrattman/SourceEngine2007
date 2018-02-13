@@ -15,9 +15,9 @@
 #include <cstdio>
 
 // tier 0
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 // tier 1
 #include "mathlib/vmatrix.h"

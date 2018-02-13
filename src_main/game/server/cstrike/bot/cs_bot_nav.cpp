@@ -13,7 +13,7 @@
 #include "fmtstr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const float NearBreakableCheckDist = 20.0f;
 const float FarBreakableCheckDist = 300.0f;

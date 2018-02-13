@@ -603,19 +603,17 @@ static ConVar mat_disablehwmorph("mat_disablehwmorph", "0", 0,
 bool CHardwareConfig::HasFastVertexTextures() const {
   static int bEnableFastVertexTextures = -1;
   static bool bDisableHWMorph = false;
+
   if (bEnableFastVertexTextures < 0) {
     bEnableFastVertexTextures = 1;
     if (CommandLine()->FindParm("-disallowhwmorph")) {
       bEnableFastVertexTextures = 0;
     }
-    bDisableHWMorph = (mat_disablehwmorph.GetInt() != 0);
+    bDisableHWMorph = mat_disablehwmorph.GetInt() != 0;
   }
 
-  // JasonM - turned this off for Orange Box release...
-  return false;
-
-  //	return m_Caps.m_bDX10Card && ( GetDXSupportLevel() >= 95 ) && (
-  // bEnableFastVertexTextures != 0 ) && ( !bDisableHWMorph );
+  return m_Caps.m_bDX10Card && GetDXSupportLevel() >= 95 &&
+         bEnableFastVertexTextures != 0 && !bDisableHWMorph;
 }
 
 int CHardwareConfig::MaxHWMorphBatchCount() const {

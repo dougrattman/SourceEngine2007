@@ -1,5 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
+#include "base/include/windows/windows_light.h"
+
 #include "recording.h"
 
 #include <cstdio>
@@ -7,10 +9,9 @@
 #include "UtlVector.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "shaderapi/IShaderUtil.h"
-#include "winlite.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef RECORDING
 

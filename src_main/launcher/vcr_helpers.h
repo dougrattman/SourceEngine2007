@@ -7,8 +7,8 @@
 
 #include "base/include/base_types.h"
 #include "base/include/windows/windows_light.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 
 class VCRHelpers : public IVCRHelpers {
  public:
@@ -20,7 +20,7 @@ class VCRHelpers : public IVCRHelpers {
   void *GetMainWindow() override { return nullptr; }
 };
 
-std::tuple<VCRHelpers, DWORD> BootstrapVCRHelpers(
+std::tuple<VCRHelpers, u32> BootstrapVCRHelpers(
     const ICommandLine *command_line);
 
 #endif  // !SOURCE_LAUNCHER_VCR_HELPERS_H_

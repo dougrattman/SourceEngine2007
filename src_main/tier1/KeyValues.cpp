@@ -3,7 +3,7 @@
 #include "tier1/keyvalues.h"
 
 #if defined(_WIN32)
-#include "winlite.h"  // for WideCharToMultiByte and MultiByteToWideChar
+#include "base/include/windows/windows_light.h"  // for WideCharToMultiByte and MultiByteToWideChar
 #elif defined(_LINUX)
 #include <cwchar>  // wcslen()
 #define _alloca alloca

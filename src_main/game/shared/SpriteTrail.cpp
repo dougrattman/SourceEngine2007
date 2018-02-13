@@ -16,14 +16,14 @@
 #include "view.h"
 #include "beamdraw.h"
 #include "enginesprite.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 extern CEngineSprite *Draw_SetSpriteTexture( const model_t *pSpriteModel, int frame, int rendermode );
 
 #endif // CLIENT_DLL
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // constants

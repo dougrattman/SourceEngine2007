@@ -19,7 +19,7 @@
 #include "IEffects.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: If requested slot is available return true and take the slot

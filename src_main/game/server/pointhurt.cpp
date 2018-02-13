@@ -12,7 +12,7 @@
 #include "ammodef.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const int SF_PHURT_START_ON			= 1;
 

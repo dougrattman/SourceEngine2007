@@ -3,7 +3,7 @@
 #ifndef SHADERAPI_GLOBAL_H
 #define SHADERAPI_GLOBAL_H
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
 //-----------------------------------------------------------------------------
 // Use this to fill in structures with the current board state

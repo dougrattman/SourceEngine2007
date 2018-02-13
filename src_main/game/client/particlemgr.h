@@ -116,7 +116,7 @@ entities. Each one is useful under different conditions.
 #include "mathlib/Mathlib.h"
 #include "iclientrenderable.h"
 #include "clientleafsystem.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "tier1/UtlLinkedList.h"
 #include "UtlDict.h"
 #include <typeinfo.h>

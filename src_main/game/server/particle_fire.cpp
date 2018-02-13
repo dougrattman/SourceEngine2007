@@ -10,7 +10,7 @@
 #include "particle_fire.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 IMPLEMENT_SERVERCLASS_ST_NOBASE(CParticleFire, DT_ParticleFire)

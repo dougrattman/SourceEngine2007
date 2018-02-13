@@ -7,7 +7,7 @@
 // $NoKeywords: $
 //===========================================================================//
 #if !defined( _X360 )
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include "cbase.h"
 #include "basehandle.h"
@@ -24,7 +24,7 @@
 #include "vgui/isurface.h"
 #include "vgui_controls/controls.h"
 #include "vgui/cursor.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "inputsystem/iinputsystem.h"
 #include "inputsystem/ButtonCode.h"
 #include "math.h"
@@ -43,7 +43,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Control like a joystick
 #define JOY_ABSOLUTE_AXIS	0x00000000		

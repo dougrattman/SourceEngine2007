@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // call once per frame to update internal stats. Should only call in "normal" game frames
 // unless you also want to gather data on frame rates during menu displays, etc.

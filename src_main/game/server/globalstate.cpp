@@ -6,7 +6,7 @@
 //
 
 #include "cbase.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "saverestore.h"
 #include "saverestore_utlvector.h"
 #include "saverestore_utlsymbol.h"
@@ -14,7 +14,7 @@
 #include "igamesystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 struct globalentity_t
 {

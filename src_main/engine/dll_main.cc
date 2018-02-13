@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include "crtmemdebug.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #ifdef _WIN32
 BOOL WINAPI DllMain(_In_ HINSTANCE instance, _In_ DWORD call_reason,

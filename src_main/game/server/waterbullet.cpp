@@ -11,7 +11,7 @@
 #include "ndebugoverlay.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define WATERBULLET_INITIAL_SPEED		1000.0
 #define WATERBULLET_STOP_TIME			0.5 // how long it takes a bullet in water to come to a stop!

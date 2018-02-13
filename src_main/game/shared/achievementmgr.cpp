@@ -3,7 +3,7 @@
 #include "cbase.h"
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "achievementmgr.h"
@@ -26,7 +26,7 @@
 #include "steam/isteamfriends.h"
 #include "steam/isteamuserstats.h"
 #include "steam/isteamutils.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier3/tier3.h"
 #include "vgui/ILocalize.h"
 

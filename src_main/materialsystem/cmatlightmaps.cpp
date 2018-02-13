@@ -14,7 +14,7 @@
 #include "bitmap/float_bm.h"
 
 // NOTE: This must be the last file included!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar mat_lightmap_pfms(
     "mat_lightmap_pfms", "0", 0,

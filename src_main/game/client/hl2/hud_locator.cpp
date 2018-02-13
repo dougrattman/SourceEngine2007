@@ -17,7 +17,7 @@
 #include "c_basehlplayer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define LOCATOR_MATERIAL_JALOPY			"vgui/icons/icon_jalopy"
 #define LOCATOR_MATERIAL_BIG_TICK		"vgui/icons/tick_long"

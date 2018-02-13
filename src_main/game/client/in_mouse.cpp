@@ -7,7 +7,7 @@
 // $NoKeywords: $
 //===========================================================================//
 #if !defined( _X360 )
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include "hud.h"
 #include "cdll_int.h"
@@ -17,7 +17,7 @@
 #include "input.h"
 #include "iviewrender.h"
 #include "iclientmode.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vgui/isurface.h"
 #include "vgui_controls/controls.h"
 #include "vgui/cursor.h"
@@ -30,7 +30,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // up / down
 #define	PITCH	0

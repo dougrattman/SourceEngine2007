@@ -1,7 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #undef PROTECTED_THINGS_ENABLE
-#include "vertexdecl.h"  // this includes <windows.h> inside the dx headers
+#include "vertexdecl.h"  // this includes "base/include/windows/windows_light.h" inside the dx headers
 #define PROTECTED_THINGS_ENABLE
 
 #include "ShaderAPIDX8_Global.h"
@@ -10,12 +10,12 @@
 #include "materialsystem/imesh.h"
 #include "recording.h"
 #include "shaderdevicedx8.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "tier1/strtools.h"
 
 // NOTE: This has to be the last file included!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Computes the DX8 vertex specification
@@ -461,7 +461,7 @@ void ComputeVertexSpec(VertexFormat_t fmt, D3DVERTEXELEMENT9 *pDecl,
     pDecl[i].Type = bUseWrinkle ? D3DDECLTYPE_FLOAT4 : D3DDECLTYPE_FLOAT3;
     ++i;
 
-    int normalOffset =
+    normalOffset =
         GetVertexElementSize(VERTEX_ELEMENT_POSITION, compressionType);
     if (bUseWrinkle) {
       normalOffset +=

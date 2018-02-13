@@ -16,8 +16,8 @@
 // Forward declarations
 //-----------------------------------------------------------------------------
 struct IDirect3DStateBlock9;
-enum RenderStateFunc_t;
-enum TextureStateFunc_t;
+enum RenderStateFunc_t : int;
+enum TextureStateFunc_t : int;
 
 //-----------------------------------------------------------------------------
 // Types related to transition table entries

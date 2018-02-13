@@ -14,7 +14,7 @@
 #include "vgui/IVGui.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 VideoPanel::VideoPanel(unsigned int nXPos, unsigned int nYPos,
                        unsigned int nHeight, unsigned int nWidth)

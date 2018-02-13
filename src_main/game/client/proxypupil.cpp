@@ -13,7 +13,7 @@
 #include "functionproxy.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DEFAULT_OPEN_PUPIL_RATE 0.03
 #define DEFAULT_CLOSE_PUPIL_RATE 0.1

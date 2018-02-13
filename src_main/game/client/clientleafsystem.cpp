@@ -20,14 +20,14 @@
 #include "engine/IStaticPropMgr.h"
 #include "engine/IVDebugOverlay.h"
 #include "model_types.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/utllinkedlist.h"
 #include "view.h"
 #include "viewrender.h"
 #include "vstdlib/jobthread.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class VMatrix;  // forward decl
 

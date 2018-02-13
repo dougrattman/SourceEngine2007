@@ -8,7 +8,7 @@
 #include "c_corpse.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 IMPLEMENT_CLIENTCLASS_DT(C_Corpse, DT_Corpse, CCorpse)
 	RecvPropInt(RECVINFO(m_nReferencePlayer))

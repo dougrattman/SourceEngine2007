@@ -23,7 +23,7 @@
 #include "AI_ResponseSystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_SPEAKER_START_SILENT		1
 #define SF_SPEAKER_EVERYWHERE		2

@@ -2,7 +2,7 @@
 
 #include "vstdlib/iprocessutils.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "tier1/tier1.h"
 #include "tier1/utlbuffer.h"

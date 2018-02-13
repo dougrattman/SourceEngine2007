@@ -9,7 +9,7 @@
 #include "tier1/rangecheckedvar.h"
 #include "tier1/utllinkedlist.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define COMPARE_HISTORY(a, b)                                     \
   (memcmp(m_VarHistory[a].GetValue(), m_VarHistory[b].GetValue(), \
@@ -1391,6 +1391,6 @@ class CInterpolatedVar : public CInterpolatedVarArrayBase<Type, false> {
   }
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // INTERPOLATEDVAR_H

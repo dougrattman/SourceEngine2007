@@ -3,7 +3,7 @@
 #include "sv_uploaddata.h"
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
 #elif _LINUX

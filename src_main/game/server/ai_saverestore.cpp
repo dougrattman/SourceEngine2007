@@ -20,7 +20,7 @@
 #endif // HL2_DLL
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static short AI_SAVE_RESTORE_VERSION = 2;
 

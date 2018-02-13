@@ -19,7 +19,7 @@
 #include "engine/IEngineTrace.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "decals.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "hl1_gamemovement.h"
 
 

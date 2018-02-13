@@ -9,7 +9,7 @@
 #include "c_prop_portal.h"
 #include "portal_shareddefs.h"
 #include "clientsideeffects.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "materialsystem/ITexture.h"
 #include "hud_macros.h"
 #include "IGameSystem.h"

@@ -12,10 +12,10 @@
 #include "view.h"
 #include "engine/IStaticPropMgr.h"
 #include "c_impact_effects.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar  r_drawflecks( "r_drawflecks", "1" );
 extern ConVar r_drawmodeldecals;

@@ -22,7 +22,7 @@
 #include "vguicenterprint.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define CHAT_WIDTH_PERCENTAGE 0.6f
 

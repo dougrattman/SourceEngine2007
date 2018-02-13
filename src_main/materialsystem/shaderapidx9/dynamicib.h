@@ -22,7 +22,7 @@
 /////////////////////////////
 
 #include "locald3dtypes.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 #include "tier1/strtools.h"
 #include "tier1/utlqueue.h"
 
@@ -489,6 +489,6 @@ void CIndexBuffer::Unlock(int numIndices) {
   m_bLocked = false;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // DYNAMICIB_H

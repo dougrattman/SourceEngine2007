@@ -23,7 +23,7 @@
 using namespace vgui;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static const float TARGET_FRAMETIME = 1.0 / 60.0;
 

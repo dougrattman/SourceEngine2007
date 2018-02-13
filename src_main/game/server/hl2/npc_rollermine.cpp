@@ -39,7 +39,7 @@
 #include "RagdollBoogie.h"
 #include "physics_collisionevent.h"
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define ROLLERMINE_MAX_TORQUE_FACTOR	5
 extern short g_sModelIndexWExplosion;

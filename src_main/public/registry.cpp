@@ -1,7 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #ifndef _LINUX
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "iregistry.h"
 

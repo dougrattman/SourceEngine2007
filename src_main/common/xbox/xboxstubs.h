@@ -66,16 +66,6 @@ typedef enum {
   XK_MAX_KEYS,
 } xKey_t;
 
-// typedef enum
-//{
-//	XVRB_NONE,		// off
-//	XVRB_ERROR,		// fatal error
-//	XVRB_ALWAYS,	// no matter what
-//	XVRB_WARNING,	// non-fatal warnings
-//	XVRB_STATUS,	// status reports
-//	XVRB_ALL,
-//} xverbose_e;
-
 typedef unsigned short WORD;
 #ifndef _LINUX
 typedef unsigned long DWORD;
@@ -85,18 +75,6 @@ typedef void *HANDLE;
 #ifdef _LINUX
 typedef int32_t COLORREF;
 #endif
-
-#ifndef INVALID_HANDLE_VALUE
-#define INVALID_HANDLE_VALUE ((HANDLE)-1)
-#endif
-
-// typedef struct {
-// 	IN_ADDR     ina;                            // IP address (zero if not
-// static/DHCP) 	IN_ADDR     inaOnline;                      // Online IP
-// address (zero if not online) 	WORD        wPortOnline;
-// // Online port 	BYTE        abEnet[6];                      // Ethernet
-// MAC address 	BYTE        abOnline[20];                   // Online
-// identification } XNADDR;
 
 typedef int XNADDR;
 typedef uint64_t XUID;

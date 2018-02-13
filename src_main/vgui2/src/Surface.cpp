@@ -3,7 +3,7 @@
 #include "vgui/ISurface.h"
 
 #define OEMRESOURCE
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 // SRC only
 #define PROTECTED_THINGS_DISABLE

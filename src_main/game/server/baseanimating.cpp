@@ -19,7 +19,7 @@
 #include "npcevent.h"
 #include "isaverestore.h"
 #include "tier1/keyvalues.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "EntityFlame.h"
 #include "EntityDissolve.h"
 #include "ai_basenpc.h"
@@ -28,7 +28,7 @@
 #include "smoke_trail.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar ai_sequence_debug( "ai_sequence_debug", "0" );
 

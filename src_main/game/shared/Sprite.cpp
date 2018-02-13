@@ -8,7 +8,7 @@
 #include "Sprite.h"
 #include "model_types.h"
 #include "engine/ivmodelinfo.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "engine/ivdebugoverlay.h"
 
 #if defined( CLIENT_DLL )
@@ -23,7 +23,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const float MAX_SPRITE_SCALE = 64.0f;
 const float MAX_GLOW_PROXY_SIZE = 64.0f;

@@ -18,10 +18,10 @@
 
 #include "appframework/AppFramework.h"
 #include "engine_launcher_api.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/strtools.h"
 
 #include "file_system_access_logger.h"
@@ -30,7 +30,7 @@
 #include "source_app_system_group.h"
 #include "vcr_helpers.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 namespace {
 // Spew function!
@@ -70,8 +70,8 @@ SpewRetval_t LauncherSpewFunc(_In_ SpewType_t spew_type,
 const ch *ComputeBaseDirectoryFromCommandLine(
     _In_ const ICommandLine *command_line) {
   static ch base_directory[MAX_PATH] = {0};
-  const ch *cmd_base_directory = command_line->CheckParm(
-      source::tier0::command_line_switches::baseDirectory);
+  const ch *cmd_base_directory{command_line->CheckParm(
+      source::tier0::command_line_switches::baseDirectory)};
 
   if (cmd_base_directory) {
     strcpy_s(base_directory, cmd_base_directory);
@@ -85,31 +85,31 @@ const ch *ComputeBaseDirectoryFromCommandLine(
 }
 
 // Gets the executable name
-inline DWORD GetExecutableName(_In_ ch *exe_name, size_t exe_name_length) {
+inline u32 GetExecutableName(_In_ ch *exe_name, usize exe_name_length) {
   const HMODULE exe_module = GetModuleHandleW(nullptr);
   if (exe_module &&
       GetModuleFileNameA(exe_module, exe_name,
                          static_cast<DWORD>(exe_name_length)) != 0) {
-    return ERROR_SUCCESS;
+    return NO_ERROR;
   }
 
   return GetLastError();
 }
 
-std::tuple<const ch *, DWORD> ComputeBaseDirectoryFromExePath() {
+std::tuple<const ch *, u32> ComputeBaseDirectoryFromExePath() {
   static ch base_directory[MAX_PATH];
-  const DWORD return_code =
-      GetExecutableName(base_directory, ARRAYSIZE(base_directory));
+  const u32 return_code{
+      GetExecutableName(base_directory, ARRAYSIZE(base_directory))};
 
-  if (return_code == ERROR_SUCCESS) {
-    ch *last_backward_slash = strrchr(base_directory, '\\');
+  if (return_code == NO_ERROR) {
+    ch *last_backward_slash{strrchr(base_directory, '\\')};
     if (*last_backward_slash) {
       *(last_backward_slash + 1) = '\0';
     }
 
-    const size_t base_directory_length = strlen(base_directory);
+    const usize base_directory_length{strlen(base_directory)};
     if (base_directory_length > 0) {
-      ch &one_but_last_char = base_directory[base_directory_length - 1];
+      ch &one_but_last_char{base_directory[base_directory_length - 1]};
       if (one_but_last_char == '\\' || one_but_last_char == '/') {
         one_but_last_char = '\0';
       }
@@ -119,21 +119,21 @@ std::tuple<const ch *, DWORD> ComputeBaseDirectoryFromExePath() {
     Q_FixSlashes(base_directory);
   }
 
-  return std::make_tuple(base_directory, return_code);
+  return {base_directory, return_code};
 }
 
 // Purpose: Determine the directory where this .exe is running from
-std::tuple<const ch *, DWORD> ComputeBaseDirectory(
+std::tuple<const ch *, u32> ComputeBaseDirectory(
     _In_ const ICommandLine *command_line) {
-  const ch *cmd_base_directory =
-      ComputeBaseDirectoryFromCommandLine(command_line);
+  const ch *cmd_base_directory{
+      ComputeBaseDirectoryFromCommandLine(command_line)};
 
   // nullptr means nothing to get from command line.
   if (cmd_base_directory == nullptr) {
     return ComputeBaseDirectoryFromExePath();
   }
 
-  return std::make_tuple(cmd_base_directory, ERROR_SUCCESS);
+  return {cmd_base_directory, NO_ERROR};
 }
 
 inline const ch *GetCtrlEventDescription(_In_ DWORD ctrl_type) {
@@ -158,28 +158,28 @@ BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD ctrl_type) {
   Warning("Exit process, since event '%s' occurred.",
           GetCtrlEventDescription(ctrl_type));
   // TODO: Process ctrl_type, change process exit code.
-  ExitProcess(ERROR_SUCCESS);
+  ExitProcess(NO_ERROR);
 }
 
-std::tuple<bool, DWORD> InitTextModeIfNeeded(
+std::tuple<bool, u32> InitTextModeIfNeeded(
     _In_ const ICommandLine *command_line) {
   if (!command_line->CheckParm(
           source::tier0::command_line_switches::textMode)) {
-    return std::make_tuple(false, ERROR_SUCCESS);
+    return {false, NO_ERROR};
   }
 
-  DWORD return_code = AllocConsole() != FALSE ? ERROR_SUCCESS : GetLastError();
-  if (return_code == ERROR_SUCCESS) {
+  u32 return_code{AllocConsole() != FALSE ? NO_ERROR : GetLastError()};
+  if (return_code == NO_ERROR) {
     // reopen stdin, stout, stderr handles as console window input, output and
     // output.
     return_code =
         freopen("CONIN$", "rb", stdin) && freopen("CONOUT$", "wb", stdout) &&
                 freopen("CONOUT$", "wb", stderr)
-            ? ERROR_SUCCESS
+            ? NO_ERROR
             : errno;  // Yea, no direct mapping errno => GetLastError() :(
 
-    // freopen set last error in errno (not 0 => not ERROR_SUCCESS).
-    if (return_code != ERROR_SUCCESS) {
+    // freopen set last error in errno (not 0 => not NO_ERROR).
+    if (return_code != NO_ERROR) {
       Error(
           "Can't redirect stdin, stout, stderr to console, error code %d, "
           "message %s.",
@@ -187,13 +187,13 @@ std::tuple<bool, DWORD> InitTextModeIfNeeded(
     }
   }
 
-  if (return_code == ERROR_SUCCESS) {
+  if (return_code == NO_ERROR) {
     return_code = SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE) != FALSE
-                      ? ERROR_SUCCESS
+                      ? NO_ERROR
                       : GetLastError();
   }
 
-  return std::make_tuple(return_code == ERROR_SUCCESS, return_code);
+  return {return_code == NO_ERROR, return_code};
 }
 
 // Remove all but the last -game parameter. This is for mods based off something
@@ -203,10 +203,10 @@ std::tuple<bool, DWORD> InitTextModeIfNeeded(
 // didn't intercede here.
 void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
   // Find the last -game parameter.
-  size_t count_game_args = 0;
+  usize count_game_args = 0;
   ch last_game_arg[MAX_PATH];
 
-  for (size_t i = 0; i < command_line->ParmCount() - 1; i++) {
+  for (usize i = 0; i < command_line->ParmCount() - 1; i++) {
     if (Q_stricmp(command_line->GetParm(i),
                   source::tier0::command_line_switches::game_path) == 0) {
       Q_snprintf(last_game_arg, ARRAYSIZE(last_game_arg), "\"%s\"",
@@ -230,50 +230,49 @@ void RelaunchWithNewLanguageViaSteam() {
   HKEY source_key;
   if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Valve\\Source",
                     REG_OPTION_RESERVED, KEY_ALL_ACCESS,
-                    &source_key) == ERROR_SUCCESS) {
+                    &source_key) == NO_ERROR) {
     ch relaunch_url[MAX_PATH];
     DWORD relaunch_url_length = ARRAYSIZE(relaunch_url);
 
     if (RegQueryValueExA(source_key, "Relaunch URL", nullptr, nullptr,
                          (LPBYTE)relaunch_url,
-                         &relaunch_url_length) == ERROR_SUCCESS) {
-      constexpr int maxErrorCode = 32;
+                         &relaunch_url_length) == NO_ERROR) {
+      constexpr u32 maxErrorCode = 32;
 
       // Fine, HINSTANCE is int here. See
       // https://msdn.microsoft.com/en-us/library/windows/desktop/bb762153(v=vs.85).aspx
       MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
       MSVC_DISABLE_WARNING(4302)  // 'reinterpret_cast': pointer truncation from
                                   // 'HINSTANCE' to 'int'
-      MSVC_DISABLE_WARNING(
-          4311)  // 'reinterpret_cast': truncation from 'HINSTANCE' to 'int'
-      DWORD return_code =
-          static_cast<DWORD>(reinterpret_cast<int>(ShellExecuteA(
-              nullptr, "open", relaunch_url, nullptr, nullptr, SW_SHOW)));
+      // 'reinterpret_cast': truncation from 'HINSTANCE' to 'int'
+      MSVC_DISABLE_WARNING(4311)
+      u32 return_code = static_cast<u32>(reinterpret_cast<i32>(ShellExecuteA(
+          nullptr, "open", relaunch_url, nullptr, nullptr, SW_SHOW)));
       MSVC_END_WARNING_OVERRIDE_SCOPE();
 
       // And 0 <=> The operating system is out of memory or resources.
       return_code =
           return_code > maxErrorCode
-              ? ERROR_SUCCESS
+              ? NO_ERROR
               : (return_code == 0 ? ERROR_NOT_ENOUGH_MEMORY : return_code);
 
-      if (return_code != ERROR_SUCCESS) {
+      if (return_code != NO_ERROR) {
         Warning("Can't relaunch %s, error code 0x%x.", relaunch_url,
                 return_code);
       }
 
       return_code =
-          static_cast<DWORD>(RegDeleteValueW(source_key, L"Relaunch URL"));
+          static_cast<u32>(RegDeleteValueW(source_key, L"Relaunch URL"));
 
-      if (return_code != ERROR_SUCCESS) {
+      if (return_code != NO_ERROR) {
         Warning("Can't delete registry key value %s, error code 0x%x.",
                 "Software\\Valve\\Source Relaunch URL", return_code);
       }
     }
 
-    DWORD return_code = static_cast<DWORD>(RegCloseKey(source_key));
+    const u32 return_code = static_cast<u32>(RegCloseKey(source_key));
 
-    if (return_code != ERROR_SUCCESS) {
+    if (return_code != NO_ERROR) {
       Warning("Can't close registry key %s, error code 0x%x.",
               "Software\\Valve\\Source", return_code);
     }
@@ -287,26 +286,25 @@ ICommandLine *const CreateCommandLine() {
   return command_line;
 }
 
-DWORD SetProcessPriorityInternal(_In_z_ const ch *priority_switch,
-                                 _In_ DWORD priority_class) {
-  const BOOL return_code =
-      SetPriorityClass(GetCurrentProcess(), priority_class);
+u32 SetProcessPriorityInternal(_In_z_ const ch *priority_switch,
+                               _In_ DWORD priority_class) {
+  const BOOL return_code{SetPriorityClass(GetCurrentProcess(), priority_class)};
 
   if (return_code == FALSE) {
-    const DWORD error_code = GetLastError();
+    const u32 error_code{GetLastError()};
     Warning("Can't set process priority by switch %s, error code 0x%x.",
             priority_switch, error_code);
     return error_code;
   }
 
-  return ERROR_SUCCESS;
+  return NO_ERROR;
 }
 
-DWORD SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
-  const bool is_low_priority = command_line->CheckParm(
-      source::tier0::command_line_switches::priority_low);
-  const bool is_high_priority = command_line->CheckParm(
-      source::tier0::command_line_switches::priority_high);
+u32 SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
+  const bool is_low_priority{!!command_line->CheckParm(
+      source::tier0::command_line_switches::priority_low)};
+  const bool is_high_priority{!!command_line->CheckParm(
+      source::tier0::command_line_switches::priority_high)};
 
   if (is_low_priority && is_high_priority) {
     Error(
@@ -317,7 +315,7 @@ DWORD SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
     return ERROR_BAD_ARGUMENTS;
   }
 
-  if (!is_low_priority && !is_high_priority) return ERROR_SUCCESS;
+  if (!is_low_priority && !is_high_priority) return NO_ERROR;
 
   if (is_low_priority) {
     return SetProcessPriorityInternal(
@@ -346,9 +344,9 @@ void CleanupSettings(_In_ ICommandLine *const command_line) {
   command_line->RemoveParm("+mat_hdr_level");
 }
 
-DWORD RunSteamApplication(_In_ ICommandLine *command_line,
-                          _In_z_ const ch *base_directory,
-                          _In_ const bool is_text_mode) {
+u32 RunSteamApplication(_In_ ICommandLine *command_line,
+                        _In_z_ const ch *base_directory,
+                        _In_ const bool is_text_mode) {
   bool need_restart{true};
   FileSystemAccessLogger file_system_access_logger{base_directory,
                                                    command_line};
@@ -375,7 +373,7 @@ DWORD RunSteamApplication(_In_ ICommandLine *command_line,
     }
   }
 
-  return ERROR_SUCCESS;
+  return NO_ERROR;
 }
 }  // namespace
 
@@ -394,8 +392,8 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
 
   // Run in text mode? (No graphics or sound).
   auto [is_text_mode, return_code] = InitTextModeIfNeeded(command_line);
-  if (return_code != ERROR_SUCCESS) {
-    Warning("Can't run in text mode, error code 0x%x.", return_code);
+  if (return_code != NO_ERROR) {
+    Error("Can't run in text mode, error code 0x%x.", return_code);
     return return_code;
   }
 
@@ -403,7 +401,7 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   source::windows::ScopedWinsockInitializer scoped_winsock_initializer{
       source::windows::WinsockVersion::Version2_2};
   return_code = scoped_winsock_initializer.error_code();
-  if (return_code != ERROR_SUCCESS) {
+  if (return_code != NO_ERROR) {
     Warning("Winsock 2.2 unavailable, error code 0x%x.", return_code);
   }
 
@@ -411,12 +409,12 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
 
   // Find directory exe is running from.
   auto [base_directory, return_code] = ComputeBaseDirectory(command_line);
-  if (return_code == ERROR_SUCCESS) {
+  if (return_code == NO_ERROR) {
     // VCR helpers is ready.
     std::tie(vcr_helpers, return_code) = BootstrapVCRHelpers(command_line);
   }
 
-  if (return_code == ERROR_SUCCESS) {
+  if (return_code == NO_ERROR) {
     // See the function for why we do this.
     RemoveSpuriousGameParameters(command_line);
 
@@ -424,7 +422,7 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
     return_code = SetProcessPriorityIfNeeded(command_line);
   }
 
-  if (return_code == ERROR_SUCCESS) {
+  if (return_code == NO_ERROR) {
     // If game is not run from Steam then add -insecure in order to avoid
     // client timeout message.
     if (command_line->FindParm("-steam") == 0) {
@@ -434,11 +432,11 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
     // Figure out the directory the executable is running from and make that
     // be the current working directory.
     return_code = SetCurrentDirectoryA(base_directory) != FALSE
-                      ? ERROR_SUCCESS
+                      ? NO_ERROR
                       : GetLastError();
   }
 
-  if (return_code == ERROR_SUCCESS) {
+  if (return_code == NO_ERROR) {
     return_code =
         RunSteamApplication(command_line, base_directory, is_text_mode);
   }

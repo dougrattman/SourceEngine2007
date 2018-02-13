@@ -18,15 +18,15 @@
 #include "materialsystem/shader_vcs_version.h"
 #include "recording.h"
 #include "shaderapidx8.h"
-#include "tier0/fasttimer.h"
-#include "tier0/vprof.h"
+#include "tier0/include/fasttimer.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlsymbol.h"
 #include "utllinkedlist.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if SHADERAPI_USE_SMP
 

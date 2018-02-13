@@ -3,7 +3,7 @@
 #ifndef ISCENETOKENPROCESSOR_H
 #define ISCENETOKENPROCESSOR_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 abstract_class ISceneTokenProcessor {
  public:

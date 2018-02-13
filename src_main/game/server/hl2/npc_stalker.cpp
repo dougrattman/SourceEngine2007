@@ -40,7 +40,7 @@
 #include "world.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //#define		STALKER_DEBUG
 #define	MIN_STALKER_FIRE_RANGE		64

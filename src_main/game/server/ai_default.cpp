@@ -17,7 +17,7 @@
 #include "ai_network.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CAI_Schedule *CAI_BaseNPC::ScheduleInList( const char *pName, CAI_Schedule **pList, int listCount )
 {

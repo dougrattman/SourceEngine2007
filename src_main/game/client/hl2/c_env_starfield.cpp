@@ -11,7 +11,7 @@
 #include "view.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar cl_starfield_diameter( "cl_starfield_diameter", "128.0", FCVAR_NONE );
 ConVar cl_starfield_distance( "cl_starfield_distance", "256.0", FCVAR_NONE );

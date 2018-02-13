@@ -15,12 +15,12 @@
 #include "iviewrender.h"
 #include "particles_simple.h"
 #include "precipitation_shared.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "view.h"
 #include "viewrender.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar cl_winddir("cl_winddir", "0", FCVAR_CHEAT,
                   "Weather effects wind direction angle");

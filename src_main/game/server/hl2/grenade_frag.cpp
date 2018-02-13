@@ -13,7 +13,7 @@
 #include "soundent.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define FRAG_GRENADE_BLIP_FREQUENCY			1.0f
 #define FRAG_GRENADE_BLIP_FAST_FREQUENCY	0.3f

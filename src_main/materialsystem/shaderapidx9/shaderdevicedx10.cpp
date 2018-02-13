@@ -18,7 +18,7 @@
 #include "shaderapidx10_global.h"
 #include "tier1/keyvalues.h"
 #include "tier2/tier2.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "inputlayoutdx10.h"
 #include "shaderapibase.h"
 

@@ -28,7 +28,7 @@
 
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Must match resource/tf_objects.txt!!!
 const char *szLocalizedObjectNames[OBJ_LAST] =

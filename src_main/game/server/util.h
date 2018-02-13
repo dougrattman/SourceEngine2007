@@ -22,7 +22,7 @@
 #include "shareddefs.h"
 #include "string_t.h"
 #include "tempentity.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "util_shared.h"
 #include "tier1/UtlVector.h"
 #include "vstdlib/random.h"
@@ -39,7 +39,7 @@ class IEntityFactory;
 #define SETUP_EXTERNC(mapClassName)
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // entity creation
 // creates an entity that has not been linked to a classname
@@ -50,7 +50,7 @@ T *_CreateEntityTemplate(T *newEnt, const char *className) {
   return newEnt;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 // creates an entity by name, and ensure it's correctness
 // does not spawn the entity

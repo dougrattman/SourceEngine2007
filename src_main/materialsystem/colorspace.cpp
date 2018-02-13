@@ -12,7 +12,7 @@
 #include "materialsystem/materialsystem_config.h"
 
 // NOTE: This has to be the last file included
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //static float			texLightToLinear[256];	// texlight (0..255) to linear (0..4)
 static float			textureToLinear[256];	// texture (0..255) to linear (0..1)

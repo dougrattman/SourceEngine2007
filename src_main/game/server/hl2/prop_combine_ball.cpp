@@ -28,7 +28,7 @@
 #include "gamestats.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PROP_COMBINE_BALL_MODEL	"models/effects/combineball.mdl"
 #define PROP_COMBINE_BALL_SPRITE_TRAIL "sprites/combineball_trail_black_1.vmt" 

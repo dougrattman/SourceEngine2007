@@ -14,7 +14,7 @@
 #include "bot_util.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 /// @todo Remove this nasty hack - CreateFakeClient() calls CBot::Spawn, which needs the profile and team
 const BotProfile *g_botInitProfile = NULL;

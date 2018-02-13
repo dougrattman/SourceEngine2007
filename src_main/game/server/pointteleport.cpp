@@ -12,7 +12,7 @@
 #include "in_buttons.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	SF_TELEPORT_TO_SPAWN_POS	0x00000001
 #define	SF_TELEPORT_INTO_DUCK		0x00000002 ///< episodic only: player should be ducked after this teleport

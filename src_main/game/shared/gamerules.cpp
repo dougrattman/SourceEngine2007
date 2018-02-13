@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "gamerules.h"
 #include "ammodef.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 #include "achievementmgr.h"
 
@@ -30,7 +30,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 ConVar g_Language( "g_Language", "0", FCVAR_REPLICATED );

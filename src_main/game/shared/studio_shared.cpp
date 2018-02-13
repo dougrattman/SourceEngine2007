@@ -10,7 +10,7 @@
 #include "tier1/utlsymbol.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ////////////////////////////////////////////////////////////////////////
 const studiohdr_t *studiohdr_t::FindModel( void **cache, char const *modelname ) const

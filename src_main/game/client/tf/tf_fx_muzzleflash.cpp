@@ -9,7 +9,7 @@
 #include "particles_localspace.h"
 #include "c_te_effect_dispatch.h"
 #include "ClientEffectPrecacheSystem.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "fx.h"
 #include "r_efx.h"
 #include "tier1/keyvalues.h"

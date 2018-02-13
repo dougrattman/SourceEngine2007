@@ -3,7 +3,7 @@
 // Purpose:  implementation of the rcon client
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
 #undef SetPort  // winsock screws with the SetPort string... *sigh*8

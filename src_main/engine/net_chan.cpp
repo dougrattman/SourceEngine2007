@@ -2,7 +2,7 @@
 //
 // Purpose: net_chan.cpp: implementation of the CNetChan_t struct.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "net_chan.h"
 

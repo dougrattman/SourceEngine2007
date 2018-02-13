@@ -8,7 +8,7 @@
 #include "c_dod_objective_resource.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // owner recv proxy
 void RecvProxy_Owner( const CRecvProxyData *pData, void *pStruct, void *pOut )

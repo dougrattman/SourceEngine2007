@@ -8,7 +8,7 @@
 
 #if !defined( _X360 )
 #define OEMRESOURCE //for OCR_* cursor junk
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include "tier0/include/dbg.h"
 #include "tier0/include/vcrmode.h"

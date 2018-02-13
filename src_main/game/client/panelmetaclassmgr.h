@@ -7,8 +7,8 @@
 #if !defined(PANELMETACLASSMGR_H)
 #define PANELMETACLASSMGR_H
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include "vgui/VGUI.h"
 
 //-----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ IPanelMetaClassMgr* PanelMetaClassMgr();
 // which returns true if the panel initialized successfully
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 template <class CPanel, class CInitData>
 class CPanelFactory : public IPanelFactory {
@@ -107,7 +107,7 @@ class CPanelFactory : public IPanelFactory {
   }
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Helper macro to make panel factories one line of code. Use like this:

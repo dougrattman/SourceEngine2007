@@ -10,7 +10,7 @@
 #include "materialsystem/imaterialsystemstub.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Hook the engine's mat_stub cvar.
 ConVar mat_stub( "mat_stub", "0", FCVAR_CHEAT );

@@ -11,14 +11,14 @@
 #include "weapon_selection.h"
 #include "hud_crosshair.h"
 #include "engine/ivmodelinfo.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "hltvcamera.h"
 #include "tier1/KeyValues.h"
 #include "toolframework/itoolframework.h"
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Gets the local client's active weapon, if any.

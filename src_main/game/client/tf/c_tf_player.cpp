@@ -28,7 +28,7 @@
 #include "c_tf_playerresource.h"
 #include "toolframework/itoolframework.h"
 #include "tier1/keyvalues.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "prediction.h"
 #include "effect_dispatch_data.h"
 #include "c_te_effect_dispatch.h"
@@ -68,7 +68,7 @@
 #include "iviewrender.h"				//for view->
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar tf_playergib_forceup( "tf_playersgib_forceup", "1.0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Upward added velocity for gibs." );
 ConVar tf_playergib_force( "tf_playersgib_force", "500.0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Gibs force." );

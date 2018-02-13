@@ -21,7 +21,7 @@
 #include "istudiorender.h"
 #include "materialsystem/imaterialsystem.h"
 #include "p4lib/ip4.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/tier1.h"
 #include "tier2/tier2.h"
 #include "tier3/tier3.h"
@@ -88,7 +88,7 @@ bool SourceAppSystemGroup::Create() {
     if (!process_utils) return false;
   }
 
-  // Connect to iterfaces loaded in AddSystems that we need locally.
+  // Connect to interfaces loaded in AddSystems that we need locally.
   auto *material_system =
       FindSystem<IMaterialSystem>(MATERIAL_SYSTEM_INTERFACE_VERSION);
   if (!material_system) {
@@ -218,15 +218,12 @@ void SourceAppSystemGroup::Destroy() {
 // will be able to switch mods at runtime because the engine/hammer integration
 // really wants this feature.
 const char *SourceAppSystemGroup::DetermineDefaultMod() {
-  if (!is_edit_mode_) {
-    return command_line_->ParmValue("-game", DEFAULT_HL2_GAMEDIR);
-  }
-  return hammer_->GetDefaultMod();
+  return !is_edit_mode_ ? command_line_->ParmValue("-game", DEFAULT_HL2_GAMEDIR)
+                        : hammer_->GetDefaultMod();
 }
 
 const char *SourceAppSystemGroup::DetermineDefaultGame() {
-  if (!is_edit_mode_) {
-    return command_line_->ParmValue("-defaultgamedir", DEFAULT_HL2_GAMEDIR);
-  }
-  return hammer_->GetDefaultGame();
+  return !is_edit_mode_
+             ? command_line_->ParmValue("-defaultgamedir", DEFAULT_HL2_GAMEDIR)
+             : hammer_->GetDefaultGame();
 }

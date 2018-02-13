@@ -29,7 +29,7 @@
 #include "particle_property.h"
 #include "shareddefs.h"
 #include "soundflags.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "toolframework/itoolentity.h"
 
 class C_Team;

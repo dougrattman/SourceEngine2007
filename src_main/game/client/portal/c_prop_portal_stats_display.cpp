@@ -16,7 +16,7 @@
 #include "point_bonusmaps_accessor.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern const ConVar *sv_cheats;
 

@@ -20,7 +20,7 @@
 #include "globals.h"
 #include "util.h"
 #include "physics_impact_damage.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #ifdef PORTAL
 	#include "portal_shareddefs.h"
@@ -29,7 +29,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar func_break_max_pieces( "func_break_max_pieces", "15", FCVAR_ARCHIVE | FCVAR_REPLICATED );
 ConVar func_break_reduction_factor( "func_break_reduction_factor", ".5" );

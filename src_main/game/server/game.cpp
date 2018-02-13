@@ -10,7 +10,7 @@
 #include "physics.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void MapCycleFileChangedCallback( IConVar *var, const char *pOldString, float flOldValue )
 {

@@ -13,7 +13,7 @@
 #include "shaderapidx8.h"
 #include "shaderapidx8_global.h"
 #include "shadershadowdx8.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier2/tier2.h"
 #include "vertexshaderdx8.h"
 #include "wmi.h"
@@ -330,12 +330,12 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   HRESULT hr = m_pD3D->GetDeviceCaps(nAdapter, DX8_DEVTYPE, &caps);
   if (FAILED(hr)) return false;
 
+  D3DADAPTER_IDENTIFIER9 ident;
   hr = m_pD3D->GetAdapterIdentifier(nAdapter, D3DENUM_WHQL_LEVEL, &ident);
   if (FAILED(hr)) return false;
 
-  D3DADAPTER_IDENTIFIER9 ident;
   Q_strncpy(pCaps->m_pDriverName, ident.Description,
-            MATERIAL_ADAPTER_NAME_LENGTH);
+            min(ARRAYSIZE(ident.Description), MATERIAL_ADAPTER_NAME_LENGTH));
   pCaps->m_VendorID = ident.VendorId;
   pCaps->m_DeviceID = ident.DeviceId;
   pCaps->m_SubSysID = ident.SubSysId;
@@ -344,7 +344,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   pCaps->m_nDriverVersionHigh = ident.DriverVersion.HighPart;
   pCaps->m_nDriverVersionLow = ident.DriverVersion.LowPart;
 
-  pCaps->m_pShaderDLL[0] = 0;
+  pCaps->m_pShaderDLL[0] = '\0';
   pCaps->m_nMaxViewports = 1;
 
   pCaps->m_PreferDynamicTextures =

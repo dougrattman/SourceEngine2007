@@ -21,7 +21,7 @@
 #include "prop_portal_shared.h"
 #include "view_scene.h"
 #include "materialsystem/imaterialvar.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 
 #define PORTALRENDERABLE_FLATBASIC_MINPIXELVIS 0.0f

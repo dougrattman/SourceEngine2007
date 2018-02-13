@@ -10,7 +10,7 @@
 #include "c_basehlplayer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static CHLMoveData g_HLMoveData;
 CMoveData *g_pMoveData = &g_HLMoveData;

@@ -23,7 +23,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_CONSTRAINT_DISABLE_COLLISION			0x0001
 #define SF_SLIDE_LIMIT_ENDS						0x0002

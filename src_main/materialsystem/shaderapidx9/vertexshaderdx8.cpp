@@ -5,7 +5,7 @@
 #include "VertexShaderDx8.h"
 
 #if defined(_WIN32) && !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include <cstdlib>
 #include "../utils/bzip2/bzlib.h"
@@ -24,10 +24,10 @@
 #include "shaderapi/ishaderutil.h"
 #include "shaderapidx8.h"
 #include "shaderdevicedx8.h"
-#include "tier0/dbg.h"
-#include "tier0/fasttimer.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/fasttimer.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlBuffer.h"
 #include "tier1/UtlDict.h"
 #include "tier1/UtlStringMap.h"
@@ -41,7 +41,7 @@
 #include "tier2/tier2.h"
 
 // NOTE: This has to be the last file included!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // uncomment to get dynamic compilation for HLSL shaders
 // X360 NOTE: By default, the system looks for a shared folder named

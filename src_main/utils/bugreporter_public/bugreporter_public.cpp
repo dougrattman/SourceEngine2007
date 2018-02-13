@@ -5,7 +5,7 @@
 #define PROTECTED_THINGS_DISABLE
 #undef PROTECT_FILEIO_FUNCTIONS
 #undef fopen
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "filesystem_tools.h"
 #include "steamcommon.h"

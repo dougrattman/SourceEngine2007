@@ -249,7 +249,7 @@
       <DelayLoadDLLs>user32.dll;shell32.dll;advapi32.dll</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Xdcmake />
@@ -306,7 +306,7 @@
       <DelayLoadDLLs>user32.dll;shell32.dll;advapi32.dll</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Xdcmake />
@@ -318,16 +318,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\public\filesystem_init.cpp" />
-    <ClCompile Include="..\public\tier0\memoverride.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\tier0\include\memoverride.cpp" />
     <ClCompile Include="file_system_access_logger.cc" />
     <ClCompile Include="launcher_main_windows.cc" />
     <ClCompile Include="reslistgenerator.cpp" />
@@ -359,7 +350,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\base\windows\include\product_version.h" />
     <ClInclude Include="file_system_access_logger.h" />
     <ClInclude Include="ireslistgenerator.h" />
     <ClInclude Include="resource.h" />

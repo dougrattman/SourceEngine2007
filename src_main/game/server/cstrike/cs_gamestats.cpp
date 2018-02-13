@@ -14,7 +14,7 @@
 #ifdef GAME_DLL
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "cs_gamestats.h"
 
 float	g_flGameStatsUpdateTime = 0.0f;

@@ -14,7 +14,7 @@
 #include "filesystem.h"
 #include "utldict.h"
 #include "ai_speech.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include <ctype.h>
 #include "sceneentity.h"
 #include "isaverestore.h"
@@ -24,7 +24,7 @@
 #include "multiplay_gamerules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar rr_debugresponses( "rr_debugresponses", "0", FCVAR_NONE, "Show verbose matching output (1 for simple, 2 for rule scoring). If set to 3, it will only show response success/failure for npc_selected NPCs." );
 ConVar rr_debugrule( "rr_debugrule", "", FCVAR_NONE, "If set to the name of the rule, that rule's score will be shown whenever a concept is passed into the response rules system.");

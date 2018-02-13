@@ -37,7 +37,7 @@
 	#include "entity_capture_flag.h"
 	#include "tf_player_resource.h"
 	#include "tf_obj_sentrygun.h"
-	#include "tier0/icommandline.h"
+	#include "tier0/include/icommandline.h"
 	#include "activitylist.h"
 	#include "AI_ResponseSystem.h"
 	#include "hl2orange.spa.h"
@@ -45,7 +45,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define ITEM_RESPAWN_TIME	10.0f
 

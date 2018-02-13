@@ -3,9 +3,9 @@
 #ifndef PREDICTABLE_ENTITY_H
 #define PREDICTABLE_ENTITY_H
 
-#include "tier0/compiler_specific_macroses.h"
+#include "tier0/include/compiler_specific_macroses.h"
 // For introspection
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "predictioncopy.h"
 #include "shared_classnames.h"
 

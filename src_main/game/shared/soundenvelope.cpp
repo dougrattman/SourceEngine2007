@@ -18,10 +18,10 @@
 #include "utlpriorityqueue.h"
 #include "tier1/mempool.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar soundpatch_captionlength( "soundpatch_captionlength", "2.0", FCVAR_REPLICATED, "How long looping soundpatch captions should display for." );
 
@@ -226,7 +226,7 @@ BEGIN_SIMPLE_DATADESC( CCopyRecipientFilter )
 END_DATADESC()
 
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 // This is the a basic sound controller, a "patch"
 // It has envelopes for pitch and volume and can manage state changes to those
 class CSoundPatch
@@ -302,7 +302,7 @@ private:
 
 	DECLARE_FIXEDSIZE_ALLOCATOR(CSoundPatch);
 };
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 int CSoundPatch::g_SoundPatchCount = 0;
 
@@ -643,7 +643,7 @@ void CSoundPatch::AddPlayerPost( CBasePlayer *pPlayer )
 // This is an entry in the command queue.  It's used to queue up various pitch and volume changes
 // so you can define an envelope without writing timing code in an entity.  Existing queued commands
 // can be deleted later if the envelope changes dynamically.
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 struct SoundCommand_t
 {
 	SoundCommand_t( void ) { memset( this, 0, sizeof(*this) ); }
@@ -660,7 +660,7 @@ struct SoundCommand_t
 	DECLARE_SIMPLE_DATADESC();
 	DECLARE_FIXEDSIZE_ALLOCATOR(SoundCommand_t);
 };
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FIXEDSIZE_ALLOCATOR( SoundCommand_t, 32, CMemoryPool::GROW_FAST );
 

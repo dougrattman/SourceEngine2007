@@ -11,7 +11,7 @@
 #include "npcevent.h"
 #include "scriptevent.h"
 #include "studio.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 #if !defined(CLIENT_DLL) && !defined(MAKEXVCD)
 #include "enginecallback.h"
@@ -19,7 +19,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define iabs(i) (((i) >= 0) ? (i) : -(i))
 

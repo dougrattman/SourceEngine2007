@@ -6,7 +6,7 @@
 #endif
 #define FKG_FORCED_USAGE  // GetVersionInfo is deprecated, but we need it.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "bugreporter/bugreporter.h"
 

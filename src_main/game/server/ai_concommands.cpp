@@ -16,7 +16,7 @@
 #include "datacache/imdlcache.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern CAI_Node*	FindPickerAINode( CBasePlayer* pPlayer, NodeType_e nNodeType );
 extern void			SetDebugBits( CBasePlayer* pPlayer, const char *name, int bit );

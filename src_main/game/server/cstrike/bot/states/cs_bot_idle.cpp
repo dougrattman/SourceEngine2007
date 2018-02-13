@@ -12,7 +12,7 @@
 #include "cs_bot.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // range for snipers to select a hiding spot
 const float sniperHideRange = 2000.0f;

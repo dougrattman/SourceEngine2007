@@ -16,7 +16,7 @@
 #include "engine/IEngineSound.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define GRENADE_PF_TURN_RATE 30
 #define GRENADE_PF_TOLERANCE 300

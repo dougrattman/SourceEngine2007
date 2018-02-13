@@ -16,11 +16,11 @@
 #include "particles_ez.h"
 #include "c_impact_effects.h"
 #include "engine/IStaticPropMgr.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "c_te_effect_dispatch.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //Precahce the effects
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheEffectImpacts )

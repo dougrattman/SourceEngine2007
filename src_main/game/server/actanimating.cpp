@@ -11,7 +11,7 @@
 #include "activitylist.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC( CActAnimating )
 	DEFINE_CUSTOM_FIELD( m_Activity, ActivityDataOps() ),

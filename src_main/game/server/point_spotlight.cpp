@@ -9,7 +9,7 @@
 #include "spotlightend.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Spawnflags
 #define SF_SPOTLIGHT_START_LIGHT_ON			0x1

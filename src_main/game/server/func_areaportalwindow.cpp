@@ -10,7 +10,7 @@
 #include "entitylist.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // The server will still send entities through a window even after it opaque 
 // to allow for net lag.

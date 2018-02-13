@@ -3,7 +3,7 @@
 #include "ChangeGameDialog.h"
 
 #include <cstdio>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "EngineInterface.h"
 #include "ModInfo.h"

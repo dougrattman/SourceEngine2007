@@ -15,7 +15,7 @@
 #include <process.h>
 #include <sys/stat.h>
 #include <cstdio>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #elif _LINUX
 #include <unistd.h>
 #define _putenv putenv

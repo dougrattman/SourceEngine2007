@@ -14,7 +14,7 @@
 #include "ai_route.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_SIMPLE_DATADESC(CAI_Path)
 	//					m_Waypoints	(reconsititute on load)

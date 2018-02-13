@@ -9,7 +9,7 @@
 #include "func_areaportalbase.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // A sphere around the player used for backface culling of areaportals.
 #define VIEWER_PADDING	80

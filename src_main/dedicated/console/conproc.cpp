@@ -7,7 +7,7 @@
 #include <cstdio>
 #include "isys.h"
 #include "tier0/include/icommandline.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 static HANDLE heventDone;
 static HANDLE hfileBuffer;

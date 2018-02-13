@@ -10,7 +10,7 @@
 #include "materialsystem/imaterialvar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // This was specified in the .dsp with the /Od flag, but that causes a warning since
 //  it's inconsistent with the release .pch, so just disable optimizations here instead

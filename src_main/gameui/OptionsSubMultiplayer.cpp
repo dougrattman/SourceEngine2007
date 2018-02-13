@@ -58,7 +58,7 @@ using namespace vgui;
 void UpdateLogoWAD(void *hdib, int r, int g, int b);
 
 struct ColorItem_t {
-  char *name;
+  const char *name;
   int r, g, b;
 };
 
@@ -1653,16 +1653,24 @@ ConversionErrorType COptionsSubMultiplayer::ConvertTGAToVTF(
     return CE_ERROR_LOADING_DLL;
   }
 
-  char *vtfParams[4];
+  char **vtfParams = new char *[4];
 
   // the 0th entry is skipped cause normally thats the program name.
-  vtfParams[0] = "";
-  vtfParams[1] = "-quiet";
-  vtfParams[2] = "-dontusegamedir";
-  vtfParams[3] = (char *)tgaPath;
+  vtfParams[0] = new char[2]{""};
+  vtfParams[1] = new char[7]{"-quiet"};
+  vtfParams[2] = new char[16]{"-dontusegamedir"};
+
+  vtfParams[3] = new char[strlen(tgaPath) + 1];
+  strcpy(vtfParams[3], tgaPath);
 
   // call vtex to do the conversion.
   vtex->VTex(4, vtfParams);
+
+  for (size_t i{0}; i < 4; ++i) {
+    delete[] vtfParams[i];
+  }
+
+  delete[] vtfParams;
 
   Sys_UnloadModule(vtexmod);
 

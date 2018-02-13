@@ -10,7 +10,7 @@
 #include "te_effect_dispatch.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static int BestAxisMatchingNormal( matrix3x4_t &matrix, const Vector &normal )
 {

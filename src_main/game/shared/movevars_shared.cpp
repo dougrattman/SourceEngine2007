@@ -9,7 +9,7 @@
 #include "movevars_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // some cvars used by player movement system
 #if defined(HL2_DLL) || defined(HL2_CLIENT_DLL)

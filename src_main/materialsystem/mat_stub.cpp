@@ -15,7 +15,7 @@
 #include "materialsystem/materialsystem_config.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // ----------------------------------------------------------------------------------------
 // // IMaterialSystem and IMesh stub classes.

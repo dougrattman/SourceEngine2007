@@ -22,7 +22,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar tf_obj_build_rotation_speed( "tf_obj_build_rotation_speed", "250", FCVAR_REPLICATED | FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Degrees per second to rotate building when player alt-fires during placement." );
 

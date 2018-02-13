@@ -10,7 +10,7 @@
 #include "stringregistry.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // NOTE: If CStringRegistry allowed storing arbitrary data, we could just use that.
 // in this case we have the "isPrivate" member and the replacement rules 

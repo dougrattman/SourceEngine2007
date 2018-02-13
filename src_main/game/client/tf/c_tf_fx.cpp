@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "tf_fx_shared.h"
 #include "c_basetempentity.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include <cliententitylist.h>
 
 class C_TEFireBullets : public C_BaseTempEntity

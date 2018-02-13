@@ -16,7 +16,7 @@
 #include "glow_overlay.h"
 #include "effect_dispatch_data.h"
 #include "c_te_effect_dispatch.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 #include "effect_color_tables.h"
 #include "iviewrender_beams.h"
@@ -27,7 +27,7 @@
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //Precahce the effects
 #ifndef TF_CLIENT_DLL

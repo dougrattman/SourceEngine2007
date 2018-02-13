@@ -36,7 +36,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Debug visualization
 ConVar g_debug_antlion("g_debug_antlion", "0");

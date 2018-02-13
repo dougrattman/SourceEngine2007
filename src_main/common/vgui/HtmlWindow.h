@@ -3,7 +3,7 @@
 #ifndef SOURCE_VGUI_HTMLWINDOW_H_
 #define SOURCE_VGUI_HTMLWINDOW_H_
 
-//#include "winlite.h"
+//#include "base/include/windows/windows_light.h"
 
 #include <basetyps.h>
 #include <exdisp.h>
@@ -94,7 +94,7 @@ class HtmlWindow : public vgui::IHTML, vgui::IHTMLEvents {
 
  private:
   // support functions
-  bool CheckIsLink(IHTMLElement *el, char *type);
+  bool CheckIsLink(IHTMLElement *el, const char *type);
 
   char m_currentUrl[512];  // the currently opened URL
   bool m_specificallyOpened;

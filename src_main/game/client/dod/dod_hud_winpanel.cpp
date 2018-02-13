@@ -18,7 +18,7 @@
 #include "fmtstr.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DECLARE_HUDELEMENT_DEPTH( CDODWinPanel_Allies, 1 );	// 1 is foreground
 DECLARE_HUDELEMENT_DEPTH( CDODWinPanel_Axis, 1 );

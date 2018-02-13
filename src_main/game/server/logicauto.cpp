@@ -14,7 +14,7 @@
 #include "globalstate.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const int SF_AUTO_FIREONCE		= 0x01;
 const int SF_AUTO_FIREONRELOAD	= 0x02;

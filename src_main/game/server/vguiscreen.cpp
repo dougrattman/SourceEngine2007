@@ -11,7 +11,7 @@
 #include "saverestore_stringtable.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // This is an entity that represents a vgui screen

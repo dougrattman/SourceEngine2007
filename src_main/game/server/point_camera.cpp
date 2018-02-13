@@ -10,7 +10,7 @@
 #include "point_camera.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define CAM_THINK_INTERVAL 0.05
 

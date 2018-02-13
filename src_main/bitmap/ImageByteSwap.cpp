@@ -4,7 +4,7 @@
 // librarian to ignore xbox 360 dependenices in non-applicable win32 projects.
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "bitmap/imageformat.h"

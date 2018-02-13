@@ -10,7 +10,7 @@
 #define SMOKE_FOG_OVERLAY_H
 
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "mathlib/vector.h"
 
 

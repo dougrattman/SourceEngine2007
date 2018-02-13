@@ -4,7 +4,7 @@
 
 #ifdef IS_WINDOWS_PC
 #include <direct.h>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include <conio.h>

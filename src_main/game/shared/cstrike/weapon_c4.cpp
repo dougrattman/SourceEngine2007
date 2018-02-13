@@ -29,7 +29,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 #define BLINK_INTERVAL 2.0
@@ -1199,7 +1199,7 @@ void CC4::OnPickedUp( CBaseCombatCharacter *pNewOwner )
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void CC4::Drop( const Vector &vecVelocity )
 {

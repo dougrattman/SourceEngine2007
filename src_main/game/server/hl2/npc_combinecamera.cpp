@@ -36,7 +36,7 @@
 #include "animation.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Debug visualization
 ConVar	g_debug_combine_camera("g_debug_combine_camera", "0");

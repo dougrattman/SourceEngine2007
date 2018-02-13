@@ -10,7 +10,7 @@
 #if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
 
 #if !defined(_X360) && defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include <cstdio>
 #include "editor_sendcommand.h"

@@ -7,11 +7,11 @@
 #include "locald3dtypes.h"
 #include "shaderapi/IShaderUtil.h"
 #include "shaderdevicedx8.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
 // Must be last
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Figures out what texture formats we support

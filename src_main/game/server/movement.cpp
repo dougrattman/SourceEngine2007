@@ -13,7 +13,7 @@
 #include "mathlib/mathlib.h"	// FIXME: why do we still need this?
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Hack, sort of. These interpolators don't get to hold state, but the ones
 // that need state (like the rope simulator) should NOT be used as paths here.

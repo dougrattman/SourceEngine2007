@@ -3,7 +3,7 @@
 #include "vstdlib/jobthread.h"
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "tier0/include/compiler_specific_macroses.h"

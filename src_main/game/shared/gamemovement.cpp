@@ -18,7 +18,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define STOP_EPSILON 0.1
 #define MAX_CLIP_PLANES 5

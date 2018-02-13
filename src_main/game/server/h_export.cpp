@@ -4,13 +4,13 @@
 
 #ifdef _WIN32
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "datamap.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Ensure data sizes are stable
 COMPILE_TIME_ASSERT(sizeof(inputfunc_t) == sizeof(int));

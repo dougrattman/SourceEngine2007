@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "dod_location.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( dod_location, CDODLocation );
 

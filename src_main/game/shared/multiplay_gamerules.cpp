@@ -27,13 +27,13 @@
 #include "player.h"
 #include "sceneentity.h"
 #include "team.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "usermessages.h"
 #include "voice_gamemgr.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 REGISTER_GAMERULES_CLASS(CMultiplayRules);
 

@@ -12,7 +12,7 @@
 #include "enginesprite.h"
 #include "engine/ivmodelinfo.h"
 #include "util_shared.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/IMaterialVar.h"
 #include "view_shared.h"
@@ -22,7 +22,7 @@
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	r_drawsprites( "r_drawsprites", "1", FCVAR_CHEAT );
 

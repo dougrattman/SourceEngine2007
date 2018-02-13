@@ -1,6 +1,6 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #include "Sys_Utils.h"
 #include "EngineInterface.h"
 #include "tier0/include/vcrmode.h"

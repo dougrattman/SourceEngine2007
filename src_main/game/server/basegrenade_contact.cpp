@@ -9,7 +9,7 @@
 #include "basegrenade_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar    sk_plr_dmg_grenade;
 

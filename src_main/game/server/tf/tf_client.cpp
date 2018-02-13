@@ -34,12 +34,12 @@
 #include "engine/IEngineSound.h"
 #include "tf_player.h"
 #include "tf_gamerules.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tf_bot_temp.h"
 #include "filesystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 extern CBaseEntity *FindPickerEntity( CBasePlayer *pPlayer );

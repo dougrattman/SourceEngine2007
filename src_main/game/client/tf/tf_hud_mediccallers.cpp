@@ -17,7 +17,7 @@
 #include "prediction.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define MEDICCALLER_WIDE		(XRES(56))
 #define MEDICCALLER_TALL		(YRES(30))

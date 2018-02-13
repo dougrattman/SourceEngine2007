@@ -7,7 +7,7 @@
 #include "BasePanel.h"
 #include "SavegameDialog.h"
 
-#include "winlite.h"		// FILETIME
+#include "base/include/windows/windows_light.h"		// FILETIME
 #include "vgui/ILocalize.h"
 #include "vgui/ISurface.h"
 #include "vgui/ISystem.h"

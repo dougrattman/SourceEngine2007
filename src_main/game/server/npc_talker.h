@@ -40,7 +40,7 @@
 #include "ai_speech.h"
 #include "ai_task.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //=========================================================
 // Talking NPC base class
@@ -268,6 +268,6 @@ class CNPCSimpleTalker : public CAI_PlayerAlly {
 #endif
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // TALKNPC_H

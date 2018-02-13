@@ -18,7 +18,7 @@
 #endif
 
 #include "tier1/utldict.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vehicle_base.h"
 
 #if defined( _X360 )

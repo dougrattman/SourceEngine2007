@@ -32,7 +32,7 @@
 #endif	// HL2_EPISODIC
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define FASTZOMBIE_IDLE_PITCH			35
 #define FASTZOMBIE_MIN_PITCH			70

@@ -9,7 +9,7 @@
 #include "collisionproperty.h"
 #include "igamesystem.h"
 #include "tier1/UtlVector.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
 #ifdef CLIENT_DLL
 
@@ -28,7 +28,7 @@
 #include "predictable_entity.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // KD tree query callbacks

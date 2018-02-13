@@ -9,7 +9,7 @@
 #endif
 
 #include <cassert>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #if !defined( _X360 )
 #include "winsock.h"
 #else

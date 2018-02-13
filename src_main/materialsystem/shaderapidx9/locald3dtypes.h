@@ -3,7 +3,7 @@
 #ifndef LOCALD3DTYPES_H
 #define LOCALD3DTYPES_H
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #ifdef DX10
 

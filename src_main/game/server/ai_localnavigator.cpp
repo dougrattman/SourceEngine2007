@@ -14,7 +14,7 @@
 #include "ai_motor.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar ai_debug_directnavprobe("ai_debug_directnavprobe", "0");
 

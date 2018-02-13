@@ -17,10 +17,10 @@
 
 #include "cs_bot.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 float g_BotUpkeepInterval = 0.0f;

@@ -9,10 +9,10 @@
 #include "c_te_effect_dispatch.h"
 #include "particles_new.h"
 #include "networkstringtable_clientdll.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: An entity that spawns and controls a particle system

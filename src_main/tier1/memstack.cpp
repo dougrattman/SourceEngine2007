@@ -3,7 +3,7 @@
 #include "tier1/memstack.h"
 
 #if defined(_WIN32) && !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #define VA_COMMIT_FLAGS MEM_COMMIT
 #define VA_RESERVE_FLAGS MEM_RESERVE
 #elif defined(_X360)

@@ -2,7 +2,7 @@
 
 #include "sys_mainwind.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "avi/iavi.h"
 #include "base/include/windows/scoped_winsock_initializer.h"

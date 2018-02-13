@@ -17,7 +17,7 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/bumpvects.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 extern float g_LinearToVertex[4096];	// linear (0..4) to screen corrected vertex space (0..1?)
 

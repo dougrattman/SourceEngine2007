@@ -4,7 +4,7 @@
 
 #include "audio_pch.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "EngineSoundInternal.h"
 #include "GameEventManager.h"

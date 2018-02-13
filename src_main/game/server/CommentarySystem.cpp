@@ -8,7 +8,7 @@
 #include "cbase.h"
 
 #ifndef _XBOX
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "igamesystem.h"
 #include "filesystem.h"
 #include "tier1/keyvalues.h"
@@ -24,7 +24,7 @@
 #include "Sprite.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static bool g_bTracingVsCommentaryNodes = false;
 static const char *s_pCommentaryUpdateViewThink = "CommentaryUpdateViewThink";

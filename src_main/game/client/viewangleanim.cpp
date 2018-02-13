@@ -9,7 +9,7 @@
 #include "viewangleanim.h"
 #include "tier1/keyvalues.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar cl_pitchdown;
 extern ConVar cl_pitchup;

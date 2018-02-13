@@ -349,7 +349,7 @@ class CMaterial : public IMaterialInternal {
 
 // NOTE: This must be the last file included
 // Has to exist *after* fixed size allocator declaration
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Parser utilities
@@ -369,7 +369,7 @@ static inline bool IsVector(char const *v) {
 //-----------------------------------------------------------------------------
 // Methods to create state snapshots
 //-----------------------------------------------------------------------------
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #ifndef _CONSOLE
 struct EditorRenderStateList_t {
@@ -388,7 +388,7 @@ struct StandardRenderStateList_t {
   DECLARE_FIXEDSIZE_ALLOCATOR(StandardRenderStateList_t);
 };
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef _CONSOLE
 DEFINE_FIXEDSIZE_ALLOCATOR(EditorRenderStateList_t, 256, true);

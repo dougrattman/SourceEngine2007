@@ -11,7 +11,7 @@
 #include "physics_prop_ragdoll.h"
 #include "smoke_trail.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CNPC_Strider;
 class CNPC_Bullseye;
@@ -650,7 +650,7 @@ class CSparkTrail : public CPointEntity {
   DECLARE_DATADESC();
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // NPC_STRIDER_H
 

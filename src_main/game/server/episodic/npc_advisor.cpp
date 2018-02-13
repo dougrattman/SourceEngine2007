@@ -35,7 +35,7 @@
 #include "npc_advisor_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //
 // Custom activities.
@@ -1215,7 +1215,9 @@ void CNPC_Advisor::PreHurlClearTheWay(CBaseEntity *pThrowable,
                   VectorSubtract( list[i]->WorldSpaceCenter(), vecStartPoint,
      vecDelta ); distance = VectorNormalize( vecDelta ); flDot = DotProduct(
      vecDelta, vecVelDir );
-                  
+                  
+
+
 
 
 
@@ -1252,7 +1254,9 @@ void CNPC_Advisor::PurgeThrownObjects()
                          m_haRecentlyThrownObjects[ii].Set(NULL);
                 }
         }
-        
+        
+
+
 
 
 
@@ -1730,7 +1734,9 @@ CAdvisorLevitate::simresult_e CAdvisorLevitate::Simulate(
     CBaseEntity *pEnt = (CBaseEntity *)pObject->GetGameData();
     Vector vecDir1 = m_vecGoalPos1 - pEnt->GetAbsOrigin();
     VectorNormalize( vecDir1 );
-    
+    
+
+
 
 
 

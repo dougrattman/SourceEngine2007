@@ -365,7 +365,7 @@ class CMaterialSubRect : public IMaterialInternal {
 
 // NOTE: This must be the last file included
 // Has to exist *after* fixed size allocator declaration
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DEFINE_FIXEDSIZE_ALLOCATOR(CMaterialSubRect, 256, true);
 

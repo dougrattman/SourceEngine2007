@@ -5,7 +5,7 @@
 //=====================================================================================//
 
 #if !defined( _X360 )
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "cbase.h"
@@ -25,14 +25,14 @@
 #include "filesystem.h"
 #include "g15/ig15.h"
 
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define G15_RESOURCE_FILE "resource/g15.res"
 #define G15_MODULE_NAME "bin/g15.dll"

@@ -1,14 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
 
 #ifndef BASEPANEL_H
 #define BASEPANEL_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "tier1/UtlVector.h"
 #include "tier1/commandbuffer.h"
@@ -20,9 +13,7 @@
 
 #include "ixboxsystem.h"
 
-#if !defined(_X360)
 #include "xbox/xboxstubs.h"
-#endif
 
 enum {
   DIALOG_STACK_IDX_STANDARD,
@@ -173,7 +164,7 @@ class CBasePanel : public vgui::Panel {
   //
   // Implementation of async jobs
   //	An async job is enqueued by calling "ExecuteAsync" with the proper job
-  //context. 	Job's function "ExecuteAsync" is called on a separate thread.
+  // context. 	Job's function "ExecuteAsync" is called on a separate thread.
   //	After the job finishes the "Completed" function is called on the
   //	main thread.
   //
@@ -278,11 +269,6 @@ class CBasePanel : public vgui::Panel {
     return m_bWaitingForStorageDeviceHandle || m_bWaitingForUserSignIn ||
            m_bXUIVisible;
   }
-
-#if defined(_X360)
-  CON_COMMAND_MEMBER_F(CBasePanel, "gameui_reload_resources", Reload_Resources,
-                       "Reload the Xbox 360 UI res files", 0);
-#endif
 
  protected:
   virtual void PaintBackground();
@@ -445,9 +431,7 @@ class CBasePanel : public vgui::Panel {
   MESSAGE_FUNC(FinishDialogClose, "FinishDialogClose");
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: singleton accessor
-//-----------------------------------------------------------------------------
 extern CBasePanel *BasePanel();
 
 #endif  // BASEPANEL_H

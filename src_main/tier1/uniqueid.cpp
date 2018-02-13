@@ -5,7 +5,7 @@
 #include "tier1/uniqueid.h"
 
 #ifdef _WIN32
-#include "winlite.h"  // UUIDCreate
+#include "base/include/windows/windows_light.h"  // UUIDCreate
 
 #include <Rpc.h>
 #else

@@ -9,7 +9,7 @@
 #include "filesystem.h"
 #include "ixboxsystem.h"
 #include "vgui/ISurface.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 using namespace vgui;
 

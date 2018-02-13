@@ -20,7 +20,7 @@
 #include "fx_water.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	__EXPLOSION_DEBUG	0
 

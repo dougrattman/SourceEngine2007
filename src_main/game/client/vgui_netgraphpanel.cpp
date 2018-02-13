@@ -19,7 +19,7 @@
 #include <vgui/ISurface.h>
 #include <vgui/IScheme.h>
 #include <vgui/ilocalize.h>
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "cdll_bounded_cvars.h"
 
 #include "materialsystem/IMaterialSystem.h"
@@ -27,7 +27,7 @@
 #include "materialsystem/IMaterial.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

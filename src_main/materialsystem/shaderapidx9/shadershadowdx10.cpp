@@ -13,7 +13,7 @@
 #include "shadersystem.h"
 #include "shaderapi/ishaderutil.h"
 #include "materialsystem/imesh.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "materialsystem/idebugtextureinfo.h"
 
 

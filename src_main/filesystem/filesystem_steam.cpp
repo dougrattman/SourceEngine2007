@@ -9,7 +9,7 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 ISteamInterface *steam = NULL;
 static SteamHandle_t g_pLastErrorFile;

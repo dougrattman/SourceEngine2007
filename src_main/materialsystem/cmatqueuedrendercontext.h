@@ -14,7 +14,7 @@
 #include "tier1/memstack.h"
 #include "tier1/utlenvelope.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if defined(_WIN32)
 #pragma once
@@ -1078,6 +1078,6 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // CMATQUEUEDRENDERCONTEXT_H

@@ -55,7 +55,7 @@ int GetVidMemBytes() {
   IWbemLocator *pLoc = NULL;
 
   hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-                        IID_IWbemLocator, (LPVOID *)&pLoc);
+                        IID_PPV_ARGS(&pLoc));
 
   if (FAILED(hr)) {
     OutputDebugString(
@@ -140,7 +140,7 @@ int GetVidMemBytes() {
   ULONG uReturn = 0;
 
   while (pEnumerator) {
-    HRESULT hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
+    hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
 
     if (0 == uReturn) {
       break;

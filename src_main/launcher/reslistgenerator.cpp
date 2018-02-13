@@ -3,7 +3,7 @@
 #include "ireslistgenerator.h"
 
 #include "filesystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/characterset.h"
 #include "tier1/fmtstr.h"
@@ -12,7 +12,7 @@
 #include "tier1/utlstring.h"
 #include "tier1/utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool SaveResList(const CUtlRBTree<CUtlString, int> &list, ch const *pchFileName,
                  ch const *pchSearchPath) {

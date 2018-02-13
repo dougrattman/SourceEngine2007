@@ -1,7 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <d3d9types.h>
 #endif

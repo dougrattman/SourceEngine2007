@@ -11,7 +11,7 @@
 #define SHARED_UTIL_H
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //--------------------------------------------------------------------------------------------------------
 /**
@@ -95,6 +95,6 @@ const char * NumAsString( int val );
  */
 char * SharedVarArgs(char *format, ...);
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif // SHARED_UTIL_H

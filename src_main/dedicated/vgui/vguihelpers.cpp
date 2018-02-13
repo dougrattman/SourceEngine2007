@@ -2,7 +2,7 @@
 
 #ifdef _WIN32
 #include <direct.h>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "FileSystem.h"
 #include "IAdminServer.h"

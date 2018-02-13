@@ -19,7 +19,7 @@
 #include "props.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static void DispatchActivate(CBaseEntity *pEntity) {
   bool bAsyncAnims = mdlcache->SetAsyncLoad(MDLCACHE_ANIMBLOCK, false);

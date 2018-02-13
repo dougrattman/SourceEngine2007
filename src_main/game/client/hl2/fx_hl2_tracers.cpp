@@ -6,7 +6,7 @@
 #include "cbase.h"
 #include "fx.h"
 #include "c_te_effect_dispatch.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "fx_line.h"
 #include "fx_quad.h"
 #include "view.h"
@@ -16,7 +16,7 @@
 #include "ClientEffectPrecacheSystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern Vector GetTracerOrigin( const CEffectData &data );
 extern void FX_TracerSound( const Vector &start, const Vector &end, int iTracerType );

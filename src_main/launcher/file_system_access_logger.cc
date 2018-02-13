@@ -5,15 +5,15 @@
 #include "base/include/windows/windows_light.h"
 #include "filesystem.h"
 #include "ireslistgenerator.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
-#include "tier0/memalloc.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
 #include "tier1/fmtstr.h"
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define ALL_RESLIST_FILE "all.lst"
 

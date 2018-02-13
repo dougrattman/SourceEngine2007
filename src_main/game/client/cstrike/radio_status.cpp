@@ -15,13 +15,13 @@
 #include "materialsystem/imesh.h"
 #include "view.h"
 #include "materialsystem/imaterial.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "cdll_int.h"
 #include "c_cs_player.h"
 #include "menu.h" // for CHudMenu defs
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

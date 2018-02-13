@@ -6,7 +6,7 @@
 #include "cbase.h"
 #include "fx.h"
 #include "c_te_effect_dispatch.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "clientsideeffects.h"
 #include "ClientEffectPrecacheSystem.h"
 #include "view.h"
@@ -15,7 +15,7 @@
 #include "engine/IEngineSound.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheTFTracers )
 	CLIENTEFFECT_MATERIAL( "effects/spark" )

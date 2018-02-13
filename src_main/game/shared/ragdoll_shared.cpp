@@ -11,7 +11,7 @@
 #include "vphysics/collision_set.h"
 #include "vcollide_parse.h"
 #include "vphysics_interface.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "engine/ivdebugoverlay.h"
 #include "solidsetdefaults.h"
 //CLIENT
@@ -29,7 +29,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CRagdollLowViolenceManager g_RagdollLVManager;
 

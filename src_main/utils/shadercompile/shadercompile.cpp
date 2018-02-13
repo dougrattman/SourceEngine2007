@@ -2225,7 +2225,7 @@ void CDistributeShaderCompileMaster::ThreadProc(void) {
   }
 }
 
-int ShaderCompile_Main(int argc, char *argv[]) {
+int ShaderCompile_Main(int argc, const char *argv[]) {
   InstallSpewFunction();
   g_bSuppressPrintfOutput = false;
   g_flStartTime = Plat_FloatTime();
@@ -2501,10 +2501,10 @@ int ShaderCompile_Main(int argc, char *argv[]) {
 }
 
 class CShaderCompileDLL : public IShaderCompileDLL {
-  int main(int argc, char **argv);
+  int main(int argc, const char **argv);
 };
 
-int CShaderCompileDLL::main(int argc, char **argv) {
+int CShaderCompileDLL::main(int argc, const char **argv) {
   return ShaderCompile_Main(argc, argv);
 }
 
@@ -2512,7 +2512,9 @@ EXPOSE_SINGLE_INTERFACE(CShaderCompileDLL, IShaderCompileDLL,
                         SHADER_COMPILE_INTERFACE_VERSION);
 
 class CLaunchableDLL : public ILaunchableDLL {
-  int main(int argc, char **argv) { return ShaderCompile_Main(argc, argv); }
+  int main(int argc, const char **argv) {
+    return ShaderCompile_Main(argc, argv);
+  }
 };
 
 EXPOSE_SINGLE_INTERFACE(CLaunchableDLL, ILaunchableDLL,

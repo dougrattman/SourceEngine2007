@@ -41,7 +41,7 @@
 #include "saverestoretypes.h"
 #include "soundinfo.h"
 #include "tier0/ICommandLine.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 #include "toolframework/itoolframework.h"
 #include "toolframework_client.h"
@@ -50,7 +50,7 @@
 #include "vphysics/constraints.h"
 #include "vstdlib/jobthread.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar cl_SetupAllBones("cl_SetupAllBones", "0");
 ConVar r_sequence_debug("r_sequence_debug", "");

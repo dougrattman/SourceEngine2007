@@ -11,11 +11,11 @@
 #include "tier1/keyvalues.h"
 #include "toolframework_client.h"
 #include "fx.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define PI 3.14159265359
 #define GLASS_SHARD_MIN_LIFE 2

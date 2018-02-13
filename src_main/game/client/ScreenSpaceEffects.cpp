@@ -4,7 +4,7 @@
 #include "cdll_client_int.h"
 #include "view_scene.h"
 #include "viewrender.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "materialsystem/IMesh.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
@@ -13,7 +13,7 @@
 #include "ScreenSpaceEffects.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //------------------------------------------------------------------------------
 // CScreenSpaceEffectRegistration code

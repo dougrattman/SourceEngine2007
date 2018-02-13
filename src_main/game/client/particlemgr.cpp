@@ -16,14 +16,14 @@
 #include "particles/particles.h"  // get new particle system access
 #include "particles_new.h"
 #include "tier0/ICommandLine.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/mempool.h"
 #include "tier1/utlintrusivelist.h"
 #include "view.h"
 #include "view_scene.h"
 #include "vstdlib/jobthread.h"
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IParticleSystemQuery *g_pParticleSystemQuery;
 

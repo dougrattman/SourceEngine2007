@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <tuple>
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #define SOURCE_ENGINE_CMD_LINE_STEAM_ARG "-steam"
 

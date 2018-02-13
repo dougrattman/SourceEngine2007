@@ -3,7 +3,7 @@
 // Purpose:  implementation of the rcon server
 
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
 

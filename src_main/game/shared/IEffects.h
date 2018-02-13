@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "mathlib/vector.h"
 #include "tier1/interface.h"
 #include "ipredictionsystem.h"

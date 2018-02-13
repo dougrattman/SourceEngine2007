@@ -15,7 +15,7 @@
 #include "tier3/tier3.h"
 #include "vtf/vtf.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <vfw.h>
 

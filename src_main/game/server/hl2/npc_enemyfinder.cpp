@@ -16,7 +16,7 @@
 #include "ai_senses.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_ENEMY_FINDER_CHECK_VIS (1 << 16)
 #define SF_ENEMY_FINDER_APC_VIS (1 << 17)

@@ -35,13 +35,13 @@
 
 #include "in_buttons.h"
 #include "engine/IEngineSound.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "decals.h"
 #include "obstacle_pushaway.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #if defined(GAME_DLL) && !defined(_XBOX)
 	extern ConVar sv_pushaway_max_force;

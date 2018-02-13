@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #include "CreateMultiplayerGameServerPage.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <Winsock2.h>
 #include <cstdio>

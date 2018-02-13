@@ -12,7 +12,7 @@
 #include "input.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "rope_helpers.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/callqueue.h"
 #include "tier1/keyvalues.h"
@@ -20,7 +20,7 @@
 #include "view.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void RecvProxy_RecomputeSprings(const CRecvProxyData *pData, void *pStruct,
                                 void *pOut) {

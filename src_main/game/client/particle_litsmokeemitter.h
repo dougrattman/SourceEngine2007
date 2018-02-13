@@ -13,7 +13,7 @@
 
 #include "particles_simple.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //==================================================
 // CLitSmokeEmitter
@@ -72,6 +72,6 @@ inline PMaterialHandle	CLitSmokeEmitter::GetSmokeMaterial() const
 	return m_hSmokeMaterial;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif // PARTICLE_LITSMOKEEMITTER_H

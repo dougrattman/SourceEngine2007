@@ -6,7 +6,7 @@
 //===========================================================================//
 
 #if !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include <direct.h>
 #include <io.h>

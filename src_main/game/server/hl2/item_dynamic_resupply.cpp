@@ -8,7 +8,7 @@
 #include "props.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar sk_dynamic_resupply_modifier("sk_dynamic_resupply_modifier", "1.0");
 extern ConVar sk_battery;
@@ -139,38 +139,40 @@ static DynamicResupplyHandle_t g_MasterResupply;
 //-----------------------------------------------------------------------------
 BEGIN_DATADESC(CItem_DynamicResupply)
 
-DEFINE_THINKFUNC(CheckPVSThink),
+  DEFINE_THINKFUNC(CheckPVSThink),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "Kill", InputKill),
-    DEFINE_INPUTFUNC(FIELD_VOID, "CalculateType", InputCalculateType),
-    DEFINE_INPUTFUNC(FIELD_VOID, "BecomeMaster", InputBecomeMaster),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Kill", InputKill),
+      DEFINE_INPUTFUNC(FIELD_VOID, "CalculateType", InputCalculateType),
+      DEFINE_INPUTFUNC(FIELD_VOID, "BecomeMaster", InputBecomeMaster),
 
-    DEFINE_KEYFIELD(m_flDesiredHealth[0], FIELD_FLOAT, "DesiredHealth"),
-    DEFINE_KEYFIELD(m_flDesiredHealth[1], FIELD_FLOAT, "DesiredArmor"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[0], FIELD_FLOAT, "DesiredAmmoPistol"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[1], FIELD_FLOAT, "DesiredAmmoSMG1"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[2], FIELD_FLOAT, "DesiredAmmoSMG1_Grenade"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[3], FIELD_FLOAT, "DesiredAmmoAR2"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[4], FIELD_FLOAT, "DesiredAmmoBuckshot"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[5], FIELD_FLOAT, "DesiredAmmoRPG_Round"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[6], FIELD_FLOAT, "DesiredAmmoGrenade"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[7], FIELD_FLOAT, "DesiredAmmo357"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[8], FIELD_FLOAT, "DesiredAmmoCrossbow"),
-    DEFINE_KEYFIELD(m_flDesiredAmmo[9], FIELD_FLOAT, "DesiredAmmoAR2_AltFire"),
+      DEFINE_KEYFIELD(m_flDesiredHealth[0], FIELD_FLOAT, "DesiredHealth"),
+      DEFINE_KEYFIELD(m_flDesiredHealth[1], FIELD_FLOAT, "DesiredArmor"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[0], FIELD_FLOAT, "DesiredAmmoPistol"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[1], FIELD_FLOAT, "DesiredAmmoSMG1"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[2], FIELD_FLOAT,
+                      "DesiredAmmoSMG1_Grenade"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[3], FIELD_FLOAT, "DesiredAmmoAR2"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[4], FIELD_FLOAT, "DesiredAmmoBuckshot"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[5], FIELD_FLOAT, "DesiredAmmoRPG_Round"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[6], FIELD_FLOAT, "DesiredAmmoGrenade"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[7], FIELD_FLOAT, "DesiredAmmo357"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[8], FIELD_FLOAT, "DesiredAmmoCrossbow"),
+      DEFINE_KEYFIELD(m_flDesiredAmmo[9], FIELD_FLOAT,
+                      "DesiredAmmoAR2_AltFire"),
 
-    DEFINE_FIELD(m_version, FIELD_INTEGER),
-    DEFINE_FIELD(m_bIsMaster, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_version, FIELD_INTEGER),
+      DEFINE_FIELD(m_bIsMaster, FIELD_BOOLEAN),
 
-    // Silence, Classcheck!
-    //	DEFINE_ARRAY( m_flDesiredHealth, FIELD_FLOAT,  NUM_HEALTH_ITEMS  ),
-    //	DEFINE_ARRAY( m_flDesiredAmmo, FIELD_FLOAT,  NUM_AMMO_ITEMS  ),
+  // Silence, Classcheck!
+  //	DEFINE_ARRAY( m_flDesiredHealth, FIELD_FLOAT,  NUM_HEALTH_ITEMS  ),
+  //	DEFINE_ARRAY( m_flDesiredAmmo, FIELD_FLOAT,  NUM_AMMO_ITEMS  ),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    // Purpose:
-    //-----------------------------------------------------------------------------
-    CItem_DynamicResupply::CItem_DynamicResupply(void) {
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+CItem_DynamicResupply::CItem_DynamicResupply(void) {
   AddSpawnFlags(SF_DYNAMICRESUPPLY_USE_MASTER);
   m_version = VERSION_CURRENT;
 
@@ -536,7 +538,6 @@ bool CItem_DynamicResupply::SpawnItemFromRatio(int nCount,
 
   // Update the spawn position to spawn them on top of each other
   pVecSpawnOrigin->z = vecWorldMaxs.z + 6.0f;
-
   pVecSpawnOrigin->x += random->RandomFloat(-6, 6);
   pVecSpawnOrigin->y += random->RandomFloat(-6, 6);
 

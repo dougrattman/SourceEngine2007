@@ -8,7 +8,7 @@
 // fopen is needed for the bzip code
 #undef fopen
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <WinInet.h>
 #include <cassert>

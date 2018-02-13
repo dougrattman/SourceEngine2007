@@ -13,7 +13,7 @@
 #include "phys_controller.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_THRUST_STARTACTIVE		0x0001
 #define SF_THRUST_FORCE				0x0002

@@ -5532,7 +5532,7 @@ struct srect_t {
 
 // Draws a filled rect of specified bounds, but omits the bounds of the skip
 // panel from those bounds
-void Panel::FillRectSkippingPanel(Color &clr, int x, int y, int w, int h,
+void Panel::FillRectSkippingPanel(Color clr, int x, int y, int w, int h,
                                   Panel *skipPanel) {
   int sx = 0, sy = 0, sw, sh;
   skipPanel->GetSize(sw, sh);

@@ -15,8 +15,8 @@
 #include "engine/ivmodelinfo.h"
 #include "view.h"
 #include "fx.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "c_pixel_visibility.h"
 #include "iviewrender.h"
 #include "view_shared.h"
@@ -29,7 +29,7 @@
 ConVar r_DrawBeams( "r_DrawBeams", "1", FCVAR_CHEAT, "0=Off, 1=Normal, 2=Wireframe" );
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool g_BeamCreationAllowed = false;
 

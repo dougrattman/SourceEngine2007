@@ -2,7 +2,7 @@
 
 #include "cbase.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 #include "materialsystem/imaterialvar.h"
 #include "smoke_fog_overlay.h"

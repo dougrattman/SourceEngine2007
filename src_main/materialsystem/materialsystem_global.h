@@ -4,7 +4,7 @@
 #define MATERIALSYSTEM_GLOBAL_H
 
 #include "imaterialsysteminternal.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier2/tier2.h"
 
 //-----------------------------------------------------------------------------

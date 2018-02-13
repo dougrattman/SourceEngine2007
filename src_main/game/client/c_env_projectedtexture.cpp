@@ -12,10 +12,10 @@
 #include "iviewrender.h"
 #include "view_shared.h"
 #include "texture_group_names.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar mat_slopescaledepthbias_shadowmap( "mat_slopescaledepthbias_shadowmap", "16", FCVAR_CHEAT );
 static ConVar mat_depthbias_shadowmap(	"mat_depthbias_shadowmap", "0.0005", FCVAR_CHEAT  );

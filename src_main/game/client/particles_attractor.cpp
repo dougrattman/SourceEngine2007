@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "particles_attractor.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

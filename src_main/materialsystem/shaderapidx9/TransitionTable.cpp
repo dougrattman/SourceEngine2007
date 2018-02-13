@@ -2,21 +2,18 @@
 
 #include "transitiontable.h"
 
-#if defined(_WIN32)
-#include "winlite.h"
-#endif
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
 #include "recording.h"
 #include "shaderapi/IShaderUtil.h"
 #include "shaderapidx8.h"
 #include "shaderdevicedx8.h"
-#include "tier0/compiler_specific_macroses.h"
-#include "tier0/vprof.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "vertexshaderdx8.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Enumeration for ApplyStateFunc_ts
@@ -24,7 +21,7 @@
 // Any function that does not require a texture stage
 // NOTE: If you change this, change the function table s_pRenderFunctionTable[]
 // below!!
-enum RenderStateFunc_t {
+enum RenderStateFunc_t : int {
   RENDER_STATE_DepthTest = 0,
   RENDER_STATE_ZWriteEnable,
   RENDER_STATE_ColorWriteEnable,
@@ -50,7 +47,7 @@ enum RenderStateFunc_t {
 // Any function that requires a texture stage
 // NOTE: If you change this, change the function table s_pTextureFunctionTable[]
 // below!!
-enum TextureStateFunc_t {
+enum TextureStateFunc_t : int {
   TEXTURE_STATE_TexCoordIndex = 0,
   TEXTURE_STATE_SRGBReadEnable,
   TEXTURE_STATE_Fetch4Enable,
@@ -1019,8 +1016,7 @@ int CTransitionTable::CreateNormalTransitions(const ShadowState_t& fromState,
   }
 
   int nStageCount = HardwareConfig()->GetTextureStageCount();
-  int i;
-  for (i = 0; i < nStageCount; ++i) {
+  for (int i = 0; i < nStageCount; ++i) {
     // Special case for texture stage ops to eliminate extra transitions
     // NOTE: If we're forcing transitions, then ActivateFixedFunction above will
     // take care of all these transitions

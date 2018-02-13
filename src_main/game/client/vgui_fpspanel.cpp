@@ -15,7 +15,7 @@
 #include "vguimatsurface/imatsystemsurface.h"
 #include "view.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar cl_showfps(
     "cl_showfps", "0", 0,

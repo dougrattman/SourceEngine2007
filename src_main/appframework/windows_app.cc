@@ -6,7 +6,7 @@
 #include "linuxapp.cpp"
 #else
 #if defined(_WIN32)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 #include "appframework/appframework.h"
 #include "appframework/iappsystemgroup.h"

@@ -5,7 +5,7 @@
 #include "tier0/include/dbg.h"
 
 #ifdef IS_WINDOWS_PC
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include <malloc.h>

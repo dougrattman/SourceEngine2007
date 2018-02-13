@@ -41,7 +41,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DEBUG_TRANSITIONS_VERBOSE 2
 ConVar g_debug_transitions("g_debug_transitions", "0", FCVAR_NONE,

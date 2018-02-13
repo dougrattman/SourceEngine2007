@@ -17,7 +17,7 @@
 #include "physics_npc_solver.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar flex_minplayertime( "flex_minplayertime", "5" );
 ConVar flex_maxplayertime( "flex_maxplayertime", "7" );

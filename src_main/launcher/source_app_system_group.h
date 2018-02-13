@@ -5,7 +5,7 @@
 
 #include "appframework/IAppSystemGroup.h"
 #include "base/include/base_types.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #include "file_system_access_logger.h"
 

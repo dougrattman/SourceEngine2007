@@ -8,7 +8,7 @@
 #include "apparent_velocity_helper.h"
 #include "filesystem.h"
 #include "studio.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "utldict.h"
 
 #ifdef CLIENT_DLL

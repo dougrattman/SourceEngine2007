@@ -4,11 +4,11 @@
 #undef PROTECTED_THINGS_ENABLE
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // HACK: Need ShellExecute for PSD updates
 #ifdef IS_WINDOWS_PC
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <direct.h>
 #include <shellapi.h>
@@ -49,7 +49,7 @@
 #include "time.h"
 #include "vtf/vtf.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define TEXTURE_FNAME_EXTENSION ".vtf"
 #define TEXTURE_FNAME_EXTENSION_LEN 4
@@ -3164,9 +3164,11 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
               FCVAR_DONTRECORD) {
   using namespace TextureLodOverride;
 
+  char const *szCmd;
+
   if (args.ArgC() != 2) goto usage;
 
-  char const *szCmd = args.Arg(1);
+  szCmd = args.Arg(1);
   Msg("mat_texture_list_txlod_sync %s...\n", szCmd);
 
   if (!stricmp(szCmd, "reset")) {

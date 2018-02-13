@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "icliententitylist.h"
 #include "iclientunknown.h"
 #include "tier1/UtlLinkedList.h"

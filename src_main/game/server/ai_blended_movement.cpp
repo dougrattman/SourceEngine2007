@@ -11,7 +11,7 @@
 #include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 //
@@ -1195,7 +1195,8 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     m_scriptMove[0].vecLocation + Vector( 0, 0, 10 ),
     m_scriptMove[0].vecLocation + tmp * 32 + Vector( 0, 0, 10 ), 255,255,255,
     true, 0.1 );
-            
+            
+
 
 
             NDebugOverlay::Line( m_scriptMove[0].vecLocation + Vector( 0, 0, 10

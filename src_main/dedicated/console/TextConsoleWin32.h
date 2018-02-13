@@ -8,7 +8,7 @@
 #ifdef _WIN32
 
 #include "TextConsole.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 class CTextConsoleWin32 : public CTextConsole {
  public:

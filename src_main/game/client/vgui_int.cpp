@@ -17,7 +17,7 @@
 #include <vgui/isurface.h>
 #include <vgui/IVGui.h>
 #include <vgui/IInput.h>
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "iclientmode.h"
 #include <vgui_controls/Panel.h>
 #include "tier1/keyvalues.h"
@@ -34,7 +34,7 @@ vgui::IInputInternal *g_InputInternal = NULL;
 #include <vgui_controls/Controls.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void GetVGUICursorPos( int& x, int& y )
 {

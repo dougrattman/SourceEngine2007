@@ -12,7 +12,7 @@
 #include "vgui_controls/Controls.h"
 #include "vgui_controls/Panel.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Simultaneous message limit
 #define MAX_MESSAGECHARS_MESSAGES 1024

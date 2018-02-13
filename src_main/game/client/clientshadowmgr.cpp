@@ -75,7 +75,7 @@
 #include "materialsystem/ITexture.h"
 #include "model_types.h"
 #include "tier0/ICommandLine.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "toolframework_client.h"
 #include "utlmultilist.h"
 #include "view_shared.h"
@@ -83,7 +83,7 @@
 #include "vstdlib/jobthread.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar r_flashlightdrawfrustum("r_flashlightdrawfrustum", "0");
 static ConVar r_flashlightmodels("r_flashlightmodels", "1");

@@ -5,7 +5,7 @@
 #include "cbenchmark.h"
 
 #ifdef IS_WINDOWS_PC
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>  // INADDR_ANY defn
 #endif

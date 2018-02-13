@@ -10,7 +10,7 @@
 #include "debugoverlay_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class C_FleshEffectTarget;
 void AddFleshProxyTarget( C_FleshEffectTarget *pTarget );

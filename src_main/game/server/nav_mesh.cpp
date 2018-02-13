@@ -15,7 +15,7 @@
 #include "nav_node.h"
 #include "fmtstr.h"
 #include "tier1/utlbuffer.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 #define DrawLine( from, to, duration, red, green, blue )		NDebugOverlay::Line( from, to, red, green, blue, true, 0.1f )
 

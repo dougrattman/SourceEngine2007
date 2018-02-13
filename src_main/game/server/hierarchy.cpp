@@ -11,7 +11,7 @@
 #include "hierarchy.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Does the linked list work of removing a child object from the hierarchy.

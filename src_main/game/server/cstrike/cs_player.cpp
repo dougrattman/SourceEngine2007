@@ -40,8 +40,8 @@
 #include "studio.h"
 #include "te_effect_dispatch.h"
 #include "team.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 #include "trains.h"
 #include "vcollide_parse.h"
@@ -55,7 +55,7 @@
 #include "weapon_smokegrenade.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Minimum interval between rate-limited commands that players can run.
 #define CS_COMMAND_MAX_RATE 0.3
@@ -318,7 +318,7 @@ SendPropFloat(SENDINFO(m_flStamina), 14, 0, 0, 1400),
 // has to be included after above macros
 #include "cs_bot.h"
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
     // --------------------------------------------------------------------------------
     // //

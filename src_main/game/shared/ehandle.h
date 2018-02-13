@@ -6,7 +6,7 @@
 #if defined(_DEBUG) && defined(GAME_DLL)
 #include "cbase.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #endif
 
 #include "basehandle.h"

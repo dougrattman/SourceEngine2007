@@ -7,13 +7,13 @@
 
 
 #include "cbase.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "igamesystem.h"
 #include "filesystem.h"
 #include "tier1/keyvalues.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 int g_iDevShotCameraCount = 0;
 #define DEVSHOT_INITIAL_WAIT		5			// Time after the level spawn before the first devshot camera takes it's shot

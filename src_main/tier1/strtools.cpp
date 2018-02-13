@@ -56,7 +56,7 @@
 #define _getcwd getcwd
 #elif _WIN32
 #include <direct.h>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #ifdef _WIN32

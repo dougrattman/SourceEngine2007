@@ -7,14 +7,14 @@
 
 #include "cbase.h"
 #include "rope_helpers.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "mathlib/mathlib.h"
 #include "rope_shared.h"
 #include "rope_physics.h"
 #include "networkvar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CHangRope : public CRopePhysics<512>
 {

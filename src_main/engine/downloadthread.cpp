@@ -14,7 +14,7 @@
 
 #include <cstdio>
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <WinInet.h>
 

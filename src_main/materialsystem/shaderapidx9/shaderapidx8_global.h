@@ -5,8 +5,8 @@
 
 #include "shaderapi_global.h"
 #include "shaderdevicedx8.h"
-#include "tier0/dbg.h"
-#include "tier0/memalloc.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/memalloc.h"
 #include "tier2/tier2.h"
 
 //-----------------------------------------------------------------------------

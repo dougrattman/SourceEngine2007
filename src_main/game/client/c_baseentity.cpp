@@ -31,7 +31,7 @@
 #include "model_types.h"
 #include "prediction.h"
 #include "soundinfo.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/interface.h"
 #include "toolframework/itoolframework.h"
@@ -40,7 +40,7 @@
 #include "view.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef INTERPOLATEDVAR_PARANOID_MEASUREMENT
 int g_nInterpolatedVarsChanged = 0;
@@ -3119,7 +3119,7 @@ bool C_BaseEntity::SnatchModelInstance(C_BaseEntity *pToEntity) {
   return true;
 }
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // C_BaseEntity new/delete
@@ -3172,7 +3172,7 @@ void C_BaseEntity::operator delete(void *pMem) {
   g_pMemAlloc->Free(pMem);
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //========================================================================================
 // TEAM HANDLING

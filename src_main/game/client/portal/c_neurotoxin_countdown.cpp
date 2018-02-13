@@ -9,7 +9,7 @@
 #include "c_neurotoxin_countdown.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 CUtlVector< C_NeurotoxinCountdown* > g_NeurotoxinCountdowns;

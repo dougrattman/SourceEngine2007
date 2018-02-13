@@ -17,8 +17,8 @@
 #include "shaderlib/ShaderDLL.h"
 #include "shaderlib/cshader.h"
 #include "texturemanager.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
@@ -27,7 +27,7 @@
 #include "tier1/utlstack.h"
 
 // NOTE: This must be the last file included!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //#define DEBUG_DEPTH 1
 
@@ -560,7 +560,7 @@ void CShaderSystem::UnloadShaderDLL(const char *pFullPath) {
 //-----------------------------------------------------------------------------
 // Make sure these match the bits in imaterial.h
 //-----------------------------------------------------------------------------
-static char *s_pShaderStateString[] = {
+static const char *s_pShaderStateString[] = {
     "$debug",
     "$no_fullbright",
     "$no_draw",

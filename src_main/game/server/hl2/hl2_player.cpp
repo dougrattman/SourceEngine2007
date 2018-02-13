@@ -45,14 +45,14 @@
 #include "eventqueue.h"
 #include "gamestats.h"
 #include "filters.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #ifdef HL2_EPISODIC
 #include "npc_alyx_episodic.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar weapon_showproficiency;
 extern ConVar autoaim_max_dist;

@@ -18,7 +18,7 @@
 #include "vstdlib/jobthread.h"
 
 // NOTE: This must be the last file included!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef _LINUX
 #define _finite finite

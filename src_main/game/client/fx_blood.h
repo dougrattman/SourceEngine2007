@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 class CBloodSprayEmitter : public CSimpleEmitter
 {
@@ -71,6 +71,6 @@ private:
 	CBloodSprayEmitter( const CBloodSprayEmitter & );
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif // FX_BLOOD_H

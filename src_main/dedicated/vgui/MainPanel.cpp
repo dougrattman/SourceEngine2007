@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "FileSystem.h"
 #include "IAdminServer.h"

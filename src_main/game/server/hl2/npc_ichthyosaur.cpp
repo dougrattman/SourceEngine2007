@@ -27,7 +27,7 @@
 #include "movevars_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	sk_ichthyosaur_health( "sk_ichthyosaur_health", "0" );
 ConVar	sk_ichthyosaur_melee_dmg( "sk_ichthyosaur_melee_dmg", "0" );

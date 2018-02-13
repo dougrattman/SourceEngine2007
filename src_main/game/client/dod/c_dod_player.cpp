@@ -58,7 +58,7 @@ ConVar cl_ragdoll_physics_enable( "cl_ragdoll_physics_enable", "1", 0, "Enable/d
 ConVar cl_autoreload( "cl_autoreload", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "Set to 1 to auto reload your weapon when it is empty" );
 ConVar cl_autorezoom( "cl_autorezoom", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "When set to 1, sniper rifles and bazooka weapons will automatically raise after each shot" );
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //======================================================
 //

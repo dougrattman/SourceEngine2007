@@ -10,7 +10,7 @@
 
 #include "tier1/UtlLinkedList.h"
 #include "vstdlib/random.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "mathlib/vector.h"
 #include <float.h>
 

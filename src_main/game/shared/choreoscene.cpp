@@ -3,7 +3,7 @@
 #include "choreoactor.h"
 
 #if defined(_WIN32) && !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include <cstdio>
@@ -14,14 +14,14 @@
 #include "ichoreoeventcallback.h"
 #include "iscenetokenprocessor.h"
 #include "mathlib/mathlib.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlrbtree.h"
 #include "tier2/tier2.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Let scene linger for 1/4 second so blends can finish
 #define SCENE_LINGER_TIME 0.25f

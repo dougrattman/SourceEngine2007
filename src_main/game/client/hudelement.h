@@ -7,7 +7,7 @@
 #include "hud.h"
 #include "hud_element_helper.h"
 #include "networkvar.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #undef new
 
@@ -137,6 +137,6 @@ class CHudRenderGroup {
   CUtlPriorityQueue<CHudElement *> m_pLockingElements;
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif  // HUDELEMENT_H

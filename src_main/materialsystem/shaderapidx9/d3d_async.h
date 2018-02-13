@@ -7,8 +7,8 @@
 #include <d3d9.h>
 #include "dx9sdk/include/d3dx9.h"
 #include "recording.h"
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
 #ifdef NDEBUG

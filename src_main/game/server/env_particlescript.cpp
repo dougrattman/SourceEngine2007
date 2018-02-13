@@ -11,7 +11,7 @@
 #include "studio.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // HACK HACK:  Must match cl_dll/cl_animevent.h!!!!
 #define CL_EVENT_SPRITEGROUP_CREATE		6002

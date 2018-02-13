@@ -14,7 +14,7 @@
 #include "filters.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define		SF_BRUSH_ACCDCC	16// brush should accelerate and decelerate when toggled
 #define		SF_BRUSH_HURT		32// rotating brush that inflicts pain based on rotation speed

@@ -24,7 +24,7 @@
 #include "tier1/checksum_crc.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "tier1/utlbuffer.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "sceneentity.h"
 #include "datacache/idatacache.h"
 #include "dt_utlvector_send.h"
@@ -39,7 +39,7 @@
 #endif // HL2_EPISODIC
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ISoundEmitterSystemBase *soundemitterbase;
 extern ISceneFileCache *scenefilecache;

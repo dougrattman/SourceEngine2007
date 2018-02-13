@@ -23,7 +23,7 @@
 #ifdef _WIN32
 #include <direct.h>
 #include "tier1/keyvalues.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 // filesystem_steam.cpp implements this useful function - mount all the caches
 // for a given app ID.
 extern void MountDependencies(int iAppId, CUtlVector<unsigned int> &depList);

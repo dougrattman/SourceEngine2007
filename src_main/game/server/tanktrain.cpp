@@ -12,7 +12,7 @@
 #include "engine/IEngineSound.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern short g_sModelIndexFireball;
 #define SPRITE_FIREBALL		"sprites/zerogxplode.vmt"

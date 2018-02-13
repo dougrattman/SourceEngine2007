@@ -6,7 +6,7 @@
 #include "server_pch.h"
 
 #ifndef SWDS
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "zip/XZip.h"
 #endif

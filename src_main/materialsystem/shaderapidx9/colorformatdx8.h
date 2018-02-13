@@ -3,7 +3,7 @@
 #ifndef COLORFORMATDX8_H
 #define COLORFORMATDX8_H
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <PixelWriter.h>
 #include <d3d9types.h>

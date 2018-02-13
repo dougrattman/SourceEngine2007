@@ -32,7 +32,7 @@
 #include "shake.h"
 #include "soundflags.h"
 #include "te_effect_dispatch.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/checksum_crc.h"
 #include "utldict.h"
 #include "vstdlib/random.h"
@@ -43,7 +43,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern short g_sModelIndexSmoke;  // (in combatweapon.cpp) holds the index for
                                   // the smoke cloud

@@ -3,7 +3,7 @@
 #ifndef SHADERDEVICEDX8_H
 #define SHADERDEVICEDX8_H
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <d3d9.h>
 #include "shaderapidx8_global.h"

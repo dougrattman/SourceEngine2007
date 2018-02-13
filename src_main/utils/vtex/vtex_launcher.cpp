@@ -1,46 +1,38 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+// Copyright © 1996-2005, Valve Corporation, All rights reserved.
 
-#include <stdio.h>
-#include "tier1/interface.h"
+#include <cstdio>
+
 #include "ilaunchabledll.h"
+#include "tier1/interface.h"
 
+int main(int argc, char **argv) {
+  const char *module_name{"vtex_dll.dll"};
 
-int main( int argc, char **argv )
-{
-	const char *pModuleName = "vtex_dll.dll";
-	
-	CSysModule *pModule = Sys_LoadModule( pModuleName );
-	if ( !pModule )
-	{
-		printf( "Can't load %s.", pModuleName );
-		return false;
-	}
+  CSysModule *module = Sys_LoadModule(module_name);
+  if (!module) {
+    fprintf(stderr, "Can't load %s.", module_name);
+    return -1;
+  }
 
-	CreateInterfaceFn fn = Sys_GetFactory( pModule );
-	if ( !fn )
-	{
-		printf( "Can't get factory from %s.", pModuleName );
-		Sys_UnloadModule( pModule );
-		return false;
-	}
+  CreateInterfaceFn fn = Sys_GetFactory(module);
+  if (!fn) {
+    fprintf(stderr, "Can't get factory from %s.", module_name);
+    Sys_UnloadModule(module);
+    return -2;
+  }
 
-	ILaunchableDLL *pInterface = (ILaunchableDLL*)fn( LAUNCHABLE_DLL_INTERFACE_VERSION, NULL );
-	if ( !pInterface )
-	{
-		printf( "Can't get '%s' interface from %s.", LAUNCHABLE_DLL_INTERFACE_VERSION, pModuleName );
-		Sys_UnloadModule( pModule );
-		return false;
-	}
+  ILaunchableDLL *launchable_dll =
+      (ILaunchableDLL *)fn(LAUNCHABLE_DLL_INTERFACE_VERSION, nullptr);
+  if (!launchable_dll) {
+    fprintf(stderr, "Can't get '%s' interface from %s.",
+            LAUNCHABLE_DLL_INTERFACE_VERSION, module_name);
+    Sys_UnloadModule(module);
+    return -3;
+  }
 
-	int iRet = pInterface->main( argc, argv );
-	Sys_UnloadModule( pModule );
-	return iRet;
+  const int return_code = launchable_dll->main(argc, argv);
+
+  Sys_UnloadModule(module);
+
+  return iRet;
 }
-
-
-

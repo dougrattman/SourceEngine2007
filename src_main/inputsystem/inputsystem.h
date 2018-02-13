@@ -3,7 +3,7 @@
 #ifndef INPUTSYSTEM_H
 #define INPUTSYSTEM_H
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <Xinput.h>
 #include <mmsystem.h>

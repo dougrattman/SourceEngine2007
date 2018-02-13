@@ -1374,7 +1374,7 @@ bool COptionsDialogXbox::ShouldSkipOption(KeyValues *pKey) {
   return false;
 }
 
-void COptionsDialogXbox::ReadOptionsFromFile(char *pchFileName) {
+void COptionsDialogXbox::ReadOptionsFromFile(const char *pchFileName) {
   KeyValues *pOptionKeys = new KeyValues("options_x360");
   pOptionKeys->LoadFromFile(g_pFullFileSystem, pchFileName, NULL);
 

@@ -42,7 +42,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // position of end of muzzle relative to shoot position
 #define TF_FLAMETHROWER_MUZZLEPOS_FORWARD		70.0f

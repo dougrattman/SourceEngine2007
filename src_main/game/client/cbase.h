@@ -8,8 +8,8 @@ struct studiohdr_t;
 #include <cstdio>
 #include <cstdlib>
 
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 #include "tier1/UtlVector.h"
 #include "tier1/strtools.h"

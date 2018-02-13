@@ -4,7 +4,7 @@
 #define SOURCE_VGUI2_VGUI_SURFACE_LIB_WIN32FONT_H_
 
 #define OEMRESOURCE
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #ifdef GetCharABCWidths
 #undef GetCharABCWidths

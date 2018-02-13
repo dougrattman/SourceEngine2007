@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: DustParticle emitter 
@@ -103,6 +103,6 @@ private:
 
 void GetColorForSurface( trace_t *trace, Vector *color );
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 #endif // C_IMPACT_EFFECTS_H

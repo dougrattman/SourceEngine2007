@@ -5,7 +5,7 @@
 #include "tier2/vconfig.h"
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <direct.h>
 #include <io.h>  // _chmod

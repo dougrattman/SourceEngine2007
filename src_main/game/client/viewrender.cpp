@@ -36,8 +36,8 @@
 #include "particles_ez.h"
 #include "renderparm.h"
 #include "smoke_fog_overlay.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/mempool.h"
 #include "toolframework_client.h"
 #include "vgui_int.h"
@@ -68,7 +68,7 @@
 #include "c_env_projected_texture.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static void testfreezeframe_f(void) { view->FreezeFrame(3.0); }
 static ConCommand test_freezeframe("test_freezeframe", testfreezeframe_f,

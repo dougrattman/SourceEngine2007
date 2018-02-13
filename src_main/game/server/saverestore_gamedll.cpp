@@ -10,7 +10,7 @@
 #include "saverestoretypes.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: iterates through a typedescript data block, so it can insert key/value data into the block

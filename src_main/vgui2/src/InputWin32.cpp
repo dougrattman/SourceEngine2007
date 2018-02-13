@@ -2,7 +2,7 @@
 
 #include "vgui/IInputInternal.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <imm.h>
 #include <cstring>
@@ -264,7 +264,7 @@ class CInputWin32 : public IInputInternal {
 
   HCursor _cursorOverride;
 
-  char *_keyTrans[KEY_LAST];
+  const char *_keyTrans[KEY_LAST];
 
   InputContext_t m_DefaultInputContext;
   HInputContext m_hContext;  // current input context

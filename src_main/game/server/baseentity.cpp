@@ -44,7 +44,7 @@
 #include "SkyCamera.h"
 #include "sceneentity.h"
 #include "game.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "ai_basenpc.h"
 #include "iservervehicle.h"
 #include "eventlist.h"
@@ -54,7 +54,7 @@
 #include "tier1/utlbuffer.h"
 #include "positionwatcher.h"
 #include "movetype_push.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vphysics/friction.h"
 #include <ctype.h>
 #include "datacache/imdlcache.h"
@@ -63,7 +63,7 @@
 #include "tier1/utlstring.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern bool g_bTestMoveTypeStepSimulation;
 extern ConVar sv_vehicle_autoaim_scale;
@@ -3140,7 +3140,7 @@ bool CBaseEntity::ShouldSavePhysics()
 
 //-----------------------------------------------------------------------------
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // CBaseEntity new/delete
@@ -3167,7 +3167,7 @@ void CBaseEntity::operator delete( void *pMem )
 	engine->FreeEntPrivateData( pMem );
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 #ifdef _DEBUG

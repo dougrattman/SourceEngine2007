@@ -32,7 +32,7 @@
 #include "tf_gamestats_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 DECLARE_HUDELEMENT_DEPTH( CTFStatPanel, 1 );
 DECLARE_HUD_MESSAGE( CTFStatPanel, PlayerStatsUpdate );

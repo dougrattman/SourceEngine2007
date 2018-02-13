@@ -11,7 +11,7 @@
 #include "engine/IEngineSound.h"
 #include "tf_weapon_parse.h"
 #include "c_basetempentity.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 //--------------------------------------------------------------------------------------------------------------
 CTFWeaponInfo *GetTFWeaponInfo( int iWeapon )

@@ -20,7 +20,7 @@
 #include "dod_ammo_box.h"
 #include "effect_dispatch_data.h"
 #include "movehelper_server.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "te_effect_dispatch.h"
 #include "vphysics/player_controller.h"
 #include "tier1/keyvalues.h"
@@ -43,7 +43,7 @@
 #include "gameinterface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define COMMAND_CHANGE_TEAM "changeteam"
 

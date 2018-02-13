@@ -3,7 +3,7 @@
 #include "vgui/ISystem.h"
 
 #define OEMRESOURCE
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <shellapi.h>
 #include <shlobj.h>
@@ -843,7 +843,6 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
                              const char *arguments,
                              const char *workingDirectory,
                              const char *iconFile) {
-#ifndef _X360
   bool bSuccess = false;
   char temp[MAX_PATH];
   strcpy(temp, linkFileName);
@@ -854,9 +853,9 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
 
   // Create the ShellLink object
   IShellLink *psl;
-  HRESULT hres = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                                    IID_IShellLink, (LPVOID *)&psl);
-  if (SUCCEEDED(hres)) {
+  HRESULT hr = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                                  IID_PPV_ARGS(&psl));
+  if (SUCCEEDED(hr)) {
     // Set the target information from the link object
     psl->SetPath(targetPath);
     psl->SetArguments(arguments);
@@ -869,13 +868,13 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
 
     // Bind the ShellLink object to the Persistent File
     IPersistFile *ppf;
-    hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *)&ppf);
-    if (SUCCEEDED(hres)) {
+    hr = psl->QueryInterface(IID_PPV_ARGS(&ppf));
+    if (SUCCEEDED(hr)) {
       wchar_t wsz[MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
       MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, MAX_PATH);
-      hres = ppf->Save(wsz, TRUE);
-      if (SUCCEEDED(hres)) {
+      hr = ppf->Save(wsz, TRUE);
+      if (SUCCEEDED(hr)) {
         bSuccess = true;
       }
       ppf->Release();
@@ -883,9 +882,6 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
     psl->Release();
   }
   return bSuccess;
-#else
-  return false;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -904,11 +900,11 @@ bool CSystem::GetShortcutTarget(const char *linkFileName, char *targetPath,
   // Create the ShellLink object
   IShellLink *psl;
   HRESULT hres = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                                    IID_IShellLink, (LPVOID *)&psl);
+                                    IID_PPV_ARGS(&psl));
   if (SUCCEEDED(hres)) {
     IPersistFile *ppf;
     // Bind the ShellLink object to the Persistent File
-    hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *)&ppf);
+    hres = psl->QueryInterface(IID_PPV_ARGS(&ppf));
     if (SUCCEEDED(hres)) {
       wchar_t wsz[MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
@@ -951,11 +947,11 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
   // Create the ShellLink object
   IShellLink *psl;
   HRESULT hres = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                                    IID_IShellLink, (LPVOID *)&psl);
+                                    IID_PPV_ARGS(&psl));
   if (SUCCEEDED(hres)) {
     IPersistFile *ppf;
     // Bind the ShellLink object to the Persistent File
-    hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *)&ppf);
+    hres = psl->QueryInterface(IID_PPV_ARGS(&ppf));
     if (SUCCEEDED(hres)) {
       wchar_t wsz[MAX_PATH];
       // Get a UNICODE wide string wsz from the link path

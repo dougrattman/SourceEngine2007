@@ -17,13 +17,13 @@
 #include "renderparm.h"
 #include "studio.h"
 #include "texturemanager.h"
-#include "tier0/dbg.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/vprof.h"
 #include "tier1/KeyValues.h"
 #include "tier1/UtlSortVector.h"
 #include "tier2/renderutils.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Activate to get stats

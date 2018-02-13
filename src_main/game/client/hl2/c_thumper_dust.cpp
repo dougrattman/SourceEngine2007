@@ -15,7 +15,7 @@
 #include "view.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	THUMPER_DUST_LIFETIME		2.0f
 #define THUMPER_MAX_PARTICLES		24

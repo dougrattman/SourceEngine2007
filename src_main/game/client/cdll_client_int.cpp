@@ -75,8 +75,8 @@
 #include "soundEnvelope.h"
 #include "soundemittersystem/isoundemittersystembase.h"
 #include "statgather.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier3/tier3.h"
 #include "toolframework_client.h"
 #include "usermessages.h"
@@ -94,7 +94,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern IClientMode *GetClientModeNormal();
 

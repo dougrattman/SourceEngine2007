@@ -14,7 +14,7 @@
 #include "entityoutput.h"
 #include "studio.h"
 #include "datacache/idatacache.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
 
 struct animevent_t;

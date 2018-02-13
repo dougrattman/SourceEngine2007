@@ -462,7 +462,7 @@ void CBonusMapsDialog::RefreshMedalDisplay(BonusMapDescription_t *pMap) {
     SetControlVisible("ChallengeNextMedal", false);
     SetControlVisible("ChallengeNextLabel", false);
 
-    int iFirstChildIndex = FindChildIndexByName("ChallengeMedalOverview00");
+    iFirstChildIndex = FindChildIndexByName("ChallengeMedalOverview00");
     for (int iChallengeIndex = 0;
          iChallengeIndex < m_pChallengeSelection->GetItemCount();
          ++iChallengeIndex) {

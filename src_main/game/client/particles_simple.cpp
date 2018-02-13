@@ -13,7 +13,7 @@
 #include "vstdlib/ikeyvaluessystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 // Used for debugging to make sure all particle effects get freed when we exit.

@@ -25,7 +25,7 @@
 #include "engine/ivmodelinfo.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "view.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "particles_localspace.h"
 #include "physpropclientside.h"
 #include "tier0/ICommandLine.h"
@@ -35,7 +35,7 @@
 #include "c_te_effect_dispatch.h"
 
 // NOTE: Always include this last!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar muzzleflash_light;
 

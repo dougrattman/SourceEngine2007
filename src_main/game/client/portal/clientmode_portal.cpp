@@ -16,7 +16,7 @@
 #include "prediction.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // default FOV for HL2
 ConVar default_fov( "default_fov", "75", FCVAR_CHEAT );

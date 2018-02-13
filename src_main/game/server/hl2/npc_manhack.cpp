@@ -40,7 +40,7 @@
 #include "ammodef.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // When the engine is running and the manhack is operating under power
 // we don't let gravity affect him.

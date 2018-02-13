@@ -11,11 +11,11 @@
 #include "point_template.h"
 #include "saverestore_utlvector.h"
 #include "mapentities.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "mapentities_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SF_POINTTEMPLATE_DONTREMOVETEMPLATEENTITIES		0x0001
 

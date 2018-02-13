@@ -15,7 +15,7 @@
 #include "movevars_shared.h"
 #include "engine/ivmodelinfo.h"
 #include "fx.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "c_world.h"
 #include "vphysics/object_hash.h"
 #include "vphysics/collision_set.h"
@@ -24,7 +24,7 @@
 #include "positionwatcher.h"
 #include "vphysics/constraints.h"
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // file system interface
 extern IFileSystem *filesystem;

@@ -19,7 +19,7 @@
 #include "mapentities_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define REPORTFAILURE(text) if ( hintCriteria.HasFlag( bits_HINT_NODE_REPORT_FAILURES ) ) \
 								NDebugOverlay::Text( GetAbsOrigin(), text, false, 60 )

@@ -437,7 +437,7 @@ CAchievementsDialog::CAchievementsDialog(vgui::Panel *parent)
                  m_AchievementGroups[i].m_iMinRange);
     }
 
-    wchar_t *wzGroupName = g_pVGuiLocalize->Find(buf);
+    const wchar_t *wzGroupName = g_pVGuiLocalize->Find(buf);
 
     if (!wzGroupName) {
       wzGroupName = L"Need Title ( %s1 of %s2 )";

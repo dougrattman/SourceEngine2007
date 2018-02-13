@@ -4,7 +4,7 @@
 // save files either in memory or on disk.
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "saverestore_filesystem.h"

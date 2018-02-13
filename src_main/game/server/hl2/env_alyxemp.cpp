@@ -8,7 +8,7 @@
 #include "env_alyxemp_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	EMP_BEAM_SPRITE	"effects/laser1.vmt"
 

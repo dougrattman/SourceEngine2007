@@ -61,8 +61,8 @@
 #include "soundent.h"
 #include "soundenvelope.h"
 #include "textstatsmgr.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/bitbuf.h"
 #include "timedeventmgr.h"
 #include "usermessages.h"
@@ -102,7 +102,7 @@ extern ConVar commentary;
 IUploadGameStats *gamestatsuploader = NULL;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 CTimedEventMgr g_NetworkPropertyEventMgr;
 

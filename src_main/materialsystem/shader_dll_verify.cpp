@@ -1,7 +1,7 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "shader_dll_verify.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 static unsigned char *g_pLastInputData = nullptr;
 static HANDLE g_hDLLInst = nullptr;

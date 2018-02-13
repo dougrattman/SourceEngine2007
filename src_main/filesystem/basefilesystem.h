@@ -16,7 +16,7 @@
 #include <sys/types.h>
 #include <cstdio>
 #include <cstring>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #undef GetCurrentDirectory
 #undef GetJob

@@ -32,11 +32,11 @@
 #include "IEffects.h"
 #include "vstdlib/random.h"
 #include "ndebugoverlay.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "env_debughistory.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar ai_task_pre_script;
 extern ConVar ai_use_efficiency;

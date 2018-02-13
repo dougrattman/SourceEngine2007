@@ -18,7 +18,7 @@
 #include "pixelwriter.h"
 #include "shaderapi/ishaderapi.h"
 #include "string.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
@@ -33,7 +33,7 @@
 #include "cmatlightmaps.h"
 #undef MATSYS_INTERNAL
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define ERROR_TEXTURE_SIZE 32
 #define WHITE_TEXTURE_SIZE 1

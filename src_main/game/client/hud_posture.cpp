@@ -16,7 +16,7 @@
 using namespace vgui;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define HUD_POSTURE_UPDATES_PER_SECOND 10
 #define HUD_POSTURE_FADE_TIME 0.4f

@@ -18,7 +18,7 @@
 #include "vphysics/object_hash.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #undef LOCAL_STEP_SIZE
 // FIXME: this should be based in their hull width

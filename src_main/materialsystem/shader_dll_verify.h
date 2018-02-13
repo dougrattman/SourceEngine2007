@@ -9,7 +9,7 @@
 #ifndef SHADER_DLL_VERIFY_H
 #define SHADER_DLL_VERIFY_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/checksum_md5.h"
 

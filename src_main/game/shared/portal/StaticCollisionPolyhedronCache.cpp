@@ -10,7 +10,7 @@
 #include "engine/IEngineTrace.h"
 #include "edict.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 class CPolyhedron_LumpedMemory : public CPolyhedron //we'll be allocating one big chunk of memory for all our polyhedrons. No individual will own any memory.
@@ -19,9 +19,9 @@ public:
 	virtual void Release( void ) { };
 	static CPolyhedron_LumpedMemory *AllocateAt( void *pMemory, int iVertices, int iLines, int iIndices, int iPolygons )
 	{
-#include "tier0/memdbgoff.h" //the following placement new doesn't compile with memory debugging
+#include "tier0/include/memdbgoff.h" //the following placement new doesn't compile with memory debugging
 		CPolyhedron_LumpedMemory *pAllocated = new ( pMemory ) CPolyhedron_LumpedMemory;
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 		pAllocated->iVertexCount = iVertices;
 		pAllocated->iLineCount = iLines;

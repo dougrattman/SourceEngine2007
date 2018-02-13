@@ -22,7 +22,7 @@
 #include "ndebugoverlay.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Increment this to force rebuilding of all networks
 #define AINET_VERSION_NUMBER 37
@@ -2498,7 +2498,8 @@ void CAI_NetworkBuilder::InitVisibility(CAI_Network *pNetwork,
                                              NULL,
                                              &tr );
 
-            
+            
+
 
 
             // there is a solid_bsp ent in the way of these two nodes, so we

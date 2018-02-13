@@ -24,15 +24,15 @@
 #include "movetype_push.h"
 #include "movevars_shared.h"
 #include "player.h"
-#include "tier0/vcrmode.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/mempool.h"
 #include "trains.h"
 #include "vphysics_interface.h"
 #include "vphysicsupdateai.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar think_limit;
 #ifdef _XBOX

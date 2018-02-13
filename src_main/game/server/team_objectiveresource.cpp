@@ -12,7 +12,7 @@
 #include "team.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define CAPHUD_PARITY_BITS		6
 #define CAPHUD_PARITY_MASK		((1<<CAPHUD_PARITY_BITS)-1)

@@ -19,10 +19,8 @@ namespace vgui {
 typedef unsigned long StringIndex_t;
 const unsigned long INVALID_STRING_INDEX = (unsigned long)-1;
 
-//-----------------------------------------------------------------------------
-// Purpose: Handles localization of text
-// looks up string names and returns the localized unicode text
-//-----------------------------------------------------------------------------
+// Purpose: Handles localization of text, looks up string names and returns the
+// localized unicode text
 abstract_class ILocalize {
  public:
   // adds the contents of a file to the localization table
@@ -55,7 +53,7 @@ abstract_class ILocalize {
   // uses the format strings first: %s1, %s2, ...  unicode strings (wchar_t *)
   virtual void ConstructString(
       wchar_t * unicodeOuput, int unicodeBufferSizeInBytes,
-      wchar_t *formatString, int numFormatParameters, ...) = 0;
+      const wchar_t *formatString, int numFormatParameters, ...) = 0;
 
   // gets the values by the string index
   virtual const char *GetNameByIndex(StringIndex_t index) = 0;

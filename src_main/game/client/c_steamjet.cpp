@@ -12,7 +12,7 @@
 #include "fx.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //NOTENOTE: Mirrored in dlls\steamjet.h
 #define	STEAM_NORMAL	0

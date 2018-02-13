@@ -14,7 +14,7 @@
 
 #include <climits>
 #if defined(_WIN32) && !defined(_X360)
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include "tier0/include/icommandline.h"

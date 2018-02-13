@@ -22,7 +22,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define AR2_GRENADE_MAX_DANGER_RADIUS	300
 

@@ -28,13 +28,13 @@
 #include "dlight.h"
 #include "iefx.h"
 #include "c_te_effect_dispatch.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "ClientEffectPrecacheSystem.h"
 #include <bitbuf.h>
 #include "fx_water.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define STRIDER_MSG_BIG_SHOT			1
 #define STRIDER_MSG_STREAKS				2

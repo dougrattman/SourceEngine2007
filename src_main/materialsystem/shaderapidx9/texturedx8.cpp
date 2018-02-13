@@ -12,10 +12,10 @@
 #include "shaderapi/IShaderUtil.h"
 #include "shaderapi/ishaderAPI.h"
 #include "textureheap.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/utlbuffer.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static int s_TextureCount = 0;
 
@@ -120,18 +120,15 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
   bool isCubeMap = (nCreationFlags & TEXTURE_CREATE_CUBEMAP) != 0;
   bool bIsRenderTarget = (nCreationFlags & TEXTURE_CREATE_RENDERTARGET) != 0;
   bool bManaged = (nCreationFlags & TEXTURE_CREATE_MANAGED) != 0;
-  bool bIsDepthBuffer = (nCreationFlags & TEXTURE_CREATE_DEPTHBUFFER) != 0;
   bool isDynamic = (nCreationFlags & TEXTURE_CREATE_DYNAMIC) != 0;
   bool bAutoMipMap = (nCreationFlags & TEXTURE_CREATE_AUTOMIPMAP) != 0;
   bool bVertexTexture = (nCreationFlags & TEXTURE_CREATE_VERTEXTEXTURE) != 0;
   bool bAllowNonFilterable =
       (nCreationFlags & TEXTURE_CREATE_UNFILTERABLE_OK) != 0;
   bool bVolumeTexture = (nDepth > 1);
-  bool bIsFallback = (nCreationFlags & TEXTURE_CREATE_FALLBACK) != 0;
-  bool bNoD3DBits = (nCreationFlags & TEXTURE_CREATE_NOD3DMEMORY) != 0;
 
   // NOTE: This function shouldn't be used for creating depth buffers!
-  Assert(!bIsDepthBuffer);
+  Assert(!(nCreationFlags & TEXTURE_CREATE_DEPTHBUFFER) != 0);
 
   D3DFORMAT d3dFormat =
       ImageLoader::ImageFormatToD3DFormat(FindNearestSupportedFormat(
@@ -165,9 +162,6 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
     hr = Dx9Device()->CreateCubeTexture(
         width, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DCubeTexture, NULL);
-#else
-    pD3DCubeTexture = g_TextureHeap.AllocCubeTexture(
-        width, numLevels, usage, d3dFormat, bIsFallback, bNoD3DBits);
 #endif
     pBaseTexture = pD3DCubeTexture;
   } else if (bVolumeTexture) {
@@ -175,10 +169,6 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
     hr = Dx9Device()->CreateVolumeTexture(
         width, height, nDepth, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DVolumeTexture, NULL);
-#else
-    Assert(!bIsFallback && !bNoD3DBits);
-    pD3DVolumeTexture = g_TextureHeap.AllocVolumeTexture(
-        width, height, nDepth, numLevels, usage, d3dFormat);
 #endif
     pBaseTexture = pD3DVolumeTexture;
   } else {
@@ -203,9 +193,6 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
         width, height, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DTexture, NULL);
 
-#else
-    pD3DTexture = g_TextureHeap.AllocTexture(
-        width, height, numLevels, usage, d3dFormat, bIsFallback, bNoD3DBits);
 #endif
     pBaseTexture = pD3DTexture;
   }
@@ -277,12 +264,15 @@ void DestroyD3DTexture(IDirect3DBaseTexture *pD3DTex) {
                                   -nMemUsed);
 #endif
 
-#if !defined(_X360)
-    int ref = pD3DTex->Release();
-    Assert(ref == 0);
-#else
-    g_TextureHeap.FreeTexture(pD3DTex);
+#ifndef NDEBUG
+    ULONG ref =
 #endif
+        pD3DTex->Release();
+
+#ifndef NDEBUG
+    Assert(ref == 0);
+#endif
+
     --s_TextureCount;
   }
 }
@@ -660,7 +650,10 @@ int ComputeTextureMemorySize(const GUID &nDeviceGUID, D3DDEVTYPE deviceType) {
   // is to allocate a crapload of textures until we can't any more
   ImageFormat fmt =
       FindNearestSupportedFormat(IMAGE_FORMAT_BGR565, false, false, false);
-  int textureSize = ShaderUtil()->GetMemRequired(256, 256, 1, fmt, false);
+#ifndef DONT_CHECK_MEM
+  int textureSize =
+#endif
+      ShaderUtil()->GetMemRequired(256, 256, 1, fmt, false);
 
   int totalSize = 0;
   CUtlVector<IDirect3DBaseTexture *> textures;

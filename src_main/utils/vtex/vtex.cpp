@@ -1,8 +1,8 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright © 1996-2017, Valve Corporation, All rights reserved.
 
 #include "ivtex.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <direct.h>
 #include <io.h>
@@ -2244,9 +2244,7 @@ class CVTex : public IVTex, public ILaunchableDLL {
     g_bUsedAsLaunchableDLL = true;
 
     // Run the vtex logic
-    int iResult = VTex(argc, argv);
-
-    return iResult;
+    return VTex(argc, argv);
   }
 
   virtual int VTex(CreateInterfaceFn fsFactory, const char *pGameDir, int argc,

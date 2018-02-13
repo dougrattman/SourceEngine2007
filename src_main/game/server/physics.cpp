@@ -20,7 +20,7 @@
 #include "physics_saverestore.h"
 #include "solidsetdefaults.h"
 #include "soundenvelope.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlVector.h"
 #include "vcollide_parse.h"
 #include "vehicle_sounds.h"
@@ -52,7 +52,7 @@ void PortalPhysFrame(float deltaTime);  // small wrapper for PhysFrame that
 void PrecachePhysicsSounds(void);
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar phys_speeds("phys_speeds", "0");
 

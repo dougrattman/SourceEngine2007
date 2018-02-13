@@ -17,7 +17,7 @@
 #include "ndebugoverlay.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define GOAL_POSITION_INVALID Vector(FLT_MAX, FLT_MAX, FLT_MAX)
 

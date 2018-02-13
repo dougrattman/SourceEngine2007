@@ -15,7 +15,7 @@
 #include "te_basebeam.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Dispatches a beam ring between two entities

@@ -15,7 +15,7 @@
 #include "ai_baseactor.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Spawnflags
 #define SF_BREEN_BACKGROUND_TALK		( 1 << 16 )		// 65536 

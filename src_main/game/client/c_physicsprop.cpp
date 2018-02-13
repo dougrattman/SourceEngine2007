@@ -14,11 +14,11 @@
 #include "view.h"
 #include "clienteffectprecachesystem.h"
 #include "c_physicsprop.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "ivrenderview.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 IMPLEMENT_CLIENTCLASS_DT(C_PhysicsProp, DT_PhysicsProp, CPhysicsProp)
 	RecvPropBool( RECVINFO( m_bAwake ) ),

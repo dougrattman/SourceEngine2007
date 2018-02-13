@@ -33,7 +33,7 @@
 #include "tier1/callqueue.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 #define MINIMUM_FLOOR_PORTAL_EXIT_VELOCITY 50.0f

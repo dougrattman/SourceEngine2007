@@ -16,7 +16,7 @@
 #include "viewrender.h"
 #include "c_te_legacytempents.h"
 #include "cl_mat_stub.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "IClientVehicle.h"
 #include "engine/IEngineTrace.h"
 #include "mathlib/vmatrix.h"
@@ -31,7 +31,7 @@
 #include "filesystem.h"
 #include "materialsystem/itexture.h"
 #include "toolframework_client.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "IEngineVGui.h"
 #include <vgui_controls/Controls.h>
 #include <vgui/ISurface.h>
@@ -47,7 +47,7 @@
 
 	
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 		  
 void ToolFramework_AdjustEngineViewport( int& x, int& y, int& width, int& height );
 bool ToolFramework_SetupEngineView( Vector &origin, QAngle &angles, float &fov );

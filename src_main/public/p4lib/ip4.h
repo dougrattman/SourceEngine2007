@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 // Current perforce file state
 //-----------------------------------------------------------------------------
-enum P4FileState_t {
+enum P4FileState_t : int {
   P4FILE_UNOPENED = 0,
   P4FILE_OPENED_FOR_ADD,
   P4FILE_OPENED_FOR_EDIT,

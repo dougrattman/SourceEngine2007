@@ -19,7 +19,7 @@
 #include "nav_path.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define DrawLine(from, to, duration, red, green, blue) \
   NDebugOverlay::Line(from, to, red, green, blue, true, 0.1f)

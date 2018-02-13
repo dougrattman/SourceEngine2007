@@ -5,7 +5,7 @@
 #include "tier2/soundutils.h"
 
 #ifdef _WIN32
-#include "winlite.h"  // WAVEFORMATEX, WAVEFORMAT and ADPCM WAVEFORMAT!!!
+#include "base/include/windows/windows_light.h"  // WAVEFORMATEX, WAVEFORMAT and ADPCM WAVEFORMAT!!!
 
 #include <mmreg.h>
 #endif

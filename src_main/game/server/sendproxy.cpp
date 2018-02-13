@@ -8,9 +8,9 @@
 #include "player.h"
 #include "sendproxy.h"
 #include "team.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void SendProxy_Color32ToInt(const SendProp *pProp, const void *pStruct,
                             const void *pData, DVariant *pOut, int iElement,

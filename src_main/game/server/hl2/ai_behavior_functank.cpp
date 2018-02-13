@@ -9,7 +9,7 @@
 #include "ai_senses.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // How long to fire a func tank before running schedule selection again.
 #define FUNCTANK_FIRE_TIME 5.0f

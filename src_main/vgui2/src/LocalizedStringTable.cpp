@@ -3,7 +3,7 @@
 #include "vgui/ILocalize.h"
 
 #include <cwchar>
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "FileSystem.h"
 #include "UnicodeFileHelpers.h"
@@ -24,15 +24,9 @@ using namespace vgui;
 
 #define MAX_LOCALIZED_CHARS 4096
 
-//-----------------------------------------------------------------------------
-//
 // Internal implementation
-//
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 // Purpose: Maps token names to localized unicode strings
-//-----------------------------------------------------------------------------
 class CLocalizedStringTable : public vgui::ILocalize {
  public:
   CLocalizedStringTable();
@@ -72,7 +66,8 @@ class CLocalizedStringTable : public vgui::ILocalize {
                            int ansiBufferSize);
 
   void ConstructString(wchar_t *unicodeOutput, int unicodeBufferSizeInBytes,
-                       wchar_t *formatString, int numFormatParameters, ...);
+                       const wchar_t *formatString, int numFormatParameters,
+                       ...);
 
   // iteration functions
   StringIndex_t GetFirstStringIndex();
@@ -98,7 +93,7 @@ class CLocalizedStringTable : public vgui::ILocalize {
   bool LocalizationFileIsLoaded(const char *name);
 
   void ConstructString(wchar_t *unicodeOutput, int unicodeBufferSizeInBytes,
-                       wchar_t *formatString, int numFormatParameters,
+                       const wchar_t *formatString, int numFormatParameters,
                        va_list argList);
 
  private:
@@ -903,7 +898,7 @@ int CLocalizedStringTable::ConvertUnicodeToANSI(const wchar_t *unicode,
 //-----------------------------------------------------------------------------
 void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
                                             int unicodeBufferSizeInBytes,
-                                            wchar_t *formatString,
+                                            const wchar_t *formatString,
                                             int numFormatParameters, ...) {
   if (!formatString) {
     unicodeOutput[0] = 0;
@@ -922,11 +917,11 @@ void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
 //-----------------------------------------------------------------------------
 void CLocalizedStringTable::ConstructString(wchar_t *unicodeOutput,
                                             int unicodeBufferSizeInBytes,
-                                            wchar_t *formatString,
+                                            const wchar_t *formatString,
                                             int numFormatParameters,
                                             va_list argList) {
   int unicodeBufferSize = unicodeBufferSizeInBytes / sizeof(wchar_t);
-  wchar_t *searchPos = formatString;
+  const wchar_t *searchPos = formatString;
   wchar_t *outputPos = unicodeOutput;
 
   // assumes we can't have %s10

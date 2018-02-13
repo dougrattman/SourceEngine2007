@@ -8,8 +8,8 @@
 #include "filesystem.h"
 #include "igamesystem.h"
 #include "soundchars.h"
-#include "tier0/icommandline.h"
-#include "tier0/vprof.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/keyvalues.h"
 #ifndef CLIENT_DLL
@@ -23,7 +23,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar sv_soundemitter_trace("sv_soundemitter_trace", "0",
                                     FCVAR_REPLICATED,

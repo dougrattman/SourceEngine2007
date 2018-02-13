@@ -1,134 +1,86 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: Holds the enumerated list of default cursors
-//
-// $NoKeywords: $
-
 
 #ifndef DAR_H
 #define DAR_H
 
-#ifdef _WIN32
-#pragma once
-#endif
-
+#include <vgui/VGUI.h>
 #include <cstdlib>
 #include <cstring>
-#include <vgui/VGUI.h>
 #include "tier1/utlvector.h"
 
 #include "tier0/include/memdbgon.h"
 
-namespace vgui
-{
-
+namespace vgui {
 //-----------------------------------------------------------------------------
 // Purpose: Simple lightweight dynamic array implementation
 //-----------------------------------------------------------------------------
-template<class ELEMTYPE> class Dar : public CUtlVector< ELEMTYPE >
-{
-	typedef CUtlVector< ELEMTYPE > BaseClass;
-	
-public:
-	Dar()
-	{
-	}
-	Dar(int initialCapacity) :
-		BaseClass( 0, initialCapacity )
-	{
-	}
+template <class ELEMTYPE>
+class Dar : public CUtlVector<ELEMTYPE> {
+  typedef CUtlVector<ELEMTYPE> BaseClass;
 
-public:
-	void SetCount(int count)
-	{
-		EnsureCount( count );
-	}
-	int GetCount()
-	{
-		return Count();
-	}
-	int AddElement(ELEMTYPE elem)
-	{
-		return AddToTail( elem );
-	}
-	void MoveElementToEnd( ELEMTYPE elem )
-	{
-		if ( Count() == 0 )
- return;
+ public:
+  Dar() {}
+  Dar(int initialCapacity) : BaseClass(0, initialCapacity) {}
 
-		// quick check to see if it's already at the end
-		if ( Element( Count() - 1 ) == elem )
- return;
+ public:
+  void SetCount(int count) { this->EnsureCount(count); }
+  int GetCount() { return this->Count(); }
+  int AddElement(ELEMTYPE elem) { return this->AddToTail(elem); }
+  void MoveElementToEnd(ELEMTYPE elem) {
+    if (this->Count() == 0) return;
 
-		int idx = Find( elem );
-		if ( idx == InvalidIndex() )
- return;
+    // quick check to see if it's already at the end
+    if (this->Element(this->Count() - 1) == elem) return;
 
-		Remove( idx );
-		AddToTail( elem );
-	}
-	// returns the index of the element in the array, -1 if not found
-	int FindElement(ELEMTYPE elem)
-	{
-		return Find( elem );
-	}
-	bool HasElement(ELEMTYPE elem)
-	{
-		if ( FindElement(elem) != InvalidIndex() )
-		{
- return true;
-		}
-		return false;
-	}
-	int PutElement(ELEMTYPE elem)
-	{
-		int index = FindElement(elem);
-		if (index >= 0)
-		{
- return index;
-		}
-		return AddElement(elem);
-	}
-	// insert element at index and move all the others down 1
-	void InsertElementAt(ELEMTYPE elem,int index)
-	{
-		InsertBefore( index, elem );
-	}
-	void SetElementAt(ELEMTYPE elem,int index)
-	{
-		EnsureCount( index + 1 );
-		Element( index ) = elem;
-	}
-	void RemoveElementAt(int index)
-	{
-		Remove( index );
-	} 
+    int idx = this->Find(elem);
+    if (idx == this->InvalidIndex()) return;
 
-	void RemoveElementsBefore(int index)
-	{
-		if ( index <= 0 )
- return;
-		RemoveMultiple( 0, index - 1 );
-	}  
+    this->Remove(idx);
+    this->AddToTail(elem);
+  }
+  // returns the index of the element in the array, -1 if not found
+  int FindElement(ELEMTYPE elem) { return this->Find(elem); }
+  bool HasElement(ELEMTYPE elem) {
+    if (FindElement(elem) != this->InvalidIndex()) {
+      return true;
+    }
+    return false;
+  }
+  int PutElement(ELEMTYPE elem) {
+    int index = this->FindElement(elem);
+    if (index >= 0) {
+      return index;
+    }
+    return this->AddElement(elem);
+  }
+  // insert element at index and move all the others down 1
+  void InsertElementAt(ELEMTYPE elem, int index) {
+    this->InsertBefore(index, elem);
+  }
+  void SetElementAt(ELEMTYPE elem, int index) {
+    this->EnsureCount(index + 1);
+    this->Element(index) = elem;
+  }
+  void RemoveElementAt(int index) { this->Remove(index); }
 
-	void RemoveElement(ELEMTYPE elem)
-	{
-		FindAndRemove( elem );
-	}
+  void RemoveElementsBefore(int index) {
+    if (index <= 0) return;
+    this->RemoveMultiple(0, index - 1);
+  }
 
-	void *GetBaseData()
-	{
-		return Base();
-	}
+  void RemoveElement(ELEMTYPE elem) { this->FindAndRemove(elem); }
 
-	void CopyFrom(Dar<ELEMTYPE> &dar)
-	{
-		CoypArray( dar.Base(), dar.Count() );
-	}
+  void *GetBaseData() { return Base(); }
+
+  void CopyFrom(Dar<ELEMTYPE> &dar) {
+    this->CoypArray(dar.Base(), dar.Count());
+  }
 };
 
-}
+}  // namespace vgui
 
 #include "tier0/include/memdbgoff.h"
 
-#endif // DAR_H
+#endif  // DAR_H

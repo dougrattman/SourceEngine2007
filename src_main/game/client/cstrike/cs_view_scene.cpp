@@ -24,7 +24,7 @@
 #include "materialsystem/IMaterialVar.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "DetailObjectSystem.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "engine/IEngineTrace.h"
 #include "engine/ivmodelinfo.h"
 #include "view_scene.h"

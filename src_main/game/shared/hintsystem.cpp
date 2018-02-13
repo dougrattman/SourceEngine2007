@@ -14,7 +14,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifdef CLIENT_DLL
 ConVar cl_showhelp( "cl_showhelp", "1", FCVAR_USERINFO | FCVAR_ARCHIVE, "Set to 0 to not show on-screen help" );

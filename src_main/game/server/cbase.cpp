@@ -85,10 +85,10 @@ OUTPUTS:
 #include "datacache/imdlcache.h"
 #include "env_debughistory.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ISaveRestoreOps *variantFuncs;	// function pointer set for save/restoring variants
 
@@ -188,7 +188,7 @@ CEventAction::CEventAction( const char *ActionData )
 // can be used for other blocks; will error if to big a block is tried to be allocated
 CMemoryPool g_EntityListPool( max(sizeof(CEventAction),sizeof(CMultiInputVar::inputitem_t)), 512, CMemoryPool::GROW_FAST, "g_EntityListPool" );
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 void *CEventAction::operator new( size_t stAllocateBlock )
 {
@@ -205,7 +205,7 @@ void CEventAction::operator delete( void *pMem )
 	g_EntityListPool.Free( pMem );
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the highest-valued delay in our list of event actions.
@@ -581,7 +581,7 @@ void CMultiInputVar::AddValue( variant_t newVal, int outputID )
 }
 
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: allocates memory from the entitylist pool
@@ -604,7 +604,7 @@ void CMultiInputVar::inputitem_t::operator delete( void *pMem )
 	g_EntityListPool.Free( pMem );
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 //-----------------------------------------------------------------------------
@@ -1698,7 +1698,7 @@ ISaveRestoreOps *variantFuncs = &g_VariantSaveDataOps;
 
 CMemoryPool g_EntListMemPool( sizeof(entitem_t), 256, CMemoryPool::GROW_NONE, "g_EntListMemPool" );
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 void *entitem_t::operator new( size_t stAllocateBlock )
 {
@@ -1715,7 +1715,7 @@ void entitem_t::operator delete( void *pMem )
 	g_EntListMemPool.Free( pMem );
 }
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 CEntityList::CEntityList()

@@ -16,7 +16,7 @@
 #include "c_pixel_visibility.h"
 #include "fx_fleck.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	bitsPARTICLE_TRAIL_VELOCITY_DAMPEN	0x00000001	//Dampen the velocity as the particles move
 #define	bitsPARTICLE_TRAIL_COLLIDE 0x00000002	//Do collision with simulation
@@ -165,4 +165,4 @@ private:
 	CSimpleGlowEmitter( const CSimpleGlowEmitter & ); // not defined, not accessible
 };
 
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"

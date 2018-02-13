@@ -594,7 +594,7 @@ class Panel : public IClientPanel {
 
   // Draws a filled rect of specified bounds, but omits the bounds of the skip
   // panel from those bounds
-  virtual void FillRectSkippingPanel(Color &clr, int x, int y, int w, int h,
+  virtual void FillRectSkippingPanel(Color clr, int x, int y, int w, int h,
                                      Panel *skipPanel);
 
   virtual int GetPaintBackgroundType();

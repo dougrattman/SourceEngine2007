@@ -2,7 +2,7 @@
 //
 // Purpose: Core implementation of vgui.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <malloc.h>
 #include <cassert>
@@ -631,7 +631,7 @@ bool CVGui::DispatchMessages() {
       // message debug code
 
       if (m_bDebugMessages) {
-        char *qname = bUsingSecondaryQueue ? "Secondary" : "Primary";
+        const char *qname = bUsingSecondaryQueue ? "Secondary" : "Primary";
 
         if (strcmp(messageItem->_params->GetName(), "Tick") &&
             strcmp(messageItem->_params->GetName(), "MouseFocusTicked") &&

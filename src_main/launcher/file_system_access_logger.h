@@ -5,8 +5,8 @@
 
 #include "base/include/base_types.h"
 
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlrbtree.h"
 #include "tier1/utlstring.h"
 

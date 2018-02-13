@@ -80,7 +80,7 @@
 #include "in_buttons.h"
 #include "physics_npc_solver.h"
 #include "physics_prop_ragdoll.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "vphysics/friction.h"
 #include "vstdlib/jobthread.h"
 #include "waterbullet.h"
@@ -106,7 +106,7 @@ extern ConVar sk_healthkit;
 #include "tier1/utlbuffer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //#define DEBUG_LOOK
 

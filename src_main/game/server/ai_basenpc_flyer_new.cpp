@@ -11,7 +11,7 @@
 #include "ai_navigator.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define FLYER_ROUTE_REBUILD_TIME	3.0		// Time between route rebuilds
 

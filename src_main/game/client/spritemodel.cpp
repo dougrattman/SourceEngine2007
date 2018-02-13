@@ -14,7 +14,7 @@
 #include "tier1/callqueue.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Sprites are clipped to this rectangle (x,y,width,height) if ScissorTest is enabled
 static int scissor_x = 0;

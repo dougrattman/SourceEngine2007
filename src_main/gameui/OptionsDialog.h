@@ -84,7 +84,7 @@ class COptionsDialogXbox : public vgui::Frame {
   void FillInDefaultBindings(void);
 
   bool ShouldSkipOption(KeyValues *pKey);
-  void ReadOptionsFromFile(char *pchFileName);
+  void ReadOptionsFromFile(const char *pchFileName);
   void SortOptions(void);
 
   void InitializeSliderDefaults(void);

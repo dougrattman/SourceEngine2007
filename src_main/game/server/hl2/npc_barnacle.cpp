@@ -33,7 +33,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 extern ConVar	sv_gravity;
 ConVar	sk_barnacle_health( "sk_barnacle_health","0");
