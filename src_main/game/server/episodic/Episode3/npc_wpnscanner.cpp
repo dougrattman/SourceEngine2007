@@ -9,7 +9,7 @@
 #include "baseprojectile.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	sk_wpnscanner_health( "sk_wpnscanner_health","30");
 ConVar	sk_wpnscanner_proj_dmg( "sk_wpnscanner_proj_dmg","5");

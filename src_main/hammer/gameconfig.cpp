@@ -22,7 +22,7 @@
 #include "tier1/strtools.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #pragma warning(disable:4244)
 
@@ -545,7 +545,7 @@ bool FindSteamUserDir(const char *szAppDir, const char *szSteamDir, char *szStea
 }
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Loads the settings from <mod dir>\gameinfo.txt into data members.

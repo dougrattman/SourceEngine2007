@@ -4,7 +4,7 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include <stdio.h>
 #include "bitmap/float_bm.h"
 #include "mathlib/mathlib.h"

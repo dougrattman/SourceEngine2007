@@ -3,9 +3,9 @@
 #include "bitmap/float_bm.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
-#include "tier0/memdbgon.h"
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
+#include "tier0/include/memdbgon.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
 #include "tier2/tier2.h"
 
 #define PROBLEM_SIZE 1000

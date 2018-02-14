@@ -6,7 +6,7 @@
 #include "checksum_crc.h"
 #include "inetmessage.h"
 #include "protocol.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 class bf_read;
 class bf_write;

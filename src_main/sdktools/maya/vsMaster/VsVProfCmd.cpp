@@ -11,7 +11,7 @@
 #include <maya/MSyntax.h>
 
 // Valve includes
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "valveMaya.h"
 #include "VsMayaMPxFactory.h"
 

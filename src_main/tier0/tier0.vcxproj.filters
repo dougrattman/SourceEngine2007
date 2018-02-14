@@ -10,9 +10,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{0baf04c0-fc49-478d-aa97-8765b274db20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interface Header Files">
-      <UniqueIdentifier>{252b0438-8a34-475b-98aa-456d4c15d10a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include">
       <UniqueIdentifier>{a588bcfb-ce21-4f13-84fd-07af0bc52f6d}</UniqueIdentifier>
     </Filter>
@@ -100,96 +97,6 @@
     </ClInclude>
     <ClInclude Include="pch_tier0.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\basetypes.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\calling_conventions.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\command_line_switches.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\commonmacros.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\compiler_specific_macroses.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\dbg.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\dbgflag.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\fasttimer.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\floattypes.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\icommandline.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\mem.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\memalloc.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\memdbgoff.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\memdbgon.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\minidump.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\platform.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\platform_detection.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\progressbar.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\protected_things.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\systeminformation.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\threadtools.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\tslist.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\validator.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\valobject.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\valve_off.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\valve_on.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\vcr_shared.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\vcrmode.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\vprof.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\tier0\wchartypes.h">
-      <Filter>Interface Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wchartypes.h">
       <Filter>Include</Filter>

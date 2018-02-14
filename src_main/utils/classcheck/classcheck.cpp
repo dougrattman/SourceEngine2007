@@ -10,7 +10,7 @@
 #include "classcheck_util.h"
 #include "icodeprocessor.h"
 #include "tier1/strtools.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 
 SpewRetval_t SpewFunc( SpewType_t type, char const *pMsg )

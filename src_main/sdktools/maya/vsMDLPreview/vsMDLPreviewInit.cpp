@@ -12,7 +12,7 @@
 
 // Local Headers
 #include "valvemaya.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "appframework/appframework.h"
 #include "vstdlib/iprocessutils.h"
 #include "datamodel/idatamodel.h"

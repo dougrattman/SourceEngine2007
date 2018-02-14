@@ -23,7 +23,7 @@
 
 #include "tier0/include/dbg.h"
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 // enable this define if you want unlocalized strings logged to files unfound.txt and unlocalized.txt
 // #define LOG_UNLOCALIZED_STRINGS

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vgui_controls/Panel.h"
 #include "elementviewer.h"
 #include "vgui_controls/MenuBar.h"
@@ -16,7 +16,7 @@
 #include "vgui/IInput.h"
 #include "vgui_controls/Menu.h"
 #include "KeyValues.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "datamodel/dmelement.h"
 #include "datamodel/idatamodel.h"
 #include "vgui_controls/FileOpenDialog.h"

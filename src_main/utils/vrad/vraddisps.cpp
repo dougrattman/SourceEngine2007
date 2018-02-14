@@ -16,7 +16,7 @@
 #include "CollisionUtils.h"
 #include "mathlib/bumpvects.h"
 #include "UtlRBTree.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "disp_vrad.h"
 
 class CBSPDispRayDistanceEnumerator;

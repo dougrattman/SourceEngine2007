@@ -11,7 +11,7 @@
 #include "disp_vbsp.h"
 #include "tier1/strtools.h"
 #include "builddisp.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "keyvalues.h"
 #include "materialsub.h"
 

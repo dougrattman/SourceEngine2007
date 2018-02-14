@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "bsplib.h"
 #include "cmdlib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "utlbuffer.h"
 
 int CopyVariableLump( int lump, void **dest, int size );

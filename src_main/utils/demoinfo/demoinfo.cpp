@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 #include <windows.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "FileSystem.h"
 #include "FileSystem_Tools.h"
 #include "cmdlib.h"

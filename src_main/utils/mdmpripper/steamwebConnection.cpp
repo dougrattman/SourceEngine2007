@@ -6,7 +6,7 @@
 #include "isqlwrapper.h"
 #include "vgui/ISystem.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

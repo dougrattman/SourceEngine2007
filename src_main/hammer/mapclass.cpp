@@ -15,14 +15,14 @@
 #include "MapDoc.h"
 #include "VisGroup.h"
 #include "mapdefs.h"
-#include "tier0/minidump.h"
+#include "tier0/include/minidump.h"
 
 int CMapAtom::s_nObjectIDCtr = 1;
 
 static CUtlVector<MCMSTRUCT> s_Classes;
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 
 bool CMapClass::s_bLoadingVMF = false;

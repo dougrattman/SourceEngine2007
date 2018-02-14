@@ -13,7 +13,7 @@
 #endif
 
 
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include <crtdbg.h>
 
 class CPlayerClassData;

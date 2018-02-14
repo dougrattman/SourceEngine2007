@@ -14,13 +14,13 @@
 #include <vgui_controls/Panel.h>
 #include "appframework/tier3app.h"
 #include "inputsystem/iinputsystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "filesystem_init.h"
 #include "CMDRipperMain.h"
 #include "isqlwrapper.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 #define MDRIPPER_MAIN_PATH_ID	"MAIN"
 #define MDRIPPER_WRITE_PATH     "DEFAULT_WRITE_PATH"

@@ -14,14 +14,14 @@
 #include "keyvaluescompiler.h"
 #include "pacifier.h"
 #include "scriplib.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/UtlBuffer.h"
 #include "tier1/utldict.h"
 #include "vstdlib/random.h"
 
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 // #define TESTING 1
 

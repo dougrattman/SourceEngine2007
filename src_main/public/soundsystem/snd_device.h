@@ -14,7 +14,7 @@
 #pragma once
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 //-----------------------------------------------------------------------------
 // 4.28 fixed point stuff for real-time resampling

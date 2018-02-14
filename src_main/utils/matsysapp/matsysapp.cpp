@@ -32,7 +32,7 @@
 #include "filesystem.h"
 #include "materialsystem/imaterialproxy.h"
 #include "materialsystem/MaterialSystem_Config.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "filesystem_tools.h"
 #include "materialsystem/imesh.h"
 #include "vstdlib/cvar.h"

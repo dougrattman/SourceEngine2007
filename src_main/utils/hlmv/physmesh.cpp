@@ -23,7 +23,7 @@
 #include "mathlib/mathlib.h"
 #include <stddef.h>
 #include "utlvector.h"
-#include "commonmacros.h"
+#include "tier0/include/commonmacros.h"
 #include "studiomodel.h"
 #include "tier1/strtools.h"
 #include "bone_setup.h"

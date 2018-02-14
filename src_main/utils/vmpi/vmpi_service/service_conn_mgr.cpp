@@ -8,7 +8,7 @@
 #include "stdafx.h"
 #include "service_conn_mgr.h"
 #include "vmpi.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tcpsocket_helpers.h"
 
 

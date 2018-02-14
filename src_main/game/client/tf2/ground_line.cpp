@@ -13,7 +13,7 @@
 #include <vgui_controls/Controls.h>
 #include <vgui/ISurface.h>
 #include "ClientEffectPrecacheSystem.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 
 #define MAX_DOWN_DIST	300
 #define MAX_UP_DIST		300

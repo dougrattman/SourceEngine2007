@@ -8,7 +8,7 @@
 #include <conio.h>
 #include <windows.h>
 #include "cmdlib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tools_minidump.h"
 #include "vmpi.h"
 #include "vmpi_tools_shared.h"

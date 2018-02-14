@@ -4,7 +4,7 @@
 #include "filesystem.h"
 #include "filesystem_tools.h"
 #include "tier1/strtools.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 void Usage( void )
 {

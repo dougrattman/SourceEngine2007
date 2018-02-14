@@ -12,7 +12,7 @@
 #include "polylib.h"
 #include "worldsize.h"
 #include "threads.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // doesn't seem to need to be here? -- in threads.h
 //extern int numthreads;

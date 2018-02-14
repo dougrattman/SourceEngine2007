@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include <hash_map>
 
 class CachedFileData

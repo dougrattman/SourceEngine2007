@@ -29,7 +29,7 @@
 #include "c_basetfplayer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar minimap_visible( "minimap_visible", "1", 0, "Draw minimap?" );
 ConVar minimap_zoomtime( "minimap_zoomtime", "0.4", 0, "How long it takes to resize the minimap." );

@@ -59,7 +59,7 @@
 #include "phonemeextractor/PhonemeExtractor.h"
 #include "scriplib.h"
 #include "tabwindow.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 #include "tier2/p4helpers.h"
 #include "vcdbrowser.h"

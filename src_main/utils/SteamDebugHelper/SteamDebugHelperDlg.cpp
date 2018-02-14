@@ -16,7 +16,7 @@
 #include "filesystem_tools.h"
 #include <io.h>
 #include <direct.h>
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

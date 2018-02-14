@@ -9,7 +9,7 @@
 
 #include "mdllib/mdllib.h"
 
-#include "platform.h"
+#include "tier0/include/platform.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Interface to accessing P4 commands

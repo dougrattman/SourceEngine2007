@@ -15,7 +15,7 @@
 #include "C_Func_Resource.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_RECV_TABLE_NOBASE( C_ObjectResourcePump, DT_ResourcePumpTeamOnlyVars )
 	RecvPropInt( RECVINFO(m_iPumpLevel) ),

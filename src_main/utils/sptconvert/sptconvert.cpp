@@ -15,7 +15,7 @@
 #include "cmdlib.h"
 #include "mathlib/mathlib.h"
 
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #include "SpeedTreeRT.h"
 

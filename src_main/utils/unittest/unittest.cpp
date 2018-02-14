@@ -8,7 +8,7 @@
 #include "unitlib/unitlib.h"
 #include "appframework/iappsystemgroup.h"
 #include "appframework/appframework.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include <stdio.h>
 #include <windows.h>
 #include "vstdlib/iprocessutils.h"

@@ -11,11 +11,11 @@
 #include <cstring>
 #include "crtmemdebug.h"
 
-#include "tier0/dbg.h"
-#include "tier0/fasttimer.h"
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
-#include "tier0/vprof.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/fasttimer.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vprof.h"
 
 #include "icvar.h"
 #include "mathlib/vmatrix.h"

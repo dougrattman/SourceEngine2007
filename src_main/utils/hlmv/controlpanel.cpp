@@ -43,7 +43,7 @@
 #include "studio_render.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "tier1/keyvalues.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 extern char g_appTitle[];
 extern IPhysicsSurfaceProps *physprop;

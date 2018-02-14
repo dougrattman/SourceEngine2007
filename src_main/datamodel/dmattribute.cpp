@@ -17,7 +17,7 @@
 #include "tier1/utlstring.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Tests equality
@@ -193,7 +193,7 @@ struct CSizeTest {
 static CSizeTest g_sizeTest;
 
 // turn memdbg off temporarily so we can get at placement new
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 USE_SPECIAL_ALLOCATOR(bool, g_DataAlloc4)
 USE_SPECIAL_ALLOCATOR(int, g_DataAlloc4)
@@ -202,7 +202,7 @@ USE_SPECIAL_ALLOCATOR(DmElementHandle_t, g_DataAlloc4)
 USE_SPECIAL_ALLOCATOR(Color, g_DataAlloc4)
 USE_SPECIAL_ALLOCATOR(Vector2D, g_DataAlloc8)
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Create, destroy attribute data
@@ -1617,7 +1617,7 @@ CMemoryPool g_AttrAlloc(sizeof(CDmAttribute), 32, CMemoryPool::GROW_SLOW,
 //-----------------------------------------------------------------------------
 
 // turn memdbg off temporarily so we can get at placement new
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 CDmAttribute *CDmAttribute::CreateAttribute(CDmElement *pOwner,
                                             DmAttributeType_t type,
@@ -1671,7 +1671,7 @@ void CDmAttribute::DestroyAttribute(CDmAttribute *pAttribute) {
 }
 
 // turn memdbg back on after using placement new
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Constructor, destructor

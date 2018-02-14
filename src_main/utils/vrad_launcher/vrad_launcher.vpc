@@ -23,7 +23,7 @@ $Project "Vrad_launcher"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\public\tier0\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
 		
 		$File	"vrad_launcher.cpp"
 		

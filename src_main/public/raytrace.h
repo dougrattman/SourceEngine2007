@@ -9,7 +9,7 @@
 #include <mathlib/mathlib.h>
 #include <mathlib/ssemath.h>
 #include <mathlib/vector.h>
-#include <tier0/platform.h>
+#include "tier0/include/platform.h"
 #include <tier1/utlvector.h>
 
 // fast SSE-ONLY ray tracing module. Based upon various "real time ray tracing"

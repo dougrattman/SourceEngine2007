@@ -14,7 +14,7 @@
 #include "raytrace.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 CInterlockedInt n_gbufs_queued;
 CInterlockedInt n_result_bms_queued;

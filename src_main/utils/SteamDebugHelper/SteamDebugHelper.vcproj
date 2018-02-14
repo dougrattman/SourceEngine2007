@@ -162,7 +162,7 @@ copy &quot;$(TargetPath)&quot; ..\..\..\game\bin
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\..\public\tier0\memoverride.cpp">
+				RelativePath="..\..\tier0\include\memoverride.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool

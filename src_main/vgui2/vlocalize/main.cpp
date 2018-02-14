@@ -10,7 +10,7 @@
 #include "FileSystem.h"
 #include "appframework/tier3app.h"
 #include "inputsystem/iinputsystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vgui/IScheme.h"
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"

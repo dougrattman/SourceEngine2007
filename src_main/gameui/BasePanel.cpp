@@ -40,7 +40,7 @@
 #include "matchmaking/achievementsdialog.h"
 #include "matchmaking/matchmakingbasepanel.h"
 #include "steam/steam_api.h"
-#include "threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "tier0/include/icommandline.h"
 #include "tier1/UtlString.h"
 #include "tier1/bitbuf.h"

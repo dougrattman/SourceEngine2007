@@ -19,7 +19,7 @@
 #include "icvar.h"
 #include "iscenemanagersound.h"
 #include "mathlib/mathlib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vstdlib/cvar.h"
 #include "vstdlib/random.h"
 #include "workspacemanager.h"

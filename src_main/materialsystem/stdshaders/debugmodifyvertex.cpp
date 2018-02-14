@@ -17,7 +17,7 @@
 #include "shaderlib/CShader.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 BEGIN_SHADER_FLAGS( DebugModifyVertex, "Help for DebugModifyVertex", SHADER_NOT_EDITABLE )
 	BEGIN_SHADER_PARAMS

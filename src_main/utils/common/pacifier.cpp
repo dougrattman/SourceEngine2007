@@ -4,8 +4,8 @@
 
 #include <cstdio>
 
-#include "tier0/basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 
 static int g_LastPacifierDrawn = -1;
 static bool g_bPacifierSuppressed = false;

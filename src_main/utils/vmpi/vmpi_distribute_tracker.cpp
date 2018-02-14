@@ -2,8 +2,8 @@
 
 #include <conio.h>
 #include <io.h>
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
 #include "vmpi.h"

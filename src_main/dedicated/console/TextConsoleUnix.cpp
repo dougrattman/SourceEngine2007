@@ -16,7 +16,7 @@
 
 // un-needed include...
 //#include "resource.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 //#include "../ifilesystem.h"
 #include "filesystem.h"
 

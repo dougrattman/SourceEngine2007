@@ -7,7 +7,7 @@
 #ifndef BONETOWORLDARRAY_H
 #define BONETOWORLDARRAY_H
 
-#include "tier0/tslist.h"
+#include "tier0/include/tslist.h"
 
 #if defined( _WIN32 )
 #pragma once

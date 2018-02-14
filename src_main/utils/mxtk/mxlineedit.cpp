@@ -23,7 +23,7 @@ public:
 	int dummy;
 };
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 
 typedef LRESULT (CALLBACK * WndProc_t)(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);

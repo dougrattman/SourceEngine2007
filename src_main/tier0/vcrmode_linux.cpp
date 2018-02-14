@@ -17,8 +17,8 @@
 #include <sys/socket.h>
 
 #define PROTECTED_THINGS_DISABLE
-#include "tier0/vcrmode.h"
-#include "tier0/dbg.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/dbg.h"
 #include "extendedtrace.h"
 
 #define VCRFILE_VERSION		2

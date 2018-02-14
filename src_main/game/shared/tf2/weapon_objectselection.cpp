@@ -21,7 +21,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( weapon_objectselection, CWeaponObjectSelection );
 

@@ -9,8 +9,8 @@
 #include "bitmap/imageformat.h"
 #include "cvtf.h"
 #include "utlbuffer.h"
-#include "tier0/dbg.h"
-#include "tier0/mem.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/mem.h"
 #include "tier2/fileutils.h"
 #include "byteswap.h"
 #include "filesystem.h"
@@ -18,7 +18,7 @@
 #include "tier1/lzmaDecoder.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Callback for UpdateOrCreate utility function - swaps a vtf file.

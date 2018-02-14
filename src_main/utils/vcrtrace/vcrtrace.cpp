@@ -10,7 +10,7 @@
 
 #include "stdafx.h"
 #include <time.h>
-#include "tier0/vcrmode.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/utlvector.h"
 
 

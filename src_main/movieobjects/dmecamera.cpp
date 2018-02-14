@@ -4,7 +4,7 @@
 //
 //=============================================================================
 #include "movieobjects/dmecamera.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "datamodel/dmelementfactoryhelper.h"
 #include "mathlib/vector.h"
 #include "movieobjects/dmetransform.h"
@@ -16,7 +16,7 @@
 #include "istudiorender.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 //-----------------------------------------------------------------------------

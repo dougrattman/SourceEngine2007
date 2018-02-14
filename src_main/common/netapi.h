@@ -3,7 +3,7 @@
 #ifndef INETAPI_H
 #define INETAPI_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/netadr.h"
 
 // Purpose: Internal winsock helpers for launcher.

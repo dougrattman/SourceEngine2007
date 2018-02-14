@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "xsi_status.h"
 #include "idccmain.h"
 #include "xsi_context.h"

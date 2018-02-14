@@ -16,7 +16,7 @@
 
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define NUM_CHANNELS 1
 #define NUM_LOG_ENTRIES 10

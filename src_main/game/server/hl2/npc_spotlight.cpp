@@ -25,7 +25,7 @@
 #include "beam_flags.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define	SPOTLIGHT_SWING_FORWARD		1
 #define	SPOTLIGHT_SWING_BACK		-1

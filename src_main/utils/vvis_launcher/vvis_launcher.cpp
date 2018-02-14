@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include <direct.h>
 #include "tier1/strtools.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "ilaunchabledll.h"
 
 

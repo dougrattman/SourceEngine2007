@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include "iphelpers.h"
 #include "vmpi.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "bitbuf.h"
 #include <conio.h>
 #include <stdlib.h>

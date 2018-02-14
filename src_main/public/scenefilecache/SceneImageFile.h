@@ -6,7 +6,7 @@
 #ifndef SCENE_IMAGE_FILE_H
 #define SCENE_IMAGE_FILE_H
 
-#include "tier0/commonmacros.h"
+#include "tier0/include/commonmacros.h"
 #include "tier1/checksum_crc.h"
 
 #define SCENE_IMAGE_ID MAKEID<int32_t>('V', 'S', 'I', 'F')

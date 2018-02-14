@@ -23,7 +23,7 @@
 #include <winsock2.h>
 #include <shellapi.h>
 #include <winuser.h>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include <stdio.h>
 #include "iphelpers.h"
 

@@ -20,7 +20,6 @@
 #include <eiface.h>
 #include <irecipientfilter.h>
 #include <proto_oob.h>
-#include <tier0/vprof.h>
 #include <vstdlib/random.h>
 #include "SteamUserIDValidation.h"
 #include "baseserver.h"
@@ -42,6 +41,7 @@
 #include "sysexternal.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
+#include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 
 #include "tier0/include/memdbgon.h"

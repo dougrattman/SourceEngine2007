@@ -22,7 +22,7 @@
 #include <vgui_controls/MenuItem.h>
 #include <vgui_controls/ScrollBar.h>
 
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 enum {
   // maximum size of text buffer

@@ -14,7 +14,7 @@
 #ifndef INCLUDED_MX
 #define INCLUDED_MX
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #ifdef WIN32
 #include <windows.h>

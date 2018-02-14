@@ -9,7 +9,7 @@
 
 // Valve Headers
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "appframework/appframework.h"
 #include "appframework/IAppSystemgroup.h"
 #include "filesystem_init.h"

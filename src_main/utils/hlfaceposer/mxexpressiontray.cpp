@@ -24,7 +24,7 @@
 #include "choreowidgetdrawhelper.h"
 #include "ExpressionTool.h"
 #include "faceposer_models.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "FileSystem.h"
 
 #define MAX_THUMBNAILSIZE 256

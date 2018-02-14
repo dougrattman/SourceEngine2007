@@ -19,7 +19,7 @@
 #include <vgui/ISurface.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 STUB_WEAPON_CLASS_IMPLEMENT( foo_tf_machine_gun, C_TFMachineGun );
 

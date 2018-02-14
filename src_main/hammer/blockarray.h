@@ -9,10 +9,10 @@
 #ifndef _BLOCKARRAY_H
 #define _BLOCKARRAY_H
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 template <class T, int nBlockSize, int nMaxBlocks>
 class BlockArray
@@ -94,6 +94,6 @@ T& BlockArray<T,nBlockSize,nMaxBlocks>::operator[] (int iIndex)
 	return Blocks[iIndex / nBlockSize][iIndex % nBlockSize];
 }
 
-#include <tier0/memdbgoff.h>
+#include "tier0/include/memdbgoff.h"
 
 #endif // _BLOCKARRAY_H

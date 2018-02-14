@@ -9,7 +9,7 @@
 #include "hud_timer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // We may get act begin messages for acts we haven't yet received entities for (usually during connection)
 // We store the current act in this, and if an act arrives matching it, we start that act.

@@ -5,7 +5,7 @@
 //===========================================================================//
 
 #include <stdlib.h>
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include "interface.h"
 #include "istudiorender.h"
 #include "studio.h"

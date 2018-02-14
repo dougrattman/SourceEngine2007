@@ -14,7 +14,7 @@
 #include "materialsystem/IMaterialVar.h"
 #include <cmdlib.h>
 #include "utilmatlib.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include <windows.h>
 #include "FileSystem.h"
 #include "materialsystem/MaterialSystem_Config.h"

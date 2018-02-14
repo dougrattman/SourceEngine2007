@@ -3,7 +3,7 @@
 
 #define Error DbgError
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #include <stdio.h>
 #include <conio.h>

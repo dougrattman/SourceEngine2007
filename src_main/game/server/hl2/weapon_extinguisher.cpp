@@ -18,7 +18,7 @@
 #include "engine/IEngineSound.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	fire_extinguisher_debug( "fire_extinguisher_debug", "0" );
 ConVar	fire_extinguisher_radius( "fire_extinguisher_radius", "45" );

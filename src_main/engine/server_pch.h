@@ -3,10 +3,10 @@
 // Purpose: Main precompiled header for server files
 
 #include "mathlib/mathlib.h"
-#include "tier0/basetypes.h"
-#include "tier0/icommandline.h"
-#include "tier0/platform.h"
-#include "tier0/vprof.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/fmtstr.h"
 #include "tier1/tier1.h"

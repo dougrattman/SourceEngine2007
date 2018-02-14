@@ -17,9 +17,9 @@
 #include "protocol.h"  // CONNECTIONLESS_HEADER
 #include "sv_filter.h"
 #include "sys.h"
-#include "tier0/icommandline.h"
-#include "tier0/tslist.h"
-#include "tier0/vcrmode.h"
+#include "tier0/include/icommandline.h"
+#include "tier0/include/tslist.h"
+#include "tier0/include/vcrmode.h"
 #include "tier1/mempool.h"
 #include "vstdlib/random.h"
 

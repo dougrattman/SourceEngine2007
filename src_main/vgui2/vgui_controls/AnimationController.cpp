@@ -20,9 +20,9 @@
 #include "tier1/mempool.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 // for SRC
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 #include <vstdlib/random.h>
 
 using namespace vgui;

@@ -6,7 +6,7 @@
 #define CUBEMAP_H
 
 #include "mathlib/mathlib.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlmemory.h"
 
 template <class T, int RES>

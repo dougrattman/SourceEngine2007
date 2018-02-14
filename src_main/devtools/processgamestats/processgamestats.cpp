@@ -28,7 +28,7 @@
 #include "FileSystem.h"
 #include "base_gamestats_parse.h"
 #include "gamestats.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 struct AnalysisData
 {

@@ -4,12 +4,12 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
 #include "bitmap/float_bm.h"
 #include "mathlib/mathlib.h"
 #include "tier2/tier2.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 #include "filesystem.h"
 #include "tier1/utlstringmap.h"
 #include "tier1/strtools.h"
@@ -18,7 +18,7 @@
 #include "tier2/fileutils.h"
 #include "stdlib.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #define MAX_IMAGES_PER_FRAME 4
 

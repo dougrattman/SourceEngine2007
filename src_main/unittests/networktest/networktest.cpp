@@ -18,7 +18,7 @@
 #include "bitbuf.h"
 #include "FileSystem.h"
 #include "filesystem_init.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vstdlib/cvar.h"
 
 

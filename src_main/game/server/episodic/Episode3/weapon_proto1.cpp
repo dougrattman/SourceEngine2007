@@ -24,7 +24,7 @@
 #include "ammodef.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #ifndef CLIENT_DLL
 ConVar weapon_proto1_rate_of_fire( "weapon_proto1_rate_of_fire", "5" );

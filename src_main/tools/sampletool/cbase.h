@@ -20,9 +20,9 @@
 #include "minmax.h"
 
 // tier 0
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
-#include "basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/basetypes.h"
 
 // tier 1
 #include "tier1/strtools.h"

@@ -4,7 +4,7 @@
 #define DEMOFORMAT_H
 
 #include "mathlib/vector.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "utlvector.h"
 
 #define DEMO_HEADER_ID "HL2DEMO"

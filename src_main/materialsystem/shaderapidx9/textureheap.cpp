@@ -12,7 +12,7 @@
 #include "textureheap.h"
 #include "shaderapidx8_global.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define USE_STANDARD_ALLOCATOR
 #ifdef USE_STANDARD_ALLOCATOR

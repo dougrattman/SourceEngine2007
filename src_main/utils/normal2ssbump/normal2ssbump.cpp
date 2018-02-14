@@ -4,13 +4,13 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
-#include "tier0/progressbar.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/progressbar.h"
 #include "bitmap/float_bm.h"
 #include "mathlib/mathlib.h"
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static float RangeAdjust( float x )
 {

@@ -12,7 +12,7 @@
 #include "clipcode.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 static float g_vert[MAX_CLIPVERT][VERTEXSIZE];

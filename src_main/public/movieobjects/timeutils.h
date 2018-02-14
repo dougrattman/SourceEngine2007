@@ -12,7 +12,7 @@
 
 #include <limits.h>
 #include <math.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 
 class DmeTime_t;

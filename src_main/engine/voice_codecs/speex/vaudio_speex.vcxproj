@@ -314,7 +314,7 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\public\tier0\memoverride.cpp" />
+    <ClCompile Include="..\..\..\tier0\include\memoverride.cpp" />
     <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp" />
     <ClCompile Include="VoiceEncoder_Speex.cpp" />
   </ItemGroup>

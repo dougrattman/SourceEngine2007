@@ -8,7 +8,6 @@
 // SRC only
 #define PROTECTED_THINGS_DISABLE
 
-#include <basetypes.h>
 #include <imm.h>
 #include <mmsystem.h>
 #include <oleidl.h>
@@ -19,6 +18,7 @@
 #include "SteamBootStrapper.h"
 #include "VPanel.h"
 #include "bitmap.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/UtlDict.h"
 #include "tier1/UtlVector.h"
 #include "tier1/keyvalues.h"

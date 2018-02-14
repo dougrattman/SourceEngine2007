@@ -31,14 +31,14 @@
 #include "FileSystem.h"
 #include "StudioModel.h"
 #include "tier1/strtools.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "TextureSystem.h"
 #include "materialproxyfactory_wc.h"
 #include "vstdlib/cvar.h"
 #include "interface.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 
 #pragma warning(disable:4244)

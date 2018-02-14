@@ -8,12 +8,12 @@
 #include "datamodel/dmehandle.h"
 #include "vstdlib/random.h"
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 #include <limits.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 LayerSelectionData_t::DataLayer_t::DataLayer_t( float frac, CDmeLogLayer *layer ) : 
 	m_flStartFraction( frac )

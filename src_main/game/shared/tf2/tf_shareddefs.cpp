@@ -6,8 +6,8 @@
 //=============================================================================//
 #include "cbase.h"
 #include "tf_shareddefs.h"
-#include "tier0/dbg.h"
-#include "basetypes.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/basetypes.h"
 #include <KeyValues.h>
 
 #ifndef CLIENT_DLL
@@ -42,7 +42,7 @@
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"	
+#include "tier0/include/memdbgon.h"	
 
 ConVar inv_demo( "inv_demo","0", FCVAR_REPLICATED, "Invasion demo." );
 ConVar lod_effect_distance( "lod_effect_distance","3240000", FCVAR_REPLICATED, "Distance at which effects LOD." );

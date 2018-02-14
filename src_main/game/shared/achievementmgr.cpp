@@ -10,7 +10,7 @@
 
 #include "filesystem.h"
 #include "fmtstr.h"
-#include "icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "inputsystem/InputEnums.h"
 #include "steam/steam_api.h"
 #include "tier1/keyvalues.h"

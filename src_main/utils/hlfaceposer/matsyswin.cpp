@@ -32,7 +32,7 @@
 #include "istudiorender.h"
 #include "choreowidgetdrawhelper.h"
 #include "faceposer_models.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "mathlib/vmatrix.h"
 #include "vstdlib/cvar.h"
 

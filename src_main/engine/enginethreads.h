@@ -4,7 +4,7 @@
 #define ENGINETHREADS_H
 
 #include "const.h"
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 
 #ifdef SOURCE_MT
 

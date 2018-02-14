@@ -8,7 +8,7 @@
 
 #include "mathlib/mathlib.h"
 #include "bsplib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "iscratchpad3d.h"
 #include "filesystem_tools.h"
 #include "tier2/fileutils.h"

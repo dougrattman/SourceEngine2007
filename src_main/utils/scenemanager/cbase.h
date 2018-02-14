@@ -18,7 +18,7 @@
 // TODO: reference additional headers your program requires here
 #include "mxtk/mx.h"
 #include "mxtk/mxwindow.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "UtlVector.h"
 #include "vstdlib/random.h"
 #include "sharedInterface.h"

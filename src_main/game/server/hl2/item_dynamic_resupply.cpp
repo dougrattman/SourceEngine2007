@@ -502,27 +502,27 @@ bool CItem_DynamicResupply::SpawnItemFromRatio(int nCount,
                                                SpawnInfo_t *pSpawnInfo,
                                                Vector *pVecSpawnOrigin) {
   // Now find the one we're farthest from
-  float flFarthest = 0;
-  int iSelectedIndex = -1;
+  float farthest_spawn = 0.0f;
+  int farthest_spawn_index = -1;
 
   for (int i = 0; i < nCount; ++i) {
-    if (pSpawnInfo[i].m_flDelta > flFarthest) {
-      flFarthest = pSpawnInfo[i].m_flDelta;
-      iSelectedIndex = i;
+    if (pSpawnInfo[i].m_flDelta > farthest_spawn) {
+      farthest_spawn = pSpawnInfo[i].m_flDelta;
+      farthest_spawn_index = i;
     }
   }
 
-  if (iSelectedIndex < 0) return false;
+  if (farthest_spawn_index < 0) return false;
 
   if (iDebug) {
     Msg("Chosen item: %s (had farthest delta, %.2f)\n",
-        pItems[iSelectedIndex].sEntityName,
-        pSpawnInfo[iSelectedIndex].m_flDelta);
+        pItems[farthest_spawn_index].sEntityName,
+        pSpawnInfo[farthest_spawn_index].m_flDelta);
   }
 
   CBaseEntity *pEnt =
-      CBaseEntity::Create(pItems[iSelectedIndex].sEntityName, *pVecSpawnOrigin,
-                          GetAbsAngles(), this);
+      CBaseEntity::Create(pItems[farthest_spawn_index].sEntityName,
+                          *pVecSpawnOrigin, GetAbsAngles(), this);
   pEnt->SetAbsVelocity(GetAbsVelocity());
   pEnt->SetLocalAngularVelocity(GetLocalAngularVelocity());
 

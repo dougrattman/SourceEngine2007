@@ -18,7 +18,7 @@
     <ClCompile Include="bugreporter_upload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\public\tier0\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

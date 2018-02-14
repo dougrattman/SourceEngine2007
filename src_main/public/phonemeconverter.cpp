@@ -2,7 +2,7 @@
 
 #include <cstdio>
 #include <cstring>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 struct PhonemeMap_t {
   const char *string;

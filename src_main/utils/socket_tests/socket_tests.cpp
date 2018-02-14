@@ -15,7 +15,7 @@
 #include "utlvector.h"
 #include "fragment_channel.h"
 #include "reliable_channel.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 
 #if defined( _DEBUG )

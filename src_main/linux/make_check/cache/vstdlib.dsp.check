@@ -161,7 +161,7 @@ SOURCE=.\KeyValuesSystem.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\tier0\memoverride.cpp
+SOURCE=..\tier0\include\memoverride.cpp
 # End Source File
 # Begin Source File
 

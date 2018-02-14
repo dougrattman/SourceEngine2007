@@ -15,7 +15,7 @@
 #include "appframework/tier2app.h"
 #include "datamodel/idatamodel.h"
 #include "filesystem.h"
-#include "icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "mathlib/mathlib.h"
 #include "vstdlib/vstdlib.h"
 #include "tier2/p4helpers.h"

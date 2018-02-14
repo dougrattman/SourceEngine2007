@@ -15,7 +15,7 @@
 #include <cstring>
 #include "FileSystem_Helpers.h"
 #include "UtlVector.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "utlrbtree.h"
 #include "utlsymbol.h"
 

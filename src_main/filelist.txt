@@ -759,7 +759,7 @@ public\tier0\mem.h
 public\tier0\memalloc.h
 public\tier0\memdbgoff.h
 public\tier0\memdbgon.h
-public\tier0\memoverride.cpp
+tier0\include\memoverride.cpp
 public\tier0\minidump.h
 public\tier0\P4PerformanceCounters.h
 public\tier0\P5P6PerformanceCounters.h

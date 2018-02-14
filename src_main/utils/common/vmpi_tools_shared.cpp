@@ -6,7 +6,7 @@
 #include "cmdlib.h"
 #include "iphelpers.h"
 #include "mpi_stats.h"
-#include "tier0/minidump.h"
+#include "tier0/include/minidump.h"
 #include "tier1/strtools.h"
 #include "vmpi.h"
 

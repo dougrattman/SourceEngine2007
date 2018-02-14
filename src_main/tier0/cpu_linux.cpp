@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <tier0/platform.h>
+#include "tier0/include/platform.h"
 #include <errno.h>
 
 #define rdtsc(x) \

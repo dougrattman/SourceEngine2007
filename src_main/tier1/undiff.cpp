@@ -4,13 +4,13 @@
 //
 //=============================================================================//
 
-#include "tier0/platform.h"
-#include "tier0/dbg.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/dbg.h"
 #include "tier1/diff.h"
 #include "mathlib/mathlib.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void ApplyDiffs(uint8 const *OldBlock, uint8 const *DiffList,
                 int OldSize, int DiffListSize, int &ResultListSize,uint8 *Output,uint32 OutSize)

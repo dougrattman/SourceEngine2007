@@ -15,10 +15,10 @@
 #include "interface.h"
 #include "filesystem.h"
 #include "hammer.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 bool SurfHasBumpedLightmaps( int flags )

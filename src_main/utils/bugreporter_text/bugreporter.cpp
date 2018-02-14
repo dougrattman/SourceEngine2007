@@ -7,7 +7,7 @@
 #undef PROTECT_FILEIO_FUNCTIONS
 #undef fopen
 #include <windows.h>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 
 #include "utlvector.h"
 #include "utlsymbol.h"

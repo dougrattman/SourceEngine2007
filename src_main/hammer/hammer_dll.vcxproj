@@ -811,7 +811,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\public\tier0\afxmem_override.cpp" />
-    <ClCompile Include="..\public\tier0\memoverride.cpp">
+    <ClCompile Include="..\tier0\include\memoverride.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NO_MEMOVERRIDE_NEW_DELETE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NO_MEMOVERRIDE_NEW_DELETE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

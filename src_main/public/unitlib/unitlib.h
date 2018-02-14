@@ -13,7 +13,7 @@
 #pragma once
 #endif
  
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/interface.h"
 #include "appframework/IAppSystem.h"
 

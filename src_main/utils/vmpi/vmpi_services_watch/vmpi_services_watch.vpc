@@ -29,7 +29,7 @@ $Project "vmpi_services_watch"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\public\tier0\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
 		
 		$File	"..\idle_dialog.cpp"
 		$File	"..\net_view_thread.cpp"

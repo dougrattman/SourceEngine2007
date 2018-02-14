@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "tfc_playeranimstate.h"
 #include "base_playeranimstate.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "animation.h"
 #include "studio.h"
 #include "apparent_velocity_helper.h"

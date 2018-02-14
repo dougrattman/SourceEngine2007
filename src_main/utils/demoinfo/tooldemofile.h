@@ -11,7 +11,7 @@
 #endif
 
 #include "mathlib/vector.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "UtlVector.h"
 #include "FileSystem.h"
 #include "demofile/demoformat.h"

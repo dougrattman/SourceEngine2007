@@ -7,4 +7,15 @@
 // #include <external.h>
 // #include "tier0/include/include/valve_on.h"
 
-#include "public/tier0/valve_off.h"
+#ifdef STEAM
+
+// Unicode-related #defines (see wchartypes.h)
+#undef ch
+
+// Memory-related #defines
+#undef malloc
+#undef realloc
+#undef _expand
+#undef free
+
+#endif

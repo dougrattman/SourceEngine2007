@@ -18,7 +18,7 @@
 #include "VGUI\IVGui.h"
 #include "vgui_controls/Panel.h"
 #include "filesystem.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "appframework/tier3app.h"
 #include "inputsystem/iinputsystem.h"
 #include "CControlCatalog.h"

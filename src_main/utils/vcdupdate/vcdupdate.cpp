@@ -15,7 +15,7 @@
 #include "appframework/tier3app.h"
 #include "datamodel/idatamodel.h"
 #include "filesystem.h"
-#include "icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "materialsystem/imaterialsystem.h"
 #include "istudiorender.h"
 #include "mathlib/mathlib.h"

@@ -7,9 +7,9 @@
 //===========================================================================//
 
 #include <windows.h>
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include <stdio.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 
 static unsigned short g_InitialColor = 0xFFFF;

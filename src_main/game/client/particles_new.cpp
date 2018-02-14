@@ -12,7 +12,7 @@
 #include "tier1/keyvalues.h"
 #include "toolframework/itoolframework.h"
 #include "toolframework_client.h"
-#include "vprof.h"
+#include "tier0/include/vprof.h"
 
 extern ConVar cl_particleeffect_aabb_buffer;
 extern ConVar cl_particles_show_bbox;

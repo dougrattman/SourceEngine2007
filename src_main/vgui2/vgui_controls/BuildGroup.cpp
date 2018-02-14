@@ -22,7 +22,7 @@
 #include <vgui_controls/Panel.h>
 #include "filesystem.h"
 
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 

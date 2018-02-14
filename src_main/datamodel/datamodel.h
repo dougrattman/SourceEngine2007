@@ -8,7 +8,7 @@
 #include "datamodel/dmehandle.h"
 #include "datamodel/dmelement.h"
 #include "datamodel/idatamodel.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "tier1/uniqueid.h"
 #include "tier1/utldict.h"

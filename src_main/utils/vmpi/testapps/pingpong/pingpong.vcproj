@@ -146,7 +146,7 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\..\..\public\tier0\memoverride.cpp">
+				RelativePath="..\..\..\tier0\include\memoverride.cpp">
 			</File>
 			<File
 				RelativePath="pingpong.cpp">

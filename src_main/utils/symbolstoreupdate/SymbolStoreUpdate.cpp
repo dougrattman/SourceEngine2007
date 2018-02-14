@@ -10,7 +10,7 @@
 #include <direct.h>
 #include <io.h>
 #include "tier1/interface.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "filesystem.h"
 #include "tier1/keyvalues.h"

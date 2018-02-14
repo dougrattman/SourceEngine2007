@@ -12,7 +12,7 @@
 #include <io.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <cstdio>
 
 #ifdef SendMessage
@@ -71,7 +71,7 @@
 #include "tier0/include/dbg.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 IGameUIFuncs *gameuifuncs = NULL;
 IEngineVGui *enginevguifuncs = NULL;

@@ -6,7 +6,7 @@
 #define HELPERINFO_H
 #pragma once
 
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <utlvector.h>
 
 

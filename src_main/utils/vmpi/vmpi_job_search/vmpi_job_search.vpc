@@ -26,7 +26,7 @@ $Project "vmpi_job_search"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\public\tier0\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
 		
 		$File	"..\net_view_thread.cpp"
 		$File	"vmpi_browser_job_search.cpp"

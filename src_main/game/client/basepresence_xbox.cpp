@@ -10,7 +10,7 @@
 #include "ixboxsystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Default global instance.  Mods should override this.
 static CBasePresence s_basePresence;

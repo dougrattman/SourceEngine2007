@@ -4,12 +4,12 @@
 //
 //===========================================================================//
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/ssemath.h"
 #include "particles.h"
 #include "tier2/tier2.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 void main(int argc,char **argv)
 {

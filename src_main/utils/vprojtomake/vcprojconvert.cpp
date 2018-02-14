@@ -9,7 +9,7 @@
 #endif
 
 #include "stdafx.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

@@ -17,7 +17,7 @@
 #include "hud.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Simultaneous message limit
 #define MAX_TEXTMESSAGE_CHARS 2048

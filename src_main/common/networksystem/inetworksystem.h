@@ -4,7 +4,7 @@
 #define INETWORKSYSTEM_H
 
 #include "appframework/IAppSystem.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // Forward declarations:
 class INetworkMessageHandler;

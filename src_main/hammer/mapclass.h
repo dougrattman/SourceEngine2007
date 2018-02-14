@@ -18,7 +18,7 @@
 #pragma once
 #endif
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 #pragma warning(push, 1)
 #pragma warning(disable : 4701 4702 4530)

@@ -54,13 +54,13 @@
 #include "progdlg.h"
 #include "soundsystem.h"
 #include "statusbarids.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "utlmap.h"
 #include "vgui_controls/Controls.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 //
 //	Note!

@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "tier0/threadtools.h"
+#include "tier0/include/threadtools.h"
 #include "bitmap/bitmap.h"
 #include "bitmap/float_bm.h"
 #include "tier1/utlvector.h"

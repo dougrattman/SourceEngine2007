@@ -24,7 +24,7 @@
 #include "service_conn_mgr.h"
 #include "resource.h"
 #include "perf_counters.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 
 // If we couldn't get into a job (maybe they weren't accepting more workers at the time),

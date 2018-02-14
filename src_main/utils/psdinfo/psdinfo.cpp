@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlbuffer.h"
 
 #include "bitmap/imageformat.h"

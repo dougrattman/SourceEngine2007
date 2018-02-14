@@ -10,7 +10,7 @@
 #include <windows.h>
 #include "classcheck_util.h"
 #include "icodeprocessor.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

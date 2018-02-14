@@ -4,7 +4,7 @@
 #ifndef WADTYPES_H
 #define WADTYPES_H
 
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // This should include ONLY types (no function prototypes)
 // in or related to WADs that are shared among the engine

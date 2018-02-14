@@ -6,7 +6,7 @@
 #include <ws2tcpip.h>
 #include <cassert>
 
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "iphelpers.h"
 #include "tier1/strtools.h"
 #include "utllinkedlist.h"

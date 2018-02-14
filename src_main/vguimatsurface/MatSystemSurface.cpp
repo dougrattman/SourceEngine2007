@@ -11,7 +11,7 @@
 
 #include <Color.h>
 #include <malloc.h>
-#include <tier0/vprof.h>
+#include "tier0/include/vprof.h"
 #include <vgui/IHTML.h>
 #include <vgui/IInput.h>
 #include <vgui/IInputInternal.h>

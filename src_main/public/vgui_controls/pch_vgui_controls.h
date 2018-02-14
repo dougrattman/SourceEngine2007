@@ -15,15 +15,15 @@
 // general includes
 #include <ctype.h>
 #include <stdlib.h>
-#include "tier0/dbg.h"
-#include "tier0/valve_off.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/valve_off.h"
 #include "tier1/KeyValues.h"
 
-#include "tier0/valve_on.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/valve_on.h"
+#include "tier0/include/memdbgon.h"
 
 #include "FileSystem.h"
-#include "tier0/validator.h"
+#include "tier0/include/validator.h"
 
 // vgui includes
 #include "vgui/IBorder.h"

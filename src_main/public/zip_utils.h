@@ -3,7 +3,7 @@
 #ifndef ZIP_UTILS_H
 #define ZIP_UTILS_H
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlsymbol.h"
 
 class CUtlBuffer;

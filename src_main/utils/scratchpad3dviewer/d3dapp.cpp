@@ -11,8 +11,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "mathlib/mathlib.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 
 
 #define MAX_LOADSTRING 100

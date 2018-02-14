@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include "consolewnd.h"
 #include "resource.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "shell_icon_mgr.h"
 #include "vmpi.h"

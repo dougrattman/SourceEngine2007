@@ -27,7 +27,7 @@
 #include "weapon_repairgun.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Buff ranges
 ConVar weapon_repairgun_target_range( "weapon_repairgun_target_range", "450", FCVAR_REPLICATED, "The farthest away you can be for the repair gun to initially lock onto a player." );

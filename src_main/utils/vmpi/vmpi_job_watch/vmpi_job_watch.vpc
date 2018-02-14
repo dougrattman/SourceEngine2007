@@ -45,7 +45,7 @@ $Project "vmpi_job_watch"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\public\tier0\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
 		
 		$File	"..\..\common\consolewnd.cpp"
 		$File	"GraphControl.cpp"

@@ -88,8 +88,8 @@ bool CAI_MoveSolver::Solve(const AI_MoveSuggestion_t *pSuggestions,
   suggestions.AddVectorToTail(m_Regulations);
 
   // Initialize the solver
-  const int NUM_SOLUTIONS = 120;
-  const int SOLUTION_ANG = 360 / NUM_SOLUTIONS;
+  constexpr int NUM_SOLUTIONS = 120;
+  constexpr int SOLUTION_ANG = 360 / NUM_SOLUTIONS;
 
   COMPILE_TIME_ASSERT((360 % NUM_SOLUTIONS) == 0);
 
@@ -167,14 +167,15 @@ bool CAI_MoveSolver::Solve(const AI_MoveSuggestion_t *pSuggestions,
   //
   // Find the best solution
   //
-  int best = -1;
-  float biasBest = 0;
+  int best = -1, i = 0;
+  float best_bias = 0;
 
-  for (int i = 0; i < NUM_SOLUTIONS; ++i) {
-    if (solutions[i].bias > biasBest) {
+  for (auto &solution : solutions) {
+    if (solution.bias > best_bias) {
       best = i;
-      biasBest = solutions[i].bias;
+      best_bias = solution.bias;
     }
+    ++i;
   }
 
   if (best == -1) return false;  // no solution

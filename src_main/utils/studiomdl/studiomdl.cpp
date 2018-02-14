@@ -38,7 +38,7 @@
 #include "studiobyteswap.h"
 #include "tier1/strtools.h"
 #include "bspflags.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "utldict.h"
 #include "tier1/utlsortvector.h"
 #include "bitvec.h"

@@ -23,7 +23,7 @@
 // Windows Header Files:
 #include <windows.h>
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // C RunTime Header Files
 #include <stdio.h>

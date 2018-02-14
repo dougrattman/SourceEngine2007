@@ -29,9 +29,9 @@
 #include "studio.h"
 #include "clientstats.h"
 #include "bone_setup.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "vstdlib/cvar.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "tier1/tier1.h"
 #include "optimize.h"
 #if defined( _X360 )

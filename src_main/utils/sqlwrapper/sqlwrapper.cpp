@@ -15,14 +15,14 @@
 #include "errmsg.h"
 
 
-#include "platform.h"
+#include "tier0/include/platform.h"
 #include "isqlwrapper.h"
 #include "sqlhelpers.h"
 #include "interface.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 ///////

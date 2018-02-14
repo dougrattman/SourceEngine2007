@@ -12,7 +12,7 @@
 #endif
 
 
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/utlstringmap.h"
 #include "vgui_controls/editablepanel.h"
 #include "datamodel/dmelement.h"

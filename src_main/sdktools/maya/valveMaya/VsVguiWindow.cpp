@@ -13,7 +13,7 @@
 
 #include <windows.h>
 #include <commctrl.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier3/tier3.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "vgui/IVGui.h"

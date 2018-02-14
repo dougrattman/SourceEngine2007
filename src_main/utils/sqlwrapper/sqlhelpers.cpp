@@ -10,7 +10,7 @@
 #include "time.h"
 #include "sqlhelpers.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: converts between a MySQL field type and our column types

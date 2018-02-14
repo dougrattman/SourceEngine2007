@@ -15,7 +15,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "checksum_md5.h"
 #include "tier1/strtools.h"
 

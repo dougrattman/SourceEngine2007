@@ -14,8 +14,8 @@
 
 //Add your own definitions here
 #include "bitmap/bitmap.h"
-#include "basetypes.h"
-#include "tier0/dbg.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/dbg.h"
 #include <malloc.h>
 #include <memory.h>
 #include "nvtc.h"

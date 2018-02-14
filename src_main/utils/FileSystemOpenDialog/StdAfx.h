@@ -17,7 +17,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "tier0/wchartypes.h"
+#include "tier0/include/wchartypes.h"
 
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 

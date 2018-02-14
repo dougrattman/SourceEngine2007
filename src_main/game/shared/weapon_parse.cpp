@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #include "tier1/keyvalues.h"
-#include <tier0/mem.h>
+#include "tier0/include/mem.h"
 #include "filesystem.h"
 #include "utldict.h"
 #include "ammodef.h"

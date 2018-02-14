@@ -30,7 +30,7 @@ extern ConVar tf_knockdowntime;
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Damage CVars
 ConVar	weapon_combat_shield_rechargetime( "weapon_combat_shield_rechargetime","4", FCVAR_REPLICATED, "Time after taking damage before the shields starts recharging" );

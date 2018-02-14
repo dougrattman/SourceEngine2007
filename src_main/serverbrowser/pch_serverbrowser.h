@@ -16,8 +16,8 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "tier0/memdbgoff.h"
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgoff.h"
+#include "tier0/include/memdbgon.h"
 #include "vgui_controls/Frame.h"
 #include "vgui_controls/pch_vgui_controls.h"
 #include "vstdlib/pch_vstdlib.h"

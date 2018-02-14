@@ -7,7 +7,7 @@
 
 #include "BuildDisp.h"
 #include "DispColl.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //=============================================================================
 

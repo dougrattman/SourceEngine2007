@@ -2,7 +2,7 @@
 
 #include "demofile.h"
 
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <tier1/strtools.h>
 #include <utlbuffer.h>
 #include "demo.h"

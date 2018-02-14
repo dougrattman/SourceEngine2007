@@ -7,7 +7,7 @@
 #ifndef ISQLWRAPPER_H
 #define ISQLWRAPPER_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #ifdef _WIN32
 #pragma once

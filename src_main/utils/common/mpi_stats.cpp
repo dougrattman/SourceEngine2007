@@ -15,7 +15,7 @@
 #include "imysqlwrapper.h"
 #include "threadhelpers.h"
 #include "vmpi_tools_shared.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 /*
 

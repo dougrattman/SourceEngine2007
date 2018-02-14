@@ -13,10 +13,10 @@
 #include "filesystem_tools.h"
 #include "interface.h"
 #include "steam.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "winlite.h"
 
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define GAME_CONFIG_FILENAME "GameConfig.txt"
 #define TOKEN_SDK_VERSION "SDKVersion"

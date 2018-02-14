@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #include "unitlib/unitlib.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include <stdio.h>
 #include <windows.h>

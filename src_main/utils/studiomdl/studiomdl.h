@@ -15,7 +15,7 @@
 
 
 #include <stdio.h>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/utlvector.h"
 #include "tier1/utlsymbol.h"
 #include "tier1/utlstring.h"

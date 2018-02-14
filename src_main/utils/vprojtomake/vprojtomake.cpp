@@ -15,8 +15,8 @@
 #include "KeyValues.h"
 #include "cmdlib.h"
 #include "makefilecreator.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 #include "vcprojconvert.h"
 

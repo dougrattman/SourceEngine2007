@@ -345,7 +345,7 @@
     <ClCompile Include="..\filesystem\filesystem_steam.cpp" />
     <ClCompile Include="..\filesystem\filetracker.cpp" />
     <ClCompile Include="..\public\filesystem_init.cpp" />
-    <ClCompile Include="..\public\tier0\memoverride.cpp">
+    <ClCompile Include="..\tier0\include\memoverride.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

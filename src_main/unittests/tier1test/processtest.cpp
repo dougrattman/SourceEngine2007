@@ -9,7 +9,7 @@
 #include "vstdlib/iprocessutils.h"
 #include "tier1/strtools.h"
 #include "tier1/tier1.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 
 DEFINE_TESTSUITE( ProcessTestSuite )

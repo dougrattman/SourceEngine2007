@@ -11,7 +11,7 @@
 #endif
 
 #include "tier1/netadr.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 
 class CUtlBuffer;
 

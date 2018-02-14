@@ -5,12 +5,12 @@
 //===========================================================================//
 
 #include "stdafx.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "mathlib/mathlib.h"
 #include "hammer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 static int g_EventTimeCounters[100];
 static float g_EventTimes[100];

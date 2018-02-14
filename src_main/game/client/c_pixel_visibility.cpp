@@ -12,7 +12,7 @@
 #include "ClientEffectPrecacheSystem.h"
 #include "view.h"
 #include "utlmultilist.h"
-#include "vprof.h"
+#include "tier0/include/vprof.h"
 
 static void PixelvisDrawChanged( IConVar *pPixelvisVar, const char *pOld, float flOldValue );
 

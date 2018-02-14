@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include "mdlcheck_util.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "utldict.h"
 
 bool uselogfile = false;

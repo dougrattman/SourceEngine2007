@@ -18,9 +18,9 @@
 #include <direct.h>
 #include <io.h>
 #include "UtlBuffer.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "cmdlib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "windows.h"
 
 #include "mathlib/IceKey.h"

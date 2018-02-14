@@ -7,7 +7,7 @@
 
 // Local Headers
 #include "valvemaya.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "appframework/appframework.h"
 #include "datamodel/idatamodel.h"
 #include "datamodel/dmelementfactoryhelper.h"

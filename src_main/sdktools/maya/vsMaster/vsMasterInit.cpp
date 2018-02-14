@@ -9,10 +9,10 @@
 
 // Valve Headers
 
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "appframework/appframework.h"
 #include "appframework/IAppSystemgroup.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "filesystem_init.h"
 #include "stringpool.h"
 #include "utlstring.h"

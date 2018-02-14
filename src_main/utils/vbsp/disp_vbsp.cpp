@@ -8,7 +8,7 @@
 //=============================================================================//
 
 #include "disp_vbsp.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "vbsp.h"
 #include "mstristrip.h"
 #include "writebsp.h"

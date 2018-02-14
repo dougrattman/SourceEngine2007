@@ -9,7 +9,7 @@
 #include "messagemgr.h"
 #include "tcpsocket.h"
 #include "iphelpers.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "threadhelpers.h"
 
 

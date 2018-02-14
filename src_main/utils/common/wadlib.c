@@ -22,7 +22,7 @@
 #endif
 #include "cmdlib.h"
 #include "wadlib.h"
-#include "commonmacros.h"
+#include "tier0/include/commonmacros.h"
 
 /*
 ============================================================================

@@ -10,7 +10,7 @@
 #include "igamesystem.h"
 #include "datacache/imdlcache.h"
 #include "tier1/UtlVector.h"
-#include "vprof.h"
+#include "tier0/include/vprof.h"
 #if defined( _X360 )
 #include "xbox/xbox_console.h"
 #endif

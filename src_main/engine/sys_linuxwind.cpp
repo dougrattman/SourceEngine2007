@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include "iengine.h"
 
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "engine_launcher_api.h"
 #include "igame.h"
 #include "ivideomode.h"

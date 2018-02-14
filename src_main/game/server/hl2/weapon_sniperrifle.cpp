@@ -24,7 +24,7 @@
 #include "vstdlib/random.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 #define SNIPER_CONE_PLAYER					vec3_origin	// Spread cone when fired by the player.
 #define SNIPER_CONE_NPC						vec3_origin	// Spread cone when fired by NPCs.

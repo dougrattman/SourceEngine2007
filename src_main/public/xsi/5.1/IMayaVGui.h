@@ -13,7 +13,7 @@
 #endif
 
 #include <windows.h>
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "appframework/iappsystem.h"
 
 

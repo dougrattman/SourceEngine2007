@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "tf_gamemovement.h"
 #include "in_buttons.h"
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 
 #define	SPEED_STOP_THRESHOLD		1.0f

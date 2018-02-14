@@ -156,7 +156,7 @@ copy &quot;$(TargetPath)&quot; ..\..\..\..\game\bin
 				RelativePath="..\iphelpers.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\public\tier0\memoverride.cpp">
+				RelativePath="..\..\..\tier0\include\memoverride.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool

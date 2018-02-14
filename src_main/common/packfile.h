@@ -5,7 +5,7 @@
 #ifndef PACKFILE_H
 #define PACKFILE_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // creates a new empty pack file
 bool Pack_CreateFile(const char *pakfile);

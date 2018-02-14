@@ -21,8 +21,8 @@
 // This file must be identical in the quake and utils directories
 //
 
-#include "basetypes.h"
-#include "commonmacros.h"
+#include "tier0/include/basetypes.h"
+#include "tier0/include/commonmacros.h"
 #include "worldsize.h"
 #include "bspfile.h"
 

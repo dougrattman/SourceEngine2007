@@ -6,7 +6,7 @@
 #include <cstdio>
 
 #include "ishadercompiledll.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/interface.h"
 #include "tier1/strtools.h"
 

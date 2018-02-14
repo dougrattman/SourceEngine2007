@@ -5,10 +5,10 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include "tier0/platform.h"
-#include "tier0/vcrmode.h"
-#include "tier0/memalloc.h"
-#include "tier0/dbg.h"
+#include "tier0/include/platform.h"
+#include "tier0/include/vcrmode.h"
+#include "tier0/include/memalloc.h"
+#include "tier0/include/dbg.h"
 
 #include <sys/time.h>
 #include <unistd.h>

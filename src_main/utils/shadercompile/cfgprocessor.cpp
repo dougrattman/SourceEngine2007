@@ -8,8 +8,8 @@
 #include <cstring>
 #include <ctime>
 
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 #include "tier1/utlbuffer.h"
 
 #undef clamp

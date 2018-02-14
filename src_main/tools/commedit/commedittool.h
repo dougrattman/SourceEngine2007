@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 #include "toolutils/basetoolsystem.h"
 #include "toolutils/recentfilelist.h"
 #include "toolutils/toolmenubar.h"

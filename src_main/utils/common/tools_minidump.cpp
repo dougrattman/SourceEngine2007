@@ -4,7 +4,7 @@
 
 #include "tools_minidump.h"
 
-#include "tier0/minidump.h"
+#include "tier0/include/minidump.h"
 
 static bool g_bToolsWriteFullMinidumps = false;
 static ToolsExceptionHandler g_pCustomExceptionHandler = NULL;

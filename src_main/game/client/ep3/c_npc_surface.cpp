@@ -14,7 +14,7 @@
 #include "view_shared.h"
 #include "iviewrender.h"
 
-#include "tier0/vprof.h"
+#include "tier0/include/vprof.h"
 #include "soundinfo.h"
 
 // TODO: These should be in public by the time the SDK ships
@@ -30,7 +30,7 @@
 	#include "../../common/blobulator/Implicit/UserFunctions2.h"
 #endif
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

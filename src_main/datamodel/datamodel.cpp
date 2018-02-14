@@ -12,7 +12,7 @@
 #include "dmserializerkeyvalues.h"
 #include "dmserializerkeyvalues2.h"
 #include "dmserializerxml.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/utlqueue.h"
 #include "tier1/utlvector.h"
@@ -21,7 +21,7 @@
 #include "vstdlib/iprocessutils.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Forward declarations

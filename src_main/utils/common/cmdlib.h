@@ -12,12 +12,12 @@
 #include <time.h>
 #include "filesystem.h"
 #include "filesystem_tools.h"
-#include "tier0/basetypes.h"
+#include "tier0/include/basetypes.h"
 // This can go away when everything is in bin.
 #if defined(CMDLIB_NODBGLIB)
 void Error(char const *pMsg, ...);
 #else
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #endif
 
 // Tools should use this as the read path ID. It'll look into the paths

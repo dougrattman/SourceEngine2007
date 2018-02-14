@@ -9,7 +9,7 @@
 ****/
 
 #include <stdio.h>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "utlvector.h"
 #include "utlsymbol.h"
 #include "mathlib/vector.h"

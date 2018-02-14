@@ -6,7 +6,7 @@
 
 #include <windows.h>
 #include "interface.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "filesystem_tools.h"
 #include "sdklauncher_main.h"
 #include "ConfigManager.h"
@@ -18,7 +18,7 @@
 #include "configs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 extern CGameConfigManager	g_ConfigManager;
 

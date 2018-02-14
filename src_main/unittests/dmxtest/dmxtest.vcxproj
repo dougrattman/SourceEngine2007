@@ -224,7 +224,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\unittests\$
     <ClCompile Include="..\..\movieobjects\dmx_to_vcd.cpp" />
     <ClCompile Include="..\..\public\interpolatortypes.cpp" />
     <ClCompile Include="..\..\public\movieobjects\movieobjects.cpp" />
-    <ClCompile Include="..\..\public\tier0\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

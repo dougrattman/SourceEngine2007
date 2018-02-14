@@ -13,7 +13,7 @@
 #include "filesystem.h"
 #include "vgui/ilocalize.h"
 #include "dme_controls/elementpropertiestree.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "materialsystem/imaterialsystem.h"
 #include "vguimatsurface/imatsystemsurface.h"
 #include "petdoc.h"

@@ -23,8 +23,8 @@
 
 #define NO_THREAD_LOCAL 1
 
-#include "tier0/vprof.h"
-#include "tier0/wchartypes.h"
+#include "tier0/include/vprof.h"
+#include "tier0/include/wchartypes.h"
 
 #define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
 
@@ -59,7 +59,7 @@
 #pragma warning(pop)
 #endif  // _AFX_NO_AFXCMN_SUPPORT
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // Some VS header files provoke this warning
 #pragma warning(disable : 4201)  // warning C4201: nonstandard extension used :

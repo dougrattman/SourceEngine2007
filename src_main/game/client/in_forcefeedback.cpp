@@ -11,7 +11,7 @@
 #include "cdll_util.h"
 #include "input.h"
 #include "convar.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "forcefeedback.h"
 #include "FileSystem.h"
 
@@ -20,7 +20,7 @@
 #include "dinput.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 static ConVar ff_autocenter( "ff_autocenter", "1", FCVAR_ARCHIVE, "Enable auto-centering of forcefeedback joystick." );
 

@@ -17,7 +17,7 @@
 #include <process.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 
 const char GAMECFG_SIG[] = "Game Configurations File\r\n\x1a";
@@ -162,7 +162,7 @@ int COptionsConfigs::ImportOldGameConfigs(const char *pszFileName)
 }
 
 // Our call to "new" will be hosed without this header
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

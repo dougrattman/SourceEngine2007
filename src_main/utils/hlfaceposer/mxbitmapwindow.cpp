@@ -10,7 +10,7 @@
 #include "mxBitmapWindow.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

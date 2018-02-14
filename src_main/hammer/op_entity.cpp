@@ -27,7 +27,7 @@
 #include "SoundBrowser.h"
 #include "ifilesystemopendialog.h"
 #include "filesystem_tools.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "ModelBrowser.h"
 #include "HammerVGui.h"
 #include "mapview3d.h"
@@ -39,7 +39,7 @@
 extern GameData *pGD;		// current game data
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 
 #pragma warning( disable : 4355 )

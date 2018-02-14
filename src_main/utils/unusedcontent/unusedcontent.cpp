@@ -8,7 +8,7 @@
 #include <windows.h>
 #include <io.h>
 #include <sys/stat.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #pragma warning( disable : 4018 )
 
 #include "utlrbtree.h"
@@ -20,7 +20,7 @@
 #include "KeyValues.h"
 #include "cmdlib.h"
 #include "scriplib.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/fmtstr.h"
 
 bool uselogfile = false;

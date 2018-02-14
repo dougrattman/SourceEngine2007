@@ -9,7 +9,7 @@
 #include <d3dx9shader.h>
 #include "dx_proxy/dx_proxy.h"
 
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 
 #define D3DXSHADER_MICROCODE_BACKEND_OLD_DEPRECATED (1 << 25)

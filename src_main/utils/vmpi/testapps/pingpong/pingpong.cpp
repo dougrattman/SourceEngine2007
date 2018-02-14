@@ -12,7 +12,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "tcpsocket.h"
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 #include "vmpi.h"
 #include "tcpsocket_helpers.h"
 

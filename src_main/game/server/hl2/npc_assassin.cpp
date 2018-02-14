@@ -17,7 +17,7 @@
 #include "ai_moveprobe.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 ConVar	sk_assassin_health( "sk_assassin_health","150");
 ConVar	g_debug_assassin( "g_debug_assassin", "0" );

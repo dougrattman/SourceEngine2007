@@ -12,7 +12,7 @@
 #include "fx_sparks.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 // Chunk movement
 #define	CHUNK_FLECK_MIN_SPEED		25.0f

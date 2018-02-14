@@ -25,7 +25,7 @@
 #include "weapon_drainbeam.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 
 #define PARTICLE_PATH_VEL				140.0

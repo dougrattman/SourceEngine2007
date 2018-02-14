@@ -3,7 +3,7 @@
 #ifndef LOCALFLEXCONTROLLER_H
 #define LOCALFLEXCONTROLLER_H
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 enum LocalFlexController_t {
   // this isn't really an enum - its just a typed int. gcc will not accept it as

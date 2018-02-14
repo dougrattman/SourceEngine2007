@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 #include "cbase.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include <stdio.h>
 #include "drawhelper.h"
 

@@ -8,7 +8,7 @@
 #ifndef WCKEYVALUES_H
 #define WCKEYVALUES_H
 
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <utldict.h>
 #include <utlvector.h>
 #include <fstream>

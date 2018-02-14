@@ -30,7 +30,7 @@
 #include "tf_func_resource.h"
 #include "resource_chunk.h"
 #include "team_messages.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "tf_obj_respawn_station.h"
 #include "tf_obj_resourcepump.h"
 #include "tf_class_commando.h"

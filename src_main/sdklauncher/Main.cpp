@@ -23,7 +23,7 @@
 #include "inputsystem/iinputsystem.h"
 #include "min_footprint_files.h"
 #include "sdklauncher_main.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #include <io.h>
 #include <stdio.h>
@@ -34,7 +34,7 @@ typedef vgui::MessageBox vguiMessageBox;
 #include <winsock2.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 HANDLE g_dwChangeHandle = NULL;
 

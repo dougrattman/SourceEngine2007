@@ -15,7 +15,7 @@
 #define INCLUDED_MXWIDGET
 
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 enum
 {

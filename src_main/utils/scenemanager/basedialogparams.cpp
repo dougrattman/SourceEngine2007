@@ -6,7 +6,7 @@
 //=============================================================================//
 #include "cbase.h"
 #include <mxtk/mx.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "basedialogparams.h"
 
 //-----------------------------------------------------------------------------

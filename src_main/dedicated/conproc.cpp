@@ -12,7 +12,7 @@
 #include <windows.h>
 #include "conproc.h"
 #include "isys.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 static HANDLE	heventDone;
 static HANDLE	hfileBuffer;

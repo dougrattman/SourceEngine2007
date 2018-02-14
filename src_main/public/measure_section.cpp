@@ -3,7 +3,7 @@
 #include "measure_section.h"
 #include <cstdlib>
 #include <cstring>
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 #include "convar.h"
 
 // Static members

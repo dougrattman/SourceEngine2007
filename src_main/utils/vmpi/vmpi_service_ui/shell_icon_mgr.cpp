@@ -8,7 +8,7 @@
 #include "stdafx.h"
 #include "shell_icon_mgr.h"
 #include "tier1/strtools.h"
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "shellapi.h"
 
 

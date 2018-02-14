@@ -10,9 +10,9 @@
 #include <string.h>
 #include <math.h>
 #include <malloc.h>
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <vgui/ISurface.h>
-#include <tier0/mem.h>
+#include "tier0/include/mem.h"
 #include <utlbuffer.h>
 #include "filesystem.h"
 #include "materialsystem/imaterialsystem.h"
@@ -21,7 +21,7 @@
 #include "vgui_surfacelib/FontManager.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 bool s_bSupportsUnicode = true;
 

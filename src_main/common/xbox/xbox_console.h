@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 #ifndef STATIC_TIER0
 

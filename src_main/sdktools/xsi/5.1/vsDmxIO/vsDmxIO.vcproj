@@ -209,7 +209,7 @@ if exist &quot;$(TargetDir)&quot;vsDmxIO.pdb copy &quot;$(TargetDir)&quot;vsDmxI
 				RelativePath="..\..\..\..\public\interpolatortypes.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\public\tier0\memoverride.cpp">
+				RelativePath="..\..\..\..\tier0\include\memoverride.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\public\movieobjects\movieobjects.cpp">

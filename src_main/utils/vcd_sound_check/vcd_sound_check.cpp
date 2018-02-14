@@ -6,7 +6,7 @@
 #include "cbase.h"
 #include <stdio.h>
 #include <windows.h>
-#include "tier0/dbg.h"
+#include "tier0/include/dbg.h"
 #include "utldict.h"
 #include "tier1/UtlLinkedList.h"
 #include "FileSystem.h"

@@ -30,7 +30,7 @@
 class CBaseObject;
 #include "tf/tf_gamestats.h"
 #include "base_gamestats_parse.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 
 #include <string>
 

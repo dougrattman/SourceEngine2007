@@ -19,12 +19,12 @@
 
 #if defined(_DEBUG) && defined(WIN32)
 
-#include "tier0/valve_off.h"
+#include "tier0/include/valve_off.h"
 #include <stdio.h>
 #include <windows.h>
 #include <tchar.h>
 #include <ImageHlp.h>
-#include "tier0/valve_on.h"
+#include "tier0/include/valve_on.h"
 #include "ExtendedTrace.h"
 
 #define BUFFERSIZE   0x200

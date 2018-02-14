@@ -3,7 +3,7 @@
 //=============================================================================
 
 #include <windows.h>
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include <io.h>
 #include <WorldSize.h>
 #include "fgdlib/GameData.h"
@@ -14,7 +14,7 @@
 #include "tier1/utlmap.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 const int MAX_ERRORS = 5;
 
@@ -880,4 +880,4 @@ bool GameData::LoadFGDAutoVisGroups( TokenReader &tr )
 }
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgoff.h"
+#include "tier0/include/memdbgoff.h"

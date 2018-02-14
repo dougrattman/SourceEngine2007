@@ -18,7 +18,7 @@
 #include "appframework/AppFramework.h"
 #include "datamodel/idatamodel.h"
 #include "filesystem.h"
-#include "icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "materialsystem/imaterialsystem.h"
 #include "mathlib/mathlib.h"
 #include "p4lib/ip4.h"

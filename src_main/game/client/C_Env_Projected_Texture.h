@@ -12,7 +12,7 @@
 #endif
 
 #include "c_baseentity.h"
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: 

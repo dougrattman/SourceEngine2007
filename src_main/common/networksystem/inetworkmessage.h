@@ -5,8 +5,8 @@
 #ifndef INETWORKMESSAGE_H
 #define INETWORKMESSAGE_H
 
-#include "tier0/dbg.h"
-#include "tier0/platform.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 // Forward declarations
 class bf_read;

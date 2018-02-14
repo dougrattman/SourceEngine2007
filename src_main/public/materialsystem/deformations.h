@@ -4,7 +4,7 @@
 #define DEFORMATIONS_H
 
 #include "mathlib/vector.h"
-#include "tier0/platform.h"
+#include "tier0/include/platform.h"
 
 // nonlinear transformations which may be applied to model vertices when
 // rendering. must be powers of two

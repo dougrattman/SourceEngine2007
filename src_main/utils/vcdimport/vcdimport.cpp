@@ -12,8 +12,8 @@
 //
 //=============================================================================
 
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "datamodel/idatamodel.h"
 #include "filesystem.h"
 #include "appframework/tier3app.h"

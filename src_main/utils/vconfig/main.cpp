@@ -13,7 +13,7 @@
 #include <vgui/IVGui.h>
 #include <vgui_controls/Panel.h>
 
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "inputsystem/iinputsystem.h"
 #include "appframework/tier3app.h"
 #include "vconfig_main.h"
@@ -21,7 +21,7 @@
 #include "ConfigManager.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 #define VCONFIG_MAIN_PATH_ID	"MAIN"
 

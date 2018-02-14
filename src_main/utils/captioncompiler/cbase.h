@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "basetypes.h"
+#include "tier0/include/basetypes.h"
 
 // This is just a dummy file to make this tool compile
 #include "ai_activity.h"

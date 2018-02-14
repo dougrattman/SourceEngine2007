@@ -11,8 +11,8 @@
 #include "cmdlib.h"
 #include "pacifier.h"
 #include "scriplib.h"
-#include "tier0/dbg.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/UtlBuffer.h"
 #include "tier1/UtlMap.h"
 #include "tier1/UtlSortVector.h"
@@ -23,7 +23,7 @@
 #include "vgui_controls/controls.h"
 #include "vstdlib/random.h"
 
-#include "tier0/fasttimer.h"
+#include "tier0/include/fasttimer.h"
 
 using namespace vgui;
 

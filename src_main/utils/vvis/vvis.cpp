@@ -10,7 +10,7 @@
 #include "pacifier.h"
 #include "stdlib.h"
 #include "threads.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 #include "tools_minidump.h"
 #include "vis.h"

@@ -13,7 +13,7 @@
 #include "utllinkedlist.h"
 #include <stdlib.h>
 #include "tier1/strtools.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/utlrbtree.h"
 #include "tier1/utlbuffer.h"
 #include "tier1/keyvalues.h"

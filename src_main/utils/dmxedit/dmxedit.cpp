@@ -28,7 +28,7 @@
 #include "tier3/tier3.h"
 #include "filesystem.h"
 #include "vstdlib/iprocessutils.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "istudiorender.h"
 #include "vphysics_interface.h"
 #include "datacache/idatacache.h"

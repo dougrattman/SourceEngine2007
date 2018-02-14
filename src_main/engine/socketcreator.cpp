@@ -22,7 +22,7 @@
 #define ioctlsocket ioctl
 #endif
 
-#include <tier0/dbg.h>
+#include "tier0/include/dbg.h"
 #include "server.h"
 #include "socketcreator.h"
 

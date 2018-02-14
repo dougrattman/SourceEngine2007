@@ -12,7 +12,7 @@
 #include "tier1/convar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/memdbgon.h"
+#include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // CDmeClip - common base class for filmclips, soundclips, and channelclips

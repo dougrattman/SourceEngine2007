@@ -154,7 +154,7 @@ SOURCE=..\Public\Mathlib.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\tier0\memoverride.cpp
+SOURCE=..\tier0\include\memoverride.cpp
 # SUBTRACT CPP /YX
 # End Source File
 # Begin Source File

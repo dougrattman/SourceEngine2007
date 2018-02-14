@@ -14,14 +14,14 @@
 #include <vgui_controls/Panel.h>
 
 #include "appframework/tier3app.h"
-#include "tier0/icommandline.h"
+#include "tier0/include/icommandline.h"
 #include "inputsystem/iinputsystem.h"
 #include "matsys_controls/QCGenerator.h"
 #include "filesystem_init.h"
 #include "CQCGenMain.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include <tier0/memdbgon.h>
+#include "tier0/include/memdbgon.h"
 
 #define QCGENERATOR_MAIN_PATH_ID	"MAIN"
 #define QCGENERATOR_WRITE_PATH     "DEFAULT_WRITE_PATH"
