@@ -84,6 +84,9 @@
     <ClCompile Include="win32_console_io.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="instance.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extendedtrace.h">
@@ -189,6 +192,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

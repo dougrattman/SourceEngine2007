@@ -5,15 +5,14 @@
 #include <cassert>
 #include "base/include/windows/windows_light.h"
 
-HINSTANCE g_hTier0Instance = nullptr;
+#include "instance.h"
 
-#ifndef STATIC_TIER0
 BOOL WINAPI DllMain(_In_ HINSTANCE instance, _In_ DWORD call_reason,
                     _In_ void *) {
   switch (call_reason) {
     case DLL_PROCESS_ATTACH:
       ::DisableThreadLibraryCalls(instance);
-      g_hTier0Instance = instance;
+      global_tier0_instance = instance;
       break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
@@ -24,4 +23,3 @@ BOOL WINAPI DllMain(_In_ HINSTANCE instance, _In_ DWORD call_reason,
   }
   return TRUE;
 }
-#endif

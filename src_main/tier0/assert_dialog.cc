@@ -4,6 +4,8 @@
 
 #include "tier0/include/valve_off.h"
 
+#include "instance.h"
+
 #ifdef OS_POSIX
 ch *GetCommandLine();
 #endif
@@ -12,8 +14,6 @@ ch *GetCommandLine();
 #include "tier0/include/valve_on.h"
 
 #include "resource.h"
-
-extern HINSTANCE g_hTier0Instance;
 
 namespace {
 struct DialogInitInfo {
@@ -299,7 +299,7 @@ DBG_INTERFACE bool DoNewAssertDialog(const ch *pFilename, i32 line,
   } else {
     HWND hParentWindow = FindLikelyParentWindow();
 
-    DialogBox(g_hTier0Instance, MAKEINTRESOURCE(IDD_ASSERT_DIALOG),
+    DialogBox(global_tier0_instance, MAKEINTRESOURCE(IDD_ASSERT_DIALOG),
               hParentWindow, AssertDialogProc);
   }
 #elif OS_POSIX

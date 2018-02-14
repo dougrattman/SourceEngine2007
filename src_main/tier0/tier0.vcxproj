@@ -354,6 +354,7 @@
     <ClCompile Include="dbg.cc" />
     <ClCompile Include="dll_main.cc" />
     <ClCompile Include="fast_timer.cc" />
+    <ClCompile Include="instance.cc" />
     <ClCompile Include="mem.cc" />
     <ClCompile Include="mem_dbg.cc" />
     <ClCompile Include="mem_std.cc" />
@@ -426,6 +427,7 @@
     <ClInclude Include="include\vcr_shared.h" />
     <ClInclude Include="include\vprof.h" />
     <ClInclude Include="include\wchartypes.h" />
+    <ClInclude Include="instance.h" />
     <ClInclude Include="memstd.h" />
     <ClInclude Include="mem_helpers.h" />
     <ClInclude Include="pch_tier0.h" />
