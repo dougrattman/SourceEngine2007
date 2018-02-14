@@ -14,12 +14,12 @@
 
 #include "tier0/include/platform.h"
 
-static i64 g_ClockSpeed;
-static unsigned long g_dwClockSpeed;
+extern i64 g_ClockSpeed;
+extern unsigned long g_dwClockSpeed;
 
-static f64 g_ClockSpeedMicrosecondsMultiplier;
-static f64 g_ClockSpeedMillisecondsMultiplier;
-static f64 g_ClockSpeedSecondsMultiplier;
+extern f64 g_ClockSpeedMicrosecondsMultiplier;
+extern f64 g_ClockSpeedMillisecondsMultiplier;
+extern f64 g_ClockSpeedSecondsMultiplier;
 
 class PLATFORM_CLASS CCycleCount {
   friend class CFastTimer;
@@ -124,7 +124,7 @@ class CClockSpeedInit {
 
     g_ClockSpeedMicrosecondsMultiplier = 1000000.0 / (f64)g_ClockSpeed;
     g_ClockSpeedMillisecondsMultiplier = 1000.0 / (f64)g_ClockSpeed;
-    g_ClockSpeedSecondsMultiplier = 1.0f / (f64)g_ClockSpeed;
+    g_ClockSpeedSecondsMultiplier = 1.0 / (f64)g_ClockSpeed;
   }
 };
 
