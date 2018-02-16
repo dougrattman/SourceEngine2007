@@ -39,7 +39,7 @@ typedef u32 DWORD;
 typedef u16 WORD;
 typedef void *HINSTANCE;
 #define _MAX_PATH PATH_MAX
-#endif  // defined(OS_WIN) && !defined(WINDED)
+#endif  // defined(OS_WIN)
 
 // Defines MAX_PATH
 #ifndef MAX_PATH

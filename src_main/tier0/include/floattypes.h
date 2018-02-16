@@ -6,8 +6,10 @@
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
+#ifdef OS_WIN
 #include <corecrt.h>
 #include <sal.h>
+#endif
 
 using vec_t = f32;
 
