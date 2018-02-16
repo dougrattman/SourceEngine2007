@@ -6,7 +6,7 @@
 #include "shaderapi/ishaderutil.h"
 #include "shaderapi_global.h"
 #include "shaderdevicebase.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/convar.h"
 
 // Hardware Config!
