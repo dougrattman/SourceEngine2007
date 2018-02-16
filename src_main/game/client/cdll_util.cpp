@@ -898,10 +898,8 @@ unsigned char UTIL_ComputeEntityFade(C_BaseEntity *pEntity, float flMinDist,
       vecAbsCenter = pEntity->GetRenderOrigin();
     }
 
-    unsigned char nGlobalAlpha = IsXbox()
-                                     ? 255
-                                     : modelinfo->ComputeLevelScreenFade(
-                                           vecAbsCenter, flRadius, flFadeScale);
+    unsigned char nGlobalAlpha =
+        modelinfo->ComputeLevelScreenFade(vecAbsCenter, flRadius, flFadeScale);
     unsigned char nDistAlpha;
 
     if (!engine->IsLevelMainMenuBackground()) {

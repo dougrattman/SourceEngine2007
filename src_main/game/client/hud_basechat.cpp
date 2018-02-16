@@ -26,7 +26,6 @@
 
 #define CHAT_WIDTH_PERCENTAGE 0.6f
 
-#ifndef _XBOX
 ConVar hud_saytext_time("hud_saytext_time", "12", 0);
 ConVar cl_showtextmsg("cl_showtextmsg", "1", 0,
                       "Enable/disable text messages printing on the screen.");
@@ -306,12 +305,10 @@ void CBaseHudChatLine::Expire(void) {
 
   //	Msg( "%s\n", text );
 }
-#endif _XBOX
 
 //-----------------------------------------------------------------------------
 // Purpose: The prompt and text entry area for chat messages
 //-----------------------------------------------------------------------------
-#ifndef _XBOX
 CBaseHudChatInputLine::CBaseHudChatInputLine(CBaseHudChat *parent,
                                              char const *panelName)
     : vgui::Panel(parent, panelName) {
@@ -387,7 +384,6 @@ void CBaseHudChatInputLine::PerformLayout() {
 }
 
 vgui::Panel *CBaseHudChatInputLine::GetInputPanel(void) { return m_pInput; }
-#endif  //_XBOX
 
 CHudChatFilterButton::CHudChatFilterButton(vgui::Panel *pParent,
                                            const char *pName, const char *pText)
@@ -547,7 +543,6 @@ CBaseHudChat::CBaseHudChat(const char *pElementName)
 }
 
 void CBaseHudChat::CreateChatInputLine(void) {
-#ifndef _XBOX
   m_pChatInput = new CBaseHudChatInputLine(this, "ChatInputLine");
   m_pChatInput->SetVisible(false);
 
@@ -555,15 +550,11 @@ void CBaseHudChat::CreateChatInputLine(void) {
     GetChatHistory()->SetMaximumCharCount(127 * 100);
     GetChatHistory()->SetVisible(true);
   }
-#endif
 }
 
 void CBaseHudChat::CreateChatLines(void) {
-#ifndef _XBOX
   m_ChatLine = new CBaseHudChatLine(this, "ChatLine1");
   m_ChatLine->SetVisible(false);
-
-#endif
 }
 
 #define BACKGROUND_BORDER_WIDTH 20
@@ -620,26 +611,11 @@ void CBaseHudChat::Reset(void) {
 #endif
 }
 
-#ifdef _XBOX
-bool CBaseHudChat::ShouldDraw() {
-  // never think, never draw
-  return false;
-}
-#endif
-
-void CBaseHudChat::Paint(void) {
-#ifndef _XBOX
-  if (m_nVisibleHeight == 0) return;
-#endif
-}
+void CBaseHudChat::Paint(void) {}
 
 CHudChatHistory *CBaseHudChat::GetChatHistory(void) { return m_pChatHistory; }
 
-void CBaseHudChat::Init(void) {
-  if (IsXbox()) return;
-
-  ListenForGameEvent("hltv_chat");
-}
+void CBaseHudChat::Init(void) { ListenForGameEvent("hltv_chat"); }
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -894,7 +870,6 @@ int CBaseHudChat::GetChatInputOffset(void) { return m_iFontHeight; }
 //  voice manager icon panel
 //-----------------------------------------------------------------------------
 void CBaseHudChat::OnTick(void) {
-#ifndef _XBOX
   m_nVisibleHeight = 0;
 
   CBaseHudChatLine *line = m_ChatLine;
@@ -928,8 +903,6 @@ void CBaseHudChat::OnTick(void) {
   }
 
   FadeChatHistory();
-
-#endif
 }
 
 // Release build is crashing on long strings...sigh
@@ -943,7 +916,6 @@ void CBaseHudChat::OnTick(void) {
 // Output : int
 //-----------------------------------------------------------------------------
 int CBaseHudChat::ComputeBreakChar(int width, const char *text, int textlen) {
-#ifndef _XBOX
   CBaseHudChatLine *line = m_ChatLine;
   vgui::HFont font = line->GetFont();
 
@@ -980,9 +952,6 @@ int CBaseHudChat::ComputeBreakChar(int width, const char *text, int textlen) {
     return lastbreak;
   }
   return textlen;
-#else
-  return 0;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1006,7 +975,6 @@ void CBaseHudChat::Printf(int iFilter, const char *fmt, ...) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CBaseHudChat::StartMessageMode(int iMessageModeType) {
-#ifndef _XBOX
   m_nMessageMode = iMessageModeType;
 
   m_pChatInput->ClearEntry();
@@ -1045,8 +1013,6 @@ void CBaseHudChat::StartMessageMode(int iMessageModeType) {
   m_pFilterPanel->SetVisible(false);
 
   engine->ClientCmd_Unrestricted("gameui_preventescapetoshow\n");
-
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1292,16 +1258,9 @@ void CBaseHudChatLine::Colorize(int alpha) {
 // Purpose:
 // Output : CBaseHudChatLine
 //-----------------------------------------------------------------------------
-CBaseHudChatLine *CBaseHudChat::FindUnusedChatLine(void) {
-#ifndef _XBOX
-  return m_ChatLine;
-#else
-  return NULL;
-#endif
-}
+CBaseHudChatLine *CBaseHudChat::FindUnusedChatLine(void) { return m_ChatLine; }
 
 void CBaseHudChat::Send(void) {
-#ifndef _XBOX
   wchar_t szTextbuf[128];
 
   m_pChatInput->GetMessageText(szTextbuf, sizeof(szTextbuf));
@@ -1330,7 +1289,6 @@ chat entry and we will see if it gets cropped or not.
   }
 
   m_pChatInput->ClearEntry();
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1338,21 +1296,15 @@ chat entry and we will see if it gets cropped or not.
 // Output : vgui::Panel
 //-----------------------------------------------------------------------------
 vgui::Panel *CBaseHudChat::GetInputPanel(void) {
-#ifndef _XBOX
   return m_pChatInput->GetInputPanel();
-#else
-  return NULL;
-#endif
 }
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 void CBaseHudChat::Clear(void) {
-#ifndef _XBOX
   // Kill input prompt
   StopMessageMode();
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1469,7 +1421,6 @@ void CBaseHudChat::ChatPrintf(int iPlayerIndex, int iFilter, const char *fmt,
 // Purpose:
 //-----------------------------------------------------------------------------
 void CBaseHudChat::FireGameEvent(IGameEvent *event) {
-#ifndef _XBOX
   const char *eventname = event->GetName();
 
   if (Q_strcmp("hltv_chat", eventname) == 0) {
@@ -1480,5 +1431,4 @@ void CBaseHudChat::FireGameEvent(IGameEvent *event) {
     ChatPrintf(player->entindex(), CHAT_FILTER_NONE, "(SourceTV) %s",
                event->GetString("text"));
   }
-#endif
 }

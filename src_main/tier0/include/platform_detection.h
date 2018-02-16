@@ -19,17 +19,12 @@
 #define IsDebug() false
 #endif
 
-// Deprecating, infavor of IsX360() which will revert to IsXbox()
-// after confidence of xbox 1 code flush
-#define IsXbox() false
-
 #ifdef OS_WIN
 
 #define IsLinux() false
 #define IsPC() true
 #define IsConsole() false
 #define IsX360() false
-#define IsPS3() false
 #define IS_WINDOWS_PC
 
 #elif defined(OS_POSIX)
@@ -37,7 +32,6 @@
 #define IsPC() true
 #define IsConsole() false
 #define IsX360() false
-#define IsPS3() false
 #define IsLinux() true
 
 #else

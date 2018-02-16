@@ -1881,7 +1881,6 @@ void CStaticPropMgr::ComputePropOpacity(CStaticProp &prop) {
   }
 
 #ifndef SWDS
-  if (!IsXbox()) {
     // Fade all props, if we have a default level setting
     // But only change the fade if it's more translucent than any other fades we
     // might have
@@ -1897,7 +1896,6 @@ void CStaticPropMgr::ComputePropOpacity(CStaticProp &prop) {
       prop.SetAlpha(alpha);
       ChangeRenderGroup(prop);
     }
-  }
 #endif
 }
 

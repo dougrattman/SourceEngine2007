@@ -187,7 +187,7 @@ CNetworkStringTable::CNetworkStringTable(TABLEID id, const char *tableName,
         maxentries);
   }
 
-  if (IsXbox() || bIsFilenames) {
+  if (bIsFilenames) {
     m_bIsFilenames = true;
     m_pItems = new CNetworkStringFilenameDict;
   } else {

@@ -159,10 +159,6 @@ void CPDumpPanel::PredictionDumpColor(bool networked, bool errorchecked,
 //			last_predicted -
 //-----------------------------------------------------------------------------
 void CPDumpPanel::DumpEntity(C_BaseEntity *ent, int commands_acknowledged) {
-  if (IsXbox()) {
-    return;
-  }
-
 #ifdef NO_ENTITY_PREDICTION
   return;
 #else
