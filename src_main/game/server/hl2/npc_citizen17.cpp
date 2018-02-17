@@ -1,7 +1,6 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
 //
 // Purpose: The downtrodden citizens of City 17.
-//
 
 #include "cbase.h"
 
@@ -31,7 +30,7 @@
 #include "ai_interactions.h"
 #include "ai_looktarget.h"
 #include "sceneentity.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 // clang-format on
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -227,15 +226,15 @@ int CCommandPoint::gm_nCommandPoints;
 LINK_ENTITY_TO_CLASS(info_target_command_point, CCommandPoint);
 BEGIN_DATADESC(CCommandPoint)
 
-//	DEFINE_FIELD( m_bNotInTransition,	FIELD_BOOLEAN ),
-DEFINE_INPUTFUNC(FIELD_VOID, "OutsideTransition", InputOutsideTransition),
+  //	DEFINE_FIELD( m_bNotInTransition,	FIELD_BOOLEAN ),
+  DEFINE_INPUTFUNC(FIELD_VOID, "OutsideTransition", InputOutsideTransition),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-    class CMattsPipe : public CWeaponCrowbar {
+class CMattsPipe : public CWeaponCrowbar {
   DECLARE_CLASS(CMattsPipe, CWeaponCrowbar);
 
   const char *GetWorldModel() const {
@@ -287,75 +286,75 @@ LINK_ENTITY_TO_CLASS(npc_citizen, CNPC_Citizen);
 
 BEGIN_DATADESC(CNPC_Citizen)
 
-DEFINE_CUSTOM_FIELD(m_nInspectActivity, ActivityDataOps()),
-    DEFINE_FIELD(m_flNextFearSoundTime, FIELD_TIME),
-    DEFINE_FIELD(m_flStopManhackFlinch, FIELD_TIME),
-    DEFINE_FIELD(m_fNextInspectTime, FIELD_TIME),
-    DEFINE_FIELD(m_flPlayerHealTime, FIELD_TIME),
-    DEFINE_FIELD(m_flNextHealthSearchTime, FIELD_TIME),
-    DEFINE_FIELD(m_flAllyHealTime, FIELD_TIME),
-    //						gm_PlayerSquadEvaluateTimer
-    //						m_AssaultBehavior
-    //						m_FollowBehavior
-    //						m_StandoffBehavior
-    //						m_LeadBehavior
-    //						m_FuncTankBehavior
-    DEFINE_FIELD(m_flPlayerGiveAmmoTime, FIELD_TIME),
-    DEFINE_KEYFIELD(m_iszAmmoSupply, FIELD_STRING, "ammosupply"),
-    DEFINE_KEYFIELD(m_iAmmoAmount, FIELD_INTEGER, "ammoamount"),
-    DEFINE_FIELD(m_bRPGAvoidPlayer, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bShouldPatrol, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_iszOriginalSquad, FIELD_STRING),
-    DEFINE_FIELD(m_flTimeJoinedPlayerSquad, FIELD_TIME),
-    DEFINE_FIELD(m_bWasInPlayerSquad, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_flTimeLastCloseToPlayer, FIELD_TIME),
-    DEFINE_EMBEDDED(m_AutoSummonTimer),
-    DEFINE_FIELD(m_vAutoSummonAnchor, FIELD_POSITION_VECTOR),
-    DEFINE_KEYFIELD(m_Type, FIELD_INTEGER, "citizentype"),
-    DEFINE_KEYFIELD(m_ExpressionType, FIELD_INTEGER, "expressiontype"),
-    DEFINE_FIELD(m_iHead, FIELD_INTEGER),
-    DEFINE_FIELD(m_flTimePlayerStare, FIELD_TIME),
-    DEFINE_FIELD(m_flTimeNextHealStare, FIELD_TIME),
-    DEFINE_FIELD(m_hSavedFollowGoalEnt, FIELD_EHANDLE),
-    DEFINE_KEYFIELD(m_bNotifyNavFailBlocked, FIELD_BOOLEAN,
-                    "notifynavfailblocked"),
-    DEFINE_KEYFIELD(m_bNeverLeavePlayerSquad, FIELD_BOOLEAN,
-                    "neverleaveplayersquad"),
-    DEFINE_KEYFIELD(m_iszDenyCommandConcept, FIELD_STRING,
-                    "denycommandconcept"),
+  DEFINE_CUSTOM_FIELD(m_nInspectActivity, ActivityDataOps()),
+      DEFINE_FIELD(m_flNextFearSoundTime, FIELD_TIME),
+      DEFINE_FIELD(m_flStopManhackFlinch, FIELD_TIME),
+      DEFINE_FIELD(m_fNextInspectTime, FIELD_TIME),
+      DEFINE_FIELD(m_flPlayerHealTime, FIELD_TIME),
+      DEFINE_FIELD(m_flNextHealthSearchTime, FIELD_TIME),
+      DEFINE_FIELD(m_flAllyHealTime, FIELD_TIME),
+      //						gm_PlayerSquadEvaluateTimer
+      //						m_AssaultBehavior
+      //						m_FollowBehavior
+      //						m_StandoffBehavior
+      //						m_LeadBehavior
+      //						m_FuncTankBehavior
+      DEFINE_FIELD(m_flPlayerGiveAmmoTime, FIELD_TIME),
+      DEFINE_KEYFIELD(m_iszAmmoSupply, FIELD_STRING, "ammosupply"),
+      DEFINE_KEYFIELD(m_iAmmoAmount, FIELD_INTEGER, "ammoamount"),
+      DEFINE_FIELD(m_bRPGAvoidPlayer, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bShouldPatrol, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_iszOriginalSquad, FIELD_STRING),
+      DEFINE_FIELD(m_flTimeJoinedPlayerSquad, FIELD_TIME),
+      DEFINE_FIELD(m_bWasInPlayerSquad, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_flTimeLastCloseToPlayer, FIELD_TIME),
+      DEFINE_EMBEDDED(m_AutoSummonTimer),
+      DEFINE_FIELD(m_vAutoSummonAnchor, FIELD_POSITION_VECTOR),
+      DEFINE_KEYFIELD(m_Type, FIELD_INTEGER, "citizentype"),
+      DEFINE_KEYFIELD(m_ExpressionType, FIELD_INTEGER, "expressiontype"),
+      DEFINE_FIELD(m_iHead, FIELD_INTEGER),
+      DEFINE_FIELD(m_flTimePlayerStare, FIELD_TIME),
+      DEFINE_FIELD(m_flTimeNextHealStare, FIELD_TIME),
+      DEFINE_FIELD(m_hSavedFollowGoalEnt, FIELD_EHANDLE),
+      DEFINE_KEYFIELD(m_bNotifyNavFailBlocked, FIELD_BOOLEAN,
+                      "notifynavfailblocked"),
+      DEFINE_KEYFIELD(m_bNeverLeavePlayerSquad, FIELD_BOOLEAN,
+                      "neverleaveplayersquad"),
+      DEFINE_KEYFIELD(m_iszDenyCommandConcept, FIELD_STRING,
+                      "denycommandconcept"),
 
-    DEFINE_OUTPUT(m_OnJoinedPlayerSquad, "OnJoinedPlayerSquad"),
-    DEFINE_OUTPUT(m_OnLeftPlayerSquad, "OnLeftPlayerSquad"),
-    DEFINE_OUTPUT(m_OnFollowOrder, "OnFollowOrder"),
-    DEFINE_OUTPUT(m_OnStationOrder, "OnStationOrder"),
-    DEFINE_OUTPUT(m_OnPlayerUse, "OnPlayerUse"),
-    DEFINE_OUTPUT(m_OnNavFailBlocked, "OnNavFailBlocked"),
+      DEFINE_OUTPUT(m_OnJoinedPlayerSquad, "OnJoinedPlayerSquad"),
+      DEFINE_OUTPUT(m_OnLeftPlayerSquad, "OnLeftPlayerSquad"),
+      DEFINE_OUTPUT(m_OnFollowOrder, "OnFollowOrder"),
+      DEFINE_OUTPUT(m_OnStationOrder, "OnStationOrder"),
+      DEFINE_OUTPUT(m_OnPlayerUse, "OnPlayerUse"),
+      DEFINE_OUTPUT(m_OnNavFailBlocked, "OnNavFailBlocked"),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "RemoveFromPlayerSquad",
-                     InputRemoveFromPlayerSquad),
-    DEFINE_INPUTFUNC(FIELD_VOID, "StartPatrolling", InputStartPatrolling),
-    DEFINE_INPUTFUNC(FIELD_VOID, "StopPatrolling", InputStopPatrolling),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SetCommandable", InputSetCommandable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SetMedicOn", InputSetMedicOn),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SetMedicOff", InputSetMedicOff),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SetAmmoResupplierOn",
-                     InputSetAmmoResupplierOn),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SetAmmoResupplierOff",
-                     InputSetAmmoResupplierOff),
-    DEFINE_INPUTFUNC(FIELD_VOID, "SpeakIdleResponse", InputSpeakIdleResponse),
+      DEFINE_INPUTFUNC(FIELD_VOID, "RemoveFromPlayerSquad",
+                       InputRemoveFromPlayerSquad),
+      DEFINE_INPUTFUNC(FIELD_VOID, "StartPatrolling", InputStartPatrolling),
+      DEFINE_INPUTFUNC(FIELD_VOID, "StopPatrolling", InputStopPatrolling),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SetCommandable", InputSetCommandable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SetMedicOn", InputSetMedicOn),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SetMedicOff", InputSetMedicOff),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SetAmmoResupplierOn",
+                       InputSetAmmoResupplierOn),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SetAmmoResupplierOff",
+                       InputSetAmmoResupplierOff),
+      DEFINE_INPUTFUNC(FIELD_VOID, "SpeakIdleResponse", InputSpeakIdleResponse),
 
 #if HL2_EPISODIC
-    DEFINE_INPUTFUNC(FIELD_VOID, "ThrowHealthKit", InputForceHealthKitToss),
+      DEFINE_INPUTFUNC(FIELD_VOID, "ThrowHealthKit", InputForceHealthKitToss),
 #endif
 
-    DEFINE_USEFUNC(CommanderUse), DEFINE_USEFUNC(SimpleUse),
+      DEFINE_USEFUNC(CommanderUse), DEFINE_USEFUNC(SimpleUse),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-    CSimpleSimTimer CNPC_Citizen::gm_PlayerSquadEvaluateTimer;
+CSimpleSimTimer CNPC_Citizen::gm_PlayerSquadEvaluateTimer;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -3673,17 +3672,17 @@ char *CitizenResponseConcepts[MAX_CITIZEN_RESPONSES] = {
 LINK_ENTITY_TO_CLASS(ai_citizen_response_system, CCitizenResponseSystem);
 
 BEGIN_DATADESC(CCitizenResponseSystem)
-DEFINE_ARRAY(m_flResponseAddedTime, FIELD_FLOAT, MAX_CITIZEN_RESPONSES),
-    DEFINE_FIELD(m_flNextResponseTime, FIELD_FLOAT),
+  DEFINE_ARRAY(m_flResponseAddedTime, FIELD_FLOAT, MAX_CITIZEN_RESPONSES),
+      DEFINE_FIELD(m_flNextResponseTime, FIELD_FLOAT),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "ResponseVitalNPC", InputResponseVitalNPC),
+      DEFINE_INPUTFUNC(FIELD_VOID, "ResponseVitalNPC", InputResponseVitalNPC),
 
-    DEFINE_THINKFUNC(ResponseThink),
-    END_DATADESC()
+      DEFINE_THINKFUNC(ResponseThink),
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
-    void CCitizenResponseSystem::Spawn() {
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void CCitizenResponseSystem::Spawn() {
   if (g_pCitizenResponseSystem) {
     Warning("Multiple citizen response systems in level.\n");
     UTIL_Remove(this);

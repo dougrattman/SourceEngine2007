@@ -12,7 +12,7 @@
 #include "igameuifuncs.h"
 #include "materialsystem/materialsystem_config.h"
 #include "modes.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 #include "tier1/KeyValues.h"
 #include "tier1/convar.h"
 #include "vgui/IInput.h"
@@ -259,12 +259,13 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     // The modes that we've seen in the wild to date are as follows (in perf
     // order, fastest to slowest)
     //
-    //								2x	4x	6x	8x	16x
-    //8x 16xQ 		Texture/Shader Samples	1	1	1	1	1
-    //1 1 		Stored Color/Z Samples	2	4	6
+    //								2x	4x	6x	8x
+    //16x
+    // 8x 16xQ 		Texture/Shader Samples	1	1	1	1
+    // 1 1 1 		Stored Color/Z Samples	2	4	6
     // 4	4 8	8
-    //		Coverage Samples		2	4	6	8	16
-    //8 16 		MSAA or CSAA			M	M
+    //		Coverage Samples		2	4	6	8
+    //16 8 16 		MSAA or CSAA			M	M
     // M	C	C M	C
     //
     //	The CSAA modes are nVidia only (added in the G80 generation of GPUs)

@@ -15,7 +15,7 @@
 #include "particledraw.h"
 #include "particles/particles.h"  // get new particle system access
 #include "particles_new.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
 #include "tier1/mempool.h"
 #include "tier1/utlintrusivelist.h"

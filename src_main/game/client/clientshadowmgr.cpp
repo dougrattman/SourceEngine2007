@@ -74,7 +74,7 @@
 #include "materialsystem/IMesh.h"
 #include "materialsystem/ITexture.h"
 #include "model_types.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
 #include "toolframework_client.h"
 #include "utlmultilist.h"

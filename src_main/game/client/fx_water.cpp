@@ -1,17 +1,15 @@
 // Copyright © 1996-2017, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
 
-#include "fx_water.h"
+#include "cbase.h"
+
 #include "ClientEffectPrecacheSystem.h"
 #include "FX_Sparks.h"
 #include "c_te_effect_dispatch.h"
-#include "cbase.h"
 #include "decals.h"
 #include "engine/IEngineSound.h"
 #include "fx.h"
 #include "fx_quad.h"
+#include "fx_water.h"
 #include "iefx.h"
 #include "particles_ez.h"
 #include "tier0/include/vprof.h"

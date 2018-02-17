@@ -40,7 +40,7 @@
 #include "saverestore.h"
 #include "saverestoretypes.h"
 #include "soundinfo.h"
-#include "tier0/ICommandLine.h"
+#include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
 #include "tier1/keyvalues.h"
 #include "toolframework/itoolframework.h"
@@ -98,12 +98,13 @@ class C_InfoLightingRelative : public C_BaseEntity {
 
 IMPLEMENT_CLIENTCLASS_DT(C_InfoLightingRelative, DT_InfoLightingRelative,
                          CInfoLightingRelative)
-RecvPropEHandle(RECVINFO(m_hLightingLandmark)), END_RECV_TABLE()
+  RecvPropEHandle(RECVINFO(m_hLightingLandmark)),
+END_RECV_TABLE()
 
-    //-----------------------------------------------------------------------------
-    // Relative lighting entity
-    //-----------------------------------------------------------------------------
-    void C_InfoLightingRelative::GetLightingOffset(matrix3x4_t &offset) {
+//-----------------------------------------------------------------------------
+// Relative lighting entity
+//-----------------------------------------------------------------------------
+void C_InfoLightingRelative::GetLightingOffset(matrix3x4_t &offset) {
   if (m_hLightingLandmark.Get()) {
     matrix3x4_t matWorldToLandmark;
     MatrixInvert(m_hLightingLandmark->EntityToWorldTransform(),
@@ -131,10 +132,11 @@ static CUtlVector<clientanimating_t> g_ClientSideAnimationList;
 
 BEGIN_RECV_TABLE_NOBASE(C_BaseAnimating, DT_ServerAnimationData)
 RecvPropFloat(RECVINFO(m_flCycle)),
-    END_RECV_TABLE()
+END_RECV_TABLE
+()
 
-        void RecvProxy_Sequence(const CRecvProxyData *pData, void *pStruct,
-                                void *pOut) {
+    void RecvProxy_Sequence(const CRecvProxyData *pData, void *pStruct,
+                            void *pOut) {
   // Have the regular proxy store the data.
   RecvProxy_Int32ToInt32(pData, pStruct, pOut);
 
@@ -149,44 +151,44 @@ RecvPropFloat(RECVINFO(m_flCycle)),
 }
 
 IMPLEMENT_CLIENTCLASS_DT(C_BaseAnimating, DT_BaseAnimating, CBaseAnimating)
-RecvPropInt(RECVINFO(m_nSequence), 0, RecvProxy_Sequence),
-    RecvPropInt(RECVINFO(m_nForceBone)), RecvPropVector(RECVINFO(m_vecForce)),
-    RecvPropInt(RECVINFO(m_nSkin)), RecvPropInt(RECVINFO(m_nBody)),
-    RecvPropInt(RECVINFO(m_nHitboxSet)),
-    RecvPropFloat(RECVINFO(m_flModelWidthScale)),
+  RecvPropInt(RECVINFO(m_nSequence), 0, RecvProxy_Sequence),
+      RecvPropInt(RECVINFO(m_nForceBone)), RecvPropVector(RECVINFO(m_vecForce)),
+      RecvPropInt(RECVINFO(m_nSkin)), RecvPropInt(RECVINFO(m_nBody)),
+      RecvPropInt(RECVINFO(m_nHitboxSet)),
+      RecvPropFloat(RECVINFO(m_flModelWidthScale)),
 
-    //	RecvPropArray(RecvPropFloat(RECVINFO(m_flPoseParameter[0])),
-    // m_flPoseParameter),
-    RecvPropArray3(RECVINFO_ARRAY(m_flPoseParameter),
-                   RecvPropFloat(RECVINFO(m_flPoseParameter[0]))),
+      //	RecvPropArray(RecvPropFloat(RECVINFO(m_flPoseParameter[0])),
+      // m_flPoseParameter),
+      RecvPropArray3(RECVINFO_ARRAY(m_flPoseParameter),
+                     RecvPropFloat(RECVINFO(m_flPoseParameter[0]))),
 
-    RecvPropFloat(RECVINFO(m_flPlaybackRate)),
+      RecvPropFloat(RECVINFO(m_flPlaybackRate)),
 
-    RecvPropArray3(RECVINFO_ARRAY(m_flEncodedController),
-                   RecvPropFloat(RECVINFO(m_flEncodedController[0]))),
+      RecvPropArray3(RECVINFO_ARRAY(m_flEncodedController),
+                     RecvPropFloat(RECVINFO(m_flEncodedController[0]))),
 
-    RecvPropInt(RECVINFO(m_bClientSideAnimation)),
-    RecvPropInt(RECVINFO(m_bClientSideFrameReset)),
+      RecvPropInt(RECVINFO(m_bClientSideAnimation)),
+      RecvPropInt(RECVINFO(m_bClientSideFrameReset)),
 
-    RecvPropInt(RECVINFO(m_nNewSequenceParity)),
-    RecvPropInt(RECVINFO(m_nResetEventsParity)),
-    RecvPropInt(RECVINFO(m_nMuzzleFlashParity)),
+      RecvPropInt(RECVINFO(m_nNewSequenceParity)),
+      RecvPropInt(RECVINFO(m_nResetEventsParity)),
+      RecvPropInt(RECVINFO(m_nMuzzleFlashParity)),
 
-    RecvPropEHandle(RECVINFO(m_hLightingOrigin)),
-    RecvPropEHandle(RECVINFO(m_hLightingOriginRelative)),
+      RecvPropEHandle(RECVINFO(m_hLightingOrigin)),
+      RecvPropEHandle(RECVINFO(m_hLightingOriginRelative)),
 
-    RecvPropDataTable("serveranimdata", 0, 0,
-                      &REFERENCE_RECV_TABLE(DT_ServerAnimationData)),
+      RecvPropDataTable("serveranimdata", 0, 0,
+                        &REFERENCE_RECV_TABLE(DT_ServerAnimationData)),
 
-    RecvPropFloat(RECVINFO(m_fadeMinDist)),
-    RecvPropFloat(RECVINFO(m_fadeMaxDist)),
-    RecvPropFloat(RECVINFO(m_flFadeScale)),
+      RecvPropFloat(RECVINFO(m_fadeMinDist)),
+      RecvPropFloat(RECVINFO(m_fadeMaxDist)),
+      RecvPropFloat(RECVINFO(m_flFadeScale)),
 
-    END_RECV_TABLE()
+END_RECV_TABLE()
 
-        BEGIN_PREDICTION_DATA(C_BaseAnimating)
+BEGIN_PREDICTION_DATA(C_BaseAnimating)
 
-            DEFINE_PRED_FIELD(m_nSkin, FIELD_INTEGER, FTYPEDESC_INSENDTABLE),
+DEFINE_PRED_FIELD(m_nSkin, FIELD_INTEGER, FTYPEDESC_INSENDTABLE),
     DEFINE_PRED_FIELD(m_nBody, FIELD_INTEGER, FTYPEDESC_INSENDTABLE),
     //	DEFINE_PRED_FIELD( m_nHitboxSet, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
     //	DEFINE_PRED_FIELD( m_flModelWidthScale, FIELD_FLOAT,
@@ -245,30 +247,31 @@ RecvPropInt(RECVINFO(m_nSequence), 0, RecvProxy_Sequence),
         LINK_ENTITY_TO_CLASS(client_ragdoll, C_ClientRagdoll);
 
 BEGIN_DATADESC(C_ClientRagdoll)
-DEFINE_FIELD(m_bFadeOut, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bImportant, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_iCurrentFriction, FIELD_INTEGER),
-    DEFINE_FIELD(m_iMinFriction, FIELD_INTEGER),
-    DEFINE_FIELD(m_iMaxFriction, FIELD_INTEGER),
-    DEFINE_FIELD(m_flFrictionModTime, FIELD_FLOAT),
-    DEFINE_FIELD(m_flFrictionTime, FIELD_TIME),
-    DEFINE_FIELD(m_iFrictionAnimState, FIELD_INTEGER),
-    DEFINE_FIELD(m_bReleaseRagdoll, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_nBody, FIELD_INTEGER), DEFINE_FIELD(m_nSkin, FIELD_INTEGER),
-    DEFINE_FIELD(m_nRenderFX, FIELD_CHARACTER),
-    DEFINE_FIELD(m_nRenderMode, FIELD_CHARACTER),
-    DEFINE_FIELD(m_clrRender, FIELD_COLOR32),
-    DEFINE_FIELD(m_flEffectTime, FIELD_TIME),
-    DEFINE_FIELD(m_bFadingOut, FIELD_BOOLEAN),
+  DEFINE_FIELD(m_bFadeOut, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bImportant, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_iCurrentFriction, FIELD_INTEGER),
+      DEFINE_FIELD(m_iMinFriction, FIELD_INTEGER),
+      DEFINE_FIELD(m_iMaxFriction, FIELD_INTEGER),
+      DEFINE_FIELD(m_flFrictionModTime, FIELD_FLOAT),
+      DEFINE_FIELD(m_flFrictionTime, FIELD_TIME),
+      DEFINE_FIELD(m_iFrictionAnimState, FIELD_INTEGER),
+      DEFINE_FIELD(m_bReleaseRagdoll, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_nBody, FIELD_INTEGER),
+      DEFINE_FIELD(m_nSkin, FIELD_INTEGER),
+      DEFINE_FIELD(m_nRenderFX, FIELD_CHARACTER),
+      DEFINE_FIELD(m_nRenderMode, FIELD_CHARACTER),
+      DEFINE_FIELD(m_clrRender, FIELD_COLOR32),
+      DEFINE_FIELD(m_flEffectTime, FIELD_TIME),
+      DEFINE_FIELD(m_bFadingOut, FIELD_BOOLEAN),
 
-    DEFINE_AUTO_ARRAY(m_flScaleEnd, FIELD_FLOAT),
-    DEFINE_AUTO_ARRAY(m_flScaleTimeStart, FIELD_FLOAT),
-    DEFINE_AUTO_ARRAY(m_flScaleTimeEnd, FIELD_FLOAT),
-    DEFINE_EMBEDDEDBYREF(m_pRagdoll),
+      DEFINE_AUTO_ARRAY(m_flScaleEnd, FIELD_FLOAT),
+      DEFINE_AUTO_ARRAY(m_flScaleTimeStart, FIELD_FLOAT),
+      DEFINE_AUTO_ARRAY(m_flScaleTimeEnd, FIELD_FLOAT),
+      DEFINE_EMBEDDEDBYREF(m_pRagdoll),
 
-    END_DATADESC()
+END_DATADESC()
 
-        C_ClientRagdoll::C_ClientRagdoll(bool bRestoring) {
+C_ClientRagdoll::C_ClientRagdoll(bool bRestoring) {
   m_iCurrentFriction = 0;
   m_iFrictionAnimState = RAGDOLL_FRICTION_NONE;
   m_bReleaseRagdoll = false;
@@ -808,7 +811,8 @@ void C_BaseAnimating::LockStudioHdr() {
 
       if (pStudioHdrContainer && pStudioHdrContainer->GetVirtualModel()) {
         MDLHandle_t hVirtualModel =
-            (MDLHandle_t)(uintptr_t)pStudioHdrContainer->GetRenderHdr()->virtualModel;
+            (MDLHandle_t)(uintptr_t)pStudioHdrContainer->GetRenderHdr()
+                ->virtualModel;
         mdlcache->LockStudioHdr(hVirtualModel);
       }
       m_pStudioHdr = pStudioHdrContainer;  // must be last to ensure virtual
@@ -4851,12 +4855,11 @@ class C_BoneFollower : public C_BaseEntity {
 };
 
 IMPLEMENT_CLIENTCLASS_DT(C_BoneFollower, DT_BoneFollower, CBoneFollower)
-RecvPropInt(RECVINFO(m_modelIndex)), RecvPropInt(RECVINFO(m_solidIndex)),
-    END_RECV_TABLE()
+  RecvPropInt(RECVINFO(m_modelIndex)), RecvPropInt(RECVINFO(m_solidIndex)),
+END_RECV_TABLE()
 
-        void VCollideWireframe_ChangeCallback(IConVar *pConVar,
-                                              char const *pOldString,
-                                              float flOldValue) {
+void VCollideWireframe_ChangeCallback(IConVar *pConVar, char const *pOldString,
+                                      float flOldValue) {
   for (C_BaseEntity *pEntity = ClientEntityList().FirstBaseEntity(); pEntity;
        pEntity = ClientEntityList().NextBaseEntity(pEntity)) {
     pEntity->UpdateVisibility();
