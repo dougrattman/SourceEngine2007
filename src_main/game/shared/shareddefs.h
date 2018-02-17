@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Definitions that are shared by the game DLL and the client DLL.
 //

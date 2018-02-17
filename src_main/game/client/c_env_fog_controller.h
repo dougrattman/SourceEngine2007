@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef C_ENV_FOG_CONTROLLER_H
 #define C_ENV_FOG_CONTROLLER_H

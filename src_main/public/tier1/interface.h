@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // This header defines the interface convention used in the valve engine.
 // To make an interface and expose it:

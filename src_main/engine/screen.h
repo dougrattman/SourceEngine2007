@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #if !defined(SCREEN_H)
 #define SCREEN_H

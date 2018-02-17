@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Definitions of all the entities that control logic flow within a map
 //

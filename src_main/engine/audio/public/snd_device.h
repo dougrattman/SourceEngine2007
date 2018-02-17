@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This abstracts the various hardware dependent implementations of
 // sound At the time of this writing there are Windows WAVEOUT, Direct Sound,

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: An effect for a single bullet passing through a body of water.
 //			The slug quickly decelerates, leaving a trail of bubbles behind it.

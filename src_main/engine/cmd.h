@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // cmd.h -- Command buffer and command execution
 // Any number of commands can be added in a frame, from several different

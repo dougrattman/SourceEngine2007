@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Local header for CVTFTexture class declaration - allows
 // platform-specific implementation to be placed in separate cpp files.

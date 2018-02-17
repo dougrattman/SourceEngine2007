@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Image Byte Swapping. Isolate routines to own module to allow
 // librarian to ignore xbox 360 dependenices in non-applicable win32 projects.

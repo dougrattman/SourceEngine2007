@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A helper that repesents a player hull swept through space between a
 //			start and end point. It writes out both points as keyvalues to the entity.

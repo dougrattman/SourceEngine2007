@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_LAUNCHER_VCR_HELPERS_H_
 #define SOURCE_LAUNCHER_VCR_HELPERS_H_

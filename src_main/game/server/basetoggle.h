@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: For the slow removing of the CBaseToggle entity
 // only old entities that need it for backwards-compatibility should

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Behavior for NPCs riding in cars (with boys)
 
@@ -169,7 +169,8 @@ void CAI_PassengerBehavior::AddPhysicsPush(float force) {
   impulse.z = -0.75;
   VectorNormalize( impulse );
   Vector vecForce = impulse * force;
-  
+  
+
   m_hVehicle->VPhysicsGetObject()->ApplyForceOffset( vecForce,
   GetOuter()->GetAbsOrigin() );
   */

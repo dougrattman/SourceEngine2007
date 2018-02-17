@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef NETMESSAGES_H
 #define NETMESSAGES_H
@@ -551,7 +551,13 @@ class SVC_EntityMessage : public CNetMessage {
         DECLARE_SVC_MESSAGE( SpawnBaseline );
 
         int	GetGroup() const { return INetChannelInfo::SIGNON; }
-        
+        
+
+
+
+
+
+
 
 
 
@@ -588,7 +594,13 @@ public:
         int m_nLength;
         bf_read		m_DataIn;
         bf_write	m_DataOut;
-        
+        
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: used by all .exe's that run under steam and out,
 // so they can be launched indirectly by steam and launch steam themselves

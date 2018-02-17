@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Uses mp3 code from:
 // http://www.codeproject.com/audio/MPEGAudioInfo.asp

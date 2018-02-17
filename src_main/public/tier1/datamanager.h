@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_RESOURCEMANAGER_H_
 #define SOURCE_TIER1_RESOURCEMANAGER_H_

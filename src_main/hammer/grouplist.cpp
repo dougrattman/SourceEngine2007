@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements a list view for visgroups. Supports drag and drop, and
 //			posts a registered windows message to the list view's parent window

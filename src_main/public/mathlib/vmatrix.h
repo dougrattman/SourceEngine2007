@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // VMatrix always postmultiply vectors as in Ax = b.
 // Given a set of basis vectors ((F)orward, (L)eft, (U)p), and a (T)ranslation,

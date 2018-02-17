@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: LIFO from disassembly of Windows API and
 // http://perso.wanadoo.fr/gmem/evenements/jim2002/articles/L17_Fober.pdf

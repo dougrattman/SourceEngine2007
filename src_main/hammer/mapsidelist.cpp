@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements a helper that manages a single keyvalue of type "side"
 //			or "sidelist" for the entity that is its parent.

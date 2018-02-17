@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef LAUNCHER_SCOPED_MEMORY_LEAK_DUMPER_
 #define LAUNCHER_SCOPED_MEMORY_LEAK_DUMPER_

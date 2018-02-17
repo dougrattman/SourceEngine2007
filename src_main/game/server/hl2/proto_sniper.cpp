@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -3034,7 +3034,8 @@ bool CSniperBullet::Start(const Vector &vecOrigin, const Vector &vecTarget,
 
           trace_t	tr;
 
-          
+          
+
           // Elapsed time counts how long the bullet is in motion through this
   simulation. float flElapsedTime = 0;
 
@@ -3100,7 +3101,8 @@ bool CSniperBullet::Start(const Vector &vecOrigin, const Vector &vecTarget,
   to penetrate. #ifdef SNIPER_DEBUG Msg( "SNIPER STARTSOLID\n" ); #endif break;
                   }
   #endif
-                  
+                  
+
                   // Now put the bullet at this point and continue.
                   UTIL_SetOrigin( this, vecCursor );
           }

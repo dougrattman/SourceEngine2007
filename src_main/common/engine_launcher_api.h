@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ENGINE_LAUNCHER_API_H_
 #define ENGINE_LAUNCHER_API_H_

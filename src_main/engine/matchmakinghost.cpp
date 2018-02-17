@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Handles joining clients together in a matchmaking session before a
 // multiplayer game, tracking new players and dropped players during the

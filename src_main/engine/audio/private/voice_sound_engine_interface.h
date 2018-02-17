@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef VOICE_SOUND_ENGINE_INTERFACE_H
 #define VOICE_SOUND_ENGINE_INTERFACE_H

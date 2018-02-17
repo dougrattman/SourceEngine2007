@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 // These classes let you write your own allocators to be used with new and
 // delete. If you have an allocator: VAllocator *pAlloc, you can call new and
 // delete like this:

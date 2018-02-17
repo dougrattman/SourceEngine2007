@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Has init functions for all the standard render targets used by most games.
 // Mods who wish to make their own render targets can inherit from this class

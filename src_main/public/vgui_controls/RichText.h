@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef RICHTEXT_H
 #define RICHTEXT_H
@@ -91,7 +91,10 @@ input:	"text"	- text is set to be this string
   /* MESSAGE SENDING (to action signal targets)
           "TextChanged"	- sent when the text is edited by the user
 
-          
+          
+
+
+
           "TextClicked"	- sent when clickable text has been clicked on
 "text"	- the text that was clicked on
   */

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER2_RIFF_H_
 #define SOURCE_TIER2_RIFF_H_

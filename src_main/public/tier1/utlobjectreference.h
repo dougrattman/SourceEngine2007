@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: class for keeping track of all the references that exist to an
 // object.  When the object being referenced is freed, all of the pointers

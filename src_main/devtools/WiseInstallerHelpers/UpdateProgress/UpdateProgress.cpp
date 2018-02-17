@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A simple app which looks for the HL2 wise installer and ticks the progress bar due
 //  to a bug with installing more than 2GB of data using the current ver of the windows installer

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_VGUI2_VGUI_SURFACE_LIB_WIN32FONT_H_
 #define SOURCE_VGUI2_VGUI_SURFACE_LIB_WIN32FONT_H_

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 // This file contains a little interface to deal with pooled vertex buffer
 // allocations (which is used to allow multiple meshes to own sub-ranges within
 // a single vertex buffer)

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef COMMON_HLSL_CONSTS_H_
 #define COMMON_HLSL_CONSTS_H_

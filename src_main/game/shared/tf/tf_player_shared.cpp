@@ -1,4 +1,4 @@
-﻿// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+﻿// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -1057,7 +1057,8 @@ void CTFPlayerShared::OnAddBurning(void) {
 
   /*
 #ifdef GAME_DLL
-  
+  
+
   if ( player == robin || player == cook )
   {
           CSingleUserRecipientFilter filter( m_pOuter );

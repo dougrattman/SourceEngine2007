@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ====
+// Copyright © 1996-2018, Valve Corporation, All rights reserved. ====
 //
 // Purpose: Implements an owner-draw combo box containing the names and thumbnail
 //			images of textures. The textures are gotten from the global texture

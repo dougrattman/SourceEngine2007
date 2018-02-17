@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef LAUNCHER_FILE_SYSTEM_ACCESS_LOGGER_H_
 #define LAUNCHER_FILE_SYSTEM_ACCESS_LOGGER_H_

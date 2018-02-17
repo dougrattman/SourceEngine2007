@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // LZSS Codec. Designed for fast cheap gametime encoding/decoding.
 // Compression results are	not aggresive as other alogrithms, but gets 2:1

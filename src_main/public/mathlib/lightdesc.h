@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 // light structure definitions.
 #ifndef SOURCE_MATHLIB_LIGHTDESC_H_

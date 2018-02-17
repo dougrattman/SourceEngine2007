@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines an interface for circular buffers. Data can be written to
 // and read from these buffers as though from a file. When it is

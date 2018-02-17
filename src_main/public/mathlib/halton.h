@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // halton.h - classes, etc for generating numbers using the Halton pseudo-random
 // sequence.  See http://halton-sequences.wikiverse.org/.

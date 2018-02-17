@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Instead of cloning all physics objects in a level to get proper
 //			near-portal reactions, only clone from a larger area near portals.

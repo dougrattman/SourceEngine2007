@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Pulling CCollisionEvent's definition out of physics.cpp so it can be
 // abstracted upon (for the portal mod)

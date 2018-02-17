@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_
 #define BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_

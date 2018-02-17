@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Save game read and write. Any *.hl? files may be stored in memory,
 // so use g_pSaveRestoreFileSystem when accessing them. The .sav

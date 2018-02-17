@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements the groups page of the Object Properties dialog. This
 //			allows the user to edit which visgroups the selected objects belong to.

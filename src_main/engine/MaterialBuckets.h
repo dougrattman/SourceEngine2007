@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This is a helper class for the situation where you want to build
 // lists of things that fall into buckets, and effeciently keep up with which

@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // @Note (toml 12-02-02): For now, all of the methods in the types defined here
 // are inline to permit simple cross-DLL usage

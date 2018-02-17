@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Dr. Kleiner, a suave ladies man leading the fight against the evil 
 //			combine while constantly having to help his idiot assistant Gordon

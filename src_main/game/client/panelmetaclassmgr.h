@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A panel "metaclass" is a name given to a particular type of
 // panel with particular instance data. Such panels tend to be dynamically

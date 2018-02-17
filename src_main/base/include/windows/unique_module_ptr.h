@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_INCLUDE_WINDOWS_UNIQUE_MODULE_PTR_H_
 #define BASE_INCLUDE_WINDOWS_UNIQUE_MODULE_PTR_H_

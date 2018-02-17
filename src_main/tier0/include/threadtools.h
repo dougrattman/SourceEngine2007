@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A collection of utility classes to simplify thread handling, and
 // as much as possible contain portability problems. Here avoiding

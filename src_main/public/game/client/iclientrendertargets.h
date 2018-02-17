@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Exposes interfaces to the engine which allow the client to setup
 // their own render targets during the proper period of material system's init.

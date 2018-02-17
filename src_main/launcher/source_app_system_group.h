@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef LAUNCHER_SOURCE_APP_SYSTEM_GROUP_H_
 #define LAUNCHER_SOURCE_APP_SYSTEM_GROUP_H_

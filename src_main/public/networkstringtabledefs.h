@@ -1,4 +1,4 @@
-// Copyright © 1996-2017, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef NETWORKSTRINGTABLEDEFS_H
 #define NETWORKSTRINGTABLEDEFS_H

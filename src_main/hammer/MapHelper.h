@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines a base class for all helper objects. Helper objects are
 //			subordinate to their entity parents, and provide services such as

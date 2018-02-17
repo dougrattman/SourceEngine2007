@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2007, Valve LLC, All rights reserved. ============
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: XBox VXConsole Common. Used for public remote access items.
 //
