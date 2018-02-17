@@ -5,6 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_TIER3APP_H_
 #define SOURCE_APPFRAMEWORK_TIER3APP_H_
 
+#include "base/include/base_types.h"
+
 #include "appframework/tier2app.h"
 #include "tier3/tier3.h"
 #include "vgui_controls/Controls.h"

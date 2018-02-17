@@ -5,6 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 #define SOURCE_APPFRAMEWORK_APPFRAMEWORK_H_
 
+#include "base/include/base_types.h"
+
 #include "appframework/iappsystemgroup.h"
 
 // Gets the application instance.
@@ -15,28 +17,26 @@ void *GetAppInstance();
 void SetAppInstance(void *instance);
 
 // Main entry point for the application.
-int AppMain(void *instance, void *prev_instance, const char *cmd_line,
-            int cmd_show, CAppSystemGroup *app_system_group);
-int AppMain(int argc, char **argv, CAppSystemGroup *app_system_group);
+i32 AppMain(void *instance, void *prev_instance, const ch *cmd_line,
+            i32 cmd_show, CAppSystemGroup *app_system_group);
+i32 AppMain(i32 argc, ch **argv, CAppSystemGroup *app_system_group);
 
 // Used to startup/shutdown the application.
-int AppStartup(void *instance, void *prev_instance, const char *cmd_line,
-               int cmd_show, CAppSystemGroup *pAppSystemGroup);
-int AppStartup(int argc, char **argv, CAppSystemGroup *app_system_group);
+i32 AppStartup(void *instance, void *prev_instance, const ch *cmd_line,
+               i32 cmd_show, CAppSystemGroup *pAppSystemGroup);
+i32 AppStartup(i32 argc, ch **argv, CAppSystemGroup *app_system_group);
 void AppShutdown(CAppSystemGroup *app_system_group);
 
 // Macros to create singleton application objects for windowed + console apps.
 #define DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(_globalVarName) \
-  int __stdcall WinMain(HINSTANCE instance, HINSTANCE prev_instance, \
-                        LPSTR cmd_line, int cmd_show) {              \
+  i32 __stdcall WinMain(HINSTANCE instance, HINSTANCE prev_instance, \
+                        LPSTR cmd_line, i32 cmd_show) {              \
     return AppMain(instance, prev_instance, cmd_line, cmd_show,      \
                    &_globalVarName);                                 \
   }
 
 #define DEFINE_CONSOLE_APPLICATION_OBJECT_GLOBALVAR(_globalVarName) \
-  int main(int argc, char **argv) {                                 \
-    return AppMain(argc, argv, &_globalVarName);                    \
-  }
+  i32 main(i32 argc, ch **argv) { return AppMain(argc, argv, &_globalVarName); }
 
 #define DEFINE_WINDOWED_APPLICATION_OBJECT(_className) \
   static _className __s_ApplicationObject;             \
@@ -58,13 +58,13 @@ class CSteamApplication : public CAppSystemGroup {
   // Implementation of IAppSystemGroup.
   bool Create() override;
   bool PreInit() override;
-  int Main() override;
+  i32 Main() override;
   void PostShutdown() override;
   void Destroy() override;
 
   // Use this version in cases where you can't control the main loop and
   // expect to be ticked.
-  int Startup() override;
+  i32 Startup() override;
   void Shutdown() override;
 
  protected:

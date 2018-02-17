@@ -5,6 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
 #define SOURCE_APPFRAMEWORK_IAPPSYSTEM_H_
 
+#include "base/include/base_types.h"
+
 #include "tier1/interface.h"
 
 // Client systems are singleton objects in the client code base responsible for
@@ -25,8 +27,8 @@ abstract_class IAppSystem {
   virtual void Disconnect() = 0;
 
   // Here's where systems can access other interfaces implemented by this object
-  // Returns NULL if it doesn't implement the requested interface.
-  virtual void *QueryInterface(const char *interface_name) = 0;
+  // Returns nullptr if it doesn't implement the requested interface.
+  virtual void *QueryInterface(const ch *interface_name) = 0;
 
   // Init, shutdown.
   virtual InitReturnVal_t Init() = 0;
@@ -42,8 +44,8 @@ class CBaseAppSystem : public IInterface {
   virtual void Disconnect() {}
 
   // Here's where systems can access other interfaces implemented by this object
-  // Returns NULL if it doesn't implement the requested interface.
-  virtual void *QueryInterface(const char *interface_name) { return nullptr; }
+  // Returns nullptr if it doesn't implement the requested interface.
+  virtual void *QueryInterface(const ch *interface_name) { return nullptr; }
 
   // Init, shutdown.
   virtual InitReturnVal_t Init() { return INIT_OK; }
@@ -80,8 +82,8 @@ abstract_class IAppSystemV0 {
   virtual void Disconnect() = 0;
 
   // Here's where systems can access other interfaces implemented by this object
-  // Returns NULL if it doesn't implement the requested interface.
-  virtual void *QueryInterface(const char *interface_name) = 0;
+  // Returns nullptr if it doesn't implement the requested interface.
+  virtual void *QueryInterface(const ch *interface_name) = 0;
 
   // Init, shutdown.
   virtual InitReturnVal_t Init() = 0;

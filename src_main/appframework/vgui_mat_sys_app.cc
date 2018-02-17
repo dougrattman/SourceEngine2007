@@ -5,9 +5,8 @@
 // Valve, L.L.C., or in accordance with the terms and conditions stipulated in
 // the agreement/contract under which the contents have been supplied.
 
-#ifdef _WIN32
-
 #include "base/include/windows/windows_light.h"
+#include "build/include/build_config.h"
 
 #include "appframework/vguimatsysapp.h"
 
@@ -26,7 +25,6 @@
 #include "vgui/IVGui.h"
 #include "vgui_controls/controls.h"
 
-// memdbgon must be the last include file in a .cc file!!!
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -70,14 +68,15 @@ void CVguiMatSysApp::Destroy() {}
 //-----------------------------------------------------------------------------
 // Window management
 //-----------------------------------------------------------------------------
-void *CVguiMatSysApp::CreateAppWindow(char const *pTitle, bool bWindowed, int w,
-                                      int h) {
+void *CVguiMatSysApp::CreateAppWindow(ch const *pTitle, bool bWindowed, i32 w,
+                                      i32 h) {
   WNDCLASSEX wc{sizeof(wc)};
   wc.style = CS_OWNDC | CS_DBLCLKS;
   wc.lpfnWndProc = DefWindowProc;
   wc.hInstance = (HINSTANCE)GetAppInstance();
   wc.lpszClassName = "Valve001";
-  wc.hIcon = NULL;  // LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
+  wc.hIcon =
+      nullptr;  // LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
   wc.hIconSm = wc.hIcon;
 
   RegisterClassEx(&wc);
@@ -106,12 +105,12 @@ void *CVguiMatSysApp::CreateAppWindow(char const *pTitle, bool bWindowed, int w,
   // Create the window
   void *hWnd = CreateWindow(wc.lpszClassName, pTitle, style, 0, 0,
                             windowRect.right - windowRect.left,
-                            windowRect.bottom - windowRect.top, NULL, NULL,
-                            (HINSTANCE)GetAppInstance(), NULL);
+                            windowRect.bottom - windowRect.top, nullptr,
+                            nullptr, (HINSTANCE)GetAppInstance(), nullptr);
 
-  if (!hWnd) return NULL;
+  if (!hWnd) return nullptr;
 
-  int CenterX, CenterY;
+  i32 CenterX, CenterY;
 
   CenterX = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
   CenterY = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
@@ -120,7 +119,7 @@ void *CVguiMatSysApp::CreateAppWindow(char const *pTitle, bool bWindowed, int w,
 
   // In VCR modes, keep it in the upper left so mouse coordinates are always
   // relative to the window.
-  SetWindowPos((HWND)hWnd, NULL, CenterX, CenterY, 0, 0,
+  SetWindowPos((HWND)hWnd, nullptr, CenterX, CenterY, 0, 0,
                SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW | SWP_DRAWFRAME);
 
   return hWnd;
@@ -134,7 +133,7 @@ void CVguiMatSysApp::AppPumpMessages() { g_pInputSystem->PollInputState(); }
 //-----------------------------------------------------------------------------
 // Sets up the game path
 //-----------------------------------------------------------------------------
-bool CVguiMatSysApp::SetupSearchPaths(const char *pStartingDir,
+bool CVguiMatSysApp::SetupSearchPaths(const ch *pStartingDir,
                                       bool bOnlyUseStartingDir, bool bIsTool) {
   if (!BaseClass::SetupSearchPaths(pStartingDir, bOnlyUseStartingDir, bIsTool))
     return false;
@@ -157,12 +156,12 @@ bool CVguiMatSysApp::PreInit() {
   }
 
   // Add paths...
-  if (!SetupSearchPaths(NULL, false, true)) return false;
+  if (!SetupSearchPaths(nullptr, false, true)) return false;
 
-  const char *pArg;
-  int iWidth = 1024;
-  int iHeight = 768;
-  bool bWindowed = (CommandLine()->CheckParm("-fullscreen") == NULL);
+  const ch *pArg;
+  i32 iWidth = 1024;
+  i32 iHeight = 768;
+  bool bWindowed = (CommandLine()->CheckParm("-fullscreen") == nullptr);
   if (CommandLine()->CheckParm("-width", &pArg)) {
     iWidth = atoi(pArg);
   }
@@ -183,13 +182,13 @@ bool CVguiMatSysApp::PreInit() {
   // m_pMaterialSystem->SetShaderAPI( "shaderapidx8" );
 
   // Get the adapter from the command line....
-  const char *pAdapterString;
-  int adapter = 0;
+  const ch *pAdapterString;
+  i32 adapter = 0;
   if (CommandLine()->CheckParm("-adapter", &pAdapterString)) {
     adapter = atoi(pAdapterString);
   }
 
-  int adapterFlags = 0;
+  i32 adapterFlags = 0;
   if (CommandLine()->CheckParm("-ref")) {
     adapterFlags |= MATERIAL_INIT_REFERENCE_RASTERIZER;
   }
@@ -204,7 +203,7 @@ bool CVguiMatSysApp::PreInit() {
 
 void CVguiMatSysApp::PostShutdown() {
   if (g_pMatSystemSurface && g_pInputSystem) {
-    g_pMatSystemSurface->AttachToWindow(NULL);
+    g_pMatSystemSurface->AttachToWindow(nullptr);
     g_pInputSystem->DetachFromWindow();
   }
 
@@ -214,9 +213,9 @@ void CVguiMatSysApp::PostShutdown() {
 //-----------------------------------------------------------------------------
 // Gets the window size
 //-----------------------------------------------------------------------------
-int CVguiMatSysApp::GetWindowWidth() const { return m_nWidth; }
+i32 CVguiMatSysApp::GetWindowWidth() const { return m_nWidth; }
 
-int CVguiMatSysApp::GetWindowHeight() const { return m_nHeight; }
+i32 CVguiMatSysApp::GetWindowHeight() const { return m_nHeight; }
 
 //-----------------------------------------------------------------------------
 // Returns the window
@@ -257,5 +256,3 @@ bool CVguiMatSysApp::SetVideoMode() {
   g_pMaterialSystem->OverrideConfig(config, false);
   return true;
 }
-
-#endif  // _WIN32

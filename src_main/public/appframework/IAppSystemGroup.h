@@ -6,6 +6,8 @@
 #ifndef SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
 #define SOURCE_APPFRAMEWORK_IAPPSYSTEMGROUP_H_
 
+#include "base/include/base_types.h"
+
 #include <type_traits>
 #include "appframework/iappsystem.h"
 #include "tier0/include/basetypes.h"
@@ -19,7 +21,7 @@ class IBaseInterface;
 class IFileSystem;
 
 // Handle to a module.
-using AppModule_t = int;
+using AppModule_t = i32;
 
 enum { APP_MODULE_INVALID = static_cast<AppModule_t>(~0) };
 
@@ -38,7 +40,7 @@ abstract_class IAppSystemGroup {
   virtual bool PreInit() = 0;
 
   // Main loop implemented by the application.
-  virtual int Main() = 0;
+  virtual i32 Main() = 0;
 
   // Allow the application to do some work after all AppSystems are shut down.
   virtual void PostShutdown() = 0;
@@ -50,15 +52,15 @@ abstract_class IAppSystemGroup {
 
 // Specifies a module + interface name for initialization.
 struct AppSystemInfo_t {
-  const char *m_pModuleName;
-  const char *m_pInterfaceName;
+  const ch *m_pModuleName;
+  const ch *m_pInterfaceName;
 };
 
 // This class represents a group of app systems that all have the same lifetime
 // that need to be connected/initialized, etc. in a well-defined order.
 class CAppSystemGroup : public IAppSystemGroup {
-  friend void *AppSystemCreateInterfaceFn(const char *interface_name,
-                                          int *return_code);
+  friend void *AppSystemCreateInterfaceFn(const ch *interface_name,
+                                          i32 *return_code);
   friend class CSteamAppSystemGroup;
 
  public:
@@ -82,11 +84,11 @@ class CAppSystemGroup : public IAppSystemGroup {
   // Runs the app system group. First, modules are loaded, next they are
   // connected, followed by initialization Then Main() is run Then modules are
   // shut down, disconnected, and unloaded.
-  int Run();
+  i32 Run();
 
   // Use this version in cases where you can't control the main loop and
   // expect to be ticked.
-  virtual int Startup();
+  virtual i32 Startup();
   virtual void Shutdown();
 
   // Returns the stage at which the app system group ran into an error.
@@ -96,32 +98,32 @@ class CAppSystemGroup : public IAppSystemGroup {
   // These methods are meant to be called by derived classes of CAppSystemGroup.
 
   // Methods to load + unload modules.
-  AppModule_t LoadModule(const char *module_name);
+  AppModule_t LoadModule(const ch *module_name);
   AppModule_t LoadModule(CreateInterfaceFn factory);
 
   // Method to add various global singleton systems.
-  IAppSystem *AddSystem(AppModule_t module, const char *interface_name);
+  IAppSystem *AddSystem(AppModule_t module, const ch *interface_name);
 
   // Method to add various global singleton typed systems.
   template <typename T>
-  T *AddSystem(AppModule_t module, const char *interface_name) {
+  T *AddSystem(AppModule_t module, const ch *interface_name) {
     static_assert(std::is_base_of<IAppSystem, T>::value,
                   "T should be IAppSystem");
     return static_cast<T *>(AddSystem(module, interface_name));
   }
 
-  void AddSystem(IAppSystem *app_system, const char *interface_name);
+  void AddSystem(IAppSystem *app_system, const ch *interface_name);
 
   // Simpler method of doing the LoadModule/AddSystem thing.
-  // Make sure the last AppSystemInfo has a NULL module name.
+  // Make sure the last AppSystemInfo has a nullptr module name.
   bool AddSystems(AppSystemInfo_t *systems);
 
   // Method to look up a particular named system.
-  void *FindSystem(const char *interface_name);
+  void *FindSystem(const ch *interface_name);
 
   // Method to look up a particular named typed system.
   template <typename T>
-  T *FindSystem(const char *interface_name) {
+  T *FindSystem(const ch *interface_name) {
     static_assert(std::is_base_of<IAppSystem, T>::value,
                   "T should be IAppSystem");
     return static_cast<T *>(FindSystem(interface_name));
@@ -132,7 +134,7 @@ class CAppSystemGroup : public IAppSystemGroup {
   static CreateInterfaceFn GetFactory();
 
  private:
-  int OnStartup();
+  i32 OnStartup();
   void OnShutdown();
 
   void UnloadAllModules();
@@ -150,19 +152,19 @@ class CAppSystemGroup : public IAppSystemGroup {
   CAppSystemGroup *GetParent();
 
   // Loads a module the standard way.
-  virtual CSysModule *LoadModuleDLL(const char *module_dll_name);
+  virtual CSysModule *LoadModuleDLL(const ch *module_dll_name);
 
-  void ReportStartupFailure(int error_stage, int system_index);
+  void ReportStartupFailure(i32 error_stage, i32 system_index);
 
   struct Module_t {
     CSysModule *m_pModule;
     CreateInterfaceFn m_Factory;
-    char *m_pModuleName;
+    ch *m_pModuleName;
   };
 
   CUtlVector<Module_t> m_Modules;
   CUtlVector<IAppSystem *> m_Systems;
-  CUtlDict<int, unsigned short> m_SystemDict;
+  CUtlDict<i32, u16> m_SystemDict;
   CAppSystemGroup *m_pParentAppSystem;
   AppSystemGroupStage_t m_nErrorStage;
 };
@@ -179,18 +181,18 @@ class CSteamAppSystemGroup : public CAppSystemGroup {
 
  protected:
   // Sets up the search paths.
-  bool SetupSearchPaths(const char *start_dir, bool use_only_start_dir,
+  bool SetupSearchPaths(const ch *start_dir, bool use_only_start_dir,
                         bool is_tool);
 
   // Returns the game info path. Only works if you've called SetupSearchPaths
   // first.
-  const char *GetGameInfoPath() const;
+  const ch *GetGameInfoPath() const;
 
  private:
-  virtual CSysModule *LoadModuleDLL(const char *module_dll_name);
+  virtual CSysModule *LoadModuleDLL(const ch *module_dll_name);
 
   IFileSystem *m_pFileSystem;
-  char m_pGameInfoPath[MAX_PATH];
+  ch m_pGameInfoPath[MAX_PATH];
 };
 
 // Helper empty decorator implementation of an IAppSystemGroup.
@@ -222,8 +224,8 @@ class CFSSteamSetupInfo;
 //   was successfully copied into the provided buffer.
 //   Returns "false" otherwise, interpreted that no suggestion will be used.
 using SuggestGameInfoDirFn_t =
-    bool (*)(CFSSteamSetupInfo const *fs_steam_setup_info, char *path_buffer,
-             int buffer_length, bool *should_bubble_dirs);
+    bool (*)(CFSSteamSetupInfo const *fs_steam_setup_info, ch *path_buffer,
+             i32 buffer_length, bool *should_bubble_dirs);
 
 // SetSuggestGameInfoDirFn.
 // Installs the supplied game info directory suggestion function.

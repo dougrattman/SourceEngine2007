@@ -3,20 +3,23 @@
 #undef PROTECTED_THINGS_ENABLE
 #undef PROTECT_FILEIO_FUNCTIONS
 
-#ifndef _LINUX
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
+#ifndef OS_POSIX
 #undef fopen
 #endif
 
 #include "filesystem_init.h"
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #include <direct.h>
 #include <io.h>
 #include <process.h>
 #include <sys/stat.h>
 #include <cstdio>
 #include "base/include/windows/windows_light.h"
-#elif _LINUX
+#elif defined(OS_POSIX)
 #include <unistd.h>
 #define _putenv putenv
 #define _chdir chdir
@@ -29,13 +32,12 @@
 #include "tier1/smartptr.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define GAMEINFO_FILENAME "gameinfo.txt"
 #define GAMEINFO_FILENAME_ALTERNATE "gameinfo.txt"
 
-static char g_FileSystemError[256];
+static ch g_FileSystemError[256];
 static bool s_bUseVProjectBinDir = false;
 static FSErrorMode_t g_FileSystemErrorMode = FS_ERRORMODE_VCONFIG;
 
@@ -48,16 +50,16 @@ void FileSystem_UseVProjectBinDir(bool bEnable) {
 // original value when it goes out of scope.
 class CTempEnvVar {
  public:
-  CTempEnvVar(const char *pVarName) {
+  CTempEnvVar(const ch *pVarName) {
     m_bRestoreOriginalValue = true;
     m_pVarName = pVarName;
 
-    const char *pValue = NULL;
+    const ch *pValue = nullptr;
 
-#ifdef _WIN32
+#ifdef OS_WIN
     // Use GetEnvironmentVariable instead of getenv because getenv doesn't pick
     // up changes to the process environment after the DLL was loaded.
-    char szBuf[4096];
+    ch szBuf[4096];
     if (GetEnvironmentVariable(m_pVarName, szBuf, sizeof(szBuf)) != 0) {
       pValue = szBuf;
     }
@@ -90,16 +92,16 @@ class CTempEnvVar {
     m_bRestoreOriginalValue = bRestore;
   }
 
-  int GetValue(char *pszBuf, int nBufSize) {
+  i32 GetValue(ch *pszBuf, i32 nBufSize) {
     if (!pszBuf || (nBufSize <= 0)) return 0;
 
-#ifdef _WIN32
+#ifdef OS_WIN
     // Use GetEnvironmentVariable instead of getenv because getenv doesn't pick
     // up changes to the process environment after the DLL was loaded.
     return GetEnvironmentVariable(m_pVarName, pszBuf, nBufSize);
 #else
     // LINUX BUG: see above
-    const char *pszOut = getenv(m_pVarName);
+    const ch *pszOut = getenv(m_pVarName);
     if (!pszOut) {
       *pszBuf = '\0';
       return 0;
@@ -110,29 +112,29 @@ class CTempEnvVar {
 #endif
   }
 
-  bool SetValue(const char *pValue, ...) {
-    char valueString[4096];
+  bool SetValue(const ch *pValue, ...) {
+    ch valueString[4096];
     va_list marker;
     va_start(marker, pValue);
     Q_vsnprintf(valueString, sizeof(valueString), pValue, marker);
     va_end(marker);
 
-    char str[4096];
+    ch str[4096];
     Q_snprintf(str, sizeof(str), "%s=%s", m_pVarName, valueString);
     return _putenv(str) == 0;
   }
 
   bool ClearValue() {
-    char str[512];
+    ch str[512];
     Q_snprintf(str, sizeof(str), "%s=", m_pVarName);
     return _putenv(str) == 0;
   }
 
  private:
   bool m_bRestoreOriginalValue;
-  const char *m_pVarName;
+  const ch *m_pVarName;
   bool m_bExisted;
-  CUtlVector<char> m_OriginalValue;
+  CUtlVector<ch> m_OriginalValue;
 };
 
 class CSteamEnvVars {
@@ -160,12 +162,12 @@ class CSteamEnvVars {
 // // Helpers.
 // ----------------------------------------------------------------------------------------------------
 // //
-bool Q_getwd(char *out, int outSize) {
-#if defined(_WIN32)
-  char *cwd = _getcwd(out, outSize);
+bool Q_getwd(ch *out, i32 outSize) {
+#if defined(OS_WIN)
+  ch *cwd = _getcwd(out, outSize);
   if (cwd) Q_strncat(out, "\\", outSize, COPY_ALL_CHARACTERS);
 #else
-  char *cwd = getcwd(out, outSize);
+  ch *cwd = getcwd(out, outSize);
   if (cwd) strcat(out, "/");
 #endif
   if (cwd) Q_FixSlashes(out);
@@ -207,23 +209,23 @@ CFSMountContentInfo::CFSMountContentInfo() {
   m_pFileSystem = nullptr;
 }
 
-const char *FileSystem_GetLastErrorString() { return g_FileSystemError; }
+const ch *FileSystem_GetLastErrorString() { return g_FileSystemError; }
 
-void AddLanguageGameDir(IFileSystem *pFileSystem, const char *pLocation,
-                        const char *pLanguage) {
+void AddLanguageGameDir(IFileSystem *pFileSystem, const ch *pLocation,
+                        const ch *pLanguage) {
 #if !defined(SWDS)
-  char temp[MAX_PATH];
+  ch temp[MAX_PATH];
   Q_snprintf(temp, sizeof(temp), "%s_%s", pLocation, pLanguage);
   pFileSystem->AddSearchPath(temp, "GAME", PATH_ADD_TO_TAIL);
 
   if (!pFileSystem->IsSteam()) {
     // also look in "..\localization\<folder>" if not running Steam
-    char baseDir[MAX_PATH];
+    ch baseDir[MAX_PATH];
     Q_strncpy(baseDir, pLocation, sizeof(baseDir));
-    char *tempPtr = Q_strstr(baseDir, "\\game\\");
+    ch *tempPtr = Q_strstr(baseDir, "\\game\\");
 
     if (tempPtr) {
-      char *gameDir = tempPtr + Q_strlen("\\game\\");
+      ch *gameDir = tempPtr + Q_strlen("\\game\\");
       *tempPtr = 0;
       Q_snprintf(temp, sizeof(temp), "%s%clocalization%c%s_%s", baseDir,
                  CORRECT_PATH_SEPARATOR, CORRECT_PATH_SEPARATOR, gameDir,
@@ -234,18 +236,18 @@ void AddLanguageGameDir(IFileSystem *pFileSystem, const char *pLocation,
 #endif
 }
 
-void AddGameBinDir(IFileSystem *pFileSystem, const char *pLocation) {
-  char temp[MAX_PATH];
+void AddGameBinDir(IFileSystem *pFileSystem, const ch *pLocation) {
+  ch temp[MAX_PATH];
   Q_snprintf(temp, sizeof(temp), "%s%cbin", pLocation, CORRECT_PATH_SEPARATOR);
   pFileSystem->AddSearchPath(temp, "GAMEBIN", PATH_ADD_TO_TAIL);
 }
 
-KeyValues *ReadKeyValuesFile(const char *pFilename) {
+KeyValues *ReadKeyValuesFile(const ch *pFilename) {
   // Read in the gameinfo.txt file and 0-terminate it.
   FILE *fp = fopen(pFilename, "rb");
-  if (!fp) return NULL;
+  if (!fp) return nullptr;
 
-  CUtlVector<char> buf;
+  CUtlVector<ch> buf;
   fseek(fp, 0, SEEK_END);
   buf.SetSize(ftell(fp) + 1);
   fseek(fp, 0, SEEK_SET);
@@ -257,15 +259,15 @@ KeyValues *ReadKeyValuesFile(const char *pFilename) {
   KeyValues *kv = new KeyValues("");
   if (!kv->LoadFromBuffer(pFilename, buf.Base())) {
     kv->deleteThis();
-    return NULL;  //-V773
+    return nullptr;  //-V773
   }
 
   return kv;
 }
 
-static bool Sys_GetExecutableName(char *out, int len) {
-#if defined(_WIN32)
-  if (!::GetModuleFileName((HINSTANCE)GetModuleHandle(NULL), out, len)) {
+static bool Sys_GetExecutableName(ch *out, i32 len) {
+#if defined(OS_WIN)
+  if (!::GetModuleFileName((HINSTANCE)GetModuleHandle(nullptr), out, len)) {
     return false;
   }
 #else
@@ -279,11 +281,11 @@ static bool Sys_GetExecutableName(char *out, int len) {
   return true;
 }
 
-bool FileSystem_GetExecutableDir(char *exedir, int exeDirLen) {
+bool FileSystem_GetExecutableDir(ch *exedir, i32 exeDirLen) {
   exedir[0] = 0;
 
   if (s_bUseVProjectBinDir) {
-    const char *pProject = GetVProjectCmdLineValue();
+    const ch *pProject = GetVProjectCmdLineValue();
     if (!pProject) {
       // Check their registry.
       pProject = getenv(GAMEDIR_TOKEN);
@@ -303,7 +305,7 @@ bool FileSystem_GetExecutableDir(char *exedir, int exeDirLen) {
 
   // Return the bin directory as the executable dir if it's not in there
   // because that's really where we're running from...
-  char ext[MAX_PATH];
+  ch ext[MAX_PATH];
   Q_StrRight(exedir, 4, ext, sizeof(ext));
   if (ext[0] != CORRECT_PATH_SEPARATOR || Q_stricmp(ext + 1, "bin") != 0) {
     Q_strncat(exedir, "\\bin", exeDirLen, COPY_ALL_CHARACTERS);
@@ -313,7 +315,7 @@ bool FileSystem_GetExecutableDir(char *exedir, int exeDirLen) {
   return true;
 }
 
-static bool FileSystem_GetBaseDir(char *baseDir, int baseDirLen) {
+static bool FileSystem_GetBaseDir(ch *baseDir, i32 baseDirLen) {
   if (FileSystem_GetExecutableDir(baseDir, baseDirLen)) {
     Q_StripFilename(baseDir);
     return true;
@@ -323,26 +325,26 @@ static bool FileSystem_GetBaseDir(char *baseDir, int baseDirLen) {
 }
 
 void LaunchVConfig() {
-#if defined(_WIN32)
-  char vconfigExe[MAX_PATH];
+#if defined(OS_WIN)
+  ch vconfigExe[MAX_PATH];
   FileSystem_GetExecutableDir(vconfigExe, ARRAYSIZE(vconfigExe));
 
   Q_AppendSlash(vconfigExe, ARRAYSIZE(vconfigExe));
   Q_strncat(vconfigExe, "vconfig.exe", ARRAYSIZE(vconfigExe),
             COPY_ALL_CHARACTERS);
 
-  const char *const argv[] = {vconfigExe, "-allowdebug", nullptr};
+  const ch *const argv[] = {vconfigExe, "-allowdebug", nullptr};
   _spawnv(_P_NOWAIT, vconfigExe, argv);
 #endif
 }
 
-const char *GetVProjectCmdLineValue() {
+const ch *GetVProjectCmdLineValue() {
   return CommandLine()->ParmValue("-vproject",
                                   CommandLine()->ParmValue("-game"));
 }
 
 FSReturnCode_t SetupFileSystemError(bool bRunVConfig, FSReturnCode_t retVal,
-                                    const char *pMsg, ...) {
+                                    const ch *pMsg, ...) {
   va_list marker;
   va_start(marker, pMsg);
   Q_vsnprintf(g_FileSystemError, ARRAYSIZE(g_FileSystemError), pMsg, marker);
@@ -367,13 +369,12 @@ FSReturnCode_t SetupFileSystemError(bool bRunVConfig, FSReturnCode_t retVal,
   return retVal;
 }
 
-FSReturnCode_t LoadGameInfoFile(const char *pDirectoryName,
-                                KeyValues *&pMainFile,
+FSReturnCode_t LoadGameInfoFile(const ch *pDirectoryName, KeyValues *&pMainFile,
                                 KeyValues *&pFileSystemInfo,
                                 KeyValues *&pSearchPaths) {
   // If GameInfo.txt exists under pBaseDir, then this is their game directory.
   // All the filesystem mappings will be in this file.
-  char gameinfoFilename[MAX_PATH];
+  ch gameinfoFilename[MAX_PATH];
   Q_strncpy(gameinfoFilename, pDirectoryName, ARRAYSIZE(gameinfoFilename));
   Q_AppendSlash(gameinfoFilename, ARRAYSIZE(gameinfoFilename));
   Q_strncat(gameinfoFilename, GAMEINFO_FILENAME, ARRAYSIZE(gameinfoFilename),
@@ -407,17 +408,17 @@ FSReturnCode_t LoadGameInfoFile(const char *pDirectoryName,
 // Check "HKEY_CURRENT_USER\Software\Valve\Source\Settings" and "User Token 2"
 // or "User Token 3"
 bool IsLowViolenceBuild() {
-#if defined(_WIN32)
+#if defined(OS_WIN)
   HKEY hKey;
-  char szValue[64];
+  ch szValue[64];
   unsigned long len = ARRAYSIZE(szValue) - 1;
   bool retVal = false;
 
-  if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Valve\\Source\\Settings", NULL,
+  if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Valve\\Source\\Settings", 0,
                    KEY_READ, &hKey) == ERROR_SUCCESS) {
     // User Token 2
-    if (RegQueryValueEx(hKey, "User Token 2", NULL, NULL,
-                        (unsigned char *)szValue, &len) == ERROR_SUCCESS) {
+    if (RegQueryValueExA(hKey, "User Token 2", nullptr, nullptr, (u8 *)szValue,
+                         &len) == ERROR_SUCCESS) {
       if (Q_strlen(szValue) > 0) {
         retVal = true;
       }
@@ -428,8 +429,8 @@ bool IsLowViolenceBuild() {
       len = sizeof(szValue) - 1;
 
       // User Token 3
-      if (RegQueryValueEx(hKey, "User Token 3", NULL, NULL,
-                          (unsigned char *)szValue, &len) == ERROR_SUCCESS) {
+      if (RegQueryValueEx(hKey, "User Token 3", nullptr, nullptr, (u8 *)szValue,
+                          &len) == ERROR_SUCCESS) {
         if (Q_strlen(szValue) > 0) {
           retVal = true;
         }
@@ -440,7 +441,7 @@ bool IsLowViolenceBuild() {
   }
 
   return retVal;
-#elif _LINUX
+#elif OS_POSIX
   return false;
 #elif
 #error "Fix me"
@@ -448,9 +449,9 @@ bool IsLowViolenceBuild() {
 }
 
 static void FileSystem_AddLoadedSearchPath(
-    CFSSearchPathsInit &initInfo, const char *pPathID, bool *bFirstGamePath,
-    const char *pBaseDir, const char *pLocation, bool bLowViolence) {
-  char fullLocationPath[MAX_PATH];
+    CFSSearchPathsInit &initInfo, const ch *pPathID, bool *bFirstGamePath,
+    const ch *pBaseDir, const ch *pLocation, bool bLowViolence) {
+  ch fullLocationPath[MAX_PATH];
   Q_MakeAbsolutePath(fullLocationPath, ARRAYSIZE(fullLocationPath), pLocation,
                      pBaseDir);
 
@@ -464,7 +465,7 @@ static void FileSystem_AddLoadedSearchPath(
   if (Q_stricmp(pPathID, "game") == 0) {
     // add the low violence path
     if (bLowViolence) {
-      char szPath[MAX_PATH];
+      ch szPath[MAX_PATH];
       Q_snprintf(szPath, ARRAYSIZE(szPath), "%s_lv", fullLocationPath);
       initInfo.m_pFileSystem->AddSearchPath(szPath, pPathID, PATH_ADD_TO_TAIL);
     }
@@ -476,7 +477,7 @@ static void FileSystem_AddLoadedSearchPath(
     }
 
     if (CommandLine()->FindParm("-tempcontent") != 0) {
-      char szPath[MAX_PATH];
+      ch szPath[MAX_PATH];
       Q_snprintf(szPath, ARRAYSIZE(szPath), "%s_tempcontent", fullLocationPath);
       initInfo.m_pFileSystem->AddSearchPath(szPath, pPathID, PATH_ADD_TO_TAIL);
     }
@@ -502,12 +503,12 @@ bool FileSystem_IsHldsUpdateToolDedicatedServer() {
   // To determine this, we see if the directory our executable was launched from
   // is "orangebox". We only are under "orangebox" if we're run from
   // hldsupdatetool.
-  char baseDir[MAX_PATH];
+  ch baseDir[MAX_PATH];
   if (!FileSystem_GetBaseDir(baseDir, ARRAYSIZE(baseDir))) return false;
 
   V_FixSlashes(baseDir);
   V_StripTrailingSlash(baseDir);
-  const char *pLastDir = V_UnqualifiedFileName(baseDir);
+  const ch *pLastDir = V_UnqualifiedFileName(baseDir);
   return (pLastDir && V_stricmp(pLastDir, "orangebox") == 0);
 }
 
@@ -524,7 +525,7 @@ FSReturnCode_t FileSystem_LoadSearchPaths(CFSSearchPathsInit &initInfo) {
 
   // All paths except those marked with |gameinfo_path| are relative to the base
   // dir.
-  char baseDir[MAX_PATH];
+  ch baseDir[MAX_PATH];
   if (!FileSystem_GetBaseDir(baseDir, ARRAYSIZE(baseDir)))
     return SetupFileSystemError(false, FS_INVALID_PARAMETERS,
                                 "FileSystem_GetBaseDir failed.");
@@ -536,13 +537,13 @@ FSReturnCode_t FileSystem_LoadSearchPaths(CFSSearchPathsInit &initInfo) {
 
   bool bLowViolence = IsLowViolenceBuild();
   bool bFirstGamePath = true;
-  size_t game_info_path_token_len = strlen(GAMEINFOPATH_TOKEN);
-  size_t base_source_paths_token_len = strlen(BASESOURCEPATHS_TOKEN);
+  usize game_info_path_token_len = strlen(GAMEINFOPATH_TOKEN);
+  usize base_source_paths_token_len = strlen(BASESOURCEPATHS_TOKEN);
 
   for (KeyValues *pCur = pSearchPaths->GetFirstValue(); pCur;
        pCur = pCur->GetNextValue()) {
-    const char *pPathID = pCur->GetName();
-    const char *pLocation = pCur->GetString();
+    const ch *pPathID = pCur->GetName();
+    const ch *pLocation = pCur->GetString();
 
     if (Q_stristr(pLocation, GAMEINFOPATH_TOKEN) == pLocation) {
       pLocation += game_info_path_token_len;
@@ -574,7 +575,7 @@ FSReturnCode_t FileSystem_LoadSearchPaths(CFSSearchPathsInit &initInfo) {
       if (FileSystem_IsHldsUpdateToolDedicatedServer()) {
         // If we're using the hldsupdatetool dedicated server, then go up a
         // directory to get the ep1-era files too.
-        char ep1EraPath[MAX_PATH];
+        ch ep1EraPath[MAX_PATH];
         V_snprintf(ep1EraPath, sizeof(ep1EraPath), "..%c%s",
                    CORRECT_PATH_SEPARATOR, pLocation);
         FileSystem_AddLoadedSearchPath(initInfo, pPathID, &bFirstGamePath,
@@ -599,15 +600,15 @@ FSReturnCode_t FileSystem_LoadSearchPaths(CFSSearchPathsInit &initInfo) {
         initInfo.m_ModPath, "DEFAULT_WRITE_PATH", PATH_ADD_TO_TAIL);
   }
 
-#ifdef _DEBUG
+#if !defined(NDEBUG)
   initInfo.m_pFileSystem->PrintSearchPaths();
 #endif
 
   return FS_OK;
 }
 
-bool DoesFileExistIn(const char *pDirectoryName, const char *pFilename) {
-  char filename[MAX_PATH];
+bool DoesFileExistIn(const ch *pDirectoryName, const ch *pFilename) {
+  ch filename[MAX_PATH];
 
   Q_strncpy(filename, pDirectoryName, ARRAYSIZE(filename));
   Q_AppendSlash(filename, ARRAYSIZE(filename));
@@ -620,7 +621,7 @@ bool DoesFileExistIn(const char *pDirectoryName, const char *pFilename) {
 
 namespace {
 SuggestGameInfoDirFn_t &GetSuggestGameInfoDirFn() {
-  static SuggestGameInfoDirFn_t s_pfnSuggestGameInfoDir = NULL;
+  static SuggestGameInfoDirFn_t s_pfnSuggestGameInfoDir = nullptr;
   return s_pfnSuggestGameInfoDir;
 }
 };  // namespace
@@ -633,15 +634,15 @@ SuggestGameInfoDirFn_t SetSuggestGameInfoDirFn(
   return pfnOldFn;
 }
 
-static FSReturnCode_t TryLocateGameInfoFile(char *pOutDir, int outDirLen,
+static FSReturnCode_t TryLocateGameInfoFile(ch *pOutDir, i32 outDirLen,
                                             bool bBubbleDir) {
   // Retain a copy of suggested path for further attempts
-  CArrayAutoPtr<char> spchCopyNameBuffer(new char[outDirLen]);
+  CArrayAutoPtr<ch> spchCopyNameBuffer(new ch[outDirLen]);
   Q_strncpy(spchCopyNameBuffer.Get(), pOutDir, outDirLen);
   spchCopyNameBuffer[outDirLen - 1] = 0;
 
   // Make appropriate slashes ('/' - Linux style)
-  for (char *pchFix = spchCopyNameBuffer.Get(), *pchEnd = pchFix + outDirLen;
+  for (ch *pchFix = spchCopyNameBuffer.Get(), *pchEnd = pchFix + outDirLen;
        pchFix < pchEnd; ++pchFix) {
     if ('\\' == *pchFix) {
       *pchFix = '/';
@@ -658,7 +659,7 @@ static FSReturnCode_t TryLocateGameInfoFile(char *pOutDir, int outDirLen,
   // Make an attempt to resolve from "content -> game" directory
   Q_strncpy(pOutDir, spchCopyNameBuffer.Get(), outDirLen);
   pOutDir[outDirLen - 1] = 0;
-  if (char *pchContentFix = Q_stristr(pOutDir, "/content/")) {
+  if (ch *pchContentFix = Q_stristr(pOutDir, "/content/")) {
     sprintf(pchContentFix, "/game/");
     memmove(pchContentFix + 6, pchContentFix + 9,
             pOutDir + outDirLen - (pchContentFix + 9));
@@ -675,14 +676,14 @@ static FSReturnCode_t TryLocateGameInfoFile(char *pOutDir, int outDirLen,
   return FS_MISSING_GAMEINFO_FILE;
 }
 
-FSReturnCode_t LocateGameInfoFile(const CFSSteamSetupInfo &fsInfo,
-                                  char *pOutDir, int outDirLen) {
+FSReturnCode_t LocateGameInfoFile(const CFSSteamSetupInfo &fsInfo, ch *pOutDir,
+                                  i32 outDirLen) {
   // Engine and Hammer don't want to search around for it.
   if (fsInfo.m_bOnlyUseDirectoryName) {
     if (!fsInfo.m_pDirectoryName)
       return SetupFileSystemError(
           false, FS_MISSING_GAMEINFO_FILE,
-          "bOnlyUseDirectoryName=1 and pDirectoryName=NULL.");
+          "bOnlyUseDirectoryName=1 and pDirectoryName=nullptr.");
 
     bool bExists = DoesFileExistIn(fsInfo.m_pDirectoryName, GAMEINFO_FILENAME);
     if (!bExists) {
@@ -698,7 +699,7 @@ FSReturnCode_t LocateGameInfoFile(const CFSSteamSetupInfo &fsInfo,
   }
 
   // First, check for overrides on the command line or environment variables.
-  const char *pProject = GetVProjectCmdLineValue();
+  const ch *pProject = GetVProjectCmdLineValue();
 
   if (pProject) {
     if (DoesFileExistIn(pProject, GAMEINFO_FILENAME)) {
@@ -737,7 +738,7 @@ FSReturnCode_t LocateGameInfoFile(const CFSSteamSetupInfo &fsInfo,
   }
 
   // Try to use the environment variable / registry
-  if ((pProject = getenv(GAMEDIR_TOKEN)) != NULL &&
+  if ((pProject = getenv(GAMEDIR_TOKEN)) != nullptr &&
       (Q_MakeAbsolutePath(pOutDir, outDirLen, pProject), 1) &&
       FS_OK == TryLocateGameInfoFile(pOutDir, outDirLen, false))
     return FS_OK;
@@ -770,9 +771,9 @@ ShowError:
       GAMEINFO_FILENAME, GAMEINFO_FILENAME);
 }
 
-bool DoesPathExistAlready(const char *pPathEnvVar, const char *pTestPath) {
+bool DoesPathExistAlready(const ch *pPathEnvVar, const ch *pTestPath) {
   // Fix the slashes in the input arguments.
-  char correctedPathEnvVar[8192], correctedTestPath[MAX_PATH];
+  ch correctedPathEnvVar[8192], correctedTestPath[MAX_PATH];
   Q_strncpy(correctedPathEnvVar, pPathEnvVar, sizeof(correctedPathEnvVar));
   Q_FixSlashes(correctedPathEnvVar);
   pPathEnvVar = correctedPathEnvVar;
@@ -780,17 +781,17 @@ bool DoesPathExistAlready(const char *pPathEnvVar, const char *pTestPath) {
   Q_strncpy(correctedTestPath, pTestPath, sizeof(correctedTestPath));
   Q_FixSlashes(correctedTestPath);
 
-  const size_t correctedTestPathLength = strlen(correctedTestPath);
+  const usize correctedTestPathLength = strlen(correctedTestPath);
   if (correctedTestPathLength > 0 &&
       PATHSEPARATOR(correctedTestPath[correctedTestPathLength - 1]))
     correctedTestPath[correctedTestPathLength - 1] = 0;
 
   pTestPath = correctedTestPath;
-  size_t test_path_len = strlen(pTestPath);
+  usize test_path_len = strlen(pTestPath);
 
-  const char *pCurPos = pPathEnvVar;
+  const ch *pCurPos = pPathEnvVar;
   while (1) {
-    const char *pTestPos = Q_stristr(pCurPos, pTestPath);
+    const ch *pTestPos = Q_stristr(pCurPos, pTestPath);
     if (!pTestPos) return false;
 
     // Ok, we found pTestPath in the path, but it's only valid if it's followed
@@ -805,8 +806,8 @@ bool DoesPathExistAlready(const char *pPathEnvVar, const char *pTestPath) {
   }
 }
 
-FSReturnCode_t SetSteamInstallPath(char *steamInstallPath,
-                                   int steamInstallPathLen,
+FSReturnCode_t SetSteamInstallPath(ch *steamInstallPath,
+                                   i32 steamInstallPathLen,
                                    CSteamEnvVars &steamEnvVars,
                                    bool bErrorsAsWarnings) {
   if (IsConsole()) {
@@ -816,7 +817,7 @@ FSReturnCode_t SetSteamInstallPath(char *steamInstallPath,
 
   // Start at our bin directory and move up until we find a directory with
   // steam.dll in it.
-  char executablePath[MAX_PATH];
+  ch executablePath[MAX_PATH];
   if (!FileSystem_GetExecutableDir(executablePath, sizeof(executablePath))) {
     if (bErrorsAsWarnings) {
       Warning("SetSteamInstallPath: FileSystem_GetExecutableDir failed.\n");
@@ -851,7 +852,7 @@ FSReturnCode_t SetSteamInstallPath(char *steamInstallPath,
 
   // Also, add the install path to their PATH environment variable, so
   // filesystem_steam.dll can get to steam.dll.
-  char szPath[8192];
+  ch szPath[8192];
   steamEnvVars.m_Path.GetValue(szPath, sizeof(szPath));
   if (!DoesPathExistAlready(szPath, steamInstallPath)) {
     steamEnvVars.m_Path.SetValue("%s;%s", szPath, steamInstallPath);
@@ -859,9 +860,9 @@ FSReturnCode_t SetSteamInstallPath(char *steamInstallPath,
   return FS_OK;
 }
 
-FSReturnCode_t GetSteamCfgPath(char *steamCfgPath, int steamCfgPathLen) {
+FSReturnCode_t GetSteamCfgPath(ch *steamCfgPath, i32 steamCfgPathLen) {
   steamCfgPath[0] = 0;
-  char executablePath[MAX_PATH];
+  ch executablePath[MAX_PATH];
   if (!FileSystem_GetExecutableDir(executablePath, sizeof(executablePath))) {
     return SetupFileSystemError(false, FS_INVALID_PARAMETERS,
                                 "FileSystem_GetExecutableDir failed.");
@@ -881,22 +882,22 @@ FSReturnCode_t GetSteamCfgPath(char *steamCfgPath, int steamCfgPathLen) {
   return FS_OK;
 }
 
-void SetSteamAppUser(KeyValues *pSteamInfo, const char *steamInstallPath,
+void SetSteamAppUser(KeyValues *pSteamInfo, const ch *steamInstallPath,
                      CSteamEnvVars &steamEnvVars) {
   // Always inherit the Steam user if it's already set, since it probably means
   // we (or the the app that launched us) were launched from Steam.
-  char appUser[MAX_PATH];
+  ch appUser[MAX_PATH];
   if (steamEnvVars.m_SteamAppUser.GetValue(appUser, sizeof(appUser))) return;
 
-  const char *pTempAppUser = NULL;
-  if (pSteamInfo &&
-      (pTempAppUser = pSteamInfo->GetString("SteamAppUser", NULL)) != NULL) {
+  const ch *pTempAppUser = nullptr;
+  if (pSteamInfo && (pTempAppUser = pSteamInfo->GetString(
+                         "SteamAppUser", nullptr)) != nullptr) {
     Q_strncpy(appUser, pTempAppUser, sizeof(appUser));
   } else {
     // They don't have SteamInfo.txt, or it's missing SteamAppUser. Try to
     // figure out the user by looking in <steam install
     // path>\config\SteamAppData.vdf.
-    char fullFilename[MAX_PATH];
+    ch fullFilename[MAX_PATH];
     Q_strncpy(fullFilename, steamInstallPath, sizeof(fullFilename));
     Q_AppendSlash(fullFilename, sizeof(fullFilename));
     Q_strncat(fullFilename, "config\\SteamAppData.vdf", sizeof(fullFilename),
@@ -904,7 +905,7 @@ void SetSteamAppUser(KeyValues *pSteamInfo, const char *steamInstallPath,
 
     KeyValues *pSteamAppData = ReadKeyValuesFile(fullFilename);
     if (!pSteamAppData || (pTempAppUser = pSteamAppData->GetString(
-                               "AutoLoginUser", NULL)) == NULL) {
+                               "AutoLoginUser", nullptr)) == nullptr) {
       Error("Can't find steam app user info.");
     }
     Q_strncpy(appUser, pTempAppUser, sizeof(appUser));
@@ -920,24 +921,24 @@ void SetSteamUserPassphrase(KeyValues *pSteamInfo,
                             CSteamEnvVars &steamEnvVars) {
   // Always inherit the passphrase if it's already set, since it probably means
   // we (or the the app that launched us) were launched from Steam.
-  char szPassPhrase[MAX_PATH];
+  ch szPassPhrase[MAX_PATH];
   if (steamEnvVars.m_SteamUserPassphrase.GetValue(szPassPhrase,
                                                   sizeof(szPassPhrase)))
     return;
 
   // SteamUserPassphrase.
-  const char *pStr;
-  if (pSteamInfo &&
-      (pStr = pSteamInfo->GetString("SteamUserPassphrase", NULL)) != NULL) {
+  const ch *pStr;
+  if (pSteamInfo && (pStr = pSteamInfo->GetString("SteamUserPassphrase",
+                                                  nullptr)) != nullptr) {
     steamEnvVars.m_SteamUserPassphrase.SetValue("%s", pStr);
   }
 }
 
-void SetSteamAppId(KeyValues *pFileSystemInfo, const char *pGameInfoDirectory,
+void SetSteamAppId(KeyValues *pFileSystemInfo, const ch *pGameInfoDirectory,
                    CSteamEnvVars &steamEnvVars) {
   // SteamAppId is in
   // gameinfo.txt->FileSystem->FileSystemInfo_Steam->SteamAppId.
-  int iAppId = pFileSystemInfo->GetInt("SteamAppId", -1);
+  i32 iAppId = pFileSystemInfo->GetInt("SteamAppId", -1);
   if (iAppId == -1)
     Error("Missing SteamAppId in %s\\%s.", pGameInfoDirectory,
           GAMEINFO_FILENAME);
@@ -946,18 +947,18 @@ void SetSteamAppId(KeyValues *pFileSystemInfo, const char *pGameInfoDirectory,
 }
 
 FSReturnCode_t SetupSteamStartupEnvironment(KeyValues *pFileSystemInfo,
-                                            const char *pGameInfoDirectory,
+                                            const ch *pGameInfoDirectory,
                                             CSteamEnvVars &steamEnvVars) {
   // Ok, we're going to run Steam. See if they have SteamInfo.txt. If not, we'll
   // try to deduce what we can.
-  char steamInfoFile[MAX_PATH];
+  ch steamInfoFile[MAX_PATH];
   Q_strncpy(steamInfoFile, pGameInfoDirectory, sizeof(steamInfoFile));
   Q_AppendSlash(steamInfoFile, sizeof(steamInfoFile));
   Q_strncat(steamInfoFile, "steaminfo.txt", sizeof(steamInfoFile),
             COPY_ALL_CHARACTERS);
   KeyValues *pSteamInfo = ReadKeyValuesFile(steamInfoFile);
 
-  char steamInstallPath[MAX_PATH];
+  ch steamInstallPath[MAX_PATH];
   FSReturnCode_t ret = SetSteamInstallPath(
       steamInstallPath, sizeof(steamInstallPath), steamEnvVars, false);
   if (ret != FS_OK) return ret;
@@ -971,8 +972,7 @@ FSReturnCode_t SetupSteamStartupEnvironment(KeyValues *pFileSystemInfo,
   return FS_OK;
 }
 
-FSReturnCode_t GetSteamExtraAppId(const char *pDirectoryName,
-                                  int *nExtraAppId) {
+FSReturnCode_t GetSteamExtraAppId(const ch *pDirectoryName, i32 *nExtraAppId) {
   // Now, load gameinfo.txt (to make sure it's there)
   KeyValues *pMainFile, *pFileSystemInfo, *pSearchPaths;
   FSReturnCode_t ret = LoadGameInfoFile(pDirectoryName, pMainFile,
@@ -987,7 +987,7 @@ FSReturnCode_t GetSteamExtraAppId(const char *pDirectoryName,
 FSReturnCode_t FileSystem_SetBasePaths(IFileSystem *pFileSystem) {
   pFileSystem->RemoveSearchPaths("EXECUTABLE_PATH");
 
-  char executablePath[MAX_PATH];
+  ch executablePath[MAX_PATH];
   if (!FileSystem_GetExecutableDir(executablePath, sizeof(executablePath)))
     return SetupFileSystemError(false, FS_INVALID_PARAMETERS,
                                 "FileSystem_GetExecutableDir failed.");
@@ -999,18 +999,18 @@ FSReturnCode_t FileSystem_SetBasePaths(IFileSystem *pFileSystem) {
 //-----------------------------------------------------------------------------
 // Returns the name of the file system DLL to use
 //-----------------------------------------------------------------------------
-FSReturnCode_t FileSystem_GetFileSystemDLLName(char *pFileSystemDLL,
-                                               int nMaxLen, bool &bSteam) {
+FSReturnCode_t FileSystem_GetFileSystemDLLName(ch *pFileSystemDLL, i32 nMaxLen,
+                                               bool &bSteam) {
   bSteam = false;
 
   // Inside of here, we don't have a filesystem yet, so we have to assume that
   // the filesystem_stdio or filesystem_steam is in this same directory with us.
-  char executablePath[MAX_PATH];
+  ch executablePath[MAX_PATH];
   if (!FileSystem_GetExecutableDir(executablePath, sizeof(executablePath)))
     return SetupFileSystemError(false, FS_INVALID_PARAMETERS,
                                 "FileSystem_GetExecutableDir failed.");
 
-#if defined(_WIN32)
+#if defined(OS_WIN)
   // If filesystem_stdio.dll is missing or -steam is specified, then load
   // filesystem_steam.dll. There are two command line parameters for Steam:
   //		1) -steam (runs Steam in remote filesystem mode; requires Steam
@@ -1025,7 +1025,7 @@ FSReturnCode_t FileSystem_GetFileSystemDLLName(char *pFileSystemDLL,
                executablePath, CORRECT_PATH_SEPARATOR);
     bSteam = true;
   }
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
   Q_snprintf(pFileSystemDLL, nMaxLen, "%s%cfilesystem_i486.so", executablePath,
              CORRECT_PATH_SEPARATOR);
 #else
@@ -1042,7 +1042,7 @@ FSReturnCode_t FileSystem_GetFileSystemDLLName(char *pFileSystemDLL,
 //-----------------------------------------------------------------------------
 FSReturnCode_t FileSystem_SetupSteamInstallPath() {
   CSteamEnvVars steamEnvVars;
-  char steamInstallPath[MAX_PATH];
+  ch steamInstallPath[MAX_PATH];
   FSReturnCode_t ret = SetSteamInstallPath(
       steamInstallPath, sizeof(steamInstallPath), steamEnvVars, true);
   steamEnvVars.m_Path.SetRestoreOriginalValue(
@@ -1061,7 +1061,7 @@ FSReturnCode_t FileSystem_SetupSteamEnvironment(CFSSteamSetupInfo &fsInfo) {
 
   // This is so that processes spawned by this application will have the same
   // VPROJECT
-  char env[MAX_PATH + 32];
+  ch env[MAX_PATH + 32];
   Q_snprintf(env, sizeof(env), "%s=%s", GAMEDIR_TOKEN, fsInfo.m_GameInfoPath);
   if (_putenv(env) != 0) {
     return SetupFileSystemError(
@@ -1101,7 +1101,7 @@ FSReturnCode_t FileSystem_SetupSteamEnvironment(CFSSteamSetupInfo &fsInfo) {
       // This is used by the engine to automatically set the path to their
       // steam.dll when running the engine, so they can debug it without having
       // to copy steam.dll up into their hl2.exe folder.
-      char steamInstallPath[MAX_PATH];
+      ch steamInstallPath[MAX_PATH];
       ret = SetSteamInstallPath(steamInstallPath, sizeof(steamInstallPath),
                                 steamEnvVars, true);
       steamEnvVars.m_Path.SetRestoreOriginalValue(
@@ -1150,7 +1150,7 @@ FSReturnCode_t FileSystem_MountContent(CFSMountContentInfo &mountContentInfo) {
     // Find out the "extra app id". This is for tools, which want to mount a
     // base app's filesystem like HL2, then mount the SDK content (tools
     // materials and models, etc) in addition.
-    int nExtraAppId = -1;
+    i32 nExtraAppId = -1;
     if (mountContentInfo.m_bToolsMode) {
       FSReturnCode_t ret =
           GetSteamExtraAppId(mountContentInfo.m_pDirectoryName, &nExtraAppId);
@@ -1161,7 +1161,7 @@ FSReturnCode_t FileSystem_MountContent(CFSMountContentInfo &mountContentInfo) {
     // This is what Steam strips off absolute filenames like c:\program
     // files\valve\steam\steamapps\username\sourcesdk to get to the relative
     // part of the path.
-    char baseDir[MAX_PATH], oldWorkingDir[MAX_PATH];
+    ch baseDir[MAX_PATH], oldWorkingDir[MAX_PATH];
     if (!FileSystem_GetBaseDir(baseDir, sizeof(baseDir)))
       return SetupFileSystemError(false, FS_INVALID_PARAMETERS,
                                   "FileSystem_GetBaseDir failed.");
@@ -1215,8 +1215,8 @@ void FileSystem_ClearSteamEnvVars() {
 // Adds the platform folder to the search path.
 //-----------------------------------------------------------------------------
 void FileSystem_AddSearchPath_Platform(IFileSystem *pFileSystem,
-                                       const char *szGameInfoPath) {
-  char platform[MAX_PATH];
+                                       const ch *szGameInfoPath) {
+  ch platform[MAX_PATH];
   if (pFileSystem->IsSteam()) {
     // Steam doesn't support relative paths
     Q_strncpy(platform, "platform", MAX_PATH);

@@ -5,6 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
 #define SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_
 
+#include "base/include/base_types.h"
+
 #include "appframework/tier3app.h"
 
 // The application object.
@@ -30,25 +32,25 @@ class CVguiMatSysApp : public CVguiSteamApp {
   void *GetAppWindow();
 
   // Gets the window size.
-  int GetWindowWidth() const;
-  int GetWindowHeight() const;
+  i32 GetWindowWidth() const;
+  i32 GetWindowHeight() const;
 
   // Sets up the game path.
-  bool SetupSearchPaths(const char *start_dir, bool use_only_start_dir,
+  bool SetupSearchPaths(const ch *start_dir, bool use_only_start_dir,
                         bool is_tool);
 
  private:
   // Returns the app name.
-  virtual const char *GetAppName() = 0;
+  virtual const ch *GetAppName() = 0;
   virtual bool AppUsesReadPixels() { return false; }
 
   // Creates the app window.
-  virtual void *CreateAppWindow(char const *title, bool is_windowed, int width,
-                                int height);
+  virtual void *CreateAppWindow(ch const *title, bool is_windowed, i32 width,
+                                i32 height);
 
   void *m_HWnd;
-  int m_nWidth;
-  int m_nHeight;
+  i32 m_nWidth;
+  i32 m_nHeight;
 };
 
 #endif  // SOURCE_APPFRAMEWORK_VGUIMATSYSAPP_H_

@@ -10,7 +10,6 @@
 #include "filesystem_init.h"
 #include "tier1/interface.h"
 
-// memdbgon must be the last include file in a .cc file!!!
 #include "tier0/include/memdbgon.h"
 
 extern SpewOutputFunc_t g_DefaultSpewFunc;
@@ -20,18 +19,18 @@ CAppSystemGroup::CAppSystemGroup(CAppSystemGroup *parent_app_system_group)
       m_pParentAppSystem{parent_app_system_group},
       m_nErrorStage{CREATION} {}
 
-CSysModule *CAppSystemGroup::LoadModuleDLL(const char *module_name) {
+CSysModule *CAppSystemGroup::LoadModuleDLL(const ch *module_name) {
   return Sys_LoadModule(module_name);
 }
 
-AppModule_t CAppSystemGroup::LoadModule(const char *module_name) {
+AppModule_t CAppSystemGroup::LoadModule(const ch *module_name) {
   // Remove the extension when creating the name.
-  const int module_name_length = Q_strlen(module_name) + 1;
-  char *pModuleName = (char *)securestackalloc(module_name_length);
+  const i32 module_name_length = Q_strlen(module_name) + 1;
+  ch *pModuleName = (ch *)securestackalloc(module_name_length);
   Q_StripExtension(module_name, pModuleName, module_name_length);
 
   // See if we already loaded it...
-  for (int i = m_Modules.Count(); --i >= 0;) {
+  for (i32 i = m_Modules.Count(); --i >= 0;) {
     if (m_Modules[i].m_pModuleName) {
       if (!Q_stricmp(pModuleName, m_Modules[i].m_pModuleName)) {
         securestackfree(pModuleName);
@@ -46,10 +45,10 @@ AppModule_t CAppSystemGroup::LoadModule(const char *module_name) {
     return APP_MODULE_INVALID;
   }
 
-  int nIndex = m_Modules.AddToTail();
+  i32 nIndex = m_Modules.AddToTail();
   m_Modules[nIndex].m_pModule = pSysModule;
   m_Modules[nIndex].m_Factory = nullptr;
-  m_Modules[nIndex].m_pModuleName = (char *)malloc(module_name_length);
+  m_Modules[nIndex].m_pModuleName = (ch *)malloc(module_name_length);
   Q_strncpy(m_Modules[nIndex].m_pModuleName, pModuleName, module_name_length);
 
   securestackfree(pModuleName);
@@ -64,13 +63,13 @@ AppModule_t CAppSystemGroup::LoadModule(CreateInterfaceFn factory) {
   }
 
   // See if we already loaded it...
-  for (int i = m_Modules.Count(); --i >= 0;) {
+  for (i32 i = m_Modules.Count(); --i >= 0;) {
     if (m_Modules[i].m_Factory) {
       if (m_Modules[i].m_Factory == factory) return i;
     }
   }
 
-  int nIndex = m_Modules.AddToTail();
+  i32 nIndex = m_Modules.AddToTail();
   m_Modules[nIndex].m_pModule = nullptr;
   m_Modules[nIndex].m_Factory = factory;
   m_Modules[nIndex].m_pModuleName = nullptr;
@@ -81,7 +80,7 @@ AppModule_t CAppSystemGroup::LoadModule(CreateInterfaceFn factory) {
 void CAppSystemGroup::UnloadAllModules() {
   // NOTE: Iterate in reverse order so they are unloaded in opposite order from
   // loading
-  for (int i = m_Modules.Count(); --i >= 0;) {
+  for (i32 i = m_Modules.Count(); --i >= 0;) {
     if (m_Modules[i].m_pModule) {
       Sys_UnloadModule(m_Modules[i].m_pModule);
     }
@@ -96,7 +95,7 @@ void CAppSystemGroup::UnloadAllModules() {
 // Methods to add/remove various global singleton systems
 //-----------------------------------------------------------------------------
 IAppSystem *CAppSystemGroup::AddSystem(AppModule_t module,
-                                       const char *pInterfaceName) {
+                                       const ch *pInterfaceName) {
   if (module == APP_MODULE_INVALID) return nullptr;
 
   Assert((module >= 0) && (module < m_Modules.Count()));
@@ -110,7 +109,7 @@ IAppSystem *CAppSystemGroup::AddSystem(AppModule_t module,
     return nullptr;
   }
 
-  int retval;
+  i32 retval;
   void *pSystem = pFactory(pInterfaceName, &retval);
   if ((retval != IFACE_OK) || (!pSystem)) {
     Warning("AppFramework: Unable to create system %s!\n", pInterfaceName);
@@ -118,7 +117,7 @@ IAppSystem *CAppSystemGroup::AddSystem(AppModule_t module,
   }
 
   IAppSystem *pAppSystem = static_cast<IAppSystem *>(pSystem);
-  int sysIndex = m_Systems.AddToTail(pAppSystem);
+  i32 sysIndex = m_Systems.AddToTail(pAppSystem);
 
   // Inserting into the dict will help us do named lookup later
   MEM_ALLOC_CREDIT();
@@ -126,20 +125,20 @@ IAppSystem *CAppSystemGroup::AddSystem(AppModule_t module,
   return pAppSystem;
 }
 
-static char const *g_StageLookup[] = {
+static ch const *g_StageLookup[] = {
     "CREATION",       "CONNECTION",  "PREINITIALIZATION",
     "INITIALIZATION", "SHUTDOWN",    "POSTSHUTDOWN",
     "DISCONNECTION",  "DESTRUCTION", "NONE",
 };
 
-void CAppSystemGroup::ReportStartupFailure(int nErrorStage, int nSysIndex) {
-  char const *pszStageDesc = "Unknown";
+void CAppSystemGroup::ReportStartupFailure(i32 nErrorStage, i32 nSysIndex) {
+  ch const *pszStageDesc = "Unknown";
   if (nErrorStage >= 0 && nErrorStage < ARRAYSIZE(g_StageLookup)) {
     pszStageDesc = g_StageLookup[nErrorStage];
   }
 
-  char const *pszSystemName = "(Unknown)";
-  for (int i = m_SystemDict.First(); i != m_SystemDict.InvalidIndex();
+  ch const *pszSystemName = "(Unknown)";
+  for (i32 i = m_SystemDict.First(); i != m_SystemDict.InvalidIndex();
        i = m_SystemDict.Next(i)) {
     if (m_SystemDict[i] != nSysIndex) continue;
 
@@ -153,10 +152,10 @@ void CAppSystemGroup::ReportStartupFailure(int nErrorStage, int nSysIndex) {
 }
 
 void CAppSystemGroup::AddSystem(IAppSystem *pAppSystem,
-                                const char *pInterfaceName) {
+                                const ch *pInterfaceName) {
   if (!pAppSystem) return;
 
-  int sysIndex = m_Systems.AddToTail(pAppSystem);
+  i32 sysIndex = m_Systems.AddToTail(pAppSystem);
 
   // Inserting into the dict will help us do named lookup later
   MEM_ALLOC_CREDIT();
@@ -199,8 +198,8 @@ bool CAppSystemGroup::AddSystems(AppSystemInfo_t *systems) {
 //-----------------------------------------------------------------------------
 // Methods to find various global singleton systems
 //-----------------------------------------------------------------------------
-void *CAppSystemGroup::FindSystem(const char *pSystemName) {
-  unsigned short i = m_SystemDict.Find(pSystemName);
+void *CAppSystemGroup::FindSystem(const ch *pSystemName) {
+  u16 i = m_SystemDict.Find(pSystemName);
   if (i != m_SystemDict.InvalidIndex()) return m_Systems[m_SystemDict[i]];
 
   // If it's not an interface we know about, it could be an older
@@ -232,7 +231,7 @@ CAppSystemGroup *CAppSystemGroup::GetParent() { return m_pParentAppSystem; }
 // Method to connect/disconnect all systems
 //-----------------------------------------------------------------------------
 bool CAppSystemGroup::ConnectSystems() {
-  for (int i = 0; i < m_Systems.Count(); ++i) {
+  for (i32 i = 0; i < m_Systems.Count(); ++i) {
     IAppSystem *sys = m_Systems[i];
 
     if (!sys->Connect(GetFactory())) {
@@ -245,7 +244,7 @@ bool CAppSystemGroup::ConnectSystems() {
 
 void CAppSystemGroup::DisconnectSystems() {
   // Disconnect in reverse order of connection
-  for (int i = m_Systems.Count(); --i >= 0;) {
+  for (i32 i = m_Systems.Count(); --i >= 0;) {
     m_Systems[i]->Disconnect();
   }
 }
@@ -254,7 +253,7 @@ void CAppSystemGroup::DisconnectSystems() {
 // Method to initialize/shutdown all systems
 //-----------------------------------------------------------------------------
 InitReturnVal_t CAppSystemGroup::InitSystems() {
-  for (int i = 0; i < m_Systems.Count(); ++i) {
+  for (i32 i = 0; i < m_Systems.Count(); ++i) {
     InitReturnVal_t nRetVal = m_Systems[i]->Init();
     if (nRetVal != INIT_OK) {
       ReportStartupFailure(INITIALIZATION, i);
@@ -266,7 +265,7 @@ InitReturnVal_t CAppSystemGroup::InitSystems() {
 
 void CAppSystemGroup::ShutdownSystems() {
   // Shutdown in reverse order of initialization
-  for (int i = m_Systems.Count(); --i >= 0;) {
+  for (i32 i = m_Systems.Count(); --i >= 0;) {
     m_Systems[i]->Shutdown();
   }
 }
@@ -284,7 +283,7 @@ CAppSystemGroup::AppSystemGroupStage_t CAppSystemGroup::GetErrorStage() const {
 // This function is used to make this system appear to the outside world to
 // function exactly like the currently existing factory system
 CAppSystemGroup *s_pCurrentAppSystem;
-void *AppSystemCreateInterfaceFn(const char *pName, int *pReturnCode) {
+void *AppSystemCreateInterfaceFn(const ch *pName, i32 *pReturnCode) {
   void *pInterface = s_pCurrentAppSystem->FindSystem(pName);
   if (pReturnCode) {
     *pReturnCode = pInterface ? IFACE_OK : IFACE_FAILED;
@@ -302,12 +301,12 @@ CreateInterfaceFn CAppSystemGroup::GetFactory() {
 //-----------------------------------------------------------------------------
 // Main application loop
 //-----------------------------------------------------------------------------
-int CAppSystemGroup::Run() {
+i32 CAppSystemGroup::Run() {
   // The factory now uses this app system group
   s_pCurrentAppSystem = this;
 
   // Load, connect, init
-  int nRetVal = OnStartup();
+  i32 nRetVal = OnStartup();
   if (m_nErrorStage != NONE) return nRetVal;
 
   // Main loop implemented by the application
@@ -326,7 +325,7 @@ int CAppSystemGroup::Run() {
 //-----------------------------------------------------------------------------
 // Virtual methods for override
 //-----------------------------------------------------------------------------
-int CAppSystemGroup::Startup() { return OnStartup(); }
+i32 CAppSystemGroup::Startup() { return OnStartup(); }
 
 void CAppSystemGroup::Shutdown() { return OnShutdown(); }
 
@@ -334,7 +333,7 @@ void CAppSystemGroup::Shutdown() { return OnShutdown(); }
 // Use this version in cases where you can't control the main loop and
 // expect to be ticked
 //-----------------------------------------------------------------------------
-int CAppSystemGroup::OnStartup() {
+i32 CAppSystemGroup::OnStartup() {
   // The factory now uses this app system group
   s_pCurrentAppSystem = this;
 
@@ -359,7 +358,7 @@ int CAppSystemGroup::OnStartup() {
   }
 
   // Call Init on all App Systems
-  int nRetVal = InitSystems();
+  i32 nRetVal = InitSystems();
   if (nRetVal != INIT_OK) {
     m_nErrorStage = INITIALIZATION;
     return -1;
@@ -435,21 +434,21 @@ void CSteamAppSystemGroup::Setup(IFileSystem *pFileSystem,
 //-----------------------------------------------------------------------------
 // Loads the module from Steam
 //-----------------------------------------------------------------------------
-CSysModule *CSteamAppSystemGroup::LoadModuleDLL(const char *pDLLName) {
+CSysModule *CSteamAppSystemGroup::LoadModuleDLL(const ch *pDLLName) {
   return m_pFileSystem->LoadModule(pDLLName);
 }
 
 //-----------------------------------------------------------------------------
 // Returns the game info path
 //-----------------------------------------------------------------------------
-const char *CSteamAppSystemGroup::GetGameInfoPath() const {
+const ch *CSteamAppSystemGroup::GetGameInfoPath() const {
   return m_pGameInfoPath;
 }
 
 //-----------------------------------------------------------------------------
 // Sets up the search paths
 //-----------------------------------------------------------------------------
-bool CSteamAppSystemGroup::SetupSearchPaths(const char *pStartingDir,
+bool CSteamAppSystemGroup::SetupSearchPaths(const ch *pStartingDir,
                                             bool bOnlyUseStartingDir,
                                             bool bIsTool) {
   CFSSteamSetupInfo steamInfo;

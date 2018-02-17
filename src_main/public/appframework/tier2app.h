@@ -5,6 +5,8 @@
 #ifndef SOURCE_APPFRAMEWORK_TIER2APP_H_
 #define SOURCE_APPFRAMEWORK_TIER2APP_H_
 
+#include "base/include/base_types.h"
+
 #include "appframework/AppFramework.h"
 #include "tier1/convar.h"
 #include "tier2/tier2dm.h"
