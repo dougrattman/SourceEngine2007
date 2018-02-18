@@ -1,8 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "shaderdevicebase.h"
-
 #include "base/include/windows/windows_light.h"
+
+#include "shaderdevicebase.h"
 
 #include "datacache/idatacache.h"
 #include "filesystem.h"

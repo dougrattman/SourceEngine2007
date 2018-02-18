@@ -209,8 +209,7 @@ SHADER_DRAW {
   bool bExtractGreenAlpha =
       (!bDX8) && (params[EXTRACTGREENALPHA]->GetIntValue() != 0);
   int nSplineType = params[SPLINETYPE]->GetIntValue();
-  bool bUseInstancing =
-      IsX360() ? (params[USEINSTANCING]->GetIntValue() != 0) : false;
+  bool bUseInstancing = false;
 
   SHADOW_STATE {
     bool bSecondSequence = params[DUALSEQUENCE]->GetIntValue() != 0;

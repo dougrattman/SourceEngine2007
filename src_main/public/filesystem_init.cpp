@@ -3,12 +3,12 @@
 #undef PROTECTED_THINGS_ENABLE
 #undef PROTECT_FILEIO_FUNCTIONS
 
-#include "base/include/base_types.h"
-#include "build/include/build_config.h"
-
 #ifndef OS_POSIX
 #undef fopen
 #endif
+
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
 
 #include "filesystem_init.h"
 
