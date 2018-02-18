@@ -2,7 +2,7 @@
 
 #include "avi/ibik.h"
 
-#include "bink/bink.h"
+#include "deps/bink/bink.h"
 #include "filesystem.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialsystem.h"

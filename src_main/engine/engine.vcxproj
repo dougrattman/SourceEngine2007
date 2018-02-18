@@ -134,10 +134,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ShowProgress>NotSet</ShowProgress>
+      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -149,14 +147,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <DelayLoadDLLs>winmm.dll;dsound.dll;wininet.dll;rpcrt4.dll;shell32.dll</DelayLoadDLLs>
-      <AdditionalLibraryDirectories>..\lib\common;..\lib\public</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\common;..\lib\public;$(SolutionDir)deps\bink</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
       <Message>
       </Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw" "binkw$(PlatformArchitecture).dll" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -197,10 +195,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ShowProgress>NotSet</ShowProgress>
+      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -211,14 +207,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <DelayLoadDLLs>winmm.dll;dsound.dll;wininet.dll;rpcrt4.dll;shell32.dll</DelayLoadDLLs>
-      <AdditionalLibraryDirectories>..\lib\common;..\lib\public</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\common;..\lib\public;$(SolutionDir)deps\bink</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
       <Message>
       </Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw" "binkw$(PlatformArchitecture).dll" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -261,10 +257,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ShowProgress>NotSet</ShowProgress>
+      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -278,14 +272,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <DelayLoadDLLs>winmm.dll;dsound.dll;wininet.dll;rpcrt4.dll;shell32.dll</DelayLoadDLLs>
-      <AdditionalLibraryDirectories>..\lib\common;..\lib\public</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\common;..\lib\public;$(SolutionDir)deps\bink</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
       <Message>
       </Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw" "binkw$(PlatformArchitecture).dll" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -328,10 +322,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ShowProgress>NotSet</ShowProgress>
+      <AdditionalDependencies>binkw$(PlatformArchitecture).lib;delayimp.lib;wsock32.lib;ws2_32.lib;wininet.lib;winmm.lib;dsound.lib;vfw32.lib;Rpcrt4.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -344,14 +336,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <DelayLoadDLLs>winmm.dll;dsound.dll;wininet.dll;rpcrt4.dll;shell32.dll</DelayLoadDLLs>
-      <AdditionalLibraryDirectories>..\lib\common;..\lib\public</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\common;..\lib\public;$(SolutionDir)deps\bink</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
     <PostBuildEvent>
       <Message>
       </Message>
-      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\bink" "$(SolutionDir)deps\bink\binkw$(PlatformArchitecture).dll" "binkw" "binkw$(PlatformArchitecture).dll" "bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -1940,9 +1932,6 @@
     <ClCompile Include="world.cpp" />
     <ClCompile Include="xboxsystem.cpp" />
     <ClCompile Include="zone.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\lib\common\binkw32.lib" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\bugreporter\bugreporter.h" />

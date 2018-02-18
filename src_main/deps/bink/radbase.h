@@ -36,7 +36,7 @@
 #ifndef __RADBASEH__
   #define __RADBASEH__
 
-  #define RADCOPYRIGHT "Copyright (C) 1994-2007, RAD Game Tools, Inc."
+  #define RADCOPYRIGHT "Copyright (C) 1994-2008, RAD Game Tools, Inc."
 
   #ifndef __RADRES__
 
@@ -114,13 +114,22 @@
 
     #elif defined(__CELLOS_LV2__)
 
-      #define __RADPS3__
-      #define __RADPPC__
-      #define __RAD32__
-      #define __RADCELL__
-      #define __RADBIGENDIAN__
-      #define RADINLINE inline
-      #define RADRESTRICT __restrict
+      #ifdef __SPU__
+        #define __RADSPU__
+        #define __RAD32__
+        #define __RADCELL__
+        #define __RADBIGENDIAN__
+        #define RADINLINE inline
+        #define RADRESTRICT __restrict
+      #else
+        #define __RADPS3__
+        #define __RADPPC__
+        #define __RAD32__
+        #define __RADCELL__
+        #define __RADBIGENDIAN__
+        #define RADINLINE inline
+        #define RADRESTRICT __restrict
+      #endif
 
       #ifndef __LP32__
       #error "PS3 32bit ABI support only"
@@ -190,6 +199,7 @@
       #define __RAD32__
       #define __RADLITTLEENDIAN__
       #define RADINLINE inline
+      #define RADRESTRICT __restrict
 
     #else
 
@@ -297,7 +307,7 @@
     #if (!defined(__RADDOS__) && !defined(__RADWIN__) && !defined(__RADMAC__) &&      \
          !defined(__RADNGC__) && !defined(__RADNDS__) && !defined(__RADXBOX__) &&     \
          !defined(__RADXENON__) && !defined(__RADLINUX__) && !defined(__RADPS2__) &&  \
-         !defined(__RADPSP__) && !defined(__RADPS3__) && !defined(__RADWII__))
+         !defined(__RADPSP__) && !defined(__RADPS3__)  && !defined(__RADSPU__) && !defined(__RADWII__))
       #error "RAD.H did not detect your platform.  Define DOS, WINDOWS, WIN32, macintosh, powerpc, or appropriate console."
     #endif
 
@@ -308,7 +318,7 @@
     #endif
 
     #if (defined(__RADNGC__) || defined(__RADWII__) || defined( __RADPS2__) || \
-         defined(__RADPSP__) || defined(__RADPS3__) || defined(__RADNDS__))
+         defined(__RADPSP__) || defined(__RADPS3__) || defined(__RADSPU__) || defined(__RADNDS__))
 
       #define RADLINK
       #define RADEXPLINK
@@ -455,9 +465,12 @@
     #endif
 
    // probably s.b: RAD_DECLARE_ALIGNED(type, name, alignment)
-    #if (defined(__RADNGC__) || defined(__RADWII__) || defined(__RADPS2__)  || defined(__RADPSP__) || \
-         defined(__RADPS3__) || defined(__RADLINUX__) || defined(__RADMAC__)) || defined(__RADNDS__)
+    #if (defined(__RADWII__) || defined(__RADPSP__) || \
+         defined(__RADPS3__) || defined(__RADSPU__) || \
+         defined(__RADLINUX__) || defined(__RADMAC__)) || defined(__RADNDS__)
       #define RAD_ALIGN(type,var,num) type __attribute__ ((aligned (num))) var
+    #elif (defined(__RADNGC__) || defined(__RADPS2__))
+      #define RAD_ALIGN(type,var,num) __attribute__ ((aligned (num))) type var
     #elif (_MSC_VER >= 1300)
       #define RAD_ALIGN(type,var,num) type __declspec(align(num)) var
     #else
@@ -538,7 +551,7 @@
       #define F64 double
     #endif
 
-    #if defined(__RADMAC__) || defined(__MRC__) || defined( __RADNGC__ ) || defined( __RADWII__ ) || defined(__RADNDS__) || defined(__RADPSP__) || defined(__RADPS3__)
+    #if defined(__RADMAC__) || defined(__MRC__) || defined( __RADNGC__ ) || defined( __RADWII__ ) || defined(__RADNDS__) || defined(__RADPSP__) || defined(__RADPS3__) || defined(__RADSPU__)
       #define U64 unsigned long long
       #define S64 signed long long
     #elif defined(__RADPS2__)
@@ -569,7 +582,7 @@
       #define S16 signed int
     #endif
 
-    #if defined( __RADXENON__ ) || defined( __RADPS3__ ) || defined( __RADWII__ )
+    #if defined( __RADXENON__ ) || defined( __RADPS3__ )  || defined( __RADSPU__ )|| defined( __RADWII__ )
       // on next gen platforms always turn off lower case types 
       //   (so we can eventually remove them)
       #undef RAD_NO_LOWERCASE_TYPES  // prevents redef warning
@@ -583,7 +596,7 @@
         // same types that we use.
         // So we use the typedefs for this platform.
 
-        #include <dolphin\types.h>
+        #include <dolphin/types.h>
 
       #elif defined(__RADWII__)
 
@@ -591,12 +604,12 @@
         // same types that we use.
         // So we use the typedefs for this platform.
 
-        #include <revolution\types.h>
+        #include <revolution/types.h>
 
       #elif defined(__RADNDS__)
 
         // Ditto for Nitro/NDS
-        #include <nitro\types.h>
+        #include <nitro/types.h>
 
       #else
 

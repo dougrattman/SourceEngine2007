@@ -6,9 +6,9 @@
 
 #include "avi/iavi.h"
 #include "base/include/windows/scoped_winsock_initializer.h"
-#include "bink/bink.h"
 #include "cdll_engine_int.h"
 #include "cl_main.h"
+#include "deps/bink/bink.h"
 #include "gameui/igameui.h"
 #include "gl_matsysiface.h"
 #include "host.h"

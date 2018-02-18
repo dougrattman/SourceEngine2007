@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{dbc6ca68-5668-4e47-845f-062b654579b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{cae7a6f5-ea21-4630-a1ba-d1cf05f3e7fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Client">
       <UniqueIdentifier>{b63ad5d1-6ae0-4535-9319-46a2fe2063f7}</UniqueIdentifier>
     </Filter>
@@ -837,11 +834,6 @@
     <ClCompile Include="audio\private\snd_dev_xaudio.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\lib\common\binkw32.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio\audio_pch.h">
