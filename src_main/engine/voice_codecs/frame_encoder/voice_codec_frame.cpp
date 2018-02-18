@@ -1,16 +1,13 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "audio/public/ivoicecodec.h"
 
+#include <algorithm>
 #include <cstring>
 #include "iframeencoder.h"
 #include "tier0/include/dbg.h"
 
 #include "tier0/include/memdbgon.h"
-
-#ifndef min
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#endif
 
 // VoiceCodec_Frame can be used to wrap a frame encoder for the engine. As it
 // gets sound data, it will queue it until it has enough for a frame, then it
@@ -72,8 +69,9 @@ class VoiceCodec_Frame : public IVoiceCodec {
     }
 
     // Store the remaining samples.
-    int nNewSamples = min(
-        nSamples, min(m_nRawSamples - m_nEncodeBufferSamples, m_nRawSamples));
+    int nNewSamples = std::min(
+        nSamples,
+        std::min(m_nRawSamples - m_nEncodeBufferSamples, m_nRawSamples));
     if (nNewSamples) {
       memcpy(&m_EncodeBuffer[m_nEncodeBufferSamples],
              &pUncompressed[nSamples - nNewSamples],

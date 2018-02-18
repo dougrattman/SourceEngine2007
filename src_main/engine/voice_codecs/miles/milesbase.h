@@ -1,27 +1,27 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef MILESBASE_H
 #define MILESBASE_H
 
-#include "Miles/mss.h"
+#include "deps/miles/include/MSS.H"
 
-class CProvider {
+class MilesProviderCache {
  public:
-  CProvider(HPROVIDER hProvider);
+  MilesProviderCache(HPROVIDER miles_provider);
 
-  static CProvider *FindProvider(HPROVIDER hProvider);
+  static MilesProviderCache *FindProvider(HPROVIDER miles_provider);
   static void FreeAllProviders();
 
   HPROVIDER GetProviderHandle();
 
  private:
-  ~CProvider();
+  ~MilesProviderCache();
 
  private:
   HPROVIDER m_hProvider;
 
-  static CProvider *s_pHead;
-  CProvider *m_pNext;
+  static MilesProviderCache *s_pHead;
+  MilesProviderCache *m_pNext;
 };
 
 // This holds the handles and function pointers we want from a
@@ -63,7 +63,7 @@ class ASISTRUCT {
   ASI_STREAM_ATTRIBUTE ASI_stream_attribute;
 
   HASISTREAM m_stream;
-  CProvider *m_pProvider;
+  MilesProviderCache *m_pProvider;
 };
 
 extern void IncrementRefMiles();

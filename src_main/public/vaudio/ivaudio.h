@@ -3,23 +3,24 @@
 #ifndef IVAUDIO_H
 #define IVAUDIO_H
 
-class IAudioStreamEvent {
+#include "tier1/interface.h"
+
+abstract_class IAudioStreamEvent {
  public:
   // called by the stream to request more data
-  // seek the source to position "offset"
+  // seek the source to position offset
   // -1 indicates previous position
-  // copy the data to pBuffer and return the number of bytes copied
-  // you may return less than bytesRequested if the end of the stream
+  // copy the data to buffer and return the number of bytes copied
+  // you may return less than copyCount if the end of the stream
   // is encountered.
-  virtual int StreamRequestData(void *pBuffer, int bytesRequested,
-                                int offset) = 0;
+  virtual int StreamRequestData(void *buffer, int copyCount, int offset) = 0;
 };
 
-class IAudioStream {
+abstract_class IAudioStream {
  public:
   // Decode another bufferSize output bytes from the stream
   // returns number of bytes decoded
-  virtual int Decode(void *pBuffer, unsigned int bufferSize) = 0;
+  virtual int Decode(void *buffer, unsigned int size) = 0;
 
   // output sampling bits (8/16)
   virtual int GetOutputBits() = 0;
@@ -38,11 +39,11 @@ class IAudioStream {
 };
 
 #define VAUDIO_INTERFACE_VERSION "VAudio002"
-class IVAudio {
+
+abstract_class IVAudio {
  public:
-  virtual IAudioStream *CreateMP3StreamDecoder(
-      IAudioStreamEvent *pEventHandler) = 0;
-  virtual void DestroyMP3StreamDecoder(IAudioStream *pDecoder) = 0;
+  virtual IAudioStream *CreateMP3StreamDecoder(IAudioStreamEvent * event) = 0;
+  virtual void DestroyMP3StreamDecoder(IAudioStream * stream) = 0;
 };
 
 #endif  // IVAUDIO_H

@@ -118,18 +118,17 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
@@ -138,6 +137,8 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mss$(PlatformArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -151,6 +152,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -175,18 +179,17 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -194,6 +197,8 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mss$(PlatformArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -207,6 +212,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -229,24 +237,25 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mss$(PlatformArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -260,6 +269,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -282,23 +294,24 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4100; 4244</DisableSpecificWarnings>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\miles\lib\$(PlatformShortName)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mss$(PlatformArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -312,16 +325,18 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mss$(PlatformArchitecture).dll" "Mss$(PlatformArchitecture)" "Mss$(PlatformArchitecture).dll" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssvoice.asi" "mssvoice" "mssvoice.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\" "$(SolutionDir)deps\miles\bin\$(PlatformShortName)\mssmp3.asi" "mssmp3" "mssmp3.asi" "bin" &amp;&amp; "$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tier0\include\memoverride.cpp" />
     <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp" />
-    <ClCompile Include="milesbase.cpp" />
-    <ClCompile Include="mp3_miles.cpp" />
+    <ClCompile Include="milesbase.cc" />
+    <ClCompile Include="mp3_miles.cc" />
     <ClCompile Include="voice_codec_miles.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\Miles\MSS.H" />
     <ClInclude Include="..\..\..\public\tier1\interface.h" />
     <ClInclude Include="milesbase.h" />
   </ItemGroup>

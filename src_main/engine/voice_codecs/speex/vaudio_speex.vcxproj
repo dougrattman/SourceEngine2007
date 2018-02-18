@@ -121,10 +121,10 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
@@ -151,6 +151,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -178,10 +181,10 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
@@ -207,6 +210,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -232,10 +238,10 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
@@ -260,6 +266,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -285,10 +294,10 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <CustomBuildStep>
-      <Command>if exist  ..\..\..\..\game\bin\vaudio_speex.dll attrib -r ..\..\..\..\game\bin\vaudio_speex.dll
-if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.dll
-</Command>
-      <Outputs>..\..\..\..\game\bin\vaudio_speex.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
@@ -312,6 +321,9 @@ if exist "$(TargetPath)" copy "$(TargetPath)" ..\..\..\..\game\bin\vaudio_speex.
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0407</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)devtools\scripts\post_build_copy_artifacts_to_game.cmd" "$(SolutionDir)" "$(TargetDir)" "$(TargetPath)" "$(TargetName)" "$(TargetFileName)" "bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tier0\include\memoverride.cpp" />

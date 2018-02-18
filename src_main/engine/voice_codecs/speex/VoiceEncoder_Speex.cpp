@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved. ============//
 
 /* This product contains Speex software.  The license terms of the Speex
 software, distributed with this product, are as follows:

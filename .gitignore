@@ -164,3 +164,7 @@ __pycache__/
 
 # Solution-specific
 game/
+!deps/
+!x64/
+!x86/
+![Bb]in/
