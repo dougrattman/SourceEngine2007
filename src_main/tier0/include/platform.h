@@ -192,9 +192,7 @@ typedef void *HINSTANCE;
 #define RESTRICT_FUNC
 #endif
 
-//-----------------------------------------------------------------------------
 // fsel
-//-----------------------------------------------------------------------------
 static FORCEINLINE f32 fsel(f32 fComparand, f32 fValGE, f32 fLT) {
   return fComparand >= 0 ? fValGE : fLT;
 }
@@ -202,10 +200,7 @@ static FORCEINLINE f64 fsel(f64 fComparand, f64 fValGE, f64 fLT) {
   return fComparand >= 0 ? fValGE : fLT;
 }
 
-//-----------------------------------------------------------------------------
 // FP exception handling
-//-----------------------------------------------------------------------------
-
 #if defined(COMPILER_MSVC)
 inline void SetupFPUControlWord() {
 #ifndef ARCH_CPU_X86_64
@@ -230,13 +225,9 @@ inline void SetupFPUControlWord() {
 }
 #endif  // COMPILER_MSVC
 
-//-----------------------------------------------------------------------------
-// Purpose: Standard functions for handling endian-ness
-//-----------------------------------------------------------------------------
+// Standard functions for handling endian-ness
 
-//-------------------------------------
 // Basic swaps
-//-------------------------------------
 
 template <typename T>
 inline T WordSwapC(T w) {
@@ -254,9 +245,7 @@ inline T DWordSwapC(T dw) {
   return *((T *)&temp);
 }
 
-//-------------------------------------
 // Fast swaps
-//-------------------------------------
 
 #ifdef COMPILER_MSVC
 #define WordSwap WordSwapAsm
@@ -280,9 +269,7 @@ inline T DWordSwapAsm(T dw) {
 #define DWordSwap DWordSwapC
 #endif
 
-//-------------------------------------
 // The typically used methods.
-//-------------------------------------
 
 #if defined(__i386__)
 #define LITTLE_ENDIAN 1

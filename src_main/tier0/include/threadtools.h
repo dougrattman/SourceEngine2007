@@ -58,10 +58,6 @@
 typedef void *HANDLE;  //-V677
 #endif
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-
 const u32 TT_INFINITE = 0xffffffff;
 
 #ifndef NO_THREAD_LOCAL
@@ -78,12 +74,8 @@ const u32 TT_INFINITE = 0xffffffff;
 
 using ThreadId_t = unsigned long;
 
-//-----------------------------------------------------------------------------
-//
 // Simple thread creation. Differs from VCR mode/CreateThread/_beginthreadex
 // in that it accepts a standard C function rather than compiler specific one.
-//
-//-----------------------------------------------------------------------------
 FORWARD_DECLARE_HANDLE(ThreadHandle_t);
 using ThreadFunc_t = u32 (*)(void *parameter);
 
@@ -93,8 +85,6 @@ TT_OVERLOAD ThreadHandle_t CreateSimpleThread(ThreadFunc_t, void *pParam,
 TT_INTERFACE ThreadHandle_t CreateSimpleThread(ThreadFunc_t, void *pParam,
                                                u32 stackSize = 0);
 TT_INTERFACE bool ReleaseThreadHandle(ThreadHandle_t);
-
-//-----------------------------------------------------------------------------
 
 TT_INTERFACE void ThreadSleep(u32 duration = 0);
 TT_INTERFACE u32 ThreadGetCurrentId();
@@ -138,8 +128,6 @@ inline void ThreadSetDebugName(const ch *pszName) {
 TT_INTERFACE void ThreadSetAffinity(ThreadHandle_t hThread,
                                     uintptr_t nAffinityMask);
 
-//-----------------------------------------------------------------------------
-
 enum ThreadWaitResult_t {
   TW_FAILED = 0xffffffff,   // WAIT_FAILED
   TW_TIMEOUT = 0x00000102,  // WAIT_TIMEOUT
@@ -155,12 +143,8 @@ inline i32 ThreadWaitForObject(HANDLE handle, bool bWaitAll = true,
 }
 #endif
 
-//-----------------------------------------------------------------------------
-//
 // Interlock methods. These perform very fast atomic thread
 // safe operations. These are especially relevant in a multi-core setting.
-//
-//-----------------------------------------------------------------------------
 
 #ifdef OS_WIN
 #define NOINLINE
@@ -377,9 +361,7 @@ inline bool ThreadInterlockedAssignIf(i32 volatile *p, i32 value,
   return ThreadInterlockedAssignIf((long volatile *)p, value, comperand);
 }
 
-//-----------------------------------------------------------------------------
 // Access to VTune thread profiling
-//-----------------------------------------------------------------------------
 #if defined(OS_WIN) && defined(THREAD_PROFILER)
 TT_INTERFACE void ThreadNotifySyncPrepare(void *p);
 TT_INTERFACE void ThreadNotifySyncCancel(void *p);
@@ -392,10 +374,8 @@ TT_INTERFACE void ThreadNotifySyncReleasing(void *p);
 #define ThreadNotifySyncReleasing(p) ((void)0)
 #endif
 
-//-----------------------------------------------------------------------------
 // Encapsulation of a thread local datum (needed because THREAD_LOCAL doesn't
 // work in a DLL loaded with LoadLibrary()
-//-----------------------------------------------------------------------------
 
 #ifndef __AFXTLS_H__  // not compatible with some Windows headers
 #ifndef NO_THREAD_LOCAL
@@ -416,8 +396,6 @@ class TT_CLASS CThreadLocalBase {
 #endif
 };
 
-//---------------------------------------------------------
-
 #ifndef __AFXTLS_H__
 
 template <class T>
@@ -433,8 +411,6 @@ class CThreadLocal : public CThreadLocalBase {
 };
 
 #endif
-
-//---------------------------------------------------------
 
 template <class T = i32>
 class CThreadLocalInt : public CThreadLocal<T> {
@@ -467,8 +443,6 @@ class CThreadLocalInt : public CThreadLocal<T> {
     return i;
   }
 };
-
-//---------------------------------------------------------
 
 template <class T>
 class CThreadLocalPtr : private CThreadLocalBase {
@@ -531,14 +505,10 @@ class CThreadLocalPtr : private CThreadLocalBase {
 #endif  // NO_THREAD_LOCAL
 #endif  // !__AFXTLS_H__
 
-//-----------------------------------------------------------------------------
-//
 // A super-fast thread-safe integer A simple class encapsulating the notion of
 // an atomic integer used across threads that uses the built in and faster
 // "interlocked" functionality rather than a full-blown mutex. Useful for simple
 // things like reference counts, etc.
-//
-//-----------------------------------------------------------------------------
 
 template <typename T>
 class CInterlockedIntT {
@@ -598,8 +568,6 @@ class CInterlockedIntT {
 
 typedef CInterlockedIntT<i32> CInterlockedInt;
 typedef CInterlockedIntT<u32> CInterlockedUInt;
-
-//-----------------------------------------------------------------------------
 
 template <typename T>
 class CInterlockedPtr {
@@ -670,20 +638,14 @@ class CInterlockedPtr {
   T *volatile m_value;
 };
 
-//-----------------------------------------------------------------------------
-//
 // Platform independent for critical sections management
-//
-//-----------------------------------------------------------------------------
 
 class TT_CLASS CThreadMutex {
  public:
   CThreadMutex();
   ~CThreadMutex();
 
-  //------------------------------------------------------
   // Mutex acquisition/release. Const intentionally defeated.
-  //------------------------------------------------------
   _Acquires_lock_(this->m_CriticalSection) void Lock();
   _Acquires_lock_(this->m_CriticalSection) void Lock() const {
     (const_cast<CThreadMutex *>(this))->Lock();
@@ -696,15 +658,11 @@ class TT_CLASS CThreadMutex {
   bool TryLock();
   bool TryLock() const { return (const_cast<CThreadMutex *>(this))->TryLock(); }
 
-  //------------------------------------------------------
   // Use this to make deadlocks easier to track by asserting
   // when it is expected that the current thread owns the mutex
-  //------------------------------------------------------
   bool AssertOwnedByCurrentThread();
 
-  //------------------------------------------------------
   // Enable tracing to track deadlock problems
-  //------------------------------------------------------
   void SetTrace(bool);
 
  private:
@@ -737,15 +695,11 @@ class TT_CLASS CThreadMutex {
 #endif
 };
 
-//-----------------------------------------------------------------------------
-//
 // An alternative mutex that is useful for cases when thread contention is
 // rare, but a mutex is required. Instances should be declared volatile.
 // Sleep of 0 may not be sufficient to keep high priority threads from starving
 // lesser threads. This class is not a suitable replacement for a critical
 // section if the resource contention is high.
-//
-//-----------------------------------------------------------------------------
 
 #if defined(OS_WIN) && !defined(THREAD_PROFILER)
 
@@ -847,10 +801,6 @@ class ALIGN128 CAlignedThreadFastMutex : public CThreadFastMutex {
 typedef CThreadMutex CThreadFastMutex;
 #endif
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-
 class CThreadNullMutex {
  public:
   static void Lock() {}
@@ -864,12 +814,8 @@ class CThreadNullMutex {
   static i32 GetDepth() { return 0; }
 };
 
-//-----------------------------------------------------------------------------
-//
 // A mutex decorator class used to control the use of a mutex, to make it
 // less expensive when not multithreading
-//
-//-----------------------------------------------------------------------------
 
 template <class BaseClass, bool *pCondition>
 class CThreadConditionalMutex : public BaseClass {
@@ -910,10 +856,7 @@ class CThreadConditionalMutex : public BaseClass {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Mutex decorator that blows up if another thread enters
-//-----------------------------------------------------------------------------
-
 template <class BaseClass>
 class CThreadTerminalMutex : public BaseClass {
  public:
@@ -939,13 +882,8 @@ class CThreadTerminalMutex : public BaseClass {
   }
 };
 
-//-----------------------------------------------------------------------------
-//
 // Class to Lock a critical section, and unlock it automatically
 // when the lock goes out of scope
-//
-//-----------------------------------------------------------------------------
-
 template <class MUTEX_TYPE = CThreadMutex>
 class CAutoLockT {
  public:
@@ -970,8 +908,6 @@ class CAutoLockT {
 };
 
 typedef CAutoLockT<CThreadMutex> CAutoLock;
-
-//---------------------------------------------------------
 
 template <i32 size>
 struct CAutoLockTypeDeducer {};
@@ -1009,30 +945,20 @@ struct CAutoLockTypeDeducer<sizeof(CAlignedThreadFastMutex)> {
 
 #define LOCAL_THREAD_LOCK() LOCAL_THREAD_LOCK_(_)
 
-//-----------------------------------------------------------------------------
-//
 // Base class for event, semaphore and mutex objects.
-//
-//-----------------------------------------------------------------------------
-
 class TT_CLASS CThreadSyncObject {
  public:
   ~CThreadSyncObject();
 
-  //-----------------------------------------------------
   // Query if object is useful
-  //-----------------------------------------------------
   bool operator!() const;
 
-  //-----------------------------------------------------
   // Access handle
-  //-----------------------------------------------------
 #ifdef OS_WIN
   operator HANDLE() { return m_hSyncObject; }
 #endif
-  //-----------------------------------------------------
+
   // Wait for a signal from the object
-  //-----------------------------------------------------
   bool Wait(u32 dwTimeout = TT_INFINITE);
 
  protected:
@@ -1056,28 +982,17 @@ class TT_CLASS CThreadSyncObject {
   CThreadSyncObject &operator=(const CThreadSyncObject &);
 };
 
-//-----------------------------------------------------------------------------
-//
 // Wrapper for unnamed event objects
-//
-//-----------------------------------------------------------------------------
 
 #ifdef OS_WIN
 
-//-----------------------------------------------------------------------------
-//
 // CThreadSemaphore
-//
-//-----------------------------------------------------------------------------
-
 class TT_CLASS CThreadSemaphore : public CThreadSyncObject {
  public:
   CThreadSemaphore(long initialValue, long maxValue);
 
-  //-----------------------------------------------------
   // Increases the count of the semaphore object by a specified
   // amount.  Wait() decreases the count by one on return.
-  //-----------------------------------------------------
   bool Release(long releaseCount = 1, long *pPreviousCount = nullptr);
 
  private:
@@ -1085,21 +1000,14 @@ class TT_CLASS CThreadSemaphore : public CThreadSyncObject {
   CThreadSemaphore &operator=(const CThreadSemaphore &);
 };
 
-//-----------------------------------------------------------------------------
-//
 // A mutex suitable for out-of-process, multi-processor usage
-//
-//-----------------------------------------------------------------------------
-
 class TT_CLASS CThreadFullMutex : public CThreadSyncObject {
  public:
   _Acquires_lock_(this->m_hSyncObject)
       CThreadFullMutex(bool bEstablishInitialOwnership = false,
                        const ch *pszName = nullptr);
 
-  //-----------------------------------------------------
   // Release ownership of the mutex
-  //-----------------------------------------------------
   _Releases_lock_(this->m_hSyncObject) bool Release();
 
   // To match regular CThreadMutex:
@@ -1119,19 +1027,13 @@ class TT_CLASS CThreadEvent : public CThreadSyncObject {
  public:
   CThreadEvent(bool fManualReset = false);
 
-  //-----------------------------------------------------
   // Set the state to signaled
-  //-----------------------------------------------------
   bool Set();
 
-  //-----------------------------------------------------
   // Set the state to nonsignaled
-  //-----------------------------------------------------
   bool Reset();
 
-  //-----------------------------------------------------
   // Check if the event is signaled
-  //-----------------------------------------------------
   bool Check();
 
   bool Wait(u32 dwTimeout = TT_INFINITE);
@@ -1162,12 +1064,7 @@ inline i32 ThreadWaitForEvents(i32 nEvents, const CThreadEvent *pEvents,
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
 // CThreadRWLock
-//
-//-----------------------------------------------------------------------------
-
 class TT_CLASS CThreadRWLock {
  public:
   CThreadRWLock();
@@ -1196,12 +1093,7 @@ class TT_CLASS CThreadRWLock {
   i32 m_nPendingReaders;
 };
 
-//-----------------------------------------------------------------------------
-//
 // CThreadSpinRWLock
-//
-//-----------------------------------------------------------------------------
-
 #define TFRWL_ALIGN ALIGN8
 
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
@@ -1216,12 +1108,44 @@ class TT_CLASS CThreadSpinRWLock {
     memset(this, 0, sizeof(*this));
   }
 
-  bool TryLockForWrite();
-  bool TryLockForRead();
+  bool TryLockForWrite() {
+    ++m_nWriters;
+    if (!TryLockForWrite(ThreadGetCurrentId())) {
+      --m_nWriters;
+      return false;
+    }
+    return true;
+  }
+  bool TryLockForRead() {
+    if (m_nWriters != 0) {
+      return false;
+    }
+    // In order to grab a write lock, the number of readers must not change and
+    // no thread can own the write
+    LockInfo_t oldValue;
+    LockInfo_t newValue;
+
+    oldValue.m_nReaders = m_lockInfo.m_nReaders;
+    oldValue.m_writerId = 0;
+    newValue.m_nReaders = oldValue.m_nReaders + 1;
+    newValue.m_writerId = 0;
+
+    return AssignIf(newValue, oldValue);
+  }
 
   void LockForRead();
   void UnlockRead();
-  void LockForWrite();
+
+  void LockForWrite() {
+    const u32 threadId = ThreadGetCurrentId();
+
+    ++m_nWriters;
+
+    if (!TryLockForWrite(threadId)) {
+      ThreadPause();
+      SpinLockForWrite(threadId);
+    }
+  }
   void UnlockWrite();
 
   bool TryLockForWrite() const {
@@ -1249,8 +1173,24 @@ class TT_CLASS CThreadSpinRWLock {
     i32 m_nReaders;
   };
 
-  bool AssignIf(const LockInfo_t &newValue, const LockInfo_t &comperand);
-  bool TryLockForWrite(const u32 threadId);
+  bool AssignIf(const LockInfo_t &newValue, const LockInfo_t &comperand) {
+    return ThreadInterlockedAssignIf64((i64 *)&m_lockInfo, *((i64 *)&newValue),
+                                       *((i64 *)&comperand));
+  }
+  bool TryLockForWrite(const u32 threadId) {
+    // In order to grab a write lock, there can be no readers and no owners of
+    // the write lock
+    if (m_lockInfo.m_nReaders > 0 ||
+        (m_lockInfo.m_writerId && m_lockInfo.m_writerId != threadId)) {
+      return false;
+    }
+
+    static const LockInfo_t oldValue = {0, 0};
+    LockInfo_t newValue = {threadId, 0};
+
+    return AssignIf(newValue, oldValue);
+  }
+
   void SpinLockForWrite(const u32 threadId);
 
   volatile LockInfo_t m_lockInfo;
@@ -1260,18 +1200,11 @@ class TT_CLASS CThreadSpinRWLock {
 
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 
-//-----------------------------------------------------------------------------
-//
 // A thread wrapper similar to a Java thread.
-//
-//-----------------------------------------------------------------------------
-
 class TT_CLASS CThread {
  public:
   CThread();
   virtual ~CThread();
-
-  //-----------------------------------------------------
 
   const ch *GetName();
   void SetName(const ch *);
@@ -1280,9 +1213,7 @@ class TT_CLASS CThread {
     return ((u8 *)m_pStackBase - (u8 *)pStackVariable);
   }
 
-  //-----------------------------------------------------
   // Functions for the other threads
-  //-----------------------------------------------------
 
   // Start thread running  - error if already running
   virtual bool Start(u32 nBytesStack = 0);
@@ -1300,13 +1231,9 @@ class TT_CLASS CThread {
   u32 GetThreadId();
 #endif
 
-  //-----------------------------------------------------
-
   i32 GetResult();
 
-  //-----------------------------------------------------
   // Functions for both this, and maybe, and other threads
-  //-----------------------------------------------------
 
   // Forcibly, abnormally, but relatively cleanly stop the thread
   void Stop(i32 exitCode = 0);
@@ -1326,9 +1253,7 @@ class TT_CLASS CThread {
   // Force hard-termination of thread.  Used for critical failures.
   bool Terminate(i32 exitCode = 0);
 
-  //-----------------------------------------------------
   // Global methods
-  //-----------------------------------------------------
 
   // Get the Thread object that represents the current thread, if any.
   // Can return nullptr if the current thread was not created using
@@ -1400,10 +1325,8 @@ class TT_CLASS CThread {
   u32 m_flags;
 };
 
-//-----------------------------------------------------------------------------
 // Simple thread class encompasses the notion of a worker thread, handing
 // synchronized communication.
-//-----------------------------------------------------------------------------
 
 #ifdef OS_WIN
 
@@ -1418,14 +1341,10 @@ class TT_CLASS CWorkerThread : public CThread {
  public:
   CWorkerThread();
 
-  //-----------------------------------------------------
-  //
   // Inter-thread communication
   //
   // Calls in either direction take place on the same "channel."
   // Seperate functions are specified to make identities obvious
-  //
-  //-----------------------------------------------------
 
   // Master: Signal the thread, and block for a response
   i32 CallWorker(u32, u32 timeout = TT_INFINITE,
@@ -1544,12 +1463,8 @@ class CMessageQueue {
   }
 };
 
-//-----------------------------------------------------------------------------
-//
 // CThreadMutex. Inlining to reduce overhead and to allow client code
 // to decide debug status (tracing)
-//
-//-----------------------------------------------------------------------------
 
 #ifdef OS_WIN
 typedef struct _RTL_CRITICAL_SECTION RTL_CRITICAL_SECTION;
@@ -1607,8 +1522,6 @@ inline _Releases_lock_(this->m_CriticalSection) void CThreadMutex::Unlock() {
   LeaveCriticalSection((CRITICAL_SECTION *)&m_CriticalSection);
 }
 
-//---------------------------------------------------------
-
 inline bool CThreadMutex::AssertOwnedByCurrentThread() {
 #ifdef THREAD_MUTEX_TRACING_ENABLED
   if (ThreadGetCurrentId() == m_currentOwnerID) return true;
@@ -1621,15 +1534,11 @@ inline bool CThreadMutex::AssertOwnedByCurrentThread() {
 #endif
 }
 
-//---------------------------------------------------------
-
 inline void CThreadMutex::SetTrace(bool bTrace) {
 #ifdef THREAD_MUTEX_TRACING_ENABLED
   m_bTrace = bTrace;
 #endif
 }
-
-//---------------------------------------------------------
 
 #elif OS_POSIX
 
@@ -1640,34 +1549,19 @@ inline CThreadMutex::CThreadMutex() {
   pthread_mutex_init(&m_Mutex, &m_Attr);
 }
 
-//---------------------------------------------------------
-
 inline CThreadMutex::~CThreadMutex() { pthread_mutex_destroy(&m_Mutex); }
-
-//---------------------------------------------------------
 
 inline void CThreadMutex::Lock() { pthread_mutex_lock(&m_Mutex); }
 
-//---------------------------------------------------------
-
 inline void CThreadMutex::Unlock() { pthread_mutex_unlock(&m_Mutex); }
 
-//---------------------------------------------------------
-
 inline bool CThreadMutex::AssertOwnedByCurrentThread() { return true; }
-
-//---------------------------------------------------------
 
 inline void CThreadMutex::SetTrace(bool fTrace) {}
 
 #endif  // OS_POSIX
 
-//-----------------------------------------------------------------------------
-//
 // CThreadRWLock inline functions
-//
-//-----------------------------------------------------------------------------
-
 inline CThreadRWLock::CThreadRWLock()
     : m_CanRead(true),
       m_nWriters(0),
@@ -1690,69 +1584,6 @@ inline void CThreadRWLock::UnlockRead() {
     m_CanWrite.Set();
   }
   m_mutex.Unlock();
-}
-
-//-----------------------------------------------------------------------------
-//
-// CThreadSpinRWLock inline functions
-//
-//-----------------------------------------------------------------------------
-
-inline bool CThreadSpinRWLock::AssignIf(const LockInfo_t &newValue,
-                                        const LockInfo_t &comperand) {
-  return ThreadInterlockedAssignIf64((i64 *)&m_lockInfo, *((i64 *)&newValue),
-                                     *((i64 *)&comperand));
-}
-
-inline bool CThreadSpinRWLock::TryLockForWrite(const u32 threadId) {
-  // In order to grab a write lock, there can be no readers and no owners of the
-  // write lock
-  if (m_lockInfo.m_nReaders > 0 ||
-      (m_lockInfo.m_writerId && m_lockInfo.m_writerId != threadId)) {
-    return false;
-  }
-
-  static const LockInfo_t oldValue = {0, 0};
-  LockInfo_t newValue = {threadId, 0};
-
-  return AssignIf(newValue, oldValue);
-}
-
-inline bool CThreadSpinRWLock::TryLockForWrite() {
-  ++m_nWriters;
-  if (!TryLockForWrite(ThreadGetCurrentId())) {
-    --m_nWriters;
-    return false;
-  }
-  return true;
-}
-
-inline bool CThreadSpinRWLock::TryLockForRead() {
-  if (m_nWriters != 0) {
-    return false;
-  }
-  // In order to grab a write lock, the number of readers must not change and no
-  // thread can own the write
-  LockInfo_t oldValue;
-  LockInfo_t newValue;
-
-  oldValue.m_nReaders = m_lockInfo.m_nReaders;
-  oldValue.m_writerId = 0;
-  newValue.m_nReaders = oldValue.m_nReaders + 1;
-  newValue.m_writerId = 0;
-
-  return AssignIf(newValue, oldValue);
-}
-
-inline void CThreadSpinRWLock::LockForWrite() {
-  const u32 threadId = ThreadGetCurrentId();
-
-  ++m_nWriters;
-
-  if (!TryLockForWrite(threadId)) {
-    ThreadPause();
-    SpinLockForWrite(threadId);
-  }
 }
 
 #endif  // SOURCE_TIER0_INCLUDE_THREADTOOLS_H_

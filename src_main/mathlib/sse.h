@@ -3,6 +3,7 @@
 #ifndef SOURCE_MATHLIB_SSE_H_
 #define SOURCE_MATHLIB_SSE_H_
 
+#include "build/include/build_config.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "tier0/include/calling_conventions.h"

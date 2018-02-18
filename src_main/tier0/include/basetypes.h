@@ -26,11 +26,13 @@ enum ThreeState_t {
   TRS_NONE,
 };
 
+// Align |value| by |alignment|.
 template <typename T>
 constexpr inline T AlignValue(T value, usize alignment) {
   return (T)(((usize)(value) + alignment - 1) & ~(alignment - 1));
 }
 
+// Limit |value| in [|min|..|max|] boundary.
 template <typename T>
 constexpr inline T clamp(T const &value, T const &min, T const &max) {
   if (value < min) return min;
@@ -40,11 +42,13 @@ constexpr inline T clamp(T const &value, T const &min, T const &max) {
 }
 
 // NOTE: This macro is the same as windows uses; so don't change the guts of it.
+// Declare handle with |name|.
 #define DECLARE_POINTER_HANDLE(name) \
   struct name##__ {                  \
     i32 unused;                      \
   };                                 \
   using name = struct name##__ *
+// Forward declare handle with |name|.
 #define FORWARD_DECLARE_HANDLE(name) using name = struct name##__ *
 
 // TODO: Find a better home for this

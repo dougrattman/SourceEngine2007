@@ -2,10 +2,12 @@
 
 #include "tier1/interface.h"
 
-#ifdef _WIN32
-#include <direct.h>  // getcwd
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
+#include <direct.h>  // _getcwd
 #include "base/include/windows/windows_light.h"
-#elif _LINUX
+#elif OS_POSIX
 #define _getcwd getcwd
 #endif
 
@@ -35,9 +37,9 @@ InterfaceReg *InterfaceReg::s_pInterfaceRegs = nullptr;
 
 InterfaceReg::InterfaceReg(InstantiateInterfaceFn instantiate_interface_func,
                            const char *interface_name)
-    : m_pName{interface_name} {
-  m_CreateFn = instantiate_interface_func;
-  m_pNext = s_pInterfaceRegs;
+    : m_CreateFn{instantiate_interface_func},
+      m_pName{interface_name},
+      m_pNext{s_pInterfaceRegs} {
   s_pInterfaceRegs = this;
 }
 
@@ -45,13 +47,12 @@ InterfaceReg::InterfaceReg(InstantiateInterfaceFn instantiate_interface_func,
 // by name via dynamic binding that exposes an opqaue function pointer to the
 // interface.
 void *CreateInterface(const char *interface_name, int *return_code) {
-  for (auto *interface_reg = InterfaceReg::s_pInterfaceRegs; interface_reg;
-       interface_reg = interface_reg->m_pNext) {
-    if (strcmp(interface_reg->m_pName, interface_name) == 0) {
+  for (auto *it = InterfaceReg::s_pInterfaceRegs; it; it = it->m_pNext) {
+    if (strcmp(it->m_pName, interface_name) == 0) {
       if (return_code) {
         *return_code = IFACE_OK;
       }
-      return interface_reg->m_CreateFn();
+      return it->m_CreateFn();
     }
   }
 
@@ -62,7 +63,7 @@ void *CreateInterface(const char *interface_name, int *return_code) {
   return nullptr;
 }
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 // Linux doesn't have this function so this emulates its functionality
 void *GetModuleHandle(const char *name) {
   if (name == nullptr) {
@@ -107,7 +108,7 @@ struct ThreadedLoadLibraryContext_t {
   HMODULE library_module;
 };
 
-#ifdef _WIN32
+#ifdef OS_WIN
 static HMODULE InternalLoadLibrary(const char *library_path) {
   return LoadLibraryEx(library_path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 }
@@ -119,13 +120,12 @@ unsigned int ThreadedLoadLibraryFunc(void *parameter) {
 #endif
 
 HMODULE Sys_LoadLibrary(const char *library_path) {
-#ifdef _WIN32
+#ifdef OS_WIN
   constexpr char const *module_extension = ".dll";
   constexpr char const *module_addition = module_extension;
-#elif _LINUX
+#elif OS_POSIX
   constexpr char const *module_extension = ".so";
-  // if an extension is on the filename assume the i486 binary set.
-  constexpr char const *module_addition = "_i486.so";
+  constexpr char const *module_addition = module_extension;
 #endif
 
   char fixed_library_path[1024];
@@ -137,7 +137,7 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
 
   Q_FixSlashes(fixed_library_path);
 
-#ifdef _WIN32
+#ifdef OS_WIN
 
   const ThreadedLoadLibraryFunc_t thread_func = GetThreadedLoadLibraryFunc();
   if (!thread_func) return InternalLoadLibrary(fixed_library_path);
@@ -154,7 +154,7 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
   ReleaseThreadHandle(thread_handle);
   return context.library_module;
 
-#elif _LINUX
+#elif OS_POSIX
 
   const HMODULE module = dlopen(fixed_library_path, RTLD_NOW);
   if (!module) {
@@ -198,6 +198,7 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
   return nullptr;
 }
 
+#ifdef OS_WIN
 static DWORD SpewModuleLoadError(_In_z_ const char *module_name,
                                  _In_ DWORD error_code = GetLastError()) {
   char *system_error;
@@ -216,6 +217,7 @@ static DWORD SpewModuleLoadError(_In_z_ const char *module_name,
 
   return error_code;
 }
+#endif
 
 // Purpose: Loads a DLL/component from disk and returns a handle to it
 CSysModule *Sys_LoadModule(const char *module_name) {
@@ -229,11 +231,11 @@ CSysModule *Sys_LoadModule(const char *module_name) {
     module = Sys_LoadLibrary(module_name);
 
     if (!module) {
-#ifdef _WIN32
+#ifdef OS_WIN
       SpewModuleLoadError(module_name);
 #else
       Error("Failed to load %s: %s\n", module_name, dlerror());
-#endif  // _WIN32
+#endif  // OS_WIN
     }
   }
 
@@ -251,10 +253,10 @@ CSysModule *Sys_LoadModule(const char *module_name) {
 
 // Purpose: Unloads a DLL/component from
 BOOL Sys_UnloadModule(CSysModule *module_handle) {
-#ifdef _WIN32
+#ifdef OS_WIN
   const HMODULE module = reinterpret_cast<HMODULE>(module_handle);
   return module ? FreeLibrary(module) : TRUE;
-#elif _LINUX
+#elif OS_POSIX
   if (module_handle) {
     dlclose((void *)module_handle);
   }
@@ -265,12 +267,12 @@ BOOL Sys_UnloadModule(CSysModule *module_handle) {
 
 // Purpose: returns a pointer to a function, given a module
 CreateInterfaceFn Sys_GetFactory(CSysModule *module_handle) {
-#ifdef _WIN32
+#ifdef OS_WIN
   const HMODULE module = reinterpret_cast<HMODULE>(module_handle);
   return module ? reinterpret_cast<CreateInterfaceFn>(
                       GetProcAddress(module, CREATEINTERFACE_PROCNAME))
                 : nullptr;
-#elif _LINUX
+#elif OS_POSIX
   return module_handle ? reinterpret_cast<CreateInterfaceFn>(GetProcAddress(
                              module_handle, CREATEINTERFACE_PROCNAME))
                        : nullptr;

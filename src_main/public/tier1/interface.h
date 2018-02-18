@@ -32,8 +32,10 @@
 #ifndef SOURCE_TIER1_INTERFACE_H_
 #define SOURCE_TIER1_INTERFACE_H_
 
-#ifdef _LINUX
-#include <dlfcn.h>  // dlopen,dlclose, et al
+#include "build/include/build_config.h"
+
+#ifdef OS_POSIX
+#include <dlfcn.h>  // dlopen, dlclose, et al
 #include <unistd.h>
 
 #define HMODULE void *

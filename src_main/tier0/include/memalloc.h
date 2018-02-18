@@ -31,10 +31,8 @@ struct _CrtMemState;
 
 typedef usize (*MemAllocFailHandler_t)(usize);
 
-//-----------------------------------------------------------------------------
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
-//-----------------------------------------------------------------------------
 abstract_class IMemAlloc {
  public:
   // Release versions
@@ -109,12 +107,8 @@ abstract_class IMemAlloc {
   virtual usize MemoryAllocFailed() = 0;
 };
 
-//-----------------------------------------------------------------------------
 // Singleton interface
-//-----------------------------------------------------------------------------
 MEM_INTERFACE IMemAlloc *g_pMemAlloc;
-
-//-----------------------------------------------------------------------------
 
 inline void *MemAlloc_AllocAligned(usize size, usize align) {
   u8 *pAlloc, *pResult;
@@ -206,8 +200,6 @@ inline usize MemAlloc_GetSizeAligned(void *pMemBlock) {
   pAlloc = *((void **)pAlloc);
   return g_pMemAlloc->GetSize(pAlloc) - ((u8 *)pMemBlock - (u8 *)pAlloc);
 }
-
-//-----------------------------------------------------------------------------
 
 #if (!defined(NDEBUG) || defined(USE_MEM_DEBUG))
 #define MEM_ALLOC_CREDIT_(tag) \

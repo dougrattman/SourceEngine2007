@@ -32,6 +32,7 @@ PLATFORM_INTERFACE void CatchAndWriteMiniDump(FnWMain pfn, i32 argc, ch *argv[])
 // CatchAndWriteMiniDump() The default is the built-in function that uses
 // DbgHlp.dll's MiniDumpWriteDump function
 using FnMiniDump = void (*)(u32 uStructuredExceptionCode, EXCEPTION_POINTERS *pExceptionInfo);
+
 PLATFORM_INTERFACE FnMiniDump SetMiniDumpFunction(FnMiniDump pfn);
 
 // Use this to write a minidump explicitly.
