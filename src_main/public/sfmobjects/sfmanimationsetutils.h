@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // NOTE: This is a cut-and-paste hack job to get animation set construction
 // working from a commandline tool. It came from tools/ifm/createsfmanimation.cpp

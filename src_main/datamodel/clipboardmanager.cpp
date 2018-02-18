@@ -9,7 +9,7 @@
 #endif
 
 #if defined(USE_WINDOWS_CLIPBOARD)
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 
 CClipboardManager::CClipboardManager() : m_pfnCleanup(NULL) {}

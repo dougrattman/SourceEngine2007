@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: base class for all element attribute panels
 //    An attribute panel is a one line widget that can be used by a list

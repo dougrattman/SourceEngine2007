@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "AudioWaveOutput.h"
 #include "cbase.h"
@@ -408,7 +408,8 @@ sentence )
                 Msg( "%s is not writable, can't save sentence data to file\n",
 wavfile ); return false;
         }
-        
+        
+
         // Rename original wavfile to temp
         filesystem->RenameFile( wavfile, tempfile, NULL );
 

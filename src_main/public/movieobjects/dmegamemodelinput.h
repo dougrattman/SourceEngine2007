@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // game model input - gets its values from an MDL within the game
 //

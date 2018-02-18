@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // The tool UI has 4 purposes:
 //		1) Create the menu bar and client area (lies under the menu bar)

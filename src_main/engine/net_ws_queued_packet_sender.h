@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef NET_WS_QUEUED_PACKET_SENDER_H
 #define NET_WS_QUEUED_PACKET_SENDER_H

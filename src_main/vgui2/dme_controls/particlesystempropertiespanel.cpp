@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Dialog used to edit properties of a particle system definition
 //

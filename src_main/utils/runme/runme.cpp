@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  a very simple wrapper to spawn another process based upon the contents of runme.dat
 //

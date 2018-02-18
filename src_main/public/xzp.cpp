@@ -1,14 +1,14 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include <io.h>
 #include <process.h>
 #endif
+#include <ctype.h>
 #include <fcntl.h>
 #include <malloc.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include < ctype.h >
 #include <cstddefh>
 #include <cstdio>
 #include <cstdlib>

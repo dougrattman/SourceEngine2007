@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmserializerkeyvalues2.h"
 #include <ctype.h>
@@ -961,7 +961,10 @@ KeyValues * >& includedKeys )
         Assert( resourceName );
         Assert( filetoinclude );
         Assert( pFileSystem );
-        
+        
+
+
+
         // Load it...
         if ( !pFileSystem )
         {
@@ -981,7 +984,10 @@ KeyValues * >& includedKeys )
                 {
                         break;
                 }
-                
+                
+
+
+
                 if ( fullpath[ len - 1 ] == '\\' ||
                          fullpath[ len - 1 ] == '/' )
                 {
@@ -1035,7 +1041,10 @@ IBaseFileSystem* pFileSystem , const char *pPathID )
         {
                 // the first thing must be a key
                 const char *s = ReadToken( &pfile, wasQuoted );
-                
+                
+
+
+
                 if ( !pfile || !s || *s == 0 )
                         break;
 

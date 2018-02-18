@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Unit test program for testing of tier2 libraries
 //

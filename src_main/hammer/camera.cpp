@@ -1,16 +1,14 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
 //
 // Purpose: Implements a camera for the 3D view.
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #include "Camera.h"
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+
+#include "base/include/windows/windows_light.h"
 #include "hammer_mathlib.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -484,7 +482,7 @@ void CCamera::CameraIdentityMatrix(VMatrix& Matrix) {
 //-----------------------------------------------------------------------------
 // Purpose: Generates a view matrix based on our current yaw, pitch, and roll.
 //			The view matrix does not consider FOV or clip plane
-//distances.
+// distances.
 //-----------------------------------------------------------------------------
 void CCamera::BuildViewMatrix() {
   // The camera transformation is produced by multiplying roll * yaw * pitch.

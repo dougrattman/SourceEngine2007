@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements the MDI child window. Each MDI child window contains one
 //			or more views. If it contains more than one view, there is a splitter

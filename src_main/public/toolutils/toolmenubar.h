@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // This menu bar displays a couple extra labels:
 // one which contains the tool name, and one which contains a arbitrary info 

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // studiomdl.c: generates a studio .mdl file from a .qc script
 // models/<scriptname>.mdl.
