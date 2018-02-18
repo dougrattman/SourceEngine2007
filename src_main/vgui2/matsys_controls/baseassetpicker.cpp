@@ -484,7 +484,8 @@ void CAssetCache::BuildModList() {
 
     // Always start in an asset-specific directory
     //		char pAssetPath[MAX_PATH];
-    //		Q_snprintf( pAssetPath, MAX_PATH, "%s\\%s", pPath, m_pAssetSubDir
+    //		Q_snprintf( pAssetPath, MAX_PATH, "%s\\%s", pPath,
+    //m_pAssetSubDir
     //); 		Q_FixSlashes( pPath );
 
     int i = m_ModList.AddToTail();
@@ -1236,9 +1237,9 @@ void CBaseAssetPicker::OnTextChanged(KeyValues *pKeyValues) {
   }
 
   if (pSource == m_pModSelector) {
-    KeyValues *pKeyValues = m_pModSelector->GetActiveItemUserData();
-    if (pKeyValues) {
-      m_nCurrentModFilter = pKeyValues->GetInt("mod", -1);
+    KeyValues *userKeyValues = m_pModSelector->GetActiveItemUserData();
+    if (userKeyValues) {
+      m_nCurrentModFilter = userKeyValues->GetInt("mod", -1);
       RefreshAssetList();
     }
     return;
