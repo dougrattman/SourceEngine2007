@@ -4,6 +4,6 @@
 #define SYSEXTERNAL_H
 
 // an error will cause the entire program to exit
-void Sys_Error(const char *format, ...);
+[[noreturn]] void Sys_Error(const char *format, ...);
 
 #endif  // SYSEXTERNAL_H

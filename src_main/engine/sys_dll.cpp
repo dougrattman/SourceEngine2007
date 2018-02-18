@@ -255,7 +255,7 @@ bool Sys_MessageBox(const char *title, const char *info,
 bool g_bUpdateMinidumpComment = true;
 
 // Purpose: Exit engine with error.
-void Sys_Error(const char *format, ...) {
+[[noreturn]] void Sys_Error(const char *format, ...) {
   extern char g_minidumpinfo[4096];
 
   va_list arg_ptr;
@@ -280,7 +280,6 @@ void Sys_Error(const char *format, ...) {
   }
 
   g_bInErrorExit = true;
-
 #if !defined(SWDS)
   if (videomode) videomode->Shutdown();
 #endif
@@ -342,7 +341,9 @@ void Sys_Error(const char *format, ...) {
 #endif
 }
 
-bool IsInErrorExit() { return g_bInErrorExit; }
+bool IsInErrorExit() {
+  return g_bInErrorExit;
+}
 
 void Sys_Sleep(int msec) {
 #ifdef _WIN32

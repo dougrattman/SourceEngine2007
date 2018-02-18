@@ -154,7 +154,7 @@ inline const ch *GetCtrlEventDescription(_In_ DWORD ctrl_type) {
   }
 }
 
-BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD ctrl_type) {
+[[noreturn]] BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD ctrl_type) {
   Warning("Exit process, since event '%s' occurred.",
           GetCtrlEventDescription(ctrl_type));
   // TODO: Process ctrl_type, change process exit code.

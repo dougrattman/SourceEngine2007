@@ -78,8 +78,8 @@ int ParseNum(char *str);
 #define CP_WARNING stderr, 1, 1, 0, 1
 #define CP_STARTUP stdout, 0, 1, 1, 1
 #define CP_NOTIFY stdout, 1, 1, 1, 1
-void ColorPrintf(FILE *pFile, bool red, bool green, bool blue, bool intensity,
-                 char const *pFormat, ...);
+void ColorPrintf(FILE *pFile, bool red, bool green, bool blue, bool intensity, char const *pFormat,
+                 ...);
 
 // Initialize spew output.
 void InstallSpewFunction();
@@ -95,10 +95,9 @@ void InstallAllocationFunctions();
 // the threads can get in a state where you can't tell if they are shutdown or
 // not, and it can stall forever.
 typedef void (*CleanupFn)();
-void CmdLib_AtCleanup(
-    CleanupFn pFn);  // register a callback when Cleanup() is called.
+void CmdLib_AtCleanup(CleanupFn pFn);  // register a callback when Cleanup() is called.
 void CmdLib_Cleanup();
-void CmdLib_Exit(int exitCode);  // Use this to cleanup and call exit().
+[[noreturn]] void CmdLib_Exit(int exitCode);  // Use this to cleanup and call exit().
 
 // entrypoint if chaining spew functions
 SpewRetval_t CmdLib_SpewOutputFunc(SpewType_t type, char const *pMsg);

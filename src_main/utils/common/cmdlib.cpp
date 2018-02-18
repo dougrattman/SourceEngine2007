@@ -330,7 +330,9 @@ void CmdLib_Cleanup() {
 #endif
 }
 
-void CmdLib_Exit(int exitCode) { TerminateProcess(GetCurrentProcess(), 1); }
+[[noreturn]] void CmdLib_Exit(int exitCode) {
+  TerminateProcess(GetCurrentProcess(), 1);
+}
 
 #endif
 

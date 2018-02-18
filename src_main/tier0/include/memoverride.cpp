@@ -629,7 +629,7 @@ printf( NULL );
 // The "int dummy" parameter is so that the callers can be unique so that the
 // linker won't use its /opt:icf optimization to collapse them together. This
 // makes reading the call stack easier.
-void __cdecl WriteMiniDumpOrBreak(int dummy, const char *pchName) {
+[[noreturn]] void __cdecl WriteMiniDumpOrBreak(int dummy, const char *pchName) {
   if (Plat_IsInDebugSession()) {
     __debugbreak();
     // Continue at your peril...
