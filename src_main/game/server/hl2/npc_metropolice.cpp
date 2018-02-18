@@ -210,13 +210,13 @@ BEGIN_DATADESC(CNPC_MetroPolice)
       DEFINE_FIELD(m_iNumPlayerHits, FIELD_INTEGER),
 
       //								m_ActBusyBehavior
-      //(auto saved by AI) 								m_StandoffBehavior (auto saved by AI)
-      //								m_AssaultBehavior
-      //(auto saved by AI) 								m_FuncTankBehavior (auto saved by AI)
-      //								m_RappelBehavior
-      //(auto saved by AI) 								m_PolicingBehavior (auto saved by AI)
-      //								m_FollowBehavior
       //(auto saved by AI)
+      //m_StandoffBehavior (auto saved by AI) 								m_AssaultBehavior (auto saved by
+      //AI)
+      //m_FuncTankBehavior (auto saved by AI) 								m_RappelBehavior (auto saved by
+      //AI)
+      //m_PolicingBehavior (auto saved by AI) 								m_FollowBehavior (auto saved by
+      //AI)
 
       DEFINE_KEYFIELD(m_iManhacks, FIELD_INTEGER, "manhacks"),
       DEFINE_INPUTFUNC(FIELD_VOID, "EnableManhackToss", InputEnableManhackToss),
@@ -373,12 +373,13 @@ class CTraceFilterMetroPolice : public CTraceFilterEntitiesOnly {
 
 //------------------------------------------------------------------------------
 // Purpose :	start and end trace position, amount
-//				of damage to do, and damage type. Returns a pointer
-//to 				the damaged entity in case the NPC wishes to do 				other stuff to the victim
-//(punchangle, etc)
+//				of damage to do, and damage type. Returns a
+//pointer
+// to 				the damaged entity in case the NPC wishes to do
+// other stuff to the victim (punchangle, etc)
 //
-//				Used for many contact-range melee attacks. Bites,
-//claws, etc.
+//				Used for many contact-range melee attacks.
+//Bites, claws, etc.
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -1376,7 +1377,7 @@ void CNPC_MetroPolice::PredictShootTargetVelocity(float flDeltaTime,
 
   //	float flBlendFactor = 1.0f;
   //	VectorMA( *pVecTargetVel, flBlendFactor * VEHICLE_PREDICT_ACCELERATION,
-  //vecForward, *pVecTargetVel ); 	if ( pVecTargetVel->LengthSqr() >
+  // vecForward, *pVecTargetVel ); 	if ( pVecTargetVel->LengthSqr() >
   //(VEHICLE_PREDICT_MAX_SPEED * VEHICLE_PREDICT_MAX_SPEED) )
   //	{
   //		VectorNormalize( *pVecTargetVel );
@@ -1570,14 +1571,14 @@ float CNPC_MetroPolice::AimBurstAtReactionTime(float flReactionTime,
 #define AIM_AT_SHOT_SPEED_COUNT 6
 #define AIM_AT_SHOT_DIST_COUNT 6
 
-static int s_pShotCountFraction[AIM_AT_TIME_DIST_COUNT]
-                               [AIM_AT_TIME_SPEED_COUNT] = {
-                                   {3.0f, 3.0f, 2.5f, 1.5f, 1.0f, 0.0f},
-                                   {3.0f, 3.0f, 2.5f, 1.25f, 0.5f, 0.0f},
-                                   {2.5f, 2.5f, 2.0f, 1.0f, 0.0f, 0.0f},
-                                   {2.0f, 2.0f, 1.5f, 0.5f, 0.0f, 0.0f},
-                                   {1.0f, 1.0f, 1.0f, 0.5f, 0.0f, 0.0f},
-                                   {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+static float s_pShotCountFraction[AIM_AT_TIME_DIST_COUNT]
+                                 [AIM_AT_TIME_SPEED_COUNT] = {
+                                     {3.0f, 3.0f, 2.5f, 1.5f, 1.0f, 0.0f},
+                                     {3.0f, 3.0f, 2.5f, 1.25f, 0.5f, 0.0f},
+                                     {2.5f, 2.5f, 2.0f, 1.0f, 0.0f, 0.0f},
+                                     {2.0f, 2.0f, 1.5f, 0.5f, 0.0f, 0.0f},
+                                     {1.0f, 1.0f, 1.0f, 0.5f, 0.0f, 0.0f},
+                                     {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
 };
 
 int CNPC_MetroPolice::AimBurstAtSetupHitCount(float flDistToTarget,
@@ -1804,7 +1805,7 @@ void CNPC_MetroPolice::AimBurstInFrontOfEnemy(float flReactionTime) {
   m_vecBurstDelta /= (nShotCount - 1);
 
   //	VisualizeStitch( m_vecBurstTargetPos, m_vecBurstTargetPos +
-  //m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
+  // m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
 }
 
 //-----------------------------------------------------------------------------
@@ -1860,7 +1861,7 @@ void CNPC_MetroPolice::AimBurstBehindEnemy(float flShotTime) {
   m_vecBurstDelta /= (nShotCount - 1);
 
   //	VisualizeStitch( m_vecBurstTargetPos, m_vecBurstTargetPos +
-  //m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
+  // m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
 }
 
 //-----------------------------------------------------------------------------
@@ -1924,7 +1925,7 @@ void CNPC_MetroPolice::AimBurstAlongSideOfEnemy(float flFollowTime) {
   m_vecBurstDelta /= (nShotCount - 1);
 
   //	VisualizeStitch( m_vecBurstTargetPos, m_vecBurstTargetPos +
-  //m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
+  // m_vecBurstDelta * (nShotCount - 1) ); 	VisualizeLineOfDeath();
 }
 
 //-----------------------------------------------------------------------------
@@ -2150,7 +2151,7 @@ Vector CNPC_MetroPolice::ComputeBurstTrajectory(const Vector &shootOrigin) {
   m_vecBurstTargetPos += m_vecBurstDelta;
 
   //	NDebugOverlay::Cross3D( m_vecBurstTargetPos, -Vector(32,32,32),
-  //Vector(32,32,32), 255, 0, 255, false, 1.0f );
+  // Vector(32,32,32), 255, 0, 255, false, 1.0f );
 
   return vecPos;
 }
@@ -2795,7 +2796,7 @@ void CNPC_MetroPolice::HandleAnimEvent(animevent_t *pEvent) {
 //-----------------------------------------------------------------------------
 // Purpose:  This is a generic function (to be implemented by sub-classes) to
 //			 handle specific interactions between different types of
-//characters 			 (For example the barnacle grabbing an NPC)
+// characters 			 (For example the barnacle grabbing an NPC)
 // Input  :  Constant for the type of interaction
 // Output :	 true  - if sub-class has a response for the interaction
 //			 false - if sub-class has no response
@@ -4457,8 +4458,8 @@ bool CNPC_MetroPolice::CanDeployManhack(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
-//			In the most cases the base implementation should be called
-//first.
+//			In the most cases the base implementation should be
+//called first.
 //-----------------------------------------------------------------------------
 void CNPC_MetroPolice::BuildScheduleTestBits(void) {
   BaseClass::BuildScheduleTestBits();
@@ -5302,10 +5303,12 @@ DEFINE_SCHEDULE(
     "		TASK_STOP_MOVING				0"
     "		TASK_FACE_PLAYER				0.1"  // FIXME:
                                                                       // This
-                                                                      // needs to
-                                                                      // be the
+                                                                      // needs
+                                                                      // to be
+                                                                      // the
                                                                       // target
-                                                                      // or enemy
+                                                                      // or
+                                                                      // enemy
     "		TASK_METROPOLICE_ACTIVATE_BATON	1"
     "		TASK_PLAY_SEQUENCE				"
     "ACTIVITY:ACT_PUSH_PLAYER"
