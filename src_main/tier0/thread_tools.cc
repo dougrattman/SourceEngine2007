@@ -145,7 +145,7 @@ i32 ThreadGetPriority(ThreadHandle_t hThread) {
 
 //-----------------------------------------------------------------------------
 
-bool ThreadSetPriority(ThreadHandle_t hThread, uintptr_t priority) {
+bool ThreadSetPriority(ThreadHandle_t hThread, i32 priority) {
   if (!hThread) {
     hThread = ThreadGetCurrentHandle();
   }
@@ -348,8 +348,7 @@ bool CThreadSyncObject::Wait(u32 dwTimeout) {
     gettimeofday(&tv, nullptr);
     volatile struct timespec tm;
 
-    volatile u64 nSec =
-        (u64)tv.tv_usec * 1000 + (u64)dwTimeout * 1000000;
+    volatile u64 nSec = (u64)tv.tv_usec * 1000 + (u64)dwTimeout * 1000000;
     tm.tv_sec = tv.tv_sec + nSec / 1000000000;
     tm.tv_nsec = nSec % 1000000000;
 
@@ -638,8 +637,8 @@ bool ThreadInterlockedAssignPointerIf(void *volatile *pDest, void *value,
 }
 #endif
 
-i64 ThreadInterlockedCompareExchange64(i64 volatile *pDest,
-                                           i64 value, i64 comperand) {
+i64 ThreadInterlockedCompareExchange64(i64 volatile *pDest, i64 value,
+                                       i64 comperand) {
   Assert((usize)pDest % 8 == 0);
 
 #if defined(ARCH_CPU_X86_64)
@@ -783,8 +782,8 @@ void *ThreadInterlockedCompareExchangePointer(void *volatile *pDest,
   return retVal;
 }
 
-i64 ThreadInterlockedCompareExchange64(i64 volatile *pDest,
-                                           i64 value, i64 comperand) {
+i64 ThreadInterlockedCompareExchange64(i64 volatile *pDest, i64 value,
+                                       i64 comperand) {
   Assert((usize)pDest % 8 == 0);
   AUTO_LOCK(g_InterlockedMutex);
   i64 retVal = *pDest;
@@ -905,8 +904,7 @@ bool CThreadMutex::TryLock() {
 //-----------------------------------------------------------------------------
 
 #ifndef OS_POSIX
-void CThreadFastMutex::Lock(const u32 threadId,
-                            u32 nSpinSleepTime) volatile {
+void CThreadFastMutex::Lock(const u32 threadId, u32 nSpinSleepTime) volatile {
   i32 i;
   if (nSpinSleepTime != TT_INFINITE) {
     for (i = 1000; i != 0; --i) {

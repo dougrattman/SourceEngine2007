@@ -43,11 +43,10 @@ abstract_class IMemAlloc {
 
   // Debug versions
   virtual void *Alloc(usize nSize, const ch *pFileName, i32 nLine) = 0;
-  virtual void *Realloc(void *pMem, usize nSize, const ch *pFileName,
-                        i32 nLine) = 0;
+  virtual void *Realloc(void *pMem, usize nSize, const ch *pFileName, i32 nLine) = 0;
   virtual void Free(void *pMem, const ch *pFileName, i32 nLine) = 0;
-  virtual void *Expand_NoLongerSupported(void *pMem, usize nSize,
-                                         const ch *pFileName, i32 nLine) = 0;
+  virtual void *Expand_NoLongerSupported(void *pMem, usize nSize, const ch *pFileName,
+                                         i32 nLine) = 0;
 
   // Returns size of a particular allocation
   virtual usize GetSize(void *pMem) = 0;
@@ -73,20 +72,18 @@ abstract_class IMemAlloc {
   // FIXME: Remove when we have our own allocator
   virtual void *CrtSetReportFile(i32 nRptType, void *hFile) = 0;
   virtual void *CrtSetReportHook(void *pfnNewHook) = 0;
-  virtual i32 CrtDbgReport(i32 nRptType, const ch *szFile, i32 nLine,
-                           const ch *szModule, const ch *pMsg) = 0;
+  virtual i32 CrtDbgReport(i32 nRptType, const ch *szFile, i32 nLine, const ch *szModule,
+                           const ch *pMsg) = 0;
 
   virtual i32 heapchk() = 0;
 
   virtual bool IsDebugHeap() = 0;
 
   virtual void GetActualDbgInfo(const ch *&pFileName, i32 &nLine) = 0;
-  virtual void RegisterAllocation(const ch *pFileName, i32 nLine,
-                                  usize nLogicalSize, usize nActualSize,
-                                  u32 nTime) = 0;
-  virtual void RegisterDeallocation(const ch *pFileName, i32 nLine,
-                                    usize nLogicalSize, usize nActualSize,
-                                    u32 nTime) = 0;
+  virtual void RegisterAllocation(const ch *pFileName, i32 nLine, usize nLogicalSize,
+                                  usize nActualSize, u32 nTime) = 0;
+  virtual void RegisterDeallocation(const ch *pFileName, i32 nLine, usize nLogicalSize,
+                                    usize nActualSize, u32 nTime) = 0;
 
   virtual i32 GetVersion() = 0;
 
@@ -117,8 +114,7 @@ inline void *MemAlloc_AllocAligned(usize size, usize align) {
 
   align = (align > sizeof(void *) ? align : sizeof(void *)) - 1;
 
-  if ((pAlloc = (u8 *)g_pMemAlloc->Alloc(sizeof(void *) + align + size)) ==
-      (u8 *)nullptr)
+  if ((pAlloc = (u8 *)g_pMemAlloc->Alloc(sizeof(void *) + align + size)) == (u8 *)nullptr)
     return nullptr;
 
   pResult = (u8 *)((usize)(pAlloc + sizeof(void *) + align) & ~align);
@@ -127,16 +123,15 @@ inline void *MemAlloc_AllocAligned(usize size, usize align) {
   return (void *)pResult;
 }
 
-inline void *MemAlloc_AllocAligned(usize size, usize align, const ch *pszFile,
-                                   i32 nLine) {
+inline void *MemAlloc_AllocAligned(usize size, usize align, const ch *pszFile, i32 nLine) {
   u8 *pAlloc, *pResult;
 
   if (!IsPowerOfTwo(align)) return nullptr;
 
   align = (align > sizeof(void *) ? align : sizeof(void *)) - 1;
 
-  if ((pAlloc = (u8 *)g_pMemAlloc->Alloc(sizeof(void *) + align + size, pszFile,
-                                         nLine)) == (u8 *)nullptr)
+  if ((pAlloc = (u8 *)g_pMemAlloc->Alloc(sizeof(void *) + align + size, pszFile, nLine)) ==
+      (u8 *)nullptr)
     return nullptr;
 
   pResult = (u8 *)((usize)(pAlloc + sizeof(void *) + align) & ~align);
@@ -202,34 +197,24 @@ inline usize MemAlloc_GetSizeAligned(void *pMemBlock) {
 }
 
 #if (!defined(NDEBUG) || defined(USE_MEM_DEBUG))
-#define MEM_ALLOC_CREDIT_(tag) \
-  CMemAllocAttributeAlloction memAllocAttributeAlloction(tag, __LINE__)
-#define MemAlloc_PushAllocDbgInfo(pszFile, line) \
-  g_pMemAlloc->PushAllocDbgInfo(pszFile, line)
+#define MEM_ALLOC_CREDIT_(tag) CMemAllocAttributeAlloction memAllocAttributeAlloction(tag, __LINE__)
+#define MemAlloc_PushAllocDbgInfo(pszFile, line) g_pMemAlloc->PushAllocDbgInfo(pszFile, line)
 #define MemAlloc_PopAllocDbgInfo() g_pMemAlloc->PopAllocDbgInfo()
-#define MemAlloc_RegisterAllocation(pFileName, nLine, nLogicalSize,            \
-                                    nActualSize, nTime)                        \
-  g_pMemAlloc->RegisterAllocation(pFileName, nLine, nLogicalSize, nActualSize, \
-                                  nTime)
-#define MemAlloc_RegisterDeallocation(pFileName, nLine, nLogicalSize, \
-                                      nActualSize, nTime)             \
-  g_pMemAlloc->RegisterDeallocation(pFileName, nLine, nLogicalSize,   \
-                                    nActualSize, nTime)
+#define MemAlloc_RegisterAllocation(pFileName, nLine, nLogicalSize, nActualSize, nTime) \
+  g_pMemAlloc->RegisterAllocation(pFileName, nLine, nLogicalSize, nActualSize, nTime)
+#define MemAlloc_RegisterDeallocation(pFileName, nLine, nLogicalSize, nActualSize, nTime) \
+  g_pMemAlloc->RegisterDeallocation(pFileName, nLine, nLogicalSize, nActualSize, nTime)
 #else
 #define MEM_ALLOC_CREDIT_(tag) ((void)0)
 #define MemAlloc_PushAllocDbgInfo(pszFile, line) ((void)0)
 #define MemAlloc_PopAllocDbgInfo() ((void)0)
-#define MemAlloc_RegisterAllocation(pFileName, nLine, nLogicalSize, \
-                                    nActualSize, nTime)             \
-  ((void)0)
-#define MemAlloc_RegisterDeallocation(pFileName, nLine, nLogicalSize, \
-                                      nActualSize, nTime)             \
-  ((void)0)
+#define MemAlloc_RegisterAllocation(pFileName, nLine, nLogicalSize, nActualSize, nTime) ((void)0)
+#define MemAlloc_RegisterDeallocation(pFileName, nLine, nLogicalSize, nActualSize, nTime) ((void)0)
 #endif
 
 class CMemAllocAttributeAlloction {
  public:
-  CMemAllocAttributeAlloction(const ch *pszFile, i32 line) {
+  CMemAllocAttributeAlloction([[maybe_unused]] const ch *pszFile, [[maybe_unused]] i32 line) {
     MemAlloc_PushAllocDbgInfo(pszFile, line);
   }
 
@@ -273,42 +258,37 @@ struct MemAllocFileLine_t {
   i32 line;
 };
 
-#define MEMALLOC_DEFINE_EXTERNAL_TRACKING(tag)                     \
-  static CUtlMap<void *, MemAllocFileLine_t, i32> g_##tag##Allocs( \
-      DefLessFunc(void *));                                        \
-  static const ch *g_psz##tag##Alloc =                             \
-      strcpy((ch *)g_pMemAlloc->Alloc(strlen(#tag "Alloc") + 1,    \
-                                      "intentional leak", 0),      \
-             #tag "Alloc");
+#define MEMALLOC_DEFINE_EXTERNAL_TRACKING(tag)                                          \
+  static CUtlMap<void *, MemAllocFileLine_t, i32> g_##tag##Allocs(DefLessFunc(void *)); \
+  static const ch *g_psz##tag##Alloc = strcpy(                                          \
+      (ch *)g_pMemAlloc->Alloc(strlen(#tag "Alloc") + 1, "intentional leak", 0), #tag "Alloc");
 
-#define MemAlloc_RegisterExternalAllocation(tag, p, size)                    \
-  if (!p)                                                                    \
-    ;                                                                        \
-  else {                                                                     \
-    MemAllocFileLine_t fileLine = {g_psz##tag##Alloc, 0};                    \
-    g_pMemAlloc->GetActualDbgInfo(fileLine.pszFile, fileLine.line);          \
-    if (fileLine.pszFile != g_psz##tag##Alloc) {                             \
-      g_##tag##Allocs.Insert(p, fileLine);                                   \
-    }                                                                        \
-                                                                             \
-    MemAlloc_RegisterAllocation(fileLine.pszFile, fileLine.line, size, size, \
-                                0);                                          \
+#define MemAlloc_RegisterExternalAllocation(tag, p, size)                        \
+  if (!p)                                                                        \
+    ;                                                                            \
+  else {                                                                         \
+    MemAllocFileLine_t fileLine = {g_psz##tag##Alloc, 0};                        \
+    g_pMemAlloc->GetActualDbgInfo(fileLine.pszFile, fileLine.line);              \
+    if (fileLine.pszFile != g_psz##tag##Alloc) {                                 \
+      g_##tag##Allocs.Insert(p, fileLine);                                       \
+    }                                                                            \
+                                                                                 \
+    MemAlloc_RegisterAllocation(fileLine.pszFile, fileLine.line, size, size, 0); \
   }
 
-#define MemAlloc_RegisterExternalDeallocation(tag, p, size)                    \
-  if (!p)                                                                      \
-    ;                                                                          \
-  else {                                                                       \
-    MemAllocFileLine_t fileLine = {g_psz##tag##Alloc, 0};                      \
-    CUtlMap<void *, MemAllocFileLine_t, i32>::IndexType_t iRecordedFileLine =  \
-        g_##tag##Allocs.Find(p);                                               \
-    if (iRecordedFileLine != g_##tag##Allocs.InvalidIndex()) {                 \
-      fileLine = g_##tag##Allocs[iRecordedFileLine];                           \
-      g_##tag##Allocs.RemoveAt(iRecordedFileLine);                             \
-    }                                                                          \
-                                                                               \
-    MemAlloc_RegisterDeallocation(fileLine.pszFile, fileLine.line, size, size, \
-                                  0);                                          \
+#define MemAlloc_RegisterExternalDeallocation(tag, p, size)                        \
+  if (!p)                                                                          \
+    ;                                                                              \
+  else {                                                                           \
+    MemAllocFileLine_t fileLine = {g_psz##tag##Alloc, 0};                          \
+    CUtlMap<void *, MemAllocFileLine_t, i32>::IndexType_t iRecordedFileLine =      \
+        g_##tag##Allocs.Find(p);                                                   \
+    if (iRecordedFileLine != g_##tag##Allocs.InvalidIndex()) {                     \
+      fileLine = g_##tag##Allocs[iRecordedFileLine];                               \
+      g_##tag##Allocs.RemoveAt(iRecordedFileLine);                                 \
+    }                                                                              \
+                                                                                   \
+    MemAlloc_RegisterDeallocation(fileLine.pszFile, fileLine.line, size, size, 0); \
   }
 
 #else

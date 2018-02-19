@@ -90,8 +90,8 @@ TT_INTERFACE void ThreadSleep(u32 duration = 0);
 TT_INTERFACE u32 ThreadGetCurrentId();
 TT_INTERFACE ThreadHandle_t ThreadGetCurrentHandle();
 TT_INTERFACE i32 ThreadGetPriority(ThreadHandle_t hThread = nullptr);
-TT_INTERFACE bool ThreadSetPriority(ThreadHandle_t hThread, uintptr_t priority);
-inline bool ThreadSetPriority(uintptr_t priority) {
+TT_INTERFACE bool ThreadSetPriority(ThreadHandle_t hThread, i32 priority);
+inline bool ThreadSetPriority(i32 priority) {
   return ThreadSetPriority(nullptr, priority);
 }
 TT_INTERFACE bool ThreadInMainThread();
@@ -1534,7 +1534,7 @@ inline bool CThreadMutex::AssertOwnedByCurrentThread() {
 #endif
 }
 
-inline void CThreadMutex::SetTrace(bool bTrace) {
+inline void CThreadMutex::SetTrace([[maybe_unused]] bool bTrace) {
 #ifdef THREAD_MUTEX_TRACING_ENABLED
   m_bTrace = bTrace;
 #endif
