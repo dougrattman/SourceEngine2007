@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{acfda110-786e-4779-bb39-285aed963172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{7537c9f1-598b-423f-a088-2406a31df4f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public Header Files">
+      <UniqueIdentifier>{b9f89aa5-df4b-4f15-a90a-f1790b7bb326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{fcd96822-f65f-4b9e-9cca-4cbe81625f89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs">
+      <UniqueIdentifier>{6762d778-34f5-4c8b-832a-c0bbfa87287f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Matchmaking">
+      <UniqueIdentifier>{adf28136-6318-48eb-9d60-e4000a595cbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Options Dialog">
+      <UniqueIdentifier>{c114ef99-2e43-4dfb-bb35-5570180d4732}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BackgroundMenuButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BonusMapsDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUI_Interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\language.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tier0\include\memoverride.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseMessageForwardingPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tracker\common\msgbuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tracker\common\netapi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\GameUI\ObjectList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelListPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RunGameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveGameBrowserDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tracker\common\Socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sys_Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextEntryBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TGAImagePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\vgui_controls\vgui_controls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VGuiSystemModuleLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapImagePanel.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandCheckButton.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="CvarNegateCheckButton.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="CvarSlider.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="CvarTextEntry.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="CvarToggleCheckButton.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyToggleCheckButton.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="LabeledCommandComboBox.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="URLButton.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="vcontrolslistpanel.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseSaveGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="BenchmarkDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="BonusMapsDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CommentaryDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CommentaryExplanationDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentControlDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMultiplayerGameBotPage.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMultiplayerGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMultiplayerGameGameplayPage.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMultiplayerGameServerPage.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConsoleDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadCommentaryDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadGameDialog_Xbox.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiplayerAdvancedDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="NewGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsDialog_Xbox.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerListDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveGameDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveGameDialog_Xbox.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\achievementsdialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\basedialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\dialogmenu.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\leaderboarddialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\matchmakingbasepanel.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\pausedialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\sessionbrowserdialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\sessionlobbydialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\sessionoptionsdialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="matchmaking\welcomedialog.cpp">
+      <Filter>Matchmaking</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsDialog.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubAudio.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubDifficulty.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubGame.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubKeyboard.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubMouse.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubMultiplayer.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubPortal.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubVideo.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsSubVoice.cpp">
+      <Filter>Options Dialog</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BonusMapsDatabase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BackgroundMenuButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSaveGameDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CDKeyEntryDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeGameDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMultiplayerGameBotPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMultiplayerGameDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMultiplayerGameGameplayPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMultiplayerGameServerPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI_Interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vgui2\src\Memorybitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMessageForwardingPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelListPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveGameBrowserDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sys_Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextEntryBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TGAImagePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VGuiSystemModuleLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\iachievementmgr.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\game\client\IGameClientExports.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GameUI\IGameUI.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\IGameUIFuncs.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\tier1\interface.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\IObjectContainer.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\IRunGameEngine.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\IVguiModule.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\IVGuiModuleLoader.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\language.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GameUI\ObjectList.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\savegame_version.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Tracker\common\TrackerMessageFlags.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ValveCDKeyGameAndTerritoryCodes.h">
+      <Filter>Public Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapImagePanel.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandCheckButton.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CvarNegateCheckButton.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CvarSlider.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CvarTextEntry.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CvarToggleCheckButton.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyToggleCheckButton.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="LabeledCommandComboBox.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="URLButton.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="vcontrolslistpanel.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchmarkDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="BonusMapsDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="CommentaryDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="CommentaryExplanationDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentControlDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConsoleDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadGameDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiplayerAdvancedDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="NewGameDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerListDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveGameDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\achievementsdialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\basedialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\dialogmenu.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\leaderboarddialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\matchmakingbasepanel.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\pausedialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\sessionbrowserdialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\sessionlobbydialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\sessionoptionsdialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="matchmaking\welcomedialog.h">
+      <Filter>Matchmaking</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsDialog.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubAudio.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubDifficulty.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubGame.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubKeyboard.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubMouse.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubMultiplayer.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubPortal.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubVideo.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsSubVoice.h">
+      <Filter>Options Dialog</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
