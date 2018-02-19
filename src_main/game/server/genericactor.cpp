@@ -1,17 +1,13 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
 
 //=========================================================
 // Generic NPC - purely for scripted sequence work.
 //=========================================================
+#include "cbase.h"
+
 #include "ai_baseactor.h"
 #include "ai_basenpc.h"
 #include "ai_hull.h"
-#include "cbase.h"
 #include "engine/IEngineSound.h"
 #include "npcevent.h"
 #include "shareddefs.h"
