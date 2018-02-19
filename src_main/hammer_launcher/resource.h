@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "base/windows/include/product_version.h"
+#include "base/include/windows/product_version.h"
 
 #define IDI_MAIN 101
 

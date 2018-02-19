@@ -7,9 +7,6 @@
     <Filter Include="Source Files\Animation Set Editor">
       <UniqueIdentifier>{3d55187f-614d-426e-ae41-042d7f6008c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{5a62d0c7-f764-4eb8-8f7a-d351ddf16dbb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{b849259b-b3c3-4e48-83cb-6e49d259a71b}</UniqueIdentifier>
     </Filter>
@@ -356,10 +353,5 @@
     <ClInclude Include="..\..\public\dme_controls\vmtpanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dme_controls.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
 </Project>

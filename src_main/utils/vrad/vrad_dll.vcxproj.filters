@@ -10,12 +10,6 @@
     <Filter Include="Source Files\Public Files">
       <UniqueIdentifier>{c1bac90b-0a53-4d2c-8c0f-3acbb69f52ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{5cbe848a-41f1-4e26-afa1-9ea03990b2c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{46763657-efe7-4b36-af05-0dbf0d7f5679}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{d59a77d2-85b0-4b8d-8691-f9c5c4800116}</UniqueIdentifier>
     </Filter>
@@ -195,9 +189,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="radial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\tgawriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vismat.h">
@@ -527,40 +518,6 @@
     <ClInclude Include="..\..\public\worldsize.h">
       <Filter>Header Files\Public Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\public\bitmap.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\mathlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\raytrace.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier2.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vmpi.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vtf.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vrad_dll.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />

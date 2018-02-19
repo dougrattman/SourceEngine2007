@@ -39,7 +39,7 @@ public:
 	int					GetFalloffInterpolatorType( int side );
 	void				SetFalloffInterpolatorType( int side, int interpolatorType );
 
-	void				GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, byte &alpha );
+	void				GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, u8 &alpha );
 	float				GetAmountForTime( DmeTime_t t, DmeTime_t curtime );
 	float				AdjustFactorForInterpolatorType( float factor, int side );
 

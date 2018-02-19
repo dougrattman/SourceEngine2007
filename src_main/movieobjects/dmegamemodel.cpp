@@ -96,9 +96,9 @@ void CDmeGlobalFlexControllerOperator::SetMapping( int globalIndex )
 	m_nFlexControllerIndex = globalIndex;
 	if ( m_gameModel.GetElement() )
 	{
-		if ( (uint)globalIndex >= m_gameModel->NumFlexWeights() )
+		if ( (u32)globalIndex >= m_gameModel->NumFlexWeights() )
 		{
-			m_gameModel->SetNumFlexWeights( (uint)( globalIndex + 1 ) );
+			m_gameModel->SetNumFlexWeights( (u32)( globalIndex + 1 ) );
 		}
 	}
 }
@@ -166,9 +166,9 @@ int CDmeGlobalFlexControllerOperator::FindGlobalFlexControllerIndex() const
 				{
 					nGlobalFlexControllerIndex = flex->localToGlobal;
 					// Grow the array
-					if ( (uint)flex->localToGlobal >= m_gameModel->NumFlexWeights() )
+					if ( (u32)flex->localToGlobal >= m_gameModel->NumFlexWeights() )
 					{
-						m_gameModel->SetNumFlexWeights( (uint)( flex->localToGlobal + 1 ) );
+						m_gameModel->SetNumFlexWeights( (u32)( flex->localToGlobal + 1 ) );
 					}
 					break;
 				}
@@ -240,7 +240,7 @@ CDmeGlobalFlexControllerOperator *CDmeGameModel::AddGlobalFlexController( const 
 		op->SetGameModel( this );
 	}
 
-	if ( (uint)globalIndex >= NumFlexWeights() )
+	if ( (u32)globalIndex >= NumFlexWeights() )
 	{
 		SetNumFlexWeights( globalIndex + 1 );
 	}
@@ -480,7 +480,7 @@ void CDmeGameModel::AddBones( studiohdr_t *pStudioHdr, const char *pBaseName, in
 }
 
 
-void CDmeGameModel::SetBone( uint index, const Vector& pos, const Quaternion& rot )
+void CDmeGameModel::SetBone( u32 index, const Vector& pos, const Quaternion& rot )
 {
 	m_bones[ index ]->SetPosition( pos );
 	m_bones[ index ]->SetOrientation( rot );
@@ -491,12 +491,12 @@ void CDmeGameModel::RemoveAllBones()
 	m_bones.RemoveAll();
 }
 
-uint CDmeGameModel::NumBones() const
+u32 CDmeGameModel::NumBones() const
 {
 	return m_bones.Count();
 }
 
-CDmeTransform *CDmeGameModel::GetBone( uint index ) const
+CDmeTransform *CDmeGameModel::GetBone( u32 index ) const
 {
 	return m_bones[ index ];
 }
@@ -506,7 +506,7 @@ int CDmeGameModel::FindBone( CDmeTransform *pTransform ) const
 	return m_bones.Find( pTransform );
 }
 
-uint CDmeGameModel::NumFlexWeights() const
+u32 CDmeGameModel::NumFlexWeights() const
 {
 	return m_flexWeights.Count();
 }
@@ -516,25 +516,25 @@ const CUtlVector< float >& CDmeGameModel::GetFlexWeights() const
 	return m_flexWeights.Get();
 }
 
-void CDmeGameModel::SetNumFlexWeights( uint nFlexWeights )
+void CDmeGameModel::SetNumFlexWeights( u32 nFlexWeights )
 {
-	if ( nFlexWeights > (uint)m_flexWeights.Count() )
+	if ( nFlexWeights > (u32)m_flexWeights.Count() )
 	{
-		while ( (uint)m_flexWeights.Count() < nFlexWeights )
+		while ( (u32)m_flexWeights.Count() < nFlexWeights )
 		{
 			m_flexWeights.AddToTail( 0.0f );
 		}
 	}
 	else
 	{
-		while ( (uint)m_flexWeights.Count() > nFlexWeights )
+		while ( (u32)m_flexWeights.Count() > nFlexWeights )
 		{
-			m_flexWeights.Remove( (uint)m_flexWeights.Count() - 1 );
+			m_flexWeights.Remove( (u32)m_flexWeights.Count() - 1 );
 		}
 	}
 }
 
-void CDmeGameModel::SetFlexWeights( uint nFlexWeights, const float* flexWeights )
+void CDmeGameModel::SetFlexWeights( u32 nFlexWeights, const float* flexWeights )
 {
 	m_flexWeights.CopyArray( flexWeights, nFlexWeights );
 }

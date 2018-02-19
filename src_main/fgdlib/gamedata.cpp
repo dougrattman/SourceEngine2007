@@ -2,10 +2,9 @@
 
 #include "fgdlib/GameData.h"
 
-#include <WorldSize.h>
 #include <io.h>
-
 #include "KeyValues.h"
+#include "WorldSize.h"
 #include "base/include/windows/windows_light.h"
 #include "fgdlib/HelperInfo.h"
 #include "filesystem_tools.h"
@@ -19,23 +18,19 @@ const int MAX_ERRORS = 5;
 
 static GameDataMessageFunc_t g_pMsgFunc = NULL;
 
-//-----------------------------------------------------------------------------
 // Sets the function used for emitting error messages while loading gamedata
 // files.
-//-----------------------------------------------------------------------------
 void GDSetMessageFunc(GameDataMessageFunc_t pFunc) { g_pMsgFunc = pFunc; }
 
-//-----------------------------------------------------------------------------
 // Purpose: Fetches the next token from the file.
 // Input  : tr -
 //			ppszStore - Destination buffer, one of the following:
 //				pointer to NULL - token will be placed in an
 // allocated
-// buffer 				pointer to non-NULL buffer - token will be
-// placed in buffer 			ttexpecting
+// buffer 				pointer to non-NULL buffer - token will
+// be placed in buffer 			ttexpecting
 //- 			pszExpecting -
 // Output :
-//-----------------------------------------------------------------------------
 static bool DoGetToken(TokenReader &tr, char **ppszStore, int nSize,
                        trtoken_t ttexpecting, const char *pszExpecting) {
   trtoken_t ttype;
@@ -73,7 +68,7 @@ static bool DoGetToken(TokenReader &tr, char **ppszStore, int nSize,
     // We didn't get the expected token type but no expected
     // string was specified.
     //
-    char *pszTokenName;
+    const char *pszTokenName;
     switch (ttexpecting) {
       case IDENT: {
         pszTokenName = "identifier";
@@ -148,10 +143,9 @@ bool GDError(TokenReader &tr, const char *error, ...) {
 //			pszStore - Buffer in which to place the token, NULL to
 // discard the token. 			ttexpecting - The token type that we are
 // expecting. If this
-// is not TOKENNONE 				and token type read is different,
-// the
-// operation will fail. 			pszExpecting - The token string that we
-// are expecting. If
+// is not TOKENNONE 				and token type read is
+// different, the operation will fail. 			pszExpecting - The token
+// string that we are expecting. If
 // this string 				is not NULL and the token string read is
 // different, the operation will fail.
 // Output : Returns TRUE if the operation succeeded, FALSE if there was an
@@ -175,10 +169,9 @@ bool GDGetToken(TokenReader &tr, char *pszStore, int nSize,
 //			pszStore - Buffer in which to place the token, NULL to
 // discard the token. 			ttexpecting - The token type that we are
 // expecting. If this
-// is not TOKENNONE 				and token type read is different,
-// the
-// operation will fail. 			pszExpecting - The token string that we
-// are expecting. If
+// is not TOKENNONE 				and token type read is
+// different, the operation will fail. 			pszExpecting - The token
+// string that we are expecting. If
 // this string 				is not NULL and the token string read is
 // different, the operation will fail.
 // Output : Returns TRUE if the operation succeeded, FALSE if there was an
@@ -723,9 +716,9 @@ bool GameData::LoadFGDAutoVisGroups(TokenReader &tr) {
           return (FALSE);
         }
 
-        m_FGDAutoVisGroups[gindex]
-            .m_Classes[cindex]
-            .szEntities.CopyAndAddToTail(szToken);
+        // m_FGDAutoVisGroups[gindex]
+        //    .m_Classes[cindex]
+        //    .szEntities.CopyAndAddToTail(szToken);
       }
 
       if (!GDSkipToken(tr, OPERATOR, "]")) {

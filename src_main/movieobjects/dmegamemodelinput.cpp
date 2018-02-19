@@ -86,7 +86,7 @@ void CDmeGameModelInput::AddBone( const Vector& pos, const Quaternion& rot )
 	m_boneRotations.AddToTail( rot );
 }
 
-void CDmeGameModelInput::SetBone( uint index, const Vector& pos, const Quaternion& rot )
+void CDmeGameModelInput::SetBone( u32 index, const Vector& pos, const Quaternion& rot )
 {
 	m_bonePositions.Set( index, pos );
 	m_boneRotations.Set( index, rot );
@@ -98,18 +98,18 @@ void CDmeGameModelInput::SetRootBone( const Vector& pos, const Quaternion& rot )
 	m_rotation.Set( rot );
 }
 
-uint CDmeGameModelInput::NumBones() const
+u32 CDmeGameModelInput::NumBones() const
 {
 	Assert( m_bonePositions.Count() == m_boneRotations.Count() );
 	return m_bonePositions.Count();
 }
 
-void CDmeGameModelInput::SetFlexWeights( uint nFlexWeights, const float* flexWeights )
+void CDmeGameModelInput::SetFlexWeights( u32 nFlexWeights, const float* flexWeights )
 {
 	m_flexWeights.CopyArray( flexWeights, nFlexWeights );
 }
 
-uint CDmeGameModelInput::NumFlexWeights() const
+u32 CDmeGameModelInput::NumFlexWeights() const
 {
 	return m_flexWeights.Count();
 }

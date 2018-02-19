@@ -37,12 +37,12 @@ void CDmeMorphOperator::OnDestruction()
 //-----------------------------------------------------------------------------
 // accessors
 //-----------------------------------------------------------------------------
-uint CDmeMorphOperator::NumDeltaStateWeights()
+u32 CDmeMorphOperator::NumDeltaStateWeights()
 {
 	return m_deltaStateWeights.Count();
 }
 
-CDmElement *CDmeMorphOperator::GetDeltaStateWeight( uint i )
+CDmElement *CDmeMorphOperator::GetDeltaStateWeight( u32 i )
 {
 	return m_deltaStateWeights[ i ];
 }
@@ -66,8 +66,8 @@ void CDmeMorphOperator::OnAttributeChanged( CDmAttribute *pAttribute )
 #if 0 // right now, the file already contains these weights, and re-creating them breaks the channel connections
 			m_deltaStateWeights.RemoveAll();
 
-			uint dn = pMesh->NumDeltaStates();
-			for ( uint di = 0; di < dn; ++di )
+			u32 dn = pMesh->NumDeltaStates();
+			for ( u32 di = 0; di < dn; ++di )
 			{
 				CDmElement *pDeltaState = pMesh->GetDeltaState( di );
 				const char *name = pDeltaState->GetName();
@@ -90,8 +90,8 @@ void CDmeMorphOperator::Operate()
 {
 	CDmeMesh *mesh = GetMesh();
 
-	uint mn = NumDeltaStateWeights();
-	for ( uint mi = 0; mi < mn; ++mi )
+	u32 mn = NumDeltaStateWeights();
+	for ( u32 mi = 0; mi < mn; ++mi )
 	{
 		CDmElement *pDeltaState = GetDeltaStateWeight( mi );
 		const char *deltaName = pDeltaState->GetName();
@@ -131,8 +131,8 @@ using namespace MorphOp;
 
 void CDmeMorphOperator::GetInputAttributes( CUtlVector< CDmAttribute * > &attrs )
 {
-	uint nWeights = NumDeltaStateWeights();
-	for ( uint wi = 0; wi < nWeights; ++wi )
+	u32 nWeights = NumDeltaStateWeights();
+	for ( u32 wi = 0; wi < nWeights; ++wi )
 	{
 		CDmElement *pDelta = GetDeltaStateWeight( wi );
 		AddAttr( attrs, pDelta->GetAttribute( "weight" ) );
@@ -142,8 +142,8 @@ void CDmeMorphOperator::GetInputAttributes( CUtlVector< CDmAttribute * > &attrs 
 	CDmeVertexData *pBaseState = pMesh->FindBaseState( m_baseStateName.Get() );
 	AddVertexAttributes( attrs, pBaseState );
 
-	uint nDeltas = pMesh->DeltaStateCount();
-	for ( uint di = 0; di < nDeltas; ++di )
+	u32 nDeltas = pMesh->DeltaStateCount();
+	for ( u32 di = 0; di < nDeltas; ++di )
 	{
 		CDmElement *pDeltaState = pMesh->GetDeltaState( di );
 		AddAttr( attrs, pDeltaState->GetAttribute( "indices" ) );

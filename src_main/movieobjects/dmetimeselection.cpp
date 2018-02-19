@@ -129,11 +129,11 @@ float CDmeTimeSelection::GetAmountForTime( DmeTime_t t, DmeTime_t curtime )
 	return minfrac;
 }
 
-void CDmeTimeSelection::GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, byte& alpha )
+void CDmeTimeSelection::GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, u8& alpha )
 {
 	Assert( IsEnabled() );
 
-	byte minAlpha = 31;
+	u8 minAlpha = 31;
 
 	// FIXME, this is slow, we should cache this maybe?
 	DmeTime_t times[ 4 ];

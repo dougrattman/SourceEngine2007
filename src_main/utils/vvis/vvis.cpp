@@ -759,7 +759,7 @@ float DetermineVisRadius() {
 
   // Check the max vis range to determine the vis radius
   for (int i = 0; i < num_entities; ++i) {
-    char *pEntity = ValueForKey(&entities[i], "classname");
+    const char *pEntity = ValueForKey(&entities[i], "classname");
     if (!stricmp(pEntity, "env_fog_controller")) {
       flRadius = FloatForKey(&entities[i], "farz");
       if (flRadius == 0.0f) flRadius = -1.0f;
@@ -1030,7 +1030,7 @@ int RunVVis(int argc, char **argv) {
   return 0;
 }
 
-int main(int argc, const char **argv) {
+int main(int argc, char **argv) {
   CommandLine()->CreateCmdLine(argc, argv);
 
   MathLib_Init(2.2f, 2.2f, 0.0f, 1.0f, false, false, false, false);
@@ -1052,7 +1052,7 @@ int main(int argc, const char **argv) {
 // used to get it going.
 class CVVisDLL : public ILaunchableDLL {
  public:
-  virtual int main(int argc, const char **argv) { return ::main(argc, argv); }
+  virtual int main(int argc, char **argv) { return ::main(argc, argv); }
 };
 
 EXPOSE_SINGLE_INTERFACE(CVVisDLL, ILaunchableDLL,

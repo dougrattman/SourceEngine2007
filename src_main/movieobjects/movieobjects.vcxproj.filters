@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{e3019963-7a93-4455-853b-ec85a4b3b71f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{d279f9cd-ae98-4c2f-9eff-e1df998bfafb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{5903c9f9-222c-43ab-b523-494f2d79a6af}</UniqueIdentifier>
     </Filter>
@@ -198,11 +195,6 @@
     <ClCompile Include="..\public\studio.cpp">
       <Filter>external</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="movieobjects.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="movieobjects_interfaces.h">

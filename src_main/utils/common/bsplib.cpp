@@ -28,383 +28,392 @@
 // Data descriptions for byte swapping - only needed
 // for structures that are written to file for use by the game.
 BEGIN_BYTESWAP_DATADESC(dheader_t)
-DEFINE_FIELD(ident, FIELD_INTEGER), DEFINE_FIELD(version, FIELD_INTEGER),
-    DEFINE_EMBEDDED_ARRAY(lumps, HEADER_LUMPS),
-    DEFINE_FIELD(mapRevision, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+  DEFINE_FIELD(ident, FIELD_INTEGER), DEFINE_FIELD(version, FIELD_INTEGER),
+      DEFINE_EMBEDDED_ARRAY(lumps, HEADER_LUMPS),
+      DEFINE_FIELD(mapRevision, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(lump_t) DEFINE_FIELD(fileofs, FIELD_INTEGER),
-    DEFINE_FIELD(filelen, FIELD_INTEGER), DEFINE_FIELD(version, FIELD_INTEGER),
-    DEFINE_ARRAY(fourCC, FIELD_CHARACTER, 4),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(lump_t)
+  DEFINE_FIELD(fileofs, FIELD_INTEGER), DEFINE_FIELD(filelen, FIELD_INTEGER),
+      DEFINE_FIELD(version, FIELD_INTEGER),
+      DEFINE_ARRAY(fourCC, FIELD_CHARACTER, 4),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dflagslump_t)
-            DEFINE_FIELD(m_LevelFlags, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dflagslump_t)
+  DEFINE_FIELD(m_LevelFlags, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dplane_t) DEFINE_FIELD(normal, FIELD_VECTOR),
-    DEFINE_FIELD(dist, FIELD_FLOAT), DEFINE_FIELD(type, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dplane_t)
+  DEFINE_FIELD(normal, FIELD_VECTOR), DEFINE_FIELD(dist, FIELD_FLOAT),
+      DEFINE_FIELD(type, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dleaf_version_0_t)
-            DEFINE_FIELD(contents, FIELD_INTEGER),
-    DEFINE_FIELD(cluster, FIELD_SHORT), DEFINE_BITFIELD(bf, FIELD_SHORT, 16),
-    DEFINE_ARRAY(mins, FIELD_SHORT, 3), DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
-    DEFINE_FIELD(firstleafface, FIELD_SHORT),
-    DEFINE_FIELD(numleaffaces, FIELD_SHORT),
-    DEFINE_FIELD(firstleafbrush, FIELD_SHORT),
-    DEFINE_FIELD(numleafbrushes, FIELD_SHORT),
-    DEFINE_FIELD(leafWaterDataID, FIELD_SHORT),
-    DEFINE_EMBEDDED(m_AmbientLighting),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dleaf_version_0_t)
+  DEFINE_FIELD(contents, FIELD_INTEGER), DEFINE_FIELD(cluster, FIELD_SHORT),
+      DEFINE_BITFIELD(bf, FIELD_SHORT, 16), DEFINE_ARRAY(mins, FIELD_SHORT, 3),
+      DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
+      DEFINE_FIELD(firstleafface, FIELD_SHORT),
+      DEFINE_FIELD(numleaffaces, FIELD_SHORT),
+      DEFINE_FIELD(firstleafbrush, FIELD_SHORT),
+      DEFINE_FIELD(numleafbrushes, FIELD_SHORT),
+      DEFINE_FIELD(leafWaterDataID, FIELD_SHORT),
+      DEFINE_EMBEDDED(m_AmbientLighting),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dleaf_t) DEFINE_FIELD(contents, FIELD_INTEGER),
-    DEFINE_FIELD(cluster, FIELD_SHORT), DEFINE_BITFIELD(bf, FIELD_SHORT, 16),
-    DEFINE_ARRAY(mins, FIELD_SHORT, 3), DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
-    DEFINE_FIELD(firstleafface, FIELD_SHORT),
-    DEFINE_FIELD(numleaffaces, FIELD_SHORT),
-    DEFINE_FIELD(firstleafbrush, FIELD_SHORT),
-    DEFINE_FIELD(numleafbrushes, FIELD_SHORT),
-    DEFINE_FIELD(leafWaterDataID, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dleaf_t)
+  DEFINE_FIELD(contents, FIELD_INTEGER), DEFINE_FIELD(cluster, FIELD_SHORT),
+      DEFINE_BITFIELD(bf, FIELD_SHORT, 16), DEFINE_ARRAY(mins, FIELD_SHORT, 3),
+      DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
+      DEFINE_FIELD(firstleafface, FIELD_SHORT),
+      DEFINE_FIELD(numleaffaces, FIELD_SHORT),
+      DEFINE_FIELD(firstleafbrush, FIELD_SHORT),
+      DEFINE_FIELD(numleafbrushes, FIELD_SHORT),
+      DEFINE_FIELD(leafWaterDataID, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CompressedLightCube)  // array of 6
-                                                      // ColorRGBExp32 (3 bytes
-                                                      // and 1 char)
-    DEFINE_ARRAY(m_Color, FIELD_CHARACTER, 6 * sizeof(ColorRGBExp32)),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CompressedLightCube)  // array of 6
+                                              // ColorRGBExp32 (3 bytes
+                                              // and 1 char)
+  DEFINE_ARRAY(m_Color, FIELD_CHARACTER, 6 * sizeof(ColorRGBExp32)),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dleafambientindex_t)
-            DEFINE_FIELD(ambientSampleCount, FIELD_SHORT),
-    DEFINE_FIELD(firstAmbientSample, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dleafambientindex_t)
+  DEFINE_FIELD(ambientSampleCount, FIELD_SHORT),
+      DEFINE_FIELD(firstAmbientSample, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dleafambientlighting_t)  // array of 6
-                                                         // ColorRGBExp32 (3
-                                                         // bytes and 1 char)
-    DEFINE_EMBEDDED(cube),
-    DEFINE_FIELD(x, FIELD_CHARACTER), DEFINE_FIELD(y, FIELD_CHARACTER),
-    DEFINE_FIELD(z, FIELD_CHARACTER), DEFINE_FIELD(pad, FIELD_CHARACTER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dleafambientlighting_t)  // array of 6
+                                                 // ColorRGBExp32 (3
+                                                 // bytes and 1 char)
+  DEFINE_EMBEDDED(cube), DEFINE_FIELD(x, FIELD_CHARACTER),
+      DEFINE_FIELD(y, FIELD_CHARACTER), DEFINE_FIELD(z, FIELD_CHARACTER),
+      DEFINE_FIELD(pad, FIELD_CHARACTER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dvertex_t) DEFINE_FIELD(point, FIELD_VECTOR),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dvertex_t)
+  DEFINE_FIELD(point, FIELD_VECTOR),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dnode_t) DEFINE_FIELD(planenum, FIELD_INTEGER),
-    DEFINE_ARRAY(children, FIELD_INTEGER, 2),
-    DEFINE_ARRAY(mins, FIELD_SHORT, 3), DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
-    DEFINE_FIELD(firstface, FIELD_SHORT), DEFINE_FIELD(numfaces, FIELD_SHORT),
-    DEFINE_FIELD(area, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dnode_t)
+  DEFINE_FIELD(planenum, FIELD_INTEGER),
+      DEFINE_ARRAY(children, FIELD_INTEGER, 2),
+      DEFINE_ARRAY(mins, FIELD_SHORT, 3), DEFINE_ARRAY(maxs, FIELD_SHORT, 3),
+      DEFINE_FIELD(firstface, FIELD_SHORT), DEFINE_FIELD(numfaces, FIELD_SHORT),
+      DEFINE_FIELD(area, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(texinfo_t)
-            DEFINE_ARRAY(textureVecsTexelsPerWorldUnits, FIELD_FLOAT, 2 * 4),
-    DEFINE_ARRAY(lightmapVecsLuxelsPerWorldUnits, FIELD_FLOAT, 2 * 4),
-    DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(texdata, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(texinfo_t)
+  DEFINE_ARRAY(textureVecsTexelsPerWorldUnits, FIELD_FLOAT, 2 * 4),
+      DEFINE_ARRAY(lightmapVecsLuxelsPerWorldUnits, FIELD_FLOAT, 2 * 4),
+      DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(texdata, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dtexdata_t)
-            DEFINE_FIELD(reflectivity, FIELD_VECTOR),
-    DEFINE_FIELD(nameStringTableID, FIELD_INTEGER),
-    DEFINE_FIELD(width, FIELD_INTEGER), DEFINE_FIELD(height, FIELD_INTEGER),
-    DEFINE_FIELD(view_width, FIELD_INTEGER),
-    DEFINE_FIELD(view_height, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dtexdata_t)
+  DEFINE_FIELD(reflectivity, FIELD_VECTOR),
+      DEFINE_FIELD(nameStringTableID, FIELD_INTEGER),
+      DEFINE_FIELD(width, FIELD_INTEGER), DEFINE_FIELD(height, FIELD_INTEGER),
+      DEFINE_FIELD(view_width, FIELD_INTEGER),
+      DEFINE_FIELD(view_height, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(ddispinfo_t)
-            DEFINE_FIELD(startPosition, FIELD_VECTOR),
-    DEFINE_FIELD(m_iDispVertStart, FIELD_INTEGER),
-    DEFINE_FIELD(m_iDispTriStart, FIELD_INTEGER),
-    DEFINE_FIELD(power, FIELD_INTEGER), DEFINE_FIELD(minTess, FIELD_INTEGER),
-    DEFINE_FIELD(smoothingAngle, FIELD_FLOAT),
-    DEFINE_FIELD(contents, FIELD_INTEGER),
-    DEFINE_FIELD(m_iMapFace, FIELD_SHORT),
-    DEFINE_FIELD(m_iLightmapAlphaStart, FIELD_INTEGER),
-    DEFINE_FIELD(m_iLightmapSamplePositionStart, FIELD_INTEGER),
-    DEFINE_EMBEDDED_ARRAY(m_EdgeNeighbors, 4),
-    DEFINE_EMBEDDED_ARRAY(m_CornerNeighbors, 4),
-    DEFINE_ARRAY(m_AllowedVerts, FIELD_INTEGER,
-                 ddispinfo_t::ALLOWEDVERTS_SIZE),  // unsigned long
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(ddispinfo_t)
+  DEFINE_FIELD(startPosition, FIELD_VECTOR),
+      DEFINE_FIELD(m_iDispVertStart, FIELD_INTEGER),
+      DEFINE_FIELD(m_iDispTriStart, FIELD_INTEGER),
+      DEFINE_FIELD(power, FIELD_INTEGER), DEFINE_FIELD(minTess, FIELD_INTEGER),
+      DEFINE_FIELD(smoothingAngle, FIELD_FLOAT),
+      DEFINE_FIELD(contents, FIELD_INTEGER),
+      DEFINE_FIELD(m_iMapFace, FIELD_SHORT),
+      DEFINE_FIELD(m_iLightmapAlphaStart, FIELD_INTEGER),
+      DEFINE_FIELD(m_iLightmapSamplePositionStart, FIELD_INTEGER),
+      DEFINE_EMBEDDED_ARRAY(m_EdgeNeighbors, 4),
+      DEFINE_EMBEDDED_ARRAY(m_CornerNeighbors, 4),
+      DEFINE_ARRAY(m_AllowedVerts, FIELD_INTEGER,
+                   ddispinfo_t::ALLOWEDVERTS_SIZE),  // unsigned long
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CDispNeighbor)
-            DEFINE_EMBEDDED_ARRAY(m_SubNeighbors, 2),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CDispNeighbor)
+  DEFINE_EMBEDDED_ARRAY(m_SubNeighbors, 2),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CDispCornerNeighbors)
-            DEFINE_ARRAY(m_Neighbors, FIELD_SHORT, MAX_DISP_CORNER_NEIGHBORS),
-    DEFINE_FIELD(m_nNeighbors, FIELD_CHARACTER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CDispCornerNeighbors)
+  DEFINE_ARRAY(m_Neighbors, FIELD_SHORT, MAX_DISP_CORNER_NEIGHBORS),
+      DEFINE_FIELD(m_nNeighbors, FIELD_CHARACTER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CDispSubNeighbor)
-            DEFINE_FIELD(m_iNeighbor, FIELD_SHORT),
-    DEFINE_FIELD(m_NeighborOrientation, FIELD_CHARACTER),
-    DEFINE_FIELD(m_Span, FIELD_CHARACTER),
-    DEFINE_FIELD(m_NeighborSpan, FIELD_CHARACTER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CDispSubNeighbor)
+  DEFINE_FIELD(m_iNeighbor, FIELD_SHORT),
+      DEFINE_FIELD(m_NeighborOrientation, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Span, FIELD_CHARACTER),
+      DEFINE_FIELD(m_NeighborSpan, FIELD_CHARACTER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CDispVert)
-            DEFINE_FIELD(m_vVector, FIELD_VECTOR),
-    DEFINE_FIELD(m_flDist, FIELD_FLOAT), DEFINE_FIELD(m_flAlpha, FIELD_FLOAT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CDispVert)
+  DEFINE_FIELD(m_vVector, FIELD_VECTOR), DEFINE_FIELD(m_flDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_flAlpha, FIELD_FLOAT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CDispTri) DEFINE_FIELD(m_uiTags, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CDispTri)
+  DEFINE_FIELD(m_uiTags, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(CFaceMacroTextureInfo)
-            DEFINE_FIELD(m_MacroTextureNameID, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(CFaceMacroTextureInfo)
+  DEFINE_FIELD(m_MacroTextureNameID, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dprimitive_t)
-            DEFINE_FIELD(type, FIELD_CHARACTER),
-    DEFINE_FIELD(firstIndex, FIELD_SHORT),
-    DEFINE_FIELD(indexCount, FIELD_SHORT), DEFINE_FIELD(firstVert, FIELD_SHORT),
-    DEFINE_FIELD(vertCount, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dprimitive_t)
+  DEFINE_FIELD(type, FIELD_CHARACTER), DEFINE_FIELD(firstIndex, FIELD_SHORT),
+      DEFINE_FIELD(indexCount, FIELD_SHORT),
+      DEFINE_FIELD(firstVert, FIELD_SHORT),
+      DEFINE_FIELD(vertCount, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dprimvert_t) DEFINE_FIELD(pos, FIELD_VECTOR),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dprimvert_t)
+  DEFINE_FIELD(pos, FIELD_VECTOR),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dface_t) DEFINE_FIELD(planenum, FIELD_SHORT),
-    DEFINE_FIELD(side, FIELD_CHARACTER), DEFINE_FIELD(onNode, FIELD_CHARACTER),
-    DEFINE_FIELD(firstedge, FIELD_INTEGER), DEFINE_FIELD(numedges, FIELD_SHORT),
-    DEFINE_FIELD(texinfo, FIELD_SHORT), DEFINE_FIELD(dispinfo, FIELD_SHORT),
-    DEFINE_FIELD(surfaceFogVolumeID, FIELD_SHORT),
-    DEFINE_ARRAY(styles, FIELD_CHARACTER, MAXLIGHTMAPS),
-    DEFINE_FIELD(lightofs, FIELD_INTEGER), DEFINE_FIELD(area, FIELD_FLOAT),
-    DEFINE_ARRAY(m_LightmapTextureMinsInLuxels, FIELD_INTEGER, 2),
-    DEFINE_ARRAY(m_LightmapTextureSizeInLuxels, FIELD_INTEGER, 2),
-    DEFINE_FIELD(origFace, FIELD_INTEGER),
-    DEFINE_FIELD(m_NumPrims, FIELD_SHORT),
-    DEFINE_FIELD(firstPrimID, FIELD_SHORT),
-    DEFINE_FIELD(smoothingGroups, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dface_t)
+  DEFINE_FIELD(planenum, FIELD_SHORT), DEFINE_FIELD(side, FIELD_CHARACTER),
+      DEFINE_FIELD(onNode, FIELD_CHARACTER),
+      DEFINE_FIELD(firstedge, FIELD_INTEGER),
+      DEFINE_FIELD(numedges, FIELD_SHORT), DEFINE_FIELD(texinfo, FIELD_SHORT),
+      DEFINE_FIELD(dispinfo, FIELD_SHORT),
+      DEFINE_FIELD(surfaceFogVolumeID, FIELD_SHORT),
+      DEFINE_ARRAY(styles, FIELD_CHARACTER, MAXLIGHTMAPS),
+      DEFINE_FIELD(lightofs, FIELD_INTEGER), DEFINE_FIELD(area, FIELD_FLOAT),
+      DEFINE_ARRAY(m_LightmapTextureMinsInLuxels, FIELD_INTEGER, 2),
+      DEFINE_ARRAY(m_LightmapTextureSizeInLuxels, FIELD_INTEGER, 2),
+      DEFINE_FIELD(origFace, FIELD_INTEGER),
+      DEFINE_FIELD(m_NumPrims, FIELD_SHORT),
+      DEFINE_FIELD(firstPrimID, FIELD_SHORT),
+      DEFINE_FIELD(smoothingGroups, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dfaceid_t)
-            DEFINE_FIELD(hammerfaceid, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dfaceid_t)
+  DEFINE_FIELD(hammerfaceid, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dbrush_t)
-            DEFINE_FIELD(firstside, FIELD_INTEGER),
-    DEFINE_FIELD(numsides, FIELD_INTEGER),
-    DEFINE_FIELD(contents, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dbrush_t)
+  DEFINE_FIELD(firstside, FIELD_INTEGER), DEFINE_FIELD(numsides, FIELD_INTEGER),
+      DEFINE_FIELD(contents, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dbrushside_t)
-            DEFINE_FIELD(planenum, FIELD_SHORT),
-    DEFINE_FIELD(texinfo, FIELD_SHORT), DEFINE_FIELD(dispinfo, FIELD_SHORT),
-    DEFINE_FIELD(bevel, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dbrushside_t)
+  DEFINE_FIELD(planenum, FIELD_SHORT), DEFINE_FIELD(texinfo, FIELD_SHORT),
+      DEFINE_FIELD(dispinfo, FIELD_SHORT), DEFINE_FIELD(bevel, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dedge_t) DEFINE_ARRAY(v, FIELD_SHORT, 2),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dedge_t)
+  DEFINE_ARRAY(v, FIELD_SHORT, 2),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dmodel_t) DEFINE_FIELD(mins, FIELD_VECTOR),
-    DEFINE_FIELD(maxs, FIELD_VECTOR), DEFINE_FIELD(origin, FIELD_VECTOR),
-    DEFINE_FIELD(headnode, FIELD_INTEGER),
-    DEFINE_FIELD(firstface, FIELD_INTEGER),
-    DEFINE_FIELD(numfaces, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dmodel_t)
+  DEFINE_FIELD(mins, FIELD_VECTOR), DEFINE_FIELD(maxs, FIELD_VECTOR),
+      DEFINE_FIELD(origin, FIELD_VECTOR), DEFINE_FIELD(headnode, FIELD_INTEGER),
+      DEFINE_FIELD(firstface, FIELD_INTEGER),
+      DEFINE_FIELD(numfaces, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dphysmodel_t)
-            DEFINE_FIELD(modelIndex, FIELD_INTEGER),
-    DEFINE_FIELD(dataSize, FIELD_INTEGER),
-    DEFINE_FIELD(keydataSize, FIELD_INTEGER),
-    DEFINE_FIELD(solidCount, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dphysmodel_t)
+  DEFINE_FIELD(modelIndex, FIELD_INTEGER),
+      DEFINE_FIELD(dataSize, FIELD_INTEGER),
+      DEFINE_FIELD(keydataSize, FIELD_INTEGER),
+      DEFINE_FIELD(solidCount, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dphysdisp_t)
-            DEFINE_FIELD(numDisplacements, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dphysdisp_t)
+  DEFINE_FIELD(numDisplacements, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(darea_t)
-            DEFINE_FIELD(numareaportals, FIELD_INTEGER),
-    DEFINE_FIELD(firstareaportal, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(darea_t)
+  DEFINE_FIELD(numareaportals, FIELD_INTEGER),
+      DEFINE_FIELD(firstareaportal, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dareaportal_t)
-            DEFINE_FIELD(m_PortalKey, FIELD_SHORT),
-    DEFINE_FIELD(otherarea, FIELD_SHORT),
-    DEFINE_FIELD(m_FirstClipPortalVert, FIELD_SHORT),
-    DEFINE_FIELD(m_nClipPortalVerts, FIELD_SHORT),
-    DEFINE_FIELD(planenum, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dareaportal_t)
+  DEFINE_FIELD(m_PortalKey, FIELD_SHORT), DEFINE_FIELD(otherarea, FIELD_SHORT),
+      DEFINE_FIELD(m_FirstClipPortalVert, FIELD_SHORT),
+      DEFINE_FIELD(m_nClipPortalVerts, FIELD_SHORT),
+      DEFINE_FIELD(planenum, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dworldlight_t)
-            DEFINE_FIELD(origin, FIELD_VECTOR),
-    DEFINE_FIELD(intensity, FIELD_VECTOR), DEFINE_FIELD(normal, FIELD_VECTOR),
-    DEFINE_FIELD(cluster, FIELD_INTEGER),
-    DEFINE_FIELD(type, FIELD_INTEGER),  // enumeration
-    DEFINE_FIELD(style, FIELD_INTEGER), DEFINE_FIELD(stopdot, FIELD_FLOAT),
-    DEFINE_FIELD(stopdot2, FIELD_FLOAT), DEFINE_FIELD(exponent, FIELD_FLOAT),
-    DEFINE_FIELD(radius, FIELD_FLOAT), DEFINE_FIELD(constant_attn, FIELD_FLOAT),
-    DEFINE_FIELD(linear_attn, FIELD_FLOAT),
-    DEFINE_FIELD(quadratic_attn, FIELD_FLOAT),
-    DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(texinfo, FIELD_INTEGER),
-    DEFINE_FIELD(owner, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dworldlight_t)
+  DEFINE_FIELD(origin, FIELD_VECTOR), DEFINE_FIELD(intensity, FIELD_VECTOR),
+      DEFINE_FIELD(normal, FIELD_VECTOR), DEFINE_FIELD(cluster, FIELD_INTEGER),
+      DEFINE_FIELD(type, FIELD_INTEGER),  // enumeration
+      DEFINE_FIELD(style, FIELD_INTEGER), DEFINE_FIELD(stopdot, FIELD_FLOAT),
+      DEFINE_FIELD(stopdot2, FIELD_FLOAT), DEFINE_FIELD(exponent, FIELD_FLOAT),
+      DEFINE_FIELD(radius, FIELD_FLOAT),
+      DEFINE_FIELD(constant_attn, FIELD_FLOAT),
+      DEFINE_FIELD(linear_attn, FIELD_FLOAT),
+      DEFINE_FIELD(quadratic_attn, FIELD_FLOAT),
+      DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(texinfo, FIELD_INTEGER),
+      DEFINE_FIELD(owner, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dleafwaterdata_t)
-            DEFINE_FIELD(surfaceZ, FIELD_FLOAT),
-    DEFINE_FIELD(minZ, FIELD_FLOAT),
-    DEFINE_FIELD(surfaceTexInfoID, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dleafwaterdata_t)
+  DEFINE_FIELD(surfaceZ, FIELD_FLOAT), DEFINE_FIELD(minZ, FIELD_FLOAT),
+      DEFINE_FIELD(surfaceTexInfoID, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(doccluderdata_t)
-            DEFINE_FIELD(flags, FIELD_INTEGER),
-    DEFINE_FIELD(firstpoly, FIELD_INTEGER),
-    DEFINE_FIELD(polycount, FIELD_INTEGER), DEFINE_FIELD(mins, FIELD_VECTOR),
-    DEFINE_FIELD(maxs, FIELD_VECTOR), DEFINE_FIELD(area, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(doccluderdata_t)
+  DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(firstpoly, FIELD_INTEGER),
+      DEFINE_FIELD(polycount, FIELD_INTEGER), DEFINE_FIELD(mins, FIELD_VECTOR),
+      DEFINE_FIELD(maxs, FIELD_VECTOR), DEFINE_FIELD(area, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(doccluderpolydata_t)
-            DEFINE_FIELD(firstvertexindex, FIELD_INTEGER),
-    DEFINE_FIELD(vertexcount, FIELD_INTEGER),
-    DEFINE_FIELD(planenum, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(doccluderpolydata_t)
+  DEFINE_FIELD(firstvertexindex, FIELD_INTEGER),
+      DEFINE_FIELD(vertexcount, FIELD_INTEGER),
+      DEFINE_FIELD(planenum, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dcubemapsample_t)
-            DEFINE_ARRAY(origin, FIELD_INTEGER, 3),
-    DEFINE_FIELD(size, FIELD_CHARACTER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dcubemapsample_t)
+  DEFINE_ARRAY(origin, FIELD_INTEGER, 3), DEFINE_FIELD(size, FIELD_CHARACTER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(doverlay_t) DEFINE_FIELD(nId, FIELD_INTEGER),
-    DEFINE_FIELD(nTexInfo, FIELD_SHORT),
-    DEFINE_FIELD(m_nFaceCountAndRenderOrder, FIELD_SHORT),
-    DEFINE_ARRAY(aFaces, FIELD_INTEGER, OVERLAY_BSP_FACE_COUNT),
-    DEFINE_ARRAY(flU, FIELD_FLOAT, 2), DEFINE_ARRAY(flV, FIELD_FLOAT, 2),
-    DEFINE_ARRAY(vecUVPoints, FIELD_VECTOR, 4),
-    DEFINE_FIELD(vecOrigin, FIELD_VECTOR),
-    DEFINE_FIELD(vecBasisNormal, FIELD_VECTOR),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(doverlay_t)
+  DEFINE_FIELD(nId, FIELD_INTEGER), DEFINE_FIELD(nTexInfo, FIELD_SHORT),
+      DEFINE_FIELD(m_nFaceCountAndRenderOrder, FIELD_SHORT),
+      DEFINE_ARRAY(aFaces, FIELD_INTEGER, OVERLAY_BSP_FACE_COUNT),
+      DEFINE_ARRAY(flU, FIELD_FLOAT, 2), DEFINE_ARRAY(flV, FIELD_FLOAT, 2),
+      DEFINE_ARRAY(vecUVPoints, FIELD_VECTOR, 4),
+      DEFINE_FIELD(vecOrigin, FIELD_VECTOR),
+      DEFINE_FIELD(vecBasisNormal, FIELD_VECTOR),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dwateroverlay_t)
-            DEFINE_FIELD(nId, FIELD_INTEGER),
-    DEFINE_FIELD(nTexInfo, FIELD_SHORT),
-    DEFINE_FIELD(m_nFaceCountAndRenderOrder, FIELD_SHORT),
-    DEFINE_ARRAY(aFaces, FIELD_INTEGER, WATEROVERLAY_BSP_FACE_COUNT),
-    DEFINE_ARRAY(flU, FIELD_FLOAT, 2), DEFINE_ARRAY(flV, FIELD_FLOAT, 2),
-    DEFINE_ARRAY(vecUVPoints, FIELD_VECTOR, 4),
-    DEFINE_FIELD(vecOrigin, FIELD_VECTOR),
-    DEFINE_FIELD(vecBasisNormal, FIELD_VECTOR),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dwateroverlay_t)
+  DEFINE_FIELD(nId, FIELD_INTEGER), DEFINE_FIELD(nTexInfo, FIELD_SHORT),
+      DEFINE_FIELD(m_nFaceCountAndRenderOrder, FIELD_SHORT),
+      DEFINE_ARRAY(aFaces, FIELD_INTEGER, WATEROVERLAY_BSP_FACE_COUNT),
+      DEFINE_ARRAY(flU, FIELD_FLOAT, 2), DEFINE_ARRAY(flV, FIELD_FLOAT, 2),
+      DEFINE_ARRAY(vecUVPoints, FIELD_VECTOR, 4),
+      DEFINE_FIELD(vecOrigin, FIELD_VECTOR),
+      DEFINE_FIELD(vecBasisNormal, FIELD_VECTOR),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(doverlayfade_t)
-            DEFINE_FIELD(flFadeDistMinSq, FIELD_FLOAT),
-    DEFINE_FIELD(flFadeDistMaxSq, FIELD_FLOAT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(doverlayfade_t)
+  DEFINE_FIELD(flFadeDistMinSq, FIELD_FLOAT),
+      DEFINE_FIELD(flFadeDistMaxSq, FIELD_FLOAT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dgamelumpheader_t)
-            DEFINE_FIELD(lumpCount, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dgamelumpheader_t)
+  DEFINE_FIELD(lumpCount, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(dgamelump_t)
-            DEFINE_FIELD(id, FIELD_INTEGER),  // GameLumpId_t
-    DEFINE_FIELD(flags, FIELD_SHORT), DEFINE_FIELD(version, FIELD_SHORT),
-    DEFINE_FIELD(fileofs, FIELD_INTEGER), DEFINE_FIELD(filelen, FIELD_INTEGER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(dgamelump_t)
+  DEFINE_FIELD(id, FIELD_INTEGER),  // GameLumpId_t
+      DEFINE_FIELD(flags, FIELD_SHORT), DEFINE_FIELD(version, FIELD_SHORT),
+      DEFINE_FIELD(fileofs, FIELD_INTEGER),
+      DEFINE_FIELD(filelen, FIELD_INTEGER),
+END_BYTESWAP_DATADESC()
 
-    // From gamebspfile.h
-    BEGIN_BYTESWAP_DATADESC(StaticPropDictLump_t)
-        DEFINE_ARRAY(m_Name, FIELD_CHARACTER, STATIC_PROP_NAME_LENGTH),
-    END_BYTESWAP_DATADESC()
+// From gamebspfile.h
+BEGIN_BYTESWAP_DATADESC(StaticPropDictLump_t)
+  DEFINE_ARRAY(m_Name, FIELD_CHARACTER, STATIC_PROP_NAME_LENGTH),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(StaticPropLump_t)
-            DEFINE_FIELD(m_Origin, FIELD_VECTOR),
-    DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
-    DEFINE_FIELD(m_PropType, FIELD_SHORT),
-    DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
-    DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
-    DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
-    DEFINE_FIELD(m_Flags, FIELD_CHARACTER), DEFINE_FIELD(m_Skin, FIELD_INTEGER),
-    DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
-    DEFINE_FIELD(m_flForcedFadeScale, FIELD_FLOAT),
-    DEFINE_FIELD(m_nMinDXLevel, FIELD_SHORT),
-    DEFINE_FIELD(m_nMaxDXLevel, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(StaticPropLump_t)
+  DEFINE_FIELD(m_Origin, FIELD_VECTOR),
+      DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
+      DEFINE_FIELD(m_PropType, FIELD_SHORT),
+      DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
+      DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
+      DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Flags, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Skin, FIELD_INTEGER),
+      DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
+      DEFINE_FIELD(m_flForcedFadeScale, FIELD_FLOAT),
+      DEFINE_FIELD(m_nMinDXLevel, FIELD_SHORT),
+      DEFINE_FIELD(m_nMaxDXLevel, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(StaticPropLumpV4_t)
-            DEFINE_FIELD(m_Origin, FIELD_VECTOR),
-    DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
-    DEFINE_FIELD(m_PropType, FIELD_SHORT),
-    DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
-    DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
-    DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
-    DEFINE_FIELD(m_Flags, FIELD_CHARACTER), DEFINE_FIELD(m_Skin, FIELD_INTEGER),
-    DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(StaticPropLumpV4_t)
+  DEFINE_FIELD(m_Origin, FIELD_VECTOR),
+      DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
+      DEFINE_FIELD(m_PropType, FIELD_SHORT),
+      DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
+      DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
+      DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Flags, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Skin, FIELD_INTEGER),
+      DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(StaticPropLumpV5_t)
-            DEFINE_FIELD(m_Origin, FIELD_VECTOR),
-    DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
-    DEFINE_FIELD(m_PropType, FIELD_SHORT),
-    DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
-    DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
-    DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
-    DEFINE_FIELD(m_Flags, FIELD_CHARACTER), DEFINE_FIELD(m_Skin, FIELD_INTEGER),
-    DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
-    DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
-    DEFINE_FIELD(m_flForcedFadeScale, FIELD_FLOAT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(StaticPropLumpV5_t)
+  DEFINE_FIELD(m_Origin, FIELD_VECTOR),
+      DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
+      DEFINE_FIELD(m_PropType, FIELD_SHORT),
+      DEFINE_FIELD(m_FirstLeaf, FIELD_SHORT),
+      DEFINE_FIELD(m_LeafCount, FIELD_SHORT),
+      DEFINE_FIELD(m_Solid, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Flags, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Skin, FIELD_INTEGER),
+      DEFINE_FIELD(m_FadeMinDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_FadeMaxDist, FIELD_FLOAT),
+      DEFINE_FIELD(m_LightingOrigin, FIELD_VECTOR),
+      DEFINE_FIELD(m_flForcedFadeScale, FIELD_FLOAT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(StaticPropLeafLump_t)
-            DEFINE_FIELD(m_Leaf, FIELD_SHORT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(StaticPropLeafLump_t)
+  DEFINE_FIELD(m_Leaf, FIELD_SHORT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(DetailObjectDictLump_t)
-            DEFINE_ARRAY(m_Name, FIELD_CHARACTER, DETAIL_NAME_LENGTH),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(DetailObjectDictLump_t)
+  DEFINE_ARRAY(m_Name, FIELD_CHARACTER, DETAIL_NAME_LENGTH),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(DetailObjectLump_t)
-            DEFINE_FIELD(m_Origin, FIELD_VECTOR),
-    DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
-    DEFINE_FIELD(m_DetailModel, FIELD_SHORT), DEFINE_FIELD(m_Leaf, FIELD_SHORT),
-    DEFINE_ARRAY(m_Lighting, FIELD_CHARACTER, 4),  // ColorRGBExp32
-    DEFINE_FIELD(m_LightStyles, FIELD_INTEGER),
-    DEFINE_FIELD(m_LightStyleCount, FIELD_CHARACTER),
-    DEFINE_FIELD(m_SwayAmount, FIELD_CHARACTER),
-    DEFINE_FIELD(m_ShapeAngle, FIELD_CHARACTER),
-    DEFINE_FIELD(m_ShapeSize, FIELD_CHARACTER),
-    DEFINE_FIELD(m_Orientation, FIELD_CHARACTER),
-    DEFINE_ARRAY(m_Padding2, FIELD_CHARACTER, 3),
-    DEFINE_FIELD(m_Type, FIELD_CHARACTER),
-    DEFINE_ARRAY(m_Padding3, FIELD_CHARACTER, 3),
-    DEFINE_FIELD(m_flScale, FIELD_FLOAT),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(DetailObjectLump_t)
+  DEFINE_FIELD(m_Origin, FIELD_VECTOR),
+      DEFINE_FIELD(m_Angles, FIELD_VECTOR),  // QAngle
+      DEFINE_FIELD(m_DetailModel, FIELD_SHORT),
+      DEFINE_FIELD(m_Leaf, FIELD_SHORT),
+      DEFINE_ARRAY(m_Lighting, FIELD_CHARACTER, 4),  // ColorRGBExp32
+      DEFINE_FIELD(m_LightStyles, FIELD_INTEGER),
+      DEFINE_FIELD(m_LightStyleCount, FIELD_CHARACTER),
+      DEFINE_FIELD(m_SwayAmount, FIELD_CHARACTER),
+      DEFINE_FIELD(m_ShapeAngle, FIELD_CHARACTER),
+      DEFINE_FIELD(m_ShapeSize, FIELD_CHARACTER),
+      DEFINE_FIELD(m_Orientation, FIELD_CHARACTER),
+      DEFINE_ARRAY(m_Padding2, FIELD_CHARACTER, 3),
+      DEFINE_FIELD(m_Type, FIELD_CHARACTER),
+      DEFINE_ARRAY(m_Padding3, FIELD_CHARACTER, 3),
+      DEFINE_FIELD(m_flScale, FIELD_FLOAT),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(DetailSpriteDictLump_t)
-            DEFINE_FIELD(m_UL, FIELD_VECTOR2D),
-    DEFINE_FIELD(m_LR, FIELD_VECTOR2D), DEFINE_FIELD(m_TexUL, FIELD_VECTOR2D),
-    DEFINE_FIELD(m_TexLR, FIELD_VECTOR2D),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(DetailSpriteDictLump_t)
+  DEFINE_FIELD(m_UL, FIELD_VECTOR2D), DEFINE_FIELD(m_LR, FIELD_VECTOR2D),
+      DEFINE_FIELD(m_TexUL, FIELD_VECTOR2D),
+      DEFINE_FIELD(m_TexLR, FIELD_VECTOR2D),
+END_BYTESWAP_DATADESC()
 
-        BEGIN_BYTESWAP_DATADESC(DetailPropLightstylesLump_t)
-            DEFINE_ARRAY(m_Lighting, FIELD_CHARACTER, 4),  // ColorRGBExp32
-    DEFINE_FIELD(m_Style, FIELD_CHARACTER),
-    END_BYTESWAP_DATADESC()
+BEGIN_BYTESWAP_DATADESC(DetailPropLightstylesLump_t)
+  DEFINE_ARRAY(m_Lighting, FIELD_CHARACTER, 4),  // ColorRGBExp32
+      DEFINE_FIELD(m_Style, FIELD_CHARACTER),
+END_BYTESWAP_DATADESC()
 
-    // From vradstaticprops.h
-    namespace HardwareVerts {
-  BEGIN_BYTESWAP_DATADESC(MeshHeader_t)
+// From vradstaticprops.h
+namespace HardwareVerts {
+BEGIN_BYTESWAP_DATADESC(MeshHeader_t)
   DEFINE_FIELD(m_nLod, FIELD_INTEGER), DEFINE_FIELD(m_nVertexes, FIELD_INTEGER),
       DEFINE_FIELD(m_nOffset, FIELD_INTEGER),
       DEFINE_ARRAY(m_nUnused, FIELD_INTEGER, 4),
-      END_BYTESWAP_DATADESC()
+END_BYTESWAP_DATADESC()
 
-          BEGIN_BYTESWAP_DATADESC(FileHeader_t)
-              DEFINE_FIELD(m_nVersion, FIELD_INTEGER),
+BEGIN_BYTESWAP_DATADESC(FileHeader_t)
+  DEFINE_FIELD(m_nVersion, FIELD_INTEGER),
       DEFINE_FIELD(m_nChecksum, FIELD_INTEGER),
       DEFINE_FIELD(m_nVertexFlags, FIELD_INTEGER),
       DEFINE_FIELD(m_nVertexSize, FIELD_INTEGER),
       DEFINE_FIELD(m_nVertexes, FIELD_INTEGER),
       DEFINE_FIELD(m_nMeshes, FIELD_INTEGER),
-      DEFINE_ARRAY(m_nUnused, FIELD_INTEGER, 4), END_BYTESWAP_DATADESC()
-}  // end namespace
+      DEFINE_ARRAY(m_nUnused, FIELD_INTEGER, 4),
+END_BYTESWAP_DATADESC()
+}  // namespace HardwareVerts
 
 static const char *s_LumpNames[] = {
     "LUMP_ENTITIES",                        // 0
@@ -1369,10 +1378,10 @@ END_BYTESWAP_DATADESC()
 BEGIN_BYTESWAP_DATADESC_(swapmoppsurfaceheader_t, swapcollideheader_t)
   DEFINE_FIELD(moppSize, FIELD_INTEGER),
 END_BYTESWAP_DATADESC()
-    // clang-format on
+// clang-format on
 
-    static void SwapPhyscollideLump(byte *pDestBase, byte *pSrcBase,
-                                    ptrdiff_t &count) {
+static void SwapPhyscollideLump(byte *pDestBase, byte *pSrcBase,
+                                ptrdiff_t &count) {
   IPhysicsCollision *physcollision = NULL;
   CSysModule *pPhysicsModule = g_pFullFileSystem->LoadModule("vphysics.dll");
   if (pPhysicsModule) {
@@ -2837,29 +2846,30 @@ void SetKeyValue(entity_t *ent, const char *key, const char *value) {
   ep->value = copystring(value);
 }
 
-const char *ValueForKey(entity_t *ent, char *key) {
+const char *ValueForKey(entity_t *ent, const char *key) {
   for (epair_t *ep = ent->epairs; ep; ep = ep->next)
     if (!Q_stricmp(ep->key, key)) return ep->value;
   return "";
 }
 
-vec_t FloatForKey(entity_t *ent, char *key) {
+vec_t FloatForKey(entity_t *ent, const char *key) {
   const char *k = ValueForKey(ent, key);
   return atof(k);
 }
 
-vec_t FloatForKeyWithDefault(entity_t *ent, char *key, float default_value) {
+vec_t FloatForKeyWithDefault(entity_t *ent, const char *key,
+                             float default_value) {
   for (epair_t *ep = ent->epairs; ep; ep = ep->next)
     if (!Q_stricmp(ep->key, key)) return atof(ep->value);
   return default_value;
 }
 
-int IntForKey(entity_t *ent, char *key) {
+int IntForKey(entity_t *ent, const char *key) {
   const char *k = ValueForKey(ent, key);
   return atol(k);
 }
 
-void GetVectorForKey(entity_t *ent, char *key, Vector &vec) {
+void GetVectorForKey(entity_t *ent, const char *key, Vector &vec) {
   const char *k = ValueForKey(ent, key);
   // scanf into doubles, then assign, so it is vec_t size independent
   double v1, v2, v3;
@@ -2870,7 +2880,7 @@ void GetVectorForKey(entity_t *ent, char *key, Vector &vec) {
   vec[2] = v3;
 }
 
-void GetVector2DForKey(entity_t *ent, char *key, Vector2D &vec) {
+void GetVector2DForKey(entity_t *ent, const char *key, Vector2D &vec) {
   double v1, v2;
 
   const char *k = ValueForKey(ent, key);
@@ -2881,7 +2891,7 @@ void GetVector2DForKey(entity_t *ent, char *key, Vector2D &vec) {
   vec[1] = v2;
 }
 
-void GetAnglesForKey(entity_t *ent, char *key, QAngle &angle) {
+void GetAnglesForKey(entity_t *ent, const char *key, QAngle &angle) {
   double v1, v2, v3;
 
   const char *k = ValueForKey(ent, key);

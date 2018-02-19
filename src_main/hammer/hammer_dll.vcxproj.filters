@@ -22,9 +22,6 @@
     <Filter Include="Link Libraries">
       <UniqueIdentifier>{ca945de2-b28b-40a8-b79e-6550b7ecbe4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{e05a9b10-ff5f-4690-97a1-ece06f928b21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{8ea41779-1e28-4e3b-be4f-5311c7b43f38}</UniqueIdentifier>
     </Filter>
@@ -836,9 +833,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\public\tier0\afxmem_override.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AnchorMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1511,6 +1505,9 @@
     <ClCompile Include="undowarningdlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\tier0\include\afxmem_override.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hammer.rc">
@@ -1523,9 +1520,6 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <None Include="hammer_dll.vpc">
-      <Filter>Resources</Filter>
-    </None>
     <None Include="res\crosshair.cur">
       <Filter>Resource Files</Filter>
     </None>

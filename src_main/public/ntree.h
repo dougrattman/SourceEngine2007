@@ -1,7 +1,7 @@
 // Copyright © 1996-2005, Valve Corporation, All rights reserved.
 
-#ifndef __TREE_H__
-#define __TREE_H__
+#ifndef NTREE_H_
+#define NTREE_H_
 
 #include "ArrayStack.h"
 #include "List.h"
@@ -259,4 +259,4 @@ NTreeNode<T> *NTreeNode<T>::ReentrantTraversalGetNext(void) {
   return NULL;
 }
 
-#endif /* __TREE_H__ */
+#endif /* NTREE_H_ */

@@ -89,7 +89,7 @@ void KillFlare(CBaseEntity *pOwnerEntity, CBaseEntity *pEntity,
 // Purpose: Breakable objects take different levels of damage based upon the
 // damage type.
 //			This isn't contained by CBaseProp, because
-//func_breakables use it as well.
+// func_breakables use it as well.
 //-----------------------------------------------------------------------------
 float GetBreakableDamage(const CTakeDamageInfo &inputInfo,
                          IBreakableWithPropData *pProp) {
@@ -261,11 +261,8 @@ bool CBaseProp::KeyValue(const char *szKeyName, const char *szValue) {
       return BaseClass::KeyValue(szKeyName, szValue);
 
     return true;
-  } else {
-    return BaseClass::KeyValue(szKeyName, szValue);
   }
-
-  return true;
+  return BaseClass::KeyValue(szKeyName, szValue);
 }
 
 //-----------------------------------------------------------------------------
@@ -299,7 +296,7 @@ void CBaseProp::CalculateBlockLOS(void) {
 // Purpose: Parse this prop's data from the model, if it has a keyvalues
 // section.
 //			Returns true only if this prop is using a model that has
-//a prop_data section that's invalid.
+// a prop_data section that's invalid.
 //-----------------------------------------------------------------------------
 int CBaseProp::ParsePropData(void) {
   KeyValues *modelKeyValues = new KeyValues("");
@@ -3960,7 +3957,7 @@ void CBasePropDoor::Blocked(CBaseEntity *pOther) {
   //		for (;;)
   //		{
   //			pTarget = gEntList.FindEntityByName(pTarget,
-  //GetEntityName()
+  // GetEntityName()
   //);
   //
   //			if (pTarget != this)
@@ -3976,26 +3973,27 @@ void CBasePropDoor::Blocked(CBaseEntity *pOther) {
   //
   //					if (pDoor->m_fAutoReturnDelay >= 0)
   //					{
-  //						if (pDoor->GetAbsVelocity() == GetAbsVelocity()
+  //						if (pDoor->GetAbsVelocity() ==
+  //GetAbsVelocity()
   //&& pDoor->GetLocalAngularVelocity() == GetLocalAngularVelocity())
   //						{
-  //							// this is the most hacked, evil,
-  //bastardized thing I've ever seen. kjb
+  //							// this is the most hacked,
+  //evil, bastardized thing I've ever seen. kjb
   // if (FClassnameIs(pTarget, "prop_door_rotating"))
   //							{
-  //								// set angles to realign
-  //rotating doors
+  //								// set angles to
+  //realign rotating doors
   // pDoor->SetLocalAngles(GetLocalAngles());
   //								pDoor->SetLocalAngularVelocity(vec3_angle);
   //							}
   //							else
   //							//{
-  //							//	// set origin to realign
-  //normal doors
+  //							//	// set origin to
+  //realign normal doors
   //							//
   // pDoor->SetLocalOrigin(GetLocalOrigin());
   //							//
-  //pDoor->SetAbsVelocity(vec3_origin);// stop!
+  // pDoor->SetAbsVelocity(vec3_origin);// stop!
   //							//}
   //						}
   //
@@ -4650,7 +4648,7 @@ void CPropDoorRotating::MoveDone() {
 //-----------------------------------------------------------------------------
 // Purpose: Calculate m_vecVelocity and m_flNextThink to reach vecDest from
 //			GetLocalOrigin() traveling at flSpeed. Just like
-//LinearMove, but rotational.
+// LinearMove, but rotational.
 // Input  : vecDestAngle -
 //			flSpeed -
 //-----------------------------------------------------------------------------

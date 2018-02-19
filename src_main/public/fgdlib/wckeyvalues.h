@@ -1,17 +1,12 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
-//
-// Purpose:
-//
-//=============================================================================//
 
 #ifndef WCKEYVALUES_H
 #define WCKEYVALUES_H
 
-#include "tier0/include/dbg.h"
-#include <utldict.h>
-#include <utlvector.h>
 #include <fstream>
+#include "tier0/include/dbg.h"
+#include "tier1/utldict.h"
+#include "tier1/utlvector.h"
 
 #define KEYVALUE_MAX_KEY_LENGTH 80
 #define KEYVALUE_MAX_VALUE_LENGTH 512

@@ -1,31 +1,22 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-#include <stdio.h>
+
 #include "physdll.h"
+
 #include "filesystem_tools.h"
 
-static CSysModule *pPhysicsModule = NULL;
-CreateInterfaceFn GetPhysicsFactory( void )
-{
-	if ( !pPhysicsModule )
-	{
-		pPhysicsModule = g_pFullFileSystem->LoadModule( "VPHYSICS.DLL" );
-		if ( !pPhysicsModule )
-			return NULL;
-	}
+static CSysModule *pPhysicsModule = nullptr;
 
-	return Sys_GetFactory( pPhysicsModule );
+CreateInterfaceFn GetPhysicsFactory(void) {
+  if (!pPhysicsModule) {
+    pPhysicsModule = g_pFullFileSystem->LoadModule("vphysics.dll");
+    if (!pPhysicsModule) return nullptr;
+  }
+
+  return Sys_GetFactory(pPhysicsModule);
 }
 
-void PhysicsDLLPath( const char *pPathname )
-{
-	if ( !pPhysicsModule )
-	{
-		pPhysicsModule = g_pFullFileSystem->LoadModule( pPathname );
-	}
+void PhysicsDLLPath(const char *pPathname) {
+  if (!pPhysicsModule) {
+    pPhysicsModule = g_pFullFileSystem->LoadModule(pPathname);
+  }
 }

@@ -553,7 +553,7 @@ CDmElement *CDmObjSerializer::ReadOBJ( CUtlBuffer &buf,
 			if ( sscanf( pBuf, "usemtl %4096s", tmpBuf1 ) == 1 )
 			{
 				// Remove any 'SG' suffix from the material
-				const uint sLen = Q_strlen( tmpBuf1 );
+				const u32 sLen = Q_strlen( tmpBuf1 );
 				if ( sLen && !Q_strcmp( tmpBuf1 + sLen - 2, "SG" ) )
 				{
 					tmpBuf1[ sLen - 2 ] = '\0';
@@ -1147,7 +1147,7 @@ void CDmObjSerializer::ParseMtlLib( CUtlBuffer &buf )
 			if ( sscanf( tmpBuf0, "newmtl %s", mtlName ) == 1 )
 			{
 				// Remove any 'SG' suffix from the material
-				const uint sLen = Q_strlen( mtlName );
+				const u32 sLen = Q_strlen( mtlName );
 				if ( sLen > 2 && !Q_strcmp( mtlName + sLen - 2, "SG" ) )
 				{
 					mtlName[ sLen - 2 ] = '\0';

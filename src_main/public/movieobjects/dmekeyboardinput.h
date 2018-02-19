@@ -6,31 +6,26 @@
 
 #ifndef DMEKEYBOARDINPUT_H
 #define DMEKEYBOARDINPUT_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "movieobjects/dmeinput.h"
-
 
 //-----------------------------------------------------------------------------
 // A class representing a camera
 //-----------------------------------------------------------------------------
-class CDmeKeyboardInput : public CDmeInput
-{
-	DEFINE_ELEMENT( CDmeKeyboardInput, CDmeInput );
+class CDmeKeyboardInput : public CDmeInput {
+  DEFINE_ELEMENT(CDmeKeyboardInput, CDmeInput);
 
-public:
-	virtual bool IsDirty(); // ie needs to operate
-	virtual void Operate();
+ public:
+  virtual bool IsDirty();  // ie needs to operate
+  virtual void Operate();
 
-	virtual void GetInputAttributes ( CUtlVector< CDmAttribute * > &attrs );
-	virtual void GetOutputAttributes( CUtlVector< CDmAttribute * > &attrs );
+  virtual void GetInputAttributes(CUtlVector<CDmAttribute *> &attrs);
+  virtual void GetOutputAttributes(CUtlVector<CDmAttribute *> &attrs);
 
-protected:
-	CDmaVar< bool > *m_keys;
+ protected:
+  CDmaVar<bool> *m_keys;
 
-	bool GetKeyStatus( uint ki );
+  bool GetKeyStatus(u32 ki);
 };
 
-#endif // DMEKEYBOARDINPUT_H
+#endif  // DMEKEYBOARDINPUT_H

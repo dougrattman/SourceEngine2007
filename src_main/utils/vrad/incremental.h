@@ -1,175 +1,132 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #ifndef INCREMENTAL_H
 #define INCREMENTAL_H
-#ifdef _WIN32
-#pragma once
-#endif
-
-
 
 #include "iincremental.h"
+#include "utlbuffer.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
-#include "utlbuffer.h"
 #include "vrad.h"
 
-
-#define INCREMENTALFILE_VERSION	31241
-
+#define INCREMENTALFILE_VERSION 31241
 
 class CIncLight;
 
-
-class CLightValue
-{
-public:
-	float m_Dot;
+class CLightValue {
+ public:
+  float m_Dot;
 };
 
+class CLightFace {
+ public:
+  unsigned short m_FaceIndex;        // global face index
+  unsigned short m_LightFacesIndex;  // index into CIncLight::m_LightFaces.
 
-class CLightFace
-{
-public:
-	unsigned short				m_FaceIndex;		// global face index
-	unsigned short				m_LightFacesIndex;	// index into CIncLight::m_LightFaces.
+  // The lightmap grid for this face. Only used while building lighting data for
+  // a face. Compressed into m_CompressedData immediately afterwards.
+  CUtlVector<CLightValue> m_LightValues;
 
-	// The lightmap grid for this face. Only used while building lighting data for a face.
-	// Compressed into m_CompressedData immediately afterwards.
-	CUtlVector<CLightValue>		m_LightValues;
-
-	CUtlBuffer					m_CompressedData;
-	CIncLight					*m_pLight;
+  CUtlBuffer m_CompressedData;
+  CIncLight *m_pLight;
 };
 
+class CIncLight {
+ public:
+  CIncLight();
+  ~CIncLight();
 
-class CIncLight
-{
-public:
-					CIncLight();
-					~CIncLight();
+  CLightFace *FindOrCreateLightFace(int iFace, int lmSize, bool *bNew = NULL);
 
-	CLightFace*		FindOrCreateLightFace( int iFace, int lmSize, bool *bNew=NULL );
+ public:
+  CRITICAL_SECTION m_CS;
 
+  // This is the light for which m_LightFaces was built.
+  dworldlight_t m_Light;
 
-public:
+  CLightFace *m_pCachedFaces[MAX_TOOL_THREADS + 1];
 
-	CRITICAL_SECTION	m_CS;
+  // The list of faces that this light contributes to.
+  CUtlLinkedList<CLightFace *, unsigned short> m_LightFaces;
 
-	// This is the light for which m_LightFaces was built.
-	dworldlight_t	m_Light;
-
-	CLightFace		*m_pCachedFaces[MAX_TOOL_THREADS+1];
-
-	// The list of faces that this light contributes to.
-	CUtlLinkedList<CLightFace*, unsigned short>	m_LightFaces;
-
-	// Largest value in intensity of light. Used to scale dot products up into a
-	// range where their values make sense.
-	float			m_flMaxIntensity;
+  // Largest value in intensity of light. Used to scale dot products up into a
+  // range where their values make sense.
+  float m_flMaxIntensity;
 };
 
+class CIncrementalHeader {
+ public:
+  class CLMSize {
+   public:
+    unsigned char m_Width;
+    unsigned char m_Height;
+  };
 
-class CIncrementalHeader
-{
-public:
-	class CLMSize
-	{
-	public:
-		unsigned char m_Width;
-		unsigned char m_Height;
-	};
-
-	CUtlVector<CLMSize>	m_FaceLightmapSizes;
+  CUtlVector<CLMSize> m_FaceLightmapSizes;
 };
 
+class CIncremental : public IIncremental {
+ public:
+  CIncremental();
+  ~CIncremental();
 
-class CIncremental : public IIncremental
-{
-public:
+  // IIncremental overrides.
+ public:
+  virtual bool Init(char const *pBSPFilename, char const *pIncrementalFilename);
 
-						CIncremental();
-						~CIncremental();
+  // Load the light definitions out of the incremental file.
+  // Figure out which lights have changed.
+  // Change 'activelights' to only consist of new or changed lights.
+  virtual bool PrepareForLighting();
 
+  virtual void AddLightToFace(IncrementalLightID lightID, int iFace,
+                              int iSample, int lmSize, float dot, int iThread);
 
+  virtual void FinishFace(IncrementalLightID lightID, int iFace, int iThread);
 
-// IIncremental overrides.
-public:
+  // For each face that was changed during the lighting process, save out
+  // new data for it in the incremental file.
+  virtual bool Finalize();
 
-	virtual bool		Init( char const *pBSPFilename, char const *pIncrementalFilename );
+  virtual void GetFacesTouched(CUtlVector<unsigned char> &touched);
 
-	// Load the light definitions out of the incremental file.
-	// Figure out which lights have changed.
-	// Change 'activelights' to only consist of new or changed lights.
-	virtual bool		PrepareForLighting();
+  virtual bool Serialize();
 
-	virtual void		AddLightToFace( 
-		IncrementalLightID lightID, 
-		int iFace, 
-		int iSample,
-		int lmSize,
-		float dot,
-		int iThread );
+ private:
+  // Read/write the header from the file.
+  bool ReadIncrementalHeader(long fp, CIncrementalHeader *pHeader);
+  bool WriteIncrementalHeader(long fp);
 
-	virtual void		FinishFace(
-		IncrementalLightID lightID,
-		int iFace,
-		int iThread );
+  // Returns true if the incremental file is valid and we can use InitUpdate.
+  bool IsIncrementalFileValid();
 
-	// For each face that was changed during the lighting process, save out
-	// new data for it in the incremental file.
-	virtual bool		Finalize();
+  void Term();
 
-	virtual void		GetFacesTouched( CUtlVector<unsigned char> &touched );
+  // For each light in 'activelights', add a light to m_Lights and link them
+  // together.
+  void AddLightsForActiveLights();
 
-	virtual bool		Serialize();
+  // Load and save the state.
+  bool LoadIncrementalFile();
+  bool SaveIncrementalFile();
 
+  typedef CUtlVector<CLightFace *> CFaceLightList;
+  void LinkLightsToFaces(CUtlVector<CFaceLightList> &faceLights);
 
-private:
+ private:
+  char const *m_pIncrementalFilename;
+  char const *m_pBSPFilename;
 
-	// Read/write the header from the file.
-	bool				ReadIncrementalHeader( long fp, CIncrementalHeader *pHeader );
-	bool				WriteIncrementalHeader( long fp );
+  CUtlLinkedList<CIncLight *, IncrementalLightID> m_Lights;
 
-	// Returns true if the incremental file is valid and we can use InitUpdate.
-	bool				IsIncrementalFileValid();
-	
-	void				Term();
+  // The face index is set to 1 if a face has new lighting data applied to it.
+  // This is used to optimize the set of lightmaps we recomposite.
+  CUtlVector<unsigned char> m_FacesTouched;
 
-	// For each light in 'activelights', add a light to m_Lights and link them together.
-	void				AddLightsForActiveLights();
+  int m_TotalMemory;
 
-	// Load and save the state.
-	bool				LoadIncrementalFile();
-	bool				SaveIncrementalFile();
-
-	typedef CUtlVector<CLightFace*> CFaceLightList;
-	void				LinkLightsToFaces( CUtlVector<CFaceLightList> &faceLights );
-
-
-private:
-
-	char const		*m_pIncrementalFilename;
-	char const		*m_pBSPFilename;
-	
-	CUtlLinkedList<CIncLight*, IncrementalLightID>	
-					m_Lights;
-
-	// The face index is set to 1 if a face has new lighting data applied to it.
-	// This is used to optimize the set of lightmaps we recomposite.
-	CUtlVector<unsigned char>	m_FacesTouched;
-	
-	int				m_TotalMemory;
-
-	// Set to true when one or more runs were completed successfully.
-	bool			m_bSuccessfulRun;
+  // Set to true when one or more runs were completed successfully.
+  bool m_bSuccessfulRun;
 };
 
-
-
-#endif // INCREMENTAL_H
+#endif  // INCREMENTAL_H

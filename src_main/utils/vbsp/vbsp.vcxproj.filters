@@ -7,12 +7,6 @@
     <Filter Include="Source Files\Common Files">
       <UniqueIdentifier>{6ef8ec56-ab29-4a03-83d6-e3cbf912c2fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{8ca3e5fb-2a26-48b5-b106-404b356864c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{24a3537a-f54e-483e-9bfd-0163aace393a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{a88f13b9-caf3-4519-bd6a-c7467d85a29a}</UniqueIdentifier>
     </Filter>
@@ -185,9 +179,6 @@
     <ClInclude Include="detail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="disp_lightmap_alpha.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\public\disp_powerinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -270,9 +261,6 @@
       <Filter>Header Files\Common header files</Filter>
     </ClInclude>
     <ClInclude Include="..\vmpi\vmpi.h">
-      <Filter>Header Files\Common header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\zip_uncompressed.h">
       <Filter>Header Files\Common header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\mathlib\amd3dx.h">
@@ -401,34 +389,6 @@
     <ClInclude Include="..\..\public\worldsize.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\public\bitmap.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\mathlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier2.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vtf.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vbsp.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />

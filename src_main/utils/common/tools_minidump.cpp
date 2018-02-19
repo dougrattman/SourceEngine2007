@@ -1,51 +1,49 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
-
-#include "winlite.h"
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tools_minidump.h"
 
+#include <utility>  // for std::exchange
+
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/minidump.h"
 
-static bool g_bToolsWriteFullMinidumps = false;
-static ToolsExceptionHandler g_pCustomExceptionHandler = NULL;
+namespace {
+bool g_should_write_full_minidumps{false};
+ToolsExceptionHandler g_exception_handler{nullptr};
 
-// ---------------------------------------------------------------------------------
-// // Internal helpers.
-// ---------------------------------------------------------------------------------
-// //
-
-static LONG __stdcall ToolsExceptionFilter(
-    struct _EXCEPTION_POINTERS *ExceptionInfo) {
+LONG WINAPI DefaultToolsExceptionFilter(EXCEPTION_POINTERS *info) {
   // Non VMPI workers write a minidump and show a crash dialog like normal.
-  int iType = MiniDumpNormal;
-  if (g_bToolsWriteFullMinidumps)
-    iType = MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory;
+  const MINIDUMP_TYPE minidump_type =
+      g_should_write_full_minidumps
+          ? static_cast<MINIDUMP_TYPE>(MiniDumpWithDataSegs |
+                                       MiniDumpWithIndirectlyReferencedMemory)
+          : MiniDumpNormal;
 
-  WriteMiniDumpUsingExceptionInfo(ExceptionInfo->ExceptionRecord->ExceptionCode,
-                                  ExceptionInfo, (MINIDUMP_TYPE)iType);
+  WriteMiniDumpUsingExceptionInfo(info->ExceptionRecord->ExceptionCode, info,
+                                  minidump_type);
+
   return EXCEPTION_CONTINUE_SEARCH;
 }
 
-static LONG __stdcall ToolsExceptionFilter_Custom(
-    struct _EXCEPTION_POINTERS *ExceptionInfo) {
+LONG WINAPI ToolsExceptionFilter(EXCEPTION_POINTERS *info) {
   // Run their custom handler.
-  g_pCustomExceptionHandler(ExceptionInfo->ExceptionRecord->ExceptionCode,
-                            ExceptionInfo);
-  return EXCEPTION_EXECUTE_HANDLER;  // (never gets here anyway)
+  g_exception_handler(info->ExceptionRecord->ExceptionCode, info);
+
+  // (never gets here anyway)
+  return EXCEPTION_EXECUTE_HANDLER;
 }
+}  // namespace
 
-// ---------------------------------------------------------------------------------
-// // Interface functions.
-// ---------------------------------------------------------------------------------
-// //
-
-void EnableFullMinidumps(bool bFull) { g_bToolsWriteFullMinidumps = bFull; }
+void EnableFullMinidumps(bool enable) {
+  g_should_write_full_minidumps = enable;
+}
 
 void SetupDefaultToolsMinidumpHandler() {
-  SetUnhandledExceptionFilter(ToolsExceptionFilter);
+  SetUnhandledExceptionFilter(DefaultToolsExceptionFilter);
 }
 
-void SetupToolsMinidumpHandler(ToolsExceptionHandler fn) {
-  g_pCustomExceptionHandler = fn;
-  SetUnhandledExceptionFilter(ToolsExceptionFilter_Custom);
+ToolsExceptionHandler SetupToolsMinidumpHandler(ToolsExceptionHandler handler) {
+  const auto old_handler{std::exchange(g_exception_handler, handler)};
+  SetUnhandledExceptionFilter(ToolsExceptionFilter);
+  return old_handler;
 }

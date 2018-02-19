@@ -25,6 +25,8 @@ class GDinputvariable;
 const int GD_MAX_VARIABLES = 128;
 
 class GDclass {
+  friend class GameData;
+
  public:
   GDclass(void);
   ~GDclass(void);

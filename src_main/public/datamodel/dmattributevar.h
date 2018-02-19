@@ -167,7 +167,7 @@ class CDmrGenericArray : public CDmrGenericArrayConst {
   void SetFromString(int i, const char *pValue);
 
   CDmAttribute *GetAttribute();
-  const CDmAttribute *GetAttribute() const;
+  CDmAttribute *GetAttribute() const;
 };
 
 //-----------------------------------------------------------------------------
@@ -461,13 +461,13 @@ class CDmaArray : public CDmaDecorator<
 
  public:
   const CDmaArray<T> &operator=(const CDmaArray<T> &val) {
-    CopyArray(val.Base(), val.Count());
+    this->CopyArray(val.Base(), val.Count());
     return *this;
   }
 
   template <class C>
   const CDmaArray<T> &operator=(const C &val) {
-    CopyArray(val.Base(), val.Count());
+    this->CopyArray(val.Base(), val.Count());
     return *this;
   }
 
@@ -597,7 +597,7 @@ class CDmaElementArray
   void Init(CDmElement *pOwner, const char *pAttributeName, int flags = 0) {
     Assert(pOwner);
     this->m_pAttribute = pOwner->AddExternalAttribute(
-        pAttributeName, AT_ELEMENT_ARRAY, &Value());
+        pAttributeName, AT_ELEMENT_ARRAY, &this->Value());
     this->m_pAttribute->SetElementTypeSymbol(E::GetStaticTypeSymbol());
     if (flags) {
       this->m_pAttribute->AddFlag(flags);
@@ -1209,28 +1209,28 @@ inline const CDmAttribute *CDmaArrayBase<T, B>::GetAttribute() const {
 //-----------------------------------------------------------------------------
 template <class B>
 inline const char *CDmaStringArrayConstBase<B>::operator[](int i) const {
-  return Value()[i].Get();
+  return this->Value()[i].Get();
 }
 
 template <class B>
 inline const char *CDmaStringArrayConstBase<B>::Element(int i) const {
-  return Value()[i].Get();
+  return this->Value()[i].Get();
 }
 
 template <class B>
 inline const char *CDmaStringArrayConstBase<B>::Get(int i) const {
-  return Value()[i].Get();
+  return this->Value()[i].Get();
 }
 
 template <class B>
 inline const CUtlVector<CUtlString> &CDmaStringArrayConstBase<B>::Get() const {
-  return Value();
+  return this->Value();
 }
 
 // Returns strlen of element i
 template <class B>
 inline int CDmaStringArrayConstBase<B>::Length(int i) const {
-  return Value()[i].Length();
+  return this->Value()[i].Length();
 }
 
 template <class B>
@@ -1259,7 +1259,7 @@ inline int CDmaStringArrayBase<B>::InsertBefore(int elem, const char *pValue) {
 //-----------------------------------------------------------------------------
 template <class E, class B>
 inline UtlSymId_t CDmaElementArrayConstBase<E, B>::GetElementType() const {
-  return Data().m_ElementType;
+  return this->Data().m_ElementType;
 }
 
 template <class E, class B>
@@ -1365,7 +1365,7 @@ inline CDmAttribute *CDmrGenericArray::GetAttribute() {
   return m_pAttribute;
 }
 
-inline const CDmAttribute *CDmrGenericArray::GetAttribute() const {
+inline CDmAttribute *CDmrGenericArray::GetAttribute() const {
   Assert(m_pAttribute);
   return m_pAttribute;
 }

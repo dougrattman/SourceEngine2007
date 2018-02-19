@@ -5,8 +5,6 @@
 
 enum ScriptPathMode_t { SCRIPT_USE_ABSOLUTE_PATH, SCRIPT_USE_RELATIVE_PATH };
 
-// scriplib.h
-
 #define MAXTOKEN 1024
 
 extern char token[MAXTOKEN];

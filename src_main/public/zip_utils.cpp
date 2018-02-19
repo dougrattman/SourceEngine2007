@@ -73,9 +73,8 @@ BEGIN_BYTESWAP_DATADESC(ZIP_PreloadDirectoryEntry)
   DEFINE_FIELD(Length, FIELD_INTEGER), DEFINE_FIELD(DataOffset, FIELD_INTEGER),
 END_BYTESWAP_DATADESC()
 
-//-----------------------------------------------------------------------------
 // For >2 GB File Support
-//-----------------------------------------------------------------------------
+
 class CWin32File {
  public:
   static HANDLE CreateTempFile(CUtlString &WritePath, CUtlString &FileName) {
@@ -141,20 +140,18 @@ class CWin32File {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Interface to allow abstraction of zip file output methods, and
 // avoid duplication of code. Files may be written to a CUtlBuffer or a
 // filestream
-//-----------------------------------------------------------------------------
+
 abstract_class IWriteStream {
  public:
   virtual void Put(const void *pMem, int size) = 0;
   virtual unsigned int Tell(void) = 0;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Wrapper for CUtlBuffer methods
-//-----------------------------------------------------------------------------
+
 class CBufferStream : public IWriteStream {
  public:
   CBufferStream(CUtlBuffer &buff) : IWriteStream(), m_buff(&buff) {}
@@ -169,9 +166,8 @@ class CBufferStream : public IWriteStream {
   CUtlBuffer *m_buff;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Wrapper for file I/O methods
-//-----------------------------------------------------------------------------
+
 class CFileStream : public IWriteStream {
  public:
   CFileStream(FILE *fout)
@@ -203,13 +199,12 @@ class CFileStream : public IWriteStream {
   HANDLE m_hFile;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Container for modifiable pak file which is embedded inside the .bsp
 // file
 //  itself.  It's used to allow one-off files to be stored local to the map and
 //  it is hooked into the file system as an override for searching for named
 //  files.
-//-----------------------------------------------------------------------------
+
 class CZipFile {
  public:
   // Construction
@@ -331,9 +326,8 @@ class CZipFile {
   CUtlString m_DiskCacheWritePath;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose:
-//-----------------------------------------------------------------------------
+
 CZipFile::CZipEntry::CZipEntry() {
   m_Name = "";
   m_Length = 0;
@@ -344,10 +338,9 @@ CZipFile::CZipEntry::CZipEntry() {
   m_SourceDiskOffset = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : src -
-//-----------------------------------------------------------------------------
+
 CZipFile::CZipEntry::CZipEntry(const CZipFile::CZipEntry &src) {
   m_Name = src.m_Name;
   m_Length = src.m_Length;
@@ -365,14 +358,12 @@ CZipFile::CZipEntry::CZipEntry(const CZipFile::CZipEntry &src) {
   m_SourceDiskOffset = src.m_SourceDiskOffset;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Clear any leftover data
-//-----------------------------------------------------------------------------
+
 CZipFile::CZipEntry::~CZipEntry() { free(m_pData); }
 
-//-----------------------------------------------------------------------------
 // Purpose: Construction
-//-----------------------------------------------------------------------------
+
 CZipFile::CZipFile(const char *pDiskCacheWritePath, bool bSortByName)
     : m_Files(0, 32), m_DiskCacheWritePath{pDiskCacheWritePath} {
   m_AlignmentSize = 0;
@@ -389,17 +380,15 @@ CZipFile::CZipFile(const char *pDiskCacheWritePath, bool bSortByName)
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Destroy zip data
-//-----------------------------------------------------------------------------
+
 CZipFile::~CZipFile() {
   m_bUseDiskCacheForWrites = false;
   Reset();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Delete all current data
-//-----------------------------------------------------------------------------
+
 void CZipFile::Reset() {
   m_Files.RemoveAll();
 
@@ -415,12 +404,11 @@ void CZipFile::Reset() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Comparison for sorting entries
 // Input  : src1 -
 //			src2 -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool CZipFile::CZipEntry::ZipFileLessFunc(CZipEntry const &src1,
                                           CZipEntry const &src2) {
   return (src1.m_Name < src2.m_Name);
@@ -460,11 +448,10 @@ void CZipFile::ActivateByteSwapping(bool bActivate) {
   m_Swap.ActivateByteSwapping(bActivate);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Load pak file from raw buffer
 // Input  : *buffer -
 //			bufferlength -
-//-----------------------------------------------------------------------------
+
 void CZipFile::ParseFromBuffer(void *buffer, int bufferlength) {
   // Throw away old data
   Reset();
@@ -579,9 +566,8 @@ void CZipFile::ParseFromBuffer(void *buffer, int bufferlength) {
   delete[] newfiles;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Mount pak file from disk
-//-----------------------------------------------------------------------------
+
 HANDLE CZipFile::ParseFromDisk(const char *pFilename) {
   HANDLE hFile = CreateFile(pFilename, GENERIC_READ | GENERIC_WRITE, 0, NULL,
                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -696,9 +682,8 @@ static int GetLengthOfBinStringAsText(const char *pSrc, int srcSize) {
   return numChars;
 }
 
-//-----------------------------------------------------------------------------
 // Copies text data from a form appropriate for disk to a normal string
-//-----------------------------------------------------------------------------
+
 static void ReadTextData(const char *pSrc, int nSrcSize, CUtlBuffer &buf) {
   buf.EnsureCapacity(nSrcSize + 1);
   const char *pSrcEnd = pSrc + nSrcSize;
@@ -718,9 +703,8 @@ static void ReadTextData(const char *pSrc, int nSrcSize, CUtlBuffer &buf) {
   buf.PutChar('\0');
 }
 
-//-----------------------------------------------------------------------------
 // Copies text data into a form appropriate for disk
-//-----------------------------------------------------------------------------
+
 static void CopyTextData(char *pDst, const char *pSrc, int dstSize,
                          int srcSize) {
   const char *pSrcScan = pSrc;
@@ -746,12 +730,11 @@ static void CopyTextData(char *pDst, const char *pSrc, int dstSize,
   Assert(pDstScan == pDstEnd);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Adds a new lump, or overwrites existing one
 // Input  : *relativename -
 //			*data -
 //			length -
-//-----------------------------------------------------------------------------
+
 void CZipFile::AddBufferToZip(const char *relativename, void *data, int length,
                               bool bTextMode) {
   // Lower case only
@@ -817,9 +800,8 @@ void CZipFile::AddBufferToZip(const char *relativename, void *data, int length,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Reads a file from the zip
-//-----------------------------------------------------------------------------
+
 bool CZipFile::ReadFileFromZip(const char *pRelativeName, bool bTextMode,
                                CUtlBuffer &buf) {
   // Lower case only
@@ -848,9 +830,8 @@ bool CZipFile::ReadFileFromZip(const char *pRelativeName, bool bTextMode,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Reads a file from the zip
-//-----------------------------------------------------------------------------
+
 bool CZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
                                bool bTextMode, CUtlBuffer &buf) {
   // Lower case only
@@ -889,10 +870,9 @@ bool CZipFile::ReadFileFromZip(HANDLE hZipFile, const char *pRelativeName,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Check if a file already exists in the zip.
 // Input  : *relativename -
-//-----------------------------------------------------------------------------
+
 bool CZipFile::FileExistsInZip(const char *pRelativeName) {
   // Lower case only
   char pName[512];
@@ -908,9 +888,8 @@ bool CZipFile::FileExistsInZip(const char *pRelativeName) {
   return nIndex != m_Files.InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Adds a new file to the zip.
-//-----------------------------------------------------------------------------
+
 void CZipFile::AddFileToZip(const char *relativename, const char *fullpath) {
   FILE *temp = fopen(fullpath, "rb");
   if (!temp) return;
@@ -932,9 +911,8 @@ void CZipFile::AddFileToZip(const char *relativename, const char *fullpath) {
   free(buf);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Removes a file from the zip.
-//-----------------------------------------------------------------------------
+
 void CZipFile::RemoveFileFromZip(const char *relativename) {
   CZipEntry e;
   e.m_Name = relativename;
@@ -962,10 +940,9 @@ unsigned short CZipFile::CalculatePadding(unsigned int filenameLen,
                           ((pos + headerSize) % m_AlignmentSize));
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Create the XZIP identifying comment string
 // Output : Length
-//-----------------------------------------------------------------------------
+
 int CZipFile::MakeXZipCommentString(char *pCommentString) {
   char tempString[XZIP_COMMENT_LENGTH];
 
@@ -980,9 +957,8 @@ int CZipFile::MakeXZipCommentString(char *pCommentString) {
   return XZIP_COMMENT_LENGTH;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: An XZIP has its configuration in the ascii comment
-//-----------------------------------------------------------------------------
+
 void CZipFile::ParseXZipCommentString(const char *pCommentString) {
   if (!V_strnicmp(pCommentString, "XZP", 3)) {
     m_bCompatibleFormat = true;
@@ -1001,10 +977,9 @@ void CZipFile::ParseXZipCommentString(const char *pCommentString) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Calculate the exact size of zip file, with headers and padding
 // Output : int
-//-----------------------------------------------------------------------------
+
 unsigned int CZipFile::CalculateSize() {
   unsigned int size = 0;
   unsigned int dirHeaders = 0;
@@ -1045,9 +1020,8 @@ unsigned int CZipFile::CalculateSize() {
   return size;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Print a directory of files in the zip
-//-----------------------------------------------------------------------------
+
 void CZipFile::PrintDirectory() {
   for (int i = m_Files.FirstInorder(); i != m_Files.InvalidIndex();
        i = m_Files.NextInorder(i)) {
@@ -1057,9 +1031,8 @@ void CZipFile::PrintDirectory() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Iterate through directory
-//-----------------------------------------------------------------------------
+
 int CZipFile::GetNextFilename(int id, char *pBuffer, int bufferSize,
                               int &fileSize) {
   if (id == -1) {
@@ -1080,9 +1053,8 @@ int CZipFile::GetNextFilename(int id, char *pBuffer, int bufferSize,
   return id;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Store data out to disk
-//-----------------------------------------------------------------------------
+
 void CZipFile::SaveToDisk(FILE *fout) {
   CFileStream stream(fout);
   SaveDirectory(stream);
@@ -1093,17 +1065,15 @@ void CZipFile::SaveToDisk(HANDLE hOutFile) {
   SaveDirectory(stream);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Store data out to a CUtlBuffer
-//-----------------------------------------------------------------------------
+
 void CZipFile::SaveToBuffer(CUtlBuffer &buf) {
   CBufferStream stream(buf);
   SaveDirectory(stream);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Store data back out to a stream (could be CUtlBuffer or filestream)
-//-----------------------------------------------------------------------------
+
 void CZipFile::SaveDirectory(IWriteStream &stream) {
   void *pPaddingBuffer = NULL;
   if (m_AlignmentSize) {

@@ -1,9 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Common collision utility methods
-//
-// $Header: $
-// $NoKeywords: $
 
 #if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
 

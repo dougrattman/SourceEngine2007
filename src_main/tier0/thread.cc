@@ -11,7 +11,7 @@
 
 #include "tier0/include/valve_off.h"
 
-void Plat_SetThreadName(u32 dwThreadID, const ch *pszName) {
+void Plat_SetThreadName(unsigned long dwThreadID, const ch *pszName) {
   ThreadSetDebugName(dwThreadID, pszName);
 }
 

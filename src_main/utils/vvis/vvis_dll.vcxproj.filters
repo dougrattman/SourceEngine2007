@@ -4,12 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{67f5406e-0350-49d4-99ae-8e1705e17758}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Link Libraries">
-      <UniqueIdentifier>{c0aa0a02-f3b3-43d7-96d4-c2d05a766256}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{b9d16c91-eff8-4e4e-a6ee-8ac97fb69a2b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{9ea893be-00cf-4263-911a-40ba74d22479}</UniqueIdentifier>
     </Filter>
@@ -191,30 +185,5 @@
     <ClInclude Include="..\..\public\wadtypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\lib\public\mathlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier0.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier1.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\tier2.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vmpi.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\lib\public\vstdlib.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vvis_dll.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
 </Project>

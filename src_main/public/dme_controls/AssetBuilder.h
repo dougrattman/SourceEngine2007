@@ -28,7 +28,7 @@ class CCompileStatusBar;
 class CDmeMakefile;
 class CDmeSource;
 struct DmeMakefileType_t;
-enum CompilationState_t;
+enum CompilationState_t : int;
 
 //-----------------------------------------------------------------------------
 // Purpose: Asset builder

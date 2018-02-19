@@ -388,7 +388,7 @@ void ExpandWildcards(int *argc, char ***argv) {}
 
 // only printf if in verbose mode
 bool verbose = false;
-void qprintf(char *format, ...) {
+void qprintf(const char *format, ...) {
   if (!verbose) return;
 
   va_list argptr;

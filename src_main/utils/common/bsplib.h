@@ -311,14 +311,15 @@ void UnparseEntities(void);
 void PrintEntity(entity_t *ent);
 
 void SetKeyValue(entity_t *ent, const char *key, const char *value);
-const char *ValueForKey(entity_t *ent, char *key);
+const char *ValueForKey(entity_t *ent, const char *key);
 // will return "" if not present
-int IntForKey(entity_t *ent, char *key);
-vec_t FloatForKey(entity_t *ent, char *key);
-vec_t FloatForKeyWithDefault(entity_t *ent, char *key, float default_value);
-void GetVectorForKey(entity_t *ent, char *key, Vector &vec);
-void GetVector2DForKey(entity_t *ent, char *key, Vector2D &vec);
-void GetAnglesForKey(entity_t *ent, char *key, QAngle &vec);
+int IntForKey(entity_t *ent, const char *key);
+vec_t FloatForKey(entity_t *ent, const char *key);
+vec_t FloatForKeyWithDefault(entity_t *ent, const char *key,
+                             float default_value);
+void GetVectorForKey(entity_t *ent, const char *key, Vector &vec);
+void GetVector2DForKey(entity_t *ent, const char *key, Vector2D &vec);
+void GetAnglesForKey(entity_t *ent, const char *key, QAngle &vec);
 epair_t *ParseEpair(void);
 
 // Build a list of the face's vertices (index into dvertexes).

@@ -27,7 +27,7 @@ struct KeyInfo
 	const char *str;
 };
 
-const uint g_nKeys = 48;
+const u32 g_nKeys = 48;
 const KeyInfo g_keyInfo[ g_nKeys ] =
 {
 	{ KEY_0, "0" },
@@ -94,7 +94,7 @@ void CDmeKeyboardInput::OnConstruction()
 {
 	m_keys = new CDmaVar< bool >[ g_nKeys ];
 
-	for ( uint ki = 0; ki < g_nKeys; ++ki )
+	for ( u32 ki = 0; ki < g_nKeys; ++ki )
 	{
 		m_keys[ ki ].Init( this, g_keyInfo[ ki ].str );
 	}
@@ -107,7 +107,7 @@ void CDmeKeyboardInput::OnDestruction()
 
 bool CDmeKeyboardInput::IsDirty()
 {
-	for ( uint ki = 0; ki < g_nKeys; ++ki )
+	for ( u32 ki = 0; ki < g_nKeys; ++ki )
 	{
 		if ( m_keys[ ki ].Get() != GetKeyStatus( ki ) )
 			return true;
@@ -117,7 +117,7 @@ bool CDmeKeyboardInput::IsDirty()
 
 void CDmeKeyboardInput::Operate()
 {
-	for ( uint ki = 0; ki < g_nKeys; ++ki )
+	for ( u32 ki = 0; ki < g_nKeys; ++ki )
 	{
 		m_keys[ ki ].Set( GetKeyStatus( ki ) );
 	}
@@ -129,13 +129,13 @@ void CDmeKeyboardInput::GetInputAttributes( CUtlVector< CDmAttribute * > &attrs 
 
 void CDmeKeyboardInput::GetOutputAttributes( CUtlVector< CDmAttribute * > &attrs )
 {
-	for ( uint ki = 0; ki < g_nKeys; ++ki )
+	for ( u32 ki = 0; ki < g_nKeys; ++ki )
 	{
 		attrs.AddToTail( m_keys[ ki ].GetAttribute() );
 	}
 }
 
-bool CDmeKeyboardInput::GetKeyStatus( uint ki )
+bool CDmeKeyboardInput::GetKeyStatus( u32 ki )
 {
 	return g_pVGuiInput->IsKeyDown( g_keyInfo[ ki ].code );
 }

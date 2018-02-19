@@ -64,8 +64,8 @@ bool ParseStringList( const char *&expr, const CUtlVector< CUtlString > &strings
 
 int FindString( const CUtlVector< CUtlString > &strings, const char *str )
 {
-	uint sn = strings.Count();
-	for ( uint si = 0; si < sn; ++si )
+	u32 sn = strings.Count();
+	for ( u32 si = 0; si < sn; ++si )
 	{
 		if ( !Q_strcmp( str, strings[ si ] ) )
 			return si;

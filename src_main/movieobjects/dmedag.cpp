@@ -313,8 +313,8 @@ void CDmeDag::Draw( CDmeDrawSettings *pDrawSettings )
 		pShape->Draw( shapeToWorld, pDrawSettings );
 	}
 
-	uint cn = m_Children.Count();
-	for ( uint ci = 0; ci < cn; ++ci )
+	u32 cn = m_Children.Count();
+	for ( u32 ci = 0; ci < cn; ++ci )
 	{
 		m_Children[ ci ]->Draw( pDrawSettings );
 	}

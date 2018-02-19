@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{8e493032-c94e-4980-b5c3-913c03b8fd2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{7ba21169-66d6-4dc8-bb10-7f78781da451}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{e61d676a-454d-423e-9078-96423bc79143}</UniqueIdentifier>
     </Filter>
@@ -57,11 +54,6 @@
     <ClCompile Include="importvmt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dmserializers.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dmebaseimporter.h">

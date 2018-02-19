@@ -713,8 +713,6 @@ static void CalcVirtualAnimation(virtualmodel_t *pVModel,
                                  Quaternion *q, mstudioseqdesc_t &seqdesc,
                                  int sequence, int animation, float cycle,
                                  int boneMask) {
-  int i, j, k;
-
   const mstudiobone_t *pbone;
   const virtualgroup_t *pSeqGroup;
   const studiohdr_t *pSeqStudioHdr;
@@ -752,7 +750,7 @@ static void CalcVirtualAnimation(virtualmodel_t *pVModel,
   float *pweight = seqdesc.pBoneweight(0);
   pbone = pStudioHdr->pBone(0);
 
-  for (i = 0; i < pStudioHdr->numbones(); i++) {
+  for (int i = 0; i < pStudioHdr->numbones(); i++) {
     if (pStudioHdr->boneFlags(i) & boneMask) {
       int j = pSeqGroup->boneMap[i];
       if (j >= 0 && pweight[j] > 0.0f) {
@@ -782,9 +780,9 @@ static void CalcVirtualAnimation(virtualmodel_t *pVModel,
 
   // FIXME: change encoding so that bone -1 is never the case
   while (panim && panim->bone < 255) {
-    j = pAnimGroup->masterBone[panim->bone];
+    int j = pAnimGroup->masterBone[panim->bone];
     if (j >= 0 && (pStudioHdr->boneFlags(j) & boneMask)) {
-      k = pSeqGroup->boneMap[j];
+      int k = pSeqGroup->boneMap[j];
 
       if (k >= 0 && pweight[k] > 0.0f) {
         CalcBoneQuaternion(iLocalFrame, s, &pAnimbone[panim->bone],
@@ -855,7 +853,6 @@ static void CalcAnimation(const CStudioHdr *pStudioHdr, Vector *pos,
   mstudiobone_t *pbone = pStudioHdr->pBone(0);
   const mstudiolinearbone_t *pLinearBones = pStudioHdr->pLinearBones();
 
-  int i;
   int iFrame;
   float s;
 
@@ -874,7 +871,7 @@ static void CalcAnimation(const CStudioHdr *pStudioHdr, Vector *pos,
   if (!panim) {
     // Msg("zeroframe %s\n", animdesc.pszName() );
     // pre initialize
-    for (i = 0; i < pStudioHdr->numbones(); i++, pbone++, pweight++) {
+    for (int i = 0; i < pStudioHdr->numbones(); i++, pbone++, pweight++) {
       if (*pweight > 0 && (pStudioHdr->boneFlags(i) & boneMask)) {
         if (animdesc.flags & STUDIO_DELTA) {
           q[i].Init(0.0f, 0.0f, 0.0f, 1.0f);
@@ -895,7 +892,7 @@ static void CalcAnimation(const CStudioHdr *pStudioHdr, Vector *pos,
 
   // BUGBUG: the sequence, the anim, and the model can have all different bone
   // mappings.
-  for (i = 0; i < pStudioHdr->numbones(); i++, pbone++, pweight++) {
+  for (int i = 0; i < pStudioHdr->numbones(); i++, pbone++, pweight++) {
     if (panim && panim->bone == i) {
       if (*pweight > 0 && (pStudioHdr->boneFlags(i) & boneMask)) {
         CalcBoneQuaternion(iLocalFrame, s, pbone, pLinearBones, panim, q[i]);
@@ -931,8 +928,7 @@ static void CalcAnimation(const CStudioHdr *pStudioHdr, Vector *pos,
     matrix3x4_t *boneToWorld = g_MatrixPool.Alloc();
     CBoneBitList boneComputed;
 
-    int i;
-    for (i = 0; i < animdesc.numlocalhierarchy; i++) {
+    for (int i = 0; i < animdesc.numlocalhierarchy; i++) {
       mstudiolocalhierarchy_t *pHierarchy = animdesc.pHierarchy(i);
 
       if (!pHierarchy) break;

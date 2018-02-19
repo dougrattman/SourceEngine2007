@@ -385,7 +385,7 @@ FORCEINLINE bool IsPowerOfTwo(uint32_t x) { return (x & (x - 1)) == 0; }
 // return the smallest power of two >= x.
 // returns 0 if x == 0 or x > 0x80000000 (ie numbers that would be negative if x
 // was signed) NOTE: the old code took an int, and if you pass in an int of
-// 0x80000000 casted to a uint,
+// 0x80000000 casted to a u32,
 //       you'll get 0x80000000, which is correct for uints, instead of 0, which
 //       was correct for ints
 FORCEINLINE uint32_t SmallestPowerOfTwoGreaterOrEqual(uint32_t x) {

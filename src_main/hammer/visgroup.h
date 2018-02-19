@@ -1,16 +1,10 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
-//
-// Purpose:
-//
-//=============================================================================//
 
 #ifndef VISGROUP_H
 #define VISGROUP_H
-#pragma once
 
-#include "BaseTypes.h"
 #include "UtlVector.h"
+#include "tier0/include/basetypes.h"
 
 class CChunkFile;
 class CSaveInfo;

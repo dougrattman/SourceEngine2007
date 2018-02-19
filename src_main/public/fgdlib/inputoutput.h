@@ -1,6 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved. ====
-//
-//=============================================================================
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef INPUTOUTPUT_H
 #define INPUTOUTPUT_H
@@ -47,7 +45,7 @@ class CClassInputOutputBase {
   CClassInputOutputBase &operator=(CClassInputOutputBase &);
 
  protected:
-  static char *g_pszEmpty;
+  static const char *g_pszEmpty;
 
   char m_szName[MAX_IO_NAME_LEN];
   InputOutputType_t m_eType;

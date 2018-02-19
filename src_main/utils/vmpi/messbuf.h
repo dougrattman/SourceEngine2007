@@ -2,6 +2,7 @@
 //
 // Purpose: MessageBuffer - handy for packing and upacking structures to be sent
 // as messages.
+
 #ifndef _MESSAGEBUFFER
 #define _MESSAGEBUFFER
 

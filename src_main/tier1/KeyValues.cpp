@@ -1168,7 +1168,7 @@ void KeyValues::SetWString(const char *keyName, const wchar_t *value) {
     }
 
     // allocate memory for the new value and copy it in
-    int len = wcslen(value);
+    size_t len = wcslen(value);
     dat->m_wsValue = new wchar_t[len + 1];
     Q_memcpy(dat->m_wsValue, value, (len + 1) * sizeof(wchar_t));
 
@@ -1350,7 +1350,7 @@ KeyValues *KeyValues::MakeCopy(void) const {
     } break;
     case TYPE_WSTRING: {
       if (m_wsValue) {
-        int len = wcslen(m_wsValue);
+        size_t len = wcslen(m_wsValue);
         newKeyValue->m_wsValue = new wchar_t[len + 1];
         Q_memcpy(newKeyValue->m_wsValue, m_wsValue,
                  (len + 1) * sizeof(wchar_t));

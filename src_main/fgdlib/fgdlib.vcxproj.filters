@@ -4,9 +4,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{be9a3949-d3fa-40cc-be87-a70dd9d16d34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{c7a9bf39-1c6e-44c5-ac83-efa9d76471c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{83ad11fc-0270-4058-882b-f0d5978dd189}</UniqueIdentifier>
     </Filter>
@@ -29,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\fgdlib\fgdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -56,10 +50,5 @@
     <ClInclude Include="..\public\fgdlib\wckeyvalues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="fgdlib.vpc">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
 </Project>

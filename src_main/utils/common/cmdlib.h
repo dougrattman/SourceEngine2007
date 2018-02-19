@@ -122,7 +122,7 @@ extern char archivedir[1024];
 
 extern bool verbose;
 
-void qprintf(char *format, ...);
+void qprintf(const char *format, ...);
 
 void ExpandWildcards(int *argc, char ***argv);
 

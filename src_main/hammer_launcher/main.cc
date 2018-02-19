@@ -2,7 +2,7 @@
 //
 // Purpose: Launcher for hammer, which is sitting in its own DLL
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "SteamWriteMinidump.h"
 #include "appframework/AppFramework.h"
@@ -20,18 +20,6 @@
 #include "vgui/ivgui.h"
 #include "vphysics_interface.h"
 #include "vstdlib/cvar.h"
-
-#ifdef _MSC_VER
-// Ensure common controls are displayed in the user's preferred visual style.
-// See
-// https://msdn.microsoft.com/en-us/library/windows/desktop/bb773175(v=vs.85).aspx
-// clang-format off
-#pragma comment(linker, \
-  "\"/manifestdependency:type='win32' \
-  name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
-  processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-// clang-format on
-#endif
 
 extern "C" void WriteMiniDumpUsingExceptionInfo(
     unsigned int uStructuredExceptionCode,
@@ -133,7 +121,7 @@ SpewRetval_t HammerSpewFunc(SpewType_t type, char const *pMsg) {
     return SPEW_DEBUGGER;
   }
 
-  if (type == SPEW_ERROR) {
+  if (type == SPEW_ERROR || type == SPEW_WARNING) {
     MessageBox(nullptr, pMsg, "Awesome Hammer - Error", MB_OK | MB_ICONSTOP);
     return SPEW_ABORT;
   }

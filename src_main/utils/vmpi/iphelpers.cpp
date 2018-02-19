@@ -2,12 +2,14 @@
 
 #include "winlite.h"
 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <cassert>
 
-#include "tier0/include/basetypes.h"
 #include "iphelpers.h"
+#include "tier0/include/basetypes.h"
 #include "tier1/strtools.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"

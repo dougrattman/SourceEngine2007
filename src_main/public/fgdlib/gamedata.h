@@ -14,7 +14,7 @@ class MDkeyvalue;
 class GameData;
 class KeyValues;
 
-enum TEXTUREFORMAT;
+enum TEXTUREFORMAT : int;
 
 typedef void (*GameDataMessageFunc_t)(int level, const char *fmt, ...);
 
@@ -37,8 +37,8 @@ struct FGDVisGroupsBaseClass_s {
 
 struct FGDAutoVisGroups_s {
   char szParent[MAX_PATH];  // i.e. Custom, SFM, etc
-  CUtlVector<FGDVisGroupsBaseClass_s>
-      m_Classes;  // i.e. Scene Logic, Sounds, etc
+  // i.e. Scene Logic, Sounds, etc
+  CUtlVector<FGDVisGroupsBaseClass_s> m_Classes;
 };
 
 #define MAX_DIRECTORY_SIZE 32
@@ -122,7 +122,7 @@ int GameData::GetMinMapCoord(void) { return m_nMinMapCoord; }
 int GameData::GetMaxMapCoord(void) { return m_nMaxMapCoord; }
 
 void GDSetMessageFunc(GameDataMessageFunc_t pFunc);
-bool GDError(TokenReader &tr, char *error, ...);
+bool GDError(TokenReader &tr, const char *error, ...);
 bool GDSkipToken(TokenReader &tr, trtoken_t ttexpecting = TOKENNONE,
                  const char *pszExpecting = NULL);
 bool GDGetToken(TokenReader &tr, char *pszStore, int nSize,

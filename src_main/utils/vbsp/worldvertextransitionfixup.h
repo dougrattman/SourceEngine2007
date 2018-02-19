@@ -1,15 +1,8 @@
-//====== Copyright © 1996-2007, Valve Corporation, All rights reserved. =======
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright © 1996-2007, Valve Corporation, All rights reserved.
 
 #ifndef WORLDVERTEXTRANSITIONFIXUP_H
 #define WORLDVERTEXTRANSITIONFIXUP_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-void WorldVertexTransitionFixup( void );
+void WorldVertexTransitionFixup(void);
 
-#endif // WORLDVERTEXTRANSITIONFIXUP_H
+#endif  // WORLDVERTEXTRANSITIONFIXUP_H
