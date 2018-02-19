@@ -14,7 +14,7 @@
 #include "interface.h"
 #include "steam.h"
 #include "tier0/include/icommandline.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "tier0/include/memdbgon.h"
 

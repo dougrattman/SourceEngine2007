@@ -99,7 +99,7 @@
 #endif
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include <ctime>

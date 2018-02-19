@@ -3,7 +3,7 @@
 #include "OptionsSubMultiplayer.h"
 
 #if !defined(_X360)
-#include "winlite.h"  // SRC only!!
+#include "base/include/windows/windows_light.h"  // SRC only!!
 #endif
 
 #include <io.h>
@@ -2174,7 +2174,7 @@ void COptionsSubMultiplayer::OnApplyButtonEnable() {
   InvalidateLayout();
 }
 
-//#include "winlite.h"
+//#include "base/include/windows/windows_light.h"
 
 #define DIB_HEADER_MARKER ((WORD)('M' << 8) | 'B')
 #define SUIT_HUE_START 192
