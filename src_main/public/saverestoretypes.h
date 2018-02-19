@@ -208,13 +208,11 @@ class CGameSaveRestoreInfo {
 
   void BuildEntityHash() {
 #ifdef GAME_DLL
-    int i;
-    entitytable_t *pTable;
     int nEntities = NumEntities();
 
-    for (i = 0; i < nEntities; i++) {
-      pTable = GetEntityInfo(i);
-      m_EntityToIndex.Insert(CHashElement(pTable->hEnt.Get(), i));
+    for (int i = 0; i < nEntities; i++) {
+      entitytable_t *ent_table = GetEntityInfo(i);
+      m_EntityToIndex.Insert(CHashElement(ent_table->hEnt.Get(), i));
     }
 #endif
   }
@@ -230,13 +228,10 @@ class CGameSaveRestoreInfo {
           return m_EntityToIndex.Element(hElement).index;
         }
       } else {
-        int i;
-        entitytable_t *pTable;
-
         int nEntities = NumEntities();
-        for (i = 0; i < nEntities; i++) {
-          pTable = GetEntityInfo(i);
-          if (pTable->hEnt == pEntity) return pTable->id;
+        for (int i = 0; i < nEntities; i++) {
+          entitytable_t *ent_table = GetEntityInfo(i);
+          if (ent_table->hEnt == pEntity) return ent_table->id;
         }
       }
     }
