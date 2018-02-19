@@ -4,4 +4,4 @@
 
 #define IDI_MAIN 101
 
-#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome Half-Life 2"
+#define HALFLIFE_VER_FILEDESCRIPTION_STR "Awesome Hammer editor"
