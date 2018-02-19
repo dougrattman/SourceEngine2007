@@ -233,13 +233,13 @@ void CUtlDict<T, I>::PurgeAndDeleteElements() {
 template <class T, class I>
 I CUtlDict<T, I>::Insert(const char *pName, const T &element) {
   MEM_ALLOC_CREDIT_CLASS();
-  return m_Elements.Insert(strdup(pName), element);
+  return m_Elements.Insert(_strdup(pName), element);
 }
 
 template <class T, class I>
 I CUtlDict<T, I>::Insert(const char *pName) {
   MEM_ALLOC_CREDIT_CLASS();
-  return m_Elements.Insert(strdup(pName));
+  return m_Elements.Insert(_strdup(pName));
 }
 
 //-----------------------------------------------------------------------------

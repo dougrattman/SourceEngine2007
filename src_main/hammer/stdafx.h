@@ -1,15 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
 
 #if !defined(AFX_STDAFX_H__2871A74F_7D2F_4026_9DB0_DBACAFB3B7F5__INCLUDED_)
 #define AFX_STDAFX_H__2871A74F_7D2F_4026_9DB0_DBACAFB3B7F5__INCLUDED_
@@ -50,20 +39,10 @@
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>  // MFC support for Windows 95 Common Controls
 #include <afxpriv.h>
-#pragma warning(push)
-#pragma warning(disable : 4018)
-#pragma warning(push, 1)
-#pragma warning(disable : 4701 4702 4530)
 #include <fstream>
-#pragma warning(pop)
-#pragma warning(pop)
 #endif  // _AFX_NO_AFXCMN_SUPPORT
 
 #include "tier0/include/platform.h"
-
-// Some VS header files provoke this warning
-#pragma warning(disable : 4201)  // warning C4201: nonstandard extension used :
-                                 // nameless struct/union
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before

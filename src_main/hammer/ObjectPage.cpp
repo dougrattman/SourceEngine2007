@@ -1,10 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
-//
-// Purpose:
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #include "stdafx.h"
 
@@ -16,7 +10,7 @@
 //
 // Used to indicate multiselect of entities with different keyvalues.
 //
-const const char *CObjectPage::VALUE_DIFFERENT_STRING = "(different)";
+const char *CObjectPage::VALUE_DIFFERENT_STRING = "(different)";
 
 //
 // Set while we are changing the page layout.

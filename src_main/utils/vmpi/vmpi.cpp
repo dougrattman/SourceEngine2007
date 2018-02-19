@@ -16,8 +16,8 @@
 #include "iphelpers.h"
 #include "threadhelpers.h"
 #include "tier0/include/icommandline.h"
-#include "tier1/strtools.h"
 #include "tier0/include/tslist.h"
+#include "tier1/strtools.h"
 #include "utllinkedlist.h"
 #include "utlvector.h"
 #include "vmpi_distribute_work.h"
@@ -1910,8 +1910,8 @@ void VMPI_FlushGroupedPackets(unsigned long msInterval) {
                         pConn->m_GroupedChunks.Count());
 
     // Free the chunks.
-    for (int i = 1; i < pConn->m_GroupedChunks.Count(); i++) {
-      free(pConn->m_GroupedChunks[i]);
+    for (int j = 1; j < pConn->m_GroupedChunks.Count(); j++) {
+      free(pConn->m_GroupedChunks[j]);
     }
     pConn->m_GroupedChunks.RemoveAll();
     pConn->m_GroupedChunkLengths.RemoveAll();

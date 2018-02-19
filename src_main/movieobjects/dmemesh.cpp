@@ -145,9 +145,6 @@ static const matrix3x4_t *ComputeSkinMatrix(int nBoneCount,
     }
       return &result;
   }
-
-  Assert(0);
-  return NULL;
 }
 
 //-----------------------------------------------------------------------------

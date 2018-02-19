@@ -490,9 +490,9 @@ bool CGameConfigManager::AddDefaultConfig(const defaultConfigInfo_t &info,
 bool CGameConfigManager::IsAppSubscribed(int nAppID) {
   // If we're running Steam, poll it
   if (g_pFullFileSystem != NULL && g_pFullFileSystem->IsSteam()) {
+#ifndef NO_STEAM
     TSteamError steamError;
     int isSubscribed = false, isPending = false;
-#ifndef NO_STEAM
     if (SteamIsAppSubscribed(nAppID, &isSubscribed, &isPending, &steamError) &&
         steamError.eSteamError == eSteamErrorNone)
       return (isSubscribed != 0);

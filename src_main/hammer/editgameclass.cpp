@@ -3,14 +3,14 @@
 //
 // Purpose: Implements a class that encapsulates much of the functionality
 //			of entities. CMapWorld and CMapEntity are both derived
-//from this 			class.
+// from this 			class.
 //
 //			CEditGameClass-derived objects have the following
 // properties:
 //
 //			Key/value pairs - A list of string pairs that hold data
-// properties 				of the object. Each property has a unique
-// name.
+// properties 				of the object. Each property has a
+// unique name.
 //
 //			Connections - A list of outputs in this object that are
 // connected to 				inputs in another entity.
@@ -32,7 +32,7 @@
 //
 // An empty string returned by GetComments when we have no comments set.
 //
-const const char *CEditGameClass::g_pszEmpty = "";
+const char *CEditGameClass::g_pszEmpty = "";
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor. Initializes data members.
@@ -319,7 +319,7 @@ void CEditGameClass::GetAngles(QAngle &vecAngles) {
 // down.
 //
 //			This method of representing orientation is obsolete;
-//this code is 			only for importing old RMF or MAP files.
+// this code is 			only for importing old RMF or MAP files.
 //
 // Input  : a - Value for angle.
 //-----------------------------------------------------------------------------
@@ -477,7 +477,7 @@ ChunkFileResult_t CEditGameClass::SaveVMF(CChunkFile *pFile,
 //-----------------------------------------------------------------------------
 // Purpose: Slightly modified strtok. Does not modify the input string. Does
 //			not skip over more than one seperator at a time. This
-//allows parsing 			strings where tokens between seperators
+// allows parsing 			strings where tokens between seperators
 // may or may not be present:
 //
 //			Door01,,,0 would be parsed as "Door01"  ""  ""  "0"
@@ -488,7 +488,7 @@ ChunkFileResult_t CEditGameClass::SaveVMF(CChunkFile *pFile,
 // missing.
 //			str - String to parse.
 //			sep - Character to use as seperator. UNDONE: allow
-//multiple seperator chars
+// multiple seperator chars
 // Output : Returns a pointer to the next token to be parsed.
 //-----------------------------------------------------------------------------
 static const char *nexttoken(char *token, const char *str, char sep) {
@@ -527,7 +527,7 @@ static const char *nexttoken(char *token, const char *str, char sep) {
 // Purpose: Builds a connection from a keyvalue pair.
 // Input  : szKey - Contains the name of the output.
 //			szValue - Contains the target, input, delay, and
-//parameter,
+// parameter,
 // comma delimited. 			pEditGameClass - Entity to receive the
 // connection.
 // Output : Returns ChunkFile_Ok if the data was well-formed, ChunkFile_Fail if

@@ -1476,6 +1476,7 @@ bool CWin32Surface::LoadBMP(Texture *texture, const char *filename) {
   // try load the tga
   char buf[1024];
   _snprintf(buf, sizeof(buf), "%s.bmp", filename);
+
   // look in the skins directory first
   FileHandle_t file = g_pFullFileSystem->Open(buf, "rb", "SKIN");
   if (!file) {
@@ -1528,7 +1529,7 @@ bool CWin32Surface::LoadBMP(Texture *texture, const char *filename) {
           int offs = (y * texture->_wide + i);
           int offsdest = (j * texture->_wide + i) * 4;
           unsigned char *src = ((unsigned char *)rgba) + offs;
-          char *dst = ((char *)texture->_dib) + offsdest;
+          unsigned char *dst = ((unsigned char *)texture->_dib) + offsdest;
 
           dst[0] = lpbmi->bmiColors[*src].rgbRed;
           dst[1] = lpbmi->bmiColors[*src].rgbGreen;

@@ -1286,6 +1286,7 @@ void MakeFaces_r(node_t *node) {
 
 typedef winding_t *pwinding_t;
 
+#ifdef PRINT_WINDING
 static void PrintWinding(winding_t *w) {
   int i;
   Msg("\t---\n");
@@ -1293,6 +1294,7 @@ static void PrintWinding(winding_t *w) {
     Msg("\t%f %f %f\n", w->p[i].x, w->p[i].y, w->p[i].z);
   }
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Adds a winding to the current list of primverts
@@ -1338,7 +1340,7 @@ int AddWindingToPrimverts(const winding_t *w, unsigned short *pIndices,
 // parts UNDONE: We should try building strips of shared verts for all water
 // faces in a leaf
 //			since those will be drawn concurrently anyway.  It
-//should be more efficient.
+// should be more efficient.
 static void SubdivideFaceBySubdivSize(face_t *f, float subdivsize) {
   // garymcthack - REFACTOR ME!!!
 
@@ -1361,9 +1363,9 @@ static void SubdivideFaceBySubdivSize(face_t *f, float subdivsize) {
   Vector min, max;
   WindingBounds(w, min, max);
 
-#if 0
-	Msg( "START WINDING: \n" );
-	PrintWinding( w );
+#ifdef PRINT_WINDING
+  Msg("START WINDING: \n");
+  PrintWinding(w);
 #endif
   int xStart, yStart, xEnd, yEnd, xSteps, ySteps;
   xStart = (int)subdivsize * (int)((min[0] - subdivsize) / subdivsize);
@@ -1442,9 +1444,9 @@ static void SubdivideFaceBySubdivSize(face_t *f, float subdivsize) {
         continue;
       }
 
-#if 0
-			Msg( "output winding:\n" );
-			PrintWinding( frontWinding );
+#ifdef PRINT_WINDING
+      Msg("output winding:\n");
+      PrintWinding(frontWinding);
 #endif
 
       if (frontWinding) {

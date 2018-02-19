@@ -99,13 +99,6 @@ static void BackSlashToForwardSlash(char *pname) {
   }
 }
 
-static void ForwardSlashToBackSlash(char *pname) {
-  while (*pname) {
-    if (*pname == '/') *pname = '\\';
-    pname++;
-  }
-}
-
 //-----------------------------------------------------------------------------
 // Finds materials that are used by a particular material
 //-----------------------------------------------------------------------------

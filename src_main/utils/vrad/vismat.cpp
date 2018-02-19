@@ -177,9 +177,8 @@ TestPatchToFace
 Sets vis bits for all patches in the face
 ==============
 */
-void TestPatchToFace(unsigned patchnum, int facenum, int head,
-                     transfer_t *transfers, CTransferMaker &transferMaker,
-                     int iThread) {
+void TestPatchToFace(int patchnum, int facenum, int head, transfer_t *transfers,
+                     CTransferMaker &transferMaker, int iThread) {
   if (faceParents.Element(facenum) == g_Patches.InvalidIndex() ||
       patchnum == g_Patches.InvalidIndex())
     return;

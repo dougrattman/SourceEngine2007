@@ -83,8 +83,7 @@ class CUtlSymbol {
 class CUtlSymbolTable {
  public:
   // constructor, destructor
-  CUtlSymbolTable(int growSize = 0, int initSize = 32,
-                  bool caseInsensitive = false);
+  CUtlSymbolTable(int growSize = 0, int initSize = 32, bool caseInsensitive = false);
   ~CUtlSymbolTable();
 
   // Finds and/or creates a symbol based on the string
@@ -119,19 +118,17 @@ class CUtlSymbolTable {
 
   class CLess {
    public:
-    CLess(int ignored = 0) {
+    CLess([[maybe_unused]] int ignored = 0) {
     }  // permits default initialization to NULL in CUtlRBTree
     bool operator!() const { return false; }
-    bool operator()(const CStringPoolIndex& left,
-                    const CStringPoolIndex& right) const;
+    bool operator()(const CStringPoolIndex& left, const CStringPoolIndex& right) const;
   };
 
   // Stores the symbol lookup
   class CTree : public CUtlRBTree<CStringPoolIndex, unsigned short, CLess> {
    public:
     CTree(int growSize, int initSize)
-        : CUtlRBTree<CStringPoolIndex, unsigned short, CLess>(growSize,
-                                                              initSize) {}
+        : CUtlRBTree<CStringPoolIndex, unsigned short, CLess>(growSize, initSize) {}
     friend class CUtlSymbolTable::CLess;  // Needed to allow CLess to calculate
                                           // pointer to symbol table
   };
@@ -158,8 +155,7 @@ class CUtlSymbolTable {
 
 class CUtlSymbolTableMT : private CUtlSymbolTable {
  public:
-  CUtlSymbolTableMT(int growSize = 0, int initSize = 32,
-                    bool caseInsensitive = false)
+  CUtlSymbolTableMT(int growSize = 0, int initSize = 32, bool caseInsensitive = false)
       : CUtlSymbolTable(growSize, initSize, caseInsensitive) {}
 
   CUtlSymbol AddString(const char* pString) {

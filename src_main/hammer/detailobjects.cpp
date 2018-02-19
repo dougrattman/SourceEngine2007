@@ -123,7 +123,7 @@ void DetailObjects::ParseDetailGroup(int detailId, KeyValues *pGroupKeyValues) {
           if ((nValid != 5) || (flTextureSize == 0)) {
             Error(
                 "Invalid arguments to \"sprite\" in detail.vbsp (model %s)!\n",
-                model.m_ModelName);
+                model.m_ModelName.String());
           }
 
           model.m_Tex[0].x = (x + 0.5f) / flTextureSize;

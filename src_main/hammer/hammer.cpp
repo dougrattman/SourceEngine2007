@@ -1377,7 +1377,7 @@ CDocument *CHammer::OpenDocumentFile(LPCTSTR lpszFileName) {
             "This map was loaded from an autosave file.\nWould you like to "
             "rename it from \"%s\" to \"%s\"?\nNOTE: This will not save the "
             "file with the new name; it will only rename it.",
-            lpszFileName, newMapPath);
+            lpszFileName, newMapPath.GetString());
 
     if (AfxMessageBox(szRenameMessage, MB_YESNO) == IDYES) {
       ((CMapDoc *)pDoc)->SetPathName(newMapPath);
@@ -1531,7 +1531,7 @@ void CHammer::UpdateLighting(CMapDoc *pDoc) {
 // processing. Input  : lCount - The number of times OnIdle has been called in
 // succession,
 //				indicating the relative length of time the app
-//has been idle without 				user input.
+// has been idle without 				user input.
 // Output : Returns TRUE if there is more idle processing to do, FALSE if not.
 //-----------------------------------------------------------------------------
 BOOL CHammer::OnIdle(LONG lCount) {
@@ -1655,9 +1655,9 @@ bool CHammer::CanAllocateVideo() const { return !m_SuppressVideoAllocation; }
 // directory.
 // Input  : pFileMap - CUtlMap that will hold the list of files in the dir
 //			pdwTotalDirSize - pointer to the DWORD that will hold
-// directory size 			pstrMapTitle - the name of the current map to
-// be saved
-// Output : returns an int containing the next number to use for the autosave
+// directory size 			pstrMapTitle - the name of the current
+// map to be saved Output : returns an int containing the next number to use for
+// the autosave
 //-------------------------------------------------------------------------------
 int CHammer::GetNextAutosaveNumber(
     CUtlMap<FILETIME, WIN32_FIND_DATA, int> *pFileMap, DWORD *pdwTotalDirSize,
@@ -1757,7 +1757,7 @@ static bool LessFunc(const FILETIME &lhs, const FILETIME &rhs) {
 //-----------------------------------------------------------------------------
 // Purpose: This is called when the autosave timer goes off.  It checks to
 //			make sure the document has changed and handles deletion
-//of old 			files when the total directory size is too big
+// of old 			files when the total directory size is too big
 //-----------------------------------------------------------------------------
 void CHammer::Autosave(void) {
   if (!Options.general.bEnableAutosave) {
@@ -1852,10 +1852,10 @@ void CHammer::Autosave(void) {
 // it if
 //			it doesn't.  Also returns various failure errors.
 //			This function is now called at two different times:
-// immediately after a new 			directory is entered in the options
-// screen and during
-// every autosave call. 			If called with a directory, the input
-// directory is
+// immediately after a new 			directory is entered in the
+// options screen and during
+// every autosave call. 			If called with a directory, the
+// input directory is
 // checked for correctness. 			Otherwise, the system directory
 // DIR_AUTOSAVE is checked
 //-----------------------------------------------------------------------------
@@ -1978,7 +1978,7 @@ void CHammer::LoadLastGoodSave(void) {
               "The last saved map was found in the autosave directory.\nWould "
               "you like to rename it from \"%s\" to \"%s\"?\nNOTE: This will "
               "not save the file with the new name; it will only rename it.",
-              szLastSaveCopy, newMapPath);
+              szLastSaveCopy, newMapPath.GetString());
 
       if (AfxMessageBox(szRenameMessage, MB_YESNO) == IDYES) {
         pCurrentDoc->SetPathName(newMapPath);

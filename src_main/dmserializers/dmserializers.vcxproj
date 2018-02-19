@@ -43,16 +43,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -74,18 +68,11 @@
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
       <AssemblerOutput />
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
       <BrowseInformation />
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -97,16 +84,9 @@
       <Command>
       </Command>
     </PreLinkEvent>
-    <Lib>
-      <OutputFile>$(TargetPath)</OutputFile>
-    </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmserializers.bsc</OutputFile>
-    </Bscmake>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -130,18 +110,11 @@
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <ExpandAttributedSource>false</ExpandAttributedSource>
       <AssemblerOutput />
-      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
       <BrowseInformation />
-      <BrowseInformationFile>$(IntDir)</BrowseInformationFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ErrorReporting>Prompt</ErrorReporting>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -154,16 +127,9 @@
       <Command>
       </Command>
     </PreLinkEvent>
-    <Lib>
-      <OutputFile>$(TargetPath)</OutputFile>
-    </Lib>
-    <Xdcmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Xdcmake>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(OutDir)dmserializers.bsc</OutputFile>
-    </Bscmake>
+    <Lib />
+    <Xdcmake />
+    <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dmebaseimporter.cpp" />

@@ -201,15 +201,6 @@ static bool LoadFile(char const *pFileName, CUtlBuffer &buf) {
 }
 
 //-----------------------------------------------------------------------------
-// Constructs the file name from the model name
-//-----------------------------------------------------------------------------
-static char const *ConstructFileName(char const *pModelName) {
-  static char buf[1024];
-  sprintf(buf, "%s%s", gamedir, pModelName);
-  return buf;
-}
-
-//-----------------------------------------------------------------------------
 // Computes a convex hull from a studio mesh
 //-----------------------------------------------------------------------------
 static CPhysConvex *ComputeConvexHull(mstudiomesh_t *pMesh,
@@ -396,18 +387,6 @@ void DumpCollideToGlView(vcollide_t *pCollide, const char *pFilename) {
     s_pPhysCollision->DestroyDebugMesh(vertCount, outVerts);
   }
   fclose(fp);
-}
-
-static bool PointInTriangle(const Vector2D &p, const Vector2D &v0,
-                            const Vector2D &v1, const Vector2D &v2) {
-  float coords[3];
-  GetBarycentricCoords2D(v0, v1, v2, p, coords);
-  for (int i = 0; i < 3; i++) {
-    if (coords[i] < 0.0f || coords[i] > 1.0f) return false;
-  }
-  float sum = coords[0] + coords[1] + coords[2];
-  if (sum > 1.0f) return false;
-  return true;
 }
 
 bool LoadFileIntoBuffer(CUtlBuffer &buf, const char *pFilename) {
@@ -1229,7 +1208,7 @@ void CVradStaticPropMgr::SerializeLighting() {
       pMesh->m_nOffset = (unsigned int)pVertexData - (unsigned int)pVhvHdr;
 
       // construct vertexes
-      for (int k = 0; k < pMesh->m_nVertexes; k++) {
+      for (unsigned int k = 0; k < pMesh->m_nVertexes; k++) {
         Vector &vector = m_StaticProps[i].m_MeshData[n].m_Verts[k];
 
         ColorRGBExp32 rgbColor;
@@ -1549,8 +1528,8 @@ void CVradStaticPropMgr::AddPolysForRayTrace(void) {
                   }
                   // 		printf( "\ngl 3\n" );
                   // 		printf( "gl %6.3f %6.3f %6.3f 1 0 0\n",
-                  // XYZ(position1)); 		printf( "gl %6.3f %6.3f %6.3f 0 1
-                  // 0\n", XYZ(position2)); 		printf( "gl %6.3f %6.3f
+                  // XYZ(position1)); 		printf( "gl %6.3f %6.3f %6.3f 0
+                  // 1 0\n", XYZ(position2)); 		printf( "gl %6.3f %6.3f
                   // %6.3f 0 0 1\n", XYZ(position3));
                   g_RtEnv.AddTriangle(TRACE_ID_STATICPROP | nProp, position1,
                                       position2, position3, color, flags,

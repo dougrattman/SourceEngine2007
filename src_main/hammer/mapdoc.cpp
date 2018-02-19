@@ -1,11 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//============//
 //
 // Purpose: The document. Exposes functions for object creation, deletion, and
-//			manipulation. Holds the current tool. Handles GUI
-//messages that are 			view-independent.
-//
-//=============================================================================//
+// manipulation. Holds the current tool. Handles GUI messages that are
+// view-independent.
 
 #include "stdafx.h"
 
@@ -69,8 +66,8 @@
 #include "ibsplighting.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
-#include "tier0/include/memdbgon.h"
 #include ".\mapdoc.h"
+#include "tier0/include/memdbgon.h"
 
 #define KeyInt(key, dest)                       \
   if (stricmp(szKey, key) != 0)                 \
@@ -645,7 +642,7 @@ void CMapDoc::VisGroups_Validate() {
 //-----------------------------------------------------------------------------
 // Purpose: Begins a remote shell editing session. This causes the GUI to be
 //			disabled to avoid version mismatches between the
-//editor's map and the 			shell client's map.
+// editor's map and the 			shell client's map.
 //-----------------------------------------------------------------------------
 void CMapDoc::BeginShellSession(void) {
   //
@@ -875,9 +872,9 @@ void CMapDoc::EndShellSession(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Finds an object in the map by number. The number corresponds to the
 //			order in which the object is written to the map file.
-//Thus, through 			this function, brushes and entities can
-// be located by ordinal, as 			reported by the MAP compile tools.
-// Input  : pObject - Object being checked for a match.
+// Thus, through 			this function, brushes and entities can
+// be located by ordinal, as 			reported by the MAP compile
+// tools. Input  : pObject - Object being checked for a match.
 //			pFindInfo - Structure containing the search criterea.
 // Output : Returns FALSE if this is the object that we are looking for, TRUE
 //			to continue iterating.
@@ -2015,8 +2012,8 @@ void CMapDoc::VisGroups_SetParent(CVisGroup *pVisGroup, CVisGroup *pNewParent) {
 //			this child belongs to.
 //
 //			NOTE: Assumes that all visgroups were initialized to
-// VISGROUP_UNDEFINED 				  before calling this with the first
-// object.
+// VISGROUP_UNDEFINED 				  before calling this with the
+// first object.
 //-----------------------------------------------------------------------------
 void CMapDoc::VisGroups_UpdateForObject(CMapClass *pObject) {
   // Msg("Object: 0x%X is ", pObject);
@@ -2489,7 +2486,7 @@ static BOOL _UpdateAnimation(CMapClass *mapClass, float animTime) {
 //-----------------------------------------------------------------------------
 // Purpose: Sets up for drawing animated objects
 //			Needs to be called each frame before any animating
-//object are rendered
+// object are rendered
 //-----------------------------------------------------------------------------
 void CMapDoc::UpdateAnimation(void) {
   // GetMainWnd()->m_AnimationDlg.RunFrame();
@@ -2894,7 +2891,7 @@ IWorldEditDispMgr *GetActiveWorldEditDispManager(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Deletes the object by removing it from its parent. The object is
 //			kept in the Undo history. If the object being deleted is
-//the only 			child of a solid entity, that entity is also
+// the only 			child of a solid entity, that entity is also
 // deleted.
 // Input  : pObject - The object to delete.
 //-----------------------------------------------------------------------------
@@ -4073,11 +4070,11 @@ void CMapDoc::OnFileSaveAs(void) {
         wsprintf(szConfirm,
                  "The file %s is read-only. You must change the file's "
                  "attributes to overwrite it.",
-                 str);
+                 str.GetString());
         AfxMessageBox(szConfirm, MB_OK | MB_ICONEXCLAMATION);
         bSave = false;
       } else {
-        wsprintf(szConfirm, "Overwrite existing file %s?", str);
+        wsprintf(szConfirm, "Overwrite existing file %s?", str.GetString());
         if (AfxMessageBox(szConfirm, MB_YESNO | MB_ICONQUESTION) != IDYES) {
           bSave = false;
         }
@@ -4295,7 +4292,7 @@ void CMapDoc::OnUpdateFileConvertWAD(CCmdUI *pCmdUI) {
 // Input  : mf -
 //			strEditExtension - The extension of the edit file (eg.
 //.VMF, .RMF) 			strCompileExtension - The extension of the file
-//to compile (eg. .VMF, .MAP)
+// to compile (eg. .VMF, .MAP)
 //-----------------------------------------------------------------------------
 void GetFileExtensions(MAPFORMAT mf, CString &strEditExtension,
                        CString &strCompileExtension) {
@@ -4498,7 +4495,8 @@ void CMapDoc::OnFileRunmap(void) {
     // else
     {
       strcpy(cmd.szRun, "$game_exe");
-      sprintf(cmd.szParms, "-game $gamedir %s +map $file", dlg.m_strQuakeParms);
+      sprintf(cmd.szParms, "-game $gamedir %s +map $file",
+              dlg.m_strQuakeParms.GetString());
     }
 
     cmds.Add(cmd);
@@ -5472,11 +5470,12 @@ static bool FindName(CUtlVector<const char *> *pList, const char *pszString) {
 // Renames all named entities in the tree pointed to by pRoot.
 //		pRoot - Points to a tree of objects.
 //		pWorld - If making the names unique, the world that they should
-//be
-// unique within. 		bMakeUnique - Whether to guarantee that the names
-// are unique in the world. 			If necessary, numbers will be
-// appended to make the names unique. 		szPrefix - A string to prepend to all named
-//entities in the tree.
+// be
+// unique within. 		bMakeUnique - Whether to guarantee that the
+// names are unique in the world. 			If necessary, numbers
+// will be appended to make the names unique. 		szPrefix - A string to
+// prepend to all named
+// entities in the tree.
 //-----------------------------------------------------------------------------
 void CMapDoc::RenameEntities(CMapClass *pRoot, CMapWorld *pWorld,
                              bool bMakeUnique, const char *szAddPrefix) {
@@ -6034,7 +6033,7 @@ bool GetSaveAsFilename(const char *pszBaseDir, char *pszFileName, int nSize) {
 //-----------------------------------------------------------------------------
 // Purpose: Takes the current selection and saves it as a prefab. The user is
 //			prompted for a folder under the prefabs folder in which
-//to place 			the prefab.
+// to place 			the prefab.
 //-----------------------------------------------------------------------------
 void CMapDoc::OnToolsCreateprefab(void) {
   if (m_pSelection->IsEmpty()) {
@@ -6423,7 +6422,7 @@ void CMapDoc::ReplaceTextures(LPCTSTR pszFind, LPCTSTR pszReplace,
 // Purpose:
 // Input  : pObject -
 //			pInfo - Pointer to the structure with info about how to
-//do the find/replace.
+// do the find/replace.
 // Output :
 //-----------------------------------------------------------------------------
 static BOOL BatchReplaceTextureCallback(CMapClass *pObject,
@@ -7168,7 +7167,8 @@ void CMapDoc::OnMapLoadportalfile(void) {
   SetFilenameExtension(m_pPortalFile->fileName, ".prt");
 
   CString str;
-  str.Format("Load default portal file?\n(%s)", m_pPortalFile->fileName);
+  str.Format("Load default portal file?\n(%s)",
+             m_pPortalFile->fileName.GetString());
   if (GetFileAttributes(m_pPortalFile->fileName) == 0xFFFFFFFF ||
       AfxMessageBox(str, MB_ICONQUESTION | MB_YESNO) == IDNO) {
     CFileDialog dlg(TRUE, ".prt", m_pPortalFile->fileName,
@@ -7244,7 +7244,7 @@ void CMapDoc::OnMapLoadpointfile(void) {
   }
 
   CString str;
-  str.Format("Load default pointfile?\n(%s)", m_strLastPointFile);
+  str.Format("Load default pointfile?\n(%s)", m_strLastPointFile.GetString());
   if (GetFileAttributes(m_strLastPointFile) == 0xFFFFFFFF ||
       AfxMessageBox(str, MB_ICONQUESTION | MB_YESNO) == IDNO) {
     CFileDialog dlg(TRUE, ".pts", m_strLastPointFile,
@@ -7613,7 +7613,7 @@ void CMapDoc::AssignAllToAutoVisGroups() {
 //-----------------------------------------------------------------------------
 // Purpose: Adds an object to the world. This is the ONLY correct way to add an
 //			object to the world. Calling directly through AddChild
-//skips a bunch 			of necessary bookkeeping.
+// skips a bunch 			of necessary bookkeeping.
 // Input  : pObject - object being added to the world.
 //-----------------------------------------------------------------------------
 void CMapDoc::AddObjectToWorld(CMapClass *pObject, CMapClass *pParent) {
@@ -7687,10 +7687,11 @@ void CMapDoc::RenderPreloadObject(CMapClass *pObject) {
 //-----------------------------------------------------------------------------
 // Purpose: CreateTempWorld creates a world with the brushes that make up the
 //			cordoned area. it does this by creating a solid of the
-//size
-// of the 			box, and another solid 1200 units bigger. subtract A
-// from B, and 			keep those brushes.
-// Output : Returns a pointer to the newly-created world.
+// size
+// of the 			box, and another solid 1200 units bigger.
+// subtract
+// A from B, and 			keep those brushes. Output : Returns a
+// pointer to the newly-created world.
 //-----------------------------------------------------------------------------
 CMapWorld *CMapDoc::CordonCreateWorld() {
   CMapWorld *pWorld = new CMapWorld;
@@ -7972,11 +7973,10 @@ ChunkFileResult_t CMapDoc::SaveVersionInfoVMF(CChunkFile *pFile,
 // Purpose: Call this function after you have made any modifications to the
 // document.
 //			By calling this function consistently, you ensure that
-//the
-// framework 			prompts the user to save changes before closing a
-// document.
-// Input  : bModified - TRUE to mark the doc as modified, FALSE to mark it as
-// clean.
+// the
+// framework 			prompts the user to save changes before closing
+// a document. Input  : bModified - TRUE to mark the doc as modified, FALSE to
+// mark it as clean.
 //-----------------------------------------------------------------------------
 void CMapDoc::SetModifiedFlag(BOOL bModified) {
   //
@@ -8081,7 +8081,7 @@ bool CMapDoc::ShouldObjectBeVisible(CMapClass *pObject) {
 //-----------------------------------------------------------------------------
 // Purpose: Notifies the document when an object has changed. The object is
 //			added to a list which will be processed before the next
-//view is rendered.
+// view is rendered.
 // Input  : pObject - Object that has changed.
 //-----------------------------------------------------------------------------
 void CMapDoc::UpdateObject(CMapClass *pObject) {
@@ -8097,13 +8097,13 @@ void CMapDoc::UpdateObject(CMapClass *pObject) {
 //-----------------------------------------------------------------------------
 // Purpose: Processes any objects that have changed since the last call.
 //			Updates each object's visiblity and makes sure that
-//there are no 			invisible objects in the selection set.
+// there are no 			invisible objects in the selection set.
 //
 //			This must be called from the outer loop, as
 // selection.RemoveInvisibles 			may change the contents of the
 // selection.
-// Therefore, this should never 			be called from low-level code
-// that might be inside an iteration of the 			selection.
+// Therefore, this should never 			be called from low-level
+// code that might be inside an iteration of the selection.
 //-----------------------------------------------------------------------------
 void CMapDoc::Update(void) {
   ProcessNotifyList();

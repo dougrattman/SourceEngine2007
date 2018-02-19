@@ -250,7 +250,7 @@ void COPTConfigs::OnGdfileEdit(void) {
   char szBuf[MAX_PATH];
   GetWindowsDirectory(szBuf, MAX_PATH);
   strcat(szBuf, "\\notepad.exe");
-  _spawnl(_P_WAIT, szBuf, szBuf, str, NULL);
+  _spawnl(_P_WAIT, szBuf, szBuf, str.GetString(), NULL);
 
   m_pLastSelConfig->LoadGDFiles();
   UpdateEntityLists();
@@ -471,7 +471,7 @@ void COPTConfigs::UpdateEntityLists(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Fills the combo box with the list of configs. Tries to select the
 //			config that was selected before coming in or, failing
-//that, the 			currently active config.
+// that, the 			currently active config.
 //-----------------------------------------------------------------------------
 void UpdateConfigList(CComboBox &combo) {
   int iCurSel = combo.GetCurSel();
