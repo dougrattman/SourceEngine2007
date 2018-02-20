@@ -20,12 +20,12 @@
 static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
                                   MAGIC_NUMBER};
 
-static ALIGN16 int32_t idx_mask[4] = {0xffff, 0xffff, 0xffff, 0xffff};
+static ALIGN16 i32 idx_mask[4] = {0xffff, 0xffff, 0xffff, 0xffff};
 
 #define MASK255 (*((fltx4 *)(&idx_mask)))
 
 // returns 0..1
-static inline float GetLatticePointValue(int idx_x, int idx_y, int idx_z) {
+static inline f32 GetLatticePointValue(int idx_x, int idx_y, int idx_z) {
   int ret_idx = perm_a[idx_x & 0xff];
   ret_idx = perm_b[(idx_y + ret_idx) & 0xff];
   ret_idx = perm_c[(idx_z + ret_idx) & 0xff];
@@ -51,9 +51,9 @@ fltx4 NoiseSIMD(const fltx4 &x, const fltx4 &y, const fltx4 &z) {
   fltx4 xfrac = Four_Zeros, yfrac = Four_Zeros, zfrac = Four_Zeros;
 #define DOPASS(i)                                                           \
   {                                                                         \
-    unsigned int xi = SubInt(x_idx, i);                                     \
-    unsigned int yi = SubInt(y_idx, i);                                     \
-    unsigned int zi = SubInt(z_idx, i);                                     \
+    u32 xi = SubInt(x_idx, i);                                     \
+    u32 yi = SubInt(y_idx, i);                                     \
+    u32 zi = SubInt(z_idx, i);                                     \
     SubFloat(xfrac, i) = (xi & 0xff) * (1.0 / 256.0);                       \
     SubFloat(yfrac, i) = (yi & 0xff) * (1.0 / 256.0);                       \
     SubFloat(zfrac, i) = (zi & 0xff) * (1.0 / 256.0);                       \

@@ -29,7 +29,7 @@ bool s_bMathlibInitialized = false;
 
 #ifdef PARANOID
 // User must provide an implementation of Sys_Error()
-void Sys_Error(char *error, ...);
+void Sys_Error(ch *error, ...);
 #endif
 
 const Vector vec3_origin(0, 0, 0);
@@ -40,27 +40,27 @@ const int nanmask = 255 << 23;
 //-----------------------------------------------------------------------------
 // Standard C implementations of optimized routines:
 //-----------------------------------------------------------------------------
-float _sqrtf(float _X) {
+f32 _sqrtf(f32 _X) {
   Assert(s_bMathlibInitialized);
   return sqrtf(_X);
 }
 
-float _rsqrtf(float x) {
+f32 _rsqrtf(f32 x) {
   Assert(s_bMathlibInitialized);
 
   return 1.f / _sqrtf(x);
 }
 
-float FASTCALL _VectorNormalize(Vector &vec) {
+f32 FASTCALL _VectorNormalize(Vector &vec) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("_VectorNormalize", "Mathlib");
 #endif
   Assert(s_bMathlibInitialized);
-  float radius = sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+  f32 radius = sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 
   // FLT_EPSILON is added to the radius to eliminate the possibility of divide
   // by zero.
-  float iradius = 1.f / (radius + FLT_EPSILON);
+  f32 iradius = 1.f / (radius + FLT_EPSILON);
 
   vec.x *= iradius;
   vec.y *= iradius;
@@ -76,7 +76,7 @@ void FASTCALL _VectorNormalizeFast(Vector &vec) {
 
   // FLT_EPSILON is added to the radius to eliminate the possibility of divide
   // by zero.
-  float iradius = 1.f / (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) +
+  f32 iradius = 1.f / (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) +
                          FLT_EPSILON);
 
   vec.x *= iradius;
@@ -84,32 +84,32 @@ void FASTCALL _VectorNormalizeFast(Vector &vec) {
   vec.z *= iradius;
 }
 
-float _InvRSquared(const float *v) {
+f32 _InvRSquared(const f32 *v) {
   Assert(s_bMathlibInitialized);
-  float r2 = DotProduct(v, v);
+  f32 r2 = DotProduct(v, v);
   return r2 < 1.f ? 1.f : 1 / r2;
 }
 
 //-----------------------------------------------------------------------------
 // Function pointers selecting the appropriate implementation
 //-----------------------------------------------------------------------------
-float (*pfSqrt)(float x) = _sqrtf;
-float (*pfRSqrt)(float x) = _rsqrtf;
-float (*pfRSqrtFast)(float x) = _rsqrtf;
-float(FASTCALL *pfVectorNormalize)(Vector &v) = _VectorNormalize;
+f32 (*pfSqrt)(f32 x) = _sqrtf;
+f32 (*pfRSqrt)(f32 x) = _rsqrtf;
+f32 (*pfRSqrtFast)(f32 x) = _rsqrtf;
+f32(FASTCALL *pfVectorNormalize)(Vector &v) = _VectorNormalize;
 void(FASTCALL *pfVectorNormalizeFast)(Vector &v) = _VectorNormalizeFast;
-float (*pfInvRSquared)(const float *v) = _InvRSquared;
-void (*pfFastSinCos)(float x, float *s, float *c) = SinCos;
-float (*pfFastCos)(float x) = cosf;
+f32 (*pfInvRSquared)(const f32 *v) = _InvRSquared;
+void (*pfFastSinCos)(f32 x, f32 *s, f32 *c) = SinCos;
+f32 (*pfFastCos)(f32 x) = cosf;
 
-float SinCosTable[SIN_TABLE_SIZE];
+f32 SinCosTable[SIN_TABLE_SIZE];
 void InitSinCosTable() {
   for (int i = 0; i < SIN_TABLE_SIZE; i++) {
     SinCosTable[i] = sin(i * 2.0 * M_PI / SIN_TABLE_SIZE);
   }
 }
 
-bool VectorsEqual(const float *v1, const float *v2) {
+bool VectorsEqual(const f32 *v1, const f32 *v2) {
   Assert(s_bMathlibInitialized);
   return ((v1[0] == v2[0]) && (v1[1] == v2[1]) && (v1[2] == v2[2]));
 }
@@ -135,7 +135,7 @@ void MatrixAngles(const matrix3x4_t &matrix, Quaternion &q, Vector &pos) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("MatrixQuaternion", "Mathlib");
 #endif
-  float trace;
+  f32 trace;
   trace = matrix[0][0] + matrix[1][1] + matrix[2][2] + 1.0f;
   if (trace > 1.0f + FLT_EPSILON) {
     // VPROF_INCREMENT_COUNTER("MatrixQuaternion A",1);
@@ -171,14 +171,14 @@ void MatrixAngles(const matrix3x4_t &matrix, Quaternion &q, Vector &pos) {
   MatrixGetColumn(matrix, 3, pos);
 }
 
-void MatrixAngles(const matrix3x4_t &matrix, float *angles) {
+void MatrixAngles(const matrix3x4_t &matrix, f32 *angles) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("MatrixAngles", "Mathlib");
 #endif
   Assert(s_bMathlibInitialized);
-  float forward[3];
-  float left[3];
-  float up[3];
+  f32 forward[3];
+  f32 left[3];
+  f32 up[3];
 
   //
   // Extract the basis vectors from the matrix. Since we only need the Z
@@ -192,7 +192,7 @@ void MatrixAngles(const matrix3x4_t &matrix, float *angles) {
   left[2] = matrix[2][1];
   up[2] = matrix[2][2];
 
-  float xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
+  f32 xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
 
   // enough here to get angles?
   if (xyDist > 0.001f) {
@@ -223,7 +223,7 @@ void MatrixAngles(const matrix3x4_t &matrix, float *angles) {
 }
 
 // transform in1 by the matrix in2
-void VectorTransform(const float *in1, const matrix3x4_t &in2, float *out) {
+void VectorTransform(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out);
   out[0] = DotProduct(in1, in2[0]) + in2[0][3];
@@ -233,9 +233,9 @@ void VectorTransform(const float *in1, const matrix3x4_t &in2, float *out) {
 
 // assuming the matrix is orthonormal, transform in1 by the transpose (also the
 // inverse in this case) of in2.
-void VectorITransform(const float *in1, const matrix3x4_t &in2, float *out) {
+void VectorITransform(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
   Assert(s_bMathlibInitialized);
-  float in1t[3];
+  f32 in1t[3];
 
   in1t[0] = in1[0] - in2[0][3];
   in1t[1] = in1[1] - in2[1][3];
@@ -247,7 +247,7 @@ void VectorITransform(const float *in1, const matrix3x4_t &in2, float *out) {
 }
 
 // assume in2 is a rotation and rotate the input vector
-void VectorRotate(const float *in1, const matrix3x4_t &in2, float *out) {
+void VectorRotate(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out);
   out[0] = DotProduct(in1, in2[0]);
@@ -270,7 +270,7 @@ void VectorRotate(const Vector &in1, const Quaternion &in2, Vector &out) {
 }
 
 // rotate by the inverse of the matrix
-void VectorIRotate(const float *in1, const matrix3x4_t &in2, float *out) {
+void VectorIRotate(const f32 *in1, const matrix3x4_t &in2, f32 *out) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out);
   out[0] = in1[0] * in2[0][0] + in1[1] * in2[1][0] + in1[2] * in2[2][0];
@@ -318,14 +318,14 @@ void MatrixInitialize(matrix3x4_t &mat, const Vector &vecOrigin,
 
 void MatrixCopy(const matrix3x4_t &in, matrix3x4_t &out) {
   Assert(s_bMathlibInitialized);
-  memcpy(out.Base(), in.Base(), sizeof(float) * 3 * 4);
+  memcpy(out.Base(), in.Base(), sizeof(f32) * 3 * 4);
 }
 
 //-----------------------------------------------------------------------------
 // Matrix equality test
 //-----------------------------------------------------------------------------
 bool MatricesAreEqual(const matrix3x4_t &src1, const matrix3x4_t &src2,
-                      float flTolerance) {
+                      f32 flTolerance) {
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 4; ++j) {
       if (fabs(src1[i][j] - src2[i][j]) > flTolerance) return false;
@@ -357,7 +357,7 @@ void MatrixInvert(const matrix3x4_t &in, matrix3x4_t &out) {
   }
 
   // now fix up the translation to be in the other space
-  float tmp[3];
+  f32 tmp[3];
   tmp[0] = in[0][3];
   tmp[1] = in[1][3];
   tmp[2] = in[2][3];
@@ -379,7 +379,7 @@ void MatrixSetColumn(const Vector &in, int column, matrix3x4_t &out) {
   out[2][column] = in.z;
 }
 
-int VectorCompare(const float *v1, const float *v2) {
+int VectorCompare(const f32 *v1, const f32 *v2) {
   Assert(s_bMathlibInitialized);
   int i;
 
@@ -389,7 +389,7 @@ int VectorCompare(const float *v1, const float *v2) {
   return 1;
 }
 
-void CrossProduct(const float *v1, const float *v2, float *cross) {
+void CrossProduct(const f32 *v1, const f32 *v2, f32 *cross) {
   Assert(s_bMathlibInitialized);
   Assert(v1 != cross);
   Assert(v2 != cross);
@@ -447,9 +447,9 @@ void VectorMatrix(const Vector &forward, matrix3x4_t &matrix) {
   MatrixSetColumn(up, 2, matrix);
 }
 
-void VectorAngles(const float *forward, float *angles) {
+void VectorAngles(const f32 *forward, f32 *angles) {
   Assert(s_bMathlibInitialized);
-  float tmp, yaw, pitch;
+  f32 tmp, yaw, pitch;
 
   if (forward[1] == 0 && forward[0] == 0) {
     yaw = 0;
@@ -476,8 +476,8 @@ void VectorAngles(const float *forward, float *angles) {
 R_ConcatRotations
 ================
 */
-void ConcatRotations(const float in1[3][3], const float in2[3][3],
-                     float out[3][3]) {
+void ConcatRotations(const f32 in1[3][3], const f32 in2[3][3],
+                     f32 out[3][3]) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out);
   Assert(in2 != out);
@@ -557,10 +557,10 @@ quotient must fit in 32 bits.
 ====================
 */
 
-void FloorDivMod(double numer, double denom, int *quotient, int *rem) {
+void FloorDivMod(f64 numer, f64 denom, int *quotient, int *rem) {
   Assert(s_bMathlibInitialized);
   int q, r;
-  double x;
+  f64 x;
 
 #ifdef PARANOID
   if (denom <= 0.0) Sys_Error("FloorDivMod: bad denominator %d\n", denom);
@@ -607,7 +607,7 @@ int GreatestCommonDivisor(int i1, int i2) {
   }
 }
 
-bool IsDenormal(const float &val) {
+bool IsDenormal(const f32 &val) {
   const int x = *reinterpret_cast<const int *>(&val);  // needs 32-bit int
   const int abs_mantissa = x & 0x007FFFFF;
   const int biased_exponent = x & 0x7F800000;
@@ -635,10 +635,10 @@ BoxOnPlaneSide
 Returns 1, 2, or 1 + 2
 ==================
 */
-int __cdecl BoxOnPlaneSide(const float *emins, const float *emaxs,
+int __cdecl BoxOnPlaneSide(const f32 *emins, const f32 *emaxs,
                            const cplane_t *p) {
   Assert(s_bMathlibInitialized);
-  float dist1, dist2;
+  f32 dist1, dist2;
   int sides;
 
   // fast axial cases
@@ -721,7 +721,7 @@ void AngleVectors(const QAngle &angles, Vector *forward) {
   Assert(s_bMathlibInitialized);
   Assert(forward);
 
-  float sp, sy, cp, cy;
+  f32 sp, sy, cp, cy;
 
   SinCos(DEG2RAD(angles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(angles[PITCH]), &sp, &cp);
@@ -738,7 +738,7 @@ void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
                   Vector *up) {
   Assert(s_bMathlibInitialized);
 
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(angles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(angles[PITCH]), &sp, &cp);
@@ -770,7 +770,7 @@ void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
 void AngleVectorsTranspose(const QAngle &angles, Vector *forward, Vector *right,
                            Vector *up) {
   Assert(s_bMathlibInitialized);
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(angles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(angles[PITCH]), &sp, &cp);
@@ -801,7 +801,7 @@ void AngleVectorsTranspose(const QAngle &angles, Vector *forward, Vector *right,
 
 void VectorAngles(const Vector &forward, QAngle &angles) {
   Assert(s_bMathlibInitialized);
-  float tmp, yaw, pitch;
+  f32 tmp, yaw, pitch;
 
   if (forward[1] == 0 && forward[0] == 0) {
     yaw = 0;
@@ -836,7 +836,7 @@ void VectorAngles(const Vector &forward, const Vector &pseudoup,
   CrossProduct(pseudoup, forward, left);
   VectorNormalizeFast(left);
 
-  float xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
+  f32 xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
 
   // enough here to get angles?
   if (xyDist > 0.001f) {
@@ -850,7 +850,7 @@ void VectorAngles(const Vector &forward, const Vector &pseudoup,
     // sqrt(forward.x*forward.x+forward.y*forward.y) );
     angles[0] = RAD2DEG(atan2f(-forward[2], xyDist));
 
-    float up_z = (left[1] * forward[0]) - (left[0] * forward[1]);
+    f32 up_z = (left[1] * forward[0]) - (left[0] * forward[1]);
 
     // (roll)	z = ATAN( left.z, up.z );
     angles[2] = RAD2DEG(atan2f(left[2], up_z));
@@ -861,7 +861,7 @@ void VectorAngles(const Vector &forward, const Vector &pseudoup,
     angles[1] = RAD2DEG(
         atan2f(-left[0], left[1]));  // This was originally copied from the
                                      // "void MatrixAngles( const matrix3x4_t&
-                                     // matrix, float *angles )" code, and it's
+                                     // matrix, f32 *angles )" code, and it's
                                      // 180 degrees off, negated the values and
                                      // it all works now (Dave Kircher)
 
@@ -878,7 +878,7 @@ void VectorAngles(const Vector &forward, const Vector &pseudoup,
 }
 
 void SetIdentityMatrix(matrix3x4_t &matrix) {
-  memset(matrix.Base(), 0, sizeof(float) * 3 * 4);
+  memset(matrix.Base(), 0, sizeof(f32) * 3 * 4);
   matrix[0][0] = 1.0;
   matrix[1][1] = 1.0;
   matrix[2][2] = 1.0;
@@ -887,7 +887,7 @@ void SetIdentityMatrix(matrix3x4_t &matrix) {
 //-----------------------------------------------------------------------------
 // Builds a scale matrix
 //-----------------------------------------------------------------------------
-void SetScaleMatrix(float x, float y, float z, matrix3x4_t &dst) {
+void SetScaleMatrix(f32 x, f32 y, f32 z, matrix3x4_t &dst) {
   dst[0][0] = x;
   dst[0][1] = 0.0f;
   dst[0][2] = 0.0f;
@@ -917,14 +917,14 @@ void SetScaleMatrix(float x, float y, float z, matrix3x4_t &dst) {
 //			vAxisOrRot -
 //			angle -
 //-----------------------------------------------------------------------------
-void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, float angleDegrees,
+void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, f32 angleDegrees,
                                   matrix3x4_t &dst) {
-  float radians;
-  float axisXSquared;
-  float axisYSquared;
-  float axisZSquared;
-  float fSin;
-  float fCos;
+  f32 radians;
+  f32 axisXSquared;
+  f32 axisYSquared;
+  f32 axisZSquared;
+  f32 fSin;
+  f32 fCos;
 
   radians = angleDegrees * (M_PI / 180.0);
   fSin = sin(radians);
@@ -959,7 +959,7 @@ void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, float angleDegrees,
 // Computes the transpose
 //-----------------------------------------------------------------------------
 void MatrixTranspose(matrix3x4_t &mat) {
-  vec_t tmp;
+  f32 tmp;
   tmp = mat[0][1];
   mat[0][1] = mat[1][0];
   mat[1][0] = tmp;
@@ -1019,7 +1019,7 @@ void AngleMatrix(const QAngle &angles, matrix3x4_t &matrix) {
 #endif
   Assert(s_bMathlibInitialized);
 
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(angles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(angles[PITCH]), &sp, &cp);
@@ -1030,10 +1030,10 @@ void AngleMatrix(const QAngle &angles, matrix3x4_t &matrix) {
   matrix[1][0] = cp * sy;
   matrix[2][0] = -sp;
 
-  float crcy = cr * cy;
-  float crsy = cr * sy;
-  float srcy = sr * cy;
-  float srsy = sr * sy;
+  f32 crcy = cr * cy;
+  f32 crsy = cr * sy;
+  f32 srcy = sr * cy;
+  f32 srsy = sr * sy;
   matrix[0][1] = sp * srcy - crsy;
   matrix[1][1] = sp * srsy + crcy;
   matrix[2][1] = sr * cp;
@@ -1055,7 +1055,7 @@ void AngleIMatrix(const RadianEuler &angles, matrix3x4_t &matrix) {
 
 void AngleIMatrix(const QAngle &angles, matrix3x4_t &matrix) {
   Assert(s_bMathlibInitialized);
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(angles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(angles[PITCH]), &sp, &cp);
@@ -1099,7 +1099,7 @@ void ClearBounds(Vector &mins, Vector &maxs) {
 void AddPointToBounds(const Vector &v, Vector &mins, Vector &maxs) {
   Assert(s_bMathlibInitialized);
   int i;
-  vec_t val;
+  f32 val;
 
   for (i = 0; i < 3; i++) {
     val = v[i];
@@ -1109,7 +1109,7 @@ void AddPointToBounds(const Vector &v, Vector &mins, Vector &maxs) {
 }
 
 // solve a x^2 + b x + c = 0
-bool SolveQuadratic(float a, float b, float c, float &root1, float &root2) {
+bool SolveQuadratic(f32 a, f32 b, f32 c, f32 &root1, f32 &root2) {
   Assert(s_bMathlibInitialized);
   if (a == 0) {
     if (b != 0) {
@@ -1125,7 +1125,7 @@ bool SolveQuadratic(float a, float b, float c, float &root1, float &root2) {
     return false;
   }
 
-  float tmp = b * b - 4.0f * a * c;
+  f32 tmp = b * b - 4.0f * a * c;
 
   if (tmp < 0) {
     // imaginary number, bah, no solution.
@@ -1140,9 +1140,9 @@ bool SolveQuadratic(float a, float b, float c, float &root1, float &root2) {
 
 // solves for "a, b, c" where "a x^2 + b x + c = y", return true if solution
 // exists
-bool SolveInverseQuadratic(float x1, float y1, float x2, float y2, float x3,
-                           float y3, float &a, float &b, float &c) {
-  float det = (x1 - x2) * (x1 - x3) * (x2 - x3);
+bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
+                           f32 y3, f32 &a, f32 &b, f32 &c) {
+  f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3);
 
   // FIXME: check with some sort of epsilon
   if (det == 0.0) return false;
@@ -1158,9 +1158,9 @@ bool SolveInverseQuadratic(float x1, float y1, float x2, float y2, float x3,
   return true;
 }
 
-bool SolveInverseQuadraticMonotonic(float x1, float y1, float x2, float y2,
-                                    float x3, float y3, float &a, float &b,
-                                    float &c) {
+bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2,
+                                    f32 x3, f32 y3, f32 &a, f32 &b,
+                                    f32 &c) {
   // use SolveInverseQuadratic, but if the sigm of the derivative at the start
   // point is the wrong sign, displace the mid point
 
@@ -1181,13 +1181,13 @@ bool SolveInverseQuadraticMonotonic(float x1, float y1, float x2, float y2,
   // non-monotonic, slowly shifts the center point closer to the linear line
   // between the endpoints. Should anyone need htis function to be actually
   // fast, it would be fairly easy to change it to be so.
-  for (float blend_to_linear_factor = 0.0; blend_to_linear_factor <= 1.0;
+  for (f32 blend_to_linear_factor = 0.0; blend_to_linear_factor <= 1.0;
        blend_to_linear_factor += 0.05) {
-    float tempy2 = (1 - blend_to_linear_factor) * y2 +
+    f32 tempy2 = (1 - blend_to_linear_factor) * y2 +
                    blend_to_linear_factor * FLerp(y1, y3, x1, x3, x2);
     if (!SolveInverseQuadratic(x1, y1, x2, tempy2, x3, y3, a, b, c))
       return false;
-    float derivative = 2.0 * a + b;
+    f32 derivative = 2.0 * a + b;
     if ((y1 < y2) && (y2 < y3))  // monotonically increasing
     {
       if (derivative >= 0.0) return true;
@@ -1204,10 +1204,10 @@ bool SolveInverseQuadraticMonotonic(float x1, float y1, float x2, float y2,
 
 // solves for "a, b, c" where "1/(a x^2 + b x + c ) = y", return true if
 // solution exists
-bool SolveInverseReciprocalQuadratic(float x1, float y1, float x2, float y2,
-                                     float x3, float y3, float &a, float &b,
-                                     float &c) {
-  float det = (x1 - x2) * (x1 - x3) * (x2 - x3) * y1 * y2 * y3;
+bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2,
+                                     f32 x3, f32 y3, f32 &a, f32 &b,
+                                     f32 &c) {
+  f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3) * y1 * y2 * y3;
 
   // FIXME: check with some sort of epsilon
   if (det == 0.0) return false;
@@ -1226,7 +1226,7 @@ bool SolveInverseReciprocalQuadratic(float x1, float y1, float x2, float y2,
 }
 
 // Rotate a vector around the Z axis (YAW)
-void VectorYawRotate(const Vector &in, float flYaw, Vector &out) {
+void VectorYawRotate(const Vector &in, f32 flYaw, Vector &out) {
   Assert(s_bMathlibInitialized);
   if (&in == &out) {
     Vector tmp;
@@ -1235,7 +1235,7 @@ void VectorYawRotate(const Vector &in, float flYaw, Vector &out) {
     return;
   }
 
-  float sy, cy;
+  f32 sy, cy;
 
   SinCos(DEG2RAD(flYaw), &sy, &cy);
 
@@ -1244,17 +1244,17 @@ void VectorYawRotate(const Vector &in, float flYaw, Vector &out) {
   out.z = in.z;
 }
 
-float Bias(float x, float biasAmt) {
+f32 Bias(f32 x, f32 biasAmt) {
   // WARNING: not thread safe
-  static float lastAmt = -1;
-  static float lastExponent = 0;
+  static f32 lastAmt = -1;
+  static f32 lastExponent = 0;
   if (lastAmt != biasAmt) {
     lastExponent = log(biasAmt) * -1.4427f;  // (-1.4427 = 1 / log(0.5))
   }
   return pow(x, lastExponent);
 }
 
-float Gain(float x, float biasAmt) {
+f32 Gain(f32 x, f32 biasAmt) {
   // WARNING: not thread safe
   if (x < 0.5)
     return 0.5f * Bias(2 * x, 1 - biasAmt);
@@ -1262,9 +1262,9 @@ float Gain(float x, float biasAmt) {
     return 1 - 0.5f * Bias(2 - 2 * x, 1 - biasAmt);
 }
 
-float SmoothCurve(float x) { return (1 - cos(x * M_PI)) * 0.5f; }
+f32 SmoothCurve(f32 x) { return (1 - cos(x * M_PI)) * 0.5f; }
 
-inline float MovePeak(float x, float flPeakPos) {
+inline f32 MovePeak(f32 x, f32 flPeakPos) {
   // Todo: make this higher-order?
   if (x < flPeakPos)
     return x * 0.5f / flPeakPos;
@@ -1272,9 +1272,9 @@ inline float MovePeak(float x, float flPeakPos) {
     return 0.5 + 0.5 * (x - flPeakPos) / (1 - flPeakPos);
 }
 
-float SmoothCurve_Tweak(float x, float flPeakPos, float flPeakSharpness) {
-  float flMovedPeak = MovePeak(x, flPeakPos);
-  float flSharpened = Gain(flMovedPeak, flPeakSharpness);
+f32 SmoothCurve_Tweak(f32 x, f32 flPeakPos, f32 flPeakSharpness) {
+  f32 flMovedPeak = MovePeak(x, flPeakPos);
+  f32 flSharpened = Gain(flMovedPeak, flPeakSharpness);
   return SmoothCurve(flSharpened);
 }
 
@@ -1290,8 +1290,8 @@ void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
 
   int i;
   // decide if one of the quaternions is backwards
-  float a = 0;
-  float b = 0;
+  f32 a = 0;
+  f32 b = 0;
   for (i = 0; i < 4; i++) {
     a += (p[i] - q[i]) * (p[i] - q[i]);
     b += (p[i] + q[i]) * (p[i] + q[i]);
@@ -1311,7 +1311,7 @@ void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
 // Do a piecewise addition of the quaternion elements. This actually makes
 // little mathematical sense, but it's a cheap way to simulate a slerp.
 //-----------------------------------------------------------------------------
-void QuaternionBlend(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionBlend(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt) {
   Assert(s_bMathlibInitialized);
 #if ALLOW_SIMD_QUATERNION_MATH
@@ -1328,10 +1328,10 @@ void QuaternionBlend(const Quaternion &p, const Quaternion &q, float t,
 #endif
 }
 
-void QuaternionBlendNoAlign(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionBlendNoAlign(const Quaternion &p, const Quaternion &q, f32 t,
                             Quaternion &qt) {
   Assert(s_bMathlibInitialized);
-  float sclp, sclq;
+  f32 sclp, sclq;
   int i;
 
   // 0.0 returns p, 1.0 return q.
@@ -1343,9 +1343,9 @@ void QuaternionBlendNoAlign(const Quaternion &p, const Quaternion &q, float t,
   QuaternionNormalize(qt);
 }
 
-void QuaternionIdentityBlend(const Quaternion &p, float t, Quaternion &qt) {
+void QuaternionIdentityBlend(const Quaternion &p, f32 t, Quaternion &qt) {
   Assert(s_bMathlibInitialized);
-  float sclp;
+  f32 sclp;
 
   sclp = 1.0f - t;
 
@@ -1364,7 +1364,7 @@ void QuaternionIdentityBlend(const Quaternion &p, float t, Quaternion &qt) {
 // Quaternion sphereical linear interpolation
 //-----------------------------------------------------------------------------
 
-void QuaternionSlerp(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionSlerp(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt) {
   Quaternion q2;
   // 0.0 returns p, 1.0 return q.
@@ -1375,10 +1375,10 @@ void QuaternionSlerp(const Quaternion &p, const Quaternion &q, float t,
   QuaternionSlerpNoAlign(p, q2, t, qt);
 }
 
-void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, f32 t,
                             Quaternion &qt) {
   Assert(s_bMathlibInitialized);
-  float omega, cosom, sinom, sclp, sclq;
+  f32 omega, cosom, sinom, sclp, sclq;
   int i;
 
   // 0.0 returns p, 1.0 return q.
@@ -1392,7 +1392,7 @@ void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, float t,
       sclp = sin((1.0f - t) * omega) / sinom;
       sclq = sin(t * omega) / sinom;
     } else {
-      // TODO: add short circuit for cosom == 1.0f?
+      // TODO: add i16 circuit for cosom == 1.0f?
       sclp = 1.0f - t;
       sclq = t;
     }
@@ -1420,32 +1420,32 @@ void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, float t,
 // Purpose: Returns the angular delta between the two normalized quaternions in
 // degrees.
 //-----------------------------------------------------------------------------
-float QuaternionAngleDiff(const Quaternion &p, const Quaternion &q) {
+f32 QuaternionAngleDiff(const Quaternion &p, const Quaternion &q) {
 #if 1
   // this code path is here for 2 reasons:
   // 1 - acos maps 1-epsilon to values much larger than epsilon (vs asin, which
   // maps epsilon to itself)
   //     this means that in floats, anything below ~0.05 degrees truncates to 0
   // 2 - normalized quaternions are frequently slightly non-normalized due to
-  // float precision issues,
+  // f32 precision issues,
   //     and the epsilon off of normalized can be several percents of a degree
   Quaternion qInv, diff;
   QuaternionConjugate(q, qInv);
   QuaternionMult(p, qInv, diff);
 
-  float sinang = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
-  float angle = RAD2DEG(2 * asin(sinang));
+  f32 sinang = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+  f32 angle = RAD2DEG(2 * asin(sinang));
   return angle;
 #else
   Quaternion q2;
   QuaternionAlign(p, q, q2);
 
   Assert(s_bMathlibInitialized);
-  float cosom = p.x * q2.x + p.y * q2.y + p.z * q2.z + p.w * q2.w;
+  f32 cosom = p.x * q2.x + p.y * q2.y + p.z * q2.z + p.w * q2.w;
 
   if (cosom > -1.0f) {
     if (cosom < 1.0f) {
-      float omega = 2 * fabs(acos(cosom));
+      f32 omega = 2 * fabs(acos(cosom));
       return RAD2DEG(omega);
     }
     return 0.0f;
@@ -1471,10 +1471,10 @@ void QuaternionInvert(const Quaternion &p, Quaternion &q) {
 
   QuaternionConjugate(p, q);
 
-  float magnitudeSqr = QuaternionDotProduct(p, p);
+  f32 magnitudeSqr = QuaternionDotProduct(p, p);
   Assert(magnitudeSqr);
   if (magnitudeSqr) {
-    float inv = 1.0f / magnitudeSqr;
+    f32 inv = 1.0f / magnitudeSqr;
     q.x *= inv;
     q.y *= inv;
     q.z *= inv;
@@ -1485,9 +1485,9 @@ void QuaternionInvert(const Quaternion &p, Quaternion &q) {
 //-----------------------------------------------------------------------------
 // Make sure the quaternion is of unit length
 //-----------------------------------------------------------------------------
-float QuaternionNormalize(Quaternion &q) {
+f32 QuaternionNormalize(Quaternion &q) {
   Assert(s_bMathlibInitialized);
-  float radius, iradius;
+  f32 radius, iradius;
 
   Assert(q.IsValid());
 
@@ -1506,18 +1506,18 @@ float QuaternionNormalize(Quaternion &q) {
   return radius;
 }
 
-void QuaternionScale(const Quaternion &p, float t, Quaternion &q) {
+void QuaternionScale(const Quaternion &p, f32 t, Quaternion &q) {
   Assert(s_bMathlibInitialized);
 
-  float r;
+  f32 r;
 
   // FIXME: nick, this isn't overly sensitive to accuracy, and it may be faster
   // to use the cos part (w) of the quaternion (sin(omega)*N,cos(omega)) to
   // figure the new scale.
-  float sinom = sqrt(DotProduct(&p.x, &p.x));
+  f32 sinom = sqrt(DotProduct(&p.x, &p.x));
   sinom = min(sinom, 1.f);
 
-  float sinsom = sin(asin(sinom) * t);
+  f32 sinsom = sin(asin(sinom) * t);
 
   t = sinsom / (sinom + FLT_EPSILON);
   VectorScale(&p.x, t, &q.x);
@@ -1558,7 +1558,7 @@ void QuaternionAdd(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
   return;
 }
 
-float QuaternionDotProduct(const Quaternion &p, const Quaternion &q) {
+f32 QuaternionDotProduct(const Quaternion &p, const Quaternion &q) {
   Assert(s_bMathlibInitialized);
   Assert(p.IsValid());
   Assert(q.IsValid());
@@ -1628,7 +1628,7 @@ void QuaternionMatrix(const Quaternion &q, matrix3x4_t &matrix) {
   matrix[1][3] = 0.0f;
   matrix[2][3] = 0.0f;
 #else
-  float wx, wy, wz, xx, yy, yz, xy, xz, zz, x2, y2, z2;
+  f32 wx, wy, wz, xx, yy, yz, xy, xz, zz, x2, y2, z2;
 
   // precalculate common multiplitcations
   x2 = q.x + q.x;
@@ -1681,7 +1681,7 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles) {
   QuaternionMatrix(q, matrix);
   MatrixAngles(matrix, angles);
 #else
-  float m11, m12, m13, m23, m33;
+  f32 m11, m12, m13, m23, m33;
 
   m11 = (2.0f * q.w * q.w) + (2.0f * q.x * q.x) - 1.0f;
   m12 = (2.0f * q.x * q.y) + (2.0f * q.w * q.z);
@@ -1702,7 +1702,7 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles) {
 // Purpose: Converts a quaternion to an axis / angle in degrees
 //			(exponential map)
 //-----------------------------------------------------------------------------
-void QuaternionAxisAngle(const Quaternion &q, Vector &axis, float &angle) {
+void QuaternionAxisAngle(const Quaternion &q, Vector &axis, f32 &angle) {
   angle = RAD2DEG(2 * acos(q.w));
   if (angle > 180) {
     angle -= 360;
@@ -1716,8 +1716,8 @@ void QuaternionAxisAngle(const Quaternion &q, Vector &axis, float &angle) {
 //-----------------------------------------------------------------------------
 // Purpose: Converts an exponential map (ang/axis) to a quaternion
 //-----------------------------------------------------------------------------
-void AxisAngleQuaternion(const Vector &axis, float angle, Quaternion &q) {
-  float sa, ca;
+void AxisAngleQuaternion(const Vector &axis, f32 angle, Quaternion &q) {
+  f32 sa, ca;
 
   SinCos(DEG2RAD(angle) * 0.5f, &sa, &ca);
 
@@ -1740,18 +1740,18 @@ void AngleQuaternion(const RadianEuler &angles, Quaternion &outQuat) {
   VPROF_BUDGET("AngleQuaternion", "Mathlib");
 #endif
 
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(angles.z * 0.5f, &sy, &cy);
   SinCos(angles.y * 0.5f, &sp, &cp);
   SinCos(angles.x * 0.5f, &sr, &cr);
 
   // NJS: for some reason VC6 wasn't recognizing the common subexpressions:
-  float srXcp = sr * cp, crXsp = cr * sp;
+  f32 srXcp = sr * cp, crXsp = cr * sp;
   outQuat.x = srXcp * cy - crXsp * sy;  // X
   outQuat.y = crXsp * cy + srXcp * sy;  // Y
 
-  float crXcp = cr * cp, srXsp = sr * sp;
+  f32 crXcp = cr * cp, srXsp = sr * sp;
   outQuat.z = crXcp * sy - srXsp * cy;  // Z
   outQuat.w = crXcp * cy + srXsp * sy;  // W (real component)
 }
@@ -1771,18 +1771,18 @@ void AngleQuaternion(const QAngle &angles, Quaternion &outQuat) {
   VPROF_BUDGET("AngleQuaternion", "Mathlib");
 #endif
 
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(angles.y) * 0.5f, &sy, &cy);
   SinCos(DEG2RAD(angles.x) * 0.5f, &sp, &cp);
   SinCos(DEG2RAD(angles.z) * 0.5f, &sr, &cr);
 
   // NJS: for some reason VC6 wasn't recognizing the common subexpressions:
-  float srXcp = sr * cp, crXsp = cr * sp;
+  f32 srXcp = sr * cp, crXsp = cr * sp;
   outQuat.x = srXcp * cy - crXsp * sy;  // X
   outQuat.y = crXsp * cy + srXcp * sy;  // Y
 
-  float crXcp = cr * cp, srXsp = sr * sp;
+  f32 crXcp = cr * cp, srXsp = sr * sp;
   outQuat.z = crXcp * sy - srXsp * cy;  // Z
   outQuat.w = crXcp * cy + srXsp * sy;  // W (real component)
 }
@@ -1803,11 +1803,11 @@ void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
   // so we can't use this super-fast way.
   /*
   // Find the trace of the matrix:
-  float flTrace = vecForward.x + vecLeft.y + vecUp.z + 1.0f;
+  f32 flTrace = vecForward.x + vecLeft.y + vecUp.z + 1.0f;
   if ( flTrace > 1e-6 )
   {
-          float flSqrtTrace = FastSqrt( flTrace );
-          float s = 0.5f / flSqrtTrace;
+          f32 flSqrtTrace = FastSqrt( flTrace );
+          f32 s = 0.5f / flSqrtTrace;
           q.x = ( vecUp.y - vecLeft.z ) * s;
           q.y = ( vecForward.z - vecUp.x ) * s;
           q.z = ( vecLeft.x - vecForward.y ) * s;
@@ -1817,22 +1817,22 @@ void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
   {
           if (( vecForward.x > vecLeft.y ) && ( vecForward.x > vecUp.z ) )
           {
-                  float flSqrtTrace = FastSqrt( 1.0f + vecForward.x - vecLeft.y
-  - vecUp.z ); float s = 0.5f / flSqrtTrace; q.x = 0.5f * flSqrtTrace; q.y = (
+                  f32 flSqrtTrace = FastSqrt( 1.0f + vecForward.x - vecLeft.y
+  - vecUp.z ); f32 s = 0.5f / flSqrtTrace; q.x = 0.5f * flSqrtTrace; q.y = (
   vecForward.y + vecLeft.x ) * s; q.z = ( vecUp.x + vecForward.z ) * s; q.w = (
   vecUp.y - vecLeft.z ) * s;
           }
           else if ( vecLeft.y > vecUp.z )
           {
-                  float flSqrtTrace = FastSqrt( 1.0f + vecLeft.y - vecForward.x
-  - vecUp.z ); float s = 0.5f / flSqrtTrace; q.x = ( vecForward.y + vecLeft.x )
+                  f32 flSqrtTrace = FastSqrt( 1.0f + vecLeft.y - vecForward.x
+  - vecUp.z ); f32 s = 0.5f / flSqrtTrace; q.x = ( vecForward.y + vecLeft.x )
   * s; q.y = 0.5f * flSqrtTrace; q.z = ( vecUp.y + vecLeft.z ) * s; q.w = (
   vecForward.z - vecUp.x ) * s;
           }
           else
           {
-                  float flSqrtTrace = FastSqrt( 1.0 + vecUp.z - vecForward.x -
-  vecLeft.y ); float s = 0.5f / flSqrtTrace; q.x = ( vecUp.x + vecForward.z ) *
+                  f32 flSqrtTrace = FastSqrt( 1.0 + vecUp.z - vecForward.x -
+  vecLeft.y ); f32 s = 0.5f / flSqrtTrace; q.x = ( vecUp.x + vecForward.z ) *
   s; q.y = ( vecUp.y + vecLeft.z ) * s; q.z = 0.5f * flSqrtTrace; q.w = (
   vecLeft.x - vecForward.y ) * s;
           }
@@ -1893,7 +1893,7 @@ void QuaternionAngles(const Quaternion &q, RadianEuler &angles) {
 //-----------------------------------------------------------------------------
 void Spline_Normalize(const Vector &p1, const Vector &p2, const Vector &p3,
                       const Vector &p4, Vector &p1n, Vector &p4n) {
-  float dt = p3.x - p2.x;
+  f32 dt = p3.x - p2.x;
 
   p1n = p1;
   p4n = p4;
@@ -1916,10 +1916,10 @@ void Spline_Normalize(const Vector &p1, const Vector &p2, const Vector &p3,
 //-----------------------------------------------------------------------------
 
 void Catmull_Rom_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                        const Vector &p4, float t, Vector &output) {
+                        const Vector &p4, f32 t, Vector &output) {
   Assert(s_bMathlibInitialized);
-  float tSqr = t * t * 0.5f;
-  float tSqrSqr = t * tSqr;
+  f32 tSqr = t * t * 0.5f;
+  f32 tSqrSqr = t * tSqr;
   t *= 0.5f;
 
   Assert(&output != &p1);
@@ -1967,12 +1967,12 @@ void Catmull_Rom_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
 }
 
 void Catmull_Rom_Spline_Tangent(const Vector &p1, const Vector &p2,
-                                const Vector &p3, const Vector &p4, float t,
+                                const Vector &p3, const Vector &p4, f32 t,
                                 Vector &output) {
   Assert(s_bMathlibInitialized);
-  float tOne = 3 * t * t * 0.5f;
-  float tTwo = 2 * t * 0.5f;
-  float tThree = 0.5;
+  f32 tOne = 3 * t * t * 0.5f;
+  f32 tTwo = 2 * t * 0.5f;
+  f32 tThree = 0.5;
 
   Assert(&output != &p1);
   Assert(&output != &p2);
@@ -2016,7 +2016,7 @@ void Catmull_Rom_Spline_Tangent(const Vector &p1, const Vector &p2,
 
 // area under the curve [0..t]
 void Catmull_Rom_Spline_Integral(const Vector &p1, const Vector &p2,
-                                 const Vector &p3, const Vector &p4, float t,
+                                 const Vector &p3, const Vector &p4, f32 t,
                                  Vector &output) {
   output =
       p2 * t - 0.25f * (p1 - p3) * t * t +
@@ -2032,10 +2032,10 @@ void Catmull_Rom_Spline_Integral(const Vector &p1, const Vector &p2,
 }
 
 void Catmull_Rom_Spline_Normalize(const Vector &p1, const Vector &p2,
-                                  const Vector &p3, const Vector &p4, float t,
+                                  const Vector &p3, const Vector &p4, f32 t,
                                   Vector &output) {
   // Normalize p2->p1 and p3->p4 to be the same length as p2->p3
-  float dt = p3.DistTo(p2);
+  f32 dt = p3.DistTo(p2);
 
   Vector p1n, p4n;
   VectorSubtract(p1, p2, p1n);
@@ -2052,9 +2052,9 @@ void Catmull_Rom_Spline_Normalize(const Vector &p1, const Vector &p2,
 
 void Catmull_Rom_Spline_Integral_Normalize(const Vector &p1, const Vector &p2,
                                            const Vector &p3, const Vector &p4,
-                                           float t, Vector &output) {
+                                           f32 t, Vector &output) {
   // Normalize p2->p1 and p3->p4 to be the same length as p2->p3
-  float dt = p3.DistTo(p2);
+  f32 dt = p3.DistTo(p2);
 
   Vector p1n, p4n;
   VectorSubtract(p1, p2, p1n);
@@ -2070,7 +2070,7 @@ void Catmull_Rom_Spline_Integral_Normalize(const Vector &p1, const Vector &p2,
 }
 
 void Catmull_Rom_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                                   const Vector &p3, const Vector &p4, float t,
+                                   const Vector &p3, const Vector &p4, f32 t,
                                    Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
@@ -2084,20 +2084,20 @@ void Catmull_Rom_Spline_NormalizeX(const Vector &p1, const Vector &p2,
 //-----------------------------------------------------------------------------
 
 void Hermite_Spline(const Vector &p1, const Vector &p2, const Vector &d1,
-                    const Vector &d2, float t, Vector &output) {
+                    const Vector &d2, f32 t, Vector &output) {
   Assert(s_bMathlibInitialized);
-  float tSqr = t * t;
-  float tCube = t * tSqr;
+  f32 tSqr = t * t;
+  f32 tCube = t * tSqr;
 
   Assert(&output != &p1);
   Assert(&output != &p2);
   Assert(&output != &d1);
   Assert(&output != &d2);
 
-  float b1 = 2.0f * tCube - 3.0f * tSqr + 1.0f;
-  float b2 = 1.0f - b1;  // -2*tCube+3*tSqr;
-  float b3 = tCube - 2 * tSqr + t;
-  float b4 = tCube - tSqr;
+  f32 b1 = 2.0f * tCube - 3.0f * tSqr + 1.0f;
+  f32 b2 = 1.0f - b1;  // -2*tCube+3*tSqr;
+  f32 b3 = tCube - 2 * tSqr + t;
+  f32 b4 = tCube - tSqr;
 
   VectorScale(p1, b1, output);
   VectorMA(output, b2, p2, output);
@@ -2105,16 +2105,16 @@ void Hermite_Spline(const Vector &p1, const Vector &p2, const Vector &d1,
   VectorMA(output, b4, d2, output);
 }
 
-float Hermite_Spline(float p1, float p2, float d1, float d2, float t) {
+f32 Hermite_Spline(f32 p1, f32 p2, f32 d1, f32 d2, f32 t) {
   Assert(s_bMathlibInitialized);
-  float output;
-  float tSqr = t * t;
-  float tCube = t * tSqr;
+  f32 output;
+  f32 tSqr = t * t;
+  f32 tCube = t * tSqr;
 
-  float b1 = 2.0f * tCube - 3.0f * tSqr + 1.0f;
-  float b2 = 1.0f - b1;  // -2*tCube+3*tSqr;
-  float b3 = tCube - 2 * tSqr + t;
-  float b4 = tCube - tSqr;
+  f32 b1 = 2.0f * tCube - 3.0f * tSqr + 1.0f;
+  f32 b2 = 1.0f - b1;  // -2*tCube+3*tSqr;
+  f32 b3 = tCube - 2 * tSqr + t;
+  f32 b4 = tCube - tSqr;
 
   output = p1 * b1;
   output += p2 * b2;
@@ -2124,9 +2124,9 @@ float Hermite_Spline(float p1, float p2, float d1, float d2, float t) {
   return output;
 }
 
-void Hermite_SplineBasis(float t, float basis[4]) {
-  float tSqr = t * t;
-  float tCube = t * tSqr;
+void Hermite_SplineBasis(f32 t, f32 basis[4]) {
+  f32 tSqr = t * t;
+  f32 tCube = t * tSqr;
 
   basis[0] = 2.0f * tCube - 3.0f * tSqr + 1.0f;
   basis[1] = 1.0f - basis[0];  // -2*tCube+3*tSqr;
@@ -2147,7 +2147,7 @@ void Hermite_SplineBasis(float t, float basis[4]) {
 #pragma optimize("g", off)
 
 void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2,
-                    float t, Vector &output) {
+                    f32 t, Vector &output) {
   Vector e10, e21;
   VectorSubtract(p1, p0, e10);
   VectorSubtract(p2, p1, e21);
@@ -2156,12 +2156,12 @@ void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2,
 
 #pragma optimize("", on)
 
-float Hermite_Spline(float p0, float p1, float p2, float t) {
+f32 Hermite_Spline(f32 p0, f32 p1, f32 p2, f32 t) {
   return Hermite_Spline(p1, p2, p1 - p0, p2 - p1, t);
 }
 
 void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
-                    const Quaternion &q2, float t, Quaternion &output) {
+                    const Quaternion &q2, f32 t, Quaternion &output) {
   // cheap, hacked version of quaternions
   Quaternion q0a;
   Quaternion q1a;
@@ -2191,21 +2191,21 @@ void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
 // http://news.povray.org/povray.binaries.tutorials/attachment/%3CXns91B880592482seed7@povray.org%3E/Splines.bas.txt
 // for example code and descriptions of various spline types...
 //
-void Kochanek_Bartels_Spline(float tension, float bias, float continuity,
+void Kochanek_Bartels_Spline(f32 tension, f32 bias, f32 continuity,
                              const Vector &p1, const Vector &p2,
-                             const Vector &p3, const Vector &p4, float t,
+                             const Vector &p3, const Vector &p4, f32 t,
                              Vector &output) {
   Assert(s_bMathlibInitialized);
 
-  float ffa, ffb, ffc, ffd;
+  f32 ffa, ffb, ffc, ffd;
 
   ffa = (1.0f - tension) * (1.0f + continuity) * (1.0f + bias);
   ffb = (1.0f - tension) * (1.0f - continuity) * (1.0f - bias);
   ffc = (1.0f - tension) * (1.0f - continuity) * (1.0f + bias);
   ffd = (1.0f - tension) * (1.0f + continuity) * (1.0f - bias);
 
-  float tSqr = t * t * 0.5f;
-  float tSqrSqr = t * tSqr;
+  f32 tSqr = t * t * 0.5f;
+  f32 tSqrSqr = t * tSqr;
   t *= 0.5f;
 
   Assert(&output != &p1);
@@ -2256,10 +2256,10 @@ void Kochanek_Bartels_Spline(float tension, float bias, float continuity,
   VectorAdd(p2, output, output);
 }
 
-void Kochanek_Bartels_Spline_NormalizeX(float tension, float bias,
-                                        float continuity, const Vector &p1,
+void Kochanek_Bartels_Spline_NormalizeX(f32 tension, f32 bias,
+                                        f32 continuity, const Vector &p1,
                                         const Vector &p2, const Vector &p3,
-                                        const Vector &p4, float t,
+                                        const Vector &p4, f32 t,
                                         Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
@@ -2268,11 +2268,11 @@ void Kochanek_Bartels_Spline_NormalizeX(float tension, float bias,
 }
 
 void Cubic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                  const Vector &p4, float t, Vector &output) {
+                  const Vector &p4, f32 t, Vector &output) {
   Assert(s_bMathlibInitialized);
 
-  float tSqr = t * t;
-  float tSqrSqr = t * tSqr;
+  f32 tSqr = t * t;
+  f32 tSqrSqr = t * tSqr;
 
   Assert(&output != &p1);
   Assert(&output != &p2);
@@ -2307,7 +2307,7 @@ void Cubic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
 }
 
 void Cubic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                             const Vector &p3, const Vector &p4, float t,
+                             const Vector &p3, const Vector &p4, f32 t,
                              Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
@@ -2315,13 +2315,13 @@ void Cubic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
 }
 
 void BSpline(const Vector &p1, const Vector &p2, const Vector &p3,
-             const Vector &p4, float t, Vector &output) {
+             const Vector &p4, f32 t, Vector &output) {
   Assert(s_bMathlibInitialized);
 
-  float oneOver6 = 1.0f / 6.0f;
+  f32 oneOver6 = 1.0f / 6.0f;
 
-  float tSqr = t * t * oneOver6;
-  float tSqrSqr = t * tSqr;
+  f32 tSqr = t * t * oneOver6;
+  f32 tSqrSqr = t * tSqr;
   t *= oneOver6;
 
   Assert(&output != &p1);
@@ -2373,17 +2373,17 @@ void BSpline(const Vector &p1, const Vector &p2, const Vector &p3,
 }
 
 void BSpline_NormalizeX(const Vector &p1, const Vector &p2, const Vector &p3,
-                        const Vector &p4, float t, Vector &output) {
+                        const Vector &p4, f32 t, Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
   BSpline(p1n, p2, p3, p4n, t, output);
 }
 
 void Parabolic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                      const Vector &p4, float t, Vector &output) {
+                      const Vector &p4, f32 t, Vector &output) {
   Assert(s_bMathlibInitialized);
 
-  float tSqr = t * t * 0.5f;
+  f32 tSqr = t * t * 0.5f;
   t *= 0.5f;
 
   Assert(&output != &p1);
@@ -2424,7 +2424,7 @@ void Parabolic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
 }
 
 void Parabolic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                                 const Vector &p3, const Vector &p4, float t,
+                                 const Vector &p3, const Vector &p4, f32 t,
                                  Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
@@ -2436,7 +2436,7 @@ void Parabolic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
 // 200% smoothly of the range maps
 //-----------------------------------------------------------------------------
 
-float RangeCompressor(float flValue, float flMin, float flMax, float flBase) {
+f32 RangeCompressor(f32 flValue, f32 flMin, f32 flMax, f32 flBase) {
   // clamp base
   if (flBase < flMin) flBase = flMin;
   if (flBase > flMax) flBase = flMax;
@@ -2444,12 +2444,12 @@ float RangeCompressor(float flValue, float flMin, float flMax, float flBase) {
   flValue += flBase;
 
   // convert to 0 to 1 value
-  float flMid = (flValue - flMin) / (flMax - flMin);
+  f32 flMid = (flValue - flMin) / (flMax - flMin);
   // convert to -1 to 1 value
-  float flTarget = flMid * 2 - 1;
+  f32 flTarget = flMid * 2 - 1;
 
   if (fabs(flTarget) > 0.75) {
-    float t = (fabs(flTarget) - 0.75) / (1.25);
+    f32 t = (fabs(flTarget) - 0.75) / (1.25);
     if (t < 1.0) {
       if (flTarget > 0) {
         flTarget = Hermite_Spline(0.75, 1, 0.75, 0, t);
@@ -2584,10 +2584,10 @@ void IRotateAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
   VectorAdd(newCenter, newExtents, vecMaxsOut);
 }
 
-float CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
+f32 CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
                             const Vector &point) {
-  float flDelta;
-  float flDistSqr = 0.0f;
+  f32 flDelta;
+  f32 flDistSqr = 0.0f;
 
   if (point.x < mins.x) {
     flDelta = (mins.x - point.x);
@@ -2625,16 +2625,16 @@ void CalcClosestPointOnAABB(const Vector &mins, const Vector &maxs,
 
 void CalcSqrDistAndClosestPointOnAABB(const Vector &mins, const Vector &maxs,
                                       const Vector &point, Vector &closestOut,
-                                      float &distSqrOut) {
+                                      f32 &distSqrOut) {
   distSqrOut = 0.0f;
   for (int i = 0; i < 3; i++) {
     if (point[i] < mins[i]) {
       closestOut[i] = mins[i];
-      float flDelta = closestOut[i] - mins[i];
+      f32 flDelta = closestOut[i] - mins[i];
       distSqrOut += flDelta * flDelta;
     } else if (point[i] > maxs[i]) {
       closestOut[i] = maxs[i];
-      float flDelta = closestOut[i] - maxs[i];
+      f32 flDelta = closestOut[i] - maxs[i];
       distSqrOut += flDelta * flDelta;
     } else {
       closestOut[i] = point[i];
@@ -2642,14 +2642,14 @@ void CalcSqrDistAndClosestPointOnAABB(const Vector &mins, const Vector &maxs,
   }
 }
 
-float CalcClosestPointToLineT(const Vector &P, const Vector &vLineA,
+f32 CalcClosestPointToLineT(const Vector &P, const Vector &vLineA,
                               const Vector &vLineB, Vector &vDir) {
   Assert(s_bMathlibInitialized);
   VectorSubtract(vLineB, vLineA, vDir);
 
   // D dot [P - (A + D*t)] = 0
   // t = ( DP - DA) / DD
-  float div = vDir.Dot(vDir);
+  f32 div = vDir.Dot(vDir);
   if (div < 0.00001f) {
     return 0;
   } else {
@@ -2659,24 +2659,24 @@ float CalcClosestPointToLineT(const Vector &P, const Vector &vLineA,
 
 void CalcClosestPointOnLine(const Vector &P, const Vector &vLineA,
                             const Vector &vLineB, Vector &vClosest,
-                            float *outT) {
+                            f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vDir;
-  float t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
+  f32 t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
   if (outT) *outT = t;
   vClosest.MulAdd(vLineA, vDir, t);
 }
 
-float CalcDistanceToLine(const Vector &P, const Vector &vLineA,
-                         const Vector &vLineB, float *outT) {
+f32 CalcDistanceToLine(const Vector &P, const Vector &vLineA,
+                         const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLine(P, vLineA, vLineB, vClosest, outT);
   return P.DistTo(vClosest);
 }
 
-float CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
-                            const Vector &vLineB, float *outT) {
+f32 CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
+                            const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLine(P, vLineA, vLineB, vClosest, outT);
@@ -2685,9 +2685,9 @@ float CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
 
 void CalcClosestPointOnLineSegment(const Vector &P, const Vector &vLineA,
                                    const Vector &vLineB, Vector &vClosest,
-                                   float *outT) {
+                                   f32 *outT) {
   Vector vDir;
-  float t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
+  f32 t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
   t = clamp(t, 0, 1);
   if (outT) {
     *outT = t;
@@ -2695,30 +2695,30 @@ void CalcClosestPointOnLineSegment(const Vector &P, const Vector &vLineA,
   vClosest.MulAdd(vLineA, vDir, t);
 }
 
-float CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
-                                const Vector &vLineB, float *outT) {
+f32 CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
+                                const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLineSegment(P, vLineA, vLineB, vClosest, outT);
   return P.DistTo(vClosest);
 }
 
-float CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
-                                   const Vector &vLineB, float *outT) {
+f32 CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
+                                   const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLineSegment(P, vLineA, vLineB, vClosest, outT);
   return P.DistToSqr(vClosest);
 }
 
-float CalcClosestPointToLineT2D(const Vector2D &P, const Vector2D &vLineA,
+f32 CalcClosestPointToLineT2D(const Vector2D &P, const Vector2D &vLineA,
                                 const Vector2D &vLineB, Vector2D &vDir) {
   Assert(s_bMathlibInitialized);
   Vector2DSubtract(vLineB, vLineA, vDir);
 
   // D dot [P - (A + D*t)] = 0
   // t = (DP - DA) / DD
-  float div = vDir.Dot(vDir);
+  f32 div = vDir.Dot(vDir);
   if (div < 0.00001f) {
     return 0;
   } else {
@@ -2728,24 +2728,24 @@ float CalcClosestPointToLineT2D(const Vector2D &P, const Vector2D &vLineA,
 
 void CalcClosestPointOnLine2D(const Vector2D &P, const Vector2D &vLineA,
                               const Vector2D &vLineB, Vector2D &vClosest,
-                              float *outT) {
+                              f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vDir;
-  float t = CalcClosestPointToLineT2D(P, vLineA, vLineB, vDir);
+  f32 t = CalcClosestPointToLineT2D(P, vLineA, vLineB, vDir);
   if (outT) *outT = t;
   vClosest.MulAdd(vLineA, vDir, t);
 }
 
-float CalcDistanceToLine2D(const Vector2D &P, const Vector2D &vLineA,
-                           const Vector2D &vLineB, float *outT) {
+f32 CalcDistanceToLine2D(const Vector2D &P, const Vector2D &vLineA,
+                           const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLine2D(P, vLineA, vLineB, vClosest, outT);
   return P.DistTo(vClosest);
 }
 
-float CalcDistanceSqrToLine2D(const Vector2D &P, const Vector2D &vLineA,
-                              const Vector2D &vLineB, float *outT) {
+f32 CalcDistanceSqrToLine2D(const Vector2D &P, const Vector2D &vLineA,
+                              const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLine2D(P, vLineA, vLineB, vClosest, outT);
@@ -2754,9 +2754,9 @@ float CalcDistanceSqrToLine2D(const Vector2D &P, const Vector2D &vLineA,
 
 void CalcClosestPointOnLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
                                      const Vector2D &vLineB, Vector2D &vClosest,
-                                     float *outT) {
+                                     f32 *outT) {
   Vector2D vDir;
-  float t = CalcClosestPointToLineT2D(P, vLineA, vLineB, vDir);
+  f32 t = CalcClosestPointToLineT2D(P, vLineA, vLineB, vDir);
   t = clamp(t, 0, 1);
   if (outT) {
     *outT = t;
@@ -2764,16 +2764,16 @@ void CalcClosestPointOnLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
   vClosest.MulAdd(vLineA, vDir, t);
 }
 
-float CalcDistanceToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
-                                  const Vector2D &vLineB, float *outT) {
+f32 CalcDistanceToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
+                                  const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLineSegment2D(P, vLineA, vLineB, vClosest, outT);
   return P.DistTo(vClosest);
 }
 
-float CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
-                                     const Vector2D &vLineB, float *outT) {
+f32 CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
+                                     const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLineSegment2D(P, vLineA, vLineB, vClosest, outT);
@@ -2797,11 +2797,11 @@ float CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 //-----------------------------------------------------------------------------
 bool CalcLineToLineIntersectionSegment(const Vector &p1, const Vector &p2,
                                        const Vector &p3, const Vector &p4,
-                                       Vector *s1, Vector *s2, float *t1,
-                                       float *t2) {
+                                       Vector *s1, Vector *s2, f32 *t1,
+                                       f32 *t2) {
   Vector p13, p43, p21;
-  float d1343, d4321, d1321, d4343, d2121;
-  float numer, denom;
+  f32 d1343, d4321, d1321, d4343, d2121;
+  f32 numer, denom;
 
   p13.x = p1.x - p3.x;
   p13.y = p1.y - p3.y;
@@ -2856,7 +2856,7 @@ static bool s_bMMXEnabled = false;
 static bool s_bSSEEnabled = false;
 static bool s_bSSE2Enabled = false;
 
-void MathLib_Init(float gamma, float texGamma, float brightness, int overbright,
+void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
                   bool bAllow3DNow, bool bAllowSSE, bool bAllowSSE2,
                   bool bAllowMMX) {
   if (s_bMathlibInitialized) return;
@@ -2941,8 +2941,8 @@ bool MathLib_SSE2Enabled() {
   return s_bSSE2Enabled;
 }
 
-float Approach(float target, float value, float speed) {
-  float delta = target - value;
+f32 Approach(f32 target, f32 value, f32 speed) {
+  f32 delta = target - value;
 
   if (delta > speed)
     value += speed;
@@ -2955,11 +2955,11 @@ float Approach(float target, float value, float speed) {
 }
 
 // BUGBUG: Why doesn't this call angle diff?!?!?
-float ApproachAngle(float target, float value, float speed) {
+f32 ApproachAngle(f32 target, f32 value, f32 speed) {
   target = anglemod(target);
   value = anglemod(value);
 
-  float delta = target - value;
+  f32 delta = target - value;
 
   // Speed is assumed to be positive
   if (speed < 0) speed = -speed;
@@ -2980,8 +2980,8 @@ float ApproachAngle(float target, float value, float speed) {
 }
 
 // BUGBUG: Why do we need both of these?
-float AngleDiff(float destAngle, float srcAngle) {
-  float delta;
+f32 AngleDiff(f32 destAngle, f32 srcAngle) {
+  f32 delta;
 
   delta = fmodf(destAngle - srcAngle, 360.0f);
   if (destAngle > srcAngle) {
@@ -2992,8 +2992,8 @@ float AngleDiff(float destAngle, float srcAngle) {
   return delta;
 }
 
-float AngleDistance(float next, float cur) {
-  float delta = next - cur;
+f32 AngleDistance(f32 next, f32 cur) {
+  f32 delta = next - cur;
 
   if (delta < -180)
     delta += 360;
@@ -3003,7 +3003,7 @@ float AngleDistance(float next, float cur) {
   return delta;
 }
 
-float AngleNormalize(float angle) {
+f32 AngleNormalize(f32 angle) {
   angle = fmodf(angle, 360.0f);
   if (angle > 180) {
     angle -= 360;
@@ -3016,7 +3016,7 @@ float AngleNormalize(float angle) {
 
 //--------------------------------------------------------------------------------------------------------------
 // ensure that 0 <= angle <= 360
-float AngleNormalizePositive(float angle) {
+f32 AngleNormalizePositive(f32 angle) {
   angle = fmodf(angle, 360.0f);
 
   if (angle < 0.0f) {
@@ -3027,12 +3027,12 @@ float AngleNormalizePositive(float angle) {
 }
 
 //--------------------------------------------------------------------------------------------------------------
-bool AnglesAreEqual(float a, float b, float tolerance) {
+bool AnglesAreEqual(f32 a, f32 b, f32 tolerance) {
   return (fabs(AngleDiff(a, b)) < tolerance);
 }
 
 void RotationDeltaAxisAngle(const QAngle &srcAngles, const QAngle &destAngles,
-                            Vector &deltaAxis, float &deltaAngle) {
+                            Vector &deltaAxis, f32 &deltaAngle) {
   Quaternion srcQuat, destQuat, srcQuatInv, out;
   AngleQuaternion(srcAngles, srcQuat);
   AngleQuaternion(destAngles, destQuat);
@@ -3064,7 +3064,7 @@ void RotationDelta(const QAngle &srcAngles, const QAngle &destAngles,
 // Purpose: Computes a triangle normal
 //-----------------------------------------------------------------------------
 void ComputeTrianglePlane(const Vector &v1, const Vector &v2, const Vector &v3,
-                          Vector &normal, float &intercept) {
+                          Vector &normal, f32 &intercept) {
   Vector e1, e2;
   VectorSubtract(v2, v1, e1);
   VectorSubtract(v3, v1, e2);
@@ -3080,10 +3080,10 @@ void ComputeTrianglePlane(const Vector &v1, const Vector &v2, const Vector &v3,
 //			dist - the plane constant
 // Output : int - vert count (always 4)
 //-----------------------------------------------------------------------------
-int PolyFromPlane(Vector *outVerts, const Vector &normal, float dist,
-                  float fHalfScale) {
+int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
+                  f32 fHalfScale) {
   int i, x;
-  vec_t max, v;
+  f32 max, v;
   Vector org, vright, vup;
 
   // find the major axis
@@ -3157,12 +3157,12 @@ int PolyFromPlane(Vector *outVerts, const Vector &normal, float dist,
 //-----------------------------------------------------------------------------
 
 int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
-                    const Vector &normal, float dist, float fOnPlaneEpsilon) {
-  vec_t *dists = (vec_t *)stackalloc(sizeof(vec_t) * vertCount *
+                    const Vector &normal, f32 dist, f32 fOnPlaneEpsilon) {
+  f32 *dists = (f32 *)stackalloc(sizeof(f32) * vertCount *
                                      4);  // 4x vertcount should cover all cases
-  int *sides = (int *)stackalloc(sizeof(vec_t) * vertCount * 4);
+  int *sides = (int *)stackalloc(sizeof(f32) * vertCount * 4);
   int counts[3];
-  vec_t dot;
+  f32 dot;
   int i, j;
   Vector mid = vec3_origin;
   int outCount;
@@ -3232,17 +3232,17 @@ int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
   return outCount;
 }
 
-int ClipPolyToPlane_Precise(double *inVerts, int vertCount, double *outVerts,
-                            const double *normal, double dist,
-                            double fOnPlaneEpsilon) {
-  double *dists = (double *)stackalloc(
-      sizeof(double) * vertCount * 4);  // 4x vertcount should cover all cases
-  int *sides = (int *)stackalloc(sizeof(double) * vertCount * 4);
+int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
+                            const f64 *normal, f64 dist,
+                            f64 fOnPlaneEpsilon) {
+  f64 *dists = (f64 *)stackalloc(
+      sizeof(f64) * vertCount * 4);  // 4x vertcount should cover all cases
+  int *sides = (int *)stackalloc(sizeof(f64) * vertCount * 4);
   int counts[3];
-  double dot;
+  f64 dot;
   int i, j;
   // Vector	mid = vec3_origin;
-  double mid[3];
+  f64 mid[3];
   mid[0] = 0.0;
   mid[1] = 0.0;
   mid[2] = 0.0;
@@ -3284,7 +3284,7 @@ int ClipPolyToPlane_Precise(double *inVerts, int vertCount, double *outVerts,
   outCount = 0;
   for (i = 0; i < vertCount; i++) {
     // Vector& p1 = inVerts[i];
-    double *p1 = &inVerts[i * 3];
+    f64 *p1 = &inVerts[i * 3];
     // p1[0] = inVerts[i*3 + 0];
     // p1[1] = inVerts[i*3 + 1];
     // p1[2] = inVerts[i*3 + 2];
@@ -3311,14 +3311,14 @@ int ClipPolyToPlane_Precise(double *inVerts, int vertCount, double *outVerts,
     // generate a split point
     // Vector& p2 = inVerts[(i+1)%vertCount];
     int wrappedindex = (i + 1) % vertCount;
-    double *p2 = &inVerts[wrappedindex * 3];
+    f64 *p2 = &inVerts[wrappedindex * 3];
     // p2[0] = inVerts[wrappedindex*3 + 0];
     // p2[1] = inVerts[wrappedindex*3 + 1];
     // p2[2] = inVerts[wrappedindex*3 + 2];
 
     dot = dists[i] / (dists[i] - dists[i + 1]);
     for (j = 0; j < 3; j++) {
-      mid[j] = (double)p1[j] + dot * ((double)p2[j] - (double)p1[j]);
+      mid[j] = (f64)p1[j] + dot * ((f64)p2[j] - (f64)p1[j]);
     }
 
     // VectorCopy (mid, outVerts[outCount]);
@@ -3350,7 +3350,7 @@ int FloorPow2(int in) {
 //-----------------------------------------------------------------------------
 // Computes Y fov from an X fov and a screen aspect ratio
 //-----------------------------------------------------------------------------
-float CalcFovY(float flFovX, float flAspect) {
+f32 CalcFovY(f32 flFovX, f32 flAspect) {
   if (flFovX < 1 || flFovX > 179) {
     flFovX = 90;  // error, set to 90
   }
@@ -3358,18 +3358,18 @@ float CalcFovY(float flFovX, float flAspect) {
   // The long, but illustrative version (more closely matches
   // CShaderAPIDX8::PerspectiveX, which is what it's based on).
   //
-  // float width = 2 * zNear * tan( DEG2RAD( fov_x / 2.0 ) );
-  // float height = width / screenaspect;
-  // float yRadians = atan( (height/2.0) / zNear );
+  // f32 width = 2 * zNear * tan( DEG2RAD( fov_x / 2.0 ) );
+  // f32 height = width / screenaspect;
+  // f32 yRadians = atan( (height/2.0) / zNear );
   // return RAD2DEG( yRadians ) * 2;
 
-  // The short and sweet version.
-  float val = atan(tan(DEG2RAD(flFovX) * 0.5f) / flAspect);
+  // The i16 and sweet version.
+  f32 val = atan(tan(DEG2RAD(flFovX) * 0.5f) / flAspect);
   val = RAD2DEG(val) * 2.0f;
   return val;
 }
 
-float CalcFovX(float flFovY, float flAspect) {
+f32 CalcFovX(f32 flFovY, f32 flAspect) {
   return RAD2DEG(atan(tan(DEG2RAD(flFovY) * 0.5f) * flAspect)) * 2.0f;
 }
 
@@ -3378,9 +3378,9 @@ float CalcFovX(float flFovY, float flAspect) {
 //-----------------------------------------------------------------------------
 void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
                                 const Vector &right, const Vector &up,
-                                float flZNear, float flZFar, float flFovX,
-                                float flFovY, Frustum_t &frustum) {
-  float flIntercept = DotProduct(origin, forward);
+                                f32 flZNear, f32 flZFar, f32 flFovX,
+                                f32 flFovY, Frustum_t &frustum) {
+  f32 flIntercept = DotProduct(origin, forward);
 
   // Setup the near and far planes.
   frustum.SetPlane(FRUSTUM_FARZ, PLANE_ANYZ, -forward, -flZFar - flIntercept);
@@ -3389,8 +3389,8 @@ void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
   flFovX *= 0.5f;
   flFovY *= 0.5f;
 
-  float flTanX = tan(DEG2RAD(flFovX));
-  float flTanY = tan(DEG2RAD(flFovY));
+  f32 flTanX = tan(DEG2RAD(flFovX));
+  f32 flTanY = tan(DEG2RAD(flFovY));
 
   // OPTIMIZE: Normalizing these planes is not necessary for culling
   Vector normalPos, normalNeg;
@@ -3419,11 +3419,11 @@ void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
 // Version that accepts angles instead of vectors
 //-----------------------------------------------------------------------------
 void GeneratePerspectiveFrustum(const Vector &origin, const QAngle &angles,
-                                float flZNear, float flZFar, float flFovX,
-                                float flAspectRatio, Frustum_t &frustum) {
+                                f32 flZNear, f32 flZFar, f32 flFovX,
+                                f32 flAspectRatio, Frustum_t &frustum) {
   Vector vecForward, vecRight, vecUp;
   AngleVectors(angles, &vecForward, &vecRight, &vecUp);
-  float flFovY = CalcFovY(flFovX, flAspectRatio);
+  f32 flFovY = CalcFovY(flFovX, flAspectRatio);
   GeneratePerspectiveFrustum(origin, vecForward, vecRight, vecUp, flZNear,
                              flZFar, flFovX, flFovY, frustum);
 }
@@ -3501,9 +3501,9 @@ void CalcTriangleTangentSpace(const Vector &p0, const Vector &p1,
 // Convert RGB to HSV
 //-----------------------------------------------------------------------------
 void RGBtoHSV(const Vector &rgb, Vector &hsv) {
-  float flMax = max(rgb.x, rgb.y);
+  f32 flMax = max(rgb.x, rgb.y);
   flMax = max(flMax, rgb.z);
-  float flMin = min(rgb.x, rgb.y);
+  f32 flMin = min(rgb.x, rgb.y);
   flMin = min(flMin, rgb.z);
 
   // hsv.z is the value
@@ -3576,11 +3576,11 @@ void HSVtoRGB(const Vector &hsv, Vector &rgb) {
   }
 }
 
-void GetInterpolationData(float const *pKnotPositions, float const *pKnotValues,
+void GetInterpolationData(f32 const *pKnotPositions, f32 const *pKnotValues,
                           int nNumValuesinList, int nInterpolationRange,
-                          float flPositionToInterpolateAt, bool bWrap,
-                          float *pValueA, float *pValueB,
-                          float *pInterpolationValue) {
+                          f32 flPositionToInterpolateAt, bool bWrap,
+                          f32 *pValueA, f32 *pValueB,
+                          f32 *pInterpolationValue) {
   // first, find the bracketting knots by looking for the first knot >= our
   // index
 
@@ -3589,7 +3589,7 @@ void GetInterpolationData(float const *pKnotPositions, float const *pKnotValues,
     if (pKnotPositions[idx] >= flPositionToInterpolateAt) break;
   }
   int nKnot1, nKnot2;
-  float flOffsetFromStartOfGap, flSizeOfGap;
+  f32 flOffsetFromStartOfGap, flSizeOfGap;
   if (idx == 0) {
     if (bWrap) {
       nKnot1 = nNumValuesinList - 1;

@@ -4,16 +4,16 @@
 
 HaltonSequenceGenerator_t::HaltonSequenceGenerator_t(int b) {
   base = b;
-  fbase = (float)b;
+  fbase = (f32)b;
   seed = 1;
 }
 
-float HaltonSequenceGenerator_t::GetElement(int elem) {
+f32 HaltonSequenceGenerator_t::GetElement(int elem) {
   int tmpseed = seed;
-  float ret = 0.0f, base_inv = 1.0f / fbase;
+  f32 ret = 0.0f, base_inv = 1.0f / fbase;
   while (tmpseed) {
     int dig = tmpseed % base;
-    ret += ((float)dig) * base_inv;
+    ret += ((f32)dig) * base_inv;
     base_inv /= fbase;
     tmpseed /= base;
   }

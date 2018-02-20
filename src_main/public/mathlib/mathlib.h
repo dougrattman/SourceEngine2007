@@ -5,6 +5,7 @@
 
 #include <cmath>
 
+#include "base/include/base_types.h"
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector2d.h"
@@ -17,10 +18,10 @@
 // FIXME: this should move to a different file
 struct cplane_t {
   Vector normal;
-  float dist;
-  uint8_t type;      // for fast side tests
-  uint8_t signbits;  // signx + (signy<<1) + (signz<<1)
-  uint8_t pad[2];
+  f32 dist;
+  u8 type;      // for fast side tests
+  u8 signbits;  // signx + (signy<<1) + (signz<<1)
+  u8 pad[2];
 
 #ifdef VECTOR_NO_SLOW_OPERATIONS
   cplane_t() {}
@@ -70,7 +71,7 @@ extern int SignbitsForPlane(cplane_t *out);
 
 class Frustum_t {
  public:
-  void SetPlane(int i, int nType, const Vector &vecNormal, float dist) {
+  void SetPlane(int i, int nType, const Vector &vecNormal, f32 dist) {
     m_Plane[i].normal = vecNormal;
     m_Plane[i].dist = dist;
     m_Plane[i].type = nType;
@@ -88,18 +89,18 @@ class Frustum_t {
 };
 
 // Computes Y fov from an X fov and a screen aspect ratio + X from Y
-float CalcFovY(float flFovX, float flScreenAspect);
-float CalcFovX(float flFovY, float flScreenAspect);
+f32 CalcFovY(f32 flFovX, f32 flScreenAspect);
+f32 CalcFovX(f32 flFovY, f32 flScreenAspect);
 
 // Generate a frustum based on perspective view parameters
 // NOTE: FOV is specified in degrees, as the *full* view angle (not half-angle)
 void GeneratePerspectiveFrustum(const Vector &origin, const QAngle &angles,
-                                float flZNear, float flZFar, float flFovX,
-                                float flAspectRatio, Frustum_t &frustum);
+                                f32 flZNear, f32 flZFar, f32 flFovX,
+                                f32 flAspectRatio, Frustum_t &frustum);
 void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
                                 const Vector &right, const Vector &up,
-                                float flZNear, float flZFar, float flFovX,
-                                float flFovY, Frustum_t &frustum);
+                                f32 flZNear, f32 flZFar, f32 flFovX, f32 flFovY,
+                                Frustum_t &frustum);
 
 // Cull the world-space bounding box to the specified frustum.
 bool R_CullBox(const Vector &mins, const Vector &maxs,
@@ -109,9 +110,8 @@ bool R_CullBoxSkipNear(const Vector &mins, const Vector &maxs,
 
 struct matrix3x4_t {
   matrix3x4_t() {}  //-V730
-  matrix3x4_t(float m00, float m01, float m02, float m03, float m10, float m11,
-              float m12, float m13, float m20, float m21, float m22,
-              float m23) {
+  matrix3x4_t(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11, f32 m12,
+              f32 m13, f32 m20, f32 m21, f32 m22, f32 m23) {
     m_flMatVal[0][0] = m00;
     m_flMatVal[0][1] = m01;
     m_flMatVal[0][2] = m02;
@@ -163,34 +163,34 @@ struct matrix3x4_t {
     }
   }
 
-  float *operator[](int i) {
+  f32 *operator[](int i) {
     Assert((i >= 0) && (i < 3));
     return m_flMatVal[i];
   }
-  const float *operator[](int i) const {
+  const f32 *operator[](int i) const {
     Assert((i >= 0) && (i < 3));
     return m_flMatVal[i];
   }
-  float *Base() { return &m_flMatVal[0][0]; }
-  const float *Base() const { return &m_flMatVal[0][0]; }
+  f32 *Base() { return &m_flMatVal[0][0]; }
+  const f32 *Base() const { return &m_flMatVal[0][0]; }
 
-  float m_flMatVal[3][4];
+  f32 m_flMatVal[3][4];
 };
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846  // matches value in gcc v2 math.h
 #endif
 
-#define M_PI_F ((float)(M_PI))  // Shouldn't collide with anything.
+#define M_PI_F ((f32)(M_PI))  // Shouldn't collide with anything.
 
 // NJS: Inlined to prevent floats from being autopromoted to doubles, as with
 // the old system.
 #ifndef RAD2DEG
-#define RAD2DEG(x) ((float)(x) * (float)(180.f / M_PI_F))
+#define RAD2DEG(x) ((f32)(x) * (f32)(180.f / M_PI_F))
 #endif
 
 #ifndef DEG2RAD
-#define DEG2RAD(x) ((float)(x) * (float)(M_PI_F / 180.f))
+#define DEG2RAD(x) ((f32)(x) * (f32)(M_PI_F / 180.f))
 #endif
 
 // Used to represent sides of things like planes.
@@ -213,44 +213,44 @@ extern const int nanmask;
 
 #define IS_NAN(x) (((*(int *)&x) & nanmask) == nanmask)
 
-FORCEINLINE vec_t DotProduct(const vec_t *v1, const vec_t *v2) {
+FORCEINLINE f32 DotProduct(const f32 *v1, const f32 *v2) {
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
-FORCEINLINE void VectorSubtract(const vec_t *a, const vec_t *b, vec_t *c) {
+FORCEINLINE void VectorSubtract(const f32 *a, const f32 *b, f32 *c) {
   c[0] = a[0] - b[0];
   c[1] = a[1] - b[1];
   c[2] = a[2] - b[2];
 }
-FORCEINLINE void VectorAdd(const vec_t *a, const vec_t *b, vec_t *c) {
+FORCEINLINE void VectorAdd(const f32 *a, const f32 *b, f32 *c) {
   c[0] = a[0] + b[0];
   c[1] = a[1] + b[1];
   c[2] = a[2] + b[2];
 }
-FORCEINLINE void VectorCopy(const vec_t *a, vec_t *b) {
+FORCEINLINE void VectorCopy(const f32 *a, f32 *b) {
   b[0] = a[0];
   b[1] = a[1];
   b[2] = a[2];
 }
-FORCEINLINE void VectorClear(vec_t *a) { a[0] = a[1] = a[2] = 0; }
+FORCEINLINE void VectorClear(f32 *a) { a[0] = a[1] = a[2] = 0; }
 
-FORCEINLINE float VectorMaximum(const vec_t *v) {
+FORCEINLINE f32 VectorMaximum(const f32 *v) {
   return max(v[0], max(v[1], v[2]));
 }
 
-FORCEINLINE float VectorMaximum(const Vector &v) {
+FORCEINLINE f32 VectorMaximum(const Vector &v) {
   return max(v.x, max(v.y, v.z));
 }
 
-FORCEINLINE void VectorScale(const float *in, vec_t scale, float *out) {
+FORCEINLINE void VectorScale(const f32 *in, f32 scale, f32 *out) {
   out[0] = in[0] * scale;
   out[1] = in[1] * scale;
   out[2] = in[2] * scale;
 }
 
 // Cannot be forceinline as they have overloads:
-inline void VectorFill(vec_t *a, float b) { a[0] = a[1] = a[2] = b; }
+inline void VectorFill(f32 *a, f32 b) { a[0] = a[1] = a[2] = b; }
 
-inline void VectorNegate(vec_t *a) {
+inline void VectorNegate(f32 *a) {
   a[0] = -a[0];
   a[1] = -a[1];
   a[2] = -a[2];
@@ -286,7 +286,7 @@ inline void VectorNegate(vec_t *a) {
   }
 
 // NJS: Some functions in VBSP still need to use these for dealing with mixing
-// vec4's and shorts with vec_t's. remove when no longer needed.
+// vec4's and shorts with f32's. remove when no longer needed.
 #define VECTOR_COPY(A, B) \
   do {                    \
     (B)[0] = (A)[0];      \
@@ -295,51 +295,51 @@ inline void VectorNegate(vec_t *a) {
   } while (0)
 #define DOT_PRODUCT(A, B) ((A)[0] * (B)[0] + (A)[1] * (B)[1] + (A)[2] * (B)[2])
 
-FORCEINLINE void VectorMAInline(const float *start, float scale,
-                                const float *direction, float *dest) {
+FORCEINLINE void VectorMAInline(const f32 *start, f32 scale,
+                                const f32 *direction, f32 *dest) {
   dest[0] = start[0] + direction[0] * scale;
   dest[1] = start[1] + direction[1] * scale;
   dest[2] = start[2] + direction[2] * scale;
 }
 
-FORCEINLINE void VectorMAInline(const Vector &start, float scale,
+FORCEINLINE void VectorMAInline(const Vector &start, f32 scale,
                                 const Vector &direction, Vector &dest) {
   dest.x = start.x + direction.x * scale;
   dest.y = start.y + direction.y * scale;
   dest.z = start.z + direction.z * scale;
 }
 
-FORCEINLINE void VectorMA(const Vector &start, float scale,
+FORCEINLINE void VectorMA(const Vector &start, f32 scale,
                           const Vector &direction, Vector &dest) {
   VectorMAInline(start, scale, direction, dest);
 }
 
-FORCEINLINE void VectorMA(const float *start, float scale,
-                          const float *direction, float *dest) {
+FORCEINLINE void VectorMA(const f32 *start, f32 scale, const f32 *direction,
+                          f32 *dest) {
   VectorMAInline(start, scale, direction, dest);
 }
 
-int VectorCompare(const float *v1, const float *v2);
+int VectorCompare(const f32 *v1, const f32 *v2);
 
-inline float VectorLength(const float *v) {
+inline f32 VectorLength(const f32 *v) {
   return FastSqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + FLT_EPSILON);
 }
 
-void CrossProduct(const float *v1, const float *v2, float *cross);
+void CrossProduct(const f32 *v1, const f32 *v2, f32 *cross);
 
-bool VectorsEqual(const float *v1, const float *v2);
+bool VectorsEqual(const f32 *v1, const f32 *v2);
 
-inline vec_t RoundInt(vec_t in) { return floor(in + 0.5f); }
+inline f32 RoundInt(f32 in) { return floor(in + 0.5f); }
 
 int Q_log2(int val);
 
 // Math routines done in optimized assembly math package routines
-void inline SinCos(float radians, float *sine, float *cosine) {
+void inline SinCos(f32 radians, f32 *sine, f32 *cosine) {
 #if defined(_WIN32)
   *sine = sin(radians);
   *cosine = cos(radians);
 #elif defined(_LINUX)
-  register double __cosr, __sinr;
+  register f64 __cosr, __sinr;
   __asm __volatile__("fsincos" : "=t"(__cosr), "=u"(__sinr) : "0"(radians));
 
   *sine = __sinr;
@@ -349,29 +349,29 @@ void inline SinCos(float radians, float *sine, float *cosine) {
 
 #define SIN_TABLE_SIZE 256
 #define FTOIBIAS 12582912.f
-extern float SinCosTable[SIN_TABLE_SIZE];
+extern f32 SinCosTable[SIN_TABLE_SIZE];
 
-inline float TableCos(float theta) {
+inline f32 TableCos(f32 theta) {
   union {
     int i;
-    float f;
+    f32 f;
   } ftmp;
 
   // ideally, the following should compile down to: theta * constant + constant,
   // changing any of these constants from defines sometimes fubars this.
-  ftmp.f = theta * (float)(SIN_TABLE_SIZE / (2.0f * M_PI)) +
+  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI)) +
            (FTOIBIAS + (SIN_TABLE_SIZE / 4));
   return SinCosTable[ftmp.i & (SIN_TABLE_SIZE - 1)];
 }
 
-inline float TableSin(float theta) {
+inline f32 TableSin(f32 theta) {
   union {
     int i;
-    float f;
+    f32 f;
   } ftmp;
 
   // ideally, the following should compile down to: theta * constant + constant
-  ftmp.f = theta * (float)(SIN_TABLE_SIZE / (2.0f * M_PI)) + FTOIBIAS;
+  ftmp.f = theta * (f32)(SIN_TABLE_SIZE / (2.0f * M_PI)) + FTOIBIAS;
   return SinCosTable[ftmp.i & (SIN_TABLE_SIZE - 1)];
 }
 
@@ -406,11 +406,11 @@ FORCEINLINE uint32_t LargestPowerOfTwoLessThanOrEqual(uint32_t x) {
 }
 
 // Math routines for optimizing division
-void FloorDivMod(double numer, double denom, int *quotient, int *rem);
+void FloorDivMod(f64 numer, f64 denom, int *quotient, int *rem);
 int GreatestCommonDivisor(int i1, int i2);
 
 // Test for FPU denormal mode
-bool IsDenormal(const float &val);
+bool IsDenormal(const f32 &val);
 
 // MOVEMENT INFO
 enum {
@@ -419,15 +419,15 @@ enum {
   ROLL        // fall over
 };
 
-void MatrixAngles(const matrix3x4_t &matrix, float *angles);  // !!!!
+void MatrixAngles(const matrix3x4_t &matrix, f32 *angles);  // !!!!
 void MatrixVectors(const matrix3x4_t &matrix, Vector *pForward, Vector *pRight,
                    Vector *pUp);
-void VectorTransform(const float *in1, const matrix3x4_t &in2, float *out);
-void VectorITransform(const float *in1, const matrix3x4_t &in2, float *out);
-void VectorRotate(const float *in1, const matrix3x4_t &in2, float *out);
+void VectorTransform(const f32 *in1, const matrix3x4_t &in2, f32 *out);
+void VectorITransform(const f32 *in1, const matrix3x4_t &in2, f32 *out);
+void VectorRotate(const f32 *in1, const matrix3x4_t &in2, f32 *out);
 void VectorRotate(const Vector &in1, const QAngle &in2, Vector &out);
 void VectorRotate(const Vector &in1, const Quaternion &in2, Vector &out);
-void VectorIRotate(const float *in1, const matrix3x4_t &in2, float *out);
+void VectorIRotate(const f32 *in1, const matrix3x4_t &in2, f32 *out);
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -446,12 +446,12 @@ void MatrixInvert(const matrix3x4_t &in, matrix3x4_t &out);
 
 // Matrix equality test
 bool MatricesAreEqual(const matrix3x4_t &src1, const matrix3x4_t &src2,
-                      float flTolerance = 1e-5);
+                      f32 flTolerance = 1e-5);
 
 void MatrixGetColumn(const matrix3x4_t &in, int column, Vector &out);
 void MatrixSetColumn(const Vector &in, int column, matrix3x4_t &out);
 
-// void DecomposeRotation( const matrix3x4_t &mat, float *out );
+// void DecomposeRotation( const matrix3x4_t &mat, f32 *out );
 void ConcatRotations(const matrix3x4_t &in1, const matrix3x4_t &in2,
                      matrix3x4_t &out);
 void ConcatTransforms(const matrix3x4_t &in1, const matrix3x4_t &in2,
@@ -463,22 +463,22 @@ inline void MatrixMultiply(const matrix3x4_t &in1, const matrix3x4_t &in2,
   ConcatTransforms(in1, in2, out);
 }
 
-void QuaternionSlerp(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionSlerp(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt);
-void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, f32 t,
                             Quaternion &qt);
-void QuaternionBlend(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionBlend(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt);
-void QuaternionBlendNoAlign(const Quaternion &p, const Quaternion &q, float t,
+void QuaternionBlendNoAlign(const Quaternion &p, const Quaternion &q, f32 t,
                             Quaternion &qt);
-void QuaternionIdentityBlend(const Quaternion &p, float t, Quaternion &qt);
-float QuaternionAngleDiff(const Quaternion &p, const Quaternion &q);
-void QuaternionScale(const Quaternion &p, float t, Quaternion &q);
+void QuaternionIdentityBlend(const Quaternion &p, f32 t, Quaternion &qt);
+f32 QuaternionAngleDiff(const Quaternion &p, const Quaternion &q);
+void QuaternionScale(const Quaternion &p, f32 t, Quaternion &q);
 void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt);
-float QuaternionDotProduct(const Quaternion &p, const Quaternion &q);
+f32 QuaternionDotProduct(const Quaternion &p, const Quaternion &q);
 void QuaternionConjugate(const Quaternion &p, Quaternion &q);
 void QuaternionInvert(const Quaternion &p, Quaternion &q);
-float QuaternionNormalize(Quaternion &q);
+f32 QuaternionNormalize(Quaternion &q);
 void QuaternionAdd(const Quaternion &p, const Quaternion &q, Quaternion &qt);
 void QuaternionMult(const Quaternion &p, const Quaternion &q, Quaternion &qt);
 void QuaternionMatrix(const Quaternion &q, matrix3x4_t &matrix);
@@ -488,52 +488,52 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles);
 void AngleQuaternion(const QAngle &angles, Quaternion &qt);
 void QuaternionAngles(const Quaternion &q, RadianEuler &angles);
 void AngleQuaternion(RadianEuler const &angles, Quaternion &qt);
-void QuaternionAxisAngle(const Quaternion &q, Vector &axis, float &angle);
-void AxisAngleQuaternion(const Vector &axis, float angle, Quaternion &q);
+void QuaternionAxisAngle(const Quaternion &q, Vector &axis, f32 &angle);
+void AxisAngleQuaternion(const Vector &axis, f32 angle, Quaternion &q);
 void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
                        const Vector &vecUp, Quaternion &q);
 void MatrixQuaternion(const matrix3x4_t &mat, Quaternion &q);
 
 // A couple methods to find the dot product of a vector with a matrix row or
 // column...
-inline float MatrixRowDotProduct(const matrix3x4_t &in1, int row,
-                                 const Vector &in2) {
+inline f32 MatrixRowDotProduct(const matrix3x4_t &in1, int row,
+                               const Vector &in2) {
   Assert((row >= 0) && (row < 3));
   return DotProduct(in1[row], in2.Base());
 }
 
-inline float MatrixColumnDotProduct(const matrix3x4_t &in1, int col,
-                                    const Vector &in2) {
+inline f32 MatrixColumnDotProduct(const matrix3x4_t &in1, int col,
+                                  const Vector &in2) {
   Assert((col >= 0) && (col < 4));
   return in1[0][col] * in2[0] + in1[1][col] * in2[1] + in1[2][col] * in2[2];
 }
 
-int __cdecl BoxOnPlaneSide(const float *emins, const float *emaxs,
+int __cdecl BoxOnPlaneSide(const f32 *emins, const f32 *emaxs,
                            const cplane_t *plane);
 
-inline float anglemod(float a) {
+inline f32 anglemod(f32 a) {
   a = (360.f / 65536) * ((int)(a * (65536.f / 360.0f)) & 65535);
   return a;
 }
 
 // Remap a value in the range [A,B] to [C,D].
-inline float RemapVal(float val, float A, float B, float C, float D) {
+inline f32 RemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   return C + (D - C) * (val - A) / (B - A);
 }
 
-inline float RemapValClamped(float val, float A, float B, float C, float D) {
+inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
-  float cVal = (val - A) / (B - A);
+  f32 cVal = (val - A) / (B - A);
   cVal = clamp(cVal, 0.0f, 1.0f);
 
   return C + (D - C) * cVal;
 }
 
 // Returns A + (B-A)*flPercent.
-// float Lerp( float flPercent, float A, float B );
+// f32 Lerp( f32 flPercent, f32 A, f32 B );
 template <class T>
-FORCEINLINE T Lerp(float flPercent, T const &A, T const &B) {
+FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
   return A + (B - A) * flPercent;
 }
 
@@ -548,7 +548,7 @@ FORCEINLINE T Lerp(float flPercent, T const &A, T const &B) {
 //   at position i2, the function can be linearly interpolated with
 //   FLerp(f1,f2,i1,i2,x)
 //    i2=i1 will cause a divide by zero.
-static inline float FLerp(float f1, float f2, float i1, float i2, float x) {
+static inline f32 FLerp(f32 f1, f32 f2, f32 i1, f32 i2, f32 x) {
   return f1 + (f2 - f1) * (x - i1) / (i2 - i1);
 }
 
@@ -556,7 +556,7 @@ static inline float FLerp(float f1, float f2, float i1, float i2, float x) {
 
 // YWB:  Specialization for interpolating euler angles via quaternions...
 template <>
-FORCEINLINE QAngle Lerp<QAngle>(float flPercent, const QAngle &q1,
+FORCEINLINE QAngle Lerp<QAngle>(f32 flPercent, const QAngle &q1,
                                 const QAngle &q2) {
   // Avoid precision errors
   if (q1 == q2) return q1;
@@ -585,7 +585,7 @@ FORCEINLINE QAngle Lerp<QAngle>(float flPercent, const QAngle &q1,
 // NOTE NOTE: I haven't tested this!! It may not work! Check out
 // interpolatedvar.cpp in the client dll to try it
 template <>
-FORCEINLINE QAngleByValue Lerp<QAngleByValue>(float flPercent,
+FORCEINLINE QAngleByValue Lerp<QAngleByValue>(f32 flPercent,
                                               const QAngleByValue &q1,
                                               const QAngleByValue &q2) {
   // Avoid precision errors
@@ -635,7 +635,7 @@ FORCEINLINE T AVG(T a, T b) {
 #define clamp(val, min, max) \
   (((val) > (max)) ? (max) : (((val) < (min)) ? (min) : (val)))
 
-inline float Sign(float x) { return (x < 0.0f) ? -1.0f : 1.0f; }
+inline f32 Sign(f32 x) { return (x < 0.0f) ? -1.0f : 1.0f; }
 
 //
 // Clamps the input integer to the given array bounds.
@@ -651,10 +651,10 @@ inline float Sign(float x) { return (x < 0.0f) ? -1.0f : 1.0f; }
 //
 // Note: This code has been run against all possible integers.
 //
-inline int ClampArrayBounds(int n, unsigned maxindex) {
+inline int ClampArrayBounds(int n, u32 maxindex) {
   // mask is 0 if less than 4096, 0xFFFFFFFF if greater than
-  unsigned int inrangemask = 0xFFFFFFFF + (((unsigned)n) > maxindex);
-  unsigned int lessthan0mask = 0xFFFFFFFF + (n >= 0);
+  u32 inrangemask = 0xFFFFFFFF + (((u32)n) > maxindex);
+  u32 lessthan0mask = 0xFFFFFFFF + (n >= 0);
 
   // If the result was valid, set the result, (otherwise sets zero)
   int result = (inrangemask & n);
@@ -672,7 +672,7 @@ inline int ClampArrayBounds(int n, unsigned maxindex) {
                    : BoxOnPlaneSide((emins), (emaxs), (p)))
 
 //-----------------------------------------------------------------------------
-// FIXME: Vector versions.... the float versions will go away hopefully soon!
+// FIXME: Vector versions.... the f32 versions will go away hopefully soon!
 //-----------------------------------------------------------------------------
 
 void AngleVectors(const QAngle &angles, Vector *forward);
@@ -696,11 +696,11 @@ void VectorAngles(const Vector &forward, const Vector &pseudoup,
 void VectorMatrix(const Vector &forward, matrix3x4_t &mat);
 void VectorVectors(const Vector &forward, Vector &right, Vector &up);
 void SetIdentityMatrix(matrix3x4_t &mat);
-void SetScaleMatrix(float x, float y, float z, matrix3x4_t &dst);
-void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, float angleDegrees,
+void SetScaleMatrix(f32 x, f32 y, f32 z, matrix3x4_t &dst);
+void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, f32 angleDegrees,
                                   matrix3x4_t &dst);
 
-inline void SetScaleMatrix(float flScale, matrix3x4_t &dst) {
+inline void SetScaleMatrix(f32 flScale, matrix3x4_t &dst) {
   SetScaleMatrix(flScale, flScale, flScale, dst);
 }
 
@@ -778,7 +778,7 @@ inline int BoxOnPlaneSide(const Vector &emins, const Vector &emaxs,
   return BoxOnPlaneSide(&emins.x, &emaxs.x, plane);
 }
 
-inline void VectorFill(Vector &a, float b) { a[0] = a[1] = a[2] = b; }
+inline void VectorFill(Vector &a, f32 b) { a[0] = a[1] = a[2] = b; }
 
 inline void VectorNegate(Vector &a) {
   a[0] = -a[0];
@@ -786,13 +786,13 @@ inline void VectorNegate(Vector &a) {
   a[2] = -a[2];
 }
 
-inline vec_t VectorAvg(Vector &a) { return (a[0] + a[1] + a[2]) / 3; }
+inline f32 VectorAvg(Vector &a) { return (a[0] + a[1] + a[2]) / 3; }
 
 //-----------------------------------------------------------------------------
 // Box/plane test (slow version)
 //-----------------------------------------------------------------------------
 inline int FASTCALL BoxOnPlaneSide2(const Vector &emins, const Vector &emaxs,
-                                    const cplane_t *p, float tolerance = 0.f) {
+                                    const cplane_t *p, f32 tolerance = 0.f) {
   Vector corners[2];
 
   if (p->normal[0] < 0) {
@@ -821,10 +821,10 @@ inline int FASTCALL BoxOnPlaneSide2(const Vector &emins, const Vector &emaxs,
 
   int sides = 0;
 
-  float dist1 = DotProduct(p->normal, corners[0]) - p->dist;
+  f32 dist1 = DotProduct(p->normal, corners[0]) - p->dist;
   if (dist1 >= tolerance) sides = 1;
 
-  float dist2 = DotProduct(p->normal, corners[1]) - p->dist;
+  f32 dist2 = DotProduct(p->normal, corners[1]) - p->dist;
   if (dist2 < -tolerance) sides |= 2;
 
   return sides;
@@ -840,25 +840,24 @@ void AddPointToBounds(const Vector &v, Vector &mins, Vector &maxs);
 //
 // COLORSPACE/GAMMA CONVERSION STUFF
 //
-void BuildGammaTable(float gamma, float texGamma, float brightness,
-                     int overbright);
+void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness, int overbright);
 
 // convert texture to linear 0..1 value
-inline float TexLightToLinear(int c, int exponent) {
-  extern float power2_n[256];
+inline f32 TexLightToLinear(int c, int exponent) {
+  extern f32 power2_n[256];
   Assert(exponent >= -128 && exponent <= 127);
-  return (float)c * power2_n[exponent + 128];
+  return (f32)c * power2_n[exponent + 128];
 }
 
 // convert texture to linear 0..1 value
-int LinearToTexture(float f);
+int LinearToTexture(f32 f);
 // converts 0..1 linear value to screen gamma (0..255)
-int LinearToScreenGamma(float f);
-float TextureToLinear(int c);
+int LinearToScreenGamma(f32 f);
+f32 TextureToLinear(int c);
 
 // compressed color format
 struct ColorRGBExp32 {
-  uint8_t r, g, b;
+  u8 r, g, b;
   signed char exponent;
 };
 
@@ -866,30 +865,28 @@ void ColorRGBExp32ToVector(const ColorRGBExp32 &in, Vector &out);
 void VectorToColorRGBExp32(const Vector &v, ColorRGBExp32 &c);
 
 // solve for "x" where "a x^2 + b x + c = 0", return true if solution exists
-bool SolveQuadratic(float a, float b, float c, float &root1, float &root2);
+bool SolveQuadratic(f32 a, f32 b, f32 c, f32 &root1, f32 &root2);
 
 // solves for "a, b, c" where "a x^2 + b x + c = y", return true if solution
 // exists
-bool SolveInverseQuadratic(float x1, float y1, float x2, float y2, float x3,
-                           float y3, float &a, float &b, float &c);
+bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3,
+                           f32 &a, f32 &b, f32 &c);
 
 // solves for a,b,c specified as above, except that it always creates a
 // monotonically increasing or decreasing curve if the data is monotonically
 // increasing or decreasing. In order to enforce the monoticity condition, it is
 // possible that the resulting quadratic will only approximate the data instead
 // of interpolating it. This code is not especially fast.
-bool SolveInverseQuadraticMonotonic(float x1, float y1, float x2, float y2,
-                                    float x3, float y3, float &a, float &b,
-                                    float &c);
+bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
+                                    f32 y3, f32 &a, f32 &b, f32 &c);
 
 // solves for "a, b, c" where "1/(a x^2 + b x + c ) = y", return true if
 // solution exists
-bool SolveInverseReciprocalQuadratic(float x1, float y1, float x2, float y2,
-                                     float x3, float y3, float &a, float &b,
-                                     float &c);
+bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
+                                     f32 y3, f32 &a, f32 &b, f32 &c);
 
 // rotate a vector around the Z axis (YAW)
-void VectorYawRotate(const Vector &in, float flYaw, Vector &out);
+void VectorYawRotate(const Vector &in, f32 flYaw, Vector &out);
 
 // Bias takes an X value between 0 and 1 and returns another value between 0 and
 // 1 The curve is biased towards 0 or 1 based on biasAmt, which is between 0
@@ -924,7 +921,7 @@ void VectorYawRotate(const Vector &in, float flYaw, Vector &out);
 // 0                   1
 //
 // With a biasAmt of 0.5, Bias returns X.
-float Bias(float x, float biasAmt);
+f32 Bias(f32 x, f32 biasAmt);
 
 // Gain is similar to Bias, but biasAmt biases towards or away from 0.5.
 // Lower bias values bias towards 0.5 and higher bias values bias away from it.
@@ -955,7 +952,7 @@ float Bias(float x, float biasAmt);
 // |*****
 // |___________________
 // 0                   1
-float Gain(float x, float biasAmt);
+f32 Gain(f32 x, f32 biasAmt);
 
 // SmoothCurve maps a 0-1 value into another 0-1 value based on a cosine wave
 // where the derivatives of the function at 0 and 1 (and 0.5) are 0. This is
@@ -974,7 +971,7 @@ float Gain(float x, float biasAmt);
 // |___________________
 // 0                   1
 //
-float SmoothCurve(float x);
+f32 SmoothCurve(f32 x);
 
 // This works like SmoothCurve, with two changes:
 //
@@ -983,28 +980,26 @@ float SmoothCurve(float x);
 //
 // 2. flPeakSharpness is a 0-1 value controlling the sharpness of the peak.
 //    Low values blunt the peak and high values sharpen the peak.
-float SmoothCurve_Tweak(float x, float flPeakPos = 0.5,
-                        float flPeakSharpness = 0.5);
+f32 SmoothCurve_Tweak(f32 x, f32 flPeakPos = 0.5, f32 flPeakSharpness = 0.5);
 
-// float ExponentialDecay( float halflife, float dt );
-// float ExponentialDecay( float decayTo, float decayTime, float dt );
+// f32 ExponentialDecay( f32 halflife, f32 dt );
+// f32 ExponentialDecay( f32 decayTo, f32 decayTime, f32 dt );
 
 // halflife is time for value to reach 50%
-inline float ExponentialDecay(float halflife, float dt) {
+inline f32 ExponentialDecay(f32 halflife, f32 dt) {
   // log(0.5) == -0.69314718055994530941723212145818
   return expf(-0.69314718f / halflife * dt);
 }
 
 // decayTo is factor the value should decay to in decayTime
-inline float ExponentialDecay(float decayTo, float decayTime, float dt) {
+inline f32 ExponentialDecay(f32 decayTo, f32 decayTime, f32 dt) {
   return expf(logf(decayTo) / decayTime * dt);
 }
 
 // Get the integrated distanced traveled
 // decayTo is factor the value should decay to in decayTime
 // dt is the time relative to the last velocity update
-inline float ExponentialDecayIntegral(float decayTo, float decayTime,
-                                      float dt) {
+inline f32 ExponentialDecayIntegral(f32 decayTo, f32 decayTime, f32 dt) {
   return (powf(decayTo, dt / decayTime) * decayTime - decayTime) /
          logf(decayTo);
 }
@@ -1012,8 +1007,8 @@ inline float ExponentialDecayIntegral(float decayTo, float decayTime,
 // hermite basis function for smooth interpolation
 // Similar to Gain() above, but very cheap to call
 // value should be between 0 & 1 inclusive
-inline float SimpleSpline(float value) {
-  float valueSquared = value * value;
+inline f32 SimpleSpline(f32 value) {
+  f32 valueSquared = value * value;
 
   // Nice little ease-in, ease-out spline-like curve
   return (3 * valueSquared - 2 * valueSquared * value);
@@ -1021,24 +1016,22 @@ inline float SimpleSpline(float value) {
 
 // remaps a value in [startInterval, startInterval+rangeInterval] from linear to
 // spline using SimpleSpline
-inline float SimpleSplineRemapVal(float val, float A, float B, float C,
-                                  float D) {
+inline f32 SimpleSplineRemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
-  float cVal = (val - A) / (B - A);
+  f32 cVal = (val - A) / (B - A);
   return C + (D - C) * SimpleSpline(cVal);
 }
 
 // remaps a value in [startInterval, startInterval+rangeInterval] from linear to
 // spline using SimpleSpline
-inline float SimpleSplineRemapValClamped(float val, float A, float B, float C,
-                                         float D) {
+inline f32 SimpleSplineRemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
-  float cVal = (val - A) / (B - A);
+  f32 cVal = (val - A) / (B - A);
   cVal = clamp(cVal, 0.0f, 1.0f);
   return C + (D - C) * SimpleSpline(cVal);
 }
 
-FORCEINLINE int RoundFloatToInt(float f) {
+FORCEINLINE int RoundFloatToInt(f32 f) {
 #if defined(__i386__) || defined(_M_IX86) || defined(_WIN64)
   return _mm_cvtss_si32(_mm_load_ss(&f));
 #elif _LINUX
@@ -1046,15 +1039,15 @@ FORCEINLINE int RoundFloatToInt(float f) {
 #endif
 }
 
-FORCEINLINE unsigned char RoundFloatToByte(float f) {
+FORCEINLINE u8 RoundFloatToByte(f32 f) {
   int nResult = RoundFloatToInt(f);
 #ifdef Assert
   Assert((nResult & ~0xFF) == 0);
 #endif
-  return (unsigned char)nResult;
+  return (u8)nResult;
 }
 
-FORCEINLINE unsigned long RoundFloatToUnsignedLong(float f) {
+FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
 #if defined(_WIN64)
   uint32_t nRet = (uint32_t)f;
   if (nRet & 1) {
@@ -1068,7 +1061,7 @@ FORCEINLINE unsigned long RoundFloatToUnsignedLong(float f) {
   }
   return nRet;
 #else
-  unsigned char nResult[8];
+  u8 nResult[8];
 
 #if defined(_WIN32)
   __asm
@@ -1085,13 +1078,13 @@ FORCEINLINE unsigned long RoundFloatToUnsignedLong(float f) {
 }
 
 // Fast, accurate ftol:
-FORCEINLINE int Float2Int(float a) {
+FORCEINLINE int Float2Int(f32 a) {
   // Rely on compiler to generate CVTTSS2SI on x86
   return static_cast<int>(a);
 }
 
 // Over 15x faster than: (int)floor(value)
-inline int Floor2Int(float a) {
+inline int Floor2Int(f32 a) {
   int RetVal;
 #if defined(__i386__)
   // Convert to int and back, compare, subtract one if too big
@@ -1107,27 +1100,27 @@ inline int Floor2Int(float a) {
 }
 
 //-----------------------------------------------------------------------------
-// Fast color conversion from float to unsigned char
+// Fast color conversion from f32 to u8
 //-----------------------------------------------------------------------------
-FORCEINLINE unsigned char FastFToC(float c) {
+FORCEINLINE u8 FastFToC(f32 c) {
   // ieee trick
-  volatile float dc = c * 255.0f + (float)(1 << 23);
+  volatile f32 dc = c * 255.0f + (f32)(1 << 23);
   // return the lsb
-  return *(unsigned char *)&dc;
+  return *(u8 *)&dc;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Bound input float to .001 (millisecond) boundary
+// Purpose: Bound input f32 to .001 (millisecond) boundary
 // Input  : in -
-// Output : inline float
+// Output : inline f32
 //-----------------------------------------------------------------------------
-inline float ClampToMsec(float in) {
+inline f32 ClampToMsec(f32 in) {
   int msec = Floor2Int(in * 1000.0f + 0.5f);
   return msec / 1000.0f;
 }
 
 // Over 15x faster than: (int)ceil(value)
-inline int Ceil2Int(float a) {
+inline int Ceil2Int(f32 a) {
   int RetVal;
 #if defined(__i386__)
   // Convert to int and back, compare, add one if too small
@@ -1154,10 +1147,10 @@ inline int Ceil2Int(float a) {
 // Get the barycentric coordinates of "pt" in triangle [A,B,C].
 inline void GetBarycentricCoords2D(Vector2D const &A, Vector2D const &B,
                                    Vector2D const &C, Vector2D const &pt,
-                                   float bcCoords[3]) {
+                                   f32 bcCoords[3]) {
   // Note, because to top and bottom are both x2, the issue washes out in the
   // composite
-  float invTriArea = 1.0f / TriArea2DTimesTwo(A, B, C);
+  f32 invTriArea = 1.0f / TriArea2DTimesTwo(A, B, C);
 
   // NOTE: We assume here that the lightmap coordinate vertices go
   // counterclockwise. If not, TriArea2D() is negated so this works out right.
@@ -1169,7 +1162,7 @@ inline void GetBarycentricCoords2D(Vector2D const &A, Vector2D const &B,
 // Return true of the sphere might touch the box (the sphere is actually
 // treated like a box itself, so this may return true if the sphere's bounding
 // box touches a corner of the box but the sphere itself doesn't).
-inline bool QuickBoxSphereTest(const Vector &vOrigin, float flRadius,
+inline bool QuickBoxSphereTest(const Vector &vOrigin, f32 flRadius,
                                const Vector &bbMin, const Vector &bbMax) {
   return vOrigin.x - flRadius < bbMax.x && vOrigin.x + flRadius > bbMin.x &&
          vOrigin.y - flRadius < bbMax.y && vOrigin.y + flRadius > bbMin.y &&
@@ -1186,27 +1179,27 @@ inline bool QuickBoxIntersectTest(const Vector &vBox1Min,
          vBox1Min.z < vBox2Max.z && vBox1Max.z > vBox2Min.z;
 }
 
-extern float GammaToLinearFullRange(float gamma);
-extern float LinearToGammaFullRange(float linear);
-extern float GammaToLinear(float gamma);
-extern float LinearToGamma(float linear);
+extern f32 GammaToLinearFullRange(f32 gamma);
+extern f32 LinearToGammaFullRange(f32 linear);
+extern f32 GammaToLinear(f32 gamma);
+extern f32 LinearToGamma(f32 linear);
 
-extern float SrgbGammaToLinear(float flSrgbGammaValue);
-extern float SrgbLinearToGamma(float flLinearValue);
-extern float X360GammaToLinear(float fl360GammaValue);
-extern float X360LinearToGamma(float flLinearValue);
-extern float SrgbGammaTo360Gamma(float flSrgbGammaValue);
+extern f32 SrgbGammaToLinear(f32 flSrgbGammaValue);
+extern f32 SrgbLinearToGamma(f32 flLinearValue);
+extern f32 X360GammaToLinear(f32 fl360GammaValue);
+extern f32 X360LinearToGamma(f32 flLinearValue);
+extern f32 SrgbGammaTo360Gamma(f32 flSrgbGammaValue);
 
 // linear (0..4) to screen corrected vertex space (0..1?)
-FORCEINLINE float LinearToVertexLight(float f) {
-  extern float lineartovertex[4096];
+FORCEINLINE f32 LinearToVertexLight(f32 f) {
+  extern f32 lineartovertex[4096];
 
   // Gotta clamp before the multiply; could overflow...
   // assume 0..4 range
   int i = RoundFloatToInt(f * 1024.f);
 
   // Presumably the comman case will be not to clamp, so check that first:
-  if ((unsigned)i > 4095) {
+  if ((u32)i > 4095) {
     if (i < 0)
       i = 0;  // Compare to zero instead of 4095 to save 4 bytes in the
               // instruction stream
@@ -1217,14 +1210,14 @@ FORCEINLINE float LinearToVertexLight(float f) {
   return lineartovertex[i];
 }
 
-FORCEINLINE unsigned char LinearToLightmap(float f) {
-  extern unsigned char lineartolightmap[4096];
+FORCEINLINE u8 LinearToLightmap(f32 f) {
+  extern u8 lineartolightmap[4096];
 
   // Gotta clamp before the multiply; could overflow...
   int i = RoundFloatToInt(f * 1024.f);  // assume 0..4 range
 
   // Presumably the comman case will be not to clamp, so check that first:
-  if ((unsigned)i > 4095) {
+  if ((u32)i > 4095) {
     if (i < 0)
       i = 0;  // Compare to zero instead of 4095 to save 4 bytes in the
               // instruction stream
@@ -1236,9 +1229,9 @@ FORCEINLINE unsigned char LinearToLightmap(float f) {
 }
 
 FORCEINLINE void ColorClamp(Vector &color) {
-  float maxc = max(color.x, max(color.y, color.z));
+  f32 maxc = max(color.x, max(color.y, color.z));
   if (maxc > 1.0f) {
-    float ooMax = 1.0f / maxc;
+    f32 ooMax = 1.0f / maxc;
     color.x *= ooMax;
     color.y *= ooMax;
     color.z *= ooMax;
@@ -1267,17 +1260,17 @@ inline void ColorClampTruncate(Vector &color) {
 // Interpolate a Catmull-Rom spline.
 // t is a [0,1] value and interpolates a curve between p2 and p3.
 void Catmull_Rom_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                        const Vector &p4, float t, Vector &output);
+                        const Vector &p4, f32 t, Vector &output);
 
 // Interpolate a Catmull-Rom spline.
 // Returns the tangent of the point at t of the spline
 void Catmull_Rom_Spline_Tangent(const Vector &p1, const Vector &p2,
-                                const Vector &p3, const Vector &p4, float t,
+                                const Vector &p3, const Vector &p4, f32 t,
                                 Vector &output);
 
 // area under the curve [0..t]
 void Catmull_Rom_Spline_Integral(const Vector &p1, const Vector &p2,
-                                 const Vector &p3, const Vector &p4, float t,
+                                 const Vector &p3, const Vector &p4, f32 t,
                                  Vector &output);
 
 // area under the curve [0..1]
@@ -1288,45 +1281,45 @@ void Catmull_Rom_Spline_Integral(const Vector &p1, const Vector &p2,
 // Interpolate a Catmull-Rom spline.
 // Normalize p2->p1 and p3->p4 to be the same length as p2->p3
 void Catmull_Rom_Spline_Normalize(const Vector &p1, const Vector &p2,
-                                  const Vector &p3, const Vector &p4, float t,
+                                  const Vector &p3, const Vector &p4, f32 t,
                                   Vector &output);
 
 // area under the curve [0..t]
 // Normalize p2->p1 and p3->p4 to be the same length as p2->p3
 void Catmull_Rom_Spline_Integral_Normalize(const Vector &p1, const Vector &p2,
                                            const Vector &p3, const Vector &p4,
-                                           float t, Vector &output);
+                                           f32 t, Vector &output);
 
 // Interpolate a Catmull-Rom spline.
 // Normalize p2.x->p1.x and p3.x->p4.x to be the same length as p2.x->p3.x
 void Catmull_Rom_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                                   const Vector &p3, const Vector &p4, float t,
+                                   const Vector &p3, const Vector &p4, f32 t,
                                    Vector &output);
 
 // area under the curve [0..t]
 void Catmull_Rom_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                                   const Vector &p3, const Vector &p4, float t,
+                                   const Vector &p3, const Vector &p4, f32 t,
                                    Vector &output);
 
 // Interpolate a Hermite spline.
 // t is a [0,1] value and interpolates a curve between p1 and p2 with the
 // deltas d1 and d2.
 void Hermite_Spline(const Vector &p1, const Vector &p2, const Vector &d1,
-                    const Vector &d2, float t, Vector &output);
+                    const Vector &d2, f32 t, Vector &output);
 
-float Hermite_Spline(float p1, float p2, float d1, float d2, float t);
+f32 Hermite_Spline(f32 p1, f32 p2, f32 d1, f32 d2, f32 t);
 
 // t is a [0,1] value and interpolates a curve between p1 and p2 with the
 // slopes p0->p1 and p1->p2
-void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2,
-                    float t, Vector &output);
+void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2, f32 t,
+                    Vector &output);
 
-float Hermite_Spline(float p0, float p1, float p2, float t);
+f32 Hermite_Spline(f32 p0, f32 p1, f32 p2, f32 t);
 
-void Hermite_SplineBasis(float t, float basis[]);
+void Hermite_SplineBasis(f32 t, f32 basis[]);
 
 void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
-                    const Quaternion &q2, float t, Quaternion &output);
+                    const Quaternion &q2, f32 t, Quaternion &output);
 
 // See http://en.wikipedia.org/wiki/Kochanek-Bartels_curves
 //
@@ -1342,43 +1335,42 @@ void Hermite_Spline(const Quaternion &q0, const Quaternion &q1,
 // http://news.povray.org/povray.binaries.tutorials/attachment/%3CXns91B880592482seed7@povray.org%3E/Splines.bas.txt
 // for example code and descriptions of various spline types...
 //
-void Kochanek_Bartels_Spline(float tension, float bias, float continuity,
+void Kochanek_Bartels_Spline(f32 tension, f32 bias, f32 continuity,
                              const Vector &p1, const Vector &p2,
-                             const Vector &p3, const Vector &p4, float t,
+                             const Vector &p3, const Vector &p4, f32 t,
                              Vector &output);
 
-void Kochanek_Bartels_Spline_NormalizeX(float tension, float bias,
-                                        float continuity, const Vector &p1,
-                                        const Vector &p2, const Vector &p3,
-                                        const Vector &p4, float t,
-                                        Vector &output);
+void Kochanek_Bartels_Spline_NormalizeX(f32 tension, f32 bias, f32 continuity,
+                                        const Vector &p1, const Vector &p2,
+                                        const Vector &p3, const Vector &p4,
+                                        f32 t, Vector &output);
 
 // See link at Kochanek_Bartels_Spline for info on the basis matrix used
 void Cubic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                  const Vector &p4, float t, Vector &output);
+                  const Vector &p4, f32 t, Vector &output);
 
 void Cubic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                             const Vector &p3, const Vector &p4, float t,
+                             const Vector &p3, const Vector &p4, f32 t,
                              Vector &output);
 
 // See link at Kochanek_Bartels_Spline for info on the basis matrix used
 void BSpline(const Vector &p1, const Vector &p2, const Vector &p3,
-             const Vector &p4, float t, Vector &output);
+             const Vector &p4, f32 t, Vector &output);
 
 void BSpline_NormalizeX(const Vector &p1, const Vector &p2, const Vector &p3,
-                        const Vector &p4, float t, Vector &output);
+                        const Vector &p4, f32 t, Vector &output);
 
 // See link at Kochanek_Bartels_Spline for info on the basis matrix used
 void Parabolic_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
-                      const Vector &p4, float t, Vector &output);
+                      const Vector &p4, f32 t, Vector &output);
 
 void Parabolic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
-                                 const Vector &p3, const Vector &p4, float t,
+                                 const Vector &p3, const Vector &p4, f32 t,
                                  Vector &output);
 
 // quintic interpolating polynomial from Perlin.
 // 0->0, 1->1, smooth-in between with smooth tangents
-FORCEINLINE float QuinticInterpolatingPolynomial(float t) {
+FORCEINLINE f32 QuinticInterpolatingPolynomial(f32 t) {
   // 6t^5-15t^4+10t^3
   return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
@@ -1386,28 +1378,27 @@ FORCEINLINE float QuinticInterpolatingPolynomial(float t) {
 // given a table of sorted tabulated positions, return the two indices and
 // blendfactor to linear interpolate. Does a search. Can be used to find the
 // blend value to interpolate between keyframes.
-void GetInterpolationData(float const *pKnotPositions, float const *pKnotValues,
+void GetInterpolationData(f32 const *pKnotPositions, f32 const *pKnotValues,
                           int nNumValuesinList, int nInterpolationRange,
-                          float flPositionToInterpolateAt, bool bWrap,
-                          float *pValueA, float *pValueB,
-                          float *pInterpolationValue);
+                          f32 flPositionToInterpolateAt, bool bWrap,
+                          f32 *pValueA, f32 *pValueB, f32 *pInterpolationValue);
 
-float RangeCompressor(float flValue, float flMin, float flMax, float flBase);
+f32 RangeCompressor(f32 flValue, f32 flMin, f32 flMax, f32 flBase);
 
 // Get the minimum distance from vOrigin to the bounding box defined by
 // [mins,maxs] using voronoi regions. 0 is returned if the origin is inside
 // the box.
-float CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
-                            const Vector &point);
+f32 CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
+                          const Vector &point);
 void CalcClosestPointOnAABB(const Vector &mins, const Vector &maxs,
                             const Vector &point, Vector &closestOut);
 void CalcSqrDistAndClosestPointOnAABB(const Vector &mins, const Vector &maxs,
                                       const Vector &point, Vector &closestOut,
-                                      float &distSqrOut);
+                                      f32 &distSqrOut);
 
-inline float CalcDistanceToAABB(const Vector &mins, const Vector &maxs,
-                                const Vector &point) {
-  float flDistSqr = CalcSqrDistanceToAABB(mins, maxs, point);
+inline f32 CalcDistanceToAABB(const Vector &mins, const Vector &maxs,
+                              const Vector &point) {
+  f32 flDistSqr = CalcSqrDistanceToAABB(mins, maxs, point);
   return sqrt(flDistSqr);
 }
 
@@ -1418,82 +1409,80 @@ inline float CalcDistanceToAABB(const Vector &mins, const Vector &maxs,
 // then 0 <= t
 // <= 1.
 void CalcClosestPointOnLine(const Vector &P, const Vector &vLineA,
-                            const Vector &vLineB, Vector &vClosest,
-                            float *t = 0);
-float CalcDistanceToLine(const Vector &P, const Vector &vLineA,
-                         const Vector &vLineB, float *t = 0);
-float CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
-                            const Vector &vLineB, float *t = 0);
+                            const Vector &vLineB, Vector &vClosest, f32 *t = 0);
+f32 CalcDistanceToLine(const Vector &P, const Vector &vLineA,
+                       const Vector &vLineB, f32 *t = 0);
+f32 CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
+                          const Vector &vLineB, f32 *t = 0);
 
 // The same three functions as above, except now the line is closed between A
 // and B.
 void CalcClosestPointOnLineSegment(const Vector &P, const Vector &vLineA,
                                    const Vector &vLineB, Vector &vClosest,
-                                   float *t = 0);
-float CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
-                                const Vector &vLineB, float *t = 0);
-float CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
-                                   const Vector &vLineB, float *t = 0);
+                                   f32 *t = 0);
+f32 CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
+                              const Vector &vLineB, f32 *t = 0);
+f32 CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
+                                 const Vector &vLineB, f32 *t = 0);
 
 // A function to compute the closes line segment connnection two lines (or
 // false if the lines are parallel, etc.)
 bool CalcLineToLineIntersectionSegment(const Vector &p1, const Vector &p2,
                                        const Vector &p3, const Vector &p4,
-                                       Vector *s1, Vector *s2, float *t1,
-                                       float *t2);
+                                       Vector *s1, Vector *s2, f32 *t1,
+                                       f32 *t2);
 
 // The above functions in 2D
 void CalcClosestPointOnLine2D(Vector2D const &P, Vector2D const &vLineA,
                               Vector2D const &vLineB, Vector2D &vClosest,
-                              float *t = 0);
-float CalcDistanceToLine2D(Vector2D const &P, Vector2D const &vLineA,
-                           Vector2D const &vLineB, float *t = 0);
-float CalcDistanceSqrToLine2D(Vector2D const &P, Vector2D const &vLineA,
-                              Vector2D const &vLineB, float *t = 0);
+                              f32 *t = 0);
+f32 CalcDistanceToLine2D(Vector2D const &P, Vector2D const &vLineA,
+                         Vector2D const &vLineB, f32 *t = 0);
+f32 CalcDistanceSqrToLine2D(Vector2D const &P, Vector2D const &vLineA,
+                            Vector2D const &vLineB, f32 *t = 0);
 void CalcClosestPointOnLineSegment2D(Vector2D const &P, Vector2D const &vLineA,
                                      Vector2D const &vLineB, Vector2D &vClosest,
-                                     float *t = 0);
-float CalcDistanceToLineSegment2D(Vector2D const &P, Vector2D const &vLineA,
-                                  Vector2D const &vLineB, float *t = 0);
-float CalcDistanceSqrToLineSegment2D(Vector2D const &P, Vector2D const &vLineA,
-                                     Vector2D const &vLineB, float *t = 0);
+                                     f32 *t = 0);
+f32 CalcDistanceToLineSegment2D(Vector2D const &P, Vector2D const &vLineA,
+                                Vector2D const &vLineB, f32 *t = 0);
+f32 CalcDistanceSqrToLineSegment2D(Vector2D const &P, Vector2D const &vLineA,
+                                   Vector2D const &vLineB, f32 *t = 0);
 
 // Init the mathlib
-void MathLib_Init(float gamma = 2.2f, float texGamma = 2.2f,
-                  float brightness = 0.0f, int overbright = 2.0f,
-                  bool bAllow3DNow = true, bool bAllowSSE = true,
-                  bool bAllowSSE2 = true, bool bAllowMMX = true);
+void MathLib_Init(f32 gamma = 2.2f, f32 texGamma = 2.2f, f32 brightness = 0.0f,
+                  int overbright = 2.0f, bool bAllow3DNow = true,
+                  bool bAllowSSE = true, bool bAllowSSE2 = true,
+                  bool bAllowMMX = true);
 bool MathLib_3DNowEnabled(void);
 bool MathLib_MMXEnabled(void);
 bool MathLib_SSEEnabled(void);
 bool MathLib_SSE2Enabled(void);
 
-float Approach(float target, float value, float speed);
-float ApproachAngle(float target, float value, float speed);
-float AngleDiff(float destAngle, float srcAngle);
-float AngleDistance(float next, float cur);
-float AngleNormalize(float angle);
+f32 Approach(f32 target, f32 value, f32 speed);
+f32 ApproachAngle(f32 target, f32 value, f32 speed);
+f32 AngleDiff(f32 destAngle, f32 srcAngle);
+f32 AngleDistance(f32 next, f32 cur);
+f32 AngleNormalize(f32 angle);
 
 // ensure that 0 <= angle <= 360
-float AngleNormalizePositive(float angle);
+f32 AngleNormalizePositive(f32 angle);
 
-bool AnglesAreEqual(float a, float b, float tolerance = 0.0f);
+bool AnglesAreEqual(f32 a, f32 b, f32 tolerance = 0.0f);
 
 void RotationDeltaAxisAngle(const QAngle &srcAngles, const QAngle &destAngles,
-                            Vector &deltaAxis, float &deltaAngle);
+                            Vector &deltaAxis, f32 &deltaAngle);
 void RotationDelta(const QAngle &srcAngles, const QAngle &destAngles,
                    QAngle *out);
 
 void ComputeTrianglePlane(const Vector &v1, const Vector &v2, const Vector &v3,
-                          Vector &normal, float &intercept);
-int PolyFromPlane(Vector *outVerts, const Vector &normal, float dist,
-                  float fHalfScale = 9000.0f);
+                          Vector &normal, f32 &intercept);
+int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
+                  f32 fHalfScale = 9000.0f);
 int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
-                    const Vector &normal, float dist,
-                    float fOnPlaneEpsilon = 0.1f);
-int ClipPolyToPlane_Precise(double *inVerts, int vertCount, double *outVerts,
-                            const double *normal, double dist,
-                            double fOnPlaneEpsilon = 0.1);
+                    const Vector &normal, f32 dist, f32 fOnPlaneEpsilon = 0.1f);
+int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
+                            const f64 *normal, f64 dist,
+                            f64 fOnPlaneEpsilon = 0.1);
 
 //-----------------------------------------------------------------------------
 // Computes a reasonable tangent space for a triangle
@@ -1581,8 +1570,7 @@ inline void MatrixITransformPlane(const matrix3x4_t &src,
 int CeilPow2(int in);
 int FloorPow2(int in);
 
-FORCEINLINE float *UnpackNormal_HEND3N(const unsigned int *pPackedNormal,
-                                       float *pNormal) {
+FORCEINLINE f32 *UnpackNormal_HEND3N(const u32 *pPackedNormal, f32 *pNormal) {
   int temp[3];
   temp[0] = ((*pPackedNormal >> 0L) & 0x7ff);
   if (temp[0] & 0x400) {
@@ -1596,14 +1584,13 @@ FORCEINLINE float *UnpackNormal_HEND3N(const unsigned int *pPackedNormal,
   if (temp[2] & 0x200) {
     temp[2] = 1024 - temp[2];
   }
-  pNormal[0] = (float)temp[0] * 1.0f / 1023.0f;
-  pNormal[1] = (float)temp[1] * 1.0f / 1023.0f;
-  pNormal[2] = (float)temp[2] * 1.0f / 511.0f;
+  pNormal[0] = (f32)temp[0] * 1.0f / 1023.0f;
+  pNormal[1] = (f32)temp[1] * 1.0f / 1023.0f;
+  pNormal[2] = (f32)temp[2] * 1.0f / 511.0f;
   return pNormal;
 }
 
-FORCEINLINE unsigned int *PackNormal_HEND3N(const float *pNormal,
-                                            unsigned int *pPackedNormal) {
+FORCEINLINE u32 *PackNormal_HEND3N(const f32 *pNormal, u32 *pPackedNormal) {
   int temp[3];
 
   temp[0] = Float2Int(pNormal[0] * 1023.0f);
@@ -1621,8 +1608,7 @@ FORCEINLINE unsigned int *PackNormal_HEND3N(const float *pNormal,
   return pPackedNormal;
 }
 
-FORCEINLINE unsigned int *PackNormal_HEND3N(float nx, float ny, float nz,
-                                            unsigned int *pPackedNormal) {
+FORCEINLINE u32 *PackNormal_HEND3N(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal) {
   int temp[3];
 
   temp[0] = Float2Int(nx * 1023.0f);
@@ -1640,23 +1626,22 @@ FORCEINLINE unsigned int *PackNormal_HEND3N(float nx, float ny, float nz,
   return pPackedNormal;
 }
 
-FORCEINLINE float *UnpackNormal_SHORT2(const unsigned int *pPackedNormal,
-                                       float *pNormal,
-                                       bool bIsTangent = FALSE) {
-  // Unpacks from Jason's 2-short format (fills in a 4th binormal-sign (+1/-1)
+FORCEINLINE f32 *UnpackNormal_SHORT2(const u32 *pPackedNormal, f32 *pNormal,
+                                     bool bIsTangent = FALSE) {
+  // Unpacks from Jason's 2-i16 format (fills in a 4th binormal-sign (+1/-1)
   // value, if this is a tangent vector)
 
-  // FIXME: short math is slow on 360 - use ints here instead (bit-twiddle to
+  // FIXME: i16 math is slow on 360 - use ints here instead (bit-twiddle to
   // deal w/ the sign bits)
-  short iX = (*pPackedNormal & 0x0000FFFF);
-  short iY = (*pPackedNormal & 0xFFFF0000) >> 16;
+  i16 iX = (*pPackedNormal & 0x0000FFFF);
+  i16 iY = (*pPackedNormal & 0xFFFF0000) >> 16;
 
-  float zSign = +1;
+  f32 zSign = +1;
   if (iX < 0) {
     zSign = -1;
     iX = -iX;
   }
-  float tSign = +1;
+  f32 tSign = +1;
   if (iY < 0) {
     tSign = -1;
     iY = -iY;
@@ -1673,10 +1658,9 @@ FORCEINLINE float *UnpackNormal_SHORT2(const unsigned int *pPackedNormal,
   return pNormal;
 }
 
-FORCEINLINE unsigned int *PackNormal_SHORT2(float nx, float ny, float nz,
-                                            unsigned int *pPackedNormal,
-                                            float binormalSign = +1.0f) {
-  // Pack a vector (ASSUMED TO BE NORMALIZED) into Jason's 4-uint8_t (SHORT2)
+FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
+                                   f32 binormalSign = +1.0f) {
+  // Pack a vector (ASSUMED TO BE NORMALIZED) into Jason's 4-u8 (SHORT2)
   // format. This simply reconstructs Z from X & Y. It uses the sign bits of
   // the X & Y coords to reconstruct the sign of Z and, if this is a tangent
   // vector, the sign of the binormal (this is needed because tangent/binormal
@@ -1700,10 +1684,10 @@ FORCEINLINE unsigned int *PackNormal_SHORT2(float nx, float ny, float nz,
   ny *= binormalSign;  // Set the sign bit for the binormal (use when encoding a
                        // tangent vector)
 
-  // FIXME: short math is slow on 360 - use ints here instead (bit-twiddle to
+  // FIXME: i16 math is slow on 360 - use ints here instead (bit-twiddle to
   // deal w/ the sign bits), also use Float2Int()
-  short sX = (short)nx;  // signed short [1,32767]
-  short sY = (short)ny;
+  i16 sX = (i16)nx;  // signed i16 [1,32767]
+  i16 sY = (i16)ny;
 
   *pPackedNormal =
       (sX & 0x0000FFFF) | (sY << 16);  // NOTE: The mask is necessary (if sX is
@@ -1712,19 +1696,17 @@ FORCEINLINE unsigned int *PackNormal_SHORT2(float nx, float ny, float nz,
   return pPackedNormal;
 }
 
-FORCEINLINE unsigned int *PackNormal_SHORT2(const float *pNormal,
-                                            unsigned int *pPackedNormal,
-                                            float binormalSign = +1.0f) {
+FORCEINLINE u32 *PackNormal_SHORT2(const f32 *pNormal, u32 *pPackedNormal,
+                                   f32 binormalSign = +1.0f) {
   return PackNormal_SHORT2(pNormal[0], pNormal[1], pNormal[2], pPackedNormal,
                            binormalSign);
 }
 
 // Unpacks a UBYTE4 normal (for a tangent, the result's fourth component
 // receives the binormal 'sign')
-FORCEINLINE float *UnpackNormal_UBYTE4(const unsigned int *pPackedNormal,
-                                       float *pNormal,
-                                       bool bIsTangent = FALSE) {
-  unsigned char cX, cY;
+FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal, f32 *pNormal,
+                                     bool bIsTangent = FALSE) {
+  u8 cX, cY;
   if (bIsTangent) {
     cX = *pPackedNormal >> 16;  // Unpack Z
     cY = *pPackedNormal >> 24;  // Unpack W
@@ -1733,33 +1715,33 @@ FORCEINLINE float *UnpackNormal_UBYTE4(const unsigned int *pPackedNormal,
     cY = *pPackedNormal >> 8;  // Unpack Y
   }
 
-  float x = cX - 128.0f;
-  float y = cY - 128.0f;
-  float z;
+  f32 x = cX - 128.0f;
+  f32 y = cY - 128.0f;
+  f32 z;
 
-  float zSignBit =
+  f32 zSignBit =
       x < 0 ? 1.0f : 0.0f;  // z and t negative bits (like slt asm instruction)
-  float tSignBit = y < 0 ? 1.0f : 0.0f;
-  float zSign = -(2 * zSignBit - 1);  // z and t signs
-  float tSign = -(2 * tSignBit - 1);
+  f32 tSignBit = y < 0 ? 1.0f : 0.0f;
+  f32 zSign = -(2 * zSignBit - 1);  // z and t signs
+  f32 tSign = -(2 * tSignBit - 1);
 
   x = x * zSign - zSignBit;  // 0..127
   y = y * tSign - tSignBit;
   x = x - 64;  // -64..63
   y = y - 64;
 
-  float xSignBit =
+  f32 xSignBit =
       x < 0 ? 1.0f : 0.0f;  // x and y negative bits (like slt asm instruction)
-  float ySignBit = y < 0 ? 1.0f : 0.0f;
-  float xSign = -(2 * xSignBit - 1);  // x and y signs
-  float ySign = -(2 * ySignBit - 1);
+  f32 ySignBit = y < 0 ? 1.0f : 0.0f;
+  f32 xSign = -(2 * xSignBit - 1);  // x and y signs
+  f32 ySign = -(2 * ySignBit - 1);
 
   x = (x * xSign - xSignBit) / 63.0f;  // 0..1 range
   y = (y * ySign - ySignBit) / 63.0f;
   z = 1.0f - x - y;
 
-  float oolen = 1.0f / sqrt(x * x + y * y + z * z);  // Normalize and
-  x *= oolen * xSign;                                // Recover signs
+  f32 oolen = 1.0f / sqrt(x * x + y * y + z * z);  // Normalize and
+  x *= oolen * xSign;                              // Recover signs
   y *= oolen * ySign;
   z *= oolen * zSign;
 
@@ -1786,28 +1768,27 @@ FORCEINLINE float *UnpackNormal_UBYTE4(const unsigned int *pPackedNormal,
 // bIsTangent is used to specify which WORD of the output to store the data
 // The expected usage is to call once with the normal and once with
 // the tangent and binormal sign flag, bitwise OR'ing the returned DWORDs
-FORCEINLINE unsigned int *PackNormal_UBYTE4(float nx, float ny, float nz,
-                                            unsigned int *pPackedNormal,
-                                            bool bIsTangent = false,
-                                            float binormalSign = +1.0f) {
-  float xSign = nx < 0.0f ? -1.0f : 1.0f;  // -1 or 1 sign
-  float ySign = ny < 0.0f ? -1.0f : 1.0f;
-  float zSign = nz < 0.0f ? -1.0f : 1.0f;
-  float tSign = binormalSign;
+FORCEINLINE u32 *PackNormal_UBYTE4(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
+                                   bool bIsTangent = false,
+                                   f32 binormalSign = +1.0f) {
+  f32 xSign = nx < 0.0f ? -1.0f : 1.0f;  // -1 or 1 sign
+  f32 ySign = ny < 0.0f ? -1.0f : 1.0f;
+  f32 zSign = nz < 0.0f ? -1.0f : 1.0f;
+  f32 tSign = binormalSign;
   Assert((binormalSign == +1.0f) || (binormalSign == -1.0f));
 
-  float xSignBit = 0.5f * (1 - xSign);  // [-1,+1] -> [1,0]
-  float ySignBit =
+  f32 xSignBit = 0.5f * (1 - xSign);  // [-1,+1] -> [1,0]
+  f32 ySignBit =
       0.5f * (1 - ySign);  // 1 is negative bit (like slt instruction)
-  float zSignBit = 0.5f * (1 - zSign);
-  float tSignBit = 0.5f * (1 - binormalSign);
+  f32 zSignBit = 0.5f * (1 - zSign);
+  f32 tSignBit = 0.5f * (1 - binormalSign);
 
-  float absX = xSign * nx;  // 0..1 range (abs)
-  float absY = ySign * ny;
-  float absZ = zSign * nz;
+  f32 absX = xSign * nx;  // 0..1 range (abs)
+  f32 absY = ySign * ny;
+  f32 absZ = zSign * nz;
 
-  float xbits = absX / (absX + absY + absZ);  // Project onto x+y+z=1 plane
-  float ybits = absY / (absX + absY + absZ);
+  f32 xbits = absX / (absX + absY + absZ);  // Project onto x+y+z=1 plane
+  f32 ybits = absY / (absX + absY + absZ);
 
   xbits *= 63;  // 0..63
   ybits *= 63;
@@ -1823,8 +1804,8 @@ FORCEINLINE unsigned int *PackNormal_UBYTE4(float nx, float ny, float nz,
   xbits += 128.0f;  // 0..255 range
   ybits += 128.0f;
 
-  unsigned char cX = (unsigned char)xbits;
-  unsigned char cY = (unsigned char)ybits;
+  u8 cX = (u8)xbits;
+  u8 cY = (u8)ybits;
 
   if (!bIsTangent)
     *pPackedNormal = (cX << 0) | (cY << 8);  // xy for normal
@@ -1834,10 +1815,9 @@ FORCEINLINE unsigned int *PackNormal_UBYTE4(float nx, float ny, float nz,
   return pPackedNormal;
 }
 
-FORCEINLINE unsigned int *PackNormal_UBYTE4(const float *pNormal,
-                                            unsigned int *pPackedNormal,
-                                            bool bIsTangent = false,
-                                            float binormalSign = +1.0f) {
+FORCEINLINE u32 *PackNormal_UBYTE4(const f32 *pNormal, u32 *pPackedNormal,
+                                   bool bIsTangent = false,
+                                   f32 binormalSign = +1.0f) {
   return PackNormal_UBYTE4(pNormal[0], pNormal[1], pNormal[2], pPackedNormal,
                            bIsTangent, binormalSign);
 }

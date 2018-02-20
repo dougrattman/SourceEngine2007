@@ -48,8 +48,8 @@ static const int ice_keyrot[16] = {0, 1, 2, 3, 2, 1, 3, 0,
  * subtractions are replaced by XOR.
  */
 
-static unsigned int gf_mult(unsigned int a, unsigned int b, unsigned int m) {
-  unsigned int res = 0;
+static u32 gf_mult(u32 a, u32 b, u32 m) {
+  u32 res = 0;
 
   while (b) {
     if (b & 1) res ^= a;
@@ -68,8 +68,8 @@ static unsigned int gf_mult(unsigned int a, unsigned int b, unsigned int m) {
  * Raise the base to the power of 7, modulo m.
  */
 
-static unsigned long gf_exp7(unsigned int b, unsigned int m) {
-  unsigned int x;
+static unsigned long gf_exp7(u32 b, u32 m) {
+  u32 x;
 
   if (b == 0) return (0);
 
@@ -192,7 +192,7 @@ static unsigned long ice_f(unsigned long p, const IceSubkey *sk) {
  * Encrypt a block of 8 bytes of data with the given ICE key.
  */
 
-void IceKey::encrypt(const unsigned char *ptext, unsigned char *ctext) const {
+void IceKey::encrypt(const u8 *ptext, u8 *ctext) const {
   int i;
   unsigned long l, r;
 
@@ -219,7 +219,7 @@ void IceKey::encrypt(const unsigned char *ptext, unsigned char *ctext) const {
  * Decrypt a block of 8 bytes of data with the given ICE key.
  */
 
-void IceKey::decrypt(const unsigned char *ctext, unsigned char *ptext) const {
+void IceKey::decrypt(const u8 *ctext, u8 *ptext) const {
   int i;
   unsigned long l, r;
 
@@ -246,7 +246,7 @@ void IceKey::decrypt(const unsigned char *ctext, unsigned char *ptext) const {
  * Set 8 rounds [n, n+7] of the key schedule of an ICE key.
  */
 
-void IceKey::scheduleBuild(unsigned short *kb, int n, const int *keyrot) {
+void IceKey::scheduleBuild(u16 *kb, int n, const int *keyrot) {
   int i;
 
   for (i = 0; i < 8; i++) {
@@ -261,7 +261,7 @@ void IceKey::scheduleBuild(unsigned short *kb, int n, const int *keyrot) {
       unsigned long *curr_sk = &isk->val[j % 3];
 
       for (k = 0; k < 4; k++) {
-        unsigned short *curr_kb = &kb[(kr + k) & 3];
+        u16 *curr_kb = &kb[(kr + k) & 3];
         int bit = *curr_kb & 1;
 
         *curr_sk = (*curr_sk << 1) | bit;
@@ -275,11 +275,11 @@ void IceKey::scheduleBuild(unsigned short *kb, int n, const int *keyrot) {
  * Set the key schedule of an ICE key.
  */
 
-void IceKey::set(const unsigned char *key) {
+void IceKey::set(const u8 *key) {
   int i;
 
   if (_rounds == 8) {
-    unsigned short kb[4];
+    u16 kb[4];
 
     for (i = 0; i < 4; i++) kb[3 - i] = (key[i * 2] << 8) | key[i * 2 + 1];
 
@@ -289,7 +289,7 @@ void IceKey::set(const unsigned char *key) {
 
   for (i = 0; i < _size; i++) {
     int j;
-    unsigned short kb[4];
+    u16 kb[4];
 
     for (j = 0; j < 4; j++)
       kb[3 - j] = (key[i * 8 + j * 2] << 8) | key[i * 8 + j * 2 + 1];

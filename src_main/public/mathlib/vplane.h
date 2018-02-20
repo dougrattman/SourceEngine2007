@@ -3,6 +3,7 @@
 #ifndef SOURCE_MATHLIB_VPLANE_H_
 #define SOURCE_MATHLIB_VPLANE_H_
 
+#include "base/include/base_types.h"
 #include "mathlib/vector.h"
 
 typedef int SideType;
@@ -17,12 +18,12 @@ typedef int SideType;
 class VPlane {
  public:
   VPlane();
-  VPlane(const Vector &vNormal, vec_t dist);
+  VPlane(const Vector &vNormal, f32 dist);
 
-  void Init(const Vector &vNormal, vec_t dist);
+  void Init(const Vector &vNormal, f32 dist);
 
   // Return the distance from the point to the plane.
-  vec_t DistTo(const Vector &vVec) const;
+  f32 DistTo(const Vector &vVec) const;
 
   // Copy.
   VPlane &operator=(const VPlane &thePlane);
@@ -30,7 +31,7 @@ class VPlane {
   // Returns SIDE_ON, SIDE_FRONT, or SIDE_BACK.
   // The epsilon for SIDE_ON can be passed in.
   SideType GetPointSide(const Vector &vPoint,
-                        vec_t sideEpsilon = VP_EPSILON) const;
+                        f32 sideEpsilon = VP_EPSILON) const;
 
   // Returns SIDE_FRONT or SIDE_BACK.
   SideType GetPointSideExact(const Vector &vPoint) const;
@@ -52,7 +53,7 @@ class VPlane {
 
  public:
   Vector m_Normal;
-  vec_t m_Dist;
+  f32 m_Dist;
 
 #ifdef VECTOR_NO_SLOW_OPERATIONS
  private:
@@ -66,15 +67,15 @@ class VPlane {
 //-----------------------------------------------------------------------------
 inline VPlane::VPlane() {}
 
-inline VPlane::VPlane(const Vector &vNormal, vec_t dist)
+inline VPlane::VPlane(const Vector &vNormal, f32 dist)
     : m_Normal{vNormal}, m_Dist{dist} {}
 
-inline void VPlane::Init(const Vector &vNormal, vec_t dist) {
+inline void VPlane::Init(const Vector &vNormal, f32 dist) {
   m_Normal = vNormal;
   m_Dist = dist;
 }
 
-inline vec_t VPlane::DistTo(const Vector &vVec) const {
+inline f32 VPlane::DistTo(const Vector &vVec) const {
   return vVec.Dot(m_Normal) - m_Dist;
 }
 
@@ -97,8 +98,8 @@ inline Vector VPlane::SnapPointToPlane(const Vector &vPoint) const {
 #endif
 
 inline SideType VPlane::GetPointSide(const Vector &vPoint,
-                                     vec_t sideEpsilon) const {
-  vec_t fDist;
+                                     f32 sideEpsilon) const {
+  f32 fDist;
 
   fDist = DistTo(vPoint);
   if (fDist >= sideEpsilon)

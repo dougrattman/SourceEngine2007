@@ -8,8 +8,9 @@
 #include <cmath>
 #include <cstdlib>  // For rand(). We really need a library!
 
+#include "base/include/base_types.h"
 #include "mathlib/math_pfns.h"
-#include "tier0/include/basetypes.h"  // For vec_t, put this somewhere else?
+#include "tier0/include/basetypes.h"  // For f32, put this somewhere else?
 #include "tier0/include/dbg.h"
 
 // forward declarations
@@ -23,26 +24,26 @@ class Vector2D;
 class Vector4D {
  public:
   // Members
-  vec_t x, y, z, w;
+  f32 x, y, z, w;
 
   // Construction/destruction
   Vector4D();
-  Vector4D(vec_t X, vec_t Y, vec_t Z, vec_t W);
-  Vector4D(const float* pFloat);
+  Vector4D(f32 X, f32 Y, f32 Z, f32 W);
+  Vector4D(const f32* pFloat);
 
   // Initialization
-  void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f, vec_t iw = 0.0f);
+  void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f, f32 iw = 0.0f);
 
   // Got any nasty NAN's?
   bool IsValid() const;
 
   // array access...
-  vec_t operator[](int i) const;
-  vec_t& operator[](int i);
+  f32 operator[](int i) const;
+  f32& operator[](int i);
 
   // Base address...
-  inline vec_t* Base();
-  inline vec_t const* Base() const;
+  inline f32* Base();
+  inline f32 const* Base() const;
 
   // Cast to Vector and Vector2D...
   Vector& AsVector3D();
@@ -52,7 +53,7 @@ class Vector4D {
   Vector2D const& AsVector2D() const;
 
   // Initialization methods
-  void Random(vec_t minVal, vec_t maxVal);
+  void Random(f32 minVal, f32 maxVal);
 
   // equality
   bool operator==(const Vector4D& v) const;
@@ -62,42 +63,42 @@ class Vector4D {
   Vector4D& operator+=(const Vector4D& v);
   Vector4D& operator-=(const Vector4D& v);
   Vector4D& operator*=(const Vector4D& v);
-  Vector4D& operator*=(float s);
+  Vector4D& operator*=(f32 s);
   Vector4D& operator/=(const Vector4D& v);
-  Vector4D& operator/=(float s);
+  Vector4D& operator/=(f32 s);
 
   // negate the Vector4D components
   void Negate();
 
   // Get the Vector4D's magnitude.
-  vec_t Length() const;
+  f32 Length() const;
 
   // Get the Vector4D's magnitude squared.
-  vec_t LengthSqr(void) const;
+  f32 LengthSqr(void) const;
 
   // return true if this vector is (0,0,0,0) within tolerance
-  bool IsZero(float tolerance = 0.01f) const {
+  bool IsZero(f32 tolerance = 0.01f) const {
     return (x > -tolerance && x < tolerance && y > -tolerance &&
             y < tolerance && z > -tolerance && z < tolerance &&
             w > -tolerance && w < tolerance);
   }
 
   // Get the distance from this Vector4D to the other one.
-  vec_t DistTo(const Vector4D& vOther) const;
+  f32 DistTo(const Vector4D& vOther) const;
 
   // Get the distance from this Vector4D to the other one squared.
-  vec_t DistToSqr(const Vector4D& vOther) const;
+  f32 DistToSqr(const Vector4D& vOther) const;
 
   // Copy
-  void CopyToArray(float* rgfl) const;
+  void CopyToArray(f32* rgfl) const;
 
   // Multiply, add, and assign to this (ie: *this = a + b * scalar). This
   // is about 12% faster than the actual Vector4D equation (because it's done
   // per-component rather than per-Vector4D).
-  void MulAdd(Vector4D const& a, Vector4D const& b, float scalar);
+  void MulAdd(Vector4D const& a, Vector4D const& b, f32 scalar);
 
   // Dot product.
-  vec_t Dot(Vector4D const& vOther) const;
+  f32 Dot(Vector4D const& vOther) const;
 
   // No copy constructors allowed if we're in optimal mode
 #ifdef VECTOR_NO_SLOW_OPERATIONS
@@ -126,9 +127,9 @@ class __attribute__((aligned(16))) Vector4DAligned : public Vector4D
 {
  public:
   Vector4DAligned() {}
-  Vector4DAligned(vec_t X, vec_t Y, vec_t Z, vec_t W);
+  Vector4DAligned(f32 X, f32 Y, f32 Z, f32 W);
 
-  inline void Set(vec_t X, vec_t Y, vec_t Z, vec_t W);
+  inline void Set(f32 X, f32 Y, f32 Z, f32 W);
   inline void InitZero(void);
 
   inline __m128& AsM128() { return *(__m128*)&x; }
@@ -155,30 +156,30 @@ void Vector4DCopy(Vector4D const& src, Vector4D& dst);
 // Vector4D arithmetic
 void Vector4DAdd(Vector4D const& a, Vector4D const& b, Vector4D& result);
 void Vector4DSubtract(Vector4D const& a, Vector4D const& b, Vector4D& result);
-void Vector4DMultiply(Vector4D const& a, vec_t b, Vector4D& result);
+void Vector4DMultiply(Vector4D const& a, f32 b, Vector4D& result);
 void Vector4DMultiply(Vector4D const& a, Vector4D const& b, Vector4D& result);
-void Vector4DDivide(Vector4D const& a, vec_t b, Vector4D& result);
+void Vector4DDivide(Vector4D const& a, f32 b, Vector4D& result);
 void Vector4DDivide(Vector4D const& a, Vector4D const& b, Vector4D& result);
-void Vector4DMA(Vector4D const& start, float s, Vector4D const& dir,
+void Vector4DMA(Vector4D const& start, f32 s, Vector4D const& dir,
                 Vector4D& result);
 
 // Vector4DAligned arithmetic
-void Vector4DMultiplyAligned(Vector4DAligned const& a, vec_t b,
+void Vector4DMultiplyAligned(Vector4DAligned const& a, f32 b,
                              Vector4DAligned& result);
 
 #define Vector4DExpand(v) (v).x, (v).y, (v).z, (v).w
 
 // Normalization
-vec_t Vector4DNormalize(Vector4D& v);
+f32 Vector4DNormalize(Vector4D& v);
 
 // Length
-vec_t Vector4DLength(Vector4D const& v);
+f32 Vector4DLength(Vector4D const& v);
 
 // Dot Product
-vec_t DotProduct4D(Vector4D const& a, Vector4D const& b);
+f32 DotProduct4D(Vector4D const& a, Vector4D const& b);
 
 // Linearly interpolate between two vectors
-void Vector4DLerp(Vector4D const& src1, Vector4D const& src2, vec_t t,
+void Vector4DLerp(Vector4D const& src1, Vector4D const& src2, f32 t,
                   Vector4D& dest);
 
 //-----------------------------------------------------------------------------
@@ -198,7 +199,7 @@ inline Vector4D::Vector4D(void) {
 #endif
 }
 
-inline Vector4D::Vector4D(vec_t X, vec_t Y, vec_t Z, vec_t W) {
+inline Vector4D::Vector4D(f32 X, f32 Y, f32 Z, f32 W) {
   x = X;
   y = Y;
   z = Z;
@@ -206,7 +207,7 @@ inline Vector4D::Vector4D(vec_t X, vec_t Y, vec_t Z, vec_t W) {
   Assert(IsValid());
 }
 
-inline Vector4D::Vector4D(const float* pFloat) {
+inline Vector4D::Vector4D(const f32* pFloat) {
   Assert(pFloat);
   x = pFloat[0];
   y = pFloat[1];
@@ -231,7 +232,7 @@ inline Vector4D::Vector4D(const Vector4D& vOther) {
 // initialization
 //-----------------------------------------------------------------------------
 
-inline void Vector4D::Init(vec_t ix, vec_t iy, vec_t iz, vec_t iw) {
+inline void Vector4D::Init(f32 ix, f32 iy, f32 iz, f32 iw) {
   x = ix;
   y = iy;
   z = iz;
@@ -239,11 +240,11 @@ inline void Vector4D::Init(vec_t ix, vec_t iy, vec_t iz, vec_t iw) {
   Assert(IsValid());
 }
 
-inline void Vector4D::Random(vec_t minVal, vec_t maxVal) {
-  x = minVal + ((vec_t)rand() / RAND_MAX) * (maxVal - minVal);
-  y = minVal + ((vec_t)rand() / RAND_MAX) * (maxVal - minVal);
-  z = minVal + ((vec_t)rand() / RAND_MAX) * (maxVal - minVal);
-  w = minVal + ((vec_t)rand() / RAND_MAX) * (maxVal - minVal);
+inline void Vector4D::Random(f32 minVal, f32 maxVal) {
+  x = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  y = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  z = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  w = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
 }
 
 inline void Vector4DClear(Vector4D& a) { a.x = a.y = a.z = a.w = 0.0f; }
@@ -265,14 +266,14 @@ inline Vector4D& Vector4D::operator=(const Vector4D& vOther) {
 // Array access
 //-----------------------------------------------------------------------------
 
-inline vec_t& Vector4D::operator[](int i) {
+inline f32& Vector4D::operator[](int i) {
   Assert((i >= 0) && (i < 4));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
-inline vec_t Vector4D::operator[](int i) const {
+inline f32 Vector4D::operator[](int i) const {
   Assert((i >= 0) && (i < 4));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
@@ -295,9 +296,9 @@ inline Vector2D const& Vector4D::AsVector2D() const {
 // Base address...
 //-----------------------------------------------------------------------------
 
-inline vec_t* Vector4D::Base() { return (vec_t*)this; }
+inline f32* Vector4D::Base() { return (f32*)this; }
 
-inline vec_t const* Vector4D::Base() const { return (vec_t const*)this; }
+inline f32 const* Vector4D::Base() const { return (f32 const*)this; }
 
 //-----------------------------------------------------------------------------
 // IsValid?
@@ -333,7 +334,7 @@ inline void Vector4DCopy(Vector4D const& src, Vector4D& dst) {
   dst.w = src.w;
 }
 
-inline void Vector4D::CopyToArray(float* rgfl) const {
+inline void Vector4D::CopyToArray(f32* rgfl) const {
   Assert(IsValid());
   Assert(rgfl);
   rgfl[0] = x;
@@ -372,7 +373,7 @@ inline Vector4D& Vector4D::operator-=(const Vector4D& v) {
   return *this;
 }
 
-inline Vector4D& Vector4D::operator*=(float fl) {
+inline Vector4D& Vector4D::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -390,9 +391,9 @@ inline Vector4D& Vector4D::operator*=(Vector4D const& v) {
   return *this;
 }
 
-inline Vector4D& Vector4D::operator/=(float fl) {
+inline Vector4D& Vector4D::operator/=(f32 fl) {
   Assert(fl != 0.0f);
-  float oofl = 1.0f / fl;
+  f32 oofl = 1.0f / fl;
   x *= oofl;
   y *= oofl;
   z *= oofl;
@@ -428,7 +429,7 @@ inline void Vector4DSubtract(Vector4D const& a, Vector4D const& b,
   c.w = a.w - b.w;
 }
 
-inline void Vector4DMultiply(Vector4D const& a, vec_t b, Vector4D& c) {
+inline void Vector4DMultiply(Vector4D const& a, f32 b, Vector4D& c) {
   Assert(a.IsValid() && IsFinite(b));
   c.x = a.x * b;
   c.y = a.y * b;
@@ -445,10 +446,10 @@ inline void Vector4DMultiply(Vector4D const& a, Vector4D const& b,
   c.w = a.w * b.w;
 }
 
-inline void Vector4DDivide(Vector4D const& a, vec_t b, Vector4D& c) {
+inline void Vector4DDivide(Vector4D const& a, f32 b, Vector4D& c) {
   Assert(a.IsValid());
   Assert(b != 0.0f);
-  vec_t oob = 1.0f / b;
+  f32 oob = 1.0f / b;
   c.x = a.x * oob;
   c.y = a.y * oob;
   c.z = a.z * oob;
@@ -464,7 +465,7 @@ inline void Vector4DDivide(Vector4D const& a, Vector4D const& b, Vector4D& c) {
   c.w = a.w / b.w;
 }
 
-inline void Vector4DMA(Vector4D const& start, float s, Vector4D const& dir,
+inline void Vector4DMA(Vector4D const& start, f32 s, Vector4D const& dir,
                        Vector4D& result) {
   Assert(start.IsValid() && IsFinite(s) && dir.IsValid());
   result.x = start.x + s * dir.x;
@@ -475,15 +476,14 @@ inline void Vector4DMA(Vector4D const& start, float s, Vector4D const& dir,
 
 // FIXME: Remove
 // For backwards compatability
-inline void Vector4D::MulAdd(Vector4D const& a, Vector4D const& b,
-                             float scalar) {
+inline void Vector4D::MulAdd(Vector4D const& a, Vector4D const& b, f32 scalar) {
   x = a.x + b.x * scalar;
   y = a.y + b.y * scalar;
   z = a.z + b.z * scalar;
   w = a.w + b.w * scalar;
 }
 
-inline void Vector4DLerp(const Vector4D& src1, const Vector4D& src2, vec_t t,
+inline void Vector4DLerp(const Vector4D& src1, const Vector4D& src2, f32 t,
                          Vector4D& dest) {
   dest[0] = src1[0] + (src2[0] - src1[0]) * t;
   dest[1] = src1[1] + (src2[1] - src1[1]) * t;
@@ -495,13 +495,13 @@ inline void Vector4DLerp(const Vector4D& src1, const Vector4D& src2, vec_t t,
 // dot, cross
 //-----------------------------------------------------------------------------
 
-inline vec_t DotProduct4D(const Vector4D& a, const Vector4D& b) {
+inline f32 DotProduct4D(const Vector4D& a, const Vector4D& b) {
   Assert(a.IsValid() && b.IsValid());
   return (a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w);
 }
 
 // for backwards compatability
-inline vec_t Vector4D::Dot(Vector4D const& vOther) const {
+inline f32 Vector4D::Dot(Vector4D const& vOther) const {
   return DotProduct4D(*this, vOther);
 }
 
@@ -509,26 +509,26 @@ inline vec_t Vector4D::Dot(Vector4D const& vOther) const {
 // length
 //-----------------------------------------------------------------------------
 
-inline vec_t Vector4DLength(Vector4D const& v) {
+inline f32 Vector4DLength(Vector4D const& v) {
   Assert(v.IsValid());
-  return (vec_t)FastSqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
+  return (f32)FastSqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
 }
 
-inline vec_t Vector4D::LengthSqr(void) const {
+inline f32 Vector4D::LengthSqr(void) const {
   Assert(IsValid());
   return (x * x + y * y + z * z + w * w);
 }
 
-inline vec_t Vector4D::Length(void) const { return Vector4DLength(*this); }
+inline f32 Vector4D::Length(void) const { return Vector4DLength(*this); }
 
 //-----------------------------------------------------------------------------
 // Normalization
 //-----------------------------------------------------------------------------
 
 // FIXME: Can't use until we're un-macroed in mathlib.h
-inline vec_t Vector4DNormalize(Vector4D& v) {
+inline f32 Vector4DNormalize(Vector4D& v) {
   Assert(v.IsValid());
-  vec_t l = v.Length();
+  f32 l = v.Length();
   if (l != 0.0f) {
     v /= l;
   } else {
@@ -541,13 +541,13 @@ inline vec_t Vector4DNormalize(Vector4D& v) {
 // Get the distance from this Vector4D to the other one
 //-----------------------------------------------------------------------------
 
-inline vec_t Vector4D::DistTo(const Vector4D& vOther) const {
+inline f32 Vector4D::DistTo(const Vector4D& vOther) const {
   Vector4D delta;
   Vector4DSubtract(*this, vOther, delta);
   return delta.Length();
 }
 
-inline vec_t Vector4D::DistToSqr(const Vector4D& vOther) const {
+inline f32 Vector4D::DistToSqr(const Vector4D& vOther) const {
   Vector4D delta;
   Vector4DSubtract(*this, vOther, delta);
   return delta.LengthSqr();
@@ -557,7 +557,7 @@ inline vec_t Vector4D::DistToSqr(const Vector4D& vOther) const {
 // Vector4DAligned routines
 //-----------------------------------------------------------------------------
 
-inline Vector4DAligned::Vector4DAligned(vec_t X, vec_t Y, vec_t Z, vec_t W) {
+inline Vector4DAligned::Vector4DAligned(f32 X, f32 Y, f32 Z, f32 W) {
   x = X;
   y = Y;
   z = Z;
@@ -565,7 +565,7 @@ inline Vector4DAligned::Vector4DAligned(vec_t X, vec_t Y, vec_t Z, vec_t W) {
   Assert(IsValid());
 }
 
-inline void Vector4DAligned::Set(vec_t X, vec_t Y, vec_t Z, vec_t W) {
+inline void Vector4DAligned::Set(f32 X, f32 Y, f32 Z, f32 W) {
   x = X;
   y = Y;
   z = Z;
@@ -596,7 +596,7 @@ inline void Vector4DMultiplyAligned(Vector4DAligned const& a,
 #endif
 }
 
-inline void Vector4DWeightMAD(vec_t w, Vector4DAligned const& vInA,
+inline void Vector4DWeightMAD(f32 w, Vector4DAligned const& vInA,
                               Vector4DAligned& vOutA,
                               Vector4DAligned const& vInB,
                               Vector4DAligned& vOutB) {
@@ -623,14 +623,14 @@ inline void Vector4DWeightMAD(vec_t w, Vector4DAligned const& vInA,
 #endif
 }
 
-inline void Vector4DWeightMADSSE(vec_t w, Vector4DAligned const& vInA,
+inline void Vector4DWeightMADSSE(f32 w, Vector4DAligned const& vInA,
                                  Vector4DAligned& vOutA,
                                  Vector4DAligned const& vInB,
                                  Vector4DAligned& vOutB) {
   Assert(vInA.IsValid() && vInB.IsValid() && IsFinite(w));
 
 #if !defined(_X360)
-  // Replicate scalar float out to 4 components
+  // Replicate scalar f32 out to 4 components
   __m128 packed = _mm_set1_ps(w);
 
   // 4D SSE Vector MAD

@@ -8,10 +8,11 @@
 #include <cmath>
 #include <cstdlib>  // For rand(). We really need a library!
 
+#include "base/include/base_types.h"
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector2d.h"
 #include "minmax.h"
-#include "tier0/include/basetypes.h"  // For vec_t, put this somewhere else?
+#include "tier0/include/basetypes.h"  // For f32, put this somewhere else?
 #include "tier0/include/dbg.h"
 #include "tier0/include/threadtools.h"
 
@@ -33,9 +34,9 @@
 #define CHECK_VALID(_v) 0
 #endif
 
-#define VecToString(v)               \
-  (static_cast<const char*>(CFmtStr( \
-      "(%f, %f, %f)", (v).x, (v).y,  \
+#define VecToString(v)              \
+  (static_cast<const ch*>(CFmtStr(  \
+      "(%f, %f, %f)", (v).x, (v).y, \
       (v).z)))  // ** Note: this generates a temporary, don't hold reference!
 
 class VectorByValue;
@@ -44,33 +45,33 @@ class VectorByValue;
 class Vector {
  public:
   // Members
-  vec_t x, y, z;
+  f32 x, y, z;
 
   // Construction/destruction:
   Vector();
-  Vector(vec_t X, vec_t Y, vec_t Z);
+  Vector(f32 X, f32 Y, f32 Z);
 
   // Initialization
-  void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f);
+  void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f);
 
   // Got any nasty NAN's?
   bool IsValid() const;
   void Invalidate();
 
   // array access...
-  vec_t operator[](int i) const;
-  vec_t& operator[](int i);
+  f32 operator[](int i) const;
+  f32& operator[](int i);
 
   // Base address...
-  vec_t* Base();
-  vec_t const* Base() const;
+  f32* Base();
+  f32 const* Base() const;
 
   // Cast to Vector2D...
   Vector2D& AsVector2D();
   const Vector2D& AsVector2D() const;
 
   // Initialization methods
-  void Random(vec_t minVal, vec_t maxVal);
+  void Random(f32 minVal, f32 maxVal);
   inline void Zero();  ///< zero out a vector
 
   // equality
@@ -81,45 +82,45 @@ class Vector {
   FORCEINLINE Vector& operator+=(const Vector& v);
   FORCEINLINE Vector& operator-=(const Vector& v);
   FORCEINLINE Vector& operator*=(const Vector& v);
-  FORCEINLINE Vector& operator*=(float s);
+  FORCEINLINE Vector& operator*=(f32 s);
   FORCEINLINE Vector& operator/=(const Vector& v);
-  FORCEINLINE Vector& operator/=(float s);
-  FORCEINLINE Vector& operator+=(float fl);  ///< broadcast add
-  FORCEINLINE Vector& operator-=(float fl);  ///< broadcast sub
+  FORCEINLINE Vector& operator/=(f32 s);
+  FORCEINLINE Vector& operator+=(f32 fl);  ///< broadcast add
+  FORCEINLINE Vector& operator-=(f32 fl);  ///< broadcast sub
 
   // negate the vector components
   void Negate();
 
   // Get the vector's magnitude.
-  inline vec_t Length() const;
+  inline f32 Length() const;
 
   // Get the vector's magnitude squared.
-  FORCEINLINE vec_t LengthSqr(void) const {
+  FORCEINLINE f32 LengthSqr(void) const {
     CHECK_VALID(*this);
     return (x * x + y * y + z * z);
   }
 
   // return true if this vector is (0,0,0) within tolerance
-  bool IsZero(float tolerance = 0.01f) const {
+  bool IsZero(f32 tolerance = 0.01f) const {
     return (x > -tolerance && x < tolerance && y > -tolerance &&
             y < tolerance && z > -tolerance && z < tolerance);
   }
 
-  vec_t NormalizeInPlace();
-  bool IsLengthGreaterThan(float val) const;
-  bool IsLengthLessThan(float val) const;
+  f32 NormalizeInPlace();
+  bool IsLengthGreaterThan(f32 val) const;
+  bool IsLengthLessThan(f32 val) const;
 
   // check if a vector is within the box defined by two other vectors
   FORCEINLINE bool WithinAABox(Vector const& boxmin, Vector const& boxmax);
 
   // Get the distance from this vector to the other one.
-  vec_t DistTo(const Vector& vOther) const;
+  f32 DistTo(const Vector& vOther) const;
 
   // Get the distance from this vector to the other one squared.
   // NJS: note, VC wasn't inlining it correctly in several deeply nested inlines
   // due to being an 'out of line' inline. may be able to tidy this up after
   // switching to VC7
-  FORCEINLINE vec_t DistToSqr(const Vector& vOther) const {
+  FORCEINLINE f32 DistToSqr(const Vector& vOther) const {
     Vector delta;
 
     delta.x = x - vOther.x;
@@ -130,22 +131,22 @@ class Vector {
   }
 
   // Copy
-  void CopyToArray(float* rgfl) const;
+  void CopyToArray(f32* rgfl) const;
 
   // Multiply, add, and assign to this (ie: *this = a + b * scalar). This
   // is about 12% faster than the actual vector equation (because it's done
   // per-component rather than per-vector).
-  void MulAdd(const Vector& a, const Vector& b, float scalar);
+  void MulAdd(const Vector& a, const Vector& b, f32 scalar);
 
   // Dot product.
-  vec_t Dot(const Vector& vOther) const;
+  f32 Dot(const Vector& vOther) const;
 
   // assignment
   Vector& operator=(const Vector& vOther);
 
   // 2d
-  vec_t Length2D(void) const;
-  vec_t Length2DSqr(void) const;
+  f32 Length2D(void) const;
+  f32 Length2DSqr(void) const;
 
   operator VectorByValue&() { return *((VectorByValue*)(this)); }
   operator const VectorByValue&() const {
@@ -163,8 +164,8 @@ class Vector {
   Vector operator-(const Vector& v) const;
   Vector operator*(const Vector& v) const;
   Vector operator/(const Vector& v) const;
-  Vector operator*(float fl) const;
-  Vector operator/(float fl) const;
+  Vector operator*(f32 fl) const;
+  Vector operator/(f32 fl) const;
 
   // Cross product between two vectors.
   Vector Cross(const Vector& vOther) const;
@@ -184,14 +185,14 @@ class Vector {
 #define USE_M64S ((!defined(_X360)) && (!defined(_LINUX)))
 
 //=========================================================
-// 4D Short Vector (aligned on 8-uint8_t boundary)
+// 4D Short Vector (aligned on 8-u8 boundary)
 //=========================================================
 class ALIGN8 ShortVector {
  public:
-  short x, y, z, w;
+  i16 x, y, z, w;
 
   // Initialization
-  void Init(short ix = 0, short iy = 0, short iz = 0, short iw = 0);
+  void Init(i16 ix = 0, i16 iy = 0, i16 iz = 0, i16 iw = 0);
 
 #if USE_M64S
   __m64& AsM64() { return *(__m64*)&x; }
@@ -200,15 +201,15 @@ class ALIGN8 ShortVector {
 
   // Setter
   void Set(const ShortVector& vOther);
-  void Set(const short ix, const short iy, const short iz, const short iw);
+  void Set(const i16 ix, const i16 iy, const i16 iz, const i16 iw);
 
   // array access...
-  short operator[](int i) const;
-  short& operator[](int i);
+  i16 operator[](int i) const;
+  i16& operator[](int i);
 
   // Base address...
-  short* Base();
-  short const* Base() const;
+  i16* Base();
+  i16 const* Base() const;
 
   // equality
   bool operator==(const ShortVector& v) const;
@@ -218,10 +219,10 @@ class ALIGN8 ShortVector {
   FORCEINLINE ShortVector& operator+=(const ShortVector& v);
   FORCEINLINE ShortVector& operator-=(const ShortVector& v);
   FORCEINLINE ShortVector& operator*=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator*=(float s);
+  FORCEINLINE ShortVector& operator*=(f32 s);
   FORCEINLINE ShortVector& operator/=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator/=(float s);
-  FORCEINLINE ShortVector operator*(float fl) const;
+  FORCEINLINE ShortVector& operator/=(f32 s);
+  FORCEINLINE ShortVector operator*(f32 fl) const;
 
  private:
   // No copy constructors allowed if we're in optimal mode
@@ -266,10 +267,10 @@ class IntVector4D {
   FORCEINLINE IntVector4D& operator+=(const IntVector4D& v);
   FORCEINLINE IntVector4D& operator-=(const IntVector4D& v);
   FORCEINLINE IntVector4D& operator*=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator*=(float s);
+  FORCEINLINE IntVector4D& operator*=(f32 s);
   FORCEINLINE IntVector4D& operator/=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator/=(float s);
-  FORCEINLINE IntVector4D operator*(float fl) const;
+  FORCEINLINE IntVector4D& operator/=(f32 s);
+  FORCEINLINE IntVector4D operator*(f32 fl) const;
 
  private:
   // No copy constructors allowed if we're in optimal mode
@@ -286,7 +287,7 @@ class VectorByValue : public Vector {
  public:
   // Construction/destruction:
   VectorByValue(void) : Vector() {}
-  VectorByValue(vec_t X, vec_t Y, vec_t Z) : Vector(X, Y, Z) {}
+  VectorByValue(f32 X, f32 Y, f32 Z) : Vector(X, Y, Z) {}
   VectorByValue(const VectorByValue& vOther) { *this = vOther; }
 };
 
@@ -296,20 +297,20 @@ class VectorByValue : public Vector {
 //-----------------------------------------------------------------------------
 class TableVector {
  public:
-  vec_t x, y, z;
+  f32 x, y, z;
 
   operator Vector&() { return *((Vector*)(this)); }
   operator const Vector&() const { return *((const Vector*)(this)); }
 
   // array access...
-  inline vec_t& operator[](int i) {
+  inline f32& operator[](int i) {
     Assert((i >= 0) && (i < 3));
-    return ((vec_t*)this)[i];
+    return ((f32*)this)[i];
   }
 
-  inline vec_t operator[](int i) const {
+  inline f32 operator[](int i) const {
     Assert((i >= 0) && (i < 3));
-    return ((vec_t*)this)[i];
+    return ((f32*)this)[i];
   }
 };
 
@@ -320,7 +321,7 @@ class TableVector {
 class ALIGN16 VectorAligned : public Vector {
  public:
   inline VectorAligned(void){};
-  inline VectorAligned(vec_t X, vec_t Y, vec_t Z) { Init(X, Y, Z); }
+  inline VectorAligned(f32 X, f32 Y, f32 Z) { Init(X, Y, Z); }
 
 #ifdef VECTOR_NO_SLOW_OPERATIONS
 
@@ -341,7 +342,7 @@ class ALIGN16 VectorAligned : public Vector {
   }
 
 #endif
-  float w;  // this space is used anyway
+  f32 w;  // this space is used anyway
 };
 
 //-----------------------------------------------------------------------------
@@ -358,30 +359,30 @@ FORCEINLINE void VectorCopy(const Vector& src, Vector& dst);
 FORCEINLINE void VectorAdd(const Vector& a, const Vector& b, Vector& result);
 FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b,
                                 Vector& result);
-FORCEINLINE void VectorMultiply(const Vector& a, vec_t b, Vector& result);
+FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& result);
 FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b,
                                 Vector& result);
-FORCEINLINE void VectorDivide(const Vector& a, vec_t b, Vector& result);
+FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& result);
 FORCEINLINE void VectorDivide(const Vector& a, const Vector& b, Vector& result);
-inline void VectorScale(const Vector& in, vec_t scale, Vector& result);
-inline void VectorMA(const Vector& start, float scale, const Vector& direction,
+inline void VectorScale(const Vector& in, f32 scale, Vector& result);
+inline void VectorMA(const Vector& start, f32 scale, const Vector& direction,
                      Vector& dest);
 
 // Vector equality with tolerance
 bool VectorsAreEqual(const Vector& src1, const Vector& src2,
-                     float tolerance = 0.0f);
+                     f32 tolerance = 0.0f);
 
 #define VectorExpand(v) (v).x, (v).y, (v).z
 
 // Normalization
 // FIXME: Can't use quite yet
-// vec_t VectorNormalize( Vector& v );
+// f32 VectorNormalize( Vector& v );
 
 // Length
-inline vec_t VectorLength(const Vector& v);
+inline f32 VectorLength(const Vector& v);
 
 // Dot Product
-FORCEINLINE vec_t DotProduct(const Vector& a, const Vector& b);
+FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b);
 
 // Cross product
 void CrossProduct(const Vector& a, const Vector& b, Vector& result);
@@ -391,7 +392,7 @@ void VectorMin(const Vector& a, const Vector& b, Vector& result);
 void VectorMax(const Vector& a, const Vector& b, Vector& result);
 
 // Linearly interpolate between two vectors
-void VectorLerp(const Vector& src1, const Vector& src2, vec_t t, Vector& dest);
+void VectorLerp(const Vector& src1, const Vector& src2, f32 t, Vector& dest);
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
@@ -399,7 +400,7 @@ void VectorLerp(const Vector& src1, const Vector& src2, vec_t t, Vector& dest);
 Vector CrossProduct(const Vector& a, const Vector& b);
 
 // Random vector creation
-Vector RandomVector(vec_t minVal, vec_t maxVal);
+Vector RandomVector(f32 minVal, f32 maxVal);
 
 #endif
 
@@ -421,7 +422,7 @@ inline Vector::Vector() {
 #endif
 }
 
-inline Vector::Vector(vec_t X, vec_t Y, vec_t Z) {
+inline Vector::Vector(f32 X, f32 Y, f32 Z) {
   x = X;
   y = Y;
   z = Z;
@@ -432,17 +433,17 @@ inline Vector::Vector(vec_t X, vec_t Y, vec_t Z) {
 // initialization
 //-----------------------------------------------------------------------------
 
-inline void Vector::Init(vec_t ix, vec_t iy, vec_t iz) {
+inline void Vector::Init(f32 ix, f32 iy, f32 iz) {
   x = ix;
   y = iy;
   z = iz;
   CHECK_VALID(*this);
 }
 
-inline void Vector::Random(vec_t minVal, vec_t maxVal) {
-  x = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
-  y = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
-  z = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
+inline void Vector::Random(f32 minVal, f32 maxVal) {
+  x = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  y = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  z = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
   CHECK_VALID(*this);
 }
 
@@ -467,22 +468,22 @@ inline Vector& Vector::operator=(const Vector& vOther) {
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline vec_t& Vector::operator[](int i) {
+inline f32& Vector::operator[](int i) {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
-inline vec_t Vector::operator[](int i) const {
+inline f32 Vector::operator[](int i) const {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
 // Base address...
 //-----------------------------------------------------------------------------
-inline vec_t* Vector::Base() { return (vec_t*)this; }
+inline f32* Vector::Base() { return (f32*)this; }
 
-inline vec_t const* Vector::Base() const { return (vec_t const*)this; }
+inline f32 const* Vector::Base() const { return (f32 const*)this; }
 
 //-----------------------------------------------------------------------------
 // Cast to Vector2D...
@@ -541,7 +542,7 @@ FORCEINLINE void VectorCopy(const Vector& src, Vector& dst) {
   dst.z = src.z;
 }
 
-inline void Vector::CopyToArray(float* rgfl) const {
+inline void Vector::CopyToArray(f32* rgfl) const {
   Assert(rgfl);
   CHECK_VALID(*this);
   rgfl[0] = x, rgfl[1] = y, rgfl[2] = z;
@@ -577,7 +578,7 @@ FORCEINLINE Vector& Vector::operator-=(const Vector& v) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator*=(float fl) {
+FORCEINLINE Vector& Vector::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -595,7 +596,7 @@ FORCEINLINE Vector& Vector::operator*=(const Vector& v) {
 }
 
 // this ought to be an opcode.
-FORCEINLINE Vector& Vector::operator+=(float fl) {
+FORCEINLINE Vector& Vector::operator+=(f32 fl) {
   x += fl;
   y += fl;
   z += fl;
@@ -603,7 +604,7 @@ FORCEINLINE Vector& Vector::operator+=(float fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator-=(float fl) {
+FORCEINLINE Vector& Vector::operator-=(f32 fl) {
   x -= fl;
   y -= fl;
   z -= fl;
@@ -611,9 +612,9 @@ FORCEINLINE Vector& Vector::operator-=(float fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator/=(float fl) {
+FORCEINLINE Vector& Vector::operator/=(f32 fl) {
   Assert(fl != 0.0f);
-  float oofl = 1.0f / fl;
+  f32 oofl = 1.0f / fl;
   x *= oofl;
   y *= oofl;
   z *= oofl;
@@ -637,7 +638,7 @@ FORCEINLINE Vector& Vector::operator/=(const Vector& v) {
 //
 //-----------------------------------------------------------------------------
 
-inline void ShortVector::Init(short ix, short iy, short iz, short iw) {
+inline void ShortVector::Init(i16 ix, i16 iy, i16 iz, i16 iw) {
   x = ix;
   y = iy;
   z = iz;
@@ -651,8 +652,8 @@ FORCEINLINE void ShortVector::Set(const ShortVector& vOther) {
   w = vOther.w;
 }
 
-FORCEINLINE void ShortVector::Set(const short ix, const short iy,
-                                  const short iz, const short iw) {
+FORCEINLINE void ShortVector::Set(const i16 ix, const i16 iy, const i16 iz,
+                                  const i16 iw) {
   x = ix;
   y = iy;
   z = iz;
@@ -662,22 +663,22 @@ FORCEINLINE void ShortVector::Set(const short ix, const short iy,
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline short ShortVector::operator[](int i) const {
+inline i16 ShortVector::operator[](int i) const {
   Assert((i >= 0) && (i < 4));
-  return ((short*)this)[i];
+  return ((i16*)this)[i];
 }
 
-inline short& ShortVector::operator[](int i) {
+inline i16& ShortVector::operator[](int i) {
   Assert((i >= 0) && (i < 4));
-  return ((short*)this)[i];
+  return ((i16*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
 // Base address...
 //-----------------------------------------------------------------------------
-inline short* ShortVector::Base() { return (short*)this; }
+inline i16* ShortVector::Base() { return (i16*)this; }
 
-inline short const* ShortVector::Base() const { return (short const*)this; }
+inline i16 const* ShortVector::Base() const { return (i16 const*)this; }
 
 //-----------------------------------------------------------------------------
 // comparison
@@ -711,7 +712,7 @@ FORCEINLINE ShortVector& ShortVector::operator-=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator*=(float fl) {
+FORCEINLINE ShortVector& ShortVector::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -727,9 +728,9 @@ FORCEINLINE ShortVector& ShortVector::operator*=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator/=(float fl) {
+FORCEINLINE ShortVector& ShortVector::operator/=(f32 fl) {
   Assert(fl != 0.0f);
-  float oofl = 1.0f / fl;
+  f32 oofl = 1.0f / fl;
   x *= oofl;
   y *= oofl;
   z *= oofl;
@@ -746,7 +747,7 @@ FORCEINLINE ShortVector& ShortVector::operator/=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE void ShortVectorMultiply(const ShortVector& src, float fl,
+FORCEINLINE void ShortVectorMultiply(const ShortVector& src, f32 fl,
                                      ShortVector& res) {
   Assert(IsFinite(fl));
   res.x = src.x * fl;
@@ -755,7 +756,7 @@ FORCEINLINE void ShortVectorMultiply(const ShortVector& src, float fl,
   res.w = src.w * fl;
 }
 
-FORCEINLINE ShortVector ShortVector::operator*(float fl) const {
+FORCEINLINE ShortVector ShortVector::operator*(f32 fl) const {
   ShortVector res;
   ShortVectorMultiply(*this, fl, res);
   return res;
@@ -841,7 +842,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator-=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator*=(float fl) {
+FORCEINLINE IntVector4D& IntVector4D::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -857,9 +858,9 @@ FORCEINLINE IntVector4D& IntVector4D::operator*=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator/=(float fl) {
+FORCEINLINE IntVector4D& IntVector4D::operator/=(f32 fl) {
   Assert(fl != 0.0f);
-  float oofl = 1.0f / fl;
+  f32 oofl = 1.0f / fl;
   x *= oofl;
   y *= oofl;
   z *= oofl;
@@ -876,7 +877,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator/=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, float fl,
+FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, f32 fl,
                                      IntVector4D& res) {
   Assert(IsFinite(fl));
   res.x = src.x * fl;
@@ -885,7 +886,7 @@ FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, float fl,
   res.w = src.w * fl;
 }
 
-FORCEINLINE IntVector4D IntVector4D::operator*(float fl) const {
+FORCEINLINE IntVector4D IntVector4D::operator*(f32 fl) const {
   IntVector4D res;
   IntVector4DMultiply(*this, fl, res);
   return res;
@@ -909,7 +910,7 @@ FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b, Vector& c) {
   c.z = a.z - b.z;
 }
 
-FORCEINLINE void VectorMultiply(const Vector& a, vec_t b, Vector& c) {
+FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& c) {
   CHECK_VALID(a);
   Assert(IsFinite(b));
   c.x = a.x * b;
@@ -926,14 +927,14 @@ FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b, Vector& c) {
 }
 
 // for backwards compatability
-inline void VectorScale(const Vector& in, vec_t scale, Vector& result) {
+inline void VectorScale(const Vector& in, f32 scale, Vector& result) {
   VectorMultiply(in, scale, result);
 }
 
-FORCEINLINE void VectorDivide(const Vector& a, vec_t b, Vector& c) {
+FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& c) {
   CHECK_VALID(a);
   Assert(b != 0.0f);
-  vec_t oob = 1.0f / b;
+  f32 oob = 1.0f / b;
   c.x = a.x * oob;
   c.y = a.y * oob;
   c.z = a.z * oob;
@@ -950,7 +951,7 @@ FORCEINLINE void VectorDivide(const Vector& a, const Vector& b, Vector& c) {
 
 // FIXME: Remove
 // For backwards compatability
-inline void Vector::MulAdd(const Vector& a, const Vector& b, float scalar) {
+inline void Vector::MulAdd(const Vector& a, const Vector& b, f32 scalar) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   x = a.x + b.x * scalar;
@@ -958,7 +959,7 @@ inline void Vector::MulAdd(const Vector& a, const Vector& b, float scalar) {
   z = a.z + b.z * scalar;
 }
 
-inline void VectorLerp(const Vector& src1, const Vector& src2, vec_t t,
+inline void VectorLerp(const Vector& src1, const Vector& src2, f32 t,
                        Vector& dest) {
   CHECK_VALID(src1);
   CHECK_VALID(src2);
@@ -990,14 +991,14 @@ inline Vector& AllocTempVector() {
 //-----------------------------------------------------------------------------
 // dot, cross
 //-----------------------------------------------------------------------------
-FORCEINLINE vec_t DotProduct(const Vector& a, const Vector& b) {
+FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
 // for backwards compatability
-inline vec_t Vector::Dot(const Vector& vOther) const {
+inline f32 Vector::Dot(const Vector& vOther) const {
   CHECK_VALID(vOther);
   return DotProduct(*this, vOther);
 }
@@ -1012,14 +1013,14 @@ inline void CrossProduct(const Vector& a, const Vector& b, Vector& result) {
   result.z = a.x * b.y - a.y * b.x;
 }
 
-inline vec_t DotProductAbs(const Vector& v0, const Vector& v1) {
+inline f32 DotProductAbs(const Vector& v0, const Vector& v1) {
   CHECK_VALID(v0);
   CHECK_VALID(v1);
   return FloatMakePositive(v0.x * v1.x) + FloatMakePositive(v0.y * v1.y) +
          FloatMakePositive(v0.z * v1.z);
 }
 
-inline vec_t DotProductAbs(const Vector& v0, const float* v1) {
+inline f32 DotProductAbs(const Vector& v0, const f32* v1) {
   return FloatMakePositive(v0.x * v1[0]) + FloatMakePositive(v0.y * v1[1]) +
          FloatMakePositive(v0.z * v1[2]);
 }
@@ -1028,12 +1029,12 @@ inline vec_t DotProductAbs(const Vector& v0, const float* v1) {
 // length
 //-----------------------------------------------------------------------------
 
-inline vec_t VectorLength(const Vector& v) {
+inline f32 VectorLength(const Vector& v) {
   CHECK_VALID(v);
-  return (vec_t)FastSqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+  return (f32)FastSqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-inline vec_t Vector::Length(void) const {
+inline f32 Vector::Length(void) const {
   CHECK_VALID(*this);
   return VectorLength(*this);
 }
@@ -1044,10 +1045,10 @@ inline vec_t Vector::Length(void) const {
 
 /*
 // FIXME: Can't use until we're un-macroed in mathlib.h
-inline vec_t VectorNormalize( Vector& v )
+inline f32 VectorNormalize( Vector& v )
 {
         Assert( v.IsValid() );
-        vec_t l = v.Length();
+        f32 l = v.Length();
         if (l != 0.0f)
         {
                 v /= l;
@@ -1071,7 +1072,7 @@ bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax) {
 //-----------------------------------------------------------------------------
 // Get the distance from this vector to the other one
 //-----------------------------------------------------------------------------
-inline vec_t Vector::DistTo(const Vector& vOther) const {
+inline f32 Vector::DistTo(const Vector& vOther) const {
   Vector delta;
   VectorSubtract(*this, vOther, delta);
   return delta.Length();
@@ -1081,7 +1082,7 @@ inline vec_t Vector::DistTo(const Vector& vOther) const {
 // Vector equality with tolerance
 //-----------------------------------------------------------------------------
 inline bool VectorsAreEqual(const Vector& src1, const Vector& src2,
-                            float tolerance) {
+                            f32 tolerance) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
   if (FloatMakePositive(src1.y - src2.y) > tolerance) return false;
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
@@ -1091,11 +1092,11 @@ inline bool VectorsAreEqual(const Vector& src1, const Vector& src2,
 // Computes the closest point to vecTarget no farther than flMaxDist from
 // vecStart
 //-----------------------------------------------------------------------------
-inline void ComputeClosestPoint(const Vector& vecStart, float flMaxDist,
+inline void ComputeClosestPoint(const Vector& vecStart, f32 flMaxDist,
                                 const Vector& vecTarget, Vector* pResult) {
   Vector vecDelta;
   VectorSubtract(vecTarget, vecStart, vecDelta);
-  float flDistSqr = vecDelta.LengthSqr();
+  f32 flDistSqr = vecDelta.LengthSqr();
   if (flDistSqr <= flMaxDist * flMaxDist) {
     *pResult = vecTarget;
   } else {
@@ -1152,7 +1153,7 @@ inline Vector Vector::operator-(const Vector& v) const {
   return res;
 }
 
-inline Vector Vector::operator*(float fl) const {
+inline Vector Vector::operator*(f32 fl) const {
   Vector res;
   VectorMultiply(*this, fl, res);
   return res;
@@ -1164,7 +1165,7 @@ inline Vector Vector::operator*(const Vector& v) const {
   return res;
 }
 
-inline Vector Vector::operator/(float fl) const {
+inline Vector Vector::operator/(f32 fl) const {
   Vector res;
   VectorDivide(*this, fl, res);
   return res;
@@ -1176,7 +1177,7 @@ inline Vector Vector::operator/(const Vector& v) const {
   return res;
 }
 
-inline Vector operator*(float fl, const Vector& v) { return v * fl; }
+inline Vector operator*(f32 fl, const Vector& v) { return v * fl; }
 
 //-----------------------------------------------------------------------------
 // cross product
@@ -1192,11 +1193,9 @@ inline Vector Vector::Cross(const Vector& vOther) const {
 // 2D
 //-----------------------------------------------------------------------------
 
-inline vec_t Vector::Length2D(void) const {
-  return (vec_t)FastSqrt(x * x + y * y);
-}
+inline f32 Vector::Length2D(void) const { return (f32)FastSqrt(x * x + y * y); }
 
-inline vec_t Vector::Length2DSqr(void) const { return (x * x + y * y); }
+inline f32 Vector::Length2DSqr(void) const { return (x * x + y * y); }
 
 inline Vector CrossProduct(const Vector& a, const Vector& b) {
   return Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
@@ -1216,7 +1215,7 @@ inline void VectorMax(const Vector& a, const Vector& b, Vector& result) {
 }
 
 // Get a random vector.
-inline Vector RandomVector(float minVal, float maxVal) {
+inline Vector RandomVector(f32 minVal, f32 maxVal) {
   Vector r;
   r.Random(minVal, maxVal);
   return r;
@@ -1228,25 +1227,25 @@ inline Vector RandomVector(float minVal, float maxVal) {
 // Helper debugging stuff....
 //-----------------------------------------------------------------------------
 
-inline bool operator==(float const*, const Vector&) {
+inline bool operator==(f32 const*, const Vector&) {
   // AIIIEEEE!!!!
   Assert(0);
   return false;
 }
 
-inline bool operator==(const Vector&, float const*) {
+inline bool operator==(const Vector&, f32 const*) {
   // AIIIEEEE!!!!
   Assert(0);
   return false;
 }
 
-inline bool operator!=(float const*, const Vector&) {
+inline bool operator!=(f32 const*, const Vector&) {
   // AIIIEEEE!!!!
   Assert(0);
   return false;
 }
 
-inline bool operator!=(const Vector&, float const*) {
+inline bool operator!=(const Vector&, f32 const*) {
   // AIIIEEEE!!!!
   Assert(0);
   return false;
@@ -1261,7 +1260,7 @@ typedef Vector AngularImpulse;
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
-inline AngularImpulse RandomAngularImpulse(float minVal, float maxVal) {
+inline AngularImpulse RandomAngularImpulse(f32 minVal, f32 maxVal) {
   AngularImpulse angImp;
   angImp.Random(minVal, maxVal);
   return angImp;
@@ -1276,7 +1275,7 @@ inline AngularImpulse RandomAngularImpulse(float minVal, float maxVal) {
 class RadianEuler;
 
 class Quaternion  // same data-layout as engine's vec4_t,
-{                 //		which is a vec_t[4]
+{                 //		which is a f32[4]
  public:
   inline Quaternion() {
     // Initialize to NAN to catch errors
@@ -1286,12 +1285,11 @@ class Quaternion  // same data-layout as engine's vec4_t,
 #endif
 #endif
   }
-  inline Quaternion(vec_t ix, vec_t iy, vec_t iz, vec_t iw)
+  inline Quaternion(f32 ix, f32 iy, f32 iz, f32 iw)
       : x(ix), y(iy), z(iz), w(iw) {}
   inline Quaternion(RadianEuler const& angle);  // evil auto type promotion!!!
 
-  inline void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f,
-                   vec_t iw = 0.0f) {
+  inline void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f, f32 iw = 0.0f) {
     x = ix;
     y = iy;
     z = iz;
@@ -1304,27 +1302,27 @@ class Quaternion  // same data-layout as engine's vec4_t,
   bool operator==(const Quaternion& src) const;
   bool operator!=(const Quaternion& src) const;
 
-  vec_t* Base() { return (vec_t*)this; }
-  const vec_t* Base() const { return (vec_t*)this; }
+  f32* Base() { return (f32*)this; }
+  const f32* Base() const { return (f32*)this; }
 
   // array access...
-  vec_t operator[](int i) const;
-  vec_t& operator[](int i);
+  f32 operator[](int i) const;
+  f32& operator[](int i);
 
-  vec_t x, y, z, w;
+  f32 x, y, z, w;
 };
 
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline vec_t& Quaternion::operator[](int i) {
+inline f32& Quaternion::operator[](int i) {
   Assert((i >= 0) && (i < 4));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
-inline vec_t Quaternion::operator[](int i) const {
+inline f32 Quaternion::operator[](int i) const {
   Assert((i >= 0) && (i < 4));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
@@ -1342,7 +1340,7 @@ inline bool Quaternion::operator!=(const Quaternion& src) const {
 // Quaternion equality with tolerance
 //-----------------------------------------------------------------------------
 inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
-                                float tolerance) {
+                                f32 tolerance) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
   if (FloatMakePositive(src1.y - src2.y) > tolerance) return false;
   if (FloatMakePositive(src1.z - src2.z) > tolerance) return false;
@@ -1355,9 +1353,7 @@ inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
 class ALIGN16 QuaternionAligned : public Quaternion {
  public:
   inline QuaternionAligned(void){};
-  inline QuaternionAligned(vec_t X, vec_t Y, vec_t Z, vec_t W) {
-    Init(X, Y, Z, W);
-  }
+  inline QuaternionAligned(f32 X, f32 Y, f32 Z, f32 W) { Init(X, Y, Z, W); }
 
 #ifdef VECTOR_NO_SLOW_OPERATIONS
 
@@ -1387,7 +1383,7 @@ class QAngle;
 class RadianEuler {
  public:
   inline RadianEuler() {}
-  inline RadianEuler(vec_t X, vec_t Y, vec_t Z) {
+  inline RadianEuler(f32 X, f32 Y, f32 Z) {
     x = X;
     y = Y;
     z = Z;
@@ -1396,7 +1392,7 @@ class RadianEuler {
   inline RadianEuler(QAngle const& angles);  // evil auto type promotion!!!
 
   // Initialization
-  inline void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f) {
+  inline void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f) {
     x = ix;
     y = iy;
     z = iz;
@@ -1408,10 +1404,10 @@ class RadianEuler {
   void Invalidate();
 
   // array access...
-  vec_t operator[](int i) const;
-  vec_t& operator[](int i);
+  f32 operator[](int i) const;
+  f32& operator[](int i);
 
-  vec_t x, y, z;
+  f32 x, y, z;
 };
 
 extern void AngleQuaternion(RadianEuler const& angles, Quaternion& qt);
@@ -1443,7 +1439,7 @@ inline void VectorCopy(RadianEuler const& src, RadianEuler& dst) {
   dst.z = src.z;
 }
 
-inline void VectorScale(RadianEuler const& src, float b, RadianEuler& dst) {
+inline void VectorScale(RadianEuler const& src, f32 b, RadianEuler& dst) {
   CHECK_VALID(src);
   Assert(IsFinite(b));
   dst.x = src.x * b;
@@ -1466,14 +1462,14 @@ inline void RadianEuler::Invalidate() {
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline vec_t& RadianEuler::operator[](int i) {
+inline f32& RadianEuler::operator[](int i) {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
-inline vec_t RadianEuler::operator[](int i) const {
+inline f32 RadianEuler::operator[](int i) const {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
@@ -1484,11 +1480,11 @@ class QAngleByValue;
 class QAngle {
  public:
   // Members
-  vec_t x, y, z;
+  f32 x, y, z;
 
   // Construction/destruction
   QAngle();
-  QAngle(vec_t X, vec_t Y, vec_t Z);
+  QAngle(f32 X, f32 Y, f32 Z);
   //	QAngle(RadianEuler const &angles);	// evil auto type promotion!!!
 
   // Allow pass-by-value
@@ -1498,20 +1494,20 @@ class QAngle {
   }
 
   // Initialization
-  void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f);
-  void Random(vec_t minVal, vec_t maxVal);
+  void Init(f32 ix = 0.0f, f32 iy = 0.0f, f32 iz = 0.0f);
+  void Random(f32 minVal, f32 maxVal);
 
   // Got any nasty NAN's?
   bool IsValid() const;
   void Invalidate();
 
   // array access...
-  vec_t operator[](int i) const;
-  vec_t& operator[](int i);
+  f32 operator[](int i) const;
+  f32& operator[](int i);
 
   // Base address...
-  vec_t* Base();
-  vec_t const* Base() const;
+  f32* Base();
+  f32 const* Base() const;
 
   // equality
   bool operator==(const QAngle& v) const;
@@ -1520,12 +1516,12 @@ class QAngle {
   // arithmetic operations
   QAngle& operator+=(const QAngle& v);
   QAngle& operator-=(const QAngle& v);
-  QAngle& operator*=(float s);
-  QAngle& operator/=(float s);
+  QAngle& operator*=(f32 s);
+  QAngle& operator/=(f32 s);
 
   // Get the vector's magnitude.
-  vec_t Length() const;
-  vec_t LengthSqr() const;
+  f32 Length() const;
+  f32 LengthSqr() const;
 
   // negate the QAngle components
   // void	Negate();
@@ -1541,8 +1537,8 @@ class QAngle {
 
   QAngle operator+(const QAngle& v) const;
   QAngle operator-(const QAngle& v) const;
-  QAngle operator*(float fl) const;
-  QAngle operator/(float fl) const;
+  QAngle operator*(f32 fl) const;
+  QAngle operator/(f32 fl) const;
 #else
 
  private:
@@ -1559,7 +1555,7 @@ class QAngleByValue : public QAngle {
  public:
   // Construction/destruction:
   QAngleByValue(void) : QAngle() {}
-  QAngleByValue(vec_t X, vec_t Y, vec_t Z) : QAngle(X, Y, Z) {}
+  QAngleByValue(f32 X, f32 Y, f32 Z) : QAngle(X, Y, Z) {}
   QAngleByValue(const QAngleByValue& vOther) { *this = vOther; }
 };
 
@@ -1571,7 +1567,7 @@ inline void VectorAdd(const QAngle& a, const QAngle& b, QAngle& result) {
   result.z = a.z + b.z;
 }
 
-inline void VectorMA(const QAngle& start, float scale, const QAngle& direction,
+inline void VectorMA(const QAngle& start, f32 scale, const QAngle& direction,
                      QAngle& dest) {
   CHECK_VALID(start);
   CHECK_VALID(direction);
@@ -1592,7 +1588,7 @@ inline QAngle::QAngle() {
 #endif
 }
 
-inline QAngle::QAngle(vec_t X, vec_t Y, vec_t Z) {
+inline QAngle::QAngle(f32 X, f32 Y, f32 Z) {
   x = X;
   y = Y;
   z = Z;
@@ -1602,23 +1598,23 @@ inline QAngle::QAngle(vec_t X, vec_t Y, vec_t Z) {
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
-inline void QAngle::Init(vec_t ix, vec_t iy, vec_t iz) {
+inline void QAngle::Init(f32 ix, f32 iy, f32 iz) {
   x = ix;
   y = iy;
   z = iz;
   CHECK_VALID(*this);
 }
 
-inline void QAngle::Random(vec_t minVal, vec_t maxVal) {
-  x = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
-  y = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
-  z = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
+inline void QAngle::Random(f32 minVal, f32 maxVal) {
+  x = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  y = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
+  z = minVal + ((f32)rand() / RAND_MAX) * (maxVal - minVal);
   CHECK_VALID(*this);
 }
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
-inline QAngle RandomAngle(float minVal, float maxVal) {
+inline QAngle RandomAngle(f32 minVal, f32 maxVal) {
   Vector r;
   r.Random(minVal, maxVal);
   QAngle ret(r.x, r.y, r.z);
@@ -1653,22 +1649,22 @@ inline QAngle& QAngle::operator=(const QAngle& vOther) {
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline vec_t& QAngle::operator[](int i) {
+inline f32& QAngle::operator[](int i) {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
-inline vec_t QAngle::operator[](int i) const {
+inline f32 QAngle::operator[](int i) const {
   Assert((i >= 0) && (i < 3));
-  return ((vec_t*)this)[i];
+  return ((f32*)this)[i];
 }
 
 //-----------------------------------------------------------------------------
 // Base address...
 //-----------------------------------------------------------------------------
-inline vec_t* QAngle::Base() { return (vec_t*)this; }
+inline f32* QAngle::Base() { return (f32*)this; }
 
-inline vec_t const* QAngle::Base() const { return (vec_t const*)this; }
+inline f32 const* QAngle::Base() const { return (f32 const*)this; }
 
 //-----------------------------------------------------------------------------
 // IsValid?
@@ -1735,7 +1731,7 @@ inline QAngle& QAngle::operator-=(const QAngle& v) {
   return *this;
 }
 
-inline QAngle& QAngle::operator*=(float fl) {
+inline QAngle& QAngle::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -1743,9 +1739,9 @@ inline QAngle& QAngle::operator*=(float fl) {
   return *this;
 }
 
-inline QAngle& QAngle::operator/=(float fl) {
+inline QAngle& QAngle::operator/=(f32 fl) {
   Assert(fl != 0.0f);
-  float oofl = 1.0f / fl;
+  f32 oofl = 1.0f / fl;
   x *= oofl;
   y *= oofl;
   z *= oofl;
@@ -1756,12 +1752,12 @@ inline QAngle& QAngle::operator/=(float fl) {
 //-----------------------------------------------------------------------------
 // length
 //-----------------------------------------------------------------------------
-inline vec_t QAngle::Length() const {
+inline f32 QAngle::Length() const {
   CHECK_VALID(*this);
-  return (vec_t)FastSqrt(LengthSqr());
+  return (f32)FastSqrt(LengthSqr());
 }
 
-inline vec_t QAngle::LengthSqr() const {
+inline f32 QAngle::LengthSqr() const {
   CHECK_VALID(*this);
   return x * x + y * y + z * z;
 }
@@ -1770,7 +1766,7 @@ inline vec_t QAngle::LengthSqr() const {
 // Vector equality with tolerance
 //-----------------------------------------------------------------------------
 inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
-                            float tolerance = 0.0f) {
+                            f32 tolerance = 0.0f) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
   if (FloatMakePositive(src1.y - src2.y) > tolerance) return false;
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
@@ -1802,7 +1798,7 @@ inline QAngle QAngle::operator-(const QAngle& v) const {
   return res;
 }
 
-inline QAngle QAngle::operator*(float fl) const {
+inline QAngle QAngle::operator*(f32 fl) const {
   QAngle res;
   res.x = x * fl;
   res.y = y * fl;
@@ -1810,7 +1806,7 @@ inline QAngle QAngle::operator*(float fl) const {
   return res;
 }
 
-inline QAngle QAngle::operator/(float fl) const {
+inline QAngle QAngle::operator/(f32 fl) const {
   QAngle res;
   res.x = x / fl;
   res.y = y / fl;
@@ -1818,7 +1814,7 @@ inline QAngle QAngle::operator/(float fl) const {
   return res;
 }
 
-inline QAngle operator*(float fl, const QAngle& v) {
+inline QAngle operator*(f32 fl, const QAngle& v) {
   QAngle ret(v * fl);
   return ret;
 }
@@ -1843,18 +1839,18 @@ inline void AngularImpulseToQAngle(const AngularImpulse& impulse,
   angles.z = impulse.x;
 }
 
-extern float (*pfInvRSquared)(const float* v);
+extern f32 (*pfInvRSquared)(const f32* v);
 
-FORCEINLINE vec_t InvRSquared(float const* v) { return (*pfInvRSquared)(v); }
-FORCEINLINE vec_t InvRSquared(const Vector& v) { return InvRSquared(&v.x); }
+FORCEINLINE f32 InvRSquared(f32 const* v) { return (*pfInvRSquared)(v); }
+FORCEINLINE f32 InvRSquared(const Vector& v) { return InvRSquared(&v.x); }
 
-extern float(FASTCALL* pfVectorNormalize)(Vector& v);
+extern f32(FASTCALL* pfVectorNormalize)(Vector& v);
 
-// FIXME: Change this back to a #define once we get rid of the vec_t version
-FORCEINLINE float VectorNormalize(Vector& v) { return (*pfVectorNormalize)(v); }
+// FIXME: Change this back to a #define once we get rid of the f32 version
+FORCEINLINE f32 VectorNormalize(Vector& v) { return (*pfVectorNormalize)(v); }
 // FIXME: Obsolete version of VectorNormalize, once we remove all the friggin
-// float*s
-FORCEINLINE float VectorNormalize(float* v) {
+// f32*s
+FORCEINLINE f32 VectorNormalize(f32* v) {
   return VectorNormalize(*(reinterpret_cast<Vector*>(v)));
 }
 
@@ -1862,13 +1858,13 @@ extern void(FASTCALL* pfVectorNormalizeFast)(Vector& v);
 
 FORCEINLINE void VectorNormalizeFast(Vector& v) { (*pfVectorNormalizeFast)(v); }
 
-inline vec_t Vector::NormalizeInPlace() { return VectorNormalize(*this); }
+inline f32 Vector::NormalizeInPlace() { return VectorNormalize(*this); }
 
-inline bool Vector::IsLengthGreaterThan(float val) const {
+inline bool Vector::IsLengthGreaterThan(f32 val) const {
   return LengthSqr() > val * val;
 }
 
-inline bool Vector::IsLengthLessThan(float val) const {
+inline bool Vector::IsLengthLessThan(f32 val) const {
   return LengthSqr() < val * val;
 }
 

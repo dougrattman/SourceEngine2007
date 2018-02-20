@@ -7,6 +7,7 @@
 #define SOURCE_MATHLIB_SIMDVECTORMATRIX_H_
 
 #include <cstring>
+#include "base/include/base_types.h"
 #include "mathlib/ssemath.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
@@ -68,9 +69,9 @@ class CSIMDVectorMatrix {
 
   CSIMDVectorMatrix &operator*=(Vector const &src);
 
-  // create from an RGBA float bitmap. alpha ignored.
+  // create from an RGBA f32 bitmap. alpha ignored.
   void CreateFromRGBA_FloatImageData(int srcwidth, int srcheight,
-                                     float const *srcdata);
+                                     f32 const *srcdata);
 
   // Element access. If you are calling this a lot, you don't want to use this
   // class, because you're not getting the sse advantage
@@ -102,7 +103,7 @@ class CSIMDVectorMatrix {
     memset(m_pData, 0, m_nHeight * m_nPaddedWidth * sizeof(m_pData[0]));
   }
 
-  void RaiseToPower(float power);
+  void RaiseToPower(f32 power);
 };
 
 #endif  // SOURCE_MATHLIB_SIMDVECTORMATRIX_H_

@@ -3,22 +3,23 @@
 #ifndef SOURCE_MATHLIB_POLYHEDRON_H_
 #define SOURCE_MATHLIB_POLYHEDRON_H_
 
+#include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
 
 struct Polyhedron_IndexedLine_t {
-  unsigned short iPointIndices[2];
+  u16 iPointIndices[2];
 };
 
 struct Polyhedron_IndexedLineReference_t {
-  unsigned short iLineIndex;
-  unsigned char iEndPointIndex;  // since two polygons reference any one line,
-                                 // one needs to traverse the line backwards,
-                                 // this flags that behavior
+  u16 iLineIndex;
+  u8 iEndPointIndex;  // since two polygons reference any one line,
+                      // one needs to traverse the line backwards,
+                      // this flags that behavior
 };
 
 struct Polyhedron_IndexedPolygon_t {
-  unsigned short iFirstIndex;
-  unsigned short iIndexCount;
+  u16 iFirstIndex;
+  u16 iIndexCount;
   Vector polyNormal;
 };
 
@@ -31,10 +32,10 @@ class CPolyhedron {
   Polyhedron_IndexedLineReference_t *pIndices;
   Polyhedron_IndexedPolygon_t *pPolygons;
 
-  unsigned short iVertexCount;
-  unsigned short iLineCount;
-  unsigned short iIndexCount;
-  unsigned short iPolygonCount;
+  u16 iVertexCount;
+  u16 iLineCount;
+  u16 iIndexCount;
+  u16 iPolygonCount;
 
   virtual ~CPolyhedron(void){};
   virtual void Release(void) = 0;
@@ -45,10 +46,10 @@ class CPolyhedron_AllocByNew : public CPolyhedron {
  public:
   virtual void Release(void);
   static CPolyhedron_AllocByNew *Allocate(
-      unsigned short iVertices, unsigned short iLines, unsigned short iIndices,
-      unsigned short iPolygons);  // creates the polyhedron along with enough
-                                  // memory to hold all it's data in a single
-                                  // allocation
+      u16 iVertices, u16 iLines, u16 iIndices,
+      u16 iPolygons);  // creates the polyhedron along with enough
+                       // memory to hold all it's data in a single
+                       // allocation
 
  private:
   CPolyhedron_AllocByNew(void){};  // CPolyhedron_AllocByNew::Allocate() is the
@@ -56,22 +57,21 @@ class CPolyhedron_AllocByNew : public CPolyhedron {
 };
 
 CPolyhedron *GeneratePolyhedronFromPlanes(
-    const float *pOutwardFacingPlanes, int iPlaneCount, float fOnPlaneEpsilon,
+    const f32 *pOutwardFacingPlanes, int iPlaneCount, f32 fOnPlaneEpsilon,
     bool bUseTemporaryMemory = false);  // be sure to polyhedron->Release()
 CPolyhedron *ClipPolyhedron(
-    const CPolyhedron *pExistingPolyhedron, const float *pOutwardFacingPlanes,
-    int iPlaneCount, float fOnPlaneEpsilon,
+    const CPolyhedron *pExistingPolyhedron, const f32 *pOutwardFacingPlanes,
+    int iPlaneCount, f32 fOnPlaneEpsilon,
     bool bUseTemporaryMemory =
         false);  // this does NOT modify/delete the existing polyhedron
 
-CPolyhedron *GetTempPolyhedron(unsigned short iVertices, unsigned short iLines,
-                               unsigned short iIndices,
-                               unsigned short iPolygons);  // grab the temporary
-                                                           // polyhedron. Avoids
-                                                           // new/delete for
-                                                           // quick work. Can
-                                                           // only be in use by
-                                                           // one chunk of code
-                                                           // at a time
+CPolyhedron *GetTempPolyhedron(u16 iVertices, u16 iLines, u16 iIndices,
+                               u16 iPolygons);  // grab the temporary
+                                                // polyhedron. Avoids
+                                                // new/delete for
+                                                // quick work. Can
+                                                // only be in use by
+                                                // one chunk of code
+                                                // at a time
 
 #endif  // SOURCE_MATHLIB_POLYHEDRON_H_

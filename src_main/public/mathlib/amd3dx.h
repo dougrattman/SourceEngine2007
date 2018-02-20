@@ -88,9 +88,9 @@ without notice.
 
  void main ()
  {
-      float x = (float)1.25;
-      float y = (float)1.25;
-      float z, zz;
+      f32 x = (f32)1.25;
+      f32 y = (f32)1.25;
+      f32 z, zz;
 
      _asm {
               movd mm1, x
@@ -120,7 +120,7 @@ without notice.
  #pragma aux EXAMPLE with WATCOM C/C++ v11.x
  ===========================================
 
-    extern void Add(float *__Dest, float *__A, float *__B);
+    extern void Add(f32 *__Dest, f32 *__A, f32 *__B);
     #pragma aux Add =               \
             p_femms                 \
             "movd mm6,[esi]"        \
@@ -318,8 +318,7 @@ without notice.
 
 #define _k3d_xglue3(a, b, c) a##b##c
 #define _k3d_glue3(a, b, c) _k3d_xglue3(a, b, c)
-#define _k3d_MODRM(dst, src) \
-  _k3d_glue3(_k3d, _k3d_name_xlat_##dst, _k3d_name_xlat_##src)
+#define _k3d_MODRM(dst, src) _k3d_glue3(_k3d, _k3d_name_xlat_##dst, _k3d_name_xlat_##src)
 
 /* Operand defines for prefetch and prefetchw */
 
@@ -394,52 +393,30 @@ without notice.
 #define SFENCE db 0x0f, 0xae, 0xf8
 
 /* Memory/offset versions of the opcodes */
-#define PF2IDM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x1d
-#define PFACCM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xae
-#define PFADDM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x9e
-#define PFCMPEQM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb0
-#define PFCMPGEM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x90
-#define PFCMPGTM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa0
-#define PFMAXM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa4
-#define PFMINM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x94
-#define PFMULM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb4
-#define PFRCPM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x96
-#define PFRCPIT1M(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa6
-#define PFRCPIT2M(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb6
-#define PFRSQRTM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x97
-#define PFRSQIT1M(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa7
-#define PFSUBM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x9a
-#define PFSUBRM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xaa
-#define PI2FDM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x0d
-#define PAVGUSBM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xbf
-#define PMULHRWM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb7
+#define PF2IDM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x1d
+#define PFACCM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xae
+#define PFADDM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x9e
+#define PFCMPEQM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb0
+#define PFCMPGEM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x90
+#define PFCMPGTM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa0
+#define PFMAXM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa4
+#define PFMINM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x94
+#define PFMULM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb4
+#define PFRCPM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x96
+#define PFRCPIT1M(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa6
+#define PFRCPIT2M(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb6
+#define PFRSQRTM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x97
+#define PFRSQIT1M(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xa7
+#define PFSUBM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x9a
+#define PFSUBRM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xaa
+#define PI2FDM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x0d
+#define PAVGUSBM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xbf
+#define PMULHRWM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xb7
 
 /* Memory/offset versions of the new, K7 opcodes */
-#define PFNACCM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x8a
-#define FPPNACCM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x8e
-#define PSWAPDM(dst, src, off) \
-  db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xbb
+#define PFNACCM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x8a
+#define FPPNACCM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0x8e
+#define PSWAPDM(dst, src, off) db 0x0f, 0x0f, _k3d_MODRM(dst, src) | 0x40, off, 0xbb
 #define PMINUBM(dst, src, off) db 0x0f, 0xda, _k3d_MODRM(dst, src) | 0x40, off
 #define PMAXUBM(dst, src, off) db 0x0f, 0xde, _k3d_MODRM(dst, src) | 0x40, off
 #define PMINSWM(dst, src, off) db 0x0f, 0xea, _k3d_MODRM(dst, src) | 0x40, off
@@ -449,13 +426,10 @@ without notice.
 #define PAVGWM(dst, src, off) db 0x0f, 0xe3, _k3d_MODRM(dst, src) | 0x40, off
 #define PSADBWM(dst, src, off) db 0x0f, 0xf6, _k3d_MODRM(dst, src) | 0x40, off
 #define PMOVMSKBM(dst, src, off) db 0x0f, 0xd7, _k3d_MODRM(dst, src) | 0x40, off
-#define PMASKMOVQM(dst, src, off) \
-  db 0x0f, 0xf7, _k3d_MODRM(dst, src) | 0x40, off
+#define PMASKMOVQM(dst, src, off) db 0x0f, 0xf7, _k3d_MODRM(dst, src) | 0x40, off
 #define MOVNTQM(dst, src, off) db 0x0f, 0xe7, _k3d_MODRM(src, dst) | 0x40, off
-#define PINSRWM(dst, src, off, msk) \
-  db 0x0f, 0xc4, _k3d_MODRM(dst, src) | 0x40, off, msk
-#define PSHUFWM(dst, src, off, msk) \
-  db 0x0f, 0x70, _k3d_MODRM(dst, src) | 0x40, off, msk
+#define PINSRWM(dst, src, off, msk) db 0x0f, 0xc4, _k3d_MODRM(dst, src) | 0x40, off, msk
+#define PSHUFWM(dst, src, off, msk) db 0x0f, 0x70, _k3d_MODRM(dst, src) | 0x40, off, msk
 
 /* Defines for 3DNow! instructions for use in pragmas */
 #define p_pf2id(dst, src) 0x0f 0x0f _k3d_MODRM(dst, src) 0x1d
@@ -501,34 +475,24 @@ without notice.
 #define P_PF2IDM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x1d
 #define P_PFACCM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xae
 #define P_PFADDM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x9e
-#define P_PFCMPEQM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb0
-#define P_PFCMPGEM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x90
-#define P_PFCMPGTM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa0
+#define P_PFCMPEQM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb0
+#define P_PFCMPGEM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x90
+#define P_PFCMPGTM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa0
 #define P_PFMAXM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa4
 #define P_PFMINM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x94
 #define P_PFMULM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb4
 #define P_PFRCPM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x96
-#define P_PFRCPIT1M(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa6
-#define P_PFRCPIT2M(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb6
-#define P_PFRSQRTM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x97
-#define P_PFRSQIT1M(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa7
+#define P_PFRCPIT1M(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa6
+#define P_PFRCPIT2M(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb6
+#define P_PFRSQRTM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x97
+#define P_PFRSQIT1M(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xa7
 #define P_PFSUBM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x9a
 #define P_PFSUBRM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xaa
 #define P_PI2FDM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x0d
-#define P_PAVGUSBM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xbf
-#define P_PMULHRWM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb7
+#define P_PAVGUSBM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xbf
+#define P_PMULHRWM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xb7
 #define P_PFNACCM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x8a
-#define P_FPPNACCM(dst, src, off) \
-  0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x8e
+#define P_FPPNACCM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0x8e
 #define P_PSWAPDM(dst, src, off) 0x0f 0x0f(_k3d_MODRM(dst, src) | 0x40) off 0xbb
 #define P_PMINUBM(dst, src, off) 0x0f 0xda(_k3d_MODRM(dst, src) | 0x40) off
 #define P_PMAXUBM(dst, src, off) 0x0f 0xde(_k3d_MODRM(dst, src) | 0x40) off
@@ -541,10 +505,8 @@ without notice.
 #define P_PMOVMSKBM(dst, src, off) 0x0f 0xd7(_k3d_MODRM(dst, src) | 0x40) off
 #define P_MOVNTQM(dst, src, off) 0x0f 0xe7(_k3d_MODRM(src, dst) | 0x40) off
 #define P_PMASKMOVQM(dst, src, off) 0x0f 0xf7(_k3d_MODRM(dst, src) | 0x40) off
-#define P_PINSRWM(dst, src, off, msk) \
-  0x0f 0xc4(_k3d_MODRM(dst, src) | 0x40) off msk
-#define P_PSHUFWM(dst, src, off, msk) \
-  0x0f 0x70(_k3d_MODRM(dst, src) | 0x40) off msk
+#define P_PINSRWM(dst, src, off, msk) 0x0f 0xc4(_k3d_MODRM(dst, src) | 0x40) off msk
+#define P_PSHUFWM(dst, src, off, msk) 0x0f 0x70(_k3d_MODRM(dst, src) | 0x40) off msk
 
 #define P_PF2ID(dst, src) p_pf2id(dst, src)
 #define P_PFACC(dst, src) p_pfacc(dst, src)
@@ -692,38 +654,32 @@ without notice.
 // operands are supported by these macros.
 
 #define InjK3DOps(dst, src, inst)                                          \
-  \
-{                                                                       \
+                                                                           \
+  {                                                                        \
     _asm _emit 0x0f _asm _emit 0x0f _asm _emit((_K3D_##dst & 0x3f) << 3) | \
         _K3D_##src _asm _emit _3DNowOpcode##inst                           \
-  \
-}
+  }
 
-#define InjK3DMOps(dst, src, off, inst)                    \
-  \
-{                                                       \
-    _asm _emit 0x0f _asm _emit 0x0f _asm _emit(            \
-        ((_K3D_##dst & 0x3f) << 3) | _K3D_##src |          \
-        0x40) _asm _emit off _asm _emit _3DNowOpcode##inst \
-  \
-}
+#define InjK3DMOps(dst, src, off, inst)                                                           \
+                                                                                                  \
+  {                                                                                               \
+    _asm _emit 0x0f _asm _emit 0x0f _asm _emit(((_K3D_##dst & 0x3f) << 3) | _K3D_##src |          \
+                                               0x40) _asm _emit off _asm _emit _3DNowOpcode##inst \
+  }
 
-#define InjMMXOps(dst, src, inst)                             \
-  \
-{                                                          \
-    _asm _emit 0x0f _asm _emit _3DNowOpcode##inst _asm _emit( \
-        (_K3D_##dst & 0x3f) << 3) |                           \
-        _K3D_##src                                            \
-  \
-}
+#define InjMMXOps(dst, src, inst)                                                        \
+                                                                                         \
+  {                                                                                      \
+    _asm _emit 0x0f _asm _emit _3DNowOpcode##inst _asm _emit((_K3D_##dst & 0x3f) << 3) | \
+        _K3D_##src                                                                       \
+  }
 
-#define InjMMXMOps(dst, src, off, inst)                                \
-  \
-{                                                                   \
-    _asm _emit 0x0f _asm _emit _3DNowOpcode##inst _asm _emit(          \
-        ((_K3D_##dst & 0x3f) << 3) | _K3D_##src | 0x40) _asm _emit off \
-  \
-}
+#define InjMMXMOps(dst, src, off, inst)                                                        \
+                                                                                               \
+  {                                                                                            \
+    _asm _emit 0x0f _asm _emit _3DNowOpcode##inst _asm _emit(((_K3D_##dst & 0x3f) << 3) |      \
+                                                             _K3D_##src | 0x40) _asm _emit off \
+  }
 
 #define _3DNowOpcodePF2ID 0x1d
 #define _3DNowOpcodePFACC 0xae
@@ -783,86 +739,56 @@ without notice.
 #define PAVGUSB(dst, src) InjK3DOps(dst, src, PAVGUSB)
 #define PMULHRW(dst, src) InjK3DOps(dst, src, PMULHRW)
 
-#define FEMMS                       \
-  \
-{                                \
-    _asm _emit 0x0f _asm _emit 0x0e \
-  \
-}
+#define FEMMS \
+              \
+  { _asm _emit 0x0f _asm _emit 0x0e }
 
-#define PREFETCH(src)                                             \
-  \
-{                                                              \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit(_K3D_##src & 0x07) \
-  \
-}
+#define PREFETCH(src) \
+                      \
+  { _asm _emit 0x0f _asm _emit 0x0d _asm _emit(_K3D_##src & 0x07) }
 
-/* Prefetch with a short offset, < 127 or > -127
+/* Prefetch with a i16 offset, < 127 or > -127
    Carefull!  Doesn't check for your offset being
    in range. */
 
-#define PREFETCHM(src, off)                        \
-  \
-{                                               \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit(    \
-        0x40 | (_K3D_##src & 0x07)) _asm _emit off \
-  \
-}
+#define PREFETCHM(src, off) \
+                            \
+  { _asm _emit 0x0f _asm _emit 0x0d _asm _emit(0x40 | (_K3D_##src & 0x07)) _asm _emit off }
 
 /* Prefetch with a long offset */
 
-#define PREFETCHMLONG(src, off)                                              \
-  \
-{                                                                         \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit(                              \
-        0x80 |                                                               \
-        (_K3D_##src &                                                        \
-         0x07)) _asm _emit(off & 0x000000ff) _asm _emit(off & 0x0000ff00) >> \
-        8 _asm _emit(off & 0x00ff0000) >> 16 _asm _emit(off & 0xff000000) >> \
-        24                                                                   \
-  \
-}
+#define PREFETCHMLONG(src, off)                                                        \
+                                                                                       \
+  {                                                                                    \
+    _asm _emit 0x0f _asm _emit 0x0d _asm _emit(0x80 | (_K3D_##src & 0x07)) _asm _emit( \
+        off & 0x000000ff) _asm _emit(off & 0x0000ff00) >>                              \
+        8 _asm _emit(off & 0x00ff0000) >> 16 _asm _emit(off & 0xff000000) >> 24        \
+  }
 
-#define PREFETCHW(src)                                                     \
-  \
-{                                                                       \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit(0x08 | (_K3D_##src & 0x07)) \
-  \
-}
+#define PREFETCHW(src) \
+                       \
+  { _asm _emit 0x0f _asm _emit 0x0d _asm _emit(0x08 | (_K3D_##src & 0x07)) }
 
-#define PREFETCHWM(src, off)                          \
-  \
-{                                                  \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit 0x48 | \
-        (_K3D_##src & 0x07) _asm _emit off            \
-  \
-}
+#define PREFETCHWM(src, off) \
+                             \
+  { _asm _emit 0x0f _asm _emit 0x0d _asm _emit 0x48 | (_K3D_##src & 0x07) _asm _emit off }
 
-#define PREFETCHWMLONG(src, off)                                            \
-  \
-{                                                                        \
-    _asm _emit 0x0f _asm _emit 0x0d _asm _emit 0x88 |                       \
-        (_K3D_##src &                                                       \
-         0x07) _asm _emit(off & 0x000000ff) _asm _emit(off & 0x0000ff00) >> \
-            8 _asm _emit(off & 0x00ff0000) >>                               \
-            16 _asm _emit(off & 0xff000000) >> 24                           \
-  \
-}
+#define PREFETCHWMLONG(src, off)                                                         \
+                                                                                         \
+  {                                                                                      \
+    _asm _emit 0x0f _asm _emit 0x0d _asm _emit 0x88 |                                    \
+        (_K3D_##src & 0x07) _asm _emit(off & 0x000000ff) _asm _emit(off & 0x0000ff00) >> \
+            8 _asm _emit(off & 0x00ff0000) >> 16 _asm _emit(off & 0xff000000) >> 24      \
+  }
 
-#define CPUID                       \
-  \
-{                                \
-    _asm _emit 0x0f _asm _emit 0xa2 \
-  \
-}
+#define CPUID \
+              \
+  { _asm _emit 0x0f _asm _emit 0xa2 }
 
 /* Defines for new, K7 opcodes */
-#define SFENCE                                      \
-  \
-{                                                \
-    _asm _emit 0x0f _asm _emit 0xae _asm _emit 0xf8 \
-  \
-}
+#define SFENCE \
+               \
+  { _asm _emit 0x0f _asm _emit 0xae _asm _emit 0xf8 }
 
 #define PFNACC(dst, src) InjK3DOps(dst, src, PFNACC)
 #define PFPNACC(dst, src) InjK3DOps(dst, src, PFPNACC)
@@ -921,10 +847,8 @@ without notice.
 #define PSADBWM(dst, src, off) InjMMXMOps(dst, src, off, PSADBW)
 #define PMOVMSKBM(dst, src, off) InjMMXMOps(dst, src, off, PMOVMSKB)
 #define PMASKMOVQM(dst, src, off) InjMMXMOps(dst, src, off, PMASKMOVQ)
-#define PINSRWM(dst, src, off, msk) \
-  InjMMXMOps(dst, src, off, PINSRW) _asm _emit msk
-#define PSHUFWM(dst, src, off, msk) \
-  InjMMXMOps(dst, src, off, PSHUFW) _asm _emit msk
+#define PINSRWM(dst, src, off, msk) InjMMXMOps(dst, src, off, PINSRW) _asm _emit msk
+#define PSHUFWM(dst, src, off, msk) InjMMXMOps(dst, src, off, PSHUFW) _asm _emit msk
 #define MOVNTQM(dst, src, off) InjMMXMOps(src, dst, off, MOVNTQ)
 #define PREFETCHNTAM(mem, off) InjMMXMOps(mm0, mem, off, PREFETCHT)
 #define PREFETCHT0M(mem, off) InjMMXMOps(mm1, mem, off, PREFETCHT)
@@ -1025,16 +949,14 @@ without notice.
 #define InjK3DOps(dst, src, inst) \
   db 0x0f, 0x0f, (((_K3D_##dst & 0x3f) << 3) | _K3D_##src), _3DNowOpcode##inst
 
-#define InjK3DMOps(dst, src, off, inst)                                 \
-  db 0x0f, 0x0f, (((_K3D_##dst & 0x3f) << 3) | _K3D_##src | 0x40), off, \
-      _3DNowOpcode##inst
+#define InjK3DMOps(dst, src, off, inst) \
+  db 0x0f, 0x0f, (((_K3D_##dst & 0x3f) << 3) | _K3D_##src | 0x40), off, _3DNowOpcode##inst
 
 #define InjMMXOps(dst, src, inst) \
   db 0x0f, _3DNowOpcode##inst, (((_K3D_##dst & 0x3f) << 3) | _K3D_##src)
 
 #define InjMMXMOps(dst, src, off, inst) \
-  db 0x0f, _3DNowOpcode##inst,          \
-      (((_K3D_##dst & 0x3f) << 3) | _K3D_##src | 0x40), off
+  db 0x0f, _3DNowOpcode##inst, (((_K3D_##dst & 0x3f) << 3) | _K3D_##src | 0x40), off
 
 #define PFNACC(dst, src) InjK3DOps(dst, src, PFNACC)
 #define PFPNACC(dst, src) InjK3DOps(dst, src, PFPNACC)

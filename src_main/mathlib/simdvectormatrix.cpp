@@ -12,7 +12,7 @@
 
 void CSIMDVectorMatrix::CreateFromRGBA_FloatImageData(int srcwidth,
                                                       int srcheight,
-                                                      float const *srcdata) {
+                                                      f32 const *srcdata) {
   Assert(srcwidth && srcheight && srcdata);
   SetSize(srcwidth, srcheight);
 
@@ -20,8 +20,8 @@ void CSIMDVectorMatrix::CreateFromRGBA_FloatImageData(int srcwidth,
   int n_vectors_per_source_line = (srcwidth >> 2);
   int ntrailing_pixels_per_source_line = (srcwidth & 3);
   for (int y = 0; y < srcheight; y++) {
-    float const *data_in = srcdata;
-    float *data_out = reinterpret_cast<float *>(p_write_ptr);
+    f32 const *data_in = srcdata;
+    f32 *data_out = reinterpret_cast<f32 *>(p_write_ptr);
     // copy full input blocks
     for (int x = 0; x < n_vectors_per_source_line; x++) {
       for (int c = 0; c < 3; c++) {
@@ -48,7 +48,7 @@ void CSIMDVectorMatrix::CreateFromRGBA_FloatImageData(int srcwidth,
   }
 }
 
-void CSIMDVectorMatrix::RaiseToPower(float power) {
+void CSIMDVectorMatrix::RaiseToPower(f32 power) {
   int nv = NVectors();
   if (nv) {
     int fixed_point_exp = (int)(4.0 * power);

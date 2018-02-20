@@ -17,14 +17,14 @@ struct GeneratePolyhedronFromPlanes_UnorderedPointLL;
 struct GeneratePolyhedronFromPlanes_UnorderedLineLL;
 struct GeneratePolyhedronFromPlanes_UnorderedPolygonLL;
 
-Vector FindPointInPlanes(const float *pPlanes, int planeCount);
-bool FindConvexShapeLooseAABB(const float *pInwardFacingPlanes, int iPlaneCount,
+Vector FindPointInPlanes(const f32 *pPlanes, int planeCount);
+bool FindConvexShapeLooseAABB(const f32 *pInwardFacingPlanes, int iPlaneCount,
                               Vector *pAABBMins, Vector *pAABBMaxs);
 CPolyhedron *ClipLinkedGeometry(
     GeneratePolyhedronFromPlanes_UnorderedPolygonLL *pPolygons,
     GeneratePolyhedronFromPlanes_UnorderedLineLL *pLines,
     GeneratePolyhedronFromPlanes_UnorderedPointLL *pPoints,
-    const float *pOutwardFacingPlanes, int iPlaneCount, float fOnPlaneEpsilon,
+    const f32 *pOutwardFacingPlanes, int iPlaneCount, f32 fOnPlaneEpsilon,
     bool bUseTemporaryMemory);
 CPolyhedron *ConvertLinkedGeometryToPolyhedron(
     GeneratePolyhedronFromPlanes_UnorderedPolygonLL *pPolygons,
@@ -35,12 +35,12 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
 #ifdef _DEBUG
 #include "filesystem.h"
 void DumpPolyhedronToGLView(const CPolyhedron *pPolyhedron,
-                            const char *pFilename, const VMatrix *pTransform);
-void DumpPlaneToGlView(const float *pPlane, float fGrayScale,
-                       const char *pszFileName, const VMatrix *pTransform);
+                            const ch *pFilename, const VMatrix *pTransform);
+void DumpPlaneToGlView(const f32 *pPlane, f32 fGrayScale,
+                       const ch *pszFileName, const VMatrix *pTransform);
 void DumpLineToGLView(const Vector &vPoint1, const Vector &vColor1,
                       const Vector &vPoint2, const Vector &vColor2,
-                      float fThickness, FileHandle_t fp);
+                      f32 fThickness, FileHandle_t fp);
 void DumpAABBToGLView(const Vector &vCenter, const Vector &vExtents,
                       const Vector &vColor, FileHandle_t fp);
 
@@ -54,13 +54,13 @@ static VMatrix s_matIdentity(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 void CPolyhedron_AllocByNew::Release(void) { delete this; }
 
 CPolyhedron_AllocByNew *CPolyhedron_AllocByNew::Allocate(
-    unsigned short iVertices, unsigned short iLines, unsigned short iIndices,
-    unsigned short iPolygons)  // creates the polyhedron along with enough
+    u16 iVertices, u16 iLines, u16 iIndices,
+    u16 iPolygons)  // creates the polyhedron along with enough
                                // memory to hold all it's data in a single
                                // allocation
 {
   void *pMemory =
-      new unsigned char[sizeof(CPolyhedron_AllocByNew) +
+      new u8[sizeof(CPolyhedron_AllocByNew) +
                         (iVertices * sizeof(Vector)) +
                         (iLines * sizeof(Polyhedron_IndexedLine_t)) +
                         (iIndices * sizeof(Polyhedron_IndexedLineReference_t)) +
@@ -106,12 +106,12 @@ class CPolyhedron_TempMemory : public CPolyhedron {
             {};
 };
 
-static CUtlVector<unsigned char> s_TempMemoryPolyhedron_Buffer;
+static CUtlVector<u8> s_TempMemoryPolyhedron_Buffer;
 static CPolyhedron_TempMemory s_TempMemoryPolyhedron;
 
 CPolyhedron *GetTempPolyhedron(
-    unsigned short iVertices, unsigned short iLines, unsigned short iIndices,
-    unsigned short iPolygons)  // grab the temporary
+    u16 iVertices, u16 iLines, u16 iIndices,
+    u16 iPolygons)  // grab the temporary
                                // polyhedron. Avoids
                                // new/delete for quick
                                // work. Can only be in
@@ -176,7 +176,7 @@ struct GeneratePolyhedronFromPlanes_Point {
   Vector ptPosition;
   GeneratePolyhedronFromPlanes_LineLL
       *pConnectedLines;  // keep these in a clockwise order, circular linking
-  float fPlaneDist;      // used in plane cutting
+  f32 fPlaneDist;      // used in plane cutting
   PolyhedronPointPlanarity planarity;
   int iSaveIndices;
 };
@@ -263,15 +263,15 @@ struct GeneratePolyhedronFromPlanes_UnorderedPointLL  // an unordered collection
 };
 
 CPolyhedron *ClipPolyhedron(const CPolyhedron *pExistingPolyhedron,
-                            const float *pOutwardFacingPlanes, int iPlaneCount,
-                            float fOnPlaneEpsilon, bool bUseTemporaryMemory) {
+                            const f32 *pOutwardFacingPlanes, int iPlaneCount,
+                            f32 fOnPlaneEpsilon, bool bUseTemporaryMemory) {
   if (pExistingPolyhedron == NULL) return NULL;
 
   AssertMsg((pExistingPolyhedron->iVertexCount >= 3) &&
                 (pExistingPolyhedron->iPolygonCount >= 2),
             "Polyhedron doesn't meet absolute minimum spec");
 
-  float *pUsefulPlanes = (float *)stackalloc(sizeof(float) * 4 * iPlaneCount);
+  f32 *pUsefulPlanes = (f32 *)stackalloc(sizeof(f32) * 4 * iPlaneCount);
   int iUsefulPlaneCount = 0;
   Vector *pExistingVertices = pExistingPolyhedron->pVertices;
 
@@ -281,14 +281,14 @@ CPolyhedron *ClipPolyhedron(const CPolyhedron *pExistingPolyhedron,
   {
     int iLiveCount = 0;
     int iDeadCount = 0;
-    const float fNegativeOnPlaneEpsilon = -fOnPlaneEpsilon;
+    const f32 fNegativeOnPlaneEpsilon = -fOnPlaneEpsilon;
 
     for (int i = 0; i != iPlaneCount; ++i) {
       Vector vNormal = *((Vector *)&pOutwardFacingPlanes[(i * 4) + 0]);
-      float fPlaneDist = pOutwardFacingPlanes[(i * 4) + 3];
+      f32 fPlaneDist = pOutwardFacingPlanes[(i * 4) + 3];
 
       for (int j = 0; j != pExistingPolyhedron->iVertexCount; ++j) {
-        float fPointDist = vNormal.Dot(pExistingVertices[j]) - fPlaneDist;
+        f32 fPointDist = vNormal.Dot(pExistingVertices[j]) - fPlaneDist;
 
         if (fPointDist <= fNegativeOnPlaneEpsilon)
           ++iLiveCount;
@@ -542,11 +542,11 @@ CPolyhedron *ClipPolyhedron(const CPolyhedron *pExistingPolyhedron,
                             bUseTemporaryMemory);
 }
 
-Vector FindPointInPlanes(const float *pPlanes, int planeCount) {
+Vector FindPointInPlanes(const f32 *pPlanes, int planeCount) {
   Vector point = vec3_origin;
 
   for (int i = 0; i < planeCount; i++) {
-    float fD =
+    f32 fD =
         DotProduct(*(Vector *)&pPlanes[i * 4], point) - pPlanes[i * 4 + 3];
     if (fD < 0) {
       point -= fD * (*(Vector *)&pPlanes[i * 4]);
@@ -555,7 +555,7 @@ Vector FindPointInPlanes(const float *pPlanes, int planeCount) {
   return point;
 }
 
-bool FindConvexShapeLooseAABB(const float *pInwardFacingPlanes, int iPlaneCount,
+bool FindConvexShapeLooseAABB(const f32 *pInwardFacingPlanes, int iPlaneCount,
                               Vector *pAABBMins,
                               Vector *pAABBMaxs)  // bounding box of the convex
                                                   // shape (subject to floating
@@ -567,11 +567,11 @@ bool FindConvexShapeLooseAABB(const float *pInwardFacingPlanes, int iPlaneCount,
     return false;
 
   struct FindConvexShapeAABB_Polygon_t {
-    float *verts;
+    f32 *verts;
     int iVertCount;
   };
 
-  float *pMovedPlanes = (float *)stackalloc(iPlaneCount * 4 * sizeof(float));
+  f32 *pMovedPlanes = (f32 *)stackalloc(iPlaneCount * 4 * sizeof(f32));
   // Vector vPointInPlanes = FindPointInPlanes( pInwardFacingPlanes, iPlaneCount
   // );
 
@@ -585,17 +585,17 @@ bool FindConvexShapeLooseAABB(const float *pInwardFacingPlanes, int iPlaneCount,
   }
 
   // vAABBMins = vAABBMaxs = FindPointInPlanes( pPlanes, iPlaneCount );
-  float *vertsIn = NULL;  // we'll be allocating a new buffer for this with each
+  f32 *vertsIn = NULL;  // we'll be allocating a new buffer for this with each
                           // new polygon, and moving it off to the polygon array
-  float *vertsOut = (float *)stackalloc(
+  f32 *vertsOut = (f32 *)stackalloc(
       (iPlaneCount + 4) *
-      (sizeof(float) * 3));  // each plane will initially
+      (sizeof(f32) * 3));  // each plane will initially
                              // have 4 points in its polygon
                              // representation, and each
                              // plane clip has the
                              // possibility to add 1 point to
                              // the polygon
-  float *vertsSwap;
+  f32 *vertsSwap;
 
   FindConvexShapeAABB_Polygon_t *pPolygons =
       (FindConvexShapeAABB_Polygon_t *)stackalloc(
@@ -604,10 +604,10 @@ bool FindConvexShapeLooseAABB(const float *pInwardFacingPlanes, int iPlaneCount,
 
   for (int i = 0; i < iPlaneCount; i++) {
     Vector *pPlaneNormal = (Vector *)&pInwardFacingPlanes[i * 4];
-    float fPlaneDist = pInwardFacingPlanes[(i * 4) + 3];
+    f32 fPlaneDist = pInwardFacingPlanes[(i * 4) + 3];
 
     if (vertsIn == NULL)
-      vertsIn = (float *)stackalloc((iPlaneCount + 4) * (sizeof(float) * 3));
+      vertsIn = (f32 *)stackalloc((iPlaneCount + 4) * (sizeof(f32) * 3));
 
     // Build a big-ass poly in this plane
     int vertCount =
@@ -696,7 +696,7 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
     GeneratePolyhedronFromPlanes_UnorderedPointLL *pPoints,
     bool bUseTemporaryMemory) {
   Assert((pPolygons != NULL) && (pLines != NULL) && (pPoints != NULL));
-  unsigned int iPolyCount = 0, iLineCount = 0, iPointCount = 0, iIndexCount = 0;
+  u32 iPolyCount = 0, iLineCount = 0, iPointCount = 0, iIndexCount = 0;
 
   GeneratePolyhedronFromPlanes_UnorderedPolygonLL *pActivePolygonWalk =
       pPolygons;
@@ -743,7 +743,7 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
 
   // copy points
   pActivePointWalk = pPoints;
-  for (unsigned int i = 0; i != iPointCount; ++i) {
+  for (u32 i = 0; i != iPointCount; ++i) {
     pVertexArray[i] = pActivePointWalk->pPoint->ptPosition;
     pActivePointWalk->pPoint->iSaveIndices = i;  // storing array indices
     pActivePointWalk = pActivePointWalk->pNext;
@@ -751,11 +751,11 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
 
   // copy lines
   pActiveLineWalk = pLines;
-  for (unsigned int i = 0; i != iLineCount; ++i) {
+  for (u32 i = 0; i != iLineCount; ++i) {
     pLineArray[i].iPointIndices[0] =
-        (unsigned short)pActiveLineWalk->pLine->pPoints[0]->iSaveIndices;
+        (u16)pActiveLineWalk->pLine->pPoints[0]->iSaveIndices;
     pLineArray[i].iPointIndices[1] =
-        (unsigned short)pActiveLineWalk->pLine->pPoints[1]->iSaveIndices;
+        (u16)pActiveLineWalk->pLine->pPoints[1]->iSaveIndices;
 
     pActiveLineWalk->pLine->iSaveIndices = i;  // storing array indices
 
@@ -765,7 +765,7 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
   // copy polygons and indices at the same time
   pActivePolygonWalk = pPolygons;
   iIndexCount = 0;
-  for (unsigned int i = 0; i != iPolyCount; ++i) {
+  for (u32 i = 0; i != iPolyCount; ++i) {
     pPolyArray[i].polyNormal = pActivePolygonWalk->pPolygon->vSurfaceNormal;
     pPolyArray[i].iFirstIndex = iIndexCount;
 
@@ -797,7 +797,7 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
   }
   else
   {*/
-  char szCollisionFile[128];
+  ch szCollisionFile[128];
   g_pFullFileSystem->CreateDirHierarchy("PolyhedronDumps");
   Q_snprintf(szCollisionFile, 128,
              "PolyhedronDumps/NewStyle_PolyhedronDump%i.txt",
@@ -818,7 +818,7 @@ CPolyhedron *ConvertLinkedGeometryToPolyhedron(
 
 void DumpPointListToGLView(GeneratePolyhedronFromPlanes_UnorderedPointLL *pHead,
                            PolyhedronPointPlanarity planarity,
-                           const Vector &vColor, const char *szDumpFile,
+                           const Vector &vColor, const ch *szDumpFile,
                            const VMatrix *pTransform) {
   if (pTransform == NULL) pTransform = &s_matIdentity;
 
@@ -836,13 +836,13 @@ void DumpPointListToGLView(GeneratePolyhedronFromPlanes_UnorderedPointLL *pHead,
   g_pFullFileSystem->Close(fp);
 }
 
-const char *DumpPolyhedronCutHistory(
+const ch *DumpPolyhedronCutHistory(
     const CUtlVector<CPolyhedron *> &DumpedHistory,
-    const CUtlVector<const float *> &CutHistory, const VMatrix *pTransform) {
+    const CUtlVector<const f32 *> &CutHistory, const VMatrix *pTransform) {
   if (pTransform == NULL) pTransform = &s_matIdentity;
 
   FileFindHandle_t oldDumpsHandle;
-  const char *szOldFile = g_pFullFileSystem->FindFirst(
+  const ch *szOldFile = g_pFullFileSystem->FindFirst(
       "FailedPolyhedronCut_*.txt", &oldDumpsHandle);
   while (szOldFile) {
     g_pFullFileSystem->RemoveFile(szOldFile, "GAME");
@@ -850,7 +850,7 @@ const char *DumpPolyhedronCutHistory(
   }
   g_pFullFileSystem->FindClose(oldDumpsHandle);
 
-  static char szDumpFile[100] =
+  static ch szDumpFile[100] =
       "FailedPolyhedronCut_Error.txt";  // most recent filename returned for
                                         // further dumping
 
@@ -871,7 +871,7 @@ const char *DumpPolyhedronCutHistory(
     matTransform.Identity();                                                   \
     matTransform[0][0] = matTransform[1][1] = matTransform[2][2] = 25.0f;      \
     matTransform.SetTranslation(-DebugCutHistory.Tail()->Center() * 25.0f);    \
-    const char *szLastDumpFile = DumpPolyhedronCutHistory(                     \
+    const ch *szLastDumpFile = DumpPolyhedronCutHistory(                     \
         DebugCutHistory, PlaneCutHistory, &matTransform);                      \
     DumpPointListToGLView(pAllPoints, POINT_ALIVE, Vector(0.9f, 0.9f, 0.9f),   \
                           szLastDumpFile, &matTransform);                      \
@@ -910,13 +910,13 @@ CPolyhedron *ClipLinkedGeometry(
     GeneratePolyhedronFromPlanes_UnorderedPolygonLL *pAllPolygons,
     GeneratePolyhedronFromPlanes_UnorderedLineLL *pAllLines,
     GeneratePolyhedronFromPlanes_UnorderedPointLL *pAllPoints,
-    const float *pOutwardFacingPlanes, int iPlaneCount, float fOnPlaneEpsilon,
+    const f32 *pOutwardFacingPlanes, int iPlaneCount, f32 fOnPlaneEpsilon,
     bool bUseTemporaryMemory) {
-  const float fNegativeOnPlaneEpsilon = -fOnPlaneEpsilon;
+  const f32 fNegativeOnPlaneEpsilon = -fOnPlaneEpsilon;
 
 #ifdef _DEBUG
   CUtlVector<CPolyhedron *> DebugCutHistory;
-  CUtlVector<const float *> PlaneCutHistory;
+  CUtlVector<const f32 *> PlaneCutHistory;
   GeneratePolyhedronFromPlanes_Point *pStartPoint = NULL;
   GeneratePolyhedronFromPlanes_Point *pWorkPoint = NULL;
 
@@ -965,11 +965,11 @@ CPolyhedron *ClipLinkedGeometry(
 
     Vector vNormal =
         *((Vector *)&pOutwardFacingPlanes[(iCurrentPlane * 4) + 0]);
-    /*double vNormalAsDouble[3];
+    /*f64 vNormalAsDouble[3];
     vNormalAsDouble[0] = vNormal.x;
     vNormalAsDouble[1] = vNormal.y;
     vNormalAsDouble[2] = vNormal.z;*/
-    float fPlaneDist = pOutwardFacingPlanes[(iCurrentPlane * 4) + 3];
+    f32 fPlaneDist = pOutwardFacingPlanes[(iCurrentPlane * 4) + 3];
 
     //===================================================================================================
     // Step 1: Categorize each point as being either cut, split, or alive
@@ -983,7 +983,7 @@ CPolyhedron *ClipLinkedGeometry(
           pAllPoints;
       do {
         GeneratePolyhedronFromPlanes_Point *pPoint = pActivePointWalk->pPoint;
-        float fPointDist = vNormal.Dot(pPoint->ptPosition) - fPlaneDist;
+        f32 fPointDist = vNormal.Dot(pPoint->ptPosition) - fPlaneDist;
         if (fPointDist > fOnPlaneEpsilon) {
           pPoint->planarity = POINT_DEAD;  // point is dead, bang bang
 
@@ -1056,7 +1056,7 @@ CPolyhedron *ClipLinkedGeometry(
                     pOnPlaneLineWalk->pPrev->pLine->bCut) {
                   // This on-plane point is surrounded by dead points on one
                   // polygon of the polyhedron. 	We have to downgrade
-                  // this point to dead to avoid situations where float
+                  // this point to dead to avoid situations where f32
                   // imprecision
                   //	turns the polyhedron into a *slightly* concave shape.
                   // Concave shapes might break this algorithm, even falsely
@@ -1368,7 +1368,7 @@ CPolyhedron *ClipLinkedGeometry(
             pAllPoints->pPrev = NULL;
             pAllPoints->pPoint = pNewPoint;
 
-            float fInvTotalDist =
+            f32 fInvTotalDist =
                 1.0f / (pDeadPoint->fPlaneDist -
                         pLivingPoint->fPlaneDist);  // subtraction because the
                                                     // living index is known to
@@ -1380,7 +1380,7 @@ CPolyhedron *ClipLinkedGeometry(
                  (pLivingPoint->fPlaneDist * fInvTotalDist));
 
 #if defined(_DEBUG)
-            float fDebugDist =
+            f32 fDebugDist =
                 vNormal.Dot(pNewPoint->ptPosition) -
                 fPlaneDist;  // just for looking at in watch windows
             AssertMsg_DumpPolyhedron(fabs(fDebugDist) < fOnPlaneEpsilon,
@@ -1932,9 +1932,9 @@ CPolyhedron *ClipLinkedGeometry(
   StartingPolygon_To_Lines_Links[(polynum * 4) + 3].pNext =                   \
       &StartingPolygon_To_Lines_Links[(polynum * 4) + 0];
 
-CPolyhedron *GeneratePolyhedronFromPlanes(const float *pOutwardFacingPlanes,
+CPolyhedron *GeneratePolyhedronFromPlanes(const f32 *pOutwardFacingPlanes,
                                           int iPlaneCount,
-                                          float fOnPlaneEpsilon,
+                                          f32 fOnPlaneEpsilon,
                                           bool bUseTemporaryMemory) {
   // this is version 2 of the polyhedron generator, version 1 made individual
   // polygons and joined points together, some guesswork is involved and it
@@ -1943,8 +1943,8 @@ CPolyhedron *GeneratePolyhedronFromPlanes(const float *pOutwardFacingPlanes,
   // polyhedron with no guesswork involved, this method should be rock solid
 
   // the polygon clipping functions we're going to use want inward facing planes
-  float *pFlippedPlanes =
-      (float *)stackalloc((iPlaneCount * 4) * sizeof(float));
+  f32 *pFlippedPlanes =
+      (f32 *)stackalloc((iPlaneCount * 4) * sizeof(f32));
   for (int i = 0; i != iPlaneCount * 4; ++i) {
     pFlippedPlanes[i] = -pOutwardFacingPlanes[i];
   }
@@ -2304,7 +2304,7 @@ void DumpAABBToGLView(const Vector &vCenter, const Vector &vExtents,
 
 void DumpLineToGLView(const Vector &vPoint1, const Vector &vColor1,
                       const Vector &vPoint2, const Vector &vColor2,
-                      float fThickness, FileHandle_t fp) {
+                      f32 fThickness, FileHandle_t fp) {
   Vector vDirection = vPoint2 - vPoint1;
   vDirection.NormalizeInPlace();
 
@@ -2366,7 +2366,7 @@ void DumpLineToGLView(const Vector &vPoint1, const Vector &vColor1,
 }
 
 void DumpPolyhedronToGLView(const CPolyhedron *pPolyhedron,
-                            const char *pFilename, const VMatrix *pTransform) {
+                            const ch *pFilename, const VMatrix *pTransform) {
   if ((pPolyhedron == NULL) || (pPolyhedron->iVertexCount == 0)) return;
 
   if (pTransform == NULL) pTransform = &s_matIdentity;
@@ -2433,15 +2433,15 @@ void DumpPolyhedronToGLView(const CPolyhedron *pPolyhedron,
   g_pFullFileSystem->Close(fp);
 }
 
-void DumpPlaneToGlView(const float *pPlane, float fGrayScale,
-                       const char *pszFileName, const VMatrix *pTransform) {
+void DumpPlaneToGlView(const f32 *pPlane, f32 fGrayScale,
+                       const ch *pszFileName, const VMatrix *pTransform) {
   if (pTransform == NULL) pTransform = &s_matIdentity;
 
   FileHandle_t fp = g_pFullFileSystem->Open(pszFileName, "ab");
 
   // transform the plane
   Vector vNormal = pTransform->ApplyRotation(*(Vector *)pPlane);
-  float fDist =
+  f32 fDist =
       pPlane[3] * vNormal.NormalizeInPlace();  // possible scaling going on
   fDist += vNormal.Dot(pTransform->GetTranslation());
 

@@ -26,7 +26,7 @@ static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
 
 #ifdef _WIN32
 #define _PS_EXTERN_CONST(Name, Val) \
-  const __declspec(align(16)) float _ps_##Name[4] = {Val, Val, Val, Val}
+  const __declspec(align(16)) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 
 #define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
   const __declspec(align(16)) Type _ps_##Name[4] = {Val, Val, Val, Val};
@@ -36,21 +36,21 @@ static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
                                                                  Val, Val}
 
 #define _PS_CONST(Name, Val) \
-  static const __declspec(align(16)) float _ps_##Name[4] = {Val, Val, Val, Val}
+  static const __declspec(align(16)) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 #elif _LINUX
 #define _PS_EXTERN_CONST(Name, Val) \
-  const __attribute__((aligned(16))) float _ps_##Name[4] = {Val, Val, Val, Val}
+  const __attribute__((aligned(16))) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 
 #define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
   const __attribute__((aligned(16))) Type _ps_##Name[4] = {Val, Val, Val, Val};
 
 #define _EPI32_CONST(Name, Val)             \
   static const __attribute__((aligned(16))) \
-      int32_t _epi32_##Name[4] = {Val, Val, Val, Val}
+      i32 _epi32_##Name[4] = {Val, Val, Val, Val}
 
-#define _PS_CONST(Name, Val) \
-  static const               \
-      __attribute__((aligned(16))) float _ps_##Name[4] = {Val, Val, Val, Val}
+#define _PS_CONST(Name, Val)                \
+  static const __attribute__((aligned(16))) \
+      f32 _ps_##Name[4] = {Val, Val, Val, Val}
 #endif
 
 _PS_EXTERN_CONST(am_0, 0.0f);
@@ -58,16 +58,16 @@ _PS_EXTERN_CONST(am_1, 1.0f);
 _PS_EXTERN_CONST(am_m1, -1.0f);
 _PS_EXTERN_CONST(am_0p5, 0.5f);
 _PS_EXTERN_CONST(am_1p5, 1.5f);
-_PS_EXTERN_CONST(am_pi, (float)M_PI);
-_PS_EXTERN_CONST(am_pi_o_2, (float)(M_PI / 2.0));
-_PS_EXTERN_CONST(am_2_o_pi, (float)(2.0 / M_PI));
-_PS_EXTERN_CONST(am_pi_o_4, (float)(M_PI / 4.0));
-_PS_EXTERN_CONST(am_4_o_pi, (float)(4.0 / M_PI));
-_PS_EXTERN_CONST_TYPE(am_sign_mask, int32_t, 0x80000000);
-_PS_EXTERN_CONST_TYPE(am_inv_sign_mask, int32_t, ~0x80000000);
-_PS_EXTERN_CONST_TYPE(am_min_norm_pos, int32_t, 0x00800000);
-_PS_EXTERN_CONST_TYPE(am_mant_mask, int32_t, 0x7f800000);
-_PS_EXTERN_CONST_TYPE(am_inv_mant_mask, int32_t, ~0x7f800000);
+_PS_EXTERN_CONST(am_pi, (f32)M_PI);
+_PS_EXTERN_CONST(am_pi_o_2, (f32)(M_PI / 2.0));
+_PS_EXTERN_CONST(am_2_o_pi, (f32)(2.0 / M_PI));
+_PS_EXTERN_CONST(am_pi_o_4, (f32)(M_PI / 4.0));
+_PS_EXTERN_CONST(am_4_o_pi, (f32)(4.0 / M_PI));
+_PS_EXTERN_CONST_TYPE(am_sign_mask, i32, 0x80000000i32);
+_PS_EXTERN_CONST_TYPE(am_inv_sign_mask, i32, ~0x80000000i32);
+_PS_EXTERN_CONST_TYPE(am_min_norm_pos, i32, 0x00800000i32);
+_PS_EXTERN_CONST_TYPE(am_mant_mask, i32, 0x7f800000i32);
+_PS_EXTERN_CONST_TYPE(am_inv_mant_mask, i32, ~0x7f800000i32);
 
 _EPI32_CONST(1, 1);
 _EPI32_CONST(2, 2);
@@ -78,16 +78,16 @@ _PS_CONST(sincos_p2, 0.7969262624561800806e-1f);
 _PS_CONST(sincos_p3, -0.468175413106023168e-2f);
 
 #ifdef PFN_VECTORMA
-void __cdecl _SSE_VectorMA(const float *start, float scale,
-                           const float *direction, float *dest);
+void __cdecl _SSE_VectorMA(const f32 *start, f32 scale, const f32 *direction,
+                           f32 *dest);
 #endif
 
 //-----------------------------------------------------------------------------
 // SSE implementations of optimized routines:
 //-----------------------------------------------------------------------------
-float _SSE_Sqrt(float x) {
+f32 _SSE_Sqrt(f32 x) {
   Assert(s_bMathlibInitialized);
-  float root = 0.f;
+  f32 root = 0.f;
 #ifdef _WIN32
   _asm
   {
@@ -106,10 +106,10 @@ float _SSE_Sqrt(float x) {
 }
 
 // Intel / Kipps SSE RSqrt.  Significantly faster than above.
-float _SSE_RSqrtAccurate(float a) {
-  float x;
-  float half = 0.5f;
-  float three = 3.f;
+f32 _SSE_RSqrtAccurate(f32 a) {
+  f32 x;
+  f32 half = 0.5f;
+  f32 three = 3.f;
 
 #ifdef _WIN32
   __asm
@@ -150,10 +150,10 @@ float _SSE_RSqrtAccurate(float a) {
 
 // Simple SSE rsqrt.  Usually accurate to around 6 (relative) decimal places
 // or so, so ok for closed transforms.  (ie, computing lighting normals)
-float _SSE_RSqrtFast(float x) {
+f32 _SSE_RSqrtFast(f32 x) {
   Assert(s_bMathlibInitialized);
 
-  float rroot;
+  f32 rroot;
 #ifdef _WIN32
   _asm
   {
@@ -174,21 +174,21 @@ float _SSE_RSqrtFast(float x) {
   return rroot;
 }
 
-float FASTCALL _SSE_VectorNormalize(Vector &vec) {
+f32 FASTCALL _SSE_VectorNormalize(Vector &vec) {
   Assert(s_bMathlibInitialized);
 
   // NOTE: This is necessary to prevent an memory overwrite...
   // sice vec only has 3 floats, we can't "movaps" directly into it.
 #ifdef _WIN32
-  __declspec(align(16)) float result[4];
+  __declspec(align(16)) f32 result[4];
 #elif _LINUX
-  __attribute__((aligned(16))) float result[4];
+  __attribute__((aligned(16))) f32 result[4];
 #endif
 
-  float *v = &vec[0];
-  float *r = &result[0];
+  f32 *v = &vec[0];
+  f32 *r = &result[0];
 
-  float radius = 0.f;
+  f32 radius = 0.f;
   // Blah, get rid of these comparisons ... in reality, if you have all 3 as
   // zero, it shouldn't be much of a performance win, considering you will very
   // likely miss 3 branch predicts in a row.
@@ -253,16 +253,16 @@ float FASTCALL _SSE_VectorNormalize(Vector &vec) {
 }
 
 void FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
-  float ool = _SSE_RSqrtAccurate(FLT_EPSILON + vec.x * vec.x + vec.y * vec.y +
-                                 vec.z * vec.z);
+  f32 ool = _SSE_RSqrtAccurate(FLT_EPSILON + vec.x * vec.x + vec.y * vec.y +
+                               vec.z * vec.z);
 
   vec.x *= ool;
   vec.y *= ool;
   vec.z *= ool;
 }
 
-float _SSE_InvRSquared(const float *v) {
-  float inv_r2 = 1.f;
+f32 _SSE_InvRSquared(const f32 *v) {
+  f32 inv_r2 = 1.f;
 #ifdef _WIN32
   _asm {  // Intel SSE only routine
 		mov			eax, v
@@ -309,9 +309,9 @@ float _SSE_InvRSquared(const float *v) {
   return inv_r2;
 }
 
-void _SSE_SinCos(float x, float *s, float *c) {
+void _SSE_SinCos(f32 x, f32 *s, f32 *c) {
 #ifdef _WIN32
-  float t4, t8, t12;
+  f32 t4, t8, t12;
 
   __asm
   {
@@ -402,9 +402,9 @@ void _SSE_SinCos(float x, float *s, float *c) {
 #endif
 }
 
-float _SSE_cos(float x) {
+f32 _SSE_cos(f32 x) {
 #ifdef _WIN32
-  float temp;
+  f32 temp;
   __asm
   {
 		movss	xmm0, x
@@ -462,86 +462,87 @@ float _SSE_cos(float x) {
 }
 
 //-----------------------------------------------------------------------------
-// SSE2 implementations of optimized routines:
+// SSE2 implementations of optimized routines:// any x
 //-----------------------------------------------------------------------------
-void _SSE2_SinCos(float x, float *s, float *c)  // any x
-{
+void _SSE2_SinCos(f32 x, f32 *s, f32 *c){
 #ifdef _WIN32
+    // clang-format off
   __asm
   {
-		movss	xmm0, x
-		movaps	xmm7, xmm0
-		movss	xmm1, _ps_am_inv_sign_mask
-		movss	xmm2, _ps_am_sign_mask
-		movss	xmm3, _ps_am_2_o_pi
-		andps	xmm0, xmm1
-		andps	xmm7, xmm2
-		mulss	xmm0, xmm3
+    movss	xmm0, x
+    movaps	xmm7, xmm0
+    movss	xmm1, _ps_am_inv_sign_mask
+    movss	xmm2, _ps_am_sign_mask
+    movss	xmm3, _ps_am_2_o_pi
+    andps	xmm0, xmm1
+    andps	xmm7, xmm2
+    mulss	xmm0, xmm3
 
-		pxor	xmm3, xmm3
-		movd	xmm5, _epi32_1
-		movss	xmm4, _ps_am_1
+    pxor	xmm3, xmm3
+    movd	xmm5, _epi32_1
+    movss	xmm4, _ps_am_1
 
-		cvttps2dq	xmm2, xmm0
-		pand	xmm5, xmm2
-		movd	xmm1, _epi32_2
-		pcmpeqd	xmm5, xmm3
-		movd	xmm3, _epi32_1
-		cvtdq2ps	xmm6, xmm2
-		paddd	xmm3, xmm2
-		pand	xmm2, xmm1
-		pand	xmm3, xmm1
-		subss	xmm0, xmm6
-		pslld	xmm2, (31 - 1)
-		minss	xmm0, xmm4
+    cvttps2dq	xmm2, xmm0
+    pand	xmm5, xmm2
+    movd	xmm1, _epi32_2
+    pcmpeqd	xmm5, xmm3
+    movd	xmm3, _epi32_1
+    cvtdq2ps	xmm6, xmm2
+    paddd	xmm3, xmm2
+    pand	xmm2, xmm1
+    pand	xmm3, xmm1
+    subss	xmm0, xmm6
+    pslld	xmm2, (31 - 1)
+    minss	xmm0, xmm4
 
-		mov		eax, s  // mov eax, [esp + 4 + 16]
-		mov		edx, c  // mov edx, [esp + 4 + 16 + 4]
+    mov		eax, s  // mov eax, [esp + 4 + 16]
+    mov		edx, c  // mov edx, [esp + 4 + 16 + 4]
 
-		subss	xmm4, xmm0
-		pslld	xmm3, (31 - 1)
+    subss	xmm4, xmm0
+    pslld	xmm3, (31 - 1)
 
-		movaps	xmm6, xmm4
-		xorps	xmm2, xmm7
-		movaps	xmm7, xmm5
-		andps	xmm6, xmm7
-		andnps	xmm7, xmm0
-		andps	xmm0, xmm5
-		andnps	xmm5, xmm4
-		movss	xmm4, _ps_sincos_p3
-		orps	xmm6, xmm7
-		orps	xmm0, xmm5
-		movss	xmm5, _ps_sincos_p2
+    movaps	xmm6, xmm4
+    xorps	xmm2, xmm7
+    movaps	xmm7, xmm5
+    andps	xmm6, xmm7
+    andnps	xmm7, xmm0
+    andps	xmm0, xmm5
+    andnps	xmm5, xmm4
+    movss	xmm4, _ps_sincos_p3
+    orps	xmm6, xmm7
+    orps	xmm0, xmm5
+    movss	xmm5, _ps_sincos_p2
 
-		movaps	xmm1, xmm0
-		movaps	xmm7, xmm6
-		mulss	xmm0, xmm0
-		mulss	xmm6, xmm6
-		orps	xmm1, xmm2
-		orps	xmm7, xmm3
-		movaps	xmm2, xmm0
-		movaps	xmm3, xmm6
-		mulss	xmm0, xmm4
-		mulss	xmm6, xmm4
-		movss	xmm4, _ps_sincos_p1
-		addss	xmm0, xmm5
-		addss	xmm6, xmm5
-		movss	xmm5, _ps_sincos_p0
-		mulss	xmm0, xmm2
-		mulss	xmm6, xmm3
-		addss	xmm0, xmm4
-		addss	xmm6, xmm4
-		mulss	xmm0, xmm2
-		mulss	xmm6, xmm3
-		addss	xmm0, xmm5
-		addss	xmm6, xmm5
-		mulss	xmm0, xmm1
-		mulss	xmm6, xmm7
+    movaps	xmm1, xmm0
+    movaps	xmm7, xmm6
+    mulss	xmm0, xmm0
+    mulss	xmm6, xmm6
+    orps	xmm1, xmm2
+    orps	xmm7, xmm3
+    movaps	xmm2, xmm0
+    movaps	xmm3, xmm6
+    mulss	xmm0, xmm4
+    mulss	xmm6, xmm4
+    movss	xmm4, _ps_sincos_p1
+    addss	xmm0, xmm5
+    addss	xmm6, xmm5
+    movss	xmm5, _ps_sincos_p0
+    mulss	xmm0, xmm2
+    mulss	xmm6, xmm3
+    addss	xmm0, xmm4
+    addss	xmm6, xmm4
+    mulss	xmm0, xmm2
+    mulss	xmm6, xmm3
+    addss	xmm0, xmm5
+    addss	xmm6, xmm5
+    mulss	xmm0, xmm1
+    mulss	xmm6, xmm7
 
-        // use full stores since caller might reload with full loads
-		movss	[eax], xmm0
-		movss	[edx], xmm6
+    // use full stores since caller might reload with full loads
+    movss [eax], xmm0
+    movss [edx], xmm6
   }
+// clang-format on
 #elif _LINUX
 #warning "_SSE2_SinCos NOT implemented!"
 #else
@@ -549,7 +550,7 @@ void _SSE2_SinCos(float x, float *s, float *c)  // any x
 #endif
 }
 
-float _SSE2_cos(float x) {
+f32 _SSE2_cos(f32 x) {
 #ifdef _WIN32
   __asm
   {
@@ -606,7 +607,7 @@ float _SSE2_cos(float x) {
 }
 
 // SSE Version of VectorTransform
-void VectorTransformSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
+void VectorTransformSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out1);
 
@@ -662,7 +663,7 @@ void VectorTransformSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
 #endif
 }
 
-void VectorRotateSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
+void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out1);
 
@@ -716,8 +717,8 @@ void VectorRotateSSE(const float *in1, const matrix3x4_t &in2, float *out1) {
 }
 
 #ifdef _WIN32
-void _declspec(naked) _SSE_VectorMA(const float *start, float scale,
-                                    const float *direction, float *dest) {
+void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
+                                    const f32 *direction, f32 *dest) {
   // FIXME: This don't work!! It will overwrite memory in the write to dest
   Assert(0);
 
@@ -748,7 +749,7 @@ void _declspec(naked) _SSE_VectorMA(const float *start, float scale,
 
 #ifdef _WIN32
 #ifdef PFN_VECTORMA
-void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, float scale,
+void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, f32 scale,
                                             const Vector &direction,
                                             Vector &dest) {
   // FIXME: This don't work!! It will overwrite memory in the write to dest
@@ -779,7 +780,7 @@ void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, float scale,
 #endif
   }
 }
-float(__cdecl *pfVectorMA)(Vector &v) = _VectorMA;
+f32(__cdecl *pfVectorMA)(Vector &v) = _VectorMA;
 #endif
 #endif
 

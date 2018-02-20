@@ -5,6 +5,7 @@
 #ifndef SOURCE_MATHLIB_SSEQUATMATH_H_
 #define SOURCE_MATHLIB_SSEQUATMATH_H_
 
+#include "base/include/base_types.h"
 #include "mathlib/ssemath.h"
 
 // Use this #define to allow SSE versions of Quaternion math
@@ -102,7 +103,7 @@ FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
   if (SubFloat(radius, 0))  // > FLT_EPSILON && ((radius < 1.0f - 4*FLT_EPSILON)
                             // || (radius > 1.0f + 4*FLT_EPSILON))
   {
-    float iradius = 1.0f / sqrt(SubFloat(radius, 0));
+    f32 iradius = 1.0f / sqrt(SubFloat(radius, 0));
     result = ReplicateX4(iradius);
     result = MulSIMD(result, q);
     return result;
@@ -128,7 +129,7 @@ FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
 // 0.0 returns p, 1.0 return q.
 //---------------------------------------------------------------------
 FORCEINLINE fltx4 QuaternionBlendNoAlignSIMD(const fltx4 &p, const fltx4 &q,
-                                             float t) {
+                                             f32 t) {
   fltx4 sclp, sclq, result;
   sclq = ReplicateX4(t);
   sclp = SubSIMD(Four_Ones, sclq);
@@ -140,7 +141,7 @@ FORCEINLINE fltx4 QuaternionBlendNoAlignSIMD(const fltx4 &p, const fltx4 &q,
 //---------------------------------------------------------------------
 // Blend Quaternions
 //---------------------------------------------------------------------
-FORCEINLINE fltx4 QuaternionBlendSIMD(const fltx4 &p, const fltx4 &q, float t) {
+FORCEINLINE fltx4 QuaternionBlendSIMD(const fltx4 &p, const fltx4 &q, f32 t) {
   // decide if one of the quaternions is backwards
   fltx4 q2, result;
   q2 = QuaternionAlignSIMD(p, q);
@@ -209,19 +210,19 @@ FORCEINLINE fltx4 QuaternionMultSIMD(const fltx4 &p, const fltx4 &q) {
 #ifndef _X360
 
 // SSE and STDC
-FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, float t) {
-  float r;
+FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
+  f32 r;
   fltx4 q;
 
   // FIXME: nick, this isn't overly sensitive to accuracy, and it may be faster
   // to use the cos part (w) of the quaternion (sin(omega)*N,cos(omega)) to
   // figure the new scale.
-  float sinom =
+  f32 sinom =
       sqrt(SubFloat(p, 0) * SubFloat(p, 0) + SubFloat(p, 1) * SubFloat(p, 1) +
            SubFloat(p, 2) * SubFloat(p, 2));
   sinom = min(sinom, 1.f);
 
-  float sinsom = sin(asin(sinom) * t);
+  f32 sinsom = sin(asin(sinom) * t);
 
   t = sinsom / (sinom + FLT_EPSILON);
   SubFloat(q, 0) = t * SubFloat(p, 0);
@@ -243,7 +244,7 @@ FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, float t) {
 #else
 
 // X360
-FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, float t) {
+FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
   fltx4 sinom = Dot3SIMD(p, p);
   sinom = SqrtSIMD(sinom);
   sinom = MinSIMD(sinom, Four_Ones);
@@ -279,8 +280,8 @@ FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, float t) {
 
 // SSE and STDC
 FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
-                                             float t) {
-  float omega, cosom, sinom, sclp, sclq;
+                                             f32 t) {
+  f32 omega, cosom, sinom, sclp, sclq;
 
   fltx4 result;
 
@@ -295,7 +296,7 @@ FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
       sclp = sin((1.0f - t) * omega) / sinom;
       sclq = sin(t * omega) / sinom;
     } else {
-      // TODO: add short circuit for cosom == 1.0f?
+      // TODO: add i16 circuit for cosom == 1.0f?
       sclp = 1.0f - t;
       sclq = t;
     }
@@ -322,13 +323,13 @@ FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
 
 // X360
 FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
-                                             float t) {
+                                             f32 t) {
   return XMQuaternionSlerp(p, q, t);
 }
 
 #endif
 
-FORCEINLINE fltx4 QuaternionSlerpSIMD(const fltx4 &p, const fltx4 &q, float t) {
+FORCEINLINE fltx4 QuaternionSlerpSIMD(const fltx4 &p, const fltx4 &q, f32 t) {
   fltx4 q2, result;
   q2 = QuaternionAlignSIMD(p, q);
   result = QuaternionSlerpNoAlignSIMD(p, q2, t);

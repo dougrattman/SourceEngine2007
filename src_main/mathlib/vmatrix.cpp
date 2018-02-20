@@ -61,7 +61,7 @@ VMatrix SetupMatrixReflection(const VPlane &thePlane) {
 }
 
 VMatrix SetupMatrixProjection(const Vector &vOrigin, const VPlane &thePlane) {
-  vec_t dot;
+  f32 dot;
   VMatrix mRet;
 
 #define PN thePlane.m_Normal
@@ -95,16 +95,16 @@ VMatrix SetupMatrixProjection(const Vector &vOrigin, const VPlane &thePlane) {
   return mRet;
 }
 
-VMatrix SetupMatrixAxisRot(const Vector &vAxis, vec_t fDegrees) {
-  vec_t s, c, t;
-  vec_t tx, ty, tz;
-  vec_t sx, sy, sz;
-  vec_t fRadians;
+VMatrix SetupMatrixAxisRot(const Vector &vAxis, f32 fDegrees) {
+  f32 s, c, t;
+  f32 tx, ty, tz;
+  f32 sx, sy, sz;
+  f32 fRadians;
 
   fRadians = fDegrees * (M_PI / 180.0f);
 
-  s = (vec_t)sin(fRadians);
-  c = (vec_t)cos(fRadians);
+  s = (f32)sin(fRadians);
+  c = (f32)cos(fRadians);
   t = 1.0f - c;
 
   tx = t * vAxis.x;
@@ -239,10 +239,10 @@ bool VMatrix::InverseGeneral(VMatrix &vInverse) const {
 
 bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
   int iRow, i, j, iTemp, iTest;
-  vec_t mul, fTest, fLargest;
-  vec_t mat[4][8];
+  f32 mul, fTest, fLargest;
+  f32 mat[4][8];
   int rowMap[4], iLargest;
-  vec_t *pOut, *pRow, *pScaleRow;
+  f32 *pOut, *pRow, *pScaleRow;
 
   // How it's done.
   // AX = I
@@ -252,7 +252,7 @@ bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
 
   // Setup AI
   for (i = 0; i < 4; i++) {
-    const vec_t *pIn = src[i];
+    const f32 *pIn = src[i];
     pOut = mat[i];
 
     for (j = 0; j < 4; j++) {
@@ -278,7 +278,7 @@ bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
     fLargest = 0.001f;
     iLargest = -1;
     for (iTest = iRow; iTest < 4; iTest++) {
-      fTest = (vec_t)FloatMakePositive(mat[rowMap[iTest]][iRow]);
+      fTest = (f32)FloatMakePositive(mat[rowMap[iTest]][iRow]);
       if (fTest > fLargest) {
         iLargest = iTest;
         fLargest = fTest;
@@ -321,7 +321,7 @@ bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
 
   // The inverse is on the right side of AX now (the identity is on the left).
   for (i = 0; i < 4; i++) {
-    const vec_t *pIn = mat[rowMap[i]] + 4;
+    const f32 *pIn = mat[rowMap[i]] + 4;
     pOut = dst.m[i];
 
     for (j = 0; j < 4; j++) {
@@ -450,7 +450,7 @@ bool VMatrix::IsRotationMatrix() const {
 
 void VMatrix::SetupMatrixOrgAngles(const Vector &origin,
                                    const QAngle &vAngles) {
-  float sr, sp, sy, cr, cp, cy;
+  f32 sr, sp, sy, cr, cp, cy;
 
   SinCos(DEG2RAD(vAngles[YAW]), &sy, &cy);
   SinCos(DEG2RAD(vAngles[PITCH]), &sp, &cp);
@@ -513,9 +513,9 @@ void MatrixFromAngles(const QAngle &vAngles, VMatrix &dst) {
 // Creates euler angles from a matrix
 //-----------------------------------------------------------------------------
 void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
-  float forward[3];
-  float left[3];
-  float up[3];
+  f32 forward[3];
+  f32 left[3];
+  f32 up[3];
 
   // Extract the basis vectors from the matrix. Since we only need the Z
   // component of the up vector, we don't get X and Y.
@@ -527,7 +527,7 @@ void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
   left[2] = src[2][1];
   up[2] = src[2][2];
 
-  float xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
+  f32 xyDist = sqrtf(forward[0] * forward[0] + forward[1] * forward[1]);
 
   // enough here to get angles?
   if (xyDist > 0.001f) {
@@ -564,8 +564,8 @@ void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
 //-----------------------------------------------------------------------------
 // Transpose
 //-----------------------------------------------------------------------------
-inline void Swap(float &a, float &b) {
-  float tmp = a;
+inline void Swap(f32 &a, f32 &b) {
+  f32 tmp = a;
   a = b;
   b = tmp;
 }
@@ -604,14 +604,14 @@ void MatrixTranspose(const VMatrix &src, VMatrix &dst) {
 
 void MatrixCopy(const VMatrix &src, VMatrix &dst) {
   if (&src != &dst) {
-    memcpy(dst.m, src.m, 16 * sizeof(float));
+    memcpy(dst.m, src.m, 16 * sizeof(f32));
   }
 }
 
 //-----------------------------------------------------------------------------
 // Matrix multiply
 //-----------------------------------------------------------------------------
-typedef float VMatrixRaw_t[4];
+typedef f32 VMatrixRaw_t[4];
 
 void MatrixMultiply(const VMatrix &src1, const VMatrix &src2, VMatrix &dst) {
   // Make sure it works if src1 == dst or src2 == dst
@@ -743,7 +743,7 @@ void Vector3DMultiplyPositionProjective(const VMatrix &src1, const Vector &src2,
     VectorCopy(src2, tmp);
   }
 
-  float w =
+  f32 w =
       src1[3][0] * v[0] + src1[3][1] * v[1] + src1[3][2] * v[2] + src1[3][3];
   if (w != 0.0f) {
     w = 1.0f / w;
@@ -771,7 +771,7 @@ void Vector3DMultiplyProjective(const VMatrix &src1, const Vector &src2,
     VectorCopy(src2, tmp);
   }
 
-  float w;
+  f32 w;
   dst[0] = src1[0][0] * v[0] + src1[0][1] * v[1] + src1[0][2] * v[2];
   dst[1] = src1[1][0] * v[0] + src1[1][1] * v[1] + src1[1][2] * v[2];
   dst[2] = src1[2][0] * v[0] + src1[2][1] * v[1] + src1[2][2] * v[2];
@@ -869,7 +869,7 @@ VPlane VMatrix::operator*(const VPlane &thePlane) const {
 //-----------------------------------------------------------------------------
 // Builds a rotation matrix that rotates one direction vector into another
 //-----------------------------------------------------------------------------
-void MatrixBuildTranslation(VMatrix &dst, float x, float y, float z) {
+void MatrixBuildTranslation(VMatrix &dst, f32 x, f32 y, f32 z) {
   MatrixSetIdentity(dst);
   dst[0][3] = x;
   dst[1][3] = y;
@@ -899,7 +899,7 @@ void MatrixBuildTranslation(VMatrix &dst, const Vector &translation) {
 //			angle -
 //-----------------------------------------------------------------------------
 void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
-                                  float angleDegrees) {
+                                  f32 angleDegrees) {
   MatrixBuildRotationAboutAxis(vAxisOfRot, angleDegrees, dst.As3x4());
   dst[3][0] = 0;
   dst[3][1] = 0;
@@ -912,7 +912,7 @@ void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
 //-----------------------------------------------------------------------------
 void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
                          const Vector &finalDirection) {
-  float angle = DotProduct(initialDirection, finalDirection);
+  f32 angle = DotProduct(initialDirection, finalDirection);
   Assert(IsFinite(angle));
 
   Vector axis;
@@ -959,11 +959,11 @@ void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void MatrixBuildRotateZ(VMatrix &dst, float angleDegrees) {
-  float radians = angleDegrees * (M_PI / 180.0f);
+void MatrixBuildRotateZ(VMatrix &dst, f32 angleDegrees) {
+  f32 radians = angleDegrees * (M_PI / 180.0f);
 
-  float fSin = (float)sin(radians);
-  float fCos = (float)cos(radians);
+  f32 fSin = (f32)sin(radians);
+  f32 fCos = (f32)cos(radians);
 
   dst[0][0] = fCos;
   dst[0][1] = -fSin;
@@ -984,7 +984,7 @@ void MatrixBuildRotateZ(VMatrix &dst, float angleDegrees) {
 }
 
 // Builds a scale matrix
-void MatrixBuildScale(VMatrix &dst, float x, float y, float z) {
+void MatrixBuildScale(VMatrix &dst, f32 x, f32 y, f32 z) {
   dst[0][0] = x;
   dst[0][1] = 0.0f;
   dst[0][2] = 0.0f;
@@ -1007,12 +1007,12 @@ void MatrixBuildScale(VMatrix &dst, const Vector &scale) {
   MatrixBuildScale(dst, scale.x, scale.y, scale.z);
 }
 
-void MatrixBuildPerspective(VMatrix &dst, float fovX, float fovY, float zNear,
-                            float zFar) {
+void MatrixBuildPerspective(VMatrix &dst, f32 fovX, f32 fovY, f32 zNear,
+                            f32 zFar) {
   // FIXME: collapse all of this into one matrix after we figure out what all
   // should be in here.
-  float width = 2 * zNear * tan(fovX * (M_PI / 180.0f) * 0.5f);
-  float height = 2 * zNear * tan(fovY * (M_PI / 180.0f) * 0.5f);
+  f32 width = 2 * zNear * tan(fovX * (M_PI / 180.0f) * 0.5f);
+  f32 height = 2 * zNear * tan(fovY * (M_PI / 180.0f) * 0.5f);
 
   memset(dst.Base(), 0, sizeof(dst));
   dst[0][0] = 2.0F * zNear / width;
@@ -1043,7 +1043,7 @@ void MatrixBuildPerspective(VMatrix &dst, float fovX, float fovY, float zNear,
 }
 
 static inline void CalculateAABBForNormalizedFrustum_Helper(
-    float x, float y, float z, const VMatrix &volumeToWorld, Vector &mins,
+    f32 x, f32 y, f32 z, const VMatrix &volumeToWorld, Vector &mins,
     Vector &maxs) {
   Vector volumeSpacePos(x, y, z);
 
@@ -1100,7 +1100,7 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
 //-----------------------------------------------------------------------------
 void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
-                                                float *pflRadius) {
+                                                f32 *pflRadius) {
   // FIXME: Could maybe do better than the compile with all of these multiplies
   // by 0 and 1.
 
@@ -1133,10 +1133,10 @@ void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
   // r = sqrt( hl^1 + x^2 )
   Vector vecDelta;
   VectorSubtract(vecCenterFar, vecCenterNear, vecDelta);
-  float l = vecDelta.Length();
-  float h1Sqr = vecCenterNear.DistToSqr(vecNearEdge);
-  float h2Sqr = vecCenterFar.DistToSqr(vecFarEdge);
-  float x = (l * l + h2Sqr - h1Sqr) / (2.0f * l);
+  f32 l = vecDelta.Length();
+  f32 h1Sqr = vecCenterNear.DistToSqr(vecNearEdge);
+  f32 h2Sqr = vecCenterFar.DistToSqr(vecFarEdge);
+  f32 x = (l * l + h2Sqr - h1Sqr) / (2.0f * l);
   VectorMA(vecCenterNear, (x / l), vecDelta, *pCenter);
   *pflRadius = sqrt(h1Sqr + x * x);
 }
@@ -1146,7 +1146,7 @@ void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
 // world space and get a bounding sphere.
 //-----------------------------------------------------------------------------
 void CalculateSphereFromProjectionMatrix(const VMatrix &worldToVolume,
-                                         Vector *pCenter, float *pflRadius) {
+                                         Vector *pCenter, f32 *pflRadius) {
   VMatrix volumeToWorld;
   MatrixInverseGeneral(worldToVolume, volumeToWorld);
   CalculateSphereFromProjectionMatrixInverse(volumeToWorld, pCenter, pflRadius);
@@ -1156,7 +1156,7 @@ static inline void FrustumPlanesFromMatrixHelper(const VMatrix &shadowToWorld,
                                                  const Vector &p1,
                                                  const Vector &p2,
                                                  const Vector &p3,
-                                                 Vector &normal, float &dist) {
+                                                 Vector &normal, f32 &dist) {
   Vector world1, world2, world3;
   Vector3DMultiplyPositionProjective(shadowToWorld, p1, world1);
   Vector3DMultiplyPositionProjective(shadowToWorld, p2, world2);
@@ -1173,7 +1173,7 @@ static inline void FrustumPlanesFromMatrixHelper(const VMatrix &shadowToWorld,
 
 void FrustumPlanesFromMatrix(const VMatrix &clipToWorld, Frustum_t &frustum) {
   Vector normal;
-  float dist;
+  f32 dist;
 
   FrustumPlanesFromMatrixHelper(clipToWorld, Vector(0.0f, 0.0f, 0.0f),
                                 Vector(1.0f, 0.0f, 0.0f),
@@ -1206,8 +1206,8 @@ void FrustumPlanesFromMatrix(const VMatrix &clipToWorld, Frustum_t &frustum) {
   frustum.SetPlane(FRUSTUM_BOTTOM, PLANE_ANYZ, normal, dist);
 }
 
-void MatrixBuildOrtho(VMatrix &dst, double left, double top, double right,
-                      double bottom, double zNear, double zFar) {
+void MatrixBuildOrtho(VMatrix &dst, f64 left, f64 top, f64 right,
+                      f64 bottom, f64 zNear, f64 zFar) {
   // FIXME: This is being used incorrectly! Should read:
   // D3DXMatrixOrthoOffCenterRH( &matrix, left, right, bottom, top, zNear, zFar
   // ); Which is certainly why we need these extra -1 scales in y. Bleah
@@ -1240,29 +1240,29 @@ void MatrixBuildOrtho(VMatrix &dst, double left, double top, double right,
            0.0f, 0.0f, 1.0f);
 }
 
-void MatrixBuildPerspectiveX(VMatrix &dst, double flFovX, double flAspect,
-                             double flZNear, double flZFar) {
-  float flWidth = 2.0f * flZNear * tanf(flFovX * M_PI / 360.0f);
-  float flHeight = flWidth / flAspect;
+void MatrixBuildPerspectiveX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                             f64 flZNear, f64 flZFar) {
+  f32 flWidth = 2.0f * flZNear * tanf(flFovX * M_PI / 360.0f);
+  f32 flHeight = flWidth / flAspect;
   dst.Init(2.0f * flZNear / flWidth, 0.0f, 0.0f, 0.0f, 0.0f,
            2.0f * flZNear / flHeight, 0.0f, 0.0f, 0.0f, 0.0f,
            flZFar / (flZNear - flZFar), flZNear * flZFar / (flZNear - flZFar),
            0.0f, 0.0f, -1.0f, 0.0f);
 }
 
-void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, double flFovX,
-                                      double flAspect, double flZNear,
-                                      double flZFar, double bottom, double top,
-                                      double left, double right) {
-  float flWidth = 2.0f * flZNear * tanf(flFovX * M_PI / 360.0f);
-  float flHeight = flWidth / flAspect;
+void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, f64 flFovX,
+                                      f64 flAspect, f64 flZNear,
+                                      f64 flZFar, f64 bottom, f64 top,
+                                      f64 left, f64 right) {
+  f32 flWidth = 2.0f * flZNear * tanf(flFovX * M_PI / 360.0f);
+  f32 flHeight = flWidth / flAspect;
 
   // bottom, top, left, right are 0..1 so convert to -<val>/2..<val>/2
-  float flLeft = -(flWidth / 2.0f) * (1.0f - left) + left * (flWidth / 2.0f);
-  float flRight = -(flWidth / 2.0f) * (1.0f - right) + right * (flWidth / 2.0f);
-  float flBottom =
+  f32 flLeft = -(flWidth / 2.0f) * (1.0f - left) + left * (flWidth / 2.0f);
+  f32 flRight = -(flWidth / 2.0f) * (1.0f - right) + right * (flWidth / 2.0f);
+  f32 flBottom =
       -(flHeight / 2.0f) * (1.0f - bottom) + bottom * (flHeight / 2.0f);
-  float flTop = -(flHeight / 2.0f) * (1.0f - top) + top * (flHeight / 2.0f);
+  f32 flTop = -(flHeight / 2.0f) * (1.0f - top) + top * (flHeight / 2.0f);
 
   dst.Init((2.0f * flZNear) / (flRight - flLeft), 0.0f,
            (flLeft + flRight) / (flRight - flLeft), 0.0f, 0.0f,

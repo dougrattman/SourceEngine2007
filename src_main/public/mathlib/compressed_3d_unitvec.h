@@ -3,11 +3,12 @@
 #ifndef SOURCE_MATHLIB_COMPRESSED_3D_UNITVEC_H_
 #define SOURCE_MATHLIB_COMPRESSED_3D_UNITVEC_H_
 
+#include "base/include/base_types.h"
 #include "mathlib/vector.h"
 #include "tier0/include/dbg.h"
 
-#define UNITVEC_DECLARE_STATICS             \
-  float cUnitVector::mUVAdjustment[0x2000]; \
+#define UNITVEC_DECLARE_STATICS           \
+  f32 cUnitVector::mUVAdjustment[0x2000]; \
   Vector cUnitVector::mTmpVec;
 
 // upper 3 bits
@@ -35,7 +36,7 @@ class cUnitVector  // : public c3dMathObject
  public:
   cUnitVector() { mVec = 0; }
   cUnitVector(const Vector& vec) { packVector(vec); }
-  cUnitVector(unsigned short val) { mVec = val; }
+  cUnitVector(u16 val) { mVec = val; }
 
   cUnitVector& operator=(const Vector& vec) {
     packVector(vec);
@@ -77,7 +78,7 @@ class cUnitVector  // : public c3dMathObject
 
     // a little slower... old pack was 4 multiplies and 2 adds.
     // This is 2 multiplies, 2 adds, and a divide....
-    float w = 126.0f / (tmp.x + tmp.y + tmp.z);
+    f32 w = 126.0f / (tmp.x + tmp.y + tmp.z);
     long xbits = (long)(tmp.x * w);
     long ybits = (long)(tmp.y * w);
 
@@ -122,10 +123,10 @@ class cUnitVector  // : public c3dMathObject
 
     // do the inverse transform and normalization
     // costs 3 extra multiplies and 2 subtracts. No big deal.
-    float uvadj = mUVAdjustment[mVec & ~SIGN_MASK];
-    vec.x = uvadj * (float)xbits;
-    vec.y = uvadj * (float)ybits;
-    vec.z = uvadj * (float)(126 - xbits - ybits);
+    f32 uvadj = mUVAdjustment[mVec & ~SIGN_MASK];
+    vec.x = uvadj * (f32)xbits;
+    vec.y = uvadj * (f32)ybits;
+    vec.z = uvadj * (f32)(126 - xbits - ybits);
 
     // set all the sign bits
     if (mVec & XSIGN_MASK) vec.x = -vec.x;
@@ -147,9 +148,9 @@ class cUnitVector  // : public c3dMathObject
       }
 
       // convert to 3D vectors
-      float x = (float)xbits;
-      float y = (float)ybits;
-      float z = (float)(126 - xbits - ybits);
+      f32 x = (f32)xbits;
+      f32 y = (f32)ybits;
+      f32 z = (f32)(126 - xbits - ybits);
 
       // calculate the amount of normalization required
       mUVAdjustment[idx] = 1.0f / sqrtf(y * y + z * z + x * x);
@@ -162,8 +163,8 @@ class cUnitVector  // : public c3dMathObject
 
   // protected: // !!!!
 
-  unsigned short mVec;
-  static float mUVAdjustment[0x2000];
+  u16 mVec;
+  static f32 mUVAdjustment[0x2000];
   static Vector mTmpVec;
 };
 

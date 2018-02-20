@@ -17,6 +17,7 @@
 #define SOURCE_MATHLIB_VMATRIX_H_
 
 #include <cstring>
+#include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector4d.h"
@@ -27,9 +28,9 @@ struct cplane_t;
 class VMatrix {
  public:
   VMatrix();
-  VMatrix(vec_t m00, vec_t m01, vec_t m02, vec_t m03, vec_t m10, vec_t m11,
-          vec_t m12, vec_t m13, vec_t m20, vec_t m21, vec_t m22, vec_t m23,
-          vec_t m30, vec_t m31, vec_t m32, vec_t m33);
+  VMatrix(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11, f32 m12,
+          f32 m13, f32 m20, f32 m21, f32 m22, f32 m23, f32 m30, f32 m31,
+          f32 m32, f32 m33);
 
   // Creates a matrix where the X axis = forward
   // the Y axis = left, and the Z axis = up
@@ -39,22 +40,22 @@ class VMatrix {
   VMatrix(const matrix3x4_t &matrix3x4);
 
   // Set the values in the matrix.
-  void Init(vec_t m00, vec_t m01, vec_t m02, vec_t m03, vec_t m10, vec_t m11,
-            vec_t m12, vec_t m13, vec_t m20, vec_t m21, vec_t m22, vec_t m23,
-            vec_t m30, vec_t m31, vec_t m32, vec_t m33);
+  void Init(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11, f32 m12,
+            f32 m13, f32 m20, f32 m21, f32 m22, f32 m23, f32 m30, f32 m31,
+            f32 m32, f32 m33);
 
   // Initialize from a 3x4
   void Init(const matrix3x4_t &matrix3x4);
 
   // array access
-  inline float *operator[](int i) { return m[i]; }
+  inline f32 *operator[](int i) { return m[i]; }
 
-  inline const float *operator[](int i) const { return m[i]; }
+  inline const f32 *operator[](int i) const { return m[i]; }
 
   // Get a pointer to m[0][0]
-  inline float *Base() { return &m[0][0]; }
+  inline f32 *Base() { return &m[0][0]; }
 
-  inline const float *Base() const { return &m[0][0]; }
+  inline const f32 *Base() const { return &m[0][0]; }
 
   void SetLeft(const Vector &vLeft);
   void SetUp(const Vector &vUp);
@@ -197,7 +198,7 @@ class VMatrix {
 
  public:
   // The matrix.
-  vec_t m[4][4];
+  f32 m[4][4];
 };
 
 //-----------------------------------------------------------------------------
@@ -222,7 +223,7 @@ VMatrix SetupMatrixReflection(const VPlane &thePlane);
 VMatrix SetupMatrixProjection(const Vector &vOrigin, const VPlane &thePlane);
 
 // Setup a matrix to rotate the specified amount around the specified axis.
-VMatrix SetupMatrixAxisRot(const Vector &vAxis, vec_t fDegrees);
+VMatrix SetupMatrixAxisRot(const Vector &vAxis, f32 fDegrees);
 
 // Setup a matrix from euler angles. Just sets identity and calls MatrixAngles.
 VMatrix SetupMatrixAngles(const QAngle &vAngles);
@@ -233,7 +234,7 @@ VMatrix SetupMatrixOrgAngles(const Vector &origin, const QAngle &vAngles);
 #endif
 
 #define VMatToString(mat)                                                      \
-  (static_cast<const char *>(                                                  \
+  (static_cast<const ch *>(                                                    \
       CFmtStr("[ (%f, %f, %f), (%f, %f, %f), (%f, %f, %f), (%f, %f, %f) ]",    \
               mat.m[0][0], mat.m[0][1], mat.m[0][2], mat.m[0][3], mat.m[1][0], \
               mat.m[1][1], mat.m[1][2], mat.m[1][3], mat.m[2][0], mat.m[2][1], \
@@ -298,10 +299,10 @@ void MatrixTransformPlane(const VMatrix &src, const cplane_t &inPlane,
                           cplane_t &outPlane);
 
 // Transform a plane that has an axis-aligned normal
-void MatrixTransformAxisAlignedPlane(const VMatrix &src, int nDim, float flSign,
-                                     float flDist, cplane_t &outPlane);
+void MatrixTransformAxisAlignedPlane(const VMatrix &src, int nDim, f32 flSign,
+                                     f32 flDist, cplane_t &outPlane);
 
-void MatrixBuildTranslation(VMatrix &dst, float x, float y, float z);
+void MatrixBuildTranslation(VMatrix &dst, f32 x, f32 y, f32 z);
 void MatrixBuildTranslation(VMatrix &dst, const Vector &translation);
 
 inline void MatrixTranslate(VMatrix &dst, const Vector &translation) {
@@ -312,11 +313,11 @@ inline void MatrixTranslate(VMatrix &dst, const Vector &translation) {
 }
 
 void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
-                                  float angleDegrees);
-void MatrixBuildRotateZ(VMatrix &dst, float angleDegrees);
+                                  f32 angleDegrees);
+void MatrixBuildRotateZ(VMatrix &dst, f32 angleDegrees);
 
 inline void MatrixRotate(VMatrix &dst, const Vector &vAxisOfRot,
-                         float angleDegrees) {
+                         f32 angleDegrees) {
   VMatrix rotation, temp;
   MatrixBuildRotationAboutAxis(rotation, vAxisOfRot, angleDegrees);
   MatrixMultiply(dst, rotation, temp);
@@ -328,7 +329,7 @@ void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
                          const Vector &finalDirection);
 
 // Builds a scale matrix
-void MatrixBuildScale(VMatrix &dst, float x, float y, float z);
+void MatrixBuildScale(VMatrix &dst, f32 x, f32 y, f32 z);
 void MatrixBuildScale(VMatrix &dst, const Vector &scale);
 
 // Build a perspective matrix.
@@ -337,8 +338,8 @@ void MatrixBuildScale(VMatrix &dst, const Vector &scale);
 // X range: [0..1]
 // Y range: [0..1]
 // Z range: [0..1]
-void MatrixBuildPerspective(VMatrix &dst, float fovX, float fovY, float zNear,
-                            float zFar);
+void MatrixBuildPerspective(VMatrix &dst, f32 fovX, f32 fovY, f32 zNear,
+                            f32 zFar);
 
 //-----------------------------------------------------------------------------
 // Given a projection matrix, take the extremes of the space in transformed into
@@ -352,7 +353,7 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
 // world space and get a bounding sphere.
 //-----------------------------------------------------------------------------
 void CalculateSphereFromProjectionMatrix(const VMatrix &worldToVolume,
-                                         Vector *pCenter, float *pflRadius);
+                                         Vector *pCenter, f32 *pflRadius);
 
 //-----------------------------------------------------------------------------
 // Given an inverse projection matrix, take the extremes of the space in
@@ -367,7 +368,7 @@ void CalculateAABBFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
 //-----------------------------------------------------------------------------
 void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
-                                                float *pflRadius);
+                                                f32 *pflRadius);
 
 //-----------------------------------------------------------------------------
 // Calculate frustum planes given a clip->world space transform.
@@ -405,10 +406,9 @@ void MatrixInverseTranspose(const VMatrix &src, VMatrix &dst);
 //-----------------------------------------------------------------------------
 inline VMatrix::VMatrix() {}
 
-inline VMatrix::VMatrix(vec_t m00, vec_t m01, vec_t m02, vec_t m03, vec_t m10,
-                        vec_t m11, vec_t m12, vec_t m13, vec_t m20, vec_t m21,
-                        vec_t m22, vec_t m23, vec_t m30, vec_t m31, vec_t m32,
-                        vec_t m33) {
+inline VMatrix::VMatrix(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11,
+                        f32 m12, f32 m13, f32 m20, f32 m21, f32 m22, f32 m23,
+                        f32 m30, f32 m31, f32 m32, f32 m33) {
   Init(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31,
        m32, m33);
 }
@@ -425,10 +425,9 @@ inline VMatrix::VMatrix(const Vector &xAxis, const Vector &yAxis,
        xAxis.z, yAxis.z, zAxis.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-inline void VMatrix::Init(vec_t m00, vec_t m01, vec_t m02, vec_t m03, vec_t m10,
-                          vec_t m11, vec_t m12, vec_t m13, vec_t m20, vec_t m21,
-                          vec_t m22, vec_t m23, vec_t m30, vec_t m31, vec_t m32,
-                          vec_t m33) {
+inline void VMatrix::Init(f32 m00, f32 m01, f32 m02, f32 m03, f32 m10, f32 m11,
+                          f32 m12, f32 m13, f32 m20, f32 m21, f32 m22, f32 m23,
+                          f32 m30, f32 m31, f32 m32, f32 m33) {
   m[0][0] = m00;
   m[0][1] = m01;
   m[0][2] = m02;
@@ -592,7 +591,7 @@ inline const VMatrix &VMatrix::operator+=(const VMatrix &other) {
 inline VMatrix VMatrix::operator+(const VMatrix &other) const {
   VMatrix ret;
   for (int i = 0; i < 16; i++) {
-    ((float *)ret.m)[i] = ((float *)m)[i] + ((float *)other.m)[i];
+    ((f32 *)ret.m)[i] = ((f32 *)m)[i] + ((f32 *)other.m)[i];
   }
   return ret;
 }
@@ -612,7 +611,7 @@ inline VMatrix VMatrix::operator-(const VMatrix &other) const {
 inline VMatrix VMatrix::operator-() const {
   VMatrix ret;
   for (int i = 0; i < 16; i++) {
-    ((float *)ret.m)[i] = ((float *)m)[i];
+    ((f32 *)ret.m)[i] = ((f32 *)m)[i];
   }
   return ret;
 }
@@ -666,7 +665,7 @@ inline Vector VMatrix::VMul3x3Transpose(const Vector &vVec) const {
 #endif  // VECTOR_NO_SLOW_OPERATIONS
 
 inline void VMatrix::V3Mul(const Vector &vIn, Vector &vOut) const {
-  vec_t rw;
+  f32 rw;
 
   rw = 1.0f / (m[3][0] * vIn.x + m[3][1] * vIn.y + m[3][2] * vIn.z + m[3][3]);
   vOut.x = (m[0][0] * vIn.x + m[0][1] * vIn.y + m[0][2] * vIn.z + m[0][3]) * rw;
@@ -776,7 +775,7 @@ inline void Vector3DMultiplyPosition(const VMatrix &src1,
 // Transform a plane that has an axis-aligned normal
 //-----------------------------------------------------------------------------
 inline void MatrixTransformAxisAlignedPlane(const VMatrix &src, int nDim,
-                                            float flSign, float flDist,
+                                            f32 flSign, f32 flDist,
                                             cplane_t &outPlane) {
   // See MatrixTransformPlane in the .cpp file for an explanation of the
   // algorithm.
@@ -796,7 +795,7 @@ inline void MatrixTransformAxisAlignedPlane(const VMatrix &src, int nDim,
 // Matrix equality test
 //-----------------------------------------------------------------------------
 inline bool MatricesAreEqual(const VMatrix &src1, const VMatrix &src2,
-                             float flTolerance) {
+                             f32 flTolerance) {
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 3; ++j) {
       if (fabs(src1[i][j] - src2[i][j]) > flTolerance) return false;
@@ -808,17 +807,16 @@ inline bool MatricesAreEqual(const VMatrix &src1, const VMatrix &src2,
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void MatrixBuildOrtho(VMatrix &dst, double left, double top, double right,
-                      double bottom, double zNear, double zFar);
-void MatrixBuildPerspectiveX(VMatrix &dst, double flFovX, double flAspect,
-                             double flZNear, double flZFar);
-void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, double flFovX,
-                                      double flAspect, double flZNear,
-                                      double flZFar, double bottom, double top,
-                                      double left, double right);
+void MatrixBuildOrtho(VMatrix &dst, f64 left, f64 top, f64 right, f64 bottom,
+                      f64 zNear, f64 zFar);
+void MatrixBuildPerspectiveX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                             f64 flZNear, f64 flZFar);
+void MatrixBuildPerspectiveOffCenterX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                                      f64 flZNear, f64 flZFar, f64 bottom,
+                                      f64 top, f64 left, f64 right);
 
-inline void MatrixOrtho(VMatrix &dst, double left, double top, double right,
-                        double bottom, double zNear, double zFar) {
+inline void MatrixOrtho(VMatrix &dst, f64 left, f64 top, f64 right, f64 bottom,
+                        f64 zNear, f64 zFar) {
   VMatrix mat;
   MatrixBuildOrtho(mat, left, top, right, bottom, zNear, zFar);
 
@@ -827,8 +825,8 @@ inline void MatrixOrtho(VMatrix &dst, double left, double top, double right,
   dst = temp;
 }
 
-inline void MatrixPerspectiveX(VMatrix &dst, double flFovX, double flAspect,
-                               double flZNear, double flZFar) {
+inline void MatrixPerspectiveX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                               f64 flZNear, f64 flZFar) {
   VMatrix mat;
   MatrixBuildPerspectiveX(mat, flFovX, flAspect, flZNear, flZFar);
 
@@ -837,10 +835,9 @@ inline void MatrixPerspectiveX(VMatrix &dst, double flFovX, double flAspect,
   dst = temp;
 }
 
-inline void MatrixPerspectiveOffCenterX(VMatrix &dst, double flFovX,
-                                        double flAspect, double flZNear,
-                                        double flZFar, double bottom,
-                                        double top, double left, double right) {
+inline void MatrixPerspectiveOffCenterX(VMatrix &dst, f64 flFovX, f64 flAspect,
+                                        f64 flZNear, f64 flZFar, f64 bottom,
+                                        f64 top, f64 left, f64 right) {
   VMatrix mat;
   MatrixBuildPerspectiveOffCenterX(mat, flFovX, flAspect, flZNear, flZFar,
                                    bottom, top, left, right);

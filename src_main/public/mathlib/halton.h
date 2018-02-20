@@ -18,20 +18,21 @@
 #ifndef SOURCE_MATHLIB_HALTON_H_
 #define SOURCE_MATHLIB_HALTON_H_
 
+#include "base/include/base_types.h"
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
 
 class HaltonSequenceGenerator_t {
   int seed;
   int base;
-  float fbase;  //< base as a float
+  f32 fbase;  //< base as a f32
 
  public:
   HaltonSequenceGenerator_t(int base);  //< base MUST be prime, >=2
 
-  float GetElement(int element);
+  f32 GetElement(int element);
 
-  inline float NextValue(void) { return GetElement(seed++); }
+  inline f32 NextValue(void) { return GetElement(seed++); }
 };
 
 //< pseudo-random sphere sampling
@@ -43,12 +44,12 @@ class DirectionalSampler_t {
   DirectionalSampler_t(void) : zdot(2), vrot(3) {}
 
   Vector NextValue(void) {
-    float zvalue = zdot.NextValue();
+    f32 zvalue = zdot.NextValue();
     zvalue = 2 * zvalue - 1.0;  // map from 0..1 to -1..1
-    float phi = acos(zvalue);
+    f32 phi = acos(zvalue);
     // now, generate a random rotation angle for x/y
-    float theta = 2.0 * M_PI * vrot.NextValue();
-    float sin_p = sin(phi);
+    f32 theta = 2.0 * M_PI * vrot.NextValue();
+    f32 sin_p = sin(phi);
     return Vector(cos(theta) * sin_p, sin(theta) * sin_p, zvalue);
   }
 };

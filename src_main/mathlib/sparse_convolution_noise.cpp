@@ -24,7 +24,7 @@
 
 //(0.5/N_IMPULSES_PER_CELL)
 
-static inline int LatticeCoord(float x) { return ((int)floor(x)) & 0xff; }
+static inline int LatticeCoord(f32 x) { return ((int)floor(x)) & 0xff; }
 
 static inline int Hash4D(int ix, int iy, int iz, int idx) {
   int ret = perm_a[ix];
@@ -36,12 +36,12 @@ static inline int Hash4D(int ix, int iy, int iz, int idx) {
 
 #define SQ(x) ((x) * (x))
 
-static float CellNoise(int ix, int iy, int iz, float xfrac, float yfrac,
-                       float zfrac, float (*pNoiseShapeFunction)(float)) {
-  float ret = 0;
+static f32 CellNoise(int ix, int iy, int iz, f32 xfrac, f32 yfrac,
+                       f32 zfrac, f32 (*pNoiseShapeFunction)(f32)) {
+  f32 ret = 0;
   for (int idx = 0; idx < N_IMPULSES_PER_CELL; idx++) {
     int coord_idx = Hash4D(ix, iy, iz, idx);
-    float dsq = SQ(impulse_xcoords[coord_idx] - xfrac) +
+    f32 dsq = SQ(impulse_xcoords[coord_idx] - xfrac) +
                 SQ(impulse_ycoords[coord_idx] - yfrac) +
                 SQ(impulse_zcoords[coord_idx] - zfrac);
     dsq = sqrt(dsq);
@@ -52,15 +52,15 @@ static float CellNoise(int ix, int iy, int iz, float xfrac, float yfrac,
   return ret;
 }
 
-float SparseConvolutionNoise(Vector const &pnt) {
+f32 SparseConvolutionNoise(Vector const &pnt) {
   return SparseConvolutionNoise(pnt, QuinticInterpolatingPolynomial);
 }
 
-float FractalNoise(Vector const &pnt, int n_octaves) {
-  float scale = 1.0;
-  float iscale = 1.0;
-  float ret = 0;
-  float sumscale = 0;
+f32 FractalNoise(Vector const &pnt, int n_octaves) {
+  f32 scale = 1.0;
+  f32 iscale = 1.0;
+  f32 ret = 0;
+  f32 sumscale = 0;
   for (int o = 0; o < n_octaves; o++) {
     Vector p1 = pnt;
     p1 *= scale;
@@ -72,11 +72,11 @@ float FractalNoise(Vector const &pnt, int n_octaves) {
   return ret * (1.0 / sumscale);
 }
 
-float Turbulence(Vector const &pnt, int n_octaves) {
-  float scale = 1.0;
-  float iscale = 1.0;
-  float ret = 0;
-  float sumscale = 0;
+f32 Turbulence(Vector const &pnt, int n_octaves) {
+  f32 scale = 1.0;
+  f32 iscale = 1.0;
+  f32 ret = 0;
+  f32 sumscale = 0;
   for (int o = 0; o < n_octaves; o++) {
     Vector p1 = pnt;
     p1 *= scale;
@@ -89,23 +89,23 @@ float Turbulence(Vector const &pnt, int n_octaves) {
 }
 
 #ifdef MEASURE_RANGE
-float fmin1 = 10000000.0;
-float fmax1 = -1000000.0;
+f32 fmin1 = 10000000.0;
+f32 fmax1 = -1000000.0;
 #endif
 
-float SparseConvolutionNoise(Vector const &pnt,
-                             float (*pNoiseShapeFunction)(float)) {
+f32 SparseConvolutionNoise(Vector const &pnt,
+                             f32 (*pNoiseShapeFunction)(f32)) {
   // computer integer lattice point
   int ix = LatticeCoord(pnt.x);
   int iy = LatticeCoord(pnt.y);
   int iz = LatticeCoord(pnt.z);
 
   // compute offsets within unit cube
-  float xfrac = pnt.x - floor(pnt.x);
-  float yfrac = pnt.y - floor(pnt.y);
-  float zfrac = pnt.z - floor(pnt.z);
+  f32 xfrac = pnt.x - floor(pnt.x);
+  f32 yfrac = pnt.y - floor(pnt.y);
+  f32 zfrac = pnt.z - floor(pnt.z);
 
-  float sum_out = 0.;
+  f32 sum_out = 0.;
 
   for (int ox = -1; ox <= 1; ox++)
     for (int oy = -1; oy <= 1; oy++)
@@ -125,10 +125,10 @@ float SparseConvolutionNoise(Vector const &pnt,
 // "JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN"
 // as available here: http://mrl.nyu.edu/~perlin/noise/
 
-float NoiseGradient(int hash, float x, float y, float z) {
+f32 NoiseGradient(int hash, f32 x, f32 y, f32 z) {
   int h = hash & 15;        // CONVERT LO 4 BITS OF HASH CODE
-  float u = h < 8 ? x : y;  // INTO 12 GRADIENT DIRECTIONS.
-  float v = h < 4 ? y : (h == 12 || h == 14 ? x : z);
+  f32 u = h < 8 ? x : y;  // INTO 12 GRADIENT DIRECTIONS.
+  f32 v = h < 4 ? y : (h == 12 || h == 14 ? x : z);
   return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
@@ -156,22 +156,22 @@ int NoiseHashIndex(int i) {
   return s_permutation[i & 0xff];
 }
 
-float ImprovedPerlinNoise(Vector const &pnt) {
-  float fx = floor(pnt.x);
-  float fy = floor(pnt.y);
-  float fz = floor(pnt.z);
+f32 ImprovedPerlinNoise(Vector const &pnt) {
+  f32 fx = floor(pnt.x);
+  f32 fy = floor(pnt.y);
+  f32 fz = floor(pnt.z);
 
   int X = (int)fx & 255;  // FIND UNIT CUBE THAT
   int Y = (int)fy & 255;  // CONTAINS POINT.
   int Z = (int)fz & 255;
 
-  float x = pnt.x - fx;  // FIND RELATIVE X,Y,Z
-  float y = pnt.y - fy;  // OF POINT IN CUBE.
-  float z = pnt.z - fz;
+  f32 x = pnt.x - fx;  // FIND RELATIVE X,Y,Z
+  f32 y = pnt.y - fy;  // OF POINT IN CUBE.
+  f32 z = pnt.z - fz;
 
-  float u = QuinticInterpolatingPolynomial(x);  // COMPUTE FADE CURVES
-  float v = QuinticInterpolatingPolynomial(y);  // FOR EACH OF X,Y,Z.
-  float w = QuinticInterpolatingPolynomial(z);
+  f32 u = QuinticInterpolatingPolynomial(x);  // COMPUTE FADE CURVES
+  f32 v = QuinticInterpolatingPolynomial(y);  // FOR EACH OF X,Y,Z.
+  f32 w = QuinticInterpolatingPolynomial(z);
 
   int A = NoiseHashIndex(X) + Y;   // HASH COORDINATES OF
   int AA = NoiseHashIndex(A) + Z;  // THE 8 CUBE CORNERS,
@@ -180,22 +180,22 @@ float ImprovedPerlinNoise(Vector const &pnt) {
   int BA = NoiseHashIndex(B) + Z;
   int BB = NoiseHashIndex(B + 1) + Z;
 
-  float g0 = NoiseGradient(NoiseHashIndex(AA), x, y, z);
-  float g1 = NoiseGradient(NoiseHashIndex(BA), x - 1, y, z);
-  float g2 = NoiseGradient(NoiseHashIndex(AB), x, y - 1, z);
-  float g3 = NoiseGradient(NoiseHashIndex(BB), x - 1, y - 1, z);
-  float g4 = NoiseGradient(NoiseHashIndex(AA + 1), x, y, z - 1);
-  float g5 = NoiseGradient(NoiseHashIndex(BA + 1), x - 1, y, z - 1);
-  float g6 = NoiseGradient(NoiseHashIndex(AB + 1), x, y - 1, z - 1);
-  float g7 = NoiseGradient(NoiseHashIndex(BB + 1), x - 1, y - 1, z - 1);
+  f32 g0 = NoiseGradient(NoiseHashIndex(AA), x, y, z);
+  f32 g1 = NoiseGradient(NoiseHashIndex(BA), x - 1, y, z);
+  f32 g2 = NoiseGradient(NoiseHashIndex(AB), x, y - 1, z);
+  f32 g3 = NoiseGradient(NoiseHashIndex(BB), x - 1, y - 1, z);
+  f32 g4 = NoiseGradient(NoiseHashIndex(AA + 1), x, y, z - 1);
+  f32 g5 = NoiseGradient(NoiseHashIndex(BA + 1), x - 1, y, z - 1);
+  f32 g6 = NoiseGradient(NoiseHashIndex(AB + 1), x, y - 1, z - 1);
+  f32 g7 = NoiseGradient(NoiseHashIndex(BB + 1), x - 1, y - 1, z - 1);
 
   // AND ADD BLENDED RESULTS FROM 8 CORNERS OF CUBE
-  float g01 = Lerp(u, g0, g1);
-  float g23 = Lerp(u, g2, g3);
-  float g45 = Lerp(u, g4, g5);
-  float g67 = Lerp(u, g6, g7);
-  float g0123 = Lerp(v, g01, g23);
-  float g4567 = Lerp(v, g45, g67);
+  f32 g01 = Lerp(u, g0, g1);
+  f32 g23 = Lerp(u, g2, g3);
+  f32 g45 = Lerp(u, g4, g5);
+  f32 g67 = Lerp(u, g6, g7);
+  f32 g0123 = Lerp(v, g01, g23);
+  f32 g4567 = Lerp(v, g45, g67);
 
   return Lerp(w, g0123, g4567);
 }

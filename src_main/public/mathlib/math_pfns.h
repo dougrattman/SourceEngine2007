@@ -3,13 +3,15 @@
 #ifndef SOURCE_MATHLIB_MATH_PFNS_H_
 #define SOURCE_MATHLIB_MATH_PFNS_H_
 
+#include "base/include/base_types.h"
+
 // These globals are initialized by mathlib and redirected based on available
 // fpu features
-extern float (*pfSqrt)(float x);
-extern float (*pfRSqrt)(float x);
-extern float (*pfRSqrtFast)(float x);
-extern void (*pfFastSinCos)(float x, float *s, float *c);
-extern float (*pfFastCos)(float x);
+extern f32 (*pfSqrt)(f32 x);
+extern f32 (*pfRSqrt)(f32 x);
+extern f32 (*pfRSqrtFast)(f32 x);
+extern void (*pfFastSinCos)(f32 x, f32 *s, f32 *c);
+extern f32 (*pfFastCos)(f32 x);
 
 // The following are not declared as macros because they are often used in
 // limiting situations, and sometimes the compiler simply refuses to inline them

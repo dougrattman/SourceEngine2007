@@ -14,7 +14,7 @@ void LightDesc_t::RecalculateDerivedValues(void) {
   if (m_Type == MATERIAL_LIGHT_SPOT) {
     m_ThetaDot = cos(m_Theta);
     m_PhiDot = cos(m_Phi);
-    float spread = m_ThetaDot - m_PhiDot;
+    f32 spread = m_ThetaDot - m_PhiDot;
     if (spread > 1.0e-10) {
       // note - this quantity is very sensitive to round off error. the sse
       // reciprocal approximation won't cut it here.
@@ -228,9 +228,9 @@ void LightDesc_t::ComputeNonincidenceLightAtPoints(const FourVectors &pos,
   color.z = AddSIMD(color.z, MulSIMD(strength, ReplicateX4(m_Color.z)));
 }
 
-void LightDesc_t::SetupOldStyleAttenuation(float fQuadraticAttn,
-                                           float fLinearAttn,
-                                           float fConstantAttn) {
+void LightDesc_t::SetupOldStyleAttenuation(f32 fQuadraticAttn,
+                                           f32 fLinearAttn,
+                                           f32 fConstantAttn) {
   // old-style manually typed quadrtiac coefficients
   if (fQuadraticAttn < EQUAL_EPSILON) fQuadraticAttn = 0;
 
@@ -245,17 +245,17 @@ void LightDesc_t::SetupOldStyleAttenuation(float fQuadraticAttn,
   m_Attenuation2 = fQuadraticAttn;
   m_Attenuation1 = fLinearAttn;
   m_Attenuation0 = fConstantAttn;
-  float fScaleFactor =
+  f32 fScaleFactor =
       fQuadraticAttn * 10000 + fLinearAttn * 100 + fConstantAttn;
 
   if (fScaleFactor > 0) m_Color *= fScaleFactor;
 }
 
-void LightDesc_t::SetupNewStyleAttenuation(float fFiftyPercentDistance,
-                                           float fZeroPercentDistance) {
+void LightDesc_t::SetupNewStyleAttenuation(f32 fFiftyPercentDistance,
+                                           f32 fZeroPercentDistance) {
   // new style storing 50% and 0% distances
-  float d50 = fFiftyPercentDistance;
-  float d0 = fZeroPercentDistance;
+  f32 d50 = fFiftyPercentDistance;
+  f32 d0 = fZeroPercentDistance;
   if (d0 < d50) {
     // !!warning in lib code???!!!
     Warning(
@@ -264,12 +264,12 @@ void LightDesc_t::SetupNewStyleAttenuation(float fFiftyPercentDistance,
         d50);
     d0 = 2.0 * d50;
   }
-  float a = 0, b = 1, c = 0;
+  f32 a = 0, b = 1, c = 0;
   if (!SolveInverseQuadraticMonotonic(0, 1.0, d50, 2.0, d0, 256.0, a, b, c)) {
     Warning("can't solve quadratic for light %f %f\n", d50, d0);
   }
-  float v50 = c + d50 * (b + d50 * a);
-  float scale = 2.0 / v50;
+  f32 v50 = c + d50 * (b + d50 * a);
+  f32 scale = 2.0 / v50;
   a *= scale;
   b *= scale;
   c *= scale;

@@ -11,14 +11,14 @@ const fltx4 Four_Threes = {3.0, 3.0, 3.0, 3.0};
 const fltx4 Four_Fours = {4.0, 4.0, 4.0, 4.0};
 const fltx4 Four_Origin = {0, 0, 0, 1};
 
-const fltx4 Four_2ToThe21s = {(float)(1 << 21), (float)(1 << 21),
-                              (float)(1 << 21), (float)(1 << 21)};
-const fltx4 Four_2ToThe22s = {(float)(1 << 22), (float)(1 << 22),
-                              (float)(1 << 22), (float)(1 << 22)};
-const fltx4 Four_2ToThe23s = {(float)(1 << 23), (float)(1 << 23),
-                              (float)(1 << 23), (float)(1 << 23)};
-const fltx4 Four_2ToThe24s = {(float)(1 << 24), (float)(1 << 24),
-                              (float)(1 << 24), (float)(1 << 24)};
+const fltx4 Four_2ToThe21s = {(f32)(1 << 21), (f32)(1 << 21), (f32)(1 << 21),
+                              (f32)(1 << 21)};
+const fltx4 Four_2ToThe22s = {(f32)(1 << 22), (f32)(1 << 22), (f32)(1 << 22),
+                              (f32)(1 << 22)};
+const fltx4 Four_2ToThe23s = {(f32)(1 << 23), (f32)(1 << 23), (f32)(1 << 23),
+                              (f32)(1 << 23)};
+const fltx4 Four_2ToThe24s = {(f32)(1 << 24), (f32)(1 << 24), (f32)(1 << 24),
+                              (f32)(1 << 24)};
 
 const fltx4 Four_Point225s = {.225, .225, .225, .225};
 const fltx4 Four_Epsilons = {FLT_EPSILON, FLT_EPSILON, FLT_EPSILON,
@@ -32,19 +32,19 @@ const fltx4 g_QuatMultRowSign[4] = {{1.0f, 1.0f, -1.0f, 1.0f},
                                     {1.0f, -1.0f, 1.0f, 1.0f},
                                     {-1.0f, -1.0f, -1.0f, 1.0f}};
 
-const int32_t ALIGN16 g_SIMD_clear_signmask[4] = {0x7fffffff, 0x7fffffff,
-                                                0x7fffffff, 0x7fffffff};
-const int32_t ALIGN16 g_SIMD_signmask[4] = {0x80000000, 0x80000000, 0x80000000,
-                                          0x80000000};
-const int32_t ALIGN16 g_SIMD_lsbmask[4] = {0xfffffffe, 0xfffffffe, 0xfffffffe,
-                                         0xfffffffe};
-const int32_t ALIGN16 g_SIMD_clear_wmask[4] = {0xffffffff, 0xffffffff, 0xffffffff,
-                                             0};
+const i32 ALIGN16 g_SIMD_clear_signmask[4] = {0x7fffffff, 0x7fffffff,
+                                              0x7fffffff, 0x7fffffff};
+const i32 ALIGN16 g_SIMD_signmask[4] = {0x80000000i32, 0x80000000i32,
+                                        0x80000000i32, 0x80000000i32};
+const i32 ALIGN16 g_SIMD_lsbmask[4] = {0xfffffffei32, 0xfffffffei32,
+                                       0xfffffffei32, 0xfffffffei32};
+const i32 ALIGN16 g_SIMD_clear_wmask[4] = {0xffffffffi32, 0xffffffffi32,
+                                           0xffffffffi32, 0};
 
-const int32_t ALIGN16 g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFF, 0, 0, 0},
-                                                  {0, 0xFFFFFFFF, 0, 0},
-                                                  {0, 0, 0xFFFFFFFF, 0},
-                                                  {0, 0, 0, 0xFFFFFFFF}};
+const i32 ALIGN16 g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFFi32, 0, 0, 0},
+                                                {0, 0xFFFFFFFFi32, 0, 0},
+                                                {0, 0, 0xFFFFFFFFi32, 0},
+                                                {0, 0, 0, 0xFFFFFFFFi32}};
 
 // FUNCTIONS
 // NOTE: WHY YOU **DO NOT** WANT TO PUT FUNCTIONS HERE
@@ -71,8 +71,7 @@ const int32_t ALIGN16 g_SIMD_ComponentMask[4][4] = {{0xFFFFFFFF, 0, 0, 0},
 /// You can use this to rotate a long array of FourVectors all by the same
 /// matrix. The first parameter is the head of the array. The second is the
 /// number of vectors to rotate. The third is the matrix.
-void FourVectors::RotateManyBy(FourVectors* RESTRICT pVectors,
-                               unsigned int numVectors,
+void FourVectors::RotateManyBy(FourVectors* RESTRICT pVectors, u32 numVectors,
                                const matrix3x4_t& rotationMatrix) {
   Assert(numVectors > 0);
   if (numVectors == 0) return;
