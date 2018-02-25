@@ -8,6 +8,7 @@
 
 #include <ctime>
 
+#include "base/include/windows/unique_module_ptr.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/valve_off.h"
 
@@ -30,8 +31,9 @@ bool WriteMiniDumpUsingExceptionInfo(
   // Get the function pointer directly so that we don't have to include the
   // .lib, and that we can easily change it to using our own dll when this code
   // is used on win98/ME/2K machines
-  HMODULE dbghelp_module = ::LoadLibraryW(L"DbgHelp.dll");
-  if (!dbghelp_module) return false;
+  auto [dbghelp_module, error_code] =
+      source::windows::unique_module_ptr::from_load_library(L"DbgHelp.dll");
+  if (error_code != NO_ERROR || !dbghelp_module) return false;
 
   // MiniDumpWriteDumpFunc() function declaration (so we can just get the
   // function directly from windows)
@@ -43,10 +45,10 @@ bool WriteMiniDumpUsingExceptionInfo(
                      _In_opt_ PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
 
   bool bReturnValue = false;
-  const auto miniDumpWriteDump = reinterpret_cast<MiniDumpWriteDumpFunc>(
-      ::GetProcAddress(dbghelp_module, "MiniDumpWriteDump"));
+  const auto [miniDumpWriteDump, error_code] =
+      dbghelp_module.get_address_as<MiniDumpWriteDumpFunc>("MiniDumpWriteDump");
 
-  if (miniDumpWriteDump) {
+  if (error_code != NO_ERROR && miniDumpWriteDump) {
     // create a unique filename for the minidump based on the current time and
     // module name
     time_t currTime = ::time(nullptr);
@@ -119,8 +121,6 @@ bool WriteMiniDumpUsingExceptionInfo(
       _wrename(file_name, failed_file_name);
     }
   }
-
-  ::FreeLibrary(dbghelp_module);
 
   // call the log flush function if one is registered to try to flush any logs
   // CallFlushLogFunc();

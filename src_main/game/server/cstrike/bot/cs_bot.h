@@ -1490,7 +1490,7 @@ inline CCSPlayer *CCSBot::GetBotEnemy( void ) const
 
 inline int CCSBot::GetNearbyEnemyCount( void ) const
 { 
-	return min( GetEnemiesRemaining(), m_nearbyEnemyCount );
+	return std::min( GetEnemiesRemaining(), m_nearbyEnemyCount );
 }
 
 inline unsigned int CCSBot::GetEnemyPlace( void ) const
@@ -1510,7 +1510,7 @@ inline CCSPlayer *CCSBot::GetBomber( void ) const
 
 inline int CCSBot::GetNearbyFriendCount( void ) const
 {
-	return min( GetFriendsRemaining(), m_nearbyFriendCount );
+	return std::min( GetFriendsRemaining(), m_nearbyFriendCount );
 }
 
 inline CCSPlayer *CCSBot::GetClosestVisibleFriend( void ) const

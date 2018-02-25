@@ -199,12 +199,12 @@ void DrawCloakBlendedPass( CBaseVSShader *pShader, IMaterialVar** params, IShade
 
 		// Set Vertex Shader Constants 
 		float vVsConst3[4] = { 1.35f, 0.0f, 0.4f, ( 1.0f / ( 0.425f - 0.4f ) ) };
-		vVsConst3[1] = clamp( IS_PARAM_DEFINED( info.m_nCloakFactor ) ? params[info.m_nCloakFactor]->GetFloatValue() : kDefaultCloakFactor, 0.0f, 1.0f );
+		vVsConst3[1] = std::clamp( IS_PARAM_DEFINED( info.m_nCloakFactor ) ? params[info.m_nCloakFactor]->GetFloatValue() : kDefaultCloakFactor, 0.0f, 1.0f );
 
 		pShaderAPI->SetVertexShaderConstant( VERTEX_SHADER_SHADER_SPECIFIC_CONST_3, vVsConst3 );
 
 		float vVsConst4[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		vVsConst4[0] = params[info.m_nRefractAmount]->GetFloatValue() * ( 1.0f - clamp( params[info.m_nCloakFactor]->GetFloatValue(), 0.0f, 1.0f ) );
+		vVsConst4[0] = params[info.m_nRefractAmount]->GetFloatValue() * ( 1.0f - std::clamp( params[info.m_nCloakFactor]->GetFloatValue(), 0.0f, 1.0f ) );
 		pShaderAPI->SetVertexShaderConstant( VERTEX_SHADER_SHADER_SPECIFIC_CONST_4, vVsConst4 );
 
 		float vVsConst5[4] = { 1.0f, 1.0f, 0.0f, 0.0f };
@@ -217,7 +217,7 @@ void DrawCloakBlendedPass( CBaseVSShader *pShader, IMaterialVar** params, IShade
 
 		// Refract color tint
 		float vPsConst0[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		float fColorTintStrength = clamp( ( clamp( IS_PARAM_DEFINED( info.m_nCloakFactor ) ? params[info.m_nCloakFactor]->GetFloatValue() : kDefaultCloakFactor, 0.0f, 1.0f ) - 0.75f ) * 4.0f, 0.0f, 1.0f );
+		float fColorTintStrength = std::clamp( ( std::clamp( IS_PARAM_DEFINED( info.m_nCloakFactor ) ? params[info.m_nCloakFactor]->GetFloatValue() : kDefaultCloakFactor, 0.0f, 1.0f ) - 0.75f ) * 4.0f, 0.0f, 1.0f );
 		vPsConst0[0] = IS_PARAM_DEFINED( info.m_nCloakColorTint ) ? params[info.m_nCloakColorTint]->GetVecValue()[0] : kDefaultCloakColorTint[0];
 		vPsConst0[1] = IS_PARAM_DEFINED( info.m_nCloakColorTint ) ? params[info.m_nCloakColorTint]->GetVecValue()[1] : kDefaultCloakColorTint[1];
 		vPsConst0[2] = IS_PARAM_DEFINED( info.m_nCloakColorTint ) ? params[info.m_nCloakColorTint]->GetVecValue()[2] : kDefaultCloakColorTint[2];
@@ -242,7 +242,7 @@ bool CloakBlendedPassIsFullyOpaque ( IMaterialVar** params, CloakBlendedPassVars
 
 	// NOTE: If this math changes, you need to update the pixel shader code!
 	float flFresnel = 1.0f - ( 0.0f ); // Assume V.N = 0.0f;
-	float flCloakLerpFactor = clamp( Lerp( clamp( flCloakFactor, 0.0f, 1.0f ), 1.0f, flFresnel - 1.35f ), 0.0f, 1.0f );
+	float flCloakLerpFactor = std::clamp( Lerp( std::clamp( flCloakFactor, 0.0f, 1.0f ), 1.0f, flFresnel - 1.35f ), 0.0f, 1.0f );
 	//flCloakLerpFactor = 1.0f - smoothstep( 0.4f, 0.425f, flCloakLerpFactor );
 
 	if ( flCloakLerpFactor <= 0.4f )

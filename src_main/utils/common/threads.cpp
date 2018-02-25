@@ -2,7 +2,7 @@
 
 #define USED
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "cmdlib.h"
 #define NO_THREAD_NAMES
 #include "pacifier.h"

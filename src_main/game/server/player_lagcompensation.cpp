@@ -324,7 +324,7 @@ void CLagCompensationManager::StartLagCompensation(CBasePlayer *player,
   correct += TICKS_TO_TIME(lerpTicks);
 
   // check bouns [0,sv_maxunlag]
-  correct = clamp(correct, 0.0f, sv_maxunlag.GetFloat());
+  correct = std::clamp(correct, 0.0f, sv_maxunlag.GetFloat());
 
   // correct tick send by player
   int targettick = cmd->tick_count - lerpTicks;

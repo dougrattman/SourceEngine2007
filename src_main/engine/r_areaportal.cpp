@@ -106,7 +106,8 @@ static inline bool GetPortalScreenExtents(dareaportal_t *pPortal,
   bool bValidExtents = false;
   worldbrushdata_t *pBrushData = host_state.worldbrush;
 
-  int nStartVerts = min(pPortal->m_nClipPortalVerts, MAX_PORTAL_VERTS);
+  int nStartVerts =
+      std::min((int)pPortal->m_nClipPortalVerts, MAX_PORTAL_VERTS);
 
   // NOTE: We need two passes to deal with reflection. We need to compute
   // the screen extents for both the reflected + non-reflected area portals
@@ -180,10 +181,10 @@ static inline bool GetPortalScreenExtents(dareaportal_t *pPortal,
 
       g_EngineRenderer->ClipTransform(point, &screenPos);
 
-      portalRect.left = min(screenPos.x, portalRect.left);
-      portalRect.bottom = min(screenPos.y, portalRect.bottom);
-      portalRect.top = max(screenPos.y, portalRect.top);
-      portalRect.right = max(screenPos.x, portalRect.right);
+      portalRect.left = std::min(screenPos.x, portalRect.left);
+      portalRect.bottom = std::min(screenPos.y, portalRect.bottom);
+      portalRect.top = std::max(screenPos.y, portalRect.top);
+      portalRect.right = std::max(screenPos.x, portalRect.right);
     }
     bValidExtents = true;
   }
@@ -199,12 +200,12 @@ static inline bool GetPortalScreenExtents(dareaportal_t *pPortal,
 // Fill in the intersection between the two rectangles.
 inline bool GetRectIntersection(CPortalRect const *pRect1,
                                 CPortalRect const *pRect2, CPortalRect *pOut) {
-  pOut->left = max(pRect1->left, pRect2->left);
-  pOut->right = min(pRect1->right, pRect2->right);
+  pOut->left = std::max(pRect1->left, pRect2->left);
+  pOut->right = std::min(pRect1->right, pRect2->right);
   if (pOut->left >= pOut->right) return false;
 
-  pOut->bottom = max(pRect1->bottom, pRect2->bottom);
-  pOut->top = min(pRect1->top, pRect2->top);
+  pOut->bottom = std::max(pRect1->bottom, pRect2->bottom);
+  pOut->top = std::min(pRect1->top, pRect2->top);
   if (pOut->bottom >= pOut->top) return false;
 
   return true;
@@ -225,10 +226,10 @@ static void R_FlowThroughArea(int area, const Vector &vecVisOrigin,
   } else {
     // Expand the areaportal's rectangle to include the new cliprect.
     CPortalRect *pFrustumRect = &g_AreaCullInfo[area].m_Rect;
-    pFrustumRect->left = min(pFrustumRect->left, pClipRect->left);
-    pFrustumRect->bottom = min(pFrustumRect->bottom, pClipRect->bottom);
-    pFrustumRect->top = max(pFrustumRect->top, pClipRect->top);
-    pFrustumRect->right = max(pFrustumRect->right, pClipRect->right);
+    pFrustumRect->left = std::min(pFrustumRect->left, pClipRect->left);
+    pFrustumRect->bottom = std::min(pFrustumRect->bottom, pClipRect->bottom);
+    pFrustumRect->top = std::max(pFrustumRect->top, pClipRect->top);
+    pFrustumRect->right = std::max(pFrustumRect->right, pClipRect->right);
   }
 
   // Mark this area as visible.

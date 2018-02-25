@@ -513,7 +513,7 @@ void CVProfPanel::PerformLayout() {
                           h - inset - topoffset);
 
   int treewide = w - 900 - 20;
-  treewide = max(treewide, 240);
+  treewide = std::max(treewide, 240);
   m_pHierarchy->SetColumnInfo(0, "Tree", treewide);
 
   m_pHierarchy->SetColumnInfo(1, "Group", 125);

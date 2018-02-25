@@ -6,7 +6,7 @@
 
 #define PROTECTED_THINGS_DISABLE
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
 #include "materialsystem/imaterialproxyfactory.h"

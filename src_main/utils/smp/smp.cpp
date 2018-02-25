@@ -6,7 +6,7 @@
 #include "initguid.h"
 #include "CWMPHost.h"
 #include <commctrl.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <psapi.h>
 #include <math.h>
 #include <cstdio>

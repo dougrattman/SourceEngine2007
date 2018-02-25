@@ -211,12 +211,12 @@ BEGIN_DATADESC(CNPC_MetroPolice)
 
       //								m_ActBusyBehavior
       //(auto saved by AI)
-      //m_StandoffBehavior (auto saved by AI) 								m_AssaultBehavior (auto saved by
-      //AI)
-      //m_FuncTankBehavior (auto saved by AI) 								m_RappelBehavior (auto saved by
-      //AI)
-      //m_PolicingBehavior (auto saved by AI) 								m_FollowBehavior (auto saved by
-      //AI)
+      // m_StandoffBehavior (auto saved by AI)
+      // m_AssaultBehavior (auto saved by AI) m_FuncTankBehavior (auto saved by
+      // AI)
+      // m_RappelBehavior (auto saved by AI) m_PolicingBehavior (auto saved by
+      // AI)
+      // m_FollowBehavior (auto saved by AI)
 
       DEFINE_KEYFIELD(m_iManhacks, FIELD_INTEGER, "manhacks"),
       DEFINE_INPUTFUNC(FIELD_VOID, "EnableManhackToss", InputEnableManhackToss),
@@ -374,12 +374,12 @@ class CTraceFilterMetroPolice : public CTraceFilterEntitiesOnly {
 //------------------------------------------------------------------------------
 // Purpose :	start and end trace position, amount
 //				of damage to do, and damage type. Returns a
-//pointer
+// pointer
 // to 				the damaged entity in case the NPC wishes to do
 // other stuff to the victim (punchangle, etc)
 //
 //				Used for many contact-range melee attacks.
-//Bites, claws, etc.
+// Bites, claws, etc.
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -1114,7 +1114,7 @@ void CNPC_MetroPolice::OnUpdateShotRegulator() {
       if (GetEnemy()) {
         float dist = WorldSpaceCenter().DistTo(GetEnemy()->WorldSpaceCenter());
 
-        dist = clamp(dist, MIN_PISTOL_MODIFY_DIST, MAX_PISTOL_MODIFY_DIST);
+        dist = std::clamp(dist, MIN_PISTOL_MODIFY_DIST, MAX_PISTOL_MODIFY_DIST);
 
         float factor = (dist - MIN_PISTOL_MODIFY_DIST) /
                        (MAX_PISTOL_MODIFY_DIST - MIN_PISTOL_MODIFY_DIST);
@@ -1712,7 +1712,7 @@ void CNPC_MetroPolice::AimBurstAtEnemy(float flReactionTime) {
   // to cross that line
   Vector vecStitchStart, vecStitchEnd;
   VectorMA(vecShootAt,
-           -min(flStitchLength * flReactionFraction, flMaxStitchDistance),
+           -std::min(flStitchLength * flReactionFraction, flMaxStitchDistance),
            vecDelta, vecStitchStart);
   VectorMA(vecShootAt, flStitchLength * (1.0f - flReactionFraction), vecDelta,
            vecStitchEnd);
@@ -1898,8 +1898,8 @@ void CNPC_MetroPolice::AimBurstAlongSideOfEnemy(float flFollowTime) {
 
   vecShootAtVel.z = 0.0f;
   float flTargetSpeed = VectorNormalize(vecShootAtVel);
-  float flStitchLength = max(AIM_IN_FRONT_OF_DEFAULT_STITCH_LENGTH,
-                             flTargetSpeed * flFollowTime * 0.9);
+  float flStitchLength = std::max(AIM_IN_FRONT_OF_DEFAULT_STITCH_LENGTH,
+                                  flTargetSpeed * flFollowTime * 0.9f);
 
   // This defines the line of death, which, when crossed, results in damage
   m_vecBurstLineOfDeathOrigin = vecSidePoint;
@@ -2208,7 +2208,7 @@ Vector CNPC_MetroPolice::ComputeTightBurstTrajectory(
   float flMin = -0.2f;
   float flMax = 1.2f;
   if (flDist > MIN_TIGHT_BURST_DIST) {
-    flDist = clamp(flDist, MIN_TIGHT_BURST_DIST, MAX_TIGHT_BURST_DIST);
+    flDist = std::clamp(flDist, MIN_TIGHT_BURST_DIST, MAX_TIGHT_BURST_DIST);
     flMin = SimpleSplineRemapVal(flDist, MIN_TIGHT_BURST_DIST,
                                  MAX_TIGHT_BURST_DIST, -0.2f, -0.7f);
     flMax = SimpleSplineRemapVal(flDist, MIN_TIGHT_BURST_DIST,
@@ -3255,13 +3255,13 @@ float CNPC_MetroPolice::StitchAtWeight(float flDist, float flSpeed, float flDot,
   // occur
   float flConeAngle = STITCH_AT_CONE;
   if (CanEnemySeeMe()) {
-    flDist = clamp(flDist, 1500.0f, 2500.0f);
+    flDist = std::clamp(flDist, 1500.0f, 2500.0f);
     flConeAngle =
         RemapVal(flDist, 1500.0f, 2500.0f, STITCH_AT_CONE_WHEN_VISIBLE_MIN,
                  STITCH_AT_CONE_WHEN_VISIBLE_MAX);
   }
 
-  flDot = clamp(flDot, -1.0f, flConeAngle);
+  flDot = std::clamp(flDot, -1.0f, flConeAngle);
   return RemapVal(flDot, -1.0f, flConeAngle, 0.5f, 1.0f);
 }
 
@@ -3339,7 +3339,7 @@ float CNPC_MetroPolice::StitchBehindWeight(float flDist, float flSpeed,
 
   // If we're close, reduce the chances of this if we're also slow
   if (flDist < STITCH_MIN_DISTANCE) {
-    flSpeed = clamp(flSpeed, 300.0f, 450.0f);
+    flSpeed = std::clamp(flSpeed, 300.0f, 450.0f);
     float flWeight = RemapVal(flSpeed, 300.0f, 450.0f, 0.0f, 1.0f);
     return flWeight;
   }
@@ -3375,7 +3375,7 @@ float CNPC_MetroPolice::StitchTightWeight(float flDist, float flSpeed,
   if ((fabs(vecTargetToGun.z) < 50.0f) && (flDist < STITCH_MIN_DISTANCE))
     return 1.0f;
 
-  flSpeed = clamp(flSpeed, 300.0f, 450.0f);
+  flSpeed = std::clamp(flSpeed, 300.0f, 450.0f);
   float flWeight = RemapVal(flSpeed, 300.0f, 450.0f, 1.0f, 0.0f);
   return flWeight;
 }
@@ -4369,10 +4369,10 @@ void CNPC_MetroPolice::RunTask(const Task_t *pTask) {
             float flMaxRange = 2000;
             float flMinRange = 0;
             if (GetActiveWeapon()) {
-              flMaxRange = max(GetActiveWeapon()->m_fMaxRange1,
-                               GetActiveWeapon()->m_fMaxRange2);
-              flMinRange = min(GetActiveWeapon()->m_fMinRange1,
-                               GetActiveWeapon()->m_fMinRange2);
+              flMaxRange = std::max(GetActiveWeapon()->m_fMaxRange1,
+                                    GetActiveWeapon()->m_fMaxRange2);
+              flMinRange = std::min(GetActiveWeapon()->m_fMinRange1,
+                                    GetActiveWeapon()->m_fMinRange2);
             }
 
             // Check against NPC's max range
@@ -4459,7 +4459,7 @@ bool CNPC_MetroPolice::CanDeployManhack(void) {
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
 //			In the most cases the base implementation should be
-//called first.
+// called first.
 //-----------------------------------------------------------------------------
 void CNPC_MetroPolice::BuildScheduleTestBits(void) {
   BaseClass::BuildScheduleTestBits();

@@ -172,7 +172,7 @@ void CDemoUIPanel::OnTick() {
     totalticks = demoplayer->GetTotalTicks();
 
     fProgress = (float)curtick / (float)totalticks;
-    fProgress = clamp(fProgress, 0.0f, 1.0f);
+    fProgress = std::clamp(fProgress, 0.0f, 1.0f);
   }
 
   m_pProgress->SetProgress(fProgress);
@@ -458,7 +458,7 @@ void CDemoUIPanel::HandleInput(bool active) {
     // Apply mouse
     m_ViewAngles.x += pitch;
 
-    m_ViewAngles.x = clamp(m_ViewAngles.x, -89.0f, 89.0f);
+    m_ViewAngles.x = std::clamp(m_ViewAngles.x, -89.0f, 89.0f);
 
     m_ViewAngles.y += yaw;
     if (m_ViewAngles.y > 180.0f) {
@@ -620,12 +620,12 @@ void CDemoUIPanel2::OnTick() {
     totalticks = demoplayer->GetTotalTicks();
 
     fProgress = (float)curtick / (float)totalticks;
-    fProgress = clamp(fProgress, 0.0f, 1.0f);
+    fProgress = std::clamp(fProgress, 0.0f, 1.0f);
   }
 
   if (!m_pProgress->IsDragged()) {
-    m_pProgress->SetRange(0, max(totalticks, 0));
-    m_pProgress->SetValue(min(max(curtick, 0), totalticks), false);
+    m_pProgress->SetRange(0, std::max(totalticks, 0));
+    m_pProgress->SetValue(std::min(std::max(curtick, 0), totalticks), false);
     m_pProgressLabelFrame->SetText(va("Tick: %i / %i", curtick, totalticks));
   } else {
     m_pProgressLabelFrame->SetText(

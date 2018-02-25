@@ -245,11 +245,11 @@ bool CNavMesh::GetActiveNavArea( void )
 				right *= ladder->m_width * 0.5f;
 				left = -right;
 
-				absMin.x += min( left.x, right.x );
-				absMin.y += min( left.y, right.y );
+				absMin.x += std::min( left.x, right.x );
+				absMin.y += std::min( left.y, right.y );
 
-				absMax.x += max( left.x, right.x );
-				absMax.y += max( left.y, right.y );
+				absMax.x += std::max( left.x, right.x );
+				absMax.y += std::max( left.y, right.y );
 
 				Extent e;
 				e.lo = absMin + Vector( -5, -5, -5 );
@@ -1354,13 +1354,13 @@ void CNavMesh::CommandNavEndArea( void )
 		// the two points defining the ladder are m_ladderAnchor and m_editCursorPos.  The normal is m_ladderNormal.
 		Vector mins, maxs;
 
-		mins.x = min( m_ladderAnchor.x, m_editCursorPos.x );
-		mins.y = min( m_ladderAnchor.y, m_editCursorPos.y );
-		mins.z = min( m_ladderAnchor.z, m_editCursorPos.z );
+		mins.x = std::min( m_ladderAnchor.x, m_editCursorPos.x );
+		mins.y = std::min( m_ladderAnchor.y, m_editCursorPos.y );
+		mins.z = std::min( m_ladderAnchor.z, m_editCursorPos.z );
 
-		maxs.x = max( m_ladderAnchor.x, m_editCursorPos.x );
-		maxs.y = max( m_ladderAnchor.y, m_editCursorPos.y );
-		maxs.z = max( m_ladderAnchor.z, m_editCursorPos.z );
+		maxs.x = std::max( m_ladderAnchor.x, m_editCursorPos.x );
+		maxs.y = std::max( m_ladderAnchor.y, m_editCursorPos.y );
+		maxs.z = std::max( m_ladderAnchor.z, m_editCursorPos.z );
 
 		Vector2D ladderDir = m_ladderNormal.AsVector2D();
 		CreateLadder( mins, maxs, &ladderDir );

@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <mmsystem.h>
 #include <mmreg.h>
 #include "snd_wave_source.h"
@@ -470,7 +470,7 @@ int CAudioMixerWaveADPCM::GetOutputData( void **pData, int samplePosition, int s
 //-----------------------------------------------------------------------------
 bool CAudioMixerWaveADPCM::SetSamplePosition( int position )
 {
-	position = max( 0, position );
+	position = std::max( 0, position );
 
 	CAudioMixerWave::SetSamplePosition( position );
 

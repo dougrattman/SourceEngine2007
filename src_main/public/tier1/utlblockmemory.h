@@ -12,7 +12,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 
 #ifdef UTLMEMORY_TRACK
 #define UTLMEMORY_TRACK_ALLOC()                               \
@@ -31,11 +31,11 @@
 #define UTLMEMORY_TRACK_FREE() ((void)0)
 #endif
 
-//-----------------------------------------------------------------------------
+
 // The CUtlBlockMemory class:
 // A growable memory class that allocates non-sequential blocks, but is indexed
 // sequentially
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 class CUtlBlockMemory {
  public:
@@ -92,7 +92,7 @@ class CUtlBlockMemory {
   int NumAllocated() const;
   int Count() const { return NumAllocated(); }
 
-  // Grows memory by max(num,growsize) rounded up to the next power of 2, and
+  // Grows memory by std::max(num,growsize) rounded up to the next power of 2, and
   // returns the allocation index/ptr
   void Grow(int num = 1);
 
@@ -120,9 +120,9 @@ class CUtlBlockMemory {
   int m_nIndexShift : 5;
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 
 template <class T, class I>
 CUtlBlockMemory<T, I>::CUtlBlockMemory(int nGrowSize, int nInitAllocationCount)
@@ -135,9 +135,9 @@ CUtlBlockMemory<T, I>::~CUtlBlockMemory() {
   Purge();
 }
 
-//-----------------------------------------------------------------------------
+
 // Fast swap
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlBlockMemory<T, I>::Swap(CUtlBlockMemory<T, I>& mem) {
   swap(m_pMemory, mem.m_pMemory);
@@ -146,9 +146,9 @@ void CUtlBlockMemory<T, I>::Swap(CUtlBlockMemory<T, I>& mem) {
   swap(m_nIndexShift, mem.m_nIndexShift);
 }
 
-//-----------------------------------------------------------------------------
+
 // Set the size by which the memory grows - round up to the next power of 2
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlBlockMemory<T, I>::Init(int nGrowSize /* = 0 */,
                                  int nInitSize /* = 0 */) {
@@ -172,9 +172,9 @@ void CUtlBlockMemory<T, I>::Init(int nGrowSize /* = 0 */,
   Grow(nInitSize);
 }
 
-//-----------------------------------------------------------------------------
+
 // element access
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline T& CUtlBlockMemory<T, I>::operator[](I i) {
   Assert(IsIdxValid(i));
@@ -203,17 +203,17 @@ inline const T& CUtlBlockMemory<T, I>::Element(I i) const {
   return pBlock[MinorIndex(i)];
 }
 
-//-----------------------------------------------------------------------------
+
 // Size
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline int CUtlBlockMemory<T, I>::NumAllocated() const {
   return m_nBlocks * NumElementsInBlock();
 }
 
-//-----------------------------------------------------------------------------
+
 // Is element index valid?
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline bool CUtlBlockMemory<T, I>::IsIdxValid(I i) const {
   return (i >= 0) && (MajorIndex(i) < m_nBlocks);
@@ -275,17 +275,17 @@ void CUtlBlockMemory<T, I>::ChangeSize(int nBlocks) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we've got at least this much memory
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline void CUtlBlockMemory<T, I>::EnsureCapacity(int num) {
   Grow(num - NumAllocated());
 }
 
-//-----------------------------------------------------------------------------
+
 // Memory deallocation
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlBlockMemory<T, I>::Purge() {
   if (!m_pMemory) return;

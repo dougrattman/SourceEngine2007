@@ -982,7 +982,7 @@ void CCollisionEvent::FluidStartTouch(IPhysicsObject *pObject,
   normal = -normal;
   float linearScale = 0.5f * DotProduct(unitVel, normal) *
                       pObject->CalculateLinearDrag(normal) * dragScale;
-  linearScale = clamp(linearScale, 0.0f, 1.0f);
+  linearScale = std::clamp(linearScale, 0.0f, 1.0f);
   vel *= -linearScale;
 
   // UNDONE: Figure out how much of the surface area has crossed the water
@@ -990,7 +990,7 @@ void CCollisionEvent::FluidStartTouch(IPhysicsObject *pObject,
   Vector rotAxis = angVel;
   VectorNormalize(rotAxis);
   float angScale = 0.25f * pObject->CalculateAngularDrag(angVel) * dragScale;
-  angScale = clamp(angScale, 0.0f, 1.0f);
+  angScale = std::clamp(angScale, 0.0f, 1.0f);
   angVel *= -angScale;
 
   // compute the splash before we modify the velocity
@@ -1453,12 +1453,12 @@ CON_COMMAND(physics_budget, "Times the cost of each active object") {
 
       float elapsed = end - start;
       float avgTime = lastTime - elapsed;
-      times[i] = clamp(avgTime, 0.00001f, 1.0f);
+      times[i] = std::clamp(avgTime, 0.00001f, 1.0f);
       totalTime += times[i];
       lastTime = elapsed;
     }
 
-    totalTime = max(totalTime, 0.001);
+    totalTime = std::max(totalTime, 0.001f);
     for (i = 0; i < ents.Count(); i++) {
       float fraction = times[i] / totalTime;
       Msg("%s (%s): %.3fms (%.3f%%) @ %s\n", ents[i]->GetClassname(),
@@ -1640,10 +1640,10 @@ void CCollisionEvent::PreCollision(vcollisionevent_t *pEvent) {
           // make it fairly small and have a tiny collision instead.
           pObject->GetVelocity(&velocity, &angVel);
           float len = VectorNormalize(velocity);
-          len = max(len, 10);
+          len = std::max(len, 10.0f);
           velocity *= len;
           len = VectorNormalize(angVel);
-          len = max(len, 1);
+          len = std::max(len, 1.0f);
           angVel *= len;
           pObject->SetVelocity(&velocity, &angVel);
         }
@@ -1994,7 +1994,7 @@ void CCollisionEvent::RestoreDamageInflictorState(IPhysicsObject *pInflictor) {
           !(state.pInflictorPhysics->GetGameFlags() & FVPHYSICS_DMG_SLICE)) {
         float otherMass = state.otherMassMax > 0 ? state.otherMassMax : 1;
         float massRatio = inflictorMass / otherMass;
-        massRatio = clamp(massRatio, 0.1f, 10.0f);
+        massRatio = std::clamp(massRatio, 0.1f, 10.0f);
         if (massRatio < 1) {
           velocityBlend = RemapVal(massRatio, 0.1, 1, 0, 0.5);
         } else {
@@ -2343,7 +2343,7 @@ void PhysCollisionScreenShake(gamevcollisionevent_t *pEvent, int index) {
   if (mass >= VPHYSICS_LARGE_OBJECT_MASS &&
       pEvent->pObjects[otherIndex]->IsStatic() &&
       !(pEvent->pObjects[index]->GetGameFlags() & FVPHYSICS_PENETRATING)) {
-    mass = clamp(mass, VPHYSICS_LARGE_OBJECT_MASS, 2000);
+    mass = std::clamp(mass, VPHYSICS_LARGE_OBJECT_MASS, 2000.0f);
     if (pEvent->collisionSpeed > 30 && pEvent->deltaCollisionTime > 0.25f) {
       Vector vecPos;
       pEvent->pInternalData->GetContactPoint(vecPos);
@@ -2424,7 +2424,7 @@ void PhysFrictionSound(CBaseEntity *pEntity, IPhysicsObject *pObject,
 
   // cut out the quiet sounds
   // UNDONE: Separate threshold for starting a sound vs. continuing?
-  flVolume = clamp(flVolume, 0.0f, 1.0f);
+  flVolume = std::clamp(flVolume, 0.0f, 1.0f);
   if (flVolume > (1.0f / 128.0f)) {
     friction_t *pFriction = g_Collisions.FindFriction(pEntity);
     if (!pFriction) return;

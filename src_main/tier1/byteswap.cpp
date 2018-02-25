@@ -4,10 +4,10 @@
 
 #include "tier1/byteswap.h"
 
-//-----------------------------------------------------------------------------
+
 // Copy a single field from the input buffer to the output buffer, swapping the
 // bytes if necessary
-//-----------------------------------------------------------------------------
+
 void CByteswap::SwapFieldToTargetEndian(void *pOutputBuffer, void *pData,
                                         typedescription_t *pField) {
   switch (pField->fieldType) {
@@ -69,9 +69,9 @@ void CByteswap::SwapFieldToTargetEndian(void *pOutputBuffer, void *pData,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Write a block of fields. Works a bit like the saverestore code.
-//-----------------------------------------------------------------------------
+
 void CByteswap::SwapFieldsToTargetEndian(void *pOutputBuffer, void *pBaseData,
                                          datamap_t *pDataMap) {
   // deal with base class first

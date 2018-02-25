@@ -6,7 +6,7 @@
 //
 //===========================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/icommandline.h"
 #include <stdio.h>
 #include "tier0/include/dbg.h"

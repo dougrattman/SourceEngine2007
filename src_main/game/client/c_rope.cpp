@@ -632,7 +632,7 @@ void CRopeManager::RenderSolidRopes(IMatRenderContext *pRenderContext,
             rope_solid_maxwidth.GetFloat(), rope_solid_minalpha.GetFloat(),
             rope_solid_maxalpha.GetFloat());
 
-        pSeg->m_flAlpha = clamp(pSeg->m_flAlpha, 0.0f, 1.0f);
+        pSeg->m_flAlpha = std::clamp(pSeg->m_flAlpha, 0.0f, 1.0f);
 
         beamSegment.NextSeg(
             &m_aSegmentCache[iSegmentCache].m_Segments[iSegment]);
@@ -858,7 +858,7 @@ void C_RopeKeyframe::CPhysicsDelegate::ApplyConstraints(
       AngleVectors(angles, &forward);
 
       int parity = 1;
-      int nFalloffNodes = min(2, nNodes - 2);
+      int nFalloffNodes = std::min(2, nNodes - 2);
       LockNodeDirection(pNodes, parity, nFalloffNodes, g_flLockAmount,
                         g_flLockFalloff, forward);
     }
@@ -872,7 +872,7 @@ void C_RopeKeyframe::CPhysicsDelegate::ApplyConstraints(
       AngleVectors(angles, &forward);
 
       int parity = -1;
-      int nFalloffNodes = min(2, nNodes - 2);
+      int nFalloffNodes = std::min(2, nNodes - 2);
       LockNodeDirection(&pNodes[nNodes - 1], parity, nFalloffNodes,
                         g_flLockAmount, g_flLockFalloff, forward);
     }
@@ -937,7 +937,7 @@ C_RopeKeyframe *C_RopeKeyframe::Create(C_BaseEntity *pStartEnt,
   pRope->m_iStartAttachment = iStartAttachment;
   pRope->m_iEndAttachment = iEndAttachment;
   pRope->m_Width = ropeWidth;
-  pRope->m_nSegments = clamp(numSegments, 2, ROPE_MAX_SEGMENTS);
+  pRope->m_nSegments = std::clamp(numSegments, 2, ROPE_MAX_SEGMENTS);
   pRope->m_RopeFlags = ropeFlags;
 
   pRope->FinishInit(pMaterialName);
@@ -1107,7 +1107,7 @@ void C_RopeKeyframe::FinishInit(const char *pMaterialName) {
   if (m_pBackMaterial) m_pBackMaterial->GetMappingWidth();
 
   // Init rope physics.
-  m_nSegments = clamp(m_nSegments, 2, ROPE_MAX_SEGMENTS);
+  m_nSegments = std::clamp(m_nSegments, 2, ROPE_MAX_SEGMENTS);
   m_RopePhysics.SetNumNodes(m_nSegments);
 
   SetCollisionBounds(Vector(-10, -10, -10), Vector(10, 10, 10));
@@ -1522,7 +1522,7 @@ void C_RopeKeyframe::BuildRope(
       // screen space.
       float zCoord = vCurrentViewForward.Dot(
           pSegmentData->m_Segments[iSegment].m_vPos - vCurrentViewOrigin);
-      zCoord = max(zCoord, 0.1f);
+      zCoord = std::max(zCoord, 0.1f);
 
       float flScreenSpaceWidth = m_Width * flHalfScreenWidth / zCoord;
       if (flScreenSpaceWidth < flMinScreenSpaceWidth) {
@@ -1546,7 +1546,7 @@ void C_RopeKeyframe::BuildRope(
           pSegmentData->m_BackWidths[iSegment] = 0.0f;
         } else {
           pSegmentData->m_flMaxBackWidth =
-              max(pSegmentData->m_flMaxBackWidth,
+              std::max(pSegmentData->m_flMaxBackWidth,
                   pSegmentData->m_BackWidths[iSegment]);
         }
       }
@@ -1745,13 +1745,13 @@ void C_RopeKeyframe::CalcLightValues() {
       float flMaxIntensity = 0;
       for (int iSide = 0; iSide < 6; iSide++) {
         float flLen = boxColors[iSide].Length();
-        flMaxIntensity = max(flMaxIntensity, flLen);
+        flMaxIntensity = std::max(flMaxIntensity, flLen);
       }
 
       VectorNormalize(m_LightValues[i]);
       m_LightValues[i] *= flMaxIntensity;
       float flMax =
-          max(m_LightValues[i].x, max(m_LightValues[i].y, m_LightValues[i].z));
+          std::max(m_LightValues[i].x, std::max(m_LightValues[i].y, m_LightValues[i].z));
       if (flMax > 1) m_LightValues[i] /= flMax;
     }
   }

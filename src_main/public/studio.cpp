@@ -123,7 +123,7 @@ mstudioanim_t *mstudioanimdesc_t::pAnim(int *piFrame, float &flStall) const {
   } else if (panim != NULL && zeroframestalltime != 0.0f) {
     float dt = Plat_FloatTime() - zeroframestalltime;
     if (dt >= 0.0) {
-      flStall = SimpleSpline(clamp((0.200f - dt) * 5.0, 0.0f, 1.0f));
+      flStall = SimpleSpline(std::clamp((0.200f - dt) * 5.0f, 0.0f, 1.0f));
     }
 
     if (flStall == 0.0f) {
@@ -484,7 +484,7 @@ int studiohdr_t::GetActivityListVersion(void) const {
     Assert(pStudioHdr);
 
     activity_list_version =
-        min(activity_list_version, pStudioHdr->activitylistversion);
+        std::min(activity_list_version, pStudioHdr->activitylistversion);
   }
 
   return activity_list_version;
@@ -1021,7 +1021,7 @@ int CStudioHdr::GetActivityListVersion(void) const {
   for (i = 1; i < m_pVModel->m_group.Count(); i++) {
     const studiohdr_t *pStudioHdr = GroupStudioHdr(i);
     Assert(pStudioHdr);
-    version = min(version, pStudioHdr->activitylistversion);
+    version = std::min(version, pStudioHdr->activitylistversion);
   }
 
   return version;
@@ -1057,7 +1057,7 @@ int CStudioHdr::GetEventListVersion(void) const {
   for (i = 1; i < m_pVModel->m_group.Count(); i++) {
     const studiohdr_t *pStudioHdr = GroupStudioHdr(i);
     Assert(pStudioHdr);
-    version = min(version, pStudioHdr->eventsindexed);
+    version = std::min(version, pStudioHdr->eventsindexed);
   }
 
   return version;
@@ -1184,11 +1184,11 @@ void CStudioHdr::RunFlexRules(const float *src, float *dest) {
           stack[k - 1] = -stack[k - 1];
           break;
         case STUDIO_MAX:
-          stack[k - 2] = max(stack[k - 2], stack[k - 1]);
+          stack[k - 2] = std::max(stack[k - 2], stack[k - 1]);
           k--;
           break;
         case STUDIO_MIN:
-          stack[k - 2] = min(stack[k - 2], stack[k - 1]);
+          stack[k - 2] = std::min(stack[k - 2], stack[k - 1]);
           k--;
           break;
         case STUDIO_CONST:
@@ -1449,7 +1449,7 @@ void CStudioHdr::CActivityToSequenceMapping::Initialize(
     HashValueType &element = m_ActToSeqHash[handle];
     element.startingIdx = sequenceCount;
     sequenceCount += element.count;
-    topActivity = max(topActivity, element.activityIdx);
+    topActivity = std::max(topActivity, element.activityIdx);
   }
 
   // Allocate the actual array of sequence information. Note the use of
@@ -1467,7 +1467,7 @@ void CStudioHdr::CActivityToSequenceMapping::Initialize(
   // doing a map.) This stack may potentially grow very large; so if you have
   // problems with it, go to a utlmap or similar structure.
   unsigned int allocsize = (topActivity + 1) * sizeof(int);
-  allocsize = ALIGN_VALUE(allocsize, 16);
+  allocsize = AlignValue(allocsize, 16);
   int *__restrict seqsPerAct = static_cast<int *>(stackalloc(allocsize));
   memset(seqsPerAct, 0, allocsize);
 

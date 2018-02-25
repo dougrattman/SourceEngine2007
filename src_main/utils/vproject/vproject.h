@@ -7,7 +7,7 @@
 #pragma once
 
 #include <winsock2.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <windowsx.h>
 #include <commctrl.h>
 #include <stdio.h>

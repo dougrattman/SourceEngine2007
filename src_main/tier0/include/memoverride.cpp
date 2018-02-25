@@ -23,6 +23,7 @@
 #define __cdecl
 #endif
 
+#include <cassert>
 #include <cstdio>
 #include <cstring>
 
@@ -95,10 +96,9 @@ inline void *ReallocUnattributed(void *pMem, size_t nSize) {
 }
 #endif
 
-//-----------------------------------------------------------------------------
 // Standard functions in the CRT that we're going to override to call our
 // allocator
-//-----------------------------------------------------------------------------
+
 #if defined(OS_WIN) && !defined(_STATIC_LINKED)
 // this magic only works under win32
 // under linux this malloc() overrides the libc malloc() and so we
@@ -129,10 +129,9 @@ ALLOC_CALL void *calloc(size_t nCount, size_t nElementSize) {
 
 }  // end extern "C"
 
-//-----------------------------------------------------------------------------
 // Non-standard MSVC functions that we're going to override to call our
 // allocator
-//-----------------------------------------------------------------------------
+
 extern "C" {
 // crt
 void *__cdecl _malloc_crt(size_t size) { return AllocUnattributed(size); }
@@ -191,11 +190,9 @@ int __cdecl _heapwalk(_HEAPINFO *) { return 0; }
 
 }  // end extern "C"
 
-//-----------------------------------------------------------------------------
 // Debugging functions that we're going to override to call our allocator
 // NOTE: These have to be here for release + debug builds in case we
 // link to a debug static lib!!!
-//-----------------------------------------------------------------------------
 
 extern "C" {
 
@@ -213,9 +210,8 @@ void *realloc_db(void *pMem, size_t nSize, const char *pFileName, int nLine) {
 
 }  // end extern "C"
 
-//-----------------------------------------------------------------------------
 // These methods are standard MSVC heap initialization + shutdown methods
-//-----------------------------------------------------------------------------
+
 extern "C" {
 int __cdecl _heap_init() { return g_pMemAlloc != nullptr; }
 
@@ -223,10 +219,9 @@ void __cdecl _heap_term() {}
 }
 #endif
 
-//-----------------------------------------------------------------------------
 // Prevents us from using an inappropriate new or delete method,
 // ensures they are here even when linking against debug or release static libs
-//-----------------------------------------------------------------------------
+
 #ifndef NO_MEMOVERRIDE_NEW_DELETE
 #ifdef OSX
 void *__cdecl operator new(size_t nSize) throw(std::bad_alloc)
@@ -275,11 +270,10 @@ void __cdecl operator delete[](void *pMem)
 }
 #endif
 
-//-----------------------------------------------------------------------------
 // Override some debugging allocation methods in MSVC
 // NOTE: These have to be here for release + debug builds in case we
 // link to a debug static lib!!!
-//-----------------------------------------------------------------------------
+
 #ifndef _STATIC_LINKED
 #ifdef OS_WIN
 
@@ -450,9 +444,8 @@ ALLOC_CALL void *__cdecl _aligned_offset_recalloc(void *memblock, size_t count,
 
 }  // end extern "C"
 
-//-----------------------------------------------------------------------------
 // Override some the _CRT debugging allocation methods in MSVC
-//-----------------------------------------------------------------------------
+
 #ifdef OS_WIN
 
 extern "C" {
@@ -529,9 +522,8 @@ void __cdecl _CrtDoForAllClientObjects(void (*pfn)(void *, void *),
   DebuggerBreak();
 }
 
-//-----------------------------------------------------------------------------
 // Methods in dbgrpt.cpp
-//-----------------------------------------------------------------------------
+
 long _crtAssertBusy = -1;
 
 int __cdecl _CrtSetReportMode(int nReportType, int nReportMode) {

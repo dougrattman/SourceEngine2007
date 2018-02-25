@@ -150,10 +150,10 @@ void CPureServerWhitelist::UpdateCommandStats(
     int *pLongestPathName) {
   for (int i = commands.First(); i != commands.InvalidIndex();
        i = commands.Next(i)) {
-    *pHighest = max(*pHighest, commands[i]->m_LoadOrder);
+    *pHighest = std::max(*pHighest, (int)commands[i]->m_LoadOrder);
 
     int len = V_strlen(commands.GetElementName(i));
-    *pLongestPathName = max(*pLongestPathName, len);
+    *pLongestPathName = std::max(*pLongestPathName, len);
   }
 }
 

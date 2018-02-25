@@ -441,7 +441,7 @@ public:
 		DWORD msToWait = (DWORD)( flTimeout * 1000.0 );
 		do
 		{
-			DWORD curWaitTime = min( msToWait, 50 );
+			DWORD curWaitTime = std::min( msToWait, 50 );
 			DWORD ret = WaitForSingleObject( m_hRecvSignal, curWaitTime );
 			if ( ret == WAIT_OBJECT_0 )
 			{

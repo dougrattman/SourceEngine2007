@@ -16,9 +16,9 @@
 
 namespace TGALoader {
 
-//-----------------------------------------------------------------------------
+
 // Format of the TGA header on disk
-//-----------------------------------------------------------------------------
+
 
 #pragma pack(1)
 
@@ -37,30 +37,30 @@ struct TGAHeader_t {
   unsigned char attributes;
 };
 
-//-----------------------------------------------------------------------------
+
 // read a row into an RGBA8888 array.
-//-----------------------------------------------------------------------------
+
 
 typedef void (*ReadRowFunc_t)(CUtlBuffer& buf, TGAHeader_t const& header,
                               unsigned char* pDstMemory);
 
-//-----------------------------------------------------------------------------
+
 // output a RGBA8888 row into the destination format.
-//-----------------------------------------------------------------------------
+
 
 typedef void (*OutputRowFunc_t)(CUtlBuffer& buf, TGAHeader_t const& header,
                                 unsigned char* pDstMemory);
 
-//-----------------------------------------------------------------------------
+
 // Important constants
-//-----------------------------------------------------------------------------
+
 
 #define TGA_MAX_COLORMAP_SIZE (256 * 4)
 #define TGA_MAX_ROW_LENGTH_IN_PIXELS IMAGE_MAX_DIM
 
-//-----------------------------------------------------------------------------
+
 // Globals... blech
-//-----------------------------------------------------------------------------
+
 static unsigned char g_ColorMap[TGA_MAX_COLORMAP_SIZE];
 
 // run-length state from row to row for RLE images
@@ -72,9 +72,9 @@ static unsigned char g_DstGammaTable[256];
 
 typedef CUtlMemory<unsigned char> CTempImage;
 
-//-----------------------------------------------------------------------------
+
 // Reads in a file, sticks it into a UtlVector
-//-----------------------------------------------------------------------------
+
 
 static bool ReadFile(char const* pFileName, CTempImage& image,
                      int maxbytes = -1) {
@@ -112,16 +112,16 @@ static bool ReadFile(char const* pFileName, CTempImage& image,
   return len == pos;
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads in the TGA Header
-//-----------------------------------------------------------------------------
+
 static void ReadHeader(CUtlBuffer& buf, TGAHeader_t& header) {
   buf.Get(&header, sizeof(TGAHeader_t));
 }
 
-//-----------------------------------------------------------------------------
+
 // Figures out TGA information
-//-----------------------------------------------------------------------------
+
 bool GetInfo(CUtlBuffer& buf, int* width, int* height, ImageFormat* imageFormat,
              float* sourceGamma) {
   TGAHeader_t header;
@@ -157,15 +157,15 @@ bool GetInfo(CUtlBuffer& buf, int* width, int* height, ImageFormat* imageFormat,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the minimum amount you have to load to get information about the TGA
 // file
-//-----------------------------------------------------------------------------
+
 int TGAHeaderSize() { return sizeof(TGAHeader_t); }
 
-//-----------------------------------------------------------------------------
+
 // Gets info about a TGA file
-//-----------------------------------------------------------------------------
+
 bool GetInfo(char const* pFileName, int* width, int* height,
              ImageFormat* imageFormat, float* sourceGamma) {
   // temporary memory
@@ -180,9 +180,9 @@ bool GetInfo(char const* pFileName, int* width, int* height,
   return GetInfo(buf, width, height, imageFormat, sourceGamma);
 }
 
-//-----------------------------------------------------------------------------
+
 // Various output methods
-//-----------------------------------------------------------------------------
+
 
 void OutputRowRGBA8888(CUtlBuffer& buf, TGAHeader_t const& header,
                        unsigned char* pDst) {
@@ -362,9 +362,9 @@ void OutputRowBGRX5551(CUtlBuffer& buf, TGAHeader_t const& header,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads an 8-bit palettized TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow8BitUncompressedWithColormap(CUtlBuffer& buf,
                                          TGAHeader_t const& header,
@@ -415,9 +415,9 @@ void ReadRow8BitUncompressedWithColormap(CUtlBuffer& buf,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads an 8-bit greyscale TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow8BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                             TGAHeader_t const& header,
@@ -428,9 +428,9 @@ void ReadRow8BitUncompressedWithoutColormap(CUtlBuffer& buf,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a 24-bit TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow24BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                              TGAHeader_t const& header,
@@ -443,9 +443,9 @@ void ReadRow24BitUncompressedWithoutColormap(CUtlBuffer& buf,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a 32-bit TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow32BitUncompressedWithoutColormap(CUtlBuffer& buf,
                                              TGAHeader_t const& header,
@@ -458,9 +458,9 @@ void ReadRow32BitUncompressedWithoutColormap(CUtlBuffer& buf,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Decompresses a run-length encoded row of bytes
-//-----------------------------------------------------------------------------
+
 
 static void DecompressRow(CUtlBuffer& buf, TGAHeader_t const& header,
                           unsigned char* pDst) {
@@ -514,9 +514,9 @@ static void DecompressRow(CUtlBuffer& buf, TGAHeader_t const& header,
   Assert(pDst == pLast);
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a compressed 8-bit palettized TGA image
-//-----------------------------------------------------------------------------
+
 void ReadRow8BitCompressedWithColormap(CUtlBuffer& buf,
                                        TGAHeader_t const& header,
                                        unsigned char* pDst) {
@@ -529,9 +529,9 @@ void ReadRow8BitCompressedWithColormap(CUtlBuffer& buf,
   ReadRow8BitUncompressedWithColormap(uncompressedBuf, header, pDst);
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a compressed 8-bit greyscale TGA image
-//-----------------------------------------------------------------------------
+
 void ReadRow8BitCompressedWithoutColormap(CUtlBuffer& buf,
                                           TGAHeader_t const& header,
                                           unsigned char* pDst) {
@@ -544,9 +544,9 @@ void ReadRow8BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow8BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a compressed 24-bit TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow24BitCompressedWithoutColormap(CUtlBuffer& buf,
                                            TGAHeader_t const& header,
@@ -560,9 +560,9 @@ void ReadRow24BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow24BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a compressed 32-bit TGA image
-//-----------------------------------------------------------------------------
+
 
 void ReadRow32BitCompressedWithoutColormap(CUtlBuffer& buf,
                                            TGAHeader_t const& header,
@@ -576,9 +576,9 @@ void ReadRow32BitCompressedWithoutColormap(CUtlBuffer& buf,
   ReadRow32BitUncompressedWithoutColormap(uncompressedBuf, header, pDst);
 }
 
-//-----------------------------------------------------------------------------
+
 // Method used to read the TGA
-//-----------------------------------------------------------------------------
+
 
 static ReadRowFunc_t GetReadRowFunc(TGAHeader_t const& header) {
   switch (header.image_type) {
@@ -634,9 +634,9 @@ static ReadRowFunc_t GetReadRowFunc(TGAHeader_t const& header) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads the color map
-//-----------------------------------------------------------------------------
+
 
 static bool ReadColormap(CUtlBuffer& buf, TGAHeader_t const& header) {
   int numColormapBytes = header.colormap_length * (header.colormap_size >> 3);
@@ -651,9 +651,9 @@ static bool ReadColormap(CUtlBuffer& buf, TGAHeader_t const& header) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads the source image
-//-----------------------------------------------------------------------------
+
 static bool ReadSourceImage(CUtlBuffer& buf, TGAHeader_t& header,
                             CTempImage& image) {
   // Figure out our reading and riting
@@ -692,9 +692,9 @@ static bool ReadSourceImage(CUtlBuffer& buf, TGAHeader_t& header,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Parses the lovely bits previously read from disk
-//-----------------------------------------------------------------------------
+
 bool Load(unsigned char* pOutputImage, CUtlBuffer& buf, int width, int height,
           ImageFormat imageFormat, float targetGamma, bool mipmap) {
   TGAHeader_t header;
@@ -729,9 +729,9 @@ bool Load(unsigned char* pOutputImage, CUtlBuffer& buf, int width, int height,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a TGA image from a file
-//-----------------------------------------------------------------------------
+
 bool Load(unsigned char* pOutputImage, const char* pFileName, int width,
           int height, ImageFormat imageFormat, float targetGamma, bool mipmap) {
   Assert(pOutputImage && pFileName);
@@ -750,9 +750,9 @@ bool Load(unsigned char* pOutputImage, const char* pFileName, int width,
               mipmap);
 }
 
-//-----------------------------------------------------------------------------
+
 // Creates a map in linear space
-//-----------------------------------------------------------------------------
+
 bool LoadRGBA8888(CUtlBuffer& buf, CUtlMemory<unsigned char>& outputData,
                   int& outWidth, int& outHeight) {
   TGAHeader_t header;
@@ -783,9 +783,9 @@ bool LoadRGBA8888(CUtlBuffer& buf, CUtlMemory<unsigned char>& outputData,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads a TGA, keeps it in RGBA8888
-//-----------------------------------------------------------------------------
+
 
 bool LoadRGBA8888(const char* pFileName, CUtlMemory<unsigned char>& outputData,
                   int& outWidth, int& outHeight) {

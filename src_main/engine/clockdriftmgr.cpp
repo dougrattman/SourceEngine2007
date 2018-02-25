@@ -51,9 +51,9 @@ ConVar cl_clock_correction_adjustment_max_offset(
 // Given the offset (in milliseconds) of the client clock from the server clock,
 // returns how much correction we'd like to apply per second (in seconds).
 static float GetClockAdjustmentAmount(float flCurDiffInMS) {
-  flCurDiffInMS =
-      clamp(flCurDiffInMS, cl_clock_correction_adjustment_min_offset.GetFloat(),
-            cl_clock_correction_adjustment_max_offset.GetFloat());
+  flCurDiffInMS = std::clamp(
+      flCurDiffInMS, cl_clock_correction_adjustment_min_offset.GetFloat(),
+      cl_clock_correction_adjustment_max_offset.GetFloat());
 
   float flReturnValue = RemapVal(
       flCurDiffInMS, cl_clock_correction_adjustment_min_offset.GetFloat(),
@@ -139,12 +139,14 @@ float CClockDriftMgr::AdjustFrameTime(float inputFrameTime) {
     if (flCurDiffInMS > cl_clock_correction_adjustment_min_offset.GetFloat()) {
       flAdjustmentPerSec = -GetClockAdjustmentAmount(flCurDiffInMS);
       flAdjustmentThisFrame = inputFrameTime * flAdjustmentPerSec;
-      flAdjustmentThisFrame = max(flAdjustmentThisFrame, -flCurDiffInSeconds);
+      flAdjustmentThisFrame =
+          std::max(flAdjustmentThisFrame, -flCurDiffInSeconds);
     } else if (flCurDiffInMS <
                -cl_clock_correction_adjustment_min_offset.GetFloat()) {
       flAdjustmentPerSec = GetClockAdjustmentAmount(-flCurDiffInMS);
       flAdjustmentThisFrame = inputFrameTime * flAdjustmentPerSec;
-      flAdjustmentThisFrame = min(flAdjustmentThisFrame, -flCurDiffInSeconds);
+      flAdjustmentThisFrame =
+          std::min(flAdjustmentThisFrame, -flCurDiffInSeconds);
     }
 
     if (IsEngineThreaded()) {
@@ -174,8 +176,8 @@ void CClockDriftMgr::ShowDebugInfo(float flAdjustment) {
     int high = -999, low = 999;
     int exactDiff = cl.GetClientTickCount() - m_nServerTick;
     for (int i = 0; i < NUM_CLOCKDRIFT_SAMPLES; i++) {
-      high = max(high, m_ClockOffsets[i]);
-      low = min(low, m_ClockOffsets[i]);
+      high = std::max(high, (int)m_ClockOffsets[i]);
+      low = std::min(low, (int)m_ClockOffsets[i]);
     }
 
     Msg("Clock drift: adjustment (per sec): %.2fms, avg: %.3f, lo: %d, hi: %d, "

@@ -37,9 +37,8 @@ const QAngle vec3_angle(0, 0, 0);
 const Vector vec3_invalid(FLT_MAX, FLT_MAX, FLT_MAX);
 const int nanmask = 255 << 23;
 
-//-----------------------------------------------------------------------------
 // Standard C implementations of optimized routines:
-//-----------------------------------------------------------------------------
+
 f32 _sqrtf(f32 _X) {
   Assert(s_bMathlibInitialized);
   return sqrtf(_X);
@@ -77,7 +76,7 @@ void FASTCALL _VectorNormalizeFast(Vector &vec) {
   // FLT_EPSILON is added to the radius to eliminate the possibility of divide
   // by zero.
   f32 iradius = 1.f / (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z) +
-                         FLT_EPSILON);
+                       FLT_EPSILON);
 
   vec.x *= iradius;
   vec.y *= iradius;
@@ -90,9 +89,8 @@ f32 _InvRSquared(const f32 *v) {
   return r2 < 1.f ? 1.f : 1 / r2;
 }
 
-//-----------------------------------------------------------------------------
 // Function pointers selecting the appropriate implementation
-//-----------------------------------------------------------------------------
+
 f32 (*pfSqrt)(f32 x) = _sqrtf;
 f32 (*pfRSqrt)(f32 x) = _rsqrtf;
 f32 (*pfRSqrtFast)(f32 x) = _rsqrtf;
@@ -114,7 +112,6 @@ bool VectorsEqual(const f32 *v1, const f32 *v2) {
   return ((v1[0] == v2[0]) && (v1[1] == v2[1]) && (v1[2] == v2[2]));
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Generates Euler angles given a left-handed orientation matrix. The
 //			columns of the matrix contain the forward, left, and up
 // vectors.
@@ -123,7 +120,6 @@ bool VectorsEqual(const f32 *v1, const f32 *v2) {
 // counterclockwise
 //				rotations in degrees around Y, Z, and X
 // respectively.
-//-----------------------------------------------------------------------------
 
 void MatrixAngles(const matrix3x4_t &matrix, RadianEuler &angles,
                   Vector &position) {
@@ -321,9 +317,8 @@ void MatrixCopy(const matrix3x4_t &in, matrix3x4_t &out) {
   memcpy(out.Base(), in.Base(), sizeof(f32) * 3 * 4);
 }
 
-//-----------------------------------------------------------------------------
 // Matrix equality test
-//-----------------------------------------------------------------------------
+
 bool MatricesAreEqual(const matrix3x4_t &src1, const matrix3x4_t &src2,
                       f32 flTolerance) {
   for (int i = 0; i < 3; ++i) {
@@ -476,8 +471,7 @@ void VectorAngles(const f32 *forward, f32 *angles) {
 R_ConcatRotations
 ================
 */
-void ConcatRotations(const f32 in1[3][3], const f32 in2[3][3],
-                     f32 out[3][3]) {
+void ConcatRotations(const f32 in1[3][3], const f32 in2[3][3], f32 out[3][3]) {
   Assert(s_bMathlibInitialized);
   Assert(in1 != out);
   Assert(in2 != out);
@@ -713,9 +707,7 @@ int __cdecl BoxOnPlaneSide(const f32 *emins, const f32 *emaxs,
   return sides;
 }
 
-//-----------------------------------------------------------------------------
 // Euler QAngle -> Basis Vectors
-//-----------------------------------------------------------------------------
 
 void AngleVectors(const QAngle &angles, Vector *forward) {
   Assert(s_bMathlibInitialized);
@@ -731,9 +723,8 @@ void AngleVectors(const QAngle &angles, Vector *forward) {
   forward->z = -sp;
 }
 
-//-----------------------------------------------------------------------------
 // Euler QAngle -> Basis Vectors.  Each vector is optional
-//-----------------------------------------------------------------------------
+
 void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
                   Vector *up) {
   Assert(s_bMathlibInitialized);
@@ -763,9 +754,7 @@ void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Euler QAngle -> Basis Vectors transposed
-//-----------------------------------------------------------------------------
 
 void AngleVectorsTranspose(const QAngle &angles, Vector *forward, Vector *right,
                            Vector *up) {
@@ -795,9 +784,7 @@ void AngleVectorsTranspose(const QAngle &angles, Vector *forward, Vector *right,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Forward direction vector -> Euler angles
-//-----------------------------------------------------------------------------
 
 void VectorAngles(const Vector &forward, QAngle &angles) {
   Assert(s_bMathlibInitialized);
@@ -823,9 +810,7 @@ void VectorAngles(const Vector &forward, QAngle &angles) {
   angles[2] = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Forward direction vector with a reference up vector -> Euler angles
-//-----------------------------------------------------------------------------
 
 void VectorAngles(const Vector &forward, const Vector &pseudoup,
                   QAngle &angles) {
@@ -884,9 +869,8 @@ void SetIdentityMatrix(matrix3x4_t &matrix) {
   matrix[2][2] = 1.0;
 }
 
-//-----------------------------------------------------------------------------
 // Builds a scale matrix
-//-----------------------------------------------------------------------------
+
 void SetScaleMatrix(f32 x, f32 y, f32 z, matrix3x4_t &dst) {
   dst[0][0] = x;
   dst[0][1] = 0.0f;
@@ -902,7 +886,6 @@ void SetScaleMatrix(f32 x, f32 y, f32 z, matrix3x4_t &dst) {
   dst[2][3] = 0.0f;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Builds the matrix for a counterclockwise rotation about an arbitrary
 // axis.
 //
@@ -916,7 +899,7 @@ void SetScaleMatrix(f32 x, f32 y, f32 z, matrix3x4_t &dst) {
 // Input  : mat -
 //			vAxisOrRot -
 //			angle -
-//-----------------------------------------------------------------------------
+
 void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, f32 angleDegrees,
                                   matrix3x4_t &dst) {
   f32 radians;
@@ -955,9 +938,8 @@ void MatrixBuildRotationAboutAxis(const Vector &vAxisOfRot, f32 angleDegrees,
   dst[2][3] = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Computes the transpose
-//-----------------------------------------------------------------------------
+
 void MatrixTranspose(matrix3x4_t &mat) {
   f32 tmp;
   tmp = mat[0][1];
@@ -986,7 +968,6 @@ void MatrixTranspose(const matrix3x4_t &src, matrix3x4_t &dst) {
   dst[2][3] = 0.0f;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: converts engine euler angles into a matrix
 // Input  : vec3_t angles - PITCH, YAW, ROLL
 // Output : *matrix - left-handed column matrix
@@ -994,7 +975,7 @@ void MatrixTranspose(const matrix3x4_t &src, matrix3x4_t &dst) {
 // columns  as follows: 			matrix[][0] is forward
 //			matrix[][1] is left
 //			matrix[][2] is up
-//-----------------------------------------------------------------------------
+
 void AngleMatrix(RadianEuler const &angles, const Vector &position,
                  matrix3x4_t &matrix) {
   AngleMatrix(angles, matrix);
@@ -1086,9 +1067,7 @@ void AngleIMatrix(const QAngle &angles, const Vector &position,
   MatrixSetColumn(vecTranslation, 3, mat);
 }
 
-//-----------------------------------------------------------------------------
 // Bounding box construction methods
-//-----------------------------------------------------------------------------
 
 void ClearBounds(Vector &mins, Vector &maxs) {
   Assert(s_bMathlibInitialized);
@@ -1140,8 +1119,8 @@ bool SolveQuadratic(f32 a, f32 b, f32 c, f32 &root1, f32 &root2) {
 
 // solves for "a, b, c" where "a x^2 + b x + c = y", return true if solution
 // exists
-bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
-                           f32 y3, f32 &a, f32 &b, f32 &c) {
+bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3,
+                           f32 &a, f32 &b, f32 &c) {
   f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3);
 
   // FIXME: check with some sort of epsilon
@@ -1158,9 +1137,8 @@ bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
   return true;
 }
 
-bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2,
-                                    f32 x3, f32 y3, f32 &a, f32 &b,
-                                    f32 &c) {
+bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
+                                    f32 y3, f32 &a, f32 &b, f32 &c) {
   // use SolveInverseQuadratic, but if the sigm of the derivative at the start
   // point is the wrong sign, displace the mid point
 
@@ -1184,7 +1162,7 @@ bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2,
   for (f32 blend_to_linear_factor = 0.0; blend_to_linear_factor <= 1.0;
        blend_to_linear_factor += 0.05) {
     f32 tempy2 = (1 - blend_to_linear_factor) * y2 +
-                   blend_to_linear_factor * FLerp(y1, y3, x1, x3, x2);
+                 blend_to_linear_factor * FLerp(y1, y3, x1, x3, x2);
     if (!SolveInverseQuadratic(x1, y1, x2, tempy2, x3, y3, a, b, c))
       return false;
     f32 derivative = 2.0 * a + b;
@@ -1204,9 +1182,8 @@ bool SolveInverseQuadraticMonotonic(f32 x1, f32 y1, f32 x2, f32 y2,
 
 // solves for "a, b, c" where "1/(a x^2 + b x + c ) = y", return true if
 // solution exists
-bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2,
-                                     f32 x3, f32 y3, f32 &a, f32 &b,
-                                     f32 &c) {
+bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
+                                     f32 y3, f32 &a, f32 &b, f32 &c) {
   f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3) * y1 * y2 * y3;
 
   // FIXME: check with some sort of epsilon
@@ -1278,10 +1255,8 @@ f32 SmoothCurve_Tweak(f32 x, f32 flPeakPos, f32 flPeakSharpness) {
   return SmoothCurve(flSharpened);
 }
 
-//-----------------------------------------------------------------------------
 // make sure quaternions are within 180 degrees of one another, if not, reverse
 // q
-//-----------------------------------------------------------------------------
 
 void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
   Assert(s_bMathlibInitialized);
@@ -1307,10 +1282,9 @@ void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Do a piecewise addition of the quaternion elements. This actually makes
 // little mathematical sense, but it's a cheap way to simulate a slerp.
-//-----------------------------------------------------------------------------
+
 void QuaternionBlend(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt) {
   Assert(s_bMathlibInitialized);
@@ -1360,9 +1334,7 @@ void QuaternionIdentityBlend(const Quaternion &p, f32 t, Quaternion &qt) {
   QuaternionNormalize(qt);
 }
 
-//-----------------------------------------------------------------------------
 // Quaternion sphereical linear interpolation
-//-----------------------------------------------------------------------------
 
 void QuaternionSlerp(const Quaternion &p, const Quaternion &q, f32 t,
                      Quaternion &qt) {
@@ -1416,10 +1388,9 @@ void QuaternionSlerpNoAlign(const Quaternion &p, const Quaternion &q, f32 t,
   Assert(qt.IsValid());
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns the angular delta between the two normalized quaternions in
 // degrees.
-//-----------------------------------------------------------------------------
+
 f32 QuaternionAngleDiff(const Quaternion &p, const Quaternion &q) {
 #if 1
   // this code path is here for 2 reasons:
@@ -1482,9 +1453,8 @@ void QuaternionInvert(const Quaternion &p, Quaternion &q) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Make sure the quaternion is of unit length
-//-----------------------------------------------------------------------------
+
 f32 QuaternionNormalize(Quaternion &q) {
   Assert(s_bMathlibInitialized);
   f32 radius, iradius;
@@ -1515,7 +1485,7 @@ void QuaternionScale(const Quaternion &p, f32 t, Quaternion &q) {
   // to use the cos part (w) of the quaternion (sin(omega)*N,cos(omega)) to
   // figure the new scale.
   f32 sinom = sqrt(DotProduct(&p.x, &p.x));
-  sinom = min(sinom, 1.f);
+  sinom = std::min(sinom, 1.f);
 
   f32 sinsom = sin(asin(sinom) * t);
 
@@ -1661,11 +1631,10 @@ void QuaternionMatrix(const Quaternion &q, matrix3x4_t &matrix) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a quaternion into engine angles
 // Input  : *quaternion - q3 + q0.i + q1.j + q2.k
 //			*outAngles - PITCH, YAW, ROLL
-//-----------------------------------------------------------------------------
+
 void QuaternionAngles(const Quaternion &q, QAngle &angles) {
   Assert(s_bMathlibInitialized);
   Assert(q.IsValid());
@@ -1698,10 +1667,9 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles) {
   Assert(angles.IsValid());
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a quaternion to an axis / angle in degrees
 //			(exponential map)
-//-----------------------------------------------------------------------------
+
 void QuaternionAxisAngle(const Quaternion &q, Vector &axis, f32 &angle) {
   angle = RAD2DEG(2 * acos(q.w));
   if (angle > 180) {
@@ -1713,9 +1681,8 @@ void QuaternionAxisAngle(const Quaternion &q, Vector &axis, f32 &angle) {
   VectorNormalize(axis);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts an exponential map (ang/axis) to a quaternion
-//-----------------------------------------------------------------------------
+
 void AxisAngleQuaternion(const Vector &axis, f32 angle, Quaternion &q) {
   f32 sa, ca;
 
@@ -1727,11 +1694,10 @@ void AxisAngleQuaternion(const Vector &axis, f32 angle, Quaternion &q) {
   q.w = ca;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts radian-euler axis aligned angles to a quaternion
 // Input  : *pfAngles - Right-handed Euler angles in radians
 //			*outQuat - quaternion of form (i,j,k,real)
-//-----------------------------------------------------------------------------
+
 void AngleQuaternion(const RadianEuler &angles, Quaternion &outQuat) {
   Assert(s_bMathlibInitialized);
   //	Assert( angles.IsValid() );
@@ -1756,7 +1722,6 @@ void AngleQuaternion(const RadianEuler &angles, Quaternion &outQuat) {
   outQuat.w = crXcp * cy + srXsp * sy;  // W (real component)
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts engine-format euler angles to a quaternion
 // Input  : angles - Right-handed Euler angles in degrees as follows:
 //				[0]: PITCH: Clockwise rotation around the Y
@@ -1765,7 +1730,7 @@ void AngleQuaternion(const RadianEuler &angles, Quaternion &outQuat) {
 //				[2]: ROLL:	Counterclockwise rotation around
 // the  X  axis. 			*outQuat - quaternion of form
 // (i,j,k,real)
-//-----------------------------------------------------------------------------
+
 void AngleQuaternion(const QAngle &angles, Quaternion &outQuat) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("AngleQuaternion", "Mathlib");
@@ -1787,9 +1752,8 @@ void AngleQuaternion(const QAngle &angles, Quaternion &outQuat) {
   outQuat.w = crXcp * cy + srXsp * sy;  // W (real component)
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a basis to a quaternion
-//-----------------------------------------------------------------------------
+
 void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
                        const Vector &vecUp, Quaternion &q) {
   Assert(fabs(vecForward.LengthSqr() - 1.0f) < 1e-3);
@@ -1866,11 +1830,10 @@ void MatrixQuaternion(const matrix3x4_t &mat, Quaternion &q) {
   AngleQuaternion(angles, q);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a quaternion into engine angles
 // Input  : *quaternion - q3 + q0.i + q1.j + q2.k
 //			*outAngles - PITCH, YAW, ROLL
-//-----------------------------------------------------------------------------
+
 void QuaternionAngles(const Quaternion &q, RadianEuler &angles) {
   Assert(s_bMathlibInitialized);
   Assert(q.IsValid());
@@ -1884,13 +1847,12 @@ void QuaternionAngles(const Quaternion &q, RadianEuler &angles) {
   Assert(angles.IsValid());
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: A helper function to normalize p2.x->p1.x and p3.x->p4.x to
 //  be the same length as p2.x->p3.x
 // Input  : &p2 -
 //			&p4 -
 //			p4n -
-//-----------------------------------------------------------------------------
+
 void Spline_Normalize(const Vector &p1, const Vector &p2, const Vector &p3,
                       const Vector &p4, Vector &p1n, Vector &p4n) {
   f32 dt = p3.x - p2.x;
@@ -1910,10 +1872,8 @@ void Spline_Normalize(const Vector &p1, const Vector &p2, const Vector &p3,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  :
-//-----------------------------------------------------------------------------
 
 void Catmull_Rom_Spline(const Vector &p1, const Vector &p2, const Vector &p3,
                         const Vector &p4, f32 t, Vector &output) {
@@ -2077,11 +2037,9 @@ void Catmull_Rom_Spline_NormalizeX(const Vector &p1, const Vector &p2,
   Catmull_Rom_Spline(p1n, p2, p3, p4n, t, output);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: basic hermite spline.  t = 0 returns p1, t = 1 returns p2,
 //			d1 and d2 are used to entry and exit slope of curve
 // Input  :
-//-----------------------------------------------------------------------------
 
 void Hermite_Spline(const Vector &p1, const Vector &p2, const Vector &d1,
                     const Vector &d2, f32 t, Vector &output) {
@@ -2134,20 +2092,18 @@ void Hermite_SplineBasis(f32 t, f32 basis[4]) {
   basis[3] = tCube - tSqr;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: simple three data point hermite spline.
 //			t = 0 returns p1, t = 1 returns p2,
 //			slopes are generated from the p0->p1 and p1->p2 segments
 //			this is reasonable C1 method when there's no "p3" data
 // yet.
 // Input  :
-//-----------------------------------------------------------------------------
 
 // BUG: the VectorSubtract()'s calls go away if the global optimizer is enabled
 #pragma optimize("g", off)
 
-void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2,
-                    f32 t, Vector &output) {
+void Hermite_Spline(const Vector &p0, const Vector &p1, const Vector &p2, f32 t,
+                    Vector &output) {
   Vector e10, e21;
   VectorSubtract(p1, p0, e10);
   VectorSubtract(p2, p1, e21);
@@ -2256,11 +2212,10 @@ void Kochanek_Bartels_Spline(f32 tension, f32 bias, f32 continuity,
   VectorAdd(p2, output, output);
 }
 
-void Kochanek_Bartels_Spline_NormalizeX(f32 tension, f32 bias,
-                                        f32 continuity, const Vector &p1,
-                                        const Vector &p2, const Vector &p3,
-                                        const Vector &p4, f32 t,
-                                        Vector &output) {
+void Kochanek_Bartels_Spline_NormalizeX(f32 tension, f32 bias, f32 continuity,
+                                        const Vector &p1, const Vector &p2,
+                                        const Vector &p3, const Vector &p4,
+                                        f32 t, Vector &output) {
   Vector p1n, p4n;
   Spline_Normalize(p1, p2, p3, p4, p1n, p4n);
   Kochanek_Bartels_Spline(tension, bias, continuity, p1n, p2, p3, p4n, t,
@@ -2431,10 +2386,8 @@ void Parabolic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
   Parabolic_Spline(p1n, p2, p3, p4n, t, output);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Compress the input values for a ranged result such that from 75% to
 // 200% smoothly of the range maps
-//-----------------------------------------------------------------------------
 
 f32 RangeCompressor(f32 flValue, f32 flMin, f32 flMax, f32 flBase) {
   // clamp base
@@ -2471,9 +2424,8 @@ f32 RangeCompressor(f32 flValue, f32 flMin, f32 flMax, f32 flBase) {
 
 //#pragma optimize( "", on )
 
-//-----------------------------------------------------------------------------
 // Transforms a AABB into another space; which will inherently grow the box.
-//-----------------------------------------------------------------------------
+
 void TransformAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
                    const Vector &vecMaxsIn, Vector &vecMinsOut,
                    Vector &vecMaxsOut) {
@@ -2496,9 +2448,8 @@ void TransformAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
   VectorAdd(worldCenter, worldExtents, vecMaxsOut);
 }
 
-//-----------------------------------------------------------------------------
 // Uses the inverse transform of in1
-//-----------------------------------------------------------------------------
+
 void ITransformAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
                     const Vector &vecMaxsIn, Vector &vecMinsOut,
                     Vector &vecMaxsOut) {
@@ -2527,10 +2478,9 @@ void ITransformAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
   VectorAdd(localCenter, localExtents, vecMaxsOut);
 }
 
-//-----------------------------------------------------------------------------
 // Rotates a AABB into another space; which will inherently grow the box.
 // (same as TransformAABB, but doesn't take the translation into account)
-//-----------------------------------------------------------------------------
+
 void RotateAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
                 const Vector &vecMaxsIn, Vector &vecMinsOut,
                 Vector &vecMaxsOut) {
@@ -2553,9 +2503,8 @@ void RotateAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
   VectorAdd(newCenter, newExtents, vecMaxsOut);
 }
 
-//-----------------------------------------------------------------------------
 // Uses the inverse transform of in1
-//-----------------------------------------------------------------------------
+
 void IRotateAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
                  const Vector &vecMaxsIn, Vector &vecMinsOut,
                  Vector &vecMaxsOut) {
@@ -2585,7 +2534,7 @@ void IRotateAABB(const matrix3x4_t &transform, const Vector &vecMinsIn,
 }
 
 f32 CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
-                            const Vector &point) {
+                          const Vector &point) {
   f32 flDelta;
   f32 flDistSqr = 0.0f;
 
@@ -2618,9 +2567,9 @@ f32 CalcSqrDistanceToAABB(const Vector &mins, const Vector &maxs,
 
 void CalcClosestPointOnAABB(const Vector &mins, const Vector &maxs,
                             const Vector &point, Vector &closestOut) {
-  closestOut.x = clamp(point.x, mins.x, maxs.x);
-  closestOut.y = clamp(point.y, mins.y, maxs.y);
-  closestOut.z = clamp(point.z, mins.z, maxs.z);
+  closestOut.x = std::clamp(point.x, mins.x, maxs.x);
+  closestOut.y = std::clamp(point.y, mins.y, maxs.y);
+  closestOut.z = std::clamp(point.z, mins.z, maxs.z);
 }
 
 void CalcSqrDistAndClosestPointOnAABB(const Vector &mins, const Vector &maxs,
@@ -2643,7 +2592,7 @@ void CalcSqrDistAndClosestPointOnAABB(const Vector &mins, const Vector &maxs,
 }
 
 f32 CalcClosestPointToLineT(const Vector &P, const Vector &vLineA,
-                              const Vector &vLineB, Vector &vDir) {
+                            const Vector &vLineB, Vector &vDir) {
   Assert(s_bMathlibInitialized);
   VectorSubtract(vLineB, vLineA, vDir);
 
@@ -2658,8 +2607,7 @@ f32 CalcClosestPointToLineT(const Vector &P, const Vector &vLineA,
 }
 
 void CalcClosestPointOnLine(const Vector &P, const Vector &vLineA,
-                            const Vector &vLineB, Vector &vClosest,
-                            f32 *outT) {
+                            const Vector &vLineB, Vector &vClosest, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vDir;
   f32 t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
@@ -2668,7 +2616,7 @@ void CalcClosestPointOnLine(const Vector &P, const Vector &vLineA,
 }
 
 f32 CalcDistanceToLine(const Vector &P, const Vector &vLineA,
-                         const Vector &vLineB, f32 *outT) {
+                       const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLine(P, vLineA, vLineB, vClosest, outT);
@@ -2676,7 +2624,7 @@ f32 CalcDistanceToLine(const Vector &P, const Vector &vLineA,
 }
 
 f32 CalcDistanceSqrToLine(const Vector &P, const Vector &vLineA,
-                            const Vector &vLineB, f32 *outT) {
+                          const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLine(P, vLineA, vLineB, vClosest, outT);
@@ -2688,7 +2636,7 @@ void CalcClosestPointOnLineSegment(const Vector &P, const Vector &vLineA,
                                    f32 *outT) {
   Vector vDir;
   f32 t = CalcClosestPointToLineT(P, vLineA, vLineB, vDir);
-  t = clamp(t, 0, 1);
+  t = std::clamp(t, 0.0f, 1.0f);
   if (outT) {
     *outT = t;
   }
@@ -2696,7 +2644,7 @@ void CalcClosestPointOnLineSegment(const Vector &P, const Vector &vLineA,
 }
 
 f32 CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
-                                const Vector &vLineB, f32 *outT) {
+                              const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLineSegment(P, vLineA, vLineB, vClosest, outT);
@@ -2704,7 +2652,7 @@ f32 CalcDistanceToLineSegment(const Vector &P, const Vector &vLineA,
 }
 
 f32 CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
-                                   const Vector &vLineB, f32 *outT) {
+                                 const Vector &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector vClosest;
   CalcClosestPointOnLineSegment(P, vLineA, vLineB, vClosest, outT);
@@ -2712,7 +2660,7 @@ f32 CalcDistanceSqrToLineSegment(const Vector &P, const Vector &vLineA,
 }
 
 f32 CalcClosestPointToLineT2D(const Vector2D &P, const Vector2D &vLineA,
-                                const Vector2D &vLineB, Vector2D &vDir) {
+                              const Vector2D &vLineB, Vector2D &vDir) {
   Assert(s_bMathlibInitialized);
   Vector2DSubtract(vLineB, vLineA, vDir);
 
@@ -2737,7 +2685,7 @@ void CalcClosestPointOnLine2D(const Vector2D &P, const Vector2D &vLineA,
 }
 
 f32 CalcDistanceToLine2D(const Vector2D &P, const Vector2D &vLineA,
-                           const Vector2D &vLineB, f32 *outT) {
+                         const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLine2D(P, vLineA, vLineB, vClosest, outT);
@@ -2745,7 +2693,7 @@ f32 CalcDistanceToLine2D(const Vector2D &P, const Vector2D &vLineA,
 }
 
 f32 CalcDistanceSqrToLine2D(const Vector2D &P, const Vector2D &vLineA,
-                              const Vector2D &vLineB, f32 *outT) {
+                            const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLine2D(P, vLineA, vLineB, vClosest, outT);
@@ -2757,7 +2705,7 @@ void CalcClosestPointOnLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
                                      f32 *outT) {
   Vector2D vDir;
   f32 t = CalcClosestPointToLineT2D(P, vLineA, vLineB, vDir);
-  t = clamp(t, 0, 1);
+  t = std::clamp(t, 0.0f, 1.0f);
   if (outT) {
     *outT = t;
   }
@@ -2765,7 +2713,7 @@ void CalcClosestPointOnLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 }
 
 f32 CalcDistanceToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
-                                  const Vector2D &vLineB, f32 *outT) {
+                                const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLineSegment2D(P, vLineA, vLineB, vClosest, outT);
@@ -2773,7 +2721,7 @@ f32 CalcDistanceToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 }
 
 f32 CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
-                                     const Vector2D &vLineB, f32 *outT) {
+                                   const Vector2D &vLineB, f32 *outT) {
   Assert(s_bMathlibInitialized);
   Vector2D vClosest;
   CalcClosestPointOnLineSegment2D(P, vLineA, vLineB, vClosest, outT);
@@ -2783,7 +2731,6 @@ f32 CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 // Do we have another epsilon we could use
 #define LINE_EPS (0.000001f)
 
-//-----------------------------------------------------------------------------
 // Purpose: Given lines p1->p2 and p3->p4, computes a line segment (pa->pb) and
 // returns the parameters 0->1 multipliers
 //  along each segment for the returned points
@@ -2794,7 +2741,7 @@ f32 CalcDistanceSqrToLineSegment2D(const Vector2D &P, const Vector2D &vLineA,
 //			*s1 -
 //			*s2 -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool CalcLineToLineIntersectionSegment(const Vector &p1, const Vector &p2,
                                        const Vector &p3, const Vector &p4,
                                        Vector *s1, Vector *s2, f32 *t1,
@@ -3014,7 +2961,6 @@ f32 AngleNormalize(f32 angle) {
   return angle;
 }
 
-//--------------------------------------------------------------------------------------------------------------
 // ensure that 0 <= angle <= 360
 f32 AngleNormalizePositive(f32 angle) {
   angle = fmodf(angle, 360.0f);
@@ -3026,7 +2972,6 @@ f32 AngleNormalizePositive(f32 angle) {
   return angle;
 }
 
-//--------------------------------------------------------------------------------------------------------------
 bool AnglesAreEqual(f32 a, f32 b, f32 tolerance) {
   return (fabs(AngleDiff(a, b)) < tolerance);
 }
@@ -3060,9 +3005,8 @@ void RotationDelta(const QAngle &srcAngles, const QAngle &destAngles,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Computes a triangle normal
-//-----------------------------------------------------------------------------
+
 void ComputeTrianglePlane(const Vector &v1, const Vector &v2, const Vector &v3,
                           Vector &normal, f32 &intercept) {
   Vector e1, e2;
@@ -3073,13 +3017,12 @@ void ComputeTrianglePlane(const Vector &v1, const Vector &v2, const Vector &v3,
   intercept = DotProduct(normal, v1);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: This is a clone of BaseWindingForPlane()
 // Input  : *outVerts - an array of preallocated verts to build the polygon in
 //			normal - the plane normal
 //			dist - the plane constant
 // Output : int - vert count (always 4)
-//-----------------------------------------------------------------------------
+
 int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
                   f32 fHalfScale) {
   int i, x;
@@ -3146,7 +3089,6 @@ int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
   return 4;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: clip a poly to the plane and return the poly on the front side of
 // the plane Input  : *inVerts - input polygon
 //			vertCount - # verts in input poly
@@ -3154,12 +3096,11 @@ int PolyFromPlane(Vector *outVerts, const Vector &normal, f32 dist,
 //			normal - plane normal
 //			dist - plane constant
 // Output : int - # verts in output poly
-//-----------------------------------------------------------------------------
 
 int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
                     const Vector &normal, f32 dist, f32 fOnPlaneEpsilon) {
   f32 *dists = (f32 *)stackalloc(sizeof(f32) * vertCount *
-                                     4);  // 4x vertcount should cover all cases
+                                 4);  // 4x vertcount should cover all cases
   int *sides = (int *)stackalloc(sizeof(f32) * vertCount * 4);
   int counts[3];
   f32 dot;
@@ -3233,10 +3174,9 @@ int ClipPolyToPlane(Vector *inVerts, int vertCount, Vector *outVerts,
 }
 
 int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
-                            const f64 *normal, f64 dist,
-                            f64 fOnPlaneEpsilon) {
-  f64 *dists = (f64 *)stackalloc(
-      sizeof(f64) * vertCount * 4);  // 4x vertcount should cover all cases
+                            const f64 *normal, f64 dist, f64 fOnPlaneEpsilon) {
+  f64 *dists = (f64 *)stackalloc(sizeof(f64) * vertCount *
+                                 4);  // 4x vertcount should cover all cases
   int *sides = (int *)stackalloc(sizeof(f64) * vertCount * 4);
   int counts[3];
   f64 dot;
@@ -3347,9 +3287,8 @@ int FloorPow2(int in) {
   return retval >> 1;
 }
 
-//-----------------------------------------------------------------------------
 // Computes Y fov from an X fov and a screen aspect ratio
-//-----------------------------------------------------------------------------
+
 f32 CalcFovY(f32 flFovX, f32 flAspect) {
   if (flFovX < 1 || flFovX > 179) {
     flFovX = 90;  // error, set to 90
@@ -3373,13 +3312,12 @@ f32 CalcFovX(f32 flFovY, f32 flAspect) {
   return RAD2DEG(atan(tan(DEG2RAD(flFovY) * 0.5f) * flAspect)) * 2.0f;
 }
 
-//-----------------------------------------------------------------------------
 // Generate a frustum based on perspective view parameters
-//-----------------------------------------------------------------------------
+
 void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
                                 const Vector &right, const Vector &up,
-                                f32 flZNear, f32 flZFar, f32 flFovX,
-                                f32 flFovY, Frustum_t &frustum) {
+                                f32 flZNear, f32 flZFar, f32 flFovX, f32 flFovY,
+                                Frustum_t &frustum) {
   f32 flIntercept = DotProduct(origin, forward);
 
   // Setup the near and far planes.
@@ -3415,9 +3353,8 @@ void GeneratePerspectiveFrustum(const Vector &origin, const Vector &forward,
   frustum.SetPlane(FRUSTUM_TOP, PLANE_ANYZ, normalNeg, normalNeg.Dot(origin));
 }
 
-//-----------------------------------------------------------------------------
 // Version that accepts angles instead of vectors
-//-----------------------------------------------------------------------------
+
 void GeneratePerspectiveFrustum(const Vector &origin, const QAngle &angles,
                                 f32 flZNear, f32 flZFar, f32 flFovX,
                                 f32 flAspectRatio, Frustum_t &frustum) {
@@ -3497,14 +3434,13 @@ void CalcTriangleTangentSpace(const Vector &p0, const Vector &p1,
   VectorNormalize(tVect);
 }
 
-//-----------------------------------------------------------------------------
 // Convert RGB to HSV
-//-----------------------------------------------------------------------------
+
 void RGBtoHSV(const Vector &rgb, Vector &hsv) {
-  f32 flMax = max(rgb.x, rgb.y);
-  flMax = max(flMax, rgb.z);
-  f32 flMin = min(rgb.x, rgb.y);
-  flMin = min(flMin, rgb.z);
+  f32 flMax = std::max(rgb.x, rgb.y);
+  flMax = std::max(flMax, rgb.z);
+  f32 flMin = std::min(rgb.x, rgb.y);
+  flMin = std::min(flMin, rgb.z);
 
   // hsv.z is the value
   hsv.z = flMax;
@@ -3535,9 +3471,8 @@ void RGBtoHSV(const Vector &rgb, Vector &hsv) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Convert HSV to RGB
-//-----------------------------------------------------------------------------
+
 void HSVtoRGB(const Vector &hsv, Vector &rgb) {
   if (hsv.y == 0.0F) {
     rgb.Init(hsv.z, hsv.z, hsv.z);
@@ -3549,7 +3484,7 @@ void HSVtoRGB(const Vector &hsv, Vector &rgb) {
     hue = 0.0F;
   }
   hue /= 60.0F;
-  int i = hue;            // integer part
+  int i = hue;      // integer part
   f32 f = hue - i;  // fractional part
   f32 p = hsv.z * (1.0F - hsv.y);
   f32 q = hsv.z * (1.0F - hsv.y * f);

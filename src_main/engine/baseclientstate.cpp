@@ -932,8 +932,8 @@ bool CBaseClientState::ProcessServerInfo(SVC_ServerInfo *msg) {
     return false;
   }
 
-  Q_snprintf(m_szLevelName, sizeof(m_szLevelName), "maps/%s%s.bsp",
-             msg->m_szMapName, GetPlatformExt());
+  Q_snprintf(m_szLevelName, sizeof(m_szLevelName), "maps/%s.bsp",
+             msg->m_szMapName);
   Q_strncpy(m_szLevelNameShort, msg->m_szMapName, sizeof(m_szLevelNameShort));
 
 #if !defined(SWDS)

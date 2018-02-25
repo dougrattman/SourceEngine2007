@@ -22,7 +22,7 @@ struct ShaderDeviceInfo_t;
 //-----------------------------------------------------------------------------
 // ShaderAPI constants
 //-----------------------------------------------------------------------------
-enum {
+enum : int {
   MAXUSERCLIPPLANES = 6,
   MAX_NUM_LIGHTS = 4,
   MAX_OUTPUTS = 3,

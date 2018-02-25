@@ -122,14 +122,14 @@ class Vector2D {
 #endif
 };
 
-//-----------------------------------------------------------------------------
+
 
 const Vector2D vec2_origin(0, 0);
 const Vector2D vec2_invalid(FLT_MAX, FLT_MAX);
 
-//-----------------------------------------------------------------------------
+
 // Vector2D related operations
-//-----------------------------------------------------------------------------
+
 
 // Vector2D clear
 void Vector2DClear(Vector2D& a);
@@ -166,15 +166,15 @@ f32 DotProduct2D(const Vector2D& a, const Vector2D& b);
 void Vector2DLerp(const Vector2D& src1, const Vector2D& src2, f32 t,
                   Vector2D& dest);
 
-//-----------------------------------------------------------------------------
+
 //
 // Inlined Vector2D methods
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+
+
 // constructors
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D::Vector2D(void) {
 #ifdef _DEBUG
@@ -196,9 +196,9 @@ inline Vector2D::Vector2D(const f32* pFloat) {
   Assert(IsValid());
 }
 
-//-----------------------------------------------------------------------------
+
 // copy constructor
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D::Vector2D(const Vector2D& vOther) {
   Assert(vOther.IsValid());
@@ -206,9 +206,9 @@ inline Vector2D::Vector2D(const Vector2D& vOther) {
   y = vOther.y;
 }
 
-//-----------------------------------------------------------------------------
+
 // initialization
-//-----------------------------------------------------------------------------
+
 
 inline void Vector2D::Init(f32 ix, f32 iy) {
   x = ix;
@@ -223,9 +223,9 @@ inline void Vector2D::Random(f32 minVal, f32 maxVal) {
 
 inline void Vector2DClear(Vector2D& a) { a.x = a.y = 0.0f; }
 
-//-----------------------------------------------------------------------------
+
 // assignment
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D& Vector2D::operator=(const Vector2D& vOther) {
   Assert(vOther.IsValid());
@@ -234,9 +234,9 @@ inline Vector2D& Vector2D::operator=(const Vector2D& vOther) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 
 inline f32& Vector2D::operator[](int i) {
   Assert((i >= 0) && (i < 2));
@@ -248,23 +248,23 @@ inline f32 Vector2D::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 
 inline f32* Vector2D::Base() { return (f32*)this; }
 
 inline f32 const* Vector2D::Base() const { return (f32 const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // IsValid?
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector2D::IsValid() const { return IsFinite(x) && IsFinite(y); }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector2D::operator==(const Vector2D& src) const {
   Assert(src.IsValid() && IsValid());
@@ -276,9 +276,9 @@ inline bool Vector2D::operator!=(const Vector2D& src) const {
   return (src.x != x) || (src.y != y);
 }
 
-//-----------------------------------------------------------------------------
+
 // Copy
-//-----------------------------------------------------------------------------
+
 
 inline void Vector2DCopy(const Vector2D& src, Vector2D& dst) {
   Assert(src.IsValid());
@@ -293,9 +293,9 @@ inline void Vector2D::CopyToArray(f32* rgfl) const {
   rgfl[1] = y;
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 
 inline void Vector2D::Negate() {
   Assert(IsValid());
@@ -409,9 +409,9 @@ inline void Vector2DLerp(const Vector2D& src1, const Vector2D& src2, f32 t,
   dest[1] = src1[1] + (src2[1] - src1[1]) * t;
 }
 
-//-----------------------------------------------------------------------------
+
 // dot, cross
-//-----------------------------------------------------------------------------
+
 inline f32 DotProduct2D(const Vector2D& a, const Vector2D& b) {
   Assert(a.IsValid() && b.IsValid());
   return (a.x * b.x + a.y * b.y);
@@ -422,9 +422,9 @@ inline f32 Vector2D::Dot(const Vector2D& vOther) const {
   return DotProduct2D(*this, vOther);
 }
 
-//-----------------------------------------------------------------------------
+
 // length
-//-----------------------------------------------------------------------------
+
 inline f32 Vector2DLength(const Vector2D& v) {
   Assert(v.IsValid());
   return (f32)FastSqrt(v.x * v.x + v.y * v.y);
@@ -459,9 +459,9 @@ inline void Vector2DMax(const Vector2D& a, const Vector2D& b,
   result.y = (a.y > b.y) ? a.y : b.y;
 }
 
-//-----------------------------------------------------------------------------
+
 // Normalization
-//-----------------------------------------------------------------------------
+
 inline f32 Vector2DNormalize(Vector2D& v) {
   Assert(v.IsValid());
   f32 l = v.Length();
@@ -473,9 +473,9 @@ inline f32 Vector2DNormalize(Vector2D& v) {
   return l;
 }
 
-//-----------------------------------------------------------------------------
+
 // Get the distance from this Vector2D to the other one
-//-----------------------------------------------------------------------------
+
 inline f32 Vector2D::DistTo(const Vector2D& vOther) const {
   Vector2D delta;
   Vector2DSubtract(*this, vOther, delta);
@@ -488,10 +488,10 @@ inline f32 Vector2D::DistToSqr(const Vector2D& vOther) const {
   return delta.LengthSqr();
 }
 
-//-----------------------------------------------------------------------------
+
 // Computes the closest point to vecTarget no farther than flMaxDist from
 // vecStart
-//-----------------------------------------------------------------------------
+
 inline void ComputeClosestPoint2D(const Vector2D& vecStart, f32 flMaxDist,
                                   const Vector2D& vecTarget,
                                   Vector2D* pResult) {
@@ -506,17 +506,17 @@ inline void ComputeClosestPoint2D(const Vector2D& vecStart, f32 flMaxDist,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Slow methods
 //
-//-----------------------------------------------------------------------------
+
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
-//-----------------------------------------------------------------------------
+
 // Returns a Vector2D with the min or max in X, Y, and Z.
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D Vector2D::Min(const Vector2D& vOther) const {
   return Vector2D(x < vOther.x ? x : vOther.x, y < vOther.y ? y : vOther.y);
@@ -526,9 +526,9 @@ inline Vector2D Vector2D::Max(const Vector2D& vOther) const {
   return Vector2D(x > vOther.x ? x : vOther.x, y > vOther.y ? y : vOther.y);
 }
 
-//-----------------------------------------------------------------------------
+
 // arithmetic operations
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D Vector2D::operator-(void) const { return Vector2D(-x, -y); }
 

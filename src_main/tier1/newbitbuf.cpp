@@ -326,7 +326,7 @@ bool CBitRead::Seek(int nPosition) {
     }
     m_nInBufWord >>= (nAdjPosition & 31);
     m_nBitsAvail =
-        min(m_nBitsAvail,
+        std::min(m_nBitsAvail,
             32 - (nAdjPosition & 31));  // in case grabnextdword overflowed
   }
   return bSucc;

@@ -878,7 +878,7 @@ void CBasePanel::DrawBackgroundImage() {
     // goes from [255..0]
     alpha = (m_flTransitionEndTime - frametime) /
             (m_flTransitionEndTime - m_flTransitionStartTime) * 255;
-    alpha = clamp(alpha, 0, 255);
+    alpha = std::clamp(alpha, 0, 255);
   }
 
   // an exiting process needs to opaquely cover everything
@@ -886,7 +886,7 @@ void CBasePanel::DrawBackgroundImage() {
     // goes from [0..255]
     alpha = (m_flTransitionEndTime - frametime) /
             (m_flTransitionEndTime - m_flTransitionStartTime) * 255;
-    alpha = 255 - clamp(alpha, 0, 255);
+    alpha = 255 - std::clamp(alpha, 0, 255);
   }
 
   int iImageID = m_iBackgroundImageID;
@@ -916,7 +916,7 @@ void CBasePanel::DrawBackgroundImage() {
       // goes from [0..255]
       alpha = (frametime - m_flFadeMenuStartTime) /
               (m_flFadeMenuEndTime - m_flFadeMenuStartTime) * 255;
-      alpha = clamp(alpha, 0, 255);
+      alpha = std::clamp(alpha, 0, 255);
       m_pGameMenu->SetAlpha(alpha);
       if (alpha == 255) {
         m_bFadingInMenus = false;

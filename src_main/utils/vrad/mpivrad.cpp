@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "bsplib.h"
 #include "consolewnd.h"

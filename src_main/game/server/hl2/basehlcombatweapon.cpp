@@ -208,7 +208,7 @@ int CHLMachineGun::WeaponSoundRealtime(WeaponSound_t shoot_type) {
   }
 
   // make enough sound events to fill up the next estimated think interval
-  float dt = clamp(m_flAnimTime - m_flPrevAnimTime, 0, 0.2);
+  float dt = std::clamp(m_flAnimTime - m_flPrevAnimTime, 0.0f, 0.2f);
   if (m_flNextSoundTime < gpGlobals->curtime + dt) {
     WeaponSound(SINGLE_NPC, m_flNextSoundTime);
     m_flNextSoundTime += GetFireRate();

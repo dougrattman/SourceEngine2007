@@ -3,17 +3,19 @@
 #ifndef IGAME_H
 #define IGAME_H
 
+#include <tuple>
+#include "base/include/base_types.h"
 #include "tier1/interface.h"
 
 abstract_class IGame {
  public:
-  virtual ~IGame(void) {}
+  virtual ~IGame() {}
 
-  virtual bool Init(void *pvInstance) = 0;
-  virtual bool Shutdown(void) = 0;
+  virtual bool Init(void *instance) = 0;
+  virtual bool Shutdown() = 0;
 
-  virtual bool CreateGameWindow(void) = 0;
-  virtual void DestroyGameWindow(void) = 0;
+  virtual bool CreateGameWindow() = 0;
+  virtual void DestroyGameWindow() = 0;
 
   // This is used in edit mode to specify a particular game window (created by
   // hammer)
@@ -24,19 +26,21 @@ abstract_class IGame {
   virtual bool InputAttachToGameWindow() = 0;
   virtual void InputDetachFromGameWindow() = 0;
 
-  virtual void PlayStartupVideos(void) = 0;
+  virtual void PlayStartupVideos() = 0;
 
-  virtual void *GetMainWindow(void) = 0;
-  virtual void **GetMainWindowAddress(void) = 0;
-  virtual void GetDesktopInfo(int &width, int &height, int &refreshrate) = 0;
+  virtual void *GetMainWindow() const = 0;
+  virtual void **GetMainWindowAddress() const = 0;
+  // [width, height, refresh rate]
+  virtual std::tuple<i32, i32, i32> GetDesktopInfo() const = 0;
 
-  virtual void SetWindowXY(int x, int y) = 0;
-  virtual void SetWindowSize(int w, int h) = 0;
+  virtual void SetWindowXY(i32 x, i32 y) = 0;
+  virtual void SetWindowSize(i32 w, i32 h) = 0;
 
-  virtual void GetWindowRect(int *x, int *y, int *w, int *h) = 0;
+  // [x, y, width, height].
+  virtual std::tuple<i32, i32, i32, i32> GetWindowRect() const = 0;
 
   // Not Alt-Tabbed away
-  virtual bool IsActiveApp(void) = 0;
+  virtual bool IsActiveApp() const = 0;
 
   virtual void DispatchAllStoredGameMessages() = 0;
 };

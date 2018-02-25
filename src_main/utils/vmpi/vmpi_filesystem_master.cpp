@@ -622,7 +622,7 @@ void CMasterMulticastThread::TCP_SendNextChunk(CMulticastFile *pFile,
   int iChunkToSend = pClient->m_TCP_LastChunkSent + 1;
   int iStartByte = iChunkToSend * TCP_CHUNK_PAYLOAD_SIZE;
   int iEndByte =
-      min(iStartByte + TCP_CHUNK_PAYLOAD_SIZE, pFile->m_Data.Count());
+      std::min(iStartByte + TCP_CHUNK_PAYLOAD_SIZE, pFile->m_Data.Count());
 
   // If the start point is past the end, then we're done sending the file to
   // this client.
@@ -836,7 +836,7 @@ bool CMasterMulticastThread::CheckClientTimeouts() {
           if (pTestFile->m_Clients[iTestClient]->m_ClientID ==
               pInfo->m_ClientID) {
             flMostRecentTime =
-                max(flMostRecentTime,
+                std::max(flMostRecentTime,
                     pTestFile->m_Clients[iTestClient]->m_flLastAckTime);
           }
         }
@@ -860,7 +860,7 @@ inline bool CMasterMulticastThread::Thread_SendFileChunk_Multicast(
 
   int iStartByte = m_iCurActiveChunk * MULTICAST_CHUNK_PAYLOAD_SIZE;
   int iEndByte =
-      min(iStartByte + MULTICAST_CHUNK_PAYLOAD_SIZE, pFile->m_Data.Count());
+      std::min(iStartByte + MULTICAST_CHUNK_PAYLOAD_SIZE, pFile->m_Data.Count());
 
   WSABUF bufs[4];
   bufs[0].buf = (char *)&pFile->m_Info;

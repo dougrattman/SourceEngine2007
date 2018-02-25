@@ -2716,7 +2716,7 @@ void Panel::SetPaintBackgroundEnabled(bool state) {
 
 void Panel::SetPaintBackgroundType(int type) {
   // HACK only 0 through 2 supported for now
-  m_nPaintBackgroundType = clamp(type, 0, 2);
+  m_nPaintBackgroundType = std::clamp(type, 0, 2);
 }
 
 void Panel::SetPaintEnabled(bool state) {
@@ -5373,8 +5373,8 @@ void Panel::OnDraggablePanelPaint() {
   input()->GetCursorPos(x, y);
   int w, h;
 
-  w = min(sw, 80);
-  h = min(sh, 80);
+  w = std::min(sw, 80);
+  h = std::min(sh, 80);
   x -= (w >> 1);
   y -= (h >> 1);
 

@@ -215,7 +215,7 @@ void CPoseController::SetPoseParameterName( const char *pName )
 
 void CPoseController::SetPoseValue( float fValue )
 {
-	m_fPoseValue = clamp( fValue, 0.0f, 1.0f );
+	m_fPoseValue = std::clamp( fValue, 0.0f, 1.0f );
 
 	// Force the client to set the current pose
 	m_bPoseValueParity = !m_bPoseValueParity;
@@ -225,7 +225,7 @@ void CPoseController::SetPoseValue( float fValue )
 
 void CPoseController::SetInterpolationTime( float fValue )
 {
-	m_fInterpolationTime = clamp( fValue, 0.0f, MAX_POSE_INTERPOLATION_TIME );
+	m_fInterpolationTime = std::clamp( fValue, 0.0f, MAX_POSE_INTERPOLATION_TIME );
 }
 
 void CPoseController::SetInterpolationWrap( bool bWrap )
@@ -235,7 +235,7 @@ void CPoseController::SetInterpolationWrap( bool bWrap )
 
 void CPoseController::SetCycleFrequency( float fValue )
 {
-	m_fCycleFrequency = clamp( fValue, -MAX_POSE_CYCLE_FREQUENCY, MAX_POSE_CYCLE_FREQUENCY );
+	m_fCycleFrequency = std::clamp( fValue, -MAX_POSE_CYCLE_FREQUENCY, MAX_POSE_CYCLE_FREQUENCY );
 }
 
 void CPoseController::SetFModType( int nType )
@@ -248,22 +248,22 @@ void CPoseController::SetFModType( int nType )
 
 void CPoseController::SetFModTimeOffset( float fValue )
 {
-	m_fFModTimeOffset = clamp( fValue, -1.0f, 1.0f );
+	m_fFModTimeOffset = std::clamp( fValue, -1.0f, 1.0f );
 }
 
 void CPoseController::SetFModRate( float fValue )
 {
-	m_fFModRate = clamp( fValue, -MAX_POSE_FMOD_RATE, MAX_POSE_FMOD_RATE );
+	m_fFModRate = std::clamp( fValue, -MAX_POSE_FMOD_RATE, MAX_POSE_FMOD_RATE );
 }
 
 void CPoseController::SetFModAmplitude( float fValue )
 {
-	m_fFModAmplitude = clamp( fValue, 0.0f, MAX_POSE_FMOD_AMPLITUDE );
+	m_fFModAmplitude = std::clamp( fValue, 0.0f, MAX_POSE_FMOD_AMPLITUDE );
 }
 
 void CPoseController::RandomizeFMod( float fExtremeness )
 {
-	fExtremeness = clamp( fExtremeness, 0.0f, 1.0f );
+	fExtremeness = std::clamp( fExtremeness, 0.0f, 1.0f );
 
 	SetFModType( RandomInt( 1, POSECONTROLLER_FMODTYPE_TOTAL - 1 ) );
 	SetFModTimeOffset( RandomFloat( -1.0, 1.0f ) );
@@ -497,7 +497,7 @@ void C_PoseController::UpdateModulation( void )
 			else
 				m_fCurrentFMod -= m_fFModRate * gpGlobals->frametime;
 
-			m_fCurrentFMod = clamp( m_fCurrentFMod, -m_fFModAmplitude, m_fFModAmplitude );
+			m_fCurrentFMod = std::clamp( m_fCurrentFMod, -m_fFModAmplitude, m_fFModAmplitude );
 
 			break;
 		}

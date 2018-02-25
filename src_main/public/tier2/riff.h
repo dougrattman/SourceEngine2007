@@ -5,10 +5,10 @@
 
 #include "tier0/include/commonmacros.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose: This is a simple abstraction that the RIFF classes use to read from
 // files/memory
-//-----------------------------------------------------------------------------
+
 class IFileReadBinary {
  public:
   virtual int open(const char *pFileName) = 0;
@@ -19,9 +19,9 @@ class IFileReadBinary {
   virtual unsigned int size(int file) = 0;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Used to read/parse a RIFF format file
-//-----------------------------------------------------------------------------
+
 class InFileRIFF {
  public:
   InFileRIFF(const char *pFileName, IFileReadBinary &io);
@@ -45,9 +45,9 @@ class InFileRIFF {
   unsigned int m_riffSize;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Used to iterate over an InFileRIFF
-//-----------------------------------------------------------------------------
+
 class IterateRIFF {
  public:
   IterateRIFF(InFileRIFF &riff, int size);
@@ -86,9 +86,9 @@ class IFileWriteBinary {
   virtual void seek(int file, int pos) = 0;
   virtual unsigned int tell(int file) = 0;
 };
-//-----------------------------------------------------------------------------
+
 // Purpose: Used to write a RIFF format file
-//-----------------------------------------------------------------------------
+
 class OutFileRIFF {
  public:
   OutFileRIFF(const char *pFileName, IFileWriteBinary &io);
@@ -116,9 +116,9 @@ class OutFileRIFF {
   int m_nLISETSize;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Used to iterate over an InFileRIFF
-//-----------------------------------------------------------------------------
+
 class IterateOutputRIFF {
  public:
   IterateOutputRIFF(OutFileRIFF &riff);

@@ -281,7 +281,7 @@ void  C_NPC_Hydra::CalcBoneChain( Vector pos[], const Vector chain[] )
 		// debugoverlay->AddLineOverlay( chain[k], chain[k-1], 255, 255, 255, false, 0 );
 		totalLength += (chain[k] - chain[k-1]).Length();
 	}
-	totalLength = clamp( totalLength, 1.0, m_maxPossibleLength );
+	totalLength = std::clamp( totalLength, 1.0, m_maxPossibleLength );
 	float scale = m_flRelaxedLength / totalLength;
 
 	// starting from the head, fit the hydra skeleton onto the chain spline

@@ -3,6 +3,7 @@
 #ifndef SOURCE_MATHLIB_MATHLIB_H_
 #define SOURCE_MATHLIB_MATHLIB_H_
 
+#include <algorithm>
 #include <cmath>
 
 #include "base/include/base_types.h"
@@ -52,10 +53,8 @@ struct cplane_t {
 #define PLANE_ANYY 4
 #define PLANE_ANYZ 5
 
-//-----------------------------------------------------------------------------
 // Frustum plane indices.
 // WARNING: there is code that depends on these values
-//-----------------------------------------------------------------------------
 
 enum {
   FRUSTUM_RIGHT = 0,
@@ -126,10 +125,9 @@ struct matrix3x4_t {
     m_flMatVal[2][3] = m23;
   }
 
-  //-----------------------------------------------------------------------------
   // Creates a matrix where the X axis = forward
   // the Y axis = left, and the Z axis = up
-  //-----------------------------------------------------------------------------
+
   void Init(const Vector &xAxis, const Vector &yAxis, const Vector &zAxis,
             const Vector &vecOrigin) {
     m_flMatVal[0][0] = xAxis.x;
@@ -146,10 +144,9 @@ struct matrix3x4_t {
     m_flMatVal[2][3] = vecOrigin.z;
   }
 
-  //-----------------------------------------------------------------------------
   // Creates a matrix where the X axis = forward
   // the Y axis = left, and the Z axis = up
-  //-----------------------------------------------------------------------------
+
   matrix3x4_t(const Vector &xAxis, const Vector &yAxis, const Vector &zAxis,
               const Vector &vecOrigin) {
     Init(xAxis, yAxis, zAxis, vecOrigin);
@@ -234,11 +231,11 @@ FORCEINLINE void VectorCopy(const f32 *a, f32 *b) {
 FORCEINLINE void VectorClear(f32 *a) { a[0] = a[1] = a[2] = 0; }
 
 FORCEINLINE f32 VectorMaximum(const f32 *v) {
-  return max(v[0], max(v[1], v[2]));
+  return std::max(v[0], std::max(v[1], v[2]));
 }
 
 FORCEINLINE f32 VectorMaximum(const Vector &v) {
-  return max(v.x, max(v.y, v.z));
+  return std::max(v.x, std::max(v.y, v.z));
 }
 
 FORCEINLINE void VectorScale(const f32 *in, f32 scale, f32 *out) {
@@ -256,7 +253,7 @@ inline void VectorNegate(f32 *a) {
   a[2] = -a[2];
 }
 
-//#define VectorMaximum(a)		( max( (a)[0], max( (a)[1], (a)[2] ) ) )
+//#define VectorMaximum(a)		( std::max( (a)[0], std::max( (a)[1], (a)[2] ) ) )
 #define Vector2Clear(x) \
   { (x)[0] = (x)[1] = 0; }
 #define Vector2Negate(x) \
@@ -525,7 +522,7 @@ inline f32 RemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
 inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   f32 cVal = (val - A) / (B - A);
-  cVal = clamp(cVal, 0.0f, 1.0f);
+  cVal = std::clamp(cVal, 0.0f, 1.0f);
 
   return C + (D - C) * cVal;
 }
@@ -629,12 +626,6 @@ FORCEINLINE T AVG(T a, T b) {
 // XYZ macro, for printf type functions - ex printf("%f %f %f",XYZ(myvector));
 #define XYZ(v) (v).x, (v).y, (v).z
 
-//
-// Returns a clamped value in the range [min, max].
-//
-#define clamp(val, min, max) \
-  (((val) > (max)) ? (max) : (((val) < (min)) ? (min) : (val)))
-
 inline f32 Sign(f32 x) { return (x < 0.0f) ? -1.0f : 1.0f; }
 
 //
@@ -671,9 +662,7 @@ inline int ClampArrayBounds(int n, u32 maxindex) {
                           : (((p)->dist >= (emaxs)[(p)->type]) ? 2 : 3)) \
                    : BoxOnPlaneSide((emins), (emaxs), (p)))
 
-//-----------------------------------------------------------------------------
 // FIXME: Vector versions.... the f32 versions will go away hopefully soon!
-//-----------------------------------------------------------------------------
 
 void AngleVectors(const QAngle &angles, Vector *forward);
 void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
@@ -788,9 +777,8 @@ inline void VectorNegate(Vector &a) {
 
 inline f32 VectorAvg(Vector &a) { return (a[0] + a[1] + a[2]) / 3; }
 
-//-----------------------------------------------------------------------------
 // Box/plane test (slow version)
-//-----------------------------------------------------------------------------
+
 inline int FASTCALL BoxOnPlaneSide2(const Vector &emins, const Vector &emaxs,
                                     const cplane_t *p, f32 tolerance = 0.f) {
   Vector corners[2];
@@ -830,9 +818,7 @@ inline int FASTCALL BoxOnPlaneSide2(const Vector &emins, const Vector &emaxs,
   return sides;
 }
 
-//-----------------------------------------------------------------------------
 // Helpers for bounding box construction
-//-----------------------------------------------------------------------------
 
 void ClearBounds(Vector &mins, Vector &maxs);
 void AddPointToBounds(const Vector &v, Vector &mins, Vector &maxs);
@@ -850,9 +836,9 @@ inline f32 TexLightToLinear(int c, int exponent) {
 }
 
 // convert texture to linear 0..1 value
-int LinearToTexture(f32 f);
+u8 LinearToTexture(f32 f);
 // converts 0..1 linear value to screen gamma (0..255)
-int LinearToScreenGamma(f32 f);
+u8 LinearToScreenGamma(f32 f);
 f32 TextureToLinear(int c);
 
 // compressed color format
@@ -1027,7 +1013,7 @@ inline f32 SimpleSplineRemapVal(f32 val, f32 A, f32 B, f32 C, f32 D) {
 inline f32 SimpleSplineRemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   if (A == B) return val >= B ? D : C;
   f32 cVal = (val - A) / (B - A);
-  cVal = clamp(cVal, 0.0f, 1.0f);
+  cVal = std::clamp(cVal, 0.0f, 1.0f);
   return C + (D - C) * SimpleSpline(cVal);
 }
 
@@ -1099,9 +1085,8 @@ inline int Floor2Int(f32 a) {
   return RetVal;
 }
 
-//-----------------------------------------------------------------------------
 // Fast color conversion from f32 to u8
-//-----------------------------------------------------------------------------
+
 FORCEINLINE u8 FastFToC(f32 c) {
   // ieee trick
   volatile f32 dc = c * 255.0f + (f32)(1 << 23);
@@ -1109,11 +1094,10 @@ FORCEINLINE u8 FastFToC(f32 c) {
   return *(u8 *)&dc;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Bound input f32 to .001 (millisecond) boundary
 // Input  : in -
 // Output : inline f32
-//-----------------------------------------------------------------------------
+
 inline f32 ClampToMsec(f32 in) {
   int msec = Floor2Int(in * 1000.0f + 0.5f);
   return msec / 1000.0f;
@@ -1229,7 +1213,7 @@ FORCEINLINE u8 LinearToLightmap(f32 f) {
 }
 
 FORCEINLINE void ColorClamp(Vector &color) {
-  f32 maxc = max(color.x, max(color.y, color.z));
+  f32 maxc = std::max(color.x, std::max(color.y, color.z));
   if (maxc > 1.0f) {
     f32 ooMax = 1.0f / maxc;
     color.x *= ooMax;
@@ -1484,46 +1468,40 @@ int ClipPolyToPlane_Precise(f64 *inVerts, int vertCount, f64 *outVerts,
                             const f64 *normal, f64 dist,
                             f64 fOnPlaneEpsilon = 0.1);
 
-//-----------------------------------------------------------------------------
 // Computes a reasonable tangent space for a triangle
-//-----------------------------------------------------------------------------
+
 void CalcTriangleTangentSpace(const Vector &p0, const Vector &p1,
                               const Vector &p2, const Vector2D &t0,
                               const Vector2D &t1, const Vector2D &t2,
                               Vector &sVect, Vector &tVect);
 
-//-----------------------------------------------------------------------------
 // Transforms a AABB into another space; which will inherently grow the box.
-//-----------------------------------------------------------------------------
+
 void TransformAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                    const Vector &vecMaxsIn, Vector &vecMinsOut,
                    Vector &vecMaxsOut);
 
-//-----------------------------------------------------------------------------
 // Uses the inverse transform of in1
-//-----------------------------------------------------------------------------
+
 void ITransformAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                     const Vector &vecMaxsIn, Vector &vecMinsOut,
                     Vector &vecMaxsOut);
 
-//-----------------------------------------------------------------------------
 // Rotates a AABB into another space; which will inherently grow the box.
 // (same as TransformAABB, but doesn't take the translation into account)
-//-----------------------------------------------------------------------------
+
 void RotateAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                 const Vector &vecMaxsIn, Vector &vecMinsOut,
                 Vector &vecMaxsOut);
 
-//-----------------------------------------------------------------------------
 // Uses the inverse transform of in1
-//-----------------------------------------------------------------------------
+
 void IRotateAABB(const matrix3x4_t &in1, const Vector &vecMinsIn,
                  const Vector &vecMaxsIn, Vector &vecMinsOut,
                  Vector &vecMaxsOut);
 
-//-----------------------------------------------------------------------------
 // Transform a plane
-//-----------------------------------------------------------------------------
+
 inline void MatrixTransformPlane(const matrix3x4_t &src,
                                  const cplane_t &inPlane, cplane_t &outPlane) {
   // What we want to do is the following:
@@ -1674,10 +1652,10 @@ FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
   ny *= 16384.0f;
 
   // '0' and '32768' values are invalid encodings
-  nx = max(nx, 1.0f);  // Make sure there are no zero values
-  ny = max(ny, 1.0f);
-  nx = min(nx, 32767.0f);  // Make sure there are no 32768 values
-  ny = min(ny, 32767.0f);
+  nx = std::max(nx, 1.0f);  // Make sure there are no zero values
+  ny = std::max(ny, 1.0f);
+  nx = std::min(nx, 32767.0f);  // Make sure there are no 32768 values
+  ny = std::min(ny, 32767.0f);
 
   if (nz < 0.0f) nx = -nx;  // Set the sign bit for z
 
@@ -1822,14 +1800,12 @@ FORCEINLINE u32 *PackNormal_UBYTE4(const f32 *pNormal, u32 *pPackedNormal,
                            bIsTangent, binormalSign);
 }
 
-//-----------------------------------------------------------------------------
 // Convert RGB to HSV
-//-----------------------------------------------------------------------------
+
 void RGBtoHSV(const Vector &rgb, Vector &hsv);
 
-//-----------------------------------------------------------------------------
 // Convert HSV to RGB
-//-----------------------------------------------------------------------------
+
 void HSVtoRGB(const Vector &hsv, Vector &rgb);
 
 #endif  // SOURCE_MATHLIB_MATHLIB_H_

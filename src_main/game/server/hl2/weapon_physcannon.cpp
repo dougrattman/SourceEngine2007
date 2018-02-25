@@ -371,7 +371,7 @@ static void ComputePlayerMatrix(CBasePlayer *pPlayer, matrix3x4_t &out) {
 
   // 0-360 / -180-180
   // angles.x = init ? 0 : AngleDistance( angles.x, 0 );
-  // angles.x = clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE,
+  // angles.x = std::clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE,
   // PLAYER_LOOK_PITCH_RANGE );
   angles.x = 0;
 
@@ -609,7 +609,7 @@ void CGrabController::ComputeMaxSpeed(CBaseEntity *pEntity,
   float flMaxMass = physcannon_maxmass.GetFloat();
   if (flMass <= flMaxMass) return;
 
-  float flLerpFactor = clamp(flMass, flMaxMass, 500.0f);
+  float flLerpFactor = std::clamp(flMass, flMaxMass, 500.0f);
   flLerpFactor =
       SimpleSplineRemapVal(flLerpFactor, flMaxMass, 500.0f, 0.0f, 1.0f);
 
@@ -1045,7 +1045,7 @@ void CPlayerPickupController::Use(CBaseEntity *pActivator, CBaseEntity *pCaller,
       Vector vecLaunch;
       m_pPlayer->EyeVectors(&vecLaunch);
       // JAY: Scale this with mass because some small objects really go flying
-      float massFactor = clamp(pPhys->GetMass(), 0.5, 15);
+      float massFactor = std::clamp(pPhys->GetMass(), 0.5f, 15.0f);
       massFactor = RemapVal(massFactor, 0.5, 15, 0.5, 4);
       vecLaunch *= player_throwforce.GetFloat() * massFactor;
 
@@ -1238,9 +1238,9 @@ class CWeaponPhysCannon : public CBaseHLCombatWeapon {
 
   bool m_bOpen;
   bool m_bActive;
-  int m_nChangeState;           // For delayed state change of elements
-  float m_flCheckSuppressTime;  // Amount of time to suppress the checking for
-                                // targets
+  int m_nChangeState;            // For delayed state change of elements
+  float m_flCheckSuppressTime;   // Amount of time to suppress the checking for
+                                 // targets
   bool m_flLastDenySoundPlayed;  // Debounce for deny sound
   int m_nAttack2Debounce;
 
@@ -1727,7 +1727,8 @@ void CWeaponPhysCannon::PuntVPhysics(CBaseEntity *pEntity,
       if (pVehicle) {
         maxMass *= 2.5;  // 625 for vehicles
       }
-      float mass = min(totalMass, maxMass);  // max 250kg of additional force
+      float mass =
+          std::min(totalMass, maxMass);  // max 250kg of additional force
 
       // Put some spin on the object
       for (i = 0; i < listCount; i++) {
@@ -1737,7 +1738,7 @@ void CWeaponPhysCannon::PuntVPhysics(CBaseEntity *pEntity,
         float ratio = pList[i]->GetMass() / totalMass;
         if (pList[i] == pEntity->VPhysicsGetObject()) {
           ratio += hitObjectFactor;
-          ratio = min(ratio, 1.0f);
+          ratio = std::min(ratio, 1.0f);
         } else {
           ratio *= otherObjectFactor;
         }
@@ -2519,9 +2520,9 @@ bool CGrabController::UpdateObject(CBasePlayer *pPlayer, float flError) {
   float pitch = AngleDistance(playerAngles.x, 0);
 
   if (!m_bAllowObjectOverhead) {
-    playerAngles.x = clamp(pitch, -75, 75);
+    playerAngles.x = std::clamp(pitch, -75.0f, 75.0f);
   } else {
-    playerAngles.x = clamp(pitch, -90, 75);
+    playerAngles.x = std::clamp(pitch, -90.0f, 75.0f);
   }
 
   // Now clamp a sphere of object radius at end to the player's bbox
@@ -3227,7 +3228,7 @@ void CWeaponPhysCannon::CloseElements(void) {
 float CWeaponPhysCannon::GetLoadPercentage(void) {
   float loadWeight = m_grabController.GetLoadWeight();
   loadWeight /= physcannon_maxmass.GetFloat();
-  loadWeight = clamp(loadWeight, 0.0f, 1.0f);
+  loadWeight = std::clamp(loadWeight, 0.0f, 1.0f);
   return loadWeight;
 }
 
@@ -3941,10 +3942,11 @@ const char *CWeaponPhysCannon::GetShootSound(int iIndex) const {
 
 //-----------------------------------------------------------------------------
 // Purpose: Adds the specified object to the list of objects that have been
-//			propelled by this physgun, along with a timestamp of when
-//the 			object was added to the list. This list is checked when a physics 			object
-//strikes another entity, to resolve whether the player is 			accountable for the
-//impact.
+//			propelled by this physgun, along with a timestamp of
+// when
+// the 			object was added to the list. This list is checked when
+// a physics 			object strikes another entity, to resolve
+// whether the player is 			accountable for the impact.
 //
 // Input  : pObject - pointer to the object being thrown by the physcannon.
 //-----------------------------------------------------------------------------
@@ -3977,8 +3979,8 @@ void CWeaponPhysCannon::RecordThrownObject(CBaseEntity *pObject) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Go through the objects in the thrown objects list and discard any
-//			objects that have gone 'stale'. (Were thrown several seconds
-//ago), or 			have been destroyed or removed.
+//			objects that have gone 'stale'. (Were thrown several
+// seconds ago), or 			have been destroyed or removed.
 //
 //-----------------------------------------------------------------------------
 #define PHYSCANNON_THROWN_LIST_TIMEOUT 10.0f

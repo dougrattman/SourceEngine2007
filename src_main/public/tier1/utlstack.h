@@ -9,14 +9,14 @@
 #include <cstring>
 #include "tier1/utlmemory.h"
 
-//-----------------------------------------------------------------------------
+
 // The CUtlStack class:
 // A growable stack class which doubles in size by default.
 // It will always keep all elements consecutive in memory, and may move the
 // elements around in memory (via a realloc) when elements are pushed or
 // popped. Clients should therefore refer to the elements of the stack
 // by index (they should *never* maintain pointers to elements in the stack).
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M = CUtlMemory<T> >
 class CUtlStack {
@@ -82,18 +82,18 @@ class CUtlStack {
   T* m_pElements;
 };
 
-//-----------------------------------------------------------------------------
+
 // For easier access to the elements through the debugger
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline void CUtlStack<T, M>::ResetDbgInfo() {
   m_pElements = m_Memory.Base();
 }
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 CUtlStack<T, M>::CUtlStack(int growSize, int initSize)
@@ -106,9 +106,9 @@ CUtlStack<T, M>::~CUtlStack() {
   Purge();
 }
 
-//-----------------------------------------------------------------------------
+
 // copy into
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::CopyFrom(const CUtlStack<T, M>& from) {
@@ -119,9 +119,9 @@ void CUtlStack<T, M>::CopyFrom(const CUtlStack<T, M>& from) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // element access
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline T& CUtlStack<T, M>::operator[](int i) {
@@ -147,9 +147,9 @@ inline T const& CUtlStack<T, M>::Element(int i) const {
   return m_Memory[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Gets the base address (can change when adding elements!)
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline T* CUtlStack<T, M>::Base() {
@@ -161,9 +161,9 @@ inline T const* CUtlStack<T, M>::Base() const {
   return m_Memory.Base();
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the top of the stack
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline T& CUtlStack<T, M>::Top() {
@@ -177,27 +177,27 @@ inline T const& CUtlStack<T, M>::Top() const {
   return Element(m_Size - 1);
 }
 
-//-----------------------------------------------------------------------------
+
 // Size
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline int CUtlStack<T, M>::Count() const {
   return m_Size;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is element index valid?
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 inline bool CUtlStack<T, M>::IsIdxValid(int i) const {
   return (i >= 0) && (i < m_Size);
 }
 
-//-----------------------------------------------------------------------------
+
 // Grows the stack
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::GrowStack() {
@@ -208,9 +208,9 @@ void CUtlStack<T, M>::GrowStack() {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we have enough memory allocated to store a requested # of elements
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::EnsureCapacity(int num) {
@@ -218,9 +218,9 @@ void CUtlStack<T, M>::EnsureCapacity(int num) {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element, uses default constructor
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 int CUtlStack<T, M>::Push() {
@@ -229,9 +229,9 @@ int CUtlStack<T, M>::Push() {
   return m_Size - 1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element, uses copy constructor
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 int CUtlStack<T, M>::Push(T const& src) {
@@ -240,9 +240,9 @@ int CUtlStack<T, M>::Push(T const& src) {
   return m_Size - 1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Pops the stack
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::Pop() {
@@ -265,9 +265,9 @@ void CUtlStack<T, M>::PopMultiple(int num) {
   m_Size -= num;
 }
 
-//-----------------------------------------------------------------------------
+
 // Element removal
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::Clear() {
@@ -276,9 +276,9 @@ void CUtlStack<T, M>::Clear() {
   m_Size = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Memory deallocation
-//-----------------------------------------------------------------------------
+
 
 template <class T, class M>
 void CUtlStack<T, M>::Purge() {

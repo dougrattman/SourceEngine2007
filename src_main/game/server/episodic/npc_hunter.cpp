@@ -655,7 +655,7 @@ void CHunterFlechette::FlechetteTouch(CBaseEntity *pOther) {
     float flDamage = sk_hunter_dmg_flechette.GetFloat();
     CBreakable *pBreak = dynamic_cast<CBreakable *>(pOther);
     if (pBreak && (pBreak->GetMaterialType() == matGlass)) {
-      flDamage = max(pOther->GetHealth(), flDamage);
+      flDamage = std::max((float)pOther->GetHealth(), flDamage);
     }
 
     CTakeDamageInfo dmgInfo(this, GetOwnerEntity(), flDamage,
@@ -1747,7 +1747,7 @@ void CNPC_Hunter::Spawn() {
   float freeKnowledge = hunter_free_knowledge.GetFloat();
   if (freeKnowledge < GetEnemies()->GetEnemyDiscardTime()) {
     GetEnemies()->SetEnemyDiscardTime(
-        max(freeKnowledge + 0.1, AI_DEF_ENEMY_DISCARD_TIME));
+        std::max(freeKnowledge + 0.1f, AI_DEF_ENEMY_DISCARD_TIME));
   }
   GetEnemies()->SetFreeKnowledgeDuration(freeKnowledge);
 
@@ -3777,7 +3777,8 @@ bool CNPC_Hunter::HandleChargeImpact(Vector vecImpact, CBaseEntity *pEntity) {
     // Robin: Due to some of the finicky details in the motor, the hunter will
     // hit
     //		  the world when it is blocked by our enemy when trying to step
-    // up 		  during a moveprobe. To get around this, we see if the enemy's
+    // up 		  during a moveprobe. To get around this, we see if the
+    // enemy's
     // within 		  a volume in front of the hunter when we hit the world,
     // and if he is, 		  we hit him anyway.
     EnemyIsRightInFrontOfMe(&pEntity);
@@ -4660,8 +4661,9 @@ bool CNPC_Hunter::WeaponLOSCondition(const Vector &ownerPos,
 //
 // Input  :	flDist				distance to trace
 //			iDamage				damage to do if attack
-// hits 			vecViewPunch		camera punch (if attack hits
-// player) 			vecVelocityPunch	velocity punch (if attack hits player)
+// hits 			vecViewPunch		camera punch (if attack
+// hits player) 			vecVelocityPunch	velocity punch
+// (if attack hits player)
 //
 // Output : The entity hit by claws. NULL if nothing.
 //-----------------------------------------------------------------------------
@@ -4713,7 +4715,7 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
       {
               // Spray some of the player's blood on the hunter.
               trace_t tr;
-              
+              
 
 
               Vector vecHunterEyePos; // = EyePosition();
@@ -4722,22 +4724,22 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
 vecHunterEyePos, angDiscard );
 
               Vector vecPlayerEyePos = pPlayer->EyePosition();
-              
+              
 
 
               Vector vecDir = vecHunterEyePos - vecPlayerEyePos;
               float flLen = VectorNormalize( vecDir );
-              
+              
 
 
               Vector vecStart = vecPlayerEyePos - ( vecDir * 64 );
               Vector vecEnd = vecPlayerEyePos + ( vecDir * ( flLen + 64 ) );
-              
+              
 
 
               NDebugOverlay::HorzArrow( vecStart, vecEnd, 16, 255, 255, 0, 255,
 false, 10 );
-              
+              
 
 
               UTIL_TraceLine( vecStart, vecEnd, MASK_SHOT, pPlayer,
@@ -4778,7 +4780,7 @@ COLLISION_GROUP_NONE, &tr );
           case HUNTER_BLOOD_LEFT_FOOT: {
             if (GetAttachment("blood_left", vecBloodPos)) {
               SpawnBlood(vecBloodPos, g_vecAttackDir, pHurt->BloodColor(),
-                         min(iDamage, 30));
+                         std::min(iDamage, 30));
             }
 
             break;
@@ -6003,8 +6005,8 @@ void CNPC_Hunter::SetAim(const Vector &aimDir, float flInterval) {
   SetPoseParameter(gm_nAimPitchPoseParam, 0);
   SetPoseParameter(gm_nAimYawPoseParam, 0);
 
-  SetPoseParameter(gm_nBodyPitchPoseParam, clamp(newPitch, -45, 45));
-  SetPoseParameter(gm_nBodyYawPoseParam, clamp(newYaw, -45, 45));
+  SetPoseParameter(gm_nBodyPitchPoseParam, std::clamp(newPitch, -45.0f, 45.0f));
+  SetPoseParameter(gm_nBodyYawPoseParam, std::clamp(newYaw, -45.0f, 45.0f));
 }
 
 //-----------------------------------------------------------------------------
@@ -6020,8 +6022,8 @@ void CNPC_Hunter::RelaxAim(float flInterval) {
   SetPoseParameter(gm_nAimPitchPoseParam, 0);
   SetPoseParameter(gm_nAimYawPoseParam, 0);
 
-  SetPoseParameter(gm_nBodyPitchPoseParam, clamp(newPitch, -45, 45));
-  SetPoseParameter(gm_nBodyYawPoseParam, clamp(newYaw, -45, 45));
+  SetPoseParameter(gm_nBodyPitchPoseParam, std::clamp(newPitch, -45.0f, 45.0f));
+  SetPoseParameter(gm_nBodyYawPoseParam, std::clamp(newYaw, -45.0f, 45.0f));
 }
 
 //-----------------------------------------------------------------------------
@@ -6478,7 +6480,7 @@ class CHunterMaker : public CTemplateNPCMaker {
 
     int nRequested = nNPCs;
     if (nNPCs < 3) {
-      nNPCs = min(3, nNPCs + freeHunters.Count());
+      nNPCs = std::min(3, nNPCs + freeHunters.Count());
     }
 
     int nSummoned = 0;
@@ -6974,8 +6976,8 @@ DEFINE_SCHEDULE(
     "		TASK_FIND_FAR_NODE_COVER_FROM_ENEMY 200.0"
     "		TASK_RUN_PATH					0"
     "		TASK_HUNTER_CORNERED_TIMER		0.0"
-    //	"		TASK_CLEAR_FAIL_SCHEDULE		0" // not used because
-    //sched_fail includes a one second pause. ick!
+    //	"		TASK_CLEAR_FAIL_SCHEDULE		0" // not used
+    // because sched_fail includes a one second pause. ick!
     "		TASK_SET_FAIL_SCHEDULE			"
     "SCHEDULE:SCHED_HUNTER_FAIL_IMMEDIATE"
     "		TASK_WAIT_FOR_MOVEMENT			0"
@@ -6984,7 +6986,7 @@ DEFINE_SCHEDULE(
     "SCHEDULE:SCHED_HUNTER_HIDE_UNDER_COVER"
     /*
     "		TASK_FACE_ENEMY					0"
-    "		TASK_SET_ACTIVITY				ACTIVITY:ACT_IDLE"
+    "		TASK_SET_ACTIVITY ACTIVITY:ACT_IDLE"
     // Translated to cover "		TASK_WAIT 1"
     */
     ""

@@ -7,17 +7,17 @@
 
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // Set up methods related to datamodel interfaces
-//-----------------------------------------------------------------------------
+
 bool ConnectDataModel(CreateInterfaceFn factory);
 InitReturnVal_t InitDataModel();
 void ShutdownDataModel();
 void DisconnectDataModel();
 
-//-----------------------------------------------------------------------------
+
 // Helper empty implementation of an IAppSystem for tier2 libraries
-//-----------------------------------------------------------------------------
+
 template <class IInterface, int ConVarFlag = 0>
 class CTier2DmAppSystem : public CTier2AppSystem<IInterface, ConVarFlag> {
   typedef CTier2AppSystem<IInterface, ConVarFlag> BaseClass;

@@ -749,7 +749,7 @@ void CConPanel::DrawNotify() {
     clr = notify->clr;
 
     if (timeleft < .5f) {
-      float f = clamp(timeleft, 0.0f, .5f) / .5f;
+      float f = std::clamp(timeleft, 0.0f, .5f) / .5f;
 
       clr[3] = (int)(f * 255.0f);
 
@@ -832,10 +832,10 @@ int CConPanel::ProcessNotifyLines(int &left, int &top, int &right, int &bottom,
 
       if (da_notify[i].szNotify[0]) {
         // Extend the bounds.
-        left = min(left, x);
-        top = min(top, y);
-        right = max(right, x + len);
-        bottom = max(bottom, y + fontTall);
+        left = std::min(left, x);
+        top = std::min(top, y);
+        right = std::max(right, x + len);
+        bottom = std::max(bottom, y + fontTall);
       }
 
       y += fontTall;

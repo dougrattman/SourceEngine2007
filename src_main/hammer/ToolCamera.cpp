@@ -82,12 +82,12 @@ int Camera3D::HitTest(CMapView *pView, const Vector2D &ptClient, bool bTestHandl
 //-----------------------------------------------------------------------------
 void Camera3D::EnsureMaxCameras()
 {
-	int nMax = max( Options.general.nMaxCameras, 1 );
+	int nMax = std::max( Options.general.nMaxCameras, 1 );
 	
 	int nToRemove = Cameras.Count() - nMax;
 	if ( nToRemove > 0 )
 	{
-		m_iActiveCamera = max( m_iActiveCamera - nToRemove, 0 );
+		m_iActiveCamera = std::max( m_iActiveCamera - nToRemove, 0 );
 		
 		while ( nToRemove-- )
 			Cameras.Remove( 0 );

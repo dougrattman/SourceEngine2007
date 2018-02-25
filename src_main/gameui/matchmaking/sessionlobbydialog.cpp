@@ -296,7 +296,7 @@ void CSessionLobbyDialog::UpdatePlayerCountDisplay(int iTeam) {
     m_nMinInfoHeight[iTeam] = m_pTeamInfos[iTeam]->GetTall();
   }
 
-  int height = max(m_nMinInfoHeight[iTeam], m_Menus[iTeam].GetTall());
+  int height = std::max(m_nMinInfoHeight[iTeam], m_Menus[iTeam].GetTall());
   m_pTeamInfos[iTeam]->SetTall(height);
 
   PositionTeamInfos();

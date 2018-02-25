@@ -178,7 +178,7 @@ void C_WeaponCombat_ChargeablePlasma::ClientThink( )
 
 	// Determine the ball size...
 	m_flPower = (gpGlobals->curtime - m_flChargeStartTime) / BALL_GROW_TIME;
-	m_flPower = clamp( m_flPower, 0, 1 );
+	m_flPower = std::clamp( m_flPower, 0, 1 );
 
 	// FIXME: dl->origin should be based on the attachment point
 	dlight_t *dl = effects->CL_AllocDlight( entindex() );

@@ -278,7 +278,7 @@ void R_SetupDecalTextureSpaceBasis(decal_t *pDecal, Vector &vSurfNormal,
   if (pDecal->flags & FDECAL_PLAYERSPRAY) {
     int nWidthScale = pMaterial->GetMappingWidth() / MAX_PLAYERSPRAY_SIZE;
     int nHeightScale = pMaterial->GetMappingHeight() / MAX_PLAYERSPRAY_SIZE;
-    float flScale = static_cast<float>(max(nWidthScale, nHeightScale));
+    float flScale = static_cast<float>(std::max(nWidthScale, nHeightScale));
 
     decalWorldScale[0] = pDecal->scale / pMaterial->GetMappingWidth();
     decalWorldScale[1] = pDecal->scale / pMaterial->GetMappingHeight();

@@ -340,8 +340,8 @@ int Voice_GetOutputData(
   // Find out how much we want and get it from the received data channel.
   CCircularBuffer *pBuffer = &pChannel->m_Buffer;
   int nBytesToRead = pBuffer->GetReadAvailable();
-  nBytesToRead = min(min(nBytesToRead, (int)maxOutSamples),
-                     sampleCount * BYTES_PER_SAMPLE);
+  nBytesToRead = std::min(std::min(nBytesToRead, (int)maxOutSamples),
+                          sampleCount * BYTES_PER_SAMPLE);
   int nSamplesGotten = pBuffer->Read(pCopyBuf, nBytesToRead) / BYTES_PER_SAMPLE;
 
   // Are we at the end of the buffer's data? If so, fade data to silence so it
@@ -349,9 +349,9 @@ int Voice_GetOutputData(
   int readSamplesAvail = pBuffer->GetReadAvailable() / BYTES_PER_SAMPLE;
   if (readSamplesAvail < g_nVoiceFadeSamples) {
     int bufferFadeOffset =
-        max((readSamplesAvail + nSamplesGotten) - g_nVoiceFadeSamples, 0);
+        std::max((readSamplesAvail + nSamplesGotten) - g_nVoiceFadeSamples, 0);
     int globalFadeOffset =
-        max(g_nVoiceFadeSamples - (readSamplesAvail + nSamplesGotten), 0);
+        std::max(g_nVoiceFadeSamples - (readSamplesAvail + nSamplesGotten), 0);
 
     ApplyFadeToSamples(&pCopyBuf[bufferFadeOffset],
                        nSamplesGotten - bufferFadeOffset, globalFadeOffset,
@@ -362,11 +362,11 @@ int Voice_GetOutputData(
   //   pad it with a copy of the most recent data, and if there
   //   isn't any, then use zeros.
   if (nSamplesGotten < sampleCount) {
-    int wantedSampleCount = min(sampleCount, maxOutSamples);
+    int wantedSampleCount = std::min(sampleCount, maxOutSamples);
     int nAdditionalNeeded = (wantedSampleCount - nSamplesGotten);
     if (nSamplesGotten > 0) {
       short *dest = (short *)&pCopyBuf[nSamplesGotten];
-      int nSamplesToDuplicate = min(nSamplesGotten, nAdditionalNeeded);
+      int nSamplesToDuplicate = std::min(nSamplesGotten, nAdditionalNeeded);
       const short *src =
           (short *)&pCopyBuf[nSamplesGotten - nSamplesToDuplicate];
 
@@ -604,8 +604,8 @@ void Voice_Idle(float frametime) {
   }
 
   // Precalculate these to speedup the voice fadeout.
-  g_nVoiceFadeSamples =
-      max((int)(voice_fadeouttime.GetFloat() * VOICE_OUTPUT_SAMPLE_RATE), 2);
+  g_nVoiceFadeSamples = std::max(
+      (int)(voice_fadeouttime.GetFloat() * VOICE_OUTPUT_SAMPLE_RATE), 2);
   g_VoiceFadeMul = 1.0f / (g_nVoiceFadeSamples - 1);
 
   if (g_pVoiceRecord) g_pVoiceRecord->Idle();
@@ -757,17 +757,17 @@ int Voice_GetCompressedData(char *pchDest, int nCount, bool bFinal) {
   if (g_pVoiceRecord && pCodec) {
     short tempData[8192];
     int gotten = g_pVoiceRecord->GetRecordedData(
-        tempData, min(nCount / BYTES_PER_SAMPLE,
-                      (int)sizeof(tempData) / BYTES_PER_SAMPLE));
+        tempData, std::min(nCount / BYTES_PER_SAMPLE,
+                           (int)sizeof(tempData) / BYTES_PER_SAMPLE));
 
     // If they want to get the data from a file instead of the mic, use that.
     if (g_pMicInputFileData) {
       double curtime = Plat_FloatTime();
       int nShouldGet = (curtime - g_MicStartTime) * Voice_SamplesPerSec();
-      gotten =
-          min(sizeof(tempData) / BYTES_PER_SAMPLE,
-              min(nShouldGet, (g_nMicInputFileBytes - g_CurMicInputFileByte) /
-                                  BYTES_PER_SAMPLE));
+      gotten = std::min(
+          (int)sizeof(tempData) / BYTES_PER_SAMPLE,
+          std::min(nShouldGet, (g_nMicInputFileBytes - g_CurMicInputFileByte) /
+                                   BYTES_PER_SAMPLE));
       memcpy(tempData, &g_pMicInputFileData[g_CurMicInputFileByte],
              gotten * BYTES_PER_SAMPLE);
       g_CurMicInputFileByte += gotten * BYTES_PER_SAMPLE;
@@ -775,7 +775,7 @@ int Voice_GetCompressedData(char *pchDest, int nCount, bool bFinal) {
     }
 
 #ifdef VOICE_SEND_RAW_TEST
-    int nCompressedBytes = min(gotten, nCount);
+    int nCompressedBytes = std::min(gotten, nCount);
     for (int i = 0; i < nCompressedBytes; i++) {
       pchDest[i] = (char)(tempData[i] >> 8);
     }
@@ -786,8 +786,8 @@ int Voice_GetCompressedData(char *pchDest, int nCount, bool bFinal) {
 
     // Write to our file buffers..
     if (g_pUncompressedFileData) {
-      int nToWrite = min(gotten * BYTES_PER_SAMPLE,
-                         MAX_WAVEFILEDATA_LEN - g_nUncompressedDataBytes);
+      int nToWrite = std::min(gotten * BYTES_PER_SAMPLE,
+                              MAX_WAVEFILEDATA_LEN - g_nUncompressedDataBytes);
       memcpy(&g_pUncompressedFileData[g_nUncompressedDataBytes], tempData,
              nToWrite);
       g_nUncompressedDataBytes += nToWrite;
@@ -923,7 +923,7 @@ int Voice_AddIncomingData(int nChannel, const char *pchData, int nCount,
     // Find the highest value
     for (int i = 0; i < nDecompressed; ++i) {
       g_VoiceTweakSpeakingVolume =
-          max(abs(data[i]), g_VoiceTweakSpeakingVolume);
+          std::max(abs(data[i]), g_VoiceTweakSpeakingVolume);
     }
 
     // Smooth it out
@@ -942,8 +942,8 @@ int Voice_AddIncomingData(int nChannel, const char *pchData, int nCount,
 
   // Write to our file buffer..
   if (g_pDecompressedFileData) {
-    int nToWrite =
-        min(nDecompressed * 2, MAX_WAVEFILEDATA_LEN - g_nDecompressedDataBytes);
+    int nToWrite = std::min(nDecompressed * 2,
+                            MAX_WAVEFILEDATA_LEN - g_nDecompressedDataBytes);
     memcpy(&g_pDecompressedFileData[g_nDecompressedDataBytes], decompressed,
            nToWrite);
     g_nDecompressedDataBytes += nToWrite;

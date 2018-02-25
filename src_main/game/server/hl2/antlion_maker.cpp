@@ -1349,7 +1349,7 @@ void CAntlionTemplateMaker::InputSetPoolRegenTime(inputdata_t &inputdata) {
 // Input  : iNumToAdd -
 //-----------------------------------------------------------------------------
 void CAntlionTemplateMaker::PoolAdd(int iNumToAdd) {
-  m_iPool = clamp(m_iPool + iNumToAdd, 0, m_iMaxPool);
+  m_iPool = std::clamp(m_iPool + iNumToAdd, 0, m_iMaxPool);
 }
 
 //-----------------------------------------------------------------------------
@@ -1357,7 +1357,7 @@ void CAntlionTemplateMaker::PoolAdd(int iNumToAdd) {
 //-----------------------------------------------------------------------------
 void CAntlionTemplateMaker::PoolRegenThink(void) {
   if (m_iPool < m_iMaxPool) {
-    m_iPool = clamp(m_iPool + m_iPoolRegenAmount, 0, m_iMaxPool);
+    m_iPool = std::clamp(m_iPool + m_iPoolRegenAmount, 0, m_iMaxPool);
 
     if (g_debug_antlionmaker.GetInt() == 2) {
       Msg("REGENERATED: Pool: %d (max %d) (Regenerating %d every %f)\n",

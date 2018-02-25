@@ -258,7 +258,7 @@ static void VCR_TraceEvents()
 			{
 				double ret;
 				VCRTrace_Read(&ret, sizeof(ret));
-				Msg("Sys_FloatTime: %f\n", ret);
+				Msg("Plat_FloatTime: %f\n", ret);
 			}
 			break;
 			

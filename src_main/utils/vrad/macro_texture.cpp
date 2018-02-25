@@ -126,8 +126,8 @@ inline Vector SampleMacroTexture(const CMacroTextureData *t,
                          t->m_Width - 0.00001);
   int iy = (int)RemapVal(vWorldPos.y, g_MacroWorldMins.y, g_MacroWorldMaxs.y, 0,
                          t->m_Height - 0.00001);
-  ix = clamp(ix, 0, t->m_Width - 1);
-  iy = t->m_Height - 1 - clamp(iy, 0, t->m_Height - 1);
+  ix = std::clamp(ix, 0, t->m_Width - 1);
+  iy = t->m_Height - 1 - std::clamp(iy, 0, t->m_Height - 1);
 
   const unsigned char *pInputColor =
       &t->m_ImageData[(iy * t->m_Width + ix) * 4];

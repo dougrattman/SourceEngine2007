@@ -8,6 +8,7 @@
 
 #include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/fasttimer.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/tslist.h"
 #include "tier1/fmtstr.h"
@@ -127,11 +128,10 @@ class ALIGN16 CJobQueue {
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 #pragma pack(pop)
 
-//-----------------------------------------------------------------------------
 //
 // CThreadPool
 //
-//-----------------------------------------------------------------------------
+
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
 
@@ -234,15 +234,12 @@ class CThreadPool : public CRefCounted1<IThreadPool, CRefCountServiceMT> {
 };
 
 MSVC_END_WARNING_OVERRIDE_SCOPE()
-//-----------------------------------------------------------------------------
 
 JOB_INTERFACE IThreadPool *CreateThreadPool() { return new CThreadPool; }
 
 JOB_INTERFACE void DestroyThreadPool(IThreadPool *pPool) {
   delete static_cast<CThreadPool *>(pPool);
 }
-
-//-----------------------------------------------------------------------------
 
 class CGlobalThreadPool : public CThreadPool {
  public:
@@ -262,7 +259,6 @@ class CGlobalThreadPool : public CThreadPool {
   }
 };
 
-//-----------------------------------------------------------------------------
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
 
@@ -821,8 +817,6 @@ CJob *CThreadPool::GetDummyJob() {
   dummyJob.AddRef();
   return &dummyJob;
 }
-
-//-----------------------------------------------------------------------------
 
 #elif defined(_LINUX)
 

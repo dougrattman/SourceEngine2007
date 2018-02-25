@@ -12,7 +12,7 @@
 //=============================================================================
 #define WIN32_LEAN_AND_MEAN
 #include <io.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "FileSystem.h"
 #include "IStudioRender.h"
@@ -395,7 +395,7 @@ int CSceneViewerApp::Main() {
 
     AppPumpMessages();
 
-    vgui::GetAnimationController()->UpdateAnimations(Sys_FloatTime());
+    vgui::GetAnimationController()->UpdateAnimations(Plat_FloatTime());
 
     g_pMaterialSystem->BeginFrame(0);
     pRenderContext->ClearColor4ub(76, 88, 68, 255);

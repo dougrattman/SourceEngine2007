@@ -82,10 +82,10 @@ inline void UpdateScreenEffectTexture(int textureIndex, int x, int y, int w,
     destRect.y = srcRect.y * scaleY;
     destRect.width = srcRect.width * scaleX;
     destRect.height = srcRect.height * scaleY;
-    destRect.x = clamp(destRect.x, 0, nDestWidth);
-    destRect.y = clamp(destRect.y, 0, nDestHeight);
-    destRect.width = clamp(destRect.width, 0, nDestWidth - destRect.x);
-    destRect.height = clamp(destRect.height, 0, nDestHeight - destRect.y);
+    destRect.x = std::clamp(destRect.x, 0, nDestWidth);
+    destRect.y = std::clamp(destRect.y, 0, nDestHeight);
+    destRect.width = std::clamp(destRect.width, 0, nDestWidth - destRect.x);
+    destRect.height = std::clamp(destRect.height, 0, nDestHeight - destRect.y);
   }
 
   pRenderContext->CopyRenderTargetToTextureEx(

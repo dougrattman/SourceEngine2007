@@ -1574,7 +1574,7 @@ bool CBaseTFPlayer::ClientCommand( const CCommand &args )
 		{
 			Vector force = RandomVector( -500, 500 );
 			force.z = fabs( force.z );
-			force.z = min( 200.0f, force.z );
+			force.z = std::min( 200.0f, force.z );
 
 			BecomeRagdollOnClient( force );
 		}
@@ -1654,7 +1654,7 @@ void CBaseTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecD
 		if ( IntersectInfiniteRayWithSphere( vStart, vLineDir, vec3_origin, 1, &f1, &f2 ) )
 		{
 			// Use the closest hit point on the sphere.
-			float fMin = min( f1, f2 );
+			float fMin = std::min( f1, f2 );
 			Vector vPos = vStart + vLineDir * fMin;
 
 			// Unsquash back to the ellipse's dimensions.
@@ -1814,7 +1814,7 @@ int CBaseTFPlayer::OnTakeDamage( const CTakeDamageInfo &info )
 		// Only certain damage types knock players around
 		ApplyDamageForce( info, iDamageToDo );
 
-		m_iHealth = max(0, m_iHealth - iDamageToDo);
+		m_iHealth = std::max(0, m_iHealth - iDamageToDo);
 	}
 
 	//Msg( "m_iHealth: %d\n\n", m_iHealth );
@@ -1836,7 +1836,7 @@ int CBaseTFPlayer::OnTakeDamage( const CTakeDamageInfo &info )
 
 	CSingleUserRecipientFilter user( this );
 	UserMessageBegin( user, "Damage" );
-		WRITE_BYTE( clamp( iDamageToDo, 0, 255 ) );
+		WRITE_BYTE( std::clamp( iDamageToDo, 0, 255 ) );
 		WRITE_FLOAT( vecDamageOrigin.x );	// BUG: Should be fixed point (to hud) not floats
 		WRITE_FLOAT( vecDamageOrigin.y );	// BUG: However, the HUD does _not_ implement bitfield messages (yet)
 		WRITE_FLOAT( vecDamageOrigin.z );	// BUG: We use WRITE_VEC3COORD for everything else
@@ -1903,7 +1903,7 @@ void CBaseTFPlayer::MenuDisplay( void )
 	if ( m_MenuRefreshTime > gpGlobals->curtime )
 	{
 		// guard against sudden clock changes
-		m_MenuRefreshTime = min( m_MenuRefreshTime, gpGlobals->curtime + MENU_UPDATETIME );
+		m_MenuRefreshTime = std::min( m_MenuRefreshTime, gpGlobals->curtime + MENU_UPDATETIME );
 		return;
 	}
 
@@ -3074,7 +3074,7 @@ bool CBaseTFPlayer::AddResourceChunks( int iChunks, bool bProcessed )
 			return false;
 	}
 
-	m_TFLocal.m_iResourceAmmo.Set( bProcessed, min( iMax, m_TFLocal.m_iResourceAmmo[ bProcessed ] + iChunks ) );
+	m_TFLocal.m_iResourceAmmo.Set( bProcessed, std::min( iMax, m_TFLocal.m_iResourceAmmo[ bProcessed ] + iChunks ) );
 	SetAmmoCount( GetTotalResourceChunks(), iIndex );
 	CPASAttenuationFilter filter( this,"BaseTFPlayer.PickupResources" );
 	EmitSound( filter, entindex(),"BaseTFPlayer.PickupResources" );
@@ -3087,7 +3087,7 @@ bool CBaseTFPlayer::AddResourceChunks( int iChunks, bool bProcessed )
 void CBaseTFPlayer::RemoveResourceChunks( int iChunks, bool bProcessed )
 {
 	// Remove the amount
-	m_TFLocal.m_iResourceAmmo.Set( bProcessed, max( 0, m_TFLocal.m_iResourceAmmo[ bProcessed ] - iChunks ) );
+	m_TFLocal.m_iResourceAmmo.Set( bProcessed, std::max( 0, m_TFLocal.m_iResourceAmmo[ bProcessed ] - iChunks ) );
 	int iIndex = GetAmmoDef()->Index("ResourceChunks");
 	SetAmmoCount( GetTotalResourceChunks(), iIndex );
 }
@@ -3217,16 +3217,16 @@ void CBaseTFPlayer::CheckCamouflage( void )
 
 	if ( remaining > 0.0f )
 	{
-		m_flCamouflageAmount += min( remaining, maxstep );
+		m_flCamouflageAmount += std::min( remaining, maxstep );
 	}
 	else
 	{
 		remaining = -remaining;
-		m_flCamouflageAmount -= min( remaining, maxstep );
+		m_flCamouflageAmount -= std::min( remaining, maxstep );
 	}
 
-	m_flCamouflageAmount = max( 0.0f, m_flCamouflageAmount );
-	m_flCamouflageAmount = min( 100.0f, m_flCamouflageAmount );
+	m_flCamouflageAmount = std::max( 0.0f, m_flCamouflageAmount );
+	m_flCamouflageAmount = std::min( 100.0f, m_flCamouflageAmount );
 }
 
 //-----------------------------------------------------------------------------

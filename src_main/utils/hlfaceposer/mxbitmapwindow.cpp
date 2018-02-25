@@ -9,7 +9,7 @@
 #include <mxtk/mxWindow.h>
 #include "mxBitmapWindow.h"
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 
 //-----------------------------------------------------------------------------

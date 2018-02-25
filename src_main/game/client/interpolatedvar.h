@@ -402,10 +402,10 @@ class CInterpolatedVarArrayBase : public IInterpolatedVar {
   void DebugInterpolate(Type *pOut, float currentTime);
 
   void GetDerivative(Type *pOut, float currentTime);
-  void GetDerivative_SmoothVelocity(
-      Type *pOut, float currentTime);  // See notes on
-                                       // ::Derivative_HermiteLinearVelocity for
-                                       // info.
+  void GetDerivative_SmoothVelocity(Type *pOut,
+                                    float currentTime);  // See notes on
+                                                         // ::Derivative_HermiteLinearVelocity
+                                                         // for info.
 
   void ClearHistory();
   void AddToHead(float changeTime, const Type *values, bool bFlushNewer);
@@ -740,7 +740,7 @@ inline bool CInterpolatedVarArrayBase<Type, IS_ARRAY>::GetInterpolationInfo(
     if (dt > 0.0001f) {
       pInfo->frac = (targettime - older_change_time) /
                     (newer_change_time - older_change_time);
-      pInfo->frac = min(pInfo->frac, 2.0f);
+      pInfo->frac = std::min(pInfo->frac, 2.0f);
 
       int oldestindex = i + 1;
 
@@ -1005,7 +1005,7 @@ void CInterpolatedVarArrayBase<Type, IS_ARRAY>::GetDerivative_SmoothVelocity(
     // Now ramp it to zero after cl_extrapolate_amount..
     float flDestTime = currentTime - m_InterpolationAmount;
     float diff = flDestTime - history[info.newer].changetime;
-    diff = clamp(diff, 0, cl_extrapolate_amount.GetFloat() * 2);
+    diff = std::clamp(diff, 0.0f, cl_extrapolate_amount.GetFloat() * 2);
     if (diff > cl_extrapolate_amount.GetFloat()) {
       float scale = 1 - (diff - cl_extrapolate_amount.GetFloat()) /
                             cl_extrapolate_amount.GetFloat();
@@ -1133,7 +1133,7 @@ inline void CInterpolatedVarArrayBase<Type, IS_ARRAY>::SetMaxCount(int newmax) {
   bool changed = (newmax != m_nMaxCount) ? true : false;
 
   // BUGBUG: Support 0 length properly?
-  newmax = max(1, newmax);
+  newmax = std::max(1, newmax);
 
   m_nMaxCount = newmax;
   // Wipe everything any time this changes!!!
@@ -1192,8 +1192,8 @@ inline void CInterpolatedVarArrayBase<Type, IS_ARRAY>::_Extrapolate(
       flDestinationTime <= pNew->changetime) {
     for (int i = 0; i < m_nMaxCount; i++) pOut[i] = pNew->GetValue()[i];
   } else {
-    float flExtrapolationAmount =
-        min(flDestinationTime - pNew->changetime, flMaxExtrapolationAmount);
+    float flExtrapolationAmount = std::min(flDestinationTime - pNew->changetime,
+                                           flMaxExtrapolationAmount);
 
     float divisor = 1.0f / (pNew->changetime - pOld->changetime);
     for (int i = 0; i < m_nMaxCount; i++) {

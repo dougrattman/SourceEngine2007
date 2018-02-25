@@ -29,10 +29,6 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
 using namespace vgui;
 
 //--------------------------------------------------------------------------------------------------------------
@@ -940,7 +936,7 @@ void CWeaponSelectBox::UpdateClips()
 		wchar_t buf[BufLen];
 		g_pVGuiLocalize->ConstructString( buf, sizeof(buf),
 			g_pVGuiLocalize->Find( "#Cstrike_BuyPresetsBullets" ),
-			2, NumAsWString( min( maxRounds, numClips * buyClipSize ) ), NumAsWString( maxRounds ) );
+			2, NumAsWString( std::min( maxRounds, numClips * buyClipSize ) ), NumAsWString( maxRounds ) );
 		m_pBullets->SetText( buf );
 	}
 	else

@@ -11,7 +11,7 @@
 // Material editor
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "appframework/tier2app.h"
 #include "inputsystem/iinputsystem.h"
 #include "FileSystem.h"
@@ -97,7 +97,7 @@ bool CInputTestApp::CreateAppWindow( char const *pTitle, bool bWindowed, int w, 
     wc.style         = CS_OWNDC | CS_DBLCLKS;
     wc.lpfnWndProc   = DefWindowProc;
     wc.hInstance     = (HINSTANCE)GetAppInstance();
-    wc.lpszClassName = "Valve001";
+    wc.lpszClassName = "Valve002";
 	wc.hIcon		 = NULL; //LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
 	wc.hIconSm		 = wc.hIcon;
 

@@ -7,7 +7,7 @@
 #include <process.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "UtlBuffer.h"
 #include "UtlLinkedList.h"
@@ -399,7 +399,7 @@ char *FindNext(char *szString, const char *szSearchSet) {
   if (szString && szSearchSet) {
     for (; *szSearchSet; ++szSearchSet) {
       if (char *szTmp = strchr(szString, *szSearchSet)) {
-        szNext = bFound ? (min(szNext, szTmp)) : szTmp;
+        szNext = bFound ? (std::min(szNext, szTmp)) : szTmp;
         bFound = true;
       }
     }
@@ -415,7 +415,7 @@ char *FindLast(char *szString, const char *szSearchSet) {
   if (szString && szSearchSet) {
     for (; *szSearchSet; ++szSearchSet) {
       if (char *szTmp = strrchr(szString, *szSearchSet)) {
-        szNext = bFound ? (max(szNext, szTmp)) : szTmp;
+        szNext = bFound ? (std::max(szNext, szTmp)) : szTmp;
         bFound = true;
       }
     }
@@ -989,7 +989,7 @@ void Master_ReceiveWorkUnitFn(uint64_t iWorkUnit, MessageBuffer *pBuf,
 
   uint64_t comboStart = iWorkUnit * g_nStaticCombosPerWorkUnit;
   uint64_t comboEnd = comboStart + g_nStaticCombosPerWorkUnit;
-  comboEnd = min(g_numStaticCombos, comboEnd);
+  comboEnd = std::min(g_numStaticCombos, comboEnd);
 
   char const *chLastShaderName = "";
   ShaderInfo_t siLastShaderInfo;
@@ -1786,7 +1786,7 @@ void Worker_ProcessWorkUnitFn(int iThread, uint64_t iWorkUnit,
                               MessageBuffer *pBuf) {
   uint64_t comboStart = iWorkUnit * g_nStaticCombosPerWorkUnit;
   uint64_t comboEnd = comboStart + g_nStaticCombosPerWorkUnit;
-  comboEnd = min(g_numStaticCombos, comboEnd);
+  comboEnd = std::min(g_numStaticCombos, comboEnd);
 
   // Determine the commands required to be executed:
   uint64_t nComboOfTheEntry = 0;
@@ -1950,7 +1950,7 @@ void Worker_GetLocalCopyOfShaders(void) {
     // Grab just the filename.
     char justFilename[MAX_PATH];
     char *pLastSlash =
-        max(strrchr(pszLineToCopy, '/'), strrchr(pszLineToCopy, '\\'));
+        std::max(strrchr(pszLineToCopy, '/'), strrchr(pszLineToCopy, '\\'));
     if (pLastSlash)
       Q_strncpy(justFilename, pLastSlash + 1, sizeof(justFilename));
     else

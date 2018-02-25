@@ -851,7 +851,7 @@ bool CBaseObject::FindNearestBuildPoint( CBaseEntity *pEntity, Vector vecBuildOr
 			if ( pBPInterface->GetBuildPoint(i, vecBPOrigin, vecBPAngles) )
 			{
 				float flDist = (vecBPOrigin - vecBuildOrigin).Length();
-				if ( flDist < min(flNearestPoint, pBPInterface->GetMaxSnapDistance( i )) )
+				if ( flDist < std::min(flNearestPoint, pBPInterface->GetMaxSnapDistance( i )) )
 				{
 					flNearestPoint = flDist;
 					vecNearestBuildPoint = vecBPOrigin;
@@ -884,8 +884,8 @@ bool CBaseObject::CalculatePlacement( CBaseTFPlayer *pPlayer )
 
 	// Adjust build distance based upon object size
 	Vector2D xyDims;
-	xyDims.x = max( fabs( m_vecBuildMins.x ), fabs( m_vecBuildMaxs.x ) );
-	xyDims.y = max( fabs( m_vecBuildMins.y ), fabs( m_vecBuildMaxs.y ) );
+	xyDims.x = std::max( fabs( m_vecBuildMins.x ), fabs( m_vecBuildMaxs.x ) );
+	xyDims.y = std::max( fabs( m_vecBuildMins.y ), fabs( m_vecBuildMaxs.y ) );
 	float flDistance = xyDims.Length() + 16; // small safety buffer
 	Vector vecBuildOrigin = pPlayer->WorldSpaceCenter() + forward * flDistance;
 
@@ -1232,7 +1232,7 @@ void CBaseObject::AlignToGround( Vector vecOrigin )
 	trace_t tr;
 	Vector vecWorldMins, vecWorldMaxs;
 	CollisionProp()->WorldSpaceAABB( &vecWorldMins, &vecWorldMaxs );
-	float flHeight = max( vecWorldMaxs.z - vecWorldMins.z, 60 );
+	float flHeight = std::max( vecWorldMaxs.z - vecWorldMins.z, 60 );
 	UTIL_TraceLine( vecOrigin, vecOrigin + Vector(0,0,-flHeight), MASK_SOLID, this, COLLISION_GROUP_PLAYER_MOVEMENT, &tr );
 	if ( tr.fraction != 1.0 )
 	{
@@ -2055,13 +2055,13 @@ bool CBaseObject::Repair( float flHealth )
 
 		// Reduce the construction time by the correct amount for the health passed in
 		float flConstructionTime = flHealth / ((GetMaxHealth() - OBJECT_CONSTRUCTION_STARTINGHEALTH) / m_flTotalConstructionTime);
-		m_flConstructionTimeLeft = max( 0, m_flConstructionTimeLeft - flConstructionTime);
-		m_flConstructionTimeLeft = clamp( m_flConstructionTimeLeft, 0.0f, m_flTotalConstructionTime );
+		m_flConstructionTimeLeft = std::max( 0, m_flConstructionTimeLeft - flConstructionTime);
+		m_flConstructionTimeLeft = std::clamp( m_flConstructionTimeLeft, 0.0f, m_flTotalConstructionTime );
 		m_flPercentageConstructed = 1 - (m_flConstructionTimeLeft / m_flTotalConstructionTime);
-		m_flPercentageConstructed = clamp( m_flPercentageConstructed, 0.0f, 1.0f );
+		m_flPercentageConstructed = std::clamp( m_flPercentageConstructed, 0.0f, 1.0f );
 
 		// Increase health.
-		SetHealth( min( GetMaxHealth(), m_flHealth + flHealth ) );
+		SetHealth( std::min( GetMaxHealth(), m_flHealth + flHealth ) );
 
 		// Return true if we're constructed now
 		if ( m_flConstructionTimeLeft <= 0.0f )
@@ -2077,7 +2077,7 @@ bool CBaseObject::Repair( float flHealth )
 			return true;
 
 		// Increase health.
-		SetHealth( min( GetMaxHealth(), m_flHealth + flHealth ) );
+		SetHealth( std::min( GetMaxHealth(), m_flHealth + flHealth ) );
 
 		m_OnRepaired.FireOutput( this, this);
 
@@ -2784,7 +2784,7 @@ void CBaseObject::InputSetHealth( inputdata_t &inputdata )
 void CBaseObject::InputAddHealth( inputdata_t &inputdata )
 {
 	int iHealth = inputdata.value.Int();
-	SetHealth( min( GetMaxHealth(), m_flHealth + iHealth ) );
+	SetHealth( std::min( GetMaxHealth(), m_flHealth + iHealth ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -2842,7 +2842,7 @@ void CBaseObject::InputSetMinDisabledHealth( inputdata_t &inputdata )
 void CBaseObject::InputSetSolidToPlayer( inputdata_t &inputdata )
 {
 	int ival = inputdata.value.Int();
-	ival = clamp( ival, (int)SOLID_TO_PLAYER_USE_DEFAULT, (int)SOLID_TO_PLAYER_NO );
+	ival = std::clamp( ival, (int)SOLID_TO_PLAYER_USE_DEFAULT, (int)SOLID_TO_PLAYER_NO );
 	OBJSOLIDTYPE stp = (OBJSOLIDTYPE)ival;
 	SetSolidToPlayers( stp );
 }

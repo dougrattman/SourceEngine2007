@@ -370,7 +370,7 @@ void CNavLadder::DrawLadder( void ) const
 	if ( 4 == sscanf( nav_area_bgcolor.GetString(), "%d %d %d %d", &(bgcolor[0]), &(bgcolor[1]), &(bgcolor[2]), &(bgcolor[3]) ) )
 	{
 		for ( int i=0; i<4; ++i )
-			bgcolor[i] = clamp( bgcolor[i], 0, 255 );
+			bgcolor[i] = std::clamp( bgcolor[i], 0, 255 );
 
 		if ( bgcolor[3] > 0 )
 		{

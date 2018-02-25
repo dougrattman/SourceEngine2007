@@ -78,7 +78,7 @@ class CAimTargetManager : public IEntityListener {
   }
   int ListCount() { return m_targetList.Count(); }
   int ListCopy(CBaseEntity *pList[], int listMax) {
-    int count = min(listMax, ListCount());
+    int count = std::min(listMax, ListCount());
     memcpy(pList, m_targetList.Base(), sizeof(CBaseEntity *) * count);
     return count;
   }
@@ -144,7 +144,7 @@ class CSimThinkManager : public IEntityListener {
   int ListCount() { return m_simThinkList.Count(); }
 
   int ListCopy(CBaseEntity *pList[], int listMax) {
-    int count = min(listMax, ListCount());
+    int count = std::min(listMax, ListCount());
     int out = 0;
     for (int i = 0; i < count; i++) {
       // only copy out entities that will simulate or think this frame

@@ -496,7 +496,7 @@ bool CPortalRender::DrawPortalsUsingStencils( CViewRender *pViewRender )
 	if( iNumRenderablePortals == 0 )
 		return false;
 
-	const int iMaxDepth = min( r_portal_stencil_depth.GetInt(), min( MAX_PORTAL_RECURSIVE_VIEWS, (1 << materials->StencilBufferBits()) ) - 1 );
+	const int iMaxDepth = std::min( r_portal_stencil_depth.GetInt(), std::min( MAX_PORTAL_RECURSIVE_VIEWS, (1 << materials->StencilBufferBits()) ) - 1 );
 
 	if( m_iViewRecursionLevel >= iMaxDepth ) //can't support any more views	
 	{

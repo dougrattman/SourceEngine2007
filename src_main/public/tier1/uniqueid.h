@@ -5,22 +5,22 @@
 
 #include "tier1/strtools.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 struct UniqueId_t;
 class CUtlBuffer;
 
-//-----------------------------------------------------------------------------
+
 // Defines a globally unique ID
-//-----------------------------------------------------------------------------
+
 struct UniqueId_t {
   unsigned char m_Value[16];
 };
 
-//-----------------------------------------------------------------------------
+
 // Methods related to unique ids
-//-----------------------------------------------------------------------------
+
 void CreateUniqueId(UniqueId_t *pDest);
 void InvalidateUniqueId(UniqueId_t *pDest);
 bool IsUniqueIdValid(const UniqueId_t &id);

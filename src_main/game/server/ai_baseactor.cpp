@@ -227,8 +227,8 @@ bool CAI_BaseActor::StartSceneEvent(CSceneEventInfo *info, CChoreoScene *scene,
         Blink();
         // don't blink for duration, or next random blink time
         float flDuration = (event->GetEndTime() - scene->GetTime());
-        m_flBlinktime =
-            gpGlobals->curtime + max(flDuration, random->RandomFloat(1.5, 4.5));
+        m_flBlinktime = gpGlobals->curtime +
+                        std::max(flDuration, random->RandomFloat(1.5, 4.5));
       } else if (stricmp(event->GetParameters(), "AI_HOLSTER") == 0) {
         // FIXME: temp code for test
         info->m_nType = SCENE_AI_HOLSTER;
@@ -330,15 +330,15 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
 
       // Msg("%f : %f - %f\n", scene->GetTime(), event->GetStartTime(),
       // event->GetEndTime() );
-      float flTime = clamp(scene->GetTime(), event->GetStartTime(),
-                           event->GetEndTime() - 0.1);
+      float flTime = std::clamp(scene->GetTime(), event->GetStartTime(),
+                                event->GetEndTime() - 0.1f);
       float intensity = event->GetIntensity(flTime);
 
       // clamp in-ramp to 0.5 seconds
       float flDuration = scene->GetTime() - event->GetStartTime();
       float flMaxIntensity =
           flDuration < 0.5f ? SimpleSpline(flDuration / 0.5f) : 1.0f;
-      intensity = clamp(intensity, 0.0f, flMaxIntensity);
+      intensity = std::clamp(intensity, 0.0f, flMaxIntensity);
 
       if (bInScene && info->m_bIsMoving) {
         info->m_flInitialYaw = GetLocalAngles().y;
@@ -363,8 +363,8 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
       } else {
         dir = 1;
       }
-      flSpineYaw = min(diff, 30);
-      flBodyYaw = min(diff - flSpineYaw, 30);
+      flSpineYaw = std::min(diff, 30.0f);
+      flBodyYaw = std::min(diff - flSpineYaw, 30.0f);
       m_goalSpineYaw =
           m_goalSpineYaw * (1.0 - intensity) + intensity * flSpineYaw * dir;
       m_goalBodyYaw =
@@ -408,14 +408,14 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
       }
 
       // calc how much to use the spine for turning
-      float spineintensity = (1.0 - max(0.0, (intensity - 0.5) / 0.5));
+      float spineintensity = (1.0 - std::max(0.0f, (intensity - 0.5f) / 0.5f));
       // force spine to full if not in scene or locked
       if (!bInScene || event->IsLockBodyFacing()) {
         spineintensity = 1.0;
       }
 
-      flSpineYaw = min(diff * spineintensity, 30);
-      flBodyYaw = min(diff * spineintensity - flSpineYaw, 30);
+      flSpineYaw = std::min(diff * spineintensity, 30.0f);
+      flBodyYaw = std::min(diff * spineintensity - flSpineYaw, 30.0f);
       info->m_flFacingYaw =
           info->m_flInitialYaw + (diff - flBodyYaw - flSpineYaw) * dir;
 
@@ -430,7 +430,8 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
         case SCENE_AI_BLINK: {
           // keep eyes not blinking for duration
           float flDuration = (event->GetEndTime() - scene->GetTime());
-          m_flBlinktime = max(m_flBlinktime, gpGlobals->curtime + flDuration);
+          m_flBlinktime =
+              std::max(m_flBlinktime, gpGlobals->curtime + flDuration);
         }
           return true;
         case SCENE_AI_HOLSTER: {
@@ -457,8 +458,8 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
               float flDuration = (event->GetEndTime() - scene->GetTime());
               int i = m_syntheticLookQueue.Count() - 1;
               m_syntheticLookQueue[i].m_flEndTime =
-                  min(m_syntheticLookQueue[i].m_flEndTime,
-                      gpGlobals->curtime + flDuration);
+                  std::min(m_syntheticLookQueue[i].m_flEndTime,
+                           gpGlobals->curtime + flDuration);
               m_syntheticLookQueue[i].m_flInterest = 0.1;
             }
           }
@@ -546,7 +547,7 @@ bool CAI_BaseActor::RandomFaceFlex(CSceneEventInfo *info, CChoreoScene *scene,
       float delta = (m_flextarget[i] - weight) / random->RandomFloat(2.0, 4.0);
       weight = weight + delta * intensity;
     }
-    weight = clamp(weight, 0.0f, 1.0f);
+    weight = std::clamp(weight, 0.0f, 1.0f);
     SetFlexWeight(i, weight);
   }
 
@@ -727,7 +728,7 @@ float CAI_BaseActor::HeadTargetValidity(const Vector &lookTargetPos) {
   // only look if target is within +-135 degrees
   // scale 1..-0.707 == 1..1,  -.707..-1 == 1..0
   // 	X * b + b = 1 == 1 / (X + 1) = b, 3.4142
-  float flInterest = clamp(3.4142 + 3.4142 * dotPr, 0, 1);
+  float flInterest = std::clamp(3.4142f + 3.4142f * dotPr, 0.0f, 1.0f);
 
   // stop looking when point too close
   if (flDist < MAX_FULL_LOOK_TARGET_DIST) {
@@ -861,7 +862,8 @@ void CAI_BaseActor::UpdateHeadControl(const Vector &vHeadTarget,
             // Msg("bias %f %f %f\n", angBias.x, angBias.y, angBias.z );
 
             Vector tmp1, tmp2;
-            
+            
+
             VectorTransform( Vector( 0, 0, 0), chestToWorld, tmp1 );
             VectorTransform( Vector( 100, 0, 0), chestToWorld, tmp2 );
             NDebugOverlay::Line( tmp1, tmp2, 0,0,255, false, 0.12 );
@@ -887,13 +889,13 @@ void CAI_BaseActor::UpdateHeadControl(const Vector &vHeadTarget,
     Vector vTargetLocal;
     VectorNormalize(vTargetDir);
     VectorIRotate(vTargetDir, forwardToWorld, vTargetLocal);
-    vTargetLocal.z *= clamp(vTargetLocal.x, 0.1, 1.0);
+    vTargetLocal.z *= std::clamp(vTargetLocal.x, 0.1f, 1.0f);
     VectorNormalize(vTargetLocal);
     VectorRotate(vTargetLocal, forwardToWorld, vTargetDir);
 
     // clamp local influence when target is behind the head
     flHeadInfluence =
-        flHeadInfluence * clamp(vTargetLocal.x * 2.0 + 2.0, 0.0, 1.0);
+        flHeadInfluence * std::clamp(vTargetLocal.x * 2.0 + 2.0, 0.0, 1.0);
   }
 
   Studio_AlignIKMatrix(targetXform, vTargetDir);
@@ -1455,7 +1457,7 @@ void CAI_BaseActor::MaintainLookTargets(float flInterval) {
     // no target, decay all head control direction
     m_goalHeadDirection = m_goalHeadDirection * 0.8 + vHead * 0.2;
 
-    m_goalHeadInfluence = max(m_goalHeadInfluence - 0.2, 0);
+    m_goalHeadInfluence = std::max(m_goalHeadInfluence - 0.2f, 0.0f);
 
     VectorNormalize(m_goalHeadDirection);
     UpdateHeadControl(vEyePosition + m_goalHeadDirection * 100,

@@ -938,8 +938,8 @@ static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
     ResampleRGBA8888(resInfo);
 
     if (info.m_bAlphaToDistance) {
-      float flMaxRad =
-          info.m_flDistanceSpread * 2.0 * max(info.m_nReduceX, info.m_nReduceY);
+      float flMaxRad = info.m_flDistanceSpread * 2.0 *
+                       std::max(info.m_nReduceX, info.m_nReduceY);
       int nSearchRad = ceil(flMaxRad);
       bool bWarnEdges = false;
       // now, do alpha to distance coded stuff
@@ -962,8 +962,8 @@ static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
             float flClosest_Dist = 1.0e23;
             for (int iy = -nSearchRad; iy <= nSearchRad; iy++) {
               for (int ix = -nSearchRad; ix <= nSearchRad; ix++) {
-                int cx = max(0, min(nWidth - 1, ix + nOrig_x));
-                int cy = max(0, min(nHeight - 1, iy + nOrig_y));
+                int cx = std::max(0, std::min(nWidth - 1, ix + nOrig_x));
+                int cy = std::max(0, std::min(nHeight - 1, iy + nOrig_y));
 
                 int nOffset = 3 + 4 * (cx + cy * nWidth);
                 uint8_t alphaValue = bmPsdData.m_pBits[nOffset];
@@ -971,20 +971,20 @@ static bool LoadFaceFromPSD(IVTFTexture *pTexture, CUtlBuffer &psdBuffer, int z,
                 if (bInOrOut != bIn)  // transition?
                 {
                   float flTryDist = sqrt((float)(ix * ix + iy * iy));
-                  flClosest_Dist = min(flClosest_Dist, flTryDist);
+                  flClosest_Dist = std::min(flClosest_Dist, flTryDist);
                 }
               }
             }
 
             // now, map signed distance to alpha value
             float flOutDist =
-                min(0.5, FLerp(0, .5, 0, flMaxRad, flClosest_Dist));
+                std::min(0.5f, FLerp(0, .5, 0, flMaxRad, flClosest_Dist));
             if (!bInOrOut) {
               // negative distance
               flOutDist = -flOutDist;
             }
             uint8_t &nOutAlpha = tmpDest[3 + 4 * (x + pTexture->Width() * y)];
-            nOutAlpha = min(255.0, 255.0 * (0.5 + flOutDist));
+            nOutAlpha = std::min(255.0, 255.0 * (0.5 + flOutDist));
             if ((nOutAlpha != 0) &&
                 ((x == 0) || (y == 0) || (x == pTexture->Width() - 1) ||
                  (y == pTexture->Height() - 1))) {
@@ -1075,8 +1075,8 @@ static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
     ResampleRGBA8888(resInfo);
 
     if (info.m_bAlphaToDistance) {
-      float flMaxRad =
-          info.m_flDistanceSpread * 2.0 * max(info.m_nReduceX, info.m_nReduceY);
+      float flMaxRad = info.m_flDistanceSpread * 2.0 *
+                       std::max(info.m_nReduceX, info.m_nReduceY);
       int nSearchRad = ceil(flMaxRad);
       bool bWarnEdges = false;
       // now, do alpha to distance coded stuff
@@ -1098,8 +1098,8 @@ static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
             float flClosest_Dist = 1.0e23;
             for (int iy = -nSearchRad; iy <= nSearchRad; iy++) {
               for (int ix = -nSearchRad; ix <= nSearchRad; ix++) {
-                int cx = max(0, min(nWidth - 1, ix + nOrig_x));
-                int cy = max(0, min(nHeight - 1, iy + nOrig_y));
+                int cx = std::max(0, std::min(nWidth - 1, ix + nOrig_x));
+                int cy = std::max(0, std::min(nHeight - 1, iy + nOrig_y));
 
                 int nOffset = 3 + 4 * (cx + cy * nWidth);
                 uint8_t alphaValue = tmpImage[nOffset];
@@ -1107,20 +1107,20 @@ static bool LoadFaceFromTGA(IVTFTexture *pTexture, CUtlBuffer &tgaBuffer, int z,
                 if (bInOrOut != bIn)  // transition?
                 {
                   float flTryDist = sqrt((float)(ix * ix + iy * iy));
-                  flClosest_Dist = min(flClosest_Dist, flTryDist);
+                  flClosest_Dist = std::min(flClosest_Dist, flTryDist);
                 }
               }
             }
 
             // now, map signed distance to alpha value
             float flOutDist =
-                min(0.5, FLerp(0, .5, 0, flMaxRad, flClosest_Dist));
+                std::min(0.5f, FLerp(0, .5, 0, flMaxRad, flClosest_Dist));
             if (!bInOrOut) {
               // negative distance
               flOutDist = -flOutDist;
             }
             uint8_t &nOutAlpha = tmpDest[3 + 4 * (x + pTexture->Width() * y)];
-            nOutAlpha = min(255.0, 255.0 * (0.5 + flOutDist));
+            nOutAlpha = std::min(255.0, 255.0 * (0.5 + flOutDist));
             if ((nOutAlpha != 0) &&
                 ((x == 0) || (y == 0) || (x == pTexture->Width() - 1) ||
                  (y == pTexture->Height() - 1))) {
@@ -1396,7 +1396,7 @@ IVTFTexture *PostProcessSkyBox(IVTFTexture *pTexture, int iSkyboxFace) {
     Error("PostProcessSkyBox: IVTFTexture::Init() failed.\n");
 
   // Now just dump the data for the face we want to keep.
-  int nMips = min(pTexture->MipCount(), pRet->MipCount());
+  int nMips = std::min(pTexture->MipCount(), pRet->MipCount());
   for (int iMip = 0; iMip < nMips; iMip++) {
     int mipSize = pTexture->ComputeMipSize(iMip);
     if (pRet->ComputeMipSize(iMip) != mipSize) {

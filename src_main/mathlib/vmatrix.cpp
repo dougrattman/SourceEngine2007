@@ -332,10 +332,10 @@ bool MatrixInverseGeneral(const VMatrix &src, VMatrix &dst) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Does a fast inverse, assuming the matrix only contains translation and
 // rotation.
-//-----------------------------------------------------------------------------
+
 void MatrixInverseTR(const VMatrix &src, VMatrix &dst) {
   Vector vTrans, vNewTrans;
 
@@ -367,9 +367,9 @@ void MatrixInverseTranspose(const VMatrix &src, VMatrix &dst) {
   MatrixTranspose(dst, dst);
 }
 
-//-----------------------------------------------------------------------------
+
 // Computes the inverse transpose
-//-----------------------------------------------------------------------------
+
 void MatrixInverseTranspose(const matrix3x4_t &src, matrix3x4_t &dst) {
   VMatrix tmp, out;
   tmp.CopyFrom3x4(src);
@@ -480,9 +480,9 @@ void VMatrix::SetupMatrixOrgAngles(const Vector &origin,
   m[3][3] = 1.0f;
 }
 
-//-----------------------------------------------------------------------------
+
 // Sets matrix to identity
-//-----------------------------------------------------------------------------
+
 void MatrixSetIdentity(VMatrix &dst) {
   dst[0][0] = 1.0f;
   dst[0][1] = 0.0f;
@@ -502,16 +502,16 @@ void MatrixSetIdentity(VMatrix &dst) {
   dst[3][3] = 1.0f;
 }
 
-//-----------------------------------------------------------------------------
+
 // Setup a matrix from euler angles.
-//-----------------------------------------------------------------------------
+
 void MatrixFromAngles(const QAngle &vAngles, VMatrix &dst) {
   dst.SetupMatrixOrgAngles(vec3_origin, vAngles);
 }
 
-//-----------------------------------------------------------------------------
+
 // Creates euler angles from a matrix
-//-----------------------------------------------------------------------------
+
 void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
   f32 forward[3];
   f32 left[3];
@@ -561,9 +561,9 @@ void MatrixToAngles(const VMatrix &src, QAngle &vAngles) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Transpose
-//-----------------------------------------------------------------------------
+
 inline void Swap(f32 &a, f32 &b) {
   f32 tmp = a;
   a = b;
@@ -598,9 +598,9 @@ void MatrixTranspose(const VMatrix &src, VMatrix &dst) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Matrix copy
-//-----------------------------------------------------------------------------
+
 
 void MatrixCopy(const VMatrix &src, VMatrix &dst) {
   if (&src != &dst) {
@@ -608,9 +608,9 @@ void MatrixCopy(const VMatrix &src, VMatrix &dst) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Matrix multiply
-//-----------------------------------------------------------------------------
+
 typedef f32 VMatrixRaw_t[4];
 
 void MatrixMultiply(const VMatrix &src1, const VMatrix &src2, VMatrix &dst) {
@@ -663,9 +663,9 @@ void MatrixMultiply(const VMatrix &src1, const VMatrix &src2, VMatrix &dst) {
               s1[3][3] * s2[3][3];
 }
 
-//-----------------------------------------------------------------------------
+
 // Matrix/vector multiply
-//-----------------------------------------------------------------------------
+
 
 void Vector4DMultiply(const VMatrix &src1, Vector4D const &src2,
                       Vector4D &dst) {
@@ -687,9 +687,9 @@ void Vector4DMultiply(const VMatrix &src1, Vector4D const &src2,
            src1[3][3] * v[3];
 }
 
-//-----------------------------------------------------------------------------
+
 // Matrix/vector multiply
-//-----------------------------------------------------------------------------
+
 
 void Vector4DMultiplyPosition(const VMatrix &src1, Vector const &src2,
                               Vector4D &dst) {
@@ -712,9 +712,9 @@ void Vector4DMultiplyPosition(const VMatrix &src1, Vector const &src2,
       src1[3][0] * v[0] + src1[3][1] * v[1] + src1[3][2] * v[2] + src1[3][3];
 }
 
-//-----------------------------------------------------------------------------
+
 // Matrix/vector multiply
-//-----------------------------------------------------------------------------
+
 
 void Vector3DMultiply(const VMatrix &src1, const Vector &src2, Vector &dst) {
   // Make sure it works if src2 == dst
@@ -730,10 +730,10 @@ void Vector3DMultiply(const VMatrix &src1, const Vector &src2, Vector &dst) {
   dst[2] = src1[2][0] * v[0] + src1[2][1] * v[1] + src1[2][2] * v[2];
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector3DMultiplyPositionProjective treats src2 as if it's a point
 // and does the perspective divide at the end
-//-----------------------------------------------------------------------------
+
 void Vector3DMultiplyPositionProjective(const VMatrix &src1, const Vector &src2,
                                         Vector &dst) {
   // Make sure it works if src2 == dst
@@ -758,10 +758,10 @@ void Vector3DMultiplyPositionProjective(const VMatrix &src1, const Vector &src2,
   dst *= w;
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector3DMultiplyProjective treats src2 as if it's a direction
 // and does the perspective divide at the end
-//-----------------------------------------------------------------------------
+
 void Vector3DMultiplyProjective(const VMatrix &src1, const Vector &src2,
                                 Vector &dst) {
   // Make sure it works if src2 == dst
@@ -783,9 +783,9 @@ void Vector3DMultiplyProjective(const VMatrix &src1, const Vector &src2,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Multiplies the vector by the transpose of the matrix
-//-----------------------------------------------------------------------------
+
 void Vector4DMultiplyTranspose(const VMatrix &src1, Vector4D const &src2,
                                Vector4D &dst) {
   // Make sure it works if src2 == dst
@@ -808,9 +808,9 @@ void Vector4DMultiplyTranspose(const VMatrix &src1, Vector4D const &src2,
            src1[3][3] * v[3];
 }
 
-//-----------------------------------------------------------------------------
+
 // Multiplies the vector by the transpose of the matrix
-//-----------------------------------------------------------------------------
+
 void Vector3DMultiplyTranspose(const VMatrix &src1, const Vector &src2,
                                Vector &dst) {
   // Make sure it works if src2 == dst
@@ -828,9 +828,9 @@ void Vector3DMultiplyTranspose(const VMatrix &src1, const Vector &src2,
   dst[2] = src1[0][2] * v[0] + src1[1][2] * v[1] + src1[2][2] * v[2];
 }
 
-//-----------------------------------------------------------------------------
+
 // Transform a plane
-//-----------------------------------------------------------------------------
+
 void MatrixTransformPlane(const VMatrix &src, const cplane_t &inPlane,
                           cplane_t &outPlane) {
   // What we want to do is the following:
@@ -866,9 +866,9 @@ VPlane VMatrix::operator*(const VPlane &thePlane) const {
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Builds a rotation matrix that rotates one direction vector into another
-//-----------------------------------------------------------------------------
+
 void MatrixBuildTranslation(VMatrix &dst, f32 x, f32 y, f32 z) {
   MatrixSetIdentity(dst);
   dst[0][3] = x;
@@ -883,7 +883,7 @@ void MatrixBuildTranslation(VMatrix &dst, const Vector &translation) {
   dst[2][3] = translation[2];
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Builds the matrix for a counterclockwise rotation about an arbitrary
 // axis.
 //
@@ -897,7 +897,7 @@ void MatrixBuildTranslation(VMatrix &dst, const Vector &translation) {
 // Input  : mat -
 //			vAxisOrRot -
 //			angle -
-//-----------------------------------------------------------------------------
+
 void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
                                   f32 angleDegrees) {
   MatrixBuildRotationAboutAxis(vAxisOfRot, angleDegrees, dst.As3x4());
@@ -907,9 +907,9 @@ void MatrixBuildRotationAboutAxis(VMatrix &dst, const Vector &vAxisOfRot,
   dst[3][3] = 1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Builds a rotation matrix that rotates one direction vector into another
-//-----------------------------------------------------------------------------
+
 void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
                          const Vector &finalDirection) {
   f32 angle = DotProduct(initialDirection, finalDirection);
@@ -957,8 +957,8 @@ void MatrixBuildRotation(VMatrix &dst, const Vector &initialDirection,
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 void MatrixBuildRotateZ(VMatrix &dst, f32 angleDegrees) {
   f32 radians = angleDegrees * (M_PI / 180.0f);
 
@@ -1060,10 +1060,10 @@ static inline void CalculateAABBForNormalizedFrustum_Helper(
   AddPointToBounds(worldPos, mins, maxs);
 }
 
-//-----------------------------------------------------------------------------
+
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding box.
-//-----------------------------------------------------------------------------
+
 void CalculateAABBFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                               Vector *pMins, Vector *pMaxs) {
   // FIXME: Could maybe do better than the compile with all of these multiplies
@@ -1094,10 +1094,10 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
   CalculateAABBFromProjectionMatrixInverse(volumeToWorld, pMins, pMaxs);
 }
 
-//-----------------------------------------------------------------------------
+
 // Given an inverse projection matrix, take the extremes of the space in
 // transformed into world space and get a bounding sphere.
-//-----------------------------------------------------------------------------
+
 void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
                                                 f32 *pflRadius) {
@@ -1141,10 +1141,10 @@ void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
   *pflRadius = sqrt(h1Sqr + x * x);
 }
 
-//-----------------------------------------------------------------------------
+
 // Given a projection matrix, take the extremes of the space in transformed into
 // world space and get a bounding sphere.
-//-----------------------------------------------------------------------------
+
 void CalculateSphereFromProjectionMatrix(const VMatrix &worldToVolume,
                                          Vector *pCenter, f32 *pflRadius) {
   VMatrix volumeToWorld;

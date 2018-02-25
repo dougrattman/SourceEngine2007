@@ -1781,7 +1781,7 @@ void CNPC_CScanner::BlindFlashTarget(CBaseEntity *pTarget) {
                  COLLISION_GROUP_NONE, &tr);
 
     if (tr.startsolid == false && tr.fraction == 1.0) {
-      color32 white = {255, 255, 255, SCANNER_FLASH_MAX_VALUE * dotPr};
+      color32 white = {255, 255, 255, (u8)(SCANNER_FLASH_MAX_VALUE * dotPr)};
 
       if ((g_pMaterialSystemHardwareConfig != NULL) &&
           (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE)) {
@@ -2210,7 +2210,7 @@ void CNPC_CScanner::MoveToTarget(float flInterval,
   float speedPerc = SimpleSplineRemapVal(GetCurrentVelocity().Length(), 0.0f,
                                          GetMaxSpeed(), 0.0f, 1.0f);
 
-  speedPerc = clamp(speedPerc, 0.0f, 1.0f);
+  speedPerc = std::clamp(speedPerc, 0.0f, 1.0f);
 
   m_vCurrentBanking *= speedPerc;
 }

@@ -887,7 +887,7 @@ int CStudioRenderContext::GetNumBoneWeights(
 
   for (int i = 0; i < pGroup->numStrips; i++) {
     OptimizedModel::StripHeader_t *pStrip = pGroup->pStrip(i);
-    nBoneWeightsMax = max(nBoneWeightsMax, pStrip->numBones);
+    nBoneWeightsMax = std::max(nBoneWeightsMax, (int)pStrip->numBones);
   }
 
   return nBoneWeightsMax;
@@ -1387,7 +1387,8 @@ bool CStudioRenderContext::LoadModel(studiohdr_t *pStudioHdr, void *pVtxBuffer,
 
   // Create static meshes
   Assert(pVertexHdr->numLODs);
-  pStudioHWData->m_RootLOD = min(pStudioHdr->rootLOD, pVertexHdr->numLODs - 1);
+  pStudioHWData->m_RootLOD =
+      std::min((int)pStudioHdr->rootLOD, pVertexHdr->numLODs - 1);
   pStudioHWData->m_NumLODs = pVertexHdr->numLODs;
   pStudioHWData->m_pLODs = new studioloddata_t[pVertexHdr->numLODs];
   memset(pStudioHWData->m_pLODs, 0,
@@ -1863,7 +1864,8 @@ void CStudioRenderContext::SetLocalLights(int nLightCount,
   } else {
     int i;
     const int max_light_count = g_pMaterialSystemHardwareConfig->MaxNumLights();
-    const int local_light_count = min(m_RC.m_NumLocalLights, max_light_count);
+    const int local_light_count =
+        std::min(m_RC.m_NumLocalLights, max_light_count);
     for (i = 0; i < local_light_count; i++) {
       render_context->SetLight(i, m_RC.m_LocalLights[i]);
     }
@@ -1999,7 +2001,8 @@ int CStudioRenderContext::ComputeRenderLOD(IMatRenderContext *pRenderContext,
 
   if (lod == USESHADOWLOD) return lastlod;
 
-  if (lod != -1) return clamp(lod, info.m_pHardwareData->m_RootLOD, lastlod);
+  if (lod != -1)
+    return std::clamp(lod, info.m_pHardwareData->m_RootLOD, lastlod);
 
   float screenSize = pRenderContext->ComputePixelWidthOfSphere(origin, 0.5f);
   lod = ComputeModelLODAndMetric(info.m_pHardwareData, screenSize, pMetric);
@@ -2009,7 +2012,7 @@ int CStudioRenderContext::ComputeRenderLOD(IMatRenderContext *pRenderContext,
     lastlod--;
   }
 
-  lod = clamp(lod, info.m_pHardwareData->m_RootLOD, lastlod);
+  lod = std::clamp(lod, info.m_pHardwareData->m_RootLOD, lastlod);
   return lod;
 }
 

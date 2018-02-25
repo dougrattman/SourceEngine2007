@@ -145,7 +145,7 @@ int CalcClipsNeeded( const BuyPresetWeapon *pWeapon, const CCSWeaponInfo *pInfo,
 			{
 				numClips = ceil(maxRounds/(float)buySize);
 			}
-			numClips = min( ceil(maxRounds/(float)buySize), numClips );
+			numClips = std::min( ceil(maxRounds/(float)buySize), numClips );
 
 			numClips -= ammo[pInfo->iAmmoType]/buySize;
 			if ( numClips < 0 || ammo[pInfo->iAmmoType] == maxRounds )
@@ -313,7 +313,7 @@ void FillClientAmmo( int ammo[MAX_AMMO_TYPES] )
 		int clientAmmoCount = localPlayer->GetAmmoCount( clientAmmoType );
 		if ( clientAmmoCount > 0 )
 		{
-			ammo[ clientAmmoType ] = max( ammo[ clientAmmoType ], clientAmmoCount );
+			ammo[ clientAmmoType ] = std::max( ammo[ clientAmmoType ], clientAmmoCount );
 		}
 	}
 }

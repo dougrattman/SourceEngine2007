@@ -1,13 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
-//===========================================================================//
 
 #ifndef SHADERAPIDX10_H
 #define SHADERAPIDX10_H
+
+#define NOMINMAX
 
 #include <d3d10.h>
 
@@ -15,20 +11,17 @@
 #include "meshdx10.h"
 #include "shaderapibase.h"
 
-//-----------------------------------------------------------------------------
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 struct MaterialSystemHardwareIdentifier_t;
 
-//-----------------------------------------------------------------------------
 // DX10 enumerations that don't appear to exist
-//-----------------------------------------------------------------------------
+
 #define MAX_DX10_VIEWPORTS 16
 #define MAX_DX10_STREAMS 16
 
-//-----------------------------------------------------------------------------
 // A record describing the state on the board
-//-----------------------------------------------------------------------------
+
 struct ShaderIndexBufferStateDx10_t {
   ID3D10Buffer *m_pBuffer;
   DXGI_FORMAT m_Format;
@@ -65,9 +58,8 @@ struct ShaderStateDx10_t {
   D3D10_PRIMITIVE_TOPOLOGY m_Topology;
 };
 
-//-----------------------------------------------------------------------------
 // Commit function helper class
-//-----------------------------------------------------------------------------
+
 typedef void (*StateCommitFunc_t)(ID3D10Device *pDevice,
                                   const ShaderStateDx10_t &desiredState,
                                   ShaderStateDx10_t &currentState, bool bForce);
@@ -97,9 +89,8 @@ class CFunctionCommit {
   CUtlVector<StateCommitFunc_t> m_CommitFuncs;
 };
 
-//-----------------------------------------------------------------------------
 // The Dx10 implementation of the shader API
-//-----------------------------------------------------------------------------
+
 class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   typedef CShaderAPIBase BaseClass;
 
@@ -809,9 +800,8 @@ class CShaderAPIDx10 : public CShaderAPIBase, public IDebugTextureInfo {
   ShaderStateDx10_t m_CurrentState;
 };
 
-//-----------------------------------------------------------------------------
 // Singleton global
-//-----------------------------------------------------------------------------
+
 extern CShaderAPIDx10 *g_pShaderAPIDx10;
 
 #endif  // SHADERAPIDX10_H

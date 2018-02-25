@@ -95,7 +95,7 @@ void CVRADDispColl::CalcSampleRadius2AndBox(dface_t *pFace) {
 
   // Calculate the patch radius - the max sample edge length * the number of
   // luxels per edge "chop."
-  float flSampleSize = max(m_flSampleWidth, m_flSampleHeight);
+  float flSampleSize = std::max(m_flSampleWidth, m_flSampleHeight);
   float flPatchSampleRadius = flSampleSize * dispchop * 2.2f;
   if (flPatchSampleRadius > g_MaxDispPatchRadius) {
     flPatchSampleRadius = g_MaxDispPatchRadius;
@@ -437,7 +437,7 @@ void CVRADDispColl::CreateChildPatchesFromRoot(int iParentPatch,
   vecEdges[3] = pParentPatch->winding->p[3] - pParentPatch->winding->p[0];
 
   // Should the patch be subdivided - check the area.
-  float flMaxLength = max(m_flSampleWidth, m_flSampleHeight);
+  float flMaxLength = std::max(m_flSampleWidth, m_flSampleHeight);
   float flMinEdgeLength = flMaxLength * dispchop;
 
   // Find the longest edge.
@@ -534,7 +534,7 @@ void CVRADDispColl::CreateChildPatches(int iParentPatch, int nLevel) {
   if (pParentPatch->winding->numpoints != 3) return;
 
   // Should the patch be subdivided - check the area.
-  float flMaxLength = max(m_flSampleWidth, m_flSampleHeight);
+  float flMaxLength = std::max(m_flSampleWidth, m_flSampleHeight);
   float flMinEdgeLength = flMaxLength * dispchop;
 
   // Split along the longest edge.
@@ -630,7 +630,7 @@ void CVRADDispColl::CreateChildPatchesSub(int iParentPatch) {
   if (pParentPatch->winding->numpoints != 3) return;
 
   // Should the patch be subdivided - check the area.
-  float flMaxLength = max(m_flSampleWidth, m_flSampleHeight);
+  float flMaxLength = std::max(m_flSampleWidth, m_flSampleHeight);
   float flMinEdgeLength = flMaxLength * dispchop;
 
   // Split along the longest edge.
@@ -823,8 +823,8 @@ bool CVRADDispColl::InitParentPatch(int iPatch, Vector *pPoints,
   Vector vecMax(FLT_MIN, FLT_MIN, FLT_MIN);
   for (int iPoint = 0; iPoint < 4; ++iPoint) {
     for (int iAxis = 0; iAxis < 3; ++iAxis) {
-      vecMin[iAxis] = min(vecMin[iAxis], pPoints[iPoint][iAxis]);
-      vecMax[iAxis] = max(vecMax[iAxis], pPoints[iPoint][iAxis]);
+      vecMin[iAxis] = std::min(vecMin[iAxis], pPoints[iPoint][iAxis]);
+      vecMax[iAxis] = std::max(vecMax[iAxis], pPoints[iPoint][iAxis]);
     }
   }
 
@@ -960,8 +960,8 @@ bool CVRADDispColl::InitPatch(int iPatch, int iParentPatch, int iChild,
   Vector vecMax(FLT_MIN, FLT_MIN, FLT_MIN);
   for (int iPoint = 0; iPoint < 3; ++iPoint) {
     for (int iAxis = 0; iAxis < 3; ++iAxis) {
-      vecMin[iAxis] = min(vecMin[iAxis], pPoints[iPoint][iAxis]);
-      vecMax[iAxis] = max(vecMax[iAxis], pPoints[iPoint][iAxis]);
+      vecMin[iAxis] = std::min(vecMin[iAxis], pPoints[iPoint][iAxis]);
+      vecMax[iAxis] = std::max(vecMax[iAxis], pPoints[iPoint][iAxis]);
     }
   }
 

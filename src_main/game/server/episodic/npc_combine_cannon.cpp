@@ -481,7 +481,7 @@ void CNPC_Combine_Cannon::PaintTarget( const Vector &vecTarget, float flPaintTim
 	Vector vecStart = GetBulletOrigin();
 
 	// keep painttime from hitting 0 exactly.
-	flPaintTime = max( flPaintTime, 0.000001f );
+	flPaintTime = std::max( flPaintTime, 0.000001f );
 
 	// Find out where we are in the arc of the paint duration
 	float flPaintPerc = GetWaitTimePercentage( flPaintTime, false );
@@ -491,7 +491,7 @@ void CNPC_Combine_Cannon::PaintTarget( const Vector &vecTarget, float flPaintTim
 	// Find out where along our line we're painting
 	Vector vecCurrentDir;
 	float flInterp = RemapValClamped( flPaintPerc, 0.0f, 0.5f, 0.0f, 1.0f );
-	flInterp = clamp( flInterp, 0.0f, 1.0f );
+	flInterp = std::clamp( flInterp, 0.0f, 1.0f );
 	GetPaintAim( m_vecPaintStart, vecTarget, flInterp, &vecCurrentDir );
 
 #define THRESHOLD 0.9f

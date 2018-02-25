@@ -7,9 +7,9 @@
 
 #include "tier0/include/dbg.h"
 
-//-----------------------------------------------------------------------------
+
 // Simple class to make it easier to deal with flags
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CUtlFlags {
  public:
@@ -31,9 +31,9 @@ class CUtlFlags {
   T m_nFlags;
 };
 
-//-----------------------------------------------------------------------------
+
 // Constructor
-//-----------------------------------------------------------------------------
+
 template <class T>
 CUtlFlags<T>::CUtlFlags(int nInitialFlags) {
   // Makes sure we didn't truncate
@@ -42,9 +42,9 @@ CUtlFlags<T>::CUtlFlags(int nInitialFlags) {
   m_nFlags = (T)nInitialFlags;
 }
 
-//-----------------------------------------------------------------------------
+
 // Set flags
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlFlags<T>::SetFlag(int nFlagMask) {
   // Makes sure we didn't truncate
@@ -65,9 +65,9 @@ void CUtlFlags<T>::SetFlag(int nFlagMask, bool bEnable) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Clear flags
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlFlags<T>::ClearFlag(int nFlagMask) {
   // Makes sure we didn't truncate
@@ -80,9 +80,9 @@ void CUtlFlags<T>::ClearAllFlags() {
   m_nFlags = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is a flag set?
-//-----------------------------------------------------------------------------
+
 template <class T>
 bool CUtlFlags<T>::IsFlagSet(int nFlagMask) const {
   // Makes sure we didn't truncate
@@ -90,9 +90,9 @@ bool CUtlFlags<T>::IsFlagSet(int nFlagMask) const {
   return (m_nFlags & nFlagMask) != 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is any flag set?
-//-----------------------------------------------------------------------------
+
 template <class T>
 bool CUtlFlags<T>::IsAnyFlagSet() const {
   return m_nFlags != 0;

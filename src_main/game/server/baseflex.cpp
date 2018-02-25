@@ -148,7 +148,7 @@ void CBaseFlex::SetFlexWeight(LocalFlexController_t index, float value) {
     if (pflexcontroller->max != pflexcontroller->min) {
       value = (value - pflexcontroller->min) /
               (pflexcontroller->max - pflexcontroller->min);
-      value = clamp(value, 0.0, 1.0);
+      value = std::clamp(value, 0.0f, 1.0f);
     }
 
     m_flexWeight.Set(index, value);
@@ -1285,8 +1285,8 @@ bool CBaseFlex::ProcessMoveToSceneEvent(CSceneEventInfo *info,
       float flDist =
           (info->m_hTarget->EyePosition() - GetAbsOrigin()).Length2D();
 
-      if (flDist >
-          max(max(flDistTolerance, 0.1), event->GetDistanceToTarget())) {
+      if (flDist > std::max(std::max(flDistTolerance, 0.1f),
+                            event->GetDistanceToTarget())) {
         // Msg("flDist %.1f\n", flDist );
         int result = false;
 
@@ -1386,7 +1386,7 @@ bool CBaseFlex::ProcessLookAtSceneEvent(CSceneEventInfo *info,
     float flDuration = scene->GetTime() - event->GetStartTime();
     float flMaxIntensity =
         flDuration < 0.3f ? SimpleSpline(flDuration / 0.3f) : 1.0f;
-    intensity = clamp(intensity, 0.0f, flMaxIntensity);
+    intensity = std::clamp(intensity, 0.0f, flMaxIntensity);
 
     myNpc->AddLookTarget(info->m_hTarget, intensity, 0.1);
     if (developer.GetInt() > 0 && scene_showlook.GetBool() && info->m_hTarget) {
@@ -1622,7 +1622,7 @@ void CBaseFlex::AddFlexSetting(const char *expr, float scale,
         FlexControllerLocalToGlobal(pSettinghdr, pWeights->key);
 
     // blend scaled weighting in to total
-    float s = clamp(scale * pWeights->influence, 0.0f, 1.0f);
+    float s = std::clamp(scale * pWeights->influence, 0.0f, 1.0f);
     float value = GetFlexWeight(index) * (1.0f - s) + pWeights->weight * s;
     SetFlexWeight(index, value);
   }
@@ -1667,9 +1667,9 @@ bool CBaseFlex::ProcessGestureSceneEvent(CSceneEventInfo *info,
     // fade out/in if npc is moving
     if (!info->m_bIsGesture) {
       if (IsMoving()) {
-        info->m_flWeight = max(info->m_flWeight - 0.2, 0.0);
+        info->m_flWeight = std::max(info->m_flWeight - 0.2, 0.0);
       } else {
-        info->m_flWeight = min(info->m_flWeight + 0.2, 1.0);
+        info->m_flWeight = std::min(info->m_flWeight + 0.2, 1.0);
       }
     }
 
@@ -1741,9 +1741,9 @@ bool CBaseFlex::ProcessSequenceSceneEvent(CSceneEventInfo *info,
     }
 
     if (bFadeOut) {
-      info->m_flWeight = max(info->m_flWeight - 0.2, 0.0);
+      info->m_flWeight = std::max(info->m_flWeight - 0.2, 0.0);
     } else {
-      info->m_flWeight = min(info->m_flWeight + 0.2, 1.0);
+      info->m_flWeight = std::min(info->m_flWeight + 0.2, 1.0);
     }
 
     float spline = 3 * info->m_flWeight * info->m_flWeight -
@@ -1756,7 +1756,7 @@ bool CBaseFlex::ProcessSequenceSceneEvent(CSceneEventInfo *info,
       float dt = scene->GetTime() - event->GetStartTime();
       float seq_duration = SequenceDuration(info->m_nSequence);
       float flCycle = dt / seq_duration;
-      flCycle = clamp(flCycle, 0, 1.0);
+      flCycle = std::clamp(flCycle, 0.0f, 1.0f);
       SetLayerCycle(info->m_iLayer, flCycle);
     }
 
@@ -1840,8 +1840,8 @@ bool CBaseFlex::EnterSceneSequence(CChoreoScene *scene, CChoreoEvent *event,
   // 2 seconds past current event, or 0.2 seconds past end of scene, whichever
   // is shorter
   float flDuration =
-      min(2.0, min(event->GetEndTime() - scene->GetTime() + 2.0,
-                   scene->FindStopTime() - scene->GetTime() + 0.2));
+      std::min(2.0, std::min(event->GetEndTime() - scene->GetTime() + 2.0,
+                             scene->FindStopTime() - scene->GetTime() + 0.2));
 
   if (myNpc->IsCurSchedule(SCHED_SCENE_GENERIC)) {
     myNpc->AddSceneLock(flDuration);
@@ -1927,9 +1927,9 @@ void CBaseFlex::DoBodyLean(void) {
     }
 
     vecDelta = vecOrigin - m_vecPrevOrigin;
-    vecDelta.x = clamp(vecDelta.x, -50, 50);
-    vecDelta.y = clamp(vecDelta.y, -50, 50);
-    vecDelta.z = clamp(vecDelta.z, -50, 50);
+    vecDelta.x = std::clamp(vecDelta.x, -50.0f, 50.0f);
+    vecDelta.y = std::clamp(vecDelta.y, -50.0f, 50.0f);
+    vecDelta.z = std::clamp(vecDelta.z, -50.0f, 50.0f);
 
     float dt = gpGlobals->curtime - GetLastThink();
     bool bSkip = ((GetFlags() & (FL_FLY | FL_SWIM)) != 0) ||
@@ -1993,9 +1993,9 @@ float CSceneEventInfo::UpdateWeight(CBaseFlex *pActor) {
   // decay if this is a background scene and there's other flex animations
   // playing
   if (pActor->IsSuppressedFlexAnimation(this)) {
-    m_flWeight = max(m_flWeight - 0.2, 0.0);
+    m_flWeight = std::max(m_flWeight - 0.2, 0.0);
   } else {
-    m_flWeight = min(m_flWeight + 0.1, 1.0);
+    m_flWeight = std::min(m_flWeight + 0.1, 1.0);
   }
   return m_flWeight;
 }
@@ -2394,7 +2394,7 @@ void CFlexCycler::Think(void) {
         weight =
             weight + (m_flextarget[i] - weight) / random->RandomFloat(2.0, 4.0);
       }
-      weight = clamp(weight, 0.0f, 1.0f);
+      weight = std::clamp(weight, 0.0f, 1.0f);
       SetFlexWeight(i, weight);
     }
 

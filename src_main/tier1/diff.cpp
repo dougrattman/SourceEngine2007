@@ -169,8 +169,8 @@ int FindDiffsForLargeFiles(uint8_t const *NewBlock, uint8_t const *OldBlock,
         // find the match length
         int match_of = b->dataptr - lastmatchend;
         if ((match_of > -32768) && (match_of < 32767)) {
-          int max_mlength = min(65535, OldBlock + OldSize - b->dataptr);
-          max_mlength = min(max_mlength, NewBlock + NewSize - walk);
+          int max_mlength = std::min(65535, OldBlock + OldSize - b->dataptr);
+          max_mlength = std::min(max_mlength, NewBlock + NewSize - walk);
           int i;
           for (i = 0; i < max_mlength; i++)
             if (walk[i] != b->dataptr[i]) break;
@@ -284,8 +284,8 @@ int FindDiffs(uint8_t const *NewBlock, uint8_t const *OldBlock, int NewSize,
         // find the match length
         int match_of = b->dataptr - lastmatchend;
         if ((match_of > -32768) && (match_of < 32767)) {
-          int max_mlength = min(65535, OldBlock + OldSize - b->dataptr);
-          max_mlength = min(max_mlength, NewBlock + NewSize - walk);
+          int max_mlength = std::min(65535, OldBlock + OldSize - b->dataptr);
+          max_mlength = std::min(max_mlength, NewBlock + NewSize - walk);
           int i;
           for (i = 0; i < max_mlength; i++)
             if (walk[i] != b->dataptr[i]) break;
@@ -379,7 +379,7 @@ int FindDiffsLowMemory(uint8_t const *NewBlock, uint8_t const *OldBlock,
           (walk[0] + walk[1] + walk[2] + walk[3]) & (NELEMS(old_data_hash) - 1);
       if (old_data_hash[hash1]) {
         int max_bytes_to_compare =
-            min(NewBlock + NewSize - walk,
+            std::min(NewBlock + NewSize - walk,
                 OldBlock + OldSize - old_data_hash[hash1]);
         int nmatches;
         for (nmatches = 0; nmatches < max_bytes_to_compare; nmatches++)

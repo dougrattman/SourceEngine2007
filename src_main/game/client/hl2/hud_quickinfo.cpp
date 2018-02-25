@@ -322,7 +322,7 @@ void CHUDQuickInfo::Paint()
 	else
 	{
 		float healthPerc = (float) health / 100.0f;
-		healthPerc = clamp( healthPerc, 0.0f, 1.0f );
+		healthPerc = std::clamp( healthPerc, 0.0f, 1.0f );
 
 		Color healthColor = m_warnHealth ? gHUD.m_clrCaution : gHUD.m_clrNormal;
 		
@@ -354,7 +354,7 @@ void CHUDQuickInfo::Paint()
 		else
 		{
 			ammoPerc = 1.0f - ( (float) ammo / (float) pWeapon->GetMaxClip1() );
-			ammoPerc = clamp( ammoPerc, 0.0f, 1.0f );
+			ammoPerc = std::clamp( ammoPerc, 0.0f, 1.0f );
 		}
 
 		Color ammoColor = m_warnAmmo ? gHUD.m_clrCaution : gHUD.m_clrNormal;

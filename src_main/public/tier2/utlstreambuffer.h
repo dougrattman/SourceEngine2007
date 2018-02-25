@@ -8,9 +8,9 @@
 #include "filesystem.h"
 #include "tier1/utlbuffer.h"
 
-//-----------------------------------------------------------------------------
+
 // Command parsing..
-//-----------------------------------------------------------------------------
+
 class CUtlStreamBuffer : public CUtlBuffer {
   typedef CUtlBuffer BaseClass;
 

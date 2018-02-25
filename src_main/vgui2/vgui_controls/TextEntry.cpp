@@ -402,8 +402,8 @@ void TextEntry::CursorToPixelSpace(int cursorPos, int &cx, int &cy) {
 int TextEntry::PixelToCursorSpace(int cx, int cy) {
   int w, h;
   GetSize(w, h);
-  cx = clamp(cx, 0, w + 100);
-  cy = clamp(cy, 0, h);
+  cx = std::clamp(cx, 0, w + 100);
+  cy = std::clamp(cy, 0, h);
 
   _putCursorAtEnd =
       false;  //	Start off assuming we clicked somewhere in the text
@@ -3083,7 +3083,7 @@ void TextEntry::GetText(char *buf, int bufLen) {
 void TextEntry::GetText(wchar_t *wbuf, int bufLenInBytes) {
   int len = m_TextStream.Count();
   if (m_TextStream.Count()) {
-    int terminator = min(len, (bufLenInBytes / (int)sizeof(wchar_t)) - 1);
+    int terminator = std::min(len, (bufLenInBytes / (int)sizeof(wchar_t)) - 1);
     wcsncpy(wbuf, m_TextStream.Base(), terminator);
     wbuf[terminator] = 0;
   } else {
@@ -3093,18 +3093,18 @@ void TextEntry::GetText(wchar_t *wbuf, int bufLenInBytes) {
 
 void TextEntry::GetTextRange(wchar_t *buf, int from, int numchars) {
   int len = m_TextStream.Count();
-  int cpChars = max(0, min(numchars, len - from));
+  int cpChars = std::max(0, std::min(numchars, len - from));
 
-  wcsncpy(buf, m_TextStream.Base() + max(0, min(len, from)), cpChars);
+  wcsncpy(buf, m_TextStream.Base() + std::max(0, std::min(len, from)), cpChars);
   buf[cpChars] = 0;
 }
 
 void TextEntry::GetTextRange(char *buf, int from, int numchars) {
   int len = m_TextStream.Count();
-  int cpChars = max(0, min(numchars, len - from));
+  int cpChars = std::max(0, std::min(numchars, len - from));
 
   g_pVGuiLocalize->ConvertUnicodeToANSI(
-      m_TextStream.Base() + max(0, min(len, from)), buf, cpChars + 1);
+      m_TextStream.Base() + std::max(0, std::min(len, from)), buf, cpChars + 1);
   buf[cpChars] = 0;
 }
 

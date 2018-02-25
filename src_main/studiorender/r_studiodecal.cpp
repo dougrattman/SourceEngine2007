@@ -1093,7 +1093,7 @@ void CStudioRender::AddDecal(StudioDecalHandle_t hDecal,
   if (maxLODToDecal == ADDDECAL_TO_ALL_LODS) {
     iMaxLOD = list.m_pHardwareData->m_NumLODs;
   } else {
-    iMaxLOD = min(list.m_pHardwareData->m_NumLODs, maxLODToDecal);
+    iMaxLOD = std::min(list.m_pHardwareData->m_NumLODs, maxLODToDecal);
   }
 
   // Allocate space for all projected mesh vertices. We do this to prevent

@@ -164,7 +164,7 @@ void CDispInfo::TestAddDecalTri(int iIndexStart, unsigned short decalHandle,
   pClipped =
       R_DoDecalSHClip(&verts[0], pOutVerts, pDecal, 3, vec3_origin, &outCount);
   if (outCount > 2) {
-    outCount = min(outCount, CDispDecalFragment::MAX_VERTS);
+    outCount = std::min(outCount, (int)CDispDecalFragment::MAX_VERTS);
 
     // Allocate a new fragment...
     CDispDecalFragment *pFragment =
@@ -612,19 +612,19 @@ static void ProcessLightmapSampleBumped(const ProcessLightmapSampleData_t &data,
 
     int index = t * smax + s;
     float directionalAtten;
-    directionalAtten = max(0.0f, vLightVecTangent.z);
+    directionalAtten = std::max(0.0f, vLightVecTangent.z);
     VectorMA(blocklights[0][index].AsVector3D(), scale * directionalAtten,
              data.m_Intensity, blocklights[0][index].AsVector3D());
     directionalAtten =
-        max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[0]));
+        std::max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[0]));
     VectorMA(blocklights[1][index].AsVector3D(), scale * directionalAtten,
              data.m_Intensity, blocklights[1][index].AsVector3D());
     directionalAtten =
-        max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[1]));
+        std::max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[1]));
     VectorMA(blocklights[2][index].AsVector3D(), scale * directionalAtten,
              data.m_Intensity, blocklights[2][index].AsVector3D());
     directionalAtten =
-        max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[2]));
+        std::max(0.0f, DotProduct(vLightVecTangent, g_localBumpBasis[2]));
     VectorMA(blocklights[3][index].AsVector3D(), scale * directionalAtten,
              data.m_Intensity, blocklights[3][index].AsVector3D());
   }
@@ -724,7 +724,7 @@ void CDispInfo::AddSingleDynamicLight(dlight_t &dl) {
   data.m_Intensity[2] =
       TexLightToLinear(dl.color.b, dl.color.exponent) * lightStyleValue;
 
-  float minlight = max(g_flMinLightingValue, dl.minlight);
+  float minlight = std::max(g_flMinLightingValue, dl.minlight);
   float ooQuadraticAttn = data.m_LightDistSqr * minlight;  // / maxIntensity;
 
   data.m_ooQuadraticAttn = ooQuadraticAttn;
@@ -752,7 +752,7 @@ void CDispInfo::AddSingleDynamicLightBumped(dlight_t &dl) {
   data.m_Intensity[2] =
       TexLightToLinear(dl.color.b, dl.color.exponent) * lightStyleValue;
 
-  float minlight = max(g_flMinLightingValue, dl.minlight);
+  float minlight = std::max(g_flMinLightingValue, dl.minlight);
   float ooQuadraticAttn = data.m_LightDistSqr * minlight;  // / maxIntensity;
 
   data.m_ooQuadraticAttn = ooQuadraticAttn;
@@ -776,7 +776,7 @@ void CDispInfo::AddSingleDynamicAlphaLight(dlight_t &dl) {
       TexLightToLinear(dl.color.r, dl.color.exponent) * lightStyleValue;
   if (dl.flags & DLIGHT_SUBTRACT_DISPLACEMENT_ALPHA) data.m_Intensity *= -1.0f;
 
-  float minlight = max(g_flMinLightingValue, dl.minlight);
+  float minlight = std::max(g_flMinLightingValue, dl.minlight);
   float ooQuadraticAttn = data.m_LightDistSqr * minlight;  // / maxIntensity;
 
   data.m_ooQuadraticAttn = ooQuadraticAttn;

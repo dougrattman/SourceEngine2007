@@ -12,7 +12,7 @@
 // models/<scriptname>.mdl.
 //
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #undef GetCurrentDirectory
 
 #include <Shlwapi.h> // PathCanonicalize
@@ -2469,7 +2469,7 @@ void ProcessOriginalContentFile( char const *szDataFile, char const *szOriginalC
 		// Assume relative path
 		char chScenePath[ MAX_PATH ] = {0};
 		Q_snprintf( chScenePath, sizeof( chScenePath ) - 1, "%.*s%s",
-			max( strrchr( szDataFile, '\\' ), strrchr( szDataFile, '/' ) ) + 1 - szDataFile,
+			std::max( strrchr( szDataFile, '\\' ), strrchr( szDataFile, '/' ) ) + 1 - szDataFile,
 			szDataFile, szOriginalContentFile );
 		EnsureDependencyFileCheckedIn( chScenePath );
 	}
@@ -3973,10 +3973,10 @@ int ParseSequence( s_sequence_t *pseq, bool isAppend )
 			GetToken( false );
 			pseq->paramend[i] = verify_atof( token );
 
-			g_pose[j].min  = min( g_pose[j].min, pseq->paramstart[i] );
-			g_pose[j].min  = min( g_pose[j].min, pseq->paramend[i] );
-			g_pose[j].max  = max( g_pose[j].max, pseq->paramstart[i] );
-			g_pose[j].max  = max( g_pose[j].max, pseq->paramend[i] );
+			g_pose[j].min  = std::min( g_pose[j].min, pseq->paramstart[i] );
+			g_pose[j].min  = std::min( g_pose[j].min, pseq->paramend[i] );
+			g_pose[j].max  = std::max( g_pose[j].max, pseq->paramstart[i] );
+			g_pose[j].max  = std::max( g_pose[j].max, pseq->paramend[i] );
 		}
 		else if (stricmp("calcblend", token ) == 0)
 		{
@@ -7395,7 +7395,7 @@ float ParseJiggleStiffness( void )
 	const float minStiffness = 0.0f;
 	const float maxStiffness = 1000.0f;
 
-	return clamp( stiffness, minStiffness, maxStiffness );
+	return std::clamp( stiffness, minStiffness, maxStiffness );
 }
 
 
@@ -7413,7 +7413,7 @@ float ParseJiggleDamping( void )
 	const float minDamping = 0.0f;
 	const float maxDamping = 10.0f;
 
-	return clamp( damping, minDamping, maxDamping );
+	return std::clamp( damping, minDamping, maxDamping );
 }
 
 

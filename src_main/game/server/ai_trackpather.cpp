@@ -1300,7 +1300,7 @@ float CAI_TrackPather::MaxDistanceFromCurrentPath() const
 	Vector vecTemp;
 	CalcClosestPointOnLine( GetAbsOrigin(), pPrevPath->GetAbsOrigin(), 
 		m_pCurrentPathTarget->GetAbsOrigin(), vecTemp, &t );
-	t = clamp( t, 0.0f, 1.0f );
+	t = std::clamp( t, 0.0f, 1.0f );
 	float flRadius = (1.0f - t) * pPrevPath->GetRadius() + t * m_pCurrentPathTarget->GetRadius(); 
 	return flRadius;
 }
@@ -1553,7 +1553,7 @@ void CAI_TrackPather::ComputePathTangent( float t, Vector *pVecTangent ) const
 		pNextTrack = m_pCurrentPathTarget;
 	}
 
-	t = clamp( t, 0.0f, 1.0f );
+	t = std::clamp( t, 0.0f, 1.0f );
 	pVecTangent->Init(0,0,0);
 	Catmull_Rom_Spline_Tangent( m_vecSegmentStartSplinePoint, m_vecSegmentStartPoint, 
 		m_pCurrentPathTarget->GetAbsOrigin(), pNextTrack->GetAbsOrigin(), t, *pVecTangent );
@@ -1592,7 +1592,7 @@ void CAI_TrackPather::ComputeNormalizedDestVelocity( Vector *pVecVelocity ) cons
 	VectorSubtract( m_pCurrentPathTarget->GetAbsOrigin(), m_vecSegmentStartPoint, vecDelta );
 	VectorNormalize( vecDelta );
 	float flDot = DotProduct( *pVecVelocity, vecDelta );
-	*pVecVelocity *= clamp( flDot, 0.0f, 1.0f );
+	*pVecVelocity *= std::clamp( flDot, 0.0f, 1.0f );
 }
 
 

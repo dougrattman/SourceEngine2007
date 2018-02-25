@@ -4,7 +4,7 @@
 
 #include <float.h>
 #include <io.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "CollisionUtils.h"
 #include "KeyValues.h"
 #include "UtlBuffer.h"
@@ -172,7 +172,7 @@ static void ParseDetailGroup(int detailId, KeyValues* pGroupKeyValues) {
               pIter->GetFloat("spriterandomscale", 0.0f);
 
           // sway is a percent of max sway, cl_detail_max_sway
-          float flSway = clamp(pIter->GetFloat("sway", 0.0f), 0.0, 1.0);
+          float flSway = std::clamp(pIter->GetFloat("sway", 0.0f), 0.0, 1.0);
           model.m_SwayAmount = (unsigned char)(255.0 * flSway);
 
           // shape angle
@@ -183,7 +183,7 @@ static void ParseDetailGroup(int detailId, KeyValues* pGroupKeyValues) {
           // for the tri shape, this is the distance from the origin to the
           // center of a side
           float flShapeSize =
-              clamp(pIter->GetFloat("shape_size", 0.0f), 0.0, 1.0);
+              std::clamp(pIter->GetFloat("shape_size", 0.0f), 0.0, 1.0);
           model.m_ShapeSize = (unsigned char)(255.0 * flShapeSize);
         }
       }

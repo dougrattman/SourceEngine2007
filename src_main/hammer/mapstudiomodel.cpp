@@ -510,8 +510,8 @@ inline float CMapStudioModel::ComputeDistanceFade( CRender3D *pRender ) const
 	Vector vecDelta;		
 	vecDelta = m_Origin - vecViewPos;
 
-	float flMin = min(m_flFadeMinDist, m_flFadeMaxDist);
-	float flMax = max(m_flFadeMinDist, m_flFadeMaxDist);
+	float flMin = std::min(m_flFadeMinDist, m_flFadeMaxDist);
+	float flMax = std::max(m_flFadeMinDist, m_flFadeMaxDist);
 
 	if (flMin < 0)
 	{

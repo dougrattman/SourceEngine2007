@@ -37,9 +37,9 @@ struct SceneFile_t {
 };
 CUtlVector<SceneFile_t> g_SceneFiles;
 
-//-----------------------------------------------------------------------------
+
 // Helper for parsing scene data file
-//-----------------------------------------------------------------------------
+
 class CSceneTokenProcessor : public ISceneTokenProcessor {
  public:
   const char *CurrentToken(void) { return token; }
@@ -144,9 +144,9 @@ class CChoreoStringPool : public IChoreoStringPool {
 };
 CChoreoStringPool g_ChoreoStringPool;
 
-//-----------------------------------------------------------------------------
+
 // Helper for crawling events to determine sounds
-//-----------------------------------------------------------------------------
+
 void FindSoundsInEvent(CChoreoEvent *pEvent, CUtlVector<short> &soundList) {
   if (!pEvent || pEvent->GetType() != CChoreoEvent::SPEAK) return;
 
@@ -167,10 +167,10 @@ void FindSoundsInEvent(CChoreoEvent *pEvent, CUtlVector<short> &soundList) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Create binary compiled version of VCD. Stores to a dictionary for later
 // post processing
-//-----------------------------------------------------------------------------
+
 bool CreateTargetFile_VCD(const char *pSourceName, const char *pTargetName,
                           bool bWriteToZip, bool bLittleEndian) {
   CUtlBuffer sourceBuf;
@@ -236,9 +236,9 @@ class CSceneImageEntryLessFunc {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // A Scene image file contains all the compiled .XCD
-//-----------------------------------------------------------------------------
+
 bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
                                        char const *pchModPath,
                                        bool bLittleEndian, bool bQuiet,

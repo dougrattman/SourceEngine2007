@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "windows.h"
+#include "base/include/windows/windows_light.h"
 
 
 ViewerSettings g_viewerSettings;

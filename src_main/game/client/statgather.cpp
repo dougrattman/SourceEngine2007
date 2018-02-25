@@ -46,7 +46,7 @@ class CStatsRecorder : public CAutoGameSystem
 	{
 		T maxsofar = -16000000;
 		for( int i = 0; i < STATS_WINDOW_SIZE; i++ )
-			maxsofar = max( maxsofar, m_StatsBuffer[i].*field );
+			maxsofar = std::max( maxsofar, m_StatsBuffer[i].*field );
 		return maxsofar;
 	}
 
@@ -54,7 +54,7 @@ class CStatsRecorder : public CAutoGameSystem
 	{
 		T minsofar = 16000000;
 		for( int i = 0; i < STATS_WINDOW_SIZE; i++ )
-			minsofar = min( minsofar, m_StatsBuffer[i].*field );
+			minsofar = std::min( minsofar, m_StatsBuffer[i].*field );
 		return minsofar;
 	}
 

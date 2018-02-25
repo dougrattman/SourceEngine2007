@@ -12,10 +12,10 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // FIXME: This trashy glue code is really not acceptable. Figure out a way of
 // making it unnecessary.
-//-----------------------------------------------------------------------------
+
 const studiohdr_t *studiohdr_t::FindModel(void **cache,
                                           char const *pModelName) const {
   MDLHandle_t handle = g_pMDLCache->FindMDL(pModelName);

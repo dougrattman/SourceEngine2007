@@ -271,7 +271,7 @@ class CWorldRenderList : public CRefCounted1<IWorldRenderList> {
   }
 
   void Purge() {
-    g_MaxLeavesVisible = max(g_MaxLeavesVisible, m_VisibleLeaves.Count());
+    g_MaxLeavesVisible = std::max(g_MaxLeavesVisible, m_VisibleLeaves.Count());
 
     m_VisibleLeaves.Purge();
     m_VisibleLeafFogVolumes.Purge();
@@ -286,7 +286,7 @@ class CWorldRenderList : public CRefCounted1<IWorldRenderList> {
   }
 
   void Reset() {
-    g_MaxLeavesVisible = max(g_MaxLeavesVisible, m_VisibleLeaves.Count());
+    g_MaxLeavesVisible = std::max(g_MaxLeavesVisible, m_VisibleLeaves.Count());
     m_SortList.Reset();
     m_AlphaSortList.Reset();
     m_DispSortList.Reset();
@@ -1786,8 +1786,8 @@ static void Shader_WorldShadowDepthFill(CWorldRenderList *pRenderList,
   // nBatchIndexCount and nBatchVertexCount are the number of indices and
   // vertices we can fit in this batch Each batch must have fewer than
   // nMaxIndices and nMaxVertices or the material system will fail
-  int nBatchIndexCount = min(nIndexCount, nMaxIndices);
-  int nBatchVertexCount = min(nVertexCount, nMaxVertices);
+  int nBatchIndexCount = std::min(nIndexCount, nMaxIndices);
+  int nBatchVertexCount = std::min(nVertexCount, nMaxVertices);
 
   pRenderContext->Bind(g_pMaterialDepthWrite[0][1]);
 
@@ -1820,8 +1820,8 @@ static void Shader_WorldShadowDepthFill(CWorldRenderList *pRenderList,
         // Nope, fire off the current batch...
         meshBuilder.End();
         pMesh->Draw();
-        nBatchIndexCount = min(nIndexCount, nMaxIndices);
-        nBatchVertexCount = min(nVertexCount, nMaxVertices);
+        nBatchIndexCount = std::min(nIndexCount, nMaxIndices);
+        nBatchVertexCount = std::min(nVertexCount, nMaxVertices);
         pMesh = pRenderContext->GetDynamicMesh(false);
         meshBuilder.Begin(pMesh, MATERIAL_TRIANGLES, nBatchVertexCount,
                           nBatchIndexCount);
@@ -1889,8 +1889,8 @@ static void Shader_WorldZFill(CWorldRenderList *pRenderList,
   // nBatchIndexCount and nBatchVertexCount are the number of indices and
   // vertices we can fit in this batch Each batch must have fewe than
   // nMaxIndices and nMaxVertices or the material system will fail
-  int nBatchIndexCount = min(nIndexCount, nMaxIndices);
-  int nBatchVertexCount = min(nVertexCount, nMaxVertices);
+  int nBatchIndexCount = std::min(nIndexCount, nMaxIndices);
+  int nBatchVertexCount = std::min(nVertexCount, nMaxVertices);
 
   CMeshBuilder meshBuilder;
   meshBuilder.Begin(pMesh, MATERIAL_TRIANGLES, nBatchVertexCount,
@@ -1921,8 +1921,8 @@ static void Shader_WorldZFill(CWorldRenderList *pRenderList,
         // Nope, fire off the current batch...
         meshBuilder.End();
         pMesh->Draw();
-        nBatchIndexCount = min(nIndexCount, nMaxIndices);
-        nBatchVertexCount = min(nVertexCount, nMaxVertices);
+        nBatchIndexCount = std::min(nIndexCount, nMaxIndices);
+        nBatchVertexCount = std::min(nVertexCount, nMaxVertices);
         pMesh = pRenderContext->GetDynamicMesh(false);
         meshBuilder.Begin(pMesh, MATERIAL_TRIANGLES, nBatchVertexCount,
                           nBatchIndexCount);
@@ -4686,14 +4686,14 @@ static bool EnumerateLeavesAlongExtrudedRay_R(mnode_t *node, Ray_t const &ray,
   }
 
   // move up to the node
-  frac = clamp(frac, 0, 1);
+  frac = std::clamp(frac, 0.0f, 1.0f);
   float midf = start + (end - start) * frac;
   bool ret = EnumerateLeavesAlongExtrudedRay_R(node->children[side], ray, start,
                                                midf, pEnum, context);
   if (!ret) return ret;
 
   // go past the node
-  frac2 = clamp(frac2, 0, 1);
+  frac2 = std::clamp(frac2, 0.0f, 1.0f);
   midf = start + (end - start) * frac2;
   return EnumerateLeavesAlongExtrudedRay_R(node->children[!side], ray, midf,
                                            end, pEnum, context);

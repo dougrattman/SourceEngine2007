@@ -168,7 +168,7 @@ void CCSGameMovement::CheckParameters( void )
 		maxspeed = mv->m_flClientMaxSpeed;
 		if ( maxspeed != 0.0 )
 		{
-			mv->m_flMaxSpeed = min( maxspeed, mv->m_flMaxSpeed );
+			mv->m_flMaxSpeed = std::min( maxspeed, mv->m_flMaxSpeed );
 		}
 
 		// Slow down by the speed factor
@@ -379,7 +379,7 @@ void CCSGameMovement::PlayerMove()
 			}
 			else
 			{
-				offset.z = min( est, offset.z );
+				offset.z = std::min( est, offset.z );
 			}
 			player->SetViewOffset( offset );
 		}
@@ -724,7 +724,7 @@ void CCSGameMovement::DecayPunchAngle( void )
 	
 	len = VectorNormalize ( vPunchAngle );
 	len -= (10.0 + len * 0.5) * gpGlobals->frametime;
-	len = max( len, 0.0 );
+	len = std::max( len, 0.0 );
 	VectorScale ( vPunchAngle, len, vPunchAngle );
 
 	m_pCSPlayer->m_Local.m_vecPunchAngle.Set( 0, vPunchAngle.x );
@@ -944,10 +944,10 @@ void CCSGameMovement::Duck( void )
 				player->m_Local.m_bDucking    = true;
 			}
 
-			float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+			float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 			float duckseconds = duckmilliseconds / 1000.0f;
 
-			//time = max( 0.0, ( 1.0 - (float)player->m_Local.m_flDucktime / 1000.0 ) );
+			//time = std::max( 0.0, ( 1.0 - (float)player->m_Local.m_flDucktime / 1000.0 ) );
 			
 			if ( player->m_Local.m_bDucking )
 			{
@@ -979,7 +979,7 @@ void CCSGameMovement::Duck( void )
 					player->m_Local.m_bDucking    = true;  // or unducking
 				}
 
-				float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+				float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 				float duckseconds = duckmilliseconds / 1000.0f;
 
 				if ( CanUnduck() )

@@ -5,7 +5,7 @@
 //=============================================================================//
 #include "cbase.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <io.h>
 #include <sys/stat.h>
 #include "tier0/include/dbg.h"
@@ -395,7 +395,7 @@ CUtlSymbol CUtlSymbolTable::AddString( char const* pString )
 	if ( iPool == -1 )
 	{
 		// Add a new pool.
-		int newPoolSize = max( len, MIN_STRING_POOL_SIZE );
+		int newPoolSize = std::max( len, MIN_STRING_POOL_SIZE );
 		StringPool_t *pPool = (StringPool_t*)malloc( sizeof( StringPool_t ) + newPoolSize - 1 );
 		pPool->m_TotalLen = newPoolSize;
 		pPool->m_SpaceUsed = 0;

@@ -51,8 +51,8 @@
 #include "vsSkinnerNode.h"
 
 
-// Get rid of min() & max() macros as they interfere with
-// MBoundingBox::min() & MBoundingBox::max() 
+// Get rid of std::min() & std::max() macros as they interfere with
+// MBoundingBox::std::min() & MBoundingBox::std::max() 
 #if defined min
 #undef min
 #endif // defined min
@@ -64,14 +64,14 @@
 
 // Define template versions, which they should have been all along...
 template < class T_t >
-inline T_t min( const T_t &a, const T_t &b )
+inline T_t std::min( const T_t &a, const T_t &b )
 {
 	return a < b ? a : b;
 }
 
 
 template < class T_t >
-inline T_t max( const T_t &a, const T_t &b )
+inline T_t std::max( const T_t &a, const T_t &b )
 {
 	return a > b ? a : b;
 }
@@ -519,8 +519,8 @@ void CVsSkinnerNode::DrawBoundingBox() const
 {
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-	MPoint n( m_wbbox.min() );
-	MPoint x( m_wbbox.max() );
+	MPoint n( m_wbbox.std::min() );
+	MPoint x( m_wbbox.std::max() );
 	glBegin( GL_QUAD_STRIP );
 	{
 		glVertex3d( x.x, n.y, n.z );
@@ -538,8 +538,8 @@ void CVsSkinnerNode::DrawBoundingBox() const
 
 	for ( int i( 0 ); i < m_volumeData.Count(); ++i )
 	{
-		const MPoint n( m_volumeData[ i ].m_bbox.min() );
-		const MPoint x( m_volumeData[ i ].m_bbox.max() );
+		const MPoint n( m_volumeData[ i ].m_bbox.std::min() );
+		const MPoint x( m_volumeData[ i ].m_bbox.std::max() );
 
 		glBegin( GL_QUAD_STRIP );
 		{

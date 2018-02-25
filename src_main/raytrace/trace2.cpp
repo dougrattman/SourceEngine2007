@@ -32,8 +32,8 @@ void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
   *(p4) = (SubInt(r, 3)) | (SubInt(g, 3) << 8) | (SubInt(b, 3) << 16);
 }
 
-static ALIGN16 int32_t signmask[4] = {0x80000000, 0x80000000, 0x80000000,
-                                      0x80000000};
+static ALIGN16 int32_t signmask[4] = {0x80000000i32, 0x80000000i32,
+                                      0x80000000i32, 0x80000000i32};
 static ALIGN16 int32_t all_ones[4] = {-1, -1, -1, -1};
 static fltx4 all_zeros = {0, 0, 0, 0};
 static fltx4 TraceLimit = {1.0e20, 1.0e20, 1.0e20, 1.0e20};

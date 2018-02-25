@@ -17,12 +17,12 @@
 #include "p4lib/ip4.h"
 #include "tier0/include/dbg.h"
 
-//-----------------------------------------------------------------------------
+
 // These tier2 libraries must be set by any users of this library.
 // They can be set by calling ConnectTier2Libraries or InitDefaultFileSystem.
 // It is hoped that setting this, and using this library will be the common
 // mechanism for allowing link libraries to access tier2 library interfaces
-//-----------------------------------------------------------------------------
+
 IFileSystem *g_pFullFileSystem = 0;
 IMaterialSystem *materials = 0;
 IMaterialSystem *g_pMaterialSystem = 0;
@@ -36,11 +36,11 @@ IP4 *p4 = 0;
 IMdlLib *mdllib = 0;
 IQueuedLoader *g_pQueuedLoader = 0;
 
-//-----------------------------------------------------------------------------
+
 // Call this to connect to all tier 2 libraries.
 // It's up to the caller to check the globals it cares about to see if ones are
 // missing
-//-----------------------------------------------------------------------------
+
 void ConnectTier2Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount) {
   // Don't connect twice..
   Assert(!g_pFullFileSystem && !materials && !g_pInputSystem &&

@@ -76,7 +76,7 @@ enum JobFlags_t {
 
 enum JobPriority_t { JP_LOW, JP_NORMAL, JP_HIGH };
 
-#define TP_MAX_POOL_THREADS 64
+#define TP_MAX_POOL_THREADS 64u
 struct ThreadPoolStartParams_t {
   ThreadPoolStartParams_t(bool bIOThreads = false, unsigned nThreads = -1,
                           int *pAffinities = NULL,
@@ -93,7 +93,7 @@ struct ThreadPoolStartParams_t {
     if (bUseAffinityTable) {
       // user supplied an optional 1:1 affinity mapping to override normal
       // distribute behavior
-      nThreads = min(TP_MAX_POOL_THREADS, nThreads);
+      nThreads = std::min(TP_MAX_POOL_THREADS, nThreads);
       for (unsigned int i = 0; i < nThreads; i++) {
         iAffinityTable[i] = pAffinities[i];
       }
@@ -638,7 +638,7 @@ class CJobSet {
     const int MAX_THREADS = 16;                                              \
     int nIdle = g_pThreadPool->NumIdleThreads();                             \
     ITERTYPE1 range = to - from;                                             \
-    int nThreads = min(nIdle + 1, range);                                    \
+    int nThreads = std::min(nIdle + 1, range);                               \
     if (nThreads > MAX_THREADS) {                                            \
       nThreads = MAX_THREADS;                                                \
     }                                                                        \
@@ -674,7 +674,7 @@ FUNC_GENERATE_ALL(DEFINE_NON_MEMBER_ITER_RANGE_PARALLEL);
     const int MAX_THREADS = 16;                                              \
     int nIdle = g_pThreadPool->NumIdleThreads();                             \
     ITERTYPE1 range = to - from;                                             \
-    int nThreads = min(nIdle + 1, range);                                    \
+    int nThreads = std::min(nIdle + 1, range);                               \
     if (nThreads > MAX_THREADS) {                                            \
       nThreads = MAX_THREADS;                                                \
     }                                                                        \

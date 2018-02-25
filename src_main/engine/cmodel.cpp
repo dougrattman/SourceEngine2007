@@ -364,7 +364,7 @@ int CM_PointLeafnumMinDistSqr_r(CCollisionBSPData *pBSPData, const Vector &p,
     else
       d = DotProduct(plane->normal, p) - plane->dist;
 
-    minDistSqr = min(d * d, minDistSqr);
+    minDistSqr = std::min(d * d, minDistSqr);
     if (d < 0)
       num = node->children[1];
     else
@@ -767,7 +767,7 @@ bool IntersectRayWithBoxBrush(TraceInfo_t *pTraceInfo, const cbrush_t *pBrush,
     fltx4 max_xy = MaxSIMD(mint, compareOne);
     fltx4 faceRot = RotateLeft(faceId);
     fltx4 faceId_xy = MaskedAssign(faceMask, faceId, faceRot);
-    // max_xy is [max(x,y), ... ]
+    // max_xy is [std::max(x,y), ... ]
     compareOne = RotateLeft2(mint);
     faceRot = RotateLeft2(faceId);
     // compareOne is [z, G, x, y]
@@ -925,7 +925,7 @@ bool IntersectRayWithBox(const Ray_t &ray, const VectorAligned &inInvDelta,
     fltx4 max_xy = MaxSIMD(mint, compareOne);
     fltx4 faceRot = RotateLeft(faceId);
     fltx4 faceId_xy = MaskedAssign(faceMask, faceId, faceRot);
-    // max_xy is [max(x,y), ... ]
+    // max_xy is [std::max(x,y), ... ]
     compareOne = RotateLeft2(mint);
     faceRot = RotateLeft2(faceId);
     // compareOne is [z, G, x, y]
@@ -1561,14 +1561,14 @@ void CM_RayLeafnums_r(const Ray_t &ray, CCollisionBSPData *pBSPData, int iNode,
   }
 
   // Move up to the node
-  flFrac1 = clamp(flFrac1, 0.0f, 1.0f);
+  flFrac1 = std::clamp(flFrac1, 0.0f, 1.0f);
   flMid = p1f + (p2f - p1f) * flFrac1;
   VectorLerp(vecPoint1, vecPoint2, flFrac1, vecMid);
   CM_RayLeafnums_r(ray, pBSPData, pNode->children[nSide], p1f, flMid, vecPoint1,
                    vecMid, pLeafList, nMaxLeafCount, nLeafCount);
 
   // Go past the node
-  flFrac2 = clamp(flFrac2, 0.0f, 1.0f);
+  flFrac2 = std::clamp(flFrac2, 0.0f, 1.0f);
   flMid = p1f + (p2f - p1f) * flFrac2;
   VectorLerp(vecPoint1, vecPoint2, flFrac2, vecMid);
   CM_RayLeafnums_r(ray, pBSPData, pNode->children[nSide ^ 1], flMid, p2f,
@@ -1676,7 +1676,7 @@ static void FASTCALL CM_RecursiveHullCheckImpl(TraceInfo_t *pTraceInfo, int num,
   }
 
   // move up to the node
-  frac = clamp(frac, 0, 1);
+  frac = std::clamp(frac, 0.0f, 1.0f);
   midf = p1f + (p2f - p1f) * frac;
   VectorLerp(p1, p2, frac, mid);
 
@@ -1684,7 +1684,7 @@ static void FASTCALL CM_RecursiveHullCheckImpl(TraceInfo_t *pTraceInfo, int num,
                                       midf, p1, mid);
 
   // go past the node
-  frac2 = clamp(frac2, 0, 1);
+  frac2 = std::clamp(frac2, 0.0f, 1.0f);
   midf = p1f + (p2f - p1f) * frac2;
   VectorLerp(p1, p2, frac2, mid);
 
@@ -2425,10 +2425,10 @@ bool FASTCALL IsBoxIntersectingRayNoLowest(
   {
     VectorAligned temp;
     StoreAlignedSIMD(temp.Base(), vt2);
-    closestExit = ReplicateX4(min(min(temp.x, temp.y), temp.z));
+    closestExit = ReplicateX4(std::min(std::min(temp.x, temp.y), temp.z));
 
     StoreAlignedSIMD(temp.Base(), vt1);
-    furthestEntry = ReplicateX4(max(max(temp.x, temp.y), temp.z));
+    furthestEntry = ReplicateX4(std::max(std::max(temp.x, temp.y), temp.z));
   }
 
   // now start testing. We bail out if:

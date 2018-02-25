@@ -19,7 +19,7 @@
 
 #include "stdafx.h"
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>

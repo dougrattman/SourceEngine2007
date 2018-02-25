@@ -180,7 +180,7 @@ void CWalkerStrider::WalkerThink()
 	if ( m_bCrouched )
 	{
 		// The "low" animation gets back up at the end so don't let that happen.
-		SetCycle( min( GetCycle(), 0.5f ) );
+		SetCycle( std::min( GetCycle(), 0.5f ) );
 	}
 	else if ( m_bFiring )
 	{

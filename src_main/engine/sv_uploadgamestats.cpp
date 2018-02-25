@@ -261,7 +261,7 @@ class CUploadGameStats : public IUploadGameStats {
     // can't determine CSER if Steam not running
     if (!SteamUtils()) return;
 #endif
-    float curTime = Sys_FloatTime();
+    float curTime = Plat_FloatTime();
 
     if (curTime < m_flNextConnectAttempt) return;
 
@@ -423,7 +423,7 @@ class CUploadGameStats : public IUploadGameStats {
         username[sizeof(username) - 1] = '\0';
 #endif
         if (bOk) {
-          int nBytesToCopy = min(Q_strlen(username), sizeof(hex) - 1);
+          int nBytesToCopy = std::min(Q_strlen(username), (int)sizeof(hex) - 1);
           // NOTE:  This doesn't copy the NULL terminator from username because
           // we want the "random" bits after the name
           Q_memcpy(hex, username, nBytesToCopy);

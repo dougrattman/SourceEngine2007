@@ -84,7 +84,7 @@ void CHudProgressBar::Paint()
 	{
 		// ProgressBarStartTime is now with respect to m_flSimulationTime rather than local time
 		float percent = (pPlayer->m_flSimulationTime - pPlayer->m_flProgressBarStartTime) / (float)pPlayer->m_iProgressBarDuration;
-		percent = clamp( percent, 0, 1 );
+		percent = std::clamp( percent, 0, 1 );
 		
 		clr[3] = 240;
 		vgui::surface()->DrawSetColor( clr );

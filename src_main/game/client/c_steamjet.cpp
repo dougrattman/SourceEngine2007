@@ -177,7 +177,7 @@ void C_SteamJet::OnDataChanged(DataUpdateType_t updateType)
 
 	// Recalulate lifetime in case length or speed changed.
 	m_Lifetime = m_JetLength / m_Speed;
-	m_ParticleEffect.SetParticleCullRadius( max(m_StartSize, m_EndSize) );
+	m_ParticleEffect.SetParticleCullRadius( std::max(m_StartSize, m_EndSize) );
 }
 
 
@@ -239,7 +239,7 @@ void CalcFastApproximateRenderBoundsAABB( C_BaseEntity *pEnt, float flBloatSize,
 		Vector vAddMins, vAddMaxs;
 		pEnt->GetRenderBounds( vAddMins, vAddMaxs );
 
-		flBloatSize += max( vAddMins.Length(), vAddMaxs.Length() );
+		flBloatSize += std::max( vAddMins.Length(), vAddMaxs.Length() );
 	}
 	else
 	{
@@ -403,9 +403,9 @@ void C_SteamJet::RenderParticles( CParticleRenderIterator *pIterator )
 		
 		Vector vRampColor = m_Ramps[iRamp] + (m_Ramps[iRamp+1] - m_Ramps[iRamp]) * fraction;
 
-		vRampColor[0] = min( 1.0f, vRampColor[0] );
-		vRampColor[1] = min( 1.0f, vRampColor[1] );
-		vRampColor[2] = min( 1.0f, vRampColor[2] );
+		vRampColor[0] = std::min( 1.0f, vRampColor[0] );
+		vRampColor[1] = std::min( 1.0f, vRampColor[1] );
+		vRampColor[2] = std::min( 1.0f, vRampColor[2] );
 
 		float sinLifetime = sin(pParticle->m_Lifetime * 3.14159f / pParticle->m_DieTime);
 
@@ -502,9 +502,9 @@ void C_SteamJet::UpdateLightingRamp()
 			pRamp->y += (m_clrRender->g/255.0f);
 			pRamp->z += (m_clrRender->b/255.0f);
 
-			pRamp->x = clamp( pRamp->x, 0.0f, 1.0f );
-			pRamp->y = clamp( pRamp->y, 0.0f, 1.0f );
-			pRamp->z = clamp( pRamp->z, 0.0f, 1.0f );
+			pRamp->x = std::clamp( pRamp->x, 0.0f, 1.0f );
+			pRamp->y = std::clamp( pRamp->y, 0.0f, 1.0f );
+			pRamp->z = std::clamp( pRamp->z, 0.0f, 1.0f );
 		}
 		else
 		{
@@ -514,7 +514,7 @@ void C_SteamJet::UpdateLightingRamp()
 		}
 
 		// Renormalize?
-		float maxVal = max(pRamp->x, max(pRamp->y, pRamp->z));
+		float maxVal = std::max(pRamp->x, std::max(pRamp->y, pRamp->z));
 		if(maxVal > 1)
 		{
 			*pRamp = *pRamp / maxVal;

@@ -1305,11 +1305,13 @@ int CParticleMgr::ComputeParticleDefScreenArea(
             : 1.0f;
     flProjRadius *= view.width;
 
-    float flMinX = max(view.x, vecScreenCenter.x - flProjRadius);
-    float flMaxX = min(view.x + view.width, vecScreenCenter.x + flProjRadius);
+    float flMinX = std::max((float)view.x, vecScreenCenter.x - flProjRadius);
+    float flMaxX =
+        std::min((float)view.x + view.width, vecScreenCenter.x + flProjRadius);
 
-    float flMinY = max(view.y, vecScreenCenter.y - flProjRadius);
-    float flMaxY = min(view.y + view.height, vecScreenCenter.y + flProjRadius);
+    float flMinY = std::max((float)view.y, vecScreenCenter.y - flProjRadius);
+    float flMaxY =
+        std::min((float)view.y + view.height, vecScreenCenter.y + flProjRadius);
 
     float flArea = (flMaxX - flMinX) * (flMaxY - flMinY);
     Assert(flArea <= flMaxPixels);

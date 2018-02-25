@@ -395,7 +395,7 @@ CON_COMMAND_F("bot_old", "Add a bot.", FCVAR_CHEAT) {
   // randomly. -frozen prevents the bots from running around when they spawn in.
 
   int count = args.FindArgInt("-count", 1);
-  count = clamp(count, 1, 16);
+  count = std::clamp(count, 1, 16);
 
   int iTeam = -1;
   const char *pVal = args.FindArg("-team");

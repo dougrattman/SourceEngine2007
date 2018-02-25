@@ -8,15 +8,15 @@
 #include "materialsystem/imesh.h"
 #include "mathlib/vector.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 struct BeamTrail_t;
 class IMaterial;
 
-//-----------------------------------------------------------------------------
+
 // CBeamSegDraw is a simple interface to beam rendering.
-//-----------------------------------------------------------------------------
+
 struct BeamSeg_t {
   Vector m_vPos;
   Vector m_vColor;
@@ -64,9 +64,9 @@ class CBeamSegDrawArbitrary : public CBeamSegDraw {
   BeamSeg_t m_PrevSeg;
 };
 
-//-----------------------------------------------------------------------------
+
 // Assumes the material has already been bound
-//-----------------------------------------------------------------------------
+
 void DrawSprite(const Vector &vecOrigin, float flWidth, float flHeight,
                 color32 color);
 

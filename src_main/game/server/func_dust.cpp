@@ -140,7 +140,7 @@ void CFunc_Dust::Spawn() {
   // Since keyvalues can arrive in any order, and UTIL_StringToColor32 stomps
   // alpha, install the alpha value here.
   color32 clr = {m_Color.m_Value.r, m_Color.m_Value.g, m_Color.m_Value.b,
-                 m_iAlpha};
+                 (u8)m_iAlpha};
   m_Color.Set(clr);
 
   BaseClass::Spawn();

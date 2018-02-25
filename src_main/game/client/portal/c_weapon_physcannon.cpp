@@ -243,7 +243,7 @@ int C_WeaponPhysCannon::DrawModel( int flags )
 			vecSkew = CurrentViewForward() * 4.0f;
 
 			float spriteScale = 1.0f;
-			spriteScale = clamp( spriteScale, 0.75f, 1.0f );
+			spriteScale = std::clamp( spriteScale, 0.75f, 1.0f );
 
 			SimpleParticle *sParticle;
 
@@ -262,7 +262,7 @@ int C_WeaponPhysCannon::DrawModel( int flags )
 				yDir = yvec;
 				float yScale = VectorNormalize( yDir ) * 0.75f;
 
-				int numParticles = clamp( 4.0f * fadePerc, 1, 3 );
+				int numParticles = std::clamp( 4.0f * fadePerc, 1, 3 );
 
 				for ( int j = 0; j < numParticles; j++ )
 				{

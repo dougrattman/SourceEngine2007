@@ -1,13 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
-//===========================================================================//
+
+#define NOMINMAX
 
 #include <d3d10.h>
-#include <d3dx10.h>
+#include "dx10sdk/Include/D3DX10.h"
 
 #include "inputlayoutdx10.h"
 #include "meshdx10.h"
@@ -635,7 +631,7 @@ void CShaderDeviceDx10::SetHardwareGammaRamp(float fGamma,
   for (int i = 0; i < nGammaPoints; i++) {
     float flGamma22 = i * flOOCount;
     float flCorrection = pow(flGamma22, fGamma / 2.2f);
-    flCorrection = clamp(flCorrection, flMin, flMax);
+    flCorrection = std::clamp(flCorrection, flMin, flMax);
 
     gammaControl.GammaCurve[i].Red = flCorrection;
     gammaControl.GammaCurve[i].Green = flCorrection;

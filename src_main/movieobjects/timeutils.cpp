@@ -114,7 +114,7 @@ DmeTime_t DmeTime_t::operator/=( float f )
 
 void DmeTime_t::Clamp( DmeTime_t lo, DmeTime_t hi )
 {
-	m_tms = clamp( m_tms, lo.m_tms, hi.m_tms );
+	m_tms = std::clamp( m_tms, lo.m_tms, hi.m_tms );
 }
 
 bool DmeTime_t::IsInRange( DmeTime_t lo, DmeTime_t hi ) const

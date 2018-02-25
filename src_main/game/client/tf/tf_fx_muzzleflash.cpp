@@ -260,7 +260,7 @@ void C_MuzzleFlashModel::ClientThink( void )
 	{
 		// Pick a new anim frame
 		float flDelta = RandomFloat(0.2,0.4) * (RandomInt(0,1) == 1 ? 1 : -1);
-		float flCycle = clamp( GetCycle() + flDelta, 0, 1 );
+		float flCycle = std::clamp( GetCycle() + flDelta, 0, 1 );
 		SetCycle( flCycle );
 
 		SetLocalAngles( QAngle(0,0,RandomFloat(0,360)) );

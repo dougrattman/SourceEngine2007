@@ -19,7 +19,7 @@ class CUtlBuffer;
 class Color;
 typedef void *FileHandle_t;
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Simple recursive data access class
 // Used in vgui for message parameters and resource files
 // Destructor deletes all child KeyValues nodes
@@ -42,7 +42,7 @@ typedef void *FileHandle_t;
 //  Escape sequences
 //	are \n, \t, \\, \n and \". The number character '#' is used for macro
 // purposes 	(eg #include), don't use it as first charater in key names.
-//-----------------------------------------------------------------------------
+
 class KeyValues {
  public:
   KeyValues(const char *setName);
@@ -336,9 +336,9 @@ struct KeyValuesUnpackStructure {
   size_t m_nFieldSize;  // for strings or other variable length
 };
 
-//-----------------------------------------------------------------------------
+
 // inline methods
-//-----------------------------------------------------------------------------
+
 inline int KeyValues::GetInt(int keySymbol, int defaultValue) {
   KeyValues *dat = FindKey(keySymbol);
   return dat ? dat->GetInt((const char *)NULL, defaultValue) : defaultValue;

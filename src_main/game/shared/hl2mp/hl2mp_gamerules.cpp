@@ -948,7 +948,7 @@ CAmmoDef *GetAmmoDef()
 	{		
 		// Look at -count.
 		int count = 1;
-		count = clamp( count, 1, 16 );
+		count = std::clamp( count, 1, 16 );
 
 		int iTeam = TEAM_COMBINE;
 				

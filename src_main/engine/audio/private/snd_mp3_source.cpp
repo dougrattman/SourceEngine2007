@@ -83,7 +83,7 @@ bool CAudioSourceMP3::GetStartupData(void *dest, int destsize,
 
   m_dataSize = (int)g_pSndIO->size(file);
 
-  bytesCopied = min(destsize, m_dataSize);
+  bytesCopied = std::min(destsize, m_dataSize);
   g_pSndIO->read(dest, bytesCopied, file);
   g_pSndIO->close(file);
   return true;

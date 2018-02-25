@@ -2207,7 +2207,7 @@ void CChoreoView::MouseStartDrag( mxEvent *event, int mx, int my )
 			float t = GetTimeValueForMouse( (short)event->x );
 			m_flScrubberTimeOffset = m_flScrub - t;
 			float maxoffset = 0.5f * (float)SCRUBBER_HANDLE_WIDTH / GetPixelsPerSecond();
-			m_flScrubberTimeOffset = clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
+			m_flScrubberTimeOffset = std::clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
 			t += m_flScrubberTimeOffset;
 
 			ClampTimeToSelectionInterval( t );
@@ -3181,11 +3181,11 @@ void CChoreoView::FinishDraggingEvent( mxEvent *event, int mx, int my )
 			float flNewDuration = 0.0f;
 			if ( m_nDragType == DRAGTYPE_RESCALELEFT )
 			{
-				flNewDuration = max( 0.1f, flSelectionDuration - dt );
+				flNewDuration = std::max( 0.1f, flSelectionDuration - dt );
 			}
 			else
 			{
-				flNewDuration = max( 0.1f, flSelectionDuration + dt );
+				flNewDuration = std::max( 0.1f, flSelectionDuration + dt );
 			}
 			float flScale = flNewDuration / flSelectionDuration;
 
@@ -3446,11 +3446,11 @@ int CChoreoView::handleEvent( mxEvent *event )
 				// Zoom time in  / out
 				if ( event->height > 0 )
 				{
-					tz = min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
+					tz = std::min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
 				}
 				else
 				{
-					tz = max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
+					tz = std::max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
 				}
 
 				SetTimeZoom( GetToolName(), tz, true );
@@ -3652,7 +3652,7 @@ int CChoreoView::handleEvent( mxEvent *event )
 					{
 						float curscrub = m_flScrub;
 						curscrub -= ( 1.0f / (float)scene->GetSceneFPS() );
-						curscrub = max( curscrub, 0.0f );
+						curscrub = std::max( curscrub, 0.0f );
 						SetScrubTargetTime( curscrub );
 					}
 				}
@@ -3664,7 +3664,7 @@ int CChoreoView::handleEvent( mxEvent *event )
 					{
 						float curscrub = m_flScrub;
 						curscrub += ( 1.0f / (float)scene->GetSceneFPS() );
-						curscrub = min( curscrub, scene->FindStopTime() );
+						curscrub = std::min( curscrub, scene->FindStopTime() );
 						SetScrubTargetTime( curscrub );
 					}
 				}
@@ -3684,7 +3684,7 @@ int CChoreoView::handleEvent( mxEvent *event )
 			case VK_PRIOR:  // PgUp
 				{
 					int window = w2() - GetLabelWidth();
-					m_flLeftOffset = max( m_flLeftOffset - (float)window, 0.0f );
+					m_flLeftOffset = std::max( m_flLeftOffset - (float)window, 0.0f );
 					MoveTimeSliderToPos( (int)m_flLeftOffset );
 				}
 				break;
@@ -3692,7 +3692,7 @@ int CChoreoView::handleEvent( mxEvent *event )
 				{
 					int window = w2() - GetLabelWidth();
 					int pixels = ComputeHPixelsNeeded();
-					m_flLeftOffset = min( m_flLeftOffset + (float)window, (float)pixels );
+					m_flLeftOffset = std::min( m_flLeftOffset + (float)window, (float)pixels );
 					MoveTimeSliderToPos( (int)m_flLeftOffset );
 				}
 				break;
@@ -3846,22 +3846,22 @@ int CChoreoView::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pVertScrollBar->getValue();
 						offset -= 20;
-						offset = max( offset, m_pVertScrollBar->getMinValue() );
+						offset = std::max( offset, m_pVertScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pVertScrollBar->getValue();
 						offset += 20;
-						offset = min( offset, m_pVertScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pVertScrollBar->getMaxValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pVertScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pVertScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pVertScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pVertScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pVertScrollBar->getMinValue() );
+						offset = std::max( offset, m_pVertScrollBar->getMinValue() );
 						break;
 					default:
 						processed = false;
@@ -3890,22 +3890,22 @@ int CChoreoView::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 20;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 20;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					default:
 						processed = false;
@@ -4328,8 +4328,8 @@ void CChoreoView::PlayScene( bool forward )
 	m_bSimulating = true;
 	m_bPaused = false;
 
-//	float soundlatency =  max( sound->GetAmountofTimeAhead(), 0.0f );
-//	soundlatency = min( 0.5f, soundlatency );
+//	float soundlatency =  std::max( sound->GetAmountofTimeAhead(), 0.0f );
+//	soundlatency = std::min( 0.5f, soundlatency );
 
 	float soundlatency = 0.0f;
 
@@ -4472,7 +4472,7 @@ void CChoreoView::ProcessExpression( CChoreoScene *scene, CChoreoEvent *event )
 		int j = pFlex->localToGlobal;
 		if ( j < 0 )
 			continue;
-		float s = clamp( weights[j] * flIntensity, 0.0, 1.0 );
+		float s = std::clamp( weights[j] * flIntensity, 0.0, 1.0 );
 		current[ j ] = current[j] * (1.0f - s) + settings[ j ] * s;
 	}
 }
@@ -4580,7 +4580,7 @@ void SetupFlexControllerTracks( CStudioHdr *hdr, CChoreoEvent *event )
 			{
 				CExpressionSample	*sample = track->GetSample( i, 0 );
 				float rangedValue = orig_min * (1 - sample->value) + orig_max * sample->value;
-				sample->value = clamp( (rangedValue - track->GetMin( )) / range, 0.0, 1.0 );
+				sample->value = std::clamp( (rangedValue - track->GetMin( )) / range, 0.0, 1.0 );
 			}
 		}
 
@@ -4743,8 +4743,8 @@ void CChoreoView::ProcessLookat( CChoreoScene *scene, CChoreoEvent *event )
 	float flDuration = scene->GetTime() - event->GetStartTime();
 	float flMaxIntensity = flDuration < 0.3f ? SimpleSpline( flDuration / 0.3f ) : 1.0f;
 	flDuration = event->GetEndTime() - scene->GetTime();
-	flMaxIntensity = min( flMaxIntensity, flDuration < 0.3f ? SimpleSpline( flDuration / 0.3f ) : 1.0f );
-	flIntensity = clamp( flIntensity, 0.0f, flMaxIntensity );
+	flMaxIntensity = std::min( flMaxIntensity, flDuration < 0.3f ? SimpleSpline( flDuration / 0.3f ) : 1.0f );
+	flIntensity = std::clamp( flIntensity, 0.0f, flMaxIntensity );
 
 	if (!stricmp( event->GetParameters(), a->GetName() ) || !stricmp( event->GetParameters(), "!self" ))
 	{
@@ -4982,8 +4982,8 @@ void CChoreoView::ProcessFace( CChoreoScene *scene, CChoreoEvent *event )
 		dir = -1;
 	}
 
-	float spineintensity = 0 * max( 0.0, (intensity - 0.5) / 0.5 );
-	float goalSpineYaw = min( diff * (1.0 - spineintensity), 30 );
+	float spineintensity = 0 * std::max( 0.0, (intensity - 0.5) / 0.5 );
+	float goalSpineYaw = std::min( diff * (1.0 - spineintensity), 30 );
 	//float idealYaw = info->m_flInitialYaw + (diff - m_goalBodyYaw * dir - m_goalSpineYaw * dir) * dir;
 	// float idealYaw = UTIL_AngleMod( info->m_flInitialYaw + diff * intensity );
 
@@ -5117,7 +5117,7 @@ void CChoreoView::ProcessSequence( CChoreoScene *scene, CChoreoEvent *event )
 	{
 		float dt = scene->GetTime() - event->m_flPrevTime;
 		event->m_flPrevTime = scene->GetTime();
-		dt = clamp( dt, 0.0, 0.1 );
+		dt = std::clamp( dt, 0.0, 0.1 );
 		cycle = event->m_flPrevCycle + flFrameRate * dt;
 		cycle = cycle - (int)cycle;
 		event->m_flPrevCycle = cycle;
@@ -5870,9 +5870,9 @@ void CChoreoView::RepositionVSlider( void )
 	m_pVertScrollBar->setBounds( w2() - m_nScrollbarHeight, GetStartRow(), m_nScrollbarHeight, h2() - m_nScrollbarHeight - GetStartRow() );
 
 	//int visiblepixels = h2() - m_nScrollbarHeight - GetStartRow();
-	//m_nTopOffset = min( pixelsneeded - visiblepixels, m_nTopOffset );
-	m_nTopOffset = max( 0, m_nTopOffset );
-	m_nTopOffset = min( pixelsneeded, m_nTopOffset );
+	//m_nTopOffset = std::min( pixelsneeded - visiblepixels, m_nTopOffset );
+	m_nTopOffset = std::max( 0, m_nTopOffset );
+	m_nTopOffset = std::min( pixelsneeded, m_nTopOffset );
 
 	m_pVertScrollBar->setRange( 0, pixelsneeded );
 	m_pVertScrollBar->setValue( m_nTopOffset );
@@ -5901,8 +5901,8 @@ void CChoreoView::RepositionHSlider( void )
 	}
 	m_pHorzScrollBar->setBounds( 0, h2() - m_nScrollbarHeight, w - m_nScrollbarHeight, m_nScrollbarHeight );
 
-	m_flLeftOffset = max( 0, m_flLeftOffset );
-	m_flLeftOffset = min( (float)pixelsneeded, m_flLeftOffset );
+	m_flLeftOffset = std::max( 0, m_flLeftOffset );
+	m_flLeftOffset = std::min( (float)pixelsneeded, m_flLeftOffset );
 
 	m_pHorzScrollBar->setRange( 0, pixelsneeded );
 	m_pHorzScrollBar->setValue( (int)m_flLeftOffset );
@@ -7653,7 +7653,7 @@ void CChoreoView::StartEvent( float currenttime, CChoreoScene *scene, CChoreoEve
 					char tok[ CChoreoEvent::MAX_CCTOKEN_STRING ];
 					if ( event->GetPlaybackCloseCaptionToken( tok, sizeof( tok ) ) )
 					{
-						float duration = max( event->GetDuration(), event->GetLastSlaveEndTime() - event->GetStartTime() );
+						float duration = std::max( event->GetDuration(), event->GetLastSlaveEndTime() - event->GetStartTime() );
 
 						closecaptionmanager->Process( tok, duration, GetCloseCaptionLanguageId() );
 
@@ -7662,7 +7662,7 @@ void CChoreoView::StartEvent( float currenttime, CChoreoScene *scene, CChoreoEve
 							 ( event->GetNumSlaves() > 0 ) ) 
 						{
 							Q_strncpy( soundname, tok, sizeof( soundname ) );
-							actualEndTime = max( actualEndTime, event->GetLastSlaveEndTime() );
+							actualEndTime = std::max( actualEndTime, event->GetLastSlaveEndTime() );
 						}
 					}
 				}
@@ -7706,13 +7706,13 @@ void CChoreoView::StartEvent( float currenttime, CChoreoScene *scene, CChoreoEve
 					if ( soundtime > 0.0f )
 					{
 						float f = ( currenttime - starttime ) / soundtime;
-						f = clamp( f, 0.0f, 1.0f );
+						f = std::clamp( f, 0.0f, 1.0f );
 
 						// Compute sample
 						float numsamples = (float)mixer->GetSource()->SampleCount();
 
 						int cursample = f * numsamples;
-						cursample = clamp( cursample, 0, numsamples - 1 );
+						cursample = std::clamp( cursample, 0, numsamples - 1 );
 						mixer->SetSamplePosition( cursample );
 						mixer->SetActive( true );
 					}
@@ -8496,8 +8496,8 @@ void CChoreoView::AddEventRelativeTag( void )
 	if ( bounds.right - bounds.left > 0 )
 	{
 		frac = (float)( m_nClickedX - bounds.left ) / (float)( bounds.right - bounds.left );
-		frac = min( 1.0f, frac );
-		frac = max( 0.0f, frac );
+		frac = std::min( 1.0f, frac );
+		frac = std::max( 0.0f, frac );
 	}
 
 	SetDirty( true );
@@ -9344,7 +9344,7 @@ void CChoreoView::ProcessSpeak( CChoreoScene *scene, CChoreoEvent *event )
 				 ( event->GetNumSlaves() > 0 ) ) 
 			{
 				Q_strncpy( soundname, tok, sizeof( soundname ) );
-				actualEndTime = max( actualEndTime, event->GetLastSlaveEndTime() );
+				actualEndTime = std::max( actualEndTime, event->GetLastSlaveEndTime() );
 			}
 		}
 	}
@@ -9389,13 +9389,13 @@ void CChoreoView::ProcessSpeak( CChoreoScene *scene, CChoreoEvent *event )
 		return;
 
 	float f = ( t - starttime ) / soundtime;
-	f = clamp( f, 0.0f, 1.0f );
+	f = std::clamp( f, 0.0f, 1.0f );
 
 	// Compute sample
 	float numsamples = (float)mixer->GetSource()->SampleCount();
 
 	int cursample = f * numsamples;
-	cursample = clamp( cursample, 0, numsamples - 1 );
+	cursample = std::clamp( cursample, 0, numsamples - 1 );
 
 	int realsample = mixer->GetSamplePosition();
 
@@ -9499,7 +9499,7 @@ void CChoreoView::GetScrubHandleRect( RECT& rcHandle, bool clipped )
 
 		if ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
 		}
 	}
 
@@ -9813,7 +9813,7 @@ void CChoreoView::OnChangeScale( void )
 	if ( !InputProperties( &params ) )
 		return;
 
-	SetTimeZoom( GetToolName(), clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
+	SetTimeZoom( GetToolName(), std::clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
 
 	// Force scroll bars to recompute
 	ForceScrollBarsToRecompute( false );
@@ -9934,7 +9934,7 @@ void CChoreoView::ApplyBounds( int& mx, int& my )
 	if ( !m_bUseBounds )
 		return;
 
-	mx = clamp( mx, m_nMinX, m_nMaxX );
+	mx = std::clamp( mx, m_nMinX, m_nMaxX );
 }
 
 //-----------------------------------------------------------------------------
@@ -10195,11 +10195,11 @@ void CChoreoView::SetTimeZoom( char const *tool, int tz, bool preserveFocus )
 			}
 
 			// float maxtime = m_pScene->FindStopTime();
-			float flApparentEndTime = max( m_pScene->FindStopTime(), 5.0f ) + 5.0f;
+			float flApparentEndTime = std::max( m_pScene->FindStopTime(), 5.0f ) + 5.0f;
 			if ( m_flEndTime > flApparentEndTime )
 			{
 				movePixels = pps * ( m_flEndTime - flApparentEndTime );
-				m_flLeftOffset = max( 0.0f, m_flLeftOffset - movePixels );
+				m_flLeftOffset = std::max( 0.0f, m_flLeftOffset - movePixels );
 			}
 		}
 	}
@@ -10389,7 +10389,7 @@ void CChoreoView::CheckDeleteTime( CChoreoEvent *e, float dt, float starttime, f
 		else
 		{
 			float shift = e->GetStartTime() - starttime;
-			float maxoffset = min( dt, shift );
+			float maxoffset = std::min( dt, shift );
 	
 			e->OffsetTime( -maxoffset );
 			e->SnapTimes();
@@ -10398,7 +10398,7 @@ void CChoreoView::CheckDeleteTime( CChoreoEvent *e, float dt, float starttime, f
 	else if ( !e->IsFixedLength() && e->HasEndTime() ) // the event starts before start, but ends after start time, need to insert space into the event, act like user dragged end time
 	{
 		float shiftend = e->GetEndTime() - starttime;
-		float maxoffset = min( dt, shiftend );
+		float maxoffset = std::min( dt, shiftend );
 
 		float newduration = e->GetDuration() - maxoffset;
 		if ( newduration <= 0.0f )

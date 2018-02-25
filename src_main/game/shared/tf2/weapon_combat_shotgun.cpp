@@ -312,7 +312,7 @@ void CWeaponCombatShotgun::ViewModelDrawn( C_BaseViewModel *pViewModel )
 		color[0] = 50;
 		color[1] = 128;
 		color[2] = 50;
-		FX_Smoke( vecBarrelPos, angMuzzle, max(0.3,m_flOwnersEnergyLevel), 1, &color[0], 255 );
+		FX_Smoke( vecBarrelPos, angMuzzle, std::max(0.3,m_flOwnersEnergyLevel), 1, &color[0], 255 );
 	}
 }
 #endif

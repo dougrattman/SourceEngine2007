@@ -488,8 +488,8 @@ void CPropJeep::AimGunAt( Vector *endPos, float flInterval )
 	float targetPitch = m_aimPitch + localEnemyAngles.x;
 	
 	// Constrain our angles
-	float newTargetYaw	= clamp( targetYaw, -CANNON_MAX_LEFT_YAW, CANNON_MAX_RIGHT_YAW );
-	float newTargetPitch = clamp( targetPitch, -CANNON_MAX_DOWN_PITCH, CANNON_MAX_UP_PITCH );
+	float newTargetYaw	= std::clamp( targetYaw, -CANNON_MAX_LEFT_YAW, CANNON_MAX_RIGHT_YAW );
+	float newTargetPitch = std::clamp( targetPitch, -CANNON_MAX_DOWN_PITCH, CANNON_MAX_UP_PITCH );
 
 	// If the angles have been clamped, we're looking outside of our valid range
 	if ( fabs(newTargetYaw-targetYaw) > 1e-4 || fabs(newTargetPitch-targetPitch) > 1e-4 )
@@ -675,7 +675,7 @@ void CPropJeep::CheckWaterLevel( void )
 		// Add the jeep's Z view offset
 		Vector vecUp;
 		AngleVectors( vecAttachAngles, NULL, NULL, &vecUp );
-		vecUp.z = clamp( vecUp.z, 0.0f, vecUp.z );
+		vecUp.z = std::clamp( vecUp.z, 0.0f, vecUp.z );
 		vecAttachPoint.z += r_JeepViewZHeight.GetFloat() * vecUp.z;
 
 		bool bEyes = ( UTIL_PointContents( vecAttachPoint ) & MASK_WATER ) ? true : false;
@@ -1277,7 +1277,7 @@ void CPropJeep::DampenUpMotion( Vector &vecVehicleEyePos, QAngle &vecVehicleEyeA
 	// Get up vector.
 	Vector vecUp;
 	AngleVectors( vecVehicleEyeAngles, NULL, NULL, &vecUp );
-	vecUp.z = clamp( vecUp.z, 0.0f, vecUp.z );
+	vecUp.z = std::clamp( vecUp.z, 0.0f, vecUp.z );
 	vecVehicleEyePos.z += r_JeepViewZHeight.GetFloat() * vecUp.z;
 
 	// NOTE: Should probably use some damped equation here.
@@ -1394,7 +1394,7 @@ void CPropJeep::UpdateSteeringAngle( void )
 
 	float flRatio = 1.0f - ( flSpeed / flMaxSpeed );
 	float flSteeringDegrees = JEEP_STEERING_FAST_ANGLE + ( ( JEEP_STEERING_SLOW_ANGLE - JEEP_STEERING_FAST_ANGLE ) * flRatio );
-	flSteeringDegrees = clamp( flSteeringDegrees, JEEP_STEERING_FAST_ANGLE, JEEP_STEERING_SLOW_ANGLE );
+	flSteeringDegrees = std::clamp( flSteeringDegrees, JEEP_STEERING_FAST_ANGLE, JEEP_STEERING_SLOW_ANGLE );
 	m_VehiclePhysics.SetSteeringDegrees( flSteeringDegrees );
 }
 

@@ -523,7 +523,7 @@ void CMapOverview::DrawMapTexture()
 		Vertex_t( MapToPanel ( Vector2D(0,OVERVIEW_MAP_SIZE-1) ), Vector2D(0,1) )
 	};
 
-	int alpha = 255.0f * overview_alpha.GetFloat(); clamp( alpha, 1, 255 );
+	int alpha = 255.0f * overview_alpha.GetFloat(); std::clamp( alpha, 1, 255 );
 	
 	surface()->DrawSetColor( 255,255,255, alpha );
 	surface()->DrawSetTexture( m_nMapTextureID );
@@ -1074,7 +1074,7 @@ void CMapOverview::UpdateSizeAndPosition()
 		if ( y < iTopBarHeight )
 			y = iTopBarHeight;
 
-        SetBounds( x,y,w,min(h,iScreenTall) );
+        SetBounds( x,y,w,std::min(h,iScreenTall) );
 	}
 }
 

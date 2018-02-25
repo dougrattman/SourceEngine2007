@@ -6,7 +6,7 @@
 //
 //=============================================================================//
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #pragma warning( disable: 4201 )
 #include <mmsystem.h>
@@ -475,7 +475,7 @@ int CAudioMixerWaveADPCM::GetOutputData( void **pData, int samplePosition, int s
 //-----------------------------------------------------------------------------
 bool CAudioMixerWaveADPCM::SetSamplePosition( int position, bool scrubbing )
 {
-	position = max( 0, position );
+	position = std::max( 0, position );
 
 	CAudioMixerWave::SetSamplePosition( position, scrubbing );
 

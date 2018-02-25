@@ -22,7 +22,7 @@ void SynthesizeTexture(FloatBitMap_t & output, FloatBitMap_t const & input)
 	FloatImagePyramid_t output_pyramid(output,PYRAMID_MODE_GAUSSIAN);
 
 	// now, synthesize texture from lowest res to highest
-	for(int level=min(input_pyramid.m_nLevels,output_pyramid.m_nLevels)-2;level>=0;level--)
+	for(int level=std::min(input_pyramid.m_nLevels,output_pyramid.m_nLevels)-2;level>=0;level--)
 	{
 		FloatBitMap_t & output=*(output_pyramid.Level(level));
 		FloatBitMap_t & output0=*(output_pyramid.Level(level+1));

@@ -515,7 +515,7 @@ int CRender3D::ObjectsAt(float x, float y, float fWidth, float fHeight,
   m_Pick.fWidth = fWidth;
   m_Pick.fHeight = fHeight;
   m_Pick.pHitsDest = pObjects;
-  m_Pick.nMaxHits = min(nMaxObjects, MAX_PICK_HITS);
+  m_Pick.nMaxHits = std::min(nMaxObjects, MAX_PICK_HITS);
   m_Pick.nNumHits = 0;
 
   if (!m_RenderState.bReverseSelection) {
@@ -592,8 +592,8 @@ void CRender3D::StartRenderFrame(void) {
     SetRenderTargetNamed(1, "_rt_normal");
     SetRenderTargetNamed(2, "_rt_position");
     SetRenderTargetNamed(3, "_rt_flags");
-    int nTargetWidth = min(width, first_rt->GetActualWidth());
-    int nTargetHeight = min(height, first_rt->GetActualHeight());
+    int nTargetWidth = std::min(width, first_rt->GetActualWidth());
+    int nTargetHeight = std::min(height, first_rt->GetActualHeight());
     pRenderContext->Viewport(0, 0, nTargetWidth, nTargetHeight);
     pRenderContext->ClearColor3ub(0, 1, 0);
     pRenderContext->ClearBuffers(true, true);
@@ -1014,7 +1014,7 @@ void CRender3D::EndRenderFrame(void) {
     //
     // Copy the requested number of nearest hits into the destination buffer.
     //
-    int nHitsToCopy = min(m_Pick.nNumHits, m_Pick.nMaxHits);
+    int nHitsToCopy = std::min(m_Pick.nNumHits, m_Pick.nMaxHits);
     if (nHitsToCopy != 0) {
       memcpy(m_Pick.pHitsDest, m_Pick.Hits,
              sizeof(m_Pick.Hits[0]) * nHitsToCopy);
@@ -1042,8 +1042,8 @@ void CRender3D::EndRenderFrame(void) {
       int width, height;
       pCamera->GetViewPort(width, height);
 
-      int nTargetWidth = min(width, pRT->GetActualWidth());
-      int nTargetHeight = min(height, pRT->GetActualHeight());
+      int nTargetWidth = std::min(width, pRT->GetActualWidth());
+      int nTargetHeight = std::min(height, pRT->GetActualHeight());
 
       bool view_changed = false;
 
@@ -1185,7 +1185,7 @@ void CRender3D::EndRenderFrame(void) {
         pRenderContext->SetRenderTarget(dest_rt_other);
         pRenderContext->ClearColor3ub(0, 0, 0);
         pRenderContext->ClearBuffers(true, true);
-        int nlights = min(MAX_PREVIEW_LIGHTS, light_queue.Count());
+        int nlights = std::min(MAX_PREVIEW_LIGHTS, light_queue.Count());
         for (int i = 0; i < nlights; i++) {
           IMaterial *src_mat = add_0_to_1;
           LightDesc_t light = light_queue.ElementAtHead().m_Light;

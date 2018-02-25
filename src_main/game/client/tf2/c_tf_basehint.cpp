@@ -583,7 +583,7 @@ float C_TFBaseHint::GetMovementFraction( void )
 	frac = 3 * squared - 2 * frac * squared;
 
 	// Simple spline
-	frac = clamp( frac, 0.0f, 1.0f );
+	frac = std::clamp( frac, 0.0f, 1.0f );
 
 	return frac;
 }

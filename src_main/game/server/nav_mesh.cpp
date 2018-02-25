@@ -457,8 +457,8 @@ CNavArea *CNavMesh::GetNavArea( const Vector &pos, float beneathLimit ) const
 //--------------------------------------------------------------------------------------------------------------
 void CNavMesh::GridToWorld( int gridX, int gridY, Vector *pos ) const
 {
-	gridX = clamp( gridX, 0, m_gridSizeX-1 );
-	gridY = clamp( gridY, 0, m_gridSizeY-1 );
+	gridX = std::clamp( gridX, 0, m_gridSizeX-1 );
+	gridY = std::clamp( gridY, 0, m_gridSizeY-1 );
 
 	pos->x = m_minX + gridX * m_gridCellSize;
 	pos->y = m_minY + gridY * m_gridCellSize;

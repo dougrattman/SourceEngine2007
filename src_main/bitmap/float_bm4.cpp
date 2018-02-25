@@ -54,8 +54,8 @@ static unsigned SSBumpCalculationThreadFN(void *ctx1) {
         surf_pnt.z += 0.55;
         Vector trace_end = surf_pnt;
         Vector trace_dir = ctx->trace_directions[r];
-        trace_dir *=
-            (1 + NREPS_TILE * 2) * max(ctx->src_bm->Width, ctx->src_bm->Height);
+        trace_dir *= (1 + NREPS_TILE * 2) *
+                     std::max(ctx->src_bm->Width, ctx->src_bm->Height);
         trace_end += trace_dir;
         ctx->m_pRtEnv->AddToRayStream(
             ray_trace_stream_ctx, surf_pnt, trace_end,
@@ -266,7 +266,7 @@ FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
   ctxs[0].min_y = 0;
   ctxs[0].max_y = Height - 1;
   ctxs[0].m_nOptionFlags = nOptionFlags;
-  int nthreads = min(32, GetCPUInformation().m_nPhysicalProcessors);
+  int nthreads = std::min(32, (int)GetCPUInformation().m_nPhysicalProcessors);
 
   ThreadHandle_t waithandles[32];
   int starty = 0;
@@ -276,7 +276,7 @@ FloatBitMap_t::ComputeSelfShadowedBumpmapFromHeightInAlphaChannel(
     ctxs[t].thread_number = t;
     ctxs[t].min_y = starty;
     if (t != nthreads - 1)
-      ctxs[t].max_y = min(Height - 1, starty + ystep - 1);
+      ctxs[t].max_y = std::min(Height - 1, starty + ystep - 1);
     else
       ctxs[t].max_y = Height - 1;
     waithandles[t] = CreateSimpleThread(SSBumpCalculationThreadFN,

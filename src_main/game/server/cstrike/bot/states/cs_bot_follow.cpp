@@ -118,7 +118,7 @@ public:
 		else
 		{
 			const float k = 1.5f; // 2.0f;
-			float trimSpeed = min( speed, 200.0f );
+			float trimSpeed = std::min( speed, 200.0f );
 			m_cutoff.x = playerOrigin.x + k * trimSpeed * m_forward.x;
 			m_cutoff.y = playerOrigin.y + k * trimSpeed * m_forward.y;
 		}

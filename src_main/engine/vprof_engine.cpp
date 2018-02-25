@@ -147,7 +147,7 @@ void PreUpdateProfile(float filteredtime) {
     bool bSuppressRestart = false;
     if (g_VProfSignalSpike || eng->GetFrameTime() > (1.f / spikeThreash)) {
       if (g_VProfSignalSpike ||
-          (Sys_FloatTime() - LastSpikeTime > MAX_SPIKE_REPORT &&
+          (Plat_FloatTime() - LastSpikeTime > MAX_SPIKE_REPORT &&
            g_ServerGlobalVariables.framecount >
                LastSpikeFrame + MAX_SPIKE_REPORT_FRAMES)) {
         ConsoleLogger consoleLog;
@@ -165,7 +165,7 @@ void PreUpdateProfile(float filteredtime) {
         if (GetLastProfileFileRead())
           Msg("******* %s\n", GetLastProfileFileRead());
 #endif
-        LastSpikeTime = Sys_FloatTime();
+        LastSpikeTime = Plat_FloatTime();
         LastSpikeFrame = g_ServerGlobalVariables.framecount;
 
         if (vprof_dump_spikes.GetFloat() < 0.0) {
@@ -497,7 +497,7 @@ class CVProfExport : public IVProfExport {
 
   virtual int GetNumBudgetGroups() {
     int nTotalGroups =
-        min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
+        std::min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
     int nRet = 0;
     for (int i = 0; i < nTotalGroups; i++) {
       if (CanShowBudgetGroup(i)) ++nRet;
@@ -508,7 +508,7 @@ class CVProfExport : public IVProfExport {
   virtual void GetBudgetGroupInfos(CExportedBudgetGroupInfo *pInfos) {
     int iOut = 0;
     int nTotalGroups =
-        min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
+        std::min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
     for (int i = 0; i < nTotalGroups; i++) {
       if (CanShowBudgetGroup(i)) {
         pInfos[iOut].m_pName = GetActiveVProfile()->GetBudgetGroupName(i);
@@ -527,8 +527,9 @@ class CVProfExport : public IVProfExport {
   virtual void GetBudgetGroupTimes(
       float times[IVProfExport::MAX_BUDGETGROUP_TIMES]) {
     int nTotalGroups =
-        min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
-    int nGroups = min(nTotalGroups, IVProfExport::MAX_BUDGETGROUP_TIMES);
+        std::min(m_Times.Count(), GetActiveVProfile()->GetNumBudgetGroups());
+    int nGroups =
+        std::min(nTotalGroups, (int)IVProfExport::MAX_BUDGETGROUP_TIMES);
     memset(times, 0, sizeof(times[0]) * nGroups);
 
     int iOut = 0;
@@ -587,7 +588,8 @@ class CVProfExport : public IVProfExport {
     int groupID = pTestNode->GetBudgetGroupID();
     double nodeTime = pNode->GetPrevTimeLessChildren();
     if (groupID >= 0 &&
-        groupID < min(m_Times.Count(), IVProfExport::MAX_BUDGETGROUP_TIMES)) {
+        groupID < std::min(m_Times.Count(),
+                           (int)IVProfExport::MAX_BUDGETGROUP_TIMES)) {
       m_Times[groupID] += nodeTime;
     } else {
       Assert(false);

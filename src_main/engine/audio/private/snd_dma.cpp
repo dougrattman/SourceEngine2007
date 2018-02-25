@@ -509,7 +509,7 @@ static CResourcePreloadSound s_ResourcePreloadSound;
 float S_GetMasterVolume(void) {
   float scale = 1.0f;
   if (soundfade.percent != 0) {
-    scale = clamp((float)soundfade.percent / 100.0f, 0.0f, 1.0f);
+    scale = std::clamp((float)soundfade.percent / 100.0f, 0.0f, 1.0f);
     scale = 1.0f - scale;
   }
   return volume.GetFloat() * scale;
@@ -1183,8 +1183,8 @@ void S_SpatializeChannel(int volumes[CCHANVOLUMES / 2], int master_vol,
   scale = gain * lscale / 2;
   volumes[IFRONT_LEFT] = (int)(master_vol * scale);
 
-  volumes[IFRONT_RIGHT] = clamp(volumes[IFRONT_RIGHT], 0, 255);
-  volumes[IFRONT_LEFT] = clamp(volumes[IFRONT_LEFT], 0, 255);
+  volumes[IFRONT_RIGHT] = std::clamp(volumes[IFRONT_RIGHT], 0, 255);
+  volumes[IFRONT_LEFT] = std::clamp(volumes[IFRONT_LEFT], 0, 255);
 }
 
 bool S_IsMusic(channel_t *pChannel) {
@@ -1364,7 +1364,7 @@ float SND_GetDspMix(channel_t *pchannel, int idist) {
 
   // dist: 0->(max - min)
 
-  dist = clamp(dist, dist_min, dist_max) - dist_min;
+  dist = std::clamp(dist, dist_min, dist_max) - dist_min;
 
   // dist: 0->1.0
 
@@ -1380,10 +1380,10 @@ float SND_GetDspMix(channel_t *pchannel, int idist) {
 // calculate crossfade between wav left (close sound) and wav right (far sound)
 // based on distance fron listener
 
-#define DVAR_DIST_MIN (20.0 * 12.0)   // play full 'near' sound at 20' or less
-#define DVAR_DIST_MAX (110.0 * 12.0)  // play full 'far' sound at 110' or more
-#define DVAR_MIX_MIN 0.0
-#define DVAR_MIX_MAX 1.0
+#define DVAR_DIST_MIN (20.0f * 12.0f)   // play full 'near' sound at 20' or less
+#define DVAR_DIST_MAX (110.0f * 12.0f)  // play full 'far' sound at 110' or more
+#define DVAR_MIX_MIN 0.0f
+#define DVAR_MIX_MAX 1.0f
 
 // calculate mixing parameter for CHAR_DISTVAR wavs
 // returns 0 - 1.0, 1.0 is 100% far sound (wav right)
@@ -1400,7 +1400,7 @@ float SND_GetDistanceMix(channel_t *pchannel, int idist) {
 
   // dist 0->(max - min)
 
-  dist = clamp(dist, DVAR_DIST_MIN, DVAR_DIST_MAX) - DVAR_DIST_MIN;
+  dist = std::clamp(dist, DVAR_DIST_MIN, DVAR_DIST_MAX) - DVAR_DIST_MIN;
 
   // dist 0->1.0
 
@@ -1501,12 +1501,13 @@ bool SND_GetClosestPoint(channel_t *pChannel, QAngle &source_angles,
 
 // Also modifies channel pitch based on distance to nearest approach point
 
-#define DOPPLER_DIST_LEFT_TO_RIGHT (4 * 12)  // separate left/right sounds by 4'
+#define DOPPLER_DIST_LEFT_TO_RIGHT \
+  (4 * 12.0f)  // separate left/right sounds by 4'
 
-#define DOPPLER_DIST_MAX (20 * 12)  // max distance - causes min pitch
-#define DOPPLER_DIST_MIN (1 * 12)   // min distance - causes max pitch
-#define DOPPLER_PITCH_MAX 1.5       // max pitch change due to distance
-#define DOPPLER_PITCH_MIN 0.25      // min pitch change due to distance
+#define DOPPLER_DIST_MAX (20 * 12.0f)  // max distance - causes min pitch
+#define DOPPLER_DIST_MIN (1 * 12.0f)   // min distance - causes max pitch
+#define DOPPLER_PITCH_MAX 1.5f         // max pitch change due to distance
+#define DOPPLER_PITCH_MIN 0.25f        // min pitch change due to distance
 
 #define DOPPLER_RANGE_MAX \
   (10 * 12)  // don't play doppler wav unless within this range
@@ -1548,7 +1549,7 @@ void SND_GetDopplerPoints(channel_t *pChannel, QAngle &source_angles,
 
   // dist varies 0->1
 
-  dist = clamp(dist, DOPPLER_DIST_MIN, DOPPLER_DIST_MAX);
+  dist = std::clamp(dist, DOPPLER_DIST_MIN, DOPPLER_DIST_MAX);
   dist = (dist - DOPPLER_DIST_MIN) / (DOPPLER_DIST_MAX - DOPPLER_DIST_MIN);
 
   // pitch varies from max to min
@@ -1638,7 +1639,7 @@ float SND_GetGain(channel_t *ch, bool fplayersound, bool fmusicsound,
     float flGoldsrcDistMult = flAttenuation / sound_nominal_clip_dist;
     dist *= flGoldsrcDistMult;
     float flReturnValue = 1.0f - dist;
-    flReturnValue = clamp(flReturnValue, 0, 1);
+    flReturnValue = std::clamp(flReturnValue, 0.0f, 1.0f);
     return flReturnValue;
   } else {
     float gain = snd_gain.GetFloat();
@@ -2169,8 +2170,8 @@ void SND_SetSpatialDelays() {
         // update when we have data for all L/R && RL/RR channels...
 
         if (chan & 0x1) {
-          float vr = min(v, (50 * 12.0f));
-          float vl = min(g_ssp.value_prev[chan - 1], (50 * 12.0f));
+          float vr = std::min(v, (50 * 12.0f));
+          float vl = std::min(g_ssp.value_prev[chan - 1], (50 * 12.0f));
 
           DSP_SetSpatialDelay(chan - 1, vl);
           DSP_SetSpatialDelay(chan, vr);
@@ -2179,7 +2180,7 @@ void SND_SetSpatialDelays() {
         // update center chan
 
         if (chan == 4) {
-          float vl = min(v, (50 * 12.0f));
+          float vl = std::min(v, (50 * 12.0f));
           DSP_SetSpatialDelay(chan, vl);
         }
       }
@@ -2228,22 +2229,23 @@ ConVar das_debug("adsp_debug", "0", FCVAR_ARCHIVE);
   0.4  // min % change in avg width of any wall pair to cause new dsp
 #define DAS_REFL_MIN \
   0.5  // min % change in avg refl of any wall to cause new dsp
-#define DAS_SKYHIT_MIN 0.8  // min % change in # of sky hits per wall
+#define DAS_SKYHIT_MIN 0.8f  // min % change in # of sky hits per wall
 
-#define DAS_DIST_MIN (4.0 * 12.0)   // min distance between room dsp changes
-#define DAS_DIST_MAX (40.0 * 12.0)  // max distance to preserve room dsp changes
+#define DAS_DIST_MIN (4.0f * 12.0f)  // min distance between room dsp changes
+#define DAS_DIST_MAX \
+  (40.0f * 12.0f)  // max distance to preserve room dsp changes
 
 #define DAS_DIST_MIN_OUTSIDE \
-  (6.0 * 12.0)  // min distance between room dsp changes outside
+  (6.0f * 12.0f)  // min distance between room dsp changes outside
 #define DAS_DIST_MAX_OUTSIDE \
-  (100.0 * 12.0)  // max distance to preserve room dsp changes outside
+  (100.0f * 12.0f)  // max distance to preserve room dsp changes outside
 
 #define IVEC_DIAG_UP 8  // start of diagonal up vectors
 #define IVEC_UP 18      // up vector
 #define IVEC_DOWN 19    // down vector
 
-#define DAS_REFLECTIVITY_NORM 0.5
-#define DAS_REFLECTIVITY_SKY 0.0
+#define DAS_REFLECTIVITY_NORM 0.5f
+#define DAS_REFLECTIVITY_SKY 0.0f
 
 // auto dsp room struct
 
@@ -2482,8 +2484,8 @@ void DAS_StoreNode(das_room_t *proom, int dsp_preset) {
 
   if (!proom->bskyabove) {
     // inside range - halls & tunnels have nodes every 5*width
-    g_das_nodes[i].range_max =
-        min(DAS_DIST_MAX, min(proom->width_max * 5, proom->length_max));
+    g_das_nodes[i].range_max = std::min(
+        DAS_DIST_MAX, (float)std::min(proom->width_max * 5, proom->length_max));
     g_das_nodes[i].range_min = DAS_DIST_MIN;
   } else {
     // outside range
@@ -2697,8 +2699,8 @@ bool DAS_CalcRoomProps(das_room_t *proom) {
 
   // width is always the smaller of the dimensions
 
-  width_max = min(dist[j], dist[j + 1]);
-  length_max = max(dist[j], dist[j + 1]);
+  width_max = std::min(dist[j], dist[j + 1]);
+  length_max = std::max(dist[j], dist[j + 1]);
 
   // get max height
 
@@ -2883,16 +2885,17 @@ void DAS_SetTraceHeight(das_room_t *proom, trace_t *ptrU, trace_t *ptrD) {
     // low ceiling - trace out just above standard door height @ 112
     if (h > door_height)
       proom->vplayer.z =
-          min(ptrD->endpos.z, ptrD->startpos.z) + door_height + 1;
+          std::min(ptrD->endpos.z, ptrD->startpos.z) + door_height + 1;
     else
-      proom->vplayer.z = min(ptrD->endpos.z, ptrD->startpos.z) + h - 1;
+      proom->vplayer.z = std::min(ptrD->endpos.z, ptrD->startpos.z) + h - 1;
   } else if (h > wall_height) {
     // tall ceiling - trace out over standard walls @ 128
 
-    proom->vplayer.z = min(ptrD->endpos.z, ptrD->startpos.z) + wall_height + 1;
+    proom->vplayer.z =
+        std::min(ptrD->endpos.z, ptrD->startpos.z) + wall_height + 1;
   } else {
     // very low ceiling, trace out from just below ceiling
-    proom->vplayer.z = min(ptrD->endpos.z, ptrD->startpos.z) + h - 1;
+    proom->vplayer.z = std::min(ptrD->endpos.z, ptrD->startpos.z) + h - 1;
     proom->lowceiling = h;
   }
 
@@ -3191,7 +3194,7 @@ bool DAS_UpdateRoomSize(das_room_t *proom) {
   // store surface data
 
   proom->dist[iwall] = surfdata.dist;
-  proom->reflect[iwall] = clamp(surfdata.reflectivity, 0.0, 1.0);
+  proom->reflect[iwall] = std::clamp(surfdata.reflectivity, 0.0f, 1.0f);
   proom->skyhits[iwall] = bskyhit ? 0.1 : 0.0;
   proom->hit[iwall] = surfdata.hit;
   proom->norm[iwall] = surfdata.norm;
@@ -3653,7 +3656,7 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
     pvol_dist = (fplayersound ? vol_dist_player : vol_dist_music);
 
     for (k = 0; k < 2; k++)
-      volumes[k] = clamp((int)(vol_total * pvol_dist[k]), 0, 255);
+      volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
 
     return;
   }
@@ -3699,7 +3702,7 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
     }
 
     for (k = 0; k < 5; k++)
-      volumes[k] = clamp((int)(vol_total * pvol_dist[k]), 0, 255);
+      volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
 
     return;
   }
@@ -3716,7 +3719,7 @@ void RemapPlayerOrMusicVols(channel_t *ch, int volumes[CCHANVOLUMES / 2],
     pvol_dist = (g_AudioDevice->IsSurroundCenter() ? vol_dist5 : vol_dist4);
 
     for (k = 0; k < 5; k++)
-      volumes[k] = clamp((int)(vol_total * pvol_dist[k]), 0, 255);
+      volumes[k] = std::clamp((int)(vol_total * pvol_dist[k]), 0, 255);
 
     return;
   }
@@ -4224,7 +4227,7 @@ bool BChannelLowVolume(channel_t *pch, int vol_min) {
 float ChannelLoudestCurVolume(const channel_t *RESTRICT pch) {
   float loudest = pch->fvolume[0];
   for (int i = 1; i < CCHANVOLUMES; i++) {
-    loudest = max(loudest, pch->fvolume[i]);
+    loudest = std::max(loudest, pch->fvolume[i]);
   }
   return loudest;
 }
@@ -4263,7 +4266,7 @@ int ChannelGetMaxVol(channel_t *pch) {
 void ChannelSetVol(channel_t *pch, int ivol, int vol) {
   Assert(ivol < CCHANVOLUMES);
 
-  pch->fvolume[ivol] = (float)(clamp(vol, 0, 255));
+  pch->fvolume[ivol] = (float)(std::clamp(vol, 0, 255));
 
   pch->fvolume_target[ivol] = pch->fvolume[ivol];
   pch->fvolume_inc[ivol] = 0.0;
@@ -4282,23 +4285,22 @@ void ChannelCopyVolumes(channel_t *pch, int *pvolume_dest, int ivol_start,
 }
 
 // volume has hit target, shut off crossfading increment
-
 inline void ChannelStopVolXfade(channel_t *pch, int ivol) {
   pch->fvolume[ivol] = pch->fvolume_target[ivol];
   pch->fvolume_inc[ivol] = 0.0;
 }
 
-#define VOL_XFADE_TIME 0.070  // channel volume crossfade time in seconds
+// channel volume crossfade time in seconds
+#define VOL_XFADE_TIME 0.070f
 
-#define VOL_INCR_MAX \
-  20.0  // never change volume by more than +/-N units per frame
+// never change volume by more than +/-N units per frame
+#define VOL_INCR_MAX 20.0f
 
 // set volume target and volume increment (for crossfade) for channel & speaker
-
 void ChannelSetVolTarget(channel_t *pch, int ivol, int volume_target) {
   float frametime = g_pSoundServices->GetHostFrametime();
   float speed;
-  float vol_target = (float)(clamp(volume_target, 0, 255));
+  float vol_target = (float)(std::clamp(volume_target, 0, 255));
   float vol_current;
 
   Assert(ivol < CCHANVOLUMES);
@@ -4328,7 +4330,7 @@ void ChannelSetVolTarget(channel_t *pch, int ivol, int volume_target) {
   // make sure we never increment by more than +/- VOL_INCR_MAX volume units per
   // frame
 
-  speed = clamp(speed, -VOL_INCR_MAX, VOL_INCR_MAX);
+  speed = std::clamp(speed, -VOL_INCR_MAX, VOL_INCR_MAX);
 
   pch->fvolume_inc[ivol] = speed;
 }
@@ -5107,7 +5109,7 @@ bool S_IsSoundStillPlaying(int guid) {
 //-----------------------------------------------------------------------------
 void S_SetVolumeByGuid(int guid, float fvol) {
   channel_t *pChannel = S_FindChannelByGuid(guid);
-  pChannel->master_vol = 255.0f * clamp(fvol, 0.0f, 1.0f);
+  pChannel->master_vol = 255.0f * std::clamp(fvol, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -5272,7 +5274,7 @@ void S_UpdateSoundFade(void) {
 
   // Spline it.
   f = SimpleSpline(f);
-  f = clamp(f, 0.0f, 1.0f);
+  f = std::clamp(f, 0.0f, 1.0f);
 
   soundfade.percent = soundfade.initial_percent * f;
 }
@@ -5295,7 +5297,7 @@ static void S_UpdateVoiceDuck(int voiceChannelCount, int voiceChannelMaxVolume,
 
   float duckTarget = 1.0;
   if (voiceChannelCount > 0) {
-    voiceChannelMaxVolume = clamp(voiceChannelMaxVolume, 0, 255);
+    voiceChannelMaxVolume = std::clamp(voiceChannelMaxVolume, 0, 255);
 
     // duckTarget = RemapVal( voiceChannelMaxVolume, 0, 255, 1.0,
     // volume_when_ducked );
@@ -5426,7 +5428,7 @@ void S_Update(const AudioState_t *pAudioState) {
       if (ch->sfx->pSource && ch->sfx->pSource->IsVoiceSource()) {
         voiceChannelCount++;
         voiceChannelMaxVolume =
-            max(voiceChannelMaxVolume, ChannelGetMaxVol(ch));
+            std::max(voiceChannelMaxVolume, ChannelGetMaxVol(ch));
       }
     }
   } else  // lowend performance improvement: spatialize only some  channels each
@@ -5449,7 +5451,7 @@ void S_Update(const AudioState_t *pAudioState) {
       if (ch->sfx->pSource && ch->sfx->pSource->IsVoiceSource()) {
         voiceChannelCount++;
         voiceChannelMaxVolume =
-            max(voiceChannelMaxVolume, ChannelGetMaxVol(ch));
+            std::max(voiceChannelMaxVolume, ChannelGetMaxVol(ch));
       }
     }
 
@@ -5814,7 +5816,7 @@ void S_DspParms(const CCommand &args) {
     return;
   }
 
-  int cparam = min(args.ArgC() - 4, 16);
+  int cparam = std::min(args.ArgC() - 4, 16);
 
   float params[16];
   Q_memset(params, 0, sizeof(float) * 16);
@@ -6610,8 +6612,8 @@ void MXR_DebugGraphMixVolumes(debug_showvols_t *groupvols, int cgroups) {
     float vol3 = 0.0;
     int cbars;
 
-    vol1 = clamp(vol, 0.0, 0.7);
-    vol2 = clamp(vol, 0.0, 0.95);
+    vol1 = std::clamp(vol, 0.0f, 0.7f);
+    vol2 = std::clamp(vol, 0.0f, 0.95f);
     vol3 = vol;
 
     flXposBar = flXpos + MXR_DEBUG_GREENSTART;
@@ -6625,7 +6627,7 @@ void MXR_DebugGraphMixVolumes(debug_showvols_t *groupvols, int cgroups) {
       Q_memset(bartext, 0, sizeof(bartext));
 
       cbars = (int)((float)vol1 * (float)MXR_DEBUG_VOLSCALE);
-      cbars = clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
+      cbars = std::clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
       Q_memset(bartext, MXR_DEBUG_CHAR, cbars);
 
       CDebugOverlay::AddScreenTextOverlay(flXposBar, flYpos, duration, rb, gb,
@@ -6640,7 +6642,7 @@ void MXR_DebugGraphMixVolumes(debug_showvols_t *groupvols, int cgroups) {
       Q_memset(bartext, 0, sizeof(bartext));
 
       cbars = (int)((float)vol2 * (float)MXR_DEBUG_VOLSCALE);
-      cbars = clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
+      cbars = std::clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
       Q_memset(bartext, MXR_DEBUG_CHAR, cbars);
 
       CDebugOverlay::AddScreenTextOverlay(flXposBar, flYpos, duration, rb, gb,
@@ -6656,7 +6658,7 @@ void MXR_DebugGraphMixVolumes(debug_showvols_t *groupvols, int cgroups) {
       Q_memset(bartext, 0, sizeof(bartext));
 
       cbars = (int)((float)vol3 * (float)MXR_DEBUG_VOLSCALE);
-      cbars = clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
+      cbars = std::clamp(cbars, 0, MXR_DEBUG_VOLSCALE * 3 - 1);
       Q_memset(bartext, MXR_DEBUG_CHAR, cbars);
 
       CDebugOverlay::AddScreenTextOverlay(flXposBar, flYpos, duration, rb, gb,
@@ -7043,7 +7045,7 @@ int MXR_AddClassname(const char *pName) {
     return -1;
   }
   Q_memcpy(g_groupclasslist[g_cgroupclass].szclassname, pName,
-           min(CMXRNAMEMAX - 1, strlen(pName)));
+           std::min((usize)CMXRNAMEMAX - 1, strlen(pName)));
   g_cgroupclass++;
   return g_cgroupclass - 1;
 }
@@ -7120,12 +7122,12 @@ bool MXR_LoadAllSoundMixers(void) {
 
     if (com_token[0])
       Q_memcpy(pgroup->szmixgroup, com_token,
-               min(CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+               std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     pstart = COM_Parse(pstart);
     if (com_token[0])
       Q_memcpy(pgroup->szdir, com_token,
-               min(CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+               std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     pgroup->classId = -1;
     pstart = COM_Parse(pstart);
@@ -7239,7 +7241,7 @@ bool MXR_LoadAllSoundMixers(void) {
     soundmixer_t *pmixer = &g_soundmixers[g_csoundmixers];
 
     Q_memcpy(pmixer->szsoundmixer, com_token,
-             min(CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
+             std::min((usize)CMXRNAMEMAX - 1, strlen(com_token)));  //-V814
 
     // init all mixer values to -1.
 
@@ -7317,7 +7319,7 @@ float S_GetMono16Samples(const char *pszName, CUtlVector<short> &sampleList) {
   int pos = 0;
   int remaining = totalsamples;
   while (remaining > 0) {
-    int blockSize = min(remaining, 1000);
+    int blockSize = std::min(remaining, 1000);
 
     char copyBuf[AUDIOSOURCE_COPYBUF_SIZE];
     int copied = pWave->GetOutputData((void **)&pData, pos, blockSize, copyBuf);

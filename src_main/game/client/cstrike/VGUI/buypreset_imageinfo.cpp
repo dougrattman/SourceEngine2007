@@ -113,7 +113,7 @@ void WeaponImageInfo::SetWeapon( const BuyPresetWeapon *pWeapon, bool isPrimary,
 			int buyClipSize = GetCSAmmoDef()->GetBuySize( info->iAmmoType );
 
 			int maxClips = (buyClipSize > 0) ? ceil(maxRounds/(float)buyClipSize) : 0;
-			numClips = min( numClips, maxClips );
+			numClips = std::min( numClips, maxClips );
 			m_weapon.image = scheme()->GetImage( ImageFnameFromWeaponID( weaponID, m_isPrimary ), true );
 			if ( numClips == 0 )
 			{
@@ -222,12 +222,12 @@ void WeaponImageInfo::PerformLayout()
 	m_needLayout = false;
 
 	m_weapon.FitInBounds( m_left, m_top, m_wide*0.8, m_tall, m_isCentered, m_weaponScale );
-	int ammoX = min( m_wide*5/6, m_weapon.w );
+	int ammoX = std::min( m_wide*5/6, m_weapon.w );
 	int ammoSize = m_tall * 9 / 16;
 	if ( !m_isPrimary )
 	{
 		ammoSize = ammoSize * 25 / 40;
-		ammoX = min( m_wide*5/6, m_weapon.w*3/4 );
+		ammoX = std::min( m_wide*5/6, m_weapon.w*3/4 );
 	}
 	if ( ammoX + ammoSize > m_wide )
 	{

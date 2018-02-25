@@ -205,7 +205,7 @@ struct SoundInfo_t {
         // Convert to msecs
         int iDelay = fDelay * 1000.0f;
 
-        iDelay = clamp(iDelay, (int)(-10 * MAX_SOUND_DELAY_MSEC),
+        iDelay = std::clamp(iDelay, (int)(-10 * MAX_SOUND_DELAY_MSEC),
                        (int)(MAX_SOUND_DELAY_MSEC));
 
         if (iDelay < 0) {

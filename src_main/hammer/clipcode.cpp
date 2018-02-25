@@ -335,7 +335,7 @@ int CreateClippedPoly(CMapFace *pFace, IEditorTexture *pDecalTex, Vector& org, v
 
 	// Clip the polygon to the decal texture space
 	// FIXME: Yes this realy copies the vertex list 4 times !!
-	int nMaxVerts = min(nOutSize, MAX_CLIPVERT);
+	int nMaxVerts = std::min(nOutSize, MAX_CLIPVERT);
 	g_outCount = SHClip( g_vert[0], pFace->nPoints, outvert[0], nMaxVerts, 0 );	// clip left
 	g_outCount = SHClip( outvert[0], g_outCount, g_vert[0], nMaxVerts, 1 );		// clip right
 	g_outCount = SHClip( g_vert[0], g_outCount, outvert[0], nMaxVerts, 2 );		// clip top

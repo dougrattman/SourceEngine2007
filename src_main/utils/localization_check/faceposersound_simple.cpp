@@ -6,7 +6,7 @@
 //
 //=============================================================================//
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #pragma warning( disable: 4201 )
 #include <mmsystem.h>
@@ -52,7 +52,7 @@ void CAudioDeviceSWMix::Mix8Mono( channel_t *pChannel, char *pData, int outputOf
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += pChannel->leftvol * pData[sampleIndex];
 		m_paintbuffer[ dest ].right += pChannel->rightvol * pData[sampleIndex];
@@ -79,7 +79,7 @@ void CAudioDeviceSWMix::Mix8Stereo( channel_t *pChannel, char *pData, int output
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += pChannel->leftvol * pData[sampleIndex];
 		m_paintbuffer[ dest ].right += pChannel->rightvol * pData[sampleIndex+1];
@@ -106,7 +106,7 @@ void CAudioDeviceSWMix::Mix16Mono( channel_t *pChannel, short *pData, int output
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += (pChannel->leftvol * pData[sampleIndex])>>8;
 		m_paintbuffer[ dest ].right += (pChannel->rightvol * pData[sampleIndex])>>8;
@@ -133,7 +133,7 @@ void CAudioDeviceSWMix::Mix16Stereo( channel_t *pChannel, short *pData, int outp
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += (pChannel->leftvol * pData[sampleIndex])>>8;
 		m_paintbuffer[ dest ].right += (pChannel->rightvol * pData[sampleIndex+1])>>8;

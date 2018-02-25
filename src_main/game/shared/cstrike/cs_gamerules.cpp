@@ -3883,7 +3883,7 @@ void CCSGameRules::UploadGameStats( void )
 
 		stats.header.serverid = 0;
 
-		stats.iMinutesPlayed = clamp( (short)( gpGlobals->curtime / 60 ), 0, MY_USHRT_MAX ); 
+		stats.iMinutesPlayed = std::clamp( (short)( gpGlobals->curtime / 60 ), 0, MY_USHRT_MAX ); 
 
 		memcpy( stats.iTerroristVictories, g_iTerroristVictories, sizeof( g_iTerroristVictories) );
 		memcpy( stats.iCounterTVictories, g_iCounterTVictories, sizeof( g_iCounterTVictories) );

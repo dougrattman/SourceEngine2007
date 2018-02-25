@@ -403,8 +403,8 @@ bool GameData::ParseMapSize(TokenReader &tr) {
   int nMax = atoi(szToken);
 
   if (nMin != nMax) {
-    m_nMinMapCoord = min(nMin, nMax);
-    m_nMaxMapCoord = max(nMin, nMax);
+    m_nMinMapCoord = std::min(nMin, nMax);
+    m_nMaxMapCoord = std::max(nMin, nMax);
   }
 
   if (!GDSkipToken(tr, OPERATOR, ")")) {

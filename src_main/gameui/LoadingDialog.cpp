@@ -433,7 +433,7 @@ bool CLoadingDialog::SetProgressPoint(float fraction) {
       // show the progress artifically completed to fill in 100%
       fraction = 1.0f;
     }
-    fraction = clamp(fraction, 0.0f, 1.0f);
+    fraction = std::clamp(fraction, 0.0f, 1.0f);
     if ((int)(fraction * 25) != (int)(m_flProgressFraction * 25)) {
       m_flProgressFraction = fraction;
       return true;

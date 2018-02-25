@@ -9,7 +9,7 @@
 //
 // This is an OS specific header file
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 // disable data conversion warnings
 

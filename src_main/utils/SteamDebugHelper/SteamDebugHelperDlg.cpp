@@ -375,7 +375,7 @@ void CSteamDebugHelperDlg::SetConfigFilename( const char *pName )
 	const char *pConfigFilename = absPath;
 	const char *pTest1 = strrchr( pConfigFilename, '\\' ) + 1;
 	const char *pTest2 = strrchr( pConfigFilename, '/' ) + 1;
-	const char *pBaseName = max( pTest1, max( pTest2, pConfigFilename ) );
+	const char *pBaseName = std::max( pTest1, std::max( pTest2, pConfigFilename ) );
 	SetWindowText( CString( "SteamDebugHelper - " ) + pBaseName );
 
 	::EnableWindow( ::GetDlgItem( m_hWnd, ID_EDIT_CONFIG_FILE ), true );

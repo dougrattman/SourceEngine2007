@@ -206,7 +206,7 @@ int CAudioMixerWave::GetScubPosition( void )
 //-----------------------------------------------------------------------------
 bool CAudioMixerWave::SetSamplePosition( int position, bool scrubbing )
 {
-	position = max( 0, position );
+	position = std::max( 0, position );
 
 	m_sample = position;
 	m_absoluteSample = position;
@@ -283,7 +283,7 @@ bool CAudioMixerWave::GetAutoDelete( void ) const
 
 void CAudioMixerWave::SetVolume( float volume )
 {
-	int ivolume = (int)( clamp( volume, 0.0f, 1.0f ) * 127.0f );
+	int ivolume = (int)( std::clamp( volume, 0.0f, 1.0f ) * 127.0f );
 
 	m_pChannel->leftvol   = ivolume;
 	m_pChannel->rightvol  = ivolume;
@@ -314,7 +314,7 @@ void CAudioMixerWave::IncrementSamples( channel_t *pChannel, int startSample, in
 		if ( requestedstart < 0 )
 			return;
 
-		startpos = max( 0, requestedstart );
+		startpos = std::max( 0, requestedstart );
 		SetSamplePosition( startpos );
 	}
 
@@ -357,7 +357,7 @@ bool CAudioMixerWave::SkipSamples( IAudioDevice *pDevice, channel_t *pChannel,
 	int inputSampleRate = (int)(pChannel->pitch * m_pData->Source().SampleRate());
 	float rate = (float)inputSampleRate / outputRate;
 
-	sampleCount = min( sampleCount, pDevice->PaintBufferSampleCount() );
+	sampleCount = std::min( sampleCount, pDevice->PaintBufferSampleCount() );
 
 	int startpos = startSample;
 
@@ -367,7 +367,7 @@ bool CAudioMixerWave::SkipSamples( IAudioDevice *pDevice, channel_t *pChannel,
 		if ( requestedstart < 0 )
 			return false;
 
-		startpos = max( 0, requestedstart );
+		startpos = std::max( 0, requestedstart );
 		SetSamplePosition( startpos );
 	}
 
@@ -383,7 +383,7 @@ bool CAudioMixerWave::SkipSamples( IAudioDevice *pDevice, channel_t *pChannel,
 			inputSampleCount = (int)(sampleCount * rate);
 			if ( !forward )
 			{
-				startSample = max( 0, startSample - inputSampleCount );
+				startSample = std::max( 0, startSample - inputSampleCount );
 			}
 			int availableSamples = GetOutputData( (void **)&pData, startSample, inputSampleCount, forward );
 			if ( !availableSamples )
@@ -404,7 +404,7 @@ bool CAudioMixerWave::SkipSamples( IAudioDevice *pDevice, channel_t *pChannel,
 		{
 			if ( !forward )
 			{
-				startSample = max( 0, startSample - sampleCount );
+				startSample = std::max( 0, startSample - sampleCount );
 			}
 			availableSamples = GetOutputData( (void **)&pData, startSample, sampleCount, forward );
 			if ( !availableSamples )
@@ -450,7 +450,7 @@ bool CAudioMixerWave::MixDataToDevice( IAudioDevice *pDevice, channel_t *pChanne
 	float rate = (float)inputSampleRate / outputRate;
 	fixedint fracstep = FIX_FLOAT( rate );
 
-	sampleCount = min( sampleCount, pDevice->PaintBufferSampleCount() );
+	sampleCount = std::min( sampleCount, pDevice->PaintBufferSampleCount() );
 
 	int startpos = startSample;
 
@@ -460,7 +460,7 @@ bool CAudioMixerWave::MixDataToDevice( IAudioDevice *pDevice, channel_t *pChanne
 		if ( requestedstart < 0 )
 			return false;
 
-		startpos = max( 0, requestedstart );
+		startpos = std::max( 0, requestedstart );
 		SetSamplePosition( startpos );
 	}
 

@@ -337,12 +337,12 @@ class CDistributor_DefaultMaster : public IWorkUnitDistributorMaster {
 
       // Allocate room for upcoming work units lookup
       WUIndexType iBegin = vlkup.PastVisibleIndex();
-      WUIndexType iEnd = min(iBegin + g_nMaxWorkerCount * numWusToDeal,
+      WUIndexType iEnd = std::min(iBegin + g_nMaxWorkerCount * numWusToDeal,
                              vlkup.PastPossibleIndex());
       vlkup.ExpandWindow(iEnd - 1);
 
       // Allocate a partition
-      size_t numPartitions = (size_t)min(iEnd - iBegin, g_nMaxWorkerCount);
+      size_t numPartitions = (size_t)std::min(iEnd - iBegin, g_nMaxWorkerCount);
       CArrayAutoPtr<CPartitionInfo *> spArrPartitions(
           new CPartitionInfo *[numPartitions]);
       CPartitionInfo **arrPartitions = spArrPartitions.Get();

@@ -27,7 +27,7 @@ class C_SunGlowOverlay : public CGlowOverlay
 		if ( m_bModulateByDot )
 		{
  float alpha = RemapVal( flDot, 1.0f, 0.9f, 0.75f, 0.0f );
- alpha = clamp( alpha, 0.0f, 0.75f );
+ alpha = std::clamp( alpha, 0.0f, 0.75f );
 
  *flHorzSize = pSprite->m_flHorzSize * 6.0f;
  *flVertSize = pSprite->m_flVertSize * 6.0f;

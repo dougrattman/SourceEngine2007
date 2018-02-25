@@ -383,7 +383,7 @@ void ErrorHandler(LPXMLPARSER parser) {
 int cstream(BYTE *buf, int cBytes, int *cBytesActual, void *inputData) {
   CUtlBuffer *pBuf = (CUtlBuffer *)inputData;
   int nMaxBytes = pBuf->GetBytesRemaining();
-  *cBytesActual = min(cBytes, nMaxBytes);
+  *cBytesActual = std::min(cBytes, nMaxBytes);
 
   // Streaming can cause BytesRemaining to be a lie
   *cBytesActual = pBuf->GetUpTo(buf, *cBytesActual);

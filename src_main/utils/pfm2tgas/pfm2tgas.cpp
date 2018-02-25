@@ -15,7 +15,7 @@
 
 static float Truncate8( float f )
 {
-	uint8 px= (uint8) min(255.0, (f*255.0));
+	uint8 px= (uint8) std::min(255.0, (f*255.0));
 	return px*(1.0/255.0);
 }
 

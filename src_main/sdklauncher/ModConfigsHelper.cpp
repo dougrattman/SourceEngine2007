@@ -14,7 +14,7 @@
  *
  */
 #include "ModConfigsHelper.h"
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 ModConfigsHelper::ModConfigsHelper()
 {

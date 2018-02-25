@@ -1031,7 +1031,7 @@ void GetDeltaVertexValuesFromDelta(
 	}
 
 	// minimum of the number of points and the number of components...
-	vDeltas.EnsureCount( min( iptEnd, vIndices.Count() ) );
+	vDeltas.EnsureCount( std::min( iptEnd, vIndices.Count() ) );
 
 	// Copy the data from Maya to Dme
 	Vector *pDst( vDeltas.Base() );
@@ -1088,7 +1088,7 @@ void RemoveZeroDeltas(
 
 	const int viEnd( vIndices.Count() );
 	const int vdEnd( vDeltas.Count() );
-	const int vidEnd( min( viEnd, vdEnd ) );
+	const int vidEnd( std::min( viEnd, vdEnd ) );
 
 	const Vector *pd( vDeltas.Base() );
 	const Vector *const pdEnd( pd + vidEnd );
@@ -1417,7 +1417,7 @@ CDmeCombinationOperator *CDmeExport::DoBlendShape(
 							mPlug.setValue( dadFn.create( wArray ) );
 						}
 
-						const int vidEnd( min( vIndices.Count(), vDeltas.Count() ) );
+						const int vidEnd( std::min( vIndices.Count(), vDeltas.Count() ) );
 
 						// Create and set the Dme version of the delta state
 						if ( isControl )
@@ -1811,10 +1811,10 @@ int CDmeExport::AddColorData(
 		{
 			pColorSrc->get( MColor::kRGB, r, g, b, a );
 			pColorDst->SetColor(
-				clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( a * 255.0f ) ), 0, 255 ) );
+				std::clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( a * 255.0f ) ), 0, 255 ) );
 		}
 
 		const FieldIndex_t colorIndex( pDmeVertexData->CreateField( CDmeVertexDataBase::FIELD_COLOR ) );

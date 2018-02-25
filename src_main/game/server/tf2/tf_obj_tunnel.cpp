@@ -250,7 +250,7 @@ float CObjectTunnelTrigger::GetTeleportDuration( void )
 		m_flTeleportDuration = tf_tunnel_time.GetFloat();
 	}
 
-	duration = min( duration, MAX_TUNNEL_DURATION );
+	duration = std::min( duration, MAX_TUNNEL_DURATION );
 	return duration;
 }
 
@@ -262,7 +262,7 @@ bool CObjectTunnelTrigger::KeepTunneling( TunnelPlayer *tunnel )
 	}
 
 	float remaining = tunnel->teleporttime - gpGlobals->curtime + 0.5f;
-	remaining = max( 0.0f, remaining );
+	remaining = std::max( 0.0f, remaining );
 
 	tunnel->iremaining = (int)( remaining );
 
@@ -315,7 +315,7 @@ bool CObjectTunnelTrigger::KeepTunneling( TunnelPlayer *tunnel )
 			if ( travel_time > 0.0f )
 			{
 				float f = ( gpGlobals->curtime - tunnel->tunnelstarted - tunnel->fadetime  ) / travel_time;
-				f = clamp( f, 0.0f, 1.0f );
+				f = std::clamp( f, 0.0f, 1.0f );
 				if ( m_hTunnelExit != NULL )
 				{
 					Vector delta = m_hTunnelExit->GetAbsOrigin() - tunnel->startpos;

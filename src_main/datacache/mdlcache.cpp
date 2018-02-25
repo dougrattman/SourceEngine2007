@@ -2259,7 +2259,7 @@ int ComputeMaxRealBoneInfluences(vertexFileHeader_t *vertexFile, int lod) {
         // just the model transform)
         numWeights = 0;
       }
-      maxWeights = max(numWeights, maxWeights);
+      maxWeights = std::max(numWeights, maxWeights);
     }
   }
   return maxWeights;
@@ -2271,14 +2271,14 @@ int ComputeMaxRealBoneInfluences(vertexFileHeader_t *vertexFile, int lod) {
 vertexFileHeader_t *CMDLCache::CreateThinVertexes(
     vertexFileHeader_t *originalData, const studiohdr_t *pStudioHdr,
     int *cacheLength) {
-  int rootLod = min(pStudioHdr->rootLOD, (originalData->numLODs - 1));
+  int rootLod = std::min((int)pStudioHdr->rootLOD, (originalData->numLODs - 1));
   int numVerts = originalData->numLODVertexes[rootLod] +
                  1;  // Add 1 vert to support prefetch during array access
 
   int numBoneInfluences = ComputeMaxRealBoneInfluences(originalData, rootLod);
   // Only store (N-1) weights (all N weights sum to 1, so we can re-compute the
   // Nth weight later)
-  int numStoredWeights = max(0, (numBoneInfluences - 1));
+  int numStoredWeights = std::max(0, (numBoneInfluences - 1));
 
   int vertexSize = 2 * sizeof(Vector) +
                    numBoneInfluences * sizeof(unsigned char) +
@@ -2727,7 +2727,7 @@ vertexFileHeader_t *CMDLCache::BuildAndCacheVertexData(
 
   bool bNeedsTangentS =
       (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 80);
-  int rootLOD = min(pStudioHdr->rootLOD, pRawVvdHdr->numLODs - 1);
+  int rootLOD = std::min((int)pStudioHdr->rootLOD, pRawVvdHdr->numLODs - 1);
 
   // determine final cache footprint, possibly truncated due to lod
   int cacheLength = Studio_VertexDataSize(pRawVvdHdr, rootLOD, bNeedsTangentS);
@@ -3047,8 +3047,7 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
   loaderJob.m_bPersistTargetData = true;
 
   if (bNeedsMDL) {
-    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s.mdl", szFilename,
-               GetPlatformExt());
+    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s.mdl", szFilename);
     loaderJob.m_pFilename = szNameOnDisk;
     loaderJob.m_pContext2 = (void *)ModelParts_t::BUFFER_MDL;
     g_pQueuedLoader->AddJob(&loaderJob);
@@ -3061,8 +3060,7 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
     V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s", szFilename,
                GetVTXExtension());
     V_StripExtension(szNameOnDisk, szTempName, sizeof(szTempName));
-    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s.vtx", szTempName,
-               GetPlatformExt());
+    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s.vtx", szTempName);
     loaderJob.m_pFilename = szNameOnDisk;
     loaderJob.m_pContext2 = (void *)ModelParts_t::BUFFER_VTX;
     g_pQueuedLoader->AddJob(&loaderJob);
@@ -3070,8 +3068,7 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
   }
 
   if (bNeedsVVD) {
-    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s.vvd", szFilename,
-               GetPlatformExt());
+    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s.vvd", szFilename);
     loaderJob.m_pFilename = szNameOnDisk;
     loaderJob.m_pContext2 = (void *)ModelParts_t::BUFFER_VVD;
     g_pQueuedLoader->AddJob(&loaderJob);
@@ -3079,8 +3076,7 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
   }
 
   if (bNeedsPHY) {
-    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s.phy", szFilename,
-               GetPlatformExt());
+    V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s.phy", szFilename);
     loaderJob.m_pFilename = szNameOnDisk;
     loaderJob.m_pContext2 = (void *)ModelParts_t::BUFFER_PHY;
     g_pQueuedLoader->AddJob(&loaderJob);

@@ -178,7 +178,7 @@ static float ResponseCurve(int curve, float x, int axis, float sensitivity) {
     case 4: {
       float flScale = sensitivity < 0.0f ? -1.0f : 1.0f;
 
-      sensitivity = clamp(fabs(sensitivity), 1.0e-8f, 1000.0f);
+      sensitivity = std::clamp(fabs(sensitivity), 1.0e-8f, 1000.0f);
 
       float oneOverSens = 1.0f / sensitivity;
 
@@ -186,7 +186,7 @@ static float ResponseCurve(int curve, float x, int axis, float sensitivity) {
         flScale = -flScale;
       }
 
-      float retval = clamp(powf(fabs(x), oneOverSens), 0.0f, 1.0f);
+      float retval = std::clamp(powf(fabs(x), oneOverSens), 0.0f, 1.0f);
       return retval * flScale;
     } break;
     case 5: {
@@ -389,7 +389,7 @@ static float ResponseCurveLookAccelerated(float x, int axis, float otherAxis,
     // this axis is pressed farther than the acceleration filter
     // Take the lowmap value, or the input, whichever is higher, since
     // we don't necesarily know whether this is the axis which is pegged
-    x = max(joy_lowmap.GetFloat(), x);
+    x = std::max(joy_lowmap.GetFloat(), x);
     bDoAcceleration = true;
   } else {
     // Joystick is languishing in the low-end, turn off acceleration.
@@ -608,7 +608,7 @@ void CInput::JoyStickMove(float frametime, CUserCmd *cmd) {
   if (vgui::surface()->IsCursorVisible()) return;
 
   if (m_flRemainingJoystickSampleTime <= 0) return;
-  frametime = min(m_flRemainingJoystickSampleTime, frametime);
+  frametime = std::min(m_flRemainingJoystickSampleTime, frametime);
   m_flRemainingJoystickSampleTime -= frametime;
 
   QAngle viewangles;
@@ -801,7 +801,7 @@ void CInput::JoyStickMove(float frametime, CUserCmd *cmd) {
 
   // Bound pitch
   viewangles[PITCH] =
-      clamp(viewangles[PITCH], -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat());
+      std::clamp(viewangles[PITCH], -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat());
 
   engine->SetViewAngles(viewangles);
 }

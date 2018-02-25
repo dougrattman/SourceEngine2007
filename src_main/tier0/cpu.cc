@@ -9,7 +9,7 @@
 #include <cstdio>
 #endif
 
-#include "tier0/include/platform.h"
+#include "tier0/include/fasttimer.h"
 
 static inline bool cpuid(i32 function_id, i32& out_eax, i32& out_ebx,
                          i32& out_ecx, i32& out_edx) {

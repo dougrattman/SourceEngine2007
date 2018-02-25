@@ -8,7 +8,7 @@
 
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
+
 // class CUtlSortVector:
 // description:
 //   This in an sorted order-preserving vector. Items may be inserted or removed
@@ -17,7 +17,7 @@
 //   elements are shifted back down. Items are searched for in the vector
 //   using a binary search technique. Clients must pass in a Less() function
 //   into the constructor of the vector to determine the sort order.
-//-----------------------------------------------------------------------------
+
 
 #ifndef _WIN32
 // gcc has no qsort_s, so i need to use a static var to hold the sort context.
@@ -99,9 +99,9 @@ class CUtlSortVector : public CUtlVector<T> {
   void QuickSort(LessFunc& less, int X, int I);
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 CUtlSortVector<T, LessFunc>::CUtlSortVector(int nGrowSize, int initSize)
     : m_pLessContext(NULL),
@@ -114,17 +114,17 @@ CUtlSortVector<T, LessFunc>::CUtlSortVector(T* pMemory, int numElements)
       CUtlVector<T>(pMemory, numElements),
       m_bNeedsSort(false) {}
 
-//-----------------------------------------------------------------------------
+
 // Allows methods to set a context to be used with the less function..
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 void CUtlSortVector<T, LessFunc>::SetLessContext(void* pCtx) {
   m_pLessContext = pCtx;
 }
 
-//-----------------------------------------------------------------------------
+
 // grows the vector
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 int CUtlSortVector<T, LessFunc>::Insert(const T& src) {
   AssertFatal(!m_bNeedsSort);
@@ -185,9 +185,9 @@ void CUtlSortVector<T, LessFunc>::RedoSort(bool bForceSort /*= false */) {
   this->QuickSort(less, 0, this->Count() - 1);
 }
 
-//-----------------------------------------------------------------------------
+
 // finds a particular element
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 int CUtlSortVector<T, LessFunc>::Find(const T& src) const {
   AssertFatal(!m_bNeedsSort);
@@ -208,9 +208,9 @@ int CUtlSortVector<T, LessFunc>::Find(const T& src) const {
   return -1;
 }
 
-//-----------------------------------------------------------------------------
+
 // finds a particular element
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 int CUtlSortVector<T, LessFunc>::FindLessOrEqual(const T& src) const {
   AssertFatal(!m_bNeedsSort);
@@ -247,9 +247,9 @@ int CUtlSortVector<T, LessFunc>::FindLess(const T& src) const {
   return end;
 }
 
-//-----------------------------------------------------------------------------
+
 // Removes a particular element
-//-----------------------------------------------------------------------------
+
 template <class T, class LessFunc>
 void CUtlSortVector<T, LessFunc>::Remove(const T& search) {
   AssertFatal(!m_bNeedsSort);

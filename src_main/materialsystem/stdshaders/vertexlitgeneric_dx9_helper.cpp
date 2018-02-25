@@ -928,24 +928,25 @@ static void DrawVertexLitGeneric_DX9_Internal(
         if (bScaleEdges || bScaleOutline) {
           int nWidth, nHeight;
           pShaderAPI->GetBackBufferDimensions(nWidth, nHeight);
-          flResScale = max(0.5, max(1024.0 / nWidth, 768 / nHeight));
+          flResScale =
+              std::max(0.5f, std::max(1024.0f / nWidth, 768.f / nHeight));
 
           if (bScaleEdges) {
             float flMid = 0.5 * (flSoftStart + flSoftEnd);
-            flSoftStart =
-                clamp(flMid + flResScale * (flSoftStart - flMid), 0.05, 0.99);
-            flSoftEnd =
-                clamp(flMid + flResScale * (flSoftEnd - flMid), 0.05, 0.99);
+            flSoftStart = std::clamp(flMid + flResScale * (flSoftStart - flMid),
+                                     0.05f, 0.99f);
+            flSoftEnd = std::clamp(flMid + flResScale * (flSoftEnd - flMid),
+                                   0.05f, 0.99f);
           }
 
           if (bScaleOutline) {
             // shrink the soft part of the outline, enlarging hard part
             float flMidS = 0.5 * (flOutlineStart1 + flOutlineStart0);
-            flOutlineStart1 = clamp(
-                flMidS + flResScale * (flOutlineStart1 - flMidS), 0.05, 0.99);
+            flOutlineStart1 = std::clamp(
+                flMidS + flResScale * (flOutlineStart1 - flMidS), 0.05f, 0.99f);
             float flMidE = 0.5 * (flOutlineEnd1 + flOutlineEnd0);
-            flOutlineEnd1 = clamp(
-                flMidE + flResScale * (flOutlineEnd1 - flMidE), 0.05, 0.99);
+            flOutlineEnd1 = std::clamp(
+                flMidE + flResScale * (flOutlineEnd1 - flMidE), 0.05f, 0.99f);
           }
         }
 

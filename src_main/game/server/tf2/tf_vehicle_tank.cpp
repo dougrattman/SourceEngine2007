@@ -134,11 +134,11 @@ float MoveAngleTowards( float flAngle, float flTowards, float flRate )
 	flAngle = anglemod( flAngle );
 	if ( flAngle > 180 )
 	{
-		flAngle = min( 360, flAngle + flRate );
+		flAngle = std::min( 360, flAngle + flRate );
 	}
 	else
 	{
-		flAngle = max( 0, flAngle - flRate );
+		flAngle = std::max( 0, flAngle - flRate );
 	}
 
 	// Translate back.

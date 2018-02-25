@@ -299,7 +299,7 @@ void CPlayerClassSapper::AddDrainedEnergy( float flEnergy )
 {
 	// Convert to 0->1
 	flEnergy = ( flEnergy / class_sapper_boost_amount.GetFloat() ); 
-	m_flDrainedEnergy = min( 1.0, m_flDrainedEnergy + flEnergy );
+	m_flDrainedEnergy = std::min( 1.0, m_flDrainedEnergy + flEnergy );
 
 	// Did we hit max?
 	if ( m_flDrainedEnergy >= 1.0 )
@@ -324,5 +324,5 @@ float CPlayerClassSapper::GetDrainedEnergy( void )
 //-----------------------------------------------------------------------------
 void CPlayerClassSapper::DeductDrainedEnergy( float flEnergy )
 {
-	m_flDrainedEnergy = max( 0, m_flDrainedEnergy - flEnergy );
+	m_flDrainedEnergy = std::max( 0, m_flDrainedEnergy - flEnergy );
 }

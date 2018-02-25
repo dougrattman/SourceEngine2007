@@ -428,8 +428,8 @@ BOOL COP_Entity::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult) {
       LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
       // Now sort by this column.
-      m_iSortColumn = max(
-          0, min(pListView->iSubItem, ARRAYSIZE(g_ColumnSortFunctions) - 1));
+      m_iSortColumn = std::max(
+          0, std::min(pListView->iSubItem, ARRAYSIZE(g_ColumnSortFunctions) - 1));
       ResortItems();
     }
   }
@@ -1033,7 +1033,7 @@ void COP_Entity::RefreshKVListValues(const char *pOnlyThisVar) {
             // It's a filename.. just show the filename and not the directory.
             // They can look at the full filename in the smart control if they
             // want.
-            const char *pLastSlash = max(strrchr(pUnformattedValue, '\\'),
+            const char *pLastSlash = std::max(strrchr(pUnformattedValue, '\\'),
                                          strrchr(pUnformattedValue, '/'));
             if (pLastSlash) {
               Q_strncpy(tmpValueBuf, pLastSlash + 1, sizeof(tmpValueBuf));

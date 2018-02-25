@@ -915,7 +915,7 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 			float flToWorldSpaceCenter = ( vecSrc - pEntity->WorldSpaceCenter() ).Length();
 			float flToOrigin = ( vecSrc - pEntity->GetAbsOrigin() ).Length();
 
-			flDistanceToEntity = min( flToWorldSpaceCenter, flToOrigin );
+			flDistanceToEntity = std::min( flToWorldSpaceCenter, flToOrigin );
 		}
 		else
 		{
@@ -1654,7 +1654,7 @@ void CTFGameRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 
 	const char *pszFov = engine->GetClientConVarValue( pPlayer->entindex(), "fov_desired" );
 	int iFov = atoi(pszFov);
-	iFov = clamp( iFov, 75, 90 );
+	iFov = std::clamp( iFov, 75, 90 );
 	pTFPlayer->SetDefaultFOV( iFov );
 }
 
@@ -2145,7 +2145,7 @@ void CTFGameRules::SendWinPanelInfo( void )
 		vecPlayerScore.Sort( PlayerRoundScoreSortFunc );
 
 		// set the top (up to) 3 players by round score in the event data
-		int numPlayers = min( 3, vecPlayerScore.Count() );
+		int numPlayers = std::min( 3, vecPlayerScore.Count() );
 		for ( int i = 0; i < numPlayers; i++ )
 		{
 			// only include players who have non-zero points this round; if we get to a player with 0 round points, stop
@@ -2784,7 +2784,7 @@ int CTFGameRules::CalcPlayerScore( RoundStats_t *pRoundStats )
 					( pRoundStats->m_iStat[TFSTAT_TELEPORTS] / TF_SCORE_TELEPORTS_PER_POINT ) +
 					( pRoundStats->m_iStat[TFSTAT_INVULNS] / TF_SCORE_INVULN ) +
 					( pRoundStats->m_iStat[TFSTAT_REVENGE] / TF_SCORE_REVENGE );
-	return max( iScore, 0 );
+	return std::max( iScore, 0 );
 }
 
 //-----------------------------------------------------------------------------

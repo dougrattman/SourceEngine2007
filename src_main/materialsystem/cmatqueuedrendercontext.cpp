@@ -364,8 +364,9 @@ class CMatQueuedMesh : public IMesh {
       if (desc.m_VertexSize_Position != 0) {
         pDest = desc.m_pPosition;
       } else {
-#define FindMin(desc, pCurrent, tag) \
-  ((desc.m_VertexSize_##tag != 0) ? min(pCurrent, desc.m_p##tag) : pCurrent)
+#define FindMin(desc, pCurrent, tag)                                          \
+  ((desc.m_VertexSize_##tag != 0) ? std::min(pCurrent, (void *)desc.m_p##tag) \
+                                  : pCurrent)
 
         pDest = (void *)(((uint8_t *)0) - 1);
 
@@ -409,7 +410,7 @@ class CMatQueuedMesh : public IMesh {
           i++;
         }
         while (i < nIndices) {
-          int nToCopy = min(ARRAYSIZE(tempIndices), nIndices - i);
+          int nToCopy = std::min(ARRAYSIZE(tempIndices), (usize)nIndices - i);
           for (int j = 0; j < nToCopy; j++) {
             tempIndices[j] = pIndexData[i + j] + desc.m_nFirstVertex;
           }
@@ -861,15 +862,15 @@ MaterialFogMode_t CMatQueuedRenderContext::GetFogMode(void) {
 }
 
 void CMatQueuedRenderContext::FogColor3f(float r, float g, float b) {
-  FogColor3ub(clamp((int)(r * 255.0f), 0, 255),
-              clamp((int)(g * 255.0f), 0, 255),
-              clamp((int)(b * 255.0f), 0, 255));
+  FogColor3ub(std::clamp((int)(r * 255.0f), 0, 255),
+              std::clamp((int)(g * 255.0f), 0, 255),
+              std::clamp((int)(b * 255.0f), 0, 255));
 }
 
 void CMatQueuedRenderContext::FogColor3fv(float const *rgb) {
-  FogColor3ub(clamp((int)(rgb[0] * 255.0f), 0, 255),
-              clamp((int)(rgb[1] * 255.0f), 0, 255),
-              clamp((int)(rgb[2] * 255.0f), 0, 255));
+  FogColor3ub(std::clamp((int)(rgb[0] * 255.0f), 0, 255),
+              std::clamp((int)(rgb[1] * 255.0f), 0, 255),
+              std::clamp((int)(rgb[2] * 255.0f), 0, 255));
 }
 
 void CMatQueuedRenderContext::FogColor3ub(unsigned char r, unsigned char g,

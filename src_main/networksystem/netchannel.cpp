@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -183,7 +183,7 @@ void CNetChannel::SetTimeout(float seconds)
 
 void CNetChannel::SetDataRate(float rate)
 {
-	m_Rate = clamp( rate, (float)MIN_RATE, (float)MAX_RATE );
+	m_Rate = std::clamp( rate, (float)MIN_RATE, (float)MAX_RATE );
 }
 
 const char * CNetChannel::GetName() const

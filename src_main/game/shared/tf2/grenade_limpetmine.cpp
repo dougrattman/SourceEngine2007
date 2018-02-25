@@ -222,7 +222,7 @@ bool CLimpetMine::TakeEMPDamage( float duration )
 	if ( !m_bFizzleInit )
 	{
 		// Set the defuse - fizzle think
-		float flDuration = min( duration, LIMPET_FIZZLE_DURATION );
+		float flDuration = std::min( duration, LIMPET_FIZZLE_DURATION );
 		m_flFizzleDuration = gpGlobals->curtime + ( flDuration - 1.0f );
 		SetThink( LimpetThink );
 		SetNextThink( gpGlobals->curtime + 0.1f );

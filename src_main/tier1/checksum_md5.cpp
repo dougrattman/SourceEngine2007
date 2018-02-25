@@ -23,14 +23,14 @@
 #define MD5STEP(f, w, x, y, z, data, s) \
   (w += f(x, y, z) + data, w = w << s | w >> (32 - s), w += x)
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The core of the MD5 algorithm, this alters an existing MD5 hash to
 //  reflect the addition of 16 longwords of new data.  MD5Update blocks
 //  the data and converts bytes into longwords for this routine.
 // Input  : buf[4] -
 //			in[16] -
 // Output : static void
-//-----------------------------------------------------------------------------
+
 static void MD5Transform(unsigned int buf[4], unsigned int const in[16]) {
   unsigned int a, b, c, d;
 
@@ -113,12 +113,12 @@ static void MD5Transform(unsigned int buf[4], unsigned int const in[16]) {
   buf[3] += d;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
 // initialization constants.
 
 // Input  : *ctx -
-//-----------------------------------------------------------------------------
+
 void MD5Init(MD5Context_t *ctx) {
   ctx->buf[0] = 0x67452301;
   ctx->buf[1] = 0xefcdab89;
@@ -129,12 +129,12 @@ void MD5Init(MD5Context_t *ctx) {
   ctx->bits[1] = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Update context to reflect the concatenation of another buffer full
 // of bytes. Input  : *ctx -
 //			*buf -
 //			len -
-//-----------------------------------------------------------------------------
+
 void MD5Update(MD5Context_t *ctx, unsigned char const *buf, unsigned int len) {
   unsigned int t;
 
@@ -177,12 +177,12 @@ void MD5Update(MD5Context_t *ctx, unsigned char const *buf, unsigned int len) {
   memcpy(ctx->in, buf, len);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Final wrapup - pad to 64-byte boundary with the bit pattern
 // 1 0* (64-bit count of bits processed, MSB-first)
 // Input  : digest[MD5_DIGEST_LENGTH] -
 //			*ctx -
-//-----------------------------------------------------------------------------
+
 void MD5Final(unsigned char digest[MD5_DIGEST_LENGTH], MD5Context_t *ctx) {
   /* Compute number of bytes mod 64 */
   unsigned count = (ctx->bits[0] >> 3) & 0x3F;
@@ -220,12 +220,12 @@ void MD5Final(unsigned char digest[MD5_DIGEST_LENGTH], MD5Context_t *ctx) {
   memset(ctx, 0, sizeof(*ctx)); /* In case it's sensitive */
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *hash -
 //			hashlen -
 // Output : char
-//-----------------------------------------------------------------------------
+
 char *MD5_Print(unsigned char *hash, int hashlen) {
   static char szReturn[64];
 
@@ -235,11 +235,11 @@ char *MD5_Print(unsigned char *hash, int hashlen) {
   return szReturn;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: generate pseudo random number from a seed number
 // Input  : seed number
 // Output : pseudo random number
-//-----------------------------------------------------------------------------
+
 unsigned int MD5_PseudoRandom(unsigned int nSeed) {
   MD5Context_t ctx;
   unsigned char digest[MD5_DIGEST_LENGTH];  // The MD5 Hash

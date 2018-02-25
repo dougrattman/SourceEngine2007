@@ -201,7 +201,7 @@ void Shader_DecalDrawPoly(CDecalVert *v, IMaterial *pMaterial,
           1.0 - (cl.GetTime() - pdecal->fadeStartTime) / pdecal->fadeDuration;
     }
 
-    fadeval = clamp(fadeval, 0.0f, 1.0f);
+    fadeval = std::clamp(fadeval, 0.0f, 1.0f);
     color[3] = (byte)(255 * fadeval);
   }
 
@@ -529,7 +529,7 @@ static decal_t *R_DecalAlloc(int flags) {
   static bool bWarningOnce = false;
   bool bPermanent = (flags & FDECAL_PERMANENT) != 0;
 
-  int dynamicDecalLimit = min(r_decals.GetInt(), g_nMaxDecals);
+  int dynamicDecalLimit = std::min(r_decals.GetInt(), g_nMaxDecals);
 
   // Now find a slot. Unless it's dynamic and we're at the limit of dynamic
   // decals, we can look for a free slot.
@@ -1101,8 +1101,8 @@ static decal_t *R_DecalIntersect(decalinfo_t *decalinfo, SurfaceHandle_t surfID,
 
       // Now figure out the part of the projection that intersects pDecal's
       // clip box [0,0,1,1].
-      Vector2D vUnionMin(max(vDecalMin.x, 0.0f), max(vDecalMin.y, 0.0f));
-      Vector2D vUnionMax(min(vDecalMax.x, 1.0f), min(vDecalMax.y, 1.0f));
+      Vector2D vUnionMin(std::max(vDecalMin.x, 0.0f), std::max(vDecalMin.y, 0.0f));
+      Vector2D vUnionMax(std::min(vDecalMax.x, 1.0f), std::min(vDecalMax.y, 1.0f));
 
       if (vUnionMin.x < 1 && vUnionMin.y < 1 && vUnionMax.x > 0 &&
           vUnionMax.y > 0) {
@@ -1752,7 +1752,7 @@ void R_DrawDecalsAllImmediate_Gathered(IMatRenderContext *pRenderContext,
             1.0 - (cl.GetTime() - pDecal->fadeStartTime) / pDecal->fadeDuration;
       }
 
-      flFadeValue = clamp(flFadeValue, 0.0f, 1.0f);
+      flFadeValue = std::clamp(flFadeValue, 0.0f, 1.0f);
 
       color[3] = (uint8_t)(255 * flFadeValue);
     }
@@ -1892,7 +1892,7 @@ void R_DrawDecalsAllImmediate(IMatRenderContext *pRenderContext, int iGroup,
                                     pDecal->fadeDuration;
           }
 
-          flFadeValue = clamp(flFadeValue, 0.0f, 1.0f);
+          flFadeValue = std::clamp(flFadeValue, 0.0f, 1.0f);
 
           color[3] = (uint8_t)(255 * flFadeValue);
         }
@@ -2187,7 +2187,7 @@ void R_DrawDecalsAll_Gathered(IMatRenderContext *pRenderContext,
             1.0 - (cl.GetTime() - pDecal->fadeStartTime) / pDecal->fadeDuration;
       }
 
-      flFadeValue = clamp(flFadeValue, 0.0f, 1.0f);
+      flFadeValue = std::clamp(flFadeValue, 0.0f, 1.0f);
 
       color[3] = (uint8_t)(255 * flFadeValue);
     }
@@ -2408,7 +2408,7 @@ void R_DrawDecalsAll(IMatRenderContext *pRenderContext, int iGroup,
                                     pDecal->fadeDuration;
           }
 
-          flFadeValue = clamp(flFadeValue, 0.0f, 1.0f);
+          flFadeValue = std::clamp(flFadeValue, 0.0f, 1.0f);
 
           color[3] = (uint8_t)(255 * flFadeValue);
         }

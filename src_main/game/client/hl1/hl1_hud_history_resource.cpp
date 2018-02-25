@@ -204,7 +204,7 @@ void CHudHistoryResource::Paint( void )
 	{
 		if ( m_PickupHistory[i].type )
 		{
-			m_PickupHistory[i].DisplayTime = min( m_PickupHistory[i].DisplayTime, gpGlobals->curtime + hud_drawhistory_time.GetFloat() );
+			m_PickupHistory[i].DisplayTime = std::min( m_PickupHistory[i].DisplayTime, gpGlobals->curtime + hud_drawhistory_time.GetFloat() );
 			if ( m_PickupHistory[i].DisplayTime <= gpGlobals->curtime )
 			{  // pic drawing time has expired
 				memset( &m_PickupHistory[i], 0, sizeof(HIST_ITEM) );
@@ -218,7 +218,7 @@ void CHudHistoryResource::Paint( void )
 			int r, g, b, nUnused;
 			(gHUD.m_clrYellowish).GetColor( r, g, b, nUnused );
 
-			Color clrAmmo( r, g, b, min( scale, 255 ) );
+			Color clrAmmo( r, g, b, std::min( scale, 255 ) );
 
 			int nHudElemWidth, nHudElemHeight;
 			GetSize( nHudElemWidth, nHudElemHeight );
@@ -269,7 +269,7 @@ void CHudHistoryResource::Paint( void )
 						// if the weapon doesn't have ammo, display it as red
 						Color clrReddish( 255, 16, 16, 255 );
 						clrReddish.GetColor( r, g, b, nUnused );
-						clrAmmo.SetColor( r, g, b, min( scale, 255 ) );
+						clrAmmo.SetColor( r, g, b, std::min( scale, 255 ) );
 					}
 
 					int ypos = nHudElemHeight - (HISTORY_PICKUP_PICK_HEIGHT + (HISTORY_PICKUP_GAP * i));

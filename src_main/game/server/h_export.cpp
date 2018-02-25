@@ -2,14 +2,13 @@
 //
 // Purpose: Entity classes exported by Halflife.
 
-#ifdef _WIN32
+#include <cassert>
 
 #include "base/include/windows/windows_light.h"
 
 #include "datamap.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // Ensure data sizes are stable
@@ -34,5 +33,3 @@ BOOL WINAPI DllMain(_In_ HINSTANCE instance, _In_ DWORD call_reason,
   }
   return TRUE;
 }
-
-#endif

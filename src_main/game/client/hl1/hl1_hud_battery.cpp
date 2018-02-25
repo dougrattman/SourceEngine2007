@@ -155,7 +155,7 @@ void CHudBattery::Paint()
 
 	if ( m_iBattery > 0 )
 	{
-		int nSuitOffset = icon_suit_full->Height() * ((float)(100-(min(100,m_iBattery))) * 0.01);	// battery can go from 0 to 100 so * 0.01 goes from 0 to 1
+		int nSuitOffset = icon_suit_full->Height() * ((float)(100-(std::min(100,m_iBattery))) * 0.01);	// battery can go from 0 to 100 so * 0.01 goes from 0 to 1
 		icon_suit_full->DrawSelfCropped( x, y - iOffset + nSuitOffset, 0, nSuitOffset, icon_suit_full->Width(), icon_suit_full->Height() - nSuitOffset, clrHealth );
 	}
 

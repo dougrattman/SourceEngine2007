@@ -358,7 +358,7 @@ void CTFStatsSummaryPanel::UpdateBarCharts()
 		{
 			// get max value of stat being charted so we know how to scale the graph
 			float flVal = GetDisplayValue( m_aClassStats[i], m_statBarGraph[iChart], m_displayBarGraph[iChart] );
-			flMax = max( flVal, flMax );
+			flMax = std::max( flVal, flMax );
 		}
 
 		// draw the bar chart value for each player class
@@ -607,7 +607,7 @@ void CTFStatsSummaryPanel::DisplayBarValue( int iChart, int iBar, ClassStats_t &
 	// calculate the bar size to draw, in the range of 0.0->1.0
 	float flBarRange = SafeCalcFraction( flValue, flMaxValue );
 	// calculate the # of pixels of bar width to draw
-	int iBarWidth = max( (int) ( flBarRange * (float) m_iBarMaxWidth ), 1 );
+	int iBarWidth = std::max( (int) ( flBarRange * (float) m_iBarMaxWidth ), 1 );
 
 	// Get the text label to draw for this bar.  For values of 0, draw nothing, to minimize clutter
 	const char *szLabel = ( flValue > 0 ? RenderValue( flValue, statType, statDisplay ) : "" );

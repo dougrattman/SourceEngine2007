@@ -824,7 +824,7 @@ int CDODPlayerShared::PlayerClass( void )
 
 void CDODPlayerShared::SetStamina( float flStamina )
 {
-	m_flStamina = clamp( flStamina, 0, 100 );
+	m_flStamina = std::clamp( flStamina, 0, 100 );
 }
 
 CWeaponDODBase* CDODPlayerShared::GetActiveDODWeapon() const
@@ -879,7 +879,7 @@ void CDODPlayerShared::ClampDeployedAngles( QAngle *vecTestAngles )
 	Assert( vecTestAngles );
 
 	// Clamp Pitch
-	vecTestAngles->x = clamp( vecTestAngles->x, MAX_DEPLOY_PITCH, MIN_DEPLOY_PITCH );
+	vecTestAngles->x = std::clamp( vecTestAngles->x, MAX_DEPLOY_PITCH, MIN_DEPLOY_PITCH );
 
 	// Clamp Yaw - do a bit more work as yaw will wrap around and cause problems
 	float flDeployedYawCenter = GetDeployedAngles().y;

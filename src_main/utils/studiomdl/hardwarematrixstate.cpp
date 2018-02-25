@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "HardwareMatrixState.h"
 #include <limits.h>
 #include <stdio.h>

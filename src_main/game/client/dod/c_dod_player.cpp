@@ -394,8 +394,8 @@ void C_DODRagdoll::CreateLowViolenceRagdoll()
 		if ( LookupSequence( str ) == -1 )
 			break;
 		
-		iMinDeathAnim = min( iMinDeathAnim, iAnim );
-		iMaxDeathAnim = max( iMaxDeathAnim, iAnim );
+		iMinDeathAnim = std::min( iMinDeathAnim, iAnim );
+		iMaxDeathAnim = std::max( iMaxDeathAnim, iAnim );
 	}
 
 	if ( iMinDeathAnim == 9999 )
@@ -589,7 +589,7 @@ void C_DODRagdoll::ClientThink( void )
 		int iAlpha = GetRenderColor().a;
 		int iFadeSpeed = 600.0f;
 
-		iAlpha = max( iAlpha - ( iFadeSpeed * gpGlobals->frametime ), 0 );
+		iAlpha = std::max( iAlpha - ( iFadeSpeed * gpGlobals->frametime ), 0 );
 
 		SetRenderMode( kRenderTransAlpha );
 		SetRenderColorA( iAlpha );
@@ -784,7 +784,7 @@ void C_DODPlayer::DoRecoil( int iWpnID, float flWpnRecoil )
 	float flYawRecoil = flPitchRecoil / 4;
 
 	if( iWpnID == WEAPON_BAR )
-		flYawRecoil = min( flYawRecoil, 1.3 );
+		flYawRecoil = std::min( flYawRecoil, 1.3 );
 
 	if ( m_Shared.IsInMGDeploy() )
 	{
@@ -833,7 +833,7 @@ void C_DODPlayer::GetRecoilToAddThisFrame( float &flPitchRecoil, float &flYawRec
 		return;
 	}
 
-	float flRemaining = min( m_flRecoilTimeRemaining, gpGlobals->frametime );
+	float flRemaining = std::min( m_flRecoilTimeRemaining, gpGlobals->frametime );
 
 	float flRecoilProportion = ( flRemaining / RECOIL_DURATION );
 
@@ -1827,10 +1827,10 @@ void C_DODPlayer::CalcDODDeathCamView(Vector& eyeOrigin, QAngle& eyeAngles, floa
 
 	// Interpolate very quickly to the killer and follow
 	float interpolation = ( gpGlobals->curtime - m_flDeathTime ) / 0.2f;
-	interpolation = clamp( interpolation, 0.0f, 1.0f );
+	interpolation = std::clamp( interpolation, 0.0f, 1.0f );
 
 	m_flObserverChaseDistance += gpGlobals->frametime*48.0f;
-	m_flObserverChaseDistance = clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
+	m_flObserverChaseDistance = std::clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
 
 	QAngle aForward = eyeAngles = EyeAngles();
 	Vector origin = EyePosition();			
@@ -1941,7 +1941,7 @@ void C_DODPlayer::CalcChaseCamView(Vector& eyeOrigin, QAngle& eyeAngles, float& 
 	}
 
 	m_flObserverChaseDistance += gpGlobals->frametime*48.0f;
-	m_flObserverChaseDistance = clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
+	m_flObserverChaseDistance = std::clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
 
 	AngleVectors( viewangles, &forward );
 
@@ -2466,7 +2466,7 @@ void C_DODPlayer::AvoidPlayers( CUserCmd *pCmd )
 		flSideScale = fabs( cl_sidespeed.GetFloat() ) / fabs( pCmd->sidemove );
 	}
 
-	float flScale = min( flForwardScale, flSideScale );
+	float flScale = std::min( flForwardScale, flSideScale );
 	pCmd->forwardmove *= flScale;
 	pCmd->sidemove *= flScale;
 

@@ -41,10 +41,6 @@ ch *GetCommandLine();
   { x; }
 #endif
 
-struct InputEvent_t;
-
-enum VCRMode_t { VCR_Invalid = -1, VCR_Disabled = 0, VCR_Record, VCR_Playback };
-
 abstract_class IVCRHelpers {
  public:
   virtual void ErrorMessage(const ch *pMsg) = 0;
@@ -58,9 +54,14 @@ abstract_class IVCRTrace {
   virtual void Read(void *pDest, i32 size) = 0;
 };
 
+struct InputEvent_t;
+
+enum VCRMode_t { VCR_Invalid = -1, VCR_Disabled = 0, VCR_Record, VCR_Playback };
+
 typedef struct VCR_s {
   // Start VCR record or play.
-  BOOL (*Start)(ch const *pFilename, bool bRecord, IVCRHelpers *pHelpers);
+  BOOL (*Start)
+  (ch const *file_name, bool should_record, IVCRHelpers *vcr_helpers);
   void (*End)();
 
   // Used by the VCR trace app.
@@ -80,7 +81,7 @@ typedef struct VCR_s {
   // synchronized.
   void (*SyncToken)(ch const *pToken);
 
-  // Hook for Sys_FloatTime().
+  // Hook for Plat_FloatTime().
   f64 (*Hook_Sys_FloatTime)(f64 time);
 
   // Note: this makes no guarantees about msg.hwnd being the same on playback.
@@ -201,7 +202,7 @@ typedef struct VCR_s {
 
 // In the launcher, this is created by vcrmode.c.
 // In the engine, this is set when the launcher initializes its DLL.
-PLATFORM_INTERFACE VCR_t *g_pVCR;
+SOURCE_TIER0_API VCR_t *g_pVCR;
 
 #endif
 
@@ -259,7 +260,7 @@ PLATFORM_INTERFACE VCR_t *g_pVCR;
 #define VCRGenericString MUST_IFDEF_OUT_GenericString
 #define VCRGenericValueVerify MUST_IFDEF_OUT_GenericValueVerify
 #define VCRGetPercentCompleted() (0.0f)
-#define VCRHook_Sys_FloatTime Sys_FloatTime
+#define VCRHook_Sys_FloatTime Plat_FloatTime
 #define VCRHook_PeekMessage PeekMessage
 #define VCRHook_RecordGameMsg RecordGameMsg
 #define VCRHook_RecordEndGameMsg RecordEndGameMsg

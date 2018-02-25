@@ -17,14 +17,14 @@
 #define FOR_EACH_VEC(vecName, iteratorName) \
   for (int iteratorName = 0; iteratorName < vecName.Count(); iteratorName++)
 
-//-----------------------------------------------------------------------------
+
 // The CUtlVector class:
 // A growable array class which doubles in size by default.
 // It will always keep all elements consecutive in memory, and may move the
 // elements around in memory (via a PvRealloc) when elements are inserted or
 // removed. Clients should therefore refer to the elements of the vector
 // by index (they should *never* maintain pointers to elements in the vector).
-//-----------------------------------------------------------------------------
+
 template <class T, class A = CUtlMemory<T> >
 class CUtlVector {
   typedef A CAllocator;
@@ -169,10 +169,10 @@ class CUtlBlockVector : public CUtlVector<T, CUtlBlockMemory<T, int> > {
       : CUtlVector<T, CUtlBlockMemory<T, int> >(growSize, initSize) {}
 };
 
-//-----------------------------------------------------------------------------
+
 // The CUtlVectorFixed class:
 // A array class with a fixed allocation scheme
-//-----------------------------------------------------------------------------
+
 
 template <class BASE_UTLVECTOR, class MUTEX_TYPE = CThreadFastMutex>
 class CUtlVectorMT : public BASE_UTLVECTOR, public MUTEX_TYPE {
@@ -188,10 +188,10 @@ class CUtlVectorMT : public BASE_UTLVECTOR, public MUTEX_TYPE {
       : BaseClass(pMemory, numElements) {}
 };
 
-//-----------------------------------------------------------------------------
+
 // The CUtlVectorFixed class:
 // A array class with a fixed allocation scheme
-//-----------------------------------------------------------------------------
+
 template <class T, size_t MAX_SIZE>
 class CUtlVectorFixed : public CUtlVector<T, CUtlMemoryFixed<T, MAX_SIZE> > {
   typedef CUtlVector<T, CUtlMemoryFixed<T, MAX_SIZE> > BaseClass;
@@ -204,10 +204,10 @@ class CUtlVectorFixed : public CUtlVector<T, CUtlMemoryFixed<T, MAX_SIZE> > {
       : BaseClass(pMemory, numElements) {}
 };
 
-//-----------------------------------------------------------------------------
+
 // The CUtlVectorFixed class:
 // A array class with a fixed allocation scheme
-//-----------------------------------------------------------------------------
+
 template <class T, size_t MAX_SIZE>
 class CUtlVectorFixedGrowable
     : public CUtlVector<T, CUtlMemoryFixedGrowable<T, MAX_SIZE> > {
@@ -218,7 +218,7 @@ class CUtlVectorFixedGrowable
   CUtlVectorFixedGrowable(int growSize = 0) : BaseClass(growSize, MAX_SIZE) {}
 };
 
-//-----------------------------------------------------------------------------
+
 // The CCopyableUtlVector class:
 // A array class that allows copy construction (so you can nest a CUtlVector
 // inside of another one of our containers)
@@ -226,7 +226,7 @@ class CUtlVectorFixedGrowable
 //  operation if you don't carefully control when it happens
 // Only use this when nesting a CUtlVector() inside of another one of our
 // container classes (i.e a CUtlMap)
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CCopyableUtlVector : public CUtlVector<T, CUtlMemory<T> > {
   typedef CUtlVector<T, CUtlMemory<T> > BaseClass;
@@ -242,9 +242,9 @@ class CCopyableUtlVector : public CUtlVector<T, CUtlMemory<T> > {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline CUtlVector<T, A>::CUtlVector(int growSize, int initSize)
     : m_Memory(growSize, initSize), m_Size(0) {
@@ -274,9 +274,9 @@ inline CUtlVector<T, A>& CUtlVector<T, A>::operator=(
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // element access
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline T& CUtlVector<T, A>::operator[](int i) {
   return m_Memory[i];
@@ -321,9 +321,9 @@ inline const T& CUtlVector<T, A>::Tail() const {
   return m_Memory[m_Size - 1];
 }
 
-//-----------------------------------------------------------------------------
+
 // Count
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline int CUtlVector<T, A>::Size() const {
   return m_Size;
@@ -334,25 +334,25 @@ inline int CUtlVector<T, A>::Count() const {
   return m_Size;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is element index valid?
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline bool CUtlVector<T, A>::IsValidIndex(int i) const {
   return (i >= 0) && (i < m_Size);
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns in invalid index
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline int CUtlVector<T, A>::InvalidIndex() {
   return -1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Grows the vector
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::GrowVector(int num) {
   if (m_Size + num > m_Memory.NumAllocated()) {
@@ -364,9 +364,9 @@ void CUtlVector<T, A>::GrowVector(int num) {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Sorts the vector
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::Sort(int(__cdecl* pfnCompare)(const T*, const T*)) {
   typedef int(__cdecl * QSortCompareFunc_t)(const void*, const void*);
@@ -391,9 +391,9 @@ void CUtlVector<T, A>::Sort(int(__cdecl* pfnCompare)(const T*, const T*)) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we have enough memory allocated to store a requested # of elements
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::EnsureCapacity(int num) {
   MEM_ALLOC_CREDIT_CLASS();
@@ -401,17 +401,17 @@ void CUtlVector<T, A>::EnsureCapacity(int num) {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we have at least this many elements
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::EnsureCount(int num) {
   if (Count() < num) AddMultipleToTail(num - Count());
 }
 
-//-----------------------------------------------------------------------------
+
 // Shifts elements
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::ShiftElementsRight(int elem, int num) {
   Assert(IsValidIndex(elem) || (m_Size == 0) || (num == 0));
@@ -433,9 +433,9 @@ void CUtlVector<T, A>::ShiftElementsLeft(int elem, int num) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element, uses default constructor
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline int CUtlVector<T, A>::AddToHead() {
   return InsertBefore(0);
@@ -462,9 +462,9 @@ int CUtlVector<T, A>::InsertBefore(int elem) {
   return elem;
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element, uses copy constructor
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline int CUtlVector<T, A>::AddToHead(const T& src) {
   // Can't insert something that's in the list... reallocation may hose us
@@ -500,9 +500,9 @@ int CUtlVector<T, A>::InsertBefore(int elem, const T& src) {
   return elem;
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds multiple elements, uses default constructor
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 inline int CUtlVector<T, A>::AddMultipleToHead(int num) {
   return InsertMultipleBefore(0, num);
@@ -593,9 +593,9 @@ inline int CUtlVector<T, A>::InsertMultipleBefore(int elem, int num,
   return elem;
 }
 
-//-----------------------------------------------------------------------------
+
 // Finds an element (element needs operator== defined)
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 int CUtlVector<T, A>::Find(const T& src) const {
   for (int i = 0; i < Count(); ++i) {
@@ -609,9 +609,9 @@ bool CUtlVector<T, A>::HasElement(const T& src) const {
   return (Find(src) >= 0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Element removal
-//-----------------------------------------------------------------------------
+
 template <typename T, class A>
 void CUtlVector<T, A>::FastRemove(int elem) {
   Assert(IsValidIndex(elem));
@@ -660,9 +660,9 @@ void CUtlVector<T, A>::RemoveAll() {
   m_Size = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Memory deallocation
-//-----------------------------------------------------------------------------
+
 
 template <typename T, class A>
 inline void CUtlVector<T, A>::Purge() {
@@ -689,9 +689,9 @@ inline int CUtlVector<T, A>::NumAllocated() const {
   return m_Memory.NumAllocated();
 }
 
-//-----------------------------------------------------------------------------
+
 // Data and memory validation
-//-----------------------------------------------------------------------------
+
 #ifdef DBGFLAG_VALIDATE
 template <typename T, class A>
 void CUtlVector<T, A>::Validate(CValidator& validator, char* pchName) {

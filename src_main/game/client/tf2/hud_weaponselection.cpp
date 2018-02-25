@@ -407,7 +407,7 @@ void CHudWeaponSelection::RebuildMenus()
 		{
 			// HACK
 			int firstbuildslot = 4;
-			int whichBuildMenu = clamp( pWeapon->GetSlot() - firstbuildslot, 0, NUM_BUILD_MENUS - 1 );
+			int whichBuildMenu = std::clamp( pWeapon->GetSlot() - firstbuildslot, 0, NUM_BUILD_MENUS - 1 );
 
 			m_BuildObjects[ whichBuildMenu ].items.Insert( item );
 		}

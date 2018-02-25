@@ -1666,18 +1666,14 @@ void CStudioRender::R_StudioSoftwareProcessMesh(
     unsigned short *pGroupToMesh, StudioModelLighting_t lighting, bool doFlex,
     float r_blend, bool bNeedsTangentSpace, bool bDX8Vertex,
     IMaterial *pMaterial) {
-  unsigned int nAlphaMask = RoundFloatToInt(r_blend * 255.0f);
-  nAlphaMask = clamp(nAlphaMask, 0, 255);
-  nAlphaMask <<= 24;
+  unsigned int nAlphaMask =
+      std::clamp(static_cast<unsigned int>(RoundFloatToInt(r_blend * 255.0f)),
+                 0u, 255u)
+      << 24;
 
   // FIXME: Use function pointers to simplify this?!?
-  int idx;
-  if (IsPC()) {
-    idx = bDX8Vertex * 24 + bNeedsTangentSpace * 12 + doFlex * 6 +
-          MathLib_SSEEnabled() * 3 + lighting;
-  } else {
-    idx = bNeedsTangentSpace * 6 + doFlex * 3 + lighting;
-  }
+  int idx = bDX8Vertex * 24 + bNeedsTangentSpace * 12 + doFlex * 6 +
+            MathLib_SSEEnabled() * 3 + lighting;
 
   const mstudio_meshvertexdata_t *pVertData =
       GetFatVertexData(pmesh, m_pStudioHdr);
@@ -2624,7 +2620,7 @@ int CStudioRender::R_StudioDrawEyeball(IMatRenderContext *pRenderContext,
   m_VertexCache.SetupComputation(pmesh);
 
   int nAlpnaInt = RoundFloatToInt(m_pRC->m_AlphaMod * 255);
-  unsigned char a = clamp(nAlpnaInt, 0, 255);
+  unsigned char a = std::clamp(nAlpnaInt, 0, 255);
 
   Vector position, normal, color;
 

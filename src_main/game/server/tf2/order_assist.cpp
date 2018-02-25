@@ -110,7 +110,7 @@ bool COrderAssist::CreateOrder( CPlayerClass *pClass )
 			gpGlobals->maxClients
 			);
 
-		nSortedEnemies = min( nSortedEnemies, NUM_ASSIST_ENEMIES );
+		nSortedEnemies = std::min( nSortedEnemies, NUM_ASSIST_ENEMIES );
 		for ( int i=0; i < nSortedEnemies; i++ )
 		{
 			CBaseEntity *pEnt = CBaseEntity::Instance( engine->PEntityOfEntIndex( sortedEnemies[i] + 1 ) );

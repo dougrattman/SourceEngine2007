@@ -172,7 +172,7 @@ void CPersonalShieldEffect::Render()
 
 	// Get redder as their health goes down.
 	float flColor = (float)m_hEnt->GetHealth() / m_hEnt->GetMaxHealth();
-	flColor = clamp(flColor, 0, 1);
+	flColor = std::clamp(flColor, 0, 1);
 	seg.m_vColor.Init( 0.5 + 0.5*flColor, flColor, flColor );
 
 	seg.m_flAlpha = 1;
@@ -1419,8 +1419,8 @@ void C_BaseTFPlayer::CheckKnockdownState( void )
 			if ( dt >= 0.0f && dt < KNOCKDOWN_BLEND_IN )
 			{
 				frac = ( dt / KNOCKDOWN_BLEND_IN );
-				frac = max( 0.0f, frac );
-				frac = min( 1.0f, frac );
+				frac = std::max( 0.0f, frac );
+				frac = std::min( 1.0f, frac );
 			}
 			else if ( dt >= KNOCKDOWN_BLEND_IN)
 			{
@@ -1599,8 +1599,8 @@ float C_BaseTFPlayer::ComputeCamoEffectAmount( void )
 	effect_amount *= 1 + LOCAL_MOTION_CAMO_EFFECT_AMOUNT * dampening;
 
 	// Clamp to valid range
-	effect_amount = max( 0.0f, effect_amount );
-	effect_amount = min( 0.99f, effect_amount );
+	effect_amount = std::max( 0.0f, effect_amount );
+	effect_amount = std::min( 0.99f, effect_amount );
 
 	return effect_amount;
 }
@@ -1814,8 +1814,8 @@ void C_BaseTFPlayer::CheckCameraMovement( void )
 	if ( vel > CAMO_DAMPENINGVELOCITY_CUTOFF )
 	{
 		frac1 = ( vel - CAMO_DAMPENINGVELOCITY_CUTOFF ) / ( CAMO_DAMPENINGVELOCITY_MAX - CAMO_DAMPENINGVELOCITY_CUTOFF );
-		frac1 = min( 0.0f, frac1 );
-		frac1 = max( 1.0f, frac1 );
+		frac1 = std::min( 0.0f, frac1 );
+		frac1 = std::max( 1.0f, frac1 );
 
 		frac1 *= 50.0f;
 
@@ -1827,8 +1827,8 @@ void C_BaseTFPlayer::CheckCameraMovement( void )
 	if ( avel > CAMO_DAMPENINGAVEL_CUTOFF )
 	{
 		frac2 = ( avel - CAMO_DAMPENINGAVEL_CUTOFF ) / ( CAMO_DAMPENINGAVEL_MAX - CAMO_DAMPENINGAVEL_CUTOFF );
-		frac2 = min( 0.0f, frac2 );
-		frac2 = max( 1.0f, frac2 );
+		frac2 = std::min( 0.0f, frac2 );
+		frac2 = std::max( 1.0f, frac2 );
 
 		frac2 *= 50.0f;
 
@@ -1837,7 +1837,7 @@ void C_BaseTFPlayer::CheckCameraMovement( void )
 	}
 
 	// Pick the greater
-	float amount = max( frac1, frac2 );
+	float amount = std::max( frac1, frac2 );
 
 	SetCamoDampening( amount );
 }
@@ -1860,7 +1860,7 @@ void C_BaseTFPlayer::CheckCamoDampening( void )
 	if ( m_flGoalDampeningAmount > m_flDampeningAmount )
 	{
 		m_flDampeningAmount += changeamount;
-		m_flDampeningAmount = min( m_flDampeningAmount, m_flGoalDampeningAmount );
+		m_flDampeningAmount = std::min( m_flDampeningAmount, m_flGoalDampeningAmount );
 	}
 	else
 	{
@@ -1868,7 +1868,7 @@ void C_BaseTFPlayer::CheckCamoDampening( void )
 			return;
 
 		m_flDampeningAmount -= changeamount;
-		m_flDampeningAmount = max( m_flDampeningAmount, m_flGoalDampeningAmount );
+		m_flDampeningAmount = std::max( m_flDampeningAmount, m_flGoalDampeningAmount );
 	}
 }
 
@@ -1920,8 +1920,8 @@ void C_BaseTFPlayer::CheckMovementCamoSuppression( void )
 	if ( avel > CAMO_DAMPENINGAVEL_CUTOFF )
 	{
 		float frac2 = ( avel - CAMO_DAMPENINGAVEL_CUTOFF ) / ( CAMO_DAMPENINGAVEL_MAX - CAMO_DAMPENINGAVEL_CUTOFF );
-		frac2 = min( 0.0f, frac2 );
-		frac2 = max( 1.0f, frac2 );
+		frac2 = std::min( 0.0f, frac2 );
+		frac2 = std::max( 1.0f, frac2 );
 		flSuppression = 50.0f * frac2;
 	}
 
@@ -1930,8 +1930,8 @@ void C_BaseTFPlayer::CheckMovementCamoSuppression( void )
 	if ( vel > CAMO_DAMPENINGVELOCITY_CUTOFF )
 	{
 		float frac = ( vel- CAMO_DAMPENINGVELOCITY_CUTOFF ) / ( CAMO_DAMPENINGVELOCITY_MAX - CAMO_DAMPENINGVELOCITY_CUTOFF );
-		frac = min( 1.0f, frac );
-		flSuppression = min( 100.f, flSuppression + (100.0f * frac) );
+		frac = std::min( 1.0f, frac );
+		flSuppression = std::min( 100.f, flSuppression + (100.0f * frac) );
 	}
 
 	// Set the camo aount
@@ -1952,7 +1952,7 @@ void C_BaseTFPlayer::CheckMovementCamoSuppression( void )
 	if ( m_flGoalMovementCamoSuppressionAmount > m_flMovementCamoSuppression )
 	{
 		m_flMovementCamoSuppression += changeamount;
-		m_flMovementCamoSuppression = min( m_flMovementCamoSuppression, m_flGoalMovementCamoSuppressionAmount );
+		m_flMovementCamoSuppression = std::min( m_flMovementCamoSuppression, m_flGoalMovementCamoSuppressionAmount );
 	}
 	else
 	{
@@ -1960,7 +1960,7 @@ void C_BaseTFPlayer::CheckMovementCamoSuppression( void )
 			return;
 
 		m_flMovementCamoSuppression -= changeamount;
-		m_flMovementCamoSuppression = max( m_flMovementCamoSuppression, m_flGoalMovementCamoSuppressionAmount );
+		m_flMovementCamoSuppression = std::max( m_flMovementCamoSuppression, m_flGoalMovementCamoSuppressionAmount );
 	}
 }
 
@@ -2061,8 +2061,8 @@ float C_BaseTFPlayer::GetOverlayAlpha( void )
 		}
 	}
 
-	alpha = min( 1.0f, alpha );
-	alpha = max( 0.0f, alpha );
+	alpha = std::min( 1.0f, alpha );
+	alpha = std::max( 0.0f, alpha );
 
 	return alpha;
 }
@@ -2483,7 +2483,7 @@ void C_BaseTFPlayer::PerformClientSideObstacleAvoidance( float flFrameTime, CUse
 			float distfromcenter = sqrt( leg1 * leg1 + objectradius * objectradius );
 
 			force = distfromcenter / radius;
-			force = clamp( force, 0.0f, 1.0f );
+			force = std::clamp( force, 0.0f, 1.0f );
 			force = 1.0f - force;
 
 			if ( force <= 0.5f )
@@ -2501,7 +2501,7 @@ void C_BaseTFPlayer::PerformClientSideObstacleAvoidance( float flFrameTime, CUse
 			float dist = deltaObject.Length2D();
 
 			force = dist / radius;
-			force = clamp( force, 0.0f, 1.0f );
+			force = std::clamp( force, 0.0f, 1.0f );
 			force = 1.0f - force;
 
 			//engine->Con_NPrintf( slot++, "dist %f/radius %f == %f\n", dist, radius, force );
@@ -2547,13 +2547,13 @@ void C_BaseTFPlayer::PerformClientSideObstacleAvoidance( float flFrameTime, CUse
 
 	if ( pCmd->forwardmove > 0.0f )
 	{
-		pCmd->forwardmove = clamp( pCmd->forwardmove, -cl_forwardspeed.GetFloat(), cl_forwardspeed.GetFloat() );
+		pCmd->forwardmove = std::clamp( pCmd->forwardmove, -cl_forwardspeed.GetFloat(), cl_forwardspeed.GetFloat() );
 	}
 	else
 	{
-		pCmd->forwardmove = clamp( pCmd->forwardmove, -cl_backspeed.GetFloat(), cl_backspeed.GetFloat() );
+		pCmd->forwardmove = std::clamp( pCmd->forwardmove, -cl_backspeed.GetFloat(), cl_backspeed.GetFloat() );
 	}
-	pCmd->sidemove = clamp( pCmd->sidemove, -cl_sidespeed.GetFloat(), cl_sidespeed.GetFloat() );
+	pCmd->sidemove = std::clamp( pCmd->sidemove, -cl_sidespeed.GetFloat(), cl_sidespeed.GetFloat() );
 }
 
 

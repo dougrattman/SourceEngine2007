@@ -2,6 +2,7 @@
 
 #include "bitmap/float_bm.h"
 
+#include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -35,9 +36,9 @@ FloatBitMap_t *FloatBitMap_t::QuarterSizeWithGaussian(void) const {
         float sumweights = 0;  // for versatility in handling the
                                // offscreen case
         for (int xofs = -2; xofs <= 2; xofs++) {
-          int orig_x = max(0, min(Width - 1, x * 2 + xofs));
+          int orig_x = std::max(0, std::min(Width - 1, x * 2 + xofs));
           for (int yofs = -2; yofs <= 2; yofs++) {
-            int orig_y = max(0, min(Height - 1, y * 2 + yofs));
+            int orig_y = std::max(0, std::min(Height - 1, y * 2 + yofs));
             float coeff = kernel[xofs + 2] * kernel[yofs + 2];
             sum += Pixel(orig_x, orig_y, c) * coeff;
             sumweights += coeff;

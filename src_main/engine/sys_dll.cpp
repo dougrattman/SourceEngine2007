@@ -61,7 +61,7 @@ ConVar mem_max_heapsize_dedicated("mem_max_heapsize_dedicated", "128", 0,
 
 #define MINIMUM_WIN_MEMORY (unsigned)(mem_min_heapsize.GetInt() * 1024 * 1024)
 #define MAXIMUM_WIN_MEMORY \
-  max((unsigned)(mem_max_heapsize.GetInt() * 1024 * 1024), MINIMUM_WIN_MEMORY)
+  std::max((unsigned)(mem_max_heapsize.GetInt() * 1024 * 1024), MINIMUM_WIN_MEMORY)
 #define MAXIMUM_DEDICATED_MEMORY \
   (unsigned)(mem_max_heapsize_dedicated.GetInt() * 1024 * 1024)
 
@@ -252,8 +252,6 @@ bool Sys_MessageBox(const char *title, const char *info,
 #endif
 }
 
-bool g_bUpdateMinidumpComment = true;
-
 // Purpose: Exit engine with error.
 [[noreturn]] void Sys_Error(const char *format, ...) {
   extern char g_minidumpinfo[4096];
@@ -300,7 +298,6 @@ bool g_bUpdateMinidumpComment = true;
   V_strncat(errorText, "\n", sizeof(errorText));
   V_strncat(errorText, g_minidumpinfo, sizeof(errorText));
 
-  g_bUpdateMinidumpComment = false;
   SteamAPI_SetMiniDumpComment(errorText);
 #endif
 
@@ -396,7 +393,7 @@ void Sys_InitMemory() {
   }
 
   host_parms.memsize =
-      clamp(host_parms.memsize, MINIMUM_WIN_MEMORY, MAXIMUM_WIN_MEMORY);
+      std::clamp(host_parms.memsize, MINIMUM_WIN_MEMORY, MAXIMUM_WIN_MEMORY);
 #else
   // FILE *meminfo=fopen("/proc/meminfo","r"); // read in meminfo file?
   // sysinfo() system call??

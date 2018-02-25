@@ -29,7 +29,7 @@ CachedFileData * CachedFileData::Create( char const *szFilename )
 		fseek( f, 0, SEEK_SET );
 	}
 
-	CachedFileData *pData = ( CachedFileData * ) malloc( eHeaderSize + max( nSize, 0 ) );
+	CachedFileData *pData = ( CachedFileData * ) malloc( eHeaderSize + std::max( nSize, 0 ) );
 	strcpy( pData->m_chFilename, szFilename );
 	pData->m_numRefs = 0;
 	pData->m_numDataBytes = nSize;
@@ -72,7 +72,7 @@ void const * CachedFileData::GetDataPtr() const
 
 int CachedFileData::GetDataLen() const
 {
-	return max( m_numDataBytes, 0 );
+	return std::max( m_numDataBytes, 0 );
 }
 
 bool CachedFileData::IsValid() const

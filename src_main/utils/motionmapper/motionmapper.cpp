@@ -12,7 +12,7 @@
 #include "tier1/strtools.h"
 #include "tier0/include/icommandline.h"
 #include "utldict.h"
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "UtlBuffer.h"
 #include "UtlSymbol.h"
 

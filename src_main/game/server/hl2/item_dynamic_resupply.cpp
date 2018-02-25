@@ -437,7 +437,7 @@ void CItem_DynamicResupply::ComputeHealthRatios(CItem_DynamicResupply *pMaster,
         pMaster->m_flDesiredHealth[i] * sk_dynamic_resupply_modifier.GetFloat();
     pSpawnInfo[i].m_flDelta =
         pSpawnInfo[i].m_flDesiredRatio - pSpawnInfo[i].m_flCurrentRatio;
-    pSpawnInfo[i].m_flDelta = clamp(pSpawnInfo[i].m_flDelta, 0, 1);
+    pSpawnInfo[i].m_flDelta = std::clamp(pSpawnInfo[i].m_flDelta, 0.0f, 1.0f);
   }
 
   if (iDebug) {
@@ -479,7 +479,7 @@ void CItem_DynamicResupply::ComputeAmmoRatios(CItem_DynamicResupply *pMaster,
         pMaster->m_flDesiredAmmo[i] * sk_dynamic_resupply_modifier.GetFloat();
     pSpawnInfo[i].m_flDelta =
         pSpawnInfo[i].m_flDesiredRatio - pSpawnInfo[i].m_flCurrentRatio;
-    pSpawnInfo[i].m_flDelta = clamp(pSpawnInfo[i].m_flDelta, 0, 1);
+    pSpawnInfo[i].m_flDelta = std::clamp(pSpawnInfo[i].m_flDelta, 0.0f, 1.0f);
   }
 
   if (iDebug) {

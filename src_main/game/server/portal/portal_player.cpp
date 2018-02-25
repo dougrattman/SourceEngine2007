@@ -736,7 +736,7 @@ void CPortal_Player::UpdatePortalPlaneSounds(void) {
           if (GetParametersForSound("PortalPlayer.EnterPortal", params, NULL)) {
             EmitSound_t ep(params);
             ep.m_nPitch = 80.0f + vVelocity.Length() * 0.03f;
-            ep.m_flVolume = min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
+            ep.m_flVolume = std::min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
 
             EmitSound(filter, entindex(), ep);
           }
@@ -752,7 +752,7 @@ void CPortal_Player::UpdatePortalPlaneSounds(void) {
           if (GetParametersForSound("PortalPlayer.ExitPortal", params, NULL)) {
             EmitSound_t ep(params);
             ep.m_nPitch = 80.0f + vVelocity.Length() * 0.03f;
-            ep.m_flVolume = min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
+            ep.m_flVolume = std::min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
 
             EmitSound(filter, entindex(), ep);
           }
@@ -769,7 +769,7 @@ void CPortal_Player::UpdatePortalPlaneSounds(void) {
       Vector vVelocity;
       GetVelocity(&vVelocity, NULL);
       ep.m_nPitch = 80.0f + vVelocity.Length() * 0.03f;
-      ep.m_flVolume = min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
+      ep.m_flVolume = std::min(0.3f + vVelocity.Length() * 0.00075f, 1.0f);
 
       EmitSound(filter, entindex(), ep);
     }
@@ -1525,7 +1525,7 @@ void CPortal_Player::CreateRagdollEntity(const CTakeDamageInfo &info) {
                   pRagdoll->ResetSequence( 0 );
 
                   float fSequenceDuration = SequenceDuration( GetSequence() );
-                  float fPreviousCycle = clamp(GetCycle()-( 0.1 * ( 1 /
+                  float fPreviousCycle = std::clamp(GetCycle()-( 0.1 * ( 1 /
      fSequenceDuration ) ),0.f,1.f); float fCurCycle = GetCycle(); matrix3x4_t
      pBoneToWorld[MAXSTUDIOBONES], pBoneToWorldNext[MAXSTUDIOBONES]; SetupBones(
      pBoneToWorldNext, BONE_USED_BY_ANYTHING ); SetCycle( fPreviousCycle );
@@ -1706,7 +1706,7 @@ int CPortal_Player::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
   IGameEvent *event = gameeventmanager->CreateEvent("player_hurt");
   if (event) {
     event->SetInt("userid", GetUserID());
-    event->SetInt("health", max(0, m_iHealth));
+    event->SetInt("health", std::max(0, m_iHealth));
     event->SetInt("priority", 5);  // HLTV event priority, not transmitted
 
     if (attacker->IsPlayer()) {

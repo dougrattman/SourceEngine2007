@@ -81,7 +81,7 @@ class CBaseClient : public IGameEventListener2,
   virtual void DemoRestart(void);  // called when client started demo recording
 
   virtual int GetMaxAckTickCount() const {
-    return max(m_nSignonTick, m_nDeltaTick);
+    return std::max(m_nSignonTick, m_nDeltaTick);
   };
 
   virtual bool ExecuteStringCommand(const char *s);

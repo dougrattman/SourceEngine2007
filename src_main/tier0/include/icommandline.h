@@ -7,7 +7,8 @@
 #include "build/include/build_config.h"
 
 #include "tier0/include/command_line_switches.h"
-#include "tier0/include/platform.h"
+#include "tier0/include/compiler_specific_macroses.h"
+#include "tier0/include/tier0_api.h"
 
 // Purpose: Interface to command line.
 abstract_class ICommandLine {
@@ -44,7 +45,7 @@ abstract_class ICommandLine {
 };
 
 // Gets a singleton to the commandline interface
-PLATFORM_INTERFACE ICommandLine *CommandLine_Tier0();
+SOURCE_TIER0_API ICommandLine *CommandLine_Tier0();
 
 #define CommandLine CommandLine_Tier0
 

@@ -16,7 +16,7 @@ void GetBaseTextureAndNormal( sampler base, sampler base2, sampler bump, bool bB
 
 #if SEAMLESS
 
-	vWeights = max( vWeights - 0.3, 0 );
+	vWeights = std::max( vWeights - 0.3, 0 );
 
 	vWeights *= 1.0f / dot( vWeights, float3(1,1,1) );
 

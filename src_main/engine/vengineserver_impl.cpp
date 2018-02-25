@@ -119,7 +119,7 @@ static MsgData s_MsgData;
 
 void SeedRandomNumberGenerator(bool random_invariant) {
   if (!random_invariant) {
-    int iSeed = -(long)Sys_FloatTime();
+    int iSeed = -(long)Plat_FloatTime();
     if (1000 < iSeed) {
       iSeed = -iSeed;
     } else if (-1000 < iSeed) {
@@ -1047,7 +1047,7 @@ class CVEngineServer : public IVEngineServer {
     client->SendNetMsg(view);
   }
 
-  virtual float Time(void) { return Sys_FloatTime(); }
+  virtual float Time(void) { return Plat_FloatTime(); }
 
   virtual void CrosshairAngle(const edict_t *clientent, float pitch,
                               float yaw) {

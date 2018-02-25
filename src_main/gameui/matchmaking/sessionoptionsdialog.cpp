@@ -293,7 +293,7 @@ void CSessionOptionsDialog::OnMenuItemChanged(KeyValues *pData) {
             }
 
             // re-set the focus
-            pItem->SetOptionFocus(min(iActiveItem, iMaxPlayers));
+            pItem->SetOptionFocus(std::min(iActiveItem, iMaxPlayers));
 
             // fixup the option sizes
             m_Menu.InvalidateLayout();

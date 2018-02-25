@@ -6,21 +6,21 @@
 #include "tier1/convar.h"
 #include "tier1/utllinkedlist.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 class CUtlBuffer;
 
-//-----------------------------------------------------------------------------
+
 // Invalid command handle
-//-----------------------------------------------------------------------------
+
 typedef int CommandHandle_t;
 enum { COMMAND_BUFFER_INVALID_COMMAND_HANDLE = 0 };
 
-//-----------------------------------------------------------------------------
+
 // A command buffer class- a queue of argc/argv based commands associated
 // with a particular time
-//-----------------------------------------------------------------------------
+
 class CCommandBuffer {
  public:
   // Constructor, destructor
@@ -114,9 +114,9 @@ class CCommandBuffer {
   CCommand m_CurrentCommand;
 };
 
-//-----------------------------------------------------------------------------
+
 // Returns the next command
-//-----------------------------------------------------------------------------
+
 inline int CCommandBuffer::ArgC() const { return m_CurrentCommand.ArgC(); }
 
 inline const char **CCommandBuffer::ArgV() const {

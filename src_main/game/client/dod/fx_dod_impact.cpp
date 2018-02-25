@@ -36,7 +36,7 @@ static void FX_Flecks( const Vector& origin, trace_t *trace, char materialType, 
 
 	// Handle increased scale
 	float flMaxSpeed = FLECK_MAX_SPEED * iScale;
-	float flAngularSpray = max( 0.2, FLECK_ANGULAR_SPRAY - ( (float)iScale * 0.2f) ); // More power makes the spray more controlled
+	float flAngularSpray = std::max( 0.2, FLECK_ANGULAR_SPRAY - ( (float)iScale * 0.2f) ); // More power makes the spray more controlled
 
 	// Setup our collision information
 	fleckEmitter->m_ParticleCollision.Setup( spawnOffset, &trace->plane.normal, flAngularSpray, FLECK_MIN_SPEED, flMaxSpeed, FLECK_GRAVITY, FLECK_DAMPEN );
@@ -89,9 +89,9 @@ static void FX_Flecks( const Vector& origin, trace_t *trace, char materialType, 
 
 		colorRamp = random->RandomFloat( 0.75f, 1.25f );
 
-		pFleckParticle->m_uchColor[0] = min( 1.0f, color[0]*colorRamp )*255.0f;
-		pFleckParticle->m_uchColor[1] = min( 1.0f, color[1]*colorRamp )*255.0f;
-		pFleckParticle->m_uchColor[2] = min( 1.0f, color[2]*colorRamp )*255.0f;
+		pFleckParticle->m_uchColor[0] = std::min( 1.0f, color[0]*colorRamp )*255.0f;
+		pFleckParticle->m_uchColor[1] = std::min( 1.0f, color[1]*colorRamp )*255.0f;
+		pFleckParticle->m_uchColor[2] = std::min( 1.0f, color[2]*colorRamp )*255.0f;
 	}
 }
 

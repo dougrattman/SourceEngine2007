@@ -654,7 +654,7 @@ bool CDODMapOverview::DrawCapturePoint( int iCP, MapObject_t *obj )
 
 			if ( requiredPlayers > 1 )
 			{
-				numPlayers = min( numPlayers, requiredPlayers );
+				numPlayers = std::min( numPlayers, requiredPlayers );
 
 				wchar_t wText[6];
 				_snwprintf( wText, sizeof(wText)/sizeof(wchar_t), L"%d/%d", numPlayers, requiredPlayers );
@@ -831,7 +831,7 @@ void CDODMapOverview::DrawBombTimerSwipeIcon( Vector pos, int scale, int texture
 	{
 		float flMinAngle = j * fl45degrees;	
 
-		float flAngle = clamp( flEndAngle - flMinAngle, 0, fl45degrees );
+		float flAngle = std::clamp( flEndAngle - flMinAngle, 0, fl45degrees );
 
 		if ( flAngle <= 0 )
 		{

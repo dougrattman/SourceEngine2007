@@ -34,7 +34,7 @@
 #include "istudiorender.h"
 
 #ifdef _DEBUG
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 
 class CDmElement;

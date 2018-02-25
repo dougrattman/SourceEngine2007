@@ -376,20 +376,8 @@ ConVar voice_debugfeedback("voice_debugfeedback", "0");
 bool CClientState::ProcessVoiceData(SVC_VoiceData *msg) {
   char chReceived[4096];
   int nBytes = Bits2Bytes(msg->m_nLength);
-  nBytes = min(nBytes, sizeof(chReceived));
+  nBytes = std::min(nBytes, (int)sizeof(chReceived));
   msg->m_DataIn.ReadBits(chReceived, msg->m_nLength);
-
-#if defined(_X360)
-  DWORD dwLength = msg->m_nLength;
-  XUID xuid = msg->m_xuid;
-  Audio_GetXVoice()->PlayIncomingVoiceData(xuid, (byte *)chReceived, dwLength);
-
-  if (voice_debugfeedback.GetBool()) {
-    Msg("Received voice from: %d\n", msg->m_nFromClient + 1);
-  }
-
-  return true;
-#endif
 
 #if !defined(NO_VOICE)  //#ifndef _XBOX
   int iEntity = msg->m_nFromClient + 1;

@@ -281,7 +281,7 @@ void CCommanderStatusPanel::SetText( STATUSTYPE type, const char *fmt, ... )
 		}
 	}
 
-	m_flCurrentAlpha = max( m_flCurrentAlpha, 0.01f );
+	m_flCurrentAlpha = std::max( m_flCurrentAlpha, 0.01f );
 	m_flGoalAlpha = 1.0f;
 	m_bShowTechnology = false;
 	m_pTechnology = NULL;

@@ -103,7 +103,7 @@ int CDmxKeyValues2ErrorStack::Push(CUtlSymbol symName) {
     m_errorStack[m_errorIndex] = symName;
   }
   m_errorIndex++;
-  m_maxErrorIndex = max(m_maxErrorIndex, (m_errorIndex - 1));
+  m_maxErrorIndex = std::max(m_maxErrorIndex, (m_errorIndex - 1));
   return m_errorIndex - 1;
 }
 

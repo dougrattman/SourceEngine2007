@@ -318,8 +318,8 @@ void CFish::Update(float deltaT) {
   // pass relative position to the client
   // clamp them here to cover the rare cases where a fish's high velocity skirts
   // the range limit
-  m_x = clamp(deltaPos.x, -255.0f, 255.0f);
-  m_y = clamp(deltaPos.y, -255.0f, 255.0f);
+  m_x = std::clamp(deltaPos.x, -255.0f, 255.0f);
+  m_y = std::clamp(deltaPos.y, -255.0f, 255.0f);
   m_z = m_poolOrigin->z;
 
   //

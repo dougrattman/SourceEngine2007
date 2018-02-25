@@ -19,10 +19,10 @@
 // Comment this out when we release.
 //#define ALLOW_DEVELOPMENT_CVARS
 
-//-----------------------------------------------------------------------------
+
 // Statically constructed list of ConCommandBases,
 // used for registering them with the ICVar interface
-//-----------------------------------------------------------------------------
+
 ConCommandBase *ConCommandBase::s_pConCommandBases = NULL;
 IConCommandBaseAccessor *ConCommandBase::s_pAccessor = NULL;
 static int s_nCVarFlag = 0;
@@ -41,9 +41,9 @@ class CDefaultAccessor : public IConCommandBaseAccessor {
 
 static CDefaultAccessor s_DefaultAccessor;
 
-//-----------------------------------------------------------------------------
+
 // Called by the framework to register ConCommandBases with the ICVar
-//-----------------------------------------------------------------------------
+
 void ConVar_Register(int nCVarFlag, IConCommandBaseAccessor *pAccessor) {
   if (!g_pCVar || s_bRegistered) return;
 
@@ -75,9 +75,9 @@ void ConVar_Unregister() {
   s_bRegistered = false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Default constructor
-//-----------------------------------------------------------------------------
+
 ConCommandBase::ConCommandBase(void) {
   m_bRegistered = false;
   m_pszName = NULL;
@@ -87,47 +87,47 @@ ConCommandBase::ConCommandBase(void) {
   m_pNext = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The base console invoked command/cvar interface
 // Input  : *pName - name of variable/command
 //			*pHelpString - help text
 //			flags - flags
-//-----------------------------------------------------------------------------
+
 ConCommandBase::ConCommandBase(const char *pName,
                                const char *pHelpString /*=0*/,
                                int flags /*= 0*/) {
   Create(pName, pHelpString, flags);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 ConCommandBase::~ConCommandBase(void) {}
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool ConCommandBase::IsCommand(void) const {
   //	Assert( 0 ); This can't assert. . causes a recursive assert in
   // Sys_Printf, etc.
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the DLL identifier
-//-----------------------------------------------------------------------------
+
 CVarDLLIdentifier_t ConCommandBase::GetDLLIdentifier() const {
   return s_nDLLIdentifier;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *pName -
 //			callback -
 //			*pHelpString -
 //			flags -
-//-----------------------------------------------------------------------------
+
 void ConCommandBase::Create(const char *pName, const char *pHelpString /*= 0*/,
                             int flags /*= 0*/) {
   static const char *empty_string = "";
@@ -160,9 +160,9 @@ void ConCommandBase::Create(const char *pName, const char *pHelpString /*= 0*/,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Used internally by OneTimeInit to initialize.
-//-----------------------------------------------------------------------------
+
 void ConCommandBase::Init() {
   if (s_pAccessor) {
     s_pAccessor->RegisterConCommandBase(this);
@@ -175,25 +175,25 @@ void ConCommandBase::Shutdown() {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return name of the command/var
 // Output : const char
-//-----------------------------------------------------------------------------
+
 const char *ConCommandBase::GetName(void) const { return m_pszName; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : flag -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool ConCommandBase::IsFlagSet(int flag) const {
   return (flag & m_nFlags) ? true : false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : flags -
-//-----------------------------------------------------------------------------
+
 void ConCommandBase::AddFlags(int flags) {
   m_nFlags |= flags;
 
@@ -202,19 +202,19 @@ void ConCommandBase::AddFlags(int flags) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : const ConCommandBase
-//-----------------------------------------------------------------------------
+
 const ConCommandBase *ConCommandBase::GetNext(void) const { return m_pNext; }
 
 ConCommandBase *ConCommandBase::GetNext(void) { return m_pNext; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Copies string using local new/delete operators
 // Input  : *from -
 // Output : char
-//-----------------------------------------------------------------------------
+
 char *ConCommandBase::CopyString(const char *from) {
   int len;
   char *to;
@@ -230,33 +230,33 @@ char *ConCommandBase::CopyString(const char *from) {
   return to;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : const char
-//-----------------------------------------------------------------------------
+
 const char *ConCommandBase::GetHelpText(void) const { return m_pszHelpString; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Has this cvar been registered
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool ConCommandBase::IsRegistered(void) const { return m_bRegistered; }
 
-//-----------------------------------------------------------------------------
+
 //
 // Con Commands start here
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+
+
 // Global methods
-//-----------------------------------------------------------------------------
+
 static characterset_t s_BreakSet;
 static bool s_bBuiltBreakSet = false;
 
-//-----------------------------------------------------------------------------
+
 // Tokenizer class
-//-----------------------------------------------------------------------------
+
 CCommand::CCommand() {
   if (!s_bBuiltBreakSet) {
     s_bBuiltBreakSet = true;
@@ -386,9 +386,9 @@ bool CCommand::Tokenize(const char *pCommand, characterset_t *pBreakSet) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Helper function to parse arguments to commands.
-//-----------------------------------------------------------------------------
+
 const char *CCommand::FindArg(const char *pName) const {
   int nArgC = ArgC();
   for (int i = 1; i < nArgC; i++) {
@@ -405,18 +405,18 @@ int CCommand::FindArgInt(const char *pName, int nDefaultVal) const {
     return nDefaultVal;
 }
 
-//-----------------------------------------------------------------------------
+
 // Default console command autocompletion function
-//-----------------------------------------------------------------------------
+
 int DefaultCompletionFunc(const char *partial,
                           char commands[COMMAND_COMPLETION_MAXITEMS]
                                        [COMMAND_COMPLETION_ITEM_LENGTH]) {
   return 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructs a console command
-//-----------------------------------------------------------------------------
+
 // ConCommand::ConCommand()
 //{
 //	m_bIsNewConCommand = true;
@@ -467,19 +467,19 @@ ConCommand::ConCommand(
   BaseClass::Create(pName, pHelpString, flags);
 }
 
-//-----------------------------------------------------------------------------
+
 // Destructor
-//-----------------------------------------------------------------------------
+
 ConCommand::~ConCommand(void) {}
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Returns true if this is a command
-//-----------------------------------------------------------------------------
+
 bool ConCommand::IsCommand(void) const { return true; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Invoke the function if there is one
-//-----------------------------------------------------------------------------
+
 void ConCommand::Dispatch(const CCommand &command) {
   if (m_bUsingNewCommandCallback) {
     if (m_fnCommandCallback) {
@@ -503,9 +503,9 @@ void ConCommand::Dispatch(const CCommand &command) {
             ("Encountered ConCommand '%s' without a callback!\n", GetName()));
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Calls the autocompletion method to get autocompletion suggestions
-//-----------------------------------------------------------------------------
+
 int ConCommand::AutoCompleteSuggest(const char *partial,
                                     CUtlVector<CUtlString> &commands) {
   if (m_bUsingCommandCallbackInterface) {
@@ -527,20 +527,20 @@ int ConCommand::AutoCompleteSuggest(const char *partial,
   return iret;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns true if the console command can autocomplete
-//-----------------------------------------------------------------------------
+
 bool ConCommand::CanAutoComplete(void) { return m_bHasCompletionCallback; }
 
-//-----------------------------------------------------------------------------
+
 //
 // Console Variables
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+
+
 // Various constructors
-//-----------------------------------------------------------------------------
+
 ConVar::ConVar(const char *pName, const char *pDefaultValue,
                int flags /* = 0 */) {
   Create(pName, pDefaultValue, flags);
@@ -570,9 +570,9 @@ ConVar::ConVar(const char *pName, const char *pDefaultValue, int flags,
          callback);
 }
 
-//-----------------------------------------------------------------------------
+
 // Destructor
-//-----------------------------------------------------------------------------
+
 ConVar::~ConVar(void) {
   if (m_pszString) {
     delete[] m_pszString;
@@ -580,9 +580,9 @@ ConVar::~ConVar(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Install a change callback (there shouldn't already be one....)
-//-----------------------------------------------------------------------------
+
 void ConVar::InstallChangeCallback(FnChangeCallback_t callback) {
   Assert(!m_pParent->m_fnChangeCallback || !callback);
   m_pParent->m_fnChangeCallback = callback;
@@ -613,22 +613,22 @@ bool ConVar::IsRegistered(void) const { return m_pParent->m_bRegistered; }
 
 const char *ConVar::GetName(void) const { return m_pParent->m_pszName; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool ConVar::IsCommand(void) const { return false; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  :
-//-----------------------------------------------------------------------------
+
 void ConVar::Init() { BaseClass::Init(); }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *value -
-//-----------------------------------------------------------------------------
+
 void ConVar::InternalSetValue(const char *value) {
   float fNewValue;
   char tempVal[32];
@@ -655,10 +655,10 @@ void ConVar::InternalSetValue(const char *value) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *tempVal -
-//-----------------------------------------------------------------------------
+
 void ConVar::ChangeStringValue(const char *tempVal, float flOldValue) {
   Assert(!(m_nFlags & FCVAR_NEVER_AS_STRING));
 
@@ -686,11 +686,11 @@ void ConVar::ChangeStringValue(const char *tempVal, float flOldValue) {
   stackfree(pszOldValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Check whether to clamp and then perform clamp
 // Input  : value -
 // Output : Returns true if value changed
-//-----------------------------------------------------------------------------
+
 bool ConVar::ClampValue(float &value) {
   if (m_bHasMin && (value < m_fMinVal)) {
     value = m_fMinVal;
@@ -705,10 +705,10 @@ bool ConVar::ClampValue(float &value) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *value -
-//-----------------------------------------------------------------------------
+
 void ConVar::InternalSetFloatValue(float fNewValue) {
   if (fNewValue == m_fValue) return;
 
@@ -731,10 +731,10 @@ void ConVar::InternalSetFloatValue(float fNewValue) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *value -
-//-----------------------------------------------------------------------------
+
 void ConVar::InternalSetIntValue(int nValue) {
   if (nValue == m_nValue) return;
 
@@ -759,9 +759,9 @@ void ConVar::InternalSetIntValue(int nValue) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Private creation
-//-----------------------------------------------------------------------------
+
 void ConVar::Create(const char *pName, const char *pDefaultValue,
                     int flags /*= 0*/, const char *pHelpString /*= NULL*/,
                     bool bMin /*= false*/, float fMin /*= 0.0*/,
@@ -802,73 +802,73 @@ void ConVar::Create(const char *pName, const char *pDefaultValue,
   BaseClass::Create(pName, pHelpString, flags);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *value -
-//-----------------------------------------------------------------------------
+
 void ConVar::SetValue(const char *value) {
   ConVar *var = (ConVar *)m_pParent;
   var->InternalSetValue(value);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : value -
-//-----------------------------------------------------------------------------
+
 void ConVar::SetValue(float value) {
   ConVar *var = (ConVar *)m_pParent;
   var->InternalSetFloatValue(value);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : value -
-//-----------------------------------------------------------------------------
+
 void ConVar::SetValue(int value) {
   ConVar *var = (ConVar *)m_pParent;
   var->InternalSetIntValue(value);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Reset to default value
-//-----------------------------------------------------------------------------
+
 void ConVar::Revert(void) {
   // Force default value again
   ConVar *var = (ConVar *)m_pParent;
   var->SetValue(var->m_pszDefaultValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : minVal -
 // Output : true if there is a min set
-//-----------------------------------------------------------------------------
+
 bool ConVar::GetMin(float &minVal) const {
   minVal = m_pParent->m_fMinVal;
   return m_pParent->m_bHasMin;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : maxVal -
-//-----------------------------------------------------------------------------
+
 bool ConVar::GetMax(float &maxVal) const {
   maxVal = m_pParent->m_fMaxVal;
   return m_pParent->m_bHasMax;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : const char
-//-----------------------------------------------------------------------------
+
 const char *ConVar::GetDefault(void) const {
   return m_pParent->m_pszDefaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // This version is simply used to make reading convars simpler.
 // Writing convars isn't allowed in this mode
-//-----------------------------------------------------------------------------
+
 class CEmptyConVar : public ConVar {
  public:
   CEmptyConVar() : ConVar("", "0") {}
@@ -912,9 +912,9 @@ ConVarRef::ConVarRef(IConVar *pConVar) {
 
 bool ConVarRef::IsValid() const { return m_pConVar != &s_EmptyConVar; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void ConVar_PrintFlags(const ConCommandBase *var) {
   bool any = false;
   if (var->IsFlagSet(FCVAR_GAMEDLL)) {
@@ -972,9 +972,9 @@ void ConVar_PrintFlags(const ConCommandBase *var) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void ConVar_PrintDescription(const ConCommandBase *pVar) {
   bool bMin, bMax;
   float fMin, fMax;

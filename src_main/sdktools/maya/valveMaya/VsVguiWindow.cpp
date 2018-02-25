@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Base class for windows that draw vgui in Maya
 //
@@ -11,7 +11,7 @@
 #include "vsvguiwindow.h"
 #include "valvemaya.h"
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <commctrl.h>
 #include "tier0/include/dbg.h"
 #include "tier3/tier3.h"
@@ -518,7 +518,7 @@ void CVsVGuiWindow::PaintWindow()
 	ValidateRect( m_hWnd, NULL );
 
 	m_flRenderDelayTime = Plat_FloatTime() - flStartTime;
-	m_flRenderDelayTime = max( m_flRenderDelayTime, 0.015f );
+	m_flRenderDelayTime = std::max( m_flRenderDelayTime, 0.015f );
 }
 
 

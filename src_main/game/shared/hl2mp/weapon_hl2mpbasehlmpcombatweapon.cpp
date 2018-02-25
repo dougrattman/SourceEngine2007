@@ -261,7 +261,7 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 	//FIXME: This maximum speed value must come from the server.
 	//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
-	speed = clamp( speed, -320, 320 );
+	speed = std::clamp( speed, -320, 320 );
 
 	float bob_offset = RemapVal( speed, 0, 320, 0.0f, 1.0f );
 	
@@ -284,7 +284,7 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 	g_verticalBob = speed*0.005f;
 	g_verticalBob = g_verticalBob*0.3 + g_verticalBob*0.7*sin(cycle);
 
-	g_verticalBob = clamp( g_verticalBob, -7.0f, 4.0f );
+	g_verticalBob = std::clamp( g_verticalBob, -7.0f, 4.0f );
 
 	//Calculate the lateral bob
 	cycle = bobtime - (int)(bobtime/HL2_BOB_CYCLE_MAX*2)*HL2_BOB_CYCLE_MAX*2;
@@ -301,7 +301,7 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 
 	g_lateralBob = speed*0.005f;
 	g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
-	g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
+	g_lateralBob = std::clamp( g_lateralBob, -7.0f, 4.0f );
 	
 	//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
 	return 0.0f;

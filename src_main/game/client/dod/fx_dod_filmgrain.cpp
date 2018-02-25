@@ -405,7 +405,7 @@ void CFilmGrainEffect::Render( int x, int y, int w, int h )
 				particle.m_nOrientation = RandomInt( 0, 3 );
 
 				particle.m_nSplotchIndex = RandomInt( 0, 15 );
-				clamp( particle.m_nSplotchIndex, 0, 15 );
+				std::clamp( particle.m_nSplotchIndex, 0, 15 );
                                       
 				particle.m_flHeight = RandomFloat( m_flMinDustSize, m_flMaxDustSize );
 				particle.m_flWidth = particle.m_flHeight * (float)screenHeight / (float)screenWidth;

@@ -107,7 +107,7 @@ CON_COMMAND(quit_x360, "") {
   // any user data needed must be placed AFTER the command line
   const char *pCmdLine = CommandLine()->GetCmdLine();
   int nCmdLineLength = (int)strlen(pCmdLine) + 1;
-  V_memcpy(pPayload, pCmdLine, min(nPayloadSize, nCmdLineLength));
+  V_memcpy(pPayload, pCmdLine, std::min(nPayloadSize, nCmdLineLength));
 
   // add any other data here to payload, after the command line
   // ...
@@ -1239,7 +1239,7 @@ CON_COMMAND(demos, "Demo demo file sequence.") {
   if (args.ArgC() == 2) {
     int numdemos = Host_GetNumDemos();
     if (numdemos >= 1) {
-      cl.demonum = clamp(Q_atoi(args[1]), 0, numdemos - 1);
+      cl.demonum = std::clamp(Q_atoi(args[1]), 0, numdemos - 1);
       DevMsg("Jumping to %s\n", cl.demos[cl.demonum]);
     }
   }
@@ -1265,7 +1265,7 @@ CON_COMMAND(nextdemo, "Play next demo in sequence.") {
   if (args.ArgC() == 2) {
     int numdemos = Host_GetNumDemos();
     if (numdemos >= 1) {
-      cl.demonum = clamp(Q_atoi(args[1]), 0, numdemos - 1);
+      cl.demonum = std::clamp(Q_atoi(args[1]), 0, numdemos - 1);
       DevMsg("Jumping to %s\n", cl.demos[cl.demonum]);
     }
   }
@@ -1289,15 +1289,15 @@ CON_COMMAND_F(soundfade, "Fade client volume.", FCVAR_SERVER_CAN_EXECUTE) {
     return;
   }
 
-  percent = clamp(atof(args[1]), 0.0f, 100.0f);
+  percent = std::clamp(atof(args[1]), 0.0, 100.0);
 
-  holdTime = max(0.0f, atof(args[2]));
+  holdTime = std::max(0.0, atof(args[2]));
 
   inTime = 0.0f;
   outTime = 0.0f;
   if (args.ArgC() == 5) {
-    outTime = max(0.0f, atof(args[3]));
-    inTime = max(0.0f, atof(args[4]));
+    outTime = std::max(0.0, atof(args[3]));
+    inTime = std::max(0.0, atof(args[4]));
   }
 
   S_SoundFade(percent, holdTime, inTime, outTime);

@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //
 //=============================================================================//
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <stdio.h>
 #include "tier1/strtools.h"
 #include "ifaceposerworkspace.h"

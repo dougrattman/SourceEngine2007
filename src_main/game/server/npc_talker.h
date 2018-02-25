@@ -1,10 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $Workfile:     $
-// $Date:         $
-// $NoKeywords: $
 
 #ifndef TALKNPC_H
 #define TALKNPC_H
@@ -18,15 +12,7 @@
 #include <set>
 #endif
 
-#ifdef _WIN32
-#pragma once
-#endif
-
-#ifdef _LINUX
-// the include <set> monkey's with the max() define, unbreak it
-#undef MINMAX_H
-#include "minmax.h"
-#endif
+#include <algorithm>
 
 #include "ai_playerally.h"
 

@@ -274,12 +274,12 @@ void CAI_BlendedMotor::SetMoveScriptAnim(float flNewSpeed) {
   }
   if (flWeight < 0.0) {
     m_flCurrRate = flNewSpeed / GetIdealSpeed();
-    m_flCurrRate = clamp(m_flCurrRate, 0.0, 1.0);
+    m_flCurrRate = std::clamp(m_flCurrRate, 0.0f, 1.0f);
     SetPlaybackRate(m_flCurrRate);
     flWeight = 0.0;
   }
   // Msg("weight %.3f rate %.3f\n", flWeight, m_flCurrRate );
-  m_flCurrRate = min(m_flCurrRate + (1.0 - m_flCurrRate) * 0.8, 1.0);
+  m_flCurrRate = std::min(m_flCurrRate + (1.0 - m_flCurrRate) * 0.8, 1.0);
 
   if (m_nSavedGoalActivity == ACT_INVALID) {
     ResetGoalSequence();
@@ -350,7 +350,7 @@ void CAI_BlendedMotor::SetMoveScriptAnim(float flNewSpeed) {
       m_flSecondaryWeight = 0.0;
     }
 
-    m_flSecondaryWeight = min(m_flSecondaryWeight + 0.3, 1.0);
+    m_flSecondaryWeight = std::min(m_flSecondaryWeight + 0.3, 1.0);
 
     if (m_flSecondaryWeight < 1.0) {
       SetLayerWeight(m_iPrimaryLayer,
@@ -960,8 +960,8 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     }
 
     m_flPredictiveSpeedAdjust = 1.1 - fabs(flDelta);
-    m_flPredictiveSpeedAdjust =
-        clamp(m_flPredictiveSpeedAdjust, (flHeight > 0.0) ? 0.5 : 0.8, 1.0);
+    m_flPredictiveSpeedAdjust = std::clamp(
+        m_flPredictiveSpeedAdjust, (flHeight > 0.0f) ? 0.5f : 0.8f, 1.0f);
 
     /*
     if ((GetOuter()->m_debugOverlays & OVERLAY_NPC_SELECTED_BIT))
@@ -985,7 +985,8 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     }
 
     float newSpeedAdjust = 1.1 - fabs(flDelta);
-    newSpeedAdjust = clamp(newSpeedAdjust, (flHeight > 0.0) ? 0.5 : 0.8, 1.0);
+    newSpeedAdjust =
+        std::clamp(newSpeedAdjust, (flHeight > 0.0f) ? 0.5f : 0.8f, 1.0f);
 
     // debounce speed adjust
     if (newSpeedAdjust < m_flReactiveSpeedAdjust) {
@@ -1012,8 +1013,8 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     */
   }
 
-  idealVelocity =
-      idealVelocity * min(m_flReactiveSpeedAdjust, m_flPredictiveSpeedAdjust);
+  idealVelocity = idealVelocity *
+                  std::min(m_flReactiveSpeedAdjust, m_flPredictiveSpeedAdjust);
 
   //-------------------------
 
@@ -1081,7 +1082,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
           // figure velocity
           float dot = (DotProduct(d1, d2) + 0.2);
           if (dot > 0) {
-            dot = clamp(dot, 0.0f, 1.0f);
+            dot = std::clamp(dot, 0.0f, 1.0f);
             script.flMaxVelocity = idealVelocity * dot;
           } else {
             script.flMaxVelocity = 0;
@@ -1100,7 +1101,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
 
           {
             float minJumpHeight = 0;
-            float maxHorzVel = max(GetCurSpeed(), 100);
+            float maxHorzVel = std::max(GetCurSpeed(), 100.0f);
             float gravity = sv_gravity.GetFloat() * GetOuter()->GetGravity();
             Vector vecApex;
             Vector rawJumpVel = GetMoveProbe()->CalcJumpLaunchVelocity(
@@ -1195,7 +1196,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     m_scriptMove[0].vecLocation + Vector( 0, 0, 10 ),
     m_scriptMove[0].vecLocation + tmp * 32 + Vector( 0, 0, 10 ), 255,255,255,
     true, 0.1 );
-            
+            
 
 
 
@@ -1219,7 +1220,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     VectorNormalize(d2);
 
     float dot = (DotProduct(d1, d2) + MIN_STEER_DOT);
-    dot = clamp(dot, 0.0f, 1.0f);
+    dot = std::clamp(dot, 0.0f, 1.0f);
     m_scriptMove[0].flMaxVelocity = m_scriptMove[0].flMaxVelocity * dot;
   }
 
@@ -1387,7 +1388,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
   // clamp min velocities
   for (i = 0; i < m_scriptMove.Count(); i++) {
     m_scriptMove[i].flMaxVelocity =
-        max(m_scriptMove[i].flMaxVelocity, MIN_VELOCITY);
+        std::max(m_scriptMove[i].flMaxVelocity, MIN_VELOCITY);
   }
 
   // rebuild fields
@@ -1465,7 +1466,7 @@ void CAI_BlendedMotor::InsertSlowdown(float distToObstruction, float idealAccel,
           SolveQuadratic(-0.5 * idealAccel, m_scriptMove[0].flMaxVelocity,
                          -distToObstruction, r1, r2)) {
         script.flMaxVelocity =
-            max(10, m_scriptMove[0].flMaxVelocity - idealAccel * r1);
+            std::max(10.0f, m_scriptMove[0].flMaxVelocity - idealAccel * r1);
       } else {
         script.flMaxVelocity = 10.0;
       }
@@ -1629,8 +1630,8 @@ bool CAI_BlendedMotor::AddTurnGesture(float flYD) {
       float diff = fabs(flYD);
       float speed = (diff / (turnCompletion * actualDuration / rate)) * 0.1;
 
-      speed = clamp(speed, 15, 35);
-      speed = min(speed, diff);
+      speed = std::clamp(speed, 15.0f, 35.0f);
+      speed = std::min(speed, diff);
 
       actualDuration = (diff / (turnCompletion * speed)) * 0.1;
 
@@ -1645,7 +1646,7 @@ bool CAI_BlendedMotor::AddTurnGesture(float flYD) {
       // don't overlap the turn portion of the gestures, and don't play them too
       // often
       m_flNextTurnGesture =
-          gpGlobals->curtime + max(turnCompletion * actualDuration, 0.3);
+          gpGlobals->curtime + std::max(turnCompletion * actualDuration, 0.3f);
 
       /*
       if ( GetOuter()->m_debugOverlays & OVERLAY_NPC_SELECTED_BIT )

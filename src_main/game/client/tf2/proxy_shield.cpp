@@ -205,12 +205,12 @@ void CTFShieldVisibilityProxy::OnBind( void *pArg )
 		if (pShield->GetRaisingTime() != 0.0f)
 		{
 			flAlpha = pShield->GetRaisingTime() * m_RaiseFactor.GetFloat();
-			flAlpha = clamp( flAlpha, 0, 1 );
+			flAlpha = std::clamp( flAlpha, 0, 1 );
 		}
 		else
 		{
 			flAlpha = 1.0f - pShield->GetLoweringTime() * m_LowerFactor.GetFloat();
-			flAlpha = clamp( flAlpha, 0, 1 );
+			flAlpha = std::clamp( flAlpha, 0, 1 );
 		}
 	}
 

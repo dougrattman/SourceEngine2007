@@ -37,12 +37,12 @@
 #include "tier1/refcount.h"
 #include "tier1/utlenvelope.h"
 
-//-----------------------------------------------------------------------------
+
 //
 // Macros used as basis for template generation. Just ignore the man behind the
 // curtain
 //
-//-----------------------------------------------------------------------------
+
 
 #define FUNC_TEMPLATE_ARG_PARAMS_0
 #define FUNC_BASE_TEMPLATE_ARG_PARAMS_0
@@ -624,11 +624,11 @@
   INNERMACRONAME(13);                     \
   INNERMACRONAME(14)
 
-//-----------------------------------------------------------------------------
+
 //
 // Purpose: Base class of all function objects
 //
-//-----------------------------------------------------------------------------
+
 
 abstract_class CFunctor : public IRefCounted {
  public:
@@ -643,14 +643,14 @@ abstract_class CFunctor : public IRefCounted {
 #endif
 };
 
-//-----------------------------------------------------------------------------
+
 // When calling through a functor, care needs to be taken to not pass objects
 // that might go away. Since this code determines the type to store in the
 // functor based on the actual arguments, this is achieved by changing the point
 // of call.
 //
 // See also CUtlEnvelope
-//-----------------------------------------------------------------------------
+
 
 // convert a reference to a passable value
 template <typename T>
@@ -658,11 +658,11 @@ inline T RefToVal(const T &item) {
   return item;
 }
 
-//-----------------------------------------------------------------------------
+
 // This class can be used to pass into a functor a proxy object for a pointer
 // to be resolved later. For example, you can execute a "call" on a resource
 // whose actual value is not known until a later time
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 class CLateBoundPtr {
@@ -678,12 +678,12 @@ class CLateBoundPtr {
   T **m_ppObject;
 };
 
-//-----------------------------------------------------------------------------
+
 //
 // Purpose: Classes to define memory management policies when operating
 // on pointers to members
 //
-//-----------------------------------------------------------------------------
+
 
 class CFuncMemPolicyNone {
  public:
@@ -698,13 +698,13 @@ class CFuncMemPolicyRefCount {
   static void OnRelease(OBJECT_TYPE_PTR pObject) { pObject->Release(); }
 };
 
-//-----------------------------------------------------------------------------
+
 //
 // Purpose: Function proxy is a generic facility for holding a function
 // pointer. Can be used on own, though primarily for use
 // by this file
 //
-//-----------------------------------------------------------------------------
+
 
 template <class OBJECT_TYPE_PTR, typename FUNCTION_TYPE,
           class MEM_POLICY = CFuncMemPolicyNone>
@@ -749,11 +749,11 @@ class CMemberFuncProxyBase {
 
 FUNC_GENERATE_ALL(DEFINE_MEMBER_FUNC_PROXY);
 
-//-----------------------------------------------------------------------------
+
 //
 // The actual functor implementation
 //
-//-----------------------------------------------------------------------------
+
 
 #include "tier0/include/memdbgon.h"
 
@@ -797,12 +797,12 @@ FUNC_GENERATE_ALL(DEFINE_FUNCTOR_TEMPLATE);
 
 FUNC_GENERATE_ALL(DEFINE_MEMBER_FUNCTOR);
 
-//-----------------------------------------------------------------------------
+
 //
 // The real magic, letting the compiler figure out all the right template
 // parameters
 //
-//-----------------------------------------------------------------------------
+
 
 #define DEFINE_NONMEMBER_FUNCTOR_FACTORY(N)                                 \
   template <typename FUNCTION_RETTYPE FUNC_TEMPLATE_FUNC_PARAMS_##N         \
@@ -896,11 +896,11 @@ FUNC_GENERATE_ALL(DEFINE_REF_COUNTING_MEMBER_FUNCTOR_FACTORY);
 
 FUNC_GENERATE_ALL(DEFINE_REF_COUNTING_CONST_MEMBER_FUNCTOR_FACTORY);
 
-//-----------------------------------------------------------------------------
+
 //
 // Templates to assist early-out direct call code
 //
-//-----------------------------------------------------------------------------
+
 
 #define DEFINE_NONMEMBER_FUNCTOR_DIRECT(N)                              \
   template <typename FUNCTION_RETTYPE FUNC_TEMPLATE_FUNC_PARAMS_##N     \
@@ -944,9 +944,9 @@ FUNC_GENERATE_ALL(DEFINE_CONST_MEMBER_FUNCTOR_DIRECT);
 
 #include "tier0/include/memdbgoff.h"
 
-//-----------------------------------------------------------------------------
+
 // Factory class useable as templated traits
-//-----------------------------------------------------------------------------
+
 
 class CDefaultFunctorFactory {
  public:
@@ -1090,6 +1090,6 @@ class CCustomizedFunctorFactory {
   CAllocator *m_pAllocator;
 };
 
-//-----------------------------------------------------------------------------
+
 
 #endif  // SOURCE_TIER1_FUNCTORS_H_

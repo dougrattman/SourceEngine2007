@@ -189,7 +189,7 @@ int VoiceRecord_DSound::GetRecordedData(short *pOut, int nSamples) {
 
   // Read the range (dwReadPos-nSamplesWanted, dwReadPos), but don't re-read
   // data we've already read.
-  DWORD readStart = max(dwReadPos - nBytesWanted, 0);
+  DWORD readStart = std::max(dwReadPos - nBytesWanted, 0UL);
   if (readStart < m_LastReadPos) {
     readStart = m_LastReadPos;
   }

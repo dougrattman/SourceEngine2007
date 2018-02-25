@@ -526,11 +526,11 @@ void CAI_NetworkManager::LoadNetworkGraph(void) {
   // If in wc_edit mode allocate extra space for nodes that might be created
   // ------------------------------------------------------------------------
   if (engine->IsInEditMode()) {
-    numNodes = max(numNodes, 1024);
+    numNodes = std::max(numNodes, 1024);
   }
 
-  m_pNetwork->m_pAInode = new CAI_Node *[max(numNodes, 1)];
-  memset(m_pNetwork->m_pAInode, 0, sizeof(CAI_Node *) * max(numNodes, 1));
+  m_pNetwork->m_pAInode = new CAI_Node *[std::max(numNodes, 1)];
+  memset(m_pNetwork->m_pAInode, 0, sizeof(CAI_Node *) * std::max(numNodes, 1));
 
   // -------------------------------
   // Load all the nodes to the file
@@ -575,9 +575,9 @@ void CAI_NetworkManager::LoadNetworkGraph(void) {
   // Load WC lookup table
   // -------------------------------
   delete[] GetEditOps()->m_pNodeIndexTable;
-  GetEditOps()->m_pNodeIndexTable = new int[max(m_pNetwork->m_iNumNodes, 1)];
+  GetEditOps()->m_pNodeIndexTable = new int[std::max(m_pNetwork->m_iNumNodes, 1)];
   memset(GetEditOps()->m_pNodeIndexTable, 0,
-         sizeof(int) * max(m_pNetwork->m_iNumNodes, 1));
+         sizeof(int) * std::max(m_pNetwork->m_iNumNodes, 1));
 
   for (node = 0; node < m_pNetwork->m_iNumNodes; node++) {
     GetEditOps()->m_pNodeIndexTable[node] = buf.GetInt();
@@ -687,7 +687,7 @@ created
 ------------------------------------------------------------------------ if (
 engine->IsInEditMode() )
         {
-                numNodes = max( numNodes, 1024 );
+                numNodes = std::max( numNodes, 1024 );
         }
 
         m_pAInode = new CAI_Node*[numNodes];
@@ -873,10 +873,9 @@ bool CAI_NetworkManager::IsAIFileCurrent(const char *szMapName) {
     return false;
   }
 
-  Q_snprintf(szBspFilename, sizeof(szBspFilename), "maps/%s%s.bsp", szMapName,
-             GetPlatformExt());
-  Q_snprintf(szGraphFilename, sizeof(szGraphFilename), "maps/graphs/%s%s.ain",
-             szMapName, GetPlatformExt());
+  Q_snprintf(szBspFilename, sizeof(szBspFilename), "maps/%s.bsp", szMapName);
+  Q_snprintf(szGraphFilename, sizeof(szGraphFilename), "maps/graphs/%s.ain",
+             szMapName);
 
   int iCompare;
   if (engine->CompareFileTime(szBspFilename, szGraphFilename, &iCompare)) {

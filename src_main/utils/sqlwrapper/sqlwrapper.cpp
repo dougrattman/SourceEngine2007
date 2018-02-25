@@ -7,7 +7,7 @@
 //#include "misc.h"
 //#include "stdafx.h"
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 ////// MySQL API includes
 #include <WinSock.H> 

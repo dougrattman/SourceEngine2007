@@ -2,7 +2,7 @@
 
 #include "mathlib/quantize.h"
 
-#include <minmax.h>
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -337,8 +337,8 @@ static void Label(struct QuantizedValue *q, int updatecolor) {
       }
     } else
       for (int i = 0; i < current_ndims; i++) {
-        q->Mins[i] = min(q->Children[0]->Mins[i], q->Children[1]->Mins[i]);
-        q->Maxs[i] = max(q->Children[0]->Maxs[i], q->Children[1]->Maxs[i]);
+        q->Mins[i] = std::min(q->Children[0]->Mins[i], q->Children[1]->Mins[i]);
+        q->Maxs[i] = std::max(q->Children[0]->Maxs[i], q->Children[1]->Maxs[i]);
       }
   }
 }
@@ -391,8 +391,8 @@ struct QuantizedValue *Quantize(struct Sample *s, int nsamples, int ndims,
   return current_root;
 }
 
-f64 MinimumError(struct QuantizedValue const *q, u8 const *sample,
-                    int ndims, u8 const *weights) {
+f64 MinimumError(struct QuantizedValue const *q, u8 const *sample, int ndims,
+                 u8 const *weights) {
   f64 err = 0;
   for (int i = 0; i < ndims; i++) {
     int val1;
@@ -407,8 +407,8 @@ f64 MinimumError(struct QuantizedValue const *q, u8 const *sample,
   return err;
 }
 
-f64 MaximumError(struct QuantizedValue const *q, u8 const *sample,
-                    int ndims, u8 const *weights) {
+f64 MaximumError(struct QuantizedValue const *q, u8 const *sample, int ndims,
+                 u8 const *weights) {
   f64 err = 0;
   for (int i = 0; i < ndims; i++) {
     int val2 = sample[i];
@@ -481,8 +481,8 @@ struct FHeap TheQueue;
     if ((a)->MinError < besterror) HeapInsert(&TheQueue, &(a)->MinError); \
   }
 
-struct QuantizedValue *FindMatch(u8 const *sample, int ndims,
-                                 u8 *weights, struct QuantizedValue *q) {
+struct QuantizedValue *FindMatch(u8 const *sample, int ndims, u8 *weights,
+                                 struct QuantizedValue *q) {
   InitHeap(&TheQueue);
   struct QuantizedValue *bestmatch = 0;
   f64 besterror = 1.0e63;

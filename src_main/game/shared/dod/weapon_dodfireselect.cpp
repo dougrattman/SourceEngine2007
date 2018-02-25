@@ -198,7 +198,7 @@ void CDODFireSelectWeapon::Drop( const Vector &vecVelocity )
 		float timer = gpGlobals->curtime - m_flPosChangeTimer;
 
 		// how long since we changed iron sight mode
-		float flPosChangePercent = clamp( ( timer / ( 0.3 ) ), 0.0, 1.0 );
+		float flPosChangePercent = std::clamp( ( timer / ( 0.3 ) ), 0.0, 1.0 );
 
 		float flZoomPercent = ( m_bAnimToSemiAuto ? ( 1.0 - flPosChangePercent ) : flPosChangePercent );
 

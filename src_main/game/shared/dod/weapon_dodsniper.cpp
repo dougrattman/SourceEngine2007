@@ -290,8 +290,8 @@ void CDODSniperWeapon::ZoomIn( void )
 	m_bDoViewAnim = !m_bDoViewAnim;
 #endif
 
-	m_flNextPrimaryAttack = max( gpGlobals->curtime + 0.5, m_flNextPrimaryAttack );
-	m_flNextSecondaryAttack = max( gpGlobals->curtime + 0.5, m_flNextSecondaryAttack );
+	m_flNextPrimaryAttack = std::max( gpGlobals->curtime + 0.5, m_flNextPrimaryAttack );
+	m_flNextSecondaryAttack = std::max( gpGlobals->curtime + 0.5, m_flNextSecondaryAttack );
 	m_flTimeWeaponIdle = gpGlobals->curtime + m_pWeaponInfo->m_flTimeToIdleAfterFire;
 
 	m_flZoomChangeTime = gpGlobals->curtime;
@@ -309,8 +309,8 @@ void CDODSniperWeapon::ZoomOut( void )
 	m_bDoViewAnim = !m_bDoViewAnim;
 #endif	
 
-	m_flNextPrimaryAttack = max( gpGlobals->curtime + 0.5, m_flNextPrimaryAttack );
-	m_flNextSecondaryAttack = max( gpGlobals->curtime + 0.5, m_flNextSecondaryAttack );
+	m_flNextPrimaryAttack = std::max( gpGlobals->curtime + 0.5, m_flNextPrimaryAttack );
+	m_flNextSecondaryAttack = std::max( gpGlobals->curtime + 0.5, m_flNextSecondaryAttack );
 	m_flTimeWeaponIdle = gpGlobals->curtime + m_pWeaponInfo->m_flTimeToIdleAfterFire;
 
 	m_flZoomChangeTime = gpGlobals->curtime;
@@ -357,7 +357,7 @@ bool CDODSniperWeapon::IsFullyZoomed( void )
 
 		Vector viewOffset = pOwner->GetViewOffset();
 
-		float flPercent = clamp( ( viewOffset.z - VEC_PRONE_VIEW.z ) / ( VEC_VIEW.z - VEC_PRONE_VIEW.z ), 0.0, 1.0 );
+		float flPercent = std::clamp( ( viewOffset.z - VEC_PRONE_VIEW.z ) / ( VEC_VIEW.z - VEC_PRONE_VIEW.z ), 0.0, 1.0 );
 
 		Vector offset = ( flPercent * GetDODWpnData().m_vecViewNormalOffset +
 			( 1.0 - flPercent ) * GetDODWpnData().m_vecViewProneOffset );
@@ -374,7 +374,7 @@ bool CDODSniperWeapon::IsFullyZoomed( void )
         	m_flViewAnimTimer += gpGlobals->frametime;
 
 		// how long since we changed iron sight mode
-		float flZoomAnimPercent = clamp( (m_flViewAnimTimer / ( DOD_SNIPER_ZOOM_CHANGE_TIME + 0.3 )), 0.0, 1.0 );
+		float flZoomAnimPercent = std::clamp( (m_flViewAnimTimer / ( DOD_SNIPER_ZOOM_CHANGE_TIME + 0.3 )), 0.0, 1.0 );
 
 		float flZoomPercent = ( IsZoomed() ? flZoomAnimPercent : ( 1.0 - flZoomAnimPercent ) );
 

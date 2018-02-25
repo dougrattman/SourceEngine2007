@@ -131,7 +131,7 @@ void CHudDamageIndicator::DrawDamageIndicatorFront( float flFade )
 		int	y = ( ScreenHeight() / 2 ) - icon_up->Height() * 3;
 		icon_up->DrawSelf( x, y, m_clrIndicator );
 
-		m_flAttackFront = max( 0.0, m_flAttackFront - flFade );
+		m_flAttackFront = std::max( 0.0, m_flAttackFront - flFade );
 	}
 	else
 	{
@@ -157,7 +157,7 @@ void CHudDamageIndicator::DrawDamageIndicatorRear( float flFade )
 		int	y = ( ScreenHeight() / 2 ) + icon_down->Height() * 2;
 		icon_down->DrawSelf( x, y, m_clrIndicator );
 
-		m_flAttackRear = max( 0.0, m_flAttackRear - flFade );
+		m_flAttackRear = std::max( 0.0, m_flAttackRear - flFade );
 	}
 	else
 	{
@@ -184,7 +184,7 @@ void CHudDamageIndicator::DrawDamageIndicatorLeft( float flFade )
 		int	y = ( ScreenHeight() / 2 ) - icon_left->Height() / 2;
 		icon_left->DrawSelf( x, y, m_clrIndicator );
 
-		m_flAttackLeft = max( 0.0, m_flAttackLeft - flFade );
+		m_flAttackLeft = std::max( 0.0, m_flAttackLeft - flFade );
 	}
 	else
 	{
@@ -211,7 +211,7 @@ void CHudDamageIndicator::DrawDamageIndicatorRight( float flFade )
 		int	y = ( ScreenHeight() / 2 ) - icon_right->Height() / 2;
 		icon_right->DrawSelf( x, y, m_clrIndicator );
 
-		m_flAttackRight = max( 0.0, m_flAttackRight - flFade );
+		m_flAttackRight = std::max( 0.0, m_flAttackRight - flFade );
 	}
 	else
 	{
@@ -294,25 +294,25 @@ void CHudDamageIndicator::CalcDamageDirection( const Vector &vecFrom )
 	if ( flFront > 0 )
 	{
 		if ( flFront > 0.3 )
-			m_flAttackFront = max( m_flAttackFront, flFront );
+			m_flAttackFront = std::max( m_flAttackFront, flFront );
 	}
 	else
 	{
 		float f = fabs( flFront );
 		if ( f > 0.3 )
-			m_flAttackRear = max( m_flAttackRear, f );
+			m_flAttackRear = std::max( m_flAttackRear, f );
 	}
 
 	if ( flSide > 0 )
 	{
 		if ( flSide > 0.3 )
-			m_flAttackRight = max( m_flAttackRight, flSide );
+			m_flAttackRight = std::max( m_flAttackRight, flSide );
 	}
 	else
 	{
 		float f = fabs( flSide );
 		if ( f > 0.3 )
-			m_flAttackLeft = max( m_flAttackLeft, f );
+			m_flAttackLeft = std::max( m_flAttackLeft, f );
 	}
 }
 

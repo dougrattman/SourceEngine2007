@@ -22,12 +22,12 @@
 #include "vgui/IVGui.h"
 #include "vphysics_interface.h"
 
-//-----------------------------------------------------------------------------
+
 // These tier3 libraries must be set by any users of this library.
 // They can be set by calling ConnectTier3Libraries.
 // It is hoped that setting this, and using this library will be the common
 // mechanism for allowing link libraries to access tier3 library interfaces
-//-----------------------------------------------------------------------------
+
 IStudioRender *g_pStudioRender = 0;
 IStudioRender *studiorender = 0;
 IMatSystemSurface *g_pMatSystemSurface = 0;
@@ -47,11 +47,11 @@ IDmeMakefileUtils *g_pDmeMakefileUtils = 0;
 IPhysicsCollision *g_pPhysicsCollision = 0;
 ISoundEmitterSystemBase *g_pSoundEmitterSystem = 0;
 
-//-----------------------------------------------------------------------------
+
 // Call this to connect to all tier 3 libraries.
 // It's up to the caller to check the globals it cares about to see if ones are
 // missing
-//-----------------------------------------------------------------------------
+
 void ConnectTier3Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount) {
   // Don't connect twice..
   Assert(!g_pStudioRender && !studiorender && !g_pMatSystemSurface &&

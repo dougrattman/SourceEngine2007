@@ -903,7 +903,7 @@ void CMultiplayRules::GoToIntermission(void) {
   float flWaitTime = mp_chattime.GetInt();
 
   if (tv_delaymapchange.GetBool() && HLTVDirector()->IsActive()) {
-    flWaitTime = max(flWaitTime, HLTVDirector()->GetDelay());
+    flWaitTime = std::max(flWaitTime, HLTVDirector()->GetDelay());
   }
 
   m_flIntermissionEndTime = gpGlobals->curtime + flWaitTime;

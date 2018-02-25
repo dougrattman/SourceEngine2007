@@ -1,8 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-//=============================================================================
 
 #include "interface.h"
 #include "UtlVector.h"
@@ -20,7 +16,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <io.h>
-#include <minmax.h>
+#include <algorithm>
 #include <direct.h>
 
 #include "packfile.h"

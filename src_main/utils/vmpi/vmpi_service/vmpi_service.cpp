@@ -706,7 +706,7 @@ bool GetDLLFilename( CUtlVector<char*> &newArgv, char pDLLFilename[MAX_PATH] )
 		
 	char baseFilename[MAX_PATH];
 	Q_strncpy( baseFilename, argStr, MAX_PATH );
-	baseFilename[ min( MAX_PATH-1, argLen-4 ) ] = 0;
+	baseFilename[ std::min( MAX_PATH-1, argLen-4 ) ] = 0;
 	
 	// First try _dll.dll (src_main), then try .dll (rel).
 	V_snprintf( pDLLFilename, MAX_PATH, "%s_dll.dll", baseFilename );

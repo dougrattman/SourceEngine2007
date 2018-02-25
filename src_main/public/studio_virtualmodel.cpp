@@ -425,9 +425,9 @@ void virtualmodel_t::AppendPoseParameters(int group,
           m_group[pose[k].group].GetStudioHdr()->pLocalPoseParameter(
               pose[k].index);
       float start =
-          min(pPose2->end, min(pPose1->end, min(pPose2->start, pPose1->start)));
+          std::min(pPose2->end, std::min(pPose1->end, std::min(pPose2->start, pPose1->start)));
       float end =
-          max(pPose2->end, max(pPose1->end, max(pPose2->start, pPose1->start)));
+          std::max(pPose2->end, std::max(pPose1->end, std::max(pPose2->start, pPose1->start)));
       pPose2->start = start;
       pPose2->end = end;
     }

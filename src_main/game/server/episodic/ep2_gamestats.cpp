@@ -327,7 +327,7 @@ void CEP2GameStats::Event_PlayerTraveled(CBasePlayer *pBasePlayer,
     rec->m_nSavePos[0] = (short)pos.x;
     rec->m_nSavePos[1] = (short)pos.y;
     rec->m_nSavePos[2] = (short)pos.z;
-    rec->m_nSaveHealth = clamp(pBasePlayer->GetHealth(), 0, 100);
+    rec->m_nSaveHealth = std::clamp(pBasePlayer->GetHealth(), 0, 100);
   }
 }
 
@@ -385,7 +385,7 @@ void CEP2GameStats::Event_SaveGame(void) {
     rec->m_nSavePos[0] = (short)pos.x;
     rec->m_nSavePos[1] = (short)pos.y;
     rec->m_nSavePos[2] = (short)pos.z;
-    rec->m_nSaveHealth = clamp(pPlayer->GetHealth(), 0, 100);
+    rec->m_nSaveHealth = std::clamp(pPlayer->GetHealth(), 0, 100);
     rec->m_SaveType =
         Q_stristr(pchSaveFile, "autosave")
             ? Ep2LevelStats_t::SaveGameInfoRecord2_t::TYPE_AUTOSAVE

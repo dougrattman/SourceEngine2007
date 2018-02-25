@@ -222,7 +222,7 @@ void CWeaponLimpetmine::PrimaryAttack( void )
 	pPlayer->EyeVectors( &vecAiming );
 
 	// Calculate launch velocity (3 seconds for max distance)
-	float flThrowTime = min( (gpGlobals->curtime - m_flStartedLaunchingAt), 3.0 );
+	float flThrowTime = std::min( (gpGlobals->curtime - m_flStartedLaunchingAt), 3.0 );
 	float flSpeed = 600 + (300 * flThrowTime);
 	vecAiming *= flSpeed;
 

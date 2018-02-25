@@ -15,10 +15,10 @@ class CChoreoChannel;
 class CChoreoActor;
 class CChoreoScene;
 
-//-----------------------------------------------------------------------------
+
 // Purpose: During choreo playback, events are triggered by calling back from
 //  the scene through this interface.
-//-----------------------------------------------------------------------------
+
 abstract_class IChoreoEventCallback
 {
 public:

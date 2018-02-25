@@ -32,8 +32,8 @@
 #include "vstEyeballNode.h"
 
 
-// Get rid of min() & max() macros as they interfere with
-// MBoundingBox::min() & MBoundingBox::max() 
+// Get rid of std::min() & std::max() macros as they interfere with
+// MBoundingBox::std::min() & MBoundingBox::std::max() 
 #if defined min
 #undef min
 #endif // defined min
@@ -45,14 +45,14 @@
 
 // Define template versions, which they should have been all along...
 template < class T_t >
-inline T_t min( const T_t &a, const T_t &b )
+inline T_t std::min( const T_t &a, const T_t &b )
 {
 	return a < b ? a : b;
 }
 
 
 template < class T_t >
-inline T_t max( const T_t &a, const T_t &b )
+inline T_t std::max( const T_t &a, const T_t &b )
 {
 	return a > b ? a : b;
 }
@@ -218,19 +218,19 @@ MStatus CVstEyeballNode::compute(
 		minfo << " * Iris:       " << dIrisBegin << " - " << dIrisEnd << std::endl;
 		minfo << " * Eyeball:    " << dEyeballBegin << " - " << 1.0 << std::endl;
 
-		m_eyeball.SetStacks( max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
-		m_eyeball.SetSlices( max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
+		m_eyeball.SetStacks( std::max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
+		m_eyeball.SetSlices( std::max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
 		m_eyeball.SetRadius( mDataBlock.inputValue( m_iaDiameter ).asDistance().as( MDistance::internalUnit() ) / 2.0 );
 		m_eyeball.SetLatBegin( dEyeballBegin );
 
-		m_iris.SetStacks( max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
-		m_iris.SetSlices( max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
+		m_iris.SetStacks( std::max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
+		m_iris.SetSlices( std::max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
 		m_iris.SetRadius( mDataBlock.inputValue( m_iaDiameter ).asDistance().as( MDistance::internalUnit() ) / 2.0 );
 		m_iris.SetLatBegin( dIrisBegin );
 		m_iris.SetLatEnd( dIrisEnd );
 
-		m_pupil.SetStacks( max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
-		m_pupil.SetSlices( max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
+		m_pupil.SetStacks( std::max( mDataBlock.inputValue( m_iaStacks ).asInt(), 1 ) );
+		m_pupil.SetSlices( std::max( mDataBlock.inputValue( m_iaSlices ).asInt(), 1 ) );
 		m_pupil.SetRadius( mDataBlock.inputValue( m_iaDiameter ).asDistance().as( MDistance::internalUnit() ) / 2.0 );
 		m_pupil.SetLatEnd( dPupilEnd );
 
@@ -309,8 +309,8 @@ void CVstEyeballNode::DrawBoundingBox() const
 
 	MBoundingBox bbox( MPoint( -1.0, -1.0, -1.0 ), MPoint( 1.0, 1.0, 1.0 ) );
 
-	MPoint n( bbox.min() );
-	MPoint x( bbox.max() );
+	MPoint n( bbox.std::min() );
+	MPoint x( bbox.std::max() );
 	glBegin( GL_QUAD_STRIP );
 	{
 		glVertex3d( x.x, n.y, n.z );

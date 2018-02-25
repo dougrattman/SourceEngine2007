@@ -95,7 +95,7 @@ envelopePoint_t envDefaultZombieMoanVolume[] = {
 };
 
 // if the zombie doesn't find anything closer than this, it doesn't swat.
-#define ZOMBIE_FARTHEST_PHYSICS_OBJECT 40.0 * 12.0
+#define ZOMBIE_FARTHEST_PHYSICS_OBJECT 40.0f * 12.0f
 #define ZOMBIE_PHYSICS_SEARCH_DEPTH 100
 
 // Don't swat objects unless player is closer than this.
@@ -279,7 +279,7 @@ bool CNPC_BaseZombie::FindNearestPhysicsObject(int iMaxMass) {
     return false;
   }
 
-  float flNearestDist = min(dist, ZOMBIE_FARTHEST_PHYSICS_OBJECT * 0.5);
+  float flNearestDist = std::min(dist, ZOMBIE_FARTHEST_PHYSICS_OBJECT * 0.5f);
   Vector vecDelta(flNearestDist, flNearestDist, GetHullHeight() * 2.0);
 
   class CZombieSwatEntitiesEnum : public CFlaggedEntitiesEnum {
@@ -777,7 +777,7 @@ int CNPC_BaseZombie::OnTakeDamage_Alive(const CTakeDamageInfo &inputInfo) {
 
   // flDamageThreshold is what percentage of the creature's max health
   // this amount of damage represents. (clips at 1.0)
-  float flDamageThreshold = min(1, info.GetDamage() / m_iMaxHealth);
+  float flDamageThreshold = std::min(1.0f, info.GetDamage() / m_iMaxHealth);
 
   // Being chopped up by a sharp physics object is a pretty special case
   // so we handle it with some special code. Mainly for
@@ -855,7 +855,7 @@ int CNPC_BaseZombie::OnTakeDamage_Alive(const CTakeDamageInfo &inputInfo) {
   if (tookDamage > 0 && (info.GetDamageType() & (DMG_BURN | DMG_DIRECT)) &&
       m_ActBusyBehavior.IsActive()) {
     //!!!HACKHACK- Stuff a light_damage condition if an actbusying zombie takes
-    //!direct burn damage. This will cause an
+    //! direct burn damage. This will cause an
     // ignited zombie to 'wake up' and rise out of its actbusy slump. (sjb)
     SetCondition(COND_LIGHT_DAMAGE);
   }
@@ -949,7 +949,7 @@ void CNPC_BaseZombie::MoanSound(envelopePoint_t *pEnvelope, int iEnvelopeSize) {
 // Purpose: Determine whether the zombie is chopped up by some physics item
 //-----------------------------------------------------------------------------
 bool CNPC_BaseZombie::IsChopped(const CTakeDamageInfo &info) {
-  float flDamageThreshold = min(1, info.GetDamage() / m_iMaxHealth);
+  float flDamageThreshold = std::min(1.0f, info.GetDamage() / m_iMaxHealth);
 
   if (m_iHealth > 0 || flDamageThreshold <= 0.5) return false;
 
@@ -1116,10 +1116,11 @@ void CNPC_BaseZombie::Ignite(float flFlameLifetime, bool bNPCOnly, float flSize,
 #endif  // HL2_EPISODIC
 
   // Set the zombie up to burn to death in about ten seconds.
-  SetHealth(min(m_iHealth, FLAME_DIRECT_DAMAGE_PER_SEC *
-                               (ZOMBIE_BURN_TIME +
-                                random->RandomFloat(-ZOMBIE_BURN_TIME_NOISE,
-                                                    ZOMBIE_BURN_TIME_NOISE))));
+  SetHealth(std::min(
+      (float)m_iHealth,
+      FLAME_DIRECT_DAMAGE_PER_SEC *
+          (ZOMBIE_BURN_TIME + random->RandomFloat(-ZOMBIE_BURN_TIME_NOISE,
+                                                  ZOMBIE_BURN_TIME_NOISE))));
 
   // FIXME: use overlays when they come online
   // AddOverlay( ACT_ZOM_WALK_ON_FIRE, false );
@@ -1156,9 +1157,9 @@ void CNPC_BaseZombie::CopyRenderColorTo(CBaseEntity *pOther) {
 //
 // Input  :	flDist				distance to trace
 //			iDamage				damage to do if attack
-//hits 			vecViewPunch		camera punch (if attack hits player)
-//			vecVelocityPunch	velocity punch (if attack hits
-//player)
+// hits 			vecViewPunch		camera punch (if attack
+// hits player) 			vecVelocityPunch	velocity punch
+// (if attack hits player)
 //
 // Output : The entity hit by claws. NULL if nothing.
 //-----------------------------------------------------------------------------
@@ -1256,23 +1257,23 @@ CBaseEntity *CNPC_BaseZombie::ClawAttack(float flDist, int iDamage,
         case ZOMBIE_BLOOD_LEFT_HAND:
           if (GetAttachment("blood_left", vecBloodPos))
             SpawnBlood(vecBloodPos, g_vecAttackDir, pHurt->BloodColor(),
-                       min(iDamage, 30));
+                       std::min(iDamage, 30));
           break;
 
         case ZOMBIE_BLOOD_RIGHT_HAND:
           if (GetAttachment("blood_right", vecBloodPos))
             SpawnBlood(vecBloodPos, g_vecAttackDir, pHurt->BloodColor(),
-                       min(iDamage, 30));
+                       std::min(iDamage, 30));
           break;
 
         case ZOMBIE_BLOOD_BOTH_HANDS:
           if (GetAttachment("blood_left", vecBloodPos))
             SpawnBlood(vecBloodPos, g_vecAttackDir, pHurt->BloodColor(),
-                       min(iDamage, 30));
+                       std::min(iDamage, 30));
 
           if (GetAttachment("blood_right", vecBloodPos))
             SpawnBlood(vecBloodPos, g_vecAttackDir, pHurt->BloodColor(),
-                       min(iDamage, 30));
+                       std::min(iDamage, 30));
           break;
 
         case ZOMBIE_BLOOD_BITE:
@@ -1661,8 +1662,8 @@ int CNPC_BaseZombie::TranslateSchedule(int scheduleType) {
 //-----------------------------------------------------------------------------
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
-//			In the most cases the base implementation should be called
-//first.
+//			In the most cases the base implementation should be
+// called first.
 //-----------------------------------------------------------------------------
 void CNPC_BaseZombie::BuildScheduleTestBits(void) {
   // Ignore damage if we were recently damaged or we're attacking.
@@ -2150,8 +2151,8 @@ bool CNPC_BaseZombie::HeadcrabFits(CBaseAnimating *pCrab) {
 
   if (tr.fraction != 1.0) {
     // NDebugOverlay::Box( vecSpawnLoc, NAI_Hull::Mins(HULL_TINY) *
-    // CRAB_HULL_EXPAND, NAI_Hull::Maxs(HULL_TINY) * CRAB_HULL_EXPAND, 255, 0, 0,
-    // 100, 10.0 );
+    // CRAB_HULL_EXPAND, NAI_Hull::Maxs(HULL_TINY) * CRAB_HULL_EXPAND, 255, 0,
+    // 0, 100, 10.0 );
     return false;
   }
 

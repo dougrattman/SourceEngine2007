@@ -943,7 +943,7 @@ void CMapDisp::Split( EditDispHandle_t hBuilderDisp )
 		// A little clean-up here.
 		for ( int iComp = 0; iComp < 2; ++iComp )
 		{
-			vecDispUV[iComp] = clamp( vecDispUV[iComp], 0.0f, 1.0f );
+			vecDispUV[iComp] = std::clamp( vecDispUV[iComp], 0.0f, 1.0f );
 		}
 
 		Vector vecNewVert, vecNewNormal;
@@ -1235,7 +1235,7 @@ bool CMapDisp::TraceLineSnapTo( Vector &HitPos, Vector &HitNormal,
 		// along edge (0.0 < v < 1.0) and below (u < 0.0)
 		if( ( v >= LOWER_TOLERANCE ) && ( v <= UPPER_TOLERANCE ) && ( u < 0.0f ) )
 		{
-			v = clamp( v, 0.0f, 1.0f );
+			v = std::clamp( v, 0.0f, 1.0f );
 
 			// snap u (u = 0.0)
 			HitPos = tri.v[0] + ( tri.v[2] - tri.v[0] ) * v; 
@@ -1262,7 +1262,7 @@ bool CMapDisp::TraceLineSnapTo( Vector &HitPos, Vector &HitNormal,
 		// along edge (0.0 < u < 1.0) and left (v < 0.0)
 		if( ( u >= LOWER_TOLERANCE ) && ( u <= UPPER_TOLERANCE ) && ( v < 0.0f ) )
 		{
-			u = clamp( u, 0.0f, 1.0f );
+			u = std::clamp( u, 0.0f, 1.0f );
 
 			// snap v (v = 0.0)
 			HitPos = tri.v[0] + ( tri.v[1] - tri.v[0] ) * u; 
@@ -1289,7 +1289,7 @@ bool CMapDisp::TraceLineSnapTo( Vector &HitPos, Vector &HitNormal,
 		// along edge (0.0 < v < 1.0) and above (u < 0.0)
 		if( ( v >= LOWER_TOLERANCE ) && ( v <= UPPER_TOLERANCE ) && ( u < 0.0f ) )
 		{
-			v = clamp( v, 0.0f, 1.0f );
+			v = std::clamp( v, 0.0f, 1.0f );
 
 			// snap u (u = 0.0)
 			HitPos = tri.v[0] + ( tri.v[2] - tri.v[0] ) * v; 
@@ -1316,7 +1316,7 @@ bool CMapDisp::TraceLineSnapTo( Vector &HitPos, Vector &HitNormal,
 		// along edge (0.0 < u < 1.0) and right (v < 0.0)
 		if( ( u >= LOWER_TOLERANCE ) && ( u <= UPPER_TOLERANCE ) && ( v < 0.0f ) )
 		{
-			u = clamp( u, 0.0f, 1.0f );
+			u = std::clamp( u, 0.0f, 1.0f );
 
 			// snap v (v = 0.0)
 			HitPos = tri.v[0] + ( tri.v[1] - tri.v[0] ) * u; 

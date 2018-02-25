@@ -21,9 +21,8 @@
 #include "tier1/refcount.h"
 #include "vtf/vtf.h"
 
-//-----------------------------------------------------------------------------
 // forward declarations
-//-----------------------------------------------------------------------------
+
 class IMaterial;
 class IMesh;
 class IVertexBuffer;
@@ -42,14 +41,11 @@ class ICallQueue;
 struct MorphWeight_t;
 class IFileList;
 
-//-----------------------------------------------------------------------------
 // The vertex format type
-//-----------------------------------------------------------------------------
+
 typedef uint64_t VertexFormat_t;
 
-//-----------------------------------------------------------------------------
 // important enumeration
-//-----------------------------------------------------------------------------
 
 // NOTE NOTE NOTE!!!!  If you up this, grep for "NEW_INTERFACE" to see if there
 // is anything waiting to be enabled during an interface revision.
@@ -163,14 +159,11 @@ enum MaterialNonInteractiveMode_t {
   MATERIAL_NON_INTERACTIVE_MODE_COUNT,
 };
 
-//-----------------------------------------------------------------------------
 // Special morph used in decalling pass
-//-----------------------------------------------------------------------------
+
 #define MATERIAL_MORPH_DECAL ((IMorph *)1)
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
 
 enum MaterialThreadMode_t {
   MATERIAL_SINGLE_THREADED,
@@ -178,9 +171,7 @@ enum MaterialThreadMode_t {
   MATERIAL_QUEUED_THREADED
 };
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
 
 enum MaterialContextType_t {
   MATERIAL_HARDWARE_CONTEXT,
@@ -188,9 +179,8 @@ enum MaterialContextType_t {
   MATERIAL_NULL_CONTEXT
 };
 
-//-----------------------------------------------------------------------------
 // Light structure
-//-----------------------------------------------------------------------------
+
 #include "mathlib/lightdesc.h"
 
 #define CREATERENDERTARGETFLAGS_HDR 0x00000001
@@ -203,9 +193,8 @@ enum MaterialContextType_t {
   0x00000010  // only allocates memory upon first resolve, destroyed at level
               // end
 
-//-----------------------------------------------------------------------------
 // allowed stencil operations. These match the d3d operations
-//-----------------------------------------------------------------------------
+
 enum StencilOperation_t {
   STENCILOPERATION_KEEP = 1,
   STENCILOPERATION_ZERO = 2,
@@ -230,9 +219,8 @@ enum StencilComparisonFunction_t {
   STENCILCOMPARISONFUNCTION_FORCE_DWORD = 0x7fffffff
 };
 
-//-----------------------------------------------------------------------------
 // Enumeration for the various fields capable of being morphed
-//-----------------------------------------------------------------------------
+
 enum MorphFormatFlags_t {
   MORPH_POSITION = 0x0001,  // 3D
   MORPH_NORMAL = 0x0002,    // 3D
@@ -241,14 +229,12 @@ enum MorphFormatFlags_t {
   MORPH_SIDE = 0x0010,      // 1D
 };
 
-//-----------------------------------------------------------------------------
 // The morph format type
-//-----------------------------------------------------------------------------
+
 typedef unsigned int MorphFormat_t;
 
-//-----------------------------------------------------------------------------
 // Standard lightmaps
-//-----------------------------------------------------------------------------
+
 enum StandardLightmap_t {
   MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE = -1,
   MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE_BUMP = -2,
@@ -262,10 +248,9 @@ struct MaterialSystem_SortInfo_t {
 
 #define MAX_FB_TEXTURES 4
 
-//-----------------------------------------------------------------------------
 // Information about each adapter
-//-----------------------------------------------------------------------------
-enum { MATERIAL_ADAPTER_NAME_LENGTH = 512 };
+
+enum : usize { MATERIAL_ADAPTER_NAME_LENGTH = 512 };
 
 struct MaterialAdapterInfo_t {
   char m_pDriverName[MATERIAL_ADAPTER_NAME_LENGTH];
@@ -279,9 +264,8 @@ struct MaterialAdapterInfo_t {
   unsigned int m_nDriverVersionLow;
 };
 
-//-----------------------------------------------------------------------------
 // Video mode info..
-//-----------------------------------------------------------------------------
+
 struct MaterialVideoMode_t {
   int m_Width;           // if width and height are 0 and you select
   int m_Height;          // windowed mode, it'll use the window size
@@ -350,17 +334,14 @@ struct FlashlightState_t {
   int m_nBottom;
 };
 
-//-----------------------------------------------------------------------------
 // Flags to be used with the Init call
-//-----------------------------------------------------------------------------
+
 enum MaterialInitFlags_t {
   MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE = 0x2,
   MATERIAL_INIT_REFERENCE_RASTERIZER = 0x4,
 };
 
-//-----------------------------------------------------------------------------
 // Flags to specify type of depth buffer used with RT
-//-----------------------------------------------------------------------------
 
 // GR - this is to add RT with no depth buffer bound
 
@@ -371,12 +352,11 @@ enum MaterialRenderTargetDepth_t {
   MATERIAL_RT_DEPTH_ONLY = 0x3,
 };
 
-//-----------------------------------------------------------------------------
 // A function to be called when we need to release all vertex buffers
 // NOTE: The restore function will tell the caller if all the vertex formats
 // changed so that it can flush caches, etc. if it needs to (for dxlevel
 // support)
-//-----------------------------------------------------------------------------
+
 enum RestoreChangeFlags_t {
   MATERIAL_RESTORE_VERTEX_FORMAT_CHANGED = 0x1,
 };
@@ -419,9 +399,7 @@ class CShadowMgr;
 
 DECLARE_POINTER_HANDLE(MaterialLock_t);
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
 
 abstract_class IMaterialSystem : public IAppSystem {
  public:
@@ -894,9 +872,8 @@ abstract_class IMaterialSystem : public IAppSystem {
   virtual void ReloadFilesInList(IFileList * pFilesToReload) = 0;
 };
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
+
 abstract_class IMatRenderContext : public IRefCounted {
  public:
   virtual void BeginRender() = 0;
@@ -1396,8 +1373,6 @@ abstract_class IMatRenderContext : public IRefCounted {
   virtual void RefreshFrontBufferNonInteractive() = 0;
 };
 
-//-----------------------------------------------------------------------------
-
 class CMatRenderContextPtr : public CRefPtr<IMatRenderContext> {
   typedef CRefPtr<IMatRenderContext> BaseClass;
 
@@ -1438,9 +1413,8 @@ class CMatRenderContextPtr : public CRefPtr<IMatRenderContext> {
   void operator=(const CMatRenderContextPtr &from);
 };
 
-//-----------------------------------------------------------------------------
 // Helper class for begin/end of pix event via constructor/destructor
-//-----------------------------------------------------------------------------
+
 #define PIX_VALVE_ORANGE 0xFFF5940F
 
 class PIXEvent {
@@ -1468,8 +1442,6 @@ class PIXEvent {
 #define PIXEVENT
 #endif
 
-//-----------------------------------------------------------------------------
-
 #ifdef MATERIAL_SYSTEM_DEBUG_CALL_QUEUE
 #include "tier1/callqueue.h"
 #include "tier1/fmtstr.h"
@@ -1486,8 +1458,6 @@ static void DoMatSysQueueMark(IMaterialSystem *pMaterialSystem,
 #else
 #define MatSysQueueMark(msg, ...) ((void)0)
 #endif
-
-//-----------------------------------------------------------------------------
 
 extern IMaterialSystem *materials;
 extern IMaterialSystem *g_pMaterialSystem;

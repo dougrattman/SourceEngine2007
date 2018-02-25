@@ -193,7 +193,7 @@ class CMixedTextureHeap
 {
 	enum
 	{
-		SIZE_ALIGNMENT = XBOX_HDD_SECTORSIZE,
+		SIZE_ALIGNMENT = 512,
 		MIN_BLOCK_SIZE = 1024,
 	};
 public:

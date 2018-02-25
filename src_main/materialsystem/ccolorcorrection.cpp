@@ -567,59 +567,6 @@ void CColorCorrectionSystem::LoadLookup(ColorCorrectionHandle_t handle,
       inColor.r = 0;
       for (int r = 0; r < COLOR_CORRECTION_TEXTURE_SIZE; ++r, ++inColor.r) {
         color24 vOutColor24 = pColors[colorIndex];
-
-        /* // Still experimenting with this...it looks banded right now so
-        leaving it off.
-           // I think we need to generate better raw data for the 360 instead of
-        hacking it here. if ( IsX360() )
-        {
-                // We need to adjust the outcolor for the 360's piecewise linear
-        gamma space
-                // So apply SrgbLinearToGamma( X360GammaToLinear( inColor.rgb )
-        ) to fetch the desired
-                //    srgb outColor assuming a 360 gamma input color and then
-        put that into 360 gamma space as the new outColor
-
-                // Our input is in 360 gamma space
-                color24 inColor24 = ConvertToColor24( inColor );
-                float flInColor360[3] = { float( inColor24.r ) / float( 255 ),
-                                                                  float(
-        inColor24.g ) / float( 255 ), float( inColor24.b ) / float( 255 ) };
-
-                // Find the srgb gamma color this maps to
-                float flInColorSrgb[3];
-                for ( int i = 0; i < 3; i++ )
-                {
-                        flInColorSrgb[i] = SrgbLinearToGamma( X360GammaToLinear(
-        flInColor360[i] ) );
-                }
-
-                int nInColor[3];
-                for ( int i = 0; i < 3; i++ )
-                {
-                        nInColor[i] = ( int )( flInColorSrgb[i] * float(
-        COLOR_CORRECTION_TEXTURE_SIZE - 1 ) );
-                }
-
-                // Now convert the sRGB out color into 360 gamma space
-                color24 vOutColor24Srgb = pColors[nInColor[0] +
-        nInColor[1]*COLOR_CORRECTION_TEXTURE_SIZE +
-        nInColor[2]*COLOR_CORRECTION_TEXTURE_SIZE*COLOR_CORRECTION_TEXTURE_SIZE];
-
-                color24 vOutColor24X360;
-                vOutColor24X360.r = ( unsigned char )( X360LinearToGamma(
-        SrgbGammaToLinear( float( vOutColor24Srgb.r ) / float( 255 ) ) ) *
-        float( 255 ) ); vOutColor24X360.g = ( unsigned char )(
-        X360LinearToGamma( SrgbGammaToLinear( float( vOutColor24Srgb.g ) /
-        float( 255 ) ) ) * float( 255 ) ); vOutColor24X360.b = ( unsigned char
-        )( X360LinearToGamma( SrgbGammaToLinear( float( vOutColor24Srgb.b ) /
-        float( 255 ) ) ) * float( 255 ) );
-
-                // Copy the outColor and pass that to SetLookupPtr() below
-                vOutColor24 = vOutColor24X360;
-        }
-        //*/
-
         SetLookupPtr(lookup, inColor, vOutColor24);
         colorIndex++;
       }
@@ -726,8 +673,8 @@ void CColorCorrectionSystem::RestoreTextures() {
 void CColorCorrectionSystem::GetNormalizedWeights(float *pDefaultWeight,
                                                   float *pLookupWeights) {
   float total_weight = 0.0f;
-  int nLoopCount =
-      min(m_ColorCorrectionList.Count(), COLOR_CORRECTION_MAX_TEXTURES);
+  int nLoopCount = std::min(m_ColorCorrectionList.Count(),
+                            (int)COLOR_CORRECTION_MAX_TEXTURES);
   for (int i = 0; i < nLoopCount; i++) {
     total_weight += m_ColorCorrectionList[i]->m_flWeight;
     pLookupWeights[i] = m_ColorCorrectionList[i]->m_flWeight;

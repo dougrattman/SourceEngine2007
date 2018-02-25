@@ -1777,8 +1777,8 @@ bool CFuncTank::RotateTankToAngles( const QAngle &angles, float *pDistX, float *
 		 ( fabs( offsetX ) > m_pitchRange + m_pitchTolerance ) )
 	{
 		// Limit against range in x
-		flActualYaw = clamp( flActualYaw, m_yawCenter - m_yawRange, m_yawCenter + m_yawRange );
-		flActualPitch = clamp( flActualPitch, m_pitchCenter - m_pitchRange, m_pitchCenter + m_pitchRange );
+		flActualYaw = std::clamp( flActualYaw, m_yawCenter - m_yawRange, m_yawCenter + m_yawRange );
+		flActualPitch = std::clamp( flActualPitch, m_pitchCenter - m_pitchRange, m_pitchCenter + m_pitchRange );
 
 		bClamped = true;
 	}
@@ -1789,12 +1789,12 @@ bool CFuncTank::RotateTankToAngles( const QAngle &angles, float *pDistX, float *
 	// Move toward target at rate or less
 	float distY = UTIL_AngleDistance( flActualYaw, GetLocalAngles().y );
 	vecAngVel.y = distY * 10;
-	vecAngVel.y = clamp( vecAngVel.y, -m_yawRate, m_yawRate );
+	vecAngVel.y = std::clamp( vecAngVel.y, -m_yawRate, m_yawRate );
 
 	// Move toward target at rate or less
 	float distX = UTIL_AngleDistance( flActualPitch, GetLocalAngles().x );
 	vecAngVel.x = distX  * 10;
-	vecAngVel.x = clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
+	vecAngVel.x = std::clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
 
 	// How exciting! We're done
 	SetLocalAngularVelocity( vecAngVel );
@@ -3538,7 +3538,7 @@ void CMortarShell::FlyThink()
 
 	float lifePerc = 1.0f - ( ( m_flImpactTime - gpGlobals->curtime ) / ( m_flImpactTime - m_flSpawnedTime ) );
 
-	lifePerc = clamp( lifePerc, 0.0f, 1.0f );
+	lifePerc = std::clamp( lifePerc, 0.0f, 1.0f );
 	
 	float curve1 = Bias( lifePerc, 0.75f );
 
@@ -3694,7 +3694,7 @@ void CMortarShell::FadeThink( void )
 
 	float lifePerc = 1.0f - ( ( gpGlobals->curtime - m_flFadeTime  ) / MORTAR_FADE_LENGTH );
 
-	lifePerc = clamp( lifePerc, 0.0f, 1.0f );
+	lifePerc = std::clamp( lifePerc, 0.0f, 1.0f );
 	
 	float curve1 = Bias( lifePerc, 0.1f );
 

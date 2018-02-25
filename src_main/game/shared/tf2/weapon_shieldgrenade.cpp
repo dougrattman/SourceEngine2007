@@ -167,7 +167,7 @@ void CWeaponShieldGrenade::ThrowGrenade( void )
 	BaseClass::WeaponSound(WPN_DOUBLE);
 
 	// Calculate launch velocity (3 seconds for max distance)
-	float flThrowTime = min( (gpGlobals->curtime - m_flStartedThrowAt), 3.0 );
+	float flThrowTime = std::min( (gpGlobals->curtime - m_flStartedThrowAt), 3.0 );
 	float flSpeed = 800 + (200 * flThrowTime);
 
 	// If the player's crouched, roll the grenade

@@ -98,7 +98,7 @@ void C_PlayerAttachedModel::ClientThink( void )
 	if ( m_iFlags & PAM_ANIMATE_RANDOMLY && gpGlobals->curtime > m_flAnimateAt )
 	{
 		float flDelta = RandomFloat(0.2,0.4) * (RandomInt(0,1) == 1 ? 1 : -1);
-		float flCycle = clamp( GetCycle() + flDelta, 0, 1 );
+		float flCycle = std::clamp( GetCycle() + flDelta, 0, 1 );
 		SetCycle( flCycle );
 		m_flAnimateAt = gpGlobals->curtime + PAM_ANIMATE_TIME;
 	}
@@ -117,7 +117,7 @@ void C_PlayerAttachedModel::ClientThink( void )
 
 	if ( m_iFlags & PAM_SCALEUP )
 	{
-		m_flScale = min( m_flScale + (gpGlobals->frametime * PAM_SCALE_SPEED), PAM_MAX_SCALE );
+		m_flScale = std::min( m_flScale + (gpGlobals->frametime * PAM_SCALE_SPEED), PAM_MAX_SCALE );
 	}
 }
 

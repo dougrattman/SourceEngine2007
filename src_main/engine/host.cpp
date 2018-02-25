@@ -2,6 +2,8 @@
 
 #include "tier0/include/fasttimer.h"
 
+#include <tuple>
+
 #ifdef _WIN32
 #include <crtdbg.h>  // For getting at current heap size
 #include "tier0/include/memdbgoff.h"
@@ -157,14 +159,14 @@ class CFrameTimer {
   CFrameTimer() : swaptime(0) { ResetDeltas(); }
 
   void MarkFrame();
-  void StartFrameSegment(int i) { starttime[i] = Sys_FloatTime(); }
+  void StartFrameSegment(int i) { starttime[i] = Plat_FloatTime(); }
 
   void EndFrameSegment(int i) {
-    double dt = Sys_FloatTime() - starttime[i];
+    double dt = Plat_FloatTime() - starttime[i];
     deltas[i] += dt;
   }
   void MarkSwapTime() {
-    double newswaptime = Sys_FloatTime();
+    double newswaptime = Plat_FloatTime();
     frametime = newswaptime - swaptime;
     swaptime = newswaptime;
 
@@ -330,7 +332,7 @@ void ThreadPoolReserverFunction() {
 }
 
 void ReserveThreads(int nToReserve) {
-  nToReserve = clamp(nToReserve, 0, g_pThreadPool->NumThreads());
+  nToReserve = std::clamp(nToReserve, 0, g_pThreadPool->NumThreads());
   g_ReleaseThreadReservation.Set();
 
   while (g_NumReservedThreads != 0) {
@@ -899,7 +901,7 @@ void Host_AccumulateTime(float dt) {
 #ifndef NO_TOOLFRAMEWORK
     if (CommandLine()->CheckParm("-tools") == NULL) {
 #endif
-      host_frametime = min(host_frametime, MAX_FRAMETIME * fullscale);
+      host_frametime = std::min(host_frametime, MAX_FRAMETIME * fullscale);
 #ifndef NO_TOOLFRAMEWORK
     }
 #endif
@@ -909,8 +911,8 @@ void Host_AccumulateTime(float dt) {
 #endif
   {  // don't allow really long or short frames
     host_frametime_unbounded = host_frametime;
-    host_frametime = min(host_frametime, MAX_FRAMETIME);
-    host_frametime = max(host_frametime, MIN_FRAMETIME);
+    host_frametime = std::min(host_frametime, MAX_FRAMETIME);
+    host_frametime = std::max(host_frametime, MIN_FRAMETIME);
   }
 #endif
 
@@ -930,29 +932,22 @@ void Host_AccumulateTime(float dt) {
 float g_fFramesPerSecond = 0.0f;
 
 void Host_PostFrameRate(float frameTime) {
-  frameTime = clamp(frameTime, 0.0001f, 1.0f);
+  frameTime = std::clamp(frameTime, 0.0001f, 1.0f);
 
   float fps = 1.0f / frameTime;
   g_fFramesPerSecond =
       g_fFramesPerSecond * FPS_AVG_FRAC + (1.0f - FPS_AVG_FRAC) * fps;
 }
 
-void Host_GetHostInfo(float *fps, int *nActive, int *nMaxPlayers, char *pszMap,
-                      int maxlen) {
-  // Count clients, report
-  int clients = sv.GetNumClients();
-
-  *fps = g_fFramesPerSecond;
-  *nActive = clients;
-
-  if (pszMap) {
+std::tuple<f32, i32, i32> Host_GetHostInfo(ch *map_name, usize map_name_size) {
+  if (map_name) {
     if (sv.m_szMapname[0])
-      Q_strncpy(pszMap, sv.m_szMapname, maxlen);
+      Q_strncpy(map_name, sv.m_szMapname, map_name_size);
     else
-      pszMap[0] = '\0';
+      map_name[0] = '\0';
   }
 
-  *nMaxPlayers = sv.GetMaxClients();
+  return {g_fFramesPerSecond, sv.GetNumClients(), sv.GetMaxClients()};
 }
 
 static bool AppearsNumeric(char const *in) {
@@ -1281,7 +1276,7 @@ void CFrameTimer::ComputeFrameVariability() {
   for (int j = 0; j < FRAME_HISTORY_COUNT; ++j) {
     if (m_pFrameTimeHistory[j] == 0.0f) continue;
 
-    double ft = min(m_pFrameTimeHistory[j], 0.25);
+    double ft = std::min(m_pFrameTimeHistory[j], 0.25f);
 
     sum += ft;
     ++count;
@@ -1296,7 +1291,7 @@ void CFrameTimer::ComputeFrameVariability() {
   for (int j = 0; j < FRAME_HISTORY_COUNT; ++j) {
     if (m_pFrameTimeHistory[j] == 0.0f) continue;
 
-    double ft = min(m_pFrameTimeHistory[j], 0.25);
+    double ft = std::min(m_pFrameTimeHistory[j], 0.25f);
 
     double dt = ft - avg;
 
@@ -1554,7 +1549,7 @@ bool CheckVarRange_Generic(ConVar *pVar, int minVal, int maxVal) {
   bInFunction = true;
 
   if (!CanCheat() && !Host_IsSinglePlayerGame()) {
-    int clampedValue = clamp(pVar->GetInt(), minVal, maxVal);
+    int clampedValue = std::clamp(pVar->GetInt(), minVal, maxVal);
     if (clampedValue != pVar->GetInt()) {
       Warning(
           "sv_cheats=0 prevented changing %s outside of the range [0,2] (was "
@@ -1644,7 +1639,7 @@ void CL_FindInterpolatedAddAngle(float t, float &frac, AddAngle **prev,
 
       // Time spans the two entries
       frac = (t - pentry->starttime) / (entry->starttime - pentry->starttime);
-      frac = clamp(frac, 0.0f, 1.0f);
+      frac = std::clamp(frac, 0.0f, 1.0f);
       return;
     }
 

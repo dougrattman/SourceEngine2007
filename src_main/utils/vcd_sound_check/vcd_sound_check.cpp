@@ -5,7 +5,7 @@
 //=============================================================================//
 #include "cbase.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 #include "utldict.h"
 #include "tier1/UtlLinkedList.h"
@@ -655,7 +655,7 @@ void CorrelateWavsAndVCDs( CUtlVector< CUtlSymbol >& vcdfiles, CUtlVector< CUtlS
 			++ecount, g_Analysis.symbols.String( wavename ) );
 	}
 
-	vprint( 0, "\nSummary:  found %i/%i (%.2f percent) .wav errors\n", ecount, c, 100.0 * ecount / max( c, 1 ) );
+	vprint( 0, "\nSummary:  found %i/%i (%.2f percent) .wav errors\n", ecount, c, 100.0 * ecount / std::max( c, 1 ) );
 }
 
 //-----------------------------------------------------------------------------

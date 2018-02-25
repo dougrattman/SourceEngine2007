@@ -248,7 +248,7 @@ HWND FindLikelyParentWindow() {
 #endif
 }  // namespace
 
-DBG_INTERFACE bool ShouldUseNewAssertDialog() {
+SOURCE_TIER0_API bool ShouldUseNewAssertDialog() {
   static bool is_mpi_worker =
       strstr(Plat_GetCommandLine(), "-mpi_worker") != nullptr;
   if (is_mpi_worker) {
@@ -263,7 +263,7 @@ DBG_INTERFACE bool ShouldUseNewAssertDialog() {
 #endif  // DBGFLAG_ASSERTDLG
 }
 
-DBG_INTERFACE bool DoNewAssertDialog(const ch *pFilename, i32 line,
+SOURCE_TIER0_API bool DoNewAssertDialog(const ch *pFilename, i32 line,
                                      const ch *pExpression) {
   LOCAL_THREAD_LOCK();
 

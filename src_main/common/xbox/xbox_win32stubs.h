@@ -1185,7 +1185,7 @@ FORCEINLINE DWORD XBX_GetEnvironmentVariable( LPCTSTR lpName, LPTSTR lpBuffer, D
 	#undef unlink
 #endif
 #define unlink XBX_unlink
-PLATFORM_INTERFACE int XBX_unlink( const char* filename );
+SOURCE_TIER0_API int XBX_unlink( const char* filename );
 
 #ifdef mkdir
 	#undef mkdir
@@ -1195,7 +1195,7 @@ PLATFORM_INTERFACE int XBX_unlink( const char* filename );
 #endif
 #define mkdir XBX_mkdir
 #define _mkdir XBX_mkdir
-PLATFORM_INTERFACE int XBX_mkdir( const char *pszDir );
+SOURCE_TIER0_API int XBX_mkdir( const char *pszDir );
 
 #ifdef getcwd
 	#undef getcwd
@@ -1205,19 +1205,19 @@ PLATFORM_INTERFACE int XBX_mkdir( const char *pszDir );
 #endif
 #define getcwd XBX_getcwd
 #define _getcwd XBX_getcwd
-PLATFORM_INTERFACE char *XBX_getcwd( char *buf, size_t size );
+SOURCE_TIER0_API char *XBX_getcwd( char *buf, size_t size );
 
 #ifdef GetCurrentDirectory
 	#undef GetCurrentDirectory
 #endif
 #define GetCurrentDirectory XBX_GetCurrentDirectory
-PLATFORM_INTERFACE DWORD XBX_GetCurrentDirectory( DWORD nBufferLength, LPTSTR lpBuffer );
+SOURCE_TIER0_API DWORD XBX_GetCurrentDirectory( DWORD nBufferLength, LPTSTR lpBuffer );
 
 #ifdef _access
 	#undef _access
 #endif
 #define _access XBX_access
-PLATFORM_INTERFACE int XBX_access( const char *path, int mode );
+SOURCE_TIER0_API int XBX_access( const char *path, int mode );
 
 #ifdef _chdir
 	#undef _chdir
@@ -1227,13 +1227,13 @@ FORCEINLINE int XBX_chdir(  const char *dirname ) { return -1; }
 
 FORCEINLINE BOOL SetPriorityClass( HANDLE hProcess, DWORD dwPriorityClass ) { return FALSE; }
 
-PLATFORM_INTERFACE int MessageBox( HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType );
+SOURCE_TIER0_API int MessageBox( HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType );
 
 #ifdef GetModuleFileName
 	#undef GetModuleFileName
 #endif
 #define GetModuleFileName XBX_GetModuleFileName
-PLATFORM_INTERFACE DWORD XBX_GetModuleFileName( HMODULE hModule, LPTSTR lpFilename, DWORD nSize );
+SOURCE_TIER0_API DWORD XBX_GetModuleFileName( HMODULE hModule, LPTSTR lpFilename, DWORD nSize );
 
 //FORCEINLINE int WSAStartup( WORD wVersionRequested, LPWSADATA lpWSAData ) { return WSASYSNOTREADY; }
 //FORCEINLINE int WSACleanup(void) { return WSANOTINITIALISED; }
@@ -1477,7 +1477,7 @@ FORCEINLINE BOOL CreateProcess( LPCSTR lpApplicationName,
 	return false;
 }
 
-PLATFORM_INTERFACE DWORD g_dwProcessAffinityMask;
+SOURCE_TIER0_API DWORD g_dwProcessAffinityMask;
 
 FORCEINLINE bool GetProcessAffinityMask( HANDLE hProcess, DWORD *lpProcessAffinityMask, DWORD *lpSystemAffinityMask )
 {
@@ -1556,25 +1556,25 @@ FORCEINLINE void SteamGameServer_RunCallbacks() {}
 
 FORCEINLINE int getch( void ) { return 0; }
 
-PLATFORM_INTERFACE LONG			GetWindowLong( HWND hWnd, int nIndex );
-PLATFORM_INTERFACE LONG			SetWindowLong( HWND hWnd, int nIndex, LONG dwNewLong );
-PLATFORM_INTERFACE LONG_PTR		GetWindowLongPtr( HWND hWnd, int nIndex );
-PLATFORM_INTERFACE LONG_PTR		SetWindowLongPtr( HWND hWnd, int nIndex, LONG dwNewLong );
-PLATFORM_INTERFACE HWND			CreateWindow( LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam );
-PLATFORM_INTERFACE HWND			CreateWindowEx( DWORD dwExStyle, LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam );
-PLATFORM_INTERFACE BOOL			DestroyWindow( HWND hWnd );
-PLATFORM_INTERFACE ATOM			RegisterClassEx( CONST WNDCLASSEX *lpwcx );
-PLATFORM_INTERFACE ATOM			RegisterClass( CONST WNDCLASS *lpwc );
-PLATFORM_INTERFACE HWND			GetFocus( VOID );
-PLATFORM_INTERFACE HWND			SetFocus( HWND hWnd );
-PLATFORM_INTERFACE int			GetSystemMetrics( int nIndex );
-PLATFORM_INTERFACE BOOL			ShowWindow( HWND hWnd, int nCmdShow );
-PLATFORM_INTERFACE LRESULT		SendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-PLATFORM_INTERFACE LRESULT		CallWindowProc( WNDPROC lpPrevWndFunc, HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-PLATFORM_INTERFACE BOOL			GetClientRect( HWND hwnd, LPRECT lpRect );
-PLATFORM_INTERFACE int			GetDeviceCaps( HDC hdc, int nIndex );
-PLATFORM_INTERFACE LRESULT		SendMessageTimeout( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, UINT fuFlags, UINT uTimeout, PDWORD_PTR lpdwResult );
-PLATFORM_INTERFACE BOOL			SetWindowPos( HWND hWnd, HWND hWndInsertAfter, int x, int y, int cx, int cy, UINT uFlags );
+SOURCE_TIER0_API LONG			GetWindowLong( HWND hWnd, int nIndex );
+SOURCE_TIER0_API LONG			SetWindowLong( HWND hWnd, int nIndex, LONG dwNewLong );
+SOURCE_TIER0_API LONG_PTR		GetWindowLongPtr( HWND hWnd, int nIndex );
+SOURCE_TIER0_API LONG_PTR		SetWindowLongPtr( HWND hWnd, int nIndex, LONG dwNewLong );
+SOURCE_TIER0_API HWND			CreateWindow( LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam );
+SOURCE_TIER0_API HWND			CreateWindowEx( DWORD dwExStyle, LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam );
+SOURCE_TIER0_API BOOL			DestroyWindow( HWND hWnd );
+SOURCE_TIER0_API ATOM			RegisterClassEx( CONST WNDCLASSEX *lpwcx );
+SOURCE_TIER0_API ATOM			RegisterClass( CONST WNDCLASS *lpwc );
+SOURCE_TIER0_API HWND			GetFocus( VOID );
+SOURCE_TIER0_API HWND			SetFocus( HWND hWnd );
+SOURCE_TIER0_API int			GetSystemMetrics( int nIndex );
+SOURCE_TIER0_API BOOL			ShowWindow( HWND hWnd, int nCmdShow );
+SOURCE_TIER0_API LRESULT		SendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+SOURCE_TIER0_API LRESULT		CallWindowProc( WNDPROC lpPrevWndFunc, HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+SOURCE_TIER0_API BOOL			GetClientRect( HWND hwnd, LPRECT lpRect );
+SOURCE_TIER0_API int			GetDeviceCaps( HDC hdc, int nIndex );
+SOURCE_TIER0_API LRESULT		SendMessageTimeout( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, UINT fuFlags, UINT uTimeout, PDWORD_PTR lpdwResult );
+SOURCE_TIER0_API BOOL			SetWindowPos( HWND hWnd, HWND hWndInsertAfter, int x, int y, int cx, int cy, UINT uFlags );
 
 
 

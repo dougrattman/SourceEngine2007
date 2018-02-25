@@ -169,7 +169,7 @@ void CAI_PassengerBehavior::AddPhysicsPush(float force) {
   impulse.z = -0.75;
   VectorNormalize( impulse );
   Vector vecForce = impulse * force;
-  
+  
 
   m_hVehicle->VPhysicsGetObject()->ApplyForceOffset( vecForce,
   GetOuter()->GetAbsOrigin() );
@@ -1051,8 +1051,10 @@ void CAI_PassengerBehavior::GetTransitionAnimationIdeal(
 
 //-----------------------------------------------------------------------------
 //	FIXME:	This is basically a complete duplication of GetIntervalMovement
-//			which doesn't remove the x and z components of the angles.
-//This 			should be consolidated to not replicate so much code! -- jdw
+//			which doesn't remove the x and z components of the
+// angles. This 			should be consolidated to not replicate so
+// much
+// code! -- jdw
 //-----------------------------------------------------------------------------
 bool CAI_PassengerBehavior::LocalIntervalMovement(float flInterval,
                                                   bool &bMoveSeqFinished,
@@ -1090,12 +1092,10 @@ bool CAI_PassengerBehavior::LocalIntervalMovement(float flInterval,
     newAngles = GetLocalAngles() + deltaAngles;
 
     return true;
-  } else {
-    newPosition = GetLocalOrigin();
-    newAngles = GetLocalAngles();
-
-    return false;
   }
+
+  newPosition = GetLocalOrigin();
+  newAngles = GetLocalAngles();
 
   return false;
 }
@@ -1158,7 +1158,7 @@ bool CAI_PassengerBehavior::DoTransitionMovement(void) {
     QAngle vecIdealAngles;
     float flNextCycle =
         GetNextCycleForInterval(GetOuter()->GetSequence(), flInterval);
-    flNextCycle = clamp(flNextCycle, 0.0f, 1.0f);
+    flNextCycle = std::clamp(flNextCycle, 0.0f, 1.0f);
     GetTransitionAnimationIdeal(flNextCycle, m_vecTargetPosition,
                                 m_vecTargetAngles, &vecIdealPos,
                                 &vecIdealAngles);

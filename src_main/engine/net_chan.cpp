@@ -592,7 +592,7 @@ void CNetChan::SetTimeout(float seconds) {
 
 void CNetChan::SetMaxBufferSize(bool bReliable, int nBytes, bool bVoice) {
   // force min/max sizes 4-96kB
-  nBytes = clamp(nBytes, NET_MAX_DATAGRAM_PAYLOAD, NET_MAX_PAYLOAD);
+  nBytes = std::clamp(nBytes, NET_MAX_DATAGRAM_PAYLOAD, NET_MAX_PAYLOAD);
 
   bf_write *stream;
   CUtlMemory<byte> *buffer;
@@ -645,7 +645,7 @@ void CNetChan::SetCompressionMode(bool bUseCompression) {
 }
 
 void CNetChan::SetDataRate(float rate) {
-  m_Rate = clamp(rate, MIN_RATE, MAX_RATE);
+  m_Rate = std::clamp(rate, MIN_RATE * 1.0f, MAX_RATE * 1.0f);
 }
 
 const char *CNetChan::GetName() const { return m_Name; }
@@ -1272,12 +1272,12 @@ void CNetChan::UpdateSubChannels() {
     // how many fragments can we send ?
 
     int numFragments =
-        min(nSendMaxFragments, data->numFragments - nSentFragments);
+        std::min(nSendMaxFragments, data->numFragments - nSentFragments);
 
     // if we are in file background transmission mode, just send one fragment
     // per packet
     if (i == FRAG_FILE_STREAM && m_bFileBackgroundTranmission)
-      numFragments = min(1, numFragments);
+      numFragments = std::min(1, numFragments);
 
     // copy fragment data into subchannel
 

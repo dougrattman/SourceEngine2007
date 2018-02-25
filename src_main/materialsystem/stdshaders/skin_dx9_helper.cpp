@@ -767,7 +767,7 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 		if ( bHasRimLight && (info.m_nRimLightPower != -1) && params[info.m_nRimLightPower]->IsDefined() )
 		{
 			vSpecularTint[3] = params[info.m_nRimLightPower]->GetFloatValue();
-			vSpecularTint[3] = max(vSpecularTint[3], 1.0f);	// Make sure this is at least 1
+			vSpecularTint[3] = std::max(vSpecularTint[3], 1.0f);	// Make sure this is at least 1
 		}
 
 		// Get the rim boost (goes in w of flashlight position)

@@ -14,7 +14,7 @@
 #define ABS(a) abs(a)
 
 // convert milliseconds to # samples in equivalent time
-#define MSEC_TO_SAMPS(a) (((a)*SOUND_DMA_SPEED) / 1000)
+#define MSEC_TO_SAMPS(a) (((a)*SOUND_DMA_SPEED) / 1000.0f)
 // convert seconds to # samples in equivalent time
 #define SEC_TO_SAMPS(a) ((a)*SOUND_DMA_SPEED)
 
@@ -87,7 +87,7 @@ inline void DlyPtrForward(int dlysize, int *psamps, int **ppsamp) {
 //  returns single sample 'out' for current input value 'in'
 //  in:				input sample
 //	psamp:			internal state array, dimension
-// max(cdenom,cnumer) + 1
+// std::max(cdenom,cnumer) + 1
 //  cnumer,cdenom:	numerator and denominator filter orders
 //  denom,numer:	cdenom+1 dimensional arrays of filter params
 //
@@ -130,7 +130,7 @@ inline int IIRFilter_Update_OrderN(int cdenom, int *denom, int cnumer,
   out = 0;
   in0 = in;
 
-  cmax = max(cdenom, cnumer);
+  cmax = std::max(cdenom, cnumer);
 
   // add input values
 
@@ -1002,8 +1002,8 @@ flt_t *FLT_Params(prc_t *pprc) {
     // highpass section
 
     FLT_Design_3db_IIR(cutoff, FLT_HP, &M_bp, &L_bp, a_bp, b_bp);
-    M_bp = clamp(M_bp, 1, FLT_M);
-    L_bp = clamp(L_bp, 1, FLT_M);
+    M_bp = std::clamp(M_bp, 1, FLT_M);
+    L_bp = std::clamp(L_bp, 1, FLT_M);
     cutoff += qwidth;
   }
 
@@ -1011,16 +1011,16 @@ flt_t *FLT_Params(prc_t *pprc) {
 
   FLT_Design_3db_IIR(cutoff, (int)ftype, &M, &L, a, b);
 
-  M = clamp(M, 1, FLT_M);
-  L = clamp(L, 1, FLT_M);
+  M = std::clamp(M, 1, FLT_M);
+  L = std::clamp(L, 1, FLT_M);
 
   // quality = # of series sections - 1
 
-  N = clamp((int)qual, 0, 3);
+  N = std::clamp((int)qual, 0, 3);
 
   // make sure we alloc at least 2 filters
 
-  if (bpass) N = max(N, 1);
+  if (bpass) N = std::max(N, 1);
 
   flt_t *pf0 = NULL;
   flt_t *pf1 = NULL;
@@ -1290,11 +1290,11 @@ inline int POS_ONE_GetNext(pos_one_t *p1) {
   ((a) == DLY_FLINEAR || (a) == DLY_LOWPASS || (a) == DLY_LOWPASS_4TAP)
 
 #define DLY_TAP_FEEDBACK_GAIN \
-  0.25  // drop multitap feedback to compensate for sum of taps in
-        // dly_*multitap()
+  0.25f  // drop multitap feedback to compensate for sum of taps in
+         // dly_*multitap()
 
 #define DLY_NORMALIZING_REDUCTION_MAX \
-  0.25  // don't reduce gain (due to feedback) below N% of original gain
+  0.25f  // don't reduce gain (due to feedback) below N% of original gain
 
 // delay line
 
@@ -1398,7 +1398,7 @@ void DLY_SetNormalizingGain(dly_t *pdly, int feedback) {
   float fb = (float)feedback;
 
   fb = fb / (float)PMAX;
-  fb = min(fb, 0.999f);
+  fb = std::min(fb, 0.999f);
 
   // if b is 0, set b to PMAX (1)
 
@@ -1417,7 +1417,7 @@ void DLY_SetNormalizingGain(dly_t *pdly, int feedback) {
 
   // limit gain reduction to N% PMAX
 
-  gain = clamp(gain, (PMAX * DLY_NORMALIZING_REDUCTION_MAX), PMAX);
+  gain = std::clamp(gain, (PMAX * DLY_NORMALIZING_REDUCTION_MAX), (float)PMAX);
 
   gain = ((float)b / (float)PMAX) * gain;  // scale final gain by pdly->b.
 
@@ -1505,7 +1505,7 @@ dly_t *DLY_AllocLP(int D, int a, int b, int type, int M, int L, int *fa,
   pdly->D0 = D;
   pdly->p = w;  // init circular pointer to head of buffer
   pdly->w = w;
-  pdly->a = min(a, PMAX - 1);  // do not allow 100% feedback
+  pdly->a = std::min(a, PMAX - 1);  // do not allow 100% feedback
   pdly->b = b;
   pdly->fused = true;
 
@@ -1793,10 +1793,10 @@ void DLY_ChangeTaps(dly_t *pdly, int t0, int t1, int t2, int t3) {
     if (t2 > t3) SWAP(t2, t3, temp);
   }
 
-  pdly->t = min(t0, pdly->D0);
-  pdly->t1 = min(t1, pdly->D0);
-  pdly->t2 = min(t2, pdly->D0);
-  pdly->t3 = min(t3, pdly->D0);
+  pdly->t = std::min(t0, pdly->D0);
+  pdly->t1 = std::min(t1, pdly->D0);
+  pdly->t2 = std::min(t2, pdly->D0);
+  pdly->t3 = std::min(t3, pdly->D0);
 }
 
 // make instantaneous change for first delay tap 't' to new delay value.
@@ -1805,7 +1805,7 @@ void DLY_ChangeTaps(dly_t *pdly, int t0, int t1, int t2, int t3) {
 void DLY_ChangeVal(dly_t *pdly, int t) {
   // never set delay > original delay
 
-  pdly->t = min(t, pdly->D0);
+  pdly->t = std::min(t, pdly->D0);
 }
 
 // ignored - use MDY_ for modulatable delay
@@ -2015,7 +2015,7 @@ mdy_t *MDY_Alloc(dly_t *pdly, float ramptime, float modtime, float depth,
 void MDY_ChangeVal(mdy_t *pmdy, int t) {
   // if D > original delay value, cap at original value
 
-  t = min(pmdy->pdly->D0, t);
+  t = std::min(pmdy->pdly->D0, t);
 
   pmdy->fchanging = true;
 
@@ -2399,9 +2399,9 @@ rva_t *RVA_Alloc(int *D, int *a, int *b, int m, flt_t *pflt, int fparallel,
 
       // value of ftaps is the seed for all tap values
 
-      float t1 = max(MSEC_TO_SAMPS(5), D[i] * (1.0 - ftaps * 3.141592));
-      float t2 = max(MSEC_TO_SAMPS(7), D[i] * (1.0 - ftaps * 1.697043));
-      float t3 = max(MSEC_TO_SAMPS(10), D[i] * (1.0 - ftaps * 0.96325));
+      float t1 = std::max(MSEC_TO_SAMPS(5), D[i] * (1.0f - ftaps * 3.141592f));
+      float t2 = std::max(MSEC_TO_SAMPS(7), D[i] * (1.0f - ftaps * 1.697043f));
+      float t3 = std::max(MSEC_TO_SAMPS(10), D[i] * (1.0f - ftaps * 0.96325f));
 
       DLY_ChangeTaps(prva->pdlys[i], (int)t1, (int)t2, (int)t3, D[i]);
     }
@@ -2425,11 +2425,11 @@ rva_t *RVA_Alloc(int *D, int *a, int *b, int m, flt_t *pflt, int fparallel,
       modtime = (float)D / (float)(SOUND_DMA_SPEED);  // seconds per delay
       depth =
           (fmoddly / 1000.0) / modtime;  // convert milliseconds to 'depth' %
-      depth = clamp(depth, 0.01, 0.99);
+      depth = std::clamp(depth, 0.01f, 0.99f);
       modtime = modtime * fmodrate;  // modulate every N delay passes
 
-      ramptime = min(20.0f / 1000.0f,
-                     modtime / 2);  // ramp between delay values in N ms
+      ramptime = std::min(20.0f / 1000.0f,
+                          modtime / 2);  // ramp between delay values in N ms
 
       prva->pmdlys[i] =
           MDY_Alloc(prva->pdlys[i], ramptime, modtime, depth, 1.0);
@@ -2709,13 +2709,13 @@ void RVA_ConstructDelays(float *rgd, float *rgf, int m, int *D, int *a, int *b,
     // re-use predelay values as reverb values:
 
     if (rgf[j] < 0 && !bpredelay)
-      d = max((int)(rgd[j] / 4.0), RVA_MIN_SEPARATION);
+      d = std::max((int)(rgd[j] / 4.0), RVA_MIN_SEPARATION);
 
     if (i < 3)
       dm = 0.0;
     else
-      dm = max(RVA_MIN_SEPARATION * (i / 3.0f),
-               ((i / 3.0f) * ((float)d * 0.18f)));
+      dm = std::max(RVA_MIN_SEPARATION * (i / 3.0f),
+                    ((i / 3.0f) * ((float)d * 0.18f)));
 
     d += (int)dm;
     D[i] = MSEC_TO_SAMPS(d);
@@ -2725,7 +2725,7 @@ void RVA_ConstructDelays(float *rgd, float *rgf, int m, int *D, int *a, int *b,
 
     // feedback - due to wall/floor/ceiling reflectivity
 
-    a[i] = (int)min(0.999 * PMAX, (float)PMAX * r);
+    a[i] = (int)std::min(0.999f * PMAX, (float)PMAX * r);
 
     if (bpredelay) a[i] = -a[i];  // flag delay as predelay
 
@@ -2826,7 +2826,7 @@ rva_t *RVA_Params(prc_t *pprc) {
 
   // limit # delays 1-12
 
-  m = clamp(numdelays, RVA_BASEM, CRVA_DLYS);
+  m = std::clamp(numdelays, (float)RVA_BASEM, (float)CRVA_DLYS);
 
   // set up D (delay) a (feedback) b (gain) arrays
 
@@ -2866,12 +2866,13 @@ rva_t *RVA_Params(prc_t *pprc) {
       if (i == 0) {
         // set feedback for smallest delay
 
-        a[i] = (int)min(0.999 * PMAX, (float)PMAX * feedback);
+        a[i] = (int)std::min(0.999f * PMAX, (float)PMAX * feedback);
       } else {
         // adjust feedback down for larger delays so that decay time is constant
 
-        a[i] = (int)min(0.999 * PMAX, (float)PMAX * DLY_NormalizeFeedback(
-                                                        D[0], feedback, D[i]));
+        a[i] = (int)std::min(
+            0.999f * PMAX,
+            (float)PMAX * DLY_NormalizeFeedback(D[0], feedback, D[i]));
       }
 
       b[i] = (int)((float)(gain * PMAX) / (float)m);
@@ -3112,7 +3113,7 @@ dfr_t *DFR_Params(prc_t *pprc) {
 
   // limit m, n to half max number of delays
 
-  n = clamp(numdelays, DFR_BASEN, CDFR_DLYS / 2);
+  n = std::clamp(numdelays, (float)DFR_BASEN, CDFR_DLYS / 2.0f);
 
   // compute delays for diffusors
 
@@ -3125,7 +3126,7 @@ dfr_t *DFR_Params(prc_t *pprc) {
 
     // feedback and gain of diffusor
 
-    a[i] = min(0.999 * PMAX, dfrfbs[i] * PMAX * feedback);
+    a[i] = std::min(0.999f * PMAX, dfrfbs[i] * PMAX * feedback);
     b[i] = (int)((float)(gain * (float)PMAX));
   }
 
@@ -3331,7 +3332,7 @@ inline float LFO_HzToStep(float freqHz) {
 
 lfo_t *LFO_Alloc(int wtype, float freqHz, bool foneshot, float gain) {
   int i;
-  int type = min(CLFOWAV - 1, wtype);
+  int type = std::min(CLFOWAV - 1, wtype);
   float lfostep;
 
   for (i = 0; i < CLFO; i++)
@@ -3622,13 +3623,13 @@ ptc_t *PTC_Alloc(float timeslice, float timexfade, float fstep) {
 
   // make sure timeslice is greater than cut/dup time
 
-  tslice = max(tslice, 1.1 * tcutdup);
+  tslice = std::max(tslice, 1.1f * tcutdup);
 
   // make sure xfade time smaller than cut/dup time, and smaller than
   // (timeslice-cutdup) time
 
-  txfade = min(txfade, 0.9 * tcutdup);
-  txfade = min(txfade, 0.9 * (tslice - tcutdup));
+  txfade = std::min(txfade, 0.9f * tcutdup);
+  txfade = std::min(txfade, 0.9f * (tslice - tcutdup));
 
   pptc->cxfade = MSEC_TO_SAMPS(txfade);
   pptc->ccut = MSEC_TO_SAMPS(tcutdup);
@@ -4227,7 +4228,7 @@ efo_t *EFO_Alloc(float threshold, float attack_sec, float decay_sec,
         RMP_SetEnd(&pefo->rmp_decay);
 
         pefo->thresh = threshold;
-        pefo->thresh_off = max(1, threshold - EFO_HYST_AMP);
+        pefo->thresh_off = std::max(1.0f, threshold - EFO_HYST_AMP);
         pefo->bgateon = false;
         pefo->bexp = bexp;
       }
@@ -4832,7 +4833,7 @@ inline int AMP_GetNext(amp_t *pamp, int x) {
     G1 = pamp->gain_max - ((pamp->gain_max * pamp->depth) >> PBITS);
 
     if (pamp->brand) {
-      gain_new = RandomInt(min(G1, G2), max(G1, G2));
+      gain_new = RandomInt(std::min(G1, G2), std::max(G1, G2));
     } else {
       // alternate between min & max
 
@@ -4932,8 +4933,8 @@ amp_t *AMP_Params(prc_t *pprc) {
 
   if (pprc->prm[amp_imodrate] > 0.0) {
     ramptime = pprc->prm[amp_imodglide] / 1000.0;  // get ramp time in seconds
-    modtime = 1.0 / max(pprc->prm[amp_imodrate],
-                        0.01);         // time between modulations in seconds
+    modtime = 1.0 / std::max(pprc->prm[amp_imodrate],
+                             0.01f);   // time between modulations in seconds
     depth = pprc->prm[amp_imoddepth];  // depth of modulations 0-1.0
   }
 
@@ -5148,7 +5149,7 @@ void PRC_CheckParams(prc_t *pprc, prm_rng_t *prng) {
     if (pprc->prm[i] != 0.0 &&
         (pprc->prm[i] > prng[i + 1].hi || pprc->prm[i] < prng[i + 1].lo)) {
       DevMsg("DSP: Warning, clamping out of range parameter.\n");
-      pprc->prm[i] = clamp(pprc->prm[i], prng[i + 1].lo, prng[i + 1].hi);
+      pprc->prm[i] = std::clamp(pprc->prm[i], prng[i + 1].lo, prng[i + 1].hi);
     }
   }
 }
@@ -5921,7 +5922,7 @@ int DSP_Alloc(int ipset, float xfade, int cchan) {
   dsp_t *pdsp;
   int i;
   int idsp;
-  int cchans = clamp(cchan, 1, DSPCHANMAX);
+  int cchans = std::clamp(cchan, 1, DSPCHANMAX);
 
   // find free slot
 
@@ -6650,12 +6651,12 @@ void ADSP_SetupAutoDelay(prc_t *pprc_dly, auto_params_t *pa) {
 
   pprc_dly->prm[dly_idtype] = DLY_LOWPASS;  // delay with feedback
 
-  pprc_dly->prm[dly_idelay] = clamp((size / 12.0), 5.0, 500.0);
+  pprc_dly->prm[dly_idelay] = std::clamp((size / 12.0), 5.0, 500.0);
 
   pprc_dly->prm[dly_ifeedback] = MapSizeToDLYFeedback[pa->len];
 
   // reduce gain based on distance reflection travels
-  //	float g = 1.0 - ( clamp(pprc_dly->prm[dly_idelay], 10.0, 1000.0) /
+  //	float g = 1.0 - ( std::clamp(pprc_dly->prm[dly_idelay], 10.0, 1000.0) /
   //(1000.0 - 10.0) ); 	pprc_dly->prm[dly_igain]		= g;
 
   pprc_dly->prm[dly_iftype] = FLT_LP;
@@ -6669,8 +6670,8 @@ void ADSP_SetupAutoDelay(prc_t *pprc_dly, auto_params_t *pa) {
 
   pprc_dly->prm[dly_iquality] = QUA_LO;
 
-  float l = clamp((pa->length * 2.0 / 12.0), 14.0, 500.0);
-  float w = clamp((pa->width * 2.0 / 12.0), 14.0, 500.0);
+  float l = std::clamp((pa->length * 2.0 / 12.0), 14.0, 500.0);
+  float w = std::clamp((pa->width * 2.0 / 12.0), 14.0, 500.0);
 
   // convert to multitap delay
 
@@ -6678,8 +6679,8 @@ void ADSP_SetupAutoDelay(prc_t *pprc_dly, auto_params_t *pa) {
 
   pprc_dly->prm[dly_idelay] = l;
   pprc_dly->prm[dly_itap1] = w;
-  pprc_dly->prm[dly_itap2] = l;  // max(7, l * 0.7 );
-  pprc_dly->prm[dly_itap3] = l;  // max(7, w * 0.7 );
+  pprc_dly->prm[dly_itap2] = l;  // std::max(7, l * 0.7 );
+  pprc_dly->prm[dly_itap3] = l;  // std::max(7, w * 0.7 );
 
   pprc_dly->prm[dly_igain] = 1.0;
 }
@@ -6742,9 +6743,11 @@ void ADSP_SetupAutoReverb(prc_t *pprc_rva, auto_params_t *pa) {
       0;  // 0.1 // use extra delay taps to increase density
 
   pprc_rva->prm[rva_width] =
-      clamp(((float)(pa->width) / 12.0), 6.0, 500.0);  // in feet
-  pprc_rva->prm[rva_depth] = clamp(((float)(pa->length) / 12.0), 6.0, 500.0);
-  pprc_rva->prm[rva_height] = clamp(((float)(pa->height) / 12.0), 6.0, 500.0);
+      std::clamp(((float)(pa->width) / 12.0), 6.0, 500.0);  // in feet
+  pprc_rva->prm[rva_depth] =
+      std::clamp(((float)(pa->length) / 12.0), 6.0, 500.0);
+  pprc_rva->prm[rva_height] =
+      std::clamp(((float)(pa->height) / 12.0), 6.0, 500.0);
 
   // room
   pprc_rva->prm[rva_fbwidth] =
@@ -6805,7 +6808,7 @@ prc_t g_prc_dfr_auto[] = {PRC_DFRA_S, PRC_DFRA_M, PRC_DFRA_L, PRC_DFRA_VL,
 // copy diffusor template from preset list, based on room size
 
 void ADSP_SetupAutoDiffusor(prc_t *pprc_dfr, auto_params_t *pa) {
-  int i = clamp(pa->size, 0, CDFRTEMPLATES - 1);
+  int i = std::clamp(pa->size, 0, (int)CDFRTEMPLATES - 1);
 
   // copy diffusor preset based on size
 
@@ -6966,9 +6969,9 @@ void ADSP_InterpolatePreset(pset_t *pnew, pset_t *pmin, pset_t *pmax,
   // exponential interpolation if pmin or pmax parameters are < 0, directly set
   // value from w/l/h
 
-  float w = clamp(((float)(pa->width) / 12.0), 6.0, 500.0);  // in feet
-  float l = clamp(((float)(pa->length) / 12.0), 6.0, 500.0);
-  float h = clamp(((float)(pa->height) / 12.0), 6.0, 500.0);
+  float w = std::clamp(((float)(pa->width) / 12.0), 6.0, 500.0);  // in feet
+  float l = std::clamp(((float)(pa->length) / 12.0), 6.0, 500.0);
+  float h = std::clamp(((float)(pa->height) / 12.0), 6.0, 500.0);
 
   ADSP_SetParamIfNegative(pnew, pmin, pmax, PRC_RVA, iskip, rva_width, pa->wid,
                           ADSP_WIDTH_MAX, 1, w);
@@ -6998,8 +7001,8 @@ void ADSP_InterpolatePreset(pset_t *pnew, pset_t *pmin, pset_t *pmax,
 
   // directly set delay value from pa->length if pmin or pmax value is < 0
 
-  l = clamp((pa->length * 2.0 / 12.0), 14.0, 500.0);
-  w = clamp((pa->width * 2.0 / 12.0), 14.0, 500.0);
+  l = std::clamp((pa->length * 2.0 / 12.0), 14.0, 500.0);
+  w = std::clamp((pa->width * 2.0 / 12.0), 14.0, 500.0);
 
   ADSP_SetParamIfNegative(pnew, pmin, pmax, PRC_DLY, iskip, dly_idelay, pa->len,
                           ADSP_LENGTH_MAX, 1, l);
@@ -8988,7 +8991,7 @@ bool DSP_LoadPresetFile(void) {
 
         // cap at max params
 
-        ip = min(ip, CPRCPARAMS);
+        ip = std::min(ip, CPRCPARAMS);
       }
 
       cproc++;
@@ -8997,7 +9000,7 @@ bool DSP_LoadPresetFile(void) {
             "DSP PARSE ERROR!!! dsp_presets.txt: missing } or too many "
             "processors in preset #: %3.0f \n",
             ipreset);
-      cproc = min(cproc, CPSET_PRCS);  // don't overflow # procs
+      cproc = std::min(cproc, CPSET_PRCS);  // don't overflow # procs
     }
 
     // if cproc == 1, type is always SIMPLE
@@ -9143,7 +9146,7 @@ void CheckNewDspPresets(void) {
 
 void DSP_DEBUGSetParams(int ipreset, int iproc, float *pvalues, int cparams) {
   pset_t new_pset;  // preset
-  int cparam = clamp(cparams, 0, CPRCPARAMS);
+  int cparam = std::clamp(cparams, 0, CPRCPARAMS);
   prc_t *pprct;
 
   // copy template preset from template array

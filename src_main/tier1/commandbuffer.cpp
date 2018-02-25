@@ -17,9 +17,9 @@ struct cmdalias_t {
   char *value;
 };
 
-//-----------------------------------------------------------------------------
+
 // Constructor, destructor
-//-----------------------------------------------------------------------------
+
 CCommandBuffer::CCommandBuffer() : m_Commands(32, 32) {
   m_hNextCommand = m_Commands.InvalidIndex();
   m_nWaitDelayTicks = 1;
@@ -32,18 +32,18 @@ CCommandBuffer::CCommandBuffer() : m_Commands(32, 32) {
 
 CCommandBuffer::~CCommandBuffer() {}
 
-//-----------------------------------------------------------------------------
+
 // Indicates how long to delay when encoutering a 'wait' command
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::SetWaitDelayTime(int nTickDelay) {
   Assert(nTickDelay >= 0);
   m_nWaitDelayTicks = nTickDelay;
 }
 
-//-----------------------------------------------------------------------------
+
 // Specifies a max limit of the args buffer. For unittesting. Size == 0 means
 // use default
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::LimitArgumentBufferSize(int nSize) {
   if (nSize > ARGS_BUFFER_LENGTH) {
     nSize = ARGS_BUFFER_LENGTH;
@@ -52,9 +52,9 @@ void CCommandBuffer::LimitArgumentBufferSize(int nSize) {
   m_nMaxArgSBufferLength = (nSize == 0) ? ARGS_BUFFER_LENGTH : nSize;
 }
 
-//-----------------------------------------------------------------------------
+
 // Parses argv0 out of the buffer
-//-----------------------------------------------------------------------------
+
 bool CCommandBuffer::ParseArgV0(CUtlBuffer &buf, char *pArgV0, int nMaxLen,
                                 const char **pArgS) {
   pArgV0[0] = 0;
@@ -70,9 +70,9 @@ bool CCommandBuffer::ParseArgV0(CUtlBuffer &buf, char *pArgV0, int nMaxLen,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Insert a command into the command queue
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::InsertCommandAtAppropriateTime(int hCommand) {
   int i;
   Command_t &command = m_Commands[hCommand];
@@ -83,16 +83,16 @@ void CCommandBuffer::InsertCommandAtAppropriateTime(int hCommand) {
   m_Commands.LinkBefore(i, hCommand);
 }
 
-//-----------------------------------------------------------------------------
+
 // Insert a command into the command queue at the appropriate time
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::InsertImmediateCommand(int hCommand) {
   m_Commands.LinkBefore(m_hNextCommand, hCommand);
 }
 
-//-----------------------------------------------------------------------------
+
 // Insert a command into the command queue
-//-----------------------------------------------------------------------------
+
 bool CCommandBuffer::InsertCommand(const char *pArgS, int nCommandSize,
                                    int nTick) {
   if (nCommandSize >= CCommand::MaxCommandLength()) {
@@ -127,9 +127,9 @@ bool CCommandBuffer::InsertCommand(const char *pArgS, int nCommandSize,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the length of the next command
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::GetNextCommandLength(const char *pText, int nMaxLen,
                                           int *pCommandLength,
                                           int *pNextCommandOffset) {
@@ -169,9 +169,9 @@ void CCommandBuffer::GetNextCommandLength(const char *pText, int nMaxLen,
   *pNextCommandOffset = nNextCommandOffset;
 }
 
-//-----------------------------------------------------------------------------
+
 // Add text to command buffer, return false if it couldn't owing to overflow
-//-----------------------------------------------------------------------------
+
 bool CCommandBuffer::AddText(const char *pText, int nTickDelay) {
   Assert(nTickDelay >= 0);
 
@@ -209,14 +209,14 @@ bool CCommandBuffer::AddText(const char *pText, int nTickDelay) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Are we in the middle of processing commands?
-//-----------------------------------------------------------------------------
+
 bool CCommandBuffer::IsProcessingCommands() { return m_bIsProcessingCommands; }
 
-//-----------------------------------------------------------------------------
+
 // Delays all queued commands to execute at a later time
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::DelayAllQueuedCommands(int nDelay) {
   if (nDelay <= 0) return;
 
@@ -226,9 +226,9 @@ void CCommandBuffer::DelayAllQueuedCommands(int nDelay) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Call this to begin iterating over all commands up to flCurrentTime
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::BeginProcessingCommands(int nDeltaTicks) {
   if (nDeltaTicks == 0) return;
 
@@ -240,9 +240,9 @@ void CCommandBuffer::BeginProcessingCommands(int nDeltaTicks) {
   m_hNextCommand = m_Commands.Head();
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the next command
-//-----------------------------------------------------------------------------
+
 bool CCommandBuffer::DequeueNextCommand() {
   m_CurrentCommand.Reset();
 
@@ -277,18 +277,18 @@ bool CCommandBuffer::DequeueNextCommand() {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the next command
-//-----------------------------------------------------------------------------
+
 int CCommandBuffer::DequeueNextCommand(const char **&ppArgv) {
   DequeueNextCommand();
   ppArgv = ArgV();
   return ArgC();
 }
 
-//-----------------------------------------------------------------------------
+
 // Compacts the command buffer
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::Compact() {
   // Compress argvbuffer + argv
   // NOTE: I'm using this choice instead of calling malloc + free
@@ -315,9 +315,9 @@ void CCommandBuffer::Compact() {
   memcpy(m_pArgSBuffer, pTempBuffer, m_nArgSBufferSize);
 }
 
-//-----------------------------------------------------------------------------
+
 // Call this to finish iterating over all commands
-//-----------------------------------------------------------------------------
+
 void CCommandBuffer::EndProcessingCommands() {
   Assert(m_bIsProcessingCommands);
   m_bIsProcessingCommands = false;
@@ -348,9 +348,9 @@ void CCommandBuffer::EndProcessingCommands() {
   Compact();
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns a handle to the next command to process
-//-----------------------------------------------------------------------------
+
 CommandHandle_t CCommandBuffer::GetNextCommandHandle() {
   Assert(m_bIsProcessingCommands);
   return m_Commands.Head();

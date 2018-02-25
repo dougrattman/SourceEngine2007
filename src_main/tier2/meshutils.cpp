@@ -4,9 +4,9 @@
 
 #include "tier2/meshutils.h"
 
-//-----------------------------------------------------------------------------
+
 // Helper methods to create various standard index buffer types
-//-----------------------------------------------------------------------------
+
 void GenerateSequentialIndexBuffer(unsigned short* pIndices, int nIndexCount,
                                    int nFirstVertex) {
   if (!pIndices) return;

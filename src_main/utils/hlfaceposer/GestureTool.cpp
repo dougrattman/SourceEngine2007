@@ -187,7 +187,7 @@ void GestureTool::GetScrubHandleRect( RECT& rcHandle, float scrub, bool clipped 
 
 		if  ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH / 2, w2() - SCRUBBER_HANDLE_WIDTH / 2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH / 2, w2() - SCRUBBER_HANDLE_WIDTH / 2 );
 		}
 	}
 
@@ -206,7 +206,7 @@ void GestureTool::GetScrubHandleReferenceRect( RECT& rcHandle, float scrub, bool
 
 		if  ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
 		}
 	}
 
@@ -780,11 +780,11 @@ int	GestureTool::handleEvent( mxEvent *event )
 				// Zoom time in  / out
 				if ( event->height > 0 )
 				{
-					tz = min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
+					tz = std::min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
 				}
 				else
 				{
-					tz = max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
+					tz = std::max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
 				}
 
 				g_pChoreoView->SetPreservedTimeZoom( this, tz );
@@ -821,7 +821,7 @@ int	GestureTool::handleEvent( mxEvent *event )
 						float t = GetTimeValueForMouse( (short)event->x );
 						m_flScrubberTimeOffset = m_flScrub - t;
 						float maxoffset = 0.5f * (float)SCRUBBER_HANDLE_WIDTH / GetPixelsPerSecond();
-						m_flScrubberTimeOffset = clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
+						m_flScrubberTimeOffset = std::clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
 						t += m_flScrubberTimeOffset;
 						ForceScrubPosition( t );
 					}
@@ -907,7 +907,7 @@ int	GestureTool::handleEvent( mxEvent *event )
 					{
 						float t = GetTimeValueForMouse( mx );
 						float lastfrac = t / GetSafeEvent()->GetDuration();
-						lastfrac = clamp( lastfrac, 0.0f, 1.0f );
+						lastfrac = std::clamp( lastfrac, 0.0f, 1.0f );
 
 						g_pChoreoView->SetDirty( true );
 						g_pChoreoView->PushUndo( "move absolute tag" );
@@ -972,22 +972,22 @@ int	GestureTool::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 20;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 20;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					default:
 						processed = false;
@@ -1017,7 +1017,7 @@ void GestureTool::ApplyBounds( int& mx, int& my )
 	if ( !m_bUseBounds )
 		return;
 
-	mx = clamp( mx, m_nMinX, m_nMaxX );
+	mx = std::clamp( mx, m_nMinX, m_nMaxX );
 }
 
 int GestureTool::GetTagTypeForTag( CEventAbsoluteTag const *tag )
@@ -1072,7 +1072,7 @@ void GestureTool::CalcBounds( int movetype )
 			if ( tag && e && e->GetDuration() )
 			{
 				m_nMinX = GetPixelForTimeValue( 0 );
-				m_nMaxX = max( w2(), GetPixelForTimeValue( e->GetDuration() ) );
+				m_nMaxX = std::max( w2(), GetPixelForTimeValue( e->GetDuration() ) );
 
 				int t = GetTagTypeForTag( tag );
 				if ( t != -1 )
@@ -1219,7 +1219,7 @@ void GestureTool::DrawMouseOverPos( CChoreoWidgetDrawHelper& drawHelper, RECT& r
 	int len = drawHelper.CalcTextWidth( "Arial", 11, 900, sz );
 
 	RECT rcText = rcPos;
-	rcText.left = max( rcPos.left, rcPos.right - len );
+	rcText.left = std::max( rcPos.left, rcPos.right - len );
 
 	drawHelper.DrawColoredText( "Arial", 11, 900, RGB( 255, 50, 70 ), rcText, sz );
 }
@@ -1799,8 +1799,8 @@ void GestureTool::RepositionHSlider( void )
 	}
 	m_pHorzScrollBar->setBounds( 0, h2() - m_nScrollbarHeight, w2() - m_nScrollbarHeight, m_nScrollbarHeight );
 
-	m_flLeftOffset = max( 0, m_flLeftOffset );
-	m_flLeftOffset = min( (float)pixelsneeded, m_flLeftOffset );
+	m_flLeftOffset = std::max( 0, m_flLeftOffset );
+	m_flLeftOffset = std::min( (float)pixelsneeded, m_flLeftOffset );
 
 	m_pHorzScrollBar->setRange( 0, pixelsneeded );
 	m_pHorzScrollBar->setValue( (int)m_flLeftOffset );
@@ -1949,7 +1949,7 @@ void GestureTool::OnChangeScale( void )
 	if ( !InputProperties( &params ) )
 		return;
 
-	g_pChoreoView->SetTimeZoom( GetToolName(), clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
+	g_pChoreoView->SetTimeZoom( GetToolName(), std::clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
 
 	m_nLastHPixelsNeeded = -1;
 	m_flLeftOffset= 0.0f;

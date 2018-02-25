@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "mxExpressionSlider.h"
 #include "expressiontool.h"
 #include "mathlib/mathlib.h"
@@ -256,8 +256,8 @@ void mxExpressionSlider::GetThumbRect( int barnum, RECT &rcThumb )
 	}
 
 	int tickmark = (int)( frac * m_nTicks[ barnum ] + 0.5 );
-	tickmark = min( m_nTicks[ barnum ], tickmark );
-	tickmark = max( 0, tickmark );
+	tickmark = std::min( m_nTicks[ barnum ], tickmark );
+	tickmark = std::max( 0, tickmark );
 
 	int thumbwidth = 20;
 	int thumbheight = 14;
@@ -345,8 +345,8 @@ void mxExpressionSlider::DrawThumb( int barnum, HDC& dc )
 			{
 				frac = m_flCurrent[ barnum ] / m_flMax[ barnum ];
 			}
-			frac = min( 1.0f, frac );
-			frac = max( 0.0f, frac );
+			frac = std::min( 1.0f, frac );
+			frac = std::max( 0.0f, frac );
 
 			COLORREF clr = GetSysColor( COLOR_3DFACE );
 			int r, g, b;
@@ -356,7 +356,7 @@ void mxExpressionSlider::DrawThumb( int barnum, HDC& dc )
 
 			// boost colors
 			r = (int)( (1-frac) * b );
-			b = min( 255, (int)(r + ( 255 - r ) * frac ) );
+			b = std::min( 255, (int)(r + ( 255 - r ) * frac ) );
 			g = (int)( (1-frac) * g );
 
 			face = CreateSolidBrush( RGB( r, g, b ) );
@@ -365,8 +365,8 @@ void mxExpressionSlider::DrawThumb( int barnum, HDC& dc )
 	case BALANCE_BAR:
 		{
 			float frac = m_flCurrent[ barnum ];
-			frac = min( 1.0f, frac );
-			frac = max( 0.0f, frac );
+			frac = std::min( 1.0f, frac );
+			frac = std::max( 0.0f, frac );
 
 			COLORREF clr = GetSysColor( COLOR_3DFACE );
 			int r, g, b;

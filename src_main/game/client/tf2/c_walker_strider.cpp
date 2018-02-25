@@ -192,7 +192,7 @@ int C_WalkerStrider::DrawModel( int flags )
 		CStriderBeamEffect *pEff = &m_BeamEffects[i];
 
 		float flAlpha = (gpGlobals->curtime - pEff->m_flStartTime) / STRIDER_BEAM_LIFETIME;
-		flAlpha = 1.0 - clamp( flAlpha, 0, 1 );
+		flAlpha = 1.0 - std::clamp( flAlpha, 0, 1 );
 
 		CBeamSegDraw segDraw;
 		segDraw.Start( 2, pMaterial );

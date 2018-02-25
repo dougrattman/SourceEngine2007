@@ -96,32 +96,32 @@ static ConCommand showtriggers_toggle("showtriggers_toggle",
 // Global Savedata for base trigger
 BEGIN_DATADESC(CBaseTrigger)
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
-    DEFINE_FIELD(m_hFilter, FIELD_EHANDLE),
-    DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
-    DEFINE_UTLVECTOR(m_hTouchingEntities, FIELD_EHANDLE),
+  // Keyfields
+  DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
+      DEFINE_FIELD(m_hFilter, FIELD_EHANDLE),
+      DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
+      DEFINE_UTLVECTOR(m_hTouchingEntities, FIELD_EHANDLE),
 
-    // Inputs
-    DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Toggle", InputToggle),
-    DEFINE_INPUTFUNC(FIELD_VOID, "TouchTest", InputTouchTest),
+      // Inputs
+      DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Toggle", InputToggle),
+      DEFINE_INPUTFUNC(FIELD_VOID, "TouchTest", InputTouchTest),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "StartTouch", InputStartTouch),
-    DEFINE_INPUTFUNC(FIELD_VOID, "EndTouch", InputEndTouch),
+      DEFINE_INPUTFUNC(FIELD_VOID, "StartTouch", InputStartTouch),
+      DEFINE_INPUTFUNC(FIELD_VOID, "EndTouch", InputEndTouch),
 
-    // Outputs
-    DEFINE_OUTPUT(m_OnStartTouch, "OnStartTouch"),
-    DEFINE_OUTPUT(m_OnStartTouchAll, "OnStartTouchAll"),
-    DEFINE_OUTPUT(m_OnEndTouch, "OnEndTouch"),
-    DEFINE_OUTPUT(m_OnEndTouchAll, "OnEndTouchAll"),
-    DEFINE_OUTPUT(m_OnTouching, "OnTouching"),
-    DEFINE_OUTPUT(m_OnNotTouching, "OnNotTouching"),
+      // Outputs
+      DEFINE_OUTPUT(m_OnStartTouch, "OnStartTouch"),
+      DEFINE_OUTPUT(m_OnStartTouchAll, "OnStartTouchAll"),
+      DEFINE_OUTPUT(m_OnEndTouch, "OnEndTouch"),
+      DEFINE_OUTPUT(m_OnEndTouchAll, "OnEndTouchAll"),
+      DEFINE_OUTPUT(m_OnTouching, "OnTouching"),
+      DEFINE_OUTPUT(m_OnNotTouching, "OnNotTouching"),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger, CBaseTrigger);
+LINK_ENTITY_TO_CLASS(trigger, CBaseTrigger);
 
 CBaseTrigger::CBaseTrigger() { AddEFlags(EFL_USE_PARTITION_WHEN_NOT_SOLID); }
 
@@ -481,12 +481,12 @@ class CTriggerRemove : public CBaseTrigger {
 
 BEGIN_DATADESC(CTriggerRemove)
 
-// Outputs
-DEFINE_OUTPUT(m_OnRemove, "OnRemove"),
+  // Outputs
+  DEFINE_OUTPUT(m_OnRemove, "OnRemove"),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_remove, CTriggerRemove);
+LINK_ENTITY_TO_CLASS(trigger_remove, CTriggerRemove);
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -509,31 +509,31 @@ void CTriggerRemove::Touch(CBaseEntity *pOther) {
 
 BEGIN_DATADESC(CTriggerHurt)
 
-// Function Pointers
-DEFINE_FUNCTION(RadiationThink), DEFINE_FUNCTION(HurtThink),
+  // Function Pointers
+  DEFINE_FUNCTION(RadiationThink), DEFINE_FUNCTION(HurtThink),
 
-    // Fields
-    DEFINE_FIELD(m_flOriginalDamage, FIELD_FLOAT),
-    DEFINE_KEYFIELD(m_flDamage, FIELD_FLOAT, "damage"),
-    DEFINE_KEYFIELD(m_flDamageCap, FIELD_FLOAT, "damagecap"),
-    DEFINE_KEYFIELD(m_bitsDamageInflict, FIELD_INTEGER, "damagetype"),
-    DEFINE_KEYFIELD(m_damageModel, FIELD_INTEGER, "damagemodel"),
-    DEFINE_KEYFIELD(m_bNoDmgForce, FIELD_BOOLEAN, "nodmgforce"),
+      // Fields
+      DEFINE_FIELD(m_flOriginalDamage, FIELD_FLOAT),
+      DEFINE_KEYFIELD(m_flDamage, FIELD_FLOAT, "damage"),
+      DEFINE_KEYFIELD(m_flDamageCap, FIELD_FLOAT, "damagecap"),
+      DEFINE_KEYFIELD(m_bitsDamageInflict, FIELD_INTEGER, "damagetype"),
+      DEFINE_KEYFIELD(m_damageModel, FIELD_INTEGER, "damagemodel"),
+      DEFINE_KEYFIELD(m_bNoDmgForce, FIELD_BOOLEAN, "nodmgforce"),
 
-    DEFINE_FIELD(m_flLastDmgTime, FIELD_TIME),
-    DEFINE_FIELD(m_flDmgResetTime, FIELD_TIME),
-    DEFINE_UTLVECTOR(m_hurtEntities, FIELD_EHANDLE),
+      DEFINE_FIELD(m_flLastDmgTime, FIELD_TIME),
+      DEFINE_FIELD(m_flDmgResetTime, FIELD_TIME),
+      DEFINE_UTLVECTOR(m_hurtEntities, FIELD_EHANDLE),
 
-    // Inputs
-    DEFINE_INPUT(m_flDamage, FIELD_FLOAT, "SetDamage"),
+      // Inputs
+      DEFINE_INPUT(m_flDamage, FIELD_FLOAT, "SetDamage"),
 
-    // Outputs
-    DEFINE_OUTPUT(m_OnHurt, "OnHurt"),
-    DEFINE_OUTPUT(m_OnHurtPlayer, "OnHurtPlayer"),
+      // Outputs
+      DEFINE_OUTPUT(m_OnHurt, "OnHurt"),
+      DEFINE_OUTPUT(m_OnHurtPlayer, "OnHurtPlayer"),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
+LINK_ENTITY_TO_CLASS(trigger_hurt, CTriggerHurt);
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when spawning, after keyvalues have been handled.
@@ -717,18 +717,18 @@ LINK_ENTITY_TO_CLASS(trigger_multiple, CTriggerMultiple);
 
 BEGIN_DATADESC(CTriggerMultiple)
 
-// Function Pointers
-DEFINE_FUNCTION(MultiTouch), DEFINE_FUNCTION(MultiWaitOver),
+  // Function Pointers
+  DEFINE_FUNCTION(MultiTouch), DEFINE_FUNCTION(MultiWaitOver),
 
-    // Outputs
-    DEFINE_OUTPUT(m_OnTrigger, "OnTrigger")
+      // Outputs
+      DEFINE_OUTPUT(m_OnTrigger, "OnTrigger")
 
-        END_DATADESC()
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    // Purpose: Called when spawning, after keyvalues have been handled.
-    //-----------------------------------------------------------------------------
-    void CTriggerMultiple::Spawn(void) {
+//-----------------------------------------------------------------------------
+// Purpose: Called when spawning, after keyvalues have been handled.
+//-----------------------------------------------------------------------------
+void CTriggerMultiple::Spawn(void) {
   BaseClass::Spawn();
 
   InitTrigger();
@@ -840,27 +840,27 @@ class CTriggerLook : public CTriggerOnce {
 LINK_ENTITY_TO_CLASS(trigger_look, CTriggerLook);
 BEGIN_DATADESC(CTriggerLook)
 
-DEFINE_FIELD(m_hLookTarget, FIELD_EHANDLE),
-    DEFINE_FIELD(m_flLookTimeTotal, FIELD_FLOAT),
-    DEFINE_FIELD(m_flLookTimeLast, FIELD_TIME),
-    DEFINE_KEYFIELD(m_flTimeoutDuration, FIELD_FLOAT, "timeout"),
-    DEFINE_FIELD(m_bTimeoutFired, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_hActivator, FIELD_EHANDLE),
+  DEFINE_FIELD(m_hLookTarget, FIELD_EHANDLE),
+      DEFINE_FIELD(m_flLookTimeTotal, FIELD_FLOAT),
+      DEFINE_FIELD(m_flLookTimeLast, FIELD_TIME),
+      DEFINE_KEYFIELD(m_flTimeoutDuration, FIELD_FLOAT, "timeout"),
+      DEFINE_FIELD(m_bTimeoutFired, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_hActivator, FIELD_EHANDLE),
 
-    DEFINE_OUTPUT(m_OnTimeout, "OnTimeout"),
+      DEFINE_OUTPUT(m_OnTimeout, "OnTimeout"),
 
-    DEFINE_FUNCTION(TimeoutThink),
+      DEFINE_FUNCTION(TimeoutThink),
 
-    // Inputs
-    DEFINE_INPUT(m_flFieldOfView, FIELD_FLOAT, "FieldOfView"),
-    DEFINE_INPUT(m_flLookTime, FIELD_FLOAT, "LookTime"),
+      // Inputs
+      DEFINE_INPUT(m_flFieldOfView, FIELD_FLOAT, "FieldOfView"),
+      DEFINE_INPUT(m_flLookTime, FIELD_FLOAT, "LookTime"),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //------------------------------------------------------------------------------
-    // Purpose:
-    //------------------------------------------------------------------------------
-    void CTriggerLook::Spawn(void) {
+//------------------------------------------------------------------------------
+// Purpose:
+//------------------------------------------------------------------------------
+void CTriggerLook::Spawn(void) {
   m_hLookTarget = NULL;
   m_flLookTimeTotal = -1;
   m_bTimeoutFired = false;
@@ -1004,7 +1004,7 @@ int CTriggerLook::DrawDebugTextOverlays(void) {
     // ----------------
     char tempstr[255];
     Q_snprintf(tempstr, sizeof(tempstr), "Time:   %3.2f",
-               m_flLookTime - max(0, m_flLookTimeTotal));
+               m_flLookTime - std::max(0.0f, m_flLookTimeTotal));
     EntityText(text_offset, tempstr, 0);
     text_offset++;
   }
@@ -1117,26 +1117,26 @@ LINK_ENTITY_TO_CLASS(trigger_changelevel, CChangeLevel);
 // Global Savedata for changelevel trigger
 BEGIN_DATADESC(CChangeLevel)
 
-DEFINE_AUTO_ARRAY(m_szMapName, FIELD_CHARACTER),
-    DEFINE_AUTO_ARRAY(m_szLandmarkName, FIELD_CHARACTER),
-    //	DEFINE_FIELD( m_touchTime, FIELD_TIME ),	// don't save
-    //	DEFINE_FIELD( m_bTouched, FIELD_BOOLEAN ),
+  DEFINE_AUTO_ARRAY(m_szMapName, FIELD_CHARACTER),
+      DEFINE_AUTO_ARRAY(m_szLandmarkName, FIELD_CHARACTER),
+      //	DEFINE_FIELD( m_touchTime, FIELD_TIME ),	// don't save
+      //	DEFINE_FIELD( m_bTouched, FIELD_BOOLEAN ),
 
-    // Function Pointers
-    DEFINE_FUNCTION(TouchChangeLevel),
+      // Function Pointers
+      DEFINE_FUNCTION(TouchChangeLevel),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "ChangeLevel", InputChangeLevel),
+      DEFINE_INPUTFUNC(FIELD_VOID, "ChangeLevel", InputChangeLevel),
 
-    // Outputs
-    DEFINE_OUTPUT(m_OnChangeLevel, "OnChangeLevel"),
+      // Outputs
+      DEFINE_OUTPUT(m_OnChangeLevel, "OnChangeLevel"),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //
-    // Cache user-entity-field values until spawn is called.
-    //
+//
+// Cache user-entity-field values until spawn is called.
+//
 
-    bool CChangeLevel::KeyValue(const char *szKeyName, const char *szValue) {
+bool CChangeLevel::KeyValue(const char *szKeyName, const char *szValue) {
   if (FStrEq(szKeyName, "map")) {
     if (strlen(szValue) >= cchMapNameMost) {
       Warning("Map name '%s' too long (32 chars)\n", szValue);
@@ -1873,12 +1873,12 @@ class CTriggerPush : public CBaseTrigger {
 };
 
 BEGIN_DATADESC(CTriggerPush)
-DEFINE_KEYFIELD(m_vecPushDir, FIELD_VECTOR, "pushdir"),
-    DEFINE_KEYFIELD(m_flAlternateTicksFix, FIELD_FLOAT, "alternateticksfix"),
-    // DEFINE_FIELD( m_flPushSpeed, FIELD_FLOAT ),
-    END_DATADESC()
+  DEFINE_KEYFIELD(m_vecPushDir, FIELD_VECTOR, "pushdir"),
+      DEFINE_KEYFIELD(m_flAlternateTicksFix, FIELD_FLOAT, "alternateticksfix"),
+// DEFINE_FIELD( m_flPushSpeed, FIELD_FLOAT ),
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_push, CTriggerPush);
+LINK_ENTITY_TO_CLASS(trigger_push, CTriggerPush);
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when spawning, after keyvalues have been handled.
@@ -2024,13 +2024,11 @@ LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
 
 BEGIN_DATADESC(CTriggerTeleport)
 
-DEFINE_KEYFIELD(m_iLandmark, FIELD_STRING, "landmark"),
+  DEFINE_KEYFIELD(m_iLandmark, FIELD_STRING, "landmark"),
 
-    END_DATADESC()
+END_DATADESC()
 
-        void CTriggerTeleport::Spawn(void) {
-  InitTrigger();
-}
+void CTriggerTeleport::Spawn(void) { InitTrigger(); }
 
 //-----------------------------------------------------------------------------
 // Purpose: Teleports the entity that touched us to the location of our target,
@@ -2130,13 +2128,13 @@ class CTriggerToggleSave : public CBaseTrigger {
 };
 
 BEGIN_DATADESC(CTriggerToggleSave)
-DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
+  DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
-    END_DATADESC()
+      DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_togglesave, CTriggerToggleSave);
+LINK_ENTITY_TO_CLASS(trigger_togglesave, CTriggerToggleSave);
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when spawning, after keyvalues have been set.
@@ -2184,11 +2182,12 @@ class CTriggerSave : public CBaseTrigger {
 
 BEGIN_DATADESC(CTriggerSave)
 
-DEFINE_KEYFIELD(m_bForceNewLevelUnit, FIELD_BOOLEAN, "NewLevelUnit"),
-    DEFINE_KEYFIELD(m_minHitPoints, FIELD_INTEGER, "MinimumHitPoints"),
-    DEFINE_KEYFIELD(m_fDangerousTimer, FIELD_FLOAT, "DangerousTimer"),
+  DEFINE_KEYFIELD(m_bForceNewLevelUnit, FIELD_BOOLEAN, "NewLevelUnit"),
+      DEFINE_KEYFIELD(m_minHitPoints, FIELD_INTEGER, "MinimumHitPoints"),
+      DEFINE_KEYFIELD(m_fDangerousTimer, FIELD_FLOAT, "DangerousTimer"),
 
-    END_DATADESC() LINK_ENTITY_TO_CLASS(trigger_autosave, CTriggerSave);
+END_DATADESC()
+LINK_ENTITY_TO_CLASS(trigger_autosave, CTriggerSave);
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when spawning, after keyvalues have been set.
@@ -2257,12 +2256,12 @@ LINK_ENTITY_TO_CLASS(trigger_gravity, CTriggerGravity);
 
 BEGIN_DATADESC(CTriggerGravity)
 
-// Function Pointers
-DEFINE_FUNCTION(GravityTouch),
+  // Function Pointers
+  DEFINE_FUNCTION(GravityTouch),
 
-    END_DATADESC()
+END_DATADESC()
 
-        void CTriggerGravity::Spawn(void) {
+void CTriggerGravity::Spawn(void) {
   BaseClass::Spawn();
   InitTrigger();
   SetTouch(&CTriggerGravity::GravityTouch);
@@ -2296,14 +2295,14 @@ LINK_ENTITY_TO_CLASS(ai_changetarget, CAI_ChangeTarget);
 
 BEGIN_DATADESC(CAI_ChangeTarget)
 
-DEFINE_KEYFIELD(m_iszNewTarget, FIELD_STRING, "m_iszNewTarget"),
+  DEFINE_KEYFIELD(m_iszNewTarget, FIELD_STRING, "m_iszNewTarget"),
 
-    // Inputs
-    DEFINE_INPUTFUNC(FIELD_VOID, "Activate", InputActivate),
+      // Inputs
+      DEFINE_INPUTFUNC(FIELD_VOID, "Activate", InputActivate),
 
-    END_DATADESC()
+END_DATADESC()
 
-        void CAI_ChangeTarget::InputActivate(inputdata_t &inputdata) {
+void CAI_ChangeTarget::InputActivate(inputdata_t &inputdata) {
   CBaseEntity *pTarget = NULL;
 
   while ((pTarget = gEntList.FindEntityByName(pTarget, m_target, NULL,
@@ -2347,18 +2346,19 @@ LINK_ENTITY_TO_CLASS(ai_changehintgroup, CAI_ChangeHintGroup);
 
 BEGIN_DATADESC(CAI_ChangeHintGroup)
 
-DEFINE_KEYFIELD(m_iSearchType, FIELD_INTEGER, "SearchType"),
-    DEFINE_KEYFIELD(m_strSearchName, FIELD_STRING, "SearchName"),
-    DEFINE_KEYFIELD(m_strNewHintGroup, FIELD_STRING, "NewHintGroup"),
-    DEFINE_KEYFIELD(m_flRadius, FIELD_FLOAT, "Radius"),
-    DEFINE_KEYFIELD(m_bHintGroupNavLimiting, FIELD_BOOLEAN, "hintlimiting"),
+  DEFINE_KEYFIELD(m_iSearchType, FIELD_INTEGER, "SearchType"),
+      DEFINE_KEYFIELD(m_strSearchName, FIELD_STRING, "SearchName"),
+      DEFINE_KEYFIELD(m_strNewHintGroup, FIELD_STRING, "NewHintGroup"),
+      DEFINE_KEYFIELD(m_flRadius, FIELD_FLOAT, "Radius"),
+      DEFINE_KEYFIELD(m_bHintGroupNavLimiting, FIELD_BOOLEAN, "hintlimiting"),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "Activate", InputActivate),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Activate", InputActivate),
 
-    END_DATADESC()
+END_DATADESC()
 
-        CAI_BaseNPC *CAI_ChangeHintGroup::FindQualifiedNPC(
-            CAI_BaseNPC *pPrev, CBaseEntity *pActivator, CBaseEntity *pCaller) {
+CAI_BaseNPC *CAI_ChangeHintGroup::FindQualifiedNPC(CAI_BaseNPC *pPrev,
+                                                   CBaseEntity *pActivator,
+                                                   CBaseEntity *pCaller) {
   CBaseEntity *pEntity = pPrev;
   CAI_BaseNPC *pResult = NULL;
   const char *pszSearchName = STRING(m_strSearchName);
@@ -2488,44 +2488,46 @@ LINK_ENTITY_TO_CLASS(point_viewcontrol, CTriggerCamera);
 
 BEGIN_DATADESC(CTriggerCamera)
 
-DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE), DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
-    DEFINE_FIELD(m_pPath, FIELD_CLASSPTR), DEFINE_FIELD(m_sPath, FIELD_STRING),
-    DEFINE_FIELD(m_flWait, FIELD_FLOAT),
-    DEFINE_FIELD(m_flReturnTime, FIELD_TIME),
-    DEFINE_FIELD(m_flStopTime, FIELD_TIME),
-    DEFINE_FIELD(m_moveDistance, FIELD_FLOAT),
-    DEFINE_FIELD(m_targetSpeed, FIELD_FLOAT),
-    DEFINE_FIELD(m_initialSpeed, FIELD_FLOAT),
-    DEFINE_FIELD(m_acceleration, FIELD_FLOAT),
-    DEFINE_FIELD(m_deceleration, FIELD_FLOAT),
-    DEFINE_FIELD(m_state, FIELD_INTEGER),
-    DEFINE_FIELD(m_vecMoveDir, FIELD_VECTOR),
-    DEFINE_KEYFIELD(m_iszTargetAttachment, FIELD_STRING, "targetattachment"),
-    DEFINE_FIELD(m_iAttachmentIndex, FIELD_INTEGER),
-    DEFINE_FIELD(m_bSnapToGoal, FIELD_BOOLEAN),
+  DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE),
+      DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
+      DEFINE_FIELD(m_pPath, FIELD_CLASSPTR),
+      DEFINE_FIELD(m_sPath, FIELD_STRING), DEFINE_FIELD(m_flWait, FIELD_FLOAT),
+      DEFINE_FIELD(m_flReturnTime, FIELD_TIME),
+      DEFINE_FIELD(m_flStopTime, FIELD_TIME),
+      DEFINE_FIELD(m_moveDistance, FIELD_FLOAT),
+      DEFINE_FIELD(m_targetSpeed, FIELD_FLOAT),
+      DEFINE_FIELD(m_initialSpeed, FIELD_FLOAT),
+      DEFINE_FIELD(m_acceleration, FIELD_FLOAT),
+      DEFINE_FIELD(m_deceleration, FIELD_FLOAT),
+      DEFINE_FIELD(m_state, FIELD_INTEGER),
+      DEFINE_FIELD(m_vecMoveDir, FIELD_VECTOR),
+      DEFINE_KEYFIELD(m_iszTargetAttachment, FIELD_STRING, "targetattachment"),
+      DEFINE_FIELD(m_iAttachmentIndex, FIELD_INTEGER),
+      DEFINE_FIELD(m_bSnapToGoal, FIELD_BOOLEAN),
 #if HL2_EPISODIC
-    DEFINE_KEYFIELD(m_bInterpolatePosition, FIELD_BOOLEAN,
-                    "interpolatepositiontoplayer"),
-    DEFINE_FIELD(m_vStartPos, FIELD_VECTOR),
-    DEFINE_FIELD(m_vEndPos, FIELD_VECTOR),
-    DEFINE_FIELD(m_flInterpStartTime, FIELD_TIME),
+      DEFINE_KEYFIELD(m_bInterpolatePosition, FIELD_BOOLEAN,
+                      "interpolatepositiontoplayer"),
+      DEFINE_FIELD(m_vStartPos, FIELD_VECTOR),
+      DEFINE_FIELD(m_vEndPos, FIELD_VECTOR),
+      DEFINE_FIELD(m_flInterpStartTime, FIELD_TIME),
 #endif
-    DEFINE_FIELD(m_nPlayerButtons, FIELD_INTEGER),
-    DEFINE_FIELD(m_nOldTakeDamage, FIELD_INTEGER),
+      DEFINE_FIELD(m_nPlayerButtons, FIELD_INTEGER),
+      DEFINE_FIELD(m_nOldTakeDamage, FIELD_INTEGER),
 
-    // Inputs
-    DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
+      // Inputs
+      DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
 
-    // Function Pointers
-    DEFINE_FUNCTION(FollowTarget), DEFINE_OUTPUT(m_OnEndFollow, "OnEndFollow"),
+      // Function Pointers
+      DEFINE_FUNCTION(FollowTarget),
+      DEFINE_OUTPUT(m_OnEndFollow, "OnEndFollow"),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    // Purpose:
-    //-----------------------------------------------------------------------------
-    void CTriggerCamera::Spawn(void) {
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void CTriggerCamera::Spawn(void) {
   BaseClass::Spawn();
 
   SetMoveType(MOVETYPE_NOCLIP);
@@ -3061,21 +3063,21 @@ class CTriggerProximity : public CBaseTrigger {
 
 BEGIN_DATADESC(CTriggerProximity)
 
-// Functions
-DEFINE_FUNCTION(MeasureThink),
+  // Functions
+  DEFINE_FUNCTION(MeasureThink),
 
-    // Keys
-    DEFINE_KEYFIELD(m_iszMeasureTarget, FIELD_STRING, "measuretarget"),
-    DEFINE_FIELD(m_hMeasureTarget, FIELD_EHANDLE),
-    DEFINE_KEYFIELD(m_fRadius, FIELD_FLOAT, "radius"),
-    DEFINE_FIELD(m_nTouchers, FIELD_INTEGER),
+      // Keys
+      DEFINE_KEYFIELD(m_iszMeasureTarget, FIELD_STRING, "measuretarget"),
+      DEFINE_FIELD(m_hMeasureTarget, FIELD_EHANDLE),
+      DEFINE_KEYFIELD(m_fRadius, FIELD_FLOAT, "radius"),
+      DEFINE_FIELD(m_nTouchers, FIELD_INTEGER),
 
-    // Outputs
-    DEFINE_OUTPUT(m_NearestEntityDistance, "NearestEntityDistance"),
+      // Outputs
+      DEFINE_OUTPUT(m_NearestEntityDistance, "NearestEntityDistance"),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_proximity, CTriggerProximity);
+LINK_ENTITY_TO_CLASS(trigger_proximity, CTriggerProximity);
 LINK_ENTITY_TO_CLASS(logic_proximity, CPointEntity);
 
 //-----------------------------------------------------------------------------
@@ -3245,12 +3247,12 @@ class CPhysicsWind : public IMotionEvent {
 
 BEGIN_SIMPLE_DATADESC(CPhysicsWind)
 
-DEFINE_FIELD(m_nWindYaw, FIELD_INTEGER),
-    DEFINE_FIELD(m_flWindSpeed, FIELD_FLOAT),
+  DEFINE_FIELD(m_nWindYaw, FIELD_INTEGER),
+      DEFINE_FIELD(m_flWindSpeed, FIELD_FLOAT),
 
-    END_DATADESC()
+END_DATADESC()
 
-        extern short g_sModelIndexSmoke;
+extern short g_sModelIndexSmoke;
 extern float GetFloorZ(const Vector &origin);
 #define WIND_THINK_CONTEXT "WindThinkContext"
 
@@ -3301,31 +3303,31 @@ LINK_ENTITY_TO_CLASS(trigger_wind, CTriggerWind);
 
 BEGIN_DATADESC(CTriggerWind)
 
-DEFINE_FIELD(m_nSpeedCurrent, FIELD_INTEGER),
-    DEFINE_FIELD(m_nSpeedTarget, FIELD_INTEGER),
-    DEFINE_FIELD(m_nDirBase, FIELD_INTEGER),
-    DEFINE_FIELD(m_nDirCurrent, FIELD_INTEGER),
-    DEFINE_FIELD(m_nDirTarget, FIELD_INTEGER),
-    DEFINE_FIELD(m_bSwitch, FIELD_BOOLEAN),
+  DEFINE_FIELD(m_nSpeedCurrent, FIELD_INTEGER),
+      DEFINE_FIELD(m_nSpeedTarget, FIELD_INTEGER),
+      DEFINE_FIELD(m_nDirBase, FIELD_INTEGER),
+      DEFINE_FIELD(m_nDirCurrent, FIELD_INTEGER),
+      DEFINE_FIELD(m_nDirTarget, FIELD_INTEGER),
+      DEFINE_FIELD(m_bSwitch, FIELD_BOOLEAN),
 
-    DEFINE_FIELD(m_nSpeedBase, FIELD_INTEGER),
-    DEFINE_KEYFIELD(m_nSpeedNoise, FIELD_INTEGER, "SpeedNoise"),
-    DEFINE_KEYFIELD(m_nDirNoise, FIELD_INTEGER, "DirectionNoise"),
-    DEFINE_KEYFIELD(m_nHoldBase, FIELD_INTEGER, "HoldTime"),
-    DEFINE_KEYFIELD(m_nHoldNoise, FIELD_INTEGER, "HoldNoise"),
+      DEFINE_FIELD(m_nSpeedBase, FIELD_INTEGER),
+      DEFINE_KEYFIELD(m_nSpeedNoise, FIELD_INTEGER, "SpeedNoise"),
+      DEFINE_KEYFIELD(m_nDirNoise, FIELD_INTEGER, "DirectionNoise"),
+      DEFINE_KEYFIELD(m_nHoldBase, FIELD_INTEGER, "HoldTime"),
+      DEFINE_KEYFIELD(m_nHoldNoise, FIELD_INTEGER, "HoldNoise"),
 
-    DEFINE_PHYSPTR(m_pWindController), DEFINE_EMBEDDED(m_WindCallback),
+      DEFINE_PHYSPTR(m_pWindController), DEFINE_EMBEDDED(m_WindCallback),
 
-    DEFINE_FUNCTION(WindThink),
+      DEFINE_FUNCTION(WindThink),
 
-    DEFINE_INPUTFUNC(FIELD_INTEGER, "SetSpeed", InputSetSpeed),
+      DEFINE_INPUTFUNC(FIELD_INTEGER, "SetSpeed", InputSetSpeed),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //------------------------------------------------------------------------------
-    // Purpose:
-    //------------------------------------------------------------------------------
-    void CTriggerWind::Spawn(void) {
+//------------------------------------------------------------------------------
+// Purpose:
+//------------------------------------------------------------------------------
+void CTriggerWind::Spawn(void) {
   m_bSwitch = true;
   m_nDirBase = GetLocalAngles().y;
 
@@ -3546,29 +3548,29 @@ LINK_ENTITY_TO_CLASS(trigger_impact, CTriggerImpact);
 
 BEGIN_DATADESC(CTriggerImpact)
 
-DEFINE_KEYFIELD(m_flMagnitude, FIELD_FLOAT, "Magnitude"),
-    DEFINE_KEYFIELD(m_flNoise, FIELD_FLOAT, "Noise"),
-    DEFINE_KEYFIELD(m_flViewkick, FIELD_FLOAT, "Viewkick"),
+  DEFINE_KEYFIELD(m_flMagnitude, FIELD_FLOAT, "Magnitude"),
+      DEFINE_KEYFIELD(m_flNoise, FIELD_FLOAT, "Noise"),
+      DEFINE_KEYFIELD(m_flViewkick, FIELD_FLOAT, "Viewkick"),
 
-    // Inputs
-    DEFINE_INPUTFUNC(FIELD_VOID, "Impact", InputImpact),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "SetMagnitude", InputSetMagnitude),
+      // Inputs
+      DEFINE_INPUTFUNC(FIELD_VOID, "Impact", InputImpact),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "SetMagnitude", InputSetMagnitude),
 
-    // Outputs
-    DEFINE_OUTPUT(m_pOutputForce, "ImpactForce"),
+      // Outputs
+      DEFINE_OUTPUT(m_pOutputForce, "ImpactForce"),
 
-    // Function Pointers
-    DEFINE_FUNCTION(Disable),
+      // Function Pointers
+      DEFINE_FUNCTION(Disable),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //------------------------------------------------------------------------------
-    // Purpose:
-    //------------------------------------------------------------------------------
-    void CTriggerImpact::Spawn(void) {
+//------------------------------------------------------------------------------
+// Purpose:
+//------------------------------------------------------------------------------
+void CTriggerImpact::Spawn(void) {
   // Clamp date in case user made an error
-  m_flNoise = clamp(m_flNoise, 0, 1);
-  m_flViewkick = clamp(m_flViewkick, 0, 1);
+  m_flNoise = std::clamp(m_flNoise, 0.0f, 1.0f);
+  m_flViewkick = std::clamp(m_flViewkick, 0.0f, 1.0f);
 
   // Always start disabled
   m_bDisabled = true;
@@ -3721,19 +3723,19 @@ void CTriggerPlayerMovement::EndTouch(CBaseEntity *pOther) {
 // Save/load
 //------------------------------------------------------------------------------
 BEGIN_DATADESC(CBaseVPhysicsTrigger)
-DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
-    DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
-    DEFINE_FIELD(m_hFilter, FIELD_EHANDLE),
+  DEFINE_KEYFIELD(m_bDisabled, FIELD_BOOLEAN, "StartDisabled"),
+      DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
+      DEFINE_FIELD(m_hFilter, FIELD_EHANDLE),
 
-    DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Toggle", InputToggle),
-    END_DATADESC()
+      DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Toggle", InputToggle),
+END_DATADESC()
 
-    //------------------------------------------------------------------------------
-    // Spawn
-    //------------------------------------------------------------------------------
-    void CBaseVPhysicsTrigger::Spawn() {
+//------------------------------------------------------------------------------
+// Spawn
+//------------------------------------------------------------------------------
+void CBaseVPhysicsTrigger::Spawn() {
   Precache();
 
   SetSolid(SOLID_VPHYSICS);
@@ -3942,28 +3944,28 @@ class CTriggerVPhysicsMotion : public CBaseVPhysicsTrigger,
 // Save/load
 //------------------------------------------------------------------------------
 BEGIN_DATADESC(CTriggerVPhysicsMotion)
-DEFINE_PHYSPTR(m_pController),
+  DEFINE_PHYSPTR(m_pController),
 #ifndef _XBOX
-    DEFINE_EMBEDDED(m_ParticleTrail),
+      DEFINE_EMBEDDED(m_ParticleTrail),
 #endif  //!_XBOX
-    DEFINE_INPUT(m_gravityScale, FIELD_FLOAT, "SetGravityScale"),
-    DEFINE_INPUT(m_addAirDensity, FIELD_FLOAT, "SetAdditionalAirDensity"),
-    DEFINE_INPUT(m_linearLimit, FIELD_FLOAT, "SetVelocityLimit"),
-    DEFINE_INPUT(m_linearLimitDelta, FIELD_FLOAT, "SetVelocityLimitDelta"),
-    DEFINE_FIELD(m_linearLimitTime, FIELD_FLOAT),
-    DEFINE_FIELD(m_linearLimitStart, FIELD_TIME),
-    DEFINE_FIELD(m_linearLimitStartTime, FIELD_TIME),
-    DEFINE_INPUT(m_linearScale, FIELD_FLOAT, "SetVelocityScale"),
-    DEFINE_INPUT(m_angularLimit, FIELD_FLOAT, "SetAngVelocityLimit"),
-    DEFINE_INPUT(m_angularScale, FIELD_FLOAT, "SetAngVelocityScale"),
-    DEFINE_INPUT(m_linearForce, FIELD_FLOAT, "SetLinearForce"),
-    DEFINE_INPUT(m_linearForceAngles, FIELD_VECTOR, "SetLinearForceAngles"),
+      DEFINE_INPUT(m_gravityScale, FIELD_FLOAT, "SetGravityScale"),
+      DEFINE_INPUT(m_addAirDensity, FIELD_FLOAT, "SetAdditionalAirDensity"),
+      DEFINE_INPUT(m_linearLimit, FIELD_FLOAT, "SetVelocityLimit"),
+      DEFINE_INPUT(m_linearLimitDelta, FIELD_FLOAT, "SetVelocityLimitDelta"),
+      DEFINE_FIELD(m_linearLimitTime, FIELD_FLOAT),
+      DEFINE_FIELD(m_linearLimitStart, FIELD_TIME),
+      DEFINE_FIELD(m_linearLimitStartTime, FIELD_TIME),
+      DEFINE_INPUT(m_linearScale, FIELD_FLOAT, "SetVelocityScale"),
+      DEFINE_INPUT(m_angularLimit, FIELD_FLOAT, "SetAngVelocityLimit"),
+      DEFINE_INPUT(m_angularScale, FIELD_FLOAT, "SetAngVelocityScale"),
+      DEFINE_INPUT(m_linearForce, FIELD_FLOAT, "SetLinearForce"),
+      DEFINE_INPUT(m_linearForceAngles, FIELD_VECTOR, "SetLinearForceAngles"),
 
-    DEFINE_INPUTFUNC(FIELD_STRING, "SetVelocityLimitTime",
-                     InputSetVelocityLimitTime),
-    END_DATADESC()
+      DEFINE_INPUTFUNC(FIELD_STRING, "SetVelocityLimitTime",
+                       InputSetVelocityLimitTime),
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(trigger_vphysics_motion, CTriggerVPhysicsMotion);
+LINK_ENTITY_TO_CLASS(trigger_vphysics_motion, CTriggerVPhysicsMotion);
 
 //------------------------------------------------------------------------------
 // Spawn
@@ -4260,10 +4262,11 @@ class CFrictionModifier : public CBaseTrigger {
 LINK_ENTITY_TO_CLASS(func_friction, CFrictionModifier);
 
 BEGIN_DATADESC(CFrictionModifier)
-DEFINE_FIELD(m_frictionFraction, FIELD_FLOAT), END_DATADESC()
+  DEFINE_FIELD(m_frictionFraction, FIELD_FLOAT),
+END_DATADESC()
 
-    // Modify an entity's friction
-    void CFrictionModifier::Spawn(void) {
+// Modify an entity's friction
+void CFrictionModifier::Spawn(void) {
   BaseClass::Spawn();
 
   InitTrigger();

@@ -7,7 +7,11 @@
 #include "mathlib/compressed_vector.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
+
+// nvtc include ddraw which include windows win min/max macro
+#define NOMINMAX
 #include "nvtc.h"
+
 #include "tier0/include/basetypes.h"
 #include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/dbg.h"
@@ -18,9 +22,9 @@
 #include "tier0/include/memdbgon.h"
 
 namespace ImageLoader {
-//-----------------------------------------------------------------------------
+
 // Gamma correction
-//-----------------------------------------------------------------------------
+
 static void ConstructFloatGammaTable(float *pTable, float srcGamma,
                                      float dstGamma) {
   for (int i = 0; i < 256; i++) {
@@ -85,9 +89,8 @@ void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
   GammaCorrectRGBA8888(src, dst, width, height, depth, gamma);
 }
 
-//-----------------------------------------------------------------------------
 // Generate a NICE filter kernel
-//-----------------------------------------------------------------------------
+
 static void GenerateNiceFilter(float wratio, float hratio, float dratio,
                                int kernelDiameter, float *pKernel,
                                float *pInvKernel) {
@@ -159,9 +162,8 @@ static void GenerateNiceFilter(float wratio, float hratio, float dratio,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Resample an image
-//-----------------------------------------------------------------------------
+
 static inline unsigned char Clamp(float x) {
   int idx = (int)(x + 0.5f);
   if (idx < 0)
@@ -193,15 +195,14 @@ typedef void (*ApplyKernelFunc_t)(const KernelInfo_t &kernel,
                                   int hratio, int dratio, float *gammaToLinear,
                                   float *pAlphaResult);
 
-//-----------------------------------------------------------------------------
 // Apply Kernel to an image
-//-----------------------------------------------------------------------------
+
 template <int type, bool bNiceFilter>
 class CKernelWrapper {
  public:
   static inline int ActualX(int x, const ResampleInfo_t &info) {
     if (info.m_nFlags & RESAMPLE_CLAMPS)
-      return clamp(x, 0, info.m_nSrcWidth - 1);
+      return std::clamp(x, 0, info.m_nSrcWidth - 1);
 
     // This works since info.m_nSrcWidth is a power of two.
     // Even for negative #s!
@@ -210,7 +211,7 @@ class CKernelWrapper {
 
   static inline int ActualY(int y, const ResampleInfo_t &info) {
     if (info.m_nFlags & RESAMPLE_CLAMPT)
-      return clamp(y, 0, info.m_nSrcHeight - 1);
+      return std::clamp(y, 0, info.m_nSrcHeight - 1);
 
     // This works since info.m_nSrcHeight is a power of two.
     // Even for negative #s!
@@ -219,7 +220,7 @@ class CKernelWrapper {
 
   static inline int ActualZ(int z, const ResampleInfo_t &info) {
     if (info.m_nFlags & RESAMPLE_CLAMPU)
-      return clamp(z, 0, info.m_nSrcDepth - 1);
+      return std::clamp(z, 0, info.m_nSrcDepth - 1);
 
     // This works since info.m_nSrcDepth is a power of two.
     // Even for negative #s!
@@ -694,8 +695,8 @@ bool ResampleRGBA16161616(const ResampleInfo_t &info) {
       int i;
       for (i = 0; i < 4; i++) {
         accum[i] /= (nSampleWidth * nSampleHeight);
-        accum[i] = max(accum[i], 0);
-        accum[i] = min(accum[i], 65535);
+        accum[i] = std::max(accum[i], 0);
+        accum[i] = std::min(accum[i], 65535);
         pDst[(x + y * info.m_nDestWidth) * 4 + i] = (unsigned short)accum[i];
       }
     }
@@ -756,9 +757,8 @@ bool ResampleRGB323232F(const ResampleInfo_t &info) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Generates mipmap levels
-//-----------------------------------------------------------------------------
+
 void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
                           int height, int depth, ImageFormat imageFormat,
                           float srcGamma, float dstGamma, int numLevels) {

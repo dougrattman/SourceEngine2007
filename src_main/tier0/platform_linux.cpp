@@ -60,14 +60,14 @@ bool vtune( bool resume )
 // Memory stuff.
 // -------------------------------------------------------------------------------------------------- //
 
-PLATFORM_INTERFACE void Plat_DefaultAllocErrorFn( unsigned long size )
+SOURCE_TIER0_API void Plat_DefaultAllocErrorFn( unsigned long size )
 {
 }
 
 typedef void (*Plat_AllocErrorFn)( unsigned long size );
 Plat_AllocErrorFn g_AllocError = Plat_DefaultAllocErrorFn;
 
-PLATFORM_INTERFACE void* Plat_Alloc( unsigned long size )
+SOURCE_TIER0_API void* Plat_Alloc( unsigned long size )
 {
 	void *pRet = g_pMemAlloc->Alloc( size );
 	if ( pRet )
@@ -82,7 +82,7 @@ PLATFORM_INTERFACE void* Plat_Alloc( unsigned long size )
 }
 
 
-PLATFORM_INTERFACE void* Plat_Realloc( void *ptr, unsigned long size )
+SOURCE_TIER0_API void* Plat_Realloc( void *ptr, unsigned long size )
 {
 	void *pRet = g_pMemAlloc->Realloc( ptr, size );
 	if ( pRet )
@@ -97,25 +97,25 @@ PLATFORM_INTERFACE void* Plat_Realloc( void *ptr, unsigned long size )
 }
 
 
-PLATFORM_INTERFACE void Plat_Free( void *ptr )
+SOURCE_TIER0_API void Plat_Free( void *ptr )
 {
 	g_pMemAlloc->Free( ptr );
 }
 
 
-PLATFORM_INTERFACE void Plat_SetAllocErrorFn( Plat_AllocErrorFn fn )
+SOURCE_TIER0_API void Plat_SetAllocErrorFn( Plat_AllocErrorFn fn )
 {
 	g_AllocError = fn;
 }
 
 static char g_CmdLine[ 2048 ];
-PLATFORM_INTERFACE void Plat_SetCommandLine( const char *cmdLine )
+SOURCE_TIER0_API void Plat_SetCommandLine( const char *cmdLine )
 {
 	strncpy( g_CmdLine, cmdLine, sizeof(g_CmdLine) );
 	g_CmdLine[ sizeof(g_CmdLine) -1 ] = 0;
 }
 
-PLATFORM_INTERFACE const tchar *Plat_GetCommandLine()
+SOURCE_TIER0_API const tchar *Plat_GetCommandLine()
 {
 	return g_CmdLine;
 }

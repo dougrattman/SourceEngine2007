@@ -526,21 +526,21 @@ class CShadowTextureList {
   // AABB of its texture space
   float ComputeCoverageForTriangle(int shadowTextureIndex, const Vector2D &t0,
                                    const Vector2D &t1, const Vector2D &t2) {
-    float umin = min(t0.x, t1.x);
-    umin = min(umin, t2.x);
-    float umax = max(t0.x, t1.x);
-    umax = max(umax, t2.x);
+    float umin = std::min(t0.x, t1.x);
+    umin = std::min(umin, t2.x);
+    float umax = std::max(t0.x, t1.x);
+    umax = std::max(umax, t2.x);
 
-    float vmin = min(t0.y, t1.y);
-    vmin = min(vmin, t2.y);
-    float vmax = max(t0.y, t1.y);
-    vmax = max(vmax, t2.y);
+    float vmin = std::min(t0.y, t1.y);
+    vmin = std::min(vmin, t2.y);
+    float vmax = std::max(t0.y, t1.y);
+    vmax = std::max(vmax, t2.y);
 
     // UNDONE: Do something about tiling
-    umin = clamp(umin, 0, 1);
-    umax = clamp(umax, 0, 1);
-    vmin = clamp(vmin, 0, 1);
-    vmax = clamp(vmax, 0, 1);
+    umin = std::clamp(umin, 0, 1);
+    umax = std::clamp(umax, 0, 1);
+    vmin = std::clamp(vmin, 0, 1);
+    vmax = std::clamp(vmax, 0, 1);
     Assert(umin >= 0.0f && umax <= 1.0f);
     Assert(vmin >= 0.0f && vmax <= 1.0f);
     const alphatexture_t &tex = m_Textures.Element(shadowTextureIndex);
@@ -578,8 +578,8 @@ class CShadowTextureList {
     // asume power of 2, clamp or wrap
     // UNDONE: Support clamp?  This code should work
 #if 0
-		u = tex.clampU ? clamp(u,0,(tex.width-1)) : (u & (tex.width-1));
-		v = tex.clampV ? clamp(v,0,(tex.height-1)) : (v & (tex.height-1));
+		u = tex.clampU ? std::clamp(u,0,(tex.width-1)) : (u & (tex.width-1));
+		v = tex.clampV ? std::clamp(v,0,(tex.height-1)) : (v & (tex.height-1));
 #else
     // for now always wrap
     u &= (tex.width - 1);

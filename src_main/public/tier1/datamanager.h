@@ -228,7 +228,7 @@ class CDataManager : public CDataManagerBase {
   MUTEX_TYPE m_mutex;
 };
 
-//-----------------------------------------------------------------------------
+
 
 inline unsigned short CDataManagerBase::FromHandle(memhandle_t handle) {
   unsigned int fullWord = (unsigned int)handle;

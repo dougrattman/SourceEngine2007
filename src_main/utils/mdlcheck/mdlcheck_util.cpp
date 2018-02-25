@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include <io.h>
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "mdlcheck_util.h"
 #include "tier0/include/dbg.h"
 

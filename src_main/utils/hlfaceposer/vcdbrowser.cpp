@@ -5,7 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "resource.h"
 #include "vcdbrowser.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"

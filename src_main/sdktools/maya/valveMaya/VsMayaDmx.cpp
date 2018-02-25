@@ -237,9 +237,9 @@ void GetMaterialInfo(
 				fprintf( pVmt, "\"VertexLitGeneric\"\n" );
 				fprintf( pVmt, "{\n" );
 				fprintf( pVmt, "   \"$color\" \"{ %d %d %d }\"\n",
-					clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
-					clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
-					clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ) );
+					std::clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
+					std::clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
+					std::clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ) );
 				fprintf( pVmt, "}\n" );
 
 				fclose( pVmt );
@@ -740,10 +740,10 @@ CDmeMesh *MayaMeshToDmeMesh(
 		{
 			pColorSrc->get( MColor::kRGB, r, g, b, a );
 			pColor->SetColor(
-				clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ),
-				clamp( static_cast<int>( floor( a * 255.0f ) ), 0, 255 ) );
+				std::clamp( static_cast<int>( floor( r * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( g * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( b * 255.0f ) ), 0, 255 ),
+				std::clamp( static_cast<int>( floor( a * 255.0f ) ), 0, 255 ) );
 		}
 
 		// Ask CDmeMesh where to store the mesh colors

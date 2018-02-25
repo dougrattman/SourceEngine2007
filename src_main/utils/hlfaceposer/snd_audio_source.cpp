@@ -37,7 +37,7 @@ CAudioSource *AudioSource_Create( const char *pName )
 	return Audio_CreateMemoryWave( pName );
 }
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "hlfaceposer.h"
 #include "ifaceposersound.h"

@@ -133,7 +133,7 @@ BEGIN_VS_SHADER_FLAGS( ParticleSphere_DX9, "Help for BumpmappedEnvMap", SHADER_N
 			// it is equal to 1).
 			const float *f = params[LIGHT_COLOR]->GetVecValue();
 			Vector vLightColor( f[0], f[1], f[2] );
-			float flScale = max( vLightColor.x, max( vLightColor.y, vLightColor.z ) );
+			float flScale = std::max( vLightColor.x, std::max( vLightColor.y, vLightColor.z ) );
 			if ( flScale < 0.01f )
 				flScale = 0.01f;
 			float vScaleVec[3] = { flScale, flScale, flScale };

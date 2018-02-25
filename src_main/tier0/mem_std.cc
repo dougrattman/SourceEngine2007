@@ -47,9 +47,9 @@ void PrintAllocTimes() {
 
 #if (defined(NDEBUG) && !defined(USE_MEM_DEBUG))
 
-//-----------------------------------------------------------------------------
+
 // Singleton...
-//-----------------------------------------------------------------------------
+
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4074)  // warning C4074: initializers put in compiler
                             // reserved initialization area
@@ -65,9 +65,9 @@ IMemAlloc *g_pActualAlloc = &s_StdMemAlloc;
 #endif
 
 #ifdef OS_WIN
-//-----------------------------------------------------------------------------
+
 // Small block heap (multi-pool)
-//-----------------------------------------------------------------------------
+
 
 #ifndef NO_SBH
 #define UsingSBH() true
@@ -224,9 +224,9 @@ usize CSmallBlockPool::Compact() {
   return nBytesFreed;
 }
 
-//-----------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------
+
 #define GetInitialCommitForPool(i) 0
 
 CSmallBlockHeap::CSmallBlockHeap() {
@@ -405,7 +405,7 @@ void *CSmallBlockHeap::Realloc(void *p, usize nBytes) {
   }
 
   if (pNewBlock) {
-    usize nBytesCopy = min(nBytes, pOldPool->GetBlockSize());
+    usize nBytesCopy = std::min(nBytes, pOldPool->GetBlockSize());
     memcpy(pNewBlock, p, nBytesCopy);
   }
 
@@ -479,9 +479,9 @@ CSmallBlockPool *CSmallBlockHeap::FindPool(void *p) {
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Release versions
-//-----------------------------------------------------------------------------
+
 
 void *CStdMemAlloc::Alloc(usize nSize) {
   PROFILE_ALLOC(Malloc);
@@ -543,9 +543,9 @@ void *CStdMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize) {
   return nullptr;
 }
 
-//-----------------------------------------------------------------------------
+
 // Debug versions
-//-----------------------------------------------------------------------------
+
 void *CStdMemAlloc::Alloc(usize nSize, const ch *pFileName, i32 nLine) {
   return CStdMemAlloc::Alloc(nSize);
 }
@@ -564,9 +564,9 @@ void *CStdMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize,
   return nullptr;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns size of a particular allocation
-//-----------------------------------------------------------------------------
+
 usize CStdMemAlloc::GetSize(void *pMem) {
 #ifdef OS_WIN
   if (!pMem) return CalcHeapUsed();
@@ -579,16 +579,16 @@ usize CStdMemAlloc::GetSize(void *pMem) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Force file + line information for an allocation
-//-----------------------------------------------------------------------------
+
 void CStdMemAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {}
 
 void CStdMemAlloc::PopAllocDbgInfo() {}
 
-//-----------------------------------------------------------------------------
+
 // FIXME: Remove when we make our own heap! Crt stuff we're currently using
-//-----------------------------------------------------------------------------
+
 long CStdMemAlloc::CrtSetBreakAlloc(long lNewBreakAlloc) { return 0; }
 
 i32 CStdMemAlloc::CrtSetReportMode(i32 nReportType, i32 nReportMode) {

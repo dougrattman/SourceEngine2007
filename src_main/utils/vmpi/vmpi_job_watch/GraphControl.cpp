@@ -76,8 +76,8 @@ void CGraphControl::Render( CDC *pDC )
 	for ( int iEntry=0; iEntry < m_Entries.Count(); iEntry++ )
 	{
 		DWORD msTime = m_Entries[iEntry].m_msTime;
-		startTime = min( startTime, msTime );
-		endTime = max( endTime, msTime );
+		startTime = std::min( startTime, msTime );
+		endTime = std::max( endTime, msTime );
 	}
 
 	int curTime = (int)endTime - nIntervals*intervalMS;
@@ -118,7 +118,7 @@ void CGraphControl::Render( CDC *pDC )
 
 				POINT sentPoint = { x, nBytesSent };
 				sentPoints.AddToTail( sentPoint );
-				nMaxBytesSent = max( nMaxBytesSent, nBytesSent );
+				nMaxBytesSent = std::max( nMaxBytesSent, nBytesSent );
 
 				
 				int nBytesReceived = (int)RemapVal(
@@ -128,7 +128,7 @@ void CGraphControl::Render( CDC *pDC )
 				
 				POINT receivedPoint = { x, nBytesReceived };
 				receivedPoints.AddToTail( receivedPoint );
-				nMaxBytesReceived = max( nMaxBytesReceived, nBytesReceived );
+				nMaxBytesReceived = std::max( nMaxBytesReceived, nBytesReceived );
 			}
 		}			
 		
@@ -139,7 +139,7 @@ void CGraphControl::Render( CDC *pDC )
 
 
 	// Now normalize all the values.
-	int largest = max( nMaxBytesSent, nMaxBytesReceived );
+	int largest = std::max( nMaxBytesSent, nMaxBytesReceived );
 	int topValue = (largest*11) / 10;
 /*
 	DWORD nZeros;

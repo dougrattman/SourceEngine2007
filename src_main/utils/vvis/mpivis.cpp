@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "iphelpers.h"
 #include "mpi_stats.h"
 #include "pacifier.h"

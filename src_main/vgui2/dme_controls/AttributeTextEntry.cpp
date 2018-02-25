@@ -429,7 +429,7 @@ void CAttributeTextEntry::OnMouseWheeled( int delta )
 
 			if ( input()->IsKeyDown(KEY_LALT) )
 			{
-				//val = clamp(val, 0.0, 1.0);
+				//val = std::clamp(val, 0.0, 1.0);
 				val = (val > 1) ? 1 : ((val < 0) ? 0 : val);
 			}
 

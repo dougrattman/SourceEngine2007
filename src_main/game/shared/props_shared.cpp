@@ -470,7 +470,7 @@ const char *CPropData::GetRandomChunkModel(const char *pszBreakableSection,
   } else {
     // Don't pick anything over the specified size
     iRandom = RandomInt(
-        0, min(iMaxSize, m_BreakableChunks[i].iszChunkModels.Count() - 1));
+        0, std::min(iMaxSize, m_BreakableChunks[i].iszChunkModels.Count() - 1));
   }
 
   return STRING(m_BreakableChunks[i].iszChunkModels[iRandom]);
@@ -830,7 +830,7 @@ void PropBreakableCreateAll(int modelindex, IPhysicsObject *pPhysics,
   if (iMaxBreakCount != -1) {
     if (iPrecomputedBreakableCount != -1) {
       iPrecomputedBreakableCount =
-          min(iMaxBreakCount, iPrecomputedBreakableCount);
+          std::min(iMaxBreakCount, iPrecomputedBreakableCount);
     } else {
       iPrecomputedBreakableCount = iMaxBreakCount;
     }
@@ -1197,7 +1197,7 @@ CBaseEntity *CreateGibsFromList(CUtlVector<breakmodel_t> &list, int modelindex,
   if (iMaxBreakCount != -1) {
     if (iPrecomputedBreakableCount != -1) {
       iPrecomputedBreakableCount =
-          min(iMaxBreakCount, iPrecomputedBreakableCount);
+          std::min(iMaxBreakCount, iPrecomputedBreakableCount);
     } else {
       iPrecomputedBreakableCount = iMaxBreakCount;
     }

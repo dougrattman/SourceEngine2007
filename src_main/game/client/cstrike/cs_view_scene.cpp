@@ -136,13 +136,13 @@ void CCSViewRender::PerformNightVisionEffect( const CViewSetup &view )
 			{
 				pPlayer->m_flNightVisionAlpha += 15;
 
-				pPlayer->m_flNightVisionAlpha = min( pPlayer->m_flNightVisionAlpha, iMaxValue );
+				pPlayer->m_flNightVisionAlpha = std::min( pPlayer->m_flNightVisionAlpha, iMaxValue );
 			}
 			else 
 			{
 				pPlayer->m_flNightVisionAlpha -= 40;
 
-				pPlayer->m_flNightVisionAlpha = max( pPlayer->m_flNightVisionAlpha, 0 );
+				pPlayer->m_flNightVisionAlpha = std::max( pPlayer->m_flNightVisionAlpha, 0 );
 				
 			}
 
@@ -188,7 +188,7 @@ void CCSViewRender::PerformFlashbangEffect( const CViewSetup &view )
 	{
 		pPlayer->m_flFlashAlpha += 45;
 		
-		pPlayer->m_flFlashAlpha = min( pPlayer->m_flFlashAlpha, pPlayer->m_flFlashMaxAlpha );
+		pPlayer->m_flFlashAlpha = std::min( pPlayer->m_flFlashAlpha, pPlayer->m_flFlashMaxAlpha );
 
 		overlaycolor[0] = overlaycolor[1] = overlaycolor[2] = pPlayer->m_flFlashAlpha;
 
@@ -225,7 +225,7 @@ void CCSViewRender::PerformFlashbangEffect( const CViewSetup &view )
 	{
 		float flAlpha = pPlayer->m_flFlashMaxAlpha * (pPlayer->m_flFlashBangTime - gpGlobals->curtime) / pPlayer->m_flFlashDuration;
 
-		flAlpha = clamp( flAlpha, 0, pPlayer->m_flFlashMaxAlpha );
+		flAlpha = std::clamp( flAlpha, 0, pPlayer->m_flFlashMaxAlpha );
 		
 		overlaycolor[0] = overlaycolor[1] = overlaycolor[2] = flAlpha;
 

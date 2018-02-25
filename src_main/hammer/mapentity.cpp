@@ -92,7 +92,7 @@ int CompareEntityNames(const char *szName1, const char *szName2) {
       nCompareLen = pszWildcard2 - szName2;
     } else {
       // Wildcards in both strings -- use the shorter pattern.
-      nCompareLen = min(nCompareLen, pszWildcard2 - szName2);
+      nCompareLen = std::min(nCompareLen, pszWildcard2 - szName2);
     }
   }
 

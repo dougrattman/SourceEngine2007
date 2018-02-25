@@ -167,7 +167,7 @@ bool CHL1BaseNPC::CorpseGib( const CTakeDamageInfo &info )
 	VectorNormalize( data.m_vNormal );
 	
 	data.m_flScale = RemapVal( m_iHealth, 0, -500, 1, 3 );
-	data.m_flScale = clamp( data.m_flScale, 1, 3 );
+	data.m_flScale = std::clamp( data.m_flScale, 1, 3 );
 
 	if ( HasAlienGibs() )
 		 data.m_nMaterial = ALIEN_GIBS;

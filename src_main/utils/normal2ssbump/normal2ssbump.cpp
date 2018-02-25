@@ -19,7 +19,7 @@ static float RangeAdjust( float x )
 
 static float saturate_and_square( float x )
 {
-	x=max(0.0,min(1.0, x) );
+	x=std::max(0.0,std::min(1.0, x) );
 	return x * x;
 }
 

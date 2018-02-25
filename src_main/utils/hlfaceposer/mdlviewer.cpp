@@ -1455,7 +1455,7 @@ int MDLViewer::handleEvent(mxEvent *event) {
       int modelwide = gridstart / 3;
       int windowwide = gridstart - modelwide;
 
-      int rowheight = max(windowtab->GetBestHeight(windowwide),
+      int rowheight = std::max(windowtab->GetBestHeight(windowwide),
                           modeltab->GetBestHeight(modelwide));
 
       workspace->setBounds(0, 0, width, height - rowheight);
@@ -1874,7 +1874,7 @@ void MDLViewer::OnTile() {
   int c = CountVisibleTools();
 
   int rows = (int)sqrt((float)c);
-  rows = clamp(rows, 1, rows);
+  rows = std::clamp(rows, 1, rows);
 
   int cols = 1;
   while (rows * cols < c) {

@@ -13,7 +13,7 @@
 #define PROTECTED_THINGS_DISABLE
 #if !defined( _X360 )
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 #include <time.h>
 #include "materialsystem/IMaterialSystem.h"
@@ -448,7 +448,7 @@ class CStatTime : public IClientStatsTime
 public:
 	float GetTime()
 	{
-		return Sys_FloatTime();
+		return Plat_FloatTime();
 	}
 };
 CStatTime	g_StatTime;
@@ -496,25 +496,25 @@ void CEngineStats::BeginRun( void )
 {
 	m_totalNumFrames = 0;
 	// frame timing data
-	m_runStartTime = Sys_FloatTime();
+	m_runStartTime = Plat_FloatTime();
 }
 
 void CEngineStats::EndRun( void )
 {
-	m_runEndTime = Sys_FloatTime();
+	m_runEndTime = Plat_FloatTime();
 }
 
 void CEngineStats::BeginFrame( void )
 {
 	m_InFrame = true;
-	m_frameStartTime = Sys_FloatTime();
+	m_frameStartTime = Plat_FloatTime();
 }
 
 void CEngineStats::EndFrame( void )
 {
 	double deltaTime;
 	
-	m_frameEndTime = Sys_FloatTime();
+	m_frameEndTime = Plat_FloatTime();
 	deltaTime = GetCurrentSystemFrameTime();
 
 	m_InFrame = false;
@@ -1134,13 +1134,13 @@ void CIHVTestApp::RenderFrame( void )
 				SetupLighting( g_LightingCombination, lightOffset );
 			}
 
-			float startBoneSetupTime = Sys_FloatTime();
+			float startBoneSetupTime = Plat_FloatTime();
 			int lod = g_LOD;
-			lod = clamp( lod, pModel->pHardwareData->m_RootLOD, pModel->pHardwareData->m_NumLODs-1 );
+			lod = std::clamp( lod, pModel->pHardwareData->m_RootLOD, pModel->pHardwareData->m_NumLODs-1 );
 
 			int boneMask = BONE_USED_BY_VERTEX_AT_LOD( lod );
 			matrix3x4_t *pBoneToWorld = SetUpBones( pModel->pStudioHdr, cameraMatrix, currentRun, modelAlternator, boneMask );
-			boneSetupTime += Sys_FloatTime() - startBoneSetupTime;
+			boneSetupTime += Plat_FloatTime() - startBoneSetupTime;
 			
 			pRenderContext->MatrixMode( MATERIAL_MODEL );
 			pRenderContext->PushMatrix();

@@ -19,7 +19,7 @@
 
 class CStatTime : public IClientStatsTime {
  public:
-  float GetTime() { return Sys_FloatTime(); }
+  float GetTime() { return Plat_FloatTime(); }
 };
 
 CStatTime g_StatTime;
@@ -31,11 +31,11 @@ void CEngineStats::BeginRun(void) {
   m_totalNumFrames = 0;
 
   // frame timing data
-  m_runStartTime = Sys_FloatTime();
+  m_runStartTime = Plat_FloatTime();
 }
 
 void CEngineStats::EndRun(void) {
-  m_runEndTime = Sys_FloatTime();
+  m_runEndTime = Plat_FloatTime();
   m_bInRun = false;
 }
 

@@ -114,7 +114,7 @@ void CAskConnectPanel::SetHostName(const char *pHostName) {
   m_pInfoLabel->GetBounds(x2, y2, wide2, tall2);
 
   int desiredWidth =
-      max(x + wide, x2 + wide2) + m_HostNameLabelRightSidePadding;
+      std::max(x + wide, x2 + wide2) + m_HostNameLabelRightSidePadding;
   if (desiredWidth < m_OriginalWidth) desiredWidth = m_OriginalWidth;
 
   SetWide(desiredWidth);
@@ -170,7 +170,7 @@ void CAskConnectPanel::OnTick() {
     }
   }
 
-  m_pAnimationController->UpdateAnimations(Sys_FloatTime());
+  m_pAnimationController->UpdateAnimations(Plat_FloatTime());
 
   // Make sure vgui doesn't call Paint() on us after we're hidden.
   if (GetAlpha() == 0) SetVisible(false);

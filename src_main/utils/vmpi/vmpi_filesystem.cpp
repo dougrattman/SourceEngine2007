@@ -105,7 +105,7 @@ void CVMPIFile_Memory::Flush() {}
 
 int CVMPIFile_Memory::Read(void *pOutput, int size) {
   Assert(m_iCurPos >= 0);
-  int nToRead = min(m_DataLen - m_iCurPos, size);
+  int nToRead = std::min(m_DataLen - m_iCurPos, size);
 
   if (m_chMode != 't') {
     memcpy(pOutput, &m_pData[m_iCurPos], nToRead);
@@ -119,7 +119,7 @@ int CVMPIFile_Memory::Read(void *pOutput, int size) {
 
     // Perform crlf translation
     while (const char *crlf = (const char *)memchr(pData, '\r', len)) {
-      int canCopy = min(size, crlf - pData);
+      int canCopy = std::min(size, crlf - pData);
       memcpy(pOutput, pData, canCopy);
 
       m_iCurPos += canCopy;
@@ -152,7 +152,7 @@ int CVMPIFile_Memory::Read(void *pOutput, int size) {
 
     if (size && len) {
       // No crlf characters left
-      int canCopy = min(size, len);
+      int canCopy = std::min(size, len);
       memcpy(pOutput, pData, canCopy);
 
       m_iCurPos += canCopy;
@@ -257,7 +257,7 @@ bool CBaseVMPIFileSystem::ReadFile(const char *pFileName, const char *pPath,
 
   int nBytesToRead = Size(fp);
   if (nMaxBytes > 0) {
-    nBytesToRead = min(nMaxBytes, nBytesToRead);
+    nBytesToRead = std::min(nMaxBytes, nBytesToRead);
   }
   buf.EnsureCapacity(nBytesToRead + buf.TellPut());
 

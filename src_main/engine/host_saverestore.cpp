@@ -111,7 +111,7 @@ static bool g_ConsoleInput = false;
 
 static char g_szMapLoadOverride[32];
 
-#define MOD_DIR (IsX360() ? "DEFAULT_WRITE_PATH" : "MOD")
+#define MOD_DIR "MOD"
 
 //-----------------------------------------------------------------------------
 
@@ -608,7 +608,7 @@ int CSaveRestore::SaveGameSlot(const char *pSaveName, const char *pSaveComment,
   }
 
   if (save_asyncdelay.GetInt() > 0) {
-    Sys_Sleep(clamp(save_asyncdelay.GetInt(), 0, 3000));
+    Sys_Sleep(std::clamp(save_asyncdelay.GetInt(), 0, 3000));
   }
 
   SaveMsg("Start save...\n", ThreadInMainThread(), ThreadGetCurrentId());
@@ -800,7 +800,7 @@ int CSaveRestore::SaveGameSlot(const char *pSaveName, const char *pSaveComment,
     if (!(bIsAutosave || bIsAutosaveDangerous) ||
         save_screenshot.GetInt() == 2) {
       Q_snprintf(m_szSaveGameScreenshotFile, sizeof(m_szSaveGameScreenshotFile),
-                 "%s%s%s.tga", GetSaveDir(), pSaveName, GetPlatformExt());
+                 "%s%s.tga", GetSaveDir(), pSaveName);
     }
   }
 
@@ -2629,10 +2629,10 @@ void CSaveRestore::AutoSaveDangerousIsSafe() {
 
   // Rename the screenshot
   if (!IsX360()) {
-    Q_snprintf(szOldName, sizeof(szOldName), "//%s/%sautosavedangerous%s.tga",
-               MOD_DIR, GetSaveDir(), GetPlatformExt());
-    Q_snprintf(szNewName, sizeof(szNewName), "//%s/%sautosave%s.tga", MOD_DIR,
-               GetSaveDir(), GetPlatformExt());
+    Q_snprintf(szOldName, sizeof(szOldName), "//%s/%sautosavedangerous.tga",
+               MOD_DIR, GetSaveDir());
+    Q_snprintf(szNewName, sizeof(szNewName), "//%s/%sautosave.tga", MOD_DIR,
+               GetSaveDir());
 
     // there could be an old version, remove it
     if (g_pFileSystem->FileExists(szNewName)) {
@@ -2649,15 +2649,15 @@ void CSaveRestore::AutoSaveDangerousIsSafe() {
 
   // Rename the dangerous auto save as a normal auto save
   if (!IsXSave()) {
-    Q_snprintf(szOldName, sizeof(szOldName), "//%s/%sautosavedangerous%s.sav",
-               MOD_DIR, GetSaveDir(), GetPlatformExt());
-    Q_snprintf(szNewName, sizeof(szNewName), "//%s/%sautosave%s.sav", MOD_DIR,
-               GetSaveDir(), GetPlatformExt());
+    Q_snprintf(szOldName, sizeof(szOldName), "//%s/%sautosavedangerous.sav",
+               MOD_DIR, GetSaveDir());
+    Q_snprintf(szNewName, sizeof(szNewName), "//%s/%sautosave.sav", MOD_DIR,
+               GetSaveDir());
   } else {
-    Q_snprintf(szOldName, sizeof(szOldName), "%s:\\autosavedangerous%s.sav",
-               GetCurrentMod(), GetPlatformExt());
-    Q_snprintf(szNewName, sizeof(szNewName), "%s:\\autosave%s.sav",
-               GetCurrentMod(), GetPlatformExt());
+    Q_snprintf(szOldName, sizeof(szOldName), "%s:\\autosavedangerous.sav",
+               GetCurrentMod());
+    Q_snprintf(szNewName, sizeof(szNewName), "%s:\\autosave.sav",
+               GetCurrentMod());
   }
 
   // there could be an old version, remove it
@@ -3062,7 +3062,7 @@ char const *CSaveRestore::GetMostRecentlyLoadedFileName() {
 char const *CSaveRestore::GetSaveFileName() { return m_szSaveGameName; }
 
 void CSaveRestore::AddDeferredCommand(char const *pchCommand) {
-  m_nDeferredCommandFrames = clamp(save_huddelayframes.GetInt(), 0, 10);
+  m_nDeferredCommandFrames = std::clamp(save_huddelayframes.GetInt(), 0, 10);
   CUtlSymbol sym;
   sym = pchCommand;
   m_sDeferredCommands.AddToTail(sym);

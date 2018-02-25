@@ -1,23 +1,16 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-//=============================================================================
 
 #ifndef CBASE_H
 #define CBASE_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #ifdef _DEBUG
 #define DEBUG 1
 #endif
 
 // Misc C-runtime library headers
-#include <math.h>
-#include <stdio.h>
-#include "minmax.h"
+#include <cmath>
+#include <cstdio>
+#include <algorithm>
 
 // tier 0
 #include "tier0/include/dbg.h"

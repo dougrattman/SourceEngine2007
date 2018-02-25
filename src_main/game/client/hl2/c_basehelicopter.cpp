@@ -65,7 +65,7 @@ void CHeliBladeMaterialProxy::OnBind( C_BaseEntity *pEnt )
 	{
 		float dt = gpGlobals->curtime  - pHeli->StartupTime();
 		dt /= FADE_IN_TIME;
-		dt = clamp( dt, 0.0f, 1.0f );
+		dt = std::clamp( dt, 0.0f, 1.0f );
 		if ( m_bFadeOut ) 
 		{
 			dt = 1.0f - dt;

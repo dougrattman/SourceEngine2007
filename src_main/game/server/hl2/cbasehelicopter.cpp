@@ -373,7 +373,7 @@ void CBaseHelicopter::DoWashPushOnAirboat(CBaseEntity *pAirboat,
   // Find the angle between how vertical we are and how vertical we should be
   float flCosDelta = DotProduct(vecExtremeUp, vecUp);
   float flDelta = acos(flCosDelta) * 180.0f / M_PI;
-  flDelta = clamp(flDelta, 0.0f, MAX_AIRBOAT_ROLL_ANGLE);
+  flDelta = std::clamp(flDelta, 0.0f, MAX_AIRBOAT_ROLL_ANGLE);
   flDelta =
       SimpleSplineRemapVal(flDelta, 0.0f, MAX_AIRBOAT_ROLL_ANGLE, 0.0f, 1.0f);
 
@@ -412,7 +412,7 @@ bool CBaseHelicopter::DoWashPush(washentity_t *pWash,
   IPhysicsObject *pPhysObject;
 
   float flPushTime = (gpGlobals->curtime - pWash->flWashStartTime);
-  flPushTime = clamp(flPushTime, 0, BASECHOPPER_WASH_RAMP_TIME);
+  flPushTime = std::clamp(flPushTime, 0.0f, BASECHOPPER_WASH_RAMP_TIME);
   float flWashAmount =
       RemapVal(flPushTime, 0, BASECHOPPER_WASH_RAMP_TIME,
                BASECHOPPER_WASH_PUSH_MIN, BASECHOPPER_WASH_PUSH_MAX);
@@ -448,7 +448,7 @@ bool CBaseHelicopter::DoWashPush(washentity_t *pWash,
   // This used to be mass independent, which is a bad idea because it blows
   // 200kg engine blocks as much as it blows cardboard and soda cans. Make this
   // force mass-independent, but clamp at 30kg.
-  flMass = min(flMass, 30.0f);
+  flMass = std::min(flMass, 30.0f);
 
   Vector vecForce = (0.015f / 0.1f) * flWashAmount * flMass * vecToSpot *
                     phys_pushscale.GetFloat();

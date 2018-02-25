@@ -150,7 +150,7 @@ void C_LowViolenceHostageDeathModel::ClientThink( void )
 
 	int iAlpha = GetRenderColor().a;
 
-	iAlpha = max( iAlpha - ( g_ragdoll_fadespeed.GetInt() * gpGlobals->frametime ), 0 );
+	iAlpha = std::max( iAlpha - ( g_ragdoll_fadespeed.GetInt() * gpGlobals->frametime ), 0 );
 
 	SetRenderMode( kRenderTransAlpha );
 	SetRenderColorA( iAlpha );
@@ -389,19 +389,19 @@ void C_CHostage::UpdateLookAt( CStudioHdr *pStudioHdr )
 
 	// Set the head's yaw.
 	float desired = AngleNormalize( desiredAngles[YAW] - bodyAngles[YAW] );
-	desired = clamp( desired, m_headYawMin, m_headYawMax );
+	desired = std::clamp( desired, m_headYawMin, m_headYawMax );
 	m_flCurrentHeadYaw = ApproachAngle( desired, m_flCurrentHeadYaw, HOSTAGE_HEAD_TURN_RATE * gpGlobals->frametime );
 
 	// Counterrotate the head from the body rotation so it doesn't rotate past its target.
 	m_flCurrentHeadYaw = AngleNormalize( m_flCurrentHeadYaw - flBodyYawDiff );
-	desired = clamp( desired, m_headYawMin, m_headYawMax );
+	desired = std::clamp( desired, m_headYawMin, m_headYawMax );
 	
 	SetPoseParameter( pStudioHdr, m_headYawPoseParam, m_flCurrentHeadYaw );
 
 	
 	// Set the head's yaw.
 	desired = AngleNormalize( desiredAngles[PITCH] );
-	desired = clamp( desired, m_headPitchMin, m_headPitchMax );
+	desired = std::clamp( desired, m_headPitchMin, m_headPitchMax );
 	
 	m_flCurrentHeadPitch = ApproachAngle( desired, m_flCurrentHeadPitch, HOSTAGE_HEAD_TURN_RATE * gpGlobals->frametime );
 	m_flCurrentHeadPitch = AngleNormalize( m_flCurrentHeadPitch );
@@ -470,7 +470,7 @@ void C_CHostage::ClientThink()
 	int speed = 2;
 	int a = m_clrRender->a;
 
-	a = max( 0, a - speed );
+	a = std::max( 0, a - speed );
 
 	SetRenderColorA( a );
 

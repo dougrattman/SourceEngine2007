@@ -372,8 +372,8 @@ void DefaultRenderBoundsWorldspace(IClientRenderable *pRenderable,
       // if our origin is actually farther away than that, expand again
       float radius = pEnt->GetLocalOrigin().Length();
 
-      float flBloatSize = max(vAddMins.Length(), vAddMaxs.Length());
-      flBloatSize = max(flBloatSize, radius);
+      float flBloatSize = std::max(vAddMins.Length(), vAddMaxs.Length());
+      flBloatSize = std::max(flBloatSize, radius);
       absMins -= Vector(flBloatSize, flBloatSize, flBloatSize);
       absMaxs += Vector(flBloatSize, flBloatSize, flBloatSize);
       return;
@@ -427,8 +427,8 @@ void CalcRenderableWorldSpaceAABB_Fast(IClientRenderable *pRenderable,
     // if our origin is actually farther away than that, expand again
     float radius = pEnt->GetLocalOrigin().Length();
 
-    float flBloatSize = max(vAddMins.Length(), vAddMaxs.Length());
-    flBloatSize = max(flBloatSize, radius);
+    float flBloatSize = std::max(vAddMins.Length(), vAddMaxs.Length());
+    flBloatSize = std::max(flBloatSize, radius);
     absMin -= Vector(flBloatSize, flBloatSize, flBloatSize);
     absMax += Vector(flBloatSize, flBloatSize, flBloatSize);
   } else {
@@ -1510,7 +1510,7 @@ void CClientLeafSystem::CollateRenderablesInLeaf(
         VectorSubtract(absMaxs, absMins, dims);
 
         float const fDimension =
-            max(max(fabs(dims.x), fabs(dims.y)), fabs(dims.z));
+            std::max(std::max(fabs(dims.x), fabs(dims.y)), fabs(dims.z));
         group = DetectBucketedRenderGroup(group, fDimension);
 
         Assert(group >= RENDER_GROUP_OPAQUE_STATIC_HUGE &&

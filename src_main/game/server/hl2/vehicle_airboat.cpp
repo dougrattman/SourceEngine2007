@@ -218,8 +218,8 @@ class CPropAirboat : public CPropVehicleDriveable {
   Vector m_vecLastEyeTarget;
   Vector m_vecEyeSpeed;
 
-  // float			m_flHandbrakeTime;			// handbrake after the fact to
-  // keep vehicles from rolling bool			m_bInitialHandbrake;
+  // float			m_flHandbrakeTime;			// handbrake after the fact
+  // to keep vehicles from rolling bool			m_bInitialHandbrake;
 
   bool m_bForcedExit;
 
@@ -570,7 +570,7 @@ void CPropAirboat::InputExitVehicle(inputdata_t &inputdata) {
 //-----------------------------------------------------------------------------
 // Purpose: Force the airboat to wake up. This was needed to fix a last-minute
 //			bug for the XBox -- the airboat didn't fall with the
-//platform 			in d1_canals_10b.
+// platform 			in d1_canals_10b.
 //-----------------------------------------------------------------------------
 void CPropAirboat::InputWake(inputdata_t &inputdata) {
   VPhysicsGetObject()->Wake();
@@ -759,7 +759,7 @@ Vector CPropAirboat::GetSmoothedVelocity(void) {
 
   Vector vecForward;
   GetVectors(&vecForward, NULL, NULL);
-  vecForward *= max(flSpeed, 1.0f);
+  vecForward *= std::max(flSpeed, 1.0f);
   if (flSpeed <= SMOOTHED_MIN_VELOCITY) return vecForward;
 
   float flBlend = SimpleSplineRemapVal(flSpeed, SMOOTHED_MIN_VELOCITY,
@@ -897,9 +897,9 @@ void CPropAirboat::AimGunAt(const Vector &aimPos, float flInterval) {
 
   // Constrain our angles
   float newTargetYaw =
-      clamp(targetYaw, -CANNON_MAX_RIGHT_YAW, CANNON_MAX_LEFT_YAW);
+      std::clamp(targetYaw, -CANNON_MAX_RIGHT_YAW, CANNON_MAX_LEFT_YAW);
   float newTargetPitch =
-      clamp(targetPitch, -CANNON_MAX_UP_PITCH, CANNON_MAX_DOWN_PITCH);
+      std::clamp(targetPitch, -CANNON_MAX_UP_PITCH, CANNON_MAX_DOWN_PITCH);
 
   // If the angles have been clamped, we're looking outside of our valid range
   if ((newTargetYaw != targetYaw) || (newTargetPitch != targetPitch)) {
@@ -1013,8 +1013,8 @@ void CPropAirboat::Think(void) {
   //	{
   //		SetNextThink( gpGlobals->curtime );
   //	}
-  //	else if ( !m_bInitialHandbrake )	// after initial timer expires, set
-  //the handbrake
+  //	else if ( !m_bInitialHandbrake )	// after initial timer expires,
+  //set the handbrake
   //	{
   //		m_bInitialHandbrake = true;
   //		m_VehiclePhysics.SetHandbrake( true );
@@ -1171,7 +1171,7 @@ void CPropAirboat::UpdateGauge() {
   CFourWheelVehiclePhysics *pPhysics = GetPhysics();
   int speed = pPhysics->GetSpeed();
   int maxSpeed = pPhysics->GetMaxSpeed();
-  float speedRatio = clamp((float)speed / (float)maxSpeed, 0, 1);
+  float speedRatio = std::clamp((float)speed / maxSpeed, 0.0f, 1.0f);
 
   SetPoseParameter("Gauge", speedRatio);
 }
@@ -1409,7 +1409,7 @@ void CPropAirboat::UpdateSound() {
   CFourWheelVehiclePhysics *pPhysics = GetPhysics();
   int speed = pPhysics->GetSpeed();
   int maxSpeed = pPhysics->GetMaxSpeed();
-  float speedRatio = clamp((float)speed / (float)maxSpeed, 0, 1);
+  float speedRatio = std::clamp((float)speed / maxSpeed, 0.0f, 1.0f);
 
   // Msg("speedRatio=%f\n", speedRatio);
 
@@ -1716,8 +1716,8 @@ void CPropAirboat::CreateDangerSounds(void) {
     CSoundEnt::InsertSound(SOUND_PHYSICS_DANGER, vecSpot, radius, soundDuration,
                            this, SOUNDENT_CHANNEL_REPEATED_PHYSICS_DANGER);
     // NDebugOverlay::Box(vecSpot,
-    // Vector(-radius,-radius,-radius),Vector(radius,radius,radius), 255, 0, 255,
-    // 0, soundDuration);
+    // Vector(-radius,-radius,-radius),Vector(radius,radius,radius), 255, 0,
+    // 255, 0, soundDuration);
 
 #if 0
 		// put sounds a bit to left and right but slightly closer to vehicle to make
@@ -1836,7 +1836,7 @@ void CPropAirboat::DampenUpMotion(Vector &vecVehicleEyePos,
   // Get up vector.
   Vector vecUp;
   AngleVectors(vecVehicleEyeAngles, NULL, NULL, &vecUp);
-  vecUp.z = clamp(vecUp.z, 0.0f, vecUp.z);
+  vecUp.z = std::clamp(vecUp.z, 0.0f, vecUp.z);
   vecVehicleEyePos.z += r_AirboatViewZHeight.GetFloat() * vecUp.z;
 
   // NOTE: Should probably use some damped equation here.
@@ -1905,7 +1905,7 @@ float CPropAirboat::CalculatePhysicsStressDamage(
 
   // if ( ( stressOut.exertedStress > 100 ) || ( stressOut.receivedStress > 100
   // ) ) 	Msg( "stress: %f %d %f\n", stressOut.exertedStress,
-  //stressOut.hasNonStaticStress, stressOut.receivedStress );
+  // stressOut.hasNonStaticStress, stressOut.receivedStress );
 
   // Make sure the stress isn't from being stuck inside some static object.
   // If we're being crushed by more than the fatal stress amount, kill the

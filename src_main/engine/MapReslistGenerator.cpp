@@ -380,7 +380,7 @@ void CMapReslistGenerator::EnableReslistGeneration(bool usemaplistfile) {
 void CMapReslistGenerator::StartReslistGeneration() {
   m_iCurrentMap = 0;
   m_iFrameCountdownToRunningNextMap = m_iPauseFramesBetweenMaps;
-  m_flNextMapRunTime = Sys_FloatTime() + m_iPauseTimeBetweenMaps;
+  m_flNextMapRunTime = Plat_FloatTime() + m_iPauseTimeBetweenMaps;
 }
 
 //-----------------------------------------------------------------------------
@@ -446,7 +446,7 @@ void CMapReslistGenerator::OnPlayerSpawn() {
 
   // initiate the next level
   m_iFrameCountdownToRunningNextMap = m_iPauseFramesBetweenMaps;
-  m_flNextMapRunTime = Sys_FloatTime() + m_iPauseTimeBetweenMaps;
+  m_flNextMapRunTime = Plat_FloatTime() + m_iPauseTimeBetweenMaps;
 }
 
 bool CMapReslistGenerator::ShouldRebuildCaches() {
@@ -484,7 +484,7 @@ void CMapReslistGenerator::RunFrame() {
 
   if (--m_iFrameCountdownToRunningNextMap > 0) return;
 
-  if (m_flNextMapRunTime && m_flNextMapRunTime < Sys_FloatTime()) {
+  if (m_flNextMapRunTime && m_flNextMapRunTime < Plat_FloatTime()) {
     // about to transition or terminate, emit the current map log
     WriteMapLog();
 

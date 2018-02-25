@@ -202,7 +202,7 @@ void DrawCloak_DX9(CBaseVSShader *pShader, IMaterialVar **params,
         // In general, cloaking on ps_2_0 needs re-working for
         // multipass...yuck...
         //
-        int nPS20NumLights = max(lightState.m_nNumLights, 1);
+        int nPS20NumLights = std::max(lightState.m_nNumLights, 1);
         DECLARE_DYNAMIC_PIXEL_SHADER(cloak_ps20);
         SET_DYNAMIC_PIXEL_SHADER_COMBO(NUM_LIGHTS, nPS20NumLights);
         SET_DYNAMIC_PIXEL_SHADER_COMBO(
@@ -272,7 +272,7 @@ void DrawCloak_DX9(CBaseVSShader *pShader, IMaterialVar **params,
         params[info.m_nRimLightPower]->IsDefined()) {
       vSpecularTint[3] = params[info.m_nRimLightPower]->GetFloatValue();
       vSpecularTint[3] =
-          max(vSpecularTint[3], 1.0f);  // Make sure this is at least 1
+          std::max(vSpecularTint[3], 1.0f);  // Make sure this is at least 1
     }
 
     // Get the rim boost power (goes in w of flashlight position)

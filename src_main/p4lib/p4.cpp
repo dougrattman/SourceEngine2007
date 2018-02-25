@@ -24,7 +24,7 @@
 #include <io.h>
 #include <sys/stat.h>
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #define CLIENTSPEC_BUFFER_SIZE		(8 * 1024)
 
@@ -1112,7 +1112,7 @@ public:
 
 	virtual void OutputError( const_char *errBuf )
 	{
-		m_errorSeverity = max( m_errorSeverity, E_WARN ); // this is a guess - it could have been E_FATAL or E_FAILED
+		m_errorSeverity = std::max( m_errorSeverity, E_WARN ); // this is a guess - it could have been E_FATAL or E_FAILED
 
 		Msg("p4 error: %s", errBuf);
 
@@ -1120,14 +1120,14 @@ public:
 	}
 	virtual void HandleError( Error *err )
 	{
-		m_errorSeverity = max( m_errorSeverity, ( ErrorSeverity )err->GetSeverity() );
+		m_errorSeverity = std::max( m_errorSeverity, ( ErrorSeverity )err->GetSeverity() );
 
 		StrBuf buf;
 		err->Fmt( buf, EF_NEWLINE );
 
 		if ( V_strstr( buf.Text(), "can't edit exclusive file already opened" ) )
 		{
-			m_errorSeverity = max( m_errorSeverity, E_WARN ); // p4 sends this is an info message, even though the file doesn't get edited!
+			m_errorSeverity = std::max( m_errorSeverity, E_WARN ); // p4 sends this is an info message, even though the file doesn't get edited!
 		}
 
 		if ( ( m_uiFlags & eDisableFiltering ) || ShallOutputErrorStringBuffer( buf ) )

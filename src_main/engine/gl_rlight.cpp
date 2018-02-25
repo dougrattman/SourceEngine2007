@@ -746,10 +746,10 @@ SurfaceHandle_t R_LightVec(const Vector &start, const Vector &end,
 }
 
 // returns light in range from 0 to 1.
-colorVec R_LightPoint(Vector &p) {
+color32 R_LightPoint(Vector &p) {
   SurfaceHandle_t surfID;
   Vector end;
-  colorVec c;
+  color32 c;
   Vector color;
 
   end[0] = p[0];

@@ -9,6 +9,7 @@
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
+#include "tier0/include/tier0_api.h"
 
 // Define this in release to get memory tracking even in release builds
 //#define USE_MEM_DEBUG 1
@@ -23,13 +24,15 @@
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 #include <cstddef>
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/mem.h"
 
 struct _CrtMemState;
 
 #define MEMALLOC_VERSION 1
 
-typedef usize (*MemAllocFailHandler_t)(usize);
+using MemAllocFailHandler_t = usize (*)(usize);
 
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
@@ -105,7 +108,7 @@ abstract_class IMemAlloc {
 };
 
 // Singleton interface
-MEM_INTERFACE IMemAlloc *g_pMemAlloc;
+SOURCE_TIER0_API IMemAlloc *g_pMemAlloc;
 
 inline void *MemAlloc_AllocAligned(usize size, usize align) {
   u8 *pAlloc, *pResult;

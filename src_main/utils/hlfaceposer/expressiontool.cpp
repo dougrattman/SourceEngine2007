@@ -451,11 +451,11 @@ int	CExpressionToolWorkspace::handleEvent( mxEvent *event )
 					// Zoom time in  / out
 					if ( event->height > 0 )
 					{
-						g_pChoreoView->SetTimeZoom( g_pExpressionTool->GetToolName(), min( tz + TIME_ZOOM_STEP, MAX_TIME_ZOOM ), false );
+						g_pChoreoView->SetTimeZoom( g_pExpressionTool->GetToolName(), std::min( tz + TIME_ZOOM_STEP, MAX_TIME_ZOOM ), false );
 					}
 					else
 					{
-						g_pChoreoView->SetTimeZoom( g_pExpressionTool->GetToolName(), min( tz - TIME_ZOOM_STEP, MAX_TIME_ZOOM ), false );
+						g_pChoreoView->SetTimeZoom( g_pExpressionTool->GetToolName(), std::min( tz - TIME_ZOOM_STEP, MAX_TIME_ZOOM ), false );
 					}
 					g_pExpressionTool->RepositionHSlider();
 				}
@@ -471,13 +471,13 @@ int	CExpressionToolWorkspace::handleEvent( mxEvent *event )
 			{
 				offset = m_pVertScrollBar->getValue();
 				offset += jump;
-				offset = min( offset, m_pVertScrollBar->getMaxValue() );
+				offset = std::min( offset, m_pVertScrollBar->getMaxValue() );
 			}
 			else
 			{
 				offset = m_pVertScrollBar->getValue();
 				offset -= jump;
-				offset = max( offset, m_pVertScrollBar->getMinValue() );
+				offset = std::max( offset, m_pVertScrollBar->getMinValue() );
 			}
 
 			m_pVertScrollBar->setValue( offset );
@@ -508,22 +508,22 @@ int	CExpressionToolWorkspace::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pVertScrollBar->getValue();
 						offset -= 100;
-						offset = max( offset, m_pVertScrollBar->getMinValue() );
+						offset = std::max( offset, m_pVertScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pVertScrollBar->getValue();
 						offset += 100;
-						offset = min( offset, m_pVertScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pVertScrollBar->getMaxValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pVertScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pVertScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pVertScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pVertScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pVertScrollBar->getMinValue() );
+						offset = std::max( offset, m_pVertScrollBar->getMinValue() );
 						break;
 					default:
 						processed = false;
@@ -663,8 +663,8 @@ void CExpressionToolWorkspace::RepositionVSlider( void )
 		m_nScrollbarHeight, 
 		h2() );
 
-	m_nTopOffset = max( 0, m_nTopOffset );
-	m_nTopOffset = min( pixelsneeded, m_nTopOffset );
+	m_nTopOffset = std::max( 0, m_nTopOffset );
+	m_nTopOffset = std::min( pixelsneeded, m_nTopOffset );
 
 	m_pVertScrollBar->setRange( 0, pixelsneeded );
 	m_pVertScrollBar->setValue( m_nTopOffset );
@@ -800,7 +800,7 @@ void CExpressionToolWorkspace::OnDeleteColumn()
 		*sep = 0;
 		deleteframestart = atoi( params.m_szInputText );
 		deleteframeend = atoi( sep + 1 );
-		deleteframeend = max( deleteframestart, deleteframeend );
+		deleteframeend = std::max( deleteframestart, deleteframeend );
 	}
 	else
 	{
@@ -890,7 +890,7 @@ void CExpressionToolWorkspace::MoveSelectedSamples( float dfdx, float dfdy, bool
 					continue;
 
 				sample->time += dfdx;
-				sample->time = clamp( sample->time, 0.0f, eventduration );
+				sample->time = std::clamp( sample->time, 0.0f, eventduration );
 
 				if ( snap )
 				{
@@ -898,7 +898,7 @@ void CExpressionToolWorkspace::MoveSelectedSamples( float dfdx, float dfdy, bool
 				}
 
 				sample->value -= dfdy;
-				sample->value = clamp( sample->value, 0.0f, 1.0f );
+				sample->value = std::clamp( sample->value, 0.0f, 1.0f );
 			}
 		}
 				
@@ -1263,7 +1263,7 @@ void ExpressionTool::GetScrubHandleRect( RECT& rcHandle, bool clipped )
 		pixel = GetPixelForTimeValue( m_flScrub );
 		if  ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
 		}
 	}
 
@@ -2148,8 +2148,8 @@ void ExpressionTool::OnMouseMove( mxEvent *event )
 				{
 					float st = GetTimeValueForMouse( mx );
 					int snapx = GetPixelForTimeValue( st );
-					f->m_rcFocus.left = min( snapx, m_nStartX );
-					f->m_rcFocus.right = max( snapx, m_nStartY );
+					f->m_rcFocus.left = std::min( snapx, m_nStartX );
+					f->m_rcFocus.right = std::max( snapx, m_nStartY );
 
 					POINT offset;
 					offset.x = 0;
@@ -2265,11 +2265,11 @@ int	ExpressionTool::handleEvent( mxEvent *event )
 				// Zoom time in  / out
 				if ( event->height > 0 )
 				{
-					tz = min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
+					tz = std::min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
 				}
 				else
 				{
-					tz = max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
+					tz = std::max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
 				}
 
 				g_pChoreoView->SetPreservedTimeZoom( this, tz );
@@ -2310,7 +2310,7 @@ int	ExpressionTool::handleEvent( mxEvent *event )
 						float t = GetTimeValueForMouse( (short)event->x );
 						m_flScrubberTimeOffset = m_flScrub - t;
 						float maxoffset = 0.5f * (float)SCRUBBER_HANDLE_WIDTH / GetPixelsPerSecond();
-						m_flScrubberTimeOffset = clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
+						m_flScrubberTimeOffset = std::clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
 						t += m_flScrubberTimeOffset;
 						ForceScrubPosition( t );
 					}
@@ -2745,22 +2745,22 @@ int	ExpressionTool::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 20;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 20;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					default:
 						processed = false;
@@ -2870,7 +2870,7 @@ void ExpressionTool::AddFlexTimingTag( int mx )
 	if ( event->GetDuration() )
 	{
 		frac = t / event->GetDuration();
-		frac = clamp( frac, 0.0f, 1.0f );
+		frac = std::clamp( frac, 0.0f, 1.0f );
 	}
 
 	g_pChoreoView->SetDirty( true );
@@ -2969,7 +2969,7 @@ void ExpressionTool::ApplyBounds( int& mx, int& my )
 	if ( !m_bUseBounds )
 		return;
 
-	mx = clamp( mx, m_nMinX, m_nMaxX );
+	mx = std::clamp( mx, m_nMinX, m_nMaxX );
 }
 
 void ExpressionTool::CalcBounds( int movetype )
@@ -3047,7 +3047,7 @@ void ExpressionTool::CalcBounds( int movetype )
 						{
 							int tagx = rcClient.left + (int)( frac * (float)( rcClient.right - rcClient.left ) );
 							
-							m_nMinX = max( m_nMinX, tagx + 5 );
+							m_nMinX = std::max( m_nMinX, tagx + 5 );
 						}
 					}
 					
@@ -3058,7 +3058,7 @@ void ExpressionTool::CalcBounds( int movetype )
 						if ( frac >= 0.0f && frac <= 1.0f )
 						{
 							int tagx = rcClient.left + (int)( frac * (float)( rcClient.right - rcClient.left ) );
-							m_nMaxX = min( m_nMaxX, tagx - 5 );
+							m_nMaxX = std::min( m_nMaxX, tagx - 5 );
 						}
 					}
 				}
@@ -3956,7 +3956,7 @@ void ExpressionTool::DrawMouseOverPos( CChoreoWidgetDrawHelper& drawHelper, RECT
 	int len = drawHelper.CalcTextWidth( "Arial", 11, 900, sz );
 
 	RECT rcText = rcPos;
-	rcText.left = max( rcPos.left, rcPos.right - len );
+	rcText.left = std::max( rcPos.left, rcPos.right - len );
 
 	drawHelper.DrawColoredText( "Arial", 11, 900, RGB( 255, 50, 70 ), rcText, sz );
 }
@@ -4245,8 +4245,8 @@ void ExpressionTool::RepositionHSlider( void )
 	}
 	m_pHorzScrollBar->setBounds( 0, h2() - m_nScrollbarHeight, w2(), m_nScrollbarHeight );
 
-	m_flLeftOffset = max( 0, m_flLeftOffset );
-	m_flLeftOffset = min( (float)pixelsneeded, m_flLeftOffset );
+	m_flLeftOffset = std::max( 0, m_flLeftOffset );
+	m_flLeftOffset = std::min( (float)pixelsneeded, m_flLeftOffset );
 
 	m_pHorzScrollBar->setRange( 0, pixelsneeded );
 	m_pHorzScrollBar->setValue( m_flLeftOffset );
@@ -4347,7 +4347,7 @@ void ExpressionTool::OnChangeScale( void )
 	if ( !InputProperties( &params ) )
 		return;
 
-	g_pChoreoView->SetTimeZoom( GetToolName(), clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
+	g_pChoreoView->SetTimeZoom( GetToolName(), std::clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
 
 	m_nLastHPixelsNeeded = -1;
 	InvalidateLayout();
@@ -4614,7 +4614,7 @@ void ExpressionTool::OnScaleSamples()
 				float curvalue = sample->value;
 				curvalue *= scale_factor;
 				// Clamp it
-				curvalue = clamp( curvalue, 0.0f, 1.0f );
+				curvalue = std::clamp( curvalue, 0.0f, 1.0f );
 				sample->value = curvalue;
 			}
 		}

@@ -27,11 +27,11 @@ class IChoreoStringPool;
 
 typedef CUtlString ChoreoStr_t;
 
-//-----------------------------------------------------------------------------
+
 // Purpose: SPEAK events can have "relative tags" that other objects can
 // reference
 //  to specify their start times off of
-//-----------------------------------------------------------------------------
+
 class CEventRelativeTag {
  public:
   DECLARE_CLASS_NOBASE(CEventRelativeTag);
@@ -58,10 +58,10 @@ class CEventRelativeTag {
   CChoreoEvent *m_pOwner;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: GESTURE events can have "absolute tags" (where the value is not a
 //  percentage, but an actual timestamp from the start of the event)
-//-----------------------------------------------------------------------------
+
 class CEventAbsoluteTag {
  public:
   enum {
@@ -107,11 +107,11 @@ class CEventAbsoluteTag {
   CChoreoEvent *m_pOwner;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: FLEXANIMATION events can have "timing tags" that are used to align
 // and
 //  manipulate flex animation curves
-//-----------------------------------------------------------------------------
+
 class CFlexTimingTag : public CEventRelativeTag {
   DECLARE_CLASS(CFlexTimingTag, CEventRelativeTag);
 
@@ -127,9 +127,9 @@ class CFlexTimingTag : public CEventRelativeTag {
   bool m_bLocked;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: A flex controller position can be animated over a period of time
-//-----------------------------------------------------------------------------
+
 class CFlexAnimationTrack {
  public:
   enum {
@@ -239,9 +239,9 @@ class CFlexAnimationTrack {
   bool m_bInverted;  // track is displayed 1..0 instead of 0..1
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The generic scene event type
-//-----------------------------------------------------------------------------
+
 class CChoreoEvent : public ICurveDataAccessor {
  public:
   // Type of event this object represents

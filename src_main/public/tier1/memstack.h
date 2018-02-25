@@ -103,10 +103,10 @@ inline MemoryStackMark_t CMemoryStack::GetCurrentAllocPoint() {
   return (m_pNextAlloc - m_pBase);
 }
 
-//-----------------------------------------------------------------------------
+
 // The CUtlMemoryStack class:
 // A fixed memory class
-//-----------------------------------------------------------------------------
+
 template <typename T, typename I, size_t MAX_SIZE, size_t COMMIT_SIZE = 0,
           size_t INITIAL_COMMIT = 0>
 class CUtlMemoryStack {
@@ -207,6 +207,6 @@ class CUtlMemoryStack {
   int m_nAllocated;
 };
 
-//-----------------------------------------------------------------------------
+
 
 #endif  // MEMSTACK_H

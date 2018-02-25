@@ -81,17 +81,17 @@ void AddDirectToRadial(radial_t *rad, Vector const &pnt,
   s_max = (int)(coordmaxs[0] + 0.9999f) + 1;  // ????
   t_max = (int)(coordmaxs[1] + 0.9999f) + 1;
 
-  s_min = max(s_min, 0);
-  t_min = max(t_min, 0);
-  s_max = min(s_max, rad->w);
-  t_max = min(t_max, rad->h);
+  s_min = std::max(s_min, 0);
+  t_min = std::max(t_min, 0);
+  s_max = std::min(s_max, rad->w);
+  t_max = std::min(t_max, rad->h);
 
   for (s = s_min; s < s_max; s++) {
     for (t = t_min; t < t_max; t++) {
-      float s0 = max(coordmins[0] - s, -1.0);
-      float t0 = max(coordmins[1] - t, -1.0);
-      float s1 = min(coordmaxs[0] - s, 1.0);
-      float t1 = min(coordmaxs[1] - t, 1.0);
+      float s0 = std::max(coordmins[0] - s, -1.0);
+      float t0 = std::max(coordmins[1] - t, -1.0);
+      float s1 = std::min(coordmaxs[0] - s, 1.0);
+      float t1 = std::min(coordmaxs[1] - t, 1.0);
 
       area = (s1 - s0) * (t1 - t0);
 
@@ -99,7 +99,7 @@ void AddDirectToRadial(radial_t *rad, Vector const &pnt,
         ds = fabs(coord[0] - s);
         dt = fabs(coord[1] - t);
 
-        r = max(ds, dt);
+        r = std::max(ds, dt);
 
         if (r < 0.1) {
           r = area / 0.1;
@@ -153,8 +153,8 @@ void AddBouncedToRadial(radial_t *rad, Vector const &pnt,
 
   // patches less than a luxel in size could be mistakeningly filtered, so
   // clamp.
-  dists = max(1.0, dists);
-  distt = max(1.0, distt);
+  dists = std::max(1.0, dists);
+  distt = std::max(1.0, distt);
 
   // find possible domain of patch influence
   s_min = (int)(coord[0] - dists * RADIALDIST);
@@ -163,10 +163,10 @@ void AddBouncedToRadial(radial_t *rad, Vector const &pnt,
   t_max = (int)(coord[1] + distt * RADIALDIST + 1.0f);
 
   // clamp to valid luxel
-  s_min = max(s_min, 0);
-  t_min = max(t_min, 0);
-  s_max = min(s_max, rad->w);
-  t_max = min(t_max, rad->h);
+  s_min = std::max(s_min, 0);
+  t_min = std::max(t_min, 0);
+  s_max = std::min(s_max, rad->w);
+  t_max = std::min(t_max, rad->h);
 
   for (s = s_min; s < s_max; s++) {
     for (t = t_min; t < t_max; t++) {
@@ -216,10 +216,10 @@ void PatchLightmapCoordRange(radial_t *rad, int ndxPatch, Vector2D &mins,
 
   for (i = 0; i < w->numpoints; i++) {
     WorldToLuxelSpace(&rad->l, w->p[i], coord);
-    mins[0] = min(mins[0], coord[0]);
-    maxs[0] = max(maxs[0], coord[0]);
-    mins[1] = min(mins[1], coord[1]);
-    maxs[1] = max(maxs[1], coord[1]);
+    mins[0] = std::min(mins[0], coord[0]);
+    maxs[0] = std::max(maxs[0], coord[0]);
+    mins[1] = std::min(mins[1], coord[1]);
+    maxs[1] = std::max(maxs[1], coord[1]);
   }
 }
 
@@ -698,7 +698,7 @@ void FinalLightFace(int iThread, int facenum) {
         // garymct: minlight is a per entity minimum light value?
         for (i = 0; i < 3; i++) {
           lb[bumpSample].m_vecLighting[i] =
-              max(lb[bumpSample].m_vecLighting[i], minlight);
+              std::max(lb[bumpSample].m_vecLighting[i], minlight);
         }
 
         // Do the average light computation, I'm assuming (perhaps incorrectly?)

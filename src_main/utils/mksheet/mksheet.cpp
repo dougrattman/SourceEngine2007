@@ -389,9 +389,9 @@ bool PackImages_Flat( char const *pFname, int nWidth )
 					}
 		}
 
-		next_line=max(next_line, cur_line+frm.m_pImage->Height );
+		next_line=std::max(next_line, cur_line+frm.m_pImage->Height );
 		cur_column += frm.m_pImage->Width;
-		max_column_written=max(max_column_written, cur_column);
+		max_column_written=std::max(max_column_written, cur_column);
 	}
 	
 	// now, truncate height
@@ -487,9 +487,9 @@ bool PackImages_Rgb_A( char const *pFname, int nWidth )
 						}
 		}
 
-		next_line[idxfrm] = max( next_line[idxfrm], cur_line[idxfrm] + frm.m_pImage->Height );
+		next_line[idxfrm] = std::max( next_line[idxfrm], cur_line[idxfrm] + frm.m_pImage->Height );
 		cur_column[idxfrm] += frm.m_pImage->Width;
-		max_column_written[idxfrm] = max( max_column_written[idxfrm], cur_column[idxfrm] );
+		max_column_written[idxfrm] = std::max( max_column_written[idxfrm], cur_column[idxfrm] );
 
 		if ( bPackingRGBA )
 		{

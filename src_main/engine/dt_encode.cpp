@@ -711,7 +711,7 @@ int Array_CompareDeltas(const SendProp *pProp, bf_read *p1, bf_read *p2) {
   int bDifferent = length1 != length2;
 
   // Compare deltas on the props that are the same.
-  int nSame = min(length1, length2);
+  int nSame = std::min(length1, length2);
   for (int iElement = 0; iElement < nSame; iElement++) {
     bDifferent |=
         g_PropTypeFns[pArrayProp->GetType()].CompareDeltas(pArrayProp, p1, p2);
@@ -721,7 +721,7 @@ int Array_CompareDeltas(const SendProp *pProp, bf_read *p1, bf_read *p2) {
   if (length1 != length2) {
     bf_read *buffer = (length1 > length2) ? p1 : p2;
 
-    int nExtra = max(length1, length2) - nSame;
+    int nExtra = std::max(length1, length2) - nSame;
     for (int iEatUp = 0; iEatUp < nExtra; iEatUp++) {
       SkipPropData(buffer, pArrayProp);
     }

@@ -1836,7 +1836,7 @@ void CResponseSystem::ParseOneResponse(const char *responseGroupName,
     if (!Q_stricmp(token, "odds")) {
       ParseToken();
       rp->flags |= AI_ResponseParams::RG_ODDS;
-      rp->odds = clamp(atoi(token), 0, 100);
+      rp->odds = std::clamp(atoi(token), 0, 100);
       continue;
     }
 
@@ -1986,7 +1986,7 @@ void CResponseSystem::ParseResponse(void) {
     if (!Q_stricmp(token, "odds")) {
       ParseToken();
       rp->flags |= AI_ResponseParams::RG_ODDS;
-      rp->odds = clamp(atoi(token), 0, 100);
+      rp->odds = std::clamp(atoi(token), 0, 100);
       continue;
     }
 

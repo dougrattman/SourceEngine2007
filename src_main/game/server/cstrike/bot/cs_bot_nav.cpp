@@ -109,7 +109,7 @@ CBaseEntity * CCSBot::FindEntitiesOnPath( float distance, CPushAwayEnumerator *e
 	}
 	else
 	{
-		int startIndex = max( 0, m_pathIndex );
+		int startIndex = std::max( 0, m_pathIndex );
 		float distanceLeft = distance;
 		// HACK: start with an index one lower than normal, so we can trace from the bot's location to the
 		// start of the path nodes.
@@ -546,7 +546,7 @@ bool CCSBot::GetSimpleGroundHeightWithFloor( const Vector &pos, float *height, V
 	{
 		// our current nav area also serves as a ground polygon
 		if (m_lastKnownArea && m_lastKnownArea->IsOverlapping( pos ))
-			*height = max( (*height), m_lastKnownArea->GetZ( pos ) );
+			*height = std::max( (*height), m_lastKnownArea->GetZ( pos ) );
 
 		return true;
 	}

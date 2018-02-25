@@ -385,7 +385,7 @@ SHADER_DRAW {
     }
 
     int nOrientation = params[ORIENTATION]->GetIntValue();
-    nOrientation = clamp(nOrientation, 0, 2);
+    nOrientation = std::clamp(nOrientation, 0, 2);
 
     // We need these only when screen-orienting
     if (nOrientation == 0) {
@@ -405,7 +405,7 @@ SHADER_DRAW {
     // set fade constants in vsconsts 8 and 9
     float flMaxDistance = params[MAXDISTANCE]->GetFloatValue();
     float flStartFade =
-        max(1.0f, flMaxDistance - params[FARFADEINTERVAL]->GetFloatValue());
+        std::max(1.0f, flMaxDistance - params[FARFADEINTERVAL]->GetFloatValue());
 
     float VC0[8] = {params[MINSIZE]->GetFloatValue(),
                     params[MAXSIZE]->GetFloatValue(),

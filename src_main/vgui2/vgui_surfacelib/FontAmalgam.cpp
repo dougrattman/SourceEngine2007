@@ -45,8 +45,8 @@ void CFontAmalgam::AddFont(CWin32Font *font, int lowRange, int highRange) {
   m_Fonts[i].lowRange = lowRange;
   m_Fonts[i].highRange = highRange;
 
-  m_iMaxHeight = max(font->GetHeight(), m_iMaxHeight);
-  m_iMaxWidth = max(font->GetMaxCharWidth(), m_iMaxWidth);
+  m_iMaxHeight = std::max(font->GetHeight(), m_iMaxHeight);
+  m_iMaxWidth = std::max(font->GetMaxCharWidth(), m_iMaxWidth);
 }
 
 //-----------------------------------------------------------------------------

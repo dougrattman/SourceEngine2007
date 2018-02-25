@@ -124,7 +124,9 @@ CNPC_Barnacle::~CNPC_Barnacle(void) {
 /*
 
         input LetGo(void) : "Let go of anything I am holding."
-        
+        
+
+
         output OnGrab(string)    : "When I attach my tongue to something"
         output OnRelease(string) : "When I let go of something"
 */
@@ -803,7 +805,7 @@ void CNPC_Barnacle::PullEnemyTorwardsMouth(bool bAdjustEnemyOrigin) {
 			{
 				// get us there in a second
 				Vector desiredVelocity;
-				float distToMove = min(distFromCenter, 24.0f * dt);
+				float distToMove = std::min(distFromCenter, 24.0f * dt);
 				desiredVelocity.x = vToCenter.x * distToMove;
 				desiredVelocity.y = vToCenter.y * distToMove;
 				desiredVelocity.z = 0;
@@ -1369,7 +1371,7 @@ vToCenter.x ; fixed.attachedRefXform[1][3] -= vToCenter.y ;
   // checking a bit
   constraint_groupparams_t params;
   pRagdoll->pGroup->GetErrorParams(&params);
-  params.minErrorTicks = min(params.minErrorTicks, 5);
+  params.minErrorTicks = std::min(params.minErrorTicks, 5);
   pRagdoll->pGroup->SetErrorParams(params);
 
   for (int i = 0; i < pRagdoll->listCount; i++) {
@@ -1937,10 +1939,10 @@ void CNPC_Barnacle::WaitTillDead(void) {
     float dt = gpGlobals->curtime - GetLastThink();
     if (m_flAltitude >= goalAltitude) {
       flNewAltitude =
-          max(goalAltitude, m_flAltitude - m_flBarnaclePullSpeed * dt);
+          std::max(goalAltitude, m_flAltitude - m_flBarnaclePullSpeed * dt);
     } else {
       flNewAltitude =
-          min(goalAltitude, m_flAltitude + m_flBarnaclePullSpeed * dt);
+          std::min(goalAltitude, m_flAltitude + m_flBarnaclePullSpeed * dt);
     }
     SetAltitude(flNewAltitude);
   } else {
@@ -2192,7 +2194,7 @@ CBaseEntity *CNPC_Barnacle::TongueTouchEnt(float *pflLength) {
 
   length = fabs(GetAbsOrigin().z - tr.endpos.z);
   // Pull it up a tad
-  length = max(8, length - m_flRestUnitsAboveGround);
+  length = std::max(8.0f, length - m_flRestUnitsAboveGround);
   if (pflLength) {
     *pflLength = length;
   }
@@ -2253,7 +2255,7 @@ CBaseEntity *CNPC_Barnacle::TongueTouchEnt(float *pflLength) {
 #ifdef HL2_EPISODIC
         length = fabs(GetAbsOrigin().z - pTest->WorldSpaceCenter().z);
         // Pull it up a tad
-        length = max(8, length - m_flRestUnitsAboveGround);
+        length = std::max(8.0f, length - m_flRestUnitsAboveGround);
         if (pflLength) {
           *pflLength = length;
         }
@@ -2276,7 +2278,7 @@ CBaseEntity *CNPC_Barnacle::TongueTouchEnt(float *pflLength) {
 #ifdef HL2_EPISODIC
       length = fabs(GetAbsOrigin().z - pTest->WorldSpaceCenter().z);
       // Pull it up a tad
-      length = max(8, length - m_flRestUnitsAboveGround);
+      length = std::max(8.0f, length - m_flRestUnitsAboveGround);
       if (pflLength) {
         *pflLength = length;
       }

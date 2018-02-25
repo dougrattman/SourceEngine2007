@@ -296,7 +296,7 @@ void CommandRender_Polygon( CScratchPad3D::CBaseCommand *pInCmd, IDirect3DDevice
 	VertPosDiffuse verts[65];
 	CScratchPad3D::CCommand_Polygon *pCmd = (CScratchPad3D::CCommand_Polygon*)pInCmd;
 
-	int nVerts = min( 64, pCmd->m_Verts.Size() );
+	int nVerts = std::min( 64, pCmd->m_Verts.Size() );
 	for( int i=0; i < nVerts; i++ )
 	{
 		verts[i].m_Pos[0] = pCmd->m_Verts[i].m_vPos.x;

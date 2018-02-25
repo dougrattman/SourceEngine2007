@@ -556,7 +556,7 @@ CProp_Portal *CBaseCombatCharacter::FInViewConeThroughPortal(
 
       // Use the tougher FOV of either the standard FOV or FOV clipped to the
       // portal hole
-      if (flDot > max(fFOVThroughPortal, m_flFieldOfView)) {
+      if (flDot > std::max(fFOVThroughPortal, m_flFieldOfView)) {
         float fActualDist = ptEyePosition.DistToSqr(vTranslatedVecSpot);
         if (fActualDist < fDistToBeat) {
           fDistToBeat = fActualDist;
@@ -914,12 +914,12 @@ void CBaseCombatCharacter::Weapon_FrameUpdate(void) {
 //------------------------------------------------------------------------------
 // Purpose :	expects a length to trace, amount
 //				of damage to do, and damage type. Returns a
-//pointer
+// pointer
 // to 				the damaged entity in case the NPC wishes to do
 // other stuff to the victim (punchangle, etc)
 //
 //				Used for many contact-range melee attacks.
-//Bites, claws, etc.
+// Bites, claws, etc.
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -1034,12 +1034,12 @@ bool CTraceFilterMelee::ShouldHitEntity(IHandleEntity *pHandleEntity,
 //------------------------------------------------------------------------------
 // Purpose :	start and end trace position, amount
 //				of damage to do, and damage type. Returns a
-//pointer
+// pointer
 // to 				the damaged entity in case the NPC wishes to do
 // other stuff to the victim (punchangle, etc)
 //
 //				Used for many contact-range melee attacks.
-//Bites, claws, etc.
+// Bites, claws, etc.
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -2572,7 +2572,7 @@ int CBaseCombatCharacter::GiveAmmo(int iCount, int iAmmoIndex,
   if (iAmmoIndex < 0 || iAmmoIndex >= MAX_AMMO_SLOTS) return 0;
 
   int iMax = GetAmmoDef()->MaxCarry(iAmmoIndex);
-  int iAdd = min(iCount, iMax - m_iAmmo[iAmmoIndex]);
+  int iAdd = std::min(iCount, iMax - m_iAmmo[iAmmoIndex]);
   if (iAdd < 1) return 0;
 
   // Ammo pickup sound
@@ -2751,7 +2751,7 @@ void CBaseCombatCharacter::VPhysicsShadowCollision(
 //-----------------------------------------------------------------------------
 // Purpose: this entity is exploding, or otherwise needs to inflict damage upon
 //			entities within a certain range.  only damage ents that
-//can clearly 			be seen by the explosion!
+// can clearly 			be seen by the explosion!
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
@@ -2769,7 +2769,7 @@ void RadiusDamage(const CTakeDamageInfo &info, const Vector &vecSrc,
   if (info.GetDamageType() & DMG_BLAST) {
     // Even the tiniest explosion gets attention. Don't let the radius
     // be less than 128 units.
-    float soundRadius = max(128.0f, flRadius * 1.5);
+    float soundRadius = std::max(128.0f, flRadius * 1.5f);
 
     CSoundEnt::InsertSound(SOUND_COMBAT | SOUND_CONTEXT_EXPLOSION, vecSrc,
                            soundRadius, 0.25, info.GetInflictor());

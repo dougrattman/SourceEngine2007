@@ -99,7 +99,7 @@ void CWeaponGrenadeRocket::SetMaxRange( float flRange )
 	GetVectors( &vecForward, NULL, NULL );
 	if ( vecForward.z > 0 )
 	{
-		m_flMaxRange = max(1, m_flMaxRange - (vecForward.z * 1200));
+		m_flMaxRange = std::max(1, m_flMaxRange - (vecForward.z * 1200));
 	}
 	else 
 	{

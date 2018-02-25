@@ -335,7 +335,8 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   if (FAILED(hr)) return false;
 
   Q_strncpy(pCaps->m_pDriverName, ident.Description,
-            min(ARRAYSIZE(ident.Description), MATERIAL_ADAPTER_NAME_LENGTH));
+            std::min(ARRAYSIZE(ident.Description),
+                     (usize)MATERIAL_ADAPTER_NAME_LENGTH));
   pCaps->m_VendorID = ident.VendorId;
   pCaps->m_DeviceID = ident.DeviceId;
   pCaps->m_SubSysID = ident.SubSysId;
@@ -428,9 +429,9 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   }
 
   // Clamp
-  pCaps->m_NumSamplers = min(pCaps->m_NumSamplers, MAX_SAMPLERS);
+  pCaps->m_NumSamplers = std::min(pCaps->m_NumSamplers, (int)MAX_SAMPLERS);
   pCaps->m_NumTextureStages =
-      min(pCaps->m_NumTextureStages, MAX_TEXTURE_STAGES);
+      std::min(pCaps->m_NumTextureStages, (int)MAX_TEXTURE_STAGES);
 
   if (D3DSupportsCompressedTextures()) {
     pCaps->m_SupportsCompressedTextures = COMPRESSED_TEXTURES_ON;
@@ -476,7 +477,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
     pCaps->m_NumVertexShaderConstants = caps.MaxVertexShaderConst;
     if (CommandLine()->FindParm("-limitvsconst")) {
       pCaps->m_NumVertexShaderConstants =
-          min(256, pCaps->m_NumVertexShaderConstants);
+          std::min(256, pCaps->m_NumVertexShaderConstants);
     }
     pCaps->m_NumBooleanVertexShaderConstants =
         pCaps->m_SupportsPixelShaders_2_0
@@ -526,7 +527,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   pCaps->m_MaxTextureAspectRatio = caps.MaxTextureAspectRatio;
   if (pCaps->m_MaxTextureAspectRatio == 0) {
     pCaps->m_MaxTextureAspectRatio =
-        max(pCaps->m_MaxTextureWidth, pCaps->m_MaxTextureHeight);
+        std::max(pCaps->m_MaxTextureWidth, pCaps->m_MaxTextureHeight);
   }
   pCaps->m_MaxPrimitiveCount = caps.MaxPrimitiveCount;
   pCaps->m_MaxBlendMatrices = caps.MaxVertexBlendMatrices;
@@ -711,7 +712,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   int nCmdlineMaxDXLevel = CommandLine()->ParmValue("-maxdxlevel", 0);
   if (nCmdlineMaxDXLevel > 0) {
     pCaps->m_nMaxDXSupportLevel =
-        min(pCaps->m_nMaxDXSupportLevel, nCmdlineMaxDXLevel);
+        std::min(pCaps->m_nMaxDXSupportLevel, nCmdlineMaxDXLevel);
   }
   pCaps->m_nDXSupportLevel = pCaps->m_nMaxDXSupportLevel;
 
@@ -2194,184 +2195,7 @@ void CShaderDeviceDx8::CheckDeviceLost(bool bOtherAppInitializing) {
 //-----------------------------------------------------------------------------
 // Special method to refresh the screen on the XBox360
 //-----------------------------------------------------------------------------
-bool CShaderDeviceDx8::AllocNonInteractiveRefreshObjects() {
-  if (!IsX360()) return true;
-
-  const char *strVertexShaderProgram =
-      " float4x4 matWVP : register(c0);"
-      " struct VS_IN"
-      " {"
-      " float4 ObjPos : POSITION;"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " struct VS_OUT"
-      " {"
-      " float4 ProjPos : POSITION;"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " VS_OUT main( VS_IN In )"
-      " {"
-      " VS_OUT Out; "
-      " Out.ProjPos = mul( matWVP, In.ObjPos );"
-      " Out.TexCoord = In.TexCoord;"
-      " return Out;"
-      " }";
-
-  const char *strPixelShaderProgram =
-      " struct PS_IN"
-      " {"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " sampler detail : register( s0 );"
-      " float4 main( PS_IN In ) : COLOR"
-      " {"
-      " return tex2D( detail, In.TexCoord );"
-      " }";
-
-  const char *strPixelShaderProgram2 =
-      " struct PS_IN"
-      " {"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " sampler detail : register( s0 );"
-      " float4 main( PS_IN In ) : COLOR"
-      " {"
-      " return tex2D( detail, In.TexCoord );"
-      " }";
-
-  const char *strPixelShaderProgram3 =
-      " struct PS_IN"
-      " {"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " float SrgbGammaToLinear( float flSrgbGammaValue )"
-      " {"
-      "	float x = saturate( flSrgbGammaValue );"
-      "	return ( x <= 0.04045f ) ? ( x / 12.92f ) : ( pow( ( x + 0.055f "
-      ") / 1.055f, 2.4f ) );"
-      " }"
-      "float X360LinearToGamma( float flLinearValue )"
-      "{"
-      "		float fl360GammaValue;"
-      ""
-      "	flLinearValue = saturate( flLinearValue );"
-      "	if ( flLinearValue < ( 128.0f / 1023.0f ) )"
-      "	{"
-      "		if ( flLinearValue < ( 64.0f / 1023.0f ) )"
-      "		{"
-      "			fl360GammaValue = flLinearValue * ( 1023.0f * ( "
-      "1.0f / 255.0f ) );"
-      "		}"
-      "		else"
-      "		{"
-      "			fl360GammaValue = flLinearValue * ( ( 1023.0f / "
-      "2.0f ) * ( 1.0f / 255.0f ) ) + ( 32.0f / 255.0f );"
-      "		}"
-      "	}"
-      "	else"
-      "	{"
-      "		if ( flLinearValue < ( 512.0f / 1023.0f ) )"
-      "		{"
-      "			fl360GammaValue = flLinearValue * ( ( 1023.0f / "
-      "4.0f ) * ( 1.0f / 255.0f ) ) + ( 64.0f / 255.0f );"
-      "		}"
-      "		else"
-      "		{"
-      "			fl360GammaValue = flLinearValue * ( ( 1023.0f "
-      "/8.0f ) * ( 1.0f / 255.0f ) ) + ( 128.0f /255.0f );"
-      "			if ( fl360GammaValue > 1.0f )"
-      "			{"
-      "				fl360GammaValue = 1.0f;"
-      "			}"
-      "		}"
-      "	}"
-      ""
-      "	fl360GammaValue = saturate( fl360GammaValue );"
-      "	return fl360GammaValue;"
-      "}"
-      " sampler detail : register( s0 );"
-      " float4 main( PS_IN In ) : COLOR"
-      " {"
-      "	float4 vTextureColor = tex2D( detail, In.TexCoord );"
-      "	vTextureColor.r = X360LinearToGamma( SrgbGammaToLinear( "
-      "vTextureColor.r ) );"
-      "	vTextureColor.g = X360LinearToGamma( SrgbGammaToLinear( "
-      "vTextureColor.g ) );"
-      "	vTextureColor.b = X360LinearToGamma( SrgbGammaToLinear( "
-      "vTextureColor.b ) );"
-      "	return vTextureColor;"
-      " }";
-
-  D3DVERTEXELEMENT9 VertexElements[4] = {
-      {0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION,
-       0},
-      {0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD,
-       0},
-      D3DDECL_END()};
-
-  ID3DXBuffer *pErrorMsg = NULL;
-  ID3DXBuffer *pShaderCode = NULL;
-
-  HRESULT hr = D3DXCompileShader(
-      strVertexShaderProgram, (UINT)strlen(strVertexShaderProgram), NULL, NULL,
-      "main", "vs_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) return false;
-
-  Dx9Device()->CreateVertexShader((DWORD *)pShaderCode->GetBufferPointer(),
-                                  &m_NonInteractiveRefresh.m_pVertexShader);
-  pShaderCode->Release();
-  pShaderCode = NULL;
-  if (pErrorMsg) {
-    pErrorMsg->Release();
-    pErrorMsg = NULL;
-  }
-
-  hr = D3DXCompileShader(strPixelShaderProgram,
-                         (UINT)strlen(strPixelShaderProgram), NULL, NULL,
-                         "main", "ps_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) return false;
-
-  Dx9Device()->CreatePixelShader((DWORD *)pShaderCode->GetBufferPointer(),
-                                 &m_NonInteractiveRefresh.m_pPixelShader);
-  pShaderCode->Release();
-  if (pErrorMsg) {
-    pErrorMsg->Release();
-    pErrorMsg = NULL;
-  }
-
-  hr = D3DXCompileShader(strPixelShaderProgram3,
-                         (UINT)strlen(strPixelShaderProgram3), NULL, NULL,
-                         "main", "ps_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) return false;
-
-  Dx9Device()->CreatePixelShader(
-      (DWORD *)pShaderCode->GetBufferPointer(),
-      &m_NonInteractiveRefresh.m_pPixelShaderStartup);
-  pShaderCode->Release();
-  if (pErrorMsg) {
-    pErrorMsg->Release();
-    pErrorMsg = NULL;
-  }
-
-  hr = D3DXCompileShader(strPixelShaderProgram2,
-                         (UINT)strlen(strPixelShaderProgram2), NULL, NULL,
-                         "main", "ps_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) return false;
-
-  Dx9Device()->CreatePixelShader(
-      (DWORD *)pShaderCode->GetBufferPointer(),
-      &m_NonInteractiveRefresh.m_pPixelShaderStartupPass2);
-  pShaderCode->Release();
-  if (pErrorMsg) {
-    pErrorMsg->Release();
-    pErrorMsg = NULL;
-  }
-
-  // Create a vertex declaration from the element descriptions.
-  Dx9Device()->CreateVertexDeclaration(VertexElements,
-                                       &m_NonInteractiveRefresh.m_pVertexDecl);
-  return true;
-}
+bool CShaderDeviceDx8::AllocNonInteractiveRefreshObjects() { return true; }
 
 void CShaderDeviceDx8::FreeNonInteractiveRefreshObjects() {
   if (m_NonInteractiveRefresh.m_pVertexShader) {
@@ -2590,7 +2414,7 @@ void CShaderDeviceDx8::SetHardwareGammaRamp(float fGamma,
       // First undo the 360 broken sRGB curve by bringing the value back into
       // linear space
       float flLinearValue = X360GammaToLinear(flInputValue);
-      flLinearValue = clamp(flLinearValue, 0.0f, 1.0f);
+      flLinearValue = std::clamp(flLinearValue, 0.0f, 1.0f);
 
       // Now apply a true sRGB curve to mimic PC hardware
       flSrgbGammaValue =
@@ -2598,26 +2422,26 @@ void CShaderDeviceDx8::SetHardwareGammaRamp(float fGamma,
                                              // ? ( flLinearValue * 12.92f ) :
                                              // ( 1.055f * powf( flLinearValue,
                                              // ( 1.0f / 2.4f ) ) ) - 0.055f;
-      flSrgbGammaValue = clamp(flSrgbGammaValue, 0.0f, 1.0f);
+      flSrgbGammaValue = std::clamp(flSrgbGammaValue, 0.0f, 1.0f);
     } else {
       flSrgbGammaValue = flInputValue;
     }
 
     // Apply the user controlled exponent curve
     float flCorrection = pow(flSrgbGammaValue, (fGamma / 2.2f));
-    flCorrection = clamp(flCorrection, 0.0f, 1.0f);
+    flCorrection = std::clamp(flCorrection, 0.0f, 1.0f);
 
     // TV adjustment - Apply an exp and a scale and bias
     if (bTVEnabled) {
       // Adjust for TV gamma of 2.5 by applying an exponent of 2.2 / 2.5 = 0.88
       flCorrection = pow(flCorrection, 2.2f / fGammaTVExponent);
-      flCorrection = clamp(flCorrection, 0.0f, 1.0f);
+      flCorrection = std::clamp(flCorrection, 0.0f, 1.0f);
 
       // Scale and bias to fit into the 16-235 range for TV's
       flCorrection =
           (flCorrection * (fGammaTVRangeMax - fGammaTVRangeMin) / 255.0f) +
           (fGammaTVRangeMin / 255.0f);
-      flCorrection = clamp(flCorrection, 0.0f, 1.0f);
+      flCorrection = std::clamp(flCorrection, 0.0f, 1.0f);
     }
 
     // Generate final int value

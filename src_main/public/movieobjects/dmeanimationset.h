@@ -199,7 +199,7 @@ inline void ValueBalanceToLeftRight( float *pLeft, float *pRight, float flValue,
 
 inline void LeftRightToValueBalance( float *pValue, float *pBalance, float flLeft, float flRight, float flDefaultBalance = 0.5f )
 {
-	*pValue = max( flRight, flLeft );
+	*pValue = std::max( flRight, flLeft );
 	if ( *pValue <= 1e-6 )
 	{
 		// Leave target balance at input value if target == 0 and on the dest side of blending

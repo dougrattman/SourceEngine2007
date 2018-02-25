@@ -71,9 +71,9 @@ typedef enum _fieldtypes {
   FIELD_TYPECOUNT,  // MUST BE LAST
 } fieldtype_t;
 
-//-----------------------------------------------------------------------------
+
 // Field sizes...
-//-----------------------------------------------------------------------------
+
 template <int FIELD_TYPE>
 class CDatamapFieldSizeDeducer {
  public:
@@ -393,10 +393,10 @@ struct typedescription_t {
   float fieldTolerance;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: stores the list of objects in the hierarchy
 // used to iterate through an object's data descriptions
-//-----------------------------------------------------------------------------
+
 struct datamap_t {
   typedescription_t *dataDesc;
   int dataNumFields;
@@ -413,7 +413,7 @@ struct datamap_t {
 #endif  // _DEBUG
 };
 
-//-----------------------------------------------------------------------------
+
 //
 // Macros used to implement datadescs
 //
@@ -522,7 +522,7 @@ struct datamap_t {
   }                                 \
   ;
 
-//-----------------------------------------------------------------------------
+
 // Forward compatability with potential seperate byteswap datadescs
 
 #define DECLARE_BYTESWAP_DATADESC() DECLARE_SIMPLE_DATADESC()
@@ -530,14 +530,14 @@ struct datamap_t {
 #define BEGIN_BYTESWAP_DATADESC_(name, base) BEGIN_SIMPLE_DATADESC_(name, base)
 #define END_BYTESWAP_DATADESC() END_DATADESC()
 
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 inline void DataMapAccess(T *ignored, datamap_t **p) {
   *p = &T::m_DataMap;
 }
 
-//-----------------------------------------------------------------------------
+
 
 class CDatadescGeneratedNameHolder {
  public:
@@ -566,7 +566,7 @@ class CDatadescGeneratedNameHolder {
   CUtlVector<char *> m_Names;
 };
 
-//-----------------------------------------------------------------------------
+
 
 #include "tier0/include/memdbgoff.h"
 

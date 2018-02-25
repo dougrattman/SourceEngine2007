@@ -316,7 +316,7 @@ void Draw_Eyes_Refract_Internal( CBaseVSShader *pShader, IMaterialVar** params, 
 #endif
 
 		// Get luminance of ambient cube and saturate it
-		float fAverageAmbient = max(0.0f, min( pShaderAPI->GetAmbientLightCubeLuminance(), 1.0f ) );
+		float fAverageAmbient = std::max(0.0f, std::min( pShaderAPI->GetAmbientLightCubeLuminance(), 1.0f ) );
 
 		// Special constant for DX9 eyes: { Dilation, Glossiness, x, x };
 		float vPSConst[4] = { 0.0f, 0.0f, 0.0f, 0.0f };

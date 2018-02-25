@@ -1125,7 +1125,7 @@ void ProcessConfiguration() {
 
     // We also establish mapping by either splitting the
     // combos into 500 intervals or stepping by every 1000 combos.
-    int iPartStep = (int)max(1000, (chi.m_numCombos / 500));
+    int iPartStep = (int)std::max(1000, (chi.m_numCombos / 500));
     for (uint64_t iRecord = nCurrentCommand + iPartStep;
          iRecord < nCurrentCommand + chi.m_numCombos; iRecord += iPartStep) {
       uint64_t iAdvance = iPartStep;

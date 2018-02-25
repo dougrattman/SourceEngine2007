@@ -48,7 +48,7 @@ class CKeyValuesErrorStack {
       m_errorStack[m_errorIndex] = symName;
     }
     m_errorIndex++;
-    m_maxErrorIndex = max(m_maxErrorIndex, (m_errorIndex - 1));
+    m_maxErrorIndex = std::max(m_maxErrorIndex, (m_errorIndex - 1));
     return m_errorIndex - 1;
   }
 
@@ -158,9 +158,9 @@ static CLeakTrack track;
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName) {
   TRACK_KV_ADD(this, setName);
 
@@ -168,9 +168,9 @@ KeyValues::KeyValues(const char *setName) {
   SetName(setName);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName, const char *firstKey,
                      const char *firstValue) {
   TRACK_KV_ADD(this, setName);
@@ -180,9 +180,9 @@ KeyValues::KeyValues(const char *setName, const char *firstKey,
   SetString(firstKey, firstValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName, const char *firstKey,
                      const wchar_t *firstValue) {
   TRACK_KV_ADD(this, setName);
@@ -192,9 +192,9 @@ KeyValues::KeyValues(const char *setName, const char *firstKey,
   SetWString(firstKey, firstValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName, const char *firstKey,
                      int firstValue) {
   TRACK_KV_ADD(this, setName);
@@ -204,9 +204,9 @@ KeyValues::KeyValues(const char *setName, const char *firstKey,
   SetInt(firstKey, firstValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName, const char *firstKey,
                      const char *firstValue, const char *secondKey,
                      const char *secondValue) {
@@ -218,9 +218,9 @@ KeyValues::KeyValues(const char *setName, const char *firstKey,
   SetString(secondKey, secondValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 KeyValues::KeyValues(const char *setName, const char *firstKey, int firstValue,
                      const char *secondKey, int secondValue) {
   TRACK_KV_ADD(this, setName);
@@ -231,9 +231,9 @@ KeyValues::KeyValues(const char *setName, const char *firstKey, int firstValue,
   SetInt(secondKey, secondValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Initialize member variables
-//-----------------------------------------------------------------------------
+
 void KeyValues::Init() {
   m_iKeyName = INVALID_KEY_SYMBOL;
   m_iDataType = TYPE_NONE;
@@ -252,18 +252,18 @@ void KeyValues::Init() {
   memset(unused, 0, sizeof(unused));
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Destructor
-//-----------------------------------------------------------------------------
+
 KeyValues::~KeyValues() {
   TRACK_KV_REMOVE(this);
 
   RemoveEverything();
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: remove everything
-//-----------------------------------------------------------------------------
+
 void KeyValues::RemoveEverything() {
   KeyValues *dat;
   KeyValues *datNext = NULL;
@@ -285,37 +285,37 @@ void KeyValues::RemoveEverything() {
   m_wsValue = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *f -
-//-----------------------------------------------------------------------------
+
 
 void KeyValues::RecursiveSaveToFile(CUtlBuffer &buf, int indentLevel) {
   RecursiveSaveToFile(NULL, FILESYSTEM_INVALID_HANDLE, &buf, indentLevel);
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds a chain... if we don't find stuff in this keyvalue, we'll look
 // in the one we're chained to.
-//-----------------------------------------------------------------------------
+
 
 void KeyValues::ChainKeyValue(KeyValues *pChain) { m_pChain = pChain; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the name of the current key section
-//-----------------------------------------------------------------------------
+
 const char *KeyValues::GetName(void) const {
   return KeyValuesSystem()->GetStringForSymbol(m_iKeyName);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the symbol name of the current key section
-//-----------------------------------------------------------------------------
+
 int KeyValues::GetNameSymbol() const { return m_iKeyName; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Read a single token from buffer (0 terminated)
-//-----------------------------------------------------------------------------
+
 const char *KeyValues::ReadToken(CUtlBuffer &buf, bool &wasQuoted,
                                  bool &wasConditional) {
   wasQuoted = false;
@@ -388,17 +388,17 @@ const char *KeyValues::ReadToken(CUtlBuffer &buf, bool &wasQuoted,
   return s_pTokenBuf;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: if parser should translate escape sequences ( /n, /t etc), set to
 // true
-//-----------------------------------------------------------------------------
+
 void KeyValues::UsesEscapeSequences(bool state) {
   m_bHasEscapeSequences = state;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Load keyValues from disk
-//-----------------------------------------------------------------------------
+
 bool KeyValues::LoadFromFile(IBaseFileSystem *filesystem,
                              const char *resourceName, const char *pathID) {
   Assert(filesystem);
@@ -434,10 +434,10 @@ bool KeyValues::LoadFromFile(IBaseFileSystem *filesystem,
   return bRetOK;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Save the keyvalues to disk
 //			Creates the path to the file if it doesn't exist
-//-----------------------------------------------------------------------------
+
 bool KeyValues::SaveToFile(IBaseFileSystem *filesystem,
                            const char *resourceName, const char *pathID) {
   // create a write file
@@ -456,9 +456,9 @@ bool KeyValues::SaveToFile(IBaseFileSystem *filesystem,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Write out a set of indenting
-//-----------------------------------------------------------------------------
+
 void KeyValues::WriteIndents(IBaseFileSystem *filesystem, FileHandle_t f,
                              CUtlBuffer *pBuf, int indentLevel) {
   for (int i = 0; i < indentLevel; i++) {
@@ -466,10 +466,10 @@ void KeyValues::WriteIndents(IBaseFileSystem *filesystem, FileHandle_t f,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Write out a string where we convert the double quotes to backslash
 // double quote
-//-----------------------------------------------------------------------------
+
 void KeyValues::WriteConvertedString(IBaseFileSystem *filesystem,
                                      FileHandle_t f, CUtlBuffer *pBuf,
                                      const char *pszString) {
@@ -504,10 +504,10 @@ void KeyValues::InternalWrite(IBaseFileSystem *filesystem, FileHandle_t f,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Save keyvalues from disk, if subkey values are detected, calls
 //			itself to save those
-//-----------------------------------------------------------------------------
+
 void KeyValues::RecursiveSaveToFile(IBaseFileSystem *filesystem, FileHandle_t f,
                                     CUtlBuffer *pBuf, int indentLevel) {
   // write header
@@ -624,9 +624,9 @@ void KeyValues::RecursiveSaveToFile(IBaseFileSystem *filesystem, FileHandle_t f,
   INTERNALWRITE("}\n", 2);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: looks up a key by symbol name
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::FindKey(int keySymbol) const {
   for (KeyValues *dat = m_pSub; dat != NULL; dat = dat->m_pPeer) {
     if (dat->m_iKeyName == keySymbol) return dat;
@@ -635,12 +635,12 @@ KeyValues *KeyValues::FindKey(int keySymbol) const {
   return NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Find a keyValue, create it if it is not found.
 //			Set bCreate to true to create the key if it doesn't
 // already  exist 			(which ensures a valid pointer will be
 // returned)
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::FindKey(const char *keyName, bool bCreate) {
   // return the current key if a NULL subkey is asked for
   if (!keyName || !keyName[0]) return this;
@@ -715,11 +715,11 @@ KeyValues *KeyValues::FindKey(const char *keyName, bool bCreate) {
   return dat;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Create a new key, with an autogenerated name.
 //			Name is guaranteed to be an integer, of value 1 higher
 // than  the highest 			other integer key name
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::CreateNewKey() {
   int newID = 1;
 
@@ -738,9 +738,9 @@ KeyValues *KeyValues::CreateNewKey() {
   return CreateKey(buf);
 }
 
-//-----------------------------------------------------------------------------
+
 // Create a key
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::CreateKey(const char *keyName) {
   // key wasn't found so just create a new one
   KeyValues *dat = new KeyValues(keyName);
@@ -754,9 +754,9 @@ KeyValues *KeyValues::CreateKey(const char *keyName) {
   return dat;
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds a subkey. Make sure the subkey isn't a child of some other keyvalues
-//-----------------------------------------------------------------------------
+
 void KeyValues::AddSubKey(KeyValues *pSubkey) {
   // Make sure the subkey isn't a child of some other keyvalues
   Assert(pSubkey->m_pPeer == NULL);
@@ -774,9 +774,9 @@ void KeyValues::AddSubKey(KeyValues *pSubkey) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Remove a subkey from the list
-//-----------------------------------------------------------------------------
+
 void KeyValues::RemoveSubKey(KeyValues *subKey) {
   if (!subKey) return;
 
@@ -799,19 +799,19 @@ void KeyValues::RemoveSubKey(KeyValues *subKey) {
   subKey->m_pPeer = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return the first subkey in the list
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::GetFirstSubKey() { return m_pSub; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return the next subkey
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::GetNextKey() { return m_pPeer; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Sets this key's peer to the KeyValues passed in
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetNextKey(KeyValues *pDat) { m_pPeer = pDat; }
 
 KeyValues *KeyValues::GetFirstTrueSubKey() {
@@ -842,10 +842,10 @@ KeyValues *KeyValues::GetNextValue() {
   return pRet;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the integer value of a keyName. Default value is returned
 //			if the keyName can't be found.
-//-----------------------------------------------------------------------------
+
 int KeyValues::GetInt(const char *keyName, int defaultValue) {
   KeyValues *dat = FindKey(keyName, false);
   if (dat) {
@@ -874,10 +874,10 @@ int KeyValues::GetInt(const char *keyName, int defaultValue) {
   return defaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the integer value of a keyName. Default value is returned
 //			if the keyName can't be found.
-//-----------------------------------------------------------------------------
+
 uint64_t KeyValues::GetUint64(const char *keyName, uint64_t defaultValue) {
   KeyValues *dat = FindKey(keyName, false);
   if (dat) {
@@ -904,10 +904,10 @@ uint64_t KeyValues::GetUint64(const char *keyName, uint64_t defaultValue) {
   return defaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the pointer value of a keyName. Default value is returned
 //			if the keyName can't be found.
-//-----------------------------------------------------------------------------
+
 void *KeyValues::GetPtr(const char *keyName, void *defaultValue) {
   KeyValues *dat = FindKey(keyName, false);
   if (dat) {
@@ -927,10 +927,10 @@ void *KeyValues::GetPtr(const char *keyName, void *defaultValue) {
   return defaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the float value of a keyName. Default value is returned
 //			if the keyName can't be found.
-//-----------------------------------------------------------------------------
+
 float KeyValues::GetFloat(const char *keyName, float defaultValue) {
   KeyValues *dat = FindKey(keyName, false);
   if (dat) {
@@ -958,10 +958,10 @@ float KeyValues::GetFloat(const char *keyName, float defaultValue) {
   return defaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the string pointer of a keyName. Default value is returned
 //			if the keyName can't be found.
-//-----------------------------------------------------------------------------
+
 const char *KeyValues::GetString(const char *keyName,
                                  const char *defaultValue) {
   KeyValues *dat = FindKey(keyName, false);
@@ -1056,9 +1056,9 @@ const wchar_t *KeyValues::GetWString(const char *keyName,
   return defaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Gets a color
-//-----------------------------------------------------------------------------
+
 Color KeyValues::GetColor(const char *keyName) {
   Color color(0, 0, 0, 0);
   KeyValues *dat = FindKey(keyName, false);
@@ -1085,9 +1085,9 @@ Color KeyValues::GetColor(const char *keyName) {
   return color;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Sets a color
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetColor(const char *keyName, Color value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1121,9 +1121,9 @@ void KeyValues::SetStringValue(char const *strValue) {
   m_iDataType = TYPE_STRING;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the string value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetString(const char *keyName, const char *value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1149,9 +1149,9 @@ void KeyValues::SetString(const char *keyName, const char *value) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the string value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetWString(const char *keyName, const wchar_t *value) {
   KeyValues *dat = FindKey(keyName, true);
   if (dat) {
@@ -1176,9 +1176,9 @@ void KeyValues::SetWString(const char *keyName, const wchar_t *value) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the integer value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetInt(const char *keyName, int value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1188,9 +1188,9 @@ void KeyValues::SetInt(const char *keyName, int value) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the integer value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetUint64(const char *keyName, uint64_t value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1208,9 +1208,9 @@ void KeyValues::SetUint64(const char *keyName, uint64_t value) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the float value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetFloat(const char *keyName, float value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1224,9 +1224,9 @@ void KeyValues::SetName(const char *setName) {
   m_iKeyName = KeyValuesSystem()->GetSymbolForString(setName);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the pointer value of a keyName.
-//-----------------------------------------------------------------------------
+
 void KeyValues::SetPtr(const char *keyName, void *value) {
   KeyValues *dat = FindKey(keyName, true);
 
@@ -1309,9 +1309,9 @@ KeyValues &KeyValues::operator=(KeyValues &src) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Make a new copy of all subkeys, add them all to the passed-in keyvalues
-//-----------------------------------------------------------------------------
+
 void KeyValues::CopySubkeys(KeyValues *pParent) const {
   // recursively copy subkeys
   // Also maintain ordering....
@@ -1331,9 +1331,9 @@ void KeyValues::CopySubkeys(KeyValues *pParent) const {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Makes a copy of the whole key-value pair set
-//-----------------------------------------------------------------------------
+
 KeyValues *KeyValues::MakeCopy(void) const {
   KeyValues *newKeyValue = new KeyValues(GetName());
 
@@ -1387,9 +1387,9 @@ KeyValues *KeyValues::MakeCopy(void) const {
   return newKeyValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Check if a keyName has no value assigned to it.
-//-----------------------------------------------------------------------------
+
 bool KeyValues::IsEmpty(const char *keyName) {
   KeyValues *dat = FindKey(keyName, false);
   if (!dat) return true;
@@ -1399,18 +1399,18 @@ bool KeyValues::IsEmpty(const char *keyName) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Clear out all subkeys, and the current value
-//-----------------------------------------------------------------------------
+
 void KeyValues::Clear() {
   delete m_pSub;
   m_pSub = NULL;
   m_iDataType = TYPE_NONE;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Get the data type of the value stored in a keyName
-//-----------------------------------------------------------------------------
+
 KeyValues::types_t KeyValues::GetDataType(const char *keyName) {
   KeyValues *dat = FindKey(keyName, false);
   if (dat) return (types_t)dat->m_iDataType;
@@ -1418,15 +1418,15 @@ KeyValues::types_t KeyValues::GetDataType(const char *keyName) {
   return TYPE_NONE;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Deletion, ensures object gets deleted from correct heap
-//-----------------------------------------------------------------------------
+
 void KeyValues::deleteThis() { delete this; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : includedKeys -
-//-----------------------------------------------------------------------------
+
 void KeyValues::AppendIncludedKeys(CUtlVector<KeyValues *> &includedKeys) {
   // Append any included keys, too...
   int includeCount = includedKeys.Count();
@@ -1501,10 +1501,10 @@ void KeyValues::ParseIncludedKeys(char const *resourceName,
   // s_CurrentFileSymbol = save;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : baseKeys -
-//-----------------------------------------------------------------------------
+
 void KeyValues::MergeBaseKeys(CUtlVector<KeyValues *> &baseKeys) {
   int includeCount = baseKeys.Count();
   int i;
@@ -1516,10 +1516,10 @@ void KeyValues::MergeBaseKeys(CUtlVector<KeyValues *> &baseKeys) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : baseKV - keyvalues we're basing ourselves on
-//-----------------------------------------------------------------------------
+
 void KeyValues::RecursiveMergeKeyValues(KeyValues *baseKV) {
   // Merge ourselves
   // we always want to keep our value, so nothing to do here
@@ -1550,17 +1550,17 @@ void KeyValues::RecursiveMergeKeyValues(KeyValues *baseKV) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns whether a keyvalues conditional evaluates to true or false
 // Needs more flexibility with conditionals, checking convars would be nice.
-//-----------------------------------------------------------------------------
+
 bool EvaluateConditional(const char *str) {
   return !Q_stricmp("[$WIN32]", str);
 }
 
-//-----------------------------------------------------------------------------
+
 // Read from a buffer...
-//-----------------------------------------------------------------------------
+
 bool KeyValues::LoadFromBuffer(char const *resourceName, CUtlBuffer &buf,
                                IBaseFileSystem *pFileSystem,
                                const char *pPathID) {
@@ -1670,9 +1670,9 @@ bool KeyValues::LoadFromBuffer(char const *resourceName, CUtlBuffer &buf,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Read from a buffer...
-//-----------------------------------------------------------------------------
+
 bool KeyValues::LoadFromBuffer(char const *resourceName, const char *pBuffer,
                                IBaseFileSystem *pFileSystem,
                                const char *pPathID) {
@@ -1684,9 +1684,9 @@ bool KeyValues::LoadFromBuffer(char const *resourceName, const char *pBuffer,
   return LoadFromBuffer(resourceName, buf, pFileSystem, pPathID);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void KeyValues::RecursiveLoadFromBuffer(char const *resourceName,
                                         CUtlBuffer &buf) {
   CKeyErrorContext errorReport(this);
@@ -1989,9 +1989,9 @@ bool KeyValues::ReadAsBinary(CUtlBuffer &buffer) {
 
 #include "tier0/include/memdbgoff.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose: memory allocator
-//-----------------------------------------------------------------------------
+
 void *KeyValues::operator new(size_t iAllocSize) {
   MEM_ALLOC_CREDIT();
   return KeyValuesSystem()->AllocKeyValuesMemory(iAllocSize);
@@ -2005,9 +2005,9 @@ void *KeyValues::operator new(size_t iAllocSize, int nBlockUse,
   return p;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: deallocator
-//-----------------------------------------------------------------------------
+
 void KeyValues::operator delete(void *pMem) {
   KeyValuesSystem()->FreeKeyValuesMemory(pMem);
 }
@@ -2098,12 +2098,12 @@ void KeyValues::UnpackIntoStructure(
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Helper function for processing a keyvalue tree for console resolution
 // support. Alters key/values for easier console video resolution support. If
 // running SD (640x480), the presence of "???_lodef" creates or slams "???". If
 // running HD (1280x720), the presence of "???_hidef" creates or slams "???".
-//-----------------------------------------------------------------------------
+
 bool KeyValues::ProcessResolutionKeys(const char *pResString) {
   if (!pResString) {
     // not for pc, console only

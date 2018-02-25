@@ -818,7 +818,7 @@ class CFileSystemOpenDialogWrapper : public IFileSystemOpenDialog {
         // Replace .jpg or .jpeg extension with .mdl?
         char *pEnd = m_RelativeFilename;
         while (Q_stristr(pEnd + 1, ".jpeg") || Q_stristr(pEnd + 1, ".jpg"))
-          pEnd = max(Q_stristr(pEnd, ".jpeg"), Q_stristr(pEnd, ".jpg"));
+          pEnd = std::max(Q_stristr(pEnd, ".jpeg"), Q_stristr(pEnd, ".jpg"));
 
         if (pEnd && pEnd != m_RelativeFilename)
           Q_strncpy(pEnd, ".mdl",

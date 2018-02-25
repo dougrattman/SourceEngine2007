@@ -114,12 +114,12 @@ inline CTimingInfo<T> SumOverTimeInterval_Struct(const T &value, float nSeconds,
     const T &value{pInfo->m_Values[i]};
 
     if (i != newValueIndex) {
-      info.m_HighAverage = max(value.m_Average, info.m_HighAverage);
-      info.m_LowAverage = min(value.m_Average, info.m_LowAverage);
+      info.m_HighAverage = std::max(value.m_Average, info.m_HighAverage);
+      info.m_LowAverage = std::min(value.m_Average, info.m_LowAverage);
     }
 
-    info.m_HighValue = max(value.m_Value, info.m_HighValue);
-    info.m_LowValue = min(value.m_Value, info.m_LowValue);
+    info.m_HighValue = std::max(value.m_Value, info.m_HighValue);
+    info.m_LowValue = std::min(value.m_Value, info.m_LowValue);
 
     info.m_AverageValue += value.m_Value;
   }

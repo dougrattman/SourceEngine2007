@@ -219,9 +219,9 @@ static BOOL CALLBACK EdgePropertiesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM w
 			{
 				char sz[ 64 ];
 				GetDlgItemText( hwndDlg, IDC_LEFT_ZEROVALUE, sz, sizeof( sz ) );
-				g_Params.m_flValue[ 0 ] = clamp( Q_atof( sz ), 0.0f, 1.0f );
+				g_Params.m_flValue[ 0 ] = std::clamp( Q_atof( sz ), 0.0f, 1.0f );
 				GetDlgItemText( hwndDlg, IDC_RIGHT_ZEROVALUE, sz, sizeof( sz ) );
-				g_Params.m_flValue[ 1 ] =  clamp( Q_atof( sz ), 0.0f, 1.0f );
+				g_Params.m_flValue[ 1 ] =  std::clamp( Q_atof( sz ), 0.0f, 1.0f );
 
 				g_Params.m_bActive[ 0 ] = SendMessage( GetDlgItem( hwndDlg, IDC_LEFT_ACTIVE ), BM_GETCHECK, 0, 0 ) == BST_CHECKED ? true : false;
 				g_Params.m_bActive[ 1 ] = SendMessage( GetDlgItem( hwndDlg, IDC_RIGHT_ACTIVE ), BM_GETCHECK, 0, 0 ) == BST_CHECKED ? true : false;

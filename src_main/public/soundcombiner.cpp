@@ -567,8 +567,8 @@ bool CSoundCombiner::AppendSilence(int &currentsample, float duration) {
 
   while (--numSamples >= 0) {
     currentValue += random->RandomInt(-MOTION_MAXSTEP, MOTION_MAXSTEP);
-    currentValue = min(maxValue, currentValue);
-    currentValue = max(minValue, currentValue);
+    currentValue = std::min(maxValue, currentValue);
+    currentValue = std::max(minValue, currentValue);
 
     // Downsample to 0 65556 range
     short s = (float)currentValue / 32768.0f;
@@ -592,7 +592,7 @@ bool CSoundCombiner::AppendStereo16Data(short samples[2]) {
       float s2 = (float)(samples[1] >> 8);
 
       float avg = (s1 + s2) * 0.5f;
-      avg = clamp(avg, -127.0f, 127.0f);
+      avg = std::clamp(avg, -127.0f, 127.0f);
       byte chopped = (byte)(avg + 127);
 
       m_pOutIterator->ChunkWriteData(&chopped, sizeof(byte));
@@ -616,8 +616,8 @@ bool CSoundCombiner::AppendStereo16Data(short samples[2]) {
       float s1 = (float)(samples[0] >> 8);
       float s2 = (float)(samples[1] >> 8);
 
-      s1 = clamp(s1, -127.0f, 127.0f);
-      s2 = clamp(s2, -127.0f, 127.0f);
+      s1 = std::clamp(s1, -127.0f, 127.0f);
+      s2 = std::clamp(s2, -127.0f, 127.0f);
 
       byte chopped1 = (byte)(s1 + 127.0f);
       byte chopped2 = (byte)(s2 + 127.0f);

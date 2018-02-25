@@ -590,8 +590,8 @@ bool CExpressionCalculator::Parse1ArgFunc( const char *&expr )
 }
 
 /*
-min(a,b)     : if a<b returns a else b
-max(a,b)     : if a>b returns a else b
+std::min(a,b)     : if a<b returns a else b
+std::max(a,b)     : if a>b returns a else b
 atan2(a,b) : atan2(a/b) returns degrees
 pow(a,b) : function returns a raised to the power of b
 */
@@ -616,10 +616,10 @@ bool CExpressionCalculator::Parse2ArgFunc( const char *&expr )
 		switch ( nFunc )
 		{
 		case 0: // min
-			m_stack.Push( min( f1, f2 ) );
+			m_stack.Push( std::min( f1, f2 ) );
 			break;
 		case 1: // max
-			m_stack.Push( max( f1, f2 ) );
+			m_stack.Push( std::max( f1, f2 ) );
 			break;
 		case 2: // atan2
 			m_stack.Push( atan2( f1, f2 ) );
@@ -635,13 +635,13 @@ bool CExpressionCalculator::Parse2ArgFunc( const char *&expr )
 
 /*
 inrange(x,a,b) : if x is between a and b, returns 1 else returns 0
-clamp(x,a,b)   : see bound() above
+std::clamp(x,a,b)   : see bound() above
 
 ramp(value,a,b)        : returns 0 -> 1 as value goes from a to b
 lerp(factor,a,b)       : returns a -> b as value goes from 0 to 1
 
-cramp(value,a,b)        : clamp(ramp(value,a,b),0,1)
-clerp(factor,a,b)       : clamp(lerp(factor,a,b),a,b)
+cramp(value,a,b)        : std::clamp(ramp(value,a,b),0,1)
+clerp(factor,a,b)       : std::clamp(lerp(factor,a,b),a,b)
 
 elerp(x,a,b)         : ramp( 3*x*x - 2*x*x*x, a, b)
 //elerp(factor,a,b)    : lerp(lerp(sind(clerp(factor,-90,90)),0.5,1.0),a,b)
@@ -692,7 +692,7 @@ bool CExpressionCalculator::Parse3ArgFunc( const char *&expr )
 			m_stack.Push( ( f1 >= f2 ) && ( f1 <= f3 ) ? 1.0f : 0.0f );
 			break;
 		case 1: // clamp
-			m_stack.Push( clamp( f1, f2, f3 ) );
+			m_stack.Push( std::clamp( f1, f2, f3 ) );
 			break;
 		case 2: // ramp
 			m_stack.Push( ramp( f1, f2, f3 ) );
@@ -701,10 +701,10 @@ bool CExpressionCalculator::Parse3ArgFunc( const char *&expr )
 			m_stack.Push( lerp( f1, f2, f3 ) );
 			break;
 		case 4: // cramp
-			m_stack.Push( clamp( ramp( f1, f2, f3 ), 0, 1 ) );
+			m_stack.Push( std::clamp( ramp( f1, f2, f3 ), 0, 1 ) );
 			break;
 		case 5: // clerp
-			m_stack.Push( clamp( lerp( f1, f2, f3 ), f2, f3 ) );
+			m_stack.Push( std::clamp( lerp( f1, f2, f3 ), f2, f3 ) );
 			break;
 		case 6: // elerp
 			m_stack.Push( lerp( smoothstep( f1 ), f2, f3 ) );
@@ -722,7 +722,7 @@ bool CExpressionCalculator::Parse3ArgFunc( const char *&expr )
 
 /*
 rescale (X,Xa,Xb,Ya,Yb) : lerp(ramp(X,Xa,Xb),Ya,Yb)
-crescale(X,Xa,Xb,Ya,Yb) : clamp(rescale(X,Xa,Xb,Ya,Yb),Ya,Yb)
+crescale(X,Xa,Xb,Ya,Yb) : std::clamp(rescale(X,Xa,Xb,Ya,Yb),Ya,Yb)
 */
 float rescale( float x, float a, float b, float c, float d )
 {
@@ -765,7 +765,7 @@ bool CExpressionCalculator::Parse5ArgFunc( const char *&expr )
 			m_stack.Push( rescale( f1, f2, f3, f4, f5 ) );
 			break;
 		case 1: // crescale
-			m_stack.Push( clamp( rescale( f1, f2, f3, f4, f5 ), f4, f5 ) );
+			m_stack.Push( std::clamp( rescale( f1, f2, f3, f4, f5 ), f4, f5 ) );
 			break;
 		}
 		return true;
@@ -827,7 +827,7 @@ void TestCalculator()
 	TestCalculator( "sqrt(9)", 3 );
 //	TestCalculator( "sqrt(-9)", -3 );
 	TestCalculator( "pow(2,3)", 8 );
-	TestCalculator( "min(abs(-4),2+3/2)", 3.5 );
+	TestCalculator( "std::min(abs(-4),2+3/2)", 3.5 );
 	TestCalculator( "round(0.5)", 1 );
 	TestCalculator( "round(0.49)", 0 );
 	TestCalculator( "round(-0.5)", 0 );

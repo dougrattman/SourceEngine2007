@@ -13,16 +13,16 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // The PSD signature bytes
-//-----------------------------------------------------------------------------
+
 #define PSD_SIGNATURE 0x38425053
 #define PSD_IMGRES_SIGNATURE 0x3842494D
 
-//-----------------------------------------------------------------------------
+
 // Format of the PSD header on disk
 // NOTE: PSD file header, everything is bigendian
-//-----------------------------------------------------------------------------
+
 #pragma pack(1)
 
 enum PSDMode_t {
@@ -72,9 +72,9 @@ struct PSDPalette_t {
   unsigned char *m_pBlue;
 };
 
-//-----------------------------------------------------------------------------
+
 // NOTE: This is how we could load files using file mapping
-//-----------------------------------------------------------------------------
+
 // HANDLE File =
 // CreateFile(FileName,GENERIC_READ,0,0,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0);
 // Assert(File != INVALID_HANDLE_VALUE);
@@ -82,9 +82,9 @@ struct PSDPalette_t {
 // Assert(FileMap != INVALID_HANDLE_VALUE);
 // void *FileData = MapViewOfFile(FileMap,FILE_MAP_READ,0,0,0);
 
-//-----------------------------------------------------------------------------
+
 // Is it a PSD file?
-//-----------------------------------------------------------------------------
+
 bool IsPSDFile(CUtlBuffer &buf) {
   int nGet = buf.TellGet();
   PSDHeader_t header;
@@ -106,9 +106,9 @@ bool IsPSDFile(const char *pFileName, const char *pPathID) {
   return IsPSDFile(buf);
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns information about the PSD file
-//-----------------------------------------------------------------------------
+
 bool PSDGetInfo(CUtlBuffer &buf, int *pWidth, int *pHeight,
                 ImageFormat *pImageFormat, float *pSourceGamma) {
   int nGet = buf.TellGet();
@@ -140,9 +140,9 @@ bool PSDGetInfo(const char *pFileName, const char *pPathID, int *pWidth,
   return PSDGetInfo(buf, pWidth, pHeight, pImageFormat, pSourceGamma);
 }
 
-//-----------------------------------------------------------------------------
+
 // Get PSD file image resources
-//-----------------------------------------------------------------------------
+
 PSDImageResources PSDGetImageResources(CUtlBuffer &buf) {
   int nGet = buf.TellGet();
 
@@ -165,9 +165,9 @@ PSDImageResources PSDGetImageResources(CUtlBuffer &buf) {
   return imgres;
 }
 
-//-----------------------------------------------------------------------------
+
 // Converts from CMYK to RGB
-//-----------------------------------------------------------------------------
+
 static inline void CMYKToRGB(RGBA8888_t &color) {
   unsigned char nCyan = 255 - color.r;
   unsigned char nMagenta = 255 - color.g;
@@ -183,9 +183,9 @@ static inline void CMYKToRGB(RGBA8888_t &color) {
   color.a = 255;
 }
 
-//-----------------------------------------------------------------------------
+
 // Deals with uncompressed channels
-//-----------------------------------------------------------------------------
+
 static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
                                  PSDPalette_t &palette, Bitmap_t &bitmap) {
   bool bShouldFillInAlpha = false;
@@ -242,9 +242,9 @@ static void PSDConvertToRGBA8888(int nChannelsCount, PSDMode_t mode,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Deals with uncompressed channels
-//-----------------------------------------------------------------------------
+
 static int s_pChannelIndex[MODE_COUNT + 1][4] = {
     {-1, -1, -1, -1}, {0, 3, -1, -1},                      // MODE_GREYSCALE
     {0, 3, -1, -1},                                        // MODE_PALETTIZED
@@ -277,9 +277,9 @@ static void PSDReadUncompressedChannels(CUtlBuffer &buf, int nChannelsCount,
   PSDConvertToRGBA8888(nChannelsCount, mode, palette, bitmap);
 }
 
-//-----------------------------------------------------------------------------
+
 // Deals with compressed channels
-//-----------------------------------------------------------------------------
+
 static void PSDReadCompressedChannels(CUtlBuffer &buf, int nChannelsCount,
                                       PSDMode_t mode, PSDPalette_t &palette,
                                       Bitmap_t &bitmap) {
@@ -323,9 +323,9 @@ static void PSDReadCompressedChannels(CUtlBuffer &buf, int nChannelsCount,
   PSDConvertToRGBA8888(nChannelsCount, mode, palette, bitmap);
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads the PSD file into the specified buffer
-//-----------------------------------------------------------------------------
+
 bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   PSDHeader_t header;
   buf.Get(&header, sizeof(header));
@@ -409,9 +409,9 @@ bool PSDReadFileRGBA8888(CUtlBuffer &buf, Bitmap_t &bitmap) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Loads the heightfield from a file
-//-----------------------------------------------------------------------------
+
 bool PSDReadFileRGBA8888(const char *pFileName, const char *pPathID,
                          Bitmap_t &bitmap) {
   CUtlStreamBuffer buf(pFileName, pPathID, CUtlBuffer::READ_ONLY);

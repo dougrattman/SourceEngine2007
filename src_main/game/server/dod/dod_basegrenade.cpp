@@ -183,7 +183,7 @@ void CDODBaseGrenade::ResolveFlyCollisionCustom( trace_t &trace, Vector &vecVelo
 	}
 	
 	float flTotalElasticity = GetElasticity() * flSurfaceElasticity;
-	flTotalElasticity = clamp( flTotalElasticity, 0.0f, 0.9f );
+	flTotalElasticity = std::clamp( flTotalElasticity, 0.0f, 0.9f );
 
 	// NOTE: A backoff of 2.0f is a reflection
 	Vector vecAbsVelocity;

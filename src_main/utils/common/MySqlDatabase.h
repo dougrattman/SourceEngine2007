@@ -3,7 +3,7 @@
 #ifndef MYSQLDATABASE_H
 #define MYSQLDATABASE_H
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "ISQLDBReplyTarget.h"
 #include "UtlLinkedList.h"
 #include "UtlVector.h"

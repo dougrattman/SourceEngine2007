@@ -101,7 +101,7 @@ bool CToolSphere::OnMouseMove2D(CMapView2D *pView, UINT nFlags, const Vector2D &
 	//
 	float flHorzRadius = fabs((float)vecWorld[pView->axHorz] - m_pSphere->m_Origin[pView->axHorz]);
 	float flVertRadius = fabs((float)vecWorld[pView->axVert] - m_pSphere->m_Origin[pView->axVert]);
-	float flRadius = max(flHorzRadius, flVertRadius);
+	float flRadius = std::max(flHorzRadius, flVertRadius);
 	
 	m_pSphere->SetRadius(flRadius);
 

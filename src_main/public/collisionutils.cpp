@@ -117,7 +117,7 @@ float IntersectRayWithTriangle(const Ray_t &ray, const Vector &v1,
   float t = DotProduct(orgCrossEdge1, edge2) * denom;
   if ((t < -boxt) || (t > 1.0f + boxt)) return -1.0f;
 
-  return clamp(t, 0, 1);
+  return std::clamp(t, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------

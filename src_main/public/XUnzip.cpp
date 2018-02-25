@@ -94,7 +94,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Windows.h>
+#include "base/include/windows/windows_light.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>

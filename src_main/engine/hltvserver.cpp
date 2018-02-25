@@ -113,7 +113,7 @@ void CDeltaEntityCache::SetTick(int nTick, int nMaxEntities) {
 
   if (m_nCacheSize <= 0) return;
 
-  m_nMaxEntities = min(nMaxEntities, MAX_EDICTS);
+  m_nMaxEntities = std::min(nMaxEntities, MAX_EDICTS);
   m_nTick = nTick;
 }
 
@@ -433,7 +433,7 @@ CHLTVServer::~CHLTVServer() {
 
 void CHLTVServer::SetMaxClients(int number) {
   // allow max clients 0 in HLTV
-  m_nMaxclients = clamp(number, 0, ABSOLUTE_PLAYER_LIMIT);
+  m_nMaxclients = std::clamp(number, 0, ABSOLUTE_PLAYER_LIMIT);
 }
 
 void CHLTVServer::StartMaster(CGameClient *client) {
@@ -530,7 +530,7 @@ void CHLTVServer::StartMaster(CGameClient *client) {
 
   if (m_bMasterOnlyMode) {
     // we allow only one client in master only mode
-    tv_maxclients.SetValue(min(1, tv_maxclients.GetInt()));
+    tv_maxclients.SetValue(std::min(1, tv_maxclients.GetInt()));
   }
 
   SetMaxClients(tv_maxclients.GetInt());
@@ -603,7 +603,7 @@ bool CHLTVServer::DispatchToRelay(CHLTVClient *pClient) {
     // ratio = clients/slots. give relay proxies 25% bonus
     float myRatio = ((float)GetNumClients() / (float)GetMaxClients()) * 1.25f;
 
-    myRatio = min(myRatio, 1.0f);  // clamp to 1
+    myRatio = std::min(myRatio, 1.0f);  // clamp to 1
 
     // if we have a better local ratio then other proxies, keep this client here
     if (myRatio < fBestRatio) return false;  // don't redirect
@@ -681,7 +681,7 @@ void CHLTVServer::StartRelay() {
 int CHLTVServer::GetHLTVSlot(void) { return m_nPlayerSlot; }
 
 float CHLTVServer::GetOnlineTime(void) {
-  return max(0, net_time - m_flStartTime);
+  return std::max(0.0, net_time - m_flStartTime);
 }
 
 void CHLTVServer::GetLocalStats(int &proxies, int &slots, int &clients) {
@@ -1014,7 +1014,7 @@ Vector CHLTVServer::GetOriginFromPackedEntity(PackedEntity* pe)
                 if ( Q_strcmp( pProp->GetName(), "m_vecOrigin" ) == 0 )
                 {
                         Assert( pProp->GetType() == DPT_Vector );
-                
+                
 
 
 
@@ -1383,7 +1383,7 @@ void CHLTVServer::UpdateTick(void) {
 
   if (IsMasterProxy()) {
     // get tick from director, he decides delay etc
-    nNewTick = max(m_nFirstTick, m_Director->GetDirectorTick());
+    nNewTick = std::max(m_nFirstTick, m_Director->GetDirectorTick());
   }
 
   // the the closest available frame

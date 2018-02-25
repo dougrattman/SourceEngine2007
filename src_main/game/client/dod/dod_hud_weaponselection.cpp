@@ -219,7 +219,7 @@ void CHudWeaponSelection::LevelInit()
 {
 	CHudElement::LevelInit();
 	
-	m_iMaxSlots = clamp( m_iMaxSlots, 0, MAX_WEAPON_SLOTS );
+	m_iMaxSlots = std::clamp( m_iMaxSlots, 0, MAX_WEAPON_SLOTS );
 }
 
 //-------------------------------------------------------------------------

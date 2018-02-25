@@ -627,7 +627,7 @@ void CTFTeam::RecomputePurchases( void )
 					continue;
 
 				// Try to spend resources on the tech
-				int iResourcesSpent = min( pPlayer->GetBankResources(), pPreferredTech->GetResourceCost() - pPreferredTech->GetResourceLevel() );
+				int iResourcesSpent = std::min( pPlayer->GetBankResources(), pPreferredTech->GetResourceCost() - pPreferredTech->GetResourceLevel() );
 				if ( pPreferredTech->IncreaseResourceLevel( iResourcesSpent ) )
 				{
 					// The technology's had enough resources spent to buy it, so enable it
@@ -774,7 +774,7 @@ float CTFTeam::GetTeamResources( void )
 //-----------------------------------------------------------------------------
 int CTFTeam::AddTeamResources( float fAmount, int nStat )
 {
-	fAmount = clamp(fAmount, 0, 9999.f);
+	fAmount = std::clamp(fAmount, 0, 9999.f);
 
 	m_flTotalResourcesSoFar += fAmount;
 

@@ -440,10 +440,10 @@ bool CBaseActionScreenFadeStartDialog::OnSaveChanges(void) {
   int rr, gg, bb, aa;
   m_pColor->GetText(sz, sizeof(sz));
   if (4 == sscanf(sz, "%i %i %i %i", &rr, &gg, &bb, &aa)) {
-    rr = clamp(rr, 0, 255);
-    gg = clamp(gg, 0, 255);
-    bb = clamp(bb, 0, 255);
-    aa = clamp(aa, 0, 255);
+    rr = std::clamp(rr, 0, 255);
+    gg = std::clamp(gg, 0, 255);
+    bb = std::clamp(bb, 0, 255);
+    aa = std::clamp(aa, 0, 255);
 
     if (rr != r || gg != g || bb != b || aa != a) {
       bret = true;

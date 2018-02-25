@@ -386,7 +386,7 @@ void CPortalGameMovement::PlayerRoughLandingEffects( float fvol )
 		{
 			EmitSound_t ep( params );
 			ep.m_nPitch = 125.0f - player->m_Local.m_flFallVelocity * 0.03f;					// lower pitch the harder they land
-			ep.m_flVolume = min( player->m_Local.m_flFallVelocity * 0.00075f - 0.38, 1.0f );	// louder the harder they land
+			ep.m_flVolume = std::min( player->m_Local.m_flFallVelocity * 0.00075f - 0.38, 1.0f );	// louder the harder they land
 
 			CBaseEntity::EmitSound( filter, player->entindex(), ep );
 		}
@@ -417,7 +417,7 @@ void TracePlayerBBoxForGround2( const Vector& start, const Vector& end, const Ve
 
 	// Check the -x, -y quadrant
 	mins = minsSrc;
-	maxs.Init( min( 0, maxsSrc.x ), min( 0, maxsSrc.y ), maxsSrc.z );
+	maxs.Init( std::min( 0, maxsSrc.x ), std::min( 0, maxsSrc.y ), maxsSrc.z );
 	ray.Init( start, end, mins, maxs );
 
 	if( pPlayerPortal )
@@ -433,7 +433,7 @@ void TracePlayerBBoxForGround2( const Vector& start, const Vector& end, const Ve
 	}
 
 	// Check the +x, +y quadrant
-	mins.Init( max( 0, minsSrc.x ), max( 0, minsSrc.y ), minsSrc.z );
+	mins.Init( std::max( 0, minsSrc.x ), std::max( 0, minsSrc.y ), minsSrc.z );
 	maxs = maxsSrc;
 	ray.Init( start, end, mins, maxs );
 
@@ -450,8 +450,8 @@ void TracePlayerBBoxForGround2( const Vector& start, const Vector& end, const Ve
 	}
 
 	// Check the -x, +y quadrant
-	mins.Init( minsSrc.x, max( 0, minsSrc.y ), minsSrc.z );
-	maxs.Init( min( 0, maxsSrc.x ), maxsSrc.y, maxsSrc.z );
+	mins.Init( minsSrc.x, std::max( 0, minsSrc.y ), minsSrc.z );
+	maxs.Init( std::min( 0, maxsSrc.x ), maxsSrc.y, maxsSrc.z );
 	ray.Init( start, end, mins, maxs );
 
 	if( pPlayerPortal )
@@ -467,8 +467,8 @@ void TracePlayerBBoxForGround2( const Vector& start, const Vector& end, const Ve
 	}
 
 	// Check the +x, -y quadrant
-	mins.Init( max( 0, minsSrc.x ), minsSrc.y, minsSrc.z );
-	maxs.Init( maxsSrc.x, min( 0, maxsSrc.y ), maxsSrc.z );
+	mins.Init( std::max( 0, minsSrc.x ), minsSrc.y, minsSrc.z );
+	maxs.Init( maxsSrc.x, std::min( 0, maxsSrc.y ), maxsSrc.z );
 	ray.Init( start, end, mins, maxs );
 
 	if( pPlayerPortal )

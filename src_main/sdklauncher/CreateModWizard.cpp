@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "CreateModWizard.h"
 #include "sdklauncher_main.h"
 #include "filesystem_tools.h"

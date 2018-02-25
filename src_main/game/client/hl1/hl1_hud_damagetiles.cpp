@@ -238,7 +238,7 @@ void CHudDamageTiles::Paint( void )
 
 		if ( m_bitsDamage & pDmgTile->fFlags )
 		{
-			pDmgTile->flExpire = min( gpGlobals->curtime + DMG_IMAGE_LIFE, pDmgTile->flExpire );
+			pDmgTile->flExpire = std::min( gpGlobals->curtime + DMG_IMAGE_LIFE, pDmgTile->flExpire );
 
 			if ( pDmgTile->flExpire <= gpGlobals->curtime		// when the time has expired
 				&& a < 40 )										// and the flash is at the low point of the cycle

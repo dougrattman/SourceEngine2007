@@ -1208,8 +1208,8 @@ CBaseEntity *CreateServerRagdoll(CBaseAnimating *pAnimating, int forceBone,
     dt = fSequenceTime;
   }
 
-  float fPreviousCycle =
-      clamp(pAnimating->GetCycle() - (dt * (1 / fSequenceDuration)), 0.f, 1.f);
+  float fPreviousCycle = std::clamp(
+      pAnimating->GetCycle() - (dt * (1 / fSequenceDuration)), 0.f, 1.f);
   float fCurCycle = pAnimating->GetCycle();
   // Get current bones positions
   pAnimating->SetupBones(pBoneToWorldNext, BONE_USED_BY_ANYTHING);
@@ -1273,7 +1273,7 @@ CBaseEntity *CreateServerRagdoll(CBaseAnimating *pAnimating, int forceBone,
 
     // distribute force over mass of entire character
     float massScale = Studio_GetMass(pAnimating->GetModelPtr());
-    massScale = clamp(massScale, 1, 1e4);
+    massScale = std::clamp(massScale, 1.0f, 1e4f);
     massScale = 1 / massScale;
 
     // distribute the force

@@ -1950,7 +1950,7 @@ void CDODPlayer::CheckChatText( char *p, int bufsize )
 				buf[pos] = '\0';
 				Q_strncat( buf, szSubst, bufsize, COPY_ALL_CHARACTERS );
 
-				pos = min( pos + Q_strlen(szSubst), bufsize-1 );
+				pos = std::min( pos + Q_strlen(szSubst), bufsize-1 );
 
 				pSrc++;
 			}
@@ -2890,7 +2890,7 @@ void CDODPlayer::SetScore( int score )
 
 void CDODPlayer::AddScore( int num )
 {
-	int n = max( 0, num );
+	int n = std::max( 0, num );
 	m_iScore += n;
 }
 
@@ -2944,7 +2944,7 @@ int CDODPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	if ( event )
 	{
 		event->SetInt("userid", GetUserID() );
-		event->SetInt("health", max(0, m_iHealth) );
+		event->SetInt("health", std::max(0, m_iHealth) );
 		event->SetInt("damage", info.GetDamage() );
 		event->SetInt("hitgroup", m_LastHitGroup );
 
@@ -3041,7 +3041,7 @@ int CDODPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 			stats_event->SetInt( "damage", iDamage );
 
 			// damage_given is the amount of damage applied, not to exceed how much life we have
-			stats_event->SetInt( "damage_given", min( iDamage, iInitialHealth ) );
+			stats_event->SetInt( "damage_given", std::min( iDamage, iInitialHealth ) );
 
 			CBaseEntity *pInflictor = info.GetInflictor();
 			float flDist = ( pInflictor->GetAbsOrigin() - GetAbsOrigin() ).Length();

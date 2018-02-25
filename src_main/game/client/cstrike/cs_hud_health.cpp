@@ -133,7 +133,7 @@ void CHudHealth::OnThink()
 	if ( local )
 	{
 		// Never below zero
-		realHealth = max( local->GetHealth(), 0 );
+		realHealth = std::max( local->GetHealth(), 0 );
 	}
 
 	// Only update the fade if we've changed health

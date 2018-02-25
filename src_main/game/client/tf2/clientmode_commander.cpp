@@ -639,7 +639,7 @@ bool CClientModeCommander::ShouldDrawParticles( )
 	GetCommanderViewport()->GetCommanderOverlayPanel()->GetOrthoRenderBox(vCenter, xSize, ySize);
 
 	// Activate/deactivate particles rendering based on zoom level
-	float maxSize = max( xSize, ySize );
+	float maxSize = std::max( xSize, ySize );
 	return (maxSize < VISIBLE_STATIC_PROP_HEIGHT);
 }
 
@@ -673,7 +673,7 @@ void CClientModeCommander::PreRender( CViewSetup *pSetup )
 	// Activate/deactivate static prop + particles rendering based on zoom level
 	Vector2D size;
 	Vector2DSubtract( maxs, mins, size );
-	float maxSize = max( size.x, size.y );
+	float maxSize = std::max( size.x, size.y );
 	bool showStaticProps = (maxSize < VISIBLE_STATIC_PROP_HEIGHT);
 	ClientLeafSystem()->DrawStaticProps(showStaticProps);
 	ClientLeafSystem()->DrawSmallEntities(showStaticProps);

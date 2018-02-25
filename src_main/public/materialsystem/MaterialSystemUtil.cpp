@@ -10,13 +10,13 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Little utility class to deal with material references
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+// Little utility class to deal with material references
+
+
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 CMaterialReference::CMaterialReference(char const *pMaterialName,
                                        const char *pTextureGroupName,
                                        bool bComplain)
@@ -29,9 +29,9 @@ CMaterialReference::CMaterialReference(char const *pMaterialName,
 
 CMaterialReference::~CMaterialReference() { Shutdown(); }
 
-//-----------------------------------------------------------------------------
+
 // Attach to a material
-//-----------------------------------------------------------------------------
+
 void CMaterialReference::Init(char const *pMaterialName,
                               const char *pTextureGroupName, bool bComplain) {
   IMaterial *pMaterial =
@@ -76,9 +76,9 @@ void CMaterialReference::Init(CMaterialReference &ref) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Detach from a material
-//-----------------------------------------------------------------------------
+
 void CMaterialReference::Shutdown() {
   if (m_pMaterial && materials) {
     m_pMaterial->DecrementReferenceCount();
@@ -86,13 +86,13 @@ void CMaterialReference::Shutdown() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Little utility class to deal with texture references
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+// Little utility class to deal with texture references
+
+
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 CTextureReference::CTextureReference() : m_pTexture(NULL) {}
 
 CTextureReference::CTextureReference(const CTextureReference &ref) {
@@ -113,9 +113,9 @@ CTextureReference::~CTextureReference() {
   // Shutdown();
 }
 
-//-----------------------------------------------------------------------------
+
 // Attach to a texture
-//-----------------------------------------------------------------------------
+
 void CTextureReference::Init(char const *pTextureName,
                              const char *pTextureGroupName, bool bComplain) {
   Shutdown();
@@ -174,9 +174,9 @@ void CTextureReference::InitRenderTarget(int w, int h,
   Assert(m_pTexture);
 }
 
-//-----------------------------------------------------------------------------
+
 // Detach from a texture
-//-----------------------------------------------------------------------------
+
 void CTextureReference::Shutdown(bool bDeleteIfUnReferenced) {
   if (m_pTexture && materials) {
     m_pTexture->DecrementReferenceCount();
@@ -187,10 +187,10 @@ void CTextureReference::Shutdown(bool bDeleteIfUnReferenced) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Builds ONLY the system ram render target. Used when caller is explicitly
 // managing. The paired EDRAM surface can be built in an alternate format.
-//-----------------------------------------------------------------------------
+
 #if defined(_X360)
 void CTextureReference::InitRenderTargetTexture(
     int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat fmt,
@@ -208,11 +208,11 @@ void CTextureReference::InitRenderTargetTexture(
 }
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Builds ONLY the EDRAM render target surface. Used when caller is explicitly
 // managing. The paired system memory texture can be built in an alternate
 // format.
-//-----------------------------------------------------------------------------
+
 #if defined(_X360)
 void CTextureReference::InitRenderTargetSurface(int width, int height,
                                                 ImageFormat fmt,

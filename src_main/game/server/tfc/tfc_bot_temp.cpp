@@ -111,7 +111,7 @@ CON_COMMAND_F( "bot", "Add a bot.", FCVAR_CHEAT )
 
 	// Look at -count.
 	int count = args.FindArgInt( "-count", 1 );
-	count = clamp( count, 1, 16 );
+	count = std::clamp( count, 1, 16 );
 
 	int iTeam = 0;
 	const char *pVal = args.FindArg( "-team" );

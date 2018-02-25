@@ -111,10 +111,10 @@ class CMemoryPoolMT : public CMemoryPool {
   CThreadFastMutex m_mutex;  // @TODO: Rework to use tslist (toml 7/6/2007)
 };
 
-//-----------------------------------------------------------------------------
+
 // Wrapper macro to make an allocator that returns particular typed allocations
 // and construction and destruction of objects.
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CClassMemoryPool : public CMemoryPool {
  public:
@@ -130,14 +130,14 @@ class CClassMemoryPool : public CMemoryPool {
   void Clear();
 };
 
-//-----------------------------------------------------------------------------
+
 // Specialized pool for aligned data management (e.g., Xbox cubemaps)
-//-----------------------------------------------------------------------------
+
 template <int ITEM_SIZE, int ALIGNMENT, int CHUNK_SIZE, class CAllocator,
           int COMPACT_THRESHOLD = 4>
 class CAlignedMemPool {
   enum {
-    BLOCK_SIZE = max(ALIGN_VALUE(ITEM_SIZE, ALIGNMENT), 8),
+    BLOCK_SIZE = std::max(AlignValue(ITEM_SIZE, ALIGNMENT), 8),
   };
 
  public:
@@ -175,9 +175,9 @@ class CAlignedMemPool {
   float m_TimeLastCompact;
 };
 
-//-----------------------------------------------------------------------------
+
 // Pool variant using standard allocation
-//-----------------------------------------------------------------------------
+
 template <typename T, int nInitialCount = 0, bool bDefCreateNewIfEmpty = true>
 class CObjectPool {
  public:
@@ -213,7 +213,7 @@ class CObjectPool {
   CTSList<T *> m_AvailableObjects;
 };
 
-//-----------------------------------------------------------------------------
+
 
 template <class T>
 inline T *CClassMemoryPool<T>::Alloc() {
@@ -280,11 +280,11 @@ inline void CClassMemoryPool<T>::Clear() {
   CMemoryPool::Clear();
 }
 
-//-----------------------------------------------------------------------------
+
 // Macros that make it simple to make a class use a fixed-size allocator
 // Put DECLARE_FIXEDSIZE_ALLOCATOR in the private section of a class,
 // Put DEFINE_FIXEDSIZE_ALLOCATOR in the CPP file
-//-----------------------------------------------------------------------------
+
 #define DECLARE_FIXEDSIZE_ALLOCATOR(_class)                                    \
  public:                                                                       \
   inline void *operator new(size_t size) {                                     \
@@ -338,12 +338,12 @@ inline void CClassMemoryPool<T>::Clear() {
   CMemoryPoolMT _class::s_Allocator(sizeof(_class), _initsize, _grow, \
                                     #_class " pool")
 
-//-----------------------------------------------------------------------------
+
 // Macros that make it simple to make a class use a fixed-size allocator
 // This version allows us to use a memory pool which is externally defined...
 // Put DECLARE_FIXEDSIZE_ALLOCATOR_EXTERNAL in the private section of a class,
 // Put DEFINE_FIXEDSIZE_ALLOCATOR_EXTERNAL in the CPP file
-//-----------------------------------------------------------------------------
+
 
 #define DECLARE_FIXEDSIZE_ALLOCATOR_EXTERNAL(_class)                           \
  public:                                                                       \
@@ -370,7 +370,7 @@ inline CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator,
                        COMPACT_THRESHOLD>::CAlignedMemPool()
     : m_pFirstFree(0), m_nFree(0), m_TimeLastCompact(0) {
   COMPILE_TIME_ASSERT(sizeof(FreeBlock_t) >= BLOCK_SIZE);
-  COMPILE_TIME_ASSERT(ALIGN_VALUE(sizeof(FreeBlock_t), ALIGNMENT) ==
+  COMPILE_TIME_ASSERT(AlignValue(sizeof(FreeBlock_t), ALIGNMENT) ==
                       sizeof(FreeBlock_t));
 }
 

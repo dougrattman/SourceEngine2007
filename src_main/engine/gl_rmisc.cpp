@@ -76,7 +76,7 @@ void R_TimeRefresh_f(void) {
   int savedeveloper = developer.GetInt();
   developer.SetValue(0);
 
-  start = Sys_FloatTime();
+  start = Plat_FloatTime();
   for (i = 0; i < 128; i++) {
     view.angles[1] = i / 128.0 * 360.0;
     g_ClientDLL->RenderView(view, VIEW_CLEAR_COLOR,
@@ -86,7 +86,7 @@ void R_TimeRefresh_f(void) {
 
   materials->Flush(true);
   Shader_SwapBuffers();
-  stop = Sys_FloatTime();
+  stop = Plat_FloatTime();
   time = stop - start;
 
   developer.SetValue(savedeveloper);

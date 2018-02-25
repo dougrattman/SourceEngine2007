@@ -958,7 +958,7 @@ void CNPC_Citizen::PrescheduleThink() {
 
     const float TIME_FADE = 1.0;
     float timeInSquad = gpGlobals->curtime - m_flTimeJoinedPlayerSquad;
-    timeInSquad = min(TIME_FADE, max(timeInSquad, 0));
+    timeInSquad = std::min(TIME_FADE, std::max(timeInSquad, 0.0f));
 
     float fade = (1.0 - timeInSquad / TIME_FADE);
 

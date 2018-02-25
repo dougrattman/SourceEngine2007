@@ -642,7 +642,7 @@ bool CSoundEmitterSystemBase::InitSoundInternalParameters(
       params.SetOnlyPlayToOwner(pKey->GetInt() ? true : false);
     } else if (!Q_strcasecmp(pKey->GetName(), "delay_msec")) {
       // Don't allow negative delay
-      params.SetDelayMsec(max(0, pKey->GetInt()));
+      params.SetDelayMsec(std::max(0, pKey->GetInt()));
     }
 
     pKey = pKey->GetNextKey();

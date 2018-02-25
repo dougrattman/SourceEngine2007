@@ -1089,14 +1089,14 @@ void ReleaseSurround() {
 
 void DEBUG_DS_FillSquare(void *lpData, DWORD dwSize) {
   short *lpshort = (short *)lpData;
-  DWORD j = min(10000, dwSize / 2);
+  DWORD j = std::min(10000UL, dwSize / 2);
 
   for (DWORD i = 0; i < j; i++) lpshort[i] = 8000;
 }
 
 void DEBUG_DS_FillSquare2(void *lpData, DWORD dwSize) {
   short *lpshort = (short *)lpData;
-  DWORD j = min(1000, dwSize / 2);
+  DWORD j = std::min(1000UL, dwSize / 2);
 
   for (DWORD i = 0; i < j; i++) lpshort[i] = 16000;
 }

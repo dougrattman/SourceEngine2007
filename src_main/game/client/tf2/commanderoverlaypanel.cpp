@@ -740,10 +740,10 @@ void CCommanderOverlayPanel::LeftMouseReleased( void )
 
 	// Normalize the rectangle
 	int x0, y0, x1, y1;
-	x0 = min( m_left.m_nXStart, m_left.m_nXCurrent );
-	x1 = max( m_left.m_nXStart, m_left.m_nXCurrent );
-	y0 = min( m_left.m_nYStart, m_left.m_nYCurrent );
-	y1 = max( m_left.m_nYStart, m_left.m_nYCurrent );
+	x0 = std::min( m_left.m_nXStart, m_left.m_nXCurrent );
+	x1 = std::max( m_left.m_nXStart, m_left.m_nXCurrent );
+	y0 = std::min( m_left.m_nYStart, m_left.m_nYCurrent );
+	y1 = std::max( m_left.m_nYStart, m_left.m_nYCurrent );
 
 	bool clearOldStates = true;
 	if ( vgui::input()->IsKeyDown( vgui::KEY_LCONTROL ) )
@@ -846,8 +846,8 @@ void CCommanderOverlayPanel::BoundOrigin( Vector& camera )
 		}
 		else
 		{
-			newVisCenter[ i ] = max( newVisCenter[i], mins[i] + dim[i] );
-			newVisCenter[ i ] = min( newVisCenter[i], maxs[i] - dim[i] );
+			newVisCenter[ i ] = std::max( newVisCenter[i], mins[i] + dim[i] );
+			newVisCenter[ i ] = std::min( newVisCenter[i], maxs[i] - dim[i] );
 		}
 	}
 
@@ -971,8 +971,8 @@ void CCommanderOverlayPanel::OnMouseWheeled(int delta)
 		m_fZoom /= 1.25f;
 	}
 
-	m_fZoom = min( m_fZoom, m_MaxWorldWidth );
-	m_fZoom = max( m_fZoom, m_MinWorldWidth );
+	m_fZoom = std::min( m_fZoom, m_MaxWorldWidth );
+	m_fZoom = std::max( m_fZoom, m_MinWorldWidth );
 
 	BoundOrigin( m_vecTacticalOrigin );
 
@@ -998,10 +998,10 @@ void CCommanderOverlayPanel::Paint()
 
 	int x0, x1, y0, y1;
 	// Make sure it's normalized
-	x0 = min( m_left.m_nXStart, m_left.m_nXCurrent );
-	x1 = max( m_left.m_nXStart, m_left.m_nXCurrent );
-	y0 = min( m_left.m_nYStart, m_left.m_nYCurrent );
-	y1 = max( m_left.m_nYStart, m_left.m_nYCurrent );
+	x0 = std::min( m_left.m_nXStart, m_left.m_nXCurrent );
+	x1 = std::max( m_left.m_nXStart, m_left.m_nXCurrent );
+	y0 = std::min( m_left.m_nYStart, m_left.m_nYCurrent );
+	y1 = std::max( m_left.m_nYStart, m_left.m_nYCurrent );
 
 	// Draw selection rectangle
 	vgui::surface()->DrawSetColor( 200, 220, 250, 192 );

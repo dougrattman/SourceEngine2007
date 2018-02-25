@@ -529,7 +529,7 @@ void CBasePlasmaProjectile::RemapPosition( Vector &vecStart, float curtime, Vect
 		return;
 
 	float frac = ( curtime - m_Shared.GetSpawnTime() ) / REMAP_BLEND_TIME;
-	frac = 1.0f - clamp( frac, 0.0f, 1.0f );
+	frac = 1.0f - std::clamp( frac, 0.0f, 1.0f );
 
 	Vector scaledOffset;
 	VectorScale( m_vecGunOriginOffset, frac, scaledOffset );
@@ -557,7 +557,7 @@ bool CBasePlasmaProjectile::SimulateAndRender(Particle *pInParticle, ParticleDra
 	if ( gpGlobals->curtime < m_Shared.GetSpawnTime() + REMAP_BLEND_TIME )
 	{
 		float frac = ( gpGlobals->curtime - m_Shared.GetSpawnTime() ) / REMAP_BLEND_TIME;
-		frac = 1.0f - clamp( frac, 0.0f, 1.0f );
+		frac = 1.0f - std::clamp( frac, 0.0f, 1.0f );
 		Vector scaledOffset;
 		VectorScale( m_vecGunOriginOffset, frac, scaledOffset );
 		pInParticle->m_Pos += scaledOffset;
@@ -646,7 +646,7 @@ bool CBasePlasmaProjectile::SimulateAndRender(Particle *pInParticle, ParticleDra
 		if ( flDot > 0.99 )
 		{
 			// Remap alpha
-			pParticle->m_flColor[3] = 1.0 - min( 1.0, RemapVal( flDot, 0.99, 1.0, 0, 1 ) );
+			pParticle->m_flColor[3] = 1.0 - std::min( 1.0, RemapVal( flDot, 0.99, 1.0, 0, 1 ) );
 		}
 		*/
 

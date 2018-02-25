@@ -284,9 +284,9 @@ void HSLToRGB(Color &out, float *hsl) {
     sat[1] = 0;
     sat[2] = (360 - hsl[0]) / 60.0;
   }
-  sat[0] = min(sat[0], 1);
-  sat[1] = min(sat[1], 1);
-  sat[2] = min(sat[2], 1);
+  sat[0] = std::min(sat[0], 1);
+  sat[1] = std::min(sat[1], 1);
+  sat[2] = std::min(sat[2], 1);
 
   ctmp[0] = 2 * hsl[1] * sat[0] + (1 - hsl[1]);
   ctmp[1] = 2 * hsl[1] * sat[1] + (1 - hsl[1]);
@@ -305,7 +305,7 @@ void HSLToRGB(Color &out, float *hsl) {
 
 inline void DrawColoredRect(Image_t *image, int x, int y, int w, int h,
                             const Color &rgb, float flAlpha) {
-  flAlpha = clamp(flAlpha, 0.0f, 1.0f);
+  flAlpha = std::clamp(flAlpha, 0.0f, 1.0f);
   float flOneMinusAlpha = 1.0f - flAlpha;
 
   for (int xx = x; xx < x + w; ++xx) {
@@ -621,7 +621,7 @@ int main(int argc, char *argv[]) {
       Msg("  mysql db '%s'\n", db);
       ++i;
     } else if (!stricmp(argv[i], "-scale")) {
-      flScale = max(0.01f, Q_atof(argv[i + 1]));
+      flScale = std::max(0.01f, Q_atof(argv[i + 1]));
       Msg("  image scale '%g'\n", flScale);
       ++i;
     } else if (!stricmp(argv[i], "-stats")) {
@@ -864,9 +864,9 @@ int main(int argc, char *argv[]) {
           POINT &v = vecDeaths[i];
           int xpos = v.x;
           int ypos = v.y;
-          for (int y = max(0, ypos - nRadius);
-               y <= min(ypos + nRadius, image.h - 1); ++y) {
-            for (int x = max(0, xpos - nRadius); x <= xpos + nRadius; ++x) {
+          for (int y = std::max(0, ypos - nRadius);
+               y <= std::min(ypos + nRadius, image.h - 1); ++y) {
+            for (int x = std::max(0, xpos - nRadius); x <= xpos + nRadius; ++x) {
               if (x >= image.w) break;
 
               float *slot = &info[y * image.w + x];
@@ -892,8 +892,8 @@ int main(int argc, char *argv[]) {
 
             for (int x = 0; x < image.w; ++x, ++slot) {
               float flValue = *slot * flOneOverMax;
-              int colorIndex = clamp((int)(flValue * flGradesMinusOne + 0.5f),
-                                     0, numgrades - 1);
+              int colorIndex = std::clamp(
+                  (int)(flValue * flGradesMinusOne + 0.5f), 0, numgrades - 1);
               const Color &col = colors[colorIndex];
 
               DrawColoredRect(&image, x, y, 1, 1, black, flValue * flValue);

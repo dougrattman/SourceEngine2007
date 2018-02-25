@@ -17,9 +17,9 @@ class CUtlMemory;
 template <class T, class A>
 class CUtlVector;
 
-//-----------------------------------------------------------------------------
+
 // Portable versions of standard string functions
-//-----------------------------------------------------------------------------
+
 void _V_memset(const char *file, int line, void *dest, int fill, int count);
 void _V_memcpy(const char *file, int line, void *dest, const void *src,
                int count);
@@ -336,9 +336,9 @@ inline void V_strcat(char *dest, const char *src, int cchDest) {
   V_strncat(dest, src, cchDest, COPY_ALL_CHARACTERS);
 }
 
-//-----------------------------------------------------------------------------
+
 // generic unique name helper functions
-//-----------------------------------------------------------------------------
+
 
 // returns startindex if none found, 2 if "prefix" found, and n+1 if "prefixn"
 // found

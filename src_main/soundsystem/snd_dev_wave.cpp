@@ -370,7 +370,7 @@ void CAudioDeviceWave::Mix8Mono(channel_t *pChannel, char *pData,
   }
 
   for (int i = 0; i < outCount; i++, fixup += fixupstep) {
-    int dest = max(outputOffset + fixup, 0);
+    int dest = std::max(outputOffset + fixup, 0);
 
     m_paintbuffer[dest].left += pChannel->leftvol * pData[sampleIndex];
     m_paintbuffer[dest].right += pChannel->rightvol * pData[sampleIndex];
@@ -396,7 +396,7 @@ void CAudioDeviceWave::Mix8Stereo(channel_t *pChannel, char *pData,
   }
 
   for (int i = 0; i < outCount; i++, fixup += fixupstep) {
-    int dest = max(outputOffset + fixup, 0);
+    int dest = std::max(outputOffset + fixup, 0);
 
     m_paintbuffer[dest].left += pChannel->leftvol * pData[sampleIndex];
     m_paintbuffer[dest].right += pChannel->rightvol * pData[sampleIndex + 1];
@@ -422,7 +422,7 @@ void CAudioDeviceWave::Mix16Mono(channel_t *pChannel, short *pData,
   }
 
   for (int i = 0; i < outCount; i++, fixup += fixupstep) {
-    int dest = max(outputOffset + fixup, 0);
+    int dest = std::max(outputOffset + fixup, 0);
 
     m_paintbuffer[dest].left += (pChannel->leftvol * pData[sampleIndex]) >> 8;
     m_paintbuffer[dest].right += (pChannel->rightvol * pData[sampleIndex]) >> 8;
@@ -448,7 +448,7 @@ void CAudioDeviceWave::Mix16Stereo(channel_t *pChannel, short *pData,
   }
 
   for (int i = 0; i < outCount; i++, fixup += fixupstep) {
-    int dest = max(outputOffset + fixup, 0);
+    int dest = std::max(outputOffset + fixup, 0);
 
     m_paintbuffer[dest].left += (pChannel->leftvol * pData[sampleIndex]) >> 8;
     m_paintbuffer[dest].right +=

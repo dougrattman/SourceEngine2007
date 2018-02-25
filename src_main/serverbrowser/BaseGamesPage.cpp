@@ -537,8 +537,8 @@ void CBaseGamesPage::ServerResponded( int iServer, gameserveritem_t *pServerItem
 
 	kv->SetString( "IPAddr", pServerItem->m_NetAdr.GetConnectionAddressString() );
 
-	int nAdjustedForBotsPlayers = max( 0, pServerItem->m_nPlayers - pServerItem->m_nBotPlayers );
-	int nAdjustedForBotsMaxPlayers = max( 0, pServerItem->m_nMaxPlayers - pServerItem->m_nBotPlayers );
+	int nAdjustedForBotsPlayers = std::max( 0, pServerItem->m_nPlayers - pServerItem->m_nBotPlayers );
+	int nAdjustedForBotsMaxPlayers = std::max( 0, pServerItem->m_nMaxPlayers - pServerItem->m_nBotPlayers );
 
 	char buf[32];
 	Q_snprintf(buf, sizeof(buf), "%d / %d", nAdjustedForBotsPlayers, nAdjustedForBotsMaxPlayers);
@@ -749,8 +749,8 @@ void CBaseGamesPage::ApplyGameFilters()
 					kv->SetWString("GameDesc", g_pVGuiLocalize->Find("#ServerBrowser_PendingPing"));
 				}
 
-				int nAdjustedForBotsPlayers = max( 0, pServer->m_nPlayers - pServer->m_nBotPlayers );
-				int nAdjustedForBotsMaxPlayers = max( 0, pServer->m_nMaxPlayers - pServer->m_nBotPlayers );
+				int nAdjustedForBotsPlayers = std::max( 0, pServer->m_nPlayers - pServer->m_nBotPlayers );
+				int nAdjustedForBotsMaxPlayers = std::max( 0, pServer->m_nMaxPlayers - pServer->m_nBotPlayers );
 
 				char buf[256];
 				Q_snprintf(buf, sizeof(buf), "%d / %d", nAdjustedForBotsPlayers, nAdjustedForBotsMaxPlayers);

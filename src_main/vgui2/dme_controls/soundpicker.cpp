@@ -4,7 +4,7 @@
 //
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #undef PropertySheet
 
 #include "filesystem.h"

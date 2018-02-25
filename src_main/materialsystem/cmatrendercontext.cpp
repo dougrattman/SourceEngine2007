@@ -672,7 +672,7 @@ void CMatRenderContextBase::TurnOnToneMapping(void) {
             mat_accelerate_adjust_exposure_down.GetFloat();
 
         // Adjust at up to 4x rate when over-exposed.
-        rate = min((acc_exposure_adjust * rate),
+        rate = std::min((acc_exposure_adjust * rate),
                    FLerp(rate, (acc_exposure_adjust * rate), 0.0f, 1.5f,
                          (m_CurToneMapScale - goalScale)));
       }
@@ -684,14 +684,14 @@ void CMatRenderContextBase::TurnOnToneMapping(void) {
         // of the histogram re-building
 
         // Warning( "flRateTimesTime = %.4f", flRateTimesTime );
-        flRateTimesTime = min(
+        flRateTimesTime = std::min(
             flRateTimesTime, (1.0f / 16.0f) * 0.25f);  // 16 is number of HDR
                                                        // sample bins defined in
                                                        // viewpostprocess.cpp
         // Warning( " --> %.4f\n", flRateTimesTime );
       }
 
-      float alpha = max(0.0f, min(1.0f, flRateTimesTime));
+      float alpha = std::max(0.0f, std::min(1.0f, flRateTimesTime));
       m_CurToneMapScale =
           (goalScale * alpha) + (m_CurToneMapScale * (1.0f - alpha));
 
@@ -2279,17 +2279,17 @@ void CMatRenderContext::GetStandardTextureDimensions(int *pWidth, int *pHeight,
 
 void CMatRenderContext::FogColor3f(float r, float g, float b) {
   unsigned char fogColor[3];
-  fogColor[0] = clamp((int)(r * 255.0f), 0, 255);
-  fogColor[1] = clamp((int)(g * 255.0f), 0, 255);
-  fogColor[2] = clamp((int)(b * 255.0f), 0, 255);
+  fogColor[0] = std::clamp((int)(r * 255.0f), 0, 255);
+  fogColor[1] = std::clamp((int)(g * 255.0f), 0, 255);
+  fogColor[2] = std::clamp((int)(b * 255.0f), 0, 255);
   g_pShaderAPI->SceneFogColor3ub(fogColor[0], fogColor[1], fogColor[2]);
 }
 
 void CMatRenderContext::FogColor3fv(const float *rgb) {
   unsigned char fogColor[3];
-  fogColor[0] = clamp((int)(rgb[0] * 255.0f), 0, 255);
-  fogColor[1] = clamp((int)(rgb[1] * 255.0f), 0, 255);
-  fogColor[2] = clamp((int)(rgb[2] * 255.0f), 0, 255);
+  fogColor[0] = std::clamp((int)(rgb[0] * 255.0f), 0, 255);
+  fogColor[1] = std::clamp((int)(rgb[1] * 255.0f), 0, 255);
+  fogColor[2] = std::clamp((int)(rgb[2] * 255.0f), 0, 255);
   g_pShaderAPI->SceneFogColor3ub(fogColor[0], fogColor[1], fogColor[2]);
 }
 

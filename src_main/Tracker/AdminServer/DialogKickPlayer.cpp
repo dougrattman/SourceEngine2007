@@ -18,9 +18,6 @@
 
 using namespace vgui;
 
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-
-
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
@@ -60,7 +57,7 @@ void CDialogKickPlayer::Activate(const char *playerName,const char *question,con
 	int wide,tall;
 	m_pInfoLabel->GetSize(wide,tall);
 
-	SetWide(max(wide+50,GetWide()));
+	SetWide(std::max(wide+50,GetWide()));
 
 	m_cType=type;
 

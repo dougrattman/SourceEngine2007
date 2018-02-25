@@ -20,9 +20,9 @@ class CChoreoScene;
 class CUtlBuffer;
 class IChoreoStringPool;
 
-//-----------------------------------------------------------------------------
+
 // Purpose: A channel is owned by an actor and contains zero or more events
-//-----------------------------------------------------------------------------
+
 class CChoreoChannel
 {
 public:

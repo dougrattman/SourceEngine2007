@@ -6,7 +6,7 @@
 
 #include "vmpi_transfer.h"
 #include <conio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "cmdlib.h"
 #include "tier0/include/icommandline.h"
 #include "tools_minidump.h"

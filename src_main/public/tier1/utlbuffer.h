@@ -9,19 +9,19 @@
 #include "tier1/byteswap.h"
 #include "tier1/utlmemory.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 struct characterset_t;
 
-//-----------------------------------------------------------------------------
+
 // Description of character conversions for string output
 // Here's an example of how to use the macros to define a character conversion
 // BEGIN_CHAR_CONVERSION( CStringConversion, '\\' )
 //	{ '\n', "n" },
 //	{ '\t', "t" }
 // END_CHAR_CONVERSION( CStringConversion, '\\' )
-//-----------------------------------------------------------------------------
+
 class CUtlCharConversion {
  public:
   struct ConversionArray_t {
@@ -78,26 +78,26 @@ class CUtlCharConversion {
                        sizeof(CUtlCharConversion::ConversionArray_t),          \
                    s_pConversionArray##_name);
 
-//-----------------------------------------------------------------------------
+
 // Character conversions for C strings
-//-----------------------------------------------------------------------------
+
 CUtlCharConversion *GetCStringCharConversion();
 
-//-----------------------------------------------------------------------------
+
 // Character conversions for quoted strings, with no escape sequences
-//-----------------------------------------------------------------------------
+
 CUtlCharConversion *GetNoEscCharConversion();
 
-//-----------------------------------------------------------------------------
+
 // Macro to set overflow functions easily
-//-----------------------------------------------------------------------------
+
 #define SetUtlBufferOverflowFuncs(_get, _put)                  \
   SetOverflowFuncs(static_cast<UtlBufferOverflowFunc_t>(_get), \
                    static_cast<UtlBufferOverflowFunc_t>(_put))
 
-//-----------------------------------------------------------------------------
+
 // Command parsing..
-//-----------------------------------------------------------------------------
+
 class CUtlBuffer {
  public:
   enum SeekType_t { SEEK_HEAD = 0, SEEK_CURRENT, SEEK_TAIL };
@@ -531,28 +531,28 @@ class CUtlInplaceBuffer : public CUtlBuffer {
   char *InplaceGetLinePtr(void);
 };
 
-//-----------------------------------------------------------------------------
+
 // Where am I reading?
-//-----------------------------------------------------------------------------
+
 inline int CUtlBuffer::TellGet() const { return m_Get; }
 
-//-----------------------------------------------------------------------------
+
 // How many bytes remain to be read?
-//-----------------------------------------------------------------------------
+
 inline int CUtlBuffer::GetBytesRemaining() const {
   return m_nMaxPut - TellGet();
 }
 
-//-----------------------------------------------------------------------------
+
 // What am I reading?
-//-----------------------------------------------------------------------------
+
 inline const void *CUtlBuffer::PeekGet(int offset) const {
   return &m_Memory[m_Get + offset - m_nOffset];
 }
 
-//-----------------------------------------------------------------------------
+
 // Unserialization
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 inline void CUtlBuffer::GetObject(T *dest) {
@@ -668,38 +668,38 @@ inline double CUtlBuffer::GetDouble() {
   return d;
 }
 
-//-----------------------------------------------------------------------------
+
 // Where am I writing?
-//-----------------------------------------------------------------------------
+
 inline unsigned char CUtlBuffer::GetFlags() const { return m_Flags; }
 
-//-----------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::IsExternallyAllocated() const {
   return m_Memory.IsExternallyAllocated();
 }
 
-//-----------------------------------------------------------------------------
+
 // Where am I writing?
-//-----------------------------------------------------------------------------
+
 inline int CUtlBuffer::TellPut() const { return m_Put; }
 
-//-----------------------------------------------------------------------------
+
 // What's the most I've ever written?
-//-----------------------------------------------------------------------------
+
 inline int CUtlBuffer::TellMaxPut() const { return m_nMaxPut; }
 
-//-----------------------------------------------------------------------------
+
 // What am I reading?
-//-----------------------------------------------------------------------------
+
 inline void *CUtlBuffer::PeekPut(int offset) {
   return &m_Memory[m_Put + offset - m_nOffset];
 }
 
-//-----------------------------------------------------------------------------
+
 // Various put methods
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 inline void CUtlBuffer::PutObject(T *src) {
@@ -743,9 +743,9 @@ inline void CUtlBuffer::PutType(T src, const char *pszFmt) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Methods to help with pretty-printing
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::WasLastCharacterCR() {
   if (!IsText() || (TellPut() == 0)) return false;
   return (*(const char *)PeekPut(-1) == '\n');
@@ -758,9 +758,9 @@ inline void CUtlBuffer::PutTabs() {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Push/pop pretty-printing tabs
-//-----------------------------------------------------------------------------
+
 inline void CUtlBuffer::PushTab() { ++m_nTab; }
 
 inline void CUtlBuffer::PopTab() {
@@ -769,9 +769,9 @@ inline void CUtlBuffer::PopTab() {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Temporarily disables pretty print
-//-----------------------------------------------------------------------------
+
 inline void CUtlBuffer::EnableTabs(bool bEnable) {
   if (bEnable) {
     m_Flags &= ~AUTO_TABS_DISABLED;
@@ -802,49 +802,49 @@ inline void CUtlBuffer::PutFloat(float f) { PutType(f, "%f"); }
 
 inline void CUtlBuffer::PutDouble(double d) { PutType(d, "%f"); }
 
-//-----------------------------------------------------------------------------
+
 // Am I a text buffer?
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::IsText() const { return (m_Flags & TEXT_BUFFER) != 0; }
 
-//-----------------------------------------------------------------------------
+
 // Can I grow if I'm externally allocated?
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::IsGrowable() const {
   return (m_Flags & EXTERNAL_GROWABLE) != 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Am I valid? (overflow or underflow error), Once invalid it stays invalid
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::IsValid() const { return m_Error == 0; }
 
-//-----------------------------------------------------------------------------
+
 // Do I contain carriage return/linefeeds?
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::ContainsCRLF() const {
   return IsText() && ((m_Flags & CONTAINS_CRLF) != 0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Am I read-only
-//-----------------------------------------------------------------------------
+
 inline bool CUtlBuffer::IsReadOnly() const {
   return (m_Flags & READ_ONLY) != 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Buffer base and size
-//-----------------------------------------------------------------------------
+
 inline const void *CUtlBuffer::Base() const { return m_Memory.Base(); }
 
 inline void *CUtlBuffer::Base() { return m_Memory.Base(); }
 
 inline int CUtlBuffer::Size() const { return m_Memory.NumAllocated(); }
 
-//-----------------------------------------------------------------------------
+
 // Clears out the buffer; frees memory
-//-----------------------------------------------------------------------------
+
 inline void CUtlBuffer::Clear() {
   m_Get = 0;
   m_Put = 0;

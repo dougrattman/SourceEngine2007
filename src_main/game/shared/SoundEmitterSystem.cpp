@@ -550,7 +550,7 @@ class CSoundEmitterSystem : public CBaseGameSystem {
       // Send caption and duration hint down to client
       UserMessageBegin(filterCopy, "CloseCaption");
       WRITE_STRING(lowercase);
-      WRITE_SHORT(min(255, (int)(duration * 10.0f))), WRITE_BYTE(byteflags),
+      WRITE_SHORT(std::min(255, (int)(duration * 10.0f))), WRITE_BYTE(byteflags),
           MessageEnd();
 #else
       // Direct dispatch

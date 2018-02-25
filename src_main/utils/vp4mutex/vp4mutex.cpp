@@ -16,7 +16,7 @@
 
 #include <time.h>
 #include <ctype.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #undef SetPort
 
@@ -108,7 +108,7 @@ static void Q_FileBase( const char *in, char *out, int maxlen )
 	// Length of new sting
 	len = end - start + 1;
 
-	int maxcopy = min( len + 1, maxlen );
+	int maxcopy = std::min( len + 1, maxlen );
 
 	// Copy partial string
 	Q_strncpy( out, &in[start], maxcopy );
@@ -127,7 +127,7 @@ static char *Q_strncat(char *pDest, const char *pSrc, size_t destBufferSize, int
 	}
 	else
 	{
-		charstocopy = (size_t)min( max_chars_to_copy, (int)srclen );
+		charstocopy = (size_t)std::min( max_chars_to_copy, (int)srclen );
 	}
 
 	if ( len + charstocopy >= destBufferSize )
@@ -645,7 +645,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		case 3:
 			{
 				validSleepSeconds = true;
-				sleepSeconds = clamp( Q_atoi( argv[ i ] ), 0, 100 );
+				sleepSeconds = std::clamp( Q_atoi( argv[ i ] ), 0, 100 );
 			}
 			break;
 		case 4:

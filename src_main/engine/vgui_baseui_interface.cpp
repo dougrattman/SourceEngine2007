@@ -4,11 +4,11 @@
 
 #include "client_pch.h"
 
-#include "vgui_baseui_interface.h"
-
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
 #endif
+
+#include "vgui_baseui_interface.h"
 
 #include "Steam.h"  // for SteamGetUser()
 #include "cdll_engine_int.h"
@@ -1273,7 +1273,7 @@ void CEngineVGui::UpdateProgressBar(LevelLoadingProgress_e progress) {
   if (desc.nRepeat > 1 && m_nLastProgressPointRepeatCount) {
     // cap the repeat count
     m_nLastProgressPointRepeatCount =
-        min(m_nLastProgressPointRepeatCount, desc.nRepeat);
+        std::min(m_nLastProgressPointRepeatCount, desc.nRepeat);
 
     // next progress point
     float flNextPerc = GetProgressDescription(progress + 1).nPercent / 100.0f;
@@ -1417,7 +1417,7 @@ void CEngineVGui::Simulate() {
     //!! currently this has to be done once per dll, because the anim controller
     //! object is in a lib; ! need to make it globally pumped (gameUI.dll has
     //! it's own version of this)
-    vgui::GetAnimationController()->UpdateAnimations(Sys_FloatTime());
+    vgui::GetAnimationController()->UpdateAnimations(Plat_FloatTime());
 
     RECT rect;
     ::GetClientRect(*pmainwindow, &rect);

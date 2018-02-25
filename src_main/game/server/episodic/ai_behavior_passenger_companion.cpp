@@ -1793,7 +1793,7 @@ void CAI_PassengerBehaviorCompanion::CalculateBodyLean( void )
 {
 	// Calculate our lateral displacement from a perfectly centered start
 	float flLateralDisp = SimpleSplineRemapVal( m_vehicleState.m_vecLastAngles.z, 100.0f, -100.0f, -1.0f, 1.0f );
-	flLateralDisp = clamp( flLateralDisp, -1.0f, 1.0f );
+	flLateralDisp = std::clamp( flLateralDisp, -1.0f, 1.0f );
 
 	// FIXME: Framerate dependent!
 	m_flLastLateralLean = ( m_flLastLateralLean * 0.2f ) + ( flLateralDisp * 0.8f );

@@ -8,7 +8,7 @@
 #include <time.h>
 #include "stdafx.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "depcheck_util.h"
 #include "codeprocessor.h"
 

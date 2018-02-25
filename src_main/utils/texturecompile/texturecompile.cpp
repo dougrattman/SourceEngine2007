@@ -5,7 +5,7 @@
 #include <process.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "UtlBuffer.h"
 #include "UtlLinkedList.h"
@@ -141,7 +141,7 @@ void Master_ReceiveWorkUnitFn(uint64 iWorkUnit, MessageBuffer *pBuf,
   DebugOut("Master_ReceiveWorkUnitFn\n");
   int textureStart = iWorkUnit * g_nTexturesPerWorkUnit;
   int textureEnd = textureStart + g_nTexturesPerWorkUnit;
-  textureEnd = min(g_CompileCommands.Count(), textureEnd);
+  textureEnd = std::min(g_CompileCommands.Count(), textureEnd);
   int i;
   for (i = textureStart; i < textureEnd; i++) {
     int len;
@@ -221,7 +221,7 @@ void Worker_ProcessWorkUnitFn(int iThread, uint64 iWorkUnit,
   Worker_GetSourceFiles(iWorkUnit);
   int textureStart = iWorkUnit * g_nTexturesPerWorkUnit;
   int textureEnd = textureStart + g_nTexturesPerWorkUnit;
-  textureEnd = min(g_CompileCommands.Count(), textureEnd);
+  textureEnd = std::min(g_CompileCommands.Count(), textureEnd);
 
   int i;
   for (i = textureStart; i < textureEnd; i++) {
@@ -340,7 +340,7 @@ void Worker_GetSourceFiles(int iWorkUnit) {
   DebugOut("Worker_GetSourceFiles( %d )\n", iWorkUnit);
   int textureStart = iWorkUnit * g_nTexturesPerWorkUnit;
   int textureEnd = textureStart + g_nTexturesPerWorkUnit;
-  textureEnd = min(g_CompileCommands.Count(), textureEnd);
+  textureEnd = std::min(g_CompileCommands.Count(), textureEnd);
   int i;
   for (i = textureStart; i < textureEnd; i++) {
     Worker_GetLocalCopyOfTextureSource(g_CompileCommands[i]);

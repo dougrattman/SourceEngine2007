@@ -1309,7 +1309,7 @@ void CAPCMissile::ComputeActualDotPosition( CLaserDot *pLaserDot, Vector *pActua
 		if ( m_flReachedTargetTime != 0.0f )
 		{
 			*pHomingSpeed = APC_HOMING_SPEED;
-			float flDeltaTime = clamp( gpGlobals->curtime - m_flReachedTargetTime, 0.0f, CORRECTION_TIME );
+			float flDeltaTime = std::clamp( gpGlobals->curtime - m_flReachedTargetTime, 0.0f, CORRECTION_TIME );
 			*pHomingSpeed = SimpleSplineRemapVal( flDeltaTime, 0.0f, CORRECTION_TIME, 0.2f, *pHomingSpeed );
 			flMinHomingDistance = SimpleSplineRemapVal( flDeltaTime, 0.0f, CORRECTION_TIME, MIN_NEAR_HOMING_DISTANCE, flMinHomingDistance );
 			flMaxHomingDistance = SimpleSplineRemapVal( flDeltaTime, 0.0f, CORRECTION_TIME, MAX_NEAR_HOMING_DISTANCE, flMaxHomingDistance );
@@ -1322,7 +1322,7 @@ void CAPCMissile::ComputeActualDotPosition( CLaserDot *pLaserDot, Vector *pActua
 			VectorSubtract( GetAbsOrigin(), *pActualDotPosition, vecDelta );
 			if ( vecDelta.z > MIN_HEIGHT_DIFFERENCE )
 			{
-				float flClampedHeight = clamp( vecDelta.z, MIN_HEIGHT_DIFFERENCE, MAX_HEIGHT_DIFFERENCE );
+				float flClampedHeight = std::clamp( vecDelta.z, MIN_HEIGHT_DIFFERENCE, MAX_HEIGHT_DIFFERENCE );
 				float flHeightAdjustFactor = SimpleSplineRemapVal( flClampedHeight, MIN_HEIGHT_DIFFERENCE, MAX_HEIGHT_DIFFERENCE, 0.0f, 1.0f );
 
 				vecDelta.z = 0.0f;
@@ -1348,7 +1348,7 @@ void CAPCMissile::ComputeActualDotPosition( CLaserDot *pLaserDot, Vector *pActua
 		if ( flBlendTime > 0.6f )
 		{
 			float flTargetLength = GetAbsOrigin().DistTo( pLaserTarget->WorldSpaceCenter() );
-			flTargetLength = clamp( flTargetLength, flMinHomingDistance, flMaxHomingDistance ); 
+			flTargetLength = std::clamp( flTargetLength, flMinHomingDistance, flMaxHomingDistance ); 
 			*pHomingSpeed = SimpleSplineRemapVal( flTargetLength, flMaxHomingDistance, flMinHomingDistance, *pHomingSpeed, 0.01f );
 		}
 	}
@@ -2070,7 +2070,7 @@ int CWeaponRPG::WeaponRangeAttack1Condition( float flDot, float flDist )
 		flDist = vecToTarget.Length();
 	}
 
-	if ( flDist < min( m_fMinRange1, m_fMinRange2 ) )
+	if ( flDist < std::min( m_fMinRange1, m_fMinRange2 ) )
 		return COND_TOO_CLOSE_TO_ATTACK;
 
 	if ( m_flNextPrimaryAttack > gpGlobals->curtime )
@@ -2325,7 +2325,7 @@ void CLaserDot::LaserThink( void )
 	float	scale = RemapVal( dist, 32, 1024, 0.01f, 0.5f );
 	float	scaleOffs = random->RandomFloat( -scale * 0.25f, scale * 0.25f );
 
-	scale = clamp( scale + scaleOffs, 0.1f, 32.0f );
+	scale = std::clamp( scale + scaleOffs, 0.1f, 32.0f );
 
 	SetScale( scale );
 }

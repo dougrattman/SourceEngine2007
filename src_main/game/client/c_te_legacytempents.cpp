@@ -177,8 +177,9 @@ int C_LocalTempEntity::DrawModel(int flags) {
     VectorNormalize(vecDelta);
     float flDot = DotProduct(m_vecNormal, vecDelta);
     if (flDot > 0) {
-      float flAlpha = RemapVal(min(flDot, 0.3), 0, 0.3, 0, 1);
-      flAlpha = max(1.0, tempent_renderamt - (tempent_renderamt * flAlpha));
+      float flAlpha = RemapVal(std::min(flDot, 0.3f), 0, 0.3, 0, 1);
+      flAlpha =
+          std::max(1.0f, tempent_renderamt - (tempent_renderamt * flAlpha));
       SetRenderColorA(flAlpha);
     }
   }
@@ -1375,7 +1376,7 @@ void CTempEnts::BloodSprite(const Vector &org, int r, int g, int b, int a,
   if (modelIndex && (model = modelinfo->GetModel(modelIndex)) != NULL) {
     C_LocalTempEntity *pTemp;
     int frameCount = modelinfo->GetModelFrameCount(model);
-    color32 impactcolor = {r, g, b, a};
+    color32 impactcolor = {(u8)r, (u8)g, (u8)b, (u8)a};
 
     // Large, single blood sprite is a high-priority tent
     if ((pTemp = TempEntAllocHigh(org, (model_t *)model)) != NULL) {
@@ -1965,9 +1966,9 @@ void CTempEnts::PlaySound(C_LocalTempEntity *pTemp, float damp) {
     int pitch;
 
     if (isshellcasing) {
-      fvol *= min(1.0, ((float)zvel) / 350.0);
+      fvol *= std::min(1.0, ((float)zvel) / 350.0);
     } else {
-      fvol *= min(1.0, ((float)zvel) / 450.0);
+      fvol *= std::min(1.0, ((float)zvel) / 450.0);
     }
 
     if (!random->RandomInt(0, 3) && !isshellcasing) {

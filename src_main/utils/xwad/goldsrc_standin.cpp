@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

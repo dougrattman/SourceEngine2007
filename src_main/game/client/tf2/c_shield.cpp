@@ -654,7 +654,7 @@ void C_Shield::ComputePoint( float s, float t, Vector& pt, Vector& normal, float
 			{
 				// Channel 1 is the opacity blend
 				float blendFactor = m_SplinePatch.GetChannel( 1 );
-				blendFactor = clamp( blendFactor, 0.0f, 1.0f );
+				blendFactor = std::clamp( blendFactor, 0.0f, 1.0f );
 
 				float blendValue = 1.0f; 
 				Vector delta;
@@ -681,7 +681,7 @@ void C_Shield::ComputePoint( float s, float t, Vector& pt, Vector& normal, float
 				opacity *= (1.0f - blendFactor) + blendFactor * blendValue;
 			}
 
-			opacity = clamp( opacity, 0.0f, 192.0f );
+			opacity = std::clamp( opacity, 0.0f, 192.0f );
 		}
 	}
 	opacity *= m_FadeValue;

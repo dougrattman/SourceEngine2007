@@ -5,9 +5,9 @@
 #ifndef SOURCE_TIER2_MESHUTILS_H_
 #define SOURCE_TIER2_MESHUTILS_H_
 
-//-----------------------------------------------------------------------------
+
 // Helper methods to create various standard index buffer types
-//-----------------------------------------------------------------------------
+
 void GenerateSequentialIndexBuffer(unsigned short* pIndexMemory,
                                    int nIndexCount, int nFirstVertex);
 void GenerateQuadIndexBuffer(unsigned short* pIndexMemory, int nIndexCount,

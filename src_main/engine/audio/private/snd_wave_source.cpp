@@ -629,8 +629,8 @@ bool CAudioSourceWave::GetStartupData(void *dest, int destsize,
     // Round to multiple of 4
     bytesNeeded = (bytesNeeded + 3) & ~3;
 
-    bytesCopied = min(destsize, m_dataSize);
-    bytesCopied = min(bytesNeeded, bytesCopied);
+    bytesCopied = std::min(destsize, m_dataSize);
+    bytesCopied = std::min(bytesNeeded, bytesCopied);
 
     g_pSndIO->seek(file, m_dataStart);
     g_pSndIO->read(dest, bytesCopied, file);

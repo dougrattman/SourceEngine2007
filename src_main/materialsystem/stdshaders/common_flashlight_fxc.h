@@ -202,7 +202,7 @@ float DoShadowATICheap( sampler DepthSampler, const float4 shadowMapPos )
 	float objDepth = shadowMapPos.z / shadowMapPos.w;
 	float fSampleDepth = tex2D( DepthSampler, shadowMapCenter ).x;
 
-	objDepth = min( objDepth, 0.99999 ); //HACKHACK: On 360, surfaces at or past the far flashlight plane have an abrupt cutoff. This is temp until a smooth falloff is implemented
+	objDepth = std::min( objDepth, 0.99999 ); //HACKHACK: On 360, surfaces at or past the far flashlight plane have an abrupt cutoff. This is temp until a smooth falloff is implemented
 
 	return fSampleDepth > objDepth;
 }
@@ -226,7 +226,7 @@ float DoShadowPoisson16Sample( sampler DepthSampler, sampler RandomRotationSampl
 	float2 rotOffset = 0;
 
 	float2 shadowMapCenter = vProjCoords.xy;			// Center of shadow filter
-	float objDepth = min( vProjCoords.z, 0.99999 );		// Object depth in shadow space
+	float objDepth = std::min( vProjCoords.z, 0.99999 );		// Object depth in shadow space
 
 	// 2D Rotation Matrix setup
 	float3 RMatTop = 0, RMatBottom = 0;
@@ -356,7 +356,7 @@ float DoShadow360Simple( sampler DepthSampler, const float3 vProjCoords )
 {
 	float fLOD;
 	float2 shadowMapCenter = vProjCoords.xy;			// Center of shadow filter
-	float objDepth = min( vProjCoords.z, 0.99999 );		// Object depth in shadow space
+	float objDepth = std::min( vProjCoords.z, 0.99999 );		// Object depth in shadow space
 
 #if defined( REVERSE_DEPTH_ON_X360 )
 	objDepth = 1.0f - objDepth;
@@ -526,7 +526,7 @@ float DoShadowPoisson360( sampler DepthSampler, sampler RandomRotationSampler, c
 								 float2( -0.6289f,  0.7388f ), float2(  0.5744f, -0.7741f ) };
 
 	float2 shadowMapCenter = vProjCoords.xy;		// Center of shadow filter
-	float objDepth = min( vProjCoords.z, 0.99999 );	// Object depth in shadow space
+	float objDepth = std::min( vProjCoords.z, 0.99999 );	// Object depth in shadow space
 
 #if defined( REVERSE_DEPTH_ON_X360 )
 	objDepth = 1.0f - objDepth;

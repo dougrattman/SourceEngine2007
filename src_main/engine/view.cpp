@@ -44,7 +44,7 @@ bool g_bIsBlendingOrModulating = false;
 
 bool g_bIsRenderingVGuiOnly = false;
 
-colorVec R_LightPoint(Vector &p);
+color32 R_LightPoint(Vector &p);
 void R_DrawLightmaps(IWorldRenderList *pList, int pageId);
 void R_DrawIdentityBrushModel(IWorldRenderList *pRenderList, model_t *model);
 
@@ -331,7 +331,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     // Here to preserve backwards compat
   }
 
-  colorVec GetLightAtPoint(Vector &pos) { return R_LightPoint(pos); }
+  color32 GetLightAtPoint(Vector &pos) { return R_LightPoint(pos); }
 
   int GetViewEntity(void) { return cl.m_nViewEntity; }
 

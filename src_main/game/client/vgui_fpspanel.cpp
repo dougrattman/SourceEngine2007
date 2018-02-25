@@ -425,7 +425,7 @@ bool CBlockingFileIOPanel::ShouldDraw(void) {
 void CBlockingFileIOPanel::Paint() {
   int x = 2;
 
-  int maxRecent = clamp(0, cl_blocking_recentsize.GetInt(), 1000);
+  int maxRecent = std::clamp(0, cl_blocking_recentsize.GetInt(), 1000);
   int bval = cl_showblocking.GetInt();
   if (bval > 0) {
     IBlockingFileItemList *list = filesystem->RetrieveBlockingFileAccessInfo();
@@ -580,9 +580,9 @@ void CBlockingFileIOPanel::DrawIOTime(int x, int y, int w, int h, int slot,
   // 250 msec is considered a huge spike
   float maxTime = cl_blocking_msec.GetFloat() * 0.001f;
   if (maxTime < 0.000001f) return;
-  float frac = clamp(t / maxTime, 0.0f, 1.0f);
-  float hfrac = clamp(history / maxTime, 0.0f, 1.0f);
-  float spikefrac = clamp(historyspike / maxTime, 0.0f, 1.0f);
+  float frac = std::clamp(t / maxTime, 0.0f, 1.0f);
+  float hfrac = std::clamp(history / maxTime, 0.0f, 1.0f);
+  float spikefrac = std::clamp(historyspike / maxTime, 0.0f, 1.0f);
 
   g_pMatSystemSurface->DrawColoredText(m_hFont, x + 2, y + 1, clr[0], clr[1],
                                        clr[2], clr[3], "%s", label);
@@ -615,7 +615,7 @@ void CBlockingFileIOPanel::DrawIOTime(int x, int y, int w, int h, int slot,
   int historyWide = (int)(w * hfrac + 0.5f);
   int spikeWide = (int)(w * spikefrac + 0.5f);
 
-  int useWide = max(barWide, historyWide);
+  int useWide = std::max(barWide, historyWide);
 
   vgui::surface()->DrawSetColor(Color(0, 0, 0, 31));
   vgui::surface()->DrawFilledRect(x, y, x + w, y + h);

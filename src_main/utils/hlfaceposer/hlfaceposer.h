@@ -12,7 +12,7 @@
 
 #include <ctype.h>
 #include <float.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 
 #define CONSOLE_COLOR RGB( 82, 173, 216 )

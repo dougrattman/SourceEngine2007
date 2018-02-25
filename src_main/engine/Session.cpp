@@ -123,11 +123,11 @@ void CSession::UpdateSlots(const CClientInfo *pClient, bool bAddPlayers) {
     }
   } else {
     m_nPlayerSlots[SLOTS_FILLEDPRIVATE] =
-        max(0, m_nPlayerSlots[SLOTS_FILLEDPRIVATE] -
-                   pClient->m_numPrivateSlotsUsed);
-    m_nPlayerSlots[SLOTS_FILLEDPUBLIC] =
-        max(0, m_nPlayerSlots[SLOTS_FILLEDPUBLIC] -
-                   (pClient->m_cPlayers - pClient->m_numPrivateSlotsUsed));
+        std::max(0u, m_nPlayerSlots[SLOTS_FILLEDPRIVATE] -
+                         pClient->m_numPrivateSlotsUsed);
+    m_nPlayerSlots[SLOTS_FILLEDPUBLIC] = std::max(
+        0u, m_nPlayerSlots[SLOTS_FILLEDPUBLIC] -
+                (pClient->m_cPlayers - pClient->m_numPrivateSlotsUsed));
   }
 }
 

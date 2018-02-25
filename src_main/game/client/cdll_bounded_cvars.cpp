@@ -76,7 +76,7 @@ public:
 		  static const ConVar *pMax = dynamic_cast< const ConVar* >( g_pCVar->FindCommandBase( "sv_client_max_interp_ratio" ) );
 		  if ( pMin && pMax && pMin->GetFloat() != -1 )
 		  {
-			  return clamp( GetBaseFloatValue(), pMin->GetFloat(), pMax->GetFloat() );
+			  return std::clamp( GetBaseFloatValue(), pMin->GetFloat(), pMax->GetFloat() );
 		  }
 		  else
 		  {
@@ -110,7 +110,7 @@ public:
 		  static const ConVar *pMin = dynamic_cast< const ConVar* >( g_pCVar->FindCommandBase( "sv_client_min_interp_ratio" ) );
 		  if ( pUpdateRate && pMin && pMin->GetFloat() != -1 )
 		  {
-			  return max( GetBaseFloatValue(), pMin->GetFloat() / pUpdateRate->GetFloat() );
+			  return std::max( GetBaseFloatValue(), pMin->GetFloat() / pUpdateRate->GetFloat() );
 		  }
 		  else
 		  {
@@ -128,7 +128,7 @@ float GetClientInterpAmount()
 	if ( pUpdateRate )
 	{
 		// #define FIXME_INTERP_RATIO
-		return max( cl_interp->GetFloat(), cl_interp_ratio->GetFloat() / pUpdateRate->GetFloat() );
+		return std::max( cl_interp->GetFloat(), cl_interp_ratio->GetFloat() / pUpdateRate->GetFloat() );
 	}
 	else
 	{

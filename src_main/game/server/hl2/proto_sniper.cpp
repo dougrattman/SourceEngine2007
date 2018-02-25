@@ -767,7 +767,7 @@ void CProtoSniper::PaintTarget(const Vector &vecTarget, float flPaintTime) {
   float P;
 
   // keep painttime from hitting 0 exactly.
-  flPaintTime = max(flPaintTime, 0.000001f);
+  flPaintTime = std::max(flPaintTime, 0.000001f);
 
   P = GetPositionParameter(flPaintTime, false);
 
@@ -783,7 +783,7 @@ void CProtoSniper::PaintTarget(const Vector &vecTarget, float flPaintTime) {
     }
   }
 
-  GetPaintAim(m_vecPaintStart, vecTarget, clamp(P, 0.0f, 1.0f), &vecCurrentDir);
+  GetPaintAim(m_vecPaintStart, vecTarget, std::clamp(P, 0.0f, 1.0f), &vecCurrentDir);
 
 #if 1
 #define THRESHOLD 0.8f

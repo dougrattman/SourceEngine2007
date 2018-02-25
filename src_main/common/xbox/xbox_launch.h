@@ -285,7 +285,7 @@ private:
 
 #if defined( PLATFORM_H )
 // For applications that use tier0.dll
-PLATFORM_INTERFACE CXboxLaunch *XboxLaunch();
+SOURCE_TIER0_API CXboxLaunch *XboxLaunch();
 #endif
 
 #endif

@@ -203,7 +203,7 @@ S32 FrameEncoder_Miles::EncodeStreamCB(
 
   // Figure out how many samples we can safely give it.
   int maxSamples = pThis->m_SrcLen - pThis->m_CurSrcPos;
-  int samplesToGive = min(maxSamples, bytes_requested / 2);
+  int samplesToGive = std::min(maxSamples, bytes_requested / 2);
 
   // Convert to 16-bit signed mono.
   short *pOut = (short *)dest;
@@ -225,7 +225,7 @@ S32 FrameEncoder_Miles::DecodeStreamCB(
   Assert(pThis && offset == -1);
 
   int maxBytes = pThis->m_SrcLen - pThis->m_CurSrcPos;
-  int bytesToGive = min(maxBytes, bytes_requested);
+  int bytesToGive = std::min(maxBytes, bytes_requested);
   memcpy(dest, &pThis->m_pSrc[pThis->m_CurSrcPos], bytesToGive);
 
   pThis->m_CurSrcPos += bytesToGive;

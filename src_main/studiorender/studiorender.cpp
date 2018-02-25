@@ -286,7 +286,7 @@ void CStudioRender::SetLightingRenderState() {
     desc.m_Type = MATERIAL_LIGHT_DISABLE;
 
     int i;
-    int nLightCount = min(m_pRC->m_NumLocalLights, nMaxLightCount);
+    int nLightCount = std::min(m_pRC->m_NumLocalLights, nMaxLightCount);
     for (i = 0; i < nLightCount; ++i) {
       pRenderContext->SetLight(i, m_pRC->m_LocalLights[i]);
     }

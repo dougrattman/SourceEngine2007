@@ -205,7 +205,7 @@ static void TakeCubemapSnapshot(const Vector &origin, const char *pFileNameBase,
                 float texel = ldr_map.Pixel(x, y, c);
                 if (texel > 0.98) bOverExposedTexels = true;
                 texel *= scale;
-                hdr_map.Pixel(x, y, c) = max(hdr_map.Pixel(x, y, c), texel);
+                hdr_map.Pixel(x, y, c) = std::max(hdr_map.Pixel(x, y, c), texel);
               }
           exposure *= 0.75;
           materials->SwapBuffers();

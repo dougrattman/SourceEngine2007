@@ -10,7 +10,7 @@
 #include "appframework/appframework.h"
 #include "tier0/include/dbg.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "vstdlib/iprocessutils.h"
 #include "tier1/interface.h"
 #include "vstdlib/cvar.h"

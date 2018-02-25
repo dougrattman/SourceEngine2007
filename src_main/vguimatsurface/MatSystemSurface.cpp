@@ -3082,7 +3082,7 @@ void CMatSystemSurface::SurfaceSetCursorPos(int x, int y) {
 // Purpose: global alpha setting functions
 //-----------------------------------------------------------------------------
 void CMatSystemSurface::DrawSetAlphaMultiplier(float alpha /* [0..1] */) {
-  m_flAlphaMultiplier = clamp(alpha, 0.0f, 1.0f);
+  m_flAlphaMultiplier = std::clamp(alpha, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------

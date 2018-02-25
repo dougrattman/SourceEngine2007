@@ -106,7 +106,7 @@ IMPLEMENT_NETWORKCLASS_ALIASED( HL1MPGameRulesProxy, DT_HL1MPGameRulesProxy )
 	{		
 		// Look at -count.
 		int count = 1;
-		count = clamp( count, 1, 16 );
+		count = std::clamp( count, 1, 16 );
 
 		int iTeam = 0;
 

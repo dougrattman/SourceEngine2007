@@ -937,7 +937,7 @@ float CMultiPlayerAnimState::CalcMovementPlaybackRate( bool *bIsMoving )
 		{
 			// Note this gets set back to 1.0 if sequence changes due to ResetSequenceInfo below
 			flReturn = flSpeed / flGroundSpeed;
-			flReturn = clamp( flReturn, 0.01f, 10.0f );
+			flReturn = std::clamp( flReturn, 0.01f, 10.0f );
 		}
 
 		*bIsMoving = true;
@@ -1363,7 +1363,7 @@ void CMultiPlayerAnimState::EstimateYaw( void )
 	else
 	{
 		m_PoseParameterData.m_flEstimateYaw = ( atan2( vecEstVelocity.y, vecEstVelocity.x ) * 180.0f / M_PI );
-		m_PoseParameterData.m_flEstimateYaw = clamp( m_PoseParameterData.m_flEstimateYaw, -180.0f, 180.0f );
+		m_PoseParameterData.m_flEstimateYaw = std::clamp( m_PoseParameterData.m_flEstimateYaw, -180.0f, 180.0f );
 	}
 }
 
@@ -1478,7 +1478,7 @@ void CMultiPlayerAnimState::ConvergeYawAngles( float flGoalYaw, float flYawRate,
 	// Always do at least a bit of the turn (1%).
 	float flScale = 1.0f;
 	flScale = flDeltaYawAbs / FADE_TURN_DEGREES;
-	flScale = clamp( flScale, 0.01f, 1.0f );
+	flScale = std::clamp( flScale, 0.01f, 1.0f );
 
 	float flYaw = flYawRate * flDeltaTime * flScale;
 	if ( flDeltaYawAbs < flYaw )

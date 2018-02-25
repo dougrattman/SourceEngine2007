@@ -4,7 +4,7 @@
 //
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <vgui/IVGui.h>
 #include <vgui_controls/DirectorySelectDialog.h>
 #include <vgui/IInput.h>

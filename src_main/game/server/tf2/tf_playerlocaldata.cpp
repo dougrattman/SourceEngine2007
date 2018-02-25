@@ -127,7 +127,7 @@ void CTFPlayerLocalData::AddResources( int iAmount )
 void CTFPlayerLocalData::RemoveResources( int iAmount )
 {
 	Assert( iAmount <= m_iBankResources );
-	m_iBankResources = max(0, m_iBankResources - iAmount);
+	m_iBankResources = std::max(0, m_iBankResources - iAmount);
 }
 
 //-----------------------------------------------------------------------------

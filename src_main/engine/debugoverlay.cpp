@@ -370,7 +370,7 @@ void AddTextOverlay(const Vector& textPos, float duration, float alpha,
   new_overlay->r = 255;
   new_overlay->g = 255;
   new_overlay->b = 255;
-  new_overlay->a = (int)clamp(alpha * 255.f, 0.f, 255.f);
+  new_overlay->a = (int)std::clamp(alpha * 255.f, 0.f, 255.f);
 
   new_overlay->nextOverlayText = s_pOverlayText;
   s_pOverlayText = new_overlay;
@@ -444,7 +444,7 @@ void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
   new_overlay->r = 255;
   new_overlay->g = 255;
   new_overlay->b = 255;
-  new_overlay->a = (int)clamp(alpha * 255.f, 0.f, 255.f);
+  new_overlay->a = (int)std::clamp(alpha * 255.f, 0.f, 255.f);
   new_overlay->bUseOrigin = true;
 
   new_overlay->nextOverlayText = s_pOverlayText;
@@ -462,10 +462,10 @@ void AddTextOverlay(const Vector& textPos, int line_offset, float duration,
   new_overlay->bUseOrigin = true;
   new_overlay->lineOffset = line_offset;
   new_overlay->SetEndTime(duration);
-  new_overlay->r = (int)clamp(r * 255.f, 0.f, 255.f);
-  new_overlay->g = (int)clamp(g * 255.f, 0.f, 255.f);
-  new_overlay->b = (int)clamp(b * 255.f, 0.f, 255.f);
-  new_overlay->a = (int)clamp(alpha * 255.f, 0.f, 255.f);
+  new_overlay->r = (int)std::clamp(r * 255.f, 0.f, 255.f);
+  new_overlay->g = (int)std::clamp(g * 255.f, 0.f, 255.f);
+  new_overlay->b = (int)std::clamp(b * 255.f, 0.f, 255.f);
+  new_overlay->a = (int)std::clamp(alpha * 255.f, 0.f, 255.f);
   new_overlay->bUseOrigin = true;
 
   new_overlay->nextOverlayText = s_pOverlayText;

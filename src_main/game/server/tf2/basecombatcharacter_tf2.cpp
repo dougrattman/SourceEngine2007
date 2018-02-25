@@ -172,7 +172,7 @@ bool CBaseCombatCharacter::AttemptToPowerup( int iPowerup, float flTime, float f
 
 	// Get the correct duration
 	flTime = PowerupDuration( iPowerup, flTime );
-	m_flPowerupEndTimes[iPowerup] = max( m_flPowerupEndTimes[iPowerup], gpGlobals->curtime + flTime );
+	m_flPowerupEndTimes[iPowerup] = std::max( m_flPowerupEndTimes[iPowerup], gpGlobals->curtime + flTime );
 
 	// Turn it on
 	SetPowerup( iPowerup, true, flTime, flAmount, pAttacker, pDamageModifier );
@@ -219,7 +219,7 @@ void CBaseCombatCharacter::PowerupStart( int iPowerup, float flAmount, CBaseEnti
 				m_flFractionalBoost = flHealthToAdd - nHealthToAdd; 
 				if ( nHealthToAdd )
 				{
-					int nHealthAdded = min( nHealthToAdd, maxHealthToAdd );
+					int nHealthAdded = std::min( nHealthToAdd, maxHealthToAdd );
 					if ( IsPlayer() )
 					{
 						((CBaseTFPlayer*)this)->TakeHealthBoost( nHealthAdded, GetMaxHealth(), 25 );

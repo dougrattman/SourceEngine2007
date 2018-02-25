@@ -474,7 +474,7 @@ bool Ep2_ParseCurrentUserID(char const *pchDataFile, char *pchUserID,
     _stat(pchDataFile, &sb);
 
     // Msg( "Processing %s\n", ctx->file );
-    int nBytesToRead = min(sb.st_size, sizeof(short) + 16);
+    int nBytesToRead = std::min(sb.st_size, sizeof(short) + 16);
 
     statsBuffer.Clear();
     statsBuffer.EnsureCapacity(nBytesToRead);

@@ -135,7 +135,7 @@ static bool AddSingleDynamicLight(dlight_t &dl, SurfaceHandle_t surfID,
   intensity[2] =
       TexLightToLinear(dl.color.b, dl.color.exponent) * lightStyleValue;
 
-  float minlight = max(g_flMinLightingValue, dl.minlight);
+  float minlight = std::max(g_flMinLightingValue, dl.minlight);
   float ooQuadraticAttn = lightRadiusSq * minlight;
   float ooRadiusSq = 1.0f / lightRadiusSq;
 
@@ -212,7 +212,7 @@ static void AddSingleDynamicLightToBumpLighting(
   intensity[2] =
       TexLightToLinear(dl.color.b, dl.color.exponent) * lightStyleValue;
 
-  float minlight = max(g_flMinLightingValue, dl.minlight);
+  float minlight = std::max(g_flMinLightingValue, dl.minlight);
   float ooQuadraticAttn = lightRadiusSq * minlight;
   float ooRadiusSq = 1.0f / lightRadiusSq;
 
@@ -1394,7 +1394,7 @@ void R_RedownloadAllLightmaps() {
   }
 #endif
 
-  double st = Sys_FloatTime();
+  double st = Plat_FloatTime();
 
   bool bOnlyUseLightStyles = false;
 
@@ -1427,7 +1427,7 @@ void R_RedownloadAllLightmaps() {
     }
   }
 
-  float elapsed = (float)(Sys_FloatTime() - st) * 1000.0;
+  float elapsed = (float)(Plat_FloatTime() - st) * 1000.0;
   DevMsg("R_RedownloadAllLightmaps took %.3f msec!\n", elapsed);
 
   g_RebuildLightmaps = false;

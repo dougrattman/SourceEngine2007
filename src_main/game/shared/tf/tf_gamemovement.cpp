@@ -719,7 +719,7 @@ void CTFGameMovement::WalkMove( void )
 
 	// Calculate the speed and direction of movement, then clamp the speed.
 	float flWishSpeed = VectorNormalize( vecWishDirection );
-	flWishSpeed = clamp( flWishSpeed, 0.0f, mv->m_flMaxSpeed );
+	flWishSpeed = std::clamp( flWishSpeed, 0.0f, mv->m_flMaxSpeed );
 
 	// Accelerate in the x,y plane.
 	mv->m_vecVelocity.z = 0;

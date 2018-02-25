@@ -11,7 +11,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 
 #ifdef UTLMEMORY_TRACK
 #define UTLMEMORY_TRACK_ALLOC()                               \
@@ -30,11 +30,11 @@
 #define UTLMEMORY_TRACK_FREE() ((void)0)
 #endif
 
-//-----------------------------------------------------------------------------
+
 // The CUtlFixedMemory class:
 // A growable memory class that allocates non-sequential blocks, but is indexed
 // sequentially
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CUtlFixedMemory {
  public:
@@ -119,7 +119,7 @@ class CUtlFixedMemory {
   int NumAllocated() const;
   int Count() const { return NumAllocated(); }
 
-  // Grows memory by max(num,growsize), and returns the allocation index/ptr
+  // Grows memory by std::max(num,growsize), and returns the allocation index/ptr
   void Grow(int num = 1);
 
   // Makes sure we've got at least this much memory
@@ -155,9 +155,9 @@ class CUtlFixedMemory {
   int m_nGrowSize;
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 
 template <class T>
 CUtlFixedMemory<T>::CUtlFixedMemory(int nGrowSize, int nInitAllocationCount)
@@ -170,9 +170,9 @@ CUtlFixedMemory<T>::~CUtlFixedMemory() {
   Purge();
 }
 
-//-----------------------------------------------------------------------------
+
 // Fast swap - WARNING: Swap invalidates all ptr-based indices!!!
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlFixedMemory<T>::Swap(CUtlFixedMemory<T>& mem) {
   swap(m_pBlocks, mem.m_pBlocks);
@@ -180,9 +180,9 @@ void CUtlFixedMemory<T>::Swap(CUtlFixedMemory<T>& mem) {
   swap(m_nGrowSize, mem.m_nGrowSize);
 }
 
-//-----------------------------------------------------------------------------
+
 // Set the size by which the memory grows - round up to the next power of 2
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlFixedMemory<T>::Init(int nGrowSize /* = 0 */,
                               int nInitSize /* = 0 */) {
@@ -197,9 +197,9 @@ void CUtlFixedMemory<T>::Init(int nGrowSize /* = 0 */,
   Grow(nInitSize);
 }
 
-//-----------------------------------------------------------------------------
+
 // element access
-//-----------------------------------------------------------------------------
+
 template <class T>
 inline T& CUtlFixedMemory<T>::operator[](int i) {
   Assert(IsIdxValid(i));
@@ -224,17 +224,17 @@ inline const T& CUtlFixedMemory<T>::Element(int i) const {
   return *(T*)i;
 }
 
-//-----------------------------------------------------------------------------
+
 // Size
-//-----------------------------------------------------------------------------
+
 template <class T>
 inline int CUtlFixedMemory<T>::NumAllocated() const {
   return m_nAllocationCount;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is element index valid?
-//-----------------------------------------------------------------------------
+
 template <class T>
 inline bool CUtlFixedMemory<T>::IsIdxValid(int i) const {
 #ifdef _DEBUG
@@ -295,17 +295,17 @@ void CUtlFixedMemory<T>::Grow(int num) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we've got at least this much memory
-//-----------------------------------------------------------------------------
+
 template <class T>
 inline void CUtlFixedMemory<T>::EnsureCapacity(int num) {
   Grow(num - NumAllocated());
 }
 
-//-----------------------------------------------------------------------------
+
 // Memory deallocation
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlFixedMemory<T>::Purge() {
   if (!m_pBlocks) return;

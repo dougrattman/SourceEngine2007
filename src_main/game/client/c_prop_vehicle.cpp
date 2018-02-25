@@ -330,7 +330,7 @@ void C_PropVehicleDriveable::RestrictView( float *pYawBounds, float *pPitchBound
 	if ( pYawBounds )
 	{
 		float flAngleDiff = AngleDiff( vecViewAngles.y, vehicleEyeAngles.y );
-		flAngleDiff = clamp( flAngleDiff, pYawBounds[0], pYawBounds[1] );
+		flAngleDiff = std::clamp( flAngleDiff, pYawBounds[0], pYawBounds[1] );
 		vecViewAngles.y = vehicleEyeAngles.y + flAngleDiff;
 	}
 
@@ -338,7 +338,7 @@ void C_PropVehicleDriveable::RestrictView( float *pYawBounds, float *pPitchBound
 	if ( pPitchBounds )
 	{
 		float flAngleDiff = AngleDiff( vecViewAngles.x, vehicleEyeAngles.x );
-		flAngleDiff = clamp( flAngleDiff, pPitchBounds[0], pPitchBounds[1] );
+		flAngleDiff = std::clamp( flAngleDiff, pPitchBounds[0], pPitchBounds[1] );
 		vecViewAngles.x = vehicleEyeAngles.x + flAngleDiff;
 	}
 
@@ -346,7 +346,7 @@ void C_PropVehicleDriveable::RestrictView( float *pYawBounds, float *pPitchBound
 	if ( pRollBounds )
 	{
 		float flAngleDiff = AngleDiff( vecViewAngles.z, vehicleEyeAngles.z );
-		flAngleDiff = clamp( flAngleDiff, pRollBounds[0], pRollBounds[1] );
+		flAngleDiff = std::clamp( flAngleDiff, pRollBounds[0], pRollBounds[1] );
 		vecViewAngles.z = vehicleEyeAngles.z + flAngleDiff;
 	}
 }

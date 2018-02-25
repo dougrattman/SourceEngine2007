@@ -418,6 +418,7 @@
     <ClInclude Include="include\protected_things.h" />
     <ClInclude Include="include\systeminformation.h" />
     <ClInclude Include="include\threadtools.h" />
+    <ClInclude Include="include\tier0_api.h" />
     <ClInclude Include="include\tslist.h" />
     <ClInclude Include="include\validator.h" />
     <ClInclude Include="include\valobject.h" />

@@ -1,6 +1,6 @@
 // Copyright © 1996-2005, Valve Corporation, All rights reserved.
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "byteswap.h"
 #include "collisionutils.h"

@@ -892,7 +892,7 @@ int CTexture::GetOptimalReadBuffer(FileHandle_t hFile, int nSize,
           ? 0
           : 2 * 1024 *
                 1024;  // 360 has no min, PC uses 2MB min to avoid fragmentation
-  nSize = max(nSize, minSize);
+  nSize = std::max(nSize, minSize);
   int nBytesOptimalRead = g_pFullFileSystem->GetOptimalReadSize(hFile, nSize);
   if (nBytesOptimalRead > s_nOptimalReadBufferSize) {
     FreeOptimalReadBuffer(0);
@@ -1387,7 +1387,7 @@ int CTexture::ComputeActualMipCount() const {
     int nNumMipLevels = 1;
     int h = m_nActualWidth;
     int w = m_nActualHeight;
-    while (min(w, h) > iMaxMipSize) {
+    while (std::min(w, h) > iMaxMipSize) {
       ++nNumMipLevels;
 
       w >>= 1;
@@ -1461,8 +1461,8 @@ int CTexture::ComputeActualSize(bool bIgnorePicmip, IVTFTexture *pVTFTexture) {
 
     // In case clamp values exceed texture dimensions, then fix up
     // the clamping values
-    nClampX = min(nClampX, m_nActualWidth);
-    nClampY = min(nClampY, m_nActualHeight);
+    nClampX = std::min(nClampX, (int)m_nActualWidth);
+    nClampY = std::min(nClampY, (int)m_nActualHeight);
   }
 
   //
@@ -1511,17 +1511,17 @@ int CTexture::ComputeActualSize(bool bIgnorePicmip, IVTFTexture *pVTFTexture) {
   int iHwHeight = HardwareConfig()->MaxTextureHeight();
   int iHwDepth = HardwareConfig()->MaxTextureDepth();
 
-  nClampX = min(nClampX, max(iHwWidth, 4));
-  nClampY = min(nClampY, max(iHwHeight, 4));
-  nClampZ = min(nClampZ, max(iHwDepth, 1));
+  nClampX = std::min(nClampX, std::max(iHwWidth, 4));
+  nClampY = std::min(nClampY, std::max(iHwHeight, 4));
+  nClampZ = std::min(nClampZ, std::max(iHwDepth, 1));
 
   Assert(nClampZ >= 1);
 
   // In case clamp values exceed texture dimensions, then fix up
   // the clamping values.
-  nClampX = min(nClampX, m_nActualWidth);
-  nClampY = min(nClampY, m_nActualHeight);
-  nClampZ = min(nClampZ, m_nActualDepth);
+  nClampX = std::min(nClampX, (int)m_nActualWidth);
+  nClampY = std::min(nClampY, (int)m_nActualHeight);
+  nClampZ = std::min(nClampZ, (int)m_nActualDepth);
 
   //
   // Clamp to the determined dimensions

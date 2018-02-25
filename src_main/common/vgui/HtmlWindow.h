@@ -3,7 +3,7 @@
 #ifndef SOURCE_VGUI_HTMLWINDOW_H_
 #define SOURCE_VGUI_HTMLWINDOW_H_
 
-//#include "base/include/windows/windows_light.h"
+#define NOMINMAX
 
 #include <basetyps.h>
 #include <exdisp.h>

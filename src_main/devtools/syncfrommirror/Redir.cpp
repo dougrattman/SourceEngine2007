@@ -272,7 +272,7 @@ int CRedirector::RedirectStdout()
 
 		char szOutput[16*1024 + 1];
 		DWORD dwRead = 0;
-		if (!::ReadFile(m_hStdoutRead, szOutput, min(16*1024, dwAvail),
+		if (!::ReadFile(m_hStdoutRead, szOutput, std::min(16*1024, dwAvail),
 			&dwRead, NULL) || !dwRead)	// error, the child might ended
 			break;
 

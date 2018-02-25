@@ -14,17 +14,17 @@
 
 MemoryPoolReportFunc_t CMemoryPool::g_ReportFunc = 0;
 
-//-----------------------------------------------------------------------------
+
 // Error reporting...  (debug only)
-//-----------------------------------------------------------------------------
+
 
 void CMemoryPool::SetErrorReportFunc(MemoryPoolReportFunc_t func) {
   g_ReportFunc = func;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 CMemoryPool::CMemoryPool(int blockSize, int numElements, int growMode,
                          const char *pszAllocOwner, int nAlignment) {
   m_nAlignment = (nAlignment != 0) ? nAlignment : 1;
@@ -42,11 +42,11 @@ CMemoryPool::CMemoryPool(int blockSize, int numElements, int growMode,
   AddNewBlob();
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Frees the memory contained in the mempool, and invalidates it for
 //			any further use.
 // Input  : *memPool - the mempool to shutdown
-//-----------------------------------------------------------------------------
+
 CMemoryPool::~CMemoryPool() {
   if (m_BlocksAllocated > 0) {
     ReportLeaks();
@@ -54,9 +54,9 @@ CMemoryPool::~CMemoryPool() {
   Clear();
 }
 
-//-----------------------------------------------------------------------------
+
 // Resets the pool
-//-----------------------------------------------------------------------------
+
 void CMemoryPool::Init() {
   m_NumBlobs = 0;
   m_BlocksAllocated = 0;
@@ -64,9 +64,9 @@ void CMemoryPool::Init() {
   m_BlobHead.m_pNext = m_BlobHead.m_pPrev = &m_BlobHead;
 }
 
-//-----------------------------------------------------------------------------
+
 // Frees everything
-//-----------------------------------------------------------------------------
+
 void CMemoryPool::Clear() {
   // Free everything..
   CBlob *pNext;
@@ -77,9 +77,9 @@ void CMemoryPool::Clear() {
   Init();
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Reports memory leaks
-//-----------------------------------------------------------------------------
+
 
 void CMemoryPool::ReportLeaks() {
   if (!g_ReportFunc) return;
@@ -122,9 +122,9 @@ void CMemoryPool::ReportLeaks() {
 #endif  // _DEBUG
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void CMemoryPool::AddNewBlob() {
   MEM_ALLOC_CREDIT_(m_pszAllocOwner);
 
@@ -177,10 +177,10 @@ void *CMemoryPool::Alloc() { return Alloc(m_BlockSize); }
 
 void *CMemoryPool::AllocZero() { return AllocZero(m_BlockSize); }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Allocs a single block of memory from the pool.
 // Input  : amount -
-//-----------------------------------------------------------------------------
+
 void *CMemoryPool::Alloc(size_t amount) {
   void *returnBlock;
 
@@ -203,7 +203,7 @@ void *CMemoryPool::Alloc(size_t amount) {
     }
   }
   m_BlocksAllocated++;
-  m_PeakAlloc = max(m_PeakAlloc, m_BlocksAllocated);
+  m_PeakAlloc = std::max(m_PeakAlloc, m_BlocksAllocated);
 
   returnBlock = m_pHeadOfFreeList;
 
@@ -213,10 +213,10 @@ void *CMemoryPool::Alloc(size_t amount) {
   return returnBlock;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Allocs a single block of memory from the pool, zeroes the memory
 // before returning Input  : amount -
-//-----------------------------------------------------------------------------
+
 void *CMemoryPool::AllocZero(size_t amount) {
   void *mem = Alloc(amount);
   if (mem) {
@@ -225,10 +225,10 @@ void *CMemoryPool::AllocZero(size_t amount) {
   return mem;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Frees a block of memory
 // Input  : *memBlock - the memory to free
-//-----------------------------------------------------------------------------
+
 void CMemoryPool::Free(void *memBlock) {
   if (!memBlock) return;  // trying to delete NULL pointer, ignore
 

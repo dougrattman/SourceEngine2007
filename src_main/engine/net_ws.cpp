@@ -848,7 +848,7 @@ void NET_AdjustLag(void) {
 
   // Bound time step
 
-  float dt = clamp(net_time - s_LastTime, 0.0f, 0.2f);
+  float dt = std::clamp(net_time - s_LastTime, 0.0, 0.2);
 
   s_LastTime = net_time;
 
@@ -897,7 +897,7 @@ bool NET_LagPacket(bool newdata, netpacket_t *packet) {
       int ninterval;
 
       ninterval = (int)(fabs(fakeloss.GetFloat()));
-      ninterval = max(2, ninterval);
+      ninterval = std::max(2, ninterval);
 
       if (!(losscount[packet->source] % ninterval)) {
         return false;
@@ -924,7 +924,7 @@ bool NET_LagPacket(bool newdata, netpacket_t *packet) {
   if (!p) return false;  // no packet in lag list
 
   float target = s_FakeLag;
-  float maxjitter = min(fakejitter.GetFloat(), target * 0.5f);
+  float maxjitter = std::min(fakejitter.GetFloat(), target * 0.5f);
   target += RandomFloat(-maxjitter, maxjitter);
 
   if ((p->received + (target / 1000.0f)) > net_time)
@@ -1805,7 +1805,7 @@ int NET_SendLong(INetChannel *chan, int sock, SOCKET s, const char FAR *buf,
   bool bFirstSend = true;
 
   while (nBytesLeft > 0) {
-    int size = min(nSplitSizeMinusHeader, nBytesLeft);
+    int size = std::min(nSplitSizeMinusHeader, nBytesLeft);
 
     pPacket->packetID =
         LittleShort((short)((nPacketNumber << 8) + nPacketCount));
@@ -2012,8 +2012,8 @@ int NET_SendPacket(INetChannel *chan, int sock, const netadr_t &to,
   int nMaxRoutable = MAX_ROUTABLE_PAYLOAD;
   if (chan) {
     nMaxRoutable =
-        clamp(chan->GetMaxRoutablePayloadSize(), MIN_USER_MAXROUTABLE_SIZE,
-              min(sv_maxroutable.GetInt(), MAX_USER_MAXROUTABLE_SIZE));
+        std::clamp(chan->GetMaxRoutablePayloadSize(), MIN_USER_MAXROUTABLE_SIZE,
+                   std::min(sv_maxroutable.GetInt(), MAX_USER_MAXROUTABLE_SIZE));
   }
 
   if (length <= nMaxRoutable && !(net_queued_packet_thread.GetInt() ==

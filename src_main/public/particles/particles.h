@@ -18,9 +18,8 @@
 #include "trace.h"
 #include "vstdlib/random.h"
 
-//-----------------------------------------------------------------------------
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 struct DmxElementUnpackStructure_t;
 class CParticleSystemDefinition;
 class CParticleCollection;
@@ -32,15 +31,13 @@ class CSheet;
 class CMeshBuilder;
 extern float s_pRandomFloats[];
 
-//-----------------------------------------------------------------------------
 // Random numbers
-//-----------------------------------------------------------------------------
+
 #define MAX_RANDOM_FLOATS 4096
 #define RANDOM_FLOAT_MASK (MAX_RANDOM_FLOATS - 1)
 
-//-----------------------------------------------------------------------------
 // Particle attributes
-//-----------------------------------------------------------------------------
+
 #define MAX_PARTICLE_ATTRIBUTES 32
 
 #define DEFPARTICLE_ATTRIBUTE(name, bit)                   \
@@ -114,9 +111,8 @@ DEFPARTICLE_ATTRIBUTE(HITBOX_RELATIVE_XYZ, 15);
 
 #define MEASURE_PARTICLE_PERF 1
 
-//-----------------------------------------------------------------------------
 // Particle function types
-//-----------------------------------------------------------------------------
+
 enum ParticleFunctionType_t {
   FUNCTION_RENDERER = 0,
   FUNCTION_OPERATOR,
@@ -162,9 +158,7 @@ class CModelHitBoxesInfo {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Interface to allow the particle system to call back into the client
-//-----------------------------------------------------------------------------
 
 #define PARTICLE_SYSTEM_QUERY_INTERFACE_VERSION "VParticleSystemQuery001"
 
@@ -205,13 +199,12 @@ class IParticleSystemQuery : public IAppSystem {
   virtual Vector GetLocalPlayerFacing(void) { return vec3_origin; }
 };
 
-//-----------------------------------------------------------------------------
 //
 // Particle system manager. Using a class because tools need it that way
 // so the SFM and PET tools can share managers despite being linked to
 // separate particle system .libs
 //
-//-----------------------------------------------------------------------------
+
 typedef int ParticleSystemHandle_t;
 
 class CParticleSystemMgr {
@@ -396,9 +389,8 @@ class CParticleSystemMgr {
 
 extern CParticleSystemMgr *g_pParticleSystemMgr;
 
-//-----------------------------------------------------------------------------
 // A particle system can only have 1 operator using a particular ID
-//-----------------------------------------------------------------------------
+
 enum ParticleOperatorId_t {
   // Generic IDs
   OPERATOR_GENERIC = -2,  // Can have as many of these as you want
@@ -423,16 +415,15 @@ enum ParticleOperatorId_t {
   OPERATOR_ID_COUNT,
 };
 
-//-----------------------------------------------------------------------------
 // Class factory for particle operators
-//-----------------------------------------------------------------------------
+
 class IParticleOperatorDefinition {
  public:
   virtual const char *GetName() const = 0;
   virtual CParticleOperatorInstance *CreateInstance(
       const DmObjectId_t &id) const = 0;
   //	virtual void DestroyInstance( CParticleOperatorInstance *pInstance )
-  //const = 0;
+  // const = 0;
   virtual const DmxElementUnpackStructure_t *GetUnpackStructure() const = 0;
   virtual ParticleOperatorId_t GetId() const = 0;
   virtual bool IsObsolete() const = 0;
@@ -445,7 +436,7 @@ class IParticleOperatorDefinition {
 
   FORCEINLINE void RecordExecutionTime(float flETime) {
     m_flUncomittedTime += flETime;
-    m_flMaxExecutionTime = max(m_flMaxExecutionTime, flETime);
+    m_flMaxExecutionTime = std::max(m_flMaxExecutionTime, flETime);
   }
 
   FORCEINLINE float TotalRecordedExecutionTime(void) const {
@@ -458,9 +449,8 @@ class IParticleOperatorDefinition {
 #endif
 };
 
-//-----------------------------------------------------------------------------
 // Particle operators
-//-----------------------------------------------------------------------------
+
 class CParticleOperatorInstance {
  public:
   // custom allocators so we can be simd aligned
@@ -667,9 +657,8 @@ class CParticleOperatorInstance {
   friend class CParticleOperatorDefinition;
 };
 
-//-----------------------------------------------------------------------------
 // Helper macro for creating particle operator factories
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CParticleOperatorDefinition : public IParticleOperatorDefinition {
  public:
@@ -742,9 +731,8 @@ class CParticleOperatorDefinition : public IParticleOperatorDefinition {
 // need to think about particle constraints in terms of segregating affected
 // particles so as to run multi-pass constraints on only a subset
 
-//-----------------------------------------------------------------------------
 // flags for particle systems
-//-----------------------------------------------------------------------------
+
 enum {
   PCFLAGS_FIRST_FRAME = 0x1,
   PCFLAGS_PREV_CONTROL_POINTS_INITIALIZED = 0x2,
@@ -778,10 +766,11 @@ struct CPathParameters {
   float m_flMidPoint;
 
   void ClampControlPointIndices(void) {
-    m_nStartControlPointNumber = max(
-        0, min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nStartControlPointNumber));
-    m_nEndControlPointNumber =
-        max(0, min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nEndControlPointNumber));
+    m_nStartControlPointNumber = std::max(
+        0,
+        std::min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nStartControlPointNumber));
+    m_nEndControlPointNumber = std::max(
+        0, std::min(MAX_PARTICLE_CONTROL_POINTS - 1, m_nEndControlPointNumber));
   }
 };
 
@@ -833,11 +822,10 @@ struct CParticleSIMDTransformation {
 
 #define NUM_COLLISION_CACHE_MODES 3
 
-//-----------------------------------------------------------------------------
 //
 // CParticleCollection
 //
-//-----------------------------------------------------------------------------
+
 class CParticleCollection {
  public:
   ~CParticleCollection(void);
@@ -1320,9 +1308,7 @@ class C4VAttributeWriteIterator : public CStridedPtr<FourVectors> {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Inline methods of CParticleCollection
-//-----------------------------------------------------------------------------
 
 inline bool CParticleCollection::HasAttachedKillList(void) const {
   return m_pParticleKillList != NULL;
@@ -1372,7 +1358,7 @@ inline void CParticleCollection::SetAttributeToConstant(int nAttribute,
 inline void CParticleCollection::SetControlPoint(int nWhichPoint,
                                                  const Vector &v) {
   Assert((nWhichPoint >= 0) && (nWhichPoint < MAX_PARTICLE_CONTROL_POINTS));
-  m_nHighestCP = max(m_nHighestCP, nWhichPoint);
+  m_nHighestCP = std::max(m_nHighestCP, nWhichPoint);
   m_ControlPoints[nWhichPoint].m_Position = v;
   for (CParticleCollection *i = m_Children.m_pHead; i; i = i->m_pNext) {
     i->SetControlPoint(nWhichPoint, v);
@@ -1752,9 +1738,8 @@ inline void CParticleCollection::FillAttributeWithConstant(int nAttribute,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Helper to set vector attribute values
-//-----------------------------------------------------------------------------
+
 FORCEINLINE void SetVectorAttribute(float *pAttribute, float x, float y,
                                     float z) {
   pAttribute[0] = x;
@@ -1774,9 +1759,8 @@ FORCEINLINE void SetVectorFromAttribute(Vector &v, const float *pAttribute) {
   v.z = pAttribute[8];
 }
 
-//-----------------------------------------------------------------------------
 // Computes the sq distance to a particle position
-//-----------------------------------------------------------------------------
+
 FORCEINLINE float CParticleCollection::ComputeSqrDistanceToParticle(
     int hParticle, const Vector &vecPosition) const {
   const float *xyz = GetFloatAttributePtr(PARTICLE_ATTRIBUTE_XYZ, hParticle);
@@ -1784,9 +1768,8 @@ FORCEINLINE float CParticleCollection::ComputeSqrDistanceToParticle(
   return vecParticlePosition.DistToSqr(vecPosition);
 }
 
-//-----------------------------------------------------------------------------
 // Grows the dist sq range for all particles
-//-----------------------------------------------------------------------------
+
 FORCEINLINE void CParticleCollection::GrowDistSqrBounds(float flDistSqr) {
   if (m_flLastMinDistSqr > flDistSqr) {
     m_flLastMinDistSqr = flDistSqr;
@@ -1795,9 +1778,8 @@ FORCEINLINE void CParticleCollection::GrowDistSqrBounds(float flDistSqr) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Data associated with children particle systems
-//-----------------------------------------------------------------------------
+
 struct ParticleChildrenInfo_t {
   DmObjectId_t m_Id;
   CUtlString m_Name;
@@ -1805,9 +1787,8 @@ struct ParticleChildrenInfo_t {
   float m_flDelay;  // How much to delay this system after the parent starts
 };
 
-//-----------------------------------------------------------------------------
 // A template describing how a particle system will function
-//-----------------------------------------------------------------------------
+
 class CParticleSystemDefinition {
   DECLARE_DMXELEMENT_UNPACK();
   DECLARE_REFERENCED_CLASS(CParticleSystemDefinition);
@@ -1959,9 +1940,8 @@ class CParticleSystemDefinition {
   friend class CParticleSystemMgr;
 };
 
-//-----------------------------------------------------------------------------
 // Inline methods
-//-----------------------------------------------------------------------------
+
 inline CParticleSystemDefinition::CParticleSystemDefinition(void) {
   m_nControlPointReadMask = 0;
   m_nInitialAttributeReadMask = 0;

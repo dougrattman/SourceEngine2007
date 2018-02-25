@@ -9,7 +9,7 @@
 #include "tier0/include/dbg.h"
 #include "tier1/utllinkedlist.h"
 
-//-----------------------------------------------------------------------------
+
 // Templatized helper class to deal with the kinds of things that spatial
 // partition code always seems to have; buckets with lists of lots of elements
 // and elements that live in lots of buckets. This makes it really quick to
@@ -34,7 +34,7 @@
 // The implicit assumption is that CBucketHandle and CElementHandle can
 // be safely cast to ints! You can increase to U64 without performance
 // penalty if necessary; the PowerPC is a 64-bit processor.
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I = S>
 class CBidirectionalSet {
  public:
@@ -112,18 +112,18 @@ class CBidirectionalSet {
   FirstElementFunc_t m_FirstElement;
 };
 
-//-----------------------------------------------------------------------------
+
 // Constructor
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::CBidirectionalSet() {
   m_FirstBucket = NULL;
   m_FirstElement = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Call this before using the set
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::Init(
     FirstElementFunc_t elemFunc, FirstBucketFunc_t bucketFunc) {
@@ -131,9 +131,9 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::Init(
   m_FirstElement = elemFunc;
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element to the bucket
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S,
                        I>::ValidateAddElementToBucket(CBucketHandlePram bucket,
@@ -163,9 +163,9 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S,
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Adds an element to the bucket
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::AddElementToBucket(
     CBucketHandlePram bucket, CElementHandlePram element) {
@@ -196,10 +196,10 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::AddElementToBucket(
   firstBucketInElement = list;
 }
 
-//-----------------------------------------------------------------------------
+
 // Test if an element is in a particular bucket.
 // NOTE: EXPENSIVE!!!
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 bool CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::IsElementInBucket(
     CBucketHandlePram bucket, CElementHandlePram element) {
@@ -214,9 +214,9 @@ bool CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::IsElementInBucket(
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Remove an element from a particular bucket
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S,
                        I>::RemoveElementFromBucket(CBucketHandlePram bucket,
@@ -225,9 +225,9 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S,
   Assert(0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Removes an element from all buckets
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::RemoveElement(
     CElementHandlePram element) {
@@ -253,9 +253,9 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::RemoveElement(
   m_FirstBucket(element) = m_BucketsUsedByElement.InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
+
 // Removes a bucket from all elements
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::RemoveBucket(
     CBucketHandlePram bucket) {
@@ -280,9 +280,9 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::RemoveBucket(
   m_FirstElement(bucket) = m_ElementsInBucket.InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
+
 // Ensure capacity
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::EnsureCapacity(
     int count) {
@@ -290,27 +290,27 @@ void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::EnsureCapacity(
   m_BucketsUsedByElement.EnsureCapacity(count);
 }
 
-//-----------------------------------------------------------------------------
+
 // Deallocate....
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::Purge() {
   m_ElementsInBucket.Purge();
   m_BucketsUsedByElement.Purge();
 }
 
-//-----------------------------------------------------------------------------
+
 // Invalid index for iteration..
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 inline S
 CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::InvalidIndex() {
   return CUtlLinkedList<CElementHandle, I>::InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
+
 // Used to iterate elements in a bucket; I is the iterator
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 inline I CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::FirstElement(
     CBucketHandlePram bucket) const {
@@ -330,9 +330,9 @@ CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::Element(I idx) const {
   return m_ElementsInBucket[idx].m_Element;
 }
 
-//-----------------------------------------------------------------------------
+
 // Used to iterate buckets an element lies in; I is the iterator
-//-----------------------------------------------------------------------------
+
 template <class CBucketHandle, class CElementHandle, class S, class I>
 inline I CBidirectionalSet<CBucketHandle, CElementHandle, S, I>::FirstBucket(
     CElementHandlePram element) const {

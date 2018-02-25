@@ -59,7 +59,7 @@ bool SIMDTest() {
     fltx4 *__restrict pCreationTime = g_CreationTime;
 
     fltx4 CurTime = ReplicateX4(t);
-    fltx4 TimeScale = ReplicateX4(1.0 / (max(0.001, 1.0)));
+    fltx4 TimeScale = ReplicateX4(1.0 / (std::max(0.001, 1.0)));
 
     // calculate radius spline
     bool bConstantRadius = true;

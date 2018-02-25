@@ -39,7 +39,7 @@
 
 #define SF_COMBINE_BALL_BOUNCING_IN_SPAWNER 0x10000
 
-#define MAX_COMBINEBALL_RADIUS 12
+#define MAX_COMBINEBALL_RADIUS 12.0f
 
 ConVar sk_npc_dmg_combineball("sk_npc_dmg_combineball", "15", FCVAR_REPLICATED);
 ConVar sk_combineball_guidefactor("sk_combineball_guidefactor", "0.5",
@@ -158,12 +158,13 @@ bool UTIL_IsAR2CombineBall(CBaseEntity *pEntity) {
 //-----------------------------------------------------------------------------
 // Purpose: Uses a deeper casting check to determine if pEntity is a combine
 //			ball. This function exists because the normal (much
-//faster)
-// check 			in UTIL_IsCombineBall() can never identify a combine
-// ball held by 			the physcannon because the physcannon changes
-// the held entity's 			collision group.
-// Input  : *pEntity - Entity to check
-// Output : Returns true on success, false on failure.
+// faster)
+// check 			in UTIL_IsCombineBall() can never identify a
+// combine
+// ball held by 			the physcannon because the physcannon
+// changes the held entity's 			collision group. Input  :
+// *pEntity - Entity to check Output : Returns true on success, false on
+// failure.
 //-----------------------------------------------------------------------------
 bool UTIL_IsCombineBallDefinite(CBaseEntity *pEntity) {
   CPropCombineBall *pBall = dynamic_cast<CPropCombineBall *>(pEntity);
@@ -291,7 +292,7 @@ bool CPropCombineBall::IsInField() const {
 // Sets the radius
 //-----------------------------------------------------------------------------
 void CPropCombineBall::SetRadius(float flRadius) {
-  m_flRadius = clamp(flRadius, 1, MAX_COMBINEBALL_RADIUS);
+  m_flRadius = std::clamp(flRadius, 1.0f, MAX_COMBINEBALL_RADIUS);
 }
 
 //-----------------------------------------------------------------------------
@@ -1617,7 +1618,7 @@ void CFuncCombineBallSpawner::Spawn() {
 
   float flWidth = CollisionProp()->OBBSize().x;
   float flHeight = CollisionProp()->OBBSize().y;
-  m_flRadius = min(flWidth, flHeight) * 0.5f;
+  m_flRadius = std::min(flWidth, flHeight) * 0.5f;
   if (m_flRadius <= 0.0f && m_bShooter == false) {
     Warning("Zero dimension func_combine_ball_spawner! Removing...\n");
     UTIL_Remove(this);

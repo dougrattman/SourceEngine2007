@@ -5,13 +5,13 @@
 
 #ifdef _WIN32
 
-#include <sys/stat.h>
-#include <cassert>
-
 #ifndef _LINUX
 #undef fopen
 #endif
 
+#include <sys/stat.h>
+#include <algorithm>
+#include <cassert>
 #include <cstdio>
 
 #include "base/include/windows/windows_light.h"
@@ -172,7 +172,7 @@ void ReadData(RequestContext &rc) {
       // We've read some data.  Make sure we won't walk off the end of our
       // buffer, then use memcpy() to save the data off.
       DWORD safeSize =
-          (DWORD)min(rc.nBytesTotal - rc.nBytesCurrent, (int)dwSize);
+          std::min((DWORD)rc.nBytesTotal - (DWORD)rc.nBytesCurrent, dwSize);
       Thread_DPrintf("Read %d bytes @ offset %d\n", safeSize, rc.nBytesCurrent);
       if (safeSize != dwSize) {
         Thread_DPrintf("Warning - read more data than expected!\n");
@@ -367,7 +367,7 @@ DWORD __stdcall DownloadThread(void *voidPtr) {
     // only access to https:// servers (?!?) to host files as transparently as
     // possible.
     // Use SSL, etc. Kinda need this for HTTPS URLs.
-    flags |= INTERNET_FLAG_SECURE;  
+    flags |= INTERNET_FLAG_SECURE;
   }
 
   // Request a partial if we have the data
@@ -464,7 +464,7 @@ DWORD __stdcall DownloadThread(void *voidPtr) {
 
   // copy cached data into buffer
   if (rc.cacheData && rc.nBytesCached) {
-    int len = min(rc.nBytesCached, rc.nBytesTotal);
+    int len = std::min(rc.nBytesCached, rc.nBytesTotal);
     memcpy(rc.data, rc.cacheData, len);
   }
 

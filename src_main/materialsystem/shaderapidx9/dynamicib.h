@@ -180,7 +180,7 @@ CIndexBuffer::CIndexBuffer(D3DDeviceWrapper *pD3D, int count,
 {
   // For write-combining, ensure we always have locked memory aligned to 4-byte
   // boundaries
-  count = ALIGN_VALUE(count, 2);
+  count = AlignValue(count, 2);
   m_IndexCount = count;
 
   MEM_ALLOC_D3D_CREDIT();
@@ -269,7 +269,7 @@ CIndexBuffer::CIndexBuffer(D3DDeviceWrapper *pD3D, int count,
   if (m_bDynamic) {
     m_iAllocationCount = count * X360_INDEX_BUFFER_SIZE_MULTIPLIER;
     Assert(m_iAllocationCount >= count);
-    m_iAllocationCount = ALIGN_VALUE(m_iAllocationCount, 2);
+    m_iAllocationCount = AlignValue(m_iAllocationCount, 2);
     m_pAllocatedMemory = (unsigned char *)XPhysicalAlloc(
         m_iAllocationCount * IndexSize(), MAXULONG_PTR, 0,
         PAGE_READWRITE | MEM_LARGE_PAGES | PAGE_WRITECOMBINE);
@@ -360,7 +360,7 @@ unsigned short *CIndexBuffer::Lock(bool bReadOnly, int numIndices,
 
   // For write-combining, ensure we always have locked memory aligned to 4-byte
   // boundaries
-  if (m_bDynamic) numIndices = ALIGN_VALUE(numIndices, 2);
+  if (m_bDynamic) numIndices = AlignValue(numIndices, 2);
 
   // Ensure there is enough space in the IB for this data
   if (numIndices > m_IndexCount) {
@@ -467,7 +467,7 @@ void CIndexBuffer::Unlock(int numIndices) {
 
   // For write-combining, ensure we always have locked memory aligned to 4-byte
   // boundaries
-  if (m_bDynamic) ALIGN_VALUE(numIndices, 2);
+  if (m_bDynamic) AlignValue(numIndices, 2);
 
   if (!m_pIB) return;
 

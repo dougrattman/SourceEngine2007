@@ -152,7 +152,7 @@ void CHudDODCrosshair::Paint()
 
 			float flMax = 0.125;
 
-			accuracy = clamp( accuracy, flMin, flMax );
+			accuracy = std::clamp( accuracy, flMin, flMax );
 
 			// approach this accuracy from our current accuracy
 			m_flAccuracy = Approach( accuracy, m_flAccuracy, cl_crosshair_approach_speed.GetFloat() );

@@ -234,7 +234,7 @@ void CWeaponCombat_ChargeablePlasma::PrimaryAttack( void )
 
 	// Set it's charged power level
 	if (m_bHasCharge)
-		m_flPower = min( MAX_CHARGED_TIME, gpGlobals->curtime - m_flChargeStartTime );
+		m_flPower = std::min( MAX_CHARGED_TIME, gpGlobals->curtime - m_flChargeStartTime );
 	else
 		m_flPower = 0.0f;
 

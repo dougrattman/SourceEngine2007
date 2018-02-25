@@ -17,6 +17,7 @@
 #define NOSERVICE
 #define NOMCX
 #define NOIME
+#define NOMINMAX
 
 // Windows 10 features.
 #define _WIN32_WINNT 0x0A00

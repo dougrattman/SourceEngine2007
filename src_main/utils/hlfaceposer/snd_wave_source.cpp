@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier2/riff.h"
 #include "snd_wave_source.h"
 #include "snd_wave_mixer_private.h"

@@ -590,7 +590,7 @@ void CNPC_Nihilanth::HuntThink( void )
 		}
 		else
 		{
-			m_flAdj = min( m_flAdj + 10, 1000 );
+			m_flAdj = std::min( m_flAdj + 10, 1000 );
 		}
 	}
 
@@ -1043,7 +1043,7 @@ void CNPC_Nihilanth::DyingThink( void )
 	{
 		if (m_pBall->GetBrightness() > 0)
 		{
-			m_pBall->SetBrightness( max( 0, m_pBall->GetBrightness() - 7 ), 0 );
+			m_pBall->SetBrightness( std::max( 0, m_pBall->GetBrightness() - 7 ), 0 );
 		}
 		else
 		{

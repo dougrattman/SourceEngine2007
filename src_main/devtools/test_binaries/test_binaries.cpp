@@ -9,7 +9,7 @@
 //
 // Adapted from PEDUMP, AUTHOR:  Matt Pietrek - 1993
 //--------------------
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <stdio.h>
 #include "common.h"
 #include "strtools.h"

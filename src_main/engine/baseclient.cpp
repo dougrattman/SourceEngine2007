@@ -145,7 +145,7 @@ void CBaseClient::SetUserCVar(const char *con_var, const char *value) {
 }
 
 void CBaseClient::SetUpdateRate(int udpaterate, bool bForce) {
-  udpaterate = clamp(udpaterate, 1, 100);
+  udpaterate = std::clamp(udpaterate, 1, 100);
 
   m_fSnapshotInterval = 1.0f / udpaterate;
 }
@@ -1021,8 +1021,9 @@ void CBaseClient::UpdateSendState(void) {
   } else if (IsActive())            // multiplayer mode
   {
     // snapshot mode: send snapshots frequently
-    float maxDelta = min(m_Server->GetTickInterval(), m_fSnapshotInterval);
-    float delta = clamp(net_time - m_fNextMessageTime, 0.0f, maxDelta);
+    float maxDelta = std::min(m_Server->GetTickInterval(), m_fSnapshotInterval);
+    float delta =
+        std::clamp((float)(net_time - m_fNextMessageTime), 0.0f, maxDelta);
     m_fNextMessageTime = net_time + m_fSnapshotInterval - delta;
   } else  // multiplayer signon mode
   {

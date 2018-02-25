@@ -65,7 +65,7 @@ void CCSHLTVDirector::CreateShotFromEvent( CGameEvent *event )
 		shot->SetInt( "phi", 20 );
 
 		// shot 2 seconds after event
-		m_nNextShotTick = min( m_nNextShotTick, (event->m_Tick+TIME_TO_TICKS(2.0)) );
+		m_nNextShotTick = std::min( m_nNextShotTick, (event->m_Tick+TIME_TO_TICKS(2.0)) );
 		m_iPVSEntity = player->entindex();
 	}
 
@@ -87,7 +87,7 @@ void CCSHLTVDirector::CreateShotFromEvent( CGameEvent *event )
 		shot->SetInt( "phi", 10 );
 
 		// shot 2 seconds after pickup
-		m_nNextShotTick = min( m_nNextShotTick, (event->m_Tick+TIME_TO_TICKS(2.0)) );
+		m_nNextShotTick = std::min( m_nNextShotTick, (event->m_Tick+TIME_TO_TICKS(2.0)) );
 		m_iPVSEntity = player->entindex();
 	}
 	else

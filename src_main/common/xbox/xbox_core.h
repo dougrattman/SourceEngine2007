@@ -160,24 +160,24 @@ typedef struct
 #define OutputDebugStringA		XBX_OutputDebugStringA
 
 // Messages
-PLATFORM_INTERFACE	void		XBX_Error( const char* format, ... );
-PLATFORM_INTERFACE	void		XBX_OutputDebugStringA( LPCSTR lpOutputString );
+SOURCE_TIER0_API	void		XBX_Error( const char* format, ... );
+SOURCE_TIER0_API	void		XBX_OutputDebugStringA( LPCSTR lpOutputString );
 
 // Event handling
-PLATFORM_INTERFACE  bool		XBX_NotifyCreateListener( ULONG64 categories );
-PLATFORM_INTERFACE	void		XBX_QueueEvent( xevent_e event, int arg1, int arg2, int arg3 );
-PLATFORM_INTERFACE	void		XBX_ProcessEvents( void );
+SOURCE_TIER0_API  bool		XBX_NotifyCreateListener( ULONG64 categories );
+SOURCE_TIER0_API	void		XBX_QueueEvent( xevent_e event, int arg1, int arg2, int arg3 );
+SOURCE_TIER0_API	void		XBX_ProcessEvents( void );
 
 // Accessors
-PLATFORM_INTERFACE	const char* XBX_GetLanguageString( void );
-PLATFORM_INTERFACE	bool		XBX_IsLocalized( void );
-PLATFORM_INTERFACE	DWORD		XBX_GetStorageDeviceId( void );
-PLATFORM_INTERFACE	void		XBX_SetStorageDeviceId( DWORD id );
-PLATFORM_INTERFACE	DWORD		XBX_GetPrimaryUserId( void );
-PLATFORM_INTERFACE	void		XBX_SetPrimaryUserId( DWORD id );
-PLATFORM_INTERFACE  XNKID		XBX_GetInviteSessionId( void );
-PLATFORM_INTERFACE	void		XBX_SetInviteSessionId( XNKID nSessionId );
-PLATFORM_INTERFACE  DWORD		XBX_GetInvitedUserId( void );
-PLATFORM_INTERFACE	void		XBX_SetInvitedUserId( DWORD nUserId );
+SOURCE_TIER0_API	const char* XBX_GetLanguageString( void );
+SOURCE_TIER0_API	bool		XBX_IsLocalized( void );
+SOURCE_TIER0_API	DWORD		XBX_GetStorageDeviceId( void );
+SOURCE_TIER0_API	void		XBX_SetStorageDeviceId( DWORD id );
+SOURCE_TIER0_API	DWORD		XBX_GetPrimaryUserId( void );
+SOURCE_TIER0_API	void		XBX_SetPrimaryUserId( DWORD id );
+SOURCE_TIER0_API  XNKID		XBX_GetInviteSessionId( void );
+SOURCE_TIER0_API	void		XBX_SetInviteSessionId( XNKID nSessionId );
+SOURCE_TIER0_API  DWORD		XBX_GetInvitedUserId( void );
+SOURCE_TIER0_API	void		XBX_SetInvitedUserId( DWORD nUserId );
 
 #endif

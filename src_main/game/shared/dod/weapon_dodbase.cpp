@@ -228,7 +228,7 @@ void CWeaponDODBase::ItemPostFrame()
 	if ((m_bInReload) && (pPlayer->m_flNextAttack <= gpGlobals->curtime))
 	{
 		// complete the reload. 
-		int j = min( GetMaxClip1() - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );	
+		int j = std::min( GetMaxClip1() - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );	
 
 		// Add them to the clip
 		m_iClip1 += j;
@@ -736,7 +736,7 @@ bool CWeaponDODBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivit
 	if ( UsesClipsForAmmo1() )
 	{
 		// need to reload primary clip?
-		int primary	= min(iClipSize1 - m_iClip1, pOwner->GetAmmoCount(m_iPrimaryAmmoType));
+		int primary	= std::min(iClipSize1 - m_iClip1, pOwner->GetAmmoCount(m_iPrimaryAmmoType));
 		if ( primary != 0 )
 		{
 			bReload = true;
@@ -746,7 +746,7 @@ bool CWeaponDODBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivit
 	if ( UsesClipsForAmmo2() )
 	{
 		// need to reload secondary clip?
-		int secondary = min(iClipSize2 - m_iClip2, pOwner->GetAmmoCount(m_iSecondaryAmmoType));
+		int secondary = std::min(iClipSize2 - m_iClip2, pOwner->GetAmmoCount(m_iSecondaryAmmoType));
 		if ( secondary != 0 )
 		{
 			bReload = true;
@@ -1129,11 +1129,11 @@ void CWeaponDODBase::Smack()
 
 		//Find the speed of the player
 		float speed = player->GetLocalVelocity().Length2D();
-		float flmaxSpeedDelta = max( 0, (gpGlobals->curtime - lastbobtime) * 320.0f );
+		float flmaxSpeedDelta = std::max( 0, (gpGlobals->curtime - lastbobtime) * 320.0f );
 
 		// don't allow too big speed changes
-		speed = clamp( speed, lastspeed-flmaxSpeedDelta, lastspeed+flmaxSpeedDelta );
-		speed = clamp( speed, -320, 320 );
+		speed = std::clamp( speed, lastspeed-flmaxSpeedDelta, lastspeed+flmaxSpeedDelta );
+		speed = std::clamp( speed, -320, 320 );
 
 		lastspeed = speed;
 
@@ -1161,7 +1161,7 @@ void CWeaponDODBase::Smack()
 		g_verticalBob = speed*0.005f;
 		g_verticalBob = g_verticalBob*0.3 + g_verticalBob*0.7*sin(cycle);
 
-		g_verticalBob = clamp( g_verticalBob, -7.0f, 4.0f );
+		g_verticalBob = std::clamp( g_verticalBob, -7.0f, 4.0f );
 
 		//Calculate the lateral bob
 		cycle = bobtime - (int)(bobtime/cl_bobcycle.GetFloat()*2)*cl_bobcycle.GetFloat()*2;
@@ -1178,7 +1178,7 @@ void CWeaponDODBase::Smack()
 
 		g_lateralBob = speed*0.005f;
 		g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
-		g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
+		g_lateralBob = std::clamp( g_lateralBob, -7.0f, 4.0f );
 		
 		//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
 		return 0.0f;

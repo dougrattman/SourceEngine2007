@@ -39,8 +39,8 @@ class CDebugHistory : public CBaseEntity {
 };
 
 BEGIN_DATADESC(CDebugHistory)
-  // DEFINE_FIELD( m_DebugLines, FIELD_CHARACTER ),		// Not saved because we
-  // write it out manually DEFINE_FIELD( m_DebugLineEnd, FIELD_CHARACTER ),
+  // DEFINE_FIELD( m_DebugLines, FIELD_CHARACTER ),		// Not saved because
+  // we write it out manually DEFINE_FIELD( m_DebugLineEnd, FIELD_CHARACTER ),
 END_DATADESC()
 
 LINK_ENTITY_TO_CLASS(env_debughistory, CDebugHistory);
@@ -105,7 +105,7 @@ void CDebugHistory::AddDebugHistoryLine(int iCategory, const char *szLine) {
         (m_DebugLineEnd[iCategory] - m_DebugLines[iCategory]);
 
     // Write into the buffer
-    int iWrote = min(iCharsToWrite, iCharsLeftBeforeLoop);
+    int iWrote = std::min(iCharsToWrite, iCharsLeftBeforeLoop);
     memcpy(m_DebugLineEnd[iCategory], pszRemaining, iWrote);
     m_DebugLineEnd[iCategory] += iWrote;
     pszRemaining += iWrote;
@@ -227,7 +227,8 @@ int CDebugHistory::Restore(IRestore &restore) {
   if (iVersion >= DEBUG_HISTORY_FIRST_VERSIONED) {
     int iMaxCategorys = restore.ReadInt();
     for (int iCategory = 0;
-         iCategory < min(iMaxCategorys, MAX_HISTORY_CATEGORIES); iCategory++) {
+         iCategory < std::min(iMaxCategorys, (int)MAX_HISTORY_CATEGORIES);
+         iCategory++) {
       int iEnd = restore.ReadInt();
       m_DebugLineEnd[iCategory] = m_DebugLines[iCategory] + iEnd;
       restore.ReadData(m_DebugLines[iCategory], sizeof(m_DebugLines[iCategory]),
@@ -236,7 +237,8 @@ int CDebugHistory::Restore(IRestore &restore) {
   } else {
     int iMaxCategorys = iVersion;
     for (int iCategory = 0;
-         iCategory < min(iMaxCategorys, MAX_HISTORY_CATEGORIES); iCategory++) {
+         iCategory < std::min(iMaxCategorys, (int)MAX_HISTORY_CATEGORIES);
+         iCategory++) {
       int iEnd = restore.ReadInt();
       m_DebugLineEnd[iCategory] = m_DebugLines[iCategory] + iEnd;
       restore.ReadData(m_DebugLines[iCategory], sizeof(m_DebugLines[iCategory]),

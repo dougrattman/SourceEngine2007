@@ -109,7 +109,7 @@ void CForceFeedback::StartEffect( CBasePlayer *player, FORCEFEEDBACK_t effect, c
 		WRITE_LONG( duration );
 		
 		// encode gain as a byte
-		byte gain = (byte)clamp( params.m_flGain * 255.0f, 0.0f, 255.0f );
+		byte gain = (byte)std::clamp( params.m_flGain * 255.0f, 0.0f, 255.0f );
 
 		WRITE_BYTE( gain );
 		WRITE_BYTE( params.m_nPriority );

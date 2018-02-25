@@ -53,13 +53,13 @@
 // Make template functions
 
 template < typename T >
-T min( const T &a, const T &b )
+T std::min( const T &a, const T &b )
 {
 	return a < b ? a : b;
 }
 
 template < typename T >
-T max( const T &a, const T &b )
+T std::max( const T &a, const T &b )
 {
 	return a > b ? a : b;
 }
@@ -650,8 +650,8 @@ MBoundingBox CVstHelperBoneNode::boundingBox() const
 
 	const MMatrix &wiMat( MFnMatrixData( mObj ).matrix() );
 
-	MPoint n( m_wbbox.min() );
-	MPoint x( m_wbbox.max() );
+	MPoint n( m_wbbox.std::min() );
+	MPoint x( m_wbbox.std::max() );
 
 	n *= wiMat;
 	x *= wiMat;
@@ -877,8 +877,8 @@ MStatus CVstHelperBoneNode::DoExport(
 //-----------------------------------------------------------------------------
 void CVstHelperBoneNode::DrawBoundingBox() const
 {
-	const MPoint n( m_wbbox.min() );
-	const MPoint x( m_wbbox.max() );
+	const MPoint n( m_wbbox.std::min() );
+	const MPoint x( m_wbbox.std::max() );
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glBegin( GL_QUAD_STRIP );
 	{
@@ -907,7 +907,7 @@ MStatus CVstHelperBoneNode::ComputeConeData(
 	MDataBlock &mDataBlock )
 {
 	const uint nSubdivisions(
-		static_cast< uint >( clamp( mDataBlock.inputValue( m_iaSubdivisons ).asInt(), 0, 100 ) ) );
+		static_cast< uint >( std::clamp( mDataBlock.inputValue( m_iaSubdivisons ).asInt(), 0, 100 ) ) );
 	const uint nCirclePoints( nSubdivisions * 4 );
 	const float fCirclePoints( nCirclePoints );
 
@@ -986,7 +986,7 @@ void CVstHelperBoneNode::DrawCone(
 		nd.z = ns.z * nr;
 	}
 
-	glTexCoord2f( 0.0, clamp( weight, 0.01, 0.99 ) );
+	glTexCoord2f( 0.0, std::clamp( weight, 0.01, 0.99 ) );
 
 	glBegin( GL_TRIANGLES );
 	for ( uint i( 0U ); i != nVertices; ++i )
@@ -1039,9 +1039,9 @@ float CVstHelperBoneNode::ComputeTriggerWeights( const Quaternion &controlQuat )
 		{
 			const Quaternion triggerQuat( trigger.m_trigger.x, trigger.m_trigger.y, trigger.m_trigger.z, trigger.m_trigger.w );
 			float dot = fabs( QuaternionDotProduct( triggerQuat, controlQuat ) );
-			dot = clamp( dot, -1.0f, 1.0f );
+			dot = std::clamp( dot, -1.0f, 1.0f );
 			trigger.m_weight = 1 - ( 2 * acos( dot ) * trigger.m_invTolerance );
-			trigger.m_weight = max( 0.0, trigger.m_weight );
+			trigger.m_weight = std::max( 0.0, trigger.m_weight );
 			scale += trigger.m_weight;
 		}
 	}

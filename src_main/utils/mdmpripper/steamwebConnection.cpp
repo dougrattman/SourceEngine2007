@@ -1,5 +1,5 @@
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 //#include <conio.h>
 #include "vgui_controls/ListPanel.h"
 #include "keyvalues.h"

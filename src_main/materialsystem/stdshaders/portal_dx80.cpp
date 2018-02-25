@@ -50,7 +50,7 @@ int iMaxTextureStages;
 
 SHADER_INIT
 {
-	iMaxTextureStages = min( 3, g_pHardwareConfig->GetSamplerCount() );
+	iMaxTextureStages = std::min( 3, g_pHardwareConfig->GetSamplerCount() );
 
 	if (params[BASETEXTURE]->IsDefined() )
 		LoadTexture( BASETEXTURE );

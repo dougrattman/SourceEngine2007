@@ -2211,8 +2211,8 @@ void Frame::OnScreenSizeChanged(int iOldWide, int iOldTall)
 	}
 
 	// make sure the top-left is visible
-	x = max( 0, x );
-	y = max( 0, y );
+	x = std::max( 0, x );
+	y = std::max( 0, y );
 
 	// apply
 	SetPos(x, y);

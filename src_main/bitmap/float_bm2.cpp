@@ -16,7 +16,7 @@ static float ScaleValue(float f, float overbright) {
 
 static float IScaleValue(float f, float overbright) {
   f *= (1.0 / overbright);
-  int ival = min(255, ceil(f * 255.0));
+  int ival = std::min(255.0, ceil(f * 255.0));
   return ival;
 }
 
@@ -24,8 +24,8 @@ void MaybeSetScaleVaue(FloatBitMap_t const &orig, FloatBitMap_t &newbm, int x,
                        int y, float newscale, float overbright) {
   // clamp the given scale value to the legal range for that pixel and regnerate
   // the rgb components.
-  float maxc =
-      max(max(orig.Pixel(x, y, 0), orig.Pixel(x, y, 1)), orig.Pixel(x, y, 2));
+  float maxc = std::max(std::max(orig.Pixel(x, y, 0), orig.Pixel(x, y, 1)),
+                        orig.Pixel(x, y, 2));
   if (maxc == 0.0) {
     // pixel is black. any scale value is fine.
     newbm.Pixel(x, y, 3) = newscale;
@@ -64,12 +64,13 @@ void FloatBitMap_t::CompressTo8Bits(float overbright) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++)
       for (int c = 0; c < 3; c++)
-        Pixel(x, y, c) = min(overbright, Pixel(x, y, c));
+        Pixel(x, y, c) = std::min(overbright, Pixel(x, y, c));
   // first pass - choose nominal scale values to convert to rgb,scale
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       // determine maximum component
-      float maxc = max(max(Pixel(x, y, 0), Pixel(x, y, 1)), Pixel(x, y, 2));
+      float maxc =
+          std::max(std::max(Pixel(x, y, 0), Pixel(x, y, 1)), Pixel(x, y, 2));
       if (maxc == 0) {
         for (int c = 0; c < 4; c++) TmpFBM.Pixel(x, y, c) = 0;
       } else {

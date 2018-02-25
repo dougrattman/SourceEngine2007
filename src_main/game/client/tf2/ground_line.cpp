@@ -195,7 +195,7 @@ void CGroundLine::SetParameters(
 
 	// Recalculate our segment list.
 	unsigned int nSteps = (int)flXYLen / XY_PER_SEGMENT;
-	nSteps = clamp( nSteps, 8, MAX_GROUNDLINE_SEGMENTS ) & ~1;
+	nSteps = std::clamp( nSteps, 8, MAX_GROUNDLINE_SEGMENTS ) & ~1;
 	unsigned int nMaxSteps = nSteps / 2;
 
 	// First generate the sequence. We generate every other point here so it can insert fixup points to prevent

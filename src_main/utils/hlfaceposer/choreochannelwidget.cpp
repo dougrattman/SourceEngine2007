@@ -217,7 +217,7 @@ int CChoreoChannelWidget::GetVerticalStackingCount( bool layout, RECT *rc )
 		}
 	}
 
-	return max( 1, rows.Count() );
+	return std::max( 1, rows.Count() );
 }
 
 int	CChoreoChannelWidget::GetItemHeight( void )
@@ -444,7 +444,7 @@ void CChoreoChannelWidget::RenderCloseCaptionInfo( CChoreoWidgetDrawHelper& draw
 		// Found one!!!
 		RECT rcEvent = event->getBounds();
 
-		float bestEndTime = max( e->GetEndTime(), e->GetLastSlaveEndTime() );
+		float bestEndTime = std::max( e->GetEndTime(), e->GetLastSlaveEndTime() );
 		int pixeloffset = (int)( ( bestEndTime - e->GetStartTime() ) * m_pView->GetPixelsPerSecond() + 0.5f );
 
 		rcEvent.right = rcEvent.left + pixeloffset;
@@ -573,7 +573,7 @@ void CChoreoChannelWidget::RenderCloseCaptions( CChoreoWidgetDrawHelper& drawHel
 		// Found one!!!
 		RECT rcEvent = event->getBounds();
 
-		float bestEndTime = max( e->GetEndTime(), e->GetLastSlaveEndTime() );
+		float bestEndTime = std::max( e->GetEndTime(), e->GetLastSlaveEndTime() );
 		int pixeloffset = (int)( ( bestEndTime - e->GetStartTime() ) * m_pView->GetPixelsPerSecond() + 0.5f );
 
 		rcEvent.right = rcEvent.left + pixeloffset;
@@ -907,7 +907,7 @@ void CChoreoChannelWidget::GetCloseCaptions( CUtlVector< CloseCaptionInfo >& sel
 		rcCaption.bottom = rcEventArea.bottom;
 
 		// Now compute true right edge
-		float bestEndTime = max( e->GetEndTime(), e->GetLastSlaveEndTime() );
+		float bestEndTime = std::max( e->GetEndTime(), e->GetLastSlaveEndTime() );
 		int pixeloffset = (int)( ( bestEndTime - e->GetStartTime() ) * m_pView->GetPixelsPerSecond() + 0.5f );
 		rcCaption.right = rcCaption.left + pixeloffset;
 

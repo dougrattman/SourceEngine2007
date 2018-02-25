@@ -261,7 +261,7 @@ void CShield::RegisterPassThru(const Vector& vecDir, int bitsDamageType, trace_t
 //-----------------------------------------------------------------------------
 void CShield::SetPower( float flPower )
 {
-	m_flPower = max( (SHIELD_MIN_HEALTH_FACTOR * m_flMaxPower), flPower );
+	m_flPower = std::max( (SHIELD_MIN_HEALTH_FACTOR * m_flMaxPower), flPower );
 	if ( m_flPower > m_flMaxPower )
 	{
 		m_flPower = m_flMaxPower;

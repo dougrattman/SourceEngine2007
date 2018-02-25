@@ -48,10 +48,10 @@ class CGame : public IGame {
   void SetWindowSize(int w, int h);
   void GetWindowRect(int *x, int *y, int *w, int *h);
 
-  bool IsActiveApp(void);
+  bool IsActiveApp(void) const;
   virtual void DispatchAllStoredGameMessages();
   virtual void PlayStartupVideos() {}
-  virtual void GetDesktopInfo(int &width, int &height, int &refreshRate);
+  virtual std::tuple<i32, i32, i32> GetDesktopInfo() const;
 
  private:
   void SetActiveApp(bool fActive);
@@ -64,7 +64,7 @@ class CGame : public IGame {
 static CGame g_Game;
 IGame *game = (IGame *)&g_Game;
 
-const char CGame::CLASSNAME[] = "Valve001";
+const char CGame::CLASSNAME[] = "Valve002";
 
 // In VCR playback mode, it sleeps this amount each frame.
 int g_iVCRPlaybackSleepInterval = 0;
@@ -150,8 +150,6 @@ void CGame::SetActiveApp(bool active) { m_bActiveApp = active; }
 
 void CGame::DispatchAllStoredGameMessages() {}
 
-void CGame::GetDesktopInfo(int &width, int &height, int &refreshRate) {
-  width = 0;
-  height = 0;
-  refreshRate = 0;
+std::tuple<i32, i32, i32> CGame::GetDesktopInfo() {
+  return { 0, 0, 0 };
 }

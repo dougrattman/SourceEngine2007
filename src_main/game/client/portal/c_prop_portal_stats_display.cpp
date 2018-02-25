@@ -197,7 +197,7 @@ void C_PropPortalStatsDisplay::ClientThink( void )
 
 				if ( m_fNumPlayerDisplay < m_iNumStepsTaken )
 				{
-					m_fNumPlayerDisplay += min( iNumStepsThisFrame, m_iNumStepsTaken - m_fNumPlayerDisplay );
+					m_fNumPlayerDisplay += std::min( iNumStepsThisFrame, m_iNumStepsTaken - m_fNumPlayerDisplay );
 
 					int iStepsMod10 = static_cast<int>( m_fNumPlayerDisplay ) % 10;
 					if ( iStepsMod10 == 0 )

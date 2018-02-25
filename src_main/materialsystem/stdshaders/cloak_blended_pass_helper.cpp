@@ -348,7 +348,7 @@ bool CloakBlendedPassIsFullyOpaque ( IMaterialVar** params, CloakBlendedPassVars
 
 	// NOTE: If this math changes, you need to update the pixel shader code!
 	float flFresnel = 1.0f - ( 0.0f ); // Assume V.N = 0.0f;
-	float flCloakLerpFactor = clamp( Lerp( clamp( flCloakFactor, 0.0f, 1.0f ), 1.0f, flFresnel - 1.35f ), 0.0f, 1.0f );
+	float flCloakLerpFactor = std::clamp( Lerp( std::clamp( flCloakFactor, 0.0f, 1.0f ), 1.0f, flFresnel - 1.35f ), 0.0f, 1.0f );
 	//flCloakLerpFactor = 1.0f - smoothstep( 0.4f, 0.425f, flCloakLerpFactor );
 
 	if ( flCloakLerpFactor <= 0.4f )

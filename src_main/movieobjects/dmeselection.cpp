@@ -154,7 +154,7 @@ void CDmeSingleIndexedComponent::AddComponents( const CUtlVector< int > &compone
 void CDmeSingleIndexedComponent::AddComponents(
 	const CUtlVector< int > &components, const CUtlVector< float > &weights )
 {
-	const int nComponents( min( components.Count(), weights.Count() ) );
+	const int nComponents( std::min( components.Count(), weights.Count() ) );
 	for ( int i( 0 ); i < nComponents; ++i )
 	{
 		AddComponent( components[ i ], weights[ i ] );
@@ -267,7 +267,7 @@ void CDmeSingleIndexedComponent::GetComponents( CUtlVector< int > &components ) 
 void CDmeSingleIndexedComponent::SetComplete( int nComplete )
 {
 	m_bComplete.Set( true );
-	m_CompleteCount.Set( max( 0, nComplete ) );
+	m_CompleteCount.Set( std::max( 0, nComplete ) );
 	m_Components.Purge();
 	m_Weights.Purge();
 }

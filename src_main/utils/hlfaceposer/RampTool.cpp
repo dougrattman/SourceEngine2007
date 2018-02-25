@@ -192,7 +192,7 @@ void RampTool::GetScrubHandleRect( RECT& rcHandle, float scrub, bool clipped )
 
 		if  ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH / 2, w2() - SCRUBBER_HANDLE_WIDTH / 2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH / 2, w2() - SCRUBBER_HANDLE_WIDTH / 2 );
 		}
 	}
 
@@ -820,11 +820,11 @@ int	RampTool::handleEvent( mxEvent *event )
 				// Zoom time in  / out
 				if ( event->height > 0 )
 				{
-					tz = min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
+					tz = std::min( tz + TIME_ZOOM_STEP * stepMultipiler, MAX_TIME_ZOOM );
 				}
 				else
 				{
-					tz = max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
+					tz = std::max( tz - TIME_ZOOM_STEP * stepMultipiler, TIME_ZOOM_STEP );
 				}
 
 				g_pChoreoView->SetPreservedTimeZoom( this, tz );
@@ -873,7 +873,7 @@ int	RampTool::handleEvent( mxEvent *event )
 						float t = GetTimeValueForMouse( (short)event->x );
 						m_flScrubberTimeOffset = m_flScrub - t;
 						float maxoffset = 0.5f * (float)SCRUBBER_HANDLE_WIDTH / GetPixelsPerSecond();
-						m_flScrubberTimeOffset = clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
+						m_flScrubberTimeOffset = std::clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
 						t += m_flScrubberTimeOffset;
 						ForceScrubPosition( t );
 					}
@@ -918,7 +918,7 @@ int	RampTool::handleEvent( mxEvent *event )
 							
 							t = FacePoser_SnapTime( t );
 							float value = 1.0f - (float)( (short)event->y - rcSamples.top ) / (float)( rcSamples.bottom - rcSamples.top );
-							value = clamp( value, 0.0f, 1.0f );
+							value = std::clamp( value, 0.0f, 1.0f );
 							
 							PreDataChanged( "Add ramp point" );
 
@@ -1089,22 +1089,22 @@ int	RampTool::handleEvent( mxEvent *event )
 					case SB_PAGEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 20;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_PAGEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 20;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					case SB_LINEUP:
 						offset = m_pHorzScrollBar->getValue();
 						offset -= 10;
-						offset = max( offset, m_pHorzScrollBar->getMinValue() );
+						offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 						break;
 					case SB_LINEDOWN:
 						offset = m_pHorzScrollBar->getValue();
 						offset += 10;
-						offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+						offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 						break;
 					default:
 						processed = false;
@@ -1155,7 +1155,7 @@ void RampTool::ApplyBounds( int& mx, int& my )
 	if ( !m_bUseBounds )
 		return;
 
-	mx = clamp( mx, m_nMinX, m_nMaxX );
+	mx = std::clamp( mx, m_nMinX, m_nMaxX );
 }
 
 void RampTool::CalcBounds( int movetype )
@@ -1282,7 +1282,7 @@ void RampTool::DrawMouseOverPos( CChoreoWidgetDrawHelper& drawHelper, RECT& rcPo
 	int len = drawHelper.CalcTextWidth( "Arial", 11, 900, sz );
 
 	RECT rcText = rcPos;
-	rcText.left = max( rcPos.left, rcPos.right - len );
+	rcText.left = std::max( rcPos.left, rcPos.right - len );
 
 	drawHelper.DrawColoredText( "Arial", 11, 900, RGB( 255, 50, 70 ), rcText, sz );
 }
@@ -1569,8 +1569,8 @@ void RampTool::RepositionHSlider( void )
 	}
 	m_pHorzScrollBar->setBounds( 0, h2() - m_nScrollbarHeight, w2() - m_nScrollbarHeight, m_nScrollbarHeight );
 
-	m_flLeftOffset = max( 0, m_flLeftOffset );
-	m_flLeftOffset = min( (float)pixelsneeded, m_flLeftOffset );
+	m_flLeftOffset = std::max( 0, m_flLeftOffset );
+	m_flLeftOffset = std::min( (float)pixelsneeded, m_flLeftOffset );
 
 	m_pHorzScrollBar->setRange( 0, pixelsneeded );
 	m_pHorzScrollBar->setValue( (int)m_flLeftOffset );
@@ -1719,7 +1719,7 @@ void RampTool::OnChangeScale( void )
 	if ( !InputProperties( &params ) )
 		return;
 
-	g_pChoreoView->SetTimeZoom( GetToolName(), clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
+	g_pChoreoView->SetTimeZoom( GetToolName(), std::clamp( (int)( 100.0f * atof( params.m_szInputText ) ), 1, MAX_TIME_ZOOM ), false );
 
 	m_nLastHPixelsNeeded = -1;
 	m_flLeftOffset= 0.0f;
@@ -1830,7 +1830,7 @@ void RampTool::DrawSamples( CChoreoWidgetDrawHelper& drawHelper, RECT &rcSamples
 
 	float timestepperpixel = 1.0f / GetPixelsPerSecond();
 
-	float stoptime = min( endtime, e->GetDuration() );
+	float stoptime = std::min( endtime, e->GetDuration() );
 	
 	float prev_t = starttime;
 	float prev_value = e->GetIntensity( prev_t );
@@ -1881,8 +1881,8 @@ void RampTool::DrawSamples( CChoreoWidgetDrawHelper& drawHelper, RECT &rcSamples
 			{
 				// Draw segment
 				drawHelper.DrawColoredLine( shadowColor, PS_SOLID, 1,
-					prevx, clamp( bottom - prev_value * height, top, bottom ),
-					x, clamp( bottom - value * height, top, bottom ) );
+					prevx, std::clamp( bottom - prev_value * height, top, bottom ),
+					x, std::clamp( bottom - value * height, top, bottom ) );
 			}
 
 			prev_t = t;
@@ -1954,7 +1954,7 @@ void RampTool::DrawSamples( CChoreoWidgetDrawHelper& drawHelper, RECT &rcSamples
 		Q_snprintf( sz, sizeof( sz ), "%s", Interpolator_NameForCurveType( start->GetCurveType(), true ) );
 		RECT rc;
 		int fontSize = 9;
-		rc.top = clamp( y + 5, rcSamples.top + 2, rcSamples.bottom - 2 - fontSize );
+		rc.top = std::clamp( y + 5, rcSamples.top + 2, rcSamples.bottom - 2 - fontSize );
 		rc.bottom = rc.top + fontSize + 1;
 		rc.left = x - 75;
 		rc.right = x + 175;
@@ -2158,10 +2158,10 @@ void RampTool::SelectPoints( void )
 	float ftop = (float)( rcSelection.top - rcSamples.top ) / (float)height;
 	float fbottom = (float)( rcSelection.bottom - rcSamples.top ) / (float)height;
 
-	fleft = clamp( fleft, 0.0f, duration );
-	fright = clamp( fright, 0.0f, duration );
-	ftop = clamp( ftop, 0.0f, 1.0f );
-	fbottom = clamp( fbottom, 0.0f, 1.0f );
+	fleft = std::clamp( fleft, 0.0f, duration );
+	fright = std::clamp( fright, 0.0f, duration );
+	ftop = std::clamp( ftop, 0.0f, 1.0f );
+	fbottom = std::clamp( fbottom, 0.0f, 1.0f );
 
 	float timestepperpixel = 1.0f / GetPixelsPerSecond();
 	float yfracstepperpixel = 1.0f / (float)height;
@@ -2222,10 +2222,10 @@ void RampTool::MoveSelectedSamples( float dfdx, float dfdy )
 			continue;
 
 		sample->time += dfdx;
-		sample->time = clamp( sample->time, 0.0f, duration );
+		sample->time = std::clamp( sample->time, 0.0f, duration );
 
 		sample->value -= dfdy;
-		sample->value = clamp( sample->value, 0.0f, 1.0f );
+		sample->value = std::clamp( sample->value, 0.0f, 1.0f );
 	}
 			
 	e->ResortRamp();

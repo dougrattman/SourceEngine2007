@@ -320,7 +320,7 @@ void CPlayerAnimState::ComputePoseParam_BodyPitch( CStudioHdr *pStudioHdr )
 	{
 		flPitch -= 360.0f;
 	}
-	flPitch = clamp( flPitch, -90, 90 );
+	flPitch = std::clamp( flPitch, -90, 90 );
 
 	QAngle absangles = GetOuter()->GetAbsAngles();
 	absangles.x = 0.0f;
@@ -352,7 +352,7 @@ int CPlayerAnimState::ConvergeAngles( float goal,float maxrate, float dt, float&
 	{
 		scale = anglediffabs / FADE_TURN_DEGREES;
 		// Always do at least a bit of the turn ( 1% )
-		scale = clamp( scale, 0.01f, 1.0f );
+		scale = std::clamp( scale, 0.01f, 1.0f );
 	}
 
 	float maxmove = maxrate * dt * scale;
@@ -509,7 +509,7 @@ void CPlayerAnimState::ComputePoseParam_BodyLookYaw( void )
 	absangles.y = m_flCurrentFeetYaw;
 	m_angRender = absangles;
 
-	GetOuter()->SetPoseParameter( upper_body_yaw, clamp( m_flCurrentTorsoYaw, -60.0f, 60.0f ) );
+	GetOuter()->SetPoseParameter( upper_body_yaw, std::clamp( m_flCurrentTorsoYaw, -60.0f, 60.0f ) );
 
 	/*
 	// FIXME: Adrian, what is this?

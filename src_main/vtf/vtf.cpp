@@ -2003,9 +2003,9 @@ void CVTFTexture::GenerateMipmaps() {
   if (TextureLODControlSettings_t const *pLodSettings =
           (TextureLODControlSettings_t const *)GetResourceData(
               VTF_RSRC_TEXTURE_LOD_SETTINGS, NULL)) {
-    int iClampX = 1 << min(pLodSettings->m_ResolutionClampX,
+    int iClampX = 1 << std::min(pLodSettings->m_ResolutionClampX,
                            pLodSettings->m_ResolutionClampX_360);
-    int iClampY = 1 << min(pLodSettings->m_ResolutionClampX,
+    int iClampY = 1 << std::min(pLodSettings->m_ResolutionClampX,
                            pLodSettings->m_ResolutionClampX_360);
 
     while (iClampX < m_nWidth || iClampY < m_nHeight) {
@@ -2263,7 +2263,7 @@ void CVTFTexture::PostProcess(bool bGenerateSpheremap, LookDir_t lookDir,
 void CVTFTexture::SetPostProcessingSettings(
     VtfProcessingOptions const *pOptions) {
   memset(&m_Options, 0, sizeof(m_Options));
-  memcpy(&m_Options, pOptions, min(sizeof(m_Options), pOptions->cbSize));
+  memcpy(&m_Options, pOptions, std::min(sizeof(m_Options), pOptions->cbSize));
   m_Options.cbSize = sizeof(m_Options);
 
   // Optionally perform the fixups

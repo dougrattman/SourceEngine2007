@@ -152,16 +152,16 @@ extern void AddMultiDamage(const CTakeDamageInfo &info, CBaseEntity *pEntity);
 #define CMD_MOSTRECENT 0
 
 //#define	FLASH_DRAIN_TIME	 1.2 //100 units/3 minutes
-//#define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds per
-//unit)
+//#define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds
+// per unit)
 
 //#define PLAYER_MAX_SAFE_FALL_DIST	20// falling any farther than this many
-//feet will inflict damage
+// feet will inflict damage
 //#define	PLAYER_FATAL_FALL_DIST		60// 100% damage inflicted if
-//player falls this many feet
+// player falls this many feet
 //#define	DAMAGE_PER_UNIT_FALLEN		(float)( 100 ) / ( (
-//PLAYER_FATAL_FALL_DIST - PLAYER_MAX_SAFE_FALL_DIST ) * 12 ) #define
-//MAX_SAFE_FALL_UNITS			( PLAYER_MAX_SAFE_FALL_DIST * 12 )
+// PLAYER_FATAL_FALL_DIST - PLAYER_MAX_SAFE_FALL_DIST ) * 12 ) #define
+// MAX_SAFE_FALL_UNITS			( PLAYER_MAX_SAFE_FALL_DIST * 12 )
 
 // player damage adjusters
 ConVar sk_player_head("sk_player_head", "2");
@@ -336,8 +336,8 @@ BEGIN_DATADESC(CBasePlayer)
       // FIELD_INTEGER ), // Don't restore, client needs reset DEFINE_FIELD(
       // m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
       // DEFINE_FIELD( m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore -
-      // this is recomputed DEFINE_FIELD( m_lastx, FIELD_INTEGER ), DEFINE_FIELD(
-      // m_lasty, FIELD_INTEGER ),
+      // this is recomputed DEFINE_FIELD( m_lastx, FIELD_INTEGER ),
+      // DEFINE_FIELD( m_lasty, FIELD_INTEGER ),
 
       DEFINE_FIELD(m_iFrags, FIELD_INTEGER),
       DEFINE_FIELD(m_iDeaths, FIELD_INTEGER),
@@ -1056,8 +1056,8 @@ int CBasePlayer::OnTakeDamage(const CTakeDamageInfo &inputInfo) {
 
     // Msg( "%f: Player %s at [%0.2f %0.2f %0.2f] took %f damage from %s, type
     // %s\n", gpGlobals->curtime, GetDebugName(), 	GetAbsOrigin().x,
-    //GetAbsOrigin().y, GetAbsOrigin().z, info.GetDamage(),
-    //info.GetInflictor()->GetDebugName(), dmgtype );
+    // GetAbsOrigin().y, GetAbsOrigin().z, info.GetDamage(),
+    // info.GetInflictor()->GetDebugName(), dmgtype );
 
     ADD_DEBUG_HISTORY(HISTORY_PLAYER_DAMAGE, outputString);
 #ifndef DISABLE_DEBUG_HISTORY
@@ -1195,7 +1195,7 @@ int CBasePlayer::OnTakeDamage(const CTakeDamageInfo &inputInfo) {
                       SUIT_NEXT_IN_30SEC);  // blood loss detected
       // else
       //	SetSuitUpdate("!HEV_DMG0", false, SUIT_NEXT_IN_30SEC);	// minor
-      //laceration
+      // laceration
 
       bitsDamage &= ~DMG_BULLET;
       ffound = true;
@@ -1509,7 +1509,7 @@ int CBasePlayer::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
   IGameEvent *event = gameeventmanager->CreateEvent("player_hurt");
   if (event) {
     event->SetInt("userid", GetUserID());
-    event->SetInt("health", max(0, m_iHealth));
+    event->SetInt("health", std::max(0, static_cast<int>(m_iHealth)));
     event->SetInt("priority", 5);  // HLTV event priority, not transmitted
 
     if (attacker->IsPlayer()) {
@@ -1999,7 +1999,8 @@ void CBasePlayer::StartDeathCam( void )
                 {
                         pNewSpot = gEntList.FindEntityByClassname( pSpot,
 "info_intermission");
-                        
+                        
+
                         if ( pNewSpot )
                         {
                                 pSpot = pNewSpot;
@@ -2453,8 +2454,8 @@ int CBasePlayer::GetNextObserverSearchStartPoint(bool bReverse) {
 CBaseEntity *CBasePlayer::FindNextObserverTarget(bool bReverse) {
   // MOD AUTHORS: Modify the logic of this function if you want to restrict the
   // observer to watching
-  //				only a subset of the players. e.g. Make it check the
-  //target's team.
+  //				only a subset of the players. e.g. Make it check
+  // the target's team.
 
   /*	if ( m_flNextFollowTime && m_flNextFollowTime > gpGlobals->time )
           {
@@ -2575,8 +2576,8 @@ float CBasePlayer::GetHeldObjectMass(IPhysicsObject *pHeldObject) { return 0; }
 
 //-----------------------------------------------------------------------------
 // Purpose:	Server side of jumping rules.  Most jumping logic is already
-//			handled in shared gamemovement code.  Put stuff here that
-//should 			only be done server side.
+//			handled in shared gamemovement code.  Put stuff here
+// that should 			only be done server side.
 //-----------------------------------------------------------------------------
 void CBasePlayer::Jump() {}
 
@@ -2789,7 +2790,7 @@ void CBasePlayer::AdjustPlayerTimeBase(int simulation_ticks) {
   } else  // multiplayer
   {
     float flCorrectionSeconds =
-        clamp(sv_clockcorrection_msecs.GetFloat() / 1000.0f, 0.0f, 1.0f);
+        std::clamp(sv_clockcorrection_msecs.GetFloat() / 1000.0f, 0.0f, 1.0f);
     int nCorrectionTicks = TIME_TO_TICKS(flCorrectionSeconds);
 
     // Set the target tick flCorrectionSeconds (rounded to ticks) ahead in the
@@ -2955,7 +2956,7 @@ void CBasePlayer::PhysicsSimulate(void) {
   if (gpGlobals->simTicksThisFrame >= commandLimit &&
       vecAvailCommands.Count() > commandLimit) {
     int commandsToRollOver =
-        min(vecAvailCommands.Count(), (gpGlobals->simTicksThisFrame - 1));
+        std::min(vecAvailCommands.Count(), (gpGlobals->simTicksThisFrame - 1));
     commandsToRun = vecAvailCommands.Count() - commandsToRollOver;
     Assert(commandsToRun >= 0);
     // Clear all contexts except the last one
@@ -3463,8 +3464,10 @@ void CBasePlayer::PreThink(void) {
                 Health kit			- Immediate stop to
    acid/chemical, fire or freeze damage. Radiation Shower	- Immediate stop
    to radiation damage, acid/chemical or fire damage.
-                
-        
+                
+
+        
+
 */
 
 // If player is taking time based damage, continue doing damage to player -
@@ -3477,9 +3480,9 @@ void CBasePlayer::PreThink(void) {
 // and init the appropriate counter.  Only processes damage every second.
 
 //#define PARALYZE_DURATION	30		// number of 2 second intervals
-//to take damage
+// to take damage
 //#define PARALYZE_DAMAGE		0.0		// damage to take each 2
-//second interval
+// second interval
 
 //#define NERVEGAS_DURATION	16
 //#define NERVEGAS_DAMAGE		5.0
@@ -3530,22 +3533,23 @@ void CBasePlayer::CheckTimeBasedDamage() {
           break;
         case itbd_NerveGas:
           //				OnTakeDamage(pev, pev, NERVEGAS_DAMAGE,
-          //DMG_GENERIC);
+          // DMG_GENERIC);
           bDuration = NERVEGAS_DURATION;
           break;
           //			case itbd_Poison:
-          //				OnTakeDamage( CTakeDamageInfo( this, this,
-          //POISON_DAMAGE, DMG_GENERIC ) ); 				bDuration = POISON_DURATION; 				break;
+          //				OnTakeDamage( CTakeDamageInfo( this,
+          // this, POISON_DAMAGE, DMG_GENERIC ) );
+          // bDuration = POISON_DURATION; 				break;
         case itbd_Radiation:
           //				OnTakeDamage(pev, pev, RADIATION_DAMAGE,
-          //DMG_GENERIC);
+          // DMG_GENERIC);
           bDuration = RADIATION_DURATION;
           break;
         case itbd_DrownRecover:
           // NOTE: this hack is actually used to RESTORE health
           // after the player has been drowning and finally takes a breath
           if (m_idrowndmg > m_idrownrestored) {
-            int idif = min(m_idrowndmg - m_idrownrestored, 10);
+            int idif = std::min(m_idrowndmg - m_idrownrestored, 10);
 
             TakeHealth(idif, DMG_GENERIC);
             m_idrownrestored += idif;
@@ -3557,7 +3561,7 @@ void CBasePlayer::CheckTimeBasedDamage() {
           // NOTE: this hack is actually used to RESTORE health
           // after the player has been poisoned.
           if (m_nPoisonDmg > m_nPoisonRestored) {
-            int nDif = min(m_nPoisonDmg - m_nPoisonRestored, 10);
+            int nDif = std::min(m_nPoisonDmg - m_nPoisonRestored, 10);
             TakeHealth(nDif, DMG_GENERIC);
             m_nPoisonRestored += nDif;
           }
@@ -3567,17 +3571,17 @@ void CBasePlayer::CheckTimeBasedDamage() {
 
         case itbd_Acid:
           //				OnTakeDamage(pev, pev, ACID_DAMAGE,
-          //DMG_GENERIC);
+          // DMG_GENERIC);
           bDuration = ACID_DURATION;
           break;
         case itbd_SlowBurn:
           //				OnTakeDamage(pev, pev, SLOWBURN_DAMAGE,
-          //DMG_GENERIC);
+          // DMG_GENERIC);
           bDuration = SLOWBURN_DURATION;
           break;
         case itbd_SlowFreeze:
-          //				OnTakeDamage(pev, pev, SLOWFREEZE_DAMAGE,
-          //DMG_GENERIC);
+          //				OnTakeDamage(pev, pev,
+          // SLOWFREEZE_DAMAGE, DMG_GENERIC);
           bDuration = SLOWFREEZE_DURATION;
           break;
         default:
@@ -3642,7 +3646,8 @@ for 3 seconds. Will not work if player was gibbed. Single use. Long Jump Used by
 hitting the ??? key(s). Caused the player to further than normal. SCUBA Used
 automatically after picked up and after player enters the water. Works for N
 seconds. Single use.
-        
+        
+
 Things powered by the battery
 
         Armor
@@ -3655,7 +3660,8 @@ Things powered by the battery
                 Uses N watts for each use. Each use lasts M seconds.
         Alien Shield
                 Augments armor. Reduces Armor drain by one half
- 
+ 
+
 */
 
 // if in range of radiation source, ping geiger counter
@@ -3671,11 +3677,11 @@ void CBasePlayer::UpdateGeigerCounter(void) {
   m_flgeigerDelay = gpGlobals->curtime + GEIGERDELAY;
 
   // send range to radition source to client
-  range = (byte)clamp(m_flgeigerRange / 4, 0, 255);
+  range = (byte)std::clamp(m_flgeigerRange / 4, 0.0f, 255.0f);
 
   // This is to make sure you aren't driven crazy by geiger while in the airboat
   if (IsInAVehicle()) {
-    range = clamp((int)range * 4, 0, 255);
+    range = std::clamp((int)range * 4, 0, 255);
   }
 
   if (range != m_igeigerRangePrev) {
@@ -4200,10 +4206,11 @@ CBaseEntity *g_pLastSpawn = NULL;
 
 //-----------------------------------------------------------------------------
 // Purpose: Finds a player start entity of the given classname. If any entity of
-//			of the given classname has the SF_PLAYER_START_MASTER flag
-//set, that 			is the entity that will be returned. Otherwise, the first entity of
-//			the given classname is returned.
-// Input  : pszClassName - should be "info_player_start", "info_player_coop", or
+//			of the given classname has the SF_PLAYER_START_MASTER
+// flag
+// set, that 			is the entity that will be returned. Otherwise,
+// the first entity of 			the given classname is returned. Input
+// : pszClassName - should be "info_player_start", "info_player_coop", or
 //			"info_player_deathmatch"
 //-----------------------------------------------------------------------------
 CBaseEntity *FindPlayerStart(const char *pszClassName) {
@@ -5063,9 +5070,9 @@ CBaseEntity *FindEntityClassForward(CBasePlayer *pMe, char *classname) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the nearest COLLIBALE entity in front of the player
-//			that has a clear line of sight. If HULL is true, the trace
-//will 			hit the collision hull of entities. Otherwise, the trace will hit
-//			hitboxes.
+//			that has a clear line of sight. If HULL is true, the
+// trace will 			hit the collision hull of entities. Otherwise,
+// the trace will hit 			hitboxes.
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
@@ -5095,7 +5102,8 @@ CBaseEntity *FindEntityForward(CBasePlayer *pMe, bool fHull) {
 //-----------------------------------------------------------------------------
 // Purpose: Finds the nearest entity in front of the player of the given
 //			classname, preferring collidable entities, but allows
-//selection of 			enities that are on the other side of walls or objects
+// selection of 			enities that are on the other side of walls
+// or objects
 //
 // Input  :
 // Output :
@@ -5118,8 +5126,8 @@ CBaseEntity *FindPickerEntityClass(CBasePlayer *pPlayer, char *classname) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Finds the nearest entity in front of the player, preferring
-//			collidable entities, but allows selection of enities that
-//are 			on the other side of walls or objects
+//			collidable entities, but allows selection of enities
+// that are 			on the other side of walls or objects
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
@@ -5740,11 +5748,11 @@ bool CBasePlayer::ClientCommand(const CCommand &args) {
   } else if (stricmp(cmd, "playerperf") == 0) {
     int nRecip = entindex();
     if (args.ArgC() >= 2) {
-      nRecip = clamp(Q_atoi(args.Arg(1)), 1, gpGlobals->maxClients);
+      nRecip = std::clamp(Q_atoi(args.Arg(1)), 1, gpGlobals->maxClients);
     }
     int nRecords = -1;  // all
     if (args.ArgC() >= 3) {
-      nRecords = max(Q_atoi(args.Arg(2)), 1);
+      nRecords = std::max(Q_atoi(args.Arg(2)), 1);
     }
 
     CBasePlayer *pl = UTIL_PlayerByIndex(nRecip);
@@ -5862,7 +5870,7 @@ bool CBasePlayer::RemovePlayerItem(CBaseCombatWeapon *pItem) {
 //-----------------------------------------------------------------------------
 // Purpose: Hides or shows the player's view model. The "r_drawviewmodel" cvar
 //			can still hide the viewmodel even if this is set to
-//true.
+// true.
 // Input  : bShow - true to show, false to hide the view model.
 //-----------------------------------------------------------------------------
 void CBasePlayer::ShowViewModel(bool bShow) {
@@ -5889,10 +5897,9 @@ QAngle CBasePlayer::BodyAngles() { return EyeAngles(); }
 //------------------------------------------------------------------------------
 // Purpose : Add noise to BodyTarget() to give enemy a better chance of
 //			 getting a clear shot when the player is peeking above a
-//hole 			 or behind a ladder (eventually the randomly-picked point 			 along the spine
-//will be one that is exposed above the hole or 			 between rungs of a ladder.)
-// Input   :
-// Output  :
+// hole 			 or behind a ladder (eventually the randomly-picked
+// point along the spine will be one that is exposed above the hole or between
+// rungs of a ladder.) Input   : Output  :
 //------------------------------------------------------------------------------
 Vector CBasePlayer::BodyTarget(const Vector &posSrc, bool bNoisy) {
   if (IsInAVehicle()) {
@@ -7136,7 +7143,7 @@ void CBasePlayer::VPhysicsShadowUpdate(IPhysicsObject *pPhysics) {
     NDebugOverlay::Box(newPosition, WorldAlignMins(), WorldAlignMaxs(), 0, 0,
                        255, 24, 15.0f);
     //	NDebugOverlay::Box( newPosition, WorldAlignMins(), WorldAlignMaxs(),
-    //0,0,255, 24, .01f);
+    // 0,0,255, 24, .01f);
   }
 
   Vector tmp = GetAbsOrigin() - newPosition;
@@ -7389,7 +7396,7 @@ int CBasePlayer::GetFOVForNetworking(void) {
   if (m_Local.m_flFOVRate == 0.0f) return fFOV;
 
   if (gpGlobals->curtime - m_flFOVTime < m_Local.m_flFOVRate) {
-    fFOV = min(fFOV, m_iFOVStart);
+    fFOV = std::min(fFOV, static_cast<int>(m_iFOVStart));
   }
   return fFOV;
 }

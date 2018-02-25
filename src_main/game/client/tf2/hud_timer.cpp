@@ -145,7 +145,7 @@ Color CHudTimer::GetColor( void )
 	}
 
 	// Handle pulses ( which brighten the timer & change the font )
-	clr[3] = clamp( MIN_TIMER_ALPHA + ( m_flBlur ) * 128, 0, 255 );
+	clr[3] = std::clamp( MIN_TIMER_ALPHA + ( m_flBlur ) * 128, 0, 255 );
 
 	// Low timer always overrides to make it bright
 	if ( flPercentagePassed > 0.99 )
@@ -186,8 +186,8 @@ bool CHudTimer::GetValue( char *value, int maxlen )
 		return false;
 
 	// Convert time to Minutes and Seconds (prevent negative times)
-	int iTimerMinutes = max( 0, ((int)m_flCurrentTime) / 60 );
-	int iTimerSeconds = max( 0, ((int)m_flCurrentTime) % 60 );
+	int iTimerMinutes = std::max( 0, ((int)m_flCurrentTime) / 60 );
+	int iTimerSeconds = std::max( 0, ((int)m_flCurrentTime) % 60 );
 
 	Q_snprintf( value, maxlen, "%02d:%.2d", iTimerMinutes, iTimerSeconds );
 	return true;

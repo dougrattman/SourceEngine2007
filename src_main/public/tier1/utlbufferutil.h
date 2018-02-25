@@ -8,9 +8,9 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 class Vector2D;
 class Vector;
 class Vector4D;
@@ -22,15 +22,15 @@ class CUtlBinaryBlock;
 class CUtlString;
 class CUtlCharConversion;
 
-//-----------------------------------------------------------------------------
+
 // For string serialization, set the delimiter rules
-//-----------------------------------------------------------------------------
+
 void SetSerializationDelimiter(CUtlCharConversion *pConv);
 void SetSerializationArrayDelimiter(const char *pDelimiter);
 
-//-----------------------------------------------------------------------------
+
 // Standard serialization methods for basic types
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const bool &src);
 bool Unserialize(CUtlBuffer &buf, bool &dest);
 
@@ -67,9 +67,9 @@ bool Unserialize(CUtlBuffer &buf, CUtlBinaryBlock &dest);
 bool Serialize(CUtlBuffer &buf, const CUtlString &src);
 bool Unserialize(CUtlBuffer &buf, CUtlString &dest);
 
-//-----------------------------------------------------------------------------
+
 // You can use this to check if a type serializes on multiple lines
-//-----------------------------------------------------------------------------
+
 template <class T>
 inline bool SerializesOnMultipleLines() {
   return false;
@@ -85,9 +85,9 @@ inline bool SerializesOnMultipleLines<CUtlBinaryBlock>() {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector serialization
-//-----------------------------------------------------------------------------
+
 template <class T>
 bool Serialize(CUtlBuffer &buf, const CUtlVector<T> &src) {
   extern const char *s_pUtlBufferUtilArrayDelim;

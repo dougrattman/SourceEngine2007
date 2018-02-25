@@ -216,7 +216,7 @@ int CWeaponBox::GiveAmmo( int iCount, char *szName, int iMax, int *pIndex )
 			if (pIndex)
 				*pIndex = i;
 
-			int iAdd = min( iCount, iMax - m_rgAmmo[i]);
+			int iAdd = std::min( iCount, iMax - m_rgAmmo[i]);
 			if (iCount == 0 || iAdd > 0)
 			{
 				m_rgAmmo[i] += iAdd;

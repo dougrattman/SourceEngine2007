@@ -52,8 +52,8 @@ void InterpolateRamp(
 
 	out.m_flMinAlpha = FLerp( a.m_flMinAlpha, b.m_flMinAlpha, t );
 	out.m_flMaxAlpha = FLerp( a.m_flMaxAlpha, b.m_flMaxAlpha, t );
-	out.m_flMinAlpha = clamp( out.m_flMinAlpha, 0, 255 );
-	out.m_flMaxAlpha = clamp( out.m_flMaxAlpha, 0, 255 );
+	out.m_flMinAlpha = std::clamp( out.m_flMinAlpha, 0, 255 );
+	out.m_flMaxAlpha = std::clamp( out.m_flMaxAlpha, 0, 255 );
 
 	out.m_flMinSize = FLerp( a.m_flMinSize, b.m_flMinSize, t );
 	out.m_flMaxSize = FLerp( a.m_flMaxSize, b.m_flMaxSize, t );
@@ -129,9 +129,9 @@ void FX_HitEffectSmoke(
 
 		float colorRamp = random->RandomFloat( 0.5f, 1.25f );
 
-		newParticle.m_uchColor[0] = min( 1.0f, colorRamp ) * 255.0f;
-		newParticle.m_uchColor[1] = min( 1.0f, colorRamp ) * 255.0f;
-		newParticle.m_uchColor[2] = min( 1.0f, colorRamp ) * 255.0f;
+		newParticle.m_uchColor[0] = std::min( 1.0f, colorRamp ) * 255.0f;
+		newParticle.m_uchColor[1] = std::min( 1.0f, colorRamp ) * 255.0f;
+		newParticle.m_uchColor[2] = std::min( 1.0f, colorRamp ) * 255.0f;
 	}	
 }
 
@@ -211,9 +211,9 @@ void FX_HitEffectBloodSpray(
 
 			float colorRamp = random->RandomFloat( 0.5f, 0.75f ) + flLODDistance;
 			
-			pParticle->m_uchColor[0]	= min( 1.0f, color[0] * colorRamp ) * 255.0f;
-			pParticle->m_uchColor[1]	= min( 1.0f, whiteness * colorRamp ) * 255.0f;
-			pParticle->m_uchColor[2]	= min( 1.0f, whiteness * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[0]	= std::min( 1.0f, color[0] * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[1]	= std::min( 1.0f, whiteness * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[2]	= std::min( 1.0f, whiteness * colorRamp ) * 255.0f;
 			
 			pParticle->m_uchStartSize	= random->RandomFloat( interpolatedRamp.m_flMinSize, interpolatedRamp.m_flMaxSize ) * flDistanceScale;
 			pParticle->m_uchEndSize		= pParticle->m_uchStartSize * 4 * flDistanceScale;
@@ -328,7 +328,7 @@ void FX_CS_BloodSpray( const Vector &origin, const Vector &normal, float flDamag
 	float g = 0;
 	float b = 4;
 
-	float scale = 0.5 + clamp( flDamage/50.f, 0.0, 1.0 ) ;
+	float scale = 0.5 + std::clamp( flDamage/50.f, 0.0, 1.0 ) ;
 
 	//Find area ambient light color and use it to tint smoke
 	Vector worldLight = WorldGetLightForPoint( origin, true );
@@ -365,9 +365,9 @@ void FX_CS_BloodSpray( const Vector &origin, const Vector &normal, float flDamag
 
 		colorRamp = random->RandomFloat( 0.75f, 2.0f );
 
-		pParticle->m_uchColor[0]	= min( 1.0f, color[0] * colorRamp ) * 255.0f;
-		pParticle->m_uchColor[1]	= min( 1.0f, color[1] * colorRamp ) * 255.0f;
-		pParticle->m_uchColor[2]	= min( 1.0f, color[2] * colorRamp ) * 255.0f;
+		pParticle->m_uchColor[0]	= std::min( 1.0f, color[0] * colorRamp ) * 255.0f;
+		pParticle->m_uchColor[1]	= std::min( 1.0f, color[1] * colorRamp ) * 255.0f;
+		pParticle->m_uchColor[2]	= std::min( 1.0f, color[2] * colorRamp ) * 255.0f;
 		
 		pParticle->m_uchStartSize	= 8;
 		pParticle->m_uchEndSize		= 32;
@@ -397,9 +397,9 @@ void FX_CS_BloodSpray( const Vector &origin, const Vector &normal, float flDamag
 
 			colorRamp = random->RandomFloat( 0.75f, 2.0f );
 
-			pParticle->m_uchColor[0]	= min( 1.0f, color[0] * colorRamp ) * 255.0f;
-			pParticle->m_uchColor[1]	= min( 1.0f, color[1] * colorRamp ) * 255.0f;
-			pParticle->m_uchColor[2]	= min( 1.0f, color[2] * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[0]	= std::min( 1.0f, color[0] * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[1]	= std::min( 1.0f, color[1] * colorRamp ) * 255.0f;
+			pParticle->m_uchColor[2]	= std::min( 1.0f, color[2] * colorRamp ) * 255.0f;
 			
 			pParticle->m_uchStartSize	= scale * random->RandomInt( 4, 8 );
 			pParticle->m_uchEndSize		= pParticle->m_uchStartSize * 4;

@@ -199,7 +199,7 @@ void CWeaponCombatLaserRifle::PrimaryAttack( void )
 		vecSrc, vecAiming, vecSpread, weapon_combat_laserrifle_range.GetFloat(), m_iPrimaryAmmoType, 0, entindex(), 0 );
 
 	m_flInaccuracy += 0.3;
-	m_flInaccuracy = clamp(m_flInaccuracy, 0, 1);
+	m_flInaccuracy = std::clamp(m_flInaccuracy, 0, 1);
 
 	m_flNextPrimaryAttack = gpGlobals->curtime + GetFireRate();
 	m_iClip1 = m_iClip1 - 1;
@@ -272,11 +272,11 @@ void CWeaponCombatLaserRifle::RecalculateAccuracy( void )
 		// Crouching prevents accuracy ever going beyond a point
 		if ( pPlayer->GetFlags() & FL_DUCKING )
 		{
-			m_flInaccuracy = clamp(m_flInaccuracy, 0, 0.8);
+			m_flInaccuracy = std::clamp(m_flInaccuracy, 0, 0.8);
 		}
 		else
 		{
-			m_flInaccuracy = clamp(m_flInaccuracy, 0, 1);
+			m_flInaccuracy = std::clamp(m_flInaccuracy, 0, 1);
 		}
 
 		m_flAccuracyTime -= 0.05;

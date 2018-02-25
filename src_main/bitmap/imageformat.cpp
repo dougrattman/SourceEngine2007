@@ -22,9 +22,9 @@
 // Should be last include
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // Various important function types for each color format
-//-----------------------------------------------------------------------------
+
 static ImageFormatInfo_t g_ImageFormatInfo[] = {
     {"UNKNOWN", 0, 0, 0, 0, 0, false},   // IMAGE_FORMAT_UNKNOWN,
     {"RGBA8888", 4, 8, 8, 8, 8, false},  // IMAGE_FORMAT_RGBA8888,
@@ -79,9 +79,9 @@ static ImageFormatInfo_t g_ImageFormatInfo[] = {
 
 namespace ImageLoader {
 
-//-----------------------------------------------------------------------------
+
 // Returns info about each image format
-//-----------------------------------------------------------------------------
+
 const ImageFormatInfo_t &ImageFormatInfo(ImageFormat fmt) {
   COMPILE_TIME_ASSERT((NUM_IMAGE_FORMATS + 1) ==
                       sizeof(g_ImageFormatInfo) / sizeof(g_ImageFormatInfo[0]));
@@ -237,10 +237,10 @@ int GetNumMipMapLevels(int width, int height, int depth) {
 
 #ifndef _LINUX
 
-//-----------------------------------------------------------------------------
+
 // convert back and forth from D3D format to ImageFormat, regardless of
 // whether it's supported or not
-//-----------------------------------------------------------------------------
+
 ImageFormat D3DFormatToImageFormat(D3DFORMAT format) {
   switch (format) {
     case D3DFMT_R8G8B8:

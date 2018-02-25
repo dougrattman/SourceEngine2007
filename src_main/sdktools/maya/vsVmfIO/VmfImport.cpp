@@ -1415,7 +1415,7 @@ void CVmfImport::GetMeshWindingData(
 	const double vVectorLength( vVector.length() );
 	const MFloatVector vUnitVector( vVector.normal() );
 
-	const uint nVertices = static_cast< uint >( max( 0, pWinding->numpoints ) );
+	const uint nVertices = static_cast< uint >( std::max( 0, pWinding->numpoints ) );
 	vertexArray.setLength( nVertices );
 	polygonCounts.setLength( 1 );
 	polygonCounts[ 0 ] = nVertices;

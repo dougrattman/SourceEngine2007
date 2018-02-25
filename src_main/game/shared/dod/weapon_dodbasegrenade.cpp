@@ -388,7 +388,7 @@ enum
 
 			//Msg( "speed %.f\n", flSpeed );
 
-			flSpeed = clamp( flSpeed, dod_grenademinspeed.GetFloat(), dod_grenademaxspeed.GetFloat() );
+			flSpeed = std::clamp( flSpeed, dod_grenademinspeed.GetFloat(), dod_grenademaxspeed.GetFloat() );
 
 			vecThrow += vForward * flSpeed;
 		}
@@ -405,7 +405,7 @@ enum
 		float flTimeLeft;
 
 		if ( IsArmed() )
-			flTimeLeft = max( 0, m_flDetonateTime - gpGlobals->curtime );
+			flTimeLeft = std::max( 0, m_flDetonateTime - gpGlobals->curtime );
 		else
 			flTimeLeft = GetDetonateTimerLength();
 

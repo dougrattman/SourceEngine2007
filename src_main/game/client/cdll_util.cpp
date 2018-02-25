@@ -862,7 +862,7 @@ static unsigned char ComputeDistanceFade(C_BaseEntity *pEntity, float flMinDist,
   // NOTE: Because of the if-checks above, flMinDist != flMinDist here
   float flFalloffFactor = 255.0f / (flMaxDist - flMinDist);
   int nAlpha = flFalloffFactor * (flMaxDist - flCurrentDistanceSq);
-  return clamp(nAlpha, 0, 255);
+  return std::clamp(nAlpha, 0, 255);
 }
 
 //-----------------------------------------------------------------------------
@@ -928,7 +928,7 @@ unsigned char UTIL_ComputeEntityFade(C_BaseEntity *pEntity, float flMinDist,
 void UTIL_BoundToWorldSize(Vector *pVecPos) {
   Assert(pVecPos);
   for (int i = 0; i < 3; ++i) {
-    (*pVecPos)[i] = clamp((*pVecPos)[i], MIN_COORD_FLOAT, MAX_COORD_FLOAT);
+    (*pVecPos)[i] = std::clamp((*pVecPos)[i], MIN_COORD_FLOAT, MAX_COORD_FLOAT);
   }
 }
 

@@ -970,7 +970,7 @@ static void Flood_FindConnectedWaterVolumes_r(CUtlVector<node_t *> &list,
   visited.Set(pLeaf->diskId);
   list.AddToTail(pLeaf);
 
-  baseleaf.minZ = min(pLeaf->mins.z, baseleaf.minZ);
+  baseleaf.minZ = std::min(pLeaf->mins.z, baseleaf.minZ);
 
   for (portal_t *p = pLeaf->portals; p; p = p->next[!oppositeNodeIndex]) {
     oppositeNodeIndex = (p->nodes[0] == pLeaf) ? 1 : 0;
@@ -1265,7 +1265,7 @@ static void ConvertModelToPhysCollide(
   // Basically you get a ray cast through each square of epsilon surface area on
   // each OBB side So compute it for 1% error (on the smallest side, less on
   // larger sides)
-  params.dragAreaEpsilon = clamp(minSurfaceArea * 1e-2f, 1.0f, 1024.0f);
+  params.dragAreaEpsilon = std::clamp(minSurfaceArea * 1e-2f, 1.0f, 1024.0f);
   CPhysCollide *pCollide = physcollision->ConvertConvexToCollideParams(
       planes.m_convex.Base(), count, params);
 

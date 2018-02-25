@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <direct.h>
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "ilaunchabledll.h"
 #include "tier0/include/icommandline.h"

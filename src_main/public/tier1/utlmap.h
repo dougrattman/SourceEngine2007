@@ -6,11 +6,11 @@
 #include "tier0/include/dbg.h"
 #include "tier1/utlrbtree.h"
 
-//-----------------------------------------------------------------------------
+
 //
 // Purpose:	An associative container. Pretty much identical to std::map.
 //
-//-----------------------------------------------------------------------------
+
 
 // This is a useful macro to iterate from start to end in order in a map
 #define FOR_EACH_MAP(mapName, iteratorName)       \
@@ -164,6 +164,6 @@ class CUtlMap {
   CTree m_Tree;
 };
 
-//-----------------------------------------------------------------------------
+
 
 #endif  // SOURCE_TIER1_UTLMAP_H_

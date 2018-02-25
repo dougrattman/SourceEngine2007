@@ -442,18 +442,18 @@ bool CNPC_Apache::FireGun( )
 	angles.x = AngleNormalize(angles.x);	
 
 	if (angles.x > m_angGun.x)
-		m_angGun.x = min( angles.x, m_angGun.x + 12 );
+		m_angGun.x = std::min( angles.x, m_angGun.x + 12 );
 	if (angles.x < m_angGun.x)
-		m_angGun.x = max( angles.x, m_angGun.x - 12 );
+		m_angGun.x = std::max( angles.x, m_angGun.x - 12 );
 	if (angles.y > m_angGun.y)
-		m_angGun.y = min( angles.y, m_angGun.y + 12 );
+		m_angGun.y = std::min( angles.y, m_angGun.y + 12 );
 	if (angles.y < m_angGun.y)
-		m_angGun.y = max( angles.y, m_angGun.y - 12 );
+		m_angGun.y = std::max( angles.y, m_angGun.y - 12 );
 
 	// hacks - shouldn't be hardcoded, oh well.
 	// limit it so it doesn't pop if you try to set it to the max value
-	m_angGun.y = clamp( m_angGun.y, -89.9, 89.9 );
-	m_angGun.x = clamp( m_angGun.x, -9.9, 44.9 );
+	m_angGun.y = std::clamp( m_angGun.y, -89.9, 89.9 );
+	m_angGun.x = std::clamp( m_angGun.x, -9.9, 44.9 );
 
 	m_angGun.y = SetBoneController( 0, m_angGun.y );
 	m_angGun.x = SetBoneController( 1, m_angGun.x );

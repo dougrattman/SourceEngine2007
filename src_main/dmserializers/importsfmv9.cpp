@@ -66,7 +66,7 @@ void CImportSFMV9::FixupElement(CDmElement *pElement) {
        // RemoveAttribute
       const Vector4D &vecColor = pOldAttr->GetValue<Vector4D>();
       for (int i = 0; i < 4; ++i) {
-        color[i] = (int)clamp(vecColor[i], 0.0f, 255.0f);
+        color[i] = (int)std::clamp(vecColor[i], 0.0f, 255.0f);
       }
 
       pElement->RemoveAttribute("color");

@@ -871,7 +871,7 @@ void CPresetSlider::PaintBackground()
 		int minAlpha = 15;
 		float alphaTarget = 255.0f;
 
-		int curAlpha = max( GetCurrent() * alphaTarget, minAlpha );
+		int curAlpha = std::max( GetCurrent() * alphaTarget, minAlpha );
 		 
 		if ( _dragging )
 		{

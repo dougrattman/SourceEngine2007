@@ -213,7 +213,7 @@ void CObjectResourcePump::ResourcePumpThink( void )
 		float flLevelBonus = 1.0 - (i / (float)GetObjectInfo( GetType() )->m_MaxUpgradeLevel);
 		iResourcesPerPlayer += (obj_resourcepump_amount.GetFloat() * flLevelBonus);
 	}
-	int iPumpedResources = min( m_hResourceZone->GetResources(), iResourcesPerPlayer );
+	int iPumpedResources = std::min( m_hResourceZone->GetResources(), iResourcesPerPlayer );
 	if ( iPumpedResources )
 	{
 		m_hResourceZone->RemoveResources( iPumpedResources );

@@ -546,7 +546,7 @@ float CWeaponCombatShield::AttemptToBlock( float flDamage )
 	// Block as much of the damage as we can
 	float flPowerNeeded = flDamage * weapon_combat_shield_factor.GetFloat();
 	flPowerNeeded = RemapVal( flPowerNeeded, 0, weapon_combat_shield_health.GetFloat(), 0, 1 );
-	float flPowerUsed = min( flPowerNeeded, GetShieldHealth() );
+	float flPowerUsed = std::min( flPowerNeeded, GetShieldHealth() );
 
 #ifndef CLIENT_DLL
 	RemoveShieldHealth( flPowerUsed );
@@ -589,7 +589,7 @@ float CWeaponCombatShield::GetShieldHealth( void )
 //-----------------------------------------------------------------------------
 void CWeaponCombatShield::AddShieldHealth( float flHealth )
 {
-	m_flShieldHealth = min( 1.0, m_flShieldHealth + flHealth );
+	m_flShieldHealth = std::min( 1.0, m_flShieldHealth + flHealth );
 }
 
 //-----------------------------------------------------------------------------
@@ -597,7 +597,7 @@ void CWeaponCombatShield::AddShieldHealth( float flHealth )
 //-----------------------------------------------------------------------------
 void CWeaponCombatShield::RemoveShieldHealth( float flHealth )
 {
-	m_flShieldHealth = max( 0.0, m_flShieldHealth - flHealth );
+	m_flShieldHealth = std::max( 0.0, m_flShieldHealth - flHealth );
 }
 
 //-----------------------------------------------------------------------------

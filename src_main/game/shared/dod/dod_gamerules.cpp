@@ -404,14 +404,14 @@ static CDODViewVectors g_DODViewVectors(
 
 		// Look at -count.
 		int count = args.FindArgInt( "-count", 1 );
-		count = clamp( count, 1, 16 );
+		count = std::clamp( count, 1, 16 );
 
 		int iTeam = TEAM_ALLIES;
 		const char *pVal = args.FindArg( "-team" );
 		if ( pVal )
 		{
 			iTeam = atoi( pVal );
-			iTeam = clamp( iTeam, 0, (GetNumberOfTeams()-1) );
+			iTeam = std::clamp( iTeam, 0, (GetNumberOfTeams()-1) );
 		}
 
 		int iClass = 0;
@@ -419,7 +419,7 @@ static CDODViewVectors g_DODViewVectors(
 		if ( pVal )
 		{
 			iClass = atoi( pVal );
-			iClass = clamp( iClass, 0, 10 );
+			iClass = std::clamp( iClass, 0, 10 );
 		}
 
 		// Look at -frozen.
@@ -571,14 +571,14 @@ static CDODViewVectors g_DODViewVectors(
 
 			stats.header.serverid = 0;
 
-			stats.iMinutesPlayed = clamp( (short)( gpGlobals->curtime / 60 ), 0, MY_USHRT_MAX ); 
+			stats.iMinutesPlayed = std::clamp( (short)( gpGlobals->curtime / 60 ), 0, MY_USHRT_MAX ); 
 
 			// Team Scores
-			stats.iNumAlliesWins = clamp( pAllies->GetRoundsWon(), 0, MY_UCHAR_MAX );
-			stats.iNumAxisWins = clamp( pAxis->GetRoundsWon(), 0, MY_UCHAR_MAX );
+			stats.iNumAlliesWins = std::clamp( pAllies->GetRoundsWon(), 0, MY_UCHAR_MAX );
+			stats.iNumAxisWins = std::clamp( pAxis->GetRoundsWon(), 0, MY_UCHAR_MAX );
 
-			stats.iAlliesTickPoints = clamp( pAllies->GetScore(), 0, MY_USHRT_MAX );
-			stats.iAxisTickPoints = clamp( pAxis->GetScore(), 0, MY_USHRT_MAX );		
+			stats.iAlliesTickPoints = std::clamp( pAllies->GetScore(), 0, MY_USHRT_MAX );
+			stats.iAxisTickPoints = std::clamp( pAxis->GetScore(), 0, MY_USHRT_MAX );		
 
 			// Player Data
 			for ( i=1;i<=MAX_PLAYERS;i++ )
@@ -604,39 +604,39 @@ static CDODViewVectors g_DODViewVectors(
 			// convert to minutes
 			for( j=0;j<7;j++ )
 			{
-				stats.iMinutesPlayedPerClass_Allies[j] = clamp( (short)( m_flSecondsPlayedPerClass_Allies[j] / 60 ), 0, MY_USHRT_MAX );
-				stats.iMinutesPlayedPerClass_Axis[j] = clamp( (short)( m_flSecondsPlayedPerClass_Axis[j] / 60 ), 0, MY_USHRT_MAX );
+				stats.iMinutesPlayedPerClass_Allies[j] = std::clamp( (short)( m_flSecondsPlayedPerClass_Allies[j] / 60 ), 0, MY_USHRT_MAX );
+				stats.iMinutesPlayedPerClass_Axis[j] = std::clamp( (short)( m_flSecondsPlayedPerClass_Axis[j] / 60 ), 0, MY_USHRT_MAX );
 			}
 
 			for ( i=0;i<6;i++ )
 			{
-				stats.iKillsPerClass_Allies[i] = clamp( (short)m_iStatsKillsPerClass_Allies[i], 0, MY_USHRT_MAX );
-				stats.iKillsPerClass_Axis[i] = clamp( (short)m_iStatsKillsPerClass_Axis[i], 0, MY_USHRT_MAX );
+				stats.iKillsPerClass_Allies[i] = std::clamp( (short)m_iStatsKillsPerClass_Allies[i], 0, MY_USHRT_MAX );
+				stats.iKillsPerClass_Axis[i] = std::clamp( (short)m_iStatsKillsPerClass_Axis[i], 0, MY_USHRT_MAX );
 
-				stats.iSpawnsPerClass_Allies[i] = clamp( (short)m_iStatsSpawnsPerClass_Allies[i], 0, MY_USHRT_MAX );
-				stats.iSpawnsPerClass_Axis[i] = clamp( (short)m_iStatsSpawnsPerClass_Axis[i], 0, MY_USHRT_MAX );
+				stats.iSpawnsPerClass_Allies[i] = std::clamp( (short)m_iStatsSpawnsPerClass_Allies[i], 0, MY_USHRT_MAX );
+				stats.iSpawnsPerClass_Axis[i] = std::clamp( (short)m_iStatsSpawnsPerClass_Axis[i], 0, MY_USHRT_MAX );
 
-				stats.iCapsPerClass_Allies[i] = clamp( (short)m_iStatsCapsPerClass_Allies[i], 0, MY_USHRT_MAX );
-				stats.iCapsPerClass_Axis[i] = clamp( (short)m_iStatsCapsPerClass_Axis[i], 0, MY_USHRT_MAX );
+				stats.iCapsPerClass_Allies[i] = std::clamp( (short)m_iStatsCapsPerClass_Allies[i], 0, MY_USHRT_MAX );
+				stats.iCapsPerClass_Axis[i] = std::clamp( (short)m_iStatsCapsPerClass_Axis[i], 0, MY_USHRT_MAX );
 
-				stats.iDefensesPerClass_Allies[i] = clamp( m_iStatsDefensesPerClass_Allies[i], 0, MY_UCHAR_MAX );
-				stats.iDefensesPerClass_Axis[i] = clamp( m_iStatsDefensesPerClass_Axis[i], 0, MY_UCHAR_MAX );
+				stats.iDefensesPerClass_Allies[i] = std::clamp( m_iStatsDefensesPerClass_Allies[i], 0, MY_UCHAR_MAX );
+				stats.iDefensesPerClass_Axis[i] = std::clamp( m_iStatsDefensesPerClass_Axis[i], 0, MY_UCHAR_MAX );
 			}
 
 			// Server Settings
-			stats.iClassLimits_Allies[0] = clamp( mp_limitAlliesRifleman.GetInt(), -1, 254 );
-			stats.iClassLimits_Allies[1] = clamp( mp_limitAlliesAssault.GetInt(), -1, 254 );
-			stats.iClassLimits_Allies[2] = clamp( mp_limitAlliesSupport.GetInt(), -1, 254 );
-			stats.iClassLimits_Allies[3] = clamp( mp_limitAlliesSniper.GetInt(), -1, 254 );
-			stats.iClassLimits_Allies[4] = clamp( mp_limitAlliesMachinegun.GetInt(), -1, 254 );
-			stats.iClassLimits_Allies[5] = clamp( mp_limitAlliesRocket.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[0] = std::clamp( mp_limitAlliesRifleman.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[1] = std::clamp( mp_limitAlliesAssault.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[2] = std::clamp( mp_limitAlliesSupport.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[3] = std::clamp( mp_limitAlliesSniper.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[4] = std::clamp( mp_limitAlliesMachinegun.GetInt(), -1, 254 );
+			stats.iClassLimits_Allies[5] = std::clamp( mp_limitAlliesRocket.GetInt(), -1, 254 );
 
-			stats.iClassLimits_Axis[0] = clamp( mp_limitAxisRifleman.GetInt(), -1, 254 );
-			stats.iClassLimits_Axis[1] = clamp( mp_limitAxisAssault.GetInt(), -1, 254 );
-			stats.iClassLimits_Axis[2] = clamp( mp_limitAxisSupport.GetInt(), -1, 254 );
-			stats.iClassLimits_Axis[3] = clamp( mp_limitAxisSniper.GetInt(), -1, 254 );
-			stats.iClassLimits_Axis[4] = clamp( mp_limitAxisMachinegun.GetInt(), -1, 254 );
-			stats.iClassLimits_Axis[5] = clamp( mp_limitAxisRocket.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[0] = std::clamp( mp_limitAxisRifleman.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[1] = std::clamp( mp_limitAxisAssault.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[2] = std::clamp( mp_limitAxisSupport.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[3] = std::clamp( mp_limitAxisSniper.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[4] = std::clamp( mp_limitAxisMachinegun.GetInt(), -1, 254 );
+			stats.iClassLimits_Axis[5] = std::clamp( mp_limitAxisRocket.GetInt(), -1, 254 );
 
 			// Weapon Data
 
@@ -645,11 +645,11 @@ static CDODViewVectors g_DODViewVectors(
 			{
 				int weaponId = iDistanceStatWeapons[i];
 
-				stats.weaponStatsDistance[i].iNumHits = clamp( m_iWeaponShotsHit[weaponId], 0, MY_USHRT_MAX );
-				stats.weaponStatsDistance[i].iNumAttacks = clamp( m_iWeaponShotsFired[weaponId], 0, MY_USHRT_MAX );
+				stats.weaponStatsDistance[i].iNumHits = std::clamp( m_iWeaponShotsHit[weaponId], 0, MY_USHRT_MAX );
+				stats.weaponStatsDistance[i].iNumAttacks = std::clamp( m_iWeaponShotsFired[weaponId], 0, MY_USHRT_MAX );
 				for ( int j=0;j<DOD_NUM_WEAPON_DISTANCE_BUCKETS;j++ )
 				{
-					stats.weaponStatsDistance[i].iDistanceBuckets[j] = clamp( m_iWeaponDistanceBuckets[weaponId][j], 0, MY_USHRT_MAX );
+					stats.weaponStatsDistance[i].iDistanceBuckets[j] = std::clamp( m_iWeaponDistanceBuckets[weaponId][j], 0, MY_USHRT_MAX );
 				}
 			}
 
@@ -657,8 +657,8 @@ static CDODViewVectors g_DODViewVectors(
 			for ( i=0;i<DOD_NUM_NODIST_STAT_WEAPONS;i++ )
 			{
 				int weaponId = iNoDistStatWeapons[i];
-				stats.weaponStats[i].iNumHits = clamp( m_iWeaponShotsHit[weaponId], 0, MY_USHRT_MAX );
-				stats.weaponStats[i].iNumAttacks = clamp( m_iWeaponShotsFired[weaponId], 0, MY_USHRT_MAX );
+				stats.weaponStats[i].iNumHits = std::clamp( m_iWeaponShotsHit[weaponId], 0, MY_USHRT_MAX );
+				stats.weaponStats[i].iNumAttacks = std::clamp( m_iWeaponShotsFired[weaponId], 0, MY_USHRT_MAX );
 			}
 
 			const void *pvBlobData = ( const void * )( &stats );
@@ -2269,7 +2269,7 @@ int CDODGameRules::GetReinforcementTimerSeconds( int team, float flSpawnEligible
 		return -1;
 	}
 
-	return max( 0, (int)( flWaveTime - gpGlobals->curtime ) );
+	return std::max( 0, (int)( flWaveTime - gpGlobals->curtime ) );
 }
 
 const CViewVectors* CDODGameRules::GetViewVectors() const
@@ -2832,7 +2832,7 @@ const CDODViewVectors *CDODGameRules::GetDODViewVectors() const
 	//ALLIES WIN
 	void CDODGameRules::State_Enter_ALLIES_WIN( void )
 	{
-		float flTime = max( 5, dod_bonusroundtime.GetFloat() );
+		float flTime = std::max( 5, dod_bonusroundtime.GetFloat() );
 
 		m_flStateTransitionTime = gpGlobals->curtime + flTime * dod_enableroundwaittime.GetFloat();
 
@@ -2853,7 +2853,7 @@ const CDODViewVectors *CDODGameRules::GetDODViewVectors() const
 	//AXIS WIN
 	void CDODGameRules::State_Enter_AXIS_WIN( void )
 	{
-		float flTime = max( 5, dod_bonusroundtime.GetFloat() );
+		float flTime = std::max( 5, dod_bonusroundtime.GetFloat() );
 
 		m_flStateTransitionTime = gpGlobals->curtime + flTime * dod_enableroundwaittime.GetFloat();
 

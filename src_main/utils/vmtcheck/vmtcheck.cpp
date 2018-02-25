@@ -6,7 +6,7 @@
 //=============================================================================//
 #include "stdafx.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "vmtcheck_util.h"
 #include "tier0/include/dbg.h"
 #include "utldict.h"
@@ -184,7 +184,7 @@ void ProcessMaterialsDirectory( char const *basedir )
 	}
 
 	int ecount = c - valid;
-	vprint( 0, "\nSummary:  found %i/%i (%.2f percent) .vmt errors\n", ecount, c, 100.0 * ecount / max( c, 1 ) );
+	vprint( 0, "\nSummary:  found %i/%i (%.2f percent) .vmt errors\n", ecount, c, 100.0 * ecount / std::max( c, 1 ) );
 
 }
 

@@ -203,8 +203,8 @@ int ColorSpace::LinearToScreenGamma( float f )
 uint16_t ColorSpace::LinearFloatToCorrectedShort( float in )
 {
 	uint16_t out;
-	in = min( in * 4096.0, 65535.0 );
-	out = max( in, 0.0f );
+	in = std::min( in * 4096.0, 65535.0 );
+	out = std::max( in, 0.0f );
 
 	return out;
 }

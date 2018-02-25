@@ -433,7 +433,7 @@ bool CMinimapPanel::InternalWorldToMinimap( MinimapPosType_t posType, const Vect
 				if (fdelta.x >= 0.5f)
 				{
 					float flRatio = delta.y / delta.x;
-					xfraction = clamp(xfraction, 0, 1);
+					xfraction = std::clamp(xfraction, 0, 1);
 					yfraction = (xfraction - 0.5f) * flRatio + 0.5f;
 				}
 			}
@@ -443,7 +443,7 @@ bool CMinimapPanel::InternalWorldToMinimap( MinimapPosType_t posType, const Vect
 				{
 					// It's more vertical than horizontal
 					float flRatio = delta.x / delta.y;
-					yfraction = clamp(yfraction, 0, 1);
+					yfraction = std::clamp(yfraction, 0, 1);
 					xfraction = (yfraction - 0.5f) * flRatio + 0.5f;
 				}
 			}
@@ -453,8 +453,8 @@ bool CMinimapPanel::InternalWorldToMinimap( MinimapPosType_t posType, const Vect
 	case MINIMAP_CLAMP:
 		{
 			// Clamp the position to lie within the minimap
-			xfraction = clamp(xfraction, 0, 1);
-			yfraction = clamp(yfraction, 0, 1);
+			xfraction = std::clamp(xfraction, 0, 1);
+			yfraction = std::clamp(yfraction, 0, 1);
 		}
 		break;
 
@@ -677,7 +677,7 @@ void CMinimapPanel::PaintActOverlays( int teamIndex, int alpha )
 	int i = GetCurrentActNumber();
 	if ( i != ACT_NONE_SPECIFIED )
 	{
-		i = clamp( i, 0, MAX_ACTS - 1 );
+		i = std::clamp( i, 0, MAX_ACTS - 1 );
 		Overlays *p = &m_rgOverlays[ teamIndex ][ i ];
 		if ( p->m_bInUse )
 		{
@@ -781,11 +781,11 @@ void CMinimapPanel::Paint()
 	}
 
 	// Can can be 0 through MAX_ACT_TEAMS
-	team = clamp( team, 0, MAX_ACT_TEAMS );
+	team = std::clamp( team, 0, MAX_ACT_TEAMS );
 
 	// Array index is 0 to MAX_ACT_TEAMS - 1 where a team of zero means no team and won't be indexed
 	//  due to logic that checks team > 0 
-	int teamIndex = clamp( team - 1, 0, MAX_ACT_TEAMS - 1 );
+	int teamIndex = std::clamp( team - 1, 0, MAX_ACT_TEAMS - 1 );
 
 	if ( m_pBackground[ teamIndex ] )
 	{
@@ -929,7 +929,7 @@ void CMinimapPanel::OnTick()
 bool CMinimapPanel::ShouldDrawZoomDetails( int& alpha )
 {
 	alpha = (int)m_flDetailsAlpha;
-	alpha = clamp( alpha, 0, 255 );
+	alpha = std::clamp( alpha, 0, 255 );
 
 	if ( !alpha )
 		return false;
@@ -1040,10 +1040,10 @@ void CMinimapPanel::ComputeMapOrigin( Vector& origin )
 	float viewport_height_world_units	= ( float )( vh - 2 * inset_pixels ) * actualworldunitsperpixel;
 
 	// Insets apply when centering on player
-	m_flWorldSpaceInsets[ 0 ] = min( m_vecMapCenter.x, worldmins.x + m_flCenterOnPlayer * ( viewport_width_world_units ) * 0.5f );
-	m_flWorldSpaceInsets[ 1 ] = min( m_vecMapCenter.y, worldmins.y + m_flCenterOnPlayer * ( viewport_height_world_units ) * 0.5f );
-	m_flWorldSpaceInsets[ 2 ] = max( m_vecMapCenter.x, worldmaxs.x - m_flCenterOnPlayer * ( viewport_width_world_units ) * 0.5f );
-	m_flWorldSpaceInsets[ 3 ] = max( m_vecMapCenter.y, worldmaxs.y - m_flCenterOnPlayer * ( viewport_height_world_units ) * 0.5f );
+	m_flWorldSpaceInsets[ 0 ] = std::min( m_vecMapCenter.x, worldmins.x + m_flCenterOnPlayer * ( viewport_width_world_units ) * 0.5f );
+	m_flWorldSpaceInsets[ 1 ] = std::min( m_vecMapCenter.y, worldmins.y + m_flCenterOnPlayer * ( viewport_height_world_units ) * 0.5f );
+	m_flWorldSpaceInsets[ 2 ] = std::max( m_vecMapCenter.x, worldmaxs.x - m_flCenterOnPlayer * ( viewport_width_world_units ) * 0.5f );
+	m_flWorldSpaceInsets[ 3 ] = std::max( m_vecMapCenter.y, worldmaxs.y - m_flCenterOnPlayer * ( viewport_height_world_units ) * 0.5f );
 	
 	// Assuming origin is at center of view, compute world space left, top, right, bottom
 	m_flWorldSpaceBounds[ 0 ] = m_vecMapCenter.x + origin.x - viewport_width_world_units * 0.5f;
@@ -1052,14 +1052,14 @@ void CMinimapPanel::ComputeMapOrigin( Vector& origin )
 	m_flWorldSpaceBounds[ 3 ] = m_vecMapCenter.y + origin.y + viewport_height_world_units * 0.5f;
 
 	// Clip these bounds
-	m_flClippedWorldSpaceBounds[ 0 ] = max( worldmins.x, m_flWorldSpaceBounds[ 0 ] );
-	m_flClippedWorldSpaceBounds[ 1 ] = max( worldmins.y, m_flWorldSpaceBounds[ 1 ] );
-	m_flClippedWorldSpaceBounds[ 2 ] = min( worldmaxs.x, m_flWorldSpaceBounds[ 2 ] );
-	m_flClippedWorldSpaceBounds[ 3 ] = min( worldmaxs.y, m_flWorldSpaceBounds[ 3 ] );
+	m_flClippedWorldSpaceBounds[ 0 ] = std::max( worldmins.x, m_flWorldSpaceBounds[ 0 ] );
+	m_flClippedWorldSpaceBounds[ 1 ] = std::max( worldmins.y, m_flWorldSpaceBounds[ 1 ] );
+	m_flClippedWorldSpaceBounds[ 2 ] = std::min( worldmaxs.x, m_flWorldSpaceBounds[ 2 ] );
+	m_flClippedWorldSpaceBounds[ 3 ] = std::min( worldmaxs.y, m_flWorldSpaceBounds[ 3 ] );
 
 	// Clip origin to inserts
-	origin.x = clamp( origin.x, m_flWorldSpaceInsets[ 0 ] - m_vecMapCenter.x, m_flWorldSpaceInsets[ 2 ] - m_vecMapCenter.x );
-	origin.y = clamp( origin.y, m_flWorldSpaceInsets[ 1 ] - m_vecMapCenter.y, m_flWorldSpaceInsets[ 3 ] - m_vecMapCenter.y );
+	origin.x = std::clamp( origin.x, m_flWorldSpaceInsets[ 0 ] - m_vecMapCenter.x, m_flWorldSpaceInsets[ 2 ] - m_vecMapCenter.x );
+	origin.y = std::clamp( origin.y, m_flWorldSpaceInsets[ 1 ] - m_vecMapCenter.y, m_flWorldSpaceInsets[ 3 ] - m_vecMapCenter.y );
 
 	/*
 	engine->Con_NPrintf( 1, "map bounds left %i top %i right %i bottom %i", 
@@ -1255,7 +1255,7 @@ void CMinimapPanel::ZoomIn( void )
 	else
 	{
 		m_nZoomLevel = ( m_nZoomLevel + 1 ) % ( NUM_WIDTHS );
-		m_nZoomLevel = clamp( m_nZoomLevel, 0, NUM_WIDTHS - 1 );	
+		m_nZoomLevel = std::clamp( m_nZoomLevel, 0, NUM_WIDTHS - 1 );	
 
 		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence(
 			m_nZoomLevel == 0 ? 

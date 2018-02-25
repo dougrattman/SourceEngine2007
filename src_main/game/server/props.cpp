@@ -334,7 +334,7 @@ void CBaseProp::DrawDebugGeometryOverlays(void) {
     } else {
       // Remap health to green brightness
       float flG = RemapVal(m_iHealth, 0, 100, 64, 255);
-      flG = clamp(flG, 0, 255);
+      flG = std::clamp(flG, 0.0f, 255.0f);
       NDebugOverlay::EntityBounds(this, 0, flG, 0, 0, 0);
     }
   }
@@ -1022,7 +1022,7 @@ int CBreakableProp::OnTakeDamage(const CTakeDamageInfo &inputInfo) {
       float flFactor;
       flFactor = flDist / MAX_BLAST_DIST;
       const float MAX_BURN_TIME = 5.0f;
-      flBurnTime = max(0.5, MAX_BURN_TIME * flFactor);
+      flBurnTime = std::max(0.5f, MAX_BURN_TIME * flFactor);
       flBurnTime += random->RandomFloat(0, 0.5);
     } else {
       // Very near the explosion. explode almost immediately.
@@ -1031,7 +1031,8 @@ int CBreakableProp::OnTakeDamage(const CTakeDamageInfo &inputInfo) {
 
     // Change my health so that I burn for flBurnTime seconds.
     float flIdealHealth =
-        min(m_iHealth, FLAME_DIRECT_DAMAGE_PER_SEC * flBurnTime);
+        std::min(static_cast<float>(static_cast<int>(m_iHealth)),
+                 FLAME_DIRECT_DAMAGE_PER_SEC * flBurnTime);
     float flIdealDamage = m_iHealth - flIdealHealth;
 
     // Scale the damage to do ideal damage.
@@ -1065,7 +1066,8 @@ int CBreakableProp::OnTakeDamage(const CTakeDamageInfo &inputInfo) {
   int ret = BaseClass::OnTakeDamage(info);
 
   // Output the new health as a percentage of max health [0..1]
-  float flRatio = clamp((float)m_iHealth / (float)m_iMaxHealth, 0, 1);
+  float flRatio =
+      std::clamp((float)m_iHealth / (float)m_iMaxHealth, 0.0f, 1.0f);
   m_OnHealthChanged.Set(flRatio, info.GetAttacker(), this);
   m_OnTakeDamage.FireOutput(info.GetAttacker(), this);
 
@@ -1133,7 +1135,8 @@ bool CBreakableProp::UpdateHealth(int iNewHealth, CBaseEntity *pActivator) {
     }
 
     // Output the new health as a percentage of max health [0..1]
-    float flRatio = clamp((float)m_iHealth / (float)m_iMaxHealth, 0, 1);
+    float flRatio =
+        std::clamp((float)m_iHealth / (float)m_iMaxHealth, 0.0f, 1.0f);
     m_OnHealthChanged.Set(flRatio, pActivator, this);
 
     if (m_iHealth <= 0) {
@@ -2977,7 +2980,7 @@ CBaseEntity *BreakModelCreateSingle(CBaseEntity *pOwner, breakmodel_t *pModel,
     pEntity->m_nSkin = nSkin;
     pEntity->m_iHealth = pModel->health;
     if (g_ActiveGibCount >= ACTIVE_GIB_FADE) {
-      pModel->fadeTime = min(3, pModel->fadeTime);
+      pModel->fadeTime = std::min(3.0f, pModel->fadeTime);
     }
     if (pModel->fadeTime) {
       pEntity->SUB_StartFadeOut(pModel->fadeTime, false);
@@ -3974,22 +3977,22 @@ void CBasePropDoor::Blocked(CBaseEntity *pOther) {
   //					if (pDoor->m_fAutoReturnDelay >= 0)
   //					{
   //						if (pDoor->GetAbsVelocity() ==
-  //GetAbsVelocity()
+  // GetAbsVelocity()
   //&& pDoor->GetLocalAngularVelocity() == GetLocalAngularVelocity())
   //						{
-  //							// this is the most hacked,
-  //evil, bastardized thing I've ever seen. kjb
+  //							// this is the most
+  // hacked, evil, bastardized thing I've ever seen. kjb
   // if (FClassnameIs(pTarget, "prop_door_rotating"))
   //							{
   //								// set angles to
-  //realign rotating doors
+  // realign rotating doors
   // pDoor->SetLocalAngles(GetLocalAngles());
   //								pDoor->SetLocalAngularVelocity(vec3_angle);
   //							}
   //							else
   //							//{
   //							//	// set origin to
-  //realign normal doors
+  // realign normal doors
   //							//
   // pDoor->SetLocalOrigin(GetLocalOrigin());
   //							//
@@ -4312,14 +4315,14 @@ void UTIL_ComputeAABBForBounds(const Vector &mins1, const Vector &maxs1,
                                const Vector &mins2, const Vector &maxs2,
                                Vector *destMins, Vector *destMaxs) {
   // Find the minimum extents
-  (*destMins)[0] = min(mins1[0], mins2[0]);
-  (*destMins)[1] = min(mins1[1], mins2[1]);
-  (*destMins)[2] = min(mins1[2], mins2[2]);
+  (*destMins)[0] = std::min(mins1[0], mins2[0]);
+  (*destMins)[1] = std::min(mins1[1], mins2[1]);
+  (*destMins)[2] = std::min(mins1[2], mins2[2]);
 
   // Find the maximum extents
-  (*destMaxs)[0] = max(maxs1[0], maxs2[0]);
-  (*destMaxs)[1] = max(maxs1[1], maxs2[1]);
-  (*destMaxs)[2] = max(maxs1[2], maxs2[2]);
+  (*destMaxs)[0] = std::max(maxs1[0], maxs2[0]);
+  (*destMaxs)[1] = std::max(maxs1[1], maxs2[1]);
+  (*destMaxs)[2] = std::max(maxs1[2], maxs2[2]);
 }
 
 //-----------------------------------------------------------------------------
@@ -4738,8 +4741,8 @@ void CPropDoorRotating::BeginOpening(CBaseEntity *pOpenAwayFrom) {
   Vector volumeCenter = ((mins + maxs) * 0.5f) + GetAbsOrigin();
 
   // Ignoring the Z
-  float volumeRadius = max(fabs(mins.x), maxs.x);
-  volumeRadius = max(volumeRadius, max(fabs(mins.y), maxs.y));
+  float volumeRadius = std::max(fabs(mins.x), maxs.x);
+  volumeRadius = std::max(volumeRadius, std::max(fabs(mins.y), maxs.y));
 
   // Debug
   if (g_debug_doors.GetBool()) {

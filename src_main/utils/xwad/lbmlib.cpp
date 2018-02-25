@@ -8,7 +8,7 @@
 
 // lbmlib.c
 
-#include <WINDOWS.H>
+#include "base/include/windows/windows_light.h"
 #include <STDIO.H>
 #include "lbmlib.h"
 #include "goldsrc_standin.h"

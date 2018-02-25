@@ -255,7 +255,7 @@ bool CResourceZone::RemoveResources( int nResourcesRemoved )
 	if ( IsEmpty() )
 		return true;
 
-	m_nResourcesLeft = max(0, m_nResourcesLeft - nResourcesRemoved);
+	m_nResourcesLeft = std::max(0, m_nResourcesLeft - nResourcesRemoved);
 	RecomputeClientResources();
 
 	// If I'm out of resources, destroy my resource spawners
@@ -508,7 +508,7 @@ void CResourceZone::SpawnChunk( const Vector &vecOrigin )
 //-----------------------------------------------------------------------------
 void CResourceZone::RecomputeClientResources( )
 {
-	m_flClientResources = clamp( (float)m_nResourcesLeft / (float)m_nMaxResources, 0.0f, 1.0f );
+	m_flClientResources = std::clamp( (float)m_nResourcesLeft / (float)m_nMaxResources, 0.0f, 1.0f );
 }
 
 

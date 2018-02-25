@@ -100,7 +100,7 @@ void CObjectBuildAlphaProxy::OnBind( C_BaseEntity *pEntity )
 		else
 		{
 			frac = ( build_amount - buildstart ) / ( buildend - buildstart );
-			frac = clamp( frac, 0.0f, 1.0f );
+			frac = std::clamp( frac, 0.0f, 1.0f );
 		}
 	}
 

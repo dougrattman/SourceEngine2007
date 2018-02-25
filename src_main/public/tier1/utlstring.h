@@ -5,9 +5,9 @@
 
 #include "tier1/utlmemory.h"
 
-//-----------------------------------------------------------------------------
+
 // Base class, containing simple memory management
-//-----------------------------------------------------------------------------
+
 class CUtlBinaryBlock {
  public:
   CUtlBinaryBlock(int growSize = 0, int initSize = 0);
@@ -41,9 +41,9 @@ class CUtlBinaryBlock {
   int m_nActualLength;
 };
 
-//-----------------------------------------------------------------------------
+
 // class inlines
-//-----------------------------------------------------------------------------
+
 inline const void *CUtlBinaryBlock::Get() const { return m_Memory.Base(); }
 
 inline void *CUtlBinaryBlock::Get() { return m_Memory.Base(); }
@@ -62,10 +62,10 @@ inline bool CUtlBinaryBlock::IsReadOnly() const {
 
 inline bool CUtlBinaryBlock::IsEmpty() const { return Length() == 0; }
 
-//-----------------------------------------------------------------------------
+
 // Simple string class.
 // NOTE: This is *not* optimal! Use in tools, but not runtime code
-//-----------------------------------------------------------------------------
+
 class CUtlString {
  public:
   CUtlString();
@@ -117,9 +117,9 @@ class CUtlString {
   CUtlBinaryBlock m_Storage;
 };
 
-//-----------------------------------------------------------------------------
+
 // Inline methods
-//-----------------------------------------------------------------------------
+
 inline bool CUtlString::IsEmpty() const { return Length() == 0; }
 
 #endif  // SOURCE_TIER1_UTLSTRING_H_

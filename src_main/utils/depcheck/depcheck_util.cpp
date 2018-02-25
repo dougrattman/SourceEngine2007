@@ -9,7 +9,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <malloc.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "depcheck_util.h"
 #include "icodeprocessor.h"
 

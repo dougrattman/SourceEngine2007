@@ -35,7 +35,7 @@ void HLaserTracerCallback( const CEffectData &data )
 	if ( totalDist <= 32 )
 		return;
 
-	float length = max( 64, random->RandomFloat( 200.0f, 256.0f ) );
+	float length = std::max( 64, random->RandomFloat( 200.0f, 256.0f ) );
 	flVelocity = random->RandomFloat( 5000, 7000 );
 	float life = ( totalDist + length ) / flVelocity;
 	float flWidth = random->RandomFloat( 2.0, 2.5 );
@@ -64,7 +64,7 @@ void ALaserTracerCallback( const CEffectData &data )
 	if ( totalDist <= 32 )
 		return;
 
-	float length = max( 64, random->RandomFloat( 512.0f, 768.0f ) );
+	float length = std::max( 64, random->RandomFloat( 512.0f, 768.0f ) );
 	flVelocity = random->RandomFloat( 5000, 7000 );
 	float life = ( totalDist + length ) / flVelocity;
 	float flWidth = random->RandomFloat( 2.0, 3.0 );
@@ -93,7 +93,7 @@ void MinigunTracerCallback( const CEffectData &data )
 	if ( totalDist <= 32 )
 		return;
 
-	float length = max( 64, random->RandomFloat( 200.0f, 256.0f ) );
+	float length = std::max( 64, random->RandomFloat( 200.0f, 256.0f ) );
 	flVelocity = random->RandomFloat( 5000, 7000 );
 	float life = ( totalDist + length ) / flVelocity;
 	float flWidth = random->RandomFloat( 1.5, 2.0 );

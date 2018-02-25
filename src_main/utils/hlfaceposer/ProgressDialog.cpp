@@ -98,11 +98,11 @@ void CProgressDialog::Start( char const *pchTitle, char const *pchText, bool bSh
 
 void CProgressDialog::Update( float flZeroToOneFraction )
 {
-	m_flFraction = clamp( flZeroToOneFraction, 0.0f, 1.0f );
+	m_flFraction = std::clamp( flZeroToOneFraction, 0.0f, 1.0f );
 
 	// Update the progress bar
 	HWND pb = GetDlgItem( m_hwndDlg, IDC_FP_PROGRESS );
-	int pos = clamp( (int)( 1000.0f * flZeroToOneFraction ), 0, 1000 );
+	int pos = std::clamp( (int)( 1000.0f * flZeroToOneFraction ), 0, 1000 );
 
 	SendMessage( pb, (UINT) PBM_SETPOS, pos, 0 );
 

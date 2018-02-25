@@ -153,7 +153,7 @@ int CPortalgunEffectBeam::SetVisible3rdPerson( void ) const
 
 void CPortalgunEffectBeam::SetBrightness( float fBrightness )
 {
-	m_fBrightness = clamp( fBrightness, 0.0f, 255.0f );
+	m_fBrightness = std::clamp( fBrightness, 0.0f, 255.0f );
 }
 
 void CPortalgunEffectBeam::DrawBeam( void )

@@ -291,8 +291,8 @@ static void ComputeLightmapColorPointSample(dface_t* pFace,
 
   // luv is in the space of the accumulated lightmap page; we need to convert
   // it to be in the space of the surface
-  int ds = clamp((int)luv.x, 0, smax - 1);
-  int dt = clamp((int)luv.y, 0, tmax - 1);
+  int ds = std::clamp((int)luv.x, 0, smax - 1);
+  int dt = std::clamp((int)luv.y, 0, tmax - 1);
 
   int offset = smax * tmax;
   if (SurfHasBumpedLightmaps(pFace)) offset *= (NUM_BUMP_VECTS + 1);
@@ -671,8 +671,8 @@ void ComputeIndirectLightingAtPoint(Vector& position, Vector& normal,
 
       // luxelcoord is in the space of the accumulated lightmap page; we need to
       // convert it to be in the space of the surface
-      int ds = clamp((int)surfEnum.m_LuxelCoord.x, 0, smax - 1);
-      int dt = clamp((int)surfEnum.m_LuxelCoord.y, 0, tmax - 1);
+      int ds = std::clamp((int)surfEnum.m_LuxelCoord.x, 0, smax - 1);
+      int dt = std::clamp((int)surfEnum.m_LuxelCoord.y, 0, tmax - 1);
 
       ColorRGBExp32* pLightmap =
           (ColorRGBExp32*)&(*pdlightdata)[surfEnum.m_pSurface->lightofs];

@@ -220,8 +220,8 @@ bool CObjectSentrygun::TakeAmmoFrom( CBaseTFPlayer *pPlayer )
 
 	// Try to fill the sentry up a bit at a time
 	int iRoundsToGive = 10;
-	iRoundsToGive = min( iRoundsToGive, (m_iMaxAmmo - m_iAmmo) );
-	iRoundsToGive = min( iRoundsToGive, pPlayer->GetAmmoCount( m_iAmmoType ) );
+	iRoundsToGive = std::min( iRoundsToGive, (m_iMaxAmmo - m_iAmmo) );
+	iRoundsToGive = std::min( iRoundsToGive, pPlayer->GetAmmoCount( m_iAmmoType ) );
 	if ( !iRoundsToGive )
 		return false;
 

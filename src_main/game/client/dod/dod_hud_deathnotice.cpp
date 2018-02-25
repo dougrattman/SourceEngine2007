@@ -369,7 +369,7 @@ int CHudDeathNotice::DrawDeathNoticeItem( DeathNoticeItem *pItem, int xRight, in
 		boxWidth += iconWide;	//m_iDefendedIconSize;
 	}
 
-	int boxHeight = m_flLineHeight;	//min( iconTall, m_flLineHeight );	
+	int boxHeight = m_flLineHeight;	//std::min( iconTall, m_flLineHeight );	
 	int boxBorder = XRES(2);
 
 	int yText = y + ( m_flLineHeight - iFontTall ) / 2;

@@ -60,22 +60,21 @@ AIMoveResult_t DbgResult(AIMoveResult_t result) {
 //
 
 BEGIN_SIMPLE_DATADESC(CAI_Motor)
-//							m_flMoveInterval	(think
-//transient)
-DEFINE_FIELD(m_IdealYaw, FIELD_FLOAT), DEFINE_FIELD(m_YawSpeed, FIELD_FLOAT),
-    DEFINE_FIELD(m_vecVelocity, FIELD_VECTOR),
-    DEFINE_FIELD(m_vecAngularVelocity, FIELD_VECTOR),
-    DEFINE_FIELD(m_nDismountSequence, FIELD_INTEGER),
-    DEFINE_FIELD(m_vecDismount, FIELD_VECTOR),
-    DEFINE_UTLVECTOR(m_facingQueue, FIELD_EMBEDDED),
-    DEFINE_FIELD(m_bYawLocked, FIELD_BOOLEAN),
-    //							m_pMoveProbe
-    END_DATADESC()
+  //							m_flMoveInterval
+  //(think transient)
+  DEFINE_FIELD(m_IdealYaw, FIELD_FLOAT), DEFINE_FIELD(m_YawSpeed, FIELD_FLOAT),
+      DEFINE_FIELD(m_vecVelocity, FIELD_VECTOR),
+      DEFINE_FIELD(m_vecAngularVelocity, FIELD_VECTOR),
+      DEFINE_FIELD(m_nDismountSequence, FIELD_INTEGER),
+      DEFINE_FIELD(m_vecDismount, FIELD_VECTOR),
+      DEFINE_UTLVECTOR(m_facingQueue, FIELD_EMBEDDED),
+      DEFINE_FIELD(m_bYawLocked, FIELD_BOOLEAN),
+//							m_pMoveProbe
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-    CAI_Motor::CAI_Motor(CAI_BaseNPC *pOuter)
-    : CAI_Component(pOuter) {
+CAI_Motor::CAI_Motor(CAI_BaseNPC *pOuter) : CAI_Component(pOuter) {
   m_flMoveInterval = 0;
 
   m_IdealYaw = 0;
@@ -157,7 +156,7 @@ AIMotorMoveResult_t CAI_Motor::MoveGroundStep(const Vector &newPos,
 
     // skip tiny steps, but notify the shadow object of any large steps
     if (moveTrace.flStepUpDistance > 0.1f) {
-      float height = clamp(moveTrace.flStepUpDistance, 0, StepHeight());
+      float height = std::clamp(moveTrace.flStepUpDistance, 0.0f, StepHeight());
       IPhysicsObject *pPhysicsObject = GetOuter()->VPhysicsGetObject();
       if (pPhysicsObject) {
         IPhysicsShadowController *pShadow =
@@ -275,7 +274,7 @@ AIMoveResult_t CAI_Motor::MoveClimbExecute(const Vector &climbDest,
   if (m_nDismountSequence != ACT_INVALID) {
     // catch situations where the climb mount/dismount finished before reaching
     // goal
-    climbSpeed = max(climbSpeed, 30.0);
+    climbSpeed = std::max(climbSpeed, 30.0f);
   } else {
     // FIXME: assume if they don't have a dismount animation then they probably
     // don't really support climbing.
@@ -505,7 +504,7 @@ AIMotorMoveResult_t CAI_Motor::MoveGroundExecuteWalk(
 // Purpose: Move the npc to the next location on its route.
 // Input  : pTargetEnt -
 //			vecDir - Normalized vector indicating the direction of
-//movement. 			flInterval - Time interval for this movement.
+// movement. 			flInterval - Time interval for this movement.
 //-----------------------------------------------------------------------------
 
 AIMotorMoveResult_t CAI_Motor::MoveFlyExecute(const AILocalMoveGoal_t &move,
@@ -650,8 +649,8 @@ float AI_ClampYaw(float yawSpeedPerSec, float current, float target,
 //-----------------------------------------------------------------------------
 // Purpose: Turns a npc towards its ideal yaw.
 // Input  : yawSpeed - Yaw speed in degrees per 1/10th of a second.
-//			flInterval - Time interval to turn, -1 uses time since last
-//think.
+//			flInterval - Time interval to turn, -1 uses time since
+//last think.
 // Output : Returns the number of degrees turned.
 //-----------------------------------------------------------------------------
 void CAI_Motor::UpdateYaw(int yawSpeed) {
@@ -671,7 +670,7 @@ void CAI_Motor::UpdateYaw(int yawSpeed) {
   ideal = UTIL_AngleMod(GetIdealYaw());
 
   // FIXME: this needs a proper interval
-  float dt = min(0.2, gpGlobals->curtime - GetLastThink());
+  float dt = std::min(0.2f, gpGlobals->curtime - GetLastThink());
 
   newYaw = AI_ClampYaw((float)yawSpeed * 10.0, current, ideal, dt);
 
@@ -821,7 +820,7 @@ AIMoveResult_t CAI_Motor::MoveNormalExecute(const AILocalMoveGoal_t &move) {
 float CAI_Motor::MinCheckDist(void) {
   // Take the groundspeed into account
   float flMoveDist = GetMoveInterval() * GetIdealSpeed();
-  float flMinDist = max(MinStoppingDist(), flMoveDist);
+  float flMinDist = std::max(MinStoppingDist(), flMoveDist);
   if (flMinDist < GetHullWidth()) flMinDist = GetHullWidth();
   return flMinDist;
 }

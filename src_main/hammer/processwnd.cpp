@@ -124,7 +124,7 @@ int CProcessWnd::Execute(LPCTSTR pszCmd, LPCTSTR pszCmdLine) {
             // read from input handle
             PeekNamedPipe(hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL);
             if (dwCount) {
-              dwCount = min(dwCount, BUFFER_SIZE - 1);
+              dwCount = std::min(dwCount, BUFFER_SIZE - 1);
               ReadFile(hChildStdoutRd, buffer, dwCount, &dwRead, NULL);
             }
             if (dwRead) {

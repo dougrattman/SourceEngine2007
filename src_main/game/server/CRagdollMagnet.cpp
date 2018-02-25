@@ -207,7 +207,7 @@ float CRagdollMagnet::DistToPoint( const Vector &vecPoint )
 			axis.InitializePlane( vecUp, GetAbsOrigin() );
 			vDist = fabs( axis.PointDist( vecPoint ) );
 
-			return max( hDist, vDist );
+			return std::max( hDist, vDist );
 		}
 		else
 		{

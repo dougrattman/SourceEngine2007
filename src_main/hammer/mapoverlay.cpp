@@ -847,8 +847,8 @@ void CMapOverlay::ClipFace_ClipBarycentric( ClipFace_t *pClipFace, cplane_t *pCl
 			                      m_pOverlayFace->m_aPoints[2], m_pOverlayFace->m_aPoints[1],
 								  vecPoint, vecUV );
 
-		vecUV.x = clamp( vecUV.x, 0.0f, 1.0f );
-		vecUV.y = clamp( vecUV.y, 0.0f, 1.0f );
+		vecUV.x = std::clamp( vecUV.x, 0.0f, 1.0f );
+		vecUV.y = std::clamp( vecUV.y, 0.0f, 1.0f );
 
 		for ( int iTexCoord=0; iTexCoord < NUM_CLIPFACE_TEXCOORDS; iTexCoord++ )
 		{
@@ -893,8 +893,8 @@ void CMapOverlay::ClipFace_PreClipDisp( ClipFace_t *pClipFace, CMapDisp *pDisp )
 		Vector2D vecTmp;
 		pDisp->BaseFacePlaneToDispUV( pClipFace->m_aPoints[iPoint], vecTmp );
 				
-		pClipFace->m_aDispPointUVs[iPoint].x = clamp(vecTmp.x, 0.0f, 1.0f);
-		pClipFace->m_aDispPointUVs[iPoint].y = clamp(vecTmp.y, 0.0f, 1.0f);
+		pClipFace->m_aDispPointUVs[iPoint].x = std::clamp(vecTmp.x, 0.0f, 1.0f);
+		pClipFace->m_aDispPointUVs[iPoint].y = std::clamp(vecTmp.y, 0.0f, 1.0f);
 		pClipFace->m_aDispPointUVs[iPoint].z = 0.0f;
 	}
 

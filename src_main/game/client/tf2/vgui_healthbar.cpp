@@ -95,8 +95,8 @@ void CHealthBarPanel::Paint( void )
 	GetSize( w, h );
 	
 	float frac;
-	frac = min( 1.0, m_Health );
-	frac = max( 0.0, m_Health );
+	frac = std::min( 1.0, m_Health );
+	frac = std::max( 0.0, m_Health );
 
 	vgui::surface()->DrawSetColor( 255,255,255,255 );
 	vgui::surface()->DrawOutlinedRect( 0,0, w,h );

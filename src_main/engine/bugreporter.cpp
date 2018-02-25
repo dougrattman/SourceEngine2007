@@ -836,9 +836,9 @@ void CBugUIPanel::OnTick() {
     } else {
       if (m_pProgressDialog) {
         float percent =
-            clamp(1.0f - (m_flPauseTime - system()->GetFrameTime()) /
-                             (float)PUBLIC_BUGREPORT_WAIT_TIME,
-                  0.0f, 1.0f);
+            std::clamp(1.0 - (m_flPauseTime - system()->GetFrameTime()) /
+                                 (float)PUBLIC_BUGREPORT_WAIT_TIME,
+                       0.0, 1.0);
         m_pProgressDialog->SetProgress(percent);
       }
     }
@@ -1913,7 +1913,7 @@ bool CBugUIPanel::UploadFile(char const *local, char const *remote,
 
     int nRemainingBytes = nLocalFileSize;
     while (nRemainingBytes > 0) {
-      int nBytesToCopy = min(nRemainingBytes, nCopyBufferSize);
+      int nBytesToCopy = std::min(nRemainingBytes, nCopyBufferSize);
       g_pFileSystem->Read(pCopyBuf, nBytesToCopy, hLocal);
       fwrite(pCopyBuf, nBytesToCopy, 1, r);
       nRemainingBytes -= nBytesToCopy;

@@ -48,13 +48,13 @@ public:
 //-----------------------------------------------------------------------------
 inline bool GetRectIntersection( wrect_t const *pRect1, wrect_t const *pRect2, wrect_t *pOut )
 {
-	pOut->left  = max( pRect1->left, pRect2->left );
-	pOut->right = min( pRect1->right, pRect2->right );
+	pOut->left  = std::max( pRect1->left, pRect2->left );
+	pOut->right = std::min( pRect1->right, pRect2->right );
 	if( pOut->left >= pOut->right )
 		return false;
 
-	pOut->bottom = min( pRect1->bottom, pRect2->bottom );
-	pOut->top    = max( pRect1->top, pRect2->top );
+	pOut->bottom = std::min( pRect1->bottom, pRect2->bottom );
+	pOut->top    = std::max( pRect1->top, pRect2->top );
 	if( pOut->top >= pOut->bottom )
 		return false;
 
@@ -165,8 +165,8 @@ static void FindConnectingLines_Straight(
 	LINEEDGE_t edge2 = BOTTOMCENTER;
 
 	// Top
-	gaph = max( r2.left - r1.right, r1.left - r2.right );
-	gapv = max( r1.top - r2.bottom, r2.top - r1.bottom );
+	gaph = std::max( r2.left - r1.right, r1.left - r2.right );
+	gapv = std::max( r1.top - r2.bottom, r2.top - r1.bottom );
 
 	if ( gapv > gaph )
 	{
@@ -267,8 +267,8 @@ static void FindConnectingLines_Axial(
 	LINEEDGE_t edge2 = BOTTOMCENTER;
 
 	// Top
-	gaph = max( r2.left - r1.right, r1.left - r2.right );
-	gapv = max( r1.top - r2.bottom, r2.top - r1.bottom );
+	gaph = std::max( r2.left - r1.right, r1.left - r2.right );
+	gapv = std::max( r1.top - r2.bottom, r2.top - r1.bottom );
 
 	if ( gapv > gaph )
 	{
@@ -439,7 +439,7 @@ static int EffectResampleColor( int in, float f )
 	float range = (float)( in - midpoint );
 
 	int color = midpoint + (int)( f * range );
-	return clamp( color, 0, 255 );
+	return std::clamp( color, 0, 255 );
 }
 
 //-----------------------------------------------------------------------------
@@ -596,7 +596,7 @@ void CArrowPanelEffect::DrawArrow( int startx, int starty, int endx, int endy, i
 
 	float length = VectorNormalize( delta );
 
-	float size = min( length / 2.0f, 15.0f );
+	float size = std::min( length / 2.0f, 15.0f );
 
 	base = start + ( length - size ) * delta;
 

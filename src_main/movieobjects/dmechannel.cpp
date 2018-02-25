@@ -378,7 +378,7 @@ void CDmeChannel::Play()
 	switch ( pmode )
 	{
 	case PM_HOLD:
-		time = clamp( time, t0, tn );
+		time = std::clamp( time, t0, tn );
 		break;
 
 	case PM_LOOP:

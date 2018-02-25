@@ -794,14 +794,14 @@ int CChoreoView::HandleZoomKey( T *other, int keyCode )
 	case VK_END:
 		{
 			float maxtime = other->GetEventEndTime();
-			int pixels = max( 0, (int)( maxtime * other->GetPixelsPerSecond() ) - other->w2() );
+			int pixels = std::max( 0, (int)( maxtime * other->GetPixelsPerSecond() ) - other->w2() );
 			other->MoveTimeSliderToPos( pixels );
 		}
 		break;
 	case VK_PRIOR:  // PgUp
 		{
 			int window = other->w2();
-			other->m_flLeftOffset = max( other->m_flLeftOffset - (float)window, 0.0f );
+			other->m_flLeftOffset = std::max( other->m_flLeftOffset - (float)window, 0.0f );
 			other->MoveTimeSliderToPos( (int)other->m_flLeftOffset );
 		}
 		break;
@@ -809,8 +809,8 @@ int CChoreoView::HandleZoomKey( T *other, int keyCode )
 		{
 			int window = other->w2();
 			float maxtime = other->GetEventEndTime();
-			int pixels = max( 0, (int)( maxtime * other->GetPixelsPerSecond() ) - other->w2() );
-			other->m_flLeftOffset = min( other->m_flLeftOffset + (float)window, (float)pixels );
+			int pixels = std::max( 0, (int)( maxtime * other->GetPixelsPerSecond() ) - other->w2() );
+			other->m_flLeftOffset = std::min( other->m_flLeftOffset + (float)window, (float)pixels );
 			other->MoveTimeSliderToPos( (int)other->m_flLeftOffset );
 		}
 		break;

@@ -1273,7 +1273,7 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
       fogParams[0] = ooFogRange * fEnd;
       fogParams[1] = 1.0f;
       fogParams[2] =
-          1.0f - clamp(m_flFogMaxDensity, 0.0f, 1.0f);  // Max fog density
+          1.0f - std::clamp(m_flFogMaxDensity, 0.0f, 1.0f);  // Max fog density
 
       fogParams[3] = ooFogRange;
 
@@ -1774,7 +1774,7 @@ void PIXifyName(char *pDst, int destSize, const char *pSrc) {
       break;
   }
 
-  V_strncpy(pDst, pSrcWalk, min(32, destSize));
+  V_strncpy(pDst, pSrcWalk, std::min(32, destSize));
 }
 
 //-----------------------------------------------------------------------------
@@ -2459,9 +2459,6 @@ void CShaderAPIDx8::ClearAllCommitFuncs(CommitFuncType_t func,
 //-----------------------------------------------------------------------------
 void CShaderAPIDx8::CallCommitFuncs(CommitFuncType_t func,
                                     CommitShaderType_t shader, bool bForce) {
-  // 360 does not have have a FF pipe
-  Assert(IsPC() || (IsX360() && shader != COMMIT_FIXED_FUNCTION));
-
   // Don't bother committing anything if we're deactivated
   if (IsDeactivated()) return;
 
@@ -2481,7 +2478,7 @@ void CShaderAPIDx8::CallCommitFuncs(CommitFuncType_t func,
 void CShaderAPIDx8::CallCommitFuncs(CommitFuncType_t func,
                                     bool bUsingFixedFunction, bool bForce) {
   // Fixed-Function only funcs
-  if (IsPC() && (bUsingFixedFunction || bForce)) {
+  if (bUsingFixedFunction || bForce) {
     CallCommitFuncs(func, COMMIT_FIXED_FUNCTION, bForce);
   }
 
@@ -2501,10 +2498,6 @@ static inline void SetSamplerState(D3DDeviceWrapper *pDevice, int stage,
                                    D3DSAMPLERSTATETYPE state, DWORD val) {
   RECORD_SAMPLER_STATE(stage, state, val);
 
-#if defined(_X360)
-  if (state == D3DSAMP_NOTSUPPORTED) return;
-#endif
-
   pDevice->SetSamplerState(stage, state, val);
 }
 
@@ -2521,27 +2514,14 @@ inline void CShaderAPIDx8::SetSamplerState(int stage, D3DSAMPLERSTATETYPE state,
 inline void CShaderAPIDx8::SetTextureStageState(int stage,
                                                 D3DTEXTURESTAGESTATETYPE state,
                                                 DWORD val) {
-#if !defined(_X360)
   if (IsDeactivated()) return;
 
   Dx9Device()->SetTextureStageState(stage, state, val);
-#endif
 }
 
 inline void CShaderAPIDx8::SetRenderState(D3DRENDERSTATETYPE state, DWORD val,
                                           bool bFlushIfChanged) {
-#if (!defined(_X360))
-  {
-    if (IsDeactivated()) return;
-  }
-#else
-  {
-    Assert(state != D3DRS_NOTSUPPORTED);  // Use SetSupportedRenderState() macro
-                                          // to avoid this at compile time
-    // if ( state == D3DRS_NOTSUPPORTED )
-    //	return;
-  }
-#endif
+  if (IsDeactivated()) return;
 
   Assert(state >= 0 && state < MAX_NUM_RENDERSTATES);
   if (m_DynamicState.m_RenderState[state] != val) {
@@ -2587,10 +2567,10 @@ static void CommitSetScissorRect(D3DDeviceWrapper *pDevice,
            (desiredState.m_ScissorRect.top >= 0) &&
            (desiredState.m_ScissorRect.left >= 0));
 
-    clamp(desiredState.m_ScissorRect.right, 0, nWidth);
-    clamp(desiredState.m_ScissorRect.left, 0, nWidth);
-    clamp(desiredState.m_ScissorRect.top, 0, nHeight);
-    clamp(desiredState.m_ScissorRect.bottom, 0, nHeight);
+    std::clamp(desiredState.m_ScissorRect.right, 0L, (long)nWidth);
+    std::clamp(desiredState.m_ScissorRect.left, 0L, (long)nWidth);
+    std::clamp(desiredState.m_ScissorRect.top, 0L, (long)nHeight);
+    std::clamp(desiredState.m_ScissorRect.bottom, 0L, (long)nHeight);
 
     Dx9Device()->SetScissorRect(&desiredState.m_ScissorRect);
     currentState.m_ScissorRect = desiredState.m_ScissorRect;
@@ -2622,10 +2602,10 @@ inline void CShaderAPIDx8::SetScissorRect(const int nLeft, const int nTop,
     Assert((nRight <= nWidth) && (nBottom <= nHeight) && (nTop >= 0) &&
            (nLeft >= 0));
 
-    clamp(nRight, 0, nWidth);
-    clamp(nLeft, 0, nWidth);
-    clamp(nTop, 0, nHeight);
-    clamp(nBottom, 0, nHeight);
+    std::clamp(nRight, 0, nWidth);
+    std::clamp(nLeft, 0, nWidth);
+    std::clamp(nTop, 0, nHeight);
+    std::clamp(nBottom, 0, nHeight);
   }
 
   DWORD dwEnableScissor = bEnableScissor ? TRUE : FALSE;
@@ -3529,7 +3509,7 @@ void CShaderAPIDx8::SetDefaultState() {
   // FIXME: This is a brutal hack. We only need to load these transforms for
   // fixed-function hardware. Cap the max here to 4.
   if (IsPC()) {
-    numTextureStages = min(numTextureStages, 4);
+    numTextureStages = std::min(numTextureStages, 4);
     int i;
     for (i = 0; i < numTextureStages; i++) {
       CShaderAPIDx8::DisableTextureTransform((TextureStage_t)i);
@@ -5171,7 +5151,8 @@ void CShaderAPIDx8::UpdatePixelFogColorConstant() {
       }
     } break;
 
-      NO_DEFAULT;
+    default:
+      UNREACHABLE();
   };
 
   fogColor[3] = 1.0f / m_DynamicState.m_DestAlphaDepthRange;
@@ -5222,7 +5203,8 @@ void CShaderAPIDx8::ApplyFogMode(ShaderFogMode_t fogMode,
     case SHADER_FOGMODE_FOGCOLOR:
       GetSceneFogColor(&r, &g, &b);  // Scene fog color
       break;
-      NO_DEFAULT
+    default:
+      UNREACHABLE();
   }
 
   bShouldGammaCorrect &= !bDisableFogGammaCorrection;
@@ -5494,9 +5476,9 @@ D3DCOLOR CShaderAPIDx8::ComputeGammaCorrectedFogColor(unsigned char r,
     fb *= m_ToneMappingScale.w;  //
   }
 
-  fr = min(fr, 1.0f);
-  fg = min(fg, 1.0f);
-  fb = min(fb, 1.0f);
+  fr = std::min(fr, 1.0f);
+  fg = std::min(fg, 1.0f);
+  fb = std::min(fb, 1.0f);
   r = (int)(fr * 255);
   g = (int)(fg * 255);
   b = (int)(fb * 255);
@@ -6001,7 +5983,7 @@ void CShaderAPIDx8::SetTextureState(Sampler_t sampler,
 
   if (!m_bDebugTexturesRendering) ++tex.m_nTimesBoundThisFrame;
 
-  tex.m_nTimesBoundMax = max(tex.m_nTimesBoundMax, tex.m_nTimesBoundThisFrame);
+  tex.m_nTimesBoundMax = std::max(tex.m_nTimesBoundMax, tex.m_nTimesBoundThisFrame);
 
   if (samplerState.m_UTexWrap != tex.m_UTexWrap) {
     samplerState.m_UTexWrap = tex.m_UTexWrap;
@@ -7147,7 +7129,7 @@ void CShaderAPIDx8::SetAnisotropicLevel(int nAnisotropyLevel) {
       nAnisotropyLevel <= 1) {
     // Set it to 1/4 the max but between 2-8
     nAnisotropyLevel =
-        max(2, min(8, (g_pHardwareConfig->Caps().m_nMaxAnisotropy / 4)));
+        std::max(2, std::min(8, (g_pHardwareConfig->Caps().m_nMaxAnisotropy / 4)));
   }
 
   // Set the D3D max insotropy state for all samplers
@@ -8572,7 +8554,7 @@ void CShaderAPIDx8::SetVertexShaderStateSkinningMatrices() {
   memcpy(m_boneMatrix[0].Base(), results, 12 * sizeof(float));  //-V512
 
   m_maxBoneLoaded++;
-  int matricesLoaded = max(1, m_maxBoneLoaded);
+  int matricesLoaded = std::max(1, m_maxBoneLoaded);
   m_maxBoneLoaded = 0;
 
   m_DynamicState.m_TransformChanged[MATERIAL_MODEL] &=
@@ -9243,8 +9225,8 @@ void CShaderAPIDx8::SetViewports(int nCount,
       GetClientRect((HWND)m_ViewHWnd, &viewRect);
       m_nWindowWidth = viewRect.right - viewRect.left;
       m_nWindowHeight = viewRect.bottom - viewRect.top;
-      nMaxWidth = min(m_nWindowWidth, nMaxWidth);
-      nMaxHeight = min(m_nWindowHeight, nMaxHeight);
+      nMaxWidth = std::min(m_nWindowWidth, nMaxWidth);
+      nMaxHeight = std::min(m_nWindowHeight, nMaxHeight);
     }
 
     // Dimensions can freak out on app exit, so at least make sure the viewport
@@ -9802,19 +9784,19 @@ IDirect3DSurface *CShaderAPIDx8::GetBackBufferImage(Rect_t *pSrcRect,
     srcRect.right = pSrcRect->x + pSrcRect->width;
     srcRect.top = pSrcRect->y;
     srcRect.bottom = pSrcRect->y + pSrcRect->height;
-    srcRect.left = clamp(srcRect.left, 0, (int)desc.Width);
-    srcRect.right = clamp(srcRect.right, 0, (int)desc.Width);
-    srcRect.top = clamp(srcRect.top, 0, (int)desc.Height);
-    srcRect.bottom = clamp(srcRect.bottom, 0, (int)desc.Height);
+    srcRect.left = std::clamp(srcRect.left, 0L, (long)desc.Width);
+    srcRect.right = std::clamp(srcRect.right, 0L, (long)desc.Width);
+    srcRect.top = std::clamp(srcRect.top, 0L, (long)desc.Height);
+    srcRect.bottom = std::clamp(srcRect.bottom, 0L, (long)desc.Height);
 
     destRect.left = pDstRect->x;
     destRect.right = pDstRect->x + pDstRect->width;
     destRect.top = pDstRect->y;
     destRect.bottom = pDstRect->y + pDstRect->height;
-    destRect.left = clamp(destRect.left, 0, (int)desc.Width);
-    destRect.right = clamp(destRect.right, 0, (int)desc.Width);
-    destRect.top = clamp(destRect.top, 0, (int)desc.Height);
-    destRect.bottom = clamp(destRect.bottom, 0, (int)desc.Height);
+    destRect.left = std::clamp(destRect.left, 0L, (long)desc.Width);
+    destRect.right = std::clamp(destRect.right, 0L, (long)desc.Width);
+    destRect.top = std::clamp(destRect.top, 0L, (long)desc.Height);
+    destRect.bottom = std::clamp(destRect.bottom, 0L, (long)desc.Height);
 
     hr = Dx9Device()->StretchRect(pRenderTarget, &srcRect, pTmpSurface,
                                   &destRect, filter);
@@ -10513,7 +10495,8 @@ void CShaderAPIDx8::SetPixelShaderFogParams(int reg, ShaderFogMode_t fogMode) {
 
     fogParams[0] = ooFogRange * fEnd;      // end / ( fogEnd - fogStart )
     fogParams[1] = m_DynamicState.m_FogZ;  // water height
-    fogParams[2] = clamp(m_flFogMaxDensity, 0.0f, 1.0f);  // Max fog density
+    fogParams[2] =
+        std::clamp(m_flFogMaxDensity, 0.0f, 1.0f);  // Max fog density
     fogParams[3] = ooFogRange;  // 1 / ( fogEnd - fogStart );
   } else {
     // emulating MATERIAL_FOG_NONE by setting the parameters so that

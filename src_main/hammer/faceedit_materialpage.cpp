@@ -706,7 +706,7 @@ void CFaceEditMaterialPage::Apply( CMapFace *pOnlyFace, int flags )
 		{
 			if (nLightmapScale != NOT_INIT)
 			{
-				pFace->texture.nLightmapScale = max( nLightmapScale, 1 );
+				pFace->texture.nLightmapScale = std::max( nLightmapScale, 1 );
 			}
 		}
 

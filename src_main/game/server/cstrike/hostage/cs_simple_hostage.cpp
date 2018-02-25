@@ -624,19 +624,19 @@ void CHostage::AvoidPhysicsProps( void )
 		{
 			mass = pInterface->GetMass();
 		}
-		mass = min( mass, maxMass );
+		mass = std::min( mass, maxMass );
 		mass -= minMass;
-		mass = max( mass, 0 );
+		mass = std::max( mass, 0 );
 		mass /= (maxMass-minMass); // bring into a 0..1 range
 
 		// Push away from the collision point. The closer our center is to the collision point,
 		// the harder we push away.
 		Vector vPushAway = (WorldSpaceCenter() - props[i]->WorldSpaceCenter());
 		float flDist = VectorNormalize( vPushAway );
-		flDist = max( flDist, 1 );
+		flDist = std::max( flDist, 1 );
 
 		float flForce = sv_pushaway_hostage_force.GetFloat() / flDist * mass;
-		flForce = min( flForce, sv_pushaway_max_hostage_force.GetFloat() );
+		flForce = std::min( flForce, sv_pushaway_max_hostage_force.GetFloat() );
 		vPushAway *= flForce;
 
 		ApplyForce( vPushAway );
@@ -1037,7 +1037,7 @@ bool CHostage::GetSimpleGroundHeightWithFloor( const Vector &pos, float *height,
 		// our current nav area also serves as a ground polygon
 		if (m_lastKnownArea && m_lastKnownArea->IsOverlapping( pos ))
 		{
-			*height = max( (*height), m_lastKnownArea->GetZ( pos ) );
+			*height = std::max( (*height), m_lastKnownArea->GetZ( pos ) );
 		}
 
 		return true;

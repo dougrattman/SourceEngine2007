@@ -247,7 +247,7 @@ void CHudAmmo::Paint( void )
 	// Assume constant width font
 	int charWidth = vgui::surface()->GetCharacterWidth( m_hNumberFont, '0' );
 
-	int digits = clamp( log10((double)m_iAmmo)+1, 1, 3 );
+	int digits = std::clamp( log10((double)m_iAmmo)+1, 1, 3 );
 	
 	x += ( 3 - digits ) * charWidth;
 
@@ -264,7 +264,7 @@ void CHudAmmo::Paint( void )
 		vgui::surface()->DrawSetTexture( m_iAdditiveWhiteID );
 		vgui::surface()->DrawTexturedRect( bar_xpos, bar_ypos, bar_xpos + bar_width, bar_ypos + bar_height );
 
-		digits = clamp( log10((double)m_iAmmo2)+1, 1, 3 );
+		digits = std::clamp( log10((double)m_iAmmo2)+1, 1, 3 );
 		x = digit2_xpos + ( 3 - digits ) * charWidth;
 
 		// draw secondary ammo

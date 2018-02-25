@@ -318,8 +318,8 @@ void C_CSRagdoll::CreateLowViolenceRagdoll( void )
 		if ( LookupSequence( str ) == -1 )
 			break;
 		
-		iMinDeathAnim = min( iMinDeathAnim, iAnim );
-		iMaxDeathAnim = max( iMaxDeathAnim, iAnim );
+		iMinDeathAnim = std::min( iMinDeathAnim, iAnim );
+		iMaxDeathAnim = std::max( iMaxDeathAnim, iAnim );
 	}
 
 	if ( iMinDeathAnim == 9999 )
@@ -477,7 +477,7 @@ void C_CSRagdoll::ComputeFxBlend( void )
 	{
 		float elapsed = gpGlobals->curtime - m_flRagdollSinkStart;
 		float flVal = RemapVal( elapsed, 0, g_flDieTranslucentTime, 255, 0 );
-		flVal = clamp( flVal, 0, 255 );
+		flVal = std::clamp( flVal, 0, 255 );
 		m_nRenderFXBlend = (int)flVal;
 
 #ifdef _DEBUG
@@ -2208,7 +2208,7 @@ void C_CSPlayer::CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float& 
 			}
 			else
 			{
-				offset.z = min( est, offset.z );
+				offset.z = std::min( est, offset.z );
 			}
 			eyeOrigin.z = GetAbsOrigin().z + offset.z;
 		}

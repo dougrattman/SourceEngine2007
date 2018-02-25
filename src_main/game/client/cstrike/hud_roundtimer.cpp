@@ -179,7 +179,7 @@ void CHudRoundTimer::Think()
 	}
 
 	float pos = (gpGlobals->curtime - m_flToggleTime) / (m_flNextToggle - m_flToggleTime);
-	pos = clamp( SimpleSpline( pos ), 0, 1 );
+	pos = std::clamp( SimpleSpline( pos ), 0, 1 );
 
 	interp_color[0] = ((endValue[0] - startValue[0]) * pos) + startValue[0];
 	interp_color[1] = ((endValue[1] - startValue[1]) * pos) + startValue[1];

@@ -24,7 +24,6 @@ typedef enum
 } QUERYSTATUS;
 
 extern void v_strncpy(char *dest, const char *src, int bufsize);
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
 
 //-----------------------------------------------------------------------------
 // Purpose: Comparison function used in query redblack tree
@@ -394,7 +393,7 @@ void CServerList::QueryFrame()
 	
 
 	// increment the number of sockets to use
-	m_nMaxRampUp = min(m_nMaxActive, m_nMaxRampUp + m_nRampUpSpeed);
+	m_nMaxRampUp = std::min(m_nMaxActive, m_nMaxRampUp + m_nRampUpSpeed);
 
 	// see if we should send more queries
 	while (m_RefreshList.Count() > 0 && (int)m_Queries.Count() < m_nMaxRampUp)

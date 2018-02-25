@@ -2,16 +2,9 @@
 //
 // Purpose: Includes all the headers/declarations necessary to access the
 // engine interface
-//
-// $NoKeywords: $
-
 
 #ifndef ENGINEINTERFACE_H
 #define ENGINEINTERFACE_H
-
-#ifdef _WIN32
-#pragma once
-#endif
 
 // these stupid set of includes are required to use the cdll_int interface
 #include "mathlib/vector.h"
@@ -27,7 +20,7 @@ extern IVEngineClient *engine;
 extern class IGameUIFuncs *gameuifuncs;
 extern class IEngineSound *enginesound;
 extern class IMatchmaking *matchmaking;
-extern class IXboxSystem  *xboxsystem;
-extern class IAchievementMgr *achievementmgr; 
+extern class IXboxSystem *xboxsystem;
+extern class IAchievementMgr *achievementmgr;
 
-#endif // ENGINEINTERFACE_H
+#endif  // ENGINEINTERFACE_H

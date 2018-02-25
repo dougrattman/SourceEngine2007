@@ -199,7 +199,7 @@ void CHUDAutoAim::OnThink() {
             delta[1] = ApproachAngle(targetangles[1], viewangles[1], magnetism);
             delta[2] = targetangles[2];
 
-            // viewangles[PITCH] = clamp( viewangles[ PITCH ],
+            // viewangles[PITCH] = std::clamp( viewangles[ PITCH ],
             // -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat() );
             engine->SetViewAngles(delta);
           }
@@ -273,11 +273,11 @@ void CHUDAutoAim::OnThink() {
 			Vector vecGoal( goalx, goaly, 0 );
 			Vector vecDir = vecGoal - m_vecPos;
 			float flDistRemaining = VectorNormalize( vecDir );
-			m_vecPos += vecDir * min(flDistRemaining, (speed * gpGlobals->frametime) );
+			m_vecPos += vecDir * std::min(flDistRemaining, (speed * gpGlobals->frametime) );
 
 			// Lerp and Clamp scale
 			float scaleDelta = fabs( goalscale - m_scale );
-			float scaleMove = min( AUTOAIM_SCALE_SPEED * gpGlobals->frametime, scaleDelta );
+			float scaleMove = std::min( AUTOAIM_SCALE_SPEED * gpGlobals->frametime, scaleDelta );
 			if( m_scale < goalscale )
 			{
 				m_scale += scaleMove;
@@ -328,7 +328,7 @@ void CHUDAutoAim::OnThink() {
 
         VectorAngles(vecDir, viewangles);
 
-        // viewangles[PITCH] = clamp( viewangles[ PITCH ],
+        // viewangles[PITCH] = std::clamp( viewangles[ PITCH ],
         // -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat() );
         engine->SetViewAngles(viewangles);
       }

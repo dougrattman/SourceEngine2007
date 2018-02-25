@@ -15,9 +15,9 @@
 #define KEYVALUES_USE_POOL 1
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Central storage point for KeyValues memory and symbols
-//-----------------------------------------------------------------------------
+
 class CKeyValuesSystem : public IKeyValuesSystem {
  public:
   CKeyValuesSystem();
@@ -79,16 +79,16 @@ class CKeyValuesSystem : public IKeyValuesSystem {
 // EXPOSE_SINGLE_INTERFACE(CKeyValuesSystem, IKeyValuesSystem,
 // KEYVALUES_INTERFACE_VERSION);
 
-//-----------------------------------------------------------------------------
+
 // Instance singleton and expose interface to rest of code
-//-----------------------------------------------------------------------------
+
 static CKeyValuesSystem g_KeyValuesSystem;
 
 IKeyValuesSystem *KeyValuesSystem() { return &g_KeyValuesSystem; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Constructor
-//-----------------------------------------------------------------------------
+
 CKeyValuesSystem::CKeyValuesSystem()
     : m_HashItemMemPool(sizeof(hash_item_t), 64, CMemoryPool::GROW_FAST,
                         "CKeyValuesSystem::m_HashItemMemPool"),
@@ -110,9 +110,9 @@ CKeyValuesSystem::CKeyValuesSystem()
   m_iMaxKeyValuesSize = sizeof(KeyValues);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Destructor
-//-----------------------------------------------------------------------------
+
 CKeyValuesSystem::~CKeyValuesSystem() {
 #ifdef KEYVALUES_USE_POOL
 #ifdef _DEBUG
@@ -134,13 +134,13 @@ CKeyValuesSystem::~CKeyValuesSystem() {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: registers the size of the KeyValues in the specified instance
 //			so it can build a properly sized memory pool for the
 // KeyValues objects
 //			the sizes will usually never differ but this is for
 // versioning safety
-//-----------------------------------------------------------------------------
+
 void CKeyValuesSystem::RegisterSizeofKeyValues(int size) {
   if (size > m_iMaxKeyValuesSize) {
     m_iMaxKeyValuesSize = size;
@@ -160,9 +160,9 @@ static void KVLeak(char const *fmt, ...) {
 }
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Purpose: allocates a KeyValues object from the shared mempool
-//-----------------------------------------------------------------------------
+
 void *CKeyValuesSystem::AllocKeyValuesMemory(int size) {
 #ifdef KEYVALUES_USE_POOL
   // allocate, if we don't have one yet
@@ -179,9 +179,9 @@ void *CKeyValuesSystem::AllocKeyValuesMemory(int size) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: frees a KeyValues object from the shared mempool
-//-----------------------------------------------------------------------------
+
 void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
 #ifdef KEYVALUES_USE_POOL
   m_pMemPool->Free(pMem);
@@ -190,9 +190,9 @@ void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: symbol table access (used for key names)
-//-----------------------------------------------------------------------------
+
 HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
                                                 bool bCreate) {
   if (!name) {
@@ -245,9 +245,9 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
   return (-1);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: symbol table access
-//-----------------------------------------------------------------------------
+
 const char *CKeyValuesSystem::GetStringForSymbol(HKeySymbol symbol) {
   if (symbol == -1) {
     return "";
@@ -255,9 +255,9 @@ const char *CKeyValuesSystem::GetStringForSymbol(HKeySymbol symbol) {
   return ((char *)m_Strings.GetBase() + (size_t)symbol);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: adds KeyValues record into global list so we can track memory leaks
-//-----------------------------------------------------------------------------
+
 void CKeyValuesSystem::AddKeyValuesToMemoryLeakList(void *pMem,
                                                     HKeySymbol name) {
 #ifdef _DEBUG
@@ -267,9 +267,9 @@ void CKeyValuesSystem::AddKeyValuesToMemoryLeakList(void *pMem,
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: used to track memory leaks
-//-----------------------------------------------------------------------------
+
 void CKeyValuesSystem::RemoveKeyValuesFromMemoryLeakList(void *pMem) {
 #ifdef _DEBUG
   // only track the memory leaks in debug builds
@@ -279,9 +279,9 @@ void CKeyValuesSystem::RemoveKeyValuesFromMemoryLeakList(void *pMem) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: generates a simple hash value for a string
-//-----------------------------------------------------------------------------
+
 int CKeyValuesSystem::CaseInsensitiveHash(const char *string, int iBounds) {
   unsigned int hash = 0;
 

@@ -298,7 +298,7 @@ CMapClass *CObjectBar::CreateInBox(BoundBox *pBox, CMapView *pView)
 			Vector sizebounds;
 			pBox->GetBoundsSize(sizebounds);
 			dlg.m_iSides = nFaces;
-			dlg.SetMaxWallWidth(min((int)sizebounds[axHorz], (int)sizebounds[axVert]));
+			dlg.SetMaxWallWidth(std::min((int)sizebounds[axHorz], (int)sizebounds[axVert]));
 			if(dlg.DoModal() != IDOK)
 				return NULL;
 
@@ -325,7 +325,7 @@ CMapClass *CObjectBar::CreateInBox(BoundBox *pBox, CMapView *pView)
 			CTorusDlg dlg( pBox->bmins, pBox->bmaxs );
 			Vector sizebounds;
 			pBox->GetBoundsSize( sizebounds );
-			dlg.SetMaxWallWidth(min((int)sizebounds[axHorz], (int)sizebounds[axVert]));
+			dlg.SetMaxWallWidth(std::min((int)sizebounds[axHorz], (int)sizebounds[axVert]));
 			if(dlg.DoModal() != IDOK)
 				return NULL;
 

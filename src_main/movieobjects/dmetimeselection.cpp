@@ -58,7 +58,7 @@ float CDmeTimeSelection::AdjustFactorForInterpolatorType( float factor, int side
 		factor, 
 		out 
 	);
-	return out.y; // clamp( out.y, 0.0f, 1.0f );
+	return out.y; // std::clamp( out.y, 0.0f, 1.0f );
 }
 
 
@@ -100,7 +100,7 @@ float CDmeTimeSelection::GetAmountForTime( DmeTime_t t, DmeTime_t curtime )
 			f, 
 			out 
 		);
-		return clamp( out.y, minfrac, 1.0f );
+		return std::clamp( out.y, minfrac, 1.0f );
 	}
 	
 	if ( t >= times[ 1 ] && t <= times[ 2 ] )
@@ -124,7 +124,7 @@ float CDmeTimeSelection::GetAmountForTime( DmeTime_t t, DmeTime_t curtime )
 			f, 
 			out 
 		);
-		return clamp( out.y, minfrac, 1.0f );
+		return std::clamp( out.y, minfrac, 1.0f );
 	}
 	return minfrac;
 }
@@ -150,14 +150,14 @@ void CDmeTimeSelection::GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, u8& alp
 		t >= times[ 0 ] && t < times[ 1 ] )
 	{
 		float frac = GetFractionOfTime( t - times[ 0 ], dt1 );
-		alpha = clamp( alpha * frac, minAlpha, 255 );
+		alpha = std::clamp( alpha * frac, minAlpha, 255 );
 		return;
 	}
 	if ( dt2 > DmeTime_t( 0 ) &&
 		t > times[ 2 ] && t <= times[ 3 ] )
 	{
 		float frac = GetFractionOfTime( times[ 3 ] - t, dt2 );
-		alpha = clamp( alpha * frac, minAlpha, 255 );
+		alpha = std::clamp( alpha * frac, minAlpha, 255 );
 		return;
 	}
 	if ( t < times[ 0 ] )

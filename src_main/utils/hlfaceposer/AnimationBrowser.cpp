@@ -4,7 +4,7 @@
 //
 // $NoKeywords: $
 //=============================================================================//
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "AnimationBrowser.h"
 #include "hlfaceposer.h"
 #include "ChoreoView.h"
@@ -185,8 +185,8 @@ AnimationBrowser::AnimationBrowser( mxWindow *parent, int id /*=0*/ )
 	m_nGap = 4;
 	m_nDescriptionHeight = 34;
 	m_nSnapshotWidth = g_viewerSettings.thumbnailsizeanim;
-	m_nSnapshotWidth = max( MIN_THUMBNAILSIZE, m_nSnapshotWidth );
-	m_nSnapshotWidth = min( MAX_THUMBNAILSIZE, m_nSnapshotWidth );
+	m_nSnapshotWidth = std::max( MIN_THUMBNAILSIZE, m_nSnapshotWidth );
+	m_nSnapshotWidth = std::min( MAX_THUMBNAILSIZE, m_nSnapshotWidth );
 
 	g_viewerSettings.thumbnailsizeanim = m_nSnapshotWidth;
 
@@ -274,7 +274,7 @@ int AnimationBrowser::ComputePixelsNeeded( void )
 
 	colsperrow = ( w - m_nGap ) / ( m_nSnapshotWidth + m_nGap );
 	// At least one
-	colsperrow = max( 1, colsperrow );
+	colsperrow = std::max( 1, colsperrow );
 
 	int rowsneeded = ( ( seqcount + colsperrow - 1 ) / colsperrow  );
 	return rowsneeded * ( m_nSnapshotHeight + m_nGap ) + m_nGap + TOP_GAP + GetCaptionHeight();
@@ -289,7 +289,7 @@ bool AnimationBrowser::ComputeRect( int cell, int& rcx, int& rcy, int& rcw, int&
 
 	colsperrow = ( w - m_nGap ) / ( m_nSnapshotWidth + m_nGap );
 	// At least one
-	colsperrow = max( 1, colsperrow );
+	colsperrow = std::max( 1, colsperrow );
 
 	int row, col;
 
@@ -497,8 +497,8 @@ void AnimationBrowser::RepositionSlider( void )
 
 	slScrollbar->setBounds( w2() - 16, GetCaptionHeight() + TOP_GAP, 16, trueh - TOP_GAP );
 
-	m_nTopOffset = max( 0, m_nTopOffset );
-	m_nTopOffset = min( rangepixels, m_nTopOffset );
+	m_nTopOffset = std::max( 0, m_nTopOffset );
+	m_nTopOffset = std::min( rangepixels, m_nTopOffset );
 
 	slScrollbar->setRange( 0, rangepixels );
 	slScrollbar->setValue( m_nTopOffset );
@@ -673,7 +673,7 @@ int AnimationBrowser::handleEvent (mxEvent *event)
 						int offset = slScrollbar->getValue();
 						
 						offset -= m_nGranularity;
-						offset = max( offset, slScrollbar->getMinValue() );
+						offset = std::max( offset, slScrollbar->getMinValue() );
 						
 						slScrollbar->setValue( offset );
 						InvalidateRect( (HWND)slScrollbar->getHandle(), NULL, TRUE );
@@ -687,7 +687,7 @@ int AnimationBrowser::handleEvent (mxEvent *event)
 						int offset = slScrollbar->getValue();
 						
 						offset += m_nGranularity;
-						offset = min( offset, slScrollbar->getMaxValue() );
+						offset = std::min( offset, slScrollbar->getMaxValue() );
 						
 						slScrollbar->setValue( offset );
 						InvalidateRect( (HWND)slScrollbar->getHandle(), NULL, TRUE );
@@ -866,11 +866,11 @@ int AnimationBrowser::handleEvent (mxEvent *event)
 
 			if ( event->height < 0 )
 			{
-				m_nTopOffset = min( m_nTopOffset + 10, slScrollbar->getMaxValue() );
+				m_nTopOffset = std::min( m_nTopOffset + 10, slScrollbar->getMaxValue() );
 			}
 			else
 			{
-				m_nTopOffset = max( m_nTopOffset - 10, 0 );
+				m_nTopOffset = std::max( m_nTopOffset - 10, 0 );
 			}
 			RepositionSlider();
 			redraw();
@@ -1013,8 +1013,8 @@ void AnimationBrowser::ThumbnailDecrease( void )
 void AnimationBrowser::RestoreThumbnailSize( void )
 {
 	m_nSnapshotWidth = g_viewerSettings.thumbnailsizeanim;
-	m_nSnapshotWidth = max( MIN_THUMBNAILSIZE, m_nSnapshotWidth );
-	m_nSnapshotWidth = min( MAX_THUMBNAILSIZE, m_nSnapshotWidth );
+	m_nSnapshotWidth = std::max( MIN_THUMBNAILSIZE, m_nSnapshotWidth );
+	m_nSnapshotWidth = std::min( MAX_THUMBNAILSIZE, m_nSnapshotWidth );
 
 	g_viewerSettings.thumbnailsizeanim = m_nSnapshotWidth;
 

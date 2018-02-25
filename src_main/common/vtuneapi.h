@@ -66,7 +66,7 @@ the VTune GUI.
 #ifndef _VTUNEAPI_H_
 #define _VTUNEAPI_H_
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #if !defined(_VTUNEAPI_)
 #define VTUNEAPI __declspec(dllimport)

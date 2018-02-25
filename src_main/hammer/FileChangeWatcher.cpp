@@ -96,7 +96,7 @@ int CFileChangeWatcher::Update()
 				{
 					// Figure out what happened to this file.
 					WCHAR nullTerminated[2048];
-					int nBytesToCopy = min( pNotify->FileNameLength, 2047 );
+					int nBytesToCopy = std::min( pNotify->FileNameLength, 2047 );
 					memcpy( nullTerminated, pNotify->FileName, nBytesToCopy );
 					nullTerminated[nBytesToCopy/2] = 0;
 					char ansiFilename[1024];

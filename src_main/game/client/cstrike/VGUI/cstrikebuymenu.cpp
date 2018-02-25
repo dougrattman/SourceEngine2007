@@ -141,7 +141,7 @@ void BuyPresetButton::PerformLayout( void )
 					scaleY = (float)tall / (float)imageTall;
 				}
 
-				float scale = min( scaleX, scaleY );
+				float scale = std::min( scaleX, scaleY );
 				if ( scale < 1.0f )
 				{
 					imageWide *= scale;
@@ -302,7 +302,7 @@ void CCSBaseBuyMenu::UpdateBuyPresets( bool showDefaultPanel )
 
 	int i;
 	// show buy preset buttons
-	int numPresets = min( TheBuyPresets->GetNumPresets(), NUM_BUY_PRESET_BUTTONS );
+	int numPresets = std::min( TheBuyPresets->GetNumPresets(), NUM_BUY_PRESET_BUTTONS );
 	for ( i=0; i<numPresets; ++i )
 	{
 		if ( !m_pBuyPresetButtons[i] )

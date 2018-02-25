@@ -428,7 +428,7 @@ int CAudioMixerWaveADPCM::GetOutputData(void **pData, int samplePosition,
 // Input  : position -
 //-----------------------------------------------------------------------------
 bool CAudioMixerWaveADPCM::SetSamplePosition(int position, bool scrubbing) {
-  position = max(0, position);
+  position = std::max(0, position);
 
   CAudioMixerWave::SetSamplePosition(position, scrubbing);
 

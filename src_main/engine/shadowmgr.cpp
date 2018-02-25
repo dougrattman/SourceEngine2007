@@ -2610,10 +2610,10 @@ bool ScreenSpaceRectFromPoints(IMatRenderContext* pRenderContext,
           vClippedPolygons[i][j],
           vScreenSpacePoint);  // Transform from World to screen space
 
-      fMinX = min(fMinX, vScreenSpacePoint.x);   // Update mins/maxes
-      fMaxX = max(fMaxX, vScreenSpacePoint.x);   //
-      fMinY = min(fMinY, -vScreenSpacePoint.y);  // These are in -1 to +1 range
-      fMaxY = max(fMaxY, -vScreenSpacePoint.y);  //
+      fMinX = std::min(fMinX, vScreenSpacePoint.x);   // Update mins/maxes
+      fMaxX = std::max(fMaxX, vScreenSpacePoint.x);   //
+      fMinY = std::min(fMinY, -vScreenSpacePoint.y);  // These are in -1 to +1 range
+      fMaxY = std::max(fMaxY, -vScreenSpacePoint.y);  //
     }
   }
 
@@ -2627,10 +2627,10 @@ bool ScreenSpaceRectFromPoints(IMatRenderContext* pRenderContext,
   *nRight = ((fMaxX * 0.5f + 0.5f) * (float)nWidth) + 1;
   *nBottom = ((fMaxY * 0.5f + 0.5f) * (float)nHeight) + 1;
 
-  *nLeft = clamp(*nLeft, 0, nWidth);  // Clamp to render target dimensions
-  *nTop = clamp(*nTop, 0, nHeight);
-  *nRight = clamp(*nRight, 0, nWidth);
-  *nBottom = clamp(*nBottom, 0, nHeight);
+  *nLeft = std::clamp(*nLeft, 0, nWidth);  // Clamp to render target dimensions
+  *nTop = std::clamp(*nTop, 0, nHeight);
+  *nRight = std::clamp(*nRight, 0, nWidth);
+  *nBottom = std::clamp(*nBottom, 0, nHeight);
 
   Assert((*nLeft <= *nRight) && (*nTop <= *nBottom));
 

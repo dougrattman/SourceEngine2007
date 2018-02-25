@@ -883,7 +883,7 @@ void CMomentaryRotButton::Spawn(void) {
         "WARNING: Momentary door (%s) start position not between 0 and 1.  "
         "Clamping.\n",
         GetDebugName());
-    m_flStartPosition = clamp(m_IdealYaw, 0, 1);
+    m_flStartPosition = std::clamp(m_IdealYaw, 0.0f, 1.0f);
   }
 
   // Check direction fields (for backward compatibility)
@@ -997,7 +997,7 @@ float CMomentaryRotButton::GetPos(const QAngle &vecAngles) {
   float flPos = flScale *
                 CBaseToggle::AxisDelta(m_spawnflags, vecAngles, m_start) /
                 m_flMoveDistance;
-  return (clamp(flPos, 0, 1));
+  return (std::clamp(flPos, 0.0f, 1.0f));
 }
 
 //------------------------------------------------------------------------------
@@ -1005,7 +1005,7 @@ float CMomentaryRotButton::GetPos(const QAngle &vecAngles) {
 // Input   : flPosition
 //------------------------------------------------------------------------------
 void CMomentaryRotButton::InputSetPosition(inputdata_t &inputdata) {
-  m_IdealYaw = clamp(inputdata.value.Float(), 0, 1);
+  m_IdealYaw = std::clamp(inputdata.value.Float(), 0.0f, 1.0f);
 
   float flCurPos = GetPos(GetLocalAngles());
   if (flCurPos < m_IdealYaw) {
@@ -1043,7 +1043,7 @@ void CMomentaryRotButton::InputSetPosition(inputdata_t &inputdata) {
     float speed = flAngleDelta / TICK_INTERVAL;
     SetLocalAngularVelocity(speed * m_vecMoveAng * m_direction);
   }
-  dt = clamp(dt, TICK_INTERVAL, TICK_INTERVAL * 6);
+  dt = std::clamp(dt, TICK_INTERVAL, TICK_INTERVAL * 6);
 
   SetMoveDoneTime(dt);
 }
@@ -1053,14 +1053,14 @@ void CMomentaryRotButton::InputSetPosition(inputdata_t &inputdata) {
 // Input   : flPosition
 //------------------------------------------------------------------------------
 void CMomentaryRotButton::InputSetPositionImmediately(inputdata_t &inputdata) {
-  m_IdealYaw = clamp(inputdata.value.Float(), 0, 1);
+  m_IdealYaw = std::clamp(inputdata.value.Float(), 0.0f, 1.0f);
   SetLocalAngles(m_start + m_vecMoveAng * (m_IdealYaw * m_flMoveDistance));
 }
 
 //------------------------------------------------------------------------------
 // Purpose: Turns off target updates so that we can change the wheel's position
 //			without changing the target's position. Used for
-//jiggling when locked.
+// jiggling when locked.
 //------------------------------------------------------------------------------
 void CMomentaryRotButton::InputDisableUpdateTarget(inputdata_t &inputdata) {
   m_bUpdateTarget = false;
@@ -1146,7 +1146,7 @@ void CMomentaryRotButton::SetPositionMoveDone(void) {
     float speed = flAngleDelta / TICK_INTERVAL;
     SetLocalAngularVelocity(speed * m_vecMoveAng * m_direction);
   }
-  dt = clamp(dt, TICK_INTERVAL, TICK_INTERVAL * 6);
+  dt = std::clamp(dt, TICK_INTERVAL, TICK_INTERVAL * 6);
 
   SetMoveDoneTime(dt);
 }

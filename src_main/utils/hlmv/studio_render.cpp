@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include <windows.h> // for OutputDebugString. . has to be a better way!
+#include "base/include/windows/windows_light.h" // for OutputDebugString. . has to be a better way!
 
 
 #include "ViewerSettings.h"
@@ -454,7 +454,7 @@ void StudioModel::SetUpBones( bool mergeBones )
 	{
 		if (m_Layer[i].m_weight > 0)
 		{
-			iMaxPriority = max( m_Layer[i].m_priority, iMaxPriority );
+			iMaxPriority = std::max( m_Layer[i].m_priority, iMaxPriority );
 		}
 	}
 
@@ -534,7 +534,7 @@ void StudioModel::SetUpBones( bool mergeBones )
 						wirecolor[0] = 1.0 - pTarget->est.flWeight;
 					}
 
-					float r = max(pTarget->est.radius,1);
+					float r = std::max(pTarget->est.radius,1);
 					Vector p0 = tmp + Vector( -r, -r, 0 );
 					Vector p2 = tmp + Vector( r, r, 0 );
 					drawTransparentBox( p0, p2, g_viewtransform, color, wirecolor );
@@ -2050,7 +2050,7 @@ void StudioModel::DrawPhysmesh( CPhysmesh *pMesh, int boneIndex, IMaterial* pMat
 void RandomColor( float *color, int key )
 {
 	static bool first = true;
-	static colorVec colors[256];
+	static color32 colors[256];
 
 	if ( first )
 	{

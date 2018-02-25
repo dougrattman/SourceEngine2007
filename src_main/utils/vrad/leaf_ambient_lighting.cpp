@@ -138,8 +138,8 @@ bool IsLeafAmbientSurfaceLight(dworldlight_t *wl) {
 
   if (wl->style != 0) return false;
 
-  float intensity = max(wl->intensity[0], wl->intensity[1]);
-  intensity = max(intensity, wl->intensity[2]);
+  float intensity = std::max(wl->intensity[0], wl->intensity[1]);
+  intensity = std::max(intensity, wl->intensity[2]);
 
   return (intensity * g_flWorldLightMinEmitSurfaceDistanceRatio) <
          g_flWorldLightMinEmitSurface;
@@ -276,7 +276,7 @@ void AddSampleToList(CUtlVector<ambientsample_t> &list,
         // color delta is computed per-component, per cube side
         for (int s = 0; s < 3; s++) {
           float dc = fabs(list[i].cube[k][s] - list[j].cube[k][s]);
-          maxDC = max(maxDC, dc);
+          maxDC = std::max(maxDC, dc);
         }
         totalDC += maxDC;
       }
@@ -369,8 +369,8 @@ float AABBDistance(const Vector &mins0, const Vector &maxs0,
                    const Vector &mins1, const Vector &maxs1) {
   Vector delta;
   for (int i = 0; i < 3; i++) {
-    float greatestMin = max(mins0[i], mins1[i]);
-    float leastMax = min(maxs0[i], maxs1[i]);
+    float greatestMin = std::max(mins0[i], mins1[i]);
+    float leastMax = std::min(maxs0[i], maxs1[i]);
     delta[i] = (greatestMin < leastMax) ? 0 : (leastMax - greatestMin);
   }
   return delta.Length();
@@ -441,16 +441,16 @@ void ComputeAmbientForLeaf(int iThread, int leafID,
   int xSize = (dleafs[leafID].maxs[0] - dleafs[leafID].mins[0]) / 32;
   int ySize = (dleafs[leafID].maxs[1] - dleafs[leafID].mins[1]) / 32;
   int zSize = (dleafs[leafID].maxs[2] - dleafs[leafID].mins[2]) / 64;
-  xSize = max(xSize, 1);
-  ySize = max(xSize, 1);
-  zSize = max(xSize, 1);
+  xSize = std::max(xSize, 1);
+  ySize = std::max(xSize, 1);
+  zSize = std::max(xSize, 1);
   // generate update 128 candidate samples, always at least one sample
   int volumeCount = xSize * ySize * zSize;
   if (g_bFastAmbient) {
     // save compute time, only do one sample
     volumeCount = 1;
   }
-  int sampleCount = clamp(volumeCount, 1, 128);
+  int sampleCount = std::clamp(volumeCount, 1, 128);
   if (dleafs[leafID].contents & CONTENTS_SOLID) {
     // don't generate any samples in solid leaves
     // NOTE: We copy the nearest non-solid leaf sample pointers into this leaf

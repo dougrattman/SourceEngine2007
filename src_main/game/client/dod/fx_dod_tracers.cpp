@@ -54,7 +54,7 @@ void FX_DoDTracerSound( const Vector &start, const Vector &end, int iTracerType 
 
 			float s, t;
 			IntersectRayWithRay( bullet, listener, s, t );
-			t = clamp( t, 0, 1 );
+			t = std::clamp( t, 0, 1 );
 			vecListenOrigin.z -= t * LISTENER_HEIGHT;
 		}
 		break;

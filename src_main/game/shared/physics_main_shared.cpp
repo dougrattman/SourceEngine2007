@@ -1353,7 +1353,7 @@ void CBaseEntity::ResolveFlyCollisionBounce( trace_t &trace, Vector &vecVelocity
 	{
 		flMinTotalElasticity = 0.9f;
 	}
-	flTotalElasticity = clamp( flTotalElasticity, flMinTotalElasticity, 0.9f );
+	flTotalElasticity = std::clamp( flTotalElasticity, flMinTotalElasticity, 0.9f );
 
 	// NOTE: A backoff of 2.0f is a reflection
 	Vector vecAbsVelocity;

@@ -202,19 +202,19 @@ void C_HL2MP_Player::UpdateLookAt( void )
 
 	// Set the head's yaw.
 	float desired = AngleNormalize( desiredAngles[YAW] - bodyAngles[YAW] );
-	desired = clamp( desired, m_headYawMin, m_headYawMax );
+	desired = std::clamp( desired, m_headYawMin, m_headYawMax );
 	m_flCurrentHeadYaw = ApproachAngle( desired, m_flCurrentHeadYaw, 130 * gpGlobals->frametime );
 
 	// Counterrotate the head from the body rotation so it doesn't rotate past its target.
 	m_flCurrentHeadYaw = AngleNormalize( m_flCurrentHeadYaw - flBodyYawDiff );
-	desired = clamp( desired, m_headYawMin, m_headYawMax );
+	desired = std::clamp( desired, m_headYawMin, m_headYawMax );
 	
 	SetPoseParameter( m_headYawPoseParam, m_flCurrentHeadYaw );
 
 	
 	// Set the head's yaw.
 	desired = AngleNormalize( desiredAngles[PITCH] );
-	desired = clamp( desired, m_headPitchMin, m_headPitchMax );
+	desired = std::clamp( desired, m_headPitchMin, m_headPitchMax );
 	
 	m_flCurrentHeadPitch = ApproachAngle( desired, m_flCurrentHeadPitch, 130 * gpGlobals->frametime );
 	m_flCurrentHeadPitch = AngleNormalize( m_flCurrentHeadPitch );
@@ -536,7 +536,7 @@ float C_HL2MP_Player::GetFOV( void )
 	int min_fov = GetMinFOV();
 	
 	// Don't let it go too low
-	flFOVOffset = max( min_fov, flFOVOffset );
+	flFOVOffset = std::max( min_fov, flFOVOffset );
 
 	return flFOVOffset;
 }

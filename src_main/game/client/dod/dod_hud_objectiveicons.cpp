@@ -517,7 +517,7 @@ void CHudObjectiveIcons::Paint()
 				{
 					float flMinAngle = j * fl45degrees;	
 
-					float flAngle = clamp( flEndAngle - flMinAngle, 0, fl45degrees );
+					float flAngle = std::clamp( flEndAngle - flMinAngle, 0, fl45degrees );
 
 					if ( flAngle <= 0 )
 					{
@@ -795,7 +795,7 @@ void CHudObjectiveIcons::Paint()
 
 			if ( requiredPlayers > 1 )
 			{
-				numPlayers = min( numPlayers, requiredPlayers );
+				numPlayers = std::min( numPlayers, requiredPlayers );
 
 				wchar_t wText[6];
 				_snwprintf( wText, sizeof(wText)/sizeof(wchar_t), L"%d/%d", numPlayers, requiredPlayers );

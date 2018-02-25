@@ -27,9 +27,7 @@ typedef int32_t *DWORD_PTR;
 // Should be last include
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
 // Various important function types for each color format
-//-----------------------------------------------------------------------------
 
 typedef void (*UserFormatToRGBA8888Func_t)(const uint8_t *src, uint8_t *dst,
                                            int numPixels);
@@ -880,12 +878,12 @@ void ConvertImageFormat_RGB323232F_To_RGBA16161616(float *pSrcImage,
   float *pSrcScan = pSrcImage;
   unsigned short *pDstScan = pDstImage;
   for (; pSrcScan < pSrcEnd; pSrcScan += 3, pDstScan += 4) {
-    pDstScan[0] =
-        (unsigned short)min(65535.0f, (pSrcScan[0] * (((float)(1 << 12)))));
-    pDstScan[1] =
-        (unsigned short)min(65535.0f, (pSrcScan[1] * (((float)(1 << 12)))));
-    pDstScan[2] =
-        (unsigned short)min(65535.0f, (pSrcScan[2] * (((float)(1 << 12)))));
+    pDstScan[0] = (unsigned short)std::min(
+        65535.0f, (pSrcScan[0] * (((float)(1 << 12)))));
+    pDstScan[1] = (unsigned short)std::min(
+        65535.0f, (pSrcScan[1] * (((float)(1 << 12)))));
+    pDstScan[2] = (unsigned short)std::min(
+        65535.0f, (pSrcScan[2] * (((float)(1 << 12)))));
     pDstScan[3] = 65535;
   }
 }
@@ -1044,8 +1042,8 @@ void ConvertImageFormat_RGBA16161616F_To_RGBA16161616(float16 *pSrcImage,
       float val;
       val = pSrcScan[i].GetFloat();
       val *= (float)(1 << 12);
-      val = max(val, 0);
-      val = min(val, 65535.0f);
+      val = std::max(val, 0.0f);
+      val = std::min(val, 65535.0f);
       pDstScan[i] = (unsigned short)val;
     }
   }
@@ -1294,9 +1292,8 @@ bool ConvertImageFormat(const uint8_t *src, ImageFormat srcImageFormat,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Color conversion routines
-//-----------------------------------------------------------------------------
+
 void ConvertIA88ImageToNormalMapRGBA8888(const uint8_t *src, int width,
                                          int height, uint8_t *dst,
                                          float bumpScale) {
@@ -1404,9 +1401,8 @@ void NormalizeNormalMapRGBA8888(uint8_t *src, int numTexels) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Image rotation
-//-----------------------------------------------------------------------------
+
 bool RotateImageLeft(const uint8_t *src, uint8_t *dst, int widthHeight,
                      ImageFormat imageFormat) {
 #define SRC(x, y) src[((x) + (y)*widthHeight) * sizeInBytes]
@@ -1536,9 +1532,8 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Image rotation
-//-----------------------------------------------------------------------------
+
 bool SwapAxes(uint8_t *src, int widthHeight, ImageFormat imageFormat) {
 #define SRC(x, y) src[((x) + (y)*widthHeight) * sizeInBytes]
   if (IsCompressed(imageFormat)) {
@@ -1949,10 +1944,10 @@ void RGBA16161616ToRGBA8888(const uint8_t *src_, uint8_t *dst, int numPixels) {
   unsigned short *src = (unsigned short *)src_;
   unsigned short *pEndSrc = src + numPixels * 4;
   for (; src < pEndSrc; src += 4, dst += 4) {
-    dst[0] = min(255, src[0] >> 4);
-    dst[1] = min(255, src[1] >> 4);
-    dst[2] = min(255, src[2] >> 4);
-    dst[3] = min(255, src[3] >> 8);
+    dst[0] = std::min(255, src[0] >> 4);
+    dst[1] = std::min(255, src[1] >> 4);
+    dst[2] = std::min(255, src[2] >> 4);
+    dst[3] = std::min(255, src[3] >> 8);
   }
 }
 

@@ -213,12 +213,13 @@ void VoiceSE_Idle(float frametime) {
   g_SND_VoiceOverdriveInt = 256;
 
   if (g_bVoiceOverdriveOn) {
-    g_VoiceOverdriveDuration = min(g_VoiceOverdriveDuration + frametime,
-                                   voice_overdrivefadetime.GetFloat());
+    g_VoiceOverdriveDuration = std::min(g_VoiceOverdriveDuration + frametime,
+                                        voice_overdrivefadetime.GetFloat());
   } else {
     if (g_VoiceOverdriveDuration == 0) return;
 
-    g_VoiceOverdriveDuration = max(g_VoiceOverdriveDuration - frametime, 0);
+    g_VoiceOverdriveDuration =
+        std::max(g_VoiceOverdriveDuration - frametime, 0.0f);
   }
 
   float percent = g_VoiceOverdriveDuration / voice_overdrivefadetime.GetFloat();

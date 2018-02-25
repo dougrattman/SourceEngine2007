@@ -87,11 +87,11 @@ static const char *s_clcommands[] = {
 // Used on the server and on the client to bound its cl_rate cvar.
 int ClampClientRate(int nRate) {
   if (sv_maxrate.GetInt() > 0) {
-    nRate = clamp(nRate, MIN_RATE, sv_maxrate.GetInt());
+    nRate = std::clamp(nRate, MIN_RATE, sv_maxrate.GetInt());
   }
 
   if (sv_minrate.GetInt() > 0) {
-    nRate = clamp(nRate, sv_minrate.GetInt(), MAX_RATE);
+    nRate = std::clamp(nRate, sv_minrate.GetInt(), MAX_RATE);
   }
 
   return nRate;
@@ -337,8 +337,8 @@ void CGameClient::SetupPackInfo(CFrameSnapshot *pSnapshot) {
   if (sv_maxreplay.GetFloat() > 0) {
     // if the server has replay features enabled, allow a way bigger frame
     // buffer
-    nMaxFrames =
-        max(nMaxFrames, sv_maxreplay.GetFloat() / m_Server->GetTickInterval());
+    nMaxFrames = std::max(nMaxFrames, (int)(sv_maxreplay.GetFloat() /
+                                            m_Server->GetTickInterval()));
   }
 
   if (nMaxFrames < AddClientFrame(m_pCurrentFrame)) {
@@ -396,11 +396,11 @@ void CGameClient::SetRate(int nRate, bool bForce) {
 void CGameClient::SetUpdateRate(int udpaterate, bool bForce) {
   if (!bForce) {
     if (sv_maxupdaterate.GetInt() > 0) {
-      udpaterate = clamp(udpaterate, 1, sv_maxupdaterate.GetInt());
+      udpaterate = std::clamp(udpaterate, 1, sv_maxupdaterate.GetInt());
     }
 
     if (sv_minupdaterate.GetInt() > 0) {
-      udpaterate = clamp(udpaterate, sv_minupdaterate.GetInt(), 100);
+      udpaterate = std::clamp(udpaterate, sv_minupdaterate.GetInt(), 100);
     }
   }
 
@@ -1157,7 +1157,7 @@ CON_COMMAND( st, "sound test" )
 	int nCount = 1;
 	if ( args.ArgC() >= 2 )
 	{
-		nCount = clamp( Q_atoi( args.Arg( 1 ) ), 1, 100000 );
+		nCount = std::clamp( Q_atoi( args.Arg( 1 ) ), 1, 100000 );
 	}
 
 	for ( int i = 0 ; i < nCount; ++i )

@@ -27,8 +27,9 @@
 f64 g_flLastVCRFloatTimeValue;
 bool g_bExpectingWindowProcCalls = false;
 
-IVCRHelpers *g_pHelpers = 0;
+IVCRHelpers *g_pHelpers = nullptr;
 FILE *g_pVCRFile = nullptr;
+
 VCRMode_t g_VCRMode = VCR_Disabled;
 // Stored temporarily between
 // SetEnabled(0)/SetEnabled(1) blocks.
@@ -36,15 +37,13 @@ VCRMode_t g_OldVCRMode = VCR_Invalid;
 
 i32 g_iCurEvent = 0;
 // So it knows when we're done playing back.
-ptrdiff_t g_CurFilePos = 0;
-ptrdiff_t g_FileLen = 0;
+isize g_CurFilePos = 0, g_FileLen = 0;
 
 // Last VCR_ReadEvent() call.
 VCREvent g_LastReadEvent = (VCREvent)-1;
 // The thread index of the thread that g_LastReadEvent
 // is intended for.
 i32 g_LastEventThread;
-
 i32 g_bVCREnabled = 0;
 
 // These wrappers exist because for some reason thread-blocking functions nuke
@@ -316,8 +315,8 @@ class CVCRTrace : public IVCRTrace {
 
 static CVCRTrace g_VCRTrace;
 
-static BOOL VCR_StartWrite(ch const *vcr_file_path) {
-  ch *command_line = GetCommandLine();
+static BOOL VCR_StartWrite(const ch *vcr_file_path) {
+  const ch *command_line = GetCommandLine();
   if (!strstr(command_line, "-nosound"))
     Error("VCR record: must use -nosound.");
 
@@ -334,7 +333,7 @@ static BOOL VCR_StartWrite(ch const *vcr_file_path) {
   return FALSE;
 }
 
-static BOOL VCR_StartRead(ch const *vcr_file_path) {
+static BOOL VCR_StartRead(const ch *vcr_file_path) {
   g_pVCRFile = fopen(vcr_file_path, "rb");
   if (g_pVCRFile) {
     // Get the file length.
@@ -1045,14 +1044,14 @@ void VCR_GenericRecord(const ch *pEventName, const void *pData, i32 len) {
   VCR_Event(VCREvent_Generic);
 
   if (g_VCRMode != VCR_Record)
-    Error("VCR_GenericRecord( %s ): not recording a VCR file", pEventName);
+    Error("VCR_GenericRecord(%s): not recording a VCR file", pEventName);
 
   // Write the event name (or 255 if none).
   usize nameLen = 255;
   if (pEventName) {
     nameLen = strlen(pEventName) + 1;
     if (nameLen >= 255) {
-      VCR_Error("VCR_GenericRecord( %s ): nameLen too long (%zu)", pEventName,
+      VCR_Error("VCR_GenericRecord(%s): nameLen too long (%zu)", pEventName,
                 nameLen);
       return;
     }

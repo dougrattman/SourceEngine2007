@@ -165,7 +165,7 @@ void CMapSprite::CalcBounds(BOOL bFullUpdate)
 	
 	if (m_pSpriteInfo)
 	{
-		fRadius = max(m_pSpriteInfo->GetWidth(), m_pSpriteInfo->GetHeight()) * m_fScale / 2.0;
+		fRadius = std::max(m_pSpriteInfo->GetWidth(), m_pSpriteInfo->GetHeight()) * m_fScale / 2.0;
 		if (fRadius == 0)
 		{
 			fRadius = 8;
@@ -485,7 +485,7 @@ void CMapSprite::DoTransform(const VMatrix &matrix)
 //			pEntity - 
 //			alpha - 
 //-----------------------------------------------------------------------------
-void CMapSprite::SpriteColor(unsigned char *pColor, int eRenderMode, colorVec RenderColor, int alpha)
+void CMapSprite::SpriteColor(unsigned char *pColor, int eRenderMode, color32 RenderColor, int alpha)
 {
 	int a;
 

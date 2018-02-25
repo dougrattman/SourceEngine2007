@@ -1743,7 +1743,7 @@ CDmElement *CDataModel::CreateElement(const DmElementReference_t &ref,
   if (pElement) {
     ++m_nElementsAllocatedSoFar;
     m_nMaxNumberOfElements =
-        max(m_nMaxNumberOfElements, GetAllocatedElementCount());
+        std::max(m_nMaxNumberOfElements, GetAllocatedElementCount());
 
     CDmeElementAccessor::SetReference(pElement, ref);
     m_Handles.SetHandle(ref.m_hElement, pElement);

@@ -55,7 +55,7 @@ static inline float ComputeInterpolationFactor(float flFactor,
                                 s_pInterolationPoints[2],
                                 s_pInterolationPoints[3],  // unused
                                 flFactor, out);
-  return out.y;  // clamp( out.y, 0.0f, 1.0f );
+  return out.y;  // std::clamp( out.y, 0.0f, 1.0f );
 }
 
 float DmeLog_TimeSelection_t::AdjustFactorForInterpolatorType(float flFactor,
@@ -116,7 +116,7 @@ float DmeLog_TimeSelection_t::GetAmountForTime(DmeTime_t dmetime) const {
                                   s_pInterolationPoints[2],
                                   s_pInterolationPoints[3],  // unused
                                   f, out);
-    return clamp(out.y, minfrac, 1.0f);
+    return std::clamp(out.y, minfrac, 1.0f);
   }
 
   if (t >= times[1] && t <= times[2]) return 1.0f;
@@ -132,7 +132,7 @@ float DmeLog_TimeSelection_t::GetAmountForTime(DmeTime_t dmetime) const {
                                   s_pInterolationPoints[2],
                                   s_pInterolationPoints[3],  // unused
                                   f, out);
-    return clamp(out.y, minfrac, 1.0f);
+    return std::clamp(out.y, minfrac, 1.0f);
   }
 
   return minfrac;
@@ -388,7 +388,7 @@ float Curve_Interpolate(float t, DmeTime_t times[4], const float values[4],
 
   // FIXME:  This means we can only work with curves that range from 0.0
   // to 1.0f!!!
-  float retval = clamp(vOut.y, fmin, fmax);
+  float retval = std::clamp(vOut.y, fmin, fmax);
   return retval;
 }
 
@@ -580,7 +580,7 @@ template <>
 Color Subtract(const Color &v1, const Color &v2) {
   Color ret;
   for (int i = 0; i < 4; ++i) {
-    ret[i] = clamp(v1[i] - v2[i], 0, 255);
+    ret[i] = std::clamp(v1[i] - v2[i], 0, 255);
   }
   return ret;
 }
@@ -622,7 +622,7 @@ template <>
 Color Add(const Color &v1, const Color &v2) {
   Color ret;
   for (int i = 0; i < 4; ++i) {
-    ret[i] = clamp(v1[i] + v2[i], 0, 255);
+    ret[i] = std::clamp(v1[i] + v2[i], 0, 255);
   }
   return ret;
 }
@@ -1448,7 +1448,7 @@ void CDmeTypedLogLayer<T>::Filter(int nSampleRadius) {
   filteredValues.EnsureCapacity(nValues);
 
   for (int i = 0; i < nValues; ++i) {
-    int nSamples = min(nSampleRadius, min(i, nValues - i - 1));
+    int nSamples = std::min(nSampleRadius, std::min(i, nValues - i - 1));
     filteredValues.AddToTail(
         Average(values.Base() + i - nSamples, 2 * nSamples + 1));
   }
@@ -3313,9 +3313,9 @@ template <>
 float CDmeTypedLog<float>::ClampValue(const float &value) {
   float retval;
   if (!IsUsingCurveTypes()) {
-    retval = clamp(value, 0.0f, 1.0f);
+    retval = std::clamp(value, 0.0f, 1.0f);
   } else {
-    retval = clamp(value, GetMinValue(), GetMaxValue());
+    retval = std::clamp(value, GetMinValue(), GetMaxValue());
   }
   return retval;
 }
@@ -3461,9 +3461,9 @@ void CLogFalloffBlend<float>::ComputeDelta(CDmeTypedLog<float> *pLog,
                                            const float &holdValue) {
   if (LengthOf(delta) > 0.0f) {
     m_Delta =
-        min(delta, m_MaxValue - holdValue);  // Max amount we can move up...
+        std::min(delta, m_MaxValue - holdValue);  // Max amount we can move up...
   } else {
-    m_Delta = max(delta, m_MinValue - holdValue);  // Amount we can move down...
+    m_Delta = std::max(delta, m_MinValue - holdValue);  // Amount we can move down...
   }
 }
 
@@ -4866,7 +4866,7 @@ void CDmeTypedLog<T>::FilterUsingTimeSelection(
                                         points[3],  // unused
                                         frac, out);
 
-          float flBias = clamp(out.y, 0.0f, 1.0f);
+          float flBias = std::clamp(out.y, 0.0f, 1.0f);
           float dFrac = flScale * (frac - flBias);
 
           newValue = Add(oldValue, ScaleValue(dynamicRange, dFrac));

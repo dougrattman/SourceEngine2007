@@ -103,9 +103,9 @@ void CStudioRender::R_StudioEyelidFACS(const mstudioeyeball_t *peyeball,
   vecNormTarget.Init(peyeball->uppertarget[0], peyeball->uppertarget[1],
                      peyeball->uppertarget[2]);
   vecNormTarget /= peyeball->radius;
-  vecNormTarget.x = clamp(vecNormTarget.x, -1.0f, 1.0f);
-  vecNormTarget.y = clamp(vecNormTarget.y, -1.0f, 1.0f);
-  vecNormTarget.z = clamp(vecNormTarget.z, -1.0f, 1.0f);
+  vecNormTarget.x = std::clamp(vecNormTarget.x, -1.0f, 1.0f);
+  vecNormTarget.y = std::clamp(vecNormTarget.y, -1.0f, 1.0f);
+  vecNormTarget.z = std::clamp(vecNormTarget.z, -1.0f, 1.0f);
 
   // get weighted position of eyeball angles based on the "raiser", "neutral",
   // and "lowerer" controls
@@ -118,9 +118,9 @@ void CStudioRender::R_StudioEyelidFACS(const mstudioeyeball_t *peyeball,
   vecNormTarget.Init(peyeball->lowertarget[0], peyeball->lowertarget[1],
                      peyeball->lowertarget[2]);
   vecNormTarget /= peyeball->radius;
-  vecNormTarget.x = clamp(vecNormTarget.x, -1.0f, 1.0f);
-  vecNormTarget.y = clamp(vecNormTarget.y, -1.0f, 1.0f);
-  vecNormTarget.z = clamp(vecNormTarget.z, -1.0f, 1.0f);
+  vecNormTarget.x = std::clamp(vecNormTarget.x, -1.0f, 1.0f);
+  vecNormTarget.y = std::clamp(vecNormTarget.y, -1.0f, 1.0f);
+  vecNormTarget.z = std::clamp(vecNormTarget.z, -1.0f, 1.0f);
 
   lowerlid = m_pFlexWeights[peyeball->lowerflexdesc[0]] * asin(vecNormTarget.x);
   lowerlid +=

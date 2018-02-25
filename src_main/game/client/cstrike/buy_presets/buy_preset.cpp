@@ -494,7 +494,7 @@ void WeaponSet::GetCurrent( int& cost, WeaponSet& ws ) const
 						{
 							ws.m_primaryWeapon.SetAmmoAmount( ws.m_primaryWeapon.GetAmmoAmount() + 1 );
 							--clipsLeft;
-							ammo[info->iAmmoType] += min(maxRounds, ammoBuySize);
+							ammo[info->iAmmoType] += std::min(maxRounds, ammoBuySize);
 							cost += ammoCost;
 						}
 					}
@@ -523,7 +523,7 @@ void WeaponSet::GetCurrent( int& cost, WeaponSet& ws ) const
 						{
 							ws.m_secondaryWeapon.SetAmmoAmount( ws.m_secondaryWeapon.GetAmmoAmount() + 1 );
 							--clipsLeft;
-							ammo[info->iAmmoType] += min(maxRounds, ammoBuySize);
+							ammo[info->iAmmoType] += std::min(maxRounds, ammoBuySize);
 							cost += ammoCost;
 						}
 					}
@@ -902,18 +902,18 @@ static void ParseWeaponString( const char *str, BuyPresetWeaponList& weapons, bo
 			{
 				int maxRounds = GetCSAmmoDef()->MaxCarry( info->iAmmoType );
 				int buySize = GetCSAmmoDef()->GetBuySize( info->iAmmoType );
-				numClips = min(ceil(maxRounds/(float)buySize), max(0, numClips));
+				numClips = std::min(ceil(maxRounds/(float)buySize), std::max(0, numClips));
 				if ( ((!isPrimary) ^ IsPrimaryWeapon( weaponID )) == 0 )
 					return;
 			}
 			else
 			{
-				numClips = min(NUM_CLIPS_FOR_CURRENT, max(0, numClips));
+				numClips = std::min(NUM_CLIPS_FOR_CURRENT, std::max(0, numClips));
 			}
 		}
 		else
 		{
-			numClips = min(NUM_CLIPS_FOR_CURRENT, max(0, numClips));
+			numClips = std::min(NUM_CLIPS_FOR_CURRENT, std::max(0, numClips));
 		}
 
 		BuyPresetWeapon weapon( weaponID );
@@ -1028,7 +1028,7 @@ void BuyPreset::Parse( KeyValues *data )
 			}
 			else if ( !strcmp( itemBuf, "flash" ) )
 			{
-				ws.m_flashbangs = min( 2, max( 0, intVal ) );
+				ws.m_flashbangs = std::min( 2, std::max( 0, intVal ) );
 			}
 
 			remainder = SharedParse( remainder );

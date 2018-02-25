@@ -5,6 +5,7 @@
 #ifndef SOURCE_TIER1_BYTESWAP_H_
 #define SOURCE_TIER1_BYTESWAP_H_
 
+#include <cassert>
 #include "datamap.h"  // Needed for typedescription_t.  Note datamap.h is tier1 as well.
 
 class CByteswap {
@@ -15,15 +16,13 @@ class CByteswap {
     SetTargetBigEndian(IsMachineBigEndian());
   }
 
-  //-----------------------------------------------------------------------------
   // Write a single field.
-  //-----------------------------------------------------------------------------
+
   void SwapFieldToTargetEndian(void *pOutputBuffer, void *pData,
                                typedescription_t *pField);
 
-  //-----------------------------------------------------------------------------
   // Write a block of fields.  Works a bit like the saverestore code.
-  //-----------------------------------------------------------------------------
+
   void SwapFieldsToTargetEndian(void *pOutputBuffer, void *pBaseData,
                                 datamap_t *pDataMap);
 
@@ -45,11 +44,10 @@ class CByteswap {
                                 objectCount);
   }
 
-  //-----------------------------------------------------------------------------
   // True if the current machine is detected as big endian.
   // (Endienness is effectively detected at compile time when optimizations are
   // enabled)
-  //-----------------------------------------------------------------------------
+
   static bool IsMachineBigEndian() {
     short nIsBigEndian = 1;
 
@@ -58,13 +56,12 @@ class CByteswap {
     return (bool)(0 == *(char *)&nIsBigEndian);
   }
 
-  //-----------------------------------------------------------------------------
   // Sets the target uint8_t ordering we are swapping to or from.
   //
   // Braindead Endian Reference:
   //		x86 is LITTLE Endian
   //		PowerPC is BIG Endian
-  //-----------------------------------------------------------------------------
+
   inline void SetTargetBigEndian(bool bigEndian) {
     m_bBigEndian = bigEndian;
     m_bSwapBytes = IsMachineBigEndian() != bigEndian;
@@ -81,11 +78,10 @@ class CByteswap {
     SetTargetBigEndian(IsMachineBigEndian() != bActivate);
   }
 
-  //-----------------------------------------------------------------------------
   // Returns true if the target machine is the same as this one in endianness.
   //
   // Used to determine when a byteswap needs to take place.
-  //-----------------------------------------------------------------------------
+
   inline bool IsSwappingBytes(void)  // Are bytes being swapped?
   {
     return m_bSwapBytes;
@@ -96,7 +92,6 @@ class CByteswap {
     return m_bBigEndian;
   }
 
-  //-----------------------------------------------------------------------------
   // IsByteSwapped()
   //
   // When supplied with a chunk of input data and a constant or magic number
@@ -111,7 +106,7 @@ class CByteswap {
   //
   // ( This is useful for detecting byteswapping in magic numbers in structure
   // headers for example. )
-  //-----------------------------------------------------------------------------
+
   template <typename T>
   inline int SourceIsNativeEndian(T input, T nativeConstant) {
     // If it's the same, it isn't byteswapped:
@@ -126,13 +121,12 @@ class CByteswap {
     return -1;
   }
 
-  //-----------------------------------------------------------------------------
   // Swaps an input buffer full of type T into the given output buffer.
   //
   // Swaps [count] items from the inputBuffer to the outputBuffer.
   // If inputBuffer is omitted or NULL, then it is assumed to be the same as
   // outputBuffer - effectively swapping the contents of the buffer in place.
-  //-----------------------------------------------------------------------------
+
   template <typename T>
   inline void SwapBuffer(T *outputBuffer, T *inputBuffer = NULL,
                          int count = 1) {
@@ -153,13 +147,12 @@ class CByteswap {
     }
   }
 
-  //-----------------------------------------------------------------------------
   // Swaps an input buffer full of type T into the given output buffer.
   //
   // Swaps [count] items from the inputBuffer to the outputBuffer.
   // If inputBuffer is omitted or NULL, then it is assumed to be the same as
   // outputBuffer - effectively swapping the contents of the buffer in place.
-  //-----------------------------------------------------------------------------
+
   template <typename T>
   inline void SwapBufferToTargetEndian(T *outputBuffer, T *inputBuffer = NULL,
                                        int count = 1) {
@@ -189,11 +182,10 @@ class CByteswap {
   }
 
  private:
-  //-----------------------------------------------------------------------------
   // The lowest level uint8_t swapping workhorse of doom.  output always
   // contains the swapped version of input.  ( Doesn't compare machine to target
   // endianness )
-  //-----------------------------------------------------------------------------
+
   template <typename T>
   static void LowLevelByteSwap(T *output, T *input) {
     T temp = *output;

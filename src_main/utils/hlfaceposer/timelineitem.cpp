@@ -350,7 +350,7 @@ int	TimelineItem::handleEvent( mxEvent *event )
 					{
 						float curscrub = g_pExpressionTool->GetScrub();
 						curscrub -= ( 1.0f / (float)scene->GetSceneFPS() );
-						curscrub = max( curscrub, 0.0f );
+						curscrub = std::max( curscrub, 0.0f );
 						g_pExpressionTool->SetScrubTargetTime( curscrub );
 					}
 				}
@@ -362,7 +362,7 @@ int	TimelineItem::handleEvent( mxEvent *event )
 					{
 						float curscrub = g_pExpressionTool->GetScrub();
 						curscrub += ( 1.0f / (float)scene->GetSceneFPS() );
-						curscrub = min( curscrub, scene->FindStopTime() );
+						curscrub = std::min( curscrub, scene->FindStopTime() );
 						g_pExpressionTool->SetScrubTargetTime( curscrub );
 					}
 				}
@@ -789,7 +789,7 @@ void TimelineItem::Draw( CChoreoWidgetDrawHelper& drawHelper )
 
 			float timestepperpixel = linelength / g_pExpressionTool->GetPixelsPerSecond();
 
-			float stoptime = min( endtime, e->GetDuration() );
+			float stoptime = std::min( endtime, e->GetDuration() );
 			
 			float prev_t = starttime;
 			float prev_value = track->GetFracIntensity( prev_t, type );
@@ -944,7 +944,7 @@ void TimelineItem::Draw( CChoreoWidgetDrawHelper& drawHelper )
 				Q_snprintf( sz, sizeof( sz ), "%s", Interpolator_NameForCurveType( start->GetCurveType(), true ) );
 				RECT rc;
 				int fontSize = 9;
-				rc.top = clamp( y + 5, rcClient.top + 2, rcClient.bottom - 2 - fontSize );
+				rc.top = std::clamp( y + 5, rcClient.top + 2, rcClient.bottom - 2 - fontSize );
 				rc.bottom = rc.top + fontSize + 1;
 				rc.left = x - 75;
 				rc.right = x + 175;
@@ -1439,10 +1439,10 @@ void TimelineItem::SelectPoints( void )
 	float ftop = (float)rcSelection.top / (float)height;
 	float fbottom = (float)rcSelection.bottom / (float)height;
 
-	fleft = clamp( fleft, 0.0f, duration );
-	fright = clamp( fright, 0.0f, duration );
-	ftop = clamp( ftop, 0.0f, 1.0f );
-	fbottom = clamp( fbottom, 0.0f, 1.0f );
+	fleft = std::clamp( fleft, 0.0f, duration );
+	fright = std::clamp( fright, 0.0f, duration );
+	ftop = std::clamp( ftop, 0.0f, 1.0f );
+	fbottom = std::clamp( fbottom, 0.0f, 1.0f );
 
 	float timestepperpixel = 1.0f / g_pExpressionTool->GetPixelsPerSecond();
 	float yfracstepperpixel = 1.0f / (float)height;

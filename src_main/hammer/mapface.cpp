@@ -1884,7 +1884,7 @@ void CMapFace::RenderFaces(CRender3D *pRender, int nCount,
 
   // Make sure we have enough for at least one triangle...
   int nMinVerts = ppFaces[0]->m_pMapFace->GetPointCount();
-  int nMinIndices = max(nMinVerts * 2, (nMinVerts - 2) * 3);
+  int nMinIndices = std::max(nMinVerts * 2, (nMinVerts - 2) * 3);
   if (nMaxVerts < nMinVerts || nMaxIndices < nMinIndices) {
     pRenderContext->GetMaxToRender(pMesh, false, &nMaxVerts, &nMaxIndices);
   }

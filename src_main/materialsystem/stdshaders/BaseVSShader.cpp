@@ -590,7 +590,7 @@ void CBaseVSShader::ColorVarsToVector(int colorVar, int alphaVar,
   }
   if (alphaVar != -1) {
     float flAlpha = s_ppParams[alphaVar]->GetFloatValue();
-    color[3] = clamp(flAlpha, 0.0f, 1.0f);
+    color[3] = std::clamp(flAlpha, 0.0f, 1.0f);
   }
 }
 

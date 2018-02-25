@@ -220,7 +220,7 @@ FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
   f32 sinom =
       sqrt(SubFloat(p, 0) * SubFloat(p, 0) + SubFloat(p, 1) * SubFloat(p, 1) +
            SubFloat(p, 2) * SubFloat(p, 2));
-  sinom = min(sinom, 1.f);
+  sinom = std::min(sinom, 1.f);
 
   f32 sinsom = sin(asin(sinom) * t);
 
@@ -273,9 +273,9 @@ FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Quaternion sphereical linear interpolation
-//-----------------------------------------------------------------------------
+
 #ifndef _X360
 
 // SSE and STDC

@@ -2,18 +2,10 @@
 
 #include "pch_tier0.h"
 
-#include "tier0/include/minidump.h"
-
-#include <malloc.h>
-#include <cassert>
-#include <cmath>
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include "public/Color.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/minidump.h"
 #include "tier0/include/threadtools.h"
 #include "tier0/include/wchartypes.h"
 
@@ -104,24 +96,22 @@ void _ExitOnFatalAssert(const ch* pFile, i32 line) {
   exit(EXIT_FAILURE);
 }
 
-//-----------------------------------------------------------------------------
 // Templates to assist in validating pointers:
-//-----------------------------------------------------------------------------
-DBG_INTERFACE void _AssertValidReadPtr(void* ptr, i32 count /* = 1*/) {}
 
-DBG_INTERFACE void _AssertValidWritePtr(void* ptr, i32 count /* = 1*/) {}
+SOURCE_TIER0_API void _AssertValidReadPtr(void* ptr, i32 count /* = 1*/) {}
 
-DBG_INTERFACE void _AssertValidReadWritePtr(void* ptr, i32 count /* = 1*/) {}
+SOURCE_TIER0_API void _AssertValidWritePtr(void* ptr, i32 count /* = 1*/) {}
 
-DBG_INTERFACE void AssertValidStringPtr(const ch* ptr,
-                                        i32 maxchar /* = 0xFFFFFF */) {
+SOURCE_TIER0_API void _AssertValidReadWritePtr(void* ptr, i32 count /* = 1*/) {}
+
+SOURCE_TIER0_API void AssertValidStringPtr(const ch* ptr,
+                                           i32 maxchar /* = 0xFFFFFF */) {
   Assert(ptr);
 }
 
-//-----------------------------------------------------------------------------
 // Should be called only inside a SpewOutputFunc_t, returns groupname, level,
 // color
-//-----------------------------------------------------------------------------
+
 const ch* GetSpewOutputGroup() {
   SpewInfo_t* pSpewInfo = g_pSpewInfo;
   assert(pSpewInfo);
@@ -143,9 +133,8 @@ const Color& GetSpewOutputColor() {
   return s_DefaultOutputColor;
 }
 
-//-----------------------------------------------------------------------------
 // Spew functions
-//-----------------------------------------------------------------------------
+
 void _SpewInfo(SpewType_t type, const ch* pFile, i32 line) {
   // Only grab the file name. Ignore the path.
   const ch* pSlash = strrchr(pFile, '\\');
@@ -225,11 +214,10 @@ FORCEINLINE SpewRetval_t _SpewMessage(SpewType_t spewType, const ch* pMsgFormat,
   return _SpewMessage(spewType, "", 0, &s_DefaultOutputColor, pMsgFormat, args);
 }
 
-//-----------------------------------------------------------------------------
 // Find a group, return true if found, false if not. Return in ind the
 // index of the found group, or the index of the group right before where the
 // group should be inserted into the list to maintain sorted order.
-//-----------------------------------------------------------------------------
+
 bool FindSpewGroup(const ch* pGroupName, i32* pInd) {
   i32 s = 0;
   if (s_GroupCount) {
@@ -251,9 +239,8 @@ bool FindSpewGroup(const ch* pGroupName, i32* pInd) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
 // Tests to see if a particular spew is active
-//-----------------------------------------------------------------------------
+
 bool IsSpewActive(const ch* pGroupName, i32 level) {
   // If we don't find the spew group, use the default level.
   i32 ind;
@@ -290,9 +277,9 @@ SpewRetval_t _DSpewMessage(const ch* pGroupName, i32 level,
   return ret;
 }
 
-DBG_INTERFACE SpewRetval_t ColorSpewMessage(SpewType_t type,
-                                            const Color* pColor,
-                                            const ch* pMsgFormat, ...) {
+SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t type,
+                                               const Color* pColor,
+                                               const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
   SpewRetval_t ret = _SpewMessage(type, "", 0, pColor, pMsgFormat, args);
@@ -358,10 +345,9 @@ void Error(const ch* pMsgFormat, ...) {
   va_end(args);
 }
 
-//-----------------------------------------------------------------------------
 // A couple of super-common dynamic spew messages, here for convenience
 // These looked at the "developer" group, print if it's level 1 or higher
-//-----------------------------------------------------------------------------
+
 void DevMsg(i32 level, const ch* pMsgFormat, ...) {
   if (!IsSpewActive(GROUP_DEVELOPER, level)) return;
 
@@ -422,10 +408,9 @@ void DevLog(const ch* pMsgFormat, ...) {
   va_end(args);
 }
 
-//-----------------------------------------------------------------------------
 // A couple of super-common dynamic spew messages, here for convenience
 // These looked at the "console" group, print if it's level 1 or higher
-//-----------------------------------------------------------------------------
+
 void ConColorMsg(i32 level, const Color& clr, const ch* pMsgFormat, ...) {
   if (!IsSpewActive(GROUP_CONSOLE, level)) return;
 
@@ -543,10 +528,9 @@ void ConDLog(const ch* pMsgFormat, ...) {
   va_end(args);
 }
 
-//-----------------------------------------------------------------------------
 // A couple of super-common dynamic spew messages, here for convenience
 // These looked at the "network" group, print if it's level 1 or higher
-//-----------------------------------------------------------------------------
+
 void NetMsg(i32 level, const ch* pMsgFormat, ...) {
   if (!IsSpewActive(GROUP_NETWORK, level)) return;
 
@@ -579,9 +563,8 @@ void NetLog(i32 level, const ch* pMsgFormat, ...) {
 
 #include "tier0/include/valve_on.h"
 
-//-----------------------------------------------------------------------------
 // Sets the priority level for a spew group
-//-----------------------------------------------------------------------------
+
 void SpewActivate(const ch* pGroupName, i32 level) {
   Assert(pGroupName);
 

@@ -307,112 +307,113 @@ SendPropVector(SENDINFO(m_vecHitPos), -1, SPROP_COORD),
 BEGIN_DATADESC(CNPC_Strider)
 
 #ifdef HL2_EPISODIC
-DEFINE_UTLVECTOR(m_hAttachedBusters, FIELD_EHANDLE),
+  DEFINE_UTLVECTOR(m_hAttachedBusters, FIELD_EHANDLE),
 #endif  // HL2_EPISODIC
 
-    DEFINE_EMBEDDED(m_EnemyUpdatedTimer), DEFINE_EMBEDDEDBYREF(m_pMinigun),
-    DEFINE_FIELD(m_miniGunAmmo, FIELD_INTEGER),
-    DEFINE_FIELD(m_miniGunDirectAmmo, FIELD_INTEGER),
-    DEFINE_FIELD(m_nextStompTime, FIELD_TIME),
-    DEFINE_FIELD(m_nextShootTime, FIELD_TIME),
-    DEFINE_FIELD(m_ragdollTime, FIELD_TIME),
-    DEFINE_FIELD(m_miniGunShootDuration, FIELD_FLOAT),
-    DEFINE_FIELD(m_aimYaw, FIELD_FLOAT), DEFINE_FIELD(m_aimPitch, FIELD_FLOAT),
-    DEFINE_FIELD(m_blastHit, FIELD_VECTOR),
-    DEFINE_FIELD(m_blastNormal, FIELD_VECTOR),
-    DEFINE_FIELD(m_vecHitPos, FIELD_POSITION_VECTOR),
-    DEFINE_AUTO_ARRAY(m_vecIKTarget, FIELD_POSITION_VECTOR),
+      DEFINE_EMBEDDED(m_EnemyUpdatedTimer), DEFINE_EMBEDDEDBYREF(m_pMinigun),
+      DEFINE_FIELD(m_miniGunAmmo, FIELD_INTEGER),
+      DEFINE_FIELD(m_miniGunDirectAmmo, FIELD_INTEGER),
+      DEFINE_FIELD(m_nextStompTime, FIELD_TIME),
+      DEFINE_FIELD(m_nextShootTime, FIELD_TIME),
+      DEFINE_FIELD(m_ragdollTime, FIELD_TIME),
+      DEFINE_FIELD(m_miniGunShootDuration, FIELD_FLOAT),
+      DEFINE_FIELD(m_aimYaw, FIELD_FLOAT),
+      DEFINE_FIELD(m_aimPitch, FIELD_FLOAT),
+      DEFINE_FIELD(m_blastHit, FIELD_VECTOR),
+      DEFINE_FIELD(m_blastNormal, FIELD_VECTOR),
+      DEFINE_FIELD(m_vecHitPos, FIELD_POSITION_VECTOR),
+      DEFINE_AUTO_ARRAY(m_vecIKTarget, FIELD_POSITION_VECTOR),
 
-    DEFINE_EMBEDDED(m_PlayerFreePass),
+      DEFINE_EMBEDDED(m_PlayerFreePass),
 
-    DEFINE_EMBEDDED(m_PostureAnimationTimer),
+      DEFINE_EMBEDDED(m_PostureAnimationTimer),
 
-    DEFINE_EMBEDDED(m_BoneFollowerManager),
+      DEFINE_EMBEDDED(m_BoneFollowerManager),
 
-    // m_iszStriderBusterName - recreated at load time
-    // m_iszMagnadeClassname - recreated at load time
-    // m_iszHunterClassname - recreated at load time
+      // m_iszStriderBusterName - recreated at load time
+      // m_iszMagnadeClassname - recreated at load time
+      // m_iszHunterClassname - recreated at load time
 
-    DEFINE_FIELD(m_hRagdoll, FIELD_EHANDLE),
-    DEFINE_FIELD(m_hCannonTarget, FIELD_EHANDLE),
-    DEFINE_EMBEDDED(m_AttemptCannonLOSTimer),
+      DEFINE_FIELD(m_hRagdoll, FIELD_EHANDLE),
+      DEFINE_FIELD(m_hCannonTarget, FIELD_EHANDLE),
+      DEFINE_EMBEDDED(m_AttemptCannonLOSTimer),
 
-    DEFINE_FIELD(m_flSpeedScale, FIELD_FLOAT),
-    DEFINE_FIELD(m_flTargetSpeedScale, FIELD_FLOAT),
+      DEFINE_FIELD(m_flSpeedScale, FIELD_FLOAT),
+      DEFINE_FIELD(m_flTargetSpeedScale, FIELD_FLOAT),
 
-    DEFINE_EMBEDDED(m_LowZCorrectionTimer),
-    DEFINE_FIELD(m_BodyTargetBone, FIELD_INTEGER),
+      DEFINE_EMBEDDED(m_LowZCorrectionTimer),
+      DEFINE_FIELD(m_BodyTargetBone, FIELD_INTEGER),
 
-    DEFINE_FIELD(m_iVisibleEnemies, FIELD_INTEGER),
-    DEFINE_FIELD(m_flTargetAcquiredTime, FIELD_FLOAT),
-    DEFINE_FIELD(m_bCrouchLocked, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bNoCrouchWalk, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bDontCrouch, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bNoMoveToLOS, FIELD_BOOLEAN),
-    DEFINE_KEYFIELD(m_bDisableBoneFollowers, FIELD_BOOLEAN, "disablephysics"),
+      DEFINE_FIELD(m_iVisibleEnemies, FIELD_INTEGER),
+      DEFINE_FIELD(m_flTargetAcquiredTime, FIELD_FLOAT),
+      DEFINE_FIELD(m_bCrouchLocked, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bNoCrouchWalk, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bDontCrouch, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bNoMoveToLOS, FIELD_BOOLEAN),
+      DEFINE_KEYFIELD(m_bDisableBoneFollowers, FIELD_BOOLEAN, "disablephysics"),
 
-    DEFINE_FIELD(m_idealHeight, FIELD_FLOAT),
-    DEFINE_FIELD(m_HeightVelocity, FIELD_FLOAT),
+      DEFINE_FIELD(m_idealHeight, FIELD_FLOAT),
+      DEFINE_FIELD(m_HeightVelocity, FIELD_FLOAT),
 
-    DEFINE_FIELD(m_prevYaw, FIELD_FLOAT), DEFINE_FIELD(m_doTurn, FIELD_FLOAT),
-    DEFINE_FIELD(m_doLeft, FIELD_FLOAT), DEFINE_FIELD(m_doRight, FIELD_FLOAT),
-    DEFINE_FIELD(m_flNextTurnAct, FIELD_TIME),
+      DEFINE_FIELD(m_prevYaw, FIELD_FLOAT), DEFINE_FIELD(m_doTurn, FIELD_FLOAT),
+      DEFINE_FIELD(m_doLeft, FIELD_FLOAT), DEFINE_FIELD(m_doRight, FIELD_FLOAT),
+      DEFINE_FIELD(m_flNextTurnAct, FIELD_TIME),
 
-    DEFINE_FIELD(m_strTrackName, FIELD_STRING),
-    DEFINE_FIELD(m_hFocus, FIELD_EHANDLE),
-    DEFINE_FIELD(m_hSmoke, FIELD_EHANDLE),
+      DEFINE_FIELD(m_strTrackName, FIELD_STRING),
+      DEFINE_FIELD(m_hFocus, FIELD_EHANDLE),
+      DEFINE_FIELD(m_hSmoke, FIELD_EHANDLE),
 
-    DEFINE_FIELD(m_flTimeLastAlertSound, FIELD_TIME),
-    DEFINE_FIELD(m_flTimeNextHuntSound, FIELD_TIME),
-    DEFINE_FIELD(m_flTimePlayerMissileDetected, FIELD_TIME),
-    DEFINE_FIELD(m_hPlayersMissile, FIELD_EHANDLE),
-    DEFINE_FIELD(m_bMinigunUseDirectFire, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_flTimeLastAlertSound, FIELD_TIME),
+      DEFINE_FIELD(m_flTimeNextHuntSound, FIELD_TIME),
+      DEFINE_FIELD(m_flTimePlayerMissileDetected, FIELD_TIME),
+      DEFINE_FIELD(m_hPlayersMissile, FIELD_EHANDLE),
+      DEFINE_FIELD(m_bMinigunUseDirectFire, FIELD_BOOLEAN),
 
-    DEFINE_FIELD(m_bUseAggressiveBehavior, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bUseAggressiveBehavior, FIELD_BOOLEAN),
 
-    DEFINE_FIELD(m_bFastCrouch, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bMinigunEnabled, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bExploding, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bFastCrouch, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bMinigunEnabled, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bExploding, FIELD_BOOLEAN),
 
-    // inputs
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "SetMinigunTime", InputSetMinigunTime),
-    DEFINE_INPUTFUNC(FIELD_STRING, "SetMinigunTarget", InputSetMinigunTarget),
-    DEFINE_INPUTFUNC(FIELD_STRING, "SetCannonTarget", InputSetCannonTarget),
-    DEFINE_INPUTFUNC(FIELD_STRING, "FlickRagdoll", InputFlickRagdoll),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Crouch", InputCrouch),
-    DEFINE_INPUTFUNC(FIELD_VOID, "CrouchInstantly", InputCrouchInstantly),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Stand", InputStand),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "SetHeight", InputSetHeight),
-    DEFINE_INPUTFUNC(FIELD_STRING, "SetTargetPath", InputSetTargetPath),
-    DEFINE_INPUTFUNC(FIELD_STRING, "ClearTargetPath", InputClearTargetPath),
-    DEFINE_INPUTFUNC(FIELD_VOID, "DisableCrouchWalk", InputDisableCrouchWalk),
-    DEFINE_INPUTFUNC(FIELD_VOID, "EnableCrouchWalk", InputEnableCrouchWalk),
-    DEFINE_INPUTFUNC(FIELD_VOID, "EnableAggressiveBehavior",
-                     InputEnableAggressiveBehavior),
-    DEFINE_INPUTFUNC(FIELD_VOID, "DisableAggressiveBehavior",
-                     InputDisableAggressiveBehavior),
-    DEFINE_INPUTFUNC(FIELD_VOID, "DisableMinigun", InputDisableMinigun),
-    DEFINE_INPUTFUNC(FIELD_VOID, "EnableMinigun", InputEnableMinigun),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "StopShootingMinigunForSeconds",
-                     InputStopShootingMinigunForSeconds),
-    DEFINE_INPUTFUNC(FIELD_VOID, "DisableCrouch", InputDisableCrouch),
-    DEFINE_INPUTFUNC(FIELD_VOID, "DisableMoveToLOS", InputDisableMoveToLOS),
-    DEFINE_INPUTFUNC(FIELD_STRING, "DisableCollisionWith",
-                     InputDisableCollisionWith),
-    DEFINE_INPUTFUNC(FIELD_STRING, "EnableCollisionWith",
-                     InputEnableCollisionWith),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Explode", InputExplode),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "ScaleGroundSpeed", InputScaleGroundSpeed),
+      // inputs
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "SetMinigunTime", InputSetMinigunTime),
+      DEFINE_INPUTFUNC(FIELD_STRING, "SetMinigunTarget", InputSetMinigunTarget),
+      DEFINE_INPUTFUNC(FIELD_STRING, "SetCannonTarget", InputSetCannonTarget),
+      DEFINE_INPUTFUNC(FIELD_STRING, "FlickRagdoll", InputFlickRagdoll),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Crouch", InputCrouch),
+      DEFINE_INPUTFUNC(FIELD_VOID, "CrouchInstantly", InputCrouchInstantly),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Stand", InputStand),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "SetHeight", InputSetHeight),
+      DEFINE_INPUTFUNC(FIELD_STRING, "SetTargetPath", InputSetTargetPath),
+      DEFINE_INPUTFUNC(FIELD_STRING, "ClearTargetPath", InputClearTargetPath),
+      DEFINE_INPUTFUNC(FIELD_VOID, "DisableCrouchWalk", InputDisableCrouchWalk),
+      DEFINE_INPUTFUNC(FIELD_VOID, "EnableCrouchWalk", InputEnableCrouchWalk),
+      DEFINE_INPUTFUNC(FIELD_VOID, "EnableAggressiveBehavior",
+                       InputEnableAggressiveBehavior),
+      DEFINE_INPUTFUNC(FIELD_VOID, "DisableAggressiveBehavior",
+                       InputDisableAggressiveBehavior),
+      DEFINE_INPUTFUNC(FIELD_VOID, "DisableMinigun", InputDisableMinigun),
+      DEFINE_INPUTFUNC(FIELD_VOID, "EnableMinigun", InputEnableMinigun),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "StopShootingMinigunForSeconds",
+                       InputStopShootingMinigunForSeconds),
+      DEFINE_INPUTFUNC(FIELD_VOID, "DisableCrouch", InputDisableCrouch),
+      DEFINE_INPUTFUNC(FIELD_VOID, "DisableMoveToLOS", InputDisableMoveToLOS),
+      DEFINE_INPUTFUNC(FIELD_STRING, "DisableCollisionWith",
+                       InputDisableCollisionWith),
+      DEFINE_INPUTFUNC(FIELD_STRING, "EnableCollisionWith",
+                       InputEnableCollisionWith),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Explode", InputExplode),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "ScaleGroundSpeed", InputScaleGroundSpeed),
 
-    // Function Pointers
-    //	DEFINE_FUNCTION( JumpTouch ),
-    DEFINE_THINKFUNC(CarriedThink), DEFINE_THINKFUNC(CannonHitThink),
+      // Function Pointers
+      //	DEFINE_FUNCTION( JumpTouch ),
+      DEFINE_THINKFUNC(CarriedThink), DEFINE_THINKFUNC(CannonHitThink),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //---------------------------------------------------------
+//---------------------------------------------------------
 
-    float CNPC_Strider::gm_strideLength;
+float CNPC_Strider::gm_strideLength;
 
 int CNPC_Strider::gm_BodyHeightPoseParam;
 int CNPC_Strider::gm_YawControl;
@@ -1091,7 +1092,7 @@ void CNPC_Strider::GatherConditions() {
                                  false))) {
 #if 0
 					if ( !HasCondition( COND_STRIDER_SHOULD_CROUCH ) && !HasCondition( COND_STRIDER_SHOULD_CROUCH ) )
-						SetIdealHeight( min( GetMaxHeight(), GetHeight() + 75.0 * 0.1 ) ); // default to rising up
+						SetIdealHeight( std::min( GetMaxHeight(), GetHeight() + 75.0 * 0.1 ) ); // default to rising up
 #endif
           GatherHeightConditions(GetAdjustedOrigin(), GetEnemy());
         }
@@ -3602,8 +3603,8 @@ bool CNPC_Strider::AimCannonAt(CBaseEntity *pEntity, float flInterval) {
   float yawSpeed = fabsf(aimSpeed * flInterval * localEnemyAngles.y);
   float pitchSpeed = fabsf(aimSpeed * flInterval * localEnemyAngles.x);
 
-  yawSpeed = max(yawSpeed, 5);
-  pitchSpeed = max(pitchSpeed, 5);
+  yawSpeed = std::max(yawSpeed, 5.0f);
+  pitchSpeed = std::max(pitchSpeed, 5.0f);
 
   m_aimYaw = UTIL_Approach(targetYaw, m_aimYaw, yawSpeed);
   m_aimPitch = UTIL_Approach(targetPitch, m_aimPitch, pitchSpeed);
@@ -4093,7 +4094,7 @@ void CNPC_Strider::CNavigator::MoveCalcBaseGoal(AILocalMoveGoal_t *pMoveGoal) {
   float heightAdj = unitDir.z * CNPC_Strider::gm_strideLength;
   pMoveGoal->flags |= (AILMG_NO_STEER | AILMG_NO_AVOIDANCE_PATHS);
   if (heightAdj < -1) {
-    heightAdj = clamp(heightAdj, -192, 0);
+    heightAdj = std::clamp(heightAdj, -192.0f, 0.0f);
     pMoveGoal->target.z += heightAdj;
     pMoveGoal->dir = unitDir * CNPC_Strider::gm_strideLength * 0.1;
     pMoveGoal->dir.z += heightAdj;
@@ -4347,36 +4348,36 @@ void CNPC_Strider::StriderBusterDetached(CBaseEntity *pAttached) {
 
 BEGIN_DATADESC_NO_BASE(CStriderMinigun)
 
-DEFINE_FIELD(m_enable, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_minigunState, FIELD_INTEGER),
-    DEFINE_FIELD(m_nextBulletTime, FIELD_TIME),
-    DEFINE_FIELD(m_burstTime, FIELD_TIME),
-    DEFINE_FIELD(m_nextTwitchTime, FIELD_TIME),
-    DEFINE_FIELD(m_randomState, FIELD_INTEGER),
-    DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
-    DEFINE_FIELD(m_bWarnedAI, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_shootDuration, FIELD_TIME),
-    DEFINE_FIELD(m_vecAnchor, FIELD_VECTOR),
-    DEFINE_FIELD(m_bOverrideEnemy, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_vecLastTargetPos, FIELD_VECTOR),
-    DEFINE_FIELD(m_iOnTargetShots, FIELD_INTEGER),
+  DEFINE_FIELD(m_enable, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_minigunState, FIELD_INTEGER),
+      DEFINE_FIELD(m_nextBulletTime, FIELD_TIME),
+      DEFINE_FIELD(m_burstTime, FIELD_TIME),
+      DEFINE_FIELD(m_nextTwitchTime, FIELD_TIME),
+      DEFINE_FIELD(m_randomState, FIELD_INTEGER),
+      DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
+      DEFINE_FIELD(m_bWarnedAI, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_shootDuration, FIELD_TIME),
+      DEFINE_FIELD(m_vecAnchor, FIELD_VECTOR),
+      DEFINE_FIELD(m_bOverrideEnemy, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_vecLastTargetPos, FIELD_VECTOR),
+      DEFINE_FIELD(m_iOnTargetShots, FIELD_INTEGER),
 
-    // Silence, Classcheck!
-    // DEFINE_FIELD( m_yaw, StriderMinigunAnimController_t ),
-    // DEFINE_FIELD( m_pitch, StriderMinigunAnimController_t ),
+      // Silence, Classcheck!
+      // DEFINE_FIELD( m_yaw, StriderMinigunAnimController_t ),
+      // DEFINE_FIELD( m_pitch, StriderMinigunAnimController_t ),
 
-    DEFINE_FIELD(m_yaw.current, FIELD_FLOAT),
-    DEFINE_FIELD(m_yaw.target, FIELD_FLOAT),
-    DEFINE_FIELD(m_yaw.rate, FIELD_FLOAT),
-    DEFINE_FIELD(m_pitch.current, FIELD_FLOAT),
-    DEFINE_FIELD(m_pitch.target, FIELD_FLOAT),
-    DEFINE_FIELD(m_pitch.rate, FIELD_FLOAT),
+      DEFINE_FIELD(m_yaw.current, FIELD_FLOAT),
+      DEFINE_FIELD(m_yaw.target, FIELD_FLOAT),
+      DEFINE_FIELD(m_yaw.rate, FIELD_FLOAT),
+      DEFINE_FIELD(m_pitch.current, FIELD_FLOAT),
+      DEFINE_FIELD(m_pitch.target, FIELD_FLOAT),
+      DEFINE_FIELD(m_pitch.rate, FIELD_FLOAT),
 
-    END_DATADESC()
+END_DATADESC()
 
-    //---------------------------------------------------------
-    //---------------------------------------------------------
-    void CStriderMinigun::Init() {
+//---------------------------------------------------------
+//---------------------------------------------------------
+void CStriderMinigun::Init() {
   m_enable = true;
   m_nextTwitchTime = gpGlobals->curtime;
   m_randomState = 0;
@@ -4451,10 +4452,10 @@ void CStriderMinigun::AimAtPoint(IStriderMinigunHost *pHost,
   m_pitch.target += 0.5 * pdiff;
   m_yaw.target -= 0.5 * ydiff;
 
-  m_pitch.target = max(MINIGUN_MIN_PITCH, m_pitch.target);
-  m_pitch.target = min(MINIGUN_MAX_PITCH, m_pitch.target);
-  m_yaw.target = max(MINIGUN_MIN_YAW, m_yaw.target);
-  m_yaw.target = min(MINIGUN_MAX_YAW, m_yaw.target);
+  m_pitch.target = std::max(MINIGUN_MIN_PITCH, m_pitch.target);
+  m_pitch.target = std::min(MINIGUN_MAX_PITCH, m_pitch.target);
+  m_yaw.target = std::max(MINIGUN_MIN_YAW, m_yaw.target);
+  m_yaw.target = std::min(MINIGUN_MAX_YAW, m_yaw.target);
 }
 
 //---------------------------------------------------------
@@ -4826,7 +4827,7 @@ void CStriderMinigun::Think(IStriderMinigunHost *pHost, float dt) {
           (flRemainingShootTime - pHost->GetMinigunOnTargetTime()) /
           m_shootDuration;
 
-      flFactor = max(0.0f, flFactor);
+      flFactor = std::max(0.0f, flFactor);
 
       Vector vecTarget = pTargetEnt->BodyTarget(
           assert_cast<CNPC_Strider *>(pHost->GetEntity())->GetAdjustedOrigin());
@@ -4850,7 +4851,7 @@ void CStriderMinigun::Think(IStriderMinigunHost *pHost, float dt) {
 
           CSoundEnt::InsertSound(SOUND_DANGER | SOUND_CONTEXT_REACT_TO_SOURCE,
                                  pTargetEnt->EarPosition() + Vector(0, 0, 1),
-                                 120, max(1.0, flRemainingShootTime),
+                                 120, std::max(1.0f, flRemainingShootTime),
                                  pHost->GetEntity());
         }
       }
@@ -4918,52 +4919,54 @@ void CSparkTrail::SparkThink() {
 }
 
 BEGIN_DATADESC(CSparkTrail)
-DEFINE_THINKFUNC(SparkThink), END_DATADESC()
+  DEFINE_THINKFUNC(SparkThink),
+END_DATADESC()
 
-    //-----------------------------------------------------------------------------
-    //
-    // Schedules
-    //
-    //-----------------------------------------------------------------------------
-    AI_BEGIN_CUSTOM_NPC(npc_strider, CNPC_Strider)
+//-----------------------------------------------------------------------------
+//
+// Schedules
+//
+//-----------------------------------------------------------------------------
+AI_BEGIN_CUSTOM_NPC(npc_strider, CNPC_Strider)
 
-        DECLARE_TASK(TASK_STRIDER_AIM) DECLARE_TASK(TASK_STRIDER_DODGE) DECLARE_TASK(
-            TASK_STRIDER_STOMP) DECLARE_TASK(TASK_STRIDER_BREAKDOWN)
-            DECLARE_TASK(TASK_STRIDER_START_MOVING) DECLARE_TASK(
-                TASK_STRIDER_REFRESH_HUNT_PATH) DECLARE_TASK(TASK_STRIDER_GET_PATH_TO_CANNON_TARGET)
-                DECLARE_TASK(TASK_STRIDER_FACE_CANNON_TARGET) DECLARE_TASK(
-                    TASK_STRIDER_SET_HEIGHT) DECLARE_TASK(TASK_STRIDER_GET_PATH_TO_CANNON_LOS)
-                    DECLARE_TASK(TASK_STRIDER_FIRE_CANNON) DECLARE_TASK(
-                        TASK_STRIDER_SET_CANNON_HEIGHT) DECLARE_TASK(TASK_STRIDER_FALL_TO_GROUND)
+DECLARE_TASK(TASK_STRIDER_AIM)
+DECLARE_TASK(TASK_STRIDER_DODGE)
+DECLARE_TASK(TASK_STRIDER_STOMP)
+DECLARE_TASK(TASK_STRIDER_BREAKDOWN) DECLARE_TASK(TASK_STRIDER_START_MOVING) DECLARE_TASK(
+    TASK_STRIDER_REFRESH_HUNT_PATH) DECLARE_TASK(TASK_STRIDER_GET_PATH_TO_CANNON_TARGET)
+    DECLARE_TASK(TASK_STRIDER_FACE_CANNON_TARGET) DECLARE_TASK(
+        TASK_STRIDER_SET_HEIGHT) DECLARE_TASK(TASK_STRIDER_GET_PATH_TO_CANNON_LOS)
+        DECLARE_TASK(TASK_STRIDER_FIRE_CANNON) DECLARE_TASK(
+            TASK_STRIDER_SET_CANNON_HEIGHT) DECLARE_TASK(TASK_STRIDER_FALL_TO_GROUND)
 
-                        DECLARE_ACTIVITY(ACT_STRIDER_LOOKL) DECLARE_ACTIVITY(
-                            ACT_STRIDER_LOOKR) DECLARE_ACTIVITY(ACT_STRIDER_DEPLOYRA1)
-                            DECLARE_ACTIVITY(ACT_STRIDER_AIMRA1) DECLARE_ACTIVITY(
-                                ACT_STRIDER_FINISHRA1) DECLARE_ACTIVITY(ACT_STRIDER_DODGER)
-                                DECLARE_ACTIVITY(ACT_STRIDER_DODGEL) DECLARE_ACTIVITY(
-                                    ACT_STRIDER_STOMPL) DECLARE_ACTIVITY(ACT_STRIDER_STOMPR)
-                                    DECLARE_ACTIVITY(ACT_STRIDER_FLICKL) DECLARE_ACTIVITY(
-                                        ACT_STRIDER_FLICKR) DECLARE_ACTIVITY(ACT_STRIDER_SLEEP)
-                                        DECLARE_ACTIVITY(ACT_STRIDER_CARRIED) DECLARE_ACTIVITY(
-                                            ACT_STRIDER_DEPLOY) DECLARE_ACTIVITY(ACT_STRIDER_GESTURE_DEATH)
+            DECLARE_ACTIVITY(ACT_STRIDER_LOOKL) DECLARE_ACTIVITY(
+                ACT_STRIDER_LOOKR) DECLARE_ACTIVITY(ACT_STRIDER_DEPLOYRA1)
+                DECLARE_ACTIVITY(ACT_STRIDER_AIMRA1) DECLARE_ACTIVITY(
+                    ACT_STRIDER_FINISHRA1) DECLARE_ACTIVITY(ACT_STRIDER_DODGER)
+                    DECLARE_ACTIVITY(ACT_STRIDER_DODGEL) DECLARE_ACTIVITY(
+                        ACT_STRIDER_STOMPL) DECLARE_ACTIVITY(ACT_STRIDER_STOMPR)
+                        DECLARE_ACTIVITY(ACT_STRIDER_FLICKL) DECLARE_ACTIVITY(
+                            ACT_STRIDER_FLICKR) DECLARE_ACTIVITY(ACT_STRIDER_SLEEP)
+                            DECLARE_ACTIVITY(ACT_STRIDER_CARRIED) DECLARE_ACTIVITY(
+                                ACT_STRIDER_DEPLOY) DECLARE_ACTIVITY(ACT_STRIDER_GESTURE_DEATH)
 
-                                            DECLARE_CONDITION(COND_STRIDER_DO_FLICK) DECLARE_CONDITION(
-                                                COND_TRACK_PATH_GO) DECLARE_CONDITION(COND_STRIDER_SHOULD_CROUCH)
+                                DECLARE_CONDITION(COND_STRIDER_DO_FLICK) DECLARE_CONDITION(
+                                    COND_TRACK_PATH_GO)
+                                    DECLARE_CONDITION(COND_STRIDER_SHOULD_CROUCH) DECLARE_CONDITION(
+                                        COND_STRIDER_SHOULD_STAND)
+                                        DECLARE_CONDITION(
+                                            COND_STRIDER_MINIGUN_SHOOTING)
+                                            DECLARE_CONDITION(
+                                                COND_STRIDER_MINIGUN_NOT_SHOOTING)
                                                 DECLARE_CONDITION(
-                                                    COND_STRIDER_SHOULD_STAND)
+                                                    COND_STRIDER_HAS_CANNON_TARGET)
                                                     DECLARE_CONDITION(
-                                                        COND_STRIDER_MINIGUN_SHOOTING)
+                                                        COND_STRIDER_ENEMY_UPDATED)
                                                         DECLARE_CONDITION(
-                                                            COND_STRIDER_MINIGUN_NOT_SHOOTING)
-                                                            DECLARE_CONDITION(
-                                                                COND_STRIDER_HAS_CANNON_TARGET)
-                                                                DECLARE_CONDITION(
-                                                                    COND_STRIDER_ENEMY_UPDATED)
-                                                                    DECLARE_CONDITION(
-                                                                        COND_STRIDER_HAS_LOS_Z)
+                                                            COND_STRIDER_HAS_LOS_Z)
 
-                                                                        DECLARE_INTERACTION(
-                                                                            g_interactionPlayerLaunchedRPG)
+                                                            DECLARE_INTERACTION(
+                                                                g_interactionPlayerLaunchedRPG)
 
     //=========================================================
     // Hunt (Basic logic for strider thinking)

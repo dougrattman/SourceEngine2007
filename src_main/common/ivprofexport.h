@@ -8,7 +8,7 @@
 
 abstract_class IVProfExport {
  public:
-  enum { MAX_BUDGETGROUP_TIMES = 512 };
+  enum : int { MAX_BUDGETGROUP_TIMES = 512 };
 
   class CExportedBudgetGroupInfo {
    public:

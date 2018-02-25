@@ -383,7 +383,7 @@ BuildingHudAlert_t C_ObjectSentrygun::GetBuildingAlertLevel( void )
 		alertLevel = BUILDING_HUD_ALERT_LOW_AMMO;
 	}
 
-	return max( baseAlertLevel, alertLevel );
+	return std::max( baseAlertLevel, alertLevel );
 }
 
 //-----------------------------------------------------------------------------

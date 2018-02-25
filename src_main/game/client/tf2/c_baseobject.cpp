@@ -801,8 +801,8 @@ void C_BaseObject::DrawDamageEffects( void )
 	{
 		pParticle->m_flLifetime	= 0.0f;
 		pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
-		pParticle->m_uchStartSize = max( 1, 20 * flDamaged );
-		pParticle->m_uchEndSize = max( 10, 80 * flDamaged );
+		pParticle->m_uchStartSize = std::max( 1, 20 * flDamaged );
+		pParticle->m_uchEndSize = std::max( 10, 80 * flDamaged );
 		dir[0] = vecSmokeDir[0] + random->RandomFloat( -0.2f, 0.2f );
 		dir[1] = vecSmokeDir[1] + random->RandomFloat( -0.2f, 0.2f );
 		dir[2] = vecSmokeDir[2] + random->RandomFloat( -0.2f, 0.2f );
@@ -830,7 +830,7 @@ void C_BaseObject::DrawDamageEffects( void )
 
 			pParticle->m_flLifetime	= 0.0f;
 			pParticle->m_flDieTime	= 1.0;
-			pParticle->m_uchStartSize = max( 5, 30 * (flDamaged - 0.25) );
+			pParticle->m_uchStartSize = std::max( 5, 30 * (flDamaged - 0.25) );
 			pParticle->m_uchEndSize = pParticle->m_uchStartSize;
 			pParticle->m_vecVelocity = Vector(0,0,1);
 			pParticle->m_uchStartAlpha = 255;

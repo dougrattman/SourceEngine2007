@@ -6,7 +6,7 @@
 //=============================================================================//
 #include "stdafx.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "classcheck_util.h"
 #include "icodeprocessor.h"
 #include "tier1/strtools.h"

@@ -310,7 +310,7 @@ void CMortarMinimapPanel::Paint()
 			float flZeroT = 1.0f / 5;
 			float flZero = flLength * flZeroT;
 			
-			float flFirePower = max( flPower, flFiringPower );
+			float flFirePower = std::max( flPower, flFiringPower );
 
 			float flStartFatness = 2;
 			float flEndFatness = flStartFatness;
@@ -321,7 +321,7 @@ void CMortarMinimapPanel::Paint()
 
 			Vector2D vInaccuracyDir = vInaccuracy2D - vEnd2D;
 			flEndFatness *= vInaccuracyDir.Length() * flScalePower * 0.4;
-			flEndFatness = max( fabs( flEndFatness ), flStartFatness );
+			flEndFatness = std::max( fabs( flEndFatness ), flStartFatness );
 			
 			Vector2D vPerp( vDir.y, -vDir.x );
 			Vector2DNormalize( vPerp );
@@ -751,7 +751,7 @@ void CVehicleMortarControlPanel::OnTickGunnerPanel()
 		break;
 
 	case MORTAR_CHARGING_POWER:
-		pMortar->m_flPower = min( pMortar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->frametime), 1 );
+		pMortar->m_flPower = std::min( pMortar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->frametime), 1 );
 		pMortar->m_flFiringPower = 0;
 		pMortar->m_flFiringAccuracy = 0;
 		if ( pMortar->m_flPower >= 1.0 )
@@ -771,7 +771,7 @@ void CVehicleMortarControlPanel::OnTickGunnerPanel()
 			flAccuracySpeed += (pMortar->m_flFiringPower * flAdjustedPower);
 		}
 
-		pMortar->m_flPower = max( pMortar->m_flPower - ( flAccuracySpeed * gpGlobals->frametime), -0.25f);
+		pMortar->m_flPower = std::max( pMortar->m_flPower - ( flAccuracySpeed * gpGlobals->frametime), -0.25f);
 		if ( pMortar->m_flPower <= -0.25 )
 		{
 			// Hit Min, fire mortar

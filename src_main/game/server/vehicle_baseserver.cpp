@@ -1669,7 +1669,7 @@ static int SoundStateIndexFromName(const char *pName) {
 }
 
 static const char *SoundStateNameFromIndex(int index) {
-  index = clamp(index, 0, SS_NUM_STATES - 1);
+  index = std::clamp(index, 0, SS_NUM_STATES - 1);
   return pSoundStateNames[index];
 }
 
@@ -2138,7 +2138,7 @@ void CBaseServerVehicle::SoundUpdate(vbs_sound_update_t &params) {
               m_vehicleSounds.pGears[m_iSoundGear].flSpeedApproachFactor);
     }
   }
-  m_flSpeedPercentage = clamp(flCurrentSpeed, 0.0f, 1.0f);
+  m_flSpeedPercentage = std::clamp(flCurrentSpeed, 0.0f, 1.0f);
 
   if (g_debug_vehiclesound.GetInt() > 1) {
     Msg("Sound Speed: %.3f\n", m_flSpeedPercentage);

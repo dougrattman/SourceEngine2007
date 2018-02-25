@@ -332,7 +332,7 @@ vgui::Panel* CMortarControlPanel::TickCurrentPanel()
 		break;
 
 	case MORTAR_CHARGING_POWER:
-		pMortar->m_flPower = min( pMortar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->frametime), 1 );
+		pMortar->m_flPower = std::min( pMortar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->frametime), 1 );
 		pMortar->m_flFiringPower = 0;
 		pMortar->m_flFiringAccuracy = 0;
 		if ( pMortar->m_flPower >= 1.0 )
@@ -352,7 +352,7 @@ vgui::Panel* CMortarControlPanel::TickCurrentPanel()
 			flAccuracySpeed += (pMortar->m_flFiringPower * flAdjustedPower);
 		}
 
-		pMortar->m_flPower = max( pMortar->m_flPower - ( flAccuracySpeed * gpGlobals->frametime), -0.25f);
+		pMortar->m_flPower = std::max( pMortar->m_flPower - ( flAccuracySpeed * gpGlobals->frametime), -0.25f);
 		if ( pMortar->m_flPower <= -0.25 )
 		{
 			// Hit Min, fire mortar

@@ -3,19 +3,27 @@
 #ifndef IGAMEUIFUNCS_H
 #define IGAMEUIFUNCS_H
 
+#include <tuple>
+
+#include "base/include/base_types.h"
+#include "modes.h"
+#include "tier1/interface.h"
 #include "vgui/keycode.h"
 
 abstract_class IGameUIFuncs {
  public:
-  virtual bool IsKeyDown(const char *keyname, bool &isdown) = 0;
-  virtual const char *GetBindingForButtonCode(ButtonCode_t code) = 0;
-  virtual ButtonCode_t GetButtonCodeForBind(const char *pBind) = 0;
-  virtual void GetVideoModes(struct vmode_s * *liststart, int *count) = 0;
-  virtual void SetFriendsID(uint32_t friendsID, const char *friendsName) = 0;
-  virtual void GetDesktopResolution(int &width, int &height) = 0;
-  virtual bool IsConnectedToVACSecureServer() = 0;
+  virtual bool IsKeyDown(const ch *key, bool &is_down) const = 0;
+  virtual const ch *GetBindingForButtonCode(ButtonCode_t code) const = 0;
+  virtual ButtonCode_t GetButtonCodeForBind(const ch *binding_name) const = 0;
+
+  // [modes array, size].
+  virtual std::tuple<vmode_t *, usize> GetVideoModes() const = 0;
+  virtual void SetFriendsID(u32 friends_id, const ch *friends_name) = 0;
+  // [width, height].
+  virtual std::tuple<i32, i32> GetDesktopResolution() const = 0;
+  virtual bool IsConnectedToVACSecureServer() const = 0;
 };
 
-#define VENGINE_GAMEUIFUNCS_VERSION "VENGINE_GAMEUIFUNCS_VERSION005"
+#define VENGINE_GAMEUIFUNCS_VERSION "VENGINE_GAMEUIFUNCS_VERSION006"
 
 #endif  // IGAMEUIFUNCS_H

@@ -342,7 +342,7 @@ bool RagdollCreate(ragdoll_t &ragdoll, const ragdollparams_t &params,
   for (i = 0; i < ragdoll.listCount; i++) {
     totalMass += ragdoll.list[i].pObject->GetMass();
   }
-  totalMass = max(totalMass, 1);
+  totalMass = std::max(totalMass, 1.0f);
 
   // apply force to the model
   Vector nudgeForce = params.forceVector;

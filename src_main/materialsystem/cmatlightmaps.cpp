@@ -664,14 +664,14 @@ Vector4D ConvertLightmapColorToRGBScale(const float *lightmapColor) {
   }
 
   fScale = ceil(fScale * (255.0f / 16.0f)) * (16.0f / 255.0f);
-  fScale = min(fScale, 16.0f);
+  fScale = std::min(fScale, 16.0f);
 
   float fInvScale = 1.0f / fScale;
 
   for (int i = 0; i != 3; ++i) {
     result[i] = lightmapColor[i] * fInvScale;
     result[i] = ceil(result[i] * 255.0f) * (1.0f / 255.0f);
-    result[i] = min(result[i], 1.0f);
+    result[i] = std::min(result[i], 1.0f);
   }
 
   fScale /= 16.0f;

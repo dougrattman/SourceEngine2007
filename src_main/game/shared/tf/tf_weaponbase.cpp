@@ -390,7 +390,7 @@ bool CTFWeaponBase::Deploy( void )
 		// Don't override primary attacks that are already further out than this. This prevents
 		// people exploiting weapon switches to allow weapons to fire faster.
 		float flDeployTime = 0.67;
-		m_flNextPrimaryAttack = max( flOriginalPrimaryAttack, gpGlobals->curtime + flDeployTime );
+		m_flNextPrimaryAttack = std::max( flOriginalPrimaryAttack, gpGlobals->curtime + flDeployTime );
 
 		CTFPlayer *pPlayer = ToTFPlayer( GetOwner() );
 		if (!pPlayer)
@@ -491,7 +491,7 @@ bool CTFWeaponBase::CalcIsAttackCriticalHelper()
 		m_flLastCritCheckTime = gpGlobals->curtime;
 
 		// get the total crit chance (ratio of total shots fired we want to be crits)
-		float flTotalCritChance = clamp( TF_DAMAGE_CRIT_CHANCE_RAPID * flPlayerCritMult, 0.01f, 0.99f );
+		float flTotalCritChance = std::clamp( TF_DAMAGE_CRIT_CHANCE_RAPID * flPlayerCritMult, 0.01f, 0.99f );
 		// get the fixed amount of time that we start firing crit shots for	
 		float flCritDuration = TF_DAMAGE_CRIT_DURATION_RAPID;
 		// calculate the amount of time, on average, that we want to NOT fire crit shots for in order to achive the total crit chance we want
@@ -644,7 +644,7 @@ bool CTFWeaponBase::ReloadSingly( void )
 			// If we have ammo, remove ammo and add it to clip
 			if ( pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 			{
-				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
+				m_iClip1 = std::min( ( m_iClip1 + 1 ), GetMaxClip1() );
 				pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
 			}
 
@@ -690,7 +690,7 @@ void CTFWeaponBase::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCh
 		{
 			if ( pOperator->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 			{
-				m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
+				m_iClip1 = std::min( ( m_iClip1 + 1 ), GetMaxClip1() );
 				pOperator->RemoveAmmo( 1, m_iPrimaryAmmoType );
 			}
 
@@ -718,7 +718,7 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 	if ( UsesClipsForAmmo1() )
 	{
 		// need to reload primary clip?
-		int primary	= min( iClipSize1 - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );
+		int primary	= std::min( iClipSize1 - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );
 		if ( primary != 0 )
 		{
 			bReloadPrimary = true;
@@ -728,7 +728,7 @@ bool CTFWeaponBase::DefaultReload( int iClipSize1, int iClipSize2, int iActivity
 	if ( UsesClipsForAmmo2() )
 	{
 		// need to reload secondary clip?
-		int secondary = min( iClipSize2 - m_iClip2, pPlayer->GetAmmoCount( m_iSecondaryAmmoType ) );
+		int secondary = std::min( iClipSize2 - m_iClip2, pPlayer->GetAmmoCount( m_iSecondaryAmmoType ) );
 		if ( secondary != 0 )
 		{
 			bReloadSecondary = true;
@@ -1883,11 +1883,11 @@ float CalcViewModelBobHelper( CBasePlayer *player, BobState_t *pBobState )
 
 	//Find the speed of the player
 	float speed = player->GetLocalVelocity().Length2D();
-	float flmaxSpeedDelta = max( 0, (gpGlobals->curtime - pBobState->m_flLastBobTime ) * 320.0f );
+	float flmaxSpeedDelta = std::max( 0, (gpGlobals->curtime - pBobState->m_flLastBobTime ) * 320.0f );
 
 	// don't allow too big speed changes
-	speed = clamp( speed, pBobState->m_flLastSpeed-flmaxSpeedDelta, pBobState->m_flLastSpeed+flmaxSpeedDelta );
-	speed = clamp( speed, -320, 320 );
+	speed = std::clamp( speed, pBobState->m_flLastSpeed-flmaxSpeedDelta, pBobState->m_flLastSpeed+flmaxSpeedDelta );
+	speed = std::clamp( speed, -320, 320 );
 
 	pBobState->m_flLastSpeed = speed;
 
@@ -1915,7 +1915,7 @@ float CalcViewModelBobHelper( CBasePlayer *player, BobState_t *pBobState )
 	pBobState->m_flVerticalBob = speed*0.005f;
 	pBobState->m_flVerticalBob = pBobState->m_flVerticalBob*0.3 + pBobState->m_flVerticalBob*0.7*sin(cycle);
 
-	pBobState->m_flVerticalBob = clamp( pBobState->m_flVerticalBob, -7.0f, 4.0f );
+	pBobState->m_flVerticalBob = std::clamp( pBobState->m_flVerticalBob, -7.0f, 4.0f );
 
 	//Calculate the lateral bob
 	cycle = pBobState->m_flBobTime - (int)(pBobState->m_flBobTime/cl_bobcycle.GetFloat()*2)*cl_bobcycle.GetFloat()*2;
@@ -1932,7 +1932,7 @@ float CalcViewModelBobHelper( CBasePlayer *player, BobState_t *pBobState )
 
 	pBobState->m_flLateralBob = speed*0.005f;
 	pBobState->m_flLateralBob = pBobState->m_flLateralBob*0.3 + pBobState->m_flLateralBob*0.7*sin(cycle);
-	pBobState->m_flLateralBob = clamp( pBobState->m_flLateralBob, -7.0f, 4.0f );
+	pBobState->m_flLateralBob = std::clamp( pBobState->m_flLateralBob, -7.0f, 4.0f );
 
 	//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
 	return 0.0f;
@@ -2091,7 +2091,7 @@ bool CTFWeaponBase::OnFireEvent( C_BaseViewModel *pViewModel, const Vector& orig
 
 		if ( pPlayer && pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) > 0 && !m_bReloadedThroughAnimEvent )
 		{
-			m_iClip1 = min( ( m_iClip1 + 1 ), GetMaxClip1() );
+			m_iClip1 = std::min( ( m_iClip1 + 1 ), GetMaxClip1() );
 			pPlayer->RemoveAmmo( 1, m_iPrimaryAmmoType );
 		}
 

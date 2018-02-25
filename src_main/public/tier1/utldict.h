@@ -19,9 +19,9 @@ enum EDictCompareType {
                                // character..
 };
 
-//-----------------------------------------------------------------------------
+
 // A dictionary mapping from symbol to structure
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 class CUtlDict {
  public:
@@ -80,9 +80,9 @@ class CUtlDict {
   DictElementMap_t m_Elements;
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 CUtlDict<T, I>::CUtlDict(int compareType, int growSize, int initSize)
     : m_Elements(growSize, initSize) {
@@ -105,9 +105,9 @@ inline void CUtlDict<T, I>::EnsureCapacity(int num) {
   return m_Elements.EnsureCapacity(num);
 }
 
-//-----------------------------------------------------------------------------
+
 // gets particular elements
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline T &CUtlDict<T, I>::Element(I i) {
   return m_Elements[i];
@@ -118,9 +118,9 @@ inline const T &CUtlDict<T, I>::Element(I i) const {
   return m_Elements[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // gets element names
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline char *CUtlDict<T, I>::GetElementName(I i) {
   return (char *)m_Elements.Key(i);
@@ -151,42 +151,42 @@ inline void CUtlDict<T, I>::SetElementName(I i, char const *pName) {
   m_Elements.Reinsert(strdup(pName), i);
 }
 
-//-----------------------------------------------------------------------------
+
 // Num elements
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline unsigned int CUtlDict<T, I>::Count() const {
   return m_Elements.Count();
 }
 
-//-----------------------------------------------------------------------------
+
 // Checks if a node is valid and in the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline bool CUtlDict<T, I>::IsValidIndex(I i) const {
   return m_Elements.IsValidIndex(i);
 }
 
-//-----------------------------------------------------------------------------
+
 // Invalid index
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline I CUtlDict<T, I>::InvalidIndex() {
   return DictElementMap_t::InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
+
 // Delete a node from the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlDict<T, I>::RemoveAt(I elem) {
   free((void *)m_Elements.Key(elem));
   m_Elements.RemoveAt(elem);
 }
 
-//-----------------------------------------------------------------------------
+
 // remove a node in the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlDict<T, I>::Remove(const char *search) {
   I node = Find(search);
@@ -195,9 +195,9 @@ void CUtlDict<T, I>::Remove(const char *search) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Removes all nodes from the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlDict<T, I>::RemoveAll() {
   typename DictElementMap_t::IndexType_t index = m_Elements.FirstInorder();
@@ -227,9 +227,9 @@ void CUtlDict<T, I>::PurgeAndDeleteElements() {
   m_Elements.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
+
 // inserts a node into the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 I CUtlDict<T, I>::Insert(const char *pName, const T &element) {
   MEM_ALLOC_CREDIT_CLASS();
@@ -242,9 +242,9 @@ I CUtlDict<T, I>::Insert(const char *pName) {
   return m_Elements.Insert(_strdup(pName));
 }
 
-//-----------------------------------------------------------------------------
+
 // finds a node in the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 I CUtlDict<T, I>::Find(const char *pName) const {
   MEM_ALLOC_CREDIT_CLASS();
@@ -254,9 +254,9 @@ I CUtlDict<T, I>::Find(const char *pName) const {
     return InvalidIndex();
 }
 
-//-----------------------------------------------------------------------------
+
 // Iteration methods
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 I CUtlDict<T, I>::First() const {
   return m_Elements.FirstInorder();

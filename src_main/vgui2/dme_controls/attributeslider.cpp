@@ -431,7 +431,7 @@ void CAttributeSlider::OnCursorMoved( int x, int y )
 	// Clamp accum so we never generate values < -1 or > 2
 	int nMinVal = floor( ( -m_flDragStartValue + flMinVal ) / flFactor );
 	int nMaxVal = ceil( ( -m_flDragStartValue + flMaxVal ) / flFactor );
-	m_nAccum[ 0 ] = clamp( m_nAccum[ 0 ], nMinVal, nMaxVal );
+	m_nAccum[ 0 ] = std::clamp( m_nAccum[ 0 ], nMinVal, nMaxVal );
 
 	float flDelta = flFactor * m_nAccum[ 0 ];
 	if ( GetDragControl() == ANIM_CONTROL_VALUE && IsControlActive( ANIM_CONTROL_BALANCE ) )
@@ -443,8 +443,8 @@ void CAttributeSlider::OnCursorMoved( int x, int y )
 		float flLeftDelta, flRightDelta;
 		ValueBalanceToLeftRight( &flLeftDelta, &flRightDelta, flDelta, m_pParent->GetBalanceSliderValue() );
 
-		flLeftValue  = clamp( flLeftValue  + flLeftDelta,  flMinVal, flMaxVal );
-		flRightValue = clamp( flRightValue + flRightDelta, flMinVal, flMaxVal );
+		flLeftValue  = std::clamp( flLeftValue  + flLeftDelta,  flMinVal, flMaxVal );
+		flRightValue = std::clamp( flRightValue + flRightDelta, flMinVal, flMaxVal );
 
 		float flValue, flBalance;
 		LeftRightToValueBalance( &flValue, &flBalance, flLeftValue, flRightValue );
@@ -454,7 +454,7 @@ void CAttributeSlider::OnCursorMoved( int x, int y )
 	}
 	else
 	{
-		float flValue = clamp( m_flDragStartValue + flDelta, flMinVal, flMaxVal );
+		float flValue = std::clamp( m_flDragStartValue + flDelta, flMinVal, flMaxVal );
 		SetValue( GetDragControl(), flValue );
 	}
 
@@ -695,7 +695,7 @@ void CAttributeSliderTextEntry::OnMouseWheeled( int delta )
 	float val = Q_atof( sz ) + deltaFactor;
 	if ( input()->IsKeyDown(KEY_LALT) )
 	{
-		val = clamp( val, 0.0f, 1.0f );
+		val = std::clamp( val, 0.0f, 1.0f );
 	}
 
 	Q_snprintf( sz, sizeof( sz ), "%f", val );
@@ -864,7 +864,7 @@ float CAttributeSlider::EstimateValueAtPos( int nLocalX, int nLocalY ) const
 	GetControlRect( &rect, ANIM_CONTROL_VALUE );
 
 	float flFactor = rect.width > 1 ? (float)( nLocalX - rect.x ) / (float)( rect.width - 1 ) : 0.5f;
-	flFactor = clamp( flFactor, 0.0f, 1.0f );
+	flFactor = std::clamp( flFactor, 0.0f, 1.0f );
 	return flFactor;
 }
 
@@ -905,21 +905,21 @@ void CAttributeSlider::GetControlRect( Rect_t *pRect, AnimationControlType_t typ
 		pRect->x = 2 * SLIDER_PIXEL_SPACING + cw;
 		pRect->y = SLIDER_PIXEL_SPACING;
 		pRect->width = sw - pRect->x * 2;
-		pRect->height = max( 0, sh - SLIDER_PIXEL_SPACING * 2 );
+		pRect->height = std::max( 0, sh - SLIDER_PIXEL_SPACING * 2 );
 		break;
 /*
 	case ANIM_CONTROL_BALANCE:
 		pRect->x = SLIDER_PIXEL_SPACING;
-		pRect->y = max( 0, sh - ch ) / 2;
+		pRect->y = std::max( 0, sh - ch ) / 2;
 		pRect->width = cw;
-		pRect->height = min( ch, sh );
+		pRect->height = std::min( ch, sh );
 		break;
 */
 	case ANIM_CONTROL_MULTILEVEL:
 		pRect->x = sw - SLIDER_PIXEL_SPACING - cw;
-		pRect->y = max( 0, sh - ch ) / 2;
+		pRect->y = std::max( 0, sh - ch ) / 2;
 		pRect->width = cw;
-		pRect->height = min( ch, sh );
+		pRect->height = std::min( ch, sh );
 		break;
 	}
 }
@@ -941,7 +941,7 @@ bool CAttributeSlider::IsFaderBeingDragged()
 //-----------------------------------------------------------------------------
 float CAttributeSlider::GetPreviewAlphaScale() const
 {
-	return max( m_flFaderAmount, 0.1f );
+	return std::max( m_flFaderAmount, 0.1f );
 }
 
 
@@ -964,7 +964,7 @@ void CAttributeSlider::DrawTick( const Color& clr, float frac, int width, int in
 	int ypos = rect.y + ( rect.height - previewtall ) / 2;
 
 	int xpos = previewx - width / 2;
-	xpos = clamp( xpos, rect.x, rect.x + rect.width - width );
+	xpos = std::clamp( xpos, rect.x, rect.x + rect.width - width );
 	surface()->DrawFilledRect( xpos, ypos, xpos + width, ypos + previewtall );
 }
 
@@ -1070,7 +1070,7 @@ void CAttributeSlider::DrawValueLabel( float flValue )
 {
 	float flMinVal = 0.0f;
 	float flMaxVal = 1.0f;
-	flValue = clamp( flValue, flMinVal, flMaxVal );
+	flValue = std::clamp( flValue, flMinVal, flMaxVal );
 
 	Rect_t rect;
 	GetControlRect( &rect, ANIM_CONTROL_VALUE );
@@ -1146,7 +1146,7 @@ void CAttributeSlider::DrawMidpoint( int x, int ty, int ttall )
 //-----------------------------------------------------------------------------
 void CAttributeSlider::PaintCircularControl( float flValue, const Rect_t& rect )
 {
-	flValue = clamp( flValue, 0.0f, 1.0f );
+	flValue = std::clamp( flValue, 0.0f, 1.0f );
 
 	m_pCircleImage->SetPos( rect.x, rect.y );
 	m_pCircleImage->Paint();
@@ -1207,7 +1207,7 @@ void CAttributeSlider::PaintCircularControl( float flValue, const Rect_t& rect )
 	for ( int j = 0; j < numTriangles; j++ )
 	{
 		ang += step;
-		//ang = min( ang, clamp );
+		//ang = std::min( ang, clamp );
 
 		float flRadians = DEG2RAD( ang );
 
@@ -1301,7 +1301,7 @@ void CAttributeSlider::PaintBackground()
 	bool bUsePreview = m_bPreviewEnabled && ( !m_bSimplePreviewOnly || m_bFaderBeingDragged );
 
 	float flMidPoint = GetControlDefaultValue( viewType );
-	int nMidPoint   = (int)( (float)rect.width * clamp( flMidPoint,   0.0f, 1.0f ) + 0.5f );
+	int nMidPoint   = (int)( (float)rect.width * std::clamp( flMidPoint,   0.0f, 1.0f ) + 0.5f );
 
 	float flValue = bUsePreview ? m_Preview.m_Current.m_pValue[viewType] : GetValue( viewType );
 	if ( viewType == ANIM_CONTROL_VALUE && IsControlActive( ANIM_CONTROL_BALANCE ) )
@@ -1310,23 +1310,23 @@ void CAttributeSlider::PaintBackground()
 		float flLeftValue, flRightValue;
 		ValueBalanceToLeftRight( &flLeftValue, &flRightValue, flValue, flBalance );
 
-		int nLeftValue  = (int)( (float)rect.width * clamp( flLeftValue,  0.0f, 1.0f ) + 0.5f );
-		int nRightValue = (int)( (float)rect.width * clamp( flRightValue, 0.0f, 1.0f ) + 0.5f );
+		int nLeftValue  = (int)( (float)rect.width * std::clamp( flLeftValue,  0.0f, 1.0f ) + 0.5f );
+		int nRightValue = (int)( (float)rect.width * std::clamp( flRightValue, 0.0f, 1.0f ) + 0.5f );
 
 		// Draw the current value as a bar from the midpoint
 		surface()->DrawSetColor( IsDragging() ? s_DraggingBarColor : s_BarColor[ m_bIsLogPreviewControl ][ IsSelected() ] );
-		surface()->DrawFilledRect( rect.x + min( nLeftValue,  nMidPoint ), y0, rect.x + max( nLeftValue,  nMidPoint ), y1 );
-		surface()->DrawFilledRect( rect.x + min( nRightValue, nMidPoint ), y1, rect.x + max( nRightValue, nMidPoint ), y2 );
+		surface()->DrawFilledRect( rect.x + std::min( nLeftValue,  nMidPoint ), y0, rect.x + std::max( nLeftValue,  nMidPoint ), y1 );
+		surface()->DrawFilledRect( rect.x + std::min( nRightValue, nMidPoint ), y1, rect.x + std::max( nRightValue, nMidPoint ), y2 );
 	}
 	else
 	{
 		Assert( viewType != ANIM_CONTROL_BALANCE );
 
-		int nValue = (int)( (float)rect.width * clamp( flValue, 0.0f, 1.0f ) + 0.5f );
+		int nValue = (int)( (float)rect.width * std::clamp( flValue, 0.0f, 1.0f ) + 0.5f );
 
 		// Draw the current value as a bar from the midpoint
 		surface()->DrawSetColor( IsDragging() ? s_DraggingBarColor : s_BarColor[ m_bIsLogPreviewControl ][ IsSelected() ] );
-		surface()->DrawFilledRect( rect.x + min( nValue, nMidPoint ), y0, rect.x + max( nValue, nMidPoint ), y2 );
+		surface()->DrawFilledRect( rect.x + std::min( nValue, nMidPoint ), y0, rect.x + std::max( nValue, nMidPoint ), y2 );
 	}
 
 	// Draw the midpoint over the top of the current value

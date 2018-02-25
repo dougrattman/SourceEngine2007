@@ -159,9 +159,9 @@ void C_TEAntlionDust::PostDataUpdate( DataUpdateType_t updateType )
 		float	colorRamp = random->RandomFloat( 0.5f, 1.0f );
 		Vector	color = vecColor*colorRamp;
 
-		color[0] = clamp( color[0], 0.0f, 1.0f );
-		color[1] = clamp( color[1], 0.0f, 1.0f );
-		color[2] = clamp( color[2], 0.0f, 1.0f );
+		color[0] = std::clamp( color[0], 0.0f, 1.0f );
+		color[1] = std::clamp( color[1], 0.0f, 1.0f );
+		color[2] = std::clamp( color[2], 0.0f, 1.0f );
 
 		color *= 255;
 

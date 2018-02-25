@@ -21,7 +21,7 @@
 #include "tier0/include/dbg.h"
 #include "cmdlib.h"
 #include "tier0/include/icommandline.h"
-#include "windows.h"
+#include "base/include/windows/windows_light.h"
 
 #include "mathlib/IceKey.h"
 #include <filesystem_tools.h>

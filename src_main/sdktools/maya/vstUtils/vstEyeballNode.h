@@ -49,10 +49,10 @@ public:
 	void SetStacks( int val ) { if ( m_nStacks != val ) { m_nStacks = val;  m_bRebuildSphere = true; } }
 
 	double GetLatBegin() const { return m_dLatBegin; }
-	void SetLatBegin(double val) { if ( m_dLatBegin != val ) { m_dLatBegin = clamp( val, 0.0, m_dLatEnd );  m_bRebuildSphere = true; } }
+	void SetLatBegin(double val) { if ( m_dLatBegin != val ) { m_dLatBegin = std::clamp( val, 0.0, m_dLatEnd );  m_bRebuildSphere = true; } }
 
 	double GetLatEnd() const { return m_dLatEnd; }
-	void SetLatEnd(double val) { if ( m_dLatEnd != val ) { m_dLatEnd = clamp( val, m_dLatBegin, 1.0 );  m_bRebuildSphere = true; } }
+	void SetLatEnd(double val) { if ( m_dLatEnd != val ) { m_dLatEnd = std::clamp( val, m_dLatBegin, 1.0 );  m_bRebuildSphere = true; } }
 
 protected:
 	bool m_bRebuildSphere;

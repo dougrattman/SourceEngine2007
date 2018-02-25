@@ -213,9 +213,9 @@ static void VectorToColor24(const Vector &inVector, color24 &outColor) {
   int r = (int)((inVector.x * 255.0f) + 0.5f);
   int g = (int)((inVector.y * 255.0f) + 0.5f);
   int b = (int)((inVector.z * 255.0f) + 0.5f);
-  outColor.r = clamp(r, 0, 255);
-  outColor.g = clamp(g, 0, 255);
-  outColor.b = clamp(b, 0, 255);
+  outColor.r = std::clamp(r, 0, 255);
+  outColor.g = std::clamp(g, 0, 255);
+  outColor.b = std::clamp(b, 0, 255);
 }
 
 //-----------------------------------------------------------------------------
@@ -659,7 +659,7 @@ void CCurvesColorOperation::RemoveControlPoint(int nPoint) {
 // Computes actual corrected color (expensive!!)
 //-----------------------------------------------------------------------------
 float CCurvesColorOperation::ComputeActualCorrectedColor(float flInColor) {
-  flInColor = clamp(flInColor, 0.0f, 1.0f);
+  flInColor = std::clamp(flInColor, 0.0f, 1.0f);
 
   // First find the control points we are between
   Vector find(flInColor, 0, 0);
@@ -697,7 +697,7 @@ void CCurvesColorOperation::UpdateOutColorArray() {
 float CCurvesColorOperation::ComputeCorrectedColor(float flInColor) {
   flInColor *= 255.0f;
   int i = (int)flInColor;
-  i = clamp(i, 0, 255);
+  i = std::clamp(i, 0, 255);
   if (i == 255) return m_pOutValue[i];
 
   float f = flInColor - i;
@@ -1113,9 +1113,9 @@ void CLevelsColorOperation::SetBlendFactor(float flBlend) {
 //-----------------------------------------------------------------------------
 void CLevelsColorOperation::SetInputLevels(float flMinValue, float flMidValue,
                                            float flMaxValue) {
-  m_flMinInputLevel = clamp(flMinValue, 0.0f, 1.0f);
-  m_flMidInputLevel = clamp(flMidValue, 0.0f, 1.0f);
-  m_flMaxInputLevel = clamp(flMaxValue, 0.0f, 1.0f);
+  m_flMinInputLevel = std::clamp(flMinValue, 0.0f, 1.0f);
+  m_flMidInputLevel = std::clamp(flMidValue, 0.0f, 1.0f);
+  m_flMaxInputLevel = std::clamp(flMaxValue, 0.0f, 1.0f);
   UpdateOutputLevelArray();
   colorcorrectiontools->UpdateColorCorrection();
 }
@@ -1125,8 +1125,8 @@ void CLevelsColorOperation::SetInputLevels(float flMinValue, float flMidValue,
 //-----------------------------------------------------------------------------
 void CLevelsColorOperation::SetOutputLevels(float flMinValue,
                                             float flMaxValue) {
-  m_flMinOutputLevel = clamp(flMinValue, 0.0f, 1.0f);
-  m_flMaxOutputLevel = clamp(flMaxValue, 0.0f, 1.0f);
+  m_flMinOutputLevel = std::clamp(flMinValue, 0.0f, 1.0f);
+  m_flMaxOutputLevel = std::clamp(flMaxValue, 0.0f, 1.0f);
   UpdateOutputLevelArray();
   colorcorrectiontools->UpdateColorCorrection();
 }
@@ -1181,7 +1181,7 @@ void CLevelsColorOperation::UpdateOutputLevelArray() {
 float CLevelsColorOperation::ComputeCorrectedLevel(float flInLevel) {
   flInLevel *= 255.0f;
   int i = (int)flInLevel;
-  i = clamp(i, 0, 255);
+  i = std::clamp(i, 0, 255);
   if (i == 255) return m_pOutValue[i];
 
   float f = flInLevel - i;
@@ -1328,9 +1328,9 @@ void CColorHistogramPanel::ComputeHistogram(Rect_t &srcRect,
       writer.ReadPixelNoAdvance(r, g, b, a);
 
       color24 inColor, col;
-      inColor.r = clamp(r, 0, 255);
-      inColor.g = clamp(g, 0, 255);
-      inColor.b = clamp(b, 0, 255);
+      inColor.r = std::clamp(r, 0, 255);
+      inColor.g = std::clamp(g, 0, 255);
+      inColor.b = std::clamp(b, 0, 255);
 
       m_pOp->GetColorOpList()->Apply(inColor, col, m_pOp);
 
@@ -1350,7 +1350,7 @@ void CColorHistogramPanel::ComputeHistogram(Rect_t &srcRect,
         case RGB: {
           float flGreyScale = 0.299f * col.r + 0.587f * col.g + 0.114f * col.b;
           int g = (int)(flGreyScale + 0.5f);
-          g = clamp(g, 0, 255);
+          g = std::clamp(g, 0, 255);
           ++m_pHistogram[g];
         } break;
       }
@@ -1545,7 +1545,7 @@ void CColorSlider::UpdateOtherSliders(int nKnobChanged) {
 //-----------------------------------------------------------------------------
 void CColorSlider::SetNormalizedValue(int nKnobIndex, float flValue) {
   Assert(m_nKnobCount > nKnobIndex);
-  m_flKnobPosition[nKnobIndex] = clamp(flValue, 0.0f, 1.0f);
+  m_flKnobPosition[nKnobIndex] = std::clamp(flValue, 0.0f, 1.0f);
   UpdateOtherSliders(nKnobIndex);
 
   SendSliderMovedMessage(nKnobIndex);
@@ -2228,10 +2228,10 @@ void CSelectedHSVOperation::Apply(const Vector &inRGB, Vector &outRGB) {
     hsv.y = m_DeltaHSV.y;
   }
 
-  hsv.y = clamp(hsv.y, 0.0f, 1.0f);
+  hsv.y = std::clamp(hsv.y, 0.0f, 1.0f);
 
   hsv.z += m_DeltaHSV.z;
-  hsv.z = clamp(hsv.z, 0.0f, 1.0f);
+  hsv.z = std::clamp(hsv.z, 0.0f, 1.0f);
   if (hsv.y == 0.0F) {
     hsv.x = -1.0f;
   }
@@ -2443,9 +2443,9 @@ void CUncorrectedImagePanel::RegenerateTextureBits(ITexture *pTexture,
       r = rgb.x * 255.0f;
       g = rgb.y * 255.0f;
       b = rgb.z * 255.0f;
-      r = clamp(r, 0, 255);
-      g = clamp(g, 0, 255);
-      b = clamp(b, 0, 255);
+      r = std::clamp(r, 0, 255);
+      g = std::clamp(g, 0, 255);
+      b = std::clamp(b, 0, 255);
 
       pixelWriter.WritePixel(r, g, b, pTexel->a);
     }
@@ -2470,10 +2470,10 @@ void CUncorrectedImagePanel::OnCursorMoved(int x, int y) {
   x = m_TextureSubRect.x + (float)x * m_TextureSubRect.width / sx;
   y = m_TextureSubRect.y + (float)y * m_TextureSubRect.height / sy;
 
-  int nSelectedX = min(x, m_nWidth);
-  nSelectedX = max(0, nSelectedX);
-  int nSelectedY = min(y, m_nHeight);
-  nSelectedY = max(0, nSelectedY);
+  int nSelectedX = std::min(x, m_nWidth);
+  nSelectedX = std::max(0, nSelectedX);
+  int nSelectedY = std::min(y, m_nHeight);
+  nSelectedY = std::max(0, nSelectedY);
   BGRA8888_t *pTexel = &m_pImageBuffer[(nSelectedY * m_nWidth) + nSelectedX];
 
   if (!bCTRLDown) m_pHSVOp->ClearSelectedColors();
@@ -3314,11 +3314,11 @@ int RGBToL(int r, int g, int b) {
   int imin, imax;
 
   if (r > g) {
-    imax = max(r, b);
-    imin = min(g, b);
+    imax = std::max(r, b);
+    imin = std::min(g, b);
   } else {
-    imax = max(g, b);
-    imin = min(r, b);
+    imax = std::max(g, b);
+    imin = std::min(r, b);
   }
 
   return (int)((float)(imax + imin) / 2.0f);
@@ -3393,11 +3393,11 @@ void RGBToHSL(int *red, int *green, int *blue) {
   b = *blue;
 
   if (r > g) {
-    imax = max(r, b);
-    imin = min(g, b);
+    imax = std::max(r, b);
+    imin = std::min(g, b);
   } else {
-    imax = max(g, b);
-    imin = min(r, b);
+    imax = std::max(g, b);
+    imin = std::min(r, b);
   }
 
   l = (imax + imin) / 2.0;
@@ -3540,9 +3540,9 @@ void CColorBalanceOperation::CreateLookupTables() {
       blueOut +=
           m_YellowBlueBalance[mode] * yellow_blue_transfer[mode][blueOut];
 
-      redOut = clamp(redOut, 0, 255);
-      greenOut = clamp(greenOut, 0, 255);
-      blueOut = clamp(blueOut, 0, 255);
+      redOut = std::clamp(redOut, 0, 255);
+      greenOut = std::clamp(greenOut, 0, 255);
+      blueOut = std::clamp(blueOut, 0, 255);
     }
 
     m_pRedLookup[i] = redOut;

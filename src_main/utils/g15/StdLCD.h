@@ -4,7 +4,7 @@
 #ifdef _WIN32
 #define _WINCON_	// skip console definitions
 #define _WINREG_	// skip registry definitions
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 //Valve requires tier0 headers before tchar.h
 //#include <tchar.h> 
 #endif

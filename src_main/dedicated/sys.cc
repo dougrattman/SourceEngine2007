@@ -71,7 +71,7 @@ void CSys::UpdateStatus(int force) {
 
   if (!engine) return;
 
-  const double current_time = Sys_FloatTime();
+  const double current_time = Plat_FloatTime();
 
   if (!force) {
     if ((current_time - last_time) < 0.5) return;
@@ -80,11 +80,9 @@ void CSys::UpdateStatus(int force) {
   last_time = current_time;
 
   char szMap[64], szHostname[128];
-  int n, nMax;
-  float fps;
+  auto [fps, n, nMax] = engine->GetStatus(szMap, ARRAYSIZE(szMap));
 
-  engine->UpdateStatus(&fps, &n, &nMax, szMap, ARRAYSIZE(szMap));
-  engine->UpdateHostname(szHostname, ARRAYSIZE(szHostname));
+  engine->GetHostname(szHostname, ARRAYSIZE(szHostname));
 
   console.SetTitle(szHostname);
 

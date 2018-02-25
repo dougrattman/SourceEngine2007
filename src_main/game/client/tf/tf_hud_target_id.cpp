@@ -194,7 +194,7 @@ void CTargetID::PerformLayout( void )
 	int iDataW, iDataH;
 	m_pTargetNameLabel->GetContentSize( iTextW, iTextH );
 	m_pTargetDataLabel->GetContentSize( iDataW, iDataH );
-	iWidth += max(iTextW,iDataW);
+	iWidth += std::max(iTextW,iDataW);
 
 	SetSize( iWidth, GetTall() );
 

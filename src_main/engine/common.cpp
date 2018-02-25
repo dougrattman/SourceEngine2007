@@ -4,6 +4,7 @@
 
 #include <ctype.h>
 #include <malloc.h>
+#include <cassert>
 
 #include "bitbuf.h"
 #include "characterset.h"

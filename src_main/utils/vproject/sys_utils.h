@@ -6,7 +6,7 @@
 //=====================================================================================//
 #pragma once
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>

@@ -9,9 +9,9 @@
 #include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 TokenReader::TokenReader() {
   m_szFilename[0] = '\0';
   m_nLine = 1;
@@ -20,11 +20,11 @@ TokenReader::TokenReader() {
   m_eStuffed = TOKENSTRINGTOOLONG;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *pszFilename -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool TokenReader::Open(const char *pszFilename) {
   open(pszFilename, std::ios::in | std::ios::binary);
   Q_strncpy(m_szFilename, pszFilename, sizeof(m_szFilename));
@@ -34,16 +34,16 @@ bool TokenReader::Open(const char *pszFilename) {
   return (is_open() != 0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void TokenReader::Close() { close(); }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *error -
 // Output : const char
-//-----------------------------------------------------------------------------
+
 const char *TokenReader::Error(char *error, ...) {
   static char szErrorBuf[256];
   Q_snprintf(szErrorBuf, sizeof(szErrorBuf), "File %s, line %d: ", m_szFilename,
@@ -53,12 +53,12 @@ const char *TokenReader::Error(char *error, ...) {
   return (szErrorBuf);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : pszStore -
 //			nSize -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 trtoken_t TokenReader::GetString(char *pszStore, int nSize) {
   if (nSize <= 0) {
     return TOKENERROR;
@@ -156,12 +156,12 @@ trtoken_t TokenReader::GetString(char *pszStore, int nSize) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Returns the next token, allocating enough memory to store the token
 //			plus a terminating NULL.
 // Input  : pszStore - Pointer to a string that will be allocated.
 // Output : Returns the type of token that was read, or TOKENERROR.
-//-----------------------------------------------------------------------------
+
 trtoken_t TokenReader::NextTokenDynamic(char **ppszStore) {
   char szTempBuffer[8192];
   trtoken_t eType = NextToken(szTempBuffer, sizeof(szTempBuffer));
@@ -174,11 +174,11 @@ trtoken_t TokenReader::NextTokenDynamic(char **ppszStore) {
   return (eType);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Returns the next token.
 // Input  : pszStore - Pointer to a string that will receive the token.
 // Output : Returns the type of token that was read, or TOKENERROR.
-//-----------------------------------------------------------------------------
+
 trtoken_t TokenReader::NextToken(char *pszStore, int nSize) {
   char *pStart = pszStore;
 
@@ -293,11 +293,11 @@ trtoken_t TokenReader::NextToken(char *pszStore, int nSize) {
   return IDENT;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : ttype -
 //			*pszToken -
-//-----------------------------------------------------------------------------
+
 void TokenReader::IgnoreTill(trtoken_t ttype, const char *pszToken) {
   trtoken_t _ttype;
   char szBuf[1024];
@@ -314,23 +314,23 @@ void TokenReader::IgnoreTill(trtoken_t ttype, const char *pszToken) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : ttype -
 //			pszToken -
-//-----------------------------------------------------------------------------
+
 void TokenReader::Stuff(trtoken_t eType, const char *pszToken) {
   m_eStuffed = eType;
   Q_strncpy(m_szStuffed, pszToken, sizeof(m_szStuffed));
   m_bStuffed = true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : ttype -
 //			pszToken -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool TokenReader::Expecting(trtoken_t ttype, const char *pszToken) {
   char szBuf[1024];
   if (NextToken(szBuf, sizeof(szBuf)) != ttype || !IsToken(pszToken, szBuf)) {
@@ -339,11 +339,11 @@ bool TokenReader::Expecting(trtoken_t ttype, const char *pszToken) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : pszStore -
 // Output :
-//-----------------------------------------------------------------------------
+
 trtoken_t TokenReader::PeekTokenType(char *pszStore, int maxlen) {
   if (!m_bStuffed) {
     m_eStuffed = NextToken(m_szStuffed, sizeof(m_szStuffed));
@@ -357,13 +357,13 @@ trtoken_t TokenReader::PeekTokenType(char *pszStore, int maxlen) {
   return (m_eStuffed);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Gets the next non-whitespace character from the file.
 // Input  : ch - Receives the character.
 // Output : Returns true if the whitespace contained the combine strings
 //			character '\', which is used to merge consecutive quoted
 // strings.
-//-----------------------------------------------------------------------------
+
 bool TokenReader::SkipWhiteSpace(void) {
   bool bCombineStrings = false;
 

@@ -254,8 +254,8 @@ bool BuildGroup::CursorMoved(int x, int y, Panel *panel) {
     input()->GetCursorPos(x, y);
 
     if (_dragMouseCode == MOUSE_RIGHT) {
-      int newW = max(1, _dragStartPanelSize[0] + x - _dragStartCursorPos[0]);
-      int newH = max(1, _dragStartPanelSize[1] + y - _dragStartCursorPos[1]);
+      int newW = std::max(1, _dragStartPanelSize[0] + x - _dragStartCursorPos[0]);
+      int newH = std::max(1, _dragStartPanelSize[1] + y - _dragStartCursorPos[1]);
 
       bool shift =
           (input()->IsKeyDown(KEY_LSHIFT) || input()->IsKeyDown(KEY_RSHIFT));

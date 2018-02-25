@@ -72,7 +72,10 @@ create table job_worker_start (
         JobWorkerID				INTEGER UNSIGNED NOT NULL
 AUTO_INCREMENT, index index_jobid( JobID ), index index_jobworkerid( JobWorkerID
 ),
-        
+        
+
+
+
         JobID					INTEGER UNSIGNED NOT NULL,
 -- links to job_master_start::JobID
         IsMaster				BOOL NOT NULL,
@@ -657,7 +660,7 @@ void RunJobWatchApp(char *pCmdLine) {
     char *s2 = V_strrchr(dirName, '/');
     if (s1 || s2) {
       // Get rid of the last slash.
-      s1 = max(s1, s2);
+      s1 = std::max(s1, s2);
       s1[0] = 0;
 
       if (!CreateProcess(NULL, pCmdLine,

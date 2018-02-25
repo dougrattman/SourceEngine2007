@@ -5,7 +5,7 @@
 #include <direct.h>
 #include <fcntl.h>
 #include <io.h>
-#include <minmax.h>
+#include <algorithm>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <cassert>
@@ -132,7 +132,7 @@ bool Pack_AppendFile(const char *pakfile, const char *file) {
   char *tempBuf = (char *)malloc(1024 * 1024);
   int64 iFileRemaining = _filelengthi64(hFile);
   while (iFileRemaining > 0) {
-    int bytesToCopy = (int)min(iFileRemaining, (1024 * 1024));
+    int bytesToCopy = (int)std::min(iFileRemaining, (1024 * 1024));
     iFileRemaining -= bytesToCopy;
 
     // read

@@ -40,7 +40,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
   switch (nDxLevel) {
     case 60:
       // NOTE: Prior to dx9, numsamplers = num texture stages
-      pCaps->m_NumTextureStages = min(2, actualCaps.m_NumTextureStages);
+      pCaps->m_NumTextureStages = std::min(2, actualCaps.m_NumTextureStages);
       pCaps->m_NumSamplers = pCaps->m_NumTextureStages;
       pCaps->m_SupportsVertexShaders = false;
       pCaps->m_SupportsVertexShaders_2_0 = false;
@@ -54,9 +54,9 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       pCaps->m_bSupportsAnisotropicFiltering = false;
       pCaps->m_bSupportsMagAnisotropicFiltering = false;
       pCaps->m_nMaxAnisotropy = 1;
-      pCaps->m_MaxTextureWidth = max(256, pCaps->m_MaxTextureWidth);
-      pCaps->m_MaxTextureHeight = max(256, pCaps->m_MaxTextureHeight);
-      pCaps->m_MaxTextureDepth = max(256, pCaps->m_MaxTextureDepth);
+      pCaps->m_MaxTextureWidth = std::max(256, pCaps->m_MaxTextureWidth);
+      pCaps->m_MaxTextureHeight = std::max(256, pCaps->m_MaxTextureHeight);
+      pCaps->m_MaxTextureDepth = std::max(256, pCaps->m_MaxTextureDepth);
       //		m_MaxTextureAspectRatio;
       //		int  m_MaxPrimitiveCount;
       pCaps->m_ZBiasAndSlopeScaledDepthBiasSupported = false;
@@ -118,7 +118,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
 
     case 70:
       // NOTE: Prior to dx9, numsamplers = num texture stages
-      pCaps->m_NumTextureStages = min(2, actualCaps.m_NumTextureStages);
+      pCaps->m_NumTextureStages = std::min(2, actualCaps.m_NumTextureStages);
       pCaps->m_NumSamplers = pCaps->m_NumTextureStages;
       pCaps->m_SupportsVertexShaders = false;
       pCaps->m_SupportsVertexShaders_2_0 = false;
@@ -132,10 +132,10 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       pCaps->m_bSupportsAnisotropicFiltering = false;
       pCaps->m_bSupportsMagAnisotropicFiltering = false;
       pCaps->m_nMaxAnisotropy = 1;
-      //		pCaps->m_MaxTextureWidth = max( 256,
-      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight = max(
-      // 256, pCaps->m_MaxTextureHeight );
-      //		pCaps->m_MaxTextureDepth = max( 256,
+      //		pCaps->m_MaxTextureWidth = std::max( 256,
+      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight =
+      // std::max( 256, pCaps->m_MaxTextureHeight );
+      //		pCaps->m_MaxTextureDepth = std::max( 256,
       // pCaps->m_MaxTextureDepth ); 		m_MaxTextureAspectRatio;
       //		int  m_MaxPrimitiveCount;
       pCaps->m_ZBiasAndSlopeScaledDepthBiasSupported = false;
@@ -189,8 +189,8 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       // NOTE: Prior to dx9, numsamplers = num texture stages
       // We clamp num texture stages to 2, though, since we never use
       // fixed-function shaders with more than 2 texture stages
-      pCaps->m_NumTextureStages = min(2, actualCaps.m_NumTextureStages);
-      pCaps->m_NumSamplers = min(4, actualCaps.m_NumTextureStages);
+      pCaps->m_NumTextureStages = std::min(2, actualCaps.m_NumTextureStages);
+      pCaps->m_NumSamplers = std::min(4, actualCaps.m_NumTextureStages);
       //		pCaps->m_SupportsVertexShaders = true;
       pCaps->m_SupportsVertexShaders_2_0 = false;
       //		pCaps->m_SupportsPixelShaders = false;
@@ -203,10 +203,10 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_bSupportsAnisotropicFiltering = false;
       //		pCaps->m_bSupportsMagAnisotropicFiltering = false;
       //		pCaps->m_nMaxAnisotropy = 1;
-      //		pCaps->m_MaxTextureWidth = max( 256,
-      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight = max(
-      // 256, pCaps->m_MaxTextureHeight );
-      //		pCaps->m_MaxTextureDepth = max( 256,
+      //		pCaps->m_MaxTextureWidth = std::max( 256,
+      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight =
+      // std::max( 256, pCaps->m_MaxTextureHeight );
+      //		pCaps->m_MaxTextureDepth = std::max( 256,
       // pCaps->m_MaxTextureDepth ); 		m_MaxTextureAspectRatio;
       //		int  m_MaxPrimitiveCount;
       //		pCaps->m_ZBiasAndSlopeScaledDepthBiasSupported = false;
@@ -215,7 +215,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_SupportsCubeMaps = false;
       pCaps->m_NumPixelShaderConstants = 8;
       pCaps->m_NumVertexShaderConstants =
-          min(96, pCaps->m_NumVertexShaderConstants);
+          std::min(96, pCaps->m_NumVertexShaderConstants);
       pCaps->m_NumBooleanVertexShaderConstants = 0;
       pCaps->m_NumIntegerVertexShaderConstants = 0;
       pCaps->m_NumBooleanPixelShaderConstants = 0;
@@ -226,7 +226,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_MaxBlendMatrices = 0;
       //		pCaps->m_MaxBlendMatrixIndices = 0;
       pCaps->m_MaxVertexShaderBlendMatrices =
-          min(16, pCaps->m_MaxVertexShaderBlendMatrices);
+          std::min(16, pCaps->m_MaxVertexShaderBlendMatrices);
       //		pCaps->m_SupportsMipmappedCubemaps = false;
       //		pCaps->m_SupportsNonPow2Textures = false;
       pCaps->m_nDXSupportLevel = 80;
@@ -272,8 +272,8 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       // NOTE: Prior to dx9, numsamplers = num texture stages
       // We clamp num texture stages to 2, though, since we never use
       // fixed-function shaders with more than 2 texture stages
-      pCaps->m_NumTextureStages = min(2, actualCaps.m_NumTextureStages);
-      pCaps->m_NumSamplers = min(6, actualCaps.m_NumTextureStages);
+      pCaps->m_NumTextureStages = std::min(2, actualCaps.m_NumTextureStages);
+      pCaps->m_NumSamplers = std::min(6, actualCaps.m_NumTextureStages);
       //		pCaps->m_SupportsVertexShaders = true;
       pCaps->m_SupportsVertexShaders_2_0 = false;
       //		pCaps->m_SupportsPixelShaders = false;
@@ -286,10 +286,10 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_bSupportsAnisotropicFiltering = false;
       //		pCaps->m_bSupportsMagAnisotropicFiltering = false;
       //		pCaps->m_nMaxAnisotropy = 1;
-      //		pCaps->m_MaxTextureWidth = max( 256,
-      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight = max(
-      // 256, pCaps->m_MaxTextureHeight );
-      //		pCaps->m_MaxTextureDepth = max( 256,
+      //		pCaps->m_MaxTextureWidth = std::max( 256,
+      // pCaps->m_MaxTextureWidth ); 		pCaps->m_MaxTextureHeight =
+      // std::max( 256, pCaps->m_MaxTextureHeight );
+      //		pCaps->m_MaxTextureDepth = std::max( 256,
       // pCaps->m_MaxTextureDepth ); 		m_MaxTextureAspectRatio;
       //		int  m_MaxPrimitiveCount;
       //		pCaps->m_ZBiasAndSlopeScaledDepthBiasSupported = false;
@@ -298,7 +298,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_SupportsCubeMaps = false;
       pCaps->m_NumPixelShaderConstants = 8;
       pCaps->m_NumVertexShaderConstants =
-          min(96, pCaps->m_NumVertexShaderConstants);
+          std::min(96, pCaps->m_NumVertexShaderConstants);
       pCaps->m_NumBooleanVertexShaderConstants = 0;
       pCaps->m_NumIntegerVertexShaderConstants = 0;
       pCaps->m_NumBooleanPixelShaderConstants = 0;
@@ -309,7 +309,7 @@ void CHardwareConfig::ForceCapsToDXLevel(HardwareCaps_t *pCaps, int nDxLevel,
       //		pCaps->m_MaxBlendMatrices = 0;
       //		pCaps->m_MaxBlendMatrixIndices = 0;
       pCaps->m_MaxVertexShaderBlendMatrices =
-          min(16, pCaps->m_MaxVertexShaderBlendMatrices);
+          std::min(16, pCaps->m_MaxVertexShaderBlendMatrices);
       //		pCaps->m_SupportsMipmappedCubemaps = false;
       //		pCaps->m_SupportsNonPow2Textures = false;
       pCaps->m_nDXSupportLevel = 81;
@@ -401,7 +401,7 @@ void CHardwareConfig::SetupHardwareCaps(int nDXLevel,
   }
 
   // Clamp num texture stages to 2, since it's only used for fixed function
-  m_Caps.m_NumTextureStages = min(2, m_Caps.m_NumTextureStages);
+  m_Caps.m_NumTextureStages = std::min(2, m_Caps.m_NumTextureStages);
 
   // Read dxsupport.cfg which has config overrides for particular cards.
   g_pShaderDeviceMgr->ReadHardwareCaps(m_Caps, m_Caps.m_nDXSupportLevel);
@@ -421,7 +421,7 @@ void CHardwareConfig::SetupHardwareCaps(int nDXLevel,
     m_Caps.m_MaxNumLights = MAX_NUM_LIGHTS - 2;
   }
 
-  m_Caps.m_MaxNumLights = min(m_Caps.m_MaxNumLights, MAX_NUM_LIGHTS);
+  m_Caps.m_MaxNumLights = std::min(m_Caps.m_MaxNumLights, (int)MAX_NUM_LIGHTS);
 
   memcpy(&m_UnOverriddenCaps, &m_Caps, sizeof(HardwareCaps_t));
 }
@@ -741,7 +741,7 @@ int CHardwareConfig::MaxTextureDepth() const {
 int CHardwareConfig::GetDXSupportLevel() const {
   const int dxSupportLevel{ShaderUtil()->GetConfig().dxSupportLevel};
   if (dxSupportLevel != 0) {
-    return min(dxSupportLevel, m_Caps.m_nDXSupportLevel);
+    return std::min(dxSupportLevel, m_Caps.m_nDXSupportLevel);
   }
 
   return m_Caps.m_nDXSupportLevel;

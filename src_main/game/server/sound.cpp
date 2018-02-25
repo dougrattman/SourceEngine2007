@@ -3,10 +3,11 @@
 // Purpose: Entities relating to in-level sound effects.
 //
 //			ambient_generic: a sound emitter used for one-shot and
-//looping sounds.
+// looping sounds.
 //
 //			env_speaker: used for public address announcements over
-//loudspeakers. 				This tries not to drown out talking NPCs.
+// loudspeakers. 				This tries not to drown out talking
+// NPCs.
 //
 //			env_soundscape: controls what sound script an area uses.
 //
@@ -117,7 +118,8 @@ typedef struct dynpitchvol {
 // presets for runtime pitch and vol modulation of ambient sounds
 
 dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] = {
-    // pitch	pstart	spinup	spindwn	volrun	volstrt	fadein	fadeout	lfotype	lforate
+    // pitch	pstart	spinup	spindwn	volrun	volstrt	fadein	fadeout	lfotype
+    // lforate
     // modptch modvol	cspnup
     {1, 255, 75, 95, 95, 10, 1, 50, 95, 0, 0, 0,
      0, 0,   0,  0,  0,  0,  0, 0,  0,  0, 0, 0},
@@ -366,7 +368,7 @@ void CAmbientGeneric::ComputeMaxAudibleDistance() {
 // Input  : Float new pitch from 0 - 255 (100 = as recorded).
 //-----------------------------------------------------------------------------
 void CAmbientGeneric::InputPitch(inputdata_t &inputdata) {
-  m_dpv.pitch = clamp(inputdata.value.Float(), 0, 255);
+  m_dpv.pitch = std::clamp(inputdata.value.Float(), 0.0f, 255.0f);
 
   SendSound(SND_CHANGE_PITCH);
 }
@@ -380,7 +382,7 @@ void CAmbientGeneric::InputVolume(inputdata_t &inputdata) {
   // Multiply the input value by ten since volumes are expected to be from 0 -
   // 100.
   //
-  m_dpv.vol = clamp(inputdata.value.Float(), 0, 10) * 10;
+  m_dpv.vol = std::clamp(inputdata.value.Float(), 0.0f, 10.0f) * 10;
   m_dpv.volfrac = m_dpv.vol << 8;
 
   SendSound(SND_CHANGE_VOL);
@@ -528,8 +530,8 @@ void CAmbientGeneric::UpdateOnRemove(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Think at 5hz if we are dynamically modifying pitch or volume of the
-//			playing sound.  This function will ramp pitch and/or volume
-//up or 			down, modify pitch/volume with lfo if active.
+//			playing sound.  This function will ramp pitch and/or
+//volume up or 			down, modify pitch/volume with lfo if active.
 //-----------------------------------------------------------------------------
 void CAmbientGeneric::RampThink(void) {
   int pitch = m_dpv.pitch;
@@ -838,8 +840,10 @@ void CAmbientGeneric::InputToggleSound(inputdata_t &inputdata) {
 //-----------------------------------------------------------------------------
 // Purpose: Turns an ambient sound on or off.  If the ambient is a looping
 // sound,
-//			mark sound as active (m_fActive) if it's playing, innactive
-//if not. 			If the sound is not a looping sound, never mark it as active.
+//			mark sound as active (m_fActive) if it's playing,
+//innactive
+// if not. 			If the sound is not a looping sound, never mark it as
+// active.
 // Input  : pActivator -
 //			pCaller -
 //			useType -

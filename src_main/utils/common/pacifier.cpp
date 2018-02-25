@@ -18,7 +18,7 @@ void StartPacifier(char const *pPrefix) {
 
 void UpdatePacifier(float flPercent) {
   int iCur = (int)(flPercent * 40.0f);
-  iCur = clamp(iCur, g_LastPacifierDrawn, 40);
+  iCur = std::clamp(iCur, g_LastPacifierDrawn, 40);
 
   if (iCur != g_LastPacifierDrawn && !g_bPacifierSuppressed) {
     for (int i = g_LastPacifierDrawn + 1; i <= iCur; i++) {

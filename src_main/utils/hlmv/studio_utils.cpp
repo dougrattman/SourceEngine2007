@@ -528,7 +528,7 @@ void StudioModel::SetFlexController( LocalFlexController_t iFlex, float flValue 
 		{
 			flValue = (flValue - pflex->min) / (pflex->max - pflex->min);
 		}
-		m_flexweight[iFlex] = clamp( flValue, 0.0f, 1.0f );
+		m_flexweight[iFlex] = std::clamp( flValue, 0.0f, 1.0f );
 	}
 }
 
@@ -542,7 +542,7 @@ void StudioModel::SetFlexControllerRaw( LocalFlexController_t iFlex, float flVal
 	if (iFlex >= 0 && iFlex < pStudioHdr->numflexcontrollers())
 	{
 //		mstudioflexcontroller_t *pflex = pStudioHdr->pFlexcontroller(iFlex);
-		m_flexweight[iFlex] = clamp( flValue, 0.0f, 1.0f );
+		m_flexweight[iFlex] = std::clamp( flValue, 0.0f, 1.0f );
 	}
 }
 

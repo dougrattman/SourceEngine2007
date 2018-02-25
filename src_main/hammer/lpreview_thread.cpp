@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The thread which performs lighting preview
 //
@@ -676,11 +676,11 @@ void CLightingPreviewThread::SendVectorMatrixAsRendering(
     for (int x = 0; x < src.m_nWidth; x++) {
       Vector color = src.Element(x, y);
       *(ret_bm->GetPixel(x, y) + 0) =
-          (uint8_t)min(255, (255.0 * pow(color.z, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (255.0 * pow(color.z, (float)(1 / 2.2))));
       *(ret_bm->GetPixel(x, y) + 1) =
-          (uint8_t)min(255, (255.0 * pow(color.y, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (255.0 * pow(color.y, (float)(1 / 2.2))));
       *(ret_bm->GetPixel(x, y) + 2) =
-          (uint8_t)min(255, (255.0 * pow(color.x, (float)(1 / 2.2))));
+          (uint8_t)std::min(255, (255.0 * pow(color.x, (float)(1 / 2.2))));
       *(ret_bm->GetPixel(x, y) + 3) = 0;
     }
   MessageFromLPreview ret_msg(LPREVIEW_MSG_DISPLAY_RESULT);

@@ -197,6 +197,9 @@
     <ClInclude Include="instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\tier0_api.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\tier0.rc">

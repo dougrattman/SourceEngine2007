@@ -12,11 +12,11 @@
 
 #endif
 
-#ifdef __i386__
-#define id386	1
+#if defined __i386__ && !defined __linux__
+#define id386 1
 #else
-#define id386	0
-#endif
+#define id386 0
+#endif  // __i386__
 
 // !!! must be kept the same as in d_iface.h !!!
 #define TRANSPARENT_COLOR	255

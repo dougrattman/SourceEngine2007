@@ -810,8 +810,8 @@ bool CNavArea::SpliceEdit(CNavArea *other) {
 
   if (m_extent.lo.x > other->m_extent.hi.x) {
     // 'this' is east of 'other'
-    float top = max(m_extent.lo.y, other->m_extent.lo.y);
-    float bottom = min(m_extent.hi.y, other->m_extent.hi.y);
+    float top = std::max(m_extent.lo.y, other->m_extent.lo.y);
+    float bottom = std::min(m_extent.hi.y, other->m_extent.hi.y);
 
     nw.x = other->m_extent.hi.x;
     nw.y = top;
@@ -838,8 +838,8 @@ bool CNavArea::SpliceEdit(CNavArea *other) {
     newArea->ConnectTo(other, WEST);
   } else if (m_extent.hi.x < other->m_extent.lo.x) {
     // 'this' is west of 'other'
-    float top = max(m_extent.lo.y, other->m_extent.lo.y);
-    float bottom = min(m_extent.hi.y, other->m_extent.hi.y);
+    float top = std::max(m_extent.lo.y, other->m_extent.lo.y);
+    float bottom = std::min(m_extent.hi.y, other->m_extent.hi.y);
 
     nw.x = m_extent.hi.x;
     nw.y = top;
@@ -868,8 +868,8 @@ bool CNavArea::SpliceEdit(CNavArea *other) {
   {
     if (m_extent.lo.y > other->m_extent.hi.y) {
       // 'this' is south of 'other'
-      float left = max(m_extent.lo.x, other->m_extent.lo.x);
-      float right = min(m_extent.hi.x, other->m_extent.hi.x);
+      float left = std::max(m_extent.lo.x, other->m_extent.lo.x);
+      float right = std::min(m_extent.hi.x, other->m_extent.hi.x);
 
       nw.x = left;
       nw.y = other->m_extent.hi.y;
@@ -896,8 +896,8 @@ bool CNavArea::SpliceEdit(CNavArea *other) {
       newArea->ConnectTo(other, NORTH);
     } else if (m_extent.hi.y < other->m_extent.lo.y) {
       // 'this' is north of 'other'
-      float left = max(m_extent.lo.x, other->m_extent.lo.x);
-      float right = min(m_extent.hi.x, other->m_extent.hi.x);
+      float left = std::max(m_extent.lo.x, other->m_extent.lo.x);
+      float right = std::min(m_extent.hi.x, other->m_extent.hi.x);
 
       nw.x = left;
       nw.y = m_extent.hi.y;
@@ -1365,8 +1365,8 @@ void CNavArea::ComputePortal(const CNavArea *to, NavDirType dir, Vector *center,
     else
       center->y = m_extent.hi.y;
 
-    float left = max(m_extent.lo.x, to->m_extent.lo.x);
-    float right = min(m_extent.hi.x, to->m_extent.hi.x);
+    float left = std::max(m_extent.lo.x, to->m_extent.lo.x);
+    float right = std::min(m_extent.hi.x, to->m_extent.hi.x);
 
     // clamp to our extent in case areas are disjoint
     if (left < m_extent.lo.x)
@@ -1388,8 +1388,8 @@ void CNavArea::ComputePortal(const CNavArea *to, NavDirType dir, Vector *center,
     else
       center->x = m_extent.hi.x;
 
-    float top = max(m_extent.lo.y, to->m_extent.lo.y);
-    float bottom = min(m_extent.hi.y, to->m_extent.hi.y);
+    float top = std::max(m_extent.lo.y, to->m_extent.lo.y);
+    float bottom = std::min(m_extent.hi.y, to->m_extent.hi.y);
 
     // clamp to our extent in case areas are disjoint
     if (top < m_extent.lo.y)
@@ -1422,8 +1422,8 @@ void CNavArea::ComputeClosestPointInPortal(const CNavArea *to, NavDirType dir,
     else
       closePos->y = m_extent.hi.y;
 
-    float left = max(m_extent.lo.x, to->m_extent.lo.x);
-    float right = min(m_extent.hi.x, to->m_extent.hi.x);
+    float left = std::max(m_extent.lo.x, to->m_extent.lo.x);
+    float right = std::min(m_extent.hi.x, to->m_extent.hi.x);
 
     // clamp to our extent in case areas are disjoint
     if (left < m_extent.lo.x)
@@ -1455,8 +1455,8 @@ void CNavArea::ComputeClosestPointInPortal(const CNavArea *to, NavDirType dir,
     else
       closePos->x = m_extent.hi.x;
 
-    float top = max(m_extent.lo.y, to->m_extent.lo.y);
-    float bottom = min(m_extent.hi.y, to->m_extent.hi.y);
+    float top = std::max(m_extent.lo.y, to->m_extent.lo.y);
+    float bottom = std::min(m_extent.hi.y, to->m_extent.hi.y);
 
     // clamp to our extent in case areas are disjoint
     if (top < m_extent.lo.y)
@@ -1537,10 +1537,10 @@ bool CNavArea::GetCornerHotspot(NavCornerType corner,
   Vector se = GetCorner(SOUTH_EAST);
 
   float size = 9.0f;
-  size = min(
+  size = std::min(
       size, GetSizeX() /
                 3);  // make sure the hotspot doesn't extend outside small areas
-  size = min(size, GetSizeY() / 3);
+  size = std::min(size, GetSizeY() / 3);
 
   switch (corner) {
     case NORTH_WEST:
@@ -1677,7 +1677,7 @@ void CNavArea::Draw(void) const {
   int bgcolor[4];
   if (4 == sscanf(nav_area_bgcolor.GetString(), "%d %d %d %d", &(bgcolor[0]),
                   &(bgcolor[1]), &(bgcolor[2]), &(bgcolor[3]))) {
-    for (int i = 0; i < 4; ++i) bgcolor[i] = clamp(bgcolor[i], 0, 255);
+    for (int i = 0; i < 4; ++i) bgcolor[i] = std::clamp(bgcolor[i], 0, 255);
 
     if (bgcolor[3] > 0) {
       const Vector offset(0, 0, 0.8f);
@@ -2959,8 +2959,10 @@ void CNavArea::UpdateBlocked(void) {
   Vector origin = GetCenter();
   origin.z += HalfHumanHeight;
 
-  const float sizeX = max(1, min(GetSizeX() / 2 - 5, HalfHumanWidth));
-  const float sizeY = max(1, min(GetSizeY() / 2 - 5, HalfHumanWidth));
+  const float sizeX =
+      std::max(1.0f, std::min(GetSizeX() / 2 - 5.0f, HalfHumanWidth));
+  const float sizeY =
+      std::max(1.0f, std::min(GetSizeY() / 2 - 5.0f, HalfHumanWidth));
   Vector mins(-sizeX, -sizeY, 0);
   Vector maxs(sizeX, sizeY, VEC_DUCK_HULL_MAX.z);
 

@@ -1436,9 +1436,11 @@ void CDetailObjectSystem::LevelInitPostEntity() {
 
   if (GetDetailController()) {
     cl_detailfade.SetValue(
-        min(m_flDefaultFadeStart, GetDetailController()->m_flFadeStartDist));
+        std::min(m_flDefaultFadeStart,
+                 static_cast<float>(GetDetailController()->m_flFadeStartDist)));
     cl_detaildist.SetValue(
-        min(m_flDefaultFadeEnd, GetDetailController()->m_flFadeEndDist));
+        std::min(m_flDefaultFadeEnd,
+                 static_cast<float>(GetDetailController()->m_flFadeEndDist)));
   } else {
     // revert to default values if the map doesn't specify
     cl_detailfade.SetValue(m_flDefaultFadeStart);
@@ -1574,8 +1576,8 @@ void CDetailObjectSystem::ScanForCounts(CUtlBuffer &buf,
     if (detailObjectLeaf != lump.m_Leaf) {
       // need to pad nfast to next sse boundary
       nFast += (0 - nFast) & 3;
-      nMaxFast = max(nMaxFast, nNumFastInLeaf);
-      nMaxOld = max(nMaxOld, nNumOldInLeaf);
+      nMaxFast = std::max(nMaxFast, nNumFastInLeaf);
+      nMaxOld = std::max(nMaxOld, nNumOldInLeaf);
       nNumOldInLeaf = 0;
       nNumFastInLeaf = 0;
       detailObjectLeaf = lump.m_Leaf;
@@ -1592,8 +1594,8 @@ void CDetailObjectSystem::ScanForCounts(CUtlBuffer &buf,
 
   // need to pad nfast to next sse boundary
   nFast += (0 - nFast) & 3;
-  nMaxFast = max(nMaxFast, nNumFastInLeaf);
-  nMaxOld = max(nMaxOld, nNumOldInLeaf);
+  nMaxFast = std::max(nMaxFast, nNumFastInLeaf);
+  nMaxOld = std::max(nMaxOld, nNumOldInLeaf);
 
   buf.SeekGet(CUtlBuffer::SEEK_HEAD, oldpos);
   *pNumFastSpritesToAllocate = nFast;
@@ -1858,7 +1860,7 @@ int CDetailObjectSystem::CountFastSpritesInLeafList(
                 pLeafList[i], CLSUBSYSTEM_DETAILOBJECTS));
     if (pData) {
       nCount += pData->m_nNumSprites;
-      nMax = max(nMax, pData->m_nNumSprites);
+      nMax = std::max(nMax, pData->m_nNumSprites);
     }
   }
   *nMaxFoundInLeaf = (nMax + 3) & ~3;  // round up
@@ -2127,7 +2129,7 @@ void CDetailObjectSystem::RenderFastSprites(const Vector &viewOrigin,
     nMaxQuadsToDraw = nMaxVerts / 4;
   }
 
-  int nQuadsToDraw = min(nQuadCount, nMaxQuadsToDraw);
+  int nQuadsToDraw = std::min(nQuadCount, nMaxQuadsToDraw);
   int nQuadsRemaining = nQuadsToDraw;
 
   meshBuilder.Begin(pMesh, MATERIAL_QUADS, nQuadsToDraw);
@@ -2163,7 +2165,7 @@ void CDetailObjectSystem::RenderFastSprites(const Vector &viewOrigin,
           nQuadsRemaining = nQuadsToDraw;
           meshBuilder.Begin(pMesh, MATERIAL_QUADS, nQuadsToDraw);
         }
-        int nToDraw = min(nCount, nQuadsRemaining);
+        int nToDraw = std::min(nCount, nQuadsRemaining);
         nCount -= nToDraw;
         nQuadsRemaining -= nToDraw;
         while (nToDraw--) {
@@ -2369,7 +2371,7 @@ void CDetailObjectSystem::RenderFastTranslucentDetailObjectsInLeaf(
     nMaxQuadsToDraw = nMaxVerts / 4;
   }
 
-  int nQuadsToDraw = min(nCount, nMaxQuadsToDraw);
+  int nQuadsToDraw = std::min(nCount, nMaxQuadsToDraw);
   int nQuadsRemaining = nQuadsToDraw;
 
   meshBuilder.Begin(pMesh, MATERIAL_QUADS, nQuadsToDraw);
@@ -2387,7 +2389,7 @@ void CDetailObjectSystem::RenderFastTranslucentDetailObjectsInLeaf(
       nQuadsRemaining = nQuadsToDraw;
       meshBuilder.Begin(pMesh, MATERIAL_QUADS, nQuadsToDraw);
     }
-    int nToDraw = min(nCount, nQuadsRemaining);
+    int nToDraw = std::min(nCount, nQuadsRemaining);
     nCount -= nToDraw;
     nQuadsRemaining -= nToDraw;
     while (nToDraw--) {
@@ -2632,7 +2634,7 @@ void CDetailObjectSystem::BuildDetailObjectRenderLists(
   } else {
     m_flCurFadeSqDist = 0;
   }
-  m_flCurFadeSqDist = min(m_flCurFadeSqDist, m_flCurMaxSqDist - 1);
+  m_flCurFadeSqDist = std::min(m_flCurFadeSqDist, m_flCurMaxSqDist - 1);
   m_flCurFalloffFactor = 255.0f / (m_flCurMaxSqDist - m_flCurFadeSqDist);
 
   ISpatialQuery *pQuery = engine->GetBSPTreeQuery();

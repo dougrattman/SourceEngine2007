@@ -226,7 +226,7 @@ void CFlextalkActor::SetFlexTarget(LocalFlexController_t flexnum, float value) {
   float value2 = value;
   if (random->RandomFloat(0.0, 1.0) < 0.2) {
     value2 = random->RandomFloat(value - 0.2, value + 0.2);
-    value2 = clamp(value2, 0.0, 1.0);
+    value2 = std::clamp(value2, 0.0f, 1.0f);
   }
 
   // HACK, for now, consider then linked is named "right_" or "left_"
@@ -341,7 +341,7 @@ void CFlextalkActor::ProcessSceneEvents(void) {
         weight =
             weight + (m_flextarget[i] - weight) / random->RandomFloat(2.0, 4.0);
       }
-      weight = clamp(weight, 0.0f, 1.0f);
+      weight = std::clamp(weight, 0.0f, 1.0f);
       SetFlexWeight(i, weight);
     }
 

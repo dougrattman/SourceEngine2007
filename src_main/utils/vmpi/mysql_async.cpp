@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "imysqlwrapper.h"
 #include "mysql_async.h"
 #include "utllinkedlist.h"

@@ -5,7 +5,7 @@
 //=============================================================================
 
 // Windows includes
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <time.h>
 
 // Maya includes

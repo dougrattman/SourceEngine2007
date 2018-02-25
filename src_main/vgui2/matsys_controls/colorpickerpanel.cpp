@@ -55,9 +55,9 @@ static void VectorToRGB888( const Vector &inVector, RGB888_t &outColor )
 	int r = (int)((inVector.x * 255.0f) + 0.5f);
 	int g = (int)((inVector.y * 255.0f) + 0.5f);
 	int b = (int)((inVector.z * 255.0f) + 0.5f);
-	outColor.r = clamp( r, 0, 255 );
-	outColor.g = clamp( g, 0, 255 );
-	outColor.b = clamp( b, 0, 255 );
+	outColor.r = std::clamp( r, 0, 255 );
+	outColor.g = std::clamp( g, 0, 255 );
+	outColor.b = std::clamp( b, 0, 255 );
 }
 
 
@@ -306,8 +306,8 @@ void CColorXYPreview::UpdateColorFromMouse( int x, int y )
 
 	float flNormalizedX = (float)x / (w-1);
 	float flNormalizedY = (float)y / (h-1);
-	flNormalizedX = clamp( flNormalizedX, 0.0f, 1.0f );
-	flNormalizedY = clamp( flNormalizedY, 0.0f, 1.0f );
+	flNormalizedX = std::clamp( flNormalizedX, 0.0f, 1.0f );
+	flNormalizedY = std::clamp( flNormalizedY, 0.0f, 1.0f );
 
 	int tx = (int)( (GetImageWidth()-1) * flNormalizedX + 0.5f );
 	int ty = (int)( (GetImageHeight()-1) * flNormalizedY + 0.5f );
@@ -574,7 +574,7 @@ void CColorZPreview::UpdateColorFromMouse( int x, int y )
 	h -= 2 * MARKER_WIDTH;
 
 	float flNormalizedY = (float)( y - MARKER_WIDTH ) / (h-1);
-	flNormalizedY = clamp( flNormalizedY, 0.0f, 1.0f );
+	flNormalizedY = std::clamp( flNormalizedY, 0.0f, 1.0f );
 
 	int ty = (int)( (GetImageHeight() - 1) * flNormalizedY + 0.5f );
 	if ( m_Type != COLOR_TYPE_RGB )
@@ -972,41 +972,41 @@ void CColorPickerPanel::OnTextChanged( KeyValues *data )
 	{
 		m_pRedText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		m_CurrentColor.r = clamp( val, 0, 255 );
+		m_CurrentColor.r = std::clamp( val, 0, 255 );
 		RGBtoHSV( m_CurrentColor, m_CurrentHSVColor );
 	}
 	else if ( pPanel == m_pGreenText )
 	{
 		m_pGreenText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		m_CurrentColor.g = clamp( val, 0, 255 );
+		m_CurrentColor.g = std::clamp( val, 0, 255 );
 		RGBtoHSV( m_CurrentColor, m_CurrentHSVColor );
 	}
 	else if ( pPanel == m_pBlueText )
 	{
 		m_pBlueText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		m_CurrentColor.b = clamp( val, 0, 255 );
+		m_CurrentColor.b = std::clamp( val, 0, 255 );
 		RGBtoHSV( m_CurrentColor, m_CurrentHSVColor );
 	}
 	else if ( pPanel == m_pAlphaText )
 	{
 		m_pAlphaText->GetText( buf, sizeof( buf ) );
 		int val = atoi( buf );
-		m_CurrentAlpha = clamp( val, 0, 255 );
+		m_CurrentAlpha = std::clamp( val, 0, 255 );
 	}
 	else if ( pPanel == m_pHueText )
 	{
 		m_pHueText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		m_CurrentHSVColor.x = clamp( val, 0, 360 );
+		m_CurrentHSVColor.x = std::clamp( val, 0, 360 );
 		HSVtoRGB( m_CurrentHSVColor, m_CurrentColor );
 	}
 	else if ( pPanel == m_pSaturationText )
 	{
 		m_pSaturationText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		val = clamp( val, 0, 100 );
+		val = std::clamp( val, 0, 100 );
 		m_CurrentHSVColor.y = (float)val / 100.0f;
 		HSVtoRGB( m_CurrentHSVColor, m_CurrentColor );
 	}
@@ -1014,7 +1014,7 @@ void CColorPickerPanel::OnTextChanged( KeyValues *data )
 	{
 		m_pValueText->GetText( buf, sizeof(buf) );
 		int val = atoi( buf );
-		val = clamp( val, 0, 100 );
+		val = std::clamp( val, 0, 100 );
 		m_CurrentHSVColor.z = (float)val / 100.0f;
 		HSVtoRGB( m_CurrentHSVColor, m_CurrentColor );
 	}

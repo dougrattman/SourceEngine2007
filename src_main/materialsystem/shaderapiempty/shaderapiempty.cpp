@@ -2112,7 +2112,7 @@ void CShaderAPIEmpty::BeginFrame() {}
 void CShaderAPIEmpty::EndFrame() {}
 
 // returns the current time in seconds....
-double CShaderAPIEmpty::CurrentTime() const { return Sys_FloatTime(); }
+double CShaderAPIEmpty::CurrentTime() const { return Plat_FloatTime(); }
 
 // Get the current camera position in world space.
 void CShaderAPIEmpty::GetWorldSpaceCameraPosition(float *pPos) const {}

@@ -157,7 +157,7 @@ void CMortarRound::MissileTouch( CBaseEntity *pOther )
 
 					// Flash the screen red
 					color32 white = {255,255,255, 255};
-					white.a = min( (flBlind * 255), 255 );
+					white.a = std::min( (flBlind * 255), 255 );
 					UTIL_ScreenFade( pPlayer, white, 0.3, 5.0, 0  );
 				}
 			}

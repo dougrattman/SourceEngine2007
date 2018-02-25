@@ -13,7 +13,7 @@
 
 // Standard includes
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <io.h>
 #include <stdlib.h>
 

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "stdafx.h"
 #ifdef _WIN32
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #elif _LINUX
 #define stricmp strcasecmp
 #endif

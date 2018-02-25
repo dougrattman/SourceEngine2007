@@ -567,7 +567,7 @@ void CMaterialModifyProxy::OnBindFloatLerp( C_MaterialModifyControl *pControl )
 		float currentValue;
 		if( m_flTransitionTime > 0.0f )
 		{
-			currentValue = m_flStartValue + ( m_flEndValue - m_flStartValue ) * clamp( ( ( gpGlobals->curtime - m_flStartTime ) / m_flTransitionTime ), 0.0f, 1.0f );
+			currentValue = m_flStartValue + ( m_flEndValue - m_flStartValue ) * std::clamp( ( ( gpGlobals->curtime - m_flStartTime ) / m_flTransitionTime ), 0.0f, 1.0f );
 		}
 		else
 		{

@@ -184,7 +184,7 @@ void MatSysWindow::Frame( void )
 	// clamp to MAX_FPS
 	if ( dt >= 0.0 && dt < MIN_TIMESTEP )
 	{
-		Sleep( max( 0, (int)( ( MIN_TIMESTEP - dt ) * 1000.0f ) ) );
+		Sleep( std::max( 0, (int)( ( MIN_TIMESTEP - dt ) * 1000.0f ) ) );
 
 		recursion_guard = false;
 		return;
@@ -192,7 +192,7 @@ void MatSysWindow::Frame( void )
 
 	if ( prev != 0.0 )
 	{
-		dt = min( 0.1, dt );
+		dt = std::min( 0.1, dt );
 		
 		g_MDLViewer->Think( dt );
 
@@ -255,7 +255,7 @@ int MatSysWindow::handleEvent (mxEvent *event)
 			oldlry = g_viewerSettings.lightrot[1];
 			g_viewerSettings.pause = false;
 
-			float r = 1.0/3.0 * min( w(), h() );
+			float r = 1.0/3.0 * std::min( w(), h() );
 
 			float d = sqrt( ( float )( (event->x - w()/2) * (event->x - w()/2) + (event->y - h()/2) * (event->y - h()/2) ) );
 
@@ -340,7 +340,7 @@ int MatSysWindow::handleEvent (mxEvent *event)
 			else if (event->buttons & mxEvent::MouseRightButton)
 			{
 				pModel->m_origin[0] = oldtx + (float) ((short)event->y - oldy) * 0.1;
-				pModel->m_origin[0] = clamp( pModel->m_origin[0], 8.0f, 1024.0f );
+				pModel->m_origin[0] = std::clamp( pModel->m_origin[0], 8.0f, 1024.0f );
 			}
 			redraw ();
 

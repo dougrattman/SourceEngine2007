@@ -689,12 +689,12 @@ void CNPC_HAssassin::RunAI( void )
 			EmitSound( filter, entindex(), "HAssassin.Beamsound" );
 		}
 
-		SetRenderColorA( max( GetRenderColor().a - 50, m_iTargetRanderamt ) );
+		SetRenderColorA( std::max( GetRenderColor().a - 50, m_iTargetRanderamt ) );
 		m_nRenderMode = kRenderTransTexture;
 	}
 	else if ( GetRenderColor().a < m_iTargetRanderamt)
 	{
-		SetRenderColorA ( min( GetRenderColor().a + 50, m_iTargetRanderamt ) );
+		SetRenderColorA ( std::min( GetRenderColor().a + 50, m_iTargetRanderamt ) );
 		if (GetRenderColor().a == 255)
 			m_nRenderMode = kRenderNormal;
 	}

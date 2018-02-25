@@ -217,13 +217,13 @@ void C_GasolineBlob::ClientThink()
 		{
 			// Fade out after we get lit.
 			m_flPuddleFade -= gpGlobals->frametime / PUDDLE_FADE_TIME;
-			m_flPuddleFade = max( m_flPuddleFade, 0 );
+			m_flPuddleFade = std::max( m_flPuddleFade, 0 );
 		}
 		else
 		{
 			// Grow the puddle until it's at its max size.
 			m_flPuddleSize += gpGlobals->frametime * ( PUDDLE_END_SIZE - PUDDLE_START_SIZE ) / PUDDLE_GROW_TIME;
-			m_flPuddleSize = min( m_flPuddleSize, PUDDLE_END_SIZE );
+			m_flPuddleSize = std::min( m_flPuddleSize, PUDDLE_END_SIZE );
 		}
 	}
 }

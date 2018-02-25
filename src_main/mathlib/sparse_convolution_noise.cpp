@@ -114,8 +114,8 @@ f32 SparseConvolutionNoise(Vector const &pnt,
                              zfrac - oz, pNoiseShapeFunction);
       }
 #ifdef MEASURE_RANGE
-  fmin1 = min(sum_out, fmin1);
-  fmax1 = max(sum_out, fmax1);
+  fmin1 = std::min(sum_out, fmin1);
+  fmax1 = std::max(sum_out, fmax1);
 #endif
   return RemapValClamped(sum_out, .544487, 9.219176, 0.0, 1.0);
 }

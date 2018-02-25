@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "consolewnd.h"
 
 #define EDITCONTROL_BORDER_SIZE	5

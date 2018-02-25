@@ -35,8 +35,8 @@ void CalculateTreeInfo_R( int iNode, int depth )
 	dnode_t *pNode = &dnodes[iNode];
 	if ( iNode < 0 ) // (is this a leaf)
 	{
-		g_nMinTreeDepth = min( g_nMinTreeDepth, depth );
-		g_nMaxTreeDepth = max( g_nMaxTreeDepth, depth );
+		g_nMinTreeDepth = std::min( g_nMinTreeDepth, depth );
+		g_nMaxTreeDepth = std::max( g_nMaxTreeDepth, depth );
 		g_TotalTreeDepth += depth;
 		g_TotalVariance += fabs( depth - g_nOptimumDepth );
 	}
@@ -101,7 +101,7 @@ void DrawTreeToScratchPad_R(
 
 void CalcTreeDepth_R( int iNode, int iLevel, int &iMaxDepth )
 {
-	iMaxDepth = max( iLevel, iMaxDepth );
+	iMaxDepth = std::max( iLevel, iMaxDepth );
 	if ( iNode < 0 )
 		return;
 
@@ -117,7 +117,7 @@ void DrawTreeToScratchPad()
 
 	int maxDepth = 0;
 	CalcTreeDepth_R( dmodels[0].headnode, 0, maxDepth );
-	float flXSpace = (1 << min( maxDepth, 14 )) * g_xSpacing;
+	float flXSpace = (1 << std::min( maxDepth, 14 )) * g_xSpacing;
 	g_ySpacing = (flXSpace / maxDepth) / 4;
 
 	DrawTreeToScratchPad_R(

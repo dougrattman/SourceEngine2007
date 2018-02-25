@@ -4,7 +4,7 @@
 //
 //=====================================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "interface.h"
 #include "tier0/include/icommandline.h"
 #include "filesystem_tools.h"

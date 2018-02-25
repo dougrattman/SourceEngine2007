@@ -910,7 +910,7 @@ bool CNPC_AntlionGuard::CanSummon( bool bIgnoreTime )
 		return false;
 
 	// Hit the max number of them allowed? Only summon when we're 2 down.
-	if ( m_iNumLiveAntlions >= max(1, ANTLIONGUARD_SUMMON_COUNT-1) )
+	if ( m_iNumLiveAntlions >= std::max(1, ANTLIONGUARD_SUMMON_COUNT-1) )
 		return false;
 
 	return true;
@@ -1344,7 +1344,7 @@ float CNPC_AntlionGuard::MaxYawSpeed( void )
 
 		//FIXME: Alter by skill level
 		float yawSpeed = RemapVal( dist, 0, 512, 1.0f, 2.0f );
-		yawSpeed = clamp( yawSpeed, 1.0f, 2.0f );
+		yawSpeed = std::clamp( yawSpeed, 1.0f, 2.0f );
 
 		return yawSpeed;
 	}

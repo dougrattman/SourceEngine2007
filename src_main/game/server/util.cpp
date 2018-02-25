@@ -654,7 +654,7 @@ void UTIL_GetPlayerConnectionInfo(int playerIndex, int &ping, int &packetloss) {
     const char *szCmdRate =
         engine->GetClientConVarValue(playerIndex, "cl_cmdrate");
 
-    int nCmdRate = max(1, Q_atoi(szCmdRate));
+    int nCmdRate = std::max(1, Q_atoi(szCmdRate));
     latency -= (0.5f / nCmdRate) + TICKS_TO_TIME(1.0f);  // correct latency
 
     // in GoldSrc we had a different, not fixed tickrate. so we have to adjust
@@ -662,10 +662,10 @@ void UTIL_GetPlayerConnectionInfo(int playerIndex, int &ping, int &packetloss) {
     latency -= TICKS_TO_TIME(0.5f);
 
     ping = latency * 1000.0f;     // as msecs
-    ping = clamp(ping, 5, 1000);  // set bounds, dont show pings under 5 msecs
+    ping = std::clamp(ping, 5, 1000);  // set bounds, dont show pings under 5 msecs
 
     packetloss = 100.0f * nci->GetAvgLoss(FLOW_INCOMING);  // loss in percentage
-    packetloss = clamp(packetloss, 0, 100);
+    packetloss = std::clamp(packetloss, 0, 100);
   } else {
     ping = 0;
     packetloss = 0;
@@ -1256,7 +1256,7 @@ void UTIL_BloodStream(const Vector &origin, const Vector &direction, int color,
 
   CPVSFilter filter(origin);
   te->BloodStream(filter, 0.0, &origin, &direction, 247, 63, 14, 255,
-                  min(amount, 255));
+                  std::min(amount, 255));
 }
 
 Vector UTIL_RandomBloodVector(void) {
@@ -2280,7 +2280,7 @@ Vector UTIL_PointOnLineNearestPoint(const Vector &vStartPos,
   float flLineLength = VectorNormalize(vEndToStart);
 
   if (clampEnds) {
-    fIntersectDist = clamp(fIntersectDist, 0.0f, flLineLength);
+    fIntersectDist = std::clamp(fIntersectDist, 0.0f, flLineLength);
   }
 
   Vector vIntersectPos = vStartPos + vEndToStart * fIntersectDist;
@@ -2591,7 +2591,7 @@ void UTIL_WorldToParentSpace(CBaseEntity *pEntity, Vector &vecPosition,
 void UTIL_BoundToWorldSize(Vector *pVecPos) {
   Assert(pVecPos);
   for (int i = 0; i < 3; ++i) {
-    (*pVecPos)[i] = clamp((*pVecPos)[i], MIN_COORD_FLOAT, MAX_COORD_FLOAT);
+    (*pVecPos)[i] = std::clamp((*pVecPos)[i], MIN_COORD_FLOAT, MAX_COORD_FLOAT);
   }
 }
 

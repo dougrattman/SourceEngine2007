@@ -15,9 +15,9 @@
 #include "tier0/include/platform.h"
 #include "tier1/utlbuffer.h"
 
-//-----------------------------------------------------------------------------
+
 // Creates a new unique id
-//-----------------------------------------------------------------------------
+
 void CreateUniqueId(UniqueId_t *pDest) {
 #ifdef IS_WINDOWS_PC
   COMPILE_TIME_ASSERT(sizeof(UUID) == sizeof(*pDest));
@@ -28,9 +28,9 @@ void CreateUniqueId(UniqueId_t *pDest) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Creates a new unique id from a string representation of one
-//-----------------------------------------------------------------------------
+
 bool UniqueIdFromString(UniqueId_t *pDest, const char *pBuf, int nMaxLen) {
   if (nMaxLen == 0) {
     nMaxLen = Q_strlen(pBuf);
@@ -71,9 +71,9 @@ bool UniqueIdFromString(UniqueId_t *pDest, const char *pBuf, int nMaxLen) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Sets an object ID to be an invalid state
-//-----------------------------------------------------------------------------
+
 void InvalidateUniqueId(UniqueId_t *pDest) {
   Assert(pDest);
   memset(pDest, 0, sizeof(UniqueId_t));

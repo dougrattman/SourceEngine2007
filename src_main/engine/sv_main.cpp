@@ -579,13 +579,13 @@ void CGameServer::InitMaxClients(void) {
 
   if (newmaxplayers >= 1) {
     // Never go above what the game .dll can handle
-    newmaxplayers = min(newmaxplayers, maxmaxplayers);
+    newmaxplayers = std::min(newmaxplayers, maxmaxplayers);
     m_nMaxClientsLimit = newmaxplayers;
   } else {
     newmaxplayers = defaultmaxplayers;
   }
 
-  newmaxplayers = clamp(newmaxplayers, minmaxplayers, m_nMaxClientsLimit);
+  newmaxplayers = std::clamp(newmaxplayers, minmaxplayers, m_nMaxClientsLimit);
 
   if ((CL_IsHL2Demo() || CL_IsPortalDemo()) && !IsDedicated()) {
     newmaxplayers = 1;
@@ -1372,7 +1372,7 @@ void CGameServer::SendClientMessages(bool bSendSnapshots) {
 }
 
 void CGameServer::SetMaxClients(int number) {
-  m_nMaxclients = clamp(number, 1, m_nMaxClientsLimit);
+  m_nMaxclients = std::clamp(number, 1, m_nMaxClientsLimit);
 
   ConMsg("maxplayers set to %i\n", m_nMaxclients);
 
@@ -1785,8 +1785,8 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   }
 
   current_skill = (int)(skill.GetFloat() + 0.5);
-  current_skill = max(current_skill, 0);
-  current_skill = min(current_skill, 3);
+  current_skill = std::max(current_skill, 0);
+  current_skill = std::min(current_skill, 3);
 
   skill.SetValue((float)current_skill);
 

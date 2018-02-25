@@ -321,7 +321,7 @@ void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
     const char *lastBackslash = strrchr(rc->gamePath, '\\');
     const char *gameFilename = rc->gamePath;
     if (lastSlash || lastBackslash) {
-      gameFilename = max(lastSlash, lastBackslash) + 1;
+      gameFilename = std::max(lastSlash, lastBackslash) + 1;
     }
     for (int i = 0; i < 1000; ++i) {
       Q_snprintf(cachePath, _MAX_PATH, "%s/%s%4.4d", CacheDirectory,

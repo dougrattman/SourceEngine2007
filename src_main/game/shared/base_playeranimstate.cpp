@@ -315,10 +315,12 @@ void CBasePlayerAnimState::UpdateAimSequenceLayers(
   }
 
   pDest0->m_flWeight *= flWeightScale * flAimSequenceWeight;
-  pDest0->m_flWeight = clamp(pDest0->m_flWeight, 0.0f, 1.0f);
+  pDest0->m_flWeight =
+      std::clamp(static_cast<float>(pDest0->m_flWeight), 0.0f, 1.0f);
 
   pDest1->m_flWeight *= flWeightScale * flAimSequenceWeight;
-  pDest1->m_flWeight = clamp(pDest1->m_flWeight, 0.0f, 1.0f);
+  pDest1->m_flWeight =
+      std::clamp(static_cast<float>(pDest1->m_flWeight), 0.0f, 1.0f);
 
   pDest0->m_flCycle = pDest1->m_flCycle = flCycle;
 }
@@ -340,7 +342,7 @@ void CBasePlayerAnimState::OptimizeLayerWeights(int iFirstLayer, int nLayers) {
   CAnimationLayer *pLayer = m_pOuter->GetAnimOverlay(iFirstLayer);
   if (pLayer->IsActive() && pLayer->m_flWeight > 0.0f) {
     pLayer->m_flWeight = 1.0f - totalWeight;
-    pLayer->m_flWeight = max(pLayer->m_flWeight, 0.0f);
+    pLayer->m_flWeight = std::max(static_cast<float>(pLayer->m_flWeight), 0.0f);
   }
 
   // This part is just an optimization. Since we have the walk/run animations
@@ -455,7 +457,8 @@ float CBasePlayerAnimState::CalcMovementPlaybackRate(bool *bIsMoving) {
       // Note this gets set back to 1.0 if sequence changes due to
       // ResetSequenceInfo below
       flReturnValue = speed / flGroundSpeed;
-      flReturnValue = clamp(flReturnValue, 0.01, 10);  // don't go nuts here.
+      flReturnValue =
+          std::clamp(flReturnValue, 0.01f, 10.0f);  // don't go nuts here.
     }
     *bIsMoving = true;
   }
@@ -634,7 +637,7 @@ void CBasePlayerAnimState::ComputePoseParam_BodyPitch(CStudioHdr *pStudioHdr) {
   if (flPitch > 180.0f) {
     flPitch -= 360.0f;
   }
-  flPitch = clamp(flPitch, -90, 90);
+  flPitch = std::clamp(flPitch, -90.0f, 90.0f);
 
   // See if we have a blender for pitch
   int pitch = GetOuter()->LookupPoseParameter(pStudioHdr, "body_pitch");
@@ -666,7 +669,7 @@ int CBasePlayerAnimState::ConvergeAngles(float goal, float maxrate,
   if (anglediffabs <= FADE_TURN_DEGREES) {
     scale = anglediffabs / FADE_TURN_DEGREES;
     // Always do at least a bit of the turn ( 1% )
-    scale = clamp(scale, 0.01f, 1.0f);
+    scale = std::clamp(scale, 0.01f, 1.0f);
   }
 
   float maxmove = maxrate * dt * scale;

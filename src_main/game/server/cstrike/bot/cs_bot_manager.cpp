@@ -658,7 +658,7 @@ CON_COMMAND_F(bot_kick,
     if (!all) {
       // adjust bot quota so kicked bot is not immediately added back in
       int newQuota = cv_bot_quota.GetInt() - 1;
-      cv_bot_quota.SetValue(clamp(newQuota, 0, cv_bot_quota.GetInt()));
+      cv_bot_quota.SetValue(std::clamp(newQuota, 0, cv_bot_quota.GetInt()));
       return;
     }
   }
@@ -669,7 +669,7 @@ CON_COMMAND_F(bot_kick,
     cv_bot_quota.SetValue(0);
   } else {
     int newQuota = cv_bot_quota.GetInt() - collector.m_bots.Count();
-    cv_bot_quota.SetValue(clamp(newQuota, 0, cv_bot_quota.GetInt()));
+    cv_bot_quota.SetValue(std::clamp(newQuota, 0, cv_bot_quota.GetInt()));
   }
 }
 
@@ -1028,7 +1028,7 @@ void CCSBotManager::MaintainBotQuota(void) {
     // together to equal bot_quota unless the round is already in progress, in
     // which case we play with what we've been dealt
     if (!isRoundInProgress) {
-      desiredBotCount = max(0, desiredBotCount - humanPlayersInGame);
+      desiredBotCount = std::max(0, desiredBotCount - humanPlayersInGame);
     } else {
       desiredBotCount = botsInGame;
     }
@@ -1038,7 +1038,7 @@ void CCSBotManager::MaintainBotQuota(void) {
     // play with what we've been dealt
     if (!isRoundInProgress) {
       desiredBotCount =
-          (int)max(0, cv_bot_quota.GetFloat() * humanPlayersInGame);
+          (int)std::max(0, cv_bot_quota.GetFloat() * humanPlayersInGame);
     } else {
       desiredBotCount = botsInGame;
     }
@@ -1059,10 +1059,10 @@ void CCSBotManager::MaintainBotQuota(void) {
   // join
   if (cv_bot_auto_vacate.GetBool())
     desiredBotCount =
-        min(desiredBotCount, gpGlobals->maxClients - (humanPlayersInGame + 1));
+        std::min(desiredBotCount, gpGlobals->maxClients - (humanPlayersInGame + 1));
   else
     desiredBotCount =
-        min(desiredBotCount, gpGlobals->maxClients - humanPlayersInGame);
+        std::min(desiredBotCount, gpGlobals->maxClients - humanPlayersInGame);
 
   // Try to balance teams, if we are in the first 20 seconds of a round and bots
   // can join either team.
@@ -1351,10 +1351,10 @@ const Vector *CCSBotManager::GetRandomPositionInZone(const Zone *zone) const {
   } else {
     const Extent &areaExtent = area->GetExtent();
     Extent overlap;
-    overlap.lo.x = max(areaExtent.lo.x, zone->m_extent.lo.x);
-    overlap.lo.y = max(areaExtent.lo.y, zone->m_extent.lo.y);
-    overlap.hi.x = min(areaExtent.hi.x, zone->m_extent.hi.x);
-    overlap.hi.y = min(areaExtent.hi.y, zone->m_extent.hi.y);
+    overlap.lo.x = std::max(areaExtent.lo.x, zone->m_extent.lo.x);
+    overlap.lo.y = std::max(areaExtent.lo.y, zone->m_extent.lo.y);
+    overlap.hi.x = std::min(areaExtent.hi.x, zone->m_extent.hi.x);
+    overlap.hi.y = std::min(areaExtent.hi.y, zone->m_extent.hi.y);
 
     pos.x = (overlap.lo.x + overlap.hi.x) / 2.0f;
     pos.y = (overlap.lo.y + overlap.hi.y) / 2.0f;

@@ -303,13 +303,13 @@ void CMapClass::SetCullBoxFromFaceList( CMapFaceList *pFaces )
 			//			
 			for (int nDim = 0; nDim < 3; nDim++)
 			{
-				m_CullBox.bmins[0] = min(m_CullBox.bmins[0], m_Origin[0] - point[nDim]);
-				m_CullBox.bmins[1] = min(m_CullBox.bmins[1], m_Origin[1] - point[nDim]);
-				m_CullBox.bmins[2] = min(m_CullBox.bmins[2], m_Origin[2] - point[nDim]);
+				m_CullBox.bmins[0] = std::min(m_CullBox.bmins[0], m_Origin[0] - point[nDim]);
+				m_CullBox.bmins[1] = std::min(m_CullBox.bmins[1], m_Origin[1] - point[nDim]);
+				m_CullBox.bmins[2] = std::min(m_CullBox.bmins[2], m_Origin[2] - point[nDim]);
 
-				m_CullBox.bmaxs[0] = max(m_CullBox.bmaxs[0], m_Origin[0] + point[nDim]);
-				m_CullBox.bmaxs[1] = max(m_CullBox.bmaxs[1], m_Origin[1] + point[nDim]);
-				m_CullBox.bmaxs[2] = max(m_CullBox.bmaxs[2], m_Origin[2] + point[nDim]);
+				m_CullBox.bmaxs[0] = std::max(m_CullBox.bmaxs[0], m_Origin[0] + point[nDim]);
+				m_CullBox.bmaxs[1] = std::max(m_CullBox.bmaxs[1], m_Origin[1] + point[nDim]);
+				m_CullBox.bmaxs[2] = std::max(m_CullBox.bmaxs[2], m_Origin[2] + point[nDim]);
 			}
 		}
 	}

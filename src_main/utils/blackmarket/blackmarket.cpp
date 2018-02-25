@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "filesystem.h"
 #include "filesystem_helpers.h"

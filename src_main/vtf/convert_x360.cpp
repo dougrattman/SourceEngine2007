@@ -90,16 +90,16 @@ bool ComputeTargetDimensions(const char *pDebugName, IVTFTexture *pVTFTexture,
           pVTFTexture->GetResourceData(VTF_RSRC_TEXTURE_LOD_SETTINGS, NULL));
   if (pLODInfo) {
     if (pLODInfo->m_ResolutionClampX) {
-      nClampX = min(nClampX, 1 << pLODInfo->m_ResolutionClampX);
+      nClampX = std::min(nClampX, 1 << pLODInfo->m_ResolutionClampX);
     }
     if (pLODInfo->m_ResolutionClampX_360) {
-      nClampX = min(nClampX, 1 << pLODInfo->m_ResolutionClampX_360);
+      nClampX = std::min(nClampX, 1 << pLODInfo->m_ResolutionClampX_360);
     }
     if (pLODInfo->m_ResolutionClampY) {
-      nClampY = min(nClampY, 1 << pLODInfo->m_ResolutionClampY);
+      nClampY = std::min(nClampY, 1 << pLODInfo->m_ResolutionClampY);
     }
     if (pLODInfo->m_ResolutionClampY_360) {
-      nClampY = min(nClampY, 1 << pLODInfo->m_ResolutionClampY_360);
+      nClampY = std::min(nClampY, 1 << pLODInfo->m_ResolutionClampY_360);
     }
   }
 
@@ -205,8 +205,8 @@ bool ConvertImageFormatEx(unsigned char *pSourceImage, int sourceImageSize,
           float flSrgbGamma = float(*(pRGB[j])) / 255.0f;
           float fl360Gamma = SrgbGammaTo360Gamma(flSrgbGamma);
 
-          fl360Gamma = clamp(fl360Gamma, 0.0f, 1.0f);
-          *(pRGB[j]) = (unsigned char)(clamp(((fl360Gamma * 255.0f) + 0.5f),
+          fl360Gamma = std::clamp(fl360Gamma, 0.0f, 1.0f);
+          *(pRGB[j]) = (unsigned char)(std::clamp(((fl360Gamma * 255.0f) + 0.5f),
                                              0.0f, 255.0f));
         }
       }
@@ -296,11 +296,11 @@ bool ConvertImageFormatEx(unsigned char *pSourceImage, int sourceImageSize,
             float flSrgbGamma = *pFlValue;
             float fl360Gamma = SrgbGammaTo360Gamma(flSrgbGamma);
 
-            fl360Gamma = clamp(fl360Gamma, 0.0f, 1.0f);
-            //*p8BitValue = ( unsigned char ) ( clamp( ( ( fl360Gamma * 255.0f )
+            fl360Gamma = std::clamp(fl360Gamma, 0.0f, 1.0f);
+            //*p8BitValue = ( unsigned char ) ( std::clamp( ( ( fl360Gamma * 255.0f )
             //+ 0.5f ), 0.0f, 255.0f ) );
             *p8BitValue =
-                (unsigned char)(clamp(((fl360Gamma * 255.0f)), 0.0f, 255.0f));
+                (unsigned char)(std::clamp(((fl360Gamma * 255.0f)), 0.0f, 255.0f));
           }
         }
 

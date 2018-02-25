@@ -229,7 +229,7 @@ void CBaseBudgetPanel::PerformLayout() {
   for (i = 0; i < m_TimeLabels.Count(); i++) {
     int labelWidth, labelHeight;
     m_TimeLabels[i]->GetContentSize(labelWidth, labelHeight);
-    maxTimeLabelHeight = max(maxTimeLabelHeight, labelHeight);
+    maxTimeLabelHeight = std::max(maxTimeLabelHeight, labelHeight);
   }
 
   totalHeightMinusTimeLabels = totalHeight - maxTimeLabelHeight;

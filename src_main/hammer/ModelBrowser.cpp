@@ -193,7 +193,7 @@ void CModelBrowser::Resize()
 	m_pPicker->SetBounds( 0,0, rect.Width(), rect.Height() - 32 );
 	m_pButtonCancel->SetPos( 8, rect.Height() - 30 );
 	m_pButtonOK->SetPos( 84, rect.Height() - 30 );
-	m_pStatusLine->SetBounds( 160, rect.Height() - 30, max( 100, rect.Width() - 166 ), 24 );
+	m_pStatusLine->SetBounds( 160, rect.Height() - 30, std::max( 100, rect.Width() - 166 ), 24 );
 }
 
 void CModelBrowser::OnSize(UINT nType, int cx, int cy) 

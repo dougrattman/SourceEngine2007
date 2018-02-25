@@ -76,7 +76,7 @@ class CMapSprite : public CMapHelper
 		
 		int  GetNextSpriteFrame( CRender3D* pRender );
 		void SetRenderMode( int mode );
-		void SpriteColor(unsigned char *pColor, int eRenderMode, colorVec RenderColor, int alpha);
+		void SpriteColor(unsigned char *pColor, int eRenderMode, color32 RenderColor, int alpha);
 
 		QAngle m_Angles;
 
@@ -86,7 +86,7 @@ class CMapSprite : public CMapHelper
 		float m_fElapsedTimeThisFrame;	// How many seconds we have rendered this sprite frame so far.
 		float m_fScale;					// Sprite scale along sprite axes.
 		int m_eRenderMode;				// Our render mode (transparency, etc.).
-		colorVec m_RenderColor;			// Our render color.
+    color32 m_RenderColor;			// Our render color.
 		bool m_bIsIcon;					// If true, this sprite is an iconic representation of an entity.
 };
 

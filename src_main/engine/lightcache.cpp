@@ -790,8 +790,8 @@ static float LightIntensityAndDirectionAtPointOld(dworldlight_t *pLight,
 
   // Early out for really low-intensity lights
   // That way we don't need to ray-cast or normalize
-  float intensity = max(pLight->intensity[0], pLight->intensity[1]);
-  intensity = max(intensity, pLight->intensity[2]);
+  float intensity = std::max(pLight->intensity[0], pLight->intensity[1]);
+  intensity = std::max(intensity, pLight->intensity[2]);
 
   // This is about 1/256
   // See the comment titled "EMIT_SURFACE LIGHTS" at the top for info about why
@@ -882,8 +882,8 @@ static float LightIntensityAndDirectionAtPointNew(dworldlight_t *pLight,
 
   // Early out for really low-intensity lights
   // That way we don't need to ray-cast or normalize
-  float intensity = max(pLight->intensity[0], pLight->intensity[1]);
-  intensity = max(intensity, pLight->intensity[2]);
+  float intensity = std::max(pLight->intensity[0], pLight->intensity[1]);
+  intensity = std::max(intensity, pLight->intensity[2]);
 
   // This is about 1/256
   // See the comment titled "EMIT_SURFACE LIGHTS" at the top for info about why
@@ -927,7 +927,7 @@ static float LightIntensityAndDirectionAtPointNew(dworldlight_t *pLight,
 
     // cache miss
     flTraceDistance =
-        max(100.0, 2.0 * dist);  // trace a little further for better caching
+        std::max(100.0, 2.0 * dist);  // trace a little further for better caching
     epnt += (dist - flTraceDistance) * (*pDirection);
   }
 
@@ -1033,7 +1033,7 @@ static float LightIntensityAndDirectionInBox(
         Vector vecClosestPoint;
         vecClosestPoint.Init();
         for (int i = 0; i < 3; ++i) {
-          vecClosestPoint[i] = clamp(pLight->origin[i], mins[i], maxs[i]);
+          vecClosestPoint[i] = std::clamp(pLight->origin[i], mins[i], maxs[i]);
         }
 
         vecClosestPoint -= pLight->origin;
@@ -1282,7 +1282,7 @@ static const uint8_t *AddWorldLightToLightingState(
   if (pWorldLight->type == emit_surface ||
       illum >= r_worldlightmin.GetFloat())  // FIXME: tune this value
   {
-    int nWorldLights = min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
+    int nWorldLights = std::min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
                            r_worldlights.GetInt());
 
     // if remaining slots, add to list
@@ -1357,7 +1357,7 @@ static void WorldLightFromDynamicLight(dlight_t const &dynamicLight,
 
   // Assume a quadratic attenuation factor; atten so we hit minlight
   // at radius away...
-  float minlight = max(dynamicLight.minlight, g_flMinLightingValue);
+  float minlight = std::max(dynamicLight.minlight, g_flMinLightingValue);
   // NOTE: Previous implementation turned off attenuation at radius zero.
   //		clamping is more continuous
   float radius = dynamicLight.GetRadius();
@@ -1605,7 +1605,7 @@ static void AddWorldLightToLightingStateForStaticProps(
   if (pWorldLight->type == emit_surface ||
       illum >= r_worldlightmin.GetFloat())  // FIXME: tune this value
   {
-    int nWorldLights = min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
+    int nWorldLights = std::min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
                            r_worldlights.GetInt());
 
     // if remaining slots, add to list
@@ -2379,9 +2379,9 @@ lightcache_t *FindNearestCache(int x, int y, int z, int leafIndex) {
     if (leafIndex != pCache->leaf) {
       dist += 2;
     }
-    dist = max(dist, dx);
-    dist = max(dist, dy);
-    dist = max(dist, dz);
+    dist = std::max(dist, dx);
+    dist = std::max(dist, dy);
+    dist = std::max(dist, dz);
     if (dist < bestDist) {
       pBest = pCache;
       bestDist = dist;

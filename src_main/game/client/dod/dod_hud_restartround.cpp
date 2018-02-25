@@ -152,7 +152,7 @@ void CDODRestartRoundLabel::OnThink()
 
 		int iSecondsRemaining = (int)( flRoundRestartTime - gpGlobals->curtime );
 
-		iSecondsRemaining = max( 0, iSecondsRemaining );
+		iSecondsRemaining = std::max( 0, iSecondsRemaining );
 
 		_snwprintf ( minutes, sizeof(minutes)/sizeof(wchar_t), L"%d", (iSecondsRemaining / 60) );
 		_snwprintf ( seconds, sizeof(seconds)/sizeof(wchar_t), L"%02d", (iSecondsRemaining % 60) );

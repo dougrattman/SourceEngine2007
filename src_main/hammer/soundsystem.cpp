@@ -202,7 +202,7 @@ void CSoundSystem::BuildFileListInDirectory( char const* pDirectoryName, const c
 		int nAllocSize = nDirectoryNameLen + Q_strlen(pFileName) + 2;
 		char *pFileNameWithPath = (char *)stackalloc( nAllocSize );
 		
-		const char *pStartPos = max( strchr( pDirectoryName, '/' ), strchr( pDirectoryName, '\\' ) );
+		const char *pStartPos = std::max( strchr( pDirectoryName, '/' ), strchr( pDirectoryName, '\\' ) );
 		if ( pStartPos )
 			Q_snprintf(	pFileNameWithPath, nAllocSize, "%s%c%s", pStartPos+1, CORRECT_PATH_SEPARATOR, pFileName ); 
 		else

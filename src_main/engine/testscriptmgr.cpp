@@ -144,7 +144,7 @@ CON_COMMAND(Test_StartScript, "Start a test script running..") {
 CTestScriptMgr::CTestScriptMgr() {
   m_hFile = FILESYSTEM_INVALID_HANDLE;
   m_NextCheckPoint[0] = 0;
-  m_WaitUntil = Sys_FloatTime();
+  m_WaitUntil = Plat_FloatTime();
 }
 
 CTestScriptMgr::~CTestScriptMgr() { Term(); }
@@ -252,7 +252,7 @@ void CTestScriptMgr::RunCommands() {
 }
 
 bool CTestScriptMgr::IsTimerWaiting() const {
-  if (Sys_FloatTime() < m_WaitUntil) {
+  if (Plat_FloatTime() < m_WaitUntil) {
     return true;
   } else {
     return false;
@@ -264,7 +264,7 @@ bool CTestScriptMgr::IsCheckPointWaiting() const {
 }
 
 void CTestScriptMgr::SetWaitTime(float flSeconds) {
-  m_WaitUntil = Sys_FloatTime() + flSeconds;
+  m_WaitUntil = Plat_FloatTime() + flSeconds;
 }
 
 CLoopInfo *CTestScriptMgr::FindLoop(const char *pLoopName) {
@@ -284,7 +284,7 @@ void CTestScriptMgr::StartLoop(const char *pLoopName) {
   CLoopInfo *pLoop = new CLoopInfo;
   Q_strncpy(pLoop->m_Name, pLoopName, sizeof(pLoop->m_Name));
   pLoop->m_nCount = 0;
-  pLoop->m_flStartTime = Sys_FloatTime();
+  pLoop->m_flStartTime = Plat_FloatTime();
   pLoop->m_iNextCommandPos = g_pFileSystem->Tell(m_hFile);
   pLoop->m_ListIndex = m_Loops.AddToTail(pLoop);
 }
@@ -319,7 +319,7 @@ void CTestScriptMgr::LoopForNumSeconds(const char *pLoopName, double nSeconds) {
         pLoopName);
   }
 
-  if (Sys_FloatTime() - pLoop->m_flStartTime < nSeconds) {
+  if (Plat_FloatTime() - pLoop->m_flStartTime < nSeconds) {
     g_pFileSystem->Seek(m_hFile, pLoop->m_iNextCommandPos,
                         FILESYSTEM_SEEK_HEAD);
   } else {

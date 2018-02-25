@@ -288,7 +288,7 @@ char *VOX_GetDirectory(char *szpath, int maxpath, char *psz) {
 
   cb = Q_strlen(psz) - cb;
 
-  cb = clamp(cb, 0, maxpath - 1);
+  cb = std::clamp(cb, 0, maxpath - 1);
 
   // FIXME:  Is this safe?
   Q_memcpy(szpath, psz, cb);
@@ -680,7 +680,7 @@ void VOX_LookupRangeHeadingOrGrid(int irhg, char *pGroupName,
 
     dmeters = (int)(dist * 2.54 / 100.0);  // convert inches to meters
 
-    dmeters = clamp(dmeters, 0, 900);
+    dmeters = std::clamp(dmeters, 0, 900);
   } else if (irhg == 1) {
     // get heading
     QAngle source_angles;
@@ -698,7 +698,7 @@ void VOX_LookupRangeHeadingOrGrid(int irhg, char *pGroupName,
     dmeters = (int)(((16384 + listener_origin.y) * 2.54 / 100.0) / 10) % 20;
   }
 
-  dmeters = clamp(dmeters, 0, 999);
+  dmeters = std::clamp(dmeters, 0, 999);
 
   // get hundreds, tens, ones
 
@@ -1089,7 +1089,7 @@ void VOX_ReplaceVirtualNames(channel_t *pchan) {
 
       if (fbymap) {
         int imap = VOX_GetMapNameIndex(pszmap);
-        imap = clamp(imap, 0, 99);
+        imap = std::clamp(imap, 0, 99);
 
         // replace last 2 characters in _MAP__ substring
         // with imap - this effectively makes all

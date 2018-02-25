@@ -59,7 +59,7 @@ int main( int argc, char ** argv )
 	int out_h = atoi( argv[4] );
 	FloatBitMap_t lores( out_w, out_h );
 
-	float max_rad = 2.0 * flSpread * max( hires_image.Width * ( 1.0 / out_w ), hires_image.Height * ( 1.0 / out_h ));
+	float max_rad = 2.0 * flSpread * std::max( hires_image.Width * ( 1.0 / out_w ), hires_image.Height * ( 1.0 / out_h ));
 	int irad = ceil( max_rad );
 	for( int comp = 0;comp < 4;comp ++ )
 	{
@@ -86,7 +86,7 @@ int main( int argc, char ** argv )
 							}
 						}
 					// done
-					float dnum = min( 0.5, FLerp( 0, .5, 0, max_rad, closest_dist ));
+					float dnum = std::min( 0.5, FLerp( 0, .5, 0, max_rad, closest_dist ));
 					if ( !inside_test )
 						dnum =- dnum;
 					lores.Pixel( x, y, comp ) = 0.5 + dnum;

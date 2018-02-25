@@ -33,7 +33,7 @@ class CUtlDataEnvelope {
   int m_nBytes;
 };
 
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 class CUtlEnvelope : protected CUtlDataEnvelope {
@@ -50,7 +50,7 @@ class CUtlEnvelope : protected CUtlDataEnvelope {
   operator void *() const;
 };
 
-//-----------------------------------------------------------------------------
+
 
 template <>
 class CUtlEnvelope<const char *> {
@@ -77,7 +77,7 @@ class CUtlEnvelope<const char *> {
   CUtlString m_string;
 };
 
-//-----------------------------------------------------------------------------
+
 
 #include "tier0/include/memdbgon.h"
 
@@ -138,7 +138,7 @@ inline CUtlDataEnvelope::operator void *() const {
   return (m_nBytes > 4) ? (void *)m_pData : (void *)m_data;
 }
 
-//-----------------------------------------------------------------------------
+
 
 template <typename T>
 inline CUtlEnvelope<T>::CUtlEnvelope(const T *pData, int nElems)
@@ -175,7 +175,7 @@ inline CUtlEnvelope<T>::operator void *() const {
   return ((const_cast<CUtlEnvelope<T> *>(this))->operator void *());
 }
 
-//-----------------------------------------------------------------------------
+
 
 #include "tier0/include/memdbgoff.h"
 

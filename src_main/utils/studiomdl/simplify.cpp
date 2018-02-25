@@ -280,7 +280,7 @@ void processAnimations()
 			{
 				// roll back 0.2 seconds to try to prevent popping
 				int frames = panim->fps * panim->motionrollback;
-				lastframe = max( min( startframe + 1, panim->numframes - 1), panim->numframes - frames - 1 );
+				lastframe = std::max( std::min( startframe + 1, panim->numframes - 1), panim->numframes - frames - 1 );
 				//printf("%s : %d %d (%d)\n", panim->name, startframe, lastframe, panim->numframes - 1 );
 			}
 			else
@@ -308,7 +308,7 @@ void processAnimations()
 			{
 				for (k = 0; k < g_sequence[i].groupsize[1]; k++)
 				{
-					g_sequence[i].weight[n] = max( g_sequence[i].weight[n], g_sequence[i].panim[j][k]->weight[n] );
+					g_sequence[i].weight[n] = std::max( g_sequence[i].weight[n], g_sequence[i].panim[j][k]->weight[n] );
 				}
 			}
 		}
@@ -1464,7 +1464,7 @@ void BuildRawTransforms( const s_source_t *psource, const char *pAnimationName,
 	}
 	else
 	{
-		frame = clamp( frame, 0, pSourceAnim->numframes - 1 );
+		frame = std::clamp( frame, 0, pSourceAnim->numframes - 1 );
 	}
 
 	// build source space local to world transforms
@@ -1806,13 +1806,13 @@ void matchBlend( s_animation_t *pDestAnim, s_animation_t *pSrcAnimation, int iSr
 
 	if (pDestAnim->flags & STUDIO_LOOPING)
 	{
-		iPre = max( iPre, -pDestAnim->numframes );
-		iPost = min( iPost, pDestAnim->numframes );
+		iPre = std::max( iPre, -pDestAnim->numframes );
+		iPost = std::min( iPost, pDestAnim->numframes );
 	}
 	else
 	{
-		iPre = max( iPre, -iDestFrame );
-		iPost = min( iPost, pDestAnim->numframes - iDestFrame );
+		iPre = std::max( iPre, -iDestFrame );
+		iPost = std::min( iPost, pDestAnim->numframes - iDestFrame );
 	}
 
 	Vector delta_pos[MAXSTUDIOSRCBONES];
@@ -2413,7 +2413,7 @@ static void ComputeVertexAnimationSpeed( s_flexkey_t& flexKey )
 		}
 		else
 		{
-			flexKey.vanim[m].speed = clamp( flexKey.vanim[m].pos.Length() / (flScale * flexKey.decay), 0.0f, 1.0f );
+			flexKey.vanim[m].speed = std::clamp( flexKey.vanim[m].pos.Length() / (flScale * flexKey.decay), 0.0f, 1.0f );
 		}
 	}
 }
@@ -2471,7 +2471,7 @@ static void BuildModelToVAnimMap( s_source_t *pVSource, s_sourceanim_t *pVSource
 		pModelToVAnim[j] = -1;
 	}
 
-	int nMinLod = min( g_minLod, g_ScriptLODs.Count() - 1 );
+	int nMinLod = std::min( g_minLod, g_ScriptLODs.Count() - 1 );
 
 	for ( int j = 0; j < pVSource->numvertices; j++ )
 	{
@@ -6109,10 +6109,10 @@ static void CalcPoseParameters( void )
 						MdlError( "calcblend failed in %s\n", pseq->name );
 					}
 
-					g_pose[j0].min = min( g_pose[j0].min, pseq->paramstart[iPose] );
-					g_pose[j0].max = max( g_pose[j0].max, pseq->paramstart[iPose] );
-					g_pose[j0].min = min( g_pose[j0].min, pseq->paramend[iPose] );
-					g_pose[j0].max = max( g_pose[j0].max, pseq->paramend[iPose] );
+					g_pose[j0].min = std::min( g_pose[j0].min, pseq->paramstart[iPose] );
+					g_pose[j0].max = std::max( g_pose[j0].max, pseq->paramstart[iPose] );
+					g_pose[j0].min = std::min( g_pose[j0].min, pseq->paramend[iPose] );
+					g_pose[j0].max = std::max( g_pose[j0].max, pseq->paramend[iPose] );
 				}
 				else
 				{
@@ -6831,7 +6831,7 @@ static void ProcessIKRules( )
 		{
 			for (k = 0; k < g_sequence[i].groupsize[1]; k++)
 			{
-				g_sequence[i].numikrules = max( g_sequence[i].numikrules, g_sequence[i].panim[j][k]->numikrules );
+				g_sequence[i].numikrules = std::max( g_sequence[i].numikrules, g_sequence[i].panim[j][k]->numikrules );
 			}
 		}
 
@@ -7021,8 +7021,8 @@ static void CompressAnimations( )
 			int iStartFrame = w * iSectionFrames;
 			int iEndFrame = (w + 1) * iSectionFrames;
 
-			iStartFrame = min( iStartFrame, panim->numframes - 1 );
-			iEndFrame = min( iEndFrame, panim->numframes - 1 );
+			iStartFrame = std::min( iStartFrame, panim->numframes - 1 );
+			iEndFrame = std::min( iEndFrame, panim->numframes - 1 );
 
 			// printf("%s : %d %d\n", panim->name, iStartFrame, iEndFrame );
 
@@ -7080,8 +7080,8 @@ static void CompressAnimations( )
 								value[n] = ( psrcdata->pos[k] - g_bonetable[j].pos[k] ) / g_bonetable[j].posscale[k]; 
 							}
 
-							checkmin[k] = min( value[n] * g_bonetable[j].posscale[k], checkmin[k] );
-							checkmax[k] = max( value[n] * g_bonetable[j].posscale[k], checkmax[k] );
+							checkmin[k] = std::min( value[n] * g_bonetable[j].posscale[k], checkmin[k] );
+							checkmax[k] = std::max( value[n] * g_bonetable[j].posscale[k], checkmax[k] );
 							break;
 						case 3: /* X Rotation */
 						case 4: /* Y Rotation */
@@ -7100,8 +7100,8 @@ static void CompressAnimations( )
 							while (v < -M_PI)
 								v += M_PI * 2;
 
-							checkmin[k] = min( v, checkmin[k] );
-							checkmax[k] = max( v, checkmax[k] );
+							checkmin[k] = std::min( v, checkmin[k] );
+							checkmax[k] = std::max( v, checkmax[k] );
 							value[n] = v / g_bonetable[j].rotscale[k-3]; 
 							break;
 						}

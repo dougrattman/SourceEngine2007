@@ -25,20 +25,18 @@
 
 #include "inetchannelinfo.h"
 
-extern IMaterialSystem *materials;
-
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
-//-----------------------------------------------------------------------------
+extern IMaterialSystem *materials;
+
 // Purpose: aspect ratio mappings (for normal/widescreen combo)
-//-----------------------------------------------------------------------------
 struct RatioToAspectMode_t {
   int anamorphic;
   float aspectRatio;
 };
+
 RatioToAspectMode_t g_RatioToAspectModes[] = {
     {0, 4.0f / 3.0f},
     {1, 16.0f / 9.0f},
@@ -51,16 +49,13 @@ struct AAMode_t {
   int m_nQualityLevel;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: list of valid dx levels
-//-----------------------------------------------------------------------------
+
 int g_DirectXLevels[] = {
     70, 80, 81, 90, 95,
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: returns the string name of a given dxlevel
-//-----------------------------------------------------------------------------
 void GetNameForDXLevel(int dxlevel, char *name, int bufferSize) {
   if (dxlevel == 95) {
     Q_snprintf(name, bufferSize, "DirectX v9.0+");
@@ -69,9 +64,7 @@ void GetNameForDXLevel(int dxlevel, char *name, int bufferSize) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: returns the aspect ratio mode number for the given resolution
-//-----------------------------------------------------------------------------
 int GetScreenAspectMode(int width, int height) {
   float aspectRatio = (float)width / (float)height;
 
@@ -89,9 +82,7 @@ int GetScreenAspectMode(int width, int height) {
   return closestAnamorphic;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: returns the string name of the specified resolution mode
-//-----------------------------------------------------------------------------
 void GetResolutionName(vmode_t *mode, char *sz, int sizeofsz) {
   if (mode->width == 1280 && mode->height == 1024) {
     // LCD native monitor resolution gets special case
@@ -101,9 +92,7 @@ void GetResolutionName(vmode_t *mode, char *sz, int sizeofsz) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Gamma-adjust dialog
-//-----------------------------------------------------------------------------
 class CGammaDialog : public vgui::Frame {
   DECLARE_CLASS_SIMPLE(CGammaDialog, vgui::Frame);
 
@@ -200,9 +189,7 @@ class CGammaDialog : public vgui::Frame {
   float m_flOriginalGamma;
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: advanced keyboard settings dialog
-//-----------------------------------------------------------------------------
 class COptionsSubVideoAdvancedDlg : public vgui::Frame {
   DECLARE_CLASS_SIMPLE(COptionsSubVideoAdvancedDlg, vgui::Frame);
 
@@ -259,13 +246,13 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     // The modes that we've seen in the wild to date are as follows (in perf
     // order, fastest to slowest)
     //
-    //								2x	4x	6x	8x
-    //16x
+    //								2x	4x
+    // 6x 8x 16x
     // 8x 16xQ 		Texture/Shader Samples	1	1	1	1
     // 1 1 1 		Stored Color/Z Samples	2	4	6
     // 4	4 8	8
     //		Coverage Samples		2	4	6	8
-    //16 8 16 		MSAA or CSAA			M	M
+    // 16 8 16 		MSAA or CSAA			M	M
     // M	C	C M	C
     //
     //	The CSAA modes are nVidia only (added in the G80 generation of GPUs)
@@ -298,18 +285,16 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
       m_nNumAAModes++;
     }
 
-    if (materials->SupportsCSAAMode(4,
-                                    2))  // nVidia CSAA			"8x"
-    {
+    // nVidia CSAA "8x"
+    if (materials->SupportsCSAAMode(4, 2)) {
       m_pAntialiasingMode->AddItem("#GameUI_8X_CSAA", NULL);
       m_nAAModes[m_nNumAAModes].m_nNumSamples = 4;
       m_nAAModes[m_nNumAAModes].m_nQualityLevel = 2;
       m_nNumAAModes++;
     }
 
-    if (materials->SupportsCSAAMode(4,
-                                    4))  // nVidia CSAA			"16x"
-    {
+    // nVidia CSAA "16x"
+    if (materials->SupportsCSAAMode(4, 4)) {
       m_pAntialiasingMode->AddItem("#GameUI_16X_CSAA", NULL);
       m_nAAModes[m_nNumAAModes].m_nNumSamples = 4;
       m_nAAModes[m_nNumAAModes].m_nQualityLevel = 4;
@@ -323,9 +308,8 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
       m_nNumAAModes++;
     }
 
-    if (materials->SupportsCSAAMode(8,
-                                    2))  // nVidia CSAA			"16xQ"
-    {
+    // nVidia CSAA "16xQ"
+    if (materials->SupportsCSAAMode(8, 2)) {
       m_pAntialiasingMode->AddItem("#GameUI_16XQ_CSAA", NULL);
       m_nAAModes[m_nNumAAModes].m_nNumSamples = 8;
       m_nAAModes[m_nNumAAModes].m_nQualityLevel = 2;
@@ -469,7 +453,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     if (m_pHDR->IsEnabled()) {
       ConVarRef mat_hdr_level("mat_hdr_level");
       Assert(mat_hdr_level.IsValid());
-      m_pHDR->ActivateItem(clamp(mat_hdr_level.GetInt(), 0, 2));
+      m_pHDR->ActivateItem(std::clamp(mat_hdr_level.GetInt(), 0, 2));
     }
   }
 
@@ -495,10 +479,8 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
         pKeyValues->GetInt("ConVar.r_shadowrendertotexture", 0);
     int nShadowDepthTextureShadows =
         pKeyValues->GetInt("ConVar.r_flashlightdepthtexture", 0);
-#ifndef _X360
     int nWaterUseRealtimeReflection =
         pKeyValues->GetInt("ConVar.r_waterforceexpensive", 0);
-#endif
     int nWaterUseEntityReflection =
         pKeyValues->GetInt("ConVar.r_waterforcereflectentities", 0);
     int nMatVSync = pKeyValues->GetInt("ConVar.mat_vsync", 1);
@@ -560,21 +542,15 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
 
     SetComboItemAsRecommended(m_pShaderDetail, nReduceFillRate ? 0 : 1);
 
-#ifndef _X360
-    if (nWaterUseRealtimeReflection)
-#endif
-    {
+    if (nWaterUseRealtimeReflection) {
       if (nWaterUseEntityReflection) {
         SetComboItemAsRecommended(m_pWaterDetail, 2);
       } else {
         SetComboItemAsRecommended(m_pWaterDetail, 1);
       }
-    }
-#ifndef _X360
-    else {
+    } else {
       SetComboItemAsRecommended(m_pWaterDetail, 0);
     }
-#endif
 
     SetComboItemAsRecommended(m_pVSync, nMatVSync != 0);
 
@@ -665,21 +641,15 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     switch (m_pWaterDetail->GetActiveItem()) {
       default:
       case 0:
-#ifndef _X360
         ApplyChangesToConVar("r_waterforceexpensive", false);
-#endif
         ApplyChangesToConVar("r_waterforcereflectentities", false);
         break;
       case 1:
-#ifndef _X360
         ApplyChangesToConVar("r_waterforceexpensive", true);
-#endif
         ApplyChangesToConVar("r_waterforcereflectentities", false);
         break;
       case 2:
-#ifndef _X360
         ApplyChangesToConVar("r_waterforceexpensive", true);
-#endif
         ApplyChangesToConVar("r_waterforcereflectentities", true);
         break;
     }
@@ -703,9 +673,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     ConVarRef mat_aaquality("mat_aaquality");
     ConVarRef mat_vsync("mat_vsync");
     ConVarRef r_flashlightdepthtexture("r_flashlightdepthtexture");
-#ifndef _X360
     ConVarRef r_waterforceexpensive("r_waterforceexpensive");
-#endif
     ConVarRef r_waterforcereflectentities("r_waterforcereflectentities");
     ConVarRef mat_reducefillrate("mat_reducefillrate");
     ConVarRef mat_hdr_level("mat_hdr_level");
@@ -715,8 +683,8 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
 
     ResetDXLevelCombo();
 
-    m_pModelDetail->ActivateItem(2 - clamp(r_rootlod.GetInt(), 0, 2));
-    m_pTextureDetail->ActivateItem(2 - clamp(mat_picmip.GetInt(), -1, 2));
+    m_pModelDetail->ActivateItem(2 - std::clamp(r_rootlod.GetInt(), 0, 2));
+    m_pTextureDetail->ActivateItem(2 - std::clamp(mat_picmip.GetInt(), -1, 2));
 
     if (r_flashlightdepthtexture
             .GetBool())  // If we're doing flashlight shadow depth texturing...
@@ -734,7 +702,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     }
 
     m_pShaderDetail->ActivateItem(mat_reducefillrate.GetBool() ? 0 : 1);
-    m_pHDR->ActivateItem(clamp(mat_hdr_level.GetInt(), 0, 2));
+    m_pHDR->ActivateItem(std::clamp(mat_hdr_level.GetInt(), 0, 2));
 
     switch (mat_forceaniso.GetInt()) {
       case 2:
@@ -765,21 +733,15 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     int nMSAAMode = FindMSAAMode(nAASamples, nAAQuality);
     m_pAntialiasingMode->ActivateItem(nMSAAMode);
 
-#ifndef _X360
-    if (r_waterforceexpensive.GetBool())
-#endif
-    {
+    if (r_waterforceexpensive.GetBool()) {
       if (r_waterforcereflectentities.GetBool()) {
         m_pWaterDetail->ActivateItem(2);
       } else {
         m_pWaterDetail->ActivateItem(1);
       }
-    }
-#ifndef _X360
-    else {
+    } else {
       m_pWaterDetail->ActivateItem(0);
     }
-#endif
 
     m_pVSync->ActivateItem(mat_vsync.GetInt());
 
@@ -872,9 +834,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
   AAMode_t m_nAAModes[16];
 };
 
-//-----------------------------------------------------------------------------
 // Purpose:
-//-----------------------------------------------------------------------------
 COptionsSubVideo::COptionsSubVideo(vgui::Panel *parent)
     : PropertyPage(parent, NULL) {
   m_bRequireRestart = false;
@@ -938,15 +898,15 @@ COptionsSubVideo::COptionsSubVideo(vgui::Panel *parent)
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Generates resolution list
-//-----------------------------------------------------------------------------
+
 void COptionsSubVideo::PrepareResolutionList() {
   // get the currently selected resolution
-  char sz[256];
-  m_pMode->GetText(sz, 256);
-  int currentWidth = 0, currentHeight = 0;
-  sscanf(sz, "%i x %i", &currentWidth, &currentHeight);
+  char mode_name[256];
+  m_pMode->GetText(mode_name, ARRAYSIZE(mode_name));
+
+  int current_Width = 0, current_height = 0;
+  sscanf(mode_name, "%i x %i", &current_Width, &current_height);
 
   // Clean up before filling the info again.
   m_pMode->DeleteAllItems();
@@ -954,34 +914,31 @@ void COptionsSubVideo::PrepareResolutionList() {
   m_pAspectRatio->SetItemEnabled(2, false);
 
   // get full video mode list
-  vmode_t *plist = NULL;
-  int count = 0;
-  gameuifuncs->GetVideoModes(&plist, &count);
-
+  auto [mode, mode_size] = gameuifuncs->GetVideoModes();
   const MaterialSystem_Config_t &config =
       materials->GetCurrentConfigForVideoCard();
 
-  bool bWindowed = (m_pWindowed->GetActiveItem() > 0);
-  int desktopWidth, desktopHeight;
-  gameuifuncs->GetDesktopResolution(desktopWidth, desktopHeight);
+  const bool is_window = m_pWindowed->GetActiveItem() > 0;
+  const auto [desktop_width, desktop_height] =
+      gameuifuncs->GetDesktopResolution();
 
   // iterate all the video modes adding them to the dropdown
-  bool bFoundWidescreen = false;
+  bool can_be_widescreen = false;
   int selectedItemID = -1;
-  for (int i = 0; i < count; i++, plist++) {
+  for (usize i = 0; i < mode_size; i++, mode++) {
     char sz[256];
-    GetResolutionName(plist, sz, sizeof(sz));
+    GetResolutionName(mode, sz, ARRAYSIZE(sz));
 
     // don't show modes bigger than the desktop for windowed mode
-    if (bWindowed &&
-        (plist->width > desktopWidth || plist->height > desktopHeight))
+    if (is_window &&
+        (mode->width > desktop_width || mode->height > desktop_height))
       continue;
 
     int itemID = -1;
-    int iAspectMode = GetScreenAspectMode(plist->width, plist->height);
+    int iAspectMode = GetScreenAspectMode(mode->width, mode->height);
     if (iAspectMode > 0) {
       m_pAspectRatio->SetItemEnabled(iAspectMode, true);
-      bFoundWidescreen = true;
+      can_be_widescreen = true;
     }
 
     // filter the list for those matching the current aspect
@@ -990,17 +947,17 @@ void COptionsSubVideo::PrepareResolutionList() {
     }
 
     // try and find the best match for the resolution to be selected
-    if (plist->width == currentWidth && plist->height == currentHeight) {
+    if (mode->width == current_Width && mode->height == current_height) {
       selectedItemID = itemID;
     } else if (selectedItemID == -1 &&
-               plist->width == config.m_VideoMode.m_Width &&
-               plist->height == config.m_VideoMode.m_Height) {
+               mode->width == config.m_VideoMode.m_Width &&
+               mode->height == config.m_VideoMode.m_Height) {
       selectedItemID = itemID;
     }
   }
 
   // disable ratio selection if we can't display widescreen.
-  m_pAspectRatio->SetEnabled(bFoundWidescreen);
+  m_pAspectRatio->SetEnabled(can_be_widescreen);
 
   m_nSelectedMode = selectedItemID;
 
@@ -1014,18 +971,12 @@ void COptionsSubVideo::PrepareResolutionList() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 COptionsSubVideo::~COptionsSubVideo() {
   if (m_hOptionsSubVideoAdvancedDlg.Get()) {
     m_hOptionsSubVideoAdvancedDlg->MarkForDeletion();
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OnResetData() {
   m_bRequireRestart = false;
 
@@ -1041,36 +992,28 @@ void COptionsSubVideo::OnResetData() {
   SetCurrentResolutionComboItem();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::SetCurrentResolutionComboItem() {
-  vmode_t *plist = NULL;
-  int count = 0;
-  gameuifuncs->GetVideoModes(&plist, &count);
-
+  auto [mode, modes_size] = gameuifuncs->GetVideoModes();
   const MaterialSystem_Config_t &config =
       materials->GetCurrentConfigForVideoCard();
 
-  int resolution = -1;
-  for (int i = 0; i < count; i++, plist++) {
-    if (plist->width == config.m_VideoMode.m_Width &&
-        plist->height == config.m_VideoMode.m_Height) {
+  usize resolution = std::numeric_limits<usize>::max();
+  for (usize i = 0; i < modes_size; i++, mode++) {
+    if (mode->width == config.m_VideoMode.m_Width &&
+        mode->height == config.m_VideoMode.m_Height) {
       resolution = i;
       break;
     }
   }
 
-  if (resolution != -1) {
-    char sz[256];
-    GetResolutionName(plist, sz, sizeof(sz));
-    m_pMode->SetText(sz);
+  if (resolution != std::numeric_limits<usize>::max()) {
+    char resolution_name[256];
+    GetResolutionName(mode, resolution_name, ARRAYSIZE(resolution_name));
+    m_pMode->SetText(resolution_name);
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: restarts the game
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OnApplyChanges() {
   if (RequiresRestart()) {
     INetChannelInfo *nci = engine->GetNetChannelInfo();
@@ -1123,9 +1066,6 @@ void COptionsSubVideo::OnApplyChanges() {
   engine->ClientCmd_Unrestricted("mat_savechanges\n");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::PerformLayout() {
   BaseClass::PerformLayout();
 
@@ -1136,9 +1076,7 @@ void COptionsSubVideo::PerformLayout() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: enables apply button on data changing
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OnTextChanged(Panel *pPanel, const char *pszText) {
   if (pPanel == m_pMode) {
     const MaterialSystem_Config_t &config =
@@ -1159,16 +1097,12 @@ void COptionsSubVideo::OnTextChanged(Panel *pPanel, const char *pszText) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: enables apply button
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OnDataChanged() {
   PostActionSignal(new KeyValues("ApplyButtonEnable"));
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Checks to see if the changes requires a restart to take effect
-//-----------------------------------------------------------------------------
 bool COptionsSubVideo::RequiresRestart() {
   if (m_hOptionsSubVideoAdvancedDlg.Get() &&
       m_hOptionsSubVideoAdvancedDlg->RequiresRestart()) {
@@ -1179,9 +1113,7 @@ bool COptionsSubVideo::RequiresRestart() {
   return m_bRequireRestart;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Opens advanced video mode options dialog
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OpenAdvanced() {
   if (!m_hOptionsSubVideoAdvancedDlg.Get()) {
     m_hOptionsSubVideoAdvancedDlg =
@@ -1193,9 +1125,7 @@ void COptionsSubVideo::OpenAdvanced() {
   m_hOptionsSubVideoAdvancedDlg->Activate();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Opens gamma-adjusting dialog
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OpenGammaDialog() {
   if (!m_hGammaDialog.Get()) {
     m_hGammaDialog = new CGammaDialog(GetVParent());
@@ -1204,16 +1134,12 @@ void COptionsSubVideo::OpenGammaDialog() {
   m_hGammaDialog->Activate();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Opens benchmark dialog
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::LaunchBenchmark() {
   BasePanel()->OnOpenBenchmarkDialog();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: third-party audio credits dialog
-//-----------------------------------------------------------------------------
 class COptionsSubVideoThirdPartyCreditsDlg : public vgui::Frame {
   DECLARE_CLASS_SIMPLE(COptionsSubVideoThirdPartyCreditsDlg, vgui::Frame);
 
@@ -1247,9 +1173,7 @@ class COptionsSubVideoThirdPartyCreditsDlg : public vgui::Frame {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Purpose: Open third party audio credits dialog
-//-----------------------------------------------------------------------------
 void COptionsSubVideo::OpenThirdPartyVideoCreditsDialog() {
   if (!m_OptionsSubVideoThirdPartyCreditsDlg.Get()) {
     m_OptionsSubVideoThirdPartyCreditsDlg =

@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -152,8 +152,8 @@ bool CNetworkSystem::RegisterMessage( INetworkMessage *pMessage )
 	// Allocate more space in messages 
 	int nGroupBits = LargestPowerOfTwoLessThanOrEqual( pMessage->GetGroup() );
 	int nTypeBits = LargestPowerOfTwoLessThanOrEqual( pMessage->GetType() );
-	m_nGroupBits = max( nGroupBits, m_nGroupBits );
-	m_nTypeBits = max( nTypeBits, m_nTypeBits );
+	m_nGroupBits = std::max( nGroupBits, m_nGroupBits );
+	m_nTypeBits = std::max( nTypeBits, m_nTypeBits );
 
 	m_NetworkMessages.AddToTail( pMessage );
 	return true;

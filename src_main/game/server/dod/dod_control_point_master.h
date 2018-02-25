@@ -163,7 +163,7 @@ public:
 	void InputGivePoints( inputdata_t &inputdata )
 	{
 		int iPoints = inputdata.value.Int();
-		GetGlobalTeam(m_iPointTeam)->AddScore( max( iPoints, 0 ) );
+		GetGlobalTeam(m_iPointTeam)->AddScore( std::max( iPoints, 0 ) );
 	}
 
 	// accessor for our point team
@@ -176,7 +176,7 @@ private:
 
 	void GivePoints( int points )
 	{
-		GetGlobalTeam(m_iPointTeam)->AddScore( max( points, 0 ) );
+		GetGlobalTeam(m_iPointTeam)->AddScore( std::max( points, 0 ) );
 		m_iRemainingPoints -= points;
 
 		if ( points > 0 )

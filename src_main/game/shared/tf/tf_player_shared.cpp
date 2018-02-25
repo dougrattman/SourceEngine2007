@@ -518,7 +518,7 @@ void CTFPlayerShared::ConditionGameRulesThink(void) {
         }
 
         m_flCondExpireTimeLeft[i] =
-            max(m_flCondExpireTimeLeft[i] - flReduction, 0);
+            std::max(m_flCondExpireTimeLeft[i] - flReduction, 0);
 
         if (m_flCondExpireTimeLeft[i] == 0) {
           RemoveCond(i);
@@ -575,12 +575,12 @@ void CTFPlayerShared::ConditionGameRulesThink(void) {
       if (InCond(TF_COND_DISGUISED)) {
         // Separate cap for disguised health
         int nFakeHealthToAdd =
-            clamp(nHealthToAdd, 0, iBoostMax - m_iDisguiseHealth);
+            std::clamp(nHealthToAdd, 0, iBoostMax - m_iDisguiseHealth);
         m_iDisguiseHealth += nFakeHealthToAdd;
       }
 
       // Cap it to the max we'll boost a player's health
-      nHealthToAdd = clamp(nHealthToAdd, 0, iBoostMax - m_pOuter->GetHealth());
+      nHealthToAdd = std::clamp(nHealthToAdd, 0, iBoostMax - m_pOuter->GetHealth());
 
       m_pOuter->TakeHealth(nHealthToAdd, DMG_IGNORE_MAXHEALTH);
 
@@ -1192,7 +1192,7 @@ void CTFPlayerShared::InvisibilityThink(void) {
   }
 
   flTargetInvis *= flTargetInvisScale;
-  m_flInvisibility = clamp(flTargetInvis, 0.0f, 1.0f);
+  m_flInvisibility = std::clamp(flTargetInvis, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -1920,7 +1920,7 @@ void CTFPlayer::TeamFortress_SetSpeed() {
       !m_Shared.InCond(TF_COND_STEALTHED)) {
     float flMaxDisguiseSpeed =
         GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
-    maxfbspeed = min(flMaxDisguiseSpeed, maxfbspeed);
+    maxfbspeed = std::min(flMaxDisguiseSpeed, maxfbspeed);
   }
 
   // Second, see if any flags are slowing them down

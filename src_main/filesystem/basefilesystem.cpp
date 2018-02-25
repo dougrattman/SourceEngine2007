@@ -1724,7 +1724,7 @@ bool CBaseFileSystem::ReadToBuffer(FileHandle_t fp, CUtlBuffer &buf,
 
   if (nMaxBytes > 0) {
     // can't read more than file has
-    nBytesToRead = min(nMaxBytes, nBytesToRead);
+    nBytesToRead = std::min(nMaxBytes, nBytesToRead);
   }
 
   int nBytesRead = 0;
@@ -1845,7 +1845,7 @@ int CBaseFileSystem::ReadFileEx(const char *pFileName, const char *pPath,
   int nBytesToRead = Size(fp);
   int nBytesRead = 0;
   if (nMaxBytes > 0) {
-    nBytesToRead = min(nMaxBytes, nBytesToRead);
+    nBytesToRead = std::min(nMaxBytes, nBytesToRead);
     if (bNullTerminate) {
       nBytesToRead--;
     }

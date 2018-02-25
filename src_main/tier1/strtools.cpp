@@ -340,12 +340,11 @@ float V_atof(const char *str) {
   return val * sign;
 }
 
-//-----------------------------------------------------------------------------
 // Normalizes a float string in place.
 //
 // (removes leading zeros, trailing zeros after the decimal point, and the
 // decimal point itself where possible)
-//-----------------------------------------------------------------------------
+
 void V_normalizeFloatString(char *pFloat) {
   // If we have a decimal point, remove trailing zeroes:
   if (strchr(pFloat, '.')) {
@@ -365,9 +364,8 @@ void V_normalizeFloatString(char *pFloat) {
   // TODO: Strip leading zeros
 }
 
-//-----------------------------------------------------------------------------
 // Finds a string in another string with a case insensitive test
-//-----------------------------------------------------------------------------
+
 char const *V_stristr(char const *pStr, char const *pSearch) {
   if (!pStr || !pSearch) return 0;
 
@@ -405,10 +403,9 @@ char *V_stristr(char *pStr, char const *pSearch) {
   return (char *)V_stristr((char const *)pStr, pSearch);
 }
 
-//-----------------------------------------------------------------------------
 // Finds a string in another string with a case insensitive test w/ length
 // validation
-//-----------------------------------------------------------------------------
+
 char const *V_strnistr(char const *pStr, char const *pSearch, int n) {
   if (!pStr || !pSearch) return 0;
 
@@ -518,7 +515,6 @@ int V_vsnprintf(char *pDest, int maxLen, char const *pFormat, va_list params) {
   return len;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: If COPY_ALL_CHARACTERS == max_chars_to_copy then we try to add the
 // whole pSrc to the end of pDest, otherwise
 //  we copy only as many characters as are specified in max_chars_to_copy (or
@@ -529,7 +525,7 @@ int V_vsnprintf(char *pDest, int maxLen, char const *pFormat, va_list params) {
 //			max_chars_to_copy - COPY_ALL_CHARACTERS in pSrc or max #
 // to  copy
 // Output : char * the copied buffer
-//-----------------------------------------------------------------------------
+
 char *V_strncat(char *pDest, const char *pSrc, size_t destBufferSize,
                 int max_chars_to_copy) {
   size_t charstocopy = (size_t)0;
@@ -539,7 +535,7 @@ char *V_strncat(char *pDest, const char *pSrc, size_t destBufferSize,
   if (max_chars_to_copy <= COPY_ALL_CHARACTERS) {
     charstocopy = srclen;
   } else {
-    charstocopy = (size_t)min(max_chars_to_copy, (int)srclen);
+    charstocopy = (size_t)std::min(max_chars_to_copy, (int)srclen);
   }
 
   if (len + charstocopy >= destBufferSize) {
@@ -555,13 +551,12 @@ char *V_strncat(char *pDest, const char *pSrc, size_t destBufferSize,
   return pOut;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts value into x.xx MB/ x.xx KB, x.xx bytes format, including
 // commas Input  : value -
 //			2 -
 //			false -
 // Output : char
-//-----------------------------------------------------------------------------
+
 #define NUM_PRETIFYMEM_BUFFERS 8
 char *V_pretifymem(float value, int digitsafterdecimal /*= 2*/,
                    bool usebinaryonek /*= false*/) {
@@ -590,7 +585,7 @@ char *V_pretifymem(float value, int digitsafterdecimal /*= 2*/,
   char val[32];
 
   // Clamp to >= 0
-  digitsafterdecimal = max(digitsafterdecimal, 0);
+  digitsafterdecimal = std::max(digitsafterdecimal, 0);
 
   // If it's basically integral, don't do any decimals
   if (FloatMakePositive(value - (int)value) < 0.00001) {
@@ -643,12 +638,11 @@ char *V_pretifymem(float value, int digitsafterdecimal /*= 2*/,
   return out;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns a string representation of an integer with commas
 //			separating the 1000s (ie, 37,426,421)
 // Input  : value -		Value to convert
 // Output : Pointer to a static buffer containing the output
-//-----------------------------------------------------------------------------
+
 #define NUM_PRETIFYNUM_BUFFERS 8
 char *V_pretifynum(int64_t value) {
   static char output[NUM_PRETIFYMEM_BUFFERS][32];
@@ -712,9 +706,8 @@ char *V_pretifynum(int64_t value) {
   return out;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a UTF8 string into a unicode string
-//-----------------------------------------------------------------------------
+
 int V_UTF8ToUnicode(const char *pUTF8, wchar_t *pwchDest,
                     int cubDestSizeInBytes) {
   pwchDest[0] = 0;
@@ -729,9 +722,8 @@ int V_UTF8ToUnicode(const char *pUTF8, wchar_t *pwchDest,
   return cchResult;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Converts a unicode string into a UTF8 (standard) string
-//-----------------------------------------------------------------------------
+
 int V_UnicodeToUTF8(const wchar_t *pUnicode, char *pUTF8,
                     int cubDestSizeInBytes) {
   pUTF8[0] = 0;
@@ -745,11 +737,10 @@ int V_UnicodeToUTF8(const wchar_t *pUnicode, char *pUTF8,
   return cchResult;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns the 4 bit nibble for a hex character
 // Input  : c -
 // Output : unsigned char
-//-----------------------------------------------------------------------------
+
 static unsigned char V_nibble(char c) {
   if ((c >= '0') && (c <= '9')) {
     return (unsigned char)(c - '0');
@@ -766,17 +757,16 @@ static unsigned char V_nibble(char c) {
   return '0';
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *in -
 //			numchars -
 //			*out -
 //			maxoutputbytes -
-//-----------------------------------------------------------------------------
+
 void V_hextobinary(char const *in, int numchars, uint8_t *out,
                    int maxoutputbytes) {
   int len = V_strlen(in);
-  numchars = min(len, numchars);
+  numchars = std::min(len, numchars);
   // Make sure it's even
   numchars = (numchars) & ~0x1;
 
@@ -794,13 +784,12 @@ void V_hextobinary(char const *in, int numchars, uint8_t *out,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *in -
 //			inputbytes -
 //			*out -
 //			outsize -
-//-----------------------------------------------------------------------------
+
 void V_binarytohex(const uint8_t *in, int inputbytes, char *out, int outsize) {
   Assert(outsize >= 1);
   char doublet[10];
@@ -821,12 +810,11 @@ void V_binarytohex(const uint8_t *in, int inputbytes, char *out, int outsize) {
 #define PATHSEPARATOR(c) ((c) == '/')
 #endif  //_WIN32
 
-//-----------------------------------------------------------------------------
 // Purpose: Extracts the base name of a file (no path, no extension, assumes '/'
 // or '\' as path separator) Input  : *in -
 //			*out -
 //			maxlen -
-//-----------------------------------------------------------------------------
+
 void V_FileBase(const char *in, char *out, int maxlen) {
   Assert(maxlen >= 1);
   Assert(in);
@@ -869,16 +857,15 @@ void V_FileBase(const char *in, char *out, int maxlen) {
   // Length of new sting
   len = end - start + 1;
 
-  int maxcopy = min(len + 1, maxlen);
+  int maxcopy = std::min(len + 1, maxlen);
 
   // Copy partial string
   V_strncpy(out, &in[start], maxcopy);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *ppath -
-//-----------------------------------------------------------------------------
+
 void V_StripTrailingSlash(char *ppath) {
   Assert(ppath);
 
@@ -890,12 +877,11 @@ void V_StripTrailingSlash(char *ppath) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *in -
 //			*out -
 //			outSize -
-//-----------------------------------------------------------------------------
+
 void V_StripExtension(const char *in, char *out, int outSize) {
   // Find the last dot. If it's followed by a dot or a slash, then it's part of
   // a directory specifier like ../../somedir/./blah.
@@ -907,7 +893,7 @@ void V_StripExtension(const char *in, char *out, int outSize) {
   }
 
   if (end > 0 && !PATHSEPARATOR(in[end]) && end < outSize) {
-    int nChars = min(end, outSize - 1);
+    int nChars = std::min(end, outSize - 1);
     if (out != in) {
       memcpy(out, in, nChars);
     }
@@ -920,12 +906,11 @@ void V_StripExtension(const char *in, char *out, int outSize) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *path -
 //			*extension -
 //			pathStringLength -
-//-----------------------------------------------------------------------------
+
 void V_DefaultExtension(char *path, const char *extension,
                         int pathStringLength) {
   Assert(path);
@@ -951,22 +936,20 @@ void V_DefaultExtension(char *path, const char *extension,
   V_strncat(path, extension, pathStringLength, COPY_ALL_CHARACTERS);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Force extension...
 // Input  : *path -
 //			*extension -
 //			pathStringLength -
-//-----------------------------------------------------------------------------
+
 void V_SetExtension(char *path, const char *extension, int pathStringLength) {
   V_StripExtension(path, path, pathStringLength);
   V_DefaultExtension(path, extension, pathStringLength);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Remove final filename from string
 // Input  : *path -
 // Output : void  V_StripFilename
-//-----------------------------------------------------------------------------
+
 void V_StripFilename(char *path) {
   int length;
 
@@ -988,11 +971,10 @@ void V_StripFilename(char *path) {
 #define INCORRECT_PATH_SEPARATOR '\\'
 #endif
 
-//-----------------------------------------------------------------------------
 // Purpose: Changes all '/' or '\' characters into separator
 // Input  : *pname -
 //			separator -
-//-----------------------------------------------------------------------------
+
 void V_FixSlashes(char *pname, char separator /* = CORRECT_PATH_SEPARATOR */) {
   while (*pname) {
     if (*pname == INCORRECT_PATH_SEPARATOR ||
@@ -1003,10 +985,9 @@ void V_FixSlashes(char *pname, char separator /* = CORRECT_PATH_SEPARATOR */) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: This function fixes cases of filenames like materials\\blah.vmt or
 // somepath\otherpath\\ and removes the extra double slash.
-//-----------------------------------------------------------------------------
+
 void V_FixDoubleSlashes(char *pStr) {
   int len = V_strlen(pStr);
 
@@ -1022,12 +1003,11 @@ void V_FixDoubleSlashes(char *pStr) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Strip off the last directory from dirName
 // Input  : *dirName -
 //			maxlen -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool V_StripLastDir(char *dirName, int maxlen) {
   if (dirName[0] == 0 || !V_stricmp(dirName, "./") ||
       !V_stricmp(dirName, ".\\"))
@@ -1062,12 +1042,11 @@ bool V_StripLastDir(char *dirName, int maxlen) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns a pointer to the beginning of the unqualified file name
 //			(no path information)
 // Input:	in - file name (may be unqualified, relative or absolute path)
 // Output:	pointer to unqualified file name
-//-----------------------------------------------------------------------------
+
 const char *V_UnqualifiedFileName(const char *in) {
   // back up until the character after the first path separator we find,
   // or the beginning of the string
@@ -1076,14 +1055,13 @@ const char *V_UnqualifiedFileName(const char *in) {
   return out;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Composes a path and filename together, inserting a path separator
 //			if need be
 // Input:	path - path to use
 //			filename - filename to use
 //			dest - buffer to compose result in
 //			destSize - size of destination buffer
-//-----------------------------------------------------------------------------
+
 void V_ComposeFileName(const char *path, const char *filename, char *dest,
                        int destSize) {
   V_strncpy(dest, path, destSize);
@@ -1092,13 +1070,12 @@ void V_ComposeFileName(const char *path, const char *filename, char *dest,
   V_FixSlashes(dest);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *path -
 //			*dest -
 //			destSize -
 // Output : void V_ExtractFilePath
-//-----------------------------------------------------------------------------
+
 bool V_ExtractFilePath(const char *path, char *dest, int destSize) {
   Assert(destSize >= 1);
   if (destSize < 1) {
@@ -1114,32 +1091,30 @@ bool V_ExtractFilePath(const char *path, char *dest, int destSize) {
     src--;
   }
 
-  int copysize = min(src - path, destSize - 1);
+  int copysize = std::min(src - path, destSize - 1);
   memcpy(dest, path, copysize);
   dest[copysize] = 0;
 
   return copysize != 0 ? true : false;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
 // Input  : *path -
 //			*dest -
 //			destSize -
 // Output : void V_ExtractFileExtension
-//-----------------------------------------------------------------------------
+
 void V_ExtractFileExtension(const char *path, char *dest, int destSize) {
   *dest = NULL;
   const char *extension = V_GetFileExtension(path);
   if (NULL != extension) V_strncpy(dest, extension, destSize);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Returns a pointer to the file extension within a file name string
 // Input:	in - file name
 // Output:	pointer to beginning of extension (after the "."), or NULL
 //				if there is no extension
-//-----------------------------------------------------------------------------
+
 const char *V_GetFileExtension(const char *path) {
   const char *src;
 
@@ -1275,9 +1250,8 @@ void V_MakeAbsolutePath(char *pOut, int outLen, const char *pPath,
   V_FixSlashes(pOut);
 }
 
-//-----------------------------------------------------------------------------
 // Makes a relative path
-//-----------------------------------------------------------------------------
+
 bool V_MakeRelativePath(const char *pFullPath, const char *pDirectory,
                         char *pRelativePath, int nBufLen) {
   pRelativePath[0] = 0;
@@ -1344,9 +1318,8 @@ bool V_MakeRelativePath(const char *pFullPath, const char *pDirectory,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // small helper function shared by lots of modules
-//-----------------------------------------------------------------------------
+
 bool V_IsAbsolutePath(const char *pStr) {
   bool bIsAbsolute =
       (pStr[0] && pStr[1] == ':') || pStr[0] == '/' || pStr[0] == '\\';
@@ -1424,7 +1397,7 @@ char *AllocString(const char *pStr, int nMaxChars) {
   if (nMaxChars == -1)
     allocLen = len + 1;
   else
-    allocLen = min(len, nMaxChars) + 1;
+    allocLen = std::min(len, nMaxChars) + 1;
 
   char *pOut = new char[allocLen];
   V_strncpy(pOut, pStr, allocLen);
@@ -1527,9 +1500,8 @@ void V_StrRight(const char *pStr, int nChars, char *pOut, int outSize) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Convert multibyte to wchar + back
-//-----------------------------------------------------------------------------
+
 void V_strtowcs(const char *pString, int nInSize, wchar_t *pWString,
                 int nOutSize) {
 #ifdef _WIN32
@@ -1557,10 +1529,7 @@ void V_wcstostr(const wchar_t *pWString, int nInSize, char *pString,
 #endif
 }
 
-//--------------------------------------------------------------------------------
 // backslashification
-//--------------------------------------------------------------------------------
-
 static char s_BackSlashMap[] = "\tt\nn\rr\"\"\\\\";
 
 char *V_AddBackSlashesToSpecialChars(char const *pSrc) {

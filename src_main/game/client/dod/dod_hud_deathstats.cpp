@@ -318,7 +318,7 @@ int CDODDeathStatsPanel::DrawDeathNoticeItem( int x, int y )
 	int yText = y + ( iconTall - iFontTall ) / 2;
 
 	int boxWidth = len + iconWide + spacerX;
-	int boxHeight = min( iconTall, m_flLineHeight );	
+	int boxHeight = std::min( iconTall, m_flLineHeight );	
 	int boxBorder = XRES(2);
 
 	// Only draw killers name if it wasn't a suicide

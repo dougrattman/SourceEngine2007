@@ -1080,7 +1080,7 @@ int CCaptureFlag::UpdateTransmitState()
 
 float CCaptureFlag::GetReturnProgress()
 {
-	float flEventTime = max( m_flResetTime.m_Value, m_flNeutralTime.m_Value );
+	float flEventTime = std::max( m_flResetTime.m_Value, m_flNeutralTime.m_Value );
 
 	return ( 1.0 - ( ( flEventTime - gpGlobals->curtime ) / m_flMaxResetTime ) );
 }
@@ -1385,7 +1385,7 @@ void CCaptureFlagReturnIcon::DrawReturnProgressBar( void )
 
 			// Internal progress is the progress through this particular slice
 			float internalProgress = RemapVal( flProgress, Segments[i].maxProgress - 0.125, Segments[i].maxProgress, 0.0, 1.0 );
-			internalProgress = clamp( internalProgress, 0.0, 1.0 );
+			internalProgress = std::clamp( internalProgress, 0.0, 1.0 );
 
 			// Calculate the x,y of the moving vertex based on internal progress
 			float swipe_x = Segments[i].vert2x - ( 1.0 - internalProgress ) * 0.5 * Segments[i].swipe_dir_x;

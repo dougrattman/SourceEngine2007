@@ -490,7 +490,7 @@ CBaseEntity *CNPC_Barnacle::TongueTouchEnt ( float *pflLength )
 	
 	// Take our current tongue's length or a point higher if we hit a wall 
 	// NOTENOTE: (this relieves the need to know if the tongue is currently moving)
-	mins.z -= min( m_flAltitude, length );
+	mins.z -= std::min( m_flAltitude, length );
 
 	CBaseEntity *pList[10];
 	int count = UTIL_EntitiesInBox( pList, 10, mins, maxs, (FL_CLIENT|FL_NPC) );

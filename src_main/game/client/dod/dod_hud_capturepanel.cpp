@@ -426,7 +426,7 @@ void CDoDHudCapturePanel::OnThink()
 					}
 
 					float flPercent = (pPlayer->m_flSimulationTime - pPlayer->m_flProgressBarStartTime) / (float)pPlayer->m_iProgressBarDuration;
-					flPercent = clamp( flPercent, 0, 1 );
+					flPercent = std::clamp( flPercent, 0, 1 );
 
 					m_pProgressBar->SetPercentage( flPercent );
 				}

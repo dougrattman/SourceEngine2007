@@ -350,7 +350,7 @@ void CNPC_Ichthyosaur::MoveExecute_Alive(float flInterval)
 	// If we're attacking, accelerate to max speed
 	if (m_bOnAttack && m_flFlyingSpeed < m_flMaxSpeed)
 	{
-		m_flFlyingSpeed = min( m_flMaxSpeed, m_flFlyingSpeed+40 );
+		m_flFlyingSpeed = std::min( m_flMaxSpeed, m_flFlyingSpeed+40 );
 	}
 
 	if (m_flFlyingSpeed < 180)
@@ -418,7 +418,7 @@ void CNPC_Ichthyosaur::MoveExecute_Alive(float flInterval)
 	
 	QAngle angAbsAngles = GetAbsAngles();
 
-	angAbsAngles.x = clamp( UTIL_Approach(angSaveAngles.x, angAbsAngles.x, 10 ), -60, 60 );
+	angAbsAngles.x = std::clamp( UTIL_Approach(angSaveAngles.x, angAbsAngles.x, 10 ), -60, 60 );
 
 	//
 	// Smooth Yaw and generate Roll
@@ -495,7 +495,7 @@ void CNPC_Ichthyosaur::MoveExecute_Alive(float flInterval)
 		}
 	}
 
-	angAbsAngles.z = clamp( UTIL_Approach(flTempRoll, angAbsAngles.z, 5 ), -20, 20 );
+	angAbsAngles.z = std::clamp( UTIL_Approach(flTempRoll, angAbsAngles.z, 5 ), -20, 20 );
 
 	SetAbsAngles( angAbsAngles );
 

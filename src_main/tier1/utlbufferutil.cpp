@@ -20,9 +20,9 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // For serialization, set the delimiter rules
-//-----------------------------------------------------------------------------
+
 CUtlCharConversion *s_pConv = NULL;
 const char *s_pUtlBufferUtilArrayDelim = NULL;
 void SetSerializationDelimiter(CUtlCharConversion *pConv) { s_pConv = pConv; }
@@ -31,9 +31,9 @@ void SetSerializationArrayDelimiter(const char *pDelimiter) {
   s_pUtlBufferUtilArrayDelim = pDelimiter;
 }
 
-//-----------------------------------------------------------------------------
+
 // Serialize a floating point number in text mode in a readably friendly fashion
-//-----------------------------------------------------------------------------
+
 static void SerializeFloat(CUtlBuffer &buf, float f) {
   Assert(buf.IsText());
 
@@ -60,9 +60,9 @@ static void SerializeFloats(CUtlBuffer &buf, int nCount, const float *pFloats) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Serialization methods for basic types
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const bool &src) {
   if (buf.IsText()) {
     buf.Printf("%d", src);
@@ -123,9 +123,9 @@ bool Unserialize(CUtlBuffer &buf, float &dest) {
   return buf.IsValid();
 }
 
-//-----------------------------------------------------------------------------
+
 // Attribute types related to vector math
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const Vector2D &src) {
   if (buf.IsText()) {
     SerializeFloats(buf, 2, src.Base());
@@ -281,9 +281,9 @@ bool Unserialize(CUtlBuffer &buf, VMatrix &dest) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Color attribute
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const Color &src) {
   if (buf.IsText()) {
     buf.Printf("%d %d %d %d", src[0], src[1], src[2], src[3]);
@@ -312,9 +312,9 @@ bool Unserialize(CUtlBuffer &buf, Color &dest) {
 }
 
 /*
-//-----------------------------------------------------------------------------
+
 // Object ID attribute
-//-----------------------------------------------------------------------------
+
 bool Serialize( CUtlBuffer &buf, const DmObjectId_t &src )
 {
         return g_pDataModel->Serialize( buf, src );
@@ -326,9 +326,9 @@ bool Unserialize( CUtlBuffer &buf, DmObjectId_t &dest )
 }
 */
 
-//-----------------------------------------------------------------------------
+
 // Binary buffer attribute
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const CUtlBinaryBlock &src) {
   int nLength = src.Length();
   if (!buf.IsText()) {
@@ -435,9 +435,9 @@ bool Unserialize(CUtlBuffer &buf, CUtlBinaryBlock &dest) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // String attribute
-//-----------------------------------------------------------------------------
+
 bool Serialize(CUtlBuffer &buf, const CUtlString &src) {
   buf.PutDelimitedString(s_pConv, src.Get());
   return buf.IsValid();

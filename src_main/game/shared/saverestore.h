@@ -293,7 +293,7 @@ private:
 		else
 		{
  Assert( nBytesAvailable % sizeof(T) == 0 );
- actual = min( desired, nBytesAvailable );
+ actual = std::min( desired, nBytesAvailable );
 		}
 
 		BufferReadBytes( (char *)pValue, actual );

@@ -536,9 +536,9 @@ void CNPC_Ichthyosaur::SetPoses( Vector moveRel, float speed )
 	}
 	
 	//Clamp
-	flSwimSpeed			= clamp( flSwimSpeed, 0.25f, 1.0f );
-	tailPosition[YAW]	= clamp( tailPosition[YAW], -90.0f, 90.0f );
-	tailPosition[PITCH]	= clamp( tailPosition[PITCH], -90.0f, 90.0f );
+	flSwimSpeed			= std::clamp( flSwimSpeed, 0.25f, 1.0f );
+	tailPosition[YAW]	= std::clamp( tailPosition[YAW], -90.0f, 90.0f );
+	tailPosition[PITCH]	= std::clamp( tailPosition[PITCH], -90.0f, 90.0f );
 
 	//Blend
 	m_flTailYaw		= ( m_flTailYaw * 0.8f ) + ( tailPosition[YAW] * 0.2f );
@@ -743,7 +743,7 @@ void CNPC_Ichthyosaur::SteerArrive(Vector &Steer, const Vector &Target)
 	float fTargetDistance = Offset.Length();
 
 	float fIdealSpeed = m_flGroundSpeed * (fTargetDistance / ICH_WAYPOINT_DISTANCE);
-	float fClippedSpeed = min( fIdealSpeed, m_flGroundSpeed );
+	float fClippedSpeed = std::min( fIdealSpeed, m_flGroundSpeed );
 	
 	Vector DesiredVelocity( 0, 0, 0 );
 
@@ -896,29 +896,29 @@ void CNPC_Ichthyosaur::ClampSteer(Vector &SteerAbs, Vector &SteerRel, Vector &fo
 
 	if (fForwardSteer > 0)
 	{
-		fForwardSteer = min(fForwardSteer, m_vecAccelerationMax.x);
+		fForwardSteer = std::min(fForwardSteer, m_vecAccelerationMax.x);
 	}
 	else
 	{
-		fForwardSteer = max(fForwardSteer, m_vecAccelerationMin.x);
+		fForwardSteer = std::max(fForwardSteer, m_vecAccelerationMin.x);
 	}
 
 	if (fRightSteer > 0)
 	{
-		fRightSteer = min(fRightSteer, m_vecAccelerationMax.y);
+		fRightSteer = std::min(fRightSteer, m_vecAccelerationMax.y);
 	}
 	else
 	{
-		fRightSteer = max(fRightSteer, m_vecAccelerationMin.y);
+		fRightSteer = std::max(fRightSteer, m_vecAccelerationMin.y);
 	}
 
 	if (fUpSteer > 0)
 	{
-		fUpSteer = min(fUpSteer, m_vecAccelerationMax.z);
+		fUpSteer = std::min(fUpSteer, m_vecAccelerationMax.z);
 	}
 	else
 	{
-		fUpSteer = max(fUpSteer, m_vecAccelerationMin.z);
+		fUpSteer = std::max(fUpSteer, m_vecAccelerationMin.z);
 	}
 
 	SteerAbs = (fForwardSteer*forward) + (fRightSteer*right) + (fUpSteer*up);
@@ -1244,7 +1244,7 @@ void CNPC_Ichthyosaur::EnsnareVictim( CBaseEntity *pVictim )
 
 			if ( pPlayer )
 			{
-				m_flHoldTime = max( gpGlobals->curtime+3.0f, pPlayer->PlayerDrownTime() - 2.0f );
+				m_flHoldTime = std::max( gpGlobals->curtime+3.0f, pPlayer->PlayerDrownTime() - 2.0f );
 			}
 		}
 		else

@@ -201,7 +201,7 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 
 		// Look at -count.
 		int count = args.FindArgInt( "-count", 1 );
-		count = clamp( count, 1, 16 );
+		count = std::clamp( count, 1, 16 );
 
 		int iTeam = -1;
 		const char *pVal = args.FindArg( "-team" );
@@ -214,12 +214,12 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 			else
 			{
 				iTeam = atoi( pVal );
-				iTeam = clamp( iTeam, 0, (GetNumberOfTeams()-1) );
+				iTeam = std::clamp( iTeam, 0, (GetNumberOfTeams()-1) );
 			}
 		}
 
 		int iClass = args.FindArgInt( "-class", -1 );
-		iClass = clamp( iClass, -1, TFCLASS_CLASS_COUNT );
+		iClass = std::clamp( iClass, -1, TFCLASS_CLASS_COUNT );
 		if ( iClass == TFCLASS_UNDECIDED )
 			iClass = TFCLASS_RECON;
 		

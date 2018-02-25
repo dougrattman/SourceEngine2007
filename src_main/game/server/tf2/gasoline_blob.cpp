@@ -214,7 +214,7 @@ void CGasolineBlob::Think()
 		
 		for ( int i=0; i < nEnts; i++ )
 		{
-			float flDistFromBorder = max( 0, FIRE_DAMAGE_DISTANCE - dists[i] );
+			float flDistFromBorder = std::max( 0, FIRE_DAMAGE_DISTANCE - dists[i] );
 			if ( flDistFromBorder <= 0 )
 				continue;
 

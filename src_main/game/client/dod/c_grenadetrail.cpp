@@ -259,7 +259,7 @@ void C_GrenadeTrail::Update( float fTimeDelta )
 		pParticle->m_vecVelocity[2] += 15;
 
 		offsetColor = m_StartColor;
-		float flMaxVal = max( m_StartColor[0], m_StartColor[1] );
+		float flMaxVal = std::max( m_StartColor[0], m_StartColor[1] );
 		if ( flMaxVal < m_StartColor[2] )
 		{
 			flMaxVal = m_StartColor[2];
@@ -269,9 +269,9 @@ void C_GrenadeTrail::Update( float fTimeDelta )
 		offsetColor *= random->RandomFloat( -0.2f, 0.2f );
 		offsetColor += m_StartColor;
 
-		offsetColor[0] = clamp( offsetColor[0], 0.0f, 1.0f );
-		offsetColor[1] = clamp( offsetColor[1], 0.0f, 1.0f );
-		offsetColor[2] = clamp( offsetColor[2], 0.0f, 1.0f );
+		offsetColor[0] = std::clamp( offsetColor[0], 0.0f, 1.0f );
+		offsetColor[1] = std::clamp( offsetColor[1], 0.0f, 1.0f );
+		offsetColor[2] = std::clamp( offsetColor[2], 0.0f, 1.0f );
 
 		pParticle->m_uchColor[0]	= offsetColor[0]*255.0f;
 		pParticle->m_uchColor[1]	= offsetColor[1]*255.0f;
@@ -281,7 +281,7 @@ void C_GrenadeTrail::Update( float fTimeDelta )
 		pParticle->m_uchEndSize		= m_EndSize;
 		
 		float alpha = random->RandomFloat( m_Opacity*0.75f, m_Opacity*1.25f );
-		alpha = clamp( alpha, 0.0f, 1.0f );
+		alpha = std::clamp( alpha, 0.0f, 1.0f );
 
 		pParticle->m_uchStartAlpha	= alpha * 255; 
 		pParticle->m_uchEndAlpha	= 0;

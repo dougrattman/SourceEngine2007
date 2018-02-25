@@ -8,11 +8,11 @@
 
 #include "tier0/include/threadtools.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Implement a standard reference counted interface. Use of this
 // is optional insofar as all the concrete tools only require
 // at compile time that the function signatures match.
-//-----------------------------------------------------------------------------
+
 
 class IRefCounted {
  public:
@@ -20,9 +20,9 @@ class IRefCounted {
   virtual int Release() = 0;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Release a pointer and mark it NULL
-//-----------------------------------------------------------------------------
+
 
 template <class REFCOUNTED_ITEM_PTR>
 inline int SafeRelease(REFCOUNTED_ITEM_PTR &pRef) {
@@ -36,9 +36,9 @@ inline int SafeRelease(REFCOUNTED_ITEM_PTR &pRef) {
   return 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Maintain a reference across a scope
-//-----------------------------------------------------------------------------
+
 
 template <class T = IRefCounted>
 class CAutoRef {
@@ -55,18 +55,18 @@ class CAutoRef {
   T *m_pRef;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Do a an inline AddRef then return the pointer, useful when
 // returning an object from a function
-//-----------------------------------------------------------------------------
+
 
 #define RetAddRef(p) ((p)->AddRef(), (p))
 #define InlineAddRef(p) ((p)->AddRef(), (p))
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	A class to both hold a pointer to an object and its reference.
 // Base exists to support other cleanup models
-//-----------------------------------------------------------------------------
+
 
 template <class T>
 class CBaseAutoPtr {
@@ -160,9 +160,9 @@ class CRefPtr : public CBaseAutoPtr<T> {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Traits classes defining reference count threading model
-//-----------------------------------------------------------------------------
+
 
 class CRefMT {
  public:
@@ -176,10 +176,10 @@ class CRefST {
   static int Decrement(int *p) { return --(*p); }
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Actual reference counting implementation. Pulled out to reduce
 // code bloat.
-//-----------------------------------------------------------------------------
+
 
 template <const bool bSelfDelete, typename CRefThreading = CRefMT>
 class NO_VTABLE CRefCountServiceBase {
@@ -243,9 +243,9 @@ typedef CRefCountServiceBase<false, CRefMT> CRefCountServiceNoDeleteMT;
 typedef CRefCountServiceNoDeleteMT CRefCountServiceNoDelete;
 typedef CRefCountServiceMT CRefCountService;
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Base classes to implement reference counting
-//-----------------------------------------------------------------------------
+
 
 template <class REFCOUNT_SERVICE = CRefCountService>
 class NO_VTABLE CRefCounted : public REFCOUNT_SERVICE {
@@ -321,10 +321,10 @@ class NO_VTABLE CRefCounted5 : public BASE1,
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose:	Class to throw around a reference counted item to debug
 // referencing problems
-//-----------------------------------------------------------------------------
+
 
 template <class BASE_REFCOUNTED, int FINAL_REFS = 0, const char *pszName = NULL>
 class CRefDebug : public BASE_REFCOUNTED {
@@ -356,6 +356,6 @@ class CRefDebug : public BASE_REFCOUNTED {
 #endif
 };
 
-//-----------------------------------------------------------------------------
+
 
 #endif  // SOURCE_TIER1_REFCOUNT_H_

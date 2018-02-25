@@ -283,8 +283,8 @@ float CBaseTFCombatWeapon::CalcViewmodelBob( void )
 	
 	bob = bob*0.3 + bob*0.7*sin(cycle);
 
-	bob = min( 4.0, bob );
-	bob = max( -7.0, bob );
+	bob = std::min( 4.0, bob );
+	bob = std::max( -7.0, bob );
 	return bob;
 	
 }

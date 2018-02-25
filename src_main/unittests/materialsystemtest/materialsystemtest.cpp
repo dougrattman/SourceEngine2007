@@ -11,7 +11,7 @@
 // Material editor
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "appframework/tier2app.h"
 #include "materialsystem/materialsystem_config.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
@@ -173,7 +173,7 @@ bool CMaterialSystemTestApp::CreateAppWindow( const char *pTitle, bool bWindowed
     wc.style         = CS_OWNDC | CS_DBLCLKS;
     wc.lpfnWndProc   = MaterialSystemTestWndProc;
     wc.hInstance     = (HINSTANCE)GetAppInstance();
-    wc.lpszClassName = "Valve001";
+    wc.lpszClassName = "Valve002";
 	wc.hIcon		 = NULL; //LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
 	wc.hIconSm		 = wc.hIcon;
 

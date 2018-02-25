@@ -69,10 +69,10 @@ void mxStatusWindow::redraw()
 	int offset = ( maxval - pagesize ) - curval;
 	offset = ( offset + lineheight - 1 ) / lineheight;
 
-	offset = max( 0, offset );
+	offset = std::max( 0, offset );
 	//offset = 0;
 	//offset += 10;
-	//offset = max( 0, offset );
+	//offset = std::max( 0, offset );
 
 	for ( int i = 0; i < MAX_TEXT_LINES - offset; i++ )
 	{
@@ -182,12 +182,12 @@ void mxStatusWindow::PositionSliders( int sboffset )
 {
 	int lineheight = ( STATUS_FONT_SIZE + 2 );
 
-	int linesused = min( MAX_TEXT_LINES, m_nCurrentLine );
-	linesused = max( linesused, 1 );
+	int linesused = std::min( MAX_TEXT_LINES, m_nCurrentLine );
+	linesused = std::max( linesused, 1 );
 
 	int trueh = h2() - GetCaptionHeight();
 
-	int vpixelsneeded = max( linesused * lineheight, trueh );
+	int vpixelsneeded = std::max( linesused * lineheight, trueh );
 	m_pScrollbar->setVisible( linesused * lineheight > trueh );
 	
 
@@ -275,7 +275,7 @@ void mxStatusWindow::DrawActiveTool()
 	static float lastrealtime = 0.0f;
 
 	float dt = (float)realtime - lastrealtime;
-	dt = clamp( dt, 0.0f, 1.0f );
+	dt = std::clamp( dt, 0.0f, 1.0f );
 
 	float fps = 0.0f;
 	if ( dt > 0.0001f )

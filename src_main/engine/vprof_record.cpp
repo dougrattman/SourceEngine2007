@@ -179,7 +179,7 @@ class CVProfRecorder : public CVProfile {
   }
 
   void Record_WriteTimings_R(const CVProfNode *pIn) {
-    unsigned short curCalls = min(pIn->m_nCurFrameCalls, 0xFFFF);
+    unsigned short curCalls = std::min(pIn->m_nCurFrameCalls, 0xFFFFu);
     if (curCalls >= 255) {
       unsigned char token = 255;
       g_pFileSystem->Write(&token, sizeof(token), m_hFile);

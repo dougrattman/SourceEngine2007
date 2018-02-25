@@ -24,11 +24,11 @@ MSVC_DISABLE_WARNING(4073)
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 #endif
 
-//-----------------------------------------------------------------------------
+
 
 MEMALLOC_DEFINE_EXTERNAL_TRACKING(CMemoryStack);
 
-//-----------------------------------------------------------------------------
+
 
 CMemoryStack::CMemoryStack()
     : m_pBase(NULL),
@@ -235,4 +235,4 @@ void CMemoryStack::PrintContents() {
   Msg("Total committed memory: %d\n", GetSize());
 }
 
-//-----------------------------------------------------------------------------
+

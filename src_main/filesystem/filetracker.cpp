@@ -80,7 +80,7 @@ CRC32_t CFileTracker::CalculateCRCForFile(FileHandle_t fp) {
   int nChunks = fileLength / CRC_CHUNK_SIZE + 1;
   unsigned int curStartByte = 0;
   for (int iChunk = 0; iChunk < nChunks; iChunk++) {
-    int curEndByte = min(curStartByte + CRC_CHUNK_SIZE, fileLength);
+    int curEndByte = std::min(curStartByte + CRC_CHUNK_SIZE, fileLength);
     int chunkLen = curEndByte - curStartByte;
     if (chunkLen == 0) break;
 

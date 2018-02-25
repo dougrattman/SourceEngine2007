@@ -272,10 +272,10 @@ void CHLTVClient::SetRate(int nRate, bool bForce) {
   if (!bForce) {
     if (m_bIsHLTV) {
       // allow higher bandwidth rates for HLTV proxies
-      nRate = clamp(nRate, MIN_RATE, MAX_RATE);
+      nRate = std::clamp(nRate, MIN_RATE, MAX_RATE);
     } else if (tv_maxrate.GetInt() > 0) {
       // restrict rate for normal clients to hltv_maxrate
-      nRate = clamp(nRate, MIN_RATE, tv_maxrate.GetInt());
+      nRate = std::clamp(nRate, MIN_RATE, tv_maxrate.GetInt());
     }
   }
 

@@ -74,7 +74,7 @@ class CDemoPlayer : public IDemoPlayer {
   // timedemo stuff:
   bool m_bTimeDemo;               // ture if in timedemo mode
   int m_nTimeDemoStartFrame;      // host_tickcount at start
-  double m_flTimeDemoStartTime;   // Sys_FloatTime() at second frame of timedemo
+  double m_flTimeDemoStartTime;   // Plat_FloatTime() at second frame of timedemo
   float m_flTotalFPSVariability;  // Frame rate variability
   int m_nTimeDemoCurrentFrame;    // last frame we read a packet
 

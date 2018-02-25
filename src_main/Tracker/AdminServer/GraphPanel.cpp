@@ -20,8 +20,6 @@
 #include "vgui_controls/TextEntry.h"
 #include "vgui_controls/ToggleButton.h"
 
-#define max(a, b) (((a) > (b)) ? (a) : (b))
-
 #define STATS_UPDATE_RATE 5.0f
 
 // colors for the various graph lines+controls
@@ -259,7 +257,7 @@ void CGraphPanel::CGraphsImage::Paint() {
 
   if (net_i) {
     // put them on a common scale, base it at zero
-    Range = max(maxIn, maxOut);
+    Range = std::max(maxIn, maxOut);
 
     Range += static_cast<float>(
         Range *
@@ -275,7 +273,7 @@ void CGraphPanel::CGraphsImage::Paint() {
 
   if (net_o) {
     // put them on a common scale, base it at zero
-    Range = max(maxIn, maxOut);
+    Range = std::max(maxIn, maxOut);
 
     Range += static_cast<float>(
         Range *

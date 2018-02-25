@@ -486,7 +486,7 @@ void CWateryDeathLeech::LeechThink(void) {
       dt = 0.1f;
     }
     m_nRenderMode = kRenderTransTexture;
-    int speed = max(1, 256 * dt);  // fade out over 1 second
+    int speed = std::max(1.0f, 256 * dt);  // fade out over 1 second
 
     if (m_iFadeState == -1)
       SetRenderColorA(UTIL_Approach(0, m_clrRender->a, speed));
@@ -555,7 +555,7 @@ LINK_ENTITY_TO_CLASS(trigger_waterydeath, CTriggerWateryDeath);
 
 // Stages of the waterydeath trigger, in time offsets from the initial touch
 #define WD_KILLTIME_NEXT_BITE 0.3
-#define WD_PAINVALUE_STEP 2.0
+#define WD_PAINVALUE_STEP 2.0f
 #define WD_MAX_DAMAGE 15.0f
 
 //-----------------------------------------------------------------------------
@@ -627,7 +627,8 @@ void CTriggerWateryDeath::Touch(CBaseEntity *pOther) {
     // &pOther->GetAbsOrigin() );
     // Kill it
     if (pOther->IsPlayer()) {
-      m_flPainValue = min(m_flPainValue + WD_PAINVALUE_STEP, WD_MAX_DAMAGE);
+      m_flPainValue =
+          std::min(m_flPainValue + WD_PAINVALUE_STEP, WD_MAX_DAMAGE);
     } else {
       m_flPainValue = WD_MAX_DAMAGE;
     }
@@ -716,7 +717,8 @@ void CTriggerWateryDeath::EndTouch(CBaseEntity *pOther) {
       // Adrian: Hi, you might be wondering why I'm doing this, yes?
       //        Well, EndTouch is called not only when the player leaves
       //		  the trigger, but also on level shutdown. We can't let
-      //the 		  soundpatch fade the sound out since we'll hit a nasty assert
+      // the 		  soundpatch fade the sound out since we'll hit a nasty
+      // assert
       //        cause it'll try to fade out a sound using an entity that might
       //        be gone since we're shutting down the server.
       if (!(pHL2Player->GetFlags() & FL_DONTTOUCH))

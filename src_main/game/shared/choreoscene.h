@@ -33,9 +33,9 @@ class IChoreoStringPool;
 #define SCENE_BINARY_TAG MAKEID<int32_t>('b', 'v', 'c', 'd')
 #define SCENE_BINARY_VERSION 0x04
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Container for choreographed scene of events for actors
-//-----------------------------------------------------------------------------
+
 class CChoreoScene : public ICurveDataAccessor {
  public:
   // Construction

@@ -70,17 +70,17 @@ class CProcessUtils : public CTier1AppSystem<IProcessUtils> {
   bool m_bInitialized;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: singleton accessor
-//-----------------------------------------------------------------------------
+
 static CProcessUtils s_ProcessUtils;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CProcessUtils, IProcessUtils,
                                   PROCESS_UTILS_INTERFACE_VERSION,
                                   s_ProcessUtils);
 
-//-----------------------------------------------------------------------------
+
 // Initialize, shutdown process system
-//-----------------------------------------------------------------------------
+
 InitReturnVal_t CProcessUtils::Init() {
   InitReturnVal_t nRetVal = BaseClass::Init();
   if (nRetVal != INIT_OK) return nRetVal;
@@ -100,9 +100,9 @@ void CProcessUtils::Shutdown() {
   return BaseClass::Shutdown();
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the last error that occurred
-//-----------------------------------------------------------------------------
+
 char *CProcessUtils::GetErrorString(char *pBuf, int nBufLen) {
   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, pBuf,
                 nBufLen, NULL);
@@ -142,9 +142,9 @@ ProcessHandle_t CProcessUtils::CreateProcess(ProcessInfo_t &info,
   return PROCESS_HANDLE_INVALID;
 }
 
-//-----------------------------------------------------------------------------
+
 // Options for compilation
-//-----------------------------------------------------------------------------
+
 ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
                                             bool bConnectStdPipes) {
   Assert(m_bInitialized);
@@ -198,9 +198,9 @@ ProcessHandle_t CProcessUtils::StartProcess(const char *pCommandLine,
   return PROCESS_HANDLE_INVALID;
 }
 
-//-----------------------------------------------------------------------------
+
 // Start up a process
-//-----------------------------------------------------------------------------
+
 ProcessHandle_t CProcessUtils::StartProcess(int argc, const char **argv,
                                             bool bConnectStdPipes) {
   CUtlString commandLine;
@@ -213,9 +213,9 @@ ProcessHandle_t CProcessUtils::StartProcess(int argc, const char **argv,
   return StartProcess(commandLine.Get(), bConnectStdPipes);
 }
 
-//-----------------------------------------------------------------------------
+
 // Shuts down the process handle
-//-----------------------------------------------------------------------------
+
 void CProcessUtils::ShutdownProcess(ProcessHandle_t hProcess) {
   ProcessInfo_t &info = m_Processes[hProcess];
   CloseHandle(info.m_hChildStderrWr);
@@ -227,9 +227,9 @@ void CProcessUtils::ShutdownProcess(ProcessHandle_t hProcess) {
   m_Processes.Remove(hProcess);
 }
 
-//-----------------------------------------------------------------------------
+
 // Closes the process
-//-----------------------------------------------------------------------------
+
 void CProcessUtils::CloseProcess(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   if (hProcess != PROCESS_HANDLE_INVALID) {
@@ -238,9 +238,9 @@ void CProcessUtils::CloseProcess(ProcessHandle_t hProcess) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Aborts the process
-//-----------------------------------------------------------------------------
+
 void CProcessUtils::AbortProcess(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   if (hProcess != PROCESS_HANDLE_INVALID) {
@@ -252,9 +252,9 @@ void CProcessUtils::AbortProcess(ProcessHandle_t hProcess) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns true if the process is complete
-//-----------------------------------------------------------------------------
+
 bool CProcessUtils::IsProcessComplete(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   Assert(hProcess != PROCESS_HANDLE_INVALID);
@@ -264,9 +264,9 @@ bool CProcessUtils::IsProcessComplete(ProcessHandle_t hProcess) {
   return (WaitForSingleObject(h, 0) != WAIT_TIMEOUT);
 }
 
-//-----------------------------------------------------------------------------
+
 // Methods used to write input into a process
-//-----------------------------------------------------------------------------
+
 int CProcessUtils::SendProcessInput(ProcessHandle_t hProcess, char *pBuf,
                                     int nBufLen) {
   // Unimplemented yet
@@ -274,9 +274,9 @@ int CProcessUtils::SendProcessInput(ProcessHandle_t hProcess, char *pBuf,
   return 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Methods used to read	output back from a process
-//-----------------------------------------------------------------------------
+
 int CProcessUtils::GetActualProcessOutputSize(ProcessHandle_t hProcess) {
   Assert(hProcess != PROCESS_HANDLE_INVALID);
 
@@ -317,7 +317,7 @@ int CProcessUtils::GetActualProcessOutput(ProcessHandle_t hProcess, char *pBuf,
     return 0;
   }
 
-  dwCount = min(dwCount, (DWORD)nBufLen - 1);
+  dwCount = std::min(dwCount, (DWORD)nBufLen - 1);
   ReadFile(info.m_hChildStdoutRd, pTempBuf, dwCount, &dwRead, NULL);
 
   // Convert /n/r -> /n
@@ -356,7 +356,7 @@ int CProcessUtils::GetProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   int nCachedBytes = info.m_ProcessOutput.TellPut();
   int nBytesRead = 0;
   if (nCachedBytes) {
-    nBytesRead = min(nBufLen - 1, nCachedBytes);
+    nBytesRead = std::min(nBufLen - 1, nCachedBytes);
     info.m_ProcessOutput.Get(pBuf, nBytesRead);
     pBuf[nBytesRead] = 0;
     nBufLen -= nBytesRead;
@@ -374,10 +374,10 @@ int CProcessUtils::GetProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   return nActualCountRead + nBytesRead + 1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the exit code for the process. Doesn't work unless the process is
 // complete
-//-----------------------------------------------------------------------------
+
 int CProcessUtils::GetProcessExitCode(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
   ProcessInfo_t &info = m_Processes[hProcess];
@@ -387,9 +387,9 @@ int CProcessUtils::GetProcessExitCode(ProcessHandle_t hProcess) {
   return nExitCode;
 }
 
-//-----------------------------------------------------------------------------
+
 // Waits until a process is complete
-//-----------------------------------------------------------------------------
+
 void CProcessUtils::WaitUntilProcessCompletes(ProcessHandle_t hProcess) {
   Assert(m_bInitialized);
 

@@ -6,7 +6,7 @@
 #ifndef SOUNDENT_H
 #define SOUNDENT_H
 
-enum {
+enum : int {
   MAX_WORLD_SOUNDS_SP = 64,  // Maximum number of sounds handled by the world at
                              // one time in single player.
   // This is also the number of entries saved in a savegame file (for b/w

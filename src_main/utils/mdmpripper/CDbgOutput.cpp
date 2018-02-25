@@ -3,7 +3,7 @@
 *****************************************************************************/
 #define WIN32_LEAN_AND_MEAN
 #define STRICT
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <dbghelp.h>
 #include <dbgeng.h>
 

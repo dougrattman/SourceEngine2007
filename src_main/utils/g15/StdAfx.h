@@ -13,7 +13,7 @@
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
 #ifdef _WIN32
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 #include "imageloader.h"
 #include "tier0/include/basetypes.h"
@@ -35,7 +35,7 @@
 #endif
 //#include <afx.h>
 
-//#include <windows.h>
+//#include "base/include/windows/windows_light.h"
 
 
 // TODO: reference additional headers your program requires here

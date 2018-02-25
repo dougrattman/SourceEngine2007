@@ -1,13 +1,14 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#if !defined(MODES_H)
+#ifndef MODES_H
 #define MODES_H
 
-typedef struct vmode_s {
-  int width;
-  int height;
-  int bpp;
-  int refreshRate;
-} vmode_t;
+#include "base/include/base_types.h"
+
+struct vmode_t {
+  i32 width, height;
+  i32 bpp;
+  i32 refreshRate;
+};
 
 #endif  // MODES_H

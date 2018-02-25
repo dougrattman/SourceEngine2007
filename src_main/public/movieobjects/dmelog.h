@@ -819,7 +819,7 @@ inline float Normalize(const Color &val) {
     sum += val[i];
   }
   sum /= 4.0f;
-  return clamp(sum / 255.0f, 0.0f, 1.0f);
+  return std::clamp(sum / 255.0f, 0.0f, 1.0f);
 }
 
 template <>
@@ -833,7 +833,7 @@ inline float Normalize(const QAngle &val) {
 
     sum += ang;
   }
-  return clamp((sum / 3.0f) / 360.0f, 0.0f, 1.0f);
+  return std::clamp((sum / 3.0f) / 360.0f, 0.0f, 1.0f);
 }
 
 template <>

@@ -709,7 +709,7 @@ void CModWizardSubPanel_CopyFiles::OnTick()
 		// Update our label.
 		if ( !bFinished )
 		{
-			unsigned int iNum = min( m_iCurCopyFile, m_FileCopyInfos.Count()-1 );
+			unsigned int iNum = std::min( m_iCurCopyFile, m_FileCopyInfos.Count()-1 );
 			if ( iNum < (unsigned int)m_FileCopyInfos.Count() )
 			{
 				char msg[512];

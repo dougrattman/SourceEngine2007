@@ -26,7 +26,7 @@ extern float realtime;
 // buffers)
 #define STREAM_BUFFER_TIME 0.200f
 // force a single buffer when streaming waves smaller than this
-#define STREAM_BUFFER_DATASIZE XBOX_DVD_ECC_SIZE
+#define STREAM_BUFFER_DATASIZE 32768
 
 // PC single buffering implementation
 // UNDONE: Allocate this in cache instead?
@@ -772,8 +772,7 @@ StreamHandle_t CAsyncWavDataCache::OpenStreamedLoad(
   streamedEntry.m_BufferSize = bufferSize;
   streamedEntry.m_numBuffers = numBuffers;
   streamedEntry.m_bSinglePlay = (flags & STREAMED_SINGLEPLAY) != 0;
-  streamedEntry.m_SectorSize =
-      (IsX360() && (flags & STREAMED_FROMDVD)) ? XBOX_DVD_SECTORSIZE : 1;
+  streamedEntry.m_SectorSize = 1;
 
   // single play streams expect to uniquely own and thus recycle their buffers
   // though the data single play streams are guaranteed that their buffers are

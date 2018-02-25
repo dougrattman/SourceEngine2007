@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include <assert.h>
 
@@ -240,7 +240,7 @@ double CSysClock::GetTime( void )
 // Purpose: Sample the high-precision clock
 // Output : double
 //-----------------------------------------------------------------------------
-double Sys_FloatTime( void )
+double Plat_FloatTime( void )
 {
 	return g_Clock.GetTime();
 }

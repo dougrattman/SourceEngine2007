@@ -920,7 +920,8 @@ void CBaseEntity::TransformStepData_ParentToParent(CBaseEntity *pOldParent,
 // Purpose: After parenting to an object, we need to also correctly translate
 // our
 //			step stimulation positions and angles into that parent
-//space.  Otherwise 			we end up splining between two different world spaces.
+// space.  Otherwise 			we end up splining between two different
+// world spaces.
 //-----------------------------------------------------------------------------
 void CBaseEntity::TransformStepData_WorldToParent(CBaseEntity *pParent) {
   // Fix up our step simulation points to be in the proper local space
@@ -937,9 +938,11 @@ void CBaseEntity::TransformStepData_WorldToParent(CBaseEntity *pParent) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the movement parent of this entity. This entity will be moved
-//			to a local coordinate calculated from its current absolute
-//offset 			from the parent entity and will then follow the parent entity.
-// Input  : pParentEntity - This entity's new parent in the movement hierarchy.
+//			to a local coordinate calculated from its current
+// absolute
+// offset 			from the parent entity and will then follow the
+// parent entity. Input  : pParentEntity - This entity's new parent in the
+// movement hierarchy.
 //-----------------------------------------------------------------------------
 void CBaseEntity::SetParent(CBaseEntity *pParentEntity, int iAttachment) {
   // If they didn't specify an attachment, use our current
@@ -1377,7 +1380,7 @@ void CBaseEntity::Event_Killed(const CTakeDamageInfo &info) {
 //-----------------------------------------------------------------------------
 // Purpose: helper method to send a game event when this entity is killed. Note:
 //			gets called specifically for particular entities (mostly
-//NPC), this 			does not get called for every entity
+// NPC), this 			does not get called for every entity
 //-----------------------------------------------------------------------------
 void CBaseEntity::SendOnKilledGameEvent(const CTakeDamageInfo &info) {
   IGameEvent *event = gameeventmanager->CreateEvent("entity_killed");
@@ -2036,10 +2039,10 @@ static void CheckPushedEntity(CBaseEntity *pEntity, pushblock_t &params) {
         float expectedDist = targetAmount - movementAmount;
         // compute the fraction to move back the AI to match the physics
         if (expectedDist <= 0) {
-          fraction = 1;
+          fraction = 1.0f;
         } else {
           fraction = dist / expectedDist;
-          fraction = clamp(fraction, 0, 1);
+          fraction = std::clamp(fraction, 0.0f, 1.0f);
         }
       }
     }
@@ -2085,8 +2088,8 @@ static void CheckPushedEntity(CBaseEntity *pEntity, pushblock_t &params) {
 
         float t =
             expectedDist != 0.0f ? fabsf(deltaAngle / expectedDist) : 1.0f;
-        t = clamp(t, 0, 1);
-        fraction = max(fraction, t);
+        t = std::clamp(t, 0.0f, 1.0f);
+        fraction = std::max(fraction, t);
       } else {
         pEntity->UpdatePhysicsShadowToCurrentPosition(0);
 #if DEBUG_PUSH_MESSAGES
@@ -3362,7 +3365,7 @@ ConVar ent_messages_draw("ent_messages_draw", "0", FCVAR_CHEAT,
 //			to the fired action.
 // Input  : char *szInputName - input destination
 //			*pActivator - entity which initiated this sequence of
-//actions 			*pCaller - entity from which this event is sent
+// actions 			*pCaller - entity from which this event is sent
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CBaseEntity::AcceptInput(const char *szInputName, CBaseEntity *pActivator,
@@ -3474,7 +3477,7 @@ bool CBaseEntity::AcceptInput(const char *szInputName, CBaseEntity *pActivator,
 // Input  : nAlpha - Alpha value (0 - 255).
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputAlpha(inputdata_t &inputdata) {
-  SetRenderColorA(clamp(inputdata.value.Int(), 0, 255));
+  SetRenderColorA(std::clamp(inputdata.value.Int(), 0, 255));
 }
 
 //-----------------------------------------------------------------------------
@@ -3843,8 +3846,10 @@ void CBaseEntity::NotifySystemEvent(
 
 //-----------------------------------------------------------------------------
 // Purpose: Holds an entity's previous abs origin and angles at the time of
-//			teleportation. Used for child & constrained entity fixup to
-//prevent 			lazy updates of abs origins and angles from messing things up.
+//			teleportation. Used for child & constrained entity fixup
+// to
+// prevent 			lazy updates of abs origins and angles from
+// messing things up.
 //-----------------------------------------------------------------------------
 struct TeleportListEntry_t {
   CBaseEntity *pEntity;
@@ -3915,8 +3920,9 @@ static void TeleportEntity(CBaseEntity *pSourceEntity,
 // Purpose: Recurses an entity hierarchy and fills out a list of all entities
 //			in the hierarchy with their current origins and angles.
 //
-//			This list is necessary to keep lazy updates of abs origins
-//and angles 			from messing up our child/constrained entity fixup.
+//			This list is necessary to keep lazy updates of abs
+// origins and angles 			from messing up our child/constrained
+// entity fixup.
 //-----------------------------------------------------------------------------
 static void BuildTeleportList_r(CBaseEntity *pTeleport,
                                 CUtlVector<TeleportListEntry_t> &teleportList) {
@@ -5057,7 +5063,7 @@ model_t *CBaseEntity::GetModel(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Calculates the absolute position of an edict in the world
 //			assumes the parent's absolute origin has already been
-//calculated
+// calculated
 //-----------------------------------------------------------------------------
 void CBaseEntity::CalcAbsolutePosition(void) {
   if (!IsEFlagSet(EFL_DIRTY_ABSTRANSFORM)) return;
@@ -5678,13 +5684,19 @@ void CBaseEntity::InputAddContext(inputdata_t &inputdata) {
 //-----------------------------------------------------------------------------
 // Purpose: User inputs. These fire the corresponding user outputs, and are
 //			a means of forwarding messages through !activator to a
-//target known 			known by !activator but not by the targetting entity.
+// target known 			known by !activator but not by the
+// targetting entity.
 //
-//			For example, say you have three identical trains, following
-//the same 			path. Each train has a sprite in hierarchy with it that needs to
-//			toggle on/off as it passes each path_track. You would hook
-//each train's 			OnUser1 output to it's sprite's Toggle input, then connect each
-//path_track's 			OnPass output to !activator's FireUser1 input.
+//			For example, say you have three identical trains,
+// following
+// the same 			path. Each train has a sprite in hierarchy with
+// it
+// that needs to 			toggle on/off as it passes each
+// path_track. You would hook each
+// train's 			OnUser1 output to it's sprite's Toggle input,
+// then connect each
+// path_track's 			OnPass output to !activator's FireUser1
+// input.
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputFireUser1(inputdata_t &inputdata) {
   m_OnUser1.FireOutput(inputdata.pActivator, this);
@@ -5954,7 +5966,7 @@ bool CBaseEntity::ComputeStepSimulationNetworkOrigin(StepSimulationData *step) {
   if (tickdelta > 0) {
     frac = (float)(gpGlobals->tickcount - step->m_Previous.nTickCount) /
            (float)tickdelta;
-    frac = clamp(frac, 0.0f, 1.0f);
+    frac = std::clamp(frac, 0.0f, 1.0f);
   }
 
   if (step->m_Previous2.nTickCount == 0 ||
@@ -5976,7 +5988,7 @@ bool CBaseEntity::ComputeStepSimulationNetworkOrigin(StepSimulationData *step) {
       if (tickdelta > 0) {
         frac = (float)(gpGlobals->tickcount - pOlder->nTickCount) /
                (float)tickdelta;
-        frac = clamp(frac, 0.0f, 1.0f);
+        frac = std::clamp(frac, 0.0f, 1.0f);
       }
     }
 
@@ -6019,7 +6031,7 @@ bool CBaseEntity::ComputeStepSimulationNetworkAngles(StepSimulationData *step) {
   if (tickdelta > 0) {
     frac = (float)(gpGlobals->tickcount - step->m_Previous.nTickCount) /
            (float)tickdelta;
-    frac = clamp(frac, 0.0f, 1.0f);
+    frac = std::clamp(frac, 0.0f, 1.0f);
   }
 
   if (step->m_Previous2.nTickCount == 0 ||
@@ -6044,7 +6056,7 @@ bool CBaseEntity::ComputeStepSimulationNetworkAngles(StepSimulationData *step) {
       if (tickdelta > 0) {
         frac = (float)(gpGlobals->tickcount - pOlder->nTickCount) /
                (float)tickdelta;
-        frac = clamp(frac, 0.0f, 1.0f);
+        frac = std::clamp(frac, 0.0f, 1.0f);
       }
     }
 
@@ -6267,7 +6279,7 @@ void CBaseEntity::SUB_PerformFadeOut(void) {
     dt = 0.1f;
   }
   m_nRenderMode = kRenderTransTexture;
-  int speed = max(1, 256 * dt);  // fade out over 1 second
+  int speed = std::max(1.0f, 256 * dt);  // fade out over 1 second
   SetRenderColorA(UTIL_Approach(0, m_clrRender->a, speed));
 }
 

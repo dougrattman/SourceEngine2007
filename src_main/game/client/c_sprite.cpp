@@ -169,7 +169,7 @@ float StandardGlowBlend( const pixelvis_queryparams_t &params, pixelvis_handle_t
 
 	// UNDONE: Tweak these magic numbers (1200 - distance at full brightness)
 	float fadeOut = (1200.0f*1200.0f) / (dist*dist);
-	fadeOut = clamp( fadeOut, 0.0f, 1.0f );
+	fadeOut = std::clamp( fadeOut, 0.0f, 1.0f );
 
 	if (rendermode != kRenderWorldGlow)
 	{
@@ -485,7 +485,7 @@ void CSprite::GetToolRecordingState( KeyValues *msg )
 	if ( m_bWorldSpaceScale )
 	{
 		CEngineSprite *psprite = ( CEngineSprite * )modelinfo->GetModelExtraData( GetModel() );
-		float flMinSize = min( psprite->GetWidth(), psprite->GetHeight() );
+		float flMinSize = std::min( psprite->GetWidth(), psprite->GetHeight() );
 		renderscale /= flMinSize;
 	}
 

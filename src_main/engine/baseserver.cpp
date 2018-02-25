@@ -926,10 +926,10 @@ void CBaseServer::CalculateCPUUsage(void) {
   if (m_fStartTime == 0)
   // record when we started
   {
-    m_fStartTime = Sys_FloatTime();
+    m_fStartTime = Plat_FloatTime();
   }
 
-  if (Sys_FloatTime() > m_fLastCPUCheckTime + 1)
+  if (Plat_FloatTime() > m_fLastCPUCheckTime + 1)
   // only do this every 1 second
   {
 #if defined(_WIN32)
@@ -964,7 +964,7 @@ void CBaseServer::CalculateCPUUsage(void) {
         (double)(totalTime - lastTotalTime) / (double)(now - lastNow);
 
     // now save this away for next time
-    if (Sys_FloatTime() > lastAvg + 5)
+    if (Plat_FloatTime() > lastAvg + 5)
     // only do it every 5 seconds, so we keep a moving average
     {
       memcpy(&lastNow, &nowTime, sizeof(__int64));
@@ -1028,10 +1028,10 @@ void CBaseServer::CalculateCPUUsage(void) {
     //	(runticks-lastrunticks),runticks);
 
     // now save this away for next time
-    if (Sys_FloatTime() > lastAvg + 5) {
+    if (Plat_FloatTime() > lastAvg + 5) {
       lastcputicks = cputicks;
       lastrunticks = runticks;
-      lastAvg = Sys_FloatTime();
+      lastAvg = Plat_FloatTime();
     }
 
     // limit checking :)
@@ -1040,7 +1040,7 @@ void CBaseServer::CalculateCPUUsage(void) {
 
   end:
 #endif
-    m_fLastCPUCheckTime = Sys_FloatTime();
+    m_fLastCPUCheckTime = Plat_FloatTime();
   }
 }
 
@@ -1981,7 +1981,7 @@ void CBaseServer::WriteTempEntities(CBaseClient *client,
   bool bDebug = sv_debugtempentities.GetBool();
 
   // limit max entities to field bit length
-  ev_max = min(ev_max, ((1 << CEventInfo::EVENT_INDEX_BITS) - 1));
+  ev_max = std::min(ev_max, ((1 << CEventInfo::EVENT_INDEX_BITS) - 1));
 
   if (pLastSnapshot) {
     pSnapshot = pLastSnapshot->NextSnapshot();
@@ -2074,7 +2074,7 @@ void CBaseServer::WriteTempEntities(CBaseClient *client,
 }
 
 void CBaseServer::SetMaxClients(int number) {
-  m_nMaxclients = clamp(number, 1, ABSOLUTE_PLAYER_LIMIT);
+  m_nMaxclients = std::clamp(number, 1, ABSOLUTE_PLAYER_LIMIT);
 }
 
 struct convar_tags_t {

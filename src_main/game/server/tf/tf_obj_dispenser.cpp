@@ -281,7 +281,7 @@ void CObjectDispenser::Precache()
 void CObjectDispenser::DetonateObject( void )
 {
 	/*
-	float flDamage = min( 100 + m_iAmmoMetal, 250 );
+	float flDamage = std::min( 100 + m_iAmmoMetal, 250 );
 
 	ExplosionCreate( 
 		GetAbsOrigin(),
@@ -341,7 +341,7 @@ bool CObjectDispenser::DispenseAmmo( CTFPlayer *pPlayer )
 	iTotalPickedUp += iSecondary;
 
 	// metal
-	int iMetal = pPlayer->GiveAmmo( min( m_iAmmoMetal, DISPENSER_DROP_METAL ), TF_AMMO_METAL );
+	int iMetal = pPlayer->GiveAmmo( std::min( m_iAmmoMetal, DISPENSER_DROP_METAL ), TF_AMMO_METAL );
 	m_iAmmoMetal -= iMetal;
 	iTotalPickedUp += iMetal;
 
@@ -367,7 +367,7 @@ void CObjectDispenser::RefillThink( void )
 	// Auto-refill half the amount as tfc, but twice as often
 	if ( m_iAmmoMetal < DISPENSER_MAX_METAL_AMMO )
 	{
-		m_iAmmoMetal = min( m_iAmmoMetal + DISPENSER_MAX_METAL_AMMO * 0.1, DISPENSER_MAX_METAL_AMMO );
+		m_iAmmoMetal = std::min( m_iAmmoMetal + DISPENSER_MAX_METAL_AMMO * 0.1, DISPENSER_MAX_METAL_AMMO );
 		EmitSound( "Building_Dispenser.GenerateMetal" );
 	}
 }

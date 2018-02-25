@@ -110,7 +110,7 @@ bool ParseFile(char *pszFile, CItemMap *pResult) {
       if (!item.length()) break;
     }
     file >> size;
-    maxEntrySize = max(maxEntrySize, size);
+    maxEntrySize = std::max(maxEntrySize, size);
     pResult->insert(make_pair(CleanupName(item), size));
     getline(file, item);  // skip the end of line
   }

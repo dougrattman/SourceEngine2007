@@ -402,7 +402,7 @@ void CWorkspaceManager::Frame( void )
 	// clamp to MAX_FPS
 	if ( dt >= 0.0 && dt < MIN_TIMESTEP )
 	{
-		Sleep( max( 0, (int)( ( MIN_TIMESTEP - dt ) * 1000.0f ) ) );
+		Sleep( std::max( 0, (int)( ( MIN_TIMESTEP - dt ) * 1000.0f ) ) );
 
 		recursion_guard = false;
 		return;
@@ -410,7 +410,7 @@ void CWorkspaceManager::Frame( void )
 
 	if ( prev != 0.0 )
 	{
-		dt = min( 0.1, dt );
+		dt = std::min( 0.1, dt );
 		
 		Think( dt );
 

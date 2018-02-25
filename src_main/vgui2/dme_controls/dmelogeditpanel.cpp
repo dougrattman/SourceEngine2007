@@ -39,7 +39,7 @@ DmeTime_t CDmeLogEditPanel::NormalizedToTime( float flIn )
 
 DmeTime_t CDmeLogEditPanel::NormalizedToDuration( float flDuration )
 {
-	flDuration = clamp( flDuration, 0.0f, 1.0f );
+	flDuration = std::clamp( flDuration, 0.0f, 1.0f );
 	return flDuration * ( m_maxTime - m_minTime );
 }
 
@@ -94,7 +94,7 @@ int CDmeLogEditPanel::FindOrAddControlPoint( float flIn, float flTolerance, floa
 		{
 			Color c = CastElement<CDmeColorLog >( m_hLog )->GetValue( time );
 			int nComp = (int)( flValue + 0.5f );
-			nComp = clamp( nComp, 0, 255 );
+			nComp = std::clamp( nComp, 0, 255 );
 			for ( int i = 0; i < 4; ++i )
 			{
 				if ( m_LogFieldMask & (1 << i) )
@@ -176,7 +176,7 @@ int CDmeLogEditPanel::ModifyControlPoint( int nPoint, float flIn, float flOut )
 		{
 			Color c = CastElement<CDmeColorLog >( m_hLog )->GetValue( initialTime );
 			int nComp = (int)( flValue + 0.5f );
-			nComp = clamp( nComp, 0, 255 );
+			nComp = std::clamp( nComp, 0, 255 );
 			for ( int i = 0; i < 4; ++i )
 			{
 				if ( m_LogFieldMask & (1 << i) )

@@ -111,7 +111,7 @@ bool CFontTextureCache::GetTextureForChars(vgui::HFont font,
   }
 
   int typePage = (int)type - 1;
-  typePage = clamp(typePage, 0, (int)vgui::FONT_DRAW_TYPE_COUNT - 1);
+  typePage = std::clamp(typePage, 0, (int)vgui::FONT_DRAW_TYPE_COUNT - 1);
 
   if (FontManager().IsBitmapFont(font)) {
     const int MAX_BITMAP_CHARS = 256;
@@ -188,8 +188,8 @@ bool CFontTextureCache::GetTextureForChars(vgui::HFont font,
         // get the char details
         int a, b, c;
         winFont->GetCharABCWidths(wch[i], a, b, c);
-        int fontWide = max(b, 1);
-        int fontTall = max(winFont->GetHeight(), 1);
+        int fontWide = std::max(b, 1);
+        int fontTall = std::max(winFont->GetHeight(), 1);
         if (winFont->GetUnderlined()) {
           fontWide += (a + c);
         }
@@ -209,7 +209,7 @@ bool CFontTextureCache::GetTextureForChars(vgui::HFont font,
         newChars[numNewChars].fontTall = fontTall;
         newChars[numNewChars].offset = 4 * totalNewCharTexels;
         totalNewCharTexels += fontWide * fontTall;
-        maxNewCharTexels = max(maxNewCharTexels, fontWide * fontTall);
+        maxNewCharTexels = std::max(maxNewCharTexels, fontWide * fontTall);
         numNewChars++;
 
         // set the cache info
@@ -352,7 +352,7 @@ bool CFontTextureCache::AllocatePageForChar(int charWide, int charTall,
       page.nextY += page.tallestCharOnLine;
       page.tallestCharOnLine = charTall;
     }
-    page.tallestCharOnLine = max(page.tallestCharOnLine, charTall);
+    page.tallestCharOnLine = std::max(page.tallestCharOnLine, (short)charTall);
 
     bNeedsNewPage = ((page.nextY + page.tallestCharOnLine) > page.tall);
   }

@@ -530,7 +530,7 @@ void Splitter::SetSplitterPosition( int nIndex, int nPos )
 			nMaxPos -= m_Splitters[i].m_nLockedSize;
 		}
 	}
-	nPos = clamp( nPos, nMinPos, nMaxPos );
+	nPos = std::clamp( nPos, nMinPos, nMaxPos );
 	
 	m_Splitters[nIndex].m_flPos = nPos;
 	int p = nPos;

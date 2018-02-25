@@ -400,7 +400,7 @@ void CWingedEdgeList::ResetActiveEdgeList() {
 
   // Don't bother with edges below the screen edge
   m_flNextDiscontinuity = WingedEdge(0).m_vecPosition.y;
-  m_flNextDiscontinuity = max(m_flNextDiscontinuity, -1.0f);
+  m_flNextDiscontinuity = std::max(m_flNextDiscontinuity, -1.0f);
 
   m_StartTerminal.m_pNextActiveEdge = &m_EndTerminal;
   m_EndTerminal.m_pPrevActiveEdge = &m_StartTerminal;
@@ -627,7 +627,7 @@ bool CWingedEdgeList::IsOccludingEdgeList(CWingedEdgeList &testList) {
 
     float flTestY = testList.NextDiscontinuity();
     float flOccluderY = NextDiscontinuity();
-    flCurrentY = min(flTestY, flOccluderY);
+    flCurrentY = std::min(flTestY, flOccluderY);
 
     // NOTE: This check here is to help occlusion @ the top of the screen
     // We cut the occluders off at y = 1.0 + epsilon, which means there's
@@ -1710,7 +1710,7 @@ void CEdgeList::ReduceActiveList(CWingedEdgeList &newEdgeList) {
 
   // We can skip everything up to y = -1.0f; since that's offscreen
   float flPrevY = NextDiscontinuity();
-  flPrevY = max(-1.0f, flPrevY);
+  flPrevY = std::max(-1.0f, flPrevY);
 
   m_flNextDiscontinuity = FLT_MAX;
   IntroduceNewActiveEdges(flPrevY);

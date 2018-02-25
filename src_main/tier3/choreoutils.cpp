@@ -13,9 +13,9 @@
 #include "tier1/KeyValues.h"
 #include "tier3/tier3.h"
 
-//-----------------------------------------------------------------------------
+
 // Find sequence by name
-//-----------------------------------------------------------------------------
+
 static int LookupSequence(CStudioHdr *pStudioHdr, const char *pSequenceName) {
   for (int i = 0; i < pStudioHdr->GetNumSeq(); i++) {
     if (!Q_stricmp(pSequenceName, pStudioHdr->pSeqdesc(i).pszLabel())) return i;
@@ -23,9 +23,9 @@ static int LookupSequence(CStudioHdr *pStudioHdr, const char *pSequenceName) {
   return -1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns sequence flags
-//-----------------------------------------------------------------------------
+
 static int GetSequenceFlags(CStudioHdr *pStudioHdr, int nSequence) {
   if (!pStudioHdr || nSequence < 0 || nSequence >= pStudioHdr->GetNumSeq())
     return 0;
@@ -33,18 +33,18 @@ static int GetSequenceFlags(CStudioHdr *pStudioHdr, int nSequence) {
   return seqdesc.flags;
 }
 
-//-----------------------------------------------------------------------------
+
 // Does a sequence loop?
-//-----------------------------------------------------------------------------
+
 static bool DoesSequenceLoop(CStudioHdr *pStudioHdr, int nSequence) {
   int nFlags = GetSequenceFlags(pStudioHdr, nSequence);
   bool bLooping = (nFlags & STUDIO_LOOPING) ? true : false;
   return bLooping;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 bool AutoAddGestureKeys(CChoreoEvent *e, CStudioHdr *pStudioHdr,
                         float *pPoseParameters, bool bCheckOnly) {
   int iSequence = LookupSequence(pStudioHdr, e->GetParameters());
@@ -167,9 +167,9 @@ bool AutoAddGestureKeys(CChoreoEvent *e, CStudioHdr *pStudioHdr,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 bool UpdateGestureLength(CChoreoEvent *e, CStudioHdr *pStudioHdr,
                          float *pPoseParameters, bool bCheckOnly) {
   Assert(e);
@@ -194,9 +194,9 @@ bool UpdateGestureLength(CChoreoEvent *e, CStudioHdr *pStudioHdr,
   return bChanged;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 bool UpdateSequenceLength(CChoreoEvent *e, CStudioHdr *pStudioHdr,
                           float *pPoseParameters, bool bCheckOnly,
                           bool bVerbose) {
@@ -289,9 +289,9 @@ bool UpdateSequenceLength(CChoreoEvent *e, CStudioHdr *pStudioHdr,
   return bChanged;
 }
 
-//-----------------------------------------------------------------------------
+
 // Finds sound files associated with events
-//-----------------------------------------------------------------------------
+
 const char *GetSoundForEvent(CChoreoEvent *pEvent, CStudioHdr *pStudioHdr) {
   const char *pSoundName = pEvent->GetParameters();
   if (Q_stristr(pSoundName, ".wav")) return PSkipSoundChars(pSoundName);

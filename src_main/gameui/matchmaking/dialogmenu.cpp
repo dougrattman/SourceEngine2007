@@ -73,7 +73,7 @@ void CMenuItem::ApplySettings(KeyValues *pSettings) {
     m_pDescription->SizeToContents();
     m_pDescription->GetPos(x, y);
     bgTall = y + m_pDescription->GetTall() + m_nBottomMargin;
-    textWide = max(textWide, m_pDescription->GetWide());
+    textWide = std::max(textWide, m_pDescription->GetWide());
   }
 
   int bgWide = x + textWide + m_nRightMargin;
@@ -314,7 +314,7 @@ COptionsItem::~COptionsItem() {
 void COptionsItem::PerformLayout() {
   BaseClass::PerformLayout();
 
-  int optionWide = max(m_nOptionsMinWide, GetWide() - m_nOptionsXPos -
+  int optionWide = std::max(m_nOptionsMinWide, GetWide() - m_nOptionsXPos -
                                               m_pRightArrow->GetWide() -
                                               m_nOptionsLeftMargin);
   int optionTall = GetTall();
@@ -414,9 +414,9 @@ void COptionsItem::AddOption(const char *pLabelText,
   pOption->SetContentAlignment(vgui::Label::a_southwest);
   pOption->SizeToContents();
 
-  int wide = max(m_nOptionsMinWide, pOption->GetWide());
+  int wide = std::max(m_nOptionsMinWide, pOption->GetWide());
   pOption->SetBounds(m_nOptionsXPos, 0, wide, GetTall());
-  m_nMaxOptionWidth = max(wide, m_nMaxOptionWidth);
+  m_nMaxOptionWidth = std::max(wide, m_nMaxOptionWidth);
 
   SetWide(m_nOptionsXPos + m_nMaxOptionWidth + m_nOptionsLeftMargin * 2 +
           m_nArrowGap * 2 + m_pRightArrow->GetWide());
@@ -940,7 +940,7 @@ void CDialogMenu::ApplySettings(KeyValues *pResourceData) {
   // Calculate the final menu size according to the widest menu item
   int wide = m_nMinWide;
   for (int i = 0; i < m_MenuItems.Count(); ++i) {
-    wide = max(wide, m_MenuItems[i]->GetWide());
+    wide = std::max(wide, m_MenuItems[i]->GetWide());
   }
   SetWide(wide);
 }
@@ -1159,7 +1159,7 @@ int CDialogMenu::GetItemCount() { return m_MenuItems.Count(); }
 // Return the number of visible menu items
 //-----------------------------------------------------------------------
 int CDialogMenu::GetVisibleItemCount() {
-  return min(GetItemCount(), m_nMaxVisibleItems);
+  return std::min(GetItemCount(), m_nMaxVisibleItems);
 }
 
 //-----------------------------------------------------------------------

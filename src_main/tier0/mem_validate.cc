@@ -15,10 +15,10 @@
 
 extern IMemAlloc *g_pActualAlloc;
 
-//-----------------------------------------------------------------------------
+
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
-//-----------------------------------------------------------------------------
+
 class CValidateAlloc : public IMemAlloc {
  public:
   enum {
@@ -116,24 +116,24 @@ class CValidateAlloc : public IMemAlloc {
   ch m_pSuffixImage[HEAP_SUFFIX_BUFFER_SIZE];
 };
 
-//-----------------------------------------------------------------------------
+
 // Singleton...
-//-----------------------------------------------------------------------------
+
 static CValidateAlloc s_ValidateAlloc;
 IMemAlloc *g_pMemAlloc = &s_ValidateAlloc;
 
-//-----------------------------------------------------------------------------
+
 // Constructor.
-//-----------------------------------------------------------------------------
+
 CValidateAlloc::CValidateAlloc() {
   m_pFirstAllocation = 0;
   memset(m_pPrefixImage, 0xBE, HEAP_PREFIX_BUFFER_SIZE);
   memset(m_pSuffixImage, 0xAF, HEAP_SUFFIX_BUFFER_SIZE);
 }
 
-//-----------------------------------------------------------------------------
+
 // Accessors...
-//-----------------------------------------------------------------------------
+
 inline CValidateAlloc::HeapSuffix_t *CValidateAlloc::Suffix(
     HeapPrefix_t *pPrefix) {
   return reinterpret_cast<HeapSuffix_t *>((u32 ch *)(pPrefix + 1) +
@@ -156,9 +156,9 @@ inline const CValidateAlloc::HeapPrefix_t *CValidateAlloc::PrefixFromAllocation(
   return ((const HeapPrefix_t *)pAlloc) - 1;
 }
 
-//-----------------------------------------------------------------------------
+
 // Add to the list!
-//-----------------------------------------------------------------------------
+
 void CValidateAlloc::AddToList(HeapPrefix_t *pHeap, i32 nSize) {
   pHeap->m_pPrev = nullptr;
   pHeap->m_pNext = m_pFirstAllocation;
@@ -174,9 +174,9 @@ void CValidateAlloc::AddToList(HeapPrefix_t *pHeap, i32 nSize) {
   memcpy(pSuffix->m_Suffix, m_pSuffixImage, HEAP_SUFFIX_BUFFER_SIZE);
 }
 
-//-----------------------------------------------------------------------------
+
 // Remove from the list!
-//-----------------------------------------------------------------------------
+
 void CValidateAlloc::RemoveFromList(HeapPrefix_t *pHeap) {
   if (!pHeap) return;
 
@@ -192,9 +192,9 @@ void CValidateAlloc::RemoveFromList(HeapPrefix_t *pHeap) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Validate the allocation
-//-----------------------------------------------------------------------------
+
 bool CValidateAlloc::ValidateAllocation(HeapPrefix_t *pHeap) {
   HeapSuffix_t *pSuffix = Suffix(pHeap);
 
@@ -215,9 +215,9 @@ bool CValidateAlloc::ValidateAllocation(HeapPrefix_t *pHeap) {
   return bOk;
 }
 
-//-----------------------------------------------------------------------------
+
 // Release versions
-//-----------------------------------------------------------------------------
+
 void *CValidateAlloc::Alloc(usize nSize) {
   Assert(heapchk() == _HEAPOK);
   Assert(CrtCheckMemory());
@@ -263,9 +263,9 @@ void *CValidateAlloc::Expand_NoLongerSupported(void *pMem, usize nSize) {
   return AllocationStart(pHeap);
 }
 
-//-----------------------------------------------------------------------------
+
 // Debug versions
-//-----------------------------------------------------------------------------
+
 void *CValidateAlloc::Alloc(usize nSize, const ch *pFileName, i32 nLine) {
   Assert(heapchk() == _HEAPOK);
   Assert(CrtCheckMemory());
@@ -315,9 +315,9 @@ void *CValidateAlloc::Expand_NoLongerSupported(void *pMem, usize nSize,
   return AllocationStart(pHeap);
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns size of a particular allocation
-//-----------------------------------------------------------------------------
+
 usize CValidateAlloc::GetSize(void *pMem) {
   if (!pMem) return CalcHeapUsed();
 
@@ -325,18 +325,18 @@ usize CValidateAlloc::GetSize(void *pMem) {
   return pHeap->m_nSize;
 }
 
-//-----------------------------------------------------------------------------
+
 // Force file + line information for an allocation
-//-----------------------------------------------------------------------------
+
 void CValidateAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {
   g_pActualAlloc->PushAllocDbgInfo(pFileName, nLine);
 }
 
 void CValidateAlloc::PopAllocDbgInfo() { g_pActualAlloc->PopAllocDbgInfo(); }
 
-//-----------------------------------------------------------------------------
+
 // FIXME: Remove when we make our own heap! Crt stuff we're currently using
-//-----------------------------------------------------------------------------
+
 long CValidateAlloc::CrtSetBreakAlloc(long lNewBreakAlloc) {
   return g_pActualAlloc->CrtSetBreakAlloc(lNewBreakAlloc);
 }

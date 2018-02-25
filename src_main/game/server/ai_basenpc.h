@@ -1671,7 +1671,7 @@ class CAI_BaseNPC : public CBaseCombatCharacter, public CAI_DefMovementSink {
   //-----------------------------------------------------
 
   void AddSceneLock(float flDuration = 0.2f) {
-    m_flSceneTime = max(gpGlobals->curtime + flDuration, m_flSceneTime);
+    m_flSceneTime = std::max(gpGlobals->curtime + flDuration, m_flSceneTime);
   };
   void ClearSceneLock(float flDuration = 0.2f) {
     m_flSceneTime = gpGlobals->curtime + flDuration;

@@ -2,7 +2,7 @@
 
 #include "vmpi_tools_shared.h"
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "cmdlib.h"
 #include "iphelpers.h"
 #include "mpi_stats.h"

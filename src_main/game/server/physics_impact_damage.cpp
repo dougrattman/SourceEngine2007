@@ -100,11 +100,9 @@ static impactentry_t npcAngularTable[] = {
 };
 
 impactdamagetable_t gDefaultNPCImpactDamageTable = {
-    npcLinearTable,
-    npcAngularTable,
+    npcLinearTable, npcAngularTable,
 
-    ARRAYSIZE(npcLinearTable),
-    ARRAYSIZE(npcAngularTable),
+    ARRAYSIZE(npcLinearTable), ARRAYSIZE(npcAngularTable),
 
     24 * 24,    // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -139,11 +137,9 @@ static impactentry_t glassAngularTable[] = {
 };
 
 impactdamagetable_t gGlassImpactDamageTable = {
-    glassLinearTable,
-    glassAngularTable,
+    glassLinearTable, glassAngularTable,
 
-    ARRAYSIZE(glassLinearTable),
-    ARRAYSIZE(glassAngularTable),
+    ARRAYSIZE(glassLinearTable), ARRAYSIZE(glassAngularTable),
 
     8 * 8,      // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -358,7 +354,7 @@ float CalculatePhysicsImpactDamage(int index, gamevcollisionevent_t *pEvent,
                              angularMom * energyScale, bDebug);
     if (damage > 0) {
       //			Msg("Spin : %.1f, Damage %.0f\n",
-      //FastSqrt(angularMom), damage );
+      // FastSqrt(angularMom), damage );
       damageType |= DMG_SLASH;
     }
   }
@@ -418,7 +414,7 @@ float CalculatePhysicsImpactDamage(int index, gamevcollisionevent_t *pEvent,
 
   if (!pEvent->pObjects[otherIndex]->IsStatic() &&
       otherMass < table.smallMassMax && table.smallMassCap > 0) {
-    damage = clamp(damage, 0, table.smallMassCap);
+    damage = std::clamp(damage, 0.0f, table.smallMassCap);
   }
 
   return damage;

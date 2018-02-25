@@ -91,8 +91,8 @@ void CHudPlayerOverlayHealth::Paint( void )
 	int drawwidth;
 
 	float frac = m_Health;
-	frac = min( 1.0, m_Health );
-	frac = max( 0.0, m_Health );
+	frac = std::min( 1.0, m_Health );
+	frac = std::max( 0.0, m_Health );
 
 	drawwidth = frac * w;
 

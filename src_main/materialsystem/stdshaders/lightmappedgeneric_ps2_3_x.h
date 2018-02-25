@@ -320,8 +320,8 @@ HALF4 main( PS_INPUT i ) : COLOR
 		float minb=modt.g-modt.r;
 		float maxb=modt.g+modt.r;
 #else
-		float minb=max(0,modt.g-modt.r);
-		float maxb=min(1,modt.g+modt.r);
+		float minb=std::max(0,modt.g-modt.r);
+		float maxb=std::min(1,modt.g+modt.r);
 #endif
 		blendfactor=smoothstep(minb,maxb,blendfactor);
 #endif

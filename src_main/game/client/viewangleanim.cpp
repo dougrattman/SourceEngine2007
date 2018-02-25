@@ -379,7 +379,7 @@ void CViewAngleAnimation::SetAngles( QAngle vecCalculatedAngles )
 		vecViewAngle[ROLL] = vecCalculatedAngles[ROLL];
 
 	// clamp pitch
-	vecViewAngle[PITCH] = clamp( vecViewAngle[PITCH], -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat() );
+	vecViewAngle[PITCH] = std::clamp( vecViewAngle[PITCH], -cl_pitchup.GetFloat(), cl_pitchdown.GetFloat() );
 
 	engine->SetViewAngles( vecViewAngle );
 }

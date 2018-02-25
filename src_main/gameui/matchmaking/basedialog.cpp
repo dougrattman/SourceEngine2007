@@ -67,8 +67,8 @@ void CBaseDialog::PerformLayout( void )
 
 	int autoWide = m_Menu.GetWide() + m_nBorderWidth * 2;
 	int autoTall = menuy + m_Menu.GetTall() + m_nBorderWidth;
-	autoWide = max( autoWide, GetWide() );
-	autoTall = max( autoTall, GetTall() );
+	autoWide = std::max( autoWide, GetWide() );
+	autoTall = std::max( autoTall, GetTall() );
 
 	SetSize( autoWide, autoTall );
 

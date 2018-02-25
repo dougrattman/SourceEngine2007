@@ -15,9 +15,9 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // Returns true if buffer is compressed.
-//-----------------------------------------------------------------------------
+
 bool CLZSS::IsCompressed(unsigned char *pInput) {
   lzss_header_t *pHeader = (lzss_header_t *)pInput;
   if (pHeader && pHeader->id == LZSS_ID) {
@@ -28,10 +28,10 @@ bool CLZSS::IsCompressed(unsigned char *pInput) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns uncompressed size of compressed input buffer. Used for allocating
 // output buffer for decompression. Returns 0 if input buffer is not compressed.
-//-----------------------------------------------------------------------------
+
 unsigned int CLZSS::GetActualSize(unsigned char *pInput) {
   lzss_header_t *pHeader = (lzss_header_t *)pInput;
   if (pHeader && pHeader->id == LZSS_ID) {
@@ -183,10 +183,10 @@ unsigned char *CLZSS::CompressNoAlloc(unsigned char *pInput, int inputLength,
   return pStart;
 }
 
-//-----------------------------------------------------------------------------
+
 // Compress an input buffer. Caller must free output compressed buffer.
 // Returns NULL if compression failed (i.e. compression yielded worse results)
-//-----------------------------------------------------------------------------
+
 unsigned char *CLZSS::Compress(unsigned char *pInput, int inputLength,
                                unsigned int *pOutputSize) {
   unsigned char *pStart = (unsigned char *)malloc(inputLength);
@@ -200,10 +200,10 @@ unsigned char *CLZSS::Compress(unsigned char *pInput, int inputLength,
   return pStart;
 }
 
-//-----------------------------------------------------------------------------
+
 // Uncompress a buffer, Returns the uncompressed size. Caller must provide an
 // adequate sized output buffer or memory corruption will occur.
-//-----------------------------------------------------------------------------
+
 unsigned int CLZSS::Uncompress(unsigned char *pInput, unsigned char *pOutput) {
   unsigned int totalBytes = 0;
   int cmdByte = 0;

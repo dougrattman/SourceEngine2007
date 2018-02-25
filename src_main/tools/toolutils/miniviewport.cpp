@@ -157,7 +157,7 @@ void CMiniViewportEngineRenderArea::InitSceneMaterials() {
     g_pMaterialSystem->GetBackBufferDimensions(nBackBufferWidth,
                                                nBackBufferHeight);
     float flAspect = nBackBufferWidth / (float)nBackBufferHeight;
-    int nPreviewWidth = min(DEFAULT_PREVIEW_WIDTH, nBackBufferWidth);
+    int nPreviewWidth = std::min(DEFAULT_PREVIEW_WIDTH, nBackBufferWidth);
     int nPreviewHeight = (int)(nPreviewWidth / flAspect + 0.5f);
 
     g_pMaterialSystem

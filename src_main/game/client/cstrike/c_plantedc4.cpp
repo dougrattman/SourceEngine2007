@@ -100,9 +100,9 @@ void C_PlantedC4::ClientThink( void )
 		//the percent complete of the bomb timer
 		float fComplete = ( ( m_flC4Blow - gpGlobals->curtime ) / m_flTimerLength );
 		
-		fComplete = clamp( fComplete, 0.0f, 1.0f );
+		fComplete = std::clamp( fComplete, 0.0f, 1.0f );
 
-		attenuation = min( 0.3 + 0.6 * fComplete, 1.0 );
+		attenuation = std::min( 0.3 + 0.6 * fComplete, 1.0 );
 		
 		CSoundParameters params;
 
@@ -115,7 +115,7 @@ void C_PlantedC4::ClientThink( void )
 			EmitSound( filter, SOUND_FROM_WORLD, ep );
 		}
 
-		freq = max( 0.1 + 0.9 * fComplete, 0.15 );
+		freq = std::max( 0.1 + 0.9 * fComplete, 0.15 );
 
 		m_flNextBeep = gpGlobals->curtime + freq;
 	}

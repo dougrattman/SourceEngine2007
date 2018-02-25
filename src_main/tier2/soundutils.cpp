@@ -14,9 +14,9 @@
 #include "tier2/riff.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // RIFF reader/writers that use the file system
-//-----------------------------------------------------------------------------
+
 class CFSIOReadBinary : public IFileReadBinary {
  public:
   // inherited from IFileReadBinary
@@ -37,18 +37,18 @@ class CFSIOWriteBinary : public IFileWriteBinary {
   virtual unsigned int tell(int file);
 };
 
-//-----------------------------------------------------------------------------
+
 // Singletons
-//-----------------------------------------------------------------------------
+
 static CFSIOReadBinary s_FSIoIn;
 static CFSIOWriteBinary s_FSIoOut;
 
 IFileReadBinary *g_pFSIOReadBinary = &s_FSIoIn;
 IFileWriteBinary *g_pFSIOWriteBinary = &s_FSIoOut;
 
-//-----------------------------------------------------------------------------
+
 // RIFF reader that use the file system
-//-----------------------------------------------------------------------------
+
 int CFSIOReadBinary::open(const char *pFileName) {
   return (int)g_pFullFileSystem->Open(pFileName, "rb");
 }
@@ -83,9 +83,9 @@ void CFSIOReadBinary::close(int file) {
   g_pFullFileSystem->Close((FileHandle_t)file);
 }
 
-//-----------------------------------------------------------------------------
+
 // RIFF writer that use the file system
-//-----------------------------------------------------------------------------
+
 int CFSIOWriteBinary::create(const char *pFileName) {
   g_pFullFileSystem->SetFileWritable(pFileName, true);
   return (int)g_pFullFileSystem->Open(pFileName, "wb");
@@ -108,9 +108,9 @@ unsigned int CFSIOWriteBinary::tell(int file) {
 }
 
 #ifndef _LINUX
-//-----------------------------------------------------------------------------
+
 // Returns the duration of a wav file
-//-----------------------------------------------------------------------------
+
 float GetWavSoundDuration(const char *pWavFile) {
   InFileRIFF riff(pWavFile, *g_pFSIOReadBinary);
 

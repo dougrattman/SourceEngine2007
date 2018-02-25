@@ -1054,7 +1054,7 @@ void CL_TakeJpeg(const char *name, int quality) {
 
   cl_takesnapshot = true;
   cl_takejpeg = true;
-  cl_jpegquality = clamp(quality, 1, 100);
+  cl_jpegquality = std::clamp(quality, 1, 100);
 
   if (name != NULL) {
     Q_strncpy(cl_snapshotname, name, sizeof(cl_snapshotname));
@@ -1094,7 +1094,7 @@ void CL_TakeSnapshotAndSwap() {
     }
 
     char extension[MAX_OSPATH];
-    Q_snprintf(extension, sizeof(extension), "%s.%s", GetPlatformExt(),
+    Q_snprintf(extension, sizeof(extension), ".%s",
                cl_takejpeg ? "jpg" : "tga");
 
     // Using a subdir? If so, create it
@@ -1294,7 +1294,7 @@ CON_COMMAND_F(startmovie, "Start recording movie frames.", FCVAR_DONTRECORD) {
         flags |= MovieInfo_t::FMOVIE_JPG;
       }
       if (!Q_stricmp(args[i], "jpeg_quality")) {
-        movie_jpeg_quality = clamp(Q_atoi(args[++i]), 1, 100);
+        movie_jpeg_quality = std::clamp(Q_atoi(args[++i]), 1, 100);
       }
       if (!Q_stricmp(args[i], "wav")) {
         flags |= MovieInfo_t::FMOVIE_WAV;
@@ -1557,11 +1557,12 @@ void CL_SendMove(void) {
 
   // Determine number of backup commands to send along
   int cl_cmdbackup = 2;
-  moveMsg.m_nBackupCommands = clamp(cl_cmdbackup, 0, MAX_BACKUP_COMMANDS);
+  moveMsg.m_nBackupCommands = std::clamp(cl_cmdbackup, 0, MAX_BACKUP_COMMANDS);
 
   // How many real new commands have queued up
   moveMsg.m_nNewCommands = 1 + cl.chokedcommands;
-  moveMsg.m_nNewCommands = clamp(moveMsg.m_nNewCommands, 0, MAX_NEW_COMMANDS);
+  moveMsg.m_nNewCommands =
+      std::clamp(moveMsg.m_nNewCommands, 0, MAX_NEW_COMMANDS);
 
   int numcmds = moveMsg.m_nNewCommands + moveMsg.m_nBackupCommands;
 
@@ -1687,8 +1688,9 @@ void CL_Move(float accumulated_extra_samples, bool bFinalTick) {
   if (cl.IsActive()) {
     // use full update rate when active
     float commandInterval = 1.0f / cl_cmdrate->GetFloat();
-    float maxDelta = min(host_state.interval_per_tick, commandInterval);
-    float delta = clamp(net_time - cl.m_flNextCmdTime, 0.0f, maxDelta);
+    float maxDelta = std::min(host_state.interval_per_tick, commandInterval);
+    float delta =
+        std::clamp((float)(net_time - cl.m_flNextCmdTime), 0.0f, maxDelta);
     cl.m_flNextCmdTime = net_time + commandInterval - delta;
   } else {
     // during signon process send only 5 packets/second
@@ -1708,7 +1710,7 @@ void CL_LatchInterpolationAmount() {
 
   float flInterp = 0.0f;
   if (flClientInterpolationAmount > 0.001) {
-    flInterp = clamp(dt / flClientInterpolationAmount, 0.0f, 3.0f);
+    flInterp = std::clamp(dt / flClientInterpolationAmount, 0.0f, 3.0f);
   }
   cl.m_NetChannel->SetInterpolationAmount(flInterp);
 }
@@ -1909,21 +1911,21 @@ void CL_DemoTransitionFromTrainstation() {
   sv_unlockedchapters.SetValue(6);  // unlock ravenholm
   Cbuf_AddText("sv_cheats 1; fadeout 1.5; sv_cheats 0;");
   Cbuf_Execute();
-  s_fDemoRevealGameUITime = Sys_FloatTime() + 1.5;
+  s_fDemoRevealGameUITime = Plat_FloatTime() + 1.5;
   s_bIsRavenHolmn = false;
 }
 
 void CL_DemoTransitionFromRavenholm() {
   Cbuf_AddText("sv_cheats 1; fadeout 2; sv_cheats 0;");
   Cbuf_Execute();
-  s_fDemoRevealGameUITime = Sys_FloatTime() + 1.9;
+  s_fDemoRevealGameUITime = Plat_FloatTime() + 1.9;
   s_bIsRavenHolmn = true;
 }
 
 void CL_DemoTransitionFromTestChmb() {
   Cbuf_AddText("sv_cheats 1; fadeout 2; sv_cheats 0;");
   Cbuf_Execute();
-  s_fDemoRevealGameUITime = Sys_FloatTime() + 1.9;
+  s_fDemoRevealGameUITime = Plat_FloatTime() + 1.9;
 }
 
 //-----------------------------------------------------------------------------
@@ -1933,7 +1935,7 @@ void V_RenderVGuiOnly();
 bool V_CheckGamma();
 void CL_DemoCheckGameUIRevealTime() {
   if (s_fDemoRevealGameUITime > 0) {
-    if (s_fDemoRevealGameUITime < Sys_FloatTime()) {
+    if (s_fDemoRevealGameUITime < Plat_FloatTime()) {
       s_fDemoRevealGameUITime = -1;
 
       SCR_BeginLoadingPlaque();
@@ -1942,14 +1944,14 @@ void CL_DemoCheckGameUIRevealTime() {
       CCommand args;
       CL_CheckToDisplayStartupMenus(args);
 
-      s_fDemoPlayMusicTime = Sys_FloatTime() + 1.0;
+      s_fDemoPlayMusicTime = Plat_FloatTime() + 1.0;
     }
   }
 
   if (s_fDemoPlayMusicTime > 0) {
     V_CheckGamma();
     V_RenderVGuiOnly();
-    if (s_fDemoPlayMusicTime < Sys_FloatTime()) {
+    if (s_fDemoPlayMusicTime < Plat_FloatTime()) {
       s_fDemoPlayMusicTime = -1;
       EngineVGui()->ActivateGameUI();
 
@@ -2026,9 +2028,7 @@ void CL_SetSteamCrashComment() {
   ConVarRef mat_aaquality("mat_aaquality");
   ConVarRef r_shadowrendertotexture("r_shadowrendertotexture");
   ConVarRef r_flashlightdepthtexture("r_flashlightdepthtexture");
-#ifndef _X360
   ConVarRef r_waterforceexpensive("r_waterforceexpensive");
-#endif
   ConVarRef r_waterforcereflectentities("r_waterforcereflectentities");
   ConVarRef mat_vsync("mat_vsync");
   ConVarRef r_rootlod("r_rootlod");
@@ -2132,7 +2132,7 @@ void CL_Init(void) {
                      IsX360() ? "6000" : "10000");
 
   if (Q_strlen(szRate) > 0) {
-    cl_rate->SetValue(clamp(Q_atoi(szRate), MIN_RATE, MAX_RATE));
+    cl_rate->SetValue(std::clamp(Q_atoi(szRate), MIN_RATE, MAX_RATE));
   }
 
   CL_InitLanguageCvar();

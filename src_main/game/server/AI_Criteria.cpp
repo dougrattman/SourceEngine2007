@@ -416,8 +416,8 @@ const char *SplitContext(const char *raw, char *key, int keylen, char *value,
   }
 
   int len = colon1 - raw;
-  Q_strncpy(key, raw, min(len + 1, keylen));
-  key[min(len, keylen - 1)] = 0;
+  Q_strncpy(key, raw, std::min(len + 1, keylen));
+  key[std::min(len, keylen - 1)] = 0;
 
   bool last = false;
   char *end = Q_strstr(colon1 + 1, ",");
@@ -431,13 +431,13 @@ const char *SplitContext(const char *raw, char *key, int keylen, char *value,
   if (colon2 && (colon2 < end)) {
     if (duration) *duration = atof(colon2 + 1);
 
-    len = min(colon2 - (colon1 + 1), valuelen - 1);
+    len = std::min(colon2 - (colon1 + 1), valuelen - 1);
     Q_strncpy(value, colon1 + 1, len + 1);
     value[len] = 0;
   } else {
     if (duration) *duration = 0.0;
 
-    len = min(end - (colon1 + 1), valuelen - 1);
+    len = std::min(end - (colon1 + 1), valuelen - 1);
     Q_strncpy(value, colon1 + 1, len + 1);
     value[len] = 0;
   }

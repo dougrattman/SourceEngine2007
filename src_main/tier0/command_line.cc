@@ -87,7 +87,7 @@ class CCommandLine : public ICommandLine {
   // When the commandline contains @name, it reads the parameters from that
   // file.
   void LoadParametersFromFile(const ch *&file_name_start, ch *&destination,
-                              ptrdiff_t max_destination_length,
+                              isize max_destination_length,
                               bool is_file_name_in_quotes);
   // Parse command line.
   void ParseCommandLine();
@@ -115,7 +115,7 @@ CCommandLine::~CCommandLine() {
 
 void CCommandLine::LoadParametersFromFile(const ch *&file_name_start,
                                           ch *&destination,
-                                          ptrdiff_t max_destination_length,
+                                          isize max_destination_length,
                                           bool is_file_name_in_quotes) {
   if (max_destination_length < 3) return;
 
@@ -246,7 +246,7 @@ void CCommandLine::RemoveParm(const ch *param) {
 
   // Search for first occurrence of param.
   usize n;
-  const ptrdiff_t param_length = strlen(param);
+  const isize param_length = strlen(param);
   ch *command_line = command_line_;
 
   while (*command_line) {

@@ -401,12 +401,12 @@ void CAPCController::TrackTarget( void )
 
 	QAngle vecAngVel = GetLocalAngularVelocity();
 	vecAngVel.y = distY * 10;
-	vecAngVel.y = clamp( vecAngVel.y, -m_yawRate, m_yawRate );
+	vecAngVel.y = std::clamp( vecAngVel.y, -m_yawRate, m_yawRate );
 
 	// Move toward target at rate or less
 	float distX = UTIL_AngleDistance( angles.x, GetLocalAngles().x );
 	vecAngVel.x = distX  * 10;
-	vecAngVel.x = clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
+	vecAngVel.x = std::clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
 	SetLocalAngularVelocity( vecAngVel );
 
 	SetMoveDoneTime( 0.1 );

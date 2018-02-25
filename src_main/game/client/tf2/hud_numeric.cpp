@@ -159,22 +159,22 @@ void CHudNumeric::GetRotatedChar( float frac, char startchar, char endchar, char
 
 	if ( m_nRotaryMaxDelta != 0 )
 	{
-		maxdelta = min( m_nRotaryMaxDelta, maxdelta );
+		maxdelta = std::min( m_nRotaryMaxDelta, maxdelta );
 	}
 
 	// Quantize steps
 	// Map frac into maxdelta discrete intervals
 	float indicesperstep = diff / (float)maxdelta;
-	float fnumstepstaken = clamp( frac * (float)maxdelta, 0.0f, (float)( maxdelta  -0.001f ) );
+	float fnumstepstaken = std::clamp( frac * (float)maxdelta, 0.0f, (float)( maxdelta  -0.001f ) );
 	int numstepstaken = (int)(fnumstepstaken);
 
 	foutindex = (float)startidx + (float)numstepstaken * indicesperstep;
-	foutindex = clamp( foutindex, (float)startidx, (float)endidx );
+	foutindex = std::clamp( foutindex, (float)startidx, (float)endidx );
 
 	outindex	= ( int )foutindex;
 
 	fnextindex = (float)startidx + (float)( numstepstaken + 1 ) * indicesperstep;
-	fnextindex = clamp( fnextindex, (float)startidx, (float)endidx );
+	fnextindex = std::clamp( fnextindex, (float)startidx, (float)endidx );
 
 	nextindex = (int)fnextindex;
 
@@ -386,11 +386,11 @@ void CHudNumeric::PaintRotatedCharacter( int x, int y, HFont& font, int prevchar
 	int w0 = abcA[0] + abcB[0] + abcC[0];
 	int w1 = abcA[1] + abcB[1] + abcC[1];
 
-	int cellwidth = max( w0, w1 );
+	int cellwidth = std::max( w0, w1 );
 
 	int fontTall = surface()->GetFontTall( font );
 
-	int dividery = y + clamp( Lerp( frac, 0, fontTall ), 2, fontTall - 2 );
+	int dividery = y + std::clamp( Lerp( frac, 0, fontTall ), 2, fontTall - 2 );
 
 	int xprev = x;
 	int xnext = x;
@@ -535,13 +535,13 @@ float CHudNumeric::MaxCharacterDiff( const char *prev, const char *next )
 	{
 		int charfromend = textlen - ch;
 		char c = next[ ch ];
-		char prevc = prev[ max( 0, prevlen - charfromend ) ];
+		char prevc = prev[ std::max( 0, prevlen - charfromend ) ];
 		if ( prevc == 0 )
 		{
 			int tempindex = FindPrintableIndex( c );
 			if ( tempindex != m_Printables.InvalidIndex() )
 			{
-				tempindex = max( 0, tempindex - 3 );
+				tempindex = std::max( 0, tempindex - 3 );
 				prevc = m_Printables[ tempindex ];
 			}
 			else
@@ -562,7 +562,7 @@ float CHudNumeric::MaxCharacterDiff( const char *prev, const char *next )
 
 	if ( m_nRotaryMaxDelta != 0 )
 	{
-		maxdelta = min( (float)m_nRotaryMaxDelta, maxdelta );
+		maxdelta = std::min( (float)m_nRotaryMaxDelta, maxdelta );
 	}
 
 	return maxdelta;
@@ -670,13 +670,13 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 	{
 		int charfromend = textlen - ch;
 		char c = text[ ch ];
-		char prevc = m_szLatchedValue[ max( 0, prevlen - charfromend ) ];
+		char prevc = m_szLatchedValue[ std::max( 0, prevlen - charfromend ) ];
 		if ( prevc == 0 )
 		{
 			int tempindex = FindPrintableIndex( c );
 			if ( tempindex != m_Printables.InvalidIndex() )
 			{
-				tempindex = max( 0, tempindex - 3 );
+				tempindex = std::max( 0, tempindex - 3 );
 				prevc = m_Printables[ tempindex ];
 			}
 			else
@@ -689,7 +689,7 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 
 		if ( m_nRotaryMaxDelta != 0 )
 		{
-			diff = min( (float)m_nRotaryMaxDelta, diff );
+			diff = std::min( (float)m_nRotaryMaxDelta, diff );
 		}
 
 		float dt = diff / m_flActualCharactersPerSecond;
@@ -697,9 +697,9 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 		float frac = 1.0f;
 		if ( dt > 0.0f )
 		{
-			frac = t / min( dt, m_flRotaryTime );
+			frac = t / std::min( dt, m_flRotaryTime );
 		}
-		frac = clamp( frac, 0.0f, 1.0f );
+		frac = std::clamp( frac, 0.0f, 1.0f );
 
 		float s;
 		char chstart, chend;
@@ -708,7 +708,7 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 		int w0 = surface()->GetCharacterWidth( font, chstart );
 		int w1 = surface()->GetCharacterWidth( font, chend );
 
-		pixels += max( w0, w1 );
+		pixels += std::max( w0, w1 );
 	}
 
 	surface()->DrawSetTextPos( x - pixels, y );
@@ -718,13 +718,13 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 	{
 		int charfromend = textlen - ch;
 		char c = text[ ch ];
-		char prevc = m_szLatchedValue[ max( 0, prevlen - charfromend ) ];
+		char prevc = m_szLatchedValue[ std::max( 0, prevlen - charfromend ) ];
 		if ( prevc == 0 )
 		{
 			int tempindex = FindPrintableIndex( c );
 			if ( tempindex != m_Printables.InvalidIndex() )
 			{
-				tempindex = max( 0, tempindex - 3 );
+				tempindex = std::max( 0, tempindex - 3 );
 				prevc = m_Printables[ tempindex ];
 			}
 			else
@@ -737,7 +737,7 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 
 		if ( m_nRotaryMaxDelta != 0 )
 		{
-			diff = min( (float)m_nRotaryMaxDelta, diff );
+			diff = std::min( (float)m_nRotaryMaxDelta, diff );
 		}
 
 		float dt = diff / m_flActualCharactersPerSecond;
@@ -745,9 +745,9 @@ void CHudNumeric::PaintStringRotary( float t, const char *text, int textlen, HFo
 		float frac = 1.0f;
 		if ( dt > 0.0f )
 		{
-			frac = t / min( dt, m_flRotaryTime );
+			frac = t / std::min( dt, m_flRotaryTime );
 		}
-		frac = clamp( frac, 0.0f, 1.0f );
+		frac = std::clamp( frac, 0.0f, 1.0f );
 
 		float s;
 		char chstart, chend;
@@ -947,7 +947,7 @@ void CHudNumeric::Paint( void )
 		float maxdiff = MaxCharacterDiff( m_szLatchedValue, value );
 		float timerequired = maxdiff / m_flDesiredCharactersPerSecond;
 		m_flActualCharactersPerSecond = (float)m_flDesiredCharactersPerSecond;
-		m_flRotaryTime = min( m_flRotaryTimeMax, timerequired );
+		m_flRotaryTime = std::min( m_flRotaryTimeMax, timerequired );
 		if ( m_flRotaryTime < timerequired )
 		{
 			// Speed up rotation since we're moving so far

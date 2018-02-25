@@ -1739,7 +1739,7 @@ int CHammer::GetNextAutosaveNumber(
   if (nNumberActualAutosaves < nMaxAutosavesPerMap) {
     // there are less autosaves than wanted for the map; use the larger
     // of the next expected or the last found hole as the number.
-    nCurrentAutosaveNumber = max(nExpectedNextAutosaveNumber, nLastHole);
+    nCurrentAutosaveNumber = std::max(nExpectedNextAutosaveNumber, nLastHole);
   } else {
     // there are no holes, use the oldest.
     nCurrentAutosaveNumber = nOldestAutosaveNumber;

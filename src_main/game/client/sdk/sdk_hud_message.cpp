@@ -89,7 +89,7 @@ void CHudGameMessage::Paint( void )
 	// Find our fade based on our time shown
 	float dt = ( m_flStartTime - gpGlobals->curtime );
 	float flAlpha = SimpleSplineRemapVal( dt, 0.0f, m_flDuration, 255, 0 );
-	flAlpha = clamp( flAlpha, 0.0f, 255.0f );
+	flAlpha = std::clamp( flAlpha, 0.0f, 255.0f );
 
 	// Draw our icon
 	m_pIcon->DrawSelf( 0, 0, 32, 32, Color(255,255,255,flAlpha) );

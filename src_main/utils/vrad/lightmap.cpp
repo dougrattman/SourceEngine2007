@@ -76,8 +76,8 @@ int CNormalList::FindOrAddNormal(Vector const &vNormal) {
   // See which grid element it's in.
   for (int iDim = 0; iDim < 3; iDim++) {
     gi[iDim] = (int)(((vNormal[iDim] + 1.0f) * 0.5f) * NUM_SUBDIVS - 0.000001f);
-    gi[iDim] = min(gi[iDim], NUM_SUBDIVS);
-    gi[iDim] = max(gi[iDim], 0);
+    gi[iDim] = std::min(gi[iDim], NUM_SUBDIVS);
+    gi[iDim] = std::max(gi[iDim], 0);
   }
 
   // Look for a matching vector in there.
@@ -1204,9 +1204,9 @@ bool CanLeafTraceToSky(int iLeaf) {
   for (int j = 0; j < NUMVERTEXNORMALS; j += 4) {
     // search back to see if we can hit a sky brush
     delta.LoadAndSwizzle(g_anorms[j],
-                         g_anorms[min(j + 1, NUMVERTEXNORMALS - 1)],
-                         g_anorms[min(j + 2, NUMVERTEXNORMALS - 1)],
-                         g_anorms[min(j + 3, NUMVERTEXNORMALS - 1)]);
+                         g_anorms[std::min(j + 1, NUMVERTEXNORMALS - 1)],
+                         g_anorms[std::min(j + 2, NUMVERTEXNORMALS - 1)],
+                         g_anorms[std::min(j + 3, NUMVERTEXNORMALS - 1)]);
     delta *= -MAX_TRACE_LENGTH;
     delta += center4;
 
@@ -2586,25 +2586,25 @@ static void ComputeLightmapGradients(SSE_SampleInfo_t &info,
       if (sample.t > 0) {
         if (sample.s > 0)
           gradient[i] =
-              max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 - w]));
-        gradient[i] = max(gradient[i], fabs(pIntensity[j] - pIntensity[j - w]));
+              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 - w]));
+        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - w]));
         if (sample.s < w - 1)
           gradient[i] =
-              max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 - w]));
+              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 - w]));
       }
       if (sample.t < h - 1) {
         if (sample.s > 0)
           gradient[i] =
-              max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 + w]));
-        gradient[i] = max(gradient[i], fabs(pIntensity[j] - pIntensity[j + w]));
+              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1 + w]));
+        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + w]));
         if (sample.s < w - 1)
           gradient[i] =
-              max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 + w]));
+              std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1 + w]));
       }
       if (sample.s > 0)
-        gradient[i] = max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1]));
+        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j - 1]));
       if (sample.s < w - 1)
-        gradient[i] = max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1]));
+        gradient[i] = std::max(gradient[i], fabs(pIntensity[j] - pIntensity[j + 1]));
     }
   }
 }
@@ -2886,7 +2886,7 @@ void BuildFacelights(int iThread, int facenum) {
     int nSample = 4 * grp;
 
     sample_t *sample = sampleInfo.m_pFaceLight->sample + nSample;
-    int numSamples = min(4, sampleInfo.m_pFaceLight->numsamples - nSample);
+    int numSamples = std::min(4, sampleInfo.m_pFaceLight->numsamples - nSample);
 
     FourVectors positions;
     FourVectors normals;

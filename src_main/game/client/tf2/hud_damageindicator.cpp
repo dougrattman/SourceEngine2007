@@ -235,7 +235,7 @@ void CHudDamageIndicator::Paint()
 	for (int i = iSize-1; i >= 0; i--)
 	{
 		// Scale size to the damage
-		int clampedDamage = clamp( m_vecDamages[i].iScale, 0, m_iMaximumDamage );
+		int clampedDamage = std::clamp( m_vecDamages[i].iScale, 0, m_iMaximumDamage );
 
 		int iWidth = RemapVal(clampedDamage, 0, m_iMaximumDamage, m_flMinimumWidth, m_flMaximumWidth) * 0.5;
 		int iHeight = RemapVal(clampedDamage, 0, m_iMaximumDamage, m_flMinimumHeight, m_flMaximumHeight) * 0.5;
@@ -244,7 +244,7 @@ void CHudDamageIndicator::Paint()
 		int xpos, ypos;
 		float flRotation;
 		float flTimeSinceStart = ( gpGlobals->curtime - m_vecDamages[i].flStartTime );
-		float flRadius = RemapVal( min( flTimeSinceStart, m_flTravelTime ), 0, m_flTravelTime, m_flStartRadius, m_flEndRadius );
+		float flRadius = RemapVal( std::min( flTimeSinceStart, m_flTravelTime ), 0, m_flTravelTime, m_flStartRadius, m_flEndRadius );
 		GetDamagePosition( m_vecDamages[i].vecDelta, flRadius, &xpos, &ypos, &flRotation );
 
 		// Calculate life left

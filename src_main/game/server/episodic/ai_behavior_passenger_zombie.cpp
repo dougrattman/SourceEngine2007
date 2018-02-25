@@ -601,7 +601,7 @@ void CAI_PassengerBehaviorZombie::CalculateBodyLean(void) {
   // Calculate our lateral displacement from a perfectly centered start
   float flLateralDisp = SimpleSplineRemapVal(m_vehicleState.m_vecLastAngles.z,
                                              100.0f, -100.0f, -1.0f, 1.0f);
-  flLateralDisp = clamp(flLateralDisp, -1.0f, 1.0f);
+  flLateralDisp = std::clamp(flLateralDisp, -1.0f, 1.0f);
 
   // FIXME: Framerate dependant!
   m_flLastLateralLean = (m_flLastLateralLean * 0.2f) + (flLateralDisp * 0.8f);
@@ -614,7 +614,7 @@ void CAI_PassengerBehaviorZombie::CalculateBodyLean(void) {
   // Calc our vertical displacement
   float flVerticalDisp = SimpleSplineRemapVal(
       m_vehicleState.m_vecDeltaVelocity.z, -50.0f, 50.0f, -1.0f, 1.0f);
-  flVerticalDisp = clamp(flVerticalDisp, -1.0f, 1.0f);
+  flVerticalDisp = std::clamp(flVerticalDisp, -1.0f, 1.0f);
 
   // FIXME: Framerate dependant!
   m_flLastVerticalLean =

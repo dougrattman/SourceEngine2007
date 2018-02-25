@@ -671,7 +671,7 @@ void CServerRemoteAccess::GetStatsString(char *buf, int bufSize) {
   // format: CPU percent, Bandwidth in, Bandwidth out, uptime, changelevels,
   // framerate, total players
   _snprintf(buf, bufSize - 1, "%5.2f %5.2f %5.2f %7i %5i %7.2f %7i",
-            sv.GetCPUUsage() * 100, avgIn, avgOut, (int)(Sys_FloatTime()) / 60,
+            sv.GetCPUUsage() * 100, avgIn, avgOut, (int)(Plat_FloatTime()) / 60,
             sv.GetSpawnCount() - 1,
             1.0 / host_frametime,  // frame rate
             sv.GetNumClients() - sv.GetNumProxies());

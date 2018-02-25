@@ -341,7 +341,7 @@ int CAudioMixerWaveXMA::UpdatePositionForLooping(int *pNumRequestedSamples) {
   if (numRemainingSamples > 0) {
     // first region, all the remaining samples, clamped until end of desired
     // data
-    *pNumRequestedSamples = min(*pNumRequestedSamples, numRemainingSamples);
+    *pNumRequestedSamples = std::min(*pNumRequestedSamples, numRemainingSamples);
 
     // nothing to discard
     return 0;
@@ -354,7 +354,7 @@ int CAudioMixerWaveXMA::UpdatePositionForLooping(int *pNumRequestedSamples) {
     // clamp the request
     numRemainingSamples =
         (m_SampleCount - numTrailingSamples) - m_SamplePosition;
-    *pNumRequestedSamples = min(*pNumRequestedSamples, numRemainingSamples);
+    *pNumRequestedSamples = std::min(*pNumRequestedSamples, numRemainingSamples);
 
     // flush these samples so the sample position is the real loop sample
     // starting position
@@ -409,7 +409,7 @@ int CAudioMixerWaveXMA::GetXMABlocksAndSubmitToDecoder(bool bDecoderIsLocked) {
 
   // the input buffer can never be less than a single xma block (buffer size is
   // multiple blocks)
-  int bufferSize = min(m_TotalBytes - m_DataOffset, XMA_INPUT_BUFFER_SIZE);
+  int bufferSize = std::min(m_TotalBytes - m_DataOffset, XMA_INPUT_BUFFER_SIZE);
   if (!bufferSize) {
     // EOF
     goto cleanUp;
@@ -546,7 +546,7 @@ int CAudioMixerWaveXMA::ServiceXMADecoder(bool bForceUpdate) {
   int numNewSamples = XMAPlaybackQueryAvailableData(m_pXMAPlayback, 0);
   int numMaxSamples =
       m_pPCMSamples->GetWriteAvailable() / (m_NumChannels * sizeof(short));
-  int numSamples = min(numNewSamples, numMaxSamples);
+  int numSamples = std::min(numNewSamples, numMaxSamples);
   while (numSamples) {
     char *pPCMData = NULL;
     int numSamplesDecoded = XMAPlaybackConsumeDecodedData(
@@ -595,7 +595,7 @@ int CAudioMixerWaveXMA::GetPCMSamples(int numSamplesToCopy, char *pData) {
 
   // peel sequential samples from the stream's staging buffer
   int numCopiedSamples = 0;
-  int numRequestedSamples = min(numSamplesToCopy, numReadySamples);
+  int numRequestedSamples = std::min(numSamplesToCopy, numReadySamples);
   if (numRequestedSamples) {
     if (pData) {
       // copy to caller
@@ -788,7 +788,7 @@ int CAudioMixerWaveXMA::GetOutputData(void **pData, int numSamplesToCopy,
 #if defined(ALLOW_SKIP_SAMPLES)
     int numMaxSamples =
         AUDIOSOURCE_COPYBUF_SIZE / (m_NumChannels * sizeof(short));
-    numSamplesToCopy = min(numSamplesToCopy, numMaxSamples);
+    numSamplesToCopy = std::min(numSamplesToCopy, numMaxSamples);
     m_SkipSamples += numSamplesToCopy;
 
     // caller requesting data before mixing has commenced
@@ -841,7 +841,7 @@ int CAudioMixerWaveXMA::GetOutputData(void **pData, int numSamplesToCopy,
   // can only drain as much as can be copied to caller
   int numMaxSamples =
       AUDIOSOURCE_COPYBUF_SIZE / (m_NumChannels * sizeof(short));
-  numRequestedSamples = min(numRequestedSamples, numMaxSamples);
+  numRequestedSamples = std::min(numRequestedSamples, numMaxSamples);
 
   int numCopiedSamples = GetPCMSamples(numRequestedSamples, copyBuf);
   if (numCopiedSamples) {

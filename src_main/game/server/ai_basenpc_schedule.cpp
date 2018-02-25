@@ -254,14 +254,17 @@ void CAI_BaseNPC::NextScheduledTask(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose: This function allows NPCs to modify the interrupt mask for the
-//			current schedule. This enables them to use base schedules
-//but with 			different interrupt conditions. Implement this function in your
-//			derived class, and Set or Clear condition bits as you
-//please.
+//			current schedule. This enables them to use base
+// schedules
+// but with 			different interrupt conditions. Implement this
+// function in your 			derived class, and Set or Clear
+// condition bits as you please.
 //
-//			NOTE: Always call the base class in your implementation, but
-//be 				  aware of the difference between changing the bits before vs. 				  changing the
-//bits after calling the base implementation.
+//			NOTE: Always call the base class in your implementation,
+// but
+// be 				  aware of the difference between changing the
+// bits before vs. 				  changing the bits after
+// calling the base implementation.
 //
 // Input  : pBitString - Receives the updated interrupt mask.
 //-----------------------------------------------------------------------------
@@ -374,8 +377,10 @@ bool CAI_BaseNPC::IsScheduleValid() {
 // Purpose: Determines whether or not SelectIdealState() should be called before
 //			a NPC selects a new schedule.
 //
-//			NOTE: This logic was a source of pure, distilled trouble in
-//Half-Life. 			If you change this function, please supply good comments.
+//			NOTE: This logic was a source of pure, distilled trouble
+// in
+// Half-Life. 			If you change this function, please supply good
+// comments.
 //
 // Output : Returns true if yes, false if no
 //-----------------------------------------------------------------------------
@@ -866,9 +871,9 @@ bool CAI_BaseNPC::FindCoverPosInRadius(CBaseEntity *pEntity,
 bool CAI_BaseNPC::FindCoverPos(CSound *pSound, Vector *pResult) {
   if (!GetTacticalServices()->FindCoverPos(
           pSound->GetSoundReactOrigin(), pSound->GetSoundReactOrigin(),
-          min(pSound->Volume(), 120.0), CoverRadius(), pResult)) {
+          std::min(pSound->Volume(), 120), CoverRadius(), pResult)) {
     return GetTacticalServices()->FindLateralCover(
-        pSound->GetSoundReactOrigin(), min(pSound->Volume(), 60.0), pResult);
+        pSound->GetSoundReactOrigin(), std::min(pSound->Volume(), 60), pResult);
   }
 
   return true;
@@ -1036,7 +1041,7 @@ float CAI_BaseNPC::GetReasonableFacingDist(void) {
                          GetAbsOrigin().AsVector2D())
                             .Length() -
                         1.0;
-      return min(distEnemy, dist);
+      return std::min(distEnemy, dist);
     }
 
     return dist;
@@ -1690,8 +1695,8 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
             (bits_CAP_INNATE_RANGE_ATTACK1 | bits_CAP_INNATE_RANGE_ATTACK2)) {
           flRange = InnateRange1MaxRange();
         } else if (GetActiveWeapon()) {
-          flRange = max(GetActiveWeapon()->m_fMaxRange1,
-                        GetActiveWeapon()->m_fMaxRange2);
+          flRange = std::max(GetActiveWeapon()->m_fMaxRange1,
+                             GetActiveWeapon()->m_fMaxRange2);
         } else {
           // You can't call this task without either innate range attacks or a
           // weapon!
@@ -1731,10 +1736,10 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
       float flMinRange = 0;
 
       if (GetActiveWeapon()) {
-        flMaxRange = max(GetActiveWeapon()->m_fMaxRange1,
-                         GetActiveWeapon()->m_fMaxRange2);
-        flMinRange = min(GetActiveWeapon()->m_fMinRange1,
-                         GetActiveWeapon()->m_fMinRange2);
+        flMaxRange = std::max(GetActiveWeapon()->m_fMaxRange1,
+                              GetActiveWeapon()->m_fMaxRange2);
+        flMinRange = std::min(GetActiveWeapon()->m_fMinRange1,
+                              GetActiveWeapon()->m_fMinRange2);
       } else if (CapabilitiesGet() & bits_CAP_INNATE_RANGE_ATTACK1) {
         flMaxRange = InnateRange1MaxRange();
         flMinRange = InnateRange1MinRange();
@@ -1881,10 +1886,10 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
           float flMinRange = 0.0f;
 
           if (GetActiveWeapon()) {
-            flMaxRange = max(GetActiveWeapon()->m_fMaxRange1,
-                             GetActiveWeapon()->m_fMaxRange2);
-            flMinRange = min(GetActiveWeapon()->m_fMinRange1,
-                             GetActiveWeapon()->m_fMinRange2);
+            flMaxRange = std::max(GetActiveWeapon()->m_fMaxRange1,
+                                  GetActiveWeapon()->m_fMaxRange2);
+            flMinRange = std::min(GetActiveWeapon()->m_fMinRange1,
+                                  GetActiveWeapon()->m_fMinRange2);
           } else if (CapabilitiesGet() & bits_CAP_INNATE_RANGE_ATTACK1) {
             flMaxRange = InnateRange1MaxRange();
             flMinRange = InnateRange1MinRange();
@@ -2016,10 +2021,10 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
       float flMaxRange = 2000;
       float flMinRange = 0;
       if (GetActiveWeapon()) {
-        flMaxRange = max(GetActiveWeapon()->m_fMaxRange1,
-                         GetActiveWeapon()->m_fMaxRange2);
-        flMinRange = min(GetActiveWeapon()->m_fMinRange1,
-                         GetActiveWeapon()->m_fMinRange2);
+        flMaxRange = std::max(GetActiveWeapon()->m_fMaxRange1,
+                              GetActiveWeapon()->m_fMaxRange2);
+        flMinRange = std::min(GetActiveWeapon()->m_fMinRange1,
+                              GetActiveWeapon()->m_fMinRange2);
       } else if (CapabilitiesGet() & bits_CAP_INNATE_RANGE_ATTACK1) {
         flMaxRange = InnateRange1MaxRange();
         flMinRange = InnateRange1MinRange();
@@ -2903,8 +2908,8 @@ void CAI_BaseNPC::RunTask(const Task_t *pTask) {
         }
 
         // @TODO (toml 10-30-02): this is unacceptable, but needed until
-        // navigation can handle commencing 						  a navigation while in the middle of
-        // a climb
+        // navigation can handle commencing
+        // a navigation while in the middle of a climb
         if (GetNavType() == NAV_CLIMB) {
           // wait until you reach the end
           break;
@@ -3252,16 +3257,17 @@ void CAI_BaseNPC::RunTask(const Task_t *pTask) {
           AngleVectors(ang, &move);
 #endif  // HL2_EPISODIC
           if (GetNavigator()->SetVectorGoal(move, (float)pTask->flTaskData,
-                                            min(36, pTask->flTaskData), true) &&
+                                            std::min(36.0f, pTask->flTaskData),
+                                            true) &&
               IsValidMoveAwayDest(GetNavigator()->GetGoalPos())) {
             TaskComplete();
           } else {
             ang.y = GetMotor()->GetIdealYaw() + 91;
             AngleVectors(ang, &move);
 
-            if (GetNavigator()->SetVectorGoal(move, (float)pTask->flTaskData,
-                                              min(24, pTask->flTaskData),
-                                              true) &&
+            if (GetNavigator()->SetVectorGoal(
+                    move, (float)pTask->flTaskData,
+                    std::min(24.0f, pTask->flTaskData), true) &&
                 IsValidMoveAwayDest(GetNavigator()->GetGoalPos())) {
               TaskComplete();
             } else {
@@ -3275,7 +3281,8 @@ void CAI_BaseNPC::RunTask(const Task_t *pTask) {
           AngleVectors(ang, &move);
 
           if (GetNavigator()->SetVectorGoal(move, (float)pTask->flTaskData,
-                                            min(24, pTask->flTaskData), true) &&
+                                            std::min(24.0f, pTask->flTaskData),
+                                            true) &&
               IsValidMoveAwayDest(GetNavigator()->GetGoalPos())) {
             TaskComplete();
           } else {
@@ -3294,7 +3301,7 @@ void CAI_BaseNPC::RunTask(const Task_t *pTask) {
             AngleVectors(ang, &move);
 
             if (GetNavigator()->SetVectorGoal(move, (float)pTask->flTaskData,
-                                              min(6, pTask->flTaskData),
+                                              std::min(6.0f, pTask->flTaskData),
                                               false) &&
                 IsValidMoveAwayDest(GetNavigator()->GetGoalPos())) {
               TaskComplete();
@@ -3705,8 +3712,8 @@ bool CAI_BaseNPC::UpdateTurnGesture(void) {
 //-----------------------------------------------------------------------------
 // Purpose: For non-looping animations that may be replayed sequentially (like
 // attacks)
-//			Set the activity to ACT_RESET if this is a replay, otherwise
-//just set ideal activity
+//			Set the activity to ACT_RESET if this is a replay,
+// otherwise just set ideal activity
 // Input  : newIdealActivity - desired ideal activity
 //-----------------------------------------------------------------------------
 void CAI_BaseNPC::ResetIdealActivity(Activity newIdealActivity) {
@@ -4094,7 +4101,8 @@ int CAI_BaseNPC::SelectFlinchSchedule() {
 
   // Robin: This was in the original HL1 flinch code. Do we still want it?
   // if ( fabs( GetMotor()->DeltaIdealYaw() ) < (1.0 - m_flFieldOfView) * 60 )
-  // // roughly in the correct direction 	return SCHED_TAKE_COVER_FROM_ORIGIN;
+  // // roughly in the correct direction 	return
+  // SCHED_TAKE_COVER_FROM_ORIGIN;
 
   // Heavy damage. Break out of my current schedule and flinch.
   Activity iFlinchActivity = GetFlinchActivity(true, false);

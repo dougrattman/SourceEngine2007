@@ -137,7 +137,7 @@ static LRESULT CALLBACK TrackerWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         if (nX * nY >= nWorkUnits) break;
       }
       static int minTestSize = 3;
-      testSize = max(testSize, minTestSize);
+      testSize = std::max(testSize, minTestSize);
 
       int xPos = 0, yPos = 0;
       for (int i = 0; i < nWorkUnits; i++) {

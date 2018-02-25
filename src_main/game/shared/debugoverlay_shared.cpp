@@ -174,8 +174,8 @@ void NDebugOverlay::EntityText( int entityID, int text_offset, const char *text,
 	if ( debugoverlay )
 	{
 		debugoverlay->AddEntityTextOverlay( entityID, text_offset, duration, 
-			(int)clamp(r * 255.f,0.f,255.f), (int)clamp(g * 255.f,0.f,255.f), (int)clamp(b * 255.f,0.f,255.f), 
-			(int)clamp(a * 255.f,0.f,255.f), text );
+			(int)std::clamp(r * 255.f,0.f,255.f), (int)std::clamp(g * 255.f,0.f,255.f), (int)std::clamp(b * 255.f,0.f,255.f), 
+			(int)std::clamp(a * 255.f,0.f,255.f), text );
 	}
 }
 

@@ -462,7 +462,7 @@ void C_WeaponMortar::Redraw()
 		m_pPowerBar->m_flPower = 0;
 		break;
 	case MORTAR_CHARGING_POWER:
-		m_pPowerBar->m_flPower = min( m_pPowerBar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->curtimeDelta), 1.0f);
+		m_pPowerBar->m_flPower = std::min( m_pPowerBar->m_flPower + ( (1.0 / MORTAR_CHARGE_POWER_RATE) * gpGlobals->curtimeDelta), 1.0f);
 		m_pPowerBar->m_flFiringPower = 0;
 		m_pPowerBar->m_flFiringAccuracy = 0;
 		if ( m_pPowerBar->m_flPower >= 1.0 )
@@ -483,7 +483,7 @@ void C_WeaponMortar::Redraw()
 			m_flAccuracySpeed += (m_pPowerBar->m_flFiringPower * flAdjustedPower);
 		}
 
-		m_pPowerBar->m_flPower = max( m_pPowerBar->m_flPower - ( m_flAccuracySpeed * gpGlobals->curtimeDelta), -0.25f);
+		m_pPowerBar->m_flPower = std::max( m_pPowerBar->m_flPower - ( m_flAccuracySpeed * gpGlobals->curtimeDelta), -0.25f);
 		if ( m_pPowerBar->m_flPower <= -0.25 )
 		{
 			// Hit Min, fire mortar

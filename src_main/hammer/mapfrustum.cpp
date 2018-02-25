@@ -142,7 +142,7 @@ void CMapFrustum::BuildFrustumFaces(void)
 	Vector vNearFace[4], vFarFace[4];
 
 	float flHalfFOV = m_flFOV / 2.0f;
-	flHalfFOV = clamp( flHalfFOV, 0.01f, 89.0f );
+	flHalfFOV = std::clamp( flHalfFOV, 0.01f, 89.0f );
 	
 	float flScaleFactor = tan( DEG2RAD( flHalfFOV ) );
 	float flBaseAlpha = 180;

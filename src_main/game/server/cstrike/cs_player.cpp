@@ -823,8 +823,8 @@ int CCSPlayer::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
 
   if (event) {
     event->SetInt("userid", GetUserID());
-    event->SetInt("health", max(0, m_iHealth));
-    event->SetInt("armor", max(0, ArmorValue()));
+    event->SetInt("health", std::max(0, m_iHealth));
+    event->SetInt("armor", std::max(0, ArmorValue()));
 
     event->SetInt("dmg_health", m_lastDamageHealth);
     event->SetInt("dmg_armor", m_lastDamageArmor);
@@ -1740,7 +1740,7 @@ void CCSPlayer::Blind(float holdTime, float fadeTime, float startingAlpha) {
   float oldBlindUntilTime = m_blindUntilTime;
   float oldBlindStartTime = m_blindStartTime;
   m_blindUntilTime =
-      max(m_blindUntilTime, gpGlobals->curtime + holdTime + 0.5f * fadeTime);
+      std::max(m_blindUntilTime, gpGlobals->curtime + holdTime + 0.5f * fadeTime);
   m_blindStartTime = gpGlobals->curtime;
 
   // Spectators get a lessened flash.
@@ -1749,10 +1749,10 @@ void CCSPlayer::Blind(float holdTime, float fadeTime, float startingAlpha) {
     if (!mp_fadetoblack.GetBool()) {
       clr.a = 150;
 
-      fadeTime = min(fadeTime, 0.5f);  // make sure the spectator flashbang time
+      fadeTime = std::min(fadeTime, 0.5f);  // make sure the spectator flashbang time
                                        // is 1/2 second or less.
       holdTime =
-          min(holdTime,
+          std::min(holdTime,
               fadeTime * 0.5f);  // adjust the hold time to match the fade time.
       UTIL_ScreenFade(this, clr, fadeTime, holdTime, FFADE_IN);
     }
@@ -1768,8 +1768,8 @@ void CCSPlayer::Blind(float holdTime, float fadeTime, float startingAlpha) {
       float remainingDuration =
           oldBlindStartTime + m_flFlashDuration - gpGlobals->curtime;
 
-      m_flFlashDuration = max(remainingDuration, fadeTime);
-      m_flFlashMaxAlpha = max(m_flFlashMaxAlpha, startingAlpha);
+      m_flFlashDuration = std::max(remainingDuration, fadeTime);
+      m_flFlashMaxAlpha = std::max(m_flFlashMaxAlpha, startingAlpha);
     }
 
     // allow bots to react
@@ -3372,9 +3372,9 @@ bool CCSPlayer::ClientCommand(const CCommand &args) {
     punchAngle.y = flDamage * random->RandomFloat(-0.15, 0.15);
     punchAngle.z = flDamage * random->RandomFloat(-0.15, 0.15);
 
-    clamp(punchAngle.x, -4, punchAngle.x);
-    clamp(punchAngle.y, -5, 5);
-    clamp(punchAngle.z, -5, 5);
+    std::clamp(punchAngle.x, -4, punchAngle.x);
+    std::clamp(punchAngle.y, -5, 5);
+    std::clamp(punchAngle.z, -5, 5);
 
     // +y == down
     // +x == left
@@ -3758,10 +3758,10 @@ bool CCSPlayer::HandleCommand_JoinClass(int iClass) {
   // clamp to valid classes
   switch (GetTeamNumber()) {
     case TEAM_TERRORIST:
-      iClass = clamp(iClass, FIRST_T_CLASS, LAST_T_CLASS);
+      iClass = std::clamp(iClass, FIRST_T_CLASS, LAST_T_CLASS);
       break;
     case TEAM_CT:
-      iClass = clamp(iClass, FIRST_CT_CLASS, LAST_CT_CLASS);
+      iClass = std::clamp(iClass, FIRST_CT_CLASS, LAST_CT_CLASS);
       break;
     default:
       iClass = CS_CLASS_NONE;
@@ -5043,7 +5043,7 @@ BuyResult_e CCSPlayer::RebuyHEGrenade() {
   }
 
   BuyResult_e overallResult = BUY_ALREADY_HAVE;
-  int numToBuy = max(0, m_rebuyStruct.m_heGrenade - numGrenades);
+  int numToBuy = std::max(0, m_rebuyStruct.m_heGrenade - numGrenades);
   for (int i = 0; i < numToBuy; ++i) {
     BuyResult_e result = HandleCommand_Buy("hegrenade");
     overallResult = CombineBuyResults(overallResult, result);
@@ -5066,7 +5066,7 @@ BuyResult_e CCSPlayer::RebuyFlashbang() {
   }
 
   BuyResult_e overallResult = BUY_ALREADY_HAVE;
-  int numToBuy = max(0, m_rebuyStruct.m_flashbang - numGrenades);
+  int numToBuy = std::max(0, m_rebuyStruct.m_flashbang - numGrenades);
   for (int i = 0; i < numToBuy; ++i) {
     BuyResult_e result = HandleCommand_Buy("flashbang");
     overallResult = CombineBuyResults(overallResult, result);
@@ -5090,7 +5090,7 @@ BuyResult_e CCSPlayer::RebuySmokeGrenade() {
   }
 
   BuyResult_e overallResult = BUY_ALREADY_HAVE;
-  int numToBuy = max(0, m_rebuyStruct.m_smokeGrenade - numGrenades);
+  int numToBuy = std::max(0, m_rebuyStruct.m_smokeGrenade - numGrenades);
   for (int i = 0; i < numToBuy; ++i) {
     BuyResult_e result = HandleCommand_Buy("smokegrenade");
     overallResult = CombineBuyResults(overallResult, result);

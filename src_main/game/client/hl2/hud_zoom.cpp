@@ -158,7 +158,7 @@ void CHudZoom::Paint( void )
 
 	// draw the appropriately scaled zoom animation
 	float deltaTime = ( gpGlobals->curtime - m_flZoomStartTime );
-	float scale = clamp( deltaTime / ZOOM_FADE_TIME, 0.0f, 1.0f );
+	float scale = std::clamp( deltaTime / ZOOM_FADE_TIME, 0.0f, 1.0f );
 	
 	float alpha;
 
@@ -194,7 +194,7 @@ void CHudZoom::Paint( void )
 	{
 		surface()->DrawFilledRect(xpos, ypos, xpos + 1, ypos + m_flDashHeight);
 		surface()->DrawFilledRect(wide - xpos, ypos, wide - xpos + 1, ypos + m_flDashHeight);
-		xpos = (int)((wide / 2) + (m_flDashGap * ++dashCount * max(scale,0.1f)));
+		xpos = (int)((wide / 2) + (m_flDashGap * ++dashCount * std::max(scale,0.1f)));
 	}
 
 	// draw the darkened edges, with a rotated texture in the four corners

@@ -248,7 +248,8 @@ class CDiffManager : public IDiffMgr {
       return DIFFCHECK_DIFFERS;
     }
 
-    int maxSlot = max(serverslot->m_Lines.Count(), clientslot->m_Lines.Count());
+    int maxSlot =
+        std::max(serverslot->m_Lines.Count(), clientslot->m_Lines.Count());
     if (!bSpew) {
       for (int i = 0; i < maxSlot; ++i) {
         CDiffStr *sv = NULL;
@@ -332,7 +333,8 @@ class CDiffManager : public IDiffMgr {
     // Now compare them
     CDiffInfo *clientslot = &m_Client[clidx];
 
-    int maxSlot = max(serverslot->m_Lines.Count(), clientslot->m_Lines.Count());
+    int maxSlot =
+        std::max(serverslot->m_Lines.Count(), clientslot->m_Lines.Count());
 
     for (int i = 0; i < maxSlot; ++i) {
       char const *sv = "(missing)";
@@ -893,7 +895,7 @@ void CGameMovement::CheckParameters() {
 
     maxspeed = mv->m_flClientMaxSpeed;
     if (maxspeed != 0.0) {
-      mv->m_flMaxSpeed = min(maxspeed, mv->m_flMaxSpeed);
+      mv->m_flMaxSpeed = std::min(maxspeed, mv->m_flMaxSpeed);
     }
 
     // Slow down by the speed factor
@@ -1095,15 +1097,15 @@ void CGameMovement::DecayPunchAngle() {
     // torsional spring
     // UNDONE: Per-axis spring constant?
     float springForceMagnitude = PUNCH_SPRING_CONSTANT * gpGlobals->frametime;
-    springForceMagnitude = clamp(springForceMagnitude, 0, 2);
+    springForceMagnitude = std::clamp(springForceMagnitude, 0.0f, 2.0f);
     player->m_Local.m_vecPunchAngleVel -=
         player->m_Local.m_vecPunchAngle * springForceMagnitude;
 
     // don't wrap around
     player->m_Local.m_vecPunchAngle.Init(
-        clamp(player->m_Local.m_vecPunchAngle->x, -89, 89),
-        clamp(player->m_Local.m_vecPunchAngle->y, -179, 179),
-        clamp(player->m_Local.m_vecPunchAngle->z, -89, 89));
+        std::clamp(player->m_Local.m_vecPunchAngle->x, -89.0f, 89.0f),
+        std::clamp(player->m_Local.m_vecPunchAngle->y, -179.0f, 179.0f),
+        std::clamp(player->m_Local.m_vecPunchAngle->z, -89.0f, 89.0f));
   } else {
     player->m_Local.m_vecPunchAngle.Init(0, 0, 0);
     player->m_Local.m_vecPunchAngleVel.Init(0, 0, 0);
@@ -1265,7 +1267,7 @@ void CGameMovement::WaterMove() {
   {
     // exaggerate upward movement along forward as well
     float upwardMovememnt = mv->m_flForwardMove * forward.z * 2;
-    upwardMovememnt = clamp(upwardMovememnt, 0, mv->m_flClientMaxSpeed);
+    upwardMovememnt = std::clamp(upwardMovememnt, 0.0f, mv->m_flClientMaxSpeed);
     wishvel[2] += mv->m_flUpMove + upwardMovememnt;
   }
 
@@ -2215,9 +2217,9 @@ bool CGameMovement::CheckJumpButton() {
   if ((player->m_Local.m_bDucking) || (player->GetFlags() & FL_DUCKING)) {
     // d = 0.5 * g * t^2		- distance traveled with linear accel
     // t = sqrt(2.0 * 45 / g)	- how long to fall 45 units
-    // v = g * t				- velocity at the end (just invert it to
-    // jump up that high) v = g * sqrt(2.0 * 45 / g ) v^2 = g * g * 2.0 * 45 / g
-    // v = sqrt( g
+    // v = g * t				- velocity at the end (just
+    // invert it to jump up that high) v = g * sqrt(2.0 * 45 / g ) v^2 = g * g
+    // * 2.0 * 45 / g v = sqrt( g
     // * 2.0 * 45 )
     mv->m_vecVelocity[2] = flGroundFactor * flMul;  // 2 * gravity * height
   } else {
@@ -3251,7 +3253,7 @@ void TracePlayerBBoxForGround(const Vector &start, const Vector &end,
 
   // Check the -x, -y quadrant
   mins = minsSrc;
-  maxs.Init(min(0, maxsSrc.x), min(0, maxsSrc.y), maxsSrc.z);
+  maxs.Init(std::min(0.0f, maxsSrc.x), std::min(0.0f, maxsSrc.y), maxsSrc.z);
   ray.Init(start, end, mins, maxs);
   UTIL_TraceRay(ray, fMask, player, collisionGroup, &pm);
   if (pm.m_pEnt && pm.plane.normal[2] >= 0.7) {
@@ -3261,7 +3263,7 @@ void TracePlayerBBoxForGround(const Vector &start, const Vector &end,
   }
 
   // Check the +x, +y quadrant
-  mins.Init(max(0, minsSrc.x), max(0, minsSrc.y), minsSrc.z);
+  mins.Init(std::max(0.0f, minsSrc.x), std::max(0.0f, minsSrc.y), minsSrc.z);
   maxs = maxsSrc;
   ray.Init(start, end, mins, maxs);
   UTIL_TraceRay(ray, fMask, player, collisionGroup, &pm);
@@ -3272,8 +3274,8 @@ void TracePlayerBBoxForGround(const Vector &start, const Vector &end,
   }
 
   // Check the -x, +y quadrant
-  mins.Init(minsSrc.x, max(0, minsSrc.y), minsSrc.z);
-  maxs.Init(min(0, maxsSrc.x), maxsSrc.y, maxsSrc.z);
+  mins.Init(minsSrc.x, std::max(0.0f, minsSrc.y), minsSrc.z);
+  maxs.Init(std::min(0.0f, maxsSrc.x), maxsSrc.y, maxsSrc.z);
   ray.Init(start, end, mins, maxs);
   UTIL_TraceRay(ray, fMask, player, collisionGroup, &pm);
   if (pm.m_pEnt && pm.plane.normal[2] >= 0.7) {
@@ -3283,8 +3285,8 @@ void TracePlayerBBoxForGround(const Vector &start, const Vector &end,
   }
 
   // Check the +x, -y quadrant
-  mins.Init(max(0, minsSrc.x), minsSrc.y, minsSrc.z);
-  maxs.Init(maxsSrc.x, min(0, maxsSrc.y), maxsSrc.z);
+  mins.Init(std::max(0.0f, minsSrc.x), minsSrc.y, minsSrc.z);
+  maxs.Init(maxsSrc.x, std::min(0.0f, maxsSrc.y), maxsSrc.z);
   ray.Init(start, end, mins, maxs);
   UTIL_TraceRay(ray, fMask, player, collisionGroup, &pm);
   if (pm.m_pEnt && pm.plane.normal[2] >= 0.7) {
@@ -3445,8 +3447,8 @@ void CGameMovement::CheckFalling() {
         // ground entity.
         player->m_Local.m_flFallVelocity +=
             player->GetGroundEntity()->GetAbsVelocity().z;
-        player->m_Local.m_flFallVelocity =
-            max(0.1f, player->m_Local.m_flFallVelocity);
+        player->m_Local.m_flFallVelocity = std::max(
+            0.1f, static_cast<float>(player->m_Local.m_flFallVelocity));
       }
 
       if (player->m_Local.m_flFallVelocity > PLAYER_MAX_SAFE_FALL_SPEED) {
@@ -3625,7 +3627,7 @@ void CGameMovement::FinishUnDuck() {
 //-----------------------------------------------------------------------------
 void CGameMovement::UpdateDuckJumpEyeOffset() {
   if (player->m_Local.m_flDuckJumpTime != 0.0f) {
-    float flDuckMilliseconds = max(
+    float flDuckMilliseconds = std::max(
         0.0f, GAMEMOVEMENT_DUCK_TIME - (float)player->m_Local.m_flDuckJumpTime);
     float flDuckSeconds = flDuckMilliseconds / GAMEMOVEMENT_DUCK_TIME;
     if (flDuckSeconds > TIME_TO_UNDUCK) {
@@ -3843,7 +3845,7 @@ void CGameMovement::Duck() {
 
       // The player is in duck transition and not duck-jumping.
       if (player->m_Local.m_bDucking && !bDuckJump && !bDuckJumpTime) {
-        float flDuckMilliseconds = max(
+        float flDuckMilliseconds = std::max(
             0.0f, GAMEMOVEMENT_DUCK_TIME - (float)player->m_Local.m_flDucktime);
         float flDuckSeconds = flDuckMilliseconds * 0.001f;
 
@@ -3928,8 +3930,8 @@ void CGameMovement::Duck() {
           // or unducking
           if ((player->m_Local.m_bDucking || player->m_Local.m_bDucked)) {
             float flDuckMilliseconds =
-                max(0.0f, GAMEMOVEMENT_DUCK_TIME -
-                              (float)player->m_Local.m_flDucktime);
+                std::max(0.0f, GAMEMOVEMENT_DUCK_TIME -
+                                   (float)player->m_Local.m_flDucktime);
             float flDuckSeconds = flDuckMilliseconds * 0.001f;
 
             // Finish ducking immediately if duck time is over or not on ground

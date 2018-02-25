@@ -234,7 +234,7 @@ static inline float ClampSplineRemapVal(float flValue, float flMinValue,
                                         float flMaxValue, float flOutMin,
                                         float flOutMax) {
   Assert(flMinValue <= flMaxValue);
-  float flClampedVal = clamp(flValue, flMinValue, flMaxValue);
+  float flClampedVal = std::clamp(flValue, flMinValue, flMaxValue);
   return SimpleSplineRemapVal(flClampedVal, flMinValue, flMaxValue, flOutMin,
                               flOutMax);
 }
@@ -1997,7 +1997,7 @@ void CNPC_AttackHelicopter::ShootAtVehicle(const Vector &vBasePos,
     Vector vecVelocity;
     GetEnemyVehicle()->GetVelocity(&vecVelocity, NULL);
 
-    float flSpeed = clamp(vecVelocity.Length(), 0.0f, 400.0f);
+    float flSpeed = std::clamp(vecVelocity.Length(), 0.0f, 400.0f);
     float flRange = RemapVal(flSpeed, 0.0f, 400.0f, 0.05f, 1.0f);
 
     // Alter each shot's trajectory based on our speed
@@ -2121,25 +2121,25 @@ bool CNPC_AttackHelicopter::PoseGunTowardTargetDirection(
   if ((m_nAttackMode == ATTACK_MODE_BULLRUSH_VEHICLE) &&
       !IsInSecondaryMode(BULLRUSH_MODE_SHOOT_IDLE_PLAYER) && GetEnemy()) {
     if (GetEnemyVehicle()) {
-      angles.x = clamp(angles.x, -12.0f, 0.0f);
-      angles.y = clamp(angles.y, -10.0f, 10.0f);
+      angles.x = std::clamp(angles.x, -12.0f, 0.0f);
+      angles.y = std::clamp(angles.y, -10.0f, 10.0f);
     } else {
-      angles.x = clamp(angles.x, -10.0f, 10.0f);
-      angles.y = clamp(angles.y, -10.0f, 10.0f);
+      angles.x = std::clamp(angles.x, -10.0f, 10.0f);
+      angles.y = std::clamp(angles.y, -10.0f, 10.0f);
     }
   }
 
   if (angles.x > m_angGun.x) {
-    m_angGun.x = min(angles.x, m_angGun.x + 12);
+    m_angGun.x = std::min(angles.x, m_angGun.x + 12);
   }
   if (angles.x < m_angGun.x) {
-    m_angGun.x = max(angles.x, m_angGun.x - 12);
+    m_angGun.x = std::max(angles.x, m_angGun.x - 12);
   }
   if (angles.y > m_angGun.y) {
-    m_angGun.y = min(angles.y, m_angGun.y + 12);
+    m_angGun.y = std::min(angles.y, m_angGun.y + 12);
   }
   if (angles.y < m_angGun.y) {
-    m_angGun.y = max(angles.y, m_angGun.y - 12);
+    m_angGun.y = std::max(angles.y, m_angGun.y - 12);
   }
 
   SetPoseParameter(m_poseWeapon_Pitch, -m_angGun.x);
@@ -2303,9 +2303,9 @@ bool CNPC_AttackHelicopter::DoGunCharging() {
     Vector vecVelocity;
     GetEnemyVehicle()->GetVelocity(&vecVelocity, NULL);
     float flSpeed = vecVelocity.Length();
-    flSpeed = clamp(flSpeed, 150.0f, 600.0f);
+    flSpeed = std::clamp(flSpeed, 150.0f, 600.0f);
     flSpeed = RemapVal(flSpeed, 150.0f, 600.0f, 0.0f, 1.0f);
-    float flAvoid = clamp(m_flAvoidMetric, 100.0f, 400.0f);
+    float flAvoid = std::clamp(m_flAvoidMetric, 100.0f, 400.0f);
     flAvoid = RemapVal(flAvoid, 100.0f, 400.0f, 0.0f, 1.0f);
 
     float flTotal = 0.5f * (flSpeed + flAvoid);
@@ -2629,7 +2629,7 @@ bool CNPC_AttackHelicopter::IsBombDropFair(const Vector &vecBombStartPos,
     VectorMA(vecBombStartPos, dt, vecBombVelocity, vecBomb);
 
     float flEnemySpeed = vecEnemyVel.LengthSqr();
-    flEnemySpeed = clamp(flEnemySpeed, 200.0f, 500.0f);
+    flEnemySpeed = std::clamp(flEnemySpeed, 200.0f, 500.0f);
     float flDistFactorSq = RemapVal(flEnemySpeed, 200.0f, 500.0f, 0.3f, 1.0f);
     flDistFactorSq *= flDistFactorSq;
 
@@ -3622,11 +3622,11 @@ float CNPC_AttackHelicopter::UpdatePerpPathDistance(float flMaxPathOffset) {
 
     if (flSpeedAlongPath > 10.0f) {
       float flLeadTime = GetLeadingDistance() / flSpeedAlongPath;
-      flLeadTime = clamp(flLeadTime, 0.0f, 2.0f);
+      flLeadTime = std::clamp(flLeadTime, 0.0f, 2.0f);
       flNewPathOffset += 0.25 * flLeadTime * TargetSpeedAcrossPath();
     }
 
-    flSpeedAlongPath = clamp(flSpeedAlongPath, 100.0f, 500.0f);
+    flSpeedAlongPath = std::clamp(flSpeedAlongPath, 100.0f, 500.0f);
     float flSinHeight =
         SimpleSplineRemapVal(flSpeedAlongPath, 100.0f, 500.0f, 0.0f, 200.0f);
     flNewPathOffset +=
@@ -3709,7 +3709,7 @@ void CNPC_AttackHelicopter::ComputeVelocity(const Vector &vecTargetPosition,
       // by damping out all impulse forces that would push us further from the
       // pipe
       float flAmount = (flDistFromPath - flMaxDistFromSegment) / 200.0f;
-      flAmount = clamp(flAmount, 0, 1);
+      flAmount = std::clamp(flAmount, 0.0f, 1.0f);
       VectorMA(*pVecAccel, flAmount * 200.0f, vecDelta, *pVecAccel);
     }
   }
@@ -3724,8 +3724,8 @@ void CNPC_AttackHelicopter::ComputeVelocity(const Vector &vecTargetPosition,
   }
 
   // don't fall faster than 0.2G or climb faster than 2G
-  pVecAccel->z =
-      clamp(pVecAccel->z, HELICOPTER_GRAVITY * 0.2f, HELICOPTER_GRAVITY * 2.0f);
+  pVecAccel->z = std::clamp(pVecAccel->z, HELICOPTER_GRAVITY * 0.2f,
+                            HELICOPTER_GRAVITY * 2.0f);
 
   // The lift factor owing to horizontal movement
   float flHorizLiftFactor =
@@ -3733,7 +3733,7 @@ void CNPC_AttackHelicopter::ComputeVelocity(const Vector &vecTargetPosition,
 
   // If we're way above the path, dampen horizontal lift factor
   float flNewHorizLiftFactor =
-      clamp(deltaPos.z, HELICOPTER_MAX_DZ_DAMP, HELICOPTER_MIN_DZ_DAMP);
+      std::clamp(deltaPos.z, HELICOPTER_MAX_DZ_DAMP, HELICOPTER_MIN_DZ_DAMP);
   flNewHorizLiftFactor = SimpleSplineRemapVal(
       flNewHorizLiftFactor, HELICOPTER_MIN_DZ_DAMP, HELICOPTER_MAX_DZ_DAMP,
       flHorizLiftFactor, 2.5f * (HELICOPTER_GRAVITY * 0.2));
@@ -3826,8 +3826,8 @@ void CNPC_AttackHelicopter::ComputeAngularVelocity(
     goalPitch *= 0.75f;
 
     // clamp goal orientations
-    goalPitch = clamp(goalPitch, -30, 45);
-    goalRoll = clamp(goalRoll, -45, 45);
+    goalPitch = std::clamp(goalPitch, -30.0f, 45.0f);
+    goalRoll = std::clamp(goalRoll, -45.0f, 45.0f);
 
     // calc angular accel needed to hit goal pitch in dt time.
     float dt = 0.6;
@@ -3844,10 +3844,10 @@ void CNPC_AttackHelicopter::ComputeAngularVelocity(
                       GetLocalAngularVelocity().z * dt) /
                      (dt * dt);
 
-    goalAngAccel.x = clamp(goalAngAccel.x, -300, 300);
-    // goalAngAccel.y = clamp( goalAngAccel.y, -60, 60 );
-    goalAngAccel.y = clamp(goalAngAccel.y, -120, 120);
-    goalAngAccel.z = clamp(goalAngAccel.z, -300, 300);
+    goalAngAccel.x = std::clamp(goalAngAccel.x, -300.0f, 300.0f);
+    // goalAngAccel.y = std::clamp( goalAngAccel.y, -60, 60 );
+    goalAngAccel.y = std::clamp(goalAngAccel.y, -120.0f, 120.0f);
+    goalAngAccel.z = std::clamp(goalAngAccel.z, -300.0f, 300.0f);
   } else {
     goalAngAccel.x = 0;
     goalAngAccel.y = random->RandomFloat(50, 120);
@@ -3861,9 +3861,9 @@ void CNPC_AttackHelicopter::ComputeAngularVelocity(
   angAccelAccel.y = (goalAngAccel.y - m_vecAngAcceleration.y) / dt;
   angAccelAccel.z = (goalAngAccel.z - m_vecAngAcceleration.z) / dt;
 
-  angAccelAccel.x = clamp(angAccelAccel.x, -1000, 1000);
-  angAccelAccel.y = clamp(angAccelAccel.y, -1000, 1000);
-  angAccelAccel.z = clamp(angAccelAccel.z, -1000, 1000);
+  angAccelAccel.x = std::clamp(angAccelAccel.x, -1000.0f, 1000.0f);
+  angAccelAccel.y = std::clamp(angAccelAccel.y, -1000.0f, 1000.0f);
+  angAccelAccel.z = std::clamp(angAccelAccel.z, -1000.0f, 1000.0f);
 
   // DevMsg( "pitch %6.1f (%6.1f:%6.1f)  ", goalPitch, GetLocalAngles().x,
   // m_vecAngVelocity.x ); DevMsg( "roll %6.1f (%6.1f:%6.1f) : ", goalRoll,
@@ -3875,7 +3875,7 @@ void CNPC_AttackHelicopter::ComputeAngularVelocity(
 
   QAngle angVel = GetLocalAngularVelocity();
   angVel += m_vecAngAcceleration * 0.1;
-  angVel.y = clamp(angVel.y, -120, 120);
+  angVel.y = std::clamp(angVel.y, -120.0f, 120.0f);
 
   // Fix up pitch and yaw to tend toward small values
   if (m_lifeState == LIFE_DYING && GetCrashPoint() == NULL) {
@@ -3887,7 +3887,7 @@ void CNPC_AttackHelicopter::ComputeAngularVelocity(
 
   SetLocalAngularVelocity(angVel);
 
-  float flAmt = clamp(angVel.y, -30, 30);
+  float flAmt = std::clamp(angVel.y, -30.0f, 30.0f);
   float flRudderPose = RemapVal(flAmt, -30, 30, 45, -45);
   SetPoseParameter("rudder", flRudderPose);
 }
@@ -3919,7 +3919,7 @@ void CNPC_AttackHelicopter::FlightDirectlyOverhead(void) {
         float flDiscrim = b * b - 4 * a * c;
         if (flDiscrim >= 0) {
           float t = (-b + sqrt(flDiscrim)) / (2 * a);
-          t = clamp(t, 0.0f, 4.0f);
+          t = std::clamp(t, 0.0f, 4.0f);
           VectorMA(pEnemyVehicle->GetAbsOrigin(), t * flEnemySpeed, vecEnemyVel,
                    vecTargetPosition);
         }
@@ -3978,7 +3978,7 @@ void CNPC_AttackHelicopter::Flight(void) {
 
   Vector vecTargetPosition;
   float flCurrentSpeed = GetAbsVelocity().Length();
-  float flDist = min(flCurrentSpeed + accelRate, maxSpeed);
+  float flDist = std::min(flCurrentSpeed + accelRate, maxSpeed);
   float dt = 1.0f;
   ComputeActualTargetPosition(flDist, dt, flPerpDist, &vecTargetPosition);
 
@@ -3986,7 +3986,7 @@ void CNPC_AttackHelicopter::Flight(void) {
   float flAdditionalHeight = 0.0f;
   if (m_nAttackMode == ATTACK_MODE_BULLRUSH_VEHICLE) {
     flAdditionalHeight =
-        clamp(m_flBullrushAdditionalHeight, 0.0f, flMaxPathOffset);
+        std::clamp(m_flBullrushAdditionalHeight, 0.0f, flMaxPathOffset);
     vecTargetPosition.z += flAdditionalHeight;
   }
 

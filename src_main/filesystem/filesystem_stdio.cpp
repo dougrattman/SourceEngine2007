@@ -696,7 +696,7 @@ size_t CStdioFile::FS_fread(void *dest, size_t destSize, size_t size) {
   return fread(dest, 1, size, m_pFile);
 }
 
-#define WRITE_CHUNK (256 * 1024)
+#define WRITE_CHUNK (size_t)(256 * 1024)
 
 //-----------------------------------------------------------------------------
 // Purpose: low-level filesystem wrapper
@@ -712,7 +712,7 @@ size_t CStdioFile::FS_fwrite(const void *src, size_t size) {
     size_t total = 0;
 
     while (remaining > 0) {
-      size_t bytesToCopy = min(remaining, WRITE_CHUNK);
+      size_t bytesToCopy = std::min(remaining, WRITE_CHUNK);
 
       total += fwrite(current, 1, bytesToCopy, m_pFile);
 
@@ -983,14 +983,8 @@ long CWin32ReadOnlyFile::FS_ftell() { return m_ReadPos; }
 //-----------------------------------------------------------------------------
 int CWin32ReadOnlyFile::FS_feof() { return (m_ReadPos >= m_Size); }
 
-// ends up on a thread's stack, don't blindly increase without awareness of that
-// implication 360 threads have small stacks, using small buffer of the worst
-// case quantum sector size
-#if !defined(_X360)
-#define READ_TEMP_BUFFER (32 * 1024)
-#else
-#define READ_TEMP_BUFFER (2 * XBOX_DVD_SECTORSIZE)
-#endif
+// Ends up on a thread's stack
+#define READ_TEMP_BUFFER (256 * 1024)
 
 //-----------------------------------------------------------------------------
 // Purpose: low-level filesystem wrapper
@@ -1065,7 +1059,7 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
   int64_t currentOffset = offset;
 
   while (bReadOk && nBytesToRead > 0) {
-    int nCurBytesToRead = min(nBytesToRead, MAX_READ);
+    int nCurBytesToRead = std::min(nBytesToRead, MAX_READ);
     DWORD nCurBytesRead = 0;
 
     overlapped.Offset = currentOffset & 0xFFFFFFFF;
@@ -1112,7 +1106,7 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
       }
     }
 
-    result = min(nBytesRead, size);
+    result = std::min((size_t)nBytesRead, size);
   }
 
   if (m_bOverlapped) {
@@ -1138,14 +1132,14 @@ char *CWin32ReadOnlyFile::FS_fgets(char *dest, int destSize) {
     return NULL;
   }
 
-  dest[min(nBytesRead, destSize - 1)] = 0;
+  dest[std::min(nBytesRead, destSize - 1)] = 0;
   char *pNewline = strchr(dest, '\n');
   if (pNewline) {
     // advance past, leave \n
     pNewline++;
     *pNewline = 0;
   } else {
-    pNewline = &dest[min(nBytesRead, destSize - 1)];
+    pNewline = &dest[std::min(nBytesRead, destSize - 1)];
   }
   m_ReadPos = nStartPos + (pNewline - dest) + 1;
 

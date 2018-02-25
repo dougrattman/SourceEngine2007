@@ -897,7 +897,7 @@ bool CNPC_Antlion::InnateWeaponLOSCondition(const Vector &ownerPos,
 Vector VecCheckThrowTolerance(CBaseEntity *pEdict, const Vector &vecSpot1,
                               Vector vecSpot2, float flSpeed,
                               float flTolerance) {
-  flSpeed = max(1.0f, flSpeed);
+  flSpeed = std::max(1.0f, flSpeed);
 
   float flGravity = sv_gravity.GetFloat();
 

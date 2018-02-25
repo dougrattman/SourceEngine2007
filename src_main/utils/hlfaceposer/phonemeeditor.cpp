@@ -894,7 +894,7 @@ int PhonemeEditor::handleEvent( mxEvent *event )
 					int offset = m_pHorzScrollBar->getValue();
 					
 					offset -= 10;
-					offset = max( offset, m_pHorzScrollBar->getMinValue() );
+					offset = std::max( offset, m_pHorzScrollBar->getMinValue() );
 
 					MoveTimeSliderToPos( offset );
 				}
@@ -903,7 +903,7 @@ int PhonemeEditor::handleEvent( mxEvent *event )
 					int offset = m_pHorzScrollBar->getValue();
 					
 					offset += 10;
-					offset = min( offset, m_pHorzScrollBar->getMaxValue() );
+					offset = std::min( offset, m_pHorzScrollBar->getMaxValue() );
 
 					MoveTimeSliderToPos( offset );
 				}
@@ -988,11 +988,11 @@ int PhonemeEditor::handleEvent( mxEvent *event )
 			// Zoom time in  / out
 			if ( event->height > 0 )
 			{
-				m_nTimeZoom = min( m_nTimeZoom + m_nTimeZoomStep, MAX_TIME_ZOOM );
+				m_nTimeZoom = std::min( m_nTimeZoom + m_nTimeZoomStep, MAX_TIME_ZOOM );
 			}
 			else
 			{
-				m_nTimeZoom = max( m_nTimeZoom - m_nTimeZoomStep, m_nTimeZoomStep );
+				m_nTimeZoom = std::max( m_nTimeZoom - m_nTimeZoomStep, m_nTimeZoomStep );
 			}
 			RepositionHSlider();
 			iret = 1;
@@ -1087,7 +1087,7 @@ int PhonemeEditor::handleEvent( mxEvent *event )
 						float t = GetTimeForPixel( (short)event->x );
 						m_flScrubberTimeOffset = m_flScrub - t;
 						float maxoffset = 0.5f * (float)SCRUBBER_HANDLE_WIDTH / GetPixelsPerSecond();
-						m_flScrubberTimeOffset = clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
+						m_flScrubberTimeOffset = std::clamp( m_flScrubberTimeOffset, -maxoffset, maxoffset );
 						t += m_flScrubberTimeOffset;
 						ClampTimeToSelectionInterval( t );
 
@@ -1153,7 +1153,7 @@ int PhonemeEditor::handleEvent( mxEvent *event )
 						sample.time = t;
 						Assert( eh >= 0 );
 						sample.value = (float)( dy ) / ( float ) eh;
-						sample.value = 1.0f - clamp( sample.value, 0.0f, 1.0f );
+						sample.value = 1.0f - std::clamp( sample.value, 0.0f, 1.0f );
 						sample.selected = false;
 
 						Emphasis_AddSample( sample );
@@ -1749,7 +1749,7 @@ void PhonemeEditor::DrawWords( CChoreoWidgetDrawHelper& drawHelper, RECT& rcWork
 
 				int length = drawHelper.CalcTextWidth( fontName, fontsize, FW_NORMAL, "%s", word->GetWord() );
 
-				rcText.right = max( xpos2 - 2, rcText.left + length + 1 );
+				rcText.right = std::max( xpos2 - 2, rcText.left + length + 1 );
 
 				int w = rcText.right - rcText.left;
 				if ( w > length )
@@ -1863,7 +1863,7 @@ void PhonemeEditor::DrawPhonemes( CChoreoWidgetDrawHelper& drawHelper, RECT& rcW
 
 					int length = drawHelper.CalcTextWidth( fontName, fontsize, FW_NORMAL, "%s", ConvertPhoneme( pPhoneme->GetPhonemeCode() ) );
 
-					rcText.right = max( xpos2 - 2, rcText.left + length + 1 );
+					rcText.right = std::max( xpos2 - 2, rcText.left + length + 1 );
 
 					int w = rcText.right - rcText.left;
 					if ( w > length )
@@ -2213,8 +2213,8 @@ static void WriteBrownNoise( void *buffer, int count )
 	while ( --count >= 0 )
 	{
 		currentValue += random->RandomInt( -MOTION_MAXSTEP, MOTION_MAXSTEP );
-		currentValue = min( maxValue, currentValue );
-		currentValue = max( minValue, currentValue );
+		currentValue = std::min( maxValue, currentValue );
+		currentValue = std::max( minValue, currentValue );
 
 		// Downsample to 0-255 range
 		*pos++ = (unsigned char)( ( (float)currentValue / 1000.0f ) + 0.5f );
@@ -3038,8 +3038,8 @@ void PhonemeEditor::FinishWordMove( int startx, int endx )
 	else
 	{
 		// cap movement
-		endtime = min( endtime, next->m_flEndTime - 1.0f / GetPixelsPerSecond() );
-		endtime = max( endtime, current->m_flStartTime + 1.0f / GetPixelsPerSecond() );
+		endtime = std::min( endtime, next->m_flEndTime - 1.0f / GetPixelsPerSecond() );
+		endtime = std::max( endtime, current->m_flStartTime + 1.0f / GetPixelsPerSecond() );
 
 		current->m_flEndTime = endtime;
 		next->m_flStartTime = endtime;
@@ -3138,8 +3138,8 @@ void PhonemeEditor::FinishPhonemeMove( int startx, int endx )
 	else
 	{
 		// cap movement
-		endtime = min( endtime, next->GetEndTime() - 1.0f / GetPixelsPerSecond() );
-		endtime = max( endtime, current->GetStartTime() + 1.0f / GetPixelsPerSecond() );
+		endtime = std::min( endtime, next->GetEndTime() - 1.0f / GetPixelsPerSecond() );
+		endtime = std::max( endtime, current->GetStartTime() + 1.0f / GetPixelsPerSecond() );
 
 		current->SetEndTime( endtime );
 		next->SetStartTime( endtime );
@@ -3198,7 +3198,7 @@ void PhonemeEditor::EditInsertPhonemeBefore( void )
 	}
 
 	// Don't have really long phonemes
-	gap = min( gap, DEFAULT_PHONEME_LENGTH );
+	gap = std::min( gap, DEFAULT_PHONEME_LENGTH );
 
 	CWordTag *word = m_Tags.GetWordForPhoneme( cp );
 	if ( !word )
@@ -3269,7 +3269,7 @@ void PhonemeEditor::EditInsertPhonemeAfter( void )
 	}
 
 	// Don't have really long phonemes
-	gap = min( gap, DEFAULT_PHONEME_LENGTH );
+	gap = std::min( gap, DEFAULT_PHONEME_LENGTH );
 
 	CWordTag *word = m_Tags.GetWordForPhoneme( cp );
 	if ( !word )
@@ -3341,7 +3341,7 @@ void PhonemeEditor::EditInsertWordBefore( void )
 	}
 
 	// Don't have really long words
-	gap = min( gap, DEFAULT_WORD_LENGTH );
+	gap = std::min( gap, DEFAULT_WORD_LENGTH );
 
 	int clicked = IndexOfWord( cw );
 	if ( clicked < 0 )
@@ -3441,7 +3441,7 @@ void PhonemeEditor::EditInsertWordAfter( void )
 	}
 
 	// Don't have really long words
-	gap = min( gap, DEFAULT_WORD_LENGTH );
+	gap = std::min( gap, DEFAULT_WORD_LENGTH );
 
 	int clicked = IndexOfWord( cw );
 	if ( clicked < 0 )
@@ -3791,7 +3791,7 @@ void PhonemeEditor::RedoPhonemeExtractionSelected( void )
 	{
 		// Convert sample #'s to time
 		selectionstarttime = ( m_nSelection[ 0 ] / numsamples ) * m_pWaveFile->GetRunningLength();
-		selectionstarttime = max( 0.0f, selectionstarttime );
+		selectionstarttime = std::max( 0.0f, selectionstarttime );
 	}
 	else
 	{
@@ -4828,10 +4828,10 @@ CPhonemeTag *PhonemeEditor::GetPhonemeTagUnderMouse( int mx, int my )
 			float frac1 = ( t1 - starttime ) / ( endtime - starttime );
 			float frac2 = ( t2 - starttime ) / ( endtime - starttime );
 
-			frac1 = min( 1.0f, frac1 );
-			frac1 = max( 0.0f, frac1 );
-			frac2 = min( 1.0f, frac2 );
-			frac2 = max( 0.0f, frac2 );
+			frac1 = std::min( 1.0f, frac1 );
+			frac1 = std::max( 0.0f, frac1 );
+			frac2 = std::min( 1.0f, frac2 );
+			frac2 = std::max( 0.0f, frac2 );
 
 			if ( frac1 == frac2 )
 				continue;
@@ -4887,10 +4887,10 @@ CWordTag *PhonemeEditor::GetWordTagUnderMouse( int mx, int my )
 		float frac1 = ( t1 - starttime ) / ( endtime - starttime );
 		float frac2 = ( t2 - starttime ) / ( endtime - starttime );
 
-		frac1 = min( 1.0f, frac1 );
-		frac1 = max( 0.0f, frac1 );
-		frac2 = min( 1.0f, frac2 );
-		frac2 = max( 0.0f, frac2 );
+		frac1 = std::min( 1.0f, frac1 );
+		frac1 = std::max( 0.0f, frac1 );
+		frac2 = std::min( 1.0f, frac2 );
+		frac2 = std::max( 0.0f, frac2 );
 
 		if ( frac1 == frac2 )
 			continue;
@@ -5492,7 +5492,7 @@ void PhonemeEditor::FinishEventTagDrag( int startx, int endx )
 	float clicktime = (float)endx / GetPixelsPerSecond() + starttime;
 
 	float percent = clicktime / m_pWaveFile->GetRunningLength();
-	percent = clamp( percent, 0.0f, 1.0f );
+	percent = std::clamp( percent, 0.0f, 1.0f );
 	
 	tag->SetPercentage( percent );
 
@@ -5610,8 +5610,8 @@ void PhonemeEditor::AddTag( void )
 	float clicktime = (float)m_nClickX / GetPixelsPerSecond() + starttime;
 
 	float percent = clicktime / m_pWaveFile->GetRunningLength();
-	percent = min( 1.0f, percent );
-	percent = max( 0.0f, percent );
+	percent = std::min( 1.0f, percent );
+	percent = std::max( 0.0f, percent );
 
 	m_pEvent->AddRelativeTag( params.m_szInputText, percent );
 
@@ -6736,8 +6736,8 @@ void PhonemeEditor::OnMouseMove( mxEvent *event )
 					rcFocus.top = m_nStartY < (short)event->y ? m_nStartY : (short)event->y;
 					rcFocus.bottom = m_nStartY < (short)event->y ? (short)event->y : m_nStartY;
 
-					rcFocus.top = clamp( rcFocus.top, rcEmphasis.top, rcEmphasis.bottom );
-					rcFocus.bottom = clamp( rcFocus.bottom, rcEmphasis.top, rcEmphasis.bottom );
+					rcFocus.top = std::clamp( rcFocus.top, rcEmphasis.top, rcEmphasis.bottom );
+					rcFocus.bottom = std::clamp( rcFocus.bottom, rcEmphasis.top, rcEmphasis.bottom );
 
 					//OffsetRect( &rcFocus, 0, -rcEmphasis.top );
 
@@ -7902,7 +7902,7 @@ void PhonemeEditor::Emphasis_GetRect( RECT const & rcWorkSpace, RECT& rcEmphasis
 	// Just past midpoint
 	rcEmphasis.top		= rcWorkSpace.top + workspaceheight / 2 + 2;
 	// 60 units or 
-	rcEmphasis.bottom = clamp( rcEmphasis.top + 60, rcEmphasis.top + 20, ybottom );
+	rcEmphasis.bottom = std::clamp( rcEmphasis.top + 60, rcEmphasis.top + 20, ybottom );
 }
 
 //-----------------------------------------------------------------------------
@@ -8111,10 +8111,10 @@ void PhonemeEditor::Emphasis_MouseDrag( int x, int y )
 			continue;
 
 		sample->time += dfdx;
-		//sample->time = clamp( sample->time, 0.0f, 1.0f );
+		//sample->time = std::clamp( sample->time, 0.0f, 1.0f );
 
 		sample->value -= dfdy;
-		sample->value = clamp( sample->value, 0.0f, 1.0f );
+		sample->value = std::clamp( sample->value, 0.0f, 1.0f );
 	}
 }
 
@@ -8277,8 +8277,8 @@ void PhonemeEditor::Emphasis_SelectPoints( void )
 	rcSelection.top = m_nStartY < m_nLastY ? m_nStartY : m_nLastY;
 	rcSelection.bottom = m_nStartY < m_nLastY ? m_nLastY : m_nStartY;
 
-	rcSelection.top = max( rcSelection.top, rcEmphasis.top );
-	rcSelection.bottom = min( rcSelection.bottom, rcEmphasis.bottom );
+	rcSelection.top = std::max( rcSelection.top, rcEmphasis.top );
+	rcSelection.bottom = std::min( rcSelection.bottom, rcEmphasis.bottom );
 
 	int eh, ew;
 
@@ -8296,10 +8296,10 @@ void PhonemeEditor::Emphasis_SelectPoints( void )
 	float ftop = (float)( rcSelection.top - rcEmphasis.top ) / (float)eh;
 	float fbottom = (float)( rcSelection.bottom- rcEmphasis.top ) / (float)eh;
 
-	//fleft = clamp( fleft, 0.0f, 1.0f );
-	//fright = clamp( fright, 0.0f, 1.0f );
-	ftop = clamp( ftop, 0.0f, 1.0f );
-	fbottom = clamp( fbottom, 0.0f, 1.0f );
+	//fleft = std::clamp( fleft, 0.0f, 1.0f );
+	//fright = std::clamp( fright, 0.0f, 1.0f );
+	ftop = std::clamp( ftop, 0.0f, 1.0f );
+	fbottom = std::clamp( fbottom, 0.0f, 1.0f );
 
 	float eps = 0.005;
 
@@ -8345,7 +8345,7 @@ void PhonemeEditor::GetScrubHandleRect( RECT& rcHandle, bool clipped )
 
 		if ( clipped )
 		{
-			pixel = clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
+			pixel = std::clamp( pixel, SCRUBBER_HANDLE_WIDTH/2, w2() - SCRUBBER_HANDLE_WIDTH/2 );
 		}
 	}
 
@@ -8495,7 +8495,7 @@ void PhonemeEditor::ClampTimeToSelectionInterval( float& timeval )
 
 	Assert( starttime <= endtime );
 
-	timeval = clamp( timeval, starttime, endtime );
+	timeval = std::clamp( timeval, starttime, endtime );
 }
 
 void PhonemeEditor::ScrubThink( float dt, bool scrubbing )

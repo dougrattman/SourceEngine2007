@@ -204,7 +204,7 @@ void CLCD::Init( void )
 	if ( kv->LoadFromFile( filesystem, G15_RESOURCE_FILE, "MOD" ) )
 	{
 		char const *title = kv->GetString( "game", "Source Engine" );
-		m_nMaxChatHistory = clamp( 1, kv->GetInt( "chatlines", m_nMaxChatHistory ), 64 );
+		m_nMaxChatHistory = std::clamp( 1, kv->GetInt( "chatlines", m_nMaxChatHistory ), 64 );
 		Assert( title );
 		m_Title = title;
 		m_lcd->Init( m_Title.String() );

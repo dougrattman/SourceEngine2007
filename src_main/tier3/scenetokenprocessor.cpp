@@ -8,9 +8,9 @@
 #include "../game/shared/choreoscene.h"
 #include "tier1/characterset.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Helper for parsing scene data file
-//-----------------------------------------------------------------------------
+
 class CSceneTokenProcessor : public ISceneTokenProcessor {
  public:
   CSceneTokenProcessor();
@@ -34,10 +34,10 @@ CSceneTokenProcessor::CSceneTokenProcessor() {
   CharacterSetBuild(&m_BreakSetIncludingColons, "{}()':");
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : const char
-//-----------------------------------------------------------------------------
+
 const char *CSceneTokenProcessor::CurrentToken(void) { return m_szToken; }
 
 const char *CSceneTokenProcessor::ParseNextToken(const char *data) {
@@ -100,11 +100,11 @@ skipwhite:
   return data;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : crossline -
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool CSceneTokenProcessor::GetToken(bool crossline) {
   // NOTE: crossline is ignored here, may need to implement if needed
   m_pBuffer = ParseNextToken(m_pBuffer);
@@ -112,10 +112,10 @@ bool CSceneTokenProcessor::GetToken(bool crossline) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+
 bool CSceneTokenProcessor::TokenAvailable(void) {
   const char *search_p = m_pBuffer;
 
@@ -134,11 +134,11 @@ bool CSceneTokenProcessor::TokenAvailable(void) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *fmt -
 //			... -
-//-----------------------------------------------------------------------------
+
 void CSceneTokenProcessor::Error(const char *fmt, ...) {
   char string[2048];
   va_list argptr;
@@ -150,10 +150,10 @@ void CSceneTokenProcessor::Error(const char *fmt, ...) {
   Assert(0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : *buffer -
-//-----------------------------------------------------------------------------
+
 void CSceneTokenProcessor::SetBuffer(char *buffer) { m_pBuffer = buffer; }
 
 CSceneTokenProcessor g_TokenProcessor;

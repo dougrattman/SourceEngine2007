@@ -3,36 +3,15 @@
 #ifndef SOURCE_TIER0_INCLUDE_DBG_H_
 #define SOURCE_TIER0_INCLUDE_DBG_H_
 
-#include <cmath>
 #include <cstdarg>
 #include <cstdio>
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
-
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbgflag.h"
 #include "tier0/include/platform.h"
-
-#ifndef STATIC_TIER0
-
-#ifdef TIER0_DLL_EXPORT
-#define DBG_INTERFACE DLL_EXPORT
-#define DBG_OVERLOAD DLL_GLOBAL_EXPORT
-#define DBG_CLASS DLL_CLASS_EXPORT
-#else
-#define DBG_INTERFACE DLL_IMPORT
-#define DBG_OVERLOAD DLL_GLOBAL_IMPORT
-#define DBG_CLASS DLL_CLASS_IMPORT
-#endif
-
-#else
-
-#define DBG_INTERFACE extern
-#define DBG_OVERLOAD
-#define DBG_CLASS
-
-#endif  // STATIC_TIER0
+#include "tier0/include/tier0_api.h"
 
 // Usage model for the Dbg library
 //
@@ -159,34 +138,34 @@ enum SpewRetval_t { SPEW_DEBUGGER = 0, SPEW_CONTINUE, SPEW_ABORT };
 using SpewOutputFunc_t = SpewRetval_t (*)(SpewType_t spew_type, const ch *message);
 
 // Used to redirect spew output.
-DBG_INTERFACE void SpewOutputFunc(SpewOutputFunc_t func);
+SOURCE_TIER0_API void SpewOutputFunc(SpewOutputFunc_t func);
 
 // Used to get the current spew output function.
-DBG_INTERFACE SpewOutputFunc_t GetSpewOutputFunc();
+SOURCE_TIER0_API SpewOutputFunc_t GetSpewOutputFunc();
 
 // Should be called only inside a SpewOutputFunc_t, returns groupname, level,
 // color.
-DBG_INTERFACE const ch *GetSpewOutputGroup();
-DBG_INTERFACE i32 GetSpewOutputLevel();
-DBG_INTERFACE const Color &GetSpewOutputColor();
+SOURCE_TIER0_API const ch *GetSpewOutputGroup();
+SOURCE_TIER0_API i32 GetSpewOutputLevel();
+SOURCE_TIER0_API const Color &GetSpewOutputColor();
 
 // Used to manage spew groups and subgroups.
-DBG_INTERFACE void SpewActivate(const ch *group_name, i32 level);
-DBG_INTERFACE bool IsSpewActive(const ch *group_name, i32 level);
+SOURCE_TIER0_API void SpewActivate(const ch *group_name, i32 level);
+SOURCE_TIER0_API bool IsSpewActive(const ch *group_name, i32 level);
 
 // Used to display messages, should never be called directly.
-DBG_INTERFACE void _SpewInfo(SpewType_t spew_type, const ch *file, i32 line);
-DBG_INTERFACE SpewRetval_t _SpewMessage(const ch *format, ...);
-DBG_INTERFACE SpewRetval_t _DSpewMessage(const ch *group_name, i32 level, const ch *format, ...);
-DBG_INTERFACE SpewRetval_t ColorSpewMessage(SpewType_t spew_type, const Color *pColor,
-                                            const ch *format, ...);
-DBG_INTERFACE void _ExitOnFatalAssert(const ch *file, i32 line);
-DBG_INTERFACE bool ShouldUseNewAssertDialog();
+SOURCE_TIER0_API void _SpewInfo(SpewType_t spew_type, const ch *file, i32 line);
+SOURCE_TIER0_API SpewRetval_t _SpewMessage(const ch *format, ...);
+SOURCE_TIER0_API SpewRetval_t _DSpewMessage(const ch *group_name, i32 level, const ch *format, ...);
+SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t spew_type, const Color *pColor,
+                                               const ch *format, ...);
+SOURCE_TIER0_API void _ExitOnFatalAssert(const ch *file, i32 line);
+SOURCE_TIER0_API bool ShouldUseNewAssertDialog();
 
-DBG_INTERFACE bool SetupWin32ConsoleIO();
+SOURCE_TIER0_API bool SetupWin32ConsoleIO();
 
 // Returns true if they want to break in the debugger.
-DBG_INTERFACE bool DoNewAssertDialog(const ch *file, i32 line, const ch *expression);
+SOURCE_TIER0_API bool DoNewAssertDialog(const ch *file, i32 line, const ch *expression);
 
 // Used to define macros, never use these directly.
 #define _AssertMsg(_exp, _msg, _executeExp, _bFatal)                                    \
@@ -340,16 +319,16 @@ DBG_INTERFACE bool DoNewAssertDialog(const ch *file, i32 line, const ch *express
 #endif  // DBGFLAG_ASSERT
 
 // These are always compiled in.
-DBG_INTERFACE void Msg(const ch *pMsg, ...);
-DBG_INTERFACE void DMsg(const ch *pGroupName, i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void Msg(const ch *pMsg, ...);
+SOURCE_TIER0_API void DMsg(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
-DBG_INTERFACE void Warning(const ch *pMsg, ...);
-DBG_INTERFACE void DWarning(const ch *pGroupName, i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void Warning(const ch *pMsg, ...);
+SOURCE_TIER0_API void DWarning(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
-DBG_INTERFACE void Log(const ch *pMsg, ...);
-DBG_INTERFACE void DLog(const ch *pGroupName, i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void Log(const ch *pMsg, ...);
+SOURCE_TIER0_API void DLog(const ch *pGroupName, i32 level, const ch *pMsg, ...);
 
-DBG_INTERFACE void Error(const ch *pMsg, ...);
+SOURCE_TIER0_API void Error(const ch *pMsg, ...);
 
 // You can use this macro like a runtime assert macro.
 // If the condition fails, then Error is called with the message. This macro is
@@ -365,41 +344,41 @@ DBG_INTERFACE void Error(const ch *pMsg, ...);
 
 /* A couple of super-common dynamic spew messages, here for convenience */
 /* These looked at the "developer" group */
-DBG_INTERFACE void DevMsg(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void DevWarning(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void DevLog(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void DevMsg(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void DevWarning(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void DevLog(i32 level, const ch *pMsg, ...);
 
 /* default level versions (level 1) */
-DBG_OVERLOAD void DevMsg(const ch *pMsg, ...);
-DBG_OVERLOAD void DevWarning(const ch *pMsg, ...);
-DBG_OVERLOAD void DevLog(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void DevMsg(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void DevWarning(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void DevLog(const ch *pMsg, ...);
 
 /* These looked at the "console" group */
-DBG_INTERFACE void ConColorMsg(i32 level, const Color &clr, const ch *pMsg, ...);
-DBG_INTERFACE void ConMsg(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void ConWarning(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void ConLog(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void ConColorMsg(i32 level, const Color &clr, const ch *pMsg, ...);
+SOURCE_TIER0_API void ConMsg(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void ConWarning(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void ConLog(i32 level, const ch *pMsg, ...);
 
 /* default console version (level 1) */
-DBG_OVERLOAD void ConColorMsg(const Color &clr, const ch *pMsg, ...);
-DBG_OVERLOAD void ConMsg(const ch *pMsg, ...);
-DBG_OVERLOAD void ConWarning(const ch *pMsg, ...);
-DBG_OVERLOAD void ConLog(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void ConColorMsg(const Color &clr, const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void ConMsg(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void ConWarning(const ch *pMsg, ...);
+SOURCE_TIER0_API_OVERLOAD void ConLog(const ch *pMsg, ...);
 
 /* developer console version (level 2) */
-DBG_INTERFACE void ConDColorMsg(const Color &clr, const ch *pMsg, ...);
-DBG_INTERFACE void ConDMsg(const ch *pMsg, ...);
-DBG_INTERFACE void ConDWarning(const ch *pMsg, ...);
-DBG_INTERFACE void ConDLog(const ch *pMsg, ...);
+SOURCE_TIER0_API void ConDColorMsg(const Color &clr, const ch *pMsg, ...);
+SOURCE_TIER0_API void ConDMsg(const ch *pMsg, ...);
+SOURCE_TIER0_API void ConDWarning(const ch *pMsg, ...);
+SOURCE_TIER0_API void ConDLog(const ch *pMsg, ...);
 
 /* These looked at the "network" group */
-DBG_INTERFACE void NetMsg(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void NetWarning(i32 level, const ch *pMsg, ...);
-DBG_INTERFACE void NetLog(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void NetMsg(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void NetWarning(i32 level, const ch *pMsg, ...);
+SOURCE_TIER0_API void NetLog(i32 level, const ch *pMsg, ...);
 
 void ValidateSpew(class CValidator &validator);
 
-DBG_INTERFACE void COM_TimestampedLog(ch const *fmt, ...);
+SOURCE_TIER0_API void COM_TimestampedLog(ch const *fmt, ...);
 
 // Code macros, debugger interface.
 
@@ -428,8 +407,6 @@ DBG_INTERFACE void COM_TimestampedLog(ch const *fmt, ...);
 
 #endif  // NDEBUG
 
-//-----------------------------------------------------------------------------
-
 #ifndef _RETAIL
 class CScopeMsg {
  public:
@@ -445,7 +422,6 @@ class CScopeMsg {
 #define SCOPE_MSG(msg)
 #endif
 
-//-----------------------------------------------------------------------------
 // Macro to assist in asserting constant invariants during compilation
 
 #define COMPILE_TIME_ASSERT(pred) static_assert(pred, #pred)
@@ -473,10 +449,10 @@ inline DEST_POINTER_TYPE assert_cast(SOURCE_POINTER_TYPE *pSource) {
 // These functions are obsolete and should not be used. Despite its names, it
 // does not guarantee that the pointer is valid or that the memory pointed to is
 // safe to use.
-DBG_INTERFACE[[deprecated]] void _AssertValidReadPtr(void *ptr, i32 count = 1);
-DBG_INTERFACE[[deprecated]] void _AssertValidWritePtr(void *ptr, i32 count = 1);
-DBG_INTERFACE[[deprecated]] void _AssertValidReadWritePtr(void *ptr, i32 count = 1);
-DBG_INTERFACE[[deprecated]] void AssertValidStringPtr(const ch *ptr, i32 maxchar = 0xFFFFFF);
+SOURCE_TIER0_API[[deprecated]] void _AssertValidReadPtr(void *ptr, i32 count = 1);
+SOURCE_TIER0_API[[deprecated]] void _AssertValidWritePtr(void *ptr, i32 count = 1);
+SOURCE_TIER0_API[[deprecated]] void _AssertValidReadWritePtr(void *ptr, i32 count = 1);
+SOURCE_TIER0_API[[deprecated]] void AssertValidStringPtr(const ch *ptr, i32 maxchar = 0xFFFFFF);
 template <class T>
 [[deprecated]] inline void AssertValidReadPtr(T *ptr, i32 count = 1) {
   _AssertValidReadPtr((void *)ptr, count);

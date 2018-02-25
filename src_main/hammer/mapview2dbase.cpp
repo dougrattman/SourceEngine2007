@@ -266,14 +266,14 @@ void CMapView2DBase::AdjustColorIntensity(Color &color, int nIntensity)
 		nIntensity = 100 - nIntensity;
 	}
 
-	nIntensity = clamp(nIntensity, 0, 100);
+	nIntensity = std::clamp(nIntensity, 0, 100);
 	
 	//
 	// Adjust each component's intensity.
 	//
-	color.SetColor( min( (color.r() * nIntensity) / 100, 255 ),
-					min( (color.g() * nIntensity) / 100, 255 ),
-					min( (color.b() * nIntensity) / 100, 255 ),
+	color.SetColor( std::min( (color.r() * nIntensity) / 100, 255 ),
+					std::min( (color.g() * nIntensity) / 100, 255 ),
+					std::min( (color.b() * nIntensity) / 100, 255 ),
 					color.a() );
 }
 
@@ -408,10 +408,10 @@ void CMapView2DBase::DrawGrid(CRender2D *pRender, int xAxis, int yAxis, float de
 	s_bGridDots = Options.view2d.bGridDots;
 	s_iCustomGridSpacing = nGridSpacing * Options.view2d.iGridHighSpec;
 
-	int xMin = SnapToGrid( (int)max( g_MIN_MAP_COORD, m_ViewMin[xAxis]-nGridSpacing ), nGridSpacing );
-	int xMax = SnapToGrid( (int)min( g_MAX_MAP_COORD, m_ViewMax[xAxis]+nGridSpacing ), nGridSpacing );
-	int yMin = SnapToGrid( (int)max( g_MIN_MAP_COORD, m_ViewMin[yAxis]-nGridSpacing ), nGridSpacing );
-	int yMax = SnapToGrid( (int)min( g_MAX_MAP_COORD, m_ViewMax[yAxis]+nGridSpacing ), nGridSpacing );
+	int xMin = SnapToGrid( (int)std::max( g_MIN_MAP_COORD, m_ViewMin[xAxis]-nGridSpacing ), nGridSpacing );
+	int xMax = SnapToGrid( (int)std::min( g_MAX_MAP_COORD, m_ViewMax[xAxis]+nGridSpacing ), nGridSpacing );
+	int yMin = SnapToGrid( (int)std::max( g_MIN_MAP_COORD, m_ViewMin[yAxis]-nGridSpacing ), nGridSpacing );
+	int yMax = SnapToGrid( (int)std::min( g_MAX_MAP_COORD, m_ViewMax[yAxis]+nGridSpacing ), nGridSpacing );
 	
 	
 	Assert( xMin < xMax );
@@ -533,10 +533,10 @@ void CMapView2DBase::DrawGridLogical( CRender2D *pRender )
 
 	int xAxis = 0;
 	int yAxis = 1;
-	int xMin = SnapToGrid( (int)max( g_MIN_MAP_COORD, m_ViewMin[xAxis]-nGridSpacing ), nGridSpacing );
-	int xMax = SnapToGrid( (int)min( g_MAX_MAP_COORD, m_ViewMax[xAxis]+nGridSpacing ), nGridSpacing );
-	int yMin = SnapToGrid( (int)max( g_MIN_MAP_COORD, m_ViewMin[yAxis]-nGridSpacing ), nGridSpacing );
-	int yMax = SnapToGrid( (int)min( g_MAX_MAP_COORD, m_ViewMax[yAxis]+nGridSpacing ), nGridSpacing );
+	int xMin = SnapToGrid( (int)std::max( g_MIN_MAP_COORD, m_ViewMin[xAxis]-nGridSpacing ), nGridSpacing );
+	int xMax = SnapToGrid( (int)std::min( g_MAX_MAP_COORD, m_ViewMax[xAxis]+nGridSpacing ), nGridSpacing );
+	int yMin = SnapToGrid( (int)std::max( g_MIN_MAP_COORD, m_ViewMin[yAxis]-nGridSpacing ), nGridSpacing );
+	int yMax = SnapToGrid( (int)std::min( g_MAX_MAP_COORD, m_ViewMax[yAxis]+nGridSpacing ), nGridSpacing );
 	
 	Assert( xMin < xMax );
 	Assert( yMin < yMax );
@@ -682,7 +682,7 @@ void CMapView2DBase::UpdateClientView(void)
 	m_fClientHeightHalf = (float)m_ClientHeight / 2;
 
 	float flMaxExtents = fabs(g_MIN_MAP_COORD) + fabs(g_MAX_MAP_COORD);
-	m_flMinZoom = min(m_ClientWidth / flMaxExtents, m_ClientHeight / flMaxExtents);
+	m_flMinZoom = std::min(m_ClientWidth / flMaxExtents, m_ClientHeight / flMaxExtents);
 
 	if ( Options.view2d.bScrollbars )
 	{
@@ -791,7 +791,7 @@ void CMapView2DBase::SetZoom(float fNewZoom)
 {
 	float fOldZoom = m_pCamera->GetZoom();
 
-	fNewZoom = clamp( fNewZoom, m_flMinZoom, ZOOM_MAX );
+	fNewZoom = std::clamp( fNewZoom, m_flMinZoom, ZOOM_MAX );
 
 	if (fOldZoom == fNewZoom)
 	{

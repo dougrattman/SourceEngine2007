@@ -197,10 +197,10 @@ int __cdecl PlayersCompare(ListPanel *pPanel, const ListPanelItem &p1, const Lis
 	if ( !s1 && !s2 )
 		return 0;
 
-	int s1p = max( 0, s1->m_nPlayers - s1->m_nBotPlayers );
-	int s1m = max( 0, s1->m_nMaxPlayers - s1->m_nBotPlayers );
-	int s2p = max( 0, s2->m_nPlayers - s2->m_nBotPlayers );
-	int s2m = max( 0, s2->m_nMaxPlayers - s2->m_nBotPlayers );
+	int s1p = std::max( 0, s1->m_nPlayers - s1->m_nBotPlayers );
+	int s1m = std::max( 0, s1->m_nMaxPlayers - s1->m_nBotPlayers );
+	int s2p = std::max( 0, s2->m_nPlayers - s2->m_nBotPlayers );
+	int s2m = std::max( 0, s2->m_nMaxPlayers - s2->m_nBotPlayers );
 
 	// compare number of players
 	if ( s1p > s2p )

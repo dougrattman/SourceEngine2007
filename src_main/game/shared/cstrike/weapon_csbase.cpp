@@ -473,7 +473,7 @@ void CWeaponCSBase::ItemPostFrame()
 	if ((m_bInReload) && (pPlayer->m_flNextAttack <= gpGlobals->curtime))
 	{
 		// complete the reload. 
-		int j = min( GetMaxClip1() - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );	
+		int j = std::min( GetMaxClip1() - m_iClip1, pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) );	
 
 		// Add them to the clip
 		m_iClip1 += j;
@@ -924,7 +924,7 @@ void CWeaponCSBase::DefaultTouch(CBaseEntity *pOther)
 	
 		if ( pPlayer->m_iShotsFired > m_iAmmoLastCheck )
 		{
-			m_flCrosshairDistance = min( 15, m_flCrosshairDistance + iDeltaDistance );
+			m_flCrosshairDistance = std::min( 15, m_flCrosshairDistance + iDeltaDistance );
 		}
 		else if( m_flCrosshairDistance > iDistance )
 		{
@@ -968,9 +968,9 @@ void CWeaponCSBase::DefaultTouch(CBaseEntity *pOther)
 
 		int iBarSize = XRES(5) + (iCrosshairDistance - iDistance) / 2;
 
-		iBarSize = max( 1, (int)( (float)iBarSize * scale ) );
+		iBarSize = std::max( 1, (int)( (float)iBarSize * scale ) );
 
-		int iBarThickness = max( 1, (int)floor( scale + 0.5f ) );
+		int iBarThickness = std::max( 1, (int)floor( scale + 0.5f ) );
 
 		int	r, g, b;
 
@@ -992,7 +992,7 @@ void CWeaponCSBase::DefaultTouch(CBaseEntity *pOther)
 			b = 50;
 		}
 
-		int alpha = clamp( cl_crosshairalpha.GetInt(), 0, 255 );
+		int alpha = std::clamp( cl_crosshairalpha.GetInt(), 0, 255 );
 		vgui::surface()->DrawSetColor( r, g, b, alpha );
 
 		if ( !m_iCrosshairTextureID )
@@ -1403,11 +1403,11 @@ bool CWeaponCSBase::IsUseable()
 
 		//Find the speed of the player
 		float speed = player->GetLocalVelocity().Length2D();
-		float flmaxSpeedDelta = max( 0, (gpGlobals->curtime - lastbobtime) * 320.0f );
+		float flmaxSpeedDelta = std::max( 0, (gpGlobals->curtime - lastbobtime) * 320.0f );
 
 		// don't allow too big speed changes
-		speed = clamp( speed, lastspeed-flmaxSpeedDelta, lastspeed+flmaxSpeedDelta );
-		speed = clamp( speed, -320, 320 );
+		speed = std::clamp( speed, lastspeed-flmaxSpeedDelta, lastspeed+flmaxSpeedDelta );
+		speed = std::clamp( speed, -320, 320 );
 
 		lastspeed = speed;
 
@@ -1437,7 +1437,7 @@ bool CWeaponCSBase::IsUseable()
 		g_verticalBob = speed*0.005f;
 		g_verticalBob = g_verticalBob*0.3 + g_verticalBob*0.7*sin(cycle);
 
-		g_verticalBob = clamp( g_verticalBob, -7.0f, 4.0f );
+		g_verticalBob = std::clamp( g_verticalBob, -7.0f, 4.0f );
 
 		//Calculate the lateral bob
 		cycle = bobtime - (int)(bobtime/cl_bobcycle.GetFloat()*2)*cl_bobcycle.GetFloat()*2;
@@ -1454,7 +1454,7 @@ bool CWeaponCSBase::IsUseable()
 
 		g_lateralBob = speed*0.005f;
 		g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
-		g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
+		g_lateralBob = std::clamp( g_lateralBob, -7.0f, 4.0f );
 		
 		//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
 		return 0.0f;

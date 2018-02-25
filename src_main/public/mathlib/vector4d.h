@@ -115,9 +115,9 @@ class Vector4D {
 const Vector4D vec4_origin(0.0f, 0.0f, 0.0f, 0.0f);
 const Vector4D vec4_invalid(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
 
-//-----------------------------------------------------------------------------
+
 // SSE optimized routines
-//-----------------------------------------------------------------------------
+
 
 #ifdef _WIN32
 class __declspec(align(16)) Vector4DAligned : public Vector4D
@@ -143,9 +143,9 @@ class __attribute__((aligned(16))) Vector4DAligned : public Vector4D
   Vector4DAligned& operator=(Vector4DAligned const& src);
 };
 
-//-----------------------------------------------------------------------------
+
 // Vector4D related operations
-//-----------------------------------------------------------------------------
+
 
 // Vector4D clear
 void Vector4DClear(Vector4D& a);
@@ -182,15 +182,15 @@ f32 DotProduct4D(Vector4D const& a, Vector4D const& b);
 void Vector4DLerp(Vector4D const& src1, Vector4D const& src2, f32 t,
                   Vector4D& dest);
 
-//-----------------------------------------------------------------------------
+
 //
 // Inlined Vector4D methods
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+
+
 // constructors
-//-----------------------------------------------------------------------------
+
 
 inline Vector4D::Vector4D(void) {
 #ifdef _DEBUG
@@ -216,9 +216,9 @@ inline Vector4D::Vector4D(const f32* pFloat) {
   Assert(IsValid());
 }
 
-//-----------------------------------------------------------------------------
+
 // copy constructor
-//-----------------------------------------------------------------------------
+
 
 inline Vector4D::Vector4D(const Vector4D& vOther) {
   Assert(vOther.IsValid());
@@ -228,9 +228,9 @@ inline Vector4D::Vector4D(const Vector4D& vOther) {
   w = vOther.w;
 }
 
-//-----------------------------------------------------------------------------
+
 // initialization
-//-----------------------------------------------------------------------------
+
 
 inline void Vector4D::Init(f32 ix, f32 iy, f32 iz, f32 iw) {
   x = ix;
@@ -249,9 +249,9 @@ inline void Vector4D::Random(f32 minVal, f32 maxVal) {
 
 inline void Vector4DClear(Vector4D& a) { a.x = a.y = a.z = a.w = 0.0f; }
 
-//-----------------------------------------------------------------------------
+
 // assignment
-//-----------------------------------------------------------------------------
+
 
 inline Vector4D& Vector4D::operator=(const Vector4D& vOther) {
   Assert(vOther.IsValid());
@@ -262,9 +262,9 @@ inline Vector4D& Vector4D::operator=(const Vector4D& vOther) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 
 inline f32& Vector4D::operator[](int i) {
   Assert((i >= 0) && (i < 4));
@@ -276,9 +276,9 @@ inline f32 Vector4D::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Cast to Vector and Vector2D...
-//-----------------------------------------------------------------------------
+
 
 inline Vector& Vector4D::AsVector3D() { return *(Vector*)this; }
 
@@ -292,25 +292,25 @@ inline Vector2D const& Vector4D::AsVector2D() const {
   return *(Vector2D const*)this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 
 inline f32* Vector4D::Base() { return (f32*)this; }
 
 inline f32 const* Vector4D::Base() const { return (f32 const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // IsValid?
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector4D::IsValid() const {
   return IsFinite(x) && IsFinite(y) && IsFinite(z) && IsFinite(w);
 }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector4D::operator==(Vector4D const& src) const {
   Assert(src.IsValid() && IsValid());
@@ -322,9 +322,9 @@ inline bool Vector4D::operator!=(Vector4D const& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z) || (src.w != w);
 }
 
-//-----------------------------------------------------------------------------
+
 // Copy
-//-----------------------------------------------------------------------------
+
 
 inline void Vector4DCopy(Vector4D const& src, Vector4D& dst) {
   Assert(src.IsValid());
@@ -343,9 +343,9 @@ inline void Vector4D::CopyToArray(f32* rgfl) const {
   rgfl[3] = w;
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 
 inline void Vector4D::Negate() {
   Assert(IsValid());
@@ -491,9 +491,9 @@ inline void Vector4DLerp(const Vector4D& src1, const Vector4D& src2, f32 t,
   dest[3] = src1[3] + (src2[3] - src1[3]) * t;
 }
 
-//-----------------------------------------------------------------------------
+
 // dot, cross
-//-----------------------------------------------------------------------------
+
 
 inline f32 DotProduct4D(const Vector4D& a, const Vector4D& b) {
   Assert(a.IsValid() && b.IsValid());
@@ -505,9 +505,9 @@ inline f32 Vector4D::Dot(Vector4D const& vOther) const {
   return DotProduct4D(*this, vOther);
 }
 
-//-----------------------------------------------------------------------------
+
 // length
-//-----------------------------------------------------------------------------
+
 
 inline f32 Vector4DLength(Vector4D const& v) {
   Assert(v.IsValid());
@@ -521,9 +521,9 @@ inline f32 Vector4D::LengthSqr(void) const {
 
 inline f32 Vector4D::Length(void) const { return Vector4DLength(*this); }
 
-//-----------------------------------------------------------------------------
+
 // Normalization
-//-----------------------------------------------------------------------------
+
 
 // FIXME: Can't use until we're un-macroed in mathlib.h
 inline f32 Vector4DNormalize(Vector4D& v) {
@@ -537,9 +537,9 @@ inline f32 Vector4DNormalize(Vector4D& v) {
   return l;
 }
 
-//-----------------------------------------------------------------------------
+
 // Get the distance from this Vector4D to the other one
-//-----------------------------------------------------------------------------
+
 
 inline f32 Vector4D::DistTo(const Vector4D& vOther) const {
   Vector4D delta;
@@ -553,9 +553,9 @@ inline f32 Vector4D::DistToSqr(const Vector4D& vOther) const {
   return delta.LengthSqr();
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector4DAligned routines
-//-----------------------------------------------------------------------------
+
 
 inline Vector4DAligned::Vector4DAligned(f32 X, f32 Y, f32 Z, f32 W) {
   x = X;

@@ -17,11 +17,11 @@ class CChoreoScene;
 class CUtlBuffer;
 class IChoreoStringPool;
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The actor is the atomic element of a scene
 //  A scene can have one or more actors, who have multiple events on one or 
 //  more channels
-//-----------------------------------------------------------------------------
+
 class CChoreoActor
 {
 public:

@@ -1316,7 +1316,7 @@ AIMoveResult_t CAI_Navigator::MoveClimb() {
   if (climbDist > 0.01 &&
       !GetMoveProbe()->MoveLimit(
           NAV_CLIMB, GetLocalOrigin(),
-          GetLocalOrigin() + (climbDir * min(0.1, climbDist - 0.005)),
+          GetLocalOrigin() + (climbDir * std::min(0.1, climbDist - 0.005)),
           MASK_NPCSOLID, GetNavTargetEntity(), &moveTrace)) {
     CAI_BaseNPC *pOther = (moveTrace.pObstruction)
                               ? moveTrace.pObstruction->MyNPCPointer()
@@ -2836,7 +2836,7 @@ AI_NavPathProgress_t CAI_Navigator::ProgressFlyPath(
 
     if (CurWaypointIsGoal()) {
       float tolerance =
-          max(params.goalTolerance, GetPath()->GetGoalTolerance());
+          std::max(params.goalTolerance, GetPath()->GetGoalTolerance());
       if (waypointDist <= tolerance) return AINPP_COMPLETE;
     } else {
       bool bIsStrictWaypoint =

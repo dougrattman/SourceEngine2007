@@ -144,7 +144,7 @@ SHADER_DRAW {
       ITexture *txtr = params[HDRCOMPRESSEDTEXTURE]->GetTextureValue();
       float w = txtr->GetActualWidth();
       float h = txtr->GetActualHeight();
-      float FUDGE = 0.01f / max(w, h);  // per ATI
+      float FUDGE = 0.01f / std::max(w, h);  // per ATI
       float c1[4] = {0.5f / w - FUDGE, 0.5f / h - FUDGE, w, h};
       pShaderAPI->SetVertexShaderConstant(VERTEX_SHADER_SHADER_SPECIFIC_CONST_0,
                                           c1);

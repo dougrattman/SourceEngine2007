@@ -345,7 +345,7 @@ float CPropJetski::CalculateFriction( CUserCmd *ucmd )
 	flRatio = 1.0f - ( float )pow( flRatio, 4 );
 	flFriction = JETSKI_FRICTION_MIN + ( JETSKI_FRICTION_MAX - JETSKI_FRICTION_MIN ) * flRatio;
 
-	flFriction = clamp( flFriction, JETSKI_FRICTION_MIN, JETSKI_FRICTION_MAX );
+	flFriction = std::clamp( flFriction, JETSKI_FRICTION_MIN, JETSKI_FRICTION_MAX );
 
 	// Debug!
 	Msg( "Speed = %f, Friction = %f", flSpeed, flFriction );

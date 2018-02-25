@@ -1,8 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
 
 #include <cstdio>
 
@@ -39,19 +35,6 @@ using namespace vgui;
 enum {
   WINDOW_BORDER_WIDTH = 2  // the width of the window's border
 };
-
-#ifndef max
-#define max(a, b) (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifndef clamp
-#define clamp(val, min, max) \
-  (((val) > (max)) ? (max) : (((val) < (min)) ? (min) : (val)))
-#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -769,7 +752,7 @@ int ListPanel::FindColumn(const char *columnName) {
 // Purpose: adds an item to the view
 //			data->GetName() is used to uniquely identify an item
 //			data sub items are matched against column header name to
-//be used in the table
+// be used in the table
 //-----------------------------------------------------------------------------
 int ListPanel::AddItem(const KeyValues *item, unsigned int userData,
                        bool bScrollToItem, bool bSortOnAdd) {
@@ -955,7 +938,7 @@ void ListPanel::IndexItem(int itemID) {
 
   // remove the item from the indexes and re-add
   int maxCount =
-      min(m_ColumnsHistory.Count(), newitem->m_SortedTreeIndexes.Count());
+      std::min(m_ColumnsHistory.Count(), newitem->m_SortedTreeIndexes.Count());
   for (int i = 0; i < maxCount; i++) {
     IndexRBTree_t &rbtree = m_ColumnsData[m_ColumnsHistory[i]].m_SortedTree;
     rbtree.RemoveAt(newitem->m_SortedTreeIndexes[i]);
@@ -1279,7 +1262,7 @@ Panel *ListPanel::GetCellRenderer(int itemID, int col) {
     // set cell size
     Panel *header = column.m_pHeader;
     int wide = header->GetWide();
-    m_pTextImage->SetSize(min(cw, wide - 5), tall);
+    m_pTextImage->SetSize(std::min(cw, wide - 5), tall);
 
     m_pLabel->SetTextImageIndex(0);
     m_pLabel->SetImageAtIndex(0, m_pTextImage, 3);
@@ -1715,7 +1698,7 @@ void ListPanel::Paint() {
 
         render->SetPos(xpos, (drawcount * m_iRowHeight) + m_iTableStartY);
 
-        int right = min(xpos + wide, maxw);
+        int right = std::min(xpos + wide, maxw);
         int usew = right - xpos;
         render->SetSize(usew, m_iRowHeight - 1);
 
@@ -1873,8 +1856,8 @@ void ListPanel::UpdateSelection(MouseCode code, int x, int y, int row,
   } else {
     // no CTRL or SHIFT keys
     // reset the selection Start point
-    //			if ( ( m_LastItemSelected != itemID ) || ( m_SelectedItems.Count()
-    //> 1 ) )
+    //			if ( ( m_LastItemSelected != itemID ) || (
+    // m_SelectedItems.Count() > 1 ) )
     { SetSingleSelectedItem(itemID); }
   }
 }
@@ -2031,7 +2014,7 @@ void ListPanel::OnKeyCodeTyped(KeyCode code) {
   };
 
   // make sure newly selected item is a valid range
-  nSelectedRow = clamp(nSelectedRow, 0, nTotalRows - 1);
+  nSelectedRow = std::clamp(nSelectedRow, 0, nTotalRows - 1);
 
   int row = m_VisibleItems[nSelectedRow];
 

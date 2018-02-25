@@ -547,7 +547,7 @@ void CVortEmissiveProxy::OnBind( C_BaseEntity *pEnt )
 			{
 				fadeRatio = 1.0f - fadeRatio;
 			}
-			flBlendValue = clamp( fadeRatio, 0.0f, 1.0f );
+			flBlendValue = std::clamp( fadeRatio, 0.0f, 1.0f );
 		}
 		else // no crossfade
 		{

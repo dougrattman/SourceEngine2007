@@ -969,7 +969,7 @@ void CBaseEntity::PhysicsDispatchThink(BASEPTR thinkFunc) {
 
   float thinkLimit = think_limit.GetFloat();
 
-  // The thinkLimit stuff makes a LOT of calls to Sys_FloatTime, which winds up
+  // The thinkLimit stuff makes a LOT of calls to Plat_FloatTime, which winds up
   // calling into VCR mode so much that the framerate becomes unusable.
   if (VCRGetMode() != VCR_Disabled) thinkLimit = 0;
 
@@ -1983,7 +1983,7 @@ void Physics_RunThinkFunctions(bool simulating) {
   } else {
     UTIL_DisableRemoveImmediate();
     int listMax = SimThink_ListCount();
-    listMax = max(listMax, 1);
+    listMax = std::max(listMax, 1);
     CBaseEntity **list =
         (CBaseEntity **)stackalloc(sizeof(CBaseEntity *) * listMax);
     // iterate through all entities and have them think or simulate

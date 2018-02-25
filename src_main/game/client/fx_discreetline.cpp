@@ -76,8 +76,8 @@ void CFXDiscreetLine::Draw( double frametime )
 	float	eDistance = sDistance - m_fLength;
 	
 	//Clip to start
-	sDistance = max( 0.0f, sDistance );
-	eDistance = max( 0.0f, eDistance );
+	sDistance = std::max( 0.0f, sDistance );
+	eDistance = std::max( 0.0f, eDistance );
 
 	if ( ( sDistance == 0.0f ) && ( eDistance == 0.0f ) )
 		return;
@@ -85,8 +85,8 @@ void CFXDiscreetLine::Draw( double frametime )
 	// Clip it
 	if ( m_fClipLength != 0.0f )
 	{
-		sDistance = min( sDistance, m_fClipLength );
-		eDistance = min( eDistance, m_fClipLength );
+		sDistance = std::min( sDistance, m_fClipLength );
+		eDistance = std::min( eDistance, m_fClipLength );
 	}
 
 	// Get our delta to calculate the tc offset
@@ -125,7 +125,7 @@ void CFXDiscreetLine::Draw( double frametime )
 		if ( flScreenSpaceWidth < 0.5f )
 		{
 			flAlpha = RemapVal( flScreenSpaceWidth, 0.25f, 2.0f, 0.3f, 1.0f );
-			flAlpha = clamp( flAlpha, 0.25f, 1.0f );
+			flAlpha = std::clamp( flAlpha, 0.25f, 1.0f );
 			flScale = 0.5f * zCoord / flHalfScreenWidth;
 		}
 		else

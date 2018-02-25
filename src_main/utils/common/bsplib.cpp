@@ -3881,6 +3881,8 @@ void SwapOcclusionLumpToDisk(void) {
   AddOcclusionLump();
 }
 
+#define LUMP_ALIGNMENT 2048
+
 void SwapPakfileLumpToDisk(const char *pInFilename) {
   DevMsg("Swapping %s\n", GetLumpName(LUMP_PAKFILE));
 
@@ -3895,7 +3897,7 @@ void SwapPakfileLumpToDisk(const char *pInFilename) {
   }
   free(pakbuffer);
 
-  SetAlignedLumpPosition(LUMP_PAKFILE, XBOX_DVD_SECTORSIZE);
+  SetAlignedLumpPosition(LUMP_PAKFILE, LUMP_ALIGNMENT);
   WritePakFileLump();
 
   ReleasePakFileLumps();
@@ -4323,7 +4325,7 @@ bool SwapBSPFile(const char *pInFilename, const char *pOutFilename,
   g_pBSPHeader->lumps[LUMP_MAP_FLAGS].version = mapCRC;
 
   // Pad out the end of the file to a sector boundary for optimal IO
-  AlignFilePosition(g_hBSPFile, XBOX_DVD_SECTORSIZE);
+  AlignFilePosition(g_hBSPFile, LUMP_ALIGNMENT);
 
   // Warn of any lumps that didn't get swapped
   for (int i = 0; i < HEADER_LUMPS; ++i) {
@@ -4520,12 +4522,12 @@ bool SetPakFileLump(const char *pBSPFilename, const char *pNewFilename,
   // Always write the pak file at the end
   // Pad out the end of the file to a sector boundary for optimal IO
   g_pBSPHeader->lumps[LUMP_PAKFILE].fileofs =
-      AlignFilePosition(g_hBSPFile, XBOX_DVD_SECTORSIZE);
+      AlignFilePosition(g_hBSPFile, LUMP_ALIGNMENT);
   g_pBSPHeader->lumps[LUMP_PAKFILE].filelen = pakSize;
   SafeWrite(g_hBSPFile, pPakData, pakSize);
 
   // Pad out the end of the file to a sector boundary for optimal IO
-  AlignFilePosition(g_hBSPFile, XBOX_DVD_SECTORSIZE);
+  AlignFilePosition(g_hBSPFile, LUMP_ALIGNMENT);
 
   // Write the updated header
   g_pFileSystem->Seek(g_hBSPFile, 0, FILESYSTEM_SEEK_HEAD);

@@ -113,7 +113,7 @@ void CTFSteamStats::FireGameEvent( IGameEvent *event )
 					if ( pStatPanel->IsLocalFileTrusted() )
 					{
 						// if local stats file is trusted, then use the higher of the current value (from local file) or Steam.  Handles case where we previously failed to write latest data to Steam.
-						classStats.accumulated.m_iStat[g_SteamStats[iStat].iStat] = max( iData, classStats.accumulated.m_iStat[g_SteamStats[iStat].iStat] );
+						classStats.accumulated.m_iStat[g_SteamStats[iStat].iStat] = std::max( iData, classStats.accumulated.m_iStat[g_SteamStats[iStat].iStat] );
 					}
 					else
 					{
@@ -127,7 +127,7 @@ void CTFSteamStats::FireGameEvent( IGameEvent *event )
 					if ( pStatPanel->IsLocalFileTrusted() )
 					{
 						// if local stats file is trusted, then use the higher of the current value (from local file) or Steam.  Handles case where we previously failed to write latest data to Steam.
-						classStats.max.m_iStat[g_SteamStats[iStat].iStat] = max( iData, classStats.max.m_iStat[g_SteamStats[iStat].iStat] );
+						classStats.max.m_iStat[g_SteamStats[iStat].iStat] = std::max( iData, classStats.max.m_iStat[g_SteamStats[iStat].iStat] );
 					}
 					else
 					{
@@ -207,7 +207,7 @@ void CTFSteamStats::ReportLiveStats()
 		ClassStats_t &classStats = CTFStatPanel::GetClassStats( iClass );
 		for ( int iStat = 0; iStat < ARRAYSIZE( g_SteamStats ); iStat++ )
 		{
-			statsTotals[iStat] = max( statsTotals[iStat], classStats.max.m_iStat[g_SteamStats[iStat].iStat] );
+			statsTotals[iStat] = std::max( statsTotals[iStat], classStats.max.m_iStat[g_SteamStats[iStat].iStat] );
 		}
 	}
 

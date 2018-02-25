@@ -70,7 +70,7 @@ int C_ObjectSentrygun::DrawModel( int flags )
 	if ( m_bTurtled )
 	{
 		// How far down are we?
-		float flTime = min( gpGlobals->curtime - m_flStartedTurtlingAt, SENTRY_TURTLE_TIME );
+		float flTime = std::min( gpGlobals->curtime - m_flStartedTurtlingAt, SENTRY_TURTLE_TIME );
 		float flPercent = 1 - (SENTRY_TURTLE_TIME - flTime) / SENTRY_TURTLE_TIME;
 
 		// FIXME: This is totally wrong!!!
@@ -83,7 +83,7 @@ int C_ObjectSentrygun::DrawModel( int flags )
 	{
 		if ( m_flStartedUnTurtlingAt )
 		{
-			float flTime = min( gpGlobals->curtime - m_flStartedUnTurtlingAt, SENTRY_TURTLE_TIME );
+			float flTime = std::min( gpGlobals->curtime - m_flStartedUnTurtlingAt, SENTRY_TURTLE_TIME );
 			float flPercent = (SENTRY_TURTLE_TIME - flTime) / SENTRY_TURTLE_TIME;
 			
 		// FIXME: This is totally wrong!!!

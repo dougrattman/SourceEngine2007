@@ -319,7 +319,7 @@ LONG CVoiceTweakDlg::OnIdle(UINT a, LONG b)
 				// Find the highest value.
 				int highValue = -100000;
 				for(int i=0; i < nSamples; i++)
-					highValue = max(abs(samples[i]), highValue);
+					highValue = std::max(abs(samples[i]), highValue);
 
 				// Set our status bar accordingly.
 				highValue = (highValue >> 9) << 9;	// Get rid of flicker.

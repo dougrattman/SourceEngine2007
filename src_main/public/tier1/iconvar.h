@@ -7,15 +7,15 @@
 #include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 class IConVar;
 class CCommand;
 
-//-----------------------------------------------------------------------------
+
 // ConVar flags
-//-----------------------------------------------------------------------------
+
 // The default, no flags at all
 #define FCVAR_NONE 0
 
@@ -94,16 +94,16 @@ class CCommand;
 // #define FCVAR_AVAILABLE (1<<27)
 // #define FCVAR_AVAILABLE (1<<31)
 
-//-----------------------------------------------------------------------------
+
 // Called when a ConVar changes value
 // NOTE: For FCVAR_NEVER_AS_STRING ConVars, pOldValue == NULL
-//-----------------------------------------------------------------------------
+
 typedef void (*FnChangeCallback_t)(IConVar *var, const char *pOldValue,
                                    float flOldValue);
 
-//-----------------------------------------------------------------------------
+
 // Abstract interface for ConVars
-//-----------------------------------------------------------------------------
+
 abstract_class IConVar {
  public:
   // Value set

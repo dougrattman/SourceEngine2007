@@ -107,7 +107,7 @@ void UpdateProgressBar(vgui::EditablePanel *pPanel, IAchievement *pAchievement,
       // storage on X360, take saved game from different user on PC). These will
       // self-correct with continued play, but if we're in that state don't show
       // more than 100% achieved.
-      flCompletion = min(flCompletion, 1.0);
+      flCompletion = std::min(flCompletion, 1.0f);
     }
 
     char szPercentageText[256] = "";

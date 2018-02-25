@@ -65,7 +65,7 @@ class CVisibleWindowVectorT : protected CUtlVector<T> {
   // Resets the content and makes size "uiTotal"
   void Reset(uint64_t uiTotal) {
     BaseClass::RemoveAll();
-    BaseClass::EnsureCapacity((int)min(100, uiTotal));
+    BaseClass::EnsureCapacity((int)std::min(100, uiTotal));
     m_uiBase = 0;
     m_uiTotal = uiTotal;
   }
@@ -116,7 +116,7 @@ class CVisibleWindowVectorT : protected CUtlVector<T> {
     if (idxDrop >= m_uiBase && idxDrop <= m_uiBase + BaseClass::Count()) {
       int iDropElements = int(idxDrop - m_uiBase) + 1;
       m_uiBase += iDropElements;
-      BaseClass::RemoveMultiple(0, min(iDropElements, BaseClass::Count()));
+      BaseClass::RemoveMultiple(0, std::min(iDropElements, BaseClass::Count()));
     }
   }
 

@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef _WIN32
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <comutil.h> // _variant_t
 #include <atlbase.h> // CComPtr
 #elif _LINUX

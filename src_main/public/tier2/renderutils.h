@@ -8,9 +8,9 @@
 #include "Color.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 class Vector;
 class QAngle;
 class IMaterial;

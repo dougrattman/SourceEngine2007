@@ -115,7 +115,7 @@ void CClipboardManager::GetClipboardData(CUtlVector<KeyValues *> &data) {
           void *ptr = GlobalLock(hmem);
           if (ptr) {
             char buf[8192];
-            len = min(len, 8191);
+            len = std::min(len, 8191);
             Q_memcpy(buf, (char *)ptr, len);
             buf[8191] = 0;
             GlobalUnlock(hmem);

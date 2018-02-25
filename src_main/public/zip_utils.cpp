@@ -484,7 +484,8 @@ void CZipFile::ParseFromBuffer(void *buffer, int bufferlength) {
       // Set any xzip configuration
       if (rec.commentLength) {
         char commentString[128];
-        int commentLength = min(rec.commentLength, sizeof(commentString));
+        int commentLength =
+            std::min((usize)rec.commentLength, sizeof(commentString));
         buf.Get(commentString, commentLength);
         commentString[commentLength] = '\0';
         ParseXZipCommentString(commentString);
@@ -598,7 +599,8 @@ HANDLE CZipFile::ParseFromDisk(const char *pFilename) {
       // Set any xzip configuration
       if (rec.commentLength) {
         char commentString[128];
-        int commentLength = min(rec.commentLength, sizeof(commentString));
+        int commentLength =
+            std::min((usize)rec.commentLength, sizeof(commentString));
         CWin32File::FileRead(hFile, commentString, commentLength);
         commentString[commentLength] = '\0';
         ParseXZipCommentString(commentString);

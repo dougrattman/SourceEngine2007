@@ -220,9 +220,9 @@ BEGIN_SHADER( VortWarp_DX7,
 			// -----------------------------------------------------------
 			float selfIllumTint[3];
 			params[SELFILLUMTINT]->GetVecValue( selfIllumTint, 3 );
-			selfIllumTint[0] = clamp( selfIllumTint[0], 0.0f, 1.0f );
-			selfIllumTint[1] = clamp( selfIllumTint[1], 0.0f, 1.0f );
-			selfIllumTint[2] = clamp( selfIllumTint[2], 0.0f, 1.0f );
+			selfIllumTint[0] = std::clamp( selfIllumTint[0], 0.0f, 1.0f );
+			selfIllumTint[1] = std::clamp( selfIllumTint[1], 0.0f, 1.0f );
+			selfIllumTint[2] = std::clamp( selfIllumTint[2], 0.0f, 1.0f );
 //			Warning( "selfillumtint: %f %f %f\n", selfIllumTint[0], selfIllumTint[1], selfIllumTint[2] );
 
 			pShaderAPI->Color4f( selfIllumTint[0], selfIllumTint[1], selfIllumTint[2], 1.0f );

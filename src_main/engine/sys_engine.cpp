@@ -168,9 +168,9 @@ bool CEngine::FilterTime(float dt) {
   float fps = fps_max.GetFloat();
   if (fps > 0.0f) {
     // Limit fps to withing tolerable range
-    //		fps = max( MIN_FPS, fps ); // red herring - since we're only
+    //		fps = std::max( MIN_FPS, fps ); // red herring - since we're only
     // checking if dt < 1/fps, clamping against MIN_FPS has no effect
-    fps = min(MAX_FPS, fps);
+    fps = std::min(MAX_FPS, fps);
 
     float minframetime = 1.0 / fps;
 
@@ -199,7 +199,7 @@ void CEngine::Frame(void) {
   }
 
   // Get current time
-  m_flCurrentTime = Sys_FloatTime();
+  m_flCurrentTime = Plat_FloatTime();
 
   // Determine dt since we last checked
   float dt = m_flCurrentTime - m_flPreviousTime;

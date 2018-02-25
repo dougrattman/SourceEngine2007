@@ -50,7 +50,7 @@
 #include <ctype.h>
 
 #ifdef _DEBUG
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #undef GetCurrentDirectory
 #endif
 

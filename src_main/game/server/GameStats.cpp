@@ -838,7 +838,7 @@ void CBaseGameStats::SetCaptionsStatistic(bool bClosedCaptionsEnabled) {
 }
 
 void CBaseGameStats::SetSkillStatistic(int iSkillSetting) {
-  int skill = clamp(iSkillSetting, 1, 3) - 1;
+  int skill = std::clamp(iSkillSetting, 1, 3) - 1;
 
   if (CBGSDriver.m_bInLevel) {
     BasicGameStatsRecord_t *map =

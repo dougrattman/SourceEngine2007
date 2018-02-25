@@ -1000,8 +1000,7 @@ class CResourcePreloadPropLighting : public CResourcePreload {
     char szBasename[MAX_PATH];
     char szFilename[MAX_PATH];
     V_FileBase(pName, szBasename, sizeof(szBasename));
-    V_snprintf(szFilename, sizeof(szFilename), "%s%s.vhv", szBasename,
-               GetPlatformExt());
+    V_snprintf(szFilename, sizeof(szFilename), "%s.vhv", szBasename);
 
     // static props have the same name across maps
     // can check if loading the same map and early out if data present
@@ -1118,7 +1117,7 @@ void CModelRender::SnapCurrentLightingState(ModelInstance_t &inst,
 #endif
 }
 
-#define AMBIENT_MAX 8.0
+#define AMBIENT_MAX 8.0f
 
 //-----------------------------------------------------------------------------
 // Time average the ambient term
@@ -1128,8 +1127,8 @@ void CModelRender::TimeAverageAmbientLight(LightingState_t &actualLightingState,
                                            float flAttenFactor,
                                            LightingState_t *pLightingState,
                                            const Vector *pLightingOrigin) {
-  flAttenFactor =
-      clamp(flAttenFactor, 0, 1);  // don't need this but alex is a coward
+  flAttenFactor = std::clamp(flAttenFactor, 0.0f,
+                             1.0f);  // don't need this but alex is a coward
   Vector vecDelta;
   for (int i = 0; i < 6; ++i) {
     VectorSubtract(pLightingState->r_boxcolor[i],
@@ -1165,12 +1164,12 @@ void CModelRender::TimeAverageAmbientLight(LightingState_t &actualLightingState,
       Assert(inst.m_CurrentLightingState.r_boxcolor[i][nComp] <= AMBIENT_MAX);
     }
 #endif
-    inst.m_CurrentLightingState.r_boxcolor[i].x =
-        clamp(inst.m_CurrentLightingState.r_boxcolor[i].x, 0, AMBIENT_MAX);
-    inst.m_CurrentLightingState.r_boxcolor[i].y =
-        clamp(inst.m_CurrentLightingState.r_boxcolor[i].y, 0, AMBIENT_MAX);
-    inst.m_CurrentLightingState.r_boxcolor[i].z =
-        clamp(inst.m_CurrentLightingState.r_boxcolor[i].z, 0, AMBIENT_MAX);
+    inst.m_CurrentLightingState.r_boxcolor[i].x = std::clamp(
+        inst.m_CurrentLightingState.r_boxcolor[i].x, 0.0f, AMBIENT_MAX);
+    inst.m_CurrentLightingState.r_boxcolor[i].y = std::clamp(
+        inst.m_CurrentLightingState.r_boxcolor[i].y, 0.0f, AMBIENT_MAX);
+    inst.m_CurrentLightingState.r_boxcolor[i].z = std::clamp(
+        inst.m_CurrentLightingState.r_boxcolor[i].z, 0.0f, AMBIENT_MAX);
   }
   memcpy(&actualLightingState.r_boxcolor,
          &inst.m_CurrentLightingState.r_boxcolor,
@@ -1220,8 +1219,8 @@ LightingState_t *CModelRender::TimeAverageLightingState(
   // Max # of lights...
   int nWorldLights;
   if (!g_pMaterialSystemConfig->bSoftwareLighting) {
-    nWorldLights = min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
-                       r_worldlights.GetInt());
+    nWorldLights = std::min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
+                            r_worldlights.GetInt());
   } else {
     nWorldLights = r_worldlights.GetInt();
   }
@@ -1296,7 +1295,7 @@ LightingState_t *CModelRender::TimeAverageLightingState(
     ++nCurrLight;
   }
 
-  actualLightingState.numlights = min(nCurrLight, nWorldLights);
+  actualLightingState.numlights = std::min(nCurrLight, nWorldLights);
   inst.m_CurrentLightingState.numlights = nCurrLight;
 
   for (i = 0; i < nCurrLight; ++i) {
@@ -1305,8 +1304,8 @@ LightingState_t *CModelRender::TimeAverageLightingState(
 
 #if defined(VISUALIZE_TIME_AVERAGE) && !defined(SWDS)
     Vector vecColor = pSourceLight[i]->intensity;
-    float flMax = max(vecColor.x, vecColor.y);
-    flMax = max(flMax, vecColor.z);
+    float flMax = std::max(vecColor.x, vecColor.y);
+    flMax = std::max(flMax, vecColor.z);
     if (flMax == 0.0f) {
       flMax = 1.0f;
     }
@@ -1572,7 +1571,7 @@ void CModelRender::StudioSetupLighting(
     if (drawFlags & STUDIORENDER_DRAW_ITEM_BLINK) {
       float add =
           r_itemblinkmax.GetFloat() *
-          (FastCos(r_itemblinkrate.GetFloat() * Sys_FloatTime()) + 1.0f);
+          (FastCos(r_itemblinkrate.GetFloat() * Plat_FloatTime()) + 1.0f);
       Vector additiveColor(add, add, add);
       static Vector temp[6];
       int i;
@@ -1594,9 +1593,11 @@ void CModelRender::StudioSetupLighting(
         for (int i = 0; i < 6; i++) {
           float luminance =
               DotProduct(pState->r_boxcolor[i], lumCoeff);  // compute luminance
-          minCubeLuminance = min(minCubeLuminance, luminance);  // min luminance
-          maxCubeLuminance = max(maxCubeLuminance, luminance);  // max luminance
-          avgCubeLuminance += luminance;  // accumulate luminance
+          minCubeLuminance =
+              std::min(minCubeLuminance, luminance);  // min luminance
+          maxCubeLuminance =
+              std::max(maxCubeLuminance, luminance);  // max luminance
+          avgCubeLuminance += luminance;              // accumulate luminance
         }
         avgCubeLuminance /= 6.0f;  // average luminance
 
@@ -1627,9 +1628,9 @@ void CModelRender::StudioSetupLighting(
             (avgCubeLuminance <
              (fDirectLight * r_ambientfraction.GetFloat()))) {
           Vector vFinalAmbientCube[6];
-          float fBoostFactor = min(
+          float fBoostFactor = std::min(
               (fDirectLight * r_ambientfraction.GetFloat()) / maxCubeLuminance,
-              5);  // boost no more than a certain factor
+              5.0f);  // boost no more than a certain factor
           for (int i = 0; i < 6; i++) {
             vFinalAmbientCube[i] = pState->r_boxcolor[i] * fBoostFactor;
           }
@@ -1808,9 +1809,9 @@ void DrawModelDebugOverlay(const DrawModelInfo_t &info,
 #ifndef SWDS
   float alpha = 1;
   if (r_drawmodelstatsoverlaydistance.GetFloat() == 1) {
-    alpha = 1.f - clamp(CurrentViewOrigin().DistTo(origin) /
-                            r_drawmodelstatsoverlaydistance.GetFloat(),
-                        0, 1.f);
+    alpha = 1.f - std::clamp(CurrentViewOrigin().DistTo(origin) /
+                                 r_drawmodelstatsoverlaydistance.GetFloat(),
+                             0.0f, 1.f);
   } else {
     float flDistance = CurrentViewOrigin().DistTo(origin);
 
@@ -2738,13 +2739,13 @@ int CModelRender::DrawStaticPropArrayFast(StaticPropRenderInfo_t *pProps,
         objectList[i].lod = model.pStudioHWData->m_RootLOD;
       }
       modelList[objectList[i].modelIndex].maxArea =
-          max(modelList[objectList[i].modelIndex].maxArea, screenSize);
+          std::max(modelList[objectList[i].modelIndex].maxArea, screenSize);
     }
   } else {
     // force the lod of each object
     for (int i = 0; i < objectList.Count(); i++) {
       const rmodel_t &model = modelList[objectList[i].modelIndex];
-      objectList[i].lod = clamp(
+      objectList[i].lod = std::clamp(
           forcedLodSetting, model.pStudioHWData->m_RootLOD, model.lodCount - 1);
     }
   }
@@ -3477,11 +3478,11 @@ void CModelRender::ValidateStaticPropColorData(ModelInstanceHandle_t handle) {
   char fileName[MAX_PATH];
   if (g_pMaterialSystemHardwareConfig->GetHDRType() == HDR_TYPE_NONE ||
       g_bBakedPropLightingNoSeparateHDR) {
-    Q_snprintf(fileName, sizeof(fileName), "sp_%d%s.vhv",
-               StaticPropMgr()->GetStaticPropIndex(pProp), GetPlatformExt());
+    Q_snprintf(fileName, sizeof(fileName), "sp_%d.vhv",
+               StaticPropMgr()->GetStaticPropIndex(pProp));
   } else {
-    Q_snprintf(fileName, sizeof(fileName), "sp_hdr_%d%s.vhv",
-               StaticPropMgr()->GetStaticPropIndex(pProp), GetPlatformExt());
+    Q_snprintf(fileName, sizeof(fileName), "sp_hdr_%d.vhv",
+               StaticPropMgr()->GetStaticPropIndex(pProp));
   }
 
   if (!g_pFileSystem->ReadFile(fileName, "GAME", utlBuf,
@@ -3607,11 +3608,11 @@ bool CModelRender::LoadStaticPropColorData(IHandleEntity *pProp,
   char fileName[MAX_PATH];
   if (g_pMaterialSystemHardwareConfig->GetHDRType() == HDR_TYPE_NONE ||
       g_bBakedPropLightingNoSeparateHDR) {
-    Q_snprintf(fileName, sizeof(fileName), "sp_%d%s.vhv",
-               StaticPropMgr()->GetStaticPropIndex(pProp), GetPlatformExt());
+    Q_snprintf(fileName, sizeof(fileName), "sp_%d.vhv",
+               StaticPropMgr()->GetStaticPropIndex(pProp));
   } else {
-    Q_snprintf(fileName, sizeof(fileName), "sp_hdr_%d%s.vhv",
-               StaticPropMgr()->GetStaticPropIndex(pProp), GetPlatformExt());
+    Q_snprintf(fileName, sizeof(fileName), "sp_hdr_%d.vhv",
+               StaticPropMgr()->GetStaticPropIndex(pProp));
   }
 
   // mark as invalid, async callback will set upon completion

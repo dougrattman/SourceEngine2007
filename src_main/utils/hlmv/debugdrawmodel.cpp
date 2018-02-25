@@ -530,7 +530,7 @@ int DebugDrawModelBoneWeights( IStudioRender *pStudioRender, DrawModelInfo_t& in
 						v = vert.m_BoneWeight[k];
 					}
 				}
-				v = clamp( v, 0.0f, 1.0f );
+				v = std::clamp( v, 0.0f, 1.0f );
 				meshBuilder.Color4f( 1.0f - v, 1.0f, 1.0f - v, 0.5 );
 			}
 			else

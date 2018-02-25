@@ -38,7 +38,7 @@ float PixelVisibility_DrawProxy( IMatRenderContext *pRenderContext, OcclusionQue
 	float forwardScale = scale;
 	// draw a pyramid of points touching a sphere of radius "scale" at origin
 	float pixelsPerUnit = pRenderContext->ComputePixelDiameterOfSphere( origin, 1.0f );
-	pixelsPerUnit = max( pixelsPerUnit, 1e-4f );
+	pixelsPerUnit = std::max( pixelsPerUnit, 1e-4f );
 	if ( screenspace )
 	{
 		// Force this to be the size of a sphere of diameter "scale" at some reference distance (1.0 unit)
@@ -87,8 +87,8 @@ float PixelVisibility_DrawProxy( IMatRenderContext *pRenderContext, OcclusionQue
 	// compute area and screen-clipped area
 	float w = screen[1].x - screen[0].x;
 	float h = screen[0].y - screen[3].y;
-	float ws = min(1.0f, screen[1].x) - max(-1.0f, screen[0].x);
-	float hs = min(1.0f, screen[0].y) - max(-1.0f, screen[3].y);
+	float ws = std::min(1.0f, screen[1].x) - std::max(-1.0f, screen[0].x);
+	float hs = std::min(1.0f, screen[0].y) - std::max(-1.0f, screen[3].y);
 	float area = w*h; // area can be zero when we ALT-TAB
 	float areaClipped = ws*hs;
 	float ratio = 0.0f;
@@ -96,7 +96,7 @@ float PixelVisibility_DrawProxy( IMatRenderContext *pRenderContext, OcclusionQue
 	{
 		// compute the ratio of the area not clipped by the frustum to total area
 		ratio = areaClipped / area;
-		ratio = clamp(ratio, 0.0f, 1.0f);
+		ratio = std::clamp(ratio, 0.0f, 1.0f);
 	}
 
 	pRenderContext->BeginOcclusionQueryDrawing( queryHandle );

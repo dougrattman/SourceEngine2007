@@ -1443,7 +1443,7 @@ int FindOrAddMesh(IMaterial *pMaterial, int vertexCount) {
 
   int nMaxVertices = pRenderContext->GetMaxVerticesToRender(pMaterial);
   int worldLimit = mat_max_worldmesh_vertices.GetInt();
-  worldLimit = max(worldLimit, 1024);
+  worldLimit = std::max(worldLimit, 1024);
   if (nMaxVertices > worldLimit) {
     nMaxVertices = mat_max_worldmesh_vertices.GetInt();
   }
@@ -1724,8 +1724,8 @@ void SurfComputeLightmapCoordinate(SurfaceCtx_t const &ctx,
 //	CheckTexCoord( uv.x );
 //	CheckTexCoord( uv.y );
 #endif
-  uv.x = clamp(uv.x, 0.0f, 1.0f);
-  uv.y = clamp(uv.y, 0.0f, 1.0f);
+  uv.x = std::clamp(uv.x, 0.0f, 1.0f);
+  uv.y = std::clamp(uv.y, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------

@@ -703,9 +703,9 @@ int LzmaDecode(CLzmaDecoderState *vs,
   return LZMA_RESULT_OK;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns true if buffer is compressed.
-//-----------------------------------------------------------------------------
+
 bool CLZMA::IsCompressed(unsigned char *pInput) {
   lzma_header_t *pHeader = (lzma_header_t *)pInput;
   if (pHeader && pHeader->id == LZMA_ID) {
@@ -716,10 +716,10 @@ bool CLZMA::IsCompressed(unsigned char *pInput) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns uncompressed size of compressed input buffer. Used for allocating
 // output buffer for decompression. Returns 0 if input buffer is not compressed.
-//-----------------------------------------------------------------------------
+
 unsigned int CLZMA::GetActualSize(unsigned char *pInput) {
   lzma_header_t *pHeader = (lzma_header_t *)pInput;
   if (pHeader && pHeader->id == LZMA_ID) {
@@ -730,10 +730,10 @@ unsigned int CLZMA::GetActualSize(unsigned char *pInput) {
   return 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Uncompress a buffer, Returns the uncompressed size. Caller must provide an
 // adequate sized output buffer or memory corruption will occur.
-//-----------------------------------------------------------------------------
+
 unsigned int CLZMA::Uncompress(unsigned char *pInput, unsigned char *pOutput) {
   unsigned int actualSize = GetActualSize(pInput);
   if (!actualSize) {

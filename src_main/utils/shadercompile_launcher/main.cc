@@ -2,7 +2,7 @@
 
 #include <conio.h>
 #include <direct.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <cstdio>
 
 #include "ishadercompiledll.h"

@@ -70,7 +70,7 @@ void CFXLine::Draw( double frametime )
 	color32 color = {255,255,255,255};
 
 	float alpha = m_FXData.m_flStartAlpha + ( ( m_FXData.m_flEndAlpha - m_FXData.m_flStartAlpha ) * scaleTimePerc );
-	alpha = clamp( alpha, 0.0f, 1.0f );
+	alpha = std::clamp( alpha, 0.0f, 1.0f );
 
 	color.a *= alpha;
 
@@ -209,7 +209,7 @@ void FX_DrawLineFade( const Vector &start, const Vector &end, float scale, IMate
 	if ( lineLength > 0 )
 	{
 		t0 = fadeDist / lineLength;
-		t0 = clamp( t0, 0.0f, 0.25f );
+		t0 = std::clamp( t0, 0.0f, 0.25f );
 		t1 = 1.0f - t0;
 	}
 

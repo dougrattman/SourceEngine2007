@@ -1007,7 +1007,7 @@ FSAsyncStatus_t CBaseFileSystem::SyncRead(const FileAsyncRequest_t &request) {
 
     result = ((nBytesRead == 0) && (nBytesToRead != 0)) ? FSASYNC_ERR_READING
                                                         : FSASYNC_OK;
-    DoAsyncCallback(request, pDest, min(nBytesRead, nBytesToRead), result);
+    DoAsyncCallback(request, pDest, std::min(nBytesRead, nBytesToRead), result);
   } else {
     DoAsyncCallback(request, NULL, 0, FSASYNC_ERR_FILEOPEN);
     result = FSASYNC_ERR_FILEOPEN;

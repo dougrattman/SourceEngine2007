@@ -654,7 +654,7 @@ void CMaster::InitConnection(void) {
   } else {
     bInitialized = true;  // needed here to stop recursion in AddServer() below
 
-    numServers = min(numServers, 2);  // only heartbeat to this many servers
+    numServers = std::min(numServers, 2);  // only heartbeat to this many servers
                                       // the servers have their own TCP/IP peer
                                       // to peer network so you only need to
                                       // heartbeat to one to show up on all of

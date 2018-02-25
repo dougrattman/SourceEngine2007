@@ -51,8 +51,8 @@ void CChannelGraphPanel::SetChannel( CDmeChannel *pChannel )
 		for ( int i = 0; i < nComponents; ++i )
 		{
 			float f = pLog->GetComponent( t, i );
-			m_graphMinValue = min( m_graphMinValue, f );
-			m_graphMaxValue = max( m_graphMaxValue, f );
+			m_graphMinValue = std::min( m_graphMinValue, f );
+			m_graphMaxValue = std::max( m_graphMaxValue, f );
 		}
 	}
 }
@@ -173,7 +173,7 @@ float GetDisplayIncrement( int windowpixels, int fontpixels, float valuerange, i
 	int nPower = ( int )ceil( log10( ratio ) );
 	if ( pDecimalPlaces )
 	{
-		*pDecimalPlaces = max( 0, -nPower );
+		*pDecimalPlaces = std::max( 0, -nPower );
 	}
 	return pow( 10.0f, nPower );
 }

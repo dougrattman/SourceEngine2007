@@ -214,7 +214,7 @@ MString CVsMayaMPxFactoryBase::GetTypeName() const
 		"Unknown"
 	};
 
-	return MString( typeNames[ static_cast< int >( clamp( GetType(), kCommand, kUnknown ) ) ] );
+	return MString( typeNames[ static_cast< int >( std::clamp( GetType(), kCommand, kUnknown ) ) ] );
 }
 
 //=============================================================================

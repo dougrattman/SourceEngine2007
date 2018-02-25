@@ -1,149 +1,138 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-
 
 #ifndef AI_BASENPC_PHYSICSFLYER_H
 #define AI_BASENPC_PHYSICSFLYER_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "ai_basenpc.h"
+
 #include "ai_navigator.h"
 
 //-----------------------------------------------------------------------------
 // The combot.
 //-----------------------------------------------------------------------------
-abstract_class CAI_BasePhysicsFlyingBot : public CAI_BaseNPC, public IMotionEvent
-{
-	DECLARE_CLASS( CAI_BasePhysicsFlyingBot, CAI_BaseNPC );
-public:
-	DECLARE_DATADESC();
+abstract_class CAI_BasePhysicsFlyingBot : public CAI_BaseNPC,
+                                          public IMotionEvent {
+  DECLARE_CLASS(CAI_BasePhysicsFlyingBot, CAI_BaseNPC);
 
-	void StartTask( const Task_t *pTask );
-	void GetVelocity(Vector *vVelocity, AngularImpulse *vAngVelocity);
-	virtual QAngle	BodyAngles();
+ public:
+  DECLARE_DATADESC();
 
-	virtual bool	ShouldSavePhysics() { return true; }
+  void StartTask(const Task_t *pTask);
+  void GetVelocity(Vector * vVelocity, AngularImpulse * vAngVelocity);
+  virtual QAngle BodyAngles();
 
-protected:
-	
-	CAI_BasePhysicsFlyingBot();
-	~CAI_BasePhysicsFlyingBot();
+  virtual bool ShouldSavePhysics() { return true; }
 
-	Vector	VelocityToAvoidObstacles(float flInterval);
-	virtual float	MinGroundDist();
+ protected:
+  CAI_BasePhysicsFlyingBot();
+  ~CAI_BasePhysicsFlyingBot();
 
-	virtual void TurnHeadToTarget( float flInterval, const Vector &moveTarget );
+  Vector VelocityToAvoidObstacles(float flInterval);
+  virtual float MinGroundDist();
 
-	void MoveInDirection( float flInterval, const Vector &targetDir, 
-   float accelXY, float accelZ, float decay)
-	{
-		decay = ExponentialDecay( decay, 1.0, flInterval );
-		accelXY *= flInterval;
-		accelZ  *= flInterval;
+  virtual void TurnHeadToTarget(float flInterval, const Vector &moveTarget);
 
-		m_vCurrentVelocity.x = ( decay * m_vCurrentVelocity.x + accelXY * targetDir.x );
-		m_vCurrentVelocity.y = ( decay * m_vCurrentVelocity.y + accelXY * targetDir.y );
-		m_vCurrentVelocity.z = ( decay * m_vCurrentVelocity.z + accelZ  * targetDir.z );
-	}
+  void MoveInDirection(float flInterval, const Vector &targetDir, float accelXY,
+                       float accelZ, float decay) {
+    decay = ExponentialDecay(decay, 1.0, flInterval);
+    accelXY *= flInterval;
+    accelZ *= flInterval;
 
-	void MoveToLocation( float flInterval, const Vector &target, 
-   float accelXY, float accelZ, float decay)
-	{
-		Vector targetDir = target - GetLocalOrigin();
-		VectorNormalize(targetDir);
+    m_vCurrentVelocity.x =
+        (decay * m_vCurrentVelocity.x + accelXY * targetDir.x);
+    m_vCurrentVelocity.y =
+        (decay * m_vCurrentVelocity.y + accelXY * targetDir.y);
+    m_vCurrentVelocity.z =
+        (decay * m_vCurrentVelocity.z + accelZ * targetDir.z);
+  }
 
-		MoveInDirection(flInterval, targetDir, accelXY, accelZ, decay);
-	}
+  void MoveToLocation(float flInterval, const Vector &target, float accelXY,
+                      float accelZ, float decay) {
+    Vector targetDir = target - GetLocalOrigin();
+    VectorNormalize(targetDir);
 
-	void Decelerate( float flInterval, float decay )
-	{
-		decay *= flInterval;
-		m_vCurrentVelocity.x = (decay * m_vCurrentVelocity.x);
-		m_vCurrentVelocity.y = (decay * m_vCurrentVelocity.y);
-		m_vCurrentVelocity.z = (decay * m_vCurrentVelocity.z);
-	}
+    MoveInDirection(flInterval, targetDir, accelXY, accelZ, decay);
+  }
 
-	void AddNoiseToVelocity( float noiseScale = 1.0 )
-	{
-		if( m_vNoiseMod.x )
-		{
- m_vCurrentVelocity.x += noiseScale*sin(m_vNoiseMod.x * gpGlobals->curtime + m_vNoiseMod.x);
-		}
+  void Decelerate(float flInterval, float decay) {
+    decay *= flInterval;
+    m_vCurrentVelocity.x = (decay * m_vCurrentVelocity.x);
+    m_vCurrentVelocity.y = (decay * m_vCurrentVelocity.y);
+    m_vCurrentVelocity.z = (decay * m_vCurrentVelocity.z);
+  }
 
-		if( m_vNoiseMod.y )
-		{
- m_vCurrentVelocity.y += noiseScale*cos(m_vNoiseMod.y * gpGlobals->curtime + m_vNoiseMod.y);
-		}
+  void AddNoiseToVelocity(float noiseScale = 1.0) {
+    if (m_vNoiseMod.x) {
+      m_vCurrentVelocity.x +=
+          noiseScale * sin(m_vNoiseMod.x * gpGlobals->curtime + m_vNoiseMod.x);
+    }
 
-		if( m_vNoiseMod.z )
-		{
- m_vCurrentVelocity.z -= noiseScale*cos(m_vNoiseMod.z * gpGlobals->curtime + m_vNoiseMod.z);
-		}
-	}
+    if (m_vNoiseMod.y) {
+      m_vCurrentVelocity.y +=
+          noiseScale * cos(m_vNoiseMod.y * gpGlobals->curtime + m_vNoiseMod.y);
+    }
 
-	void LimitSpeed( float zLimit, float maxSpeed = -1 )
-	{
-		if ( maxSpeed == -1 )
- maxSpeed = m_flSpeed;
-		if (m_vCurrentVelocity.Length() > maxSpeed)
-		{
- VectorNormalize(m_vCurrentVelocity);
- m_vCurrentVelocity *= maxSpeed;
-		}
-		// Limit fall speed
-		if (zLimit > 0 && m_vCurrentVelocity.z < -zLimit)
-		{
- m_vCurrentVelocity.z = -zLimit;
-		}
-	}
+    if (m_vNoiseMod.z) {
+      m_vCurrentVelocity.z -=
+          noiseScale * cos(m_vNoiseMod.z * gpGlobals->curtime + m_vNoiseMod.z);
+    }
+  }
 
-	AI_NavPathProgress_t ProgressFlyPath( float flInterval,
-   	  const CBaseEntity *pNewTarget, 
-   	  unsigned collisionMask, 
-   	  bool bNewTrySimplify = true, 
-   	  float strictPointTolerance = 32.0 );
+  void LimitSpeed(float zLimit, float maxSpeed = -1) {
+    if (maxSpeed == -1) maxSpeed = m_flSpeed;
+    if (m_vCurrentVelocity.Length() > maxSpeed) {
+      VectorNormalize(m_vCurrentVelocity);
+      m_vCurrentVelocity *= maxSpeed;
+    }
+    // Limit fall speed
+    if (zLimit > 0 && m_vCurrentVelocity.z < -zLimit) {
+      m_vCurrentVelocity.z = -zLimit;
+    }
+  }
 
-	const Vector &GetCurrentVelocity() const		{ return m_vCurrentVelocity; }
-	void SetCurrentVelocity(const Vector &vNewVel)	{ m_vCurrentVelocity = vNewVel; }
+  AI_NavPathProgress_t ProgressFlyPath(
+      float flInterval, const CBaseEntity *pNewTarget, unsigned collisionMask,
+      bool bNewTrySimplify = true, float strictPointTolerance = 32.0);
 
-	const Vector &GetNoiseMod() const 	{ return m_vNoiseMod; }
-	void SetNoiseMod( float x, float y, float z )	{ m_vNoiseMod.Init( x, y, z ); }
-	void SetNoiseMod( const Vector &noise ) { m_vNoiseMod = noise; }
+  const Vector &GetCurrentVelocity() const { return m_vCurrentVelocity; }
+  void SetCurrentVelocity(const Vector &vNewVel) {
+    m_vCurrentVelocity = vNewVel;
+  }
 
-	void TranslateNavGoal( CBaseEntity *pTarget, Vector &chasePosition );
+  const Vector &GetNoiseMod() const { return m_vNoiseMod; }
+  void SetNoiseMod(float x, float y, float z) { m_vNoiseMod.Init(x, y, z); }
+  void SetNoiseMod(const Vector &noise) { m_vNoiseMod = noise; }
 
-	virtual void MoveToTarget(float flInterval, const Vector &MoveTarget) = 0;
+  void TranslateNavGoal(CBaseEntity * pTarget, Vector & chasePosition);
 
-	virtual float GetHeadTurnRate( void ) { return 15.0f; }	// Degrees per second
+  virtual void MoveToTarget(float flInterval, const Vector &MoveTarget) = 0;
 
-	bool CreateVPhysics( void );
-	IMotionEvent::simresult_e Simulate( IPhysicsMotionController *pController, IPhysicsObject *pObject, float deltaTime, Vector &linear, AngularImpulse &angular );
+  virtual float GetHeadTurnRate(void) { return 15.0f; }  // Degrees per second
 
-	virtual void ClampMotorForces( Vector &linear, AngularImpulse &angular )
-	{ 
-		// limit reaction forces
-		linear.x = clamp( linear.x, -3000, 3000 );
-		linear.y = clamp( linear.y, -3000, 3000 );
-		linear.z = clamp( linear.z, -3000, 3000 );
+  bool CreateVPhysics(void);
+  IMotionEvent::simresult_e Simulate(IPhysicsMotionController * pController,
+                                     IPhysicsObject * pObject, float deltaTime,
+                                     Vector &linear, AngularImpulse &angular);
 
-		// add in weightlessness
-		linear.z += 800;
-	}
+  virtual void ClampMotorForces(Vector & linear, AngularImpulse & angular) {
+    // limit reaction forces
+    linear.x = std::clamp(linear.x, -3000.0f, 3000.0f);
+    linear.y = std::clamp(linear.y, -3000.0f, 3000.0f);
+    linear.z = std::clamp(linear.z, -3000.0f, 3000.0f);
 
-	// -------------------------------
-	//  Movement vars
-	// -------------------------------
-	Vector m_vCurrentVelocity;
-	Vector m_vCurrentBanking;
-	Vector m_vNoiseMod;
-	float m_fHeadYaw;
-	Vector m_vLastPatrolDir;
-	IPhysicsMotionController	*m_pMotionController;
+    // add in weightlessness
+    linear.z += 800;
+  }
+
+  // -------------------------------
+  //  Movement vars
+  // -------------------------------
+  Vector m_vCurrentVelocity;
+  Vector m_vCurrentBanking;
+  Vector m_vNoiseMod;
+  float m_fHeadYaw;
+  Vector m_vLastPatrolDir;
+  IPhysicsMotionController *m_pMotionController;
 };
 
-#endif // AI_BASENPC_PHYSICSFLYER_H
+#endif  // AI_BASENPC_PHYSICSFLYER_H

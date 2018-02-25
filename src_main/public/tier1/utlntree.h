@@ -11,13 +11,13 @@
 
 #define INVALID_NTREE_IDX ((I)~0)
 
-//-----------------------------------------------------------------------------
+
 // class CUtlNTree:
 // description:
 //		A lovely index-based linked list! T is the class type, I is the
 // index 		type, which usually should be an unsigned short or
 // smaller.
-//-----------------------------------------------------------------------------
+
 template <class T, class I = unsigned short>
 class CUtlNTree {
  public:
@@ -124,9 +124,9 @@ class CUtlNTree {
   Node_t* m_pElements;
 };
 
-//-----------------------------------------------------------------------------
+
 // constructor, destructor
-//-----------------------------------------------------------------------------
+
 
 template <class T, class I>
 CUtlNTree<T, I>::CUtlNTree(int growSize, int initSize)
@@ -154,9 +154,9 @@ void CUtlNTree<T, I>::ConstructList() {
   m_ElementCount = m_MaxElementIndex = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // gets particular elements
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline T& CUtlNTree<T, I>::Element(I i) {
   return m_Memory[i].m_Element;
@@ -177,9 +177,9 @@ inline const T& CUtlNTree<T, I>::operator[](I i) const {
   return m_Memory[i].m_Element;
 }
 
-//-----------------------------------------------------------------------------
+
 // list statistics
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline int CUtlNTree<T, I>::Count() const {
   return m_ElementCount;
@@ -190,9 +190,9 @@ inline I CUtlNTree<T, I>::MaxElementIndex() const {
   return m_MaxElementIndex;
 }
 
-//-----------------------------------------------------------------------------
+
 // Traversing the list
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline I CUtlNTree<T, I>::Root() const {
   return m_Root;
@@ -222,9 +222,9 @@ inline I CUtlNTree<T, I>::Parent(I i) const {
   return InternalNode(i).m_Parent;
 }
 
-//-----------------------------------------------------------------------------
+
 // Are nodes in the list or valid?
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 inline bool CUtlNTree<T, I>::IsValidIndex(I i) const {
   return (i < m_MaxElementIndex) && (i >= 0);
@@ -236,9 +236,9 @@ inline bool CUtlNTree<T, I>::IsInTree(I i) const {
          (InternalNode(i).m_PrevSibling != i);
 }
 
-//-----------------------------------------------------------------------------
+
 // Makes sure we have enough memory allocated to store a requested # of elements
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::EnsureCapacity(int num) {
   MEM_ALLOC_CREDIT_CLASS();
@@ -246,9 +246,9 @@ void CUtlNTree<T, I>::EnsureCapacity(int num) {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Deallocate memory
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::Purge() {
   RemoveAll();
@@ -258,9 +258,9 @@ void CUtlNTree<T, I>::Purge() {
   ResetDbgInfo();
 }
 
-//-----------------------------------------------------------------------------
+
 // Node allocation/deallocation
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 I CUtlNTree<T, I>::AllocInternal() {
   I elem;
@@ -337,9 +337,9 @@ void CUtlNTree<T, I>::FreeSubTree(I elem) {
   Free(elem);
 }
 
-//-----------------------------------------------------------------------------
+
 // Clears the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::RemoveAll() {
   if (m_MaxElementIndex == 0) return;
@@ -365,9 +365,9 @@ void CUtlNTree<T, I>::RemoveAll() {
   m_ElementCount = 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // list modification
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::SetRoot(I root) {
   // Resetting the root while it's got stuff in it is bad...
@@ -375,9 +375,9 @@ void CUtlNTree<T, I>::SetRoot(I root) {
   m_Root = root;
 }
 
-//-----------------------------------------------------------------------------
+
 // Links a node after a particular node
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::LinkChildAfter(I parent, I after, I elem) {
   Assert(IsInTree(elem));
@@ -413,9 +413,9 @@ void CUtlNTree<T, I>::LinkChildAfter(I parent, I after, I elem) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Links a node before a particular node
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::LinkChildBefore(I parent, I before, I elem) {
   Assert(IsValidIndex(elem));
@@ -449,9 +449,9 @@ void CUtlNTree<T, I>::LinkChildBefore(I parent, I before, I elem) {
   LinkChildAfter(parent, after, elem);
 }
 
-//-----------------------------------------------------------------------------
+
 // Unlinks a node from the tree
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::Unlink(I elem) {
   Assert(IsInTree(elem));
@@ -483,9 +483,9 @@ void CUtlNTree<T, I>::Unlink(I elem) {
       INVALID_NTREE_IDX;
 }
 
-//-----------------------------------------------------------------------------
+
 // Alloc + link combined
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 I CUtlNTree<T, I>::InsertChildBefore(I parent, I before) {
   I elem = AllocInternal();
@@ -518,9 +518,9 @@ I CUtlNTree<T, I>::InsertChildAfter(I parent, I after, const T& data) {
   return elem;
 }
 
-//-----------------------------------------------------------------------------
+
 // Unlink + free combined
-//-----------------------------------------------------------------------------
+
 template <class T, class I>
 void CUtlNTree<T, I>::Remove(I elem) {
   Unlink(elem);

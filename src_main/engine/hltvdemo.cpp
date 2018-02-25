@@ -265,7 +265,7 @@ void CHLTVDemoRecorder::WriteFrame(CHLTVFrame *pFrame) {
 #ifndef SHARED_NET_STRING_TABLES
   // Update shared client/server string tables. Must be done before sending
   // entities
-  sv.m_StringTables->WriteUpdateMessage(NULL, max(m_nSignonTick, m_nDeltaTick),
+  sv.m_StringTables->WriteUpdateMessage(NULL, std::max(m_nSignonTick, m_nDeltaTick),
                                         msg);
 #endif
 

@@ -271,7 +271,7 @@ void ServerDTI_AddEntityEncodeEvent(SendTable *pSendTable, float distToPlayer) {
   if (!pTable) return;
 
   int iDist = (int)(distToPlayer / DELTA_DISTANCE_BAND);
-  iDist = clamp(iDist, 0, NUM_DELTA_DISTANCE_BANDS - 1);
+  iDist = std::clamp(iDist, 0, NUM_DELTA_DISTANCE_BANDS - 1);
   pTable->m_DistanceDeltaCounts[iDist]++;
 }
 

@@ -51,9 +51,9 @@ static inline void myfwrite(void const *data, int size1, int size2,
   g_pFullFileSystem->Write(data, size1 * size2, fileHandle);
 }
 
-//-----------------------------------------------------------------------------
+
 // FIXME: assumes that we don't need to do gamma correction.
-//-----------------------------------------------------------------------------
+
 bool WriteToBuffer(unsigned char *pImageData, CUtlBuffer &buffer, int width,
                    int height, ImageFormat srcFormat, ImageFormat dstFormat) {
   TGAHeader_t header;

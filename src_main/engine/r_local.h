@@ -24,7 +24,7 @@ extern VMatrix g_BrushToWorldMatrix;
 
 class IClientEntity;
 
-colorVec R_LightPoint(Vector& p);
+color32 R_LightPoint(Vector& p);
 
 // returns surfID
 SurfaceHandle_t R_LightVec(const Vector& start, const Vector& end,

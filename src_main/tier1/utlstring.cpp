@@ -4,9 +4,9 @@
 
 #include "tier1/strtools.h"
 
-//-----------------------------------------------------------------------------
+
 // Base class, containing simple memory management
-//-----------------------------------------------------------------------------
+
 CUtlBinaryBlock::CUtlBinaryBlock(int growSize, int initSize)
     : m_Memory(growSize, initSize) {
   m_nActualLength = 0;
@@ -92,9 +92,9 @@ bool CUtlBinaryBlock::operator==(const CUtlBinaryBlock &src) const {
   return !memcmp(src.Get(), Get(), Length());
 }
 
-//-----------------------------------------------------------------------------
+
 // Simple string class.
-//-----------------------------------------------------------------------------
+
 CUtlString::CUtlString() {}
 
 CUtlString::CUtlString(const char *pString) { Set(pString); }
@@ -269,9 +269,9 @@ int CUtlString::Format(const char *pFormat, ...) {
   return len;
 }
 
-//-----------------------------------------------------------------------------
+
 // Strips the trailing slash
-//-----------------------------------------------------------------------------
+
 void CUtlString::StripTrailingSlash() {
   if (IsEmpty()) return;
 

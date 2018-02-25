@@ -17,19 +17,19 @@
 #error "implement me"
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations
-//-----------------------------------------------------------------------------
+
 class ConVar;
 class CCommand;
 class ConCommand;
 class ConCommandBase;
 struct characterset_t;
 
-//-----------------------------------------------------------------------------
+
 // Any executable that wants to use ConVars need to implement one of
 // these to hook up access to console variables.
-//-----------------------------------------------------------------------------
+
 class IConCommandBaseAccessor {
  public:
   // Flags is a combination of FCVAR flags in cvar.h.
@@ -37,32 +37,32 @@ class IConCommandBaseAccessor {
   virtual bool RegisterConCommandBase(ConCommandBase *pVar) = 0;
 };
 
-//-----------------------------------------------------------------------------
+
 // Helper method for console development
-//-----------------------------------------------------------------------------
+
 #if defined(_X360) && !defined(_RETAIL)
 void ConVar_PublishToVXConsole();
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Called when a ConCommand needs to execute
-//-----------------------------------------------------------------------------
+
 typedef void (*FnCommandCallbackV1_t)();
 typedef void (*FnCommandCallback_t)(const CCommand &command);
 
 #define COMMAND_COMPLETION_MAXITEMS 64
 #define COMMAND_COMPLETION_ITEM_LENGTH 64
 
-//-----------------------------------------------------------------------------
+
 // Returns 0 to COMMAND_COMPLETION_MAXITEMS worth of completion strings
-//-----------------------------------------------------------------------------
+
 typedef int (*FnCommandCompletionCallback)(
     const char *partial,
     char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH]);
 
-//-----------------------------------------------------------------------------
+
 // Interface version
-//-----------------------------------------------------------------------------
+
 class ICommandCallback {
  public:
   virtual void CommandCallback(const CCommand &command) = 0;
@@ -74,9 +74,9 @@ class ICommandCompletionCallback {
                                         CUtlVector<CUtlString> &commands) = 0;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The base console invoked command/cvar interface
-//-----------------------------------------------------------------------------
+
 class ConCommandBase {
   friend class CCvar;
   friend class ConVar;
@@ -154,9 +154,9 @@ class ConCommandBase {
   static IConCommandBaseAccessor *s_pAccessor;
 };
 
-//-----------------------------------------------------------------------------
+
 // Command tokenizer
-//-----------------------------------------------------------------------------
+
 class CCommand {
  public:
   CCommand();
@@ -221,9 +221,9 @@ inline const char *CCommand::operator[](int nIndex) const {
   return Arg(nIndex);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: The console invoked command
-//-----------------------------------------------------------------------------
+
 class ConCommand : public ConCommandBase {
   friend class CCvar;
 
@@ -278,9 +278,9 @@ class ConCommand : public ConCommandBase {
   bool m_bUsingCommandCallbackInterface : 1;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: A console variable
-//-----------------------------------------------------------------------------
+
 class ConVar : public ConCommandBase, public IConVar {
   friend class CCvar;
   friend class ConVarRef;
@@ -383,33 +383,33 @@ class ConVar : public ConCommandBase, public IConVar {
   FnChangeCallback_t m_fnChangeCallback;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as a float
 // Output : float
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR float ConVar::GetFloat(void) const {
   return m_pParent->m_fValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as an int
 // Output : int
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR int ConVar::GetInt(void) const { return m_pParent->m_nValue; }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as a string, return "" for bogus string pointer,
 // etc. Output : const char *
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR const char *ConVar::GetString(void) const {
   if (m_nFlags & FCVAR_NEVER_AS_STRING) return "FCVAR_NEVER_AS_STRING";
 
   return (m_pParent->m_pszString) ? m_pParent->m_pszString : "";
 }
 
-//-----------------------------------------------------------------------------
+
 // Used to read/write convars that already exist (replaces the FindVar method)
-//-----------------------------------------------------------------------------
+
 class ConVarRef {
  public:
   ConVarRef(const char *pName);
@@ -442,9 +442,9 @@ class ConVarRef {
   ConVar *m_pConVarState;
 };
 
-//-----------------------------------------------------------------------------
+
 // Did we find an existing convar of that name?
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR bool ConVarRef::IsFlagSet(int nFlags) const {
   return (m_pConVar->IsFlagSet(nFlags) != 0);
 }
@@ -455,24 +455,24 @@ FORCEINLINE_CVAR const char *ConVarRef::GetName() const {
   return m_pConVar->GetName();
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as a float
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR float ConVarRef::GetFloat(void) const {
   return m_pConVarState->m_fValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as an int
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR int ConVarRef::GetInt(void) const {
   return m_pConVarState->m_nValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Return ConVar value as a string, return "" for bogus string pointer,
 // etc.
-//-----------------------------------------------------------------------------
+
 FORCEINLINE_CVAR const char *ConVarRef::GetString(void) const {
   Assert(!IsFlagSet(FCVAR_NEVER_AS_STRING));
   return m_pConVarState->m_pszString;
@@ -498,22 +498,22 @@ FORCEINLINE_CVAR const char *ConVarRef::GetDefault() const {
   return m_pConVarState->m_pszDefaultValue;
 }
 
-//-----------------------------------------------------------------------------
+
 // Called by the framework to register ConCommands with the ICVar
-//-----------------------------------------------------------------------------
+
 void ConVar_Register(int nCVarFlag = 0,
                      IConCommandBaseAccessor *pAccessor = NULL);
 void ConVar_Unregister();
 
-//-----------------------------------------------------------------------------
+
 // Utility methods
-//-----------------------------------------------------------------------------
+
 void ConVar_PrintFlags(const ConCommandBase *var);
 void ConVar_PrintDescription(const ConCommandBase *pVar);
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Utility class to quickly allow ConCommands to call member methods
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CConCommandMemberAccessor : public ConCommand,
                                   public ICommandCallback,
@@ -556,9 +556,9 @@ class CConCommandMemberAccessor : public ConCommand,
   FnMemberCommandCompletionCallback_t m_CompletionFunc;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Utility macros to quicky generate a simple console command
-//-----------------------------------------------------------------------------
+
 #define CON_COMMAND(name, description)                        \
   static void name(const CCommand &args);                     \
   static ConCommand name##_command(#name, name, description); \

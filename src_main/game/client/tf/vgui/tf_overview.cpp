@@ -638,7 +638,7 @@ bool CTFMapOverview::DrawCapturePoint( int iCP, MapObject_t *obj )
 
 		if ( requiredPlayers > 1 )
 		{
-			numPlayers = min( numPlayers, requiredPlayers );
+			numPlayers = std::min( numPlayers, requiredPlayers );
 
 			wchar_t wText[6];
 			_snwprintf( wText, sizeof(wText)/sizeof(wchar_t), L"%d", numPlayers );
@@ -820,7 +820,7 @@ void CTFMapOverview::DrawMapOverlayTexture()
 			Vertex_t( MapToPanel ( Vector2D(0,OVERVIEW_MAP_SIZE-1) ), Vector2D(0,1) )
 	};
 
-	int alpha = 255.0f * overview_alpha.GetFloat(); clamp( alpha, 1, 255 );
+	int alpha = 255.0f * overview_alpha.GetFloat(); std::clamp( alpha, 1, 255 );
 
 	surface()->DrawSetColor( 255,255,255, alpha );
 	surface()->DrawSetTexture( m_nMapTextureOverlayID );

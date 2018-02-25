@@ -151,7 +151,7 @@ void CC4Panel::OnTick()
 	{
 		//Initial display
 		char buf[8];
-		Q_strncpy( buf, cArmedDisplay, min( sizeof(buf), sizeof(cArmedDisplay) ) );
+		Q_strncpy( buf, cArmedDisplay, std::min( sizeof(buf), sizeof(cArmedDisplay) ) );
 
 		int iDigitPos = 0;
 		while( flProgress < flTransitionTimes[iDigitPos] )

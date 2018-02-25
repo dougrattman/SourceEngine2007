@@ -904,7 +904,7 @@ void COptionsDialogXbox::ChangeValue(float fChange) {
 
         float fOldValue = varOption.GetFloat();
         float fValue =
-            clamp(fOldValue + fIncValue, m_pSelectedOption->fMinValue,
+            std::clamp(fOldValue + fIncValue, m_pSelectedOption->fMinValue,
                   m_pSelectedOption->fMaxValue);
 
         if (fOldValue != fValue) {

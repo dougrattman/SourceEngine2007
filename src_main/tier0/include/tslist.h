@@ -22,6 +22,7 @@
 #include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/threadtools.h"
+#include "tier0/include/tier0_api.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -40,8 +41,8 @@
 #define TSLIST_HEAD_ALIGN DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
 #define TSLIST_NODE_ALIGN DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
 
-PLATFORM_INTERFACE bool RunTSQueueTests(i32 nListSize = 10000, i32 nTests = 1);
-PLATFORM_INTERFACE bool RunTSListTests(i32 nListSize = 10000, i32 nTests = 1);
+SOURCE_TIER0_API bool RunTSQueueTests(i32 nListSize = 10000, i32 nTests = 1);
+SOURCE_TIER0_API bool RunTSListTests(i32 nListSize = 10000, i32 nTests = 1);
 
 // Lock free list.
 
@@ -70,8 +71,6 @@ union TSLHead_t {
   i64 value64;
 };
 #endif
-
-//-------------------------------------
 
 class TSLIST_HEAD_ALIGN CTSListBase {
  public:
@@ -277,7 +276,6 @@ class TSLIST_HEAD_ALIGN CTSPool : public CTSListBase {
   }
 };
 
-//-----------------------------------------------------------------------------
 // Lock free queue
 //
 // A special consideration: the element type should be simple. This code
@@ -289,7 +287,6 @@ class TSLIST_HEAD_ALIGN CTSPool : public CTSListBase {
 // The PushItem()/PopItem() for handles this by keeping a persistent
 // free list. Dont mix Push/PushItem. Note also nodes will be freed at the end,
 // and are expected to have been allocated with operator new.
-//-----------------------------------------------------------------------------
 
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)

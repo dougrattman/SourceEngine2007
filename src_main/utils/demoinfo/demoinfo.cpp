@@ -4,7 +4,7 @@
 //
 // $NoKeywords: $
 //=============================================================================//
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 #include "FileSystem.h"
 #include "FileSystem_Tools.h"

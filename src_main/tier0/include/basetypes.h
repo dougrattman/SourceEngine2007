@@ -5,7 +5,6 @@
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
-
 #include "tier0/include/commonmacros.h"
 #include "tier0/include/floattypes.h"
 #include "tier0/include/wchartypes.h"
@@ -28,17 +27,8 @@ enum ThreeState_t {
 
 // Align |value| by |alignment|.
 template <typename T>
-constexpr inline T AlignValue(T value, usize alignment) {
+constexpr const inline T AlignValue(const T value, const usize alignment) {
   return (T)(((usize)(value) + alignment - 1) & ~(alignment - 1));
-}
-
-// Limit |value| in [|min|..|max|] boundary.
-template <typename T>
-constexpr inline T clamp(T const &value, T const &min, T const &max) {
-  if (value < min) return min;
-  if (value > max) return max;
-
-  return value;
 }
 
 // NOTE: This macro is the same as windows uses; so don't change the guts of it.
@@ -51,31 +41,40 @@ constexpr inline T clamp(T const &value, T const &min, T const &max) {
 // Forward declare handle with |name|.
 #define FORWARD_DECLARE_HANDLE(name) using name = struct name##__ *
 
-// TODO: Find a better home for this
+// TODO: Find a better home for this.
 #if !defined(_STATIC_LINKED) && !defined(PUBLISH_DLL_SUBSYSTEM)
-// for platforms built with dynamic linking, the dll interface does not need
+// For platforms built with dynamic linking, the dll interface does not need
 // spoofing.
 #define PUBLISH_DLL_SUBSYSTEM()
 #endif
 
-// FIXME: why are these here? Hardly anyone actually needs them.
+// FIXME: Why are these here? Hardly anyone actually needs them.
 struct color24 {
-  u8 r, g, b;
-};
+  color24() = default;
+  constexpr color24(u8 r_, u8 g_, u8 b_) : r{r_}, g{g_}, b{b_} {}
 
-struct color32 {
-  inline bool operator==(const color32 &other) const {
-    return r == other.r && g == other.g && b == other.b && a == other.a;
+  constexpr inline bool operator==(const color24 &other) const {
+    return r == other.r && g == other.g && b == other.b;
   }
-  inline bool operator!=(const color32 &other) const {
+  constexpr inline bool operator!=(const color24 &other) const {
     return !(*this == other);
   }
 
-  u8 r, g, b, a;
+  u8 r, g, b;
 };
 
-struct colorVec {
-  u32 r, g, b, a;
+struct color32 : public color24 {
+  color32() = default;
+  constexpr color32(u8 r_, u8 g_, u8 b_, u8 a_) : color24{r_, g_, b_}, a{a_} {}
+
+  constexpr inline bool operator==(const color32 &other) const {
+    return color24::operator==(other) && a == other.a;
+  }
+  constexpr inline bool operator!=(const color32 &other) const {
+    return !(*this == other);
+  }
+
+  u8 a;
 };
 
 struct vrect_t {

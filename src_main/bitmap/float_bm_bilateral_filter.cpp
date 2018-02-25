@@ -63,7 +63,7 @@ void FloatBitMap_t::TileableBilateralFilter(int radius_in_pixels,
   ctxs[0].edge_threshold_value = edge_threshold_value;
   ctxs[0].orig_bm = &orig;
   ctxs[0].dest_bm = this;
-  int nthreads = min(32, GetCPUInformation().m_nPhysicalProcessors);
+  int nthreads = std::min(32, (int)GetCPUInformation().m_nPhysicalProcessors);
   ThreadHandle_t waithandles[32];
   int starty = 0;
   int ystep = Height / nthreads;
@@ -73,7 +73,7 @@ void FloatBitMap_t::TileableBilateralFilter(int radius_in_pixels,
     ctxs[t].thread_number = t;
     ctxs[t].min_y = starty;
     if (t != nthreads - 1)
-      ctxs[t].max_y = min(Height - 1, starty + ystep - 1);
+      ctxs[t].max_y = std::min(Height - 1, starty + ystep - 1);
     else
       ctxs[t].max_y = Height - 1;
     waithandles[t] = CreateSimpleThread(TBFCalculationThreadFN, &ctxs[t]);

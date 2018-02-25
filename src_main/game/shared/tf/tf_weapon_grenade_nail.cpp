@@ -89,8 +89,8 @@ CTFGrenadeNailProjectile* CTFGrenadeNailProjectile::Create( const Vector &positi
 {
 	// Nail grenades are always thrown like discs
 	QAngle vecCustomAngles = angles;
-	vecCustomAngles.x = clamp( vecCustomAngles.x, -10,10 );
-	vecCustomAngles.z = clamp( vecCustomAngles.x, -10,10 );
+	vecCustomAngles.x = std::clamp( vecCustomAngles.x, -10,10 );
+	vecCustomAngles.z = std::clamp( vecCustomAngles.x, -10,10 );
 	Vector vecCustomAngVelocity = vec3_origin;
 	vecCustomAngVelocity.z = RandomFloat( -600, 600 );
 	CTFGrenadeNailProjectile *pGrenade = static_cast<CTFGrenadeNailProjectile*>( CTFWeaponBaseGrenadeProj::Create( "tf_weapon_grenade_nail_projectile", position, vecCustomAngles, velocity, vecCustomAngVelocity, pOwner, weaponInfo, timer, iFlags ) );

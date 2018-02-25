@@ -149,7 +149,7 @@ public:
 	{
 		m_azimuth  += 0.002f * ( m_lastx - x );
 		m_altitude -= 0.002f * ( m_lasty - y );
-		m_altitude = max( -M_PI/2, min( M_PI/2, m_altitude ) );
+		m_altitude = std::max( -M_PI/2, std::min( M_PI/2, m_altitude ) );
 	
 		m_lastx = x;
 		m_lasty = y;
@@ -366,8 +366,8 @@ void CSimplePotteryWheelPanel::SetLightProbe( CDmElement *pLightProbe )
 		const char *pType = pLocalLight->GetValueString( "name" );
 
 		const Vector& vecColor = pLocalLight->GetValue<Vector>( "color" );
-		float flIntensity = max( vecColor.x, vecColor.y );
-		flIntensity = max( flIntensity, vecColor.z );
+		float flIntensity = std::max( vecColor.x, vecColor.y );
+		flIntensity = std::max( flIntensity, vecColor.z );
 		if ( flIntensity == 0.0f )
 		{
 			flIntensity = 1.0f;

@@ -943,7 +943,7 @@ void CDmeFilmClip::DrawOverlay(DmeTime_t time, Rect_t &currentRect,
     fade = (time - GetStartTime()) / fadeIn;
   }
   if (time > GetEndTime() - fadeOut) {
-    fade = min(fade, (GetEndTime() - time) / fadeOut);
+    fade = std::min(fade, (GetEndTime() - time) / fadeOut);
   }
   if (fade < 1.0f) {
     if (!m_FadeMaterial.IsValid()) {

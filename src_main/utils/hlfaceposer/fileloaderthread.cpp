@@ -184,7 +184,7 @@ int CFileLoaderThread::DoThreadWork()
 	if ( !remaining )
 		return 1;
 
-	int workitems = remaining; // min( remaining, 1000 );
+	int workitems = remaining; // std::min( remaining, 1000 );
 
 	CUtlVector< SentenceRequest * > transfer;
 

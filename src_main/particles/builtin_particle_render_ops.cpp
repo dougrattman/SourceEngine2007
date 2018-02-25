@@ -1,13 +1,12 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: particle system code
+
+#include "particles/particles.h"
 
 #include "filesystem.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialvar.h"
 #include "materialsystem/imesh.h"
 #include "materialsystem/itexture.h"
-#include "particles/particles.h"
 #include "psheet.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/vprof.h"
@@ -44,7 +43,7 @@ static inline int GetMaxParticlesPerBatch(IMatRenderContext *pRenderContext,
   if (bWithInstancing)
     return nMaxVertices;
   else
-    return min((nMaxVertices / 4), (nMaxIndices / 6));
+    return std::min((nMaxVertices / 4), (nMaxIndices / 6));
 }
 
 static SheetSequenceSample_t s_DefaultSheetSequence = {
@@ -92,7 +91,7 @@ void C_OP_RenderPoints::Render(IMatRenderContext *pRenderContext,
   while (nParticles) {
     IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
 
-    int nParticlesInBatch = min(nMaxVertices, nParticles);
+    int nParticlesInBatch = std::min(nMaxVertices, nParticles);
     meshBuilder.Begin(pMesh, MATERIAL_POINTS, nParticlesInBatch);
     nParticles -= nParticlesInBatch;
     for (int i = 0; i < nParticlesInBatch; i++) {
@@ -289,7 +288,7 @@ const SheetSequenceSample_t *GetSampleForSequence(CSheet *pSheet,
   flAge *= flAgeScale;
   unsigned int nFrame = flAge;
   if (pSheet->m_bClamp[nSequence]) {
-    nFrame = min(nFrame, SEQUENCE_SAMPLE_COUNT - 1);
+    nFrame = std::min(nFrame, SEQUENCE_SAMPLE_COUNT - 1);
   } else {
     nFrame &= SEQUENCE_SAMPLE_COUNT - 1;
   }
@@ -378,7 +377,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardCameraFacing(
 
   CSheet *pSheet = pParticles->m_Sheet();
   while (nParticles) {
-    int nParticlesInBatch = min(nMaxParticlesInBatch, nParticles);
+    int nParticlesInBatch = std::min(nMaxParticlesInBatch, nParticles);
     nParticles -= nParticlesInBatch;
     IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
     CMeshBuilder meshBuilder;
@@ -611,7 +610,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardZRotating(
   int nMaxParticlesInBatch =
       GetMaxParticlesPerBatch(pRenderContext, pMaterial, false);
   while (nParticles) {
-    int nParticlesInBatch = min(nMaxParticlesInBatch, nParticles);
+    int nParticlesInBatch = std::min(nMaxParticlesInBatch, nParticles);
     nParticles -= nParticlesInBatch;
 
     IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
@@ -781,7 +780,7 @@ void C_OP_RenderSprites::RenderNonSpriteCardOriented(
   int nMaxParticlesInBatch =
       GetMaxParticlesPerBatch(pRenderContext, pMaterial, false);
   while (nParticles) {
-    int nParticlesInBatch = min(nMaxParticlesInBatch, nParticles);
+    int nParticlesInBatch = std::min(nMaxParticlesInBatch, nParticles);
     nParticles -= nParticlesInBatch;
 
     IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
@@ -857,7 +856,8 @@ void C_OP_RenderSprites::RenderSpriteCard(CMeshBuilder &meshBuilder,
     float flAgeScale = info.m_flAgeScale;
     // 		if ( m_bFitCycleToLifetime )
     // 		{
-    // 			float flLifetime = SubFloat( pLifeDuration[ nGroup * ld_stride
+    // 			float flLifetime = SubFloat( pLifeDuration[ nGroup *
+    // ld_stride
     // ], nOffset ); 			flAgeScale = ( flLifetime > 0.0f ) ?
     // ( 1.0f / flLifetime ) * SEQUENCE_SAMPLE_COUNT : 0.0f;
     // 		}
@@ -1156,7 +1156,7 @@ void C_OP_RenderSprites::Render(IMatRenderContext *pRenderContext,
   const ParticleRenderData_t *pSortList =
       pParticles->GetRenderList(pRenderContext, true, &nParticles);
   while (nParticles) {
-    int nParticlesInBatch = min(nMaxParticlesInBatch, nParticles);
+    int nParticlesInBatch = std::min(nMaxParticlesInBatch, nParticles);
     nParticles -= nParticlesInBatch;
 
     int vertexCount =
@@ -1204,7 +1204,7 @@ void C_OP_RenderSprites::RenderUnsorted(CParticleCollection *pParticles,
             "unimplemented sprite renderer for system \"%s\"!\n",
             pParticles->m_pDef->GetName());
         //			RenderUnsortedNonSpriteCardCameraFacing(
-        //pParticles, pContext, pRenderContext, meshBuilder, nVertexOffset,
+        // pParticles, pContext, pRenderContext, meshBuilder, nVertexOffset,
         // nFirstParticle, nParticleCount );
         break;
 
@@ -1404,7 +1404,7 @@ void C_OP_RenderSpritesTrail::RenderSpriteTrail(CMeshBuilder &meshBuilder,
       SubFloat(info.m_pLength[nGroup * info.length_stride], nOffset);
   if (flLength <= 0.0f) return;
 
-  flLength = max(m_flMinLength, min(m_flMaxLength, flLength));
+  flLength = std::max(m_flMinLength, std::min(m_flMaxLength, flLength));
 
   vecDelta *= flLength;
 
@@ -1487,7 +1487,7 @@ void C_OP_RenderSpritesTrail::Render(IMatRenderContext *pRenderContext,
   float flOODt =
       (pParticles->m_flDt != 0.0f) ? (1.0f / pParticles->m_flDt) : 1.0f;
   while (nParticles) {
-    int nParticlesInBatch = min(nMaxParticlesInBatch, nParticles);
+    int nParticlesInBatch = std::min(nMaxParticlesInBatch, nParticles);
     nParticles -= nParticlesInBatch;
 
     IMesh *pMesh = pRenderContext->GetDynamicMesh(true);
@@ -1730,8 +1730,9 @@ void C_OP_RenderRope::RenderSpriteCard(CParticleCollection *pParticles,
   int nNumIndicesPerSegment = 6 * m_nSubdivCount;
   int nNumVerticesPerSegment = 2 * m_nSubdivCount;
 
-  int nNumSegmentsPerBatch = min((nMaxVertices - 2) / nNumVerticesPerSegment,
-                                 (nMaxIndices) / nNumIndicesPerSegment);
+  int nNumSegmentsPerBatch =
+      std::min((nMaxVertices - 2) / nNumVerticesPerSegment,
+               (nMaxIndices) / nNumIndicesPerSegment);
 
   const float *pXYZ =
       pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_XYZ, 0);
@@ -1747,7 +1748,7 @@ void C_OP_RenderRope::RenderSpriteCard(CParticleCollection *pParticles,
   CMeshBuilder meshBuilder;
 
   int nNumSegmentsIWillRenderPerBatch =
-      min(nNumSegmentsPerBatch, nSegmentsToRender);
+      std::min(nNumSegmentsPerBatch, nSegmentsToRender);
 
   bool bFirstPoint = true;
 
@@ -1980,11 +1981,11 @@ void C_OP_RenderRope::RenderUnsorted(CParticleCollection *pParticles,
           (seg[nCurr].m_flWidth - seg[nPrev].m_flWidth) * flOOSubDivCount;
       for (int iSubdiv = 1; iSubdiv < m_nSubdivCount; ++iSubdiv) {
         subDivSeg.m_vColor += vecColorInc;
-        subDivSeg.m_vColor.x = clamp(subDivSeg.m_vColor.x, 0.0f, 1.0f);
-        subDivSeg.m_vColor.y = clamp(subDivSeg.m_vColor.y, 0.0f, 1.0f);
-        subDivSeg.m_vColor.z = clamp(subDivSeg.m_vColor.z, 0.0f, 1.0f);
+        subDivSeg.m_vColor.x = std::clamp(subDivSeg.m_vColor.x, 0.0f, 1.0f);
+        subDivSeg.m_vColor.y = std::clamp(subDivSeg.m_vColor.y, 0.0f, 1.0f);
+        subDivSeg.m_vColor.z = std::clamp(subDivSeg.m_vColor.z, 0.0f, 1.0f);
         subDivSeg.m_flAlpha += flAlphaInc;
-        subDivSeg.m_flAlpha = clamp(subDivSeg.m_flAlpha, 0.0f, 1.0f);
+        subDivSeg.m_flAlpha = std::clamp(subDivSeg.m_flAlpha, 0.0f, 1.0f);
         subDivSeg.m_flTexCoord += flTexcoordInc;
         subDivSeg.m_flWidth += flWidthInc;
 

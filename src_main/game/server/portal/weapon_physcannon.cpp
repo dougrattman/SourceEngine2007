@@ -414,7 +414,7 @@ static void ComputePlayerMatrix( CBasePlayer *pPlayer, matrix3x4_t &out )
 	
 	// 0-360 / -180-180
 	//angles.x = init ? 0 : AngleDistance( angles.x, 0 );
-	//angles.x = clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE, PLAYER_LOOK_PITCH_RANGE );
+	//angles.x = std::clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE, PLAYER_LOOK_PITCH_RANGE );
 	angles.x = 0;
 
 	float feet = pPlayer->GetAbsOrigin().z + pPlayer->WorldAlignMins().z;
@@ -673,7 +673,7 @@ float CGrabController::ComputeError()
 		QAngle playerAngles = pPortalPlayer->EyeAngles();
 
 		float pitch = AngleDistance(playerAngles.x,0);
-		playerAngles.x = clamp( pitch, -75, 75 );
+		playerAngles.x = std::clamp( pitch, -75, 75 );
 		AngleVectors( playerAngles, &forward, &right, &up );
 
 		Vector start = pPortalPlayer->Weapon_ShootPosition();
@@ -713,7 +713,7 @@ void CGrabController::ComputeMaxSpeed( CBaseEntity *pEntity, IPhysicsObject *pPh
 	if ( flMass <= flMaxMass )
 		return;
 
-	float flLerpFactor = clamp( flMass, flMaxMass, 500.0f );
+	float flLerpFactor = std::clamp( flMass, flMaxMass, 500.0f );
 	flLerpFactor = SimpleSplineRemapVal( flLerpFactor, flMaxMass, 500.0f, 0.0f, 1.0f );
 
 	float invMass = pPhysics->GetInvMass();
@@ -1281,7 +1281,7 @@ void CPlayerPickupController::Use( CBaseEntity *pActivator, CBaseEntity *pCaller
 
 			((CPortal_Player *)m_pPlayer)->SetHeldObjectOnOppositeSideOfPortal( false );
 			// JAY: Scale this with mass because some small objects really go flying
-			float massFactor = clamp( pPhys->GetMass(), 0.5, 15 );
+			float massFactor = std::clamp( pPhys->GetMass(), 0.5, 15 );
 			massFactor = RemapVal( massFactor, 0.5, 15, 0.5, 4 );
 			vecLaunch *= player_throwforce.GetFloat() * massFactor;
 
@@ -2009,7 +2009,7 @@ void CWeaponPhysCannon::PuntVPhysics( CBaseEntity *pEntity, const Vector &vecFor
 			{
 				maxMass *= 2.5;	// 625 for vehicles
 			}
-			float mass = min(totalMass, maxMass); // max 250kg of additional force
+			float mass = std::min(totalMass, maxMass); // max 250kg of additional force
 
 			// Put some spin on the object
 			for ( i = 0; i < listCount; i++ )
@@ -2021,7 +2021,7 @@ void CWeaponPhysCannon::PuntVPhysics( CBaseEntity *pEntity, const Vector &vecFor
 				if ( pList[i] == pEntity->VPhysicsGetObject() )
 				{
 					ratio += hitObjectFactor;
-					ratio = min(ratio,1.0f);
+					ratio = std::min(ratio,1.0f);
 				}
 				else
 				{
@@ -2869,11 +2869,11 @@ bool CGrabController::UpdateObject( CBasePlayer *pPlayer, float flError )
 	float pitch = AngleDistance(playerAngles.x,0);
 	if( !m_bAllowObjectOverhead )
 	{
-		playerAngles.x = clamp( pitch, -75, 75 );
+		playerAngles.x = std::clamp( pitch, -75, 75 );
 	}
 	else
 	{
-		playerAngles.x = clamp( pitch, -90, 75 );
+		playerAngles.x = std::clamp( pitch, -90, 75 );
 	}
 	AngleVectors( playerAngles, &forward, &right, &up );
 
@@ -3786,7 +3786,7 @@ float CWeaponPhysCannon::GetLoadPercentage( void )
 {
 	float loadWeight = m_grabController.GetLoadWeight();
 	loadWeight /= physcannon_maxmass.GetFloat();	
-	loadWeight = clamp( loadWeight, 0.0f, 1.0f );
+	loadWeight = std::clamp( loadWeight, 0.0f, 1.0f );
 	return loadWeight;
 }
 

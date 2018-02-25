@@ -281,7 +281,7 @@ class CPluginHudMessage : public vgui::Frame {
   void OnSizeChanged(int newWide, int newTall);
 
  private:
-  enum { MESSAGE_X_INSET = 40, MAX_TEXT_LEN_PIXELS = 400 };
+  enum : int { MESSAGE_X_INSET = 40, MAX_TEXT_LEN_PIXELS = 400 };
 
   CMessage *m_Message;
   vgui::ImagePanel *m_pExtraPanelIcon;
@@ -354,7 +354,7 @@ void CPluginHudMessage::ApplySchemeSettings(vgui::IScheme *pScheme) {
 // says to
 //-----------------------------------------------------------------------------
 void CPluginHudMessage::OnTick() {
-  m_pAnimationController->UpdateAnimations(Sys_FloatTime());
+  m_pAnimationController->UpdateAnimations(Plat_FloatTime());
   BaseClass::OnTick();
 }
 
@@ -412,7 +412,7 @@ void CPluginHudMessage::ShowMessage(const wchar_t *text, int time, Color clr,
   int textW, textH;
   m_Message->GetContentSize(textW, textH);
 
-  textW = min(textW + MESSAGE_X_INSET + 10, MAX_TEXT_LEN_PIXELS);
+  textW = std::min(textW + MESSAGE_X_INSET + 10, (int)MAX_TEXT_LEN_PIXELS);
   SetSize(textW, m_iTargetH);  // the "small" animation event changes our size
 }
 
@@ -451,7 +451,7 @@ void CPluginUIManager::OnTick() {
 
   if (m_iMessageDisplayUntil != 0 && !EngineVGui()->IsGameUIVisible() &&
       m_iMessageDisplayUntil <
-          Sys_FloatTime())  // check the GameUI large message
+          Plat_FloatTime())  // check the GameUI large message
   {
     m_pGameUIDialog->SetVisible(false);
     m_pHudMessage->Hide();
@@ -460,7 +460,7 @@ void CPluginUIManager::OnTick() {
   }
 
   if (m_iHudDisplayUntil != 0 &&
-      m_iHudDisplayUntil < Sys_FloatTime())  // check the hud panel
+      m_iHudDisplayUntil < Plat_FloatTime())  // check the hud panel
   {
     m_pHudMessage->StartHiding();
     m_iHudDisplayUntil = 0;
@@ -509,13 +509,13 @@ void CPluginUIManager::Show(DIALOG_TYPE type, KeyValues *kv) {
 
   if (type != DIALOG_MSG) {
     m_iMessageDisplayUntil =
-        Sys_FloatTime() + min(max(kv->GetInt("time", 10), 10), 200);
+        Plat_FloatTime() + std::min(std::max(kv->GetInt("time", 10), 10), 200);
   } else {
-    m_iMessageDisplayUntil = Sys_FloatTime() + 10;
+    m_iMessageDisplayUntil = Plat_FloatTime() + 10;
   }
 
   m_iHudDisplayUntil =
-      Sys_FloatTime() + 10;  // hud messages only get 10 seconds
+      Plat_FloatTime() + 10;  // hud messages only get 10 seconds
 
   m_pGameUIDialog->Show(type, kv);
   Color clr(255, 255, 255, 255);

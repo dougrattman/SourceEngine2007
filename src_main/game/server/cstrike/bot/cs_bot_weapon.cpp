@@ -182,7 +182,7 @@ void CCSBot::SetAimOffset( float accuracy )
 			m_aimSpreadTimestamp = gpGlobals->curtime;
 
 		// focusTime is the time it takes for a bot to "focus in" for very good aim, from 2 to 5 seconds
-		const float focusTime = max( 5.0f * (1.0f - accuracy), 2.0f );
+		const float focusTime = std::max( 5.0f * (1.0f - accuracy), 2.0f );
 		float focusInterval = gpGlobals->curtime - m_aimSpreadTimestamp;
 
 		float focusAccuracy = focusInterval / focusTime;
@@ -192,7 +192,7 @@ void CCSBot::SetAimOffset( float accuracy )
 		if (focusAccuracy > maxFocusAccuracy)
 			focusAccuracy = maxFocusAccuracy;
 
-		accuracy = max( accuracy, focusAccuracy );
+		accuracy = std::max( accuracy, focusAccuracy );
 	}
 
 	//PrintIfWatched( "Accuracy = %4.3f\n", accuracy );

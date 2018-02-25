@@ -509,8 +509,8 @@ void CInput::AccumulateMouse( void )
 	{
 		int ox, oy;
 		GetMousePos( ox, oy );
-		ox = clamp( ox, 0, w - 1 );
-		oy = clamp( oy, 0, h - 1 );
+		ox = std::clamp( ox, 0, w - 1 );
+		oy = std::clamp( oy, 0, h - 1 );
 		SetMousePos( ox, oy );
 	}
 
@@ -647,11 +647,11 @@ void CInput::GetFullscreenMousePos( int *mx, int *my, int *unclampedx /*=NULL*/,
 	}
 
 	// Clamp
-	current_posx = max( 0, current_posx );
-	current_posx = min( ScreenWidth(), current_posx );
+	current_posx = std::max( 0, current_posx );
+	current_posx = std::min( ScreenWidth(), current_posx );
 
-	current_posy = max( 0, current_posy );
-	current_posy = min( ScreenHeight(), current_posy );
+	current_posy = std::max( 0, current_posy );
+	current_posy = std::min( ScreenHeight(), current_posy );
 
 	*mx = current_posx;
 	*my = current_posy;

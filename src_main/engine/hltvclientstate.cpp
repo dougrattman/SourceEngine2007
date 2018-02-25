@@ -281,8 +281,9 @@ void CHLTVClientState::SendPacket() {
   if (IsActive()) {
     // use full update rate when active
     float commandInterval = (2.0f / 3.0f) / tv_snapshotrate.GetInt();
-    float maxDelta = min(host_state.interval_per_tick, commandInterval);
-    float delta = clamp(net_time - m_flNextCmdTime, 0.0f, maxDelta);
+    float maxDelta = std::min(host_state.interval_per_tick, commandInterval);
+    float delta =
+        std::clamp((float)(net_time - m_flNextCmdTime), 0.0f, maxDelta);
     m_flNextCmdTime = net_time + commandInterval - delta;
   } else {
     // during signon process send only 5 packets/second

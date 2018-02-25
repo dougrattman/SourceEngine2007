@@ -364,8 +364,8 @@ bool CTFGameMovementRecon::CheckBackJump( bool bWasInAir )
 	mv->m_vecVelocity[1] += flSideFactor * jumpDir.y;
 	mv->m_vecVelocity[2] += flUpFactor * sqrt(2 * 800 * 45.0); 
 
-	mv->m_vecVelocity[0] = clamp( mv->m_vecVelocity[0], -200, 200 );
-	mv->m_vecVelocity[1] = clamp( mv->m_vecVelocity[1], -200, 200 );
+	mv->m_vecVelocity[0] = std::clamp( mv->m_vecVelocity[0], -200, 200 );
+	mv->m_vecVelocity[1] = std::clamp( mv->m_vecVelocity[1], -200, 200 );
 	if (mv->m_vecVelocity[2] > MAX_VERTICAL_SPEED)
 		mv->m_vecVelocity[2] = MAX_VERTICAL_SPEED;
 
@@ -411,8 +411,8 @@ bool CTFGameMovementRecon::CheckStrafeJump( bool bWasInAir )
 	else
 		mv->m_vecVelocity[2] += 0.5f * sqrt(2 * 800 * 45.0);  // 2 * gravity * height
 
-	mv->m_vecVelocity[0] = clamp( mv->m_vecVelocity[0], -400, 400 );
-	mv->m_vecVelocity[1] = clamp( mv->m_vecVelocity[1], -400, 400 );
+	mv->m_vecVelocity[0] = std::clamp( mv->m_vecVelocity[0], -400, 400 );
+	mv->m_vecVelocity[1] = std::clamp( mv->m_vecVelocity[1], -400, 400 );
 	if (mv->m_vecVelocity[2] > MAX_VERTICAL_SPEED)
 		mv->m_vecVelocity[2] = MAX_VERTICAL_SPEED;
 

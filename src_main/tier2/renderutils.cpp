@@ -10,18 +10,18 @@
 #include "tier1/KeyValues.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // Globals
-//-----------------------------------------------------------------------------
+
 static bool s_bMaterialsInitialized = false;
 static IMaterial *s_pWireframe;
 static IMaterial *s_pWireframeIgnoreZ;
 static IMaterial *s_pVertexColor;
 static IMaterial *s_pVertexColorIgnoreZ;
 
-//-----------------------------------------------------------------------------
+
 // Initializes standard materials
-//-----------------------------------------------------------------------------
+
 void InitializeStandardMaterials() {
   if (s_bMaterialsInitialized) return;
 
@@ -75,9 +75,9 @@ void ShutdownStandardMaterials() {
   s_pVertexColorIgnoreZ = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders a wireframe sphere
-//-----------------------------------------------------------------------------
+
 void RenderWireframeSphere(const Vector &vCenter, float flRadius, int nTheta,
                            int nPhi, Color c, bool bZBuffer) {
   InitializeStandardMaterials();
@@ -139,9 +139,9 @@ void RenderWireframeSphere(const Vector &vCenter, float flRadius, int nTheta,
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Draws a sphere
-//-----------------------------------------------------------------------------
+
 void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
                   Color c, IMaterial *pMaterial) {
   InitializeStandardMaterials();
@@ -229,9 +229,9 @@ void RenderSphere(const Vector &vCenter, float flRadius, int nTheta, int nPhi,
   RenderSphere(vCenter, flRadius, nTheta, nPhi, cActual, pMaterial);
 }
 
-//-----------------------------------------------------------------------------
+
 // Box vertices
-//-----------------------------------------------------------------------------
+
 static int s_pBoxFaceIndices[6][4] = {
     {0, 4, 6, 2},  // -x
     {5, 1, 3, 7},  // +x
@@ -268,9 +268,9 @@ static void GenerateBoxVertices(const Vector &vOrigin, const QAngle &angles,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders a wireframe box relative to an origin
-//-----------------------------------------------------------------------------
+
 void RenderWireframeBox(const Vector &vOrigin, const QAngle &angles,
                         const Vector &vMins, const Vector &vMaxs, Color c,
                         bool bZBuffer) {
@@ -310,9 +310,9 @@ void RenderWireframeBox(const Vector &vOrigin, const QAngle &angles,
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders a solid box
-//-----------------------------------------------------------------------------
+
 void RenderBox(const Vector &vOrigin, const QAngle &angles, const Vector &vMins,
                const Vector &vMaxs, Color c, IMaterial *pMaterial,
                bool bInsideOut) {
@@ -377,9 +377,9 @@ void RenderBox(const Vector &vOrigin, const QAngle &angles, const Vector &vMins,
   RenderBox(vOrigin, angles, vMins, vMaxs, cActual, pMaterial, bInsideOut);
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders axes, red->x, green->y, blue->z
-//-----------------------------------------------------------------------------
+
 void RenderAxes(const Vector &vOrigin, float flScale, bool bZBuffer) {
   InitializeStandardMaterials();
 
@@ -465,9 +465,9 @@ void RenderAxes(const matrix3x4_t &transform, float flScale, bool bZBuffer) {
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Render a line
-//-----------------------------------------------------------------------------
+
 void RenderLine(const Vector &v1, const Vector &v2, Color c, bool bZBuffer) {
   InitializeStandardMaterials();
 
@@ -495,9 +495,9 @@ void RenderLine(const Vector &v1, const Vector &v2, Color c, bool bZBuffer) {
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Draws a triangle
-//-----------------------------------------------------------------------------
+
 void RenderTriangle(const Vector &p1, const Vector &p2, const Vector &p3,
                     Color c, IMaterial *pMaterial) {
   InitializeStandardMaterials();
@@ -550,9 +550,9 @@ void RenderTriangle(const Vector &p1, const Vector &p2, const Vector &p3,
   RenderTriangle(p1, p2, p3, cActual, pMaterial);
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders an extruded box
-//-----------------------------------------------------------------------------
+
 static void DrawAxes(const Vector &origin, Vector *pts, int idx, Color c,
                      CMeshBuilder &meshBuilder) {
   Vector start, temp;
@@ -693,9 +693,9 @@ void RenderWireframeSweptBox(const Vector &vStart, const Vector &vEnd,
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Draws a axis-aligned quad
-//-----------------------------------------------------------------------------
+
 void RenderQuad(IMaterial *pMaterial, float x, float y, float w, float h,
                 float z, float s0, float t0, float s1, float t1,
                 const Color &clr) {
@@ -730,9 +730,9 @@ void RenderQuad(IMaterial *pMaterial, float x, float y, float w, float h,
   pMesh->Draw();
 }
 
-//-----------------------------------------------------------------------------
+
 // Renders a screen space quad
-//-----------------------------------------------------------------------------
+
 void DrawScreenSpaceRectangle(
     IMaterial *pMaterial, int nDestX, int nDestY, int nWidth,
     int nHeight,  // Rect to draw into in screen space
@@ -759,8 +759,8 @@ void DrawScreenSpaceRectangle(
 
   pRenderContext->Bind(pMaterial, pClientRenderable);
 
-  int xSegments = max(nXDice, 1);
-  int ySegments = max(nYDice, 1);
+  int xSegments = std::max(nXDice, 1);
+  int ySegments = std::max(nYDice, 1);
 
   CMeshBuilder meshBuilder;
   IMesh *pMesh = pRenderContext->GetDynamicMesh(true);

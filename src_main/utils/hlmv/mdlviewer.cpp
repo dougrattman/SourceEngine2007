@@ -276,9 +276,9 @@ MDLViewer::MDLViewer() : mxWindow(0, 0, 0, 0, 0, g_appTitle, mxWindow::Normal) {
   // for multi-monitor try to catch weird initialization error
   if (g_viewerSettings.xpos < -16384) g_viewerSettings.xpos = 20;
   if (g_viewerSettings.ypos < -16384) g_viewerSettings.ypos = 20;
-  g_viewerSettings.ypos = max(0, g_viewerSettings.ypos);
-  g_viewerSettings.width = max(640, g_viewerSettings.width);
-  g_viewerSettings.height = max(700, g_viewerSettings.height);
+  g_viewerSettings.ypos = std::max(0, g_viewerSettings.ypos);
+  g_viewerSettings.width = std::max(640, g_viewerSettings.width);
+  g_viewerSettings.height = std::max(700, g_viewerSettings.height);
 
   setBounds(g_viewerSettings.xpos, g_viewerSettings.ypos,
             g_viewerSettings.width, g_viewerSettings.height);

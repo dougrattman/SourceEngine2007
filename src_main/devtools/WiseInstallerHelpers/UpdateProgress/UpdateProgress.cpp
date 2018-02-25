@@ -5,7 +5,7 @@
 //
 //=============================================================================//
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <commctrl.h>
@@ -323,7 +323,7 @@ void UpdateProgress()
 
 	bool showTicks = ( remainder <= PROGRESS_WAIT_TICKS ) ? false : true;
 
-	int currentTick = max( 0, remainder - PROGRESS_WAIT_TICKS );
+	int currentTick = std::max( 0, remainder - PROGRESS_WAIT_TICKS );
 	int totalTicks = PROGRESS_TICKS - PROGRESS_WAIT_TICKS;
 
 	float frac = ( float )( currentTick % totalTicks ) / ( float )( totalTicks - 1 );

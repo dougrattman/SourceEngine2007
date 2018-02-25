@@ -138,7 +138,7 @@ void FX_TF2_BloodSpray( const Vector &origin, const Vector &normal, float scale,
 
 			// Ramp up the brightness as it gets farther away
 			colorRamp = random->RandomFloat( 0.5f, 0.75f ) + flLODDistance;
-			FloatToColor32( tParticle->m_color, min( 1.0, color[0] * colorRamp ), min( 1.0, color[1] * colorRamp ), min( 1.0, color[2] * colorRamp ), 1.0f );
+			FloatToColor32( tParticle->m_color, std::min( 1.0, color[0] * colorRamp ), std::min( 1.0, color[1] * colorRamp ), std::min( 1.0, color[2] * colorRamp ), 1.0f );
 		}
 
 		//
@@ -172,7 +172,7 @@ void FX_TF2_BloodSpray( const Vector &origin, const Vector &normal, float scale,
 				tParticle->m_flDieTime		= random->RandomFloat( 0.5f, 1.0f );
 
 				colorRamp = random->RandomFloat( 0.5f, 0.75f ) + flLODDistance;
-				FloatToColor32( tParticle->m_color, min( 1.0, color[0] * colorRamp ), min( 1.0, color[1] * colorRamp ), min( 1.0, color[2] * colorRamp ), 1.0f );
+				FloatToColor32( tParticle->m_color, std::min( 1.0, color[0] * colorRamp ), std::min( 1.0, color[1] * colorRamp ), std::min( 1.0, color[2] * colorRamp ), 1.0f );
 			}
 		}
 	}
@@ -218,9 +218,9 @@ void FX_TF2_BloodSpray( const Vector &origin, const Vector &normal, float scale,
 
 					colorRamp = random->RandomFloat( 0.75f, 1.0f ) + flLODDistance;
 
-					pParticle->m_uchColor[0]	= min( 1.0f, color[0] * colorRamp ) * 255.0f;
-					pParticle->m_uchColor[1]	= min( 1.0f, color[1] * colorRamp ) * 255.0f;
-					pParticle->m_uchColor[2]	= min( 1.0f, color[2] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[0]	= std::min( 1.0f, color[0] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[1]	= std::min( 1.0f, color[1] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[2]	= std::min( 1.0f, color[2] * colorRamp ) * 255.0f;
 					
 					pParticle->m_uchStartSize	= random->RandomFloat( scale, scale * 4 ) * flDistanceScale;
 					pParticle->m_uchEndSize		= pParticle->m_uchStartSize * 2 * flDistanceScale;
@@ -263,9 +263,9 @@ void FX_TF2_BloodSpray( const Vector &origin, const Vector &normal, float scale,
 
 					colorRamp = random->RandomFloat( 0.5f, 0.75f ) + flLODDistance;
 
-					pParticle->m_uchColor[0]	= min( 1.0f, color[0] * colorRamp ) * 255.0f;
-					pParticle->m_uchColor[1]	= min( 1.0f, color[1] * colorRamp ) * 255.0f;
-					pParticle->m_uchColor[2]	= min( 1.0f, color[2] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[0]	= std::min( 1.0f, color[0] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[1]	= std::min( 1.0f, color[1] * colorRamp ) * 255.0f;
+					pParticle->m_uchColor[2]	= std::min( 1.0f, color[2] * colorRamp ) * 255.0f;
 					
 					pParticle->m_uchStartSize	= random->RandomFloat( scale * 0.5, scale ) * flDistanceScale;
 					pParticle->m_uchEndSize		= pParticle->m_uchStartSize * 4 * flDistanceScale;

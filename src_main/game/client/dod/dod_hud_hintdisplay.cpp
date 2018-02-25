@@ -222,7 +222,7 @@ void CDODHudHintDisplay::PerformLayout()
 	int labelWide = 0;
 	for ( i=0; i<m_Labels.Count(); ++i )
 	{
-		labelWide = max( labelWide, m_Labels[i]->GetWide() );
+		labelWide = std::max( labelWide, m_Labels[i]->GetWide() );
 	}
 
 	// find the total height

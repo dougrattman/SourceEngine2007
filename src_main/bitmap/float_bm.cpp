@@ -115,10 +115,10 @@ bool FloatBitMap_t::WritePFM(char const *fname) {
 float FloatBitMap_t::InterpolatedPixel(float x, float y, int comp) const {
   int Top = floor(y);
   float Yfrac = y - Top;
-  int Bot = min(Height - 1, Top + 1);
+  int Bot = std::min(Height - 1, Top + 1);
   int Left = floor(x);
   float Xfrac = x - Left;
-  int Right = min(Width - 1, Left + 1);
+  int Right = std::min(Width - 1, Left + 1);
   return BiLinInterp(Xfrac, Yfrac, Pixel(Left, Top, comp),
                      Pixel(Right, Top, comp), Pixel(Left, Bot, comp),
                      Pixel(Right, Bot, comp));
@@ -297,7 +297,7 @@ float FloatBitMap_t::BrightestColor(void) {
   for (int y = 0; y < Height; y++)
     for (int x = 0; x < Width; x++) {
       Vector v(Pixel(x, y, 0), Pixel(x, y, 1), Pixel(x, y, 2));
-      ret = max(ret, v.Length());
+      ret = std::max(ret, v.Length());
     }
   return ret;
 }

@@ -4,6 +4,8 @@
 #define D3DASYNC_H
 
 #define SHADERAPI_USE_SMP 1
+#define NOMINMAX
+
 #include <d3d9.h>
 #include "dx9sdk/include/d3dx9.h"
 #include "recording.h"

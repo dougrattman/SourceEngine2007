@@ -1282,7 +1282,7 @@ void CBaseHelicopter::CrashTouch( CBaseEntity *pOther )
 			pos.x += random->RandomFloat( -150, 150 );
 			pos.y += random->RandomFloat( -150, 150 );
 			pos.z += random->RandomFloat( -150, -50 );
-			te->Explosion( filter, min( 0.99, i * 0.2 ),	&pos, g_sModelIndexFireball,	10, 15, TE_EXPLFLAG_NONE, 100, 0 );
+			te->Explosion( filter, std::min( 0.99, i * 0.2 ),	&pos, g_sModelIndexFireball,	10, 15, TE_EXPLFLAG_NONE, 100, 0 );
 		}
 
 		UTIL_Remove( this );

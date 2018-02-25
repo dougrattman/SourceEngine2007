@@ -693,5 +693,5 @@ int CMatchmaking::GetPlayersNeeded() {
     total += CountPlayersOnTeam(i);
   }
 
-  return max(0, mm_minplayers.GetInt() - max(0, total));
+  return std::max(0, mm_minplayers.GetInt() - std::max(0, total));
 }

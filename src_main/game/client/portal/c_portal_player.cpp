@@ -516,10 +516,10 @@ void C_Portal_Player::UpdateLookAt( void )
 
 	// Set the head's yaw.
 	float desiredYaw = AngleNormalize( desiredAngles[YAW] - bodyAngles[YAW] );
-	desiredYaw = clamp( desiredYaw, m_headYawMin, m_headYawMax );
+	desiredYaw = std::clamp( desiredYaw, m_headYawMin, m_headYawMax );
 
 	float desiredPitch = AngleNormalize( desiredAngles[PITCH] );
-	desiredPitch = clamp( desiredPitch, m_headPitchMin, m_headPitchMax );
+	desiredPitch = std::clamp( desiredPitch, m_headPitchMin, m_headPitchMax );
 
 	if ( bNewTarget )
 	{
@@ -624,7 +624,7 @@ void C_Portal_Player::ClientThink( void )
 			if ( m_flDeathCCWeight < 1.0f )
 			{
 				m_flDeathCCWeight += DEATH_CC_FADE_SPEED;
-				clamp( m_flDeathCCWeight, 0.0f, 1.0f );
+				std::clamp( m_flDeathCCWeight, 0.0f, 1.0f );
 			}
 		}
 		else 
@@ -1179,7 +1179,7 @@ float C_Portal_Player::GetFOV( void )
 	int min_fov = GetMinFOV();
 
 	// Don't let it go too low
-	flFOVOffset = max( min_fov, flFOVOffset );
+	flFOVOffset = std::max( min_fov, flFOVOffset );
 
 	return flFOVOffset;
 }

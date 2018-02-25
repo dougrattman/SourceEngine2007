@@ -127,7 +127,7 @@ void CWalkerBase::WalkerThink()
 		Vector2DNormalize( m_vSteerVelocity );
 
 		float flDecayAmt = flDecayRate * dt;
-		flLen = max( 0, flLen - flDecayAmt );
+		flLen = std::max( 0, flLen - flDecayAmt );
 		m_vSteerVelocity *= flLen;
 
 
@@ -189,8 +189,8 @@ void CWalkerBase::WalkerThink()
 		m_vSteerVelocity += vAccel * dt;
 
 		
-		m_vSteerVelocity.x = clamp( m_vSteerVelocity.x, -MAX_WALKER_VEL, MAX_WALKER_VEL );
-		m_vSteerVelocity.y = clamp( m_vSteerVelocity.y, -MAX_WALKER_VEL, MAX_WALKER_VEL );
+		m_vSteerVelocity.x = std::clamp( m_vSteerVelocity.x, -MAX_WALKER_VEL, MAX_WALKER_VEL );
+		m_vSteerVelocity.y = std::clamp( m_vSteerVelocity.y, -MAX_WALKER_VEL, MAX_WALKER_VEL );
 
 
 		float wantedYaw = m_vLastCmdViewAngles[YAW];

@@ -1048,7 +1048,7 @@ int CCSBot::FindPathPoint(float aheadRange, Vector *point, int *prevIndex) {
  * Set the current index along the path
  */
 void CCSBot::SetPathIndex(int newIndex) {
-  m_pathIndex = min(newIndex, m_pathLength - 1);
+  m_pathIndex = std::min(newIndex, m_pathLength - 1);
   m_areaEnteredTimestamp = gpGlobals->curtime;
 
   if (m_path[m_pathIndex].ladder) {

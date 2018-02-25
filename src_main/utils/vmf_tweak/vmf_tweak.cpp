@@ -21,7 +21,7 @@
 #include "FileSystem_Tools.h"
 #include "cmdlib.h"
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 char const *g_pInFilename = NULL;
 

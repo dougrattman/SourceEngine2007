@@ -201,7 +201,7 @@ void FX_PlayerAR2Tracer(const Vector &start, const Vector &end) {
 
   // Randomly place the tracer along this line, with a random length
   VectorMA(start, random->RandomFloat(0.0f, 8.0f), shotDir, dStart);
-  VectorMA(dStart, min(length, random->RandomFloat(256.0f, 1024.0f)), shotDir,
+  VectorMA(dStart, std::min(length, random->RandomFloat(256.0f, 1024.0f)), shotDir,
            dEnd);
 
   // Create the line

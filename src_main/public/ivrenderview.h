@@ -227,7 +227,7 @@ class IVRenderView {
   // Sets up the projection matrix for the specified field of view
   virtual void OLD_SetProjectionMatrix(float fov, float zNear, float zFar) = 0;
   // Determine lighting at specified position
-  virtual colorVec GetLightAtPoint(Vector &pos) = 0;
+  virtual color32 GetLightAtPoint(Vector &pos) = 0;
   // Whose eyes are we looking through?
   virtual int GetViewEntity(void) = 0;
   // Get engine field of view setting

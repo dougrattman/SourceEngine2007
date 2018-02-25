@@ -290,7 +290,7 @@ class CMapDoc : public CDocument
 		inline MAPFORMAT GetMapFormat(void);
 		inline CMapWorld *GetMapWorld(void);
 		inline CGameConfig *GetGame(void);
-		inline int GetGridSpacing(void) { return(max(m_nGridSpacing, 1)); }
+		inline int GetGridSpacing(void) { return(std::max(m_nGridSpacing, 1)); }
 
 		inline CHistory *GetDocHistory(void);
 

@@ -516,7 +516,7 @@ int CalculateObjectCost( int iObjectType, int iNumberOfObjects, int iTeam, bool 
 	// Find out how much the next object should cost
 	if ( bLast )
 	{
-		iNumberOfObjects = max(0,iNumberOfObjects-1);
+		iNumberOfObjects = std::max(0,iNumberOfObjects-1);
 	}
 
 	int iCost = GetObjectInfo( iObjectType )->m_Cost;

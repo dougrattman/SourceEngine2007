@@ -8,7 +8,7 @@
 #define NOSERVICE
 #define NOMCX
 #define NOIME
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #undef MessageBox
 #undef PostMessage

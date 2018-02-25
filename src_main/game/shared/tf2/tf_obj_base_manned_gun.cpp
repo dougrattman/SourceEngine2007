@@ -287,7 +287,7 @@ void CObjectBaseMannedGun::BaseMannedGunThink( void )
 		float flPitch = anglemod( m_flGunPitch );
 		if (( flPitch <= 180 ) && ( flPitch >= 0 ))
 		{
-			m_flGunPitch = max( 0, flPitch - (gpGlobals->frametime * MANNEDGUN_RESTORE_TURN_RATE) );
+			m_flGunPitch = std::max( 0, flPitch - (gpGlobals->frametime * MANNEDGUN_RESTORE_TURN_RATE) );
 		}
 		else
 		{
@@ -310,7 +310,7 @@ void CObjectBaseMannedGun::BaseMannedGunThink( void )
 		}
 		else
 		{
-			m_flGunYaw = max( 0, m_flGunYaw - (gpGlobals->frametime * MANNEDGUN_RESTORE_TURN_RATE) );
+			m_flGunYaw = std::max( 0, m_flGunYaw - (gpGlobals->frametime * MANNEDGUN_RESTORE_TURN_RATE) );
 		}
 
 	}

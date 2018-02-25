@@ -64,8 +64,8 @@ bool CImagePacker::AddBlock( int width, int height,
 #ifdef ADD_ONE_TEXEL_BORDER
 	width += 2;
 	height += 2;
-	width = clamp( width, m_MaxLightmapWidth );
-	height = clamp( height, m_MaxLightmapHeight );
+	width = std::clamp( width, m_MaxLightmapWidth );
+	height = std::clamp( height, m_MaxLightmapHeight );
 #endif
 
 	// If we've already determined that a block this big couldn't fit

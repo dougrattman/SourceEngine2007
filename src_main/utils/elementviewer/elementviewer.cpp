@@ -10,7 +10,7 @@
 //
 // Material editor
 //=============================================================================
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "vstdlib/cvar.h"
 #include "appframework/vguimatsysapp.h"
 #include "FileSystem.h"
@@ -248,7 +248,7 @@ void VGui_DrawHierarchy( void )
 	}
 
 	// Can't start after end
-	startlevel = min( endlevel, startlevel );
+	startlevel = std::min( endlevel, startlevel );
 
 	int drawn = 0;
 
@@ -322,7 +322,7 @@ int CElementViewerApp::Main()
 
 		pRenderContext->Viewport( 0, 0, GetWindowWidth(), GetWindowHeight() );
 	
-		vgui::GetAnimationController()->UpdateAnimations( Sys_FloatTime() );
+		vgui::GetAnimationController()->UpdateAnimations( Plat_FloatTime() );
 
 		g_pMaterialSystem->BeginFrame( 0 );
 		pRenderContext->ClearColor4ub( 76, 88, 68, 255 ); 

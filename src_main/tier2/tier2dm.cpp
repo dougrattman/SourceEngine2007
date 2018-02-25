@@ -8,9 +8,9 @@
 #include "dmserializers/idmserializers.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // Set up methods related to datamodel interfaces
-//-----------------------------------------------------------------------------
+
 bool ConnectDataModel(CreateInterfaceFn factory) {
   if (!g_pDataModel->Connect(factory)) return false;
 

@@ -458,7 +458,7 @@ void CHostState::State_Run( float frameTime )
 		// Only clamp time if client is in process of connecting or is already connected.
 		if ( IsClientConnected() )
 		{
-			frameTime = min( frameTime, host_state.interval_per_tick );
+			frameTime = std::min( frameTime, host_state.interval_per_tick );
 		}
 	}
 	Host_RunFrame( frameTime );

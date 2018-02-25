@@ -240,7 +240,7 @@ void CTextureBudgetPanel::SnapshotTextureHistory() {
       int value = pProf->GetCounterValue(i) / 1024;
 
       m_SumOfValues += value;
-      m_MaxValue = max(m_MaxValue, value);
+      m_MaxValue = std::max(m_MaxValue, value);
     }
   }
 

@@ -7,14 +7,14 @@
 #include "filesystem.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
+
 // default stream chunk size
-//-----------------------------------------------------------------------------
+
 enum { DEFAULT_STREAM_CHUNK_SIZE = 16 * 1024 };
 
-//-----------------------------------------------------------------------------
+
 // Constructor, destructor
-//-----------------------------------------------------------------------------
+
 CUtlStreamBuffer::CUtlStreamBuffer()
     : BaseClass(DEFAULT_STREAM_CHUNK_SIZE, DEFAULT_STREAM_CHUNK_SIZE, 0) {
   SetUtlBufferOverflowFuncs(&CUtlStreamBuffer::StreamGetOverflow,
@@ -62,7 +62,7 @@ CUtlStreamBuffer::CUtlStreamBuffer(const char *pFileName, const char *pPath,
 
     // Read in the first bytes of the file
     if (Size() > 0) {
-      int nSizeToRead = min(Size(), m_nMaxPut);
+      int nSizeToRead = std::min(Size(), m_nMaxPut);
       ReadBytesFromFile(nSizeToRead, 0);
     }
   }
@@ -102,9 +102,9 @@ void CUtlStreamBuffer::Close() {
 
 CUtlStreamBuffer::~CUtlStreamBuffer() { Close(); }
 
-//-----------------------------------------------------------------------------
+
 // Open the file. normally done in constructor
-//-----------------------------------------------------------------------------
+
 void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
                             int nFlags) {
   if (IsOpen()) {
@@ -129,7 +129,7 @@ void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
 
     // Read in the first bytes of the file
     if (Size() > 0) {
-      int nSizeToRead = min(Size(), m_nMaxPut);
+      int nSizeToRead = std::min(Size(), m_nMaxPut);
       ReadBytesFromFile(nSizeToRead, 0);
     }
   } else {
@@ -142,9 +142,9 @@ void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Is the file open?
-//-----------------------------------------------------------------------------
+
 bool CUtlStreamBuffer::IsOpen() const {
   if (m_hFileHandle != FILESYSTEM_INVALID_HANDLE) return true;
 
@@ -152,9 +152,9 @@ bool CUtlStreamBuffer::IsOpen() const {
   return (m_pFileName != 0);
 }
 
-//-----------------------------------------------------------------------------
+
 // Grow allocation size to fit requested size
-//-----------------------------------------------------------------------------
+
 void CUtlStreamBuffer::GrowAllocatedSize(int nSize) {
   int nNewSize = Size();
   if (nNewSize < nSize + 1) {
@@ -165,9 +165,9 @@ void CUtlStreamBuffer::GrowAllocatedSize(int nSize) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Load up more of the stream when we overflow
-//-----------------------------------------------------------------------------
+
 bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
   if (!IsValid() || IsReadOnly()) return false;
 
@@ -205,9 +205,9 @@ bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Reads bytes from the file; fixes up maxput if necessary and 0 terminates
-//-----------------------------------------------------------------------------
+
 int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
   if (m_hFileHandle == FILESYSTEM_INVALID_HANDLE) {
     if (!m_pFileName) {
@@ -245,9 +245,9 @@ int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
   return nBytesRead;
 }
 
-//-----------------------------------------------------------------------------
+
 // Load up more of the stream when we overflow
-//-----------------------------------------------------------------------------
+
 bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
   if (!IsValid() || !IsReadOnly()) return false;
 
@@ -282,9 +282,9 @@ bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
   return (nBytesRead + nUnreadBytes >= nSize);
 }
 
-//-----------------------------------------------------------------------------
+
 // open file unless already failed to open
-//-----------------------------------------------------------------------------
+
 FileHandle_t CUtlStreamBuffer::OpenFile(const char *pFileName,
                                         const char *pPath) {
   if (m_Error & FILE_OPEN_ERROR) return FILESYSTEM_INVALID_HANDLE;

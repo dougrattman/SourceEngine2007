@@ -592,7 +592,7 @@ void CWeaponHarpoon::ThrowGrenade( void )
 	BaseClass::WeaponSound(WPN_DOUBLE);
 
 	// Calculate launch velocity (3 seconds for max distance)
-	float flThrowTime = min( (gpGlobals->curtime - m_flStartedThrowAt), 3.0 );
+	float flThrowTime = std::min( (gpGlobals->curtime - m_flStartedThrowAt), 3.0 );
 	float flSpeed = 1000 + (200 * flThrowTime);
 
 	PlayAttackAnimation( ACT_VM_PRIMARYATTACK );

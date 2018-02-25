@@ -10,7 +10,7 @@
 //
 // Material editor
 //=============================================================================
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "appframework/vguimatsysapp.h"
 #include "FileSystem.h"
 #include "materialsystem/IMaterialSystem.h"
@@ -101,7 +101,7 @@ void CAVITestApp::DrawStuff( AVIMaterial_t hMaterial )
 	int iViewableWidth = GetWindowWidth();
 	int iViewableHeight = GetWindowHeight();
 
-	g_pAVI->SetTime( hMaterial, Sys_FloatTime() - m_flStartTime );
+	g_pAVI->SetTime( hMaterial, Plat_FloatTime() - m_flStartTime );
 
 	float flMaxU, flMaxV;
 	g_pAVI->GetTexCoordRange( hMaterial, &flMaxU, &flMaxV );
@@ -192,7 +192,7 @@ int CAVITestApp::Main()
 	int imagesize = params.m_nWidth * params.m_nHeight;
 	BGR888_t *hp = new BGR888_t[ imagesize ];
 
-	m_flStartTime = Sys_FloatTime();
+	m_flStartTime = Plat_FloatTime();
 	m_pMaterial = g_pMaterialSystem->FindMaterial( "debug/debugempty", "app" );
 	while ( g_pVGui->IsRunning() )
 	{

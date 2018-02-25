@@ -21,7 +21,7 @@
 
 #include "tier0/include/valve_off.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <tchar.h>
 #include <ImageHlp.h>
 #include "tier0/include/valve_on.h"

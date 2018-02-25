@@ -212,7 +212,7 @@ void CBaseHudChatLine::PerformFadeout(void) {
 
     frac = cos(frac);
 
-    frac = clamp(frac, 0.0f, 1.0f);
+    frac = std::clamp(frac, 0.0f, 1.0f);
 
     frac *= (1.0f - frac1);
 
@@ -224,7 +224,7 @@ void CBaseHudChatLine::PerformFadeout(void) {
 
     // Draw a right facing triangle in red, faded out over time
     int alpha = 63 + 192 * (1.0f - frac1);
-    alpha = clamp(alpha, 0, 255);
+    alpha = std::clamp(alpha, 0, 255);
 
     wchar_t wbuf[4096];
     GetText(0, wbuf, sizeof(wbuf));
@@ -238,7 +238,7 @@ void CBaseHudChatLine::PerformFadeout(void) {
     float frac = (m_flExpireTime - curtime) / CHATLINE_FADE_TIME;
 
     int alpha = frac * 255;
-    alpha = clamp(alpha, 0, 255);
+    alpha = std::clamp(alpha, 0, 255);
 
     wchar_t wbuf[4096];
     GetText(0, wbuf, sizeof(wbuf));
@@ -942,7 +942,7 @@ int CBaseHudChat::ComputeBreakChar(int width, const char *text, int textlen) {
       //  to the end, but it's still too long, break on the character just
       //  before this one
       if (lastbreak == textlen) {
-        lastbreak = max(0, i - 1);
+        lastbreak = std::max(0, i - 1);
       }
       break;
     }
@@ -1047,7 +1047,7 @@ void CBaseHudChat::FadeChatHistory(void) {
       (m_flHistoryFadeTime - gpGlobals->curtime) / CHAT_HISTORY_FADE_TIME;
 
   int alpha = frac * CHAT_HISTORY_ALPHA;
-  alpha = clamp(alpha, 0, CHAT_HISTORY_ALPHA);
+  alpha = std::clamp(alpha, 0, CHAT_HISTORY_ALPHA);
 
   if (alpha >= 0) {
     if (GetChatHistory()) {

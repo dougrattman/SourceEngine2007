@@ -8,12 +8,12 @@
 #include "tier0/include/dbg.h"
 #include "vstdlib/iprocessutils.h"
 
-//-----------------------------------------------------------------------------
+
 // These tier1 libraries must be set by any users of this library.
 // They can be set by calling ConnectTier1Libraries or InitDefaultFileSystem.
 // It is hoped that setting this, and using this library will be the common
 // mechanism for allowing link libraries to access tier1 library interfaces
-//-----------------------------------------------------------------------------
+
 ICvar *cvar = 0;
 ICvar *g_pCVar = 0;
 IProcessUtils *g_pProcessUtils = 0;
@@ -24,11 +24,11 @@ static bool s_bConnected = false;
 void *g_pUtlSortVectorQSortContext = NULL;
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Call this to connect to all tier 1 libraries.
 // It's up to the caller to check the globals it cares about to see if ones are
 // missing
-//-----------------------------------------------------------------------------
+
 void ConnectTier1Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount) {
   // Don't connect twice..
   if (s_bConnected) return;

@@ -254,7 +254,7 @@ void ReadLightFile(char *filename) {
       texlights[j].filename = filename;
       file_texlights++;
 
-      num_texlights = max(num_texlights, j + 1);
+      num_texlights = std::max(num_texlights, j + 1);
     }
   }
   qprintf("[%i texlights parsed from '%s']\n\n", file_texlights, filename);
@@ -728,7 +728,7 @@ int CreateChildPatch(int nParentIndex, winding_t *pWinding, float flArea,
       if ((child->face_maxs[i] == child->maxs[i] ||
            child->face_mins[i] == child->mins[i]) &&
           total[i] > minchop) {
-        child->chop = max(minchop, child->chop / 2);
+        child->chop = std::max(minchop, child->chop / 2);
         break;
       }
     }
@@ -779,7 +779,7 @@ void SubdividePatch(int ndxPatch) {
         total[widest_axis] > total[(widest_axis + 2) % 3] * 2) {
       if (patch->chop > minchop) {
         bSubdivide = true;
-        patch->chop = max(minchop, patch->chop / 2);
+        patch->chop = std::max(minchop, patch->chop / 2);
       }
     }
   }
@@ -2248,7 +2248,7 @@ int ParseCommandLine(int argc, char **argv, bool *onlydetail) {
           Warning("Error: expected positive value after '-chop'\n");
           return 1;
         }
-        minchop = min(minchop, maxchop);
+        minchop = std::min(minchop, maxchop);
       } else {
         Warning("Error: expected a value after '-chop'\n");
         return 1;

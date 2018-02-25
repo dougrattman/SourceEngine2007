@@ -217,7 +217,7 @@ void CPDumpPanel::Paint() {
   int numcols = ScreenWidth() / columnwidth;
   int i;
 
-  numcols = clamp(numcols, 1, 5);
+  numcols = std::clamp(numcols, 1, 5);
 
   for (i = 0; i < numcols; i++) {
     if (i == 0) {

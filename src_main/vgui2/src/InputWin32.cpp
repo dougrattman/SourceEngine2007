@@ -1882,7 +1882,7 @@ void CInputWin32::OnChangeIME(bool forward) {
 
     oldKb += forward ? 1 : -1;
     if (oldKb < 0) {
-      oldKb = max(0, selections.Count() - 1);
+      oldKb = std::max(0, selections.Count() - 1);
     } else if (oldKb >= selections.Count()) {
       oldKb = 0;
     }
@@ -1979,7 +1979,7 @@ int CInputWin32::GetIMELanguageList(LanguageItem *dest, int destcount) {
 
     iret = selections.Count();
     if (dest) {
-      for (int i = 0; i < min(iret, destcount); ++i) {
+      for (int i = 0; i < std::min(iret, destcount); ++i) {
         HKL hkl = selections[i];
 
         IInput::LanguageItem *p = &dest[i];

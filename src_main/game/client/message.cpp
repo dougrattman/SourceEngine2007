@@ -540,7 +540,7 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 		boxx -= flBoxPixels;
 		boxy -= flBoxPixels * 0.5f;
 
-		float flAlphaScale = clamp( ( 255.0f - (float)m_parms.fadeBlend ) / 255.0f, 0.0f, 1.0f );
+		float flAlphaScale = std::clamp( ( 255.0f - (float)m_parms.fadeBlend ) / 255.0f, 0.0f, 1.0f );
 		Color boxColor( 
 			pMessage->boxcolor[ 0 ],
 			pMessage->boxcolor[ 1 ],

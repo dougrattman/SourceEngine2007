@@ -1,10 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//
-//===========================================================================//
+
+#define NOMINMAX
 
 #include <d3d10.h>
 #undef GetCommandLine

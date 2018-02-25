@@ -39,8 +39,8 @@ inline Vector32 &Vector32::operator=(const Vector &vOther) {
 
   static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
 
-  f32 fmax = max(fabs(vOther.x), fabs(vOther.y));
-  fmax = max(fmax, fabs(vOther.z));
+  f32 fmax = std::max(fabs(vOther.x), fabs(vOther.y));
+  fmax = std::max(fmax, fabs(vOther.z));
 
   for (exp = 0; exp < 3; exp++) {
     if (fmax < expScale[exp]) break;
@@ -49,9 +49,9 @@ inline Vector32 &Vector32::operator=(const Vector &vOther) {
 
   f32 fexp = 512.0f / expScale[exp];
 
-  x = clamp((int)(vOther.x * fexp) + 512, 0, 1023);
-  y = clamp((int)(vOther.y * fexp) + 512, 0, 1023);
-  z = clamp((int)(vOther.z * fexp) + 512, 0, 1023);
+  x = std::clamp((int)(vOther.x * fexp) + 512, 0, 1023);
+  y = std::clamp((int)(vOther.y * fexp) + 512, 0, 1023);
+  z = std::clamp((int)(vOther.z * fexp) + 512, 0, 1023);
   return *this;
 }
 
@@ -91,8 +91,8 @@ class Normal32 {
 inline Normal32 &Normal32::operator=(const Vector &vOther) {
   CHECK_VALID(vOther);
 
-  x = clamp((int)(vOther.x * 16384) + 16384, 0, 32767);
-  y = clamp((int)(vOther.y * 16384) + 16384, 0, 32767);
+  x = std::clamp((int)(vOther.x * 16384) + 16384, 0, 32767);
+  y = std::clamp((int)(vOther.y * 16384) + 16384, 0, 32767);
   zneg = (vOther.z < 0);
   // x = vOther.x;
   // y = vOther.y;
@@ -147,9 +147,9 @@ inline Quaternion64::operator Quaternion() {
 inline Quaternion64 &Quaternion64::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
 
-  x = clamp((int)(vOther.x * 1048576) + 1048576, 0, 2097151);
-  y = clamp((int)(vOther.y * 1048576) + 1048576, 0, 2097151);
-  z = clamp((int)(vOther.z * 1048576) + 1048576, 0, 2097151);
+  x = std::clamp((int)(vOther.x * 1048576) + 1048576, 0, 2097151);
+  y = std::clamp((int)(vOther.y * 1048576) + 1048576, 0, 2097151);
+  z = std::clamp((int)(vOther.z * 1048576) + 1048576, 0, 2097151);
   wneg = (vOther.w < 0);
   return *this;
 }
@@ -190,9 +190,9 @@ inline Quaternion48::operator Quaternion() {
 inline Quaternion48 &Quaternion48::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
 
-  x = clamp((int)(vOther.x * 32768) + 32768, 0, 65535);
-  y = clamp((int)(vOther.y * 32768) + 32768, 0, 65535);
-  z = clamp((int)(vOther.z * 16384) + 16384, 0, 32767);
+  x = std::clamp((int)(vOther.x * 32768) + 32768, 0, 65535);
+  y = std::clamp((int)(vOther.y * 32768) + 32768, 0, 65535);
+  z = std::clamp((int)(vOther.z * 16384) + 16384, 0, 32767);
   wneg = (vOther.w < 0);
   return *this;
 }
@@ -233,9 +233,9 @@ inline Quaternion32::operator Quaternion() {
 inline Quaternion32 &Quaternion32::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
 
-  x = clamp((int)(vOther.x * 1024) + 1024, 0, 2047);
-  y = clamp((int)(vOther.y * 512) + 512, 0, 1023);
-  z = clamp((int)(vOther.z * 512) + 512, 0, 1023);
+  x = std::clamp((int)(vOther.x * 1024) + 1024, 0, 2047);
+  y = std::clamp((int)(vOther.y * 512) + 512, 0, 1023);
+  z = std::clamp((int)(vOther.z * 512) + 512, 0, 1023);
   wneg = (vOther.w < 0);
   return *this;
 }

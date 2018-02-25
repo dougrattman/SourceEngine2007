@@ -7,7 +7,7 @@
 
 #include "hammer_mathlib.h"
 
-#include <Windows.h>
+#include "base/include/windows/windows_light.h"
 #include <string.h>
 
 // memdbgon must be the last include file in a .cpp file!!!

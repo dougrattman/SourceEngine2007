@@ -61,7 +61,7 @@ void CFXQuad::Draw( double frametime )
 	}
 
 	float alpha = m_FXData.m_flStartAlpha + ( ( m_FXData.m_flEndAlpha - m_FXData.m_flStartAlpha ) * alphaTimePerc );
-	alpha = clamp( alpha, 0.0f, 1.0f );
+	alpha = std::clamp( alpha, 0.0f, 1.0f );
 	
 	CMatRenderContextPtr pRenderContext( materials );
 

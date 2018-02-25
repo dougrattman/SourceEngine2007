@@ -6,7 +6,7 @@
 //=============================================================================//
 #include "stdafx.h"
 #include <stdio.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "mdlcheck_util.h"
 #include "tier0/include/dbg.h"
 #include "utldict.h"
@@ -249,7 +249,7 @@ void ProcessSourceDirectory( char const *basedir )
 	}
 
 	int ecount = c - valid;
-	vprint( 0, "\n summary:  found %i/%i (%.2f percent) .qc errors\n\n", ecount, c, 100.0 * ecount / max( c, 1 ) );
+	vprint( 0, "\n summary:  found %i/%i (%.2f percent) .qc errors\n\n", ecount, c, 100.0 * ecount / std::max( c, 1 ) );
 }
 
 #include "studio.h"
@@ -371,7 +371,7 @@ void ProcessModelsDirectory( char const *basedir )
 	}
 
 	int ecount = c - valid;
-	vprint( 0, "\n summary:  found %i/%i (%.2f percent) .mdl errors\n", ecount, c, 100.0 * ecount / max( c, 1 ) );
+	vprint( 0, "\n summary:  found %i/%i (%.2f percent) .mdl errors\n", ecount, c, 100.0 * ecount / std::max( c, 1 ) );
 
 }
 
@@ -403,7 +403,7 @@ void CheckForUnbuiltModels( )
 	}
 
 	int ecount = c - valid;
-	vprint( 0, "\n summary:  found %i/%i (%.2f percent) missing .mdl's\n", ecount, c, 100.0 * ecount / max( c, 1 ) );
+	vprint( 0, "\n summary:  found %i/%i (%.2f percent) missing .mdl's\n", ecount, c, 100.0 * ecount / std::max( c, 1 ) );
 }
 
 //-----------------------------------------------------------------------------

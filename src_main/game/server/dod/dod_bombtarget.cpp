@@ -451,7 +451,7 @@ void CDODBombTarget::State_Think_ARMED( void )
 	// manually advance frame so that it matches bomb timer length.
 	float flTimerLength = GetBombTimerLength();
 	float flTimeLeft = m_flExplodeTime - gpGlobals->curtime;
-	SetCycle( clamp( 1.0 - ( flTimeLeft / flTimerLength ), 0.0, 1.0 ) );
+	SetCycle( std::clamp( 1.0 - ( flTimeLeft / flTimerLength ), 0.0, 1.0 ) );
 
 	static int iAttachment = LookupAttachment( "wick" );//ed awesome
 

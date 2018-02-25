@@ -88,7 +88,7 @@ void CInitTracker::Init(const char *init, const char *shutdown, int listnum) {
   f->sequence = m_nNumFuncs[listnum];
   f->referencecount = 1;
   f->warningprinted = false;
-  f->inittime = 0.0;  // Sys_FloatTime();
+  f->inittime = 0.0;  // Plat_FloatTime();
   f->shutdowntime = 0.0;
 
   m_Funcs[listnum].AddToHead(f);
@@ -125,7 +125,7 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
 
     if (!stricmp(ff->shutdownname, shutdown)) {
       Assert(ff->referencecount);
-      // f->shutdowntime = Sys_FloatTime();
+      // f->shutdowntime = Plat_FloatTime();
       ff->referencecount--;
       return;
     }

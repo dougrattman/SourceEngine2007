@@ -680,8 +680,8 @@ void CChildFrame::CenterViews(void)
 	GetClientRect(r);
 	CSize sizeView(r.Width()/2 - 3, r.Height()/2 - 3);
 
-	sizeView.cy = max(0, sizeView.cy);
-	sizeView.cx = max(0, sizeView.cx);
+	sizeView.cy = std::max(0, sizeView.cy);
+	sizeView.cx = std::max(0, sizeView.cx);
 
 	m_wndSplitter->SetRowInfo(0, sizeView.cy, 0);
 	m_wndSplitter->SetRowInfo(1, sizeView.cy, 0);

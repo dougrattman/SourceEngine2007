@@ -950,7 +950,7 @@ void ControlPanel::DeleteExpression( int index )
 			
 		g_pFlexPanel->DeleteExpression( index );
 
-		active->SelectExpression( max( 0, index - 1 ) );
+		active->SelectExpression( std::max( 0, index - 1 ) );
 	}
 }
 

@@ -650,8 +650,8 @@ void GetInterpolatedVarTimeRange(CInterpolatedVar<T> *pVar, float &flMin,
     float changetime;
     if (!pVar->GetHistoryValue(i, changetime)) return;
 
-    flMin = min(flMin, changetime);
-    flMax = max(flMax, changetime);
+    flMin = std::min(flMin, changetime);
+    flMax = std::max(flMax, changetime);
     i = pVar->GetNext(i);
   }
 }
@@ -1167,7 +1167,7 @@ float C_BaseEntity::HealthFraction() const {
   if (GetMaxHealth() == 0) return 1.0f;
 
   float flFraction = (float)GetHealth() / (float)GetMaxHealth();
-  flFraction = clamp(flFraction, 0.0f, 1.0f);
+  flFraction = std::clamp(flFraction, 0.0f, 1.0f);
   return flFraction;
 }
 
@@ -2930,7 +2930,7 @@ void C_BaseEntity::ComputeFxBlend() {
       break;
   }
 
-  blend = clamp(blend, 0, 255);
+  blend = std::clamp(blend, 0, 255);
 
   // Look for client-side fades
   unsigned char nFadeAlpha = GetClientSideFade();
@@ -2938,7 +2938,7 @@ void C_BaseEntity::ComputeFxBlend() {
     float flBlend = blend / 255.0f;
     float flFade = nFadeAlpha / 255.0f;
     blend = (int)(flBlend * flFade * 255.0f + 0.5f);
-    blend = clamp(blend, 0, 255);
+    blend = std::clamp(blend, 0, 255);
   }
 
   m_nRenderFXBlend = blend;
@@ -4480,7 +4480,7 @@ int C_BaseEntity::GetIntermediateDataSize() {
   Assert(size > 0);
 
   // At least 4 bytes to avoid some really bad stuff
-  return max(size, 4);
+  return std::max(size, 4);
 #else
   return 0;
 #endif

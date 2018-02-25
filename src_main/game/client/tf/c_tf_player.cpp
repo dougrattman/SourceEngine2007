@@ -609,7 +609,7 @@ void C_TFRagdoll::ClientThink( void )
 		int iAlpha = GetRenderColor().a;
 		int iFadeSpeed = 600.0f;
 
-		iAlpha = max( iAlpha - ( iFadeSpeed * gpGlobals->frametime ), 0 );
+		iAlpha = std::max( iAlpha - ( iFadeSpeed * gpGlobals->frametime ), 0 );
 
 		SetRenderMode( kRenderTransAlpha );
 		SetRenderColorA( iAlpha );
@@ -1264,7 +1264,7 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 	
 	if ( m_bDisguised != m_Shared.InCond( TF_COND_DISGUISED ) )
 	{
-		m_flDisguiseEndEffectStartTime = max( m_flDisguiseEndEffectStartTime, gpGlobals->curtime );
+		m_flDisguiseEndEffectStartTime = std::max( m_flDisguiseEndEffectStartTime, gpGlobals->curtime );
 	}
 
 	int nNewWaterLevel = GetWaterLevel();
@@ -1936,7 +1936,7 @@ void C_TFPlayer::UpdateLookAt( void )
 
 	// Set the head's yaw.
 	float desired = AngleNormalize( desiredAngles[YAW] - bodyAngles[YAW] );
-	desired = clamp( -desired, m_headYawMin, m_headYawMax );
+	desired = std::clamp( -desired, m_headYawMin, m_headYawMax );
 	m_flCurrentHeadYaw = ApproachAngle( desired, m_flCurrentHeadYaw, 130 * gpGlobals->frametime );
 
 	// Counterrotate the head from the body rotation so it doesn't rotate past its target.
@@ -1946,7 +1946,7 @@ void C_TFPlayer::UpdateLookAt( void )
 
 	// Set the head's yaw.
 	desired = AngleNormalize( desiredAngles[PITCH] );
-	desired = clamp( desired, m_headPitchMin, m_headPitchMax );
+	desired = std::clamp( desired, m_headPitchMin, m_headPitchMax );
 
 	m_flCurrentHeadPitch = ApproachAngle( -desired, m_flCurrentHeadPitch, 130 * gpGlobals->frametime );
 	m_flCurrentHeadPitch = AngleNormalize( m_flCurrentHeadPitch );
@@ -2218,7 +2218,7 @@ void C_TFPlayer::AvoidPlayers( CUserCmd *pCmd )
 		flSideScale = fabs( cl_sidespeed.GetFloat() ) / fabs( pCmd->sidemove );
 	}
 
-	float flScale = min( flForwardScale, flSideScale );
+	float flScale = std::min( flForwardScale, flSideScale );
 	pCmd->forwardmove *= flScale;
 	pCmd->sidemove *= flScale;
 
@@ -2544,11 +2544,11 @@ void C_TFPlayer::CalcDeathCamView(Vector& eyeOrigin, QAngle& eyeAngles, float& f
 
 	// Swing to face our killer within half the death anim time
 	float interpolation = ( gpGlobals->curtime - m_flDeathTime ) / (TF_DEATH_ANIMATION_TIME * 0.5);
-	interpolation = clamp( interpolation, 0.0f, 1.0f );
+	interpolation = std::clamp( interpolation, 0.0f, 1.0f );
 	interpolation = SimpleSpline( interpolation );
 
 	m_flObserverChaseDistance += gpGlobals->frametime*48.0f;
-	m_flObserverChaseDistance = clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
+	m_flObserverChaseDistance = std::clamp( m_flObserverChaseDistance, 16, CHASE_CAM_DISTANCE );
 
 	QAngle aForward = eyeAngles = EyeAngles();
 	Vector origin = EyePosition();			

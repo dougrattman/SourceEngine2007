@@ -1,9 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
 
 #ifndef COMMON_FXC_H_
 #define COMMON_FXC_H_
@@ -44,11 +39,6 @@ static const HALF3 bumpBasisTranspose[3] = {
 	HALF3(  OO_SQRT_3, OO_SQRT_3, OO_SQRT_3 )
 };
 
-#if defined( _X360 )
-#define REVERSE_DEPTH_ON_X360 //uncomment to use D3DFMT_D24FS8 with an inverted depth viewport for better performance. Keep this in sync with the same named #define in public/shaderapi/shareddefs.h
-//Note that the reversal happens in the viewport. So ONLY reading back from a depth texture should be affected. Projected math is unaffected.
-#endif
-
 HALF3 CalcReflectionVectorNormalized( HALF3 normal, HALF3 eyeVector )
 {
 	// FIXME: might be better of normalizing with a normalizing cube map and
@@ -70,7 +60,7 @@ HALF3 CalcReflectionVectorUnnormalized( HALF3 normal, HALF3 eyeVector )
 float3 HuePreservingColorClamp( float3 c )
 {
 	// Get the max of all of the color components and a specified maximum amount
-	float maximum = max( max( c.x, c.y ), max( c.z, 1.0f ) );
+	float maximum = std::max( std::max( c.x, c.y ), std::max( c.z, 1.0f ) );
 
 	return (c / maximum);
 }
@@ -78,7 +68,7 @@ float3 HuePreservingColorClamp( float3 c )
 HALF3 HuePreservingColorClamp( HALF3 c, HALF maxVal )
 {
 	// Get the max of all of the color components and a specified maximum amount
-	float maximum = max( max( c.x, c.y ), max( c.z, maxVal ) );
+	float maximum = std::max( std::max( c.x, c.y ), std::max( c.z, maxVal ) );
 	return (c * ( maxVal / maximum ) );
 }
 
@@ -126,22 +116,12 @@ void ComputeBumpedLightmapCoordinates( HALF4 Lightmap1and2Coord, HALF2 Lightmap3
 
 float3 mul3x3(float3 v, float3x3 m)
 {
-#if !defined( _X360 )
     return float3(dot(v, transpose(m)[0]), dot(v, transpose(m)[1]), dot(v, transpose(m)[2]));
-#else
-	// xbox360 fxc.exe (new back end) borks with transposes, generates bad code
-	return mul( v, m );
-#endif
 }
 
 float3 mul4x3(float4 v, float4x3 m)
 {
-#if !defined( _X360 )
 	return float3(dot(v, transpose(m)[0]), dot(v, transpose(m)[1]), dot(v, transpose(m)[2]));
-#else
-	// xbox360 fxc.exe (new back end) borks with transposes, generates bad code
-	return mul( v, m );
-#endif
 }
 
 float3 DecompressHDR( float4 input )
@@ -153,14 +133,14 @@ float4 CompressHDR( float3 input )
 {
 	// FIXME: want to use min so that we clamp to white, but what happens if we 
 	// have an albedo component that's less than 1/MAX_HDR_OVERBRIGHT?
-	//	float fMax = max( max( color.r, color.g ), color.b );
+	//	float fMax = std::max( std::max( color.r, color.g ), color.b );
 	float4 output;
-	float fMax = min( min( input.r, input.g ), input.b );
+	float fMax = std::min( std::min( input.r, input.g ), input.b );
 	if( fMax > 1.0f )
 	{
 		float oofMax = 1.0f / fMax;
 		output.rgb = oofMax * input.rgb;
-		output.a = min( fMax / MAX_HDR_OVERBRIGHT, 1.0f );
+		output.a = std::min( fMax / MAX_HDR_OVERBRIGHT, 1.0f );
 	}
 	else
 	{

@@ -119,7 +119,7 @@ void CHudAmmo::Paint( void )
 	int nFontWidth	= GetNumberFontWidth();
 	int nFontHeight	= GetNumberFontHeight();
 
-	a = (int)max( MIN_ALPHA, m_flFade );
+	a = (int)std::max( MIN_ALPHA, m_flFade );
 
 	if ( m_flFade > 0 )
 		m_flFade -= ( gpGlobals->frametime * 20 );

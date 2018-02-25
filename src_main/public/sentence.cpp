@@ -641,7 +641,8 @@ void CSentence::CacheSaveToBuffer(CUtlBuffer &buf, int version) {
       CEmphasisSample *sample = &m_EmphasisSamples[i];
       Assert(sample);
       buf.PutFloat(sample->time);
-      short scaledValue = clamp((short)(sample->value * 32767), 0, 32767);
+      short scaledValue =
+          (short)std::clamp((int)(sample->value * 32767), 0, 32767);
       buf.PutShort(scaledValue);
     }
     buf.PutChar(GetVoiceDuck() ? 1 : 0);
@@ -914,7 +915,7 @@ void CSentence::ResetToBase(void) {
 //-----------------------------------------------------------------------------
 void CSentence::MarkNewPhraseBase(void) {
 #if PHONEME_EDITOR
-  m_nResetWordBase = max(m_Words.Size(), 0);
+  m_nResetWordBase = std::max(m_Words.Size(), 0);
 #endif
 }
 
@@ -1257,10 +1258,10 @@ float CSentence::GetIntensity(float time, float endtime) {
   int end = i + 1;
   int next = i + 2;
 
-  prev = max(-1, prev);
-  start = max(-1, start);
-  end = min(end, GetNumSamples());
-  next = min(next, GetNumSamples());
+  prev = std::max(-1, prev);
+  start = std::max(-1, start);
+  end = std::min(end, GetNumSamples());
+  next = std::min(next, GetNumSamples());
 
   CEmphasisSample *esPre = GetBoundedSample(prev, endtime);
   CEmphasisSample *esStart = GetBoundedSample(start, endtime);
@@ -1268,7 +1269,7 @@ float CSentence::GetIntensity(float time, float endtime) {
   CEmphasisSample *esNext = GetBoundedSample(next, endtime);
 
   float dt = esEnd->time - esStart->time;
-  dt = clamp(dt, 0.01f, 1.0f);
+  dt = std::clamp(dt, 0.01f, 1.0f);
 
   Vector vPre(esPre->time, esPre->value, 0);
   Vector vStart(esStart->time, esStart->value, 0);
@@ -1276,12 +1277,12 @@ float CSentence::GetIntensity(float time, float endtime) {
   Vector vNext(esNext->time, esNext->value, 0);
 
   float f2 = (time - esStart->time) / (dt);
-  f2 = clamp(f2, 0.0f, 1.0f);
+  f2 = std::clamp(f2, 0.0f, 1.0f);
 
   Vector vOut;
   Catmull_Rom_Spline(vPre, vStart, vEnd, vNext, f2, vOut);
 
-  float retval = clamp(vOut.y, 0.0f, 1.0f);
+  float retval = std::clamp(vOut.y, 0.0f, 1.0f);
   return retval;
 }
 

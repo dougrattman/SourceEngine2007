@@ -581,9 +581,9 @@ bool NET_Tick::WriteToBuffer(bf_write &buffer) {
   buffer.WriteLong(m_nTick);
 #if PROTOCOL_VERSION > 10
   buffer.WriteUBitLong(
-      clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTime), 0, 65535), 16);
+      std::clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTime), 0, 65535), 16);
   buffer.WriteUBitLong(
-      clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTimeStdDeviation), 0, 65535),
+      std::clamp((int)(NET_TICK_SCALEUP * m_flHostFrameTimeStdDeviation), 0, 65535),
       16);
 #endif
   return !buffer.IsOverflowed();

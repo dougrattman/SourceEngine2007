@@ -137,8 +137,8 @@ enum LandingState_t {
   LANDING_END_HOVER,
 };
 
-#define DROPSHIP_NEAR_SOUND_MIN_DISTANCE 1000
-#define DROPSHIP_NEAR_SOUND_MAX_DISTANCE 2500
+#define DROPSHIP_NEAR_SOUND_MIN_DISTANCE 1000.0f
+#define DROPSHIP_NEAR_SOUND_MAX_DISTANCE 2500.0f
 #define DROPSHIP_GROUND_WASH_MIN_ALTITUDE 100.0f
 #define DROPSHIP_GROUND_WASH_MAX_ALTITUDE 750.0f
 
@@ -1145,7 +1145,7 @@ void CNPC_CombineDropship::Flight(void) {
     }
 
     float flCurrentSpeed = GetAbsVelocity().Length();
-    float flDist = min(flCurrentSpeed + accelRate, maxSpeed);
+    float flDist = std::min(flCurrentSpeed + accelRate, maxSpeed);
 
     Vector deltaPos;
     if (GetLandingState() == LANDING_SWOOPING) {
@@ -1179,13 +1179,13 @@ void CNPC_CombineDropship::Flight(void) {
         // by damping out all impulse forces that would push us further from the
         // pipe
         float flAmount = (flDistFromPath - 200) / 200.0f;
-        flAmount = clamp(flAmount, 0, 1);
+        flAmount = std::clamp(flAmount, 0.0f, 1.0f);
         VectorMA(accel, flAmount * 200.0f, vecDelta, accel);
       }
     }
 
     // don't fall faster than 0.2G or climb faster than 2G
-    accel.z = clamp(accel.z, 384 * 0.2, 384 * 2.0);
+    accel.z = std::clamp(accel.z, 384 * 0.2f, 384 * 2.0f);
 
     Vector goalUp = accel;
     VectorNormalize(goalUp);
@@ -1196,8 +1196,8 @@ void CNPC_CombineDropship::Flight(void) {
     float goalRoll = RAD2DEG(asin(DotProduct(right, goalUp)));
 
     // clamp goal orientations
-    goalPitch = clamp(goalPitch, -45, 60);
-    goalRoll = clamp(goalRoll, -45, 45);
+    goalPitch = std::clamp(goalPitch, -45.0f, 60.0f);
+    goalRoll = std::clamp(goalRoll, -45.0f, 45.0f);
 
     // calc angular accel needed to hit goal pitch in dt time.
     dt = 0.6;
@@ -1215,10 +1215,10 @@ void CNPC_CombineDropship::Flight(void) {
                       GetLocalAngularVelocity().z * dt) /
                      (dt * dt);
 
-    goalAngAccel.x = clamp(goalAngAccel.x, -300, 300);
-    // goalAngAccel.y = clamp( goalAngAccel.y, -60, 60 );
-    goalAngAccel.y = clamp(goalAngAccel.y, -120, 120);
-    goalAngAccel.z = clamp(goalAngAccel.z, -300, 300);
+    goalAngAccel.x = std::clamp(goalAngAccel.x, -300.0f, 300.0f);
+    // goalAngAccel.y = std::clamp( goalAngAccel.y, -60, 60 );
+    goalAngAccel.y = std::clamp(goalAngAccel.y, -120.0f, 120.0f);
+    goalAngAccel.z = std::clamp(goalAngAccel.z, -300.0f, 300.0f);
 
     // limit angular accel changes to simulate mechanical response times
     dt = 0.1;
@@ -1227,9 +1227,9 @@ void CNPC_CombineDropship::Flight(void) {
     angAccelAccel.y = (goalAngAccel.y - m_vecAngAcceleration.y) / dt;
     angAccelAccel.z = (goalAngAccel.z - m_vecAngAcceleration.z) / dt;
 
-    angAccelAccel.x = clamp(angAccelAccel.x, -1000, 1000);
-    angAccelAccel.y = clamp(angAccelAccel.y, -1000, 1000);
-    angAccelAccel.z = clamp(angAccelAccel.z, -1000, 1000);
+    angAccelAccel.x = std::clamp(angAccelAccel.x, -1000.0f, 1000.0f);
+    angAccelAccel.y = std::clamp(angAccelAccel.y, -1000.0f, 1000.0f);
+    angAccelAccel.z = std::clamp(angAccelAccel.z, -1000.0f, 1000.0f);
 
     m_vecAngAcceleration += angAccelAccel * 0.1;
 
@@ -1245,9 +1245,9 @@ void CNPC_CombineDropship::Flight(void) {
     QAngle angVel = GetLocalAngularVelocity();
     angVel += m_vecAngAcceleration * 0.1;
 
-    // angVel.y = clamp( angVel.y, -60, 60 );
-    // angVel.y = clamp( angVel.y, -120, 120 );
-    angVel.y = clamp(angVel.y, -120, 120);
+    // angVel.y = std::clamp( angVel.y, -60, 60 );
+    // angVel.y = std::clamp( angVel.y, -120, 120 );
+    angVel.y = std::clamp(angVel.y, -120.0f, 120.0f);
 
     SetLocalAngularVelocity(angVel);
 
@@ -1486,8 +1486,8 @@ void CNPC_CombineDropship::UpdateRotorWashVolume() {
   CBaseEntity *pPlayer = UTIL_PlayerByIndex(1);
   if (pPlayer) {
     float flDist = pPlayer->GetAbsOrigin().DistTo(GetAbsOrigin());
-    flDist = clamp(flDist, DROPSHIP_NEAR_SOUND_MIN_DISTANCE,
-                   DROPSHIP_NEAR_SOUND_MAX_DISTANCE);
+    flDist = std::clamp(flDist, DROPSHIP_NEAR_SOUND_MIN_DISTANCE,
+                        DROPSHIP_NEAR_SOUND_MAX_DISTANCE);
     flNearFactor = RemapVal(flDist, DROPSHIP_NEAR_SOUND_MIN_DISTANCE,
                             DROPSHIP_NEAR_SOUND_MAX_DISTANCE, 1.0f, 0.0f);
   }
@@ -1537,7 +1537,7 @@ void CNPC_CombineDropship::UpdateRotorSoundPitch(int iPitch) {
 //-----------------------------------------------------------------------------
 void CNPC_CombineDropship::CalculateSoldierCount(int iSoldiers) {
   if (m_iCrateType >= 0) {
-    m_soldiersToDrop = clamp(iSoldiers, 0, DROPSHIP_MAX_SOLDIERS);
+    m_soldiersToDrop = std::clamp(iSoldiers, 0, DROPSHIP_MAX_SOLDIERS);
   } else {
     m_soldiersToDrop = 0;
   }
@@ -1940,8 +1940,8 @@ void CNPC_CombineDropship::PrescheduleThink(void) {
 #define MIN_LAND_VEL -75.0f
 #define ALTITUDE_CAP 512.0f
 
-      float flFactor = min(1.0, flAltitude / ALTITUDE_CAP);
-      float flDescendVelocity = min(-75, MAX_LAND_VEL * flFactor);
+      float flFactor = std::min(1.0f, flAltitude / ALTITUDE_CAP);
+      float flDescendVelocity = std::min(-75.0f, MAX_LAND_VEL * flFactor);
 
       vecVelocity.z = flDescendVelocity;
 
@@ -1979,7 +1979,7 @@ void CNPC_CombineDropship::PrescheduleThink(void) {
       CSoundEnt::InsertSound(SOUND_DANGER, vecSpot, 400, 0.1, this, 0);
       CSoundEnt::InsertSound(SOUND_PHYSICS_DANGER, vecSpot, 400, 0.1, this, 1);
       //			NDebugOverlay::Cross3D( vecSpot, -Vector(4,4,4),
-      //Vector(4,4,4), 255, 0, 255, false, 10.0f );
+      // Vector(4,4,4), 255, 0, 255, false, 10.0f );
 
       // now check to see if player is below us, if so, cause heat damage to
       // them (i.e. get them to move)
@@ -2152,7 +2152,7 @@ void CNPC_CombineDropship::PrescheduleThink(void) {
                   float flSpeed = GetAbsVelocity().Length();
                   Vector vecVelocity = vecToTarget;
                   VectorNormalize( vecVelocity );
-                  SetAbsVelocity( vecVelocity * min(flSpeed,flDistance) );
+                  SetAbsVelocity( vecVelocity * std::min(flSpeed,flDistance) );
           }
           else
           */

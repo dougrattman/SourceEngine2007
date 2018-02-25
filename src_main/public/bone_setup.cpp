@@ -659,13 +659,13 @@ static void CalcZeroframeData(const CStudioHdr *pStudioHdr,
       index = animdesc.zeroframecount - 2;
       s1 = 1.0f;
     } else {
-      s1 = clamp(
+      s1 = std::clamp(
           (fFrame - index * animdesc.zeroframespan) / animdesc.zeroframespan,
           0.0f, 1.0f);
     }
-    int i0 = max(index - 1, 0);
+    int i0 = std::max(index - 1, 0);
     int i1 = index;
-    int i2 = min(index + 1, animdesc.zeroframecount - 1);
+    int i2 = std::min(index + 1, animdesc.zeroframecount - 1);
     for (j = 0; j < pAnimStudioHdr->numbones; j++) {
       if (pAnimGroup)
         i = pAnimGroup->masterBone[j];
@@ -1620,7 +1620,7 @@ bool CalcPoseSingle(const CStudioHdr *pStudioHdr, Vector pos[], Quaternion q[],
       cycle = cycle - (int)cycle;
       if (cycle < 0) cycle += 1;
     } else {
-      cycle = clamp(cycle, 0.0f, 1.0f);
+      cycle = std::clamp(cycle, 0.0f, 1.0f);
     }
   }
 
@@ -1877,7 +1877,7 @@ void CalcPose(const CStudioHdr *pStudioHdr, CIKContext *pIKContext,
   Assert(flWeight >= 0.0f && flWeight <= 1.0f);
   // This shouldn't be necessary, but the Assert should help us catch whoever is
   // screwing this up
-  flWeight = clamp(flWeight, 0.0f, 1.0f);
+  flWeight = std::clamp(flWeight, 0.0f, 1.0f);
 
   // add any IK locks to prevent numautolayers from moving extremities
   CIKContext seq_ik;
@@ -1918,7 +1918,7 @@ void AccumulatePose(const CStudioHdr *pStudioHdr, CIKContext *pIKContext,
   Assert(flWeight >= 0.0f && flWeight <= 1.0f);
   // This shouldn't be necessary, but the Assert should help us catch whoever is
   // screwing this up
-  flWeight = clamp(flWeight, 0.0f, 1.0f);
+  flWeight = std::clamp(flWeight, 0.0f, 1.0f);
 
   if (sequence < 0) return;
 
@@ -2296,8 +2296,8 @@ bool Studio_SolveIK(int iThigh, int iKnee, int iFoot, Vector &targetFoot,
   // exaggerate knee targets for legs that are nearly straight
   // FIXME: should be configurable, and the ikKnee should be from the original
   // animation, not modifed
-  float d = (targetFoot - worldThigh).Length() - min(l1, l2);
-  d = max(l1 + l2, d);
+  float d = (targetFoot - worldThigh).Length() - std::min(l1, l2);
+  d = std::max(l1 + l2, d);
   // FIXME: too short knee directions cause trouble
   d = d * 100;
 
@@ -2318,7 +2318,7 @@ bool Studio_SolveIK(int iThigh, int iKnee, int iFoot, Vector &targetFoot,
 
   // too close?
   // limit distance to about an 80 degree knee bend
-  float minDist = max(fabs(l1 - l2) * 1.15, min(l1, l2) * 0.15);
+  float minDist = std::max(fabs(l1 - l2) * 1.15, std::min(l1, l2) * 0.15);
   if (ikFoot.Length() < minDist) {
     // too close to get an accurate vector, just use original vector
     ikFoot = (worldFoot - worldThigh);
@@ -2467,7 +2467,7 @@ bool Studio_IKAnimationError(const CStudioHdr *pStudioHdr,
 
   // This shouldn't be necessary, but the Assert should help us catch whoever is
   // screwing this up
-  flWeight = clamp(flWeight, 0.0f, 1.0f);
+  flWeight = std::clamp(flWeight, 0.0f, 1.0f);
 
   if (pRule->type != IK_GROUND && flWeight < 0.0001) return false;
 
@@ -2696,7 +2696,7 @@ void CIKContext::AddDependencies(mstudioseqdesc_t &seqdesc, int iSequence,
   Assert(flWeight >= 0.0f && flWeight <= 1.0f);
   // This shouldn't be necessary, but the Assert should help us catch whoever is
   // screwing this up
-  flWeight = clamp(flWeight, 0.0f, 1.0f);
+  flWeight = std::clamp(flWeight, 0.0f, 1.0f);
 
   // unify this
   if (seqdesc.flags & STUDIO_REALTIME) {
@@ -2708,7 +2708,7 @@ void CIKContext::AddDependencies(mstudioseqdesc_t &seqdesc, int iSequence,
       flCycle = flCycle - (int)flCycle;
       if (flCycle < 0) flCycle += 1;
     } else {
-      flCycle = max(0.0, min(flCycle, 0.9999));
+      flCycle = std::max(0.0f, std::min(flCycle, 0.9999f));
     }
   }
 
@@ -3133,7 +3133,8 @@ void CIKContext::UpdateTargets(Vector pos[], Quaternion q[],
                   Lerp(pRule->flRuleWeight, pTarget->est.radius, pRule->radius);
               // pTarget->est.latched = Lerp( pRule->flRuleWeight,
               // pTarget->est.latched, pRule->latched );
-              pTarget->est.latched = min(pTarget->est.latched, pRule->latched);
+              pTarget->est.latched =
+                  std::min(pTarget->est.latched, pRule->latched);
               pTarget->est.release = Lerp(pRule->flRuleWeight,
                                           pTarget->est.release, pRule->release);
               pTarget->est.flWeight = Lerp(
@@ -3152,7 +3153,7 @@ void CIKContext::UpdateTargets(Vector pos[], Quaternion q[],
             pTarget->est.latched = 0.0;
           else
             pTarget->est.latched =
-                min(pTarget->est.latched, 1.0f - pRule->flWeight);
+                std::min(pTarget->est.latched, 1.0f - pRule->flWeight);
         } break;
         case IK_RELEASE: {
           CIKTarget *pTarget = &m_target[pRule->slot];
@@ -3160,7 +3161,7 @@ void CIKContext::UpdateTargets(Vector pos[], Quaternion q[],
             pTarget->est.latched = 0.0;
           else
             pTarget->est.latched =
-                min(pTarget->est.latched, 1.0f - pRule->flWeight);
+                std::min(pTarget->est.latched, 1.0f - pRule->flWeight);
 
           pTarget->est.flWeight = (pTarget->est.flWeight) *
                                   (1 - pRule->flWeight * pRule->flRuleWeight);
@@ -3312,9 +3313,9 @@ void CIKContext::AutoIKRelease() {
 
       float ft = m_flTime - pTarget->error.flErrorTime;
       if (dt < 0.25) {
-        pTarget->error.ramp = min(pTarget->error.ramp + ft * 4.0, 1.0);
+        pTarget->error.ramp = std::min(pTarget->error.ramp + ft * 4.0, 1.0);
       } else {
-        pTarget->error.ramp = max(pTarget->error.ramp - ft * 4.0, 0.0);
+        pTarget->error.ramp = std::max(pTarget->error.ramp - ft * 4.0, 0.0);
       }
       if (pTarget->error.ramp > 0.0) {
         ikcontextikrule_t ikrule;
@@ -3953,9 +3954,9 @@ void DoQuatInterpBone(mstudiobone_t *pbones, int ibone,
     for (i = 0; i < pProc->numtriggers; i++) {
       float dot = fabs(QuaternionDotProduct(pProc->pTrigger(i)->trigger, src));
       // FIXME: a fast acos should be acceptable
-      dot = clamp(dot, -1, 1);
+      dot = std::clamp(dot, -1.0f, 1.0f);
       weight[i] = 1 - (2 * acos(dot) * pProc->pTrigger(i)->inv_tolerance);
-      weight[i] = max(0, weight[i]);
+      weight[i] = std::max(0.0f, weight[i]);
       scale += weight[i];
     }
 

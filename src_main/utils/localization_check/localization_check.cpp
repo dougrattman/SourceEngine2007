@@ -30,7 +30,7 @@
 #include <mmreg.h>
 #include <stdio.h>
 #include <vgui/ILocalize.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "AudioWaveOutput.h"
 #include "FileSystem.h"
 #include "FileSystem_Helpers.h"

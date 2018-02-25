@@ -6,7 +6,7 @@
 #define PROTECTED_THINGS_DISABLE
 #undef PROTECT_FILEIO_FUNCTIONS
 #undef fopen
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/basetypes.h"
 
 #include "utlvector.h"

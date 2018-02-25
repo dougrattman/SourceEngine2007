@@ -7,11 +7,11 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 //
 // CBeamSegDraw implementation.
 //
-//-----------------------------------------------------------------------------
+
 void CBeamSegDraw::Start(IMatRenderContext *pRenderContext, int nSegs,
                          IMaterial *pMaterial, CMeshBuilder *pMeshBuilder,
                          int nMeshVertCount) {
@@ -154,16 +154,16 @@ void CBeamSegDraw::End() {
   m_Mesh.End(false, true);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void CBeamSegDrawArbitrary::SetNormal(const Vector &normal) {
   m_vNormalLast = normal;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
-//-----------------------------------------------------------------------------
+
 void CBeamSegDrawArbitrary::NextSeg(BeamSeg_t *pSeg) {
   if (m_nSegsDrawn > 0) {
     Vector segDir = (m_PrevSeg.m_vPos - pSeg->m_vPos);
@@ -178,10 +178,10 @@ void CBeamSegDrawArbitrary::NextSeg(BeamSeg_t *pSeg) {
   ++m_nSegsDrawn;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose:
 // Input  : &vNextPos -
-//-----------------------------------------------------------------------------
+
 void CBeamSegDrawArbitrary::SpecifySeg(const Vector &vNormal) {
   // Build the endpoints.
   Vector vPoint1, vPoint2;

@@ -12,7 +12,7 @@
 //
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "filesystem.h"
@@ -121,7 +121,7 @@ bool CSoundTestApp::CreateAppWindow( char const *pTitle, bool bWindowed, int w, 
     wc.style         = CS_OWNDC | CS_DBLCLKS;
     wc.lpfnWndProc   = WinAppWindowProc;
     wc.hInstance     = (HINSTANCE)GetAppInstance();
-    wc.lpszClassName = "Valve001";
+    wc.lpszClassName = "Valve002";
 	wc.hIcon		 = NULL; //LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
 	wc.hIconSm		 = wc.hIcon;
 

@@ -812,8 +812,8 @@ CSceneEntity::~CSceneEntity(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Resets time such that the client version of the .vcd is also
 // updated, if appropriate Input  : t -
-//			forceClientSync - forces new timestamp down to client .dll
-//via networking
+//			forceClientSync - forces new timestamp down to client
+//.dll via networking
 //-----------------------------------------------------------------------------
 void CSceneEntity::SetCurrentTime(float t, bool bForceClientSync) {
   m_flCurrentTime = t;
@@ -1750,7 +1750,7 @@ void CSceneEntity::DispatchStartSpeak(CChoreoScene *scene, CBaseFlex *actor,
           float durationShort = event->GetDuration();
           float durationLong = endtime - event->GetStartTime();
 
-          float duration = max(durationShort, durationLong);
+          float duration = std::max(durationShort, durationLong);
 
           byte byteflags = CLOSE_CAPTION_WARNIFMISSING;  // warnifmissing
           /*
@@ -1772,7 +1772,7 @@ void CSceneEntity::DispatchStartSpeak(CChoreoScene *scene, CBaseFlex *actor,
           // Send caption and duration hint down to client
           UserMessageBegin(filter, "CloseCaption");
           WRITE_STRING(lowercase);
-          WRITE_SHORT(min(255, (int)(duration * 10.0f)));
+          WRITE_SHORT(std::min(255, (int)(duration * 10.0f)));
           WRITE_BYTE(byteflags);  // warn on missing
           MessageEnd();
         }
@@ -1904,7 +1904,7 @@ void CSceneEntity::DoThink(float frametime) {
 
   // catch bad pitch shifting from old save games
   Assert(m_fPitch >= SCENE_MIN_PITCH && m_fPitch <= SCENE_MAX_PITCH);
-  m_fPitch = clamp(m_fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
+  m_fPitch = std::clamp(m_fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
 
   if (m_bPaused) {
     PauseThink();
@@ -2542,7 +2542,7 @@ void CSceneEntity::CancelPlayback(void) {
 }
 
 void CSceneEntity::PitchShiftPlayback(float fPitch) {
-  fPitch = clamp(fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
+  fPitch = std::clamp(fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
 
   m_fPitch = fPitch;
 
@@ -3305,10 +3305,10 @@ class CSceneFindNearestMarkFilter : public IEntityFindFilter {
     if (pActor) {
       m_vecPos1 = pActor->GetAbsOrigin();
       m_flMaxSegmentDistance =
-          min(flMaxRadius, (m_vecPos1 - m_vecPos2).Length() + 1.0);
+          std::min(flMaxRadius, (m_vecPos1 - m_vecPos2).Length() + 1.0f);
       if (m_flMaxSegmentDistance <= 1.0) {
         // must be closest to self
-        m_flMaxSegmentDistance = min(flMaxRadius, MAX_TRACE_LENGTH);
+        m_flMaxSegmentDistance = std::min(flMaxRadius, (float)MAX_TRACE_LENGTH);
       }
     }
   }
@@ -4194,7 +4194,7 @@ void CInstancedSceneEntity::DoThink(float frametime) {
   CheckInterruptCompletion();
 
   if (m_flPreDelay > 0) {
-    m_flPreDelay = max(0, m_flPreDelay - frametime);
+    m_flPreDelay = std::max(0.0f, m_flPreDelay - frametime);
     StartPlayback();
     if (!m_bIsPlayingBack) return;
   }
@@ -4206,7 +4206,7 @@ void CInstancedSceneEntity::DoThink(float frametime) {
 
   // catch bad pitch shifting from old save games
   Assert(m_fPitch >= SCENE_MIN_PITCH && m_fPitch <= SCENE_MAX_PITCH);
-  m_fPitch = clamp(m_fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
+  m_fPitch = std::clamp(m_fPitch, SCENE_MIN_PITCH, SCENE_MAX_PITCH);
 
   if (m_bPaused) {
     PauseThink();
@@ -4342,7 +4342,7 @@ void CSceneManager::Think() {
   // The manager is always thinking at 20 hz
   SetNextThink(gpGlobals->curtime + SCENE_THINK_INTERVAL);
   float frameTime = (gpGlobals->curtime - GetLastThink());
-  frameTime = min(0.1, frameTime);
+  frameTime = std::min(0.1f, frameTime);
 
   // stop if AI is diabled
   if (CAI_BaseNPC::m_nDebugBits & bits_debugDisableAI) return;

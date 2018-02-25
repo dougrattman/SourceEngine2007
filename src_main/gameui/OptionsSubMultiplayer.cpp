@@ -174,7 +174,7 @@ void CrosshairImagePanel::Paint() {
   if (!additive) {
     ConVarRef cl_crosshairalpha("cl_crosshairalpha");
     if (cl_crosshairalpha.IsValid()) {
-      a = clamp(cl_crosshairalpha.GetInt(), 0, 255);
+      a = std::clamp(cl_crosshairalpha.GetInt(), 0, 255);
     }
   }
   vgui::surface()->DrawSetColor(m_R, m_G, m_B, a);
@@ -1543,13 +1543,13 @@ ConversionErrorType COptionsSubMultiplayer::StretchRGBAImage(
       // assign the computed color to the destination pixel, round to the
       // nearest value.  Make sure the value doesn't exceed 255.
       destBuf[(destRow * destWidth * 4) + (destColumn * 4)] =
-          min((int)(destRed + 0.5f), 255);
+          std::min((int)(destRed + 0.5f), 255);
       destBuf[(destRow * destWidth * 4) + (destColumn * 4) + 1] =
-          min((int)(destGreen + 0.5f), 255);
+          std::min((int)(destGreen + 0.5f), 255);
       destBuf[(destRow * destWidth * 4) + (destColumn * 4) + 2] =
-          min((int)(destBlue + 0.5f), 255);
+          std::min((int)(destBlue + 0.5f), 255);
       destBuf[(destRow * destWidth * 4) + (destColumn * 4) + 3] =
-          min((int)(destAlpha + 0.5f), 255);
+          std::min((int)(destAlpha + 0.5f), 255);
     }  // column loop
   }    // row loop
 
@@ -1901,7 +1901,7 @@ void COptionsSubMultiplayer::InitCrosshairColorEntries() {
   ConVarRef cl_crosshaircolor("cl_crosshaircolor");
   int index = 0;
   if (cl_crosshaircolor.IsValid()) {
-    index = clamp(cl_crosshaircolor.GetInt(), 0, NumCrosshairColors);
+    index = std::clamp(cl_crosshaircolor.GetInt(), 0, NumCrosshairColors);
   }
 
   if (m_pCrosshairColorComboBox != NULL) {
@@ -1941,7 +1941,7 @@ void COptionsSubMultiplayer::RedrawCrosshairImage() {
   // get the color selected in the combo box.
   KeyValues *data = m_pCrosshairColorComboBox->GetActiveItemUserData();
   int colorIndex = data->GetInt("color");
-  colorIndex = clamp(colorIndex, 0, NumCrosshairColors);
+  colorIndex = std::clamp(colorIndex, 0, NumCrosshairColors);
 
   int selectedVal = 0;
   int actualVal = 0;
@@ -1951,7 +1951,7 @@ void COptionsSubMultiplayer::RedrawCrosshairImage() {
 
   ConVarRef cl_crosshaircolor("cl_crosshaircolor");
   if (cl_crosshaircolor.IsValid()) {
-    actualVal = clamp(cl_crosshaircolor.GetInt(), 0, NumCrosshairColors);
+    actualVal = std::clamp(cl_crosshaircolor.GetInt(), 0, NumCrosshairColors);
   }
 
   if (selectedVal != actualVal) {
@@ -1981,11 +1981,12 @@ void COptionsSubMultiplayer::RedrawAdvCrosshairImage() {
   }
 
   // get the color selected in the combo box.
-  int r, g, b;
-
-  r = clamp(m_pAdvCrosshairRedSlider->GetSliderValue(), 0, 255);
-  g = clamp(m_pAdvCrosshairGreenSlider->GetSliderValue(), 0, 255);
-  b = clamp(m_pAdvCrosshairBlueSlider->GetSliderValue(), 0, 255);
+  int r = std::clamp(
+      static_cast<int>(m_pAdvCrosshairRedSlider->GetSliderValue()), 0, 255);
+  int g = std::clamp(
+      static_cast<int>(m_pAdvCrosshairGreenSlider->GetSliderValue()), 0, 255);
+  int b = std::clamp(
+      static_cast<int>(m_pAdvCrosshairBlueSlider->GetSliderValue()), 0, 255);
 
   float scale = m_pAdvCrosshairScaleSlider->GetSliderValue();
 
@@ -2198,8 +2199,8 @@ static void PaletteHueReplace(RGBQUAD *palSrc, int newHue, int Start, int end) {
     g = palSrc[i].rgbGreen;
     r = palSrc[i].rgbRed;
 
-    maxcol = max(max(r, g), b) / 255.0f;
-    mincol = min(min(r, g), b) / 255.0f;
+    maxcol = std::max(std::max(r, g), b) / 255.0f;
+    mincol = std::min(std::min(r, g), b) / 255.0f;
 
     val = maxcol;
     sat = (maxcol - mincol) / maxcol;

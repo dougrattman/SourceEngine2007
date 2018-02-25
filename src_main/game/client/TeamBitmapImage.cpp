@@ -82,7 +82,7 @@ bool CTeamBitmapImage::Init(vgui::Panel *pParent, KeyValues *pInitData,
 // Alpha modulate...
 //-----------------------------------------------------------------------------
 void CTeamBitmapImage::SetAlpha(float alpha) {
-  m_Alpha = clamp(alpha, 0.0f, 1.0f);
+  m_Alpha = std::clamp(alpha, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------

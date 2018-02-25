@@ -164,7 +164,7 @@ void CWeaponMinigun::ItemPostFrame( void )
 			if ( m_flRotationSpeed < 0.99 )
 			{
 				// If we're starting, play the sound
-				m_flRotationSpeed = min(1, m_flRotationSpeed + (gpGlobals->frametime / MINIGUN_WIND_TIME) );
+				m_flRotationSpeed = std::min(1, m_flRotationSpeed + (gpGlobals->frametime / MINIGUN_WIND_TIME) );
 			}
 			else
 			{
@@ -213,7 +213,7 @@ void CWeaponMinigun::ReduceRotation( void )
 {
 	if ( m_flRotationSpeed > 0 )
 	{
-		m_flRotationSpeed = max(0, m_flRotationSpeed - (gpGlobals->frametime / MINIGUN_WIND_TIME) );
+		m_flRotationSpeed = std::max(0, m_flRotationSpeed - (gpGlobals->frametime / MINIGUN_WIND_TIME) );
 	}
 }
 

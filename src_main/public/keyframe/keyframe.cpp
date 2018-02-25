@@ -347,7 +347,7 @@ int Motion_GetNumberOfPositionInterpolators() {
 IPositionInterpolator *Motion_GetPositionInterpolator(int interpNum) {
   Assert(interpNum >= 0 &&
          interpNum < Motion_GetNumberOfPositionInterpolators());
-  return g_PositionInterpolatorCreateFns[clamp(
+  return g_PositionInterpolatorCreateFns[std::clamp(
       interpNum, 0, Motion_GetNumberOfPositionInterpolators() - 1)]();
 }
 

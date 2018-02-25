@@ -308,7 +308,7 @@ void Map_VisSetup(model_t *worldmodel, int visorigincount,
   assert(visorigincount <= MAX_VIS_LEAVES);
 
   // Don't crash if the client .dll tries to do something weird/dumb
-  vis.nClusters = min(visorigincount, MAX_VIS_LEAVES);
+  vis.nClusters = std::min(visorigincount, MAX_VIS_LEAVES);
   vis.bForceFullSky = false;
   vis.bSkyVisible = false;
   returnFlags = 0;

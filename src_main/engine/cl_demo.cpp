@@ -178,7 +178,7 @@ void DemoOverlay::Tick() {
   if (!m_bTick) {
     m_bTick = true;
 
-    float const fRealTime = Sys_FloatTime();
+    float const fRealTime = Plat_FloatTime();
     if (m_fLastTickTime != fRealTime) {
       m_fLastTickTime = fRealTime;
 
@@ -735,7 +735,7 @@ void CDemoPlayer::StopPlayback(void) {
     m_bTimeDemo = false;
   } else {
     int framecount = host_framecount - m_nTimeDemoStartFrame;
-    float demotime = Sys_FloatTime() - m_flTimeDemoStartTime;
+    float demotime = Plat_FloatTime() - m_flTimeDemoStartTime;
 
     if (demotime > 0.0f) {
       DevMsg(
@@ -1077,7 +1077,7 @@ netpacket_t *CDemoPlayer::ReadPacket(void) {
   // Skip a few ticks before doing any timing
   if ((m_nTimeDemoStartFrame < 0) && GetPlaybackTick() > 100) {
     m_nTimeDemoStartFrame = host_framecount;
-    m_flTimeDemoStartTime = Sys_FloatTime();
+    m_flTimeDemoStartTime = Plat_FloatTime();
     m_flTotalFPSVariability = 0.0f;
 
     if (m_bTimeDemo) {
@@ -1203,7 +1203,7 @@ void CDemoPlayer::InterpolateViewpoint(void) {
 
     frac = (TICKS_TO_TIME(nTargetTick - prev.tick) + cl.m_tickRemainder) / dt;
 
-    frac = clamp(frac, 0.0f, 1.0f);
+    frac = std::clamp(frac, 0.0f, 1.0f);
 
     // Now interpolate
     Vector delta;
@@ -1409,7 +1409,7 @@ void CDemoPlayer::WriteTimeDemoResults(void) {
   int frames;
   float time;
   frames = (host_framecount - m_nTimeDemoStartFrame) - 1;
-  time = Sys_FloatTime() - m_flTimeDemoStartTime;
+  time = Plat_FloatTime() - m_flTimeDemoStartTime;
   if (!time) {
     time = 1;
   }
@@ -1501,7 +1501,7 @@ void CDemoPlayer::PausePlayback(float seconds) {
 
   if (seconds > 0.0f) {
     // Use true clock since everything else is frozen
-    m_flAutoResumeTime = Sys_FloatTime() + seconds;
+    m_flAutoResumeTime = Plat_FloatTime() + seconds;
   } else {
     m_flAutoResumeTime = 0.0f;
   }
@@ -1537,7 +1537,7 @@ bool CDemoPlayer::CheckPausedPlayback() {
 
   if (m_bPlaybackPaused) {
     if ((m_flAutoResumeTime > 0.0f) &&
-        (Sys_FloatTime() >= m_flAutoResumeTime)) {
+        (Plat_FloatTime() >= m_flAutoResumeTime)) {
       // it's time to unpause replay
       ResumePlayback();
     }
@@ -1810,7 +1810,7 @@ void CL_BenchFrame_f(const CCommand &args) {
     return;
   }
 
-  g_pClientDemoPlayer->SetBenchframe(max(0, atoi(args[2])), args[3]);
+  g_pClientDemoPlayer->SetBenchframe(std::max(0, atoi(args[2])), args[3]);
 
   s_bBenchframe = true;
 
@@ -1927,7 +1927,7 @@ CON_COMMAND(demo_timescale, "Sets demo replay speed.") {
 
   if (args.ArgC() == 2) {
     fScale = atof(args[1]);
-    fScale = clamp(fScale, 0.0f, 100.0f);
+    fScale = std::clamp(fScale, 0.0f, 100.0f);
   }
 
   demoplayer->SetPlaybackTimeScale(fScale);

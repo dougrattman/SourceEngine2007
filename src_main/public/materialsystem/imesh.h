@@ -36,7 +36,10 @@ typedef uint64_t VertexFormat_t;
 //-----------------------------------------------------------------------------
 // The Vertex Buffer interface
 //-----------------------------------------------------------------------------
-enum { VERTEX_MAX_TEXTURE_COORDINATES = 8, BONE_MATRIX_INDEX_INVALID = 255 };
+enum : int {
+  VERTEX_MAX_TEXTURE_COORDINATES = 8,
+  BONE_MATRIX_INDEX_INVALID = 255
+};
 
 // Internal maximums for sizes. Don't use directly, use
 // IMaterialSystem::GetMaxToRender()
@@ -2565,7 +2568,7 @@ inline void CIndexBuilder::GenerateIndices(
   if (m_nIndexSize == 0) return;
 
   int nMaxIndices = m_nMaxIndexCount - m_nCurrentIndex;
-  nIndexCount = min(nMaxIndices, nIndexCount);
+  nIndexCount = std::min(nMaxIndices, nIndexCount);
   if (nIndexCount == 0) return;
 
   unsigned short *pIndices = &m_pIndices[m_nCurrentIndex];

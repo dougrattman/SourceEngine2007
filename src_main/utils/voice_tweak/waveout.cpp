@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #include "stdafx.h"
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <assert.h>
 #include <mmsystem.h>
 #include "waveout.h"

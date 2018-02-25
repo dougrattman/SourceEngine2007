@@ -444,7 +444,7 @@ class CWorkerMulticastListener {
         }
 
         int iChunkStart = iChunk * iChunkPayloadSize;
-        int iChunkEnd = min(iChunkStart + iChunkPayloadSize,
+        int iChunkEnd = std::min(iChunkStart + iChunkPayloadSize,
                             pTestFile->m_CompressedData.Count());
         int chunkLen = iChunkEnd - iChunkStart;
 

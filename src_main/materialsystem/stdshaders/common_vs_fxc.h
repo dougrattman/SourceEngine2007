@@ -510,7 +510,7 @@ bool ApplyMorph( sampler2D morphSampler, const float3 vMorphTargetTextureDim, co
 
 float RangeFog( const float3 projPos )
 {
-	return max( cFogMaxDensity, ( -projPos.z * cOOFogRange + cFogEndOverFogRange ) );
+	return std::max( cFogMaxDensity, ( -projPos.z * cOOFogRange + cFogEndOverFogRange ) );
 }
 
 float WaterFog( const float3 worldPos, const float3 projPos )
@@ -525,7 +525,7 @@ float WaterFog( const float3 worldPos, const float3 projPos )
 	// if $tmp.x < 0, then set it to 0
 	// This is the equivalent of moving the vert to the water surface if it's above the water surface
 	
-	tmp.x = max( 0.0f, tmp.x );
+	tmp.x = std::max( 0.0f, tmp.x );
 
 	// $tmp.w = $tmp.x / $tmp.y
 	tmp.w = tmp.x / tmp.y;
@@ -534,7 +534,7 @@ float WaterFog( const float3 worldPos, const float3 projPos )
 
 	// $tmp.w is now the distance that we see through water.
 
-	return max( cFogMaxDensity, ( -tmp.w * cOOFogRange + cFogOne ) );
+	return std::max( cFogMaxDensity, ( -tmp.w * cOOFogRange + cFogOne ) );
 }
 
 float CalcFog( const float3 worldPos, const float3 projPos, const int fogType )
@@ -773,7 +773,7 @@ float VertexAttenInternal( const float3 worldPos, int lightNum )
 	// Spot attenuation
 	float flCosTheta = dot( cLightInfo[lightNum].dir.xyz, -lightDir );
 	float flSpotAtten = (flCosTheta - cLightInfo[lightNum].spotParams.z) * cLightInfo[lightNum].spotParams.w;
-	flSpotAtten = max( 0.0001f, flSpotAtten );
+	flSpotAtten = std::max( 0.0001f, flSpotAtten );
 	flSpotAtten = pow( flSpotAtten, cLightInfo[lightNum].spotParams.x );
 	flSpotAtten = saturate( flSpotAtten );
 
@@ -799,7 +799,7 @@ float CosineTermInternal( const float3 worldPos, const float3 worldNormal, int l
 
 	if ( !bHalfLambert )
 	{
-		NDotL = max( 0.0f, NDotL );
+		NDotL = std::max( 0.0f, NDotL );
 	}
 	else	// Half-Lambert
 	{
@@ -936,8 +936,8 @@ float3 ApplyDeformation( float3 worldpos, int deftype, float4 defparms0, float4 
 	float3 ret = worldpos;
 	if ( deftype == DEFORMATION_CLAMP_TO_BOX_IN_WORLDSPACE )
 	{
-		ret=max( ret, defparms2.xyz );
-		ret=min( ret, defparms3.xyz );
+		ret=std::max( ret, defparms2.xyz );
+		ret=std::min( ret, defparms3.xyz );
 	}
 
 	return ret;

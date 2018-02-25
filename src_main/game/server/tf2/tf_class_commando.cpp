@@ -476,7 +476,7 @@ void CPlayerClassCommando::Boot( CBaseTFPlayer *pTarget )
 	Vector vecForward;
 	AngleVectors( m_pPlayer->GetLocalAngles(), &vecForward );
 	// Give it a lot of "in the air"
-	vecForward.z = max( 0.8, vecForward.z );
+	vecForward.z = std::max( 0.8, vecForward.z );
 	VectorNormalize( vecForward );
 
 	// Knock the target to the ground for a few seconds (use default duration)

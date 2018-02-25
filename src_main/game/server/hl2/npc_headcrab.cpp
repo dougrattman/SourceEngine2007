@@ -937,7 +937,7 @@ void CBaseHeadcrab::PrescheduleThink(void) {
 
   // Are we fading in after being hidden?
   if (!m_bHidden && (m_nRenderMode != kRenderNormal)) {
-    int iNewAlpha = min(255, GetRenderColor().a + 120);
+    int iNewAlpha = std::min(255, GetRenderColor().a + 120);
     if (iNewAlpha >= 255) {
       m_nRenderMode = kRenderNormal;
       SetRenderColorA(0);

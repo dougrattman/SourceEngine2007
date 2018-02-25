@@ -24,11 +24,6 @@
 
 using namespace vgui;
 
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-
 //--------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------
 BuyPresetListBox::BuyPresetListBox( vgui::Panel *parent, char const *panelName ) : Panel( parent, panelName )
@@ -280,7 +275,7 @@ void BuyPresetListBox::PerformLayout()
 	//!! need to make it recalculate scroll positions
 	m_vbar->SetVisible(true);
 	m_vbar->SetEnabled(false);
-	m_vbar->SetRange( 0, (max( 0, vpixels - tall + m_iDefaultHeight ))  );
+	m_vbar->SetRange( 0, (std::max( 0, vpixels - tall + m_iDefaultHeight ))  );
 	m_vbar->SetRangeWindow( m_iDefaultHeight );
 	m_vbar->SetButtonPressedScrollValue( m_iDefaultHeight ); // standard height of labels/buttons etc.
 	m_vbar->SetPos(wide - m_iScrollbarSize, 1);
@@ -288,7 +283,7 @@ void BuyPresetListBox::PerformLayout()
 
 	m_visibleIndex = visibleIndex;
 
-	int top = max( 0, m_vbar->GetValue() );
+	int top = std::max( 0, m_vbar->GetValue() );
 
 	m_pPanelEmbedded->SetPos( 1, -top );
 	m_pPanelEmbedded->SetSize( wide-m_iScrollbarSize -2, vpixels );
@@ -323,7 +318,7 @@ void BuyPresetListBox::PerformLayout()
 		int vtop, vbottom;
 		m_vbar->GetRange( vtop, vbottom );
 
-		int top = max( 0, m_vbar->GetValue() ); // top pixel in the embedded panel
+		int top = std::max( 0, m_vbar->GetValue() ); // top pixel in the embedded panel
 		int bottom = top + tall - 2;
 
 		int itemTop, itemLeft, itemBottom, itemRight;

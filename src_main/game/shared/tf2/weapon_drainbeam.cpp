@@ -283,7 +283,7 @@ void CWeaponDrainBeam::PrimaryAttack( void )
 			if ( pTarget->AttemptToPowerup( POWERUP_EMP, flPostDrainTime ) )
 			{
 				// Crank up the drain rate based on the time since we started draining this target
-				flDrainTime = min( weapon_drainbeam_max_rate_time.GetFloat(), flDrainTime );
+				flDrainTime = std::min( weapon_drainbeam_max_rate_time.GetFloat(), flDrainTime );
 				float flDrainAmount = weapon_drainbeam_max_rate.GetFloat() * ( flDrainTime / weapon_drainbeam_max_rate_time.GetFloat() );
 
 				// It uses floating point in here so it doesn't lose the fractional part on small frame times.
@@ -305,7 +305,7 @@ void CWeaponDrainBeam::PrimaryAttack( void )
 					if ( pOwner->GetHealth() < pOwner->GetMaxHealth() )
 					{
 						int maxHealthToAdd = pOwner->GetMaxHealth() - pOwner->GetHealth();
-						int nHealthAdded = min( iDamage, maxHealthToAdd );
+						int nHealthAdded = std::min( iDamage, maxHealthToAdd );
 						pOwner->TakeHealth( nHealthAdded, DMG_GENERIC );
 					}
 

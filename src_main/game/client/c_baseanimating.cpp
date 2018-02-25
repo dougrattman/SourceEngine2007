@@ -494,7 +494,7 @@ void C_ClientRagdoll::FadeOut(void) {
                        ? g_ragdoll_lvfadespeed.GetInt()
                        : g_ragdoll_fadespeed.GetInt();
 
-  iAlpha = max(iAlpha - (iFadeSpeed * gpGlobals->frametime), 0);
+  iAlpha = std::max(iAlpha - (iFadeSpeed * gpGlobals->frametime), 0.0f);
 
   SetRenderMode(kRenderTransAlpha);
   SetRenderColorA(iAlpha);
@@ -923,8 +923,8 @@ CStudioHdr *C_BaseAnimating::OnNewModel() {
     }
   }
 
-  int boneControllerCount =
-      min(hdr->numbonecontrollers(), ARRAYSIZE(m_flEncodedController));
+  int boneControllerCount = std::min(hdr->numbonecontrollers(),
+                                     (int)ARRAYSIZE(m_flEncodedController));
 
   m_iv_flEncodedController.SetMaxCount(boneControllerCount);
 
@@ -1142,7 +1142,7 @@ float C_BaseAnimating::ClampCycle(float flCycle, bool isLooping) {
       flCycle += 1.0f;
     }
   } else {
-    flCycle = clamp(flCycle, 0.0f, 0.999f);
+    flCycle = std::clamp(flCycle, 0.0f, 0.999f);
   }
   return flCycle;
 }
@@ -1508,7 +1508,7 @@ void C_BaseAnimating::UnragdollBlend(CStudioHdr *hdr, Vector pos[],
 
   // Slerp bone sets together
   float frac = dt / 0.2f;
-  frac = clamp(frac, 0.0f, 1.0f);
+  frac = std::clamp(frac, 0.0f, 1.0f);
 
   int i;
   for (i = 0; i < hdr->numbones(); i++) {
@@ -1953,7 +1953,7 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
         VectorMA(estGround, pTarget->est.height, up, p1);
         VectorMA(estGround, -pTarget->est.height, up, p2);
 
-        float r = max(pTarget->est.radius, 1);
+        float r = std::max(pTarget->est.radius, 1.0f);
 
         // don't IK to other characters
         ray.Init(p1, p2, Vector(-r, -r, 0), Vector(r, r, r * 2));
@@ -4108,7 +4108,7 @@ float C_BaseAnimating::GetAnimTimeInterval(void) const {
 #define MAX_ANIMTIME_INTERVAL 0.2f
 
   float flInterval =
-      min(gpGlobals->curtime - m_flAnimTime, MAX_ANIMTIME_INTERVAL);
+      std::min(gpGlobals->curtime - m_flAnimTime, MAX_ANIMTIME_INTERVAL);
   return flInterval;
 }
 
@@ -4319,7 +4319,7 @@ float C_BaseAnimating::FrameAdvance(float flInterval) {
       addcycle = (serverAdvance + addcycle) / 2;
 
       const float MAX_CYCLE_ADJUSTMENT = 0.1f;
-      addcycle = min(
+      addcycle = std::min(
           MAX_CYCLE_ADJUSTMENT,
           addcycle);  // Don't do too big of a jump; it's too jarring as well.
 

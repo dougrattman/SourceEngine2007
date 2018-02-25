@@ -1,4 +1,4 @@
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "mdmpRipper.h"
 #include <vgui/IVGui.h>
 #include "vgui_controls/MessageMap.h"

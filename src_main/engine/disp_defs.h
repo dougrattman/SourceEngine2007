@@ -121,7 +121,7 @@ class CDispDecal : public CDispDecalBase {
 #pragma pack(1)
 class CDispDecalFragment {
  public:
-  enum {
+  enum : int {
     MAX_VERTS = 6
   };  // 3 decal verts clipped by 4 planes results in a maximum of 6 (not 8)
       // verts

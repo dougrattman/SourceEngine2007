@@ -299,8 +299,8 @@ void CTabWindow::add( const char *item )
 
 	strcpy( p->m_szString, item );
 	p->m_szPrefix[ 0 ] = 0;
-	m_nSelected = min( m_nSelected, m_Items.Size() - 1 );
-	m_nSelected = max( m_nSelected, 0 );
+	m_nSelected = std::min( m_nSelected, m_Items.Size() - 1 );
+	m_nSelected = std::max( m_nSelected, 0 );
 
 	RecomputeLayout( w2() );
 
@@ -340,8 +340,8 @@ void CTabWindow::remove( int index )
 	
 	m_Items.Remove( index );
 
-	m_nSelected = min( m_nSelected, m_Items.Size() - 1 );
-	m_nSelected = max( m_nSelected, 0 );
+	m_nSelected = std::min( m_nSelected, m_Items.Size() - 1 );
+	m_nSelected = std::max( m_nSelected, 0 );
 
 	RecomputeLayout( w2() );
 

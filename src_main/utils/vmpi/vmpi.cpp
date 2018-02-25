@@ -1080,7 +1080,7 @@ void CMasterBroadcaster::IncreaseMaxWorkers(int count) {
   CCriticalSectionLock connectionsLock(&g_ConnectionsCS);
   connectionsLock.Lock();
 
-  m_nMaxWorkers = min(MAX_VMPI_CONNECTIONS, m_nMaxWorkers + count);
+  m_nMaxWorkers = std::min(MAX_VMPI_CONNECTIONS, m_nMaxWorkers + count);
 }
 
 void CMasterBroadcaster::SetPassword(const char *pPassword) {
@@ -1306,7 +1306,7 @@ bool InitMaster(int argc, char **argv, const char *pDependencyFilename,
   } else {
     nMaxWorkers = DEFAULT_MAX_WORKERS;
   }
-  nMaxWorkers = clamp(nMaxWorkers, 2, MAX_VMPI_CONNECTIONS);
+  nMaxWorkers = std::clamp(nMaxWorkers, 2, MAX_VMPI_CONNECTIONS);
 
   g_bMPIMaster = true;
   g_nMaxWorkerCount = nMaxWorkers;

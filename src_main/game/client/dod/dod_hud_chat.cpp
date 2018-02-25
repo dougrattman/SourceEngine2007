@@ -598,7 +598,7 @@ void CHudChat::FindLocalizableSubstrings( char *szChat, int chatLength )
 			Q_strncat( buf, szTemp, DOD_MAX_CHAT_LENGTH, COPY_ALL_CHARACTERS );
 
 			int remainingSpace = chatLength - pos - 2;	// minus one for the NULL and one for the space
-			pos += min( Q_strlen(szTemp), remainingSpace );
+			pos += std::min( Q_strlen(szTemp), remainingSpace );
 
 			pSrc += iWordPos-1;		// progress pSrc to the end of the word
 		}
@@ -614,7 +614,7 @@ void CHudChat::FindLocalizableSubstrings( char *szChat, int chatLength )
 	pos++;
 
 	//copy buf back to szChat
-	Q_strncpy( szChat, buf, min(chatLength, pos) );
+	Q_strncpy( szChat, buf, std::min(chatLength, pos) );
 }
 
 

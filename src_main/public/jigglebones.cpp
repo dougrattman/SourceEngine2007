@@ -82,7 +82,7 @@ void CJiggleBones::BuildJiggleTransformations( int boneIndex, float currenttime,
 	// if framerate gets very low, jiggle will run in slow motion
 	const float thirtyHZ = 0.0333f;
 	const float thousandHZ = 0.001f;
-	float deltaT = clamp( currenttime - data->lastUpdate, thousandHZ, thirtyHZ );
+	float deltaT = std::clamp( currenttime - data->lastUpdate, thousandHZ, thirtyHZ );
 	data->lastUpdate = currenttime;
 
 	//

@@ -637,7 +637,7 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
           pConfiguration->FindKey("ConVar.mat_picmip", false);
       int newPicMip = pMatPicmipKeyValue->GetInt();
       int oldPicMip = pConfigMatPicMip ? pConfigMatPicMip->GetInt() : 0;
-      pConfiguration->SetInt("ConVar.mat_picmip", max(newPicMip, oldPicMip));
+      pConfiguration->SetInt("ConVar.mat_picmip", std::max(newPicMip, oldPicMip));
     }
   }
 

@@ -297,23 +297,23 @@ FORCEINLINE fltx4 ArcSinSIMD(const fltx4 &sine) {
   return result;
 }
 
-FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // max(a,b)
+FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // std::max(a,b)
 {
   fltx4 retVal;
-  SubFloat(retVal, 0) = max(SubFloat(a, 0), SubFloat(b, 0));
-  SubFloat(retVal, 1) = max(SubFloat(a, 1), SubFloat(b, 1));
-  SubFloat(retVal, 2) = max(SubFloat(a, 2), SubFloat(b, 2));
-  SubFloat(retVal, 3) = max(SubFloat(a, 3), SubFloat(b, 3));
+  SubFloat(retVal, 0) = std::max(SubFloat(a, 0), SubFloat(b, 0));
+  SubFloat(retVal, 1) = std::max(SubFloat(a, 1), SubFloat(b, 1));
+  SubFloat(retVal, 2) = std::max(SubFloat(a, 2), SubFloat(b, 2));
+  SubFloat(retVal, 3) = std::max(SubFloat(a, 3), SubFloat(b, 3));
   return retVal;
 }
 
-FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // min(a,b)
+FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // std::min(a,b)
 {
   fltx4 retVal;
-  SubFloat(retVal, 0) = min(SubFloat(a, 0), SubFloat(b, 0));
-  SubFloat(retVal, 1) = min(SubFloat(a, 1), SubFloat(b, 1));
-  SubFloat(retVal, 2) = min(SubFloat(a, 2), SubFloat(b, 2));
-  SubFloat(retVal, 3) = min(SubFloat(a, 3), SubFloat(b, 3));
+  SubFloat(retVal, 0) = std::min(SubFloat(a, 0), SubFloat(b, 0));
+  SubFloat(retVal, 1) = std::min(SubFloat(a, 1), SubFloat(b, 1));
+  SubFloat(retVal, 2) = std::min(SubFloat(a, 2), SubFloat(b, 2));
+  SubFloat(retVal, 3) = std::min(SubFloat(a, 3), SubFloat(b, 3));
   return retVal;
 }
 
@@ -683,14 +683,14 @@ FORCEINLINE void TransposeSIMD(fltx4 &x, fltx4 &y, fltx4 &z, fltx4 &w) {
 // find the lowest component of a.x, a.y, a.z,
 // and replicate it to the whole return value.
 FORCEINLINE fltx4 FindLowestSIMD3(const fltx4 &a) {
-  f32 lowest = min(min(SubFloat(a, 0), SubFloat(a, 1)), SubFloat(a, 2));
+  f32 lowest = std::min(std::min(SubFloat(a, 0), SubFloat(a, 1)), SubFloat(a, 2));
   return ReplicateX4(lowest);
 }
 
 // find the highest component of a.x, a.y, a.z,
 // and replicate it to the whole return value.
 FORCEINLINE fltx4 FindHighestSIMD3(const fltx4 &a) {
-  f32 highest = max(max(SubFloat(a, 0), SubFloat(a, 1)), SubFloat(a, 2));
+  f32 highest = std::max(std::max(SubFloat(a, 0), SubFloat(a, 1)), SubFloat(a, 2));
   return ReplicateX4(highest);
 }
 
@@ -853,12 +853,12 @@ FORCEINLINE fltx4 ArcSinSIMD(const fltx4 &sine) { return XMVectorASin(sine); }
 
 // DivSIMD defined further down, since it uses ReciprocalSIMD
 
-FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // max(a,b)
+FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // std::max(a,b)
 {
   return __vmaxfp(a, b);
 }
 
-FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // min(a,b)
+FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // std::min(a,b)
 {
   return __vminfp(a, b);
 }
@@ -1241,11 +1241,11 @@ FORCEINLINE fltx4 FindLowestSIMD3(const fltx4 &a) {
   compareOne = __vrlimi(compareOne, a, 8 | 4, 1);
   // compareOne is [y,z,G,G]
   fltx4 retval = MinSIMD(a, compareOne);
-  // retVal is [min(x,y), min(y,z), G, G]
+  // retVal is [std::min(x,y), std::min(y,z), G, G]
   compareOne = __vrlimi(compareOne, a, 8, 2);
   // compareOne is [z, G, G, G]
   retval = MinSIMD(retval, compareOne);
-  // retVal = [ min(min(x,y),z), G, G, G ]
+  // retVal = [ std::min(std::min(x,y),z), G, G, G ]
 
   // splat the x component out to the whole vector and return
   return SplatXSIMD(retval);
@@ -1264,11 +1264,11 @@ FORCEINLINE fltx4 FindHighestSIMD3(const fltx4 &a) {
   compareOne = __vrlimi(compareOne, a, 8 | 4, 1);
   // compareOne is [y,z,G,G]
   fltx4 retval = MaxSIMD(a, compareOne);
-  // retVal is [max(x,y), max(y,z), G, G]
+  // retVal is [std::max(x,y), std::max(y,z), G, G]
   compareOne = __vrlimi(compareOne, a, 8, 2);
   // compareOne is [z, G, G, G]
   retval = MaxSIMD(retval, compareOne);
-  // retVal = [ max(max(x,y),z), G, G, G ]
+  // retVal = [ std::max(std::max(x,y),z), G, G, G ]
 
   // splat the x component out to the whole vector and return
   return SplatXSIMD(retval);
@@ -1765,12 +1765,12 @@ CmpInBoundsSIMD(const fltx4 &a, const fltx4 &b)  // (a <= b && a >= -b) ? ~0 : 0
   return AndSIMD(CmpLeSIMD(a, b), CmpGeSIMD(a, NegSIMD(b)));
 }
 
-FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // min(a,b)
+FORCEINLINE fltx4 MinSIMD(const fltx4 &a, const fltx4 &b)  // std::min(a,b)
 {
   return _mm_min_ps(a, b);
 }
 
-FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // max(a,b)
+FORCEINLINE fltx4 MaxSIMD(const fltx4 &a, const fltx4 &b)  // std::max(a,b)
 {
   return _mm_max_ps(a, b);
 }
@@ -1888,11 +1888,11 @@ FORCEINLINE fltx4 FindLowestSIMD3(const fltx4 &a) {
   fltx4 compareOne = RotateLeft(a);
   // compareOne is [y,z,G,x]
   fltx4 retval = MinSIMD(a, compareOne);
-  // retVal is [min(x,y), ... ]
+  // retVal is [std::min(x,y), ... ]
   compareOne = RotateLeft2(a);
   // compareOne is [z, G, x, y]
   retval = MinSIMD(retval, compareOne);
-  // retVal = [ min(min(x,y),z)..]
+  // retVal = [ std::min(std::min(x,y),z)..]
   // splat the x component out to the whole vector and return
   return SplatXSIMD(retval);
 }
@@ -1903,11 +1903,11 @@ FORCEINLINE fltx4 FindHighestSIMD3(const fltx4 &a) {
   fltx4 compareOne = RotateLeft(a);
   // compareOne is [y,z,G,x]
   fltx4 retval = MaxSIMD(a, compareOne);
-  // retVal is [max(x,y), ... ]
+  // retVal is [std::max(x,y), ... ]
   compareOne = RotateLeft2(a);
   // compareOne is [z, G, x, y]
   retval = MaxSIMD(retval, compareOne);
-  // retVal = [ max(max(x,y),z)..]
+  // retVal = [ std::max(std::max(x,y),z)..]
   // splat the x component out to the whole vector and return
   return SplatXSIMD(retval);
 }
@@ -2583,10 +2583,10 @@ FORCEINLINE fltx4 BiasSIMD(const fltx4 &val, const fltx4 &precalc_param) {
       val, AddSIMD(MulSIMD(precalc_param, SubSIMD(Four_Ones, val)), Four_Ones));
 }
 
-//-----------------------------------------------------------------------------
+
 // Box/plane test
 // NOTE: The w component of emins + emaxs must be 1 for this to work
-//-----------------------------------------------------------------------------
+
 FORCEINLINE int BoxOnPlaneSideSIMD(const fltx4 &emins, const fltx4 &emaxs,
                                    const cplane_t *p, f32 tolerance = 0.f) {
   fltx4 corners[2];

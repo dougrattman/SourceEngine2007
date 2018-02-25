@@ -1,16 +1,13 @@
-//===== Copyright © 1996-2007, Valve Corporation, All rights reserved. ======//
-//
-// Purpose: particle system code
-//
-//===========================================================================//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "particles/particles.h"
-#include "dmxloader/dmxloader.h"
+
 #include "filesystem.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialvar.h"
 #include "materialsystem/imesh.h"
 #include "materialsystem/itexture.h"
+#include "particles/particles.h"
 #include "particles_internal.h"
 #include "psheet.h"
 #include "random_floats.h"
@@ -443,7 +440,7 @@ void CParticleSystemDefinition::Read(CDmxElement *pElement) {
     m_nMaxParticles = 1;
   }
   m_nMaxParticles *= g_nParticle_Multiplier;
-  m_nMaxParticles = min(m_nMaxParticles, MAX_PARTICLES_IN_A_SYSTEM);
+  m_nMaxParticles = std::min(m_nMaxParticles, MAX_PARTICLES_IN_A_SYSTEM);
   if (m_flCullRadius > 0) {
     m_nControlPointReadMask |= 1ULL << m_nCullControlPoint;
   }
@@ -639,7 +636,7 @@ void CParticleOperatorInstance::InitNewParticles(
   int nHead = nFirstParticle & 3;
   if (nHead) {
     // need to init up to 3 particles before we are block aligned
-    int nHeadCount = min(nParticleCount, 4 - nHead);
+    int nHeadCount = std::min(nParticleCount, 4 - nHead);
     InitNewParticlesScalar(pParticles, nFirstParticle, nHeadCount,
                            nAttributeWriteMask, pContext);
     nParticleCount -= nHeadCount;
@@ -1017,7 +1014,7 @@ void CParticleCollection::InitStorage(CParticleSystemDefinition *pDef) {
   Assert(pDef->m_nMaxParticles < 65536);
 
   m_nMaxAllowedParticles =
-      min(MAX_PARTICLES_IN_A_SYSTEM, pDef->m_nMaxParticles);
+      std::min(MAX_PARTICLES_IN_A_SYSTEM, pDef->m_nMaxParticles);
   m_nAllocatedParticles = 4 + 4 * ((m_nMaxAllowedParticles + 3) / 4);
 
   int nConstantMemorySize =
@@ -1279,18 +1276,18 @@ float FadeInOut(float flFadeInStart, float flFadeInEnd, float flFadeOutStart,
     return 0.;
 
   // handle out of order cases
-  flFadeInEnd = max(flFadeInEnd, flFadeInStart);
-  flFadeOutStart = max(flFadeOutStart, flFadeInEnd);
-  flFadeOutEnd = max(flFadeOutEnd, flFadeOutStart);
+  flFadeInEnd = std::max(flFadeInEnd, flFadeInStart);
+  flFadeOutStart = std::max(flFadeOutStart, flFadeInEnd);
+  flFadeOutEnd = std::max(flFadeOutEnd, flFadeOutStart);
 
   float flStrength = 1.0;
   if ((flFadeInEnd > flCurTime) && (flFadeInEnd > flFadeInStart))
-    flStrength =
-        min(flStrength, FLerp(0, 1, flFadeInStart, flFadeInEnd, flCurTime));
+    flStrength = std::min(flStrength,
+                          FLerp(0, 1, flFadeInStart, flFadeInEnd, flCurTime));
 
   if ((flCurTime > flFadeOutStart) && (flFadeOutEnd > flFadeOutStart))
-    flStrength =
-        min(flStrength, FLerp(0, 1, flFadeOutEnd, flFadeOutStart, flCurTime));
+    flStrength = std::min(flStrength,
+                          FLerp(0, 1, flFadeOutEnd, flFadeOutStart, flCurTime));
 
   return flStrength;
 }
@@ -1336,9 +1333,9 @@ void CParticleCollection::Render(IMatRenderContext *pRenderContext,
                                  bool bTranslucentOnly, void *pCameraObject) {
   if (!IsValid()) return;
 
-  m_flNextSleepTime =
-      max(m_flNextSleepTime, (g_pParticleSystemMgr->GetLastSimulationTime() +
-                              m_pDef->m_flNoDrawTimeToGoToSleep));
+  m_flNextSleepTime = std::max(m_flNextSleepTime,
+                               (g_pParticleSystemMgr->GetLastSimulationTime() +
+                                m_pDef->m_flNoDrawTimeToGoToSleep));
 
   if (m_nActiveParticles != 0) {
     if (!bTranslucentOnly || m_pDef->GetMaterial()->IsTranslucent()) {
@@ -1539,7 +1536,8 @@ void CParticleCollection::SimulateFirstFrame() {
   }
 
   // first, create initial particles
-  int nNumToCreate = min(m_pDef->m_nInitialParticles, m_nMaxAllowedParticles);
+  int nNumToCreate =
+      std::min(m_pDef->m_nInitialParticles, m_nMaxAllowedParticles);
   if (nNumToCreate > 0) {
     SetNActiveParticles(nNumToCreate);
     InitializeNewParticles(0, nNumToCreate, 0);
@@ -1596,16 +1594,16 @@ void CParticleCollection::Simulate(float dt) {
     if ((flRemainingDt + m_flCurTime) > m_pDef->m_flMaximumSimTime) {
       // if delta+current > checkpoint then delta = checkpoint - current
       flRemainingDt = m_pDef->m_flMaximumSimTime - m_flCurTime;
-      flRemainingDt = max(m_pDef->m_flMinimumSimTime, flRemainingDt);
+      flRemainingDt = std::max(m_pDef->m_flMinimumSimTime, flRemainingDt);
     }
     m_nDrawnFrames += 1;
   }
 
   flRemainingDt =
-      min(flRemainingDt, 10 * flMaxDT);  // no more than 10 passes ever
+      std::min(flRemainingDt, 10 * flMaxDT);  // no more than 10 passes ever
 
   while (flRemainingDt > 0.0) {
-    float flDT_ThisStep = min(flRemainingDt, flMaxDT);
+    float flDT_ThisStep = std::min(flRemainingDt, flMaxDT);
     flRemainingDt -= flDT_ThisStep;
     m_flDt = flDT_ThisStep;
     m_flCurTime += flDT_ThisStep;
@@ -1688,10 +1686,11 @@ void CParticleCollection::Simulate(float dt) {
 
 #if MEASURE_PARTICLE_PERF
   m_pDef->m_nMaximumActiveParticles =
-      max(m_pDef->m_nMaximumActiveParticles, m_nActiveParticles);
+      std::max(m_pDef->m_nMaximumActiveParticles, m_nActiveParticles);
   float flETime = Plat_FloatTime() - flStartSimTime;
   m_pDef->m_flUncomittedTotalSimTime += flETime;
-  m_pDef->m_flMaxMeasuredSimTime = max(m_pDef->m_flMaxMeasuredSimTime, flETime);
+  m_pDef->m_flMaxMeasuredSimTime =
+      std::max(m_pDef->m_flMaxMeasuredSimTime, flETime);
 #endif
 
   // let children simulate
@@ -1962,19 +1961,19 @@ void CParticleCollection::RecomputeBounds(void) {
     xyz += xyz_stride;
   }
   m_bBoundsValid = true;
-  m_MinBounds.x = min(min(SubFloat(min_x, 0), SubFloat(min_x, 1)),
-                      min(SubFloat(min_x, 2), SubFloat(min_x, 3)));
-  m_MinBounds.y = min(min(SubFloat(min_y, 0), SubFloat(min_y, 1)),
-                      min(SubFloat(min_y, 2), SubFloat(min_y, 3)));
-  m_MinBounds.z = min(min(SubFloat(min_z, 0), SubFloat(min_z, 1)),
-                      min(SubFloat(min_z, 2), SubFloat(min_z, 3)));
+  m_MinBounds.x = std::min(std::min(SubFloat(min_x, 0), SubFloat(min_x, 1)),
+                           std::min(SubFloat(min_x, 2), SubFloat(min_x, 3)));
+  m_MinBounds.y = std::min(std::min(SubFloat(min_y, 0), SubFloat(min_y, 1)),
+                           std::min(SubFloat(min_y, 2), SubFloat(min_y, 3)));
+  m_MinBounds.z = std::min(std::min(SubFloat(min_z, 0), SubFloat(min_z, 1)),
+                           std::min(SubFloat(min_z, 2), SubFloat(min_z, 3)));
 
-  m_MaxBounds.x = max(max(SubFloat(max_x, 0), SubFloat(max_x, 1)),
-                      max(SubFloat(max_x, 2), SubFloat(max_x, 3)));
-  m_MaxBounds.y = max(max(SubFloat(max_y, 0), SubFloat(max_y, 1)),
-                      max(SubFloat(max_y, 2), SubFloat(max_y, 3)));
-  m_MaxBounds.z = max(max(SubFloat(max_z, 0), SubFloat(max_z, 1)),
-                      max(SubFloat(max_z, 2), SubFloat(max_z, 3)));
+  m_MaxBounds.x = std::max(std::max(SubFloat(max_x, 0), SubFloat(max_x, 1)),
+                           std::max(SubFloat(max_x, 2), SubFloat(max_x, 3)));
+  m_MaxBounds.y = std::max(std::max(SubFloat(max_y, 0), SubFloat(max_y, 1)),
+                           std::max(SubFloat(max_y, 2), SubFloat(max_y, 3)));
+  m_MaxBounds.z = std::max(std::max(SubFloat(max_z, 0), SubFloat(max_z, 1)),
+                           std::max(SubFloat(max_z, 2), SubFloat(max_z, 3)));
 
   float fsum_x = SubFloat(sum_x, 0) + SubFloat(sum_x, 1) + SubFloat(sum_x, 2) +
                  SubFloat(sum_x, 3);
@@ -1985,16 +1984,16 @@ void CParticleCollection::RecomputeBounds(void) {
 
   // now, handle "tail" in a non-sse manner
   for (int i = 0; i < (m_nActiveParticles & 3); i++) {
-    m_MinBounds.x = min(m_MinBounds.x, SubFloat(xyz[0], i));
-    m_MaxBounds.x = max(m_MaxBounds.x, SubFloat(xyz[0], i));
+    m_MinBounds.x = std::min(m_MinBounds.x, SubFloat(xyz[0], i));
+    m_MaxBounds.x = std::max(m_MaxBounds.x, SubFloat(xyz[0], i));
     fsum_x += SubFloat(xyz[0], i);
 
-    m_MinBounds.y = min(m_MinBounds.y, SubFloat(xyz[1], i));
-    m_MaxBounds.y = max(m_MaxBounds.y, SubFloat(xyz[1], i));
+    m_MinBounds.y = std::min(m_MinBounds.y, SubFloat(xyz[1], i));
+    m_MaxBounds.y = std::max(m_MaxBounds.y, SubFloat(xyz[1], i));
     fsum_y += SubFloat(xyz[1], i);
 
-    m_MinBounds.z = min(m_MinBounds.z, SubFloat(xyz[2], i));
-    m_MaxBounds.z = max(m_MaxBounds.z, SubFloat(xyz[2], i));
+    m_MinBounds.z = std::min(m_MinBounds.z, SubFloat(xyz[2], i));
+    m_MaxBounds.z = std::max(m_MaxBounds.z, SubFloat(xyz[2], i));
     fsum_z += SubFloat(xyz[2], i);
   }
 
@@ -2050,8 +2049,8 @@ void CParticleCollection::StopEmission(bool bInfiniteOnly,
     // Set next sleep time - an additional fudge factor is added over the normal
     // time so that existing particles have a chance to go away.
     m_flNextSleepTime =
-        max(m_flNextSleepTime,
-            (g_pParticleSystemMgr->GetLastSimulationTime() + 10));
+        std::max(m_flNextSleepTime,
+                 (g_pParticleSystemMgr->GetLastSimulationTime() + 10));
   }
 
   m_bEmissionStopped = true;
@@ -2893,9 +2892,9 @@ void CParticleSystemMgr::AddToRenderCache(CParticleCollection *pParticles) {
     return;
 
   pParticles->m_flNextSleepTime =
-      max(pParticles->m_flNextSleepTime,
-          (g_pParticleSystemMgr->GetLastSimulationTime() +
-           pParticles->m_pDef->m_flNoDrawTimeToGoToSleep));
+      std::max(pParticles->m_flNextSleepTime,
+               (g_pParticleSystemMgr->GetLastSimulationTime() +
+                pParticles->m_pDef->m_flNoDrawTimeToGoToSleep));
   // Find the current rope list.
   int iRenderCache = 0;
   int nRenderCacheCount = m_RenderCache.Count();

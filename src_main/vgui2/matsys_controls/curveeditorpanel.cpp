@@ -165,7 +165,7 @@ void CCurveEditorPanel::Paint( void )
 		float flOut = GetValue( flIn );
 		int x = i;
 		int y = (h-1) - (int)(flOut * (h-1) + 0.5f);
-		y = clamp( y, 0, h-1 );
+		y = std::clamp( y, 0, h-1 );
 		
 		if ( i != 0 )
 		{

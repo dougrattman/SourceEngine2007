@@ -34,16 +34,14 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-#ifndef _X360
 extern ConVar r_waterforceexpensive;
-#endif
 
 ConVar r_aspectratio("r_aspectratio", "0");
 ConVar r_dynamiclighting("r_dynamiclighting", "1", FCVAR_CHEAT);
 extern ConVar building_cubemaps;
 extern float scr_demo_override_fov;
 
-extern colorVec R_LightPoint(Vector &p);
+extern color32 R_LightPoint(Vector &p);
 
 CEngineStats g_EngineStats;
 
@@ -362,7 +360,7 @@ void CRender::FrameBegin(void) {
     R_PushDlights();
 
     if (!r_norefresh.GetInt()) {
-      m_frameStartTime = Sys_FloatTime();
+      m_frameStartTime = Plat_FloatTime();
     }
   }
 

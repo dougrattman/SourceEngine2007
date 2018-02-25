@@ -287,7 +287,7 @@ class CCloseCaptionItem {
         if (fadeintime > 0.001f) {
           f = (time_since_start - fadeintimehidden) / fadeintime;
         }
-        f = clamp(f, 0.0f, 1.0f);
+        f = std::clamp(f, 0.0f, 1.0f);
         return f;
       }
 
@@ -296,7 +296,7 @@ class CCloseCaptionItem {
 
     if (fadeouttime > 0.001f && time_until_end < fadeouttime) {
       float f = time_until_end / fadeouttime;
-      f = clamp(f, 0.0f, 1.0f);
+      f = std::clamp(f, 0.0f, 1.0f);
       return f;
     }
 
@@ -862,7 +862,7 @@ void CHudCloseCaption::Paint(void) {
   float desiredAlpha = visibleitems.Count() >= 1 ? 1.0f : 0.0f;
 
   // Always return at least one line height for drawing the surrounding box
-  totalheight = max(totalheight, m_nLineHeight);
+  totalheight = std::max(totalheight, m_nLineHeight);
 
   // Trigger box growing
   if (totalheight != m_nGoalHeight) {
@@ -896,11 +896,11 @@ void CHudCloseCaption::Paint(void) {
 
     float dt = m_flGoalHeightFinishTime - m_flGoalHeightStartTime;
     float frac = (gpGlobals->curtime - m_flGoalHeightStartTime) / dt;
-    frac = clamp(frac, 0.0f, 1.0f);
+    frac = std::clamp(frac, 0.0f, 1.0f);
     int newHeight = m_nCurrentHeight + (int)(frac * togo);
     m_nCurrentHeight = newHeight;
     float newAlpha = m_flCurrentAlpha + frac * alphatogo;
-    m_flCurrentAlpha = clamp(newAlpha, 0.0f, 1.0f);
+    m_flCurrentAlpha = std::clamp(newAlpha, 0.0f, 1.0f);
   } else {
     m_nCurrentHeight = m_nGoalHeight;
     m_flCurrentAlpha = m_flGoalAlpha;
@@ -910,8 +910,8 @@ void CHudCloseCaption::Paint(void) {
 
   Color bgColor = GetBgColor();
   bgColor[3] = m_flBackgroundAlpha;
-  DrawBox(rcText.left, max(rcText.top, 0), rcText.right - rcText.left,
-          rcText.bottom - max(rcText.top, 0), bgColor, m_flCurrentAlpha);
+  DrawBox(rcText.left, std::max(rcText.top, 0), rcText.right - rcText.left,
+          rcText.bottom - std::max(rcText.top, 0), bgColor, m_flCurrentAlpha);
 
   if (!visibleitems.Count()) {
     return;
@@ -940,7 +940,7 @@ void CHudCloseCaption::Paint(void) {
       if (si->item->GetAddedTime() > 0.0f) {
         float ttl = si->item->GetTimeToLive();
         ttl -= si->item->GetAddedTime();
-        ttl = max(0.0f, ttl);
+        ttl = std::max(0.0f, ttl);
         si->item->SetTimeToLive(ttl);
         si->item->SetAddedTime(0.0f);
       }
@@ -972,7 +972,8 @@ void CHudCloseCaption::Paint(void) {
       float flCurMove = item->GetInitialLifeSpan() - item->GetTimeToLive();
       int iHeightToMove = 0;
 
-      int iLinesToMove = clamp(floor(flCurMove / flMoveDelta), 0, units);
+      int iLinesToMove =
+          std::clamp(floor(flCurMove / flMoveDelta), 0.0f, (float)units);
       if (iLinesToMove) {
         int iCurrentLineHeight = 0;
         for (int j = 0; j < iLinesToMove; j++) {
@@ -997,11 +998,11 @@ void CHudCloseCaption::Paint(void) {
           // Fade out quickly
           float flFadeTime =
               (gpGlobals->curtime - wu->GetFadeStart()) / CAPTION_PAN_FADE_TIME;
-          flFadeLineAlpha = clamp(1.0 - flFadeTime, 0, 1);
+          flFadeLineAlpha = std::clamp(1.0f - flFadeTime, 0.0f, 1.0f);
         } else if (flTimePostMove <
                    (CAPTION_PAN_FADE_TIME + CAPTION_PAN_SLIDE_TIME)) {
           flTimePostMove -= CAPTION_PAN_FADE_TIME;
-          float flSlideTime = clamp(flTimePostMove / 0.25, 0, 1);
+          float flSlideTime = std::clamp(flTimePostMove / 0.25f, 0.0f, 1.0f);
           iHeightToMove +=
               ceil((iCurrentLineHeight - iHeightToMove) * flSlideTime);
         } else {
@@ -1056,13 +1057,13 @@ void CHudCloseCaption::OnTick(void) {
     float predisplay = item->GetPreDisplayTime();
     if (predisplay > 0.0f) {
       predisplay -= dt;
-      predisplay = max(0.0f, predisplay);
+      predisplay = std::max(0.0f, predisplay);
       item->SetPreDisplayTime(predisplay);
     } else {
       // remove time from actual playback
       float ttl = item->GetTimeToLive();
       ttl -= dt;
-      ttl = max(0.0f, ttl);
+      ttl = std::max(0.0f, ttl);
       item->SetTimeToLive(ttl);
     }
   }
@@ -1279,7 +1280,7 @@ void CHudCloseCaption::Process(const wchar_t *stream, float duration,
       addedlife = prevlife - lifespan;
     }
 
-    lifespan = max(lifespan, prevlife);
+    lifespan = std::max(lifespan, prevlife);
   }
 
   float delay = 0.0f;
@@ -1317,7 +1318,7 @@ void CHudCloseCaption::Process(const wchar_t *stream, float duration,
         out = phrase;
 
         // Delay must be positive
-        delay = max(0.0f, (float)wcstod(args, NULL));
+        delay = std::max(0.0f, (float)wcstod(args, NULL));
 
         continue;
       }
@@ -1363,7 +1364,8 @@ void CHudCloseCaption::CreateFonts(void) {
     m_hFonts[CCFONT_SMALL] = pScheme->GetFont("CloseCaption_Small");
   }
 
-  m_nLineHeight = max(6, vgui::surface()->GetFontTall(m_hFonts[CCFONT_NORMAL]));
+  m_nLineHeight =
+      std::max(6, vgui::surface()->GetFontTall(m_hFonts[CCFONT_NORMAL]));
 }
 
 struct WorkUnitParams {
@@ -1434,8 +1436,8 @@ void CHudCloseCaption::AddWorkUnit(CCloseCaptionItem *item,
     int curheight = item->GetHeight();
     int curwidth = item->GetWidth();
 
-    curheight = max(curheight, params.y + wu->GetHeight());
-    curwidth = max(curwidth, params.x + params.width);
+    curheight = std::max(curheight, params.y + wu->GetHeight());
+    curwidth = std::max(curwidth, params.x + params.width);
 
     item->SetHeight(curheight);
     item->SetWidth(curwidth);
@@ -2004,7 +2006,7 @@ bool CHudCloseCaption::AddAsyncWork(const char *tokenstream, bool bIsStream,
 
 void CHudCloseCaption::ProcessSentenceCaptionStream(const char *tokenstream) {
   float interval = cc_sentencecaptionnorepeat.GetFloat();
-  interval = clamp(interval, 0.1f, 60.0f);
+  interval = std::clamp(interval, 0.1f, 60.0f);
 
   // The first token from the stream is the name of the sentence
   char tokenname[512];
@@ -2277,7 +2279,7 @@ CON_COMMAND_F_COMPLETION(cc_emit, "Emits a closed caption", 0,
 CON_COMMAND(cc_random, "Emits a random caption") {
   int count = 1;
   if (args.ArgC() == 2) {
-    count = max(1, atoi(args[1]));
+    count = std::max(1, atoi(args[1]));
   }
   CHudCloseCaption *hudCloseCaption = GET_HUDELEMENT(CHudCloseCaption);
   if (hudCloseCaption) {
@@ -2419,7 +2421,7 @@ void CHudCloseCaption::FindSound(char const *pchANSI) {
 
       // Now we have the data
       const wchar_t *pIn = (const wchar_t *)&block[lu.offset];
-      Q_memcpy((void *)stream, pIn, min(lu.length, sizeof(stream)));
+      Q_memcpy((void *)stream, pIn, std::min((usize)lu.length, sizeof(stream)));
 
       // Now search for search text
       g_pVGuiLocalize->ConvertUnicodeToANSI(stream, streamANSI,

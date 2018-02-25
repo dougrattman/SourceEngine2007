@@ -16,9 +16,9 @@ enum NormalDecodeMode_t {
 using D3DFORMAT = enum _D3DFORMAT : int;
 #endif
 
-//-----------------------------------------------------------------------------
+
 // The various image format types
-//-----------------------------------------------------------------------------
+
 
 enum ImageFormat {
   IMAGE_FORMAT_UNKNOWN = -1,
@@ -69,9 +69,9 @@ enum ImageFormat {
   NUM_IMAGE_FORMATS
 };
 
-//-----------------------------------------------------------------------------
+
 // Color structures
-//-----------------------------------------------------------------------------
+
 
 struct BGRA8888_t {
   unsigned char b;  // change the order of names to change the
@@ -194,15 +194,15 @@ struct RGBX5551_t {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // some important constants
-//-----------------------------------------------------------------------------
+
 #define ARTWORK_GAMMA (2.2f)
 #define IMAGE_MAX_DIM (2048)
 
-//-----------------------------------------------------------------------------
+
 // information about each image format
-//-----------------------------------------------------------------------------
+
 struct ImageFormatInfo_t {
   const char *m_pName;
   int m_NumBytes;
@@ -213,9 +213,9 @@ struct ImageFormatInfo_t {
   bool m_IsCompressed;
 };
 
-//-----------------------------------------------------------------------------
+
 // Various methods related to pixelmaps and color formats
-//-----------------------------------------------------------------------------
+
 namespace ImageLoader {
 
 bool GetInfo(const char *fileName, int *width, int *height,
@@ -252,10 +252,10 @@ void ByteSwapImageData(unsigned char *pImageData, int nImageSize,
                        ImageFormat imageFormat, int width = 0, int stride = 0);
 bool IsFormatValidForConversion(ImageFormat fmt);
 
-//-----------------------------------------------------------------------------
+
 // convert back and forth from D3D format to ImageFormat, regardless of
 // whether it's supported or not
-//-----------------------------------------------------------------------------
+
 #ifdef _WIN32
 ImageFormat D3DFormatToImageFormat(D3DFORMAT format);
 D3DFORMAT ImageFormatToD3DFormat(ImageFormat format);
@@ -328,34 +328,34 @@ void ConvertIA88ImageToNormalMapRGBA8888(const unsigned char *src, int width,
 
 void NormalizeNormalMapRGBA8888(unsigned char *src, int numTexels);
 
-//-----------------------------------------------------------------------------
+
 // Gamma correction
-//-----------------------------------------------------------------------------
+
 void GammaCorrectRGBA8888(unsigned char *src, unsigned char *dst, int width,
                           int height, int depth, float srcGamma,
                           float dstGamma);
 
-//-----------------------------------------------------------------------------
+
 // Makes a gamma table
-//-----------------------------------------------------------------------------
+
 void ConstructGammaTable(unsigned char *pTable, float srcGamma, float dstGamma);
 
-//-----------------------------------------------------------------------------
+
 // Gamma corrects using a previously constructed gamma table
-//-----------------------------------------------------------------------------
+
 void GammaCorrectRGBA8888(unsigned char *pSrc, unsigned char *pDst, int width,
                           int height, int depth, unsigned char *pGammaTable);
 
-//-----------------------------------------------------------------------------
+
 // Generates a number of mipmap levels
-//-----------------------------------------------------------------------------
+
 void GenerateMipmapLevels(unsigned char *pSrc, unsigned char *pDst, int width,
                           int height, int depth, ImageFormat imageFormat,
                           float srcGamma, float dstGamma, int numLevels = 0);
 
-//-----------------------------------------------------------------------------
+
 // operations on square images (src and dst can be the same)
-//-----------------------------------------------------------------------------
+
 bool RotateImageLeft(const unsigned char *src, unsigned char *dst,
                      int widthHeight, ImageFormat imageFormat);
 bool RotateImage180(const unsigned char *src, unsigned char *dst,
@@ -366,42 +366,42 @@ bool FlipImageHorizontally(void *pSrc, void *pDst, int nWidth, int nHeight,
                            ImageFormat imageFormat, int nDstStride = 0);
 bool SwapAxes(unsigned char *src, int widthHeight, ImageFormat imageFormat);
 
-//-----------------------------------------------------------------------------
+
 // Returns info about each image format
-//-----------------------------------------------------------------------------
+
 ImageFormatInfo_t const &ImageFormatInfo(ImageFormat fmt);
 
-//-----------------------------------------------------------------------------
+
 // Gets the name of the image format
-//-----------------------------------------------------------------------------
+
 inline char const *GetName(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_pName;
 }
 
-//-----------------------------------------------------------------------------
+
 // Gets the size of the image format in bytes
-//-----------------------------------------------------------------------------
+
 inline int SizeInBytes(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_NumBytes;
 }
 
-//-----------------------------------------------------------------------------
+
 // Does the image format support transparency?
-//-----------------------------------------------------------------------------
+
 inline bool IsTransparent(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_NumAlphaBits > 0;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is the image format compressed?
-//-----------------------------------------------------------------------------
+
 inline bool IsCompressed(ImageFormat fmt) {
   return ImageFormatInfo(fmt).m_IsCompressed;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is any channel > 8 bits?
-//-----------------------------------------------------------------------------
+
 inline bool HasChannelLargerThan8Bits(ImageFormat fmt) {
   ImageFormatInfo_t info = ImageFormatInfo(fmt);
   return (info.m_NumRedBits > 8 || info.m_NumGreeBits > 8 ||

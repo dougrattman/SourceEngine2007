@@ -284,7 +284,7 @@ void ResolveMacrosInString( char *pString, char *pOutBuff, int outBuffSize )
 	}
 	while ( !bDone );
 
-	int len = min( outBuffSize, (int)strlen( buffer1 ) );
+	int len = std::min( outBuffSize, (int)strlen( buffer1 ) );
 	memcpy( pOutBuff, buffer1, len );
 	pOutBuff[len] = '\0';
 }
@@ -414,7 +414,7 @@ bool ParsePropertyValue( char **pScriptData, int *pScriptLine, char *pBaseString
 
 			ResolveMacrosInString( buffer2, buffer1, sizeof( buffer1 ) );
 
-			len = min( (int)strlen( buffer1 ), remaining );
+			len = std::min( (int)strlen( buffer1 ), remaining );
 			if ( len <= 0 )
 				break;
 			memcpy( pOut, buffer1, len );

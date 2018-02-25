@@ -290,7 +290,7 @@ void CNPC_FloorTurret::Spawn( void )
 		}
 		else
 		{	// at least make sure that it's in the right range
-			m_nSkin = clamp(m_iKeySkin,1,4);
+			m_nSkin = std::clamp(m_iKeySkin,1,4);
 		}
 	}
 
@@ -2080,7 +2080,7 @@ void CNPC_FloorTurret::SelfDestructThink( void )
 	}
 
 	// Find out where we are in the cycle of our destruction
-	float flDestructPerc = clamp( ( gpGlobals->curtime - m_flDestructStartTime ) / SELF_DESTRUCT_DURATION, 0.0f, 1.0f );
+	float flDestructPerc = std::clamp( ( gpGlobals->curtime - m_flDestructStartTime ) / SELF_DESTRUCT_DURATION, 0.0f, 1.0f );
 
 	// Figure out when our next beep should occur
 	float flBeepTime = SELF_DESTRUCT_BEEP_MAX_DELAY + ( ( SELF_DESTRUCT_BEEP_MIN_DELAY - SELF_DESTRUCT_BEEP_MAX_DELAY ) * flDestructPerc );

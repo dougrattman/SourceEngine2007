@@ -99,7 +99,7 @@ void CStunEffect::Render(int x, int y, int w, int h) {
     }
 
     // Set alpha blend value
-    float flOverlayAlpha = clamp((150.0f / 255.0f) * flEffectPerc, 0.0f, 1.0f);
+    float flOverlayAlpha = std::clamp((150.0f / 255.0f) * flEffectPerc, 0.0f, 1.0f);
     m_EffectMaterial->AlphaModulate(flOverlayAlpha);
 
     // Draw full screen alpha-blended quad
@@ -175,22 +175,22 @@ inline unsigned char CEP1IntroEffect::GetFadeAlpha(void) {
       (m_flDuration == 0.0f)
           ? 0.0f
           : (m_flFinishTime - gpGlobals->curtime) / m_flDuration;
-  flEffectPerc = clamp(flEffectPerc, 0.0f, 1.0f);
+  flEffectPerc = std::clamp(flEffectPerc, 0.0f, 1.0f);
 
   if (m_bFadeOut) {
     // HDR requires us to be more subtle, or we get uber-brightening
     if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE)
-      return (unsigned char)clamp(50.0f * flEffectPerc, 0.0f, 50.0f);
+      return (unsigned char)std::clamp(50.0f * flEffectPerc, 0.0f, 50.0f);
 
     // Non-HDR
-    return (unsigned char)clamp(64.0f * flEffectPerc, 0.0f, 64.0f);
+    return (unsigned char)std::clamp(64.0f * flEffectPerc, 0.0f, 64.0f);
   } else {
     // HDR requires us to be more subtle, or we get uber-brightening
     if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE)
-      return (unsigned char)clamp(64.0f * flEffectPerc, 50.0f, 64.0f);
+      return (unsigned char)std::clamp(64.0f * flEffectPerc, 50.0f, 64.0f);
 
     // Non-HDR
-    return (unsigned char)clamp(128.0f * flEffectPerc, 64.0f, 128.0f);
+    return (unsigned char)std::clamp(128.0f * flEffectPerc, 64.0f, 128.0f);
   }
 }
 
@@ -331,22 +331,22 @@ inline unsigned char CEP2StunEffect::GetFadeAlpha(void) {
       (m_flDuration == 0.0f)
           ? 0.0f
           : (m_flFinishTime - gpGlobals->curtime) / m_flDuration;
-  flEffectPerc = clamp(flEffectPerc, 0.0f, 1.0f);
+  flEffectPerc = std::clamp(flEffectPerc, 0.0f, 1.0f);
 
   if (m_bFadeOut) {
     // HDR requires us to be more subtle, or we get uber-brightening
     if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE)
-      return (unsigned char)clamp(50.0f * flEffectPerc, 0.0f, 50.0f);
+      return (unsigned char)std::clamp(50.0f * flEffectPerc, 0.0f, 50.0f);
 
     // Non-HDR
-    return (unsigned char)clamp(64.0f * flEffectPerc, 0.0f, 64.0f);
+    return (unsigned char)std::clamp(64.0f * flEffectPerc, 0.0f, 64.0f);
   } else {
     // HDR requires us to be more subtle, or we get uber-brightening
     if (g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE)
-      return (unsigned char)clamp(164.0f * flEffectPerc, 128.0f, 164.0f);
+      return (unsigned char)std::clamp(164.0f * flEffectPerc, 128.0f, 164.0f);
 
     // Non-HDR
-    return (unsigned char)clamp(164.0f * flEffectPerc, 128.0f, 164.0f);
+    return (unsigned char)std::clamp(164.0f * flEffectPerc, 128.0f, 164.0f);
   }
 }
 

@@ -58,10 +58,10 @@ class TokenReader : private std::ifstream {
   trtoken_t m_eStuffed;
 };
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Returns the total number of parsing errors since this file was
 // opened.
-//-----------------------------------------------------------------------------
+
 int TokenReader::GetErrorCount() { return m_nErrorCount; }
 
 #endif  // SOURCE_TIER1_TOKENREADER_H_

@@ -825,7 +825,7 @@ bool FindStringResourceEx( HINSTANCE hinst, UINT uId, UINT langId, char *pStr, i
 				}
 				
 				// First word in the resource is the length and the rest is the data.
-				int nChars = min( pwsz[0], outLen-1 );
+				int nChars = std::min( pwsz[0], outLen-1 );
 				++pwsz;
 				V_wcstostr( pwsz, nChars, pStr, outLen );
 				pStr[nChars] = 0;
@@ -1074,7 +1074,7 @@ BOOL CServicesDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 			LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
 			// Now sort by this column.
-			int iSortColumn = max( 0, min( pListView->iSubItem, ARRAYSIZE( g_ColumnInfos ) - 1 ) );
+			int iSortColumn = std::max( 0, std::min( pListView->iSubItem, ARRAYSIZE( g_ColumnInfos ) - 1 ) );
 			PushSortColumn( iSortColumn );
 			ResortItems();
 		}

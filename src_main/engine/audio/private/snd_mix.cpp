@@ -14,6 +14,12 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
+#if defined __i386__ && !defined __linux__
+#define id386 1
+#else
+#define id386 0
+#endif  // __i386__
+
 #if defined(_WIN32) && id386
 #endif
 
@@ -248,7 +254,7 @@ double MIX_GetMaxRate(double rate, int sampleCount) {
 
   Assert(sampleCount <= PAINTBUFFER_SIZE);
 
-  return min(rate, rate_max);
+  return std::min(rate, rate_max);
 }
 
 // Transfer (endtime - lpaintedtime) stereo samples in pfront out to hardware
@@ -964,7 +970,7 @@ void MIX_ClearAllPaintBuffers(int SampleCount, bool clearFilters) {
     return;
   }
   int i;
-  int count = min(SampleCount, PAINTBUFFER_SIZE);
+  int count = std::min(SampleCount, PAINTBUFFER_SIZE);
 
   // zero out all paintbuffer data (ignore sampleCount)
 
@@ -2217,7 +2223,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
 
     // duck all sound volumes except speaker's voice
 #if !defined(NO_VOICE)
-  int duckScale = min((int)(g_DuckScale * 256), g_SND_VoiceOverdriveInt);
+  int duckScale = std::min((int)(g_DuckScale * 256), g_SND_VoiceOverdriveInt);
 #else
   int duckScale = (int)(g_DuckScale * 256);
 #endif
@@ -2239,7 +2245,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
   if (mixflag & SOUND_BUSS_ROOM) {
     // set dsp mix volume, scaled by global dsp_volume
 
-    float dspmixvol = min(dspmix * g_dsp_volume, 1.0f);
+    float dspmixvol = std::min(dspmix * g_dsp_volume, 1.0f);
 
     // if dspmix is 1.0, 100% of sound goes to IROOMBUFFER and 0% to
     // IFACINGBUFFER
@@ -2273,7 +2279,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
 
   scale = scale * (1 / cone);
 
-  scale = clamp(scale, 0.0f, 1.0f);
+  scale = std::clamp(scale, 0.0f, 1.0f);
 
   // pan between facing and facing away buffers
 
@@ -2339,7 +2345,7 @@ bool MIX_ScaleChannelVolume(paintbuffer_t *ppaint, channel_t *pChannel,
   bool fzerovolume = true;
 
   for (i = 0; i < CCHANVOLUMES; i++) {
-    volume[i] = clamp(volume[i], 0, 255);
+    volume[i] = std::clamp(volume[i], 0, 255);
 
     if (volume[i]) fzerovolume = false;
   }

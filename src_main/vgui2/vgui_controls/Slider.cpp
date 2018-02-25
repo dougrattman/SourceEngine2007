@@ -162,7 +162,7 @@ void Slider::RecomputeNobPosFromValue()
 	if ( m_bUseSubRange )
 	{
 		userange = &_subrange[ 0 ];
-		usevalue = clamp( _value, _subrange[ 0 ], _subrange[ 1 ] );
+		usevalue = std::clamp( _value, _subrange[ 0 ], _subrange[ 1 ] );
 	}
 
 	float fwide=(float)wide;
@@ -726,7 +726,7 @@ void Slider::OnMousePressed(MouseCode code)
 		if ( wide > 0 )
 		{
 			float frange = ( float )( max - min );
-			float clickFrac = clamp( ( float )( x - _x ) / (float)( wide - 1 ), 0.0f, 1.0f );
+			float clickFrac = std::clamp( ( float )( x - _x ) / (float)( wide - 1 ), 0.0f, 1.0f );
 
 			float value = (float)min + clickFrac * frange;
 

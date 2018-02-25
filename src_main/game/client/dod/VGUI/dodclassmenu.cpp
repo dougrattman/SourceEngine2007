@@ -302,7 +302,7 @@ void CDODClassMenu::UpdateNumClassLabel( void )
 			ConVar *pLimitCvar = ( ConVar * )cvar->FindVar( pClassInfo.m_szLimitCvar );
 
 			if ( pLimitCvar )
-				iClassLimit[i] = min( 32, pLimitCvar->GetInt() );
+				iClassLimit[i] = std::min( 32, pLimitCvar->GetInt() );
 		}	
 
 		if ( iClassLimit[i] < 0 || iClassCount[i] < iClassLimit[i] )

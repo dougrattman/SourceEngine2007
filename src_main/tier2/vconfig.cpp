@@ -13,12 +13,12 @@
 #endif
 
 #ifdef _WIN32
-//-----------------------------------------------------------------------------
+
 // Purpose: Returns the string value of a registry key
 // Input  : *pName - name of the subKey to read
 //			*pReturn - string buffer to receive read string
 //			size - size of specified buffer
-//-----------------------------------------------------------------------------
+
 bool GetVConfigRegistrySetting(const char *pName, char *pReturn, int size) {
   // Open the key
   HKEY hregkey;
@@ -38,10 +38,10 @@ bool GetVConfigRegistrySetting(const char *pName, char *pReturn, int size) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Sends a global system message to alert programs to a changed
 // environment variable
-//-----------------------------------------------------------------------------
+
 void NotifyVConfigRegistrySettingChanged(void) {
   DWORD_PTR dwReturnValue = 0;
 
@@ -51,11 +51,11 @@ void NotifyVConfigRegistrySettingChanged(void) {
                       &dwReturnValue);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Set the registry entry to a string value, under the given subKey
 // Input  : *pName - name of the subKey to set
 //			*pValue - string value
-//-----------------------------------------------------------------------------
+
 void SetVConfigRegistrySetting(const char *pName, const char *pValue,
                                bool bNotify) {
   HKEY hregkey;
@@ -89,11 +89,11 @@ void SetVConfigRegistrySetting(const char *pName, const char *pValue,
   RegCloseKey(hregkey);
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Removes the obsolete user keyvalue
 // Input  : *pName - name of the subKey to set
 //			*pValue - string value
-//-----------------------------------------------------------------------------
+
 bool RemoveObsoleteVConfigRegistrySetting(const char *pValueName,
                                           char *pOldValue, int size) {
   // Open the key
@@ -124,10 +124,10 @@ bool RemoveObsoleteVConfigRegistrySetting(const char *pValueName,
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Take a user-defined environment variable and swap it out for the
 // internally used one
-//-----------------------------------------------------------------------------
+
 
 bool ConvertObsoleteVConfigRegistrySetting(const char *pValueName) {
   char szValue[MAX_PATH];

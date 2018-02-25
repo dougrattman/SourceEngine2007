@@ -53,7 +53,7 @@ void CDoDHudHealthBar::OnThink()
 	if ( pPlayer )
 	{
 		// m_nHealth >= 0 
-		int nHealth = max( pPlayer->GetHealth(), 0 );
+		int nHealth = std::max( pPlayer->GetHealth(), 0 );
 		m_flPercentage = nHealth / 100.0f;
 	}
 }

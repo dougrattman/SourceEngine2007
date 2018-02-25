@@ -233,7 +233,7 @@ void DrawSegs(int noise_divisions, float *prgNoise, const model_t *spritemodel,
   }
 
   length = VectorLength(delta);
-  float flMaxWidth = max(startWidth, endWidth) * 0.5f;
+  float flMaxWidth = std::max(startWidth, endWidth) * 0.5f;
   div = 1.0 / (segments - 1);
 
   if (length * div < flMaxWidth * 1.414) {
@@ -298,7 +298,7 @@ void DrawSegs(int noise_divisions, float *prgNoise, const model_t *spritemodel,
   float fadeFraction = fadeLength / delta.Length();
 
   // BUGBUG: This code generates NANs when fadeFraction is zero! REVIST!
-  fadeFraction = clamp(fadeFraction, 1e-6, 1);
+  fadeFraction = std::clamp(fadeFraction, 1e-6f, 1.0f);
 
   // Choose two vectors that are perpendicular to the beam
   Vector perp1;
@@ -479,7 +479,7 @@ void DrawTeslaSegs(int noise_divisions, float *prgNoise,
   float fadeFraction = fadeLength / delta.Length();
 
   // BUGBUG: This code generates NANs when fadeFraction is zero! REVIST!
-  fadeFraction = clamp(fadeFraction, 1e-6, 1);
+  fadeFraction = std::clamp(fadeFraction, 1e-6f, 1.0f);
 
   Vector perp;
   ComputeBeamPerpendicular(delta, &perp);
@@ -517,7 +517,7 @@ void DrawTeslaSegs(int noise_divisions, float *prgNoise,
     }
 
     // clamps
-    brightness = clamp(brightness, 0, 1);
+    brightness = std::clamp(brightness, 0.0f, 1.0f);
 
     VectorScale(*((Vector *)color), brightness, curSeg.m_vColor);
 
@@ -1310,9 +1310,9 @@ void DrawBeamFollow(const model_t *spritemodel, BeamTrail_t *pHead, int frame,
   unsigned char nColor[3];
 
   VectorScale(color, fraction, scaledColor);
-  nColor[0] = (unsigned char)clamp((int)(scaledColor[0] * 255.0f), 0, 255);
-  nColor[1] = (unsigned char)clamp((int)(scaledColor[1] * 255.0f), 0, 255);
-  nColor[2] = (unsigned char)clamp((int)(scaledColor[2] * 255.0f), 0, 255);
+  nColor[0] = (unsigned char)std::clamp((int)(scaledColor[0] * 255.0f), 0, 255);
+  nColor[1] = (unsigned char)std::clamp((int)(scaledColor[1] * 255.0f), 0, 255);
+  nColor[2] = (unsigned char)std::clamp((int)(scaledColor[2] * 255.0f), 0, 255);
 
   // need to count the segments
   int count = 0;
@@ -1360,9 +1360,12 @@ void DrawBeamFollow(const model_t *spritemodel, BeamTrail_t *pHead, int frame,
     if (pHead->next != NULL) {
       fraction = (pHead->die - gpGlobals->curtime) * div;
       VectorScale(color, fraction, scaledColor);
-      nColor[0] = (unsigned char)clamp((int)(scaledColor[0] * 255.0f), 0, 255);
-      nColor[1] = (unsigned char)clamp((int)(scaledColor[1] * 255.0f), 0, 255);
-      nColor[2] = (unsigned char)clamp((int)(scaledColor[2] * 255.0f), 0, 255);
+      nColor[0] =
+          (unsigned char)std::clamp((int)(scaledColor[0] * 255.0f), 0, 255);
+      nColor[1] =
+          (unsigned char)std::clamp((int)(scaledColor[1] * 255.0f), 0, 255);
+      nColor[2] =
+          (unsigned char)std::clamp((int)(scaledColor[2] * 255.0f), 0, 255);
     } else {
       fraction = 0.0;
       nColor[0] = nColor[1] = nColor[2] = 0;

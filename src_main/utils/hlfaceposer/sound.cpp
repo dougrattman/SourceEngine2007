@@ -6,7 +6,7 @@
 //
 //===========================================================================//
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #pragma warning( disable : 4201 )
 #include <mmsystem.h>
 #include <stdio.h>
@@ -386,7 +386,7 @@ void CAudioDeviceSWMix::Mix8Mono( channel_t *pChannel, char *pData, int outputOf
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += pChannel->leftvol * pData[sampleIndex];
 		m_paintbuffer[ dest ].right += pChannel->rightvol * pData[sampleIndex];
@@ -413,7 +413,7 @@ void CAudioDeviceSWMix::Mix8Stereo( channel_t *pChannel, char *pData, int output
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += pChannel->leftvol * pData[sampleIndex];
 		m_paintbuffer[ dest ].right += pChannel->rightvol * pData[sampleIndex+1];
@@ -440,7 +440,7 @@ void CAudioDeviceSWMix::Mix16Mono( channel_t *pChannel, short *pData, int output
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += (pChannel->leftvol * pData[sampleIndex])>>8;
 		m_paintbuffer[ dest ].right += (pChannel->rightvol * pData[sampleIndex])>>8;
@@ -467,7 +467,7 @@ void CAudioDeviceSWMix::Mix16Stereo( channel_t *pChannel, short *pData, int outp
 
 	for ( int i = 0; i < outCount; i++, fixup += fixupstep )
 	{
-		int dest = max( outputOffset + fixup, 0 );
+		int dest = std::max( outputOffset + fixup, 0 );
 
 		m_paintbuffer[ dest ].left += (pChannel->leftvol * pData[sampleIndex])>>8;
 		m_paintbuffer[ dest ].right += (pChannel->rightvol * pData[sampleIndex+1])>>8;
@@ -1282,7 +1282,7 @@ void ComputeBlendedSetting( Emphasized_Phoneme *classes, float emphasis_intensit
 		}
 		else
 		{
-			emphasis_intensity = min( emphasis_intensity, STRONG_CROSSFADE_START );
+			emphasis_intensity = std::min( emphasis_intensity, STRONG_CROSSFADE_START );
 			classes[ PHONEME_CLASS_NORMAL ].amount = 2.0f * emphasis_intensity;
 		}
 	}
@@ -1299,7 +1299,7 @@ void ComputeBlendedSetting( Emphasized_Phoneme *classes, float emphasis_intensit
 		}
 		else
 		{
-			emphasis_intensity = max( emphasis_intensity, WEAK_CROSSFADE_START );
+			emphasis_intensity = std::max( emphasis_intensity, WEAK_CROSSFADE_START );
 			classes[ PHONEME_CLASS_NORMAL ].amount = 2.0f * emphasis_intensity;
 		}
 	}
@@ -1451,7 +1451,7 @@ void CFacePoserSound::SetupWeights( void )
 							{
 								if (k < word->m_Phonemes.Size()-1)
 								{
-									dt = max( dt, min( word->m_Phonemes[ k+1 ]->GetEndTime() - t, phoneme->GetEndTime() - phoneme->GetStartTime() ) );
+									dt = std::max( dt, std::min( word->m_Phonemes[ k+1 ]->GetEndTime() - t, phoneme->GetEndTime() - phoneme->GetStartTime() ) );
 								}
 							}
 						}
@@ -1562,7 +1562,7 @@ void CFacePoserSound::RenderWavToDC( HDC dc, RECT& outrect, COLORREF clr,
 
 	float samplesperpixel = timeperpixel * pWave->SampleRate();
 
-	samplesperpixel = min( samplesperpixel, (float)PAINTBUFFER_SIZE );
+	samplesperpixel = std::min( samplesperpixel, (float)PAINTBUFFER_SIZE );
 
 	int intsamplesperpixel = (int)samplesperpixel;
 
@@ -1598,7 +1598,7 @@ void CFacePoserSound::RenderWavToDC( HDC dc, RECT& outrect, COLORREF clr,
 	int bufferlen = ( intsamplesperpixel + 3 ) & ~3;
 	short *samples = new short[ 2 * bufferlen ];
 	bool drawingselection = false;
-	int maxsamples = max( 32, intsamplesperpixel / 16 );
+	int maxsamples = std::max( 32, intsamplesperpixel / 16 );
 	int currentsample = 0;
 
 	while ( currenttime < endtime )
@@ -1606,7 +1606,7 @@ void CFacePoserSound::RenderWavToDC( HDC dc, RECT& outrect, COLORREF clr,
 
 		pWaveOutput->m_audioDevice.MixBegin();
 
-		int samplecount = min( maxsamples, intsamplesperpixel );
+		int samplecount = std::min( maxsamples, intsamplesperpixel );
 
 		if ( !pMixer->MixDataToDevice( &pWaveOutput->m_audioDevice, &channel, currentsample, samplecount, pWave->SampleRate(), true ) )
 			break;

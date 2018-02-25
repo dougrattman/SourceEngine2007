@@ -104,7 +104,7 @@ void CFloatAttributeManipulator::OnCursorMoved( int x, int y )
 	if ( m_pAttr )
 	{
 		float value = m_pAttr->GetValue<float>();
-		value = max( 0.0f, min( 1.0f, value + 0.0005f * dx ) );
+		value = std::max( 0.0f, std::min( 1.0f, value + 0.0005f * dx ) );
 		m_pAttr->SetValue( value );
 	}
 
@@ -129,7 +129,7 @@ void CFloatAttributeManipulator::OnMouseWheeled( int delta )
 	if ( m_pAttr )
 	{
 		float value = m_pAttr->GetValue<float>();
-		value = max( 0.0f, min( 1.0f, value + 0.1f * delta ) );
+		value = std::max( 0.0f, std::min( 1.0f, value + 0.1f * delta ) );
 		m_pAttr->SetValue( value );
 	}
 }
@@ -248,7 +248,7 @@ void CPotteryWheelManip::OnCursorMoved( int x, int y )
 	{
 		m_azimuth  += 0.002f * ( x - m_lastx );
 		m_altitude -= 0.002f * ( y - m_lasty );
-		m_altitude = max( -M_PI/2, min( M_PI/2, m_altitude ) );
+		m_altitude = std::max( -M_PI/2, std::min( M_PI/2, m_altitude ) );
 	}
 	m_lastx = x;
 	m_lasty = y;

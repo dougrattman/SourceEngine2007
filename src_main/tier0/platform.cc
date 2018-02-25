@@ -4,6 +4,7 @@
 
 #include "tier0/include/platform.h"
 
+#include <algorithm>
 #include <cassert>
 #include <ctime>
 
@@ -52,8 +53,9 @@ f64 Plat_FloatTime() {
   }
 
   if (return_code == ERROR_SUCCESS) {
-    f64 raw_seconds = max(0.0, (f64)(current_counter.QuadPart - g_ClockStart) /
-                                   (f64)(g_PerformanceFrequency));
+    f64 raw_seconds =
+        std::max(0.0, (f64)(current_counter.QuadPart - g_ClockStart) /
+                          (f64)(g_PerformanceFrequency));
 
 #if !defined(STEAM)
     if (g_VCRMode == VCR_Disabled) return raw_seconds;
@@ -156,9 +158,7 @@ void Plat_DebugString(const ch *psz) {
 #endif
 }
 
-const ch *Plat_GetCommandLine() { return Plat_GetCommandLineA(); }
-
-const ch *Plat_GetCommandLineA() { return GetCommandLine(); }
+const ch *Plat_GetCommandLine() { return GetCommandLine(); }
 
 // Memory stuff.
 //
@@ -178,7 +178,7 @@ class CAllocCSInit {
   CAllocCSInit() { InitializeCriticalSection(&g_AllocCS); }
 } g_AllocCSInit;
 
-PLATFORM_INTERFACE void *Plat_Alloc(u32 size) {
+SOURCE_TIER0_API void *Plat_Alloc(u32 size) {
   EnterCriticalSection(&g_AllocCS);
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
   void *pRet = g_pMemAlloc->Alloc(size);
@@ -196,7 +196,7 @@ PLATFORM_INTERFACE void *Plat_Alloc(u32 size) {
   }
 }
 
-PLATFORM_INTERFACE void *Plat_Realloc(void *ptr, u32 size) {
+SOURCE_TIER0_API void *Plat_Realloc(void *ptr, u32 size) {
   EnterCriticalSection(&g_AllocCS);
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
   void *pRet = g_pMemAlloc->Realloc(ptr, size);
@@ -214,7 +214,7 @@ PLATFORM_INTERFACE void *Plat_Realloc(void *ptr, u32 size) {
   }
 }
 
-PLATFORM_INTERFACE void Plat_Free(void *ptr) {
+SOURCE_TIER0_API void Plat_Free(void *ptr) {
   EnterCriticalSection(&g_AllocCS);
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
   g_pMemAlloc->Free(ptr);
@@ -225,7 +225,7 @@ PLATFORM_INTERFACE void Plat_Free(void *ptr) {
 }
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-PLATFORM_INTERFACE void Plat_SetAllocErrorFn(Plat_AllocErrorFn fn) {
+SOURCE_TIER0_API void Plat_SetAllocErrorFn(Plat_AllocErrorFn fn) {
   g_AllocError = fn;
 }
 #endif

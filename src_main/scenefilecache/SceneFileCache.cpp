@@ -275,7 +275,7 @@ bool CSceneFileCache::GetSceneDataFromImage(const char *pFileName, int iScene,
   } else {
     if (pSceneData) {
       size_t nCountToCopy =
-          min(*pSceneLength, (size_t)pEntries[iScene].nDataLength);
+          std::min(*pSceneLength, (size_t)pEntries[iScene].nDataLength);
       V_memcpy(pSceneData, pData, nCountToCopy);
     }
     if (pSceneLength) {

@@ -11,7 +11,7 @@
 // Material editor
 //=============================================================================
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "appframework/tier2app.h"
 #include "shaderapi/ishaderdevice.h"
 #include "shaderapi/ishaderutil.h"
@@ -310,7 +310,7 @@ bool CShaderAPITestApp::CreateAppWindow( const char *pTitle, bool bWindowed, int
     wc.style         = CS_OWNDC | CS_DBLCLKS;
     wc.lpfnWndProc   = ShaderAPITestWndProc;
     wc.hInstance     = (HINSTANCE)GetAppInstance();
-    wc.lpszClassName = "Valve001";
+    wc.lpszClassName = "Valve002";
 	wc.hIcon		 = NULL; //LoadIcon( s_HInstance, MAKEINTRESOURCE( IDI_LAUNCHER ) );
 	wc.hIconSm		 = wc.hIcon;
 

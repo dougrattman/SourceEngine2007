@@ -3,7 +3,7 @@
 #ifndef IVIDEOMODE_H
 #define IVIDEOMODE_H
 
-#include "vmodes.h"
+#include "modes.h"
 #include "vtf/vtf.h"
 
 struct MovieInfo_t;
@@ -31,7 +31,7 @@ abstract_class IVideoMode {
 
   // Returns the fullscreen modes for the adapter the game was started on
   virtual int GetModeCount(void) = 0;
-  virtual struct vmode_s *GetMode(int num) = 0;
+  virtual vmode_t *GetMode(int num) = 0;
 
   // Purpose: This is called in response to a WM_MOVE message
   // or whatever the equivalent that would be under linux

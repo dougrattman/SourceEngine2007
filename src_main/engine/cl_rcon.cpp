@@ -104,9 +104,10 @@ void CRConVProfExport::GetBudgetGroupInfos(CExportedBudgetGroupInfo *pInfos) {
 
 void CRConVProfExport::GetBudgetGroupTimes(
     float times[IVProfExport::MAX_BUDGETGROUP_TIMES]) {
-  int nGroups = min(m_Times.Count(), IVProfExport::MAX_BUDGETGROUP_TIMES);
+  int nGroups =
+      std::min(m_Times.Count(), (int)IVProfExport::MAX_BUDGETGROUP_TIMES);
   memset(times, 0, nGroups * sizeof(float));
-  nGroups = min(GetNumBudgetGroups(), nGroups);
+  nGroups = std::min(GetNumBudgetGroups(), nGroups);
   memcpy(times, m_Times.Base(), nGroups * sizeof(float));
 }
 
@@ -464,10 +465,11 @@ void CRConClient::RunFrame() {
   // we have a command to process
   // Read data into a utlbuffer
   m_RecvBuffer.EnsureCapacity(m_RecvBuffer.TellPut() + readLen + 1);
-  char *recvbuffer = (char *)_alloca(min(1024, readLen + 1));
+  char *recvbuffer = (char *)_alloca(std::min(1024UL, readLen + 1));
   unsigned int len = 0;
   while (len < readLen) {
-    int recvLen = recv(hSocket, recvbuffer, min(1024, readLen - len), 0);
+    int recvLen =
+        recv(hSocket, recvbuffer, std::min(1024UL, readLen - len), 0.0f);
     if (recvLen == 0)  // socket was closed
     {
       CloseSocket();

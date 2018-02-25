@@ -283,7 +283,7 @@ void FillStaticBuffer(CGroupMesh *pMesh, CDispInfo *pDisp,
 
     float flAlpha = ((CCoreDispInfo *)pCoreDisp)->GetAlpha(i);
     flAlpha *= (1.0f / 255.0f);
-    flAlpha = clamp(flAlpha, 0.0f, 1.0f);
+    flAlpha = std::clamp(flAlpha, 0.0f, 1.0f);
     builder.Color4f(1.0f, 1.0f, 1.0f, flAlpha);
 
     if (nLightmaps > 1) {

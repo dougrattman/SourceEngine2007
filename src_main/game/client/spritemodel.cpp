@@ -35,10 +35,10 @@ static bool giScissorTest = false;
 //-----------------------------------------------------------------------------
 void EnableScissorTest( int x, int y, int width, int height )
 {
-	x = clamp( x, 0, ScreenWidth() );
-	y = clamp( y, 0, ScreenHeight() );
-	width = clamp( width, 0, ScreenWidth() - x );
-	height = clamp( height, 0, ScreenHeight() - y );
+	x = std::clamp( x, 0, ScreenWidth() );
+	y = std::clamp( y, 0, ScreenHeight() );
+	width = std::clamp( width, 0, ScreenWidth() - x );
+	height = std::clamp( height, 0, ScreenHeight() - y );
 
 	scissor_x = x;
 	scissor_width = width;
@@ -95,13 +95,13 @@ static int IntersectWRect(const wrect_t *prc1, const wrect_t *prc2, wrect_t *prc
 	if (!prc)
 		prc = &rc;
 
-	prc->left = max(prc1->left, prc2->left);
-	prc->right = min(prc1->right, prc2->right);
+	prc->left = std::max(prc1->left, prc2->left);
+	prc->right = std::min(prc1->right, prc2->right);
 
 	if (prc->left < prc->right)
 	{
-		prc->top = max(prc1->top, prc2->top);
-		prc->bottom = min(prc1->bottom, prc2->bottom);
+		prc->top = std::max(prc1->top, prc2->top);
+		prc->bottom = std::min(prc1->bottom, prc2->bottom);
 
 		if (prc->top < prc->bottom)
 			return 1;

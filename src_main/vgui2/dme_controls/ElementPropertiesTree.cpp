@@ -654,7 +654,7 @@ int CElementTreeViewListControl::GetFontSize()
 
 void CElementTreeViewListControl::SetFontSize( int size )
 {
-	m_iFontSize = min( 5, max( 1, size ) );
+	m_iFontSize = std::min( 5, std::max( 1, size ) );
 	SetFont( GetFont( m_iFontSize ) );
 }
 
@@ -2091,7 +2091,7 @@ void CElementPropertiesTreeInternal::OnNavSearch( const char *text )
 		return;
 	}
 
-	m_nCurrentSearchResult = clamp( m_nCurrentSearchResult, 0, m_SearchResults.Count() - 1 );
+	m_nCurrentSearchResult = std::clamp( m_nCurrentSearchResult, 0, m_SearchResults.Count() - 1 );
 
 	NavigateToSearchResult();
 

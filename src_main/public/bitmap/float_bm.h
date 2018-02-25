@@ -32,10 +32,10 @@ inline PixRGBAF PixRGBA8_to_F(PixRGBA8 const &x) {
 
 inline PixRGBA8 PixRGBAF_to_8(PixRGBAF const &f) {
   PixRGBA8 x;
-  x.Red = max(0, min(255.0, 255.0 * f.Red));
-  x.Green = max(0, min(255.0, 255.0 * f.Green));
-  x.Blue = max(0, min(255.0, 255.0 * f.Blue));
-  x.Alpha = max(0, min(255.0, 255.0 * f.Alpha));
+  x.Red = std::max(0.0, std::min(255.0, 255.0 * f.Red));
+  x.Green = std::max(0.0, std::min(255.0, 255.0 * f.Green));
+  x.Blue = std::max(0.0, std::min(255.0, 255.0 * f.Blue));
+  x.Alpha = std::max(0.0, std::min(255.0, 255.0 * f.Alpha));
   return x;
 }
 
@@ -95,8 +95,8 @@ class FloatBitMap_t {
 
   inline float &PixelClamped(int x, int y, int comp) const {
     // like Pixel except wraps around to other side
-    x = clamp(x, 0, Width - 1);
-    y = clamp(y, 0, Height - 1);
+    x = std::clamp(x, 0, Width - 1);
+    y = std::clamp(y, 0, Height - 1);
     return RGBAData[4 * (x + Width * y) + comp];
   }
 
@@ -260,7 +260,7 @@ class FloatCubeMap_t {
     for (int f = 0; f < 6; f++)
       if (face_maps[f].RGBAData) {
         nfaces++;
-        ret = max(ret, face_maps[f].BrightestColor());
+        ret = std::max(ret, face_maps[f].BrightestColor());
       }
     return ret;
   }

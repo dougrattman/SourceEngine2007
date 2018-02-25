@@ -217,7 +217,7 @@ float CalcWaterFogAlpha( const float flWaterZ, const float flEyePosZ, const floa
 	// if flDepthFromWater < 0, then set it to 0
 	// This is the equivalent of moving the vert to the water surface if it's above the water surface
 	// We'll do this with the saturate at the end instead.
-//	flDepthFromWater = max( 0.0f, flDepthFromWater );
+//	flDepthFromWater = std::max( 0.0f, flDepthFromWater );
 
 	// Calculate the ratio of water fog to regular fog (ie. how much of the distance from the viewer
 	// to the vert is actually underwater.
@@ -231,7 +231,7 @@ float CalcWaterFogAlpha( const float flWaterZ, const float flEyePosZ, const floa
 float CalcRangeFog( const float flProjPosZ, const float flFogEndOverRange, const float flFogMaxDensity, const float flFogOORange )
 {
 #if !(defined(SHADER_MODEL_PS_1_1) || defined(SHADER_MODEL_PS_1_4) || defined(SHADER_MODEL_PS_2_0)) //Minimum requirement of ps2b
-	return min( flFogMaxDensity, ( saturate( 1.0 - (flFogEndOverRange - (flProjPosZ * flFogOORange)) ) ) );
+	return std::min( flFogMaxDensity, ( saturate( 1.0 - (flFogEndOverRange - (flProjPosZ * flFogOORange)) ) ) );
 #else
 	return 0.0f; //ps20 shaders will never have range fog enabled because too many ran out of slots.
 #endif
@@ -535,7 +535,7 @@ float2 CalcParallaxedTexCoord( float2 inTexCoord, float2 vParallax, float3 vNorm
       float sh4 = (tex2D( sNormalMap, texSampleBase + inXY * 0.22 ).w - sh0 - 0.22 ) * 12 * fShadowSoftening;
       
       // Compute the actual shadow strength:
-      float fShadow = 1 - max( max( max( max( max( max( shA, sh9 ), sh8 ), sh7 ), sh6 ), sh5 ), sh4 );
+      float fShadow = 1 - std::max( std::max( std::max( std::max( std::max( std::max( shA, sh9 ), sh8 ), sh7 ), sh6 ), sh5 ), sh4 );
 
       cResultColor.rgb *= fShadow * 0.6 + 0.4;
    }
@@ -558,8 +558,8 @@ float2 CalcParallaxedTexCoord( float2 inTexCoord, float2 vParallax, float3 vNorm
 float4 RGBtoHSL( float4 inColor )
 {
    float h, s;
-   float flMax = max( inColor.r, max( inColor.g, inColor.b ) );
-   float flMin = min( inColor.r, min( inColor.g, inColor.b ) );
+   float flMax = std::max( inColor.r, std::max( inColor.g, inColor.b ) );
+   float flMin = std::min( inColor.r, std::min( inColor.g, inColor.b ) );
    
    float l = (flMax + flMin) / 2.0f;
    
@@ -734,9 +734,9 @@ float3 TextureCombinePostLighting( float3 lit_baseColor, float4 detailColor, int
  		// fade in an unusual way - instead of fading out color, remap an increasing band of it from
  		// 0..1
 		if ( fBlendFactor > 0.5)
- lit_baseColor += min(1, (1.0/fBlendFactor)*max(0, detailColor.rgb-(1-fBlendFactor) ) );
+ lit_baseColor += std::min(1, (1.0/fBlendFactor)*std::max(0, detailColor.rgb-(1-fBlendFactor) ) );
 		else
- lit_baseColor += 2*fBlendFactor*2*max(0, detailColor.rgb-.5);
+ lit_baseColor += 2*fBlendFactor*2*std::max(0, detailColor.rgb-.5);
 	}
 	return lit_baseColor;
 }
@@ -779,7 +779,7 @@ float DepthFeathering( sampler DepthSampler, const float2 vScreenPos, float fPro
  flSpriteDepth = SoftParticleDepth( fProjZ );
 
  flFeatheredAlpha = abs(flSceneDepth - flSpriteDepth) * vDepthBlendConstants.x;
- flFeatheredAlpha = max( smoothstep( 0.75f, 1.0f, flSceneDepth ), flFeatheredAlpha ); //as the sprite approaches the edge of our compressed depth space, the math stops working. So as the sprite approaches the far depth, smoothly remove feathering.
+ flFeatheredAlpha = std::max( smoothstep( 0.75f, 1.0f, flSceneDepth ), flFeatheredAlpha ); //as the sprite approaches the edge of our compressed depth space, the math stops working. So as the sprite approaches the far depth, smoothly remove feathering.
  flFeatheredAlpha = saturate( flFeatheredAlpha );
 		}
 #		endif

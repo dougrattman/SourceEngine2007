@@ -116,7 +116,7 @@ void FlexPanel::PositionSliders( int sboffset )
 
 	int colsavailable = ( this->w2() - 20 /*scrollbar*/ - 10 /*left edge gap + right gap*/ ) / widthofslidercolumn;
 	// Need at least one column
-	colsavailable = max( colsavailable, 1 );
+	colsavailable = std::max( colsavailable, 1 );
 
 	int rowsneeded = GLOBAL_STUDIO_FLEX_CONTROL_COUNT;
 

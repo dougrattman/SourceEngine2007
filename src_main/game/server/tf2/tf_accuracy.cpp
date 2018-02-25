@@ -129,7 +129,7 @@ void CBaseTFPlayer::Supress( void )
 {
 	if ( gpGlobals->curtime <= (m_flLastRicochetNearby + ACC_RICOCHET_TIME) )
 	{
-		m_flNumberOfRicochets = min( ACC_RICOCHET_CAP, m_flNumberOfRicochets + 1 );
+		m_flNumberOfRicochets = std::min( ACC_RICOCHET_CAP, m_flNumberOfRicochets + 1 );
 	}
 	else
 	{

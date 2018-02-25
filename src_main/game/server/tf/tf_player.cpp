@@ -1672,7 +1672,7 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 	{
 		if ( args.ArgC() >= 2 )
 		{
-			int iCond = clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
+			int iCond = std::clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
 
 			CTFPlayer *pTargetPlayer = this;
 			if ( args.ArgC() >= 4 )
@@ -1708,7 +1708,7 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 	{
 		if ( args.ArgC() >= 2 )
 		{
-			int iCond = clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
+			int iCond = std::clamp( atoi( args[1] ), 0, TF_COND_LAST-1 );
 			m_Shared.RemoveCond( iCond );
 		}
 		return true;
@@ -2456,9 +2456,9 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 	// Save damage force for ragdolls.
 	m_vecTotalBulletForce = info.GetDamageForce();
-	m_vecTotalBulletForce.x = clamp( m_vecTotalBulletForce.x, -15000.0f, 15000.0f );
-	m_vecTotalBulletForce.y = clamp( m_vecTotalBulletForce.y, -15000.0f, 15000.0f );
-	m_vecTotalBulletForce.z = clamp( m_vecTotalBulletForce.z, -15000.0f, 15000.0f );
+	m_vecTotalBulletForce.x = std::clamp( m_vecTotalBulletForce.x, -15000.0f, 15000.0f );
+	m_vecTotalBulletForce.y = std::clamp( m_vecTotalBulletForce.y, -15000.0f, 15000.0f );
+	m_vecTotalBulletForce.z = std::clamp( m_vecTotalBulletForce.z, -15000.0f, 15000.0f );
 
 	int bTookDamage = 0;
  
@@ -2549,7 +2549,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 				if ( bitsDamage & DMG_USEDISTANCEMOD )
 				{
-					float flDistance = max( 1.0, (WorldSpaceCenter() - info.GetAttacker()->WorldSpaceCenter()).Length() );
+					float flDistance = std::max( 1.0, (WorldSpaceCenter() - info.GetAttacker()->WorldSpaceCenter()).Length() );
 					float flOptimalDistance = 512.0;
 
 					float flCenter = RemapValClamped( flDistance / flOptimalDistance, 0.0, 2.0, 1.0, 0.0 );
@@ -2561,8 +2561,8 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 							flCenter = RemapVal( flCenter, 0.5, 1.0, 0.5, 0.65 );
 						}
 					}
-					flMin = max( 0.0, flCenter - 0.25 );
-					flMax = min( 1.0, flCenter + 0.25 );
+					flMin = std::max( 0.0, flCenter - 0.25 );
+					flMax = std::min( 1.0, flCenter + 0.25 );
 
 					if ( bDebug )
 					{
@@ -2651,7 +2651,7 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 		CSingleUserRecipientFilter user( this );
 		UserMessageBegin( user, "Damage" );
-			WRITE_BYTE( clamp( (int)info.GetDamage(), 0, 255 ) );
+			WRITE_BYTE( std::clamp( (int)info.GetDamage(), 0, 255 ) );
 			WRITE_VEC3COORD( vecDamageOrigin );
 		MessageEnd();
 	}
@@ -2897,7 +2897,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 	if ( event )
 	{
 		event->SetInt( "userid", GetUserID() );
-		event->SetInt( "health", max( 0, m_iHealth ) );
+		event->SetInt( "health", std::max( 0, m_iHealth ) );
 
 		// HLTV event priority, not transmitted
 		event->SetInt( "priority", 5 );	
@@ -3424,9 +3424,9 @@ void CTFPlayer::DropAmmoPack( void )
 		return;
 
 	// Fill the ammo pack with unused player ammo, if out add a minimum amount.
-	int iPrimary = max( 5, GetAmmoCount( TF_AMMO_PRIMARY ) );
-	int iSecondary = max( 5, GetAmmoCount( TF_AMMO_SECONDARY ) );
-	int iMetal = max( 5, GetAmmoCount( TF_AMMO_METAL ) );	
+	int iPrimary = std::max( 5, GetAmmoCount( TF_AMMO_PRIMARY ) );
+	int iSecondary = std::max( 5, GetAmmoCount( TF_AMMO_SECONDARY ) );
+	int iMetal = std::max( 5, GetAmmoCount( TF_AMMO_METAL ) );	
 
 	// Create the ammo pack.
 	CTFAmmoPack *pAmmoPack = CTFAmmoPack::Create( vecPackOrigin, vecPackAngles, this, pszWorldModel );
@@ -4112,7 +4112,7 @@ int CTFPlayer::GiveAmmo( int iCount, int iAmmoIndex, bool bSuppressSound )
 	}
 
 	int iMax = m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex];
-	int iAdd = min( iCount, iMax - GetAmmoCount(iAmmoIndex) );
+	int iAdd = std::min( iCount, iMax - GetAmmoCount(iAmmoIndex) );
 	if ( iAdd < 1 )
 	{
 		return 0;
@@ -4581,7 +4581,7 @@ void CTFPlayer::PainSound( const CTakeDamageInfo &info )
 
 	if ( SpeakConceptIfAllowed( MP_CONCEPT_PLAYER_PAIN, "damagecritical:1", szResponse, AI_Response::MAX_RESPONSE_NAME, &filter ) )
 	{
-		flPainLength = max( GetSceneDuration( szResponse ), flPainLength );
+		flPainLength = std::max( GetSceneDuration( szResponse ), flPainLength );
 	}
 
 	// speak a louder pain concept to just the attacker
@@ -5764,7 +5764,7 @@ bool CTFPlayer::CanSpeakVoiceCommand( void )
 void CTFPlayer::NoteSpokeVoiceCommand( const char *pszScenePlayed )
 {
 	Assert( pszScenePlayed );
-	m_flNextVoiceCommandTime = gpGlobals->curtime + min( GetSceneDuration( pszScenePlayed ), tf_max_voice_speak_delay.GetFloat() );
+	m_flNextVoiceCommandTime = gpGlobals->curtime + std::min( GetSceneDuration( pszScenePlayed ), tf_max_voice_speak_delay.GetFloat() );
 }
 
 //-----------------------------------------------------------------------------

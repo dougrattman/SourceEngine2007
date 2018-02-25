@@ -2187,7 +2187,7 @@ void CServerGameClients::ClientSettingsChanged(edict_t *pEdict) {
   static const ConVar *pMaxUpdateRate = g_pCVar->FindVar("sv_maxupdaterate");
   if (pMinUpdateRate && pMaxUpdateRate)
     player->m_nUpdateRate =
-        (int)clamp(player->m_nUpdateRate, pMinUpdateRate->GetFloat(),
+        std::clamp((float)player->m_nUpdateRate, pMinUpdateRate->GetFloat(),
                    pMaxUpdateRate->GetFloat());
 
   bool useInterpolation = Q_atoi(QUICKGETCVARVALUE("cl_interpolate")) != 0;
@@ -2199,13 +2199,13 @@ void CServerGameClients::ClientSettingsChanged(edict_t *pEdict) {
     static const ConVar *pMin = g_pCVar->FindVar("sv_client_min_interp_ratio");
     static const ConVar *pMax = g_pCVar->FindVar("sv_client_max_interp_ratio");
     if (pMin && pMax && pMin->GetFloat() != -1) {
-      flLerpRatio = clamp(flLerpRatio, pMin->GetFloat(), pMax->GetFloat());
+      flLerpRatio = std::clamp(flLerpRatio, pMin->GetFloat(), pMax->GetFloat());
     } else {
       if (flLerpRatio == 0) flLerpRatio = 1.0f;
     }
     // #define FIXME_INTERP_RATIO
     player->m_fLerpTime =
-        max(flLerpAmount, flLerpRatio / player->m_nUpdateRate);
+        std::max(flLerpAmount, flLerpRatio / player->m_nUpdateRate);
   } else {
     player->m_fLerpTime = 0.0f;
   }

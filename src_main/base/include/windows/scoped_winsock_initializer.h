@@ -3,7 +3,7 @@
 #ifndef SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
 #define SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
 
-#include "base/include/windows/scoped_winsock_initializer.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
 #include <cassert>

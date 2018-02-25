@@ -411,7 +411,7 @@ void CloseCaptionTool::Think( float dt )
 		if ( predisplay > 0.0f )
 		{
 			predisplay -= dt;
-			predisplay = max( 0.0f, predisplay );
+			predisplay = std::max( 0.0f, predisplay );
 			item->SetPreDisplayTime( predisplay );
 		}
 		else
@@ -419,7 +419,7 @@ void CloseCaptionTool::Think( float dt )
 			// remove time from actual playback
 			float ttl = item->GetTimeToLive();
 			ttl -= dt;
-			ttl = max( 0.0f, ttl );
+			ttl = std::max( 0.0f, ttl );
 			item->SetTimeToLive( ttl );
 		}
 	}
@@ -620,7 +620,7 @@ void CloseCaptionTool::Process( char const *tokenname, float duration, int langu
 				out = phrase;
 
 				// Delay must be positive
-				delay = max( 0.0f, (float)wcstod( args, NULL ) );
+				delay = std::max( 0.0f, (float)wcstod( args, NULL ) );
 
 				continue;
 			}
@@ -808,8 +808,8 @@ void CloseCaptionTool::AddWorkUnit( CCloseCaptionItem *item,
 		int curheight = item->GetHeight();
 		int curwidth = item->GetWidth();
 
-		curheight = max( curheight, params.y + wu->GetHeight() );
-		curwidth = max( curwidth, params.x + params.width );
+		curheight = std::max( curheight, params.y + wu->GetHeight() );
+		curwidth = std::max( curwidth, params.x + params.width );
 
 		item->SetHeight( curheight );
 		item->SetWidth( curwidth );

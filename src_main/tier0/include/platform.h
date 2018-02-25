@@ -26,8 +26,10 @@
 #include "tier0/include/calling_conventions.h"
 #include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/platform_detection.h"
-#include "tier0/include/valve_off.h"
+#include "tier0/include/tier0_api.h"
 #include "tier0/include/wchartypes.h"
+
+#include "tier0/include/valve_off.h"
 
 // portability / compiler settings
 #ifdef OS_WIN
@@ -35,9 +37,6 @@
 #define __i386__ 1
 #endif
 #elif OS_POSIX
-typedef u32 DWORD;
-typedef u16 WORD;
-typedef void *HINSTANCE;
 #define _MAX_PATH PATH_MAX
 #endif  // defined(OS_WIN)
 
@@ -45,9 +44,6 @@ typedef void *HINSTANCE;
 #ifndef MAX_PATH
 #define MAX_PATH 260
 #endif
-
-//  need macro for constant expression
-#define ALIGN_VALUE(val, alignment) (((val) + (alignment)-1) & ~((alignment)-1))
 
 // Used to step into the debugger
 #ifdef OS_WIN
@@ -72,12 +68,6 @@ typedef void *HINSTANCE;
 #endif
 #endif
 
-#if defined __i386__ && !defined __linux__
-#define id386 1
-#else
-#define id386 0
-#endif  // __i386__
-
 // decls for aligning data
 #ifdef OS_WIN
 #define DECL_ALIGN(x) __declspec(align(x))
@@ -100,14 +90,6 @@ typedef void *HINSTANCE;
 #define CONSTRUCT_EARLY __attribute__((init_priority(101)))
 #else
 #define CONSTRUCT_EARLY
-#endif
-
-#ifdef OS_WIN
-#define SELECTANY __declspec(selectany)
-#elif OS_POSIX
-#define SELECTANY __attribute__((weak))
-#else
-#define SELECTANY static
 #endif
 
 #ifdef OS_WIN
@@ -138,11 +120,8 @@ typedef void *HINSTANCE;
 #define DLL_GLOBAL_IMPORT extern
 
 #else
-#error "Unsupported Platform."
+#error Please, add support of your platform to tier0/include/platform.h
 #endif
-
-// Force a function call site -not- to inlined. (useful for profiling)
-#define DONT_INLINE(a) (((i32)(a) + 1) ? (a) : (a))
 
 // Pass hints to the compiler to prevent it from generating unnessecary / stupid
 // code in certain situations.  Several compilers other than MSVC also have an
@@ -166,21 +145,15 @@ typedef void *HINSTANCE;
     HINT(0);          \
   }
 
-// In cases where no default is present or appropriate, this causes MSVC to
-// generate as little code as possible, and throw an assertion in debug.
-#define NO_DEFAULT \
-  default:         \
-    UNREACHABLE();
-
 #ifdef OS_WIN
 // Alloca defined for this platform
-#define stackalloc(_size) _alloca(ALIGN_VALUE(_size, 16))
+#define stackalloc(_size) _alloca(AlignValue(_size, 16))
 #define stackfree(_p) 0
-#define securestackalloc(_size) _malloca(ALIGN_VALUE(_size, 16))
+#define securestackalloc(_size) _malloca(AlignValue(_size, 16))
 #define securestackfree(_p) _freea(_p)
 #elif OS_POSIX
 // Alloca defined for this platform
-#define stackalloc(_size) _alloca(ALIGN_VALUE(_size, 16))
+#define stackalloc(_size) _alloca(AlignValue(_size, 16))
 #define stackfree(_p) 0
 #endif
 
@@ -275,10 +248,6 @@ inline T DWordSwapAsm(T dw) {
 #define LITTLE_ENDIAN 1
 #endif
 
-#if defined(_SGI_SOURCE)
-#define BIG_ENDIAN 1
-#endif
-
 // If a swapped f32 passes through the fpu, the bytes may get changed.
 // Prevent this by swapping floats as DWORDs.
 #define SafeSwapFloat(pOut, pIn) (*((u32 *)pOut) = DWordSwap(*((u32 *)pIn)))
@@ -302,26 +271,6 @@ inline T DWordSwapAsm(T dw) {
 #define BigFloat(pOut, pIn) SafeSwapFloat(pOut, pIn)
 #define LittleFloat(pOut, pIn) (*pOut = *pIn)
 #define SwapFloat(pOut, pIn) BigFloat(pOut, pIn)
-
-#elif defined(BIG_ENDIAN)
-
-#define BigShort(val) (val)
-#define BigWord(val) (val)
-#define BigLong(val) (val)
-#define BigDWord(val) (val)
-#define LittleShort(val) WordSwap(val)
-#define LittleWord(val) WordSwap(val)
-#define LittleLong(val) DWordSwap(val)
-#define LittleDWord(val) DWordSwap(val)
-#define SwapShort(val) LittleShort(val)
-#define SwapWord(val) LittleWord(val)
-#define SwapLong(val) LittleLong(val)
-#define SwapDWord(val) LittleDWord(val)
-
-// Pass floats by pointer for swapping to avoid truncation in the fpu
-#define BigFloat(pOut, pIn) (*pOut = *pIn)
-#define LittleFloat(pOut, pIn) SafeSwapFloat(pOut, pIn)
-#define SwapFloat(pOut, pIn) LittleFloat(pOut, pIn)
 
 #else
 
@@ -387,35 +336,12 @@ inline void StoreLittleDWord(unsigned long *base, usize dwordIndex,
   base[dwordIndex] = LittleDWord(dword);
 }
 
-#ifndef STATIC_TIER0
-
-#ifdef TIER0_DLL_EXPORT
-#define PLATFORM_INTERFACE DLL_EXPORT
-#define PLATFORM_OVERLOAD DLL_GLOBAL_EXPORT
-#define PLATFORM_CLASS DLL_CLASS_EXPORT
-#else
-#define PLATFORM_INTERFACE DLL_IMPORT
-#define PLATFORM_OVERLOAD DLL_GLOBAL_IMPORT
-#define PLATFORM_CLASS DLL_CLASS_IMPORT
-#endif
-
-#else  // BUILD_AS_DLL
-
-#define PLATFORM_INTERFACE extern
-#define PLATFORM_OVERLOAD
-#define PLATFORM_CLASS
-
-#endif  // BUILD_AS_DLL
-
 // Returns time in seconds since the module was loaded.
-PLATFORM_INTERFACE f64 Plat_FloatTime();
+SOURCE_TIER0_API f64 Plat_FloatTime();
 // Time in milliseconds.
-PLATFORM_INTERFACE unsigned long Plat_MSTime();
+SOURCE_TIER0_API unsigned long Plat_MSTime();
 // Query timer frequency.
-PLATFORM_INTERFACE u64 Plat_PerformanceFrequency();
-
-// b/w compatibility
-#define Sys_FloatTime Plat_FloatTime
+SOURCE_TIER0_API u64 Plat_PerformanceFrequency();
 
 // Processor Information:
 struct CPUInformation {
@@ -430,130 +356,73 @@ struct CPUInformation {
       m_bMMX : 1,     // Is MMX supported?
       m_bHT : 1;      // Is HyperThreading supported?
 
-  u8 m_nLogicalProcessors;   // Number op logical processors.
-  u8 m_nPhysicalProcessors;  // Number of physical processors
+  u8 m_nLogicalProcessors;   // Number of logical processors.
+  u8 m_nPhysicalProcessors;  // Number of physical processors.
 
   i64 m_Speed;  // In cycles per second.
 
   ch *m_szProcessorID;  // Processor vendor Identification.
 };
 
-PLATFORM_INTERFACE const CPUInformation &GetCPUInformation();
+SOURCE_TIER0_API const CPUInformation &GetCPUInformation();
 
-PLATFORM_INTERFACE void GetCurrentDate(i32 *pDay, i32 *pMonth, i32 *pYear);
+SOURCE_TIER0_API void GetCurrentDate(i32 *pDay, i32 *pMonth, i32 *pYear);
 
 // Thread related functions
 // Registers the current thread with Tier0's thread management system.
 // This should be called on every thread created in the game.
-PLATFORM_INTERFACE unsigned long Plat_RegisterThread(
+SOURCE_TIER0_API unsigned long Plat_RegisterThread(
     const ch *pName = "Source Thread");
 
 // Registers the current thread as the primary thread.
-PLATFORM_INTERFACE unsigned long Plat_RegisterPrimaryThread();
+SOURCE_TIER0_API unsigned long Plat_RegisterPrimaryThread();
 
 // VC-specific. Sets the thread's name so it has a friendly name in the
 // debugger. This should generally only be handled by Plat_RegisterThread and
 // Plat_RegisterPrimaryThread
-PLATFORM_INTERFACE void Plat_SetThreadName(unsigned long dwThreadID,
-                                           const ch *pName);
+SOURCE_TIER0_API void Plat_SetThreadName(unsigned long dwThreadID,
+                                         const ch *pName);
 
 // These would be private if it were possible to export private variables from a
 // .DLL. They need to be variables because they are checked by inline functions
 // at performance critical places.
-PLATFORM_INTERFACE unsigned long Plat_PrimaryThreadID;
+SOURCE_TIER0_API unsigned long Plat_PrimaryThreadID;
 
 // Returns the ID of the currently executing thread.
-PLATFORM_INTERFACE unsigned long Plat_GetCurrentThreadID();
+SOURCE_TIER0_API unsigned long Plat_GetCurrentThreadID();
 
 // Returns the ID of the primary thread.
 inline unsigned long Plat_GetPrimaryThreadID() { return Plat_PrimaryThreadID; }
 
 // Returns true if the current thread is the primary thread.
 inline bool Plat_IsPrimaryThread() {
-  // return true;
-  return (Plat_GetPrimaryThreadID() == Plat_GetCurrentThreadID());
+  return Plat_GetPrimaryThreadID() == Plat_GetCurrentThreadID();
 }
 
-//-----------------------------------------------------------------------------
-// Process related functions
-//-----------------------------------------------------------------------------
-PLATFORM_INTERFACE const ch *Plat_GetCommandLine();
+SOURCE_TIER0_API const ch *Plat_GetCommandLine();
 #ifndef OS_WIN
 // helper function for OS's that don't have a ::GetCommandLine() call
-PLATFORM_INTERFACE void Plat_SetCommandLine(const ch *cmdLine);
+SOURCE_TIER0_API void Plat_SetCommandLine(const ch *cmdLine);
 #endif
-PLATFORM_INTERFACE const ch *Plat_GetCommandLineA();
 
-//-----------------------------------------------------------------------------
 // Just logs file and line to simple.log
-//-----------------------------------------------------------------------------
-PLATFORM_INTERFACE bool Plat_SimpleLog(const ch *file, i32 line);
+SOURCE_TIER0_API bool Plat_SimpleLog(const ch *file, i32 line);
 
-//-----------------------------------------------------------------------------
 // Returns true if debugger attached, false otherwise
-//-----------------------------------------------------------------------------
+
 #ifdef OS_WIN
-PLATFORM_INTERFACE bool Plat_IsInDebugSession();
-PLATFORM_INTERFACE void Plat_DebugString(const ch *);
+SOURCE_TIER0_API bool Plat_IsInDebugSession();
+SOURCE_TIER0_API void Plat_DebugString(const ch *);
 #else
 #define Plat_IsInDebugSession() (false)
 #define Plat_DebugString(s) ((void)0)
 #endif
 
-//-----------------------------------------------------------------------------
 // XBOX Components valid in PC compilation space
-//-----------------------------------------------------------------------------
-
-#define XBOX_DVD_SECTORSIZE 2048
-#define XBOX_DVD_ECC_SIZE 32768  // driver reads in quantum ECC blocks
-#define XBOX_HDD_SECTORSIZE 512
 
 // Custom windows messages for Xbox input
 #define WM_XREMOTECOMMAND (WM_USER + 100)
 #define WM_XCONTROLLER_KEY (WM_USER + 101)
-#define WM_SYS_UI (WM_USER + 102)
-#define WM_SYS_SIGNINCHANGED (WM_USER + 103)
-#define WM_SYS_STORAGEDEVICESCHANGED (WM_USER + 104)
-#define WM_SYS_PROFILESETTINGCHANGED (WM_USER + 105)
-#define WM_SYS_MUTELISTCHANGED (WM_USER + 106)
-#define WM_SYS_INPUTDEVICESCHANGED (WM_USER + 107)
-#define WM_SYS_INPUTDEVICECONFIGCHANGED (WM_USER + 108)
-#define WM_LIVE_CONNECTIONCHANGED (WM_USER + 109)
-#define WM_LIVE_INVITE_ACCEPTED (WM_USER + 110)
-#define WM_LIVE_LINK_STATE_CHANGED (WM_USER + 111)
-#define WM_LIVE_CONTENT_INSTALLED (WM_USER + 112)
-#define WM_LIVE_MEMBERSHIP_PURCHASED (WM_USER + 113)
-#define WM_LIVE_VOICECHAT_AWAY (WM_USER + 114)
-#define WM_LIVE_PRESENCE_CHANGED (WM_USER + 115)
-#define WM_FRIENDS_PRESENCE_CHANGED (WM_USER + 116)
-#define WM_FRIENDS_FRIEND_ADDED (WM_USER + 117)
-#define WM_FRIENDS_FRIEND_REMOVED (WM_USER + 118)
-#define WM_CUSTOM_GAMEBANNERPRESSED (WM_USER + 119)
-#define WM_CUSTOM_ACTIONPRESSED (WM_USER + 120)
-#define WM_XMP_STATECHANGED (WM_USER + 121)
-#define WM_XMP_PLAYBACKBEHAVIORCHANGED (WM_USER + 122)
-#define WM_XMP_PLAYBACKCONTROLLERCHANGED (WM_USER + 123)
-
-inline const ch *GetPlatformExt() { return IsX360() ? ".360" : ""; }
-
-// flat view, 6 hw threads
-#define XBOX_PROCESSOR_0 (1 << 0)
-#define XBOX_PROCESSOR_1 (1 << 1)
-#define XBOX_PROCESSOR_2 (1 << 2)
-#define XBOX_PROCESSOR_3 (1 << 3)
-#define XBOX_PROCESSOR_4 (1 << 4)
-#define XBOX_PROCESSOR_5 (1 << 5)
-
-// core view, 3 cores with 2 hw threads each
-#define XBOX_CORE_0_HWTHREAD_0 XBOX_PROCESSOR_0
-#define XBOX_CORE_0_HWTHREAD_1 XBOX_PROCESSOR_1
-#define XBOX_CORE_1_HWTHREAD_0 XBOX_PROCESSOR_2
-#define XBOX_CORE_1_HWTHREAD_1 XBOX_PROCESSOR_3
-#define XBOX_CORE_2_HWTHREAD_0 XBOX_PROCESSOR_4
-#define XBOX_CORE_2_HWTHREAD_1 XBOX_PROCESSOR_5
-
-// Include additional dependant header components.
-#include "tier0/include/fasttimer.h"
 
 // Methods to invoke the constructor, copy constructor, and destructor
 template <class T>
@@ -658,7 +527,7 @@ FunctionWrapper<9>::Function
 };
 */
 
-PLATFORM_INTERFACE bool vtune(bool resume);
+SOURCE_TIER0_API bool vtune(bool resume);
 
 #define TEMPLATE_FUNCTION_TABLE(RETURN_TYPE, NAME, ARGS, COUNT)        \
                                                                        \

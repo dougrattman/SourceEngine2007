@@ -229,7 +229,7 @@ void CLCDScrollingText::OnDraw(CLCDGfx &rGfx)
             // determine how far we have to travel until scrolling stops
             m_nScrollingDistance = ((GetWidth()) >= GetHExtent().cx) ?
                 0 : (GetHExtent().cx - GetWidth());
-            SetLogicalSize(max(GetSize().cx, GetVExtent().cx), GetHExtent().cy);
+            SetLogicalSize(std::max(GetSize().cx, GetVExtent().cx), GetHExtent().cy);
         }
     }
 
@@ -266,7 +266,7 @@ void CLCDScrollingText::OnDraw(CLCDGfx &rGfx)
             m_fTotalDistance += fDistance;
 
             // we dont want the total distnace exceed our scrolling distance
-            int nTotalOffset = min((int)m_fTotalDistance, m_nScrollingDistance);
+            int nTotalOffset = std::min((int)m_fTotalDistance, m_nScrollingDistance);
             
             if (SCROLL_VERT == m_eScrollDir)
             {

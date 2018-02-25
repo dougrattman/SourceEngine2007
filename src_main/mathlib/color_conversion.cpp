@@ -6,6 +6,7 @@
 
 #include <float.h>  // Needed for FLT_EPSILON
 #include <memory.h>
+#include <algorithm>
 #include <cmath>
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
@@ -14,23 +15,22 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
 // Gamma conversion support
-//-----------------------------------------------------------------------------
+
 // palette is sent through this to convert to screen gamma
 static u8 texgammatable[256];
 
 static f32 texturetolinear[256];  // texture (0..255) to linear (0..1)
-static int lineartotexture[1024];   // linear (0..1) to texture (0..255)
-static int lineartoscreen[1024];    // linear (0..1) to gamma corrected vertex
-                                    // light (0..255)
+static u8 lineartotexture[1024];  // linear (0..1) to texture (0..255)
+static u8 lineartoscreen[1024];   // linear (0..1) to gamma corrected vertex
+                                  // light (0..255)
 
 // build a lightmap texture to combine with surface texture, adjust for
 // src*dst+dst*src, ramp reprogramming, etc
-f32 lineartovertex[4096];  // linear (0..4) to screen corrected vertex space
-                             // (0..1?)
+f32 lineartovertex[4096];   // linear (0..4) to screen corrected vertex space
+                            // (0..1?)
 u8 lineartolightmap[4096];  // linear (0..4) to screen corrected
-                                       // texture value (0..255)
+                            // texture value (0..255)
 
 static f32 g_Mathlib_GammaToLinear[256];  // gamma (0..1) to linear (0..1)
 static f32 g_Mathlib_LinearToGamma[256];  // linear (0..1) to gamma (0..1)
@@ -169,71 +169,42 @@ ALIGN128 f32 power2_n[256] =  // 2**(index - 128) / 255
      8.340254091199472000E+034, 1.668050818239894400E+035,
      3.336101636479788800E+035, 6.672203272959577600E+035};
 
-void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness,
-                     int overbright) {
-  int i, inf;
-  f32 g1, g3;
+void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness, int overbright) {
+  f32 g = 1.0f / (gamma <= 3.0f ? gamma : 3.0f);
+  f32 g1 = texGamma * g;
+  f32 g3;
 
-  // Con_Printf("BuildGammaTable %.1f %.1f %.1f\n", g, v_lightgamma.GetFloat(),
-  // v_texgamma.GetFloat() );
-
-  f32 g = gamma;
-  if (g > 3.0) {
-    g = 3.0;
-  }
-
-  g = 1.0 / g;
-  g1 = texGamma * g;
-
-  if (brightness <= 0.0) {
-    g3 = 0.125;
-  } else if (brightness > 1.0) {
-    g3 = 0.05;
+  if (brightness <= 0.0f) {
+    g3 = 0.125f;
+  } else if (brightness > 1.0f) {
+    g3 = 0.05f;
   } else {
-    g3 = 0.125 - (brightness * brightness) * 0.075;
+    g3 = 0.125f - (brightness * brightness) * 0.075f;
   }
 
-  for (i = 0; i < 256; i++) {
-    inf = 255 * pow(i / 255.f, g1);
-    if (inf < 0) inf = 0;
-    if (inf > 255) inf = 255;
+  for (int i = 0; i < 256; i++) {
+    u8 inf = std::clamp(static_cast<int>(255 * pow(i / 255.f, g1)), 0, 255);
     texgammatable[i] = inf;
   }
 
-  for (i = 0; i < 1024; i++) {
-    f32 f;
-
-    f = i / 1023.0;
+  for (int i = 0; i < 1024; i++) {
+    f32 f = i / 1023.0f;
 
     // scale up
-    if (brightness > 1.0) f = f * brightness;
+    if (brightness > 1.0f) f *= brightness;
 
     // shift up
     if (f <= g3)
-      f = (f / g3) * 0.125;
+      f = (f / g3) * 0.125f;
     else
-      f = 0.125 + ((f - g3) / (1.0 - g3)) * 0.875;
+      f = 0.125f + ((f - g3) / (1.0f - g3)) * 0.875f;
 
     // convert linear space to desired gamma space
-    inf = 255 * pow(f, g);
-
-    if (inf < 0) inf = 0;
-    if (inf > 255) inf = 255;
+    u8 inf = std::clamp(static_cast<int>(255 * pow(f, g)), 0, 255);
     lineartoscreen[i] = inf;
   }
 
-  /*
-  for (i=0 ; i<1024 ; i++)
-  {
-          // convert from screen gamma space to linear space
-          lineargammatable[i] = 1023 * pow ( i/1023.0, v_gamma.GetFloat() );
-          // convert from linear gamma space to screen space
-          screengammatable[i] = 1023 * pow ( i/1023.0, 1.0 / v_gamma.GetFloat()
-  );
-  }
-  */
-
-  for (i = 0; i < 256; i++) {
+  for (int i = 0; i < 256; i++) {
     // convert from nonlinear texture space (0..255) to linear space (0..1)
     texturetolinear[i] = pow(i / 255.f, texGamma);
 
@@ -244,35 +215,32 @@ void BuildGammaTable(f32 gamma, f32 texGamma, f32 brightness,
     g_Mathlib_GammaToLinear[i] = GammaToLinearFullRange(i / 255.f);
   }
 
-  for (i = 0; i < 1024; i++) {
+  for (int i = 0; i < 1024; i++) {
     // convert from linear space (0..1) to nonlinear texture space (0..255)
     lineartotexture[i] = pow(i / 1023.0, 1.0 / texGamma) * 255;
   }
 
-  {
-    f32 f;
-    f32 overbrightFactor = 1.0f;
+  f32 overbrightFactor = 1.0f;
 
-    // Can't do overbright without texcombine
-    // UNDONE: Add GAMMA ramp to rectify this
-    if (overbright == 2) {
-      overbrightFactor = 0.5;
-    } else if (overbright == 4) {
-      overbrightFactor = 0.25;
-    }
+  // Can't do overbright without texcombine
+  // UNDONE: Add GAMMA ramp to rectify this
+  if (overbright == 2) {
+    overbrightFactor = 0.5;
+  } else if (overbright == 4) {
+    overbrightFactor = 0.25;
+  }
 
-    for (i = 0; i < 4096; i++) {
-      // convert from linear 0..4 (x1024) to screen corrected vertex space
-      // (0..1?)
-      f = pow(i / 1024.0, 1.0 / gamma);
+  for (int i = 0; i < 4096; i++) {
+    // convert from linear 0..4 (x1024) to screen corrected vertex space
+    // (0..1?)
+    f32 f = pow(i / 1024.0, 1.0 / gamma);
 
-      lineartovertex[i] = f * overbrightFactor;
-      if (lineartovertex[i] > 1) lineartovertex[i] = 1;
+    lineartovertex[i] = f * overbrightFactor;
+    if (lineartovertex[i] > 1) lineartovertex[i] = 1;
 
-      int nLightmap = RoundFloatToInt(f * 255 * overbrightFactor);
-      nLightmap = clamp(nLightmap, 0, 255);
-      lineartolightmap[i] = (u8)nLightmap;
-    }
+    int nLightmap = RoundFloatToInt(f * 255 * overbrightFactor);
+    nLightmap = std::clamp(nLightmap, 0, 255);
+    lineartolightmap[i] = (u8)nLightmap;
   }
 }
 
@@ -314,16 +282,15 @@ f32 LinearToGamma(f32 linear) {
   return g_Mathlib_LinearToGamma[index];
 }
 
-//-----------------------------------------------------------------------------
 // Helper functions to convert between sRGB and 360 gamma space
-//-----------------------------------------------------------------------------
+
 f32 SrgbGammaToLinear(f32 flSrgbGammaValue) {
-  f32 x = clamp(flSrgbGammaValue, 0.0f, 1.0f);
+  f32 x = std::clamp(flSrgbGammaValue, 0.0f, 1.0f);
   return (x <= 0.04045f) ? (x / 12.92f) : (pow((x + 0.055f) / 1.055f, 2.4f));
 }
 
 f32 SrgbLinearToGamma(f32 flLinearValue) {
-  f32 x = clamp(flLinearValue, 0.0f, 1.0f);
+  f32 x = std::clamp(flLinearValue, 0.0f, 1.0f);
   return (x <= 0.0031308f) ? (x * 12.92f)
                            : (1.055f * pow(x, (1.0f / 2.4f))) - 0.055f;
 }
@@ -331,7 +298,7 @@ f32 SrgbLinearToGamma(f32 flLinearValue) {
 f32 X360GammaToLinear(f32 fl360GammaValue) {
   f32 flLinearValue;
 
-  fl360GammaValue = clamp(fl360GammaValue, 0.0f, 1.0f);
+  fl360GammaValue = std::clamp(fl360GammaValue, 0.0f, 1.0f);
   if (fl360GammaValue < (96.0f / 255.0f)) {
     if (fl360GammaValue < (64.0f / 255.0f)) {
       flLinearValue = fl360GammaValue * 255.0f;
@@ -351,14 +318,14 @@ f32 X360GammaToLinear(f32 fl360GammaValue) {
 
   flLinearValue *= 1.0f / 1023.0f;
 
-  flLinearValue = clamp(flLinearValue, 0.0f, 1.0f);
+  flLinearValue = std::clamp(flLinearValue, 0.0f, 1.0f);
   return flLinearValue;
 }
 
 f32 X360LinearToGamma(f32 flLinearValue) {
   f32 fl360GammaValue;
 
-  flLinearValue = clamp(flLinearValue, 0.0f, 1.0f);
+  flLinearValue = std::clamp(flLinearValue, 0.0f, 1.0f);
   if (flLinearValue < (128.0f / 1023.0f)) {
     if (flLinearValue < (64.0f / 1023.0f)) {
       fl360GammaValue = flLinearValue * (1023.0f * (1.0f / 255.0f));
@@ -380,7 +347,7 @@ f32 X360LinearToGamma(f32 flLinearValue) {
     }
   }
 
-  fl360GammaValue = clamp(fl360GammaValue, 0.0f, 1.0f);
+  fl360GammaValue = std::clamp(fl360GammaValue, 0.0f, 1.0f);
   return fl360GammaValue;
 }
 
@@ -400,23 +367,21 @@ f32 TextureToLinear(int c) {
 }
 
 // convert texture to linear 0..1 value
-int LinearToTexture(f32 f) {
+u8 LinearToTexture(f32 f) {
   Assert(s_bMathlibInitialized);
-  int i;
-  i = f * 1023;  // assume 0..1 range
-  if (i < 0) i = 0;
-  if (i > 1023) i = 1023;
+  Assert(f >= 0.0f && f <= 1.0f);
+
+  int i = std::clamp(static_cast<int>(f * 1023), 0, 1023);
 
   return lineartotexture[i];
 }
 
 // converts 0..1 linear value to screen gamma (0..255)
-int LinearToScreenGamma(f32 f) {
+u8 LinearToScreenGamma(f32 f) {
   Assert(s_bMathlibInitialized);
-  int i;
-  i = f * 1023;  // assume 0..1 range
-  if (i < 0) i = 0;
-  if (i > 1023) i = 1023;
+  Assert(f >= 0.0f && f <= 1.0f);
+
+  int i = std::clamp(static_cast<int>(f * 1023), 0, 1023);
 
   return lineartoscreen[i];
 }
@@ -442,15 +407,19 @@ inline static int VectorToColorRGBExp32_CalcExponent(const f32 *pin) {
   // (because 32 * 2^2 = 128)
   if (*pin == 0.0f) return 0;
 
-  u32 fbits = *reinterpret_cast<const u32 *>(pin);
+  u32 fbits;
+
+  static_assert(
+      sizeof(fbits) == sizeof(std::remove_pointer<decltype(pin)>::type),
+      "Sizes for memcpy should be the same.");
+  std::memcpy(&fbits, pin, sizeof(fbits));
 
   // the exponent component is bits 23..30, and biased by +127
   const u32 biasedSeven = 7 + 127;
 
-  signed int expComponent = (fbits & 0x7F800000) >> 23;
-  expComponent -= biasedSeven;  // now the difference from seven (positive if
-                                // was less than, etc)
-  return expComponent;
+  // now the difference from seven (positive if was less than, etc)
+  int exponent = ((fbits & 0x7F800000) >> 23) - biasedSeven;
+  return exponent;
 }
 
 /// Slightly faster version of the function to turn a f32-vector color into
@@ -483,7 +452,7 @@ void VectorToColorRGBExp32(const Vector &vin, ColorRGBExp32 &c) {
   }
 
   // now work out the exponent for this luxel.
-  signed int exponent = VectorToColorRGBExp32_CalcExponent(pMax);
+  int exponent = VectorToColorRGBExp32_CalcExponent(pMax);
 
   // make sure the exponent fits into a signed byte.
   // (in single precision format this is assured because it was a signed byte to
@@ -492,32 +461,19 @@ void VectorToColorRGBExp32(const Vector &vin, ColorRGBExp32 &c) {
 
   // promote the exponent back onto a scalar that we'll use to normalize all the
   // numbers
+  u32 fbits = (127 - exponent) << 23;
   f32 scalar;
-  {
-    u32 fbits = (127 - exponent) << 23;
-    scalar = *reinterpret_cast<f32 *>(&fbits);
-  }
+
+  static_assert(sizeof(fbits) == sizeof(scalar),
+                "Sizes for memcpy should be the same.");
+  std::memcpy(&scalar, &fbits, sizeof(scalar));
 
   // we should never need to clamp:
   Assert(vin.x * scalar <= 255.0f && vin.y * scalar <= 255.0f &&
          vin.z * scalar <= 255.0f);
 
-  // This awful construction is necessary to prevent VC2005 from using the
-  // fldcw/fnstcw control words around every f32-to-u32-ch operation.
-  {
-    int red = (vin.x * scalar);
-    int green = (vin.y * scalar);
-    int blue = (vin.z * scalar);
-
-    c.r = red;
-    c.g = green;
-    c.b = blue;
-  }
-  /*
-  c.r = ( u8 )(vin.x * scalar);
-  c.g = ( u8 )(vin.y * scalar);
-  c.b = ( u8 )(vin.z * scalar);
-  */
-
+  c.r = vin.x * scalar;
+  c.g = vin.y * scalar;
+  c.b = vin.z * scalar;
   c.exponent = (signed char)exponent;
 }

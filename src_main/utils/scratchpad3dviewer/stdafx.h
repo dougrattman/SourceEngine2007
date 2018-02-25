@@ -21,7 +21,7 @@
 
 
 // Windows Header Files:
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 
 #include "tier0/include/basetypes.h"
 

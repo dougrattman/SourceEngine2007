@@ -10,31 +10,31 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // Purpose: Comparison function for string sorted associative data structures
-//-----------------------------------------------------------------------------
+
 
 bool StrLess(const char* const& pszLeft, const char* const& pszRight) {
   return (Q_stricmp(pszLeft, pszRight) < 0);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 CStringPool::CStringPool() : m_Strings(32, 256, StrLess) {}
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 CStringPool::~CStringPool() { FreeAll(); }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 unsigned int CStringPool::Count() const { return m_Strings.Count(); }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 const char* CStringPool::Find(const char* pszValue) {
   unsigned short i = m_Strings.Find(pszValue);
   if (m_Strings.IsValidIndex(i)) return m_Strings[i];
@@ -54,8 +54,8 @@ const char* CStringPool::Allocate(const char* pszValue) {
   return pszNew;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 void CStringPool::FreeAll() {
   unsigned short i = m_Strings.FirstInorder();
@@ -66,8 +66,8 @@ void CStringPool::FreeAll() {
   m_Strings.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 CCountedStringPool::CCountedStringPool() {
   MEM_ALLOC_CREDIT();

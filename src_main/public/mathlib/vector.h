@@ -3,6 +3,7 @@
 #ifndef SOURCE_MATHLIB_VECTOR_H_
 #define SOURCE_MATHLIB_VECTOR_H_
 
+#include <algorithm>
 #include <float.h>
 #include <xmmintrin.h>
 #include <cmath>
@@ -11,7 +12,6 @@
 #include "base/include/base_types.h"
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector2d.h"
-#include "minmax.h"
 #include "tier0/include/basetypes.h"  // For f32, put this somewhere else?
 #include "tier0/include/dbg.h"
 #include "tier0/include/threadtools.h"
@@ -280,9 +280,9 @@ class IntVector4D {
   //	IntVector4D& operator=( IntVector4D const& src );
 };
 
-//-----------------------------------------------------------------------------
+
 // Allows us to specifically pass the vector by value when we need to
-//-----------------------------------------------------------------------------
+
 class VectorByValue : public Vector {
  public:
   // Construction/destruction:
@@ -291,10 +291,10 @@ class VectorByValue : public Vector {
   VectorByValue(const VectorByValue& vOther) { *this = vOther; }
 };
 
-//-----------------------------------------------------------------------------
+
 // Utility to simplify table construction. No constructor means can use
 // traditional C-style initialization
-//-----------------------------------------------------------------------------
+
 class TableVector {
  public:
   f32 x, y, z;
@@ -314,9 +314,9 @@ class TableVector {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // Here's where we add all those lovely SSE optimized routines
-//-----------------------------------------------------------------------------
+
 
 class ALIGN16 VectorAligned : public Vector {
  public:
@@ -345,9 +345,9 @@ class ALIGN16 VectorAligned : public Vector {
   f32 w;  // this space is used anyway
 };
 
-//-----------------------------------------------------------------------------
+
 // Vector related operations
-//-----------------------------------------------------------------------------
+
 
 // Vector clear
 FORCEINLINE void VectorClear(Vector& a);
@@ -404,15 +404,15 @@ Vector RandomVector(f32 minVal, f32 maxVal);
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 //
 // Inlined Vector methods
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+
+
 // constructors
-//-----------------------------------------------------------------------------
+
 inline Vector::Vector() {
 #ifdef _DEBUG
 #ifdef VECTOR_PARANOIA
@@ -429,9 +429,9 @@ inline Vector::Vector(f32 X, f32 Y, f32 Z) {
   CHECK_VALID(*this);
 }
 
-//-----------------------------------------------------------------------------
+
 // initialization
-//-----------------------------------------------------------------------------
+
 
 inline void Vector::Init(f32 ix, f32 iy, f32 iz) {
   x = ix;
@@ -453,9 +453,9 @@ inline void Vector::Zero() { x = y = z = 0.0f; }
 
 inline void VectorClear(Vector& a) { a.x = a.y = a.z = 0.0f; }
 
-//-----------------------------------------------------------------------------
+
 // assignment
-//-----------------------------------------------------------------------------
+
 
 inline Vector& Vector::operator=(const Vector& vOther) {
   CHECK_VALID(vOther);
@@ -465,9 +465,9 @@ inline Vector& Vector::operator=(const Vector& vOther) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline f32& Vector::operator[](int i) {
   Assert((i >= 0) && (i < 3));
   return ((f32*)this)[i];
@@ -478,16 +478,16 @@ inline f32 Vector::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 inline f32* Vector::Base() { return (f32*)this; }
 
 inline f32 const* Vector::Base() const { return (f32 const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // Cast to Vector2D...
-//-----------------------------------------------------------------------------
+
 
 inline Vector2D& Vector::AsVector2D() { return *(Vector2D*)this; }
 
@@ -495,17 +495,17 @@ inline const Vector2D& Vector::AsVector2D() const {
   return *(const Vector2D*)this;
 }
 
-//-----------------------------------------------------------------------------
+
 // IsValid?
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector::IsValid() const {
   return IsFinite(x) && IsFinite(y) && IsFinite(z);
 }
 
-//-----------------------------------------------------------------------------
+
 // Invalidate
-//-----------------------------------------------------------------------------
+
 
 inline void Vector::Invalidate() {
   //#ifdef _DEBUG
@@ -515,9 +515,9 @@ inline void Vector::Invalidate() {
   //#endif
 }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 
 inline bool Vector::operator==(const Vector& src) const {
   CHECK_VALID(src);
@@ -531,9 +531,9 @@ inline bool Vector::operator!=(const Vector& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z);
 }
 
-//-----------------------------------------------------------------------------
+
 // Copy
-//-----------------------------------------------------------------------------
+
 
 FORCEINLINE void VectorCopy(const Vector& src, Vector& dst) {
   CHECK_VALID(src);
@@ -548,9 +548,9 @@ inline void Vector::CopyToArray(f32* rgfl) const {
   rgfl[0] = x, rgfl[1] = y, rgfl[2] = z;
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 // #pragma message("TODO: these should be SSE")
 
 inline void Vector::Negate() {
@@ -632,11 +632,11 @@ FORCEINLINE Vector& Vector::operator/=(const Vector& v) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Inlined Short Vector methods
 //
-//-----------------------------------------------------------------------------
+
 
 inline void ShortVector::Init(i16 ix, i16 iy, i16 iz, i16 iw) {
   x = ix;
@@ -660,9 +660,9 @@ FORCEINLINE void ShortVector::Set(const i16 ix, const i16 iy, const i16 iz,
   w = iw;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline i16 ShortVector::operator[](int i) const {
   Assert((i >= 0) && (i < 4));
   return ((i16*)this)[i];
@@ -673,16 +673,16 @@ inline i16& ShortVector::operator[](int i) {
   return ((i16*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 inline i16* ShortVector::Base() { return (i16*)this; }
 
 inline i16 const* ShortVector::Base() const { return (i16 const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 
 inline bool ShortVector::operator==(const ShortVector& src) const {
   return (src.x == x) && (src.y == y) && (src.z == z) && (src.w == w);
@@ -692,9 +692,9 @@ inline bool ShortVector::operator!=(const ShortVector& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z) || (src.w != w);
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 
 FORCEINLINE ShortVector& ShortVector::operator+=(const ShortVector& v) {
   x += v.x;
@@ -762,11 +762,11 @@ FORCEINLINE ShortVector ShortVector::operator*(f32 fl) const {
   return res;
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Inlined Integer Vector methods
 //
-//-----------------------------------------------------------------------------
+
 
 inline void IntVector4D::Init(int ix, int iy, int iz, int iw) {
   x = ix;
@@ -790,9 +790,9 @@ FORCEINLINE void IntVector4D::Set(const int ix, const int iy, const int iz,
   w = iw;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline int IntVector4D::operator[](int i) const {
   Assert((i >= 0) && (i < 4));
   return ((int*)this)[i];
@@ -803,16 +803,16 @@ inline int& IntVector4D::operator[](int i) {
   return ((int*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 inline int* IntVector4D::Base() { return (int*)this; }
 
 inline int const* IntVector4D::Base() const { return (int const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 
 inline bool IntVector4D::operator==(const IntVector4D& src) const {
   return (src.x == x) && (src.y == y) && (src.z == z) && (src.w == w);
@@ -822,9 +822,9 @@ inline bool IntVector4D::operator!=(const IntVector4D& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z) || (src.w != w);
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 
 FORCEINLINE IntVector4D& IntVector4D::operator+=(const IntVector4D& v) {
   x += v.x;
@@ -968,9 +968,9 @@ inline void VectorLerp(const Vector& src1, const Vector& src2, f32 t,
   dest.z = src1.z + (src2.z - src1.z) * t;
 }
 
-//-----------------------------------------------------------------------------
+
 // Temporary storage for vector results so const Vector& results can be returned
-//-----------------------------------------------------------------------------
+
 inline Vector& AllocTempVector() {
   static Vector s_vecTemp[128];
   static CInterlockedInt s_nIndex;
@@ -988,9 +988,9 @@ inline Vector& AllocTempVector() {
   return s_vecTemp[nIndex & 0x7F];
 }
 
-//-----------------------------------------------------------------------------
+
 // dot, cross
-//-----------------------------------------------------------------------------
+
 FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b) {
   CHECK_VALID(a);
   CHECK_VALID(b);
@@ -1025,9 +1025,9 @@ inline f32 DotProductAbs(const Vector& v0, const f32* v1) {
          FloatMakePositive(v0.z * v1[2]);
 }
 
-//-----------------------------------------------------------------------------
+
 // length
-//-----------------------------------------------------------------------------
+
 
 inline f32 VectorLength(const Vector& v) {
   CHECK_VALID(v);
@@ -1039,9 +1039,9 @@ inline f32 Vector::Length(void) const {
   return VectorLength(*this);
 }
 
-//-----------------------------------------------------------------------------
+
 // Normalization
-//-----------------------------------------------------------------------------
+
 
 /*
 // FIXME: Can't use until we're un-macroed in mathlib.h
@@ -1069,18 +1069,18 @@ bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax) {
           (y <= boxmax.y) && (z >= boxmin.z) && (z <= boxmax.z));
 }
 
-//-----------------------------------------------------------------------------
+
 // Get the distance from this vector to the other one
-//-----------------------------------------------------------------------------
+
 inline f32 Vector::DistTo(const Vector& vOther) const {
   Vector delta;
   VectorSubtract(*this, vOther, delta);
   return delta.Length();
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector equality with tolerance
-//-----------------------------------------------------------------------------
+
 inline bool VectorsAreEqual(const Vector& src1, const Vector& src2,
                             f32 tolerance) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
@@ -1088,10 +1088,10 @@ inline bool VectorsAreEqual(const Vector& src1, const Vector& src2,
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
 }
 
-//-----------------------------------------------------------------------------
+
 // Computes the closest point to vecTarget no farther than flMaxDist from
 // vecStart
-//-----------------------------------------------------------------------------
+
 inline void ComputeClosestPoint(const Vector& vecStart, f32 flMaxDist,
                                 const Vector& vecTarget, Vector* pResult) {
   Vector vecDelta;
@@ -1105,26 +1105,26 @@ inline void ComputeClosestPoint(const Vector& vecStart, f32 flMaxDist,
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Takes the absolute value of a vector
-//-----------------------------------------------------------------------------
+
 inline void VectorAbs(const Vector& src, Vector& dst) {
   dst.x = FloatMakePositive(src.x);
   dst.y = FloatMakePositive(src.y);
   dst.z = FloatMakePositive(src.z);
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Slow methods
 //
-//-----------------------------------------------------------------------------
+
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
-//-----------------------------------------------------------------------------
+
 // Returns a vector with the min or max in X, Y, and Z.
-//-----------------------------------------------------------------------------
+
 inline Vector Vector::Min(const Vector& vOther) const {
   return Vector(x < vOther.x ? x : vOther.x, y < vOther.y ? y : vOther.y,
                 z < vOther.z ? z : vOther.z);
@@ -1135,9 +1135,9 @@ inline Vector Vector::Max(const Vector& vOther) const {
                 z > vOther.z ? z : vOther.z);
 }
 
-//-----------------------------------------------------------------------------
+
 // arithmetic operations
-//-----------------------------------------------------------------------------
+
 
 inline Vector Vector::operator-(void) const { return Vector(-x, -y, -z); }
 
@@ -1179,9 +1179,9 @@ inline Vector Vector::operator/(const Vector& v) const {
 
 inline Vector operator*(f32 fl, const Vector& v) { return v * fl; }
 
-//-----------------------------------------------------------------------------
+
 // cross product
-//-----------------------------------------------------------------------------
+
 
 inline Vector Vector::Cross(const Vector& vOther) const {
   Vector res;
@@ -1189,9 +1189,9 @@ inline Vector Vector::Cross(const Vector& vOther) const {
   return res;
 }
 
-//-----------------------------------------------------------------------------
+
 // 2D
-//-----------------------------------------------------------------------------
+
 
 inline f32 Vector::Length2D(void) const { return (f32)FastSqrt(x * x + y * y); }
 
@@ -1203,15 +1203,15 @@ inline Vector CrossProduct(const Vector& a, const Vector& b) {
 }
 
 inline void VectorMin(const Vector& a, const Vector& b, Vector& result) {
-  result.x = min(a.x, b.x);
-  result.y = min(a.y, b.y);
-  result.z = min(a.z, b.z);
+  result.x = std::min(a.x, b.x);
+  result.y = std::min(a.y, b.y);
+  result.z = std::min(a.z, b.z);
 }
 
 inline void VectorMax(const Vector& a, const Vector& b, Vector& result) {
-  result.x = max(a.x, b.x);
-  result.y = max(a.y, b.y);
-  result.z = max(a.z, b.z);
+  result.x = std::max(a.x, b.x);
+  result.y = std::max(a.y, b.y);
+  result.z = std::max(a.z, b.z);
 }
 
 // Get a random vector.
@@ -1223,9 +1223,9 @@ inline Vector RandomVector(f32 minVal, f32 maxVal) {
 
 #endif  // slow
 
-//-----------------------------------------------------------------------------
+
 // Helper debugging stuff....
-//-----------------------------------------------------------------------------
+
 
 inline bool operator==(f32 const*, const Vector&) {
   // AIIIEEEE!!!!
@@ -1251,9 +1251,9 @@ inline bool operator!=(const Vector&, f32 const*) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
+
 // AngularImpulse
-//-----------------------------------------------------------------------------
+
 // AngularImpulse are exponetial maps (an axis scaled by a "twist" angle in
 // degrees)
 typedef Vector AngularImpulse;
@@ -1268,9 +1268,9 @@ inline AngularImpulse RandomAngularImpulse(f32 minVal, f32 maxVal) {
 
 #endif
 
-//-----------------------------------------------------------------------------
+
 // Quaternion
-//-----------------------------------------------------------------------------
+
 
 class RadianEuler;
 
@@ -1312,9 +1312,9 @@ class Quaternion  // same data-layout as engine's vec4_t,
   f32 x, y, z, w;
 };
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline f32& Quaternion::operator[](int i) {
   Assert((i >= 0) && (i < 4));
   return ((f32*)this)[i];
@@ -1325,9 +1325,9 @@ inline f32 Quaternion::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Equality test
-//-----------------------------------------------------------------------------
+
 inline bool Quaternion::operator==(const Quaternion& src) const {
   return (x == src.x) && (y == src.y) && (z == src.z) && (w == src.w);
 }
@@ -1336,9 +1336,9 @@ inline bool Quaternion::operator!=(const Quaternion& src) const {
   return !operator==(src);
 }
 
-//-----------------------------------------------------------------------------
+
 // Quaternion equality with tolerance
-//-----------------------------------------------------------------------------
+
 inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
                                 f32 tolerance) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
@@ -1347,9 +1347,9 @@ inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
   return (FloatMakePositive(src1.w - src2.w) <= tolerance);
 }
 
-//-----------------------------------------------------------------------------
+
 // Here's where we add all those lovely SSE optimized routines
-//-----------------------------------------------------------------------------
+
 class ALIGN16 QuaternionAligned : public Quaternion {
  public:
   inline QuaternionAligned(void){};
@@ -1376,9 +1376,9 @@ class ALIGN16 QuaternionAligned : public Quaternion {
 #endif
 };
 
-//-----------------------------------------------------------------------------
+
 // Radian Euler angle aligned to axis (NOT ROLL/PITCH/YAW)
-//-----------------------------------------------------------------------------
+
 class QAngle;
 class RadianEuler {
  public:
@@ -1459,9 +1459,9 @@ inline void RadianEuler::Invalidate() {
   //#endif
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline f32& RadianEuler::operator[](int i) {
   Assert((i >= 0) && (i < 3));
   return ((f32*)this)[i];
@@ -1472,9 +1472,9 @@ inline f32 RadianEuler::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Degree Euler QAngle pitch, yaw, roll
-//-----------------------------------------------------------------------------
+
 class QAngleByValue;
 
 class QAngle {
@@ -1548,9 +1548,9 @@ class QAngle {
 #endif
 };
 
-//-----------------------------------------------------------------------------
+
 // Allows us to specifically pass the vector by value when we need to
-//-----------------------------------------------------------------------------
+
 class QAngleByValue : public QAngle {
  public:
   // Construction/destruction:
@@ -1576,9 +1576,9 @@ inline void VectorMA(const QAngle& start, f32 scale, const QAngle& direction,
   dest.z = start.z + scale * direction.z;
 }
 
-//-----------------------------------------------------------------------------
+
 // constructors
-//-----------------------------------------------------------------------------
+
 inline QAngle::QAngle() {
 #ifdef _DEBUG
 #ifdef VECTOR_PARANOIA
@@ -1595,9 +1595,9 @@ inline QAngle::QAngle(f32 X, f32 Y, f32 Z) {
   CHECK_VALID(*this);
 }
 
-//-----------------------------------------------------------------------------
+
 // initialization
-//-----------------------------------------------------------------------------
+
 inline void QAngle::Init(f32 ix, f32 iy, f32 iz) {
   x = ix;
   y = iy;
@@ -1635,9 +1635,9 @@ inline QAngle RadianEuler::ToQAngle(void) const {
                 x * 180.f / 3.14159265358979323846f);
 }
 
-//-----------------------------------------------------------------------------
+
 // assignment
-//-----------------------------------------------------------------------------
+
 inline QAngle& QAngle::operator=(const QAngle& vOther) {
   CHECK_VALID(vOther);
   x = vOther.x;
@@ -1646,9 +1646,9 @@ inline QAngle& QAngle::operator=(const QAngle& vOther) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Array access
-//-----------------------------------------------------------------------------
+
 inline f32& QAngle::operator[](int i) {
   Assert((i >= 0) && (i < 3));
   return ((f32*)this)[i];
@@ -1659,23 +1659,23 @@ inline f32 QAngle::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-//-----------------------------------------------------------------------------
+
 // Base address...
-//-----------------------------------------------------------------------------
+
 inline f32* QAngle::Base() { return (f32*)this; }
 
 inline f32 const* QAngle::Base() const { return (f32 const*)this; }
 
-//-----------------------------------------------------------------------------
+
 // IsValid?
-//-----------------------------------------------------------------------------
+
 inline bool QAngle::IsValid() const {
   return IsFinite(x) && IsFinite(y) && IsFinite(z);
 }
 
-//-----------------------------------------------------------------------------
+
 // Invalidate
-//-----------------------------------------------------------------------------
+
 
 inline void QAngle::Invalidate() {
   //#ifdef _DEBUG
@@ -1685,9 +1685,9 @@ inline void QAngle::Invalidate() {
   //#endif
 }
 
-//-----------------------------------------------------------------------------
+
 // comparison
-//-----------------------------------------------------------------------------
+
 inline bool QAngle::operator==(const QAngle& src) const {
   CHECK_VALID(src);
   CHECK_VALID(*this);
@@ -1700,9 +1700,9 @@ inline bool QAngle::operator!=(const QAngle& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z);
 }
 
-//-----------------------------------------------------------------------------
+
 // Copy
-//-----------------------------------------------------------------------------
+
 inline void VectorCopy(const QAngle& src, QAngle& dst) {
   CHECK_VALID(src);
   dst.x = src.x;
@@ -1710,9 +1710,9 @@ inline void VectorCopy(const QAngle& src, QAngle& dst) {
   dst.z = src.z;
 }
 
-//-----------------------------------------------------------------------------
+
 // standard math operations
-//-----------------------------------------------------------------------------
+
 inline QAngle& QAngle::operator+=(const QAngle& v) {
   CHECK_VALID(*this);
   CHECK_VALID(v);
@@ -1749,9 +1749,9 @@ inline QAngle& QAngle::operator/=(f32 fl) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // length
-//-----------------------------------------------------------------------------
+
 inline f32 QAngle::Length() const {
   CHECK_VALID(*this);
   return (f32)FastSqrt(LengthSqr());
@@ -1762,9 +1762,9 @@ inline f32 QAngle::LengthSqr() const {
   return x * x + y * y + z * z;
 }
 
-//-----------------------------------------------------------------------------
+
 // Vector equality with tolerance
-//-----------------------------------------------------------------------------
+
 inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
                             f32 tolerance = 0.0f) {
   if (FloatMakePositive(src1.x - src2.x) > tolerance) return false;
@@ -1772,9 +1772,9 @@ inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
 }
 
-//-----------------------------------------------------------------------------
+
 // arithmetic operations (SLOW!!)
-//-----------------------------------------------------------------------------
+
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 
 inline QAngle QAngle::operator-(void) const {
@@ -1821,7 +1821,7 @@ inline QAngle operator*(f32 fl, const QAngle& v) {
 
 #endif  // VECTOR_NO_SLOW_OPERATIONS
 
-//-----------------------------------------------------------------------------
+
 // NOTE: These are not completely correct.  The representations are not
 // equivalent unless the QAngle represents a rotational impulse along a
 // coordinate axis (x,y,z)

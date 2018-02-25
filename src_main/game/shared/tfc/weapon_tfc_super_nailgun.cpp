@@ -81,7 +81,7 @@ void CTFCSuperNailgun::PrimaryAttack()
 #endif
 
 	// Uses 2 nails if it can
-	pOwner->RemoveAmmo( min( 2, iCurrentAmmoCount ), GetPrimaryAmmoType() );
+	pOwner->RemoveAmmo( std::min( 2, iCurrentAmmoCount ), GetPrimaryAmmoType() );
 	
 	// Setup fire delays
 	m_flNextPrimaryAttack = gpGlobals->curtime + 0.1;

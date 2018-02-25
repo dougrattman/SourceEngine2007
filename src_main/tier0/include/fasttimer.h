@@ -5,23 +5,21 @@
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
-
-#include <cassert>
+#include "tier0/include/platform.h"
+#include "tier0/include/tier0_api.h"
 
 #if OS_WIN
 #include <intrin.h>
 #endif
 
-#include "tier0/include/platform.h"
+SOURCE_TIER0_API i64 g_ClockSpeed;
+SOURCE_TIER0_API unsigned long g_dwClockSpeed;
 
-PLATFORM_INTERFACE i64 g_ClockSpeed;
-PLATFORM_INTERFACE unsigned long g_dwClockSpeed;
+SOURCE_TIER0_API f64 g_ClockSpeedMicrosecondsMultiplier;
+SOURCE_TIER0_API f64 g_ClockSpeedMillisecondsMultiplier;
+SOURCE_TIER0_API f64 g_ClockSpeedSecondsMultiplier;
 
-PLATFORM_INTERFACE f64 g_ClockSpeedMicrosecondsMultiplier;
-PLATFORM_INTERFACE f64 g_ClockSpeedMillisecondsMultiplier;
-PLATFORM_INTERFACE f64 g_ClockSpeedSecondsMultiplier;
-
-class PLATFORM_CLASS CCycleCount {
+class SOURCE_TIER0_API_CLASS CCycleCount {
   friend class CFastTimer;
 
  public:
@@ -128,33 +126,19 @@ class CClockSpeedInit {
   }
 };
 
-class PLATFORM_CLASS CFastTimer {
+class SOURCE_TIER0_API_CLASS CFastTimer {
  public:
   // These functions are fast to call and should be called from your sampling
   // code.
-  void Start() {
-    m_Duration.Sample();
-#ifdef DEBUG_FASTTIMER
-    m_bRunning = true;
-#endif
-  }
+  void Start() { m_Duration.Sample(); }
   void End() {
     CCycleCount cnt;
     cnt.Sample();
 
     m_Duration.m_Int64 = cnt.m_Int64 - m_Duration.m_Int64;
-
-#ifdef DEBUG_FASTTIMER
-    m_bRunning = false;
-#endif
   }
 
-  const CCycleCount &GetDuration() const {
-#ifdef DEBUG_FASTTIMER
-    assert(!m_bRunning);
-#endif
-    return m_Duration;
-  }
+  const CCycleCount &GetDuration() const { return m_Duration; }
 
   // Get the elapsed time between Start and End calls.
   CCycleCount GetDurationInProgress() const {
@@ -172,9 +156,6 @@ class PLATFORM_CLASS CFastTimer {
 
  private:
   CCycleCount m_Duration;
-#ifdef DEBUG_FASTTIMER
-  bool m_bRunning;  // Are we currently running?
-#endif
 };
 
 // This is a helper class that times whatever block of code it's in

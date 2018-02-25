@@ -177,7 +177,7 @@ void CHLTVDirector::UpdateSettings() {
     }
   }
 
-  m_nBroadcastTick = max(0, newBroadcastTick);
+  m_nBroadcastTick = std::max(0, newBroadcastTick);
 }
 
 const char **CHLTVDirector::GetModEvents() {
@@ -419,7 +419,7 @@ void CHLTVDirector::StartBestFixedCameraShot(bool bForce) {
 
 void CHLTVDirector::StartRandomShot() {
   int toTick = m_nBroadcastTick + TIME_TO_TICKS(DEF_SHOT_LENGTH);
-  m_nNextShotTick = min(m_nNextShotTick, toTick);
+  m_nNextShotTick = std::min(m_nNextShotTick, toTick);
 
   if (RandomFloat(0, 1) < 0.25 && tv_allow_static_shots.GetBool()) {
     // create a static shot from a level camera
@@ -470,7 +470,7 @@ void CHLTVDirector::CreateShotFromEvent(CGameEvent *event) {
 
     // shot 2 seconds after death/hurt
     m_nNextShotTick =
-        min(m_nNextShotTick, (event->m_Tick + TIME_TO_TICKS(2.0)));
+        std::min(m_nNextShotTick, (event->m_Tick + TIME_TO_TICKS(2.0)));
   } else if (bRoundStart || bRoundEnd) {
     StartBestFixedCameraShot(false);
   } else {
@@ -690,7 +690,7 @@ void CHLTVDirector::StartInstantBroadcastShot() {
 void CHLTVDirector::StartNewShot() {
   // we can remove all events the
   int smallestTick =
-      max(0, gpGlobals->tickcount - TIME_TO_TICKS(HLTV_MAX_DELAY));
+      std::max(0, gpGlobals->tickcount - TIME_TO_TICKS(HLTV_MAX_DELAY));
   RemoveEventsFromHistory(smallestTick);
 
   // if the delay time is to short for autodirector, just show next best thing

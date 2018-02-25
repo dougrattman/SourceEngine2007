@@ -266,7 +266,7 @@ bool CMdlLib::StripModelBuffers( CUtlBuffer &mdlBuffer, CUtlBuffer &vvdBuffer, C
 		vvdTangentSrc ? memcpy( vvdTangentSrc, BYTE_OFF_PTR( memTempVVD.Get(), vvdHdr->tangentDataStart ), mdlNumVerticesOld * sizeof( *vvdTangentSrc ) ) : 0;
 	}
 	
-	vvdHdr->vertexDataStart -= ALIGN_VALUE( sizeof( vertexFileFixup_t ) * vvdHdr->numFixups, 16 );
+	vvdHdr->vertexDataStart -= AlignValue( sizeof( vertexFileFixup_t ) * vvdHdr->numFixups, 16 );
 	vvdHdr->numFixups = 0;
 	DECLARE_PTR( mstudiovertex_t, vvdVertexNew, BYTE_OFF_PTR( vvdHdr, vvdHdr->vertexDataStart ) );
 	for ( int k = 0; k < srcIndices.Count(); ++ k )

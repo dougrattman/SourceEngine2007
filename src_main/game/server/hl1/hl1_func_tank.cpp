@@ -1003,15 +1003,15 @@ void CFuncTank::TrackTarget( void )
 
 	QAngle vecAngVel = GetLocalAngularVelocity();
 	vecAngVel.y = distY * 10;
-	vecAngVel.y = clamp( vecAngVel.y, -m_yawRate, m_yawRate );
+	vecAngVel.y = std::clamp( vecAngVel.y, -m_yawRate, m_yawRate );
 
 	// Limit against range in x
-	angles.x = clamp( angles.x, m_pitchCenter - m_pitchRange, m_pitchCenter + m_pitchRange );
+	angles.x = std::clamp( angles.x, m_pitchCenter - m_pitchRange, m_pitchCenter + m_pitchRange );
 
 	// Move toward target at rate or less
 	float distX = UTIL_AngleDistance( angles.x, GetLocalAngles().x );
 	vecAngVel.x = distX  * 10;
-	vecAngVel.x = clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
+	vecAngVel.x = std::clamp( vecAngVel.x, -m_pitchRate, m_pitchRate );
 	SetLocalAngularVelocity( vecAngVel );
 
 	SetMoveDoneTime( 0.1 );

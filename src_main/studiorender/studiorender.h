@@ -858,7 +858,8 @@ class CWorldLightAngleWrapper {
       case MATERIAL_LIGHT_DISABLE:
         return 0.f;
 
-        NO_DEFAULT;
+      default:
+        UNREACHABLE();
     }
   }
 };
@@ -900,7 +901,8 @@ class CWorldLightAngleWrapperConstDirectional {
       case MATERIAL_LIGHT_DISABLE:
         return 0.f;
 
-        NO_DEFAULT;
+      default:
+        UNREACHABLE();
     }
   }
 };
@@ -923,7 +925,8 @@ inline float CStudioRender::R_WorldLightAngle(const LightDesc_t *wl,
     case MATERIAL_LIGHT_SPOT:
       return CWorldLightAngleWrapper<MATERIAL_LIGHT_SPOT>::WorldLightAngle(
           wl, lnormal, snormal, delta);
-      NO_DEFAULT;
+    default:
+      UNREACHABLE();
   }
 }
 

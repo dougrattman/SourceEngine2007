@@ -87,7 +87,7 @@ class CBoundedCvar_CmdRate : public ConVar_ServerBounded {
       }
 
       // Then we clamp to the min/max values the server has set.
-      return clamp(flCmdRate, sv_mincmdrate.GetFloat(),
+      return std::clamp(flCmdRate, sv_mincmdrate.GetFloat(),
                    sv_maxcmdrate.GetFloat());
     } else {
       return flCmdRate;
@@ -117,7 +117,7 @@ class CBoundedCvar_UpdateRate : public ConVar_ServerBounded {
     // This cvar only takes effect on the server anyway, and this is done there
     // too, but we have this here so they'll get the **note thing telling them
     // the value isn't functioning the way they set it.
-    return clamp(GetBaseFloatValue(), sv_minupdaterate.GetFloat(),
+    return std::clamp(GetBaseFloatValue(), sv_minupdaterate.GetFloat(),
                  sv_maxupdaterate.GetFloat());
   }
 };

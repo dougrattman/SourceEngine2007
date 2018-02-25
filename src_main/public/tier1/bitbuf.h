@@ -10,21 +10,21 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
-//-----------------------------------------------------------------------------
+
 // Forward declarations.
-//-----------------------------------------------------------------------------
+
 
 class Vector;
 class QAngle;
 
-//-----------------------------------------------------------------------------
+
 // You can define a handler function that will be called in case of
 // out-of-range values and overruns here.
 //
 // NOTE: the handler is only called in debug mode.
 //
 // Call SetBitBufErrorHandler to install a handler.
-//-----------------------------------------------------------------------------
+
 
 typedef enum {
   BITBUFERROR_VALUE_OUT_OF_RANGE =
@@ -50,18 +50,18 @@ extern void InternalBitBufErrorHandler(BitBufErrorType errorType,
 // handler.
 void SetBitBufErrorHandler(BitBufErrorHandler fn);
 
-//-----------------------------------------------------------------------------
+
 // Helpers.
-//-----------------------------------------------------------------------------
+
 
 inline int BitByte(int bits) {
   // return PAD_NUMBER( bits, 8 ) >> 3;
   return (bits + 7) >> 3;
 }
 
-//-----------------------------------------------------------------------------
+
 // Used for serialization
-//-----------------------------------------------------------------------------
+
 
 class old_bf_write {
  public:
@@ -178,9 +178,9 @@ class old_bf_write {
   const char *m_pDebugName;
 };
 
-//-----------------------------------------------------------------------------
+
 // Inlined methods
-//-----------------------------------------------------------------------------
+
 
 // How many bytes are filled in?
 inline int old_bf_write::GetNumBytesWritten() { return BitByte(m_iCurBit); }
@@ -296,9 +296,9 @@ inline void old_bf_write::WriteUBitLong(unsigned int curData, int numbits,
   m_iCurBit += numbits;
 }
 
-//-----------------------------------------------------------------------------
+
 // This is useful if you just want a buffer to write into on the stack.
-//-----------------------------------------------------------------------------
+
 
 template <int SIZE>
 class old_bf_write_static : public old_bf_write {
@@ -308,9 +308,9 @@ class old_bf_write_static : public old_bf_write {
   char m_StaticData[SIZE];
 };
 
-//-----------------------------------------------------------------------------
+
 // Used for unserialization
-//-----------------------------------------------------------------------------
+
 
 class old_bf_read {
  public:
@@ -454,9 +454,9 @@ class old_bf_read {
   const char *m_pDebugName;
 };
 
-//-----------------------------------------------------------------------------
+
 // Inlines.
-//-----------------------------------------------------------------------------
+
 
 inline int old_bf_read::GetNumBytesRead() { return BitByte(m_iCurBit); }
 
@@ -903,7 +903,7 @@ FORCEINLINE int CBitRead::GetNumBitsRead(void) const {
   int nCurOfs = (32 - m_nBitsAvail) +
                 (8 * sizeof(m_pData[0]) * (m_pDataIn - m_pData - 1));
   int nAdjust = 8 * (m_nDataBytes & 3);
-  return min(nCurOfs + nAdjust, m_nDataBits);
+  return std::min(nCurOfs + nAdjust, m_nDataBits);
 }
 
 FORCEINLINE void CBitRead::GrabNextDWord(bool bOverFlowImmediately) {

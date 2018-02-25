@@ -240,7 +240,7 @@ void CWeaponIFMSteadyCam::UpdateRelativeOrientation()
 	Vector3DMultiply( steadyCamToPlayer, vecSelectionDir, vecDesiredDirection );
 
 	float flDot = DotProduct( vecDesiredDirection, vecCurrentForward );
-	flDot = clamp( flDot, -1.0f, 1.0f );
+	flDot = std::clamp( flDot, -1.0f, 1.0f );
 	float flAngle = 180.0f * acos( flDot ) / M_PI;
 	if ( flAngle < 1e-3 )
 	{
@@ -264,7 +264,7 @@ void CWeaponIFMSteadyCam::UpdateRelativeOrientation()
 	flRateFactor *= flRateFactor * flRateFactor;
 	float flRate = flRateFactor * 30.0f;
 	float flMaxAngle = gpGlobals->frametime * flRate;
-	flAngle = clamp( flAngle, 0.0f, flMaxAngle );
+	flAngle = std::clamp( flAngle, 0.0f, flMaxAngle );
 
 	Vector vecNewForard;
 	VMatrix rotation;
@@ -454,7 +454,7 @@ void CWeaponIFMSteadyCam::ItemPostFrame()
 		m_flFOVOffsetY *= flDamp;
 	}			    
 	m_flFOV += m_flFOVOffsetY * ifm_steadycam_zoomspeed.GetFloat() / 1000.0f;
-	m_flFOV = clamp( m_flFOV, 0.5f, 160.0f ); 
+	m_flFOV = std::clamp( m_flFOV, 0.5f, 160.0f ); 
 
 	if ( pPlayer->m_nButtons & IN_WALK )
 	{

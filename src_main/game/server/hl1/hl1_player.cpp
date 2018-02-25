@@ -620,7 +620,7 @@ void CHL1_Player::CheckTimeBasedDamage( void )
 				// after the player has been drowning and finally takes a breath
 				if (m_idrowndmg > m_idrownrestored)
 				{
-					int idif = min(m_idrowndmg - m_idrownrestored, 10);
+					int idif = std::min(m_idrowndmg - m_idrownrestored, 10);
 
 					TakeHealth(idif, DMG_GENERIC);
 					m_idrownrestored += idif;
@@ -1144,8 +1144,8 @@ void CHL1_Player::UpdateClientData( void )
 		int iShowHudDamage = g_pGameRules->Damage_GetShowOnHud();
 		int visibleDamageBits = m_bitsDamageType & iShowHudDamage;
 
-		m_DmgTake = clamp( m_DmgTake, 0, 255 );
-		m_DmgSave = clamp( m_DmgSave, 0, 255 );
+		m_DmgTake = std::clamp( m_DmgTake, 0, 255 );
+		m_DmgSave = std::clamp( m_DmgSave, 0, 255 );
 
 		CSingleUserRecipientFilter user( this );
 		user.MakeReliable();
@@ -1357,7 +1357,7 @@ static void ComputePlayerMatrix( CBasePlayer *pPlayer, matrix3x4_t &out )
 	
 	// 0-360 / -180-180
 	//angles.x = init ? 0 : AngleDistance( angles.x, 0 );
-	//angles.x = clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE, PLAYER_LOOK_PITCH_RANGE );
+	//angles.x = std::clamp( angles.x, -PLAYER_LOOK_PITCH_RANGE, PLAYER_LOOK_PITCH_RANGE );
 	angles.x = 0;
 
 	float feet = pPlayer->GetAbsOrigin().z + pPlayer->WorldAlignMins().z;
@@ -1575,7 +1575,7 @@ void CGrabController::ComputeMaxSpeed( CBaseEntity *pEntity, IPhysicsObject *pPh
 	if ( flMass <= flMaxMass )
 		return;
 
-	float flLerpFactor = clamp( flMass, flMaxMass, 500.0f );
+	float flLerpFactor = std::clamp( flMass, flMaxMass, 500.0f );
 	flLerpFactor = SimpleSplineRemapVal( flLerpFactor, flMaxMass, 500.0f, 0.0f, 1.0f );
 
 	float invMass = pPhysics->GetInvMass();
@@ -1830,7 +1830,7 @@ bool CGrabController::UpdateObject( CBasePlayer *pPlayer, float flError )
 	Vector forward, right, up;
 	QAngle playerAngles = pPlayer->EyeAngles();
 	float pitch = AngleDistance(playerAngles.x,0);
-	playerAngles.x = clamp( pitch, -75, 75 );
+	playerAngles.x = std::clamp( pitch, -75, 75 );
 	AngleVectors( playerAngles, &forward, &right, &up );
 	
 	// Now clamp a sphere of object radius at end to the player's bbox
@@ -2055,7 +2055,7 @@ void CPlayerPickupController::Use( CBaseEntity *pActivator, CBaseEntity *pCaller
 			Vector vecLaunch;
 			m_pPlayer->EyeVectors( &vecLaunch );
 			// JAY: Scale this with mass because some small objects really go flying
-			float massFactor = clamp( pAttached->VPhysicsGetObject()->GetMass(), 0.5, 15 );
+			float massFactor = std::clamp( pAttached->VPhysicsGetObject()->GetMass(), 0.5, 15 );
 			massFactor = RemapVal( massFactor, 0.5, 15, 0.5, 4 );
 			vecLaunch *= player_throwforce.GetFloat() * massFactor;
 

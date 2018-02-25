@@ -1,4 +1,4 @@
-//===== Copyright © 1996-2006, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Factory class for installing vgui window helpers
 // NOTE: This is in a separate file to avoid needing to add library dependencies

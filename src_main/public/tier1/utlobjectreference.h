@@ -88,9 +88,9 @@ class CUtlReferenceList : public CUtlIntrusiveDList<CUtlReference<T> > {
   }
 };
 
-//-----------------------------------------------------------------------------
+
 // Put this macro in classes that are referenced by CUtlReference
-//-----------------------------------------------------------------------------
+
 #define DECLARE_REFERENCED_CLASS(_className)  \
  private:                                     \
   CUtlReferenceList<_className> m_References; \

@@ -2,7 +2,8 @@
 
 #include "circularbuffer.h"
 
-#include "minmax.h"
+#include <algorithm>
+#include <cassert>
 #include "tier0/include/dbg.h"
 
 #include "tier0/include/memdbgon.h"
@@ -79,7 +80,7 @@ int CCircularBuffer::Peek(char *pchDest, int nCount) {
   if (m_nCount == 0) return 0;
 
   // Requested amount should not exceed the available amount.
-  nCount = min(m_nCount, nCount);
+  nCount = std::min(m_nCount, nCount);
 
   // Copy as many of the requested bytes as possible.
   // If buffer wrap occurs split the data into two chunks.
@@ -111,7 +112,7 @@ int CCircularBuffer::Advance(int nCount) {
   if (m_nCount == 0) return 0;
 
   // Requested amount should not exceed the available amount.
-  nCount = min(m_nCount, nCount);
+  nCount = std::min(m_nCount, nCount);
 
   // Advance the read pointer, checking for buffer wrap.
   m_nRead = (m_nRead + nCount) % m_nSize;

@@ -177,7 +177,7 @@ void CTFGameMovement::SpeedCrop( void )
 	// Moving backwards happens more slowly
 	float flAngle = atan2( mv->m_flSideMove, mv->m_flForwardMove ) / M_PI;
 	flAngle = 2.0f * (fabs(flAngle) - 0.5f);
-	flAngle = clamp( flAngle, 0.0f, 1.0f );
+	flAngle = std::clamp( flAngle, 0.0f, 1.0f );
 	float flFactor = 1.0f - fabs(flAngle) * (1.0f - sv_backspeed.GetFloat());
 
 	mv->m_flForwardMove *= flFactor;
@@ -266,7 +266,7 @@ void CTFGameMovement::SetupSpeed( void )
 	//       this code can be removed.
 	if ( mv->m_flClientMaxSpeed )
 	{
-		mv->m_flMaxSpeed = min( mv->m_flClientMaxSpeed, mv->m_flMaxSpeed );
+		mv->m_flMaxSpeed = std::min( mv->m_flClientMaxSpeed, mv->m_flMaxSpeed );
 	}
 
 	// Slow down by the speed factor
@@ -390,7 +390,7 @@ void CTFGameMovement::HandleDuck( void )
 				player->m_Local.m_bDucking    = true;
 			}
 
-			float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+			float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 			float duckseconds = duckmilliseconds / 1000.0f;
 			
 			if ( player->m_Local.m_bDucking )
@@ -418,7 +418,7 @@ void CTFGameMovement::HandleDuck( void )
 				player->m_Local.m_bDucking    = true;  // or unducking
 			}
 
-			float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+			float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 			float duckseconds = duckmilliseconds / 1000.0f;
 
 			if ( player->m_Local.m_bDucking ) // or unducking

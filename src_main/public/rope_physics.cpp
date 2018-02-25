@@ -44,7 +44,7 @@ void CBaseRopePhysics::SetNumNodes(int nNodes) {
 void CBaseRopePhysics::Restart() { m_Physics.Init(1.0 / 50); }
 
 void CBaseRopePhysics::ResetSpringLength(float flSpringDist) {
-  m_flSpringDist = max(flSpringDist, 0);
+  m_flSpringDist = std::max(flSpringDist, 0.0f);
   m_flSpringDistSqr = m_flSpringDist * m_flSpringDist;
 
   for (int i = 0; i < NumSprings(); i++) {

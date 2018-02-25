@@ -3029,7 +3029,7 @@ void CAI_BaseNPC::UpdateEfficiency(bool bInPVS) {
 
   //---------------------------------
 
-  SetEfficiency(clamp(efficiency, minEfficiency, maxEfficiency));
+  SetEfficiency(std::clamp(efficiency, minEfficiency, maxEfficiency));
 }
 
 //-----------------------------------------------------------------------------
@@ -3258,7 +3258,7 @@ void CAI_BaseNPC::RebalanceThinks() {
                (float)iTicksPer10Hz);  // +1 to account for "this"
 
       int iCurTickDistributing =
-          min(gpGlobals->tickcount, rebalanceCandidates[0].iNextThinkTick);
+          std::min(gpGlobals->tickcount, rebalanceCandidates[0].iNextThinkTick);
       int iRemainingThinksToDistribute =
           iMaxThinkersPerTick -
           1;  // Start with one fewer first time because "this" is
@@ -4201,7 +4201,8 @@ void CAI_BaseNPC::GatherConditions(void) {
         // @Note (toml 05-05-04): There seems to be a case where an NPC can not
         // respond
         //						  to COND_NEW_ENEMY.
-        //Only evidence  right now is save 						  games after the fact, so for  now,
+        // Only evidence  right now is save
+        // games after the fact, so for  now,
         // just patching it up
         DevMsg(2, "Had to force COND_NEW_ENEMY\n");
         SetCondition(COND_NEW_ENEMY);
@@ -5052,7 +5053,7 @@ void CAI_BaseNPC::GatherEnemyConditions(CBaseEntity *pEnemy) {
 
   float tooFar = m_flDistTooFar;
   if (GetActiveWeapon() && HasCondition(COND_SEE_ENEMY)) {
-    tooFar = max(m_flDistTooFar, GetActiveWeapon()->m_fMaxRange1);
+    tooFar = std::max(m_flDistTooFar, GetActiveWeapon()->m_fMaxRange1);
   }
 
   if (flDistToEnemy >= tooFar) {
@@ -5126,7 +5127,7 @@ float CAI_BaseNPC::GetGoalRepathTolerance(CBaseEntity *pGoalEnt,
   if (distMoved1Sec > 0.0) {
     float t = distToGoal / distMoved1Sec;
 
-    result = clamp(120 * t, 0, 120);
+    result = std::clamp(120.0f * t, 0.0f, 120.0f);
     // Msg("t %.2f : d %.0f  (%.0f)\n", t, result, distMoved1Sec );
   }
 
@@ -5289,8 +5290,8 @@ Activity CAI_BaseNPC::NPC_TranslateActivity(Activity eNewActivity) {
   // ====
   // HACK : LEIPZIG 06 -	The underlying problem is that the AR2 and SMG1
   // cannot map IDLE_ANGRY to a crouched equivalent automatically
-  //						which causes the character to pop up and
-  //down in  their idle state of firing while crouched. -- jdw
+  //						which causes the character to pop up
+  //and down in  their idle state of firing while crouched. -- jdw
   else if (eNewActivity == ACT_IDLE_ANGRY_SMG1) {
     if (IsCrouching()) {
       eNewActivity = ACT_RANGE_AIM_LOW;
@@ -9519,7 +9520,8 @@ BEGIN_DATADESC(CAI_BaseNPC)
       //								m_InverseIgnoreConditions
       //(custom  save)
       //								m_poseAim_Pitch
-      //(not saved; recomputed on  restore) 								m_poseAim_Yaw (not saved; recomputed
+      //(not saved; recomputed on  restore)
+      //m_poseAim_Yaw (not saved; recomputed
       // on  restore)
       //								m_poseMove_Yaw
       //(not saved; recomputed on  restore)
@@ -9659,7 +9661,7 @@ BEGIN_DATADESC(CAI_BaseNPC)
       // DEFINE_FIELD( m_ScheduleHistory, CUtlVector < AIScheduleChoice_t > ),
 
       //							m_fIsUsingSmallHull
-      //TODO -- This needs more  consideration than simple save/load
+      // TODO -- This needs more  consideration than simple save/load
       // 							m_failText
       // DEBUG 							m_interruptText
       // DEBUG 							m_failedSchedule

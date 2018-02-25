@@ -620,7 +620,7 @@ void CPropVehicleDriveable::DriveVehicle(float flFrameTime, CUserCmd *ucmd,
   m_VehiclePhysics.UpdateDriverControls(ucmd, flFrameTime);
 
   m_nSpeed = m_VehiclePhysics.GetSpeed();  // send speed to client
-  m_nRPM = clamp(m_VehiclePhysics.GetRPM(), 0, 4095);
+  m_nRPM = std::clamp(m_VehiclePhysics.GetRPM(), 0, 4095);
   m_nBoostTimeLeft = m_VehiclePhysics.BoostTimeLeft();
   m_nHasBoost = m_VehiclePhysics.HasBoost();
   m_flThrottle = m_VehiclePhysics.GetThrottle();

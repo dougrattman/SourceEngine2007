@@ -1148,7 +1148,7 @@ struct mstudiovertanim_wrinkle_t : public mstudiovertanim_t {
 
   inline void SetWrinkleFixed(float flWrinkle) {
     int nWrinkleDeltaInt = flWrinkle * g_VertAnimFixedPointScaleInv;
-    wrinkledelta = clamp(nWrinkleDeltaInt, -32767, 32767);
+    wrinkledelta = std::clamp(nWrinkleDeltaInt, -32767, 32767);
   }
 
   inline Vector4D GetDeltaFixed() {
@@ -1830,7 +1830,7 @@ struct thinModelVertices_t {
     Assert((m_numBoneInfluences >= 1) && (m_numBoneInfluences <= 3));
     Assert((boneWeights.numbones >= 1) &&
            (boneWeights.numbones <= m_numBoneInfluences));
-    int numStoredWeights = max(0, (m_numBoneInfluences - 1));
+    int numStoredWeights = std::max(0, (m_numBoneInfluences - 1));
     float *pBaseWeight = m_boneWeights + vertIndex * numStoredWeights;
     char *pBaseIndex = m_boneIndices + vertIndex * m_numBoneInfluences;
     for (int i = 0; i < m_numBoneInfluences; i++) {
@@ -1897,7 +1897,7 @@ struct thinModelVertices_t {
     Assert(pBoneWeights);
     Assert((m_numBoneInfluences <= 1) || (m_boneWeights != NULL));
     Assert((m_numBoneInfluences <= 0) || (m_boneIndices != NULL));
-    int numStoredWeights = max(0, (m_numBoneInfluences - 1));
+    int numStoredWeights = std::max(0, (m_numBoneInfluences - 1));
     float *pBaseWeight = m_boneWeights + vertIndex * numStoredWeights;
     char *pBaseIndex = m_boneIndices + vertIndex * m_numBoneInfluences;
     float sum = 0.0f;

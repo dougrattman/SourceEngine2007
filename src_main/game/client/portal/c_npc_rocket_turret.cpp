@@ -173,5 +173,5 @@ void C_NPC_RocketTurret::LaserOn( void )
 
 float C_NPC_RocketTurret::LaserEndPointSize( void )
 {
-	return ( max( 0.0f, sinf( gpGlobals->curtime * M_PI + m_fPulseOffset ) ) ) * ROCKET_TURRET_END_POINT_PULSE_SCALE + 1.0f;
+	return ( std::max( 0.0f, sinf( gpGlobals->curtime * M_PI + m_fPulseOffset ) ) ) * ROCKET_TURRET_END_POINT_PULSE_SCALE + 1.0f;
 }

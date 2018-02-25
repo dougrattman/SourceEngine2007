@@ -136,7 +136,7 @@ static DWORD WINAPI SocketThreadFunc( LPVOID threadobject )
 		for ( sockets = socketthread->GetSocketList(); sockets; sockets = sockets->next )
 		{
 			FD_SET( static_cast<u_int>( sockets->socket->GetSocketNumber() ), &fdset );
-			count = max( count, sockets->socket->GetSocketNumber() );
+			count = std::max( count, sockets->socket->GetSocketNumber() );
 		}
 
 		// Done

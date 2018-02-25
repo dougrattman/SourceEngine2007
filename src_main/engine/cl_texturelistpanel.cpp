@@ -1208,8 +1208,8 @@ void CRenderTextureEditor::Paint() {
   iDrawHeight = iDrawHeight / (float(TILE_TEXTURE_SIZE) / float(TILE_SIZE));
   iDrawWidth = iDrawWidth / (float(TILE_TEXTURE_SIZE) / float(TILE_SIZE));
 
-  iDrawHeight = max(iDrawHeight, 4);
-  iDrawWidth = max(iDrawWidth, 4);
+  iDrawHeight = std::max(iDrawHeight, 4);
+  iDrawWidth = std::max(iDrawWidth, 4);
 
   //
   // Draw frame
@@ -1296,9 +1296,9 @@ void CRenderTextureEditor::Paint() {
 
       if (wact > 4 || hact > 4) {
         char chbuf[50];
-        int mem = ImageLoader::GetMemRequired(max(min(wact, 4), wact / 2),
-                                              max(min(hact, 4), hact / 2),
-                                              max(1, dact / 2), fmt, true);
+        int mem = ImageLoader::GetMemRequired(std::max(std::min(wact, 4), wact / 2),
+                                              std::max(std::min(hact, 4), hact / 2),
+                                              std::max(1, dact / 2), fmt, true);
         mem = (mem + 511) / 1024;
         FmtCommaNumber(chbuf, mem);
 
@@ -1307,9 +1307,9 @@ void CRenderTextureEditor::Paint() {
 
       if (wmap > wact || hmap > hact || dmap > dact) {
         char chbuf[50];
-        int mem = ImageLoader::GetMemRequired(min(wmap, wact * 2),
-                                              min(hmap, hact * 2),
-                                              min(dmap, dact * 2), fmt, true);
+        int mem = ImageLoader::GetMemRequired(std::min(wmap, wact * 2),
+                                              std::min(hmap, hact * 2),
+                                              std::min(dmap, dact * 2), fmt, true);
         mem = (mem + 511) / 1024;
         FmtCommaNumber(chbuf, mem);
 
@@ -1626,8 +1626,8 @@ void CRenderTexturesListViewPanel::RenderTile(int iTile, int x, int y) {
   iDrawHeight = iDrawHeight / (float(TILE_TEXTURE_SIZE) / float(TILE_SIZE));
   iDrawWidth = iDrawWidth / (float(TILE_TEXTURE_SIZE) / float(TILE_SIZE));
 
-  iDrawHeight = max(iDrawHeight, 4);
-  iDrawWidth = max(iDrawWidth, 4);
+  iDrawHeight = std::max(iDrawHeight, 4);
+  iDrawWidth = std::max(iDrawWidth, 4);
 
   //
   // Draw frame
@@ -2133,7 +2133,7 @@ void CTextureListPanel::PerformLayout() {
     for (int k = 0; k < ARRAYSIZE(layout); ++k) {
       layout[k].pPanel->SetPos(xOffset, 2);
       iWidth = layout[k].iWidth;
-      iWidth = min(w - xOffset - 30, iWidth);
+      iWidth = std::min(w - xOffset - 30, iWidth);
       layout[k].pPanel->SetWide(iWidth);
       layout[k].pPanel->SetVisible(iWidth > 50);
 

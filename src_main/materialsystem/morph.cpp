@@ -901,13 +901,13 @@ void CMorph::WriteDeltaPositionNormalToTexture(CPixelWriter &pixelWriter, int x,
       r = (int)(info.m_PositionDelta.x * m_flFloatToFixedScale) + 32767;
       g = (int)(info.m_PositionDelta.y * m_flFloatToFixedScale) + 32767;
       b = (int)(info.m_PositionDelta.z * m_flFloatToFixedScale) + 32767;
-      r = clamp(r, 0, 65534);
-      g = clamp(g, 0, 65534);
-      b = clamp(b, 0, 65534);
+      r = std::clamp(r, 0, 65534);
+      g = std::clamp(g, 0, 65534);
+      b = std::clamp(b, 0, 65534);
     }
     if (m_Format & MORPH_WRINKLE) {
       a = (int)(info.m_flWrinkleDelta * m_flFloatToFixedScale) + 32767;
-      a = clamp(a, 0, 65534);
+      a = std::clamp(a, 0, 65534);
     }
     pixelWriter.WritePixel(r, g, b, a);
   }
@@ -917,9 +917,9 @@ void CMorph::WriteDeltaPositionNormalToTexture(CPixelWriter &pixelWriter, int x,
     r = (int)(info.m_NormalDelta.x * m_flFloatToFixedScale) + 32767;
     g = (int)(info.m_NormalDelta.y * m_flFloatToFixedScale) + 32767;
     b = (int)(info.m_NormalDelta.z * m_flFloatToFixedScale) + 32767;
-    r = clamp(r, 0, 65534);
-    g = clamp(g, 0, 65534);
-    b = clamp(b, 0, 65534);
+    r = std::clamp(r, 0, 65534);
+    g = std::clamp(g, 0, 65534);
+    b = std::clamp(b, 0, 65534);
 
     pixelWriter.WritePixel(r, g, b, a);
   }
@@ -937,8 +937,8 @@ void CMorph::WriteSideSpeedToTexture(CPixelWriter &pixelWriter, int x, int y,
   if (m_Format & MORPH_SPEED) {
     g = info.m_flSpeed * 255;
   }
-  r = clamp(r, 0, 255);
-  g = clamp(g, 0, 255);
+  r = std::clamp(r, 0, 255);
+  g = std::clamp(g, 0, 255);
 
   pixelWriter.Seek(x, y);
   pixelWriter.WritePixel(r, g, b, a);
@@ -1053,7 +1053,7 @@ void CMorph::BuildQuadList(
         int sy = nSrc - sx * m_nTextureHeight;
 
         int nMaxCount = m_nTextureHeight - sy;
-        int nCount = min(nMaxCount, nTotalCount);
+        int nCount = std::min(nMaxCount, nTotalCount);
         nTotalCount -= nCount;
 
         int l = quadList.AddToTail();
@@ -1452,7 +1452,7 @@ bool CMorph::RenderMorphWeights(IMatRenderContext *pRenderContext,
   if (m_nMaxMorphTargetCount == 0) return false;
 
   // Cache off the weights, we need them when we accumulate the morphs later.
-  int nCountToCopy = min(nWeightCount, m_nMaxMorphTargetCount);
+  int nCountToCopy = std::min(nWeightCount, m_nMaxMorphTargetCount);
   memcpy(m_pRenderMorphWeight, pWeights, nCountToCopy * sizeof(MorphWeight_t));
   int nCountToClear = m_nMaxMorphTargetCount - nWeightCount;
   if (nCountToClear > 0) {

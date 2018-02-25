@@ -388,7 +388,7 @@ static int MapList_CountMaps(const char *pszSubString, bool listobsolete,
           !Q_strnicmp(&mapname[5], pszSubString, substringlength)) {
         if (MapList_CheckPrintMap("(fs)", &mapname[5], valid,
                                   showOutdated ? true : false, false)) {
-          maxitemlength = max(maxitemlength, (int)(strlen(&mapname[5]) + 1));
+          maxitemlength = std::max(maxitemlength, (int)(strlen(&mapname[5]) + 1));
           count++;
         }
       }
@@ -467,7 +467,7 @@ static int _Host_Map_f_CompletionFunc(
   }
 
   int longest = 0;
-  int count = min(MapList_CountMaps(substring, false, longest),
+  int count = std::min(MapList_CountMaps(substring, false, longest),
                   COMMAND_COMPLETION_MAXITEMS);
   if (count > 0) {
     MapList_ListMaps(substring, false, false, COMMAND_COMPLETION_MAXITEMS,

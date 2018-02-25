@@ -237,7 +237,7 @@ static int TextHintColorMod( int incolor, float frac )
 	
 	int clr = midcolor + range * frac;
 	
-	clr = clamp( clr, 0, 255 );
+	clr = std::clamp( clr, 0, 255 );
 	return clr;
 }
 

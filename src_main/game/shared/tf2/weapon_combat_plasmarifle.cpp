@@ -296,7 +296,7 @@ void CWeaponCombatPlasmaRifle::ChargeThink( void )
 	}
 	else if ( m_iClip1 > 0 && m_flPower < MAX_RIFLE_POWER )
 	{
-		m_flPower = min( MAX_RIFLE_POWER, m_flPower + (((MAX_RIFLE_POWER-1.0) / RIFLE_CHARGE_TIME) * gpGlobals->frametime ) );
+		m_flPower = std::min( MAX_RIFLE_POWER, m_flPower + (((MAX_RIFLE_POWER-1.0) / RIFLE_CHARGE_TIME) * gpGlobals->frametime ) );
 	}
 }
 

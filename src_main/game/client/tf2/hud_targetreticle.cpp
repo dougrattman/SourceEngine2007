@@ -125,7 +125,7 @@ void CTargetReticle::Update( void )
 	GetTargetInScreenSpace( m_hTargetEntity, iX, iY );
 	
 	int halfWidth = GetWide() / 2;
-	halfWidth = max( halfWidth, m_pTargetLabel->GetWide() / 2 );
+	halfWidth = std::max( halfWidth, m_pTargetLabel->GetWide() / 2 );
 
 	m_iRenderTextureId = m_iReticleId;
 	if( iX < halfWidth || iX > ScreenWidth()-halfWidth )

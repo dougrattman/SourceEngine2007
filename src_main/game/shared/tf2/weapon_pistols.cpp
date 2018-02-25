@@ -47,7 +47,7 @@ const Vector& CWeaponPistols::GetBulletSpread( void )
 
 	// Modify accuracy based upon firing rate
 	// Maximum accuracy's used if you're firing at the standard rate of the gun
-	float flModifier = min( GetFireRate(), gpGlobals->curtime - m_flLastPrimaryAttack );
+	float flModifier = std::min( GetFireRate(), gpGlobals->curtime - m_flLastPrimaryAttack );
 	flModifier = 1.0 - RemapVal( flModifier, 0, GetFireRate(), 0, 1.0 );
 	cone *= flModifier;
 

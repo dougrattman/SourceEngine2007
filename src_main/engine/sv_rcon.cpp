@@ -230,11 +230,12 @@ void CRConServer::RunFrame() {
     {
       CUtlBuffer &response = pData->packetbuffer;
       response.EnsureCapacity(response.TellPut() + readLen);
-      char *recvBuf =
-          (char *)_alloca(min(1024, readLen));  // a buffer used for recv()
+      char *recvBuf = (char *)_alloca(
+          std::min(1024UL, readLen));  // a buffer used for recv()
       unsigned int len = 0;
       while (len < readLen) {
-        int recvLen = recv(hSocket, recvBuf, min(1024, readLen - len), 0);
+        int recvLen =
+            recv(hSocket, recvBuf, std::min(1024UL, readLen - len), 0);
         if (recvLen == 0)  // socket was closed
         {
           m_Socket.CloseAcceptedSocket(i);

@@ -21,25 +21,25 @@
 #define EPS 1.2e-7
 #define RNMX (1.0 - EPS)
 
-//-----------------------------------------------------------------------------
+
 // globals
-//-----------------------------------------------------------------------------
+
 static CUniformRandomStream s_UniformStream;
 static CGaussianRandomStream s_GaussianStream;
 static IUniformRandomStream *s_pUniformStream = &s_UniformStream;
 
-//-----------------------------------------------------------------------------
+
 // Installs a global random number generator, which will affect the Random
 // functions above
-//-----------------------------------------------------------------------------
+
 void InstallUniformRandomStream(IUniformRandomStream *pStream) {
   s_pUniformStream = pStream ? pStream : &s_UniformStream;
 }
 
-//-----------------------------------------------------------------------------
+
 // A couple of convenience functions to access the library's global uniform
 // stream
-//-----------------------------------------------------------------------------
+
 void RandomSeed(int iSeed) { s_pUniformStream->SetSeed(iSeed); }
 
 float RandomFloat(float flMinVal, float flMaxVal) {
@@ -58,11 +58,11 @@ float RandomGaussianFloat(float flMean, float flStdDev) {
   return s_GaussianStream.RandomFloat(flMean, flStdDev);
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Implementation of the uniform random number stream
 //
-//-----------------------------------------------------------------------------
+
 CUniformRandomStream::CUniformRandomStream() { SetSeed(0); }
 
 void CUniformRandomStream::SetSeed(int iSeed) {
@@ -148,21 +148,21 @@ int CUniformRandomStream::RandomInt(int iLow, int iHigh) {
   return iLow + (n % x);
 }
 
-//-----------------------------------------------------------------------------
+
 //
 // Implementation of the gaussian random number stream
 // We're gonna use the Box-Muller method (which actually generates 2
 // gaussian-distributed numbers at once)
 //
-//-----------------------------------------------------------------------------
+
 CGaussianRandomStream::CGaussianRandomStream(
     IUniformRandomStream *pUniformStream) {
   AttachToStream(pUniformStream);
 }
 
-//-----------------------------------------------------------------------------
+
 // Attaches to a random uniform stream
-//-----------------------------------------------------------------------------
+
 void CGaussianRandomStream::AttachToStream(
     IUniformRandomStream *pUniformStream) {
   AUTO_LOCK(m_mutex);
@@ -170,9 +170,9 @@ void CGaussianRandomStream::AttachToStream(
   m_bHaveValue = false;
 }
 
-//-----------------------------------------------------------------------------
+
 // Generates random numbers
-//-----------------------------------------------------------------------------
+
 float CGaussianRandomStream::RandomFloat(float flMean, float flStdDev) {
   AUTO_LOCK(m_mutex);
   IUniformRandomStream *pUniformStream =
@@ -202,6 +202,6 @@ float CGaussianRandomStream::RandomFloat(float flMean, float flStdDev) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Creates a histogram (for testing)
-//-----------------------------------------------------------------------------
+

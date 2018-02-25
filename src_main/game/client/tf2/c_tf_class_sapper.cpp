@@ -49,5 +49,5 @@ float C_PlayerClassSapper::GetDrainedEnergy( void )
 //-----------------------------------------------------------------------------
 void C_PlayerClassSapper::DeductDrainedEnergy( float flEnergy )
 {
-	m_flDrainedEnergy = max( 0, m_flDrainedEnergy - flEnergy );
+	m_flDrainedEnergy = std::max( 0, m_flDrainedEnergy - flEnergy );
 }

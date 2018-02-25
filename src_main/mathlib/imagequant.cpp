@@ -2,7 +2,7 @@
 
 #include "mathlib/quantize.h"
 
-#include <minmax.h>
+#include <algorithm>
 
 #define N_EXTRAVALUES 1
 #define N_DIMENSIONS (3 + N_EXTRAVALUES)
@@ -36,7 +36,7 @@ void ColorQuantize(u8 const *image, int width, int height, int flags,
 
         for (int c = 0; c < 3; c++)
           NthSample(s, y * width + x, N_DIMENSIONS)->Value[c] =
-              (u8)(min(255, max(0, extra_val)));
+              (u8)(std::min(255, std::max(0, extra_val)));
       }
     }
 
@@ -67,7 +67,7 @@ void ColorQuantize(u8 const *image, int width, int height, int flags,
           errors[x][c][error_use] = 0;
         }
 
-        samp[c] = (u8)min(255, max(0, tryc));
+        samp[c] = (u8)std::min(255, std::max(0, tryc));
       }
 
       struct QuantizedValue *f = FindMatch(samp, 3, Weights, q);

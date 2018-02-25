@@ -808,10 +808,8 @@ void CVideoMode_Common::BlitGraphicToHDC(HDC hdc, uint8_t *rgba, int imageWidth,
 // Purpose: This is called in response to a WM_MOVE message
 //-----------------------------------------------------------------------------
 void CVideoMode_Common::UpdateWindowPosition(void) {
-  int x, y, w, h;
-
   // Get the window from the game ( right place for it? )
-  game->GetWindowRect(&x, &y, &w, &h);
+  auto [x, y, w, h] = game->GetWindowRect();
 
   RECT window_rect;
   window_rect.left = x;
@@ -985,7 +983,7 @@ void CVideoMode_Common::CenterEngineWindow(HWND hWndCenter, int width,
   int cxScreen = 0, cyScreen = 0, refreshRate = 0;
 
   if (!(WS_EX_TOPMOST & ::GetWindowLong(hWndCenter, GWL_EXSTYLE))) {
-    game->GetDesktopInfo(cxScreen, cyScreen, refreshRate);
+    std::tie(cxScreen, cyScreen, refreshRate) = game->GetDesktopInfo();
   }
 
   if (!cxScreen || !cyScreen) {
@@ -1121,7 +1119,8 @@ void GetCubemapOffset(CubeMapFaceIndex_t faceIndex, int &x, int &y,
       x = 2;
       y = 2;
       break;
-      NO_DEFAULT
+    default:
+      UNREACHABLE();
   }
   x *= faceDim;
   y *= faceDim;
@@ -1425,7 +1424,7 @@ bool CVideoMode_Common::TakeSnapshotJPEGToBuffer(CUtlBuffer &buf, int quality) {
   if (g_LostVideoMemory) return false;
 
   // Validate quality level
-  quality = clamp(quality, 1, 100);
+  quality = std::clamp(quality, 1, 100);
 
   // Allocate space for bits
   uint8_t *pImage = new uint8_t[GetModeWidth() * 3 * GetModeHeight()];
@@ -1573,8 +1572,8 @@ bool CVideoMode_MaterialSystem::Init() {
   int nAdapter = materials->GetCurrentAdapter();
   int nModeCount = materials->GetModeCount(nAdapter);
 
-  int nDesktopWidth, nDesktopHeight, nDesktopRefresh;
-  game->GetDesktopInfo(nDesktopWidth, nDesktopHeight, nDesktopRefresh);
+  int nDesktopRefresh;
+  std::tie(std::ignore, std::ignore, nDesktopRefresh) = game->GetDesktopInfo();
 
   for (int i = 0; i < nModeCount; i++) {
     MaterialVideoMode_t info;

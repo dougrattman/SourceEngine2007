@@ -8,9 +8,9 @@
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"
 
-//-----------------------------------------------------------------------------
+
 // Light structure
-//-----------------------------------------------------------------------------
+
 
 enum LightType_t {
   MATERIAL_LIGHT_DISABLE = 0,

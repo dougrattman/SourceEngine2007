@@ -207,7 +207,7 @@ bool CMdlStripInfo::StripHardwareVertsBuffer( CUtlBuffer &vhvBuffer )
 
 	// Verts must be aligned from hdr, length must be aligned from hdr
 	size_t vhvNewVertOffset = vhvRemove.ComputeOffset( vhvHdr, vhvVertOffset );
-	size_t vhvAlignedVertOffset = ALIGN_VALUE( vhvNewVertOffset, 4 );
+	size_t vhvAlignedVertOffset = AlignValue( vhvNewVertOffset, 4 );
 
 	ITERATE_CHILDREN( HardwareVerts::MeshHeader_t, vhvMesh, vhvHdr, pMesh, m_nMeshes )
 		vhvMesh->m_nOffset = vhvRemove.ComputeOffset( vhvHdr, vhvMesh->m_nOffset ) + vhvAlignedVertOffset - vhvNewVertOffset;
@@ -219,7 +219,7 @@ bool CMdlStripInfo::StripHardwareVertsBuffer( CUtlBuffer &vhvBuffer )
 	vhvRemove.MemMove( vhvHdr, vhvLength );	// All padding has been removed
 
 	size_t numBytesNewLength = vhvLength + vhvAlignedVertOffset - vhvNewVertOffset;
-	size_t numAlignedNewLength = ALIGN_VALUE( numBytesNewLength, 4 );
+	size_t numAlignedNewLength = AlignValue( numBytesNewLength, 4 );
 
 	// Now reinsert the padding
 	CInsertionTracker vhvInsertPadding;
@@ -383,7 +383,7 @@ bool CMdlStripInfo::StripVertexDataBuffer( CUtlBuffer &vvdBuffer )
 		vvdTangentSrc ? memcpy( vvdTangentSrc, BYTE_OFF_PTR( memTempVVD.Get(), vvdHdr->tangentDataStart ), mdlNumVerticesOld * sizeof( *vvdTangentSrc ) ) : 0;
 	}
 	
-	vvdHdr->vertexDataStart -= ALIGN_VALUE( sizeof( vertexFileFixup_t ) * vvdHdr->numFixups, 16 );
+	vvdHdr->vertexDataStart -= AlignValue( sizeof( vertexFileFixup_t ) * vvdHdr->numFixups, 16 );
 	vvdHdr->numFixups = 0;
 	DECLARE_PTR( mstudiovertex_t, vvdVertexNew, BYTE_OFF_PTR( vvdHdr, vvdHdr->vertexDataStart ) );
 	for ( int k = 0; k < srcIndices.Count(); ++ k )

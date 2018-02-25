@@ -18,7 +18,7 @@
 #include "tier2/riff.h"
 
 #if defined(_WIN32) && !defined(_X360)
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 
 #ifdef MAKE_GAMEDATA_TOOL
@@ -288,7 +288,6 @@ void CXZip::PreloadData() {
   if (!m_Header.PreloadBytes || !m_Header.PreloadDirectoryEntries) return;
 
     // Allocate and read the data block in:
-#ifndef _X360
   MEM_ALLOC_CREDIT_("xZip");
   m_pPreloadedData = malloc(m_Header.PreloadBytes);
 
@@ -297,22 +296,6 @@ void CXZip::PreloadData() {
 
   m_pRead(m_pPreloadedData, m_nPreloadStart, -1, m_Header.PreloadBytes,
           m_hUser);
-#else
-  int nAlignedStart = AlignValue((m_nPreloadStart - XBOX_HDD_SECTORSIZE) + 1,
-                                 XBOX_HDD_SECTORSIZE);
-  int nBytesToRead =
-      AlignValue((m_nPreloadStart - nAlignedStart) + m_Header.PreloadBytes,
-                 XBOX_HDD_SECTORSIZE);
-  int nBytesBuffer = AlignValue(nBytesToRead, XBOX_HDD_SECTORSIZE);
-  byte* pReadData = (byte*)malloc(nBytesBuffer);
-
-  // Just drop out if allocation fails;
-  if (!pReadData) return;
-
-  MEM_ALLOC_CREDIT_("xZip");
-  m_pRead(pReadData, nAlignedStart, nBytesBuffer, nBytesToRead, m_hUser);
-  m_pPreloadedData = pReadData + (m_nPreloadStart - nAlignedStart);
-#endif
 
   // Set up the preload directory:
   m_pPreloadDirectory = (xZipDirectoryEntry_t*)m_pPreloadedData;
@@ -349,15 +332,7 @@ void CXZip::PreloadData() {
 
 void CXZip::DiscardPreloadedData() {
   if (m_pPreloadedData) {
-#ifndef _X360
     free(m_pPreloadedData);
-#else
-    int nAlignedStart = AlignValue((m_nPreloadStart - XBOX_HDD_SECTORSIZE) + 1,
-                                   XBOX_HDD_SECTORSIZE);
-    byte* pReadData =
-        (byte*)m_pPreloadedData - (m_nPreloadStart - nAlignedStart);
-    free(pReadData);
-#endif
     m_pPreloadedData = NULL;
     m_pPreloadDirectory = NULL;
     m_nRegular2PreloadEntryMapping = NULL;
@@ -701,6 +676,8 @@ FILE* hTempFilePreload;
 FILE* hTempFileData;
 FILE* hOutputFile;
 
+#define XBOX_HDD_SECTORSIZE 512
+
 bool xZipAddFile(const char* filename, CUtlBuffer& fileBuff,
                  bool bPrecacheEntireFile, bool bProcessPrecacheHeader,
                  bool bProcessPrecacheHeaderOnly) {
@@ -717,7 +694,7 @@ bool xZipAddFile(const char* filename, CUtlBuffer& fileBuff,
     customPreloadSize = xZipComputeCustomPreloads(filename);
   } else if (bProcessPrecacheHeaderOnly) {
     customPreloadSize = xZipComputeCustomPreloads(filename);
-    fileSize = min(fileSize, customPreloadSize);
+    fileSize = std::min(fileSize, customPreloadSize);
   }
 
   unsigned CRC = xZipCRCFilename(filename);

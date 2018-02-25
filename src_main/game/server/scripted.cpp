@@ -1,16 +1,17 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of entities that cause NPCs to participate in
-//			scripted events. These entities find and temporarily possess
-//NPCs 			within a given search radius.
+//			scripted events. These entities find and temporarily
+//possess NPCs 			within a given search radius.
 //
 //			Multiple scripts with the same targetname will start
-//frame-synchronized.
+// frame-synchronized.
 //
-//			Scripts will find available NPCs by name or class name and
-//grab them 			to play the script. If the NPC is already playing a script, the 			new
-//script may enqueue itself unless there is already a non critical 			script in the
-//queue.
+//			Scripts will find available NPCs by name or class name
+//and
+// grab them 			to play the script. If the NPC is already playing a
+// script, the 			new script may enqueue itself unless there is
+// already a non critical 			script in the queue.
 //
 
 #include "cbase.h"
@@ -161,7 +162,7 @@ void CAI_ScriptedSequence::ScriptEntityCancel(CBaseEntity *pentCine,
         // Robin HACK: If a script is started and then cancelled before an NPC
         // gets to
         //		 think, we have to manually clear it out of scripted
-        //state, or it'll never recover.
+        // state, or it'll never recover.
         pCineTarget->SetTarget(NULL);
         pTarget->SetEffects(pCineTarget->m_saved_effects);
         pTarget->m_hCine = NULL;
@@ -396,9 +397,9 @@ void CAI_ScriptedSequence::InputScriptPlayerDeath(inputdata_t &inputdata) {
 //			Scripts wait for two reasons:
 //
 //			1. To frame-syncronize with other scripts of the same
-//name.
-//			2. To wait indefinitely for the BeginSequence input after
-//the NPC 				moves to the script position.
+// name.
+//			2. To wait indefinitely for the BeginSequence input
+//after the NPC 				moves to the script position.
 //-----------------------------------------------------------------------------
 bool CAI_ScriptedSequence::IsTimeToStart(void) {
   Assert(!m_bWaitForBeginSequence);
@@ -795,7 +796,7 @@ void CAI_ScriptedSequence::SynchronizeSequence(CAI_BaseNPC *pNPC) {
   // GetEntityName().ToCStr(), pNPC->GetClassname(), pNPC->m_flAnimTime.Get(),
   // m_startTime, flInterval );
   // Assert( flInterval >= 0.0 && flInterval <= 0.15 );
-  flInterval = clamp(flInterval, 0, 0.15);
+  flInterval = std::clamp(flInterval, 0.0f, 0.15f);
 
   if (flInterval == 0) return;
 
@@ -838,8 +839,8 @@ bool CAI_ScriptedSequence::FinishedActionSequence(CAI_BaseNPC *pNPC) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when a scripted sequence animation sequence is done playing
-//			(or when an AI Scripted Sequence doesn't supply an animation
-//sequence 			to play).
+//			(or when an AI Scripted Sequence doesn't supply an
+//animation sequence 			to play).
 // Input  : pNPC - Pointer to the NPC that the sequence possesses.
 //-----------------------------------------------------------------------------
 void CAI_ScriptedSequence::SequenceDone(CAI_BaseNPC *pNPC) {
@@ -924,8 +925,8 @@ void CAI_ScriptedSequence::SynchNewSequence(CAI_BaseNPC::SCRIPTSTATE newState,
 
 //-----------------------------------------------------------------------------
 // Purpose: Called when a scripted sequence animation sequence is done playing
-//			(or when an AI Scripted Sequence doesn't supply an animation
-//sequence 			to play).
+//			(or when an AI Scripted Sequence doesn't supply an
+//animation sequence 			to play).
 // Input  : pNPC - Pointer to the NPC that the sequence possesses.
 //-----------------------------------------------------------------------------
 void CAI_ScriptedSequence::PostIdleDone(CAI_BaseNPC *pNPC) {
@@ -992,8 +993,8 @@ void CAI_ScriptedSequence::PostIdleDone(CAI_BaseNPC *pNPC) {
 //-----------------------------------------------------------------------------
 // Purpose: When a NPC finishes a scripted sequence, we have to fix up its state
 //			and schedule for it to return to a normal AI NPC.
-//			Scripted sequences just dirty the Schedule and drop the NPC
-//in Idle State.
+//			Scripted sequences just dirty the Schedule and drop the
+//NPC in Idle State.
 // Input  : *pNPC -
 //-----------------------------------------------------------------------------
 void CAI_ScriptedSequence::FixScriptNPCSchedule(CAI_BaseNPC *pNPC,
@@ -1073,7 +1074,7 @@ void CAI_ScriptedSequence::RemoveIgnoredConditions(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Returns true if another script is allowed to enqueue itself after
 //			this script. The enqueued script will begin immediately
-//after the 			current script without dropping the NPC into AI.
+// after the 			current script without dropping the NPC into AI.
 //-----------------------------------------------------------------------------
 bool CAI_ScriptedSequence::CanEnqueueAfter(void) {
   if (m_hNextCine == NULL) {
@@ -1126,7 +1127,7 @@ void CAI_ScriptedSequence::StopActionLoop(bool bStopSynchronizedScenes) {
 // Purpose: Code method of forcing a scripted sequence entity to use a
 // particular NPC.
 //			Useful when you don't know if the NPC has a unique
-//targetname.
+// targetname.
 //-----------------------------------------------------------------------------
 void CAI_ScriptedSequence::ForceSetTargetEntity(
     CAI_BaseNPC *pTarget, bool bDontCancelOtherSequences) {
@@ -1255,12 +1256,16 @@ void CAI_ScriptedSequence::CancelScript(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Find all the cinematic entities with my targetname and tell them to
 //			wait before starting. This ensures that all scripted
-//sequences with 			the same name are frame-synchronized.
+// sequences with 			the same name are frame-synchronized.
 //
-//			When triggered, scripts call this first with a state of 1 to
-//indicate that 			they are not ready to play (while NPCs move to their cue
-//positions, etc). 			Once they are ready to play, they call it with a state of 0.
-//When all 			the scripts are ready, they all are told to start.
+//			When triggered, scripts call this first with a state of 1
+//to
+// indicate that 			they are not ready to play (while NPCs move to
+// their cue
+// positions, etc). 			Once they are ready to play, they call it
+// with a state of 0.
+// When all 			the scripts are ready, they all are told to
+// start.
 //
 // Input  : bDelay - true means this script is not ready, false means it is
 // ready.
@@ -1712,8 +1717,8 @@ void CAI_ScriptedSchedule::StartSchedule(CAI_BaseNPC *pTarget) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Input handler to activate the scripted schedule. Finds the NPC to
-//			act on and sets a think for the near future to do the real
-//work.
+//			act on and sets a think for the near future to do the
+//real work.
 //-----------------------------------------------------------------------------
 void CAI_ScriptedSchedule::InputStartSchedule(inputdata_t &inputdata) {
   if ((m_nForceState == 0) && (m_nSchedule == 0)) {

@@ -4,10 +4,9 @@
 #define SOURCE_TIER0_INCLUDE_SYSTEMINFORMATION_H_
 
 #include "base/include/base_types.h"
-
-#include "tier0/include/platform.h"
+#include "tier0/include/tier0_api.h"
 
 // Returns the size of a memory page in kilobytes.
-PLATFORM_INTERFACE u32 Plat_GetMemPageSize();
+SOURCE_TIER0_API u32 Plat_GetMemPageSize();
 
 #endif  // SOURCE_TIER0_INCLUDE_SYSTEMINFORMATION_H_

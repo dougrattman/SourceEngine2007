@@ -10,7 +10,7 @@
 //
 // Material editor
 //=============================================================================
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "vstdlib/cvar.h"
 #include "appframework/vguimatsysapp.h"
 #include "FileSystem.h"
@@ -442,7 +442,7 @@ int CModelBrowserApp::Main()
 
 		AppPumpMessages();
 	
-		vgui::GetAnimationController()->UpdateAnimations( Sys_FloatTime() );
+		vgui::GetAnimationController()->UpdateAnimations( Plat_FloatTime() );
 
 		g_pMaterialSystem->BeginFrame( 0 );
 		g_pStudioRender->BeginFrame();

@@ -6,18 +6,18 @@
 #include "tier1/utlqueue.h"
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
+
 // Handles are 32 bits. Invalid handles are all 1s
-//-----------------------------------------------------------------------------
+
 typedef unsigned int UtlHandle_t;
 #define UTLHANDLE_INVALID ((UtlHandle_t)~0)
 
-//-----------------------------------------------------------------------------
+
 // Purpose: This is a table used to allocate handles
 // HandleBits specifies the max # of simultaneously allocated handles.
 // An extra bit is used for the validity state
 // The rest of the 32 bits are used for a serial number
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 class CUtlHandleTable {
  public:
@@ -71,15 +71,15 @@ class CUtlHandleTable {
   CUtlQueue<int> m_unused;
 };
 
-//-----------------------------------------------------------------------------
+
 // Constructor, destructor
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 CUtlHandleTable<T, HandleBits>::CUtlHandleTable() : m_nValidHandles(0) {}
 
-//-----------------------------------------------------------------------------
+
 // Allocate, deallocate handles
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 UtlHandle_t CUtlHandleTable<T, HandleBits>::AddHandle() {
   unsigned int nIndex =
@@ -118,9 +118,9 @@ void CUtlHandleTable<T, HandleBits>::RemoveHandle(UtlHandle_t handle) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Set/get handle values
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 void CUtlHandleTable<T, HandleBits>::SetHandle(UtlHandle_t handle, T *pData) {
   EntryType_t *entry = const_cast<EntryType_t *>(GetEntry(handle, false));
@@ -148,9 +148,9 @@ T *CUtlHandleTable<T, HandleBits>::GetHandle(UtlHandle_t handle,
   return entry ? entry->m_pData : NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is a handle valid?
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 bool CUtlHandleTable<T, HandleBits>::IsHandleValid(UtlHandle_t handle) const {
   if (handle == UTLHANDLE_INVALID) return false;
@@ -167,9 +167,9 @@ bool CUtlHandleTable<T, HandleBits>::IsHandleValid(UtlHandle_t handle) const {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+
 // Current max handle
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 unsigned int CUtlHandleTable<T, HandleBits>::GetValidHandleCount() const {
   return m_nValidHandles;
@@ -193,9 +193,9 @@ int CUtlHandleTable<T, HandleBits>::GetIndexFromHandle(UtlHandle_t h) const {
   return GetListIndex(h);
 }
 
-//-----------------------------------------------------------------------------
+
 // Cracking handles into indices + serial numbers
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 unsigned int CUtlHandleTable<T, HandleBits>::GetSerialNumber(
     UtlHandle_t handle) {
@@ -214,9 +214,9 @@ UtlHandle_t CUtlHandleTable<T, HandleBits>::CreateHandle(unsigned int nSerial,
   return *(UtlHandle_t *)&h;
 }
 
-//-----------------------------------------------------------------------------
+
 // Looks up a entry by handle
-//-----------------------------------------------------------------------------
+
 template <class T, int HandleBits>
 const typename CUtlHandleTable<T, HandleBits>::EntryType_t *
 CUtlHandleTable<T, HandleBits>::GetEntry(UtlHandle_t handle,
@@ -269,14 +269,14 @@ void CUtlHandleTable<T, HandleBits>::MarkHandleValid(UtlHandle_t handle) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Handle wrapper. Assumes 2 things
 //		1) That class T has a non-static method called GetHandle which
 // returns a UtlHandle_t 		2) That class T has a static method
 // called GetPtrFromHandle which returns a T* given a UtlHandle_t
 //		3) That class T has a static method called IsHandleValid which
 // accepts a UtlHandle_t
-//-----------------------------------------------------------------------------
+
 template <class T>
 class CUtlHandle {
  public:
@@ -318,9 +318,9 @@ class CUtlHandle {
   UtlHandle_t m_handle;
 };
 
-//-----------------------------------------------------------------------------
+
 // Constructors
-//-----------------------------------------------------------------------------
+
 template <class T>
 CUtlHandle<T>::CUtlHandle() : m_handle(UTLHANDLE_INVALID) {}
 
@@ -339,9 +339,9 @@ CUtlHandle<T>::CUtlHandle(const CUtlHandle<T> &h) {
   m_handle = h.m_handle;
 }
 
-//-----------------------------------------------------------------------------
+
 // Assignment
-//-----------------------------------------------------------------------------
+
 template <class T>
 void CUtlHandle<T>::Set(T *pObject) {
   // Assumes T has a member function GetHandle
@@ -365,18 +365,18 @@ const CUtlHandle<T> &CUtlHandle<T>::operator=(T *pObject) {
   return *this;
 }
 
-//-----------------------------------------------------------------------------
+
 // Is the handle valid?
-//-----------------------------------------------------------------------------
+
 template <class T>
 bool CUtlHandle<T>::IsValid() const {
   // Assumes T has a static member function IsHandleValid
   return T::IsHandleValid(m_handle);
 }
 
-//-----------------------------------------------------------------------------
+
 // Retrieval
-//-----------------------------------------------------------------------------
+
 template <class T>
 T *CUtlHandle<T>::Get() {
   // Assumes T has a static member function GetPtrFromHandle
@@ -389,9 +389,9 @@ const T *CUtlHandle<T>::Get() const {
   return T::GetPtrFromHandle(m_handle);
 }
 
-//-----------------------------------------------------------------------------
+
 // Casting
-//-----------------------------------------------------------------------------
+
 template <class T>
 CUtlHandle<T>::operator T *() {
   return Get();
@@ -417,9 +417,9 @@ CUtlHandle<T>::operator bool() {
   return m_handle != UTLHANDLE_INVALID;
 }
 
-//-----------------------------------------------------------------------------
+
 // Equality
-//-----------------------------------------------------------------------------
+
 template <class T>
 bool CUtlHandle<T>::operator==(CUtlHandle<T> h) const {
   return m_handle == h.m_handle;
@@ -452,9 +452,9 @@ bool CUtlHandle<T>::operator!=(UtlHandle_t h) const {
   return m_handle != h;
 }
 
-//-----------------------------------------------------------------------------
+
 // Add this macro to a class definition to hook in handles for it!
-//-----------------------------------------------------------------------------
+
 #define DECLARE_HANDLES(_className, _handleBitCount)   \
  public:                                               \
   UtlHandle_t GetHandle() { return m_Handle; }         \
@@ -469,15 +469,15 @@ bool CUtlHandle<T>::operator!=(UtlHandle_t h) const {
   UtlHandle_t m_Handle;                                \
   static CUtlHandleTable<_className, _handleBitCount> m_HandleTable
 
-//-----------------------------------------------------------------------------
+
 // Add this macro to a .cpp file  to hook in handles for it!
-//-----------------------------------------------------------------------------
+
 #define IMPLEMENT_HANDLES(_className, _handleBitCount) \
   CUtlHandleTable<_className, _handleBitCount> _className::m_HandleTable;
 
-//-----------------------------------------------------------------------------
+
 // Add these macro to the class constructor + destructor
-//-----------------------------------------------------------------------------
+
 #define CONSTRUCT_HANDLE()              \
   m_Handle = m_HandleTable.AddHandle(); \
   m_HandleTable.SetHandle(m_Handle, this)

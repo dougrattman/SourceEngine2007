@@ -1,4 +1,4 @@
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier1/strtools.h"
 #include <conio.h>
 #include "utlvector.h"

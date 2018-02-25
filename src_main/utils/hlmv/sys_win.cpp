@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================//
 #include "sys.h"
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include "tier1/strtools.h"
 
 

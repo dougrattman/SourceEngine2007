@@ -275,8 +275,8 @@ void CCSSpectatorGUI::ResizeControls( void )
 	m_pTerScore->GetContentSize( wTer, hTer );
 	
 	int desiredScoreWidth = m_scoreWidth;
-	desiredScoreWidth = max( desiredScoreWidth, wCT );
-	desiredScoreWidth = max( desiredScoreWidth, wTer );
+	desiredScoreWidth = std::max( desiredScoreWidth, wCT );
+	desiredScoreWidth = std::max( desiredScoreWidth, wTer );
 
 	int diff = desiredScoreWidth - w1;
 	if ( diff != 0 )
@@ -302,7 +302,7 @@ void CCSSpectatorGUI::ResizeControls( void )
 	m_pExtraInfo->GetContentSize( wExtra, hExtra );
 
 	int desiredExtraWidth = m_extraInfoWidth;
-	desiredExtraWidth = max( desiredExtraWidth, wExtra );
+	desiredExtraWidth = std::max( desiredExtraWidth, wExtra );
 
 	diff = desiredExtraWidth - w1;
 	if ( diff != 0 )
@@ -1014,7 +1014,7 @@ void CCSMapOverview::UpdateBomb()
 	else
 	{
 		m_bomb.currentRingRadius += (m_bomb.maxRingRadius - m_flIconSize) * gpGlobals->frametime / m_bomb.ringTravelTime;
-		m_bomb.currentRingRadius = min( m_bomb.currentRingRadius, m_bomb.maxRingRadius );
+		m_bomb.currentRingRadius = std::min( m_bomb.currentRingRadius, m_bomb.maxRingRadius );
 		m_bomb.currentRingAlpha = (alpha - 55) * ((m_bomb.maxRingRadius - m_bomb.currentRingRadius) / (m_bomb.maxRingRadius - m_flIconSize)) + 55;
 	}
 }
@@ -2135,13 +2135,13 @@ void CCSMapOverview::UpdateFlashes()
 				// Time for a peak
 				playerCS->currentFlashAlpha = 255;
 				playerCS->nextFlashPeakTime = now + 0.5f;
-				playerCS->nextFlashPeakTime = min( playerCS->nextFlashPeakTime, playerCS->flashUntilTime );
+				playerCS->nextFlashPeakTime = std::min( playerCS->nextFlashPeakTime, playerCS->flashUntilTime );
 			}
 			else
 			{
 				// Just fade away
 				playerCS->currentFlashAlpha -= ((playerCS->currentFlashAlpha * gpGlobals->frametime) / (playerCS->nextFlashPeakTime - now));
-				playerCS->currentFlashAlpha = max( 0, playerCS->currentFlashAlpha );
+				playerCS->currentFlashAlpha = std::max( 0, playerCS->currentFlashAlpha );
 			}
 		}
 	}
@@ -2270,7 +2270,7 @@ int CCSMapOverview::GetMasterAlpha( void )
 		alpha = cl_radaralpha.GetInt();
 	else
 		alpha = overview_alpha.GetFloat() * 255;
-	alpha = clamp( alpha, 0, 255 );
+	alpha = std::clamp( alpha, 0, 255 );
 
 	return alpha;
 }

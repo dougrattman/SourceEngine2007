@@ -66,10 +66,10 @@ void CStatusWindow::redraw()
 	int offset = ( maxval - pagesize ) - curval;
 	offset = ( offset + lineheight - 1 ) / lineheight;
 
-	offset = max( 0, offset );
+	offset = std::max( 0, offset );
 	//offset = 0;
 	//offset += 10;
-	//offset = max( 0, offset );
+	//offset = std::max( 0, offset );
 
 	for ( int i = 0; i < MAX_TEXT_LINES - offset; i++ )
 	{
@@ -181,12 +181,12 @@ void CStatusWindow::PositionSliders( int sboffset )
 {
 	int lineheight = ( STATUS_FONT_SIZE + 2 );
 
-	int linesused = min( MAX_TEXT_LINES, m_nCurrentLine );
-	linesused = max( linesused, 1 );
+	int linesused = std::min( MAX_TEXT_LINES, m_nCurrentLine );
+	linesused = std::max( linesused, 1 );
 
 	int trueh = h2();
 
-	int vpixelsneeded = max( linesused * lineheight, trueh );
+	int vpixelsneeded = std::max( linesused * lineheight, trueh );
 	m_pScrollbar->setVisible( linesused * lineheight > trueh );
 	
 

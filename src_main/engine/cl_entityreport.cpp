@@ -235,8 +235,8 @@ static int MungeColorValue(float cycle, int &value) {
     value = 255 - value;
   }
 
-  value = max(0, value);
-  value = min(255, value);
+  value = std::max(0, value);
+  value = std::min(255, value);
   return value;
 }
 
@@ -256,8 +256,8 @@ void CEntityReportPanel::ApplyEffect(ENTITYBITS *entry, int &r, int &g,
 
   float frac =
       (EFFECT_TIME - (entry->effectfinishtime - realtime)) / EFFECT_TIME;
-  frac = min(1.0, frac);
-  frac = max(0.0, frac);
+  frac = std::min(1.0f, frac);
+  frac = std::max(0.0f, frac);
 
   frac *= 2.0 * M_PI;
   frac = sin(frequency * frac);
@@ -370,8 +370,8 @@ void CEntityReportPanel::Paint() {
         fracs[2] = (float)((int)entry->average >> 3) / 100.0f;
 
         for (int j = 0; j < 3; j++) {
-          fracs[j] = max(0.0f, fracs[j]);
-          fracs[j] = min(1.0f, fracs[j]);
+          fracs[j] = std::max(0.0f, fracs[j]);
+          fracs[j] = std::min(1.0f, fracs[j]);
         }
 
         int rcright = left + col * colwidth + colwidth - 2;

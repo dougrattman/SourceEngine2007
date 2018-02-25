@@ -1302,7 +1302,7 @@ void CQueuedLoader::GetJobRequests() {
     float newt = Plat_FloatTime();
     if (newt - flLastUpdateT > .03) {
       m_pProgress->UpdateProgress(flProgress);
-      flProgress = clamp(flProgress + flDelta, PROGRESS_PARSEDRESLIST,
+      flProgress = std::clamp(flProgress + flDelta, PROGRESS_PARSEDRESLIST,
                          PROGRESS_CREATEDRESOURCES);
 
       // Necessary to take into account any waits for vsync

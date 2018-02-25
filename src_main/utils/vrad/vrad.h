@@ -19,7 +19,7 @@
 #include "worldsize.h"
 
 #ifdef _WIN32
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #endif
 
 #include <sys/stat.h>

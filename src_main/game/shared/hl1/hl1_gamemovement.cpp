@@ -322,7 +322,7 @@ void CHL1GameMovement::Duck( void )
 			// The player is in duck transition and not duck-jumping.
 			if ( player->m_Local.m_bDucking )
 			{
-				float flDuckMilliseconds = max( 0.0f, GAMEMOVEMENT_DUCK_TIME - ( float )player->m_Local.m_flDucktime );
+				float flDuckMilliseconds = std::max( 0.0f, GAMEMOVEMENT_DUCK_TIME - ( float )player->m_Local.m_flDucktime );
 				float flDuckSeconds = flDuckMilliseconds / GAMEMOVEMENT_DUCK_TIME;
 				
 				// Finish in duck transition when transition time is over, in "duck", in air.
@@ -356,7 +356,7 @@ void CHL1GameMovement::Duck( void )
 					// or unducking
   					if ( ( player->m_Local.m_bDucking || player->m_Local.m_bDucked ) )
 					{
-						float flDuckMilliseconds = max( 0.0f, GAMEMOVEMENT_DUCK_TIME - (float)player->m_Local.m_flDucktime );
+						float flDuckMilliseconds = std::max( 0.0f, GAMEMOVEMENT_DUCK_TIME - (float)player->m_Local.m_flDucktime );
 						float flDuckSeconds = flDuckMilliseconds / GAMEMOVEMENT_DUCK_TIME;
 						
 						// Finish ducking immediately if duck time is over or not on ground

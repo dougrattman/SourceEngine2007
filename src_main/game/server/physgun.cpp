@@ -399,7 +399,7 @@ IMotionEvent::simresult_e CGravControllerPoint::Simulate( IPhysicsMotionControll
 		float factor = fabsf(alignRotation);
 		if ( factor < 5 )
 		{
-			factor = clamp( factor, 0, 5 ) * (1/5);
+			factor = std::clamp( factor, 0, 5 ) * (1/5);
 			alignDir = m_targetAlignPosition - worldRotCenter;
 			// Limit movement to the part along m_targetAlignNormal if worldRotCenter is on the backside of 
 			// of the target plane (one inch epsilon)!

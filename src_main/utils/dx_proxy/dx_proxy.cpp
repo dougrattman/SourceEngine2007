@@ -7,7 +7,7 @@
 //=============================================================================//
 //
 
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <vector>
 
 // Aux function prototype

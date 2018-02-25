@@ -33,7 +33,7 @@ using namespace std;
 
 #ifdef VPROF_ENABLED
 
-//-----------------------------------------------------------------------------
+
 
 CVProfile g_VProfCurrentProfile;
 
@@ -182,13 +182,13 @@ void CVProfNode::SetCurFrameTime(unsigned long milliseconds) {
   m_CurFrameTime.Init((f32)milliseconds);
 }
 #ifdef DBGFLAG_VALIDATE
-//-----------------------------------------------------------------------------
+
 // Purpose: Ensure that all of our internal structures are consistent, and
 //			account for all memory that we've allocated.
 // Input:	validator -		Our global validator object
 //			pchName -		Our name (typically a member var
 // in  our  container)
-//-----------------------------------------------------------------------------
+
 void CVProfNode::Validate(CValidator &validator, ch *pchName) {
   validator.Push(_T("CVProfNode"), this, pchName);
 
@@ -199,7 +199,7 @@ void CVProfNode::Validate(CValidator &validator, ch *pchName) {
 }
 #endif  // DBGFLAG_VALIDATE
 
-//-----------------------------------------------------------------------------
+
 
 struct TimeSums_t {
   const ch *pszProfileScope;
@@ -457,7 +457,7 @@ void CVProfile::OutputReport(i32 type, const ch *pszStartNode,
 #endif
 #endif
 
-  g_TotalFrames = max(NumFramesSampled() - 1, 1);
+  g_TotalFrames = std::max(NumFramesSampled() - 1, 1);
 
   if (NumFramesSampled() == 0 || GetTotalTimeSampled() == 0)
     Msg("No samples\n");
@@ -473,7 +473,7 @@ void CVProfile::OutputReport(i32 type, const ch *pszStartNode,
 
       f64 timeAccountedFor =
           100.0 - (m_Root.GetTotalTimeLessChildren() / m_Root.GetTotalTime());
-      Msg("%.0f pct of time accounted for\n", min(100.0, timeAccountedFor));
+      Msg("%.0f pct of time accounted for\n", std::min(100.0, timeAccountedFor));
       Msg("\n");
     }
 
@@ -719,7 +719,7 @@ i32 CVProfile::AddBudgetGroupName(const ch *pBudgetGroupName, i32 budgetFlags) {
   if (m_nBudgetGroupNames + 1 > m_nBudgetGroupNamesAllocated) {
     m_nBudgetGroupNamesAllocated *= 2;
     m_nBudgetGroupNamesAllocated =
-        max(m_nBudgetGroupNames + 6, m_nBudgetGroupNamesAllocated);
+        std::max(m_nBudgetGroupNames + 6, m_nBudgetGroupNamesAllocated);
 
     CBudgetGroup *pNew = new CBudgetGroup[m_nBudgetGroupNamesAllocated];
     for (i32 i = 0; i < m_nBudgetGroupNames; i++) pNew[i] = m_pBudgetGroups[i];
@@ -835,13 +835,13 @@ CounterGroup_t CVProfile::GetCounterGroup(i32 index) const {
 const i32 k_cSTLMapAllocOffset = 4;
 #define GET_INTERNAL_MAP_ALLOC_PTR(pMap) \
   (*((void **)(((byte *)(pMap)) + k_cSTLMapAllocOffset)))
-//-----------------------------------------------------------------------------
+
 // Purpose: Ensure that all of our internal structures are consistent, and
 //			account for all memory that we've allocated.
 // Input:	validator -		Our global validator object
 //			pchName -		Our name (typically a member var
 // in  our  container)
-//-----------------------------------------------------------------------------
+
 void CVProfile::Validate(CValidator &validator, ch *pchName) {
   validator.Push(_T("CVProfile"), this, pchName);
 

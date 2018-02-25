@@ -786,7 +786,7 @@ void WriteAnimationData( s_animation_t *srcanim, mstudioanimdesc_t *destanimdesc
 			{
 				// printf("%d : %d %d %d : %d %d %d\n", j, psrcdata->num[0], psrcdata->num[1], psrcdata->num[2], psrcdata->num[3], psrcdata->num[4], psrcdata->num[5] );
 				// single frame, if animation detected just store as raw
-				int iFrame = min( w * srcanim->sectionframes, srcanim->numframes - 1 );
+				int iFrame = std::min( w * srcanim->sectionframes, srcanim->numframes - 1 );
 				if (psrcdata->num[3] != 0 || psrcdata->num[4] != 0 || psrcdata->num[5] != 0)
 				{
 					Quaternion q;
@@ -1390,15 +1390,15 @@ static byte *WriteAnimations( byte *pData, byte *pStart, studiohdr_t *phdr )
 		{
 			panimdesc[i].zeroframeindex = pData - (byte *)&panimdesc[i];
 
-			int k = min( panimdesc[i].numframes - 1, 9 );
+			int k = std::min( panimdesc[i].numframes - 1, 9 );
 			if (panimdesc[i].flags & STUDIO_LOOPING)
 			{
-				k = min( (panimdesc[i].numframes - 1) / 2, k );
+				k = std::min( (panimdesc[i].numframes - 1) / 2, k );
 			}
 			panimdesc[i].zeroframespan = k;
 			if (k > 2)
 			{
-				panimdesc[i].zeroframecount = min( (panimdesc[i].numframes - 1) / panimdesc[i].zeroframespan, 3 ); // save frames 0..24 frames
+				panimdesc[i].zeroframecount = std::min( (panimdesc[i].numframes - 1) / panimdesc[i].zeroframespan, 3 ); // save frames 0..24 frames
 			}
 			if (panimdesc[i].zeroframecount < 1)
 				panimdesc[i].zeroframecount = 1;

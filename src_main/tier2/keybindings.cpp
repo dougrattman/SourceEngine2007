@@ -9,9 +9,9 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
+
 // Set a key binding
-//-----------------------------------------------------------------------------
+
 void CKeyBindings::SetBinding(ButtonCode_t code, const char *pBinding) {
   if (code == BUTTON_CODE_INVALID || code == KEY_NONE) return;
 
@@ -47,9 +47,9 @@ void CKeyBindings::UnbindAll() {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Count number of lines of bindings we'll be writing
-//-----------------------------------------------------------------------------
+
 int CKeyBindings::GetBindingCount() const {
   int nCount = 0;
   for (int i = 0; i < BUTTON_CODE_LAST; i++) {
@@ -61,9 +61,9 @@ int CKeyBindings::GetBindingCount() const {
   return nCount;
 }
 
-//-----------------------------------------------------------------------------
+
 // Writes lines containing "bind key value"
-//-----------------------------------------------------------------------------
+
 void CKeyBindings::WriteBindings(CUtlBuffer &buf) {
   for (int i = 0; i < BUTTON_CODE_LAST; i++) {
     if (m_KeyInfo[i].Length()) {
@@ -74,10 +74,10 @@ void CKeyBindings::WriteBindings(CUtlBuffer &buf) {
   }
 }
 
-//-----------------------------------------------------------------------------
+
 // Returns the keyname to which a binding string is bound.  E.g., if
 // TAB is bound to +use then searching for +use will return "TAB"
-//-----------------------------------------------------------------------------
+
 const char *CKeyBindings::ButtonNameForBinding(const char *pBinding) {
   const char *pBind = pBinding;
   if (pBinding[0] == '+') {

@@ -254,7 +254,7 @@ void CDODGameMovement::CheckParameters( void )
 		maxspeed = mv->m_flClientMaxSpeed;
 		if ( maxspeed != 0.0 )
 		{
-			mv->m_flMaxSpeed = min( maxspeed, mv->m_flMaxSpeed );
+			mv->m_flMaxSpeed = std::min( maxspeed, mv->m_flMaxSpeed );
 		}
 
 		// Slow down by the speed factor
@@ -1012,7 +1012,7 @@ void CDODGameMovement::SetDeployedEyeOffset( void )
 			if ( m_pDODPlayer->m_Shared.GetLastViewAnimTime() < m_pDODPlayer->m_Shared.m_flDeployChangeTime.m_Value )
 			{
 				// Deployed height
-				float flViewOffset = clamp( m_pDODPlayer->m_Shared.GetDeployedHeight(),
+				float flViewOffset = std::clamp( m_pDODPlayer->m_Shared.GetDeployedHeight(),
 					CROUCHING_DEPLOY_HEIGHT,
 					STANDING_DEPLOY_HEIGHT );
 
@@ -1287,10 +1287,10 @@ void CDODGameMovement::Duck( void )
 				player->m_Local.m_bDucking    = true;
 			}
 
-			float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+			float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 			float duckseconds = duckmilliseconds / 1000.0f;
 
-			//time = max( 0.0, ( 1.0 - (float)player->m_Local.m_flDucktime / 1000.0 ) );
+			//time = std::max( 0.0, ( 1.0 - (float)player->m_Local.m_flDucktime / 1000.0 ) );
 			
 			if ( player->m_Local.m_bDucking )
 			{
@@ -1322,7 +1322,7 @@ void CDODGameMovement::Duck( void )
 					player->m_Local.m_bDucking    = true;  // or unducking
 				}
 
-				float duckmilliseconds = max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
+				float duckmilliseconds = std::max( 0.0f, 1000.0f - (float)player->m_Local.m_flDucktime );
 				float duckseconds = duckmilliseconds / 1000.0f;
 
 				if ( CanUnduck() )

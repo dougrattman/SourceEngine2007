@@ -4694,7 +4694,8 @@ VertexFormat_t CMeshMgr::ComputeVertexFormat(unsigned int flags,
   // NOTE: If pTexCoordDimensions isn't specified, then nTexCoordArraySize
   // is interpreted as meaning that we have n 2D texcoords in the first N
   // texcoord slots
-  nTexCoordArraySize = min(nTexCoordArraySize, VERTEX_MAX_TEXTURE_COORDINATES);
+  nTexCoordArraySize =
+      std::min(nTexCoordArraySize, (int)VERTEX_MAX_TEXTURE_COORDINATES);
   for (int i = 0; i < nTexCoordArraySize; ++i) {
     if (pTexCoordDimensions) {
       Assert(pTexCoordDimensions[i] >= 0 && pTexCoordDimensions[i] <= 4);

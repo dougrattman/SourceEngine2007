@@ -11,13 +11,13 @@
 
 // Makes a 4-byte "packed ID" i32 out of 4 chacters.
 template <typename R = u32>
-constexpr R MAKEID(const ch& d, const ch& c, const ch& b, const ch& a) {
+constexpr inline R MAKEID(const ch& d, const ch& c, const ch& b, const ch& a) {
   return (static_cast<R>(a) << 24) | (static_cast<R>(b) << 16) |
          (static_cast<R>(c) << 8) | (static_cast<R>(d));
 }
 // Compares a string with a 4-byte packed ID constant.
 template <typename T, typename I = u32>
-constexpr bool STRING_MATCHES_ID(const T& p, const I id) {
+constexpr inline bool STRING_MATCHES_ID(const T& p, const I id) {
   return *reinterpret_cast<I*>(p) == id;
 }
 #define ID_TO_STRING(id, p)                                        \

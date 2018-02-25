@@ -214,8 +214,8 @@ bool CWindowPositionMgr::LoadPositions( char const *filename, vgui::Panel *paren
 			w = (int)( sw * fw + 0.5f );
 			h = (int)( sh * fh + 0.5f );
 
-			w = clamp( w, 0, sw );
-			h = clamp( h, 0, sh );
+			w = std::clamp( w, 0, sw );
+			h = std::clamp( h, 0, sh );
 
 			// Now load pages
 			KeyValues *pages = tw->FindKey( "windows", false );

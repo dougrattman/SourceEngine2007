@@ -1,9 +1,4 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-
 
 #include <cassert>
 
@@ -33,10 +28,6 @@
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
-
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
 
 using namespace vgui;
 enum 
@@ -902,7 +893,7 @@ void TreeNode::CalculateVisibleMaxWidth()
 		int childMaxWidth = GetMaxChildrenWidth();
 		childMaxWidth += TREE_INDENT_AMOUNT;
 
-		width = max(childMaxWidth, m_iNodeWidth);
+		width = std::max(childMaxWidth, m_iNodeWidth);
 	}
 	else
 	{
@@ -2506,8 +2497,8 @@ void TreeView::EnableExpandTreeOnLeftClick( bool bEnable )
 
 int TreeView::FindItemUnderMouse( int mx, int my )
 {
-	mx = clamp( mx, 0, GetWide() - 1 );
-	my = clamp( my, 0, GetTall() - 1 );
+	mx = std::clamp( mx, 0, GetWide() - 1 );
+	my = std::clamp( my, 0, GetTall() - 1 );
 	if ( mx >= TREE_INDENT_AMOUNT )
 	{
 		// Find what's under this position

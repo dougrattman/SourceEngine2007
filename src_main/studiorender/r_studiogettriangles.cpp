@@ -26,7 +26,7 @@ void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
   if (lod == USESHADOWLOD) {
     lod = lastlod;
   } else {
-    lod = clamp(lod, 0, lastlod);
+    lod = std::clamp(lod, 0, lastlod);
   }
 
   // clamp to root lod

@@ -474,13 +474,13 @@ bool CDmSerializerBinary::UnserializeElements(
   if (!nElementCount) return true;
 
   int nMaxIdConflicts =
-      min(nElementCount, g_pDataModel->GetAllocatedElementCount());
+      std::min(nElementCount, g_pDataModel->GetAllocatedElementCount());
   int nExpectedIdCopyConflicts = (idConflictResolution == CR_FORCE_COPY ||
                                   idConflictResolution == CR_COPY_NEW)
                                      ? nMaxIdConflicts
                                      : 0;
-  int nBuckets = min(
-      0x10000, max(16, nExpectedIdCopyConflicts /
+  int nBuckets = std::min(
+      0x10000, std::max(16, nExpectedIdCopyConflicts /
                            16));  // CUtlHash can only address up to 65k buckets
   CUtlHash<DmIdPair_t> idmap(nBuckets, 0, 0, DmIdPair_t::Compare,
                              DmIdPair_t::HashKey);

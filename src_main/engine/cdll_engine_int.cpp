@@ -560,9 +560,9 @@ Vector CEngineClient::GetLightForPointFast(const Vector &pos, bool bClamp) {
   Vector cube[6];
   Mod_LeafAmbientColorAtPos(cube, pos, leafIndex);
   for (int i = 0; i < 6; i++) {
-    vRet.x = max(vRet.x, cube[i].x);
-    vRet.y = max(vRet.y, cube[i].y);
-    vRet.z = max(vRet.z, cube[i].z);
+    vRet.x = std::max(vRet.x, cube[i].x);
+    vRet.y = std::max(vRet.y, cube[i].y);
+    vRet.z = std::max(vRet.z, cube[i].z);
   }
   if (bClamp) {
     if (vRet.x > 1.0f) vRet.x = 1.0f;
@@ -788,7 +788,7 @@ int CEngineClient::IsBoxInViewCluster(const Vector &mins, const Vector &maxs) {
   return CM_BoxVisible(mins, maxs, ppvs, sizeof(pvs));
 }
 
-float CEngineClient::Time() { return Sys_FloatTime(); }
+float CEngineClient::Time() { return Plat_FloatTime(); }
 
 void CEngineClient::Sound_ExtraUpdate(void) {
   // On xbox this is not necessary except for long pauses, so unhook this one

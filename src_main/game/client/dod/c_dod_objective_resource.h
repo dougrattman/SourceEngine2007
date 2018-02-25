@@ -188,7 +188,7 @@ public:
 
 	float GetBombTimeForPoint( int index )
 	{
-		return max( 0, m_flBombEndTimes[index] - gpGlobals->curtime );
+		return std::max( 0, m_flBombEndTimes[index] - gpGlobals->curtime );
 	}
 
 	int GetBombsRequired( int index )

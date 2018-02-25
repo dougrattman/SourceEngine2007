@@ -3,7 +3,7 @@
 #define NV_TRISTRIP_OBJECTS_H
 
 #include <assert.h>
-#include <windows.h>
+#include "base/include/windows/windows_light.h"
 #include <vector>
 #include <list>
 #include "VertexCache.h"

@@ -620,7 +620,7 @@ float CInput::DetermineKeySpeed( float frametime )
 		if ( m_flKeyboardSampleTime <= 0 )
 			return 0.0f;
 	
-		frametime = min( m_flKeyboardSampleTime, frametime );
+		frametime = std::min( m_flKeyboardSampleTime, frametime );
 		m_flKeyboardSampleTime -= frametime;
 	}
 	

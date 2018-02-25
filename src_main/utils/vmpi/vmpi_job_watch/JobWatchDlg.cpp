@@ -584,7 +584,7 @@ void CJobWatchDlg::ProcessQueryResults_Graph( IMySQLRowSet *pSet )
 		entry.m_nBytesReceived = pSet->GetColumnValue( iBytesReceived ).Int32();
 		entries.AddToTail( entry );
 
-		highest = max( highest, entry.m_msTime );
+		highest = std::max( highest, entry.m_msTime );
 	}
 
 	if ( highest > m_CurGraphTime )
@@ -615,7 +615,7 @@ BOOL CJobWatchDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 			LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
 			// Now sort by this column.
-			g_iSortColumn = max( 0, min( pListView->iSubItem, ARRAYSIZE( g_ColumnInfos ) - 1 ) );
+			g_iSortColumn = std::max( 0, std::min( pListView->iSubItem, ARRAYSIZE( g_ColumnInfos ) - 1 ) );
 			ResortItems();
 		}
 	}

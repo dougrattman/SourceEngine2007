@@ -120,7 +120,7 @@ CON_COMMAND_F( "bot_add", "Add a bot.", FCVAR_CHEAT )
 {
 	// Look at -count.
 	int count = args.FindArgInt( "-count", 1 );
-	count = clamp( count, 1, 16 );
+	count = std::clamp( count, 1, 16 );
 
 	// Look at -frozen.
 	bool bFrozen = !!args.FindArg( "-frozen" );

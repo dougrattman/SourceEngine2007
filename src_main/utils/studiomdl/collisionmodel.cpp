@@ -1062,10 +1062,10 @@ void MarkConnectedMeshes( int *vertID, s_source_t *pmodel, int *vertMap )
 				globalFace.c = vertMap[globalFace.c];
 
 
-				// find min(faceid, vertID[a], vertID[b], vertID[c]);
-				int newid = min(faceid, vertID[globalFace.a]);
-				newid = min( newid, vertID[globalFace.b]);
-				newid = min( newid, vertID[globalFace.c]);
+				// find std::min(faceid, vertID[a], vertID[b], vertID[c]);
+				int newid = std::min(faceid, vertID[globalFace.a]);
+				newid = std::min( newid, vertID[globalFace.b]);
+				newid = std::min( newid, vertID[globalFace.c]);
 				
 				// mark all verts with the minimum, count the number we had to mark
 				if ( vertID[globalFace.a] != newid )
@@ -1256,7 +1256,7 @@ void CreateCollide( CPhysCollisionModel *pBase, CPhysConvex **pElements, int ele
 	// this can be really slow with super-large models and a low error tolerance
 	// Basically you get a ray cast through each square of epsilon surface area on each OBB side
 	// So compute it for 0.01% error (on the smallest side, less on larger sides)
-	params.dragAreaEpsilon = clamp( minSurfaceArea * 1e-4f, 0.25f, 128.0f );
+	params.dragAreaEpsilon = std::clamp( minSurfaceArea * 1e-4f, 0.25f, 128.0f );
 
 	Vector tmp = size;
 	tmp[largest] = 0;
@@ -1438,9 +1438,9 @@ void BuildConvexListForFaceList( s_source_t *pmodel, CUtlVector<convexlist_t> &c
 			globalFace.c = weldTable[globalFace.c];
 
 
-			int newid = min(i, vertID[globalFace.a]);
-			newid = min( newid, vertID[globalFace.b]);
-			newid = min( newid, vertID[globalFace.c]);
+			int newid = std::min(i, vertID[globalFace.a]);
+			newid = std::min( newid, vertID[globalFace.b]);
+			newid = std::min( newid, vertID[globalFace.c]);
 
 			// mark all verts with the minimum, count the number we had to mark
 			if ( vertID[globalFace.a] != newid )

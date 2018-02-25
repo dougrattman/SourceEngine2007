@@ -20,9 +20,9 @@
 static const uint32_t _sincos_masks[] = {(uint32_t)0x0, (uint32_t)~0x0};
 static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
 
-//-----------------------------------------------------------------------------
+
 // Macros and constants required by some of the SSE assembly:
-//-----------------------------------------------------------------------------
+
 
 #ifdef _WIN32
 #define _PS_EXTERN_CONST(Name, Val) \
@@ -82,9 +82,9 @@ void __cdecl _SSE_VectorMA(const f32 *start, f32 scale, const f32 *direction,
                            f32 *dest);
 #endif
 
-//-----------------------------------------------------------------------------
+
 // SSE implementations of optimized routines:
-//-----------------------------------------------------------------------------
+
 f32 _SSE_Sqrt(f32 x) {
   Assert(s_bMathlibInitialized);
   f32 root = 0.f;
@@ -279,8 +279,8 @@ f32 _SSE_InvRSquared(const f32 *v) {
 		shufps		xmm2, xmm2, 1  // x2 = vy * vy, X, X, X
 		addss		xmm1, xmm2  // x1 = (vx * vx) + (vy * vy), X, X, X
 		addss		xmm1, xmm3  // x1 = (vx * vx) + (vy * vy) + (vz * vz), X, X, X
-		maxss		xmm1, xmm5  // x1 = max( 1.0, x1 )
-		rcpss		xmm0, xmm1  // x0 = 1 / max( 1.0, x1 )
+		maxss		xmm1, xmm5  // x1 = std::max( 1.0, x1 )
+		rcpss		xmm0, xmm1  // x0 = 1 / std::max( 1.0, x1 )
 		movss		inv_r2, xmm0  // inv_r2 = x0
   }
 #elif _LINUX
@@ -461,9 +461,9 @@ f32 _SSE_cos(f32 x) {
   return x;
 }
 
-//-----------------------------------------------------------------------------
+
 // SSE2 implementations of optimized routines:// any x
-//-----------------------------------------------------------------------------
+
 void _SSE2_SinCos(f32 x, f32 *s, f32 *c){
 #ifdef _WIN32
     // clang-format off

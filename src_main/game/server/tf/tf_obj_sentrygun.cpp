@@ -481,7 +481,7 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 	if ( !bDidWork && CanBeUpgraded( pPlayer ) )
 	{
 		int iPlayerMetal = pPlayer->GetAmmoCount( TF_AMMO_METAL );
-		int iAmountToAdd = min( tf_sentrygun_upgrade_per_hit.GetInt(), iPlayerMetal );
+		int iAmountToAdd = std::min( tf_sentrygun_upgrade_per_hit.GetInt(), iPlayerMetal );
 
 		if ( iAmountToAdd > ( m_iUpgradeMetalRequired - m_iUpgradeMetal ) )
 			iAmountToAdd = ( m_iUpgradeMetalRequired - m_iUpgradeMetal );
@@ -519,9 +519,9 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 			int iMaxShellsPlayerCanAfford = (int)( (float)iPlayerMetal / tf_sentrygun_metal_per_shell.GetFloat() );
 
 			// cap the amount we can add
-			int iAmountToAdd = min( SENTRYGUN_ADD_SHELLS, iMaxShellsPlayerCanAfford );
+			int iAmountToAdd = std::min( SENTRYGUN_ADD_SHELLS, iMaxShellsPlayerCanAfford );
 
-			iAmountToAdd = min( ( m_iMaxAmmoShells - m_iAmmoShells ), iAmountToAdd );
+			iAmountToAdd = std::min( ( m_iMaxAmmoShells - m_iAmmoShells ), iAmountToAdd );
 
 			pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_shell.GetInt(), TF_AMMO_METAL );
 			m_iAmmoShells += iAmountToAdd;
@@ -539,8 +539,8 @@ bool CObjectSentrygun::OnWrenchHit( CTFPlayer *pPlayer )
 		{
 			int iMaxRocketsPlayerCanAfford = (int)( (float)iPlayerMetal / tf_sentrygun_metal_per_rocket.GetFloat() );
 
-			int iAmountToAdd = min( ( SENTRYGUN_ADD_ROCKETS ), iMaxRocketsPlayerCanAfford );
-			iAmountToAdd = min( ( m_iMaxAmmoRockets - m_iAmmoRockets ), iAmountToAdd );
+			int iAmountToAdd = std::min( ( SENTRYGUN_ADD_ROCKETS ), iMaxRocketsPlayerCanAfford );
+			iAmountToAdd = std::min( ( m_iMaxAmmoRockets - m_iAmmoRockets ), iAmountToAdd );
 
 			pPlayer->RemoveAmmo( iAmountToAdd * tf_sentrygun_metal_per_rocket.GetFloat(), TF_AMMO_METAL );
 			m_iAmmoRockets += iAmountToAdd;
