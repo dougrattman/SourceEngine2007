@@ -12,18 +12,16 @@
 #include "base/include/type_traits.h"
 #include "base/include/windows/windows_light.h"
 
-namespace source {
-namespace windows {
+namespace source::windows {
 // Define DLL module descriptor.
 using module_descriptor = HINSTANCE__;
-}  // namespace windows
-}  // namespace source
+}  // namespace source::windows
 
 namespace std {
 // Deleter to unload DLL on end of scope.
 template <>
 struct default_delete<source::windows::module_descriptor> {
-  // Use HMODULE here to ensure pointer since module_descriptor is HMODULE.
+  // Use HMODULE here since module_descriptor is HMODULE.
   void operator()(_In_ HMODULE module) const noexcept {
 #ifdef _DEBUG
     BOOL result_code =
@@ -36,8 +34,7 @@ struct default_delete<source::windows::module_descriptor> {
 };
 }  // namespace std
 
-namespace source {
-namespace windows {
+namespace source::windows {
 // Smart pointer with std::unique_ptr semantic for module lifecycle handling.
 class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   // Define std::unique_ptr members to simplify usage.
@@ -78,7 +75,6 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
     return {address, address != nullptr ? NO_ERROR : GetLastError()};
   }
 };
-}  // namespace windows
-}  // namespace source
+}  // namespace source::windows
 
 #endif  // BASE_INCLUDE_WINDOWS_UNIQUE_MODULE_PTR_H_

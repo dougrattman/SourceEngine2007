@@ -6,8 +6,7 @@
 #include <cstdint>
 #include "base/include/windows/windows_light.h"
 
-namespace source {
-namespace windows {
+namespace source::windows {
 // Scoped error mode.
 class ScopedErrorMode {
  public:
@@ -28,7 +27,6 @@ class ScopedErrorMode {
   ScopedErrorMode(const ScopedErrorMode& s) = delete;
   ScopedErrorMode& operator=(const ScopedErrorMode& s) = delete;
 };
-}  // namespace windows
-}  // namespace source
+}  // namespace source::windows
 
 #endif  // BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_

@@ -9,8 +9,7 @@
 #include <cassert>
 #include <type_traits>
 
-namespace source {
-namespace windows {
+namespace source::windows {
 // Winsock versions.
 enum class WinsockVersion : WORD { Version2_2 = MAKEWORD(2, 2) };
 
@@ -51,7 +50,6 @@ class ScopedWinsockInitializer {
   ScopedWinsockInitializer& operator=(const ScopedWinsockInitializer& s) =
       delete;
 };
-}  // namespace windows
-}  // namespace source
+}  // namespace source::windows
 
 #endif  // SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
