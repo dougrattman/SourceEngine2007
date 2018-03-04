@@ -17,22 +17,22 @@ ch *GetCommandLine();
 
 namespace {
 struct DialogInitInfo {
-  const ch *file_name;
+  const ch *fileName;
   i32 line;
   const ch *expression;
 };
 
 struct AssertDisable {
-  ch file_name[_MAX_PATH];
+  ch fileName[_MAX_PATH];
 
   // If these are not -1, then this CAssertDisable only disables asserts on
   // lines between these values (inclusive).
-  i32 line_min, line_max;
+  i32 lineMin, lineMax;
 
   // Decremented each time we hit this assert and ignore it, until it's 0.
   // Then the CAssertDisable is removed.
   // If this is -1, then we always ignore this assert.
-  i32 ignore_times;
+  i32 ignoreTimes;
 
   AssertDisable *next;
 };
@@ -66,21 +66,21 @@ bool AreAssertsEnabledInFileLine(const ch *file_name, i32 line) {
   for (AssertDisable *it{g_pAssertDisables}; it; it = next) {
     next = it->next;
 
-    if (stricmp(file_name, it->file_name) == 0) {
+    if (stricmp(file_name, it->fileName) == 0) {
       // Are asserts disabled in the whole file?
       bool are_asserts_enabled{true};
-      if (it->line_min == -1 && it->line_max == -1) are_asserts_enabled = false;
+      if (it->lineMin == -1 && it->lineMax == -1) are_asserts_enabled = false;
 
       // Are asserts disabled on the specified line?
-      if (line >= it->line_min && line <= it->line_max)
+      if (line >= it->lineMin && line <= it->lineMax)
         are_asserts_enabled = false;
 
       if (!are_asserts_enabled) {
         // If this assert is only disabled for the next N times, then
         // countdown..
-        if (it->ignore_times > 0) {
-          --it->ignore_times;
-          if (it->ignore_times == 0) {
+        if (it->ignoreTimes > 0) {
+          --it->ignoreTimes;
+          if (it->ignoreTimes == 0) {
             // Remove this one from the list.
             *prev = next;
             delete it;
@@ -103,24 +103,24 @@ AssertDisable *CreateNewAssertDisable(const ch *pFilename) {
   assert_disable->next = g_pAssertDisables;
   g_pAssertDisables = assert_disable;
 
-  assert_disable->line_min = assert_disable->line_max = -1;
-  assert_disable->ignore_times = -1;
+  assert_disable->lineMin = assert_disable->lineMax = -1;
+  assert_disable->ignoreTimes = -1;
 
-  strncpy(assert_disable->file_name, g_Info.file_name,
-          ARRAYSIZE(assert_disable->file_name) - 1);
-  assert_disable->file_name[ARRAYSIZE(assert_disable->file_name) - 1] = 0;
+  strncpy(assert_disable->fileName, g_Info.fileName,
+          ARRAYSIZE(assert_disable->fileName) - 1);
+  assert_disable->fileName[ARRAYSIZE(assert_disable->fileName) - 1] = 0;
 
   return assert_disable;
 }
 
 inline void IgnoreAssertsInCurrentFile() {
-  CreateNewAssertDisable(g_Info.file_name);
+  CreateNewAssertDisable(g_Info.fileName);
 }
 
 AssertDisable *IgnoreAssertsNearby(i32 range) {
-  AssertDisable *assert_disable = CreateNewAssertDisable(g_Info.file_name);
-  assert_disable->line_min = g_Info.line - range;
-  assert_disable->line_max = g_Info.line + range;
+  AssertDisable *assert_disable = CreateNewAssertDisable(g_Info.fileName);
+  assert_disable->lineMin = g_Info.line - range;
+  assert_disable->lineMax = g_Info.line + range;
   return assert_disable;
 }
 
@@ -133,7 +133,7 @@ INT_PTR CALLBACK AssertDialogProc(HWND window,        // handle to dialog box
   switch (message) {
     case WM_INITDIALOG: {
       SetDlgItemText(window, IDC_ASSERT_MSG_CTRL, g_Info.expression);
-      SetDlgItemText(window, IDC_FILENAME_CONTROL, g_Info.file_name);
+      SetDlgItemText(window, IDC_FILENAME_CONTROL, g_Info.fileName);
 
       SetDlgItemInt(window, IDC_LINE_CONTROL, g_Info.line, false);
       SetDlgItemInt(window, IDC_IGNORE_NUMLINES, g_iLastLineRange, false);
@@ -169,7 +169,7 @@ INT_PTR CALLBACK AssertDialogProc(HWND window,        // handle to dialog box
                                    FALSE)};
           if (is_translated && value > 1) {
             AssertDisable *assert_disable{IgnoreAssertsNearby(0)};
-            assert_disable->ignore_times = value - 1;
+            assert_disable->ignoreTimes = value - 1;
             g_nLastIgnoreNumTimes = value;
           }
 
@@ -264,7 +264,7 @@ SOURCE_TIER0_API bool ShouldUseNewAssertDialog() {
 }
 
 SOURCE_TIER0_API bool DoNewAssertDialog(const ch *pFilename, i32 line,
-                                     const ch *pExpression) {
+                                        const ch *pExpression) {
   LOCAL_THREAD_LOCK();
 
   if (AreAssertsDisabled()) return false;
@@ -280,7 +280,7 @@ SOURCE_TIER0_API bool DoNewAssertDialog(const ch *pFilename, i32 line,
   if (!AreAssertsEnabledInFileLine(pFilename, line)) return false;
 
   // Now create the dialog.
-  g_Info.file_name = pFilename;
+  g_Info.fileName = pFilename;
   g_Info.line = line;
   g_Info.expression = pExpression;
 
