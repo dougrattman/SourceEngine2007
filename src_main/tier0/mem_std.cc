@@ -2,12 +2,12 @@
 //
 // Purpose: Memory allocation!
 
-#include "pch_tier0.h"
-
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 #include <malloc.h>
 #include <algorithm>
+
+#include "build/include/build_config.h"
 
 #if defined(OS_WIN)
 #define VA_COMMIT_FLAGS MEM_COMMIT
@@ -47,7 +47,6 @@ void PrintAllocTimes() {
 
 #if (defined(NDEBUG) && !defined(USE_MEM_DEBUG))
 
-
 // Singleton...
 
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
@@ -67,7 +66,6 @@ IMemAlloc *g_pActualAlloc = &s_StdMemAlloc;
 #ifdef OS_WIN
 
 // Small block heap (multi-pool)
-
 
 #ifndef NO_SBH
 #define UsingSBH() true
@@ -223,7 +221,6 @@ usize CSmallBlockPool::Compact() {
 
   return nBytesFreed;
 }
-
 
 //
 
@@ -479,9 +476,7 @@ CSmallBlockPool *CSmallBlockHeap::FindPool(void *p) {
 
 #endif
 
-
 // Release versions
-
 
 void *CStdMemAlloc::Alloc(usize nSize) {
   PROFILE_ALLOC(Malloc);
@@ -543,7 +538,6 @@ void *CStdMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize) {
   return nullptr;
 }
 
-
 // Debug versions
 
 void *CStdMemAlloc::Alloc(usize nSize, const ch *pFileName, i32 nLine) {
@@ -564,7 +558,6 @@ void *CStdMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize,
   return nullptr;
 }
 
-
 // Returns size of a particular allocation
 
 usize CStdMemAlloc::GetSize(void *pMem) {
@@ -579,13 +572,11 @@ usize CStdMemAlloc::GetSize(void *pMem) {
 #endif
 }
 
-
 // Force file + line information for an allocation
 
 void CStdMemAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {}
 
 void CStdMemAlloc::PopAllocDbgInfo() {}
-
 
 // FIXME: Remove when we make our own heap! Crt stuff we're currently using
 
@@ -597,8 +588,7 @@ i32 CStdMemAlloc::CrtSetReportMode(i32 nReportType, i32 nReportMode) {
 
 i32 CStdMemAlloc::CrtIsValidHeapPointer(const void *pMem) { return 1; }
 
-i32 CStdMemAlloc::CrtIsValidPointer(const void *pMem, u32 size,
-                                    i32 access) {
+i32 CStdMemAlloc::CrtIsValidPointer(const void *pMem, u32 size, i32 access) {
   return 1;
 }
 

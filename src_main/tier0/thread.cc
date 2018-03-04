@@ -2,8 +2,6 @@
 //
 // Purpose: Thread management routines
 
-#include "pch_tier0.h"
-
 #include "tier0/include/threadtools.h"
 
 #include "tier0/include/dbg.h"

@@ -1,7 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
 #include <cassert>
 #include "base/include/windows/windows_light.h"
 

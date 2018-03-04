@@ -1,13 +1,12 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
 #include "tier0/include/platform.h"
 
 #include <algorithm>
 #include <cassert>
 #include <ctime>
 
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/vcrmode.h"
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)

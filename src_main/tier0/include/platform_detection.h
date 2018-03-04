@@ -20,24 +20,18 @@
 #endif
 
 #ifdef OS_WIN
-
 #define IsLinux() false
 #define IsPC() true
 #define IsConsole() false
 #define IsX360() false
 #define IS_WINDOWS_PC
-
 #elif defined(OS_POSIX)
-
 #define IsPC() true
 #define IsConsole() false
 #define IsX360() false
 #define IsLinux() true
-
 #else
-
-#error Unknown platform.
-
+#error Please, define your platform in tier0/include/platform_detection.h
 #endif
 
 #endif  // SOURCE_TIER0_INCLUDE_PLATFORM_DETECTION_H_

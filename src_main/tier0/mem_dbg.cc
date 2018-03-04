@@ -2,8 +2,6 @@
 //
 // Purpose: Memory allocation!
 
-#include "pch_tier0.h"
-
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 #include <malloc.h>
@@ -34,8 +32,6 @@
 // #define USE_STACK_WALK_DETAILED
 #endif
 
-
-
 #define DebugAlloc malloc
 #define DebugFree free
 
@@ -46,8 +42,6 @@ i32 g_DefaultHeapFlags =
 static ch s_szStatsMapName[32];
 static ch s_szStatsComment[256];
 #endif
-
-
 
 #if defined(USE_STACK_WALK) || defined(USE_STACK_WALK_DETAILED)
 #include <dbghelp.h>
@@ -325,8 +319,6 @@ inline usize InternalLogicalSize(void *pMem) {
 #define _CrtDbgReport(nRptType, szFile, nLine, szModule, pMsg) 0
 #endif
 
-
-
 // Custom allocator protects this module from recursing on operator new
 template <class T>
 class CNoRecurseAllocator {
@@ -385,14 +377,11 @@ class CStringLess {
   }
 };
 
-
-
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4074)  // warning C4074: initializers put in compiler
                             // reserved initialization area
 #pragma init_seg(compiler)
 MSVC_END_WARNING_OVERRIDE_SCOPE()
-
 
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
@@ -577,8 +566,6 @@ class CDbgMemAlloc : public IMemAlloc {
 
 static ch const *g_pszUnknown = "unknown";
 
-
-
 const i32 DBG_INFO_STACK_DEPTH = 32;
 
 struct DbgInfoStack_t {
@@ -588,7 +575,6 @@ struct DbgInfoStack_t {
 
 CThreadLocalPtr<DbgInfoStack_t> g_DbgInfoStack CONSTRUCT_EARLY;
 CThreadLocalInt<> g_nDbgInfoStackDepth CONSTRUCT_EARLY;
-
 
 // Singleton...
 
@@ -600,12 +586,9 @@ IMemAlloc *g_pMemAlloc = &s_DbgMemAlloc;
 IMemAlloc *g_pActualAlloc = &s_DbgMemAlloc;
 #endif
 
-
-
 CThreadMutex g_DbgMemMutex CONSTRUCT_EARLY;
 
 #define HEAP_LOCK() AUTO_LOCK(g_DbgMemMutex)
-
 
 // Byte count buckets
 
@@ -617,7 +600,6 @@ const ch *CDbgMemAlloc::s_pCountHeader[CDbgMemAlloc::NUM_BYTE_COUNT_BUCKETS] = {
     "33-128 byte allocations", "129-1024 byte allocations",
     ">1024 byte allocations"};
 
-
 // Standard output
 
 static FILE *s_DbgFile;
@@ -628,7 +610,6 @@ static void DefaultHeapReportFunc(ch const *pFormat, ...) {
   vfprintf(s_DbgFile, pFormat, args);
   va_end(args);
 }
-
 
 // Constructor
 
@@ -654,9 +635,7 @@ CDbgMemAlloc::~CDbgMemAlloc() {
   m_bInitialized = false;
 }
 
-
 // Release versions
-
 
 void *CDbgMemAlloc::Alloc(usize nSize) {
   /*
@@ -709,7 +688,6 @@ void *CDbgMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize) {
   return nullptr;
 }
 
-
 // Force file + line information for an allocation
 
 void CDbgMemAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {
@@ -737,7 +715,6 @@ void CDbgMemAlloc::PopAllocDbgInfo() {
   Assert(g_nDbgInfoStackDepth >= -1);
 }
 
-
 // Returns the actual debug info
 
 void CDbgMemAlloc::GetActualDbgInfo(const ch *&pFileName, i32 &nLine) {
@@ -756,7 +733,6 @@ void CDbgMemAlloc::GetActualDbgInfo(const ch *&pFileName, i32 &nLine) {
     nLine = g_DbgInfoStack[0].m_nLine;
   }
 }
-
 
 //
 
@@ -798,7 +774,6 @@ const ch *CDbgMemAlloc::FindOrCreateFilename(const ch *pFileName) {
   return pszFilenameCopy;
 }
 
-
 // Finds the file in our map
 
 CDbgMemAlloc::MemInfo_t &CDbgMemAlloc::FindOrCreateEntry(const ch *pFileName,
@@ -810,7 +785,6 @@ CDbgMemAlloc::MemInfo_t &CDbgMemAlloc::FindOrCreateEntry(const ch *pFileName,
       StatMapEntry_t(MemInfoKey_t(pFileName, line), MemInfo_t()));
   return retval.first->second;
 }
-
 
 // Updates stats
 
@@ -883,9 +857,7 @@ void CDbgMemAlloc::RegisterDeallocation(MemInfo_t &info, usize nLogicalSize,
   info.m_nTime += nTime;
 }
 
-
 // Gets the allocation file name
-
 
 const ch *CDbgMemAlloc::GetAllocatonFileName(void *pMem) {
   if (!pMem) return "";
@@ -897,7 +869,6 @@ const ch *CDbgMemAlloc::GetAllocatonFileName(void *pMem) {
     return g_pszUnknown;
 }
 
-
 // Gets the allocation file name
 
 i32 CDbgMemAlloc::GetAllocatonLineNumber(void *pMem) {
@@ -906,7 +877,6 @@ i32 CDbgMemAlloc::GetAllocatonLineNumber(void *pMem) {
   CrtDbgMemHeader_t *pHeader = GetCrtDbgMemHeader(pMem);
   return pHeader->m_nLineNumber;
 }
-
 
 // Debug versions of the main allocation methods
 
@@ -992,14 +962,12 @@ void *CDbgMemAlloc::Expand_NoLongerSupported(void *pMem, usize nSize,
   return nullptr;
 }
 
-
 // Returns size of a particular allocation
 
 usize CDbgMemAlloc::GetSize(void *pMem) {
   HEAP_LOCK();
   return pMem ? InternalMSize(pMem) : CalcHeapUsed();
 }
-
 
 // FIXME: Remove when we make our own heap! Crt stuff we're currently using
 
@@ -1113,7 +1081,6 @@ void CDbgMemAlloc::DumpBlockStats(void *p) {
       GetSize(p));
 }
 
-
 // Stat output
 
 void CDbgMemAlloc::DumpMemInfo(const ch *pAllocationName, i32 line,
@@ -1131,7 +1098,6 @@ void CDbgMemAlloc::DumpMemInfo(const ch *pAllocationName, i32 line,
 
   m_OutputFunc("\n");
 }
-
 
 // Stat output
 
@@ -1198,7 +1164,6 @@ void CDbgMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
     fclose(s_DbgFile);
   }
 }
-
 
 // Stat output
 

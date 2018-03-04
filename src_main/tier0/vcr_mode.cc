@@ -1,8 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
 #include "tier0/include/vcrmode.h"
+
+#include "base/include/windows/windows_light.h"
 
 #ifdef OS_WIN
 #include <winsock.h>

@@ -1,9 +1,9 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
-#include "public/Color.h"
 #include "tier0/include/dbg.h"
+
+#include <cassert>
+#include "public/Color.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/minidump.h"
 #include "tier0/include/threadtools.h"

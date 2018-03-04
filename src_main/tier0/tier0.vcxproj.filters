@@ -45,9 +45,6 @@
     <ClCompile Include="minidump.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pch_tier0.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="platform.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="memstd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch_tier0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wchartypes.h">

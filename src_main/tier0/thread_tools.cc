@@ -1,7 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
 #include "tier0/include/threadtools.h"
 
 #ifdef OS_WIN
@@ -21,9 +19,10 @@ typedef void *LPVOID;
 
 #include <memory.h>
 #include <memory>
+#include "base/include/windows/windows_light.h"
+#include "tier0/include/dbg.h"
 #include "tier0/include/vcrmode.h"
 
-// Must be last header...
 #include "tier0/include/memdbgon.h"
 
 #define THREADS_DEBUG 1
@@ -41,7 +40,6 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 COMPILE_TIME_ASSERT(TT_SIZEOF_CRITICALSECTION == sizeof(CRITICAL_SECTION));
 COMPILE_TIME_ASSERT(TT_INFINITE == INFINITE);
 #endif
-
 
 // Simple thread functions.
 // Because _beginthreadex uses stdcall, we need to convert to cdecl
@@ -94,11 +92,9 @@ bool ReleaseThreadHandle(ThreadHandle_t hThread) {
 #endif
 }
 
-
 //
 // Wrappers for other simple threading operations
 //
-
 
 void ThreadSleep(u32 duration) {
 #ifdef OS_WIN
@@ -107,8 +103,6 @@ void ThreadSleep(u32 duration) {
   usleep(duration * 1000);
 #endif
 }
-
-
 
 #ifndef ThreadGetCurrentId
 u32 ThreadGetCurrentId() {
@@ -120,7 +114,6 @@ u32 ThreadGetCurrentId() {
 }
 #endif
 
-
 ThreadHandle_t ThreadGetCurrentHandle() {
 #ifdef OS_WIN
   return (ThreadHandle_t)GetCurrentThread();
@@ -128,8 +121,6 @@ ThreadHandle_t ThreadGetCurrentHandle() {
   return (ThreadHandle_t)pthread_self();
 #endif
 }
-
-
 
 i32 ThreadGetPriority(ThreadHandle_t hThread) {
 #ifdef OS_WIN
@@ -141,8 +132,6 @@ i32 ThreadGetPriority(ThreadHandle_t hThread) {
   return 0;
 #endif
 }
-
-
 
 bool ThreadSetPriority(ThreadHandle_t hThread, i32 priority) {
   if (!hThread) {
@@ -158,8 +147,6 @@ bool ThreadSetPriority(ThreadHandle_t hThread, i32 priority) {
   return true;
 #endif
 }
-
-
 
 void ThreadSetAffinity(ThreadHandle_t hThread, uintptr_t nAffinityMask) {
   if (!hThread) {
@@ -178,8 +165,6 @@ void ThreadSetAffinity(ThreadHandle_t hThread, uintptr_t nAffinityMask) {
 #endif
 }
 
-
-
 u32 InitMainThread() {
   ThreadSetDebugName("MainThrd");
 #ifdef OS_WIN
@@ -194,7 +179,6 @@ u32 g_ThreadMainThreadID = InitMainThread();
 bool ThreadInMainThread() {
   return (ThreadGetCurrentId() == g_ThreadMainThreadID);
 }
-
 
 void DeclareCurrentThreadIsMainThread() {
   g_ThreadMainThreadID = ThreadGetCurrentId();
@@ -219,7 +203,6 @@ bool ThreadJoin(ThreadHandle_t hThread, u32 timeout) {
 #endif
   return true;
 }
-
 
 // https://docs.microsoft.com/en-us/visualstudio/debugger/how-to-set-a-thread-name-in-native-code
 void ThreadSetDebugName(ThreadId_t id, const ch *pszName) {
@@ -250,8 +233,6 @@ void ThreadSetDebugName(ThreadId_t id, const ch *pszName) {
 #endif
 }
 
-
-
 COMPILE_TIME_ASSERT(TW_FAILED == WAIT_FAILED);
 COMPILE_TIME_ASSERT(TW_TIMEOUT == WAIT_TIMEOUT);
 COMPILE_TIME_ASSERT(WAIT_OBJECT_0 == 0);
@@ -263,11 +244,11 @@ i32 ThreadWaitForObjects(i32 nEvents, const HANDLE *pHandles, bool bWaitAll,
 }
 #endif
 
-
 // Used to thread LoadLibrary on the 360
 
 static ThreadedLoadLibraryFunc_t s_ThreadedLoadLibraryFunc = 0;
-SOURCE_TIER0_API void SetThreadedLoadLibraryFunc(ThreadedLoadLibraryFunc_t func) {
+SOURCE_TIER0_API void SetThreadedLoadLibraryFunc(
+    ThreadedLoadLibraryFunc_t func) {
   s_ThreadedLoadLibraryFunc = func;
 }
 
@@ -275,9 +256,7 @@ SOURCE_TIER0_API ThreadedLoadLibraryFunc_t GetThreadedLoadLibraryFunc() {
   return s_ThreadedLoadLibraryFunc;
 }
 
-
 //
-
 
 CThreadSyncObject::CThreadSyncObject()
 #ifdef OS_WIN
@@ -365,9 +344,7 @@ bool CThreadSyncObject::Wait(u32 dwTimeout) {
 #endif
 }
 
-
 //
-
 
 CThreadEvent::CThreadEvent(bool bManualReset) {
 #ifdef OS_WIN
@@ -389,7 +366,6 @@ CThreadEvent::CThreadEvent(bool bManualReset) {
 }
 
 //
-
 
 //---------------------------------------------------------
 
@@ -444,7 +420,6 @@ bool CThreadEvent::Wait(u32 dwTimeout) {
 // http://www-128.ibm.com/developerworks/eserver/library/es-win32linux-sem.html
 //
 
-
 CThreadSemaphore::CThreadSemaphore(long initialValue, long maxValue) {
   if (maxValue) {
     AssertMsg(maxValue > 0, "Invalid max value for semaphore");
@@ -469,9 +444,7 @@ bool CThreadSemaphore::Release(long releaseCount, long *pPreviousCount) {
   return (ReleaseSemaphore(m_hSyncObject, releaseCount, pPreviousCount) != 0);
 }
 
-
 //
-
 
 _Acquires_lock_(this->m_hSyncObject) CThreadFullMutex::CThreadFullMutex(
     bool bEstablishInitialOwnership, const ch *pszName) {
@@ -492,9 +465,7 @@ _Releases_lock_(this->m_hSyncObject) bool CThreadFullMutex::Release() {
 
 #endif
 
-
 //
-
 
 CThreadLocalBase::CThreadLocalBase() {
 #ifdef OS_WIN
@@ -544,10 +515,6 @@ void CThreadLocalBase::Set(void *value) {
     AssertMsg(0, "Bad thread local");
 #endif
 }
-
-
-
-
 
 #ifdef OS_WIN
 #define TO_INTERLOCK_PARAM(p) (p)
@@ -817,8 +784,6 @@ bool ThreadInterlockedAssignIf(long volatile *pDest, long value,
 
 #endif
 
-
-
 #if defined(OS_WIN) && defined(THREAD_PROFILER)
 void ThreadNotifySyncNoop(void *p) {}
 
@@ -837,11 +802,9 @@ MAP_THREAD_PROFILER_CALL(ThreadNotifySyncReleasing,
 
 #endif
 
-
 //
 // CThreadMutex
 //
-
 
 #ifndef OS_POSIX
 CThreadMutex::CThreadMutex() {
@@ -896,11 +859,9 @@ bool CThreadMutex::TryLock() {
 #endif
 }
 
-
 //
 // CThreadFastMutex
 //
-
 
 #ifndef OS_POSIX
 void CThreadFastMutex::Lock(const u32 threadId, u32 nSpinSleepTime) volatile {
@@ -955,11 +916,9 @@ void CThreadFastMutex::Lock(const u32 threadId, u32 nSpinSleepTime) volatile {
 }
 #endif  // !linux
 
-
 //
 // CThreadRWLock
 //
-
 
 void CThreadRWLock::WaitForRead() {
   m_nPendingReaders++;
@@ -998,11 +957,9 @@ void CThreadRWLock::UnlockWrite() {
   m_mutex.Unlock();
 }
 
-
 //
 // CThreadSpinRWLock
 //
-
 
 void CThreadSpinRWLock::SpinLockForWrite(const u32 threadId) {
   i32 i;
@@ -1128,11 +1085,9 @@ void CThreadSpinRWLock::UnlockWrite() {
   --m_nWriters;
 }
 
-
 //
 // CThread
 //
-
 
 CThreadLocalPtr<CThread> g_pCurThread;
 
@@ -1526,7 +1481,6 @@ u32 __stdcall CThread::ThreadProc(LPVOID pv) {
 
   return pInit->pThread->m_result;
 }
-
 
 //
 

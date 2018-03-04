@@ -1,21 +1,41 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
+#include "tier0/include/platform.h"
 
-#ifdef OS_WIN
-#include <intrin.h>
 #include <array>
-#elif defined(OS_POSIX)
-#include <cstdio>
-#endif
 
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/fasttimer.h"
 
-static inline bool cpuid(i32 function_id, i32& out_eax, i32& out_ebx,
-                         i32& out_ecx, i32& out_edx) {
-#ifdef OS_POSIX
-  return false;
+#ifdef COMPILER_MSVC
+#include <intrin.h>
+#endif
+
+namespace {
+inline bool cpuid(i32 function_id, i32& out_eax, i32& out_ebx, i32& out_ecx,
+                  i32& out_edx) {
+#if defined(COMPILER_CLANG) || defined(COMPILER_GCC)
+#ifdef ARCH_CPU_X86_64
+  __asm__(
+      "movq\t%%rbx, %%rsi\n\t"
+      "cpuid\n\t"
+      "xchgq\t%%rbx, %%rsi\n\t"
+      : "=a"(out_eax), "=S"(out_ebx), "=c"(out_ecx), "=d"(out_edx)
+      : "a"(function_id));
+  return true;
+#elif defined(ARCH_CPU_X86)
+  __asm__(
+      "movl\t%%ebx, %%esi\n\t"
+      "cpuid\n\t"
+      "xchgl\t%%ebx, %%esi\n\t"
+      : "=a"(out_eax), "=S"(out_ebx), "=c"(out_ecx), "=d"(out_edx)
+      : "a"(function_id));
+  return true;
 #else
+#error Please, define cpuid for your platform in tier0/cpu.cc
+  return false;
+#endif
+#elif defined(COMPILER_MSVC)
   std::array<i32, 4> cpui;
   __cpuid(cpui.data(), function_id);
 
@@ -28,196 +48,162 @@ static inline bool cpuid(i32 function_id, i32& out_eax, i32& out_ebx,
 #endif
 }
 
-bool CheckMMXTechnology() {
-#ifdef OS_POSIX
-  return true;
-#else
+bool HasMmx() {
   i32 eax, ebx, edx, unused;
   if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
   return (edx & 0x800000) != 0;
-#endif
 }
 
-bool CheckSSETechnology() {
-#ifdef OS_POSIX
-  return true;
-#else
+bool HasSse() {
   i32 eax, ebx, edx, unused;
-  if (!cpuid(1, eax, ebx, unused, edx)) {
-    return false;
-  }
+  if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
-  return (edx & 0x2000000L) != 0;
-#endif
+  return (edx & 0x2000000) != 0;
 }
 
-bool CheckSSE2Technology() {
-#ifdef OS_POSIX
-  return false;
-#else
+bool HasSse2() {
   i32 eax, ebx, edx, unused;
   if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
   return (edx & 0x04000000) != 0;
-#endif
 }
 
-bool Check3DNowTechnology() {
-#ifdef OS_POSIX
-  return false;
-#else
+bool Has3dNow() {
   i32 eax, unused;
   if (!cpuid(0x80000000, eax, unused, unused, unused)) return false;  //-V112
 
-  if (eax > 0x80000000L) {  //-V112
+  if (eax > 0x80000000) {  //-V112
     if (!cpuid(0x80000001, unused, unused, unused, eax)) return false;
 
     return (eax & 1 << 31) != 0;
   }
+
   return false;
-#endif
 }
 
-bool CheckCMOVTechnology() {
-#ifdef OS_POSIX
-  return false;
-#else
+bool HasCmov() {
   i32 eax, ebx, edx, unused;
   if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
   return (edx & (1 << 15)) != 0;
-#endif
 }
 
-bool CheckFCMOVTechnology() {
-#ifdef OS_POSIX
-  return false;
-#else
+bool HasFcmov() {
   i32 eax, ebx, edx, unused;
   if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
   return (edx & (1 << 16)) != 0;
-#endif
 }
 
-bool CheckRDTSCTechnology() {
-#ifdef OS_POSIX
-  return true;
-#else
+bool HasRdtsc() {
   i32 eax, ebx, edx, unused;
   if (!cpuid(1, eax, ebx, unused, edx)) return false;
 
   return (edx & 0x10) != 0;
-#endif
 }
 
 // Return the Processor's vendor identification string, or "Generic_x86" if it
 // doesn't exist on this CPU
-const ch* GetProcessorVendorId() {
-#ifdef OS_POSIX
-  return "Generic_x86";
+ch* GetCpuVendorId() {
+  i32 unused, registers[3];
+  static ch vendor_id[0x20];
+
+  memset(vendor_id, 0, sizeof(vendor_id));
+  if (!cpuid(0, unused, registers[0], registers[2], registers[1])) {
+#ifdef ARCH_CPU_X86
+    strcpy(vendor_id, "Generic_x86");
+#elif defined(ARCH_CPU_X86_64)
+    strcpy(vendor_id, "Generic_x86_64");
 #else
-  i32 unused, VendorIDRegisters[3];
-
-  static ch VendorID[0x20];
-
-  memset(VendorID, 0, sizeof(VendorID));
-  if (!cpuid(0, unused, VendorIDRegisters[0], VendorIDRegisters[2],
-             VendorIDRegisters[1])) {
-    strcpy(VendorID, "Generic_x86");
+#error Please, define yout cpu architecture in tier0/cpu.cc
+#endif
   } else {
-    memcpy(VendorID + 0, &(VendorIDRegisters[0]), sizeof(VendorIDRegisters[0]));
-    memcpy(VendorID + 4, &(VendorIDRegisters[1]),
-           sizeof(VendorIDRegisters[1]));  //-V112
-    memcpy(VendorID + 8, &(VendorIDRegisters[2]), sizeof(VendorIDRegisters[2]));
+    memcpy(vendor_id + 0, &(registers[0]), sizeof(registers[0]));
+    memcpy(vendor_id + sizeof(registers[0]), &(registers[1]),
+           sizeof(registers[1]));  //-V112
+    memcpy(vendor_id + sizeof(registers[0]) + sizeof(registers[1]),
+           &(registers[2]), sizeof(registers[2]));
   }
 
-  return VendorID;
-#endif
+  return vendor_id;
 }
 
 // Returns non-zero if Hyper-Threading Technology is supported on the processors
-// and zero if not.  This does not mean that Hyper-Threading Technology is
+// and zero if not. This does not mean that Hyper-Threading Technology is
 // necessarily enabled.
-static bool HTSupported() {
-#if defined(OS_POSIX)
-  // not entirely sure about the semantic of HT support, it being an intel name
-  // are we asking about HW threads or HT?
-  return true;
-#else
-  const u32 HT_BIT = 0x10000000;  // EDX[28] - Bit 28 set indicates
-                                  // Hyper-Threading Technology is
-                                  // supported in hardware.
-  const u32 FAMILY_ID =
-      0x0f00;  // EAX[11:8] - Bit 11 thru 8 contains family processor id
-  const u32 EXT_FAMILY_ID = 0x0f00000;  // EAX[23:20] - Bit 23 thru 20
-                                        // contains extended family
-                                        // processor id
-  const u32 PENTIUM4_ID = 0x0f00;       // Pentium 4 family processor id
+bool HasHt() {
+  // EDX[28] - Bit 28 set indicates Hyper-Threading Technology is supported in
+  // hardware.
+  constexpr u32 kHtBit{0x10000000};
+  // EAX[11:8] - Bit 11 thru 8 contains family processor id.
+  constexpr u32 kFamliyId{0x0F00};
+  // EAX[23:20] - Bit 23 thru 20 contains extended family processor id.
+  constexpr u32 kExtFamilyId{0x0f00000};
+  // Pentium 4 family processor id.
+  constexpr u32 kPentium4Id{0x0F00};
 
   i32 unused, reg_eax = 0, reg_edx = 0, vendor_id[3] = {0, 0, 0};
 
-  // verify cpuid instruction is supported
+  // verify cpuid instruction is supported.
   if (!cpuid(0, unused, vendor_id[0], vendor_id[2], vendor_id[1]) ||
       !cpuid(1, reg_eax, unused, unused, reg_edx))
     return false;
 
-  //  Check to see if this is a Pentium 4 or later processor
-  if (((reg_eax & FAMILY_ID) == PENTIUM4_ID) || (reg_eax & EXT_FAMILY_ID))
+  // Check to see if this is a Pentium 4 or later processor.
+  if (((reg_eax & kFamliyId) == kPentium4Id) || (reg_eax & kExtFamilyId))
     if (vendor_id[0] == 'uneG' && vendor_id[1] == 'Ieni' &&
         vendor_id[2] == 'letn')
-      return (reg_edx & HT_BIT) !=
-             0;  // Genuine Intel Processor with Hyper-Threading Technology
+      // Genuine Intel Processor with Hyper-Threading Technology.
+      return (reg_edx & kHtBit) != 0;
 
-  return false;            // This is not a genuine Intel processor.
-#endif
+  // This is not a genuine Intel processor.
+  return false;
 }
 
 // Returns the number of logical processors per physical processors.
-static u8 LogicalProcessorsPerPackage() {
-  // EBX[23:16] indicate number of logical processors per package
-  const u32 NUM_LOGICAL_BITS = 0x00FF0000;
+u8 LogicalProcessorsPerPackage() {
+  // EBX[23:16] indicate number of logical processors per package.
+  constexpr u32 kNumLogicalBits{0x00FF0000};
 
   i32 unused, reg_ebx = 0;
 
-  if (!HTSupported()) return 1;
-
+  if (!HasHt()) return 1;
   if (!cpuid(1, unused, reg_ebx, unused, unused)) return 1;
 
-  return (u8)((reg_ebx & NUM_LOGICAL_BITS) >> 16);
+  return (u8)((reg_ebx & kNumLogicalBits) >> 16);
 }
 
 // Measure the processor clock speed by sampling the cycle count, waiting
 // for some fraction of a second, then measuring the elapsed number of cycles.
-static i64 CalculateClockSpeed() {
+i64 CalculateClockSpeed() {
 #ifdef OS_WIN
-  LARGE_INTEGER startCount, curCount;
-  CCycleCount start, end;
+  LARGE_INTEGER start_count, end_count;
+  CCycleCount start_cycle, end_cycle;
 
-  // Take 1/32 of a second for the measurement.
-  u64 waitTime = Plat_PerformanceFrequency();
   i32 scale = 5;
-  waitTime >>= scale;
+  // Take 1/32 of a second for the measurement.
+  u64 waitTime = Plat_PerformanceFrequency() >> scale;
 
-  QueryPerformanceCounter(&startCount);
-  start.Sample();
+  QueryPerformanceCounter(&start_count);
+  start_cycle.Sample();
   do {
-    QueryPerformanceCounter(&curCount);
-  } while (curCount.QuadPart - startCount.QuadPart <
+    QueryPerformanceCounter(&end_count);
+  } while (end_count.QuadPart - start_count.QuadPart <
            static_cast<i64>(waitTime));
-  end.Sample();
+  end_cycle.Sample();
 
-  return (end.m_Int64 - start.m_Int64) << scale;
+  return (end_cycle.m_Int64 - start_cycle.m_Int64) << scale;
 #elif defined(OS_POSIX)
   u64 CalculateCPUFreq();  // from cpu_linux.cc
   i64 freq = (i64)CalculateCPUFreq();
-  if (freq == 0) { // couldn't calculate clock speed
+  if (freq == 0) {  // couldn't calculate clock speed
     Error("Unable to determine CPU Frequency\n");
   }
   return freq;
 #endif
 }
+}  // namespace
 
 const CPUInformation& GetCPUInformation() {
   static CPUInformation pi;
@@ -226,7 +212,7 @@ const CPUInformation& GetCPUInformation() {
   if (pi.m_Size == sizeof(pi)) return pi;
 
   // Redundant, but just in case the user somehow messes with the size.
-  memset(&pi, 0x0, sizeof(pi));
+  memset(&pi, 0x00, sizeof(pi));
 
   // Fill out the structure, and return it:
   pi.m_Size = sizeof(pi);
@@ -254,20 +240,21 @@ const CPUInformation& GetCPUInformation() {
   }
 #elif defined(OS_POSIX)
   // TODO: poll /dev/cpuinfo when we have some benefits from multithreading
+  // Assume at least 2 logical processors.
   pi.m_nPhysicalProcessors = 1;
-  pi.m_nLogicalProcessors = 1;
+  pi.m_nLogicalProcessors = 2;
 #endif
 
   // Determine Processor Features:
-  pi.m_bRDTSC = CheckRDTSCTechnology();
-  pi.m_bCMOV = CheckCMOVTechnology();
-  pi.m_bFCMOV = CheckFCMOVTechnology();
-  pi.m_bMMX = CheckMMXTechnology();
-  pi.m_bSSE = CheckSSETechnology();
-  pi.m_bSSE2 = CheckSSE2Technology();
-  pi.m_b3DNow = Check3DNowTechnology();
-  pi.m_szProcessorID = (ch*)GetProcessorVendorId();
-  pi.m_bHT = HTSupported();
+  pi.m_bRDTSC = HasRdtsc();
+  pi.m_bCMOV = HasCmov();
+  pi.m_bFCMOV = HasFcmov();
+  pi.m_bMMX = HasMmx();
+  pi.m_bSSE = HasSse();
+  pi.m_bSSE2 = HasSse2();
+  pi.m_b3DNow = Has3dNow();
+  pi.m_szProcessorID = GetCpuVendorId();
+  pi.m_bHT = HasHt();
 
   return pi;
 }

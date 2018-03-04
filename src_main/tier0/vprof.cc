@@ -2,8 +2,6 @@
 //
 // Purpose: Real-Time Hierarchical Profiling
 
-#include "pch_tier0.h"
-
 #include "tier0/include/vprof.h"
 
 #include <algorithm>
@@ -32,8 +30,6 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 using namespace std;
 
 #ifdef VPROF_ENABLED
-
-
 
 CVProfile g_VProfCurrentProfile;
 
@@ -198,8 +194,6 @@ void CVProfNode::Validate(CValidator &validator, ch *pchName) {
   validator.Pop();
 }
 #endif  // DBGFLAG_VALIDATE
-
-
 
 struct TimeSums_t {
   const ch *pszProfileScope;
@@ -473,7 +467,8 @@ void CVProfile::OutputReport(i32 type, const ch *pszStartNode,
 
       f64 timeAccountedFor =
           100.0 - (m_Root.GetTotalTimeLessChildren() / m_Root.GetTotalTime());
-      Msg("%.0f pct of time accounted for\n", std::min(100.0, timeAccountedFor));
+      Msg("%.0f pct of time accounted for\n",
+          std::min(100.0, timeAccountedFor));
       Msg("\n");
     }
 

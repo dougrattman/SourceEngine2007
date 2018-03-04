@@ -3,14 +3,11 @@
 // Purpose: Attaches a console for I/O to a Win32 GUI application in a
 // reasonably smart fashion
 
-#include "pch_tier0.h"
+#include "tier0/include/dbg.h"
 
-#ifdef OS_WIN
 #include <fcntl.h>
 #include <io.h>
-#include <iostream>
-#endif
-
+#include "base/include/windows/windows_light.h"
 #include "tier0/include/dbg.h"
 
 // Attach a console to a Win32 GUI process and setup stdin, stdout & stderr

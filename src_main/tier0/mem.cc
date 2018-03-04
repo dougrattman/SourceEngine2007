@@ -2,8 +2,6 @@
 //
 // Purpose: Memory allocation!
 
-#include "pch_tier0.h"
-
 #include "tier0/include/mem.h"
 
 #include <malloc.h>

@@ -1,7 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "pch_tier0.h"
-
 #include "tier0/include/minidump.h"
 
 #ifdef OS_WIN
@@ -9,6 +7,7 @@
 #include <ctime>
 
 #include "base/include/windows/unique_module_ptr.h"
+#include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 #include "tier0/include/valve_off.h"
 
