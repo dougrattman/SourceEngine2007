@@ -564,7 +564,7 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
 // This crash redirects the handlers for these two events so that crash dumps
 // are created.
 //
-// The ErrorHandlerRegistrar object must be in memoverride.cpp so that it will
+// The ErrorHandlerRegistrar object must be in memoverride.cc so that it will
 // be placed in every DLL and EXE. This is required because each DLL and EXE
 // gets its own copy of the C run-time and these overrides are set on a per-CRT
 // basis.

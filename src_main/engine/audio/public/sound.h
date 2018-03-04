@@ -108,7 +108,7 @@ void S_PrefetchSound(char const *name, bool bPlayOnce);
 void S_MarkUISound(CSfxTable *pSfx);
 void S_ReloadFilesInList(IFileList *pFilesToReload);
 
-vec_t S_GetNominalClipDist();
+f32 S_GetNominalClipDist();
 
 extern bool TestSoundChar(const char *pch, char c);
 extern char *PSkipSoundChars(const char *pch);
@@ -126,7 +126,7 @@ int S_GetCurrentStaticSounds(SoundInfo_t *pResult, int nSizeResult,
 
 //-----------------------------------------------------------------------------
 
-float S_GetGainFromSoundLevel(soundlevel_t soundlevel, vec_t dist);
+float S_GetGainFromSoundLevel(soundlevel_t soundlevel, f32 dist);
 
 struct musicsave_t {
   DECLARE_SIMPLE_DATADESC();

@@ -318,7 +318,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\public\filesystem_init.cpp" />
-    <ClCompile Include="..\tier0\include\memoverride.cpp" />
+    <ClCompile Include="..\tier0\include\memoverride.cc" />
     <ClCompile Include="file_system_access_logger.cc" />
     <ClCompile Include="launcher_main_windows.cc" />
     <ClCompile Include="reslistgenerator.cpp" />

@@ -1,10 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+
 // File extracted from MFC due to symbol conflicts
 
 // This is a part of the Microsoft Foundation Classes C++ library.

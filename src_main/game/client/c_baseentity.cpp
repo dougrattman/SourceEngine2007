@@ -3440,7 +3440,7 @@ pMoveParent->GetAbsAngularVelocity();
 // Prevent these for now until hierarchy is properly networked
 const Vector &C_BaseEntity::GetLocalOrigin(void) const { return m_vecOrigin; }
 
-vec_t C_BaseEntity::GetLocalOriginDim(int iDim) const {
+f32 C_BaseEntity::GetLocalOriginDim(int iDim) const {
   return m_vecOrigin[iDim];
 }
 
@@ -3452,7 +3452,7 @@ void C_BaseEntity::SetLocalOrigin(const Vector &origin) {
   }
 }
 
-void C_BaseEntity::SetLocalOriginDim(int iDim, vec_t flValue) {
+void C_BaseEntity::SetLocalOriginDim(int iDim, f32 flValue) {
   if (m_vecOrigin[iDim] != flValue) {
     InvalidatePhysicsRecursive(POSITION_CHANGED);
     m_vecOrigin[iDim] = flValue;
@@ -3462,7 +3462,7 @@ void C_BaseEntity::SetLocalOriginDim(int iDim, vec_t flValue) {
 // Prevent these for now until hierarchy is properly networked
 const QAngle &C_BaseEntity::GetLocalAngles(void) const { return m_angRotation; }
 
-vec_t C_BaseEntity::GetLocalAnglesDim(int iDim) const {
+f32 C_BaseEntity::GetLocalAnglesDim(int iDim) const {
   return m_angRotation[iDim];
 }
 
@@ -3486,7 +3486,7 @@ void C_BaseEntity::SetLocalAngles(const QAngle &angles) {
   }
 }
 
-void C_BaseEntity::SetLocalAnglesDim(int iDim, vec_t flValue) {
+void C_BaseEntity::SetLocalAnglesDim(int iDim, f32 flValue) {
   flValue = AngleNormalize(flValue);
   if (m_angRotation[iDim] != flValue) {
     // This will cause the velocities of all children to need recomputation

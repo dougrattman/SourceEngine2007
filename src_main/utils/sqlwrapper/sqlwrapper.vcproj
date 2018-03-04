@@ -163,7 +163,7 @@ copy &quot;$(TargetDir)&quot;sqlwrapper.lib ..\..\..\src\lib\common\sqlwrapper.l
 				RelativePath="..\..\tier1\interface.cpp">
 			</File>
 			<File
-				RelativePath="..\..\tier0\include\memoverride.cpp">
+				RelativePath="..\..\tier0\include\memoverride.cc">
 			</File>
 			<File
 				RelativePath=".\sqlhelpers.cpp">

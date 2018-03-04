@@ -21,7 +21,7 @@
     <ClCompile Include="clipviewpanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sceneviewer.cpp">

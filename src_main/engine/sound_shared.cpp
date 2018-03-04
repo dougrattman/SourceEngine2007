@@ -38,7 +38,7 @@ ConVar snd_gain_min("snd_gain_min", "0.01", FCVAR_CHEAT);
                               (dist_mult * snd_refdist.GetFloat())))  \
                 : 0)
 
-float SND_GetGainFromMult(float gain, float dist_mult, vec_t dist) {
+float SND_GetGainFromMult(float gain, float dist_mult, f32 dist) {
   // test additional attenuation
   // at 30c, 14.7psi, 60% humidity, 1000Hz == 0.22dB / 100ft.
   // dense foliage is roughly 2dB / 100ft
@@ -98,7 +98,7 @@ float SND_GetGainFromMult(float gain, float dist_mult, vec_t dist) {
   return gain;
 }
 
-float S_GetGainFromSoundLevel(soundlevel_t soundlevel, vec_t dist) {
+float S_GetGainFromSoundLevel(soundlevel_t soundlevel, f32 dist) {
   float gain = snd_gain.GetFloat();
 
   float dist_mult = SNDLVL_TO_DIST_MULT(soundlevel);

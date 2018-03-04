@@ -300,7 +300,7 @@ void 	SetKeyValue (entity_t *ent, char *key, char *value);
 char 	*ValueForKey (entity_t *ent, char *key);
 // will return "" if not present
 
-vec_t	FloatForKey (entity_t *ent, char *key);
+f32	FloatForKey (entity_t *ent, char *key);
 void 	GetVectorForKey (entity_t *ent, char *key, vec3_t vec);
 
 epair_t *ParseEpair (void);

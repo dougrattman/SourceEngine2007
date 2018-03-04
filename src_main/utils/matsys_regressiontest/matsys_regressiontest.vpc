@@ -27,7 +27,7 @@ $Project "Matsys_regressiontest"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		$File	"matsys_regressiontest.cpp"
 	}
 

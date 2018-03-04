@@ -23,7 +23,7 @@ int PortalVisibleSides(portal_t *p) {
 
 void OutputWinding(winding_t *w, FileHandle_t glview) {
   static int level = 128;
-  vec_t light;
+  f32 light;
   int i;
 
   CmdLib_FPrintf(glview, "%i\n", w->numpoints);

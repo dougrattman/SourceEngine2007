@@ -24,39 +24,39 @@ struct winding_t {
 #endif
 
 winding_t *AllocWinding(int points);
-vec_t WindingArea(winding_t *w);
+f32 WindingArea(winding_t *w);
 void WindingCenter(winding_t *w, Vector &center);
-vec_t WindingAreaAndBalancePoint(winding_t *w, Vector &center);
-void ClipWindingEpsilon(winding_t *in, const Vector &normal, vec_t dist,
-                        vec_t epsilon, winding_t **front, winding_t **back);
+f32 WindingAreaAndBalancePoint(winding_t *w, Vector &center);
+void ClipWindingEpsilon(winding_t *in, const Vector &normal, f32 dist,
+                        f32 epsilon, winding_t **front, winding_t **back);
 
 // translates everything by offset, then does the clip, then translates back (to
 // keep precision)
-void ClipWindingEpsilon_Offset(winding_t *in, const Vector &normal, vec_t dist,
-                               vec_t epsilon, winding_t **front,
+void ClipWindingEpsilon_Offset(winding_t *in, const Vector &normal, f32 dist,
+                               f32 epsilon, winding_t **front,
                                winding_t **back, const Vector &offset);
 
-void ClassifyWindingEpsilon(winding_t *in, const Vector &normal, vec_t dist,
-                            vec_t epsilon, winding_t **front, winding_t **back,
+void ClassifyWindingEpsilon(winding_t *in, const Vector &normal, f32 dist,
+                            f32 epsilon, winding_t **front, winding_t **back,
                             winding_t **on);
 void ClassifyWindingEpsilon_Offset(winding_t *in, const Vector &normal,
-                                   vec_t dist, vec_t epsilon, winding_t **front,
+                                   f32 dist, f32 epsilon, winding_t **front,
                                    winding_t **back, winding_t **on,
                                    const Vector &offset);
 
-winding_t *ChopWinding(winding_t *in, const Vector &normal, vec_t dist);
+winding_t *ChopWinding(winding_t *in, const Vector &normal, f32 dist);
 winding_t *CopyWinding(winding_t *w);
 winding_t *ReverseWinding(winding_t *w);
-winding_t *BaseWindingForPlane(const Vector &normal, vec_t dist);
+winding_t *BaseWindingForPlane(const Vector &normal, f32 dist);
 void CheckWinding(winding_t *w);
-void WindingPlane(winding_t *w, Vector &normal, vec_t *dist);
+void WindingPlane(winding_t *w, Vector &normal, f32 *dist);
 void RemoveColinearPoints(winding_t *w);
-int WindingOnPlaneSide(winding_t *w, const Vector &normal, vec_t dist);
+int WindingOnPlaneSide(winding_t *w, const Vector &normal, f32 dist);
 void FreeWinding(winding_t *w);
 void WindingBounds(winding_t *w, Vector &mins, Vector &maxs);
 
-void ChopWindingInPlace(winding_t **w, const Vector &normal, vec_t dist,
-                        vec_t epsilon);
+void ChopWindingInPlace(winding_t **w, const Vector &normal, f32 dist,
+                        f32 epsilon);
 // frees the original if clipped
 
 bool PointInWinding(Vector const &pt, winding_t *pWinding);

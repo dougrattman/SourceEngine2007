@@ -724,7 +724,7 @@ static bool LightForString(char const *pLight, Vector &intensity) {
 
   VectorFill(intensity, 0);
 
-  // scanf into doubles, then assign, so it is vec_t size independent
+  // scanf into doubles, then assign, so it is f32 size independent
   r = g = b = scaler = 0;
   double r_hdr, g_hdr, b_hdr, scaler_hdr;
   int argCnt = sscanf(pLight, "%lf %lf %lf %lf %lf %lf %lf %lf", &r, &g, &b,

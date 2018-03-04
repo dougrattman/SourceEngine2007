@@ -110,7 +110,7 @@ extern CUtlVector< char >	g_KeyValueText;
 int		KeyValueTextSize( CUtlVector< char > *pKeyValue );
 const char *KeyValueText( CUtlVector< char > *pKeyValue );
 
-extern vec_t Q_rint (vec_t in);
+extern f32 Q_rint (f32 in);
 
 extern void WriteModelFiles(void);
 void *kalloc( int num, int size );

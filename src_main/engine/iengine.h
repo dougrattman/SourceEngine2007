@@ -3,6 +3,7 @@
 #ifndef IENGINE_H
 #define IENGINE_H
 
+#include "base/include/base_types.h"
 #include "tier1/interface.h"
 
 abstract_class IEngine {
@@ -20,7 +21,7 @@ abstract_class IEngine {
 
   virtual ~IEngine() {}
 
-  virtual bool Load(bool dedicated, const char *rootdir) = 0;
+  virtual bool Load(bool dedicated, const ch *rootdir) = 0;
   virtual void Unload() = 0;
 
   virtual void SetNextState(EngineState_t iNextState) = 0;
@@ -28,11 +29,11 @@ abstract_class IEngine {
 
   virtual void Frame() = 0;
 
-  virtual float GetFrameTime() const = 0;
-  virtual float GetCurTime() const = 0;
+  virtual f32 GetFrameTime() const = 0;
+  virtual f32 GetCurTime() const = 0;
 
-  virtual int GetQuitting() const = 0;
-  virtual void SetQuitting(int quittype) = 0;
+  virtual i32 GetQuitting() const = 0;
+  virtual void SetQuitting(i32 quittype) = 0;
 };
 
 extern IEngine *eng;

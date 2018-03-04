@@ -30,7 +30,7 @@ class CFrameSnapshotEntry {
 // HLTV needs some more data per entity
 class CHLTVEntityData {
  public:
-  vec_t origin[3];  // entity position
+  f32 origin[3];  // entity position
   unsigned int
       m_nNodeCluster;  // if (1<<31) is set it's a node, otherwise a cluster
 };

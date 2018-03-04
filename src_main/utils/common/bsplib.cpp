@@ -2852,12 +2852,12 @@ const char *ValueForKey(entity_t *ent, const char *key) {
   return "";
 }
 
-vec_t FloatForKey(entity_t *ent, const char *key) {
+f32 FloatForKey(entity_t *ent, const char *key) {
   const char *k = ValueForKey(ent, key);
   return atof(k);
 }
 
-vec_t FloatForKeyWithDefault(entity_t *ent, const char *key,
+f32 FloatForKeyWithDefault(entity_t *ent, const char *key,
                              float default_value) {
   for (epair_t *ep = ent->epairs; ep; ep = ep->next)
     if (!Q_stricmp(ep->key, key)) return atof(ep->value);
@@ -2871,7 +2871,7 @@ int IntForKey(entity_t *ent, const char *key) {
 
 void GetVectorForKey(entity_t *ent, const char *key, Vector &vec) {
   const char *k = ValueForKey(ent, key);
-  // scanf into doubles, then assign, so it is vec_t size independent
+  // scanf into doubles, then assign, so it is f32 size independent
   double v1, v2, v3;
   v1 = v2 = v3 = 0;
   sscanf(k, "%lf %lf %lf", &v1, &v2, &v3);
@@ -2884,7 +2884,7 @@ void GetVector2DForKey(entity_t *ent, const char *key, Vector2D &vec) {
   double v1, v2;
 
   const char *k = ValueForKey(ent, key);
-  // scanf into doubles, then assign, so it is vec_t size independent
+  // scanf into doubles, then assign, so it is f32 size independent
   v1 = v2 = 0;
   sscanf(k, "%lf %lf", &v1, &v2);
   vec[0] = v1;
@@ -2895,7 +2895,7 @@ void GetAnglesForKey(entity_t *ent, const char *key, QAngle &angle) {
   double v1, v2, v3;
 
   const char *k = ValueForKey(ent, key);
-  // scanf into doubles, then assign, so it is vec_t size independent
+  // scanf into doubles, then assign, so it is f32 size independent
   v1 = v2 = v3 = 0;
   sscanf(k, "%lf %lf %lf", &v1, &v2, &v3);
   angle[0] = v1;
@@ -2969,7 +2969,7 @@ Fills in s->texmins[] and s->texsize[]
 */
 void CalcFaceExtents(dface_t *s, int lightmapTextureMinsInLuxels[2],
                      int lightmapTextureSizeInLuxels[2]) {
-  vec_t mins[2], maxs[2], val = 0;
+  f32 mins[2], maxs[2], val = 0;
   int e = 0;
   dvertex_t *v = NULL;
   texinfo_t *tex = NULL;

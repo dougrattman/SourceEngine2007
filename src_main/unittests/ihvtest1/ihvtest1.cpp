@@ -800,7 +800,7 @@ matrix3x4_t* CIHVTestApp::SetUpBones( studiohdr_t *pStudioHdr, const matrix3x4_t
 			{
 				for (k = 0; k < 4; k++)
 				{
-					pBoneToWorld[i][j][k] = VEC_T_NAN;
+					pBoneToWorld[i][j][k] = FLOAT32_NAN;
 				}
 			}
 			continue;

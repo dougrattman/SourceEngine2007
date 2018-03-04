@@ -23,7 +23,7 @@ $Project "Syncfrommirror"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		
 		$File	"Redir.cpp"
 		$File	"Redirect.cpp"

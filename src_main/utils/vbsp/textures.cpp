@@ -278,7 +278,7 @@ Vector baseaxis[18] = {
 
 void TextureAxisFromPlane(plane_t *pln, Vector &xv, Vector &yv) {
   int bestaxis;
-  vec_t dot, best;
+  f32 dot, best;
   int i;
 
   best = 0;
@@ -508,8 +508,8 @@ int TexinfoForBrushTexture(plane_t *plane, brush_texture_t *bt,
                            const Vector &origin) {
   Vector vecs[2];
   int sv, tv;
-  vec_t ang, sinv, cosv;
-  vec_t ns, nt;
+  f32 ang, sinv, cosv;
+  f32 ns, nt;
   texinfo_t tx;
   int i, j;
 

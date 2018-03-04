@@ -147,7 +147,7 @@ if exist &quot;$(TargetDir)&quot;vsMaster.pdb copy &quot;$(TargetDir)&quot;vsMas
 				RelativePath=".\MayaVGui.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\tier0\include\memoverride.cpp">
+				RelativePath="..\..\..\..\tier0\include\memoverride.cc">
 			</File>
 			<File
 				RelativePath="..\..\..\..\public\movieobjects\movieobjects.cpp">

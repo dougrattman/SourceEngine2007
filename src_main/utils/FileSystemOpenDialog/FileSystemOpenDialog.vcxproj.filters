@@ -18,13 +18,13 @@
     <ClCompile Include="FileSystemOpenDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tier0\include\afxmem_override.cpp">
+    <ClCompile Include="..\..\tier0\include\afxmem_override.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -239,10 +239,9 @@ class CModAppSystemGroup : public CAppSystemGroup {
   using BaseClass = CAppSystemGroup;
 
  public:
-  // constructor
   CModAppSystemGroup(bool bServerOnly,
                      CAppSystemGroup *pParentAppSystem = nullptr)
-      : BaseClass(pParentAppSystem), m_bServerOnly(bServerOnly) {}
+      : BaseClass(pParentAppSystem), is_server_only_(bServerOnly) {}
 
   CreateInterfaceFn GetFactory() { return CAppSystemGroup::GetFactory(); }
 
@@ -341,7 +340,7 @@ class CModAppSystemGroup : public CAppSystemGroup {
   }
 
  private:
-  bool IsServerOnly() const { return m_bServerOnly; }
+  bool IsServerOnly() const { return is_server_only_; }
 
   bool ModuleAlreadyInList(CUtlVector<AppSystemInfo_t> &list,
                            const char *moduleName, const char *interfaceName) {
@@ -382,7 +381,8 @@ class CModAppSystemGroup : public CAppSystemGroup {
 
     return true;
   }
-  bool m_bServerOnly;
+
+  const bool is_server_only_;
 };
 
 #ifndef SWDS
@@ -475,7 +475,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     InitReturnVal_t nRetVal = BaseClass::Init();
     if (nRetVal != INIT_OK) return nRetVal;
 
-    m_bRunningSimulation = false;
+    is_running_simulation_ = false;
 
     // Initialize the FPU control word
 #if !defined(SWDS)
@@ -489,13 +489,13 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     VideoMode_Create();
 
     // Initialize the editor hwnd to render into
-    m_hEditorHWnd = nullptr;
+    editor_hwnd_ = nullptr;
 
     // One-time setup
     // FIXME: OnStartup + OnShutdown should be removed + moved into the launcher
     // or the launcher code should be merged into the engine into the code in
     // OnStartup/OnShutdown
-    if (!OnStartup(m_StartupInfo.m_pInstance, m_StartupInfo.m_pInitialMod)) {
+    if (!OnStartup(startup_info_.m_pInstance, startup_info_.m_pInitialMod)) {
       return HandleSetModeError();
     }
 
@@ -515,10 +515,10 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     host_parms.basedir = const_cast<char *>(info.m_pBaseDirectory);
 
     // Copy off all the startup info
-    m_StartupInfo = info;
+    startup_info_ = info;
 
     // Needs to be done prior to init material system config
-    TRACEINIT(COM_InitFilesystem(m_StartupInfo.m_pInitialMod),
+    TRACEINIT(COM_InitFilesystem(startup_info_.m_pInitialMod),
               COM_ShutdownFileSystem());
   }
 
@@ -547,8 +547,8 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     // Detach input from the previous editor window
     game->InputDetachFromGameWindow();
 
-    m_hEditorHWnd = hWnd;
-    videomode->SetGameWindow(m_hEditorHWnd);
+    editor_hwnd_ = hWnd;
+    videomode->SetGameWindow(editor_hwnd_);
   }
 
   // Posts a console command
@@ -616,7 +616,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
       }
 
       // Run engine frame + hammer frame
-      if (!InEditMode() || m_hEditorHWnd) {
+      if (!InEditMode() || editor_hwnd_) {
         VCRSyncToken("Frame");
 
         // Deactivate edit mode shaders
@@ -647,9 +647,9 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     int nRunResult = RUN_OK;
 
     // Happens every time we start up and shut down a mod
-    if (ModInit(m_StartupInfo.m_pInitialMod, m_StartupInfo.m_pInitialGame)) {
+    if (ModInit(startup_info_.m_pInitialMod, startup_info_.m_pInitialGame)) {
       CModAppSystemGroup modAppSystemGroup(
-          false, m_StartupInfo.m_pParentAppSystemGroup);
+          false, startup_info_.m_pParentAppSystemGroup);
 
       // Store off the app system factory...
       g_AppSystemFactory = modAppSystemGroup.GetFactory();
@@ -903,9 +903,9 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   }
 
  private:
-  void *m_hEditorHWnd;
-  bool m_bRunningSimulation;
-  StartupInfo_t m_StartupInfo;
+  void *editor_hwnd_;
+  bool is_running_simulation_;
+  StartupInfo_t startup_info_;
 };
 
 static CEngineAPI s_EngineAPI;

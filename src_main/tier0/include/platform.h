@@ -69,14 +69,7 @@
 #endif
 
 // decls for aligning data
-#ifdef OS_WIN
-#define DECL_ALIGN(x) __declspec(align(x))
-
-#elif OS_POSIX
-#define DECL_ALIGN(x) __attribute__((aligned(x)))
-#elif
-#define DECL_ALIGN(x) /* */
-#endif
+#define DECL_ALIGN(x) alignas(x)
 
 #define ALIGN8 DECL_ALIGN(8)
 #define ALIGN16 DECL_ALIGN(16)
@@ -93,7 +86,6 @@
 #endif
 
 #ifdef OS_WIN
-
 // Used for dll exporting and importing
 #define DLL_EXPORT extern "C" __declspec(dllexport)
 #define DLL_IMPORT extern "C" __declspec(dllimport)
@@ -105,7 +97,6 @@
 // Can't use extern "C" when DLL exporting a global
 #define DLL_GLOBAL_EXPORT extern __declspec(dllexport)
 #define DLL_GLOBAL_IMPORT extern __declspec(dllimport)
-
 #elif defined OS_POSIX
 // Used for dll exporting and importing
 #define DLL_EXPORT extern "C"
@@ -118,7 +109,6 @@
 // Can't use extern "C" when DLL exporting a global
 #define DLL_GLOBAL_EXPORT extern
 #define DLL_GLOBAL_IMPORT extern
-
 #else
 #error Please, add support of your platform to tier0/include/platform.h
 #endif

@@ -24,7 +24,7 @@ $Project "Mdlcheck"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		$File	"mdlcheck.cpp"
 		$File	"mdlcheck_util.cpp"
 		$File	"StdAfx.cpp"

@@ -897,8 +897,8 @@ CStudioHdr *C_BaseAnimating::OnNewModel() {
       m_Attachments[i].m_nLastFramecount = 0;
 #ifdef _DEBUG
       m_Attachments[i].m_AttachmentToWorld.Invalidate();
-      m_Attachments[i].m_angRotation.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
-      m_Attachments[i].m_vOriginVelocity.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
+      m_Attachments[i].m_angRotation.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+      m_Attachments[i].m_vOriginVelocity.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
 #endif
     }
   }
@@ -1618,7 +1618,7 @@ bool C_BaseAnimating::PutAttachment(int number,
   pAtt->m_AttachmentToWorld = attachmentToWorld;
 
 #ifdef _DEBUG
-  pAtt->m_angRotation.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
+  pAtt->m_angRotation.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
 #endif
 
   return true;

@@ -246,7 +246,7 @@ SOURCE=..\..\Public\interface.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\tier0\include\memoverride.cpp
+SOURCE=..\..\tier0\include\memoverride.cc
 # End Source File
 # Begin Source File
 

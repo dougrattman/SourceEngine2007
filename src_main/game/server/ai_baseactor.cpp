@@ -862,7 +862,15 @@ void CAI_BaseActor::UpdateHeadControl(const Vector &vHeadTarget,
             // Msg("bias %f %f %f\n", angBias.x, angBias.y, angBias.z );
 
             Vector tmp1, tmp2;
-            
+            
+
+
+
+
+
+
+
+
 
             VectorTransform( Vector( 0, 0, 0), chestToWorld, tmp1 );
             VectorTransform( Vector( 100, 0, 0), chestToWorld, tmp2 );

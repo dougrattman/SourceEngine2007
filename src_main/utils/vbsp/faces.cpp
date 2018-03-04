@@ -46,7 +46,7 @@ int c_tryedges;
 
 Vector edge_dir;
 Vector edge_start;
-vec_t edge_len;
+f32 edge_len;
 
 int num_edge_verts;
 int edge_verts[MAX_MAP_VERTS];
@@ -149,7 +149,7 @@ Dumb linear search
 int GetVertexnum(Vector &v) {
   int i, j;
   dvertex_t *dv;
-  vec_t d;
+  f32 d;
 
   c_totalverts++;
 
@@ -384,13 +384,13 @@ TestEdge
 Can be recursively reentered
 ==========
 */
-void TestEdge(vec_t start, vec_t end, int p1, int p2, int startvert) {
+void TestEdge(f32 start, f32 end, int p1, int p2, int startvert) {
   int j, k;
-  vec_t dist;
+  f32 dist;
   Vector delta;
   Vector exact;
   Vector off;
-  vec_t error;
+  f32 error;
   Vector p;
 
   if (p1 == p2) {
@@ -527,7 +527,7 @@ void FixFaceEdges(face_t **pList, face_t *f) {
   int p1, p2;
   int i;
   Vector e2;
-  vec_t len;
+  f32 len;
   int count[MAX_SUPERVERTS], start[MAX_SUPERVERTS];
   int base;
 
@@ -841,7 +841,7 @@ winding_t *TryMergeWinding(winding_t *f1, winding_t *f2, Vector &planenormal) {
   winding_t *newf;
   int i, j, k, l;
   Vector normal, delta;
-  vec_t dot;
+  f32 dot;
   bool keep1, keep2;
 
   //
@@ -1028,12 +1028,12 @@ Chop up faces that are larger than we want in the surface cache
 */
 void SubdivideFace(face_t **pFaceList, face_t *f) {
   float mins, maxs;
-  vec_t v;
-  vec_t luxelsPerWorldUnit;
+  f32 v;
+  f32 luxelsPerWorldUnit;
   int axis, i;
   texinfo_t *tex;
   Vector temp;
-  vec_t dist;
+  f32 dist;
   winding_t *w, *frontw, *backw;
 
   if (f->merged || f->split[0] || f->split[1]) return;
@@ -1344,7 +1344,7 @@ int AddWindingToPrimverts(const winding_t *w, unsigned short *pIndices,
 static void SubdivideFaceBySubdivSize(face_t *f, float subdivsize) {
   // garymcthack - REFACTOR ME!!!
 
-  vec_t dummy;
+  f32 dummy;
   Vector hackNormal;
   WindingPlane(f->w, hackNormal, &dummy);
 

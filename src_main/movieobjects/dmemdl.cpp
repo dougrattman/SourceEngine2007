@@ -398,7 +398,7 @@ void CDmeMDL::SetUpBones( CStudioHdr &studioHdr, const matrix3x4_t& shapeToWorld
 			{
 				for (k = 0; k < 4; k++)
 				{
-					pBoneToWorld[i][j][k] = VEC_T_NAN;
+					pBoneToWorld[i][j][k] = FLOAT32_NAN;
 				}
 			}
 			continue;

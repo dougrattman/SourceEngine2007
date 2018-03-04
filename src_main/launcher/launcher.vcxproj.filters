@@ -30,7 +30,7 @@
     <ClCompile Include="source_app_system_group.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

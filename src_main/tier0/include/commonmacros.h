@@ -11,22 +11,25 @@
 
 // Makes a 4-byte "packed ID" i32 out of 4 chacters.
 template <typename R = u32>
-constexpr inline R MAKEID(const ch& d, const ch& c, const ch& b, const ch& a) {
+constexpr inline R MAKEID(ch d, ch c, ch b, ch a) {
   return (static_cast<R>(a) << 24) | (static_cast<R>(b) << 16) |
          (static_cast<R>(c) << 8) | (static_cast<R>(d));
 }
-// Compares a string with a 4-byte packed ID constant.
-template <typename T, typename I = u32>
-constexpr inline bool STRING_MATCHES_ID(const T& p, const I id) {
-  return *reinterpret_cast<I*>(p) == id;
-}
-#define ID_TO_STRING(id, p)                                        \
-  ((p)[3] = (((id) >> 24) & 0xFF), (p)[2] = (((id) >> 16) & 0xFF), \
-   (p)[1] = (((id) >> 8) & 0xFF), (p)[0] = (((id) >> 0) & 0xFF))
 
-#define SETBITS(iBitVector, bits) ((iBitVector) |= (bits))
-#define CLEARBITS(iBitVector, bits) ((iBitVector) &= ~(bits))
-#define FBitSet(iBitVector, bit) ((iBitVector) & (bit))
+template <typename T>
+constexpr inline T SETBITS(T bit_vector, T bits) {
+  return bit_vector |= bits;
+}
+
+template <typename T>
+constexpr inline T CLEARBITS(T bit_vector, T bits) {
+  return bit_vector &= ~bits;
+}
+
+template <typename T>
+constexpr inline T FBitSet(T bit_vector, T bit) {
+  return bit_vector & bit;
+}
 
 #define UID_PREFIX generated_id_
 #define UID_CAT1(a, c) a##c

@@ -40,6 +40,12 @@ wadinfo_t		header;
 FILE			*wadhandle;
 
 
+// Compares a string with a 4-byte packed ID constant.
+template <typename T, typename I = u32>
+constexpr inline bool IsStringMatchesId(const T& p, const I id) {
+  return *reinterpret_cast<I*>(p) == id;
+}
+
 /*
 ====================
 W_OpenWad
@@ -57,7 +63,7 @@ void W_OpenWad (char *filename)
 	wadhandle = SafeOpenRead (filename);
 	SafeRead (wadhandle, &header, sizeof(header));
 
-	if (!STRING_MATCHES_ID(header.identification,WAD_ID))
+	if (!IsStringMatchesId(header.identification,WAD_ID))
 		Error ("Wad file %s doesn't have %s identifier\n",filename, WAD_IDNAME);
 		
 	header.numlumps = LittleLong(header.numlumps);
@@ -307,6 +313,10 @@ void	AddLump (char *name, void *buffer, int length, int type, int compress)
 WriteWad
 ===============
 */
+
+#define ID_TO_STRING(id, p)                                        \
+  ((p)[3] = (((id) >> 24) & 0xFF), (p)[2] = (((id) >> 16) & 0xFF), \
+   (p)[1] = (((id) >> 8) & 0xFF), (p)[0] = (((id) >> 0) & 0xFF))
 
 void WriteWad (int wad3)
 {

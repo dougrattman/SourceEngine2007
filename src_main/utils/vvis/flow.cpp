@@ -95,10 +95,10 @@ ChopWinding
 #endif
 
 winding_t *ChopWinding(winding_t *in, pstack_t *stack, plane_t *split) {
-  vec_t dists[128];
+  f32 dists[128];
   int sides[128];
   int counts[3];
-  vec_t dot;
+  f32 dot;
   int i, j;
   Vector mid;
   winding_t *neww;
@@ -209,7 +209,7 @@ winding_t *ClipToSeperators(winding_t *source, winding_t *pass,
   plane_t plane;
   Vector v1, v2;
   float d;
-  vec_t length;
+  f32 length;
   int counts[3];
   bool fliptest;
 

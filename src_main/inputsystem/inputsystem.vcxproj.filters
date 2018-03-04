@@ -24,7 +24,7 @@
     <ClCompile Include="key_translation.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xcontroller.cc">

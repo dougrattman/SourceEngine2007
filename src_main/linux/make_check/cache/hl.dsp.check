@@ -67116,7 +67116,7 @@ SOURCE=..\Public\MATHLIB.H
 # End Source File
 # Begin Source File
 
-SOURCE=..\tier0\include\memoverride.cpp
+SOURCE=..\tier0\include\memoverride.cc
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File

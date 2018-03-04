@@ -261,7 +261,7 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\..\tier0\include\memoverride.cpp"
+				RelativePath="..\..\tier0\include\memoverride.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

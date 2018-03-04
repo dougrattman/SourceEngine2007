@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This header should never be used directly from leaf code!!!
-// Instead, just add the file memoverride.cpp into your project and all this
+// Instead, just add the file memoverride.cc into your project and all this
 // will automagically be used
 
 #ifndef SOURCE_TIER0_INCLUDE_MEMALLOC_H_

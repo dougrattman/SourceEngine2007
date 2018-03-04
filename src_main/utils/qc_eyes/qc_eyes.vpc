@@ -23,7 +23,7 @@ $Project "QC_Eyes"
 {
 	$Folder	"Source Files"
 	{		
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		
 		$File	"QC_Eyes.cpp"
 		$File	"QC_Eyes.rc"

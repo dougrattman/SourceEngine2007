@@ -1379,7 +1379,7 @@ void CMapFace::InitializeQuakeStyleTextureAxes(Vector4D &UAxis,
   };
 
   int bestaxis;
-  vec_t dot, best;
+  f32 dot, best;
   int i;
 
   best = 0;

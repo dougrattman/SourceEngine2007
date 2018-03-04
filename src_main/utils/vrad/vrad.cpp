@@ -744,8 +744,8 @@ void SubdividePatch(int ndxPatch) {
   winding_t *w, *o1, *o2;
   Vector total;
   Vector split;
-  vec_t dist;
-  vec_t widest = -1;
+  f32 dist;
+  f32 widest = -1;
   int i, widest_axis = -1;
   bool bSubdivide = false;
 
@@ -993,7 +993,7 @@ void MakeTransfer(int ndxPatch1, int ndxPatch2, transfer_t *all_transfers)
 // void MakeTransfer (CPatch *patch, CPatch *patch2, transfer_t *all_transfers )
 {
   Vector delta;
-  vec_t scale;
+  f32 scale;
   float trans;
   transfer_t *transfer;
 

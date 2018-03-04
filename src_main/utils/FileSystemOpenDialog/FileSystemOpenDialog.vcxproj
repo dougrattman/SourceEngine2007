@@ -268,8 +268,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tier0\include\afxmem_override.cpp" />
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\afxmem_override.cc" />
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NO_MEMOVERRIDE_NEW_DELETE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NO_MEMOVERRIDE_NEW_DELETE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

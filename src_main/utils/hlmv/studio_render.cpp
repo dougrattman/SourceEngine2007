@@ -581,7 +581,7 @@ void StudioModel::SetUpBones( bool mergeBones )
 			{
 				for (k = 0; k < 4; k++)
 				{
-					m_pBoneToWorld[i][j][k] = VEC_T_NAN;
+					m_pBoneToWorld[i][j][k] = FLOAT32_NAN;
 				}
 			}
 			continue;

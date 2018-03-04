@@ -155,7 +155,7 @@ struct matrix3x4_t {
   inline void Invalidate(void) {
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
-        m_flMatVal[i][j] = VEC_T_NAN;
+        m_flMatVal[i][j] = FLOAT32_NAN;
       }
     }
   }
@@ -253,7 +253,8 @@ inline void VectorNegate(f32 *a) {
   a[2] = -a[2];
 }
 
-//#define VectorMaximum(a)		( std::max( (a)[0], std::max( (a)[1], (a)[2] ) ) )
+//#define VectorMaximum(a)		( std::max( (a)[0], std::max( (a)[1],
+//(a)[2] ) ) )
 #define Vector2Clear(x) \
   { (x)[0] = (x)[1] = 0; }
 #define Vector2Negate(x) \

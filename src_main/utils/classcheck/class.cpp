@@ -732,7 +732,7 @@ static int GetTypeSize( CClass *cl, CClassVariable *var )
 	{
 		return sizeof( float );
 	}
-	else if ( strstr( input, "vec_t" ) )
+	else if ( strstr( input, "f32" ) )
 	{
 		return sizeof( float );
 	}

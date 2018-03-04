@@ -449,8 +449,8 @@ void LoadPortals(char *name) {
       double v[3];
       int k;
 
-      // scanf into double, then assign to vec_t
-      // so we don't care what size vec_t is
+      // scanf into double, then assign to f32
+      // so we don't care what size f32 is
       if (fscanf(f, "(%lf %lf %lf ) ", &v[0], &v[1], &v[2]) != 3)
         Error("LoadPortals: reading portal %i", i);
       for (k = 0; k < 3; k++) w->points[j][k] = v[k];

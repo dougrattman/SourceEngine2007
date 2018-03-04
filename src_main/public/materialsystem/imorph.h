@@ -115,11 +115,11 @@ inline void CMorphBuilder::Begin(IMorph *pMorph, float flFloatToFixedScale) {
   m_pMorph->Lock(flFloatToFixedScale);
 
 #ifdef _DEBUG
-  m_Info.m_PositionDelta.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
-  m_Info.m_NormalDelta.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
-  m_Info.m_flWrinkleDelta = VEC_T_NAN;
-  m_Info.m_flSpeed = VEC_T_NAN;
-  m_Info.m_flSide = VEC_T_NAN;
+  m_Info.m_PositionDelta.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+  m_Info.m_NormalDelta.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+  m_Info.m_flWrinkleDelta = FLOAT32_NAN;
+  m_Info.m_flSpeed = FLOAT32_NAN;
+  m_Info.m_flSide = FLOAT32_NAN;
 #endif
 }
 
@@ -199,11 +199,11 @@ inline void CMorphBuilder::AdvanceMorph(int nSourceVertex, int nMorphTargetId) {
   m_pMorph->AddMorph(m_Info);
 
 #ifdef _DEBUG
-  m_Info.m_PositionDelta.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
-  m_Info.m_NormalDelta.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
-  m_Info.m_flWrinkleDelta = VEC_T_NAN;
-  m_Info.m_flSpeed = VEC_T_NAN;
-  m_Info.m_flSide = VEC_T_NAN;
+  m_Info.m_PositionDelta.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+  m_Info.m_NormalDelta.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+  m_Info.m_flWrinkleDelta = FLOAT32_NAN;
+  m_Info.m_flSpeed = FLOAT32_NAN;
+  m_Info.m_flSide = FLOAT32_NAN;
 #endif
 }
 

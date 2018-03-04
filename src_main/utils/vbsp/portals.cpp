@@ -298,7 +298,7 @@ winding_t *BaseWindingForNode(node_t *node) {
   node_t *n;
   plane_t *plane;
   Vector normal;
-  vec_t dist;
+  f32 dist;
 
   w = BaseWindingForPlane(mapplanes[node->planenum].normal,
                           mapplanes[node->planenum].dist);
@@ -610,7 +610,7 @@ void FloodAreaLeak(node_t *headnode, node_t *pFirstSide) {
 //-----------------------------------------------------------------------------
 bool PlaceOccupant(node_t *headnode, Vector &origin, entity_t *occupant) {
   node_t *node;
-  vec_t d;
+  f32 d;
   plane_t *plane;
 
   // find the leaf to start in

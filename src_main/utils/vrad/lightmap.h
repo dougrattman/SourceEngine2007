@@ -81,7 +81,7 @@ extern int numdlights;
 //==============================================
 
 struct lightinfo_t {
-  vec_t facedist;
+  f32 facedist;
   Vector facenormal;
 
   Vector facemid;  // world coordinates of center

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SymbolStoreUpdate.cpp">

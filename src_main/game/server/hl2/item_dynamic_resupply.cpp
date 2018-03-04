@@ -505,6 +505,7 @@ bool CItem_DynamicResupply::SpawnItemFromRatio(int nCount,
   float farthest_spawn = 0.0f;
   int farthest_spawn_index = -1;
 
+#pragma loop(no_vector)
   for (int i = 0; i < nCount; ++i) {
     if (pSpawnInfo[i].m_flDelta > farthest_spawn) {
       farthest_spawn = pSpawnInfo[i].m_flDelta;

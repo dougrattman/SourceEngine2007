@@ -35,8 +35,8 @@
 
 // Forward declarations
 
-int Sys_InitGame(CreateInterfaceFn appSystemFactory, char const *pBaseDir,
-                 void *pwnd, int bIsDedicated);
+i32 Sys_InitGame(CreateInterfaceFn appSystemFactory, ch const *pBaseDir,
+                 void *pwnd, i32 bIsDedicated);
 void Sys_ShutdownGame();
 
 // sleep time when not focus
@@ -58,17 +58,17 @@ class CEngine : public IEngine {
     dll_state_ = DLL_INACTIVE;
     next_dll_state_ = DLL_INACTIVE;
 
-    m_flCurrentTime = 0.0;
-    m_flFrameTime = 0.0f;
-    m_flPreviousTime = 0.0;
-    m_flFilteredTime = 0.0f;
+    current_time_ = 0.0;
+    frame_time_ = 0.0f;
+    previous_time_ = 0.0;
+    filtered_time_ = 0.0f;
 
     quitting_state_ = QUIT_NOTQUITTING;
   }
 
   virtual ~CEngine() {}
 
-  bool Load(bool is_dedicated, const char *basedir) override {
+  bool Load(bool is_dedicated, const ch *basedir) override {
     // Activate engine
     // NOTE: We must bypass the 'next state' block here for initialization to
     // work properly.
@@ -105,24 +105,24 @@ class CEngine : public IEngine {
     }
 
     // Get current time
-    m_flCurrentTime = Plat_FloatTime();
+    current_time_ = Plat_FloatTime();
 
     // Determine dt since we last checked
-    float dt = m_flCurrentTime - m_flPreviousTime;
+    f64 dt = current_time_ - previous_time_;
 
     // Remember old time
-    m_flPreviousTime = m_flCurrentTime;
+    previous_time_ = current_time_;
 
     // Accumulate current time delta into the true "frametime"
-    m_flFrameTime += dt;
+    frame_time_ += dt;
 
     // If the time is < 0, that means we've restarted.
     // Set the new time high enough so the engine will run a frame
-    if (m_flFrameTime < 0.0f) return;
+    if (frame_time_ < 0.0f) return;
 
     // If the frametime is still too short, don't pass through
-    if (!FilterTime(m_flFrameTime)) {
-      m_flFilteredTime += dt;
+    if (!FilterTime(frame_time_)) {
+      filtered_time_ += dt;
       return;
     }
 
@@ -131,7 +131,7 @@ class CEngine : public IEngine {
           g_pCVar->FindVar("fs_report_sync_opens");
       bool bReportingSyncOpens =
           (pSyncReportConVar && pSyncReportConVar->GetInt());
-      int reportLevel = 0;
+      i32 reportLevel = 0;
       if (bReportingSyncOpens) {
         reportLevel = pSyncReportConVar->GetInt();
         pSyncReportConVar->SetValue(0);
@@ -143,11 +143,11 @@ class CEngine : public IEngine {
     }
 
 #ifdef VPROF_ENABLED
-    PreUpdateProfile(m_flFilteredTime);
+    PreUpdateProfile(filtered_time_);
 #endif
 
     // Reset swallowed time...
-    m_flFilteredTime = 0.0f;
+    filtered_time_ = 0.0f;
 
 #ifndef SWDS
     if (!sv.IsDedicated()) {
@@ -172,7 +172,7 @@ class CEngine : public IEngine {
         case DLL_CLOSE:    // closing down dll
         case DLL_RESTART:  // engine is shutting down but will restart right
                            // away Run the engine frame
-          HostState_Frame(m_flFrameTime);
+          HostState_Frame(frame_time_);
           break;
       }
 
@@ -194,21 +194,17 @@ class CEngine : public IEngine {
     }  // profile scope
 
     // Reset for next frame
-    m_flFrameTime = 0.0f;
-
-#if defined(VPROF_ENABLED) && defined(_X360)
-    UpdateVXConsoleProfile();
-#endif
+    frame_time_ = 0.0f;
   }
 
-  float GetFrameTime() const override { return m_flFrameTime; }
-  float GetCurTime() const override { return m_flCurrentTime; }
+  f32 GetFrameTime() const override { return frame_time_; }
+  f32 GetCurTime() const override { return current_time_; }
 
-  int GetQuitting() const override { return quitting_state_; }
-  void SetQuitting(int quittype) override { quitting_state_ = quittype; }
+  i32 GetQuitting() const override { return quitting_state_; }
+  void SetQuitting(i32 quittype) override { quitting_state_ = quittype; }
 
  private:
-  bool FilterTime(float dt) {
+  bool FilterTime(f32 dt) {
     // Dedicated's tic_rate regulates server frame rate.  Don't apply fps filter
     // here. Only do this restriction on the client. Prevents clients from
     // accomplishing certain hacks by pausing their client for a period of time.
@@ -223,7 +219,7 @@ class CEngine : public IEngine {
       }
     }
 
-    float fps = fps_max.GetFloat();
+    f32 fps = fps_max.GetFloat();
     if (fps > 0.0f) {
       // Limit fps to withing tolerable range
       //		fps = std::max( MIN_FPS, fps ); // red herring - since
@@ -232,7 +228,7 @@ class CEngine : public IEngine {
       // checking if dt < 1/fps, clamping against MIN_FPS has no effect
       fps = std::min(MAX_FPS, fps);
 
-      float minframetime = 1.0 / fps;
+      f32 minframetime = 1.0 / fps;
 
       if (
 #if !defined(SWDS)
@@ -247,15 +243,15 @@ class CEngine : public IEngine {
     return true;
   }
 
-  int quitting_state_;
+  i32 quitting_state_;
 
   EngineState_t dll_state_;
   EngineState_t next_dll_state_;
 
-  double m_flCurrentTime;
-  float m_flFrameTime;
-  double m_flPreviousTime;
-  float m_flFilteredTime;
+  f64 current_time_;
+  f32 frame_time_;
+  f64 previous_time_;
+  f32 filtered_time_;
 };
 
 static CEngine g_Engine;

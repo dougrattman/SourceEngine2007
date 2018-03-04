@@ -208,7 +208,7 @@ void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
 
   for (usize i = 0; i < command_line->ParmCount() - 1; i++) {
     if (Q_stricmp(command_line->GetParm(i),
-                  source::tier0::command_line_switches::game_path) == 0) {
+                  source::tier0::command_line_switches::kGamePath) == 0) {
       Q_snprintf(last_game_arg, ARRAYSIZE(last_game_arg), "\"%s\"",
                  command_line->GetParm(i + 1));
       ++count_game_args;
@@ -218,8 +218,8 @@ void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
 
   // We only care if > 1 was specified.
   if (count_game_args > 1) {
-    command_line->RemoveParm(source::tier0::command_line_switches::game_path);
-    command_line->AppendParm(source::tier0::command_line_switches::game_path,
+    command_line->RemoveParm(source::tier0::command_line_switches::kGamePath);
+    command_line->AppendParm(source::tier0::command_line_switches::kGamePath,
                              last_game_arg);
   }
 }
@@ -302,16 +302,16 @@ u32 SetProcessPriorityInternal(_In_z_ const ch *priority_switch,
 
 u32 SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
   const bool is_low_priority{!!command_line->CheckParm(
-      source::tier0::command_line_switches::priority_low)};
+      source::tier0::command_line_switches::kCpuPriorityLow)};
   const bool is_high_priority{!!command_line->CheckParm(
-      source::tier0::command_line_switches::priority_high)};
+      source::tier0::command_line_switches::kCpuPriorityHigh)};
 
   if (is_low_priority && is_high_priority) {
     Error(
         "Can't set process priority to low and high at the same time. Use one "
         "of %s,%s switches.",
-        source::tier0::command_line_switches::priority_low,
-        source::tier0::command_line_switches::priority_high);
+        source::tier0::command_line_switches::kCpuPriorityLow,
+        source::tier0::command_line_switches::kCpuPriorityHigh);
     return ERROR_BAD_ARGUMENTS;
   }
 
@@ -319,12 +319,13 @@ u32 SetProcessPriorityIfNeeded(_In_ const ICommandLine *command_line) {
 
   if (is_low_priority) {
     return SetProcessPriorityInternal(
-        source::tier0::command_line_switches::priority_low,
+        source::tier0::command_line_switches::kCpuPriorityLow,
         IDLE_PRIORITY_CLASS);
   }
 
   return SetProcessPriorityInternal(
-      source::tier0::command_line_switches::priority_high, HIGH_PRIORITY_CLASS);
+      source::tier0::command_line_switches::kCpuPriorityHigh,
+      HIGH_PRIORITY_CLASS);
 }
 
 // Remove any overrides in case settings changed.

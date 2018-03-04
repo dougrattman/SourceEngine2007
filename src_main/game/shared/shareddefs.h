@@ -585,8 +585,8 @@ struct FireBulletsInfo_t
 
 #ifdef _DEBUG
 		m_iAmmoType = -1;
-		m_vecSrc.Init( VEC_T_NAN, VEC_T_NAN, VEC_T_NAN );
-		m_vecDirShooting.Init( VEC_T_NAN, VEC_T_NAN, VEC_T_NAN );
+		m_vecSrc.Init( FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN );
+		m_vecDirShooting.Init( FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN );
 #endif
 		m_bPrimaryAttack = true;
 	}

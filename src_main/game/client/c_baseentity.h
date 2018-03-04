@@ -473,15 +473,15 @@ class C_BaseEntity : public IClientEntity {
 
   const Vector &GetLocalOrigin(void) const;
   void SetLocalOrigin(const Vector &origin);
-  vec_t GetLocalOriginDim(int iDim)
+  f32 GetLocalOriginDim(int iDim)
       const;  // You can use the X_INDEX, Y_INDEX, and Z_INDEX defines here.
-  void SetLocalOriginDim(int iDim, vec_t flValue);
+  void SetLocalOriginDim(int iDim, f32 flValue);
 
   const QAngle &GetLocalAngles(void) const;
   void SetLocalAngles(const QAngle &angles);
-  vec_t GetLocalAnglesDim(int iDim)
+  f32 GetLocalAnglesDim(int iDim)
       const;  // You can use the X_INDEX, Y_INDEX, and Z_INDEX defines here.
-  void SetLocalAnglesDim(int iDim, vec_t flValue);
+  void SetLocalAnglesDim(int iDim, f32 flValue);
 
   virtual const Vector &GetPrevLocalOrigin() const;
   virtual const QAngle &GetPrevLocalAngles() const;

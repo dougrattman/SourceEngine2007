@@ -231,7 +231,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   <ItemGroup>
     <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
     <ClCompile Include="..\..\public\filesystem_init.cpp" />
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

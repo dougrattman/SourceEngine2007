@@ -1185,7 +1185,7 @@ void CDmeTestMesh::SetUpBones( CDmeTransform *pTransform, int nMaxBoneCount, mat
 			{
 				for (k = 0; k < 4; k++)
 				{
-					pBoneToWorld[i][j][k] = VEC_T_NAN;
+					pBoneToWorld[i][j][k] = FLOAT32_NAN;
 				}
 			}
 			continue;

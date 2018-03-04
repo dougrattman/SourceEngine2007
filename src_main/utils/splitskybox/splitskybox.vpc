@@ -21,7 +21,7 @@ $Project "Splitskybox"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		
 		$File	"$SRCDIR\public\filesystem_helpers.cpp"
 		$File	"$SRCDIR\public\filesystem_init.cpp"

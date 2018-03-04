@@ -1710,7 +1710,7 @@ void CEngineTrace::TraceRay(const Ray_t &ray, unsigned int fMask,
     pTrace->fractionleftsolid = 0;
 
 #ifdef _DEBUG
-    pTrace->fractionleftsolid = VEC_T_NAN;
+    pTrace->fractionleftsolid = FLOAT32_NAN;
 #endif
   }
 }

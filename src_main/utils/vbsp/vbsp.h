@@ -35,10 +35,10 @@ struct plane_t : public dplane_t {
 struct brush_texture_t {
   Vector UAxis;
   Vector VAxis;
-  vec_t shift[2];
-  vec_t rotate;
-  vec_t textureWorldUnitsPerTexel[2];
-  vec_t lightmapWorldUnitsPerLuxel;
+  f32 shift[2];
+  f32 rotate;
+  f32 textureWorldUnitsPerTexel[2];
+  f32 lightmapWorldUnitsPerLuxel;
   char name[TEXTURE_NAME_LENGTH];
   int flags;
 
@@ -255,7 +255,7 @@ extern bool dumpcollide;
 extern bool nodetailcuts;
 extern bool g_DumpStaticProps;
 extern bool g_bSkyVis;
-extern vec_t microvolume;
+extern f32 microvolume;
 extern bool g_snapAxialPlanes;
 extern bool g_NodrawTriggers;
 extern bool g_DisableWaterLighting;
@@ -268,7 +268,7 @@ extern char mapbase[64];
 extern CUtlVector<int> g_SkyAreas;
 
 void LoadMapFile(const char *filename);
-int FindFloatPlane(Vector &normal, vec_t dist);
+int FindFloatPlane(Vector &normal, f32 dist);
 int GetVertexnum(Vector &v);
 bool Is3DSkyboxArea(int area);
 
@@ -370,7 +370,7 @@ node_t *AllocNode(void);
 bspbrush_t *AllocBrush(int numsides);
 int CountBrushList(bspbrush_t *brushes);
 void FreeBrush(bspbrush_t *brushes);
-vec_t BrushVolume(bspbrush_t *brush);
+f32 BrushVolume(bspbrush_t *brush);
 node_t *NodeForPoint(node_t *node, Vector &origin);
 
 void BoundBrush(bspbrush_t *brush);

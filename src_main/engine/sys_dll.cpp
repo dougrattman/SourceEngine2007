@@ -802,11 +802,8 @@ class CServerGameDLLV3 : public IServerGameDLL {
 };
 #endif
 
-//
 // Try to load a single DLL.  If it conforms to spec, keep it loaded, and add
 // relevant info to the DLL directory.  If not, ignore it entirely.
-//
-
 CreateInterfaceFn g_ServerFactory;
 
 #pragma optimize("g", off)
@@ -909,9 +906,7 @@ IgnoreThisDLL:
 }
 #pragma optimize("", on)
 
-//
 // Scan DLL directory, load all DLLs that conform to spec.
-//
 void LoadEntityDLLs(const char *szBaseDir) {
   memset(&gmodinfo, 0, sizeof(modinfo_t));
   gmodinfo.version = 1;
@@ -955,9 +950,7 @@ void LoadEntityDLLs(const char *szBaseDir) {
   }
 }  //-V773
 
-//-----------------------------------------------------------------------------
 // Purpose: Retrieves a string value from the registry
-//-----------------------------------------------------------------------------
 #if defined(_WIN32)
 char string_type_name[] = {'S', 't', 'r', 'i', 'n', 'g', '\0'};
 
@@ -1023,9 +1016,7 @@ void Sys_GetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
   VCRHook_RegCloseKey(hKey);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Retrieves a DWORD value from the registry
-//-----------------------------------------------------------------------------
 void Sys_GetRegKeyValueUnderRootInt(HKEY rootKey, const char *pszSubKey,
                                     const char *pszElement, long *plReturnValue,
                                     const long lDefaultValue) {
@@ -1151,8 +1142,6 @@ void Sys_SetRegKeyValue(const char *pszSubKey, const char *pszElement,
 
 void Sys_CreateFileAssociations(int count, FileAssociationInfo *list) {
 #if defined(_WIN32)
-  if (IsX360()) return;
-
   char appname[512];
 
   GetModuleFileName(0, appname, sizeof(appname));
@@ -1196,7 +1185,7 @@ void Sys_CreateFileAssociations(int count, FileAssociationInfo *list) {
 }
 
 void Sys_TestSendKey(const char *pKey) {
-#if defined(_WIN32) && !defined(_XBOX)
+#if defined(_WIN32)
   int key = pKey[0];
   if (pKey[0] == '\\' && pKey[1] == 'r') {
     key = VK_RETURN;
@@ -1214,9 +1203,6 @@ void Sys_TestSendKey(const char *pKey) {
 
 void Sys_OutputDebugString(const char *msg) { Plat_DebugString(msg); }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void UnloadEntityDLLs() {
   if (!g_GameDLL) return;
 

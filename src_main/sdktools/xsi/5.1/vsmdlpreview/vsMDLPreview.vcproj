@@ -131,7 +131,7 @@ if exist &quot;$(TargetDir)&quot;vsMDLPreview.pdb copy &quot;$(TargetDir)&quot;v
 				RelativePath="..\..\..\..\public\interpolatortypes.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\tier0\include\memoverride.cpp">
+				RelativePath="..\..\..\..\tier0\include\memoverride.cc">
 			</File>
 			<File
 				RelativePath="..\..\..\..\public\vgui_controls\vgui_controls.cpp">

@@ -330,7 +330,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\tier0\include\memoverride.cpp" />
+    <ClCompile Include="..\..\..\tier0\include\memoverride.cc" />
     <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp" />
     <ClCompile Include="milesbase.cc" />
     <ClCompile Include="mp3_miles.cc" />

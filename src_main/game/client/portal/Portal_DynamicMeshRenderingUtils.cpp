@@ -14,10 +14,10 @@ extern ConVar mat_wireframe;
 
 int ClipPolyToPlane_LerpTexCoords( PortalMeshPoint_t *inVerts, int vertCount, PortalMeshPoint_t *outVerts, const Vector& normal, float dist, float fOnPlaneEpsilon )
 {
-	vec_t	*dists = (vec_t *)stackalloc( sizeof(vec_t) * vertCount * 4 ); //4x vertcount should cover all cases
+	f32	*dists = (f32 *)stackalloc( sizeof(f32) * vertCount * 4 ); //4x vertcount should cover all cases
 	int		*sides = (int *)stackalloc( sizeof(int) * vertCount * 4 );
 	int		counts[3];
-	vec_t	dot;
+	f32	dot;
 	int		i, j;
 	Vector	mid = vec3_origin;
 	int		outCount;

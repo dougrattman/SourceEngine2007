@@ -14,7 +14,7 @@ $Project "Shadercompile_launcher"
 {
 	$Folder	"Source Files"
 	{
-		-$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		-$File	"$SRCDIR\tier0\include\memoverride.cc"
 		
 		$File	"shadercompile_launcher.cpp"
 	}

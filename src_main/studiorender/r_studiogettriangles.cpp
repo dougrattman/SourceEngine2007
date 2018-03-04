@@ -83,7 +83,7 @@ void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,
 #if _DEBUG
         else {
           // ensure any unintended access faults
-          vert.m_TangentS.Init(VEC_T_NAN, VEC_T_NAN, VEC_T_NAN, VEC_T_NAN);
+          vert.m_TangentS.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
         }
 #endif
         vert.m_NumBones = vertData->BoneWeights(vertID)->numbones;

@@ -13,7 +13,7 @@ CCachedRenderData::CCachedRenderData()
     : m_CurrentTag(0), m_pFirstFlexIndex(0), m_pFirstWorldIndex(0) {
 #ifdef _DEBUG
   int i;
-  float val = VEC_T_NAN;
+  float val = FLOAT32_NAN;
   for (i = 0; i < MAXSTUDIOFLEXVERTS; i++) {
     m_pFlexVerts[i].m_Position[0] = val;
     m_pFlexVerts[i].m_Position[1] = val;

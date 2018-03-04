@@ -213,7 +213,7 @@ SOURCE=.\matrendertexture.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\Public\tier0\memoverride.cpp
+SOURCE=..\Public\tier0\memoverride.cc
 # End Source File
 # Begin Source File
 

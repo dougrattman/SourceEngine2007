@@ -22,13 +22,13 @@ bool VGui_InitInterfacesList(const char *moduleName,
                              CreateInterfaceFn *factoryList, int numFactories) {
   g_nYou_Must_Add_Public_Vgui_Controls_Vgui_ControlsCpp_To_Your_Project = 1;
 
-  // If you hit this error, then you need to include memoverride.cpp in the
+  // If you hit this error, then you need to include memoverride.cc in the
   // project somewhere or else you'll get crashes later when vgui_controls
   // allocates KeyValues and vgui tries to delete them.
 #if !defined(NO_MALLOC_OVERRIDE)
   if (_heapmin() != 1) {
     Assert(false);
-    Error("Must include memoverride.cpp in your project.");
+    Error("Must include memoverride.cc in your project.");
   }
 #endif
   // keep a record of this module name

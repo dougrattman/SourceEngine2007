@@ -28,7 +28,7 @@ $Project "vmpi_transfer"
 {
 	$Folder	"Source Files"
 	{
-		$File	"$SRCDIR\tier0\include\memoverride.cpp"
+		$File	"$SRCDIR\tier0\include\memoverride.cc"
 		
 		$File	"..\..\common\vmpi_tools_shared.cpp"
 		$File	"..\..\common\vmpi_tools_shared.h"

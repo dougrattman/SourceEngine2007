@@ -171,7 +171,7 @@ bspbrush_t *BrushFromBounds(Vector &mins, Vector &maxs) {
   bspbrush_t *b;
   int i;
   Vector normal;
-  vec_t dist;
+  f32 dist;
 
   b = AllocBrush(6);
   b->numsides = 6;
@@ -197,11 +197,11 @@ BrushVolume
 
 ==================
 */
-vec_t BrushVolume(bspbrush_t *brush) {
+f32 BrushVolume(bspbrush_t *brush) {
   int i;
   winding_t *w;
   Vector corner;
-  vec_t d, area, volume;
+  f32 d, area, volume;
   plane_t *plane;
 
   if (!brush) return 0;
@@ -360,7 +360,7 @@ PointInLeaf
 ==================
 */
 node_t *PointInLeaf(node_t *node, Vector &point) {
-  vec_t d;
+  f32 d;
   plane_t *plane;
 
   while (node->planenum != PLANENUM_LEAF) {
@@ -394,7 +394,7 @@ int BrushBspBoxOnPlaneSide(const Vector &mins, const Vector &maxs,
   int side;
   int i;
   Vector corners[2];
-  vec_t dist1, dist2;
+  f32 dist1, dist2;
 
   // axial planes are easy
   if (plane->type < 3) {
@@ -472,7 +472,7 @@ int TestBrushToPlanenum(bspbrush_t *brush, int planenum, int *numsplits,
   plane_t *plane;
   int s;
   winding_t *w;
-  vec_t d, d_front, d_back;
+  f32 d, d_front, d_back;
   int front, back;
 
   *numsplits = 0;
@@ -555,7 +555,7 @@ existance by the vertex snapping.
 #define EDGE_LENGTH 0.2
 bool WindingIsTiny(winding_t *w) {
   int i, j;
-  vec_t len;
+  f32 len;
   Vector delta;
   int edges;
 
@@ -580,11 +580,11 @@ bool WindingIsTiny(winding_t *w) {
 bool WindingIsTiny2 (winding_t *w)
 {
 	int		i, j;
-	vec_t	len;
+	f32	len;
 	Vector	delta;
 	int		edges;
 
-	vec_t maxLen = 0;
+	f32 maxLen = 0;
 	Vector maxEdge = vec3_origin;
 
 	edges = 0;
@@ -600,7 +600,7 @@ bool WindingIsTiny2 (winding_t *w)
 		}
 	}
 	Vector normal;
-	vec_t dist;
+	f32 dist;
 	WindingPlane (w, normal, &dist); // normal can come back vec3_origin in some cases
 	VectorNormalize(maxEdge);
 	Vector cross = CrossProduct(normal, maxEdge);
@@ -861,7 +861,7 @@ BrushMostlyOnSide
 int BrushMostlyOnSide(bspbrush_t *brush, plane_t *plane) {
   int i, j;
   winding_t *w;
-  vec_t d, max;
+  f32 d, max;
   int side;
 
   max = 0;
@@ -1066,7 +1066,7 @@ void SplitBrush(bspbrush_t *brush, int planenum, bspbrush_t **front,
   }
 
   {
-    vec_t v1;
+    f32 v1;
     for (int i = 0; i < 2; i++) {
       v1 = BrushVolume(b[i]);
       if (v1 < 1.0) {
@@ -1203,7 +1203,7 @@ tree_t *BrushBSP(bspbrush_t *brushlist, Vector &mins, Vector &maxs) {
   int c_brushes;
   tree_t *tree;
   int i;
-  vec_t volume;
+  f32 volume;
 
   qprintf("--- BrushBSP ---\n");
 

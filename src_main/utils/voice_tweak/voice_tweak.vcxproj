@@ -154,7 +154,7 @@ copy "$(TargetPath)" ..\..\..\game\bin
     <ClCompile Include="..\..\engine\audio\private\voice_mixer_controls.cpp" />
     <ClCompile Include="..\..\engine\audio\private\voice_record_dsound.cpp" />
     <ClCompile Include="..\..\engine\audio\private\voice_wavefile.cpp" />
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

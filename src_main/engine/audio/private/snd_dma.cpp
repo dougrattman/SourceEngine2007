@@ -199,10 +199,10 @@ static Vector listener_forward;
 Vector listener_right;
 static Vector listener_up;
 static bool s_bIsListenerUnderwater;
-static vec_t sound_nominal_clip_dist = SOUND_NORMAL_CLIP_DIST;
+static f32 sound_nominal_clip_dist = SOUND_NORMAL_CLIP_DIST;
 
 // @TODO (toml 05-08-02): put this somewhere more reasonable
-vec_t S_GetNominalClipDist() { return sound_nominal_clip_dist; }
+f32 S_GetNominalClipDist() { return sound_nominal_clip_dist; }
 
 int g_soundtime = 0;    // sample PAIRS output since start
 int g_paintedtime = 0;  // sample PAIRS mixed since start
@@ -1154,7 +1154,7 @@ channel_t *SND_PickStaticChannel(int soundsource, CSfxTable *pSfx) {
 void S_SpatializeChannel(int volumes[CCHANVOLUMES / 2], int master_vol,
                          const Vector *psourceDir, float gain, float mono) {
   float lscale, rscale, scale;
-  vec_t dotRight;
+  f32 dotRight;
   Vector sourceDir = *psourceDir;
 
   dotRight = DotProduct(listener_right, sourceDir);
@@ -1455,7 +1455,7 @@ bool SND_GetClosestPoint(channel_t *pChannel, QAngle &source_angles,
   Vector SF;    // sound source forward direction unit vector
   Vector SL;    // sound -> listener vector
   Vector SD;    // sound->closest point vector
-  vec_t dSLSF;  // magnitude of project of SL onto SF
+  f32 dSLSF;  // magnitude of project of SL onto SF
 
   // P = SF (SF . SL) + S
 
@@ -1620,12 +1620,12 @@ soundlevel_t SND_GetSndlvl(channel_t *pchannel) {
 //(SND_GAIN_THRESH - 1) )
 //
 
-float SND_GetGainFromMult(float gain, float dist_mult, vec_t dist);
+float SND_GetGainFromMult(float gain, float dist_mult, f32 dist);
 
 // gain curve construction
 
 float SND_GetGain(channel_t *ch, bool fplayersound, bool fmusicsound,
-                  bool flooping, vec_t dist, bool bAttenuated) {
+                  bool flooping, f32 dist, bool bAttenuated) {
   VPROF_("SND_GetGain", 2, VPROF_BUDGETGROUP_OTHER_SOUND, false,
          BUDGETFLAG_OTHER);
   if (ch->flags.m_bCompatibilityAttenuation) {
@@ -1635,7 +1635,7 @@ float SND_GetGain(channel_t *ch, bool fplayersound, bool fmusicsound,
 
     // Now get the goldsrc dist_mult and use the same calculation it uses in
     // SND_Spatialize. Straight outta Goldsrc!!!
-    vec_t sound_nominal_clip_dist = 1000.0;
+    f32 sound_nominal_clip_dist = 1000.0;
     float flGoldsrcDistMult = flAttenuation / sound_nominal_clip_dist;
     dist *= flGoldsrcDistMult;
     float flReturnValue = 1.0f - dist;
@@ -3743,7 +3743,7 @@ SND_Spatialize
 void SND_Spatialize(channel_t *ch) {
   VPROF("SND_Spatialize");
 
-  vec_t dist;
+  f32 dist;
   Vector source_vec;
   Vector source_vec_DL;
   Vector source_vec_DR;

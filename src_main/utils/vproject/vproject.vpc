@@ -15,7 +15,7 @@ $Project "VProject"
 	{
 		$File	"vproject.cpp"
 		$File	"sys_utils.cpp"
-		-$File	"memoverride.cpp"
+		-$File	"memoverride.cc"
 	}
 
 	$Folder	"Header Files"

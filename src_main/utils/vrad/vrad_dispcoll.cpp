@@ -728,7 +728,7 @@ void CVRADDispColl::CreateChildPatchesSub(int iParentPatch) {
 }
 
 int PlaneTypeForNormal(Vector &normal) {
-  vec_t ax, ay, az;
+  f32 ax, ay, az;
 
   // NOTE: should these have an epsilon around 1.0?
   if (normal[0] == 1.0 || normal[0] == -1.0) return PLANE_X;

@@ -25,7 +25,7 @@ char mapbase[64];
 char name[1024];
 char materialPath[1024];
 
-vec_t microvolume = 1.0;
+f32 microvolume = 1.0;
 bool noprune;
 bool glview;
 bool nodetail;

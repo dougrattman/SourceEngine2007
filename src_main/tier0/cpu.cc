@@ -210,10 +210,9 @@ static i64 CalculateClockSpeed() {
 
   return (end.m_Int64 - start.m_Int64) << scale;
 #elif defined(OS_POSIX)
-  u64 CalculateCPUFreq();  // from cpu_linux.cpp
-  i64 freq = (int64)CalculateCPUFreq();
-  if (freq == 0)  // couldn't calculate clock speed
-  {
+  u64 CalculateCPUFreq();  // from cpu_linux.cc
+  i64 freq = (i64)CalculateCPUFreq();
+  if (freq == 0) { // couldn't calculate clock speed
     Error("Unable to determine CPU Frequency\n");
   }
   return freq;

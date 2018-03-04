@@ -314,8 +314,8 @@ void SetKeyValue(entity_t *ent, const char *key, const char *value);
 const char *ValueForKey(entity_t *ent, const char *key);
 // will return "" if not present
 int IntForKey(entity_t *ent, const char *key);
-vec_t FloatForKey(entity_t *ent, const char *key);
-vec_t FloatForKeyWithDefault(entity_t *ent, const char *key,
+f32 FloatForKey(entity_t *ent, const char *key);
+f32 FloatForKeyWithDefault(entity_t *ent, const char *key,
                              float default_value);
 void GetVectorForKey(entity_t *ent, const char *key, Vector &vec);
 void GetVector2DForKey(entity_t *ent, const char *key, Vector2D &vec);

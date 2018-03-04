@@ -20,7 +20,7 @@ int num_visportals;
 
 int g_SkyCluster = -1;
 
-void WriteFloat(FILE *f, vec_t v) {
+void WriteFloat(FILE *f, f32 v) {
   if (fabs(v - RoundInt(v)) < 0.001)
     fprintf(f, "%i ", (int)RoundInt(v));
   else
@@ -36,7 +36,7 @@ void WritePortalFile(FILE *pFile, const CUtlVector<cluster_portals_t> &list) {
   portal_t *p;
   winding_t *w;
   Vector normal;
-  vec_t dist;
+  f32 dist;
 
   for (int clusterIndex = 0; clusterIndex < list.Count(); clusterIndex++) {
     for (int j = 0; j < list[clusterIndex].portals.Count(); j++) {

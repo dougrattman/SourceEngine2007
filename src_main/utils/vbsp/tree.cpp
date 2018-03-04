@@ -8,7 +8,7 @@ void RemovePortalFromNode(portal_t *portal, node_t *l);
 
 node_t *NodeForPoint(node_t *node, Vector &origin) {
   plane_t *plane;
-  vec_t d;
+  f32 d;
 
   while (node->planenum != PLANENUM_LEAF) {
     plane = &mapplanes[node->planenum];

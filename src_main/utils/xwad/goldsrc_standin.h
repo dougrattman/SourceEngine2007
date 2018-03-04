@@ -7,7 +7,7 @@
 #ifndef GOLDSRC_STANDIN_H
 #define GOLDSRC_STANDIN_H
 
-typedef float vec_t;
+typedef float f32;
 typedef float vec3_t[3];
 
 typedef unsigned char byte;

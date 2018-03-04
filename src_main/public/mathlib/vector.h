@@ -3,9 +3,9 @@
 #ifndef SOURCE_MATHLIB_VECTOR_H_
 #define SOURCE_MATHLIB_VECTOR_H_
 
-#include <algorithm>
 #include <float.h>
 #include <xmmintrin.h>
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>  // For rand(). We really need a library!
 
@@ -280,7 +280,6 @@ class IntVector4D {
   //	IntVector4D& operator=( IntVector4D const& src );
 };
 
-
 // Allows us to specifically pass the vector by value when we need to
 
 class VectorByValue : public Vector {
@@ -290,7 +289,6 @@ class VectorByValue : public Vector {
   VectorByValue(f32 X, f32 Y, f32 Z) : Vector(X, Y, Z) {}
   VectorByValue(const VectorByValue& vOther) { *this = vOther; }
 };
-
 
 // Utility to simplify table construction. No constructor means can use
 // traditional C-style initialization
@@ -314,9 +312,7 @@ class TableVector {
   }
 };
 
-
 // Here's where we add all those lovely SSE optimized routines
-
 
 class ALIGN16 VectorAligned : public Vector {
  public:
@@ -345,9 +341,7 @@ class ALIGN16 VectorAligned : public Vector {
   f32 w;  // this space is used anyway
 };
 
-
 // Vector related operations
-
 
 // Vector clear
 FORCEINLINE void VectorClear(Vector& a);
@@ -404,12 +398,9 @@ Vector RandomVector(f32 minVal, f32 maxVal);
 
 #endif
 
-
 //
 // Inlined Vector methods
 //
-
-
 
 // constructors
 
@@ -429,9 +420,7 @@ inline Vector::Vector(f32 X, f32 Y, f32 Z) {
   CHECK_VALID(*this);
 }
 
-
 // initialization
-
 
 inline void Vector::Init(f32 ix, f32 iy, f32 iz) {
   x = ix;
@@ -453,9 +442,7 @@ inline void Vector::Zero() { x = y = z = 0.0f; }
 
 inline void VectorClear(Vector& a) { a.x = a.y = a.z = 0.0f; }
 
-
 // assignment
-
 
 inline Vector& Vector::operator=(const Vector& vOther) {
   CHECK_VALID(vOther);
@@ -464,7 +451,6 @@ inline Vector& Vector::operator=(const Vector& vOther) {
   z = vOther.z;
   return *this;
 }
-
 
 // Array access
 
@@ -478,16 +464,13 @@ inline f32 Vector::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-
 // Base address...
 
 inline f32* Vector::Base() { return (f32*)this; }
 
 inline f32 const* Vector::Base() const { return (f32 const*)this; }
 
-
 // Cast to Vector2D...
-
 
 inline Vector2D& Vector::AsVector2D() { return *(Vector2D*)this; }
 
@@ -495,29 +478,23 @@ inline const Vector2D& Vector::AsVector2D() const {
   return *(const Vector2D*)this;
 }
 
-
 // IsValid?
-
 
 inline bool Vector::IsValid() const {
   return IsFinite(x) && IsFinite(y) && IsFinite(z);
 }
 
-
 // Invalidate
-
 
 inline void Vector::Invalidate() {
   //#ifdef _DEBUG
   //#ifdef VECTOR_PARANOIA
-  x = y = z = VEC_T_NAN;
+  x = y = z = FLOAT32_NAN;
   //#endif
   //#endif
 }
 
-
 // comparison
-
 
 inline bool Vector::operator==(const Vector& src) const {
   CHECK_VALID(src);
@@ -531,9 +508,7 @@ inline bool Vector::operator!=(const Vector& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z);
 }
 
-
 // Copy
-
 
 FORCEINLINE void VectorCopy(const Vector& src, Vector& dst) {
   CHECK_VALID(src);
@@ -547,7 +522,6 @@ inline void Vector::CopyToArray(f32* rgfl) const {
   CHECK_VALID(*this);
   rgfl[0] = x, rgfl[1] = y, rgfl[2] = z;
 }
-
 
 // standard math operations
 
@@ -632,11 +606,9 @@ FORCEINLINE Vector& Vector::operator/=(const Vector& v) {
   return *this;
 }
 
-
 //
 // Inlined Short Vector methods
 //
-
 
 inline void ShortVector::Init(i16 ix, i16 iy, i16 iz, i16 iw) {
   x = ix;
@@ -660,7 +632,6 @@ FORCEINLINE void ShortVector::Set(const i16 ix, const i16 iy, const i16 iz,
   w = iw;
 }
 
-
 // Array access
 
 inline i16 ShortVector::operator[](int i) const {
@@ -673,16 +644,13 @@ inline i16& ShortVector::operator[](int i) {
   return ((i16*)this)[i];
 }
 
-
 // Base address...
 
 inline i16* ShortVector::Base() { return (i16*)this; }
 
 inline i16 const* ShortVector::Base() const { return (i16 const*)this; }
 
-
 // comparison
-
 
 inline bool ShortVector::operator==(const ShortVector& src) const {
   return (src.x == x) && (src.y == y) && (src.z == z) && (src.w == w);
@@ -692,9 +660,7 @@ inline bool ShortVector::operator!=(const ShortVector& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z) || (src.w != w);
 }
 
-
 // standard math operations
-
 
 FORCEINLINE ShortVector& ShortVector::operator+=(const ShortVector& v) {
   x += v.x;
@@ -762,11 +728,9 @@ FORCEINLINE ShortVector ShortVector::operator*(f32 fl) const {
   return res;
 }
 
-
 //
 // Inlined Integer Vector methods
 //
-
 
 inline void IntVector4D::Init(int ix, int iy, int iz, int iw) {
   x = ix;
@@ -790,7 +754,6 @@ FORCEINLINE void IntVector4D::Set(const int ix, const int iy, const int iz,
   w = iw;
 }
 
-
 // Array access
 
 inline int IntVector4D::operator[](int i) const {
@@ -803,16 +766,13 @@ inline int& IntVector4D::operator[](int i) {
   return ((int*)this)[i];
 }
 
-
 // Base address...
 
 inline int* IntVector4D::Base() { return (int*)this; }
 
 inline int const* IntVector4D::Base() const { return (int const*)this; }
 
-
 // comparison
-
 
 inline bool IntVector4D::operator==(const IntVector4D& src) const {
   return (src.x == x) && (src.y == y) && (src.z == z) && (src.w == w);
@@ -822,9 +782,7 @@ inline bool IntVector4D::operator!=(const IntVector4D& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z) || (src.w != w);
 }
 
-
 // standard math operations
-
 
 FORCEINLINE IntVector4D& IntVector4D::operator+=(const IntVector4D& v) {
   x += v.x;
@@ -968,7 +926,6 @@ inline void VectorLerp(const Vector& src1, const Vector& src2, f32 t,
   dest.z = src1.z + (src2.z - src1.z) * t;
 }
 
-
 // Temporary storage for vector results so const Vector& results can be returned
 
 inline Vector& AllocTempVector() {
@@ -987,7 +944,6 @@ inline Vector& AllocTempVector() {
   }
   return s_vecTemp[nIndex & 0x7F];
 }
-
 
 // dot, cross
 
@@ -1025,9 +981,7 @@ inline f32 DotProductAbs(const Vector& v0, const f32* v1) {
          FloatMakePositive(v0.z * v1[2]);
 }
 
-
 // length
-
 
 inline f32 VectorLength(const Vector& v) {
   CHECK_VALID(v);
@@ -1039,9 +993,7 @@ inline f32 Vector::Length(void) const {
   return VectorLength(*this);
 }
 
-
 // Normalization
-
 
 /*
 // FIXME: Can't use until we're un-macroed in mathlib.h
@@ -1069,7 +1021,6 @@ bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax) {
           (y <= boxmax.y) && (z >= boxmin.z) && (z <= boxmax.z));
 }
 
-
 // Get the distance from this vector to the other one
 
 inline f32 Vector::DistTo(const Vector& vOther) const {
@@ -1077,7 +1028,6 @@ inline f32 Vector::DistTo(const Vector& vOther) const {
   VectorSubtract(*this, vOther, delta);
   return delta.Length();
 }
-
 
 // Vector equality with tolerance
 
@@ -1087,7 +1037,6 @@ inline bool VectorsAreEqual(const Vector& src1, const Vector& src2,
   if (FloatMakePositive(src1.y - src2.y) > tolerance) return false;
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
 }
-
 
 // Computes the closest point to vecTarget no farther than flMaxDist from
 // vecStart
@@ -1105,7 +1054,6 @@ inline void ComputeClosestPoint(const Vector& vecStart, f32 flMaxDist,
   }
 }
 
-
 // Takes the absolute value of a vector
 
 inline void VectorAbs(const Vector& src, Vector& dst) {
@@ -1114,14 +1062,11 @@ inline void VectorAbs(const Vector& src, Vector& dst) {
   dst.z = FloatMakePositive(src.z);
 }
 
-
 //
 // Slow methods
 //
 
-
 #ifndef VECTOR_NO_SLOW_OPERATIONS
-
 
 // Returns a vector with the min or max in X, Y, and Z.
 
@@ -1135,9 +1080,7 @@ inline Vector Vector::Max(const Vector& vOther) const {
                 z > vOther.z ? z : vOther.z);
 }
 
-
 // arithmetic operations
-
 
 inline Vector Vector::operator-(void) const { return Vector(-x, -y, -z); }
 
@@ -1179,9 +1122,7 @@ inline Vector Vector::operator/(const Vector& v) const {
 
 inline Vector operator*(f32 fl, const Vector& v) { return v * fl; }
 
-
 // cross product
-
 
 inline Vector Vector::Cross(const Vector& vOther) const {
   Vector res;
@@ -1189,9 +1130,7 @@ inline Vector Vector::Cross(const Vector& vOther) const {
   return res;
 }
 
-
 // 2D
-
 
 inline f32 Vector::Length2D(void) const { return (f32)FastSqrt(x * x + y * y); }
 
@@ -1223,9 +1162,7 @@ inline Vector RandomVector(f32 minVal, f32 maxVal) {
 
 #endif  // slow
 
-
 // Helper debugging stuff....
-
 
 inline bool operator==(f32 const*, const Vector&) {
   // AIIIEEEE!!!!
@@ -1251,7 +1188,6 @@ inline bool operator!=(const Vector&, f32 const*) {
   return false;
 }
 
-
 // AngularImpulse
 
 // AngularImpulse are exponetial maps (an axis scaled by a "twist" angle in
@@ -1268,9 +1204,7 @@ inline AngularImpulse RandomAngularImpulse(f32 minVal, f32 maxVal) {
 
 #endif
 
-
 // Quaternion
-
 
 class RadianEuler;
 
@@ -1312,7 +1246,6 @@ class Quaternion  // same data-layout as engine's vec4_t,
   f32 x, y, z, w;
 };
 
-
 // Array access
 
 inline f32& Quaternion::operator[](int i) {
@@ -1325,7 +1258,6 @@ inline f32 Quaternion::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-
 // Equality test
 
 inline bool Quaternion::operator==(const Quaternion& src) const {
@@ -1336,7 +1268,6 @@ inline bool Quaternion::operator!=(const Quaternion& src) const {
   return !operator==(src);
 }
 
-
 // Quaternion equality with tolerance
 
 inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
@@ -1346,7 +1277,6 @@ inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
   if (FloatMakePositive(src1.z - src2.z) > tolerance) return false;
   return (FloatMakePositive(src1.w - src2.w) <= tolerance);
 }
-
 
 // Here's where we add all those lovely SSE optimized routines
 
@@ -1375,7 +1305,6 @@ class ALIGN16 QuaternionAligned : public Quaternion {
 
 #endif
 };
-
 
 // Radian Euler angle aligned to axis (NOT ROLL/PITCH/YAW)
 
@@ -1423,7 +1352,7 @@ inline bool Quaternion::IsValid() const {
 inline void Quaternion::Invalidate() {
   //#ifdef _DEBUG
   //#ifdef VECTOR_PARANOIA
-  x = y = z = w = VEC_T_NAN;
+  x = y = z = w = FLOAT32_NAN;
   //#endif
   //#endif
 }
@@ -1454,11 +1383,10 @@ inline bool RadianEuler::IsValid() const {
 inline void RadianEuler::Invalidate() {
   //#ifdef _DEBUG
   //#ifdef VECTOR_PARANOIA
-  x = y = z = VEC_T_NAN;
+  x = y = z = FLOAT32_NAN;
   //#endif
   //#endif
 }
-
 
 // Array access
 
@@ -1471,7 +1399,6 @@ inline f32 RadianEuler::operator[](int i) const {
   Assert((i >= 0) && (i < 3));
   return ((f32*)this)[i];
 }
-
 
 // Degree Euler QAngle pitch, yaw, roll
 
@@ -1548,7 +1475,6 @@ class QAngle {
 #endif
 };
 
-
 // Allows us to specifically pass the vector by value when we need to
 
 class QAngleByValue : public QAngle {
@@ -1576,7 +1502,6 @@ inline void VectorMA(const QAngle& start, f32 scale, const QAngle& direction,
   dest.z = start.z + scale * direction.z;
 }
 
-
 // constructors
 
 inline QAngle::QAngle() {
@@ -1594,7 +1519,6 @@ inline QAngle::QAngle(f32 X, f32 Y, f32 Z) {
   z = Z;
   CHECK_VALID(*this);
 }
-
 
 // initialization
 
@@ -1635,7 +1559,6 @@ inline QAngle RadianEuler::ToQAngle(void) const {
                 x * 180.f / 3.14159265358979323846f);
 }
 
-
 // assignment
 
 inline QAngle& QAngle::operator=(const QAngle& vOther) {
@@ -1645,7 +1568,6 @@ inline QAngle& QAngle::operator=(const QAngle& vOther) {
   z = vOther.z;
   return *this;
 }
-
 
 // Array access
 
@@ -1659,13 +1581,11 @@ inline f32 QAngle::operator[](int i) const {
   return ((f32*)this)[i];
 }
 
-
 // Base address...
 
 inline f32* QAngle::Base() { return (f32*)this; }
 
 inline f32 const* QAngle::Base() const { return (f32 const*)this; }
-
 
 // IsValid?
 
@@ -1673,18 +1593,15 @@ inline bool QAngle::IsValid() const {
   return IsFinite(x) && IsFinite(y) && IsFinite(z);
 }
 
-
 // Invalidate
-
 
 inline void QAngle::Invalidate() {
   //#ifdef _DEBUG
   //#ifdef VECTOR_PARANOIA
-  x = y = z = VEC_T_NAN;
+  x = y = z = FLOAT32_NAN;
   //#endif
   //#endif
 }
-
 
 // comparison
 
@@ -1700,7 +1617,6 @@ inline bool QAngle::operator!=(const QAngle& src) const {
   return (src.x != x) || (src.y != y) || (src.z != z);
 }
 
-
 // Copy
 
 inline void VectorCopy(const QAngle& src, QAngle& dst) {
@@ -1709,7 +1625,6 @@ inline void VectorCopy(const QAngle& src, QAngle& dst) {
   dst.y = src.y;
   dst.z = src.z;
 }
-
 
 // standard math operations
 
@@ -1749,7 +1664,6 @@ inline QAngle& QAngle::operator/=(f32 fl) {
   return *this;
 }
 
-
 // length
 
 inline f32 QAngle::Length() const {
@@ -1762,7 +1676,6 @@ inline f32 QAngle::LengthSqr() const {
   return x * x + y * y + z * z;
 }
 
-
 // Vector equality with tolerance
 
 inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
@@ -1771,7 +1684,6 @@ inline bool QAnglesAreEqual(const QAngle& src1, const QAngle& src2,
   if (FloatMakePositive(src1.y - src2.y) > tolerance) return false;
   return (FloatMakePositive(src1.z - src2.z) <= tolerance);
 }
-
 
 // arithmetic operations (SLOW!!)
 
@@ -1820,7 +1732,6 @@ inline QAngle operator*(f32 fl, const QAngle& v) {
 }
 
 #endif  // VECTOR_NO_SLOW_OPERATIONS
-
 
 // NOTE: These are not completely correct.  The representations are not
 // equivalent unless the QAngle represents a rotational impulse along a

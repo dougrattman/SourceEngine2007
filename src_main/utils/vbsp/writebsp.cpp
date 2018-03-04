@@ -922,7 +922,7 @@ void EmitBrushes(void) {
   mapbrush_t *b;
   dbrushside_t *cp;
   Vector normal;
-  vec_t dist;
+  f32 dist;
   int planenum;
 
   numbrushsides = 0;

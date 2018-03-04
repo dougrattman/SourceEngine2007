@@ -45,7 +45,7 @@
     <ClCompile Include="lightmappedtwotexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tier0\include\memoverride.cpp">
+    <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="modulate_dx6.cpp">

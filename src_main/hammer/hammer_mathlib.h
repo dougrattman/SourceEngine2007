@@ -17,7 +17,7 @@ typedef unsigned char byte;
 #include "mathlib/mathlib.h"
 #include "mathlib/vmatrix.h"
 
-typedef vec_t vec5_t[5];
+typedef f32 vec5_t[5];
 
 enum { AXIS_X = 0, AXIS_Y, AXIS_Z };
 

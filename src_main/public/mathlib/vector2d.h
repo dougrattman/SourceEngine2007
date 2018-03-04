@@ -179,7 +179,7 @@ void Vector2DLerp(const Vector2D& src1, const Vector2D& src2, f32 t,
 inline Vector2D::Vector2D(void) {
 #ifdef _DEBUG
   // Initialize to NAN to catch errors
-  x = y = VEC_T_NAN;
+  x = y = FLOAT32_NAN;
 #endif
 }
 

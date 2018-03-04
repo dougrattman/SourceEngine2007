@@ -136,7 +136,7 @@ PlaneTypeForNormal
 =================
 */
 int PlaneTypeForNormal(Vector &normal) {
-  vec_t ax, ay, az;
+  f32 ax, ay, az;
 
   // NOTE: should these have an epsilon around 1.0?
   if (normal[0] == 1.0 || normal[0] == -1.0) return PLANE_X;
@@ -157,7 +157,7 @@ int PlaneTypeForNormal(Vector &normal) {
 PlaneEqual
 ================
 */
-bool PlaneEqual(plane_t *p, Vector &normal, vec_t dist, float normalEpsilon,
+bool PlaneEqual(plane_t *p, Vector &normal, f32 dist, float normalEpsilon,
                 float distEpsilon) {
 #if 1
   if (fabs(p->normal[0] - normal[0]) < normalEpsilon &&
@@ -193,7 +193,7 @@ void AddPlaneToHash(plane_t *p) {
 CreateNewFloatPlane
 ================
 */
-int CreateNewFloatPlane(Vector &normal, vec_t dist) {
+int CreateNewFloatPlane(Vector &normal, f32 dist) {
   plane_t *p, temp;
 
   if (VectorLength(normal) < 0.5)
@@ -263,7 +263,7 @@ bool SnapVector(Vector &normal) {
 // Input  : normal - Plane normal vector (assumed to be unit length).
 //			dist - Plane constant.
 //-----------------------------------------------------------------------------
-void SnapPlane(Vector &normal, vec_t &dist) {
+void SnapPlane(Vector &normal, f32 &dist) {
   SnapVector(normal);
 
   if (fabs(dist - RoundInt(dist)) < RENDER_DIST_EPSILON) {
@@ -279,7 +279,7 @@ void SnapPlane(Vector &normal, vec_t &dist) {
 //			dist - Plane constant.
 //			p0, p1, p2 - Three points on the plane.
 //-----------------------------------------------------------------------------
-void SnapPlane(Vector &normal, vec_t &dist, const Vector &p0, const Vector &p1,
+void SnapPlane(Vector &normal, f32 &dist, const Vector &p0, const Vector &p1,
                const Vector &p2) {
   if (SnapVector(normal)) {
     //
@@ -306,7 +306,7 @@ FindFloatPlane
 =============
 */
 #ifndef USE_HASHING
-int FindFloatPlane(Vector &normal, vec_t dist) {
+int FindFloatPlane(Vector &normal, f32 dist) {
   int i;
   plane_t *p;
 
@@ -319,7 +319,7 @@ int FindFloatPlane(Vector &normal, vec_t dist) {
   return CreateNewFloatPlane(normal, dist);
 }
 #else
-int FindFloatPlane(Vector &normal, vec_t dist) {
+int FindFloatPlane(Vector &normal, f32 dist) {
   int i;
   plane_t *p;
   int hash, h;
@@ -351,7 +351,7 @@ int FindFloatPlane(Vector &normal, vec_t dist) {
 //-----------------------------------------------------------------------------
 int PlaneFromPoints(const Vector &p0, const Vector &p1, const Vector &p2) {
   Vector t1, t2, normal;
-  vec_t dist;
+  f32 dist;
 
   VectorSubtract(p0, p1, t1);
   VectorSubtract(p2, p1, t2);
@@ -1354,7 +1354,7 @@ ChunkFileResult_t LoadEntityCallback(CChunkFile *pFile, int nParam) {
         mapbrush_t *b = &mapbrushes[mapent->firstbrush + i];
         for (int j = 0; j < b->numsides; j++) {
           side_t *s = &b->original_sides[j];
-          vec_t newdist =
+          f32 newdist =
               mapplanes[s->planenum].dist -
               DotProduct(mapplanes[s->planenum].normal, mapent->origin);
           s->planenum = FindFloatPlane(mapplanes[s->planenum].normal, newdist);
@@ -2112,7 +2112,7 @@ void TestExpandBrushes(void) {
   winding_t *w;
   const char *name = "expanded.map";
   mapbrush_t *brush;
-  vec_t dist;
+  f32 dist;
 
   Msg("writing %s\n", name);
   f = fopen(name, "wb");
