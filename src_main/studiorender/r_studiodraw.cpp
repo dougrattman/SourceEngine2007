@@ -2312,7 +2312,7 @@ int CStudioRender::R_StudioDrawStaticMesh(
   }
 
   // Needed when we switch back and forth between hardware + software lighting
-  if (IsPC() && pGroup->m_MeshNeedsRestore) {
+  if (pGroup->m_MeshNeedsRestore) {
     VertexCompressionType_t compressionType =
         CompressionType(pGroup->m_pMesh->GetVertexFormat());
     switch (compressionType) {

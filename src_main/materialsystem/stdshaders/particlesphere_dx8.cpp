@@ -41,7 +41,7 @@ BEGIN_VS_SHADER_FLAGS( ParticleSphere_DX8, "Help for BumpmappedEnvMap", SHADER_N
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && !UsePixelShaders(params) )
+		if ( !UsePixelShaders(params) )
 		{
 			return "UnlitGeneric_DX6";
 		}

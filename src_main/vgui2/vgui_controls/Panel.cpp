@@ -2224,7 +2224,7 @@ void Panel::InternalSetCursor() {
 //-----------------------------------------------------------------------------
 void Panel::OnThink() {
 #if defined(VGUI_USEDRAGDROP)
-  if (IsPC() && m_pDragDrop->m_bDragEnabled && m_pDragDrop->m_bDragging &&
+  if (m_pDragDrop->m_bDragEnabled && m_pDragDrop->m_bDragging &&
       m_pDragDrop->m_bDragStarted) {
     bool isEscapeKeyDown = input()->IsKeyDown(KEY_ESCAPE);
     if (isEscapeKeyDown) {
@@ -3905,11 +3905,11 @@ void Panel::PreparePanelMap(PanelMap_t *panelMap) {
 // Purpose: Called to delete the panel
 //-----------------------------------------------------------------------------
 void Panel::OnDelete() {
-  Assert(IsX360() || (IsPC() && _heapchk() == _HEAPOK));
+  Assert(IsX360() || (_heapchk() == _HEAPOK));
 
   delete this;
 
-  Assert(IsX360() || (IsPC() && _heapchk() == _HEAPOK));
+  Assert(IsX360() || (_heapchk() == _HEAPOK));
 }
 
 //-----------------------------------------------------------------------------

@@ -309,7 +309,7 @@ static HardwareShader_t CreateD3DPixelShader(DWORD *pByteCode,
 
   if (!pByteCode) return INVALID_HARDWARE_SHADER;
 
-  if (IsPC() && nCentroidMask &&
+  if (nCentroidMask &&
       (HardwareConfig()->NeedsATICentroidHack() ||
        mat_force_ps_patch.GetInt())) {
     if (!mat_disable_ps_patch.GetInt()) {
@@ -1673,7 +1673,7 @@ bool CShaderManager::CreateDynamicCombos_Ver4(void *pContext,
 #endif
     HardwareShader_t hardwareShader = INVALID_HARDWARE_SHADER;
 
-    if (IsPC() && m_bCreateShadersOnDemand) {
+    if (m_bCreateShadersOnDemand) {
       // cache the code off for later
       pLookup->m_ShaderStaticCombos.m_pCreationData[i].ByteCode.SetSize(
           nByteCodeSize);
@@ -1792,7 +1792,7 @@ bool CShaderManager::CreateDynamicCombos_Ver5(void *pContext,
       if (iIndex >= pLookup->m_nStaticIndex)
         iIndex -= pLookup->m_nStaticIndex;  // ver5 stores combos as full combo,
                                             // ver6 as dynamic combo # only
-      if (IsPC() && m_bCreateShadersOnDemand) {
+      if (m_bCreateShadersOnDemand) {
         // cache the code off for later
         pLookup->m_ShaderStaticCombos.m_pCreationData[iIndex].ByteCode.SetSize(
             nShaderSize);
@@ -1961,7 +1961,7 @@ bool CShaderManager::LoadAndCreateShaders(ShaderLookup_t &lookup,
   lookup.m_ShaderStaticCombos.m_nCount = pHeader->m_nDynamicCombos;
   lookup.m_ShaderStaticCombos.m_pHardwareShaders =
       new HardwareShader_t[pHeader->m_nDynamicCombos];
-  if (IsPC() && m_bCreateShadersOnDemand) {
+  if (m_bCreateShadersOnDemand) {
     lookup.m_ShaderStaticCombos.m_pCreationData =
         new ShaderStaticCombos_t::ShaderCreationData_t[pHeader
                                                            ->m_nDynamicCombos];
@@ -2242,7 +2242,7 @@ void CShaderManager::SetVertexShader(VertexShader_t shader) {
       lookup.m_ShaderStaticCombos.m_pHardwareShaders[vshIndex];
 #endif
 
-  if (IsPC() && (dxshader == INVALID_HARDWARE_SHADER) &&
+  if ((dxshader == INVALID_HARDWARE_SHADER) &&
       m_bCreateShadersOnDemand) {
 #ifdef DYNAMIC_SHADER_COMPILE
     ShaderStaticCombos_t::ShaderCreationData_t *pCreationData =
@@ -2339,7 +2339,7 @@ void CShaderManager::SetPixelShader(PixelShader_t shader) {
       lookup.m_ShaderStaticCombos.m_pHardwareShaders[pshIndex];
 #endif
 
-  if (IsPC() && (dxshader == INVALID_HARDWARE_SHADER) &&
+  if ((dxshader == INVALID_HARDWARE_SHADER) &&
       m_bCreateShadersOnDemand) {
 #ifdef DYNAMIC_SHADER_COMPILE
     ShaderStaticCombos_t::ShaderCreationData_t *pCreationData =

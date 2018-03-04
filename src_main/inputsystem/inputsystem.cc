@@ -781,7 +781,7 @@ LRESULT CInputSystem::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
   }
 
   // Can't put this in the case statement, it's not constant
-  if (IsPC() && (uMsg == m_uiMouseWheel)) {
+  if (uMsg == m_uiMouseWheel) {
     ButtonCode_t code = ((int)wParam) > 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN;
     state.m_ButtonPressedTick[code] = state.m_ButtonReleasedTick[code] =
         m_nLastSampleTick;

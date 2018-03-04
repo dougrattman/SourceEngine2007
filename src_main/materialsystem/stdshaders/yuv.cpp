@@ -28,7 +28,7 @@ BEGIN_VS_SHADER_FLAGS( YUV, "Help for YUV", SHADER_NOT_EDITABLE )
 	SHADER_FALLBACK
 	{
 		// Requires DX8 + above
-		if ( IsPC() && !g_pHardwareConfig->SupportsVertexAndPixelShaders())
+		if ( !g_pHardwareConfig->SupportsVertexAndPixelShaders())
 		{
 			Assert( 0 );
 			return "Wireframe";

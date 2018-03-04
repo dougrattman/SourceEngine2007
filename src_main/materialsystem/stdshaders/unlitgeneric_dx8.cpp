@@ -39,7 +39,7 @@ BEGIN_VS_SHADER( UnlitGeneric_DX8,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && !g_pHardwareConfig->SupportsVertexAndPixelShaders())
+		if ( !g_pHardwareConfig->SupportsVertexAndPixelShaders())
 		{
 			return "UnlitGeneric_DX6";
 		}

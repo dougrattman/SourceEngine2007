@@ -145,7 +145,7 @@ void V_RenderView(void) {
 
   bCanRenderWorld = bCanRenderWorld && toolframework->ShouldGameRenderView();
 
-  if (IsPC() && bCanRenderWorld && g_bTextMode) {
+  if (bCanRenderWorld && g_bTextMode) {
     // Sleep to let the other textmode clients get some cycles.
     Sys_Sleep(15);
     bCanRenderWorld = false;

@@ -123,7 +123,7 @@ SHADER_INIT_PARAMS() {
 }
 
 SHADER_FALLBACK {
-  if (IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80) return "Eyes_dx6";
+  if (g_pHardwareConfig->GetDXSupportLevel() < 80) return "Eyes_dx6";
 
   return 0;
 }

@@ -422,7 +422,7 @@ extern void GetPlatformMapPath(const char *pMapPath, char *pPlatformMapPath,
                                int maxLength);
 
 bool CL_HL2Demo_MapCheck(const char *name) {
-  if (IsPC() && CL_IsHL2Demo() && !sv.IsDedicated()) {
+  if (CL_IsHL2Demo() && !sv.IsDedicated()) {
     if (!Q_stricmp(name, "d1_trainstation_01") ||
         !Q_stricmp(name, "d1_trainstation_02") ||
         !Q_stricmp(name, "d1_town_01") || !Q_stricmp(name, "d1_town_01a") ||
@@ -437,7 +437,7 @@ bool CL_HL2Demo_MapCheck(const char *name) {
 }
 
 bool CL_PortalDemo_MapCheck(const char *name) {
-  if (IsPC() && CL_IsPortalDemo() && !sv.IsDedicated()) {
+  if (CL_IsPortalDemo() && !sv.IsDedicated()) {
     if (!Q_stricmp(name, "testchmb_a_00") ||
         !Q_stricmp(name, "testchmb_a_01") ||
         !Q_stricmp(name, "testchmb_a_02") ||
@@ -721,7 +721,7 @@ void Host_Changelevel2_f(const CCommand &args) {
 #if !defined(SWDS)
   // needs to be before CL_HL2Demo_MapCheck() check as d1_trainstation_03 isn't
   // a valid map
-  if (IsPC() && CL_IsHL2Demo() && !sv.IsDedicated() &&
+  if (CL_IsHL2Demo() && !sv.IsDedicated() &&
       !Q_stricmp(args[1], "d1_trainstation_03")) {
     void CL_DemoTransitionFromTrainstation();
     CL_DemoTransitionFromTrainstation();
@@ -730,7 +730,7 @@ void Host_Changelevel2_f(const CCommand &args) {
 
   // needs to be before CL_HL2Demo_MapCheck() check as d1_trainstation_03 isn't
   // a valid map
-  if (IsPC() && CL_IsHL2Demo() && !sv.IsDedicated() &&
+  if (CL_IsHL2Demo() && !sv.IsDedicated() &&
       !Q_stricmp(args[1], "d1_town_02a") &&
       !Q_stricmp(args[2], "d1_town_02_02a")) {
     void CL_DemoTransitionFromRavenholm();
@@ -738,7 +738,7 @@ void Host_Changelevel2_f(const CCommand &args) {
     return;
   }
 
-  if (IsPC() && CL_IsPortalDemo() && !sv.IsDedicated() &&
+  if (CL_IsPortalDemo() && !sv.IsDedicated() &&
       !Q_stricmp(args[1], "testchmb_a_07")) {
     void CL_DemoTransitionFromTestChmb();
     CL_DemoTransitionFromTestChmb();

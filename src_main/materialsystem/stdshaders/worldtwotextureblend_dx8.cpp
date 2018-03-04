@@ -31,7 +31,7 @@ BEGIN_VS_SHADER( WorldTwoTextureBlend_DX8,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 			return "WorldTwoTextureBlend_DX6";
 
 		return 0;

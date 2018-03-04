@@ -2131,7 +2131,7 @@ void CHudCloseCaption::MsgFunc_CloseCaption(bf_read &msg) {
 }
 
 int CHudCloseCaption::GetFontNumber(bool bold, bool italic) {
-  if (IsPC() && (bold || italic)) {
+  if ((bold || italic)) {
     if (bold && italic) {
       return CHudCloseCaption::CCFONT_ITALICBOLD;
     }

@@ -433,7 +433,7 @@ void CAsyncWaveData::SetAsyncPriority(int priority) {
 // Input  : params -
 //-----------------------------------------------------------------------------
 void CAsyncWaveData::StartAsyncLoading(const asyncwaveparams_t &params) {
-  Assert((IsPC() && !m_bLoaded));
+  Assert((!m_bLoaded));
 
   // expected to be relative to the sound\ dir
   m_hFileNameHandle = params.hFilename;

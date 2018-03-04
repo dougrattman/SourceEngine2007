@@ -85,7 +85,7 @@ BEGIN_VS_SHADER( Water_DX80,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && ( g_pHardwareConfig->GetDXSupportLevel() < 80 ||	!g_pHardwareConfig->HasProjectedBumpEnv() ) )
+		if ( ( g_pHardwareConfig->GetDXSupportLevel() < 80 ||	!g_pHardwareConfig->HasProjectedBumpEnv() ) )
 		{
 			return "Water_DX60";
 		}

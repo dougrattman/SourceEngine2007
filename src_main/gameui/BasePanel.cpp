@@ -300,7 +300,7 @@ class CGameMenu : public vgui::Menu {
   }
 
   void UpdateMenuItemState(bool isInGame, bool isMultiplayer) {
-    bool isSteam = IsPC() && (CommandLine()->FindParm("-steam") != 0);
+    bool isSteam = (CommandLine()->FindParm("-steam") != 0);
     bool bIsConsoleUI = GameUI().IsConsoleUI();
 
     // disabled save button if we're not in a game

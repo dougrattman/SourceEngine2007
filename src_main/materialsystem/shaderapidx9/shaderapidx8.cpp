@@ -5804,7 +5804,7 @@ void CShaderAPIDx8::SetBooleanPixelShaderConstant(int var, int const *pVec,
   Assert(pVec);
   Assert(var + numBools <= g_pHardwareConfig->NumBooleanPixelShaderConstants());
 
-  if (IsPC() && !bForce &&
+  if (!bForce &&
       memcmp(pVec, &m_DesiredState.m_pBooleanPixelShaderConstant[var],
              numBools * sizeof(BOOL)) == 0) {
     return;
@@ -5829,7 +5829,7 @@ void CShaderAPIDx8::SetIntegerPixelShaderConstant(int var, int const *pVec,
   Assert(var + numIntVecs <=
          g_pHardwareConfig->NumIntegerPixelShaderConstants());
 
-  if (IsPC() && !bForce &&
+  if (!bForce &&
       memcmp(pVec, &m_DesiredState.m_pIntegerPixelShaderConstant[var],
              numIntVecs * sizeof(IntVector4D)) == 0) {
     return;
@@ -9220,7 +9220,7 @@ void CShaderAPIDx8::SetViewports(int nCount,
     // Clamp to both the back buffer and the window, if it is resizing
     int nMaxWidth = 0, nMaxHeight = 0;
     GetBackBufferDimensions(nMaxWidth, nMaxHeight);
-    if (IsPC() && m_IsResizing) {
+    if (m_IsResizing) {
       RECT viewRect;
       GetClientRect((HWND)m_ViewHWnd, &viewRect);
       m_nWindowWidth = viewRect.right - viewRect.left;
@@ -10586,7 +10586,7 @@ bool CShaderAPIDx8::SupportsBorderColor(void) const {
 }
 
 bool CShaderAPIDx8::SupportsFetch4() {
-  return IsPC() && g_pHardwareConfig->Caps().m_bSupportsFetch4;
+  return g_pHardwareConfig->Caps().m_bSupportsFetch4;
 }
 
 ImageFormat CShaderAPIDx8::GetShadowDepthTextureFormat() {

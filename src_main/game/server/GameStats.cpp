@@ -607,7 +607,7 @@ bool CBaseGameStats_Driver::Init() {
 
 #if 0
 	// This should only impact us internally!!!
-	if ( IsPC() && !filesystem->IsSteam() )
+	if ( !filesystem->IsSteam() )
 	{
 		Warning( "Forcing gamestats logging to file, remove before shipping!!!\n" );
 		gamestats->m_bLoggingToFile = true;

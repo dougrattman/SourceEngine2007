@@ -816,7 +816,7 @@ int CSaveRestore::SaveGameSlot(const char *pSaveName, const char *pSaveComment,
 // Purpose: Saves a screenshot for save game if necessary
 //-----------------------------------------------------------------------------
 void CSaveRestore::UpdateSaveGameScreenshots() {
-  if (IsPC() && g_LostVideoMemory) return;
+  if (g_LostVideoMemory) return;
 
   if (m_szSaveGameScreenshotFile[0]) {
     host_framecount++;

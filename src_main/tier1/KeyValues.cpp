@@ -402,7 +402,7 @@ void KeyValues::UsesEscapeSequences(bool state) {
 bool KeyValues::LoadFromFile(IBaseFileSystem *filesystem,
                              const char *resourceName, const char *pathID) {
   Assert(filesystem);
-  Assert(IsX360() || (IsPC() && _heapchk() == _HEAPOK));
+  Assert(IsX360() || (_heapchk() == _HEAPOK));
 
   FileHandle_t f = filesystem->Open(resourceName, "rb", pathID);
   if (!f) return false;

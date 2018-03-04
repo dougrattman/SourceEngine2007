@@ -384,7 +384,7 @@ void Cmd_Exec_f(const CCommand &args) {
   }
 
   // 360 doesn't need to do costly existence checks
-  if (IsPC() && g_pFileSystem->FileExists(fileName)) {
+  if (g_pFileSystem->FileExists(fileName)) {
     // don't want to exec files larger than 1 MB
     // probably not a valid file to exec
     unsigned int size = g_pFileSystem->Size(fileName);

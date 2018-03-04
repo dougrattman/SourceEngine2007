@@ -38,7 +38,7 @@ BEGIN_VS_SHADER( Teeth_DX8, "Help for Teeth_DX8" )
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && ( g_pHardwareConfig->GetDXSupportLevel() < 80 || g_pConfig->bSoftwareLighting ) )
+		if ( ( g_pHardwareConfig->GetDXSupportLevel() < 80 || g_pConfig->bSoftwareLighting ) )
 		{
 			return "Teeth_dx6";
 		}

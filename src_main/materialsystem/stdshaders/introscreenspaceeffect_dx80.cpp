@@ -29,7 +29,7 @@ BEGIN_VS_SHADER_FLAGS( IntroScreenSpaceEffect_dx80, "Help for IntroScreenSpaceEf
 	SHADER_FALLBACK
 	{
 		// Requires DX9 + above
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 			return "introscreenspaceeffect_dx60";
 		return 0;
 	}

@@ -1074,7 +1074,7 @@ void CTexture::InitRenderTarget(const char *pRTName, int w, int h,
 void CTexture::OnRestore() {
   // May have to change whether or not we have a depth buffer.
   // Are we a render target?
-  if (IsPC() && (m_nFlags & TEXTUREFLAGS_RENDERTARGET)) {
+  if ((m_nFlags & TEXTUREFLAGS_RENDERTARGET)) {
     // Did they not ask for a depth buffer?
     if (m_nOriginalRenderTargetType == RENDER_TARGET) {
       // But, did we force them to have one, or should we force them to have one
@@ -1229,7 +1229,7 @@ void CTexture::AllocateShaderAPITextures() {
     // This here is simply so we can use a different call to
     // create the depth texture below
     if ((m_nFlags & TEXTUREFLAGS_DEPTHRENDERTARGET) &&
-        ((IsPC() && (nCount == 2)) ||
+        (((nCount == 2)) ||
          (IsX360() &&
           (nCount == 3))))  // nCount must be 2 on pc, must be 3 on 360
     {

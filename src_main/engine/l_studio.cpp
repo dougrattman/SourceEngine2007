@@ -148,7 +148,7 @@ void UpdateStudioRenderConfig(void) {
   s_StudioRenderConfig.fEyeShiftY = r_eyeshift_y.GetFloat();
   s_StudioRenderConfig.fEyeShiftZ = r_eyeshift_z.GetFloat();
   s_StudioRenderConfig.fEyeSize = r_eyesize.GetFloat();
-  if (IsPC() && (mat_softwareskin.GetInt() || ShouldDrawInWireFrameMode())) {
+  if ((mat_softwareskin.GetInt() || ShouldDrawInWireFrameMode())) {
     s_StudioRenderConfig.bSoftwareSkin = true;
   } else {
     s_StudioRenderConfig.bSoftwareSkin = false;

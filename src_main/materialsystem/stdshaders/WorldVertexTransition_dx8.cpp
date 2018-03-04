@@ -55,7 +55,7 @@ BEGIN_VS_SHADER( WorldVertexTransition_DX8,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 			return "WorldVertexTransition_DX6";
 		return 0;
 	}

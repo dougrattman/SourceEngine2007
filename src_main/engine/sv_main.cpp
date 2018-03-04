@@ -2226,7 +2226,7 @@ void SV_Frame(bool finalTick) {
   networkStringTableContainerServer->Lock(true);
 
   // let the steam auth server process new connections
-  if (IsPC() && sv.IsMultiplayer()) {
+  if (sv.IsMultiplayer()) {
     Steam3Server().RunFrame();
   }
 }

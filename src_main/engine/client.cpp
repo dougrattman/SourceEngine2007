@@ -221,7 +221,7 @@ bool CClientState::SetSignonState(int state, int count) {
     case SIGNONSTATE_NEW: {
       EngineVGui()->UpdateProgressBar(PROGRESS_SIGNONNEW);
 
-      if (IsPC() && !demoplayer->IsPlayingBack()) {
+      if (!demoplayer->IsPlayingBack()) {
         // start making sure we have all the specified resources
         StartUpdatingSteamResources();
       } else {
@@ -1409,7 +1409,7 @@ void CClientState::FinishSignonState_New() {
 
 	// HACK!!!!  For use only on PC not yet using a whitelist!
 	// install hooks
-	if ( IsPC() && 	( m_nMaxClients > 1 ) )
+	if ( 	( m_nMaxClients > 1 ) )
 	{
 		m_pModelPrecacheTable->SetStringChangedCallback( NULL, Callback_ModelChanged );
 

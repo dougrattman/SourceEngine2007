@@ -3809,7 +3809,7 @@ const char *CBaseFileSystem::RelativePathToFullPath(
   // Fill in the default in case it's not found...
   Q_strncpy(pFullPath, pFileName, fullPathBufferSize);
 
-  if (IsPC() && pathFilter == FILTER_NONE) {
+  if (pathFilter == FILTER_NONE) {
     // X360TBD: PC legacy behavior never returned pack paths
     // do legacy behavior to ensure naive callers don't break
     pathFilter = FILTER_CULLPACK;

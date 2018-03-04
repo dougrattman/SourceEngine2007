@@ -4309,7 +4309,7 @@ void CMeshMgr::Shutdown() { CleanUp(); }
 // Task switch...
 //-----------------------------------------------------------------------------
 void CMeshMgr::ReleaseBuffers() {
-  if (IsPC() && mat_debugalttab.GetBool()) {
+  if (mat_debugalttab.GetBool()) {
     Warning("mat_debugalttab: CMeshMgr::ReleaseBuffers\n");
   }
 
@@ -4319,7 +4319,7 @@ void CMeshMgr::ReleaseBuffers() {
 }
 
 void CMeshMgr::RestoreBuffers() {
-  if (IsPC() && mat_debugalttab.GetBool()) {
+  if (mat_debugalttab.GetBool()) {
     Warning("mat_debugalttab: CMeshMgr::RestoreBuffers\n");
   }
   Init();

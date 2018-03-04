@@ -408,7 +408,7 @@ static bool HandleEngineKey(const InputEvent_t &event) {
   ButtonCode_t code = (ButtonCode_t)event.m_nData;
 
   // Warn about unbound keys
-  if (IsPC() && bDown) {
+  if (bDown) {
     if (IsJoystickCode(code) && !IsJoystickAxisCode(code) &&
         !s_pKeyInfo[code].m_pKeyBinding) {
       ConDMsg("%s is unbound.\n", g_pInputSystem->ButtonCodeToString(code));

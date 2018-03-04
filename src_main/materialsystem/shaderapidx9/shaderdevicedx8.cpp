@@ -179,7 +179,7 @@ void CShaderDeviceMgrDx8::CheckVendorDependentShadowMappingSupport(
     pCaps->m_NullTextureFormat = IMAGE_FORMAT_RGB565;
   }
 
-  bool bToolsMode = IsPC() && (CommandLine()->CheckParm("-tools") != NULL);
+  bool bToolsMode = (CommandLine()->CheckParm("-tools") != NULL);
   bool bFound16Bit = false;
 
   if ((pCaps->m_VendorID == VENDORID_NVIDIA) &&
@@ -634,7 +634,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   pCaps->m_bDX10Card = false;
 
   // NVidia wants fog color to be specified in linear space
-  if (IsPC() && pCaps->m_SupportsSRGB) {
+  if (pCaps->m_SupportsSRGB) {
     if (pCaps->m_VendorID == VENDORID_NVIDIA) {
       pCaps->m_bFogColorSpecifiedInLinearSpace = true;
 
@@ -1386,7 +1386,7 @@ bool CShaderDeviceDx8::InitDevice(void *hwnd, int nAdapter,
 }
 
 void CShaderDeviceDx8::ShutdownDevice() {
-  if (IsPC() && IsActive()) {
+  if (IsActive()) {
     Dx9Device()->Release();
 
 #ifdef STUBD3D
@@ -2307,7 +2307,7 @@ void CShaderDeviceDx8::Present() {
   // If we're not iconified, try to present (without this check, we can flicker
   // when Alt-Tabbed away)
   if (IsX360() || IsIconic((HWND)m_hWnd) == 0) {
-    if (IsPC() && (m_IsResizing || (m_ViewHWnd != (HWND)m_hWnd))) {
+    if ((m_IsResizing || (m_ViewHWnd != (HWND)m_hWnd))) {
       RECT destRect;
       GetClientRect((HWND)m_ViewHWnd, &destRect);
 

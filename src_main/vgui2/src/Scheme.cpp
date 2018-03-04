@@ -301,7 +301,7 @@ HScheme CSchemeManager::LoadSchemeFromFileEx(VPANEL sizingPanel,
   HScheme hScheme = FindLoadedScheme(fileName);
   if (hScheme != 0) {
     CScheme *pScheme = static_cast<CScheme *>(GetIScheme(hScheme));
-    if (IsPC() && pScheme) {
+    if (pScheme) {
       pScheme->ReloadFontGlyphs();
     }
     return hScheme;

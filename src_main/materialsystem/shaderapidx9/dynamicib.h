@@ -256,7 +256,7 @@ CIndexBuffer::CIndexBuffer(D3DDeviceWrapper *pD3D, int count,
 #endif
 
 #if defined(_DEBUG)
-  if (IsPC() && m_pIB) {
+  if (m_pIB) {
     D3DINDEXBUFFER_DESC aDesc;
     m_pIB->GetDesc(&aDesc);
     Assert(memcmp(&aDesc, &desc, sizeof(desc)) == 0);

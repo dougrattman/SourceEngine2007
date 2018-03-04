@@ -25,7 +25,7 @@ BEGIN_VS_SHADER_FLAGS( WriteStencil_DX8, "Help for WriteStencil", SHADER_NOT_EDI
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 			return "WriteStencil_DX6";
 
 		return 0;

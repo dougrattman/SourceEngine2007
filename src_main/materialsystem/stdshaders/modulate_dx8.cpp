@@ -29,7 +29,7 @@ BEGIN_VS_SHADER( Modulate_DX8,
 
 	SHADER_FALLBACK
 	{	
-		if ( IsPC() && !g_pHardwareConfig->SupportsVertexAndPixelShaders() )
+		if ( !g_pHardwareConfig->SupportsVertexAndPixelShaders() )
 			return "Modulate_DX6";
 		return 0;
 	}

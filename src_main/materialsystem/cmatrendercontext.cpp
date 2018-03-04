@@ -844,7 +844,7 @@ void CMatRenderContext::Flush(bool flushHardware) {
   VPROF("CMatRenderContextBase::Flush");
 
   g_pShaderAPI->FlushBufferedPrimitives();
-  if (IsPC() && flushHardware) {
+  if (flushHardware) {
     g_pShaderAPI->FlushBufferedPrimitives();
   }
 }
@@ -2309,7 +2309,7 @@ void CMatRenderContext::SetFlashlightStateEx(
     ITexture *pFlashlightDepthTexture) {
   g_pShaderAPI->SetFlashlightStateEx(state, worldToTexture,
                                      pFlashlightDepthTexture);
-  if (IsPC() && g_config.dxSupportLevel <= 70) {
+  if (g_config.dxSupportLevel <= 70) {
     // Going to go ahead and set a single hardware light here to do all lighting
     // except for the spotlight falloff function, which is done with a texture.
     SetAmbientLight(0.0f, 0.0f, 0.0f);

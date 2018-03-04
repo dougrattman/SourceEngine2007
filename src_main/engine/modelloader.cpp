@@ -691,7 +691,7 @@ const char *CMapLoadHelper::GetMapName(void) { return s_szMapName; }
 char *CMapLoadHelper::GetLoadName(void) {
   // If we have a custom lump file for the lump this helper
   // is loading, return it instead.
-  if (IsPC() && s_MapLumpFiles[m_nLumpID].file != FILESYSTEM_INVALID_HANDLE) {
+  if (s_MapLumpFiles[m_nLumpID].file != FILESYSTEM_INVALID_HANDLE) {
     return m_szLumpFilename;
   }
 

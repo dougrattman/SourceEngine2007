@@ -201,10 +201,10 @@ BEGIN_VS_SHADER( LightmappedGeneric_DX8,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80)
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80)
 			return "LightmappedGeneric_DX6";
 
-		if ( IsPC() && g_pHardwareConfig->PreferReducedFillrate() )
+		if ( g_pHardwareConfig->PreferReducedFillrate() )
 			return "LightmappedGeneric_NoBump_DX8";
 
 		return 0;

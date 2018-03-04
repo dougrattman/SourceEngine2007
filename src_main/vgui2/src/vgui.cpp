@@ -360,7 +360,7 @@ void CVGui::RunFrame() {
   }
 
   // update cursor positions
-  if (IsPC() && !IsReentrant()) {
+  if (!IsReentrant()) {
     VPROF("update cursor positions");
     int cursorX, cursorY;
     g_pInput->GetCursorPosition(cursorX, cursorY);
@@ -409,7 +409,7 @@ void CVGui::RunFrame() {
     // make sure the hierarchy is up to date
     g_pSurface->SolveTraverse(g_pSurface->GetEmbeddedPanel());
     g_pSurface->ApplyChanges();
-    Assert(IsX360() || (IsPC() && _heapchk() == _HEAPOK));
+    Assert(IsX360() || (_heapchk() == _HEAPOK));
   }
 
   if (bIsReentrant) {

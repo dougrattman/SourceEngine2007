@@ -22,7 +22,7 @@ SHADER_PARAM(MAXLIGHT, SHADER_PARAM_TYPE_FLOAT, "0.3",
 END_SHADER_PARAMS
 
 SHADER_FALLBACK {
-  if (IsPC() && !g_pHardwareConfig->SupportsVertexAndPixelShaders()) {
+  if (!g_pHardwareConfig->SupportsVertexAndPixelShaders()) {
     return "UnlitGeneric_DX6";
   }
   return 0;

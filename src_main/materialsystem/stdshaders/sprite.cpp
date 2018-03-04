@@ -37,7 +37,7 @@ BEGIN_VS_SHADER( Sprite_DX8,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 			return "Sprite_DX6";
 		return 0;
 	}

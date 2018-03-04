@@ -807,7 +807,7 @@ void InitWellKnownRenderTargets(void) {
 
   // Create these for all mods because the engine references them
   if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 80) {
-    if (IsPC() && g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 90 &&
+    if (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() >= 90 &&
         g_pMaterialSystemHardwareConfig->GetHDRType() == HDR_TYPE_FLOAT) {
       // Used for building HDR Cubemaps
       g_BuildCubemaps16BitTexture.Init(CreateBuildCubemaps16BitTexture());
@@ -990,7 +990,7 @@ static void InitDebugMaterials(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 static void ShutdownDebugMaterials(void) {
-  if (IsPC() && mat_debugalttab.GetBool()) {
+  if (mat_debugalttab.GetBool()) {
     Warning("mat_debugalttab: ShutdownDebugMaterials\n");
   }
 

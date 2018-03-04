@@ -807,14 +807,14 @@ extern bool g_bUsingLegacyAppSystems;
 // Purpose: Called to Shutdown the game UI system
 //-----------------------------------------------------------------------------
 void CEngineVGui::Shutdown() {
-  if (IsPC() && CL_IsHL2Demo())  // if they are playing the demo then open the
-                                 // storefront on shutdown
+  if (CL_IsHL2Demo())  // if they are playing the demo then open the
+                       // storefront on shutdown
   {
     vgui::system()->ShellExecute("open", "steam://store_demo/220");
   }
 
-  if (IsPC() && CL_IsPortalDemo())  // if they are playing the demo then open
-                                    // the storefront on shutdown
+  if (CL_IsPortalDemo())  // if they are playing the demo then open
+                          // the storefront on shutdown
   {
     vgui::system()->ShellExecute("open", "steam://store_demo/400");
   }
@@ -1355,7 +1355,7 @@ bool CEngineVGui::Key_Event(const InputEvent_t &event) {
   bool bDown = event.m_nType != IE_ButtonReleased;
   ButtonCode_t code = (ButtonCode_t)event.m_nData;
 
-  if (IsPC() && IsShiftKeyDown()) {
+  if (IsShiftKeyDown()) {
     switch (code) {
       case KEY_F1:
         if (bDown) {
@@ -1373,8 +1373,7 @@ bool CEngineVGui::Key_Event(const InputEvent_t &event) {
 
 #if defined(_WIN32)
   // Ignore alt tilde, since the Japanese IME uses this to toggle itself on/off
-  if (IsPC() && code == KEY_BACKQUOTE && (IsAltKeyDown() || IsCtrlKeyDown()))
-    return true;
+  if (code == KEY_BACKQUOTE && (IsAltKeyDown() || IsCtrlKeyDown())) return true;
 #endif
 
   // ESCAPE toggles game ui

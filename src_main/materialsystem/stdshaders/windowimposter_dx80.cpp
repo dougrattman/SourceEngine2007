@@ -28,7 +28,7 @@ BEGIN_VS_SHADER( WindowImposter_DX80,
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80)
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80)
 			return "WindowImposter_DX60";
 
 		return NULL;

@@ -36,7 +36,7 @@ BEGIN_VS_SHADER_FLAGS( Overlay_Fit, "Help for TerrainTest2", SHADER_NOT_EDITABLE
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && !g_pHardwareConfig->SupportsVertexAndPixelShaders() )
+		if ( !g_pHardwareConfig->SupportsVertexAndPixelShaders() )
 			return "WorldTwoTextureBlend";
 
 		return 0;

@@ -714,7 +714,7 @@ void CTextureManager::AllocateStandardRenderTargets() {
   bool bAllocateMorphAccumTexture =
       g_pMorphMgr->ShouldAllocateScratchTextures();
 
-  if (IsPC() && (bAllocateFullscreenTexture || bAllocateMorphAccumTexture)) {
+  if ((bAllocateFullscreenTexture || bAllocateMorphAccumTexture)) {
     MaterialSystem()->BeginRenderTargetAllocation();
 
     // A offscreen render target which is the size + format of the back buffer

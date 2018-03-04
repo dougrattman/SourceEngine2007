@@ -24,7 +24,7 @@ BEGIN_VS_SHADER_FLAGS( Occlusion_DX8, "Help for Occlusion", SHADER_NOT_EDITABLE 
 
 	SHADER_FALLBACK
 	{
-		if ( IsPC() && g_pHardwareConfig->GetDXSupportLevel() < 80 )
+		if ( g_pHardwareConfig->GetDXSupportLevel() < 80 )
 		{
 			return "Wireframe";
 		}

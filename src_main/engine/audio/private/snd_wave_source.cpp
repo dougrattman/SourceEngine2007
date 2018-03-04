@@ -788,7 +788,7 @@ void CAudioSourceWave::ReferenceRemove(CAudioMixer *pMixer) {
   m_refCount--;
 
   if (m_refCount == 0 &&
-      ((IsPC() && IsPlayOnce()) || (IsX360() && IsStreaming()))) {
+      ((IsPlayOnce()) || (IsX360() && IsStreaming()))) {
     SetPlayOnce(false);  // in case it gets used again
     CacheUnload();
   }

@@ -825,7 +825,7 @@ bool CDispInfo::CopyCoreDispData(model_t *pWorld,
 #endif
 
   // Restoring is only for alt+tabbing, which can't happen on consoles
-  if (IsPC() && bRestoring) {
+  if (bRestoring) {
 #ifndef SWDS
     // When restoring, have to recompute lightmap coords
     if (NumLightMaps() > 1) {

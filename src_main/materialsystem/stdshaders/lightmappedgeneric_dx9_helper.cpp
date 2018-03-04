@@ -1058,7 +1058,7 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 	}
 	pShader->Draw();
 
-	if( IsPC() && (IS_FLAG_SET( MATERIAL_VAR_ALPHATEST ) != 0) && pContextData->m_bFullyOpaqueWithoutAlphaTest )
+	if( (IS_FLAG_SET( MATERIAL_VAR_ALPHATEST ) != 0) && pContextData->m_bFullyOpaqueWithoutAlphaTest )
 	{
 		//Alpha testing makes it so we can't write to dest alpha
 		//Writing to depth makes it so later polygons can't write to dest alpha either

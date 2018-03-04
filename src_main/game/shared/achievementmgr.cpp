@@ -562,7 +562,7 @@ extern bool IsInCommentaryMode(void);
 //-----------------------------------------------------------------------------
 bool CAchievementMgr::CheckAchievementsEnabled() {
   // if PC, Steam must be running and user logged in
-  if (IsPC() && !LoggedIntoSteam()) {
+  if (!LoggedIntoSteam()) {
     Msg("Achievements disabled: Steam not running.\n");
     return false;
   }
@@ -794,7 +794,7 @@ void CAchievementMgr::ResetAchievement(int iAchievementID) {
 // Purpose: Resets all achievements.  For debugging purposes only
 //-----------------------------------------------------------------------------
 void CAchievementMgr::PrintAchievementStatus() {
-  if (IsPC() && !LoggedIntoSteam()) {
+  if (!LoggedIntoSteam()) {
     Msg("Steam not running, achievements disabled. Cannot view or unlock "
         "achievements.\n");
     return;
