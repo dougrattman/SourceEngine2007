@@ -525,11 +525,6 @@ abstract_class IServerGameDLL {
   // Called once per frame even when no level is loaded...
   virtual void Think(bool finalTick) = 0;
 
-#ifdef _XBOX
-  virtual void GetTitleName(const char *pMapName, char *pTitleBuff,
-                            int titleBuffSize) = 0;
-#endif
-
   virtual void PreSaveGameLoaded(char const *pSaveName,
                                  bool bCurrentlyInGame) = 0;
 

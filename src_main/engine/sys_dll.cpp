@@ -60,8 +60,9 @@ ConVar mem_max_heapsize_dedicated("mem_max_heapsize_dedicated", "128", 0,
                                   "server (in mb)");
 
 #define MINIMUM_WIN_MEMORY (unsigned)(mem_min_heapsize.GetInt() * 1024 * 1024)
-#define MAXIMUM_WIN_MEMORY \
-  std::max((unsigned)(mem_max_heapsize.GetInt() * 1024 * 1024), MINIMUM_WIN_MEMORY)
+#define MAXIMUM_WIN_MEMORY                                      \
+  std::max((unsigned)(mem_max_heapsize.GetInt() * 1024 * 1024), \
+           MINIMUM_WIN_MEMORY)
 #define MAXIMUM_DEDICATED_MEMORY \
   (unsigned)(mem_max_heapsize_dedicated.GetInt() * 1024 * 1024)
 
@@ -1110,33 +1111,10 @@ void Sys_SetRegKeyValueUnderRoot(HKEY rootKey, const char *pszSubKey,
         VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
                               (CONST BYTE *)pszValue, Q_strlen(pszValue) + 1);
   } else {
-    /*
-    // FIXE:  We might want to support a mode where we only create this key, we
-    don't overwrite values already present
-    // We opened the existing key. Now go ahead and find out how big the key is.
-    dwSize = nReturnLength;
-    lResult = VCRHook_RegQueryValueEx( hKey, pszElement, 0, &dwType, (unsigned
-    char *)szBuff, &dwSize );
-
-    // Success?
-    if (lResult == ERROR_SUCCESS)
-    {
-            // Only copy strings, and only copy as much data as requested.
-            if (dwType == REG_SZ)
-            {
-                    Q_strncpy(pszReturnString, szBuff, nReturnLength);
-                    pszReturnString[nReturnLength - 1] = '\0';
-            }
-    }
-    else
-    */
-    // Didn't find it, so write out new value
-    {
-      // Just Set the Values according to the defaults
-      lResult =
-          VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
-                                (CONST BYTE *)pszValue, Q_strlen(pszValue) + 1);
-    }
+    // Just Set the Values according to the defaults
+    lResult =
+        VCRHook_RegSetValueEx(hKey, pszElement, 0, REG_SZ,
+                              (CONST BYTE *)pszValue, Q_strlen(pszValue) + 1);
   };
 
   // Always close this key before exiting.
@@ -1261,7 +1239,7 @@ CON_COMMAND(star_memory, "Dump memory stats") {
       memstats.arena / (1024.0 * 1024.0), memstats.uordblks / (1024.0 * 1024.0),
       memstats.hblks);
 #else
-  MEMORYSTATUSEX stat = {sizeof(MEMORYSTATUSEX)};
+  MEMORYSTATUSEX stat{sizeof(MEMORYSTATUSEX)};
   if (GlobalMemoryStatusEx(&stat)) {
     Msg("Available: %.2f MB, Used: %.2f MB, Free: %.2f MB\n",
         stat.ullTotalPhys / (1024.0f * 1024.0f) - 32.0f,

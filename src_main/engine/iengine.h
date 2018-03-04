@@ -18,19 +18,20 @@ abstract_class IEngine {
     DLL_PAUSED,        // engine is paused, can become active from this state
   };
 
-  virtual ~IEngine(void) {}
+  virtual ~IEngine() {}
 
   virtual bool Load(bool dedicated, const char *rootdir) = 0;
-  virtual void Unload(void) = 0;
+  virtual void Unload() = 0;
+
   virtual void SetNextState(EngineState_t iNextState) = 0;
-  virtual EngineState_t GetState(void) = 0;
+  virtual EngineState_t GetState() const = 0;
 
-  virtual void Frame(void) = 0;
+  virtual void Frame() = 0;
 
-  virtual float GetFrameTime(void) = 0;
-  virtual float GetCurTime(void) = 0;
+  virtual float GetFrameTime() const = 0;
+  virtual float GetCurTime() const = 0;
 
-  virtual int GetQuitting(void) = 0;
+  virtual int GetQuitting() const = 0;
   virtual void SetQuitting(int quittype) = 0;
 };
 
