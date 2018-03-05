@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/minidump.h"
 
@@ -44,10 +44,10 @@ bool WriteMiniDumpUsingExceptionInfo(
                      _In_opt_ PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
 
   bool bReturnValue = false;
-  const auto [miniDumpWriteDump, error_code] =
+  const auto [miniDumpWriteDump, address_error_code] =
       dbghelp_module.get_address_as<MiniDumpWriteDumpFunc>("MiniDumpWriteDump");
 
-  if (error_code != NO_ERROR && miniDumpWriteDump) {
+  if (address_error_code == NO_ERROR && miniDumpWriteDump) {
     // create a unique filename for the minidump based on the current time and
     // module name
     time_t currTime = ::time(nullptr);

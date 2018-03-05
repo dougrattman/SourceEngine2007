@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cmdlib.h"
 
@@ -242,11 +242,11 @@ SpewRetval_t CmdLib_SpewOutputFunc(SpewType_t type, char const *pMsg) {
     if (!g_bSuppressPrintfOutput || type == SPEW_ERROR)
       fprintf(stderr, "%s", pMsg);
 
-    OutputDebugString(pMsg);
+    Plat_DebugString(pMsg);
 
     if (type == SPEW_ERROR) {
       fprintf(stderr, "\n");
-      OutputDebugString("\n");
+      Plat_DebugString("\n");
     }
 
     if (g_pLogFile) {

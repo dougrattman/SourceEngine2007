@@ -644,7 +644,7 @@ void ValidateSpew(CValidator& validator) {
 }
 #endif  // DBGFLAG_VALIDATE
 
-// Purpose: For debugging startup times, etc.-
+// Purpose: For debugging startup times, etc.
 void COM_TimestampedLog(ch const* fmt, ...) {
   static f64 last_stamp = 0.0;
   static bool should_log = false;
@@ -655,9 +655,7 @@ void COM_TimestampedLog(ch const* fmt, ...) {
     should_log = CommandLine()->CheckParm("-profile") ? true : false;
     is_checked = true;
   }
-  if (!should_log) {
-    return;
-  }
+  if (!should_log) return;
 
   ch log_buffer[1024];
   va_list arg_list;

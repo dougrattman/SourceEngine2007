@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Entities relating to in-level sound effects.
 //
@@ -6,8 +6,8 @@
 // looping sounds.
 //
 //			env_speaker: used for public address announcements over
-// loudspeakers. 				This tries not to drown out talking
-// NPCs.
+// loudspeakers. 				This tries not to drown out
+// talking NPCs.
 //
 //			env_soundscape: controls what sound script an area uses.
 //
@@ -270,7 +270,9 @@ END_DATADESC()
 void CAmbientGeneric::Spawn(void) {
   m_iSoundLevel = ComputeSoundlevel(
       m_radius,
-      FBitSet(m_spawnflags, SF_AMBIENT_SOUND_EVERYWHERE) ? true : false);
+      FBitSet(m_spawnflags.operator const int &(), SF_AMBIENT_SOUND_EVERYWHERE)
+          ? true
+          : false);
   ComputeMaxAudibleDistance();
 
   char *szSoundFile = (char *)STRING(m_iszSound);
@@ -294,7 +296,8 @@ void CAmbientGeneric::Spawn(void) {
 
   m_fActive = false;
 
-  if (FBitSet(m_spawnflags, SF_AMBIENT_SOUND_NOT_LOOPING)) {
+  if (FBitSet(m_spawnflags.operator const int &(),
+              SF_AMBIENT_SOUND_NOT_LOOPING)) {
     m_fLooping = false;
   } else {
     m_fLooping = true;
@@ -433,7 +436,8 @@ void CAmbientGeneric::Precache(void) {
     }
   }
 
-  if (!FBitSet(m_spawnflags, SF_AMBIENT_SOUND_START_SILENT)) {
+  if (!FBitSet(m_spawnflags.operator const int &(),
+               SF_AMBIENT_SOUND_START_SILENT)) {
     // start the sound ASAP
     if (m_fLooping) m_fActive = true;
   }
@@ -459,7 +463,8 @@ void CAmbientGeneric::Activate(void) {
       m_hSoundSource = this;
       m_nSoundSourceEntIndex = entindex();
     } else {
-      if (!FBitSet(m_spawnflags, SF_AMBIENT_SOUND_EVERYWHERE)) {
+      if (!FBitSet(m_spawnflags.operator const int &(),
+                   SF_AMBIENT_SOUND_EVERYWHERE)) {
         AddEFlags(EFL_FORCE_CHECK_TRANSMIT);
       }
     }
@@ -502,7 +507,8 @@ void CAmbientGeneric::SetTransmit(CCheckTransmitInfo *pInfo, bool bAlways) {
 
   // Don't bother sending the position of the source if we have to play
   // everywhere
-  if (FBitSet(m_spawnflags, SF_AMBIENT_SOUND_EVERYWHERE)) return;
+  if (FBitSet(m_spawnflags.operator const int &(), SF_AMBIENT_SOUND_EVERYWHERE))
+    return;
 
   Assert(pInfo->m_pClientEnt);
   CBaseEntity *pClient = (CBaseEntity *)(pInfo->m_pClientEnt->GetUnknown());
@@ -531,7 +537,8 @@ void CAmbientGeneric::UpdateOnRemove(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Think at 5hz if we are dynamically modifying pitch or volume of the
 //			playing sound.  This function will ramp pitch and/or
-//volume up or 			down, modify pitch/volume with lfo if active.
+// volume up or 			down, modify pitch/volume with lfo if
+// active.
 //-----------------------------------------------------------------------------
 void CAmbientGeneric::RampThink(void) {
   int pitch = m_dpv.pitch;
@@ -841,10 +848,9 @@ void CAmbientGeneric::InputToggleSound(inputdata_t &inputdata) {
 // Purpose: Turns an ambient sound on or off.  If the ambient is a looping
 // sound,
 //			mark sound as active (m_fActive) if it's playing,
-//innactive
-// if not. 			If the sound is not a looping sound, never mark it as
-// active.
-// Input  : pActivator -
+// innactive
+// if not. 			If the sound is not a looping sound, never mark it
+// as active. Input  : pActivator -
 //			pCaller -
 //			useType -
 //			value -

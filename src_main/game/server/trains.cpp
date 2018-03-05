@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Spawn, think, and touch functions for trains, etc.
 
@@ -2408,12 +2408,12 @@ END_DATADESC()
 
 void CFuncTrackChange::Spawn(void) {
   Setup();
-  if (FBitSet(m_spawnflags, SF_TRACK_DONT_MOVE))
+  if (FBitSet(m_spawnflags.operator const int &(), SF_TRACK_DONT_MOVE))
     m_vecPosition2.z = GetLocalOrigin().z;
 
   SetupRotation();
 
-  if (FBitSet(m_spawnflags, SF_TRACK_STARTBOTTOM)) {
+  if (FBitSet(m_spawnflags.operator const int &(), SF_TRACK_STARTBOTTOM)) {
     UTIL_SetOrigin(this, m_vecPosition2);
     m_toggle_state = TS_AT_BOTTOM;
     SetLocalAngles(m_start);
@@ -2538,7 +2538,7 @@ void CFuncTrackChange::GoDown(void) {
 
   UpdateAutoTargets(TS_GOING_DOWN);
   // If ROTMOVE, move & rotate
-  if (FBitSet(m_spawnflags, SF_TRACK_DONT_MOVE)) {
+  if (FBitSet(m_spawnflags.operator const int &(), SF_TRACK_DONT_MOVE)) {
     SetMoveDone(&CFuncTrackChange::CallHitBottom);
     m_toggle_state = TS_GOING_DOWN;
     AngularMove(m_start, m_flSpeed);
@@ -2569,7 +2569,7 @@ void CFuncTrackChange::GoUp(void) {
   // before you call GoUp();
 
   UpdateAutoTargets(TS_GOING_UP);
-  if (FBitSet(m_spawnflags, SF_TRACK_DONT_MOVE)) {
+  if (FBitSet(m_spawnflags.operator const int &(), SF_TRACK_DONT_MOVE)) {
     m_toggle_state = TS_GOING_UP;
     SetMoveDone(&CFuncTrackChange::CallHitTop);
     AngularMove(m_end, m_flSpeed);

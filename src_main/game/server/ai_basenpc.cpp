@@ -5290,8 +5290,8 @@ Activity CAI_BaseNPC::NPC_TranslateActivity(Activity eNewActivity) {
   // ====
   // HACK : LEIPZIG 06 -	The underlying problem is that the AR2 and SMG1
   // cannot map IDLE_ANGRY to a crouched equivalent automatically
-  //						which causes the character to pop up
-  //and down in  their idle state of firing while crouched. -- jdw
+  //						which causes the character to pop
+  //up and down in  their idle state of firing while crouched. -- jdw
   else if (eNewActivity == ACT_IDLE_ANGRY_SMG1) {
     if (IsCrouching()) {
       eNewActivity = ACT_RANGE_AIM_LOW;
@@ -9521,7 +9521,7 @@ BEGIN_DATADESC(CAI_BaseNPC)
       //(custom  save)
       //								m_poseAim_Pitch
       //(not saved; recomputed on  restore)
-      //m_poseAim_Yaw (not saved; recomputed
+      // m_poseAim_Yaw (not saved; recomputed
       // on  restore)
       //								m_poseMove_Yaw
       //(not saved; recomputed on  restore)
@@ -10815,7 +10815,7 @@ bool CAI_BaseNPC::CineCleanup() {
   }
 
   //	SetAnimation( m_NPCState );
-  CLEARBITS(m_spawnflags, SF_NPC_WAIT_FOR_SCRIPT);
+  CLEARBITS(m_spawnflags.operator const int &(), SF_NPC_WAIT_FOR_SCRIPT);
 
   if (bDestroyCine) {
     UTIL_Remove(pOldCine);

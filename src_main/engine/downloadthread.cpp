@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation file for optional HTTP asset downloading thread
 // Author: Matthew D. Campbell (matt@turtlerockstudios.com), 2004
@@ -19,9 +19,9 @@
 #include <WinInet.h>
 
 #include "download_internal.h"
+#include "tier0/include/platform.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //--------------------------------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ inline void Thread_DPrintf(const char *fmt, ...) {
   va_start(argptr, fmt);
   Q_vsnprintf(msg, sizeof(msg), fmt, argptr);
   va_end(argptr);
-  OutputDebugString(msg);
+  Plat_DebugString(msg);
 #endif  // _DEBUG
 }
 

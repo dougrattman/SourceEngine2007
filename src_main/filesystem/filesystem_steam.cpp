@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 
@@ -255,7 +255,7 @@ void CFileSystem_Steam::Shutdown() {
   // STEAM VFS.
   if (!CommandLine()->CheckParm("-steamlocal") && !m_bSelfMounted &&
       !steam->UnmountAppFilesystem(&steamError)) {
-    OutputDebugString(steamError.szDesc);
+    Plat_DebugString(steamError.szDesc);
     Assert(!("STEAM VFS failed to unmount"));
 
     // just continue on as if nothing happened

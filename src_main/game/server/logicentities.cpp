@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved. ====
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved. ====
 //
 // Purpose: Implements many of the entities that control logic flow within a
 // map.
@@ -584,7 +584,8 @@ void CMathRemap::InputValue(inputdata_t &inputdata) {
   float flClampValue = std::clamp(flValue, m_flInMin, m_flInMax);
 
   if ((flClampValue == flValue) ||
-      !FBitSet(m_spawnflags, SF_MATH_REMAP_IGNORE_OUT_OF_RANGE)) {
+      !FBitSet(m_spawnflags.operator const int &(),
+               SF_MATH_REMAP_IGNORE_OUT_OF_RANGE)) {
     //
     // Remap the input value to the desired output range and update the output.
     //
@@ -672,7 +673,8 @@ void CMathColorBlend::InputValue(inputdata_t &inputdata) {
   //
   float flClampValue = std::clamp(flValue, m_flInMin, m_flInMax);
   if ((flClampValue == flValue) ||
-      !FBitSet(m_spawnflags, SF_COLOR_BLEND_IGNORE_OUT_OF_RANGE)) {
+      !FBitSet(m_spawnflags.operator const int &(),
+               SF_COLOR_BLEND_IGNORE_OUT_OF_RANGE)) {
     //
     // Remap the input value to the desired output color and update the output.
     //
@@ -799,7 +801,7 @@ void CEnvGlobal::Spawn(void) {
   }
 #endif
 
-  if (FBitSet(m_spawnflags, SF_GLOBAL_SET)) {
+  if (FBitSet(m_spawnflags.operator const int &(), SF_GLOBAL_SET)) {
     if (!GlobalEntity_IsInTable(m_globalstate)) {
       GlobalEntity_Add(m_globalstate, gpGlobals->mapname,
                        (GLOBALESTATE)m_initialstate);
@@ -1422,11 +1424,13 @@ void CMathCounter::UpdateOutValue(CBaseEntity *pActivator, float fNewValue) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Compares a single string input to up to 16 case values, firing an
-//			output corresponding to the case value that matched, or a
-//default 			output if the input value didn't match any of the case values.
+//			output corresponding to the case value that matched, or
+//a
+// default 			output if the input value didn't match any of the case
+// values.
 //
-//			This can also be used to fire a random output from a set of
-//outputs.
+//			This can also be used to fire a random output from a set
+//of outputs.
 //-----------------------------------------------------------------------------
 #define MAX_LOGIC_CASES 16
 
@@ -1523,8 +1527,8 @@ void CLogicCase::Spawn(void) { m_nLastShuffleCase = -1; }
 //			if the input value matches one of the "CaseX" keys.
 // Input  : Value - Variant value to compare against the values of the case
 // fields.
-//				We use a variant so that we can convert any input type
-//to a string.
+//				We use a variant so that we can convert any input
+//type to a string.
 //-----------------------------------------------------------------------------
 void CLogicCase::InputValue(inputdata_t &inputdata) {
   const char *pszValue = inputdata.value.String();

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/platform.h"
 
@@ -155,13 +155,15 @@ void Plat_DebugString(const ch *psz) {
 #ifdef OS_WIN
   ::OutputDebugStringA(psz);
 #endif
+
+  fprintf(stderr, "%s", psz);
 }
 
 const ch *Plat_GetCommandLine() { return GetCommandLine(); }
 
 // Memory stuff.
 //
-// DEPRECATED. Still here to support binary back compatability of tier0.dll
+// DEPRECATED. Still here to support binary back compatibility of tier0.dll
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 typedef void (*Plat_AllocErrorFn)(u32 size);

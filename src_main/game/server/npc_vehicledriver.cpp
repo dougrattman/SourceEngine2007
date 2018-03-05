@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -770,8 +770,8 @@ bool CNPC_VehicleDriver::OverridePathMove(float flInterval) {
 
 //-----------------------------------------------------------------------------
 // Purpose: This takes the current place the NPC's trying to get to, figures out
-//			what keys to press to get the vehicle to go there, and then
-//sends 			them to the vehicle.
+//			what keys to press to get the vehicle to go there, and
+// then sends 			them to the vehicle.
 //-----------------------------------------------------------------------------
 void CNPC_VehicleDriver::DriveVehicle(void) {
   AngularImpulse angVel;
@@ -932,7 +932,7 @@ void CNPC_VehicleDriver::InputSetDriversMinSpeed(inputdata_t &inputdata) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CNPC_VehicleDriver::InputStartForward(inputdata_t &inputdata) {
-  CLEARBITS(m_spawnflags, SF_VEHICLEDRIVER_INACTIVE);
+  CLEARBITS(m_spawnflags.operator const int &(), SF_VEHICLEDRIVER_INACTIVE);
   if (m_NPCState == NPC_STATE_IDLE) {
     SetState(NPC_STATE_ALERT);
   }
@@ -950,7 +950,7 @@ void CNPC_VehicleDriver::InputStop(inputdata_t &inputdata) { m_flMaxSpeed = 0; }
 // Purpose: Tell the driver to start firing at targets
 //-----------------------------------------------------------------------------
 void CNPC_VehicleDriver::InputStartFiring(inputdata_t &inputdata) {
-  CLEARBITS(m_spawnflags, SF_VEHICLEDRIVER_INACTIVE);
+  CLEARBITS(m_spawnflags.operator const int &(), SF_VEHICLEDRIVER_INACTIVE);
   SetCondition(COND_PROVOKED);
 
   float flMinRange, flMaxRange;

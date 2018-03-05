@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #undef PROTECTED_THINGS_ENABLE
 #undef PROTECT_FILEIO_FUNCTIONS
@@ -158,10 +158,6 @@ class CSteamEnvVars {
   CTempEnvVar m_Path;
 };
 
-// ----------------------------------------------------------------------------------------------------
-// // Helpers.
-// ----------------------------------------------------------------------------------------------------
-// //
 bool Q_getwd(ch *out, i32 outSize) {
 #if defined(OS_WIN)
   ch *cwd = _getcwd(out, outSize);
@@ -173,11 +169,6 @@ bool Q_getwd(ch *out, i32 outSize) {
   if (cwd) Q_FixSlashes(out);
   return cwd != nullptr;
 }
-
-// ----------------------------------------------------------------------------------------------------
-// // Module interface.
-// ----------------------------------------------------------------------------------------------------
-// //
 
 CFSSearchPathsInit::CFSSearchPathsInit() {
   m_pDirectoryName = nullptr;

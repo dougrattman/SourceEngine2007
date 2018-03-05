@@ -2633,7 +2633,7 @@ void CBaseEntity::MakeDormant(void) {
 
   if (!edict()) return;
 
-  SETBITS(m_iEFlags, EFL_DORMANT);
+  SETBITS(m_iEFlags, (int)EFL_DORMANT);
 
   // Don't touch
   AddSolidFlags(FSOLID_NOT_SOLID);

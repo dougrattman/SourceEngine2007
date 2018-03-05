@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Provides an ActiveX control hosting environment for an Internet
 // Explorer control.
@@ -26,7 +26,6 @@
 #include "vgui_internal.h"
 #include "vgui_key_translation.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #ifdef UNICODE
@@ -39,22 +38,14 @@
 #ifdef DEBUG
 #undef DEBUG
 #endif
-//#define DEBUG( x ) OutputDebugString( #x "\n" )
-#define DEBUG(x)
+#define DEBUG(x) OutputDebugString(#x "\n")
 #else
 #define DEBUG(x)
 #endif
 
 #define ASSERT assert
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//		Class definitions for the various OLE (ActiveX) containers
-// needed.
-//
-//
-//
-//-----------------------------------------------------------------------------
+// Class definitions for the various OLE (ActiveX) containers needed.
 class HtmlWindow;
 class FS_IOleInPlaceFrame;
 class FS_IOleInPlaceSiteWindowless;
@@ -89,14 +80,14 @@ class FrameSite : public IUnknown {
   ~FrameSite();
 
   // IUnknown
-  STDMETHODIMP QueryInterface(REFIID iid, void **ppvObject);
-  ULONG STDMETHODCALLTYPE AddRef();
-  ULONG STDMETHODCALLTYPE Release();
+  STDMETHODIMP QueryInterface(REFIID iid, void **ppvObject) override;
+  ULONG STDMETHODCALLTYPE AddRef() override;
+  ULONG STDMETHODCALLTYPE Release() override;
 
   FS_IAdviseSinkEx *m_IAdviseSinkEx;
 
  protected:
-  int m_cRef;
+  ULONG volatile m_cRef;
 
   FS_IOleInPlaceFrame *m_IOleInPlaceFrame;
   FS_IOleInPlaceSiteWindowless *m_IOleInPlaceSiteWindowless;
@@ -1872,18 +1863,20 @@ STDMETHODIMP FrameSite::QueryInterface(REFIID riid, void **ppv) {
   return S_OK;
 }
 
-STDMETHODIMP_(ULONG) FrameSite::AddRef() { return ++m_cRef; }
+STDMETHODIMP_(ULONG) FrameSite::AddRef() {
+  return ::InterlockedIncrement(&m_cRef);
+}
 
 STDMETHODIMP_(ULONG) FrameSite::Release() {
-  if (--m_cRef == 0) {
+  if (InterlockedDecrement(&m_cRef) == 0) {
     delete this;
     return 0;
-  } else
-    return m_cRef;
+  }
+
+  return m_cRef;
 }
 
 // IDispatch
-
 HRESULT FS_IDispatch::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames,
                                     unsigned int cNames, LCID lcid,
                                     DISPID *rgDispId) {
@@ -1960,10 +1953,6 @@ HRESULT FS_IDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     }
     return S_OK;
   }
-
-  //	char dbtxt[200];
-  //	Q_snprintf(dbtxt,200,"$$$$$$$$$$$$$$$ Got ID %i %i\n",dispIdMember,
-  // DISPID_BEFORENAVIGATE2); 	OutputDebugString(dbtxt);
 
   switch (dispIdMember) {
     case DISPID_BEFORENAVIGATE2: {

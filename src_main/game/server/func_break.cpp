@@ -237,7 +237,8 @@ void CBreakable::Spawn(void) {
 
   Precache();
 
-  if (!m_iHealth || FBitSet(m_spawnflags, SF_BREAK_TRIGGER_ONLY)) {
+  if (!m_iHealth ||
+      FBitSet(m_spawnflags.operator const int &(), SF_BREAK_TRIGGER_ONLY)) {
     // This allows people to shoot at the glass (since it's penetrable)
     if (m_Material == matGlass) {
       m_iHealth = 1;
@@ -260,7 +261,8 @@ void CBreakable::Spawn(void) {
   SetModel(STRING(GetModelName()));  // set size and link into world.
 
   SetTouch(&CBreakable::BreakTouch);
-  if (FBitSet(m_spawnflags, SF_BREAK_TRIGGER_ONLY))  // Only break on trigger
+  if (FBitSet(m_spawnflags.operator const int &(),
+              SF_BREAK_TRIGGER_ONLY))  // Only break on trigger
   {
     SetTouch(NULL);
   }
@@ -277,8 +279,8 @@ void CBreakable::Spawn(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Parse this prop's data, if it has a keyvalues section.
-//			Returns true only if this prop is using a model that has a
-//prop_data section that's invalid.
+//			Returns true only if this prop is using a model that has
+// a prop_data section that's invalid.
 //-----------------------------------------------------------------------------
 void CBreakable::ParsePropData(void) {
   if (m_iszPropData == NULL_STRING) return;
@@ -625,7 +627,7 @@ bool CBreakable::UpdateHealth(int iNewHealth, CBaseEntity *pActivator) {
       Break(pActivator);
       return false;
     } else {
-      if (FBitSet(m_spawnflags, SF_BREAK_TRIGGER_ONLY)) {
+      if (FBitSet(m_spawnflags.operator const int &(), SF_BREAK_TRIGGER_ONLY)) {
         m_takedamage = DAMAGE_NO;
       } else {
         m_takedamage = DAMAGE_YES;

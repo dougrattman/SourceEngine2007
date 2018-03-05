@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the entry point for the application.
 
@@ -407,9 +407,10 @@ DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   }
 
   VCRHelpers vcr_helpers;
+  const ch *base_directory;
 
   // Find directory exe is running from.
-  auto [base_directory, return_code] = ComputeBaseDirectory(command_line);
+  std::tie(base_directory, return_code) = ComputeBaseDirectory(command_line);
   if (return_code == NO_ERROR) {
     // VCR helpers is ready.
     std::tie(vcr_helpers, return_code) = BootstrapVCRHelpers(command_line);

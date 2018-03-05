@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This should contain ONLY general purpose macros that are appropriate
 // for use in engine/launcher/all tools
@@ -8,6 +8,11 @@
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
+
+template <typename To, typename From>
+constexpr inline To implicit_cast(const From value) {
+  return value;
+}
 
 // Makes a 4-byte "packed ID" i32 out of 4 chacters.
 template <typename R = u32>

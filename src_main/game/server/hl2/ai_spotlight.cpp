@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -137,7 +137,7 @@ void CAI_Spotlight::CreateSpotlightEntities(void) {
   m_hSpotlightTarget->SetOwnerEntity(GetOuter());
   m_hSpotlightTarget->SetRenderColor(255, 255, 255);
   m_hSpotlightTarget->m_Radius = m_flSpotlightMaxLength;
-  if (FBitSet(m_nFlags, AI_SPOTLIGHT_NO_DLIGHTS)) {
+  if (FBitSet(m_nFlags, (int)AI_SPOTLIGHT_NO_DLIGHTS)) {
     m_hSpotlightTarget->m_flLightScale = 0.0;
   } else {
     m_hSpotlightTarget->m_flLightScale = SPOTLIGHT_WIDTH;
@@ -339,7 +339,7 @@ void CAI_Spotlight::UpdateSpotlightEndpoint(void) {
   m_hSpotlight->SetEndWidth(flNewWidth);
 
   // Adjust width of light on the end.
-  if (FBitSet(m_nFlags, AI_SPOTLIGHT_NO_DLIGHTS)) {
+  if (FBitSet(m_nFlags, (int)AI_SPOTLIGHT_NO_DLIGHTS)) {
     m_hSpotlightTarget->m_flLightScale = 0.0;
   } else {
     m_hSpotlightTarget->m_flLightScale = flNewWidth;

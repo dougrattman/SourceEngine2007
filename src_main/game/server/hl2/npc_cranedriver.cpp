@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -467,8 +467,8 @@ void CNPC_CraneDriver::SetDesiredPosition(const Vector &vecPosition) {
 
 //-----------------------------------------------------------------------------
 // Purpose: This takes the current place the NPC's trying to get to, figures out
-//			what keys to press to get the vehicle to go there, and then
-//sends 			them to the vehicle.
+//			what keys to press to get the vehicle to go there, and
+// then sends 			them to the vehicle.
 //-----------------------------------------------------------------------------
 void CNPC_CraneDriver::DriveVehicle(void) {
   // No targets?
@@ -566,7 +566,7 @@ void CNPC_CraneDriver::InputForcePickup(inputdata_t &inputdata) {
     m_bForcedPickup = true;
     m_bForcedDropoff = false;
     SetCondition(COND_PROVOKED);
-    CLEARBITS(m_spawnflags, SF_VEHICLEDRIVER_INACTIVE);
+    CLEARBITS(m_spawnflags.operator const int &(), SF_VEHICLEDRIVER_INACTIVE);
   }
 }
 
@@ -587,7 +587,7 @@ void CNPC_CraneDriver::InputForceDrop(inputdata_t &inputdata) {
     m_bForcedDropoff = true;
     SetDesiredPosition(pEntity->GetAbsOrigin());
     SetCondition(COND_PROVOKED);
-    CLEARBITS(m_spawnflags, SF_VEHICLEDRIVER_INACTIVE);
+    CLEARBITS(m_spawnflags.operator const int &(), SF_VEHICLEDRIVER_INACTIVE);
   }
 }
 

@@ -138,13 +138,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   const wstr launcher_dll_path{root_dir + L"\\bin\\launcher.dll"};
 
   // STEAM OK ... file system not mounted yet.
-  const auto [launcher_module, error_code] =
+  auto [launcher_module, error_code] =
       source::windows::unique_module_ptr::from_load_library(
           launcher_dll_path, LOAD_WITH_ALTERED_SEARCH_PATH);
 
   if (launcher_module) {
     using LauncherMain = int (*)(HINSTANCE, int);
-    const auto [main, error_code] =
+    LauncherMain main;
+    std::tie(main, error_code) =
         launcher_module.get_address_as<LauncherMain>("LauncherMain");
 
     return main ? (*main)(instance, cmd_show)

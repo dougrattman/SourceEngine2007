@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -195,7 +195,8 @@ void CPointSpotlight::ComputeRenderInfo() {
   m_hSpotlight->SetEndWidth(flNewWidth);
 
   // Adjust width of light on the end.
-  if (FBitSet(m_spawnflags, SF_SPOTLIGHT_NO_DYNAMIC_LIGHT)) {
+  if (FBitSet(m_spawnflags.operator const int &(),
+              SF_SPOTLIGHT_NO_DYNAMIC_LIGHT)) {
     m_hSpotlightTarget->m_flLightScale = 0.0;
   } else {
     // <<TODO>> - magic number 1.8 depends on sprite size
@@ -306,7 +307,8 @@ void CPointSpotlight::SpotlightCreate(void) {
   m_hSpotlightTarget->m_clrRender = m_clrRender;
   m_hSpotlightTarget->m_Radius = m_flSpotlightMaxLength;
 
-  if (FBitSet(m_spawnflags, SF_SPOTLIGHT_NO_DYNAMIC_LIGHT)) {
+  if (FBitSet(m_spawnflags.operator const int &(),
+              SF_SPOTLIGHT_NO_DYNAMIC_LIGHT)) {
     m_hSpotlightTarget->m_flLightScale = 0.0;
   }
 

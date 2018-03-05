@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Core implementation of vgui.
 
@@ -13,6 +13,7 @@
 #include "VPanel.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/platform.h"
 #include "tier0/include/vprof.h"
 #include "tier1/UtlLinkedList.h"
 #include "tier1/UtlPriorityQueue.h"
@@ -859,7 +860,7 @@ void CVGui::DPrintf(const char *format, ...) {
   Q_vsnprintf(buf, sizeof(buf), format, argList);
   va_end(argList);
 
-  ::OutputDebugString(buf);
+  Plat_DebugString(buf);
 }
 
 void CVGui::DPrintf2(const char *format, ...) {
@@ -873,7 +874,7 @@ void CVGui::DPrintf2(const char *format, ...) {
   Q_vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), format, argList);
   va_end(argList);
 
-  ::OutputDebugString(buf);
+  Plat_DebugString(buf);
 }
 
 void vgui::vgui_strcpy(char *dst, int dstLen, const char *src) {

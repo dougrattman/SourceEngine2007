@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "source_app_system_group.h"
 
@@ -11,6 +11,7 @@
 #include "appframework/IAppSystemGroup.h"
 #include "avi/iavi.h"
 #include "avi/ibik.h"
+#include "base/include/windows/scoped_com_initializer.h"
 #include "datacache/idatacache.h"
 #include "datacache/imdlcache.h"
 #include "engine_launcher_api.h"
@@ -42,10 +43,8 @@ bool SourceAppSystemGroup::Create() {
 
   file_system->InstallDirtyDiskReportFunc([]() {});
 
-  HRESULT hr = CoInitializeEx(
-      nullptr, COINIT_APARTMENTTHREADED | COINIT_SPEED_OVER_MEMORY);
-  if (FAILED(hr)) {
-    Error("COM initialization failed, hr 0x%x.", hr);
+  if (FAILED(scoped_com_initializer_->hr())) {
+    Error("COM initialization failed, hr 0x%x.", scoped_com_initializer_->hr());
     return false;
   }
 
@@ -113,10 +112,9 @@ bool SourceAppSystemGroup::Create() {
   }
 
   // Load up the appropriate shader DLL. This has to be done before connection.
-  const char *shader_api_dll_name = "shaderapidx9.dll";
-  if (command_line_->FindParm("-noshaderapi")) {
-    shader_api_dll_name = "shaderapiempty.dll";
-  }
+  const char *shader_api_dll_name = !command_line_->FindParm("-noshaderapi")
+                                        ? "shaderapidx9.dll"
+                                        : "shaderapiempty.dll";
   material_system->SetShaderAPI(shader_api_dll_name);
 
   const double elapsed = Plat_FloatTime() - start_loading_app_systems_stamp;

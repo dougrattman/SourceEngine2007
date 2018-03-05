@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui/ISurface.h"
 
@@ -17,6 +17,7 @@
 #include "FileSystem.h"
 #include "SteamBootStrapper.h"
 #include "VPanel.h"
+#include "base/include/windows/scoped_com_initializer.h"
 #include "bitmap.h"
 #include "tier0/include/basetypes.h"
 #include "tier1/UtlDict.h"
@@ -366,6 +367,8 @@ class CWin32Surface : public ISurface {
 
   CUtlRBTree<Texture, int> m_VGuiSurfaceTextures;
   bool m_bAllowJavaScript;
+
+  const source::windows::ScopedComInitializer scoped_com_initializer_;
 };
 
 CWin32Surface g_Surface;
@@ -622,7 +625,10 @@ static void staticGenerateIconForTexture(Texture *texture, HDC hdc) {
 // Purpose: Constructor, basic variable initialization
 //-----------------------------------------------------------------------------
 CWin32Surface::CWin32Surface()
-    : m_VGuiSurfaceTextures(0, 128, TextureLessFunc) {
+    : m_VGuiSurfaceTextures(0, 128, TextureLessFunc),
+      scoped_com_initializer_{static_cast<COINIT>(COINIT_APARTMENTTHREADED |
+                                                  COINIT_SPEED_OVER_MEMORY |
+                                                  COINIT_DISABLE_OLE1DDE)} {
   _currentCursor = NULL;
   m_pCurrentTexture = NULL;
 
@@ -638,12 +644,9 @@ CWin32Surface::CWin32Surface()
   _needKB = true;
   _needMouse = true;
 
-  // this step is IMPORTANT , it turns "on" COM
-  HRESULT hr = CoInitializeEx(
-      nullptr, COINIT_APARTMENTTHREADED | COINIT_SPEED_OVER_MEMORY);
-
-  if (FAILED(hr)) {
-    Warning("vgui2::Surface COM initialization failed, error 0x%x", hr);
+  if (FAILED(scoped_com_initializer_.hr())) {
+    Warning("vgui2::Surface COM initialization failed, error 0x%8x",
+            scoped_com_initializer_.hr());
   }
 
   m_bSupportsUnicode = true;

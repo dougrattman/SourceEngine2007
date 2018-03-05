@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bone_setup.h"
 
@@ -1706,12 +1706,6 @@ bool CalcPoseSingle(const CStudioHdr *pStudioHdr, Vector pos[], Quaternion q[],
 
       Calc3WayBlendIndices(i0, i1, s0, s1, seqdesc, iAnimIndices, weight);
 
-      /*
-      char buf[256];
-      sprintf( buf, "%d %6.2f  %d %6.2f : %6.2f %6.2f %6.2f\n", i0, s0, i1, s1,
-      weight[0], weight[1], weight[2] ); OutputDebugString( buf );
-      */
-
       if (weight[1] < 0.001) {
         // on diagonal
         CalcAnimation(pStudioHdr, pos, q, seqdesc, sequence, iAnimIndices[0],
@@ -2124,13 +2118,13 @@ class CIKSolver {
     for (i = 0; i < 3; i++) X[i] = P[i];
     normalize(X);
 
-    // Its y axis is perpendicular to P, so Y = unit( E - X(E·X) ).
+    // Its y axis is perpendicular to P, so Y = unit( E - X(EÂ·X) ).
 
     float dDOTx = dot(D, X);
     for (i = 0; i < 3; i++) Y[i] = D[i] - dDOTx * X[i];
     normalize(Y);
 
-    // Its z axis is perpendicular to both X and Y, so Z = X×Y.
+    // Its z axis is perpendicular to both X and Y, so Z = XÃ—Y.
 
     cross(X, Y, Z);
 
@@ -3342,11 +3336,6 @@ void CIKContext::AutoIKRelease() {
                   pTarget->error.bInError = false;
                   continue;
                 }
-                /*
-                char buf[256];
-                sprintf( buf, "dt %.4f ft %.4f weight %.4f latched %.4f\n", dt,
-                ft, ikrule.flWeight, ikrule.latched ); OutputDebugString( buf );
-                */
 
                 int nIndex = m_ikChainRule.Element(ikrule.chain).AddToTail();
                 m_ikChainRule.Element(ikrule.chain).Element(nIndex) = ikrule;

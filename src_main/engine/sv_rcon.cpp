@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:  implementation of the rcon server
 
@@ -313,13 +313,6 @@ void CRConServer::FinishRedirect(const char *msg, const netadr_t &adr) {
     response.PutInt(size);  // the size
     response.SeekPut(CUtlBuffer::SEEK_CURRENT, size);
 
-    //		OutputDebugString( va("RCON: String is %i long\n",
-    // Q_strlen(msg))
-    //);
-    //// can't use DevMsg(), we are potentially inside the RedirectFlush()
-    // function 		printf("RCON: String is %i long, packet size
-    // %i\n",  Q_strlen(msg), size );
-
     SendRCONResponse(i, response.Base(), response.TellPut());
   }
 }
@@ -396,9 +389,7 @@ bool CRConServer::SendRCONResponse(int nIndex, const void *data, int len,
       sendLen += ret;
     }
   }
-  //	printf("RCON: Sending packet %i in len\n", len);
-  //	OutputDebugString( va("RCON: Sending packet %i in len\n", len) ); //
-  // can't use DevMsg(), we are potentially inside the RedirectFlush() function
+
   return true;
 }
 
