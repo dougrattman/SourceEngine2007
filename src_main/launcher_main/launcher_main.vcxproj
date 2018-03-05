@@ -282,7 +282,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\base\windows\include\product_version.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "file_system_access_logger.h"
 
@@ -12,7 +12,6 @@
 #include "tier1/fmtstr.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define ALL_RESLIST_FILE "all.lst"
