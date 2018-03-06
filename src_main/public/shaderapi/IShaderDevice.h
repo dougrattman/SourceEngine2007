@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ISHADERDEVICE_H
 #define ISHADERDEVICE_H
@@ -10,16 +10,11 @@
 #include "tier1/interface.h"
 #include "tier1/utlbuffer.h"
 
-//-----------------------------------------------------------------------------
-// forward declarations
-//-----------------------------------------------------------------------------
 struct MaterialAdapterInfo_t;
 class IMesh;
 class KeyValues;
 
-//-----------------------------------------------------------------------------
 // Describes how to set the mode
-//-----------------------------------------------------------------------------
 #define SHADER_DISPLAY_MODE_VERSION 1
 
 struct ShaderDisplayMode_t {
@@ -37,9 +32,7 @@ struct ShaderDisplayMode_t {
   int m_nRefreshRateDenominator;  // Refresh rate = numerator / denominator.
 };
 
-//-----------------------------------------------------------------------------
 // Describes how to set the device
-//-----------------------------------------------------------------------------
 #define SHADER_DEVICE_INFO_VERSION 1
 
 struct ShaderDeviceInfo_t {
@@ -72,9 +65,7 @@ struct ShaderDeviceInfo_t {
   bool m_bUsingMultipleWindows : 1;  // Forces D3DPresent to use _COPY instead
 };
 
-//-----------------------------------------------------------------------------
 // Info for non-interactive mode
-//-----------------------------------------------------------------------------
 struct ShaderNonInteractiveInfo_t {
   ShaderAPITextureHandle_t m_hTempFullscreenTexture;
   int m_nPacifierCount;
@@ -84,11 +75,9 @@ struct ShaderNonInteractiveInfo_t {
   float m_flNormalizedSize;
 };
 
-//-----------------------------------------------------------------------------
 // For vertex/index buffers. What type is it?
 // (NOTE: mirror this with a similarly named enum at the material system level
 // for backwards compatability.)
-//-----------------------------------------------------------------------------
 enum ShaderBufferType_t {
   SHADER_BUFFER_TYPE_STATIC = 0,
   SHADER_BUFFER_TYPE_DYNAMIC,
@@ -98,14 +87,12 @@ enum ShaderBufferType_t {
   SHADER_BUFFER_TYPE_COUNT,
 };
 
-inline bool IsDynamicBufferType(ShaderBufferType_t type) {
+constexpr inline bool IsDynamicBufferType(ShaderBufferType_t type) {
   return ((type == SHADER_BUFFER_TYPE_DYNAMIC) ||
           (type == SHADER_BUFFER_TYPE_DYNAMIC_TEMP));
 }
 
-//-----------------------------------------------------------------------------
 // Handle to a vertex, pixel, and geometry shader
-//-----------------------------------------------------------------------------
 DECLARE_POINTER_HANDLE(VertexShaderHandle_t);
 DECLARE_POINTER_HANDLE(GeometryShaderHandle_t);
 DECLARE_POINTER_HANDLE(PixelShaderHandle_t);
@@ -114,10 +101,8 @@ DECLARE_POINTER_HANDLE(PixelShaderHandle_t);
 #define GEOMETRY_SHADER_HANDLE_INVALID ((GeometryShaderHandle_t)0)
 #define PIXEL_SHADER_HANDLE_INVALID ((PixelShaderHandle_t)0)
 
-//-----------------------------------------------------------------------------
 // A shader buffer returns a block of memory which must be released when done
 // with it
-//-----------------------------------------------------------------------------
 abstract_class IShaderBuffer {
  public:
   virtual size_t GetSize() const = 0;
@@ -125,14 +110,10 @@ abstract_class IShaderBuffer {
   virtual void Release() = 0;
 };
 
-//-----------------------------------------------------------------------------
 // Mode chance callback
-//-----------------------------------------------------------------------------
 typedef void (*ShaderModeChangeCallbackFunc_t)(void);
 
-//-----------------------------------------------------------------------------
 // Methods related to discovering and selecting devices
-//-----------------------------------------------------------------------------
 #define SHADER_DEVICE_MGR_INTERFACE_VERSION "ShaderDeviceMgr001"
 abstract_class IShaderDeviceMgr : public IAppSystem {
  public:
@@ -175,9 +156,21 @@ abstract_class IShaderDeviceMgr : public IAppSystem {
       ShaderModeChangeCallbackFunc_t func) = 0;
 };
 
-//-----------------------------------------------------------------------------
+// Helper wrapper for IShaderBuffer for reading precompiled shader files
+// NOTE: This is meant to be instanced on the stack; so don't call Release!
+class CUtlShaderBuffer : public IShaderBuffer {
+ public:
+  CUtlShaderBuffer(CUtlBuffer &buf) : m_pBuf{&buf} {}
+
+  virtual size_t GetSize() const { return m_pBuf->TellMaxPut(); }
+  virtual const void *GetBits() const { return m_pBuf->Base(); }
+  virtual void Release() { Assert(0); }
+
+ private:
+  CUtlBuffer *m_pBuf;
+};
+
 // Methods related to control of the device
-//-----------------------------------------------------------------------------
 #define SHADER_DEVICE_INTERFACE_VERSION "ShaderDevice001"
 abstract_class IShaderDevice {
  public:
@@ -285,27 +278,7 @@ abstract_class IShaderDevice {
   virtual void RefreshFrontBufferNonInteractive() = 0;
 };
 
-//-----------------------------------------------------------------------------
-// Helper wrapper for IShaderBuffer for reading precompiled shader files
-// NOTE: This is meant to be instanced on the stack; so don't call Release!
-//-----------------------------------------------------------------------------
-class CUtlShaderBuffer : public IShaderBuffer {
- public:
-  CUtlShaderBuffer(CUtlBuffer &buf) : m_pBuf(&buf) {}
-
-  virtual size_t GetSize() const { return m_pBuf->TellMaxPut(); }
-
-  virtual const void *GetBits() const { return m_pBuf->Base(); }
-
-  virtual void Release() { Assert(0); }
-
- private:
-  CUtlBuffer *m_pBuf;
-};
-
-//-----------------------------------------------------------------------------
 // Inline methods of IShaderDevice
-//-----------------------------------------------------------------------------
 inline VertexShaderHandle_t IShaderDevice::CreateVertexShader(
     CUtlBuffer &buf, const char *pShaderVersion) {
   // NOTE: Text buffers are assumed to have source-code shader files

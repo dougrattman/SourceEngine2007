@@ -1,8 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef WMI_H
-#define WMI_H
+#ifndef MATERIAL_SYSTEM_SHADERAPIDX9_WMI_H_
+#define MATERIAL_SYSTEM_SHADERAPIDX9_WMI_H_
 
-int GetVidMemBytes();
+#include <tuple>
+#include "base/include/base_types.h"
+#include "base/include/windows/windows_light.h"
 
-#endif  // WMI_H
+// [bytes, error code]
+std::tuple<u64, HRESULT> GetVidMemBytes([[maybe_unused]] u32 adapter_idx);
+
+#endif  // MATERIAL_SYSTEM_SHADERAPIDX9_WMI_H_

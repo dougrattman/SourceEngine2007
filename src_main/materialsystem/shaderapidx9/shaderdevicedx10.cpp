@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #define NOMINMAX
 
@@ -102,14 +102,14 @@ void CShaderDeviceMgrDx10::Shutdown() {
 // Initialize adapter information
 //-----------------------------------------------------------------------------
 void CShaderDeviceMgrDx10::InitAdapterInfo() {
-  m_Adapters.RemoveAll();
+  adapters_.RemoveAll();
 
   IDXGIAdapter *pAdapter;
   for (UINT nCount = 0;
        m_pDXGIFactory->EnumAdapters(nCount, &pAdapter) != DXGI_ERROR_NOT_FOUND;
        ++nCount) {
-    int j = m_Adapters.AddToTail();
-    AdapterInfo_t &info = m_Adapters[j];
+    int j = adapters_.AddToTail();
+    AdapterInfo_t &info = adapters_[j];
 
 #ifdef _DEBUG
     memset(&info.m_ActualCaps, 0xDD, sizeof(info.m_ActualCaps));
@@ -237,15 +237,15 @@ bool CShaderDeviceMgrDx10::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
 //-----------------------------------------------------------------------------
 // Gets the number of adapters...
 //-----------------------------------------------------------------------------
-int CShaderDeviceMgrDx10::GetAdapterCount() const { return m_Adapters.Count(); }
+int CShaderDeviceMgrDx10::GetAdapterCount() const { return adapters_.Count(); }
 
 //-----------------------------------------------------------------------------
 // Returns info about each adapter
 //-----------------------------------------------------------------------------
 void CShaderDeviceMgrDx10::GetAdapterInfo(int nAdapter,
                                           MaterialAdapterInfo_t &info) const {
-  Assert((nAdapter >= 0) && (nAdapter < m_Adapters.Count()));
-  const HardwareCaps_t &caps = m_Adapters[nAdapter].m_ActualCaps;
+  Assert((nAdapter >= 0) && (nAdapter < adapters_.Count()));
+  const HardwareCaps_t &caps = adapters_[nAdapter].m_ActualCaps;
   memcpy(&info, &caps, sizeof(MaterialAdapterInfo_t));
 }
 
@@ -263,7 +263,7 @@ IDXGIAdapter *CShaderDeviceMgrDx10::GetAdapter(int nAdapter) const {
 //-----------------------------------------------------------------------------
 // Returns the amount of video memory in bytes for a particular adapter
 //-----------------------------------------------------------------------------
-int CShaderDeviceMgrDx10::GetVidMemBytes(int nAdapter) const {
+u64 CShaderDeviceMgrDx10::GetVidMemBytes(u32 nAdapter) const {
   LOCK_SHADERAPI();
   IDXGIAdapter *pAdapter = GetAdapter(nAdapter);
   if (!pAdapter) return 0;
@@ -400,13 +400,13 @@ CreateInterfaceFn CShaderDeviceMgrDx10::SetMode(
   Assert(nAdapter < GetAdapterCount());
   int nDXLevel = mode.m_nDXLevel != 0
                      ? mode.m_nDXLevel
-                     : m_Adapters[nAdapter].m_ActualCaps.m_nDXSupportLevel;
+                     : adapters_[nAdapter].m_ActualCaps.m_nDXSupportLevel;
   if (m_bObeyDxCommandlineOverride) {
     nDXLevel = CommandLine()->ParmValue("-dxlevel", nDXLevel);
     m_bObeyDxCommandlineOverride = false;
   }
-  if (nDXLevel > m_Adapters[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel) {
-    nDXLevel = m_Adapters[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel;
+  if (nDXLevel > adapters_[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel) {
+    nDXLevel = adapters_[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel;
   }
   nDXLevel = GetClosestActualDXLevel(nDXLevel);
 

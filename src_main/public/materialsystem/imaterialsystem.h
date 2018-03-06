@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IMATERIALSYSTEM_H
 #define IMATERIALSYSTEM_H
@@ -1432,9 +1432,9 @@ class PIXEvent {
   IMatRenderContext *m_pRenderContext;
 };
 
-#define PIX_ENABLE \
-  0  // set this to 1 and build engine/studiorender to enable pix events in the
-     // engine
+// set this to 1 and build engine/studiorender to enable pix events in the
+// engine
+#define PIX_ENABLE 0
 
 #if PIX_ENABLE
 #define PIXEVENT PIXEvent _pixEvent

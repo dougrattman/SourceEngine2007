@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IMATERIALSYSTEMHARDWARECONFIG_H
 #define IMATERIALSYSTEMHARDWARECONFIG_H
@@ -69,7 +69,7 @@ class IMaterialSystemHardwareConfig {
       const = 0;  // 0 means no anisotropic filtering
   virtual int MaxTextureWidth() const = 0;
   virtual int MaxTextureHeight() const = 0;
-  virtual int TextureMemorySize() const = 0;
+  virtual u64 TextureMemorySize() const = 0;
   virtual bool SupportsOverbright() const = 0;
   virtual bool SupportsCubeMaps() const = 0;
   virtual bool SupportsMipmappedCubemaps() const = 0;

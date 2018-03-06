@@ -303,6 +303,64 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x64", "x64", "{3AF86762-75F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tier0_tests", "tier0\tier0_tests.vcxproj", "{7B075A67-D547-48FB-8DC4-3D61B9D6CDBE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{4D4166E3-3D3B-4727-96B1-45922A9189E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{05D80643-69B6-43FB-AA80-145672B54399}"
+	ProjectSection(SolutionItems) = preProject
+		base\include\base_types.h = base\include\base_types.h
+		base\include\i18n.h = base\include\i18n.h
+		base\include\type_traits.h = base\include\type_traits.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows", "windows", "{DA253064-49A9-4F3B-861F-FB8F2EFDD5A5}"
+	ProjectSection(SolutionItems) = preProject
+		base\include\windows\com_ptr.h = base\include\windows\com_ptr.h
+		base\include\windows\product_version.h = base\include\windows\product_version.h
+		base\include\windows\scoped_com_initializer.h = base\include\windows\scoped_com_initializer.h
+		base\include\windows\scoped_error_mode.h = base\include\windows\scoped_error_mode.h
+		base\include\windows\scoped_winsock_initializer.h = base\include\windows\scoped_winsock_initializer.h
+		base\include\windows\unique_module_ptr.h = base\include\windows\unique_module_ptr.h
+		base\include\windows\windows_light.h = base\include\windows\windows_light.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{EE15C203-9C06-4343-8DC1-E19D9C59A204}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{1AC3CA14-1CE4-4FF5-9B05-4A40B4196403}"
+	ProjectSection(SolutionItems) = preProject
+		build\include\build_config.h = build\include\build_config.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bink", "bink", "{9904E75F-106B-46F8-8D45-150C49C56D5F}"
+	ProjectSection(SolutionItems) = preProject
+		deps\bink\bink.h = deps\bink\bink.h
+		deps\bink\binktextures.cpp = deps\bink\binktextures.cpp
+		deps\bink\binktextures.h = deps\bink\binktextures.h
+		deps\bink\binkw32.dll = deps\bink\binkw32.dll
+		deps\bink\binkw32.lib = deps\bink\binkw32.lib
+		deps\bink\binkw32.pdb = deps\bink\binkw32.pdb
+		deps\bink\binkw64.dll = deps\bink\binkw64.dll
+		deps\bink\dx7rad3d.cpp = deps\bink\dx7rad3d.cpp
+		deps\bink\dx8rad3d.cpp = deps\bink\dx8rad3d.cpp
+		deps\bink\dx9rad3d.cpp = deps\bink\dx9rad3d.cpp
+		deps\bink\exam3d.c = deps\bink\exam3d.c
+		deps\bink\exam3da.c = deps\bink\exam3da.c
+		deps\bink\exam3DPS.cpp = deps\bink\exam3DPS.cpp
+		deps\bink\exam3DPSA.cpp = deps\bink\exam3DPSA.cpp
+		deps\bink\exam3DPSthr.cpp = deps\bink\exam3DPSthr.cpp
+		deps\bink\examddp.c = deps\bink\examddp.c
+		deps\bink\exammss.c = deps\bink\exammss.c
+		deps\bink\examwin.c = deps\bink\examwin.c
+		deps\bink\examwinthr.c = deps\bink\examwinthr.c
+		deps\bink\glrad3d.c = deps\bink\glrad3d.c
+		deps\bink\rad3d.h = deps\bink\rad3d.h
+		deps\bink\radbase.h = deps\bink\radbase.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "winhelp", "winhelp", "{73FBE700-81FF-4B49-A882-1FF1B2675629}"
+	ProjectSection(SolutionItems) = preProject
+		deps\bink\winhelp\bink.chm = deps\bink\winhelp\bink.chm
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -1291,6 +1349,11 @@ Global
 		{46729406-C5EE-4C16-9A36-41FCFAF93830} = {EEB6AE48-742B-414C-B70B-C906F7B1AE0E}
 		{3AF86762-75F4-417A-AAB0-4DB9D1600726} = {EEB6AE48-742B-414C-B70B-C906F7B1AE0E}
 		{7B075A67-D547-48FB-8DC4-3D61B9D6CDBE} = {FCB545F9-7A56-4890-8BB1-9C1DF2B27CEB}
+		{05D80643-69B6-43FB-AA80-145672B54399} = {4D4166E3-3D3B-4727-96B1-45922A9189E5}
+		{DA253064-49A9-4F3B-861F-FB8F2EFDD5A5} = {05D80643-69B6-43FB-AA80-145672B54399}
+		{1AC3CA14-1CE4-4FF5-9B05-4A40B4196403} = {EE15C203-9C06-4343-8DC1-E19D9C59A204}
+		{9904E75F-106B-46F8-8D45-150C49C56D5F} = {CD8FD995-69EB-40A7-B796-79D2C046ED50}
+		{73FBE700-81FF-4B49-A882-1FF1B2675629} = {9904E75F-106B-46F8-8D45-150C49C56D5F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04BAD92C-5987-4112-B06B-1BEA672F11E3}

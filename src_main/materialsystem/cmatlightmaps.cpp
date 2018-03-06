@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "pch_materialsystem.h"
 
@@ -521,11 +521,6 @@ int CMatLightmaps::AllocateWhiteLightmap(IMaterial *iMaterial) {
     } else {
       // material change
       m_numSortIDs++;
-#if 0
-			char buf[128];
-			Q_snprintf( buf, sizeof( buf ), "AllocateWhiteLightmap: m_numSortIDs = %d %s\n", m_numSortIDs, pMaterial->GetName() );
-			OutputDebugString( buf );
-#endif
     }
     //		Warning( "%d material: \"%s\" lightmapPageID: -1\n",
     // m_numSortIDs, pMaterial->GetName() );
@@ -1500,29 +1495,13 @@ void CMatLightmaps::ComputeSortInfo(MaterialSystem_SortInfo_t *pInfo,
       continue;
     }
 
-    //	const IMaterialVar *pTransVar = pMaterial->GetMaterialProperty(
-    // MATERIAL_PROPERTY_OPACITY ); 	if( ( !alpha && (
-    // pTransVar->GetIntValue()
-    // == MATERIAL_TRANSLUCENT ) ) || 		( alpha && !(
-    // pTransVar->GetIntValue() == MATERIAL_TRANSLUCENT ) ) )
-    //	{
-    //		return true;
-    //	}
-
-    //		Warning( "sort stuff: %s %s\n", material->GetName(), bAlpha ?
-    //"alpha" : "not alpha" );
-
     // fill in the lightmapped materials
     for (lightmapPageID = pMaterial->GetMinLightmapPageID();
          lightmapPageID <= pMaterial->GetMaxLightmapPageID();
          ++lightmapPageID) {
       pInfo[sortId].material = pMaterial->GetQueueFriendlyVersion();
       pInfo[sortId].lightmapPageID = lightmapPageID;
-#if 0
-			char buf[128];
-			Q_snprintf( buf, sizeof( buf ), "ComputeSortInfo: %s lightmapPageID: %d sortID: %d\n", pMaterial->GetName(), lightmapPageID, sortId );
-			OutputDebugString( buf );
-#endif
+
       ++sortId;
     }
   }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "shaderapi/ishaderapi.h"
 
@@ -724,7 +724,7 @@ class CShaderAPIEmpty : public IShaderAPI,
   int MaxTextureAspectRatio() const;
   int GetDXSupportLevel() const;
   const char *GetShaderDLLName() const { return "UNKNOWN"; }
-  int TextureMemorySize() const;
+  u64 TextureMemorySize() const;
   bool SupportsOverbright() const;
   bool SupportsCubeMaps() const;
   bool SupportsMipmappedCubemaps() const;
@@ -1596,7 +1596,7 @@ int CShaderAPIEmpty::MaxTextureAspectRatio() const {
   return 16384;
 }
 
-int CShaderAPIEmpty::TextureMemorySize() const {
+u64 CShaderAPIEmpty::TextureMemorySize() const {
   // fake it
   return 64 * 1024 * 1024;
 }

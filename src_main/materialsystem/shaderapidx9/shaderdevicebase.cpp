@@ -1,5 +1,6 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
+#include <cinttypes>
 #include "base/include/windows/windows_light.h"
 
 #include "shaderdevicebase.h"
@@ -16,9 +17,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
-// Globals
-//-----------------------------------------------------------------------------
 IShaderUtil *g_pShaderUtil;  // The main shader utility interface
 CShaderDeviceBase *g_pShaderDevice;
 CShaderDeviceMgrBase *g_pShaderDeviceMgr;
@@ -29,12 +27,10 @@ bool g_bUseShaderMutex = false;  // Shader mutex globals
 bool g_bShaderAccessDisallowed;
 CShaderMutex g_ShaderMutex;
 
-//-----------------------------------------------------------------------------
 // FIXME: Hack related to setting command-line values for convars. Remove!!!
-//-----------------------------------------------------------------------------
 class CShaderAPIConVarAccessor : public IConCommandBaseAccessor {
  public:
-  virtual bool RegisterConCommandBase(ConCommandBase *pCommand) {
+  bool RegisterConCommandBase(ConCommandBase *pCommand) override {
     // Link to engine's list instead
     g_pCVar->RegisterConCommand(pCommand);
 
@@ -42,6 +38,7 @@ class CShaderAPIConVarAccessor : public IConCommandBaseAccessor {
     if (pValue && !pCommand->IsCommand()) {
       ((ConVar *)pCommand)->SetValue(pValue);
     }
+
     return true;
   }
 };
@@ -53,43 +50,35 @@ static void InitShaderAPICVars() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Read dx support levels
-//-----------------------------------------------------------------------------
 #define SUPPORT_CFG_FILE "dxsupport.cfg"
 #define SUPPORT_CFG_OVERRIDE_FILE "dxsupport_override.cfg"
 
-//-----------------------------------------------------------------------------
-// constructor, destructor
-//-----------------------------------------------------------------------------
-CShaderDeviceMgrBase::CShaderDeviceMgrBase() { m_pDXSupport = NULL; }
+CShaderDeviceMgrBase::CShaderDeviceMgrBase() : dx_support_config_{nullptr} {}
 
 CShaderDeviceMgrBase::~CShaderDeviceMgrBase() {}
 
-//-----------------------------------------------------------------------------
 // Factory used to get at internal interfaces (used by shaderapi + shader dlls)
-//-----------------------------------------------------------------------------
 static CreateInterfaceFn s_TempFactory;
+
 void *ShaderDeviceFactory(const char *pName, int *pReturnCode) {
   if (pReturnCode) {
     *pReturnCode = IFACE_OK;
   }
 
-  void *pInterface = s_TempFactory(pName, pReturnCode);
-  if (pInterface) return pInterface;
+  void *the_interface = s_TempFactory(pName, pReturnCode);
+  if (the_interface) return the_interface;
 
-  pInterface = Sys_GetFactoryThis()(pName, pReturnCode);
-  if (pInterface) return pInterface;
+  the_interface = Sys_GetFactoryThis()(pName, pReturnCode);
+  if (the_interface) return the_interface;
 
   if (pReturnCode) {
     *pReturnCode = IFACE_FAILED;
   }
-  return NULL;
+
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// Connect, disconnect
-//-----------------------------------------------------------------------------
 bool CShaderDeviceMgrBase::Connect(CreateInterfaceFn factory) {
   LOCK_SHADERAPI();
 
@@ -102,64 +91,61 @@ bool CShaderDeviceMgrBase::Connect(CreateInterfaceFn factory) {
   ConnectTier1Libraries(&actualFactory, 1);
   InitShaderAPICVars();
   ConnectTier2Libraries(&actualFactory, 1);
-  g_pShaderUtil =
-      (IShaderUtil *)ShaderDeviceFactory(SHADER_UTIL_INTERFACE_VERSION, NULL);
+  g_pShaderUtil = (IShaderUtil *)ShaderDeviceFactory(
+      SHADER_UTIL_INTERFACE_VERSION, nullptr);
   g_pShaderDeviceMgr = this;
 
-  s_TempFactory = NULL;
+  s_TempFactory = nullptr;
 
   if (!g_pShaderUtil || !g_pFullFileSystem || !g_pShaderDeviceMgr) {
-    Warning("ShaderAPIDx10 was unable to access the required interfaces!\n");
+    Warning("ShaderDeviceMgr was unable to access the required interfaces!\n");
     return false;
   }
 
-  // NOTE! : Overbright is 1.0 so that Hammer will work properly with the white
+  // NOTE: Overbright is 1.0 so that Hammer will work properly with the white
   // bumped and unbumped lightmaps.
   MathLib_Init(2.2f, 2.2f, 0.0f, 2.0f);
+
   return true;
 }
 
 void CShaderDeviceMgrBase::Disconnect() {
   LOCK_SHADERAPI();
 
-  g_pShaderDeviceMgr = NULL;
-  g_pShaderUtil = NULL;
+  g_pShaderDeviceMgr = nullptr;
+  g_pShaderUtil = nullptr;
   DisconnectTier2Libraries();
   ConVar_Unregister();
   DisconnectTier1Libraries();
 
-  if (m_pDXSupport) {
-    m_pDXSupport->deleteThis();
-    m_pDXSupport = NULL;
+  if (dx_support_config_) {
+    dx_support_config_->deleteThis();
+    dx_support_config_ = nullptr;
   }
 }
 
-//-----------------------------------------------------------------------------
 // Query interface
-//-----------------------------------------------------------------------------
 void *CShaderDeviceMgrBase::QueryInterface(const char *pInterfaceName) {
   if (!Q_stricmp(pInterfaceName, SHADER_DEVICE_MGR_INTERFACE_VERSION))
     return (IShaderDeviceMgr *)this;
+
   if (!Q_stricmp(pInterfaceName,
                  MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION))
     return (IMaterialSystemHardwareConfig *)g_pHardwareConfig;
-  return NULL;
+
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the hardware caps for a particular adapter
-//-----------------------------------------------------------------------------
 const HardwareCaps_t &CShaderDeviceMgrBase::GetHardwareCaps(
     int nAdapter) const {
   Assert((nAdapter >= 0) && (nAdapter < GetAdapterCount()));
-  return m_Adapters[nAdapter].m_ActualCaps;
+  return adapters_[nAdapter].m_ActualCaps;
 }
 
-//-----------------------------------------------------------------------------
 // Utility methods for reading config scripts
-//-----------------------------------------------------------------------------
 static inline int ReadHexValue(KeyValues *pVal, const char *pName) {
-  const char *pString = pVal->GetString(pName, NULL);
+  const char *pString = pVal->GetString(pName, nullptr);
   if (!pString) {
     return -1;
   }
@@ -172,9 +158,6 @@ static inline int ReadHexValue(KeyValues *pVal, const char *pName) {
 static bool ReadBool(KeyValues *pGroup, const char *pKeyName, bool bDefault) {
   int nVal = pGroup->GetInt(pKeyName, -1);
   if (nVal != -1) {
-    //		Warning( "\t%s = %s\n", pKeyName, (nVal != false) ? "true" :
-    //"false"
-    //);
     return (nVal != false);
   }
   return bDefault;
@@ -185,13 +168,10 @@ static void ReadInt(KeyValues *pGroup, const char *pKeyName, int nInvalidValue,
   int nVal = pGroup->GetInt(pKeyName, nInvalidValue);
   if (nVal != nInvalidValue) {
     *pResult = nVal;
-    //		Warning( "\t%s = %d\n", pKeyName, *pResult );
   }
 }
 
-//-----------------------------------------------------------------------------
 // Utility method to copy over a keyvalue
-//-----------------------------------------------------------------------------
 static void AddKey(KeyValues *pDest, KeyValues *pSrc) {
   // Note this will replace already-existing values
   switch (pSrc->GetDataType()) {
@@ -221,28 +201,26 @@ static void AddKey(KeyValues *pDest, KeyValues *pSrc) {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a dxlevel-specific config in the support keyvalues
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindDXLevelSpecificConfig(
     KeyValues *pKeyValues, int nDxLevel) {
   KeyValues *pGroup = pKeyValues->GetFirstSubKey();
+
   for (pGroup = pKeyValues->GetFirstSubKey(); pGroup;
        pGroup = pGroup->GetNextKey()) {
     int nFoundDxLevel = pGroup->GetInt("name", 0);
     if (nFoundDxLevel == nDxLevel) return pGroup;
   }
 
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a dxlevel and vendor-specific config in the support
 // keyvalues
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindDXLevelAndVendorSpecificConfig(
     KeyValues *pKeyValues, int nDxLevel, int nVendorID) {
   KeyValues *pGroup = pKeyValues->GetFirstSubKey();
+
   for (pGroup = pKeyValues->GetFirstSubKey(); pGroup;
        pGroup = pGroup->GetNextKey()) {
     int nFoundDxLevel = pGroup->GetInt("name", 0);
@@ -250,21 +228,20 @@ KeyValues *CShaderDeviceMgrBase::FindDXLevelAndVendorSpecificConfig(
     if (nFoundDxLevel == nDxLevel && nFoundVendorID == nVendorID) return pGroup;
   }
 
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a vendor-specific config in the support keyvalues
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindCPUSpecificConfig(KeyValues *pKeyValues,
-                                                       int nCPUMhz, bool bAMD) {
+                                                       i32 nCPUMhz,
+                                                       bool is_amd) {
   for (KeyValues *pGroup = pKeyValues->GetFirstSubKey(); pGroup;
        pGroup = pGroup->GetNextKey()) {
-    const char *pName = pGroup->GetString("name", NULL);
+    const char *pName = pGroup->GetString("name", nullptr);
     if (!pName) continue;
 
-    if ((bAMD && Q_stristr(pName, "AMD")) ||
-        (!bAMD && Q_stristr(pName, "Intel"))) {
+    if ((is_amd && Q_stristr(pName, "AMD")) ||
+        (!is_amd && Q_stristr(pName, "Intel"))) {
       int nMinMegahertz = pGroup->GetInt("min megahertz", -1);
       int nMaxMegahertz = pGroup->GetInt("max megahertz", -1);
       if (nMinMegahertz == -1 || nMaxMegahertz == -1) continue;
@@ -272,12 +249,10 @@ KeyValues *CShaderDeviceMgrBase::FindCPUSpecificConfig(KeyValues *pKeyValues,
       if (nMinMegahertz <= nCPUMhz && nCPUMhz < nMaxMegahertz) return pGroup;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a vendor-specific config in the support keyvalues
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindCardSpecificConfig(KeyValues *pKeyValues,
                                                         int nVendorId,
                                                         int nDeviceId) {
@@ -292,51 +267,49 @@ KeyValues *CShaderDeviceMgrBase::FindCardSpecificConfig(KeyValues *pKeyValues,
       return pGroup;
   }
 
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a vendor-specific config in the support keyvalues
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindMemorySpecificConfig(KeyValues *pKeyValues,
-                                                          int nSystemRamMB) {
+                                                          u32 nSystemRamMB) {
   for (KeyValues *pGroup = pKeyValues->GetFirstSubKey(); pGroup;
        pGroup = pGroup->GetNextKey()) {
-    // Used to help us debug this code
-    //		const char *pDebugName = pGroup->GetString( "name", "blah" );
-
-    int nMinMB = pGroup->GetInt("min megabytes", -1);
-    int nMaxMB = pGroup->GetInt("max megabytes", -1);
-    if (nMinMB == -1 || nMaxMB == -1) continue;
+    const u64 nMinMB =
+        pGroup->GetUint64("min megabytes", std::numeric_limits<u64>::max());
+    const u64 nMaxMB =
+        pGroup->GetUint64("max megabytes", std::numeric_limits<u64>::max());
+    if (nMinMB == std::numeric_limits<u64>::max() ||
+        nMaxMB == std::numeric_limits<u64>::max())
+      continue;
 
     if (nMinMB <= nSystemRamMB && nSystemRamMB < nMaxMB) return pGroup;
   }
-  return NULL;
+
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Finds if we have a texture mem size specific config
-//-----------------------------------------------------------------------------
 KeyValues *CShaderDeviceMgrBase::FindVidMemSpecificConfig(KeyValues *pKeyValues,
-                                                          int nVideoRamMB) {
+                                                          u32 nVideoRamMB) {
   for (KeyValues *pGroup = pKeyValues->GetFirstSubKey(); pGroup;
        pGroup = pGroup->GetNextKey()) {
-    int nMinMB = pGroup->GetInt("min megatexels", -1);
-    int nMaxMB = pGroup->GetInt("max megatexels", -1);
-    if (nMinMB == -1 || nMaxMB == -1) continue;
+    const u64 nMinMB =
+        pGroup->GetUint64("min megatexels", std::numeric_limits<u64>::max());
+    const u64 nMaxMB =
+        pGroup->GetUint64("max megatexels", std::numeric_limits<u64>::max());
+    if (nMinMB == std::numeric_limits<u64>::max() ||
+        nMaxMB == std::numeric_limits<u64>::max())
+      continue;
 
     if (nMinMB <= nVideoRamMB && nVideoRamMB < nMaxMB) return pGroup;
   }
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 // Methods related to reading DX support levels given particular devices
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 // Reads in the dxsupport.cfg keyvalues
-//-----------------------------------------------------------------------------
 static void OverrideValues_R(KeyValues *pDest, KeyValues *pSrc) {
   // Any same-named values get overridden in pDest.
   for (KeyValues *pSrcValue = pSrc->GetFirstValue(); pSrcValue;
@@ -362,12 +335,12 @@ static KeyValues *FindMatchingGroup(KeyValues *pSrc, KeyValues *pMatch) {
   KeyValues *pMatchSubKey = pMatch->FindKey("name");
   bool bHasSubKey =
       (pMatchSubKey && (pMatchSubKey->GetDataType() != KeyValues::TYPE_NONE));
-  const char *name = bHasSubKey ? pMatchSubKey->GetString() : NULL;
+  const char *name = bHasSubKey ? pMatchSubKey->GetString() : nullptr;
   int nMatchVendorID = ReadHexValue(pMatch, "VendorID");
   int nMatchMinDeviceID = ReadHexValue(pMatch, "MinDeviceID");
   int nMatchMaxDeviceID = ReadHexValue(pMatch, "MaxDeviceID");
 
-  KeyValues *pSrcGroup = NULL;
+  KeyValues *pSrcGroup = nullptr;
   for (pSrcGroup = pSrc->GetFirstTrueSubKey(); pSrcGroup;
        pSrcGroup = pSrcGroup->GetNextTrueSubKey()) {
     if (name) {
@@ -393,11 +366,11 @@ static KeyValues *FindMatchingGroup(KeyValues *pSrc, KeyValues *pMatch) {
 
     return pSrcGroup;
   }
-  return NULL;
+  return nullptr;
 }
 
 static void OverrideKeyValues(KeyValues *pDst, KeyValues *pSrc) {
-  KeyValues *pSrcGroup = NULL;
+  KeyValues *pSrcGroup = nullptr;
   for (pSrcGroup = pSrc->GetFirstTrueSubKey(); pSrcGroup;
        pSrcGroup = pSrcGroup->GetNextTrueSubKey()) {
     // Match each group in pSrc to one in pDst containing the same "name" value:
@@ -407,79 +380,66 @@ static void OverrideKeyValues(KeyValues *pDst, KeyValues *pSrc) {
       OverrideValues_R(pDstGroup, pSrcGroup);
     }
   }
-
-  //	if( CommandLine()->FindParm( "-debugdxsupport" ) )
-  //	{
-  //		CUtlBuffer tmpBuf;
-  //		pDst->RecursiveSaveToFile( tmpBuf, 0 );
-  //		g_pFullFileSystem->WriteFile( "gary.txt", NULL, tmpBuf );
-  //	}
 }
 
 KeyValues *CShaderDeviceMgrBase::ReadDXSupportKeyValues() {
-  if (CommandLine()->CheckParm("-ignoredxsupportcfg")) return NULL;
+  if (CommandLine()->CheckParm("-ignoredxsupportcfg")) return nullptr;
+  if (dx_support_config_) return dx_support_config_;
 
-  if (m_pDXSupport) return m_pDXSupport;
-
-  KeyValues *pCfg = new KeyValues("dxsupport");
-  const char *pPathID = "EXECUTABLE_PATH";
+  KeyValues *dx_support_config = new KeyValues("dxsupport");
+  const char *path_id = "EXECUTABLE_PATH";
 
   // First try to read a game-specific config, if it exists
-  if (!pCfg->LoadFromFile(g_pFullFileSystem, SUPPORT_CFG_FILE, pPathID)) {
-    pCfg->deleteThis();
-    return NULL;  //-V773
+  if (!dx_support_config->LoadFromFile(g_pFullFileSystem, SUPPORT_CFG_FILE,
+                                       path_id)) {
+    dx_support_config->deleteThis();
+    return nullptr;  //-V773
   }
 
-  char pTempPath[1024];
-  if (g_pFullFileSystem->GetSearchPath("GAME", false, pTempPath,
-                                       sizeof(pTempPath)) > 1) {
+  char temp_path[1024];
+  if (g_pFullFileSystem->GetSearchPath("GAME", false, temp_path,
+                                       ARRAYSIZE(temp_path)) > 1) {
     // Is there a mod-specific override file?
-    KeyValues *pOverride = new KeyValues("dxsupport_override");
-    if (pOverride->LoadFromFile(g_pFullFileSystem, SUPPORT_CFG_OVERRIDE_FILE,
-                                "GAME")) {
-      OverrideKeyValues(pCfg, pOverride);
+    KeyValues *dx_support_override_config = new KeyValues("dxsupport_override");
+    if (dx_support_override_config->LoadFromFile(
+            g_pFullFileSystem, SUPPORT_CFG_OVERRIDE_FILE, "GAME")) {
+      OverrideKeyValues(dx_support_config, dx_support_override_config);
     }
 
-    pOverride->deleteThis();
+    dx_support_override_config->deleteThis();
   }
 
-  m_pDXSupport = pCfg;
-  return pCfg;
+  dx_support_config_ = dx_support_config;
+
+  return dx_support_config;
 }
 
-//-----------------------------------------------------------------------------
 // Returns the max dx support level achievable with this board
-//-----------------------------------------------------------------------------
 void CShaderDeviceMgrBase::ReadDXSupportLevels(HardwareCaps_t &caps) {
   // See if the file tells us otherwise
-  KeyValues *pCfg = ReadDXSupportKeyValues();
-  if (!pCfg) return;
+  KeyValues *dx_support_config = ReadDXSupportKeyValues();
+  if (!dx_support_config) return;
 
-  KeyValues *pDeviceKeyValues =
-      FindCardSpecificConfig(pCfg, caps.m_VendorID, caps.m_DeviceID);
-  if (pDeviceKeyValues) {
+  KeyValues *gpu_config = FindCardSpecificConfig(
+      dx_support_config, caps.m_VendorID, caps.m_DeviceID);
+  if (gpu_config) {
     // First, set the max dx level
-    int nMaxDXSupportLevel = 0;
-    ReadInt(pDeviceKeyValues, "MaxDXLevel", 0, &nMaxDXSupportLevel);
-    if (nMaxDXSupportLevel != 0) {
-      caps.m_nMaxDXSupportLevel = nMaxDXSupportLevel;
+    int max_dx_level = 0;
+    ReadInt(gpu_config, "MaxDXLevel", 0, &max_dx_level);
+    if (max_dx_level != 0) {
+      caps.m_nMaxDXSupportLevel = max_dx_level;
     }
 
     // Next, set the preferred dx level
-    int nDXSupportLevel = 0;
-    ReadInt(pDeviceKeyValues, "DXLevel", 0, &nDXSupportLevel);
-    if (nDXSupportLevel != 0) {
-      caps.m_nDXSupportLevel = nDXSupportLevel;
-    } else {
-      caps.m_nDXSupportLevel = caps.m_nMaxDXSupportLevel;
-    }
+    int dx_support_level = 0;
+    ReadInt(gpu_config, "DXLevel", 0, &dx_support_level);
+    caps.m_nDXSupportLevel =
+        dx_support_level != 0 ? dx_support_level : caps.m_nMaxDXSupportLevel;
   }
 }
 
-//-----------------------------------------------------------------------------
 // Loads the hardware caps, for cases in which the D3D caps lie or where we need
 // to augment the caps
-//-----------------------------------------------------------------------------
 void CShaderDeviceMgrBase::LoadHardwareCaps(KeyValues *pGroup,
                                             HardwareCaps_t &caps) {
   if (!pGroup) return;
@@ -492,44 +452,41 @@ void CShaderDeviceMgrBase::LoadHardwareCaps(KeyValues *pGroup,
       pGroup, "DisableShaderOptimizations", caps.m_bDisableShaderOptimizations);
 }
 
-//-----------------------------------------------------------------------------
 // Reads in the hardware caps from the dxsupport.cfg file
-//-----------------------------------------------------------------------------
 void CShaderDeviceMgrBase::ReadHardwareCaps(HardwareCaps_t &caps,
                                             int nDxLevel) {
-  KeyValues *pCfg = ReadDXSupportKeyValues();
-  if (!pCfg) return;
+  KeyValues *dx_support_config = ReadDXSupportKeyValues();
+  if (!dx_support_config) return;
 
   // Next, read the hardware caps for that dx support level.
-  KeyValues *pDxLevelKeyValues = FindDXLevelSpecificConfig(pCfg, nDxLevel);
+  KeyValues *dx_levels_config =
+      FindDXLevelSpecificConfig(dx_support_config, nDxLevel);
   // Look for a vendor specific line for a given dxlevel.
-  KeyValues *pDXLevelAndVendorKeyValue =
-      FindDXLevelAndVendorSpecificConfig(pCfg, nDxLevel, caps.m_VendorID);
+  KeyValues *dx_level_and_vendor_config = FindDXLevelAndVendorSpecificConfig(
+      dx_support_config, nDxLevel, caps.m_VendorID);
   // Finally, override the hardware caps based on the specific card
-  KeyValues *pCardKeyValues =
-      FindCardSpecificConfig(pCfg, caps.m_VendorID, caps.m_DeviceID);
+  KeyValues *gpu_config = FindCardSpecificConfig(
+      dx_support_config, caps.m_VendorID, caps.m_DeviceID);
 
   // Apply
-  if (pCardKeyValues && ReadHexValue(pCardKeyValues, "MinDeviceID") == 0 &&
-      ReadHexValue(pCardKeyValues, "MaxDeviceID") == 0xffff) {
+  if (gpu_config && ReadHexValue(gpu_config, "MinDeviceID") == 0 &&
+      ReadHexValue(gpu_config, "MaxDeviceID") == 0xFFFF) {
     // The card specific case is a catch all for device ids, so run it before
     // running the dxlevel and card specific stuff.
-    LoadHardwareCaps(pDxLevelKeyValues, caps);
-    LoadHardwareCaps(pCardKeyValues, caps);
-    LoadHardwareCaps(pDXLevelAndVendorKeyValue, caps);
+    LoadHardwareCaps(dx_levels_config, caps);
+    LoadHardwareCaps(gpu_config, caps);
+    LoadHardwareCaps(dx_level_and_vendor_config, caps);
   } else {
     // The card specific case is a small range of cards, so run it last to
     // override all other configs.
-    LoadHardwareCaps(pDxLevelKeyValues, caps);
+    LoadHardwareCaps(dx_levels_config, caps);
     // don't run this one since we have a specific config for this card.
     //		LoadHardwareCaps( pDXLevelAndVendorKeyValue, caps );
-    LoadHardwareCaps(pCardKeyValues, caps);
+    LoadHardwareCaps(gpu_config, caps);
   }
 }
 
-//-----------------------------------------------------------------------------
 // Reads in ConVars + config variables
-//-----------------------------------------------------------------------------
 void CShaderDeviceMgrBase::LoadConfig(KeyValues *pKeyValues,
                                       KeyValues *pConfiguration) {
   if (!pKeyValues) return;
@@ -545,25 +502,21 @@ void CShaderDeviceMgrBase::LoadConfig(KeyValues *pKeyValues,
   }
 }
 
-//-----------------------------------------------------------------------------
-// Computes amount of ram
-//-----------------------------------------------------------------------------
-static uint64_t GetRam() {
-  MEMORYSTATUSEX stat = {sizeof(MEMORYSTATUSEX)};
-  if (GlobalMemoryStatusEx(&stat)) {
-    return stat.ullTotalPhys / (1024 * 1024);
+// Computes amount of ram.
+static u64 GetRam() {
+  MEMORYSTATUSEX memory_status{sizeof(MEMORYSTATUSEX)};
+  if (GlobalMemoryStatusEx(&memory_status)) {
+    return memory_status.ullTotalPhys / (1024 * 1024);
   }
 
   DevWarning("Can't get system RAM info. Assume %u MB.\n", 1024);
   return 1024;
 }
 
-//-----------------------------------------------------------------------------
 // Gets the recommended configuration associated with a particular dx level
-//-----------------------------------------------------------------------------
 bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
     int nAdapter, int nDXLevel, int nVendorID, int nDeviceID,
-    KeyValues *pConfiguration) {
+    KeyValues *common_config) {
   LOCK_SHADERAPI();
 
   const HardwareCaps_t &caps = GetHardwareCaps(nAdapter);
@@ -573,90 +526,95 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
   nDXLevel = GetClosestActualDXLevel(nDXLevel);
   if (nDXLevel > caps.m_nMaxDXSupportLevel) return false;
 
-  KeyValues *pCfg = ReadDXSupportKeyValues();
-  if (!pCfg) return true;
+  KeyValues *dx_config = ReadDXSupportKeyValues();
+  if (!dx_config) return true;
 
   // Look for a dxlevel specific line
-  KeyValues *pDxLevelKeyValues = FindDXLevelSpecificConfig(pCfg, nDXLevel);
+  KeyValues *dx_level_config = FindDXLevelSpecificConfig(dx_config, nDXLevel);
   // Look for a vendor specific line for a given dxlevel.
-  KeyValues *pDXLevelAndVendorKeyValue =
-      FindDXLevelAndVendorSpecificConfig(pCfg, nDXLevel, nVendorID);
+  KeyValues *dx_level_and_vendor_config =
+      FindDXLevelAndVendorSpecificConfig(dx_config, nDXLevel, nVendorID);
   // Next, override with device-specific overrides
-  KeyValues *pCardKeyValues =
-      FindCardSpecificConfig(pCfg, nVendorID, nDeviceID);
+  KeyValues *gpu_config =
+      FindCardSpecificConfig(dx_config, nVendorID, nDeviceID);
 
   // Apply
-  if (pCardKeyValues && ReadHexValue(pCardKeyValues, "MinDeviceID") == 0 &&
-      ReadHexValue(pCardKeyValues, "MaxDeviceID") == 0xffff) {
+  if (gpu_config && ReadHexValue(gpu_config, "MinDeviceID") == 0 &&
+      ReadHexValue(gpu_config, "MaxDeviceID") == 0xffff) {
     // The card specific case is a catch all for device ids, so run it before
     // running the dxlevel and card specific stuff.
-    LoadConfig(pDxLevelKeyValues, pConfiguration);
-    LoadConfig(pCardKeyValues, pConfiguration);
-    LoadConfig(pDXLevelAndVendorKeyValue, pConfiguration);
+    LoadConfig(dx_level_config, common_config);
+    LoadConfig(gpu_config, common_config);
+    LoadConfig(dx_level_and_vendor_config, common_config);
   } else {
     // The card specific case is a small range of cards, so run it last to
     // override all other configs.
-    LoadConfig(pDxLevelKeyValues, pConfiguration);
+    LoadConfig(dx_level_config, common_config);
     // don't run this one since we have a specific config for this card.
     //		LoadConfig( pDXLevelAndVendorKeyValue, pConfiguration );
-    LoadConfig(pCardKeyValues, pConfiguration);
+    LoadConfig(gpu_config, common_config);
   }
 
   // Next, override with cpu-speed based overrides
-  const CPUInformation &pi = GetCPUInformation();
-  int nCPUSpeedMhz = (int)(pi.m_Speed / 1000000.0f);
-  bool bAMD = Q_stristr(pi.m_szProcessorID, "amd") != NULL;
-  DevMsg("cpu speed %d MHz %s\n", nCPUSpeedMhz, pi.m_szProcessorID);
-  KeyValues *pCPUKeyValues = FindCPUSpecificConfig(pCfg, nCPUSpeedMhz, bAMD);
-  LoadConfig(pCPUKeyValues, pConfiguration);
+  const CPUInformation &cpu_info = GetCPUInformation();
+  const i64 cpu_speed_mhz = cpu_info.m_Speed / 1000000;
+  const bool is_amd_cpu = Q_stristr(cpu_info.m_szProcessorID, "amd") != nullptr;
 
-  // override with system memory-size based overrides
-  uint64_t nSystemMB = GetRam();
-  DevMsg("%llu MB of system RAM\n", nSystemMB);
-  KeyValues *pMemoryKeyValues = FindMemorySpecificConfig(pCfg, nSystemMB);
-  LoadConfig(pMemoryKeyValues, pConfiguration);
+  DevMsg("CPU %s frequency %.2f GHz\n", cpu_info.m_szProcessorID,
+         cpu_speed_mhz / 1000.f);
 
-  // override with texture memory-size based overrides
-  int nTextureMemorySize = GetVidMemBytes(nAdapter);
-  int vidMemMB = nTextureMemorySize / (1024 * 1024);
-  KeyValues *pVidMemKeyValues = FindVidMemSpecificConfig(pCfg, vidMemMB);
-  if (pVidMemKeyValues) {
+  KeyValues *cpu_config =
+      FindCPUSpecificConfig(dx_config, cpu_speed_mhz, is_amd_cpu);
+  LoadConfig(cpu_config, common_config);
+
+  // Override with system memory-size based overrides
+  const u64 memory_in_mb = GetRam();
+  DevMsg("%" PRIu64 " MB of system RAM\n", memory_in_mb);
+
+  KeyValues *memory_config = FindMemorySpecificConfig(dx_config, memory_in_mb);
+  LoadConfig(memory_config, common_config);
+
+  // Override with texture memory-size based overrides
+  const u64 gpu_memory_in_mb = GetVidMemBytes(nAdapter) / (1024 * 1024);
+  KeyValues *gpu_memory_config =
+      FindVidMemSpecificConfig(dx_config, gpu_memory_in_mb);
+  if (gpu_memory_config) {
     if (CommandLine()->FindParm("-debugdxsupport")) {
       CUtlBuffer tmpBuf;
-      pVidMemKeyValues->RecursiveSaveToFile(tmpBuf, 0);
-      Warning("pVidMemKeyValues\n%s\n", (const char *)tmpBuf.Base());
+      gpu_memory_config->RecursiveSaveToFile(tmpBuf, 0);
+      Warning("gpu memory config\n%s\n", (const char *)tmpBuf.Base());
     }
-    KeyValues *pMatPicmipKeyValue =
-        pVidMemKeyValues->FindKey("ConVar.mat_picmip", false);
+    KeyValues *gpu_mat_picmip_config =
+        gpu_memory_config->FindKey("ConVar.mat_picmip", false);
 
     // FIXME: Man, is this brutal. If it wasn't 1 day till orange box ship, I'd
     // do something in dxsupport maybe
-    if (pMatPicmipKeyValue &&
-        ((nDXLevel == caps.m_nMaxDXSupportLevel) || (vidMemMB < 100))) {
-      KeyValues *pConfigMatPicMip =
-          pConfiguration->FindKey("ConVar.mat_picmip", false);
-      int newPicMip = pMatPicmipKeyValue->GetInt();
-      int oldPicMip = pConfigMatPicMip ? pConfigMatPicMip->GetInt() : 0;
-      pConfiguration->SetInt("ConVar.mat_picmip", std::max(newPicMip, oldPicMip));
+    if (gpu_mat_picmip_config &&
+        ((nDXLevel == caps.m_nMaxDXSupportLevel) || (gpu_memory_in_mb < 100))) {
+      KeyValues *common_mat_picmip_config =
+          common_config->FindKey("ConVar.mat_picmip", false);
+      const int newPicMip = gpu_mat_picmip_config->GetInt();
+      const int oldPicMip =
+          common_mat_picmip_config ? common_mat_picmip_config->GetInt() : 0;
+      common_config->SetInt("ConVar.mat_picmip",
+                            std::max(newPicMip, oldPicMip));
     }
   }
 
   // Hack to slam the mat_dxlevel ConVar to match the requested dxlevel
-  pConfiguration->SetInt("ConVar.mat_dxlevel", nDXLevel);
+  common_config->SetInt("ConVar.mat_dxlevel", nDXLevel);
 
   if (CommandLine()->FindParm("-debugdxsupport")) {
     CUtlBuffer tmpBuf;
-    pConfiguration->RecursiveSaveToFile(tmpBuf, 0);
+    common_config->RecursiveSaveToFile(tmpBuf, 0);
     Warning("final config:\n%s\n", (const char *)tmpBuf.Base());
   }
 
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Gets recommended congifuration for a particular adapter at a particular dx
 // level
-//-----------------------------------------------------------------------------
 bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
     int nAdapter, int nDXLevel, KeyValues *pCongifuration) {
   Assert(nAdapter >= 0 && nAdapter <= GetAdapterCount());
@@ -666,9 +624,7 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
                                          info.m_DeviceID, pCongifuration);
 }
 
-//-----------------------------------------------------------------------------
 // Returns only valid dx levels
-//-----------------------------------------------------------------------------
 int CShaderDeviceMgrBase::GetClosestActualDXLevel(int nDxLevel) const {
   if (nDxLevel <= 69) return 60;
   if (nDxLevel <= 79) return 70;
@@ -676,35 +632,33 @@ int CShaderDeviceMgrBase::GetClosestActualDXLevel(int nDxLevel) const {
   if (nDxLevel <= 89) return 81;
   if (nDxLevel <= 94) return 90;
   if (nDxLevel <= 99) return 95;
-  return 100;
+  if (nDxLevel <= 100) return 100;
+  if (nDxLevel <= 110) return 110;
+  return 120;
 }
 
-//-----------------------------------------------------------------------------
 // Mode change callback
-//-----------------------------------------------------------------------------
 void CShaderDeviceMgrBase::AddModeChangeCallback(
     ShaderModeChangeCallbackFunc_t func) {
   LOCK_SHADERAPI();
-  Assert(func && m_ModeChangeCallbacks.Find(func) < 0);
-  m_ModeChangeCallbacks.AddToTail(func);
+  Assert(func && shader_mode_change_callbacks_.Find(func) < 0);
+  shader_mode_change_callbacks_.AddToTail(func);
 }
 
 void CShaderDeviceMgrBase::RemoveModeChangeCallback(
     ShaderModeChangeCallbackFunc_t func) {
   LOCK_SHADERAPI();
-  m_ModeChangeCallbacks.FindAndRemove(func);
+  shader_mode_change_callbacks_.FindAndRemove(func);
 }
 
 void CShaderDeviceMgrBase::InvokeModeChangeCallbacks() {
-  int nCount = m_ModeChangeCallbacks.Count();
+  int nCount = shader_mode_change_callbacks_.Count();
   for (int i = 0; i < nCount; ++i) {
-    m_ModeChangeCallbacks[i]();
+    shader_mode_change_callbacks_[i]();
   }
 }
 
-//-----------------------------------------------------------------------------
 // Factory to return from SetMode
-//-----------------------------------------------------------------------------
 void *CShaderDeviceMgrBase::ShaderInterfaceFactory(const char *pInterfaceName,
                                                    int *pReturnCode) {
   if (pReturnCode) {
@@ -720,23 +674,18 @@ void *CShaderDeviceMgrBase::ShaderInterfaceFactory(const char *pInterfaceName,
   if (pReturnCode) {
     *pReturnCode = IFACE_FAILED;
   }
-  return NULL;
+  return nullptr;
 }
 
-//-----------------------------------------------------------------------------
 //
 // The Base implementation of the shader device
 //
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// constructor, destructor
-//-----------------------------------------------------------------------------
 CShaderDeviceBase::CShaderDeviceBase() {
   m_bInitialized = false;
   m_nAdapter = -1;
-  m_hWnd = NULL;
-  m_hWndCookie = NULL;
+  m_hWnd = nullptr;
+  m_hWndCookie = nullptr;
 }
 
 CShaderDeviceBase::~CShaderDeviceBase() {}
@@ -750,9 +699,8 @@ int CShaderDeviceBase::StencilBufferBits() const { return 0; }
 
 bool CShaderDeviceBase::IsAAEnabled() const { return false; }
 
-//-----------------------------------------------------------------------------
 // Methods for interprocess communication to release resources
-//-----------------------------------------------------------------------------
+
 #define MATERIAL_SYSTEM_WINDOW_ID 0xFEEDDEAD
 
 static HWND GetTopmostParentWindow(HWND hWnd) {
@@ -767,14 +715,14 @@ static HWND GetTopmostParentWindow(HWND hWnd) {
 }
 
 static BOOL CALLBACK EnumChildWindowsProc(HWND hWnd, LPARAM lParam) {
-  int windowId = GetWindowLongPtr(hWnd, GWLP_USERDATA);
+  int windowId = GetWindowLongPtrW(hWnd, GWLP_USERDATA);
   if (windowId == MATERIAL_SYSTEM_WINDOW_ID) {
     COPYDATASTRUCT copyData;
     copyData.dwData = lParam;
     copyData.cbData = 0;
     copyData.lpData = 0;
 
-    SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM)&copyData);
+    SendMessageW(hWnd, WM_COPYDATA, 0, (LPARAM)&copyData);
   }
   return TRUE;
 }
@@ -793,19 +741,9 @@ static BOOL CALLBACK EnumWindowsProcNotThis(HWND hWnd, LPARAM lParam) {
   return TRUE;
 }
 
-//-----------------------------------------------------------------------------
 // Adds a hook to let us know when other instances are setting the mode
-//-----------------------------------------------------------------------------
-
-#ifdef STRICT
-#define WINDOW_PROC WNDPROC
-#else
-#define WINDOW_PROC FARPROC
-#endif
-
-static LRESULT CALLBACK ShaderDX8WndProc(HWND hWnd, UINT msg, WPARAM wParam,
-                                         LPARAM lParam) {
-#if !defined(_X360)
+static LRESULT CALLBACK ShaderApiDx9WndProc(HWND hWnd, UINT msg, WPARAM wParam,
+                                            LPARAM lParam) {
   // FIXME: Should these IPC messages tell when an app has focus or not?
   // If so, we'd want to totally disable the shader api layer when an app
   // doesn't have focus.
@@ -829,75 +767,65 @@ static LRESULT CALLBACK ShaderDX8WndProc(HWND hWnd, UINT msg, WPARAM wParam,
     } break;
   }
 
-  return DefWindowProc(hWnd, msg, wParam, lParam);
-#endif
+  return DefWindowProcW(hWnd, msg, wParam, lParam);
 }
 
-//-----------------------------------------------------------------------------
 // Install, remove ability to talk to other shaderapi apps
-//-----------------------------------------------------------------------------
 void CShaderDeviceBase::InstallWindowHook(void *hWnd) {
-  Assert(m_hWndCookie == NULL);
+  Assert(m_hWndCookie == nullptr);
 
-#if !defined(_X360)
-  HWND hParent = GetTopmostParentWindow((HWND)hWnd);
+  HWND parent_window = GetTopmostParentWindow((HWND)hWnd);
 
   // Attach a child window to the parent; we're gonna store special info there
   // We can't use the USERDATA, cause other apps may want to use this.
-  HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hParent, GWLP_HINSTANCE);
-  WNDCLASS wc;
-  memset(&wc, 0, sizeof(wc));
+  HINSTANCE instance =
+      (HINSTANCE)GetWindowLongPtrW(parent_window, GWLP_HINSTANCE);
+  WNDCLASSW wc{0};
   wc.style = CS_NOCLOSE | CS_PARENTDC;
-  wc.lpfnWndProc = ShaderDX8WndProc;
-  wc.hInstance = hInst;
-  wc.lpszClassName = "shaderdx8";
+  wc.lpfnWndProc = ShaderApiDx9WndProc;
+  wc.hInstance = instance;
+  wc.lpszClassName = L"Valve_ShaderApiDx9_WndClass";
 
   // In case an old one is sitting around still...
-  UnregisterClass("shaderdx8", hInst);
+  UnregisterClassW(L"Valve_ShaderApiDx9_WndClass", instance);
 
-  RegisterClass(&wc);
+  RegisterClassW(&wc);
 
   // Create the window
-  m_hWndCookie = CreateWindow("shaderdx8", "shaderdx8", WS_CHILD, 0, 0, 0, 0,
-                              hParent, NULL, hInst, NULL);
+  m_hWndCookie = CreateWindowW(L"Valve_ShaderApiDx9_WndClass",
+                               L"Valve ShaderApiDx9", WS_CHILD, 0, 0, 0, 0,
+                               parent_window, nullptr, instance, nullptr);
 
   // Marks it as a material system window
-  SetWindowLongPtr((HWND)m_hWndCookie, GWLP_USERDATA,
-                   MATERIAL_SYSTEM_WINDOW_ID);
-#endif
+  SetWindowLongPtrW((HWND)m_hWndCookie, GWLP_USERDATA,
+                    MATERIAL_SYSTEM_WINDOW_ID);
 }
 
 void CShaderDeviceBase::RemoveWindowHook(void *hWnd) {
-#if !defined(_X360)
   if (m_hWndCookie) {
     DestroyWindow((HWND)m_hWndCookie);
     m_hWndCookie = 0;
   }
 
-  HWND hParent = GetTopmostParentWindow((HWND)hWnd);
-  HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hParent, GWLP_HINSTANCE);
-  UnregisterClass("shaderdx8", hInst);
-#endif
+  HWND parent_window = GetTopmostParentWindow((HWND)hWnd);
+  HINSTANCE instance =
+      (HINSTANCE)GetWindowLongPtrW(parent_window, GWLP_HINSTANCE);
+
+  UnregisterClassW(L"Valve_ShaderApiDx9_WndClass", instance);
 }
 
-//-----------------------------------------------------------------------------
 // Sends a message to other shaderapi applications
-//-----------------------------------------------------------------------------
 void CShaderDeviceBase::SendIPCMessage(IPCMessage_t msg) {
-#if !defined(_X360)
   // Gotta send this to all windows, since we don't know which ones
   // are material system apps...
   if (msg != EVICT_MESSAGE) {
-    EnumWindows(EnumWindowsProc, (DWORD)msg);
+    EnumWindows(EnumWindowsProc, implicit_cast<LPARAM>(msg));
   } else {
-    EnumWindows(EnumWindowsProcNotThis, (DWORD)msg);
+    EnumWindows(EnumWindowsProcNotThis, implicit_cast<LPARAM>(msg));
   }
-#endif
 }
 
-//-----------------------------------------------------------------------------
 // Find view
-//-----------------------------------------------------------------------------
 int CShaderDeviceBase::FindView(void *hWnd) const {
   /* FIXME: Is this necessary?
   // Look for the view in the list of views
@@ -910,9 +838,7 @@ int CShaderDeviceBase::FindView(void *hWnd) const {
   return -1;
 }
 
-//-----------------------------------------------------------------------------
 // Creates a child window
-//-----------------------------------------------------------------------------
 bool CShaderDeviceBase::AddView(void *hWnd) {
   LOCK_SHADERAPI();
   /*
@@ -954,9 +880,7 @@ void CShaderDeviceBase::RemoveView(void *hWnd) {
   */
 }
 
-//-----------------------------------------------------------------------------
 // Activates a child window
-//-----------------------------------------------------------------------------
 void CShaderDeviceBase::SetView(void *hWnd) {
   LOCK_SHADERAPI();
 
@@ -972,9 +896,7 @@ void CShaderDeviceBase::SetView(void *hWnd) {
   g_pShaderAPI->SetViewports(1, &viewport);
 }
 
-//-----------------------------------------------------------------------------
 // Gets the window size
-//-----------------------------------------------------------------------------
 void CShaderDeviceBase::GetWindowSize(int &nWidth, int &nHeight) const {
   // If the window was minimized last time swap buffers happened, or if it's
   // iconic now, return 0 size

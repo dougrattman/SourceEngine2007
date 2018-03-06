@@ -1,179 +1,144 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2006, Valve Corporation, All rights reserved.
 
 #include "resource.h"
+
+#include "wmi.h"
 
 #define _WIN32_DCOM
 #include <Wbemidl.h>
 #include <comdef.h>
+#include <comip.h>
+#include <cassert>
+
+#include "base/include/windows/com_ptr.h"
+#include "base/include/windows/scoped_com_initializer.h"
+#include "tier0/include/commonmacros.h"
+#include "tier0/include/dbg.h"
 
 #pragma comment(lib, "wbemuuid.lib")
 
-int GetVidMemBytes() {
-  static int bBeenHere = false;
-  static int nBytes = 0;
+#ifdef NDEBUG
+#pragma comment(lib, "comsuppw.lib")
+#else
+#pragma comment(lib, "comsuppwd.lib")
+#endif
 
-  if (bBeenHere) {
-    return nBytes;
+// TODO: Do not ignore adapter idx.
+std::tuple<u64, HRESULT> GetVidMemBytes([[maybe_unused]] u32 adapter_idx) {
+  static bool has_value = false;
+  static u64 video_memory_bytes = 0;
+
+  if (has_value) {
+    return {video_memory_bytes, S_OK};
   }
 
-  bBeenHere = true;
+  has_value = true;
 
-  // Initialize COM
-  HRESULT hr = CoInitializeEx(
-      nullptr, COINIT_APARTMENTTHREADED | COINIT_SPEED_OVER_MEMORY);
+  // COM is needed for WMI calls.
+  source::windows::ScopedComInitializer scoped_com_initializer{
+      static_cast<COINIT>(COINIT_APARTMENTTHREADED | COINIT_SPEED_OVER_MEMORY |
+                          COINIT_DISABLE_OLE1DDE)};
+  HRESULT hr{scoped_com_initializer.hr()};
   if (FAILED(hr)) {
-    OutputDebugString(
-        "GetWMIDeviceStats - Unable to initialize COM library.\n");
-    return 0;
+    Error("GetVidMemBytes: COM initialization failure, hr 0x%0.8x.\n", hr);
+    return {0, hr};
   }
 
-  // Set general COM security levels --------------------------
-  // Note: If you are using Windows 2000, you need to specify
-  // the default authentication credentials for a user by using
-  // a SOLE_AUTHENTICATION_LIST structure in the pAuthList
-  // parameter of CoInitializeSecurity ------------------------
-
+  // Set general COM security levels.
   hr = CoInitializeSecurity(
-      NULL,
+      nullptr,
       -1,                           // COM authentication
-      NULL,                         // Authentication services
-      NULL,                         // Reserved
+      nullptr,                      // Authentication services
+      nullptr,                      // Reserved
       RPC_C_AUTHN_LEVEL_DEFAULT,    // Default authentication
       RPC_C_IMP_LEVEL_IMPERSONATE,  // Default Impersonation
-      NULL,                         // Authentication info
+      nullptr,                      // Authentication info
       EOAC_NONE,                    // Additional capabilities
-      NULL                          // Reserved
-  );
-
+      nullptr);
   if (FAILED(hr)) {
-    OutputDebugString("GetWMIDeviceStats - Unable to initialize security.\n");
-    CoUninitialize();
-    return 0;
+    Error("GetVidMemBytes: COM security initialization failure, hr 0x%0.8x.\n",
+          hr);
+    return {0, hr};
   }
 
-  // Obtain the initial locator to WMI
-  IWbemLocator *pLoc = NULL;
-
-  hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-                        IID_PPV_ARGS(&pLoc));
-
+  // Obtain the initial locator to WMI.
+  source::windows::com_ptr<IWbemLocator> wbem_locator;
+  hr = wbem_locator.CreateInstance(CLSID_WbemLocator, nullptr,
+                                   CLSCTX_INPROC_SERVER);
   if (FAILED(hr)) {
-    OutputDebugString(
-        "GetWMIDeviceStats - Failed to create IWbemLocator object.\n");
-    CoUninitialize();
-    return 0;
+    Error("GetVidMemBytes: Failed to create IWbemLocator object, hr 0x%0.8x.\n",
+          hr);
+    return {0, hr};
   }
 
-  // Connect to WMI through the IWbemLocator::ConnectServer method
-
-  IWbemServices *pSvc = NULL;
-
-  // Connect to the root\cimv2 namespace with
-  // the current user and obtain pointer pSvc
-  // to make IWbemServices calls.
-  hr = pLoc->ConnectServer(
-      _bstr_t(L"ROOT\\CIMV2"),  // Object path of WMI namespace
-      NULL,                     // User name. NULL = current user
-      NULL,                     // User password. NULL = current
-      0,                        // Locale. NULL indicates current
-      NULL,                     // Security flags.
-      0,                        // Authority (e.g. Kerberos)
-      0,                        // Context object
-      &pSvc                     // pointer to IWbemServices proxy
-  );
-
+  // Connect to the root\cimv2 namespace with the current user and obtain
+  // pointer wbem_services to make IWbemServices calls.
+  source::windows::com_ptr<IWbemServices> wbem_services;
+  hr = wbem_locator->ConnectServer(
+      bstr_t(L"ROOT\\CIMV2"),  // Object path of WMI namespace
+      nullptr,                 // User name. nullptr = current user
+      nullptr,                 // User password. nullptr = current
+      nullptr,                 // Locale. nullptr indicates current
+      0,                       // Security flags.
+      nullptr,                 // Authority (e.g. Kerberos)
+      nullptr,                 // Context object
+      &wbem_services);         // pointer to IWbemServices proxy
   if (FAILED(hr)) {
-    OutputDebugString("GetWMIDeviceStats - Could not connect.\n");
-    pLoc->Release();
-    CoUninitialize();
-    return 0;
+    Error(
+        "GetVidMemBytes: Could not connect to ROOT\\CIMV2 server, hr "
+        "0x%0.8x.\n",
+        hr);
+    return {0, hr};
   }
 
-  //	OutputDebugString ( L"GetWMIDeviceStats - Connected to ROOT\\CIMV2 WMI
-  // namespace\n");
-
-  // Set security levels on the proxy
-
-  hr = CoSetProxyBlanket(pSvc,                    // Indicates the proxy to set
+  // Set security levels on the proxy.
+  hr = CoSetProxyBlanket(wbem_services,           // Indicates the proxy to set
                          RPC_C_AUTHN_WINNT,       // RPC_C_AUTHN_xxx
                          RPC_C_AUTHZ_NONE,        // RPC_C_AUTHZ_xxx
-                         NULL,                    // Server principal name
+                         nullptr,                 // Server principal name
                          RPC_C_AUTHN_LEVEL_CALL,  // RPC_C_AUTHN_LEVEL_xxx
                          RPC_C_IMP_LEVEL_IMPERSONATE,  // RPC_C_IMP_LEVEL_xxx
-                         NULL,                         // client identity
-                         EOAC_NONE                     // proxy capabilities
-  );
-
+                         nullptr,                      // client identity
+                         EOAC_NONE);                   // proxy capabilities
   if (FAILED(hr)) {
-    OutputDebugString("GetWMIDeviceStats - Could not set proxy blanket.\n");
-    pSvc->Release();
-    pLoc->Release();
-    CoUninitialize();
-    return 0;
+    Error("GetVidMemBytes: Could not set proxy blanket, hr 0x%0.8x.\n", hr);
+    return {0, hr};
   }
 
-  // Use the IWbemServices pointer to make requests of WMI
-
-  //
-  // --- Win32_VideoController
-  // --------------------------------------------------
-  //
-
-  IEnumWbemClassObject *pEnumerator = NULL;
-  hr = pSvc->ExecQuery(bstr_t("WQL"),
-                       bstr_t("SELECT * FROM Win32_VideoController"),
-                       WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-                       NULL, &pEnumerator);
-
+  // Use the IWbemServices pointer to make requests of WMI.
+  source::windows::com_ptr<IEnumWbemClassObject> wbem_enumerator;
+  hr = wbem_services->ExecQuery(
+      bstr_t("WQL"), bstr_t("SELECT * FROM Win32_VideoController"),
+      WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr,
+      &wbem_enumerator);
   if (FAILED(hr)) {
-    OutputDebugString(
-        "GetWMIDeviceStats - Query for Win32_VideoController failed.\n");
-
-    pSvc->Release();
-    pLoc->Release();
-    CoUninitialize();
-    return 0;
+    Error(
+        "GetVidMemBytes: Could not query Win32_VideoController, hr "
+        "0x%0.8x.\n",
+        hr);
+    return {0, hr};
   }
 
   // Get the data from the above query
-  IWbemClassObject *pclsObj = NULL;
-  ULONG uReturn = 0;
+  source::windows::com_ptr<IWbemClassObject> wbem_class_object;
+  ULONG wbem_class_object_count = 0;
 
-  while (pEnumerator) {
-    hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
+  while (true) {
+    hr = wbem_enumerator->Next(WBEM_INFINITE, 1, &wbem_class_object,
+                               &wbem_class_object_count);
+    if (FAILED(hr) || 0 == wbem_class_object_count) break;
 
-    if (0 == uReturn) {
-      break;
-    }
+    variant_t property;
+    hr = wbem_class_object->Get(L"AdapterRAM", 0, &property, nullptr, nullptr);
 
-    VARIANT vtProp;
-    VariantInit(&vtProp);
-
-    // Pluck a series of properties out of the query from Win32_VideoController
-
-    //        hr = pclsObj->Get(L"Description", 0, &vtProp, 0, 0);
-    //        // Basically the same as "VideoProcessor"
-    //		if ( SUCCEEDED( hr ) )
-    //		{
-    //			wsprintf( pAdapter->m_szPrimaryAdapterDescription,
-    // vtProp.bstrVal
-    //);
-    //		}
-
-    hr = pclsObj->Get(L"AdapterRAM", 0, &vtProp, 0, 0);
     if (SUCCEEDED(hr)) {
-      nBytes = vtProp.intVal;  // Video RAM in bytes
+      video_memory_bytes = implicit_cast<u32>(property);
     }
 
-    VariantClear(&vtProp);
+    wbem_class_object.Release();
   }
 
-  // Cleanup
-  pSvc->Release();
-  pLoc->Release();
-  pEnumerator->Release();
-  pclsObj->Release();
-  CoUninitialize();
+  // TODO: wbem_class_object.Release();
 
-  return nBytes;
+  return {video_memory_bytes, hr};
 }

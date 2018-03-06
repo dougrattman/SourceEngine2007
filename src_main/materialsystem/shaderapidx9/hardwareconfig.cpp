@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "hardwareconfig.h"
 
@@ -632,7 +632,7 @@ int CHardwareConfig::MaxTextureHeight() const {
   return m_Caps.m_MaxTextureHeight;
 }
 
-int CHardwareConfig::TextureMemorySize() const {
+u64 CHardwareConfig::TextureMemorySize() const {
   return m_Caps.m_TextureMemorySize;
 }
 

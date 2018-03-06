@@ -437,7 +437,7 @@ static inline bool IsDepthFormatCompatible(int nAdapter,
 
   // Verify that the depth format is compatible.
   HRESULT hr =
-      D3D()->CheckDepthStencilMatch(nAdapter, DX8_DEVTYPE, d3dDisplayFormat,
+      D3D()->CheckDepthStencilMatch(nAdapter, SOURCE_DX9_DEVICE_TYPE, d3dDisplayFormat,
                                     d3dRenderTargetFormat, depthFormat);
   return !FAILED(hr);
 }

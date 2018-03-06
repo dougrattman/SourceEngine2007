@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "shaderdevicedx8.h"
 
@@ -98,12 +98,12 @@ void CShaderDeviceMgrDx8::InitAdapterInfo() {
   if (m_bAdapterInfoIntialized) return;
 
   m_bAdapterInfoIntialized = true;
-  m_Adapters.RemoveAll();
+  adapters_.RemoveAll();
 
   int nCount = m_pD3D->GetAdapterCount();
   for (int i = 0; i < nCount; ++i) {
-    int j = m_Adapters.AddToTail();
-    AdapterInfo_t &info = m_Adapters[j];
+    int j = adapters_.AddToTail();
+    AdapterInfo_t &info = adapters_[j];
 
 #ifdef _DEBUG
     memset(&info.m_ActualCaps, 0xDD, sizeof(info.m_ActualCaps));
@@ -152,11 +152,13 @@ void CShaderDeviceMgrDx8::CheckNormalCompressionSupport(HardwareCaps_t *pCaps,
 //	360 Requires more work in the download logic
 //
 //	// Test ATI2N support
-//	if ( m_pD3D->CheckDeviceFormat( nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
+//	if ( m_pD3D->CheckDeviceFormat( nAdapter, SOURCE_DX9_DEVICE_TYPE,
+// D3DFMT_X8R8G8B8,
 // 0, D3DRTYPE_TEXTURE, ATIFMT_ATI2N ) == S_OK )
 //	{
 //		// Test ATI1N support
-//		if ( m_pD3D->CheckDeviceFormat( nAdapter, DX8_DEVTYPE,
+//		if ( m_pD3D->CheckDeviceFormat( nAdapter,
+// SOURCE_DX9_DEVICE_TYPE,
 // D3DFMT_X8R8G8B8, 0, D3DRTYPE_TEXTURE, ATIFMT_ATI1N ) == S_OK )
 //		{
 //			pCaps->m_bSupportsNormalMapCompression = true;
@@ -173,28 +175,28 @@ void CShaderDeviceMgrDx8::CheckVendorDependentShadowMappingSupport(
   // Set a default 0 texture format...may be overridden below by IHV-specific
   // surface type
   pCaps->m_NullTextureFormat = IMAGE_FORMAT_ARGB8888;
-  if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE,
-                                D3DFMT_R5G6B5) == S_OK) {
+  if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                D3DFMT_X8R8G8B8, D3DUSAGE_RENDERTARGET,
+                                D3DRTYPE_TEXTURE, D3DFMT_R5G6B5) == S_OK) {
     pCaps->m_NullTextureFormat = IMAGE_FORMAT_RGB565;
   }
 
-  bool bToolsMode = (CommandLine()->CheckParm("-tools") != NULL);
+  bool bToolsMode = (CommandLine()->CheckParm("-tools") != nullptr);
   bool bFound16Bit = false;
 
   if ((pCaps->m_VendorID == VENDORID_NVIDIA) &&
       (pCaps->m_SupportsShaderModel_3_0))  // ps_3_0 parts from nVidia
   {
     // First, test for 0 texture support
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE,
-                                  NVFMT_NULL) == S_OK) {
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_RENDERTARGET,
+                                  D3DRTYPE_TEXTURE, NVFMT_NULL) == S_OK) {
       pCaps->m_NullTextureFormat = IMAGE_FORMAT_NV_NULL;
     }
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
-                                  D3DFMT_D16) == S_OK) {
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_DEPTHSTENCIL,
+                                  D3DRTYPE_TEXTURE, D3DFMT_D16) == S_OK) {
       pCaps->m_ShadowDepthTextureFormat = IMAGE_FORMAT_NV_DST16;
       pCaps->m_bSupportsFetch4 = false;
       pCaps->m_bSupportsShadowDepthTextures = true;
@@ -204,9 +206,9 @@ void CShaderDeviceMgrDx8::CheckVendorDependentShadowMappingSupport(
         return;
     }
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
-                                  D3DFMT_D24S8) == S_OK) {
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_DEPTHSTENCIL,
+                                  D3DRTYPE_TEXTURE, D3DFMT_D24S8) == S_OK) {
       pCaps->m_ShadowDepthTextureFormat = IMAGE_FORMAT_NV_DST24;
       pCaps->m_bSupportsFetch4 = false;
       pCaps->m_bSupportsShadowDepthTextures = true;
@@ -220,14 +222,15 @@ void CShaderDeviceMgrDx8::CheckVendorDependentShadowMappingSupport(
   {
     // Initially, check for Fetch4 (tied to ATIFMT_D24S8 support)
     pCaps->m_bSupportsFetch4 = false;
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
-                                  ATIFMT_D24S8) == S_OK) {
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_DEPTHSTENCIL,
+                                  D3DRTYPE_TEXTURE, ATIFMT_D24S8) == S_OK) {
       pCaps->m_bSupportsFetch4 = true;
     }
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_DEPTHSTENCIL,
+                                  D3DRTYPE_TEXTURE,
                                   ATIFMT_D16) == S_OK)  // Prefer 16-bit
     {
       pCaps->m_ShadowDepthTextureFormat = IMAGE_FORMAT_ATI_DST16;
@@ -238,9 +241,9 @@ void CShaderDeviceMgrDx8::CheckVendorDependentShadowMappingSupport(
         return;
     }
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                  D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
-                                  ATIFMT_D24S8) == S_OK) {
+    if (m_pD3D->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                  D3DFMT_X8R8G8B8, D3DUSAGE_DEPTHSTENCIL,
+                                  D3DRTYPE_TEXTURE, ATIFMT_D24S8) == S_OK) {
       pCaps->m_ShadowDepthTextureFormat = IMAGE_FORMAT_ATI_DST24;
       pCaps->m_bSupportsShadowDepthTextures = true;
       return;
@@ -275,17 +278,17 @@ void CShaderDeviceMgrDx8::CheckVendorDependentAlphaToCoverage(
     bool bNVIDIA_MSAA = false;
     bool bNVIDIA_SSAA = false;
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE,  // Check MSAA version
-                                  D3DFMT_X8R8G8B8, 0, D3DRTYPE_SURFACE,
-                                  (D3DFORMAT)MAKEFOURCC('A', 'T', 'O', 'C')) ==
-        S_OK) {
+    if (m_pD3D->CheckDeviceFormat(
+            nAdapter, SOURCE_DX9_DEVICE_TYPE,  // Check MSAA version
+            D3DFMT_X8R8G8B8, 0, D3DRTYPE_SURFACE,
+            (D3DFORMAT)MAKEFOURCC('A', 'T', 'O', 'C')) == S_OK) {
       bNVIDIA_MSAA = true;
     }
 
-    if (m_pD3D->CheckDeviceFormat(nAdapter, DX8_DEVTYPE,  // Check SSAA version
-                                  D3DFMT_X8R8G8B8, 0, D3DRTYPE_SURFACE,
-                                  (D3DFORMAT)MAKEFOURCC('S', 'S', 'A', 'A')) ==
-        S_OK) {
+    if (m_pD3D->CheckDeviceFormat(
+            nAdapter, SOURCE_DX9_DEVICE_TYPE,  // Check SSAA version
+            D3DFMT_X8R8G8B8, 0, D3DRTYPE_SURFACE,
+            (D3DFORMAT)MAKEFOURCC('S', 'S', 'A', 'A')) == S_OK) {
       bNVIDIA_SSAA = true;
     }
 
@@ -327,7 +330,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   D3DCAPS caps;
   // NOTE: When getting the caps, we want to be limited by the hardware
   // even if we're running with software T&L...
-  HRESULT hr = m_pD3D->GetDeviceCaps(nAdapter, DX8_DEVTYPE, &caps);
+  HRESULT hr = m_pD3D->GetDeviceCaps(nAdapter, SOURCE_DX9_DEVICE_TYPE, &caps);
   if (FAILED(hr)) return false;
 
   D3DADAPTER_IDENTIFIER9 ident;
@@ -572,14 +575,14 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
 
   // query for SRGB support as needed for our DX 9 stuff
   pCaps->m_SupportsSRGB =
-      (D3D()->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                D3DUSAGE_QUERY_SRGBREAD, D3DRTYPE_TEXTURE,
-                                D3DFMT_DXT1) == S_OK);
+      (D3D()->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                D3DFMT_X8R8G8B8, D3DUSAGE_QUERY_SRGBREAD,
+                                D3DRTYPE_TEXTURE, D3DFMT_DXT1) == S_OK);
 
   if (pCaps->m_SupportsSRGB) {
     pCaps->m_SupportsSRGB =
         (D3D()->CheckDeviceFormat(
-             nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
+             nAdapter, SOURCE_DX9_DEVICE_TYPE, D3DFMT_X8R8G8B8,
              D3DUSAGE_QUERY_SRGBREAD | D3DUSAGE_QUERY_SRGBWRITE,
              D3DRTYPE_TEXTURE, D3DFMT_A8R8G8B8) == S_OK);
   }
@@ -589,9 +592,9 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   }
 
   pCaps->m_bSupportsVertexTextures =
-      (D3D()->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                D3DUSAGE_QUERY_VERTEXTEXTURE, D3DRTYPE_TEXTURE,
-                                D3DFMT_R32F) == S_OK);
+      (D3D()->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                D3DFMT_X8R8G8B8, D3DUSAGE_QUERY_VERTEXTEXTURE,
+                                D3DRTYPE_TEXTURE, D3DFMT_R32F) == S_OK);
 
   // FIXME: vs30 has a fixed setting here at 4.
   // Future hardware will need some other way of computing this.
@@ -603,27 +606,28 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
 
   // Does the device support filterable int16_t textures?
   bool bSupportsInteger16Textures =
-      (D3D()->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                D3DUSAGE_QUERY_FILTER, D3DRTYPE_TEXTURE,
-                                D3DFMT_A16B16G16R16) == S_OK);
+      (D3D()->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                D3DFMT_X8R8G8B8, D3DUSAGE_QUERY_FILTER,
+                                D3DRTYPE_TEXTURE, D3DFMT_A16B16G16R16) == S_OK);
 
   // Does the device support filterable fp16 textures?
   bool bSupportsFloat16Textures =
-      (D3D()->CheckDeviceFormat(nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
-                                D3DUSAGE_QUERY_FILTER, D3DRTYPE_TEXTURE,
+      (D3D()->CheckDeviceFormat(nAdapter, SOURCE_DX9_DEVICE_TYPE,
+                                D3DFMT_X8R8G8B8, D3DUSAGE_QUERY_FILTER,
+                                D3DRTYPE_TEXTURE,
                                 D3DFMT_A16B16G16R16F) == S_OK);
 
   // Does the device support blendable fp16 render targets?
   bool bSupportsFloat16RenderTargets =
       (D3D()->CheckDeviceFormat(
-           nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
+           nAdapter, SOURCE_DX9_DEVICE_TYPE, D3DFMT_X8R8G8B8,
            D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING | D3DUSAGE_RENDERTARGET,
            D3DRTYPE_TEXTURE, D3DFMT_A16B16G16R16F) == S_OK);
 
   // Essentially a proxy for a DX10 device running DX9 code path
   pCaps->m_bSupportsFloat32RenderTargets =
       (D3D()->CheckDeviceFormat(
-           nAdapter, DX8_DEVTYPE, D3DFMT_X8R8G8B8,
+           nAdapter, SOURCE_DX9_DEVICE_TYPE, D3DFMT_X8R8G8B8,
            D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING | D3DUSAGE_RENDERTARGET,
            D3DRTYPE_TEXTURE, D3DFMT_A32B32G32R32F) == S_OK);
 
@@ -823,7 +827,7 @@ int CShaderDeviceMgrDx8::GetAdapterCount() const {
   // resolved.
   const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
 
-  return m_Adapters.Count();
+  return adapters_.Count();
 }
 
 //-----------------------------------------------------------------------------
@@ -835,8 +839,8 @@ void CShaderDeviceMgrDx8::GetAdapterInfo(int nAdapter,
   // resolved.
   const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
 
-  Assert((nAdapter >= 0) && (nAdapter < m_Adapters.Count()));
-  const HardwareCaps_t &caps = m_Adapters[nAdapter].m_ActualCaps;
+  Assert((nAdapter >= 0) && (nAdapter < adapters_.Count()));
+  const HardwareCaps_t &caps = adapters_[nAdapter].m_ActualCaps;
   memcpy(&info, &caps, sizeof(MaterialAdapterInfo_t));  //-V512
 }
 
@@ -941,23 +945,9 @@ void CShaderDeviceMgrDx8::GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
   LOCK_SHADERAPI();
   Assert(D3D());
 
-  HRESULT hr;
   D3DDISPLAYMODE mode;
-#if !defined(_X360)
-  hr = D3D()->GetAdapterDisplayMode(nAdapter, &mode);
+  HRESULT hr = D3D()->GetAdapterDisplayMode(nAdapter, &mode);
   Assert(!FAILED(hr));
-#else
-  if (!m_pD3DDevice) {
-    // the console has no prior display or mode until its created
-    mode.Width = GetSystemMetrics(SM_CXSCREEN);
-    mode.Height = GetSystemMetrics(SM_CYSCREEN);
-    mode.RefreshRate = 60;
-    mode.Format = D3DFMT_X8R8G8B8;
-  } else {
-    hr = m_pD3DDevice->GetDisplayMode(0, &mode);
-    Assert(!FAILED(hr));
-  }
-#endif
 
   pInfo->m_nWidth = mode.Width;
   pInfo->m_nHeight = mode.Height;
@@ -976,20 +966,20 @@ CreateInterfaceFn CShaderDeviceMgrDx8::SetMode(void *hWnd, int nAdapter,
   Assert(nAdapter < GetAdapterCount());
   int nDXLevel = mode.m_nDXLevel != 0
                      ? mode.m_nDXLevel
-                     : m_Adapters[nAdapter].m_ActualCaps.m_nDXSupportLevel;
+                     : adapters_[nAdapter].m_ActualCaps.m_nDXSupportLevel;
   if (m_bObeyDxCommandlineOverride) {
     nDXLevel = CommandLine()->ParmValue("-dxlevel", nDXLevel);
     m_bObeyDxCommandlineOverride = false;
   }
 
   const int maxAdapterDxSupportLevel{
-      m_Adapters[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel};
+      adapters_[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel};
   if (nDXLevel > maxAdapterDxSupportLevel) {
     nDXLevel = maxAdapterDxSupportLevel;
   }
   nDXLevel = GetClosestActualDXLevel(nDXLevel);
 
-  if (nDXLevel >= 100) return NULL;
+  if (nDXLevel >= 100) return nullptr;
 
   bool bReacquireResourcesNeeded = false;
   if (g_pShaderDevice) {
@@ -999,22 +989,22 @@ CreateInterfaceFn CShaderDeviceMgrDx8::SetMode(void *hWnd, int nAdapter,
 
   if (g_pShaderAPI) {
     g_pShaderAPI->OnDeviceShutdown();
-    g_pShaderAPI = NULL;
+    g_pShaderAPI = nullptr;
   }
 
   if (g_pShaderDevice) {
     g_pShaderDevice->ShutdownDevice();
-    g_pShaderDevice = NULL;
+    g_pShaderDevice = nullptr;
   }
 
-  g_pShaderShadow = NULL;
+  g_pShaderShadow = nullptr;
 
   ShaderDeviceInfo_t adjustedMode = mode;
   adjustedMode.m_nDXLevel = nDXLevel;
   if (!g_pShaderDeviceDx8->InitDevice(hWnd, nAdapter, adjustedMode))
-    return NULL;
+    return nullptr;
 
-  if (!g_pShaderAPIDX8->OnDeviceInit()) return NULL;
+  if (!g_pShaderAPIDX8->OnDeviceInit()) return nullptr;
 
   g_pShaderDevice = g_pShaderDeviceDx8;
   g_pShaderAPI = g_pShaderAPIDX8;
@@ -1046,21 +1036,17 @@ bool CShaderDeviceMgrDx8::ValidateMode(int nAdapter,
 
   // Make sure the image format requested is valid
   ImageFormat backBufferFormat = FindNearestSupportedBackBufferFormat(
-      nAdapter, DX8_DEVTYPE, displayMode.m_Format, info.m_DisplayMode.m_Format,
-      info.m_bWindowed);
+      nAdapter, SOURCE_DX9_DEVICE_TYPE, displayMode.m_Format,
+      info.m_DisplayMode.m_Format, info.m_bWindowed);
   return (backBufferFormat != IMAGE_FORMAT_UNKNOWN);
 }
 
 //-----------------------------------------------------------------------------
 // Returns the amount of video memory in bytes for a particular adapter
 //-----------------------------------------------------------------------------
-int CShaderDeviceMgrDx8::GetVidMemBytes(int nAdapter) const {
-#if defined(_X360)
-  return 256 * 1024 * 1024;
-#else
-  // FIXME: This currently ignores the adapter
-  return ::GetVidMemBytes();
-#endif
+u64 CShaderDeviceMgrDx8::GetVidMemBytes(u32 adapter_idx) const {
+  auto [bytes, error_code] = ::GetVidMemBytes(adapter_idx);
+  return bytes;
 }
 
 //-----------------------------------------------------------------------------
@@ -1075,17 +1061,13 @@ static CShaderDeviceDx8 s_ShaderDeviceDX8;
 CShaderDeviceDx8* g_pShaderDeviceDx8 = &s_ShaderDeviceDX8;
 #endif
 
-#if defined(_X360)
-IDirect3DDevice *m_pD3DDevice;
-#endif
-
 //-----------------------------------------------------------------------------
 // Constructor, destructor
 //-----------------------------------------------------------------------------
 CShaderDeviceDx8::CShaderDeviceDx8() {
-  m_pD3DDevice = NULL;
-  m_pFrameSyncQueryObject = NULL;
-  m_pFrameSyncTexture = NULL;
+  m_pD3DDevice = nullptr;
+  m_pFrameSyncQueryObject = nullptr;
+  m_pFrameSyncTexture = nullptr;
   m_bQueuedDeviceLost = false;
   m_DeviceState = DEVICE_STATE_OK;
   m_bOtherAppInitializing = false;
@@ -1095,11 +1077,11 @@ CShaderDeviceDx8::CShaderDeviceDx8() {
   m_bUsingStencil = false;
   m_iStencilBufferBits = 0;
   m_NonInteractiveRefresh.m_Mode = MATERIAL_NON_INTERACTIVE_MODE_NONE;
-  m_NonInteractiveRefresh.m_pVertexShader = NULL;
-  m_NonInteractiveRefresh.m_pPixelShader = NULL;
-  m_NonInteractiveRefresh.m_pPixelShaderStartup = NULL;
-  m_NonInteractiveRefresh.m_pPixelShaderStartupPass2 = NULL;
-  m_NonInteractiveRefresh.m_pVertexDecl = NULL;
+  m_NonInteractiveRefresh.m_pVertexShader = nullptr;
+  m_NonInteractiveRefresh.m_pPixelShader = nullptr;
+  m_NonInteractiveRefresh.m_pPixelShaderStartup = nullptr;
+  m_NonInteractiveRefresh.m_pPixelShaderStartupPass2 = nullptr;
+  m_NonInteractiveRefresh.m_pVertexDecl = nullptr;
   m_NonInteractiveRefresh.m_nPacifierFrame = 0;
   m_numReleaseResourcesRefCount = 0;
 }
@@ -1197,8 +1179,8 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
 
   // What back-buffer format should we use?
   ImageFormat backBufferFormat = FindNearestSupportedBackBufferFormat(
-      nAdapter, DX8_DEVTYPE, m_AdapterFormat, info.m_DisplayMode.m_Format,
-      info.m_bWindowed);
+      nAdapter, SOURCE_DX9_DEVICE_TYPE, m_AdapterFormat,
+      info.m_DisplayMode.m_Format, info.m_bWindowed);
 
   // What depth format should we use?
   m_bUsingStencil = info.m_bUseStencil;
@@ -1342,8 +1324,9 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
         (adapterCaps.m_VendorID == VENDORID_NVIDIA)) {
       multiSampleType = ComputeMultisampleType(4);
       hr = D3D()->CheckDeviceMultiSampleType(
-          nAdapter, DX8_DEVTYPE, m_PresentParameters.BackBufferFormat,
-          m_PresentParameters.Windowed, multiSampleType,
+          nAdapter, SOURCE_DX9_DEVICE_TYPE,
+          m_PresentParameters.BackBufferFormat, m_PresentParameters.Windowed,
+          multiSampleType,
           &nQualityLevel);  // 4x at highest quality level
 
       if (!FAILED(hr) && (nQualityLevel == 16)) {
@@ -1355,8 +1338,9 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
     } else  // Regular MSAA on any old vendor
     {
       hr = D3D()->CheckDeviceMultiSampleType(
-          nAdapter, DX8_DEVTYPE, m_PresentParameters.BackBufferFormat,
-          m_PresentParameters.Windowed, multiSampleType, &nQualityLevel);
+          nAdapter, SOURCE_DX9_DEVICE_TYPE,
+          m_PresentParameters.BackBufferFormat, m_PresentParameters.Windowed,
+          multiSampleType, &nQualityLevel);
 
       nQualityLevel = 0;
     }
@@ -1495,7 +1479,7 @@ void CShaderDeviceDx8::SpewDriverInfo() const {
           (caps.RasterCaps & D3DPRASTERCAPS_DEPTHBIAS) ? " Y " : " N ",
           (caps.RasterCaps & D3DPRASTERCAPS_ZTEST) ? " Y " : "*N*");
 
-  Warning("Size of Texture Memory : %d kb\n",
+  Warning("Size of Texture Memory : %llu kb\n",
           g_pHardwareConfig->Caps().m_TextureMemorySize / 1024);
   Warning("Max Texture Dimensions : %d x %d\n", caps.MaxTextureWidth,
           caps.MaxTextureHeight);
@@ -1583,7 +1567,7 @@ void CShaderDeviceDx8::SpewDriverInfo() const {
           g_pHardwareConfig->Caps().m_NumBooleanVertexShaderConstants);
   Warning("m_NumIntegerVertexShaderConstants: %d\n",
           g_pHardwareConfig->Caps().m_NumIntegerVertexShaderConstants);
-  Warning("m_TextureMemorySize: %d\n",
+  Warning("m_TextureMemorySize: %llu\n",
           g_pHardwareConfig->Caps().m_TextureMemorySize);
   Warning("m_MaxNumLights: %d\n", g_pHardwareConfig->Caps().m_MaxNumLights);
   Warning("m_SupportsHardwareLighting: %s\n",
@@ -1659,7 +1643,7 @@ void CShaderDeviceDx8::DetectQuerySupport(IDirect3DDevice9 *pD3DDevice) {
   // creating it?
   if (m_DeviceSupportsCreateQuery != -1) return;
 
-  IDirect3DQuery9 *pQueryObject = NULL;
+  IDirect3DQuery9 *pQueryObject = nullptr;
 
   // Detect whether query is supported by creating and releasing:
   HRESULT hr = pD3DDevice->CreateQuery(D3DQUERYTYPE_EVENT, &pQueryObject);
@@ -1676,8 +1660,8 @@ void CShaderDeviceDx8::DetectQuerySupport(IDirect3DDevice9 *pD3DDevice) {
 //-----------------------------------------------------------------------------
 IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
     void *hWnd, int nAdapter, DWORD deviceCreationFlags) {
-  IDirect3DDevice9 *pD3DDevice = NULL;
-  D3DDEVTYPE devType = DX8_DEVTYPE;
+  IDirect3DDevice9 *pD3DDevice = nullptr;
+  D3DDEVTYPE devType = SOURCE_DX9_DEVICE_TYPE;
 
 #if NVPERFHUD
   nAdapter = D3D()->GetAdapterCount() - 1;
@@ -1692,7 +1676,7 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
 
   if (!FAILED(hr) && pD3DDevice) return pD3DDevice;
 
-  if (!IsPC()) return NULL;
+  if (!IsPC()) return nullptr;
 
   // try again, other applications may be taking their time
   Sleep(1000);
@@ -1717,7 +1701,7 @@ IDirect3DDevice9 *CShaderDeviceDx8::InvokeCreateDevice(
       "http://support.steampowered.com/cgi-bin/steampowered.cfg/php/enduser/"
       "std_adp.php?p_faqid=772\n");
 
-  return NULL;
+  return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -1738,7 +1722,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 
   // Get some caps....
   D3DCAPS caps;
-  HRESULT hr = D3D()->GetDeviceCaps(nAdapter, DX8_DEVTYPE, &caps);
+  HRESULT hr = D3D()->GetDeviceCaps(nAdapter, SOURCE_DX9_DEVICE_TYPE, &caps);
   if (FAILED(hr)) return false;
 
   // Determine the adapter format
@@ -1748,7 +1732,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 
   // FIXME: Need to do this prior to SetPresentParameters. Fix.
   // Make it part of HardwareCaps_t
-  InitializeColorInformation(nAdapter, DX8_DEVTYPE, m_AdapterFormat);
+  InitializeColorInformation(nAdapter, SOURCE_DX9_DEVICE_TYPE, m_AdapterFormat);
 
   const HardwareCaps_t &adapterCaps =
       g_ShaderDeviceMgrDx8.GetHardwareCaps(nAdapter);
@@ -1796,7 +1780,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
                             m_PresentParameters.BackBufferHeight,
                             m_PresentParameters.MultiSampleType);
 
-    IDirect3DSurface *pDepthStencilSurface = NULL;
+    IDirect3DSurface *pDepthStencilSurface = nullptr;
     hr = Dx9Device()->CreateDepthStencilSurface(
         m_PresentParameters.BackBufferWidth,
         m_PresentParameters.BackBufferHeight,
@@ -1822,7 +1806,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
     XUIInitParams xuiInit;
     XUI_INIT_PARAMS(xuiInit);
     xuiInit.dwFlags = XUI_INIT_PARAMS_FLAGS_NONE;
-    xuiInit.pHooks = NULL;
+    xuiInit.pHooks = nullptr;
     hr = XuiInit(&xuiInit);
     if (FAILED(hr)) return false;
 
@@ -1873,14 +1857,14 @@ void CShaderDeviceDx8::AllocFrameSyncTextureObject() {
   FreeFrameSyncTextureObject();
 
   // Create a tiny managed texture.
-  HRESULT hr =
-      Dx9Device()->CreateTexture(1, 1,              // width, height
-                                 0,                 // levels
-                                 D3DUSAGE_DYNAMIC,  // usage
-                                 D3DFMT_A8R8G8B8,   // format
-                                 D3DPOOL_DEFAULT, &m_pFrameSyncTexture, NULL);
+  HRESULT hr = Dx9Device()->CreateTexture(1, 1,              // width, height
+                                          0,                 // levels
+                                          D3DUSAGE_DYNAMIC,  // usage
+                                          D3DFMT_A8R8G8B8,   // format
+                                          D3DPOOL_DEFAULT, &m_pFrameSyncTexture,
+                                          nullptr);
   if (FAILED(hr)) {
-    m_pFrameSyncTexture = NULL;
+    m_pFrameSyncTexture = nullptr;
   }
 }
 
@@ -1889,7 +1873,7 @@ void CShaderDeviceDx8::FreeFrameSyncTextureObject() {
 
   if (m_pFrameSyncTexture) {
     m_pFrameSyncTexture->Release();
-    m_pFrameSyncTexture = NULL;
+    m_pFrameSyncTexture = nullptr;
   }
 }
 
@@ -1904,7 +1888,7 @@ void CShaderDeviceDx8::AllocFrameSyncObjects(void) {
   AllocFrameSyncTextureObject();
 
   if (m_DeviceSupportsCreateQuery == 0) {
-    m_pFrameSyncQueryObject = NULL;
+    m_pFrameSyncQueryObject = nullptr;
     return;
   }
 
@@ -1913,7 +1897,7 @@ void CShaderDeviceDx8::AllocFrameSyncObjects(void) {
       Dx9Device()->CreateQuery(D3DQUERYTYPE_EVENT, &m_pFrameSyncQueryObject);
   if (hr == D3DERR_NOTAVAILABLE) {
     Warning("D3DQUERYTYPE_EVENT not available on this driver\n");
-    Assert(m_pFrameSyncQueryObject == NULL);
+    Assert(m_pFrameSyncQueryObject == nullptr);
   } else {
     Assert(hr == D3D_OK);
     Assert(m_pFrameSyncQueryObject);
@@ -1937,7 +1921,7 @@ void CShaderDeviceDx8::FreeFrameSyncObjects(void) {
 #endif
         m_pFrameSyncQueryObject->Release();
     Assert(nRetVal == 0);
-    m_pFrameSyncQueryObject = NULL;
+    m_pFrameSyncQueryObject = nullptr;
   }
 }
 
@@ -2200,27 +2184,27 @@ bool CShaderDeviceDx8::AllocNonInteractiveRefreshObjects() { return true; }
 void CShaderDeviceDx8::FreeNonInteractiveRefreshObjects() {
   if (m_NonInteractiveRefresh.m_pVertexShader) {
     m_NonInteractiveRefresh.m_pVertexShader->Release();
-    m_NonInteractiveRefresh.m_pVertexShader = NULL;
+    m_NonInteractiveRefresh.m_pVertexShader = nullptr;
   }
 
   if (m_NonInteractiveRefresh.m_pPixelShader) {
     m_NonInteractiveRefresh.m_pPixelShader->Release();
-    m_NonInteractiveRefresh.m_pPixelShader = NULL;
+    m_NonInteractiveRefresh.m_pPixelShader = nullptr;
   }
 
   if (m_NonInteractiveRefresh.m_pPixelShaderStartup) {
     m_NonInteractiveRefresh.m_pPixelShaderStartup->Release();
-    m_NonInteractiveRefresh.m_pPixelShaderStartup = NULL;
+    m_NonInteractiveRefresh.m_pPixelShaderStartup = nullptr;
   }
 
   if (m_NonInteractiveRefresh.m_pPixelShaderStartupPass2) {
     m_NonInteractiveRefresh.m_pPixelShaderStartupPass2->Release();
-    m_NonInteractiveRefresh.m_pPixelShaderStartupPass2 = NULL;
+    m_NonInteractiveRefresh.m_pPixelShaderStartupPass2 = nullptr;
   }
 
   if (m_NonInteractiveRefresh.m_pVertexDecl) {
     m_NonInteractiveRefresh.m_pVertexDecl->Release();
-    m_NonInteractiveRefresh.m_pVertexDecl = NULL;
+    m_NonInteractiveRefresh.m_pVertexDecl = nullptr;
   }
 }
 
@@ -2301,7 +2285,8 @@ void CShaderDeviceDx8::Present() {
   if (m_NonInteractiveRefresh.m_Mode ==
       MATERIAL_NON_INTERACTIVE_MODE_LEVEL_LOAD) {
     g_pShaderAPI->CopyRenderTargetToTextureEx(
-        m_NonInteractiveRefresh.m_Info.m_hTempFullscreenTexture, 0, NULL, NULL);
+        m_NonInteractiveRefresh.m_Info.m_hTempFullscreenTexture, 0, nullptr,
+        nullptr);
   }
 
   // If we're not iconified, try to present (without this check, we can flicker

@@ -1,9 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef HARDWARECONFIG_H
 #define HARDWARECONFIG_H
 
 #include "IHardwareConfigInternal.h"
+#include "base/include/base_types.h"
 #include "bitmap/imageformat.h"
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
 #include "materialsystem/imaterialsystem.h"
@@ -72,7 +73,7 @@ struct HardwareCaps_t : public MaterialAdapterInfo_t {
   int m_NumVertexShaderConstants;
   int m_NumBooleanVertexShaderConstants;
   int m_NumIntegerVertexShaderConstants;
-  int m_TextureMemorySize;
+  u64 m_TextureMemorySize;
   int m_MaxNumLights;
   int m_MaxBlendMatrices;
   int m_MaxBlendMatrixIndices;
@@ -177,7 +178,7 @@ class CHardwareConfig : public IHardwareConfigInternal {
   virtual int MaximumAnisotropicLevel() const;
   virtual int MaxTextureWidth() const;
   virtual int MaxTextureHeight() const;
-  virtual int TextureMemorySize() const;
+  virtual u64 TextureMemorySize() const;
   virtual bool SupportsOverbright() const;
   virtual bool SupportsCubeMaps() const;
   virtual bool SupportsMipmappedCubemaps() const;

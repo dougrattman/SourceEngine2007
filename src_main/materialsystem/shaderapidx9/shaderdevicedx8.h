@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SHADERDEVICEDX8_H
 #define SHADERDEVICEDX8_H
@@ -6,16 +6,13 @@
 #include "base/include/windows/windows_light.h"
 
 #include <d3d9.h>
+#include "base/include/base_types.h"
 #include "shaderapidx8_global.h"
 #include "shaderdevicebase.h"
 #include "tier1/utlvector.h"
 
 // Describes which D3DDEVTYPE to use
-#ifndef USE_REFERENCE_RASTERIZER
-#define DX8_DEVTYPE D3DDEVTYPE_HAL
-#else
-#define DX8_DEVTYPE D3DDEVTYPE_REF
-#endif
+#define SOURCE_DX9_DEVICE_TYPE D3DDEVTYPE_HAL
 
 // By default, PIX profiling is explicitly disallowed using the
 // D3DPERF_SetOptions(1) API on PC. Uncomment to use PIX instrumentation:
@@ -61,7 +58,7 @@ class CShaderDeviceMgrDx8 : public CShaderDeviceMgrBase {
   bool ValidateMode(int nAdapter, const ShaderDeviceInfo_t &info) const;
 
   // Returns the amount of video memory in bytes for a particular adapter
-  virtual int GetVidMemBytes(int nAdapter) const;
+  virtual u64 GetVidMemBytes(u32 adapter_idx) const;
 
   FORCEINLINE IDirect3D9 *D3D() const { return m_pD3D; }
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The dx8 implementation of the shader API
 
@@ -2002,162 +2002,7 @@ void CShaderAPIDx8::ReleaseInternalRenderTargets() {
 // self contained, no other shader api systems are viable during init.
 //-----------------------------------------------------------------------------
 bool CShaderAPIDx8::RestorePersistedDisplay(bool bUseFrontBuffer) {
-#if defined(_X360)
-  if (!(XboxLaunch()->GetLaunchFlags() & LF_INTERNALLAUNCH)) {
-    // there is no persisted screen
-    return false;
-  }
-
-  OwnGPUResources(false);
-
-  const char *strVertexShaderProgram =
-      " float4x4 matWVP : register(c0);"
-      " struct VS_IN"
-      " {"
-      " float4 ObjPos : POSITION;"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " struct VS_OUT"
-      " {"
-      " float4 ProjPos : POSITION;"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " VS_OUT main( VS_IN In )"
-      " {"
-      " VS_OUT Out; "
-      " Out.ProjPos = mul( matWVP, In.ObjPos );"
-      " Out.TexCoord = In.TexCoord;"
-      " return Out;"
-      " }";
-
-  const char *strPixelShaderProgram =
-      " struct PS_IN"
-      " {"
-      " float2 TexCoord : TEXCOORD;"
-      " };"
-      " sampler detail;"
-      " float4 main( PS_IN In ) : COLOR"
-      " {"
-      " return tex2D( detail, In.TexCoord );"
-      " }";
-
-  D3DVERTEXELEMENT9 VertexElements[3] = {
-      {0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION,
-       0},
-      {0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD,
-       0},
-      D3DDECL_END()};
-
-  IDirect3DTexture *pTexture;
-  if (bUseFrontBuffer) {
-    Dx9Device()->GetFrontBuffer(&pTexture);
-  } else {
-    // 360 holds a persistent image across restarts
-    Dx9Device()->GetPersistedTexture(&pTexture);
-  }
-
-  ID3DXBuffer *pErrorMsg = NULL;
-  ID3DXBuffer *pShaderCode = NULL;
-
-  HRESULT hr = D3DXCompileShader(
-      strVertexShaderProgram, (UINT)strlen(strVertexShaderProgram), NULL, NULL,
-      "main", "vs_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) {
-    return false;
-  }
-  IDirect3DVertexShader9 *pVertexShader;
-  Dx9Device()->CreateVertexShader((DWORD *)pShaderCode->GetBufferPointer(),
-                                  &pVertexShader);
-  pShaderCode->Release();
-
-  pErrorMsg = NULL;
-  pShaderCode = NULL;
-  hr = D3DXCompileShader(strPixelShaderProgram,
-                         (UINT)strlen(strPixelShaderProgram), NULL, NULL,
-                         "main", "ps_2_0", 0, &pShaderCode, &pErrorMsg, NULL);
-  if (FAILED(hr)) {
-    return false;
-  }
-  IDirect3DPixelShader9 *pPixelShader;
-  Dx9Device()->CreatePixelShader((DWORD *)pShaderCode->GetBufferPointer(),
-                                 &pPixelShader);
-  pShaderCode->Release();
-
-  int w, h;
-  GetBackBufferDimensions(w, h);
-
-  // Create a vertex declaration from the element descriptions.
-  IDirect3DVertexDeclaration9 *pVertexDecl;
-  Dx9Device()->CreateVertexDeclaration(VertexElements, &pVertexDecl);
-  XMMATRIX matWVP =
-      XMMatrixOrthographicOffCenterLH(0, (FLOAT)w, (FLOAT)h, 0, 0, 1);
-
-  ConVarRef mat_monitorgamma("mat_monitorgamma");
-  ConVarRef mat_monitorgamma_tv_range_min("mat_monitorgamma_tv_range_min");
-  ConVarRef mat_monitorgamma_tv_range_max("mat_monitorgamma_tv_range_max");
-  ConVarRef mat_monitorgamma_tv_exp("mat_monitorgamma_tv_exp");
-  ConVarRef mat_monitorgamma_tv_enabled("mat_monitorgamma_tv_enabled");
-  g_pShaderDeviceDx8->SetHardwareGammaRamp(
-      mat_monitorgamma.GetFloat(), mat_monitorgamma_tv_range_min.GetFloat(),
-      mat_monitorgamma_tv_range_max.GetFloat(),
-      mat_monitorgamma_tv_exp.GetFloat(),
-      mat_monitorgamma_tv_enabled.GetBool());
-
-  // Structure to hold vertex data.
-  struct COLORVERTEX {
-    FLOAT Position[3];
-    float TexCoord[2];
-  };
-  COLORVERTEX Vertices[4];
-
-  Vertices[0].Position[0] = 0;
-  Vertices[0].Position[1] = 0;
-  Vertices[0].Position[2] = 0;
-  Vertices[0].TexCoord[0] = 0;
-  Vertices[0].TexCoord[1] = 0;
-
-  Vertices[1].Position[0] = w - 1;
-  Vertices[1].Position[1] = 0;
-  Vertices[1].Position[2] = 0;
-  Vertices[1].TexCoord[0] = 1;
-  Vertices[1].TexCoord[1] = 0;
-
-  Vertices[2].Position[0] = w - 1;
-  Vertices[2].Position[1] = h - 1;
-  Vertices[2].Position[2] = 0;
-  Vertices[2].TexCoord[0] = 1;
-  Vertices[2].TexCoord[1] = 1;
-
-  Vertices[3].Position[0] = 0;
-  Vertices[3].Position[1] = h - 1;
-  Vertices[3].Position[2] = 0;
-  Vertices[3].TexCoord[0] = 0;
-  Vertices[3].TexCoord[1] = 1;
-
-  Dx9Device()->SetTexture(0, pTexture);
-  Dx9Device()->SetVertexShader(pVertexShader);
-  Dx9Device()->SetPixelShader(pPixelShader);
-  Dx9Device()->SetVertexShaderConstantF(0, (FLOAT *)&matWVP, 4);
-  Dx9Device()->SetVertexDeclaration(pVertexDecl);
-  Dx9Device()->DrawPrimitiveUP(D3DPT_QUADLIST, 1, Vertices,
-                               sizeof(COLORVERTEX));
-
-  Dx9Device()->SetVertexShader(NULL);
-  Dx9Device()->SetPixelShader(NULL);
-  Dx9Device()->SetTexture(0, NULL);
-  Dx9Device()->SetVertexDeclaration(NULL);
-
-  pVertexShader->Release();
-  pPixelShader->Release();
-  pVertexDecl->Release();
-  pTexture->Release();
-
-  OwnGPUResources(true);
-
-  return true;
-#else
   return false;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -5983,7 +5828,8 @@ void CShaderAPIDx8::SetTextureState(Sampler_t sampler,
 
   if (!m_bDebugTexturesRendering) ++tex.m_nTimesBoundThisFrame;
 
-  tex.m_nTimesBoundMax = std::max(tex.m_nTimesBoundMax, tex.m_nTimesBoundThisFrame);
+  tex.m_nTimesBoundMax =
+      std::max(tex.m_nTimesBoundMax, tex.m_nTimesBoundThisFrame);
 
   if (samplerState.m_UTexWrap != tex.m_UTexWrap) {
     samplerState.m_UTexWrap = tex.m_UTexWrap;
@@ -7128,8 +6974,8 @@ void CShaderAPIDx8::SetAnisotropicLevel(int nAnisotropyLevel) {
   if (nAnisotropyLevel > g_pHardwareConfig->Caps().m_nMaxAnisotropy ||
       nAnisotropyLevel <= 1) {
     // Set it to 1/4 the max but between 2-8
-    nAnisotropyLevel =
-        std::max(2, std::min(8, (g_pHardwareConfig->Caps().m_nMaxAnisotropy / 4)));
+    nAnisotropyLevel = std::max(
+        2, std::min(8, (g_pHardwareConfig->Caps().m_nMaxAnisotropy / 4)));
   }
 
   // Set the D3D max insotropy state for all samplers

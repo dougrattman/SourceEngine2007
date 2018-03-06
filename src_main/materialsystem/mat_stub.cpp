@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/imageformat.h"
 #include "materialsystem/imaterial.h"
@@ -209,7 +209,7 @@ class CDummyTexture : public ITexture {
   // Params:
   //		eDataType		type of resource to retrieve.
   //		pnumBytes		on return is the number of bytes
-  //available in the  read-only data buffer or is undefined
+  // available in the  read-only data buffer or is undefined
   // Returns:
   //		pointer to the resource data, or NULL
   virtual void *GetResourceData(uint32_t eDataType, size_t *pNumBytes) const {
@@ -380,7 +380,7 @@ class CDummyHardwareConfig : public IMaterialSystemHardwareConfig {
   virtual int MaxTextureWidth() const { return 0; }
   virtual int MaxTextureHeight() const { return 0; }
   virtual int MaxTextureDepth() const { return 0; }
-  virtual int TextureMemorySize() const { return 0; }
+  virtual u64 TextureMemorySize() const { return 0; }
   virtual bool SupportsOverbright() const { return false; }
   virtual bool SupportsCubeMaps() const { return false; }
   virtual bool SupportsMipmappedCubemaps() const { return false; }
@@ -871,8 +871,7 @@ class CDummyMaterialSystem
   // fixme: could just be an array of ints for lightmapPageIDs since the
   // material for a surface is already known.
   virtual int GetNumSortIDs() { return 10; }
-  //	virtual int					GetLightmapPageIDForSortID(
-  //int sortID ) = 0;
+  //	virtual int GetLightmapPageIDForSortID( int sortID ) = 0;
   virtual void GetSortInfo(MaterialSystem_SortInfo_t *pSortInfoArray) {}
 
   virtual void BeginFrame(float) {}
@@ -993,8 +992,8 @@ class CDummyMaterialSystem
   // Force writes only when z matches. . . useful for stenciling things out
   // by rendering the desired Z values ahead of time.
   //	virtual void				ForceDepthFuncEquals( bool
-  //bEnable ) =  0; 	virtual void RenderZOnlyWithHeightClip( bool bEnable ) =
-  //0;
+  // bEnable ) =  0; 	virtual void RenderZOnlyWithHeightClip( bool bEnable ) =
+  // 0;
   // This could easily be extended to a general user clip plane
   virtual void SetHeightClipMode(MaterialHeightClipMode_t nClipMode) {}
   virtual MaterialHeightClipMode_t GetHeightClipMode() {
