@@ -21,7 +21,7 @@
 #include "iengine.h"
 #include "igame.h"
 #include "iregistry.h"
-#include "jpeglib/jpeglib.h"
+#include "deps/libjpeg/jpeglib.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "materialsystem/itexture.h"

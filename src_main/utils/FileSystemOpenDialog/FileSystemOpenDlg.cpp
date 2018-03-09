@@ -4,7 +4,7 @@
 
 #include "FileSystemOpenDlg.h"
 #include "ifilesystemopendialog.h"
-#include "jpeglib/jpeglib.h"
+#include "deps/libjpeg/jpeglib.h"
 #include "resource.h"
 #include "utldict.h"
 

@@ -1141,9 +1141,6 @@
     <ProjectReference Include="..\tier3\tier3.vcxproj">
       <Project>{2016f937-136a-4182-ba4c-e179be64ad52}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\utils\jpeglib\jpeglib.vcxproj">
-      <Project>{3b166b12-22bb-4fa3-8319-42eedb8e1928}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\vgui2\dme_controls\dme_controls.vcxproj">
       <Project>{e3f8062a-f88c-40f9-beb0-279e2c993479}</Project>
     </ProjectReference>

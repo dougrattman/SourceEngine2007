@@ -526,6 +526,9 @@
     <ProjectReference Include="..\bitmap\bitmap.vcxproj">
       <Project>{d98f41bd-a135-4fea-a53a-c6553419da29}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\deps\libjpeg\jpeg.vcxproj">
+      <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\mathlib\mathlib.vcxproj">
       <Project>{8be8d44d-b656-40c7-83d2-d51309021093}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -544,9 +547,6 @@
     <ProjectReference Include="..\tier3\tier3.vcxproj">
       <Project>{2016f937-136a-4182-ba4c-e179be64ad52}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\utils\jpeglib\jpeglib.vcxproj">
-      <Project>{3b166b12-22bb-4fa3-8319-42eedb8e1928}</Project>
     </ProjectReference>
     <ProjectReference Include="..\vgui2\vgui_controls\vgui_controls.vcxproj">
       <Project>{78768610-44cc-47aa-9064-95449328075c}</Project>

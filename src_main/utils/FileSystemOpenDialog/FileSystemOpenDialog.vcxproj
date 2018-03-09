@@ -315,10 +315,6 @@
       <Project>{08257043-fe59-4e3f-8c99-a181397052d0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\jpeglib\jpeglib.vcxproj">
-      <Project>{3b166b12-22bb-4fa3-8319-42eedb8e1928}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2183,15 +2183,6 @@
     <ClInclude Include="..\public\ivtex.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\jpeglib\jconfig.h">
-      <Filter>Public Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\jpeglib\jmorecfg.h">
-      <Filter>Public Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\jpeglib\jpeglib.h">
-      <Filter>Public Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\vgui\KeyCode.h">
       <Filter>Public Headers</Filter>
     </ClInclude>

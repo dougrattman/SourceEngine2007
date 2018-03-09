@@ -442,10 +442,6 @@
     <ProjectReference Include="..\..\vstdlib\vstdlib.vcxproj">
       <Project>{7477716c-91c5-47d1-9821-61c61c066e8c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\bzip2\bzip2.vcxproj">
-      <Project>{beffacd2-07b1-4cb3-a65e-92fceb8fea77}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\vmpi\vmpi.vcxproj">
       <Project>{1315511f-4885-4916-94b3-a4348ee5413a}</Project>
     </ProjectReference>

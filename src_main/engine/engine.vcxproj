@@ -2055,9 +2055,6 @@
     <ClInclude Include="..\public\ivoicetweak.h" />
     <ClInclude Include="..\public\ivrenderview.h" />
     <ClInclude Include="..\public\ivtex.h" />
-    <ClInclude Include="..\public\jpeglib\jconfig.h" />
-    <ClInclude Include="..\public\jpeglib\jmorecfg.h" />
-    <ClInclude Include="..\public\jpeglib\jpeglib.h" />
     <ClInclude Include="..\public\keydefs.h" />
     <ClInclude Include="..\public\lumpfiles.h" />
     <ClInclude Include="..\public\materialsystem\idebugtextureinfo.h" />
@@ -2500,6 +2497,9 @@
     <ProjectReference Include="..\deps\bzip2\libbz2.vcxproj">
       <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\deps\libjpeg\jpeg.vcxproj">
+      <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\deps\xunzip\libxunzip.vcxproj">
       <Project>{977db2cd-9905-4624-9618-40614833b94b}</Project>
     </ProjectReference>
@@ -2528,9 +2528,6 @@
     <ProjectReference Include="..\tier3\tier3.vcxproj">
       <Project>{2016f937-136a-4182-ba4c-e179be64ad52}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\utils\jpeglib\jpeglib.vcxproj">
-      <Project>{3b166b12-22bb-4fa3-8319-42eedb8e1928}</Project>
     </ProjectReference>
     <ProjectReference Include="..\vgui2\matsys_controls\matsys_controls.vcxproj">
       <Project>{594a6f34-a5b3-4434-9dcb-51353a2a92a6}</Project>

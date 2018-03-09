@@ -56,7 +56,6 @@
 ./public/game/client
 ./public/game/server
 ./public/inputsystem
-./public/jpeglib
 ./public/keyframe
 ./public/materialsystem
 ./public/mathlib
