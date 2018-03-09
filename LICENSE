@@ -377,7 +377,7 @@ Valve’s obligations to provide such notices:
     version Beta 1.00.00-98-03-26
   """
 
-- SPEEX Codec 1.2.0, located at deps/speex, is licensed as follows:
+- SPEEX Codec 1.2.0, located at deps/libspeex, is licensed as follows:
   """
     Copyright 2002-2008 	Xiph.org Foundation
     Copyright 2002-2008 	Jean-Marc Valin

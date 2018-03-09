@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "deps/speex/include/speex/speex.h"
+#include "deps/libspeex/include/speex/speex.h"
 
 #include "frame_voice_codec.h"
 #include "iframe_encoder.h"

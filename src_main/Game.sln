@@ -429,7 +429,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\libbz2\libbz
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "speex", "speex", "{83010A1A-8FBB-4E79-83C9-6C8AD8F2107C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libspeex", "deps\speex\win32\VS2017\libspeex\libspeex.vcxproj", "{E972C52F-9E85-4D65-B19C-031E511E9DB4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libspeex", "deps\libspeex\win32\VS2017\libspeex\libspeex.vcxproj", "{E972C52F-9E85-4D65-B19C-031E511E9DB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trktool", "trktool", "{03152E3B-4D16-4915-992E-99D2EC671C9C}"
 	ProjectSection(SolutionItems) = preProject

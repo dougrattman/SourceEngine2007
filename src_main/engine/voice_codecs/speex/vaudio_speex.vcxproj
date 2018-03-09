@@ -323,7 +323,7 @@
     <ClInclude Include="..\frame_encoder\iframe_encoder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\deps\speex\win32\VS2017\libspeex\libspeex.vcxproj">
+    <ProjectReference Include="..\..\..\deps\libspeex\win32\VS2017\libspeex\libspeex.vcxproj">
       <Project>{e972c52f-9e85-4d65-b19c-031e511e9db4}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\tier0\tier0.vcxproj">
