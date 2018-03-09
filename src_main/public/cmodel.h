@@ -32,7 +32,7 @@ COLLISION DETECTION
 //#include "mathlib/vector.h"
 
 // gi.BoxEdicts() can return a list of either solid or trigger entities
-// FIXME: eliminate AREA_ distinction?
+// TODO(d.rattman): eliminate AREA_ distinction?
 #define	AREA_SOLID		1
 #define	AREA_TRIGGERS	2
 

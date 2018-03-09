@@ -69,7 +69,7 @@ public:
 	void	CopyQuaternion( difftype_t dt, Quaternion* outValue, const Quaternion *inValue, int count ); 	// Copy a quaternion array
 	void	CopyEHandle( difftype_t dt, EHANDLE *outvalue, EHANDLE const *invalue, int count );
 
-	void	FORCEINLINE CopyData( difftype_t dt, int size, char *outdata, const char *indata )		// Copy a binary data block
+	void	SOURCE_FORCEINLINE CopyData( difftype_t dt, int size, char *outdata, const char *indata )		// Copy a binary data block
 	{
 		if ( !m_bPerformCopy )
  return;

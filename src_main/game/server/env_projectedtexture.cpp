@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Entity to control screen overlays on a player
 //
@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "shareddefs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ENV_PROJECTEDTEXTURE_STARTON			(1<<0)
@@ -55,7 +55,7 @@ private:
 	CNetworkVar( bool, m_bCameraSpace );
 	CNetworkVector( m_LinearFloatLightColor );
 	CNetworkVar( float, m_flAmbient );
-	CNetworkString( m_SpotlightTextureName, MAX_PATH );
+	CNetworkString( m_SpotlightTextureName, SOURCE_MAX_PATH );
 	CNetworkVar( int, m_nSpotlightTextureFrame );
 	CNetworkVar( float, m_flNearZ );
 	CNetworkVar( float, m_flFarZ );

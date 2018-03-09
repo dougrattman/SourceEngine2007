@@ -82,7 +82,7 @@ private:
 
 //-----------------------------------------------------------------------------
 
-abstract_class CAI_NetworkBuildHelper : public CLogicalEntity
+the_interface CAI_NetworkBuildHelper : public CLogicalEntity
 {
 	DECLARE_CLASS( CAI_NetworkBuildHelper, CLogicalEntity );
 

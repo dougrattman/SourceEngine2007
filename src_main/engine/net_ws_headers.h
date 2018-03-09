@@ -1,14 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef NET_WS_HEADERS_H
 #define NET_WS_HEADERS_H
 
 #ifdef _WIN32
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #endif
 
-#include "../utils/bzip2/bzlib.h"
 #include "convar.h"
+#include "deps/bzip2/bzlib.h"
 #include "filesystem_engine.h"
 #include "inetmsghandler.h"
 #include "matchmaking.h"

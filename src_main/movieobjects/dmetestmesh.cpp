@@ -24,7 +24,7 @@
 #include <fstream>
 #include <algorithm>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -237,7 +237,7 @@ void CDmeTestMesh::Resolve()
 //-----------------------------------------------------------------------------
 void CDmeTestMesh::LoadModelMatrix( CDmeTransform *pTransform )
 {
-	// FIXME: Should this go into the DmeTransform node?
+	// TODO(d.rattman): Should this go into the DmeTransform node?
 	matrix3x4_t transform;
 	CMatRenderContextPtr pRenderContext( g_pMaterialSystem );
 	pTransform->GetTransform( transform );
@@ -943,7 +943,7 @@ void CDmeTestMesh::DrawBox( CDmeTransform *pTransform )
 	if ( !g_pMaterialSystem )
 		return;
 
-	// FIXME: Hack!
+	// TODO(d.rattman): Hack!
 	if ( !m_pMorph || !m_pMesh )
 		return;
 
@@ -957,7 +957,7 @@ void CDmeTestMesh::DrawBox( CDmeTransform *pTransform )
 	pMorphFactors[1] = 1.0f - pMorphFactors[0];
 	pRenderContext->SetMorphTargetFactors( 0, pMorphFactors, 32 );
 
-	// FIXME: Should this call be made from the application rendering the mesh?
+	// TODO(d.rattman): Should this call be made from the application rendering the mesh?
 	LoadModelMatrix( pTransform );
 
 	pRenderContext->BindMorph( m_pMorph );
@@ -1003,7 +1003,7 @@ void CDmeTestMesh::Draw( const matrix3x4_t& shapeToWorld, CDmeDrawSettings *pDra
 	info.m_bStaticLighting = false;
 	info.m_Lod = GetAttributeValueInt( "lod" );
 
-	// FIXME: Deal with lighting
+	// TODO(d.rattman): Deal with lighting
 	for ( int i = 0; i < 6; ++ i )
 	{
 		info.m_vecAmbientCube[i].Init( 1, 1, 1 );
@@ -1153,7 +1153,7 @@ void CDmeTestMesh::SetUpBones( CDmeTransform *pTransform, int nMaxBoneCount, mat
 	}
 	float flCycle = ( flTime * flPlaybackRate ) / nFrameCount;
 
-	// FIXME: We're always wrapping; may want to determing if we should clamp
+	// TODO(d.rattman): We're always wrapping; may want to determing if we should clamp
 	flCycle -= (int)(flCycle);
 
 	Vector		pos[MAXSTUDIOBONES];
@@ -1162,7 +1162,7 @@ void CDmeTestMesh::SetUpBones( CDmeTransform *pTransform, int nMaxBoneCount, mat
 	InitPose( &studioHdr, pos, q );
 	AccumulatePose( &studioHdr, NULL, pos, q, nSequence, flCycle, pPoseParameter, BoneMask( ), 1.0f, flTime );
 
-	// FIXME: Try enabling this?
+	// TODO(d.rattman): Try enabling this?
 //	CalcAutoplaySequences( pStudioHdr, NULL, pos, q, pPoseParameter, BoneMask( ), flTime );
 
 	// Root transform
@@ -1209,7 +1209,7 @@ void CDmeTestMesh::SetUpBones( CDmeTransform *pTransform, int nMaxBoneCount, mat
 
 
 //-----------------------------------------------------------------------------
-// FIXME: This trashy glue code is really not acceptable. Figure out a way of making it unnecessary.
+// TODO(d.rattman): This trashy glue code is really not acceptable. Figure out a way of making it unnecessary.
 //-----------------------------------------------------------------------------
 const studiohdr_t *studiohdr_t::FindModel( void **cache, char const *pModelName ) const
 {

@@ -31,7 +31,7 @@
 #include "tier1/mempool.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern CBaseEntity *g_pLastSpawn;
@@ -155,7 +155,7 @@ void CDecal::StaticDecal(void) {
       // rendering, either.
       if (pEntity->IsEffectActive(EF_NODRAW)) return false;
 
-      for (int i = 0; i < ARRAYSIZE(ppszIgnoredClasses); i++) {
+      for (int i = 0; i < SOURCE_ARRAYSIZE(ppszIgnoredClasses); i++) {
         if (pEntity->ClassMatches(ppszIgnoredClasses[i])) return false;
       }
 
@@ -200,7 +200,7 @@ void CDecal::StaticDecal(void) {
 
 bool CDecal::KeyValue(const char *szKeyName, const char *szValue) {
   if (FStrEq(szKeyName, "texture")) {
-    // FIXME:  should decals all be preloaded?
+    // TODO(d.rattman):  should decals all be preloaded?
     m_nTexture = UTIL_PrecacheDecal(szValue, true);
 
     // Found
@@ -313,7 +313,7 @@ void CProjectedDecal::StaticDecal(void) {
 
 bool CProjectedDecal::KeyValue(const char *szKeyName, const char *szValue) {
   if (FStrEq(szKeyName, "texture")) {
-    // FIXME:  should decals all be preloaded?
+    // TODO(d.rattman):  should decals all be preloaded?
     m_nTexture = UTIL_PrecacheDecal(szValue, true);
 
     // Found
@@ -498,7 +498,7 @@ static const char *g_DefaultLightstyles[] = {
 };
 
 const char *GetDefaultLightstyleString(int styleIndex) {
-  if (styleIndex < ARRAYSIZE(g_DefaultLightstyles)) {
+  if (styleIndex < SOURCE_ARRAYSIZE(g_DefaultLightstyles)) {
     return g_DefaultLightstyles[styleIndex];
   }
   return "m";
@@ -577,7 +577,7 @@ void CWorld::Precache(void) {
   //
   // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
   //
-  for (int i = 0; i < ARRAYSIZE(g_DefaultLightstyles); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_DefaultLightstyles); i++) {
     engine->LightStyle(i, GetDefaultLightstyleString(i));
   }
 

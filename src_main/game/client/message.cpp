@@ -23,7 +23,7 @@
 #include "client_textmessage.h"
 #include "VguiMatSurface/IMatSystemSurface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #include <ctype.h>
@@ -561,9 +561,9 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 			line[m_parms.lineLength] = c;
 			m_parms.width += vgui::surface()->GetCharacterWidth( m_parms.font, c);
 			m_parms.lineLength++;
-			if ( m_parms.lineLength > (ARRAYSIZE(line)-1) )
+			if ( m_parms.lineLength > (SOURCE_ARRAYSIZE(line)-1) )
 			{
-				m_parms.lineLength = ARRAYSIZE(line)-1;
+				m_parms.lineLength = SOURCE_ARRAYSIZE(line)-1;
 			}
 			pText++;
 		}

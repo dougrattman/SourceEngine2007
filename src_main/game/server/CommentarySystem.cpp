@@ -21,7 +21,7 @@
 #include "tier1/keyvalues.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static bool g_bTracingVsCommentaryNodes = false;

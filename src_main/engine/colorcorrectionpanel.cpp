@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -34,7 +34,7 @@
 #include "vgui_baseui_interface.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -275,7 +275,7 @@ static void ComputeSplinePoint(float flInColor, Vector *pControlPoints[4],
 //-----------------------------------------------------------------------------
 // A color operation
 //-----------------------------------------------------------------------------
-abstract_class IColorOperation {
+the_interface IColorOperation {
  public:
   // RGB are in 0-1 space here
   virtual void Apply(const Vector &inRGB, Vector &outRGB) = 0;
@@ -1401,7 +1401,7 @@ void CColorHistogramPanel::Paint(void) {
   int w, h;
   GetSize(w, h);
 
-  // FIXME: Add method to draw multiple lines DrawPolyLine connects the 1st and
+  // TODO(d.rattman): Add method to draw multiple lines DrawPolyLine connects the 1st and
   // last points... bleah
   switch (m_Type) {
     case RED:
@@ -2887,7 +2887,7 @@ class CColorLookupOperation : public IColorOperation {
   // Deletes any active lookup data
   void DeleteLookupTableData();
 
-  char m_pFilename[MAX_PATH];
+  char m_pFilename[SOURCE_MAX_PATH];
 
   int m_Resolution;
   color24 *m_LookupTable;
@@ -3043,7 +3043,7 @@ void CColorLookupOperation::DeleteLookupTableData() {
 IColorOperation *CColorLookupOperation::Clone() {
   CColorLookupOperation *pClone = new CColorLookupOperation;
 
-  Q_memcpy(pClone->m_pFilename, m_pFilename, sizeof(char) * MAX_PATH);
+  Q_memcpy(pClone->m_pFilename, m_pFilename, sizeof(char) * SOURCE_MAX_PATH);
 
   pClone->m_Resolution = m_Resolution;
   pClone->m_flBlendFactor = m_flBlendFactor;

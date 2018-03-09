@@ -23,7 +23,7 @@
 #include "VisGroup.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ********
@@ -430,7 +430,7 @@ void CMapCheckDlg::OnSelchangeErrors() {
 
   // Figure out which error string we're using.
   int iErrorStr = (int)pError->Type;
-  iErrorStr = std::clamp(iErrorStr, 0, ARRAYSIZE(g_MapErrorStrings) - 1);
+  iErrorStr = std::clamp(iErrorStr, 0, SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
   Assert(iErrorStr == (int)pError->Type);
 
   str.LoadString(g_MapErrorStrings[iErrorStr].m_DescriptionResourceID);
@@ -501,7 +501,7 @@ static void AddErrorToListBox(CListBox *pList, MapError *pError) {
 
   // Figure out which error string we're using.
   int iErrorStr = (int)pError->Type;
-  iErrorStr = std::clamp(iErrorStr, 0, ARRAYSIZE(g_MapErrorStrings) - 1);
+  iErrorStr = std::clamp(iErrorStr, 0, SOURCE_ARRAYSIZE(g_MapErrorStrings) - 1);
   Assert(iErrorStr == (int)pError->Type);
 
   str.LoadString(g_MapErrorStrings[iErrorStr].m_StrResourceID);
@@ -1116,7 +1116,7 @@ static bool HasVisGroupShownChildren(CMapClass *pObject) {
 static BOOL _CheckVisGroups(CMapClass *pObject, CListBox *pList) {
   CMapDoc *pDoc = CMapDoc::GetActiveMapDoc();
 
-  // dvs: FIXME: not working yet, revisit
+  // dvs: TODO(d.rattman): not working yet, revisit
   // Entities cannot have hidden children.
   // CMapEntity *pEntity = dynamic_cast<CMapEntity *>(pObject);
   // if (pEntity && HasVisGroupHiddenChildren(pEntity))

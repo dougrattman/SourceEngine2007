@@ -9,7 +9,7 @@
 #include "vgui/ILocalize.h"
 #include "vgui_controls/Label.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define NUM_ROWS_PER_QUERY 100
@@ -112,8 +112,8 @@ void CLeaderboardDialog::PerformLayout(void) {
   if (iActive < 0) {
     iActive = 0;
   }
-  _itow_s(iActive, wzActiveItem, ARRAYSIZE(wzActiveItem), 10);
-  _itow_s(m_iMaxRank, wzTotal, ARRAYSIZE(wzTotal), 10);
+  _itow_s(iActive, wzActiveItem, SOURCE_ARRAYSIZE(wzActiveItem), 10);
+  _itow_s(m_iMaxRank, wzTotal, SOURCE_ARRAYSIZE(wzTotal), 10);
   g_pVGuiLocalize->ConstructString(wszNumbering, sizeof(wszNumbering),
                                    wzNumberingFmt, 2, wzActiveItem, wzTotal);
   m_pNumbering->SetText(wszNumbering);
@@ -282,8 +282,8 @@ bool CLeaderboardDialog::GetPlayerStats(int rank, bool bFriends) {
 
   if (ret == ERROR_SUCCESS) {
     const char *pEntries[32];
-    char pRowBuffer[MAX_PATH];
-    char pBuffers[32][MAX_PATH];
+    char pRowBuffer[SOURCE_MAX_PATH];
+    char pBuffers[32][SOURCE_MAX_PATH];
 
     m_Menu.ClearItems();
     m_iMaxRank = m_pStats->pViews[0].dwTotalViewRows;

@@ -233,7 +233,7 @@ void CTFPlayerMove::FinishMove( CBasePlayer *player, CUserCmd *ucmd, CMoveData *
 	// Copy the position delta.
 	pTFPlayer->m_vecPosDelta = pTFMove->m_vecPosDelta;
 
-	COMPILE_TIME_ASSERT( CBaseTFPlayer::MOMENTUM_MAXSIZE == CTFMoveData::MOMENTUM_MAXSIZE );
+	static_assert( CBaseTFPlayer::MOMENTUM_MAXSIZE == CTFMoveData::MOMENTUM_MAXSIZE );
 	
 	// Copy the momentum data back (the movement may have updated it!).
 	pTFPlayer->m_iMomentumHead = pTFMove->m_iMomentumHead;

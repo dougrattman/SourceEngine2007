@@ -45,9 +45,9 @@ void FileSystemAccessLogger::Init() {
 
   ch const *pszDir = nullptr;
   if (command_line_->CheckParm("-reslistdir", &pszDir) && pszDir) {
-    ch szDir[MAX_PATH];
+    ch szDir[SOURCE_MAX_PATH];
 
-    Q_strncpy(szDir, pszDir, ARRAYSIZE(szDir));
+    Q_strncpy(szDir, pszDir, SOURCE_ARRAYSIZE(szDir));
     Q_StripTrailingSlash(szDir);
     Q_strlower(szDir);
     Q_FixSlashes(szDir);
@@ -58,16 +58,16 @@ void FileSystemAccessLogger::Init() {
   }
 
   // game directory has not been established yet, must derive ourselves
-  ch path[MAX_PATH];
-  Q_snprintf(path, ARRAYSIZE(path), "%s/%s", base_directory_,
+  ch path[SOURCE_MAX_PATH];
+  Q_snprintf(path, SOURCE_ARRAYSIZE(path), "%s/%s", base_directory_,
              command_line_->ParmValue("-game", "hl2"));
   Q_FixSlashes(path);
   Q_strlower(path);
   path_to_game_directory_ = path;
 
   // create file to dump out to
-  ch szDir[MAX_PATH];
-  V_snprintf(szDir, ARRAYSIZE(szDir), "%s\\%s",
+  ch szDir[SOURCE_MAX_PATH];
+  V_snprintf(szDir, SOURCE_ARRAYSIZE(szDir), "%s\\%s",
              path_to_game_directory_.String(),
              resource_lists_directory_.String());
   g_pFullFileSystem->CreateDirHierarchy(szDir, "GAME");
@@ -83,8 +83,8 @@ void FileSystemAccessLogger::Init() {
         "GAME");
   }
 
-  GetCurrentDirectoryA(ARRAYSIZE(current_directory_), current_directory_);
-  Q_strncat(current_directory_, "\\", ARRAYSIZE(current_directory_), 1);
+  GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_directory_), current_directory_);
+  Q_strncat(current_directory_, "\\", SOURCE_ARRAYSIZE(current_directory_), 1);
   _strlwr(current_directory_);
 }
 
@@ -145,8 +145,8 @@ void FileSystemAccessLogger::LogFile(const ch *fullPathFileName,
   if (relative) {
     relative += Q_strlen(base_directory_) + 1;
 
-    ch rel[MAX_PATH];
-    Q_strncpy(rel, relative, ARRAYSIZE(rel));
+    ch rel[SOURCE_MAX_PATH];
+    Q_strncpy(rel, relative, SOURCE_ARRAYSIZE(rel));
     Q_strlower(rel);
     Q_FixSlashes(rel);
 

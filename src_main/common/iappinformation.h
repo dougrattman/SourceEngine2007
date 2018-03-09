@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // Purpose: Interface to running the game engine
 //-----------------------------------------------------------------------------
-abstract_class IAppInformation : public IBaseInterface {
+the_interface IAppInformation : public IBaseInterface {
  public:
   // the number of apps known about by the app
   virtual int GetAppCount() = 0;

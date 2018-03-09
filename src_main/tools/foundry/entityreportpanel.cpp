@@ -19,7 +19,7 @@
 #include "foundrydoc.h"
 #include "foundrytool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -403,7 +403,7 @@ void CEntityReportPanel::OnButtonToggled( KeyValues *kv )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: Necessary because SetSelected doesn't cause a ButtonToggled message to trigger
+// TODO(d.rattman): Necessary because SetSelected doesn't cause a ButtonToggled message to trigger
 //-----------------------------------------------------------------------------
 void CEntityReportPanel::OnCheckButtonChecked( KeyValues *kv )
 {

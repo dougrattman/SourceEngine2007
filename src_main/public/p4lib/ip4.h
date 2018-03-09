@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IP4_H
 #define IP4_H
@@ -66,7 +66,7 @@ struct P4Client_t {
 // Vitaliy - 09-Feb-'07: if anybody ups the version of this interface, please
 // move the method "SetOpenFileChangeList" into the appropriate section.
 
-abstract_class IP4 : public IAppSystem {
+the_interface IP4 : public IAppSystem {
  public:
   // name of the current clientspec
   virtual P4Client_t &GetActiveClient() = 0;

@@ -15,7 +15,6 @@
 #include "toolframework_client.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //
@@ -373,7 +372,8 @@ void C_SmokeTrail::CleanupToolRecordingState(KeyValues *msg) {
 
     KeyValues *pInitializers = pEmitter->FindKey("initializers", true);
 
-    // FIXME: Until we can interpolate ent logs during emission, this can't work
+    // TODO(d.rattman): Until we can interpolate ent logs during emission, this
+    // can't work
     KeyValues *pPosition =
         pInitializers->FindKey("DmePositionPointToEntityInitializer", true);
     pPosition->SetPtr("entindex", (void *)pEnt->entindex());
@@ -654,7 +654,7 @@ void C_RocketTrail::Update(float fTimeDelta) {
     // debugoverlay->AddLineOverlay( m_vecLastPosition, GetAbsOrigin(), 255, 0,
     // 0, true, 2.0f );
 
-    // FIXME: More rational cap here, perhaps
+    // TODO(d.rattman): More rational cap here, perhaps
     if (numPuffs > 50) numPuffs = 50;
 
     Vector offsetColor;
@@ -1109,7 +1109,8 @@ END_RECV_TABLE()
 
 C_SporeTrail::C_SporeTrail(void) {
   m_pParticleMgr = NULL;
-  // m_pSmokeEffect			= SporeSmokeEffect::Create( "C_SporeTrail"
+  // m_pSmokeEffect			= SporeSmokeEffect::Create(
+  // "C_SporeTrail"
   // );
 
   m_flSpawnRate = 10;
@@ -1374,7 +1375,7 @@ void C_FireTrail::Update(float fTimeDelta) {
 
     int numPuffs = moveLength / (STARTSIZE / 2.0f);
 
-    // FIXME: More rational cap here, perhaps
+    // TODO(d.rattman): More rational cap here, perhaps
     numPuffs = std::clamp(numPuffs, 1, 32);
 
     SimpleParticle *pParticle;
@@ -1397,9 +1398,10 @@ void C_FireTrail::Update(float fTimeDelta) {
       if (pParticle != NULL) {
         pParticle->m_flLifetime = 0.0f;
         pParticle->m_flDieTime =
-            /*PARTICLE_LIFETIME*/ 0.5f;  // +
-                                         // random->RandomFloat(PARTICLE_LIFETIME*0.75f,
-                                         // PARTICLE_LIFETIME*1.25f);
+            /*PARTICLE_LIFETIME*/
+            0.5f;  // +
+                   // random->RandomFloat(PARTICLE_LIFETIME*0.75f,
+                   // PARTICLE_LIFETIME*1.25f);
 
         pParticle->m_vecVelocity.Random(0.0f, 1.0f);
         pParticle->m_vecVelocity *= random->RandomFloat(MIN_SPEED, MAX_SPEED);
@@ -1584,8 +1586,8 @@ void C_DustTrail::OnDataChanged(DataUpdateType_t updateType) {
   }
 }
 
-// FIXME: These all have to be moved out of this old system and into the new to
-// leverage art assets!
+// TODO(d.rattman): These all have to be moved out of this old system and into
+// the new to leverage art assets!
 CLIENTEFFECT_REGISTER_BEGIN(PrecacheEffectDusttrail)
 CLIENTEFFECT_MATERIAL("particle/smokesprites_0001")
 /*
@@ -1674,7 +1676,7 @@ void C_DustTrail::Update(float fTimeDelta) {
 
     pParticle = (SimpleParticle *)m_pDustEmitter->AddParticle(
         sizeof(SimpleParticle), m_MaterialHandle[random->RandomInt(0, 0)],
-        offset);  // FIXME: the other sprites look bad
+        offset);  // TODO(d.rattman): the other sprites look bad
 
     if (pParticle == NULL) continue;
 
@@ -1769,12 +1771,13 @@ void C_DustTrail::CleanupToolRecordingState(KeyValues *msg) {
     pEmitter->SetString("material", "particle/smokesprites_0001");
     pEmitter->SetInt(
         "count", m_SpawnRate);  // particles per second, when duration is < 0
-    pEmitter->SetFloat("duration", -1);  // FIXME
+    pEmitter->SetFloat("duration", -1);  // TODO(d.rattman): Compute duration!
     pEmitter->SetInt("active", bEmitterActive);
 
     KeyValues *pInitializers = pEmitter->FindKey("initializers", true);
 
-    // FIXME: Until we can interpolate ent logs during emission, this can't work
+    // TODO(d.rattman): Until we can interpolate ent logs during emission, this
+    // can't work
     KeyValues *pPosition =
         pInitializers->FindKey("DmePositionPointToEntityInitializer", true);
     pPosition->SetPtr("entindex", (void *)pEnt->entindex());

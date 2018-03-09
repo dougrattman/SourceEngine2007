@@ -8,14 +8,14 @@
 #include "IGameSystem.h"
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialSystem.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier1/UtlVector.h"
 #include "tier1/interface.h"
 
 //-----------------------------------------------------------------------------
 // Interface to automated system for precaching materials
 //-----------------------------------------------------------------------------
-abstract_class IClientEffect {
+the_interface IClientEffect {
  public:
   virtual void Cache(bool precache = true) = 0;
 };
@@ -111,7 +111,7 @@ class CClientEffect : public IClientEffect {
   }                                                       \
   ;                                                       \
   void ClientEffectRegister::Cache(bool precache) {       \
-    for (int i = 0; i < ARRAYSIZE(m_pszMaterials); i++) { \
+    for (int i = 0; i < SOURCE_ARRAYSIZE(m_pszMaterials); i++) { \
       ReferenceMaterial(m_pszMaterials[i], precache);     \
     }                                                     \
   }                                                       \
@@ -123,7 +123,7 @@ class CClientEffect : public IClientEffect {
   ;                                                         \
   void ClientEffectRegister::Cache(bool precache) {         \
     if (condition) {                                        \
-      for (int i = 0; i < ARRAYSIZE(m_pszMaterials); i++) { \
+      for (int i = 0; i < SOURCE_ARRAYSIZE(m_pszMaterials); i++) { \
         ReferenceMaterial(m_pszMaterials[i], precache);     \
       }                                                     \
     }                                                       \

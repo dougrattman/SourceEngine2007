@@ -25,7 +25,7 @@
 #include "physobj.h"
 #include "tier1/utlsymbol.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern CAI_Node *FindPickerAINode(CBasePlayer *pPlayer, NodeType_e nNodeType);

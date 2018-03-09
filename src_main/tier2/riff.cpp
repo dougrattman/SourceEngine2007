@@ -1,14 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier2/riff.h"
 
 #include <cstdio>
 #include <cstring>
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
-
 
 // Purpose: Opens a RIFF file using the given I/O mechanism
 // Input  : *pFileName
@@ -41,11 +40,9 @@ InFileRIFF::InFileRIFF(const char *pFileName, IFileReadBinary &io) : m_io(io) {
   }
 }
 
-
 // Purpose: Close the file
 
 InFileRIFF::~InFileRIFF() { m_io.close(m_file); }
-
 
 // Purpose: read a 4-byte int out of the stream
 // Output : int = read value, default is zero
@@ -58,7 +55,6 @@ int InFileRIFF::ReadInt() {
   return tmp;
 }
 
-
 // Purpose: Read a block of binary data
 // Input  : *pOutput - pointer to destination memory
 //			dataSize - size of block to read
@@ -70,18 +66,15 @@ int InFileRIFF::ReadData(void *pOutput, int dataSize) {
   return count;
 }
 
-
 // Purpose: Gets the file position
 // Output : int (bytes from start of file)
 
 int InFileRIFF::PositionGet() { return m_io.tell(m_file); }
 
-
 // Purpose: Seek to file position
 // Input  : position - bytes from start of file
 
 void InFileRIFF::PositionSet(int position) { m_io.seek(m_file, position); }
-
 
 // Purpose: Used to write a RIFF format file
 
@@ -152,7 +145,6 @@ void OutFileRIFF::PositionSet(int position) {
   m_io.seek(m_file, position);
 }
 
-
 // Purpose: Create an iterator for the given file
 // Input  : &riff - riff file
 //			size - size of file or sub-chunk
@@ -170,7 +162,6 @@ IterateRIFF::IterateRIFF(InFileRIFF &riff, int size)
   ChunkSetup();
 }
 
-
 // Purpose: Set up a sub-chunk iterator
 // Input  : &parent - parent iterator
 
@@ -179,7 +170,6 @@ IterateRIFF::IterateRIFF(IterateRIFF &parent)
   m_start = parent.ChunkFilePosition();
   ChunkSetup();
 }
-
 
 // Purpose: Parse the chunk at the current file position
 //			This object will iterate over the sub-chunks of this
@@ -192,11 +182,9 @@ void IterateRIFF::ChunkSetup() {
   m_chunkSize = m_riff.ReadInt();
 }
 
-
 // Purpose: clear chunk setup, ChunkAvailable will return false
 
 void IterateRIFF::ChunkClear() { m_chunkSize = -1; }
-
 
 // Purpose: If there are chunks left to read beyond this one, return true
 
@@ -205,7 +193,6 @@ bool IterateRIFF::ChunkAvailable() {
 
   return false;
 }
-
 
 // Purpose: Go to the next chunk in the file, return true if there is one.
 
@@ -228,18 +215,15 @@ bool IterateRIFF::ChunkNext() {
   return ChunkAvailable();
 }
 
-
 // Purpose: get the chunk FOURCC as an int
 // Output : unsigned int
 
 unsigned int IterateRIFF::ChunkName() { return m_chunkName; }
 
-
 // Purpose: get the size of this chunk
 // Output : unsigned int
 
 unsigned int IterateRIFF::ChunkSize() { return m_chunkSize; }
-
 
 // Purpose: Read the entire chunk into a buffer
 // Input  : *pOutput - dest buffer
@@ -248,7 +232,6 @@ unsigned int IterateRIFF::ChunkSize() { return m_chunkSize; }
 int IterateRIFF::ChunkRead(void *pOutput) {
   return m_riff.ReadData(pOutput, ChunkSize());
 }
-
 
 // Purpose: Read a partial chunk (updates file position for subsequent partial
 // reads). Input  : *pOutput - dest buffer
@@ -259,12 +242,10 @@ int IterateRIFF::ChunkReadPartial(void *pOutput, int dataSize) {
   return m_riff.ReadData(pOutput, dataSize);
 }
 
-
 // Purpose: Read a 4-byte int
 // Output : int - read int
 
 int IterateRIFF::ChunkReadInt() { return m_riff.ReadInt(); }
-
 
 // Purpose: Used to iterate over an InFileRIFF
 

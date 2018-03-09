@@ -1,52 +1,44 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose:		Projectile shot by wasteland scanner 
-//
-// $Workfile:     $
-// $Date:         $
-//
-//-----------------------------------------------------------------------------
-// $Log: $
-//
-// $NoKeywords: $
+// Purpose: Projectile shot by wasteland scanner
 
-
-#ifndef	GRENADEPATHFOLLOWER_H
-#define	GRENADEPATHFOLLOWER_H
+#ifndef GRENADEPATHFOLLOWER_H
+#define GRENADEPATHFOLLOWER_H
 
 #include "basegrenade_shared.h"
 
 class RocketTrail;
 
-class CGrenadePathfollower : public CBaseGrenade
-{
-public:
-	DECLARE_CLASS( CGrenadePathfollower, CBaseGrenade );
+class CGrenadePathfollower : public CBaseGrenade {
+ public:
+  DECLARE_CLASS(CGrenadePathfollower, CBaseGrenade);
 
-	static CGrenadePathfollower* CreateGrenadePathfollower( string_t sModelName, string_t sFlySound, const Vector &vecOrigin, const QAngle &vecAngles, edict_t *pentOwner );
+  static CGrenadePathfollower *CreateGrenadePathfollower(
+      string_t sModelName, string_t sFlySound, const Vector &vecOrigin,
+      const QAngle &vecAngles, edict_t *pentOwner);
 
-	CHandle<RocketTrail>	m_hRocketTrail;
-	CBaseEntity*	m_pPathTarget; 	// path corner we are heading towards
-	float m_flFlySpeed;
-	string_t		m_sFlySound;
-	float m_flNextFlySoundTime;
+  CHandle<RocketTrail> m_hRocketTrail;
+  CBaseEntity *m_pPathTarget;  // path corner we are heading towards
+  float m_flFlySpeed;
+  string_t m_sFlySound;
+  float m_flNextFlySoundTime;
 
-	Class_T Classify( void);
-	void Spawn( void );
-	void AimThink( void );
-	void  GrenadeTouch( CBaseEntity *pOther );
-	void Event_Killed( const CTakeDamageInfo &info );
-	void Launch( float flLaunchSpeed, string_t sPathCornerName);
-	void PlayFlySound();
+  Class_T Classify(void);
+  void Spawn(void);
+  void AimThink(void);
+  void GrenadeTouch(CBaseEntity *pOther);
+  void Event_Killed(const CTakeDamageInfo &info);
+  void Launch(float flLaunchSpeed, string_t sPathCornerName);
+  void PlayFlySound();
 
-	void EXPORT		Detonate();
+  void Detonate();
 
-	CGrenadePathfollower();
-	~CGrenadePathfollower();
+  CGrenadePathfollower();
+  ~CGrenadePathfollower();
 
-	virtual void Precache();
+  virtual void Precache();
 
-	DECLARE_DATADESC();
+  DECLARE_DATADESC();
 };
 
-#endif	//GRENADEPATHFOLLOWER_H
+#endif  // GRENADEPATHFOLLOWER_H

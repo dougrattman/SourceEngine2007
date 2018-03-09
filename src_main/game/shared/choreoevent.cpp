@@ -15,7 +15,7 @@
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int CChoreoEvent::s_nGlobalID = 1;
@@ -972,7 +972,7 @@ CChoreoEvent &CChoreoEvent::operator=(const CChoreoEvent &src) {
 
   m_bTrackLookupSet = src.m_bTrackLookupSet;
 
-  // FIXME:  Use a safe handle?
+  // TODO(d.rattman):  Use a safe handle?
   // m_pSubScene = src.m_pSubScene;
 
   m_bProcessing = src.m_bProcessing;
@@ -1484,7 +1484,7 @@ float CCurveData::GetIntensityArea(ICurveDataAccessor *data, float time) {
   Interpolator_CurveInterpolatorsForType(startCurve, dummy, earlypart);
   Interpolator_CurveInterpolatorsForType(endCurve, laterpart, dummy);
 
-  // FIXME: needs other curve types
+  // TODO(d.rattman): needs other curve types
   Catmull_Rom_Spline_Integral_Normalize(vPre, vStart, vEnd, vNext, f2, vOut);
 
   // Con_Printf( "Accum %f : Partial %f\n", flTotal, vOut.y * (vEnd.x -
@@ -1624,7 +1624,7 @@ static EventNameMap_t g_NameMap[] = {
 class CCheckEventNames {
  public:
   CCheckEventNames() {
-    COMPILE_TIME_ASSERT(ARRAYSIZE(g_NameMap) == CChoreoEvent::NUM_TYPES);
+    static_assert(SOURCE_ARRAYSIZE(g_NameMap) == CChoreoEvent::NUM_TYPES);
     for (int i = 0; i < CChoreoEvent::NUM_TYPES; ++i) {
       if (!g_NameMap[i].name) {
         Error("g_NameMap:  Event type at %i has NULL name string!", i);
@@ -1686,7 +1686,7 @@ static CCNameMap_t g_CCNameMap[] = {
 class CCheckCCNames {
  public:
   CCheckCCNames() {
-    COMPILE_TIME_ASSERT(ARRAYSIZE(g_CCNameMap) == CChoreoEvent::NUM_CC_TYPES);
+    static_assert(SOURCE_ARRAYSIZE(g_CCNameMap) == CChoreoEvent::NUM_CC_TYPES);
     for (int i = 0; i < CChoreoEvent::NUM_CC_TYPES; ++i) {
       if (!g_CCNameMap[i].name) {
         Error("g_NameMap:  CC type at %i has NULL name string!", i);
@@ -2851,7 +2851,7 @@ void CChoreoEvent::RescaleGestureTimes(float newstart, float newend,
 bool CChoreoEvent::PreventTagOverlap(void) {
   bool bHadOverlap = false;
 
-  // FIXME: limit to single frame?
+  // TODO(d.rattman): limit to single frame?
   float minDp = 0.01f, minP = 1.00f;
 
   int count = GetNumAbsoluteTags(CChoreoEvent::PLAYBACK);

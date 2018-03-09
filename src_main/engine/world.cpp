@@ -18,7 +18,7 @@
 #include "vengineserver_impl.h"
 #include "vphysics_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -207,7 +207,7 @@ class CTriggerMoved : public IPartitionEnumerator {
     IServerEntity *serverEntity = pTouch->GetIServerEntity();
     if (!serverEntity) return ITERATION_CONTINUE;
 
-    // FIXME: Should we be using the surrounding bounds here?
+    // TODO(d.rattman): Should we be using the surrounding bounds here?
     Vector vecMins, vecMaxs;
     CM_GetCollideableTriggerTestBox(pTouchCollide, &vecMins, &vecMaxs,
                                     m_bAccurateBBoxCheck);

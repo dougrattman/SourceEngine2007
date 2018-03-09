@@ -652,7 +652,7 @@ bool CBaseClientState::ProcessConnectionlessPacket(netpacket_t *packet) {
 
   char string[MAX_ROUTABLE_PAYLOAD];
 
-  // FIXME:  For some of these, we should confirm that the sender of
+  // TODO(d.rattman):  For some of these, we should confirm that the sender of
   // the message is what we think the server is...
 
   switch (c) {

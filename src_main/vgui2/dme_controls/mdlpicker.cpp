@@ -26,7 +26,7 @@
 #include "datamodel/dmelement.h"
 #include "matsys_controls/assetpicker.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -275,7 +275,7 @@ void CMDLPicker::OnAssetSelected( KeyValues *pParams )
 {
 	const char *pAsset = pParams->GetString( "asset" );
 
-	char pProbeBuf[MAX_PATH];
+	char pProbeBuf[SOURCE_MAX_PATH];
 	Q_snprintf( pProbeBuf, sizeof(pProbeBuf), "materials/lightprobes/%s", pAsset );
 
 	CDisableUndoScopeGuard sg;
@@ -379,7 +379,7 @@ void CMDLPicker::RefreshActivitiesAndSequencesList()
 //-----------------------------------------------------------------------------
 void CMDLPicker::OnSelectedAssetPicked( const char *pMDLName )
 {
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	if ( pMDLName )
 	{
 		Q_snprintf( pRelativePath, sizeof(pRelativePath), "models\\%s", pMDLName );
@@ -537,7 +537,7 @@ void CMDLPicker::SelectActivity( const char *pActivityName )
 		mstudioseqdesc_t &seqdesc = pstudiohdr->pSeqdesc( i );
 		if ( stricmp( seqdesc.pszActivityName(), pActivityName ) == 0 )
 		{
-			// FIXME: Add weighted sequence selection logic?
+			// TODO(d.rattman): Add weighted sequence selection logic?
 			m_pMDLPreview->SetSequence( i );
 			break;
 		}

@@ -15,7 +15,7 @@
 #include "utlsymbol.h"
 #ifdef _WIN32
 #include "msxml2.h"
-#elif _LINUX
+#elif OS_POSIX
 #include "xercesc/dom/DOMDocument.hpp"
 #define IXMLDOMDocument DOMDocument
 #define IXMLDOMElement DOMElement

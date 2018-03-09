@@ -14,7 +14,7 @@
 #include <vgui_controls/WizardPanel.h>
 #include <vgui_controls/WizardSubPanel.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

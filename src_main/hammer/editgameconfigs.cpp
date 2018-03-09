@@ -14,7 +14,7 @@
 #include "StrDlg.h"
 #include "MapDoc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ void CEditGameConfigs::OnRemove()
 	// Remove selection
 	m_cConfigs.DeleteString( iCurSel );
 
-	// FIXME: This will apply the change even if you cancel the dialog.  This needs to store a copy
+	// TODO(d.rattman): This will apply the change even if you cancel the dialog.  This needs to store a copy
 	//		  of the data which then reconciles the two versions on OK or Apply! -- jdw
 
 	Options.configs.Configs.RemoveAt(iArrayIndex);

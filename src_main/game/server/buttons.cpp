@@ -14,7 +14,7 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void PlayLockSounds(CBaseEntity *pEdict, locksound_t *pls, int flocked,
@@ -222,7 +222,7 @@ void CBaseButton::Press(CBaseEntity *pActivator, BUTTON_CODE eCode) {
     return;
   }
 
-  // FIXME: consolidate all the button press code into one place!
+  // TODO(d.rattman): consolidate all the button press code into one place!
   if (m_bLocked) {
     // play button locked sound
     PlayLockSounds(this, &m_ls, TRUE, TRUE);

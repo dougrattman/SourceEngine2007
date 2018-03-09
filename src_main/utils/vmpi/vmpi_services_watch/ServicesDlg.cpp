@@ -377,7 +377,7 @@ BOOL CServicesDlg::OnInitDialog()
 	m_ServicesList.SetExtendedStyle( LVS_EX_FULLROWSELECT );
 	
 	// Setup the headers.
-	for ( int i=0; i < ARRAYSIZE( g_ColumnInfos ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( g_ColumnInfos ); i++ )
 	{
 		m_ServicesList.InsertColumn( i, g_ColumnInfos[i].pText, LVCFMT_LEFT, g_ColumnInfos[i].width, i );
 	}
@@ -840,7 +840,7 @@ bool FindStringResourceEx( HINSTANCE hinst, UINT uId, UINT langId, char *pStr, i
 
 int CheckServiceVersion( const char *pPatchDir, char *pServiceVersion, int maxServiceVersionLen )
 {
-	char filename[MAX_PATH];
+	char filename[SOURCE_MAX_PATH];
 	V_ComposeFileName( pPatchDir, "vmpi_service.exe", filename, sizeof( filename ) );
 	
 	int ret = IDCANCEL;
@@ -882,7 +882,7 @@ TryAgain:;
 		// Launch the transfer app.
 		char commandLine[32 * 1024] = {0};
 		
-		char transferExe[MAX_PATH];
+		char transferExe[SOURCE_MAX_PATH];
 		V_ComposeFileName( dlg.m_VMPITransferDirectory, "vmpi_transfer.exe", transferExe, sizeof( transferExe ) );
 		if ( _access( transferExe, 0 ) != 0 )
 		{
@@ -1074,7 +1074,7 @@ BOOL CServicesDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 			LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
 			// Now sort by this column.
-			int iSortColumn = std::max( 0, std::min( pListView->iSubItem, ARRAYSIZE( g_ColumnInfos ) - 1 ) );
+			int iSortColumn = std::max( 0, std::min( pListView->iSubItem, SOURCE_ARRAYSIZE( g_ColumnInfos ) - 1 ) );
 			PushSortColumn( iSortColumn );
 			ResortItems();
 		}

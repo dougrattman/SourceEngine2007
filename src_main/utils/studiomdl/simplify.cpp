@@ -125,7 +125,7 @@ void processAnimations()
 	{
 		s_animation_t *panim = g_panimation[i];
 
-		extractUnusedMotion( panim ); // FIXME: this should be part of LinearMotion()
+		extractUnusedMotion( panim ); // TODO(d.rattman): this should be part of LinearMotion()
 
 		setAnimationWeight( panim, 0 );
 
@@ -432,7 +432,7 @@ void extractLinearMotion( s_animation_t *panim, int motiontype, int iStartFrame,
 		Quaternion deltaQ2;
 		QuaternionMA( q2, -1, q0, deltaQ2 );
 
-		// FIXME: this is still wrong, but it should be slightly more robust
+		// TODO(d.rattman): this is still wrong, but it should be slightly more robust
 		RadianEuler a3;
 		if (motiontype & STUDIO_LXR)
 		{
@@ -490,7 +490,7 @@ void extractLinearMotion( s_animation_t *panim, int motiontype, int iStartFrame,
 	Vector p2 = panim->sanim[iSrcFrame][g_rootIndex].pos;
 	Vector p1 = panim->sanim[iMidFrame][g_rootIndex].pos * (1 - s) + panim->sanim[iMidFrame+1][g_rootIndex].pos * s;
 
-	// ConvertToAnimLocal( panim, pos, angles ); // FIXME: unused
+	// ConvertToAnimLocal( panim, pos, angles ); // TODO(d.rattman): unused
 
 	p2 = p2 - p0;
 	p1 = p1 - p0;
@@ -706,7 +706,7 @@ Vector calcMovement( s_animation_t *panim, int iFrom, int iTo )
 }
 
 #if 0
-	// FIXME: add in correct motion!!!
+	// TODO(d.rattman): add in correct motion!!!
 	int iFrame = pRule->peak - pRule->start - k;
 	if (pRule->start + k > panim->numframes - 1)
 	{
@@ -943,7 +943,7 @@ void worldspaceBlend( s_animation_t *psrc, s_animation_t *pdest, int srcframe, i
 			{
 				MatrixAngles( destBoneToWorld[k], pdest->sanim[j][k].rot, tmp );
 
-				// FIXME: it's not clear if this should blend position or not....it'd be 
+				// TODO(d.rattman): it's not clear if this should blend position or not....it'd be 
 				// better if weight lists could do quat and pos independently. 
 			}
 			else
@@ -1749,7 +1749,7 @@ void fixupLoopingDiscontinuities( s_animation_t *panim, int start, int end )
 	}
 
 	// HACK: skip fixup for motion that'll be matched with linear extraction
-	// FIXME: remove when "global" extraction moved into normal ordered processing loop
+	// TODO(d.rattman): remove when "global" extraction moved into normal ordered processing loop
 	for (k = 0; k < g_numbones; k++)
 	{
 		if (g_bonetable[k].parent == -1)
@@ -1760,7 +1760,7 @@ void fixupLoopingDiscontinuities( s_animation_t *panim, int start, int end )
 				delta_pos[k].y = 0.0;
 			if (panim->motiontype & STUDIO_LZ)
 				delta_pos[k].z = 0.0;
-			// FIXME: add rotation
+			// TODO(d.rattman): add rotation
 		}
 	}
 
@@ -1775,7 +1775,7 @@ void fixupLoopingDiscontinuities( s_animation_t *panim, int start, int end )
 		}
 	}
 
-	// FIXME: figure out S
+	// TODO(d.rattman): figure out S
 	float s = 0;
 	float nf = end - start;
 	
@@ -1830,7 +1830,7 @@ void matchBlend( s_animation_t *pDestAnim, s_animation_t *pSrcAnimation, int iSr
 	}
 
 	// HACK: skip fixup for motion that'll be matched with linear extraction
-	// FIXME: remove when "global" extraction moved into normal ordered processing loop
+	// TODO(d.rattman): remove when "global" extraction moved into normal ordered processing loop
 	for (k = 0; k < g_numbones; k++)
 	{
 		if (g_bonetable[k].parent == -1)
@@ -1841,11 +1841,11 @@ void matchBlend( s_animation_t *pDestAnim, s_animation_t *pSrcAnimation, int iSr
 				delta_pos[k].y = 0.0;
 			if (pDestAnim->motiontype & STUDIO_LZ)
 				delta_pos[k].z = 0.0;
-			// FIXME: add rotation
+			// TODO(d.rattman): add rotation
 		}
 	}
 
-	// FIXME: figure out S
+	// TODO(d.rattman): figure out S
 	float s = 0;
 
 	for (j = iPre; j <= iPost; j++)
@@ -2108,7 +2108,7 @@ void makeAngle( s_animation_t *panim, float angle )
 		}
 	}
 
-	// FIXME: not finished
+	// TODO(d.rattman): not finished
 }
 
 //-----------------------------------------------------------------------------
@@ -2271,7 +2271,7 @@ void fixupIKErrors( s_animation_t *panim, s_ikrule_t *pRule )
 					boneToWorld );
 
 				// slam final matrix
-				// FIXME: this isn't taking into account the IK may have failed
+				// TODO(d.rattman): this isn't taking into account the IK may have failed
 				ConcatTransforms( boneToWorld[pRule->bone], local, boneToWorld[g_ikchain[pRule->chain].link[2].bone] );
 
 				solveBone( panim, k + pRule->start, g_ikchain[pRule->chain].link[0].bone, boneToWorld );  
@@ -2288,7 +2288,7 @@ void fixupIKErrors( s_animation_t *panim, s_ikrule_t *pRule )
 
 			int bone = g_ikchain[pRule->chain].link[2].bone;
 			CalcBoneTransforms( panim, pRule->contact, boneToWorld );
-			// FIXME: add in motion
+			// TODO(d.rattman): add in motion
 
 			Vector footfall;
 			MatrixGetColumn( boneToWorld[bone], 3, footfall );
@@ -2300,7 +2300,7 @@ void fixupIKErrors( s_animation_t *panim, s_ikrule_t *pRule )
 
 				float cycle = (panim->numframes <= 1) ? 0 : (float)(k + pRule->start) / (panim->numframes - 1);
 				float s = IKRuleWeight( pRule, cycle );
-				s = 1.0; // FIXME - the weight rule is wrong
+				s = 1.0; // TODO(d.rattman): the weight rule is wrong
 
 				Vector orig;
 				MatrixPosition( boneToWorld[g_ikchain[pRule->chain].link[2].bone], orig );
@@ -2713,8 +2713,8 @@ void RemapVertexAnimations(void)
 					VectorCopy( psrcanim->normal, pmLodSource->vertex[k].normal );
 
 					// copy "default" pos to frame 0 of vertex animation source
-					// FIXME: this needs to copy to all sources of vertex animation.
-					// FIXME: the "default" pose needs to be in each vertex animation source since it's likely that the vertices won't be numbered the same in each file.
+					// TODO(d.rattman): this needs to copy to all sources of vertex animation.
+					// TODO(d.rattman): the "default" pose needs to be in each vertex animation source since it's likely that the vertices won't be numbered the same in each file.
 					VectorCopy( psrcanim->pos, pSourceAnim->vanim[0][psrcanim->vertex].pos );
 					VectorCopy( psrcanim->normal, pSourceAnim->vanim[0][psrcanim->vertex].normal );
 				}
@@ -2769,7 +2769,7 @@ void RemapVertexAnimations(void)
 			VectorSubtract( psrcanim->normal, pSourceAnim->vanim[0][psrcanim->vertex].normal, ndelta );
 
 			// if the changes are too small, skip 'em
-			// FIXME: the clamp needs to be paired with the other matching positions.
+			// TODO(d.rattman): the clamp needs to be paired with the other matching positions.
 			// currently this is set to the float16 min value.  Sucky.
 			if (DotProduct( delta, delta ) <= (0.001f*0.001f) /* 0.0001 */ && DotProduct( ndelta, ndelta ) <= 0.001)
 			{
@@ -2940,7 +2940,7 @@ static void RemapVertexAnimationsNewVersion(void)
 				continue;
 
 			// if the changes are too small, skip 'em
-			// FIXME: the clamp needs to be paired with the other matching positions.
+			// TODO(d.rattman): the clamp needs to be paired with the other matching positions.
 			// currently this is set to the float16 min value.  Sucky.
 			if ( DotProduct( pSrcVAnim->pos, pSrcVAnim->pos ) <= (0.001f*0.001f) /* 0.0001 */ && DotProduct( pSrcVAnim->normal, pSrcVAnim->normal ) <= 0.001f && pSrcVAnim->wrinkle <= 0.001f )
 			{
@@ -3245,7 +3245,7 @@ void limitIKChainLength( void )
 
 					Vector ikHalf = (worldFoot+worldThigh) * 0.5;
 
-					// FIXME: what to do when the knee completely straight?
+					// TODO(d.rattman): what to do when the knee completely straight?
 					Vector ikKneeDir = worldKnee - ikHalf;
 					VectorNormalize( ikKneeDir );
 					// ikTargetKnee = ikKnee + ikKneeDir * l1;
@@ -3648,7 +3648,7 @@ void MakeStaticProp()
 
 	AngleMatrix( g_defaultrotation, rotated );
 
-	// FIXME: missing attachment point recalcs!
+	// TODO(d.rattman): missing attachment point recalcs!
 
 	// replace bone 0 with "static_prop" bone and attach everything to it.
 	for (i = 0; i < g_numsources; i++)
@@ -3830,7 +3830,7 @@ void TagUsedBones( )
 	{
 		s_source_t *psource = g_source[i];
 
-		// FIXME: this is in the wrong place.  The attachment may be rigid and it never defined in a reference file
+		// TODO(d.rattman): this is in the wrong place.  The attachment may be rigid and it never defined in a reference file
 		for (k = 0; k < g_numattachments; k++)
 		{
 			for (j = 0; j < psource->numbones; j++)
@@ -4006,7 +4006,7 @@ int BuildGlobalBonetable( )
 			}
 			else
 			{
-				// FIXME: This won't work if the imported bone refers to
+				// TODO(d.rattman): This won't work if the imported bone refers to
 				// another imported bone which is further along in the list
 				g_bonetable[k].parent = findGlobalBone( g_importbone[i].parent );
 				if ( g_bonetable[k].parent == -1 )
@@ -4245,7 +4245,7 @@ void EnforceHierarchy( )
 			// split the bone
 			Quaternion q1, q2;
 			Vector p;
-			MatrixAngles( boneToPose[k], q1, p );  // FIXME: badly named!
+			MatrixAngles( boneToPose[k], q1, p );  // TODO(d.rattman): badly named!
 
 			// !!!!
 			// QuaternionScale( q1, 0.5, q2 );
@@ -5265,7 +5265,7 @@ void SlerpBones(
 				{
 					QuaternionMA( q1[i], s2, q2[i], q1[i] );
 
-					// FIXME: are these correct?
+					// TODO(d.rattman): are these correct?
 					pos1[i][0] = pos1[i][0] + pos2[i][0] * s2;
 					pos1[i][1] = pos1[i][1] + pos2[i][1] * s2;
 					pos1[i][2] = pos1[i][2] + pos2[i][2] * s2;
@@ -5274,7 +5274,7 @@ void SlerpBones(
 				{
 					QuaternionSM( s2, q2[i], q1[i], q1[i] );
 
-					// FIXME: are these correct?
+					// TODO(d.rattman): are these correct?
 					pos1[i][0] = pos1[i][0] + pos2[i][0] * s2;
 					pos1[i][1] = pos1[i][1] + pos2[i][1] * s2;
 					pos1[i][2] = pos1[i][2] + pos2[i][2] * s2;
@@ -5318,12 +5318,12 @@ void CalcPoseSingle( Vector pos[], Quaternion q[], int sequence, float frame )
 
 	s_animation_t *panim = pseqdesc->panim[0][0];
 
-	// FIXME: is this modulo correct?
+	// TODO(d.rattman): is this modulo correct?
 	int iframe = ((int)frame) % panim->numframes;
 
 	for (int k = 0; k < g_numbones; k++)
 	{
-		// FIXME: this isn't doing a fractional frame
+		// TODO(d.rattman): this isn't doing a fractional frame
 		AngleQuaternion( panim->sanim[iframe][k].rot, q[k] );
 		pos[k] = panim->sanim[iframe][k].pos;
 	}
@@ -5745,7 +5745,7 @@ static void InitRemappedVertex( s_source_t *pSource, matrix3x4_t *pDestBoneToWor
 	VectorNormalize( ndest );
 	VectorCopy( ndest, dstVertex.normal );
 
-	// FIXME: Remapping will whack tangentS. Need to recompute tangents after remapping
+	// TODO(d.rattman): Remapping will whack tangentS. Need to recompute tangents after remapping
 }
 
 
@@ -6038,7 +6038,7 @@ static void CalcPoseParameters( void )
 					}
 
 					// for 2D animation, figure out what opposite row/column to use
-					// FIXME: make these 2D instead of 2 1D!
+					// TODO(d.rattman): make these 2D instead of 2 1D!
 					int m[2];
 					bool found = false;
 					if (pseq->paramcenter != NULL)
@@ -6175,7 +6175,7 @@ static void LinkIKChains( )
 		g_ikchain[i].link[0].bone = k;
 		g_bonetable[k].flags |= BONE_USED_BY_ATTACHMENT;
 
-		// FIXME: search for toes
+		// TODO(d.rattman): search for toes
 	}
 }
 
@@ -6509,7 +6509,7 @@ static void ProcessIKRules( )
 
 			if (pRule->usesequence)
 			{
-				// FIXME: bah, this is horrendously hacky, add a damn back pointer
+				// TODO(d.rattman): bah, this is horrendously hacky, add a damn back pointer
 				for (n = 0; n < g_sequence.Count(); n++)
 				{
 					if (g_sequence[n].panim[0][0] == panim)
@@ -6590,7 +6590,7 @@ static void ProcessIKRules( )
 
 					int bone = g_ikchain[pRule->chain].link[2].bone;
 					CalcBoneTransforms( panim, pRule->contact, boneToWorld );
-					// FIXME: add in motion
+					// TODO(d.rattman): add in motion
 
 					// pRule->pos = footfall;
 					// pRule->q = RadianEuler( 0, 0, 0 );
@@ -6613,7 +6613,7 @@ static void ProcessIKRules( )
 
 					if (pRule->bone != -1)
 					{
-						// FIXME: look for local bones...
+						// TODO(d.rattman): look for local bones...
 						CalcBoneTransforms( panim, pRule->contact, boneToWorld );
 						MatrixAngles( boneToWorld[pRule->bone], pRule->q, pRule->pos );
 					}
@@ -6689,7 +6689,7 @@ static void ProcessIKRules( )
 						CalcBoneTransforms( panim, pRule->contact, boneToWorld );
 					}
 
-					// FIXME: add in motion
+					// TODO(d.rattman): add in motion
 
 					Vector footfall;
 					VectorTransform( g_ikchain[pRule->chain].center, boneToWorld[bone], footfall );
@@ -6862,7 +6862,7 @@ static void ProcessIKRules( )
 			}
 		}
 
-		// FIXME: this doesn't check alignment!!!
+		// TODO(d.rattman): this doesn't check alignment!!!
 		for (j = 0; j < g_sequence[i].groupsize[0]; j++)
 		{
 			for (k = 0; k < g_sequence[i].groupsize[1]; k++)
@@ -7109,7 +7109,7 @@ static void CompressAnimations( )
 					if (n == 0)
 						MdlError("no animation frames: \"%s\"\n", psource->filename );
 
-					// FIXME: this compression algorithm needs work
+					// TODO(d.rattman): this compression algorithm needs work
 
 					// initialize animation RLE block
 					memset( data, 0, sizeof( data ) ); 

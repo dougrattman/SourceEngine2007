@@ -13,7 +13,7 @@
 #include "tier1/strtools.h"
 #include <shlobj.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 /////////////////////////////////////////////////////////////////////////////
 // COPTTextures property page
@@ -101,7 +101,7 @@ void COPTTextures::OnExtract()
 //-----------------------------------------------------------------------------
 void COPTTextures::OnAddtexfile(void)
 {
-	static char szInitialDir[MAX_PATH] = "\0";
+	static char szInitialDir[SOURCE_MAX_PATH] = "\0";
 
 	CFileDialog dlg(TRUE, "wad", NULL, OFN_ALLOWMULTISELECT | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST, "Texture files (*.wad;*.pak)|*.wad; *.pak||");
 
@@ -210,7 +210,7 @@ void GetDirectory(char *pDest, const char *pLongName)
 void COPTTextures::OnAddtexfile2() 
 {
 	BROWSEINFO bi;
-	char szDisplayName[MAX_PATH];
+	char szDisplayName[SOURCE_MAX_PATH];
 
 	bi.hwndOwner = m_hWnd;
 	bi.pidlRoot = NULL;
@@ -226,14 +226,14 @@ void COPTTextures::OnAddtexfile2()
 	{
 
 		// get path from the id list
-		char szPathName[MAX_PATH];
+		char szPathName[SOURCE_MAX_PATH];
 		SHGetPathFromIDList(pidlNew, szPathName);
 		
 		
 		if (AfxMessageBox("Add all subdirectories as separate Texture Groups?", MB_YESNO) == IDYES)
 		//if (!strcmpi("\\textures", &szPathName[strlen(szPathName) - strlen("\\textures")]))
 		{
-			char szNewPath[MAX_PATH];
+			char szNewPath[SOURCE_MAX_PATH];
 			strcpy(szNewPath, szPathName);
 			strcat(szNewPath, "\\*.*");
 			WIN32_FIND_DATA FindData;
@@ -267,7 +267,7 @@ void COPTTextures::OnAddtexfile2()
 }
 
 
-static char s_szStartFolder[MAX_PATH];
+static char s_szStartFolder[SOURCE_MAX_PATH];
 static int CALLBACK BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
 {
 	switch ( uMsg )
@@ -319,7 +319,7 @@ BOOL COPTTextures::BrowseForFolder( char *pszTitle, char *pszDirectory )
 		pshDesktop->ParseDisplayName( NULL, NULL, A2OLE( s_szStartFolder ), &ulEaten, &pidlStartFolder, &ulAttributes );
 	}	
 	
-	char szTmp[MAX_PATH];
+	char szTmp[SOURCE_MAX_PATH];
 
 	BROWSEINFO bi;
 	memset( &bi, 0, sizeof( bi ) );
@@ -435,12 +435,12 @@ void COPTTextures::OnMaterialExcludeAdd( void )
 	//
 	// get the directory path to exclude
 	//
-	char szTmp[MAX_PATH];
+	char szTmp[SOURCE_MAX_PATH];
 	if( !BrowseForFolder( "Select Game Executable Directory", szTmp ) )
 		return;
 
 	// strip off the material directory
-	char szSubDirName[MAX_PATH];
+	char szSubDirName[SOURCE_MAX_PATH];
 	StripOffMaterialDirectory( szTmp, &szSubDirName[0] );
 	if( szSubDirName[0] == '\0' )
 		return;
@@ -476,7 +476,7 @@ void COPTTextures::OnMaterialExcludeRemove( void )
 	if( ndxSel == LB_ERR )
 		return;
 
-	char szTmp[MAX_PATH];
+	char szTmp[SOURCE_MAX_PATH];
 	m_MaterialExclude.GetText( ndxSel, &szTmp[0] );
 
 	//

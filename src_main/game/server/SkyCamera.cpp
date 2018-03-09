@@ -9,7 +9,7 @@
 #include "entitylist.h"
 #include "SkyCamera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // automatically hooks in the system's callbacks

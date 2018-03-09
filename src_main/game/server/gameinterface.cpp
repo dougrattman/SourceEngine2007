@@ -99,7 +99,7 @@ extern ConVar commentary;
 
 IUploadGameStats *gamestatsuploader = NULL;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CTimedEventMgr g_NetworkPropertyEventMgr;
@@ -1036,7 +1036,7 @@ void CServerGameDLL::GameFrame(bool simulating) {
   // free all ents marked in think functions
   gEntList.CleanupDeleteList();
 
-  // FIXME:  Should this only occur on the final tick?
+  // TODO(d.rattman):  Should this only occur on the final tick?
   UpdateAllClientData();
 
   if (g_pGameRules) {
@@ -1460,7 +1460,7 @@ static TITLECOMMENT gTitleComments[] = {
 void CServerGameDLL::GetTitleName(const char *pMapName, char *pTitleBuff,
                                   int titleBuffSize) {
   // Try to find a matching title comment for this mapname
-  for (int i = 0; i < ARRAYSIZE(gTitleComments); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(gTitleComments); i++) {
     if (!Q_strnicmp(pMapName, gTitleComments[i].pBSPName,
                     strlen(gTitleComments[i].pBSPName))) {
       Q_strncpy(pTitleBuff, gTitleComments[i].pTitleName, titleBuffSize);
@@ -1482,7 +1482,7 @@ void CServerGameDLL::GetSaveComment(char *text, int maxlength, float flMinutes,
   pName = NULL;
 
   // Try to find a matching title comment for this mapname
-  for (i = 0; i < ARRAYSIZE(gTitleComments) && !pName; i++) {
+  for (i = 0; i < SOURCE_ARRAYSIZE(gTitleComments) && !pName; i++) {
     if (!Q_strnicmp(mapname, gTitleComments[i].pBSPName,
                     strlen(gTitleComments[i].pBSPName))) {
       // found one
@@ -1649,7 +1649,7 @@ void UpdateChapterRestrictions(const char *mapname) {
   // look at the chapter for this map
   char chapterTitle[64];
   chapterTitle[0] = 0;
-  for (int i = 0; i < ARRAYSIZE(gTitleComments); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(gTitleComments); i++) {
     if (!Q_strnicmp(mapname, gTitleComments[i].pBSPName,
                     strlen(gTitleComments[i].pBSPName))) {
       // found
@@ -1673,7 +1673,7 @@ void UpdateChapterRestrictions(const char *mapname) {
   strlwr(chapterTitle);
 
   // Get our active mod directory name
-  char modDir[MAX_PATH];
+  char modDir[SOURCE_MAX_PATH];
   if (UTIL_GetModDir(modDir, sizeof(modDir)) == false) return;
 
   char chapterNumberPrefix[64];
@@ -1912,7 +1912,7 @@ void CServerGameEnts::CheckTransmit(CCheckTransmitInfo *pInfo,
     if (pInfo->m_pTransmitEdict->Get(iEdict)) continue;
 
     if (nFlags & FL_EDICT_ALWAYS) {
-      // FIXME: Hey! Shouldn't this be using SetTransmit so as
+      // TODO(d.rattman): Hey! Shouldn't this be using SetTransmit so as
       // to also force network down dependent entities?
       while (true) {
         // mark entity for sending
@@ -1936,7 +1936,7 @@ void CServerGameEnts::CheckTransmit(CCheckTransmitInfo *pInfo,
       continue;
     }
 
-    // FIXME: Would like to remove all dependencies
+    // TODO(d.rattman): Would like to remove all dependencies
     CBaseEntity *pEnt = (CBaseEntity *)pEdict->GetUnknown();
     Assert(dynamic_cast<CBaseEntity *>(pEdict->GetUnknown()) == pEnt);
 
@@ -2349,7 +2349,7 @@ void CServerGameClients::ClientSetupVisibility(edict_t *pViewEntity,
 #endif
 
     ++iOutPortal;
-    if (iOutPortal >= ARRAYSIZE(portalNums)) {
+    if (iOutPortal >= SOURCE_ARRAYSIZE(portalNums)) {
       engine->SetAreaPortalStates(portalNums, isOpen, iOutPortal);
       iOutPortal = 0;
     }
@@ -2429,7 +2429,7 @@ float CServerGameClients::ProcessUsercmds(edict_t *player, bf_read *buf,
 
     Msg("CBasePlayer::ProcessUsercmds: too many cmds %i sent for player %s\n",
         totalcmds, name);
-    // FIXME:  Need a way to drop the client from here
+    // TODO(d.rattman):  Need a way to drop the client from here
     // SV_DropClient ( host_client, false, "CMD_MAXBACKUP hit" );
     buf->SetOverflowFlag();
     return 0.0f;

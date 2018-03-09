@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This header, which must be the final include in a .cpp (or .h) file,
 // causes all crt methods to use debugging versions of the memory allocators.
@@ -23,18 +23,14 @@
 // already included this file
 #if (!defined(NDEBUG) || !defined(_INC_CRTDBG)) || defined(MEMDBGON_H)
 
-#include "tier0/include/basetypes.h"
-
 #include <malloc.h>
-#include <cstring>
-#include <cwchar>
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/memalloc.h"
 
 #if defined(USE_MEM_DEBUG)
 #if defined(OS_POSIX)
 
-#define _NORMAL_BLOCK 1
+#define SOURCE_MEM_NORMAL_BLOCK 1
 
 #include <glob.h>
 #include <sys/types.h>
@@ -63,6 +59,10 @@ inline void *operator new[](usize nSize, i32 blah, const ch *pFileName,
 #else
 #include <crtdbg.h>
 #endif  // defined(NDEBUG)
+
+#ifndef SOURCE_MEM_NORMAL_BLOCK
+#define SOURCE_MEM_NORMAL_BLOCK _NORMAL_BLOCK
+#endif
 
 #endif  // defined(OS_POSIX)
 #endif
@@ -109,7 +109,7 @@ inline void *MemAlloc_InlineCallocMemset(void *pMem, usize nCount,
 #define new DEBUG_NEW
 #else
 #undef new
-#define MEMALL_DEBUG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+#define MEMALL_DEBUG_NEW new (SOURCE_MEM_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new MEMALL_DEBUG_NEW
 #endif
 

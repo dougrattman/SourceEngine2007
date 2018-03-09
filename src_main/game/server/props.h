@@ -410,7 +410,7 @@ enum parentCollisionInteraction_t
 };
 
 
-abstract_class IParentPropInteraction
+the_interface IParentPropInteraction
 {
 public:
 	virtual void OnParentCollisionInteraction( parentCollisionInteraction_t eType, int index, gamevcollisionevent_t *pEvent ) = 0;

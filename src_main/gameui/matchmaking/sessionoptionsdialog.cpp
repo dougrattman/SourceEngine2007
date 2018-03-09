@@ -10,7 +10,7 @@
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/Label.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //---------------------------------------------------------------------
@@ -159,7 +159,7 @@ int CSessionOptionsDialog::GetMaxPlayersRecommendedOption(void) {
   // Determine the option that suits our B/W bests
   int options[] = {8, 12, 16};
 
-  for (int k = 1; k < ARRAYSIZE(options); ++k) {
+  for (int k = 1; k < SOURCE_ARRAYSIZE(options); ++k) {
     if (options[k] > numPlayersCanService) {
       Msg("[SessionOptionsDialog] Defaulting number of players to %d (upstream "
           "b/w = %.1f kB/s ~ %d players).\n",
@@ -168,7 +168,7 @@ int CSessionOptionsDialog::GetMaxPlayersRecommendedOption(void) {
     }
   }
 
-  return ARRAYSIZE(options) - 1;
+  return SOURCE_ARRAYSIZE(options) - 1;
 }
 
 //---------------------------------------------------------------------

@@ -20,7 +20,7 @@
 #include "tier2/tier2.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void BuildTagData(CCoreDispInfo *pCoreDisp, CDispInfo *pDisp);
@@ -181,10 +181,10 @@ VertexFormat_t ComputeDisplacementStaticMeshVertexFormat(
     const ddispinfo_t *pMapDisps) {
   VertexFormat_t vertexFormat = pMaterial->GetVertexFormat();
 
-  // FIXME: set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
+  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
   // saves enough memory (use 'mem_dumpvballocs')
   vertexFormat &= ~VERTEX_FORMAT_COMPRESSED;
-  // FIXME: check for and strip unused vertex elements (TANGENT_S/T?)
+  // TODO(d.rattman): check for and strip unused vertex elements (TANGENT_S/T?)
 
   return vertexFormat;
 }
@@ -1050,7 +1050,7 @@ int GetAllNeighbors(const CCoreDispInfo *pDisp, int (&iNeighbors)[512]) {
     const CDispCornerNeighbors *pCorner = pDisp->GetCornerNeighbors(iCorner);
 
     for (int i = 0; i < pCorner->m_nNeighbors; i++) {
-      if (nNeighbors < ARRAYSIZE(iNeighbors))
+      if (nNeighbors < SOURCE_ARRAYSIZE(iNeighbors))
         iNeighbors[nNeighbors++] = pCorner->m_Neighbors[i];
     }
   }

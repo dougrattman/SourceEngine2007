@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve LLC, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DMEHANDLE_H
 #define DMEHANDLE_H
@@ -31,9 +31,8 @@ class CDmeHandle : public CDmeElementRefHelper {
   template <class T, bool B>
   CDmeHandle(const CDmeHandle<T, B> &handle)
       : m_handle(DMELEMENT_HANDLE_INVALID) {
-    DmeType *p = (T *)
+    [[maybe_unused]] DmeType *p = (T *)
         NULL;  // triggers compiler error if converting from invalid handle type
-    NOTE_UNUSED(p);
 
     Set(handle.GetHandle());
   }
@@ -48,9 +47,8 @@ class CDmeHandle : public CDmeElementRefHelper {
 
   template <class T, bool B>
   CDmeHandle &operator=(const CDmeHandle<T, B> &handle) {
-    DmeType *p = (T *)
+    [[maybe_unused]] DmeType *p = (T *)
         NULL;  // triggers compiler error if converting from invalid handle type
-    NOTE_UNUSED(p);
 
     Set(handle.GetHandle());
     return *this;

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_FILESYSTEM_H_
 #define SOURCE_FILESYSTEM_H_
@@ -6,6 +6,7 @@
 #include <climits>
 
 #include "appframework/IAppSystem.h"
+#include "base/include/macros.h"
 #include "tier0/include/memalloc.h"
 #include "tier0/include/threadtools.h"
 #include "tier1/checksum_crc.h"
@@ -218,8 +219,8 @@ typedef void (*FSDirtyDiskReportFunc_t)();
 //-----------------------------------------------------------------------------
 // Asynchronous support types
 //-----------------------------------------------------------------------------
-DECLARE_POINTER_HANDLE(FSAsyncControl_t);
-DECLARE_POINTER_HANDLE(FSAsyncFile_t);
+SOURCE_DECLARE_POINTER_HANDLE(FSAsyncControl_t);
+SOURCE_DECLARE_POINTER_HANDLE(FSAsyncFile_t);
 const FSAsyncFile_t FS_INVALID_ASYNC_FILE = (FSAsyncFile_t)(0x0000ffff);
 
 //---------------------------------------------------------
@@ -306,8 +307,8 @@ struct FileAsyncRequest_t {
 
 class CUnverifiedCRCFile {
  public:
-  char m_PathID[MAX_PATH];
-  char m_Filename[MAX_PATH];
+  char m_PathID[SOURCE_MAX_PATH];
+  char m_Filename[SOURCE_MAX_PATH];
   CRC32_t m_CRC;
 };
 
@@ -329,7 +330,7 @@ class CUnverifiedCRCFile {
 // a named set of files.
 #define BASEFILESYSTEM_INTERFACE_VERSION "VBaseFileSystem011"
 
-abstract_class IBaseFileSystem {
+the_interface IBaseFileSystem {
  public:
   virtual int Read(void *pOutput, int size, FileHandle_t file) = 0;
   virtual int Write(void const *pInput, int size, FileHandle_t file) = 0;
@@ -375,7 +376,7 @@ abstract_class IBaseFileSystem {
 
 #define FILESYSTEM_INTERFACE_VERSION "VFileSystem017"
 
-abstract_class IFileSystem : public IAppSystem, public IBaseFileSystem {
+the_interface IFileSystem : public IAppSystem, public IBaseFileSystem {
  public:
   //--------------------------------------------------------
   // Steam operations
@@ -499,8 +500,8 @@ abstract_class IFileSystem : public IAppSystem, public IBaseFileSystem {
   // File name and directory operations
   //--------------------------------------------------------
 
-  // FIXME: This method is obsolete! Use RelativePathToFullPath instead!
-  // converts a partial path into a full path
+  // TODO(d.rattman): This method is obsolete! Use RelativePathToFullPath
+  // instead! converts a partial path into a full path
   virtual const char *GetLocalPath(const char *pFileName, char *pLocalPath,
                                    int localPathBufferSize) = 0;
 

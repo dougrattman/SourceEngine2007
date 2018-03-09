@@ -67,7 +67,7 @@ class CUserCmd;
 // UNDONE: Cascade these?
 #define IMPLEMENT_ACTTABLE(className) \
 	acttable_t *className::ActivityList( void ) { return m_acttable; } \
-	int className::ActivityListCount( void ) { return ARRAYSIZE(m_acttable); } \
+	int className::ActivityListCount( void ) { return SOURCE_ARRAYSIZE(m_acttable); } \
 
 typedef struct
 {

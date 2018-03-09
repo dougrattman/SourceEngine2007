@@ -35,7 +35,6 @@
 #undef GetCursorPos  // protected_things.h defines this, and it makes it so we
                      // can't access g_pInput->GetCursorPos.
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -533,7 +532,6 @@ void CVGui::PanelDeleted(VPanel *focus) {
 // message every frame
 //-----------------------------------------------------------------------------
 void CVGui::AddTickSignal(VPANEL panel, int intervalMilliseconds /*=0*/) {
-  Tick_t *t;
   // See if it's already in list
   int count = m_TickSignalVec.Count();
   for (int i = 0; i < count; i++) {
@@ -547,7 +545,7 @@ void CVGui::AddTickSignal(VPANEL panel, int intervalMilliseconds /*=0*/) {
   }
 
   // Add to list
-  t = new Tick_t;
+  Tick_t *t = new Tick_t;
 
   t->panel = panel;
   t->interval = intervalMilliseconds;
@@ -908,7 +906,7 @@ bool CVGui::Connect(CreateInterfaceFn factory) {
 }
 
 void CVGui::Disconnect() {
-  // FIXME: Blat out interface pointers
+  // TODO(d.rattman): Blat out interface pointers
   BaseClass::Disconnect();
 }
 
@@ -943,7 +941,7 @@ void CVGui::Shutdown() {
 // Returns NULL if it doesn't implement the requested interface
 //-----------------------------------------------------------------------------
 void *CVGui::QueryInterface(const char *pInterfaceName) {
-  // FIXME: Should this go here?
+  // TODO(d.rattman): Should this go here?
   // Access other global interfaces exposed by this system...
   CreateInterfaceFn vguiFactory = Sys_GetFactoryThis();
   return vguiFactory(pInterfaceName, NULL);

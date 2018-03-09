@@ -7,7 +7,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define __cdecl
 #endif
 

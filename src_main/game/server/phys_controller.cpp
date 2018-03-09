@@ -8,7 +8,7 @@
 #include "physics_saverestore.h"
 #include "vphysics/constraints.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_THRUST_STARTACTIVE 0x0001
@@ -81,7 +81,7 @@ IMotionEvent::simresult_e CConstantForceController::Simulate(
 // Purpose: This is a general entity that has a force/motion controller that
 //			simply integrates a constant linear/angular acceleration
 //-----------------------------------------------------------------------------
-abstract_class CPhysForce : public CPointEntity {
+the_interface CPhysForce : public CPointEntity {
  public:
   DECLARE_CLASS(CPhysForce, CPointEntity);
 
@@ -542,7 +542,7 @@ class CPhysMotor : public CLogicalEntity {
   float m_additionalAcceleration;
   float m_angularAcceleration;
   float m_lastTime;
-  // FIXME: can we remove m_flSpeed from CBaseEntity?
+  // TODO(d.rattman): can we remove m_flSpeed from CBaseEntity?
   // float m_flSpeed;
 
   IPhysicsConstraint *m_pHinge;

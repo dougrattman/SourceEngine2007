@@ -24,7 +24,7 @@ class IMaterial;
 //-----------------------------------------------------------------------------
 // Purpose: Exposes effects api to client .dll
 //-----------------------------------------------------------------------------
-abstract_class IVEfx
+the_interface IVEfx
 {
 public:
 	// Retrieve decal texture index from decal by name

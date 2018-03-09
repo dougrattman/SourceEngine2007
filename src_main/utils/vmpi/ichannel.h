@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ICHANNEL_H
 #define ICHANNEL_H
@@ -6,7 +6,7 @@
 #include "tier1/interface.h"
 #include "tier1/utlvector.h"
 
-abstract_class IChannel {
+the_interface IChannel {
  public:
   // Note: this also releases any channels contained inside. So if you make a
   // reliable channel that contains an unreliable channel and release the

@@ -9,6 +9,7 @@
 #define TEXGAMMA 2.2f
 
 #include "appframework/IAppSystem.h"
+#include "base/include/macros.h"
 #include "bitmap/imageformat.h"
 #include "materialsystem/IColorCorrection.h"
 #include "materialsystem/deformations.h"
@@ -90,7 +91,7 @@ enum MaterialMatrixMode_t {
   NUM_TEXTURE_TRANSFORMS = MATERIAL_TEXTURE7 - MATERIAL_TEXTURE0 + 1
 };
 
-// FIXME: How do I specify the actual number of matrix modes?
+// TODO(d.rattman): How do I specify the actual number of matrix modes?
 const int NUM_MODEL_TRANSFORMS = 53;
 const int MATERIAL_MODEL_MAX = MATERIAL_MODEL + NUM_MODEL_TRANSFORMS;
 
@@ -389,7 +390,7 @@ typedef void (*ModeChangeCallbackFunc_t)(void);
 typedef int VertexBufferHandle_t;
 typedef unsigned short MaterialHandle_t;
 
-DECLARE_POINTER_HANDLE(OcclusionQueryObjectHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(OcclusionQueryObjectHandle_t);
 #define INVALID_OCCLUSION_QUERY_OBJECT_HANDLE ((OcclusionQueryObjectHandle_t)0)
 
 class IMaterialProxyFactory;
@@ -397,11 +398,11 @@ class ITexture;
 class IMaterialSystemHardwareConfig;
 class CShadowMgr;
 
-DECLARE_POINTER_HANDLE(MaterialLock_t);
+SOURCE_DECLARE_POINTER_HANDLE(MaterialLock_t);
 
 //
 
-abstract_class IMaterialSystem : public IAppSystem {
+the_interface IMaterialSystem : public IAppSystem {
  public:
   // Placeholder for API revision
   virtual bool Connect(CreateInterfaceFn factory) = 0;
@@ -506,7 +507,7 @@ abstract_class IMaterialSystem : public IAppSystem {
 
   virtual bool SupportsMSAAMode(int nMSAAMode) = 0;
 
-  // FIXME: REMOVE! Get video card identitier
+  // TODO(d.rattman): REMOVE! Get video card identitier
   virtual const MaterialSystemHardwareIdentifier_t &GetVideoCardIdentifier(void)
       const = 0;
 
@@ -542,7 +543,7 @@ abstract_class IMaterialSystem : public IAppSystem {
   virtual void EndFrame() = 0;
   virtual void Flush(bool flushHardware = false) = 0;
 
-  /// FIXME: This stuff needs to be cleaned up and abstracted.
+  /// TODO(d.rattman): This stuff needs to be cleaned up and abstracted.
   // Stuff that gets exported to the launcher through the engine
   virtual void SwapBuffers() = 0;
 
@@ -582,7 +583,7 @@ abstract_class IMaterialSystem : public IAppSystem {
   virtual int GetShaders(int nFirstShader, int nMaxCount,
                          IShader **ppShaderList) const = 0;
 
-  // FIXME: Is there a better way of doing this?
+  // TODO(d.rattman): Is there a better way of doing this?
   // Returns shader flag names for editors to be able to edit them
   virtual int ShaderFlagCount() const = 0;
   virtual const char *ShaderFlagName(int nIndex) const = 0;
@@ -874,7 +875,7 @@ abstract_class IMaterialSystem : public IAppSystem {
 
 //
 
-abstract_class IMatRenderContext : public IRefCounted {
+the_interface IMatRenderContext : public IRefCounted {
  public:
   virtual void BeginRender() = 0;
   virtual void EndRender() = 0;
@@ -1056,14 +1057,15 @@ abstract_class IMatRenderContext : public IRefCounted {
   // Allows us to override the depth buffer setting of a material
   virtual void OverrideDepthEnable(bool bEnable, bool bDepthEnable) = 0;
 
-  // FIXME: This is a hack required for NVidia/XBox, can they fix in drivers?
+  // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in
+  // drivers?
   virtual void DrawScreenSpaceQuad(IMaterial * pMaterial) = 0;
 
   // For debugging and building recording files. This will stuff a token into
   // the recording file, then someone doing a playback can watch for the token.
   virtual void SyncToken(const char *pToken) = 0;
 
-  // FIXME: REMOVE THIS FUNCTION!
+  // TODO(d.rattman): REMOVE THIS FUNCTION!
   // The only reason why it's not gone is because we're a week from ship when I
   // found the bug in it and everything's tuned to use it. It's returning values
   // which are 2x too big (it's returning sphere diameter x2) Use
@@ -1114,7 +1116,7 @@ abstract_class IMatRenderContext : public IRefCounted {
   // Used to make the handle think it's never had a successful query before
   virtual void ResetOcclusionQueryObject(OcclusionQueryObjectHandle_t) = 0;
 
-  // FIXME: Remove
+  // TODO(d.rattman): Remove
   virtual void Unused3() {}
 
   // Creates/destroys morph data associated w/ a particular material
@@ -1128,7 +1130,7 @@ abstract_class IMatRenderContext : public IRefCounted {
   virtual void SetFlexWeights(int nFirstWeight, int nCount,
                               const MorphWeight_t *pWeights) = 0;
 
-  // FIXME: Remove
+  // TODO(d.rattman): Remove
   virtual void Unused4(){};
   virtual void Unused5(){};
   virtual void Unused6(){};
@@ -1344,7 +1346,7 @@ abstract_class IMatRenderContext : public IRefCounted {
   // Color correction related methods..
   // Client cannot call IColorCorrectionSystem directly because it is not
   // thread-safe
-  // FIXME: Make IColorCorrectionSystem threadsafe?
+  // TODO(d.rattman): Make IColorCorrectionSystem threadsafe?
   virtual void EnableColorCorrection(bool bEnable) = 0;
   virtual ColorCorrectionHandle_t AddLookup(const char *pName) = 0;
   virtual bool RemoveLookup(ColorCorrectionHandle_t handle) = 0;

@@ -1,7 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SND_AUDIO_SOURCE_H
 #define SND_AUDIO_SOURCE_H
+
+#include "base/include/macros.h"
+#include "tier0/include/vprof.h"
 
 #define MP3_SUPPORT 1
 #define AUDIOSOURCE_COPYBUF_SIZE 4096
@@ -14,8 +17,6 @@ class CAudioSource;
 class IAudioDevice;
 class CUtlBuffer;
 
-#include "tier0/include/vprof.h"
-
 //-----------------------------------------------------------------------------
 // Purpose: This is an instance of an audio source.
 // Mixers are attached to channels and reference an audio source.
@@ -23,7 +24,7 @@ class CUtlBuffer;
 // Mixers are never re-used, so they can track instance data like
 // sample position, fractional sample, stream cache, faders, etc.
 //-----------------------------------------------------------------------------
-abstract_class CAudioMixer {
+the_interface CAudioMixer {
  public:
   virtual ~CAudioMixer(void) {}
 
@@ -217,7 +218,7 @@ class IAudioSourceCache {
 
 extern IAudioSourceCache *audiosourcecache;
 
-FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
 
 typedef int StreamHandle_t;
 enum { INVALID_STREAM_HANDLE = (StreamHandle_t)~0 };
@@ -234,7 +235,7 @@ enum {
       0x00000004,  // hint the streamer to load using the queued loader system
 };
 
-abstract_class IAsyncWavDataCache {
+the_interface IAsyncWavDataCache {
  public:
   virtual bool Init(unsigned int memSize) = 0;
   virtual void Shutdown() = 0;
@@ -322,7 +323,7 @@ struct CAudioSourceCachedInfoHandle_t {
 // Purpose: A source is an abstraction for a stream, cached file, or procedural
 // source of audio.
 //-----------------------------------------------------------------------------
-abstract_class CAudioSource {
+the_interface CAudioSource {
  public:
   enum {
     AUDIO_SOURCE_UNK = 0,

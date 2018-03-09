@@ -11,7 +11,7 @@
 #include "tier2/fileutils.h"
 #include "tier2/renderutils.h"
 #include "tier2/tier2.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #if MEASURE_PARTICLE_PERF
@@ -956,7 +956,7 @@ void C_OP_RemapScalar::Operate(CParticleCollection *pParticles,
     flMax = std::clamp(m_flOutputMax, 0.0f, 1.0f);
   }
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     const float *pInput = pParticles->GetFloatAttributePtr(m_nFieldInput, i);
     float *pOutput =
@@ -1187,7 +1187,7 @@ void C_OP_Cull::Operate(CParticleCollection *pParticles, float flStrength,
   float flLifeTime;
   int nRandomOffset = pParticles->OperatorRandomSampleOffset();
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     pCreationTime =
         pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_CREATION_TIME, i);
@@ -1266,7 +1266,7 @@ void CGeneralSpin::Operate(CParticleCollection *pParticles, float flStrength,
   fltx4 Pi_2 = ReplicateX4(2.0 * M_PI);
   fltx4 nPi_2 = ReplicateX4(-2.0 * M_PI);
 
-  // FIXME: This is wrong
+  // TODO(d.rattman): This is wrong
   fltx4 minSpeedRadians =
       ReplicateX4(dt * fabs(m_fSpinRateMinRadians * 2.0f * M_PI));
 
@@ -1789,7 +1789,7 @@ void C_OP_PositionLock::Operate(CParticleCollection *pParticles,
   Vector vDelta = vecControlPoint - pCtx->m_vPrevPosition;
   vDelta *= flStrength;
   int nRandomOffset = pParticles->OperatorRandomSampleOffset();
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     const float *pCreationTime;
     const float *pLifeDuration;
@@ -2625,7 +2625,7 @@ void C_OP_DampenToCP::Operate(CParticleCollection *pParticles, float flStrength,
   Vector vecControlPoint =
       pParticles->GetControlPointAtCurrentTime(m_nControlPointNumber);
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     float *xyz =
         pParticles->GetFloatAttributePtrForWrite(PARTICLE_ATTRIBUTE_XYZ, i);
@@ -2753,7 +2753,7 @@ void C_OP_DistanceBetweenCPs::Operate(CParticleCollection *pParticles,
     }
   }
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     float flOutput =
         RemapValClamped(flDistance, m_flInputMin, m_flInputMax, flMin, flMax);
@@ -2848,7 +2848,7 @@ void C_OP_DistanceToCP::Operate(CParticleCollection *pParticles,
   Vector vecControlPoint1 =
       pParticles->GetControlPointAtCurrentTime(m_nStartCP);
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     Vector vecPosition2;
     const float *pXYZ =
@@ -3439,7 +3439,7 @@ void C_OP_VelocityMatchingForce::Operate(CParticleCollection *pParticles,
   Vector vecVelocityAvg = vec3_origin;
   float flAvgSpeed = 0;
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     float *xyz =
         pParticles->GetFloatAttributePtrForWrite(PARTICLE_ATTRIBUTE_XYZ, i);
@@ -3512,7 +3512,7 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_OrientTo2dDirection)
 void C_OP_OrientTo2dDirection::Operate(CParticleCollection *pParticles,
                                        float flStrength, void *pContext) const {
   float flRotOffset = m_flRotOffset * (M_PI / 180.0f);
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     const float *xyz =
         pParticles->GetFloatAttributePtr(PARTICLE_ATTRIBUTE_XYZ, i);
@@ -3575,7 +3575,7 @@ END_PARTICLE_OPERATOR_UNPACK(C_OP_MaxVelocity)
 
 void C_OP_MaxVelocity::Operate(CParticleCollection *pParticles,
                                float flStrength, void *pContext) const {
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     float *xyz =
         pParticles->GetFloatAttributePtrForWrite(PARTICLE_ATTRIBUTE_XYZ, i);
@@ -3823,7 +3823,7 @@ void C_OP_RemapDotProductToScalar::Operate(CParticleCollection *pParticles,
   vecInput1 = pXForm1.m_v4Fwd.Vec(0);
   vecInput2 = pXForm2.m_v4Fwd.Vec(0);
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (int i = 0; i < pParticles->m_nActiveParticles; ++i) {
     if (m_bUseParticleVelocity) {
       const float *xyz =

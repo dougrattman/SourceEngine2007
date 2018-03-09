@@ -14,10 +14,10 @@
 #include "tier0/include/vprof.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-// FIXME: All these functions will be moved out to FX_Main.CPP or a individual
+// TODO(d.rattman): All these functions will be moved out to FX_Main.CPP or a individual
 // folder
 
 CLIENTEFFECT_REGISTER_BEGIN(PrecacheEffectsTest)
@@ -256,7 +256,7 @@ void FX_TracerSound(const Vector &start, const Vector &end, int iTracerType) {
                            &start, &shotDir, false);
   }
 
-  // FIXME: This has a bad behavior when both bullet + strider shots are
+  // TODO(d.rattman): This has a bad behavior when both bullet + strider shots are
   // whizzing by at the same time Could use different timers for the different
   // types.
 

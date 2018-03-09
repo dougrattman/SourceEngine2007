@@ -4,10 +4,10 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-// FIXME!!  Need to make dx9 version so that "CENTROID" flags can be added!
+// TODO(d.rattman): Need to make dx9 version so that "CENTROID" flags can be added!
 BEGIN_SHADER(LightmappedTwoTexture, "Help for LightmappedTwoTexture")
 
 BEGIN_SHADER_PARAMS
@@ -87,7 +87,7 @@ SHADER_FALLBACK {
 }
 
 /*
-// FIXME: I didn't remove this because it's modulating against the detail alpha!
+// TODO(d.rattman): I didn't remove this because it's modulating against the detail alpha!
 // This seems very strange and isn't what FixedFunctionBaseTimesDetailPass does.
 // Should it!?!? If so, I want to move this to the
 FixedFunctionBaseTimesDetailPass.

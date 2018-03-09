@@ -1,6 +1,6 @@
 // Copyright c 1996-2007, Valve Corporation, All rights reserved.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include "subprocess.h"
 

@@ -11,7 +11,7 @@ typedef void (CCDAudio::*vfunc)(int param1, int param2);
 //-----------------------------------------------------------------------------
 // Purpose: CD Audio thread processing
 //-----------------------------------------------------------------------------
-abstract_class IThread {
+the_interface IThread {
  public:
   virtual ~IThread(void) {}
 

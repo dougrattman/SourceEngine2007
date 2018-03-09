@@ -309,7 +309,7 @@ class CBaseVSShader : public CBaseShader {
   void ColorVarsToVector(int colorVar, int alphaVar, Vector4D &color);
 };
 
-FORCEINLINE void SetFlashLightColorFromState(
+SOURCE_FORCEINLINE void SetFlashLightColorFromState(
     FlashlightState_t const &state, IShaderDynamicAPI *pShaderAPI,
     int nPSRegister = 28, bool bFlashlightNoLambert = false) {
   // Old code
@@ -352,7 +352,7 @@ FORCEINLINE void SetFlashLightColorFromState(
   pShaderAPI->SetPixelShaderConstant(nPSRegister, (float *)vPsConst);
 }
 
-FORCEINLINE float ShadowAttenFromState(FlashlightState_t const &state) {
+SOURCE_FORCEINLINE float ShadowAttenFromState(FlashlightState_t const &state) {
   // DX10 requires some hackery due to sRGB/blend ordering change from DX9,
   // which makes the shadows too light
   if (g_pHardwareConfig->UsesSRGBCorrectBlending())
@@ -361,39 +361,39 @@ FORCEINLINE float ShadowAttenFromState(FlashlightState_t const &state) {
   return state.m_flShadowAtten;
 }
 
-FORCEINLINE float ShadowFilterFromState(FlashlightState_t const &state) {
+SOURCE_FORCEINLINE float ShadowFilterFromState(FlashlightState_t const &state) {
   // We developed shadow maps at 1024, so we expect the penumbra size to have
   // been tuned relative to that
   return state.m_flShadowFilterSize / 1024.0f;
 }
 
 // convenient material variable access functions for helpers to use.
-FORCEINLINE bool IsTextureSet(int nVar, IMaterialVar **params) {
+SOURCE_FORCEINLINE bool IsTextureSet(int nVar, IMaterialVar **params) {
   return (nVar != -1) && (params[nVar]->IsTexture());
 }
 
-FORCEINLINE bool IsBoolSet(int nVar, IMaterialVar **params) {
+SOURCE_FORCEINLINE bool IsBoolSet(int nVar, IMaterialVar **params) {
   return (nVar != -1) && (params[nVar]->GetIntValue());
 }
 
-FORCEINLINE int GetIntParam(int nVar, IMaterialVar **params,
+SOURCE_FORCEINLINE int GetIntParam(int nVar, IMaterialVar **params,
                             int nDefaultValue = 0) {
   return (nVar != -1) ? (params[nVar]->GetIntValue()) : nDefaultValue;
 }
 
-FORCEINLINE float GetFloatParam(int nVar, IMaterialVar **params,
+SOURCE_FORCEINLINE float GetFloatParam(int nVar, IMaterialVar **params,
                                 float flDefaultValue = 0.0) {
   return (nVar != -1) ? (params[nVar]->GetFloatValue()) : flDefaultValue;
 }
 
-FORCEINLINE void InitFloatParam(int nIndex, IMaterialVar **params,
+SOURCE_FORCEINLINE void InitFloatParam(int nIndex, IMaterialVar **params,
                                 float flValue) {
   if ((nIndex != -1) && !params[nIndex]->IsDefined()) {
     params[nIndex]->SetFloatValue(flValue);
   }
 }
 
-FORCEINLINE void InitIntParam(int nIndex, IMaterialVar **params, int nValue) {
+SOURCE_FORCEINLINE void InitIntParam(int nIndex, IMaterialVar **params, int nValue) {
   if ((nIndex != -1) && !params[nIndex]->IsDefined()) {
     params[nIndex]->SetIntValue(nValue);
   }

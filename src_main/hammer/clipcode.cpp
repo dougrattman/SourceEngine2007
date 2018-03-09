@@ -11,7 +11,7 @@
 #include "MapFace.h"
 #include "clipcode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -334,7 +334,7 @@ int CreateClippedPoly(CMapFace *pFace, IEditorTexture *pDecalTex, Vector& org, v
 // #endif
 
 	// Clip the polygon to the decal texture space
-	// FIXME: Yes this realy copies the vertex list 4 times !!
+	// TODO(d.rattman): Yes this realy copies the vertex list 4 times !!
 	int nMaxVerts = std::min(nOutSize, MAX_CLIPVERT);
 	g_outCount = SHClip( g_vert[0], pFace->nPoints, outvert[0], nMaxVerts, 0 );	// clip left
 	g_outCount = SHClip( outvert[0], g_outCount, g_vert[0], nMaxVerts, 1 );		// clip right

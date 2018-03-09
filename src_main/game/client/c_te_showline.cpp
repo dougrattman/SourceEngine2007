@@ -13,7 +13,7 @@
 #include "cbase.h"
 #include "c_te_particlesystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

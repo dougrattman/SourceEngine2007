@@ -41,7 +41,7 @@ void AddRestoredEntity(CBaseEntity *pEntity);
 void AddRestoredEntity(C_BaseEntity *pEntity);
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_ENTITYARRAY 1024
@@ -331,7 +331,7 @@ void CSave::WriteInt(const int *value, int count) {
 //-------------------------------------
 
 void CSave::WriteBool(const bool *value, int count) {
-  COMPILE_TIME_ASSERT(sizeof(bool) == sizeof(char));
+  static_assert(sizeof(bool) == sizeof(char));
   BufferData((const char *)value, sizeof(bool) * count);
 }
 
@@ -403,7 +403,7 @@ void CSave::WriteInt(const char *pname, const int *data, int count) {
 //-------------------------------------
 
 void CSave::WriteBool(const char *pname, const bool *data, int count) {
-  COMPILE_TIME_ASSERT(sizeof(bool) == sizeof(char));
+  static_assert(sizeof(bool) == sizeof(char));
   BufferField(pname, sizeof(bool) * count, (const char *)data);
 }
 
@@ -1250,7 +1250,7 @@ void CRestore::ReadBasicField(const SaveRestoreRecordHeader_t &header,
     }
 
     case FIELD_COLOR32: {
-      COMPILE_TIME_ASSERT(sizeof(color32) == sizeof(int));
+      static_assert(sizeof(color32) == sizeof(int));
       ReadInt((int *)pDest, pField->fieldSize, header.size);
       break;
     }
@@ -1581,7 +1581,7 @@ int CRestore::ReadInt(int *pValue, int nElems, int nBytesAvailable) {
 //-------------------------------------
 
 int CRestore::ReadBool(bool *pValue, int nElems, int nBytesAvailable) {
-  COMPILE_TIME_ASSERT(sizeof(bool) == sizeof(char));
+  static_assert(sizeof(bool) == sizeof(char));
   return ReadSimple(pValue, nElems, nBytesAvailable);
 }
 
@@ -1869,7 +1869,7 @@ void CRestore::ReadGameField(const SaveRestoreRecordHeader_t &header,
         // bugreporter renamed it
         if (pField->fieldType == FIELD_MODELNAME &&
             Q_stristr(pStringDest->ToCStr(), ".bsp")) {
-          char buf[MAX_PATH];
+          char buf[SOURCE_MAX_PATH];
           Q_strncpy(buf, "maps/", sizeof(buf));
           Q_strncat(buf, gpGlobals->mapname.ToCStr(), sizeof(buf));
           Q_strncat(buf, ".bsp", sizeof(buf));
@@ -2400,7 +2400,7 @@ void CEntitySaveRestoreBlockHandler::Restore(IRestore *pRestore,
     pEntInfo = pSaveData->GetEntityInfo(i);
 
     bool bRestoredCorrectly = false;
-    // FIXME, need to translate save spot to real index here using lookup table
+    // TODO(d.rattman): need to translate save spot to real index here using lookup table
     // transmitted from server
     // Assert( !"Need translation still" );
     if (pEntInfo->restoreentityindex >= 0) {

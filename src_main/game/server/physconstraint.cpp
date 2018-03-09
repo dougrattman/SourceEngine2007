@@ -22,7 +22,7 @@
 #include "physconstraint_sounds.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_CONSTRAINT_DISABLE_COLLISION			0x0001
@@ -259,7 +259,7 @@ static void DrawConstraintObjectsAxes(CBaseEntity *pConstraintEntity, IPhysicsCo
 	}
 }
 
-abstract_class CPhysConstraint : public CLogicalEntity
+the_interface CPhysConstraint : public CLogicalEntity
 {
 	DECLARE_CLASS( CPhysConstraint, CLogicalEntity );
 public:
@@ -552,7 +552,7 @@ void FindPhysicsAnchor( string_t name, hl_constraint_info_t &info, int index, CB
 				if ( pAnim )
 				{
 					IPhysicsObject *list[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-					int listCount = pAnchor->hEntity->VPhysicsGetObjectList( list, ARRAYSIZE(list) );
+					int listCount = pAnchor->hEntity->VPhysicsGetObjectList( list, SOURCE_ARRAYSIZE(list) );
 					int iPhysicsBone = pAnim->GetPhysicsBone( pAnim->GetAttachmentBone( pAnchor->parentAttachment ) );
 					if ( iPhysicsBone < listCount )
 					{
@@ -1687,7 +1687,7 @@ IPhysicsConstraint *CRagdollConstraint::CreateConstraint( IPhysicsConstraintGrou
 
 	ragdoll.onlyAngularLimits = HasSpawnFlags( SF_RAGDOLL_FREEMOVEMENT ) ? true : false;
 
-	// FIXME: Why are these friction numbers in different units from what the hinge uses?
+	// TODO(d.rattman): Why are these friction numbers in different units from what the hinge uses?
 	ragdoll.axes[0].SetAxisFriction( m_xmin, m_xmax, m_xfriction );
 	ragdoll.axes[1].SetAxisFriction( m_ymin, m_ymax, m_yfriction );
 	ragdoll.axes[2].SetAxisFriction( m_zmin, m_zmax, m_zfriction );

@@ -180,7 +180,7 @@ public:
 	CMeshDx10();
 	virtual ~CMeshDx10();
 
-	// FIXME: Make this work! Unsupported methods of IIndexBuffer
+	// TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer
 	virtual bool Lock( int nMaxIndexCount, bool bAppend, IndexDesc_t& desc ) { Assert(0); return false; }
 	virtual void Unlock( int nWrittenIndexCount, IndexDesc_t& desc ) { Assert(0); }
 	virtual int GetRoomRemaining() const { Assert(0); return 0; }

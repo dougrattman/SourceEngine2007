@@ -563,11 +563,11 @@ BOOL CEventPropertiesSpeakDialog::HandleMessage( HWND hwndDlg, UINT uMsg, WPARAM
 						char const *scriptfile = soundemitter->GetSourceFileForSound( soundindex );
 						if ( scriptfile )
 						{
-							char relative_path[MAX_PATH];
-							Q_snprintf( relative_path, MAX_PATH, "%s", scriptfile );
+							char relative_path[SOURCE_MAX_PATH];
+							Q_snprintf( relative_path, SOURCE_MAX_PATH, "%s", scriptfile );
 
-							char full_path[MAX_PATH];
-							if ( filesystem->GetLocalPath( relative_path, full_path, MAX_PATH ) )
+							char full_path[SOURCE_MAX_PATH];
+							if ( filesystem->GetLocalPath( relative_path, full_path, SOURCE_MAX_PATH ) )
 							{
 								ShellExecute( NULL, "open", full_path, NULL, NULL, SW_SHOWNORMAL );
 							}

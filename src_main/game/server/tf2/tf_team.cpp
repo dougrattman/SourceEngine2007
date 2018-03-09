@@ -23,7 +23,7 @@
 #include "tf_stats.h"
 #include "tf_obj_buff_station.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define OBJECT_COVERED_DIST	1000
@@ -164,7 +164,7 @@ void CTFTeam::Think( void )
 	UpdateOrders();
 	UpdateMessages();
 
-	// FIXME: Try this out?
+	// TODO(d.rattman): Try this out?
 	/*
 	// Give resources to the team at regular intervals
 	if (gpGlobals->curtime >= m_flNextResourceTime)
@@ -176,7 +176,7 @@ void CTFTeam::Think( void )
 
 	UpdateTechnologies();
 		    
-	/* FIXME: Re-enable once we figure out what the correct orders should be
+	/* TODO(d.rattman): Re-enable once we figure out what the correct orders should be
 	// Create new personal orders
 	if ( m_flPersonalOrderUpdateTime < gpGlobals->curtime )
 	{
@@ -652,7 +652,7 @@ void CTFTeam::RecomputePurchases( void )
 bool CTFTeam::HasNamedTechnology( const char *name )
 {
 	// Look it up
-	// FIXME:  This could be too slow, consider using #define'd/indexed names?
+	// TODO(d.rattman):  This could be too slow, consider using #define'd/indexed names?
 	CBaseTechnology *tech = m_pTechnologyTree->GetTechnology( name ); 
 	if ( !tech )
 		return false;

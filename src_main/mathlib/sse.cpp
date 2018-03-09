@@ -12,46 +12,26 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef ARCH_CPU_X86_64
 
-static const uint32_t _sincos_masks[] = {(uint32_t)0x0, (uint32_t)~0x0};
-static const uint32_t _sincos_inv_masks[] = {(uint32_t)~0x0, (uint32_t)0x0};
-
+static const u32 _sincos_masks[] = {(u32)0x0, (u32)~0x0};
+static const u32 _sincos_inv_masks[] = {(u32)~0x0, (u32)0x0};
 
 // Macros and constants required by some of the SSE assembly:
-
-
-#ifdef _WIN32
 #define _PS_EXTERN_CONST(Name, Val) \
-  const __declspec(align(16)) f32 _ps_##Name[4] = {Val, Val, Val, Val}
+  const alignas(16) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 
 #define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
-  const __declspec(align(16)) Type _ps_##Name[4] = {Val, Val, Val, Val};
+  const alignas(16) Type _ps_##Name[4] = {Val, Val, Val, Val};
 
 #define _EPI32_CONST(Name, Val)                                            \
-  static const __declspec(align(16)) __int32 _epi32_##Name[4] = {Val, Val, \
+  static const alignas(16) i32 _epi32_##Name[4] = {Val, Val, \
                                                                  Val, Val}
-
 #define _PS_CONST(Name, Val) \
-  static const __declspec(align(16)) f32 _ps_##Name[4] = {Val, Val, Val, Val}
-#elif _LINUX
-#define _PS_EXTERN_CONST(Name, Val) \
-  const __attribute__((aligned(16))) f32 _ps_##Name[4] = {Val, Val, Val, Val}
-
-#define _PS_EXTERN_CONST_TYPE(Name, Type, Val) \
-  const __attribute__((aligned(16))) Type _ps_##Name[4] = {Val, Val, Val, Val};
-
-#define _EPI32_CONST(Name, Val)             \
-  static const __attribute__((aligned(16))) \
-      i32 _epi32_##Name[4] = {Val, Val, Val, Val}
-
-#define _PS_CONST(Name, Val)                \
-  static const __attribute__((aligned(16))) \
-      f32 _ps_##Name[4] = {Val, Val, Val, Val}
-#endif
+  static const alignas(16) f32 _ps_##Name[4] = {Val, Val, Val, Val}
 
 _PS_EXTERN_CONST(am_0, 0.0f);
 _PS_EXTERN_CONST(am_1, 1.0f);
@@ -82,9 +62,7 @@ void __cdecl _SSE_VectorMA(const f32 *start, f32 scale, const f32 *direction,
                            f32 *dest);
 #endif
 
-
 // SSE implementations of optimized routines:
-
 f32 _SSE_Sqrt(f32 x) {
   Assert(s_bMathlibInitialized);
   f32 root = 0.f;
@@ -94,7 +72,7 @@ f32 _SSE_Sqrt(f32 x) {
 		sqrtss		xmm0, x
 		movss		root, xmm0
   }
-#elif _LINUX
+#elif OS_POSIX
   __asm__ __volatile__(
       "movss %1,%%xmm2\n"
       "sqrtss %%xmm2,%%xmm1\n"
@@ -127,7 +105,7 @@ f32 _SSE_RSqrtAccurate(f32 a) {
 
 		movss   x,    xmm1;
   }
-#elif _LINUX
+#elif OS_POSIX
   __asm__ __volatile__(
       "movss   %1, %%xmm3 \n\t"
       "movss   %2, %%xmm1 \n\t"
@@ -160,7 +138,7 @@ f32 _SSE_RSqrtFast(f32 x) {
 		rsqrtss	xmm0, x
 		movss	rroot, xmm0
   }
-#elif _LINUX
+#elif OS_POSIX
   __asm__ __volatile__(
       "rsqrtss %1, %%xmm0 \n\t"
       "movss %%xmm0, %0 \n\t"
@@ -174,16 +152,12 @@ f32 _SSE_RSqrtFast(f32 x) {
   return rroot;
 }
 
-f32 FASTCALL _SSE_VectorNormalize(Vector &vec) {
+f32 SOURCE_FASTCALL _SSE_VectorNormalize(Vector &vec) {
   Assert(s_bMathlibInitialized);
 
   // NOTE: This is necessary to prevent an memory overwrite...
   // sice vec only has 3 floats, we can't "movaps" directly into it.
-#ifdef _WIN32
-  __declspec(align(16)) f32 result[4];
-#elif _LINUX
-  __attribute__((aligned(16))) f32 result[4];
-#endif
+  alignas(16) f32 result[4];
 
   f32 *v = &vec[0];
   f32 *r = &result[0];
@@ -218,7 +192,7 @@ f32 FASTCALL _SSE_VectorNormalize(Vector &vec) {
 			mulps		xmm4, xmm1  // r4 = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
 			movaps		[edx], xmm4  // v = vx * 1/radius, vy * 1/radius, vz * 1/radius, X
     }
-#elif _LINUX
+#elif OS_POSIX
     __asm__ __volatile__(
 #ifdef ALIGNED_VECTOR
         "movaps          %2, %%xmm4 \n\t"
@@ -252,7 +226,7 @@ f32 FASTCALL _SSE_VectorNormalize(Vector &vec) {
   return radius;
 }
 
-void FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
+void SOURCE_FASTCALL _SSE_VectorNormalizeFast(Vector &vec) {
   f32 ool = _SSE_RSqrtAccurate(FLT_EPSILON + vec.x * vec.x + vec.y * vec.y +
                                vec.z * vec.z);
 
@@ -283,7 +257,7 @@ f32 _SSE_InvRSquared(const f32 *v) {
 		rcpss		xmm0, xmm1  // x0 = 1 / std::max( 1.0, x1 )
 		movss		inv_r2, xmm0  // inv_r2 = x0
   }
-#elif _LINUX
+#elif OS_POSIX
   __asm__ __volatile__(
 #ifdef ALIGNED_VECTOR
       "movaps          %1, %%xmm4 \n\t"
@@ -395,7 +369,7 @@ void _SSE_SinCos(f32 x, f32 *s, f32 *c) {
 		movss	[eax], xmm0
 		movss	[edx], xmm4
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "_SSE_sincos NOT implemented!"
 #else
 #error "Not Implemented"
@@ -452,7 +426,7 @@ f32 _SSE_cos(f32 x) {
 		movss   x,    xmm0
 
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "_SSE_cos NOT implemented!"
 #else
 #error "Not Implemented"
@@ -543,7 +517,7 @@ void _SSE2_SinCos(f32 x, f32 *s, f32 *c){
     movss [edx], xmm6
   }
 // clang-format on
-#elif _LINUX
+#elif OS_POSIX
 #warning "_SSE2_SinCos NOT implemented!"
 #else
 #error "Not Implemented"
@@ -597,7 +571,7 @@ f32 _SSE2_cos(f32 x) {
 		mulss	xmm0, xmm1
 		movss   x,    xmm0
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "_SSE2_cos NOT implemented!"
 #else
 #error "Not Implemented"
@@ -653,7 +627,7 @@ void VectorTransformSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
 		addss xmm0, [ecx+12]
 		movss [edx+8], xmm0;
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "VectorTransformSSE C implementation only"
   out1[0] = DotProduct(in1, in2[0]) + in2[0][3];
   out1[1] = DotProduct(in1, in2[1]) + in2[1][3];
@@ -706,7 +680,7 @@ void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
 		addss xmm0, xmm2;
 		movss [edx+8], xmm0;
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "VectorRotateSSE C implementation only"
   out1[0] = DotProduct(in1, in2[0]);
   out1[1] = DotProduct(in1, in2[1]);
@@ -719,7 +693,7 @@ void VectorRotateSSE(const f32 *in1, const matrix3x4_t &in2, f32 *out1) {
 #ifdef _WIN32
 void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
                                     const f32 *direction, f32 *dest) {
-  // FIXME: This don't work!! It will overwrite memory in the write to dest
+  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to dest
   Assert(0);
 
   Assert(s_bMathlibInitialized);
@@ -752,7 +726,7 @@ void _declspec(naked) _SSE_VectorMA(const f32 *start, f32 scale,
 void _declspec(naked) __cdecl _SSE_VectorMA(const Vector &start, f32 scale,
                                             const Vector &direction,
                                             Vector &dest) {
-  // FIXME: This don't work!! It will overwrite memory in the write to dest
+  // TODO(d.rattman): This don't work!! It will overwrite memory in the write to dest
   Assert(0);
 
   Assert(s_bMathlibInitialized);

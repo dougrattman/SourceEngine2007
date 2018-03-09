@@ -9,7 +9,7 @@
 #include "cbase.h"
 #include "AI_Interest_Target.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool CAI_InterestTarget_t::IsThis( CBaseEntity *pThis )

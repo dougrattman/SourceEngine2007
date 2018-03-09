@@ -282,7 +282,7 @@ int main( int argc, char **argv )
 		}
 	}
 
-	char pCurrentDirectory[MAX_PATH];
+	char pCurrentDirectory[SOURCE_MAX_PATH];
 	if ( _getcwd( pCurrentDirectory, sizeof(pCurrentDirectory) ) == NULL )
 	{
 		fprintf( stderr, "Unable to get the current directory\n" );

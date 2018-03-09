@@ -26,7 +26,7 @@
 #include "te_effect_dispatch.h"
 #include "weapon_gauss.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define VEHICLE_HITBOX_DRIVER 1
@@ -683,7 +683,7 @@ void CPropJeep::Think(void) {
   }
 
   // spin gun if charging cannon
-  // FIXME: Don't bother for E3
+  // TODO(d.rattman): Don't bother for E3
   if (m_bCannonCharging) {
     m_nSpinPos += JEEP_GUN_SPIN_RATE;
     SetPoseParameter(JEEP_GUN_SPIN, m_nSpinPos);
@@ -867,7 +867,7 @@ void CPropJeep::FireCannon(void) {
 
   // make cylinders of gun spin a bit
   m_nSpinPos += JEEP_GUN_SPIN_RATE;
-  // SetPoseParameter( JEEP_GUN_SPIN, m_nSpinPos );	//FIXME: Don't bother
+  // SetPoseParameter( JEEP_GUN_SPIN, m_nSpinPos );	//TODO(d.rattman): Don't bother
   // with this for E3, won't look right
 }
 
@@ -912,7 +912,7 @@ void CPropJeep::FireChargedCannon(void) {
   }
 
   // Determine the damage amount
-  // FIXME: Use ConVars!
+  // TODO(d.rattman): Use ConVars!
   float flDamage = 15 + ((250 - 15) * flChargeAmount);
 
   CBaseEntity *pHit = tr.m_pEnt;

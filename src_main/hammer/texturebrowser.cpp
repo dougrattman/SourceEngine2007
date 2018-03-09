@@ -24,7 +24,7 @@
 #include "hammer.h"
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static LPCTSTR pszIniSection = "Texture Browser";
@@ -32,7 +32,7 @@ static LPCTSTR pszIniSection = "Texture Browser";
 
 CStringArray CTextureBrowser::m_FilterHistory;
 int CTextureBrowser::m_nFilterHistory;
-char CTextureBrowser::m_szLastKeywords[MAX_PATH];
+char CTextureBrowser::m_szLastKeywords[SOURCE_MAX_PATH];
 
 
 BEGIN_MESSAGE_MAP(CTextureBrowser, CDialog)
@@ -513,7 +513,7 @@ LRESULT CTextureBrowser::OnTexturewindowSelchange(WPARAM wParam, LPARAM lParam)
 {
 	IEditorTexture *pTex = g_Textures.FindActiveTexture(m_cTextureWindow.szCurTexture);
 	CString str;
-	char szName[MAX_PATH];
+	char szName[SOURCE_MAX_PATH];
 
 	if (pTex != NULL)
 	{

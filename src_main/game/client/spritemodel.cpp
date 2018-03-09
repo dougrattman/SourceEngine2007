@@ -13,7 +13,7 @@
 #include "c_sprite.h"
 #include "tier1/callqueue.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Sprites are clipped to this rectangle (x,y,width,height) if ScissorTest is enabled
@@ -466,7 +466,7 @@ void CEngineSprite::DrawFrame( int frame, int x, int y, const wrect_t *prcSubRec
 //-----------------------------------------------------------------------------
 void CEngineSprite::DrawFrameOfSize( int frame, int x, int y, int iWidth, int iHeight, const wrect_t *prcSubRect )
 {
-	// FIXME: If we ever call this with AVIs, need to have it call GetTexCoordRange and make that work
+	// TODO(d.rattman): If we ever call this with AVIs, need to have it call GetTexCoordRange and make that work
 	Assert( !IsAVI() && !IsBIK() );
 
 	float fLeft = 0;

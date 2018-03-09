@@ -17,7 +17,7 @@
 #include "TextureConverter.h"
 #include "TextureSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CProgressDlg *CTextureConverter::m_pProgDlg;

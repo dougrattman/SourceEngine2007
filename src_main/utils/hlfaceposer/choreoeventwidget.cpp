@@ -463,7 +463,7 @@ void CChoreoEventWidget::DrawGenericEvent( CChoreoWidgetDrawHelper& drawHelper, 
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME:  This should either be embedded or we should draw the caption
+// Purpose: TODO(d.rattman):  This should either be embedded or we should draw the caption
 //  here
 //-----------------------------------------------------------------------------
 void CChoreoEventWidget::redraw( CChoreoWidgetDrawHelper& drawHelper )

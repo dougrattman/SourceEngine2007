@@ -27,7 +27,7 @@
 #include "materialsystem/imesh.h"
 #include "tier3/tier3.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ CDmeTrackGroup *CDmeClip::GetTrackGroup(int nIndex) const {
 // Is a track group valid to add?
 //-----------------------------------------------------------------------------
 bool CDmeClip::IsTrackGroupValid(CDmeTrackGroup *pTrackGroup) {
-  // FIXME: If track groups have allowed types, we can check for validity
+  // TODO(d.rattman): If track groups have allowed types, we can check for validity
   for (DmeClipType_t i = DMECLIP_FIRST; i <= DMECLIP_LAST; ++i) {
     if (!IsSubClipTypeAllowed(i) && pTrackGroup->IsSubClipTypeAllowed(i))
       return false;
@@ -241,7 +241,7 @@ bool CDmeClip::IsTrackGroupValid(CDmeTrackGroup *pTrackGroup) {
 void CDmeClip::AddTrackGroup(CDmeTrackGroup *pTrackGroup) {
   if (!IsTrackGroupValid(pTrackGroup)) return;
 
-  // FIXME:  Should check if track with same name already exists???
+  // TODO(d.rattman):  Should check if track with same name already exists???
   if (GetTrackGroupIndex(pTrackGroup) < 0) {
     m_TrackGroups.AddToTail(pTrackGroup);
   }
@@ -251,7 +251,7 @@ void CDmeClip::AddTrackGroupBefore(CDmeTrackGroup *pTrackGroup,
                                    CDmeTrackGroup *pBefore) {
   if (!IsTrackGroupValid(pTrackGroup)) return;
 
-  // FIXME:  Should check if track with same name already exists???
+  // TODO(d.rattman):  Should check if track with same name already exists???
   if (GetTrackGroupIndex(pTrackGroup) < 0) {
     int nBeforeIndex =
         pBefore ? GetTrackGroupIndex(pBefore) : GetTrackGroupCount();
@@ -365,7 +365,7 @@ CDmeTrack *CDmeClip::FindTrackForClip(
   //	DmeClipType_t type = pClip->GetClipType();
   int c = m_TrackGroups.Count();
   for (int i = 0; i < c; ++i) {
-    // FIXME: If trackgroups have valid types, can early out here
+    // TODO(d.rattman): If trackgroups have valid types, can early out here
     CDmeTrack *pTrack = m_TrackGroups[i]->FindTrackForClip(pClip);
     if (pTrack) {
       if (ppTrackGroup) {

@@ -38,7 +38,7 @@
 #define CL_EVENT_DISPATCHEFFECT9	9091	// Hook into a DispatchEffect on attachment 9
 
 // These two events are used by c_env_spritegroup.
-// FIXME: Should this be local to c_env_spritegroup?
+// TODO(d.rattman): Should this be local to c_env_spritegroup?
 #define CL_EVENT_SPRITEGROUP_CREATE		6002
 #define CL_EVENT_SPRITEGROUP_DESTROY	6003
 #define CL_EVENT_FOOTSTEP_LEFT 6004

@@ -8,7 +8,7 @@
 #include "entitylist.h"
 #include "func_movelinear.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_LDOOR_THRESHOLD 8192

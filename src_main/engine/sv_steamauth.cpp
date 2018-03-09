@@ -6,7 +6,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>  // INADDR_ANY defn
-#elif _LINUX
+#elif OS_POSIX
 #include <netinet/in.h>
 #endif
 
@@ -32,7 +32,7 @@
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sv_lan;

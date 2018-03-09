@@ -12,7 +12,7 @@
 #include "eventlist.h"
 #include "npcevent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //---------------------------------------------------------
@@ -625,7 +625,7 @@ public:
 	void	SetupCrate( void );
 	void	OnRestore( void );
 
-	//FIXME: May not want to have this used in a radius
+	//TODO(d.rattman): May not want to have this used in a radius
 	int		ObjectCaps( void ) { return (BaseClass::ObjectCaps() | (FCAP_IMPULSE_USE|FCAP_USE_IN_RADIUS)); };
 	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
@@ -690,7 +690,7 @@ const char *CItem_AmmoCrate::m_lpzModelNames[NUM_AMMO_CRATE_TYPES] =
 	"models/items/ammocrate_smg1.mdl",		// 357
 	"models/items/ammocrate_smg1.mdl",	// Crossbow
 	
-	//FIXME: This model is incorrect!
+	//TODO(d.rattman): This model is incorrect!
 	"models/items/ammocrate_ar2.mdl",		// Combine Ball 
 	"models/items/ammocrate_smg2.mdl",	    // smg grenade
 };
@@ -964,7 +964,7 @@ void CItem_AmmoCrate::CrateThink( void )
 			CPASAttenuationFilter sndFilter( this, "AmmoCrate.Close" );
 			EmitSound( sndFilter, entindex(), "AmmoCrate.Close" );
 
-			// FIXME: We're resetting the sequence here
+			// TODO(d.rattman): We're resetting the sequence here
 			// but setting Think to NULL will cause this to never have
 			// StudioFrameAdvance called. What are the consequences of that?
 			ResetSequence( LookupSequence( "Idle" ) );

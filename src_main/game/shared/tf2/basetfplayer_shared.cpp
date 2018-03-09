@@ -710,7 +710,7 @@ void CPlayerAnimState::ComputePoseParam_BodyLookYaw( void )
 
 		// Standing still for a while, rotate feet around to face forward
 		// Or rotated too far
-		// FIXME:  Play an in place turning animation
+		// TODO(d.rattman):  Play an in place turning animation
 		if ( rotated_too_far || 
 			( gpGlobals->curtime > m_flLastTurnTime + mp_facefronttime.GetFloat() ) )
 		{

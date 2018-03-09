@@ -1,16 +1,17 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_INCLUDE_FASTTIMER_H_
 #define SOURCE_TIER0_INCLUDE_FASTTIMER_H_
 
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
-#include "tier0/include/platform.h"
-#include "tier0/include/tier0_api.h"
 
 #if OS_WIN
-#include <intrin.h>
+#include <intrin.h>  // __rdtsc
 #endif
+
+#include "base/include/base_types.h"
+#include "tier0/include/platform.h"  // GetCpuInformation
+#include "tier0/include/tier0_api.h"
 
 SOURCE_TIER0_API i64 g_ClockSpeed;
 SOURCE_TIER0_API unsigned long g_dwClockSpeed;
@@ -30,7 +31,7 @@ class SOURCE_TIER0_API_CLASS CCycleCount {
   void Sample() {
 #ifdef OS_WIN
     m_Int64 = __rdtsc();
-#elif defined(OS_POSIX)
+#elif defined OS_POSIX
     unsigned long *pSample = (unsigned long *)&m_Int64;
     __asm__ __volatile__(
         "rdtsc\n\t"
@@ -39,7 +40,7 @@ class SOURCE_TIER0_API_CLASS CCycleCount {
         : /* no output regs */
         : "D"(pSample)
         : "%eax", "%edx");
-#endif
+#endif  // OS_WIN
   }
 
   // Set to zero.

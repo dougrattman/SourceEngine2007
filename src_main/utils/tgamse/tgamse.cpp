@@ -35,7 +35,7 @@ int main( int argc, char **argv )
 	MathLib_Init( 2.2f, 2.2f, 0.0f, 2.0f );
 	InitDefaultFileSystem();
 
-	char pCurrentDirectory[MAX_PATH];
+	char pCurrentDirectory[SOURCE_MAX_PATH];
 	if ( _getcwd( pCurrentDirectory, sizeof(pCurrentDirectory) ) == NULL )
 	{
 		fprintf( stderr, "Unable to get the current directory\n" );
@@ -44,7 +44,7 @@ int main( int argc, char **argv )
 	Q_FixSlashes( pCurrentDirectory );
 	Q_StripTrailingSlash( pCurrentDirectory );
 
-	char pBuf[3][MAX_PATH];
+	char pBuf[3][SOURCE_MAX_PATH];
 	const char *pFileName[2];
 	for ( int i = 0; i < 2; ++i )
 	{

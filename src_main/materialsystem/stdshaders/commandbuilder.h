@@ -25,19 +25,19 @@ class CFixedCommandStorageBuffer {
   size_t m_nNumBytesRemaining;
 #endif
 
-  FORCEINLINE CFixedCommandStorageBuffer(void) {
+  SOURCE_FORCEINLINE CFixedCommandStorageBuffer(void) {
     m_pDataOut = m_Data;
 #ifndef NDEBUG
     m_nNumBytesRemaining = N;
 #endif
   }
 
-  FORCEINLINE void EnsureCapacity(size_t sz) {
+  SOURCE_FORCEINLINE void EnsureCapacity(size_t sz) {
     Assert(m_nNumBytesRemaining >= sz);
   }
 
   template <class T>
-  FORCEINLINE void Put(T const &nValue) {
+  SOURCE_FORCEINLINE void Put(T const &nValue) {
     EnsureCapacity(sizeof(T));
     *(reinterpret_cast<T *>(m_pDataOut)) = nValue;
     m_pDataOut += sizeof(nValue);
@@ -46,28 +46,28 @@ class CFixedCommandStorageBuffer {
 #endif
   }
 
-  FORCEINLINE void PutInt(int nValue) { Put(nValue); }
+  SOURCE_FORCEINLINE void PutInt(int nValue) { Put(nValue); }
 
-  FORCEINLINE void PutFloat(float nValue) { Put(nValue); }
+  SOURCE_FORCEINLINE void PutFloat(float nValue) { Put(nValue); }
 
-  FORCEINLINE void PutPtr(void *pPtr) { Put(pPtr); }
+  SOURCE_FORCEINLINE void PutPtr(void *pPtr) { Put(pPtr); }
 
-  FORCEINLINE void PutMemory(const void *pMemory, size_t nBytes) {
+  SOURCE_FORCEINLINE void PutMemory(const void *pMemory, size_t nBytes) {
     EnsureCapacity(nBytes);
     memcpy(m_pDataOut, pMemory, nBytes);
     m_pDataOut += nBytes;
   }
 
-  FORCEINLINE uint8_t *Base(void) { return m_Data; }
+  SOURCE_FORCEINLINE uint8_t *Base(void) { return m_Data; }
 
-  FORCEINLINE void Reset(void) {
+  SOURCE_FORCEINLINE void Reset(void) {
     m_pDataOut = m_Data;
 #ifndef NDEBUG
     m_nNumBytesRemaining = N;
 #endif
   }
 
-  FORCEINLINE size_t Size(void) const { return m_pDataOut - m_Data; }
+  SOURCE_FORCEINLINE size_t Size(void) const { return m_pDataOut - m_Data; }
 };
 
 template <class S>
@@ -75,26 +75,26 @@ class CCommandBufferBuilder {
  public:
   S m_Storage;
 
-  FORCEINLINE void End(void) { m_Storage.PutInt(CBCMD_END); }
+  SOURCE_FORCEINLINE void End(void) { m_Storage.PutInt(CBCMD_END); }
 
-  FORCEINLINE IMaterialVar *Param(int nVar) const {
+  SOURCE_FORCEINLINE IMaterialVar *Param(int nVar) const {
     return CBaseShader::s_ppParams[nVar];
   }
 
-  FORCEINLINE void SetPixelShaderConstants(int nFirstConstant, int nConstants) {
+  SOURCE_FORCEINLINE void SetPixelShaderConstants(int nFirstConstant, int nConstants) {
     m_Storage.PutInt(CBCMD_SET_PIXEL_SHADER_FLOAT_CONST);
     m_Storage.PutInt(nFirstConstant);
     m_Storage.PutInt(nConstants);
   }
 
-  FORCEINLINE void OutputConstantData(float const *pSrcData) {
+  SOURCE_FORCEINLINE void OutputConstantData(float const *pSrcData) {
     m_Storage.PutFloat(pSrcData[0]);
     m_Storage.PutFloat(pSrcData[1]);
     m_Storage.PutFloat(pSrcData[2]);
     m_Storage.PutFloat(pSrcData[3]);
   }
 
-  FORCEINLINE void OutputConstantData4(float flVal0, float flVal1, float flVal2,
+  SOURCE_FORCEINLINE void OutputConstantData4(float flVal0, float flVal1, float flVal2,
                                        float flVal3) {
     m_Storage.PutFloat(flVal0);
     m_Storage.PutFloat(flVal1);
@@ -102,14 +102,14 @@ class CCommandBufferBuilder {
     m_Storage.PutFloat(flVal3);
   }
 
-  FORCEINLINE void SetPixelShaderConstant(int nFirstConstant,
+  SOURCE_FORCEINLINE void SetPixelShaderConstant(int nFirstConstant,
                                           float const *pSrcData,
                                           int nNumConstantsToSet) {
     SetPixelShaderConstants(nFirstConstant, nNumConstantsToSet);
     m_Storage.PutMemory(pSrcData, 4 * sizeof(float) * nNumConstantsToSet);
   }
 
-  FORCEINLINE void SetPixelShaderConstant(int nFirstConstant, int nVar) {
+  SOURCE_FORCEINLINE void SetPixelShaderConstant(int nFirstConstant, int nVar) {
     SetPixelShaderConstant(nFirstConstant, Param(nVar)->GetVecValue());
   }
 
@@ -123,20 +123,20 @@ class CCommandBufferBuilder {
     SetPixelShaderConstant(pixelReg, val);
   }
 
-  FORCEINLINE void SetPixelShaderConstant(int nFirstConstant,
+  SOURCE_FORCEINLINE void SetPixelShaderConstant(int nFirstConstant,
                                           float const *pSrcData) {
     SetPixelShaderConstants(nFirstConstant, 1);
     OutputConstantData(pSrcData);
   }
 
-  FORCEINLINE void SetPixelShaderConstant4(int nFirstConstant, float flVal0,
+  SOURCE_FORCEINLINE void SetPixelShaderConstant4(int nFirstConstant, float flVal0,
                                            float flVal1, float flVal2,
                                            float flVal3) {
     SetPixelShaderConstants(nFirstConstant, 1);
     OutputConstantData4(flVal0, flVal1, flVal2, flVal3);
   }
 
-  FORCEINLINE void SetPixelShaderConstant_W(int pixelReg, int constantVar,
+  SOURCE_FORCEINLINE void SetPixelShaderConstant_W(int pixelReg, int constantVar,
                                             float fWValue) {
     if (constantVar != -1) {
       float val[3];
@@ -145,7 +145,7 @@ class CCommandBufferBuilder {
     }
   }
 
-  FORCEINLINE void SetVertexShaderConstant(int nFirstConstant,
+  SOURCE_FORCEINLINE void SetVertexShaderConstant(int nFirstConstant,
                                            float const *pSrcData) {
     m_Storage.PutInt(CBCMD_SET_VERTEX_SHADER_FLOAT_CONST);
     m_Storage.PutInt(nFirstConstant);
@@ -153,7 +153,7 @@ class CCommandBufferBuilder {
     OutputConstantData(pSrcData);
   }
 
-  FORCEINLINE void SetVertexShaderConstant(int nFirstConstant,
+  SOURCE_FORCEINLINE void SetVertexShaderConstant(int nFirstConstant,
                                            float const *pSrcData, int nConsts) {
     m_Storage.PutInt(CBCMD_SET_VERTEX_SHADER_FLOAT_CONST);
     m_Storage.PutInt(nFirstConstant);
@@ -161,7 +161,7 @@ class CCommandBufferBuilder {
     m_Storage.PutMemory(pSrcData, 4 * nConsts * sizeof(float));
   }
 
-  FORCEINLINE void SetVertexShaderConstant4(int nFirstConstant, float flVal0,
+  SOURCE_FORCEINLINE void SetVertexShaderConstant4(int nFirstConstant, float flVal0,
                                             float flVal1, float flVal2,
                                             float flVal3) {
     m_Storage.PutInt(CBCMD_SET_VERTEX_SHADER_FLOAT_CONST);
@@ -221,7 +221,7 @@ class CCommandBufferBuilder {
     SetVertexShaderConstant(vertexReg, transformation[0].Base(), 2);
   }
 
-  FORCEINLINE void SetEnvMapTintPixelShaderDynamicState(int pixelReg,
+  SOURCE_FORCEINLINE void SetEnvMapTintPixelShaderDynamicState(int pixelReg,
                                                         int tintVar) {
     if (g_pConfig->bShowSpecular && mat_fullbright.GetInt() != 2) {
       SetPixelShaderConstant(pixelReg, Param(tintVar)->GetVecValue());
@@ -230,7 +230,7 @@ class CCommandBufferBuilder {
     }
   }
 
-  FORCEINLINE void SetEnvMapTintPixelShaderDynamicStateGammaToLinear(
+  SOURCE_FORCEINLINE void SetEnvMapTintPixelShaderDynamicStateGammaToLinear(
       int pixelReg, int tintVar) {
     if (g_pConfig->bShowSpecular && mat_fullbright.GetInt() != 2) {
       float color[4];
@@ -242,52 +242,52 @@ class CCommandBufferBuilder {
     }
   }
 
-  FORCEINLINE void StoreEyePosInPixelShaderConstant(int nConst) {
+  SOURCE_FORCEINLINE void StoreEyePosInPixelShaderConstant(int nConst) {
     m_Storage.PutInt(CBCMD_STORE_EYE_POS_IN_PSCONST);
     m_Storage.PutInt(nConst);
   }
 
-  FORCEINLINE void CommitPixelShaderLighting(int nConst) {
+  SOURCE_FORCEINLINE void CommitPixelShaderLighting(int nConst) {
     m_Storage.PutInt(CBCMD_COMMITPIXELSHADERLIGHTING);
     m_Storage.PutInt(nConst);
   }
 
-  FORCEINLINE void SetPixelShaderStateAmbientLightCube(int nConst) {
+  SOURCE_FORCEINLINE void SetPixelShaderStateAmbientLightCube(int nConst) {
     m_Storage.PutInt(CBCMD_SETPIXELSHADERSTATEAMBIENTLIGHTCUBE);
     m_Storage.PutInt(nConst);
   }
 
-  FORCEINLINE void SetAmbientCubeDynamicStateVertexShader(void) {
+  SOURCE_FORCEINLINE void SetAmbientCubeDynamicStateVertexShader(void) {
     m_Storage.PutInt(CBCMD_SETAMBIENTCUBEDYNAMICSTATEVERTEXSHADER);
   }
 
-  FORCEINLINE void SetPixelShaderFogParams(int nReg) {
+  SOURCE_FORCEINLINE void SetPixelShaderFogParams(int nReg) {
     m_Storage.PutInt(CBCMD_SETPIXELSHADERFOGPARAMS);
     m_Storage.PutInt(nReg);
   }
 
-  FORCEINLINE void BindStandardTexture(Sampler_t nSampler,
+  SOURCE_FORCEINLINE void BindStandardTexture(Sampler_t nSampler,
                                        StandardTextureId_t nTextureId) {
     m_Storage.PutInt(CBCMD_BIND_STANDARD_TEXTURE);
     m_Storage.PutInt(nSampler);
     m_Storage.PutInt(nTextureId);
   }
 
-  FORCEINLINE void BindTexture(Sampler_t nSampler,
+  SOURCE_FORCEINLINE void BindTexture(Sampler_t nSampler,
                                ShaderAPITextureHandle_t hTexture) {
     m_Storage.PutInt(CBCMD_BIND_SHADERAPI_TEXTURE_HANDLE);
     m_Storage.PutInt(nSampler);
     m_Storage.PutInt(hTexture);
   }
 
-  FORCEINLINE void BindTexture(CBaseVSShader *pShader, Sampler_t nSampler,
+  SOURCE_FORCEINLINE void BindTexture(CBaseVSShader *pShader, Sampler_t nSampler,
                                int nTextureVar, int nFrameVar) {
     ShaderAPITextureHandle_t hTexture =
         pShader->GetShaderAPITextureBindHandle(nTextureVar, nFrameVar);
     BindTexture(nSampler, hTexture);
   }
 
-  FORCEINLINE void BindMultiTexture(CBaseVSShader *pShader, Sampler_t nSampler1,
+  SOURCE_FORCEINLINE void BindMultiTexture(CBaseVSShader *pShader, Sampler_t nSampler1,
                                     Sampler_t nSampler2, int nTextureVar,
                                     int nFrameVar) {
     ShaderAPITextureHandle_t hTexture =
@@ -298,38 +298,38 @@ class CCommandBufferBuilder {
     BindTexture(nSampler2, hTexture);
   }
 
-  FORCEINLINE void SetPixelShaderIndex(int nIndex) {
+  SOURCE_FORCEINLINE void SetPixelShaderIndex(int nIndex) {
     m_Storage.PutInt(CBCMD_SET_PSHINDEX);
     m_Storage.PutInt(nIndex);
   }
 
-  FORCEINLINE void SetVertexShaderIndex(int nIndex) {
+  SOURCE_FORCEINLINE void SetVertexShaderIndex(int nIndex) {
     m_Storage.PutInt(CBCMD_SET_VSHINDEX);
     m_Storage.PutInt(nIndex);
   }
 
-  FORCEINLINE void SetDepthFeatheringPixelShaderConstant(
+  SOURCE_FORCEINLINE void SetDepthFeatheringPixelShaderConstant(
       int iConstant, float fDepthBlendScale) {
     m_Storage.PutInt(CBCMD_SET_DEPTH_FEATHERING_CONST);
     m_Storage.PutInt(iConstant);
     m_Storage.PutFloat(fDepthBlendScale);
   }
 
-  FORCEINLINE void Goto(uint8_t *pCmdBuf) {
+  SOURCE_FORCEINLINE void Goto(uint8_t *pCmdBuf) {
     m_Storage.PutInt(CBCMD_JUMP);
     m_Storage.PutPtr(pCmdBuf);
   }
 
-  FORCEINLINE void Call(uint8_t *pCmdBuf) {
+  SOURCE_FORCEINLINE void Call(uint8_t *pCmdBuf) {
     m_Storage.PutInt(CBCMD_JSR);
     m_Storage.PutPtr(pCmdBuf);
   }
 
-  FORCEINLINE void Reset(void) { m_Storage.Reset(); }
+  SOURCE_FORCEINLINE void Reset(void) { m_Storage.Reset(); }
 
-  FORCEINLINE size_t Size(void) const { return m_Storage.Size(); }
+  SOURCE_FORCEINLINE size_t Size(void) const { return m_Storage.Size(); }
 
-  FORCEINLINE uint8_t *Base(void) { return m_Storage.Base(); }
+  SOURCE_FORCEINLINE uint8_t *Base(void) { return m_Storage.Base(); }
 };
 
 #endif  // commandbuilder_h

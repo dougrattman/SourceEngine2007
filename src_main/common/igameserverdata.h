@@ -14,7 +14,7 @@ const ra_listener_id INVALID_LISTENER_ID = 0xffffffff;
 // designed to be a simple data parsing interface so that the implementation
 // can be as similar to remote administration as possible
 //-----------------------------------------------------------------------------
-abstract_class IGameServerData : public IBaseInterface {
+the_interface IGameServerData : public IBaseInterface {
  public:
   // writes out a request
   virtual void WriteDataRequest(ra_listener_id listener, const void *buffer,

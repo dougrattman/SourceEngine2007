@@ -57,7 +57,7 @@
 #include "vox.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -98,7 +98,7 @@ static ConVar cl_playback_screenshots(
 
 MovieInfo_t cl_movieinfo;
 
-// FIXME: put these on hunk?
+// TODO(d.rattman): put these on hunk?
 dlight_t cl_dlights[MAX_DLIGHTS];
 dlight_t cl_elights[MAX_ELIGHTS];
 CFastPointLeafNum g_DLightLeafAccessors[MAX_DLIGHTS];
@@ -401,7 +401,7 @@ bool CL_CheckCRCs(const char *pszMap) {
   // Check to see that our copy of the client side dll matches the server's.
   // Client side DLL  CRC check.
   char client_dll_name[MAX_QPATH];  // Client side DLL being used.
-  Q_snprintf(client_dll_name, ARRAYSIZE(client_dll_name), "bin\\client.dll");
+  Q_snprintf(client_dll_name, SOURCE_ARRAYSIZE(client_dll_name), "bin\\client.dll");
 
   CRC32_t clientDllCRC;
   if (!CRC_File(&clientDllCRC, client_dll_name) &&
@@ -898,7 +898,7 @@ void CL_FullyConnected(void) {
   SCR_EndLoadingPlaque();
   EndLoadingUpdates();
 
-  // FIXME: Please oh please move this out of this spot...
+  // TODO(d.rattman): Please oh please move this out of this spot...
   // It so does not belong here. Instead, we want some phase of the
   // client DLL where it knows its read in all entities
   size_t i;
@@ -1889,10 +1889,10 @@ void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
 //-----------------------------------------------------------------------------
 void CL_CheckToDisplayStartupMenus(const CCommand &args) {
   if (CL_ShouldLoadBackgroundLevel(args)) {
-    char szBackgroundName[_MAX_PATH];
+    char szBackgroundName[SOURCE_MAX_PATH];
     CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName), true);
 
-    char cmd[_MAX_PATH];
+    char cmd[SOURCE_MAX_PATH];
     Q_snprintf(cmd, sizeof(cmd), "map_background %s\n", szBackgroundName);
     Cbuf_AddText(cmd);
   }

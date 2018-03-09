@@ -18,7 +18,7 @@
 #include "networkstringtable_clientdll.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PARTICLES_MANIFEST_FILE				"particles/particles_manifest.txt"

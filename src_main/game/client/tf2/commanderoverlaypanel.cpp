@@ -226,7 +226,7 @@ void CCommanderOverlayPanel::Enable()
 void CCommanderOverlayPanel::Disable()
 {
 	SetVisible( false );
-	// FIXME: Need a removeTickSignal!
+	// TODO(d.rattman): Need a removeTickSignal!
 //	vgui::ivgui()->removeTickSignal( GetVPanel() );
 }
 
@@ -665,7 +665,7 @@ void CCommanderOverlayPanel::SelectPlayersInRectangle( int x0, int y0, int x1, i
 		// Transform
 		debugoverlay->ScreenPosition( pos, screen );
 
-		// FIXME: Get the player icon size from where?!?					
+		// TODO(d.rattman): Get the player icon size from where?!?					
 		drawX = screen.x - 32;
 		drawY = screen.y - 40;
 		int intersectX = 64;
@@ -703,7 +703,7 @@ void CCommanderOverlayPanel::GetVisibleSize( int& w, int& h )
 {
 	GetSize( w, h );
 
-	// FIXME: Hack to make the map appear above the tech tree
+	// TODO(d.rattman): Hack to make the map appear above the tech tree
 	h -= 200;
 }
 
@@ -802,7 +802,7 @@ float CCommanderOverlayPanel::WorldUnitsPerPixel()
 //-----------------------------------------------------------------------------
 void CCommanderOverlayPanel::ActualToVisibleOffset( Vector& offset )
 {
-	// FIXME: This doesn't work arbitrarily; we assume the visible
+	// TODO(d.rattman): This doesn't work arbitrarily; we assume the visible
 	// part is on the top of the screen..
 	int w, h, wact, hact;
 	GetVisibleSize( w, h );

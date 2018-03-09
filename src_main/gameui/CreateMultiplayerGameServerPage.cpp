@@ -13,7 +13,7 @@
 #include "vgui_controls/RadioButton.h"
 #include "vstdlib/random.h"  // for SRC
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define RANDOM_MAP "#GameUI_RandomMap"
@@ -133,7 +133,7 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
 
     // FindFirst ignores the pszPathID, so check it here
     // TODO: this doesn't find maps in fallback dirs
-    _snprintf(map_name, ARRAYSIZE(map_name), "maps/%s", map_path);
+    _snprintf(map_name, SOURCE_ARRAYSIZE(map_name), "maps/%s", map_path);
     if (!g_pFullFileSystem->FileExists(map_name, pszPathID)) {
       goto nextFile;
     }
@@ -142,9 +142,9 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
 
     str = Q_strstr(map_path, "maps");
     if (str) {
-      strncpy(map_name, str + 5, ARRAYSIZE(map_name) - 1);  // maps + \\ = 5
+      strncpy(map_name, str + 5, SOURCE_ARRAYSIZE(map_name) - 1);  // maps + \\ = 5
     } else {
-      strncpy(map_name, map_path, ARRAYSIZE(map_name) - 1);
+      strncpy(map_name, map_path, SOURCE_ARRAYSIZE(map_name) - 1);
     }
     ext = Q_strstr(map_name, ".bsp");
     if (ext) {

@@ -217,7 +217,7 @@ void CNPC_Barnacle::BarnacleThink ( void )
 			vecNewEnemyOrigin.y = GetLocalOrigin().y;
 
 			// guess as to where their neck is
-			// FIXME: remove, ask victim where their neck is
+			// TODO(d.rattman): remove, ask victim where their neck is
 			vecNewEnemyOrigin.x -= 6 * cos(GetEnemy()->GetLocalAngles().y * M_PI/180.0);	
 			vecNewEnemyOrigin.y -= 6 * sin(GetEnemy()->GetLocalAngles().y * M_PI/180.0);
 
@@ -342,7 +342,7 @@ void CNPC_Barnacle::BarnacleThink ( void )
 			// tongue is fully extended, and is touching someone.
 			CBaseCombatCharacter* pBCC = (CBaseCombatCharacter *)pTouchEnt;
 
-			// FIXME: humans should return neck position
+			// TODO(d.rattman): humans should return neck position
 			Vector vecGrabPos = pTouchEnt->GetAbsOrigin();
 
 			if ( pBCC && pBCC->DispatchInteraction( g_interactionBarnacleVictimGrab, &vecGrabPos, this ) )

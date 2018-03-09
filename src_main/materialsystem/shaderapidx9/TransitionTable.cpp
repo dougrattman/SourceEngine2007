@@ -9,12 +9,12 @@
 #include "shaderapi/IShaderUtil.h"
 #include "shaderapidx8.h"
 #include "shaderdevicedx8.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "vertexshaderdx8.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ enum {
 //-----------------------------------------------------------------------------
 inline unsigned char TextureOp(TextureStateFunc_t func, int stage) {
   // This fails if we've added too many texture stages states to fit in a byte.
-  COMPILE_TIME_ASSERT(TEXTURE_STATE_COUNT < (1 << TEXTURE_OP_BIT_COUNT));
+  static_assert(TEXTURE_STATE_COUNT < (1 << TEXTURE_OP_BIT_COUNT));
   Assert(stage < TEXTURE_STAGE_MAX_STAGE);
 
   return ((func << TEXTURE_OP_SHIFT) & TEXTURE_OP_MASK) |
@@ -799,7 +799,7 @@ void ApplyTextureEnable(const ShadowState_t& state, int stage) {
 
 //-----------------------------------------------------------------------------
 // All transitions below this point depend on dynamic render state
-// FIXME: Eliminate these virtual calls?
+// TODO(d.rattman): Eliminate these virtual calls?
 //-----------------------------------------------------------------------------
 void ApplyCullEnable(const ShadowState_t& state, int arg) {
   ShaderAPI()->ApplyCullEnable(state.m_CullEnable);
@@ -1068,9 +1068,9 @@ int CTransitionTable::CreateNormalTransitions(const ShadowState_t& fromState,
 void CTransitionTable::CreateTransitionTableEntry(int to, int from) {
   // You added or removed a state to the enums but not to the function table
   // lists!
-  COMPILE_TIME_ASSERT(sizeof(s_pRenderFunctionTable) ==
+  static_assert(sizeof(s_pRenderFunctionTable) ==
                       sizeof(ApplyStateFunc_t) * RENDER_STATE_COUNT);
-  COMPILE_TIME_ASSERT(sizeof(s_pTextureFunctionTable) ==
+  static_assert(sizeof(s_pTextureFunctionTable) ==
                       sizeof(ApplyStateFunc_t) * TEXTURE_STATE_COUNT);
 
   // If from < 0, that means add *all* transitions into it.
@@ -1464,7 +1464,7 @@ void CTransitionTable::ApplyShaderState(
   // Don't bother testing against the current state because there
   // could well be dynamic state modifiers affecting this too....
   if (!shadowState.m_UsingFixedFunction) {
-    // FIXME: Improve early-binding of vertex shader index
+    // TODO(d.rattman): Improve early-binding of vertex shader index
     ShaderManager()->SetVertexShader(shaderState.m_VertexShader);
     ShaderManager()->SetPixelShader(shaderState.m_PixelShader);
 

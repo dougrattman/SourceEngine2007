@@ -15,7 +15,7 @@
 #include "view.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define FADEOUT_TIME	1.0f
@@ -729,7 +729,7 @@ CBaseEntity *BreakModelCreateSingle( CBaseEntity *pOwner, breakmodel_t *pModel, 
 		pEntity->SetDmgModClub( pBreakableOwner->GetDmgModClub() );
 		pEntity->SetDmgModExplosive( pBreakableOwner->GetDmgModExplosive() );
 
-		// FIXME: If this was created from a client-side entity which was in the
+		// TODO(d.rattman): If this was created from a client-side entity which was in the
 		// middle of ramping the fade scale, we're screwed.
 		pEntity->CopyFadeFrom( pBreakableOwner );
 	}

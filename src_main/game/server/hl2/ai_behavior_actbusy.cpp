@@ -15,7 +15,7 @@
 #include "npcevent.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ACTBUSY_SEE_ENTITY_TIMEOUT 1.0f
@@ -877,7 +877,7 @@ Activity CAI_ActBusyBehavior::NPC_TranslateActivity(Activity nActivity) {
   Activity nNewActivity = BaseClass::NPC_TranslateActivity(nActivity);
 
   if (nActivity == ACT_RUN) {
-    // FIXME: Forcing STIMULATED here is illegal if the entity doesn't support
+    // TODO(d.rattman): Forcing STIMULATED here is illegal if the entity doesn't support
     // it as an activity
     CAI_PlayerAlly *pAlly = dynamic_cast<CAI_PlayerAlly *>(GetOuter());
     if (pAlly) return ACT_RUN_STIMULATED;

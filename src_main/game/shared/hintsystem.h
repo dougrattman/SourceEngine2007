@@ -106,7 +106,7 @@ private:
 #ifdef CLIENT_DLL
 // Derive from this if you have an entity that wants to display a hint
 // when the player waves his target ID over it on the client.
-abstract_class ITargetIDProvidesHint
+the_interface ITargetIDProvidesHint
 {
 public:
 	virtual void	DisplayHintTo( C_BasePlayer *pPlayer ) = 0;

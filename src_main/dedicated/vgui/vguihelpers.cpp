@@ -17,7 +17,7 @@
 #include "vgui_controls/Controls.h"
 #include "vgui_controls/Panel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CMainPanel *g_pMainPanel = NULL;  // the main panel to show

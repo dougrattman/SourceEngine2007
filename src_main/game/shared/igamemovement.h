@@ -108,7 +108,7 @@ inline void CMoveData::SetAbsOrigin( const Vector &vec )
 // Purpose: The basic player movement interface
 //-----------------------------------------------------------------------------
 
-abstract_class IGameMovement
+the_interface IGameMovement
 {
 public:
 	virtual ~IGameMovement( void ) {}

@@ -26,7 +26,7 @@
 #include "dme_controls/dmecontrols.h"
 #include "dme_controls/dmepanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -183,7 +183,7 @@ void CMDLPanel::LookAtMDL( )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: This should be moved into studiorender
+// TODO(d.rattman): This should be moved into studiorender
 //-----------------------------------------------------------------------------
 static ConVar	r_showenvcubemap( "r_showenvcubemap", "0", FCVAR_CHEAT );
 static ConVar	r_eyegloss		( "r_eyegloss", "1", FCVAR_ARCHIVE ); // wet eyes
@@ -329,7 +329,7 @@ void CMDLPanel::OnPaint3D()
 	if ( !m_hMDL.Get() )
 		return;
 
-	// FIXME: Move this call into DrawModel in StudioRender
+	// TODO(d.rattman): Move this call into DrawModel in StudioRender
 	StudioRenderConfig_t oldStudioRenderConfig;
 	StudioRender()->GetCurrentConfig( oldStudioRenderConfig );
 

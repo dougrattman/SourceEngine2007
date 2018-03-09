@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/icommandline.h"
 
@@ -8,6 +8,7 @@
 #include <cstring>
 
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -123,13 +124,13 @@ void CCommandLine::LoadParametersFromFile(const ch *&file_name_start,
   file_name_start++;
 
   // Suck out the file name.
-  ch file_name[_MAX_PATH];
+  ch file_name[SOURCE_MAX_PATH];
   ch *file_name_output = file_name;
   ch terminating_char = is_file_name_in_quotes ? '\"' : ' ';
 
   while (*file_name_start && *file_name_start != terminating_char) {
     *file_name_output++ = *file_name_start++;
-    if (file_name_output - file_name >= _MAX_PATH - 1) break;
+    if (file_name_output - file_name >= SOURCE_MAX_PATH - 1) break;
   }
 
   *file_name_output = '\0';

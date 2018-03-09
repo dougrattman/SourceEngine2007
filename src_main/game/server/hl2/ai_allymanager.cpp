@@ -6,7 +6,7 @@
 #include "entitylist.h"
 #include "npc_citizen17.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_ALLIES 10

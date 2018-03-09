@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Launcher for hammer, which is sitting in its own DLL
 
@@ -67,9 +67,9 @@ bool CHammerApp::Create() {
   if (!cvar_system) return false;
 
   bool is_steam;
-  char filesystem_dll_path[MAX_PATH];
+  char filesystem_dll_path[SOURCE_MAX_PATH];
   if (FileSystem_GetFileSystemDLLName(filesystem_dll_path,
-                                      ARRAYSIZE(filesystem_dll_path),
+                                      SOURCE_ARRAYSIZE(filesystem_dll_path),
                                       is_steam) != FS_OK)
     return false;
 
@@ -162,7 +162,7 @@ bool CHammerApp::PreInit() {
       bDone = true;
     } else {
       char error[512];
-      Q_snprintf(error, ARRAYSIZE(error), "%s",
+      Q_snprintf(error, SOURCE_ARRAYSIZE(error), "%s",
                  FileSystem_GetLastErrorString());
       MessageBox(nullptr, error, "Awesome Hammer - Warning",
                  MB_OK | MB_ICONEXCLAMATION);

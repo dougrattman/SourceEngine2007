@@ -74,7 +74,7 @@ class CUtlFixedMemory {
     Assert(IsValidIterator(it));
     if (!IsValidIterator(it)) return InvalidIterator();
 
-    BlockHeader_t* RESTRICT pHeader = it.m_pBlockHeader;
+    BlockHeader_t* SOURCE_RESTRICT pHeader = it.m_pBlockHeader;
     if (it.m_nIndex + 1 < pHeader->m_nBlockSize)
       return Iterator_t(pHeader, it.m_nIndex + 1);
 
@@ -93,7 +93,7 @@ class CUtlFixedMemory {
 
     if (IsInBlock(i, it.m_pBlockHeader)) return i > GetIndex(it);
 
-    for (BlockHeader_t* RESTRICT pbh = it.m_pBlockHeader->m_pNext; pbh;
+    for (BlockHeader_t* SOURCE_RESTRICT pbh = it.m_pBlockHeader->m_pNext; pbh;
          pbh = pbh->m_pNext) {
       if (IsInBlock(i, pbh)) return true;
     }
@@ -270,7 +270,7 @@ void CUtlFixedMemory<T>::Grow(int num) {
   m_nAllocationCount += nBlockSize;
 
   MEM_ALLOC_CREDIT_CLASS();
-  BlockHeader_t* RESTRICT pBlockHeader =
+  BlockHeader_t* SOURCE_RESTRICT pBlockHeader =
       (BlockHeader_t*)malloc(sizeof(BlockHeader_t) + nBlockSize * sizeof(T));
   if (!pBlockHeader) {
     Error("CUtlFixedMemory overflow!\n");
@@ -283,7 +283,7 @@ void CUtlFixedMemory<T>::Grow(int num) {
     m_pBlocks = pBlockHeader;
   } else {
 #if 1  // IsIdxAfter assumes that newly allocated blocks are at the end
-    BlockHeader_t* RESTRICT pbh = m_pBlocks;
+    BlockHeader_t* SOURCE_RESTRICT pbh = m_pBlocks;
     while (pbh->m_pNext) {
       pbh = pbh->m_pNext;
     }

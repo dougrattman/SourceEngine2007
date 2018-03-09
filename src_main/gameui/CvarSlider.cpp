@@ -11,7 +11,7 @@
 
 #define CVARSLIDER_SCALE_FACTOR 100.0f
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

@@ -16,7 +16,7 @@ class IMaterialVar;
 //-----------------------------------------------------------------------------
 // Base class all material proxies should inherit from
 //-----------------------------------------------------------------------------
-abstract_class CEntityMaterialProxy : public IMaterialProxy
+the_interface CEntityMaterialProxy : public IMaterialProxy
 {
 public:
 	virtual void Release( void );

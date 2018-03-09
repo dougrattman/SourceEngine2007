@@ -12,7 +12,7 @@
 #include "shatteredglass_envmap.inc"
 #include "shatteredglass_envmapsphere.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_VS_SHADER( ShatteredGlass_DX8,

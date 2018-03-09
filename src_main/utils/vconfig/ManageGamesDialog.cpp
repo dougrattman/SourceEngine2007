@@ -13,7 +13,7 @@
 #include "vconfig_main.h"
 #include "ManageGamesDialog.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -77,8 +77,8 @@ CManageGamesDialog::~CManageGamesDialog( void )
 void CManageGamesDialog::SetGameDir( const char *szDir )
 {
 	// Strip any trailing slashes
-	char szGameDir[MAX_PATH];
-	Q_strncpy( szGameDir, szDir, MAX_PATH );
+	char szGameDir[SOURCE_MAX_PATH];
+	Q_strncpy( szGameDir, szDir, SOURCE_MAX_PATH );
 	Q_StripTrailingSlash( szGameDir );
 
 	m_pGameDirEntry->SetText( szGameDir );

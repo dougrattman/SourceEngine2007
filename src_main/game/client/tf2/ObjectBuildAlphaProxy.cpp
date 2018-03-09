@@ -11,7 +11,7 @@
 #include "c_baseobject.h"
 #include <KeyValues.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

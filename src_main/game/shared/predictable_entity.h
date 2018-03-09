@@ -3,7 +3,7 @@
 #ifndef PREDICTABLE_ENTITY_H
 #define PREDICTABLE_ENTITY_H
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 // For introspection
 #include "tier0/include/platform.h"
 #include "predictioncopy.h"
@@ -92,7 +92,7 @@ class SendTable;
 		\
 		MSVC_SCOPED_DISABLE_WARNING(4127, if (sizeof(predDesc) > sizeof(predDesc[0]))) \
 		{ \
- classNameTypedef::m_PredMap.dataNumFields = ARRAYSIZE( predDesc ) - 1; \
+ classNameTypedef::m_PredMap.dataNumFields = SOURCE_ARRAYSIZE( predDesc ) - 1; \
  classNameTypedef::m_PredMap.dataDesc 	  = &predDesc[1]; \
 		} \
 		else \
@@ -181,7 +181,7 @@ class SendTable;
 #endif     		
 
 // Interface used by client and server to track predictable entities
-abstract_class IPredictableList
+the_interface IPredictableList
 {
 public:
 	// Get predictables by index

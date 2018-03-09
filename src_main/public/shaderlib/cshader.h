@@ -267,7 +267,7 @@ inline bool CShader_IsFlag2Set(IMaterialVar **params,
 // Used to easily define a shader which inherits from another shader
 //-----------------------------------------------------------------------------
 
-// FIXME: There's a compiler bug preventing this from working.
+// TODO(d.rattman): There's a compiler bug preventing this from working.
 // Maybe it'll work under VC7!
 
 //#define BEGIN_INHERITED_SHADER( name, _baseclass, help ) \

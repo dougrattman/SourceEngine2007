@@ -7,12 +7,12 @@
 #include "dt_recv.h"
 #include "dt_send.h"
 #include "dt_stack.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PROPINDEX_NUMBITS 12
@@ -311,7 +311,7 @@ void SendTable_BuildHierarchy_IterateProps(
 
         // Setup a datatable prop for this node to reference (so the recursion
         // routines can get at the proxy).
-        if (bhs->m_nDatatableProps >= ARRAYSIZE(bhs->m_pDatatableProps))
+        if (bhs->m_nDatatableProps >= SOURCE_ARRAYSIZE(bhs->m_pDatatableProps))
           Error("Overflowed datatable prop list in SendTable '%s'.",
                 pTable->GetName());
 
@@ -356,7 +356,7 @@ void SendTable_BuildHierarchy(CSendNode *pNode, const SendTable *pTable,
   // Now add the properties.
 
   // Make sure there's room, then just copy the pointers from the loop above.
-  ErrorIfNot(bhs->m_nProps + nNonDatatableProps < ARRAYSIZE(bhs->m_pProps),
+  ErrorIfNot(bhs->m_nProps + nNonDatatableProps < SOURCE_ARRAYSIZE(bhs->m_pProps),
              ("SendTable_BuildHierarchy: overflowed prop buffer."));
 
   for (int i = 0; i < nNonDatatableProps; i++) {

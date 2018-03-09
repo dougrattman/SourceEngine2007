@@ -25,7 +25,7 @@
 #include "baseviewmodel.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sk_npc_dmg_brickbat;
@@ -82,7 +82,7 @@ END_DATADESC()
 //------------------------------------------------------------------------------
 void CWeaponBrickbat::Precache( void )
 {
-	for (int i=0;i<ARRAYSIZE(BrickBatAmmoArray);i++)
+	for (int i=0;i<SOURCE_ARRAYSIZE(BrickBatAmmoArray);i++)
 	{
 		PrecacheModel(BrickBatAmmoArray[i].m_sWorldModel);
 		PrecacheModel(BrickBatAmmoArray[i].m_sViewModel);
@@ -164,7 +164,7 @@ void CWeaponBrickbat::BrickbatTouch( CBaseEntity *pOther )
 	// ---------------------------------------------------
 	BaseClass::DefaultTouch(pOther);
 
-	//FIXME: This ammo handling code is a bit bogus, need a real solution if brickbats are going to live
+	//TODO(d.rattman): This ammo handling code is a bit bogus, need a real solution if brickbats are going to live
 
 	/*
 	// ----------------------------------------------------

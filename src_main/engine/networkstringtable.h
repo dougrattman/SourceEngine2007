@@ -13,7 +13,7 @@
 class SVC_CreateStringTable;
 class CBaseClient;
 
-abstract_class INetworkStringDict {
+the_interface INetworkStringDict {
  public:
   virtual ~INetworkStringDict() {}
 

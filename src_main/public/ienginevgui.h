@@ -40,7 +40,7 @@ enum PaintMode_t
 	PAINT_INGAMEPANELS  = (1<<1),
 };
 
-abstract_class IEngineVGui
+the_interface IEngineVGui
 {
 public:
 	virtual 		~IEngineVGui( void ) { }

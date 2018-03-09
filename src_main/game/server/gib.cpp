@@ -13,7 +13,7 @@
 #include "soundent.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern Vector g_vecAttackDir;  // In globals.cpp
@@ -328,7 +328,7 @@ void CGib::WaitTillLand(void) {
     // If you bleed, you stink!
     if (m_bloodColor != DONT_BLEED) {
       // ok, start stinkin!
-      // FIXME: It's too easy to fill up the sound queue with all these meat
+      // TODO(d.rattman): It's too easy to fill up the sound queue with all these meat
       // sounds CSoundEnt::InsertSound ( SOUND_MEAT, GetAbsOrigin(), 384, 25 );
     }
   } else {

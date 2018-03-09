@@ -6,7 +6,7 @@
 #include "event_tempentity_tester.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define TEMPENT_TEST_GAP 1.0f

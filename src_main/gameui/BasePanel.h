@@ -78,8 +78,8 @@ class CFooterPanel : public vgui::EditablePanel {
  private:
   struct ButtonLabel_t {
     bool bVisible;
-    char name[MAX_PATH];
-    wchar_t text[MAX_PATH];
+    char name[SOURCE_MAX_PATH];
+    wchar_t text[SOURCE_MAX_PATH];
     wchar_t icon[2];  // icon is a single character
   };
 
@@ -275,7 +275,7 @@ class CBasePanel : public vgui::Panel {
   virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
 
  public:
-  // FIXME: This should probably become a friend relationship between the
+  // TODO(d.rattman): This should probably become a friend relationship between the
   // classes
   bool HandleSignInRequest(const char *command);
   bool HandleStorageDeviceRequest(const char *command);

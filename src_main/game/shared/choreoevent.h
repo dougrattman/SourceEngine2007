@@ -453,9 +453,9 @@ class CChoreoEvent : public ICurveDataAccessor {
   // Absolute tags
   typedef enum {
     PLAYBACK =
-        0,     // new timeline		- FIXME: should be stored as an absolute
+        0,     // new timeline		- TODO(d.rattman): should be stored as an absolute
                // time
-    ORIGINAL,  // original timeline - FIXME: should be stored at a fixed
+    ORIGINAL,  // original timeline - TODO(d.rattman): should be stored at a fixed
                // percentage of event
 
     NUM_ABS_TAG_TYPES,

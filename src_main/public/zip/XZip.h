@@ -1,4 +1,4 @@
-// XZip.h  Version 1.1
+// XZip.h  Version 1.3
 //
 // Authors:      Mark Adler et al. (see below)
 //
@@ -12,10 +12,7 @@
 //                 any intermediate files
 // 
 // Modified by:  Hans Dietrich
-//               hdietrich2@hotmail.com
-//
-// Version 1.1:  - Added Unicode support to CreateZip() and ZipAdd()
-//               - Changed file names to avoid conflicts with Lucian's files
+//               hdietrich@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -95,12 +92,8 @@
 // zip.cpp. The repackaging was done by Lucian Wischik to simplify its
 // use in Windows/C++.
 
-#ifndef DECLARE_XZIP_HANDLE
-#define DECLARE_XZIP_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
-#endif
-
 #ifndef XUNZIP_H
-DECLARE_XZIP_HANDLE(HZIP);		// An HZIP identifies a zip file that is being created
+DECLARE_HANDLE(HZIP);		// An HZIP identifies a zip file that is being created
 #endif
 
 typedef DWORD ZRESULT;		// result codes from any of the zip functions. Listed later.
@@ -207,7 +200,7 @@ ZRESULT ZipGetMemory(HZIP hz, void **buf, unsigned long *len);
 // Note: you can't add any more after calling this.
 
 
-unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
+unsigned int FormatZipMessage(ZRESULT code, char *buf, unsigned int len);
 // FormatZipMessage - given an error code, formats it as a string.
 // It returns the length of the error message. If buf/len points
 // to a real buffer, then it also writes as much as possible into there.
@@ -310,10 +303,12 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 // the cpp files for zip and unzip are both present, so we will call
 // one or the other of them based on a dynamic choice. If the header file
 // for only one is present, then we will bind to that particular one.
-HZIP CreateZipZ(void *z,unsigned int len,DWORD flags);
+HZIP CreateZipZ(void *z, unsigned int len, DWORD flags);
 ZRESULT CloseZipZ(HZIP hz);
-unsigned int FormatZipMessageZ(ZRESULT code, char *buf,unsigned int len);
+unsigned int FormatZipMessageZ(ZRESULT code, char *buf, unsigned int len);
 bool IsZipHandleZ(HZIP hz);
+BOOL AddFolderContent(HZIP hZip, TCHAR* AbsolutePath, TCHAR* DirToAdd);
+
 #define CreateZip CreateZipZ
 
 #ifdef XUNZIP_H

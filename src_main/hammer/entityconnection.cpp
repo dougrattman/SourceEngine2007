@@ -20,7 +20,7 @@
 #include "MapDoc.h"
 #include "MapWorld.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -508,7 +508,7 @@ int CEntityConnection::ValidateInputConnections(CMapEntity *pEntity, bool bVisib
 					return CONNECTION_BAD;
 				}
 
-	// FIXME -- Validate the upstream connections the target entities.
+	// TODO(d.rattman):- Validate the upstream connections the target entities.
 				bHaveConnection = true;
 			}
 		}

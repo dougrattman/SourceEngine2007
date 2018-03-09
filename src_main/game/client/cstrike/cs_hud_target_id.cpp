@@ -15,7 +15,7 @@
 
 #include "c_cs_hostage.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PLAYER_HINT_DISTANCE	150
@@ -210,8 +210,8 @@ void CTargetID::Paint()
 
 				if ( bShowHealth )
 				{
-					_snwprintf( wszHealthText, ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) * 100 );
-					wszHealthText[ ARRAYSIZE(wszHealthText)-1 ] = '\0';
+					_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) * 100 );
+					wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
 				}
 			}
 		}
@@ -262,8 +262,8 @@ void CTargetID::Paint()
 			{
 				c = m_cHostageColor;
 				printFormatString = "#Cstrike_playerid_hostage";
-				_snwprintf( wszHealthText, ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pHostage->GetHealth() / (float)pHostage->GetMaxHealth() ) * 100 );
-				wszHealthText[ ARRAYSIZE(wszHealthText)-1 ] = '\0';
+				_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pHostage->GetHealth() / (float)pHostage->GetMaxHealth() ) * 100 );
+				wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
 				bShowHealth = true;
 			}
 			else if ( !pEnt || !pEnt->InSameTeam(pLocalPlayer) )

@@ -22,7 +22,7 @@
 #include "Worldsize.h"
 #include "MapOverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -1144,7 +1144,7 @@ static bool EnsureTrailingChar(char *psz, char ch, int nSize)
 
 //-----------------------------------------------------------------------------
 // Purpose: Finds the face with the corresponding face ID.
-//			FIXME: AAARGH, slow!! Need to build a table or something.
+//			TODO(d.rattman): AAARGH, slow!! Need to build a table or something.
 // Input  : nFaceID - 
 //-----------------------------------------------------------------------------
 CMapFace *CMapWorld::FaceID_FaceForID(int nFaceID)

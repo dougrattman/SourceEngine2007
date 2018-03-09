@@ -1,31 +1,37 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BLOCKINGUDPSOCKET_H
 #define BLOCKINGUDPSOCKET_H
 
+#include "base/include/base_types.h"
 #include "tier1/netadr.h"
+
+struct sockaddr_in;
 
 class CBlockingUDPSocket {
  public:
   explicit CBlockingUDPSocket();
   virtual ~CBlockingUDPSocket();
 
-  bool WaitForMessage(float timeOutInSeconds);
-  unsigned int ReceiveSocketMessage(struct sockaddr_in *packet_from,
-                                    unsigned char *buf, size_t bufsize);
-  bool SendSocketMessage(const struct sockaddr_in &rRecipient,
-                         const unsigned char *buf, size_t bufsize);
+  bool WaitForMessage(f32 timeout_seconds);
+  u32 ReceiveSocketMessage(sockaddr_in *packet_from, u8 *buffer, usize size);
+  u32 SendSocketMessage(const sockaddr_in &packet_to, const u8 *buffer,
+                        usize size);
 
   bool IsValid() const { return m_Socket != 0; }
 
  protected:
-  bool CreateSocket();
+  int CreateSocket();
 
-  class CImpl;
+  struct CImpl;
   CImpl *m_pImpl;
 
   netadr_t m_cserIP;
-  unsigned int m_Socket;
+#ifdef OS_WIN
+  uintptr_t m_Socket;
+#elif OS_POSIX
+  int m_Socket;
+#endif  // OS_WIN
 };
 
 #endif  // BLOCKINGUDPSOCKET_H

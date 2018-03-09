@@ -11,7 +11,7 @@
 #include "te_particlesystem.h"
 #include "coordsize.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_SERVERCLASS_ST(CTEParticleSystem, DT_TEParticleSystem)

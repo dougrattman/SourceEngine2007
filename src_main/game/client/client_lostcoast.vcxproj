@@ -1196,7 +1196,7 @@ if exist ..\..\devtools\bin\vpc.exe ..\..\devtools\bin\vpc.exe -crc client_lostc
     <ClInclude Include="..\..\public\materialsystem\imaterialvar.h" />
     <ClInclude Include="..\..\public\materialsystem\imesh.h" />
     <ClInclude Include="..\..\public\materialsystem\itexture.h" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\..\public\mathlib\compressed_light_cube.h" />
     <ClInclude Include="..\..\public\mathlib\compressed_vector.h" />

@@ -16,7 +16,7 @@
 #include "ai_basenpc.h"
 #include "ai_memory.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_BURN_RADIUS		256

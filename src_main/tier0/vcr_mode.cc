@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/vcrmode.h"
 
@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
-#include "inputsystem/include/inputenums.h"  // FIXME: We totally have a bad tier dependency here
+#include "inputsystem/include/inputenums.h"  // TODO(d.rattman): We totally have a bad tier dependency here
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
@@ -82,7 +82,7 @@ void VCR_Debug(const ch *message, ...) {
 
   EnterCriticalSection(&g_DebugFileCS);
 
-  if (!g_pDebugFile) g_pDebugFile = fopen("c:\\vcrdebug.txt", "wt");
+  if (!g_pDebugFile) g_pDebugFile = fopen("vcrdebug.txt", "wt");
 
   if (g_pDebugFile) {
     vfprintf(g_pDebugFile, message, marker);
@@ -109,15 +109,15 @@ struct CVCRThreadInfo {
   CVCRThreadInfo() : CVCRThreadInfo{0, nullptr, false} {}
   CVCRThreadInfo(unsigned long the_thread_id, HANDLE the_wait_event,
                  bool the_is_enabled)
-      : thread_id{the_thread_id},
-        wait_event{the_wait_event},
+      : wait_event{the_wait_event},
+        thread_id{the_thread_id},
         is_enabled{the_is_enabled} {}
 
-  // The Windows thread ID.
-  unsigned long thread_id;
   // Used to get the signal that there is an event for
   // this thread.
   HANDLE wait_event;
+  // The Windows thread ID.
+  unsigned long thread_id;
   // By default, this is true, but it can be set to false to
   // temporarily disable a thread's VCR usage.
   bool is_enabled;
@@ -195,8 +195,7 @@ class CVCRThreadSafeInitter {
 static void VCR_Error(const ch *error, ...) {
 #ifndef NDEBUG
   // Figure out which thread we're in, for the debugger.
-  u32 current_thread_index = GetCurrentVCRThreadIndex();
-  NOTE_UNUSED(current_thread_index);
+  [[maybe_unused]] u32 current_thread_index = GetCurrentVCRThreadIndex();
 
   DebuggerBreak();
 #endif
@@ -204,7 +203,7 @@ static void VCR_Error(const ch *error, ...) {
   ch error_message[256];
   va_list marker;
   va_start(marker, error);
-  _snprintf_s(error_message, ARRAYSIZE(error_message), error, marker);
+  _snprintf_s(error_message, SOURCE_ARRAYSIZE(error_message), error, marker);
   va_end(marker);
 
   g_pHelpers->ErrorMessage(error_message);
@@ -337,9 +336,9 @@ static BOOL VCR_StartRead(const ch *vcr_file_path) {
   g_pVCRFile = fopen(vcr_file_path, "rb");
   if (g_pVCRFile) {
     // Get the file length.
-    fseek(g_pVCRFile, 0, SEEK_END);
-    g_FileLen = ftell(g_pVCRFile);
-    fseek(g_pVCRFile, 0, SEEK_SET);
+    _fseeki64(g_pVCRFile, 0, SEEK_END);
+    g_FileLen = _ftelli64(g_pVCRFile);
+    _fseeki64(g_pVCRFile, 0, SEEK_SET);
     g_CurFilePos = 0;
 
     u32 version;
@@ -1261,7 +1260,7 @@ void *VCR_CreateThread(void *lpThreadAttributes, unsigned long dwStackSize,
     if (g_VCRMode == VCR_Disabled) {
       HANDLE hThread = (void *)_beginthreadex(
           (LPSECURITY_ATTRIBUTES)lpThreadAttributes, dwStackSize,
-          (u32(__stdcall *)(void *))lpStartAddress, lpParameter,
+          (u32(SOURCE_STDCALL *)(void *))lpStartAddress, lpParameter,
           dwCreationFlags, &dwThreadID);
 
       if (lpThreadID) *lpThreadID = dwThreadID;
@@ -1289,7 +1288,7 @@ void *VCR_CreateThread(void *lpThreadAttributes, unsigned long dwStackSize,
   // Create the thread.
   HANDLE hThread = (void *)_beginthreadex(
       (LPSECURITY_ATTRIBUTES)lpThreadAttributes, dwStackSize,
-      (u32(__stdcall *)(void *))lpStartAddress, lpParameter,
+      (u32(SOURCE_STDCALL *)(void *))lpStartAddress, lpParameter,
       dwCreationFlags | CREATE_SUSPENDED, &dwThreadID);
 
   if (lpThreadID) *lpThreadID = dwThreadID;

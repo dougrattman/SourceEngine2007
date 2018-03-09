@@ -54,7 +54,7 @@
 #include "weapon_parse.h"
 #include "weapon_smokegrenade.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Minimum interval between rate-limited commands that players can run.
@@ -317,7 +317,7 @@ SendPropFloat(SENDINFO(m_flStamina), 14, 0, 0, 1400),
 
 // has to be included after above macros
 #include "cs_bot.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
     // --------------------------------------------------------------------------------
@@ -4044,7 +4044,7 @@ CCSPlayerStateInfo *CCSPlayer::State_LookupInfo(CSPlayerState state) {
        &CCSPlayer::State_Enter_OBSERVER_MODE, NULL,
        &CCSPlayer::State_PreThink_OBSERVER_MODE}};
 
-  for (int i = 0; i < ARRAYSIZE(playerStateInfos); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(playerStateInfos); i++) {
     if (playerStateInfos[i].m_iPlayerState == state)
       return &playerStateInfos[i];
   }

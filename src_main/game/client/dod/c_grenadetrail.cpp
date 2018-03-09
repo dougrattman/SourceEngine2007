@@ -14,7 +14,7 @@
 //#include "glow_overlay.h"
 //#include "fx_explosion.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CSmokeParticle : public CSimpleEmitter

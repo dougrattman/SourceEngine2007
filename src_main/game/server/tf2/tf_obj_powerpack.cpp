@@ -245,7 +245,7 @@ void CObjectPowerPack::PowerObject( CBaseObject *pObject, bool bPlacing )
 	if (nAttachmentIndex < 0)
 		nAttachmentIndex = 1;
 							   
-	// FIXME: Cache these off
+	// TODO(d.rattman): Cache these off
 	char sAttachment[32];
 	Q_snprintf( sAttachment,sizeof(sAttachment), "cablepoint%d", iPoint );
 	int nLocalAttachment = LookupAttachment( sAttachment );

@@ -11,7 +11,7 @@
 
 class IFileSystem;
 
-abstract_class IBSPPack {
+the_interface IBSPPack {
  public:
   virtual void LoadBSPFile(IFileSystem * pFileSystem, char *filename) = 0;
   virtual void WriteBSPFile(char *filename) = 0;

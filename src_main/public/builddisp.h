@@ -8,7 +8,7 @@
 #include "disp_common.h"
 #include "mathlib/bumpvects.h"
 #include "mathlib/mathlib.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 
 #define DISP_ALPHA_PROP_DELTA 382.5f
@@ -113,11 +113,11 @@ class CCoreDispSurface {
 
   // Indexed by CORNER_ defines.
   CDispCornerNeighbors *GetCornerNeighbors(int iCorner) {
-    Assert(iCorner >= 0 && iCorner < ARRAYSIZE(m_CornerNeighbors));
+    Assert(iCorner >= 0 && iCorner < SOURCE_ARRAYSIZE(m_CornerNeighbors));
     return &m_CornerNeighbors[iCorner];
   }
   const CDispCornerNeighbors *GetCornerNeighbors(int iCorner) const {
-    Assert(iCorner >= 0 && iCorner < ARRAYSIZE(m_CornerNeighbors));
+    Assert(iCorner >= 0 && iCorner < SOURCE_ARRAYSIZE(m_CornerNeighbors));
     return &m_CornerNeighbors[iCorner];
   }
 
@@ -132,11 +132,11 @@ class CCoreDispSurface {
   }
 
   CDispNeighbor *GetEdgeNeighbor(int iEdge) {
-    Assert(iEdge >= 0 && iEdge < ARRAYSIZE(m_EdgeNeighbors));
+    Assert(iEdge >= 0 && iEdge < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
     return &m_EdgeNeighbors[iEdge];
   }
   const CDispNeighbor *GetEdgeNeighbor(int iEdge) const {
-    Assert(iEdge >= 0 && iEdge < ARRAYSIZE(m_EdgeNeighbors));
+    Assert(iEdge >= 0 && iEdge < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
     return &m_EdgeNeighbors[iEdge];
   }
 

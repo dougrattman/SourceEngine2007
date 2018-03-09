@@ -10,7 +10,7 @@
 #include "eventlist.h"
 #include "npcevent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 enum EffectType { EFFECT_TYPE_TRAIL = 1, EFFECT_TYPE_SPRITE };

@@ -14,7 +14,7 @@
 #include "materialsystem/imesh.h"
 #include "r_local.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar r_drawlights("r_drawlights", "0", FCVAR_CHEAT);

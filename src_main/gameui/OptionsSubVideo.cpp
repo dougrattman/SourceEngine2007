@@ -71,7 +71,7 @@ int GetScreenAspectMode(int width, int height) {
   // just find the closest ratio
   float closestAspectRatioDist = 99999.0f;
   int closestAnamorphic = 0;
-  for (int i = 0; i < ARRAYSIZE(g_RatioToAspectModes); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_RatioToAspectModes); i++) {
     float dist = fabs(g_RatioToAspectModes[i].aspectRatio - aspectRatio);
     if (dist < closestAspectRatioDist) {
       closestAspectRatioDist = dist;
@@ -205,7 +205,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
     KeyValues *pKeyValues = new KeyValues("config");
     materials->GetRecommendedConfigurationInfo(0, pKeyValues);
     m_pDXLevel->DeleteAllItems();
-    for (int i = 0; i < ARRAYSIZE(g_DirectXLevels); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(g_DirectXLevels); i++) {
       // don't allow choice of lower dxlevels than the default,
       // unless we're already at that lower level or have it forced
       if (!CommandLine()->CheckParm("-dxlevel") &&
@@ -903,7 +903,7 @@ COptionsSubVideo::COptionsSubVideo(vgui::Panel *parent)
 void COptionsSubVideo::PrepareResolutionList() {
   // get the currently selected resolution
   char mode_name[256];
-  m_pMode->GetText(mode_name, ARRAYSIZE(mode_name));
+  m_pMode->GetText(mode_name, SOURCE_ARRAYSIZE(mode_name));
 
   int current_Width = 0, current_height = 0;
   sscanf(mode_name, "%i x %i", &current_Width, &current_height);
@@ -927,7 +927,7 @@ void COptionsSubVideo::PrepareResolutionList() {
   int selectedItemID = -1;
   for (usize i = 0; i < mode_size; i++, mode++) {
     char sz[256];
-    GetResolutionName(mode, sz, ARRAYSIZE(sz));
+    GetResolutionName(mode, sz, SOURCE_ARRAYSIZE(sz));
 
     // don't show modes bigger than the desktop for windowed mode
     if (is_window &&
@@ -1008,7 +1008,7 @@ void COptionsSubVideo::SetCurrentResolutionComboItem() {
 
   if (resolution != std::numeric_limits<usize>::max()) {
     char resolution_name[256];
-    GetResolutionName(mode, resolution_name, ARRAYSIZE(resolution_name));
+    GetResolutionName(mode, resolution_name, SOURCE_ARRAYSIZE(resolution_name));
     m_pMode->SetText(resolution_name);
   }
 }

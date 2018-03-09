@@ -121,14 +121,14 @@ VS_OUTPUT main( const VS_INPUT v )
 	o.fog = CalcFog( worldPos, o.projPos, g_FogType );
 #endif
 	// Needed for water fog alpha and diffuse lighting 
-	// FIXME: we shouldn't have to compute this all the time.
+	// TODO(d.rattman): we shouldn't have to compute this all the time.
 	o.worldPos_atten3.xyz = worldPos;
 
 	// Needed for specular
 	o.worldVertToEyeVector = VSHADER_VECT_SCALE * (cEyePos - worldPos);
 
 	// Compute bumped lighting
-	// FIXME: We shouldn't have to compute this for unlit materials
+	// TODO(d.rattman): We shouldn't have to compute this for unlit materials
 	o.lightAtten.x = GetVertexAttenForLight( worldPos, 0 );
 	o.lightAtten.y = GetVertexAttenForLight( worldPos, 1 );
 	o.lightAtten.z = GetVertexAttenForLight( worldPos, 2 );

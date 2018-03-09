@@ -110,7 +110,7 @@ typedef CAI_BlendingHost< CAI_BehaviorHost<CAI_BaseNPC> > CAI_BaseZombieBase;
 
 //=========================================================
 //=========================================================
-abstract_class CNPC_BaseZombie : public CAI_BaseZombieBase
+the_interface CNPC_BaseZombie : public CAI_BaseZombieBase
 {
 	DECLARE_CLASS( CNPC_BaseZombie, CAI_BaseZombieBase );
 

@@ -9,7 +9,7 @@
 #include "particlemgr.h"
 #include "surfinfo.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Definitions
@@ -344,7 +344,7 @@ void C_AR2Explosion::SimulateParticles(CParticleSimulateIterator *pIterator) {
         // Dampen velocity.
         float dist = pParticle->m_Velocity.Length() * dt;
         float r = dist * dist;
-        // FIXME: this is a really screwy air-resistance function....
+        // TODO(d.rattman): this is a really screwy air-resistance function....
         pParticle->m_Velocity = pParticle->m_Velocity * (100 / (100 + r));
 
         // dampen roll
@@ -373,7 +373,7 @@ void C_AR2Explosion::RenderParticles(CParticleRenderIterator *pIterator) {
       float lifetimePercent =
           (pParticle->m_Lifetime - AR2_DUST_FADE_IN_TIME) / pParticle->m_Dwell;
 
-      // FIXME: base color should be a dirty version of the material color
+      // TODO(d.rattman): base color should be a dirty version of the material color
       Vector color = g_AR2DustColor1 * (1.0 - lifetimePercent) +
                      g_AR2DustColor2 * lifetimePercent;
 

@@ -999,7 +999,7 @@ sub DirectionalLight
 	local( $linearColor ) = shift;
 	local( $add ) = shift;
 
-	&AllocateRegister( \$nDotL ); # FIXME: This only needs to be a scalar
+	&AllocateRegister( \$nDotL ); # TODO(d.rattman): This only needs to be a scalar
 
 	; NOTE: Gotta use -l here, since light direction = -l
 	; DIRECTIONAL LIGHT
@@ -1075,7 +1075,7 @@ sub PointLight
 	&FreeRegister( \$attenuation );
 	
 	local( $tmp );
-	&AllocateRegister( \$tmp ); # FIXME : really only needs to be a scalar
+	&AllocateRegister( \$tmp ); # TODO(d.rattman): really only needs to be a scalar
 
 	; compute n dot l, fold in distance attenutation
 	dp3 $tmp.x, $lightDir, $worldNormal
@@ -1107,7 +1107,7 @@ sub PointLight
 	}
 
 	&FreeRegister( \$lightDir );
-	&FreeRegister( \$tmp ); # FIXME : really only needs to be a scalar
+	&FreeRegister( \$tmp ); # TODO(d.rattman): really only needs to be a scalar
 }
 
 sub SpotLight
@@ -1151,7 +1151,7 @@ sub SpotLight
 	&FreeRegister( \$attenuation );
 	
 	local( $litSrc ); &AllocateRegister( \$litSrc );
-	local( $tmp ); &AllocateRegister( \$tmp ); # FIXME - only needs to be scalar
+	local( $tmp ); &AllocateRegister( \$tmp ); # TODO(d.rattman): only needs to be scalar
 
 	; compute n dot l
 	dp3 $litSrc.x, $worldNormal, $lightDir
@@ -1185,7 +1185,7 @@ sub SpotLight
 	min $litDst.z, $litDst.z, $cOne		 			; clamp pow() to 1
 	
 	local( $tmp1 ); &AllocateRegister( \$tmp1 );
-	local( $tmp2 ); &AllocateRegister( \$tmp2 );  # FIXME - could be scalar
+	local( $tmp2 ); &AllocateRegister( \$tmp2 );  # TODO(d.rattman): could be scalar
 
 	; fold in distance attenutation with other factors
 	mul $tmp1, c[a0.x], $lightDir.w

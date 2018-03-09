@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Insert this file into all projects using the memory system
 // It will cause that project to use the shader memory allocator.
@@ -35,24 +35,25 @@
 
 #include "tier0/include/dbg.h"
 #include "tier0/include/memalloc.h"
+#include "tier0/include/platform.h"
 
 // Tags this DLL as debug
-#if defined(_DEBUG)
-DLL_EXPORT void BuiltDebug() {}
+#ifdef _DEBUG
+SOURCE_API_EXPORT void BuiltDebug() {}
 #endif
 
-#if defined(OS_WIN)
+#ifdef OS_WIN
 const char *MakeModuleFileName() {
   if (g_pMemAlloc->IsDebugHeap()) {
     char *pszModuleName = (char *)HeapAlloc(
-        GetProcessHeap(), 0, MAX_PATH);  // small leak, debug only
+        GetProcessHeap(), 0, SOURCE_MAX_PATH);  // small leak, debug only
 
     MEMORY_BASIC_INFORMATION mbi;
     static int dummy;
     VirtualQuery(&dummy, &mbi, sizeof(mbi));
 
     GetModuleFileName(reinterpret_cast<HMODULE>(mbi.AllocationBase),
-                      pszModuleName, MAX_PATH);
+                      pszModuleName, SOURCE_MAX_PATH);
     char *pDot = strrchr(pszModuleName, '.');
     if (pDot) {
       char *pSlash = strrchr(pszModuleName, '\\');
@@ -100,10 +101,10 @@ inline void *ReallocUnattributed(void *pMem, size_t nSize) {
 // allocator
 
 #if defined(OS_WIN) && !defined(_STATIC_LINKED)
-// this magic only works under win32
+// This magic only works under win32
 // under linux this malloc() overrides the libc malloc() and so we
 // end up in a recursion (as g_pMemAlloc->Alloc() calls malloc)
-#if _MSC_VER >= 1400
+#ifdef COMPILER_MSVC
 #define ALLOC_CALL _CRTALLOCATOR _CRT_JIT_INTRINSIC _CRTRESTRICT
 #define FREE_CALL
 #else
@@ -165,10 +166,8 @@ void *__cdecl _expand(void *pMem, size_t nSize) {
 
 unsigned int _amblksiz = 16;  // BYTES_PER_PARA;
 
-#if _MSC_VER >= 1400
 HANDLE _crtheap = (HANDLE)1;  // PatM Can't be 0 or CRT pukes
 int __active_heap = 1;
-#endif  //  _MSC_VER >= 1400
 
 size_t __cdecl _get_sbh_threshold() { return 0; }
 
@@ -360,9 +359,7 @@ size_t __cdecl _msize_dbg(void *pMem, int nBlockUse) {
 
 #ifdef OS_WIN
 
-#if defined(_DEBUG) && _MSC_VER >= 1300
-// X360TBD: aligned and offset allocations may be important on the 360
-
+#if defined(_DEBUG)
 // aligned base
 ALLOC_CALL void *__cdecl _aligned_malloc_base(size_t size, size_t align) {
   return MemAlloc_AllocAligned(size, align);
@@ -438,7 +435,7 @@ ALLOC_CALL void *__cdecl _aligned_offset_recalloc(void *memblock, size_t count,
   return _aligned_offset_recalloc_base(memblock, count * size, align, offset);
 }
 
-#endif  // _MSC_VER >= 1400
+#endif
 
 #endif
 
@@ -486,7 +483,7 @@ int __cdecl _CrtIsValidPointer(const void *pMem, unsigned int size,
 }
 
 int __cdecl _CrtCheckMemory() {
-  // FIXME: Remove this when we re-implement the heap
+  // TODO(d.rattman): Remove this when we re-implement the heap
   return g_pMemAlloc->CrtCheckMemory();
 }
 
@@ -509,7 +506,7 @@ void __cdecl _CrtMemDumpStatistics(const _CrtMemState *pState) {
 }
 
 void __cdecl _CrtMemCheckpoint(_CrtMemState *pState) {
-  // FIXME: Remove this when we re-implement the heap
+  // TODO(d.rattman): Remove this when we re-implement the heap
   g_pMemAlloc->CrtMemCheckpoint(pState);
 }
 
@@ -544,7 +541,7 @@ int __cdecl _CrtDbgReport(int nRptType, const char *szFile, int nLine,
   va_list args;
   if (szFormat) {
     va_start(args, szFormat);
-    _vsnprintf_s(output, ARRAYSIZE(output) - 1, szFormat, args);
+    _vsnprintf_s(output, SOURCE_ARRAYSIZE(output) - 1, szFormat, args);
     va_end(args);
   } else {
     output[0] = '\0';
@@ -726,7 +723,6 @@ extern "C" void *__cdecl _recalloc_dbg(void *memblock, size_t count,
 }
 
 _CRT_REPORT_HOOK __cdecl _CrtGetReportHook() { return NULL; }
-
 #endif
 int __cdecl _CrtReportBlockType(const void *pUserData) { return 0; }
 

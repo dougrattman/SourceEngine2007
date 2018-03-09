@@ -74,7 +74,7 @@ mul $projPos.xy, $projPos.w, $projPos.xy
 mad $projPos.xy, $projPos.xy, $cHalf, $cHalf
 
 ; tweak with the texcoords based on the normal and $refractionamount
-mad $projPos.xy, $projNormal.xy, -$SHADER_SPECIFIC_CONST_4.xy, $projPos.xy		; FIXME
+mad $projPos.xy, $projNormal.xy, -$SHADER_SPECIFIC_CONST_4.xy, $projPos.xy		; TODO(d.rattman):
 
 ; invert y
 add $projPos.y, $cOne, -$projPos.y

@@ -5,7 +5,7 @@
 #include "physics.h"
 #include "te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static int BestAxisMatchingNormal(matrix3x4_t &matrix, const Vector &normal) {
@@ -110,7 +110,8 @@ void PhysicsSplash(IPhysicsFluidController *pFluid, IPhysicsObject *pObject,
     data.m_flScale = random->RandomFloat( 8, 10 );
 
     DispatchEffect( "watersplash", data );
-    
+    
+
     int		splashes = 4;
     Vector	point;
 
@@ -130,7 +131,7 @@ void PhysicsSplash(IPhysicsFluidController *pFluid, IPhysicsObject *pObject,
     }
     */
 
-    // FIXME: This code will not work correctly given how the ragdoll/fluid
+    // TODO(d.rattman): This code will not work correctly given how the ragdoll/fluid
     // collision is acting currently
     return;
   }
@@ -152,7 +153,7 @@ void PhysicsSplash(IPhysicsFluidController *pFluid, IPhysicsObject *pObject,
   if (pEntity->PhysicsSplash(centerPoint, normal, rawSpeed, speed)) return;
 
   // Deny really weak hits
-  // FIXME: We still need to ripple the surface in this case
+  // TODO(d.rattman): We still need to ripple the surface in this case
   if (speed <= 0.35f) {
     if (speed <= 0.1f) return;
 

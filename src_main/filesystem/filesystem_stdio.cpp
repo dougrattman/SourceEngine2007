@@ -2,7 +2,7 @@
 
 #include "basefilesystem.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include "linux_support.cpp"
 #endif
 
@@ -22,12 +22,12 @@
 #include "tier1/fmtstr.h"
 #include "tier1/utlrbtree.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-COMPILE_TIME_ASSERT(SEEK_CUR == FILESYSTEM_SEEK_CURRENT);
-COMPILE_TIME_ASSERT(SEEK_SET == FILESYSTEM_SEEK_HEAD);
-COMPILE_TIME_ASSERT(SEEK_END == FILESYSTEM_SEEK_TAIL);
+static_assert(SEEK_CUR == FILESYSTEM_SEEK_CURRENT);
+static_assert(SEEK_SET == FILESYSTEM_SEEK_HEAD);
+static_assert(SEEK_END == FILESYSTEM_SEEK_TAIL);
 
 //-----------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ class CFileSystem_Stdio : public CBaseFileSystem {
 //-----------------------------------------------------------------------------
 // Per-file worker classes
 //-----------------------------------------------------------------------------
-abstract_class CStdFilesystemFile {
+the_interface CStdFilesystemFile {
  public:
   virtual ~CStdFilesystemFile() {}
   virtual void FS_setbufsize(unsigned nBytes) = 0;
@@ -805,7 +805,7 @@ int GetSectorSize(const char *pszFilename) {
   char volume = tolower(*pszFilename);
 
   int i;
-  for (i = 0; i < ARRAYSIZE(cachedSizes) && cachedSizes[i].volume; i++) {
+  for (i = 0; i < SOURCE_ARRAYSIZE(cachedSizes) && cachedSizes[i].volume; i++) {
     if (cachedSizes[i].volume == volume) {
       sectorSize = cachedSizes[i].sectorSize;
       break;
@@ -821,7 +821,7 @@ int GetSectorSize(const char *pszFilename) {
       sectorSize = 0;
     }
 
-    if (i < ARRAYSIZE(cachedSizes)) {
+    if (i < SOURCE_ARRAYSIZE(cachedSizes)) {
       cachedSizes[i].volume = volume;
       cachedSizes[i].sectorSize = sectorSize;
     }

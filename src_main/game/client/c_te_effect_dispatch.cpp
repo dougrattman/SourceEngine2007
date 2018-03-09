@@ -15,7 +15,7 @@
 #include "toolframework_client.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ static void RecordEffect( const char *pEffectName, const CEffectData &data )
 		msg->SetInt( "hitbox", data.m_nHitBox );
  		msg->SetString( "effectname", pEffectName );
 
-		// FIXME: Need to write the attachment name here
+		// TODO(d.rattman): Need to write the attachment name here
  		msg->SetInt( "attachmentindex", data.m_nAttachmentIndex );
 
 		// NOTE: Ptrs are our way of indicating it's an entindex

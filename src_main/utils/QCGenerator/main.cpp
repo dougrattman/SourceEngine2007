@@ -20,7 +20,7 @@
 #include "filesystem_init.h"
 #include "CQCGenMain.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define QCGENERATOR_MAIN_PATH_ID	"MAIN"
@@ -36,8 +36,8 @@ static HWND staticHwnd = 0;
 // List of our game configs, as read from the gameconfig.txt file
 //HANDLE g_dwChangeHandle = NULL;
 
-char pszPath[MAX_PATH];
-char pszScene[MAX_PATH];
+char pszPath[SOURCE_MAX_PATH];
+char pszScene[SOURCE_MAX_PATH];
 
 //-----------------------------------------------------------------------------
 // Purpose: Copy a string into a CUtlVector of characters
@@ -54,7 +54,7 @@ void UtlStrcpy( CUtlVector<char> &dest, const char *pSrc )
 //-----------------------------------------------------------------------------
 const char *GetBaseDirectory( void )
 {
-	static char path[MAX_PATH] = {0};
+	static char path[SOURCE_MAX_PATH] = {0};
 	if ( path[0] == 0 )
 	{
 		GetModuleFileName( (HMODULE)GetAppInstance(), path, sizeof( path ) );
@@ -154,7 +154,7 @@ bool CQCGeneratorApp::PreInit()
 	FileSystem_SetErrorMode( FS_ERRORMODE_AUTO );
 
 	// We only want to use the gameinfo.txt that is in the bin\vconfig directory.
-	char dirName[MAX_PATH];
+	char dirName[SOURCE_MAX_PATH];
 	Q_strncpy( dirName, GetBaseDirectory(), sizeof( dirName ) );
 	Q_AppendSlash( dirName, sizeof( dirName ) );
 	Q_strncat( dirName, "QCGenerator", sizeof( dirName ), COPY_ALL_CHARACTERS );

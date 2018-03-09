@@ -19,7 +19,7 @@
 #include "engine/IEngineSound.h"
 #include "in_buttons.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar	sk_suitcharger( "sk_suitcharger","0" );

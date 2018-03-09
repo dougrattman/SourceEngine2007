@@ -16,7 +16,7 @@
 #include <sys\stat.h>
 #include "DummyTexture.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ int CDummyTexture::GetKeywords(char *pszKeywords) const {
 //-----------------------------------------------------------------------------
 // dvs: move into a common place for CWADTexture & CDummyTexture
 int CDummyTexture::GetShortName(char *pszName) const {
-  char szBuf[MAX_PATH];
+  char szBuf[SOURCE_MAX_PATH];
 
   if (pszName == NULL) {
     pszName = szBuf;

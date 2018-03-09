@@ -20,7 +20,7 @@
 #include "ai_behavior_follow.h"
 #include "collisionutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define EFFECT_COUNT 4
@@ -264,7 +264,7 @@ bool CNPC_Dog::CreateVPhysics( void )
 
 	if ( m_bBoneFollowersActive == true && !m_BoneFollowerManager.GetNumBoneFollowers() )
 	{
-		m_BoneFollowerManager.InitBoneFollowers( this, ARRAYSIZE(pFollowerBoneNames), pFollowerBoneNames );
+		m_BoneFollowerManager.InitBoneFollowers( this, SOURCE_ARRAYSIZE(pFollowerBoneNames), pFollowerBoneNames );
 	}
 	return true;
 }
@@ -1699,7 +1699,7 @@ void CNPC_Dog::InputTurnBoneFollowersOn( inputdata_t &inputdata )
 	if ( !m_bBoneFollowersActive )
 	{
 		m_bBoneFollowersActive = true;
-		m_BoneFollowerManager.InitBoneFollowers( this, ARRAYSIZE(pFollowerBoneNames), pFollowerBoneNames );
+		m_BoneFollowerManager.InitBoneFollowers( this, SOURCE_ARRAYSIZE(pFollowerBoneNames), pFollowerBoneNames );
 	}
 }
 

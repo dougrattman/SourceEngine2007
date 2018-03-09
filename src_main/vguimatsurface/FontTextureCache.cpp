@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -19,7 +19,6 @@
 #include "tier1/utlbuffer.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 extern CMatSystemSurface g_MatSystemSurface;
@@ -149,8 +148,8 @@ bool CFontTextureCache::GetTextureForChars(vgui::HFont font,
         index = m_FontPages.Insert(font);
         pPage = &m_FontPages.Element(index);
 
-        for (int type = 0; type < FONT_DRAW_TYPE_COUNT; ++type) {
-          pPage->textureID[type] = g_MatSystemSurface.CreateNewTextureID(false);
+        for (int t = 0; t < FONT_DRAW_TYPE_COUNT; ++t) {
+          pPage->textureID[t] = g_MatSystemSurface.CreateNewTextureID(false);
         }
         CreateFontMaterials(*pPage, pWinFont->GetTexturePage(), true);
       }

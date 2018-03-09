@@ -92,7 +92,7 @@ enum {
 };
 // The public methods exposed by each shader
 //-----------------------------------------------------------------------------
-abstract_class IShader {
+the_interface IShader {
  public:
   // Returns the shader name
   virtual char const* GetName() const = 0;
@@ -120,7 +120,7 @@ abstract_class IShader {
   virtual ShaderParamType_t GetParamType(int paramIndex) const = 0;
   virtual char const* GetParamDefault(int paramIndex) const = 0;
 
-  // FIXME: Figure out a better way to do this?
+  // TODO(d.rattman): Figure out a better way to do this?
   virtual int ComputeModulationFlags(IMaterialVar * *params,
                                      IShaderDynamicAPI * pShaderAPI) = 0;
   virtual bool NeedsPowerOfTwoFrameBufferTexture(
@@ -133,7 +133,7 @@ abstract_class IShader {
 
   virtual int GetFlags() const = 0;
 
-  // FIXME: Remove GetParamName, etc. above
+  // TODO(d.rattman): Remove GetParamName, etc. above
   //	virtual const ShaderParamInfo_t& GetParamInfo( int paramIndex ) const =
   //0;
 };

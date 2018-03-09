@@ -22,7 +22,7 @@
 #include "TextureSystem.h"
 #include "WADTexture.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -288,7 +288,7 @@ int CWADTexture::GetKeywords(char *pszKeywords) const
 //-----------------------------------------------------------------------------
 int CWADTexture::GetShortName(char *pszName) const
 {
-	char szBuf[MAX_PATH];
+	char szBuf[SOURCE_MAX_PATH];
 
 	if (pszName == NULL)
 	{
@@ -673,7 +673,7 @@ void CWADTexture::Draw(CDC *pDC, RECT& rect, int iFontHeight, int iIconHeight, D
 		pDC->FillRect(rcCaption, &brCaption);
 
 		// draw name
-		char szShortName[MAX_PATH];
+		char szShortName[SOURCE_MAX_PATH];
 		int iLen = GetShortName(szShortName);
 		pDC->TextOut(rect.left, rect.bottom - (iFontHeight + 4), szShortName, iLen);
 	}

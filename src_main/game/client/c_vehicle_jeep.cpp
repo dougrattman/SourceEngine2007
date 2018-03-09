@@ -13,7 +13,7 @@
 #include "c_te_effect_dispatch.h"
 #include "fx.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar default_fov;
@@ -286,7 +286,7 @@ void WheelDustCallback( const CEffectData &data )
 
 	Vector	offset;
 
-	//FIXME: Better sampling area
+	//TODO(d.rattman): Better sampling area
 	offset = data.m_vOrigin + ( data.m_vNormal * data.m_flScale );
 	
 	//Find area ambient light color and use it to tint smoke

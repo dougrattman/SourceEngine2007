@@ -28,7 +28,7 @@ texm3x3pad t1, t0_bx2
 texm3x3pad t2, t0_bx2		
 texm3x3vspec t3, t0_bx2
 
-; FIXME FIXME - Need to do specialized versions of this with and without:
+; TODO(d.rattman): FIXME - Need to do specialized versions of this with and without:
 ; - constant color
 ; - fresnel amount of exactly 0 or 1 or in between
 ; - envmap contrast of 0, 1, or in between
@@ -50,7 +50,7 @@ lrp r0.rgb, c1, r1, r0				; blend between color and color * color
 dp3 r1.rgb, r0, c3				; color greyscaled
 +mul r0.a, r0.a, 1-r1.a				; quintic
 
-; FIXME - these should be able to pair (I think), but don't on nvidia for some reason.
+; TODO(d.rattman): - these should be able to pair (I think), but don't on nvidia for some reason.
 ; (I think) cannot pair due to use of >2 constants in single stage
 lrp	r0.rgb, c2, r0, r1 			; blend between color and greyscale
 mad r0.a, r0.a, c6.a, c4.a			; Take Fresnel R(0) into consideration

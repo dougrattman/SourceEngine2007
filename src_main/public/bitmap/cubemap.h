@@ -14,7 +14,7 @@ struct CCubeMap {
   T m_Samples[6][RES][RES];
 
  public:
-  FORCEINLINE void GetCoords(Vector const &vecNormalizedDirection, int &nX,
+  SOURCE_FORCEINLINE void GetCoords(Vector const &vecNormalizedDirection, int &nX,
                              int &nY, int &nFace) {
     // find largest magnitude component
     int nLargest = 0;
@@ -44,7 +44,7 @@ struct CCubeMap {
                          RES - 1);
   }
 
-  FORCEINLINE T &GetSample(Vector const &vecNormalizedDirection) {
+  SOURCE_FORCEINLINE T &GetSample(Vector const &vecNormalizedDirection) {
     int nX, nY, nFace;
     GetCoords(vecNormalizedDirection, nX, nY, nFace);
     return m_Samples[nFace][nX][nY];

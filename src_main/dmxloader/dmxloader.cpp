@@ -478,10 +478,10 @@ bool SerializeDMX(CUtlBuffer &buf, CDmxElement *pRoot, const char *pFileName) {
 bool SerializeDMX(const char *pFileName, const char *pPathID, bool bTextMode,
                   CDmxElement *pRoot) {
   // NOTE: This guarantees full path names for pathids
-  char pBuf[MAX_PATH];
+  char pBuf[SOURCE_MAX_PATH];
   const char *pFullPath = pFileName;
   if (!Q_IsAbsolutePath(pFullPath) && !pPathID) {
-    char pDir[MAX_PATH];
+    char pDir[SOURCE_MAX_PATH];
     if (g_pFullFileSystem->GetCurrentDirectory(pDir, sizeof(pDir))) {
       Q_ComposeFileName(pDir, pFileName, pBuf, sizeof(pBuf));
       Q_RemoveDotSlashes(pBuf);
@@ -599,10 +599,10 @@ bool UnserializeDMX(CUtlBuffer &buf, CDmxElement **ppRoot,
 bool UnserializeDMX(const char *pFileName, const char *pPathID, bool bTextMode,
                     CDmxElement **ppRoot) {
   // NOTE: This guarantees full path names for pathids
-  char pBuf[MAX_PATH];
+  char pBuf[SOURCE_MAX_PATH];
   const char *pFullPath = pFileName;
   if (!Q_IsAbsolutePath(pFullPath) && !pPathID) {
-    char pDir[MAX_PATH];
+    char pDir[SOURCE_MAX_PATH];
     if (g_pFullFileSystem->GetCurrentDirectory(pDir, sizeof(pDir))) {
       Q_ComposeFileName(pDir, pFileName, pBuf, sizeof(pBuf));
       Q_RemoveDotSlashes(pBuf);

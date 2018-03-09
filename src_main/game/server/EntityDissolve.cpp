@@ -15,7 +15,7 @@
 #include "physics_prop_ragdoll.h"
 #include "ai_basenpc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static const char *s_pElectroThinkContext = "ElectroThinkContext";

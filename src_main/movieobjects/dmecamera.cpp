@@ -12,10 +12,10 @@
 #include "movieobjects_interfaces.h"
 #include "tier2/tier2.h"
 
-// FIXME: REMOVE
+// TODO(d.rattman): REMOVE
 #include "istudiorender.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -32,7 +32,7 @@ void CDmeCamera::OnConstruction()
 {
 	m_fieldOfView.InitAndSet( this, "fieldOfView", 30.0f );
 
-	// FIXME: This currently matches the client DLL for HL2
+	// TODO(d.rattman): This currently matches the client DLL for HL2
 	// but we probably need a way of getting this state from the client DLL
 	m_zNear.InitAndSet( this, "znear", 3.0f );
 	m_zFar.InitAndSet( this, "zfar", 16384.0f * 1.73205080757f );
@@ -86,7 +86,7 @@ void CDmeCamera::LoadProjectionMatrix( int nDisplayWidth, int nDisplayHeight )
 //-----------------------------------------------------------------------------
 void CDmeCamera::LoadStudioRenderCameraState()
 {
-	// FIXME: Remove this! This should automatically happen in DrawModel
+	// TODO(d.rattman): Remove this! This should automatically happen in DrawModel
 	// in studiorender.
 	if ( !g_pStudioRender )
 		return;

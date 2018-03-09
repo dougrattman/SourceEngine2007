@@ -75,7 +75,7 @@ enum propdata_interactions_t
 };
 
 // Entities using COLLISION_GROUP_SPECIAL_PHYSICS should support this interface.
-abstract_class IMultiplayerPhysics
+the_interface IMultiplayerPhysics
 {
 public:
 	virtual int		GetMultiplayerPhysicsMode() = 0;
@@ -112,7 +112,7 @@ enum PerformanceMode_t
 //-----------------------------------------------------------------------------
 // Purpose: Derive your entity from this if you want your entity to parse propdata
 //-----------------------------------------------------------------------------
-abstract_class IBreakableWithPropData
+the_interface IBreakableWithPropData
 {
 public:
 	// Damage modifiers

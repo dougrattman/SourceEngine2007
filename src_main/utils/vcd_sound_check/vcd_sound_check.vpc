@@ -28,7 +28,7 @@ $Project "Vcd_sound_check"
 
 		$File	"..\common\cmdlib.cpp"					\
 				"$SRCDIR\public\filesystem_helpers.cpp"	\
-				"$SRCDIR\public\filesystem_init.cpp"	\
+				"$SRCDIR\public\filesystem_init.cc"	\
 				"..\common\filesystem_tools.cpp"		\
 				"$SRCDIR\public\interpolatortypes.cpp"	\
 				"$SRCDIR\game\shared\interval.cpp"		\

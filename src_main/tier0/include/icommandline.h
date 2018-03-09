@@ -1,19 +1,16 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_INCLUDE_ICOMMANDLINE_H_
 #define SOURCE_TIER0_INCLUDE_ICOMMANDLINE_H_
 
 #include "base/include/base_types.h"
-#include "build/include/build_config.h"
-
 #include "tier0/include/command_line_switches.h"
-#include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/tier0_api.h"
 
-// Purpose: Interface to command line.
-abstract_class ICommandLine {
+// Interface to the process command line.
+the_interface ICommandLine {
  public:
-  // Creates comand line from windows one.
+  // Creates comand line from Windows one.
   virtual void CreateCmdLine(const ch *command_line) = 0;
   // Creates command line from POSIX one.
   virtual void CreateCmdLine(i32 argc, ch * *argv) = 0;
@@ -36,9 +33,9 @@ abstract_class ICommandLine {
   // Returns the argument after the one specified, or the default if not found.
   virtual f32 ParmValue(const ch *param, f32 default_param_value) const = 0;
 
-  // Gets params count.
+  // Gets parameters count.
   virtual usize ParmCount() const = 0;
-  // Find param, or 0 if not found.
+  // Find parameter, or 0 if not found.
   virtual usize FindParm(const ch *param) const = 0;
   // Gets parameter at exact index.
   virtual const ch *GetParm(usize index) const = 0;

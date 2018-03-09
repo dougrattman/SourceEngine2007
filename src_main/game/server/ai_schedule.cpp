@@ -15,7 +15,7 @@
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -242,7 +242,7 @@ bool CAI_SchedulesManager::LoadSchedulesFromBuffer(
     if (scheduleID == -1) {
       DevMsg("ERROR: LoadSchd (%s): Unknown schedule type (%s)\n", prefix,
              token);
-      // FIXME: .sch's not being in code/perforce makes it hard to share
+      // TODO(d.rattman): .sch's not being in code/perforce makes it hard to share
       // branches between developers for now, just stop processing this entities
       // schedules if one is found that isn't in the schedule registry
       break;

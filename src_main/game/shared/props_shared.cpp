@@ -16,7 +16,7 @@
 #include "gamestringpool.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar sv_pushaway_clientside_size("sv_pushaway_clientside_size", "15",

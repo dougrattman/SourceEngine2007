@@ -18,7 +18,7 @@
 #include "tier1/keyvalues.h"
 #include "vphysics/constraints.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -158,7 +158,7 @@ void CRagdollProp::Spawn(void) {
   matrix3x4_t pBoneToWorld[MAXSTUDIOBONES];
   BaseClass::SetupBones(
       pBoneToWorld,
-      BONE_USED_BY_ANYTHING);  // FIXME: shouldn't this be a subset of the bones
+      BONE_USED_BY_ANYTHING);  // TODO(d.rattman): shouldn't this be a subset of the bones
   // this is useless info after the initial conditions are set
   SetAbsAngles(vec3_angle);
   int collisionGroup = (m_spawnflags & SF_RAGDOLLPROP_DEBRIS)
@@ -457,7 +457,7 @@ void CRagdollProp::VPhysicsCollision(int index, gamevcollisionevent_t *pEvent) {
             pEvent->postVelocity[!index] * pEvent->pObjects[!index]->GetMass();
       }
 
-      // FIXME: this doesn't pass in who is responsible if some other entity
+      // TODO(d.rattman): this doesn't pass in who is responsible if some other entity
       // "caused" this collision
       PhysCallbackDamage(this,
                          CTakeDamageInfo(pHitEntity, pHitEntity, damageForce,
@@ -1268,7 +1268,7 @@ CBaseEntity *CreateServerRagdoll(CBaseAnimating *pAnimating, int forceBone,
     int boxList[128];
     Vector normal(0, 0, -1);
     int count = pAnimating->GetHitboxesFrontside(
-        boxList, ARRAYSIZE(boxList), normal,
+        boxList, SOURCE_ARRAYSIZE(boxList), normal,
         DotProduct(normal, info.GetDamagePosition()));
 
     // distribute force over mass of entire character

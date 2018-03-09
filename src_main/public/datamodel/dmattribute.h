@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DMATTRIBUTE_H
 #define DMATTRIBUTE_H
@@ -286,7 +286,7 @@ inline const char *CDmAttribute::GetValueString() const {
 // used with GetType() for use w/ SetValue( type, void* )
 inline const void *CDmAttribute::GetValueUntyped() const { return m_pData; }
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 template <class E>
 inline E *CDmAttribute::GetValueElement() const {
   Assert(GetType() == AT_ELEMENT);

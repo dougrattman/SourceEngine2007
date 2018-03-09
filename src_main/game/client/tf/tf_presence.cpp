@@ -15,7 +15,7 @@
 #include "engine/imatchmaking.h"
 #include "ixboxsystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Global singleton
@@ -91,7 +91,7 @@ static s_PresenceTranslation s_PresenceValues[] = {
 //-----------------------------------------------------------------------------
 static unsigned int GetMapID( const char *pMapName )
 {
-	for ( int i = 0; i < ARRAYSIZE( s_Scenarios ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_Scenarios ); ++i )
 	{
 		if ( !Q_stricmp( s_Scenarios[i].pDiskName, pMapName ) )
 		{
@@ -175,7 +175,7 @@ void CTF_Presence::GetPropertyDisplayString( uint32_t id, uint32_t value, char *
 //-----------------------------------------------------------------------------
 const char *CTF_Presence::GetPropertyIdString( const uint32_t id )
 {
-	for ( int i = 0; i < ARRAYSIZE( s_PresenceIds ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_PresenceIds ); ++i )
 	{
 		if ( s_PresenceIds[i].id == id )
 		{
@@ -190,7 +190,7 @@ const char *CTF_Presence::GetPropertyIdString( const uint32_t id )
 //-----------------------------------------------------------------------------
 uint32_t CTF_Presence::GetPresenceID( const char *pIDName )
 {
-	for ( int i = 0; i < ARRAYSIZE( s_PresenceIds ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_PresenceIds ); ++i )
 	{
 		if ( !Q_stricmp( s_PresenceIds[i].pString, pIDName ) )
 		{
@@ -198,7 +198,7 @@ uint32_t CTF_Presence::GetPresenceID( const char *pIDName )
 		}
 	}
 
-	for ( int i = 0; i < ARRAYSIZE( s_PresenceValues ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_PresenceValues ); ++i )
 	{
 		if ( !Q_stricmp( s_PresenceValues[i].pString, pIDName ) )
 		{
@@ -247,7 +247,7 @@ void CTF_Presence::SetupGameProperties( CUtlVector< XUSER_CONTEXT > &contexts, C
 {
 	// Session properties have been set for this game.  Use our knowledge of
 	// the properties that have been defined for this game to set rules, cvars, etc.
-	char buffer[MAX_PATH];
+	char buffer[SOURCE_MAX_PATH];
 
 #if 0 // defined( _X360 ) // absolutely nothing happens in this loop, so I disabled it. It was breaking the compiler in LTCG mode. -egr
 	int count = contexts.Count();

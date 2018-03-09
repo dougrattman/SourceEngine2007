@@ -87,7 +87,7 @@ private:
 
 	vgui::MenuBar *m_pMenuBar;
 
-	// FIXME: Is there a better way?
+	// TODO(d.rattman): Is there a better way?
 	// A panel that represents all area under the menu bar
 	vgui::Panel *m_pClientArea;
 	CFileManagerFrame *m_pFileManager;
@@ -136,7 +136,7 @@ CElementViewerPanel::CElementViewerPanel() : vgui::Panel( NULL, "ElementViewer" 
 	if ( fileName )
 	{
 		// trim off any quotes (paths with spaces need to be quoted on the commandline)
-		char buf[ MAX_PATH ];
+		char buf[ SOURCE_MAX_PATH ];
 		V_StrSubst( fileName, "\"", "", buf, sizeof( buf ) );
 
 		KeyValues *pKeyValues = new KeyValues( "OnFileSelected", "fullpath", buf );
@@ -219,7 +219,7 @@ void CElementViewerPanel::CreateNewView( CDmElement *pRoot, const char *title )
 
 void CElementViewerPanel::NotifyDataChanged( const char *pReason, int nNotifySource, int nNotifyFlags )
 {
-//	if ( flags & INotifyUI::NOTIFY_REFRESH_PROPERTIES_VALUES ) // FIXME - do we need new flags for file association changes?
+//	if ( flags & INotifyUI::NOTIFY_REFRESH_PROPERTIES_VALUES ) // TODO(d.rattman): do we need new flags for file association changes?
 	{
 		m_pFileManager->Refresh();
 
@@ -318,7 +318,7 @@ struct DataModelFilenameArray
 
 void CElementViewerPanel::OnNew()
 {
-	char filename[ MAX_PATH ];
+	char filename[ SOURCE_MAX_PATH ];
 	V_GenerateUniqueName( filename, sizeof( filename ), "unnamed", DataModelFilenameArray() );
 
 	ViewerDoc_t doc;

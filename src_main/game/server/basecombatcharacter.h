@@ -335,7 +335,7 @@ public:
 	Hull_t	GetHullType() const 	{ return m_eHull; }
 	void	SetHullType( Hull_t hullType )	{ m_eHull = hullType; }
 
-	// FIXME: The following 3 methods are backdoor hack methods
+	// TODO(d.rattman): The following 3 methods are backdoor hack methods
 	
 	// This is a sort of hack back-door only used by physgun!
 	void SetAmmoCount( int iCount, int iAmmoIndex );

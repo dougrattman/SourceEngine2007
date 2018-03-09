@@ -40,7 +40,7 @@
 #include "materialsystem/itexture.h"
 #include "mathlib/halton.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define NUM_MIPLEVELS 4
@@ -2332,7 +2332,7 @@ void CRender3D::RenderEnable(RenderState_t eRenderState, bool bEnable) {
 
     case RENDER_POLYGON_OFFSET_LINE: {
       assert(0);
-      /* FIXME:
+      /* TODO(d.rattman):
          Think we'll need to have two versions of the wireframe material
          one which ztests with offset + culling, the other which doesn't
          ztest, doesn't offect, and doesn't cull??!?

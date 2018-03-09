@@ -162,7 +162,7 @@ inline bool	IsAlphaTested( ShaderRenderState_t* pRenderState )
 //-----------------------------------------------------------------------------
 // The shader system (a singleton)
 //-----------------------------------------------------------------------------
-abstract_class IShaderSystemInternal : public IShaderInit, public IShaderSystem
+the_interface IShaderSystemInternal : public IShaderInit, public IShaderSystem
 {
 public:
 	// Initialization, shutdown

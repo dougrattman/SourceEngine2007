@@ -28,7 +28,7 @@
 #include "rumble_shared.h"
 #include "gamestats.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar sk_weapon_ar2_alt_fire_radius( "sk_weapon_ar2_alt_fire_radius", "10" );
@@ -55,9 +55,9 @@ PRECACHE_WEAPON_REGISTER(weapon_ar2);
 acttable_t	CWeaponAR2::m_acttable[] = 
 {
 	{ ACT_RANGE_ATTACK1,			ACT_RANGE_ATTACK_AR2,			true },
-	{ ACT_RELOAD,					ACT_RELOAD_SMG1,				true },		// FIXME: hook to AR2 unique
-	{ ACT_IDLE,						ACT_IDLE_SMG1,					true },		// FIXME: hook to AR2 unique
-	{ ACT_IDLE_ANGRY,				ACT_IDLE_ANGRY_SMG1,			true },		// FIXME: hook to AR2 unique
+	{ ACT_RELOAD,					ACT_RELOAD_SMG1,				true },		// TODO(d.rattman): hook to AR2 unique
+	{ ACT_IDLE,						ACT_IDLE_SMG1,					true },		// TODO(d.rattman): hook to AR2 unique
+	{ ACT_IDLE_ANGRY,				ACT_IDLE_ANGRY_SMG1,			true },		// TODO(d.rattman): hook to AR2 unique
 
 	{ ACT_WALK,						ACT_WALK_RIFLE,					true },
 
@@ -96,9 +96,9 @@ acttable_t	CWeaponAR2::m_acttable[] =
 	{ ACT_RUN_CROUCH,				ACT_RUN_CROUCH_RIFLE,			true },
 	{ ACT_RUN_CROUCH_AIM,			ACT_RUN_CROUCH_AIM_RIFLE,		true },
 	{ ACT_GESTURE_RANGE_ATTACK1,	ACT_GESTURE_RANGE_ATTACK_AR2,	false },
-	{ ACT_COVER_LOW,				ACT_COVER_SMG1_LOW,				false },		// FIXME: hook to AR2 unique
+	{ ACT_COVER_LOW,				ACT_COVER_SMG1_LOW,				false },		// TODO(d.rattman): hook to AR2 unique
 	{ ACT_RANGE_AIM_LOW,			ACT_RANGE_AIM_AR2_LOW,			false },
-	{ ACT_RANGE_ATTACK1_LOW,		ACT_RANGE_ATTACK_SMG1_LOW,		true },		// FIXME: hook to AR2 unique
+	{ ACT_RANGE_ATTACK1_LOW,		ACT_RANGE_ATTACK_SMG1_LOW,		true },		// TODO(d.rattman): hook to AR2 unique
 	{ ACT_RELOAD_LOW,				ACT_RELOAD_SMG1_LOW,			false },
 	{ ACT_GESTURE_RELOAD,			ACT_GESTURE_RELOAD_SMG1,		true },
 //	{ ACT_RANGE_ATTACK2, ACT_RANGE_ATTACK_AR2_GRENADE, true },
@@ -506,7 +506,7 @@ const WeaponProficiencyInfo_t *CWeaponAR2::GetProficiencyValues()
 		{ 1.00,		1.0		},
 	};
 
-	COMPILE_TIME_ASSERT( ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( SOURCE_ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return proficiencyTable;
 }

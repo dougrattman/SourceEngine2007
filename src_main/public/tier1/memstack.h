@@ -1,10 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A fast stack memory allocator that uses virtual memory if available
 
 #ifndef MEMSTACK_H
 #define MEMSTACK_H
 
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
@@ -23,7 +24,7 @@ class CMemoryStack {
   int GetMaxSize();
   int GetUsed();
 
-  void *RESTRICT Alloc(unsigned bytes, bool bClear = false);
+  void *SOURCE_RESTRICT Alloc(unsigned bytes, bool bClear = false);
 
   MemoryStackMark_t GetCurrentAllocPoint();
   void FreeToAllocPoint(MemoryStackMark_t mark, bool bDecommit = true);
@@ -39,7 +40,7 @@ class CMemoryStack {
   }
 
  private:
-  bool CommitTo(uint8_t *RESTRICT);
+  bool CommitTo(uint8_t *SOURCE_RESTRICT);
 
   uint8_t *m_pNextAlloc;
   uint8_t *m_pCommitLimit;
@@ -57,7 +58,8 @@ class CMemoryStack {
 
 //-------------------------------------
 
-FORCEINLINE void *RESTRICT CMemoryStack::Alloc(unsigned bytes, bool bClear) {
+SOURCE_FORCEINLINE void *SOURCE_RESTRICT CMemoryStack::Alloc(unsigned bytes,
+                                                             bool bClear) {
   Assert(m_pBase);
 
   int alignment = m_alignment;
@@ -103,7 +105,6 @@ inline MemoryStackMark_t CMemoryStack::GetCurrentAllocPoint() {
   return (m_pNextAlloc - m_pBase);
 }
 
-
 // The CUtlMemoryStack class:
 // A fixed memory class
 
@@ -115,7 +116,7 @@ class CUtlMemoryStack {
   CUtlMemoryStack(int nGrowSize = 0, int nInitSize = 0) : m_nAllocated{0} {
     m_MemoryStack.Init(MAX_SIZE * sizeof(T), COMMIT_SIZE * sizeof(T),
                        INITIAL_COMMIT * sizeof(T), 4);
-    COMPILE_TIME_ASSERT(sizeof(T) % 4 == 0);
+    static_assert(sizeof(T) % 4 == 0);
   }
 
   // Can we use this index?
@@ -206,7 +207,5 @@ class CUtlMemoryStack {
   CMemoryStack m_MemoryStack;
   int m_nAllocated;
 };
-
-
 
 #endif  // MEMSTACK_H

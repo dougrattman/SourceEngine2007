@@ -189,10 +189,10 @@ void AvoidPushawayProps(CBaseCombatCharacter *pPlayer, CUserCmd *pCmd) {
 
   CBaseEntity *props[512];
 #ifdef CLIENT_DLL
-  int nEnts = GetPushawayEnts(pPlayer, props, ARRAYSIZE(props), 0.0f,
+  int nEnts = GetPushawayEnts(pPlayer, props, SOURCE_ARRAYSIZE(props), 0.0f,
                               PARTITION_CLIENT_SOLID_EDICTS, NULL);
 #else
-  int nEnts = GetPushawayEnts(pPlayer, props, ARRAYSIZE(props), 0.0f,
+  int nEnts = GetPushawayEnts(pPlayer, props, SOURCE_ARRAYSIZE(props), 0.0f,
                               PARTITION_ENGINE_SOLID_EDICTS, NULL);
 #endif
 
@@ -291,10 +291,10 @@ void PerformObstaclePushaway(CBaseCombatCharacter *pPushingEntity) {
       (!pPlayer || !pPlayer->IsLocalPlayer()))
     return;
 
-  int nEnts = GetPushawayEnts(pPushingEntity, props, ARRAYSIZE(props), 3.0f,
+  int nEnts = GetPushawayEnts(pPushingEntity, props, SOURCE_ARRAYSIZE(props), 3.0f,
                               PARTITION_CLIENT_RESPONSIVE_EDICTS, NULL);
 #else
-  int nEnts = GetPushawayEnts(pPushingEntity, props, ARRAYSIZE(props), 3.0f,
+  int nEnts = GetPushawayEnts(pPushingEntity, props, SOURCE_ARRAYSIZE(props), 3.0f,
                               PARTITION_ENGINE_SOLID_EDICTS, NULL);
 #endif
 

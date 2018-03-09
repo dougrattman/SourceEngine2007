@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: ZONE MEMORY ALLOCATION
 //
@@ -22,8 +22,8 @@
 #include "tier1/strtools.h"
 
 #define MINIMUM_WIN_MEMORY \
-  0x03000000  // FIXME: copy from sys_dll.cpp, find a common header at some
-              // point
+  0x03000000  // TODO(d.rattman): copy from sys_dll.cpp, find a common header at
+              // some point
 
 CMemoryStack g_HunkMemoryStack;
 #ifdef HUNK_USE_16MB_PAGE
@@ -117,7 +117,7 @@ void Hunk_Print() {
 //-----------------------------------------------------------------------------
 void Memory_Init(void) {
   MEM_ALLOC_CREDIT();
-  int nMaxBytes = 48 * 1024 * 1024;
+  int nMaxBytes = 64 * 1024 * 1024;
   const int nMinCommitBytes = 0x8000;
 #ifndef HUNK_USE_16MB_PAGE
   const int nInitialCommit = 0x280000;

@@ -21,7 +21,7 @@
 #include "ammodef.h"
 #include "hl2_shareddefs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MD_FULLAMMO	50

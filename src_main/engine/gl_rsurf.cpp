@@ -47,7 +47,7 @@
 #include "overlay.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define BACKFACE_EPSILON -0.01f
@@ -338,22 +338,22 @@ IWorldRenderList *AllocWorldRenderList() {
   return CWorldRenderList::FindOrCreateList(host_state.worldbrush->numsurfaces);
 }
 
-FORCEINLINE bool VisitSurface(CVisitedSurfs &visitedSurfs,
+SOURCE_FORCEINLINE bool VisitSurface(CVisitedSurfs &visitedSurfs,
                               SurfaceHandle_t surfID) {
   return !visitedSurfs.TestAndSet(MSurf_Index(surfID));
 }
 
-FORCEINLINE void MarkSurfaceVisited(CVisitedSurfs &visitedSurfs,
+SOURCE_FORCEINLINE void MarkSurfaceVisited(CVisitedSurfs &visitedSurfs,
                                     SurfaceHandle_t surfID) {
   visitedSurfs.Set(MSurf_Index(surfID));
 }
 
-FORCEINLINE bool VisitedSurface(CVisitedSurfs &visitedSurfs,
+SOURCE_FORCEINLINE bool VisitedSurface(CVisitedSurfs &visitedSurfs,
                                 SurfaceHandle_t surfID) {
   return visitedSurfs.IsBitSet(MSurf_Index(surfID));
 }
 
-FORCEINLINE bool VisitedSurface(CVisitedSurfs &visitedSurfs, int index) {
+SOURCE_FORCEINLINE bool VisitedSurface(CVisitedSurfs &visitedSurfs, int index) {
   return visitedSurfs.IsBitSet(index);
 }
 
@@ -994,7 +994,7 @@ void Shader_DrawChainsStatic(const CMSurfaceSortList &sortList, int nSortGroup,
           }
         }
 #ifdef NEWMESH
-        // FIXME: IMaterial::GetVertexFormat() should do this stripping (add a
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
         // separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             pBindMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
@@ -1944,7 +1944,7 @@ static void Shader_WorldZFill(CWorldRenderList *pRenderList,
   meshBuilder.End();
   pMesh->Draw();
 
-  // FIXME: Do fast z reject on displacements!
+  // TODO(d.rattman): Do fast z reject on displacements!
 }
 
 //-----------------------------------------------------------------------------
@@ -2031,7 +2031,7 @@ static void Shader_WorldEnd(CWorldRenderList *pRenderList, unsigned long flags,
     g_pShadowMgr->RenderFlashlights(bFlashlightMask);
 
     // Render the fragments from the surfaces + displacements.
-    // FIXME: Actually, this call is irrelevant (for displacements) because it's
+    // TODO(d.rattman): Actually, this call is irrelevant (for displacements) because it's
     // done from within DrawDispChain currently, but that should change. We need
     // to split out the disp decal rendering from DrawDispChain and do it after
     // overlays are rendered....
@@ -2213,7 +2213,7 @@ void Shader_DrawTranslucentSurfaces(IWorldRenderList *pRenderListIn,
 //
 //=============================================================
 
-void FASTCALL R_DrawSurface(CWorldRenderList *pRenderList,
+void SOURCE_FASTCALL R_DrawSurface(CWorldRenderList *pRenderList,
                             SurfaceHandle_t surfID) {
   ASSERT_SURF_VALID(surfID);
   Assert(!SurfaceHasDispInfo(surfID));
@@ -2230,7 +2230,7 @@ void FASTCALL R_DrawSurface(CWorldRenderList *pRenderList,
 
 // The NoCull flavor of this function calls functions which optimize for shadow
 // depth map rendering
-void FASTCALL R_DrawSurfaceNoCull(CWorldRenderList *pRenderList,
+void SOURCE_FASTCALL R_DrawSurfaceNoCull(CWorldRenderList *pRenderList,
                                   SurfaceHandle_t surfID) {
   ASSERT_SURF_VALID(surfID);
   if (!(MSurf_Flags(surfID) & SURFDRAW_TRANS) &&
@@ -2289,7 +2289,7 @@ static inline void UpdateVisibleLeafLists(CWorldRenderList *pRenderList,
 //-----------------------------------------------------------------------------
 // Draws all displacements + surfaces in a leaf
 //-----------------------------------------------------------------------------
-static void FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
+static void SOURCE_FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
   // Add this leaf to the list of visible leaves
   UpdateVisibleLeafLists(pRenderList, pleaf);
 
@@ -2352,7 +2352,7 @@ static void FASTCALL R_DrawLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
 
 static ConVar r_frustumcullworld("r_frustumcullworld", "1");
 
-static void FASTCALL R_DrawLeafNoCull(CWorldRenderList *pRenderList,
+static void SOURCE_FASTCALL R_DrawLeafNoCull(CWorldRenderList *pRenderList,
                                       mleaf_t *pleaf) {
   // Add this leaf to the list of visible leaves
   UpdateVisibleLeafLists(pRenderList, pleaf);
@@ -2651,7 +2651,7 @@ static void R_DrawTopViewLeaf(CWorldRenderList *pRenderList, mleaf_t *pleaf) {
       if (MSurf_Plane(surfID).normal.z <= 0.0f) continue;
     }
 
-    // FIXME: For now, blow off translucent world polygons.
+    // TODO(d.rattman): For now, blow off translucent world polygons.
     // Gotta solve the problem of how to render them all, unsorted,
     // in a pass after the opaque world polygons, and before the
     // translucent entities.
@@ -2710,7 +2710,7 @@ void R_RenderWorldTopView(CWorldRenderList *pRenderList, mnode_t *node) {
           if (MSurf_Plane(surfID).normal.z <= 0.0f) continue;
         }
 
-        // FIXME: For now, blow off translucent world polygons.
+        // TODO(d.rattman): For now, blow off translucent world polygons.
         // Gotta solve the problem of how to render them all, unsorted,
         // in a pass after the opaque world polygons, and before the
         // translucent entities.
@@ -3227,7 +3227,7 @@ bool Shader_DrawBrushSurfaceOverride(IMatRenderContext *pRenderContext,
                                                          &brushSurface);
 }
 
-FORCEINLINE void ModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
+SOURCE_FORCEINLINE void ModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
   if (g_bIsBlendingOrModulating) {
     pOldColor[3] = pMaterial->GetAlphaModulation();
     pMaterial->GetColorModulation(&pOldColor[0], &pOldColor[1], &pOldColor[2]);
@@ -3236,7 +3236,7 @@ FORCEINLINE void ModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
   }
 }
 
-FORCEINLINE void UnModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
+SOURCE_FORCEINLINE void UnModulateMaterial(IMaterial *pMaterial, float *pOldColor) {
   if (g_bIsBlendingOrModulating) {
     pMaterial->AlphaModulate(pOldColor[3]);
     pMaterial->ColorModulate(pOldColor[0], pOldColor[1], pOldColor[2]);
@@ -3266,7 +3266,7 @@ void Shader_BrushSurface(SurfaceHandle_t surfID, model_t *model,
     // Shader_DrawSurfaceStatic( surfID );
     Shader_DrawSurfaceDynamic(pRenderContext, surfID, false);
 
-    // FIXME: This may cause an unnecessary flush to occur!
+    // TODO(d.rattman): This may cause an unnecessary flush to occur!
     // Thankfully, this is a rare codepath. I don't think anything uses it now.
     UnModulateMaterial(pMaterial, pOldColor);
   } else {
@@ -3281,7 +3281,7 @@ void Shader_BrushSurface(SurfaceHandle_t surfID, model_t *model,
   }
 
   // Add overlay fragments to list.
-  // FIXME: A little code support is necessary to get overlays working on brush
+  // TODO(d.rattman): A little code support is necessary to get overlays working on brush
   // models
   //	OverlayMgr()->AddFragmentListToRenderList( MSurf_OverlayFragmentList(
   // surfID ), false );
@@ -3605,7 +3605,7 @@ class CBrushBatchRender {
 #ifdef NEWMESH
         indexBufferBuilder.End(false);  // haven't tested this one yet (alpha
                                         // blended world geom I think)
-        // FIXME: IMaterial::GetVertexFormat() should do this stripping (add a
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
         // separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
@@ -3642,10 +3642,10 @@ class CBrushBatchRender {
         // work correctly.
         DecalSurfaceDraw(pRenderContext, BRUSHMODEL_DECAL_SORT_GROUP);
 
-        // FIXME: Decals are not being rendered while illuminated by the
+        // TODO(d.rattman): Decals are not being rendered while illuminated by the
         // flashlight
 
-        // FIXME: Need to draw decals in flashlight rendering mode
+        // TODO(d.rattman): Need to draw decals in flashlight rendering mode
         // Retire decals on opaque world surfaces
         R_DecalFlushDestroyList();
 
@@ -3984,7 +3984,7 @@ void CBrushBatchRender::DrawOpaqueBrushModel(IClientEntity *baseentity,
         }
 
         // Add overlay fragments to list.
-        // FIXME: A little code support is necessary to get overlays working on
+        // TODO(d.rattman): A little code support is necessary to get overlays working on
         // brush models
         //	OverlayMgr()->AddFragmentListToRenderList(
         // MSurf_OverlayFragmentList( surfID ), false );
@@ -4332,7 +4332,7 @@ void R_DrawIdentityBrushModel(IWorldRenderList *pRenderListIn, model_t *model) {
   for (int j = 0; j < model->brush.nummodelsurfaces; ++j, surfID++) {
     Assert(!(MSurf_Flags(surfID) & SURFDRAW_NODRAW));
 
-    // FIXME: Can't insert translucent stuff into the list
+    // TODO(d.rattman): Can't insert translucent stuff into the list
     // of translucent surfaces because we don't know what leaf
     // we're in. At the moment, the client doesn't add translucent
     // brushes to the identity brush model list

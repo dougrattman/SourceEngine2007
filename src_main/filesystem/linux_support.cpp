@@ -171,7 +171,7 @@ bool FindClose(int handle)
 
 
 
-static char fileName[MAX_PATH];
+static char fileName[SOURCE_MAX_PATH];
 int CheckName(const struct dirent *dir)
 {
 	return !strcasecmp( dir->d_name, fileName );
@@ -201,7 +201,7 @@ const char *findFileInDirCaseInsensitive(const char *file)
 	struct dirent **namelist;
 	int n;
 
-	strncpy( fileName, dirSep + 1, MAX_PATH );
+	strncpy( fileName, dirSep + 1, SOURCE_MAX_PATH );
 
 
 	n = scandir( dirName , &namelist, CheckName, alphasort );

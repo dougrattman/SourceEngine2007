@@ -27,7 +27,7 @@
 #define SF_TANK_ALLOW_PLAYER_HITS 0x1000		// 4096		Allow friendly NPCs to fire upon enemies near the player
 #define SF_TANK_IGNORE_RANGE_IN_VIEWCONE	0x2000		// 8192		Don't use range as a factor in determining if something is in view cone
 #define SF_TANK_NOTSOLID 		0x8000		// 32768
-#define SF_TANK_SOUNDON  0x10000		// FIXME: This is not really a spawnflag! It holds transient state!!!
+#define SF_TANK_SOUNDON  0x10000		// TODO(d.rattman): This is not really a spawnflag! It holds transient state!!!
 #define SF_TANK_HACKPLAYERHIT 	0x20000		// 131072	Make this func_tank cheat and hit the player regularly
 
 #define FUNCTANK_DISTANCE_MAX 	1200 // 100 ft.

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of the VGUI ISurface interface using the
 // material system to implement it.
@@ -11,7 +11,6 @@
 
 #include <Color.h>
 #include <malloc.h>
-#include "tier0/include/vprof.h"
 #include <vgui/IHTML.h>
 #include <vgui/IInput.h>
 #include <vgui/IInputInternal.h>
@@ -41,13 +40,13 @@
 #include "mathlib/mathlib.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
+#include "tier0/include/vprof.h"
 #include "tier1/UtlVector.h"
 #include "tier1/strtools.h"
 #include "vgui/htmlwindow.h"
 #include "vgui_surfacelib/FontManager.h"
 #include "xbox/xboxstubs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define VPANEL_NORMAL ((vgui::SurfacePlat *)NULL)
@@ -417,7 +416,7 @@ void CMatSystemSurface::DrawPanelIn3DSpace(vgui::VPANEL pRootPanel,
                                            int pw, int ph, float sw, float sh) {
   Assert(pRootPanel);
 
-  // FIXME: When should such panels be solved?!?
+  // TODO(d.rattman): When should such panels be solved?!?
   SolveTraverse(pRootPanel, false);
 
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
@@ -1410,10 +1409,10 @@ void CMatSystemSurface::GetTextSize(HFont font, const wchar_t *text, int &wide,
 // for now)
 //-----------------------------------------------------------------------------
 bool CMatSystemSurface::AddCustomFontFile(const char *fontFileName) {
-  char full_font_path[MAX_PATH];
+  char full_font_path[SOURCE_MAX_PATH];
   // windows needs an absolute path for ttf
   const bool is_font_found = g_pFullFileSystem->GetLocalPath(
-      fontFileName, full_font_path, ARRAYSIZE(full_font_path));
+      fontFileName, full_font_path, SOURCE_ARRAYSIZE(full_font_path));
   if (!is_font_found) {
     Msg("Couldn't find custom font file '%s'\n", fontFileName);
     return false;
@@ -1460,8 +1459,8 @@ bool CMatSystemSurface::AddBitmapFontFile(const char *fontFileName) {
     Msg("Couldn't find bitmap font file '%s'\n", fontFileName);
     return false;
   }
-  char path[MAX_PATH];
-  Q_strncpy(path, fontFileName, MAX_PATH);
+  char path[SOURCE_MAX_PATH];
+  Q_strncpy(path, fontFileName, SOURCE_MAX_PATH);
 
   // only add if it's not already in the list
   Q_strlower(path);
@@ -1489,8 +1488,8 @@ bool CMatSystemSurface::AddBitmapFontFile(const char *fontFileName) {
 //-----------------------------------------------------------------------------
 void CMatSystemSurface::SetBitmapFontName(const char *pName,
                                           const char *pFontFilename) {
-  char fontPath[MAX_PATH];
-  Q_strncpy(fontPath, pFontFilename, MAX_PATH);
+  char fontPath[SOURCE_MAX_PATH];
+  Q_strncpy(fontPath, pFontFilename, SOURCE_MAX_PATH);
   Q_strlower(fontPath);
 
   CUtlSymbol sym(fontPath);
@@ -1800,7 +1799,7 @@ void CMatSystemSurface::DrawPrintText(
       Assert(texCoords);
 
       if (iTexId != iLastTexId) {
-        // FIXME: At the moment, we just draw all the batched up
+        // TODO(d.rattman): At the moment, we just draw all the batched up
         // text when the font changes. We Should batch up per material
         // and *then* draw
         if (iCount) {
@@ -2441,7 +2440,7 @@ void CMatSystemSurface::Begin3DPaint(int iLeft, int iTop, int iRight,
         materials->FindTexture("_rt_FullScreen", "render targets"));
   }
 
-  // FIXME: Set the viewport to match the clip rectangle?
+  // TODO(d.rattman): Set the viewport to match the clip rectangle?
   // Set the viewport to match the scissor rectangle
   pRenderContext->PushRenderTargetAndViewport(m_FullScreenBuffer, 0, 0,
                                               iRight - iLeft, iBottom - iTop);
@@ -2838,7 +2837,7 @@ bool CMatSystemSurface::IsCursorLocked() const { return ::IsCursorLocked(); }
 //-----------------------------------------------------------------------------
 void CMatSystemSurface::SetMouseCallbacks(GetMouseCallback_t GetFunc,
                                           SetMouseCallback_t SetFunc) {
-  // FIXME: Remove! This is obsolete
+  // TODO(d.rattman): Remove! This is obsolete
   Assert(0);
 }
 
@@ -2862,11 +2861,11 @@ void CMatSystemSurface::MovePopupToFront(VPANEL panel) {
   // lock
   if (input()->GetAppModalSurface()) {
     if (!g_pVGuiPanel->HasParent(panel, input()->GetAppModalSurface())) {
-      HPanel p = ivgui()->PanelToHandle(input()->GetAppModalSurface());
-      index = m_PopupList.Find(p);
+      HPanel pn = ivgui()->PanelToHandle(input()->GetAppModalSurface());
+      index = m_PopupList.Find(pn);
       if (index != m_PopupList.InvalidIndex()) {
         m_PopupList.Remove(index);
-        m_PopupList.AddToTail(p);
+        m_PopupList.AddToTail(pn);
       }
     }
   }
@@ -2905,7 +2904,7 @@ bool CMatSystemSurface::IsCursorVisible() {
 }
 
 bool CMatSystemSurface::IsTextureIDValid(int id) {
-  // FIXME:
+  // TODO(d.rattman):
   return true;
 }
 

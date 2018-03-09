@@ -11,7 +11,7 @@
 #define XBX_MAX_BUTTONSAMPLE			32768
 #define XBX_MAX_ANALOGSAMPLE			255
 #define XBX_MAX_MESSAGE					2048
-#define XBX_MAX_PATH					MAX_PATH
+#define XBX_MAX_PATH					SOURCE_MAX_PATH
 #define XBX_MAX_RCMDLENGTH				256
 #define XBX_MAX_RCMDNAMELEN				32
 #define XBX_HDD_CLUSTERSIZE				16384
@@ -130,7 +130,7 @@ typedef struct
 
 typedef struct
 {
-	char		name[MAX_PATH];
+	char		name[SOURCE_MAX_PATH];
 	char		formatName[32];
 	int			rate;
 	int			bits;

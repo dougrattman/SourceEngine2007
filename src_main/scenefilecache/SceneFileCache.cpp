@@ -13,7 +13,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IFileSystem *filesystem = NULL;
@@ -103,7 +103,7 @@ void CSceneFileCache::Reload() {
 size_t CSceneFileCache::GetSceneBufferSize(char const *pFilename) {
   size_t returnSize = 0;
 
-  char fn[MAX_PATH];
+  char fn[SOURCE_MAX_PATH];
   Q_strncpy(fn, pFilename, sizeof(fn));
   Q_FixSlashes(fn);
   Q_strlower(fn);
@@ -118,7 +118,7 @@ bool CSceneFileCache::GetSceneData(char const *pFilename, uint8_t *buf,
   Assert(buf);
   Assert(bufsize > 0);
 
-  char fn[MAX_PATH];
+  char fn[SOURCE_MAX_PATH];
   Q_strncpy(fn, pFilename, sizeof(fn));
   Q_FixSlashes(fn);
   Q_strlower(fn);
@@ -196,11 +196,11 @@ int CSceneFileCache::FindSceneInImage(const char *pSceneName) {
   auto *entries = reinterpret_cast<SceneImageEntry_t *>(
       reinterpret_cast<uint8_t *>(header) + header->nSceneEntryOffset);
 
-  char clean_name[MAX_PATH];
-  V_strncpy(clean_name, pSceneName, ARRAYSIZE(clean_name));
+  char clean_name[SOURCE_MAX_PATH];
+  V_strncpy(clean_name, pSceneName, SOURCE_ARRAYSIZE(clean_name));
   V_strlower(clean_name);
 
-#ifdef _LINUX
+#ifdef OS_POSIX
   V_FixSlashes(clean_name, '\\');
 #else
   V_FixSlashes(clean_name);

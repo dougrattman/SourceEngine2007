@@ -20,7 +20,7 @@ class IMaterialVar;
 //-----------------------------------------------------------------------------
 // Methods that can be called from the SHADER_INIT blocks of shaders
 //-----------------------------------------------------------------------------
-abstract_class IShaderInit {
+the_interface IShaderInit {
  public:
   // Loads up a texture
   virtual void LoadTexture(IMaterialVar * pTextureVar,

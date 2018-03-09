@@ -220,7 +220,7 @@ CUtlString &CUtlString::operator+=(char c) {
 
 CUtlString &CUtlString::operator+=(int rhs) {
   Assert(!m_Storage.IsReadOnly());
-  COMPILE_TIME_ASSERT(sizeof(rhs) == 4);
+  static_assert(sizeof(rhs) == 4);
 
   char tmpBuf[12];  // Sufficient for a signed 32 bit integer [ -2147483648 to
                     // +2147483647 ]
@@ -251,7 +251,7 @@ int CUtlString::Format(const char *pFormat, ...) {
   va_start(marker, pFormat);
 #ifdef _WIN32
   int len = _vsnprintf(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
-#elif _LINUX
+#elif OS_POSIX
   int len = vsnprintf(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
 #else
 #error "define vsnprintf type."

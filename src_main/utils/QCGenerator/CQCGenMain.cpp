@@ -14,7 +14,7 @@
 #include "matsys_controls/QCGenerator.h"
 #include "CQCGenMain.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -51,7 +51,7 @@ CQCGenMain::CQCGenMain( Panel *parent, const char *pszPath, const char *pszScene
 
 	SetSize( 846, 770 );
 	SetMinimumSize(846, 770);	
-	char szTitle[MAX_PATH];
+	char szTitle[SOURCE_MAX_PATH];
 	strcpy( szTitle, pszPath );
 	strcat( szTitle, "\\" );
 	strcat( szTitle, pszScene );

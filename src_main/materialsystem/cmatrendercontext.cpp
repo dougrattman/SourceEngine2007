@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "pch_materialsystem.h"
 
@@ -19,8 +19,8 @@
 
 //-----------------------------------------------------------------------------
 
-// FIXME: right now, always keeping shader API in sync, because debug overlays
-// don't seem to work 100% with the delayed matrix loading
+// TODO(d.rattman): right now, always keeping shader API in sync, because debug
+// overlays don't seem to work 100% with the delayed matrix loading
 #define FORCE_MATRIX_SYNC 1
 
 #ifdef VALIDATE_MATRICES
@@ -233,15 +233,15 @@ void CMatRenderContextBase::SetFrameBufferCopyTexture(ITexture *pTexture,
     return;
   }
 
-  // FIXME: Do I need to increment/decrement ref counts here, or assume that the
-  // app is going to do it?
+  // TODO(d.rattman): Do I need to increment/decrement ref counts here, or
+  // assume that the app is going to do it?
   m_pCurrentFrameBufferCopyTexture[textureIndex] = pTexture;
 }
 
 ITexture *CMatRenderContextBase::GetFrameBufferCopyTexture(int textureIndex) {
   if (textureIndex < 0 || textureIndex >= MAX_FB_TEXTURES) {
     Assert(0);
-    return NULL;  // FIXME!  This should return the error texture.
+    return NULL;  // TODO(d.rattman): This should return the error texture.
   }
   return m_pCurrentFrameBufferCopyTexture[textureIndex];
 }
@@ -315,8 +315,8 @@ void CMatRenderContextBase::MultMatrixLocal(const matrix3x4_t &matrix) {
 }
 
 void CMatRenderContextBase::LoadIdentity() {
-  // FIXME: possibly track is identity so can call shader API LoadIdentity()
-  // later instead of LoadMatrix()?
+  // TODO(d.rattman): possibly track is identity so can call shader API
+  // LoadIdentity() later instead of LoadMatrix()?
   m_pCurMatrixItem->matrix.Identity();
   m_pCurMatrixItem->flags = (MSF_DIRTY | MSF_IDENTITY);
   CurrentMatrixChanged();
@@ -411,7 +411,7 @@ void CMatRenderContextBase::RecomputeViewState() {
   if (!m_bDirtyViewState) return;
   m_bDirtyViewState = false;
 
-  // FIXME: Cache this off to make it less expensive?
+  // TODO(d.rattman): Cache this off to make it less expensive?
   matrix3x4_t viewMatrix;
   GetMatrix(MATERIAL_VIEW, &viewMatrix);
   m_vecViewOrigin.x = -(viewMatrix[0][3] * viewMatrix[0][0] +
@@ -424,11 +424,11 @@ void CMatRenderContextBase::RecomputeViewState() {
                         viewMatrix[1][3] * viewMatrix[1][2] +
                         viewMatrix[2][3] * viewMatrix[2][2]);
 
-  // FIXME Implement computation of m_vecViewForward, etc
+  // TODO(d.rattman): Implement computation of m_vecViewForward, etc
   m_vecViewForward.Init();
   m_vecViewRight.Init();
 
-  // FIXME: Is this correct?
+  // TODO(d.rattman): Is this correct?
   m_vecViewUp.Init(viewMatrix[1][0], viewMatrix[1][1], viewMatrix[1][2]);
 }
 
@@ -442,7 +442,7 @@ void CMatRenderContextBase::GetWorldSpaceCameraVectors(Vector *pVecForward,
                                                        Vector *pVecUp) {
   RecomputeViewState();
 
-  // FIXME Implement computation of m_vecViewForward
+  // TODO(d.rattman): Implement computation of m_vecViewForward
   Assert(0);
 
   if (pVecForward) {
@@ -598,8 +598,8 @@ void CMatRenderContextBase::RecomputeViewProjState() {
   if (m_bDirtyViewProjState) {
     VMatrix viewMatrix, projMatrix;
 
-    // FIXME: Should consider caching this upon change for projection or view
-    // matrix.
+    // TODO(d.rattman): Should consider caching this upon change for projection
+    // or view matrix.
     GetMatrix(MATERIAL_VIEW, &viewMatrix);
     GetMatrix(MATERIAL_PROJECTION, &projMatrix);
     m_viewProjMatrix = projMatrix * viewMatrix;
@@ -616,9 +616,9 @@ float CMatRenderContextBase::ComputePixelDiameterOfSphere(
   RecomputeViewState();
   RecomputeViewProjState();
   // This is sort of faked, but it's faster that way
-  // FIXME: Also, there's a much faster way to do this with similar triangles
-  // but I want to make sure it exactly matches the current matrices, so
-  // for now, I do it this conservative way
+  // TODO(d.rattman): Also, there's a much faster way to do this with similar
+  // triangles but I want to make sure it exactly matches the current matrices,
+  // so for now, I do it this conservative way
   Vector4D testPoint1, testPoint2;
   VectorMA(vecAbsOrigin, flRadius, m_vecViewUp, testPoint1.AsVector3D());
   VectorMA(vecAbsOrigin, -flRadius, m_vecViewUp, testPoint2.AsVector3D());
@@ -673,8 +673,8 @@ void CMatRenderContextBase::TurnOnToneMapping(void) {
 
         // Adjust at up to 4x rate when over-exposed.
         rate = std::min((acc_exposure_adjust * rate),
-                   FLerp(rate, (acc_exposure_adjust * rate), 0.0f, 1.5f,
-                         (m_CurToneMapScale - goalScale)));
+                        FLerp(rate, (acc_exposure_adjust * rate), 0.0f, 1.5f,
+                              (m_CurToneMapScale - goalScale)));
       }
 
       float flRateTimesTime = rate * elapsed_time;
@@ -1068,7 +1068,7 @@ void CMatRenderContext::GetMatrix(MaterialMatrixMode_t matrixMode,
 }
 
 void CMatRenderContext::SyncMatrices() {
-  if (!ShouldValidateMatrices() && AllowLazyMatrixSync()) {
+  if constexpr (!ShouldValidateMatrices() && AllowLazyMatrixSync()) {
     for (int i = 0; i < NUM_MATRIX_MODES; i++) {
       MatrixStackItem_t &top = m_MatrixStacks[i].Top();
       if (top.flags & MSF_DIRTY) {
@@ -1112,7 +1112,7 @@ void CMatRenderContext::ForceSyncMatrix(MaterialMatrixMode_t mode) {
 }
 
 void CMatRenderContext::SyncMatrix(MaterialMatrixMode_t mode) {
-  if (!ShouldValidateMatrices() && AllowLazyMatrixSync()) {
+  if constexpr (!ShouldValidateMatrices() && AllowLazyMatrixSync()) {
     ForceSyncMatrix(mode);
   }
 }
@@ -1290,8 +1290,8 @@ IMesh *CMatRenderContext::GetDynamicMeshEx(VertexFormat_t vertexFormat,
 
   // For anything more than 1 bone, imply the last weight from the 1 - the sum
   // of the others.
-  // FIXME: this seems wrong - in common_vs_fxc.h, we only infer the last weight
-  // if we have 3 (not 2)
+  // TODO(d.rattman): this seems wrong - in common_vs_fxc.h, we only infer the
+  // last weight if we have 3 (not 2)
   int nCurrentBoneCount = GetCurrentNumBones();
   Assert(nCurrentBoneCount <= 4);
   if (nCurrentBoneCount > 1) {
@@ -1397,8 +1397,8 @@ void CMatRenderContext::SetFrameBufferCopyTexture(ITexture *pTexture,
   if (m_pCurrentFrameBufferCopyTexture[textureIndex] != pTexture) {
     g_pShaderAPI->FlushBufferedPrimitives();
   }
-  // FIXME: Do I need to increment/decrement ref counts here, or assume that the
-  // app is going to do it?
+  // TODO(d.rattman): Do I need to increment/decrement ref counts here, or
+  // assume that the app is going to do it?
   m_pCurrentFrameBufferCopyTexture[textureIndex] = pTexture;
 }
 
@@ -1537,7 +1537,8 @@ void CMatRenderContext::GetLightmapDimensions(int *w, int *h) {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: This is a hack required for NVidia/XBox, can they fix in drivers?
+// TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in
+// drivers?
 //-----------------------------------------------------------------------------
 void CMatRenderContext::DrawScreenSpaceQuad(IMaterial *pMaterial) {
   // This is required because the texture coordinates for NVidia reading
@@ -1552,7 +1553,7 @@ void CMatRenderContext::DrawScreenSpaceQuad(IMaterial *pMaterial) {
   bw = w;
   bh = h;
 
-  /* FIXME: Get this to work in hammer/engine integration
+  /* TODO(d.rattman): Get this to work in hammer/engine integration
   if ( m_pRenderTargetTexture )
   {
   }

@@ -13,7 +13,7 @@
 #include "tier1/utldict.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MANIFEST_FILE "scripts/game_sounds_manifest.txt"
@@ -1068,7 +1068,7 @@ void CSoundEmitterSystemBase::SaveChangesToSoundScript(int scriptindex) {
 
   CUtlBuffer buf(0, 0, CUtlBuffer::TEXT_BUFFER);
 
-  // FIXME:  Write sound script header
+  // TODO(d.rattman):  Write sound script header
   if (filesystem->FileExists(GAME_SOUNDS_HEADER_BLOCK)) {
     FileHandle_t header =
         filesystem->Open(GAME_SOUNDS_HEADER_BLOCK, "rb", NULL);

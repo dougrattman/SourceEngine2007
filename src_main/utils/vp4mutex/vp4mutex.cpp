@@ -277,7 +277,7 @@ static int Q_snprintf( char *pDest, int maxLen, char const *pFormat, ... )
 	va_start( marker, pFormat );
 #ifdef _WIN32
 	int len = _vsnprintf( pDest, maxLen, pFormat, marker );
-#elif _LINUX
+#elif OS_POSIX
 	int len = vsnprintf( pDest, maxLen, pFormat, marker );
 #else
 	#error "define vsnprintf type."
@@ -343,8 +343,8 @@ private:
 		}
 
 		// parse
-		char szVar[_MAX_PATH];
-		char szInfo[_MAX_PATH];
+		char szVar[SOURCE_MAX_PATH];
+		char szInfo[SOURCE_MAX_PATH];
 		SplitP4Output(data, szVar, szInfo, sizeof(szVar));
 
 		// emit

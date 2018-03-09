@@ -16,7 +16,7 @@ VS_OUTPUT main( const VS_INPUT v )
 {
 	VS_OUTPUT o = ( VS_OUTPUT )0;
 
-	// FIXME: Want these to be in pixel centers!
+	// TODO(d.rattman): Want these to be in pixel centers!
 	float2 projSpace = v.vSrcCoord.xy;
 	projSpace *= 2.0f;
 	projSpace -= 1.0f;

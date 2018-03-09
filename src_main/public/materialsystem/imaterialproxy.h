@@ -10,7 +10,7 @@
 class IMaterial;
 class KeyValues;
 
-abstract_class IMaterialProxy {
+the_interface IMaterialProxy {
  public:
   virtual bool Init(IMaterial * pMaterial, KeyValues * pKeyValues) = 0;
   virtual void OnBind(void*) = 0;

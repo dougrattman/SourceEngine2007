@@ -10,7 +10,7 @@
 class IWaveData;
 class CAudioMixer;
 
-abstract_class CAudioSourceMP3 : public CAudioSource {
+the_interface CAudioSourceMP3 : public CAudioSource {
  public:
   CAudioSourceMP3(CSfxTable * pSfx);
   CAudioSourceMP3(CSfxTable * pSfx, CAudioSourceCachedInfo * info);

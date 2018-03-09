@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define COLOR_CORRECTION_ENT_THINK_RATE TICK_INTERVAL
@@ -15,7 +15,7 @@ static const char *s_pFadeInContextThink = "ColorCorrectionFadeInThink";
 static const char *s_pFadeOutContextThink = "ColorCorrectionFadeOutThink";
 
 //------------------------------------------------------------------------------
-// FIXME: This really should inherit from something	more lightweight
+// TODO(d.rattman): This really should inherit from something	more lightweight
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ class CColorCorrection : public CBaseEntity {
   CNetworkVar(float, m_MinFalloff);
   CNetworkVar(float, m_MaxFalloff);
   CNetworkVar(float, m_flCurWeight);
-  CNetworkString(m_netlookupFilename, MAX_PATH);
+  CNetworkString(m_netlookupFilename, SOURCE_MAX_PATH);
 
   string_t m_lookupFilename;
 };
@@ -92,7 +92,7 @@ BEGIN_DATADESC(CColorCorrection)
 
       DEFINE_KEYFIELD(m_bEnabled, FIELD_BOOLEAN, "enabled"),
       DEFINE_KEYFIELD(m_bStartDisabled, FIELD_BOOLEAN, "StartDisabled"),
-      //	DEFINE_ARRAY( m_netlookupFilename, FIELD_CHARACTER, MAX_PATH ),
+      //	DEFINE_ARRAY( m_netlookupFilename, FIELD_CHARACTER, SOURCE_MAX_PATH ),
 
       DEFINE_INPUTFUNC(FIELD_VOID, "Enable", InputEnable),
       DEFINE_INPUTFUNC(FIELD_VOID, "Disable", InputDisable),
@@ -170,7 +170,7 @@ void CColorCorrection::Activate(void) {
   BaseClass::Activate();
 
   Q_strncpy(m_netlookupFilename.GetForModify(), STRING(m_lookupFilename),
-            MAX_PATH);
+            SOURCE_MAX_PATH);
 }
 
 //-----------------------------------------------------------------------------

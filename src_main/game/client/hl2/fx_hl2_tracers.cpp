@@ -15,7 +15,7 @@
 #include "tier0/include/vprof.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern Vector GetTracerOrigin(const CEffectData &data);

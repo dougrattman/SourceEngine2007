@@ -1,6 +1,6 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>
 
@@ -665,7 +665,7 @@ int CMasterMulticastThread::AddFileRequest(const char *pFilename,
   pClient->m_flTransmitStartTime = pClient->m_flLastAckTime;
   pClient->m_nTimesFileCycled = 0;
   pClient->m_nChunksLeft = pFile->m_Info.m_nChunks;
-  pClient->m_ChunksToSend.SetSize(PAD_NUMBER(pFile->m_Info.m_nChunks, 8) / 8);
+  pClient->m_ChunksToSend.SetSize(SOURCE_PAD_NUMBER(pFile->m_Info.m_nChunks, 8) / 8);
   memset(pClient->m_ChunksToSend.Base(), 0xFF, pClient->m_ChunksToSend.Count());
   pFile->m_Clients.AddToTail(pClient);
 
@@ -898,7 +898,7 @@ inline bool CMasterMulticastThread::Thread_SendFileChunk_Multicast(
                      (sockaddr *)&m_MulticastAddr, sizeof(m_MulticastAddr));
     bSuccess = (ret == (int)nWantedBytes);
   } else {
-    WSASendTo(m_Socket, bufs, ARRAYSIZE(bufs), &nBytesSent, 0,
+    WSASendTo(m_Socket, bufs, SOURCE_ARRAYSIZE(bufs), &nBytesSent, 0,
               (sockaddr *)&m_MulticastAddr, sizeof(m_MulticastAddr), NULL,
               NULL);
     bSuccess = (nBytesSent == nWantedBytes);
@@ -1190,7 +1190,7 @@ int CMasterMulticastThread::FinishFileSetup(CMulticastFile *pFile,
     pFile->m_Info.m_UncompressedSize = pFile->m_UncompressedData.Count();
 
     pFile->m_Info.m_nChunks =
-        PAD_NUMBER(pFile->m_Info.m_CompressedSize, chunkSize) / chunkSize;
+        SOURCE_PAD_NUMBER(pFile->m_Info.m_CompressedSize, chunkSize) / chunkSize;
 
     // Initialize the chunks.
     pFile->m_Chunks.SetSize(pFile->m_Info.m_nChunks);
@@ -1418,7 +1418,7 @@ bool CMasterVMPIFileSystem::HandleFileSystemPacket(MessageBuffer *pBuf,
       int chunkLen[4] = {sizeof(cPacket), sizeof(requestID), sizeof(fileID),
                          sizeof(bZeroLength)};
 
-      VMPI_SendChunks(pChunks, chunkLen, ARRAYSIZE(pChunks), iSource);
+      VMPI_SendChunks(pChunks, chunkLen, SOURCE_ARRAYSIZE(pChunks), iSource);
     }
       return true;
 

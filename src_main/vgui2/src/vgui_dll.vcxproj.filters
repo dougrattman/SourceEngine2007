@@ -27,7 +27,7 @@
     <ClCompile Include="..\..\public\filesystem_helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\public\filesystem_init.cpp">
+    <ClCompile Include="..\..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="htmlwindow.cpp">

@@ -18,7 +18,7 @@
 #include "soundenvelope.h"
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_SPEAKER_NAME 256
@@ -178,8 +178,8 @@ class C_PointCommentaryNode : public C_BaseAnimating {
   bool m_bActive;
   bool m_bWasActive;
   float m_flStartTime;
-  char m_iszCommentaryFile[MAX_PATH];
-  char m_iszCommentaryFileNoHDR[MAX_PATH];
+  char m_iszCommentaryFile[SOURCE_MAX_PATH];
+  char m_iszCommentaryFileNoHDR[SOURCE_MAX_PATH];
   char m_iszSpeakers[MAX_SPEAKER_NAME];
   int m_iNodeNumber;
   int m_iNodeNumberMax;

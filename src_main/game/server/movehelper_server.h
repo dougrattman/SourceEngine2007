@@ -27,7 +27,7 @@ class CBaseEntity;
 // Implementation of the movehelper on the server
 //-----------------------------------------------------------------------------
 
-abstract_class IMoveHelperServer : public IMoveHelper
+the_interface IMoveHelperServer : public IMoveHelper
 {
 public:
 	virtual void SetHost( CBasePlayer *host ) = 0;

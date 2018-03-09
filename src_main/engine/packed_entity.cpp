@@ -32,7 +32,7 @@ PackedEntity::~PackedEntity() {
 bool PackedEntity::AllocAndCopyPadded(const void *pData, unsigned long size) {
   FreeData();
 
-  unsigned long nBytes = PAD_NUMBER(size, 4);
+  unsigned long nBytes = SOURCE_PAD_NUMBER(size, 4);
 
   // allocate the memory
   m_pData = malloc(nBytes);

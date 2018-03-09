@@ -22,7 +22,7 @@ struct ModInfo_t {
 
 // Purpose: This is the interface exported by the engine.dll to allow a
 // dedicated server front end application to host it.
-abstract_class IDedicatedServerAPI : public IAppSystem {
+the_interface IDedicatedServerAPI : public IAppSystem {
  public:
   // Initialize the engine with the specified base directory and interface
   // factories

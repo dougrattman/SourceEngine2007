@@ -3,8 +3,9 @@
 #include "client_pch.h"
 
 #include "cbenchmark.h"
+#include "build/include/build_config.h"
 
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>  // INADDR_ANY defn

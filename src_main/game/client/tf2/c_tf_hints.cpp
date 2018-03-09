@@ -24,7 +24,7 @@
 #include "c_hint_events.h"
 #include "c_tf_hintmanager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -1306,7 +1306,7 @@ CHintData g_HintDatas[] =
 
 int GetNumHintDatas()
 {
-	return ARRAYSIZE( g_HintDatas );
+	return SOURCE_ARRAYSIZE( g_HintDatas );
 }
 
 

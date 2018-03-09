@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vmpi_distribute_work.h"
 
@@ -20,7 +20,7 @@
 #include "vmpi_distribute_tracker.h"
 #include "vmpi_distribute_work_internal.h"
 #include "vstdlib/random.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 // To catch some bugs with 32-bit vs 64-bit and etc.
 #pragma warning(default : 4244)
@@ -164,7 +164,7 @@ void VMPI_DistributeWork_DisconnectHandler(int procID, const char *pReason) {
 }
 
 uint64_t VMPI_GetNumWorkUnitsCompleted(int iProc) {
-  Assert(iProc >= 0 && iProc <= ARRAYSIZE(g_totalWUCountByProcess));
+  Assert(iProc >= 0 && iProc <= SOURCE_ARRAYSIZE(g_totalWUCountByProcess));
   return g_totalWUCountByProcess[iProc];
 }
 
@@ -456,7 +456,7 @@ void DistributeWork_Worker(CDSInfo *pInfo, ProcessWorkUnitFn processFn) {
       VMPI_DispatchNextMessage(300);
 
       Msg("\rThreads status: ");
-      for (int i = 0; i < ARRAYSIZE(g_ThreadWUs); i++) {
+      for (int i = 0; i < SOURCE_ARRAYSIZE(g_ThreadWUs); i++) {
         if (g_ThreadWUs[i] != ~0ull)
           Msg("%d: WU %5d  ", i, (int)g_ThreadWUs[i]);
       }
@@ -567,7 +567,7 @@ double DistributeWork(
                g_nMessagesReceived - nMessagesReceivedStart);
 
   // Mark that the threads aren't working on anything at the moment.
-  for (int i = 0; i < ARRAYSIZE(g_ThreadWUs); i++) g_ThreadWUs[i] = ~0ull;
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ThreadWUs); i++) g_ThreadWUs[i] = ~0ull;
 
   return flTimeSpent;
 }

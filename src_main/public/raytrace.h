@@ -81,7 +81,7 @@ struct TriGeometryData_t {
   signed char m_nTmpData1;  // used by kd-tree builder
 
   // accessors to get around union annoyance
-  FORCEINLINE Vector &Vertex(int idx) {
+  SOURCE_FORCEINLINE Vector &Vertex(int idx) {
     return *(reinterpret_cast<Vector *>(m_VertexCoordData + 3 * idx));
   }
 };
@@ -93,12 +93,12 @@ struct CacheOptimizedTriangle {
   } m_Data;
 
   // accessors to get around union annoyance
-  FORCEINLINE Vector &Vertex(int idx) {
+  SOURCE_FORCEINLINE Vector &Vertex(int idx) {
     return *(reinterpret_cast<Vector *>(
         m_Data.m_GeometryData.m_VertexCoordData + 3 * idx));
   }
 
-  FORCEINLINE const Vector &Vertex(int idx) const {
+  SOURCE_FORCEINLINE const Vector &Vertex(int idx) const {
     return *(reinterpret_cast<const Vector *>(
         m_Data.m_GeometryData.m_VertexCoordData + 3 * idx));
   }
@@ -178,7 +178,7 @@ struct RayTracingSingleResult {
 
 struct RayTracingResult {
   FourVectors surface_normal;  // surface normal at intersection
-  ALIGN16 int32_t HitIds[4];   // -1=no hit. otherwise, triangle index
+  alignas(16) int32_t HitIds[4];   // -1=no hit. otherwise, triangle index
   fltx4 HitDistance;           // distance to intersection
 };
 

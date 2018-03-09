@@ -32,7 +32,7 @@ struct channel_t;
 //			Mixers are never re-used, so they can track instance data like
 //			sample position, fractional sample, stream cache, faders, etc.
 //-----------------------------------------------------------------------------
-abstract_class CAudioMixer
+the_interface CAudioMixer
 {
 public:
 	virtual ~CAudioMixer( void ) {}
@@ -73,7 +73,7 @@ public:
 //-----------------------------------------------------------------------------
 class CSentence;
 
-abstract_class CAudioSource
+the_interface CAudioSource
 {
 public:
 	CAudioSource( void );

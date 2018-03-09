@@ -31,7 +31,7 @@ using namespace vgui;
 
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define INIT_HEALTH -1

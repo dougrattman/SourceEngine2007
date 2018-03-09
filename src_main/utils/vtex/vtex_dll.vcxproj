@@ -149,6 +149,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -204,6 +205,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -266,6 +268,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -327,6 +330,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -338,7 +342,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
-    <ClCompile Include="..\..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\..\public\filesystem_init.cc" />
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>

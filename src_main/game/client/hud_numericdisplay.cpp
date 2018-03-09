@@ -11,7 +11,7 @@
 #include "iclientmode.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -90,14 +90,14 @@ void CHudNumericDisplay::PaintNumbers(HFont font, int xpos, int ypos,
   surface()->DrawSetTextFont(font);
   wchar_t unicode[6];
   if (!m_bIsTime) {
-    swprintf(unicode, ARRAYSIZE(unicode), L"%d", value);
+    swprintf(unicode, SOURCE_ARRAYSIZE(unicode), L"%d", value);
   } else {
     int iMinutes = value / 60;
     int iSeconds = value - iMinutes * 60;
     if (iSeconds < 10)
-      swprintf(unicode, ARRAYSIZE(unicode), L"%d‘0%d", iMinutes, iSeconds);
+      swprintf(unicode, SOURCE_ARRAYSIZE(unicode), L"%d‘0%d", iMinutes, iSeconds);
     else
-      swprintf(unicode, ARRAYSIZE(unicode), L"%d‘%d", iMinutes, iSeconds);
+      swprintf(unicode, SOURCE_ARRAYSIZE(unicode), L"%d‘%d", iMinutes, iSeconds);
   }
 
   // adjust the position to take into account 3 characters

@@ -19,7 +19,7 @@
 #include "portal_shareddefs.h"
 #include "effect_color_tables.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

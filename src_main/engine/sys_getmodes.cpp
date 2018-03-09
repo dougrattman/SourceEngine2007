@@ -39,7 +39,7 @@
 #include "vtf/vtf.h"
 #include "xbox/xboxstubs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void CL_GetBackgroundLevelName(char *pszBackgroundName, int bufSize,
@@ -350,7 +350,7 @@ bool CVideoMode_Common::CreateGameWindow(int nWidth, int nHeight,
   // Requires you to set both width and height for the window and
   // that you start in windowed mode
   if (bWindowed && nWidth && nHeight) {
-    // FIXME: There's some ordering issues related to the config record
+    // TODO(d.rattman): There's some ordering issues related to the config record
     // and reading the command-line. Would be nice for just one place where this
     // is done.
     RequestedWindowVideoMode().width = nWidth;
@@ -404,7 +404,7 @@ IVTFTexture *CVideoMode_Common::LoadVTF(CUtlBuffer &temp,
 // Computes the startup graphic name
 //-----------------------------------------------------------------------------
 void CVideoMode_Common::ComputeStartupGraphicName(char *pBuf, int nBufLen) {
-  char szBackgroundName[_MAX_PATH];
+  char szBackgroundName[SOURCE_MAX_PATH];
   CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName), false);
 
   float aspectRatio = (float)GetModeWidth() / GetModeHeight();
@@ -428,11 +428,11 @@ void CVideoMode_Common::ComputeStartupGraphicName(char *pBuf, int nBufLen) {
 void CVideoMode_Common::SetupStartupGraphic() {
   COM_TimestampedLog("CVideoMode_Common::Init  SetupStartupGraphic");
 
-  char szBackgroundName[_MAX_PATH];
+  char szBackgroundName[SOURCE_MAX_PATH];
   CL_GetBackgroundLevelName(szBackgroundName, sizeof(szBackgroundName), false);
 
   // get the image to load
-  char material[_MAX_PATH];
+  char material[SOURCE_MAX_PATH];
   CUtlBuffer buf;
 
   float aspectRatio = (float)GetModeWidth() / GetModeHeight();
@@ -489,7 +489,7 @@ void CVideoMode_Common::DrawStartupGraphic() {
 
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
 
-  char pStartupGraphicName[MAX_PATH];
+  char pStartupGraphicName[SOURCE_MAX_PATH];
   ComputeStartupGraphicName(pStartupGraphicName, sizeof(pStartupGraphicName));
 
   // Allocate a white material
@@ -833,7 +833,7 @@ void CVideoMode_Common::ReleaseFullScreen(void) {}
 int CVideoMode_Common::GetRefreshRateForMode(const vmode_t *pMode) {
   int nRefreshRate = pMode->refreshRate;
 
-  // FIXME: We should only read this once, at the beginning
+  // TODO(d.rattman): We should only read this once, at the beginning
   // override the refresh rate from the command-line maybe
   nRefreshRate = CommandLine()->ParmValue("-freq", nRefreshRate);
   nRefreshRate = CommandLine()->ParmValue("-refresh", nRefreshRate);
@@ -1120,7 +1120,7 @@ void GetCubemapOffset(CubeMapFaceIndex_t faceIndex, int &x, int &y,
       y = 2;
       break;
     default:
-      UNREACHABLE();
+      SOURCE_UNREACHABLE();
   }
   x *= faceDim;
   y *= faceDim;
@@ -1654,7 +1654,7 @@ bool CVideoMode_MaterialSystem::SetMode(int nWidth, int nHeight,
 
   config.SetFlag(MATSYS_VIDCFG_FLAGS_WINDOWED, bWindowed);
 
-  // FIXME: This is trash. We have to do *different* things depending on how
+  // TODO(d.rattman): This is trash. We have to do *different* things depending on how
   // we're setting the mode!
   if (!m_bSetModeOnce) {
     if (!materials->SetMode((void *)game->GetMainWindow(), config))
@@ -1712,7 +1712,7 @@ void CVideoMode_MaterialSystem::SetGameWindow(void *hWnd) {
   // When running in edit mode, just use hammer's window
   game->SetGameWindow((HWND)hWnd);
 
-  // FIXME: Move this code into the _MaterialSystem version of CVideoMode
+  // TODO(d.rattman): Move this code into the _MaterialSystem version of CVideoMode
   // In editor mode, the mode width + height is equal to the desktop width +
   // height
   MaterialVideoMode_t mode;
@@ -1771,7 +1771,7 @@ void CVideoMode_MaterialSystem::ChangeDisplaySettingsToFullscreen(int nWidth,
   dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
   dm.dmBitsPerPel = nBPP;
 
-  // FIXME: Fix direct reference of refresh rate from config record
+  // TODO(d.rattman): Fix direct reference of refresh rate from config record
   int freq = g_pMaterialSystemConfig->m_VideoMode.m_RefreshRate;
   if (freq >= 60) {
     dm.dmDisplayFrequency = freq;

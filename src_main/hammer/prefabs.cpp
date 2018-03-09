@@ -22,7 +22,7 @@
 #include "Prefabs.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BOOL CPrefab::bCacheEnabled = TRUE;
@@ -309,8 +309,8 @@ void CPrefabLibrary::FreeAllLibraries(void) {
 // Purpose: Load all libraries in the prefabs directory.
 //-----------------------------------------------------------------------------
 void CPrefabLibrary::LoadAllLibraries() {
-  char szDir[MAX_PATH];
-  char szFile[MAX_PATH];
+  char szDir[SOURCE_MAX_PATH];
+  char szFile[SOURCE_MAX_PATH];
   ((CHammer *)AfxGetApp())->GetDirectory(DIR_PREFABS, szDir);
 
   //
@@ -544,7 +544,7 @@ bool CPrefabLibraryRMF::DeleteFile(void) {
 //-----------------------------------------------------------------------------
 int CPrefabLibraryRMF::Save(LPCTSTR pszFilename, BOOL bIndexOnly) {
   // temp storage
-  static char szFile[MAX_PATH];
+  static char szFile[SOURCE_MAX_PATH];
 
   // if only saving index, special code -
   if (bIndexOnly && m_file.is_open()) {
@@ -601,7 +601,7 @@ int CPrefabLibraryRMF::Save(LPCTSTR pszFilename, BOOL bIndexOnly) {
     pszFilename = szFile;
 
     if (m_strOpenFileName.IsEmpty()) {
-      char szNewFilename[MAX_PATH];
+      char szNewFilename[SOURCE_MAX_PATH];
       CHammer *pApp = (CHammer *)AfxGetApp();
       pApp->GetDirectory(DIR_PREFABS, szNewFilename);
 
@@ -715,7 +715,7 @@ int CPrefabLibraryRMF::SetName(LPCTSTR pszName) {
   // set szName
   strcpy(m_szName, pszName);
 
-  char szNewFilename[MAX_PATH];
+  char szNewFilename[SOURCE_MAX_PATH];
   CHammer *pApp = (CHammer *)AfxGetApp();
   pApp->GetDirectory(DIR_PREFABS, szNewFilename);
 
@@ -773,7 +773,7 @@ int CPrefabLibraryVMF::Load(LPCTSTR pszFilename) {
   //
   // Read the prefabs - they are stored as individual VMF files.
   //
-  char szDir[MAX_PATH];
+  char szDir[SOURCE_MAX_PATH];
   strcpy(szDir, pszFilename);
   strcat(szDir, "\\*.vmf");
 
@@ -791,7 +791,7 @@ int CPrefabLibraryVMF::Load(LPCTSTR pszFilename) {
       //
       // Build the full path to the prefab file.
       //
-      char szFile[MAX_PATH];
+      char szFile[SOURCE_MAX_PATH];
       strcpy(szFile, szDir);
       strcat(szFile, fd.cFileName);
 

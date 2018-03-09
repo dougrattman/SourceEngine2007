@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -626,7 +626,7 @@ C_BaseAnimating::C_BaseAnimating()
   m_builtRagdoll = false;
   m_hitboxBoneCacheHandle = 0;
   int i;
-  for (i = 0; i < ARRAYSIZE(m_flEncodedController); i++) {
+  for (i = 0; i < SOURCE_ARRAYSIZE(m_flEncodedController); i++) {
     m_flEncodedController[i] = 0.0f;
   }
 
@@ -736,9 +736,9 @@ ShadowType_t C_BaseAnimating::ShadowCastType() {
     if (pStudioHdr->numikchains() > 0) return SHADOWS_RENDER_TO_TEXTURE_DYNAMIC;
   }
 
-  // FIXME: Do something to check to see how many frames the current animation
-  // has If we do this, we have to be able to handle the case of changing
-  // ShadowCastTypes at the moment, they are assumed to be constant.
+  // TODO(d.rattman): Do something to check to see how many frames the current
+  // animation has If we do this, we have to be able to handle the case of
+  // changing ShadowCastTypes at the moment, they are assumed to be constant.
   return SHADOWS_RENDER_TO_TEXTURE;
 }
 
@@ -897,13 +897,15 @@ CStudioHdr *C_BaseAnimating::OnNewModel() {
       m_Attachments[i].m_nLastFramecount = 0;
 #ifdef _DEBUG
       m_Attachments[i].m_AttachmentToWorld.Invalidate();
-      m_Attachments[i].m_angRotation.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
-      m_Attachments[i].m_vOriginVelocity.Init(FLOAT32_NAN, FLOAT32_NAN, FLOAT32_NAN);
+      m_Attachments[i].m_angRotation.Init(FLOAT32_NAN, FLOAT32_NAN,
+                                          FLOAT32_NAN);
+      m_Attachments[i].m_vOriginVelocity.Init(FLOAT32_NAN, FLOAT32_NAN,
+                                              FLOAT32_NAN);
 #endif
     }
   }
 
-  Assert(hdr->GetNumPoseParameters() <= ARRAYSIZE(m_flPoseParameter));
+  Assert(hdr->GetNumPoseParameters() <= SOURCE_ARRAYSIZE(m_flPoseParameter));
 
   m_iv_flPoseParameter.SetMaxCount(hdr->GetNumPoseParameters());
 
@@ -923,8 +925,8 @@ CStudioHdr *C_BaseAnimating::OnNewModel() {
     }
   }
 
-  int boneControllerCount = std::min(hdr->numbonecontrollers(),
-                                     (int)ARRAYSIZE(m_flEncodedController));
+  int boneControllerCount = std::min(
+      hdr->numbonecontrollers(), (int)SOURCE_ARRAYSIZE(m_flEncodedController));
 
   m_iv_flEncodedController.SetMaxCount(boneControllerCount);
 
@@ -994,7 +996,6 @@ void C_BaseAnimating::GetBoneTransform(int iBone, matrix3x4_t &pBoneToWorld) {
 
   Assert(pmatrix);
 
-  // FIXME
   MatrixCopy(*pmatrix, pBoneToWorld);
 }
 
@@ -1085,7 +1086,7 @@ void C_BaseAnimating::TermRopes() {
   m_Ropes.Purge();
 }
 
-// FIXME: redundant?
+// TODO(d.rattman): redundant?
 void C_BaseAnimating::GetBoneControllers(
     float controllers[MAXSTUDIOBONECTRLS]) {
   // interpolate two 0..1 encoded controllers to a single 0..1 controller
@@ -1107,7 +1108,7 @@ float C_BaseAnimating::GetPoseParameter(int iPoseParameter) {
   return m_flPoseParameter[iPoseParameter];
 }
 
-// FIXME: redundant?
+// TODO(d.rattman): redundant?
 void C_BaseAnimating::GetPoseParameters(
     CStudioHdr *pStudioHdr, float poseParameter[MAXSTUDIOPOSEPARAM]) {
   if (!pStudioHdr) return;
@@ -1136,7 +1137,7 @@ void C_BaseAnimating::GetPoseParameters(
 
 float C_BaseAnimating::ClampCycle(float flCycle, bool isLooping) {
   if (isLooping) {
-    // FIXME: does this work with negative framerate?
+    // TODO(d.rattman): does this work with negative framerate?
     flCycle -= (int)flCycle;
     if (flCycle < 0.0f) {
       flCycle += 1.0f;
@@ -1643,8 +1644,8 @@ void C_BaseAnimating::SetupBones_AttachmentHelper(CStudioHdr *hdr) {
       MatrixSetColumn(vecWorldBonePos, 3, world);
     }
 
-    // FIXME: this shouldn't be here, it should client side on-demand only and
-    // hooked into the bone cache!!
+    // TODO(d.rattman): this shouldn't be here, it should client side on-demand
+    // only and hooked into the bone cache!!
     FormatViewModelAttachment(i, world);
     PutAttachment(i + 1, world);
   }
@@ -1926,11 +1927,11 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
   Ray_t ray;
   CTraceFilterSkipNPCsAndPlayers traceFilter(this, GetCollisionGroup());
 
-  // FIXME: trace based on gravity or trace based on angles?
+  // TODO(d.rattman): trace based on gravity or trace based on angles?
   Vector up;
   AngleVectors(GetRenderAngles(), NULL, NULL, &up);
 
-  // FIXME: check number of slots?
+  // TODO(d.rattman): check number of slots?
   float minHeight = FLT_MAX;
   float maxHeight = -FLT_MAX;
 
@@ -2007,8 +2008,8 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
               float d = sqrt((1 - limit * limit) / DotProduct(diff, diff));
               trace.plane.normal = up * limit + d * diff;
             }
-            // FIXME: this is wrong with respect to contact position and actual
-            // ankle offset
+            // TODO(d.rattman): this is wrong with respect to contact position
+            // and actual ankle offset
             pTarget->SetPosWithNormalOffset(trace.endpos, trace.plane.normal);
             pTarget->SetNormal(trace.plane.normal);
             pTarget->SetOnWorld(true);
@@ -2021,7 +2022,8 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
 
               if (maxHeight < offset) maxHeight = offset;
             }
-            // FIXME: if we don't drop legs, running down hills looks horrible
+            // TODO(d.rattman): if we don't drop legs, running down hills looks
+            // horrible
             /*
             if (DotProduct( pTarget->est.pos, up ) < DotProduct( estGround, up
             ))
@@ -2040,7 +2042,8 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
 
               if (maxHeight < offset) maxHeight = offset;
             }
-            // FIXME: if we don't drop legs, running down hills looks horrible
+            // TODO(d.rattman): if we don't drop legs, running down hills looks
+            // horrible
             /*
             if (DotProduct( pTarget->est.pos, up ) < DotProduct( estGround, up
             ))
@@ -2076,8 +2079,8 @@ void C_BaseAnimating::CalculateIKLocks(float currentTime) {
         C_BaseEntity *pEntity = NULL;
         float flDist = pTarget->est.radius;
 
-        // FIXME: make entity finding sticky!
-        // FIXME: what should the radius check be?
+        // TODO(d.rattman): make entity finding sticky!
+        // TODO(d.rattman): what should the radius check be?
         for (CEntitySphereQuery sphere(pTarget->est.pos, 64);
              (pEntity = sphere.GetCurrentEntity()) != NULL;
              sphere.NextEntity()) {
@@ -2561,7 +2564,7 @@ int C_BaseAnimating::DrawModel(int flags) {
         int baseDrawn = follow->DrawModel(0);
 
         // draw entity
-        // FIXME: Currently only draws if aiment is drawn.
+        // TODO(d.rattman): Currently only draws if aiment is drawn.
         // BUGBUG: Fixup bbox and do a separate cull for follow object
         if (baseDrawn) {
           drawn = InternalDrawModel(STUDIO_RENDER | extraFlags);
@@ -2714,7 +2717,7 @@ extern ConVar muzzleflash_light;
 void C_BaseAnimating::ProcessMuzzleFlashEvent() {
   // If we have an attachment, then stick a light on it.
   if (muzzleflash_light.GetBool()) {
-    // FIXME: We should really use a named attachment for this
+    // TODO(d.rattman): We should really use a named attachment for this
     if (m_Attachments.Count() > 0) {
       Vector vAttachment;
       QAngle dummyAngles;
@@ -3582,7 +3585,7 @@ void C_BaseAnimating::RagdollMoved(void) {
 // Purpose: My physics object has been updated, react or extract data
 //-----------------------------------------------------------------------------
 void C_BaseAnimating::VPhysicsUpdate(IPhysicsObject *pPhysics) {
-  // FIXME: Should make sure the physics objects being passed in
+  // TODO(d.rattman): Should make sure the physics objects being passed in
   // is the ragdoll physics object, but I think it's pretty safe not to check
   if (IsRagdoll()) {
     m_pRagdoll->VPhysicsUpdate(pPhysics);
@@ -3829,7 +3832,7 @@ bool C_BaseAnimating::InitAsClientRagdoll(
   if (m_bStoreRagdollInfo && m_pRagdoll) {
     matrix3x4_t parentTransform;
     AngleMatrix(GetAbsAngles(), GetAbsOrigin(), parentTransform);
-    // FIXME/CHECK:  This might be too expensive to do every frame???
+    // TODO(d.rattman): This might be too expensive to do every frame???
     SaveRagdollInfo(hdr->numbones(), parentTransform, m_BoneAccessor);
   }
 
@@ -4375,8 +4378,8 @@ void C_BaseAnimating::ResetSequenceInfo(void) {
   m_nNewSequenceParity = (m_nNewSequenceParity + 1) & EF_PARITY_MASK;
   m_nResetEventsParity = (m_nResetEventsParity + 1) & EF_PARITY_MASK;
 
-  // FIXME: why is this called here?  Nothing should have changed to make this
-  // nessesary
+  // TODO(d.rattman): why is this called here?  Nothing should have changed to
+  // make this nessesary
   SetEventIndexForSequence(pStudioHdr->pSeqdesc(GetSequence()));
 }
 
@@ -4635,7 +4638,7 @@ void C_BaseAnimating::ClearRagdoll() {
     // callback on the ragdoll entity, which was a crash on TF)
     // That is to say: it is vital that the member be cleared out
     // BEFORE the delete occurs.
-    CRagdoll *RESTRICT pDoomed = m_pRagdoll;
+    CRagdoll *SOURCE_RESTRICT pDoomed = m_pRagdoll;
     m_pRagdoll = NULL;
 
     delete pDoomed;

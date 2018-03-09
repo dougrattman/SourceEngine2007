@@ -42,7 +42,7 @@
 //#include "Portal_PhysicsEnvironmentMgr.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern short g_sModelIndexSmoke;  // (in combatweapon.cpp) holds the index for
@@ -279,7 +279,7 @@ int UTIL_EntitiesInSphere(const Vector &center, float radius,
 CEntitySphereQuery::CEntitySphereQuery(const Vector &center, float radius,
                                        int flagMask) {
   m_listIndex = 0;
-  m_listCount = UTIL_EntitiesInSphere(m_pList, ARRAYSIZE(m_pList), center,
+  m_listCount = UTIL_EntitiesInSphere(m_pList, SOURCE_ARRAYSIZE(m_pList), center,
                                       radius, flagMask);
 }
 
@@ -1850,7 +1850,7 @@ const char *nexttoken(char *token, const char *str, char sep) {
 // Input  : check - last checked client
 // Output : static int UTIL_GetNewCheckClient
 //-----------------------------------------------------------------------------
-// FIXME:  include bspfile.h here?
+// TODO(d.rattman):  include bspfile.h here?
 class CCheckClient : public CAutoGameSystem {
  public:
   CCheckClient(char const *name) : CAutoGameSystem(name) {}
@@ -2150,7 +2150,7 @@ void UTIL_PredictedPosition(CBaseEntity *pTarget, float flTimeDelta,
 
   Vector vecPredictedVel;
 
-  // FIXME: Should we look at groundspeed or velocity for non-clients??
+  // TODO(d.rattman): Should we look at groundspeed or velocity for non-clients??
 
   // Get the proper velocity to predict with
   CBasePlayer *pPlayer = ToBasePlayer(pTarget);

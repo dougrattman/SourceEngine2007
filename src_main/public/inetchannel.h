@@ -21,7 +21,7 @@ class	INetChannelInfo;
 typedef struct netpacket_s netpacket_t;
 typedef struct netadr_s	netadr_t;
 
-abstract_class INetChannel : public INetChannelInfo
+the_interface INetChannel : public INetChannelInfo
 {
 public:
 	virtual	~INetChannel( void ) {};
@@ -43,8 +43,8 @@ public:
 	virtual void	ProcessPacket( struct netpacket_s* packet, bool bHasHeader ) = 0;
  
 	virtual bool	SendNetMsg(INetMessage &msg, bool bForceReliable = false, bool bVoice = false ) = 0;
-#ifdef _LINUX
-	FORCEINLINE bool SendNetMsg(INetMessage const &msg, bool bForceReliable = false, bool bVoice = false ) { SendNetMsg( *( (INetMessage *) &msg ), bForceReliable, bVoice ); }
+#ifdef OS_POSIX
+	SOURCE_FORCEINLINE bool SendNetMsg(INetMessage const &msg, bool bForceReliable = false, bool bVoice = false ) { SendNetMsg( *( (INetMessage *) &msg ), bForceReliable, bVoice ); }
 #endif
 	virtual bool	SendData(bf_write &msg, bool bReliable = true) = 0;
 	virtual bool	SendFile(const char *filename, unsigned int transferID) = 0;

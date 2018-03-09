@@ -17,7 +17,7 @@
 #include "ai_interactions.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -58,8 +58,8 @@ void CAI_BaseHumanoid::CheckAmmo( void )
 {
 	BaseClass::CheckAmmo();
 
-	// FIXME: put into GatherConditions()?
-	// FIXME: why isn't this a baseclass function?
+	// TODO(d.rattman): put into GatherConditions()?
+	// TODO(d.rattman): why isn't this a baseclass function?
 	if (!GetActiveWeapon())
 		return;
 

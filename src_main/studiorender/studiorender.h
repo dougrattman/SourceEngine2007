@@ -45,7 +45,7 @@ struct ModelLODHeader_t;
 }  // namespace OptimizedModel
 
 //-----------------------------------------------------------------------------
-// FIXME: Remove
+// TODO(d.rattman): Remove
 //-----------------------------------------------------------------------------
 class IStudioDataCache;
 extern IStudioDataCache *g_pStudioDataCache;
@@ -484,7 +484,7 @@ class CStudioRender {
   inline bool R_TeethAreVisible(void) {
     return true;
     /*
-    // FIXME: commented out until Gary can change them to just draw black
+    // TODO(d.rattman): commented out until Gary can change them to just draw black
     mstudiomouth_t *pMouth = m_pStudioHdr->pMouth( 0 );
     float fIllum = m_FlexWeights[pMouth->flexdesc];
     return fIllum > 0.0f;
@@ -517,7 +517,7 @@ class CStudioRender {
   // NJS: Messy, but needed for an externally optimized routine to set up the
   // lighting.
   void R_InitLightEffectsWorld3();
-  void(FASTCALL *R_LightEffectsWorld3)(const LightDesc_t *pLightDesc,
+  void(SOURCE_FASTCALL *R_LightEffectsWorld3)(const LightDesc_t *pLightDesc,
                                        const lightpos_t *light,
                                        const Vector &normal, Vector &dest);
 
@@ -802,7 +802,7 @@ inline void CStudioRender::R_StudioRotate(Vector4D &realIn1,
 template <int nLightType>
 class CWorldLightAngleWrapper {
  public:
-  FORCEINLINE static float WorldLightAngle(const LightDesc_t *wl,
+  SOURCE_FORCEINLINE static float WorldLightAngle(const LightDesc_t *wl,
                                            const Vector &lnormal,
                                            const Vector &snormal,
                                            const Vector &delta) {
@@ -859,7 +859,7 @@ class CWorldLightAngleWrapper {
         return 0.f;
 
       default:
-        UNREACHABLE();
+        SOURCE_UNREACHABLE();
     }
   }
 };
@@ -867,7 +867,7 @@ class CWorldLightAngleWrapper {
 template <int nLightType>
 class CWorldLightAngleWrapperConstDirectional {
  public:
-  FORCEINLINE static float WorldLightAngle(const LightDesc_t *wl,
+  SOURCE_FORCEINLINE static float WorldLightAngle(const LightDesc_t *wl,
                                            const Vector &lnormal,
                                            const Vector &snormal,
                                            const Vector &delta,
@@ -902,7 +902,7 @@ class CWorldLightAngleWrapperConstDirectional {
         return 0.f;
 
       default:
-        UNREACHABLE();
+        SOURCE_UNREACHABLE();
     }
   }
 };
@@ -926,7 +926,7 @@ inline float CStudioRender::R_WorldLightAngle(const LightDesc_t *wl,
       return CWorldLightAngleWrapper<MATERIAL_LIGHT_SPOT>::WorldLightAngle(
           wl, lnormal, snormal, delta);
     default:
-      UNREACHABLE();
+      SOURCE_UNREACHABLE();
   }
 }
 

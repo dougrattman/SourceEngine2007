@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Functions which do things to a DmeMesh
 
@@ -21,7 +21,7 @@
 #include "tier1/utlstringmap.h"
 #include "tier2/p4helpers.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -1065,9 +1065,9 @@ bool CDmMeshUtils::RemapMaterial(CDmeMesh *pMesh, const CUtlString &src,
                                  const CUtlString &dst) {
   bool retVal = false;
 
-  char srcName[MAX_PATH];
-  char matName[MAX_PATH];
-  char dstName[MAX_PATH];
+  char srcName[SOURCE_MAX_PATH];
+  char matName[SOURCE_MAX_PATH];
+  char dstName[SOURCE_MAX_PATH];
 
   Q_StripExtension(src.Get(), srcName, sizeof(srcName));
   Q_FixSlashes(srcName, '/');
@@ -2030,7 +2030,7 @@ DmFileId_t CreateUniqueFileId() {
   DmFileId_t fileId = DMFILEID_INVALID;
 
   UniqueId_t uniqueId;
-  char fileIdBuf[MAX_PATH];
+  char fileIdBuf[SOURCE_MAX_PATH];
 
   do {
     CreateUniqueId(&uniqueId);
@@ -2060,7 +2060,7 @@ bool CreateExpressionFile(const char *pExpressionFile,
 
   if (nControlCount <= 0 || nPresetsCount <= 0) return false;
 
-  char expName[MAX_PATH];
+  char expName[SOURCE_MAX_PATH];
   Q_FileBase(pExpressionFile, expName, sizeof(expName));
 
   CDmePresetGroup *pDstPresetGroup =
@@ -2148,8 +2148,8 @@ bool CreateExpressionFile(const char *pExpressionFile,
     }
   }
 
-  char buf[MAX_PATH];
-  char buf1[MAX_PATH];
+  char buf[SOURCE_MAX_PATH];
+  char buf1[SOURCE_MAX_PATH];
   Q_strncpy(buf, pExpressionFile, sizeof(buf));
   Q_SetExtension(buf, ".txt", sizeof(buf));
   Q_ExtractFilePath(buf, buf1, sizeof(buf1));

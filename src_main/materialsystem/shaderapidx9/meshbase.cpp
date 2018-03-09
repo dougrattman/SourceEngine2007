@@ -1,17 +1,16 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "meshbase.h"
 
 #include "ShaderAPI_Global.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Helpers with VertexDesc_t...
 //-----------------------------------------------------------------------------
-// FIXME: add compression-agnostic read-accessors (which decompress and return
-// by value, checking desc.m_CompressionType)
+// TODO(d.rattman): add compression-agnostic read-accessors (which decompress
+// and return by value, checking desc.m_CompressionType)
 inline Vector &Position(VertexDesc_t const &desc, int vert) {
   return *(Vector *)((unsigned char *)desc.m_pPosition +
                      vert * desc.m_VertexSize_Position);
@@ -82,8 +81,8 @@ void CVertexBufferBase::PrintVertexFormat(VertexFormat_t vertexFormat) {
     Msg("VERTEX_POSITION|");
   }
   if (vertexFormat & VERTEX_NORMAL) {
-    // FIXME: genericise this stuff using VertexElement_t data tables (so funcs
-    // like 'just work' if we make compression changes)
+    // TODO(d.rattman): genericise this stuff using VertexElement_t data tables
+    // (so funcs like 'just work' if we make compression changes)
     if (compression == VERTEX_COMPRESSION_ON)
       Msg("VERTEX_NORMAL|");
     else
@@ -142,7 +141,7 @@ void CVertexBufferBase::ComputeVertexDescription(unsigned char *pBuffer,
 // Returns the vertex format size
 //-----------------------------------------------------------------------------
 int CVertexBufferBase::VertexFormatSize(VertexFormat_t vertexFormat) {
-  // FIXME: We could make this much faster
+  // TODO(d.rattman): We could make this much faster
   MeshDesc_t temp;
   ComputeVertexDescription(0, vertexFormat, temp);
   return temp.m_ActualVertexSize;
@@ -357,8 +356,7 @@ void CIndexBufferBase::Spew(int nIndexCount, const IndexDesc_t &indexDesc) {
 // Call this in debug mode to make sure our data is good.
 //-----------------------------------------------------------------------------
 void CIndexBufferBase::ValidateData(int nIndexCount, const IndexDesc_t &desc) {
-  /* FIXME */
-  // NOTE: Is there anything reasonable to do here at all?
+  // TODO(d.rattman): Is there anything reasonable to do here at all?
   // Or is this a bogus method altogether?
 }
 

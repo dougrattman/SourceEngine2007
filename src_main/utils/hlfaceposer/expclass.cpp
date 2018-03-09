@@ -26,9 +26,9 @@
 #include "tier1/utlvector.h"
 
 
-#undef ALIGN16
+#undef alignas(16)
 #define ALIGN4( a ) a = (byte *)((int)((byte *)a + 3) & ~ 3)
-#define ALIGN16( a ) a = (byte *)((int)((byte *)a + 15) & ~ 15)
+#define alignas(16)( a ) a = (byte *)((int)((byte *)a + 15) & ~ 15)
 
 char const *GetGlobalFlexControllerName( int index );
 int GetGlobalFlexControllerCount( void );

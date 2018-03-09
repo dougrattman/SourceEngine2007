@@ -8,7 +8,7 @@
 #include "npc_basescanner.h"
 #include "baseprojectile.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_wpnscanner_health( "sk_wpnscanner_health","30");
@@ -242,7 +242,7 @@ void CNPC_WpnScanner::MoveToAttack(float flInterval)
 
 	MoveToTarget( flInterval, idealPos );
 
-	//FIXME: Re-implement?
+	//TODO(d.rattman): Re-implement?
 
 	/*
 	// ---------------------------------------------------------

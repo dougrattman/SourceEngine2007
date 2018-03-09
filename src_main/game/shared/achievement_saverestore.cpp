@@ -16,7 +16,7 @@
 #include "baseachievement.h"
 #include "utlmap.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static short ACHIEVEMENT_SAVE_RESTORE_VERSION = 2;

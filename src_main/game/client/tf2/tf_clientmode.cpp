@@ -70,7 +70,7 @@ void CTFModeManager::Init( void )
 	PanelMetaClassMgr()->LoadMetaClassDefinitionFile( MINIMAP_FILE );
 	PanelMetaClassMgr()->LoadMetaClassDefinitionFile( SCREEN_FILE );
 
-	// FIXME: Turn these into client systems
+	// TODO(d.rattman): Turn these into client systems
 	HudCommanderOverlayMgr()->GameInit();
 	MapData().Init();
 	GetTechnologyTreeDoc().Init();

@@ -789,7 +789,7 @@ void ConvertToWorldSpace( CJointedModel &joints, s_source_t *psource, CUtlVector
 				// convert vertex into world space
 				VectorTransform( psource->vertex[i].position, srcBoneToWorld[localBone], tmp );
 				// just assume the model is in identity space 
-				// FIXME: shouldn't this do an inverse xform of the default boneToWorld?
+				// TODO(d.rattman): shouldn't this do an inverse xform of the default boneToWorld?
 
 				VectorMA( worldVerts[i], psource->vertex[i].boneweight.weight[n], tmp, worldVerts[i] );
 			}

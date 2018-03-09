@@ -83,7 +83,7 @@ class CSoundCombiner : public ISoundCombiner {
   int m_nNumChannels;
   int m_nBitsPerSample;
   int m_nBytesPerSample;
-  char m_szOutFile[MAX_PATH];
+  char m_szOutFile[SOURCE_MAX_PATH];
 };
 
 static CSoundCombiner g_SoundCombiner;
@@ -97,7 +97,7 @@ bool CSoundCombiner::CreateWorkList(IFileSystem *filesystem,
   for (int i = 0; i < c; ++i) {
     CombinerWork *workitem = new CombinerWork();
 
-    char fullpath[MAX_PATH];
+    char fullpath[SOURCE_MAX_PATH];
     Q_strncpy(fullpath, info[i].wavefile, sizeof(fullpath));
     filesystem->GetLocalPath(info[i].wavefile, fullpath, sizeof(fullpath));
 
@@ -215,7 +215,7 @@ bool CSoundCombiner::IsCombinedFileChecksumValid(
     CUtlVector<CombinerEntry> &info) {
   unsigned int computedChecksum = CheckSumWork(filesystem, info);
 
-  char fullpath[MAX_PATH];
+  char fullpath[SOURCE_MAX_PATH];
   Q_strncpy(fullpath, outfile, sizeof(fullpath));
   filesystem->GetLocalPath(outfile, fullpath, sizeof(fullpath));
 

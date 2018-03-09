@@ -7,7 +7,7 @@
 #include "tier1/interface.h"
 
 // Purpose: Interface to server browser module
-abstract_class IServerBrowser {
+the_interface IServerBrowser {
  public:
   // activates the server browser window, brings it to the foreground
   virtual bool Activate() = 0;

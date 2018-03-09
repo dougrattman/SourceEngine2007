@@ -7,7 +7,7 @@
 #include "items.h"
 #include "props.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar sk_dynamic_resupply_modifier("sk_dynamic_resupply_modifier", "1.0");
@@ -64,8 +64,8 @@ static DynamicResupplyItems_t g_DynamicResupplyAmmoItems[] = {
 #define DS_ARMOR_INDEX 1
 #define DS_GRENADE_INDEX 6
 
-#define NUM_HEALTH_ITEMS (ARRAYSIZE(g_DynamicResupplyHealthItems))
-#define NUM_AMMO_ITEMS (ARRAYSIZE(g_DynamicResupplyAmmoItems))
+#define NUM_HEALTH_ITEMS (SOURCE_ARRAYSIZE(g_DynamicResupplyHealthItems))
+#define NUM_AMMO_ITEMS (SOURCE_ARRAYSIZE(g_DynamicResupplyAmmoItems))
 
 #define DYNAMIC_ITEM_THINK 1.0
 

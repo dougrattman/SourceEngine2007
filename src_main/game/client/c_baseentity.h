@@ -513,7 +513,7 @@ class C_BaseEntity : public IClientEntity {
   // the entity
   virtual const Vector &WorldSpaceCenter() const;
 
-  // FIXME: Do we want this?
+  // TODO(d.rattman): Do we want this?
   const Vector &WorldAlignSize() const;
   bool IsPointSized() const;
 
@@ -967,7 +967,7 @@ class C_BaseEntity : public IClientEntity {
   // even-hackier global trace vars)
   static const trace_t &GetTouchTrace(void);
 
-  // FIXME: Should be private, but I can't make em private just yet
+  // TODO(d.rattman): Should be private, but I can't make em private just yet
   void PhysicsImpact(C_BaseEntity *other, trace_t &trace);
   void PhysicsMarkEntitiesAsTouching(C_BaseEntity *other, trace_t &trace);
   void PhysicsMarkEntitiesAsTouchingEventDriven(C_BaseEntity *other,
@@ -1193,7 +1193,7 @@ class C_BaseEntity : public IClientEntity {
   void FunctionCheck(void *pFunction, const char *name);
 
   ENTITYFUNCPTR TouchSet(ENTITYFUNCPTR func, char *name) {
-    // COMPILE_TIME_ASSERT( sizeof(func) == 4 );
+    // static_assert( sizeof(func) == 4 );
     m_pfnTouch = func;
     // FunctionCheck( *(reinterpret_cast<void **>(&m_pfnTouch)), name );
     return func;
@@ -1415,7 +1415,7 @@ class C_BaseEntity : public IClientEntity {
  protected:
   int m_nFXComputeFrame;
 
-  // FIXME: Should I move the functions handling these out of C_ClientEntity
+  // TODO(d.rattman): Should I move the functions handling these out of C_ClientEntity
   // and into C_BaseEntity? Then we could make these private.
   // Client handle
   CBaseHandle m_RefEHandle;  // Reference ehandle. Used to generate ehandles off
@@ -1521,7 +1521,7 @@ class C_BaseEntity : public IClientEntity {
   void PhysicsCheckSweep(const Vector &vecAbsStart, const Vector &vecAbsDelta,
                          trace_t *pTrace);
 
-  // FIXME: REMOVE!!!
+  // TODO(d.rattman): REMOVE!!!
   void MoveToAimEnt();
 
   // Sets/Gets the next think based on context index

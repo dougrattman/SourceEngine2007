@@ -326,7 +326,7 @@ BOOL GameData::Load(const char *pszFilename) {
     } else if (IsToken(szToken, "include")) {
       if (GDGetToken(tr, szToken, sizeof(szToken), STRING)) {
         // Let's assume it's in the same directory.
-        char justPath[MAX_PATH], loadFilename[MAX_PATH];
+        char justPath[SOURCE_MAX_PATH], loadFilename[SOURCE_MAX_PATH];
         if (Q_ExtractFilePath(pszFilename, justPath, sizeof(justPath))) {
           Q_snprintf(loadFilename, sizeof(loadFilename), "%s%s", justPath,
                      szToken);
@@ -751,5 +751,5 @@ bool GameData::LoadFGDAutoVisGroups(TokenReader &tr) {
   return (FALSE);
 }
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgoff.h"

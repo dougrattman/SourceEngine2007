@@ -11,7 +11,7 @@
 #include "triggers.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar soundscape_debug( "soundscape_debug", "0", FCVAR_CHEAT, "When on, draws lines to all env_soundscape entities. Green lines show the active soundscape, red lines show soundscapes that aren't in range, and white lines show soundscapes that are in range, but not the active soundscape." );
@@ -50,7 +50,7 @@ void CEnvSoundscapeProxy::Activate()
 	{
 		// Copy the relevant parameters from our main soundscape.
 		m_soundscapeIndex = m_hProxySoundscape->m_soundscapeIndex;
-		for ( int i=0; i < ARRAYSIZE( m_positionNames ); i++ )
+		for ( int i=0; i < SOURCE_ARRAYSIZE( m_positionNames ); i++ )
 			m_positionNames[i] = m_hProxySoundscape->m_positionNames[i];
 	}
 	else
@@ -223,7 +223,7 @@ void CEnvSoundscape::WriteAudioParamsTo( audioparams_t &audio )
 	audio.ent.Set( this );
 	audio.soundscapeIndex = m_soundscapeIndex;
 	audio.localBits = 0;
-	for ( int i = 0; i < ARRAYSIZE(m_positionNames); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE(m_positionNames); i++ )
 	{
 		if ( m_positionNames[i] != NULL_STRING )
 		{

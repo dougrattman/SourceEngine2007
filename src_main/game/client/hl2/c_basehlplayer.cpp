@@ -10,7 +10,7 @@
 #include "in_buttons.h"
 #include "playerandobjectenumerator.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // How fast to avoid collisions with center of other object, in units per second

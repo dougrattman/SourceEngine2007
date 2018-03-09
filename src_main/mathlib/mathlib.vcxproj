@@ -293,7 +293,7 @@
     <ClCompile Include="vmatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\public\mathlib\anorms.h" />
     <ClInclude Include="..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\public\mathlib\compressed_3d_unitvec.h" />

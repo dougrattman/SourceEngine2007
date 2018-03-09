@@ -99,7 +99,7 @@ class CEngine : public IEngine {
 
   void Frame() override {
     // yield the CPU for a little while when paused, minimized, or not the focus
-    // FIXME:  Move this to main windows message pump?
+    // TODO(d.rattman):  Move this to main windows message pump?
     if (!game->IsActiveApp() && !sv.IsDedicated()) {
       g_pInputSystem->SleepUntilInput(NOT_FOCUS_SLEEP);
     }

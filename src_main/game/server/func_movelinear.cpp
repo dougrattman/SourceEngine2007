@@ -12,7 +12,7 @@
 #include "ndebugoverlay.h"
 #include "physics_saverestore.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // -------------------------------
@@ -138,7 +138,7 @@ bool CFuncMoveLinear::CreateVPhysics(void) {
     fluid.viscosityFactor = 0.01f;
     fluid.pGameData = static_cast<void *>(this);
 
-    // FIXME: Currently there's no way to specify that you want slime
+    // TODO(d.rattman): Currently there's no way to specify that you want slime
     fluid.contents = CONTENTS_WATER;
 
     m_pFluidController = physenv->CreateFluidController(pPhysics, &fluid);
@@ -307,7 +307,7 @@ void CFuncMoveLinear::InputSetSpeed(inputdata_t &inputdata) {
   // Set the new speed
   m_flSpeed = inputdata.value.Float();
 
-  // FIXME: This is a little questionable.  Do we want to fix the speed, or let
+  // TODO(d.rattman): This is a little questionable.  Do we want to fix the speed, or let
   // it continue on at the old speed?
   float flDistToGoalSqr = (m_vecFinalDest - GetAbsOrigin()).LengthSqr();
   if (flDistToGoalSqr > Square(FLT_EPSILON)) {

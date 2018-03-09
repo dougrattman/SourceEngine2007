@@ -2,7 +2,7 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER(VertexLitGeneric, VertexLitGeneric_DX6)
@@ -142,7 +142,7 @@ void MultiplyByVertexLighting(IMaterialVar** params,
                               IShaderDynamicAPI* pShaderAPI,
                               IShaderShadow* pShaderShadow) {
   SHADOW_STATE {
-    // FIXME: How to deal with texture alpha??
+    // TODO(d.rattman): How to deal with texture alpha??
 
     pShaderShadow->EnableTexGen(SHADER_TEXTURE_STAGE0, false);
     pShaderShadow->EnableTexGen(SHADER_TEXTURE_STAGE1, false);
@@ -287,7 +287,7 @@ void DrawMode1(IMaterialVar** params, IShaderDynamicAPI* pShaderAPI,
 
   // Pass 1 : Base + env
 
-  // FIXME: Could make it 1 pass for base + env, if it wasn't
+  // TODO(d.rattman): Could make it 1 pass for base + env, if it wasn't
   // for the envmap tint. So this is 3 passes for now....
 
   // If it's base + mask * env, gotta do that in 2 passes
@@ -322,7 +322,7 @@ void DrawMode1(IMaterialVar** params, IShaderDynamicAPI* pShaderAPI,
   // Pass 2 : * vertex lighting
   MultiplyByVertexLighting(params, pShaderAPI, pShaderShadow);
 
-  // FIXME: We could add it to the lightmap
+  // TODO(d.rattman): We could add it to the lightmap
   // Draw the selfillum pass (blows away envmap at self-illum points)
   if (IS_FLAG_SET(MATERIAL_VAR_SELFILLUM)) {
     FixedFunctionSelfIlluminationPass(SHADER_SAMPLER0, BASETEXTURE, FRAME,

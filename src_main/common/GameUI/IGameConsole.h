@@ -6,7 +6,7 @@
 #include "tier1/interface.h"
 
 // Purpose: interface to game/dev console
-abstract_class IGameConsole : public IBaseInterface {
+the_interface IGameConsole : public IBaseInterface {
  public:
   // activates the console, makes it visible and brings it to the foreground
   virtual void Activate() = 0;

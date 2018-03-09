@@ -23,7 +23,7 @@
 #include "mathlib/mathlib.h"
 #include <stddef.h>
 #include "utlvector.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "studiomodel.h"
 #include "tier1/strtools.h"
 #include "bone_setup.h"
@@ -222,7 +222,7 @@ public:
 			Q_strncpy( parentName, pWord, sizeof(parentName) );
 			pWord = strtok( NULL, "," );
 			Q_strncpy( childName, pWord, sizeof(childName) );
-			if ( pEdit->mergeCount < ARRAYSIZE(pEdit->mergeList) )
+			if ( pEdit->mergeCount < SOURCE_ARRAYSIZE(pEdit->mergeList) )
 			{
 				merge_t *pMerge = &pEdit->mergeList[pEdit->mergeCount];
 				pEdit->mergeCount++;

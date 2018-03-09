@@ -87,7 +87,7 @@ void CWeaponPistols::PrimaryAttack( void )
 //-----------------------------------------------------------------------------
 void CWeaponPistols::SecondaryAttack( void )
 {
-	/* FIXME: Temporarily disabled
+	/* TODO(d.rattman): Temporarily disabled
 	CBasePlayer *pPlayer = GetOwner();
 	if ( pPlayer == NULL )
 		return;

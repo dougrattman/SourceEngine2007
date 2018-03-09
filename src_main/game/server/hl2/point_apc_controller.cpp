@@ -21,7 +21,7 @@
 #include "entitylist.h"
 #include "iservervehicle.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_TANK_ACTIVE			0x0001
@@ -419,7 +419,7 @@ void CAPCController::TrackTarget( void )
 
 	if ( lineOfSight == TRUE )
 	{
-		// FIXME: This will ultimately have to deal with NPCs being in the vehicle as well
+		// TODO(d.rattman): This will ultimately have to deal with NPCs being in the vehicle as well
 		// See if the target is in a vehicle. If so, check its relationship
 		CBasePlayer *pPlayer = ToBasePlayer( pTarget );
 		if ( pPlayer && pPlayer->IsInAVehicle() )

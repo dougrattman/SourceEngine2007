@@ -9,7 +9,7 @@
 #include "vstdlib/random.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define		NUM_LATERAL_CHECKS		13  // how many checks are made on each side of a NPC looking for lateral cover

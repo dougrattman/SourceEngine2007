@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "render_pch.h"
 
@@ -17,7 +17,6 @@
 #include "tier1/memstack.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define DECAL_CACHEENTRY \
@@ -150,8 +149,8 @@ float ComputeDecalLightmapOffset(SurfaceHandle_t surfID) {
 }
 
 static VertexFormat_t GetUncompressedFormat(const IMaterial *pMaterial) {
-  // FIXME: IMaterial::GetVertexFormat() should do this stripping (add a
-  // separate 'SupportsCompression' accessor)
+  // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add
+  // a separate 'SupportsCompression' accessor)
   return (pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED);
 }
 
@@ -261,7 +260,7 @@ void R_DecalGetMaterialAndSize(int decalIndex, IMaterial *&pDecalMaterial,
   float scale = 1.0f;
 
   // Compute scale of surface
-  // FIXME: cache this?
+  // TODO(d.rattman): cache this?
   bool found;
   IMaterialVar *pDecalScaleVar =
       pDecalMaterial->FindVar("$decalScale", &found, false);
@@ -880,7 +879,7 @@ static void R_DecalShoot_(IMaterial *pMaterial, int entity,
     decalInfo.m_Size = pMaterial->GetMappingHeight() >> 1;
 
   // Compute scale of surface
-  // FIXME: cache this?
+  // TODO(d.rattman): cache this?
   IMaterialVar *decalScaleVar;
   bool found;
   decalScaleVar = decalInfo.m_pMaterial->FindVar("$decalScale", &found, false);
@@ -1101,8 +1100,10 @@ static decal_t *R_DecalIntersect(decalinfo_t *decalinfo, SurfaceHandle_t surfID,
 
       // Now figure out the part of the projection that intersects pDecal's
       // clip box [0,0,1,1].
-      Vector2D vUnionMin(std::max(vDecalMin.x, 0.0f), std::max(vDecalMin.y, 0.0f));
-      Vector2D vUnionMax(std::min(vDecalMax.x, 1.0f), std::min(vDecalMax.y, 1.0f));
+      Vector2D vUnionMin(std::max(vDecalMin.x, 0.0f),
+                         std::max(vDecalMin.y, 0.0f));
+      Vector2D vUnionMax(std::min(vDecalMax.x, 1.0f),
+                         std::min(vDecalMax.y, 1.0f));
 
       if (vUnionMin.x < 1 && vUnionMin.y < 1 && vUnionMax.x > 0 &&
           vUnionMax.y > 0) {
@@ -1574,7 +1575,7 @@ void DrawDecalsOnSingleSurface_NonQueued(IMatRenderContext *pRenderContext,
   decal_t *plist = MSurf_DecalPointer(surfID);
 
 #if 1
-  // FIXME!  Make this not truck through the decal list twice.
+  // TODO(d.rattman): Make this not truck through the decal list twice.
   while (plist) {
     // Store off the next pointer, DecalUpdateAndDrawSingle could unlink
     decal_t *pnext = plist->pnext;
@@ -1595,7 +1596,7 @@ void DrawDecalsOnSingleSurface_NonQueued(IMatRenderContext *pRenderContext,
     plist = pnext;
   }
 #else
-  // FIXME!!:  This code screws up since DecalUpdateAndDrawSingle can
+  // TODO(d.rattman): This code screws up since DecalUpdateAndDrawSingle can
   // unlink items from the decal list.
   // The version below is used instead, which trucks through memory twice. . .
   // not optimal.

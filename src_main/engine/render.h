@@ -75,7 +75,7 @@ void R_LoadWorldGeometry(bool bDXChange = false);
 
 class VMatrix;
 
-abstract_class IRender {
+the_interface IRender {
  public:
   virtual void FrameBegin(void) = 0;
   virtual void FrameEnd(void) = 0;

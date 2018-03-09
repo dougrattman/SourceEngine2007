@@ -26,7 +26,7 @@
 #include "props.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const char *g_ppszGoalTypes[] = {
@@ -267,7 +267,7 @@ void CAI_Navigator::Restore(IRestore &restore) {
 //-----------------------------------------------------------------------------
 
 bool CAI_Navigator::ActivityIsLocomotive(Activity activity) {
-  // FIXME: should be calling HasMovement() for a sequence
+  // TODO(d.rattman): should be calling HasMovement() for a sequence
   return (activity > ACT_IDLE);
 }
 
@@ -388,11 +388,11 @@ bool CAI_Navigator::FindPath(const AI_NavGoal_t &goal, unsigned flags) {
     }
 
     // Initialize goal facing direction
-    // FIXME: This is a poor way to initialize the arrival direction, apps
+    // TODO(d.rattman): This is a poor way to initialize the arrival direction, apps
     // calling SetGoal()
     //		  should do this themselves, and/or it should be part of
     // AI_NavGoal_t
-    // FIXME: A number of calls to SetGoal() building routes to their enemy but
+    // TODO(d.rattman): A number of calls to SetGoal() building routes to their enemy but
     // don't set the flags!
     if (goal.type == GOALTYPE_ENEMY) {
       pPath->SetGoalDirection(pPathTarget);
@@ -420,7 +420,7 @@ bool CAI_Navigator::SetGoal(const AI_NavGoal_t &goal, unsigned flags) {
         CreateFunctor(this, &CAI_Navigator::SetGoal, RefToVal(goal), flags));
 
     // Complete immediately if we're waiting on that
-    // FIXME: This will probably cause a lot of subtle little nuisances...
+    // TODO(d.rattman): This will probably cause a lot of subtle little nuisances...
     if ((flags & AIN_NO_PATH_TASK_FAIL) == 0 ||
         GetOuter()->IsCurTaskContinuousMove()) {
       TaskComplete();
@@ -753,7 +753,7 @@ bool CAI_Navigator::PrependLocalAvoidance(float distObstacle,
     return false;
   }
 
-  // FIXME: should the route get simplified?
+  // TODO(d.rattman): should the route get simplified?
   DbgNavMsg(GetOuter(), "Adding triangulation\n");
   GetPath()->PrependWaypoints(pAvoidanceRoute);
   return true;
@@ -1110,7 +1110,7 @@ float CAI_Navigator::GetPathTimeToGoal() {
 //-----------------------------------------------------------------------------
 
 AI_PathNode_t CAI_Navigator::GetNearestNode() {
-  COMPILE_TIME_ASSERT((int)AIN_NO_NODE == NO_NODE);
+  static_assert((int)AIN_NO_NODE == NO_NODE);
   return (AI_PathNode_t)(GetPathfinder()->NearestNodeToNPC());
 }
 
@@ -1184,7 +1184,7 @@ void CAI_Navigator::OnNavFailed(AI_TaskFailureCode_t code, bool bMovement) {
 
         // if failing, turn off collisions with the object
         CBaseEntity *pBlocker = GetBlockingEntity();
-        // FIXME: change this to only be for MOVETYPE_VPHYSICS?
+        // TODO(d.rattman): change this to only be for MOVETYPE_VPHYSICS?
         if (pBlocker && !pBlocker->IsWorld() && !pBlocker->IsPlayer() &&
             !FClassnameIs(pBlocker, "func_tracktrain")) {
           // pBlocker->DrawBBoxOverlay( 2.0f );
@@ -1573,7 +1573,7 @@ bool CAI_Navigator::OnObstructionPreSteer(AILocalMoveGoal_t *pMoveGoal,
   if (ai_vehicle_avoidance.GetBool() &&
       pMoveGoal->directTrace.pObstruction != NULL &&
       pMoveGoal->directTrace.pObstruction->GetServerVehicle() != NULL) {
-    // FIXME: This should change into a flag which forces an OBB route to be
+    // TODO(d.rattman): This should change into a flag which forces an OBB route to be
     // formed around the entity in question!
     AI_Waypoint_t *pOBB = GetPathfinder()->BuildOBBAvoidanceRoute(
         GetOuter()->GetAbsOrigin(), GetGoalPos(),
@@ -2052,7 +2052,7 @@ AIMoveResult_t CAI_Navigator::MoveNormal() {
 
   // --------------------------------
 
-  // FIXME: only need since IdealSpeed isn't based on movement activity but
+  // TODO(d.rattman): only need since IdealSpeed isn't based on movement activity but
   // immediate activity!
   SetActivity(GetMovementActivity());
 
@@ -2074,7 +2074,7 @@ AIMoveResult_t CAI_Navigator::MoveNormal() {
   // If we didn't actually move, but it was a success (i.e., blocked but within
   // tolerance), make sure no visual artifact
 
-  // FIXME: only needed because of the above slamming of SetActivity(), which is
+  // TODO(d.rattman): only needed because of the above slamming of SetActivity(), which is
   // only needed because GetIdealSpeed() looks at the current activity instead
   // of the movement activity.
 
@@ -2136,7 +2136,7 @@ bool CAI_Navigator::PreMove() {
 
 bool CAI_Navigator::IsMovingOutOfWay(const AILocalMoveGoal_t &moveGoal,
                                      float distClear) {
-  // FIXME: We can make this work for regular entities; although the
+  // TODO(d.rattman): We can make this work for regular entities; although the
   // original code was simply looking @ NPCs. I'm reproducing that code now
   // although I want to make it work for both.
   CAI_BaseNPC *pBlocker =
@@ -2900,7 +2900,7 @@ bool CAI_Navigator::SimplifyFlyPath(const AI_ProgressFlyPathParams_t &params) {
   float length = VectorNormalize(dir);
 
   if (!bIsStrictWaypoint || length < params.strictPointTolerance) {
-    // FIXME: This seems strange... Why should this condition ever be met?
+    // TODO(d.rattman): This seems strange... Why should this condition ever be met?
     // Don't advance your waypoint if you don't have one!
     if (GetPath()->CurWaypointIsGoal()) return false;
 
@@ -3046,7 +3046,7 @@ float CAI_Navigator::BuildAndGetPathDistToGoal() {
   return -1;
 }
 
-// FIXME: this ignores the fact that flPathDistGoal might be -1, yielding
+// TODO(d.rattman): this ignores the fact that flPathDistGoal might be -1, yielding
 // nonsensical results. See BuildAndGetPathDistToGoal above.
 float CAI_Navigator::GetPathDistToGoal() const {
   return (GetPath()->GetCurWaypoint())
@@ -3368,7 +3368,7 @@ bool CAI_Navigator::DoFindPathToPathcorner(CBaseEntity *pPathCorner) {
           // approaching a pathcorner
           lastWaypoint->ModifyFlags(bits_WP_TO_GOAL, false);
           // BRJ 10/4/02
-          // FIXME: I'm not certain about the navtype here
+          // TODO(d.rattman): I'm not certain about the navtype here
           AI_Waypoint_t *curWaypoint = new AI_Waypoint_t(
               pPathCorner->GetLocalOrigin(), 0, GetNavType(),
               (bits_WP_TO_PATHCORNER | bits_WP_TO_GOAL), NO_NODE);

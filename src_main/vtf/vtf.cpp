@@ -15,7 +15,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // byteswap data descriptions
@@ -62,7 +62,7 @@ BEGIN_BYTESWAP_DATADESC_(VTFFileHeaderX360_t, VTFFileBaseHeader_t)
       DEFINE_ARRAY(lowResImageSample, FIELD_CHARACTER, 4),
       DEFINE_FIELD(compressedSize, FIELD_INTEGER),
 END_DATADESC()
-#if defined(_LINUX)
+#if defined(OS_POSIX)
 // stub functions
 const char *S3TC_GetBlock(const void *pCompressed, ImageFormat format,
                           int nBlocksWide,  // How many blocks wide is the
@@ -203,7 +203,7 @@ CVTFTexture::CVTFTexture() {
   m_nFaceCount = 0;
   m_nFrameCount = 0;
 
-  // FIXME: Is the start frame needed?
+  // TODO(d.rattman): Is the start frame needed?
   m_iStartFrame = 0;
 
   m_flAlphaThreshhold = -1.0f;
@@ -793,7 +793,7 @@ bool CVTFTexture::Unserialize(CUtlBuffer &buf, bool bHeaderOnly,
   m_vecReflectivity = header.reflectivity;
   m_flBumpScale = header.bumpScale;
 
-  // FIXME: Why is this needed?
+  // TODO(d.rattman): Why is this needed?
   m_iStartFrame = header.startFrame;
 
   // This is to make sure old-format .vtf files are read properly
@@ -1055,7 +1055,7 @@ bool CVTFTexture::Serialize(CUtlBuffer &buf) {
   VectorCopy(m_vecReflectivity, header.reflectivity);
   header.bumpScale = m_flBumpScale;
 
-  // FIXME: Why is this needed?
+  // TODO(d.rattman): Why is this needed?
   header.startFrame = m_iStartFrame;
 
   header.lowResImageWidth = m_nLowResImageWidth;
@@ -1385,7 +1385,7 @@ void CVTFTexture::ConvertImageFormat(ImageFormat fmt, bool bNormalToDUDV) {
     return;
   }
 
-  // FIXME: Should this be re-written to not do an allocation?
+  // TODO(d.rattman): Should this be re-written to not do an allocation?
   int iConvertedSize = ComputeTotalSize(fmt);
 
   unsigned char *pConvertedImage =
@@ -1958,7 +1958,7 @@ void CVTFTexture::GenerateMipmaps() {
   Assert(m_Format == IMAGE_FORMAT_RGBA8888 ||
          m_Format == IMAGE_FORMAT_RGB323232F);
 
-  // FIXME: Should we be doing anything special for normalmaps other than a
+  // TODO(d.rattman): Should we be doing anything special for normalmaps other than a
   // final normalization pass?
   ImageLoader::ResampleInfo_t info;
   info.m_nSrcWidth = m_nWidth;
@@ -2232,7 +2232,7 @@ void CVTFTexture::PostProcess(bool bGenerateSpheremap, LookDir_t lookDir,
     // Rotate the cubemaps so they're appropriate for the material system
     if (bAllowFixCubemapOrientation) FixCubemapFaceOrientation();
 
-    // FIXME: We could theoretically not compute spheremap mip levels
+    // TODO(d.rattman): We could theoretically not compute spheremap mip levels
     // in generate spheremaps; should we? The trick is when external
     // clients can be expected to call it
 

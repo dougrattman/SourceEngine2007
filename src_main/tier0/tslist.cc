@@ -1,12 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/tslist.h"
 
+#include "base/include/base_types.h"
+#include "tier0/include/platform.h"
+
 namespace TSListTests {
-i32 NUM_TEST = 10000;
+isize NUM_TEST = 10000;
 i32 NUM_THREADS;
-i32 MAX_THREADS = 8;
-i32 NUM_PROCESSORS = 1;
+u16 MAX_THREADS = 8;
+u8 NUM_PROCESSORS = 1;
 
 CInterlockedInt g_nTested;
 CInterlockedInt g_nThreads;
@@ -71,14 +74,14 @@ void ClearBuckets(i32 *pTestBuckets) {
   memset(pTestBuckets, 0, sizeof(i32) * NUM_TEST);
 }
 
-void IncBucket(i32 *pTestBuckets, i32 i) {
+void IncBucket(i32 *pTestBuckets, isize i) {
   if (i < NUM_TEST)  // tests can slop over a bit
   {
     ThreadInterlockedIncrement(&pTestBuckets[i]);
   }
 }
 
-void DecBucket(i32 *pTestBuckets, i32 i) {
+void DecBucket(i32 *pTestBuckets, isize i) {
   if (i < NUM_TEST)  // tests can slop over a bit
   {
     ThreadInterlockedDecrement(&pTestBuckets[i]);
@@ -86,7 +89,7 @@ void DecBucket(i32 *pTestBuckets, i32 i) {
 }
 
 void ValidateBuckets(i32 *pTestBuckets) {
-  for (i32 i = 0; i < NUM_TEST; i++) {
+  for (isize i = 0; i < NUM_TEST; i++) {
     if (pTestBuckets[i] != 0) {
       Msg("Test bucket %d has an invalid value %d\n", i, pTestBuckets[i]);
       DebuggerBreakIfDebugging();
@@ -241,10 +244,10 @@ void STPushMTPop(i32 *pTestBuckets, bool bDistribute) {
       bDistribute ? "distributed..." : "no affinity...");
   TestStart(pTestBuckets);
   CreateSimpleThread(&PushThreadFunc, nullptr);
-  for (i32 i = 0; i < NUM_THREADS - 1; i++) {
+  for (isize i = 0; i < NUM_THREADS - 1; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PopThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (i % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (i % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
@@ -258,10 +261,10 @@ void MTPushSTPop(i32 *pTestBuckets, bool bDistribute) {
       bDistribute ? "distributed..." : "no affinity...");
   TestStart(pTestBuckets);
   CreateSimpleThread(&PopThreadFunc, nullptr);
-  for (i32 i = 0; i < NUM_THREADS - 1; i++) {
+  for (isize i = 0; i < NUM_THREADS - 1; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PushThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (i % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (i % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
@@ -275,17 +278,17 @@ void MTPushMTPop(i32 *pTestBuckets, bool bDistribute) {
       bDistribute ? "distributed..." : "no affinity...");
   TestStart(pTestBuckets);
   i32 ct = 0;
-  for (i32 i = 0; i < NUM_THREADS / 2; i++) {
+  for (isize i = 0; i < NUM_THREADS / 2; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PopThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (ct++ % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (ct++ % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
-  for (i32 i = 0; i < NUM_THREADS / 2; i++) {
+  for (isize i = 0; i < NUM_THREADS / 2; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PushThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (ct++ % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (ct++ % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
@@ -299,11 +302,11 @@ void MTPushPopPopInterleaved(i32 *pTestBuckets, bool bDistribute) {
       bDistribute ? "distributed..." : "no affinity...");
   srand(Plat_MSTime());
   TestStart(pTestBuckets);
-  for (i32 i = 0; i < NUM_THREADS; i++) {
+  for (isize i = 0; i < NUM_THREADS; i++) {
     ThreadHandle_t hThread =
         CreateSimpleThread(&PushPopInterleavedTestThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (i % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (i % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
@@ -315,10 +318,10 @@ void MTPushSeqPop(i32 *pTestBuckets, bool bDistribute) {
   Msg("%s test: multithread push, sequential pop, %s", g_pListType,
       bDistribute ? "distributed..." : "no affinity...");
   TestStart(pTestBuckets);
-  for (i32 i = 0; i < NUM_THREADS; i++) {
+  for (isize i = 0; i < NUM_THREADS; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PushThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (i % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (i % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }
@@ -338,10 +341,10 @@ void SeqPushMTPop(i32 *pTestBuckets, bool bDistribute) {
   while (g_nTested++ < NUM_TEST) {
     g_pTestOps->Push(g_nTested);
   }
-  for (i32 i = 0; i < NUM_THREADS; i++) {
+  for (isize i = 0; i < NUM_THREADS; i++) {
     ThreadHandle_t hThread = CreateSimpleThread(&PopThreadFunc, nullptr);
     if (bDistribute) {
-      i32 mask = 1 << (i % NUM_PROCESSORS);
+      uintptr_t mask = (usize)1 << (i % NUM_PROCESSORS);
       ThreadSetAffinity(hThread, mask);
     }
   }

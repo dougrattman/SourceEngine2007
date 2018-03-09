@@ -14,7 +14,7 @@
 #include "vgui_controls/Label.h"
 #include "vgui_controls/PanelListPanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -58,7 +58,7 @@ class CSaveGamePanel : public vgui::EditablePanel {
 
   void SetSaveGameInfo(SaveGameDescription_t &save) {
     // set the bitmap to display
-    char tga[_MAX_PATH];
+    char tga[SOURCE_MAX_PATH];
     Q_strncpy(tga, save.szFileName, sizeof(tga));
     char *ext = strstr(tga, ".sav");
     if (ext) {
@@ -185,7 +185,7 @@ int CBaseSaveGameDialog::GetSelectedItemSaveIndex() {
 //-----------------------------------------------------------------------------
 void CBaseSaveGameDialog::ScanSavedGames() {
   // populate list box with all saved games on record:
-  char szDirectory[_MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
   Q_snprintf(szDirectory, sizeof(szDirectory), "save/*.sav");
 
   // clear the current list
@@ -201,7 +201,7 @@ void CBaseSaveGameDialog::ScanSavedGames() {
       continue;
     }
 
-    char szFileName[_MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFileName, sizeof(szFileName), "save/%s", pFileName);
 
     // Only load save games from the current mod's save dir
@@ -479,7 +479,7 @@ void CBaseSaveGameDialog::DeleteSaveGame(const char *fileName) {
   g_pFullFileSystem->RemoveFile(fileName, "MOD");
 
   // delete the associated tga
-  char tga[_MAX_PATH];
+  char tga[SOURCE_MAX_PATH];
   Q_strncpy(tga, fileName, sizeof(tga));
   char *ext = strstr(tga, ".sav");
   if (ext) {

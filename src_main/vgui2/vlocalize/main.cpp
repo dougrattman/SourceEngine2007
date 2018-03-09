@@ -16,8 +16,6 @@
 #include "vgui/IVGui.h"
 #include "vgui_controls/Panel.h"
 
-//#include "..\..\tracker\common\winlite.h"
-
 #include "LocalizationDialog.h"
 
 #include <stdio.h>

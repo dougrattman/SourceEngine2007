@@ -5,11 +5,11 @@
 #include <cstdio>
 #include <cstring>
 #include "tier0/include/basetypes.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // The four core functions - F1 is optimized somewhat

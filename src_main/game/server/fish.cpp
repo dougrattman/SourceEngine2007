@@ -9,7 +9,7 @@
 
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar fish_dormant("fish_dormant", "0", FCVAR_REPLICATED | FCVAR_CHEAT,

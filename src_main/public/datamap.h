@@ -4,14 +4,14 @@
 #define SOURCE_DATAMAP_H_
 
 #include "mathlib/vector.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier1/utlvector.h"
 
 #include "tier0/include/memdbgon.h"
 
-// SINGLE_INHERITANCE restricts the size of CBaseEntity
+// MSVC_SINGLE_INHERITANCE restricts the size of CBaseEntity
 // pointers-to-member-functions to 4 bytes
-class SINGLE_INHERITANCE CBaseEntity;
+class MSVC_SINGLE_INHERITANCE CBaseEntity;
 struct inputdata_t;
 
 #define INVALID_TIME (FLT_MAX * -1.0)  // Special value not rebased on save/load
@@ -121,12 +121,12 @@ DECLARE_FIELD_SIZE(
 DECLARE_FIELD_SIZE(FIELD_MODELINDEX, sizeof(int))
 DECLARE_FIELD_SIZE(FIELD_MATERIALINDEX, sizeof(int))
 
-#if !defined(offsetof) || defined(_LINUX)
+#if !defined(offsetof) || defined(OS_POSIX)
 #define offsetof(s, m) (size_t) & (((s *)0)->m)
 #endif
 
 #define ARRAYSIZE2D(p) (sizeof(p) / sizeof(p[0][0]))
-#define SIZE_OF_ARRAY(p) _ARRAYSIZE(p)
+#define SIZE_OF_ARRAY(p) sizeof(p)/sizeof((p)[0])
 
 #define _FIELD(name, fieldtype, count, flags, mapname, tolerance)          \
   {                                                                        \
@@ -565,7 +565,6 @@ class CDatadescGeneratedNameHolder {
   size_t m_nLenBase;
   CUtlVector<char *> m_Names;
 };
-
 
 
 #include "tier0/include/memdbgoff.h"

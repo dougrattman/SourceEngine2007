@@ -6,7 +6,7 @@
 #include "tier1/interface.h"
 
 // Purpose: interface to accessing all loaded modules
-abstract_class IVGuiModuleLoader : public IBaseInterface {
+the_interface IVGuiModuleLoader : public IBaseInterface {
  public:
   virtual int GetModuleCount() = 0;
   virtual const char *GetModuleLabel(int moduleIndex) = 0;

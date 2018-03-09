@@ -322,7 +322,7 @@ class CBasePerMaterialContextData  		// shaders can keep per material data in cl
 	uint32_t m_nVarChangeID;
 	bool m_bMaterialVarsChanged;  	// set by mat system when material vars change. shader should rehtink and then clear the var
 
-	FORCEINLINE CBasePerMaterialContextData( void )
+	SOURCE_FORCEINLINE CBasePerMaterialContextData( void )
 	{
 		m_bMaterialVarsChanged = true;
 		m_nVarChangeID = 0xffffffff;

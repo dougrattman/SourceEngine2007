@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // This header defines the interface convention used in the valve engine.
 // To make an interface and expose it:
@@ -44,7 +44,8 @@
 #define _snprintf snprintf
 #endif
 
-// TODO: move interface.cpp into tier0 library.
+#include "tier0/include/basetypes.h"
+// TODO(d.rattman): move interface.cpp into tier0 library.
 #include "tier0/include/platform.h"
 
 // All interfaces derive from this.
@@ -164,7 +165,8 @@ enum { IFACE_OK = 0, IFACE_FAILED };
 // interfaces exposed with the above macros. if pReturnCode is set, it will
 // return one of the following values (IFACE_OK, IFACE_FAILED) extend this for
 // other error conditions/code.
-DLL_EXPORT void *CreateInterface(const char *interface_name, int *return_code);
+SOURCE_API_EXPORT void *CreateInterface(const char *interface_name,
+                                        int *return_code);
 
 // UNDONE: This is obsolete, use the module load/unload/get instead!!!
 extern CreateInterfaceFn Sys_GetFactory(CSysModule *module);

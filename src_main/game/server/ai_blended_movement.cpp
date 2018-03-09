@@ -10,7 +10,7 @@
 #include "movevars_shared.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ void CAI_BlendedMotor::SetMoveScriptAnim(float flNewSpeed) {
   if (!GetOuter()->IsAlive()) return;
 
   // insert ideal layers
-  // FIXME: needs full transitions, as well as starting vs stopping sequences,
+  // TODO(d.rattman): needs full transitions, as well as starting vs stopping sequences,
   // leaning, etc.
 
   CAI_Navigator *pNavigator = GetNavigator();
@@ -391,7 +391,7 @@ void CAI_BlendedMotor::SetMoveScriptAnim(float flNewSpeed) {
 int CAI_BlendedMotor::GetInteriorSequence(int fromSequence) {
   AI_PROFILE_SCOPE(CAI_BlendedMotor_GetInteriorSequence);
 
-  // FIXME: add interior activity to path, just like arrival activity.
+  // TODO(d.rattman): add interior activity to path, just like arrival activity.
   int sequence = GetNavigator()->GetMovementSequence();
 
   if (m_nInteriorSequence != ACT_INVALID &&
@@ -483,7 +483,7 @@ AIMotorMoveResult_t CAI_BlendedMotor::MoveGroundExecute(
   // reset actual "sequence" ground speed based current movement sequence,
   // orientation
 
-  // FIXME: this should be based on
+  // TODO(d.rattman): this should be based on
 
   GetOuter()->m_flGroundSpeed = GetSequenceGroundSpeed(GetSequence());
 
@@ -551,7 +551,7 @@ AIMotorMoveResult_t CAI_BlendedMotor::MoveFlyExecute(
   // reset actual "sequence" ground speed based current movement sequence,
   // orientation
 
-  // FIXME: the above is redundant with MoveGroundExecute, and the below is a
+  // TODO(d.rattman): the above is redundant with MoveGroundExecute, and the below is a
   // mix of MoveGroundExecuteWalk and MoveFlyExecute
 
   bool bReachingLocalGoal = (flTotalDist > move.maxDist);
@@ -783,7 +783,7 @@ void CAI_BlendedMotor::BuildTurnScript(const AILocalMoveGoal_t &move) {
   }
 
   // propagate ending facing back over any nearby nodes
-  // FIXME: this needs to minimize total turning, not just local/end turning.
+  // TODO(d.rattman): this needs to minimize total turning, not just local/end turning.
   // depending on waypoint spacing, complexity, it may turn the wrong way!
   for (i = m_scriptTurn.Count() - 1; i > 1; i--) {
     float deltaYaw =
@@ -1059,7 +1059,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
                       m_scriptMove[m_scriptMove.Count() - 1].vecLocation;
 
           // remove very short, non terminal ground links
-          // FIXME: is this safe?  Maybe just check for co-located ground
+          // TODO(d.rattman): is this safe?  Maybe just check for co-located ground
           // points?
           if (d1.Length2D() < 1.0) {
             /*
@@ -1090,7 +1090,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
         } break;
         case NAV_JUMP:
 
-          // FIXME: information about what the jump should look like isn't
+          // TODO(d.rattman): information about what the jump should look like isn't
           // stored in the waypoints this'll need to call
           //    GetMoveProbe()->MoveLimit( NAV_JUMP, GetLocalOrigin(),
           //    GetPath()->CurWaypointPos(), MASK_NPCSOLID,
@@ -1129,7 +1129,7 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
         } break;
           /*
           case NAV_FLY:
-                  // FIXME: can there be a NAV_GROUND -> NAV_FLY transition?
+                  // TODO(d.rattman): can there be a NAV_GROUND -> NAV_FLY transition?
                   script.flMaxVelocity = 0;
                   break;
           */
@@ -1196,7 +1196,8 @@ void CAI_BlendedMotor::BuildVelocityScript(const AILocalMoveGoal_t &move) {
     m_scriptMove[0].vecLocation + Vector( 0, 0, 10 ),
     m_scriptMove[0].vecLocation + tmp * 32 + Vector( 0, 0, 10 ), 255,255,255,
     true, 0.1 );
-            
+            
+
 
 
 

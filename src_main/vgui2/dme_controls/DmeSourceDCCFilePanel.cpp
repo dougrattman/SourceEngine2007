@@ -15,7 +15,7 @@
 #include "vgui/keycode.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -352,7 +352,7 @@ void CDmeSourceDCCFilePanel::OnDCCObjectNameChanged()
 	if ( nDCCObjectIndex < 0 )
 		return;
 
-	char pDCCObjectName[MAX_PATH];
+	char pDCCObjectName[SOURCE_MAX_PATH];
 	m_pDCCObjectName->GetText( pDCCObjectName, sizeof(pDCCObjectName) );
 
 	if ( CheckForDuplicateNames( pDCCObjectName, nDCCObjectIndex ) )

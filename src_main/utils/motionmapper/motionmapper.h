@@ -37,7 +37,7 @@ struct LodScriptData_t;
 
 EXTERN	char		outname[1024];
 EXTERN  int			numdirs;
-EXTERN	char		cddir[32][MAX_PATH];
+EXTERN	char		cddir[32][SOURCE_MAX_PATH];
 EXTERN  char		fullpath[1024];
 
 EXTERN	float		g_defaultscale;
@@ -45,8 +45,8 @@ EXTERN  float		g_currentscale;
 EXTERN  RadianEuler	g_defaultrotation;
 
 
-EXTERN	char		defaulttexture[16][MAX_PATH];
-EXTERN	char		sourcetexture[16][MAX_PATH];
+EXTERN	char		defaulttexture[16][SOURCE_MAX_PATH];
+EXTERN	char		sourcetexture[16][SOURCE_MAX_PATH];
 
 EXTERN	int			numrep;
 
@@ -114,7 +114,7 @@ struct s_bone_t
 
 struct s_texture_t
 {
-	char	name[MAX_PATH];
+	char	name[SOURCE_MAX_PATH];
 	int		flags;
 	int		parent;
 	int		material;
@@ -179,7 +179,7 @@ struct s_loddata_t
 // raw off-disk source files.  Raw data should be not processed.
 struct s_source_t
 {
-	char	filename[MAX_PATH];
+	char	filename[SOURCE_MAX_PATH];
 	int 	time;	// time stamp
 
 	bool	isActiveModel;

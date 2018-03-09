@@ -101,7 +101,7 @@ float4 main( PS_INPUT i ) : COLOR
 	specularLighting *= g_ReflectTint;
 	
 #if FRESNEL
-	// FIXME: It's unclear that we want to do this for cheap water
+	// TODO(d.rattman): It's unclear that we want to do this for cheap water
 	// but the code did this previously and I didn't want to change it
 	HALF flDotResult = dot( worldSpaceEye, worldSpaceNormal ); 
 	flDotResult = 1.0f - max( 0.0f, flDotResult );

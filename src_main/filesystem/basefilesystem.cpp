@@ -1,6 +1,8 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifdef _LINUX
+#include "build/include/build_config.h"
+
+#ifdef OS_POSIX
 #define _snwprintf swprintf
 #endif
 
@@ -24,7 +26,7 @@
 #endif
 #include "ifilelist.h"
 
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 // Needed for getting file type string
 #define WIN32_LEAN_AND_MEAN
 #include <shellapi.h>
@@ -35,7 +37,7 @@
 #undef GetCurrentDirectory
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar fs_report_sync_opens("fs_report_sync_opens", "0", 0,
@@ -240,7 +242,7 @@ CBaseFileSystem::CBaseFileSystem()
 
   // If this changes then FileNameHandleInternal_t/FileNameHandle_t needs to be
   // fixed!!!
-  COMPILE_TIME_ASSERT(sizeof(CUtlSymbol) == sizeof(short));
+  static_assert(sizeof(CUtlSymbol) == sizeof(short));
 
   // Clear out statistics
   memset(&m_Stats, 0, sizeof(m_Stats));
@@ -660,7 +662,7 @@ bool CBaseFileSystem::AddPackFileFromPath(const char *pPath,
                                           const char *pakfile,
                                           bool bCheckForAppendedPack,
                                           const char *pathID) {
-  char fullpath[MAX_PATH];
+  char fullpath[SOURCE_MAX_PATH];
   _snprintf(fullpath, sizeof(fullpath), "%s%s", pPath, pakfile);
   Q_FixSlashes(fullpath);
 
@@ -743,7 +745,7 @@ int CPackFile::ReadFromPack(int nIndex, void *buffer, int nDestBytes,
   if (fs_monitor_read_from_pack.GetInt() == 1 ||
       (fs_monitor_read_from_pack.GetInt() == 2 && ThreadInMainThread())) {
     // spew info about real i/o request
-    char szName[MAX_PATH];
+    char szName[SOURCE_MAX_PATH];
     IndexToFilename(nIndex, szName, sizeof(szName));
     Msg("Read From Pack: Sync I/O: Requested:%7d, Offset:0x%16.16x, %s\n",
         nBytes, m_nBaseOffset + nOffset, szName);
@@ -1040,7 +1042,7 @@ bool CZipPackFile::Prepare(int64_t fileLen, int64_t nFileOfs) {
   zipDirBuff.SeekPut(CUtlBuffer::SEEK_HEAD, rec.centralDirectorySize);
 
   ZIP_FileHeader zipFileHeader;
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
 
   // Check for a preload section, expected to be the first file in the zip
   zipDirBuff.GetObjects(&zipFileHeader);
@@ -1067,7 +1069,7 @@ bool CZipPackFile::Prepare(int64_t fileLen, int64_t nFileOfs) {
   // Parse out central directory and determine absolute file positions of data.
   // Supports uncompressed zip files, with or without preload sections
   bool bSuccess = true;
-  char tmpString[MAX_PATH];
+  char tmpString[SOURCE_MAX_PATH];
   CZipPackFile::CPackFileEntry lookup;
 
   m_PackFiles.EnsureCapacity(numFilesInZip);
@@ -1158,8 +1160,8 @@ void CBaseFileSystem::AddPackFiles(const char *pPath, const CUtlSymbol &pathID,
 
   // determine pak files, [zip0..zipN]
   for (int i = 0;; i++) {
-    char pakfile[MAX_PATH];
-    char fullpath[MAX_PATH];
+    char pakfile[SOURCE_MAX_PATH];
+    char fullpath[SOURCE_MAX_PATH];
     V_snprintf(pakfile, sizeof(pakfile), PACK_NAME_FORMAT, i);
     V_ComposeFileName(pPath, pakfile, fullpath, sizeof(fullpath));
 
@@ -1177,7 +1179,7 @@ void CBaseFileSystem::AddPackFiles(const char *pPath, const CUtlSymbol &pathID,
   int pakcount = pakSizes.Count();
   int nCount = 0;
   for (int i = pakcount - 1; i >= 0; i--) {
-    char fullpath[MAX_PATH];
+    char fullpath[SOURCE_MAX_PATH];
     V_ComposeFileName(pPath, pakNames[i].Get(), fullpath, sizeof(fullpath));
 
     int nIndex;
@@ -1252,7 +1254,7 @@ void CBaseFileSystem::RemoveAllMapSearchPaths() {
 //-----------------------------------------------------------------------------
 void CBaseFileSystem::AddMapPackFile(const char *pPath, const char *pPathID,
                                      SearchPathAdd_t addType) {
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pPath, pPathID, tempPathID);
 
   char newPath[MAX_FILEPATH];
@@ -1908,7 +1910,7 @@ bool CBaseFileSystem::WriteFile(const char *pFileName, const char *pPath,
 
 bool CBaseFileSystem::UnzipFile(const char *pFileName, const char *pPath,
                                 const char *pDestination) {
-#ifdef _LINUX
+#ifdef OS_POSIX
   Error(" need to hook up zip for linux");
 #else
   IZip *pZip = IZip::CreateZip(NULL, true);
@@ -1921,7 +1923,7 @@ bool CBaseFileSystem::UnzipFile(const char *pFileName, const char *pPath,
 
   int iZipIndex = -1;
   int iFileSize;
-  char szFileName[MAX_PATH];
+  char szFileName[SOURCE_MAX_PATH];
 
   // Create Directories
   CreateDirHierarchy(pDestination, pPath);
@@ -1941,7 +1943,7 @@ bool CBaseFileSystem::UnzipFile(const char *pFileName, const char *pPath,
       // Its a directory, so create it
       szFileName[iFileNameLength - 1] = '\0';
 
-      char szFinalName[MAX_PATH];
+      char szFinalName[SOURCE_MAX_PATH];
       Q_snprintf(szFinalName, sizeof(szFinalName), "%s\\%s", pDestination,
                  szFileName);
       CreateDirHierarchy(szFinalName, pPath);
@@ -1965,7 +1967,7 @@ bool CBaseFileSystem::UnzipFile(const char *pFileName, const char *pPath,
       fileBuffer.Purge();
 
       if (pZip->ReadFileFromZip(hZipFile, szFileName, false, fileBuffer)) {
-        char szFinalName[MAX_PATH];
+        char szFinalName[SOURCE_MAX_PATH];
         Q_snprintf(szFinalName, sizeof(szFinalName), "%s\\%s", pDestination,
                    szFileName);
 
@@ -2180,7 +2182,7 @@ void CBaseFileSystem::HandleOpenFromPackFile(CPackFile *pPackFile,
   openInfo.m_pFileHandle =
       pPackFile->OpenFile(openInfo.m_pFileName, openInfo.m_pOptions);
   if (openInfo.m_pFileHandle) {
-    char tempStr[MAX_PATH * 2 + 2];
+    char tempStr[SOURCE_MAX_PATH * 2 + 2];
     V_snprintf(tempStr, sizeof(tempStr), "%s%c%s",
                pPackFile->m_ZipName.String(), CORRECT_PATH_SEPARATOR,
                openInfo.m_pFileName);
@@ -2213,7 +2215,7 @@ void CBaseFileSystem::HandleOpenRegularFile(CFileOpenInfo &openInfo,
       Plat_DebugString("fs_debug: ");
       Plat_DebugString(openInfo.m_AbsolutePath);
       Plat_DebugString("\n");
-#elif _LINUX
+#elif OS_POSIX
       fprintf(stderr, "fs_debug: %s\n", openInfo.m_AbsolutePath);
 #endif
     }
@@ -2307,13 +2309,13 @@ FileHandle_t CBaseFileSystem::OpenForRead(const char *pFileName,
 FileHandle_t CBaseFileSystem::OpenForWrite(const char *pFileName,
                                            const char *pOptions,
                                            const char *pathID) {
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pathID, tempPathID);
 
   // Opening for write or append uses the write path
   // Unless an absolute path is specified...
   const char *pTmpFileName;
-  char szScratchFileName[MAX_PATH];
+  char szScratchFileName[SOURCE_MAX_PATH];
   if (Q_IsAbsolutePath(pFileName)) {
     pTmpFileName = pFileName;
   } else {
@@ -2341,12 +2343,12 @@ FileHandle_t CBaseFileSystem::OpenForWrite(const char *pFileName,
 // pFilename to "cfg/config.cfg" and pPathID to "mod" (mod is placed in
 // tempPathID).
 void CBaseFileSystem::ParsePathID(const char *&pFilename, const char *&pPathID,
-                                  char tempPathID[MAX_PATH]) {
+                                  char tempPathID[SOURCE_MAX_PATH]) {
   tempPathID[0] = 0;
 
   if (!pFilename || pFilename[0] == 0) return;
 
-  // FIXME: Pain! Backslashes are used to denote network drives, forward to
+  // TODO(d.rattman): Pain! Backslashes are used to denote network drives, forward to
   // denote path ids HOORAY! We call FixSlashes everywhere. That will definitely
   // not work I'm not changing it yet though because I don't know how painful
   // the bugs would be that would be generated
@@ -2365,7 +2367,7 @@ void CBaseFileSystem::ParsePathID(const char *&pFilename, const char *&pPathID,
   // Parse out the path ID.
   const char *pIn = &pFilename[2];
   char *pOut = tempPathID;
-  while (*pIn && !PATHSEPARATOR(*pIn) && (pOut - tempPathID) < (MAX_PATH - 1)) {
+  while (*pIn && !PATHSEPARATOR(*pIn) && (pOut - tempPathID) < (SOURCE_MAX_PATH - 1)) {
     *pOut++ = *pIn++;
   }
 
@@ -2410,9 +2412,9 @@ FileHandle_t CBaseFileSystem::OpenEx(const char *pFileName,
   }
 
   // Allow for UNC-type syntax to specify the path ID.
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pathID, tempPathID);
-  char tempFileName[MAX_PATH];
+  char tempFileName[SOURCE_MAX_PATH];
   Q_strncpy(tempFileName, pFileName, sizeof(tempFileName));
   Q_FixSlashes(tempFileName);
 #ifdef _WIN32
@@ -2420,7 +2422,7 @@ FileHandle_t CBaseFileSystem::OpenEx(const char *pFileName,
 #endif
 
   // Try each of the search paths in succession
-  // FIXME: call createdirhierarchy upon opening for write.
+  // TODO(d.rattman): call createdirhierarchy upon opening for write.
   if (strchr(pOptions, 'r') && !strchr(pOptions, '+')) {
     return OpenForRead(tempFileName, pOptions, flags, pathID,
                        ppszResolvedFilename);
@@ -2576,7 +2578,7 @@ long CBaseFileSystem::FastFileTime(const CSearchPath *path,
     if (FS_stat(pTmpFileName, &buf) != -1) {
       return buf.st_mtime;
     }
-#ifdef _LINUX
+#ifdef OS_POSIX
     const char *realName = findFileInDirCaseInsensitive(pTmpFileName);
     if (realName && FS_stat(realName, &buf) != -1) {
       free((void *)realName);
@@ -2617,7 +2619,7 @@ int CBaseFileSystem::FastFindFile(const CSearchPath *path,
 
       return buf.st_size;
     }
-#ifdef _LINUX
+#ifdef OS_POSIX
     const char *realName = findFileInDirCaseInsensitive(pTmpFileName);
     if (realName && FS_stat(realName, &buf) != -1) {
       return buf.st_size;
@@ -2705,10 +2707,10 @@ bool CBaseFileSystem::LoadKeyValues(KeyValues &head,
   bool bret = true;
 
 #ifndef DEDICATED
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(filename, pPathID, tempPathID);
 
-  // FIXME:  THIS STUFF DOESN'T TRACK pPathID AT ALL RIGHT NOW!!!!!
+  // TODO(d.rattman):  THIS STUFF DOESN'T TRACK pPathID AT ALL RIGHT NOW!!!!!
   if (!m_PreloadData[type].m_pReader ||
       !m_PreloadData[type].m_pReader->InstanceInPlace(head, filename)) {
     bret = head.LoadFromFile(this, filename, pPathID);
@@ -2742,7 +2744,7 @@ KeyValues *CBaseFileSystem::LoadKeyValues(KeyValuesPreloadType_t type,
     }
   } else {
 #ifndef DEDICATED
-    // FIXME:  THIS STUFF DOESN'T TRACK pPathID AT ALL RIGHT NOW!!!!!
+    // TODO(d.rattman):  THIS STUFF DOESN'T TRACK pPathID AT ALL RIGHT NOW!!!!!
     kv = m_PreloadData[type].m_pReader->Instance(filename);
     if (!kv) {
       kv = new KeyValues(filename);
@@ -2817,7 +2819,7 @@ bool CBaseFileSystem::ExtractRootKeyName(KeyValuesPreloadType_t type,
                                          char *outbuf, size_t bufsize,
                                          char const *filename,
                                          char const *pPathID /*= 0*/) {
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(filename, pPathID, tempPathID);
 
   bool bret = true;
@@ -2859,7 +2861,7 @@ void CBaseFileSystem::SetupPreloadData() {
       CompiledKeyValuesPreloaders_t &preloader = m_PreloadData[i];
       Assert(!preloader.m_pReader);
 
-      char fn[MAX_PATH];
+      char fn[SOURCE_MAX_PATH];
       if (preloader.m_CacheFile != 0 &&
           String(preloader.m_CacheFile, fn, sizeof(fn))) {
         preloader.m_pReader = new CCompiledKeyValuesReader();
@@ -2968,7 +2970,7 @@ bool CBaseFileSystem::Precache(const char *pFileName, const char *pPathID) {
   CHECK_DOUBLE_SLASHES(pFileName);
 
   // Allow for UNC-type syntax to specify the path ID.
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pPathID, tempPathID);
   Assert(pPathID);
 
@@ -3051,7 +3053,7 @@ long CBaseFileSystem::GetFileTime(const char *pFileName, const char *pPathID) {
 
   CSearchPathsIterator iter(this, &pFileName, pPathID);
 
-  char tempFileName[MAX_PATH];
+  char tempFileName[SOURCE_MAX_PATH];
   Q_strncpy(tempFileName, pFileName, sizeof(tempFileName));
   Q_FixSlashes(tempFileName);
 #ifdef _WIN32
@@ -3088,7 +3090,7 @@ long CBaseFileSystem::GetPathTime(const char *pFileName, const char *pPathID) {
 
   CSearchPathsIterator iter(this, &pFileName, pPathID);
 
-  char tempFileName[MAX_PATH];
+  char tempFileName[SOURCE_MAX_PATH];
   Q_strncpy(tempFileName, pFileName, sizeof(tempFileName));
   Q_FixSlashes(tempFileName);
 #ifdef _WIN32
@@ -3134,7 +3136,7 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
 
   CFileInfo *fileInfos[256];
   int nFileInfos =
-      m_FileTracker.GetFileInfos(fileInfos, ARRAYSIZE(fileInfos), pFilename);
+      m_FileTracker.GetFileInfos(fileInfos, SOURCE_ARRAYSIZE(fileInfos), pFilename);
   if (nFileInfos == 0) {
     // Ain't heard of this file. It probably came from a BSP or a pak file.
     if (m_WhitelistSpewFlags & WHITELIST_SPEW_DONT_RELOAD_FILES) {
@@ -3244,7 +3246,7 @@ void CBaseFileSystem::CacheFileCRCs(const char *pPathname, ECacheCRCType eType,
 void CBaseFileSystem::CacheFileCRCs_R(const char *pPathname,
                                       ECacheCRCType eType, IFileList *pFilter,
                                       CUtlDict<int, int> &searchPathNames) {
-  char searchStr[MAX_PATH];
+  char searchStr[SOURCE_MAX_PATH];
   bool bRecursive = false;
 
   if (eType == k_eCacheCRCType_SingleFile) {
@@ -3257,7 +3259,7 @@ void CBaseFileSystem::CacheFileCRCs_R(const char *pPathname,
   }
 
   // Get the path we're searching in.
-  char pathDirectory[MAX_PATH];
+  char pathDirectory[SOURCE_MAX_PATH];
   V_strncpy(pathDirectory, searchStr, sizeof(pathDirectory));
   V_StripLastDir(pathDirectory, sizeof(pathDirectory));
 
@@ -3286,7 +3288,7 @@ void CBaseFileSystem::CacheFileCRCs_R(const char *pPathname,
         FindFirstHelper(searchStr, pPathIDStr, &findHandle, &foundStoreID);
     while (pFilename) {
       if (pFilename[0] != '.') {
-        char relativeName[MAX_PATH];
+        char relativeName[SOURCE_MAX_PATH];
         V_ComposeFileName(pathDirectory, pFilename, relativeName,
                           sizeof(relativeName));
 
@@ -3431,7 +3433,7 @@ bool CBaseFileSystem::IsFileWritable(char const *pFileName,
 
   struct _stat buf;
 
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pPathID, tempPathID);
 
   if (Q_IsAbsolutePath(pFileName)) {
@@ -3483,7 +3485,7 @@ bool CBaseFileSystem::SetFileWritable(char const *pFileName, bool writable,
   int pmode = writable ? (S_IWRITE | S_IREAD) : (S_IREAD);
 #endif
 
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pPathID, tempPathID);
 
   if (Q_IsAbsolutePath(pFileName)) {
@@ -3518,12 +3520,12 @@ bool CBaseFileSystem::IsDirectory(const char *pFileName, const char *pathID) {
   // Allow for UNC-type syntax to specify the path ID.
   struct _stat buf;
 
-  char pTempBuf[MAX_PATH];
+  char pTempBuf[SOURCE_MAX_PATH];
   Q_strncpy(pTempBuf, pFileName, sizeof(pTempBuf));
   Q_StripTrailingSlash(pTempBuf);
   pFileName = pTempBuf;
 
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pathID, tempPathID);
   if (Q_IsAbsolutePath(pFileName)) {
     if (FS_stat(pFileName, &buf) != -1) {
@@ -3555,10 +3557,10 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
   CHECK_DOUBLE_SLASHES(pRelativePath);
 
   // Allow for UNC-type syntax to specify the path ID.
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pRelativePath, pathID, tempPathID);
 
-  char szScratchFileName[MAX_PATH];
+  char szScratchFileName[SOURCE_MAX_PATH];
   if (!Q_IsAbsolutePath(pRelativePath)) {
     Assert(pathID);
     ComputeFullWritePath(szScratchFileName, sizeof(szScratchFileName),
@@ -3576,7 +3578,7 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
       *s = '\0';
 #if defined(_WIN32)
       _mkdir(szScratchFileName);
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
       mkdir(szScratchFileName,
             S_IRWXU | S_IRGRP | S_IROTH);  // owner has rwx, rest have r
 #endif
@@ -3587,7 +3589,7 @@ void CBaseFileSystem::CreateDirHierarchy(const char *pRelativePath,
 
 #if defined(_WIN32)
   _mkdir(szScratchFileName);
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
   mkdir(szScratchFileName, S_IRWXU | S_IRGRP | S_IROTH);
 #endif
 }
@@ -3636,7 +3638,7 @@ const char *CBaseFileSystem::FindFirstHelper(const char *pWildCard,
          pFindData->currentSearchPathID++) {
       CSearchPath *pSearchPath = &m_SearchPaths[pFindData->currentSearchPathID];
 
-      // FIXME:  Should findfirst/next work with pak files?
+      // TODO(d.rattman):  Should findfirst/next work with pak files?
       if (pSearchPath->GetPackFile()) continue;
 
       if (FilterByPathID(pSearchPath, pFindData->m_FilterPathID)) continue;
@@ -3706,7 +3708,7 @@ bool CBaseFileSystem::FindNextFileHelper(FindData_t *pFindData,
   for (; pFindData->currentSearchPathID < c; ++pFindData->currentSearchPathID) {
     CSearchPath *pSearchPath = &m_SearchPaths[pFindData->currentSearchPathID];
 
-    // FIXME: Should this work with PAK files?
+    // TODO(d.rattman): Should this work with PAK files?
     if (pSearchPath->GetPackFile()) continue;
 
     if (FilterByPathID(pSearchPath, pFindData->m_FilterPathID)) continue;
@@ -3906,7 +3908,7 @@ bool CBaseFileSystem::FullPathToRelativePathEx(const char *pFullPath,
 
   int c = m_SearchPaths.Count();
   for (int i = 0; i < c; i++) {
-    // FIXME: Should this work with embedded pak files?
+    // TODO(d.rattman): Should this work with embedded pak files?
     if (m_SearchPaths[i].GetPackFile() &&
         m_SearchPaths[i].GetPackFile()->m_bIsMapPath)
       continue;
@@ -3947,13 +3949,13 @@ void CBaseFileSystem::RemoveFile(char const *pRelativePath,
   CHECK_DOUBLE_SLASHES(pRelativePath);
 
   // Allow for UNC-type syntax to specify the path ID.
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pRelativePath, pathID, tempPathID);
 
   Assert(pathID || !IsX360());
 
   // Opening for write or append uses Write Path
-  char szScratchFileName[MAX_PATH];
+  char szScratchFileName[SOURCE_MAX_PATH];
   if (Q_IsAbsolutePath(pRelativePath)) {
     Q_strncpy(szScratchFileName, pRelativePath, sizeof(szScratchFileName));
   } else {
@@ -3977,24 +3979,24 @@ bool CBaseFileSystem::RenameFile(char const *pOldPath, char const *pNewPath,
   CHECK_DOUBLE_SLASHES(pNewPath);
 
   // Allow for UNC-type syntax to specify the path ID.
-  char pPathIdCopy[MAX_PATH];
+  char pPathIdCopy[SOURCE_MAX_PATH];
   const char *pOldPathId = pathID;
   if (pathID) {
     Q_strncpy(pPathIdCopy, pathID, sizeof(pPathIdCopy));
     pOldPathId = pPathIdCopy;
   }
 
-  char tempOldPathID[MAX_PATH];
+  char tempOldPathID[SOURCE_MAX_PATH];
   ParsePathID(pOldPath, pOldPathId, tempOldPathID);
   Assert(pOldPathId);
 
   // Allow for UNC-type syntax to specify the path ID.
-  char tempNewPathID[MAX_PATH];
+  char tempNewPathID[SOURCE_MAX_PATH];
   ParsePathID(pNewPath, pathID, tempNewPathID);
   Assert(pathID);
 
-  char pNewFileName[MAX_PATH];
-  char szScratchFileName[MAX_PATH];
+  char pNewFileName[SOURCE_MAX_PATH];
+  char szScratchFileName[SOURCE_MAX_PATH];
 
   // The source file may be in a fallback directory, so just resolve the actual
   // path, don't assume pathid...
@@ -4009,7 +4011,7 @@ bool CBaseFileSystem::RenameFile(char const *pOldPath, char const *pNewPath,
   }
 
   // Make sure the directory exitsts, too
-  char pPathOnly[MAX_PATH];
+  char pPathOnly[SOURCE_MAX_PATH];
   Q_strncpy(pPathOnly, pNewFileName, sizeof(pPathOnly));
   Q_StripFilename(pPathOnly);
   CreateDirHierarchy(pPathOnly, pathID);
@@ -4032,7 +4034,7 @@ bool CBaseFileSystem::RenameFile(char const *pOldPath, char const *pNewPath,
 bool CBaseFileSystem::GetCurrentDirectory(char *pDirectory, int maxlen) {
 #if defined(_WIN32) && !defined(_X360)
   if (!::GetCurrentDirectoryA(maxlen, pDirectory))
-#elif defined(_LINUX) || defined(_X360)
+#elif defined(OS_POSIX) || defined(_X360)
   if (!getcwd(pDirectory, maxlen))
 #endif
     return false;
@@ -4231,7 +4233,7 @@ CSysModule *CBaseFileSystem::LoadModule(const char *pFileName,
     pPathID = "EXECUTABLE_PATH";  // default to the bin dir
   }
 
-  char tempPathID[MAX_PATH];
+  char tempPathID[SOURCE_MAX_PATH];
   ParsePathID(pFileName, pPathID, tempPathID);
 
   CUtlSymbol lookup = g_PathIDTable.AddString(pPathID);
@@ -4397,7 +4399,7 @@ void CBaseFileSystem::BlockingFileAccess_LeaveCriticalSection() {
 bool CBaseFileSystem::GetFileTypeForFullPath(char const *pFullPath,
                                              wchar_t *buf,
                                              size_t bufSizeInBytes) {
-#if !defined(_X360) && !defined(_LINUX)
+#if !defined(_X360) && !defined(OS_POSIX)
   wchar_t wcharpath[512];
   ::MultiByteToWideChar(CP_UTF8, 0, pFullPath, -1, wcharpath,
                         sizeof(wcharpath) / sizeof(wchar_t));

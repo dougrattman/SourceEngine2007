@@ -16,7 +16,7 @@
 #include "ai_route.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -603,7 +603,7 @@ void CAI_PlaneSolver::AdjustSolutionForFliers( const AILocalMoveGoal_t &goal, fl
 	// Check the deflection amount...
 	pSolution->z += flUpAmount * 5.0f;
 
-	// FIXME: Also, if we've got a bunch of regulations, we may 
+	// TODO(d.rattman): Also, if we've got a bunch of regulations, we may 
 	// also wish to raise up a little bit..because this indicates
 	// that we've got a bunch of stuff to avoid
 	VectorNormalize( *pSolution );
@@ -665,7 +665,7 @@ bool CAI_PlaneSolver::RunMoveSolver( const AILocalMoveGoal_t &goal, const AIMove
 
 			if (goal.navType == NAV_FLY)
 			{
-				// FIXME: Does the z component have to occur during the goal
+				// TODO(d.rattman): Does the z component have to occur during the goal
 				// setting because it's there & only there where MoveLimit
 				// will report contact with the world if we move up?
 				AdjustSolutionForFliers( goal, solution.dir, pResult );

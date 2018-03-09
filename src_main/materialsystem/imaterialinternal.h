@@ -33,7 +33,7 @@ class KeyValues;
 //-----------------------------------------------------------------------------
 // Interface for materials used only within the material system
 //-----------------------------------------------------------------------------
-abstract_class IMaterialInternal : public IMaterial {
+the_interface IMaterialInternal : public IMaterial {
  public:
   // class factory methods
   static IMaterialInternal *CreateMaterial(char const *pMaterialName,

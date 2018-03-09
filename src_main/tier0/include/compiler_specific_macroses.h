@@ -17,7 +17,7 @@
 #define NO_VTABLE
 #endif  // COMPILER_MSVC
 
-#define abstract_class class NO_VTABLE
+#define the_interface class NO_VTABLE
 
 // Macroses to disable compiler warnings in scope.
 #ifdef COMPILER_MSVC

@@ -9,7 +9,7 @@
 #include "items.h"
 #include "item_dynamic_resupply.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const char *pszItemCrateModelName[] =
@@ -183,7 +183,7 @@ void CItem_ItemCrate::VPhysicsCollision( int index, gamevcollisionevent_t *pEven
 //-----------------------------------------------------------------------------
 void CItem_ItemCrate::OnBreak( const Vector &vecVelocity, const AngularImpulse &angImpulse, CBaseEntity *pBreaker )
 {
-	// FIXME: We could simply store the name of an entity to put into the crate 
+	// TODO(d.rattman): We could simply store the name of an entity to put into the crate 
 	// as a string entered in by worldcraft. Should we?	I'd do it for sure
 	// if it was easy to get a dropdown with all entity types in it.
 

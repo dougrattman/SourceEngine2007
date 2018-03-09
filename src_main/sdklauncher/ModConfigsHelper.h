@@ -61,7 +61,7 @@ protected:
 
 private:
 	// Member that holds the base directory of MODs
-	char m_sourceModBaseDir[MAX_PATH];
+	char m_sourceModBaseDir[SOURCE_MAX_PATH];
 
 	// Member that holds the child MOD names
 	CUtlVector<char *> m_ModDirs;

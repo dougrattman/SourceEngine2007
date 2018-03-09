@@ -186,7 +186,7 @@
     <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\winlite.h">
+    <ClInclude Include="..\..\base\include\windows\windows_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

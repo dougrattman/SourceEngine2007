@@ -104,7 +104,7 @@ void CMatLightmaps::EnumerateMaterials(void) {
 // Gets the maximum lightmap page size...
 //-----------------------------------------------------------------------------
 int CMatLightmaps::GetMaxLightmapPageWidth() const {
-  // FIXME: It's unclear which we want here.
+  // TODO(d.rattman): It's unclear which we want here.
   // It doesn't drastically increase primitives per DrawIndexedPrimitive
   // call at the moment to increase it, so let's not for now.
 
@@ -203,7 +203,7 @@ void CMatLightmaps::CleanupLightmaps() {
     for (int lightmap = 0; lightmap < GetNumLightmapPages(); lightmap++) {
       if ((NULL != m_pLightmapDataPtrArray) &&
           (NULL != m_pLightmapDataPtrArray[lightmap])) {
-        char szPFMFileName[MAX_PATH];
+        char szPFMFileName[SOURCE_MAX_PATH];
 
         sprintf(szPFMFileName, "Lightmap-Page-%d.pfm", lightmap);
         m_pLightmapDataPtrArray[lightmap]->WritePFM(szPFMFileName);
@@ -803,10 +803,10 @@ void CMatLightmaps::BumpedLightmapBitsToPixelWriter_HDRF(
 
 // write bumped lightmap update to HDR integer lightmap
 void CMatLightmaps::BumpedLightmapBitsToPixelWriter_HDRI(
-    float *RESTRICT pFloatImage, float *RESTRICT pFloatImageBump1,
-    float *RESTRICT pFloatImageBump2, float *RESTRICT pFloatImageBump3,
+    float *SOURCE_RESTRICT pFloatImage, float *SOURCE_RESTRICT pFloatImageBump1,
+    float *SOURCE_RESTRICT pFloatImageBump2, float *SOURCE_RESTRICT pFloatImageBump3,
     int pLightmapSize[2], int pOffsetIntoLightmapPage[2],
-    FloatBitMap_t *pfmOut) RESTRICT {
+    FloatBitMap_t *pfmOut) SOURCE_RESTRICT {
   const int nLightmapSize0 = pLightmapSize[0];
   const int nLightmap0WriterSizeBytes =
       nLightmapSize0 * m_LightmapPixelWriter.GetPixelSize();
@@ -949,7 +949,7 @@ RoundFloatToByte( vRGBScale.w * 255.0f );
     } else {  // This case should actually never be hit -- we do not use RGBA.
       for (int t = 0; t < pLightmapSize[1]; t++) {
         // assert that 1 * 4 = 4
-        COMPILE_TIME_ASSERT(sizeof(Vector4D) == sizeof(float) * 4);
+        static_assert(sizeof(Vector4D) == sizeof(float) * 4);
 #define FOUR (sizeof(Vector4D) / sizeof(float))  // in case this ever changes
         int srcTexelOffset = (FOUR) * (0 + t * nLightmapSize0);
         m_LightmapPixelWriter.Seek(pOffsetIntoLightmapPage[0],
@@ -1080,8 +1080,8 @@ void CMatLightmaps::LightmapBitsToPixelWriter_HDRF(
 
 // numbers come in on the domain [0..16]
 void CMatLightmaps::LightmapBitsToPixelWriter_HDRI(
-    float *RESTRICT pFloatImage, int pLightmapSize[2],
-    int pOffsetIntoLightmapPage[2], FloatBitMap_t *RESTRICT pfmOut) {
+    float *SOURCE_RESTRICT pFloatImage, int pLightmapSize[2],
+    int pOffsetIntoLightmapPage[2], FloatBitMap_t *SOURCE_RESTRICT pfmOut) {
 #ifndef X360_USE_SIMD_LIGHTMAP
   // PC code (and old, pre-SIMD xbox version -- unshippably slow)
   if (m_LightmapPixelWriter.IsUsingFloatFormat()) {
@@ -1144,7 +1144,7 @@ void CMatLightmaps::LightmapBitsToPixelWriter_HDRI(
       // format is restored to 360.
 
       // integer HDR lightmap processing
-      float *RESTRICT pSrc = pFloatImage;
+      float *SOURCE_RESTRICT pSrc = pFloatImage;
       for (int t = 0; t < pLightmapSize[1]; ++t) {
         m_LightmapPixelWriter.Seek(pOffsetIntoLightmapPage[0],
                                    pOffsetIntoLightmapPage[1] + t);
@@ -1169,10 +1169,10 @@ void CMatLightmaps::LightmapBitsToPixelWriter_HDRI(
     // This is the fast X360 pathway.
 
     // integer HDR lightmap processing
-    float *RESTRICT pSrc = pFloatImage;
+    float *SOURCE_RESTRICT pSrc = pFloatImage;
     // Assert((reinterpret_cast<unsigned int>(pSrc) & 15) == 0); // 16-byte
     // aligned?
-    COMPILE_TIME_ASSERT(sizeof(Vector4D) / sizeof(*pSrc) ==
+    static_assert(sizeof(Vector4D) / sizeof(*pSrc) ==
                         4);  // assert that 1 * 4 = 4
 #ifndef USE_32BIT_LIGHTMAPS_ON_360
 #pragma error("This function only supports 32 bit lightmaps.")
@@ -1407,7 +1407,7 @@ void CMatLightmaps::UpdateLightmap(int lightmapPageID, int lightmapSize[2],
       }
     } else if (lightmapPageID != m_nLockedLightmap) {
       if (!LockLightmap(lightmapPageID)) {
-        ExecuteNTimes(10, Warning("Failed to lock lightmap\n"));
+        Warning("Failed to lock lightmap\n");
         return;
       }
     }

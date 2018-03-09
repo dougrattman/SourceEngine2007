@@ -19,7 +19,7 @@ struct IDirect3D10BaseTexture {
 class CDx10Types {
  public:
   typedef struct IDirect3D10BaseTexture IDirect3DTexture;
-  // FIXME: What is this called now ?
+  // TODO(d.rattman): What is this called now ?
   // typedef ID3D10TextureCube IDirect3DCubeTexture;
   typedef ID3D10Texture3D IDirect3DVolumeTexture;
   typedef ID3D10Device IDirect3DDevice;

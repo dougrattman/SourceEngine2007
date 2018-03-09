@@ -28,7 +28,7 @@
 
 #include "tf_weapon_sniperrifle.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

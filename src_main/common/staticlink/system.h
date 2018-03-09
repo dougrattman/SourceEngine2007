@@ -1,15 +1,15 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: static link master include
 
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#define UID_PREFIX generated_id_
-#define UID_CAT1(a, c) a##c
-#define UID_CAT2(a, c) UID_CAT1(a, c)
-#define EXPAND_CONCAT(a, c) UID_CAT1(a, c)
-#define UNIQUE_ID UID_CAT2(UID_PREFIX, __LINE__)
+#define SOURCE_UID_PREFIX generated_id_
+#define SOURCE_UID_CAT1(a, c) a##c
+#define SOURCE_UID_CAT2(a, c) SOURCE_UID_CAT1(a, c)
+#define SOURCE_EXPAND_CONCAT(a, c) SOURCE_UID_CAT1(a, c)
+#define SOURCE_UNIQUE_ID SOURCE_UID_CAT2(SOURCE_UID_PREFIX, __LINE__)
 
 // helper atom macros - force preprocessor symbol expansion
 #define SYMBOL_TO_STRING(token1) #token1
@@ -59,7 +59,7 @@ class DynamicLibraryList {
 #endif
 
 #define MAKE_NAME_UNIQUE(identifier) \
-  EXPAND_CONCAT(EXPAND_CONCAT(_SUBSYSTEM, _), identifier)
+  SOURCE_EXPAND_CONCAT(SOURCE_EXPAND_CONCAT(_SUBSYSTEM, _), identifier)
 
 // the low tech solution
 #if defined(_STATIC_LINKED)

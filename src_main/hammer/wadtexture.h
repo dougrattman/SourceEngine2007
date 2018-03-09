@@ -145,8 +145,8 @@ class CWADTexture : public IEditorTexture
 		BOOL Load(int fd, HANDLE hFile);
 		void DrawNoImage(CDC *pDC, RECT &rect, int iFontHeight);
 
-		char m_szName[MAX_PATH];
-		char m_szFileName[MAX_PATH];
+		char m_szName[SOURCE_MAX_PATH];
+		char m_szFileName[SOURCE_MAX_PATH];
 
 		// additional data for new .WAL textures:
 		int m_WALsurface;

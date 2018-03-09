@@ -228,7 +228,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
-    <ClCompile Include="..\..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\..\public\filesystem_init.cc" />
     <ClCompile Include="..\common\filesystem_tools.cpp" />
     <ClCompile Include="splitskybox.cpp" />
   </ItemGroup>

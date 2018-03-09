@@ -298,7 +298,7 @@ void CTFMapInfoMenu::Update()
 void CTFMapInfoMenu::LoadMapPage( const char *mapName )
 {
 	// load the map image (if it exists for the current map)
-	char szMapImage[ MAX_PATH ];
+	char szMapImage[ SOURCE_MAX_PATH ];
 	Q_snprintf( szMapImage, sizeof( szMapImage ), "VGUI/maps/menu_photos_%s", mapName );
 	Q_strlower( szMapImage );
 
@@ -328,7 +328,7 @@ void CTFMapInfoMenu::LoadMapPage( const char *mapName )
 	}
 
 	// load the map description files
-	char mapRES[ MAX_PATH ];
+	char mapRES[ SOURCE_MAX_PATH ];
 
 	char uilanguage[ 64 ];
 	engine->GetUILanguage( uilanguage, sizeof( uilanguage ) );
@@ -560,7 +560,7 @@ const char *GetMapDisplayName( const char *mapName )
 	Q_strncpy( szTempName, mapName, sizeof( szTempName ) );
 	Q_strlower( szTempName );
 
-	for ( int i = 0; i < ARRAYSIZE( s_Maps ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_Maps ); ++i )
 	{
 		if ( !Q_stricmp( s_Maps[i].pDiskName, szTempName ) )
 		{
@@ -597,7 +597,7 @@ const char *CTFMapInfoMenu::GetMapType( const char *mapName )
 {
 	if ( IsX360() && mapName )
 	{
-		for ( int i = 0; i < ARRAYSIZE( s_Maps ); ++i )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE( s_Maps ); ++i )
 		{
 			if ( !Q_stricmp( s_Maps[i].pDiskName, mapName ) )
 			{

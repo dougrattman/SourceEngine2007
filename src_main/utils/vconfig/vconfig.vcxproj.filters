@@ -18,7 +18,7 @@
     <ClCompile Include="..\..\common\ConfigManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\public\filesystem_init.cpp">
+    <ClCompile Include="..\..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">

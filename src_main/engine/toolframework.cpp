@@ -223,7 +223,7 @@ InitReturnVal_t CToolFrameworkInternal::Init() {
 #ifndef SWDS
   EngineTool_InstallQuitHandler(this, CToolFrameworkInternal_QuitHandler);
 
-  // FIXME: Eventually this should be -edit
+  // TODO(d.rattman): Eventually this should be -edit
   if (CommandLine()->FindParm("-tools")) {
     LoadTools();
   }
@@ -242,7 +242,7 @@ bool CToolFrameworkInternal::PostInit() {
   for (int i = 0; i < toolCount; ++i) {
     IToolSystem *system = m_ToolSystems[i];
 
-    // FIXME: Should this really get access to a list if factories
+    // TODO(d.rattman): Should this really get access to a list if factories
     bool success = system->Init();
     if (!success) {
       bRetVal = false;
@@ -289,7 +289,7 @@ bool CToolFrameworkInternal::ServerInit(CreateInterfaceFn serverFactory) {
   int toolCount = m_ToolSystems.Count();
   for (int i = 0; i < toolCount; ++i) {
     IToolSystem *system = m_ToolSystems[i];
-    // FIXME: Should this really get access to a list if factories
+    // TODO(d.rattman): Should this really get access to a list if factories
     bool success = system->ServerInit(serverFactory);
     if (!success) {
       retval = false;
@@ -309,7 +309,7 @@ bool CToolFrameworkInternal::ClientInit(CreateInterfaceFn clientFactory) {
   int toolCount = m_ToolSystems.Count();
   for (int i = 0; i < toolCount; ++i) {
     IToolSystem *system = m_ToolSystems[i];
-    // FIXME: Should this really get access to a list if factories
+    // TODO(d.rattman): Should this really get access to a list if factories
     bool success = system->ClientInit(clientFactory);
     if (!success) {
       retval = false;
@@ -512,7 +512,7 @@ IMaterialProxy *CToolFrameworkInternal::LookupProxy(const char *proxyName) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME:  Should scan a KeyValues file
+// Purpose: TODO(d.rattman):  Should scan a KeyValues file
 // Input  :  -
 //-----------------------------------------------------------------------------
 void CToolFrameworkInternal::LoadTools() {
@@ -682,7 +682,7 @@ void CToolFrameworkInternal::ServerPreSetupVisibilityAllTools() {
 //-----------------------------------------------------------------------------
 void CToolFrameworkInternal::PostToolMessage(HTOOLHANDLE hEntity,
                                              KeyValues *msg) {
-  // FIXME: Only message topmost tool?
+  // TODO(d.rattman): Only message topmost tool?
 
   int toolCount = m_ToolSystems.Count();
   for (int i = 0; i < toolCount; ++i) {

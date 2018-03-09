@@ -45,7 +45,7 @@ class CBSPInfo {
 #define VRAD_INTERFACE_VERSION "vraddll_1"
 
 // This is the DLL interface to VRAD.
-abstract_class IVRadDLL {
+the_interface IVRadDLL {
  public:
   // All vrad.exe does is load the VRAD DLL and run this.
   virtual int main(int argc, char **argv) = 0;

@@ -40,7 +40,7 @@
 #include "vmodes.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // putting this here so that it is replicated to the client.dll and
@@ -270,7 +270,7 @@ static void BuildSingleCubemap(const char *pVTFName, const Vector &vecOrigin,
   int nScreenBufSize = 4 * nSize;
   TakeCubemapSnapshot(vecOrigin, pVTFName, nScreenBufSize, nSize, bHDR);
 
-  char pTXTName[MAX_PATH];
+  char pTXTName[SOURCE_MAX_PATH];
   Q_strncpy(pTXTName, pVTFName, sizeof(pTXTName));
   Q_SetExtension(pTXTName, ".txt", sizeof(pTXTName));
 
@@ -298,7 +298,7 @@ static void BuildSingleCubemap(const char *pVTFName, const Vector &vecOrigin,
 
   const char *pSrcExtension = bHDR ? ".pfm" : ".tga";
   for (int i = 0; i < 6; i++) {
-    char pTempName[MAX_PATH];
+    char pTempName[SOURCE_MAX_PATH];
     Q_snprintf(pTempName, sizeof(pTempName), "%s%s", pVTFName, facingName[i]);
     Q_SetExtension(pTempName, pSrcExtension, sizeof(pTempName));
     g_pFileSystem->RemoveFile(pTempName, NULL);
@@ -339,7 +339,7 @@ CON_COMMAND(envmap, "") {
 //-----------------------------------------------------------------------------
 static void WriteLightProbe(const char *pBasePath, const LightingState_t &state,
                             bool bHDR) {
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   Q_strncpy(pFullPath, pBasePath, sizeof(pFullPath));
   Q_SetExtension(pFullPath, ".prb", sizeof(pFullPath));
 
@@ -352,7 +352,7 @@ static void WriteLightProbe(const char *pBasePath, const LightingState_t &state,
   pLightProbe->SetValue("cubemap", pCubemap);
 
   if (bHDR) {
-    char pTemp[MAX_PATH];
+    char pTemp[SOURCE_MAX_PATH];
     Q_snprintf(pTemp, sizeof(pTemp), "%s_hdr", pCubemap);
     pLightProbe->SetValue("cubemapHdr", pTemp);
   }
@@ -451,13 +451,13 @@ CON_COMMAND(lightprobe,
   IVTex *pIVTex = VTex_Load(&pModule);
   if (!pIVTex) return;
 
-  char pBasePath[MAX_PATH];
+  char pBasePath[SOURCE_MAX_PATH];
   Q_snprintf(pBasePath, sizeof(pBasePath), "materials/lightprobes/%s", args[1]);
   Q_StripFilename(pBasePath);
   g_pFileSystem->CreateDirHierarchy(pBasePath, "DEFAULT_WRITE_PATH");
 
-  char pTemp[MAX_PATH];
-  char pMaterialSrcPath[MAX_PATH];
+  char pTemp[SOURCE_MAX_PATH];
+  char pMaterialSrcPath[SOURCE_MAX_PATH];
   Q_snprintf(pTemp, sizeof(pTemp), "materialsrc/lightprobes/%s", args[1]);
   GetModContentSubdirectory(pTemp, pMaterialSrcPath, sizeof(pMaterialSrcPath));
   Q_StripFilename(pMaterialSrcPath);
@@ -468,7 +468,7 @@ CON_COMMAND(lightprobe,
 
   bool bHDR = g_pMaterialSystemHardwareConfig->GetHDRType() != HDR_TYPE_NONE;
   if (bHDR) {
-    char pTemp2[MAX_PATH];
+    char pTemp2[SOURCE_MAX_PATH];
     Q_snprintf(pTemp2, sizeof(pTemp2), "materialsrc/lightprobes/%s_hdr",
                args[1]);
 
@@ -503,7 +503,7 @@ static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
 
   int i;
   for (i = 0; i < 6; i++) {
-    // !!! FIXME: This needs to open the vmt (or some other method) to find the
+    // !!! TODO(d.rattman): This needs to open the vmt (or some other method) to find the
     // correct LDR or HDR set of skybox textures! Look in vbsp\cubemap.cpp!
     char srcVTFFileName[1024];
     Q_snprintf(srcVTFFileName, sizeof(srcVTFFileName),
@@ -591,7 +591,7 @@ void Cubemap_CreateDefaultCubemap(const char *pMapName, IBSPPack *iBSPPack) {
         int iSrcMipSize =
             pSrcVTFTextures[iFace]->ComputeMipSize(iMip + iMipLevelOffset);
 
-        // !!! FIXME: Set this to black until the LDR/HDR issues are fixed on
+        // !!! TODO(d.rattman): Set this to black until the LDR/HDR issues are fixed on
         // line ~563 in this file
         memset(pDstBits, 0, iSize);
       }
@@ -814,14 +814,14 @@ void R_BuildCubemapSamples(int numIterations) {
     IVTex *ivt = VTex_Load(&pModule);
     if (!ivt) return;
 
-    char matDir[MAX_PATH];
+    char matDir[SOURCE_MAX_PATH];
     Q_snprintf(matDir, sizeof(matDir), "materials/maps/%s", mapName);
     g_pFileSystem->CreateDirHierarchy(matDir, "DEFAULT_WRITE_PATH");
 
-    char pTemp[MAX_PATH];
+    char pTemp[SOURCE_MAX_PATH];
     Q_snprintf(pTemp, sizeof(pTemp), "materialsrc/maps/%s", mapName);
 
-    char pMaterialSrcDir[MAX_PATH];
+    char pMaterialSrcDir[SOURCE_MAX_PATH];
     GetModContentSubdirectory(pTemp, pMaterialSrcDir, sizeof(pMaterialSrcDir));
 
     g_pFileSystem->CreateDirHierarchy(pMaterialSrcDir, NULL);
@@ -869,7 +869,7 @@ void R_BuildCubemapSamples(int numIterations) {
       mcubemapsample_t *pCubemapSample =
           &pWorldModel->brush.pShared->m_pCubemapSamples[i];
 
-      char pVTFName[MAX_PATH];
+      char pVTFName[SOURCE_MAX_PATH];
       Q_snprintf(pVTFName, sizeof(pVTFName), "%s/c%d_%d_%d", pMaterialSrcDir,
                  (int)pCubemapSample->origin[0], (int)pCubemapSample->origin[1],
                  (int)pCubemapSample->origin[2]);

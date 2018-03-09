@@ -74,7 +74,7 @@ public:
 			}
 
 			// get the files path
-			char szPath[MAX_PATH];
+			char szPath[SOURCE_MAX_PATH];
 			if (files[i].m_bDir)
 			{
 				Q_snprintf(szPath, sizeof(szPath), "%s/%s/%%%%1", p4->String( files[i].m_sPath ), p4->String( files[i].m_sName ) );
@@ -85,7 +85,7 @@ public:
 			}
 
 			// translate the files path from a depot path into a local path
-			char szLocalPath[MAX_PATH];
+			char szLocalPath[SOURCE_MAX_PATH];
 			p4->GetLocalFilePath(szLocalPath, szPath, sizeof(szLocalPath));
 			kv->SetString("path", szLocalPath);
 
@@ -325,7 +325,7 @@ void CVP4Dialog::RefreshChangesList()
 	// add the files to the changelists
 	{for (int i = 0; i < files.Count(); i++)
 	{
-		char szFile[_MAX_PATH];
+		char szFile[SOURCE_MAX_PATH];
 		Q_snprintf(szFile, sizeof(szFile), "%s/%s", p4->String( files[i].m_sPath ) + p4->GetDepotRootLength(), p4->String( files[i].m_sName ));
 		KeyValues *pkv = new KeyValues("node", "file", szFile);
 		m_pChangesList->AddItem(files[i].m_iChangelist, pkv);

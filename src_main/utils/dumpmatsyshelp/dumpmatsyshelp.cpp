@@ -22,7 +22,7 @@ CreateInterfaceFn g_ShaderAPIFactory = NULL;
 class CShaderDLLInfo
 {
 public:
-	char m_Filename[MAX_PATH];
+	char m_Filename[SOURCE_MAX_PATH];
 	IShaderDLLInternal *m_pInternal;
 };
 CUtlVector<CShaderDLLInfo> g_ShaderDLLs;

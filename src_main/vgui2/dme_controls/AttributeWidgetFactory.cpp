@@ -27,7 +27,7 @@
 #include "dme_controls/AttributeColorPickerPanel.h"
 #include "dme_controls/AttributeInterpolatorChoicePanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

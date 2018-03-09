@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Serialize and Unserialize Wavefront OBJ <-> DME Data
 //
@@ -333,7 +333,7 @@ CDmElement *CDmObjSerializer::ReadOBJ(
 	bool bLoadAllDeltas /* = true */,
 	bool bAbsolute /* = true */ )
 {
-	char filename[ MAX_PATH ];
+	char filename[ SOURCE_MAX_PATH ];
 	Q_strncpy( filename, pFilename, sizeof( filename ) );
 	Q_FixSlashes( filename );
 
@@ -341,7 +341,7 @@ CDmElement *CDmObjSerializer::ReadOBJ(
 	if ( !g_pFullFileSystem->ReadFile( filename, NULL, utlBuf ) )
 		return NULL;
 
-	char baseFile[ MAX_PATH ];
+	char baseFile[ SOURCE_MAX_PATH ];
 	Q_FileBase( filename, baseFile, sizeof( baseFile ) );
 
 	CDmeMesh *pMesh( NULL );
@@ -370,7 +370,7 @@ CDmElement *CDmObjSerializer::ReadOBJ(
 				return pRoot;
 		}
 
-		char findGlob[ MAX_PATH ];
+		char findGlob[ SOURCE_MAX_PATH ];
 		Q_strncpy( findGlob, baseFile, sizeof( findGlob ) );
 		pSuffix = findGlob + ( pSuffix - baseFile );
 		*( pSuffix + 0 ) = '_';	// Just in case it was <prefix>=<suffix>.obj
@@ -378,18 +378,18 @@ CDmElement *CDmObjSerializer::ReadOBJ(
 		*( pSuffix + 2 ) = '.';
 		Q_strncpy( pSuffix + 3, Q_GetFileExtension( filename ), sizeof( findGlob ) - ( pSuffix - findGlob + 3 ) );
 
-		char path[ MAX_PATH ];
+		char path[ SOURCE_MAX_PATH ];
 		Q_ExtractFilePath( filename, path, sizeof( path ) );
 
 		m_objDirectory = path;
 
-		char findPath[ MAX_PATH ];
+		char findPath[ SOURCE_MAX_PATH ];
 		Q_ComposeFileName( path, findGlob, findPath, sizeof( findPath ) );
 
 		FileFindHandle_t hFind;
 
-		char deltaFile[ MAX_PATH ];
-		char deltaPath[ MAX_PATH ];
+		char deltaFile[ SOURCE_MAX_PATH ];
+		char deltaPath[ SOURCE_MAX_PATH ];
 
 		for ( const char *pFindFile( g_pFullFileSystem->FindFirst( findPath, &hFind ) ); pFindFile && *pFindFile; pFindFile = g_pFullFileSystem->FindNext( hFind ) )
 		{
@@ -537,7 +537,7 @@ CDmElement *CDmObjSerializer::ReadOBJ( CUtlBuffer &buf,
 				Q_FixSlashes( tmpBuf0 );
 				Q_StripFilename( tmpBuf0 );
 
-				char mtlLibPath[ MAX_PATH ];
+				char mtlLibPath[ SOURCE_MAX_PATH ];
 
 				Q_ComposeFileName( tmpBuf0, tmpBuf1, mtlLibPath, sizeof( mtlLibPath ) );
 				CUtlBuffer utlBuf;
@@ -1059,10 +1059,10 @@ bool CDmObjSerializer::WriteOBJ( const char *pFilename, CDmElement *pRoot, bool 
 
 	if ( deltaMeshes.Count() )
 	{
-		char base[ MAX_PATH ];
+		char base[ SOURCE_MAX_PATH ];
 		Q_FileBase( pFilename, base, sizeof( base ) );
 
-		char path[ MAX_PATH ];
+		char path[ SOURCE_MAX_PATH ];
 		Q_ExtractFilePath( pFilename, path, sizeof( path ) );
 
 		char *pSuffix = strchr( base, '='	 );
@@ -1077,7 +1077,7 @@ bool CDmObjSerializer::WriteOBJ( const char *pFilename, CDmElement *pRoot, bool 
 			*( pSuffix + 1 ) = '\0';
 		}
 
-		char filename[ MAX_PATH ];
+		char filename[ SOURCE_MAX_PATH ];
 
 		const int nDeltaMeshes( deltaMeshes.Count() );
 		for ( int i( 0 ); i < nDeltaMeshes; ++i )
@@ -1165,7 +1165,7 @@ void CDmObjSerializer::ParseMtlLib( CUtlBuffer &buf )
 			if ( nCurrentMtl < 0 )
 				continue;
 
-			char tgaPath[MAX_PATH];
+			char tgaPath[SOURCE_MAX_PATH];
 			char tgaName[1024];
 			if ( sscanf( tmpBuf0, "map_Kd %s", tgaPath ) == 1 )
 			{
@@ -1291,7 +1291,7 @@ CDmeVertexDeltaData *CDmObjSerializer::GetDelta( const char *pDeltaName, bool bA
 
 	CUtlBuffer utlBuf;
 
-	char deltaPath[ MAX_PATH ];
+	char deltaPath[ SOURCE_MAX_PATH ];
 	Q_ComposeFileName( m_objDirectory, deltaInfo.m_filename, deltaPath, sizeof( deltaPath ) );
 	Q_FixSlashes( deltaPath );
 

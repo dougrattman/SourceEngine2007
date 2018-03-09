@@ -12,7 +12,7 @@
 #include "collisionutils.h"
 #include "npc_metropolice.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC( CAI_PolicingBehavior )
@@ -504,7 +504,7 @@ int CAI_PolicingBehavior::SelectSuppressSchedule( void )
 			return SCHED_CHASE_ENEMY;
 		}
 
-		//FIXME: This needs to be a more aggressive warning to the player
+		//TODO(d.rattman): This needs to be a more aggressive warning to the player
 		if ( m_flNextHarassTime < gpGlobals->curtime )
 		{
 			return SCHED_POLICE_WARN_TARGET;

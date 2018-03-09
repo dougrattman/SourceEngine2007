@@ -16,7 +16,7 @@
 #include "team.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef GAME_DLL
@@ -127,7 +127,8 @@ const char *CTeamplayRules::SetDefaultPlayerTeam(CBasePlayer *pPlayer) {
   || defaultteam.GetFloat() )
   {
           const char *pTeamName = NULL;
-          
+          
+
           if ( defaultteam.GetFloat() )
           {
                   pTeamName = team_names[0];

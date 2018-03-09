@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A Scene Image file aggregates all the compiled binary VCD files into
 // a single file.
@@ -6,7 +6,7 @@
 #ifndef SCENE_IMAGE_FILE_H
 #define SCENE_IMAGE_FILE_H
 
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier1/checksum_crc.h"
 
 #define SCENE_IMAGE_ID MAKEID<int32_t>('V', 'S', 'I', 'F')

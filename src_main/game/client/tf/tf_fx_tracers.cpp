@@ -14,7 +14,7 @@
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheTFTracers )

@@ -65,13 +65,9 @@ CPolyhedron *ClipPolyhedron(
     bool bUseTemporaryMemory =
         false);  // this does NOT modify/delete the existing polyhedron
 
+// grab the temporary polyhedron. Avoids new/delete for quick work. Can only be
+// in use by one chunk of code at a time
 CPolyhedron *GetTempPolyhedron(u16 iVertices, u16 iLines, u16 iIndices,
-                               u16 iPolygons);  // grab the temporary
-                                                // polyhedron. Avoids
-                                                // new/delete for
-                                                // quick work. Can
-                                                // only be in use by
-                                                // one chunk of code
-                                                // at a time
+                               u16 iPolygons);
 
 #endif  // SOURCE_MATHLIB_POLYHEDRON_H_

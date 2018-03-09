@@ -24,7 +24,7 @@
 #include "../common/blobulator/Implicit/UserFunctions.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Vertex instancing (1 vert submitted per particle, duplicated to 4 (a quad) on
@@ -890,7 +890,7 @@ void C_OP_RenderSprites::RenderSpriteCard(CMeshBuilder &meshBuilder,
   meshBuilder.TexCoord4f(1, pSample0->m_fLeft_U1, pSample0->m_fTop_V1,
                          pSample0->m_fRight_U1, pSample0->m_fBottom_V1);
   meshBuilder.TexCoord4f(2, pSample->m_fBlendFactor, rot, rad, yaw);
-  // FIXME: change the vertex decl (remove texcoord3/cornerid) if instancing -
+  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if instancing -
   // need to adjust elements beyond texcoord3 down, though
   if (!bUseInstancing) meshBuilder.TexCoord2f(3, 0, 0);
   meshBuilder.TexCoord4f(
@@ -1016,7 +1016,7 @@ void C_OP_RenderSprites::RenderTwoSequenceSpriteCard(CMeshBuilder &meshBuilder,
   meshBuilder.TexCoord4f(1, pSample0->m_fLeft_U1, pSample0->m_fTop_V1,
                          pSample0->m_fRight_U1, pSample0->m_fBottom_V1);
   meshBuilder.TexCoord4f(2, pSample->m_fBlendFactor, rot, rad, yaw);
-  // FIXME: change the vertex decl (remove texcoord3/cornerid) if instancing -
+  // TODO(d.rattman): change the vertex decl (remove texcoord3/cornerid) if instancing -
   // need to adjust elements beyond texcoord3 down, though
   if (!bUseInstancing) meshBuilder.TexCoord2f(3, 0, 0);
   meshBuilder.TexCoord4f(
@@ -1197,7 +1197,7 @@ void C_OP_RenderSprites::RenderUnsorted(CParticleCollection *pParticles,
   if (!pParticles->m_pDef->GetMaterial()->IsSpriteCard()) {
     switch (m_nOrientationType) {
       case 0:
-        // FIXME: Implement! Requires removing MATERIAL_VIEW modification from
+        // TODO(d.rattman): Implement! Requires removing MATERIAL_VIEW modification from
         // sorted version
         Warning(
             "C_OP_RenderSprites::RenderUnsorted: Attempting to use an "
@@ -1859,7 +1859,7 @@ void C_OP_RenderRope::RenderSpriteCard(CParticleCollection *pParticles,
 void C_OP_RenderRope::Render(IMatRenderContext *pRenderContext,
                              CParticleCollection *pParticles,
                              void *pContext) const {
-  // FIXME: What does this even mean?	Ropes can't really be sorted.
+  // TODO(d.rattman): What does this even mean?	Ropes can't really be sorted.
 
   IMaterial *pMaterial = pParticles->m_pDef->GetMaterial();
   if (pMaterial->IsSpriteCard()) {

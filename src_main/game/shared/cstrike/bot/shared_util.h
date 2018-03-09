@@ -10,7 +10,7 @@
 #ifndef SHARED_UTIL_H
 #define SHARED_UTIL_H
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //--------------------------------------------------------------------------------------------------------

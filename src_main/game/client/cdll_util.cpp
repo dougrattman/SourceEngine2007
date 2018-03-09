@@ -24,7 +24,7 @@
 #include "view.h"
 #include "view_scene.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -556,7 +556,7 @@ int UTIL_EntitiesInSphere(C_BaseEntity **pList, int listMax,
 CEntitySphereQuery::CEntitySphereQuery(const Vector &center, float radius,
                                        int flagMask, int partitionMask) {
   m_listIndex = 0;
-  m_listCount = UTIL_EntitiesInSphere(m_pList, ARRAYSIZE(m_pList), center,
+  m_listCount = UTIL_EntitiesInSphere(m_pList, SOURCE_ARRAYSIZE(m_pList), center,
                                       radius, flagMask, partitionMask);
 }
 
@@ -950,8 +950,8 @@ bool UTIL_GetMapLoadCountFileName(const char *pszFilePrependName,
 void UTIL_IncrementMapKey(const char *pszCustomKey) {
   if (!pszCustomKey) return;
 
-  char szFilename[_MAX_PATH];
-  if (!UTIL_GetMapLoadCountFileName(MAP_KEY_FILE, szFilename, _MAX_PATH))
+  char szFilename[SOURCE_MAX_PATH];
+  if (!UTIL_GetMapLoadCountFileName(MAP_KEY_FILE, szFilename, SOURCE_MAX_PATH))
     return;
 
   int iCount = 1;
@@ -989,8 +989,8 @@ void UTIL_IncrementMapKey(const char *pszCustomKey) {
 int UTIL_GetMapKeyCount(const char *pszCustomKey) {
   if (!pszCustomKey) return 0;
 
-  char szFilename[_MAX_PATH];
-  if (!UTIL_GetMapLoadCountFileName(MAP_KEY_FILE, szFilename, _MAX_PATH))
+  char szFilename[SOURCE_MAX_PATH];
+  if (!UTIL_GetMapLoadCountFileName(MAP_KEY_FILE, szFilename, SOURCE_MAX_PATH))
     return 0;
 
   int iCount = 0;

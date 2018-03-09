@@ -8,7 +8,7 @@
 #include "clientmode_tf.h"
 #include "c_tf_objective_resource.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

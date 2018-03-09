@@ -19,7 +19,7 @@ extern IVEngineClient *engineClient;
 // TODO: remove when UI sets all properties
 #include "hl2orange.spa.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IXboxSystem *g_pXboxSystem;
@@ -130,7 +130,7 @@ void CMatchmaking::HandleSystemLinkReply(netpacket_t *pPacket) {
 // Purpose: Search for a session to join
 //-----------------------------------------------------------------------------
 bool CMatchmaking::SearchForSession() {
-#ifdef _LINUX
+#ifdef OS_POSIX
   return false;
 #else
   if (m_Session.IsSystemLink()) {
@@ -179,7 +179,7 @@ bool CMatchmaking::SearchForSession() {
 // Purpose: Check for session search results
 //-----------------------------------------------------------------------------
 void CMatchmaking::UpdateSearch() {
-#ifndef _LINUX
+#ifndef OS_POSIX
   if (!m_Session.IsSystemLink()) {
     // Check if the search has finished
     DWORD ret =
@@ -720,7 +720,7 @@ void CMatchmaking::SendJoinRequest(netadr_t *adr) {
 // Purpose: Process the session host's response to our join request
 //-----------------------------------------------------------------------------
 bool CMatchmaking::ProcessJoinResponse(MM_JoinResponse *pMsg) {
-#ifdef _LINUX
+#ifdef OS_POSIX
   return false;
 #else
   switch (pMsg->m_ResponseType) {
@@ -830,7 +830,7 @@ void CMatchmaking::ApplySessionProperties(int numContexts, int numProperties,
   m_SessionContexts.RemoveAll();
   m_SessionProperties.RemoveAll();
 
-  char szBuffer[MAX_PATH];
+  char szBuffer[SOURCE_MAX_PATH];
   uint32_t nGameTypeId = g_ClientDLL->GetPresenceID("CONTEXT_GAME_TYPE");
 
   // Update the session properties

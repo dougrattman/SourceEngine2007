@@ -209,7 +209,7 @@ void CSnark::HuntThink( void )
 	StudioFrameAdvance( );
 	SetNextThink( gpGlobals->curtime + 0.1f );
 	
-	//FIXME: There's a problem in this movetype that causes it to set a ground entity but never recheck to clear it
+	//TODO(d.rattman): There's a problem in this movetype that causes it to set a ground entity but never recheck to clear it
 	//		 For now, we stomp it clear and force it to revalidate -- jdw
 
 	SetGroundEntity( NULL );

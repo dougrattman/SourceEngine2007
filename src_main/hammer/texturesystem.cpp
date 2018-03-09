@@ -27,7 +27,7 @@
 #include "tier1/utldict.h"
 #include "FaceEditSheet.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -284,7 +284,7 @@ IEditorTexture *CTextureSystem::FindActiveTexture(LPCSTR pszInputName, int *piIn
 
 	// The .vmf file format gets confused if there are backslashes in material names,
 	// so make sure they're all using forward slashes here.
-	char szName[MAX_PATH];
+	char szName[SOURCE_MAX_PATH];
 	Q_StrSubst( pszInputName, "\\", "/", szName, sizeof( szName ) );
 	const char *pszName = szName;
 	IEditorTexture *pTex = NULL;
@@ -478,7 +478,7 @@ void CTextureSystem::SetActiveGroup(const char *pcszName)
 	if (!m_pActiveContext)
 		return;
 
-	char szBuf[MAX_PATH];
+	char szBuf[SOURCE_MAX_PATH];
 	sprintf(szBuf, "textures\\%s", pcszName);
 
 	int iCount = m_pActiveContext->Groups.Count();
@@ -520,7 +520,7 @@ void HammerFileSystem_ReportSearchPath( const char *szPathID )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: Make this work correctly, using the version in filesystem_tools.cpp
+// TODO(d.rattman): Make this work correctly, using the version in filesystem_tools.cpp
 // (it doesn't work currently owing to filesystem setup issues)
 //-----------------------------------------------------------------------------
 void HammerFileSystem_SetGame( const char *pExeDir, const char *pModDir )
@@ -529,9 +529,9 @@ void HammerFileSystem_SetGame( const char *pExeDir, const char *pModDir )
 	Assert( !s_bOnce );
 	s_bOnce = true;
 
-	char buf[MAX_PATH];
+	char buf[SOURCE_MAX_PATH];
 
-	Q_snprintf( buf, MAX_PATH, "%s\\hl2", pExeDir );
+	Q_snprintf( buf, SOURCE_MAX_PATH, "%s\\hl2", pExeDir );
 	g_pFullFileSystem->AddSearchPath( buf, "GAME", PATH_ADD_TO_HEAD );
 
 	if ( pModDir && *pModDir != '\0' )
@@ -593,7 +593,7 @@ void CTextureSystem::LoadAllGraphicsFiles(void)
 //-----------------------------------------------------------------------------
 void CTextureSystem::LoadWADFiles(CGameConfig *pConfig)
 {
-	// dvs: FIXME: WADs are not currently per-config
+	// dvs: TODO(d.rattman): WADs are not currently per-config
 	for (int i = 0; i < Options.textures.nTextureFiles; i++)
 	{
 		LoadGraphicsFile(Options.textures.TextureFiles[i]);
@@ -665,7 +665,7 @@ void CTextureSystem::UpdateFileChangeWatchers()
 void CTextureSystem::OnFileChange( const char *pFilename, int context, CTextureSystem::EFileType eFileType )
 {
 	// It requires the forward slashes later...
-	char fixedSlashes[MAX_PATH];
+	char fixedSlashes[SOURCE_MAX_PATH];
 	V_StrSubst( pFilename, "\\", "/", fixedSlashes, sizeof( fixedSlashes ) );	
 
 	// Get rid of the extension.
@@ -1067,7 +1067,7 @@ DWORD CTextureSystem::LoadGraphicsFile(const char *pFilename)
 		}
 		else
 		{
-			char str[MAX_PATH*2];
+			char str[SOURCE_MAX_PATH*2];
 			Q_snprintf( str, sizeof(str), "The file \"%s\" is not a valid WAD3 file and will not be used.", pFilename);
 			AfxMessageBox(str, MB_ICONEXCLAMATION | MB_OK);
 			_close(gf.fd);
@@ -1167,7 +1167,7 @@ void CTextureSystem::RegisterTextureKeywords( IEditorTexture *pTexture )
 	//
 	// Add any new keywords from this material to the list of keywords.
 	//
-	char szKeywords[MAX_PATH];
+	char szKeywords[SOURCE_MAX_PATH];
 	pTexture->GetKeywords(szKeywords);
 	if (szKeywords[0] != '\0')
 	{
@@ -1235,11 +1235,11 @@ void CTextureSystem::OpenSource( const char *pMaterialName )
 	if ( !pMaterialName )
 		return;
 
-	char pRelativePath[MAX_PATH];
-	Q_snprintf( pRelativePath, MAX_PATH, "materials/%s.vmt", pMaterialName );
+	char pRelativePath[SOURCE_MAX_PATH];
+	Q_snprintf( pRelativePath, SOURCE_MAX_PATH, "materials/%s.vmt", pMaterialName );
 
-	char pFullPath[MAX_PATH];
-	if ( g_pFullFileSystem->GetLocalPath( pRelativePath, pFullPath, MAX_PATH ) )
+	char pFullPath[SOURCE_MAX_PATH];
+	if ( g_pFullFileSystem->GetLocalPath( pRelativePath, pFullPath, SOURCE_MAX_PATH ) )
 	{
 		ShellExecute( NULL, "open", pFullPath, NULL, NULL, SW_SHOWNORMAL );
 	}

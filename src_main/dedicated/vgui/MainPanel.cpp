@@ -19,7 +19,7 @@
 #include "vgui_controls/Panel.h"
 #include "vgui_controls/ProgressBox.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -110,7 +110,7 @@ void CMainPanel::StartServer(const char *cvars) {
   m_pProgressBox->ShowWindow();
 
   // make sure we have all the steam content for this mod
-  char reslist[_MAX_PATH];
+  char reslist[SOURCE_MAX_PATH];
   _snprintf(reslist, sizeof(reslist), "reslists/%s/preload.lst",
             m_pConfigPage->GetGameName());
   m_hResourceWaitHandle = g_pFullFileSystem->WaitForResources(reslist);

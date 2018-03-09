@@ -16,7 +16,7 @@
 #include "soundent.h"
 #include "grenade_hopwire.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define GRENADE_TIMER	2.0f	//Seconds
@@ -281,7 +281,7 @@ void CWeaponHopwire::HandleFireOnEmpty( void )
 {
 	if ( m_hActiveHopWire!= NULL )
 	{
-		// FIXME: This toggle is hokey
+		// TODO(d.rattman): This toggle is hokey
 		m_bRedraw = false;
 		PrimaryAttack();
 		m_bRedraw = true;

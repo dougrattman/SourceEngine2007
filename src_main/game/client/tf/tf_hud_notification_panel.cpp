@@ -20,7 +20,7 @@
 #include "tf_hud_notification_panel.h"
 #include "tf_hud_freezepanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

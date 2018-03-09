@@ -10,7 +10,7 @@
 #include "materialsystem/IMaterialVar.h"
 #include "c_team.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // $sineVar : name of variable that controls the alpha level (float)

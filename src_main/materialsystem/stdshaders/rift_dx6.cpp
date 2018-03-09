@@ -2,7 +2,7 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_SHADER(Rift_DX6, "Help for Rift_DX6")

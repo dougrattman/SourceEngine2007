@@ -56,7 +56,7 @@ Vector Pickup_PhysGunLaunchVelocity( CBaseEntity *pObject, const Vector &vecForw
 
 CBaseEntity	*Pickup_OnFailedPhysGunPickup( CBaseEntity *pPickedUpObject, Vector vPhysgunPos );
 
-abstract_class IPlayerPickupVPhysics
+the_interface IPlayerPickupVPhysics
 {
 public:
 	// Callbacks for the physgun/cannon picking up an entity

@@ -19,7 +19,7 @@
 #include "cmodel.h"
 #include "engine/ienginetrace.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -77,7 +77,7 @@ void CDmeVMFEntity::OnConstruction()
 
 	m_Wireframe.Init( "debug/debugwireframevertexcolor", "editor" );
 
-	// FIXME: Need to abstract out rendering into a separate class
+	// TODO(d.rattman): Need to abstract out rendering into a separate class
 	// based on information parsed from the FGD
 	KeyValues *pVMTKeyValues = new KeyValues( "UnlitGeneric" );
 	pVMTKeyValues->SetString( "$basetexture", "editor/info_target" );
@@ -126,7 +126,7 @@ void CDmeVMFEntity::OnAttributeChanged( CDmAttribute *pAttribute )
 	{
 		m_bInfoTarget = !Q_strncmp( m_ClassName, "info_target", 11 );
 
-		// FIXME: Change the model based on the current class
+		// TODO(d.rattman): Change the model based on the current class
 		SetModelName( NULL );
 		return;
 	}
@@ -173,7 +173,7 @@ void CDmeVMFEntity::MarkDirty( bool bDirty )
 {
 	m_bIsDirty = bDirty;
 
-	// FIXME: this is doing two operations!!
+	// TODO(d.rattman): this is doing two operations!!
 	CopyToServer();
 }
 
@@ -273,7 +273,7 @@ void CDmeVMFEntity::SetRenderOrigin( const Vector &vecOrigin )
 
 void CDmeVMFEntity::SetRenderAngles( const QAngle &angles )
 {
-	m_vecLocalAngles.Set( Vector( angles.x, angles.y, angles.z ) ); // FIXME: angles is a vector due to the vmf "angles" having a problem parsing...
+	m_vecLocalAngles.Set( Vector( angles.x, angles.y, angles.z ) ); // TODO(d.rattman): angles is a vector due to the vmf "angles" having a problem parsing...
 	clienttools->MarkClientRenderableDirty( this );
 }
 
@@ -605,14 +605,14 @@ bool CDmeVMFEntity::CopyToServer( void )
 		if (pServerEntity != NULL)
 		{
 			servertools->SetKeyValue( pServerEntity, "origin", m_vecLocalOrigin.Get() );
-			// FIXME: isn't there a string to vector conversion?
+			// TODO(d.rattman): isn't there a string to vector conversion?
 			Vector tmp( m_vecLocalAngles.Get().x, m_vecLocalAngles.Get().y, m_vecLocalAngles.Get().z );
 			servertools->SetKeyValue( pServerEntity, "angles", tmp );
 			return true;
 		}
 		else
 		{
-			// FIXME: does one need to be spawned?
+			// TODO(d.rattman): does one need to be spawned?
 		}
 	}
 	return false;
@@ -627,7 +627,7 @@ bool CDmeVMFEntity::IsSameOnServer( void *pServerEntity )
 		return false;
 	}
 
-	// FIXME: check targetname?  Can it be edited?
+	// TODO(d.rattman): check targetname?  Can it be edited?
 	Vector mapOrigin;
 	servertools->GetKeyValue( pServerEntity, "origin", text, sizeof( text ) );
 	sscanf( text, "%f %f %f", &mapOrigin.x, &mapOrigin.y, &mapOrigin.z );

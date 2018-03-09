@@ -22,7 +22,7 @@
 
 #include "hl2mp/weapon_slam.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	SLAM_PRIMARY_VOLUME		450

@@ -9,9 +9,9 @@
 #include "studio.h"
 #include "studiorender.h"
 #include "studiorendercontext.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void R_WorldLightDelta(const LightDesc_t* wl, const Vector& org, Vector& delta);
@@ -202,8 +202,8 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTable,
   dest[0] = dest[1] = dest[2] = 0.0f;
 #endif
 
-  // FIXME: lighting effects for normal and position are independent!
-  // FIXME: these can be pre-calculated per normal
+  // TODO(d.rattman): lighting effects for normal and position are independent!
+  // TODO(d.rattman): these can be pre-calculated per normal
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType1 != MATERIAL_LIGHT_DISABLE)) {
     float ratio =
         light[0].falloff *
@@ -275,8 +275,8 @@ TEMPLATE_FUNCTION_TABLE(void, R_LightEffectsWorldFunctionTableConstDirectional,
   dest[0] = dest[1] = dest[2] = 0.0f;
 #endif
 
-  // FIXME: lighting effects for normal and position are independent!
-  // FIXME: these can be pre-calculated per normal
+  // TODO(d.rattman): lighting effects for normal and position are independent!
+  // TODO(d.rattman): these can be pre-calculated per normal
   if (MSVC_SCOPED_DISABLE_WARNING(4127, LightType1 != MATERIAL_LIGHT_DISABLE)) {
     float ratio =
         light[0].falloff *
@@ -407,7 +407,7 @@ TEMPLATE_FUNCTION_TABLE(float, R_WorldLightDistanceFalloffFunctionTable,
 //-----------------------------------------------------------------------------
 // Calculate the falloff from the world lights
 //-----------------------------------------------------------------------------
-float FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+float SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
                                            const Vector& delta) {
   // Ensure no invalid flags are set
   Assert(!(wl->m_Flags & ~(LIGHTTYPE_OPTIMIZATIONFLAGS_HAS_ATTENUATION0 |
@@ -422,7 +422,7 @@ float FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
 }
 
 #if defined(_WIN32) && !defined(_X360)
-fltx4 FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+fltx4 SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
                                            const FourVectors& delta) {
   // !!speed!!: lights could store m_Attenuation2,m_Attenuation1, and m_Range^2
   // copies in replicated SSE format.
@@ -517,9 +517,9 @@ void CStudioRenderContext::ComputeLighting(const Vector* pAmbient,
     return;
   }
 
-  if (lightCount > ARRAYSIZE(m_pLightPos)) {
+  if (lightCount > SOURCE_ARRAYSIZE(m_pLightPos)) {
     AssertMsg(0, "Light count out of range in ComputeLighting\n");
-    lightCount = ARRAYSIZE(m_pLightPos);
+    lightCount = SOURCE_ARRAYSIZE(m_pLightPos);
   }
 
   // Calculate color given lightpos_t lightpos, a normal, and the ambient
@@ -544,9 +544,9 @@ void CStudioRenderContext::ComputeLightingConstDirectional(
     return;
   }
 
-  if (lightCount > ARRAYSIZE(m_pLightPos)) {
+  if (lightCount > SOURCE_ARRAYSIZE(m_pLightPos)) {
     AssertMsg(0, "Light count out of range in ComputeLighting\n");
-    lightCount = ARRAYSIZE(m_pLightPos);
+    lightCount = SOURCE_ARRAYSIZE(m_pLightPos);
   }
 
   // Calculate color given lightpos_t lightpos, a normal, and the ambient

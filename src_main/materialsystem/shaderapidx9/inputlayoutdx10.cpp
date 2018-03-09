@@ -170,14 +170,14 @@ static unsigned int ComputeInputDesc(VertexFormat_t fmt,
 
   // NOTE: Fix s_pFieldInfo, s_pVertexDesc, s_pFallbackVertexDesc if you add
   // more fields As well as the fallback stream (stream #15)
-  COMPILE_TIME_ASSERT(VERTEX_MAX_TEXTURE_COORDINATES == 8);
+  static_assert(VERTEX_MAX_TEXTURE_COORDINATES == 8);
   for (int i = 0; i < VERTEX_MAX_TEXTURE_COORDINATES; ++i) {
     int nTexCoordCount = TexCoordSize(i, fmt);
     s_pFieldInfo[6 + i].m_nFieldSize = sizeof(float) * nTexCoordCount;
     s_pVertexDesc[6 + i].Format = s_pSizeLookup[nTexCoordCount];
   }
 
-  // FIXME: Change this loop so CheckShaderSignatureExpectations is called once!
+  // TODO(d.rattman): Change this loop so CheckShaderSignatureExpectations is called once!
   for (int i = 0; s_pFieldInfo[i].m_pSemanticString; ++i) {
     if (fmt & s_pFieldInfo[i].m_nFormatMask) {
       memcpy(&pDecl[nCount], &s_pVertexDesc[i],

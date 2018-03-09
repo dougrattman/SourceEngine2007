@@ -197,7 +197,7 @@ public:
 		SetNextThink( gpGlobals->curtime ); 
 	}
 
-	// FIXME: This completely blows.
+	// TODO(d.rattman): This completely blows.
 	// Surely there's gotta be a better way.
 	void FadeOutFromSpawn( )
 	{

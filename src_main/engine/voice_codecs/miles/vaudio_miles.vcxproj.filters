@@ -14,24 +14,27 @@
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp">
+    <ClCompile Include="miles_voice_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="voice_codec_miles.cpp">
+    <ClCompile Include="miles_mp3_audio_stream.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="milesbase.cc">
+    <ClCompile Include="miles_base_types.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mp3_miles.cc">
+    <ClCompile Include="..\frame_encoder\frame_voice_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\public\tier1\interface.h">
+    <ClInclude Include="miles_base_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="milesbase.h">
+    <ClInclude Include="..\frame_encoder\iframe_encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frame_encoder\frame_voice_codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

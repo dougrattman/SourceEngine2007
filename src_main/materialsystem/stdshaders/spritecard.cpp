@@ -25,7 +25,7 @@
 
 #include "tier0/include/icommandline.h"  //command line
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DEFAULT_PARTICLE_FEATHERING_ENABLED 1
@@ -399,7 +399,7 @@ SHADER_DRAW {
       float flZScale = 1.0 / (params[ZOOMANIMATESEQ2]->GetFloatValue());
       float C0[4] = {0.5f * (1.0f + flZScale), flZScale, 0, 0};
       pShaderAPI->SetVertexShaderConstant(VERTEX_SHADER_SHADER_SPECIFIC_CONST_7,
-                                          C0, ARRAYSIZE(C0) / 4);
+                                          C0, SOURCE_ARRAYSIZE(C0) / 4);
     }
 
     // set fade constants in vsconsts 8 and 9
@@ -417,7 +417,7 @@ SHADER_DRAW {
                     0};
 
     pShaderAPI->SetVertexShaderConstant(VERTEX_SHADER_SHADER_SPECIFIC_CONST_8,
-                                        VC0, ARRAYSIZE(VC0) / 4);
+                                        VC0, SOURCE_ARRAYSIZE(VC0) / 4);
 
     pShaderAPI->SetDepthFeatheringPixelShaderConstant(
         2, params[DEPTHBLENDSCALE]->GetFloatValue());
@@ -440,7 +440,7 @@ SHADER_DRAW {
           VERTEX_SHADER_SHADER_SPECIFIC_BOOL_CONST_0, bShaderConstants, 3);
     }
 
-    pShaderAPI->SetPixelShaderConstant(0, C0, ARRAYSIZE(C0) / 4);
+    pShaderAPI->SetPixelShaderConstant(0, C0, SOURCE_ARRAYSIZE(C0) / 4);
 
     if (g_pHardwareConfig->GetDXSupportLevel() < 90) {
 #if SUPPORT_DX8

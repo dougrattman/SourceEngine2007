@@ -12,7 +12,7 @@
 #include "saverestore_utlvector.h"
 #include "smoke_trail.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CAntlionMakerManager g_AntlionMakerManager("CAntlionMakerManager");
@@ -1409,7 +1409,7 @@ bool CAntlionTemplateMaker::IsDepleted(void) {
 //-----------------------------------------------------------------------------
 void CAntlionTemplateMaker::InputChangeDestinationGroup(
     inputdata_t &inputdata) {
-  // FIXME: This function is redundant to the base class version, remove the
+  // TODO(d.rattman): This function is redundant to the base class version, remove the
   // m_strSpawnGroup
   m_strSpawnGroup = inputdata.value.StringID();
 }

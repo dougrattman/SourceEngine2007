@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SV_MASTER_LEGACY_H
 #define SV_MASTER_LEGACY_H
@@ -12,7 +12,7 @@ class CGameServer;
 //-----------------------------------------------------------------------------
 // Purpose: Implements a master server interface.
 //-----------------------------------------------------------------------------
-abstract_class IMaster {
+the_interface IMaster {
  public:
   // Allow master server to register cvars/commands
   virtual void Init(void) = 0;

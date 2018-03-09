@@ -29,7 +29,7 @@
 #include "hl2mp_gamerules.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern int gEvilImpulse101;  // In Player.h
@@ -269,7 +269,7 @@ bool CBaseCombatWeapon::WeaponLOSCondition(const Vector &ownerPos,
                  vecRelativeShootPosition);
   Vector barrelPos = ownerPos + vecRelativeShootPosition;
 
-  // FIXME: If we're in a vehicle, we need some sort of way to handle shooting
+  // TODO(d.rattman): If we're in a vehicle, we need some sort of way to handle shooting
   // out of them
 
   // Use the custom LOS trace filter
@@ -400,7 +400,7 @@ int CBaseCombatWeapon::WeaponMeleeAttack2Condition(float flDot, float flDist) {
 //====================================================================================
 void CBaseCombatWeapon::Delete(void) {
   SetTouch(NULL);
-  // FIXME: why doesn't this just remove itself now?
+  // TODO(d.rattman): why doesn't this just remove itself now?
   SetThink(&CBaseCombatWeapon::SUB_Remove);
   SetNextThink(gpGlobals->curtime + 0.1f);
 }
@@ -418,8 +418,8 @@ void CBaseCombatWeapon::DestroyItem(void) {
 
 void CBaseCombatWeapon::Kill(void) {
   SetTouch(NULL);
-  // FIXME: why doesn't this just remove itself now?
-  // FIXME: how is this different than Delete(), and why do they have the same
+  // TODO(d.rattman): why doesn't this just remove itself now?
+  // TODO(d.rattman): how is this different than Delete(), and why do they have the same
   // code in them?
   SetThink(&CBaseCombatWeapon::SUB_Remove);
   SetNextThink(gpGlobals->curtime + 0.1f);

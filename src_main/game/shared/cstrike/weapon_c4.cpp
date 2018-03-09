@@ -28,7 +28,7 @@
 	#include "tier1/keyvalues.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -127,7 +127,7 @@ END_PREDICTION_DATA()
 	{
 		char buf[64];
 
-		// FIXME: Deal with dynamically resizing control panels?
+		// TODO(d.rattman): Deal with dynamically resizing control panels?
 
 		// If we're attached to an entity, spawn control panels on it instead of use
 		CBaseAnimating *pEntityToSpawnOn = this;
@@ -1198,7 +1198,7 @@ void CC4::OnPickedUp( CBaseCombatCharacter *pNewOwner )
 	#include "cs_bot.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void CC4::Drop( const Vector &vecVelocity )

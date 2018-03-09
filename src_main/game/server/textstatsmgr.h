@@ -37,7 +37,7 @@ public:
 	void 	SetStatsFilename( char *sFilename );
 
 private:
-	char	m_szStatFilename[ MAX_PATH ];
+	char	m_szStatFilename[ SOURCE_MAX_PATH ];
 };
 
 

@@ -3,7 +3,6 @@
 #ifndef LAUNCHER_SOURCE_APP_SYSTEM_GROUP_H_
 #define LAUNCHER_SOURCE_APP_SYSTEM_GROUP_H_
 
-#include <memory>
 #include "appframework/IAppSystemGroup.h"
 #include "base/include/base_types.h"
 #include "base/include/windows/scoped_com_initializer.h"
@@ -27,11 +26,9 @@ class SourceAppSystemGroup : public CSteamAppSystemGroup {
         hammer_{nullptr},
         command_line_{command_line},
         file_system_access_logger_{file_system_access_logger},
-        scoped_com_initializer_{
-            std::make_unique<source::windows::ScopedComInitializer>(
-                static_cast<COINIT>(COINIT_APARTMENTTHREADED |
-                                    COINIT_SPEED_OVER_MEMORY |
-                                    COINIT_DISABLE_OLE1DDE))} {
+        scoped_com_initializer_{static_cast<COINIT>(COINIT_APARTMENTTHREADED |
+                                                    COINIT_SPEED_OVER_MEMORY |
+                                                    COINIT_DISABLE_OLE1DDE)} {
     g_all_files_access_logger = &file_system_access_logger_;
   }
 
@@ -50,8 +47,7 @@ class SourceAppSystemGroup : public CSteamAppSystemGroup {
   IEngineAPI *engine_api_;
   IHammer *hammer_;
   FileSystemAccessLogger &file_system_access_logger_;
-  const std::unique_ptr<source::windows::ScopedComInitializer>
-      scoped_com_initializer_;
+  const source::windows::ScopedComInitializer scoped_com_initializer_;
 
   const ch *DetermineDefaultMod();
   const ch *DetermineDefaultGame();

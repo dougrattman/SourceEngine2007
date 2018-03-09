@@ -963,7 +963,7 @@ void AnimationBrowser::Think( float dt )
 			// This should be the only thing on the model!!!
 			model->ClearAnimationLayers();
 
-			// FIXME: shouldn't sequences always be lower priority than gestures?
+			// TODO(d.rattman): shouldn't sequences always be lower priority than gestures?
 			int iLayer = model->GetNewAnimationLayer( 0 );
 			model->SetOverlaySequence( iLayer, iSequence, 1.0f );
 			model->SetOverlayRate( iLayer, cycle, 0.0f );

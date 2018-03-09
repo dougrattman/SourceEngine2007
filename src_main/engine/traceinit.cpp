@@ -7,7 +7,7 @@
 #include "tier0/include/basetypes.h"
 #include "tier1/UtlVector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

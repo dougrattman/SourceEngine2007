@@ -18,7 +18,7 @@
 
 #include "dinput.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar ff_autocenter("ff_autocenter", "1", FCVAR_ARCHIVE,
@@ -52,13 +52,13 @@ static EffectMap_t g_EffectMap[] = {
 };
 
 static void InitEffectMap() {
-  int c = ARRAYSIZE(g_EffectMap);
+  int c = SOURCE_ARRAYSIZE(g_EffectMap);
   for (int i = 0; i < c; ++i) {
     g_EffectMap[i].pVecEffectPtr = new vecEffectPtr_t();
   }
 }
 static void ShutdownEffectMap() {
-  int c = ARRAYSIZE(g_EffectMap);
+  int c = SOURCE_ARRAYSIZE(g_EffectMap);
   for (int i = 0; i < c; ++i) {
     if (g_EffectMap[i].pVecEffectPtr) {
       g_EffectMap[i].pVecEffectPtr->RemoveAll();
@@ -427,7 +427,7 @@ static void LoadEffectFile(LPDIRECTINPUTDEVICE8 device, EffectMap_t &map) {
 // Output : static void
 //-----------------------------------------------------------------------------
 static void LoadEffectFiles(LPDIRECTINPUTDEVICE8 device) {
-  int c = ARRAYSIZE(g_EffectMap);
+  int c = SOURCE_ARRAYSIZE(g_EffectMap);
   for (int i = 0; i < c; ++i) {
     EffectMap_t &map = g_EffectMap[i];
 

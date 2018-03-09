@@ -42,7 +42,7 @@ struct envelopeDescription_t
 
 class IRecipientFilter;
 
-abstract_class CSoundEnvelopeController
+the_interface CSoundEnvelopeController
 {
 public:
 	virtual void		SystemReset( void ) = 0;

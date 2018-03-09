@@ -19,7 +19,7 @@
 #include "view.h"
 #include "viewrender.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar cl_winddir("cl_winddir", "0", FCVAR_CHEAT,
@@ -681,7 +681,7 @@ inline CPrecipitationParticle *CClient_Precipitation::CreateParticle() {
 
 bool CClient_Precipitation::ComputeEmissionArea(Vector &origin,
                                                 Vector2D &size) {
-  // FIXME: Compute the precipitation area based on computational power
+  // TODO(d.rattman): Compute the precipitation area based on computational power
   float emissionSize =
       r_RainRadius.GetFloat();  // size of box to emit particles in
 
@@ -960,7 +960,7 @@ void CClient_Precipitation::EmitParticles(float fTimeDelta) {
   // clamp this to prevent creating a bunch of rain or snow at one time.
   if (fTimeDelta > 0.075f) fTimeDelta = 0.075f;
 
-  // FIXME: Compute the precipitation density based on computational power
+  // TODO(d.rattman): Compute the precipitation density based on computational power
   float density = m_flDensity;
 
   if (density > 0.01f) density = 0.01f;

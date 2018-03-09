@@ -27,11 +27,11 @@ typedef struct
 	BOOL bEnable;				// Run this command?
 
 	int iSpecialCmd;			// Nonzero if special command exists
-	char szRun[MAX_PATH];
-	char szParms[MAX_PATH];
+	char szRun[SOURCE_MAX_PATH];
+	char szParms[SOURCE_MAX_PATH];
 	BOOL bLongFilenames;		// Obsolete, but kept here for file backwards compatibility
 	BOOL bEnsureCheck;
-	char szEnsureFn[MAX_PATH];
+	char szEnsureFn[SOURCE_MAX_PATH];
 	BOOL bUseProcessWnd;
 	BOOL bNoWait;
 

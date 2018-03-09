@@ -28,7 +28,7 @@
 	#include "portal_util_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const char *GetMassEquivalent(float flMass);
@@ -315,7 +315,7 @@ void CNPC_FloorTurret::Spawn( void )
 	m_iMuzzleAttachment = LookupAttachment( "eyes" );
 	m_iEyeAttachment = LookupAttachment( "light" );
 
-	// FIXME: Do we ever need m_bAutoStart? (Sawyer)
+	// TODO(d.rattman): Do we ever need m_bAutoStart? (Sawyer)
 	m_spawnflags |= SF_FLOOR_TURRET_AUTOACTIVATE;
 
 	//Set our autostart state
@@ -1886,7 +1886,7 @@ void CNPC_FloorTurret::SpinUp( void )
 //-----------------------------------------------------------------------------
 QAngle CNPC_FloorTurret::PreferredCarryAngles( void )
 {
-	// FIXME: Embed this into the class
+	// TODO(d.rattman): Embed this into the class
 	static QAngle g_prefAngles;
 
 	Vector vecUserForward;

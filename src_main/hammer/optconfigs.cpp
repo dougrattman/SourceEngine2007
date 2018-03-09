@@ -19,7 +19,7 @@
 
 #include "tier2/vconfig.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_DYNCREATE(COPTConfigs, CPropertyPage)
@@ -95,7 +95,7 @@ void EditorUtil_ConvertPath(CString &str, bool bExpand) {
   const char *szSteamDirToken = "$SteamDir";
   const char *szSteamUserDirToken = "$SteamUserDir";
 
-  char szPathOut[MAX_PATH];
+  char szPathOut[SOURCE_MAX_PATH];
 
   if (bExpand) {
     // Replace the tokens with the full strings
@@ -213,7 +213,7 @@ void COPTConfigs::OnEditconfigs(void) {
 void COPTConfigs::OnGdfileAdd(void) {
   if (m_pLastSelConfig == NULL) return;
 
-  char szAppDir[MAX_PATH];
+  char szAppDir[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_PROGRAM, szAppDir);
 
   // browse for .FGD files
@@ -247,8 +247,8 @@ void COPTConfigs::OnGdfileEdit(void) {
   EditorUtil_ConvertPath(str, true);
 
   // call editor (notepad!)
-  char szBuf[MAX_PATH];
-  GetWindowsDirectory(szBuf, MAX_PATH);
+  char szBuf[SOURCE_MAX_PATH];
+  GetWindowsDirectory(szBuf, SOURCE_MAX_PATH);
   strcat(szBuf, "\\notepad.exe");
   _spawnl(_P_WAIT, szBuf, szBuf, str.GetString(), NULL);
 
@@ -325,7 +325,7 @@ void COPTConfigs::SaveInfo(CGameConfig *pConfig) {
   EditorUtil_TransferPath(this, IDC_MODDIR, pConfig->m_szModDir, true);
   EditorUtil_TransferPath(this, IDC_MAPDIR, pConfig->szMapDir, true);
 
-  char szCordonTexture[MAX_PATH];
+  char szCordonTexture[SOURCE_MAX_PATH];
   m_cCordonTexture.GetWindowText(szCordonTexture, sizeof(szCordonTexture));
   pConfig->SetCordonTexture(szCordonTexture);
 
@@ -510,7 +510,7 @@ void UpdateConfigList(CComboBox &combo) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void SelectActiveConfig(CComboBox &combo) {
-  char szGameDir[MAX_PATH];
+  char szGameDir[SOURCE_MAX_PATH];
   if (GetPersistentEnvironmentVariable(GAMEDIR_TOKEN, szGameDir,
                                        sizeof(szGameDir))) {
     CGameConfig *pConfig = Options.configs.FindConfigForGame(szGameDir);
@@ -633,7 +633,7 @@ BOOL COPTConfigs::OnApply(void) {
 // Output : Returns TRUE on success, FALSE on failure.
 //-----------------------------------------------------------------------------
 BOOL COPTConfigs::BrowseForFolder(const char *pszTitle, char *pszDirectory) {
-  char szTmp[MAX_PATH];
+  char szTmp[SOURCE_MAX_PATH];
 
   BROWSEINFO bi;
   memset(&bi, 0, sizeof bi);
@@ -687,7 +687,7 @@ void COPTConfigs::OnBrowseCordonTexture(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void COPTConfigs::OnBrowseGameExeDir(void) {
-  char szTmp[MAX_PATH];
+  char szTmp[SOURCE_MAX_PATH];
   if (!BrowseForFolder("Select Game Executable Directory", szTmp)) {
     return;
   }
@@ -701,7 +701,7 @@ void COPTConfigs::OnBrowseGameExeDir(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void COPTConfigs::OnBrowseModDir(void) {
-  char szTmp[MAX_PATH];
+  char szTmp[SOURCE_MAX_PATH];
   if (!BrowseForFolder("Select Mod Directory", szTmp)) {
     return;
   }
@@ -715,7 +715,7 @@ void COPTConfigs::OnBrowseModDir(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void COPTConfigs::OnBrowsemapdir(void) {
-  char szTmp[MAX_PATH];
+  char szTmp[SOURCE_MAX_PATH];
   if (!BrowseForFolder("Select Map Directory", szTmp)) {
     return;
   }

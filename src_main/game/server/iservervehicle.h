@@ -23,7 +23,7 @@ enum VehicleSeatQuery_e;
 
 // This is used by the player to access vehicles. It's an interface so the
 // vehicles are not restricted in what they can derive from.
-abstract_class IServerVehicle : public IVehicle
+the_interface IServerVehicle : public IVehicle
 {
 public:
 	// Get the entity associated with the vehicle.
@@ -109,7 +109,7 @@ public:
 
 // This is an interface to derive from if your class contains an IServerVehicle 
 // handler (i.e. something derived CBaseServerVehicle.
-abstract_class IDrivableVehicle
+the_interface IDrivableVehicle
 {
 public:
 	virtual CBaseEntity		*GetDriver( void ) = 0;

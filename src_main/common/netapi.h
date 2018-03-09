@@ -7,7 +7,7 @@
 #include "tier1/netadr.h"
 
 // Purpose: Internal winsock helpers for launcher.
-abstract_class INetAPI {
+the_interface INetAPI {
  public:
   // Convert a netadr_t to sockaddr
   virtual void NetAdrToSockAddr(netadr_t * a, struct sockaddr * s) = 0;

@@ -366,7 +366,7 @@ private:
 
 
 //-----------------------------------------------------------------------------
-// FIXME: find a better way to do this
+// TODO(d.rattman): find a better way to do this
 // Switches us to a physics damage table that caps the max damage.
 //-----------------------------------------------------------------------------
 void CHL2_Player::EnableCappedPhysicsDamage()

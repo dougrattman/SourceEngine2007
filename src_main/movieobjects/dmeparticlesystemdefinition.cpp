@@ -16,7 +16,7 @@
 #include "dme_controls/attributeboolchoicepanel.h"
 #include "dme_controls/attributestringchoicepanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -292,7 +292,7 @@ void CDmeParticleChild::OnDestruction()
 //-----------------------------------------------------------------------------
 void CDmeParticleChild::SetChildParticleSystem( CDmeParticleSystemDefinition *pDef, IParticleOperatorDefinition *pDefinition )
 {
-	// FIXME: Convert system name into a 
+	// TODO(d.rattman): Convert system name into a 
 	m_Child = pDef;
 	const DmxElementUnpackStructure_t *pUnpack = pDefinition->GetUnpackStructure();
 	UpdateAttributes( pUnpack );

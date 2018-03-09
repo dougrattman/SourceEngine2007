@@ -15,7 +15,7 @@
 #include "vgui/ISurface.h"
 #include <vgui/ILocalize.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar player_squad_transient_commands( "player_squad_transient_commands", "1", FCVAR_REPLICATED );

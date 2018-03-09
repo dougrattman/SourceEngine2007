@@ -265,7 +265,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\public\filesystem_init.cpp"
+				RelativePath="..\..\public\filesystem_init.cc"
 				>
 			</File>
 			<File

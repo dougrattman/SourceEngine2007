@@ -39,8 +39,8 @@
 
 const char *g_pGameDir = NULL;
 const char *g_pTextureOutputDir = NULL;
-char g_WorkerTempPath[MAX_PATH];
-char g_ExeDir[MAX_PATH];
+char g_WorkerTempPath[SOURCE_MAX_PATH];
+char g_ExeDir[SOURCE_MAX_PATH];
 CUtlVector<char *> g_CompileCommands;
 int g_nTexturesPerWorkUnit = 0;
 #ifdef DEBUGFP
@@ -207,10 +207,10 @@ void VTFNameToTGAName(const char *pSrcName, char *pDstName) {
   if (pMaterials) {
     Q_strncpy(pDstName, pSrcName, pMaterials - pSrcName + 1);
   }
-  Q_strcat(pDstName, "materialsrc", MAX_PATH);
-  Q_strcat(pDstName, pMaterials + strlen("materials"), MAX_PATH);
+  Q_strcat(pDstName, "materialsrc", SOURCE_MAX_PATH);
+  Q_strcat(pDstName, pMaterials + strlen("materials"), SOURCE_MAX_PATH);
   Q_StripExtension(pDstName, pDstName, strlen(pDstName));
-  Q_strcat(pDstName, ".tga", MAX_PATH);
+  Q_strcat(pDstName, ".tga", SOURCE_MAX_PATH);
 }
 
 // You must append data to pBuf with the work unit results.
@@ -404,7 +404,7 @@ void Worker_GetLocalCopyOfTextureSource(const char *pVtfName) {
 
 void Worker_GetLocalCopyOfBinary(const char *pFilename) {
   CUtlBuffer fileBuf;
-  char tmpFilename[MAX_PATH];
+  char tmpFilename[SOURCE_MAX_PATH];
   sprintf(tmpFilename, "%s\\%s", g_ExeDir, pFilename);
   printf("trying to open: %s\n", tmpFilename);
 
@@ -422,7 +422,7 @@ void Worker_GetLocalCopyOfBinary(const char *pFilename) {
   fclose(fp);
   fileBuf.SeekPut(CUtlBuffer::SEEK_HEAD, nBytesRead);
 
-  char newFilename[MAX_PATH];
+  char newFilename[SOURCE_MAX_PATH];
   sprintf(newFilename, "%s%s", g_WorkerTempPath, pFilename);
 
   DebugOut("this is fucked \"%s\"\n", newFilename);
@@ -471,7 +471,7 @@ void Shared_ParseListOfCompileCommands(void) {
 void SetupPaths(int argc, char **argv) {
   GetTempPath(sizeof(g_WorkerTempPath), g_WorkerTempPath);
   strcat(g_WorkerTempPath, "texturecompiletemp\\");
-  char tmp[MAX_PATH];
+  char tmp[SOURCE_MAX_PATH];
   sprintf(tmp, "rd /s /q \"%s\"", g_WorkerTempPath);
   system(tmp);
   _mkdir(g_WorkerTempPath);
@@ -493,7 +493,7 @@ void SetupPaths(int argc, char **argv) {
 void SetupDebugFile(void) {
 #ifdef DEBUGFP
   const char *pComputerName = getenv("COMPUTERNAME");
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   sprintf(filename, "\\\\fileserver\\user\\gary\\debug\\%s.txt", pComputerName);
   g_WorkerDebugFp = fopen(filename, "w");
   Assert(g_WorkerDebugFp);
@@ -537,8 +537,8 @@ void WriteTexture(const char *pTextureName) {
 		}
 	}
 
-	char filename[MAX_PATH];
-	char filename2[MAX_PATH];
+	char filename[SOURCE_MAX_PATH];
+	char filename2[SOURCE_MAX_PATH];
 //	strcpy( filename2, g_pShaderOutputDir );
 	strcpy( filename2, g_pShaderPath );
 	strcat( filename2, "\\shaders\\fxc" );
@@ -585,7 +585,7 @@ void WriteTexture(const char *pTextureName) {
 
 void TouchFile(const char *path) {
   Warning("TouchFile: %s\n", path);
-  char dir[MAX_PATH];
+  char dir[SOURCE_MAX_PATH];
   Q_strcpy(dir, path);
   Q_StripFilename(dir);
   MakeDirHier(dir);
@@ -663,7 +663,7 @@ int TextureCompile_Main(int argc, const char *argv[]) {
 
     // DIE DIE KILL KILL
     // AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    char path[MAX_PATH];
+    char path[SOURCE_MAX_PATH];
     sprintf(path, "%s%s\\bin\\server.dll", g_WorkerTempPath,
             g_pGameDir + 3);  // hack hack
     TouchFile(path);

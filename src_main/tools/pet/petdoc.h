@@ -114,7 +114,7 @@ private:
 
 	IPetDocCallback *m_pCallback;
 	CDmeHandle< CDmElement > m_hRoot;
-	char m_pFileName[MAX_PATH];
+	char m_pFileName[SOURCE_MAX_PATH];
 	bool m_bDirty;
 };
 

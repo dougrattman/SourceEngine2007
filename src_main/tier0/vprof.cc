@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Real-Time Hierarchical Profiling
 
@@ -9,11 +9,11 @@
 #include <map>
 #include <vector>
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/memalloc.h"
 #include "tier0/include/valve_off.h"
 
-#ifdef OS_WIN
+#ifdef COMPILER_MSVC
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4073)
 #pragma init_seg(lib)
@@ -24,12 +24,11 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 
 #include "tier0/include/memdbgon.h"
 
+#ifdef VPROF_ENABLED
 // NOTE: Explicitly and intentionally using STL in here to not generate any
 // cyclical dependencies between the low-level debug library and the higher
 // level data structures (toml 01-27-03)
 using namespace std;
-
-#ifdef VPROF_ENABLED
 
 CVProfile g_VProfCurrentProfile;
 
@@ -60,8 +59,6 @@ CVProfNode *CVProfNode::GetSubNode(const ch *pszName, i32 detailLevel,
   return GetSubNode(pszName, detailLevel, pBudgetGroupName, BUDGETFLAG_OTHER);
 }
 
-//-------------------------------------
-
 void CVProfNode::EnterScope() {
   m_nCurFrameCalls++;
   if (m_nRecursions++ == 0) {
@@ -72,8 +69,6 @@ void CVProfNode::EnterScope() {
 #endif
   }
 }
-
-//-------------------------------------
 
 bool CVProfNode::ExitScope() {
   if (--m_nRecursions == 0 && m_nCurFrameCalls != 0) {
@@ -86,8 +81,6 @@ bool CVProfNode::ExitScope() {
   }
   return (m_nRecursions == 0);
 }
-
-//-------------------------------------
 
 void CVProfNode::Pause() {
   if (m_nRecursions > 0) {
@@ -102,8 +95,6 @@ void CVProfNode::Pause() {
   }
 }
 
-//-------------------------------------
-
 void CVProfNode::Resume() {
   if (m_nRecursions > 0) {
     m_Timer.Start();
@@ -115,8 +106,6 @@ void CVProfNode::Resume() {
     m_pSibling->Resume();
   }
 }
-
-//-------------------------------------
 
 void CVProfNode::Reset() {
   m_nPrevFrameCalls = 0;
@@ -137,8 +126,6 @@ void CVProfNode::Reset() {
     m_pSibling->Reset();
   }
 }
-
-//-------------------------------------
 
 void CVProfNode::MarkFrame() {
   m_nPrevFrameCalls = m_nCurFrameCalls;
@@ -161,8 +148,6 @@ void CVProfNode::MarkFrame() {
   }
 }
 
-//-------------------------------------
-
 void CVProfNode::ResetPeak() {
   m_PeakTime.Init();
 
@@ -177,8 +162,8 @@ void CVProfNode::ResetPeak() {
 void CVProfNode::SetCurFrameTime(unsigned long milliseconds) {
   m_CurFrameTime.Init((f32)milliseconds);
 }
-#ifdef DBGFLAG_VALIDATE
 
+#ifdef DBGFLAG_VALIDATE
 // Purpose: Ensure that all of our internal structures are consistent, and
 //			account for all memory that we've allocated.
 // Input:	validator -		Our global validator object
@@ -246,8 +231,6 @@ vector<TimeSums_t> g_TimeSums;
 CVProfNode *g_pStartNode;
 const ch *g_pszSumNode;
 
-//-------------------------------------
-
 void CVProfile::SumTimes(CVProfNode *pNode, i32 budgetGroupID) {
   if (!pNode) return;  // this generally only happens on a failed FindNode()
 
@@ -298,8 +281,6 @@ void CVProfile::SumTimes(CVProfNode *pNode, i32 budgetGroupID) {
   if (bSetStartNode) g_pStartNode = nullptr;
 }
 
-//-------------------------------------
-
 CVProfNode *CVProfile::FindNode(CVProfNode *pStartNode, const ch *pszNode) {
   if (strcmp(pStartNode->GetName(), pszNode) != 0) {
     CVProfNode *pFoundNode = nullptr;
@@ -316,8 +297,6 @@ CVProfNode *CVProfile::FindNode(CVProfNode *pStartNode, const ch *pszNode) {
   return pStartNode;
 }
 
-//-------------------------------------
-
 void CVProfile::SumTimes(const ch *pszStartNode, i32 budgetGroupID) {
   if (GetRoot()->GetChild()) {
     if (pszStartNode == nullptr)
@@ -330,8 +309,6 @@ void CVProfile::SumTimes(const ch *pszStartNode, i32 budgetGroupID) {
     g_pStartNode = nullptr;
   }
 }
-
-//-------------------------------------
 
 void CVProfile::DumpNodes(CVProfNode *pNode, i32 indent,
                           bool bAverageAndCountOnly) {
@@ -402,11 +379,9 @@ void CVProfile::DumpNodes(CVProfNode *pNode, i32 indent,
   }
 }
 
-//-------------------------------------
 static void DumpSorted(const ch *pszHeading, f64 totalTime,
                        bool (*pfnSort)(const TimeSums_t &, const TimeSums_t &),
-                       i32 maxLen = 999999) {
-  u32 i;
+                       usize maxLen = 999999) {
   vector<TimeSums_t> sortedSums;
   sortedSums = g_TimeSums;
   sort(sortedSums.begin(), sortedSums.end(), pfnSort);
@@ -418,7 +393,7 @@ static void DumpSorted(const ch *pszHeading, f64 totalTime,
   Msg("  ---------------------------------------------------- ----------- "
       "----------- ----------- ------ ----------- ------ ----------- "
       "----------- ----------- -----------\n");
-  for (i = 0; i < sortedSums.size() && i < (u32)maxLen; i++) {
+  for (usize i = 0; i < sortedSums.size() && i < maxLen; i++) {
     f64 avg = (sortedSums[i].calls)
                   ? sortedSums[i].time / (f64)sortedSums[i].calls
                   : 0.0;
@@ -439,17 +414,9 @@ static void DumpSorted(const ch *pszHeading, f64 totalTime,
   }
 }
 
-//-------------------------------------
-
 void CVProfile::OutputReport(i32 type, const ch *pszStartNode,
                              i32 budgetGroupID) {
-  Msg("******** BEGIN VPROF REPORT ********\n");
-#ifdef COMPILER_MSVC
-#if (_MSC_VER < 1300)
-  Msg(_T("  (note: this report exceeds the output capacity of MSVC debug ")
-      _T("window. Use console window or console log.) \n"));
-#endif
-#endif
+  Msg(">>> Begin vprof report\n");
 
   g_TotalFrames = std::max(NumFramesSampled() - 1, 1);
 
@@ -547,10 +514,9 @@ void CVProfile::OutputReport(i32 type, const ch *pszStartNode,
     g_TimeSumsMap.clear();
     g_TimeSums.clear();
   }
-  Msg("******** END VPROF REPORT ********\n");
-}
 
-//=============================================================================
+  Msg(">>> End vporf report\n");
+}
 
 CVProfile::CVProfile()
     : m_Root("Root", 0, nullptr, VPROF_BUDGETGROUP_OTHER_UNACCOUNTED, 0),
@@ -568,7 +534,7 @@ CVProfile::CVProfile()
   MEM_ALLOC_CREDIT();
   m_pBudgetGroups = new CVProfile::CBudgetGroup[32];
   m_nBudgetGroupNames = 0;
-  m_nBudgetGroupNamesAllocated = 32;
+  m_nBudgetGroupNamesAllocated = 32;  //-V112
 
   // Add these here so that they will always be in the same order.
   // VPROF_BUDGETGROUP_OTHER_UNACCOUNTED has to be FIRST!!!!
@@ -651,16 +617,14 @@ void CVProfile::FreeNodes_R(CVProfNode *pNode) {
 }
 
 void CVProfile::Term() {
-  i32 i;
-  for (i = 0; i < m_nBudgetGroupNames; i++) {
+  for (isize i = 0; i < m_nBudgetGroupNames; i++) {
     delete[] m_pBudgetGroups[i].m_pName;
   }
   delete[] m_pBudgetGroups;
   m_nBudgetGroupNames = m_nBudgetGroupNamesAllocated = 0;
   m_pBudgetGroups = nullptr;
 
-  i32 n;
-  for (n = 0; n < m_NumCounters; n++) {
+  for (isize n = 0; n < m_NumCounters; n++) {
     delete[] m_CounterNames[n];
     m_CounterNames[n] = nullptr;
   }
@@ -698,8 +662,7 @@ void CVProfile::GetBudgetGroupColor(i32 budgetGroupID, i32 &r, i32 &g, i32 &b,
 
 // return -1 if it doesn't exist.
 i32 CVProfile::FindBudgetGroupName(const ch *pBudgetGroupName) {
-  i32 i;
-  for (i = 0; i < m_nBudgetGroupNames; i++) {
+  for (isize i = 0; i < m_nBudgetGroupNames; i++) {
     if (stricmp(pBudgetGroupName, m_pBudgetGroups[i].m_pName) == 0) {
       return i;
     }
@@ -717,7 +680,8 @@ i32 CVProfile::AddBudgetGroupName(const ch *pBudgetGroupName, i32 budgetFlags) {
         std::max(m_nBudgetGroupNames + 6, m_nBudgetGroupNamesAllocated);
 
     CBudgetGroup *pNew = new CBudgetGroup[m_nBudgetGroupNamesAllocated];
-    for (i32 i = 0; i < m_nBudgetGroupNames; i++) pNew[i] = m_pBudgetGroups[i];
+    for (isize i = 0; i < m_nBudgetGroupNames; i++)
+      pNew[i] = m_pBudgetGroups[i];
 
     delete[] m_pBudgetGroups;
     m_pBudgetGroups = pNew;
@@ -822,7 +786,6 @@ CounterGroup_t CVProfile::GetCounterGroup(i32 index) const {
 }
 
 #ifdef DBGFLAG_VALIDATE
-
 #ifdef ARCH_CPU_X86_64
 #error The below is presumably broken on 64 bit
 #endif  // ARCH_CPU_X86_64
@@ -857,5 +820,4 @@ void CVProfile::Validate(CValidator &validator, ch *pchName) {
   validator.Pop();
 }
 #endif  // DBGFLAG_VALIDATE
-
-#endif
+#endif  // VPROF_ENABLED

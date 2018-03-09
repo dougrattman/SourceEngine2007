@@ -8,7 +8,7 @@
 #include "vphysics/player_controller.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //==============================================================================================
@@ -30,8 +30,8 @@ impactdamagetable_t gDefaultPlayerImpactDamageTable = {
     playerLinearTable,
     playerAngularTable,
 
-    ARRAYSIZE(playerLinearTable),
-    ARRAYSIZE(playerAngularTable),
+    SOURCE_ARRAYSIZE(playerLinearTable),
+    SOURCE_ARRAYSIZE(playerAngularTable),
 
     24 * 24.0f,    // minimum linear speed
     360 * 360.0f,  // minimum angular speed
@@ -67,8 +67,8 @@ impactdamagetable_t gDefaultPlayerVehicleImpactDamageTable = {
     playerVehicleLinearTable,
     playerVehicleAngularTable,
 
-    ARRAYSIZE(playerVehicleLinearTable),
-    ARRAYSIZE(playerVehicleAngularTable),
+    SOURCE_ARRAYSIZE(playerVehicleLinearTable),
+    SOURCE_ARRAYSIZE(playerVehicleAngularTable),
 
     24 * 24,    // minimum linear speed
     360 * 360,  // minimum angular speed
@@ -102,7 +102,7 @@ static impactentry_t npcAngularTable[] = {
 impactdamagetable_t gDefaultNPCImpactDamageTable = {
     npcLinearTable, npcAngularTable,
 
-    ARRAYSIZE(npcLinearTable), ARRAYSIZE(npcAngularTable),
+    SOURCE_ARRAYSIZE(npcLinearTable), SOURCE_ARRAYSIZE(npcAngularTable),
 
     24 * 24,    // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -139,7 +139,7 @@ static impactentry_t glassAngularTable[] = {
 impactdamagetable_t gGlassImpactDamageTable = {
     glassLinearTable, glassAngularTable,
 
-    ARRAYSIZE(glassLinearTable), ARRAYSIZE(glassAngularTable),
+    SOURCE_ARRAYSIZE(glassLinearTable), SOURCE_ARRAYSIZE(glassAngularTable),
 
     8 * 8,      // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -269,7 +269,7 @@ float CalculatePhysicsImpactDamage(int index, gamevcollisionevent_t *pEvent,
     // UNDONE: Add up mass here for car wheels and prop_ragdoll pieces?
     IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
     int count = pEvent->pEntities[otherIndex]->VPhysicsGetObjectList(
-        pList, ARRAYSIZE(pList));
+        pList, SOURCE_ARRAYSIZE(pList));
     for (int i = 0; i < count; i++) {
       if (pList[i]->GetGameFlags() & gameFlagsNoDamage) return 0;
     }
@@ -430,7 +430,7 @@ float CalculateDefaultPhysicsDamage(int index, gamevcollisionevent_t *pEvent,
                                     bool bDamageFromHeldObjects) {
   // If we have a specified damage table, find it and use it instead
   if (iszDamageTableName != NULL_STRING) {
-    for (int i = 0; i < ARRAYSIZE(gDamageTableRegistry); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(gDamageTableRegistry); i++) {
       if (!Q_strcmp(gDamageTableRegistry[i].pszTableName,
                     STRING(iszDamageTableName)))
         return CalculatePhysicsImpactDamage(

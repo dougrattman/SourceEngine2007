@@ -52,7 +52,7 @@ void ProcessConsoleInput() {
     s = sys->ConsoleInput();
     if (s) {
       char szBuf[256];
-      Q_snprintf(szBuf, ARRAYSIZE(szBuf), "%s\n", s);
+      Q_snprintf(szBuf, SOURCE_ARRAYSIZE(szBuf), "%s\n", s);
       engine->AddConsoleText(szBuf);
     }
   } while (s);
@@ -95,7 +95,7 @@ SpewRetval_t DedicatedSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
                  MB_OK | MB_ICONERROR | MB_TASKMODAL);
     }
     TerminateProcess(GetCurrentProcess(), 1);
-#elif _LINUX
+#elif OS_POSIX
     fflush(stdout);
     _exit(1);
 #else
@@ -132,7 +132,7 @@ int Sys_GetExecutableName(char *out) {
 // Output : char
 //-----------------------------------------------------------------------------
 const char *UTIL_GetExecutableDir() {
-  static char exedir[MAX_PATH];
+  static char exedir[SOURCE_MAX_PATH];
 
   exedir[0] = 0;
   if (!Sys_GetExecutableName(exedir)) return NULL;
@@ -166,7 +166,7 @@ const char *UTIL_GetExecutableDir() {
 // Output : char
 //-----------------------------------------------------------------------------
 const char *UTIL_GetBaseDir(void) {
-  static char basedir[MAX_PATH];
+  static char basedir[SOURCE_MAX_PATH];
 
   char const *pOverrideDir = CommandLine()->CheckParm("-basedir");
   if (pOverrideDir) return pOverrideDir;

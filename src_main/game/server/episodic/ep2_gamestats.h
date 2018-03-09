@@ -504,7 +504,7 @@ public:
 	// Generic statistics lump
 	virtual void Event_IncrementCountedStatistic( const Vector& vecAbsOrigin, char const *pchStatisticName, float flIncrementAmount );
 
-public:	//FIXME: temporary used for CC_ListDeaths command
+public:	//TODO(d.rattman): temporary used for CC_ListDeaths command
 	Ep2LevelStats_t	*FindOrAddMapStats( const char *szMapName );
 	
 public:

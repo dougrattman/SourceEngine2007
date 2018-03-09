@@ -39,7 +39,7 @@ public:
 	int iMaxAutosaveSpace;
 	int iMaxAutosavesPerMap;
 	BOOL bClosedCorrectly;
-	char szAutosaveDir[MAX_PATH];
+	char szAutosaveDir[SOURCE_MAX_PATH];
 	BOOL bUseVGUIModelBrowser;
 	BOOL bShowCollisionModels;
 	BOOL bShowDetailObjects;

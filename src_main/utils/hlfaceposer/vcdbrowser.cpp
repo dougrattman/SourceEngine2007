@@ -155,7 +155,7 @@ public:
 
 	struct FileTreePath
 	{
-		char	path[ MAX_PATH ];
+		char	path[ SOURCE_MAX_PATH ];
 	};
 
 	static bool FileTreeLessFunc( const FileTreePath &lhs, const FileTreePath &rhs )
@@ -471,7 +471,7 @@ void CVCDBrowser::OpenVCD( const FileNameHandle_t& handle )
 	char fn[ 512 ];
 	if ( filesystem->String( handle, fn, sizeof( fn ) ) )
 	{
-		char pFullPath[MAX_PATH];
+		char pFullPath[SOURCE_MAX_PATH];
 		const char *pFileName = filesystem->RelativePathToFullPath( fn, "GAME", pFullPath, sizeof(pFullPath) );
 		if ( !pFileName )
 		{

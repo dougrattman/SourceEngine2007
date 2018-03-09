@@ -30,7 +30,7 @@
 #include "tier0/include/vprof.h"
 #include "tfc_bot_temp.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

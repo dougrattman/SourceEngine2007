@@ -18,7 +18,7 @@ enum VertexShaderLightTypes_t {
 //-----------------------------------------------------------------------------
 // Vertex + pixel shader manager
 //-----------------------------------------------------------------------------
-abstract_class IShaderManager {
+the_interface IShaderManager {
  protected:
   // The current vertex and pixel shader index
   int m_nVertexShaderIndex;
@@ -48,8 +48,8 @@ abstract_class IShaderManager {
                                           int nStaticPshIndex = 0) = 0;
 
   // Sets which dynamic version of the vertex + pixel shader to use
-  FORCEINLINE void SetVertexShaderIndex(int vshIndex);
-  FORCEINLINE void SetPixelShaderIndex(int pshIndex);
+  SOURCE_FORCEINLINE void SetVertexShaderIndex(int vshIndex);
+  SOURCE_FORCEINLINE void SetPixelShaderIndex(int pshIndex);
 
   // Sets the vertex + pixel shader render state
   virtual void SetVertexShader(VertexShader_t shader) = 0;
@@ -80,11 +80,11 @@ abstract_class IShaderManager {
 // Methods related to setting vertex + pixel shader state
 //
 //-----------------------------------------------------------------------------
-FORCEINLINE void IShaderManager::SetVertexShaderIndex(int vshIndex) {
+SOURCE_FORCEINLINE void IShaderManager::SetVertexShaderIndex(int vshIndex) {
   m_nVertexShaderIndex = vshIndex;
 }
 
-FORCEINLINE void IShaderManager::SetPixelShaderIndex(int pshIndex) {
+SOURCE_FORCEINLINE void IShaderManager::SetPixelShaderIndex(int pshIndex) {
   m_nPixelShaderIndex = pshIndex;
 }
 

@@ -67,12 +67,12 @@ CON_COMMAND(tv_test_start, "Starts the SourceTV test system") {
 
   int nClients = Q_atoi(args[1]);
 
-  char address[MAX_PATH];
+  char address[SOURCE_MAX_PATH];
 
   if (args.ArgC() == 3) {
-    Q_strncpy(address, args[2], MAX_PATH);
+    Q_strncpy(address, args[2], SOURCE_MAX_PATH);
   } else {
-    Q_snprintf(address, MAX_PATH, "%s:%s", args[2], args[4]);
+    Q_snprintf(address, SOURCE_MAX_PATH, "%s:%s", args[2], args[4]);
   }
 
   // If it's not a single player connection to "localhost", initialize

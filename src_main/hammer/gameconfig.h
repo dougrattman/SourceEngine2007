@@ -84,7 +84,7 @@ public:
 	char szBSPDir[128];
 	char m_szModDir[128];
 	int	 m_MaterialExcludeCount;
-	char m_szMaterialExcludeDirs[MAX_DIRECTORY_SIZE][MAX_PATH];
+	char m_szMaterialExcludeDirs[MAX_DIRECTORY_SIZE][SOURCE_MAX_PATH];
 
 	CStringArray GDFiles;
 	GameData GD;	// gamedata files loaded
@@ -110,11 +110,11 @@ protected:
 	TEXTUREFORMAT textureformat;
 	float m_fDefaultTextureScale;
 	int m_nDefaultLightmapScale;
-	char m_szCordonTexture[MAX_PATH];
+	char m_szCordonTexture[SOURCE_MAX_PATH];
 
 		// These settings are loaded from GameInfo.txt:
-		char m_szSteamDir[MAX_PATH];			// The full path to steam.exe
-		char m_szSteamUserDir[MAX_PATH];		// The full path to the users's directory under SteamApps
+		char m_szSteamDir[SOURCE_MAX_PATH];			// The full path to steam.exe
+		char m_szSteamUserDir[SOURCE_MAX_PATH];		// The full path to the users's directory under SteamApps
 		char m_szSteamAppID[32];				// The app id to add to the command line when launching the game via Steam.
 };
 

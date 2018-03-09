@@ -8,7 +8,7 @@
 #include "interval.h"
 #include "soundchars.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 struct SoundChannels {
@@ -72,7 +72,7 @@ static SoundLevelLookup g_pSoundLevels[] = {
 };
 
 static const char *_SoundLevelToString(soundlevel_t level) {
-  int c = ARRAYSIZE(g_pSoundLevels);
+  int c = SOURCE_ARRAYSIZE(g_pSoundLevels);
 
   int i;
 
@@ -87,7 +87,7 @@ static const char *_SoundLevelToString(soundlevel_t level) {
 }
 
 static const char *_ChannelToString(int channel) {
-  int c = ARRAYSIZE(g_pChannelNames);
+  int c = SOURCE_ARRAYSIZE(g_pChannelNames);
 
   int i;
 
@@ -102,7 +102,7 @@ static const char *_ChannelToString(int channel) {
 }
 
 static const char *_VolumeToString(float volume) {
-  int c = ARRAYSIZE(g_pVolumeLevels);
+  int c = SOURCE_ARRAYSIZE(g_pVolumeLevels);
 
   int i;
 
@@ -117,7 +117,7 @@ static const char *_VolumeToString(float volume) {
 }
 
 static const char *_PitchToString(float pitch) {
-  int c = ARRAYSIZE(g_pPitchLookup);
+  int c = SOURCE_ARRAYSIZE(g_pPitchLookup);
 
   int i;
 
@@ -139,7 +139,7 @@ soundlevel_t TextToSoundLevel(const char *key) {
     return SNDLVL_NORM;
   }
 
-  int c = ARRAYSIZE(g_pSoundLevels);
+  int c = SOURCE_ARRAYSIZE(g_pSoundLevels);
 
   int i;
 
@@ -177,7 +177,7 @@ int TextToChannel(const char *name) {
     return atoi(name);
   }
 
-  int c = ARRAYSIZE(g_pChannelNames);
+  int c = SOURCE_ARRAYSIZE(g_pChannelNames);
   int i;
 
   for (i = 0; i < c; i++) {
@@ -197,7 +197,7 @@ int TextToChannel(const char *name) {
 }
 
 const char *SoundLevelToString(soundlevel_t level) {
-  int c = ARRAYSIZE(g_pSoundLevels);
+  int c = SOURCE_ARRAYSIZE(g_pSoundLevels);
 
   int i;
 
@@ -212,7 +212,7 @@ const char *SoundLevelToString(soundlevel_t level) {
 }
 
 const char *ChannelToString(int channel) {
-  int c = ARRAYSIZE(g_pChannelNames);
+  int c = SOURCE_ARRAYSIZE(g_pChannelNames);
 
   int i;
 
@@ -227,7 +227,7 @@ const char *ChannelToString(int channel) {
 }
 
 const char *VolumeToString(float volume) {
-  int c = ARRAYSIZE(g_pVolumeLevels);
+  int c = SOURCE_ARRAYSIZE(g_pVolumeLevels);
 
   int i;
 
@@ -242,7 +242,7 @@ const char *VolumeToString(float volume) {
 }
 
 const char *PitchToString(float pitch) {
-  int c = ARRAYSIZE(g_pPitchLookup);
+  int c = SOURCE_ARRAYSIZE(g_pPitchLookup);
 
   int i;
 
@@ -437,7 +437,7 @@ void CSoundParametersInternal::AddToTail(SoundFile **pDest,
     // NOTE: when there's only one soundfile in the list, we store it
     // packed into the pointer itself, the four bytes for the pointer is just
     // used to store the sound file!
-    COMPILE_TIME_ASSERT(sizeof(SoundFile) <= sizeof(SoundFile *));
+    static_assert(sizeof(SoundFile) <= sizeof(SoundFile *));
     *((SoundFile *)(pDest)) = source;
   } else {
     SoundFile temp;

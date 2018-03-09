@@ -9,7 +9,7 @@
 #include "view_shared.h"
 #include "viewrender.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IntroData_t *g_pIntroData;

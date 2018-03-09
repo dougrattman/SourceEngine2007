@@ -40,7 +40,7 @@ class Vector;
 #define IENGINESOUND_CLIENT_INTERFACE_VERSION "IEngineSoundClient003"
 #define IENGINESOUND_SERVER_INTERFACE_VERSION "IEngineSoundServer003"
 
-abstract_class IEngineSound {
+the_interface IEngineSound {
  public:
   // Precache a particular sample
   virtual bool PrecacheSound(const char *pSample, bool bPreload = false,

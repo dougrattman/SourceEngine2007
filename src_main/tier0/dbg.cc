@@ -1,20 +1,23 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/dbg.h"
 
+#include <fcntl.h>
+#include <io.h>
 #include <cassert>
+#include <cstdio>
+
 #include "public/Color.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/minidump.h"
+#include "tier0/include/platform.h"
 #include "tier0/include/threadtools.h"
-#include "tier0/include/wchartypes.h"
 
 #ifndef STEAM
 #define PvRealloc realloc
 #define PvAlloc malloc
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 enum { MAX_GROUP_NAME_LENGTH = 48 };
@@ -43,7 +46,7 @@ static i32 s_Line;
 static SpewType_t s_SpewType;
 
 static SpewGroup_t* s_pSpewGroups = 0;
-static i32 s_GroupCount = 0;
+static usize s_GroupCount = 0;
 static i32 s_DefaultLevel = 0;
 static Color s_DefaultOutputColor(255, 255, 255, 255);
 
@@ -84,7 +87,7 @@ SpewOutputFunc_t GetSpewOutputFunc() {
 }
 
 void _ExitOnFatalAssert(const ch* pFile, i32 line) {
-  _SpewMessage("Fatal assert failed: %s, line %d.  Application exiting.\n",
+  SpewMessage_("Fatal assert failed: %s, line %d.  Application exiting.\n",
                pFile, line);
 
   // only write out minidumps if we're not in the debugger
@@ -92,7 +95,20 @@ void _ExitOnFatalAssert(const ch* pFile, i32 line) {
     WriteMiniDump();
   }
 
-  DevMsg(1, "_ExitOnFatalAssert\n");
+  DevMsg(1, "ExitOnFatalAssert_\n");
+  exit(EXIT_FAILURE);
+}
+
+void ExitOnFatalAssert_(const ch* pFile, i32 line) {  //-V524
+  SpewMessage_("Fatal assert failed: %s, line %d.  Application exiting.\n",
+               pFile, line);
+
+  // only write out minidumps if we're not in the debugger
+  if (!Plat_IsInDebugSession()) {
+    WriteMiniDump();
+  }
+
+  DevMsg(1, "ExitOnFatalAssert_\n");
   exit(EXIT_FAILURE);
 }
 
@@ -146,30 +162,41 @@ void _SpewInfo(SpewType_t type, const ch* pFile, i32 line) {
   s_SpewType = type;
 }
 
-static SpewRetval_t _SpewMessage(SpewType_t spewType, const ch* pGroupName,
+void SpewInfo_(SpewType_t type, const ch* pFile, i32 line) {  //-V524
+  // Only grab the file name. Ignore the path.
+  const ch* pSlash = strrchr(pFile, '\\');
+  const ch* pSlash2 = strrchr(pFile, '/');
+  if (pSlash < pSlash2) pSlash = pSlash2;
+
+  s_pFileName = pSlash ? pSlash + 1 : pFile;
+  s_Line = line;
+  s_SpewType = type;
+}
+
+static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
                                  i32 nLevel, const Color* pColor,
                                  const ch* pMsgFormat, va_list args) {
   ch message[5020];
   // check that we won't artifically truncate the string
-  assert(strlen(pMsgFormat) < ARRAYSIZE(message));
+  assert(strlen(pMsgFormat) < SOURCE_ARRAYSIZE(message));
 
   /* Printf the file and line for warning + assert only... */
   i32 len = 0;
   if ((spewType == SPEW_ASSERT)) {
-    len = _snprintf_s(message, ARRAYSIZE(message) - 1,
+    len = _snprintf_s(message, SOURCE_ARRAYSIZE(message) - 1,
                       "%s (%d) : ", s_pFileName, s_Line);
   }
 
   if (len == -1) return SPEW_ABORT;
 
   /* Create the message.... */
-  i32 val =
-      _vsnprintf(&message[len], ARRAYSIZE(message) - len - 1, pMsgFormat, args);
+  i32 val = _vsnprintf(&message[len], SOURCE_ARRAYSIZE(message) - len - 1,
+                       pMsgFormat, args);
   if (val == -1) return SPEW_ABORT;
 
   len += val;
   /* use normal assert here; to avoid recursion. */
-  assert(len * sizeof(*pMsgFormat) < ARRAYSIZE(message));
+  assert(len * sizeof(*pMsgFormat) < SOURCE_ARRAYSIZE(message));
 
   // Add \n for warning and assert
   if ((spewType == SPEW_ASSERT)) {
@@ -177,7 +204,7 @@ static SpewRetval_t _SpewMessage(SpewType_t spewType, const ch* pGroupName,
   }
 
   /* use normal assert here; to avoid recursion. */
-  assert(len < ARRAYSIZE(message) - 1);
+  assert(len < SOURCE_ARRAYSIZE(message) - 1);
   assert(s_SpewOutputFunc);
 
   /* direct it to the appropriate target(s) */
@@ -209,9 +236,10 @@ static SpewRetval_t _SpewMessage(SpewType_t spewType, const ch* pGroupName,
 
 #include "tier0/include/valve_off.h"
 
-FORCEINLINE SpewRetval_t _SpewMessage(SpewType_t spewType, const ch* pMsgFormat,
-                                      va_list args) {
-  return _SpewMessage(spewType, "", 0, &s_DefaultOutputColor, pMsgFormat, args);
+SOURCE_FORCEINLINE SpewRetval_t SpewMessage_(SpewType_t spewType,
+                                             const ch* pMsgFormat,
+                                             va_list args) {
+  return SpewMessage_(spewType, "", 0, &s_DefaultOutputColor, pMsgFormat, args);
 }
 
 // Find a group, return true if found, false if not. Return in ind the
@@ -260,7 +288,15 @@ inline bool IsSpewActive(StandardSpewGroup_t group, i32 level) {
 SpewRetval_t _SpewMessage(const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  SpewRetval_t ret = _SpewMessage(s_SpewType, pMsgFormat, args);
+  SpewRetval_t ret = SpewMessage_(s_SpewType, pMsgFormat, args);
+  va_end(args);
+  return ret;
+}
+
+SpewRetval_t SpewMessage_(const ch* pMsgFormat, ...) {  //-V524
+  va_list args;
+  va_start(args, pMsgFormat);
+  SpewRetval_t ret = SpewMessage_(s_SpewType, pMsgFormat, args);
   va_end(args);
   return ret;
 }
@@ -271,7 +307,19 @@ SpewRetval_t _DSpewMessage(const ch* pGroupName, i32 level,
 
   va_list args;
   va_start(args, pMsgFormat);
-  SpewRetval_t ret = _SpewMessage(s_SpewType, pGroupName, level,
+  SpewRetval_t ret = SpewMessage_(s_SpewType, pGroupName, level,
+                                  &s_DefaultOutputColor, pMsgFormat, args);
+  va_end(args);
+  return ret;
+}
+
+SpewRetval_t DSpewMessage_(const ch* pGroupName, i32 level,  //-V524
+                           const ch* pMsgFormat, ...) {
+  if (!IsSpewActive(pGroupName, level)) return SPEW_CONTINUE;
+
+  va_list args;
+  va_start(args, pMsgFormat);
+  SpewRetval_t ret = SpewMessage_(s_SpewType, pGroupName, level,
                                   &s_DefaultOutputColor, pMsgFormat, args);
   va_end(args);
   return ret;
@@ -282,7 +330,7 @@ SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t type,
                                                const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  SpewRetval_t ret = _SpewMessage(type, "", 0, pColor, pMsgFormat, args);
+  SpewRetval_t ret = SpewMessage_(type, "", 0, pColor, pMsgFormat, args);
   va_end(args);
   return ret;
 }
@@ -290,7 +338,7 @@ SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t type,
 void Msg(const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, pMsgFormat, args);
+  SpewMessage_(SPEW_MESSAGE, pMsgFormat, args);
   va_end(args);
 }
 
@@ -299,7 +347,7 @@ void DMsg(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, pGroupName, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_MESSAGE, pGroupName, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -307,7 +355,7 @@ void DMsg(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 void Warning(const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, pMsgFormat, args);
+  SpewMessage_(SPEW_WARNING, pMsgFormat, args);
   va_end(args);
 }
 
@@ -316,7 +364,7 @@ void DWarning(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, pGroupName, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_WARNING, pGroupName, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -324,7 +372,7 @@ void DWarning(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 void Log(const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, pMsgFormat, args);
+  SpewMessage_(SPEW_LOG, pMsgFormat, args);
   va_end(args);
 }
 
@@ -333,7 +381,7 @@ void DLog(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, pGroupName, level, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, pGroupName, level, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -341,7 +389,7 @@ void DLog(const ch* pGroupName, i32 level, const ch* pMsgFormat, ...) {
 void Error(const ch* pMsgFormat, ...) {
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_ERROR, pMsgFormat, args);
+  SpewMessage_(SPEW_ERROR, pMsgFormat, args);
   va_end(args);
 }
 
@@ -353,7 +401,7 @@ void DevMsg(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pDeveloper, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_MESSAGE, s_pDeveloper, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -363,7 +411,7 @@ void DevWarning(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pDeveloper, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_WARNING, s_pDeveloper, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -373,7 +421,7 @@ void DevLog(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pDeveloper, level, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pDeveloper, level, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -383,7 +431,7 @@ void DevMsg(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_MESSAGE, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -393,7 +441,7 @@ void DevWarning(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_WARNING, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -403,7 +451,7 @@ void DevLog(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pDeveloper, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -416,7 +464,7 @@ void ConColorMsg(i32 level, const Color& clr, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, level, &clr, pMsgFormat, args);
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, level, &clr, pMsgFormat, args);
   va_end(args);
 }
 
@@ -425,7 +473,7 @@ void ConMsg(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -435,7 +483,7 @@ void ConWarning(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pConsole, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_WARNING, s_pConsole, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -445,7 +493,7 @@ void ConLog(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pConsole, level, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pConsole, level, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -455,7 +503,7 @@ void ConColorMsg(const Color& clr, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, 1, &clr, pMsgFormat, args);
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, 1, &clr, pMsgFormat, args);
   va_end(args);
 }
 
@@ -464,7 +512,7 @@ void ConMsg(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -474,7 +522,7 @@ void ConWarning(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_WARNING, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -484,7 +532,7 @@ void ConLog(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pConsole, 1, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -494,7 +542,7 @@ void ConDColorMsg(const Color& clr, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, 2, &clr, pMsgFormat, args);
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, 2, &clr, pMsgFormat, args);
   va_end(args);
 }
 
@@ -503,7 +551,7 @@ void ConDMsg(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_MESSAGE, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -513,7 +561,7 @@ void ConDWarning(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_WARNING, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -523,7 +571,7 @@ void ConDLog(const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pConsole, 2, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -536,7 +584,7 @@ void NetMsg(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_MESSAGE, s_pNetwork, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_MESSAGE, s_pNetwork, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -546,7 +594,7 @@ void NetWarning(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_WARNING, s_pNetwork, level, &s_DefaultOutputColor,
+  SpewMessage_(SPEW_WARNING, s_pNetwork, level, &s_DefaultOutputColor,
                pMsgFormat, args);
   va_end(args);
 }
@@ -556,7 +604,7 @@ void NetLog(i32 level, const ch* pMsgFormat, ...) {
 
   va_list args;
   va_start(args, pMsgFormat);
-  _SpewMessage(SPEW_LOG, s_pNetwork, level, &s_DefaultOutputColor, pMsgFormat,
+  SpewMessage_(SPEW_LOG, s_pNetwork, level, &s_DefaultOutputColor, pMsgFormat,
                args);
   va_end(args);
 }
@@ -564,7 +612,6 @@ void NetLog(i32 level, const ch* pMsgFormat, ...) {
 #include "tier0/include/valve_on.h"
 
 // Sets the priority level for a spew group
-
 void SpewActivate(const ch* pGroupName, i32 level) {
   Assert(pGroupName);
 
@@ -592,7 +639,7 @@ void SpewActivate(const ch* pGroupName, i32 level) {
       s_pSpewGroups = new_spew_groups;
 
       // shift elements down to preserve order
-      i32 numToMove = s_GroupCount - ind - 1;
+      usize numToMove = s_GroupCount - ind - 1;
       memmove(&s_pSpewGroups[ind + 1], &s_pSpewGroups[ind],
               numToMove * sizeof(SpewGroup_t));
 
@@ -644,7 +691,7 @@ void ValidateSpew(CValidator& validator) {
 }
 #endif  // DBGFLAG_VALIDATE
 
-// Purpose: For debugging startup times, etc.
+// For debugging startup times, etc.
 void COM_TimestampedLog(ch const* fmt, ...) {
   static f64 last_stamp = 0.0;
   static bool should_log = false;
@@ -660,7 +707,7 @@ void COM_TimestampedLog(ch const* fmt, ...) {
   ch log_buffer[1024];
   va_list arg_list;
   va_start(arg_list, fmt);
-  _vsnprintf_s(log_buffer, ARRAYSIZE(log_buffer), fmt, arg_list);
+  _vsnprintf_s(log_buffer, SOURCE_ARRAYSIZE(log_buffer), fmt, arg_list);
   va_end(arg_list);
 
   const f64 curent_stamp = Plat_FloatTime();
@@ -679,3 +726,41 @@ void COM_TimestampedLog(ch const* fmt, ...) {
 
   last_stamp = curent_stamp;
 }
+
+#ifdef OS_WIN
+bool SetupWin32ConsoleIO() {
+  // Only useful on Windows platforms
+  bool newConsole{false};
+
+  if (GetFileType(GetStdHandle(STD_OUTPUT_HANDLE)) == FILE_TYPE_UNKNOWN) {
+    if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
+      newConsole = true;
+      AllocConsole();
+    }
+
+    *stdout = *_fdopen(_open_osfhandle(reinterpret_cast<intptr_t>(
+                                           GetStdHandle(STD_OUTPUT_HANDLE)),
+                                       _O_TEXT),
+                       "w");
+    setvbuf(stdout, nullptr, _IONBF, 0);
+
+    *stdin =
+        *_fdopen(_open_osfhandle(
+                     reinterpret_cast<intptr_t>(GetStdHandle(STD_INPUT_HANDLE)),
+                     _O_TEXT),
+                 "r");
+    setvbuf(stdin, nullptr, _IONBF, 0);
+
+    *stderr =
+        *_fdopen(_open_osfhandle(
+                     reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE)),
+                     _O_TEXT),
+                 "w");
+    setvbuf(stdout, nullptr, _IONBF, 0);
+
+    std::ios_base::sync_with_stdio();
+  }
+
+  return newConsole;
+}
+#endif

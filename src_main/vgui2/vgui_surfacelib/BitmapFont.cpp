@@ -17,7 +17,7 @@
 #include "vgui/ISurface.h"
 #include "vgui_surfacelib/FontManager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 struct BitmapFontTable_t {
@@ -63,8 +63,8 @@ bool CBitmapFont::Create(const char *pFontFilename, float scalex, float scaley,
   }
 
   CUtlSymbol symbol;
-  char fontName[MAX_PATH];
-  Q_FileBase(pFontFilename, fontName, MAX_PATH);
+  char fontName[SOURCE_MAX_PATH];
+  Q_FileBase(pFontFilename, fontName, SOURCE_MAX_PATH);
   Q_strlower(fontName);
   symbol = fontName;
 
@@ -113,8 +113,8 @@ bool CBitmapFont::Create(const char *pFontFilename, float scalex, float scaley,
     FontManager().FileSystem()->FreeOptimalReadBuffer(pBuf);
 
     // load the art resources
-    char textureName[MAX_PATH];
-    Q_snprintf(textureName, MAX_PATH, "vgui/fonts/%s", fontName);
+    char textureName[SOURCE_MAX_PATH];
+    Q_snprintf(textureName, SOURCE_MAX_PATH, "vgui/fonts/%s", fontName);
     pFontTable->m_pTexture = FontManager().MaterialSystem()->FindTexture(
         textureName, TEXTURE_GROUP_VGUI);
 
@@ -187,8 +187,8 @@ bool CBitmapFont::Create(const char *pFontFilename, float scalex, float scaley,
 //-----------------------------------------------------------------------------
 bool CBitmapFont::IsEqualTo(const char *windowsFontName, float scalex,
                             float scaley, int flags) {
-  char fontname[MAX_PATH];
-  Q_FileBase(windowsFontName, fontname, MAX_PATH);
+  char fontname[SOURCE_MAX_PATH];
+  Q_FileBase(windowsFontName, fontname, SOURCE_MAX_PATH);
 
   if (!Q_stricmp(fontname, m_szName.String()) && m_scalex == scalex &&
       m_scaley == scaley) {

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: loads and unloads main matsystem dll and interface
 
@@ -50,7 +50,6 @@ extern IFileSystem *g_pFileSystem;
 #endif
 #include "igame.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // Start the frame count at one so stuff gets updated the first frame
@@ -160,8 +159,8 @@ static void NukeModeSwitchSaveGames(void) {
 void mat_hdr_level_Callback(IConVar *var, const char *pOldString,
                             float flOldValue) {
   // Can do any reloading that is necessary here upon change.
-  // FIXME: should check if there is actually going to be a change here (ie. are
-  // we able to run in HDR given the current map and hardware.
+  // TODO(d.rattman): should check if there is actually going to be a change
+  // here (ie. are we able to run in HDR given the current map and hardware.
 #ifndef SWDS
   if (g_pMaterialSystemHardwareConfig->GetHardwareHDRType() != HDR_TYPE_NONE &&
       saverestore->IsValidSave() &&
@@ -394,7 +393,8 @@ static void OverrideMaterialSystemConfigFromCommandLine(
 void OverrideMaterialSystemConfig(MaterialSystem_Config_t &config) {
   // enable/disable flashlight support based on mod (user can also set this
   // explicitly)
-  // FIXME: this is only here because dxsupport_override.cfg is currently broken
+  // TODO(d.rattman): this is only here because dxsupport_override.cfg is
+  // currently broken
   ConVarRef mat_supportflashlight("mat_supportflashlight");
   if (mat_supportflashlight.GetInt() == -1) {
     const char *gameName = COM_GetModDirectory();
@@ -1431,8 +1431,8 @@ static CUtlVector<meshlist_t> g_Meshes;
 ConVar mat_max_worldmesh_vertices("mat_max_worldmesh_vertices", "65536");
 
 static VertexFormat_t GetUncompressedFormat(const IMaterial *pMaterial) {
-  // FIXME: IMaterial::GetVertexFormat() should do this stripping (add a
-  // separate 'SupportsCompression' accessor)
+  // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add
+  // a separate 'SupportsCompression' accessor)
   return (pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED);
 }
 
@@ -1495,10 +1495,10 @@ void SetTexInfoBaseTexture2Flags() {
 VertexFormat_t ComputeWorldStaticMeshVertexFormat(const IMaterial *pMaterial) {
   VertexFormat_t vertexFormat = GetUncompressedFormat(pMaterial);
 
-  // FIXME: set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
-  // saves enough memory (use 'mem_dumpvballocs') vertexFormat |=
+  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and
+  // if it saves enough memory (use 'mem_dumpvballocs') vertexFormat |=
   // VERTEX_FORMAT_COMPRESSED;
-  // FIXME: check for and strip unused vertex elements (TANGENT_S/T?)
+  // TODO(d.rattman): check for and strip unused vertex elements (TANGENT_S/T?)
 
   return vertexFormat;
 }
@@ -1522,10 +1522,9 @@ void WorldStaticMeshCreate(void) {
   }
 
   // Setup sortbins for flashlight rendering
-  // FIXME!!!!  Could have less bins since we don't care about the lightmap
-  // for projective light rendering purposes.
-  // Not entirely true since we need the correct lightmap page for
-  // WorldVertexTransition materials.
+  // TODO(d.rattman): Could have less bins since we don't care about the
+  // lightmap for projective light rendering purposes. Not entirely true since
+  // we need the correct lightmap page for WorldVertexTransition materials.
   g_pShadowMgr->SetNumWorldMaterialBuckets(nSortIDs);
 
   Assert(!g_WorldStaticMeshes.Count());

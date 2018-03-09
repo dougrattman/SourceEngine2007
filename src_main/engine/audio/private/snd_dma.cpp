@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Main control for any streaming sound output device.
 
@@ -40,7 +40,6 @@
 #include "vstdlib/jobthread.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 ///////////////////////////////////
@@ -279,7 +278,7 @@ class CDummySfx : public CSfxTable {
   }
 
  private:
-  char name[MAX_PATH];
+  char name[SOURCE_MAX_PATH];
 };
 
 static CDummySfx dummySfx;
@@ -310,11 +309,11 @@ void CSfxTable::SetNamePoolIndex(int index) {
 
 void CSfxTable::OnNameChanged(const char *pName) {
   if (pName && g_cgrouprules) {
-    char szString[MAX_PATH];
+    char szString[SOURCE_MAX_PATH];
     Q_strncpy(szString, pName, sizeof(szString));
     Q_FixSlashes(szString, '/');
-    m_mixGroupCount = MXR_GetMixGroupListFromDirName(szString, m_mixGroupList,
-                                                     ARRAYSIZE(m_mixGroupList));
+    m_mixGroupCount = MXR_GetMixGroupListFromDirName(
+        szString, m_mixGroupList, SOURCE_ARRAYSIZE(m_mixGroupList));
     m_bMixGroupsCached = true;
   }
 }
@@ -324,7 +323,7 @@ void CSfxTable::OnNameChanged(const char *pName) {
 //-----------------------------------------------------------------------------
 const char *CSfxTable::getname() {
   if (s_Sounds.InvalidIndex() != m_namePoolIndex) {
-    char szString[MAX_PATH];
+    char szString[SOURCE_MAX_PATH];
     g_pFileSystem->String(s_Sounds.Key(m_namePoolIndex), szString,
                           sizeof(szString));
     return va("%s", szString);
@@ -407,8 +406,8 @@ static ConCommand snd_mixvol("snd_mixvol", MXR_DebugSetMixGroupVolume,
 #endif
 
 // vaudio DLL
-IVAudio *vaudio = NULL;
-CSysModule *g_pVAudioModule = NULL;
+IVAudio *vaudio = nullptr;
+CSysModule *g_pVAudioModule = nullptr;
 
 //-----------------------------------------------------------------------------
 // Resource loading for sound
@@ -580,13 +579,11 @@ void S_Init(void) {
   // KDB: init sentence array
   TRACEINIT(VOX_Init(), VOX_Shutdown());
 
-  if (IsPC()) {
-    g_pFileSystem->GetLocalCopy(
-        "mss32.dll");  // vaudio_miles.dll will load this...
-    g_pVAudioModule = FileSystem_LoadModule("vaudio_miles");
-    CreateInterfaceFn vaudioFactory = Sys_GetFactory(g_pVAudioModule);
-    vaudio = (IVAudio *)vaudioFactory(VAUDIO_INTERFACE_VERSION, NULL);
-  }
+  // vaudio_miles.dll will load this...
+  g_pFileSystem->GetLocalCopy("mss32.dll");
+  g_pVAudioModule = FileSystem_LoadModule("vaudio_miles");
+  CreateInterfaceFn vaudioFactory = Sys_GetFactory(g_pVAudioModule);
+  vaudio = (IVAudio *)vaudioFactory(VAUDIO_INTERFACE_VERSION, NULL);
 
   if (CommandLine()->CheckParm("-nosound")) {
     g_AudioDevice = Audio_GetNullDevice();
@@ -686,7 +683,7 @@ bool S_IsInitted() { return snd_initialized; }
 CSfxTable *S_FindName(const char *szName, int *pfInCache) {
   int i;
   CSfxTable *sfx = NULL;
-  char szBuff[MAX_PATH];
+  char szBuff[SOURCE_MAX_PATH];
   const char *pName;
 
   if (!szName) {
@@ -864,7 +861,7 @@ void S_ReloadFilesInList(IFileList *pFilesToReload) {
   for (int i = s_Sounds.FirstInorder(); i != iLast;
        i = s_Sounds.NextInorder(i)) {
     FileNameHandle_t fnHandle = s_Sounds.Key(i);
-    char filename[MAX_PATH * 3];
+    char filename[SOURCE_MAX_PATH * 3];
     if (!g_pFileSystem->String(fnHandle, filename, sizeof(filename))) {
       Assert(!"S_HandlePureServerWhitelist - can't get a filename.");
       continue;
@@ -874,7 +871,7 @@ void S_ReloadFilesInList(IFileList *pFilesToReload) {
     // file, so don't bother.
     CSfxTable *sfx = s_Sounds[i].pSfx;
     if (sfx) {
-      char fullFilename[MAX_PATH * 2];
+      char fullFilename[SOURCE_MAX_PATH * 2];
       if (IsSoundChar(filename[0]))
         Q_snprintf(fullFilename, sizeof(fullFilename), "sound/%s",
                    &filename[1]);
@@ -1452,9 +1449,9 @@ bool SND_GetClosestPoint(channel_t *pChannel, QAngle &source_angles,
   // S - sound source origin
   // L - listener origin
 
-  Vector SF;    // sound source forward direction unit vector
-  Vector SL;    // sound -> listener vector
-  Vector SD;    // sound->closest point vector
+  Vector SF;  // sound source forward direction unit vector
+  Vector SL;  // sound -> listener vector
+  Vector SD;  // sound->closest point vector
   f32 dSLSF;  // magnitude of project of SL onto SF
 
   // P = SF (SF . SL) + S
@@ -4224,7 +4221,7 @@ bool BChannelLowVolume(channel_t *pch, int vol_min) {
 }
 
 // Get the loudest actual volume for a channel (not counting targets).
-float ChannelLoudestCurVolume(const channel_t *RESTRICT pch) {
+float ChannelLoudestCurVolume(const channel_t *SOURCE_RESTRICT pch) {
   float loudest = pch->fvolume[0];
   for (int i = 1; i < CCHANVOLUMES; i++) {
     loudest = std::max(loudest, pch->fvolume[i]);

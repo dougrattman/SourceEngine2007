@@ -223,7 +223,7 @@ CVertexBuffer::CVertexBuffer(D3DDeviceWrapper* pD3D, VertexFormat_t fmt,
   if (hr == D3DERR_OUTOFVIDEOMEMORY || hr == E_OUTOFMEMORY) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
-    // FIXME: need to record this
+    // TODO(d.rattman): need to record this
     pD3D->EvictManagedResources();
     pD3D->CreateVertexBuffer(m_nBufferSize, desc.Usage, desc.FVF, desc.Pool,
                              &m_pVB, NULL);

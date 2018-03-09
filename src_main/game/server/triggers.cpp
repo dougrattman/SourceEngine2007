@@ -40,7 +40,7 @@
 #include "hl2_player.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DEBUG_TRANSITIONS_VERBOSE 2
@@ -395,7 +395,7 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther) {
     hOther = pOther;
     m_hTouchingEntities.FindAndRemove(hOther);
 
-    // FIXME: Without this, triggers fire their EndTouch outputs when they are
+    // TODO(d.rattman): Without this, triggers fire their EndTouch outputs when they are
     // disabled!  if ( !m_bDisabled )
     //{
     m_OnEndTouch.FireOutput(pOther, this);
@@ -416,7 +416,7 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther) {
       }
     }
 
-    // FIXME: Without this, triggers fire their EndTouch outputs when they are
+    // TODO(d.rattman): Without this, triggers fire their EndTouch outputs when they are
     // disabled!
     // Didn't find one?
     if (!bFoundOtherTouchee /*&& !m_bDisabled*/) {
@@ -1499,7 +1499,7 @@ static bool TestEntityTriggerIntersection_Accurate(CBaseEntity *pTrigger,
         CUtlVector<collidelist_t> collideList;
         IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
         int physicsCount =
-            pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+            pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
         if (physicsCount) {
           for (int i = 0; i < physicsCount; i++) {
             const CPhysCollide *pCollide = pList[i]->GetCollide();
@@ -1808,7 +1808,7 @@ int CChangeLevel::AddDependentEntities(int nCount, CBaseEntity **ppEntList,
 // We can only ever move 512 entities across a transition
 #define MAX_ENTITY 512
 
-// FIXME: This has grown into a complicated beast. Can we make this more
+// TODO(d.rattman): This has grown into a complicated beast. Can we make this more
 // elegant?
 int CChangeLevel::ChangeList(levellist_t *pLevelList, int maxList) {
   // Find all of the possible level changes on this BSP
@@ -1834,7 +1834,7 @@ int CChangeLevel::ChangeList(levellist_t *pLevelList, int maxList) {
         BuildEntityTransitionList(pLandmarkEntity, pLevelList[i].landmarkName,
                                   pEntList, entityFlags, MAX_ENTITY);
 
-    // FIXME: Activate if we have a dependency problem on level transition
+    // TODO(d.rattman): Activate if we have a dependency problem on level transition
     // Next, add in all entities depended on by entities near the transition
     //		iEntity = AddDependentEntities( iEntity, pEntList, entityFlags,
     // MAX_ENTITY );
@@ -1927,7 +1927,7 @@ void CTriggerPush::Touch(CBaseEntity *pOther) {
 
   if (!PassesTriggerFilters(pOther)) return;
 
-  // FIXME: If something is hierarchically attached, should we try to push the
+  // TODO(d.rattman): If something is hierarchically attached, should we try to push the
   // parent?
   if (pOther->GetMoveParent()) return;
 

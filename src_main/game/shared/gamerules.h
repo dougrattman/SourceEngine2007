@@ -97,7 +97,7 @@ class CGameRulesProxy : public CBaseEntity {
   static CGameRulesProxy *s_pGameRulesProxy;
 };
 
-abstract_class CGameRules : public CAutoGameSystemPerFrame {
+the_interface CGameRules : public CAutoGameSystemPerFrame {
  public:
   DECLARE_CLASS_GAMEROOT(CGameRules, CAutoGameSystemPerFrame);
 

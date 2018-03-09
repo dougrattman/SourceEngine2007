@@ -12,7 +12,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlrbtree.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <wctype.h>
 #include <cwchar>
 #endif
@@ -287,7 +287,7 @@ void CCvar::UnregisterConCommand(ConCommandBase *pCommandToRemove) {
 
   pCommandToRemove->m_bRegistered = false;
 
-  // FIXME: Should we make this a doubly-linked list? Would remove faster
+  // TODO(d.rattman): Should we make this a doubly-linked list? Would remove faster
   ConCommandBase *pPrev = nullptr;
   for (ConCommandBase *pCommand = m_pConCommandList; pCommand;
        pCommand = pCommand->m_pNext) {

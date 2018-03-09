@@ -330,7 +330,7 @@ void CBaseObject::SpawnControlPanels()
 {
 	char buf[64];
 
-	// FIXME: Deal with dynamically resizing control panels?
+	// TODO(d.rattman): Deal with dynamically resizing control panels?
 
 	// If we're attached to an entity, spawn control panels on it instead of use
 	CBaseAnimating *pEntityToSpawnOn = this;
@@ -1046,7 +1046,7 @@ bool CBaseObject::CheckBuildPoint( Vector vecPoint, Vector &vecTrace, Vector *ve
 		}
 	}
 
-	// FIXME: HACK! This is a test to try to make mud non-buildable!!
+	// TODO(d.rattman): HACK! This is a test to try to make mud non-buildable!!
 	const surfacedata_t *pSurfaceProp = physprops->GetSurfaceData( tr.surface.surfaceProps );
 	if (pSurfaceProp->game.maxSpeedFactor < 1.0f)
 		bClear = false;
@@ -1273,7 +1273,7 @@ void CBaseObject::GetExitPoint( CBaseEntity *pPlayer, int nBuildPoint, Vector *p
 		}
 	}
 
-	// FIXME: In future, we may well want to use specific exit attachments here...
+	// TODO(d.rattman): In future, we may well want to use specific exit attachments here...
 	GetBuildPoint( nBuildPoint, *pAbsPosition, *pAbsAngles );
 
 	// Move back along the forward direction a bit...

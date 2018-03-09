@@ -317,7 +317,7 @@ Vector FindBumpVectorInCorner( const Vector &ptCorner1, const Vector &ptCorner2,
 
 	if ( fShortLegLength == 0.0f || fShortLeg2Length == 0.0f )
 	{
-		// FIXME: Our triangle is actually a point or a line, so there's nothing we can do
+		// TODO(d.rattman): Our triangle is actually a point or a line, so there's nothing we can do
 		return vec3_origin;
 	}
 

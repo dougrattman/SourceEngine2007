@@ -57,8 +57,8 @@ void CMakefileCreator::CreateBaseDirs( CVCProjConvert::CConfiguration & config )
 	{
 		if ( config.GetFileType(i) == CVCProjConvert::CConfiguration::FILE_SOURCE ) 
 		{
-			char basedir[ MAX_PATH ];
-			char fulldir[ MAX_PATH ];
+			char basedir[ SOURCE_MAX_PATH ];
+			char fulldir[ SOURCE_MAX_PATH ];
 			Q_snprintf( fulldir, sizeof(fulldir), "%s/%s", m_BaseDir.String(), config.GetFileName(i) );
 			if ( Q_ExtractFilePath( fulldir, basedir, sizeof(basedir) ) )	
 			{
@@ -93,7 +93,7 @@ void CMakefileCreator::CleanupFileName( char *name )
 
 void CMakefileCreator::CreateMakefileName( const char *projectName, CVCProjConvert::CConfiguration & config )
 {
-	char makefileName[ MAX_PATH ];
+	char makefileName[ SOURCE_MAX_PATH ];
 	Q_snprintf( makefileName, sizeof(makefileName), "Makefile.%s_%s", projectName, config.GetName().String() );
 	CleanupFileName( makefileName );
 	m_MakefileName = makefileName;
@@ -186,7 +186,7 @@ void CMakefileCreator::OutputDirs( FileHandle_t f )
 			dirName = m_BaseDir.String();
 		}
 
-		char friendlyDirName[ MAX_PATH ];
+		char friendlyDirName[ SOURCE_MAX_PATH ];
 		CreateDirectoryFriendlyName( dirName, friendlyDirName, sizeof(friendlyDirName) );
 		int dirLen = Q_strlen(friendlyDirName);
 		Q_strncat( friendlyDirName, "_SRC_DIR", sizeof(friendlyDirName), COPY_ALL_CHARACTERS );
@@ -200,7 +200,7 @@ void CMakefileCreator::OutputDirs( FileHandle_t f )
 		Q_strncat( friendlyDirName, "_OBJS", sizeof(friendlyDirName), COPY_ALL_CHARACTERS );
 		dirs.m_ObjName = friendlyDirName;		
 		
-		char objDirName[ MAX_PATH ];
+		char objDirName[ SOURCE_MAX_PATH ];
 		Q_snprintf(  objDirName, sizeof(objDirName) , "obj%c$(NAME)_$(ARCH)%c", CORRECT_PATH_SEPARATOR, CORRECT_PATH_SEPARATOR );
 		Q_strncat( objDirName, dirName, sizeof(objDirName), COPY_ALL_CHARACTERS );
 		CreateObjDirectoryFriendlyName( objDirName );
@@ -250,7 +250,7 @@ void CMakefileCreator::OutputObjLists( CVCProjConvert::CConfiguration & config, 
 		{
 			if ( dirs.m_iBaseDirIndex == m_FileToBaseDirMapping[j] )
 			{
-				char baseName[ MAX_PATH ];
+				char baseName[ SOURCE_MAX_PATH ];
 				const char *fileName = config.GetFileName(m_FileToBaseDirMapping.Key(j));
 				Q_FileBase( fileName, baseName, sizeof(baseName) );
 				Q_SetExtension( baseName, ".o",  sizeof(baseName) );

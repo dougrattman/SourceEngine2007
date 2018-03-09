@@ -9,7 +9,7 @@
 #include "rendertargetblit_ps20.inc"
 #include "rendertargetblit_ps20b.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_VS_SHADER_FLAGS( RenderTargetBlit_X360, "", SHADER_NOT_EDITABLE )

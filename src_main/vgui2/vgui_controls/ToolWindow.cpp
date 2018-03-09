@@ -14,7 +14,7 @@
 #include <vgui_controls/ToolWindow.h>
 #include <vgui_controls/PropertySheet.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

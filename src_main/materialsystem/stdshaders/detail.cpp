@@ -7,7 +7,7 @@
 
 #include "BaseVSShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_VS_SHADER( Detail, "Help for Detail" )

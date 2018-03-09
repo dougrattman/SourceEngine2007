@@ -18,15 +18,7 @@ using ushort = unsigned short;
 using uint = unsigned int;
 using ulong = unsigned long;
 
-#ifndef _WCHAR_T_DEFINED
-// DAL - wchar_t is a built in define in gcc 3.2 with a size of 4 bytes
-#if !defined(__x86_64__) && !defined(__WCHAR_TYPE__)
-using wchar_t = unsigned short;
-#define _WCHAR_T_DEFINED
-#endif
-#endif
-
-// do this in GOLDSRC only!!!
+// Do this in GOLDSRC only!!!
 //#define Assert assert
 
 namespace vgui {

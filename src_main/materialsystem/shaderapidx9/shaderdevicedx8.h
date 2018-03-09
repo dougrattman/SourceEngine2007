@@ -60,7 +60,7 @@ class CShaderDeviceMgrDx8 : public CShaderDeviceMgrBase {
   // Returns the amount of video memory in bytes for a particular adapter
   virtual u64 GetVidMemBytes(u32 adapter_idx) const;
 
-  FORCEINLINE IDirect3D9 *D3D() const { return m_pD3D; }
+  SOURCE_FORCEINLINE IDirect3D9 *D3D() const { return m_pD3D; }
 
  protected:
   // Determine capabilities
@@ -167,7 +167,7 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
   // Call this when another app is initializing or finished initializing
   virtual void OtherAppInitializing(bool initializing);
 
-  // FIXME: Make private
+  // TODO(d.rattman): Make private
   // Which device are we using?
   UINT m_DisplayAdapter;
   D3DDEVTYPE m_DeviceType;
@@ -246,8 +246,8 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
   bool AllocNonInteractiveRefreshObjects();
   void FreeNonInteractiveRefreshObjects();
 
-  // FIXME: This is for backward compat; I still haven't solved a way of
-  // decoupling this
+  // TODO(d.rattman): This is for backward compat; I still haven't solved a way
+  // of decoupling this
   virtual bool OnAdapterSet() = 0;
   virtual void ResetRenderState(bool bFullReset = true) = 0;
 
@@ -306,7 +306,7 @@ D3DDeviceWrapper *Dx9Device();
 extern CShaderDeviceDx8 *g_pShaderDeviceDx8;
 
 // Used to determine if we're deactivated
-FORCEINLINE bool CShaderDeviceDx8::IsDeactivated() const {
+SOURCE_FORCEINLINE bool CShaderDeviceDx8::IsDeactivated() const {
   return m_DeviceState != DEVICE_STATE_OK || m_bQueuedDeviceLost ||
          m_numReleaseResourcesRefCount;
 }

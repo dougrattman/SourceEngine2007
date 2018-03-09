@@ -141,7 +141,7 @@ class CMatRenderContextBase : public CRefCounted1<IMatRenderContextInternal> {
 
   float ComputePixelDiameterOfSphere(const Vector &origin, float flRadius);
   float ComputePixelWidthOfSphere(
-      const Vector &origin, float flRadius);  // FIXME: REMOVE THIS FUNCTION!
+      const Vector &origin, float flRadius);  // TODO(d.rattman): REMOVE THIS FUNCTION!
 
   virtual void GetWorldSpaceCameraPosition(Vector *pCameraPos);
   virtual void GetWorldSpaceCameraVectors(Vector *pVecForward,
@@ -343,7 +343,7 @@ class CMatRenderContext : public CMatRenderContextBase {
   // Allows us to override the depth buffer setting of a material
   DELEGATE_TO_OBJECT_2V(OverrideDepthEnable, bool, bool, g_pShaderAPI);
 
-  // FIXME: This is a hack required for NVidia/XBox, can they fix in drivers?
+  // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in drivers?
   void DrawScreenSpaceQuad(IMaterial *pMaterial);
 
   int CompareMaterialCombos(IMaterial *pMaterial1, IMaterial *pMaterial2,

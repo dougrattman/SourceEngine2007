@@ -415,7 +415,7 @@ void ComputeVertexSpec(VertexFormat_t fmt, D3DVERTEXELEMENT9 *pDecl,
     if ((compressionType == VERTEX_COMPRESSION_ON) &&
         (COMPRESSED_NORMALS_TYPE ==
          COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4)) {
-      // FIXME: Normals and tangents are packed together into a single UBYTE4
+      // TODO(d.rattman): Normals and tangents are packed together into a single UBYTE4
       // element,
       //        so just point this back at the same data while we're testing
       //        UBYTE4 out.
@@ -447,7 +447,7 @@ void ComputeVertexSpec(VertexFormat_t fmt, D3DVERTEXELEMENT9 *pDecl,
   }
 
   if (HardwareConfig()->SupportsVertexAndPixelShaders()) {
-    // FIXME: There needs to be a better way of doing this
+    // TODO(d.rattman): There needs to be a better way of doing this
     // In 2.0b, assume position is 4d, storing wrinkle in pos.w.
     bool bUseWrinkle = HardwareConfig()->SupportsPixelShaders_2_b();
 
@@ -457,7 +457,7 @@ void ComputeVertexSpec(VertexFormat_t fmt, D3DVERTEXELEMENT9 *pDecl,
     pDecl[i].Method = D3DDECLMETHOD_DEFAULT;
     pDecl[i].Usage = D3DDECLUSAGE_POSITION;
     pDecl[i].UsageIndex = 1;
-    // FIXME: unify this with VertexElementToDeclType():
+    // TODO(d.rattman): unify this with VertexElementToDeclType():
     pDecl[i].Type = bUseWrinkle ? D3DDECLTYPE_FLOAT4 : D3DDECLTYPE_FLOAT3;
     ++i;
 
@@ -520,8 +520,8 @@ struct VertexDeclLookup_t {
 
 //-----------------------------------------------------------------------------
 // Dictionary of vertex decls
-// FIXME: stick this in the class?
-// FIXME: Does anything cause this to get flushed?
+// TODO(d.rattman): stick this in the class?
+// TODO(d.rattman): Does anything cause this to get flushed?
 //-----------------------------------------------------------------------------
 static bool VertexDeclLessFunc(const VertexDeclLookup_t &src1,
                                const VertexDeclLookup_t &src2) {
@@ -571,7 +571,7 @@ IDirect3DVertexDeclaration9 *FindOrCreateVertexDecl(VertexFormat_t fmt,
   RECORD_COMMAND(DX8_CREATE_VERTEX_DECLARATION, 2);
   RECORD_INT((int)lookup.m_pDecl);
   RECORD_STRUCT(decl, sizeof(decl));
-  COMPILE_TIME_ASSERT(sizeof(decl) == sizeof(D3DVERTEXELEMENT9) * 32);
+  static_assert(sizeof(decl) == sizeof(D3DVERTEXELEMENT9) * 32);
 
   Assert(hr == D3D_OK);
   if (hr != D3D_OK) {

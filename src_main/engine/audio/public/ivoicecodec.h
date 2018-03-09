@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Define the IVoiceCodec interface.
 
@@ -10,18 +10,17 @@
 #define BYTES_PER_SAMPLE 2
 
 // This interface is for voice codecs to implement.
-
+//
 // Codecs are guaranteed to be called with the exact output from Compress into
 // Decompress (ie: data won't be stuck together and sent to Decompress).
-
+//
 // Decompress is not guaranteed to be called in any specific order relative to
 // Compress, but Codecs maintain state between calls, so it is best to call
 // Compress with consecutive voice data and decompress likewise. If you call it
 // out of order, it will sound wierd.
-
+//
 // In the same vein, calling Decompress twice with the same data is a bad idea
 // since the state will be expecting the next block of data, not the same block.
-
 class IVoiceCodec {
  protected:
   virtual ~IVoiceCodec() {}
@@ -35,7 +34,8 @@ class IVoiceCodec {
 
   // Compress the voice data.
   // pUncompressed		-	16-bit signed mono voice data.
-  // maxCompressedBytes	-	The length of the pCompressed buffer. Don't exceed
+  // maxCompressedBytes	-	The length of the pCompressed buffer. Don't
+  // exceed
   // this. bFinal        		-	Set to true on the last call to
   // Compress (the user stopped talking).
   //  	Some codecs like big block sizes and will hang onto data you give them
@@ -54,5 +54,8 @@ class IVoiceCodec {
   // should clear that state.
   virtual bool ResetState() = 0;
 };
+
+#define MILES_VOICE_CODEC "vaudio_miles"
+#define SPEEX_VOICE_CODEC "vaudio_speex"
 
 #endif  // IVOICECODEC_H

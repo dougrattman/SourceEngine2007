@@ -41,7 +41,7 @@
 	//ConVar  tf_flame_force( "tf_flame_force", "30" );
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // position of end of muzzle relative to shoot position

@@ -13,7 +13,7 @@
 #include "engine/IEngineSound.h"
 #include "explode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern const char* g_pModelNameLaser;

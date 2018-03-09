@@ -13,7 +13,7 @@ typedef unsigned char byte;
 #include "rope_shared.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ TimeModifier_t g_TimeModifiers[] = {
     {"Accel (time*time)", TimeModifierFunc_TimeSquared},
 };
 
-int Motion_GetNumberOfTimeModifiers() { return ARRAYSIZE(g_TimeModifiers); }
+int Motion_GetNumberOfTimeModifiers() { return SOURCE_ARRAYSIZE(g_TimeModifiers); }
 
 bool Motion_GetTimeModifierDetails(int timeInterpNum, const char **outName) {
   if (timeInterpNum < 0 || timeInterpNum >= Motion_GetNumberOfTimeModifiers()) {
@@ -341,7 +341,7 @@ PositionInterpolatorCreateFn g_PositionInterpolatorCreateFns[] = {
     GetLinearInterpolator, GetCatmullRomInterpolator, GetRopeInterpolator};
 
 int Motion_GetNumberOfPositionInterpolators() {
-  return ARRAYSIZE(g_PositionInterpolatorCreateFns);
+  return SOURCE_ARRAYSIZE(g_PositionInterpolatorCreateFns);
 }
 
 IPositionInterpolator *Motion_GetPositionInterpolator(int interpNum) {
@@ -380,7 +380,7 @@ RotationInterpolator_t g_RotationInterpolators[] = {
 };
 
 int Motion_GetNumberOfRotationInterpolators() {
-  return ARRAYSIZE(g_RotationInterpolators);
+  return SOURCE_ARRAYSIZE(g_RotationInterpolators);
 }
 
 bool Motion_GetRotationInterpolatorDetails(int rotInterpNum,

@@ -35,7 +35,6 @@
 #include "npc_alyx_episodic.h"
 #endif  // HL2_EPISODIC
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 extern ISoundEmitterSystemBase *soundemitterbase;
@@ -60,9 +59,9 @@ static ConVar scene_maxcaptionradius(
 // snd_mixahead cvar!)
 #define SOUND_SYSTEM_LATENCY_DEFAULT (0.1f)
 
-// Think every 50 msec (FIXME: Try 10hz?)
+// Think every 50 msec (TODO(d.rattman): Try 10hz?)
 #define SCENE_THINK_INTERVAL \
-  0.001  // FIXME: make scene's think in concert with their npc's
+  0.001  // TODO(d.rattman): make scene's think in concert with their npc's
 
 #define FINDNAMEDENTITY_MAX_ENTITIES \
   32  // max number of entities to be considered for random entity selection in
@@ -286,7 +285,7 @@ void SceneManager_ClientActive(CBasePlayer *player) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME, need to deal with save/restore
+// TODO(d.rattman): need to deal with save/restore
 //-----------------------------------------------------------------------------
 class CSceneEntity : public CPointEntity, public IChoreoEventCallback {
   friend class CInstancedSceneEntity;
@@ -1160,7 +1159,8 @@ void CSceneEntity::PauseThink(void) {
   }
 
   if (!m_bAutomated) {
-    // FIXME:  Game code should check for AI waiting conditions being met, etc.
+    // TODO(d.rattman):  Game code should check for AI waiting conditions being
+    // met, etc.
     //
     //
     //
@@ -1237,8 +1237,8 @@ void CSceneEntity::DispatchPauseScene(CChoreoScene *scene,
   // already
   if (m_bRestoring) return;
 
-  // FIXME:  Hook this up to AI, etc. somehow, perhaps poll each actor for
-  // conditions using
+  // TODO(d.rattman):  Hook this up to AI, etc. somehow, perhaps poll each actor
+  // for conditions using
   //  scene resume condition iterator
   PausePlayback();
 
@@ -1480,8 +1480,8 @@ void CSceneEntity::DispatchEndLookAt(CChoreoScene *scene, CBaseFlex *actor,
 
 //-----------------------------------------------------------------------------
 // Purpose: Move to spot/actor
-// FIXME:  Need to allow this to take arbitrary amount of time and pause
-// playback
+// TODO(d.rattman):  Need to allow this to take arbitrary amount of time and
+// pause playback
 //  while waiting for actor to move into position
 // Input  : *actor -
 //			*parameters -
@@ -1661,7 +1661,7 @@ void CSceneEntity::DispatchStartSpeak(CChoreoScene *scene, CBaseFlex *actor,
     }
 
     // No CC since we do it manually
-    // FIXME:  This will  change
+    // TODO(d.rattman):  This will  change
     es.m_bEmitCloseCaption = false;
 
     int c = filter.GetRecipientCount();
@@ -2514,10 +2514,10 @@ void CSceneEntity::ResumePlayback(void) {
     return;
   }
 
-  // FIXME:  Iterate using m_pScene->IterateResumeConditionEvents and
+  // TODO(d.rattman):  Iterate using m_pScene->IterateResumeConditionEvents and
   //  only resume if the event conditions have all been satisfied
 
-  // FIXME:  Just resume for now
+  // TODO(d.rattman):  Just resume for now
   m_pScene->ResumeSimulation();
 
   m_bPaused = false;
@@ -2708,7 +2708,8 @@ void CSceneEntity::StartEvent(float currenttime, CChoreoScene *scene,
       if (pActor) {
         // Speaking is edge triggered
 
-        // FIXME: dB hack.  soundlevel needs to be moved into inside of wav?
+        // TODO(d.rattman): dB hack.  soundlevel needs to be moved into inside
+        // of wav?
         soundlevel_t iSoundlevel = SNDLVL_TALKING;
         if (event->GetParameters2()) {
           iSoundlevel = (soundlevel_t)atoi(event->GetParameters2());
@@ -2719,7 +2720,7 @@ void CSceneEntity::StartEvent(float currenttime, CChoreoScene *scene,
       }
     } break;
     case CChoreoEvent::MOVETO: {
-      // FIXME: make sure moveto's aren't edge triggered
+      // TODO(d.rattman): make sure moveto's aren't edge triggered
       if (!event->HasEndTime()) {
         event->SetEndTime(event->GetStartTime() + 1.0);
       }
@@ -2804,7 +2805,7 @@ void CSceneEntity::StartEvent(float currenttime, CChoreoScene *scene,
         pActivator = this;
       }
 
-      // FIXME:  how do I decide who fired it??
+      // TODO(d.rattman):  how do I decide who fired it??
       switch (atoi(event->GetParameters())) {
         case 1:
           m_OnTrigger1.FireOutput(pActivator, this, 0);
@@ -2888,7 +2889,7 @@ void CSceneEntity::StartEvent(float currenttime, CChoreoScene *scene,
       DispatchStartPermitResponses(scene, pActor, event);
     } break;
     default: {
-      // FIXME: Unhandeled event
+      // TODO(d.rattman): Unhandeled event
       // Assert(0);
     } break;
   }
@@ -3034,7 +3035,7 @@ CChoreoScene *CSceneEntity::LoadScene(const char *filename,
                                       IChoreoEventCallback *pCallback) {
   DevMsg(2, "Blocking load of scene from '%s'\n", filename);
 
-  char loadfile[MAX_PATH];
+  char loadfile[SOURCE_MAX_PATH];
   Q_strncpy(loadfile, filename, sizeof(loadfile));
   Q_SetExtension(loadfile, ".vcd", sizeof(loadfile));
   Q_FixSlashes(loadfile);
@@ -4013,9 +4014,9 @@ float InstancedScriptedScene(CBaseFlex *pActor, const char *pszScene,
   }
   pScene->m_iszSceneFile = MAKE_STRING(pScene->m_szInstanceFilename);
 
-  // FIXME: I should set my output to fire something that kills me....
+  // TODO(d.rattman): I should set my output to fire something that kills me....
 
-  // FIXME: add a proper initialization function
+  // TODO(d.rattman): add a proper initialization function
   pScene->m_hOwner = pActor;
   pScene->m_bHadOwner = pActor != NULL;
   pScene->m_bMultiplayer = bMultiplayer;

@@ -4,7 +4,7 @@
 #include "Render3DMS.h"
 #include "base/include/windows/windows_light.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CRender3D *CreateRender3D(Render3DType_t eRender3DType) {

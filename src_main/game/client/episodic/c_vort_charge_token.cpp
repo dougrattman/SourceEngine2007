@@ -117,7 +117,7 @@ void C_NPC_Vortigaunt::ClientThink( void )
 	}
 }
 
-// FIXME: Move to shared code!
+// TODO(d.rattman): Move to shared code!
 #define VORTFX_ZAPBEAM	0
 #define VORTFX_ARMBEAM	1
 

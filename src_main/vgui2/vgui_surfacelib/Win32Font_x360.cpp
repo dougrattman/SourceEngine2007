@@ -20,7 +20,7 @@
 #include "vgui_surfacelib/Win32Font.h"
 #include "vgui_surfacelib/FontManager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool s_bSupportsUnicode = true;
@@ -84,7 +84,7 @@ bool CWin32Font::Create( const char *windowsFontName, int tall, int weight, int 
 		style |= XUI_FONT_STYLE_BOLD;
 
 	// must support > 128, there are characters in this range in the custom fonts
-	COMPILE_TIME_ASSERT( ABCWIDTHS_CACHE_SIZE == 256 );
+	static_assert( ABCWIDTHS_CACHE_SIZE == 256 );
 
 	XUIFontMetrics fontMetrics;
 	XUICharMetrics charMetrics[256];

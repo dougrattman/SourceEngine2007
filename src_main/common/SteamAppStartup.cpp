@@ -52,9 +52,9 @@ bool SaveAppDataToSteam(_In_z_ const char *command_line,
 }
 
 // Purpose: Get steam exe path.
-std::tuple<bool, std::array<char, MAX_PATH>> GetSteamExePath(
+std::tuple<bool, std::array<char, SOURCE_MAX_PATH>> GetSteamExePath(
     _In_z_ char *current_dir) {
-  std::array<char, MAX_PATH> steam_exe_path;
+  std::array<char, SOURCE_MAX_PATH> steam_exe_path;
 
   char *slash = strrchr(current_dir, '\\');
   while (slash) {
@@ -94,14 +94,14 @@ std::tuple<bool, std::array<char, MAX_PATH>> GetSteamExePath(
 
 // Purpose: Find or launch steam and launch app via it.
 bool FindSteamAndLaunchSelfViaIt() {
-  char current_dir[MAX_PATH];
-  if (!GetCurrentDirectoryA(ARRAYSIZE(current_dir), current_dir)) {
+  char current_dir[SOURCE_MAX_PATH];
+  if (!GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_dir), current_dir)) {
     return false;
   }
 
   // First, search backwards through our current set of directories
   bool return_code;
-  std::array<char, MAX_PATH> steam_exe_path;
+  std::array<char, SOURCE_MAX_PATH> steam_exe_path;
   std::tie(return_code, steam_exe_path) = GetSteamExePath(current_dir);
 
   if (!return_code) {
@@ -156,8 +156,8 @@ bool LaunchSelfViaSteam(_In_z_ const char *command_line) {
     return false;
   }
 
-  char app_path[MAX_PATH];
-  if (!GetModuleFileNameA(app_module, app_path, ARRAYSIZE(app_path))) {
+  char app_path[SOURCE_MAX_PATH];
+  if (!GetModuleFileNameA(app_module, app_path, SOURCE_ARRAYSIZE(app_path))) {
     return false;
   }
 

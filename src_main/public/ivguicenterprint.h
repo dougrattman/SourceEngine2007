@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 // Purpose: Engine Center Print Interface
 //-----------------------------------------------------------------------------
-abstract_class ICenterPrint
+the_interface ICenterPrint
 {
 public:
 	virtual void		SetTextColor( int r, int g, int b, int a ) = 0;

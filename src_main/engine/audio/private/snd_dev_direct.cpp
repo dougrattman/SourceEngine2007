@@ -13,7 +13,7 @@
 #include "iprediction.h"
 #include "tier0/include/icommandline.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern bool snd_firsttime;

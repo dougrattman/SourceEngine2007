@@ -14,7 +14,7 @@
 #include "showz_ps20.inc"
 #include "showz_ps20b.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar r_showz_power( "r_showz_power", "1.0f", FCVAR_CHEAT );

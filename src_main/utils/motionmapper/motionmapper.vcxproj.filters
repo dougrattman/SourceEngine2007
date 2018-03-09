@@ -21,7 +21,7 @@
     <ClCompile Include="..\..\public\filesystem_helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\public\filesystem_init.cpp">
+    <ClCompile Include="..\..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\common\filesystem_tools.cpp">
@@ -63,7 +63,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\tier0\basetypes.h">

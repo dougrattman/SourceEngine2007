@@ -1,9 +1,21 @@
-// Purpose: C++ implementation of the ICE encryption algorithm.
-//			Taken from public domain code, as written by Matthew
-//Kwan
-//-  July 1996 			http://www.darkside.com.au/ice/
-
-#if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
+/*
+ * C++ implementation of the ICE encryption algorithm.
+ *
+ * Written by Matthew Kwan - July 1996
+ *
+ * The ICE algorithm is public domain, and source code can be downloaded from
+ * this page (http://www.darkside.com.au/ice/). There are no patents or
+ * copyrights, so its use is unrestricted. Naturally, if you do decide to use
+ * it, the author would love to hear about it.
+ *
+ * As of 28 November 1998 there have been two changes to the ICE source code.
+ * The first fixes a bug in the C and C++ versions that caused incorrect
+ * encryption when compiled for 16-bit integers. The second changes the API for
+ * the encrypt and decrypt functions to be void rather than returning a
+ * redundant pointer to the result (which no-one ever used).
+ *
+ * NOTE: register keyword is deprecated, so its usages are removed.
+ */
 
 #include "mathlib/IceKey.H"
 
@@ -48,8 +60,9 @@ static const int ice_keyrot[16] = {0, 1, 2, 3, 2, 1, 3, 0,
  * subtractions are replaced by XOR.
  */
 
-static u32 gf_mult(u32 a, u32 b, u32 m) {
-  u32 res = 0;
+static unsigned int gf_mult(unsigned int a, unsigned int b,
+                            unsigned int m) {
+  unsigned int res = 0;
 
   while (b) {
     if (b & 1) res ^= a;
@@ -68,8 +81,8 @@ static u32 gf_mult(u32 a, u32 b, u32 m) {
  * Raise the base to the power of 7, modulo m.
  */
 
-static unsigned long gf_exp7(u32 b, u32 m) {
-  u32 x;
+static unsigned long gf_exp7(unsigned int b, unsigned int m) {
+  unsigned int x;
 
   if (b == 0) return (0);
 
@@ -101,7 +114,7 @@ static unsigned long ice_perm32(unsigned long x) {
  * This only has to be done once.
  */
 
-static void ice_sboxes_init() {
+static void ice_sboxes_init(void) {
   int i;
 
   for (i = 0; i < 1024; i++) {
@@ -192,7 +205,7 @@ static unsigned long ice_f(unsigned long p, const IceSubkey *sk) {
  * Encrypt a block of 8 bytes of data with the given ICE key.
  */
 
-void IceKey::encrypt(const u8 *ptext, u8 *ctext) const {
+void IceKey::encrypt(const unsigned char *ptext, unsigned char *ctext) const {
   int i;
   unsigned long l, r;
 
@@ -219,7 +232,7 @@ void IceKey::encrypt(const u8 *ptext, u8 *ctext) const {
  * Decrypt a block of 8 bytes of data with the given ICE key.
  */
 
-void IceKey::decrypt(const u8 *ctext, u8 *ptext) const {
+void IceKey::decrypt(const unsigned char *ctext, unsigned char *ptext) const {
   int i;
   unsigned long l, r;
 
@@ -246,7 +259,7 @@ void IceKey::decrypt(const u8 *ctext, u8 *ptext) const {
  * Set 8 rounds [n, n+7] of the key schedule of an ICE key.
  */
 
-void IceKey::scheduleBuild(u16 *kb, int n, const int *keyrot) {
+void IceKey::scheduleBuild(unsigned short *kb, int n, const int *keyrot) {
   int i;
 
   for (i = 0; i < 8; i++) {
@@ -261,7 +274,7 @@ void IceKey::scheduleBuild(u16 *kb, int n, const int *keyrot) {
       unsigned long *curr_sk = &isk->val[j % 3];
 
       for (k = 0; k < 4; k++) {
-        u16 *curr_kb = &kb[(kr + k) & 3];
+        unsigned short *curr_kb = &kb[(kr + k) & 3];
         int bit = *curr_kb & 1;
 
         *curr_sk = (*curr_sk << 1) | bit;
@@ -275,11 +288,11 @@ void IceKey::scheduleBuild(u16 *kb, int n, const int *keyrot) {
  * Set the key schedule of an ICE key.
  */
 
-void IceKey::set(const u8 *key) {
+void IceKey::set(const unsigned char *key) {
   int i;
 
   if (_rounds == 8) {
-    u16 kb[4];
+    unsigned short kb[4];
 
     for (i = 0; i < 4; i++) kb[3 - i] = (key[i * 2] << 8) | key[i * 2 + 1];
 
@@ -289,7 +302,7 @@ void IceKey::set(const u8 *key) {
 
   for (i = 0; i < _size; i++) {
     int j;
-    u16 kb[4];
+    unsigned short kb[4];
 
     for (j = 0; j < 4; j++)
       kb[3 - j] = (key[i * 8 + j * 2] << 8) | key[i * 8 + j * 2 + 1];
@@ -310,5 +323,3 @@ int IceKey::keySize() const { return (_size * 8); }
  */
 
 int IceKey::blockSize() const { return (8); }
-
-#endif  // !_STATIC_LINKED || _SHARED_LIB

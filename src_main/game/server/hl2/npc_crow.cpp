@@ -29,7 +29,7 @@
 #include "soundent.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -643,7 +643,7 @@ void CNPC_Crow::Takeoff(const Vector &vGoal) {
     Vector vecMoveDir = vGoal - GetAbsOrigin();
     VectorNormalize(vecMoveDir);
 
-    // FIXME: pitch over time
+    // TODO(d.rattman): pitch over time
 
     SetFlyingState(FlyState_Flying);
 
@@ -1181,7 +1181,7 @@ bool CNPC_Crow::HandleInteraction(int interactionType, void *data,
 
     // return ideal grab position
     if (data) {
-      // FIXME: need a good way to ensure this contract
+      // TODO(d.rattman): need a good way to ensure this contract
       *((Vector *)data) = GetAbsOrigin() + Vector(0, 0, 5);
     }
 

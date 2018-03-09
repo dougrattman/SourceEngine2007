@@ -12,7 +12,7 @@
 #include "vgui_baseui_interface.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Imported from other .cpp files
@@ -183,7 +183,7 @@ CMapListManager::~CMapListManager(void) { ClearList(); }
 void CMapListManager::Think(void) {}
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME:  Refresh doesn't notice maps that have been deleted... oh
+// Purpose: TODO(d.rattman):  Refresh doesn't notice maps that have been deleted... oh
 // well
 //-----------------------------------------------------------------------------
 void CMapListManager::RefreshList(void) {

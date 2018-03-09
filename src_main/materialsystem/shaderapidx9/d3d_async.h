@@ -122,13 +122,13 @@ class D3DDeviceWrapper {
 #if SHADERAPI_USE_SMP
   void Synchronize();  // wait for all commands to be done
 #else
-  FORCEINLINE void Synchronize(void) {}
+  SOURCE_FORCEINLINE void Synchronize(void) {}
 #endif
 
   void SubmitIfNotBusy();
 
   template <class T>
-  FORCEINLINE void PushStruct(PushBufferCommand cmd, T const *str) {
+  SOURCE_FORCEINLINE void PushStruct(PushBufferCommand cmd, T const *str) {
     int nwords = N_DWORDS(T);
     AllocatePushBufferSpace(1 + nwords);
     m_pOutputPtr[0] = cmd;
@@ -136,7 +136,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += 1 + nwords;
   }
 
-  FORCEINLINE void AllocatePushBufferSpace(size_t nSlots) {
+  SOURCE_FORCEINLINE void AllocatePushBufferSpace(size_t nSlots) {
     // check for N slots of space, and decrement amount of space left
     if (nSlots > m_PushBufferFreeSlots)  // out of room?
     {
@@ -146,27 +146,27 @@ class D3DDeviceWrapper {
   }
 
   // simple methods for pushing a few words into output buffer
-  FORCEINLINE void Push(PushBufferCommand cmd) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd) {
     AllocatePushBufferSpace(1);
     m_pOutputPtr[0] = cmd;
     m_pOutputPtr++;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, int arg1) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, int arg1) {
     AllocatePushBufferSpace(2);
     m_pOutputPtr[0] = cmd;
     m_pOutputPtr[1] = arg1;
     m_pOutputPtr += 2;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, void *ptr) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, void *ptr) {
     AllocatePushBufferSpace(1 + N_DWORDS_IN_PTR);
     *(m_pOutputPtr++) = cmd;
     *((void **)m_pOutputPtr) = ptr;
     m_pOutputPtr += N_DWORDS_IN_PTR;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, void *ptr, void *ptr1) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, void *ptr, void *ptr1) {
     AllocatePushBufferSpace(1 + 2 * N_DWORDS_IN_PTR);
     *(m_pOutputPtr++) = cmd;
     *((void **)m_pOutputPtr) = ptr;
@@ -175,7 +175,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += N_DWORDS_IN_PTR;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, void *arg1, uint32_t arg2,
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, void *arg1, uint32_t arg2,
                         uint32_t arg3, uint32_t arg4, void *arg5) {
     AllocatePushBufferSpace(1 + N_DWORDS_IN_PTR + 1 + 1 + 1 + N_DWORDS_IN_PTR);
     *(m_pOutputPtr++) = cmd;
@@ -188,7 +188,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += N_DWORDS_IN_PTR;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, uint32_t arg1, void *ptr) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, uint32_t arg1, void *ptr) {
     AllocatePushBufferSpace(2 + N_DWORDS_IN_PTR);
     *(m_pOutputPtr++) = cmd;
     *(m_pOutputPtr++) = arg1;
@@ -196,7 +196,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += N_DWORDS_IN_PTR;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, uint32_t arg1, void *ptr,
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, uint32_t arg1, void *ptr,
                         int arg2, int arg3) {
     AllocatePushBufferSpace(4 + N_DWORDS_IN_PTR);
     *(m_pOutputPtr++) = cmd;
@@ -208,7 +208,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += 2;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2) {
     AllocatePushBufferSpace(3);
     m_pOutputPtr[0] = cmd;
     m_pOutputPtr[1] = arg1;
@@ -216,7 +216,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += 3;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2, int arg3) {
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2, int arg3) {
     AllocatePushBufferSpace(4);
     m_pOutputPtr[0] = cmd;
     m_pOutputPtr[1] = arg1;
@@ -225,7 +225,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += 4;
   }
 
-  FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2, int arg3,
+  SOURCE_FORCEINLINE void Push(PushBufferCommand cmd, int arg1, int arg2, int arg3,
                         int arg4, int arg5, int arg6) {
     AllocatePushBufferSpace(7);
     m_pOutputPtr[0] = cmd;
@@ -238,7 +238,7 @@ class D3DDeviceWrapper {
     m_pOutputPtr += 7;
   }
 
-  FORCEINLINE bool ASyncMode(void) const {
+  SOURCE_FORCEINLINE bool ASyncMode(void) const {
 #if SHADERAPI_USE_SMP
     return (m_pASyncThreadHandle != 0);
 #else
@@ -246,7 +246,7 @@ class D3DDeviceWrapper {
 #endif
   }
 
-  FORCEINLINE IDirect3DDevice9 *Dx9Device(void) const { return m_pD3DDevice; }
+  SOURCE_FORCEINLINE IDirect3DDevice9 *Dx9Device(void) const { return m_pD3DDevice; }
 
   void AsynchronousLock(IDirect3DVertexBuffer9 *vb, size_t offset, size_t size,
                         void **ptr, DWORD flags, LockedBufferContext *lb);
@@ -283,7 +283,7 @@ class D3DDeviceWrapper {
     m_pD3DDevice = 0;
   }
 
-  void FORCEINLINE SetDepthStencilSurface(IDirect3DSurface9 *new_stencil) {
+  void SOURCE_FORCEINLINE SetDepthStencilSurface(IDirect3DSurface9 *new_stencil) {
     if (ASyncMode())
       Push(PBCMD_SET_DEPTH_STENCIL_SURFACE, new_stencil);
     else
@@ -372,7 +372,7 @@ class D3DDeviceWrapper {
     return m_pD3DDevice->GetDepthStencilSurface(ppZStencilSurface);
   }
 
-  FORCEINLINE void SetClipPlane(int idx, float const *pplane) {
+  SOURCE_FORCEINLINE void SetClipPlane(int idx, float const *pplane) {
     RECORD_COMMAND(DX8_SET_CLIP_PLANE, 5);
     RECORD_INT(idx);
     RECORD_FLOAT(pplane[0]);
@@ -389,7 +389,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetClipPlane(idx, pplane));
   }
 
-  FORCEINLINE void SetVertexDeclaration(IDirect3DVertexDeclaration9 *decl) {
+  SOURCE_FORCEINLINE void SetVertexDeclaration(IDirect3DVertexDeclaration9 *decl) {
     RECORD_COMMAND(DX8_SET_VERTEX_DECLARATION, 1);
     RECORD_INT((int)decl);
 
@@ -399,7 +399,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetVertexDeclaration(decl));
   }
 
-  FORCEINLINE void SetViewport(D3DVIEWPORT9 const *vp) {
+  SOURCE_FORCEINLINE void SetViewport(D3DVIEWPORT9 const *vp) {
     RECORD_COMMAND(DX8_SET_VIEWPORT, 1);
     RECORD_STRUCT(vp, sizeof(*vp));
 
@@ -442,7 +442,7 @@ class D3DDeviceWrapper {
         ppSurface, pSharedHandle);
   }
 
-  FORCEINLINE void SetRenderTarget(int idx, IDirect3DSurface9 *new_rt) {
+  SOURCE_FORCEINLINE void SetRenderTarget(int idx, IDirect3DSurface9 *new_rt) {
     if (ASyncMode()) {
       Push(PBCMD_SET_RENDER_TARGET, idx, new_rt);
     } else {
@@ -454,7 +454,7 @@ class D3DDeviceWrapper {
     }
   }
 
-  FORCEINLINE void LightEnable(int lidx, bool onoff) {
+  SOURCE_FORCEINLINE void LightEnable(int lidx, bool onoff) {
     RECORD_COMMAND(DX8_LIGHT_ENABLE, 2);
     RECORD_INT(lidx);
     RECORD_INT(onoff);
@@ -463,7 +463,7 @@ class D3DDeviceWrapper {
     DO_D3D(LightEnable(lidx, onoff));
   }
 
-  FORCEINLINE void SetRenderState(D3DRENDERSTATETYPE state, DWORD val) {
+  SOURCE_FORCEINLINE void SetRenderState(D3DRENDERSTATETYPE state, DWORD val) {
     //		Assert( state >= 0 && state < MAX_NUM_RENDERSTATES );
     RECORD_RENDER_STATE(state, val);
     if (ASyncMode()) {
@@ -472,7 +472,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetRenderState(state, val));
   }
 
-  FORCEINLINE void SetScissorRect(const RECT *pScissorRect) {
+  SOURCE_FORCEINLINE void SetScissorRect(const RECT *pScissorRect) {
     RECORD_COMMAND(DX8_SET_SCISSOR_RECT, 1);
     RECORD_STRUCT(pScissorRect, 4 * sizeof(LONG));
     if (ASyncMode()) {
@@ -482,7 +482,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetScissorRect(pScissorRect));
   }
 
-  FORCEINLINE void SetVertexShaderConstantF(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetVertexShaderConstantF(UINT StartRegister,
                                             CONST float *pConstantData,
                                             UINT Vector4fCount) {
     RECORD_COMMAND(DX8_SET_VERTEX_SHADER_CONSTANT, 3);
@@ -502,7 +502,7 @@ class D3DDeviceWrapper {
                                       Vector4fCount));
   }
 
-  FORCEINLINE void SetVertexShaderConstantB(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetVertexShaderConstantB(UINT StartRegister,
                                             CONST int *pConstantData,
                                             UINT BoolCount) {
     RECORD_COMMAND(DX8_SET_VERTEX_SHADER_CONSTANT, 3);
@@ -520,7 +520,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetVertexShaderConstantB(StartRegister, pConstantData, BoolCount));
   }
 
-  FORCEINLINE void SetVertexShaderConstantI(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetVertexShaderConstantI(UINT StartRegister,
                                             CONST int *pConstantData,
                                             UINT Vector4IntCount) {
     RECORD_COMMAND(DX8_SET_VERTEX_SHADER_CONSTANT, 3);
@@ -540,7 +540,7 @@ class D3DDeviceWrapper {
                                       Vector4IntCount));
   }
 
-  FORCEINLINE void SetPixelShaderConstantF(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetPixelShaderConstantF(UINT StartRegister,
                                            CONST float *pConstantData,
                                            UINT Vector4fCount) {
     RECORD_COMMAND(DX8_SET_PIXEL_SHADER_CONSTANT, 3);
@@ -560,7 +560,7 @@ class D3DDeviceWrapper {
           SetPixelShaderConstantF(StartRegister, pConstantData, Vector4fCount));
   }
 
-  FORCEINLINE void SetPixelShaderConstantB(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetPixelShaderConstantB(UINT StartRegister,
                                            CONST int *pConstantData,
                                            UINT BoolCount) {
     RECORD_COMMAND(DX8_SET_PIXEL_SHADER_CONSTANT, 3);
@@ -578,7 +578,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetPixelShaderConstantB(StartRegister, pConstantData, BoolCount));
   }
 
-  FORCEINLINE void SetPixelShaderConstantI(UINT StartRegister,
+  SOURCE_FORCEINLINE void SetPixelShaderConstantI(UINT StartRegister,
                                            CONST int *pConstantData,
                                            UINT Vector4IntCount) {
     RECORD_COMMAND(DX8_SET_PIXEL_SHADER_CONSTANT, 3);
@@ -622,7 +622,7 @@ class D3DDeviceWrapper {
                                        pDestSurface, pDestRect, Filter);
   }
 
-  FORCEINLINE void BeginScene(void) {
+  SOURCE_FORCEINLINE void BeginScene(void) {
     RECORD_COMMAND(DX8_BEGIN_SCENE, 0);
     if (ASyncMode())
       Push(PBCMD_BEGIN_SCENE);
@@ -630,7 +630,7 @@ class D3DDeviceWrapper {
       DO_D3D(BeginScene());
   }
 
-  FORCEINLINE void EndScene(void) {
+  SOURCE_FORCEINLINE void EndScene(void) {
     RECORD_COMMAND(DX8_END_SCENE, 0);
     if (ASyncMode())
       Push(PBCMD_END_SCENE);
@@ -638,7 +638,7 @@ class D3DDeviceWrapper {
       DO_D3D(EndScene());
   }
 
-  FORCEINLINE HRESULT Lock(IDirect3DVertexBuffer9 *vb, size_t offset,
+  SOURCE_FORCEINLINE HRESULT Lock(IDirect3DVertexBuffer9 *vb, size_t offset,
                            size_t size, void **ptr, DWORD flags) {
     Assert(size);  // lock size of 0 = unknown entire size of buffer = bad
     Synchronize();
@@ -668,7 +668,7 @@ class D3DDeviceWrapper {
     return hr;
   }
 
-  FORCEINLINE HRESULT Lock(IDirect3DVertexBuffer9 *vb, size_t offset,
+  SOURCE_FORCEINLINE HRESULT Lock(IDirect3DVertexBuffer9 *vb, size_t offset,
                            size_t size, void **ptr, DWORD flags,
                            LockedBufferContext *lb) {
     HRESULT hr = D3D_OK;
@@ -703,7 +703,7 @@ class D3DDeviceWrapper {
     return hr;
   }
 
-  FORCEINLINE HRESULT Lock(IDirect3DIndexBuffer9 *ib, size_t offset,
+  SOURCE_FORCEINLINE HRESULT Lock(IDirect3DIndexBuffer9 *ib, size_t offset,
                            size_t size, void **ptr, DWORD flags) {
     HRESULT hr = D3D_OK;
 
@@ -735,7 +735,7 @@ class D3DDeviceWrapper {
   }
 
   // asycnhronous lock of index buffer
-  FORCEINLINE HRESULT Lock(IDirect3DIndexBuffer9 *ib, size_t offset,
+  SOURCE_FORCEINLINE HRESULT Lock(IDirect3DIndexBuffer9 *ib, size_t offset,
                            size_t size, void **ptr, DWORD flags,
                            LockedBufferContext *lb) {
     HRESULT hr = D3D_OK;
@@ -779,7 +779,7 @@ class D3DDeviceWrapper {
     vb->Release();
   }
 
-  FORCEINLINE void Unlock(IDirect3DVertexBuffer9 *vb) {
+  SOURCE_FORCEINLINE void Unlock(IDirect3DVertexBuffer9 *vb) {
     // needed for d3d on pc only
 #ifndef _XBOX
     if (ASyncMode())
@@ -795,7 +795,7 @@ class D3DDeviceWrapper {
 #endif
   }
 
-  FORCEINLINE void Unlock(IDirect3DVertexBuffer9 *vb, LockedBufferContext *lb,
+  SOURCE_FORCEINLINE void Unlock(IDirect3DVertexBuffer9 *vb, LockedBufferContext *lb,
                           size_t unlock_size) {
     // needed for d3d on pc only
 #ifndef _XBOX
@@ -819,7 +819,7 @@ class D3DDeviceWrapper {
 #endif
   }
 
-  FORCEINLINE void Unlock(IDirect3DIndexBuffer9 *ib) {
+  SOURCE_FORCEINLINE void Unlock(IDirect3DIndexBuffer9 *ib) {
     // needed for d3d on pc only
 #ifndef _XBOX
     if (ASyncMode())
@@ -835,7 +835,7 @@ class D3DDeviceWrapper {
 #endif
   }
 
-  FORCEINLINE void Unlock(IDirect3DIndexBuffer9 *ib, LockedBufferContext *lb,
+  SOURCE_FORCEINLINE void Unlock(IDirect3DIndexBuffer9 *ib, LockedBufferContext *lb,
                           size_t unlock_size) {
     // needed for d3d on pc only
 #ifndef _XBOX
@@ -866,7 +866,7 @@ class D3DDeviceWrapper {
 #endif
   }
 
-  FORCEINLINE void Clear(int count, D3DRECT const *pRects, int Flags,
+  SOURCE_FORCEINLINE void Clear(int count, D3DRECT const *pRects, int Flags,
                          D3DCOLOR color, float Z, int stencil) {
     if (ASyncMode()) {
       int n_rects_words = count * N_DWORDS(D3DRECT);
@@ -899,7 +899,7 @@ class D3DDeviceWrapper {
     DO_D3D(Release());
   }
 
-  FORCEINLINE void SetTexture(int stage, IDirect3DBaseTexture9 *txtr) {
+  SOURCE_FORCEINLINE void SetTexture(int stage, IDirect3DBaseTexture9 *txtr) {
     RECORD_COMMAND(DX8_SET_TEXTURE, 3);
     RECORD_INT(stage);
     RECORD_INT(-1);
@@ -917,7 +917,7 @@ class D3DDeviceWrapper {
     DO_D3D(SetTransform(mtrx_id, mt));
   }
 
-  FORCEINLINE void SetSamplerState(int stage, D3DSAMPLERSTATETYPE state,
+  SOURCE_FORCEINLINE void SetSamplerState(int stage, D3DSAMPLERSTATETYPE state,
                                    DWORD val) {
     RECORD_SAMPLER_STATE(stage, state, val);
     if (ASyncMode())
@@ -931,7 +931,7 @@ class D3DDeviceWrapper {
     DO_D3D(SetFVF(fvf));
   }
 
-  FORCEINLINE void SetTextureStageState(int stage,
+  SOURCE_FORCEINLINE void SetTextureStageState(int stage,
                                         D3DTEXTURESTAGESTATETYPE state,
                                         DWORD val) {
     RECORD_TEXTURE_STAGE_STATE(stage, state, val);
@@ -939,7 +939,7 @@ class D3DDeviceWrapper {
     DO_D3D(SetTextureStageState(stage, state, val));
   }
 
-  FORCEINLINE void DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
+  SOURCE_FORCEINLINE void DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
                                  UINT StartVertex, UINT PrimitiveCount) {
     RECORD_COMMAND(DX8_DRAW_PRIMITIVE, 3);
     RECORD_INT(PrimitiveType);
@@ -975,14 +975,14 @@ class D3DDeviceWrapper {
     return m_pD3DDevice->CreatePixelShader(pFunction, ppShader);
   }
 
-  FORCEINLINE void SetIndices(IDirect3DIndexBuffer9 *pIndexData) {
+  SOURCE_FORCEINLINE void SetIndices(IDirect3DIndexBuffer9 *pIndexData) {
     if (ASyncMode())
       Push(PBCMD_SET_INDICES, pIndexData);
     else
       DO_D3D(SetIndices(pIndexData));
   }
 
-  FORCEINLINE void SetStreamSource(UINT StreamNumber,
+  SOURCE_FORCEINLINE void SetStreamSource(UINT StreamNumber,
                                    IDirect3DVertexBuffer9 *pStreamData,
                                    UINT OffsetInBytes, UINT Stride) {
     if (ASyncMode())
@@ -1008,7 +1008,7 @@ class D3DDeviceWrapper {
                                            ppIndexBuffer, pSharedHandle);
   }
 
-  FORCEINLINE void DrawIndexedPrimitive(D3DPRIMITIVETYPE Type,
+  SOURCE_FORCEINLINE void DrawIndexedPrimitive(D3DPRIMITIVETYPE Type,
                                         INT BaseVertexIndex, UINT MinIndex,
                                         UINT NumVertices, UINT StartIndex,
                                         UINT PrimitiveCount) {
@@ -1035,7 +1035,7 @@ class D3DDeviceWrapper {
     DO_D3D(SetMaterial(mat));
   }
 
-  FORCEINLINE void SetPixelShader(IDirect3DPixelShader9 *pShader) {
+  SOURCE_FORCEINLINE void SetPixelShader(IDirect3DPixelShader9 *pShader) {
     RECORD_COMMAND(DX8_SET_PIXEL_SHADER, 1);
     RECORD_INT((int)pShader);
     if (ASyncMode())
@@ -1044,7 +1044,7 @@ class D3DDeviceWrapper {
       DO_D3D(SetPixelShader(pShader));
   }
 
-  FORCEINLINE void SetVertexShader(IDirect3DVertexShader9 *pShader) {
+  SOURCE_FORCEINLINE void SetVertexShader(IDirect3DVertexShader9 *pShader) {
     if (ASyncMode())
       Push(PBCMD_SET_VERTEX_SHADER, pShader);
     else

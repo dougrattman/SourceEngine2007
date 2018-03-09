@@ -1,10 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/datamanager.h"
 
-#include "tier0/include/basetypes.h"
+#include "base/include/macros.h"
 
-DECLARE_POINTER_HANDLE(memhandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(memhandle_t);
 
 #define AUTO_LOCK_DM() AUTO_LOCK_(CDataManagerBase, *this)
 
@@ -303,7 +303,7 @@ void *CDataManagerBase::GetForFreeByIndex(unsigned short memoryIndex) {
     resource_lru_element_t &mem = m_memoryLists[memoryIndex];
     unsigned size = GetRealSize(mem.pStore);
     if (size > m_memUsed) {
-      ExecuteOnce(Warning("Data manager 'used' memory incorrect\n"));
+      Warning("Data manager 'used' memory incorrect\n");
       size = m_memUsed;
     }
     m_memUsed -= size;

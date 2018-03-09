@@ -11,7 +11,7 @@
 #include <vgui_controls/Panel.h>
 #include "hudelement.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -31,7 +31,7 @@ void CHudBaseTimer::PaintTime(HFont font, int xpos, int ypos, int mins,
                               int secs) {
   surface()->DrawSetTextFont(font);
   wchar_t unicode[6];
-  swprintf(unicode, ARRAYSIZE(unicode), L"%d:%.2d", mins, secs);
+  swprintf(unicode, SOURCE_ARRAYSIZE(unicode), L"%d:%.2d", mins, secs);
 
   surface()->DrawSetTextPos(xpos, ypos);
   surface()->DrawUnicodeString(unicode);

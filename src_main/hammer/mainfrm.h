@@ -75,7 +75,7 @@ public:
 	void OpenURL(UINT nID);
 
 	//
-	// Public attributes. FIXME: eliminate!
+	// Public attributes. TODO(d.rattman): eliminate!
 	//
 	CTextureBrowser			*pTextureBrowser;
 	CObjectProperties		*pObjectProperties;

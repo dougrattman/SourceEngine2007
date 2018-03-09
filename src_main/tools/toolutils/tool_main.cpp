@@ -127,7 +127,7 @@ bool CToolDictionary::Connect( CreateInterfaceFn factory )
 	if ( !BaseClass::Connect( factory ) )
 		return false;
 
-	// FIXME: This interface pointer is taken care of in tier2 + tier1
+	// TODO(d.rattman): This interface pointer is taken care of in tier2 + tier1
 	g_pFileSystem = g_pFullFileSystem;
 
 	enginevgui = ( IEngineVGui * )factory( VENGINE_VGUI_VERSION, NULL );

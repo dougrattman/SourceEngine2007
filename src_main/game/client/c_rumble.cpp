@@ -1,11 +1,9 @@
-//======= Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Rumble effects mixer for XBox
-//
-// $NoKeywords: $
-//
 
 #include "cbase.h"
+
 #include "c_rumble.h"
 #include "rumble_shared.h"
 #include "inputsystem/iinputsystem.h"

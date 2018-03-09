@@ -55,7 +55,7 @@ struct channel_t
 //-----------------------------------------------------------------------------
 // The audio device is responsible for mixing
 //-----------------------------------------------------------------------------
-abstract_class IAudioDevice
+the_interface IAudioDevice
 {
 public:
 	// This initializes the sound hardware.  true on success, false on failure

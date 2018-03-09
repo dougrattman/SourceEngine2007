@@ -92,7 +92,7 @@ CDmeMakefile* CVsAssetBuilderFrame::GetMakefile()
 //-----------------------------------------------------------------------------
 void CVsAssetBuilderFrame::SaveChangesCallback( void* clientData )
 {
-	// FIXME: Hierarchical saving of all makefiles not possible here
+	// TODO(d.rattman): Hierarchical saving of all makefiles not possible here
 	CDmeMakefile *pMakefile = GetMakefile();
 	if ( !pMakefile || !pMakefile->IsDirty() )
 		return;
@@ -100,11 +100,11 @@ void CVsAssetBuilderFrame::SaveChangesCallback( void* clientData )
 	const char *pFileName = g_pDataModel->GetFileName( pMakefile->GetFileId() );
 	if ( !pFileName )
 	{
-		// FIXME: Query for file name
+		// TODO(d.rattman): Query for file name
 		return;
 	}
 
-	char pFileBuf[MAX_PATH];
+	char pFileBuf[SOURCE_MAX_PATH];
 	Q_strncpy( pFileBuf, pFileName, sizeof(pFileBuf) );
 	Q_FixSlashes( pFileBuf, '/' );
 
@@ -229,7 +229,7 @@ MStatus CVsAssetCmd::doIt( const MArgList &mArgList )
 	{
 		const char *pFileName = pMakefile ? g_pDataModel->GetFileName( pMakefile->GetFileId() ) : "";
 
-		char pFileBuf[MAX_PATH];
+		char pFileBuf[SOURCE_MAX_PATH];
 		Q_strncpy( pFileBuf, pFileName, sizeof(pFileBuf) );
 		Q_FixSlashes( pFileBuf, '/' );
 

@@ -183,7 +183,7 @@ void BuildFileList_R(CUtlVector<CUtlSymbol> &files, char const *dir,
       int len = strlen(wfd.cFileName);
       if (len > extlen) {
         if (!stricmp(&wfd.cFileName[len - extlen], extension)) {
-          char filename[MAX_PATH];
+          char filename[SOURCE_MAX_PATH];
           Q_snprintf(filename, sizeof(filename), "%s\\%s", dir, wfd.cFileName);
           _strlwr(filename);
 
@@ -225,7 +225,7 @@ void BuildFileListWildcard_R(CUtlVector<CUtlSymbol> &files, char const *dir,
         continue;
       }
 
-      char filename[MAX_PATH];
+      char filename[SOURCE_MAX_PATH];
       Q_snprintf(filename, sizeof(filename), "%s\\%s", dir, filedata.cFileName);
       _strlwr(filename);
 
@@ -541,10 +541,10 @@ int CCompileKeyValuesApp::Main() {
 
   PrintHeader();
 
-  char binaries[MAX_PATH];
-  Q_strncpy(binaries, gamedir, MAX_PATH);
+  char binaries[SOURCE_MAX_PATH];
+  Q_strncpy(binaries, gamedir, SOURCE_MAX_PATH);
   Q_StripTrailingSlash(binaries);
-  Q_strncat(binaries, "/../bin", MAX_PATH, MAX_PATH);
+  Q_strncat(binaries, "/../bin", SOURCE_MAX_PATH, SOURCE_MAX_PATH);
 
   char outfile[512];
   Q_strncpy(outfile, worklist[worklist.Count() - 1].String(), sizeof(outfile));

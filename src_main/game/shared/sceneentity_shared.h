@@ -27,7 +27,7 @@ class CSceneEntity;
 //-----------------------------------------------------------------------------
 // Purpose: One of a number of currently playing scene events for this actor
 //-----------------------------------------------------------------------------
-// FIXME: move this, it's only used in in baseflex and baseactor
+// TODO(d.rattman): move this, it's only used in in baseflex and baseactor
 class CSceneEventInfo
 {
 public:
@@ -69,8 +69,8 @@ public:
 
 public:
 	//	EVENT local data...
-	// FIXME: Evil, make accessors or figure out better place
-	// FIXME: This won't work, scenes don't save and restore...
+	// TODO(d.rattman): Evil, make accessors or figure out better place
+	// TODO(d.rattman): This won't work, scenes don't save and restore...
 	int  m_iLayer;
 	int  m_iPriority;
 	int  m_nSequence;

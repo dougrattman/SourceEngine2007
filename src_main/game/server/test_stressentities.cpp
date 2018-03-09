@@ -10,7 +10,7 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CStressEntityReg	*CStressEntityReg::s_pHead = NULL;

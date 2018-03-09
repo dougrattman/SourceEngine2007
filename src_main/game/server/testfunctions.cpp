@@ -11,7 +11,7 @@
 #include "player.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void Test_CreateEntity( const CCommand &args )

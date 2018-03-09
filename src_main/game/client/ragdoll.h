@@ -25,7 +25,7 @@ class Vector;
 class IPhysicsObject;
 class CBoneAccessor;
 
-abstract_class IRagdoll
+the_interface IRagdoll
 {
 public:
 	virtual ~IRagdoll() {}

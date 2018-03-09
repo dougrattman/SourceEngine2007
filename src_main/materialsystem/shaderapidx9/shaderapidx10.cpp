@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "shaderapidx10.h"
 #include "imaterialinternal.h"
@@ -131,7 +131,7 @@ static void CommitSetInputLayout(ID3D10Device *pDevice,
   const ShaderInputLayoutStateDx10_t &newState = desiredState.m_InputLayout;
   if (bForce || memcmp(&newState, &currentState.m_InputLayout,
                        sizeof(ShaderInputLayoutStateDx10_t))) {
-    // FIXME: Deal with multiple streams
+    // TODO(d.rattman): Deal with multiple streams
     ID3D10InputLayout *pInputLayout = g_pShaderDeviceDx10->GetInputLayout(
         newState.m_hVertexShader, newState.m_pVertexDecl[0]);
     pDevice->IASetInputLayout(pInputLayout);
@@ -252,7 +252,7 @@ static void GenerateRasterizerDesc(D3D10_RASTERIZER_DESC *pDesc,
     pDesc->SlopeScaledDepthBias = 0.0f;
     pDesc->DepthClipEnable = FALSE;
   } else {
-    // FIXME: Implement! Read ConVars
+    // TODO(d.rattman): Implement! Read ConVars
   }
 
   pDesc->ScissorEnable = state.m_bScissorEnable ? TRUE : FALSE;
@@ -452,8 +452,8 @@ void CShaderAPIDx10::ClearBuffers(bool bClearColor, bool bClearDepth,
   // NOTE: State change commit isn't necessary since clearing doesn't use state
   //	CommitStateChanges();
 
-  // FIXME: This implementation is totally bust0red [doesn't guarantee exact
-  // color specified]
+  // TODO(d.rattman): This implementation is totally bust0red [doesn't guarantee
+  // exact color specified]
   if (bClearColor) {
     D3D10Device()->ClearRenderTargetView(D3D10RenderTargetView(),
                                          m_DesiredState.m_ClearColor);
@@ -494,7 +494,7 @@ void CShaderAPIDx10::BindVertexBuffer(int nStreamID,
                                       int nOffsetInBytes, int nFirstVertex,
                                       int nVertexCount, VertexFormat_t fmt,
                                       int nRepetitions) {
-  // FIXME: What to do about repetitions?
+  // TODO(d.rattman): What to do about repetitions?
   CVertexBufferDx10 *pVertexBufferDx10 =
       static_cast<CVertexBufferDx10 *>(pVertexBuffer);
 
@@ -654,7 +654,7 @@ void CShaderAPIDx10::Draw(MaterialPrimitiveType_t primitiveType,
 
   CommitStateChanges();
 
-  // FIXME: How do I set the base vertex location!?
+  // TODO(d.rattman): How do I set the base vertex location!?
   D3D10Device()->DrawIndexed((UINT)nIndexCount, (UINT)nFirstIndex, 0);
 }
 
@@ -924,7 +924,7 @@ MaterialFogMode_t CShaderAPIDx10::GetSceneFogMode() {
 }
 
 int CShaderAPIDx10::GetPixelFogCombo() {
-  return 0;  // FIXME
+  return 0;  // TODO(d.rattman):
 }
 
 void CShaderAPIDx10::FogColor3f(float r, float g, float b) {}

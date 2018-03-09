@@ -9,7 +9,7 @@
 
 #include "portal_player_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( baseportalcombatweapon, CBasePortalCombatWeapon );
@@ -264,7 +264,7 @@ float CBasePortalCombatWeapon::CalcViewmodelBob( void )
 	//Find the speed of the player
 	float speed = player->GetLocalVelocity().Length2D();
 
-	//FIXME: This maximum speed value must come from the server.
+	//TODO(d.rattman): This maximum speed value must come from the server.
 	//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
 	speed = std::clamp( speed, -320, 320 );
@@ -414,7 +414,7 @@ const WeaponProficiencyInfo_t *CBasePortalCombatWeapon::GetDefaultProficiencyVal
 		{ 1.00, 1.0	},
 	};
 
-	COMPILE_TIME_ASSERT( ARRAYSIZE(g_BaseWeaponProficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( SOURCE_ARRAYSIZE(g_BaseWeaponProficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return g_BaseWeaponProficiencyTable;
 }

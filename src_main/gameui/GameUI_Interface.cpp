@@ -70,7 +70,7 @@
 #include "engine/IEngineSound.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IGameUIFuncs *gameuifuncs = NULL;
@@ -311,7 +311,7 @@ void CGameUI::Connect(CreateInterfaceFn gameFactory) {
 // Purpose: Callback function; sends platform Shutdown message to specified
 // window
 //-----------------------------------------------------------------------------
-int __stdcall SendShutdownMsgFunc(WHANDLE hwnd, int lparam) {
+int SOURCE_STDCALL SendShutdownMsgFunc(WHANDLE hwnd, int lparam) {
   Sys_PostMessage(hwnd, Sys_RegisterWindowMessage("ShutdownValvePlatform"), 0,
                   1);
   return 1;

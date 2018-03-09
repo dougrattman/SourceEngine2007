@@ -20,7 +20,7 @@ class CBaseEntity;
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-abstract_class IEntityDataInstantiator
+the_interface IEntityDataInstantiator
 {
 public:
 	virtual ~IEntityDataInstantiator() {};
@@ -71,7 +71,7 @@ public:
  Assert( handle != m_HashTable.InvalidHandle() );
  m_HashTable[ handle ].data = new T;
 	
- // FIXME: We'll have to remove this if any objects we instance have vtables!!!
+ // TODO(d.rattman): We'll have to remove this if any objects we instance have vtables!!!
  Q_memset( m_HashTable[ handle ].data, 0, sizeof( T ) );
 		}
 

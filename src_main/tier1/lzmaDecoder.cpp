@@ -10,7 +10,7 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef _7ZIP_BYTE_DEFINED

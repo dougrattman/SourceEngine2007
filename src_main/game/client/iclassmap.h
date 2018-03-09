@@ -14,7 +14,7 @@
 class C_BaseEntity;
 typedef C_BaseEntity* (*DISPATCHFUNCTION)( void );
 
-abstract_class IClassMap
+the_interface IClassMap
 {
 public:
 	virtual 		~IClassMap() {}

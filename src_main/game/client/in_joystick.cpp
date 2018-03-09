@@ -29,12 +29,12 @@
 #include "../common/xbox/xboxstubs.h"
 
 #ifdef HL2_CLIENT_DLL
-// FIXME: Autoaim support needs to be moved from HL2_DLL to the client dll, so
+// TODO(d.rattman): Autoaim support needs to be moved from HL2_DLL to the client dll, so
 // this include should be c_baseplayer.h
 #include "c_basehlplayer.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Control like a joystick
@@ -241,7 +241,7 @@ static float ResponseCurve(int curve, float x, int axis, float sensitivity) {
 // This assists the player staying on target.
 //-----------------------------------------------
 float AutoAimDampening(float x, int axis, float dist) {
-  // FIXME: Autoaim support needs to be moved from HL2_DLL to the client dll, so
+  // TODO(d.rattman): Autoaim support needs to be moved from HL2_DLL to the client dll, so
   // all games can use it.
 #ifdef HL2_CLIENT_DLL
   // Help the user stay on target if the feature is enabled and the user

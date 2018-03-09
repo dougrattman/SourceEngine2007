@@ -62,7 +62,7 @@ class CMemoryPool {
 
   int m_GrowMode;  // GROW_ enum.
 
-  // FIXME: Change m_ppMemBlob into a growable array?
+  // TODO(d.rattman): Change m_ppMemBlob into a growable array?
   CBlob m_BlobHead;
   void *m_pHeadOfFreeList;
   int m_BlocksAllocated;
@@ -369,8 +369,8 @@ template <int ITEM_SIZE, int ALIGNMENT, int CHUNK_SIZE, class CAllocator,
 inline CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator,
                        COMPACT_THRESHOLD>::CAlignedMemPool()
     : m_pFirstFree(0), m_nFree(0), m_TimeLastCompact(0) {
-  COMPILE_TIME_ASSERT(sizeof(FreeBlock_t) >= BLOCK_SIZE);
-  COMPILE_TIME_ASSERT(AlignValue(sizeof(FreeBlock_t), ALIGNMENT) ==
+  static_assert(sizeof(FreeBlock_t) >= BLOCK_SIZE);
+  static_assert(AlignValue(sizeof(FreeBlock_t), ALIGNMENT) ==
                       sizeof(FreeBlock_t));
 }
 

@@ -15,13 +15,13 @@
 
 #include "AI_Criteria.h"
 
-abstract_class IResponseFilter
+the_interface IResponseFilter
 {
 public:
 	virtual bool IsValidResponse( ResponseType_t type, const char *pszValue ) = 0;
 };
 
-abstract_class IResponseSystem
+the_interface IResponseSystem
 {
 public:
 	virtual ~IResponseSystem() {}

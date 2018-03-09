@@ -11,7 +11,7 @@
 extern float g_LinearToVertex[4096];  // linear (0..4) to screen corrected
                                       // vertex space (0..1?)
 
-// FIXME!!!  Get rid of this. . all of this should be in mathlib
+// TODO(d.rattman): Get rid of this. . all of this should be in mathlib
 namespace ColorSpace {
 void SetGamma(float screenGamma, float texGamma, float overbright,
               bool allowCheats, bool linearFrameBuffer);
@@ -38,7 +38,7 @@ void LinearToBumpedLightmap(const float *linearColor,
 // converts 0..1 linear value to screen gamma (0..255)
 int LinearToScreenGamma(float f);
 
-FORCEINLINE void LinearToLightmap(unsigned char *pDstRGB,
+SOURCE_FORCEINLINE void LinearToLightmap(unsigned char *pDstRGB,
                                   const float *pSrcRGB) {
   Vector tmpVect;
 #if 1
@@ -67,7 +67,7 @@ FORCEINLINE void LinearToLightmap(unsigned char *pDstRGB,
 
 // Clamp the three values for bumped lighting such that we trade off
 // directionality for brightness.
-FORCEINLINE void ColorClampBumped(Vector &color1, Vector &color2,
+SOURCE_FORCEINLINE void ColorClampBumped(Vector &color1, Vector &color2,
                                   Vector &color3) {
   Vector maxs;
   Vector *colors[3] = {&color1, &color2, &color3};
@@ -124,7 +124,7 @@ FORCEINLINE void ColorClampBumped(Vector &color1, Vector &color2,
   if (color3[2] < 0.f) color3[2] = 0.f;
 }
 
-FORCEINLINE void LinearToBumpedLightmap(
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(
     const float *linearColor, const float *linearBumpColor1,
     const float *linearBumpColor2, const float *linearBumpColor3,
     unsigned char *ret, unsigned char *retBump1, unsigned char *retBump2,
@@ -206,7 +206,7 @@ inline void ClampToHDR(const Vector &in, unsigned short out[3]) {
   out[2] = LinearFloatToCorrectedShort(in.z);
 }
 
-FORCEINLINE void LinearToBumpedLightmap(const float *linearColor,
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(const float *linearColor,
                                         const float *linearBumpColor1,
                                         const float *linearBumpColor2,
                                         const float *linearBumpColor3,
@@ -259,7 +259,7 @@ FORCEINLINE void LinearToBumpedLightmap(const float *linearColor,
 // The domain of the inputs is floats [0 .. 16.0f]
 // the output range is also floats [0 .. 16.0f] (eg, compression to short does
 // not happen)
-FORCEINLINE void LinearToBumpedLightmap(
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(
     FLTX4 linearColor, FLTX4 linearBumpColor1, FLTX4 linearBumpColor2,
     FLTX4 linearBumpColor3, fltx4 &ret,
     fltx4 &retBump1,                   // I pray that with inlining
@@ -299,7 +299,7 @@ FORCEINLINE void LinearToBumpedLightmap(
 
 // input: floats [0 .. 16.0f]
 // output: shorts [0 .. 65535]
-FORCEINLINE void LinearToBumpedLightmap(
+SOURCE_FORCEINLINE void LinearToBumpedLightmap(
     const float *linearColor, const float *linearBumpColor1,
     const float *linearBumpColor2, const float *linearBumpColor3,
     unsigned short *ret, unsigned short *retBump1, unsigned short *retBump2,

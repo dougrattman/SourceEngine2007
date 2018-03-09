@@ -65,7 +65,7 @@ public:
 
 protected:
 
-	char m_szName[MAX_PATH];
+	char m_szName[SOURCE_MAX_PATH];
 	TEXTUREFORMAT m_eTextureFormat;
 	CUtlVector<IEditorTexture *> m_Textures;
 	CUtlDict<int,int> m_TextureNameMap;	// Maps the texture name to an index into m_Textures (the key is IEditorTexture::GetName).
@@ -80,7 +80,7 @@ typedef CUtlVector<CTextureGroup *> TextureGroupList_t;
 
 typedef struct tagGF
 {
-	char filename[MAX_PATH];
+	char filename[SOURCE_MAX_PATH];
 	DWORD id;
 	int fd;
 	TEXTUREFORMAT format;

@@ -13,7 +13,7 @@
 #include "mapdoc.h"
 #include "options.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -99,7 +99,7 @@ void COP_Model::UpdateData(int Mode, PVOID pData)
 			int nCount = pModel->GetSequenceCount();
 			for ( int i = 0; i < nCount; i++ )
 			{
-				char szName[MAX_PATH];
+				char szName[SOURCE_MAX_PATH];
 				pModel->GetSequenceName(i, szName);
 				suggestions.AddToTail( szName );
 			}

@@ -28,7 +28,7 @@ void CFileChangeWatcher::Init( ICallbacks *pCallbacks )
 
 bool CFileChangeWatcher::AddDirectory( const char *pSearchPathBase, const char *pDirName, bool bRecursive )
 {
-	char fullDirName[MAX_PATH];
+	char fullDirName[SOURCE_MAX_PATH];
 	V_ComposeFileName( pSearchPathBase, pDirName, fullDirName, sizeof( fullDirName ) );
 	
 	HANDLE hDir = CreateFile( fullDirName, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_OVERLAPPED, NULL );
@@ -138,7 +138,7 @@ int CFileChangeWatcher::Update()
 void CFileChangeWatcher::SendNotification( CFileChangeWatcher::CDirWatch *pDirWatch, const char *pRelativeFilename )
 {
 	// Use this for full filenames although you don't strictly need it.. 
-	char fullFilename[MAX_PATH];
+	char fullFilename[SOURCE_MAX_PATH];
 	V_ComposeFileName( pDirWatch->m_FullDirName, pRelativeFilename, fullFilename, sizeof( fullFilename ) );
 
 	m_pCallbacks->OnFileChange( pRelativeFilename, fullFilename );

@@ -237,7 +237,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\public\filesystem_init.cpp">
+    <ClCompile Include="..\..\public\filesystem_init.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

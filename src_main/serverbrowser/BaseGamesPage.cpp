@@ -649,7 +649,7 @@ void CBaseGamesPage::OnButtonToggled(Panel *panel, int state)
 //-----------------------------------------------------------------------------
 void CBaseGamesPage::UpdateDerivedLayouts( void )
 {
-	char rgchControlSettings[MAX_PATH];
+	char rgchControlSettings[SOURCE_MAX_PATH];
 	if ( m_pCustomResFilename )
 	{
 		Q_snprintf( rgchControlSettings, sizeof( rgchControlSettings ), "%s", m_pCustomResFilename );

@@ -65,13 +65,13 @@ void PASCAL CObject::operator delete(void* p, void*)
 
 void* __cdecl operator new(size_t nSize, LPCSTR lpszFileName, int nLine)
 {
-	return ::operator new(nSize, _NORMAL_BLOCK, lpszFileName, nLine);
+	return ::operator new(nSize, SOURCE_MEM_NORMAL_BLOCK, lpszFileName, nLine);
 }
 
 #if _MSC_VER >= 1210
 void* __cdecl operator new[](size_t nSize, LPCSTR lpszFileName, int nLine)
 {
-	return ::operator new[](nSize, _NORMAL_BLOCK, lpszFileName, nLine);
+	return ::operator new[](nSize, SOURCE_MEM_NORMAL_BLOCK, lpszFileName, nLine);
 }
 #endif
 
@@ -112,13 +112,13 @@ CObject::operator delete(void *pObject, LPCSTR /* lpszFileName */,
 
 void* AFXAPI AfxAllocMemoryDebug(size_t nSize, BOOL bIsObject,  LPCSTR lpszFileName, int nLine)
 {
-	return _malloc_dbg(nSize, bIsObject ? _AFX_CLIENT_BLOCK : _NORMAL_BLOCK,
+	return _malloc_dbg(nSize, bIsObject ? _AFX_CLIENT_BLOCK : SOURCE_MEM_NORMAL_BLOCK,
 		lpszFileName, nLine);
 }
 
 void AFXAPI AfxFreeMemoryDebug(void* pbData, BOOL bIsObject)
 {
-	_free_dbg(pbData, bIsObject ? _AFX_CLIENT_BLOCK : _NORMAL_BLOCK);
+	_free_dbg(pbData, bIsObject ? _AFX_CLIENT_BLOCK : SOURCE_MEM_NORMAL_BLOCK);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -341,7 +341,7 @@ void* __cdecl operator new(size_t nSize)
 	for (;;)
 	{
 #if !defined(_AFX_NO_DEBUG_CRT) && defined(_DEBUG)
-		pResult = _malloc_dbg(nSize, _NORMAL_BLOCK, NULL, 0);
+		pResult = _malloc_dbg(nSize, SOURCE_MEM_NORMAL_BLOCK, NULL, 0);
 #else
 		pResult = malloc(nSize);
 #endif
@@ -367,7 +367,7 @@ void* __cdecl operator new(size_t nSize)
 void __cdecl operator delete(void* p)
 {
 #if !defined(_AFX_NO_DEBUG_CRT) && defined(_DEBUG)
-		_free_dbg(p, _NORMAL_BLOCK);
+		_free_dbg(p, SOURCE_MEM_NORMAL_BLOCK);
 #else
 		free(p);
 #endif

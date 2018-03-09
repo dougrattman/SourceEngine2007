@@ -10,7 +10,7 @@
 #include "qlimits.h"
 #include "tier0/include/basetypes.h"
 
-// FIXME, remove more of these?
+// TODO(d.rattman): remove more of these?
 #include "cmd.h"
 #include "common.h"
 #include "gl_model.h"

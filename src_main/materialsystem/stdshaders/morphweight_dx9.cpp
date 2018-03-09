@@ -11,7 +11,7 @@
 #include "morphweight_vs30.inc"
 #include "morphweight_ps30.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define V1 1

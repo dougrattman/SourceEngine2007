@@ -1305,7 +1305,7 @@ void CTFWeaponBase::CreateMuzzleFlashEffects( C_BaseEntity *pAttachEnt, int nInd
 			{
 				m_hMuzzleFlashModel[nIndex] = C_MuzzleFlashModel::CreateMuzzleFlashModel( pszMuzzleFlashModel, pAttachEnt, iMuzzleFlashAttachment, flEffectLifetime );
 
-				// FIXME: This is an incredibly brutal hack to get muzzle flashes positioned correctly for recording
+				// TODO(d.rattman): This is an incredibly brutal hack to get muzzle flashes positioned correctly for recording
 				m_hMuzzleFlashModel[nIndex]->SetIs3rdPersonFlash( nIndex == 1 );
 			}
 		}
@@ -1778,19 +1778,19 @@ int CTFWeaponBase::ActivityListCount( void )
 	{
 	case TF_WPN_TYPE_PRIMARY:
 	default:
-		iSize = ARRAYSIZE(m_acttablePrimary);
+		iSize = SOURCE_ARRAYSIZE(m_acttablePrimary);
 		break;
 	case TF_WPN_TYPE_SECONDARY:
-		iSize = ARRAYSIZE(m_acttableSecondary);
+		iSize = SOURCE_ARRAYSIZE(m_acttableSecondary);
 		break;
 	case TF_WPN_TYPE_MELEE:
-		iSize = ARRAYSIZE(m_acttableMelee);
+		iSize = SOURCE_ARRAYSIZE(m_acttableMelee);
 		break;
 	case TF_WPN_TYPE_BUILDING:
-		iSize = ARRAYSIZE(m_acttableBuilding);
+		iSize = SOURCE_ARRAYSIZE(m_acttableBuilding);
 		break;
 	case TF_WPN_TYPE_PDA:
-		iSize = ARRAYSIZE(m_acttablePDA);
+		iSize = SOURCE_ARRAYSIZE(m_acttablePDA);
 		break;
 	}
 
@@ -1891,7 +1891,7 @@ float CalcViewModelBobHelper( CBasePlayer *player, BobState_t *pBobState )
 
 	pBobState->m_flLastSpeed = speed;
 
-	//FIXME: This maximum speed value must come from the server.
+	//TODO(d.rattman): This maximum speed value must come from the server.
 	//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
 	float bob_offset = RemapVal( speed, 0, 320, 0.0f, 1.0f );

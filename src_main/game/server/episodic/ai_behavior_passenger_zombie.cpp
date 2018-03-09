@@ -49,8 +49,8 @@ impactdamagetable_t gZombiePassengerImpactDamageTable = {
     zombieLinearTable,
     zombieAngularTable,
 
-    ARRAYSIZE(zombieLinearTable),
-    ARRAYSIZE(zombieAngularTable),
+    SOURCE_ARRAYSIZE(zombieLinearTable),
+    SOURCE_ARRAYSIZE(zombieAngularTable),
 
     24 * 24,    // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -215,7 +215,7 @@ int CAI_PassengerBehaviorZombie::SelectSchedule(void) {
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CAI_PassengerBehaviorZombie::CanJumpToAttachToVehicle(void) {
-  // FIXME: Probably move this up one level and out of this function
+  // TODO(d.rattman): Probably move this up one level and out of this function
   if (m_flNextLeapTime > gpGlobals->curtime) return false;
 
   // Predict an attachment jump
@@ -519,7 +519,7 @@ void CAI_PassengerBehaviorZombie::RunTask(const Task_t *pTask) {
 //-----------------------------------------------------------------------------
 float CAI_PassengerBehaviorZombie::GetEntryPointCost(
     const Vector &vecEntryPos) {
-  // FIXME: We don't care about cost any longer!
+  // TODO(d.rattman): We don't care about cost any longer!
   return 1.0f;
 
   // Find the direction from us to the entry point
@@ -603,7 +603,7 @@ void CAI_PassengerBehaviorZombie::CalculateBodyLean(void) {
                                              100.0f, -100.0f, -1.0f, 1.0f);
   flLateralDisp = std::clamp(flLateralDisp, -1.0f, 1.0f);
 
-  // FIXME: Framerate dependant!
+  // TODO(d.rattman): Framerate dependant!
   m_flLastLateralLean = (m_flLastLateralLean * 0.2f) + (flLateralDisp * 0.8f);
 
   // Factor in a "stun" if the zombie was moved too far off course
@@ -616,7 +616,7 @@ void CAI_PassengerBehaviorZombie::CalculateBodyLean(void) {
       m_vehicleState.m_vecDeltaVelocity.z, -50.0f, 50.0f, -1.0f, 1.0f);
   flVerticalDisp = std::clamp(flVerticalDisp, -1.0f, 1.0f);
 
-  // FIXME: Framerate dependant!
+  // TODO(d.rattman): Framerate dependant!
   m_flLastVerticalLean =
       (m_flLastVerticalLean * 0.75f) + (flVerticalDisp * 0.25f);
 
@@ -660,7 +660,7 @@ void CAI_PassengerBehaviorZombie::GatherVehicleStateConditions(void) {
       GetOuter()->TakeDamage(info);
     }
   } else if (flLateralDelta < -150.0f) {
-    // FIXME: Realistically this should interrupt and play a schedule to do it
+    // TODO(d.rattman): Realistically this should interrupt and play a schedule to do it
     GetOuter()->SetIdealActivity((Activity)ACT_PASSENGER_FLINCH);
   }
 }

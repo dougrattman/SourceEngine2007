@@ -141,7 +141,7 @@ class CUtlBuffer {
   bool IsExternallyAllocated() const;
   void AssumeMemory(void *pMemory, int nSize, int nInitialPut, int nFlags = 0);
 
-  FORCEINLINE void ActivateByteSwappingIfBigEndian(void) {
+  SOURCE_FORCEINLINE void ActivateByteSwappingIfBigEndian(void) {
     if (IsX360()) ActivateByteSwapping(true);
   }
 

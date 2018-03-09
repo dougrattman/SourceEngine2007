@@ -55,8 +55,8 @@ bool WriteMiniDumpUsingExceptionInfo(
     ++g_nMinidumpsWritten;
 
     // strip off the rest of the path from the .exe name
-    wch module_name[MAX_PATH];
-    ::GetModuleFileNameW(nullptr, module_name, ARRAYSIZE(module_name));
+    wch module_name[SOURCE_MAX_PATH];
+    ::GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
     wch *pch = wcsrchr(module_name, L'.');
     if (pch) {
       *pch = L'\0';
@@ -68,8 +68,8 @@ bool WriteMiniDumpUsingExceptionInfo(
     }
 
     // can't use the normal string functions since we're in tier0
-    wch file_name[MAX_PATH];
-    _snwprintf_s(file_name, ARRAYSIZE(file_name),
+    wch file_name[SOURCE_MAX_PATH];
+    _snwprintf_s(file_name, SOURCE_ARRAYSIZE(file_name),
                  L"%s_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp", pch ? pch : L"unknown",
                  g_bWritingNonfatalMinidump ? L"assert" : L"crash",
                  pTime->tm_year + 1900, /* Year less 2000 */
@@ -114,8 +114,8 @@ bool WriteMiniDumpUsingExceptionInfo(
 
     // mark any failed minidump writes by renaming them
     if (!bMinidumpResult) {
-      wch failed_file_name[_MAX_PATH];
-      _snwprintf_s(failed_file_name, ARRAYSIZE(failed_file_name), L"(failed)%s",
+      wch failed_file_name[SOURCE_MAX_PATH];
+      _snwprintf_s(failed_file_name, SOURCE_ARRAYSIZE(failed_file_name), L"(failed)%s",
                    file_name);
       _wrename(file_name, failed_file_name);
     }

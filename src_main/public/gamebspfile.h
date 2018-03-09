@@ -83,10 +83,10 @@ struct DetailObjectLump_t {
   unsigned char m_ShapeSize;    // size param for shaped sprites
   unsigned char m_Orientation;  // See DetailPropOrientation_t
   unsigned char
-      m_Padding2[3];     // FIXME: Remove when we rev the detail lump again..
+      m_Padding2[3];     // TODO(d.rattman): Remove when we rev the detail lump again..
   unsigned char m_Type;  // See DetailPropType_t
   unsigned char
-      m_Padding3[3];  // FIXME: Remove when we rev the detail lump again..
+      m_Padding3[3];  // TODO(d.rattman): Remove when we rev the detail lump again..
   float m_flScale;    // For sprites only currently
 };
 

@@ -1,10 +1,7 @@
 //====== Copyright © 1996-2007, Valve Corporation, All rights reserved. =======//
 //
 // Purpose: Common pixel shader code specific to flashlights
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+
 #ifndef COMMON_FLASHLIGHT_FXC_H_
 #define COMMON_FLASHLIGHT_FXC_H_
 

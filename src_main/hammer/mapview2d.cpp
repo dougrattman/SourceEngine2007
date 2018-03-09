@@ -14,11 +14,11 @@
 #include "TitleWnd.h"
 #include "mainfrm.h"
 #include "MapSolid.h"
-#include "ToolMorph.h"		// FIXME: remove
+#include "ToolMorph.h"		// TODO(d.rattman): remove
 #include "MapWorld.h"
 #include "camera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

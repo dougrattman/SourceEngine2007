@@ -38,7 +38,7 @@ public:
 };
 
 #define UTLCLASS_SAVERESTORE_VALIDATE_TYPE( type ) \
-	COMPILE_TIME_ASSERT( \
+	static_assert( \
 		type == FIELD_FLOAT ||\
 		type == FIELD_STRING ||\
 		type == FIELD_CLASSPTR ||\

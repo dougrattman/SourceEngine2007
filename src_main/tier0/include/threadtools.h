@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: A collection of utility classes to simplify thread handling, and
 // as much as possible contain portability problems. Here avoiding
@@ -7,9 +7,6 @@
 #ifndef SOURCE_TIER0_INCLUDE_THREADTOOLS_H_
 #define SOURCE_TIER0_INCLUDE_THREADTOOLS_H_
 
-#include <climits>
-
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
 #ifdef OS_WIN
@@ -17,11 +14,15 @@
 #endif
 
 #ifdef OS_POSIX
-#include <errno.h>
 #include <pthread.h>
+#include <cerrno>
 #endif
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include <climits>
+
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/tier0_api.h"
 #include "tier0/include/vcrmode.h"
@@ -30,36 +31,35 @@
 
 #ifndef _RETAIL
 #define THREAD_MUTEX_TRACING_SUPPORTED
+
 #if defined(OS_WIN) && !defined(NDEBUG)
 #define THREAD_MUTEX_TRACING_ENABLED
 #endif
-#endif
+#endif  // !_RETAIL
 
 #ifdef OS_WIN
 using HANDLE = void *;  //-V677
 #endif
 
-constexpr u32 TT_INFINITE{0xFFFFFFFFui32};
+constexpr u32 TT_INFINITE{0xFFFFFFFFui32};  //-V112
 
 #ifndef NO_THREAD_LOCAL
-
 #ifndef THREAD_LOCAL
 #define THREAD_LOCAL thread_local
-#endif
-
-#endif  // NO_THREAD_LOCAL
+#endif  // THREAD_LOCAL
+#endif  // !NO_THREAD_LOCAL
 
 using ThreadId_t = unsigned long;
 
 // Simple thread creation. Differs from VCR mode/CreateThread/_beginthreadex
 // in that it accepts a standard C function rather than compiler specific one.
-FORWARD_DECLARE_HANDLE(ThreadHandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(ThreadHandle_t);
 using ThreadFunc_t = u32 (*)(void *parameter);
 
-SOURCE_TIER0_API_OVERLOAD ThreadHandle_t CreateSimpleThread(ThreadFunc_t,
-                                                            void *pParam,
-                                                            ThreadId_t *pID,
-                                                            u32 stackSize = 0);
+SOURCE_TIER0_API_GLOBAL ThreadHandle_t CreateSimpleThread(ThreadFunc_t,
+                                                          void *pParam,
+                                                          ThreadId_t *pID,
+                                                          u32 stackSize = 0);
 SOURCE_TIER0_API ThreadHandle_t CreateSimpleThread(ThreadFunc_t, void *pParam,
                                                    u32 stackSize = 0);
 SOURCE_TIER0_API bool ReleaseThreadHandle(ThreadHandle_t);
@@ -77,13 +77,14 @@ SOURCE_TIER0_API void DeclareCurrentThreadIsMainThread();
 
 // NOTE: ThreadedLoadLibraryFunc_t needs to return the sleep time in
 // milliseconds or TT_INFINITE
-typedef i32 (*ThreadedLoadLibraryFunc_t)();
+using ThreadedLoadLibraryFunc_t = i32 (*)();
 SOURCE_TIER0_API void SetThreadedLoadLibraryFunc(
     ThreadedLoadLibraryFunc_t func);
 SOURCE_TIER0_API ThreadedLoadLibraryFunc_t GetThreadedLoadLibraryFunc();
 
 #if defined(OS_WIN) && !defined(ARCH_CPU_X86_64)
-extern "C" unsigned long __declspec(dllimport) __stdcall GetCurrentThreadId();
+extern "C" unsigned long __declspec(dllimport) SOURCE_STDCALL
+    GetCurrentThreadId();
 #define ThreadGetCurrentId GetCurrentThreadId
 #endif
 
@@ -108,7 +109,7 @@ SOURCE_TIER0_API void ThreadSetAffinity(ThreadHandle_t hThread,
                                         uintptr_t nAffinityMask);
 
 enum ThreadWaitResult_t {
-  TW_FAILED = 0xffffffff,   // WAIT_FAILED
+  TW_FAILED = 0xffffffff,   // WAIT_FAILED //-V112
   TW_TIMEOUT = 0x00000102,  // WAIT_TIMEOUT
 };
 
@@ -381,7 +382,7 @@ class SOURCE_TIER0_API_CLASS CThreadLocalBase {
 
 template <class T>
 class CThreadLocal : public CThreadLocalBase {
-  COMPILE_TIME_ASSERT(sizeof(T) <= sizeof(void *));
+  static_assert(sizeof(T) <= sizeof(void *));
 
  public:
   CThreadLocal() {}
@@ -469,8 +470,8 @@ class CThreadLocalPtr : private CThreadLocalBase {
   const T *operator->() const { return (T *)Get(); }
   const T &operator*() const { return *((T *)Get()); }
 
-  const T &operator[](i32 i) const { return *((T *)Get() + i); }
-  T &operator[](i32 i) { return *((T *)Get() + i); }
+  const T &operator[](usize i) const { return *((T *)Get() + i); }
+  T &operator[](usize i) { return *((T *)Get() + i); }
 
  private:
   // Disallowed operations
@@ -494,9 +495,7 @@ class CThreadLocalPtr : private CThreadLocalBase {
 template <typename T>
 class CInterlockedIntT {
  public:
-  CInterlockedIntT() : m_value(0) {
-    COMPILE_TIME_ASSERT(sizeof(T) == sizeof(long));
-  }
+  CInterlockedIntT() : m_value(0) { static_assert(sizeof(T) == sizeof(long)); }
   CInterlockedIntT(T value) : m_value(value) {}
 
   operator T() const { return m_value; }
@@ -547,8 +546,8 @@ class CInterlockedIntT {
   volatile T m_value;
 };
 
-typedef CInterlockedIntT<i32> CInterlockedInt;
-typedef CInterlockedIntT<u32> CInterlockedUInt;
+using CInterlockedInt = CInterlockedIntT<i32>;
+using CInterlockedUInt = CInterlockedIntT<u32>;
 
 template <typename T>
 class CInterlockedPtr {
@@ -559,7 +558,7 @@ class CInterlockedPtr {
 #endif
  public:
   CInterlockedPtr() : m_value{nullptr} {
-    COMPILE_TIME_ASSERT(sizeof(T *) == sizeof(pointer_type));
+    static_assert(sizeof(T *) == sizeof(pointer_type));
   }
   CInterlockedPtr(T *value) : m_value{value} {}
 
@@ -689,7 +688,7 @@ class SOURCE_TIER0_API_CLASS CThreadFastMutex {
   CThreadFastMutex() : m_ownerID(0), m_depth(0) {}
 
  private:
-  FORCEINLINE bool TryLockInline(const u32 threadId) volatile {
+  SOURCE_FORCEINLINE bool TryLockInline(const u32 threadId) volatile {
     if (threadId != m_ownerID &&
         !ThreadInterlockedAssignIf((volatile long *)&m_ownerID, (long)threadId,
                                    0))
@@ -714,7 +713,7 @@ class SOURCE_TIER0_API_CLASS CThreadFastMutex {
   }
 
 #ifdef NDEBUG
-  FORCEINLINE
+  SOURCE_FORCEINLINE
 #endif
   void Lock(u32 nSpinSleepTime = 0) volatile {
     const u32 threadId = ThreadGetCurrentId();
@@ -733,7 +732,7 @@ class SOURCE_TIER0_API_CLASS CThreadFastMutex {
   }
 
 #ifdef NDEBUG
-  FORCEINLINE
+  SOURCE_FORCEINLINE
 #endif
   void Unlock() volatile {
 #ifndef NDEBUG
@@ -768,7 +767,7 @@ class SOURCE_TIER0_API_CLASS CThreadFastMutex {
   i32 m_depth;
 };
 
-class ALIGN128 CAlignedThreadFastMutex : public CThreadFastMutex {
+class alignas(128) CAlignedThreadFastMutex : public CThreadFastMutex {
  public:
   CAlignedThreadFastMutex() {  //-V730
     Assert((usize)this % 128 == 0 && sizeof(*this) == 128);
@@ -779,7 +778,7 @@ class ALIGN128 CAlignedThreadFastMutex : public CThreadFastMutex {
 };
 
 #else
-typedef CThreadMutex CThreadFastMutex;
+using CThreadFastMutex = CThreadMutex;
 #endif
 
 class CThreadNullMutex {
@@ -868,17 +867,20 @@ class CThreadTerminalMutex : public BaseClass {
 template <class MUTEX_TYPE = CThreadMutex>
 class CAutoLockT {
  public:
-  _Acquires_lock_(this->m_lock) FORCEINLINE CAutoLockT(MUTEX_TYPE &lock)
+  _Acquires_lock_(this->m_lock) SOURCE_FORCEINLINE CAutoLockT(MUTEX_TYPE &lock)
       : m_lock(lock) {
     m_lock.Lock();
   }
 
-  _Acquires_lock_(this->m_lock) FORCEINLINE CAutoLockT(const MUTEX_TYPE &lock)
+  _Acquires_lock_(this->m_lock) SOURCE_FORCEINLINE
+      CAutoLockT(const MUTEX_TYPE &lock)
       : m_lock(const_cast<MUTEX_TYPE &>(lock)) {
     m_lock.Lock();
   }
 
-  _Releases_lock_(this->m_lock) FORCEINLINE ~CAutoLockT() { m_lock.Unlock(); }
+  _Releases_lock_(this->m_lock) SOURCE_FORCEINLINE ~CAutoLockT() {
+    m_lock.Unlock();
+  }
 
  private:
   MUTEX_TYPE &m_lock;
@@ -888,7 +890,7 @@ class CAutoLockT {
   CAutoLockT<MUTEX_TYPE> &operator=(const CAutoLockT<MUTEX_TYPE> &) = delete;
 };
 
-typedef CAutoLockT<CThreadMutex> CAutoLock;
+using CAutoLock = CAutoLockT<CThreadMutex>;
 
 template <i32 size>
 struct CAutoLockTypeDeducer {};
@@ -912,7 +914,7 @@ struct CAutoLockTypeDeducer<sizeof(CAlignedThreadFastMutex)> {
 #endif
 
 #define AUTO_LOCK_(type, mutex) \
-  CAutoLockT<type> UNIQUE_ID(static_cast<const type &>(mutex))
+  CAutoLockT<type> SOURCE_UNIQUE_ID(static_cast<const type &>(mutex))
 
 #define AUTO_LOCK(mutex) \
   AUTO_LOCK_(CAutoLockTypeDeducer<sizeof(mutex)>::Type_t, mutex)
@@ -1075,7 +1077,7 @@ class SOURCE_TIER0_API_CLASS CThreadRWLock {
 };
 
 // CThreadSpinRWLock
-#define TFRWL_ALIGN ALIGN8
+#define TFRWL_ALIGN alignas(8)
 
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
@@ -1083,7 +1085,7 @@ MSVC_DISABLE_WARNING(4324)
 class TFRWL_ALIGN SOURCE_TIER0_API_CLASS CThreadSpinRWLock {
  public:
   CThreadSpinRWLock() {
-    COMPILE_TIME_ASSERT(sizeof(LockInfo_t) == sizeof(i64));
+    static_assert(sizeof(LockInfo_t) == sizeof(i64));
     Assert((uintptr_t)this % 8 == 0);
     memset(this, 0, sizeof(*this));
   }
@@ -1269,7 +1271,7 @@ class SOURCE_TIER0_API_CLASS CThread {
 #endif
 
   // "Virtual static" facility
-  typedef u32(__stdcall *ThreadProc_t)(void *);
+  typedef u32(SOURCE_STDCALL *ThreadProc_t)(void *);
   virtual ThreadProc_t GetThreadProc();
 
   CThreadMutex m_Lock;
@@ -1287,11 +1289,11 @@ class SOURCE_TIER0_API_CLASS CThread {
     bool *pfInitSuccess;
   };
 
-  static u32 __stdcall ThreadProc(void *pv);
+  static u32 SOURCE_STDCALL ThreadProc(void *pv);
 
   // make copy constructor and assignment operator inaccessible
-  CThread(const CThread &);
-  CThread &operator=(const CThread &);
+  CThread(const CThread &) = delete;
+  CThread &operator=(const CThread &) = delete;
 
 #ifdef OS_WIN
   HANDLE m_hThread;
@@ -1300,7 +1302,7 @@ class SOURCE_TIER0_API_CLASS CThread {
   pthread_t m_threadId;
 #endif
   i32 m_result;
-  ch m_szName[32];
+  ch m_szName[64];
   void *m_pStackBase;
   u32 m_flags;
 };
@@ -1358,8 +1360,8 @@ class SOURCE_TIER0_API_CLASS CWorkerThread : public CThread {
   i32 BoostPriority();
 
  protected:
-  typedef u32(__stdcall *WaitFunc_t)(u32 nHandles, const HANDLE *pHandles,
-                                     i32 bWaitAll, u32 timeout);
+  typedef u32(SOURCE_STDCALL *WaitFunc_t)(u32 nHandles, const HANDLE *pHandles,
+                                          i32 bWaitAll, u32 timeout);
   i32 Call(u32, u32 timeout, bool fBoost, WaitFunc_t = nullptr);
   i32 WaitForReply(u32 timeout, WaitFunc_t);
 
@@ -1378,7 +1380,7 @@ class SOURCE_TIER0_API_CLASS CWorkerThread : public CThread {
 
 #else
 
-typedef CThread CWorkerThread;
+using CWorkerThread = CThread;
 
 #endif
 
@@ -1447,18 +1449,18 @@ class CMessageQueue {
 // to decide debug status (tracing)
 
 #ifdef OS_WIN
-typedef struct _RTL_CRITICAL_SECTION RTL_CRITICAL_SECTION;
-typedef RTL_CRITICAL_SECTION CRITICAL_SECTION;
+using RTL_CRITICAL_SECTION = struct _RTL_CRITICAL_SECTION;
+using CRITICAL_SECTION = RTL_CRITICAL_SECTION;
 
 extern "C" {
-void __declspec(dllimport) __stdcall InitializeCriticalSection(
-    _Out_ CRITICAL_SECTION *);
-void __declspec(dllimport) __stdcall EnterCriticalSection(
-    _Inout_ CRITICAL_SECTION *);
-void __declspec(dllimport) __stdcall LeaveCriticalSection(
-    _Inout_ CRITICAL_SECTION *);
-void __declspec(dllimport) __stdcall DeleteCriticalSection(
-    _Inout_ CRITICAL_SECTION *);
+void __declspec(dllimport) SOURCE_STDCALL
+    InitializeCriticalSection(_Out_ CRITICAL_SECTION *);
+void __declspec(dllimport) SOURCE_STDCALL
+    EnterCriticalSection(_Inout_ CRITICAL_SECTION *);
+void __declspec(dllimport) SOURCE_STDCALL
+    LeaveCriticalSection(_Inout_ CRITICAL_SECTION *);
+void __declspec(dllimport) SOURCE_STDCALL
+    DeleteCriticalSection(_Inout_ CRITICAL_SECTION *);
 };
 
 //---------------------------------------------------------

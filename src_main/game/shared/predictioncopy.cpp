@@ -17,7 +17,7 @@
 #include "tier1/fmtstr.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // --------------------------------------------------------------
@@ -923,7 +923,7 @@ void CPredictionCopy::CopyFields(int chain_count, datamap_t *pRootMap,
 
         m_pCurrentClassName = m_pCurrentField->td->dataClassName;
 
-        // FIXME: Should this be done outside the FIELD_EMBEDDED case??
+        // TODO(d.rattman): Should this be done outside the FIELD_EMBEDDED case??
         // Don't follow the pointer if we're reading from a compressed packet
         m_pSrc = pInputData;
         if ((flags & FTYPEDESC_PTR) && (m_nSrcOffsetIndex == PC_DATA_NORMAL)) {

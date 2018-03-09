@@ -27,9 +27,9 @@ static ConVar tf_stats( "tf_stats", "0", 0, "Enable stat gathering for TF2." );
 #define TF_TEAM_STAT_FILE	"tf_stat_team"
 #define TF_PLAYER_STAT_FILE "tf_stat_class"
 
-static char s_pStatFile[MAX_PATH];
-static char s_pTeamStatFile[MAX_PATH];
-static char s_pPlayerStatFile[MAX_PATH];
+static char s_pStatFile[SOURCE_MAX_PATH];
+static char s_pTeamStatFile[SOURCE_MAX_PATH];
+static char s_pPlayerStatFile[SOURCE_MAX_PATH];
 
 //-----------------------------------------------------------------------------
 // Strings assocaited with the stats

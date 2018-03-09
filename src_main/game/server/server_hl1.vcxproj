@@ -1190,7 +1190,7 @@ if exist ..\..\devtools\bin\vpc.exe ..\..\devtools\bin\vpc.exe -crc server_hl1.v
     <ClInclude Include="..\..\public\materialsystem\imaterialsystem.h" />
     <ClInclude Include="..\..\public\materialsystem\imaterialvar.h" />
     <ClInclude Include="..\..\public\MATHLIB.H" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\..\public\mathlib\compressed_light_cube.h" />
     <ClInclude Include="..\..\public\mathlib\compressed_vector.h" />
@@ -1272,7 +1272,7 @@ if exist ..\..\devtools\bin\vpc.exe ..\..\devtools\bin\vpc.exe -crc server_hl1.v
     <ClInclude Include="..\..\public\vstdlib\random.h" />
     <ClInclude Include="..\..\public\vstdlib\strtools.h" />
     <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
-    <ClInclude Include="..\..\public\winlite.h" />
+    <ClInclude Include="..\..\base\include\windows\windows_light.h" />
     <ClInclude Include="..\..\public\worldsize.h" />
     <ClInclude Include="..\..\public\zip_uncompressed.h" />
     <ClInclude Include="..\..\steam\steam_api.h" />

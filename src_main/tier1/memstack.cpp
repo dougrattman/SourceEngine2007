@@ -11,7 +11,7 @@
 #define VA_RESERVE_FLAGS (MEM_RESERVE | MEM_LARGE_PAGES)
 #endif
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier1/utlmap.h"
 
@@ -141,7 +141,7 @@ int CMemoryStack::GetSize() {
 
 //-------------------------------------
 
-bool CMemoryStack::CommitTo(uint8_t *RESTRICT pNextAlloc) {
+bool CMemoryStack::CommitTo(uint8_t *SOURCE_RESTRICT pNextAlloc) {
 #if defined(_WIN32)
   unsigned char *pNewCommitLimit = AlignValue(pNextAlloc, m_commitSize);
   unsigned commitSize = pNewCommitLimit - m_pCommitLimit;

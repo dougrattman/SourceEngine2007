@@ -246,8 +246,8 @@ MString CVsVmtCmd::GetVmtPath()
 	MString vmtPath;
 	mArgDatabase.getFlagArgument( kOptVmtPath, 0, vmtPath );
 
-	char buf0[ MAX_PATH ];
-	char buf1[ MAX_PATH ];
+	char buf0[ SOURCE_MAX_PATH ];
+	char buf1[ SOURCE_MAX_PATH ];
 
 	// Clean up the passed material name
 	if ( !g_pFullFileSystem->FullPathToRelativePath( vmtPath.asChar(), buf0, sizeof( buf0 ) ) )
@@ -349,8 +349,8 @@ MStatus CVsVmtCmd::redoIt()
 			mArgDatabase.getFlagArgument( kOptVmtPath, 0, vmtPath );
 		}
 
-		char buf0[ MAX_PATH ];
-		char buf1[ MAX_PATH ];
+		char buf0[ SOURCE_MAX_PATH ];
+		char buf1[ SOURCE_MAX_PATH ];
 
 		// Clean up the passed material name
 		if ( !g_pFullFileSystem->FullPathToRelativePath( vmtPath.asChar(), buf0, sizeof( buf0 ) ) )

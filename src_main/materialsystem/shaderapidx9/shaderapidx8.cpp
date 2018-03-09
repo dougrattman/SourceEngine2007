@@ -14,8 +14,9 @@ from somewhere (shaderapidx8.cpp, GetModeCount, GetModeInfo) -record frame sync
 objects (allocframesyncobjects, free framesync objects, ForceHardwareSync) -Need
 to fix ENVMAPMASKSCALE, BUMPOFFSET in lightmappedgeneric*.cpp and
 vertexlitgeneric*.cpp fix this:
-                // FIXME: This also depends on the vertex format and whether or
-not we are static lit in dx9 #ifndef SHADERAPIDX9 if
+
+TODO(d.rattman): This also depends on the vertex format and
+whether or not we are static lit in dx9 #ifndef SHADERAPIDX9 if
 (m_DynamicState.m_VertexShader != shader) // garymcthack #endif // !SHADERAPIDX9
 unrelated to dx9:
 mat_fullbright 1 doesn't work properly on alpha materials in testroom_standards
@@ -42,6 +43,7 @@ mat_fullbright 1 doesn't work properly on alpha materials in testroom_standards
 #include "UtlStack.h"
 #include "UtlVector.h"
 #include "VertexShaderDX8.h"
+#include "base/include/compiler_specific.h"
 #include "color.h"
 #include "imeshdx8.h"
 #include "ishadersystem.h"
@@ -55,7 +57,6 @@ mat_fullbright 1 doesn't work properly on alpha materials in testroom_standards
 #include "shaderapi/commandbuffer.h"
 #include "shaderapidx8_global.h"
 #include "textureheap.h"
-#include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
 #include "tier0/include/vprof.h"
@@ -94,7 +95,6 @@ mat_fullbright 1 doesn't work properly on alpha materials in testroom_standards
 #include "stubd3ddevice.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 ConVar mat_texture_limit(
@@ -382,7 +382,7 @@ struct Texture_t {
     m_pTextureGroupCounterFrame = NULL;
   }
 
-  // FIXME: Compress this info
+  // TODO(d.rattman): Compress this info
   D3DTEXTUREADDRESS m_UTexWrap;
   D3DTEXTUREADDRESS m_VTexWrap;
   D3DTEXTUREADDRESS m_WTexWrap;
@@ -701,9 +701,10 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
                      bool bUsingFlex, bool bUsingMorph);
 
   // Sets the constant register for vertex and pixel shaders
-  FORCEINLINE void SetVertexShaderConstantInternal(int var, float const *pVec,
-                                                   int numVecs = 1,
-                                                   bool bForce = false);
+  SOURCE_FORCEINLINE void SetVertexShaderConstantInternal(int var,
+                                                          float const *pVec,
+                                                          int numVecs = 1,
+                                                          bool bForce = false);
 
   void SetVertexShaderConstant(int var, float const *pVec, int numVecs = 1,
                                bool bForce = false);
@@ -714,8 +715,10 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
 
   void SetPixelShaderConstant(int var, float const *pVec, int numVecs = 1,
                               bool bForce = false);
-  FORCEINLINE void SetPixelShaderConstantInternal(int var, float const *pValues,
-                                                  int nNumConsts, bool bForce);
+  SOURCE_FORCEINLINE void SetPixelShaderConstantInternal(int var,
+                                                         float const *pValues,
+                                                         int nNumConsts,
+                                                         bool bForce);
 
   void SetBooleanPixelShaderConstant(int var, BOOL const *pVec,
                                      int numBools = 1, bool bForce = false);
@@ -741,11 +744,12 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
 
   bool IsTexture(ShaderAPITextureHandle_t textureHandle);
   bool IsTextureResident(ShaderAPITextureHandle_t textureHandle);
-  FORCEINLINE bool TextureIsAllocated(ShaderAPITextureHandle_t hTexture) {
+  SOURCE_FORCEINLINE bool TextureIsAllocated(
+      ShaderAPITextureHandle_t hTexture) {
     return m_Textures.IsValidIndex(hTexture) &&
            (GetTexture(hTexture).m_Flags & Texture_t::IS_ALLOCATED);
   }
-  FORCEINLINE void AssertValidTextureHandle(
+  SOURCE_FORCEINLINE void AssertValidTextureHandle(
       ShaderAPITextureHandle_t textureHandle) {
 #ifdef _DEBUG
     Assert(TextureIsAllocated(textureHandle));
@@ -843,7 +847,7 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
   void ClearSnapshots();
 
   // returns the D3D interfaces....
-  FORCEINLINE D3DDeviceWrapper *Dx9Device() const {
+  SOURCE_FORCEINLINE D3DDeviceWrapper *Dx9Device() const {
     return (D3DDeviceWrapper *)&(m_DeviceWrapper);
   }
 
@@ -1257,7 +1261,7 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
   void SetPixelShaderFogParams(int reg);
   void SetPixelShaderFogParams(int reg, ShaderFogMode_t fogMode);
 
-  FORCEINLINE void UpdateVertexShaderFogParams() {
+  SOURCE_FORCEINLINE void UpdateVertexShaderFogParams() {
     if (g_pHardwareConfig->Caps().m_SupportsPixelShaders) {
       float ooFogRange = 1.0f;
 
@@ -1377,20 +1381,20 @@ class CShaderAPIDx8 : public CShaderDeviceDx8,
                                ImageFormat srcFormat, ImageFormat dstFormat,
                                int nDstStride);
 
-  FORCEINLINE void SetTransform(D3DTRANSFORMSTATETYPE State,
-                                CONST D3DXMATRIX *pMatrix) {
+  SOURCE_FORCEINLINE void SetTransform(D3DTRANSFORMSTATETYPE State,
+                                       CONST D3DXMATRIX *pMatrix) {
 #if !defined(_X360)
     Dx9Device()->SetTransform(State, pMatrix);
 #endif
   }
 
-  FORCEINLINE void SetLight(DWORD Index, CONST D3DLIGHT9 *pLight) {
+  SOURCE_FORCEINLINE void SetLight(DWORD Index, CONST D3DLIGHT9 *pLight) {
 #if !defined(_X360)
     Dx9Device()->SetLight(Index, pLight);
 #endif
   }
 
-  FORCEINLINE void LightEnable(DWORD LightIndex, bool bEnable) {
+  SOURCE_FORCEINLINE void LightEnable(DWORD LightIndex, bool bEnable) {
 #if !defined(_X360)
     Dx9Device()->LightEnable(LightIndex, bEnable);
 #endif
@@ -1741,7 +1745,7 @@ static CShaderAPIDx8 g_ShaderAPIDX8;
 IShaderAPIDX8 *g_pShaderAPIDX8 = &g_ShaderAPIDX8;
 CShaderDeviceDx8 *g_pShaderDeviceDx8 = &g_ShaderAPIDX8;
 
-// FIXME: Remove IShaderAPI + IShaderDevice; they change after SetMode
+// TODO(d.rattman): Remove IShaderAPI + IShaderDevice; they change after SetMode
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderAPIDx8, IShaderAPI,
                                   SHADERAPI_INTERFACE_VERSION, g_ShaderAPIDX8)
 
@@ -1812,7 +1816,7 @@ CShaderAPIDx8::CShaderAPIDx8()
       m_fShadowDepthBias(0.00008f),
       m_hCachedRenderTarget(INVALID_SHADERAPI_TEXTURE_HANDLE),
       m_bUsingSRGBRenderTarget(false) {
-  // FIXME: Remove! Backward compat
+  // TODO(d.rattman): Remove! Backward compat
   m_bAdapterSet = false;
   m_bBuffer2FramesAhead = false;
   m_bReadPixelsEnabled = true;
@@ -1893,12 +1897,12 @@ CShaderAPIDx8::~CShaderAPIDx8() {
 }
 
 void CShaderAPIDx8::ClearStdTextureHandles() {
-  for (int i = 0; i < ARRAYSIZE(m_StdTextureHandles); i++)
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_StdTextureHandles); i++)
     m_StdTextureHandles[i] = INVALID_SHADERAPI_TEXTURE_HANDLE;
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Remove! Backward compat.
+// TODO(d.rattman): Remove! Backward compat.
 //-----------------------------------------------------------------------------
 bool CShaderAPIDx8::OnAdapterSet() {
   if (!DetermineHardwareCaps()) return false;
@@ -1906,7 +1910,8 @@ bool CShaderAPIDx8::OnAdapterSet() {
   // Modify the caps based on requested DXlevels
   int nForcedDXLevel = CommandLine()->ParmValue("-dxlevel", 0);
 
-  // FIXME: Check g_pHardwareConfig->ActualCaps() for a preferred DX level
+  // TODO(d.rattman): Check g_pHardwareConfig->ActualCaps() for a preferred DX
+  // level
   OverrideCaps(nForcedDXLevel);
 
   m_bAdapterSet = true;
@@ -2097,7 +2102,8 @@ void CShaderAPIDx8::OnDeviceShutdown() {
 bool CShaderAPIDx8::SetMode(void *hWnd, int nAdapter,
                             const ShaderDeviceInfo_t &info) {
   //
-  // FIXME: Note that this entire function is backward compat and will go soon
+  // TODO(d.rattman): Note that this entire function is backward compat and will
+  // go soon
   //
 
   bool bRestoreNeeded = false;
@@ -2248,7 +2254,7 @@ void CShaderAPIDx8::DXSupportLevelChanged() {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Remove! Backward compat only
+// TODO(d.rattman): Remove! Backward compat only
 //-----------------------------------------------------------------------------
 int CShaderAPIDx8::GetActualTextureStageCount() const {
   return g_pHardwareConfig->GetActualTextureStageCount();
@@ -3132,7 +3138,7 @@ void CShaderAPIDx8::ResetRenderState(bool bFullReset) {
     SetSamplerState(i, D3DSAMP_BORDERCOLOR, RGB(0, 0, 0));
   }
 
-  // FIXME!!!!! : This barfs with the debug runtime on 6800.
+  // TODO(d.rattman): This barfs with the debug runtime on 6800.
   for (i = 0; i < g_pHardwareConfig->ActualCaps().m_nVertexTextureCount; i++) {
     m_DynamicState.m_VertexTextureState[i].m_BoundTexture =
         INVALID_SHADERAPI_TEXTURE_HANDLE;
@@ -3351,8 +3357,8 @@ void CShaderAPIDx8::SetDefaultState() {
   // per pass/batch virtual function calls.
   int numTextureStages = g_pHardwareConfig->GetTextureStageCount();
 
-  // FIXME: This is a brutal hack. We only need to load these transforms for
-  // fixed-function hardware. Cap the max here to 4.
+  // TODO(d.rattman): This is a brutal hack. We only need to load these
+  // transforms for fixed-function hardware. Cap the max here to 4.
   if (IsPC()) {
     numTextureStages = std::min(numTextureStages, 4);
     int i;
@@ -3504,7 +3510,7 @@ void CShaderAPIDx8::DrawWithVertexAndIndexBuffers() {
 #endif
 
   //	m_pRenderMesh = pMesh;
-  // FIXME: need to make this deal with multiple streams, etc.
+  // TODO(d.rattman): need to make this deal with multiple streams, etc.
   VertexFormat_t vertexFormat = MeshMgr()->GetCurrentVertexFormat();
   SetVertexDecl(vertexFormat, false /*m_pRenderMesh->HasColorMesh()*/,
                 false /*m_pRenderMesh->HasFlexMesh()*/,
@@ -3605,8 +3611,8 @@ void CShaderAPIDx8::ForceHardwareSync() {
     BOOL bDummy;
     HRESULT hr;
 
-    // FIXME: Could install a callback into the materialsystem to do something
-    // while waiting for the frame to finish (update sound, etc.)
+    // TODO(d.rattman): Could install a callback into the materialsystem to do
+    // something while waiting for the frame to finish (update sound, etc.)
 
     // Disable VCR mode here or else it'll screw up (and we don't really care if
     // this part plays back in exactly the same amount of time).
@@ -3814,7 +3820,7 @@ void CShaderAPIDx8::ReleaseShaderObjects() {
   ReleaseInternalRenderTargets();
   EvictManagedResourcesInternal();
 
-  // FIXME: Move into shaderdevice when textures move over.
+  // TODO(d.rattman): Move into shaderdevice when textures move over.
 
 #ifdef _DEBUG
   // Helps to find the unreleased textures.
@@ -4031,7 +4037,7 @@ MorphFormat_t CShaderAPIDx8::GetBoundMorphFormat() {
 // returns the current time in seconds...
 //-----------------------------------------------------------------------------
 double CShaderAPIDx8::CurrentTime() const {
-  // FIXME: Return game time instead of real time!
+  // TODO(d.rattman): Return game time instead of real time!
   // Or eliminate this altogether and put it into a material var
   // (this is used by vertex modifiers in shader code at the moment)
   return Plat_FloatTime();
@@ -4054,8 +4060,8 @@ void CShaderAPIDx8::ApplyZBias(const ShadowState_t &shaderState) {
                 ? 1.0f / config.m_DepthBias_Normal
                 : 0.0f;
 
-  // FIXME: No longer necessary; may be necessary if you want to use cat 4.3
-  // drivers? GR - hack for R200
+  // TODO(d.rattman): No longer necessary; may be necessary if you want to use
+  // cat 4.3 drivers? GR - hack for R200
   bool bPS14Only = g_pHardwareConfig->Caps().m_SupportsPixelShaders_1_4 &&
                    !g_pHardwareConfig->Caps().m_SupportsPixelShaders_2_0;
   if ((g_pHardwareConfig->Caps().m_VendorID == 0x1002) && bPS14Only) {
@@ -4483,7 +4489,7 @@ D3DCULL CShaderAPIDx8::GetCullMode() const {
 }
 
 void CShaderAPIDx8::SetRasterState(const ShaderRasterState_t &state) {
-  // FIXME: Implement!
+  // TODO(d.rattman): Implement!
 }
 
 void CShaderAPIDx8::ForceDepthFuncEquals(bool bEnable) {
@@ -4997,7 +5003,7 @@ void CShaderAPIDx8::UpdatePixelFogColorConstant() {
     } break;
 
     default:
-      UNREACHABLE();
+      SOURCE_UNREACHABLE();
   };
 
   fogColor[3] = 1.0f / m_DynamicState.m_DestAlphaDepthRange;
@@ -5049,7 +5055,7 @@ void CShaderAPIDx8::ApplyFogMode(ShaderFogMode_t fogMode,
       GetSceneFogColor(&r, &g, &b);  // Scene fog color
       break;
     default:
-      UNREACHABLE();
+      SOURCE_UNREACHABLE();
   }
 
   bShouldGammaCorrect &= !bDisableFogGammaCorrection;
@@ -5362,7 +5368,7 @@ void CShaderAPIDx8::DestroyVertexBuffers(bool bExitingLevel) {
 
 int CShaderAPIDx8::GetCurrentDynamicVBSize() { return m_nDynamicVBSize; }
 
-FORCEINLINE void CShaderAPIDx8::SetVertexShaderConstantInternal(
+SOURCE_FORCEINLINE void CShaderAPIDx8::SetVertexShaderConstantInternal(
     int var, float const *pVec, int numVecs, bool bForce) {
   Assert(pVec);
 
@@ -5454,7 +5460,7 @@ void CShaderAPIDx8::SetIntegerVertexShaderConstant(int var, int const *pVec,
          numIntVecs * sizeof(IntVector4D));
 }
 
-FORCEINLINE void CShaderAPIDx8::SetPixelShaderConstantInternal(
+SOURCE_FORCEINLINE void CShaderAPIDx8::SetPixelShaderConstantInternal(
     int nStartConst, float const *pValues, int nNumConsts, bool bForce) {
   Assert(nStartConst + nNumConsts <=
          g_pHardwareConfig->NumPixelShaderConstants());
@@ -5488,26 +5494,26 @@ void CShaderAPIDx8::SetPixelShaderConstant(int var, float const *pVec,
 }
 
 template <class T>
-FORCEINLINE T GetData(uint8_t const *pData) {
+SOURCE_FORCEINLINE T GetData(uint8_t const *pData) {
   return *(reinterpret_cast<T const *>(pData));
 }
 
 void CShaderAPIDx8::SetStandardTextureHandle(StandardTextureId_t nId,
                                              ShaderAPITextureHandle_t nHandle) {
-  Assert(nId < ARRAYSIZE(m_StdTextureHandles));
+  Assert(nId < SOURCE_ARRAYSIZE(m_StdTextureHandles));
   m_StdTextureHandles[nId] = nHandle;
 }
 
 void CShaderAPIDx8::ExecuteCommandBuffer(uint8_t *pCmdBuf) {
   uint8_t *pReturnStack[20];
-  uint8_t **pSP = &pReturnStack[ARRAYSIZE(pReturnStack)];
+  uint8_t **pSP = &pReturnStack[SOURCE_ARRAYSIZE(pReturnStack)];
   uint8_t *pLastCmd;
   for (;;) {
     uint8_t *pCmd = pCmdBuf;
     int nCmd = GetData<int>(pCmdBuf);
     switch (nCmd) {
       case CBCMD_END: {
-        if (pSP == &pReturnStack[ARRAYSIZE(pReturnStack)])
+        if (pSP == &pReturnStack[SOURCE_ARRAYSIZE(pReturnStack)])
           return;
         else {
           // pop pc
@@ -6059,10 +6065,9 @@ ShaderAPITextureHandle_t CShaderAPIDx8::CreateDepthTexture(
   return i;
 }
 
-// FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Could keep a free-list for this instead of linearly searching.  We
-// don't create textures all the time, so this is probably fine for now.
-// FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO(d.rattman): Could keep a free-list for this instead of linearly
+// searching.  We don't create textures all the time, so this is probably fine
+// for now.
 ShaderAPITextureHandle_t CShaderAPIDx8::CreateTextureHandle() {
   ShaderAPITextureHandle_t handle;
   CreateTextureHandles(&handle, 1);
@@ -6305,7 +6310,7 @@ void CShaderAPIDx8::DeleteD3DTexture(ShaderAPITextureHandle_t hTexture) {
       texture.GetDepthStencilSurface() = 0;
       numDeallocated = 1;
     } else {
-      // FIXME: we hit this on shutdown of HLMV on some machines
+      // TODO(d.rattman): we hit this on shutdown of HLMV on some machines
       Assert(0);
     }
   } else if (texture.m_NumCopies == 1) {
@@ -6346,7 +6351,7 @@ void CShaderAPIDx8::DeleteD3DTexture(ShaderAPITextureHandle_t hTexture) {
   }
 
   // remove this texture from std textures
-  for (int i = 0; i < ARRAYSIZE(m_StdTextureHandles); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_StdTextureHandles); i++) {
     if (m_StdTextureHandles[i] == hTexture)
       m_StdTextureHandles[i] = INVALID_SHADERAPI_TEXTURE_HANDLE;
   }
@@ -7626,7 +7631,7 @@ static const char *BlendModeToString(int blendMode) {
 // Spew Board State
 //-----------------------------------------------------------------------------
 void CShaderAPIDx8::SpewBoardState() {
-  // FIXME: This has regressed
+  // TODO(d.rattman): This has regressed
   return;
 #ifdef DEBUG_BOARD_STATE
   char buf[256];
@@ -7731,8 +7736,8 @@ void CShaderAPIDx8::BeginPass(StateSnapshot_t snapshot) {
 
   m_nCurrentSnapshot = snapshot;
   //	Assert( m_pRenderMesh );
-  // FIXME: This only does anything with temp meshes, so don't bother yet for
-  // the new code.
+  // TODO(d.rattman): This only does anything with temp meshes, so don't bother
+  // yet for the new code.
   if (m_pRenderMesh) {
     m_pRenderMesh->BeginPass();
   }
@@ -7922,7 +7927,7 @@ void CShaderAPIDx8::UpdateMatrixTransform(TransformType_t type) {
     // NOTE: Flush shouldn't happen here because we
     // expect that texture transforms will be set within the shader
 
-    // FIXME: We only want to use D3DTTFF_COUNT3 for cubemaps
+    // TODO(d.rattman): We only want to use D3DTTFF_COUNT3 for cubemaps
     // D3DTFF_COUNT2 is used for non-cubemaps. Of course, if there's
     // no performance penalty for COUNT3, we should just use that.
     D3DTEXTURETRANSFORMFLAGS transformFlags;
@@ -8184,7 +8189,7 @@ void CShaderAPIDx8::Ortho(double left, double top, double right, double bottom,
   if (MatrixIsChanging()) {
     D3DXMATRIX matrix;
 
-    // FIXME: This is being used incorrectly! Should read:
+    // TODO(d.rattman): This is being used incorrectly! Should read:
     // D3DXMatrixOrthoOffCenterRH( &matrix, left, right, bottom, top, zNear,
     // zFar ); Which is certainly why we need these extra -1 scales in y. Bleah
 
@@ -9095,8 +9100,8 @@ void CShaderAPIDx8::SetViewports(int nCount,
     }
   }
 
-  // FIXME: Once we extract buffered primitives out, we can directly fill in
-  // desired state and avoid the memcmp and copy
+  // TODO(d.rattman): Once we extract buffered primitives out, we can directly
+  // fill in desired state and avoid the memcmp and copy
   if (memcmp(&m_DesiredState.m_Viewport, &viewport, sizeof(D3DVIEWPORT9))) {
     if (!IsDeactivated()) {
       // State changed... need to flush the dynamic buffer
@@ -10089,8 +10094,8 @@ int CShaderAPIDx8::GetCurrentLightCombo(void) const {
 
   Assert(m_DynamicState.m_NumLights <= 2);
 
-  COMPILE_TIME_ASSERT(DX8_LIGHTING_COMBINATION_COUNT ==
-                      ARRAYSIZE(g_DX8LightCombinations));
+  static_assert(DX8_LIGHTING_COMBINATION_COUNT ==
+                SOURCE_ARRAYSIZE(g_DX8LightCombinations));
 
   // hack . . do this a cheaper way.
   bool bUseAmbientCube;
@@ -10541,26 +10546,26 @@ void CShaderAPIDx8::EnableLinearColorSpaceFrameBuffer(bool bEnable) {
 
 void CShaderAPIDx8::SetFloatRenderingParameter(int parm_number, float value) {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(FloatRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(FloatRenderingParameters))
     FloatRenderingParameters[parm_number] = value;
 }
 
 void CShaderAPIDx8::SetIntRenderingParameter(int parm_number, int value) {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(IntRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(IntRenderingParameters))
     IntRenderingParameters[parm_number] = value;
 }
 
 void CShaderAPIDx8::SetVectorRenderingParameter(int parm_number,
                                                 Vector const &value) {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(VectorRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(VectorRenderingParameters))
     VectorRenderingParameters[parm_number] = value;
 }
 
 float CShaderAPIDx8::GetFloatRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(FloatRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(FloatRenderingParameters))
     return FloatRenderingParameters[parm_number];
   else
     return 0.0;
@@ -10568,7 +10573,7 @@ float CShaderAPIDx8::GetFloatRenderingParameter(int parm_number) const {
 
 int CShaderAPIDx8::GetIntRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(IntRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(IntRenderingParameters))
     return IntRenderingParameters[parm_number];
   else
     return 0;
@@ -10576,7 +10581,7 @@ int CShaderAPIDx8::GetIntRenderingParameter(int parm_number) const {
 
 Vector CShaderAPIDx8::GetVectorRenderingParameter(int parm_number) const {
   LOCK_SHADERAPI();
-  if (parm_number < ARRAYSIZE(VectorRenderingParameters))
+  if (parm_number < SOURCE_ARRAYSIZE(VectorRenderingParameters))
     return VectorRenderingParameters[parm_number];
   else
     return Vector(0, 0, 0);

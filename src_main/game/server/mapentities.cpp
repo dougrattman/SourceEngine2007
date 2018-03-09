@@ -19,7 +19,7 @@
 #include "world.h"
 #include "toolframework/iserverenginetools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -190,7 +190,7 @@ static void SortSpawnListByHierarchy( int nEntities, HierarchicalSpawn_t *pSpawn
 	// it can properly set up anything that relies on hierarchy.
 #ifdef _WIN32
 	qsort(&pSpawnList[0], nEntities, sizeof(pSpawnList[0]), (int (__cdecl *)(const void *, const void *))CompareSpawnOrder);
-#elif _LINUX
+#elif OS_POSIX
 	qsort(&pSpawnList[0], nEntities, sizeof(pSpawnList[0]), (int (*)(const void *, const void *))CompareSpawnOrder);
 #endif
 	delete g_pClassnameSpawnPriority;

@@ -1,13 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
+//
+// Here are small and easy to read types used everywhere.
 
 #ifndef BASE_INCLUDE_BASE_TYPES_H_
 #define BASE_INCLUDE_BASE_TYPES_H_
 
-#include <cmath>
-#include <cstddef>  // std::size_t, std::ptrdiff_t
-#include <cstdint>
+#include <cstddef>  // std::size_t, std::ptrdiff_t.
+#include <cstdint>  // precise bit int types.
 #include <string>
-#include <tuple>
 #include <vector>
 
 #include "build/include/build_config.h"
@@ -48,26 +48,22 @@ static_assert(
 // Easy to use void type.
 using v = void;
 
-// Special type to ignore function call result.
-using ignore_result = v;
-
+// Short char alias.
 using ch = char;
-
+// Short char16_t alias.
+using ch16 = char16_t;
+// Short char32_t alias.
+using ch32 = char32_t;
+// Short wchar_t alias.
 using wch = wchar_t;
 
 // Basic char string type.
 using str = std::string;
-
 // Basic wide char string type.
 using wstr = std::wstring;
 
+// Nice vector alias.
 template <typename T>
 using vec = std::vector<T, std::allocator<T>>;
-
-// Define error code.
-using err = int;
-
-template <typename T>
-using Result = std::tuple<T, err>;
 
 #endif  // BASE_INCLUDE_BASE_TYPES_H_

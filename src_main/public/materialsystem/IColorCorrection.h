@@ -11,7 +11,7 @@ struct ShaderColorCorrectionInfo_t;
 
 #define COLORCORRECTION_INTERFACE_VERSION "COLORCORRECTION_VERSION_1"
 
-abstract_class IColorCorrectionSystem {
+the_interface IColorCorrectionSystem {
  public:
   virtual void Init() = 0;
   virtual void Shutdown() = 0;
@@ -63,7 +63,7 @@ abstract_class IColorCorrectionSystem {
 
   virtual void EnableColorCorrection(bool bEnable) = 0;
 
-  // FIXME: Move this to a private interface only the material system can see?
+  // TODO(d.rattman): Move this to a private interface only the material system can see?
   virtual void GetCurrentColorCorrection(ShaderColorCorrectionInfo_t *
                                          pInfo) = 0;
 };

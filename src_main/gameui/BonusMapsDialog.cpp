@@ -19,7 +19,7 @@
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -34,9 +34,9 @@ bool ConstructFullImagePath(const char *pCurrentPath, const char *pchImageName,
   if (ext) {
     // Use the specified image
     if (pchImageName[0] != '.')
-      Q_snprintf(pchImageFileName, _MAX_PATH, "%s", pchImageName);
+      Q_snprintf(pchImageFileName, SOURCE_MAX_PATH, "%s", pchImageName);
     else
-      Q_snprintf(pchImageFileName, _MAX_PATH, "%s/%s", pCurrentPath,
+      Q_snprintf(pchImageFileName, SOURCE_MAX_PATH, "%s/%s", pCurrentPath,
                  pchImageName);
 
     return true;
@@ -80,7 +80,7 @@ class CBonusMapPanel : public vgui::EditablePanel {
 
   void SetBonusMapInfo(const char *pCurrentPath, BonusMapDescription_t &map) {
     // set the image to display
-    char szImageFileName[_MAX_PATH];
+    char szImageFileName[SOURCE_MAX_PATH];
 
     bool bIsTGA = false;
 
@@ -104,7 +104,7 @@ class CBonusMapPanel : public vgui::EditablePanel {
     } else {
       if (map.szImageName[0] == '\0') {
         // Didn't specify an image name, so pair it with the name of this file
-        char szImpliedTgaName[_MAX_PATH];
+        char szImpliedTgaName[SOURCE_MAX_PATH];
         Q_snprintf(szImpliedTgaName, sizeof(szImpliedTgaName), "%s.tga",
                    map.szMapFileName);
         bIsTGA = ConstructFullImagePath(pCurrentPath, szImpliedTgaName,
@@ -299,8 +299,8 @@ void CBonusMapsDialog::BuildMapsList(void) {
   SetControlEnabled("ImportBonusMaps", bIsRoot);
   SetControlVisible("ImportBonusMaps", bIsRoot);
 
-  char szDisplayPath[_MAX_PATH];
-  Q_snprintf(szDisplayPath, _MAX_PATH, "%s/", BonusMapsDatabase()->GetPath());
+  char szDisplayPath[SOURCE_MAX_PATH];
+  Q_snprintf(szDisplayPath, SOURCE_MAX_PATH, "%s/", BonusMapsDatabase()->GetPath());
 
   SetControlString("FileName", szDisplayPath);
   SetControlString("CommentLabel", "");

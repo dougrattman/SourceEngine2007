@@ -26,7 +26,7 @@
 
 #include "tier1/UtlString.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -1924,7 +1924,7 @@ void TreeView::RemoveItem(int itemIndex, bool bPromoteChildren, bool bFullDelete
 {
 	// HACK: there's a bug with RemoveItem where panels are lingering. This gets around it temporarily.
 
-	// FIXME: Negative item indices is a bogus interface method!
+	// TODO(d.rattman): Negative item indices is a bogus interface method!
 	// because what if you want to recursively remove everything under node 0?
 	// Use the bFullDelete parameter instead.
 	if ( itemIndex < 0 )

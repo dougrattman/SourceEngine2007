@@ -21,7 +21,7 @@
 #include "weapon_physcannon.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 REGISTER_GAMERULES_CLASS(CHalfLife2);
@@ -123,7 +123,7 @@ ConVar sk_plr_dmg_smg1("sk_plr_dmg_smg1", "0", FCVAR_REPLICATED);
 ConVar sk_npc_dmg_smg1("sk_npc_dmg_smg1", "0", FCVAR_REPLICATED);
 ConVar sk_max_smg1("sk_max_smg1", "0", FCVAR_REPLICATED);
 
-// FIXME: remove these
+// TODO(d.rattman): remove these
 // ConVar	sk_plr_dmg_flare_round	( "sk_plr_dmg_flare_round","0",
 // FCVAR_REPLICATED); ConVar	sk_npc_dmg_flare_round	(
 // "sk_npc_dmg_flare_round","0", FCVAR_REPLICATED);
@@ -2135,7 +2135,7 @@ void CHalfLife2::Think(void) {
   if (physcannon_mega_enabled.GetBool() == true) {
     m_bMegaPhysgun = true;
   } else {
-    // FIXME: Is there a better place for this?
+    // TODO(d.rattman): Is there a better place for this?
     m_bMegaPhysgun = (GlobalEntity_GetState("super_phys_gun") == GLOBAL_ON);
   }
 }

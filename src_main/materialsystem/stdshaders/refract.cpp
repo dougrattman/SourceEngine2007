@@ -39,7 +39,7 @@ BEGIN_VS_SHADER( Refract_DX90, "Help for Refract" )
 		SHADER_PARAM( MASKED, SHADER_PARAM_TYPE_BOOL, "0", "mask using dest alpha" )
 		SHADER_PARAM( VERTEXCOLORMODULATE, SHADER_PARAM_TYPE_BOOL, "0","Use the vertex color to effect refract color. alpha will adjust refract amount" )
 	END_SHADER_PARAMS
-// FIXME: doesn't support Fresnel!
+// TODO(d.rattman): doesn't support Fresnel!
 
 	void SetupVars( Refract_DX9_Vars_t& info )
 	{

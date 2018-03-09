@@ -8,7 +8,7 @@
 #include "base/include/windows/windows_light.h"
 #include "xbox/xboxstubs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ButtonCode_t s_pVirtualKeyToButtonCode[256];
@@ -121,7 +121,7 @@ static const char *s_pButtonCodeName[] = {
     "F11",            // KEY_F11,
     "F12",            // KEY_F12,
 
-    // FIXME: CAPSLOCK/NUMLOCK/SCROLLLOCK all appear above. What are these for?!
+    // TODO(d.rattman): CAPSLOCK/NUMLOCK/SCROLLLOCK all appear above. What are these for?!
     // They only appear in CInputWin32::UpdateToggleButtonState in vgui2
     "CAPSLOCKTOGGLE",    // KEY_CAPSLOCKTOGGLE,
     "NUMLOCKTOGGLE",     // KEY_NUMLOCKTOGGLE,
@@ -297,9 +297,9 @@ static ButtonCode_t s_pScanToButtonCode_QWERTY[128] = {
 static ButtonCode_t s_pScanToButtonCode[128];
 
 void ButtonCode_InitKeyTranslationTable() {
-  COMPILE_TIME_ASSERT(sizeof(s_pButtonCodeName) / sizeof(const char *) ==
+  static_assert(sizeof(s_pButtonCodeName) / sizeof(const char *) ==
                       BUTTON_CODE_LAST);
-  COMPILE_TIME_ASSERT(sizeof(s_pAnalogCodeName) / sizeof(const char *) ==
+  static_assert(sizeof(s_pAnalogCodeName) / sizeof(const char *) ==
                       ANALOG_CODE_LAST);
 
   // set virtual key translation table
@@ -518,7 +518,7 @@ ButtonCode_t ButtonCode_StringToButtonCode(const char *pString,
 
 #if !defined(_X360)
   if (bXController) {
-    for (int i = 0; i < ARRAYSIZE(s_pXControllerButtonCodeNames); ++i) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(s_pXControllerButtonCodeNames); ++i) {
       if (!Q_stricmp(s_pXControllerButtonCodeNames[i], pString))
         return (ButtonCode_t)(JOYSTICK_FIRST_BUTTON + i);
     }
@@ -602,7 +602,7 @@ void ButtonCode_UpdateScanCodeLayout() {
   HKL englishKb = ::LoadKeyboardLayout("00000409", 0);
 
   if (englishKb && englishKb != currentKb) {
-    for (int i = 0; i < ARRAYSIZE(s_pScanToButtonCode); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(s_pScanToButtonCode); i++) {
       // take the english/QWERTY
       ButtonCode_t code = s_pScanToButtonCode_QWERTY[i];
 

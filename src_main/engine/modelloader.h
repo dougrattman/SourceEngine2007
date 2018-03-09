@@ -12,7 +12,7 @@ class IFileList;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-abstract_class IModelLoader {
+the_interface IModelLoader {
  public:
   enum REFERENCETYPE {
     // The name is allocated, but nothing else is in memory or being referenced
@@ -167,7 +167,7 @@ class CMapLoadHelper {
 
   // Handling for lump files
   int m_nLumpID;
-  char m_szLumpFilename[MAX_PATH];
+  char m_szLumpFilename[SOURCE_MAX_PATH];
 };
 
 //-----------------------------------------------------------------------------

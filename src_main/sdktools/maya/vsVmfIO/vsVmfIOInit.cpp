@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The plugin entry and exit points
 //
@@ -36,7 +36,7 @@ bool g_okToUnload( true );	// Whether or not this plug-in is unloadable or not
 //			pointer perhaps
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
+SOURCE_API_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
 {
 	static const AppSystemInfo_t appSystems[] = 
 	{
@@ -56,7 +56,7 @@ DLL_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
 // Output : true is everything is good, false otherwise
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
+SOURCE_API_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
 {
 	ConnectTier1Libraries( &factory, 1 );
 	ConnectTier2Libraries( &factory, 1 );
@@ -84,7 +84,7 @@ DLL_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
 // Output :
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT void VsMayaDisconnect()
+SOURCE_API_EXPORT void VsMayaDisconnect()
 {
 	DisconnectTier3Libraries();
 	DisconnectTier2Libraries();

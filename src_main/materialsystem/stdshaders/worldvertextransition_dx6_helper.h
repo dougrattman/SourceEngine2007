@@ -1,4 +1,4 @@
-// Copyright © 1996-2002, Valve LLC, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef WORLDVERTEXTRANSITION_DX6_HELPER_H
 #define WORLDVERTEXTRANSITION_DX6_HELPER_H

@@ -30,7 +30,7 @@
 #include "materialsystem/IMaterialSystem.h"
 #include "materialsystem/IMesh.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS(CMapAxisHandle);
@@ -153,7 +153,7 @@ CMapClass *CMapAxisHandle::CopyFrom(CMapClass *pObject,
 // Purpose: Gets the tool object for a given context data from HitTest2D.
 //-----------------------------------------------------------------------------
 CBaseTool *CMapAxisHandle::GetToolObject(int nHitData, bool bAttachObject) {
-  // FIXME: ideally, we could use CToolPointHandle here, because all it does is
+  // TODO(d.rattman): ideally, we could use CToolPointHandle here, because all it does is
   // move points around, but that would require some way for the CMapAxisHandle
   // to know when the CMapPointHandle's position changes. This way the
   // CToolAxisHandle can handle the notification. In general, we need a better

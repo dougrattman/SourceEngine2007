@@ -14,7 +14,7 @@
 #include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static int g_nTotalDecalVerts;
@@ -341,7 +341,7 @@ static int IntersectPlane(DecalClipState_t& state, int start, int end,
 
   // Interpolate normal
   Vector vNormal;
-  // FIXME: this is a bug (it's using position data to compute interpolated
+  // TODO(d.rattman): this is a bug (it's using position data to compute interpolated
   // normals!)... not seeing any obvious artifacts, though
   vNormal[0] = startVert.m_Position[0] * (1.0 - t) + endVert.m_Position[0] * t;
   vNormal[1] = startVert.m_Position[1] * (1.0 - t) + endVert.m_Position[1] * t;
@@ -367,7 +367,7 @@ static int IntersectPlane(DecalClipState_t& state, int start, int end,
 
 static void ClipTriangleAgainstPlane(DecalClipState_t& state, int normalInd,
                                      int flag, float val) {
-  // FIXME: Could compute the & of all the clip flags of all the verts
+  // TODO(d.rattman): Could compute the & of all the clip flags of all the verts
   // as we go through the loop to do another early out
 
   // Ye Olde Sutherland-Hodgman clipping algorithm
@@ -532,7 +532,7 @@ inline unsigned short CStudioRender::AddVertexToDecal(DecalBuildInfo_t& build,
 //-----------------------------------------------------------------------------
 void CStudioRender::AddClippedDecalToTriangle(DecalBuildInfo_t& build,
                                               DecalClipState_t& clipState) {
-  // FIXME: Clipped vertices will almost always be shared. We
+  // TODO(d.rattman): Clipped vertices will almost always be shared. We
   // need a way of associating clipped vertices with edges so we can share
   // the clipped vertices quickly
   Assert(clipState.m_VertCount <= 7);
@@ -610,7 +610,7 @@ void CStudioRender::AddTriangleToDecal(DecalBuildInfo_t& build, int i1, int i2,
   DecalBuildVertexInfo_t* pVertexInfo = build.m_pVertexInfo;
 
   // All must be front-facing for a decal to be added
-  // FIXME: Could make it work if not all are front-facing, need clipping for
+  // TODO(d.rattman): Could make it work if not all are front-facing, need clipping for
   // that
   int nAllFrontFacing = pVertexInfo[i1].m_Flags & pVertexInfo[i2].m_Flags &
                         pVertexInfo[i3].m_Flags;
@@ -720,7 +720,7 @@ void CStudioRender::AddDecalToMesh(DecalBuildInfo_t& build) {
 // Adds a decal to a mesh
 //-----------------------------------------------------------------------------
 bool CStudioRender::AddDecalToModel(DecalBuildInfo_t& buildInfo) {
-  // FIXME: We need to do some high-level culling to figure out exactly
+  // TODO(d.rattman): We need to do some high-level culling to figure out exactly
   // which meshes we need to add the decals to
   // Turns out this solution may also be good for mesh sorting
   // we need to know the center of each mesh, could also store a
@@ -890,7 +890,7 @@ void CStudioRender::RetireDecal(DecalModelList_t& list, DecalId_t nRetireID,
           vertices.Purge();
         }
 
-        // FIXME: This does a memmove. How expensive is it?
+        // TODO(d.rattman): This does a memmove. How expensive is it?
         pMaterial->m_Indices.RemoveMultiple(0, decalToRemove.m_IndexCount);
         if (pMaterial->m_Indices.Count() == 0) {
           pMaterial->m_Indices.Purge();
@@ -1364,7 +1364,7 @@ bool CStudioRender::DrawMultiBoneDecals(CMeshBuilder& meshBuilder,
 
       if (vertData) {
         mstudioboneweight_t* pBoneWeights = vertData->BoneWeights(n);
-        // FIXME: could be faster to blend the matrices and then transform the
+        // TODO(d.rattman): could be faster to blend the matrices and then transform the
         // pos+norm by the same matrix
         R_StudioTransform(*vertData->Position(n), pBoneWeights,
                           pCachedVert->m_Position.AsVector3D());
@@ -1587,7 +1587,7 @@ void CStudioRender::DrawDecalMaterial(IMatRenderContext* pRenderContext,
   CMeshBuilder meshBuilder;
   meshBuilder.Begin(pMesh, MATERIAL_TRIANGLES, vertexCount, indexCount);
 
-  // FIXME: Could make static meshes for these?
+  // TODO(d.rattman): Could make static meshes for these?
   // But don't make no static meshes for decals that fade, at least
 
   // Two possibilities: no/one bones, we let the hardware do all transformation
@@ -1660,7 +1660,7 @@ bool CStudioRender::PreDrawDecal(IMatRenderContext* pRenderContext,
                                  const DrawModelInfo_t& drawInfo) {
   if (!drawInfo.m_bStaticLighting) return false;
 
-  // FIXME: This is incredibly bogus,
+  // TODO(d.rattman): This is incredibly bogus,
   // it's overwriting lighting state in the context without restoring it!
   const Vector* pAmbient;
   if (m_pRC->m_Config.fullbright) {
@@ -1698,7 +1698,7 @@ void CStudioRender::DrawDecal(const DrawModelInfo_t& drawInfo, int lod,
   // All decal vertex data is are stored in pose space
   // So as long as the pose-to-world transforms are set, we're all ready!
 
-  // FIXME: Body stuff isn't hooked in at all for decals
+  // TODO(d.rattman): Body stuff isn't hooked in at all for decals
 
   // Get the decal list for this lod
   const DecalModelList_t& list = m_DecalList[(int)handle];
@@ -1763,7 +1763,7 @@ void CStudioRender::DrawStaticPropDecals(const DrawModelInfo_t& drawInfo,
   // All decal vertex data is are stored in pose space
   // So as long as the pose-to-world transforms are set, we're all ready!
 
-  // FIXME: Body stuff isn't hooked in at all for decals
+  // TODO(d.rattman): Body stuff isn't hooked in at all for decals
 
   pRenderContext->MatrixMode(MATERIAL_MODEL);
   pRenderContext->LoadMatrix(modelToWorld);

@@ -11,7 +11,7 @@
 
 ConVar ai_debug_ragdoll_magnets( "ai_debug_ragdoll_magnets", "0");
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( phys_ragdollmagnet, CRagdollMagnet );

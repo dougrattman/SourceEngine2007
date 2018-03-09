@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 // The combot.
 //-----------------------------------------------------------------------------
-abstract_class CAI_BaseFlyingBot : public CAI_BaseNPC
+the_interface CAI_BaseFlyingBot : public CAI_BaseNPC
 {
 	DECLARE_CLASS( CAI_BaseFlyingBot, CAI_BaseNPC );
 public:

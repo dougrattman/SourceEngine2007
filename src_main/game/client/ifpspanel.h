@@ -23,14 +23,14 @@ namespace vgui
 	class Panel;
 }
 
-abstract_class IFPSPanel
+the_interface IFPSPanel
 {
 public:
 	virtual void		Create( vgui::VPANEL parent ) = 0;
 	virtual void		Destroy( void ) = 0;
 };
 
-abstract_class IShowBlockingPanel
+the_interface IShowBlockingPanel
 {
 public:
 	virtual void		Create( vgui::VPANEL parent ) = 0;

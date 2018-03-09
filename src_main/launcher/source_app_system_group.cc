@@ -43,8 +43,8 @@ bool SourceAppSystemGroup::Create() {
 
   file_system->InstallDirtyDiskReportFunc([]() {});
 
-  if (FAILED(scoped_com_initializer_->hr())) {
-    Error("COM initialization failed, hr 0x%x.", scoped_com_initializer_->hr());
+  if (FAILED(scoped_com_initializer_.hr())) {
+    Error("COM initialization failed, hr 0x%0.8x.", scoped_com_initializer_.hr());
     return false;
   }
 
@@ -169,7 +169,7 @@ bool SourceAppSystemGroup::PreInit() {
   // line as needed
   reslistgenerator->SetupCommandLine();
 
-  // FIXME: Logfiles is mod-specific, needs to move into the engine.
+  // TODO(d.rattman): Logfiles is mod-specific, needs to move into the engine.
   file_system_access_logger_.Init();
 
   // Required to run through the editor
@@ -193,7 +193,7 @@ bool SourceAppSystemGroup::PreInit() {
 int SourceAppSystemGroup::Main() { return engine_api_->Run(); }
 
 void SourceAppSystemGroup::PostShutdown() {
-  // FIXME: Logfiles is mod-specific, needs to move into the engine.
+  // TODO(d.rattman): Logfiles is mod-specific, needs to move into the engine.
   file_system_access_logger_.Shutdown();
 
   reslistgenerator->Shutdown();

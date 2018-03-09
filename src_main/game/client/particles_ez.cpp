@@ -8,7 +8,7 @@
 #include "particles_ez.h"
 #include "IGameSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

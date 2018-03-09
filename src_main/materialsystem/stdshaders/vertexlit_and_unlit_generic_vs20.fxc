@@ -208,12 +208,12 @@ VS_OUTPUT main( const VS_INPUT v )
 #endif
 
 #if SEAMLESS_DETAIL
-	// FIXME: detail texcoord as a 2d xform doesn't make much sense here, so I just do enough so
+	// TODO(d.rattman): detail texcoord as a 2d xform doesn't make much sense here, so I just do enough so
 	// that scale works. More smartness could allow 3d xform.
 	o.SeamlessDetailTexCoord.xyz = (SEAMLESS_SCALE*cDetailTexCoordTransform[0].x) * v.vPos.xyz;
 #else
 	// Detail texture coordinates
-	// FIXME: This shouldn't have to be computed all the time.
+	// TODO(d.rattman): This shouldn't have to be computed all the time.
 	o.detailTexCoord.x = dot( v.vTexCoord0, cDetailTexCoordTransform[0] );
 	o.detailTexCoord.y = dot( v.vTexCoord0, cDetailTexCoordTransform[1] );
 #endif

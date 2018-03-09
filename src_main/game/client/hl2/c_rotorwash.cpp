@@ -13,7 +13,7 @@
 #include "fx_quad.h"
 #include "ClientEffectPrecacheSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ==============================================
@@ -38,7 +38,7 @@ public:
 		// Float up when lifetime is half gone.
 		pParticle->m_vecVelocity[ 2 ] += 64 * timeDelta;
 
-		// FIXME: optimize this....
+		// TODO(d.rattman): optimize this....
 		pParticle->m_vecVelocity *= ExponentialDecay( 0.8, 0.05, timeDelta );
 	}
 

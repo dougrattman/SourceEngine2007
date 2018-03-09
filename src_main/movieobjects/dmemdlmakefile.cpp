@@ -14,7 +14,7 @@
 #include "filesystem.h"
 #include "tier3/tier3.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -214,24 +214,24 @@ CDmElement *CDmeMDLMakefile::CreateOutputElement( )
 	}
 	m_hMDL->SetMDL( MDLHANDLE_INVALID );
 
-	// FIXME: Should we ask the tool (studiomdl) for this?
+	// TODO(d.rattman): Should we ask the tool (studiomdl) for this?
 	// Should we have output type names? Not sure yet..
 	// Doing the simplest thing first.
-	char pOutputName[MAX_PATH];
+	char pOutputName[SOURCE_MAX_PATH];
 	Q_FileBase( GetFileName(), pOutputName, sizeof(pOutputName) );
 	if ( !pOutputName[0] )
 		return m_hMDL.Get();
 
-	char pOutputDir[MAX_PATH];
+	char pOutputDir[SOURCE_MAX_PATH];
 	GetOutputDirectory( pOutputDir, sizeof(pOutputDir) );
 	if ( !pOutputDir[0] )
 		return m_hMDL.Get();
 
 	Q_StripTrailingSlash( pOutputDir );
-	char pFullPath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
 	Q_snprintf( pFullPath, sizeof(pFullPath), "%s\\%s.mdl", pOutputDir, pOutputName );
 
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	g_pFullFileSystem->FullPathToRelativePathEx( pFullPath, "GAME", pRelativePath, sizeof( pRelativePath ) );
 
 	MDLHandle_t h = g_pMDLCache->FindMDL( pRelativePath );
@@ -263,21 +263,21 @@ void CDmeMDLMakefile::GetOutputs( CUtlVector<CUtlString> &fullPaths )
 {
 	fullPaths.RemoveAll();
 
-	// FIXME: Should we ask the tool (studiomdl) for this?
+	// TODO(d.rattman): Should we ask the tool (studiomdl) for this?
 	// Should we have output type names? Not sure yet..
 	// Doing the simplest thing first.
-	char pOutputName[MAX_PATH];
+	char pOutputName[SOURCE_MAX_PATH];
 	Q_FileBase( GetFileName(), pOutputName, sizeof(pOutputName) );
 	if ( !pOutputName[0] )
 		return;
 
-	char pOutputDir[MAX_PATH];
+	char pOutputDir[SOURCE_MAX_PATH];
 	GetOutputDirectory( pOutputDir, sizeof(pOutputDir) );
 	if ( !pOutputDir[0] )
 		return;
 
 	Q_StripTrailingSlash( pOutputDir );
-	char pFullPath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
 	for ( int i = 0; s_pOutputExtensions[i]; ++i )
 	{
 		Q_snprintf( pFullPath, sizeof(pFullPath), "%s\\%s.%s", pOutputDir, pOutputName, s_pOutputExtensions[i] );

@@ -233,8 +233,8 @@ int main(int argc, char* argv[])
 
 		if ( strstr( pInputBaseName, "*.") )
 		{
-			char	search[ MAX_PATH ];
-			char	fname[ MAX_PATH ];
+			char	search[ SOURCE_MAX_PATH ];
+			char	fname[ SOURCE_MAX_PATH ];
 			char	ext[_MAX_EXT];
 
 			_splitpath( pInputBaseName, NULL, NULL, fname, ext ); //find extension wanted

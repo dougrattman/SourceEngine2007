@@ -23,7 +23,7 @@ ConVar spec_autodirector(
     "spec_autodirector", "1", FCVAR_CLIENTDLL | FCVAR_CLIENTCMD_CAN_EXECUTE,
     "Auto-director chooses best view modes while spectating");
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define CHASE_CAM_DISTANCE 96.0f

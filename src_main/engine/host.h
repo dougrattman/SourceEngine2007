@@ -40,7 +40,7 @@ inline const char *GetCurrentGame() { return host_parms.game; }
 inline const char *GetBaseDirectory() { return host_parms.basedir; }
 
 // host
-// FIXME, move all this crap somewhere else
+// TODO(d.rattman): move all this crap somewhere else
 extern ConVar developer;
 extern bool host_initialized;  // true if into command execution
 extern float host_frametime;
@@ -69,7 +69,7 @@ extern bool g_bInCommentaryMode;
 extern bool g_bLowViolence;
 
 // Returns true if host is not single stepping/pausing through code/
-// FIXME:  Remove from final, retail version of code.
+// TODO(d.rattman):  Remove from final, retail version of code.
 bool Host_ShouldRun(void);
 void Host_FreeToLowMark(bool server);
 void Host_FreeStateAndWorld(bool server);

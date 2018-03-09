@@ -14,7 +14,7 @@
 #include	"ai_hull.h"
 #include "ai_baseactor.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Spawnflags

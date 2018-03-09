@@ -7,8 +7,7 @@
 
 #ifdef _WIN32
 
-BOOL WINAPI ConsoleHandlerRoutine(DWORD CtrlType) {
-  NOTE_UNUSED(CtrlType);
+BOOL WINAPI ConsoleHandlerRoutine([[maybe_unused]] DWORD CtrlType) {
   return TRUE;
 }
 
@@ -86,7 +85,7 @@ char *CTextConsoleWin32::GetLine() {
 
     if (numevents <= 0) break;
 
-    if (!ReadConsoleInput(hinput, recs, ARRAYSIZE(recs), &numread)) {
+    if (!ReadConsoleInput(hinput, recs, SOURCE_ARRAYSIZE(recs), &numread)) {
       Error("CTextConsoleWin32::GetLine: !ReadConsoleInput");
 
       return NULL;

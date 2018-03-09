@@ -13,7 +13,7 @@
 #include "shadowbuildtexture_ps20.inc"
 #include "shadowbuildtexture_ps20b.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( ShadowBuild, ShadowBuild_DX9 )
@@ -91,7 +91,7 @@ BEGIN_VS_SHADER_FLAGS( ShadowBuild_DX9, "Help for ShadowBuild", SHADER_NOT_EDITA
 			SetModulationVertexShaderDynamicState();
 
 			// Snack important parameters from the original material
-			// FIXME: What about alpha modulation? Need a solution for that
+			// TODO(d.rattman): What about alpha modulation? Need a solution for that
 			ITexture *pTexture = NULL;
 			IMaterialVar **ppTranslucentParams = NULL;
 			if (params[TRANSLUCENT_MATERIAL]->IsDefined())

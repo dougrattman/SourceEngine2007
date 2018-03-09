@@ -21,7 +21,7 @@
 #include "vgui_controls/TextEntry.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #include <ctype.h>

@@ -14,7 +14,7 @@
 #include "mathlib/vector.h"
 #include "nvtc.h"
 #include "tier0/include/basetypes.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
@@ -83,7 +83,7 @@ namespace ImageLoader {
 // Returns info about each image format
 
 const ImageFormatInfo_t &ImageFormatInfo(ImageFormat fmt) {
-  COMPILE_TIME_ASSERT((NUM_IMAGE_FORMATS + 1) ==
+  static_assert((NUM_IMAGE_FORMATS + 1) ==
                       sizeof(g_ImageFormatInfo) / sizeof(g_ImageFormatInfo[0]));
   Assert(unsigned(fmt + 1) <= (NUM_IMAGE_FORMATS));
   return g_ImageFormatInfo[fmt + 1];
@@ -235,7 +235,7 @@ int GetNumMipMapLevels(int width, int height, int depth) {
   return numMipLevels;
 }
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 
 
 // convert back and forth from D3D format to ImageFormat, regardless of

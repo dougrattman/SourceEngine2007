@@ -8,7 +8,7 @@
 #include "c_hl2_playerlocaldata.h"
 #include "dt_recv.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_RECV_TABLE_NOBASE( C_HL2PlayerLocalData, DT_HL2Local )

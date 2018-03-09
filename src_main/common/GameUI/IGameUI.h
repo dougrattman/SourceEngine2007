@@ -28,7 +28,7 @@ enum ESystemNotify {
 };
 
 // Purpose: contains all the functions that the GameUI dll exports
-abstract_class IGameUI {
+the_interface IGameUI {
  public:
   // initialization/shutdown
   virtual void Initialize(CreateInterfaceFn appFactory) = 0;

@@ -159,7 +159,7 @@ static bool CHLSceneViewerApp_SuggestGameInfoDirFn(
     int nBufferLength, bool *pbBubbleDirectories) {
   const char *pFilename = NULL;
   const size_t nParmCount = CommandLine()->ParmCount();
-  char pchTmpBuf[MAX_PATH];
+  char pchTmpBuf[SOURCE_MAX_PATH];
   for (size_t nPi = 0; nPi < nParmCount; ++nPi) {
     pFilename = CommandLine()->GetParm(nPi);
     Q_MakeAbsolutePath(pchTmpBuf, sizeof(pchTmpBuf), pFilename);
@@ -178,7 +178,7 @@ static bool CHLSceneViewerApp_SuggestGameInfoDirFn(
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+int SOURCE_STDCALL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       LPSTR lpCmdLine, int nCmdShow) {
   static CSceneViewerApp sceneViewerApp;
   static CSteamApplication steamApp(&sceneViewerApp);
@@ -243,7 +243,7 @@ bool CSceneViewerApp::Create() {
     return false;
   }
 
-  // FIXME: Enable vs30 shaders while NVidia driver bug exists
+  // TODO(d.rattman): Enable vs30 shaders while NVidia driver bug exists
   CommandLine()->AppendParm("-box", NULL);
 
   SpewOutputFunc(ModelBrowserSpewFunc);

@@ -55,11 +55,11 @@ static byte *pStart;
 static byte *pBlockData;
 static byte *pBlockStart;
 
-#undef ALIGN16
-#undef ALIGN32
+#undef alignas(16)
+#undef alignas(32)
 #define ALIGN4( a ) a = (byte *)((int)((byte *)a + 3) & ~ 3)
-#define ALIGN16( a ) a = (byte *)((int)((byte *)a + 15) & ~ 15)
-#define ALIGN32( a ) a = (byte *)((int)((byte *)a + 31) & ~ 31)
+#define alignas(16)( a ) a = (byte *)((int)((byte *)a + 15) & ~ 15)
+#define alignas(32)( a ) a = (byte *)((int)((byte *)a + 31) & ~ 31)
 #define ALIGN64( a ) a = (byte *)((int)((byte *)a + 63) & ~ 63)
 #define ALIGN512( a ) a = (byte *)((int)((byte *)a + 511) & ~ 511)
 // make sure kalloc aligns to maximum alignment size
@@ -1183,8 +1183,8 @@ static byte *WriteAnimations( byte *pData, byte *pStart, studiohdr_t *phdr )
 		// destanim->automoveangleindex = srcanim->automoveangleindex;
 
 		// align all animation data to cache line boundaries
-		ALIGN16( pData );
-		ALIGN16( pBlockData );
+		alignas(16)( pData );
+		alignas(16)( pBlockData );
 
 		if (pBlockStart)
 		{
@@ -1623,7 +1623,7 @@ static void WriteVertices( studiohdr_t *phdr )
 	fileHeader->numLODVertexes[0] = 0;
 
 	// store vertexes grouped by mesh order
-	ALIGN16( pData );
+	alignas(16)( pData );
 	fileHeader->vertexDataStart  = pData-pStart;
 	for (i = 0; i < g_nummodelsbeforeLOD; i++) 
 	{
@@ -1634,7 +1634,7 @@ static void WriteVertices( studiohdr_t *phdr )
 			continue;
 
 		// save vertices
-		ALIGN16( pData );
+		alignas(16)( pData );
 		cur = (int)pData;
 		mstudiovertex_t *pVert = (mstudiovertex_t *)pData;
 		pData += pLodData->numvertices * sizeof( mstudiovertex_t );
@@ -2079,7 +2079,7 @@ static void WriteModel( studiohdr_t *phdr )
 		}
 
 		// set expected base offsets to external data
-		ALIGN16( externalVertexIndex );
+		alignas(16)( externalVertexIndex );
 		pmodel[i].vertexindex = (int)externalVertexIndex; 
 		externalVertexIndex += pmodel[i].numvertices * sizeof(mstudiovertex_t);
 
@@ -2101,8 +2101,8 @@ static void WriteModel( studiohdr_t *phdr )
 		for (j = 0; j < g_model[i]->numeyeballs; j++)
 		{
 			k = g_model[i]->eyeball[j].mesh;
-			pmesh[k].materialtype		= 1;	// FIXME: tag custom material
-			pmesh[k].materialparam		= j;	// FIXME: tag custom material
+			pmesh[k].materialtype		= 1;	// TODO(d.rattman): tag custom material
+			pmesh[k].materialparam		= j;	// TODO(d.rattman): tag custom material
 
 			peyeball[j].bone			= g_model[i]->eyeball[j].bone;
 			VectorCopy( g_model[i]->eyeball[j].org, peyeball[j].org );
@@ -2332,7 +2332,7 @@ void LoadMaterials( studiohdr_t *phdr )
 
 			phdr->pTexture( i )->material = pMaterial;
 
-			// FIXME: hack, needs proper client side material system interface
+			// TODO(d.rattman): hack, needs proper client side material system interface
 			bool found = false;
 			IMaterialVar *clientShaderVar = pMaterial->FindVar( "$clientShader", &found, false );
 			if( found )
@@ -2386,7 +2386,7 @@ void WriteSeqKeyValues( mstudioseqdesc_t *pseqdesc, CUtlVector< char > *pKeyValu
 
 void EnsureFileDirectoryExists( const char *pFilename )
 {
-	char dirName[MAX_PATH];
+	char dirName[SOURCE_MAX_PATH];
 	Q_strncpy( dirName, pFilename, sizeof( dirName ) );
 	Q_FixSlashes( dirName );
 	char *pLastSlash = strrchr( dirName, CORRECT_PATH_SEPARATOR );
@@ -2523,7 +2523,7 @@ void WriteModelFiles(void)
 
 	pData = (byte *)phdr + sizeof( studiohdr_t );
 
-	// FIXME: Remove when we up the model version
+	// TODO(d.rattman): Remove when we up the model version
 	phdr->studiohdr2index = ( pData - pStart );
 	studiohdr2_t* phdr2 = (studiohdr2_t*)pData;
 	memset( phdr2, 0, sizeof(studiohdr2_t) );
@@ -2640,7 +2640,7 @@ void WriteModelFiles(void)
 				MdlError("Aborted ANI byteswap on '%s':\n", g_animblockname);
 			}
 
-			char outname[ MAX_PATH ];
+			char outname[ SOURCE_MAX_PATH ];
 			Q_StripExtension( g_animblockname, outname, sizeof( outname ) );
 			Q_strcat( outname, ".360.ani", sizeof( outname ) );
 			
@@ -3660,7 +3660,7 @@ bool FixupToSortedLODVertexes(studiohdr_t *pStudioHdr)
 		return false;
 	}
 
-	for (i=0; i<ARRAYSIZE(vtxPrefixes); i++)
+	for (i=0; i<SOURCE_ARRAYSIZE(vtxPrefixes); i++)
 	{
 		// fixup ???.vtx
 		strcpy( tmpFileName, filename );
@@ -4092,7 +4092,7 @@ bool Clamp_RootLOD( studiohdr_t *phdr )
 	strcat( tmpFileName, ".vvd" );
 	Clamp_VVD_LODS( tmpFileName, rootLOD );
 
-	for (i=0; i<ARRAYSIZE(vtxPrefixes); i++)
+	for (i=0; i<SOURCE_ARRAYSIZE(vtxPrefixes); i++)
 	{
 		// fixup ???.vtx
 		strcpy( tmpFileName, filename );
@@ -4146,8 +4146,8 @@ void WriteSwappedFile( char *srcname, char *outname, int(*pfnSwapFunc)(void*, co
 //----------------------------------------------------------------------
 void WriteAllSwappedFiles( const char *filename )
 {
-	char srcname[ MAX_PATH ];
-	char outname[ MAX_PATH ];
+	char srcname[ SOURCE_MAX_PATH ];
+	char outname[ SOURCE_MAX_PATH ];
 
 	extern IPhysicsCollision *physcollision;
 	if ( physcollision )

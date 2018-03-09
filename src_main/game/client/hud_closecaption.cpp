@@ -18,7 +18,7 @@
 #include "tier1/checksum_crc.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define CC_INSET 12
@@ -2165,7 +2165,7 @@ void CHudCloseCaption::InitCaptionDictionary(const char *dbfile) {
   filesystem->GetSearchPath("GAME", true, searchPaths, sizeof(searchPaths));
 
   for (char *path = strtok(searchPaths, ";"); path; path = strtok(NULL, ";")) {
-    char fullpath[MAX_PATH];
+    char fullpath[SOURCE_MAX_PATH];
     Q_snprintf(fullpath, sizeof(fullpath), "%s%s", path, dbfile);
     Q_FixSlashes(fullpath);
     Q_strlower(fullpath);

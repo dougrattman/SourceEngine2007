@@ -9,7 +9,7 @@
 #include "net.h"
 #include "sv_rcon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static redirect_t	sv_redirected;

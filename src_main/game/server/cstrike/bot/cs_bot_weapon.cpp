@@ -11,7 +11,7 @@
 #include "cs_bot.h"
 #include "basecsgrenade_projectile.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //--------------------------------------------------------------------------------------------------------------

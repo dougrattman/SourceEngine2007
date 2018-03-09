@@ -9,7 +9,7 @@
 #include "cbase.h"
 #include "buy_preset_debug.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef _DEBUG

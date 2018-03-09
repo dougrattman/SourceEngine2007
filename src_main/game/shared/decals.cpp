@@ -15,7 +15,7 @@
 #include "iefx.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DECAL_LIST_FILE "scripts/decals_subrect.txt"

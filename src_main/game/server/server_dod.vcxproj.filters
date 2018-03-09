@@ -2498,7 +2498,7 @@
     <ClInclude Include="..\shared\weapon_ifmsteadycam.h">
       <Filter>Source Files\IFM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\ammodef.h">
@@ -3116,7 +3116,7 @@
     <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\winlite.h">
+    <ClInclude Include="..\..\base\include\windows\windows_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\worldsize.h">

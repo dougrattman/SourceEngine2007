@@ -17,7 +17,7 @@
 #include "hammer.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -587,9 +587,9 @@ VertexFormat_t CBSPLighting::ComputeLMGroupVertexFormat( IMaterial * pMaterial )
 {
 	VertexFormat_t vertexFormat = pMaterial->GetVertexFormat();
 
-	// FIXME: set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it saves enough memory (use 'mem_dumpvballocs')
+	// TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it saves enough memory (use 'mem_dumpvballocs')
 	vertexFormat &= ~VERTEX_FORMAT_COMPRESSED;
-	// FIXME: check for and strip unused vertex elements (bone weights+indices, TANGENT_S/T?) - requires reliable material vertex formats first
+	// TODO(d.rattman): check for and strip unused vertex elements (bone weights+indices, TANGENT_S/T?) - requires reliable material vertex formats first
 
 	return vertexFormat;
 }

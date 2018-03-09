@@ -10,7 +10,7 @@
 #include "networkstringtable_gamedll.h"
 #include "saverestore_stringtable.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -281,7 +281,7 @@ void CVGuiScreen::MakeVisibleOnlyToTeammates( bool bActive )
 
 bool CVGuiScreen::IsVisibleToTeam( int nTeam )
 {
-	// FIXME: Should this maybe go into a derived class of some sort?
+	// TODO(d.rattman): Should this maybe go into a derived class of some sort?
 	// Don't bother with screens on the wrong team
 	if ( IsVisibleOnlyToTeammates() && (nTeam > 0) )
 	{

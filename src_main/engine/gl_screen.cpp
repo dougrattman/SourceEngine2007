@@ -27,7 +27,7 @@
 #include "toolframework/itoolframework.h"
 #include "vgui_baseui_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // In other C files.

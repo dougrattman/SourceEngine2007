@@ -12,7 +12,7 @@
 #include "ClientEffectPrecacheSystem.h"
 #include "beamdraw.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheEffectStunstick )
@@ -28,7 +28,7 @@ public:
 
 	int DrawModel( int flags )
 	{
-		//FIXME: This sucks, but I can't easily create temp ents...
+		//TODO(d.rattman): This sucks, but I can't easily create temp ents...
 
 		if ( m_bActive )
 		{

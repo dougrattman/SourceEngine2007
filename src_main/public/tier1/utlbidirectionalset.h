@@ -221,7 +221,7 @@ template <class CBucketHandle, class CElementHandle, class S, class I>
 void CBidirectionalSet<CBucketHandle, CElementHandle, S,
                        I>::RemoveElementFromBucket(CBucketHandlePram bucket,
                                                    CElementHandlePram element) {
-  // FIXME: Implement me!
+  // TODO(d.rattman): Implement me!
   Assert(0);
 }
 

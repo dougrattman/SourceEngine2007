@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: FIXME: This will ultimately become a more generic implementation
+// Purpose: TODO(d.rattman): This will ultimately become a more generic implementation
 //
 //=============================================================================
 

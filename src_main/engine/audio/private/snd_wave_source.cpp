@@ -12,7 +12,7 @@
 #include "tier1/utlsymbol.h"
 #include "xwvfile.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // This determines how much data to pre-cache (will invalidate per-map caches if
@@ -445,8 +445,8 @@ const char *CAudioSourceWave::GetName() {
 //-----------------------------------------------------------------------------
 bool CAudioSourceWave::GetXboxAudioStartupData() {
   CUtlBuffer buf;
-  char fileName[MAX_PATH];
-  char tempFileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
+  char tempFileName[SOURCE_MAX_PATH];
 
   MEM_ALLOC_CREDIT();
 
@@ -1193,7 +1193,7 @@ char *CAudioSourceMemWave::GetDataPointer(void) {
 
   // If we have reloaded data from disk (async) and we haven't converted the
   // samples yet, do it now
-  // FIXME:  Is this correct for stereo wavs?
+  // TODO(d.rattman):  Is this correct for stereo wavs?
   if (pWaveData && !bSamplesConverted) {
     ConvertSamples(pWaveData, m_dataSize / m_sampleSize);
     wavedatacache->SetPostProcessed(m_hCache, true);
@@ -1415,8 +1415,7 @@ CAudioSource *CreateWave(CSfxTable *pSfx, bool bStreaming) {
   // For some reason you can't usually do pSfx->getname() in the dev studio
   // debugger, so for convenience we'll grab the name here in debug builds at
   // least...
-  char const *pName = pSfx->getname();
-  NOTE_UNUSED(pName);
+  [[maybe_unused]] char const *pName = pSfx->getname();
 #endif
 
   CAudioSourceWave *pWave = NULL;

@@ -31,7 +31,7 @@
 #include "tier1/ConVar.h"
 #include "tier2/fileutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -2689,7 +2689,7 @@ void CElementPropertiesTreeInternal::OnShowFileDialog( KeyValues *params )
 	KeyValues *pContext = params->FindKey( "context" );
 	FileOpenDialog *pDialog = new FileOpenDialog( this, pTitle, bOpenOnly, pContext->MakeCopy() );
 
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( NULL, pStartingDir, sizeof( pStartingDir ) );
 	Q_StripTrailingSlash( pStartingDir );
 
@@ -3243,7 +3243,7 @@ void CElementPropertiesTreeInternal::GenerateContextMenu( int itemIndex, int x, 
 			menu->AddMenuItem( pText, new KeyValues( "OnChangeFile", "filename", pFileName ), this );
 		}
 
-		char filename[ MAX_PATH ];
+		char filename[ SOURCE_MAX_PATH ];
 		V_GenerateUniqueName( filename, sizeof( filename ), "unnamed", DataModelFilenameArray() );
 
 		menu->AddMenuItem( "<new file>", new KeyValues( "OnChangeFile", "filename", filename ), this );
@@ -4151,7 +4151,7 @@ void CElementPropertiesTreeInternal::CreateTreeEntry( int parentNodeIndex, CDmEl
 	if ( bIsDroppable )
 	{
 		// Can always drop onto arrays
-		kv->SetString( "droppableelementtype", "dmeelement" ); // FIXME: Should be able to restrict to certain types!!!
+		kv->SetString( "droppableelementtype", "dmeelement" ); // TODO(d.rattman): Should be able to restrict to certain types!!!
 	}
 
 	CUtlVector< vgui::Panel * >	columns;
@@ -4196,8 +4196,7 @@ void CElementPropertiesTreeInternal::SetupWidgetInfo( AttributeWidgetInfo_t *pIn
 //-----------------------------------------------------------------------------
 void CElementPropertiesTreeInternal::InsertSingleAttribute( int parentNodeIndex, CDmElement *obj, CDmAttribute *pAttribute, int nArrayIndex )
 {
-	const char *attributeName = pAttribute->GetName();
-	NOTE_UNUSED( attributeName );
+  [[maybe_unused]] const char *attributeName = pAttribute->GetName();
 
 	// Get information about the widget to create
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dependencygraph.h"
 #include "datamodel/dmattribute.h"
@@ -8,7 +8,7 @@
 #include "tier0/include/vprof.h"
 #include "tier1/mempool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 //-----------------------------------------------------------------------------
 // Misc helper enums and classes for CDependencyGraph class
@@ -99,7 +99,7 @@ void CDependencyGraph::Reset(const CUtlVector<IDmeOperator *> &operators) {
 
 #ifdef _DEBUG
       // Look for dependent operators, add them if they are not in the array
-      // FIXME: Should this happen for input attributes too?
+      // TODO(d.rattman): Should this happen for input attributes too?
       CDmElement *pElement = pAttrNode->m_attribute->GetOwner();
       IDmeOperator *pOperator = dynamic_cast<IDmeOperator *>(pElement);
       if (pOperator) {

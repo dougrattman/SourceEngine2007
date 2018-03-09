@@ -24,7 +24,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -216,7 +216,7 @@ inline const char *MoveToNextSubDir( const char *pStart, int *nCount )
 void DirectorySelectDialog::ExpandTreeToPath( const char *lpszPath, bool bSelectFinalDirectory /*= true*/ )
 {
 	// Make sure our slashes are correct!
-	char workPath[MAX_PATH];
+	char workPath[SOURCE_MAX_PATH];
 	Q_strncpy( workPath, lpszPath, sizeof(workPath) );
 	Q_FixSlashes( workPath );
 	
@@ -238,7 +238,7 @@ void DirectorySelectDialog::ExpandTreeToPath( const char *lpszPath, bool bSelect
 	const char *lpszSubDirName = MoveToNextSubDir( workPath, &nPathPos ); 
 	const char *lpszLastSubDirName = NULL;
 	int nPathIncr = 0;
-	char subDirName[MAX_PATH];
+	char subDirName[SOURCE_MAX_PATH];
 
 	// While there are subdirectory names present, expand and populate the tree with their subdirectories
 	while ( lpszSubDirName[0] != '\0' )

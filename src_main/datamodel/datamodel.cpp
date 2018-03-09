@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datamodel.h"
 
@@ -20,7 +20,7 @@
 #include "undomanager.h"
 #include "vstdlib/iprocessutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -560,7 +560,7 @@ bool GenerateFullPath(const char *pFileName, char const *pPathID, char *pBuf,
       pFileName, pPathID, pBuf, nBufLen);
   if (pFullPath && Q_IsAbsolutePath(pFullPath)) return true;
 
-  char pDir[MAX_PATH];
+  char pDir[SOURCE_MAX_PATH];
   if (!g_pFullFileSystem->GetCurrentDirectory(pDir, sizeof(pDir))) return false;
 
   V_ComposeFileName(pDir, pFileName, pBuf, nBufLen);
@@ -572,7 +572,7 @@ bool CDataModel::SaveToFile(char const *pFileName, char const *pPathID,
                             const char *pEncodingName, const char *pFormatName,
                             CDmElement *pRoot) {
   // NOTE: This guarantees full path names for pathids
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   if (!GenerateFullPath(pFileName, pPathID, pFullPath, sizeof(pFullPath))) {
     Warning("CDataModel: Unable to generate full path for file %s\n",
             pFileName);
@@ -602,7 +602,7 @@ DmFileId_t CDataModel::RestoreFromFile(
     DmConflictResolution_t idConflictResolution /*= CR_DELETE_NEW*/,
     DmxHeader_t *pHeaderOut /*= NULL*/) {
   // NOTE: This guarantees full path names for pathids
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   if (!GenerateFullPath(pFileName, pPathID, pFullPath, sizeof(pFullPath))) {
     Warning("CDataModel: Unable to generate full path for file %s\n",
             pFileName);

@@ -26,7 +26,7 @@
 #include "engine/IEngineSound.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_ichthyosaur_health( "sk_ichthyosaur_health", "0" );
@@ -89,7 +89,7 @@ public:
 
 	float	MaxYawSpeed( void );
 
-	Class_T Classify( void )	{	return CLASS_ANTLION;	}	//FIXME: No classification for various wildlife?
+	Class_T Classify( void )	{	return CLASS_ANTLION;	}	//TODO(d.rattman): No classification for various wildlife?
 
 	bool	FVisible( CBaseEntity *pEntity, int traceMask = MASK_BLOCKLOS, CBaseEntity **ppBlocker = NULL );
 
@@ -550,7 +550,7 @@ void CNPC_Ichthyosaur::SetPoses( Vector moveRel, float speed )
 	SetPoseParameter( 1, m_flTailYaw );
 	SetPoseParameter( 2, m_flTailPitch );
 	
-	//FIXME: Until the sequence info is reset properly after SetPoseParameter
+	//TODO(d.rattman): Until the sequence info is reset properly after SetPoseParameter
 	if ( ( GetActivity() == ACT_RUN ) || ( GetActivity() == ACT_WALK ) )
 	{
 		ResetSequenceInfo();
@@ -566,7 +566,7 @@ void CNPC_Ichthyosaur::SetPoses( Vector moveRel, float speed )
 		pitch = -RAD2DEG( asin( GetAbsVelocity().z / speed ) );
 	}
 
-	//FIXME: Framerate dependant
+	//TODO(d.rattman): Framerate dependant
 	QAngle angles = GetLocalAngles();
 
 	angles.x = (angles.x * 0.8f) + (pitch * 0.2f);
@@ -1035,7 +1035,7 @@ void CNPC_Ichthyosaur::Bite( void )
 
 	CBaseEntity *pHurt;
 	
-	//FIXME: E3 HACK - Always damage bullseyes if we're scripted to hit them
+	//TODO(d.rattman): E3 HACK - Always damage bullseyes if we're scripted to hit them
 	if ( ( GetEnemy() != NULL ) && ( GetEnemy()->Classify() == CLASS_BULLSEYE ) )
 	{
 		pHurt = GetEnemy();

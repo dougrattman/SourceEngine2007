@@ -21,7 +21,7 @@
 #include "ai_node.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Increment this to force rebuilding of all networks
@@ -201,13 +201,13 @@ void CAI_NetworkManager::SaveNetworkGraph(void) {
   // -----------------------------
   // Make sure directories have been made
   // -----------------------------
-  char szNrpFilename[MAX_PATH];  // text node report filename
+  char szNrpFilename[SOURCE_MAX_PATH];  // text node report filename
   Q_strncpy(szNrpFilename, "maps/graphs", sizeof(szNrpFilename));
 
   // Usually adding on the map filename and stripping it does nothing, but if
   // the map is under a subdir, this makes it create the correct subdir under
   // maps/graphs.
-  char tempFilename[MAX_PATH];
+  char tempFilename[SOURCE_MAX_PATH];
   Q_snprintf(tempFilename, sizeof(tempFilename), "%s/%s", szNrpFilename,
              STRING(gpGlobals->mapname));
 
@@ -339,7 +339,7 @@ void CAI_NetworkManager::SaveNetworkGraph( void )
         // -----------------------------
         // Make sure directories have been made
         // -----------------------------
-        char	szNrpFilename [MAX_PATH];// text node report filename
+        char	szNrpFilename [SOURCE_MAX_PATH];// text node report filename
         Q_strncpy( szNrpFilename, "maps" ,sizeof(szNrpFilename));
         filesystem->CreateDirHierarchy( szNrpFilename );
         Q_strncat( szNrpFilename, "/graphs", COPY_ALL_CHARACTERS );
@@ -462,7 +462,7 @@ void CAI_NetworkManager::LoadNetworkGraph(void) {
   // -----------------------------
   // Make sure directories have been made
   // -----------------------------
-  char szNrpFilename[MAX_PATH];  // text node report filename
+  char szNrpFilename[SOURCE_MAX_PATH];  // text node report filename
   Q_strncpy(szNrpFilename, "maps", sizeof(szNrpFilename));
   filesystem->CreateDirHierarchy(szNrpFilename, "DEFAULT_WRITE_PATH");
   Q_strncat(szNrpFilename, "/graphs", sizeof(szNrpFilename),
@@ -639,7 +639,7 @@ void CAI_NetworkManager::LoadNetworkGraph( void )
         // -----------------------------
         // Make sure directories have been made
         // -----------------------------
-        char	szNrpFilename [MAX_PATH];// text node report filename
+        char	szNrpFilename [SOURCE_MAX_PATH];// text node report filename
         Q_strncpy( szNrpFilename, "maps" ,sizeof(szNrpFilename));
         filesystem->CreateDirHierarchy( szNrpFilename );
         Q_strncat( szNrpFilename, "/graphs", COPY_ALL_CHARACTERS );
@@ -857,8 +857,8 @@ void CAI_NetworkManager::InitializeAINetworks() {
 }
 
 // UNDONE: Where should this be defined?
-#ifndef MAX_PATH
-#define MAX_PATH 256
+#ifndef SOURCE_MAX_PATH
+#define SOURCE_MAX_PATH 256
 #endif
 
 //-----------------------------------------------------------------------------
@@ -866,8 +866,8 @@ void CAI_NetworkManager::InitializeAINetworks() {
 //-----------------------------------------------------------------------------
 
 bool CAI_NetworkManager::IsAIFileCurrent(const char *szMapName) {
-  char szBspFilename[MAX_PATH];
-  char szGraphFilename[MAX_PATH];
+  char szBspFilename[SOURCE_MAX_PATH];
+  char szGraphFilename[SOURCE_MAX_PATH];
 
   if (!g_pGameRules->FAllowNPCs()) {
     return false;
@@ -2232,7 +2232,7 @@ void CAI_NetworkBuilder::InitClimbNodePosition(CAI_Network *pNetwork,
     // trace.startsolid, trace.fraction );
 
     if (!trace.startsolid && trace.fraction == 1.0) {
-      float floorZ = GetFloorZ(origin);  // FIXME: don't use this
+      float floorZ = GetFloorZ(origin);  // TODO(d.rattman): don't use this
 
       if (abs(pNode->GetOrigin().z - floorZ) < 36) {
         CAI_Node *new_node =
@@ -2243,7 +2243,7 @@ void CAI_NetworkBuilder::InitClimbNodePosition(CAI_Network *pNetwork,
         InitGroundNodePosition(pNetwork, new_node);
 
         // copy over the offsets for the first CLIMB_OFF node
-        // FIXME: this method is broken for when the CLIMB_OFF nodes are at
+        // TODO(d.rattman): this method is broken for when the CLIMB_OFF nodes are at
         // different heights
         if (numExits == 0) {
           for (int hull = 0; hull < NUM_HULLS; hull++) {

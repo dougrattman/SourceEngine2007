@@ -8,7 +8,7 @@
 #include "ToolInterface.h"
 #include "mapdoc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void CBaseTool::Init( CMapDoc *pDocument )

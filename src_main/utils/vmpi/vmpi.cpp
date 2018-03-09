@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This module implements the subset of MPI that VRAD and VVIS use.
 
@@ -22,7 +22,7 @@
 #include "utlvector.h"
 #include "vmpi_distribute_work.h"
 #include "vstdlib/random.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #define DEFAULT_MAX_WORKERS \
   32  // Unless they specify -mpi_MaxWorkers, it will stop accepting workers
@@ -129,7 +129,7 @@ bool g_bMPI_StatsTextOutput = false;
 char g_CurrentStageString[128] = "";
 CCriticalSection g_CurrentStageCS;
 
-char g_MasterExeName[MAX_PATH];
+char g_MasterExeName[SOURCE_MAX_PATH];
 bool g_bReceivedMasterExeName = false;
 
 // Change our window text.
@@ -147,15 +147,15 @@ class CDependencyInfo {
  public:
   class CDependencyFile {
    public:
-    char m_Name[MAX_PATH];
+    char m_Name[SOURCE_MAX_PATH];
   };
 
   // This is the directory where the dependency files live (i.e. all the
   // binaries that the workers need to run the job).
-  char m_DependencyFilesDir[MAX_PATH];
+  char m_DependencyFilesDir[SOURCE_MAX_PATH];
 
   // "vrad.exe", "vvis.exe", etc.
-  char m_OriginalExeFilename[MAX_PATH];
+  char m_OriginalExeFilename[SOURCE_MAX_PATH];
 
   CUtlVector<CDependencyFile *> m_Files;
 
@@ -381,7 +381,7 @@ void ParseDependencyFile(CDependencyInfo *pInfo, const char *pDepFilename) {
 
   const char *pOptionalPrefix = "optional ";
 
-  char tempStr[MAX_PATH];
+  char tempStr[SOURCE_MAX_PATH];
   while (ReadString(tempStr, sizeof(tempStr), fp)) {
     CDependencyInfo::CDependencyFile *pFile =
         new CDependencyInfo::CDependencyFile;
@@ -395,7 +395,7 @@ void ParseDependencyFile(CDependencyInfo *pInfo, const char *pDepFilename) {
     }
 
     // Now get the file info.
-    char fullFilename[MAX_PATH];
+    char fullFilename[SOURCE_MAX_PATH];
     V_ComposeFileName(pInfo->m_DependencyFilesDir, pFile->m_Name, fullFilename,
                       sizeof(fullFilename));
 
@@ -414,7 +414,7 @@ void ParseDependencyFile(CDependencyInfo *pInfo, const char *pDepFilename) {
 
 void SetupDependenciesForPatch(CDependencyInfo *pInfo,
                                const char *pPatchDirectory) {
-  char searchStr[MAX_PATH];
+  char searchStr[SOURCE_MAX_PATH];
   V_ComposeFileName(pPatchDirectory, "*.*", searchStr, sizeof(searchStr));
 
   _finddata_t data;
@@ -444,7 +444,7 @@ void SetupDependencyInfo(CDependencyInfo *pInfo,
     SetupDependencyFilename(pInfo, NULL);
 
     // Parse the dependency file.
-    char depFilename[MAX_PATH];
+    char depFilename[SOURCE_MAX_PATH];
     V_ComposeFileName(pInfo->m_DependencyFilesDir, pDependencyFilename,
                       depFilename, sizeof(depFilename));
     ParseDependencyFile(pInfo, depFilename);
@@ -619,7 +619,7 @@ void VMPI_SendExeName() {
                            VMPI_INTERNAL_SUBPACKET_VERIFY_EXE_NAME};
   mb.write(cPacketHeader, sizeof(cPacketHeader));
 
-  char baseExeFilename[MAX_PATH], fileBase[MAX_PATH];
+  char baseExeFilename[SOURCE_MAX_PATH], fileBase[SOURCE_MAX_PATH];
   if (!GetModuleFileName(GetModuleHandle(NULL), baseExeFilename,
                          sizeof(baseExeFilename)))
     Error("VMPI_CheckSDKMode -> GetModuleFileName failed.");
@@ -640,7 +640,7 @@ void VMPI_ReceiveExeName() {
   }
 
   // Now compare the exe name we got with our own.
-  char baseExeFilename[MAX_PATH], fileBase[MAX_PATH];
+  char baseExeFilename[SOURCE_MAX_PATH], fileBase[SOURCE_MAX_PATH];
   if (!GetModuleFileName(GetModuleHandle(NULL), baseExeFilename,
                          sizeof(baseExeFilename)))
     Error("VMPI_CheckSDKMode -> GetModuleFileName failed.");
@@ -693,7 +693,7 @@ class CMasterBroadcaster {
    public:
     int m_JobID[4];
     char m_Password[256];
-    char m_WorkerExeFilename[MAX_PATH];
+    char m_WorkerExeFilename[SOURCE_MAX_PATH];
     CUtlVector<const char *> m_Args;
     char m_PatchVersion[32];  // 0 if not patching.
     bool m_bForcePatch;
@@ -1415,14 +1415,14 @@ bool IsValidSDKBinPath(CUtlVector<char *> &outStrings, int *pError) {
   }
 
   // Check the last-access date on clientregistry.blob
-  char baseSteamPath[MAX_PATH];
+  char baseSteamPath[SOURCE_MAX_PATH];
   V_strncpy(baseSteamPath, outStrings[0], sizeof(baseSteamPath));
   for (int i = 1; i < outStrings.Count() - 7; i++) {
     V_AppendSlash(baseSteamPath, sizeof(baseSteamPath));
     V_strncat(baseSteamPath, outStrings[i], sizeof(baseSteamPath));
   }
 
-  char blobPath[MAX_PATH];
+  char blobPath[SOURCE_MAX_PATH];
   V_ComposeFileName(baseSteamPath, "ClientRegistry.blob", blobPath,
                     sizeof(blobPath));
   struct _stat results;
@@ -1443,7 +1443,7 @@ bool IsValidSDKBinPath(CUtlVector<char *> &outStrings, int *pError) {
   }
 
   // Check for some of the files under sourcesdk_content.
-  char sourcesdkContentPath[MAX_PATH];
+  char sourcesdkContentPath[SOURCE_MAX_PATH];
   V_strncpy(sourcesdkContentPath, outStrings[0], sizeof(sourcesdkContentPath));
   for (int i = 1; i < outStrings.Count() - 5; i++) {
     V_AppendSlash(sourcesdkContentPath, sizeof(sourcesdkContentPath));
@@ -1454,7 +1454,7 @@ bool IsValidSDKBinPath(CUtlVector<char *> &outStrings, int *pError) {
   V_strncat(sourcesdkContentPath, "sourcesdk_content",
             sizeof(sourcesdkContentPath));
 
-  char tempFilename[MAX_PATH], mapsrcFilename[MAX_PATH];
+  char tempFilename[SOURCE_MAX_PATH], mapsrcFilename[SOURCE_MAX_PATH];
   V_snprintf(tempFilename, sizeof(tempFilename), "cstrike%cmapsrc",
              CORRECT_PATH_SEPARATOR);
   V_ComposeFileName(sourcesdkContentPath, tempFilename, mapsrcFilename,
@@ -1470,7 +1470,7 @@ bool IsValidSDKBinPath(CUtlVector<char *> &outStrings, int *pError) {
 void VerifyValidSDKMode() {
   // Make sure we're running out of the SourceSDK directory and that our SDK
   // directories are filled out.
-  char baseExeFilename[MAX_PATH];
+  char baseExeFilename[SOURCE_MAX_PATH];
   if (!GetModuleFileName(GetModuleHandle(NULL), baseExeFilename,
                          sizeof(baseExeFilename)))
     Error("VerifyValidSDKMode: GetModuleFileName failed.");
@@ -1688,7 +1688,7 @@ bool VMPI_GetNextMessage(MessageBuffer *pBuf, int *pSource,
 
   while (1) {
     DWORD ret =
-        WaitForMultipleObjects(ARRAYSIZE(handles), handles, FALSE, timeout);
+        WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles, FALSE, timeout);
     if (ret == WAIT_TIMEOUT) {
       return false;
     } else if (ret == WAIT_OBJECT_0) {
@@ -1983,7 +1983,7 @@ bool VMPI_Send2Chunks(const void *pChunk1, int chunk1Len, const void *pChunk2,
                       int chunk2Len, int iDest, int fVMPISendFlags) {
   const void *pChunks[2] = {pChunk1, pChunk2};
   int len[2] = {chunk1Len, chunk2Len};
-  return VMPI_SendChunks(pChunks, len, ARRAYSIZE(pChunks), iDest,
+  return VMPI_SendChunks(pChunks, len, SOURCE_ARRAYSIZE(pChunks), iDest,
                          fVMPISendFlags);
 }
 
@@ -1992,7 +1992,7 @@ bool VMPI_Send3Chunks(const void *pChunk1, int chunk1Len, const void *pChunk2,
                       int iDest, int fVMPISendFlags) {
   const void *pChunks[3] = {pChunk1, pChunk2, pChunk3};
   int len[3] = {chunk1Len, chunk2Len, chunk3Len};
-  return VMPI_SendChunks(pChunks, len, ARRAYSIZE(pChunks), iDest,
+  return VMPI_SendChunks(pChunks, len, SOURCE_ARRAYSIZE(pChunks), iDest,
                          fVMPISendFlags);
 }
 

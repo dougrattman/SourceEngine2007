@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Put things which require Valve libraries in a separate file so
 //          things that don't reference these symbols don't need the extra

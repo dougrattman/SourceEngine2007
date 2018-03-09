@@ -87,7 +87,7 @@ class CTextParams {
   float m_flLetterWidth;  // Letter width in world space.
 };
 
-abstract_class IScratchPad3D {
+the_interface IScratchPad3D {
  protected:
   virtual ~IScratchPad3D() {}
 

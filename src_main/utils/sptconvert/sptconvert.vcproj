@@ -138,7 +138,7 @@ copy &quot;$(TargetPath)&quot; ..\..\..\game\bin\&quot;$(TargetName)&quot;.pdb
 				RelativePath="..\..\public\filesystem_helpers.h">
 			</File>
 			<File
-				RelativePath="..\..\public\filesystem_init.cpp">
+				RelativePath="..\..\public\filesystem_init.cc">
 			</File>
 			<File
 				RelativePath="..\..\public\filesystem_init.h">

@@ -1163,7 +1163,7 @@ void CDmeCombinationControlsPanel::OnFileSelected( KeyValues *kv )
 //-----------------------------------------------------------------------------
 void CDmeCombinationControlsPanel::OnImportCombination()
 {
-	char pStartingDir[MAX_PATH];
+	char pStartingDir[SOURCE_MAX_PATH];
 	GetModContentSubdirectory( "models", pStartingDir, sizeof(pStartingDir) );
 
 	vgui::FileOpenDialog *pDialog = new vgui::FileOpenDialog( this, "Select File to Import", true, new KeyValues( "ImportControls" ) );
@@ -1365,8 +1365,8 @@ void CDmeRawControlListPanel::OnNewWrinkleText()
 {
 	LeaveEditMode();
 
-	char szEditText[MAX_PATH];
-	m_pWrinkleEdit->GetText( szEditText, MAX_PATH );
+	char szEditText[SOURCE_MAX_PATH];
+	m_pWrinkleEdit->GetText( szEditText, SOURCE_MAX_PATH );
 	m_pWrinkleEdit->SetVisible( false );
 
 	float flWrinkleScale = atof( szEditText );
@@ -1778,7 +1778,7 @@ void CDmeCombinationDominationRulesPanel::OnFileSelected( KeyValues *kv )
 //-----------------------------------------------------------------------------
 void CDmeCombinationDominationRulesPanel::OnImportDominationRules()
 {
-	char pStartingDir[MAX_PATH];
+	char pStartingDir[SOURCE_MAX_PATH];
 	GetModContentSubdirectory( "models", pStartingDir, sizeof(pStartingDir) );
 
 	vgui::FileOpenDialog *pDialog = new vgui::FileOpenDialog( this, "Select File to Import", true, new KeyValues( "ImportDominationRules" ) );

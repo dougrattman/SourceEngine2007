@@ -11,7 +11,7 @@
 #include "downsample_nohdr_ps20.inc"
 #include "downsample_nohdr_ps20b.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

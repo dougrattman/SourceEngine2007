@@ -46,7 +46,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -238,7 +238,7 @@ void CWeaponFlameThrower::PrimaryAttack()
 						if ( FindInArray( pTestEnt, pHitEnts, nHitEnts ) == -1 )
 						{
 							pHitEnts[nHitEnts++] = pTestEnt;
-							if ( nHitEnts >= ARRAYSIZE( pHitEnts ) )
+							if ( nHitEnts >= SOURCE_ARRAYSIZE( pHitEnts ) )
 								break;
 						}
 					}
@@ -414,7 +414,7 @@ void CWeaponFlameThrower::PrimaryAttack()
 		int nEnts = FindBurnableEntsInSphere(
 			ents,
 			dists,
-			ARRAYSIZE( dists ),
+			SOURCE_ARRAYSIZE( dists ),
 			vOrigin,
 			50,
 			pOwner );

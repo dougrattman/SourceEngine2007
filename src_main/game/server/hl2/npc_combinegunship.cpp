@@ -44,7 +44,6 @@
 #include "trains.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define GUNSHIP_MSG_BIG_SHOT 1
@@ -847,13 +846,13 @@ bool CNPC_CombineGunship::CheckGroundAttack(void) {
   // Can't ground attack missiles
   if (IsTargettingMissile()) return false;
 
-  // FIXME: Check to make sure we're not firing too far above or below the
-  // target
+  // TODO(d.rattman): Check to make sure we're not firing too far above or below
+  // the target
   if (fabs(GetGroundAttackHitPosition().z - GetEnemy()->WorldSpaceCenter().z) >
       MIN_GROUND_ATTACK_HEIGHT_DIFF)
     return false;
 
-  // FIXME: Check for ground movement capabilities?
+  // TODO(d.rattman): Check for ground movement capabilities?
 
   // TODO: Check for friendly-fire
 
@@ -1548,9 +1547,8 @@ void CNPC_CombineGunship::FireCannonRound(void) {
   VectorNormalize(vecToEnemy);
 
   // If the gun is wildly off target, stop firing!
-  // FIXME  - this should use a vector pointing
-  // to the enemy's location PLUS the stitching
-  // error! (sjb) !!!BUGBUG
+  // TODO(d.rattman): this should use a vector pointing to the enemy's location
+  // PLUS the stitching error!
 
   if (g_debug_gunship.GetInt() == GUNSHIP_DEBUG_STITCHING) {
     QAngle vecAimAngle;
@@ -1616,7 +1614,7 @@ void CNPC_CombineGunship::FireCannonRound(void) {
         GetEnemy()->TakeDamage(info);
       }
     } else {
-      // FIXME: Some other metric
+      // TODO(d.rattman): Some other metric
     }
   } else {
     m_iBurstSize--;
@@ -1898,8 +1896,8 @@ void CNPC_CombineGunship::BeginDestruct(void) {
   // Create the crashing controller and attach it to the ragdoll physics objects
   m_pCrashingController = physenv->CreateMotionController( &m_crashCallback );
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = m_hRagdoll->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
-  for ( int i = 0; i < count; i++ )
+  int count = m_hRagdoll->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList)
+  ); for ( int i = 0; i < count; i++ )
   {
           m_pCrashingController->AttachObject( pList[i], false );
   }
@@ -2231,7 +2229,7 @@ void CNPC_CombineGunship::UpdateRotorSoundPitch(int iPitch) {
   // Apply the pitch to both sounds.
   controller.SoundChangePitch(m_pAirExhaustSound, iPitch, 0.1);
 
-  // FIXME: Doesn't work in multiplayer
+  // TODO(d.rattman): Doesn't work in multiplayer
   CBaseEntity *pPlayer = UTIL_PlayerByIndex(1);
   if (pPlayer) {
     Vector pos;

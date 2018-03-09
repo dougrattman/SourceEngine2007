@@ -4,6 +4,7 @@
 #define ISHADERDEVICE_H
 
 #include "appframework/IAppSystem.h"
+#include "base/include/macros.h"
 #include "bitmap/imageformat.h"
 #include "materialsystem/imaterial.h"
 #include "shaderapi/ishaderdynamic.h"
@@ -93,9 +94,9 @@ constexpr inline bool IsDynamicBufferType(ShaderBufferType_t type) {
 }
 
 // Handle to a vertex, pixel, and geometry shader
-DECLARE_POINTER_HANDLE(VertexShaderHandle_t);
-DECLARE_POINTER_HANDLE(GeometryShaderHandle_t);
-DECLARE_POINTER_HANDLE(PixelShaderHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(VertexShaderHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(GeometryShaderHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(PixelShaderHandle_t);
 
 #define VERTEX_SHADER_HANDLE_INVALID ((VertexShaderHandle_t)0)
 #define GEOMETRY_SHADER_HANDLE_INVALID ((GeometryShaderHandle_t)0)
@@ -103,7 +104,7 @@ DECLARE_POINTER_HANDLE(PixelShaderHandle_t);
 
 // A shader buffer returns a block of memory which must be released when done
 // with it
-abstract_class IShaderBuffer {
+the_interface IShaderBuffer {
  public:
   virtual size_t GetSize() const = 0;
   virtual const void *GetBits() const = 0;
@@ -115,7 +116,7 @@ typedef void (*ShaderModeChangeCallbackFunc_t)(void);
 
 // Methods related to discovering and selecting devices
 #define SHADER_DEVICE_MGR_INTERFACE_VERSION "ShaderDeviceMgr001"
-abstract_class IShaderDeviceMgr : public IAppSystem {
+the_interface IShaderDeviceMgr : public IAppSystem {
  public:
   // Gets the number of adapters...
   virtual int GetAdapterCount() const = 0;
@@ -172,7 +173,7 @@ class CUtlShaderBuffer : public IShaderBuffer {
 
 // Methods related to control of the device
 #define SHADER_DEVICE_INTERFACE_VERSION "ShaderDevice001"
-abstract_class IShaderDevice {
+the_interface IShaderDevice {
  public:
   // Releases/reloads resources when other apps want some memory
   virtual void ReleaseResources() = 0;

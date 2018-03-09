@@ -224,10 +224,10 @@ bool CSoundTestApp::SetupSearchPaths()
 	FileSystem_AddSearchPath_Platform( g_pFileSystem, steamInfo.m_GameInfoPath );
 
 	// and now add episodic to the GAME searchpath
-	char shorts[MAX_PATH];
-	Q_strncpy( shorts, steamInfo.m_GameInfoPath, MAX_PATH );
+	char shorts[SOURCE_MAX_PATH];
+	Q_strncpy( shorts, steamInfo.m_GameInfoPath, SOURCE_MAX_PATH );
 	Q_StripTrailingSlash( shorts );
-	Q_strncat( shorts, "/../episodic", MAX_PATH, MAX_PATH );
+	Q_strncat( shorts, "/../episodic", SOURCE_MAX_PATH, SOURCE_MAX_PATH );
 
 	g_pFileSystem->AddSearchPath( shorts, "GAME", PATH_ADD_TO_HEAD );
 

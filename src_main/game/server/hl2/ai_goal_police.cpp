@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "ai_goal_police.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ai_goal_police

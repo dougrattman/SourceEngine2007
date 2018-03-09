@@ -39,7 +39,7 @@
 #include "usercmd.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef INTERPOLATEDVAR_PARANOID_MEASUREMENT
@@ -211,7 +211,7 @@ static C_BaseEntity *FindPreviouslyCreatedEntity(CPredictableId &testId) {
 }
 #endif
 
-abstract_class IRecordingList {
+the_interface IRecordingList {
  public:
   virtual ~IRecordingList(){};
   virtual void AddToList(ClientEntityHandle_t add) = 0;
@@ -678,7 +678,7 @@ bool C_BaseEntity::IsAbsQueriesValid() {
 
 void C_BaseEntity::PushEnableAbsRecomputations(bool bEnable) {
   if (!ThreadInMainThread()) return;
-  if (g_iAbsRecomputationStackPos < ARRAYSIZE(g_bAbsRecomputationStack)) {
+  if (g_iAbsRecomputationStackPos < SOURCE_ARRAYSIZE(g_bAbsRecomputationStack)) {
     g_bAbsRecomputationStack[g_iAbsRecomputationStackPos] =
         s_bAbsRecomputationEnabled;
     ++g_iAbsRecomputationStackPos;
@@ -1146,7 +1146,7 @@ int C_BaseEntity::VPhysicsGetObjectList(IPhysicsObject **pList, int listMax) {
 
 bool C_BaseEntity::VPhysicsIsFlesh() {
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < count; i++) {
     int material = pList[i]->GetMaterialIndex();
     const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(material);
@@ -1934,7 +1934,7 @@ CUtlVector<C_BaseEntity *> g_AimEntsList;
 // Moves all aiments
 //-----------------------------------------------------------------------------
 void C_BaseEntity::MarkAimEntsDirty() {
-  // FIXME: With the dirty bits hooked into cycle + sequence, it's unclear
+  // TODO(d.rattman): With the dirty bits hooked into cycle + sequence, it's unclear
   // that this is even necessary any more (provided aiments are always accessing
   // joints or attachments of the move parent).
   //
@@ -2139,7 +2139,7 @@ void C_BaseEntity::PostDataUpdate(DataUpdateType_t updateType) {
     m_nModelIndex = 1;
     SetSolid(SOLID_BSP);
 
-    // FIXME: Should these be assertions?
+    // TODO(d.rattman): Should these be assertions?
     SetAbsOrigin(vec3_origin);
     SetAbsAngles(vec3_angle);
   }
@@ -3026,7 +3026,7 @@ void C_BaseEntity::AddStudioDecal(const Ray_t &ray, int hitbox, int decalIndex,
   // Found the point, now lets apply the decals
   CreateModelInstance();
 
-  // FIXME: Pass in decal up?
+  // TODO(d.rattman): Pass in decal up?
   Vector up(0, 0, 1);
 
   if (doTrace && (GetSolid() == SOLID_VPHYSICS) && !tr.startsolid &&
@@ -3070,7 +3070,7 @@ void C_BaseEntity::AddDecal(const Vector &rayStart, const Vector &rayEnd,
   Ray_t ray;
   ray.Init(rayStart, rayEnd);
 
-  // FIXME: Better bloat?
+  // TODO(d.rattman): Better bloat?
   // Bloat a little bit so we get the intersection
   ray.m_Delta *= 1.1f;
 
@@ -3343,7 +3343,7 @@ void C_BaseEntity::SetAbsAngles(const QAngle &absAngles) {
   // This is necessary to get the other fields of m_rgflCoordinateFrame ok
   CalcAbsolutePosition();
 
-  // FIXME: The normalize caused problems in server code like
+  // TODO(d.rattman): The normalize caused problems in server code like
   // momentary_rot_button that isn't
   //        handling things like +/-180 degrees properly. This should be
   //        revisited.
@@ -3472,7 +3472,7 @@ void C_BaseEntity::SetLocalAngles(const QAngle &angles) {
   // a bunch of time in interpolation if we don't have to invalidate everything
   // and sometimes it's off by a normalization amount
 
-  // FIXME: The normalize caused problems in server code like
+  // TODO(d.rattman): The normalize caused problems in server code like
   // momentary_rot_button that isn't
   //        handling things like +/-180 degrees properly. This should be
   //        revisited.
@@ -3522,7 +3522,7 @@ void C_BaseEntity::SetLocalTransform(const matrix3x4_t &localTransform) {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: REMOVE!!!
+// TODO(d.rattman): REMOVE!!!
 //-----------------------------------------------------------------------------
 void C_BaseEntity::MoveToAimEnt() {
   Vector vecAimEntOrigin;
@@ -3583,7 +3583,7 @@ void C_BaseEntity::CalcAbsolutePosition() {
   // just have to accept stale data.
   if (!s_bAbsRecomputationEnabled) return;
 
-  // FIXME: Recompute absbox!!!
+  // TODO(d.rattman): Recompute absbox!!!
   if ((m_iEFlags & EFL_DIRTY_ABSTRANSFORM) == 0) {
     // quick check to make sure we really don't need an update
     // Assert( m_pMoveParent || m_vecAbsOrigin == GetLocalOrigin() );

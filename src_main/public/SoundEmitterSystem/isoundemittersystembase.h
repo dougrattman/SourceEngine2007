@@ -69,7 +69,7 @@ struct SoundFile {
     symbol = UTL_INVAL_SYMBOL;
     gender = GENDER_NONE;
     available = true;
-    COMPILE_TIME_ASSERT(sizeof(SoundFile) == 4);
+    static_assert(sizeof(SoundFile) == 4);
   }
 
   CUtlSymbol symbol;
@@ -213,7 +213,7 @@ struct CSoundParametersInternal {
 //-----------------------------------------------------------------------------
 // Purpose: Base class for sound emitter system handling (can be used by tools)
 //-----------------------------------------------------------------------------
-abstract_class ISoundEmitterSystemBase : public IAppSystem {
+the_interface ISoundEmitterSystemBase : public IAppSystem {
  public:
   // Init, shutdown called after we know what mod is running
   virtual bool ModInit() = 0;

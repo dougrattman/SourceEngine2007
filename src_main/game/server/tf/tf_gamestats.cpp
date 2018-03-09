@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.//
 //
 // Purpose: 
 //
@@ -181,7 +181,7 @@ void CTFGameStats::ResetKillHistory( CTFPlayer *pPlayer )
 	int iPlayerIndex = pPlayer->entindex();
 
 	// for every other player, set all all the kills with respect to this player to 0
-	for ( int i = 0; i < ARRAYSIZE( m_aPlayerStats ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( m_aPlayerStats ); i++ )
 	{
 		PlayerStats_t &statsOther = m_aPlayerStats[i];
 		statsOther.statsKills.iNumKilled[iPlayerIndex] = 0;
@@ -195,7 +195,7 @@ void CTFGameStats::ResetKillHistory( CTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 void CTFGameStats::ResetRoundStats()
 {
-	for ( int i = 0; i < ARRAYSIZE( m_aPlayerStats ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( m_aPlayerStats ); i++ )
 	{		
 		m_aPlayerStats[i].statsCurrentRound.Reset();
 	}

@@ -20,8 +20,8 @@ void MyDisconnectHandler(int procID, const char *pReason) {
 void DownloadFile(const char *pCachePath, const char *pRemoteFileBase,
                   const char *pFilename) {
   // Setup local and remote filenames.
-  char remoteFilename[MAX_PATH];
-  char localFilename[MAX_PATH];
+  char remoteFilename[SOURCE_MAX_PATH];
+  char localFilename[SOURCE_MAX_PATH];
   V_ComposeFileName(pRemoteFileBase, pFilename, remoteFilename,
                     sizeof(remoteFilename));
   V_ComposeFileName(pCachePath, pFilename, localFilename,
@@ -97,7 +97,7 @@ int RunVMPITransferWorker(int argc, char **argv) {
 
   // Ok, we're done. Write the status file so the service knows all the files
   // are ready to go.
-  char statusFilename[MAX_PATH];
+  char statusFilename[SOURCE_MAX_PATH];
   V_ComposeFileName(pCachePath, "ReadyToGo.txt", statusFilename,
                     sizeof(statusFilename));
   FILE *fp = fopen(statusFilename, "wb");

@@ -9,7 +9,7 @@
 #include "iregistry.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -98,7 +98,7 @@ void CRecentFileList::LoadFromRegistry( const char *pToolKeyName )
 		Q_snprintf( szType, sizeof( szType ), "%s\\history_fileformat%02i", pToolKeyName, i ); 
 		
 		// NOTE: Can't call registry->ReadString twice in a row!
-		char pFileName[MAX_PATH];
+		char pFileName[SOURCE_MAX_PATH];
 		Q_strncpy( pFileName, registry->ReadString( sz, "" ), sizeof(pFileName) );
 		if ( pFileName && pFileName[ 0 ] )
 		{

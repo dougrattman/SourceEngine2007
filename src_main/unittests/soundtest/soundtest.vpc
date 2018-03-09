@@ -13,7 +13,7 @@ $Project "Soundtest"
 {
 	$Folder	"Source Files"
 	{
-		$File	"$SRCDIR\public\filesystem_init.cpp"
+		$File	"$SRCDIR\public\filesystem_init.cc"
 		$File	"soundtest.cpp"
 	}
 

@@ -127,16 +127,13 @@ class NET_Tick : public CNetMessage {
 #endif
   };
 
-  NET_Tick(int tick, float the_host_frametime,
-           float the_host_frametime_stddeviation) {
+  NET_Tick(int tick, [[maybe_unused]] float the_host_frametime,
+    [[maybe_unused]] float the_host_frametime_stddeviation) {
     m_bReliable = false;
     m_nTick = tick;
 #if PROTOCOL_VERSION > 10
     m_flHostFrameTime = the_host_frametime;
     m_flHostFrameTimeStdDeviation = the_host_frametime_stddeviation;
-#else
-    NOTE_UNUSED(the_host_frametime);
-    NOTE_UNUSED(the_host_frametime_stddeviation);
 #endif
   };
 
@@ -255,8 +252,8 @@ class CLC_FileCRCCheck : public CNetMessage {
  public:
   DECLARE_CLC_MESSAGE(FileCRCCheck);
 
-  char m_szPathID[MAX_PATH];
-  char m_szFilename[MAX_PATH];
+  char m_szPathID[SOURCE_MAX_PATH];
+  char m_szFilename[SOURCE_MAX_PATH];
   CRC32_t m_CRC;
 };
 

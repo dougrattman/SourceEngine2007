@@ -18,7 +18,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern short	g_sModelIndexFireball;		// (in combatweapon.cpp) holds the index for the fireball 
@@ -404,7 +404,7 @@ void CBaseGrenade::BounceTouch( CBaseEntity *pOther )
 		// add a bit of static friction
 //		SetAbsVelocity( GetAbsVelocity() * 0.8 );
 
-		// SetSequence( random->RandomInt( 1, 1 ) ); // FIXME: missing tumble animations
+		// SetSequence( random->RandomInt( 1, 1 ) ); // TODO(d.rattman): missing tumble animations
 	}
 	else
 	{

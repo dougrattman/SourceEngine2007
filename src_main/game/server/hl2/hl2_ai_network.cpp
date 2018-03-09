@@ -10,7 +10,7 @@
 #include "ai_networkmanager.h"
 #include "npc_strider.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CHL2NetworkBuildHelper : public CAI_NetworkBuildHelper

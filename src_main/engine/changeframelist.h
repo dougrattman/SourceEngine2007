@@ -15,7 +15,7 @@
 // These are created once per entity per frame. Since usually a very small
 // percentage of an entity's properties actually change each frame, this allows
 // you to get a small set of properties to delta for each client.
-abstract_class IChangeFrameList {
+the_interface IChangeFrameList {
  public:
   // Call this to delete the object.
   virtual void Release() = 0;

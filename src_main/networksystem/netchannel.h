@@ -65,7 +65,7 @@ enum
 
 // shared commands used by all streams, handled by stream layer, TODO
 
-abstract_class INetworkMessageHandler
+the_interface INetworkMessageHandler
 {
 public:
 	virtual void	OnConnectionClosing( INetChannel *channel, char const *reason ) = 0;
@@ -128,7 +128,7 @@ private:
 };
 
 
-abstract_class IConnectionlessPacketHandler
+the_interface IConnectionlessPacketHandler
 {
 public:
 	virtual bool ProcessConnectionlessPacket( CNetPacket *packet ) = 0;	// process a connectionless packet
@@ -137,14 +137,14 @@ protected:
 	virtual	~IConnectionlessPacketHandler( void ) {};
 };
 
-abstract_class ILookupChannel
+the_interface ILookupChannel
 {
 public:
 
 	virtual INetChannel *FindNetChannel( const netadr_t& from ) = 0;
 };
 
-// FIXME: Make an INetChannel
+// TODO(d.rattman): Make an INetChannel
 class CNetChannel : public INetChannel
 {
 public:

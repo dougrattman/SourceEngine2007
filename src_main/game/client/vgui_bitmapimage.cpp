@@ -11,7 +11,7 @@
 #include "panelmetaclassmgr.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -172,7 +172,7 @@ bool InitializeImage(KeyValues* pInitData, const char* pSectionName,
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: How sad. We need to make KeyValues + vgui::KeyValues be the same.
+// TODO(d.rattman): How sad. We need to make KeyValues + vgui::KeyValues be the same.
 // Bleah
 /*-----------------------------------------------------------------------------
 bool InitializeImage( KeyValues *pInitData, const char* pSectionName,

@@ -11,7 +11,7 @@
 #include "saverestore_bitstring.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -579,7 +579,7 @@ void CAI_Squad::JustMadeSound( int soundPriority, float time )
 bool CAI_Squad::OccupyStrategySlotRange( CBaseEntity *pEnemy, int slotIDStart, int slotIDEnd, int *pSlot )
 {
 #ifndef PER_ENEMY_SQUADSLOTS
-	// FIXME: combat slots need to be per enemy, not per squad.  
+	// TODO(d.rattman): combat slots need to be per enemy, not per squad.  
 	// As it is, once a squad is occupied it stops making even simple attacks to other things nearby.
 	// This code may make soldiers too aggressive
 	if (GetLeader() && pEnemy != GetLeader()->GetEnemy())

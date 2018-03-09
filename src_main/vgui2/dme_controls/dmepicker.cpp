@@ -14,7 +14,7 @@
 #include "vgui/iinput.h"
 #include "dme_controls/dmecontrols_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -44,7 +44,7 @@ static int __cdecl DmeBrowserSortFunc( vgui::ListPanel *pPanel, const ListPanelI
 //-----------------------------------------------------------------------------
 CDmePicker::CDmePicker( vgui::Panel *pParent ) : BaseClass( pParent, "DmePicker" )
 {
-	// FIXME: Make this an image browser
+	// TODO(d.rattman): Make this an image browser
 	m_pDmeBrowser = new vgui::ListPanel( this, "DmeBrowser" );
 	m_pDmeBrowser->AddColumnHeader( 0, "dme", "Dme Elements", 52, 0 );
 	m_pDmeBrowser->SetSelectIndividualCells( true );

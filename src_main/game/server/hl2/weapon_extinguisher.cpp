@@ -17,7 +17,7 @@
 #include "ndebugoverlay.h"
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	fire_extinguisher_debug( "fire_extinguisher_debug", "0" );
@@ -97,7 +97,7 @@ void CWeaponExtinguisher::Spawn( void )
 	BaseClass::Spawn();
 
 	m_takedamage	= DAMAGE_YES;
-	m_iHealth		= 25;//FIXME: Define
+	m_iHealth		= 25;//TODO(d.rattman): Define
 }
 
 //-----------------------------------------------------------------------------
@@ -234,9 +234,9 @@ void CWeaponExtinguisher::ItemPostFrame( void )
 		
 		vMuzzlePos	= pOwner->Weapon_ShootPosition( );
 		
-		//FIXME: Need to get the exact same muzzle point!
+		//TODO(d.rattman): Need to get the exact same muzzle point!
 
-		//FIXME: This needs to be adjusted so the server collision matches the visuals on the client
+		//TODO(d.rattman): This needs to be adjusted so the server collision matches the visuals on the client
 		vMuzzlePos	+= vForward * 15.0f;
 		vMuzzlePos	+= vRight * 6.0f;
 		vMuzzlePos	+= vUp * -4.0f;
@@ -361,7 +361,7 @@ void CExtinguisherCharger::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, U
 
 	if ( pPlayer )
 	{
-		//FIXME: Need a way to do this silently
+		//TODO(d.rattman): Need a way to do this silently
 		pPlayer->GiveAmmo( 1, "extinguisher" );
 	}
 }

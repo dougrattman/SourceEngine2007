@@ -25,7 +25,7 @@
 
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IPredictionSystem *IPredictionSystem::g_pPredictionSystems = NULL;
@@ -656,7 +656,7 @@ void CPrediction::RunPreThink(C_BasePlayer *player) {
 
   // Called every frame to let game rules do any specific think logic for the
   // player
-  // FIXME:  Do we need to set up a client side version of the gamerules???
+  // TODO(d.rattman):  Do we need to set up a client side version of the gamerules???
   // g_pGameRules->PlayerThink( player );
 
   player->PreThink();
@@ -743,7 +743,7 @@ void CPrediction::RunCommand(C_BasePlayer *player, CUserCmd *ucmd,
   IClientVehicle *pVehicle = player->GetVehicle();
   if (ucmd->impulse) {
     // Discard impulse commands unless the vehicle allows them.
-    // FIXME: UsingStandardWeapons seems like a bad filter for this.
+    // TODO(d.rattman): UsingStandardWeapons seems like a bad filter for this.
     // The flashlight is an impulse command, for example.
     if (!pVehicle || player->UsingStandardWeaponsInVehicle()) {
       player->m_nImpulse = ucmd->impulse;
@@ -935,7 +935,7 @@ void CPrediction::RemoveStalePredictedEntities(int sequence_number) {
         }
       }
 
-      // FIXME:  Do we need an OnPredictedEntityRemove call with an "it's not
+      // TODO(d.rattman):  Do we need an OnPredictedEntityRemove call with an "it's not
       // valid" flag of some kind
     }
 
@@ -1113,7 +1113,7 @@ void CPrediction::StorePredictionResults(int predicted_frame) {
     //  simulated until a network update arrives
     if (!entity->GetPredictable()) continue;
 
-    // FIXME: The lack of this call inexplicably actually creates prediction
+    // TODO(d.rattman): The lack of this call inexplicably actually creates prediction
     // errors
     InvalidateEFlagsRecursive(entity, EFL_DIRTY_ABSTRANSFORM |
                                           EFL_DIRTY_ABSVELOCITY |
@@ -1515,7 +1515,7 @@ void CPrediction::_Update(bool received_new_world_update, bool validframe,
   // This allows us to sample the world when it may not be ready to be sampled
   Assert(C_BaseEntity::IsAbsQueriesValid());
 
-  // FIXME: What about hierarchy here?!?
+  // TODO(d.rattman): What about hierarchy here?!?
   SetIdealPitch(localPlayer, localPlayer->GetLocalOrigin(),
                 localPlayer->GetLocalAngles(), localPlayer->m_vecViewOffset);
 #endif

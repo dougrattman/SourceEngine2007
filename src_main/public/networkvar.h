@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef NETWORKVAR_H
 #define NETWORKVAR_H
@@ -42,7 +42,7 @@ inline int CheckDeclareClass_Access(T *, const char *pShouldBe) {
 
 #ifndef _STATIC_LINKED
 #ifdef _MSC_VER
-#if defined(_DEBUG) && (_MSC_VER > 1200)
+#if defined(_DEBUG)
 #define VALIDATE_DECLARE_CLASS 1
 #endif
 #endif

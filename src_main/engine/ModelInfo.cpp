@@ -19,7 +19,7 @@
 #include "sys_dll.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ const studiohdr_t *CModelInfo::FindModel(const studiohdr_t *pStudioHdr,
   const model_t *model = (model_t *)*cache;
 
   if (!model) {
-    // FIXME: what do I pass in here?
+    // TODO(d.rattman): what do I pass in here?
     model = modelloader->GetModelForName(modelname,
                                          IModelLoader::FMODELLOADER_SERVER);
     *cache = (void *)model;
@@ -303,7 +303,7 @@ int CModelInfo::GetAutoplayList(const studiohdr_t *pStudioHdr,
 
 //-----------------------------------------------------------------------------
 // Purpose: bind studiohdr_t support functions to engine
-// FIXME: This should be moved into studio.cpp?
+// TODO(d.rattman): This should be moved into studio.cpp?
 //-----------------------------------------------------------------------------
 const studiohdr_t *studiohdr_t::FindModel(void **cache,
                                           char const *pModelName) const {
@@ -378,7 +378,7 @@ bool CModelInfo::IsUsingFBTexture(
       case mod_studio: {
         IMaterial *pMaterials[128];
         int materialCount = g_pStudioRender->GetMaterialListFromBodyAndSkin(
-            model->studio, nSkin, nBody, ARRAYSIZE(pMaterials), pMaterials);
+            model->studio, nSkin, nBody, SOURCE_ARRAYSIZE(pMaterials), pMaterials);
         for (int i = 0; i < materialCount; i++) {
           if (pMaterials[i] != NULL) {
             // Bind material first so all material proxies execute
@@ -804,7 +804,7 @@ void CModelInfoClient::GetModelMaterialColorAndLighting(
     }
 
     case mod_studio: {
-      // FIXME: Need some way of getting the material!
+      // TODO(d.rattman): Need some way of getting the material!
       matColor.Init(0.5f, 0.5f, 0.5f);
 
       // Get the lighting at the point

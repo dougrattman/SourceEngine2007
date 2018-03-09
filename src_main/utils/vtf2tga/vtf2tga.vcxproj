@@ -249,7 +249,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\public\commonmacros.h" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\..\public\mathlib\vector.h" />
     <ClInclude Include="..\..\public\mathlib\vector2d.h" />

@@ -26,7 +26,6 @@
 #include "tier1/keyvalues.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 ConVar ai_sequence_debug("ai_sequence_debug", "0");
@@ -803,8 +802,8 @@ void CBaseAnimating::ResetSequenceInfo() {
   m_nNewSequenceParity = (m_nNewSequenceParity + 1) & EF_PARITY_MASK;
   m_nResetEventsParity = (m_nResetEventsParity + 1) & EF_PARITY_MASK;
 
-  // FIXME: why is this called here?  Nothing should have changed to make this
-  // nessesary
+  // TODO(d.rattman): why is this called here?  Nothing should have changed to
+  // make this nessesary
   if (pStudioHdr) {
     SetEventIndexForSequence(pStudioHdr->pSeqdesc(GetSequence()));
   }
@@ -965,7 +964,7 @@ void CBaseAnimating::DispatchAnimEvents(CBaseAnimating *eventHandler) {
   }
   */
 
-  // FIXME: does not handle negative framerates!
+  // TODO(d.rattman): does not handle negative framerates!
   int index = 0;
   while ((index = GetAnimationEvent(pstudiohdr, GetSequence(), &event, flStart,
                                     flEnd, index)) != 0) {
@@ -1304,7 +1303,6 @@ void CBaseAnimating::GetBoneTransform(int iBone, matrix3x4_t &pBoneToWorld) {
 
   Assert(pmatrix);
 
-  // FIXME
   MatrixCopy(*pmatrix, pBoneToWorld);
 }
 
@@ -1343,7 +1341,8 @@ void CBaseAnimating::InitStepHeightAdjust(void) {
   m_flIKGroundMinHeight = 0;
   m_flIKGroundMaxHeight = 0;
 
-  // FIXME: not safe to call GetAbsOrigin here. Hierarchy might not be set up!
+  // TODO(d.rattman): not safe to call GetAbsOrigin here. Hierarchy might not be
+  // set up!
   m_flEstIkFloor = GetAbsOrigin().z;
   m_flEstIkOffset = 0;
 }
@@ -1377,7 +1376,7 @@ void CBaseAnimating::UpdateStepOrigin() {
       Vector toAbs = GetAbsOrigin() - GetLocalOrigin();
       if (toAbs.z == 0.0) {
         CAI_BaseNPC *pNPC = MyNPCPointer();
-        // FIXME:  There needs to be a default step height somewhere
+        // TODO(d.rattman):  There needs to be a default step height somewhere
         float height = 18.0f;
         if (pNPC) {
           height = pNPC->StepHeight();
@@ -1434,7 +1433,7 @@ void CBaseAnimating::CalculateIKLocks(float currentTime) {
     CTraceFilterSkipNPCs traceFilter(this, GetCollisionGroup());
     Vector up;
     GetVectors(NULL, NULL, &up);
-    // FIXME: check number of slots?
+    // TODO(d.rattman): check number of slots?
     for (int i = 0; i < m_pIk->m_target.Count(); i++) {
       trace_t trace;
       CIKTarget *pTarget = &m_pIk->m_target[i];
@@ -1605,7 +1604,7 @@ void CBaseAnimating::SetupBones(matrix3x4_t *pBoneToWorld, int boneMask) {
     // Msg( "%.03f : %s:%s not in pvs\n", gpGlobals->curtime, GetClassname(),
     // GetEntityName().ToCStr() );
   } else if (m_pIk) {
-    // FIXME: pass this into Studio_BuildMatrices to skip transforms
+    // TODO(d.rattman): pass this into Studio_BuildMatrices to skip transforms
     CBoneBitList boneComputed;
     m_iIKCounter++;
     m_pIk->Init(pStudioHdr, GetAbsAngles(), adjOrigin, gpGlobals->curtime,
@@ -1721,7 +1720,7 @@ bool CBaseAnimating::GetAttachment(int iAttachment,
   if (iAttachment < 1 || iAttachment > pStudioHdr->GetNumAttachments()) {
     MatrixCopy(EntityToWorldTransform(), attachmentToWorld);
     //		Assert(!"CBaseAnimating::GetAttachment: invalid attachment
-    //index");
+    // index");
     return false;
   }
 
@@ -1985,9 +1984,10 @@ int CBaseAnimating::RegisterPrivateActivity(const char *pszActivityName) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Notifies the console that this entity could not retrieve an
-//			animation sequence for the specified activity. This probably
-//means 			there's a typo in the model QC file, or the sequence is missing
-//			entirely.
+//			animation sequence for the specified activity. This
+//probably
+// means 			there's a typo in the model QC file, or the sequence is
+// missing 			entirely.
 //
 //
 // Input  : iActivity - The activity that failed to resolve to a sequence.
@@ -1995,9 +1995,10 @@ int CBaseAnimating::RegisterPrivateActivity(const char *pszActivityName) {
 //
 // NOTE   :	IMPORTANT - Something needs to be done so that private
 // activities
-//			(which are allowed to collide in the activity list) remember
-//each 			entity that registered an activity there, and the activity name 			each
-//character registered.
+//			(which are allowed to collide in the activity list)
+//remember
+// each 			entity that registered an activity there, and the
+// activity name 			each character registered.
 //-----------------------------------------------------------------------------
 void CBaseAnimating::ReportMissingActivity(int iActivity) {
   Msg("%s has no sequence for act:%s\n", GetClassname(),
@@ -2075,7 +2076,7 @@ float CBaseAnimating::GetInstantaneousVelocity(float flInterval) {
   CStudioHdr *pstudiohdr = GetModelPtr();
   if (!pstudiohdr) return 0;
 
-  // FIXME: someone needs to check for last frame, etc.
+  // TODO(d.rattman): someone needs to check for last frame, etc.
   float flNextCycle = GetCycle() + flInterval *
                                        GetSequenceCycleRate(GetSequence()) *
                                        m_flPlaybackRate;
@@ -2192,8 +2193,8 @@ bool CBaseAnimating::HasMovement(int iSequence) {
   CStudioHdr *pstudiohdr = GetModelPtr();
   if (!pstudiohdr) return false;
 
-  // FIXME: this needs to check to see if there are keys, and the object is
-  // walking
+  // TODO(d.rattman): this needs to check to see if there are keys, and the
+  // object is walking
   Vector deltaPos;
   QAngle deltaAngles;
   if (Studio_SeqMovement(pstudiohdr, iSequence, 0.0f, 1.0f,
@@ -2390,7 +2391,7 @@ bool CBaseAnimating::TestHitboxes(const Ray_t &ray, unsigned int fContentsMask,
   return true;
 }
 
-void CBaseAnimating::InitBoneControllers(void)  // FIXME: rename
+void CBaseAnimating::InitBoneControllers(void)  // TODO(d.rattman): rename
 {
   int i;
 
@@ -2450,7 +2451,7 @@ float CBaseAnimating::GetBoneController(int iController) {
 //------------------------------------------------------------------------------
 // Purpose : Returns velcocity of the NPC from it's animation.
 //			 If physically simulated gets velocity from physics
-//object
+// object
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 #include <KeyValues.h>
 #include <vgui/IVGui.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ void CHudPlayerOverlay::OnTick( )
 		iteam	= tf2player->GetTeamNumber();
 		iclass	= tf2player->PlayerClass();
 
-		// FIXME: Get max health for player
+		// TODO(d.rattman): Get max health for player
 		m_pHealth->SetHealth( (float)tf2player->GetHealth() / (float)100.0f );
 	}
 

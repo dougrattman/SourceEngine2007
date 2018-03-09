@@ -351,7 +351,7 @@
     <ClInclude Include="..\..\public\cmodel.h" />
     <ClInclude Include="..\..\public\commonmacros.h" />
     <ClInclude Include="..\..\public\gamebspfile.h" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\..\public\mathlib\vector.h" />

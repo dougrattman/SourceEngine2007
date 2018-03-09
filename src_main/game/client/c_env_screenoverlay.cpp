@@ -17,7 +17,7 @@
 #include "ScreenSpaceEffects.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -234,7 +234,7 @@ void C_EnvScreenEffect::ReceiveMessage( int classID, bf_read &msg )
 	switch( messageType )
 	{
 		// Effect turning on
-		case 0: // FIXME: Declare
+		case 0: // TODO(d.rattman): Declare
 			{		
 				// Create a keyvalue block to set these params
 				KeyValues *pKeys = new KeyValues( "keys" );
@@ -281,7 +281,7 @@ void C_EnvScreenEffect::ReceiveMessage( int classID, bf_read &msg )
 			break;
 
 		// Effect turning off
-		case 1:	// FIXME: Declare
+		case 1:	// TODO(d.rattman): Declare
 			
 			if ( m_nType == SCREENEFFECT_EP1_INTRO )
 			{

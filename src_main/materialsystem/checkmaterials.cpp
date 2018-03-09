@@ -537,9 +537,9 @@ void CheckVTFInDirectoryRecursive( const char *pRoot, const char *pDirectory, CU
 		{
 			int i = vtf.AddToTail( );
 
-			char buf[MAX_PATH];
-			char buf2[MAX_PATH];
-			Q_snprintf( buf, MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
+			char buf[SOURCE_MAX_PATH];
+			char buf2[SOURCE_MAX_PATH];
+			Q_snprintf( buf, SOURCE_MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
 			Q_FixSlashes( buf );
 
 			Q_StripExtension( buf, buf2, sizeof(buf2) );
@@ -568,8 +568,8 @@ void CheckVTFInDirectoryRecursive( const char *pRoot, const char *pDirectory, CU
 					continue;
 				}
 
-				char buf[MAX_PATH];
-				Q_snprintf( buf, MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
+				char buf[SOURCE_MAX_PATH];
+				Q_snprintf( buf, SOURCE_MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
 				CheckVTFInDirectoryRecursive( pRoot, buf, vtf );
 			}
 		} while ( FindNextFile ( findHandle, &wfd ) ); 
@@ -598,7 +598,7 @@ void _CheckMateralsInDirectoryRecursive( const char *pRoot, const char *pDirecto
 		{
 			KeyValues * vmtKeyValues = new KeyValues("vmt");
 
-			char pFileName[MAX_PATH];
+			char pFileName[SOURCE_MAX_PATH];
 			Q_snprintf( pFileName, sizeof( pFileName ), "%s/%s", pDirectory, wfd.cFileName );
 			if ( !vmtKeyValues->LoadFromFile( g_pFullFileSystem, pFileName, "GAME" ) )
 			{
@@ -630,8 +630,8 @@ void _CheckMateralsInDirectoryRecursive( const char *pRoot, const char *pDirecto
 					continue;
 				}
 
-				char buf[MAX_PATH];
-				Q_snprintf( buf, MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
+				char buf[SOURCE_MAX_PATH];
+				Q_snprintf( buf, SOURCE_MAX_PATH, "%s/%s", pDirectory, wfd.cFileName );
 				_CheckMateralsInDirectoryRecursive( pRoot, buf, vtf );
 			}
 		} while ( FindNextFile ( findHandle, &wfd ) ); 

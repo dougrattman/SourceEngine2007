@@ -21,7 +21,7 @@ class BitmapImage : public vgui::Image {
   bool Init(vgui::VPANEL pParent, const char* pFileName);
   bool Init(vgui::VPANEL pParent, KeyValues* pInitData);
 
-  /* FIXME: Bleah!!! Don't want two different KeyValues
+  /* TODO(d.rattman): Bleah!!! Don't want two different KeyValues
   bool Init( vgui::VPANEL pParent, KeyValues* pInitData ); */
 
   void DoPaint(vgui::VPANEL panel, float yaw = 0, float flAlphaModulate = 1.0f);
@@ -69,7 +69,7 @@ class BitmapImage : public vgui::Image {
 bool InitializeImage(KeyValues* pInitData, const char* pSectionName,
                      vgui::Panel* pParent, BitmapImage* pBitmapImage);
 
-/* FIXME: How sad. We need to make KeyValues + vgui::KeyValues be the same.
+/* TODO(d.rattman): How sad. We need to make KeyValues + vgui::KeyValues be the same.
 Bleah bool InitializeImage( KeyValues *pInitData, const char* pSectionName,
 vgui::Panel *pParent, BitmapImage* pBitmapImage ); */
 

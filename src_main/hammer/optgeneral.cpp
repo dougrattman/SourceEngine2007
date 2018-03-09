@@ -13,7 +13,7 @@
 #pragma warning(disable:4244)
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void EditorUtil_ConvertPath(CString &str, bool bSave);
@@ -149,7 +149,7 @@ void COPTGeneral::DoDataExchange(CDataExchange* pDX)
 //-----------------------------------------------------------------------------
 BOOL COPTGeneral::OnInitDialog(void)
 {
-	char szAutosaveDir[MAX_PATH];
+	char szAutosaveDir[SOURCE_MAX_PATH];
 	APP()->GetDirectory( DIR_AUTOSAVE, szAutosaveDir );
 	CString str( szAutosaveDir );
 
@@ -259,7 +259,7 @@ void COPTGeneral::OnEnableAutosave(void)
 
 void COPTGeneral::OnBrowseAutosaveDir(void)
 {
-	char szTmp[MAX_PATH];
+	char szTmp[SOURCE_MAX_PATH];
 	if (!BrowseForFolder("Select Autosave Directory", szTmp))
 	{
 		return;
@@ -272,7 +272,7 @@ void COPTGeneral::OnBrowseAutosaveDir(void)
 
 BOOL COPTGeneral::BrowseForFolder(char *pszTitle, char *pszDirectory)
 {
-	char szTmp[MAX_PATH];
+	char szTmp[SOURCE_MAX_PATH];
 
 	BROWSEINFO bi;
 	memset(&bi, 0, sizeof bi);

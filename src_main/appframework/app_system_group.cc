@@ -133,7 +133,7 @@ static ch const *g_StageLookup[] = {
 
 void CAppSystemGroup::ReportStartupFailure(i32 nErrorStage, i32 nSysIndex) {
   ch const *pszStageDesc = "Unknown";
-  if (nErrorStage >= 0 && nErrorStage < ARRAYSIZE(g_StageLookup)) {
+  if (nErrorStage >= 0 && nErrorStage < SOURCE_ARRAYSIZE(g_StageLookup)) {
     pszStageDesc = g_StageLookup[nErrorStage];
   }
 
@@ -310,7 +310,7 @@ i32 CAppSystemGroup::Run() {
   if (m_nErrorStage != NONE) return nRetVal;
 
   // Main loop implemented by the application
-  // FIXME: HACK workaround to avoid vgui porting
+  // TODO(d.rattman): HACK workaround to avoid vgui porting
   nRetVal = Main();
 
   // Shutdown, disconnect, unload

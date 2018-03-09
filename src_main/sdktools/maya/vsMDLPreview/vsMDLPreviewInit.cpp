@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: The plugin entry and exit points
 //
@@ -48,7 +48,7 @@ static bool g_okToUnload = true;
 //			pointer perhaps
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
+SOURCE_API_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
 {
 	static const AppSystemInfo_t appSystems[] = 
 	{
@@ -73,7 +73,7 @@ DLL_EXPORT const AppSystemInfo_t *VsMayaGetAppSystems( )
 // Output : true is everything is good, false otherwise
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
+SOURCE_API_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
 {
 	if ( !ValveMaya::ConnectLibraries( factory ) )
 		return false;
@@ -98,7 +98,7 @@ DLL_EXPORT bool VsMayaConnect( CreateInterfaceFn factory )
 // Output :
 //
 //-----------------------------------------------------------------------------
-DLL_EXPORT void VsMayaDisconnect()
+SOURCE_API_EXPORT void VsMayaDisconnect()
 {
 	ValveMaya::DisconnectLibraries();
 
@@ -138,7 +138,7 @@ EXPORT MStatus uninitializePlugin( MObject mObject )
 	if ( !g_okToUnload )
 		return MS::kFailure;
 
-	// FIXME: Should we have a generic framework of stuff to call during uninitialize?
+	// TODO(d.rattman): Should we have a generic framework of stuff to call during uninitialize?
 	UninstallAssetBuilderCallback();
 
 	MFnPlugin pluginFn( mObject );

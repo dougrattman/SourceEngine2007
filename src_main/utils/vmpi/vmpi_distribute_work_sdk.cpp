@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cmdlib.h"
 #include "mathlib/mathlib.h"
@@ -116,7 +116,7 @@ class CShuffledWorkUnitWalker {
     m_flLastShuffleTime = Plat_FloatTime();
     m_pShuffleRequester = pRequester;
 
-    int nBytes = PAD_NUMBER(nWorkUnits, 8) / 8;
+    int nBytes = SOURCE_PAD_NUMBER(nWorkUnits, 8) / 8;
     m_CompletedWUBits.SetSize(nBytes);
     m_LocalCompletedWUBits.SetSize(nBytes);
     for (WUIndexType i = 0; i < m_CompletedWUBits.Count(); i++)
@@ -392,7 +392,7 @@ class CDistributor_SDKMaster : public IWorkUnitDistributorMaster,
     CUtlVector<unsigned short> whosWorking;
     if (m_bUsingMasterLocalThreads) {
       whosWorking.AddToTail(VMPI_MASTER_ID);
-      COMPILE_TIME_ASSERT(VMPI_MASTER_ID == 0);
+      static_assert(VMPI_MASTER_ID == 0);
     }
 
     {

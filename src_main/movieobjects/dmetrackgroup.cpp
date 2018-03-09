@@ -14,7 +14,7 @@
 
 #include "movieobjects_interfaces.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -135,7 +135,7 @@ bool CDmeTrackGroup::IsSubClipTypeAllowed( DmeClipType_t type )
 //-----------------------------------------------------------------------------
 void CDmeTrackGroup::AddTrack( CDmeTrack *pTrack )
 {
-	// FIXME:  Should check if track with same name already exists???
+	// TODO(d.rattman):  Should check if track with same name already exists???
 	if ( GetTrackIndex( pTrack ) < 0 )
 	{
 		// Tracks can only exist in one track group

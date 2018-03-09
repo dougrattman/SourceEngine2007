@@ -303,7 +303,7 @@ float AssignRangeMultiplier(int nBits, double range) {
     // integer in the valid range when given the highest value.
     float multipliers[] = {0.9999, 0.99, 0.9, 0.8, 0.7};
     int i;
-    for (i = 0; i < ARRAYSIZE(multipliers); i++) {
+    for (i = 0; i < SOURCE_ARRAYSIZE(multipliers); i++) {
       float new_fHighLowMul = (float)(iHighValue / range) * multipliers[i];
       if ((unsigned long)(new_fHighLowMul * range) > iHighValue ||
           (new_fHighLowMul * range) > (double)iHighValue) {
@@ -312,7 +312,7 @@ float AssignRangeMultiplier(int nBits, double range) {
       }
     }
 
-    if (i == ARRAYSIZE(multipliers)) {
+    if (i == SOURCE_ARRAYSIZE(multipliers)) {
       // Doh! We seem to be unable to represent this range.
       Assert(false);
       return 0;

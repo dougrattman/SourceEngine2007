@@ -1,12 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Interfaces between the client.dll and engine
-//
-//===========================================================================//
 
 #ifndef CDLL_INT_H
 #define CDLL_INT_H
 
+#include "base/include/macros.h"
 #include "const.h"
 #include "datamap.h"
 #include "inputsystem/ButtonCode.h"
@@ -17,9 +16,6 @@
 #include "tier1/interface.h"
 #include "xbox/xboxstubs.h"
 
-//-----------------------------------------------------------------------------
-// forward declarations
-//-----------------------------------------------------------------------------
 class ClientClass;
 struct model_t;
 class CSentence;
@@ -135,7 +131,7 @@ enum RenderViewInfo_t {
 //-----------------------------------------------------------------------------
 // Lightcache entry handle
 //-----------------------------------------------------------------------------
-DECLARE_POINTER_HANDLE(LightCacheHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(LightCacheHandle_t);
 
 //-----------------------------------------------------------------------------
 // Occlusion parameters
@@ -159,7 +155,7 @@ struct OcclusionParams_t {
 //-----------------------------------------------------------------------------
 // Purpose: Interface exposed from the engine to the client .dll
 //-----------------------------------------------------------------------------
-abstract_class IVEngineClient {
+the_interface IVEngineClient {
  public:
   // Find the model's surfaces that intersect the given sphere.
   // Returns the number of surfaces filled in.
@@ -532,7 +528,7 @@ abstract_class IVEngineClient {
 //-----------------------------------------------------------------------------
 // Purpose: Interface exposed from the client .dll back to the engine
 //-----------------------------------------------------------------------------
-abstract_class IBaseClientDLL {
+the_interface IBaseClientDLL {
  public:
   // Called once when the client DLL is loaded
   virtual int Init(CreateInterfaceFn appSystemFactory,
@@ -721,7 +717,7 @@ abstract_class IBaseClientDLL {
 // Purpose: Interface exposed from the client .dll back to the engine for
 // specifying shared .dll IAppSystems (e.g., ISoundEmitterSystem)
 //-----------------------------------------------------------------------------
-abstract_class IClientDLLSharedAppSystems {
+the_interface IClientDLLSharedAppSystems {
  public:
   virtual int Count() = 0;
   virtual char const *GetDllName(int idx) = 0;

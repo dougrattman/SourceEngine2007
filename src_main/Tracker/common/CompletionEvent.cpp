@@ -6,7 +6,7 @@
 //=============================================================================
 
 #include "CompletionEvent.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: creates an event

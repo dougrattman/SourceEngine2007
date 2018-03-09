@@ -51,7 +51,7 @@ extern CSDKLauncherDialog *g_pMainFrame;
 
 extern bool g_bAutoHL2Mod; // skip modwizard_intro...
 extern bool g_bModWizard_CmdLineFields;
-extern char g_ModWizard_CmdLine_ModDir[MAX_PATH];
+extern char g_ModWizard_CmdLine_ModDir[SOURCE_MAX_PATH];
 extern char g_ModWizard_CmdLine_ModName[256];
 
 // Set this to make the app exit.

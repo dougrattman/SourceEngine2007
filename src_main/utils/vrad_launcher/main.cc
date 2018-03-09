@@ -17,7 +17,7 @@ char *GetLastErrorString() {
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Default language
                 (LPTSTR)&msg_buffer, 0, NULL);
 
-  strncpy_s(error_msg, msg_buffer, ARRAYSIZE(error_msg));
+  strncpy_s(error_msg, msg_buffer, SOURCE_ARRAYSIZE(error_msg));
   LocalFree(msg_buffer);
 
   return error_msg;
@@ -48,9 +48,9 @@ int main(int argc, char **argv) {
   }
 
   char full_path[512], redirect_file_name[512];
-  MakeFullPath(argv[0], full_path, ARRAYSIZE(full_path));
+  MakeFullPath(argv[0], full_path, SOURCE_ARRAYSIZE(full_path));
   Q_StripFilename(full_path);
-  Q_snprintf(redirect_file_name, ARRAYSIZE(redirect_file_name), "%s\\%s",
+  Q_snprintf(redirect_file_name, SOURCE_ARRAYSIZE(redirect_file_name), "%s\\%s",
              full_path, "vrad.redirect");
 
   char dll_name[512];
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
   FILE *redirect_file = fopen(redirect_file_name, "rt");
   if (redirect_file) {
-    if (fgets(dll_name, ARRAYSIZE(dll_name), redirect_file)) {
+    if (fgets(dll_name, SOURCE_ARRAYSIZE(dll_name), redirect_file)) {
       char *end = strstr(dll_name, "\n");
       if (end) *end = '\0';
 

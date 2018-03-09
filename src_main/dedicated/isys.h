@@ -8,7 +8,7 @@
 
 class CDedicatedAppSystemGroup;
 
-abstract_class ISys {
+the_interface ISys {
  public:
   virtual ~ISys() {}
 

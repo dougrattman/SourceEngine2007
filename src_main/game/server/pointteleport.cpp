@@ -11,7 +11,7 @@
 
 #include "in_buttons.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	SF_TELEPORT_TO_SPAWN_POS	0x00000001

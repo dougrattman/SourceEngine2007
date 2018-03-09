@@ -882,7 +882,7 @@ struct mstudioseqdesc_t {
   };
   inline float weight(int i) const { return *(pBoneweight(i)); };
 
-  // FIXME: make this 2D instead of 2x1D arrays
+  // TODO(d.rattman): make this 2D instead of 2x1D arrays
   int posekeyindex;
   float *pPoseKey(int iParam, int iAnim) const {
     return (float *)(((uint8_t *)this) + posekeyindex) + iParam * groupsize[0] +
@@ -1340,7 +1340,7 @@ struct mstudioikchain_t {
   inline mstudioiklink_t *pLink(int i) const {
     return (mstudioiklink_t *)(((uint8_t *)this) + linkindex) + i;
   };
-  // FIXME: add unused entries
+  // TODO(d.rattman): add unused entries
 };
 
 struct mstudioiface_t {
@@ -2433,7 +2433,7 @@ struct studiohdr_t {
 
   int unused3[2];
 
-  // FIXME: Remove when we up the model version. Move all fields of studiohdr2_t
+  // TODO(d.rattman): Remove when we up the model version. Move all fields of studiohdr2_t
   // into studiohdr_t.
   int studiohdr2index;
   studiohdr2_t *pStudioHdr2() const {
@@ -2550,7 +2550,7 @@ class CStudioHdr {
   int EntryNode(int iSequence) const;
   int ExitNode(int iSequence) const;
   const char *pszNodeName(int iNode) const;
-  // FIXME: where should this one be?
+  // TODO(d.rattman): where should this one be?
   int GetTransition(int iFrom, int iTo) const;
 
   int GetNumPoseParameters(void) const;
@@ -2841,8 +2841,8 @@ class CStudioHdr {
     const void *m_expectedVModel;
 
     // double-check that the data I point to hasn't changed
-    bool ValidateAgainst(const CStudioHdr *RESTRICT pstudiohdr);
-    void SetValidationPair(const CStudioHdr *RESTRICT pstudiohdr);
+    bool ValidateAgainst(const CStudioHdr *SOURCE_RESTRICT pstudiohdr);
+    void SetValidationPair(const CStudioHdr *SOURCE_RESTRICT pstudiohdr);
 
     friend class CStudioHdr;
   };
@@ -3166,7 +3166,7 @@ inline const mstudioflexcontroller_t *mstudioflexcontrollerui_t::pController(
 // STUDIO_VERSION to a new one. If we only support the current version, this
 // function should be empty.
 inline bool Studio_ConvertStudioHdrToNewVersion(studiohdr_t *pStudioHdr) {
-  COMPILE_TIME_ASSERT(STUDIO_VERSION == 48);  //  put this to make sure this
+  static_assert(STUDIO_VERSION == 48);  //  put this to make sure this
                                               //  code is updated upon changing
                                               //  version.
 

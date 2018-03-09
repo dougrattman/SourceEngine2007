@@ -403,7 +403,7 @@ void CAttributeTextEntry::OnMouseWheeled( int delta )
 		}
 		else
 		{
-			// FIXME: Make this work for non-auto-apply panels
+			// TODO(d.rattman): Make this work for non-auto-apply panels
 		}
 	}
 

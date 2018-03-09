@@ -71,7 +71,7 @@ class CScriptObject : public vgui::Panel {
   CScriptObject *pNext;
 };
 
-abstract_class CDescription {
+the_interface CDescription {
  public:
   CDescription(CPanelListPanel * panel);
   ~CDescription();

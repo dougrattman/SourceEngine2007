@@ -38,7 +38,7 @@ extern int TrainSpeed(int iSpeed, int iMax);
 #include "obstacle_pushaway.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #if defined(GAME_DLL) && !defined(_XBOX)
@@ -206,7 +206,7 @@ const QAngle &CBasePlayer::EyeAngles() {
     return pl.v_angle;
   }
 
-  // FIXME: Cache off the angles?
+  // TODO(d.rattman): Cache off the angles?
   matrix3x4_t eyesToParent, eyesToWorld;
   AngleMatrix(pl.v_angle, eyesToParent);
   ConcatTransforms(pMoveParent->EntityToWorldTransform(), eyesToParent,
@@ -1290,7 +1290,7 @@ void CBasePlayer::CalcPlayerView(Vector &eyeOrigin, QAngle &eyeAngles,
                                  float &fov) {
 #if defined(CLIENT_DLL)
   if (!prediction->InPrediction()) {
-    // FIXME: Move into prediction
+    // TODO(d.rattman): Move into prediction
     view->DriftPitch();
   }
 #endif
@@ -1606,7 +1606,7 @@ bool CBasePlayer::SetFOV(CBaseEntity *pRequester, int FOV, float zoomRate,
 #endif
       return false;
   } else {
-    // FIXME: Maybe do this is as an accessor instead
+    // TODO(d.rattman): Maybe do this is as an accessor instead
     if (FOV == 0) {
       m_hZoomOwner = NULL;
     } else {

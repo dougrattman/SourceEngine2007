@@ -10,15 +10,15 @@
 #include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
-// FIXME: shouldn't this API be part of IFileSystem?
+// TODO(d.rattman): shouldn't this API be part of IFileSystem?
 extern bool COM_CopyFile(const char *netpath, const char *cachepath);
 
 // Create a wave file
 void WaveCreateTmpFile(const char *filename, int rate, int bits,
                        int channels_num) {
-  char tmpfilename[MAX_PATH];
-  Q_StripExtension(filename, tmpfilename, ARRAYSIZE(tmpfilename));
-  Q_DefaultExtension(tmpfilename, ".WAV", ARRAYSIZE(tmpfilename));
+  char tmpfilename[SOURCE_MAX_PATH];
+  Q_StripExtension(filename, tmpfilename, SOURCE_ARRAYSIZE(tmpfilename));
+  Q_DefaultExtension(tmpfilename, ".WAV", SOURCE_ARRAYSIZE(tmpfilename));
 
   FileHandle_t file;
   file = g_pFileSystem->Open(tmpfilename, "wb");
@@ -57,7 +57,7 @@ void WaveCreateTmpFile(const char *filename, int rate, int bits,
 
 void WaveAppendTmpFile(const char *filename, void *pBuffer, int sampleBits,
                        int numSamples) {
-  char tmpfilename[MAX_PATH];
+  char tmpfilename[SOURCE_MAX_PATH];
   Q_StripExtension(filename, tmpfilename, sizeof(tmpfilename));
   Q_DefaultExtension(tmpfilename, ".WAV", sizeof(tmpfilename));
 
@@ -71,7 +71,7 @@ void WaveAppendTmpFile(const char *filename, void *pBuffer, int sampleBits,
 }
 
 void WaveFixupTmpFile(const char *filename) {
-  char tmpfilename[MAX_PATH];
+  char tmpfilename[SOURCE_MAX_PATH];
   Q_StripExtension(filename, tmpfilename, sizeof(tmpfilename));
   Q_DefaultExtension(tmpfilename, ".WAV", sizeof(tmpfilename));
 

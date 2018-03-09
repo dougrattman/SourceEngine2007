@@ -8,7 +8,7 @@
 #include "func_dust_shared.h"
 #include "te_particlesystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CFunc_Dust : public CBaseEntity {

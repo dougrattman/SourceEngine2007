@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
 #include <direct.h>
@@ -20,7 +20,7 @@ char *GetLastErrorString() {
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Default language
                 (LPTSTR)&msg_buffer, 0, NULL);
 
-  strncpy_s(error_msg, (char *)msg_buffer, ARRAYSIZE(error_msg));
+  strncpy_s(error_msg, (char *)msg_buffer, SOURCE_ARRAYSIZE(error_msg));
   LocalFree(msg_buffer);
 
   error_msg[sizeof(error_msg) - 1] = '\0';
@@ -42,9 +42,9 @@ int main(int argc, char *argv[]) {
   CommandLine()->CreateCmdLine(argc, argv);
 
   char full_path[512], redirect_path[512];
-  MakeFullPath(argv[0], full_path, ARRAYSIZE(full_path));
+  MakeFullPath(argv[0], full_path, SOURCE_ARRAYSIZE(full_path));
   Q_StripFilename(full_path);
-  Q_snprintf(redirect_path, ARRAYSIZE(redirect_path), "%s\\%s", full_path,
+  Q_snprintf(redirect_path, SOURCE_ARRAYSIZE(redirect_path), "%s\\%s", full_path,
              "vrad.redirect");
 
   char redirect_module_name[512];
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
   FILE *fp;
   if (!fopen_s(&fp, redirect_path, "rt")) {
-    if (fgets(redirect_module_name, ARRAYSIZE(redirect_module_name), fp)) {
+    if (fgets(redirect_module_name, SOURCE_ARRAYSIZE(redirect_module_name), fp)) {
       char *pEnd = strstr(redirect_module_name, "\n");
       if (pEnd) *pEnd = '\0';
 

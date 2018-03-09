@@ -14,7 +14,7 @@
 #include "shake.h"				// For screen fade constants
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IPhysicsCollision *physcollision;
@@ -273,7 +273,7 @@ void CMoveHelperServer::StartSound( const Vector& origin, int channel, char cons
 
 	CRecipientFilter filter;
 	filter.AddRecipientsByPAS( origin );
-	// FIXME, these sounds should not go to the host entity ( SND_NOTHOST )
+	// TODO(d.rattman): these sounds should not go to the host entity ( SND_NOTHOST )
 	if ( gpGlobals->maxClients == 1 )
 	{
 		// Always send sounds down in SP
@@ -312,7 +312,7 @@ void CMoveHelperServer::StartSound( const Vector& origin, int channel, char cons
 //-----------------------------------------------------------------------------
 void CMoveHelperServer::PlaybackEventFull( int flags, int clientindex, unsigned short eventindex, float delay, Vector& origin, Vector& angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2 )
 {
-	// FIXME, Redo with new event system parameter stuff
+	// TODO(d.rattman): Redo with new event system parameter stuff
 }
 
 IPhysicsSurfaceProps *CMoveHelperServer::GetSurfaceProps( void )

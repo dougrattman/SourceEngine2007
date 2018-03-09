@@ -37,7 +37,7 @@
 #include "jigglebones.h"
 #include "debugdrawmodel.h"
 
-// FIXME:
+// TODO(d.rattman):
 extern ViewerSettings g_viewerSettings;
 int g_dxlevel = 0;
 
@@ -497,7 +497,7 @@ void StudioModel::SetUpBones( bool mergeBones )
 
 		pIK->UpdateTargets( pos, q, m_pBoneToWorld, boneComputed );
 
-		// FIXME: check number of slots?
+		// TODO(d.rattman): check number of slots?
 		for (int i = 0; i < pIK->m_target.Count(); i++)
 		{
 			trace_t tr;
@@ -1472,7 +1472,7 @@ void StudioModel::SetViewTarget( void )
 	eyeDeflect.x = 0;
 
 	// reduce deflection the more the eye is off center
-	// FIXME: this angles make no damn sense
+	// TODO(d.rattman): this angles make no damn sense
 	eyeDeflect = eyeDeflect * (local.x * local.x);
 	local = local + eyeDeflect;
 	VectorNormalize( local );
@@ -1742,7 +1742,7 @@ float StudioModel::SetHeadPosition( matrix3x4_t& attToWorld, Vector const &vTarg
 
 	MatrixAngles( headXform, vEyeAngles );
 
-	// FIXME: add chest compression
+	// TODO(d.rattman): add chest compression
 
 	// Msg( "yaw %f pitch %f\n", vEyeAngles.y, vEyeAngles.x );
 

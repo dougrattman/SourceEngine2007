@@ -11,7 +11,7 @@
 #include "datamodel/dmelement.h"
 #include "dme_controls/dmecontrols_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -312,7 +312,7 @@ void CDmePanel::OnViewedElementChanged( KeyValues *kv )
 	// doesn't work because it reorders the history. What we want is to
 	// populate the combo box without causing the OnTextChanged message to get sent.
 
-	// FIXME: Perhaps it would be better to extract the back/forward/search
+	// TODO(d.rattman): Perhaps it would be better to extract the back/forward/search
 	// out of the element properties tree and put it into the dme panel?
 	CDmElement *pElement = GetElementKeyValue<CDmElement>( kv, "dmeelement" );
 	if ( pElement == m_hElement )

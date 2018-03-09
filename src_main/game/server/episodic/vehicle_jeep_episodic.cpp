@@ -484,7 +484,7 @@ void CPropJeepEpisodic::Activate()
 //-----------------------------------------------------------------------------
 void CPropJeepEpisodic::NPC_FinishedEnterVehicle( CAI_BaseNPC *pPassenger, bool bCompanion )
 {
-	// FIXME: This will be moved to the NPCs entering and exiting
+	// TODO(d.rattman): This will be moved to the NPCs entering and exiting
 	// Fire our outputs
 	if ( bCompanion	)
 	{
@@ -501,7 +501,7 @@ void CPropJeepEpisodic::NPC_FinishedEnterVehicle( CAI_BaseNPC *pPassenger, bool 
 //-----------------------------------------------------------------------------
 void CPropJeepEpisodic::NPC_FinishedExitVehicle( CAI_BaseNPC *pPassenger, bool bCompanion )
 {
-	// FIXME: This will be moved to the NPCs entering and exiting
+	// TODO(d.rattman): This will be moved to the NPCs entering and exiting
 	// Fire our outputs
 	if ( bCompanion	)
 	{
@@ -635,7 +635,7 @@ void CPropJeepEpisodic::InputAddBusterToCargo( inputdata_t &data )
 //-----------------------------------------------------------------------------
 bool CPropJeepEpisodic::PassengerInTransition( void )
 {
-	// FIXME: Big hack - we need a way to bridge this data better
+	// TODO(d.rattman): Big hack - we need a way to bridge this data better
 	// TODO: Get a list of passengers we can traverse instead
 	CNPC_Alyx *pAlyx = CNPC_Alyx::GetAlyx();
 	if ( pAlyx )
@@ -1003,7 +1003,7 @@ void CPropJeepEpisodic::UpdateCargoEntry( void )
 
 	// Slerp our quaternions to find where we are this frame
 	Quaternion	qtTarget;
-	AngleQuaternion( pProp->PreferredCarryAngles() + QAngle( 0, 90, 0 ), qtTarget );	// FIXME: Find the real offset to make this sit properly
+	AngleQuaternion( pProp->PreferredCarryAngles() + QAngle( 0, 90, 0 ), qtTarget );	// TODO(d.rattman): Find the real offset to make this sit properly
 	Quaternion	qtCurrent;
 	AngleQuaternion( pProp->GetLocalAngles(), qtCurrent );
 
@@ -1445,7 +1445,7 @@ void CPropJeepEpisodic::InputSetCargoVisibility( inputdata_t &data )
 //-----------------------------------------------------------------------------
 void CPropJeepEpisodic::SpawnRadarPanel()
 {
-	// FIXME: Deal with dynamically resizing control panels?
+	// TODO(d.rattman): Deal with dynamically resizing control panels?
 
 	// If we're attached to an entity, spawn control panels on it instead of use
 	CBaseAnimating *pEntityToSpawnOn = this;

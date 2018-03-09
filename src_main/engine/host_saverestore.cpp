@@ -67,7 +67,7 @@
 #include "ixboxsystem.h"
 extern IXboxSystem *g_pXboxSystem;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IBaseClientDLL *g_ClientDLL;
@@ -994,7 +994,7 @@ bool CL_PortalDemo_MapCheck(const char *name);  // in host_cmd.cpp
 bool CSaveRestore::LoadGame(const char *pName) {
   FileHandle_t pFile;
   GAME_HEADER gameHeader;
-  char name[MAX_PATH];
+  char name[SOURCE_MAX_PATH];
   bool validload = false;
 
   FinishAsyncSave();
@@ -1021,9 +1021,9 @@ bool CSaveRestore::LoadGame(const char *pName) {
 
   pFile = g_pSaveRestoreFileSystem->Open(name, "rb", MOD_DIR);
   if (pFile) {
-    char szDummyName[MAX_PATH];
-    char szComment[MAX_PATH];
-    char szElapsedTime[MAX_PATH];
+    char szDummyName[SOURCE_MAX_PATH];
+    char szComment[SOURCE_MAX_PATH];
+    char szElapsedTime[SOURCE_MAX_PATH];
 
     if (SaveReadNameAndComment(pFile, szDummyName, szComment)) {
       // Elapsed time is the last 6 characters in comment. (mmm:ss)
@@ -1474,7 +1474,7 @@ struct clientsectionsold_t : public baseclientsectionsold_t {
   char *decaldata;
 };
 
-// FIXME:  Remove the above and replace with this once we update the save
+// TODO(d.rattman):  Remove the above and replace with this once we update the save
 // format!!
 struct baseclientsections_t {
   int entitysize;
@@ -2619,8 +2619,8 @@ void CSaveRestore::AutoSaveDangerousIsSafe() {
 
   ConDMsg("Committing autosavedangerous...\n");
 
-  char szOldName[MAX_PATH];
-  char szNewName[MAX_PATH];
+  char szOldName[SOURCE_MAX_PATH];
+  char szNewName[SOURCE_MAX_PATH];
 
   // Back up the old autosaves
   if (StorageDeviceValid()) {
@@ -2695,7 +2695,7 @@ static void SaveGame(const CCommand &args) {
     }
   }
 
-  char szMapName[MAX_PATH];
+  char szMapName[SOURCE_MAX_PATH];
   if (bRenameMap) {
     // HACK: The bug is going to make a copy of this map, so replace the global
     // state to fool the system

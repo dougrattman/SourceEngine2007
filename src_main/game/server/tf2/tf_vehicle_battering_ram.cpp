@@ -130,7 +130,7 @@ void CVehicleBatteringRam::VPhysicsCollision( int index, gamevcollisionevent_t *
 		return;
 
 	// Use the attachment point to make sure we damage stuff that hit our front
-	// FIXME: Should we be using hitboxes here?
+	// TODO(d.rattman): Should we be using hitboxes here?
 	// And damage them all
     // We only damage objects...
  	QAngle vecAng;
@@ -171,7 +171,7 @@ void CVehicleBatteringRam::VPhysicsCollision( int index, gamevcollisionevent_t *
 	if (flVel < flMinDamageVel)
 		return;
 
-	// FIXME: Play a sound here...
+	// TODO(d.rattman): Play a sound here...
 	EmitSound( "VehicleBatteringRam.BashSound" );
 
 	// Apply the damage

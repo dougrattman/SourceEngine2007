@@ -27,7 +27,7 @@
 #include "vgui_controls/ImagePanel.h"
 #include "vgui_controls/RadioButton.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -113,7 +113,7 @@ class CGameChapterPanel : public vgui::EditablePanel {
   Color m_SelectedColor;
   Color m_FillColor;
 
-  char m_szConfigFile[_MAX_PATH];
+  char m_szConfigFile[SOURCE_MAX_PATH];
   char m_szChapter[32];
 
   bool m_bTeaserChapter;
@@ -153,7 +153,7 @@ class CGameChapterPanel : public vgui::EditablePanel {
     SetPaintBackgroundEnabled(false);
 
     // the image has the same name as the config file
-    char szMaterial[MAX_PATH];
+    char szMaterial[SOURCE_MAX_PATH];
     Q_snprintf(szMaterial, sizeof(szMaterial), "chapters/%s",
                chapterConfigFile);
     char *ext = strstr(szMaterial, ".");
@@ -250,7 +250,7 @@ class CGameChapterPanel : public vgui::EditablePanel {
 };
 
 const char *COM_GetModDirectory() {
-  static char modDir[MAX_PATH];
+  static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
         "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
@@ -337,7 +337,7 @@ CNewGameDialog::CNewGameDialog(vgui::Panel *parent, bool bCommentaryMode)
   static const int MAX_CHAPTERS = 32;
   chapter_t chapters[MAX_CHAPTERS];
 
-  char szFullFileName[MAX_PATH];
+  char szFullFileName[SOURCE_MAX_PATH];
   int chapterIndex = 0;
 
   FileFindHandle_t findHandle = FILESYSTEM_INVALID_FIND_HANDLE;
@@ -580,7 +580,7 @@ void CNewGameDialog::UpdateMenuComponents(EScrollDirection dir) {
   if (GameUI().IsConsoleUI()) {
     bool bHasBonus = false;
     if (m_PanelIndex[centerIdx] != INVALID_INDEX) {
-      wchar_t buffer[MAX_PATH];
+      wchar_t buffer[SOURCE_MAX_PATH];
       m_ChapterPanels[m_PanelIndex[centerIdx]]->m_pChapterNameLabel->GetText(
           buffer, sizeof(buffer));
       m_pChapterTitleLabels[m_ActiveTitleIdx]->SetText(buffer);

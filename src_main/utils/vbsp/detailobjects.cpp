@@ -520,7 +520,7 @@ static void PlaceDetail(DetailModel_t const& model, const Vector& pt,
     MatrixToAngles(matrix, angles);
   }
 
-  // FIXME: We may also want a purely random rotation too
+  // TODO(d.rattman): We may also want a purely random rotation too
 
   // Insert an element into the object dictionary if it aint there...
   switch (model.m_Type) {

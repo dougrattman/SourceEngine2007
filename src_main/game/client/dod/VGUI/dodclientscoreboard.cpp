@@ -293,7 +293,7 @@ void CDODClientScoreBoardDialog::UpdateTeamInfo()
 			wchar_t name[64];
 			wchar_t string1[1024];
 			wchar_t wNumPlayers[6];
-			_snwprintf( wNumPlayers, ARRAYSIZE( wNumPlayers ), L"%i", team->Get_Number_Players() );
+			_snwprintf( wNumPlayers, SOURCE_ARRAYSIZE( wNumPlayers ), L"%i", team->Get_Number_Players() );
 			if ( !teamName && team )
 			{
 				g_pVGuiLocalize->ConvertANSIToUnicode( team->Get_Name(), name, sizeof( name ) );
@@ -421,10 +421,10 @@ void CDODClientScoreBoardDialog::UpdateSpectatorList()
 		{
 			if ( nSpectators > 0 )
 			{
-				Q_strncat( szSpectatorList, ", ", ARRAYSIZE( szSpectatorList ) );
+				Q_strncat( szSpectatorList, ", ", SOURCE_ARRAYSIZE( szSpectatorList ) );
 			}
 
-			Q_strncat( szSpectatorList, g_PR->GetPlayerName( playerIndex ), ARRAYSIZE( szSpectatorList ) );
+			Q_strncat( szSpectatorList, g_PR->GetPlayerName( playerIndex ), SOURCE_ARRAYSIZE( szSpectatorList ) );
 			nSpectators++;
 		}
 	}
@@ -436,7 +436,7 @@ void CDODClientScoreBoardDialog::UpdateSpectatorList()
 
 		wchar_t wzSpectatorCount[16];
 		wchar_t wzSpectatorList[1024];
-		_snwprintf( wzSpectatorCount, ARRAYSIZE( wzSpectatorCount ), L"%i", nSpectators );
+		_snwprintf( wzSpectatorCount, SOURCE_ARRAYSIZE( wzSpectatorCount ), L"%i", nSpectators );
 		g_pVGuiLocalize->ConvertANSIToUnicode( szSpectatorList, wzSpectatorList, sizeof( wzSpectatorList ) );
 		g_pVGuiLocalize->ConstructString( wzSpectators, sizeof(wzSpectators), g_pVGuiLocalize->Find( pchFormat), 2, wzSpectatorCount, wzSpectatorList );
 	}

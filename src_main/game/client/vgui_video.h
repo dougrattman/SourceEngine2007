@@ -36,7 +36,7 @@ public:
 	{
 		if ( pExitCommand && pExitCommand[0] )
 		{
- Q_strncpy( m_szExitCommand, pExitCommand, MAX_PATH );
+ Q_strncpy( m_szExitCommand, pExitCommand, SOURCE_MAX_PATH );
 		}
 	}
 
@@ -55,7 +55,7 @@ protected:
 	IMaterial		*m_pMaterial;
 	int 	m_nPlaybackHeight; // Calculated to address ratio changes
 	int 	m_nPlaybackWidth;
-	char m_szExitCommand[MAX_PATH];	// This call is fired at the engine when the video finishes or is interrupted
+	char m_szExitCommand[SOURCE_MAX_PATH];	// This call is fired at the engine when the video finishes or is interrupted
 
 	float m_flU;	// U,V ranges for video on its sheet
 	float m_flV;

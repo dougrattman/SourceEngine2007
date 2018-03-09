@@ -305,7 +305,7 @@ int CProcessUtils::GetActualProcessOutput(ProcessHandle_t hProcess, char *pBuf,
   DWORD dwCount = 0;
   DWORD dwRead = 0;
 
-  // FIXME: Is there a way of making pipes be text mode so we don't get /n/rs
+  // TODO(d.rattman): Is there a way of making pipes be text mode so we don't get /n/rs
   // back?
   char *pTempBuf = (char *)_alloca(nBufLen);
   if (!PeekNamedPipe(info.m_hChildStdoutRd, NULL, NULL, NULL, &dwCount, NULL)) {

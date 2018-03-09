@@ -23,7 +23,6 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // The minimum time a hud hint for a weapon should be on screen. If we switch
@@ -842,9 +841,9 @@ void CBaseCombatWeapon::SetActivity(Activity act, float duration) {
     ResetSequenceInfo();
 
     if (duration > 0) {
-      // FIXME: does this even make sense in non-shoot animations?
+      // TODO(d.rattman): does this even make sense in non-shoot animations?
       m_flPlaybackRate = SequenceDuration(sequence) / duration;
-      // FIXME; magic number!, network encoding range
+      // TODO(d.rattman): magic number!, network encoding range
       m_flPlaybackRate = std::min(static_cast<float>(m_flPlaybackRate), 12.0f);
     } else {
       m_flPlaybackRate = 1.0;
@@ -1307,8 +1306,8 @@ void CBaseCombatWeapon::ItemPostFrame(void) {
   if (!pOwner) return;
 
   // Track the duration of the fire
-  // FIXME: Check for IN_ATTACK2 as well?
-  // FIXME: What if we're calling ItemBusyFrame?
+  // TODO(d.rattman): Check for IN_ATTACK2 as well?
+  // TODO(d.rattman): What if we're calling ItemBusyFrame?
   m_fFireDuration = (pOwner->m_nButtons & IN_ATTACK)
                         ? (m_fFireDuration + gpGlobals->frametime)
                         : 0.0f;
@@ -1335,8 +1334,8 @@ void CBaseCombatWeapon::ItemPostFrame(void) {
       m_flNextPrimaryAttack = gpGlobals->curtime + 0.2;
       return;
     } else {
-      // FIXME: This isn't necessarily true if the weapon doesn't have a
-      // secondary fire! For instance, the crossbow doesn't have a 'real'
+      // TODO(d.rattman): This isn't necessarily true if the weapon doesn't have
+      // a secondary fire! For instance, the crossbow doesn't have a 'real'
       // secondary fire, but it still stops the crossbow from firing on the 360
       // if the player chooses to hold down their zoom button. (sjb) Orange Box
       // 7/25/2007
@@ -1460,8 +1459,8 @@ const WeaponProficiencyInfo_t *CBaseCombatWeapon::GetProficiencyValues() {
       {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0},
   };
 
-  COMPILE_TIME_ASSERT(ARRAYSIZE(defaultWeaponProficiencyTable) ==
-                      WEAPON_PROFICIENCY_PERFECT + 1);
+  static_assert(SOURCE_ARRAYSIZE(defaultWeaponProficiencyTable) ==
+                WEAPON_PROFICIENCY_PERFECT + 1);
   return defaultWeaponProficiencyTable;
 }
 

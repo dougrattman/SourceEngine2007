@@ -13,13 +13,13 @@
 #include "ndebugoverlay.h"
 #include "wcedit.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include "ai_basenpc.h"
 #include "ai_network.h"
 #include "ai_networkmanager.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

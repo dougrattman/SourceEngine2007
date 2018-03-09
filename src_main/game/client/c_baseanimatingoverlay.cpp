@@ -15,21 +15,21 @@
 
 #include "dt_utlvector_recv.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar r_sequence_debug;
 
 C_BaseAnimatingOverlay::C_BaseAnimatingOverlay()
 {
-	// FIXME: where does this initialization go now?
+	// TODO(d.rattman): where does this initialization go now?
 	//for ( int i=0; i < MAX_OVERLAYS; i++ )
 	//{
 	//	memset( &m_Layer[i], 0, sizeof(m_Layer[0]) );
 	//	m_Layer[i].m_nOrder = MAX_OVERLAYS;
 	//}
 
-	// FIXME: where does this initialization go now?
+	// TODO(d.rattman): where does this initialization go now?
 	// AddVar( m_Layer, &m_iv_AnimOverlay, LATCH_ANIMATION_VAR );
 }
 
@@ -106,7 +106,7 @@ void ResizeAnimationLayerCallback( void *pStruct, int offsetToUtlVector, int len
 		pWatcher->SetDebugName( s_m_iv_AnimOverlayNames[i] );
 		pEnt->AddVar( &pVec->Element( i ), pWatcher, LATCH_ANIMATION_VAR, true );
 	}
-	// FIXME: need to set historical values of nOrder in pVecIV to MAX_OVERLAY
+	// TODO(d.rattman): need to set historical values of nOrder in pVecIV to MAX_OVERLAY
 	
 }
 
@@ -210,7 +210,7 @@ void C_BaseAnimatingOverlay::CheckForLayerChanges( CStudioHdr *hdr, float curren
 
 	bool bLayersChanged = false;
 	
-	// FIXME: damn, there has to be a better way than this.
+	// TODO(d.rattman): damn, there has to be a better way than this.
 	int i;
 	for (i = 0; i < m_iv_AnimOverlay.Count(); i++)
 	{
@@ -356,7 +356,7 @@ void C_BaseAnimatingOverlay::AccumulateLayers( CStudioHdr *hdr, Vector pos[], Qu
 			if (fWeight > 0)
 			{
 				// check to see if the sequence changed
-				// FIXME: move this to somewhere more reasonable
+				// TODO(d.rattman): move this to somewhere more reasonable
 				// do a nice spline interpolation of the values
 				// if ( m_AnimOverlay[i].m_nSequence != m_iv_AnimOverlay.GetPrev( i )->nSequence )
 				float fCycle = m_AnimOverlay[ i ].m_flCycle;

@@ -599,7 +599,7 @@ void CMaterialSubRect::Precache() {
 bool CMaterialSubRect::PrecacheVars(KeyValues *pVMTKeyValues,
                                     KeyValues *pPatchKeyValues,
                                     CUtlVector<FileNameHandle_t> *pIncludes) {
-  // FIXME:  Should call through to the parent material for all of this???
+  // TODO(d.rattman):  Should call through to the parent material for all of this???
   // We should get both parameters or neither
   Assert((pVMTKeyValues == NULL) ? (pPatchKeyValues == NULL)
                                  : (pPatchKeyValues != NULL));

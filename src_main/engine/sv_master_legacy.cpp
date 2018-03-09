@@ -572,7 +572,7 @@ void CMaster::UseDefault(void) {
 #if defined(_WIN32) && !defined(_X360)
 // Instead of including windows.h
 extern "C" {
-extern void *__stdcall GetProcAddress(void *hModule, const char *pszProcName);
+extern void *SOURCE_STDCALL GetProcAddress(void *hModule, const char *pszProcName);
 };
 #endif
 
@@ -603,7 +603,7 @@ void CMaster::InitConnection(void) {
   if (!m_hSteamDLL) {
 #ifdef _WIN32
     m_hSteamDLL = Sys_LoadModule("steam.dll");
-#elif _LINUX
+#elif OS_POSIX
     m_hSteamDLL = Sys_LoadModule("libsteamvalidateuseridtickets_i486.so");
 #else
 #error "Define the steam.dll I should load!"
@@ -618,7 +618,7 @@ void CMaster::InitConnection(void) {
   PFSteamFindServersIterateServer pfnSteamFindServersIterateServer = NULL;
 
   if (m_hSteamDLL) {
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define GetProcAddress dlsym
 #endif
     pfnSteamFindServersNumServers =

@@ -18,8 +18,8 @@ typedef int32_t HSteamPipe;
 // handle to single instance of a steam user
 typedef int32_t HSteamUser;
 
-#ifndef DLL_EXPORT
-#define DLL_EXPORT 
+#ifndef SOURCE_API_EXPORT
+#define SOURCE_API_EXPORT 
 #endif
 
 // interface predec
@@ -126,12 +126,12 @@ enum { k_iSteamUserStatsCallbacks = 1100 };
 // For GoldSRC we need a C API as the C++ ABI changed from the GoldSRC compiler 
 // (GCC 2.95.3) to the Source/Steam3 one (GCC 3.4.1)
 // C functions we export for the C API, maps to ISteamClient functions 
-DLL_EXPORT HSteamPipe Steam_CreateSteamPipe();
-DLL_EXPORT bool Steam_BReleaseSteamPipe( HSteamPipe hSteamPipe );
-DLL_EXPORT HSteamUser Steam_CreateLocalUser( HSteamPipe *phSteamPipe );
-DLL_EXPORT HSteamUser Steam_ConnectToGlobalUser( HSteamPipe hSteamPipe );
-DLL_EXPORT void Steam_ReleaseUser( HSteamPipe hSteamPipe, HSteamUser hUser );
-DLL_EXPORT void Steam_SetLocalIPBinding( uint32_t unIP, uint16_t usLocalPort );
+SOURCE_API_EXPORT HSteamPipe Steam_CreateSteamPipe();
+SOURCE_API_EXPORT bool Steam_BReleaseSteamPipe( HSteamPipe hSteamPipe );
+SOURCE_API_EXPORT HSteamUser Steam_CreateLocalUser( HSteamPipe *phSteamPipe );
+SOURCE_API_EXPORT HSteamUser Steam_ConnectToGlobalUser( HSteamPipe hSteamPipe );
+SOURCE_API_EXPORT void Steam_ReleaseUser( HSteamPipe hSteamPipe, HSteamUser hUser );
+SOURCE_API_EXPORT void Steam_SetLocalIPBinding( uint32_t unIP, uint16_t usLocalPort );
 
 
 #endif // ISTEAMCLIENT_H

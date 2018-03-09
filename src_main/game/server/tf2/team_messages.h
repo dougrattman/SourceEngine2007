@@ -38,7 +38,7 @@ enum
 //-----------------------------------------------------------------------------
 // Purpose: Message sent to a team for the purpose of updating its members about some event
 //-----------------------------------------------------------------------------
-abstract_class CTeamMessage
+the_interface CTeamMessage
 {
 public:
 	CTeamMessage( CTFTeam *pTeam, int iMessageID, CBaseEntity *pEntity, float flTTL );

@@ -12,7 +12,7 @@
 #include "tier1/bitbuf.h"
 #include "tier1/utlbuffer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SUBSTRING_BITS 5
@@ -73,7 +73,7 @@ class CNetworkStringFilenameDict : public INetworkStringDict {
   void Purge() { m_Items.RemoveAll(); }
 
   const char *String(int index) {
-    char szString[MAX_PATH];
+    char szString[SOURCE_MAX_PATH];
     g_pFileSystem->String(m_Items.Key(index), szString, sizeof(szString));
     return va("%s", szString);
   }
@@ -666,7 +666,7 @@ int CNetworkStringTable::AddString(bool bIsServer, const char *string,
     if (!m_pItemsClientSide->IsValidIndex(i)) {
       // not in list yet, create it now
       if (m_pItemsClientSide->Count() >= (unsigned int)GetMaxStrings()) {
-        // Too many strings, FIXME: Print warning message
+        // Too many strings, TODO(d.rattman): Print warning message
         ConMsg("Warning:  Table %s is full, can't add %s\n", GetTableName(),
                string);
         return INVALID_STRING_INDEX;
@@ -717,7 +717,7 @@ int CNetworkStringTable::AddString(bool bIsServer, const char *string,
     if (!m_pItems->IsValidIndex(i)) {
       // not in list yet, create it now
       if (m_pItems->Count() >= (unsigned int)GetMaxStrings()) {
-        // Too many strings, FIXME: Print warning message
+        // Too many strings, TODO(d.rattman): Print warning message
         ConMsg("Warning:  Table %s is full, can't add %s\n", GetTableName(),
                string);
         return INVALID_STRING_INDEX;

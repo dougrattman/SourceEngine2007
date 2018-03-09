@@ -21,7 +21,7 @@
 #include "mapdoc.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -88,7 +88,7 @@ void CReplaceTexDlg::BrowseTex(int iEdit)
 	if (pBrowser->DoModal() == IDOK)
 	{
 		IEditorTexture *pTex = g_Textures.FindActiveTexture(pBrowser->m_cTextureWindow.szCurTexture);
-		char szName[MAX_PATH];
+		char szName[SOURCE_MAX_PATH];
 		if (pTex != NULL)
 		{
 			pTex->GetShortName(szName);

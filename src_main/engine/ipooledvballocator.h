@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 // Pooled VB allocator abstract base class
 //-----------------------------------------------------------------------------
-abstract_class IPooledVBAllocator {
+the_interface IPooledVBAllocator {
  public:
   virtual ~IPooledVBAllocator(){};
 

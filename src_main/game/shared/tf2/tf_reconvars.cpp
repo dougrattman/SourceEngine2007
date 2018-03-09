@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "tf_reconvars.h"
 
-// FIXME: put these in a config file.
+// TODO(d.rattman): put these in a config file.
 CReconJetpackLevel g_ReconJetpackLevels[MAX_TF_TECHLEVELS] =
 {
 	{

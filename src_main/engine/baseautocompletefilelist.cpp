@@ -26,10 +26,10 @@ int CBaseAutoCompleteFileList::AutoCompletionFunc(
   // Search the directory structure.
   char search_path[MAX_QPATH];
   if (m_pszSubDir && m_pszSubDir[0] && Q_strcasecmp(m_pszSubDir, "NULL")) {
-    Q_snprintf(search_path, ARRAYSIZE(search_path), "%s/*.%s", m_pszSubDir,
+    Q_snprintf(search_path, SOURCE_ARRAYSIZE(search_path), "%s/*.%s", m_pszSubDir,
                m_pszExtension);
   } else {
-    Q_snprintf(search_path, ARRAYSIZE(search_path), "*.%s", m_pszExtension);
+    Q_snprintf(search_path, SOURCE_ARRAYSIZE(search_path), "*.%s", m_pszExtension);
   }
 
   CUtlSymbolTable entries{0, 0, true};
@@ -68,7 +68,7 @@ int CBaseAutoCompleteFileList::AutoCompletionFunc(
   for (int i = 0; i < symbols.Count(); i++) {
     char const *filename = entries.String(symbols[i]);
 
-    Q_snprintf(commands[i], ARRAYSIZE(commands[i]), "%s %s", command_name,
+    Q_snprintf(commands[i], SOURCE_ARRAYSIZE(commands[i]), "%s %s", command_name,
                filename);
     // Remove .dem
     commands[i][strlen(commands[i]) - 4] = 0;

@@ -143,7 +143,7 @@ void CDeltaEntityCache::AddDeltaBits(int nEntityIndex, int nDeltaTick,
   if (nEntityIndex < 0 || nEntityIndex >= m_nMaxEntities || m_nCacheSize <= 0)
     return;
 
-  int nBufferSize = PAD_NUMBER(Bits2Bytes(nBits), 4);
+  int nBufferSize = SOURCE_PAD_NUMBER(Bits2Bytes(nBits), 4);
 
   DeltaEntityEntry_s *pEntry = m_Cache[nEntityIndex];
 
@@ -160,7 +160,7 @@ void CDeltaEntityCache::AddDeltaBits(int nEntityIndex, int nDeltaTick,
     }
 
     int entrySize =
-        sizeof(DeltaEntityEntry_s) + PAD_NUMBER(Bits2Bytes(pEntry->nBits), 4);
+        sizeof(DeltaEntityEntry_s) + SOURCE_PAD_NUMBER(Bits2Bytes(pEntry->nBits), 4);
 
     DeltaEntityEntry_s *pNew =
         (DeltaEntityEntry_s *)((char *)(pEntry) + entrySize);
@@ -283,14 +283,14 @@ void CHLTVServer::InitClientRecvTables() {
     // create receive table from send table.
     AddRecvTableR(pCur->m_pTable, m_pRecvTables, m_nRecvTables);
 
-    ErrorIfNot(m_nRecvTables < ARRAYSIZE(m_pRecvTables),
+    ErrorIfNot(m_nRecvTables < SOURCE_ARRAYSIZE(m_pRecvTables),
                ("AddRecvTableR: overflowed MAX_DATATABLES"));
   }
 
   // now register client classes
   for (pCur = serverGameDLL->GetAllServerClasses(); pCur;
        pCur = pCur->m_pNext) {
-    ErrorIfNot(m_nRecvTables < ARRAYSIZE(m_pRecvTables),
+    ErrorIfNot(m_nRecvTables < SOURCE_ARRAYSIZE(m_pRecvTables),
                ("ClientDLL_InitRecvTableMgr: overflowed MAX_DATATABLES"));
 
     // find top receive table for class
@@ -336,7 +336,7 @@ void CHLTVFrame::CopyHLTVData(CHLTVFrame &frame) {
   int bits = frame.m_Messages[HLTV_BUFFER_RELIABLE].GetNumBitsWritten();
 
   if (bits > 0) {
-    int bytes = PAD_NUMBER(Bits2Bytes(bits), 4);
+    int bytes = SOURCE_PAD_NUMBER(Bits2Bytes(bits), 4);
     m_Messages[HLTV_BUFFER_RELIABLE].StartWriting(new char[bytes], bytes, bits);
     Q_memcpy(m_Messages[HLTV_BUFFER_RELIABLE].GetBasePointer(),
              frame.m_Messages[HLTV_BUFFER_RELIABLE].GetBasePointer(), bytes);
@@ -352,7 +352,7 @@ void CHLTVFrame::CopyHLTVData(CHLTVFrame &frame) {
 
   if (bits > 0) {
     // collapse all unreliable buffers in one
-    int bytes = PAD_NUMBER(Bits2Bytes(bits), 4);
+    int bytes = SOURCE_PAD_NUMBER(Bits2Bytes(bits), 4);
     m_Messages[HLTV_BUFFER_UNRELIABLE].StartWriting(new char[bytes], bytes);
     m_Messages[HLTV_BUFFER_UNRELIABLE].WriteBits(
         frame.m_Messages[HLTV_BUFFER_UNRELIABLE].GetData(),
@@ -1014,7 +1014,8 @@ Vector CHLTVServer::GetOriginFromPackedEntity(PackedEntity* pe)
                 if ( Q_strcmp( pProp->GetName(), "m_vecOrigin" ) == 0 )
                 {
                         Assert( pProp->GetType() == DPT_Vector );
-                
+                
+
 
 
 
@@ -1072,7 +1073,7 @@ CHLTVEntityData *FindHLTVDataInSnapshot(CFrameSnapshot *pSnapshot,
 }
 
 void CHLTVServer::EntityPVSCheck(CClientFrame *pFrame) {
-  uint8_t PVS[PAD_NUMBER(MAX_MAP_CLUSTERS, 8) / 8];
+  uint8_t PVS[SOURCE_PAD_NUMBER(MAX_MAP_CLUSTERS, 8) / 8];
   int nPVSSize = (GetCollisionBSPData()->numclusters + 7) / 8;
 
   // setup engine PVS

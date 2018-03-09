@@ -97,7 +97,7 @@ SpewRetval_t ModelBrowserSpewFunc( SpewType_t spewType, const tchar *pMsg )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: This should be moved into studiorender
+// TODO(d.rattman): This should be moved into studiorender
 //-----------------------------------------------------------------------------
 static ConVar	r_showenvcubemap( "r_showenvcubemap", "0", FCVAR_CHEAT );
 static ConVar	r_eyegloss		( "r_eyegloss", "1", FCVAR_ARCHIVE ); // wet eyes

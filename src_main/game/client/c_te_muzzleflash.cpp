@@ -12,7 +12,7 @@
 #include "tier0/include/vprof.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ void C_TEMuzzleFlash::PostDataUpdate( DataUpdateType_t updateType )
 {
 	VPROF( "C_TEMuzzleFlash::PostDataUpdate" );
 
-	//FIXME: Index is incorrect
+	//TODO(d.rattman): Index is incorrect
 	g_pEffects->MuzzleFlash( m_vecOrigin, m_vecAngles, m_flScale, m_nType );	
 	RecordMuzzleFlash( m_vecOrigin, m_vecAngles, m_flScale, m_nType ); 
 }

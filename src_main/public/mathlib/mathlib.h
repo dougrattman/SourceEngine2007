@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_MATHLIB_MATHLIB_H_
 #define SOURCE_MATHLIB_MATHLIB_H_
@@ -10,13 +10,13 @@
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector2d.h"
-#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/floattypes.h"
 
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
-// FIXME: does the asm code even exist anymore?
-// FIXME: this should move to a different file
+// TODO(d.rattman): does the asm code even exist anymore?
+// TODO(d.rattman): this should move to a different file
 struct cplane_t {
   Vector normal;
   f32 dist;
@@ -210,35 +210,35 @@ extern const int nanmask;
 
 #define IS_NAN(x) (((*(int *)&x) & nanmask) == nanmask)
 
-FORCEINLINE f32 DotProduct(const f32 *v1, const f32 *v2) {
+SOURCE_FORCEINLINE f32 DotProduct(const f32 *v1, const f32 *v2) {
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
-FORCEINLINE void VectorSubtract(const f32 *a, const f32 *b, f32 *c) {
+SOURCE_FORCEINLINE void VectorSubtract(const f32 *a, const f32 *b, f32 *c) {
   c[0] = a[0] - b[0];
   c[1] = a[1] - b[1];
   c[2] = a[2] - b[2];
 }
-FORCEINLINE void VectorAdd(const f32 *a, const f32 *b, f32 *c) {
+SOURCE_FORCEINLINE void VectorAdd(const f32 *a, const f32 *b, f32 *c) {
   c[0] = a[0] + b[0];
   c[1] = a[1] + b[1];
   c[2] = a[2] + b[2];
 }
-FORCEINLINE void VectorCopy(const f32 *a, f32 *b) {
+SOURCE_FORCEINLINE void VectorCopy(const f32 *a, f32 *b) {
   b[0] = a[0];
   b[1] = a[1];
   b[2] = a[2];
 }
-FORCEINLINE void VectorClear(f32 *a) { a[0] = a[1] = a[2] = 0; }
+SOURCE_FORCEINLINE void VectorClear(f32 *a) { a[0] = a[1] = a[2] = 0; }
 
-FORCEINLINE f32 VectorMaximum(const f32 *v) {
+SOURCE_FORCEINLINE f32 VectorMaximum(const f32 *v) {
   return std::max(v[0], std::max(v[1], v[2]));
 }
 
-FORCEINLINE f32 VectorMaximum(const Vector &v) {
+SOURCE_FORCEINLINE f32 VectorMaximum(const Vector &v) {
   return std::max(v.x, std::max(v.y, v.z));
 }
 
-FORCEINLINE void VectorScale(const f32 *in, f32 scale, f32 *out) {
+SOURCE_FORCEINLINE void VectorScale(const f32 *in, f32 scale, f32 *out) {
   out[0] = in[0] * scale;
   out[1] = in[1] * scale;
   out[2] = in[2] * scale;
@@ -293,27 +293,27 @@ inline void VectorNegate(f32 *a) {
   } while (0)
 #define DOT_PRODUCT(A, B) ((A)[0] * (B)[0] + (A)[1] * (B)[1] + (A)[2] * (B)[2])
 
-FORCEINLINE void VectorMAInline(const f32 *start, f32 scale,
-                                const f32 *direction, f32 *dest) {
+SOURCE_FORCEINLINE void VectorMAInline(const f32 *start, f32 scale,
+                                       const f32 *direction, f32 *dest) {
   dest[0] = start[0] + direction[0] * scale;
   dest[1] = start[1] + direction[1] * scale;
   dest[2] = start[2] + direction[2] * scale;
 }
 
-FORCEINLINE void VectorMAInline(const Vector &start, f32 scale,
-                                const Vector &direction, Vector &dest) {
+SOURCE_FORCEINLINE void VectorMAInline(const Vector &start, f32 scale,
+                                       const Vector &direction, Vector &dest) {
   dest.x = start.x + direction.x * scale;
   dest.y = start.y + direction.y * scale;
   dest.z = start.z + direction.z * scale;
 }
 
-FORCEINLINE void VectorMA(const Vector &start, f32 scale,
-                          const Vector &direction, Vector &dest) {
+SOURCE_FORCEINLINE void VectorMA(const Vector &start, f32 scale,
+                                 const Vector &direction, Vector &dest) {
   VectorMAInline(start, scale, direction, dest);
 }
 
-FORCEINLINE void VectorMA(const f32 *start, f32 scale, const f32 *direction,
-                          f32 *dest) {
+SOURCE_FORCEINLINE void VectorMA(const f32 *start, f32 scale,
+                                 const f32 *direction, f32 *dest) {
   VectorMAInline(start, scale, direction, dest);
 }
 
@@ -336,7 +336,7 @@ void inline SinCos(f32 radians, f32 *sine, f32 *cosine) {
 #if defined(_WIN32)
   *sine = sin(radians);
   *cosine = cos(radians);
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
   register f64 __cosr, __sinr;
   __asm __volatile__("fsincos" : "=t"(__cosr), "=u"(__sinr) : "0"(radians));
 
@@ -374,11 +374,11 @@ inline f32 TableSin(f32 theta) {
 }
 
 template <class T>
-FORCEINLINE T Square(T const &a) {
+SOURCE_FORCEINLINE T Square(T const &a) {
   return a * a;
 }
 
-FORCEINLINE bool IsPowerOfTwo(uint32_t x) { return (x & (x - 1)) == 0; }
+SOURCE_FORCEINLINE bool IsPowerOfTwo(u32 x) { return (x & (x - 1)) == 0; }
 
 // return the smallest power of two >= x.
 // returns 0 if x == 0 or x > 0x80000000 (ie numbers that would be negative if x
@@ -386,7 +386,7 @@ FORCEINLINE bool IsPowerOfTwo(uint32_t x) { return (x & (x - 1)) == 0; }
 // 0x80000000 casted to a u32,
 //       you'll get 0x80000000, which is correct for uints, instead of 0, which
 //       was correct for ints
-FORCEINLINE uint32_t SmallestPowerOfTwoGreaterOrEqual(uint32_t x) {
+SOURCE_FORCEINLINE u32 SmallestPowerOfTwoGreaterOrEqual(u32 x) {
   x -= 1;
   x |= x >> 1;
   x |= x >> 2;
@@ -397,7 +397,7 @@ FORCEINLINE uint32_t SmallestPowerOfTwoGreaterOrEqual(uint32_t x) {
 }
 
 // return the largest power of two <= x. Will return 0 if passed 0
-FORCEINLINE uint32_t LargestPowerOfTwoLessThanOrEqual(uint32_t x) {
+SOURCE_FORCEINLINE u32 LargestPowerOfTwoLessThanOrEqual(u32 x) {
   if (x >= 0x80000000) return 0x80000000;
 
   return SmallestPowerOfTwoGreaterOrEqual(x + 1) >> 1;
@@ -531,7 +531,7 @@ inline f32 RemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
 // Returns A + (B-A)*flPercent.
 // f32 Lerp( f32 flPercent, f32 A, f32 B );
 template <class T>
-FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
+SOURCE_FORCEINLINE T Lerp(f32 flPercent, T const &A, T const &B) {
   return A + (B - A) * flPercent;
 }
 
@@ -554,8 +554,8 @@ static inline f32 FLerp(f32 f1, f32 f2, f32 i1, f32 i2, f32 x) {
 
 // YWB:  Specialization for interpolating euler angles via quaternions...
 template <>
-FORCEINLINE QAngle Lerp<QAngle>(f32 flPercent, const QAngle &q1,
-                                const QAngle &q2) {
+SOURCE_FORCEINLINE QAngle Lerp<QAngle>(f32 flPercent, const QAngle &q1,
+                                       const QAngle &q2) {
   // Avoid precision errors
   if (q1 == q2) return q1;
 
@@ -583,9 +583,9 @@ FORCEINLINE QAngle Lerp<QAngle>(f32 flPercent, const QAngle &q1,
 // NOTE NOTE: I haven't tested this!! It may not work! Check out
 // interpolatedvar.cpp in the client dll to try it
 template <>
-FORCEINLINE QAngleByValue Lerp<QAngleByValue>(f32 flPercent,
-                                              const QAngleByValue &q1,
-                                              const QAngleByValue &q2) {
+SOURCE_FORCEINLINE QAngleByValue Lerp<QAngleByValue>(f32 flPercent,
+                                                     const QAngleByValue &q1,
+                                                     const QAngleByValue &q2) {
   // Avoid precision errors
   if (q1 == q2) return q1;
 
@@ -610,14 +610,14 @@ FORCEINLINE QAngleByValue Lerp<QAngleByValue>(f32 flPercent,
 
 // Swap two of anything.
 template <class T>
-FORCEINLINE void swap(T &x, T &y) {
+SOURCE_FORCEINLINE void swap(T &x, T &y) {
   T temp = x;
   x = y;
   y = temp;
 }
 
 template <class T>
-FORCEINLINE T AVG(T a, T b) {
+SOURCE_FORCEINLINE T AVG(T a, T b) {
   return (a + b) / 2;
 }
 
@@ -663,7 +663,8 @@ inline int ClampArrayBounds(int n, u32 maxindex) {
                           : (((p)->dist >= (emaxs)[(p)->type]) ? 2 : 3)) \
                    : BoxOnPlaneSide((emins), (emaxs), (p)))
 
-// FIXME: Vector versions.... the f32 versions will go away hopefully soon!
+// TODO(d.rattman): Vector versions.... the f32 versions will go away hopefully
+// soon!
 
 void AngleVectors(const QAngle &angles, Vector *forward);
 void AngleVectors(const QAngle &angles, Vector *forward, Vector *right,
@@ -780,8 +781,10 @@ inline f32 VectorAvg(Vector &a) { return (a[0] + a[1] + a[2]) / 3; }
 
 // Box/plane test (slow version)
 
-inline int FASTCALL BoxOnPlaneSide2(const Vector &emins, const Vector &emaxs,
-                                    const cplane_t *p, f32 tolerance = 0.f) {
+inline int SOURCE_FASTCALL BoxOnPlaneSide2(const Vector &emins,
+                                           const Vector &emaxs,
+                                           const cplane_t *p,
+                                           f32 tolerance = 0.f) {
   Vector corners[2];
 
   if (p->normal[0] < 0) {
@@ -1018,15 +1021,15 @@ inline f32 SimpleSplineRemapValClamped(f32 val, f32 A, f32 B, f32 C, f32 D) {
   return C + (D - C) * SimpleSpline(cVal);
 }
 
-FORCEINLINE int RoundFloatToInt(f32 f) {
-#if defined(__i386__) || defined(_M_IX86) || defined(_WIN64)
+SOURCE_FORCEINLINE int RoundFloatToInt(f32 f) {
+#if defined(ARCH_CPU_X86) || defined(ARCH_CPU_X86_64)
   return _mm_cvtss_si32(_mm_load_ss(&f));
-#elif _LINUX
+#elif OS_POSIX
   __asm __volatile__("fistpl %0;" : "=m"(nResult) : "t"(f) : "st");
 #endif
 }
 
-FORCEINLINE u8 RoundFloatToByte(f32 f) {
+SOURCE_FORCEINLINE u8 RoundFloatToByte(f32 f) {
   int nResult = RoundFloatToInt(f);
 #ifdef Assert
   Assert((nResult & ~0xFF) == 0);
@@ -1034,9 +1037,9 @@ FORCEINLINE u8 RoundFloatToByte(f32 f) {
   return (u8)nResult;
 }
 
-FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
+SOURCE_FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
 #if defined(_WIN64)
-  uint32_t nRet = (uint32_t)f;
+  u32 nRet = (u32)f;
   if (nRet & 1) {
     if ((f - floor(f) >= 0.5)) {
       nRet++;
@@ -1065,7 +1068,7 @@ FORCEINLINE unsigned long RoundFloatToUnsignedLong(f32 f) {
 }
 
 // Fast, accurate ftol:
-FORCEINLINE int Float2Int(f32 a) {
+SOURCE_FORCEINLINE int Float2Int(f32 a) {
   // Rely on compiler to generate CVTTSS2SI on x86
   return static_cast<int>(a);
 }
@@ -1073,7 +1076,7 @@ FORCEINLINE int Float2Int(f32 a) {
 // Over 15x faster than: (int)floor(value)
 inline int Floor2Int(f32 a) {
   int RetVal;
-#if defined(__i386__)
+#if defined(ARCH_CPU_X86)
   // Convert to int and back, compare, subtract one if too big
   __m128 a128 = _mm_set_ss(a);
   RetVal = _mm_cvtss_si32(a128);
@@ -1088,7 +1091,7 @@ inline int Floor2Int(f32 a) {
 
 // Fast color conversion from f32 to u8
 
-FORCEINLINE u8 FastFToC(f32 c) {
+SOURCE_FORCEINLINE u8 FastFToC(f32 c) {
   // ieee trick
   volatile f32 dc = c * 255.0f + (f32)(1 << 23);
   // return the lsb
@@ -1107,7 +1110,7 @@ inline f32 ClampToMsec(f32 in) {
 // Over 15x faster than: (int)ceil(value)
 inline int Ceil2Int(f32 a) {
   int RetVal;
-#if defined(__i386__)
+#if defined(ARCH_CPU_X86)
   // Convert to int and back, compare, add one if too small
   __m128 a128 = _mm_load_ss(&a);
   RetVal = _mm_cvtss_si32(a128);
@@ -1176,7 +1179,7 @@ extern f32 X360LinearToGamma(f32 flLinearValue);
 extern f32 SrgbGammaTo360Gamma(f32 flSrgbGammaValue);
 
 // linear (0..4) to screen corrected vertex space (0..1?)
-FORCEINLINE f32 LinearToVertexLight(f32 f) {
+SOURCE_FORCEINLINE f32 LinearToVertexLight(f32 f) {
   extern f32 lineartovertex[4096];
 
   // Gotta clamp before the multiply; could overflow...
@@ -1195,7 +1198,7 @@ FORCEINLINE f32 LinearToVertexLight(f32 f) {
   return lineartovertex[i];
 }
 
-FORCEINLINE u8 LinearToLightmap(f32 f) {
+SOURCE_FORCEINLINE u8 LinearToLightmap(f32 f) {
   extern u8 lineartolightmap[4096];
 
   // Gotta clamp before the multiply; could overflow...
@@ -1213,7 +1216,7 @@ FORCEINLINE u8 LinearToLightmap(f32 f) {
   return lineartolightmap[i];
 }
 
-FORCEINLINE void ColorClamp(Vector &color) {
+SOURCE_FORCEINLINE void ColorClamp(Vector &color) {
   f32 maxc = std::max(color.x, std::max(color.y, color.z));
   if (maxc > 1.0f) {
     f32 ooMax = 1.0f / maxc;
@@ -1355,7 +1358,7 @@ void Parabolic_Spline_NormalizeX(const Vector &p1, const Vector &p2,
 
 // quintic interpolating polynomial from Perlin.
 // 0->0, 1->1, smooth-in between with smooth tangents
-FORCEINLINE f32 QuinticInterpolatingPolynomial(f32 t) {
+SOURCE_FORCEINLINE f32 QuinticInterpolatingPolynomial(f32 t) {
   // 6t^5-15t^4+10t^3
   return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
@@ -1549,7 +1552,8 @@ inline void MatrixITransformPlane(const matrix3x4_t &src,
 int CeilPow2(int in);
 int FloorPow2(int in);
 
-FORCEINLINE f32 *UnpackNormal_HEND3N(const u32 *pPackedNormal, f32 *pNormal) {
+SOURCE_FORCEINLINE f32 *UnpackNormal_HEND3N(const u32 *pPackedNormal,
+                                            f32 *pNormal) {
   int temp[3];
   temp[0] = ((*pPackedNormal >> 0L) & 0x7ff);
   if (temp[0] & 0x400) {
@@ -1569,7 +1573,8 @@ FORCEINLINE f32 *UnpackNormal_HEND3N(const u32 *pPackedNormal, f32 *pNormal) {
   return pNormal;
 }
 
-FORCEINLINE u32 *PackNormal_HEND3N(const f32 *pNormal, u32 *pPackedNormal) {
+SOURCE_FORCEINLINE u32 *PackNormal_HEND3N(const f32 *pNormal,
+                                          u32 *pPackedNormal) {
   int temp[3];
 
   temp[0] = Float2Int(pNormal[0] * 1023.0f);
@@ -1587,7 +1592,8 @@ FORCEINLINE u32 *PackNormal_HEND3N(const f32 *pNormal, u32 *pPackedNormal) {
   return pPackedNormal;
 }
 
-FORCEINLINE u32 *PackNormal_HEND3N(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal) {
+SOURCE_FORCEINLINE u32 *PackNormal_HEND3N(f32 nx, f32 ny, f32 nz,
+                                          u32 *pPackedNormal) {
   int temp[3];
 
   temp[0] = Float2Int(nx * 1023.0f);
@@ -1605,13 +1611,14 @@ FORCEINLINE u32 *PackNormal_HEND3N(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal) {
   return pPackedNormal;
 }
 
-FORCEINLINE f32 *UnpackNormal_SHORT2(const u32 *pPackedNormal, f32 *pNormal,
-                                     bool bIsTangent = FALSE) {
+SOURCE_FORCEINLINE f32 *UnpackNormal_SHORT2(const u32 *pPackedNormal,
+                                            f32 *pNormal,
+                                            bool bIsTangent = false) {
   // Unpacks from Jason's 2-i16 format (fills in a 4th binormal-sign (+1/-1)
   // value, if this is a tangent vector)
 
-  // FIXME: i16 math is slow on 360 - use ints here instead (bit-twiddle to
-  // deal w/ the sign bits)
+  // TODO(d.rattman): i16 math is slow on 360 - use ints here instead
+  // (bit-twiddle to deal w/ the sign bits)
   i16 iX = (*pPackedNormal & 0x0000FFFF);
   i16 iY = (*pPackedNormal & 0xFFFF0000) >> 16;
 
@@ -1637,8 +1644,9 @@ FORCEINLINE f32 *UnpackNormal_SHORT2(const u32 *pPackedNormal, f32 *pNormal,
   return pNormal;
 }
 
-FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
-                                   f32 binormalSign = +1.0f) {
+SOURCE_FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz,
+                                          u32 *pPackedNormal,
+                                          f32 binormalSign = +1.0f) {
   // Pack a vector (ASSUMED TO BE NORMALIZED) into Jason's 4-u8 (SHORT2)
   // format. This simply reconstructs Z from X & Y. It uses the sign bits of
   // the X & Y coords to reconstruct the sign of Z and, if this is a tangent
@@ -1663,8 +1671,8 @@ FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
   ny *= binormalSign;  // Set the sign bit for the binormal (use when encoding a
                        // tangent vector)
 
-  // FIXME: i16 math is slow on 360 - use ints here instead (bit-twiddle to
-  // deal w/ the sign bits), also use Float2Int()
+  // TODO(d.rattman): i16 math is slow on 360 - use ints here instead
+  // (bit-twiddle to deal w/ the sign bits), also use Float2Int()
   i16 sX = (i16)nx;  // signed i16 [1,32767]
   i16 sY = (i16)ny;
 
@@ -1675,16 +1683,18 @@ FORCEINLINE u32 *PackNormal_SHORT2(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
   return pPackedNormal;
 }
 
-FORCEINLINE u32 *PackNormal_SHORT2(const f32 *pNormal, u32 *pPackedNormal,
-                                   f32 binormalSign = +1.0f) {
+SOURCE_FORCEINLINE u32 *PackNormal_SHORT2(const f32 *pNormal,
+                                          u32 *pPackedNormal,
+                                          f32 binormalSign = +1.0f) {
   return PackNormal_SHORT2(pNormal[0], pNormal[1], pNormal[2], pPackedNormal,
                            binormalSign);
 }
 
 // Unpacks a UBYTE4 normal (for a tangent, the result's fourth component
 // receives the binormal 'sign')
-FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal, f32 *pNormal,
-                                     bool bIsTangent = FALSE) {
+SOURCE_FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal,
+                                            f32 *pNormal,
+                                            bool bIsTangent = false) {
   u8 cX, cY;
   if (bIsTangent) {
     cX = *pPackedNormal >> 16;  // Unpack Z
@@ -1734,8 +1744,7 @@ FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal, f32 *pNormal,
   return pNormal;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// See:
+// See
 // http://www.oroboro.com/rafael/docserv.php/index/programming/article/unitv2
 //
 // UBYTE4 encoding, using per-octant projection onto x+y+z=1
@@ -1747,9 +1756,10 @@ FORCEINLINE f32 *UnpackNormal_UBYTE4(const u32 *pPackedNormal, f32 *pNormal,
 // bIsTangent is used to specify which WORD of the output to store the data
 // The expected usage is to call once with the normal and once with
 // the tangent and binormal sign flag, bitwise OR'ing the returned DWORDs
-FORCEINLINE u32 *PackNormal_UBYTE4(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
-                                   bool bIsTangent = false,
-                                   f32 binormalSign = +1.0f) {
+SOURCE_FORCEINLINE u32 *PackNormal_UBYTE4(f32 nx, f32 ny, f32 nz,
+                                          u32 *pPackedNormal,
+                                          bool bIsTangent = false,
+                                          f32 binormalSign = +1.0f) {
   f32 xSign = nx < 0.0f ? -1.0f : 1.0f;  // -1 or 1 sign
   f32 ySign = ny < 0.0f ? -1.0f : 1.0f;
   f32 zSign = nz < 0.0f ? -1.0f : 1.0f;
@@ -1794,19 +1804,18 @@ FORCEINLINE u32 *PackNormal_UBYTE4(f32 nx, f32 ny, f32 nz, u32 *pPackedNormal,
   return pPackedNormal;
 }
 
-FORCEINLINE u32 *PackNormal_UBYTE4(const f32 *pNormal, u32 *pPackedNormal,
-                                   bool bIsTangent = false,
-                                   f32 binormalSign = +1.0f) {
+SOURCE_FORCEINLINE u32 *PackNormal_UBYTE4(const f32 *pNormal,
+                                          u32 *pPackedNormal,
+                                          bool bIsTangent = false,
+                                          f32 binormalSign = +1.0f) {
   return PackNormal_UBYTE4(pNormal[0], pNormal[1], pNormal[2], pPackedNormal,
                            bIsTangent, binormalSign);
 }
 
 // Convert RGB to HSV
-
 void RGBtoHSV(const Vector &rgb, Vector &hsv);
 
 // Convert HSV to RGB
-
 void HSVtoRGB(const Vector &hsv, Vector &rgb);
 
 #endif  // SOURCE_MATHLIB_MATHLIB_H_

@@ -12,7 +12,7 @@
 #include "ai_motor.h"
 #include "physics_saverestore.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC( CAI_BasePhysicsFlyingBot )
@@ -361,7 +361,7 @@ IMotionEvent::simresult_e CAI_BasePhysicsFlyingBot::Simulate( IPhysicsMotionCont
 	QAngle actualAngles;
 	pPhysicsObject->GetPosition( &actualPosition, &actualAngles ); 
 
-	// FIXME: banking currently disabled, forces simple upright posture
+	// TODO(d.rattman): banking currently disabled, forces simple upright posture
 	angular.x = (UTIL_AngleDiff( m_vCurrentBanking.z, actualAngles.z ) - actualAngularVelocity.x) * (1 / deltaTime);
 	angular.y = (UTIL_AngleDiff( m_vCurrentBanking.x, actualAngles.x ) - actualAngularVelocity.y) * (1 / deltaTime);
 
@@ -372,8 +372,8 @@ IMotionEvent::simresult_e CAI_BasePhysicsFlyingBot::Simulate( IPhysicsMotionCont
 
 	// DevMsg("Sim %d : %.1f %.1f %.1f (%.1f)\n", count++, actualAngles.x, actualAngles.y, actualAngles.z, m_fHeadYaw );
 
-	// FIXME: remove the stuff from MoveExecute();
-	// FIXME: check MOVE?
+	// TODO(d.rattman): remove the stuff from MoveExecute();
+	// TODO(d.rattman): check MOVE?
 
 	ClampMotorForces( linear, angular );
 

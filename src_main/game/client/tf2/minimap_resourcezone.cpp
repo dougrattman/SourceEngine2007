@@ -13,7 +13,7 @@
 #include "techtree.h"
 #include "shareddefs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CMinimapResourceZonePanel : public CMinimapTracePanel

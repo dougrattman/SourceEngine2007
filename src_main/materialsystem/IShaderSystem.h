@@ -48,7 +48,7 @@ enum
 //-----------------------------------------------------------------------------
 // The shader system (a singleton)
 //-----------------------------------------------------------------------------
-abstract_class IShaderSystem
+the_interface IShaderSystem
 {
 public:
 	virtual ShaderAPITextureHandle_t GetShaderAPITextureBindHandle( ITexture *pTexture, int nFrameVar, int nTextureChannel = 0 ) =0;
@@ -80,7 +80,7 @@ public:
 //-----------------------------------------------------------------------------
 // The Shader interface versions
 //-----------------------------------------------------------------------------
-abstract_class IShaderDLLInternal
+the_interface IShaderDLLInternal
 {
 public:
 	// Here's where the app systems get to learn about each other 

@@ -20,7 +20,7 @@
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialSYstem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -220,7 +220,7 @@ BOOL CTextureWindow::EnumTexturePositions(TWENUMPOS *pTE, BOOL bStart)
 		}
 
 		// Filter by texture name.
-		char szTemp[MAX_PATH];
+		char szTemp[SOURCE_MAX_PATH];
 		pTE->pTex->GetShortName(szTemp);
 		if (MatchKeywords(szTemp, m_Filters, m_nFilters))
 		{

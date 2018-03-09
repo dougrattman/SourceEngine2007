@@ -14,7 +14,7 @@
 
 class CBaseAchievement;
 
-abstract_class IAchievement
+the_interface IAchievement
 {
 public:
 	virtual int GetAchievementID() = 0;
@@ -29,7 +29,7 @@ public:
 };
 
 
-abstract_class IAchievementMgr
+the_interface IAchievementMgr
 {
 public:
 	virtual IAchievement* GetAchievementByIndex( int index ) = 0;

@@ -28,7 +28,7 @@ char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
 #include "menu.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //

@@ -41,7 +41,7 @@
 #include "soundbrowser.h"
 #include "lprvwindow.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -1275,10 +1275,10 @@ BOOL CMainFrame::OnFileNew(UINT)
 //-----------------------------------------------------------------------------
 void CMainFrame::SaveWindowStates(std::fstream *pFile)
 {
-	char szRootDir[MAX_PATH];
-	char szFullPath[MAX_PATH];
+	char szRootDir[SOURCE_MAX_PATH];
+	char szFullPath[SOURCE_MAX_PATH];
 	APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-	Q_MakeAbsolutePath( szFullPath, MAX_PATH, "winstate.wc", szRootDir ); 
+	Q_MakeAbsolutePath( szFullPath, SOURCE_MAX_PATH, "winstate.wc", szRootDir ); 
 
 	std::fstream file(szFullPath, std::ios::out | std::ios::binary);
 
@@ -1363,10 +1363,10 @@ void CMainFrame::SaveWindowStates(std::fstream *pFile)
 //-----------------------------------------------------------------------------
 void CMainFrame::LoadWindowStates(std::fstream *pFile)
 {
-	char szRootDir[MAX_PATH];
-	char szFullPath[MAX_PATH];
+	char szRootDir[SOURCE_MAX_PATH];
+	char szFullPath[SOURCE_MAX_PATH];
 	APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-	Q_MakeAbsolutePath( szFullPath, MAX_PATH, "winstate.wc", szRootDir ); 
+	Q_MakeAbsolutePath( szFullPath, SOURCE_MAX_PATH, "winstate.wc", szRootDir ); 
 
 	std::fstream file( szFullPath, std::ios::in | std::ios::binary );
 

@@ -17,7 +17,7 @@
 #include "vgui_internal.h"
 #include "vstdlib/IKeyValuesSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -532,7 +532,7 @@ void CScheme::LoadFromFile(VPANEL sizingPanel, const char *inFilename,
   }
 
   // translate format from goldsrc scheme to new scheme
-  for (int i = 0; i < ARRAYSIZE(g_SchemeTranslation); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_SchemeTranslation); i++) {
     if (!m_pkvBaseSettings->FindKey(g_SchemeTranslation[i].pchNewEntry,
                                     false)) {
       const char *pchColor;
@@ -1000,7 +1000,7 @@ IBorder *CScheme::GetBorder(const char *borderName) {
 // Finds a font in the alias list
 //-----------------------------------------------------------------------------
 HFont CScheme::FindFontInAliasList(const char *fontName) {
-  // FIXME: Slow!!!
+  // TODO(d.rattman): Slow!!!
   for (int i = m_FontAliases.Count(); --i >= 0;) {
     //		const char *name = m_FontAliases[i]._fontName.String();
     if (!strnicmp(fontName, m_FontAliases[i]._fontName.String(),

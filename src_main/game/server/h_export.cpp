@@ -12,7 +12,7 @@
 #include "tier0/include/memdbgon.h"
 
 // Ensure data sizes are stable
-COMPILE_TIME_ASSERT(sizeof(inputfunc_t) == sizeof(int));
+static_assert(sizeof(inputfunc_t) == sizeof(int));
 
 HINSTANCE win32DLLHandle;
 

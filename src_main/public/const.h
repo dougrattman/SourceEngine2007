@@ -38,7 +38,7 @@
 #define MAX_NETWORKID_LENGTH 64  // num chars for a network (i.e steam) ID
 
 // BUGBUG: Reconcile with or derive this from the engine's internal definition!
-// FIXME: I added an extra bit because I needed to make it signed
+// TODO(d.rattman): I added an extra bit because I needed to make it signed
 #define SP_MODEL_INDEX_BITS 11
 
 // How many bits to use to encode an edict.

@@ -46,7 +46,7 @@ public:
 		}
 	}
 
-	char m_szPropertyString[ MAX_PATH ];
+	char m_szPropertyString[ SOURCE_MAX_PATH ];
 };
 
 //--------------------------------

@@ -146,6 +146,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -203,6 +204,7 @@
       </BaseAddress>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -266,6 +268,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -327,6 +330,7 @@
       </BaseAddress>
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />

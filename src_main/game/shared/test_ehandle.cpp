@@ -8,7 +8,7 @@
 
 #include "cbase.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // In this test, the server makes an entity (call it A) that has an EHANDLE to another 

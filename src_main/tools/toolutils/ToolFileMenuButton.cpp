@@ -16,7 +16,7 @@
 #include "p4lib/ip4.h"
 #include "vgui_controls/perforcefilelistframe.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -102,7 +102,7 @@ void CToolFileMenuButton::OnShowMenu( vgui::Menu *menu )
 	}
 
 	bool bP4Connected = p4->IsConnectedToServer();
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( bP4Connected && m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		bool bIsUnnamed = !Q_IsAbsolutePath( pPerforceFile );
@@ -133,7 +133,7 @@ void CToolFileMenuButton::OnShowMenu( vgui::Menu *menu )
 //-----------------------------------------------------------------------------
 void CToolFileMenuButton::OnPerforceAdd( )
 {
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		CPerforceFileListFrame *pPerforceFrame = new CPerforceFileListFrame( m_pFileMenuCallback->GetRootPanel(), "Add Movie File to Perforce?", "Movie File", PERFORCE_ACTION_FILE_ADD );
@@ -148,7 +148,7 @@ void CToolFileMenuButton::OnPerforceAdd( )
 //-----------------------------------------------------------------------------
 void CToolFileMenuButton::OnPerforceOpen( )
 {
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		CPerforceFileListFrame *pPerforceFrame = new CPerforceFileListFrame( m_pFileMenuCallback->GetRootPanel(), "Check Out Movie File from Perforce?", "Movie File", PERFORCE_ACTION_FILE_EDIT );
@@ -163,7 +163,7 @@ void CToolFileMenuButton::OnPerforceOpen( )
 //-----------------------------------------------------------------------------
 void CToolFileMenuButton::OnPerforceRevert( )
 {
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		CPerforceFileListFrame *pPerforceFrame = new CPerforceFileListFrame( m_pFileMenuCallback->GetRootPanel(), "Revert Movie File Changes from Perforce?", "Movie File", PERFORCE_ACTION_FILE_REVERT );
@@ -178,7 +178,7 @@ void CToolFileMenuButton::OnPerforceRevert( )
 //-----------------------------------------------------------------------------
 void CToolFileMenuButton::OnPerforceSubmit( )
 {
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		CPerforceFileListFrame *pPerforceFrame = new CPerforceFileListFrame( m_pFileMenuCallback->GetRootPanel(), "Submit Movie File Changes to Perforce?", "Movie File", PERFORCE_ACTION_FILE_SUBMIT );
@@ -193,7 +193,7 @@ void CToolFileMenuButton::OnPerforceSubmit( )
 //-----------------------------------------------------------------------------
 void CToolFileMenuButton::OnPerforceP4Win( )
 {
-	char pPerforceFile[MAX_PATH];
+	char pPerforceFile[SOURCE_MAX_PATH];
 	if ( m_pFileMenuCallback->GetPerforceFileName( pPerforceFile, sizeof(pPerforceFile) ) )
 	{
 		if ( p4->IsFileInPerforce( pPerforceFile ) )

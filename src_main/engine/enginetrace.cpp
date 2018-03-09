@@ -61,7 +61,7 @@ static CUtlVector<Ray_t> s_BenchmarkRays;
 //-----------------------------------------------------------------------------
 // Implementation of IEngineTrace
 //-----------------------------------------------------------------------------
-abstract_class CEngineTrace : public IEngineTrace {
+the_interface CEngineTrace : public IEngineTrace {
  public:
   CEngineTrace() { m_pRootMoveParent = NULL; }
   // Returns the contents mask at a particular world-space position
@@ -109,7 +109,7 @@ abstract_class CEngineTrace : public IEngineTrace {
                                  const Vector &vecAbsMaxs,
                                  IEntityEnumerator *pEnumerator);
 
-  // FIXME: Different versions for client + server. Eventually we need to make
+  // TODO(d.rattman): Different versions for client + server. Eventually we need to make
   // these go away
   virtual void HandleEntityToCollideable(IHandleEntity * pHandleEntity,
                                          ICollideable * *ppCollide,
@@ -146,7 +146,7 @@ abstract_class CEngineTrace : public IEngineTrace {
   virtual int GetLeafContainingPoint(const Vector &ptTest);
 
  private:
-  // FIXME: Different versions for client + server. Eventually we need to make
+  // TODO(d.rattman): Different versions for client + server. Eventually we need to make
   // these go away
   virtual void SetTraceEntity(ICollideable * pCollideable,
                               trace_t * pTrace) = 0;
@@ -528,7 +528,7 @@ int CEngineTrace::GetStatByIndex(int index, bool bClear) {
   return out;
 }
 
-static void FASTCALL GetBrushesInAABB_ParseLeaf(
+static void SOURCE_FASTCALL GetBrushesInAABB_ParseLeaf(
     const Vector *pExtents, CCollisionBSPData *pBSPData, cleaf_t *pLeaf,
     CUtlVector<int> *pOutput, int iContentsMask, int *pCounters) {
   for (unsigned int i = 0; i != pLeaf->numleafbrushes; ++i) {
@@ -897,7 +897,7 @@ bool CEngineTrace::ClipRayToBBox(const Ray_t &ray, unsigned int fMask,
   extern bool IntersectRayWithBox(
       const Ray_t &ray, const VectorAligned &inInvDelta,
       const VectorAligned &inBoxMins, const VectorAligned &inBoxMaxs,
-      trace_t *RESTRICT pTrace);
+      trace_t *SOURCE_RESTRICT pTrace);
 
   if (pEntity->GetSolid() != SOLID_BBOX) return false;
 
@@ -978,7 +978,7 @@ void CEngineTraceClient::SetTraceEntity(ICollideable *pCollideable,
                                         trace_t *pTrace) {
   if (!pTrace->DidHit()) return;
 
-  // FIXME: This is only necessary because of traces occurring during
+  // TODO(d.rattman): This is only necessary because of traces occurring during
   // LevelInit (a suspect time to be tracing)
   if (!pCollideable) {
     pTrace->m_pEnt = NULL;
@@ -1046,7 +1046,7 @@ void CEngineTrace::ClipRayToCollideable(const Ray_t &ray, unsigned int fMask,
     bTraced = ClipRayToVPhysics(ray, fMask, pEntity, pStudioHdr, pTrace);
   }
 
-  // FIXME: Why aren't we using solid type to check what kind of collisions to
+  // TODO(d.rattman): Why aren't we using solid type to check what kind of collisions to
   // test against?!?!
   if (!bTraced && pModel && pModel->type == mod_brush) {
     bTraced = ClipRayToBSP(ray, fMask, pEntity, pTrace);
@@ -1344,7 +1344,7 @@ void CEngineTrace::TraceRayAgainstLeafAndEntityList(const Ray_t &ray,
     ICollideable *pCollide = GetWorldCollideable();
 
     // Make sure the world entity is unrotated
-    // FIXME: BAH! The !pCollide test here is because of
+    // TODO(d.rattman): BAH! The !pCollide test here is because of
     // CStaticProp::PrecacheLighting.. it's occurring too early
     // need to fix that later
     Assert(!pCollide || pCollide->GetCollisionOrigin() == vec3_origin);
@@ -1402,7 +1402,7 @@ void CEngineTrace::TraceRayAgainstLeafAndEntityList(const Ray_t &ray,
     if (!StaticPropMgr()->IsStaticProp(pHandleEntity)) {
       if (!pTraceFilter->ShouldHitEntity(pHandleEntity, fMask)) continue;
     } else {
-      // FIXME: Could remove this check here by
+      // TODO(d.rattman): Could remove this check here by
       // using a different spatial partition mask. Look into it
       // if we want more speedups here.
       if (bNoStaticProps) continue;
@@ -1586,7 +1586,7 @@ void CEngineTrace::TraceRay(const Ray_t &ray, unsigned int fMask,
     Assert(pCollide);
 
     // Make sure the world entity is unrotated
-    // FIXME: BAH! The !pCollide test here is because of
+    // TODO(d.rattman): BAH! The !pCollide test here is because of
     // CStaticProp::PrecacheLighting.. it's occurring too early
     // need to fix that later
     Assert(!pCollide || pCollide->GetCollisionOrigin() == vec3_origin);
@@ -1636,7 +1636,7 @@ void CEngineTrace::TraceRay(const Ray_t &ray, unsigned int fMask,
   }
 
   // Collide with entities along the ray
-  // FIXME: Hitbox code causes this to be re-entrant for the IK stuff.
+  // TODO(d.rattman): Hitbox code causes this to be re-entrant for the IK stuff.
   // If we could eliminate that, this could be static and therefore
   // not have to reallocate memory all the time
   CEntityListAlongRay enumerator;
@@ -1669,7 +1669,7 @@ void CEngineTrace::TraceRay(const Ray_t &ray, unsigned int fMask,
     if (!StaticPropMgr()->IsStaticProp(pHandleEntity)) {
       if (!pTraceFilter->ShouldHitEntity(pHandleEntity, fMask)) continue;
     } else {
-      // FIXME: Could remove this check here by
+      // TODO(d.rattman): Could remove this check here by
       // using a different spatial partition mask. Look into it
       // if we want more speedups here.
       if (bNoStaticProps) continue;
@@ -1766,7 +1766,7 @@ class CEnumerationFilter : public IPartitionEnumerator {
 void CEngineTrace::EnumerateEntities(const Ray_t &ray, bool bTriggers,
                                      IEntityEnumerator *pEnumerator) {
   m_traceStatCounters[TRACE_STAT_COUNTER_ENUMERATE]++;
-  // FIXME: If we store CBaseHandles directly in the spatial partition, this
+  // TODO(d.rattman): If we store CBaseHandles directly in the spatial partition, this
   // method basically becomes obsolete. The spatial partition can be queried
   // directly.
   CEnumerationFilter enumerator(this, pEnumerator);
@@ -1788,7 +1788,7 @@ void CEngineTrace::EnumerateEntities(const Vector &vecAbsMins,
                                      const Vector &vecAbsMaxs,
                                      IEntityEnumerator *pEnumerator) {
   m_traceStatCounters[TRACE_STAT_COUNTER_ENUMERATE]++;
-  // FIXME: If we store CBaseHandles directly in the spatial partition, this
+  // TODO(d.rattman): If we store CBaseHandles directly in the spatial partition, this
   // method basically becomes obsolete. The spatial partition can be queried
   // directly.
   CEnumerationFilter enumerator(this, pEnumerator);

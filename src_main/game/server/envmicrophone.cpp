@@ -19,7 +19,7 @@
 #include "soundent.h"
 #include "soundflags.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUG_MICROPHONE

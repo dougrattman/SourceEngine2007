@@ -52,7 +52,7 @@ struct VS_INPUT
 	float4 vTexCoord0		: TEXCOORD0;
 	float4 vTexCoord1		: TEXCOORD1;
 	float4 vParms           : TEXCOORD2;   // frame blend, rot, radius, yaw
-	// FIXME: remove this vertex element for (USE_INSTANCING == 1), need to shuffle the following elements down
+	// TODO(d.rattman): remove this vertex element for (USE_INSTANCING == 1), need to shuffle the following elements down
 	float2 vCornerID        : TEXCOORD3;   // 0,0 1,0 1,1 0,1
 	float4 vTexCoord2		: TEXCOORD4;
 #if DUALSEQUENCE

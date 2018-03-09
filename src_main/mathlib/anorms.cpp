@@ -6,7 +6,7 @@
 
 #include "mathlib/vector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 Vector g_anorms[NUMVERTEXNORMALS] = {Vector(-0.525731, 0.000000, 0.850651),

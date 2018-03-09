@@ -13,7 +13,7 @@
 
 using namespace vgui;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLoadGameDialogXbox::CLoadGameDialogXbox(vgui::Panel *parent)
@@ -131,7 +131,7 @@ void CLoadGameDialogXbox::OnCommand(const char *command) {
     DeleteSaveGame(pSave);
     RemoveActivePanel();
   } else if (!Q_stricmp(command, "RefreshSaveGames")) {
-    // FIXME: At this point the rug has been pulled out from undereath us!
+    // TODO(d.rattman): At this point the rug has been pulled out from undereath us!
     RefreshSaveGames();
   } else if (!Q_stricmp(command, "LoadGameCancelled")) {
     SetControlDisabled(false);

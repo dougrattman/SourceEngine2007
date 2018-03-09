@@ -16,7 +16,7 @@
 #include "tf_hints.h"
 #include "c_tf_hintmanager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CTechnologyTreeDoc s_TechnologyTreeDoc;
@@ -83,13 +83,13 @@ void CTechnologyTreeDoc::LevelShutdown( void )
 //-----------------------------------------------------------------------------
 void CTechnologyTreeDoc::ReloadTechTree( void )
 {
-	// FIXME, CTechnologyTreeDoc should be an entity /MO
+	// TODO(d.rattman): CTechnologyTreeDoc should be an entity /MO
 	HOOK_HUD_MESSAGE( s_TechnologyTreeDoc, Technology );
 
 	// Reconstruct the tech tree
 	delete m_pTree;
 
-	// FIXME: If we reactivate this, we'll need to revisit team number here...
+	// TODO(d.rattman): If we reactivate this, we'll need to revisit team number here...
 	m_pTree = new CTechnologyTree( ::filesystem, 0);
 	Assert( m_pTree );
 
@@ -169,7 +169,7 @@ void CTechnologyTreeDoc::AddTechnologyFile( char *sFilename )
 	// Add the technologies to the tech list
 	if ( m_pTree )
 	{
-		// FIXME: If we reactivate this, we'll need to revisit team number here...
+		// TODO(d.rattman): If we reactivate this, we'll need to revisit team number here...
 		m_pTree->AddTechnologyFile( ::filesystem, 0, sFilename );
 	}
 }

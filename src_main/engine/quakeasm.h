@@ -1,22 +1,16 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // general asm header file
 
 // #define GLQUAKE	1
 
-#if defined(_WIN32)
+#include "build/include/build_config.h"
 
-#if defined(_M_IX86)
-#define __i386__	1
-#endif
-
-#endif
-
-#if defined __i386__ && !defined __linux__
+#if defined ARCH_CPU_X86 && !defined __linux__
 #define id386 1
 #else
 #define id386 0
-#endif  // __i386__
+#endif
 
 // !!! must be kept the same as in d_iface.h !!!
 #define TRANSPARENT_COLOR	255

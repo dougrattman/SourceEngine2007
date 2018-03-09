@@ -518,7 +518,7 @@ static bool LoadMesh( CDmeMesh *pMesh, CDmeVertexData *pBindState, const matrix3
 	// load the base triangles
 	int texture;
 	int material;
-	char pTextureName[MAX_PATH];
+	char pTextureName[SOURCE_MAX_PATH];
 
 	int nFaceSetCount = pMesh->FaceSetCount();
 	for ( int i = 0; i < nFaceSetCount; ++i )
@@ -545,7 +545,7 @@ static bool LoadMesh( CDmeMesh *pMesh, CDmeVertexData *pBindState, const matrix3
 		}
 
 		// skip all faces with the null texture on them.
-		char pPathNoExt[MAX_PATH];
+		char pPathNoExt[SOURCE_MAX_PATH];
 		Q_StripExtension( pTextureName, pPathNoExt, sizeof(pPathNoExt) );
 		if ( !Q_stricmp( pPathNoExt, "null" ) )
 			continue;
@@ -1118,7 +1118,7 @@ int Load_DMX( s_source_t *pSource )
 	s_UniqueVerticesMap.RemoveAll();
 
 	// use the full search tree, including mod hierarchy to find the file
-	char pFullPath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
 	if ( !GetGlobalFilePath( pSource->filename, pFullPath, sizeof(pFullPath) ) )
 		return 0;
 

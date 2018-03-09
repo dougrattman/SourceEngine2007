@@ -44,7 +44,7 @@ CPicker::CPicker( vgui::Panel *pParent, const char *pColumnHeader, const char *p
 	m_pPickerType = pColumnHeader;
 	m_pPickerTextType = pTextType;
 
-	// FIXME: Make this an image browser
+	// TODO(d.rattman): Make this an image browser
 	m_pPickerBrowser = new vgui::ListPanel( this, "Browser" );
  	m_pPickerBrowser->AddColumnHeader( 0, "choice", m_pPickerType, 52, 0 );
     m_pPickerBrowser->SetSelectIndividualCells( true );

@@ -14,7 +14,7 @@
 #include "tier1/UtlVector.h"
 #include "tier1/netadr.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define RCON_MAX_OUTSTANDING_SENDS \

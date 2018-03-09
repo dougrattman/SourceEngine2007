@@ -7,7 +7,7 @@ namespace vgui {
 class Panel;
 };
 
-abstract_class IEnginePerfTools {
+the_interface IEnginePerfTools {
  public:
   virtual void Init(void) = 0;
   virtual void Shutdown(void) = 0;

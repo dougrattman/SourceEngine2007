@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <climits>
 #include "datamodel/dmelement.h"
@@ -64,7 +64,7 @@ LogToCurveInfoTypeMap_t g_typeMap[] = {
 };
 
 const char *GetCurveInfoTypeFromLogType(const char *pLogType) {
-  int c = ARRAYSIZE(g_typeMap);
+  int c = SOURCE_ARRAYSIZE(g_typeMap);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(pLogType, g_typeMap[i].pLogType))
       return g_typeMap[i].pCurveInfoType;
@@ -73,7 +73,7 @@ const char *GetCurveInfoTypeFromLogType(const char *pLogType) {
 }
 
 bool IsLogLayerType(const char *pLogLayerType) {
-  int c = ARRAYSIZE(g_typeMap);
+  int c = SOURCE_ARRAYSIZE(g_typeMap);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(pLogLayerType, g_typeMap[i].pLogLayerType)) return true;
   }

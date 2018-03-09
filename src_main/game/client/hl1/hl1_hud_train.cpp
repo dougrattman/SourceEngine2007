@@ -18,7 +18,7 @@
 #include <vgui/ISurface.h>
 
 using namespace vgui;
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CHudTrain: public CHudElement, public CHL1HudNumbers

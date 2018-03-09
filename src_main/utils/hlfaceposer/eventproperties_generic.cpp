@@ -75,7 +75,7 @@ static CEventPropertiesGenericDialog g_EventPropertiesGenericDialog;
 
 void CEventPropertiesGenericDialog::PopulateAIGeneric( HWND control, CEventParams *params )
 {
-	// FIXME: this should load from a config file
+	// TODO(d.rattman): this should load from a config file
 	SendMessage( control, CB_ADDSTRING, 0, (LPARAM)"AI_BLINK" );
 	SendMessage( control, CB_ADDSTRING, 0, (LPARAM)"AI_HOLSTER" );
 	SendMessage( control, CB_ADDSTRING, 0, (LPARAM)"AI_UNHOLSTER" );

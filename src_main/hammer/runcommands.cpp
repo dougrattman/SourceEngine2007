@@ -16,7 +16,7 @@
 #include "GlobalFunctions.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static bool s_bRunsCommands = false;
@@ -160,8 +160,8 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 {
 	s_bRunsCommands = true;
 
-	char szCurDir[MAX_PATH];
-	_getcwd(szCurDir, MAX_PATH);
+	char szCurDir[SOURCE_MAX_PATH];
+	_getcwd(szCurDir, SOURCE_MAX_PATH);
 
 	procWnd.GetReady();
 
@@ -169,13 +169,13 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 	//  create two sets of buffers - one set with the long filename
 	//  and one set with the 8.3 format.
 
-	char szDocLongPath[MAX_PATH] = {0}, szDocLongName[MAX_PATH] = {0}, 
-		szDocLongExt[MAX_PATH] = {0};
-	char szDocShortPath[MAX_PATH] = {0}, szDocShortName[MAX_PATH] = {0}, 
-		szDocShortExt[MAX_PATH] = {0};
+	char szDocLongPath[SOURCE_MAX_PATH] = {0}, szDocLongName[SOURCE_MAX_PATH] = {0}, 
+		szDocLongExt[SOURCE_MAX_PATH] = {0};
+	char szDocShortPath[SOURCE_MAX_PATH] = {0}, szDocShortName[SOURCE_MAX_PATH] = {0}, 
+		szDocShortExt[SOURCE_MAX_PATH] = {0};
 
-	GetFullPathName(pszOrigDocName, MAX_PATH, szDocLongPath, NULL);
-	GetShortPathName(pszOrigDocName, szDocShortPath, MAX_PATH);
+	GetFullPathName(pszOrigDocName, SOURCE_MAX_PATH, szDocLongPath, NULL);
+	GetShortPathName(pszOrigDocName, szDocShortPath, SOURCE_MAX_PATH);
 
 	// split them up
 	char *p = strrchr(szDocLongPath, '.');
@@ -230,7 +230,7 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 		pszDocName = szDocLongName;
 		pszDocPath = szDocLongPath;
 		
-		char szNewParms[MAX_PATH*5], szNewRun[MAX_PATH*5];
+		char szNewParms[SOURCE_MAX_PATH*5], szNewRun[SOURCE_MAX_PATH*5];
 
 		// HACK: force the spawnv call for launching the game
 		if (!Q_stricmp(cmd.szRun, "$game_exe"))
@@ -372,7 +372,7 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 				// Change to the game exe folder before spawning the engine.
 				// This is necessary for Steam to find the correct Steam DLL (it
 				// uses the current working directory to search).
-				char szDir[MAX_PATH];
+				char szDir[SOURCE_MAX_PATH];
 				Q_strncpy(szDir, szNewRun, sizeof(szDir));
 				Q_StripFilename(szDir);
 
@@ -394,7 +394,7 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 		// check for existence?
 		if(cmd.bEnsureCheck)
 		{
-			char szFile[MAX_PATH];
+			char szFile[SOURCE_MAX_PATH];
 			FixGameVars(cmd.szEnsureFn, szFile, FALSE);
 			if(GetFileAttributes(szFile) == 0xFFFFFFFF)
 			{

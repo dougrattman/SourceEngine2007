@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -67,7 +67,7 @@
 #include "materialsystem/imesh.h"		//for materials->FindMaterial
 #include "iviewrender.h"				//for view->
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar tf_playergib_forceup( "tf_playersgib_forceup", "1.0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Upward added velocity for gibs." );
@@ -1515,9 +1515,9 @@ void C_TFPlayer::InitPhonemeMappings()
 	CStudioHdr *pStudio = GetModelPtr();
 	if ( pStudio )
 	{
-		char szBasename[MAX_PATH];
+		char szBasename[SOURCE_MAX_PATH];
 		Q_StripExtension( pStudio->pszName(), szBasename, sizeof( szBasename ) );
-		char szExpressionName[MAX_PATH];
+		char szExpressionName[SOURCE_MAX_PATH];
 		Q_snprintf( szExpressionName, sizeof( szExpressionName ), "%s/phonemes/phonemes", szBasename );
 		if ( FindSceneFile( szExpressionName ) )
 		{
@@ -2692,7 +2692,7 @@ void C_TFPlayer::InitPlayerGibs( void )
 		{
 			if ( RandomFloat(0,1) < 0.75 )
 			{
-				Q_strncpy( m_aGibs[i].modelName, g_pszBDayGibs[ RandomInt(0,ARRAYSIZE(g_pszBDayGibs)-1) ] , sizeof(m_aGibs[i].modelName) );
+				Q_strncpy( m_aGibs[i].modelName, g_pszBDayGibs[ RandomInt(0,SOURCE_ARRAYSIZE(g_pszBDayGibs)-1) ] , sizeof(m_aGibs[i].modelName) );
 			}
 		}
 	}

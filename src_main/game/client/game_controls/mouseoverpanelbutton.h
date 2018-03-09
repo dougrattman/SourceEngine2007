@@ -78,7 +78,7 @@ public:
 
 	const char *GetClassPage( const char *className )
 	{
-		static char classPanel[ _MAX_PATH ];
+		static char classPanel[ SOURCE_MAX_PATH ];
 		Q_snprintf( classPanel, sizeof( classPanel ), "classes/%s.res", className);
 
 		if ( g_pFullFileSystem->FileExists( classPanel, "MOD" ) )

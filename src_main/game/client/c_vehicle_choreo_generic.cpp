@@ -10,7 +10,7 @@
 #include "vehicle_choreo_generic_shared.h"
 #include "vehicle_viewblend_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern float RemapAngleRange(float startInterval, float endInterval,

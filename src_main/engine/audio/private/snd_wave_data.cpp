@@ -10,7 +10,7 @@
 #include "filesystem/IQueuedLoader.h"
 #include "tier1/UtlLinkedList.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -166,7 +166,7 @@ void CAsyncWaveData::DestroyResource() {
 // Output : char const
 //-----------------------------------------------------------------------------
 char const *CAsyncWaveData::GetFileName() {
-  static char sz[MAX_PATH];
+  static char sz[SOURCE_MAX_PATH];
 
   if (m_hFileNameHandle) {
     if (g_pFileSystem->String(m_hFileNameHandle, sz, sizeof(sz))) {
@@ -326,7 +326,7 @@ bool CAsyncWaveData::BlockingCopyData(void *destbuffer, int destbufsize,
     // Only warn once
     m_bMissing = false;
 
-    char fn[MAX_PATH];
+    char fn[SOURCE_MAX_PATH];
     if (g_pFileSystem->String(m_hFileNameHandle, fn, sizeof(fn))) {
       MaybeReportMissingWav(fn);
     }
@@ -395,7 +395,7 @@ bool CAsyncWaveData::BlockingGetDataPointer(void **ppData) {
     // Only warn once
     m_bMissing = false;
 
-    char fn[MAX_PATH];
+    char fn[SOURCE_MAX_PATH];
     if (g_pFileSystem->String(m_hFileNameHandle, fn, sizeof(fn))) {
       MaybeReportMissingWav(fn);
     }
@@ -439,7 +439,7 @@ void CAsyncWaveData::StartAsyncLoading(const asyncwaveparams_t &params) {
   m_hFileNameHandle = params.hFilename;
 
   // build the real filename
-  char szFilename[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   Q_snprintf(szFilename, sizeof(szFilename), "sound\\%s", GetFileName());
 
   int nPriority = 1;
@@ -710,7 +710,7 @@ memhandle_t CAsyncWavDataCache::FindOrCreateBuffer(asyncwaveparams_t &params,
       // found
       search.m_hWaveData = m_BufferList[hBuffer].m_hWaveData;
       if (snd_async_stream_spew.GetInt() >= 2) {
-        char tempBuff[MAX_PATH];
+        char tempBuff[SOURCE_MAX_PATH];
         g_pFileSystem->String(params.hFilename, tempBuff, sizeof(tempBuff));
         Msg("Found Buffer: %s, offset: %d\n", tempBuff, params.seekpos);
       }
@@ -1385,7 +1385,7 @@ void CAsyncWavDataCache::SpewMemoryUsage(int level) {
     if (level >= 1) {
       for (int i = m_CacheHandles.FirstInorder();
            m_CacheHandles.IsValidIndex(i); i = m_CacheHandles.NextInorder(i)) {
-        char name[MAX_PATH];
+        char name[SOURCE_MAX_PATH];
         if (!g_pFileSystem->String(m_CacheHandles[i].name, name,
                                    sizeof(name))) {
           Assert(0);
@@ -1579,7 +1579,7 @@ CWaveDataStreamAsync::~CWaveDataStreamAsync(void) {
 // Output : char const
 //-----------------------------------------------------------------------------
 char const *CWaveDataStreamAsync::GetFileName() {
-  static char fn[MAX_PATH];
+  static char fn[SOURCE_MAX_PATH];
 
   if (m_hFileName) {
     if (g_pFileSystem->String(m_hFileName, fn, sizeof(fn))) {

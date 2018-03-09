@@ -474,7 +474,7 @@ void CNPC_Bug_Builder::AlertSound( void )
 {
 	if ( GetEnemy() )
 	{
-		//FIXME: We need a better solution for inner-squad alerts!!
+		//TODO(d.rattman): We need a better solution for inner-squad alerts!!
 		//SOUND_DANGER is designed to frighten NPC's away. Need a different SOUND_ type.
 		CSoundEnt::InsertSound( SOUND_DANGER, GetEnemy()->GetAbsOrigin(), 1024, 0.5f, this );
 	}

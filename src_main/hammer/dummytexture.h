@@ -143,8 +143,8 @@ class CDummyTexture : public IEditorTexture
 
 	protected:
 
-		char m_szName[MAX_PATH];
-		char m_szFileName[MAX_PATH];
+		char m_szName[SOURCE_MAX_PATH];
+		char m_szFileName[SOURCE_MAX_PATH];
 
 		TEXTUREFORMAT m_eTextureFormat;
 };

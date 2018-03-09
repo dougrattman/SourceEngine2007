@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: provides an interface for dlls to query information about players
 // from the game dll
@@ -85,7 +85,7 @@ class CBotCmd {
   bool hasbeenpredicted;
 };
 
-abstract_class IPlayerInfo {
+the_interface IPlayerInfo {
  public:
   // returns the players name (UTF-8 encoded)
   virtual const char *GetName() = 0;
@@ -136,13 +136,13 @@ abstract_class IPlayerInfo {
 };
 
 #define INTERFACEVERSION_PLAYERINFOMANAGER "PlayerInfoManager002"
-abstract_class IPlayerInfoManager {
+the_interface IPlayerInfoManager {
  public:
   virtual IPlayerInfo *GetPlayerInfo(edict_t * pEdict) = 0;
   virtual CGlobalVars *GetGlobalVars() = 0;
 };
 
-abstract_class IBotController {
+the_interface IBotController {
  public:
   // change the bots position
   virtual void SetAbsOrigin(Vector & vec) = 0;
@@ -165,7 +165,7 @@ abstract_class IBotController {
 };
 
 #define INTERFACEVERSION_PLAYERBOTMANAGER "BotManager001"
-abstract_class IBotManager {
+the_interface IBotManager {
  public:
   virtual IBotController *GetBotController(edict_t * pEdict) = 0;
   // create a new bot and spawn it into the server

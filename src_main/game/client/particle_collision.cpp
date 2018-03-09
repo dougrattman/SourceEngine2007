@@ -8,7 +8,7 @@
 #include "particle_collision.h"
 #include "engine/IVDebugOverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef _XBOX
@@ -262,8 +262,8 @@ void CParticleCollision::Setup( const Vector &origin, const Vector *dir, float a
 		Vector	vSkewDir, vRight;
 		QAngle  vAngles;
 
-		//FIXME: Quicker conversion?
-		//FIXME: We need to factor in the angular spread instead
+		//TODO(d.rattman): Quicker conversion?
+		//TODO(d.rattman): We need to factor in the angular spread instead
 		VectorAngles( *dir, vAngles );
 		AngleVectors( vAngles, NULL, &vRight, NULL );
 

@@ -29,10 +29,10 @@ vgui::Panel *g_pMainPanel = NULL;
 void AddFileSystemSearchPaths(const char *pszExeName)
 {
 	// search locally first
-	char pExeName[MAX_PATH];
+	char pExeName[SOURCE_MAX_PATH];
     if ( ::GetModuleFileName( ( HINSTANCE )GetModuleHandle( NULL ), pExeName, sizeof(pExeName) ) )
 	{
-		char pPlatform[MAX_PATH];
+		char pPlatform[SOURCE_MAX_PATH];
 		Q_StripFilename( pExeName );
 		Q_snprintf( pPlatform, sizeof(pPlatform), "%s\\..\\platform", pExeName );
 		g_pFullFileSystem->AddSearchPath( pExeName, "EXECUTABLE_PATH");

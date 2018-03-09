@@ -20,7 +20,7 @@
 // Purpose: Main interface for DCC
 //-----------------------------------------------------------------------------
 #define DCC_MAIN_INTERFACE_VERSION "VDCCMain001"
-abstract_class IDCCMain : public IAppSystem
+the_interface IDCCMain : public IAppSystem
 {
 public:
 	virtual bool IsInitialized( ) = 0; 

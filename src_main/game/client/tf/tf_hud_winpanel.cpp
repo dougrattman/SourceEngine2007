@@ -24,7 +24,7 @@
 #include "fmtstr.h"
 #include "teamplayroundbased_gamerules.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DECLARE_HUDELEMENT_DEPTH( CTFWinPanel, 1 );
@@ -182,7 +182,7 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 		case WINREASON_FLAG_CAPTURE_LIMIT:
 			{
 				wchar_t wzFlagCaptureLimit[16];
-				_snwprintf( wzFlagCaptureLimit, ARRAYSIZE( wzFlagCaptureLimit), L"%i", iFlagCapLimit );
+				_snwprintf( wzFlagCaptureLimit, SOURCE_ARRAYSIZE( wzFlagCaptureLimit), L"%i", iFlagCapLimit );
 				g_pVGuiLocalize->ConstructString( wzWinReason, sizeof( wzWinReason ), g_pVGuiLocalize->Find( "#Winreason_FlagCaptureLimit" ), 2, 
 					pLocalizedTeamName, wzFlagCaptureLimit );
 			}			
@@ -207,7 +207,7 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 			// if this was a mini-round, show # of capture points remaining
 			wchar_t wzNumCapturesRemaining[16];
 			wchar_t wzCapturesRemainingMsg[256]=L"";
-			_snwprintf( wzNumCapturesRemaining, ARRAYSIZE( wzNumCapturesRemaining ), L"%i", iRoundsRemaining );
+			_snwprintf( wzNumCapturesRemaining, SOURCE_ARRAYSIZE( wzNumCapturesRemaining ), L"%i", iRoundsRemaining );
 			g_pVGuiLocalize->ConstructString( wzCapturesRemainingMsg, sizeof( wzCapturesRemainingMsg ), 
 				g_pVGuiLocalize->Find( 1 == iRoundsRemaining ? "#Winpanel_CapturePointRemaining" : "Winpanel_CapturePointsRemaining" ),
 				1, wzNumCapturesRemaining );
@@ -225,10 +225,10 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 				wchar_t wzCapMsg[512]=L"";
 				for ( int i = 0; i < iCappers; i++ )
 				{
-					Q_strncat( szPlayerNames, g_PR->GetPlayerName( (int) pCappers[i] ), ARRAYSIZE( szPlayerNames ) );
+					Q_strncat( szPlayerNames, g_PR->GetPlayerName( (int) pCappers[i] ), SOURCE_ARRAYSIZE( szPlayerNames ) );
 					if ( i < iCappers - 1 )
 					{
-						Q_strncat( szPlayerNames, ", ", ARRAYSIZE( szPlayerNames ) );
+						Q_strncat( szPlayerNames, ", ", SOURCE_ARRAYSIZE( szPlayerNames ) );
 					}
 				}
 				g_pVGuiLocalize->ConvertANSIToUnicode( szPlayerNames, wzPlayerNames, sizeof( wzPlayerNames ) );
@@ -272,8 +272,8 @@ void CTFWinPanel::FireGameEvent( IGameEvent * event )
 			bool bShow = false;
 			char szPlayerIndexVal[64]="", szPlayerScoreVal[64]="";
 			// get player index and round points from the event
-			Q_snprintf( szPlayerIndexVal, ARRAYSIZE( szPlayerIndexVal ), "player_%d", i );
-			Q_snprintf( szPlayerScoreVal, ARRAYSIZE( szPlayerScoreVal ), "player_%d_points", i );
+			Q_snprintf( szPlayerIndexVal, SOURCE_ARRAYSIZE( szPlayerIndexVal ), "player_%d", i );
+			Q_snprintf( szPlayerScoreVal, SOURCE_ARRAYSIZE( szPlayerScoreVal ), "player_%d_points", i );
 			int iPlayerIndex = event->GetInt( szPlayerIndexVal, 0 );
 			int iRoundScore = event->GetInt( szPlayerScoreVal, 0 );
 			// round score of 0 means no player to show for that position (not enough players, or didn't score any points that round)

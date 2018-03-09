@@ -23,7 +23,7 @@
 #include "vehicle_base.h"
 #include "vehicle_crane.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar g_debug_vehicledriver;

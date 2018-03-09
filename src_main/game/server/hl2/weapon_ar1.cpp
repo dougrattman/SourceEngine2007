@@ -12,7 +12,7 @@
 #include "player.h"
 #include "in_buttons.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DAMAGE_PER_SECOND 10

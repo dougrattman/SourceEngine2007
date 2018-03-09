@@ -5,7 +5,7 @@
 #include "basetempentity.h"
 #include "mathlib/mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_SERVERCLASS_ST_NOBASE(CBaseTempEntity, DT_BaseTempEntity)

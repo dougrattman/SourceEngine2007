@@ -67,7 +67,7 @@ struct DmeCameraParams_t
 
 //-----------------------------------------------------------------------------
 // A class representing the SFM Session
-// FIXME: Should this be a dmelement? Maybe!
+// TODO(d.rattman): Should this be a dmelement? Maybe!
 //-----------------------------------------------------------------------------
 class CSFMSession
 {

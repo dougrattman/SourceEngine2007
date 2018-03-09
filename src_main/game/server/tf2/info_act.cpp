@@ -273,7 +273,7 @@ void CInfoAct::RespawnTimerThink()
 //-----------------------------------------------------------------------------
 void CInfoAct::StartAct( void )
 {
-	// FIXME: Should this change?
+	// TODO(d.rattman): Should this change?
 	// Don't allow two simultaneous acts
 	if (g_hCurrentAct)
 	{

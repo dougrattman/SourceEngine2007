@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #if defined(GAME_DLL)
 #include "cbase.h"
@@ -39,7 +39,7 @@ static char const *ep2Maps[] = {
     "ep2_outland_11", "ep2_outland_11a", "ep2_outland_12",  "ep2_outland_12a"};
 
 bool CEP2GameStats::UserPlayedAllTheMaps(void) {
-  int c = ARRAYSIZE(ep2Maps);
+  int c = SOURCE_ARRAYSIZE(ep2Maps);
   for (int i = 0; i < c; ++i) {
     int idx = m_BasicStats.m_MapTotals.Find(ep2Maps[i]);
     if (idx == m_BasicStats.m_MapTotals.InvalidIndex()) return false;
@@ -513,7 +513,7 @@ static void CC_ListDeaths(const CCommand &args) {
                map->m_aPlayerDeaths[i].nPosition[1],
                map->m_aPlayerDeaths[i].nPosition[2] + 36.0f);
 
-    // FIXME: This might overflow
+    // TODO(d.rattman): This might overflow
     NDebugOverlay::Box(org, Vector(-8, -8, -8), Vector(8, 8, 8), 0, 255, 0, 128,
                        10.0f);
 

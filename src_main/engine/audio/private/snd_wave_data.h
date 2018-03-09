@@ -9,7 +9,7 @@
 // Purpose: Linear iterator over source data.
 // Keeps track of position in source, and maintains necessary buffers
 //-----------------------------------------------------------------------------
-abstract_class IWaveData {
+the_interface IWaveData {
  public:
   virtual ~IWaveData(void) {}
   virtual CAudioSource &Source(void) = 0;
@@ -18,7 +18,7 @@ abstract_class IWaveData {
   virtual bool IsReadyToMix() = 0;
 };
 
-abstract_class IWaveStreamSource {
+the_interface IWaveStreamSource {
  public:
   virtual int UpdateLoopingSamplePosition(int samplePosition) = 0;
   virtual void UpdateSamples(char *pData, int sampleCount) = 0;

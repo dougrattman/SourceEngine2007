@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DMELEMENT_H
 #define DMELEMENT_H
@@ -11,7 +11,7 @@
 #include "tier1/utlmap.h"
 #include "tier1/utlsymbol.h"
 #include "tier1/utlvector.h"
-#ifndef _LINUX
+#ifndef OS_POSIX
 #include "datamodel/dmattributevar.h"
 #endif
 
@@ -482,7 +482,7 @@ inline CDmAttribute *CDmElement::AddAttributeElement(
   CDmAttribute *pAttribute = AddAttribute(pAttributeName, AT_ELEMENT);
   if (!pAttribute) return NULL;
 
-  // FIXME: If the attribute exists but has a different element type symbol,
+  // TODO(d.rattman): If the attribute exists but has a different element type symbol,
   // should we complain?
   pAttribute->SetElementTypeSymbol(E::GetStaticTypeSymbol());
   return pAttribute;
@@ -494,7 +494,7 @@ inline CDmAttribute *CDmElement::AddAttributeElementArray(
   CDmAttribute *pAttribute = AddAttribute(pAttributeName, AT_ELEMENT_ARRAY);
   if (!pAttribute) return NULL;
 
-  // FIXME: If the attribute exists but has a different element type symbol,
+  // TODO(d.rattman): If the attribute exists but has a different element type symbol,
   // should we complain?
   pAttribute->SetElementTypeSymbol(E::GetStaticTypeSymbol());
   return pAttribute;

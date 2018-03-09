@@ -98,7 +98,7 @@ enum StandardTextureId_t : int {
 // The Shader interface versions
 //-----------------------------------------------------------------------------
 #define SHADERDYNAMIC_INTERFACE_VERSION "ShaderDynamic001"
-abstract_class IShaderDynamicAPI {
+the_interface IShaderDynamicAPI {
  public:
   // returns the current time in seconds....
   virtual double CurrentTime() const = 0;
@@ -175,7 +175,7 @@ abstract_class IShaderDynamicAPI {
   // Get the dimensions of the back buffer.
   virtual void GetBackBufferDimensions(int &width, int &height) const = 0;
 
-  // FIXME: The following 6 methods used to live in IShaderAPI
+  // TODO(d.rattman): The following 6 methods used to live in IShaderAPI
   // and were moved for stdshader_dx8. Let's try to move them back!
 
   // Get the lights

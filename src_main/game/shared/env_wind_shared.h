@@ -150,7 +150,7 @@ public:
 	// The function returns the time at which it must be called again
 	float WindThink( float flTime );
 
-	// FIXME: These really should be private
+	// TODO(d.rattman): These really should be private
 	CNetworkVar( float, m_flStartTime );
 
 	CNetworkVar( int, m_iWindSeed );		// random number seed...

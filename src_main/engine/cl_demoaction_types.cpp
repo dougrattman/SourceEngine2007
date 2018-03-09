@@ -495,7 +495,7 @@ bool CDemoActionPlaySoundStart::Init(KeyValues *pInitData) {
 
   SetSoundName(pInitData->GetString("sound", ""));
 
-  // FIXME:  Could add parsing of attenuation, other sound flags
+  // TODO(d.rattman):  Could add parsing of attenuation, other sound flags
 
   return true;
 }

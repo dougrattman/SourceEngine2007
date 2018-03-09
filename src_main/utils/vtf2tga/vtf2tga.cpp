@@ -71,7 +71,7 @@ int main( int argc, char **argv )
 		pTGAFileName = pVTFFileName;
 	}
 
-	char pCurrentDirectory[MAX_PATH];
+	char pCurrentDirectory[SOURCE_MAX_PATH];
 	if ( _getcwd( pCurrentDirectory, sizeof(pCurrentDirectory) ) == NULL )
 	{
 		fprintf( stderr, "Unable to get the current directory\n" );
@@ -79,7 +79,7 @@ int main( int argc, char **argv )
 	}
 	Q_StripTrailingSlash( pCurrentDirectory );
 
-	char pBuf[MAX_PATH];
+	char pBuf[SOURCE_MAX_PATH];
 	if ( !Q_IsAbsolutePath( pTGAFileName ) )
 	{
 		Q_snprintf( pBuf, sizeof(pBuf), "%s\\%s", pCurrentDirectory, pTGAFileName );
@@ -90,14 +90,14 @@ int main( int argc, char **argv )
 	}
 	Q_FixSlashes( pBuf );
 
-	char pOutFileNameBase[MAX_PATH];
-	Q_StripExtension( pBuf, pOutFileNameBase, MAX_PATH );
+	char pOutFileNameBase[SOURCE_MAX_PATH];
+	Q_StripExtension( pBuf, pOutFileNameBase, SOURCE_MAX_PATH );
 
-	char pActualVTFFileName[MAX_PATH];
-	Q_strncpy( pActualVTFFileName, pVTFFileName, MAX_PATH );
+	char pActualVTFFileName[SOURCE_MAX_PATH];
+	Q_strncpy( pActualVTFFileName, pVTFFileName, SOURCE_MAX_PATH );
 	if ( !Q_strstr( pActualVTFFileName, ".vtf" ) )
 	{
-		Q_strcat( pActualVTFFileName, ".vtf", MAX_PATH ); 
+		Q_strcat( pActualVTFFileName, ".vtf", SOURCE_MAX_PATH ); 
 	}
 
 	FILE *vtfFp = fopen( pActualVTFFileName, "rb" );

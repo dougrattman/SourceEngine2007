@@ -15,7 +15,7 @@
 #include "tier1/mempool.h"
 #include "utlpriorityqueue.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar soundpatch_captionlength(
@@ -425,7 +425,7 @@ bool CSoundPatch::Update(float time, float deltaTime) {
   }
 
   if (EntIndex() < 0) {
-    // FIXME:  The pointer to this soundpatch is probably leaked since no entity
+    // TODO(d.rattman):  The pointer to this soundpatch is probably leaked since no entity
     // is around to clean it up (ywb)
     DevWarning(
         "CSoundPatch::Update:  Removing CSoundPatch (%s) with NULL EHandle\n",
@@ -519,7 +519,7 @@ void CSoundPatch::ResumeSound(void) {
 
       CBaseEntity::EmitSound(m_Filter, EntIndex(), ep);
     } else {
-      // FIXME: Lost the entity on restore. It might have been suppressed by the
+      // TODO(d.rattman): Lost the entity on restore. It might have been suppressed by the
       // save/restore system. This will probably leak the sound patch since
       // there's no one to delete it, but the next call to CSoundPatch::Update
       // should at least remove it from the list of sound patches.
@@ -928,7 +928,7 @@ CSoundPatch *CSoundControllerImp::SoundCreate(IRecipientFilter &filter,
                                               const char *pSoundName) {
   CSoundPatch *pSound = new CSoundPatch;
 
-  // FIXME: This is done so we don't have to futz with the public interface
+  // TODO(d.rattman): This is done so we don't have to futz with the public interface
   EHANDLE hEnt =
       (nEntIndex != -1) ? g_pEntityList->GetNetworkableHandle(nEntIndex) : NULL;
   pSound->Init(&filter, hEnt.Get(), CHAN_AUTO, pSoundName, SNDLVL_NORM);
@@ -966,7 +966,7 @@ CSoundPatch *CSoundControllerImp::SoundCreate(IRecipientFilter &filter,
                                               const EmitSound_t &es) {
   CSoundPatch *pSound = new CSoundPatch;
 
-  // FIXME: This is done so we don't have to futz with the public interface
+  // TODO(d.rattman): This is done so we don't have to futz with the public interface
   EHANDLE hEnt =
       (nEntIndex != -1) ? g_pEntityList->GetNetworkableHandle(nEntIndex) : NULL;
   pSound->Init(&filter, hEnt.Get(), es.m_nChannel, es.m_pSoundName,

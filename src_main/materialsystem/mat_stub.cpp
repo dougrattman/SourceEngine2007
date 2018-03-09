@@ -14,7 +14,7 @@
 #include "imaterialinternal.h"
 #include "materialsystem/materialsystem_config.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ----------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ class CDummyMesh : public IMesh {
 
   virtual void ModifyEnd(MeshDesc_t &desc) {}
 
-  // FIXME: Make this work! Unsupported methods of IIndexBuffer
+  // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc) {
     static unsigned short dummyIndex;
     desc.m_pIndices = &dummyIndex;
@@ -1035,7 +1035,7 @@ class CDummyMaterialSystem
       *width = *height = 32;
   }
 
-  /// FIXME: This stuff needs to be cleaned up and abstracted.
+  /// TODO(d.rattman): This stuff needs to be cleaned up and abstracted.
   // Stuff that gets exported to the launcher through the engine
   virtual void SwapBuffers() {}
 
@@ -1162,10 +1162,10 @@ class CDummyMaterialSystem
 
   ImageFormat GetBackBufferFormat(void) const { return IMAGE_FORMAT_RGBA8888; }
 
-  // FIXME: This is a hack required for NVidia/XBox, can they fix in drivers?
+  // TODO(d.rattman): This is a hack required for NVidia/XBox, can they fix in drivers?
   virtual void DrawScreenSpaceQuad(IMaterial *pMaterial) {}
 
-  // FIXME: Test interface
+  // TODO(d.rattman): Test interface
   virtual bool Connect(CreateInterfaceFn factory) { return true; }
   virtual void Disconnect() {}
   virtual void *QueryInterface(const char *pInterfaceName) { return NULL; }

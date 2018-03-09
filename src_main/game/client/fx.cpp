@@ -22,7 +22,7 @@
 #include "toolframework_client.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Precahce the effects
@@ -233,7 +233,8 @@ void FX_MuzzleEffect(const Vector &origin, const QAngle &angles, float scale,
           pParticle = (SimpleParticle *) pSimple->AddParticle( sizeof(
   SimpleParticle ), pSimple->GetPMaterial( "particle/particle_smokegrenade" ),
   origin );
-                  
+                  
+
           if ( pParticle == NULL )
                   return;
 
@@ -357,7 +358,7 @@ void FX_MuzzleEffectAttached(float scale, ClientEntityHandle_t hEntity,
   pEmitter->SetFloat("duration", 0);
   pEmitter->SetString(
       "material",
-      "effects/muzzleflash2");  // FIXME - create DmeMultiMaterialSpriteEmitter
+      "effects/muzzleflash2");  // TODO(d.rattman): create DmeMultiMaterialSpriteEmitter
                                 // to support the 4 materials of muzzleflash
   pEmitter->SetInt("active", true);
 
@@ -440,7 +441,7 @@ void MuzzleFlashCallback(const CEffectData &data) {
     if (!pRenderable) return;
 
     if (data.m_nAttachmentIndex) {
-      // FIXME: We also need to allocate these particles into an attachment
+      // TODO(d.rattman): We also need to allocate these particles into an attachment
       // space setup
       pRenderable->GetAttachment(data.m_nAttachmentIndex, vecOrigin, vecAngles);
     } else {

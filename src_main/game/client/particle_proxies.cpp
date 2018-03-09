@@ -9,12 +9,12 @@
 #include "materialsystem/imaterialproxy.h"
 #include "materialsystem/imaterialvar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // This was specified in the .dsp with the /Od flag, but that causes a warning since
 //  it's inconsistent with the release .pch, so just disable optimizations here instead
-// FIXME:  Is this even needed any more?
+// TODO(d.rattman):  Is this even needed any more?
 #pragma optimize( "", off )
 
 

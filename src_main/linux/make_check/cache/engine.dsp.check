@@ -1408,7 +1408,7 @@ SOURCE=..\public\filesystem_helpers.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\filesystem_init.cpp
+SOURCE=..\public\filesystem_init.cc
 # SUBTRACT CPP /D fopen=dont_use_fopen /D "PROTECTED_THINGS_ENABLE"
 # End Source File
 # Begin Source File
@@ -3442,7 +3442,7 @@ SOURCE=.\valve.ico
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\Public\amd3dx.h
+SOURCE=..\deps\amd3dx\include\amd3dx.h
 # End Source File
 # Begin Source File
 

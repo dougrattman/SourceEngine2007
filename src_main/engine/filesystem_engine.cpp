@@ -10,7 +10,7 @@
 #include "quakedef.h"  // for MAX_OSPATH
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IFileSystem *g_pFileSystem = NULL;

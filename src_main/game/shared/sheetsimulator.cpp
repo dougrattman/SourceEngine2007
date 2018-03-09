@@ -9,7 +9,7 @@
 #include "collisionutils.h"
 #include "edict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define COLLISION_PLANE_OFFSET 6.0f
@@ -146,7 +146,7 @@ void CSheetSimulator::ComputeBounds(Vector& mins, Vector& maxs) {
 //-----------------------------------------------------------------------------
 
 void CSheetSimulator::SetPosition(const Vector& origin, const QAngle& angles) {
-  // FIXME: Need a better metric for position reset
+  // TODO(d.rattman): Need a better metric for position reset
   if (m_Origin.DistToSqr(origin) > 1e3) {
     for (int i = 0; i < NumParticles(); ++i) {
       m_Particle[i].m_Position = origin;

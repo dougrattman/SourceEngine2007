@@ -4,6 +4,7 @@
 #define SOURCE_MATHLIB_COMPRESSED_LIGHT_CUBE_H_
 
 #include "mathlib/mathlib.h"
+#include "public/datamap.h"
 
 struct CompressedLightCube {
   DECLARE_BYTESWAP_DATADESC();

@@ -32,7 +32,7 @@
 
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -1021,7 +1021,7 @@ void Panel::PaintBuildOverlay() {
 // Purpose: Returns true if the panel's draw code will fully cover it's area
 //-----------------------------------------------------------------------------
 bool Panel::IsOpaque() {
-  // FIXME: Add code to account for the 'SkipChild' functionality in Frame
+  // TODO(d.rattman): Add code to account for the 'SkipChild' functionality in Frame
   if (IsVisible() && _flags.IsFlagSet(PAINT_BACKGROUND_ENABLED) &&
       (_bgColor[3] == 255))
     return true;
@@ -1048,7 +1048,7 @@ bool Panel::IsBottomAligned() {
 //-----------------------------------------------------------------------------
 void Panel::SetParent(Panel *newParent) {
   // Assert that the parent is from the same module as the child
-  // FIXME: !!! work out how to handle this properly!
+  // TODO(d.rattman): !!! work out how to handle this properly!
   //	Assert(!newParent || !strcmp(newParent->GetModuleName(),
   // GetControlsModuleName()));
 
@@ -1117,7 +1117,7 @@ int Panel::GetAlpha() { return (int)m_flAlpha; }
 // Purpose: Moves the panel to the front of the z-order
 //-----------------------------------------------------------------------------
 void Panel::MoveToFront(void) {
-  // FIXME: only use ipanel() as per src branch?
+  // TODO(d.rattman): only use ipanel() as per src branch?
   if (IsPopup()) {
     surface()->BringToFront(GetVPanel());
   } else {
@@ -1795,7 +1795,7 @@ static KeyNames_t g_KeyNames[] = {
 };
 
 char const *Panel::KeyCodeToString(KeyCode code) {
-  int c = ARRAYSIZE(g_KeyNames);
+  int c = SOURCE_ARRAYSIZE(g_KeyNames);
   for (int i = 0; i < c; ++i) {
     if (g_KeyNames[i].code == code) return g_KeyNames[i].string;
   }
@@ -1804,7 +1804,7 @@ char const *Panel::KeyCodeToString(KeyCode code) {
 }
 
 wchar_t const *Panel::KeyCodeToDisplayString(KeyCode code) {
-  int c = ARRAYSIZE(g_KeyNames);
+  int c = SOURCE_ARRAYSIZE(g_KeyNames);
   for (int i = 0; i < c; ++i) {
     if (g_KeyNames[i].code == code) {
       char const *str = g_KeyNames[i].displaystring;
@@ -1860,7 +1860,7 @@ wchar_t const *Panel::KeyCodeModifiersToDisplayString(KeyCode code,
 }
 
 KeyCode Panel::StringToKeyCode(char const *str) {
-  int c = ARRAYSIZE(g_KeyNames);
+  int c = SOURCE_ARRAYSIZE(g_KeyNames);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(str, g_KeyNames[i].string)) return g_KeyNames[i].code;
   }
@@ -3419,7 +3419,7 @@ MessageMapItem_t Panel::m_MessageMap[] = {
 
 // IMPLEMENT_PANELMAP( Panel, NULL )
 PanelMap_t Panel::m_PanelMap = {Panel::m_MessageMap,
-                                ARRAYSIZE(Panel::m_MessageMap), "Panel", NULL};
+                                SOURCE_ARRAYSIZE(Panel::m_MessageMap), "Panel", NULL};
 PanelMap_t *Panel::GetPanelMap(void) { return &m_PanelMap; }
 
 //-----------------------------------------------------------------------------
@@ -3471,11 +3471,6 @@ void Panel::OnMessage(const KeyValues *params, VPANEL ifromPanel) {
 
   // iterate through the class hierarchy message maps
   for (; panelMap != NULL && !bFound; panelMap = panelMap->baseMap) {
-#if defined(_DEBUG)
-//		char const *className = panelMap->pfnClassName();
-//		NOTE_UNUSED( className );
-#endif
-
     // iterate all the entries in the panel map
     for (int i = 0; i < panelMap->entries.Count(); i++) {
       MessageMapItem_t *pMap = &panelMap->entries[i];
@@ -4568,7 +4563,7 @@ void Panel::DrawBoxFade(int x, int y, int wide, int tall, Color color,
       surface()->DrawFilledRectFade(x + cornerWide, y, x + wide - cornerWide,
                                     y + tall, alpha0, alpha1, bHorizontal);
     } else {
-      // FIXME: Hollow horz version not implemented
+      // TODO(d.rattman): Hollow horz version not implemented
       // surface()->DrawFilledRectFade(x, y + cornerTall, x + cornerWide, y +
       // tall - cornerTall, alpha0, alpha1, bHorizontal);
       // surface()->DrawFilledRectFade(x + wide - cornerWide, y + cornerTall, x
@@ -4791,7 +4786,7 @@ Panel *Panel::GetDragPanel() {
 void Panel::OnStartDragging() {
 #if defined(VGUI_USEDRAGDROP)
   // Only left mouse initiates drag/drop.
-  // FIXME: Revisit?
+  // TODO(d.rattman): Revisit?
   if (!input()->IsMouseDown(MOUSE_LEFT)) return;
 
   if (!m_pDragDrop->m_bDragEnabled) return;

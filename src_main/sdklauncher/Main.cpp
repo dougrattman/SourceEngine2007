@@ -33,7 +33,7 @@ typedef vgui::MessageBox vguiMessageBox;
 
 #include <winsock2.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 HANDLE g_dwChangeHandle = NULL;
@@ -52,7 +52,7 @@ CSDKLauncherDialog *g_pMainFrame = 0;
 
 bool g_bAutoHL2Mod = false;
 bool g_bModWizard_CmdLineFields = false;
-char g_ModWizard_CmdLine_ModDir[MAX_PATH];
+char g_ModWizard_CmdLine_ModDir[SOURCE_MAX_PATH];
 char g_ModWizard_CmdLine_ModName[256];
 bool g_bAppQuit = false;
 
@@ -64,7 +64,7 @@ static LRESULT CALLBACK messageProc(HWND hwnd, UINT msg, WPARAM wparam,
   // See if we've gotten a VPROJECT change
   if (msg == WM_SETTINGCHANGE) {
     if (g_pMainFrame != NULL) {
-      char szCurrentGame[MAX_PATH];
+      char szCurrentGame[SOURCE_MAX_PATH];
 
       // Get VCONFIG from the registry
       GetVConfigRegistrySetting(GAMEDIR_TOKEN, szCurrentGame,
@@ -132,7 +132,7 @@ SpewRetval_t SDKLauncherSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
 #ifdef _WIN32
     MessageBox(NULL, pMsg, "Error", MB_OK | MB_TASKMODAL);
     TerminateProcess(GetCurrentProcess(), 1);
-#elif _LINUX
+#elif OS_POSIX
     _exit(1);
 #else
 #error "Implement me"
@@ -150,7 +150,7 @@ SpewRetval_t SDKLauncherSpewOutputFunc(SpewType_t spewType, char const *pMsg) {
 }
 
 const char *GetSDKLauncherBinDirectory() {
-  static char path[MAX_PATH] = {0};
+  static char path[SOURCE_MAX_PATH] = {0};
   if (path[0] == 0) {
     GetModuleFileName((HMODULE)GetAppInstance(), path, sizeof(path));
     Q_StripLastDir(path, sizeof(path));  // Get rid of the filename.
@@ -237,7 +237,7 @@ bool CopyWithReplacements(const char *pInputFilename,
   }
 
   // Get the output filename.
-  char outFilename[MAX_PATH];
+  char outFilename[SOURCE_MAX_PATH];
   va_list marker;
   va_start(marker, pOutputFilenameFormat);
   Q_vsnprintf(outFilename, sizeof(outFilename), pOutputFilenameFormat, marker);
@@ -309,7 +309,7 @@ int InitializeVGui() {
 void ShutdownVGui() { delete g_pMainFrame; }
 
 KeyValues *LoadGameDirsFile() {
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   Q_snprintf(filename, sizeof(filename), "%ssdklauncher_gamedirs.txt", gamedir);
 
   KeyValues *dataFile = new KeyValues("gamedirs");
@@ -319,7 +319,7 @@ KeyValues *LoadGameDirsFile() {
 }
 
 bool SaveGameDirsFile(KeyValues *pFile) {
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   Q_snprintf(filename, sizeof(filename), "%ssdklauncher_gamedirs.txt", gamedir);
   return pFile->SaveToFile(g_pFullFileSystem, filename);
 }
@@ -359,11 +359,11 @@ void VGUIMessageBox(vgui::Panel *pParent, const char *pTitle, const char *pMsg,
 void UpdateConfigsStatus_Init(void) {
   // Watch our config file for changes
   if (g_dwChangeHandle == NULL) {
-    char szConfigDir[MAX_PATH];
+    char szConfigDir[SOURCE_MAX_PATH];
     Q_strncpy(szConfigDir, GetSDKLauncherBinDirectory(), sizeof(szConfigDir));
-    Q_strncat(szConfigDir, "\\", MAX_PATH);
-    Q_strncat(szConfigDir, g_engineDir, MAX_PATH);
-    Q_strncat(szConfigDir, "\\bin", MAX_PATH);
+    Q_strncat(szConfigDir, "\\", SOURCE_MAX_PATH);
+    Q_strncat(szConfigDir, g_engineDir, SOURCE_MAX_PATH);
+    Q_strncat(szConfigDir, "\\bin", SOURCE_MAX_PATH);
 
     g_dwChangeHandle = FindFirstChangeNotification(
         szConfigDir,  // directory to watch
@@ -373,7 +373,7 @@ void UpdateConfigsStatus_Init(void) {
          FILE_NOTIFY_CHANGE_ATTRIBUTES));  // watch file and dir name changes
 
     if (g_dwChangeHandle == INVALID_HANDLE_VALUE) {
-      // FIXME: Unable to watch the file
+      // TODO(d.rattman): Unable to watch the file
     }
   }
 }

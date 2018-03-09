@@ -18,7 +18,7 @@
 #include "decalmodulate_ps30.inc"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( DecalModulate, DecalModulate_DX9 )

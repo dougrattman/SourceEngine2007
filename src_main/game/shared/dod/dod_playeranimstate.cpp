@@ -1110,7 +1110,7 @@ void CDODPlayerAnimState::EstimateYaw( void )
 	float flDeltaTime = gpGlobals->frametime;
 	if ( flDeltaTime == 0.0f )
 	{
-		// FIXME: why does this short circuit?
+		// TODO(d.rattman): why does this short circuit?
 		m_flEstimateVelocity = 0.0;
 		m_flEstimateYaw = 0.0;
 		return;

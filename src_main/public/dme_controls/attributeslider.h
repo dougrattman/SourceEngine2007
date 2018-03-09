@@ -253,7 +253,7 @@ inline bool CAttributeSlider::IsTransform() const
 //-----------------------------------------------------------------------------
 inline bool CAttributeSlider::IsDragging() const
 {
-	COMPILE_TIME_ASSERT( ANIM_CONTROL_COUNT < 4 );
+	static_assert( ANIM_CONTROL_COUNT < 4 );
 	return ( m_SliderMode >= SLIDER_MODE_FIRST_DRAG_MODE && m_SliderMode <= SLIDER_MODE_LAST_DRAG_MODE ); 
 }
 
@@ -270,7 +270,7 @@ inline AnimationControlType_t CAttributeSlider::GetDragControl() const
 //-----------------------------------------------------------------------------
 inline bool CAttributeSlider::IsInTextEntry() const
 {
-	COMPILE_TIME_ASSERT( ANIM_CONTROL_COUNT < 4 );
+	static_assert( ANIM_CONTROL_COUNT < 4 );
 	return ( m_SliderMode >= SLIDER_MODE_FIRST_TEXT_MODE && m_SliderMode <= SLIDER_MODE_LAST_TEXT_MODE ); 
 }
 

@@ -19,7 +19,7 @@
 
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // -----------------------------------------------------------------------------
@@ -860,7 +860,7 @@ void DispInfo_DrawDecalsGroup(int iGroup, int iTreeType) {
             const CDecalVert &vert = fragment.m_pVerts[iVert];
 
             meshBuilder.Position3fv(vert.m_vPos.Base());
-            // FIXME!!  Really want the normal from the displacement, not from
+            // TODO(d.rattman): Really want the normal from the displacement, not from
             // the base surface.
             Vector &normal = MSurf_Plane(fragment.m_pDecal->surfID).normal;
             meshBuilder.Normal3fv(normal.Base());
@@ -931,7 +931,7 @@ void DispInfo_DrawDecals_Old(CDispInfo *visibleDisps[MAX_MAP_DISPINFO],
 
   CMatRenderContextPtr pRenderContext(materials);
 
-  // FIXME: We should bucket all decals (displacement + otherwise)
+  // TODO(d.rattman): We should bucket all decals (displacement + otherwise)
   // and sort them by material enum id + lightmap
   // To do this, we need to associate a sort index from 0-n for all
   // decals we've seen this level. Then we add those decals to the

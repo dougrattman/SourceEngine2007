@@ -39,7 +39,7 @@ void CGrenadeSpit::Spawn( void )
 	SetSolid( SOLID_BBOX );
 	SetMoveType( MOVETYPE_FLYGRAVITY );
 
-	// FIXME, if these is a sprite, then we need a base class derived from CSprite rather than
+	// TODO(d.rattman): if these is a sprite, then we need a base class derived from CSprite rather than
 	// CBaseAnimating.  pev->scale becomes m_flSpriteScale in that case.
 	SetModel( "models/spitball_large.mdl" );
 	UTIL_SetSize(this, Vector(-3, -3, -3), Vector(3, 3, 3));

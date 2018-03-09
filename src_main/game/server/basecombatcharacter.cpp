@@ -48,7 +48,7 @@
 #include "prop_portal_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef HL2_DLL
@@ -385,7 +385,7 @@ bool CBaseCombatCharacter::FVisibleThroughPortal(const CProp_Portal *pPortal,
   if (pEntity->GetFlags() & FL_NOTARGET) return false;
 
 #if HL1_DLL
-  // FIXME: only block LOS through opaque water
+  // TODO(d.rattman): only block LOS through opaque water
   // don't look through water
   if ((m_nWaterLevel != 3 && pEntity->m_nWaterLevel == 3) ||
       (m_nWaterLevel == 3 && pEntity->m_nWaterLevel == 0))
@@ -973,7 +973,7 @@ bool CTraceFilterMelee::ShouldHitEntity(IHandleEntity *pHandleEntity,
 
     if (pEntity->m_takedamage == DAMAGE_NO) return false;
 
-    // FIXME: Do not translate this to the driver because the driver only
+    // TODO(d.rattman): Do not translate this to the driver because the driver only
     // accepts damage from the vehicle Translate the vehicle into its driver for
     // damage
     /*
@@ -1138,7 +1138,7 @@ CBaseEntity *CBaseCombatCharacter::CheckTraceHullAttack(
 
     if (pDriver != NULL) {
       pEntity = pDriver;
-      // FIXME: Hook for damage scale in car here
+      // TODO(d.rattman): Hook for damage scale in car here
     }
   }
 
@@ -1368,7 +1368,7 @@ bool CBaseCombatCharacter::BecomeRagdoll(const CTakeDamageInfo &info,
           Classify() != CLASS_PLAYER_ALLY) {
     if (CanBecomeServerRagdoll() == false) return false;
 
-    // FIXME: This is fairly leafy to be here, but time is short!
+    // TODO(d.rattman): This is fairly leafy to be here, but time is short!
     CBaseEntity *pRagdoll = CreateServerRagdoll(
         this, m_nForceBone, newinfo, COLLISION_GROUP_INTERACTIVE_DEBRIS, true);
     FixupBurningServerRagdoll(pRagdoll);
@@ -1563,7 +1563,7 @@ void CBaseCombatCharacter::DropWeaponForWeaponStrip(CBaseCombatWeapon *pWeapon,
 
   if (tr.startsolid || tr.allsolid ||
       (tr.fraction < 1.0f && tr.m_pEnt != pWeapon)) {
-    // FIXME: Throw towards a known safe spot?
+    // TODO(d.rattman): Throw towards a known safe spot?
     vecThrow.Negate();
     VectorMA(vecOrigin, flDiameter, vecThrow, vecOffsetOrigin);
   }
@@ -1853,7 +1853,7 @@ void CBaseCombatCharacter::Weapon_Equip(CBaseCombatWeapon *pWeapon) {
   if (IsPlayer() == false) {
     if (m_hActiveWeapon) {
       m_hActiveWeapon->Holster();
-      // FIXME: isn't this handeled by the weapon?
+      // TODO(d.rattman): isn't this handeled by the weapon?
       m_hActiveWeapon->AddEffects(EF_NODRAW);
     }
     SetActiveWeapon(pWeapon);
@@ -2187,7 +2187,7 @@ Vector CBaseCombatCharacter::BodyDirection2D(void) {
 Vector CBaseCombatCharacter::BodyDirection3D(void) {
   QAngle angles = BodyAngles();
 
-  // FIXME: cache this
+  // TODO(d.rattman): cache this
   Vector vBodyDir;
   AngleVectors(angles, &vBodyDir);
   return vBodyDir;
@@ -2464,7 +2464,7 @@ CBaseEntity *CBaseCombatCharacter::Weapon_FindUsable(const Vector &range) {
   Vector mins = GetAbsOrigin() - range;
   Vector maxs = GetAbsOrigin() + range;
   int listCount = CBaseCombatWeapon::GetAvailableWeaponsInBox(
-      weaponList, ARRAYSIZE(weaponList), mins, maxs);
+      weaponList, SOURCE_ARRAYSIZE(weaponList), mins, maxs);
 
   float fBestDist = 1e6;
 
@@ -2736,7 +2736,7 @@ void CBaseCombatCharacter::VPhysicsShadowCollision(
   CTakeDamageInfo dmgInfo(pOther, pOther, damageForce, damagePos, damage,
                           damageType);
 
-  // FIXME: is there a better way for physics objects to keep track of what root
+  // TODO(d.rattman): is there a better way for physics objects to keep track of what root
   // entity responsible for them moving?
   CBasePlayer *pPlayer = pOther->HasPhysicsAttacker(1.0);
   if (pPlayer) {

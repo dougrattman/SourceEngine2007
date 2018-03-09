@@ -30,7 +30,7 @@
 ConVar ai_newgroundturret ( "ai_newgroundturret", "0" );
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( npc_turret_ground, CNPC_GroundTurret );

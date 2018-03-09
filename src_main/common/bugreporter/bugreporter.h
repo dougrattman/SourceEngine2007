@@ -1,13 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BUGREPORTER_H
 #define BUGREPORTER_H
 
 #include "tier1/interface.h"
+#include "tier1/strtools.h"
+#include "tier1/utlvector.h"
 
 #undef GetUserName
 
-abstract_class IBugReporter : public IBaseInterface {
+the_interface IBugReporter : public IBaseInterface {
  public:
   // Initialize and login with default username/password for this computer (from
   // resource/bugreporter.res)
@@ -46,8 +48,8 @@ abstract_class IBugReporter : public IBaseInterface {
   virtual int GetReportTypeCount() = 0;
   virtual char const *GetReportType(int index) = 0;
 
-  virtual char const *GetRepositoryURL(void) = 0;
-  virtual char const *GetSubmissionURL(void) = 0;
+  virtual char const *GetRepositoryURL() = 0;
+  virtual char const *GetSubmissionURL() = 0;
 
   virtual int GetLevelCount(int area) = 0;
   virtual char const *GetLevel(int area, int index) = 0;
@@ -100,5 +102,59 @@ abstract_class IBugReporter : public IBaseInterface {
 };
 
 #define INTERFACEVERSION_BUGREPORTER "BugReporter004"
+
+struct Bug {
+  Bug() { Clear(); }
+
+  void Clear() {
+    Q_memset(title, 0, sizeof(title));
+    Q_memset(desc, 0, sizeof(desc));
+    Q_memset(submitter, 0, sizeof(submitter));
+    Q_memset(owner, 0, sizeof(owner));
+    Q_memset(severity, 0, sizeof(severity));
+    Q_memset(priority, 0, sizeof(priority));
+    Q_memset(area, 0, sizeof(area));
+    Q_memset(mapNumber, 0, sizeof(mapNumber));
+    Q_memset(reportType, 0, sizeof(reportType));
+    Q_memset(level, 0, sizeof(level));
+    Q_memset(build, 0, sizeof(build));
+    Q_memset(position, 0, sizeof(position));
+    Q_memset(orientation, 0, sizeof(orientation));
+    Q_memset(screenshotUnc, 0, sizeof(screenshotUnc));
+    Q_memset(savegameUnc, 0, sizeof(savegameUnc));
+    Q_memset(bspUnc, 0, sizeof(bspUnc));
+    Q_memset(vmfUnc, 0, sizeof(vmfUnc));
+    Q_memset(driverInfo, 0, sizeof(driverInfo));
+    Q_memset(misc, 0, sizeof(misc));
+
+    includedFiles.Purge();
+  }
+
+  char title[256];
+  char desc[8192];
+  char owner[256];
+  char submitter[256];
+  char severity[256];
+  char priority[256];
+  char area[256];
+  char mapNumber[256];
+  char reportType[256];
+  char level[256];
+  char build[256];
+  char position[256];
+  char orientation[256];
+  char screenshotUnc[256];
+  char savegameUnc[256];
+  char bspUnc[256];
+  char vmfUnc[256];
+  char driverInfo[2048];
+  char misc[1024];
+
+  struct IncludeFile {
+    char name[256];
+  };
+
+  CUtlVector<IncludeFile> includedFiles;
+};
 
 #endif  // BUGREPORTER_H

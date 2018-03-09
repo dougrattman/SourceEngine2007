@@ -12,7 +12,7 @@ void EmitDistanceToWaterInfo(void) {
   for (leafID = 0; leafID < numleafs; leafID++) {
     dleaf_t *pLeaf = &dleafs[leafID];
     if (pLeaf->leafWaterDataID == -1) {
-      // FIXME: set the distance to water to infinity here just in case.
+      // TODO(d.rattman): set the distance to water to infinity here just in case.
       continue;
     }
 

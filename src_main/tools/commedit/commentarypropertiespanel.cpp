@@ -28,7 +28,7 @@
 #include "filesystem.h"
 #include "tier2/fileutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -404,7 +404,7 @@ void CCommentaryPropertiesPanel::OnFileSelected( KeyValues *pKeyValues )
 //-----------------------------------------------------------------------------
 void CCommentaryPropertiesPanel::RecordSound( )
 {
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( "sound", pStartingDir, sizeof(pStartingDir) );
 
 	vgui::FileOpenDialog *pDialog = new vgui::FileOpenDialog( this, "Save As", false );

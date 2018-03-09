@@ -16,7 +16,7 @@
 #include "Render3D.h"
 #include "mapdoc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS(CMapSideList);
@@ -220,7 +220,7 @@ CMapClass *CMapSideList::CopyFrom(CMapClass *pOther, bool bUpdateDependencies)
 
 //-----------------------------------------------------------------------------
 // Purpose: Searches for a face with the given unique ID in the list of objects.
-//			FIXME: should this be in CMapObjectList?
+//			TODO(d.rattman): should this be in CMapObjectList?
 // Input  : nFaceID - Face ID to search for.
 //			List - List of objects to search.
 // Output : Returns the face with the given ID if it was found, NULL if not.

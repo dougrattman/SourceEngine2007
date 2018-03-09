@@ -10,7 +10,7 @@
 
 class IWaveData;
 
-abstract_class CAudioMixerWave : public CAudioMixer {
+the_interface CAudioMixerWave : public CAudioMixer {
  public:
   CAudioMixerWave(IWaveData * data);
   virtual ~CAudioMixerWave(void);

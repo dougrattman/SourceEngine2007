@@ -7,7 +7,7 @@
 #include <io.h>  // _chmod
 
 #include "base/include/windows/windows_light.h"
-#elif _LINUX
+#elif OS_POSIX
 #include <unistd.h>
 #endif
 
@@ -24,7 +24,7 @@
 #include "vmpi_tools_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ----------------------------------------------------------------------------------------------------
@@ -74,9 +74,9 @@ bool FileSystem_Init_Normal(const char *pFilename, FSInitType_t initType,
                             bool bOnlyUseDirectoryName) {
   if (initType == FS_INIT_FULL) {
     // First, get the name of the module
-    char fileSystemDLLName[MAX_PATH];
+    char fileSystemDLLName[SOURCE_MAX_PATH];
     bool bSteam;
-    if (FileSystem_GetFileSystemDLLName(fileSystemDLLName, MAX_PATH, bSteam) !=
+    if (FileSystem_GetFileSystemDLLName(fileSystemDLLName, SOURCE_MAX_PATH, bSteam) !=
         FS_OK)
       return false;
 

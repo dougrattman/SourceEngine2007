@@ -19,7 +19,7 @@
 
 using namespace vgui;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Shared helper functions so xbox and pc can share as much code as possible
@@ -32,7 +32,7 @@ using namespace vgui;
 bool LoadAchievementIcon(vgui::ImagePanel *pIconPanel,
                          IAchievement *pAchievement,
                          const char *pszExt /*= NULL*/) {
-  char imagePath[_MAX_PATH];
+  char imagePath[SOURCE_MAX_PATH];
   Q_strncpy(imagePath, "achievements\\", sizeof(imagePath));
   Q_strncat(imagePath, pAchievement->GetName(), sizeof(imagePath),
             COPY_ALL_CHARACTERS);
@@ -41,7 +41,7 @@ bool LoadAchievementIcon(vgui::ImagePanel *pIconPanel,
   }
   Q_strncat(imagePath, ".vtf", sizeof(imagePath), COPY_ALL_CHARACTERS);
 
-  char checkFile[_MAX_PATH];
+  char checkFile[SOURCE_MAX_PATH];
   Q_snprintf(checkFile, sizeof(checkFile), "materials\\vgui\\%s", imagePath);
   if (!g_pFullFileSystem->FileExists(checkFile)) {
     Q_snprintf(imagePath, sizeof(imagePath), "hud\\icon_locked.vtf");
@@ -189,7 +189,7 @@ void CAchievementsDialog_XBox::PerformLayout(void) {
     m_pProgressBar->SetBounds(iBarX, y, iBarWide, tall);
 
     wchar_t wszProgressText[64];
-    swprintf(wszProgressText, ARRAYSIZE(wszProgressText), L"%d%% %s",
+    swprintf(wszProgressText, SOURCE_ARRAYSIZE(wszProgressText), L"%d%% %s",
              (m_nUnlocked * 100) / m_nTotalAchievements,
              g_pVGuiLocalize->Find("#GameUI_Achievement_Unlocked"));
     m_pProgressPercent->SetText(wszProgressText);
@@ -220,8 +220,8 @@ void CAchievementsDialog_XBox::PerformLayout(void) {
     wchar_t wzActiveItem[8];
     wchar_t wzTotal[8];
     _itow_s(m_Menu.GetActiveItemIndex() + 1, wzActiveItem,
-            ARRAYSIZE(wzActiveItem), 10);
-    _itow_s(m_nTotalAchievements, wzTotal, ARRAYSIZE(wzTotal), 10);
+            SOURCE_ARRAYSIZE(wzActiveItem), 10);
+    _itow_s(m_nTotalAchievements, wzTotal, SOURCE_ARRAYSIZE(wzTotal), 10);
     g_pVGuiLocalize->ConstructString(wszNumbering, sizeof(wszNumbering),
                                      wzNumberingFmt, 2, wzActiveItem, wzTotal);
     m_pNumbering->SetText(wszNumbering);
@@ -448,11 +448,11 @@ CAchievementsDialog::CAchievementsDialog(vgui::Panel *parent)
     if (wzGroupName) {
       wchar_t wzNumUnlocked[8];
       _itow_s(m_AchievementGroups[i].m_iNumUnlocked, wzNumUnlocked,
-              ARRAYSIZE(wzNumUnlocked), 10);
+              SOURCE_ARRAYSIZE(wzNumUnlocked), 10);
 
       wchar_t wzNumAchievements[8];
       _itow_s(m_AchievementGroups[i].m_iNumAchievements, wzNumAchievements,
-              ARRAYSIZE(wzNumAchievements), 10);
+              SOURCE_ARRAYSIZE(wzNumAchievements), 10);
 
       g_pVGuiLocalize->ConstructString(wzGroupTitle, sizeof(wzGroupTitle),
                                        wzGroupName, 2, wzNumUnlocked,

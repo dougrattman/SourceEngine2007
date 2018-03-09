@@ -33,7 +33,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CCallQueue *GetPortalCallQueue();
@@ -62,7 +62,7 @@ static ConVar sv_portal_collision_sim_bounds_z(
 #if !defined(PORTAL_SIMULATORS_EMBED_GUID)
 #pragma message(          \
     __FILE__              \
-    "(" __LINE__AS_STRING \
+    "(" SOURCE_LINE_AS_STRING \
     ") : error custom: Portal simulators require a GUID to debug, enable the GUID in PortalSimulation.h .")
 #endif
 #endif

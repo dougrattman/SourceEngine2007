@@ -22,7 +22,7 @@
 #include "ivieweffects.h"
 #include "viewrender.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DECLARE_HUDELEMENT_DEPTH( CTFFreezePanel, 1 );
@@ -791,7 +791,7 @@ void CTFFreezePanelCallout::UpdateForGib( int iGib, int iCount )
 	if ( !m_pGibLabel )
 		return;
 
-	if ( iGib < ARRAYSIZE(pszCalloutGibNames) )
+	if ( iGib < SOURCE_ARRAYSIZE(pszCalloutGibNames) )
 	{
 		if ( pszCalloutGibNames[iGib] )
 		{
@@ -799,7 +799,7 @@ void CTFFreezePanelCallout::UpdateForGib( int iGib, int iCount )
 		}
 		else
 		{
-			m_pGibLabel->SetText( pszCalloutRandomGibNames[ RandomInt(0,ARRAYSIZE(pszCalloutRandomGibNames)-1) ] );
+			m_pGibLabel->SetText( pszCalloutRandomGibNames[ RandomInt(0,SOURCE_ARRAYSIZE(pszCalloutRandomGibNames)-1) ] );
 		}
 	}
 	else

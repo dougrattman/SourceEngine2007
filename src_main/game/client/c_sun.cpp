@@ -4,7 +4,7 @@
 
 #include "c_sun.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static void RecvProxy_HDRColorScale(const CRecvProxyData *pData, void *pStruct,

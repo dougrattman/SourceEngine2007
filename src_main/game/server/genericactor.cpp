@@ -14,7 +14,7 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar flex_looktime("flex_looktime", "5");
@@ -142,7 +142,7 @@ void CGenericActor::Precache() { PrecacheModel(STRING(GetModelName())); }
 
 // -----------------------------------------------------------------------
 
-// FIXME: delete this code
+// TODO(d.rattman): delete this code
 
 class CFlextalkActor : public CGenericActor {
  private:

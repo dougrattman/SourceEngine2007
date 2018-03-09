@@ -64,7 +64,7 @@ extern IFileSystem *g_pFileSystem;
 #define MAX_EXPECTED_SENTENCES 900
 
 CUtlVector<sentence_t> g_Sentences;
-// FIXME: could get this through common includes
+// TODO(d.rattman): could get this through common includes
 const char *COM_Parse(const char *data);
 extern char com_token[1024];
 
@@ -290,7 +290,7 @@ char *VOX_GetDirectory(char *szpath, int maxpath, char *psz) {
 
   cb = std::clamp(cb, 0, maxpath - 1);
 
-  // FIXME:  Is this safe?
+  // TODO(d.rattman):  Is this safe?
   Q_memcpy(szpath, psz, cb);
   szpath[cb] = 0;
   return pszscan + 1;
@@ -1261,8 +1261,8 @@ void VOX_Precache(IEngineSound *pSoundSystem, int sentenceIndex,
                   const char *pPathOverride = NULL) {
   voxword_t rgvoxword[CVOXWORDMAX];
   char buffer[512];
-  char szpath[MAX_PATH];
-  char pathbuffer[MAX_PATH];
+  char szpath[SOURCE_MAX_PATH];
+  char pathbuffer[SOURCE_MAX_PATH];
   char *pWords[CVOXWORDMAX];  // array of pointers to parsed words
 
   if (!IsVirtualName(g_Sentences[sentenceIndex].pName)) {
@@ -1337,8 +1337,8 @@ void VOX_LoadSound(channel_t *pchan, const char *pszin) {
 #ifndef SWDS
   char buffer[512];
   int i, cword;
-  char pathbuffer[MAX_PATH];
-  char szpath[MAX_PATH];
+  char pathbuffer[SOURCE_MAX_PATH];
+  char szpath[SOURCE_MAX_PATH];
   voxword_t rgvoxword[CVOXWORDMAX];
   char *psz;
   bool emitcaption = false;
@@ -1720,8 +1720,8 @@ void VOX_TouchSound(const char *pszin, CUtlDict<int, int> &filelist,
 #ifndef SWDS
   char buffer[512];
   int i, cword;
-  char pathbuffer[MAX_PATH];
-  char szpath[MAX_PATH];
+  char pathbuffer[SOURCE_MAX_PATH];
+  char szpath[SOURCE_MAX_PATH];
   voxword_t rgvoxword[CVOXWORDMAX];
   char *psz;
 
@@ -2027,7 +2027,7 @@ void VOX_LRUInit(sentencegroup_t *pGroup) {
 
     // randomize array by swapping random elements
     for (i = 0; i < (pGroup->count * 4); i++) {
-      // FIXME: This should probably call through g_pSoundServices
+      // TODO(d.rattman): This should probably call through g_pSoundServices
       // or some other such call?
       n1 = RandomInt(0, pGroup->count - 1);
       n2 = RandomInt(0, pGroup->count - 1);

@@ -259,7 +259,7 @@ bool StudioModel::PostLoadModel( const char *modelname )
 	SetController (2, 0.0f);
 	SetController (3, 0.0f);
 	SetBlendTime( DEFAULT_BLEND_TIME );
-	// SetHeadTurn( 1.0f );  // FIXME:!!!
+	// SetHeadTurn( 1.0f );  // TODO(d.rattman):!!!
 
 	int n;
 	for (n = 0; n < pStudioHdr->numbodyparts(); n++)
@@ -777,7 +777,7 @@ void StudioModel::GetMovement( int iSequence, float prevCycle, float nextCycle, 
 		return;
 	}
 
-	// FIXME: this doesn't consider layers
+	// TODO(d.rattman): this doesn't consider layers
 	Studio_SeqMovement( pStudioHdr, iSequence, prevCycle, nextCycle, m_poseparameter, vecPos, vecAngles );
 
 	return;
@@ -1156,7 +1156,7 @@ const vertexFileHeader_t * mstudiomodel_t::CacheVertexData( void * pModelData )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: This trashy glue code is really not acceptable. Figure out a way of making it unnecessary.
+// TODO(d.rattman): This trashy glue code is really not acceptable. Figure out a way of making it unnecessary.
 //-----------------------------------------------------------------------------
 const studiohdr_t *studiohdr_t::FindModel( void **cache, char const *pModelName ) const
 {

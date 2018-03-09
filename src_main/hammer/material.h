@@ -169,9 +169,9 @@ protected:
 	// We don't want to load them all at once because it takes way too long
 	bool LoadMaterial();
 
-	char m_szName[MAX_PATH];
-	char m_szFileName[MAX_PATH];
-	char m_szKeywords[MAX_PATH];
+	char m_szName[SOURCE_MAX_PATH];
+	char m_szFileName[SOURCE_MAX_PATH];
+	char m_szKeywords[SOURCE_MAX_PATH];
 
 	int m_nTextureID;			// Uniquely identifies this texture in all 3D renderers.
 

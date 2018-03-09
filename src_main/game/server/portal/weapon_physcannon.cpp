@@ -45,7 +45,7 @@
 #include "rumble_shared.h"
 #include "gamestats.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static const char *s_pWaitForUpgradeContext = "WaitForUpgrade";
@@ -103,7 +103,7 @@ public:
 
 	bool HasContentsGrate( CBaseEntity *pEntity )
 	{
-		// FIXME: Move this into the GetModelContents() function in base entity
+		// TODO(d.rattman): Move this into the GetModelContents() function in base entity
 
 		// Find the contents based on the model type
 		int nModelType = modelinfo->GetModelType( pEntity->GetModel() );
@@ -359,7 +359,7 @@ IPhysicsObject *GetRagdollChildAtPosition( CBaseEntity *pTarget, const Vector &p
 
 	// Get the root
 	IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-	int count = pTarget->VPhysicsGetObjectList( pList, ARRAYSIZE( pList ) );
+	int count = pTarget->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE( pList ) );
 	
 	IPhysicsObject *pBestChild = NULL;
 	float			flBestDist = 99999999.0f;
@@ -859,7 +859,7 @@ void CGrabController::AttachEntity( CBasePlayer *pPlayer, CBaseEntity *pEntity, 
 	SetTargetPosition( position, angles );
 	m_attachedEntity = pEntity;
 	IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-	int count = pEntity->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+	int count = pEntity->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 	m_flLoadWeight = 0;
 	float damping = 10;
 	float flFactor = count / 7.5f;
@@ -942,7 +942,7 @@ void CGrabController::DetachEntity( bool bClearVelocity )
 		// Restore the LS blocking state
 		pEntity->SetBlocksLOS( m_bCarriedEntityBlocksLOS );
 		IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-		int count = pEntity->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+		int count = pEntity->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 		for ( int i = 0; i < count; i++ )
 		{
 			IPhysicsObject *pPhys = pList[i];
@@ -1026,7 +1026,7 @@ float CGrabController::GetSavedMass( IPhysicsObject *pObject )
 		if ( pObject->GetGameData() == (void*)pHeld )
 		{
 			IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-			int count = pHeld->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+			int count = pHeld->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 			for ( int i = 0; i < count; i++ )
 			{
 				if ( pList[i] == pObject )
@@ -1967,10 +1967,10 @@ void CWeaponPhysCannon::PuntVPhysics( CBaseEntity *pEntity, const Vector &vecFor
 	if ( Pickup_OnAttemptPhysGunPickup( pEntity, pOwner, PUNTED_BY_CANNON ) )
 	{
 		IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-		int listCount = pEntity->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+		int listCount = pEntity->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 		if ( !listCount )
 		{
-			//FIXME: Do we want to do this if there's no physics object?
+			//TODO(d.rattman): Do we want to do this if there's no physics object?
 			Physgun_OnPhysGunPickup( pEntity, pOwner, PUNTED_BY_CANNON );
 			DryFire();
 			return;
@@ -2703,7 +2703,7 @@ CWeaponPhysCannon::FindObjectResult_t CWeaponPhysCannon::FindObject( void )
 	if ( !bPull )
 		return OBJECT_NOT_FOUND;
 
-	// FIXME: This needs to be run through the CanPickupObject logic
+	// TODO(d.rattman): This needs to be run through the CanPickupObject logic
 	IPhysicsObject *pObj = pEntity->VPhysicsGetObject();
 	if ( !pObj )
 		return OBJECT_NOT_FOUND;
@@ -3211,7 +3211,7 @@ void CWeaponPhysCannon::CheckForTarget( void )
 		float dist = (tr.endpos - tr.startpos).Length();
 		if ( dist <= TraceLength() )
 		{
-			// FIXME: Try just having the elements always open when pointed at a physics object
+			// TODO(d.rattman): Try just having the elements always open when pointed at a physics object
 			if ( CanPickupObject( tr.m_pEnt ) || Pickup_ForcePhysGunOpen( tr.m_pEnt, pOwner ) )
 			// if ( ( tr.m_pEnt->VPhysicsGetObject() != NULL ) && ( tr.m_pEnt->GetMoveType() == MOVETYPE_VPHYSICS ) )
 			{
@@ -3386,7 +3386,7 @@ void CWeaponPhysCannon::DoEffectIdle( void )
 	if ( ( m_hEndSprites[0] != NULL ) && ( m_hEndSprites[1] != NULL ) )
 	{
 		//Make the end points flicker as fast as possible
-		//FIXME: Make this a property of the CSprite class!
+		//TODO(d.rattman): Make this a property of the CSprite class!
 		for ( int i = 0; i < 2; i++ )
 		{
 			m_hEndSprites[i]->SetBrightness( random->RandomInt( 200, 255 ) );
@@ -4323,7 +4323,7 @@ void CWeaponPhysCannon::DoEffectLaunch( Vector *pos )
 	VectorNormalize( shotDir );
 
 	//End hit
-	//FIXME: Probably too big
+	//TODO(d.rattman): Probably too big
 	CPVSFilter filter( endpos );
 	te->GaussExplosion( filter, 0.0f, endpos - ( shotDir * 4.0f ), RandomVector(-1.0f, 1.0f), 0 );
 	
@@ -4393,7 +4393,7 @@ void CWeaponPhysCannon::DoMegaEffectLaunch( Vector *pos )
 	VectorNormalize( shotDir );
 
 	//End hit
-	//FIXME: Probably too big
+	//TODO(d.rattman): Probably too big
 	CPVSFilter filter( endpos );
 	te->GaussExplosion( filter, 0.0f, endpos - ( shotDir * 4.0f ), RandomVector(-1.0f, 1.0f), 0 );
 }
@@ -4841,7 +4841,7 @@ void GetSavedParamsForCarriedPhysObject( CGrabController *pGrabController, IPhys
 		if( pObject->GetGameData() == (void*)pHeld )
 		{
 			IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-			int count = pHeld->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+			int count = pHeld->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 			for ( int i = 0; i < count; i++ )
 			{
 				if ( pList[i] == pObject )

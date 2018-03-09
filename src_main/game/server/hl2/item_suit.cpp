@@ -17,7 +17,7 @@
 #include "gamerules.h"
 #include "items.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_SUIT_SHORTLOGON		0x0001

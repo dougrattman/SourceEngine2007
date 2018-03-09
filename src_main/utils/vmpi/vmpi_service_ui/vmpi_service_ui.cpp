@@ -195,7 +195,7 @@ void CUIConnMgr::HandlePacket( const char *pData, int len )
 		int bExitAfter = pData[offset];
 		++offset;
 		
-		char workingDir[MAX_PATH], commandLine[4096];
+		char workingDir[SOURCE_MAX_PATH], commandLine[4096];
 		V_strncpy( workingDir, &pData[offset], sizeof( workingDir ) );
 		offset += V_strlen( workingDir ) + 1;
 		

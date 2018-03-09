@@ -623,7 +623,7 @@ bool CBaseGameStats_Driver::Init() {
   }
 
   if (StatsTrackingIsFullyEnabled()) {
-    // FIXME: Load m_tLastUpload from registry and save it back out, too
+    // TODO(d.rattman): Load m_tLastUpload from registry and save it back out, too
 #ifndef SWDS
     IRegistry *reg = InstanceRegistry("Steam");
     Assert(reg);

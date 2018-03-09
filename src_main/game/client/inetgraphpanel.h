@@ -20,7 +20,7 @@ namespace vgui
 	class Panel;
 }
 
-abstract_class INetGraphPanel
+the_interface INetGraphPanel
 {
 public:
 	virtual void Create( vgui::VPANEL parent ) = 0;

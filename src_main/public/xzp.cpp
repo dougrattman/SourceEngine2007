@@ -38,7 +38,7 @@
 CByteswap g_xzpSwap;
 extern IFileReadBinary* g_pSndIO;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -768,7 +768,7 @@ bool xZipAddFile(const char* filename, CUtlBuffer& fileBuff,
 bool xZipAddFile(const char* zipname, bool bPrecacheEntireFile,
                  bool bProcessPrecacheHeader, bool bProcessPrecacheHeaderOnly) {
   // Clean up the filename:
-  char buffer[MAX_PATH];
+  char buffer[SOURCE_MAX_PATH];
   strcpy(buffer, zipname);
 
   // Fix slashes and convert it to lower case:

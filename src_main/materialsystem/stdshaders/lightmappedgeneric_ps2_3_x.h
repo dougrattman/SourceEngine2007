@@ -457,7 +457,7 @@ HALF4 main( PS_INPUT i ) : COLOR
 
 #if WARPLIGHTING && ( SEAMLESS == 0 )
 	float len=0.5*length(diffuseLighting);
-	// FIXME: 8-bit lookup textures like this need a "nice filtering" VTF option, which converts
+	// TODO(d.rattman): 8-bit lookup textures like this need a "nice filtering" VTF option, which converts
 	//        them to 16-bit on load or does filtering in the shader (since most hardware - 360
 	//        included - interpolates 8-bit textures at 8-bit precision, which causes banding)
 	diffuseLighting *= 2.0*tex2D(WarpLightingSampler,float2(len,0));

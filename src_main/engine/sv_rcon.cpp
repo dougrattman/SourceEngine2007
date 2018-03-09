@@ -10,7 +10,7 @@
 #undef SetPort  // winsock screws with the SetPort string... *sigh*
 #define socklen_t int
 #define MSG_NOSIGNAL 0
-#elif _LINUX
+#elif OS_POSIX
 #include <errno.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>

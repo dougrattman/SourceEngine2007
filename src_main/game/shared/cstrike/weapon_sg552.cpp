@@ -84,7 +84,7 @@ void CWeaponSG552::SecondaryAttack()
 		}
 		else 
 		{
-			//FIXME: This seems wrong
+			//TODO(d.rattman): This seems wrong
 			pPlayer->SetFOV( pPlayer, pPlayer->GetDefaultFOV() );
 		}
 	#endif

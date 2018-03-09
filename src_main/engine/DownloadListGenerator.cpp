@@ -18,7 +18,7 @@
 #include "tier1/strtools.h"
 #include "vengineserver_impl.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CDownloadListGenerator g_DownloadListGenerator;
@@ -47,7 +47,7 @@ void CDownloadListGenerator::SetStringTable(INetworkStringTable *pStringTable) {
   m_AlreadyWrittenFileNames.RemoveAll();
 
   // add in the bsp file to the list, and its node graph and nav mesh
-  char path[_MAX_PATH];
+  char path[SOURCE_MAX_PATH];
   Q_snprintf(path, sizeof(path), "maps\\%s.bsp", m_mapName);
   OnResourcePrecached(path);
 
@@ -134,7 +134,7 @@ void CDownloadListGenerator::OnModelPrecached(
   if (Q_strstr(relativePathFileName, ".vmt")) {
     // it's a materials file, make sure that it starts in the materials
     // directory, and we get the .vtf
-    char file[_MAX_PATH];
+    char file[SOURCE_MAX_PATH];
 
     if (!Q_strnicmp(relativePathFileName, "materials", strlen("materials"))) {
       Q_strncpy(file, relativePathFileName, sizeof(file));
@@ -167,7 +167,7 @@ void CDownloadListGenerator::OnSoundPrecached(
   }
 
   // prepend the sound/ directory if necessary
-  char file[_MAX_PATH];
+  char file[SOURCE_MAX_PATH];
   if (!Q_strnicmp(relativePathFileName, "sound", strlen("sound"))) {
     Q_strncpy(file, relativePathFileName, sizeof(file));
   } else {
@@ -193,7 +193,7 @@ void CDownloadListGenerator::OnResourcePrecached(
     return;
   }
 
-  char fullPath[_MAX_PATH];
+  char fullPath[SOURCE_MAX_PATH];
   if (g_pFileSystem->GetLocalPath(relativePathFileName, fullPath,
                                   sizeof(fullPath))) {
     OnResourcePrecachedFullPath(fullPath);
@@ -214,7 +214,7 @@ void CDownloadListGenerator::ForceExactFile(const char *relativePathFileName,
 
   CRC32_t crc;
   bool error = true;
-  char file[_MAX_PATH];
+  char file[SOURCE_MAX_PATH];
   const char *filePtr = relativePathFileName;
 
   if (Q_strstr(relativePathFileName, ".vmt") ||
@@ -236,7 +236,7 @@ void CDownloadListGenerator::ForceExactFile(const char *relativePathFileName,
   if (error) {
     DevMsg("Failed to CRC %s\n", relativePathFileName);
   } else {
-    char relativeFileName[_MAX_PATH];
+    char relativeFileName[SOURCE_MAX_PATH];
     Q_strncpy(relativeFileName, filePtr, sizeof(relativeFileName));
     Q_FixSlashes(relativeFileName);
 
@@ -271,7 +271,7 @@ void CDownloadListGenerator::ForceModelBounds(const char *relativePathFileName,
     return;
   }
 
-  char relativeFileName[_MAX_PATH];
+  char relativeFileName[SOURCE_MAX_PATH];
   Q_strncpy(relativeFileName, relativePathFileName, sizeof(relativeFileName));
   Q_FixSlashes(relativeFileName);
 
@@ -317,7 +317,7 @@ void CDownloadListGenerator::OnResourcePrecachedFullPath(
   // add extras for mdl's
   if (Q_strstr(fullPathFileName, ".mdl")) {
     // it's a model, get it's other files as well
-    char file[_MAX_PATH];
+    char file[SOURCE_MAX_PATH];
     Q_strncpy(file, fullPathFileName, sizeof(file) - 10);
     char *ext = Q_strstr(file, ".mdl");
 

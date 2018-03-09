@@ -129,9 +129,9 @@ void WriteSubRect( int nSrcWidth, int nSrcHeight, const float *pSrcImage,
 		}
 	}
 
-	char dstFileName[MAX_PATH];
+	char dstFileName[SOURCE_MAX_PATH];
 	Q_strcpy( dstFileName, pSrcFileName );
-	Q_StripExtension( pSrcFileName, dstFileName, MAX_PATH );
+	Q_StripExtension( pSrcFileName, dstFileName, SOURCE_MAX_PATH );
 	Q_strcat( dstFileName, pDstFileNameExtension, sizeof(dstFileName) );
 	Q_strcat( dstFileName, ".pfm", sizeof(dstFileName) );
 

@@ -8,14 +8,14 @@
 #include "usermessages.h"
 #include <bitbuf.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void RegisterUserMessages( void );
 
 //-----------------------------------------------------------------------------
 // Purpose: Force registration on .dll load
-// FIXME:  Should this be a client/server system?
+// TODO(d.rattman):  Should this be a client/server system?
 //-----------------------------------------------------------------------------
 CUserMessages::CUserMessages()
 {

@@ -272,7 +272,7 @@
     <ClInclude Include="..\vmpi\vmpi_filesystem.h">
       <Filter>Header Files\Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Header Files\Public Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\mathlib\anorms.h">

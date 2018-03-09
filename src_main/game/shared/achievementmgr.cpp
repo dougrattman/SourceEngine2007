@@ -46,13 +46,13 @@ ISteamUserStats *SteamUserStats() { return NULL; }
 // Purpose: Write helper
 //-----------------------------------------------------------------------------
 static void WriteAchievementGlobalState(KeyValues *pKV) {
-  char szFilename[_MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   Q_snprintf(szFilename, sizeof(szFilename), "GameState.txt");
 
   pKV->SaveToFile(filesystem, szFilename, "MOD");
   pKV->deleteThis();
 }
-#ifndef _LINUX
+#ifndef OS_POSIX
 
 //-----------------------------------------------------------------------------
 // Purpose: Async save thread
@@ -97,7 +97,7 @@ class CAchievementSaveThread : public CWorkerThread {
 
 static CAchievementSaveThread g_AchievementSaveThread;
 
-#endif  //_LINUX
+#endif  //OS_POSIX
 //-----------------------------------------------------------------------------
 // Purpose: constructor
 //-----------------------------------------------------------------------------
@@ -165,11 +165,11 @@ bool CAchievementMgr::Init() {
 // available earlier
 //-----------------------------------------------------------------------------
 void CAchievementMgr::PostInit() {
-#ifndef _LINUX
+#ifndef OS_POSIX
   if (!g_AchievementSaveThread.IsAlive()) {
     g_AchievementSaveThread.Start();
   }
-#endif  //_LINUX
+#endif  //OS_POSIX
 
   // get current game dir
   const char *pGameDir = COM_GetModDirectory();
@@ -213,7 +213,7 @@ void CAchievementMgr::PostInit() {
 // Purpose: Shuts down the achievement manager
 //-----------------------------------------------------------------------------
 void CAchievementMgr::Shutdown() {
-#ifndef _LINUX
+#ifndef OS_POSIX
   g_AchievementSaveThread.CallWorker(CAchievementSaveThread::EXIT);
 #endif
 
@@ -270,9 +270,9 @@ void CAchievementMgr::LevelInitPreEntity() {
   // client, just file base name on server), cache it in base file name form
   // here so we don't have to have different code paths each time we access it
 #ifdef CLIENT_DLL
-  Q_FileBase(engine->GetLevelName(), m_szMap, ARRAYSIZE(m_szMap));
+  Q_FileBase(engine->GetLevelName(), m_szMap, SOURCE_ARRAYSIZE(m_szMap));
 #else
-  Q_strncpy(m_szMap, gpGlobals->mapname.ToCStr(), ARRAYSIZE(m_szMap));
+  Q_strncpy(m_szMap, gpGlobals->mapname.ToCStr(), SOURCE_ARRAYSIZE(m_szMap));
 #endif  // CLIENT_DLL
 
   // look through all achievements, see which ones we want to have listen for
@@ -361,7 +361,7 @@ void CAchievementMgr::DownloadUserData() {
 }
 
 const char *COM_GetModDirectory() {
-  static char modDir[MAX_PATH];
+  static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
         "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
@@ -397,7 +397,7 @@ void CAchievementMgr::UploadUserData() {
 // Purpose: loads global state from file
 //-----------------------------------------------------------------------------
 void CAchievementMgr::LoadGlobalState() {
-  char szFilename[_MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   Q_snprintf(szFilename, sizeof(szFilename), "GameState.txt");
 
   KeyValues *pKV = new KeyValues("GameState");
@@ -461,7 +461,7 @@ void CAchievementMgr::SaveGlobalState(bool bAsync) {
   if (!bAsync) {
     WriteAchievementGlobalState(pKV);
   } else {
-#ifndef _LINUX
+#ifndef OS_POSIX
     g_AchievementSaveThread.WriteAchievementGlobalState(pKV);
 #endif
   }
@@ -815,7 +815,7 @@ void CAchievementMgr::PrintAchievementStatus() {
       Msg("%-20s", "FAILED");
     } else {
       char szBuf[255];
-      Q_snprintf(szBuf, ARRAYSIZE(szBuf), "(%d/%d)%s", pAchievement->GetCount(),
+      Q_snprintf(szBuf, SOURCE_ARRAYSIZE(szBuf), "(%d/%d)%s", pAchievement->GetCount(),
                  pAchievement->GetGoal(),
                  pAchievement->IsActive() ? "" : " (inactive)");
       Msg("%-20s", szBuf);

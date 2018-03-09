@@ -109,7 +109,7 @@ static bool LoadCustomDataFromBuffer(CUtlBuffer &LoadBuffer) {
 // Purpose:
 //-----------------------------------------------------------------------------
 static const char *ClassIdToAlias(int iClass) {
-  if ((iClass >= ARRAYSIZE(s_aClassNames)) || (iClass < 0)) return NULL;
+  if ((iClass >= SOURCE_ARRAYSIZE(s_aClassNames)) || (iClass < 0)) return NULL;
 
   return s_aClassNames[iClass];
 }
@@ -118,7 +118,7 @@ static const char *ClassIdToAlias(int iClass) {
 // Purpose:
 //-----------------------------------------------------------------------------
 const char *WeaponIdToAlias(int iWeapon) {
-  if ((iWeapon >= ARRAYSIZE(s_aWeaponNames)) || (iWeapon < 0)) return NULL;
+  if ((iWeapon >= SOURCE_ARRAYSIZE(s_aWeaponNames)) || (iWeapon < 0)) return NULL;
 
   return s_aWeaponNames[iWeapon];
 }
@@ -186,7 +186,7 @@ void InsertTF2Data(bool bDeathOnly, char const *szStatsFileUserID,
   char szDate[128] = "Now()";
   if (fileTime > 0) {
     tm *pTm = localtime(&fileTime);
-    Q_snprintf(szDate, ARRAYSIZE(szDate), "'%04d-%02d-%02d %02d:%02d:%02d'",
+    Q_snprintf(szDate, SOURCE_ARRAYSIZE(szDate), "'%04d-%02d-%02d %02d:%02d:%02d'",
                pTm->tm_year + 1900, pTm->tm_mon + 1, pTm->tm_mday, pTm->tm_hour,
                pTm->tm_min, pTm->tm_sec);
   }

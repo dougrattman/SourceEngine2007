@@ -1234,7 +1234,7 @@ void CBaseTFPlayer::SetAnimation( PLAYER_ANIM playerAnim )
 	
 	if ( GetPlayerClass()  )
 	{
-// FIXME: TF2 makes no distinction between walking and running for now,
+// TODO(d.rattman): TF2 makes no distinction between walking and running for now,
 //  use the run animation always
 		if ( speed > 10.0f )
 		{
@@ -1306,7 +1306,7 @@ void CBaseTFPlayer::SetAnimation( PLAYER_ANIM playerAnim )
 		idealActivity = ACT_DIESIMPLE;
 		break;
 
-	// FIXME:  Use overlays for reload, start/leave aiming, attacking
+	// TODO(d.rattman):  Use overlays for reload, start/leave aiming, attacking
 	case PLAYER_START_AIMING:
 	case PLAYER_LEAVE_AIMING:
 		idealActivity = ACT_WALK;

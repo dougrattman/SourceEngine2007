@@ -23,7 +23,7 @@ namespace vgui
 	class Panel;
 }
 
-abstract_class IConsole
+the_interface IConsole
 {
 public:
 	virtual void		Create( vgui::VPANEL parent ) = 0;

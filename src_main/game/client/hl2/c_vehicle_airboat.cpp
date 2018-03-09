@@ -26,7 +26,7 @@
 #include "ClientEffectPrecacheSystem.h"
 #include "c_basehlplayer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar r_AirboatViewBlendTo( "r_AirboatViewBlendTo", "1", FCVAR_CHEAT );
@@ -763,7 +763,7 @@ int C_PropAirboat::DrawWake( void )
 	if ( GetWaterLevel() == 0 )
 		return 0;
 
-	//FIXME: For now, we don't draw slime this way
+	//TODO(d.rattman): For now, we don't draw slime this way
 	if ( GetWaterLevel() == 2 )
 		return 0;
 
@@ -780,7 +780,7 @@ int C_PropAirboat::DrawWake( void )
 
 	QAngle fooAngles;
 
-	//FIXME: This lookup should be cached off
+	//TODO(d.rattman): This lookup should be cached off
 	// Get all attachments
 	GetAttachment( LookupAttachment( "raytrace_fl" ), vecPontoonFrontLeft, fooAngles );
 	GetAttachment( LookupAttachment( "raytrace_fr" ), vecPontoonFrontRight, fooAngles );

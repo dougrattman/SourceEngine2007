@@ -12,7 +12,7 @@
 #include "tier1/UtlLinkedList.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CClientSendTable;

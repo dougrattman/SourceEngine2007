@@ -39,7 +39,7 @@
 #define CHAR_TEX_GLASS 'Y'
 #define CHAR_TEX_WARPSHIELD		'Z' ///< wierd-looking jello effect for advisor shield.
 
-abstract_class IDecalEmitterSystem
+the_interface IDecalEmitterSystem
 {
 public:
 	virtual int	GetDecalIndexForName( char const *decalname ) = 0;

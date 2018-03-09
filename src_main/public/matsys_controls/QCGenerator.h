@@ -47,18 +47,18 @@ class CBrowseButton : public vgui::Button {
 };
 
 struct LODInfo {
-  char pszFilename[MAX_PATH];
+  char pszFilename[SOURCE_MAX_PATH];
   int iLOD;
 };
 
 struct QCInfo {
   CQCGenerator *pQCGenerator;
 
-  char pszSMDPath[MAX_PATH];
-  char pszCollisionPath[MAX_PATH];
-  char pszSurfaceProperty[MAX_PATH];
-  char pszMaterialPath[MAX_PATH];
-  char pszSceneName[MAX_PATH];
+  char pszSMDPath[SOURCE_MAX_PATH];
+  char pszCollisionPath[SOURCE_MAX_PATH];
+  char pszSurfaceProperty[SOURCE_MAX_PATH];
+  char pszMaterialPath[SOURCE_MAX_PATH];
+  char pszSceneName[SOURCE_MAX_PATH];
 
   bool bStaticProp;
   bool bMostlyOpaque;
@@ -132,7 +132,7 @@ class CQCGenerator : public vgui::EditablePanel {
 
  private:
   CBrowseButton *m_pCollisionBrowseButton;
-  char m_szTargetField[MAX_PATH];
+  char m_szTargetField[SOURCE_MAX_PATH];
   vgui::ListPanel *m_pLODPanel;
 
   vgui::TextEntry *m_pLODEdit;

@@ -11,7 +11,7 @@
 #include "ObjectControlPanel.h"
 #include "VGUI_BitmapButton.h"
 	    
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //=============================================================================

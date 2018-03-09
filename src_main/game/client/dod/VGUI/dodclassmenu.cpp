@@ -297,7 +297,7 @@ void CDODClassMenu::UpdateNumClassLabel( void )
 
 		if ( pTeam->IsClassOnTeam( i ) )
 		{
-			// FIXME - store pointers to these cvars
+			// TODO(d.rattman): store pointers to these cvars
 			const CDODPlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( i );
 			ConVar *pLimitCvar = ( ConVar * )cvar->FindVar( pClassInfo.m_szLimitCvar );
 

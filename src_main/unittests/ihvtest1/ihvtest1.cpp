@@ -781,7 +781,7 @@ matrix3x4_t* CIHVTestApp::SetUpBones( studiohdr_t *pStudioHdr, const matrix3x4_t
 	InitPose( &studioHdr, pos, q, boneMask );
 	AccumulatePose( &studioHdr, NULL, pos, q, g_BenchRuns[iRun].sequence1[model], s_Cycle[model], pPoseParameter, boneMask, 1.0f, 0.0 );
 
-	// FIXME: Try enabling this?
+	// TODO(d.rattman): Try enabling this?
 //	CalcAutoplaySequences( pStudioHdr, NULL, pos, q, pPoseParameter, BoneMask( ), flTime );
 
 	// Root transform

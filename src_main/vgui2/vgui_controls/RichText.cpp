@@ -309,7 +309,7 @@ const wchar_t *RichText::ResolveLocalizedTextAndVariables(
     StringIndex_t index = g_pVGuiLocalize->FindIndex(pchLookup + 1);
     if (index == INVALID_STRING_INDEX) {
       /*			// if it's not found, maybe it's a special
-         expanded variable - look for an expansion char rgchT[MAX_PATH];
+         expanded variable - look for an expansion char rgchT[SOURCE_MAX_PATH];
 
                               // get the variables
                               KeyValues *variables = GetDialogVariables_R();

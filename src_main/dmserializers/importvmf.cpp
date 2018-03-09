@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datamodel/dmattribute.h"
 #include "datamodel/dmelement.h"
@@ -182,7 +182,7 @@ bool CImportVMF::SerializeEntityEditorKey(CUtlBuffer &buf,
   }
 
   PrintIntAttribute(pEditorElement, buf,
-                    "id");  // FIXME - id is a DmObjectId_t!!! This should never
+                    "id");  // TODO(d.rattman): id is a DmObjectId_t!!! This should never
                             // print anything!
   PrintStringAttribute(pEditorElement, buf, "comments");
   PrintBoolAttribute(pEditorElement, buf, "visgroupshown");
@@ -211,7 +211,7 @@ bool CImportVMF::SerializeEntityEditorKey(CUtlBuffer &buf,
 // Writes out all entities
 //-----------------------------------------------------------------------------
 bool CImportVMF::SerializeEntities(CUtlBuffer &buf, CDmAttribute *pEntities) {
-  // FIXME: Make this serialize in the order in which it appears in the FGD
+  // TODO(d.rattman): Make this serialize in the order in which it appears in the FGD
   // to minimize diffs
   CDmrElementArray<> array(pEntities);
 
@@ -360,7 +360,7 @@ bool CImportVMF::UnserializeEntityKey(CDmAttribute *pEntities,
   // Read the actual fields
   for (KeyValues *pField = pKeyValues->GetFirstValue(); pField != NULL;
        pField = pField->GetNextValue()) {
-    // FIXME: Knowing the FGD here would be useful for type determination.
+    // TODO(d.rattman): Knowing the FGD here would be useful for type determination.
     // Look up the field by name based on class name
     // In the meantime, just use the keyvalues type?
     char pFieldName[512];

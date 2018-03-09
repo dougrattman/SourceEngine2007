@@ -204,6 +204,6 @@ typedef struct {
 } RequestContext;
 
 //--------------------------------------------------------------------------------------------------------------
-DWORD __stdcall DownloadThread(void *voidPtr);
+DWORD SOURCE_STDCALL DownloadThread(void *voidPtr);
 
 #endif  // DOWNLOAD_INTERNAL_H

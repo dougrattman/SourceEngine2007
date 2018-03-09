@@ -22,7 +22,7 @@
 #include "Options.h"
 #include "camera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -81,7 +81,7 @@ CMapClass *CMapSprite::CreateMapSprite(CHelperInfo *pHelperInfo, CMapEntity *pPa
 			}
 			else
 			{
-				// FIXME: Gotta do this a little better
+				// TODO(d.rattman): Gotta do this a little better
 				// This initializes the render mode in the sprite
 				pSprite->SetRenderMode( pSprite->m_eRenderMode );
 			}
@@ -102,7 +102,7 @@ CMapSprite *CMapSprite::CreateMapSprite(const char *pszSpritePath)
 
 	if (pSprite != NULL)
 	{
-		char szPath[MAX_PATH];
+		char szPath[SOURCE_MAX_PATH];
 
 		pSprite->Initialize();
 

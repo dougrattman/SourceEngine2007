@@ -11,7 +11,7 @@
 #include "FileSystem.h"
 #include "cdll_client_int.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define BANMGR_FILEVERSION	1

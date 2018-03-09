@@ -50,7 +50,7 @@ typedef struct player_info_s player_info_t;
 //-----------------------------------------------------------------------------
 
 #ifdef _WIN32
-#define DLLEXPORT __stdcall
+#define DLLEXPORT SOURCE_STDCALL
 #else
 #define DLLEXPORT /* */
 #endif
@@ -60,7 +60,7 @@ typedef struct player_info_s player_info_t;
 //-----------------------------------------------------------------------------
 // Purpose: Interface the engine exposes to the game DLL
 //-----------------------------------------------------------------------------
-abstract_class IVEngineServer {
+the_interface IVEngineServer {
  public:
   // Tell engine to change level ( "changelevel s1\n" or "changelevel2 s1 s2\n"
   // )
@@ -288,7 +288,7 @@ abstract_class IVEngineServer {
   virtual bool GetAreaPortalPlane(Vector const &vViewOrigin, int portalKey,
                                   VPlane *pPlane) = 0;
 
-  // Save/restore wrapper - FIXME:  At some point we should move this to it's
+  // Save/restore wrapper - TODO(d.rattman):  At some point we should move this to it's
   // own interface
   virtual bool LoadGameState(char const *pMapName, bool createPlayers) = 0;
   virtual void LoadAdjacentEnts(const char *pOldLevel,
@@ -436,7 +436,7 @@ abstract_class IVEngineServer {
 //-----------------------------------------------------------------------------
 // Purpose: These are the interfaces that the game .dll exposes to the engine
 //-----------------------------------------------------------------------------
-abstract_class IServerGameDLL {
+the_interface IServerGameDLL {
  public:
   // Initialize the game (one-time call when the DLL is first loaded )
   // Return false if there is an error during startup.
@@ -559,7 +559,7 @@ abstract_class IServerGameDLL {
 //-----------------------------------------------------------------------------
 // Purpose: Interface to get at server entities
 //-----------------------------------------------------------------------------
-abstract_class IServerGameEnts {
+the_interface IServerGameEnts {
  public:
   virtual ~IServerGameEnts() {}
 
@@ -592,7 +592,7 @@ abstract_class IServerGameEnts {
 //-----------------------------------------------------------------------------
 // Purpose: Player / Client related functions
 //-----------------------------------------------------------------------------
-abstract_class IServerGameClients {
+the_interface IServerGameClients {
  public:
   // Get server maxplayers and lower bound for same
   virtual void GetPlayerLimits(int &minplayers, int &maxplayers,
@@ -661,7 +661,7 @@ abstract_class IServerGameClients {
 
 #define INTERFACEVERSION_UPLOADGAMESTATS "ServerUploadGameStats001"
 
-abstract_class IUploadGameStats {
+the_interface IUploadGameStats {
  public:
   // Note that this call will block the server until the upload is completed, so
   // use only at levelshutdown if at all.
@@ -700,7 +700,7 @@ abstract_class IUploadGameStats {
 //-----------------------------------------------------------------------------
 // Purpose: allows the game dll to control which plugin functions can be run
 //-----------------------------------------------------------------------------
-abstract_class IPluginHelpersCheck {
+the_interface IPluginHelpersCheck {
  public:
   virtual bool CreateMessage(const char *plugin, edict_t *pEntity,
                              DIALOG_TYPE type, KeyValues *data) = 0;
@@ -710,7 +710,7 @@ abstract_class IPluginHelpersCheck {
 // Purpose: Interface exposed from the client .dll back to the engine for
 // specifying shared .dll IAppSystems (e.g., ISoundEmitterSystem)
 //-----------------------------------------------------------------------------
-abstract_class IServerDLLSharedAppSystems {
+the_interface IServerDLLSharedAppSystems {
  public:
   virtual int Count() = 0;
   virtual char const *GetDllName(int idx) = 0;

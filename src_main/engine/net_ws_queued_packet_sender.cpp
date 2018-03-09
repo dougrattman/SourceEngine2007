@@ -80,7 +80,7 @@ bool CQueuedPacketSender::Start(unsigned nBytesStack) {
     // Ahhh the perfect cross-platformness of the threads library.
 #ifdef _WIN32
     SetPriority(THREAD_PRIORITY_HIGHEST);
-#elif _LINUX
+#elif OS_POSIX
     // SetPriority( PRIORITY_MAX );
 #endif
     m_bThreadShouldExit = false;

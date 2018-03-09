@@ -43,7 +43,7 @@ void LoadResList(CUtlRBTree<CUtlString, int> &list, ch const *pchFileName,
   CharacterSetBuild(&breakSet, "");
 
   // parse reslist
-  ch szToken[MAX_PATH];
+  ch szToken[SOURCE_MAX_PATH];
   for (;;) {
     int nTokenSize = buffer.ParseToken(&breakSet, szToken, sizeof(szToken));
     if (nTokenSize <= 0) {
@@ -160,7 +160,7 @@ void CResListGenerator::CollateFiles(ch const *pchResListFilename) {
   CUtlVector<CUtlString> vecReslists;
 
   for (int i = 0; i < m_WorkItems.Count(); ++i) {
-    ch fn[MAX_PATH];
+    ch fn[SOURCE_MAX_PATH];
     Q_snprintf(fn, sizeof(fn), "%s\\%s\\%s\\%s", m_sFullGamePath.String(),
                m_sWorkingDir.String(), m_WorkItems[i].m_sSubDir.String(),
                pchResListFilename);
@@ -185,7 +185,7 @@ void CResListGenerator::Init(ch const *pchBaseDir, ch const *pchGameDir) {
   m_sBaseDir = pchBaseDir;
   m_sGameDir = pchGameDir;
 
-  ch path[MAX_PATH];
+  ch path[SOURCE_MAX_PATH];
   Q_snprintf(path, sizeof(path), "%s/%s", m_sBaseDir.String(),
              m_sGameDir.String());
   Q_FixSlashes(path);
@@ -207,7 +207,7 @@ void CResListGenerator::Shutdown() {
 bool CResListGenerator::IsActive() { return m_bInitialized && m_bActive; }
 
 void CResListGenerator::Collate() {
-  ch szDir[MAX_PATH];
+  ch szDir[SOURCE_MAX_PATH];
   V_snprintf(szDir, sizeof(szDir), "%s\\%s", m_sFullGamePath.String(),
              m_sFinalDir.String());
   g_pFullFileSystem->CreateDirHierarchy(szDir, "GAME");
@@ -234,7 +234,7 @@ void CResListGenerator::SetupCommandLine() {
       Q_snprintf(szWorkingDir, sizeof(szWorkingDir), "%s\\%s",
                  m_sWorkingDir.String(), work.m_sSubDir.String());
 
-      ch szFullWorkingDir[MAX_PATH];
+      ch szFullWorkingDir[SOURCE_MAX_PATH];
       V_snprintf(szFullWorkingDir, sizeof(szFullWorkingDir), "%s\\%s",
                  m_sFullGamePath.String(), szWorkingDir);
       g_pFullFileSystem->CreateDirHierarchy(szFullWorkingDir, "GAME");
@@ -242,7 +242,7 @@ void CResListGenerator::SetupCommandLine() {
       // Preserve startmap
       ch const *pszStartMap = NULL;
       CommandLine()->CheckParm("-startmap", &pszStartMap);
-      ch szMap[MAX_PATH] = {0};
+      ch szMap[SOURCE_MAX_PATH] = {0};
       if (pszStartMap) {
         Q_strncpy(szMap, pszStartMap, sizeof(szMap));
       }
@@ -325,7 +325,7 @@ void CResListGenerator::LoadMapList(ch const *pchGameDir,
   CUtlBuffer buf(0, 0, CUtlBuffer::TEXT_BUFFER);
 
   if (g_pFullFileSystem->ReadFile(fullpath, "GAME", buf)) {
-    ch szMap[MAX_PATH];
+    ch szMap[SOURCE_MAX_PATH];
     while (true) {
       buf.GetLine(szMap, sizeof(szMap));
       if (!szMap[0]) break;

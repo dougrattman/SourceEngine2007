@@ -371,7 +371,7 @@
     <ClCompile Include="..\public\dt_utlvector_send.cpp" />
     <ClCompile Include="..\public\editor_sendcommand.cpp" />
     <ClCompile Include="..\public\filesystem_helpers.cpp" />
-    <ClCompile Include="..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\public\filesystem_init.cc" />
     <ClCompile Include="..\public\lumpfiles.cpp" />
     <ClCompile Include="..\public\networkvar.cpp" />
     <ClCompile Include="..\public\registry.cpp" />
@@ -2072,7 +2072,7 @@
     <ClInclude Include="..\public\materialsystem\imesh.h" />
     <ClInclude Include="..\public\materialsystem\itexture.h" />
     <ClInclude Include="..\public\materialsystem\materialsystem_config.h" />
-    <ClInclude Include="..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\public\mathlib\anorms.h" />
     <ClInclude Include="..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\public\mathlib\compressed_light_cube.h" />
@@ -2499,6 +2499,9 @@
     <ProjectReference Include="..\bitmap\bitmap.vcxproj">
       <Project>{d98f41bd-a135-4fea-a53a-c6553419da29}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\deps\bzip2\libbz2.vcxproj">
+      <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\dmxloader\dmxloader.vcxproj">
       <Project>{5f5b0fbe-d3e6-4653-a23f-e8b6b8a5fc0e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -2520,10 +2523,6 @@
     </ProjectReference>
     <ProjectReference Include="..\tier3\tier3.vcxproj">
       <Project>{2016f937-136a-4182-ba4c-e179be64ad52}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\utils\bzip2\bzip2.vcxproj">
-      <Project>{beffacd2-07b1-4cb3-a65e-92fceb8fea77}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\utils\jpeglib\jpeglib.vcxproj">

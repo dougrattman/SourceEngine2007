@@ -4,7 +4,7 @@
 //
 // $NoKeywords: $
 //=============================================================================//
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <ctime> // needed by xercesc
 #endif
 
@@ -18,7 +18,7 @@
 #include "base/include/windows/windows_light.h"
 #include <comutil.h> // _variant_t
 #include <atlbase.h> // CComPtr
-#elif _LINUX
+#elif OS_POSIX
 #include <unistd.h>
 #include <dirent.h> // scandir()
 #define _stat stat
@@ -86,7 +86,7 @@ CVCProjConvert::CVCProjConvert()
 {
 #ifdef _WIN32
 	::CoInitialize(NULL); 
-#elif _LINUX
+#elif OS_POSIX
 	try {
             XMLPlatformUtils::Initialize();
         }
@@ -106,7 +106,7 @@ CVCProjConvert::~CVCProjConvert()
 {
 #ifdef _WIN32
 	::CoUninitialize(); 
-#elif _LINUX
+#elif OS_POSIX
 	// nothing to shutdown
 #endif
 }
@@ -145,7 +145,7 @@ bool CVCProjConvert::LoadProject( const char *project )
 		pXMLDoc->Release();
 		return false;
 	} 
-#elif _LINUX
+#elif OS_POSIX
 	XercesDOMParser* parser = new XercesDOMParser();
         parser->setValidationScheme(XercesDOMParser::Val_Always);    // optional.
         parser->setDoNamespaces(true);    // optional
@@ -182,7 +182,7 @@ bool CVCProjConvert::LoadProject( const char *project )
 		Msg( "Failed to extract project name\n" );
 		return false;
 	}
-	char baseDir[ MAX_PATH ];
+	char baseDir[ SOURCE_MAX_PATH ];
 	Q_ExtractFilePath( project, baseDir, sizeof(baseDir) );
 	Q_StripTrailingSlash( baseDir );
 	m_BaseDir = baseDir;
@@ -198,7 +198,7 @@ bool CVCProjConvert::LoadProject( const char *project )
 
 #ifdef _WIN32
 	pXMLDoc->Release();
-#elif _LINUX
+#elif OS_POSIX
 	delete pXMLDoc;
 	delete errHandler;
 #endif
@@ -259,7 +259,7 @@ CUtlSymbol CVCProjConvert::GetXMLAttribValue( IXMLDOMElement *p, const char *att
 	Assert( vtValue.vt == VT_BSTR );
 	CUtlSymbol name( static_cast<char *>( _bstr_t( vtValue.bstrVal ) ) );
 	::SysFreeString(vtValue.bstrVal);
-#elif _LINUX
+#elif OS_POSIX
 	const XMLCh *xAttrib = XMLString::transcode( attribName );
 	const XMLCh *value = p->getAttribute( xAttrib );
 	if ( value == NULL )
@@ -292,7 +292,7 @@ CUtlSymbol CVCProjConvert::GetXMLNodeName( IXMLDOMElement *p )
 	_bstr_t bstr(bstrName);
 	name = static_cast<char *>(bstr);
 	return name;
-#elif _LINUX
+#elif OS_POSIX
 	Assert( 0 );
 	Error( "Function CVCProjConvert::GetXMLNodeName not implemented\n" );
 	return name;
@@ -333,7 +333,7 @@ bool CVCProjConvert::ExtractProjectName( IXMLDOMDocument *pDoc )
 			}
 		}
 	}
-#elif _LINUX
+#elif OS_POSIX
 	DOMNodeList *nodes = pDoc->getElementsByTagName( _bstr_t("VisualStudioProject") );
 	if ( nodes )
 	{
@@ -388,7 +388,7 @@ bool CVCProjConvert::ExtractConfigurations( IXMLDOMDocument *pDoc )
 			}
 		}
 	}
-#elif _LINUX
+#elif OS_POSIX
 	 DOMNodeList *nodes = pDoc->getElementsByTagName( _bstr_t("Configuration"));
     	if ( nodes )
 	{
@@ -488,7 +488,7 @@ bool CVCProjConvert::ExtractIncludes( IXMLDOMElement *pDoc, CConfiguration & con
 			}
 		}
 	}
-#elif _LINUX
+#elif OS_POSIX
 	DOMNodeList *nodes= pDoc->getElementsByTagName( _bstr_t("Tool"));
 	if (nodes)
 	{
@@ -545,7 +545,7 @@ bool CVCProjConvert::ExtractIncludes( IXMLDOMElement *pDoc, CConfiguration & con
 						delim++;
 						Q_FixSlashes( curpos );
 						Q_strlower( curpos );
-						char fullPath[ MAX_PATH ];
+						char fullPath[ SOURCE_MAX_PATH ];
 						Q_snprintf( fullPath, sizeof(fullPath), "%s/%s", m_BaseDir.String(), curpos );
 						Q_StripTrailingSlash( fullPath );
 						config.AddInclude( fullPath );
@@ -554,7 +554,7 @@ bool CVCProjConvert::ExtractIncludes( IXMLDOMElement *pDoc, CConfiguration & con
 					}
 					Q_FixSlashes( curpos );
 					Q_strlower( curpos );
-					char fullPath[ MAX_PATH ];
+					char fullPath[ SOURCE_MAX_PATH ];
 					Q_snprintf( fullPath, sizeof(fullPath), "%s/%s", m_BaseDir.String(), curpos );
 					Q_StripTrailingSlash( fullPath );
 					config.AddInclude( fullPath );
@@ -601,7 +601,7 @@ bool CVCProjConvert::IterateFileConfigurations( IXMLDOMElement *pFile, CUtlSymbo
 
 		}//for
 	}//if
-#elif _LINUX
+#elif OS_POSIX
 	DOMNodeList *nodes = pFile->getElementsByTagName( _bstr_t("FileConfiguration"));
 	if (nodes)
 	{
@@ -670,7 +670,7 @@ bool CVCProjConvert::ExtractFiles( IXMLDOMDocument *pDoc  )
 			}
 		}//for
 	}
-#elif _LINUX
+#elif OS_POSIX
 	DOMNodeList *nodes = pDoc->getElementsByTagName( _bstr_t("File") );
 	if (nodes)
 	{
@@ -683,7 +683,7 @@ bool CVCProjConvert::ExtractFiles( IXMLDOMDocument *pDoc  )
 				CUtlSymbol fileName = GetXMLAttribValue(node,"RelativePath");
 				if ( fileName.IsValid() )
 				{
-					char fixedFileName[ MAX_PATH ];
+					char fixedFileName[ SOURCE_MAX_PATH ];
 					Q_strncpy( fixedFileName, fileName.String(), sizeof(fixedFileName) );
 					if ( fixedFileName[0] == '.' && fixedFileName[1] == '\\' )
 					{
@@ -708,8 +708,8 @@ bool CVCProjConvert::ExtractFiles( IXMLDOMDocument *pDoc  )
 	return true;
 }
 
-#ifdef _LINUX
-static char fileName[MAX_PATH];
+#ifdef OS_POSIX
+static char fileName[SOURCE_MAX_PATH];
 int CheckName(const struct dirent *dir)
 {
         return !strcasecmp( dir->d_name, fileName );
@@ -737,7 +737,7 @@ const char *findFileInDirCaseInsensitive(const char *file)
         struct dirent **namelist;
         int n;
 
-        strncpy( fileName, dirSep + 1, MAX_PATH );
+        strncpy( fileName, dirSep + 1, SOURCE_MAX_PATH );
 
 
         n = scandir( dirName , &namelist, CheckName, alphasort );
@@ -765,7 +765,7 @@ const char *findFileInDirCaseInsensitive(const char *file)
 
 void CVCProjConvert::FindFileCaseInsensitive( char *fileName, int fileNameSize )
 {
-	char filePath[ MAX_PATH ];
+	char filePath[ SOURCE_MAX_PATH ];
 
 	Q_snprintf( filePath, sizeof(filePath), "%s/%s", m_BaseDir.String(), fileName ); 
 
@@ -775,7 +775,7 @@ void CVCProjConvert::FindFileCaseInsensitive( char *fileName, int fileNameSize )
 		return; // found the filename directly
 	}
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 	const char *realName = findFileInDirCaseInsensitive( filePath );
 	if ( realName )
 	{

@@ -21,7 +21,7 @@
 #include "vstdlib/random.h"
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern short	g_sModelIndexFireball;

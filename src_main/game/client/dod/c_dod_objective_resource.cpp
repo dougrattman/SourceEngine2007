@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "c_dod_objective_resource.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // owner recv proxy

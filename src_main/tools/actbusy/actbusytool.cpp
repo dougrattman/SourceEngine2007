@@ -313,7 +313,7 @@ void CActBusyTool::InitEditorDict()
 {
 	CDmeEditorAttributeInfo *pInfo, *pArrayInfo;
 
-	// FIXME: This eventually will move to an .fgd-like file.
+	// TODO(d.rattman): This eventually will move to an .fgd-like file.
 	g_pEditorTypeDict = CreateElement< CDmeEditorTypeDictionary >( "DmeEditorTypeDictionary", DMFILEID_INVALID );
 	m_toolElements.AddToTail( g_pEditorTypeDict->GetHandle() );
 
@@ -736,7 +736,7 @@ void CActBusyTool::OnFileOperationCompleted( const char *pFileType, bool bWroteF
 void CActBusyTool::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog, bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
 	// Compute starting directory
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( "scripts", pStartingDir, sizeof(pStartingDir) );
 
 	if ( bOpenFile )
@@ -1023,7 +1023,7 @@ void CActBusyTool::InitTools()
 {
 	ShowElementProperties();
 
-	// FIXME: There are no tool windows here; how should this work?
+	// TODO(d.rattman): There are no tool windows here; how should this work?
 	// These panels are saved
 	windowposmgr->RegisterPanel( "picker", m_hMDLSequencePicker, false );
 	windowposmgr->RegisterPanel( "properties", m_hProperties, false );

@@ -109,7 +109,7 @@ bool CModWizardSubPanel_GetModInfo::OnNextButton()
 	}
 
 	// Validate the mod name.
-	char outputModGamedirName[MAX_PATH];
+	char outputModGamedirName[SOURCE_MAX_PATH];
 
 	if ( m_ModType == ModType_SourceCodeOnly )
 	{
@@ -177,7 +177,7 @@ void CModWizardSubPanel_GetModInfo::OnCommand( const char *command )
 	{
 		CModalPreserveDirectorySelectDialog *pDlg = vgui::SETUP_PANEL( new CModalPreserveDirectorySelectDialog( this, "#SelectInstallDirectory" ) );
 		pDlg->SetStartDirectory( "C:\\" );
-		char szPath[MAX_PATH];
+		char szPath[SOURCE_MAX_PATH];
 		m_pModPath->GetText( szPath, sizeof(szPath) );
 		pDlg->ExpandTreeToPath( szPath );
 		pDlg->SetDefaultCreateDirectoryName( "MyMod" );

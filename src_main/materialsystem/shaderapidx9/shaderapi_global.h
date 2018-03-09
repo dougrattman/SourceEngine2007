@@ -80,7 +80,7 @@ extern bool g_bShaderAccessDisallowed;
   do {                                                           \
     if ((!g_bUseShaderMutex || g_ShaderMutex.GetDepth() == 0) && \
         g_bShaderAccessDisallowed) {                             \
-      ExecuteOnce(DebuggerBreakIfDebugging());                   \
+      DebuggerBreakIfDebugging();                   \
     }                                                            \
   } while (0)
 #else

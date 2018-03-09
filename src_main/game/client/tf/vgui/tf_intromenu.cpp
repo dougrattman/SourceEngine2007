@@ -197,10 +197,10 @@ bool CTFIntroMenu::LoadCaptions( void )
 	if ( m_pCaptionLabel )
 	{
 		KeyValues *kvCaptions = NULL;
-		char strFullpath[MAX_PATH];
+		char strFullpath[SOURCE_MAX_PATH];
 
-		Q_strncpy( strFullpath, TFGameRules()->GetVideoFileForMap( false ), MAX_PATH );	// Assume we must play out of the media directory
-		Q_strncat( strFullpath, ".res", MAX_PATH );					// Assume we're a .res extension type
+		Q_strncpy( strFullpath, TFGameRules()->GetVideoFileForMap( false ), SOURCE_MAX_PATH );	// Assume we must play out of the media directory
+		Q_strncat( strFullpath, ".res", SOURCE_MAX_PATH );					// Assume we're a .res extension type
 
 		if ( g_pFullFileSystem->FileExists( strFullpath ) )
 		{

@@ -16,7 +16,7 @@
 #include "in_buttons.h"
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	SLAM_PRIMARY_VOLUME		450

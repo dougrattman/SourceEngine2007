@@ -8,7 +8,7 @@
 #include "cbase.h"
 #include "assassin_smoke.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ASSASSINSMOKE_ENTITYNAME	"env_assassinsmoke"

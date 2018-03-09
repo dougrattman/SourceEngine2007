@@ -23,7 +23,7 @@ $Project "VConfig"
 	{
 		$File	"$SRCDIR\common\ConfigManager.cpp"
 		$File	"$SRCDIR\common\SourceAppInfo.cpp"
-		$File	"$SRCDIR\public\filesystem_init.cpp"
+		$File	"$SRCDIR\public\filesystem_init.cc"
 		$File	"main.cpp"
 		$File	"ManageGamesDialog.cpp"
 		$File	"VConfigDialog.cpp"

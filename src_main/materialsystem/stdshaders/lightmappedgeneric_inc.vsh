@@ -82,8 +82,8 @@ sub LightmappedGeneric
 			&ComputeReflectionVector( $worldPos, $worldNormal, "oT2" );
 		}
 		; envmap mask
-		dp4 oT3.x, $vTexCoord0, $SHADER_SPECIFIC_CONST_2	; FIXME
-		dp4 oT3.y, $vTexCoord0, $SHADER_SPECIFIC_CONST_3	; FIXME
+		dp4 oT3.x, $vTexCoord0, $SHADER_SPECIFIC_CONST_2	; TODO(d.rattman):
+		dp4 oT3.y, $vTexCoord0, $SHADER_SPECIFIC_CONST_3	; TODO(d.rattman):
 
 #		&FreeRegister( \$worldPos );
 		&FreeRegister( \$worldNormal );
@@ -93,8 +93,8 @@ sub LightmappedGeneric
 
 	if( $detail )
 	{
-		dp4 oT2.x, $vTexCoord0, $SHADER_SPECIFIC_CONST_4		; FIXME
-		dp4 oT2.y, $vTexCoord0, $SHADER_SPECIFIC_CONST_5		; FIXME
+		dp4 oT2.x, $vTexCoord0, $SHADER_SPECIFIC_CONST_4		; TODO(d.rattman):
+		dp4 oT2.y, $vTexCoord0, $SHADER_SPECIFIC_CONST_5		; TODO(d.rattman):
 	}
 
 	if( $vertexcolor )

@@ -989,7 +989,7 @@ void CBaseActionPlaySoundStartDialog::OnCommand(char const *command) {
           new vgui::FileOpenDialog(this, "Choose .wav file", true);
     }
     if (m_hFileOpenDialog) {
-      char startPath[MAX_PATH];
+      char startPath[SOURCE_MAX_PATH];
       Q_strncpy(startPath, com_gamedir, sizeof(startPath));
       Q_FixSlashes(startPath);
       m_hFileOpenDialog->SetStartDirectory(va("%s/sound", startPath));

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -14,7 +14,7 @@
 #include "texture_group_names.h"
 #include "tier0/include/icommandline.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar mat_slopescaledepthbias_shadowmap( "mat_slopescaledepthbias_shadowmap", "16", FCVAR_CHEAT );
@@ -55,7 +55,7 @@ private:
 	float	m_flAmbient;
 	float	m_flNearZ;
 	float	m_flFarZ;
-	char	m_SpotlightTextureName[ MAX_PATH ];
+	char	m_SpotlightTextureName[ SOURCE_MAX_PATH ];
 	int		m_nSpotlightTextureFrame;
 	int		m_nShadowQuality;
 };

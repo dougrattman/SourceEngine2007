@@ -1326,7 +1326,7 @@ void COptimizedModel::ProcessStripGroup( StripGroup_t *pStripGroup, bool isHWSki
 	TriangleList_t	stripGroupSourceTriangles;
 	VertexList_t	stripGroupVertices;
 
-	// FIXME: Flexed/HWSkinned state of faces don't change with each pass.
+	// TODO(d.rattman): Flexed/HWSkinned state of faces don't change with each pass.
 	// We could precompute those flags just once (instead of doing it 4 times)
 
 	// Add each face to the stripgroup, if it's appropriate
@@ -3970,7 +3970,7 @@ void WriteOptimizedFiles( studiohdr_t *phdr, s_bodypart_t *pSrcBodyParts )
 	strcat( glViewFilename, ".sw.glview" );
 	bool bForceSoftwareSkinning = phdr->numbones > 0 && !g_staticprop;
 	s_OptimizedModel.OptimizeFromStudioHdr( phdr, pSrcBodyParts,
-											512,	//vert cache size FIXME: figure out the correct size for L1
+											512,	//vert cache size TODO(d.rattman): figure out the correct size for L1
 											false, /* doesn't use fixed function */
 											bForceSoftwareSkinning,	// force software skinning if not static prop
 											false, // No hardware flex

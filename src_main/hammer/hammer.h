@@ -172,8 +172,8 @@ protected:
 
 	bool m_bForceRenderNextFrame;
 
-	char m_szAppDir[MAX_PATH];
-	char m_szAutosaveDir[MAX_PATH];
+	char m_szAppDir[SOURCE_MAX_PATH];
+	char m_szAutosaveDir[SOURCE_MAX_PATH];
 };
 
 

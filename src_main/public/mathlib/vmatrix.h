@@ -11,7 +11,6 @@
 // Note that concatenating matrices needs to multiply them in reverse order.
 // ie: if I want to apply matrix A, B, then C, the equation needs to look like
 // this: C * B * A * v ie: v = A * v; v = B * v; v = C * v;
-//=============================================================================
 
 #ifndef SOURCE_MATHLIB_VMATRIX_H_
 #define SOURCE_MATHLIB_VMATRIX_H_

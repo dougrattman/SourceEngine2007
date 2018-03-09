@@ -14,24 +14,18 @@
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp">
+    <ClCompile Include="speex_voice_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VoiceEncoder_Speex.cpp">
+    <ClCompile Include="..\frame_encoder\frame_voice_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\frame_encoder\iframeencoder.h">
+    <ClInclude Include="..\frame_encoder\iframe_encoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\public\tier1\interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\audio\public\ivoicecodec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VoiceEncoder_Speex.h">
+    <ClInclude Include="..\frame_encoder\frame_voice_codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,7 @@ CloseCaptionTool *g_pCloseCaptionTool = 0;
 #define STREAM_WEIGHT		FW_NORMAL
 
 #define CAPTION_LINGER_TIME	1.5f
-// FIXME: Yahn, what is this, it's coded up as a DELAY before when the closed caption is displayed. That seems odd.
+// TODO(d.rattman): Yahn, what is this, it's coded up as a DELAY before when the closed caption is displayed. That seems odd.
 #define CAPTION_PREDISPLAY_TIME	0.0f // 0.5f
 
 
@@ -880,7 +880,7 @@ void CloseCaptionTool::ComputeStreamWork( CChoreoWidgetDrawHelper &helper, int a
 					COLORREF newcolor;
 					if ( 6 == swscanf( args, L"%i,%i,%i:%i,%i,%i", &pr, &pg, &pb, &nr, &ng, &nb ) )
 					{
-						// FIXME:  nothing in .vcds is ever from the player...
+						// TODO(d.rattman):  nothing in .vcds is ever from the player...
 						newcolor = /*item->IsFromPlayer()*/ false ? RGB( pr, pg, pb ) : RGB( nr, ng, nb );
 						colorStack.AddToTail( newcolor );
 						params.clr = colorStack[ colorStack.Count() - 1 ];

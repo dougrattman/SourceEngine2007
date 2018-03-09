@@ -7,7 +7,7 @@
 #include "BaseVSShader.h"
 #include "common_hlsl_cpp_consts.h"
 #include "tier1/convar.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( Downsample_nohdr, Downsample_nohdr_DX80 )

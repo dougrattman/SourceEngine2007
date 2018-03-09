@@ -22,7 +22,7 @@
 #include "rumble_shared.h"
 #include "gamestats.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_SERVERCLASS_ST( CBaseHLBludgeonWeapon, DT_BaseHLBludgeonWeapon )
@@ -235,7 +235,7 @@ Activity CBaseHLBludgeonWeapon::ChooseIntersectionPointAndActivity( trace_t &hit
 //-----------------------------------------------------------------------------
 bool CBaseHLBludgeonWeapon::ImpactWater( const Vector &start, const Vector &end )
 {
-	//FIXME: This doesn't handle the case of trying to splash while being underwater, but that's not going to look good
+	//TODO(d.rattman): This doesn't handle the case of trying to splash while being underwater, but that's not going to look good
 	//		 right now anyway...
 	
 	// We must start outside the water
@@ -280,7 +280,7 @@ void CBaseHLBludgeonWeapon::ImpactEffect( trace_t &traceHit )
 	if ( ImpactWater( traceHit.startpos, traceHit.endpos ) )
 		return;
 
-	//FIXME: need new decals
+	//TODO(d.rattman): need new decals
 	UTIL_ImpactTrace( &traceHit, DMG_CLUB );
 }
 

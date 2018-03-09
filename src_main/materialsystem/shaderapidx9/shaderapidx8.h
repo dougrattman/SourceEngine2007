@@ -46,7 +46,7 @@ struct BufferedState_t
 //-----------------------------------------------------------------------------
 // The DX8 shader API
 //-----------------------------------------------------------------------------
-// FIXME: Remove this! Either move them into CShaderAPIBase or CShaderAPIDx8
+// TODO(d.rattman): Remove this! Either move them into CShaderAPIBase or CShaderAPIDx8
 class IShaderAPIDX8 : public CShaderAPIBase
 {
 public:

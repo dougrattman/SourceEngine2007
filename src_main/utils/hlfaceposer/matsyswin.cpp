@@ -40,7 +40,7 @@ IFileSystem *filesystem = NULL;
 
 extern char g_appTitle[];
 
-// FIXME: move all this to mxMatSysWin
+// TODO(d.rattman): move all this to mxMatSysWin
 
 class DummyMaterialProxyFactory : public IMaterialProxyFactory
 {
@@ -525,7 +525,7 @@ void MatSysWindow::draw ()
 	
 	pRenderContext->MatrixMode( MATERIAL_VIEW );
 	pRenderContext->LoadIdentity( );
-	// FIXME: why is this needed?  Doesn't SetView() override this?
+	// TODO(d.rattman): why is this needed?  Doesn't SetView() override this?
 	pRenderContext->Rotate( -90,  1, 0, 0 );	    // put Z going up
 	pRenderContext->Rotate( -90,  0, 0, 1 );
 

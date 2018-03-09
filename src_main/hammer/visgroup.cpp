@@ -6,10 +6,10 @@
 
 #include "stdafx.h"
 #include "ChunkFile.h"
-#include "MapDoc.h"		// dvs: FIXME: I'd rather not have this class know about the doc
+#include "MapDoc.h"		// dvs: TODO(d.rattman): I'd rather not have this class know about the doc
 #include "VisGroup.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

@@ -12,7 +12,7 @@
 #include "toolframework/itoolsystem.h"
 #include "vgui_baseui_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 enum KeyUpTarget_t {
@@ -160,7 +160,7 @@ CON_COMMAND(bind, "Bind a key.") {
   } else {
     // copy the rest of the command line
     cmd[0] = '\0';  // start out with a 0 string
-    Q_strncat(cmd, args[2], ARRAYSIZE(cmd), COPY_ALL_CHARACTERS);
+    Q_strncat(cmd, args[2], SOURCE_ARRAYSIZE(cmd), COPY_ALL_CHARACTERS);
   }
 
   Key_SetBinding(b, cmd);
@@ -299,7 +299,7 @@ void Key_Init(void) {
 }
 
 void Key_Shutdown(void) {
-  for (int i = 0; i < ARRAYSIZE(s_pKeyInfo); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(s_pKeyInfo); ++i) {
     delete[] s_pKeyInfo[i].m_pKeyBinding;
     s_pKeyInfo[i].m_pKeyBinding = NULL;
   }

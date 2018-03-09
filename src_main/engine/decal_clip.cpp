@@ -153,7 +153,7 @@ CDecalVert *R_DoDecalSHClip(CDecalVert *pInVerts, CDecalVert *pOutVerts,
     }
   }
 
-  // FIXME: This is a brutally hack workaround for the fact that we get massive
+  // TODO(d.rattman): This is a brutally hack workaround for the fact that we get massive
   // decal flicker when looking at a decal at a glancing angle while standing
   // right next to it.
   for (int i = 0; i < outCount; ++i) {

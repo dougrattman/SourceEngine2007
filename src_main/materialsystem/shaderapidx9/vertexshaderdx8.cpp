@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Vertex/Pixel Shaders
 
@@ -8,10 +8,10 @@
 #include "base/include/windows/windows_light.h"
 #endif
 #include <cstdlib>
-#include "../utils/bzip2/bzlib.h"
 #include "Color.h"
 #include "ShaderAPIDX8_Global.h"
 #include "datacache/idatacache.h"
+#include "deps/bzip2/bzlib.h"
 #include "filesystem.h"
 #include "filesystem/IQueuedLoader.h"
 #include "ishadersystem.h"
@@ -309,9 +309,8 @@ static HardwareShader_t CreateD3DPixelShader(DWORD *pByteCode,
 
   if (!pByteCode) return INVALID_HARDWARE_SHADER;
 
-  if (nCentroidMask &&
-      (HardwareConfig()->NeedsATICentroidHack() ||
-       mat_force_ps_patch.GetInt())) {
+  if (nCentroidMask && (HardwareConfig()->NeedsATICentroidHack() ||
+                        mat_force_ps_patch.GetInt())) {
     if (!mat_disable_ps_patch.GetInt()) {
       PatchPixelShaderForAtiMsaaHack(pByteCode, nCentroidMask);
     }
@@ -571,7 +570,7 @@ class CShaderManager : public IShaderManager {
   CUtlSymbolTable m_ShaderSymbolTable;
 
 #ifdef DYNAMIC_SHADER_COMPILE
-  typedef HRESULT(__stdcall *ShaderCompileFromFileFunc_t)(
+  typedef HRESULT(SOURCE_STDCALL *ShaderCompileFromFileFunc_t)(
       LPCSTR pSrcFile, CONST D3DXMACRO *pDefines, LPD3DXINCLUDE pInclude,
       LPCSTR pFunctionName, LPCSTR pProfile, DWORD Flags,
       LPD3DXBUFFER *ppShader, LPD3DXBUFFER *ppErrorMsgs,
@@ -585,7 +584,7 @@ class CShaderManager : public IShaderManager {
   HardwareShader_t m_HardwareVertexShader;
   HardwareShader_t m_HardwarePixelShader;
 
-  // FIXME: NOTE this is a parallel structure to mirror Dx10 for now
+  // TODO(d.rattman): NOTE this is a parallel structure to mirror Dx10 for now
   // I think I'm going to need to layer this into 2 classes, one which
   // has a plain dictionary, and another which knows about static/dynamic
   // combos.
@@ -813,13 +812,15 @@ void CShaderManager::DestroyStaticShaders() {
 
 #ifdef DYNAMIC_SHADER_COMPILE
 static const char *GetShaderSourcePath(void) {
-  static char shaderDir[MAX_PATH];
+  static char shaderDir[SOURCE_MAX_PATH];
   // GR - just in case init this...
   static bool bHaveShaderDir = false;
   if (!bHaveShaderDir) {
     bHaveShaderDir = true;
 #if (defined(DYNAMIC_SHADER_COMPILE_CUSTOM_PATH))
-    { Q_strncpy(shaderDir, DYNAMIC_SHADER_COMPILE_CUSTOM_PATH, MAX_PATH); }
+    {
+      Q_strncpy(shaderDir, DYNAMIC_SHADER_COMPILE_CUSTOM_PATH, SOURCE_MAX_PATH);
+    }
 #else
     {
 #if (defined(_X360))
@@ -835,14 +836,16 @@ static const char *GetShaderSourcePath(void) {
           pHostName = hostName;
         }
 
-        Q_snprintf(shaderDir, MAX_PATH, "net:\\smb\\%s\\stdshaders", pHostName);
+        Q_snprintf(shaderDir, SOURCE_MAX_PATH, "net:\\smb\\%s\\stdshaders",
+                   pHostName);
       }
 #else
       {
-        Q_strncpy(shaderDir, __FILE__, MAX_PATH);
+        Q_strncpy(shaderDir, __FILE__, SOURCE_MAX_PATH);
         Q_StripFilename(shaderDir);
-        Q_StripLastDir(shaderDir, MAX_PATH);
-        Q_strncat(shaderDir, "stdshaders", MAX_PATH, COPY_ALL_CHARACTERS);
+        Q_StripLastDir(shaderDir, SOURCE_MAX_PATH);
+        Q_strncat(shaderDir, "stdshaders", SOURCE_MAX_PATH,
+                  COPY_ALL_CHARACTERS);
       }
 #endif
     }
@@ -859,21 +862,21 @@ const CShaderManager::ShaderCombos_t *CShaderManager::FindOrCreateShaderCombos(
     return &m_ShaderNameToCombos[pShaderName];
   }
   ShaderCombos_t &combos = m_ShaderNameToCombos[pShaderName];
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   // try the vsh dir first.
-  Q_strncpy(filename, GetShaderSourcePath(), MAX_PATH);
-  Q_strncat(filename, "\\", MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(filename, pShaderName, MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(filename, ".vsh", MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncpy(filename, GetShaderSourcePath(), SOURCE_MAX_PATH);
+  Q_strncat(filename, "\\", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(filename, pShaderName, SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(filename, ".vsh", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
   CUtlInplaceBuffer bffr(0, 0, CUtlInplaceBuffer::TEXT_BUFFER);
   if (bool bOpenResult = g_pFullFileSystem->ReadFile(filename, NULL, bffr)) {
     NULL;
   } else {
     // try the fxc dir.
-    Q_strncpy(filename, GetShaderSourcePath(), MAX_PATH);
-    Q_strncat(filename, "\\", MAX_PATH, COPY_ALL_CHARACTERS);
-    Q_strncat(filename, pShaderName, MAX_PATH, COPY_ALL_CHARACTERS);
-    Q_strncat(filename, ".fxc", MAX_PATH, COPY_ALL_CHARACTERS);
+    Q_strncpy(filename, GetShaderSourcePath(), SOURCE_MAX_PATH);
+    Q_strncat(filename, "\\", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+    Q_strncat(filename, pShaderName, SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+    Q_strncat(filename, ".fxc", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
     bOpenResult = g_pFullFileSystem->ReadFile(filename, NULL, bffr);
 
     if (!bOpenResult) {
@@ -1091,10 +1094,10 @@ class CDxInclude : public ID3DXInclude {
   virtual HRESULT WINAPI Close(LPCVOID pData);
 
  private:
-  char m_pBasePath[MAX_PATH];
+  char m_pBasePath[SOURCE_MAX_PATH];
 
 #if defined(_X360)
-  char m_pFullPath[MAX_PATH];
+  char m_pFullPath[SOURCE_MAX_PATH];
 #endif
 };
 
@@ -1111,7 +1114,7 @@ HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
                          LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
 #endif
 {
-  char pTemp[MAX_PATH];
+  char pTemp[SOURCE_MAX_PATH];
   if (!Q_IsAbsolutePath(pFileName) && (IncludeType == D3DXINC_LOCAL)) {
     Q_ComposeFileName(m_pBasePath, pFileName, pTemp, sizeof(pTemp));
     pFileName = pTemp;
@@ -1129,7 +1132,7 @@ HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
   {
     Q_ComposeFileName(m_pBasePath, pFileName, m_pFullPath, sizeof(m_pFullPath));
     pFullPath = m_pFullPath;
-    cbFullPath = MAX_PATH;
+    cbFullPath = SOURCE_MAX_PATH;
   }
 #endif
 
@@ -1283,11 +1286,11 @@ HardwareShader_t CShaderManager::CompileShader(const char *pShaderName,
   Warning("\n");
 #endif
 
-  char filename[MAX_PATH];
-  Q_strncpy(filename, GetShaderSourcePath(), MAX_PATH);
-  Q_strncat(filename, "\\", MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(filename, pShaderName, MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(filename, ".fxc", MAX_PATH, COPY_ALL_CHARACTERS);
+  char filename[SOURCE_MAX_PATH];
+  Q_strncpy(filename, GetShaderSourcePath(), SOURCE_MAX_PATH);
+  Q_strncat(filename, "\\", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(filename, pShaderName, SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(filename, ".fxc", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
 
   const char *pShaderModel = FileNameToShaderModel(pShaderName, bVertexShader);
 
@@ -1386,8 +1389,8 @@ retry_compile:
       D3DXSHADER_COMPILE_PARAMETERS compileParams;
       memset(&compileParams, 0, sizeof(compileParams));
 
-      char pUPDBOutputFile[MAX_PATH] = "";  // where we write the file
-      char pUPDBPIXLookup[MAX_PATH] =
+      char pUPDBOutputFile[SOURCE_MAX_PATH] = "";  // where we write the file
+      char pUPDBPIXLookup[SOURCE_MAX_PATH] =
           "";  // where PIX (on a pc) looks for the file
 
       compileParams.Flags |= D3DXSHADEREX_OPTIMIZE_UCODE;
@@ -1397,9 +1400,9 @@ retry_compile:
         compileParams.Flags |= D3DXSHADEREX_GENERATE_UPDB;
         compileParams.UPDBPath = pUPDBPIXLookup;
 
-        Q_snprintf(pUPDBOutputFile, MAX_PATH, "%s\\UPDB_X360\\%s_S%d_D%d.updb",
-                   GetShaderSourcePath(), pShaderName, nStaticIndex,
-                   nDynamicIndex);
+        Q_snprintf(pUPDBOutputFile, SOURCE_MAX_PATH,
+                   "%s\\UPDB_X360\\%s_S%d_D%d.updb", GetShaderSourcePath(),
+                   pShaderName, nStaticIndex, nDynamicIndex);
 
         // replace "net:\smb" with another "\" turning the xbox network address
         // format into the pc network address format
@@ -1491,7 +1494,7 @@ retry_compile:
            pd3dxBuffer->GetBufferPointer(), pd3dxBuffer->GetBufferSize());
     tempBuffer.SeekPut(CUtlBuffer::SEEK_CURRENT,
                        pd3dxBuffer->GetBufferSize() + exampleCommandLineLength);
-    char filename[MAX_PATH];
+    char filename[SOURCE_MAX_PATH];
     sprintf(filename, "%s_%d_%d.asm", pShaderName, nStaticIndex, nDynamicIndex);
     g_pFullFileSystem->WriteFile(filename, "DEFAULT_WRITE_PATH", tempBuffer);
 #endif
@@ -1596,7 +1599,7 @@ void CShaderManager::DisassembleShader(ShaderLookup_t *pLookup,
          pd3dxBuffer->GetBufferSize());
   tempBuffer.SeekPut(CUtlBuffer::SEEK_CURRENT, pd3dxBuffer->GetBufferSize());
 
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   sprintf(filename, "%s_%d_%d.asm", pName, pLookup->m_nStaticIndex,
           dynamicCombo);
   g_pFullFileSystem->WriteFile(filename, "DEFAULT_WRITE_PATH", tempBuffer);
@@ -1895,8 +1898,9 @@ bool CShaderManager::LoadAndCreateShaders(ShaderLookup_t &lookup,
     V_memset(pHeader, 0, sizeof(ShaderHeader_t));
 
     // try the vsh/psh dir first
-    char filename[MAX_PATH];
-    Q_snprintf(filename, MAX_PATH, "shaders\\%s\\%s" SHADER_FNAME_EXTENSION,
+    char filename[SOURCE_MAX_PATH];
+    Q_snprintf(filename, SOURCE_MAX_PATH,
+               "shaders\\%s\\%s" SHADER_FNAME_EXTENSION,
                bVertexShader ? "vsh" : "psh", pName);
     hFile = OpenFileAndLoadHeader(filename, pHeader);
     if (hFile == FILESYSTEM_INVALID_HANDLE) {
@@ -1910,8 +1914,8 @@ bool CShaderManager::LoadAndCreateShaders(ShaderLookup_t &lookup,
       }
 #endif
       // next, try the fxc dir
-      Q_snprintf(filename, MAX_PATH, "shaders\\fxc\\%s" SHADER_FNAME_EXTENSION,
-                 pName);
+      Q_snprintf(filename, SOURCE_MAX_PATH,
+                 "shaders\\fxc\\%s" SHADER_FNAME_EXTENSION, pName);
       hFile = OpenFileAndLoadHeader(filename, pHeader);
       if (hFile == FILESYSTEM_INVALID_HANDLE) {
         lookup.m_Flags |= SHADER_FAILED_LOAD;
@@ -1956,7 +1960,8 @@ bool CShaderManager::LoadAndCreateShaders(ShaderLookup_t &lookup,
     }
   }
 
-  // FIXME: should make lookup and ShaderStaticCombos_t are pool allocated.
+  // TODO(d.rattman): should make lookup and ShaderStaticCombos_t are pool
+  // allocated.
   int i;
   lookup.m_ShaderStaticCombos.m_nCount = pHeader->m_nDynamicCombos;
   lookup.m_ShaderStaticCombos.m_pHardwareShaders =
@@ -2242,8 +2247,7 @@ void CShaderManager::SetVertexShader(VertexShader_t shader) {
       lookup.m_ShaderStaticCombos.m_pHardwareShaders[vshIndex];
 #endif
 
-  if ((dxshader == INVALID_HARDWARE_SHADER) &&
-      m_bCreateShadersOnDemand) {
+  if ((dxshader == INVALID_HARDWARE_SHADER) && m_bCreateShadersOnDemand) {
 #ifdef DYNAMIC_SHADER_COMPILE
     ShaderStaticCombos_t::ShaderCreationData_t *pCreationData =
         &m_VertexShaderDict[shader]
@@ -2339,8 +2343,7 @@ void CShaderManager::SetPixelShader(PixelShader_t shader) {
       lookup.m_ShaderStaticCombos.m_pHardwareShaders[pshIndex];
 #endif
 
-  if ((dxshader == INVALID_HARDWARE_SHADER) &&
-      m_bCreateShadersOnDemand) {
+  if ((dxshader == INVALID_HARDWARE_SHADER) && m_bCreateShadersOnDemand) {
 #ifdef DYNAMIC_SHADER_COMPILE
     ShaderStaticCombos_t::ShaderCreationData_t *pCreationData =
         &m_PixelShaderDict[shader]

@@ -11,10 +11,10 @@
 
 #include "lightmappedgeneric_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-// FIXME: Need to make a dx9 version so that "CENTROID" works.
+// TODO(d.rattman): Need to make a dx9 version so that "CENTROID" works.
 
 BEGIN_VS_SHADER( GooInGlass,
 			  "Help for GooInGlass" )
@@ -87,7 +87,7 @@ BEGIN_VS_SHADER( GooInGlass,
 					pShaderShadow->EnableBlending( true );
 					pShaderShadow->BlendFunc( SHADER_BLEND_SRC_ALPHA, SHADER_BLEND_ONE );
 				}
-				// FIXME: Remove the normal (needed for tangent space gen)
+				// TODO(d.rattman): Remove the normal (needed for tangent space gen)
 				pShaderShadow->VertexShaderVertexFormat( 
 					VERTEX_POSITION | VERTEX_NORMAL | VERTEX_TANGENT_S |
 					VERTEX_TANGENT_T, 1, 0, 0 );
@@ -125,7 +125,7 @@ BEGIN_VS_SHADER( GooInGlass,
 				pShaderShadow->EnableBlending( true );
 				pShaderShadow->BlendFunc( SHADER_BLEND_ONE, SHADER_BLEND_ONE );
 
-				// FIXME: Remove the normal (needed for tangent space gen)
+				// TODO(d.rattman): Remove the normal (needed for tangent space gen)
 				pShaderShadow->VertexShaderVertexFormat( 
 					VERTEX_POSITION | VERTEX_NORMAL | VERTEX_TANGENT_S |
 					VERTEX_TANGENT_T, 1, 0, 0 );

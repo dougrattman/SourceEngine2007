@@ -6,7 +6,7 @@
 #include "tier0/include/platform.h"
 
 // Purpose: Interface to registry
-abstract_class IRegistry {
+the_interface IRegistry {
  public:
   virtual ~IRegistry();
 

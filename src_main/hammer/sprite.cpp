@@ -8,14 +8,14 @@
 #include "stdafx.h"
 #include "const.h"
 #include "Sprite.h"
-#include "Material.h"			// FIXME: we need to work only with IEditorTexture!
+#include "Material.h"			// TODO(d.rattman): we need to work only with IEditorTexture!
 #include "materialsystem/IMaterial.h"
 #include "materialsystem/IMaterialSystem.h"
 #include "Render3d.h"
 #include "camera.h"
 #include "tier1/utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -485,7 +485,7 @@ void CSpriteModel::Bind( CRender* pRender, int frame )
 
 CSpriteDataCache* LookupSpriteDataCache( const char *pSpritePath )
 {
-	char filename[MAX_PATH];
+	char filename[SOURCE_MAX_PATH];
 	V_strncpy( filename, pSpritePath, sizeof( filename ) );
 	V_FixSlashes( filename );
 	
@@ -535,7 +535,7 @@ bool CSpriteModel::LoadSprite(const char *pszSpritePath)
 	{
 		m_Width = pCache->m_Width;
 		m_Height = pCache->m_Height;
-		// FIXME: m_NumFrames = m_pMaterial->GetMaterial()->GetNumAnimationFrames();
+		// TODO(d.rattman): m_NumFrames = m_pMaterial->GetMaterial()->GetNumAnimationFrames();
 		m_pFrameVar = pCache->m_pFrameVar;
 		m_pRenderModeVar = pCache->m_pRenderModeVar;
 
@@ -585,7 +585,7 @@ bool CSpriteModel::LoadSprite(const char *pszSpritePath)
 //-----------------------------------------------------------------------------
 int CSpriteModel::GetFrameCount()
 {
-	// FIXME: Figure out the correct time to cache in this info
+	// TODO(d.rattman): Figure out the correct time to cache in this info
 	if ((m_NumFrames < 0) && m_pMaterial)
 	{
 		m_NumFrames = m_pMaterial->GetMaterial()->GetNumAnimationFrames();

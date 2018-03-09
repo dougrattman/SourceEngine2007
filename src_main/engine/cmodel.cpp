@@ -20,14 +20,14 @@
 #include "quakedef.h"
 #include "sys_dll.h"
 #include "sysexternal.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/tslist.h"
 #include "tier0/include/vprof.h"
 #include "tier1/UtlVector.h"
 #include "vphysics_interface.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CCollisionBSPData g_BSPData;  // the global collision bsp
@@ -540,14 +540,14 @@ int CM_BoxLeafnums(const Vector &mins, const Vector &maxs, int *list,
 // UNDONE: This is a version that returns only leaves with valid clusters
 // UNDONE: Use this in the PVS calcs for networking
 #if 0
-int CM_BoxClusters( leafnums_t * RESTRICT pContext, const Vector &center, const Vector &extents, int nodenum )
+int CM_BoxClusters( leafnums_t * SOURCE_RESTRICT pContext, const Vector &center, const Vector &extents, int nodenum )
 {
 	const int NODELIST_MAX = 1024;
 	int nodeList[NODELIST_MAX];
 	int nodeReadIndex = 0;
 	int nodeWriteIndex = 0;
-	cplane_t *RESTRICT plane;
-	cnode_t	 *RESTRICT node;
+	cplane_t *SOURCE_RESTRICT plane;
+	cnode_t	 *SOURCE_RESTRICT node;
 	int prev_topnode = -1;
 	int leafCount = 0;
 	while (1)
@@ -563,7 +563,7 @@ int CM_BoxClusters( leafnums_t * RESTRICT pContext, const Vector &center, const 
 
 			if (leafCount < pContext->leafMaxCount)
 			{
-				cleaf_t *RESTRICT pLeaf = &pContext->pBSPData->map_leafs[leafIndex];
+				cleaf_t *SOURCE_RESTRICT pLeaf = &pContext->pBSPData->map_leafs[leafIndex];
 				if ( pLeaf->cluster >= 0 )
 				{
 					pContext->pLeafList[leafCount] = leafIndex;
@@ -686,8 +686,8 @@ BOX TRACING
 
 const fltx4 Four_DistEpsilons = {DIST_EPSILON, DIST_EPSILON, DIST_EPSILON,
                                  DIST_EPSILON};
-const int32_t ALIGN16 g_CubeFaceIndex0[4] = {0, 1, 2, -1};
-const int32_t ALIGN16 g_CubeFaceIndex1[4] = {3, 4, 5, -1};
+const int32_t alignas(16) g_CubeFaceIndex0[4] = {0, 1, 2, -1};
+const int32_t alignas(16) g_CubeFaceIndex1[4] = {3, 4, 5, -1};
 bool IntersectRayWithBoxBrush(TraceInfo_t *pTraceInfo, const cbrush_t *pBrush,
                               cboxbrush_t *pBox) {
   // Load the unaligned ray/box parameters into SIMD registers
@@ -784,7 +784,7 @@ bool IntersectRayWithBoxBrush(TraceInfo_t *pTraceInfo, const cbrush_t *pBrush,
       uint32_t faceIndex = SubInt(faceId, 0);
       Assert(faceIndex < 6);
       float t1 = SubFloat(lastIn, 0);
-      trace_t *RESTRICT pTrace = &pTraceInfo->m_trace;
+      trace_t *SOURCE_RESTRICT pTrace = &pTraceInfo->m_trace;
 
       // this condition is copied from the brush case to avoid hitting an assert
       // and overwriting a previous start solid with a new shorter fraction
@@ -841,7 +841,7 @@ bool IntersectRayWithBoxBrush(TraceInfo_t *pTraceInfo, const cbrush_t *pBrush,
 bool IntersectRayWithBox(const Ray_t &ray, const VectorAligned &inInvDelta,
                          const VectorAligned &inBoxMins,
                          const VectorAligned &inBoxMaxs,
-                         trace_t *RESTRICT pTrace) {
+                         trace_t *SOURCE_RESTRICT pTrace) {
   // mark trace as not hitting
   pTrace->startsolid = false;
   pTrace->allsolid = false;
@@ -1002,8 +1002,8 @@ CM_ClipBoxToBrush
 ================
 */
 template <bool IS_POINT>
-void FASTCALL CM_ClipBoxToBrush(TraceInfo_t *RESTRICT pTraceInfo,
-                                const cbrush_t *RESTRICT brush) {
+void SOURCE_FASTCALL CM_ClipBoxToBrush(TraceInfo_t *SOURCE_RESTRICT pTraceInfo,
+                                const cbrush_t *SOURCE_RESTRICT brush) {
   if (brush->IsBox()) {
     cboxbrush_t *pBox =
         &pTraceInfo->m_pBSPData->map_boxbrushes[brush->GetBox()];
@@ -1012,7 +1012,7 @@ void FASTCALL CM_ClipBoxToBrush(TraceInfo_t *RESTRICT pTraceInfo,
   }
   if (!brush->numsides) return;
 
-  trace_t *RESTRICT trace = &pTraceInfo->m_trace;
+  trace_t *SOURCE_RESTRICT trace = &pTraceInfo->m_trace;
   const Vector &p1 = pTraceInfo->m_start;
   const Vector &p2 = pTraceInfo->m_end;
   int brushContents = brush->contents;
@@ -1030,7 +1030,7 @@ void FASTCALL CM_ClipBoxToBrush(TraceInfo_t *RESTRICT pTraceInfo,
 
   float dist;
 
-  cbrushside_t *RESTRICT side =
+  cbrushside_t *SOURCE_RESTRICT side =
       &pTraceInfo->m_pBSPData->map_brushsides[brush->firstbrushside];
   for (const cbrushside_t *const sidelimit = side + brush->numsides;
        side < sidelimit; side++) {
@@ -1164,7 +1164,7 @@ inline bool IsTraceBoxIntersectingBoxBrush(TraceInfo_t *pTraceInfo,
 CM_TestBoxInBrush
 ================
 */
-static void FASTCALL CM_TestBoxInBrush(TraceInfo_t *pTraceInfo,
+static void SOURCE_FASTCALL CM_TestBoxInBrush(TraceInfo_t *pTraceInfo,
                                        const cbrush_t *brush) {
   if (brush->IsBox()) {
     cboxbrush_t *pBox =
@@ -1187,13 +1187,13 @@ static void FASTCALL CM_TestBoxInBrush(TraceInfo_t *pTraceInfo,
       side = &pTraceInfo->m_pBSPData->map_brushsides[brush->firstbrushside + i];
       plane = side->plane;
 
-      // FIXME: special case for axial
+      // TODO(d.rattman): special case for axial
 
       // general box case
 
       // push the plane out appropriately for mins/maxs
 
-      // FIXME: use signbits into 8 way lookup for each mins/maxs
+      // TODO(d.rattman): use signbits into 8 way lookup for each mins/maxs
       for (j = 0; j < 3; j++) {
         if (plane->normal[j] < 0)
           ofs[j] = maxs[j];
@@ -1230,11 +1230,11 @@ CM_TraceToLeaf
 */
 
 template <bool IS_POINT>
-void FASTCALL CM_TraceToLeaf(TraceInfo_t *RESTRICT pTraceInfo, int ndxLeaf,
+void SOURCE_FASTCALL CM_TraceToLeaf(TraceInfo_t *SOURCE_RESTRICT pTraceInfo, int ndxLeaf,
                              float startFrac, float endFrac) {
   VPROF("CM_TraceToLeaf");
   // get the leaf
-  cleaf_t *RESTRICT pLeaf = &pTraceInfo->m_pBSPData->map_leafs[ndxLeaf];
+  cleaf_t *SOURCE_RESTRICT pLeaf = &pTraceInfo->m_pBSPData->map_leafs[ndxLeaf];
 
   //
   // trace ray/box sweep against all brushes in this leaf
@@ -1245,14 +1245,14 @@ void FASTCALL CM_TraceToLeaf(TraceInfo_t *RESTRICT pTraceInfo, int ndxLeaf,
       pTraceInfo->m_pBSPData->map_leafbrushes;
   CRangeValidatedArray<cbrush_t> &map_brushes =
       pTraceInfo->m_pBSPData->map_brushes;
-  TraceCounter_t *RESTRICT pCounters = pTraceInfo->GetBrushCounters();
+  TraceCounter_t *SOURCE_RESTRICT pCounters = pTraceInfo->GetBrushCounters();
   TraceCounter_t count = pTraceInfo->GetCount();
   for (int ndxLeafBrush = pLeaf->firstleafbrush; ndxLeafBrush < lastleafbrush;
        ndxLeafBrush++) {
     // get the current brush
     int ndxBrush = map_leafbrushes[ndxLeafBrush];
 
-    cbrush_t *RESTRICT pBrush = &map_brushes[ndxBrush];
+    cbrush_t *SOURCE_RESTRICT pBrush = &map_brushes[ndxBrush];
 
     // make sure we only check this brush once per trace/stab
     if (!pTraceInfo->Visit(pBrush, ndxBrush, count, pCounters)) continue;
@@ -1325,14 +1325,14 @@ void FASTCALL CM_TraceToLeaf(TraceInfo_t *RESTRICT pTraceInfo, int ndxLeaf,
     //
     // trace ray/swept box against all displacement surfaces in this leaf
     //
-    TraceCounter_t *RESTRICT pCounters = pTraceInfo->GetDispCounters();
+    TraceCounter_t *SOURCE_RESTRICT pCounters = pTraceInfo->GetDispCounters();
     TraceCounter_t count = pTraceInfo->GetCount();
 
     // utterly nonoptimal FPU pathway
     for (int i = 0; i < pLeaf->dispCount; i++) {
       int dispIndex =
           pTraceInfo->m_pBSPData->map_dispList[pLeaf->dispListStart + i];
-      alignedbbox_t *RESTRICT pDispBounds = &g_pDispBounds[dispIndex];
+      alignedbbox_t *SOURCE_RESTRICT pDispBounds = &g_pDispBounds[dispIndex];
 
       // only collide with objects you are interested in
       if (!(pDispBounds->GetContents() & pTraceInfo->m_contents)) continue;
@@ -1363,7 +1363,7 @@ void FASTCALL CM_TraceToLeaf(TraceInfo_t *RESTRICT pTraceInfo, int ndxLeaf,
 
       MSVC_END_WARNING_OVERRIDE_SCOPE()
 
-      CDispCollTree *RESTRICT pDispTree = &g_pDispCollTrees[dispIndex];
+      CDispCollTree *SOURCE_RESTRICT pDispTree = &g_pDispCollTrees[dispIndex];
       CM_TraceToDispTree<IS_POINT>(pTraceInfo, pDispTree, startFrac, endFrac);
       if (!pTraceInfo->m_trace.fraction) break;
     }
@@ -1377,7 +1377,7 @@ void FASTCALL CM_TraceToLeaf(TraceInfo_t *RESTRICT pTraceInfo, int ndxLeaf,
 CM_TestInLeaf
 ================
 */
-static void FASTCALL CM_TestInLeaf(TraceInfo_t *pTraceInfo, int ndxLeaf) {
+static void SOURCE_FASTCALL CM_TestInLeaf(TraceInfo_t *pTraceInfo, int ndxLeaf) {
   // get the leaf
   cleaf_t *pLeaf = &pTraceInfo->m_pBSPData->map_leafs[ndxLeaf];
 
@@ -1597,7 +1597,7 @@ CM_RecursiveHullCheck
 Attempt to do whatever is nessecary to get this function to unroll at least once
 */
 template <bool IS_POINT>
-static void FASTCALL CM_RecursiveHullCheckImpl(TraceInfo_t *pTraceInfo, int num,
+static void SOURCE_FASTCALL CM_RecursiveHullCheckImpl(TraceInfo_t *pTraceInfo, int num,
                                                const float p1f, const float p2f,
                                                const Vector &p1,
                                                const Vector &p2) {
@@ -1692,7 +1692,7 @@ static void FASTCALL CM_RecursiveHullCheckImpl(TraceInfo_t *pTraceInfo, int num,
                                       midf, p2f, mid, p2);
 }
 
-void FASTCALL CM_RecursiveHullCheck(TraceInfo_t *pTraceInfo, int num,
+void SOURCE_FASTCALL CM_RecursiveHullCheck(TraceInfo_t *pTraceInfo, int num,
                                     const float p1f, const float p2f) {
   const Vector &p1 = pTraceInfo->m_start;
   const Vector &p2 = pTraceInfo->m_end;
@@ -1729,7 +1729,7 @@ static inline void CM_UnsweptBoxTrace(TraceInfo_t *pTraceInfo, const Ray_t &ray,
   leafnums_t context;
   context.pLeafList = leafs;
   context.leafTopNode = -1;
-  context.leafMaxCount = ARRAYSIZE(leafs);
+  context.leafMaxCount = SOURCE_ARRAYSIZE(leafs);
   context.pBSPData = pTraceInfo->m_pBSPData;
 
   bool bFoundNonSolidLeaf = false;
@@ -2265,7 +2265,7 @@ int CM_BoxVisible(const Vector &mins, const Vector &maxs,
   int leafList[MAX_BOX_LEAVES];
   int topnode;
 
-  // FIXME: Could save a loop here by traversing the tree in this routine like
+  // TODO(d.rattman): Could save a loop here by traversing the tree in this routine like
   // the code above
   int count = CM_BoxLeafnums(mins, maxs, leafList, MAX_BOX_LEAVES, &topnode);
   for (int i = 0; i < count; i++) {
@@ -2366,7 +2366,7 @@ int CFastPointLeafNum::GetLeaf(const Vector &vPos) {
   return m_iCachedLeaf;
 }
 
-bool FASTCALL IsBoxIntersectingRayNoLowest(
+bool SOURCE_FASTCALL IsBoxIntersectingRayNoLowest(
     fltx4 boxMin, fltx4 boxMax, const fltx4 &origin, const fltx4 &delta,
     const fltx4 &invDelta,   // ray parameters
     const fltx4 &vTolerance  ///< eg from ReplicateX4(flTolerance)
@@ -2462,7 +2462,7 @@ bool FASTCALL IsBoxIntersectingRayNoLowest(
 #if 0
 /*
 //-----------------------------------------------------------------------------
-bool FASTCALL IsBoxIntersectingRay( fltx4 boxMin, fltx4 boxMax, 
+bool SOURCE_FASTCALL IsBoxIntersectingRay( fltx4 boxMin, fltx4 boxMax, 
 fltx4 origin, fltx4 delta, fltx4 invDelta, // ray parameters
 fltx4 vTolerance ///< eg from ReplicateX4(flTolerance)
 )

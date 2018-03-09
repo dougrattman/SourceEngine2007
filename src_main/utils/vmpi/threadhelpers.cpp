@@ -1,12 +1,12 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "threadhelpers.h"
 
 #include "tier0/include/dbg.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 CCriticalSection::CCriticalSection() {
-  COMPILE_TIME_ASSERT(sizeof(CRITICAL_SECTION) == SIZEOF_CS);
+  static_assert(sizeof(CRITICAL_SECTION) == SIZEOF_CS);
 
 #if defined(_DEBUG)
   InitializeCriticalSection((CRITICAL_SECTION*)&m_DeadlockProtect);

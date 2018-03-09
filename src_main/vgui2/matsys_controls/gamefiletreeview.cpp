@@ -15,7 +15,7 @@
 #include "vgui/isurface.h"
 #include "vgui/cursor.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -122,8 +122,8 @@ void CGameFileTreeView::PopulateRootNode( int itemIndex )
 //-----------------------------------------------------------------------------
 bool CGameFileTreeView::DoesDirectoryHaveSubdirectories( const char *pFilePath )
 {
-	char pSearchString[MAX_PATH];
-	Q_snprintf( pSearchString, MAX_PATH, "%s\\*", pFilePath );
+	char pSearchString[SOURCE_MAX_PATH];
+	Q_snprintf( pSearchString, SOURCE_MAX_PATH, "%s\\*", pFilePath );
 
 	// get the list of files
 	FileFindHandle_t findHandle;
@@ -150,8 +150,8 @@ bool CGameFileTreeView::DoesDirectoryHaveSubdirectories( const char *pFilePath )
 //-----------------------------------------------------------------------------
 void CGameFileTreeView::AddDirectoriesOfNode( int itemIndex, const char *pFilePath )
 {
-	char pSearchString[MAX_PATH];
-	Q_snprintf( pSearchString, MAX_PATH, "%s\\*", pFilePath );
+	char pSearchString[SOURCE_MAX_PATH];
+	Q_snprintf( pSearchString, SOURCE_MAX_PATH, "%s\\*", pFilePath );
 
 	// get the list of files
 	FileFindHandle_t findHandle;
@@ -166,7 +166,7 @@ void CGameFileTreeView::AddDirectoriesOfNode( int itemIndex, const char *pFilePa
 		{
 			KeyValues *kv = new KeyValues( "node", "text", pszFileName );
 			 
-			char pFullPath[MAX_PATH];
+			char pFullPath[SOURCE_MAX_PATH];
 			Q_snprintf( pFullPath, sizeof(pFullPath), "%s/%s", pFilePath, pszFileName );
 			Q_FixSlashes( pFullPath );
 			Q_strlower( pFullPath );
@@ -196,8 +196,8 @@ void CGameFileTreeView::AddDirectoriesOfNode( int itemIndex, const char *pFilePa
 //-----------------------------------------------------------------------------
 void CGameFileTreeView::AddFilesOfNode( int itemIndex, const char *pFilePath, const char *pExt )
 {
-	char pSearchString[MAX_PATH];
-	Q_snprintf( pSearchString, MAX_PATH, "%s\\*.%s", pFilePath, pExt );
+	char pSearchString[SOURCE_MAX_PATH];
+	Q_snprintf( pSearchString, SOURCE_MAX_PATH, "%s\\*.%s", pFilePath, pExt );
 
 	// get the list of files
 	FileFindHandle_t findHandle;
@@ -211,8 +211,8 @@ void CGameFileTreeView::AddFilesOfNode( int itemIndex, const char *pFilePath, co
 		{
 			KeyValues *kv = new KeyValues( "node", "text", pszFileName );
 
-			char pFullPath[MAX_PATH];
-			Q_snprintf( pFullPath, MAX_PATH, "%s\\%s", pFilePath, pszFileName );
+			char pFullPath[SOURCE_MAX_PATH];
+			Q_snprintf( pFullPath, SOURCE_MAX_PATH, "%s\\%s", pFilePath, pszFileName );
 			kv->SetString( "path", pFullPath );
 			kv->SetInt( "image", IMAGE_FILE );
 

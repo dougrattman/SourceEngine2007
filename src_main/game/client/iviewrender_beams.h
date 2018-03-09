@@ -108,7 +108,7 @@ struct BeamInfo_t
 // Purpose: Declare client .dll beam entity interface
 //-----------------------------------------------------------------------------
 
-abstract_class IViewRenderBeams
+the_interface IViewRenderBeams
 {
 public:
 	virtual void	InitBeams( void ) = 0;

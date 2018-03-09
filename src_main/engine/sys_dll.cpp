@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
@@ -43,7 +43,6 @@
 #include "vgui_baseui_interface.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define ONE_HUNDRED_TWENTY_EIGHT_MB (128 * 1024 * 1024)
@@ -219,15 +218,15 @@ void Sys_Printf(const char *format, ...) {
   char message[1024];
 
   va_start(arg_ptr, format);
-  Q_vsnprintf(message, ARRAYSIZE(message), format, arg_ptr);
+  Q_vsnprintf(message, SOURCE_ARRAYSIZE(message), format, arg_ptr);
   va_end(arg_ptr);
 
   if (developer.GetInt()) {
 #ifdef _WIN32
     wchar_t unicode_message[2048];
     ::MultiByteToWideChar(CP_UTF8, 0, message, -1, unicode_message,
-                          ARRAYSIZE(unicode_message));
-    unicode_message[ARRAYSIZE(unicode_message) - 1] = L'\0';
+                          SOURCE_ARRAYSIZE(unicode_message));
+    unicode_message[SOURCE_ARRAYSIZE(unicode_message) - 1] = L'\0';
 
     OutputDebugStringW(unicode_message);
     Sleep(0);
@@ -245,7 +244,7 @@ bool Sys_MessageBox(const char *title, const char *info,
   return IDOK == ::MessageBox(nullptr, title, info,
                               MB_ICONEXCLAMATION |
                                   (bShowOkAndCancel ? MB_OKCANCEL : MB_OK));
-#elif _LINUX
+#elif OS_POSIX
   Warning("%s\n", info);
   return true;
 #else
@@ -262,7 +261,7 @@ bool Sys_MessageBox(const char *title, const char *info,
   static bool bReentry = false;  // Don't meltdown
 
   va_start(arg_ptr, format);
-  Q_vsnprintf(error_message, ARRAYSIZE(error_message), format, arg_ptr);
+  Q_vsnprintf(error_message, SOURCE_ARRAYSIZE(error_message), format, arg_ptr);
   va_end(arg_ptr);
 
   if (bReentry) {
@@ -346,7 +345,7 @@ bool IsInErrorExit() {
 void Sys_Sleep(int msec) {
 #ifdef _WIN32
   Sleep(msec);
-#elif _LINUX
+#elif OS_POSIX
   usleep(msec);
 #endif
 }
@@ -495,21 +494,21 @@ void DeveloperChangeCallback(IConVar *pConVar, const char *pOldString,
 // together.
 void *GameFactory(const char *pName, int *pReturnCode) {
   // first ask the app factory
-  void *the_interface = g_AppSystemFactory(pName, pReturnCode);
-  if (the_interface) return the_interface;
+  void *an_interface = g_AppSystemFactory(pName, pReturnCode);
+  if (an_interface) return an_interface;
 
 #ifndef SWDS
     // now ask the client dll
 #ifdef _WIN32
   if (ClientDLL_GetFactory()) {
-    the_interface = ClientDLL_GetFactory()(pName, pReturnCode);
-    if (the_interface) return the_interface;
+    an_interface = ClientDLL_GetFactory()(pName, pReturnCode);
+    if (an_interface) return an_interface;
   }
 
   // gameui.dll
   if (EngineVGui()->GetGameUIFactory()) {
-    the_interface = EngineVGui()->GetGameUIFactory()(pName, pReturnCode);
-    if (the_interface) return the_interface;
+    an_interface = EngineVGui()->GetGameUIFactory()(pName, pReturnCode);
+    if (an_interface) return an_interface;
   }
 #endif
 #endif
@@ -569,12 +568,12 @@ int Sys_InitGame(CreateInterfaceFn appSystemFactory, const char *pBaseDir,
   Q_FixSlashes(s_pBaseDir);
   host_parms.basedir = s_pBaseDir;
 
-#ifdef _LINUX
+#ifdef OS_POSIX
   if (CommandLine()->FindParm("-pidfile")) {
     FILE *pidFile = g_pFileSystem->Open(
         CommandLine()->ParmValue("-pidfile", "srcds.pid"), "w+");
     if (pidFile) {
-      char dir[MAX_PATH];
+      char dir[SOURCE_MAX_PATH];
       getcwd(dir, sizeof(dir));
       g_pFileSystem->FPrintf(pidFile, "%i\n", getpid());
       g_pFileSystem->Close(pidFile);
@@ -933,10 +932,10 @@ void LoadEntityDLLs(const char *szBaseDir) {
   modinfo->deleteThis();
 
   // Load the game .dll
-  char szDllFilename[MAX_PATH];
+  char szDllFilename[SOURCE_MAX_PATH];
 #ifdef _WIN32
   Q_snprintf(szDllFilename, sizeof(szDllFilename), "server.dll");
-#elif _LINUX
+#elif OS_POSIX
   Q_snprintf(szDllFilename, sizeof(szDllFilename), "server_i486.so");
 #else
 #error "define server.dll type"
@@ -1219,7 +1218,7 @@ CON_COMMAND(star_memory, "Dump memory stats") {
   // get a current stat of available memory
   // 32 MB is reserved and fixed by OS, so not reporting to allow memory loggers
   // sync
-#ifdef _LINUX
+#ifdef OS_POSIX
   struct mallinfo memstats = mallinfo();
   Msg("sbrk size: %.2f MB, Used: %.2f MB, #mallocs = %d\n",
       memstats.arena / (1024.0 * 1024.0), memstats.uordblks / (1024.0 * 1024.0),

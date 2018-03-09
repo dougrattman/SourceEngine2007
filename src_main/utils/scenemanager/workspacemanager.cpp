@@ -1260,7 +1260,7 @@ void CWorkspaceManager::OnChangeLanguage( int lang_index, bool force /* = false 
 		char const *suffix = CSentence::NameForLanguage( lang_index );
 		if ( Q_stricmp( suffix, "unknown_language" ) )
 		{
-			char fn[ MAX_PATH ];
+			char fn[ SOURCE_MAX_PATH ];
 			Q_snprintf( fn, sizeof( fn ), "resource/closecaption_%s.txt", suffix );
 
 			long filetimestamp = filesystem->GetFileTime( fn );

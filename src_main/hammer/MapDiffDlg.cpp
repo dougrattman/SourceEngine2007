@@ -18,7 +18,7 @@
 #include "MapOverlay.h"
 #include "GameConfig.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 #include ".\mapdiffdlg.h"
 
@@ -74,7 +74,7 @@ void CMapDiffDlg::OnBnClickedMapbrowse()
 	CString	m_pszFilename;
 	
 	// TODO: Add your control notification handler code here
-	static char szInitialDir[MAX_PATH] = "";
+	static char szInitialDir[SOURCE_MAX_PATH] = "";
 	if (szInitialDir[0] == '\0')
 	{
 		strcpy(szInitialDir, g_pGameConfig->szMapDir);

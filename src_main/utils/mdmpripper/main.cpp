@@ -19,7 +19,7 @@
 #include "CMDRipperMain.h"
 #include "isqlwrapper.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MDRIPPER_MAIN_PATH_ID	"MAIN"
@@ -45,7 +45,7 @@ HANDLE g_dwChangeHandle = NULL;
 //-----------------------------------------------------------------------------
 const char *GetBaseDirectory( void )
 {
-	static char path[MAX_PATH] = {0};
+	static char path[SOURCE_MAX_PATH] = {0};
 	if ( path[0] == 0 )
 	{
 		GetModuleFileName( (HMODULE)GetAppInstance(), path, sizeof( path ) );
@@ -199,7 +199,7 @@ bool CMDRipperApp::PreInit()
 	FileSystem_SetErrorMode( FS_ERRORMODE_AUTO );
 
 	// We only want to use the gameinfo.txt that is in the bin\vconfig directory.
-	char dirName[MAX_PATH];
+	char dirName[SOURCE_MAX_PATH];
 	Q_strncpy( dirName, GetBaseDirectory(), sizeof( dirName ) );
 	Q_AppendSlash( dirName, sizeof( dirName ) );
 	Q_strncat( dirName, "minidumpRipper", sizeof( dirName ), COPY_ALL_CHARACTERS );

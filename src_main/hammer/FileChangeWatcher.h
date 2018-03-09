@@ -48,9 +48,9 @@ private:
 	class CDirWatch
 	{
 	public:
-		char m_SearchPathBase[MAX_PATH];
-		char m_DirName[MAX_PATH];
-		char m_FullDirName[MAX_PATH];
+		char m_SearchPathBase[SOURCE_MAX_PATH];
+		char m_DirName[SOURCE_MAX_PATH];
+		char m_FullDirName[SOURCE_MAX_PATH];
 		OVERLAPPED m_Overlapped;
 		HANDLE m_hEvent;
 		HANDLE m_hDir;		// Created with CreateFile.

@@ -32,9 +32,6 @@
     <Library Include="..\..\lib\public\tier1.lib">
       <Filter>Link Libraries</Filter>
     </Library>
-    <Library Include="..\..\lib\common\trktooln.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
     <Library Include="..\..\lib\public\vstdlib.lib">
       <Filter>Link Libraries</Filter>
     </Library>
@@ -91,9 +88,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\vstdlib\strtools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trktool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\tier1\utlmemory.h">

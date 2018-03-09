@@ -9,7 +9,7 @@
 #include "view.h"
 #include "c_pixel_visibility.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class C_LightGlowOverlay : public CGlowOverlay

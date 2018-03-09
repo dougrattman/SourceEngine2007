@@ -81,7 +81,7 @@ public:
 		pParticle->m_vecVelocity[2] -= ( 8.0f * timeDelta );
 
 
-		// FIXME: optimize this....
+		// TODO(d.rattman): optimize this....
 		pParticle->m_vecVelocity *= ExponentialDecay( 0.9, 0.03, timeDelta );
 	}
 
@@ -2144,8 +2144,8 @@ void C_DODPlayer::CalculateIKLocks( float currentTime )
 				C_BaseEntity *pEntity = NULL;
 				float flDist = pTarget->est.radius;
 
-				// FIXME: make entity finding sticky!
-				// FIXME: what should the radius check be?
+				// TODO(d.rattman): make entity finding sticky!
+				// TODO(d.rattman): what should the radius check be?
 				for ( CEntitySphereQuery sphere( pTarget->est.pos, 64 ); ( pEntity = sphere.GetCurrentEntity() ) != NULL; sphere.NextEntity() )
 				{
 					C_BaseAnimating *pAnim = pEntity->GetBaseAnimating( );

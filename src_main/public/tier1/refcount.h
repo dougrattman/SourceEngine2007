@@ -182,7 +182,7 @@ class CRefST {
 
 
 template <const bool bSelfDelete, typename CRefThreading = CRefMT>
-class NO_VTABLE CRefCountServiceBase {
+class MSVC_NOVTABLE CRefCountServiceBase {
  protected:
   CRefCountServiceBase() : m_iRefs(1) {}
 
@@ -212,7 +212,7 @@ class CRefCountServiceNull {
 };
 
 template <typename CRefThreading = CRefMT>
-class NO_VTABLE CRefCountServiceDestruct {
+class MSVC_NOVTABLE CRefCountServiceDestruct {
  protected:
   CRefCountServiceDestruct() : m_iRefs(1) {}
 
@@ -248,7 +248,7 @@ typedef CRefCountServiceMT CRefCountService;
 
 
 template <class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted : public REFCOUNT_SERVICE {
+class MSVC_NOVTABLE CRefCounted : public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
@@ -258,7 +258,7 @@ class NO_VTABLE CRefCounted : public REFCOUNT_SERVICE {
 //-------------------------------------
 
 template <class BASE1, class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
+class MSVC_NOVTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted1() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
@@ -268,7 +268,7 @@ class NO_VTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
 //-------------------------------------
 
 template <class BASE1, class BASE2, class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted2 : public BASE1,
+class MSVC_NOVTABLE CRefCounted2 : public BASE1,
                                public BASE2,
                                public REFCOUNT_SERVICE {
  public:
@@ -281,7 +281,7 @@ class NO_VTABLE CRefCounted2 : public BASE1,
 
 template <class BASE1, class BASE2, class BASE3,
           class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted3 : public BASE1,
+class MSVC_NOVTABLE CRefCounted3 : public BASE1,
                                public BASE2,
                                public BASE3,
                                public REFCOUNT_SERVICE {
@@ -294,7 +294,7 @@ class NO_VTABLE CRefCounted3 : public BASE1,
 
 template <class BASE1, class BASE2, class BASE3, class BASE4,
           class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted4 : public BASE1,
+class MSVC_NOVTABLE CRefCounted4 : public BASE1,
                                public BASE2,
                                public BASE3,
                                public BASE4,
@@ -309,7 +309,7 @@ class NO_VTABLE CRefCounted4 : public BASE1,
 
 template <class BASE1, class BASE2, class BASE3, class BASE4, class BASE5,
           class REFCOUNT_SERVICE = CRefCountService>
-class NO_VTABLE CRefCounted5 : public BASE1,
+class MSVC_NOVTABLE CRefCounted5 : public BASE1,
                                public BASE2,
                                public BASE3,
                                public BASE4,

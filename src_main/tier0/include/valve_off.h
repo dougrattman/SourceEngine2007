@@ -1,16 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose:	This turns off all Valve-specific #defines.  Because we
-// sometimes call external include files from inside .cpp files, we need to wrap
-// those includes like this:
-// #include "tier0/include/include/valve_off.h"
+// This turns off all Valve-specific #defines. Because we sometimes call
+// external include files from inside .cc files, we need to wrap those includes
+// like this:
+//
+// #include "tier0/include/valve_off.h"
 // #include <external.h>
-// #include "tier0/include/include/valve_on.h"
+// #include "tier0/include/valve_on.h"
 
 #ifdef STEAM
-
-// Unicode-related #defines (see wchartypes.h)
-#undef ch
 
 // Memory-related #defines
 #undef malloc

@@ -1,21 +1,22 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Memory allocation!
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
+
+#include "mem_std.h"
 
 #include <malloc.h>
 #include <algorithm>
 
 #include "build/include/build_config.h"
 
-#if defined(OS_WIN)
+#ifdef OS_WIN
 #define VA_COMMIT_FLAGS MEM_COMMIT
 #define VA_RESERVE_FLAGS MEM_RESERVE
 #endif
 
 #include "mem_helpers.h"
-#include "memstd.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/memalloc.h"
 #include "tier0/include/threadtools.h"
@@ -79,8 +80,9 @@ inline T MemAlign(T val, usize alignment) {
 }
 
 void CSmallBlockPool::Init(usize nBlockSize, u8 *pBase, usize initialCommit) {
-  if (!(nBlockSize % MIN_SBH_ALIGN == 0 && nBlockSize >= MIN_SBH_BLOCK &&
-        nBlockSize >= sizeof(TSLNodeBase_t)))
+  if (!(nBlockSize % MIN_SBH_ALIGN == 0 &&
+        nBlockSize >= std::max(implicit_cast<usize>(MIN_SBH_BLOCK),
+                               sizeof(TSLNodeBase_t))))
     DebuggerBreak();
 
   m_nBlockSize = nBlockSize;
@@ -244,7 +246,7 @@ CSmallBlockHeap::CSmallBlockHeap() {
   i32 iCurPool = 0;
 
   // Blocks sized 0 - 128 are in pools in increments of 8
-  for (; i < 32; i++) {
+  for (; i < 32; i++) {  //-V112
     if ((i + 1) % 2 == 1) {
       nBytesElement += 8;
       pCurPool = &m_Pools[iCurPool];
@@ -260,7 +262,7 @@ CSmallBlockHeap::CSmallBlockHeap() {
 
   // Blocks sized 129 - 256 are in pools in increments of 16
   for (; i < 64; i++) {
-    if ((i + 1) % 4 == 1) {
+    if ((i + 1) % 4 == 1) {  //-V112
       nBytesElement += 16;
       pCurPool = &m_Pools[iCurPool];
       pCurPool->Init(nBytesElement, pCurBase,
@@ -276,7 +278,7 @@ CSmallBlockHeap::CSmallBlockHeap() {
   // Blocks sized 257 - 512 are in pools in increments of 32
   for (; i < 128; i++) {
     if ((i + 1) % 8 == 1) {
-      nBytesElement += 32;
+      nBytesElement += 32;  //-V112
       pCurPool = &m_Pools[iCurPool];
       pCurPool->Init(nBytesElement, pCurBase,
                      GetInitialCommitForPool(iCurPool));
@@ -305,7 +307,7 @@ CSmallBlockHeap::CSmallBlockHeap() {
 
   // Blocks sized 769 - 1024 are in pools in increments of 128
   for (; i < 256; i++) {
-    if ((i + 1) % 32 == 1) {
+    if ((i + 1) % 32 == 1) {  //-V112
       nBytesElement += 128;
       pCurPool = &m_Pools[iCurPool];
       pCurPool->Init(nBytesElement, pCurBase,
@@ -578,7 +580,8 @@ void CStdMemAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {}
 
 void CStdMemAlloc::PopAllocDbgInfo() {}
 
-// FIXME: Remove when we make our own heap! Crt stuff we're currently using
+// TODO(d.rattman): Remove when we make our own heap! Crt stuff we're currently
+// using
 
 long CStdMemAlloc::CrtSetBreakAlloc(long lNewBreakAlloc) { return 0; }
 
@@ -598,7 +601,7 @@ i32 CStdMemAlloc::CrtSetDbgFlag(i32 nNewFlag) { return 0; }
 
 void CStdMemAlloc::CrtMemCheckpoint(_CrtMemState *pState) {}
 
-// FIXME: Remove when we have our own allocator
+// TODO(d.rattman): Remove when we have our own allocator
 void *CStdMemAlloc::CrtSetReportFile(i32 nRptType, void *file) { return 0; }
 
 void *CStdMemAlloc::CrtSetReportHook(void *pfnNewHook) { return 0; }
@@ -621,7 +624,7 @@ void CStdMemAlloc::DumpStats() { DumpStatsFileBase("memstats"); }
 void CStdMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
 #ifdef OS_WIN
   ch filename[512];
-  _snprintf_s(filename, ARRAYSIZE(filename) - 1, "%s.txt", pchFileBase);
+  _snprintf_s(filename, SOURCE_ARRAYSIZE(filename) - 1, "%s.txt", pchFileBase);
 
   FILE *pFile = fopen(filename, "wt");
   if (pFile) {

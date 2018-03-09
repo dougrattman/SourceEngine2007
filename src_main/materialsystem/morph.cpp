@@ -1074,7 +1074,7 @@ void CMorph::BuildQuadList(
 // Counts the total number of vertices to place in the static mesh
 //-----------------------------------------------------------------------------
 int CMorph::CountStaticMeshVertices() const {
-  // FIXME: I'm doing the simple thing here of 4 verts per segment.
+  // TODO(d.rattman): I'm doing the simple thing here of 4 verts per segment.
   // I believe I should be able to share any edge that isn't on the edges of the
   // texture so I should be able to get down to nearly 2 (or is it 1?) verts per
   // segment.
@@ -1521,7 +1521,7 @@ void CMorph::AccumulateMorph(int nRenderId) {
   }
 
   // Clear the morph accumulator
-  // FIXME: Can I avoid even changing the render target if I know the last time
+  // TODO(d.rattman): Can I avoid even changing the render target if I know the last time
   // the morph accumulator was used that it was also cleared to black? Yes, but
   // I need to deal with alt-tab.
   bool bRenderQuads = (nTotalQuadCount != 0) && (m_nTextureWidth != 0) &&
@@ -1549,7 +1549,7 @@ CMorphMgrRenderContext::CMorphMgrRenderContext() {
 }
 
 int CMorphMgrRenderContext::GetRenderId(CMorph *pMorph) {
-  // FIXME: This could be done without all these comparisons, at the cost of
+  // TODO(d.rattman): This could be done without all these comparisons, at the cost of
   // memory + complexity. NOTE: m_nMorphCount <= 4.
   for (int i = 0; i < m_nMorphCount; ++i) {
     if (m_pMorphsToAccumulate[i] == pMorph) return i;
@@ -1625,7 +1625,7 @@ void CMorphMgr::AllocateScratchTextures() {
 
   m_nWeightWidth = m_nWeightHeight = nDim;
 
-  // FIXME: Re-enable if NVidia gets a fast implementation using more shader
+  // TODO(d.rattman): Re-enable if NVidia gets a fast implementation using more shader
   // constants
   m_bUsingConstantRegisters =
       false;  //( g_pMaterialSystemHardwareConfig->NumVertexShaderConstants() >=
@@ -2027,7 +2027,7 @@ void CMorphMgr::BeginMorphAccumulation(
   pRenderContext->SetFlashlightMode(false);
 
   if (!m_bUsingConstantRegisters) {
-    // FIXME: We could theoretically avoid pushing this if we copied off all the
+    // TODO(d.rattman): We could theoretically avoid pushing this if we copied off all the
     // weights and set the weight texture only at the end if any non-zero
     // weights were sent down
     pRenderContext->PushRenderTargetAndViewport(m_pMorphWeightTexture);

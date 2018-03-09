@@ -86,7 +86,7 @@ public:
 	void SetControlPointUpVector( int nWhichPoint, const Vector &v );
 	void SetControlPointRightVector( int nWhichPoint, const Vector &v );
 
-	FORCEINLINE EHANDLE const &CNewParticleEffect::GetControlPointEntity( int nWhichPoint )
+	SOURCE_FORCEINLINE EHANDLE const &CNewParticleEffect::GetControlPointEntity( int nWhichPoint )
 	{
 		return m_hControlPointOwners[ nWhichPoint ];
 	}

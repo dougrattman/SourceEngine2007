@@ -90,7 +90,7 @@ void UpdateSounds()
 }
 
 
-// FIXME: move all this to mxMatSysWin
+// TODO(d.rattman): move all this to mxMatSysWin
 
 class DummyMaterialProxyFactory : public IMaterialProxyFactory
 {
@@ -775,8 +775,7 @@ void PlaySounds( StudioModel *pStudioModel )
 	{
 		mstudioevent_t *pEvent = seqdesc.pEvent( i );
 #if defined( _DEBUG )
-		const char *pEventName = pEvent->pszEventName();
-		NOTE_UNUSED( pEventName );
+    [[maybe_unused]] const char *pEventName = pEvent->pszEventName();
 #endif
 		if ( pEvent->cycle <= prevcycle || pEvent->cycle > currcycle )
 			continue;
@@ -880,7 +879,7 @@ MatSysWindow::draw ()
 
 	pRenderContext->MatrixMode( MATERIAL_VIEW );
 	pRenderContext->LoadIdentity( );
-	// FIXME: why is this needed?  Doesn't SetView() override this?
+	// TODO(d.rattman): why is this needed?  Doesn't SetView() override this?
 	pRenderContext->Rotate( -90,  1, 0, 0 );	    // put Z going up
 	pRenderContext->Rotate( -90,  0, 0, 1 );
 

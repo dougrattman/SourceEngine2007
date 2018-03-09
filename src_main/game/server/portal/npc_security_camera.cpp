@@ -30,7 +30,7 @@
 #include "ai_baseactor.h"		// for Glados ent playing VCDs
 #include "sceneentity.h"		// precacheing vcds
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	SECURITY_CAMERA_MODEL		"models/props/security_camera.mdl"

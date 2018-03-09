@@ -11,7 +11,7 @@
 #include "tf_gamerules.h"
 #include "explode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //----------------------------------------------

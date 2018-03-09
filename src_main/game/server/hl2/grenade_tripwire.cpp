@@ -14,7 +14,7 @@
 #include "rope_shared.h"
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar    sk_dmg_tripwire		( "sk_dmg_tripwire","0");

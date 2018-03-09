@@ -12,7 +12,7 @@
 
 class IConnectionlessPacketHandler;
 
-abstract_class INetwork
+the_interface INetwork
 {
 public:
 	virtual	~INetwork( void ) {};

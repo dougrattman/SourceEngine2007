@@ -8,7 +8,7 @@
 #include "tier1/memstack.h"
 #include "tier1/utlsymbol.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef NO_SBH  // no need to pool if using tier0 small block heap

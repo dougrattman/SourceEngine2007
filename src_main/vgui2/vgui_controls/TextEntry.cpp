@@ -626,7 +626,7 @@ void TextEntry::PaintBackground() {
   int nCompStart = -1;
   int nCompEnd = -1;
 
-  // FIXME: Should insert at cursor pos instead
+  // TODO(d.rattman): Should insert at cursor pos instead
   bool composing = m_bAllowNonAsciiCharacters && wcslen(m_szComposition) > 0;
   bool invertcomposition = input()->GetShouldInvertCompositionString();
 

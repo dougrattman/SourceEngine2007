@@ -6,7 +6,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
-#elif _LINUX
+#elif OS_POSIX
 #include <netinet/in.h>
 #include <sys/socket.h>
 #endif

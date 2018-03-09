@@ -16,7 +16,7 @@
 #include "vehicle_crane.h"
 #include "vphysics/constraints.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define VEHICLE_HITBOX_DRIVER 1
@@ -214,7 +214,7 @@ void CPropCrane::Activate(void) {
 bool CPropCrane::CreateVPhysics(void) {
   BaseClass::CreateVPhysics();
   m_BoneFollowerManager.InitBoneFollowers(
-      this, ARRAYSIZE(pCraneFollowerBoneNames), pCraneFollowerBoneNames);
+      this, SOURCE_ARRAYSIZE(pCraneFollowerBoneNames), pCraneFollowerBoneNames);
   return true;
 }
 
@@ -837,7 +837,7 @@ CPropCrane *CCraneServerVehicle::GetCrane(void) {
 void CCraneServerVehicle::GetVehicleViewPosition(int nRole, Vector *pAbsOrigin,
                                                  QAngle *pAbsAngles,
                                                  float *pFOV /*= NULL*/) {
-  // FIXME: This needs to be reconciled with the other versions of this
+  // TODO(d.rattman): This needs to be reconciled with the other versions of this
   // function!
   Assert(nRole == VEHICLE_ROLE_DRIVER);
   CBasePlayer *pPlayer = ToBasePlayer(GetDrivableVehicle()->GetDriver());

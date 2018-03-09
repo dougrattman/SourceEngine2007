@@ -21,7 +21,7 @@ static CSendProxyRecipients
 // -----------------------------------------------------------------------------
 // //
 
-abstract_class CDatatableStack {
+the_interface CDatatableStack {
  public:
   CDatatableStack(CSendTablePrecalc * pPrecalc, unsigned char *pStructBase,
                   int objectID);

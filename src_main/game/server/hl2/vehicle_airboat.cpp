@@ -21,7 +21,7 @@
 #include "weapon_rpg.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sv_vehicle_autoaim_scale;
@@ -734,7 +734,7 @@ Vector CPropAirboat::BodyTarget(const Vector &posSrc, bool bNoisy) {
   Vector vecPosition;
   QAngle angles;
   if (GetServerVehicle()->GetPassenger()) {
-    // FIXME: Reconcile this with other functions that store a cached version of
+    // TODO(d.rattman): Reconcile this with other functions that store a cached version of
     // the results here?
     GetServerVehicle()->GetVehicleViewPosition(VEHICLE_ROLE_DRIVER,
                                                &vecPosition, &angles);
@@ -857,7 +857,7 @@ void CPropAirboat::VPhysicsFriction(IPhysicsObject *pObject, float energy,
   const surfacedata_t *pprops = physprops->GetSurfaceData(surfaceProps);
   if (phit->game.material == 'X' || pprops->game.material == 'X') return;
 
-  // FIXME: Make different scraping sounds here
+  // TODO(d.rattman): Make different scraping sounds here
   float flVolume = 0.3f;
 
   surfacedata_t *psurf = physprops->GetSurfaceData(surfaceProps);
@@ -1073,7 +1073,7 @@ void CPropAirboat::Think(void) {
     ResetClientsideFrame();
   }
 
-  // FIXME: Slam the crosshair every think -- if we don't do this it disappears
+  // TODO(d.rattman): Slam the crosshair every think -- if we don't do this it disappears
   // randomly, never to return.
   if ((m_hPlayer.Get() != NULL) && !(m_bEnterAnimOn || m_bExitAnimOn)) {
     m_hPlayer->m_Local.m_iHideHUD &= ~HIDEHUD_VEHICLE_CROSSHAIR;

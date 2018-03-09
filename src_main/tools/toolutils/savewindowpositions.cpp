@@ -16,14 +16,14 @@
 #include "tier1/KeyValues.h"
 #include "filesystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
 //-----------------------------------------------------------------------------
 // Purpose: This will save the bounds and the visibility state of UI elements registered during startup
-// FIXME:  Preserve Z order?
+// TODO(d.rattman):  Preserve Z order?
 //-----------------------------------------------------------------------------
 class CWindowPositionMgr : public IWindowPositionMgr
 {

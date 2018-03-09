@@ -26,7 +26,7 @@
 #include "point_template.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar template_debug("template_debug", "0");
@@ -228,7 +228,7 @@ void Templates_ReconnectIOForGroup(CPointTemplate *pGroup) {
         // Entity I/O values are stored as "Targetname,<data>", so we need to
         // see if there's a ',' in the string
         char *sValue = value;
-        // FIXME: This is very brittle. Any key with a , will not be found.
+        // TODO(d.rattman): This is very brittle. Any key with a , will not be found.
         char *s = strchr(value, ',');
         if (s) {
           // Grab just the targetname of the receiver

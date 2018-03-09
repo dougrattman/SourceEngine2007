@@ -18,7 +18,7 @@
 #include "tier1/strtools.h"
 #include "mapentities_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define REPORTFAILURE(text) if ( hintCriteria.HasFlag( bits_HINT_NODE_REPORT_FAILURES ) ) \
@@ -1625,7 +1625,7 @@ hinttypedescs_t g_pszHintDescriptions[] =
 //-----------------------------------------------------------------------------
 const char *GetHintTypeDescription( Hint_e iHintType )
 {
-	for ( int i = 0; i < ARRAYSIZE(g_pszHintDescriptions); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE(g_pszHintDescriptions); i++ )
 	{
 		if ( g_pszHintDescriptions[i].iType == iHintType )
 			return g_pszHintDescriptions[i].pszDesc;
@@ -1655,7 +1655,7 @@ void CC_ai_drop_hint( const CCommand &args )
 	{
 		Msg("Invalid hint type specified. Format: ai_drop_hint <hint type>\nValid hint types:\n");
 
-		for ( int i = 0; i < ARRAYSIZE(g_pszHintDescriptions); i++ )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE(g_pszHintDescriptions); i++ )
 		{
 			Msg("%d : %s\n", g_pszHintDescriptions[i].iType, g_pszHintDescriptions[i].pszDesc );
 		}

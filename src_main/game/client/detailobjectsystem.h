@@ -16,7 +16,7 @@ struct model_t;
 //-----------------------------------------------------------------------------
 // Responsible for managing detail objects
 //-----------------------------------------------------------------------------
-abstract_class IDetailObjectSystem : public IGameSystem {
+the_interface IDetailObjectSystem : public IGameSystem {
  public:
   // Gets a particular detail object
   virtual IClientRenderable *GetDetailModel(int idx) = 0;

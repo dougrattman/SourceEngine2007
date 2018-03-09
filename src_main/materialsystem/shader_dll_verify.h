@@ -19,7 +19,7 @@
 #define SHADER_DLL_FNNAME_1 "_ftol3"
 typedef void (*ShaderDLLVerifyFn)(char *pData);
 
-abstract_class IShaderDLLVerification {
+the_interface IShaderDLLVerification {
  public:
   virtual CRC32_t Function1(unsigned char *pData) = 0;
   virtual void Function2(int a, int b, int c) = 0;

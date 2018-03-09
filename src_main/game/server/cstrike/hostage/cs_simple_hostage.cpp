@@ -20,7 +20,7 @@
 #include "obstacle_pushaway.h"
 #include "props_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define HOSTAGE_THINK_INTERVAL	0.1f
@@ -608,7 +608,7 @@ void CHostage::AvoidPhysicsProps( void )
 		return;
 
 	CBaseEntity *props[512];
-	int nEnts = GetPushawayEnts( this, props, ARRAYSIZE( props ), 0.0f, PARTITION_ENGINE_SOLID_EDICTS );
+	int nEnts = GetPushawayEnts( this, props, SOURCE_ARRAYSIZE( props ), 0.0f, PARTITION_ENGINE_SOLID_EDICTS );
 
 	for ( int i=0; i < nEnts; i++ )
 	{

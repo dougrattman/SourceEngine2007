@@ -10,7 +10,7 @@
 #include "tier1/interface.h"
 #include "vgui/keycode.h"
 
-abstract_class IGameUIFuncs {
+the_interface IGameUIFuncs {
  public:
   virtual bool IsKeyDown(const ch *key, bool &is_down) const = 0;
   virtual const ch *GetBindingForButtonCode(ButtonCode_t code) const = 0;

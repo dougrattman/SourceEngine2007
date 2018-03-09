@@ -11,7 +11,7 @@
 #include "fire.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar fire_extinguisher_debug;
@@ -61,7 +61,7 @@ CExtinguisherJet::CExtinguisherJet( void )
 
 	m_nLength			= 128;
 	m_nSize				= 8;
-	m_flStrength		= 0.97f;	//FIXME: Stub numbers
+	m_flStrength		= 0.97f;	//TODO(d.rattman): Stub numbers
 	m_nRadius			= 32;
 
 	// Send to the client even though we don't have a model

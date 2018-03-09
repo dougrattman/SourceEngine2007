@@ -23,7 +23,7 @@
 #include "vstdlib/jobthread.h"
 #include "welcomedialog.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //--------------------------------
@@ -755,7 +755,7 @@ void CMatchmakingBasePanel::OnOpenLeaderboardDialog(const char *pResourceName) {
 void CMatchmakingBasePanel::LoadMap(const char *mapname) {
   CloseAllDialogs(false);
 
-  char cmd[MAX_PATH];
+  char cmd[SOURCE_MAX_PATH];
   Q_snprintf(cmd, sizeof(cmd), "map %s", m_szMapLoadName);
   BasePanel()->FadeToBlackAndRunEngineCommand(cmd);
 }

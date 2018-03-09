@@ -7,7 +7,7 @@
 #include "vgui/ISurface.h"
 #include "vgui_surfacelib/BitmapFont.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CFontManager s_FontManager;

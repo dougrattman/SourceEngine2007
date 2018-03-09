@@ -254,7 +254,7 @@ void CSampleTool::OnCommand( const char *cmd )
 //-----------------------------------------------------------------------------
 void CSampleTool::OnNew()
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 void CSampleTool::OnOpen()
@@ -264,7 +264,7 @@ void CSampleTool::OnOpen()
 
 bool CSampleTool::OnReadFileFromDisk( const char *pFileName, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 
 	m_RecentFiles.Add( pFileName, pFileFormat );
 	return true;
@@ -272,7 +272,7 @@ bool CSampleTool::OnReadFileFromDisk( const char *pFileName, const char *pFileFo
 
 void CSampleTool::OnSave()
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 void CSampleTool::OnSaveAs()
@@ -282,7 +282,7 @@ void CSampleTool::OnSaveAs()
 
 bool CSampleTool::OnWriteFileToDisk( const char *pFileName, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 
 	m_RecentFiles.Add( pFileName, pFileFormat );
 	return true;
@@ -290,17 +290,17 @@ bool CSampleTool::OnWriteFileToDisk( const char *pFileName, const char *pFileFor
 
 void CSampleTool::OnClose()
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 void CSampleTool::OnCloseNoSave()
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 void CSampleTool::OnMarkNotDirty()
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 
@@ -319,7 +319,7 @@ void CSampleTool::OpenFileFromHistory( int slot )
 //-----------------------------------------------------------------------------
 void CSampleTool::OnFileOperationCompleted( const char *pFileType, bool bWroteFile, vgui::FileOpenStateMachine::CompletionState_t state, KeyValues *pContextKeyValues )
 {
-	// FIXME: Implement
+	// TODO(d.rattman): Implement
 }
 
 
@@ -328,7 +328,7 @@ void CSampleTool::OnFileOperationCompleted( const char *pFileType, bool bWroteFi
 //-----------------------------------------------------------------------------
 void CSampleTool::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog, bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( NULL, pStartingDir, sizeof(pStartingDir) );
 
 	pDialog->SetTitle( "Choose SampleTool .txt file", true );

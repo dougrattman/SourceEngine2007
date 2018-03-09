@@ -46,7 +46,7 @@
 #endif
 
 	
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 		  
 void ToolFramework_AdjustEngineViewport( int& x, int& y, int& width, int& height );
@@ -247,7 +247,7 @@ void CViewRender::Init( void )
 	extern CMaterialReference g_material_WriteZ;
 	g_material_WriteZ.Init( "engine/writez", TEXTURE_GROUP_OTHER );
 
-	// FIXME:  
+	// TODO(d.rattman):  
 	QAngle angles;
 	engine->GetViewAngles( angles );
 	AngleVectors( angles, &m_vecLastFacing );
@@ -563,8 +563,8 @@ void CViewRender::SetUpView()
 	}
 	else
 	{
-		// FIXME: Are there multiple views? If so, then what?
-		// FIXME: What happens when there's no player?
+		// TODO(d.rattman): Are there multiple views? If so, then what?
+		// TODO(d.rattman): What happens when there's no player?
 		if (pPlayer)
 		{
 			pPlayer->CalcView( m_View.origin, m_View.angles, m_View.zNear, m_View.zFar, m_View.fov );
@@ -695,7 +695,7 @@ void CViewRender::WriteSaveGameScreenshotOfSize( const char *pFilename, int widt
 	free( pImage );
 
 	// async write to disk (this will take ownership of the memory)
-	char szPathedFileName[_MAX_PATH];
+	char szPathedFileName[SOURCE_MAX_PATH];
 	Q_snprintf( szPathedFileName, sizeof(szPathedFileName), "//MOD/%s", pFilename );
 
 	filesystem->AsyncWrite( szPathedFileName, buffer.Base(), buffer.TellPut(), true );

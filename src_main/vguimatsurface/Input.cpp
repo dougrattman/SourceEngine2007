@@ -29,7 +29,7 @@
 #include "tier0/include/dbg.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -272,7 +272,7 @@ void InputDetachFromWindow(void *hwnd) {
 
 //-----------------------------------------------------------------------------
 // Converts an input system button code to a vgui key code
-// FIXME: Remove notion of vgui::KeyCode + vgui::MouseCode altogether
+// TODO(d.rattman): Remove notion of vgui::KeyCode + vgui::MouseCode altogether
 //-----------------------------------------------------------------------------
 static vgui::KeyCode ButtonCodeToKeyCode(ButtonCode_t buttonCode) {
   return (vgui::KeyCode)buttonCode;
@@ -359,7 +359,7 @@ bool InputHandleInputEvent(const InputEvent_t &event) {
       return true;
 
     case IE_Close:
-      // FIXME: Change this so we don't stop until 'save' occurs, etc.
+      // TODO(d.rattman): Change this so we don't stop until 'save' occurs, etc.
       g_pVGui->Stop();
       return true;
 

@@ -99,7 +99,7 @@ bool CMayaDmeMakefileUtils::PerformCompilationStep( CDmeMDLMakefile *pMakefile, 
 			if ( !pMayaSource )
 				continue;
 
-			char pSourcePath[MAX_PATH];
+			char pSourcePath[SOURCE_MAX_PATH];
 			pDependentMakefile->GetSourceFullPath( pMayaSource, pSourcePath, sizeof(pSourcePath) );
 
 			// Maya wants forward slashes
@@ -135,7 +135,7 @@ bool CMayaDmeMakefileUtils::PerformCompilationStep( CDmeMayaMakefile *pMakeFile,
 		if ( !pMayaSource )
 			continue;
 
-		char pSourcePath[MAX_PATH];
+		char pSourcePath[SOURCE_MAX_PATH];
 		pMakeFile->GetSourceFullPath( pMayaSource, pSourcePath, sizeof(pSourcePath) );
 		 
 		// Maya wants forward slashes
@@ -171,7 +171,7 @@ void CMayaDmeMakefileUtils::OpenEditor( CDmeSourceMayaFile *pDmeSourceDCCFile )
 
 	MString currentFile = MFileIO::currentFile();
 
-	char pSourcePath[MAX_PATH];
+	char pSourcePath[SOURCE_MAX_PATH];
 	pMakefile->GetSourceFullPath( pDmeSourceDCCFile, pSourcePath, sizeof(pSourcePath) );
 
 	// Maya wants forward slashes

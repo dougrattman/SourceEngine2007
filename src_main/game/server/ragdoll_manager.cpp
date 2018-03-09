@@ -11,7 +11,7 @@
 #include "ragdoll_shared.h"
 #include "ai_basenpc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CRagdollManager : public CBaseEntity

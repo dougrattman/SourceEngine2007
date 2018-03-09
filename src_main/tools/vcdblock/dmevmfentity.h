@@ -101,7 +101,7 @@ private:
 	// entity needs to be deleted
 	CDmaVar<bool> m_bIsDeleted;
 
-	// FIXME: This is a hack for info targets
+	// TODO(d.rattman): This is a hack for info targets
 	bool m_bInfoTarget;
 
 	// Used to store the next unique entity id;

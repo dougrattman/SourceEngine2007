@@ -59,7 +59,7 @@ class CDemoFile {
   void WriteFileBytes(FileHandle_t fh, int length);
 
  public:
-  char m_szFileName[MAX_PATH];  // name of current demo file
+  char m_szFileName[SOURCE_MAX_PATH];  // name of current demo file
   demoheader_t m_DemoHeader;    // general demo info
 
  private:

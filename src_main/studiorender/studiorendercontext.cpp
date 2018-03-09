@@ -16,7 +16,7 @@
 #include "tier1/refcount.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // garymcthack - this should go elsewhere
@@ -157,7 +157,7 @@ matrix3x4_t *CStudioRenderContext::CreateQueuedMatrices(
       (matrix3x4_t *)m_BoneToWorldMatrices[m_nCurrentStack].Alloc(nSizeInBytes,
                                                                   false);
   if (pDest) {
-    // FIXME: Should I only copy matrices that are used by this LOD?
+    // TODO(d.rattman): Should I only copy matrices that are used by this LOD?
     memcpy(pDest, pBoneToWorld, nSizeInBytes);
   } else {
     Warning("Overflowed the queued bone matrix buffer!\n");
@@ -176,7 +176,7 @@ float *CStudioRenderContext::CreateQueuedFlexWeights(int nWeightCount,
   float *pDest =
       (float *)m_FlexWeights[m_nCurrentStack].Alloc(nSizeInBytes, false);
   if (pDest) {
-    // FIXME: Should I only copy matrices that are used by this LOD?
+    // TODO(d.rattman): Should I only copy matrices that are used by this LOD?
     memcpy(pDest, pWeights, nSizeInBytes);
   } else {
     Warning("Overflowed the queued flex weight buffer!\n");
@@ -193,7 +193,7 @@ void *CStudioRenderContext::CreateQueuedShadowData(int nSizeInBytes,
 
   void *pDest = m_FlexWeights[m_nCurrentStack].Alloc(nSizeInBytes, false);
   if (pDest) {
-    // FIXME: Should I only copy matrices that are used by this LOD?
+    // TODO(d.rattman): Should I only copy matrices that are used by this LOD?
     memcpy(pDest, pSrc, nSizeInBytes);
   } else {
     Warning("Overflowed the queued shadow data buffer!\n");
@@ -220,7 +220,7 @@ void CStudioRenderContext::ComputeMaterialFlags(studiohdr_t *phdr,
     phdr->flags |= STUDIOHDR_FLAGS_USES_FB_TEXTURE;
   }
 
-  // FIXME: I'd rather know that the material is definitely using the bumpmap.
+  // TODO(d.rattman): I'd rather know that the material is definitely using the bumpmap.
   // It could be in the file without actually being used.
   static unsigned int bumpvarCache = 0;
   IMaterialVar *pBumpMatVar = pMaterial->FindVarFast("$bumpmap", &bumpvarCache);
@@ -242,7 +242,7 @@ void CStudioRenderContext::ComputeMaterialFlags(studiohdr_t *phdr,
 // Does this material use a mouth shader?
 //-----------------------------------------------------------------------------
 static bool UsesMouthShader(IMaterial *pMaterial) {
-  // FIXME: hack, needs proper client side material system interface
+  // TODO(d.rattman): hack, needs proper client side material system interface
   static unsigned int clientShaderCache = 0;
   IMaterialVar *clientShaderVar =
       pMaterial->FindVarFast("$clientShader", &clientShaderCache);
@@ -299,7 +299,7 @@ void CStudioRenderContext::LoadMaterials(
   if (phdr->textureindex == 0) return;
 
   for (i = 0; i < phdr->numtextures; i++) {
-    char szPath[MAX_PATH];
+    char szPath[SOURCE_MAX_PATH];
     IMaterial *pMaterial = NULL;
 
     // search through all specified directories until a valid material is found
@@ -485,7 +485,7 @@ void CStudioRenderContext::DetermineHWMorphing(
   // Finally, the expensive method. Do HW morphing on the N most expensive strip
   // groups
 
-  // FIXME: We should do this at studiomdl time?
+  // TODO(d.rattman): We should do this at studiomdl time?
   // Certainly counting the # of flexed vertices can be done at studiomdl time.
   int *pVertexCount = (int *)_alloca(nFlexedStripGroup * sizeof(int));
   int nCount = 0;
@@ -837,7 +837,7 @@ void CStudioRenderContext::R_StudioBuildMorph(
 void CStudioRenderContext::R_StudioBuildMeshStrips(
     studiomeshgroup_t *pMeshGroup,
     OptimizedModel::StripGroupHeader_t *pStripGroup) {
-  // FIXME: This is bogus
+  // TODO(d.rattman): This is bogus
   // Compute the amount of memory we need to store the strip data
   int i;
   int stripDataSize = 0;
@@ -909,7 +909,7 @@ VertexFormat_t CStudioRenderContext::CalculateVertexFormat(
       !g_pMaterialSystemHardwareConfig->SupportsVertexAndPixelShaders();
   bool bIsDX8 = (g_pMaterialSystemHardwareConfig->GetDXSupportLevel() < 90);
   if (bIsDX7) {
-    // FIXME: this is untested (as of June '07, the engine currently doesn't
+    // TODO(d.rattman): this is untested (as of June '07, the engine currently doesn't
     // work with "-dxlevel 70")
     if (bSkinnedMesh)
       return MATERIAL_VERTEX_FORMAT_MODEL_SKINNED_DX7;
@@ -929,14 +929,14 @@ VertexFormat_t CStudioRenderContext::CalculateVertexFormat(
     // bool bBumpmapping = false;
     short *pSkinref = pStudioHdr->pSkinref(0);
     for (int i = 0; i < pStudioHdr->numskinfamilies; i++) {
-      // FIXME: ### MATERIAL VERTEX FORMATS ARE UNRELIABLE! ###
+      // TODO(d.rattman): ### MATERIAL VERTEX FORMATS ARE UNRELIABLE! ###
       //
       //	IMaterial* pMaterial = pStudioLodData->ppMaterials[ pSkinref[
       // pMesh->material ] ]; 	Assert( pMaterial ); 	VertexFormat_t
       // vertexFormat = pMaterial->GetVertexFormat(); 	newVertexFormat &=
       //~VERTEX_FORMAT_COMPRESSED; // Decide whether to compress below
       //
-      // FIXME: ### MATERIAL VERTEX FORMATS ARE UNRELIABLE! ###
+      // TODO(d.rattman): ### MATERIAL VERTEX FORMATS ARE UNRELIABLE! ###
       //        we need to go through all the shader CPP code and make sure that
       //        the correct vertex format is being specified for every single
       //        shader combo! We don't have time to fix that before shipping
@@ -969,7 +969,7 @@ VertexFormat_t CStudioRenderContext::CalculateVertexFormat(
         }
       }
 
-      // FIXME: re-enable this test, fix it to work and see how much memory we
+      // TODO(d.rattman): re-enable this test, fix it to work and see how much memory we
       // save (Q: why is this different to
       // CStudioRenderContext::MeshNeedsTangentSpace ?)
       /*if ( !bBumpmapping && pMaterial->NeedsTangentSpace() )
@@ -999,7 +999,7 @@ VertexFormat_t CStudioRenderContext::CalculateVertexFormat(
       newVertexFormat |= VERTEX_BONE_INDEX;
     }
 
-    // FIXME: re-enable this (see above)
+    // TODO(d.rattman): re-enable this (see above)
     /*if ( !bBumpmapping )
     {
             // no bumpmapping, user data not needed
@@ -1149,7 +1149,7 @@ void CStudioRenderContext::R_StudioCreateStaticMeshes(
       DetermineHWMorphing(pModel, pVtxLOD);
 
       // Support tracking of VB allocations
-      // FIXME: categorise studiomodel allocs more precisely
+      // TODO(d.rattman): categorise studiomodel allocs more precisely
       if (g_VBAllocTracker) {
         if ((pStudioHdr->numbones > 8) || (pStudioHdr->numflexdesc > 0)) {
           g_VBAllocTracker->TrackMeshAllocations(
@@ -1523,7 +1523,7 @@ int CStudioRenderContext::GetMaterialList(studiohdr_t *pStudioHdr, int count,
   int j;
   int found = 0;
   for (i = 0; i < pStudioHdr->numtextures; i++) {
-    char szPath[MAX_PATH];
+    char szPath[SOURCE_MAX_PATH];
     IMaterial *pMaterial = NULL;
 
     // iterate quietly through all specified directories until a valid material
@@ -1742,7 +1742,7 @@ void CStudioRenderContext::GetPerfStats(DrawModelResults_t *pResults,
             }
             pResults->m_ActualTriCount += numTris * numPasses;
           } else if (pStripData->flags & OptimizedModel::STRIP_IS_TRISTRIP) {
-            Assert(0);  // FIXME: fill this in when we start using strips again.
+            Assert(0);  // TODO(d.rattman): fill this in when we start using strips again.
           } else {
             Assert(0);
           }
@@ -1833,7 +1833,7 @@ void CStudioRenderContext::SetAmbientLightColors(const Vector *pColors) {
     m_RC.m_LightBoxColors[i][3] = 1.0f;
   }
 
-  // FIXME: Would like to get this into the render thread, but there's systemic
+  // TODO(d.rattman): Would like to get this into the render thread, but there's systemic
   // confusion about whether to set lighting state here or in the material
   // system
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
@@ -1843,7 +1843,7 @@ void CStudioRenderContext::SetAmbientLightColors(const Vector *pColors) {
 void CStudioRenderContext::SetAmbientLightColors(const Vector4D *pColors) {
   memcpy(m_RC.m_LightBoxColors, pColors, 6 * sizeof(Vector4D));
 
-  // FIXME: Would like to get this into the render thread, but there's systemic
+  // TODO(d.rattman): Would like to get this into the render thread, but there's systemic
   // confusion about whether to set lighting state here or in the material
   // system
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
@@ -1855,7 +1855,7 @@ void CStudioRenderContext::SetLocalLights(int nLightCount,
   m_RC.m_NumLocalLights = CopyLocalLightingState(
       MAXLOCALLIGHTS, m_RC.m_LocalLights, nLightCount, pLights);
 
-  // FIXME: Would like to get this into the render thread, but there's systemic
+  // TODO(d.rattman): Would like to get this into the render thread, but there's systemic
   // confusion about whether to set lighting state here or in the material
   // system
   CMatRenderContextPtr render_context{g_pMaterialSystem};
@@ -1890,7 +1890,7 @@ void CStudioRenderContext::SetAlphaModulation(float alpha) {
 
 //-----------------------------------------------------------------------------
 // Used to set bone-to-world transforms.
-// FIXME: Should this be a lock/unlock pattern so we can't read after unlock?
+// TODO(d.rattman): Should this be a lock/unlock pattern so we can't read after unlock?
 //-----------------------------------------------------------------------------
 matrix3x4_t *CStudioRenderContext::LockBoneMatrices(int nCount) {
   MEM_ALLOC_CREDIT_("CStudioRenderContext::m_BoneToWorldMatrices");
@@ -1905,7 +1905,7 @@ matrix3x4_t *CStudioRenderContext::LockBoneMatrices(int nCount) {
       (matrix3x4_t *)m_BoneToWorldMatrices[m_nCurrentStack].Alloc(nSizeInBytes,
                                                                   false);
   if (!pDest) {
-    ExecuteNTimes(10, "studiorender: Out of memory in bone matrix stack\n");
+    Warning("studiorender: Out of memory in bone matrix stack\n");
   }
   return pDest;
 }
@@ -1929,13 +1929,13 @@ void CStudioRenderContext::LockFlexWeights(int nWeightCount,
   *ppFlexWeights =
       (float *)m_FlexWeights[m_nCurrentStack].Alloc(nSizeInBytes, false);
   if (!*ppFlexWeights) {
-    ExecuteNTimes(10, "studiorender: Out of memory in flex weight stack\n");
+    Warning("studiorender: Out of memory in flex weight stack\n");
   }
   if (ppFlexDelayedWeights) {
     *ppFlexDelayedWeights =
         (float *)m_FlexWeights[m_nCurrentStack].Alloc(nSizeInBytes, false);
     if (!*ppFlexDelayedWeights) {
-      ExecuteNTimes(10, "studiorender: Out of memory in flex weight stack\n");
+      Warning("studiorender: Out of memory in flex weight stack\n");
     }
   }
 }

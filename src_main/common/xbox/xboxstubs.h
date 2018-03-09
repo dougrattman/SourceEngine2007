@@ -67,12 +67,12 @@ typedef enum {
 } xKey_t;
 
 typedef unsigned short WORD;
-#ifndef _LINUX
+#ifndef OS_POSIX
 typedef unsigned long DWORD;
 typedef void *HANDLE;
 #endif
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 typedef int32_t COLORREF;
 #endif
 
@@ -181,14 +181,14 @@ typedef struct {
 #define XNET_QOS_LISTEN_DISABLE 0
 #define XNET_QOS_LISTEN_SET_DATA 0
 
-FORCEINLINE void XBX_ProcessEvents() {}
-FORCEINLINE unsigned int XBX_GetSystemTime() { return 0; }
-FORCEINLINE int XBX_GetPrimaryUserId() { return 0; }
-FORCEINLINE void XBX_SetPrimaryUserId(DWORD idx) {}
-FORCEINLINE int XBX_GetStorageDeviceId() { return 0; }
-FORCEINLINE void XBX_SetStorageDeviceId(DWORD idx) {}
-FORCEINLINE const char *XBX_GetLanguageString() { return ""; }
-FORCEINLINE bool XBX_IsLocalized() { return false; }
+SOURCE_FORCEINLINE void XBX_ProcessEvents() {}
+SOURCE_FORCEINLINE unsigned int XBX_GetSystemTime() { return 0; }
+SOURCE_FORCEINLINE int XBX_GetPrimaryUserId() { return 0; }
+SOURCE_FORCEINLINE void XBX_SetPrimaryUserId(DWORD idx) {}
+SOURCE_FORCEINLINE int XBX_GetStorageDeviceId() { return 0; }
+SOURCE_FORCEINLINE void XBX_SetStorageDeviceId(DWORD idx) {}
+SOURCE_FORCEINLINE const char *XBX_GetLanguageString() { return ""; }
+SOURCE_FORCEINLINE bool XBX_IsLocalized() { return false; }
 
 #define XCONTENT_MAX_DISPLAYNAME_LENGTH 128
 #define XCONTENT_MAX_FILENAME_LENGTH 42

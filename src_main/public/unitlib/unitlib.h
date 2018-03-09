@@ -83,13 +83,13 @@
 //-----------------------------------------------------------------------------
 
 #ifdef UNITLIB_DLL_EXPORT
-#define UNITLIB_INTERFACE DLL_EXPORT
-#define UNITLIB_CLASS_INTERFACE DLL_CLASS_EXPORT
-#define UNITLIB_GLOBAL_INTERFACE DLL_GLOBAL_EXPORT
+#define UNITLIB_INTERFACE SOURCE_API_EXPORT
+#define UNITLIB_CLASS_INTERFACE SOURCE_API_CLASS_EXPORT
+#define UNITLIB_GLOBAL_INTERFACE SOURCE_API_GLOBAL_EXPORT
 #else
-#define UNITLIB_INTERFACE DLL_IMPORT
-#define UNITLIB_CLASS_INTERFACE DLL_CLASS_IMPORT
-#define UNITLIB_GLOBAL_INTERFACE DLL_GLOBAL_IMPORT
+#define UNITLIB_INTERFACE SOURCE_API_IMPORT
+#define UNITLIB_CLASS_INTERFACE SOURCE_API_CLASS_IMPORT
+#define UNITLIB_GLOBAL_INTERFACE SOURCE_API_GLOBAL_IMPORT
 #endif
 
 
@@ -251,15 +251,15 @@ protected:
 	do {																\
 		if (!(_exp)) 													\
 		{ 																\
-			_SpewInfo( SPEW_ASSERT, __FILE__, __LINE__ );				\
-			SpewRetval_t ret = _SpewMessage(_msg);						\
+			SpewInfo_( SPEW_ASSERT, __FILE__, __LINE__ );				\
+			SpewRetval_t ret = SpewMessage_(_msg);						\
 			_executeExp; 												\
 			if ( ret == SPEW_DEBUGGER)									\
 			{															\
 				if ( !ShouldUseNewAssertDialog() || DoNewAssertDialog( __FILE__, __LINE__, _msg ) ) \
 					DebuggerBreak();									\
 				if ( _bFatal )											\
-					_ExitOnFatalAssert( __FILE__, __LINE__ );			\
+					ExitOnFatalAssert_( __FILE__, __LINE__ );			\
 			}															\
 		}																\
 	} while (0)

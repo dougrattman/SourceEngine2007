@@ -45,7 +45,7 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Allows the doc to call back into the CommEdit editor tool
 //-----------------------------------------------------------------------------
-abstract_class ICommEditDocCallback
+the_interface ICommEditDocCallback
 {
 public:
 	// Called by the doc when the data changes
@@ -56,7 +56,7 @@ public:
 //-----------------------------------------------------------------------------
 // Global methods of the commedit tool
 //-----------------------------------------------------------------------------
-abstract_class ICommEditTool
+the_interface ICommEditTool
 {
 public:
 	// Gets at the rool panel (for modal dialogs)

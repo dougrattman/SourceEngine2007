@@ -16,7 +16,7 @@
 
 
 
-abstract_class CBaseHeadcrab : public CAI_BaseNPC
+the_interface CBaseHeadcrab : public CAI_BaseNPC
 {
 	DECLARE_CLASS( CBaseHeadcrab, CAI_BaseNPC );
 

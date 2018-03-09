@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of CVstSmdIOCommand
 //
@@ -428,7 +428,7 @@ MStatus CVstSmdIOCmd::DoImport(
 	}
 
 	CQcData qcData;
-	char fullPath[ MAX_PATH ];
+	char fullPath[ SOURCE_MAX_PATH ];
 	if ( !_fullpath( fullPath, optFilename.asChar(), sizeof( fullPath ) ) )
 	{
 		strncpy( fullPath, optFilename.asChar(), sizeof( fullPath ) );

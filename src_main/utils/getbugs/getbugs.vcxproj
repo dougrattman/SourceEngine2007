@@ -228,7 +228,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
-    <ClCompile Include="..\..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\..\public\filesystem_init.cc" />
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -241,7 +241,6 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\lib\common\expdlln.lib" />
-    <Library Include="..\..\lib\common\trktooln.lib" />
     <Library Include="..\..\lib\public\tier0.lib" />
     <Library Include="..\..\lib\public\tier1.lib" />
     <Library Include="..\..\lib\public\tier2.lib" />

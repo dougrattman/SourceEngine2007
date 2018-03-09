@@ -19,7 +19,7 @@
 #include "npc_playercompanion.h"
 #endif  // HL2_DLL
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CBaseEntity *FindPickerEntity(CBasePlayer *pPlayer);
@@ -109,7 +109,7 @@ class CSimThinkManager : public IEntityListener {
   CSimThinkManager() { Clear(); }
   void Clear() {
     m_simThinkList.Purge();
-    for (int i = 0; i < ARRAYSIZE(m_entinfoIndex); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(m_entinfoIndex); i++) {
       m_entinfoIndex[i] = 0xFFFF;
     }
   }
@@ -459,10 +459,10 @@ CBaseEntity *CGlobalEntityList::FindEntityProcedural(
         return CBaseEntity::Instance(
             UTIL_FindClientInPVS(pSearchingEntity->edict()));
       } else if (pActivator) {
-        // FIXME: error condition?
+        // TODO(d.rattman): error condition?
         return CBaseEntity::Instance(UTIL_FindClientInPVS(pActivator->edict()));
       } else {
-        // FIXME: error condition?
+        // TODO(d.rattman): error condition?
         return (CBaseEntity *)UTIL_PlayerByIndex(1);
       }
 
@@ -563,7 +563,7 @@ CBaseEntity *CGlobalEntityList::FindEntityByModel(CBaseEntity *pStartEntity,
 // Input  : pStartEntity -
 //			szName -
 //-----------------------------------------------------------------------------
-// FIXME: obsolete, remove
+// TODO(d.rattman): obsolete, remove
 CBaseEntity *CGlobalEntityList::FindEntityByTarget(CBaseEntity *pStartEntity,
                                                    const char *szName) {
   const CEntInfo *pInfo =
@@ -877,7 +877,7 @@ CBaseEntity *CGlobalEntityList::FindEntityClassNearestFacing(
       continue;
     }
 
-    // FIXME: why is this skipping pointsize entities?
+    // TODO(d.rattman): why is this skipping pointsize entities?
     if (ent->IsPointSized()) continue;
 
     // Make vector to entity
@@ -1380,7 +1380,7 @@ CON_COMMAND(report_touchlinks, "Lists all touchlinks") {
 
 CON_COMMAND(report_simthinklist, "Lists all simulating/thinking entities") {
   CBaseEntity *pTmp[NUM_ENT_ENTRIES];
-  int count = SimThink_ListCopy(pTmp, ARRAYSIZE(pTmp));
+  int count = SimThink_ListCopy(pTmp, SOURCE_ARRAYSIZE(pTmp));
 
   CSortedEntityList list;
   for (int i = 0; i < count; i++) {

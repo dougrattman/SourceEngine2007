@@ -8,7 +8,7 @@
 #include "cbase.h"
 #include "antlion_dust.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_SERVERCLASS_ST( CTEAntlionDust, DT_TEAntlionDust )

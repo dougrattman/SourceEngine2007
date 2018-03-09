@@ -7,11 +7,13 @@
 #include <ctime>
 
 #include "base/include/windows/windows_light.h"
+#include "tier0/include/dbg.h"
+#include "tier0/include/threadtools.h"
 #include "tier0/include/vcrmode.h"
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 #include "tier0/include/memalloc.h"
-// memdbgon must be the last include file in a .cpp file!!!
+
 #include "tier0/include/memdbgon.h"
 #endif
 
@@ -161,72 +163,13 @@ void Plat_DebugString(const ch *psz) {
 
 const ch *Plat_GetCommandLine() { return GetCommandLine(); }
 
-// Memory stuff.
-//
-// DEPRECATED. Still here to support binary back compatibility of tier0.dll
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-
-typedef void (*Plat_AllocErrorFn)(u32 size);
-
-void Plat_DefaultAllocErrorFn(u32 size) {}
-
-Plat_AllocErrorFn g_AllocError = Plat_DefaultAllocErrorFn;
-#endif
-
-CRITICAL_SECTION g_AllocCS;
-class CAllocCSInit {
- public:
-  CAllocCSInit() { InitializeCriticalSection(&g_AllocCS); }
-} g_AllocCSInit;
-
-SOURCE_TIER0_API void *Plat_Alloc(u32 size) {
-  EnterCriticalSection(&g_AllocCS);
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-  void *pRet = g_pMemAlloc->Alloc(size);
-#else
-  void *pRet = malloc(size);
-#endif
-  LeaveCriticalSection(&g_AllocCS);
-  if (pRet) {
-    return pRet;
-  } else {
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-    g_AllocError(size);
-#endif
-    return 0;
-  }
+void Plat_SetThreadName(unsigned long dwThreadID, const ch *pszName) {
+  ThreadSetDebugName(dwThreadID, pszName);
 }
 
-SOURCE_TIER0_API void *Plat_Realloc(void *ptr, u32 size) {
-  EnterCriticalSection(&g_AllocCS);
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-  void *pRet = g_pMemAlloc->Realloc(ptr, size);
-#else
-  void *pRet = realloc(ptr, size);
-#endif
-  LeaveCriticalSection(&g_AllocCS);
-  if (pRet) {
-    return pRet;
-  } else {
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-    g_AllocError(size);
-#endif
-    return 0;
-  }
+unsigned long Plat_RegisterThread(const ch *pszName) {
+  ThreadSetDebugName(pszName);
+  return ThreadGetCurrentId();
 }
 
-SOURCE_TIER0_API void Plat_Free(void *ptr) {
-  EnterCriticalSection(&g_AllocCS);
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-  g_pMemAlloc->Free(ptr);
-#else
-  free(ptr);
-#endif
-  LeaveCriticalSection(&g_AllocCS);
-}
-
-#if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
-SOURCE_TIER0_API void Plat_SetAllocErrorFn(Plat_AllocErrorFn fn) {
-  g_AllocError = fn;
-}
-#endif
+unsigned long Plat_GetCurrentThreadID() { return ThreadGetCurrentId(); }

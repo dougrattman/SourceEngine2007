@@ -20,7 +20,7 @@ typedef CClientThinkHandlePtr* ClientThinkHandle_t;
 
 
 // Entities that implement this interface can be put into the client think list.
-abstract_class IClientThinkable
+the_interface IClientThinkable
 {
 public:
 	// Gets at the containing class...

@@ -5,7 +5,7 @@
 #include "snd_mp3_source.h"
 #include "vaudio/ivaudio.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IVAudio *vaudio;

@@ -15,14 +15,14 @@
 #include "optimize.h"
 #include "studio.h"
 #include "studiorendercontext.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/vprof.h"
 #include "tier2/tier2.h"
 
 //#define PROFILE_STUDIO VPROF
 #define PROFILE_STUDIO
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 typedef void (*SoftwareProcessMeshFunc_t)(
@@ -292,7 +292,7 @@ int CStudioRender::R_StudioRenderModel(IMatRenderContext *pRenderContext,
 //-----------------------------------------------------------------------------
 void CStudioRender::GenerateMorphAccumulator(mstudiomodel_t *pSubModel) {
   // Deal with all flexes
-  // FIXME: HW Morphing doesn't work with translucent models yet
+  // TODO(d.rattman): HW Morphing doesn't work with translucent models yet
   if (!m_pRC->m_Config.m_bEnableHWMorph || !m_pRC->m_Config.bFlex ||
       m_bDrawTranslucentSubModels ||
       !g_pMaterialSystemHardwareConfig->HasFastVertexTextures())
@@ -354,7 +354,7 @@ void CStudioRender::GenerateMorphAccumulator(mstudiomodel_t *pSubModel) {
 //-----------------------------------------------------------------------------
 void CStudioRender::ComputeEyelidStateFACS(mstudiomodel_t *pSubModel) {
   for (int j = 0; j < pSubModel->numeyeballs; j++) {
-    // FIXME: This might not be necessary...
+    // TODO(d.rattman): This might not be necessary...
     R_StudioEyeballPosition(pSubModel->pEyeball(j), &m_pEyeballState[j]);
     R_StudioEyelidFACS(pSubModel->pEyeball(j), &m_pEyeballState[j]);
   }
@@ -834,7 +834,7 @@ static matrix3x4_t *ComputeSkinMatrixSSE(mstudioboneweight_t &boneweights,
     }
       return &result;
   }
-#elif _LINUX
+#elif OS_POSIX
 #warning "ComputeSkinMatrixSSE C implementation only"
   return ComputeSkinMatrix(boneweights, pPoseToWorld, result);
 #else
@@ -1062,15 +1062,15 @@ class CProcessMeshWrapper {
     Vector *pSrcNorm;
     Vector4D *pSrcTangentS = NULL;
 
-    ALIGN16 ModelVertexDX8_t dstVertex;
+    alignas(16) ModelVertexDX8_t dstVertex;
     dstVertex.m_flBoneWeights[0] = 1.0f;
     dstVertex.m_flBoneWeights[1] = 0.0f;
     dstVertex.m_nBoneIndices = 0;
     dstVertex.m_nColor = 0xFFFFFFFF;
     dstVertex.m_vecUserData.Init(1.0f, 0.0f, 0.0f, 1.0f);
 
-    ALIGN16 matrix3x4_t temp;
-    ALIGN16 matrix3x4_t *pSkinMat;
+    alignas(16) matrix3x4_t temp;
+    alignas(16) matrix3x4_t *pSkinMat;
 
     int ntemp[PREFETCH_VERT_COUNT];
 
@@ -1303,7 +1303,7 @@ class CProcessMeshWrapper {
     mstudiovertex_t *pVertices = vertData->Vertex(0);
 
 #define N_VERTS_TO_DO_AT_ONCE 4  // for SSE processing
-    COMPILE_TIME_ASSERT(N_VERTS_TO_DO_AT_ONCE <= PREFETCH_VERT_COUNT);
+    static_assert(N_VERTS_TO_DO_AT_ONCE <= PREFETCH_VERT_COUNT);
 
     SSELightingHalfLambert =
         (pMaterial &&
@@ -1312,7 +1312,7 @@ class CProcessMeshWrapper {
     Vector *pSrcPos;
     Vector *pSrcNorm;
 
-    ALIGN16 ModelVertexDX8_t dstVertexBuf[N_VERTS_TO_DO_AT_ONCE];
+    alignas(16) ModelVertexDX8_t dstVertexBuf[N_VERTS_TO_DO_AT_ONCE];
     ;
     for (int i = 0; i < N_VERTS_TO_DO_AT_ONCE; i++) {
       dstVertexBuf[i].m_flBoneWeights[0] = 1.0f;
@@ -1338,8 +1338,8 @@ class CProcessMeshWrapper {
       }
     }
 
-    ALIGN16 matrix3x4_t temp;
-    ALIGN16 matrix3x4_t *pSkinMat;
+    alignas(16) matrix3x4_t temp;
+    alignas(16) matrix3x4_t *pSkinMat;
 
     // Mouth related stuff...
     float fIllum = 1.0f;
@@ -1671,7 +1671,7 @@ void CStudioRender::R_StudioSoftwareProcessMesh(
                  0u, 255u)
       << 24;
 
-  // FIXME: Use function pointers to simplify this?!?
+  // TODO(d.rattman): Use function pointers to simplify this?!?
   int idx = bDX8Vertex * 24 + bNeedsTangentSpace * 12 + doFlex * 6 +
             MathLib_SSEEnabled() * 3 + lighting;
 
@@ -1737,8 +1737,8 @@ void CStudioRender::R_StudioSoftwareProcessMesh_Normals(
     mstudiomesh_t *pmesh, CMeshBuilder &meshBuilder, int numVertices,
     unsigned short *pGroupToMesh, StudioModelLighting_t lighting, bool doFlex,
     float r_blend, bool bShowNormals, bool bShowTangentFrame) {
-  ALIGN16 matrix3x4_t temp;
-  ALIGN16 matrix3x4_t *pSkinMat;
+  alignas(16) matrix3x4_t temp;
+  alignas(16) matrix3x4_t *pSkinMat;
 
   Vector *pSrcPos = NULL;
   Vector *pSrcNorm = NULL;
@@ -2004,7 +2004,7 @@ void CStudioRender::R_StudioProcessFlexedMesh(mstudiomesh_t *pmesh,
       int n = pGroupToMesh[j];
       mstudiovertex_t &vert = pVertices[n];
 
-      // FIXME: For now, flexed hw-skinned meshes can only have one bone
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
       // The data must exist in the 0th hardware matrix
 
       // Here, we are doing HW skinning, so we need to simply copy over the flex
@@ -2048,7 +2048,7 @@ void CStudioRender::R_StudioProcessFlexedMesh(mstudiomesh_t *pmesh,
       int n = pGroupToMesh[j];
       mstudiovertex_t &vert = pVertices[n];
 
-      // FIXME: For now, flexed hw-skinned meshes can only have one bone
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
       // The data must exist in the 0th hardware matrix
 
       // Here, we are doing HW skinning, so we need to simply copy over the flex
@@ -2538,7 +2538,7 @@ int CStudioRender::R_StudioDrawEyeball(IMatRenderContext *pRenderContext,
     return 0;
   }
 
-  // FIXME: We could compile a static vertex buffer in this case
+  // TODO(d.rattman): We could compile a static vertex buffer in this case
   // if there's no flexed verts.
   const mstudio_meshvertexdata_t *vertData =
       GetFatVertexData(pmesh, m_pStudioHdr);
@@ -2704,7 +2704,7 @@ int CStudioRender::R_StudioDrawEyeball(IMatRenderContext *pRenderContext,
 
       meshBuilder.TexCoord2fv(0, vert.m_vecTexCoord.Base());
 
-      // FIXME: For now, flexed hw-skinned meshes can only have one bone
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
       // The data must exist in the 0th hardware matrix
       meshBuilder.BoneWeight(0, 1.0f);
       meshBuilder.BoneWeight(1, 0.0f);
@@ -2841,7 +2841,7 @@ int CStudioRender::SortMeshes(int *pIndices, IMaterial **ppMaterials,
       IMaterial *pMaterial = ppMaterials[pskinref[pmesh->material]];
       if (!pMaterial || !pMaterial->IsTranslucent()) continue;
 
-      // FIXME: put the "center" of the mesh into delta
+      // TODO(d.rattman): put the "center" of the mesh into delta
       //			Vector delta;
       //			VectorSubtract( delta, r_origin, delta );
       //			float dist = DotProduct( delta, vforward );
@@ -2912,7 +2912,7 @@ int CStudioRender::R_StudioDrawPoints(IMatRenderContext *pRenderContext,
     pskinref += (skin * m_pStudioHdr->numskinref);
   }
 
-  // FIXME: Activate sorting on a mesh level
+  // TODO(d.rattman): Activate sorting on a mesh level
   //	int* pIndices = (int*)_alloca( m_pSubModel->nummeshes * sizeof(int) );
   //	int numMeshes = SortMeshes( pIndices, ppMaterials, pskinref, vforward,
   // r_origin );
@@ -2936,8 +2936,7 @@ int CStudioRender::R_StudioDrawPoints(IMatRenderContext *pRenderContext,
     if (!pMaterial) continue;
 
 #ifdef _DEBUG
-    char const *materialName = pMaterial->GetName();
-    NOTE_UNUSED(materialName);
+    [[maybe_unused]] char const *materialName = pMaterial->GetName()
 #endif
     // Set up flex data
     m_VertexCache.SetMesh(i);

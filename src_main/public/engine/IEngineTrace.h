@@ -31,7 +31,7 @@ enum TraceType_t {
                                   // unlike all other filters
 };
 
-abstract_class ITraceFilter {
+the_interface ITraceFilter {
  public:
   virtual bool ShouldHitEntity(IHandleEntity * pEntity, int contentsMask) = 0;
   virtual TraceType_t GetTraceType() const = 0;
@@ -81,7 +81,7 @@ class CTraceFilterHitAll : public CTraceFilter {
 //-----------------------------------------------------------------------------
 // Enumeration interface for EnumerateLinkEntities
 //-----------------------------------------------------------------------------
-abstract_class IEntityEnumerator {
+the_interface IEntityEnumerator {
  public:
   // This gets called with each handle
   virtual bool EnumEntity(IHandleEntity * pHandleEntity) = 0;
@@ -92,7 +92,7 @@ abstract_class IEntityEnumerator {
 //-----------------------------------------------------------------------------
 #define INTERFACEVERSION_ENGINETRACE_SERVER "EngineTraceServer003"
 #define INTERFACEVERSION_ENGINETRACE_CLIENT "EngineTraceClient003"
-abstract_class IEngineTrace {
+the_interface IEngineTrace {
  public:
   // Returns the contents mask + entity at a particular world-space position
   virtual int GetPointContents(const Vector &vecAbsPosition,

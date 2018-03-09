@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =====//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Interface for makefiles to build differently depending on where they are run from
 //
@@ -443,7 +443,7 @@ CompilationState_t CDmeMakefileUtils::UpdateCompilation( char *pOutputBuf, int n
 
 	// This is the PERFORMING_COMPILATION case:
 
-	// FIXME: Check return codes from compile process..
+	// TODO(d.rattman): Check return codes from compile process..
 	// fail if compilation process had a problem
 	if ( m_hCompileProcess == PROCESS_HANDLE_INVALID )
 	{
@@ -491,11 +491,11 @@ bool CDmeMakefileUtils::PerformCompilationStep( CDmeMDLMakefile *pMakeFile, Comp
 	if ( step != PERFORMING_COMPILATION )
 		return PerformCompilationStep( static_cast<CDmeMakefile*>( pMakeFile ), step );
 
-	char pBinDirectory[MAX_PATH];
+	char pBinDirectory[SOURCE_MAX_PATH];
 	GetModSubdirectory( "..\\bin", pBinDirectory, sizeof(pBinDirectory) );
 	Q_RemoveDotSlashes( pBinDirectory );
 
-	char pStudioMDLCmd[MAX_PATH];
+	char pStudioMDLCmd[SOURCE_MAX_PATH];
 #ifdef _DEBUG
 	Q_snprintf( pStudioMDLCmd, sizeof(pStudioMDLCmd), "%s\\studiomdl.exe -allowdebug %s", pBinDirectory, pMakeFile->GetFileName() );
 #else
@@ -516,7 +516,7 @@ bool CDmeMakefileUtils::PerformCompilationStep( CDmeMayaMakefile *pMakeFile, Com
 	if ( step != PERFORMING_COMPILATION )
 		return PerformCompilationStep( static_cast<CDmeMakefile*>( pMakeFile ), step );
 
-	// FIXME: Create batch export command here
+	// TODO(d.rattman): Create batch export command here
 	CUtlString mayaCommand;
 	mayaCommand = "vsDmxIO -export";
 
@@ -564,7 +564,7 @@ bool CDmeMakefileUtils::PerformCompilationStep( CDmeMayaMakefile *pMakeFile, Com
 		break;
 	}
 
-	char pFileName[MAX_PATH];
+	char pFileName[SOURCE_MAX_PATH];
 	Q_strncpy( pFileName, pMakeFile->GetFileName(), sizeof( pFileName ) );
 	Q_FixSlashes( pFileName, '/' );
 	mayaCommand += " -filename \\\"";
@@ -578,7 +578,7 @@ bool CDmeMakefileUtils::PerformCompilationStep( CDmeMayaMakefile *pMakeFile, Com
 		mayaCommand += pDmeSourceDCCFile->m_RootDCCObjects[ rootObjectIndex ];
 	}
 
-	char pSourcePath[MAX_PATH];
+	char pSourcePath[SOURCE_MAX_PATH];
 	pMakeFile->GetSourceFullPath( pDmeSourceDCCFile, pSourcePath, sizeof(pSourcePath) );
 
 	// Maya wants forward slashes
@@ -601,7 +601,7 @@ void CDmeMakefileUtils::OpenEditor( CDmeSourceMayaFile *pDmeSourceDCCFile )
 	if ( !pMakefile )
 		return;
 
-	char pSourcePath[MAX_PATH];
+	char pSourcePath[SOURCE_MAX_PATH];
 	pMakefile->GetSourceFullPath( pDmeSourceDCCFile, pSourcePath, sizeof(pSourcePath) );
 
 	// Maya wants forward slashes

@@ -295,7 +295,7 @@ void	AddLump (char *name, void *buffer, int length, int type, int compress)
 	info->type = type;
 	info->compression = compress;
 	
-// FIXME: do compression
+// TODO(d.rattman): do compression
 
 	SafeWrite (outwad, buffer, length);
 }

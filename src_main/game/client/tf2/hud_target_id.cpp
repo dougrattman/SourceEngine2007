@@ -16,7 +16,7 @@
 #include "c_baseobject.h"
 #include "iclientmode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PLAYER_HINT_DISTANCE	150

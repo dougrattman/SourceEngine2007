@@ -12,7 +12,7 @@
 
 #include "cpp_shader_constant_register_map.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #include "sprite_vs20.inc"
@@ -49,7 +49,7 @@ BEGIN_VS_SHADER( Sprite_DX9,
 	}
 	SHADER_INIT_PARAMS()
 	{
-		// FIXME: This can share code with sprite.cpp
+		// TODO(d.rattman): This can share code with sprite.cpp
 		if (!params[ALPHA]->IsDefined())
 		{
 			params[ALPHA]->SetFloatValue( 1.0f );

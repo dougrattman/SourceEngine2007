@@ -51,7 +51,7 @@ VS_OUTPUT main( const VS_INPUT v )
 	light_vec = normalize( light_vec );
 
 	o.projPos       = projPos;
-	// FIXME: if this shader gets put back into use, be sure this usage of normals jives with compressed verts
+	// TODO(d.rattman): if this shader gets put back into use, be sure this usage of normals jives with compressed verts
 	o.texCoord      = v.vNormal.xy;
 	o.color         = lighting;
 

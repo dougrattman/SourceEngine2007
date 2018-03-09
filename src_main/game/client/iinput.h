@@ -27,7 +27,7 @@ struct CameraThirdData_t
 	Vector	m_vecHullMax;
 };
 
-abstract_class IInput
+the_interface IInput
 {
 public:
 	// Initialization/shutdown of the subsystem
@@ -77,7 +77,7 @@ public:
 	virtual void		ResetMouse( void ) = 0;
 	virtual	float		GetLastForwardMove( void ) = 0;
 
-	// Third Person camera ( TODO/FIXME:  Move this to a separate interface? )
+	// Third Person camera ( TODO/TODO(d.rattman):  Move this to a separate interface? )
 	virtual void		CAM_Think( void ) = 0;
 	virtual int CAM_IsThirdPerson( void ) = 0;
 	virtual void		CAM_GetCameraOffset( Vector& ofs ) = 0;
@@ -89,7 +89,7 @@ public:
 	virtual void		CAM_EndDistance(void) = 0;
 	virtual int CAM_InterceptingMouse( void ) = 0;
 
-	// orthographic camera info	( TODO/FIXME:  Move this to a separate interface? )
+	// orthographic camera info	( TODO/TODO(d.rattman):  Move this to a separate interface? )
 	virtual void		CAM_ToOrthographic() = 0;
 	virtual	bool		CAM_IsOrthographic() const = 0;
 	virtual	void		CAM_OrthographicSize( float& w, float& h ) const = 0;

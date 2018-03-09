@@ -221,7 +221,7 @@ bool CBaseTFVehicle::IsPlayerInVehicle( CBaseTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 int CBaseTFVehicle::GetPassengerCount() const
 {
-	// FIXME: Cache this off!
+	// TODO(d.rattman): Cache this off!
 	int nCount = 0;
 	for (int i = m_nMaxPassengers; --i >= 0; )
 	{
@@ -720,7 +720,7 @@ void CBaseTFVehicle::GetPassengerExitPoint( CBasePlayer *pPlayer, int nRole, Vec
 //-----------------------------------------------------------------------------
 bool CBaseTFVehicle::GetPassengerExitPoint( int nRole, Vector *pAbsPosition, QAngle *pAbsAngles )
 {
-	// FIXME: Clean this up
+	// TODO(d.rattman): Clean this up
 	CBasePlayer *pPlayer = GetPassenger(nRole);
 	GetPassengerExitPoint( pPlayer, nRole, pAbsPosition, pAbsAngles );
 	return true;
@@ -832,7 +832,7 @@ int CBaseTFVehicle::LocateEntryPoint( CBaseTFPlayer *pPlayer, float* fBest2dDist
 		if ( bOccupied && !bOwner )
 			continue;
 	
-		// FIXME: Cache off the entry point
+		// TODO(d.rattman): Cache off the entry point
 		Q_snprintf( szPassengerEyes, sizeof( szPassengerEyes ), "vehicle_feet_passenger%d", iEntryPoint );
 		int nAttachmentIndex = LookupAttachment( szPassengerEyes );
 

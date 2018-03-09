@@ -497,16 +497,16 @@ class CPrimList;
 //-----------------------------------------------------------------------------
 
 #define Unsupported(funcName) \
-  ExecuteOnce(Msg("CMatQueuedRenderContext: %s is unsupported\n", #funcName))
+  Msg("CMatQueuedRenderContext: %s is unsupported\n", #funcName)
 #define FATAL_QUEUE 1
 
 #ifdef FATAL_QUEUE
 #define CannotSupport()                                           \
-  ExecuteOnce(Msg("Called function that cannot be supported\n")); \
-  ExecuteOnce(DebuggerBreakIfDebugging())
+  Msg("Called function that cannot be supported\n"); \
+  DebuggerBreakIfDebugging()
 #else
 #define CannotSupport() \
-  ExecuteOnce(Msg("Called function that cannot be supported\n"))
+  Msg("Called function that cannot be supported\n")
 #endif
 
 //-----------------------------------------------------------------------------
@@ -914,13 +914,13 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
                        m_pHardwareContext);
   virtual void AccumulateMorph(IMorph *pMorph, int nMorphCount,
                                const MorphWeight_t *pWeights) {
-    // FIXME: Must copy off the morph weights here. Not sure the pattern for
+    // TODO(d.rattman): Must copy off the morph weights here. Not sure the pattern for
     // this.
     Assert(0);
   }
   virtual bool GetMorphAccumulatorTexCoord(Vector2D *pTexCoord, IMorph *pIMorph,
                                            int nVertex) {
-    // FIXME: We must assign morph ids in the queued mode
+    // TODO(d.rattman): We must assign morph ids in the queued mode
     // and pass the ids down to the morph mgr to get the texcoord
     Assert(0);
     pTexCoord->Init();
@@ -978,7 +978,7 @@ class CMatQueuedRenderContext : public CMatRenderContextBase {
   // Color correction related methods..
   // Client cannot call IColorCorrectionSystem directly because it is not
   // thread-safe
-  // FIXME: Make IColorCorrectionSystem threadsafe?
+  // TODO(d.rattman): Make IColorCorrectionSystem threadsafe?
   virtual ColorCorrectionHandle_t AddLookup(const char *pName);
   virtual void LockLookup(ColorCorrectionHandle_t handle);
   virtual void LoadLookup(ColorCorrectionHandle_t handle,

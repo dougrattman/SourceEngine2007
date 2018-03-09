@@ -19,7 +19,7 @@
 #include "tier1/keyvalues.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define CLOSE_AREAPORTAL_THINK_CONTEXT "CloseAreaportalThink"
@@ -395,7 +395,7 @@ bool CBaseDoor::CreateVPhysics() {
     fluid.viscosityFactor = 0.01f;
     fluid.pGameData = static_cast<void *>(this);
 
-    // FIXME: Currently there's no way to specify that you want slime
+    // TODO(d.rattman): Currently there's no way to specify that you want slime
     fluid.contents = CONTENTS_WATER;
 
     physenv->CreateFluidController(pPhysics, &fluid);
@@ -413,7 +413,7 @@ void CBaseDoor::Activate(void) {
   m_bDoorGroup = true;
 
   // force movement groups to sync!!!
-  int doorCount = GetDoorMovementGroup(pDoorList, ARRAYSIZE(pDoorList));
+  int doorCount = GetDoorMovementGroup(pDoorList, SOURCE_ARRAYSIZE(pDoorList));
   for (int i = 0; i < doorCount; i++) {
     if (pDoorList[i]->m_vecMoveDir == m_vecMoveDir) {
       bool error = false;
@@ -1103,7 +1103,7 @@ void CBaseDoor::Blocked(CBaseEntity *pOther) {
   // Block all door pieces with the same targetname here.
   if (GetEntityName() != NULL_STRING) {
     CBaseDoor *pDoorList[64];
-    int doorCount = GetDoorMovementGroup(pDoorList, ARRAYSIZE(pDoorList));
+    int doorCount = GetDoorMovementGroup(pDoorList, SOURCE_ARRAYSIZE(pDoorList));
 
     for (int i = 0; i < doorCount; i++) {
       CBaseDoor *pDoor = pDoorList[i];

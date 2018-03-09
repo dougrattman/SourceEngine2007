@@ -23,7 +23,7 @@
 #include <VGuiMatSurface/IMatSystemSurface.h>
 #include "camera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -446,7 +446,7 @@ void Box3D::GetStatusString(char *pszBuf)
 //-----------------------------------------------------------------------------
 void Box3D::UpdateStatusBar()
 {
-	char szBuf[MAX_PATH];
+	char szBuf[SOURCE_MAX_PATH];
 	GetStatusString(szBuf);
 	SetStatusText(SBI_SIZE, szBuf);
 }

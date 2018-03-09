@@ -7,7 +7,7 @@
 
 static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
                                   MAGIC_NUMBER};
-static ALIGN16 int32_t Four_255s[4] = {0xff, 0xff, 0xff, 0xff};
+static alignas(16) int32_t Four_255s[4] = {0xff, 0xff, 0xff, 0xff};
 #define PIXMASK (*(reinterpret_cast<fltx4 *>(&Four_255s)))
 
 void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
@@ -32,9 +32,9 @@ void MapLinearIntensities(FourVectors const &intens, uint32_t *p1, uint32_t *p2,
   *(p4) = (SubInt(r, 3)) | (SubInt(g, 3) << 8) | (SubInt(b, 3) << 16);
 }
 
-static ALIGN16 int32_t signmask[4] = {0x80000000i32, 0x80000000i32,
+static alignas(16) int32_t signmask[4] = {0x80000000i32, 0x80000000i32,
                                       0x80000000i32, 0x80000000i32};
-static ALIGN16 int32_t all_ones[4] = {-1, -1, -1, -1};
+static alignas(16) int32_t all_ones[4] = {-1, -1, -1, -1};
 static fltx4 all_zeros = {0, 0, 0, 0};
 static fltx4 TraceLimit = {1.0e20, 1.0e20, 1.0e20, 1.0e20};
 

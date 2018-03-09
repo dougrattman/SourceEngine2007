@@ -26,7 +26,7 @@
 #include "cl_animevent.h"
 #include "eventlist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // forward declarations
@@ -442,7 +442,7 @@ void C_BaseObject::HighlightBuildPoints( int flags )
 					frac = cos( frac );
 					render->SetBlend( (175 + (int)( frac * 75.0f )) / 255.0 );
 
-					// FIXME: This truly sucks! The bone cache should use
+					// TODO(d.rattman): This truly sucks! The bone cache should use
 					// render location for this computation instead of directly accessing AbsAngles
 					// Necessary for bone cache computations to work
 					pPlacementObj->SetAbsOrigin( vecBPOrigin );

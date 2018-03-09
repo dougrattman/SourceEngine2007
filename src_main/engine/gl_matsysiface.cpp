@@ -35,7 +35,7 @@ extern ConVar developer;
 #include <crtdbg.h>
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef SWDS
@@ -241,7 +241,7 @@ static void RegisterUnlightmappedSurface(SurfaceHandle_t surfID) {
 
 static bool LightmapLess(const SurfaceHandle_t &surfID1,
                          const SurfaceHandle_t &surfID2) {
-  // FIXME: This really should be in the material system,
+  // TODO(d.rattman): This really should be in the material system,
   // as it completely depends on the behavior of the lightmap packer
   bool hasLightmap1 = (MSurf_Flags(surfID1) & SURFDRAW_NOLIGHT) == 0;
   bool hasLightmap2 = (MSurf_Flags(surfID2) & SURFDRAW_NOLIGHT) == 0;
@@ -615,7 +615,7 @@ void BuildMSurfacePrimVerts(worldbrushdata_t *pBrushData, mprimitive_t *prim,
                             CMeshBuilder &builder, SurfaceHandle_t surfID) {
   Vector tVect;
   bool negate = false;
-  // FIXME: For some reason, normals are screwed up on water surfaces.  Revisit
+  // TODO(d.rattman): For some reason, normals are screwed up on water surfaces.  Revisit
   // this once we have normals started in primverts.
   if (MSurf_Flags(surfID) & SURFDRAW_TANGENTSPACE) {
     negate = TangentSpaceSurfaceSetup(surfID, tVect);
@@ -810,7 +810,7 @@ void CMSurfaceSortList::AddSurfaceToTail(msurface2_t *pSurface, int sortGroup,
   if (pGroup->listTail != m_list.InvalidIndex()) {
     // existing block
     pList = &m_list[pGroup->listTail];
-    if (pList->count >= ARRAYSIZE(pList->pSurfaces)) {
+    if (pList->count >= SOURCE_ARRAYSIZE(pList->pSurfaces)) {
       prevIndex = pGroup->listTail;
       // no space in existing block
       pList = NULL;

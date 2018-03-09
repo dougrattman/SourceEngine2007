@@ -54,7 +54,7 @@ struct FFBaseParams_t
 	bool			m_bSolo;		// Temporarily suppress all other FF effects while playing
 };
 
-abstract_class IForceFeedback
+the_interface IForceFeedback
 {
 public:
 	// API

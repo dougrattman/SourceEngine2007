@@ -950,7 +950,7 @@ void InitializeAddonModelFromWeapon( CWeaponCSBase *weapon, C_BreakableProp *add
 
 void C_CSPlayer::CreateAddonModel( int i )
 {
-	COMPILE_TIME_ASSERT( (sizeof( g_AddonInfo ) / sizeof( g_AddonInfo[0] )) == NUM_ADDON_BITS );
+	static_assert( (sizeof( g_AddonInfo ) / sizeof( g_AddonInfo[0] )) == NUM_ADDON_BITS );
 
 	// Create the model entity.
 	CAddonInfo *pAddonInfo = &g_AddonInfo[i];
@@ -1483,7 +1483,7 @@ void C_CSPlayer::SetFireAnimation( PLAYER_ANIM playerAnim )
 		idealActivity = ACT_DIESIMPLE;
 		break;
 
-	// FIXME:  Use overlays for reload, start/leave aiming, attacking
+	// TODO(d.rattman):  Use overlays for reload, start/leave aiming, attacking
 	case PLAYER_START_AIMING:
 	case PLAYER_LEAVE_AIMING:
 		idealActivity = ACT_WALK;

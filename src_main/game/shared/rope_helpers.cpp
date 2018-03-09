@@ -13,7 +13,7 @@
 #include "rope_physics.h"
 #include "networkvar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CHangRope : public CRopePhysics<512>

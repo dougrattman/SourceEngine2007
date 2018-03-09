@@ -22,7 +22,7 @@
 #include "ai_navigator.h"
 #include "ai_memory.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -123,8 +123,8 @@ bool CAI_MoveAndShootOverlay::CanAimAtEnemy()
 
 void CAI_MoveAndShootOverlay::UpdateMoveShootActivity( bool bMoveAimAtEnemy )
 {
-	// FIXME: should be able to query that transition/state is happening
-	// FIXME: needs to not try to shoot if the movement type isn't understood
+	// TODO(d.rattman): should be able to query that transition/state is happening
+	// TODO(d.rattman): needs to not try to shoot if the movement type isn't understood
 	Activity curActivity = GetOuter()->GetNavigator()->GetMovementActivity();
 	Activity newActivity = curActivity;
 
@@ -246,7 +246,7 @@ void CAI_MoveAndShootOverlay::RunShootWhileMove()
 
 					pOuter->RestartGesture( activity );
 
-					// FIXME: this seems a bit wacked
+					// TODO(d.rattman): this seems a bit wacked
 					pOuter->Weapon_SetActivity( pOuter->Weapon_TranslateActivity( ACT_RANGE_ATTACK1 ), 0 );
 				}
 			}

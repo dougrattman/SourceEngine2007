@@ -19,7 +19,7 @@
 #include "shattersurfacetypes.h"
 #include "te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Spawn flags

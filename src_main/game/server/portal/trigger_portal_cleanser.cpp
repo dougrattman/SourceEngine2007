@@ -18,7 +18,7 @@
 #include "model_types.h"
 #include "rumble_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static char *g_pszPortalNonCleansable[] = 

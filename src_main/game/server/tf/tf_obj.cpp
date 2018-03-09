@@ -40,7 +40,7 @@
 #include "particle_parse.h"
 #include "tf_fx.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Control panels
@@ -332,7 +332,7 @@ void CBaseObject::SpawnControlPanels()
 {
 	char buf[64];
 
-	// FIXME: Deal with dynamically resizing control panels?
+	// TODO(d.rattman): Deal with dynamically resizing control panels?
 
 	// If we're attached to an entity, spawn control panels on it instead of use
 	CBaseAnimating *pEntityToSpawnOn = this;
@@ -1063,7 +1063,7 @@ bool CBaseObject::StartBuilding( CBaseEntity *pBuilder )
 	Vector vecMins = m_vecBuildOrigin + m_vecBuildMins;
 	Vector vecMaxs = m_vecBuildOrigin + m_vecBuildMaxs;
 
-	int count = UTIL_EntitiesInBox( pList, ARRAYSIZE(pList), vecMins, vecMaxs, 0 );
+	int count = UTIL_EntitiesInBox( pList, SOURCE_ARRAYSIZE(pList), vecMins, vecMaxs, 0 );
 	for ( int i = 0; i < count; i++ )
 	{
 		if ( pList[i] == this )

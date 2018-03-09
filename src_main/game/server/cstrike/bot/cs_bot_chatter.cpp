@@ -19,7 +19,7 @@
 #include "cs_bot.h"
 #include "cs_bot_chatter.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -755,7 +755,7 @@ bool BotPhraseManager::Initialize( const char *filename, int bankIndex )
 				}
 				speak->m_place = placeCriteria;
 				speak->m_count = countCriteria;
-#ifdef _LINUX
+#ifdef OS_POSIX
 				Q_FixSlashes( speak->m_phrase );
 				Q_strlower( speak->m_phrase );
 #endif

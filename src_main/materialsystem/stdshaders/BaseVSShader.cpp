@@ -41,7 +41,7 @@
 #include "unlitgeneric_vs11.inc"
 #include "vertexlitgeneric_flashlight_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar mat_fullbright("mat_fullbright", "0", FCVAR_CHEAT);
@@ -1125,7 +1125,7 @@ void CBaseVSShader::DrawWorldBumpedSpecularLighting(
       s_pShaderShadow->EnableBlending(true);
       s_pShaderShadow->BlendFunc(SHADER_BLEND_SRC_ALPHA, SHADER_BLEND_ONE);
     }
-    // FIXME: Remove the normal (needed for tangent space gen)
+    // TODO(d.rattman): Remove the normal (needed for tangent space gen)
     s_pShaderShadow->VertexShaderVertexFormat(
         VERTEX_POSITION | VERTEX_NORMAL | VERTEX_TANGENT_S | VERTEX_TANGENT_T,
         1, 0, 0);
@@ -1307,7 +1307,7 @@ void CBaseVSShader::DrawBaseTextureBlend(
     s_pShaderShadow->EnableTexture(SHADER_SAMPLER2, true);
     s_pShaderShadow->DrawFlags(SHADER_DRAW_POSITION | SHADER_DRAW_TEXCOORD0 |
                                SHADER_DRAW_LIGHTMAP_TEXCOORD1);
-    // FIXME: Remove the normal (needed for tangent space gen)
+    // TODO(d.rattman): Remove the normal (needed for tangent space gen)
     s_pShaderShadow->VertexShaderVertexFormat(VERTEX_POSITION, 2, 0, 0);
 
     lightmappedgeneric_basetextureblend_Static_Index vshIndex;

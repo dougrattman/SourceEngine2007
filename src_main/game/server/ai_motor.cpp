@@ -15,7 +15,7 @@
 #include "ai_navigator.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef DEBUG
@@ -276,7 +276,7 @@ AIMoveResult_t CAI_Motor::MoveClimbExecute(const Vector &climbDest,
     // goal
     climbSpeed = std::max(climbSpeed, 30.0f);
   } else {
-    // FIXME: assume if they don't have a dismount animation then they probably
+    // TODO(d.rattman): assume if they don't have a dismount animation then they probably
     // don't really support climbing.
     climbSpeed = 100.0;
   }
@@ -358,7 +358,7 @@ AIMoveResult_t CAI_Motor::MoveJumpStop() {
       return AIMR_CHANGE_TYPE;
 
     SetActivity(ACT_LAND);
-    // FIXME: find out why the client doesn't interpolate immediatly after
+    // TODO(d.rattman): find out why the client doesn't interpolate immediatly after
     // sequence change GetOuter()->SetCycle( flTime - gpGlobals->curtime );
   }
   if (GetOuter()->GetActivity() != ACT_LAND ||
@@ -383,7 +383,7 @@ float CAI_Motor::GetIdealAccel() const { return GetOuter()->GetIdealAccel(); }
 
 // how far will I go?
 float CAI_Motor::MinStoppingDist(float flMinResult) {
-  // FIXME: should this be a constant rate or a constant time like it is now?
+  // TODO(d.rattman): should this be a constant rate or a constant time like it is now?
   float flDecelRate = GetIdealAccel();
 
   if (flDecelRate > 0.0) {
@@ -403,7 +403,7 @@ float CAI_Motor::MinStoppingDist(float flMinResult) {
 // Purpose: how fast should I be going ideally
 //-----------------------------------------------------------------------------
 float CAI_Motor::IdealVelocity(void) {
-  // FIXME: this should be a per-entity setting so run speeds are not based on
+  // TODO(d.rattman): this should be a per-entity setting so run speeds are not based on
   // animation speeds
   return GetIdealSpeed() * GetPlaybackRate();
 }
@@ -576,7 +576,7 @@ void CAI_Motor::MoveFacing(const AILocalMoveGoal_t &move) {
   if (!HasPoseParameter(nSequence, GetOuter()->LookupPoseMoveYaw())) {
     SetIdealYawAndUpdate(UTIL_AngleMod(flMoveYaw - fSequenceMoveYaw));
   } else {
-    // FIXME: move this up to navigator so that path goals can ignore these
+    // TODO(d.rattman): move this up to navigator so that path goals can ignore these
     // overrides.
     Vector dir;
     float flInfluence = GetFacingDirection(dir);
@@ -586,7 +586,7 @@ void CAI_Motor::MoveFacing(const AILocalMoveGoal_t &move) {
     // ideal facing direction
     float idealYaw = UTIL_AngleMod(UTIL_VecToYaw(dir));
 
-    // FIXME: facing has important max velocity issues
+    // TODO(d.rattman): facing has important max velocity issues
     SetIdealYawAndUpdate(idealYaw);
 
     // find movement direction to compensate for not being turned far enough
@@ -669,7 +669,7 @@ void CAI_Motor::UpdateYaw(int yawSpeed) {
   current = UTIL_AngleMod(GetLocalAngles().y);
   ideal = UTIL_AngleMod(GetIdealYaw());
 
-  // FIXME: this needs a proper interval
+  // TODO(d.rattman): this needs a proper interval
   float dt = std::min(0.2f, gpGlobals->curtime - GetLastThink());
 
   newYaw = AI_ClampYaw((float)yawSpeed * 10.0, current, ideal, dt);
@@ -800,8 +800,8 @@ AIMoveResult_t CAI_Motor::MoveNormalExecute(const AILocalMoveGoal_t &move) {
       AIMR_BLOCKED_WORLD,  // AIM_PARTIAL_HIT_WORLD
       AIMR_BLOCKED_WORLD,  // AIM_PARTIAL_HIT_TARGET
   };
-  Assert(ARRAYSIZE(moveResults) == AIM_NUM_RESULTS && fMotorResult >= 0 &&
-         fMotorResult <= ARRAYSIZE(moveResults));
+  Assert(SOURCE_ARRAYSIZE(moveResults) == AIM_NUM_RESULTS && fMotorResult >= 0 &&
+         fMotorResult <= SOURCE_ARRAYSIZE(moveResults));
 
   AIMoveResult_t result = moveResults[fMotorResult];
 

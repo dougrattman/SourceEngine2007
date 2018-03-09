@@ -1,16 +1,15 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_INCLUDE_DBG_H_
 #define SOURCE_TIER0_INCLUDE_DBG_H_
 
-#include <cstdarg>
-#include <cstdio>
+#include <cstdarg>  // va_list
+#include <cstdio>   // _vsnprintf_s
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
-#include "tier0/include/basetypes.h"
+#include "base/include/macros.h"  // SOURCE_ARRAYSIZE
 #include "tier0/include/dbgflag.h"
-#include "tier0/include/platform.h"
 #include "tier0/include/tier0_api.h"
 
 // Usage model for the Dbg library
@@ -154,40 +153,86 @@ SOURCE_TIER0_API void SpewActivate(const ch *group_name, i32 level);
 SOURCE_TIER0_API bool IsSpewActive(const ch *group_name, i32 level);
 
 // Used to display messages, should never be called directly.
-SOURCE_TIER0_API void _SpewInfo(SpewType_t spew_type, const ch *file, i32 line);
-SOURCE_TIER0_API SpewRetval_t _SpewMessage(const ch *format, ...);
-SOURCE_TIER0_API SpewRetval_t _DSpewMessage(const ch *group_name, i32 level, const ch *format, ...);
+SOURCE_TIER0_API[[deprecated(
+    "Use SpewInfo_. This violates SEI CERT C++ Coding Standard rule 'Do not declare or define a "
+    "reserved identifier'")]] void
+_SpewInfo(SpewType_t spew_type, const ch *file, i32 line);
+SOURCE_TIER0_API void SpewInfo_(SpewType_t spew_type, const ch *file, i32 line);
+SOURCE_TIER0_API[[deprecated(
+    "Use SpewMessage_. This violates SEI CERT C++ Coding Standard rule 'Do not declare or define a "
+    "reserved identifier'")]] SpewRetval_t
+_SpewMessage(const ch *format, ...);
+SOURCE_TIER0_API SpewRetval_t SpewMessage_(const ch *format, ...);
+SOURCE_TIER0_API[
+    [deprecated("Use DSpewMessage_. This violates SEI CERT C++ Coding Standard rule 'Do not "
+                "declare or define a "
+                "reserved identifier'")]] SpewRetval_t
+_DSpewMessage(const ch *group_name, i32 level, const ch *format, ...);
+SOURCE_TIER0_API SpewRetval_t DSpewMessage_(const ch *group_name, i32 level, const ch *format, ...);
 SOURCE_TIER0_API SpewRetval_t ColorSpewMessage(SpewType_t spew_type, const Color *pColor,
                                                const ch *format, ...);
-SOURCE_TIER0_API void _ExitOnFatalAssert(const ch *file, i32 line);
+SOURCE_TIER0_API[
+    [deprecated("Use ExitOnFatalAssert_. This violates SEI CERT C++ Coding Standard rule 'Do not "
+                "declare or define a "
+                "reserved identifier'")]] void
+_ExitOnFatalAssert(const ch *file, i32 line);
+SOURCE_TIER0_API void ExitOnFatalAssert_(const ch *file, i32 line);
 SOURCE_TIER0_API bool ShouldUseNewAssertDialog();
 
+#ifdef OS_WIN
+// Attach a console to a Win32 GUI process and setup stdin, stdout & stderr
+// along with the std::iostream (cout, cin, cerr) equivalents to read and
+// write to and from that console
+//
+// 1. Ensure the handle associated with stdio is FILE_TYPE_UNKNOWN
+//    if it's anything else just return false.  This supports cygwin
+//    style command shells like rxvt which setup pipes to processes
+//    they spawn
+//
+// 2. See if the Win32 function call AttachConsole exists in kernel32
+//    It's a Windows 2000 and above call.  If it does, call it and see
+//    if it succeeds in attaching to the console of the parent process.
+//    If that succeeds, return false (for no new console allocated).
+//    This supports someone typing the command from a normal windows
+//    command window and having the output go to the parent window.
+//    It's a little funny because a GUI app detaches so the command
+//    prompt gets intermingled with output from this process
+//
+// 3. If thigns get to here call AllocConsole which will pop open
+//    a new window and allow output to go to that window.  The
+//    window will disappear when the process exists so if it's used
+//    for something like a help message then do something like getchar()
+//    from stdin to wait for a keypress.  if AllocConsole is called
+//    true is returned.
+//
+// Return: true if AllocConsole() was used to pop open a new windows console
 SOURCE_TIER0_API bool SetupWin32ConsoleIO();
+#endif  // OS_WIN
 
 // Returns true if they want to break in the debugger.
 SOURCE_TIER0_API bool DoNewAssertDialog(const ch *file, i32 line, const ch *expression);
 
 // Used to define macros, never use these directly.
-#define _AssertMsg(_exp, _msg, _executeExp, _bFatal)                                    \
+#define SOURCE_ASSERT_MESSAGE_(exp_, msg_, executeExp_, bFatal_)                        \
   do {                                                                                  \
-    if (!(_exp)) {                                                                      \
-      _SpewInfo(SPEW_ASSERT, __FILE__, __LINE__);                                       \
-      SpewRetval_t spew = _SpewMessage("%s", _msg);                                     \
-      _executeExp;                                                                      \
+    if (!(exp_)) {                                                                      \
+      SpewInfo_(SPEW_ASSERT, __FILE__, __LINE__);                                       \
+      SpewRetval_t spew = SpewMessage_("%s", msg_);                                     \
+      executeExp_;                                                                      \
       if (spew == SPEW_DEBUGGER) {                                                      \
-        if (!ShouldUseNewAssertDialog() || DoNewAssertDialog(__FILE__, __LINE__, _msg)) \
+        if (!ShouldUseNewAssertDialog() || DoNewAssertDialog(__FILE__, __LINE__, msg_)) \
           DebuggerBreak();                                                              \
-        if (_bFatal) _ExitOnFatalAssert(__FILE__, __LINE__);                            \
+        if (bFatal_) ExitOnFatalAssert_(__FILE__, __LINE__);                            \
       }                                                                                 \
     }                                                                                   \
   } while (0)
 
-#define _AssertMsgOnce(_exp, _msg, _bFatal)                \
-  do {                                                     \
-    static bool fAsserted;                                 \
-    if (!fAsserted) {                                      \
-      _AssertMsg(_exp, _msg, (fAsserted = true), _bFatal); \
-    }                                                      \
+#define SOURCE_ASSERT_MESSAGE_ONCE_(exp_, msg_, bFatal_)               \
+  do {                                                                 \
+    static bool fAsserted;                                             \
+    if (!fAsserted) {                                                  \
+      SOURCE_ASSERT_MESSAGE_(exp_, msg_, (fAsserted = true), bFatal_); \
+    }                                                                  \
   } while (0)
 
 // Spew macros...
@@ -199,61 +244,61 @@ SOURCE_TIER0_API bool DoNewAssertDialog(const ch *file, i32 line, const ch *expr
 
 #ifdef DBGFLAG_ASSERTFATAL
 
-#define AssertFatal(_exp) _AssertMsg(_exp, "Assertion Failed: " #_exp, ((void)0), true)
-#define AssertFatalOnce(_exp) _AssertMsgOnce(_exp, "Assertion Failed: " #_exp, true)
-#define AssertFatalMsg(_exp, _msg) _AssertMsg(_exp, _msg, ((void)0), true)
-#define AssertFatalMsgOnce(_exp, _msg) _AssertMsgOnce(_exp, _msg, true)
-#define AssertFatalFunc(_exp, _f) _AssertMsg(_exp, "Assertion Failed: " #_exp, _f, true)
-#define AssertFatalEquals(_exp, _expectedValue) \
-  AssertFatalMsg2((_exp) == (_expectedValue), "Expected %d but got %d!", (_expectedValue), (_exp))
-#define AssertFatalFloatEquals(_exp, _expectedValue, _tol)                              \
-  AssertFatalMsg2(fabs((_exp) - (_expectedValue)) <= (_tol), "Expected %f but got %f!", \
-                  (_expectedValue), (_exp))
-#define VerifyFatal(_exp) AssertFatal(_exp)
-#define VerifyEqualsFatal(_exp, _expectedValue) AssertFatalEquals(_exp, _expectedValue)
+#define AssertFatal(exp_) SOURCE_ASSERT_MESSAGE_(exp_, "Assertion Failed: " #exp_, ((void)0), true)
+#define AssertFatalOnce(exp_) SOURCE_ASSERT_MESSAGE_ONCE_(exp_, "Assertion Failed: " #exp_, true)
+#define AssertFatalMsg(exp_, msg_) SOURCE_ASSERT_MESSAGE_(exp_, msg_, ((void)0), true)
+#define AssertFatalMsgOnce(exp_, msg_) SOURCE_ASSERT_MESSAGE_ONCE_(exp_, msg_, true)
+#define AssertFatalFunc(exp_, f_) SOURCE_ASSERT_MESSAGE_(exp_, "Assertion Failed: " #exp_, f_, true)
+#define AssertFatalEquals(exp_, _expectedValue) \
+  AssertFatalMsg2((exp_) == (_expectedValue), "Expected %d but got %d!", (_expectedValue), (exp_))
+#define AssertFatalFloatEquals(exp_, _expectedValue, _tol)                              \
+  AssertFatalMsg2(fabs((exp_) - (_expectedValue)) <= (_tol), "Expected %f but got %f!", \
+                  (_expectedValue), (exp_))
+#define VerifyFatal(exp_) AssertFatal(exp_)
+#define VerifyEqualsFatal(exp_, _expectedValue) AssertFatalEquals(exp_, _expectedValue)
 
-#define AssertFatalMsg1(_exp, _msg, a1) AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1)))
-#define AssertFatalMsg2(_exp, _msg, a1, a2) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2)))
-#define AssertFatalMsg3(_exp, _msg, a1, a2, a3) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3)))
-#define AssertFatalMsg4(_exp, _msg, a1, a2, a3, a4) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4)))
-#define AssertFatalMsg5(_exp, _msg, a1, a2, a3, a4, a5) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5)))
-#define AssertFatalMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6)))
-#define AssertFatalMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6)))
-#define AssertFatalMsg7(_exp, _msg, a1, a2, a3, a4, a5, a6, a7) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7)))
-#define AssertFatalMsg8(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7, a8)))
-#define AssertFatalMsg9(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8, a9) \
-  AssertFatalMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7, a8, a9)))
+#define AssertFatalMsg1(exp_, msg_, a1) AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1)))
+#define AssertFatalMsg2(exp_, msg_, a1, a2) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2)))
+#define AssertFatalMsg3(exp_, msg_, a1, a2, a3) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3)))
+#define AssertFatalMsg4(exp_, msg_, a1, a2, a3, a4) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4)))
+#define AssertFatalMsg5(exp_, msg_, a1, a2, a3, a4, a5) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5)))
+#define AssertFatalMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6)))
+#define AssertFatalMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6)))
+#define AssertFatalMsg7(exp_, msg_, a1, a2, a3, a4, a5, a6, a7) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7)))
+#define AssertFatalMsg8(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7, a8)))
+#define AssertFatalMsg9(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9) \
+  AssertFatalMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9)))
 
 #else  // DBGFLAG_ASSERTFATAL
 
-#define AssertFatal(_exp) ((void)0)
-#define AssertFatalOnce(_exp) ((void)0)
-#define AssertFatalMsg(_exp, _msg) ((void)0)
-#define AssertFatalMsgOnce(_exp, _msg) ((void)0)
-#define AssertFatalFunc(_exp, _f) ((void)0)
-#define AssertFatalEquals(_exp, _expectedValue) ((void)0)
-#define AssertFatalFloatEquals(_exp, _expectedValue, _tol) ((void)0)
-#define VerifyFatal(_exp) (_exp)
-#define VerifyEqualsFatal(_exp, _expectedValue) (_exp)
+#define AssertFatal(exp_) ((void)0)
+#define AssertFatalOnce(exp_) ((void)0)
+#define AssertFatalMsg(exp_, msg_) ((void)0)
+#define AssertFatalMsgOnce(exp_, msg_) ((void)0)
+#define AssertFatalFunc(exp_, f_) ((void)0)
+#define AssertFatalEquals(exp_, _expectedValue) ((void)0)
+#define AssertFatalFloatEquals(exp_, _expectedValue, _tol) ((void)0)
+#define VerifyFatal(exp_) (exp_)
+#define VerifyEqualsFatal(exp_, _expectedValue) (exp_)
 
-#define AssertFatalMsg1(_exp, _msg, a1) ((void)0)
-#define AssertFatalMsg2(_exp, _msg, a1, a2) ((void)0)
-#define AssertFatalMsg3(_exp, _msg, a1, a2, a3) ((void)0)
-#define AssertFatalMsg4(_exp, _msg, a1, a2, a3, a4) ((void)0)
-#define AssertFatalMsg5(_exp, _msg, a1, a2, a3, a4, a5) ((void)0)
-#define AssertFatalMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) ((void)0)
-#define AssertFatalMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) ((void)0)
-#define AssertFatalMsg7(_exp, _msg, a1, a2, a3, a4, a5, a6, a7) ((void)0)
-#define AssertFatalMsg8(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8) ((void)0)
-#define AssertFatalMsg9(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8, a9) ((void)0)
+#define AssertFatalMsg1(exp_, msg_, a1) ((void)0)
+#define AssertFatalMsg2(exp_, msg_, a1, a2) ((void)0)
+#define AssertFatalMsg3(exp_, msg_, a1, a2, a3) ((void)0)
+#define AssertFatalMsg4(exp_, msg_, a1, a2, a3, a4) ((void)0)
+#define AssertFatalMsg5(exp_, msg_, a1, a2, a3, a4, a5) ((void)0)
+#define AssertFatalMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) ((void)0)
+#define AssertFatalMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) ((void)0)
+#define AssertFatalMsg7(exp_, msg_, a1, a2, a3, a4, a5, a6, a7) ((void)0)
+#define AssertFatalMsg8(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8) ((void)0)
+#define AssertFatalMsg9(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9) ((void)0)
 
 #endif  // DBGFLAG_ASSERTFATAL
 
@@ -263,58 +308,58 @@ SOURCE_TIER0_API bool DoNewAssertDialog(const ch *file, i32 line, const ch *expr
 
 #ifdef DBGFLAG_ASSERT
 
-#define Assert(_exp) _AssertMsg(_exp, "Assertion Failed: " #_exp, ((void)0), false)
-#define AssertMsg(_exp, _msg) _AssertMsg(_exp, _msg, ((void)0), false)
-#define AssertOnce(_exp) _AssertMsgOnce(_exp, "Assertion Failed: " #_exp, false)
-#define AssertMsgOnce(_exp, _msg) _AssertMsgOnce(_exp, _msg, false)
-#define AssertFunc(_exp, _f) _AssertMsg(_exp, "Assertion Failed: " #_exp, _f, false)
-#define AssertEquals(_exp, _expectedValue) \
-  AssertMsg2((_exp) == (_expectedValue), "Expected %d but got %d!", (_expectedValue), (_exp))
-#define AssertFloatEquals(_exp, _expectedValue, _tol)                              \
-  AssertMsg2(fabs((_exp) - (_expectedValue)) <= (_tol), "Expected %f but got %f!", \
-             (_expectedValue), (_exp))
-#define Verify(_exp) Assert(_exp)
-#define VerifyEquals(_exp, _expectedValue) AssertEquals(_exp, _expectedValue)
+#define Assert(exp_) SOURCE_ASSERT_MESSAGE_(exp_, "Assertion Failed: " #exp_, ((void)0), false)
+#define AssertMsg(exp_, msg_) SOURCE_ASSERT_MESSAGE_(exp_, msg_, ((void)0), false)
+#define AssertOnce(exp_) SOURCE_ASSERT_MESSAGE_ONCE_(exp_, "Assertion Failed: " #exp_, false)
+#define AssertMsgOnce(exp_, msg_) SOURCE_ASSERT_MESSAGE_ONCE_(exp_, msg_, false)
+#define AssertFunc(exp_, f_) SOURCE_ASSERT_MESSAGE_(exp_, "Assertion Failed: " #exp_, f_, false)
+#define AssertEquals(exp_, _expectedValue) \
+  AssertMsg2((exp_) == (_expectedValue), "Expected %d but got %d!", (_expectedValue), (exp_))
+#define AssertFloatEquals(exp_, _expectedValue, _tol)                              \
+  AssertMsg2(fabs((exp_) - (_expectedValue)) <= (_tol), "Expected %f but got %f!", \
+             (_expectedValue), (exp_))
+#define Verify(exp_) Assert(exp_)
+#define VerifyEquals(exp_, _expectedValue) AssertEquals(exp_, _expectedValue)
 
-#define AssertMsg1(_exp, _msg, a1) AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1)))
-#define AssertMsg2(_exp, _msg, a1, a2) AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2)))
-#define AssertMsg3(_exp, _msg, a1, a2, a3) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3)))
-#define AssertMsg4(_exp, _msg, a1, a2, a3, a4) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4)))
-#define AssertMsg5(_exp, _msg, a1, a2, a3, a4, a5) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5)))
-#define AssertMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6)))
-#define AssertMsg7(_exp, _msg, a1, a2, a3, a4, a5, a6, a7) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7)))
-#define AssertMsg8(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7, a8)))
-#define AssertMsg9(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8, a9) \
-  AssertMsg(_exp, (const ch *)(CDbgFmtMsg(_msg, a1, a2, a3, a4, a5, a6, a7, a8, a9)))
+#define AssertMsg1(exp_, msg_, a1) AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1)))
+#define AssertMsg2(exp_, msg_, a1, a2) AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2)))
+#define AssertMsg3(exp_, msg_, a1, a2, a3) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3)))
+#define AssertMsg4(exp_, msg_, a1, a2, a3, a4) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4)))
+#define AssertMsg5(exp_, msg_, a1, a2, a3, a4, a5) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5)))
+#define AssertMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6)))
+#define AssertMsg7(exp_, msg_, a1, a2, a3, a4, a5, a6, a7) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7)))
+#define AssertMsg8(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7, a8)))
+#define AssertMsg9(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9) \
+  AssertMsg(exp_, (const ch *)(CDbgFmtMsg(msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9)))
 
 #else  // DBGFLAG_ASSERT
 
-#define Assert(_exp) ((void)0)
-#define AssertOnce(_exp) ((void)0)
-#define AssertMsg(_exp, _msg) ((void)0)
-#define AssertMsgOnce(_exp, _msg) ((void)0)
-#define AssertFunc(_exp, _f) ((void)0)
-#define AssertEquals(_exp, _expectedValue) ((void)0)
-#define AssertFloatEquals(_exp, _expectedValue, _tol) ((void)0)
-#define Verify(_exp) (_exp)
-#define VerifyEquals(_exp, _expectedValue) (_exp)
+#define Assert(exp_) ((void)0)
+#define AssertOnce(exp_) ((void)0)
+#define AssertMsg(exp_, msg_) ((void)0)
+#define AssertMsgOnce(exp_, msg_) ((void)0)
+#define AssertFunc(exp_, f_) ((void)0)
+#define AssertEquals(exp_, _expectedValue) ((void)0)
+#define AssertFloatEquals(exp_, _expectedValue, _tol) ((void)0)
+#define Verify(exp_) (exp_)
+#define VerifyEquals(exp_, _expectedValue) (exp_)
 
-#define AssertMsg1(_exp, _msg, a1) ((void)0)
-#define AssertMsg2(_exp, _msg, a1, a2) ((void)0)
-#define AssertMsg3(_exp, _msg, a1, a2, a3) ((void)0)
-#define AssertMsg4(_exp, _msg, a1, a2, a3, a4) ((void)0)
-#define AssertMsg5(_exp, _msg, a1, a2, a3, a4, a5) ((void)0)
-#define AssertMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) ((void)0)
-#define AssertMsg6(_exp, _msg, a1, a2, a3, a4, a5, a6) ((void)0)
-#define AssertMsg7(_exp, _msg, a1, a2, a3, a4, a5, a6, a7) ((void)0)
-#define AssertMsg8(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8) ((void)0)
-#define AssertMsg9(_exp, _msg, a1, a2, a3, a4, a5, a6, a7, a8, a9) ((void)0)
+#define AssertMsg1(exp_, msg_, a1) ((void)0)
+#define AssertMsg2(exp_, msg_, a1, a2) ((void)0)
+#define AssertMsg3(exp_, msg_, a1, a2, a3) ((void)0)
+#define AssertMsg4(exp_, msg_, a1, a2, a3, a4) ((void)0)
+#define AssertMsg5(exp_, msg_, a1, a2, a3, a4, a5) ((void)0)
+#define AssertMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) ((void)0)
+#define AssertMsg6(exp_, msg_, a1, a2, a3, a4, a5, a6) ((void)0)
+#define AssertMsg7(exp_, msg_, a1, a2, a3, a4, a5, a6, a7) ((void)0)
+#define AssertMsg8(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8) ((void)0)
+#define AssertMsg9(exp_, msg_, a1, a2, a3, a4, a5, a6, a7, a8, a9) ((void)0)
 
 #endif  // DBGFLAG_ASSERT
 
@@ -349,9 +394,9 @@ SOURCE_TIER0_API void DevWarning(i32 level, const ch *pMsg, ...);
 SOURCE_TIER0_API void DevLog(i32 level, const ch *pMsg, ...);
 
 /* default level versions (level 1) */
-SOURCE_TIER0_API_OVERLOAD void DevMsg(const ch *pMsg, ...);
-SOURCE_TIER0_API_OVERLOAD void DevWarning(const ch *pMsg, ...);
-SOURCE_TIER0_API_OVERLOAD void DevLog(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void DevMsg(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void DevWarning(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void DevLog(const ch *pMsg, ...);
 
 /* These looked at the "console" group */
 SOURCE_TIER0_API void ConColorMsg(i32 level, const Color &clr, const ch *pMsg, ...);
@@ -360,10 +405,10 @@ SOURCE_TIER0_API void ConWarning(i32 level, const ch *pMsg, ...);
 SOURCE_TIER0_API void ConLog(i32 level, const ch *pMsg, ...);
 
 /* default console version (level 1) */
-SOURCE_TIER0_API_OVERLOAD void ConColorMsg(const Color &clr, const ch *pMsg, ...);
-SOURCE_TIER0_API_OVERLOAD void ConMsg(const ch *pMsg, ...);
-SOURCE_TIER0_API_OVERLOAD void ConWarning(const ch *pMsg, ...);
-SOURCE_TIER0_API_OVERLOAD void ConLog(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void ConColorMsg(const Color &clr, const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void ConMsg(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void ConWarning(const ch *pMsg, ...);
+SOURCE_TIER0_API_GLOBAL void ConLog(const ch *pMsg, ...);
 
 /* developer console version (level 2) */
 SOURCE_TIER0_API void ConDColorMsg(const Color &clr, const ch *pMsg, ...);
@@ -384,25 +429,25 @@ SOURCE_TIER0_API void COM_TimestampedLog(ch const *fmt, ...);
 
 #ifndef NDEBUG
 
-#define DBG_CODE(_code) \
+#define DBG_CODE(code_) \
   if (0)                \
     ;                   \
   else {                \
-    _code               \
+    code_               \
   }
-#define DBG_CODE_NOSCOPE(_code) _code
-#define DBG_DCODE(_g, _l, _code) \
-  if (IsSpewActive(_g, _l)) {    \
-    _code                        \
+#define DBG_CODE_NOSCOPE(code_) code_
+#define DBG_DCODE(g_, l_, code_) \
+  if (IsSpewActive(g_, l_)) {    \
+    code_                        \
   } else {                       \
   }
 #define DBG_BREAK() DebuggerBreak() /* defined in platform.h */
 
 #else  // NDEBUG
 
-#define DBG_CODE(_code) ((void)0)
-#define DBG_CODE_NOSCOPE(_code)
-#define DBG_DCODE(_g, _l, _code) ((void)0)
+#define DBG_CODE(code_) ((void)0)
+#define DBG_CODE_NOSCOPE(code_)
+#define DBG_DCODE(g_, l_, code_) ((void)0)
 #define DBG_BREAK() ((void)0)
 
 #endif  // NDEBUG
@@ -422,13 +467,9 @@ class CScopeMsg {
 #define SCOPE_MSG(msg)
 #endif
 
-// Macro to assist in asserting constant invariants during compilation
-
-#define COMPILE_TIME_ASSERT(pred) static_assert(pred, #pred)
-
 #ifndef NDEBUG
 #define ASSERT_INVARIANT(pred) \
-  static void UNIQUE_ID() { COMPILE_TIME_ASSERT(pred); }
+  static void SOURCE_UNIQUE_ID() { static_assert(pred); }
 #else
 #define ASSERT_INVARIANT(pred)
 #endif
@@ -489,7 +530,7 @@ class CReentryGuard {
 #define ASSERT_NO_REENTRY()
 #endif
 
-// Purpose: Inline string formatter
+// Inline string formatter.
 #include "tier0/include/valve_off.h"
 class CDbgFmtMsg {
  public:
@@ -497,7 +538,7 @@ class CDbgFmtMsg {
     va_list arg_ptr;
 
     va_start(arg_ptr, format);
-    _vsnprintf_s(dbg_message_, ARRAYSIZE(dbg_message_) - 1, format, arg_ptr);
+    _vsnprintf_s(dbg_message_, SOURCE_ARRAYSIZE(dbg_message_) - 1, format, arg_ptr);
     va_end(arg_ptr);
   }
 
@@ -506,20 +547,18 @@ class CDbgFmtMsg {
  private:
   ch dbg_message_[256];
 };
+
 #include "tier0/include/valve_on.h"
 
-// Purpose: Embed debug info in each file.
-#ifdef OS_WIN
-
+// Embed debug info in each file.
+#ifdef COMPILER_MSVC
 #ifndef NDEBUG
 #pragma comment(compiler)
 #endif
-
 #endif
 
-// Purpose: Wrap around a variable to create a simple place to put a breakpoint
+// xWrap around a variable to create a simple place to put a breakpoint.
 #ifndef NDEBUG
-
 template <class Type>
 class CDataWatcher {
  public:
@@ -581,15 +620,12 @@ class CDataWatcher {
 
   Type m_Value;
 };
-
 #else
-
 template <class Type>
 class CDataWatcher {
  private:
   CDataWatcher();  // refuse to compile in non-debug builds
 };
-
 #endif
 
 #endif  // SOURCE_TIER0_INCLUDE_DBG_H_

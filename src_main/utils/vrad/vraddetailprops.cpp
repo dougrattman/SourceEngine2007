@@ -113,7 +113,7 @@ static void ComputeWorldCenter(DetailObjectLump_t& prop, Vector& center,
   AngleVectors(prop.m_Angles, &forward, &right, &normal);
   VectorCopy(prop.m_Origin, center);
 
-  // FIXME: Take orientation into account?
+  // TODO(d.rattman): Take orientation into account?
   switch (prop.m_Type) {
     case DETAIL_PROP_TYPE_MODEL:
       VectorMA(center, g_ModelCenterOffset[prop.m_DetailModel].x, forward,
@@ -447,7 +447,7 @@ class CLightSurface : public IBSPNodeEnumerator {
   bool TestPointAgainstSurface(Vector const& pt, dface_t* pFace,
                                texinfo_t* pTex) {
     // no lightmaps on this surface? punt...
-    // FIXME: should be water surface?
+    // TODO(d.rattman): should be water surface?
     if (pTex->flags & SURF_NOLIGHT) return false;
 
     // See where in lightmap space our intersection point is
@@ -462,7 +462,7 @@ class CLightSurface : public IBSPNodeEnumerator {
         t < pFace->m_LightmapTextureMinsInLuxels[1])
       return false;
 
-    // assuming a square lightmap (FIXME: which ain't always the case),
+    // assuming a square lightmap (TODO(d.rattman): which ain't always the case),
     // lets see if it lies in that rectangle. If not, punt...
     float ds = s - pFace->m_LightmapTextureMinsInLuxels[0];
     float dt = t - pFace->m_LightmapTextureMinsInLuxels[1];

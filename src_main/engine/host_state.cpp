@@ -494,7 +494,7 @@ void HostState_RunGameInit() {
 
 void HostState_NewGame(char const *pMapName, bool remember_location,
                        bool background) {
-  char szMapName[_MAX_PATH];
+  char szMapName[SOURCE_MAX_PATH];
   Q_StripExtension(pMapName, szMapName, sizeof(szMapName));
   Q_strncpy(g_HostState.m_levelName, szMapName,
             sizeof(g_HostState.m_levelName));

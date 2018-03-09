@@ -19,7 +19,7 @@
 #include "hl2mptextwindow.h"
 #include "ienginevgui.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 //-----------------------------------------------------------------------------
 // Globals

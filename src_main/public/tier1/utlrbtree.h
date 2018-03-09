@@ -77,7 +77,7 @@ template <typename RBTREE_T>
 void SetDefLessFunc(RBTREE_T &RBTree) {
 #ifdef _WIN32
   RBTree.SetLessFunc(DefLessFunc(RBTREE_T::KeyType_t));
-#elif _LINUX
+#elif OS_POSIX
   RBTree.SetLessFunc(DefLessFunc(typename RBTREE_T::KeyType_t));
 #endif
 }
@@ -272,7 +272,7 @@ class CUtlRBTree {
 
   Node_t *m_pElements;
 
-  FORCEINLINE M const &Elements(void) const { return m_Elements; }
+  SOURCE_FORCEINLINE M const &Elements(void) const { return m_Elements; }
 
   void ResetDbgInfo() { m_pElements = (Node_t *)m_Elements.Base(); }
 };

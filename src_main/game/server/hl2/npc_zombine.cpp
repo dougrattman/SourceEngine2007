@@ -35,7 +35,7 @@
 
 #include "ai_interactions.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 enum
@@ -760,7 +760,7 @@ void CNPC_Zombine::InputPullGrenade ( inputdata_t &inputdata )
 //-----------------------------------------------------------------------------
 const char *CNPC_Zombine::GetMoanSound( int nSound )
 {
-	return pMoanSounds[ nSound % ARRAYSIZE( pMoanSounds ) ];
+	return pMoanSounds[ nSound % SOURCE_ARRAYSIZE( pMoanSounds ) ];
 }
 
 //-----------------------------------------------------------------------------

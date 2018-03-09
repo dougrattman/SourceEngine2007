@@ -14,7 +14,7 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	if ( !f )
 		return -1;
 
-	char szCommand[MAX_PATH];
+	char szCommand[SOURCE_MAX_PATH];
 	memset( szCommand, 0x0, sizeof(szCommand) );
 	fread( szCommand, sizeof(szCommand), 1, f );
 	fclose( f );

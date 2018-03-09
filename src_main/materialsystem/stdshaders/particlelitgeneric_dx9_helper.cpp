@@ -14,7 +14,7 @@
 #include "particlelit_generic_ps30.inc"
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -121,7 +121,7 @@ void DrawParticleLitGeneric_DX9( CBaseVSShader *pShader, IMaterialVar** params,
 		bool hasFlashlight = CShader_IsFlag2Set( params, MATERIAL_VAR2_USE_FLASHLIGHT );
 		bool bHalfLambert = IS_FLAG_SET( MATERIAL_VAR_HALFLAMBERT );
 
-		// Alpha test: FIXME: shouldn't this be handled in CBaseVSShader::SetInitialShadowState
+		// Alpha test: TODO(d.rattman): shouldn't this be handled in CBaseVSShader::SetInitialShadowState
 		pShaderShadow->EnableAlphaTest( bIsAlphaTested );
 
 		if( info.m_nAlphaTestReference != -1 && params[info.m_nAlphaTestReference]->GetFloatValue() > 0.0f )

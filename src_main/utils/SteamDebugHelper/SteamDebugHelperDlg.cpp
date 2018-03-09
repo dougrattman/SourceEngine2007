@@ -355,7 +355,7 @@ void CSteamDebugHelperDlg::OnEditChooseConfigFile()
 
 void CSteamDebugHelperDlg::SetConfigFilename( const char *pName )
 {
-	char absPath[MAX_PATH];
+	char absPath[SOURCE_MAX_PATH];
 	MakeAbsolutePath( absPath, sizeof( absPath ), pName );
 
 	if ( _access( absPath, 0 ) == 0 )

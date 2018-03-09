@@ -16,7 +16,7 @@
 #include "ToolDisplace.h"
 #include "ToolManager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -528,7 +528,7 @@ void CDispPaintDistDlg::FilterComboBoxBrushGeo( unsigned int nEffect, bool bInit
 				CDispMapImageFilter *pFilter = pFilterMgr->GetFilter( iFilter );
 
 				// get the application directory
-				char appDir[MAX_PATH];
+				char appDir[SOURCE_MAX_PATH];
 				APP()->GetDirectory( DIR_PROGRAM, appDir );
 				
 				// append the filters directory name
@@ -1272,7 +1272,7 @@ void CDispPaintDataDlg::FilterComboBoxBrushData( unsigned int uiEffect, bool bIn
 				CDispMapImageFilter *pFilter = pFilterMgr->GetFilter( ndxFilter );
 
 				// get the application directory
-				char appDir[MAX_PATH];
+				char appDir[SOURCE_MAX_PATH];
 				APP()->GetDirectory( DIR_PROGRAM, appDir );
 				
 				// append the filters directory name

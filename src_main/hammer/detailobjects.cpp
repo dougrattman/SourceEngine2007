@@ -33,7 +33,7 @@
 // at all.
 #define MAX_DETAIL_SPRITES_PER_FACE 65535
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // IMPLEMENT_MAPCLASS(DetailObjects)
@@ -332,7 +332,7 @@ void DetailObjects::AddDetailSpriteToFace(const Vector &vecOrigin,
   CSpriteModel *pSpriteModel = new CSpriteModel;
   m_DetailSprites.AddToTail(pSpriteModel);
 
-  const char szSpriteName[_MAX_PATH] = "detail/detailsprites";
+  const char szSpriteName[SOURCE_MAX_PATH] = "detail/detailsprites";
 
   pSpriteModel->LoadSprite(szSpriteName);
 
@@ -403,7 +403,7 @@ void DetailObjects::PlaceDetail(DetailModel_t const &model, const Vector &pt,
     MatrixToAngles(matrix, angles);
   }
 
-  // FIXME: We may also want a purely random rotation too
+  // TODO(d.rattman): We may also want a purely random rotation too
 
   // Insert an element into the object dictionary if it aint there...
   switch (model.m_Type) {
@@ -628,7 +628,7 @@ void DetailObjects::BuildAnyDetailObjects(CMapFace *pMapFace) {
 
     int objectType = s_DetailObjectDict.Find(search);
     if (objectType < 0) {
-      char szTextureName[MAX_PATH];
+      char szTextureName[SOURCE_MAX_PATH];
       pMapFace->GetTextureName(szTextureName);
       Warning("Material %s uses unknown detail object type %s!\n",
               szTextureName, pDetailType);

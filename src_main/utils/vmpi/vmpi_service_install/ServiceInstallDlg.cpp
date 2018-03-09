@@ -145,7 +145,7 @@ void ScanDirectory( const char *pDirName, CUtlVector<CString> &subDirs, CUtlVect
 	subDirs.Purge();
 	files.Purge();
 
-	char strPattern[MAX_PATH];
+	char strPattern[SOURCE_MAX_PATH];
 	V_ComposeFileName( pDirName, "*.*", strPattern, sizeof( strPattern ) );
 
 	WIN32_FIND_DATA fileInfo; // File information
@@ -168,7 +168,7 @@ void ScanDirectory( const char *pDirName, CUtlVector<CString> &subDirs, CUtlVect
 }
 
 
-int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char errorFile[MAX_PATH] )
+int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char errorFile[SOURCE_MAX_PATH] )
 {
 	errorFile[0] = 0;
 
@@ -180,7 +180,7 @@ int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char erro
 	{
 		for ( int i=0; i < subDirs.Count(); i++ )
 		{	
-			char fullName[MAX_PATH];
+			char fullName[SOURCE_MAX_PATH];
 			V_ComposeFileName( pRootDir, subDirs[i], fullName, sizeof( fullName ) );
 			
 			// Delete subdirectory
@@ -192,7 +192,7 @@ int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char erro
 	
 	for ( int i=0; i < files.Count(); i++ )
 	{
-		char fullName[MAX_PATH];
+		char fullName[SOURCE_MAX_PATH];
 		V_ComposeFileName( pRootDir, files[i], fullName, sizeof( fullName ) );
 
 		// Set file attributes
@@ -202,7 +202,7 @@ int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char erro
 		// Delete file
 		if ( !DeleteFile( fullName ) )
 		{
-			V_strncpy( errorFile, fullName, MAX_PATH );
+			V_strncpy( errorFile, fullName, SOURCE_MAX_PATH );
 			return GetLastError();
 		}
 	}
@@ -224,7 +224,7 @@ int DeleteDirectory( const char *pRootDir, bool bDeleteSubdirectories, char erro
 
 bool CreateDirectory_R( const char *pDirName )
 {
-	char chPrevDir[MAX_PATH];
+	char chPrevDir[SOURCE_MAX_PATH];
 	V_strncpy( chPrevDir, pDirName, sizeof( chPrevDir ) );
 	if ( V_StripLastDir( chPrevDir, sizeof( chPrevDir ) ) )
 	{
@@ -250,7 +250,7 @@ bool SetupStartMenuSubFolderName( const char *pSubFolderName, char *pOut, int ou
 		return false;
 
 	// Convert the item ID list's binary representation into a file system path
-	char szPath[_MAX_PATH];
+	char szPath[SOURCE_MAX_PATH];
 	BOOL f = SHGetPathFromIDList(pidl, szPath);
 
 	// Free the LPITEMIDLIST they gave us.
@@ -272,7 +272,7 @@ bool SetupStartMenuSubFolderName( const char *pSubFolderName, char *pOut, int ou
 
 bool CreateStartMenuLink( const char *pSubFolderName, const char *pLinkName, const char *pLinkTarget, const char *pArguments )
 {
-	char fullFolderName[MAX_PATH];
+	char fullFolderName[SOURCE_MAX_PATH];
 	if ( !SetupStartMenuSubFolderName( pSubFolderName, fullFolderName, sizeof( fullFolderName ) ) )
 		return false;
 	
@@ -302,13 +302,13 @@ bool CreateStartMenuLink( const char *pSubFolderName, const char *pLinkName, con
 		if (SUCCEEDED(hres)) 
 		{ 
 			// Setup the filename for the link.
-			char linkFilename[MAX_PATH];
+			char linkFilename[SOURCE_MAX_PATH];
 			V_ComposeFileName( fullFolderName, pLinkName, linkFilename, sizeof( linkFilename ) );
 			V_strncat( linkFilename, ".lnk", sizeof( linkFilename ) );
 
 			// Ensure that the string is ANSI. 
-			WCHAR wsz[MAX_PATH]; 
-			MultiByteToWideChar(CP_ACP, 0, linkFilename, -1, wsz, MAX_PATH); 
+			WCHAR wsz[SOURCE_MAX_PATH]; 
+			MultiByteToWideChar(CP_ACP, 0, linkFilename, -1, wsz, SOURCE_MAX_PATH); 
 
 			// Save the link by calling IPersistFile::Save. 
 			hres = ppf->Save( wsz, TRUE );
@@ -371,7 +371,7 @@ bool StartVMPIServiceUI( const char *pInstallLocation )
 		return true;
 	}
 	
-	char cmdLine[MAX_PATH];
+	char cmdLine[SOURCE_MAX_PATH];
 	V_ComposeFileName( pInstallLocation, "vmpi_service_ui.exe", cmdLine, sizeof( cmdLine ) );
 	return LaunchApp( cmdLine, pInstallLocation );
 }
@@ -589,7 +589,7 @@ void RemoveRegistryKeys()
 
 bool IsAnInstallFile( const char *pName )
 {
-	for ( int i=0; i < ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
 	{
 		if ( V_stricmp( g_pInstallFiles[i], pName ) == 0 )
 			return true;
@@ -600,7 +600,7 @@ bool IsAnInstallFile( const char *pName )
 
 bool AnyNonInstallFilesInDirectory( const char *strInstallLocation )
 {
-	char searchStr[MAX_PATH];
+	char searchStr[SOURCE_MAX_PATH];
 	V_ComposeFileName( strInstallLocation, "*.*", searchStr, sizeof( searchStr ) );
 
 	_finddata_t data;
@@ -820,11 +820,11 @@ void SetupStartMenuLinks( const char *pInstallerFilename )
 
 void RemoveStartMenuLinks()
 {
-	char fullFolderName[MAX_PATH];
+	char fullFolderName[SOURCE_MAX_PATH];
 	if ( !SetupStartMenuSubFolderName( "Valve\\VMPI", fullFolderName, sizeof( fullFolderName ) ) )
 		return;
 	
-	char errorFile[MAX_PATH];
+	char errorFile[SOURCE_MAX_PATH];
 	if ( !DeleteDirectory( fullFolderName, true, errorFile ) )
 	{
 		Msg( "Unable to remove Start Menu items in %s.\n", fullFolderName );
@@ -863,12 +863,12 @@ void CServiceInstallDlg::OnInstall()
 	
 	// Copy the files down.
 	Msg( "Copying files.\n" );
-	char chDir[MAX_PATH];
+	char chDir[SOURCE_MAX_PATH];
 	GetModuleFileName( NULL, chDir, sizeof( chDir ) );
 	V_StripFilename( chDir );
-	for ( int i=0; i < ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
 	{
-		char srcFilename[MAX_PATH], destFilename[MAX_PATH];
+		char srcFilename[SOURCE_MAX_PATH], destFilename[SOURCE_MAX_PATH];
 		V_ComposeFileName( chDir, g_pInstallFiles[i], srcFilename, sizeof( srcFilename ) );
 		V_ComposeFileName( strInstallLocation, g_pInstallFiles[i], destFilename, sizeof( destFilename ) );
 		
@@ -897,7 +897,7 @@ void CServiceInstallDlg::OnInstall()
 	}
 	
 	// Setup start menu links.
-	char installerFilename[MAX_PATH];
+	char installerFilename[SOURCE_MAX_PATH];
 	V_ComposeFileName( strInstallLocation, "vmpi_service_install.exe", installerFilename, sizeof( installerFilename ) );
 	SetupStartMenuLinks( installerFilename );
 	
@@ -938,7 +938,7 @@ bool CServiceInstallDlg::DoUninstall( bool bShowMessage )
 
 	bool bSuccess = true;
 	RemoveRegistryKeys();
-	char errorFile[MAX_PATH];
+	char errorFile[SOURCE_MAX_PATH];
 	if ( !NukeDirectory( strInstallLocation, errorFile ) )
 	{
 		// When reinstalling, the service may not be done exiting, so give it a sec.
@@ -1008,7 +1008,7 @@ void CServiceInstallDlg::OnStopExisting()
 	}
 }
 
-bool CServiceInstallDlg::NukeDirectory( const char *pDir, char errorFile[MAX_PATH] )
+bool CServiceInstallDlg::NukeDirectory( const char *pDir, char errorFile[SOURCE_MAX_PATH] )
 {
 	// If the directory doesn't exist anyways, then return true..
 	if ( _access( pDir, 0 ) != 0 )
@@ -1020,18 +1020,18 @@ bool CServiceInstallDlg::NukeDirectory( const char *pDir, char errorFile[MAX_PAT
 
 void CServiceInstallDlg::VerifyInstallFiles()
 {
-	char chDir[MAX_PATH];
+	char chDir[SOURCE_MAX_PATH];
 	GetModuleFileName( NULL, chDir, sizeof( chDir ) );
 	V_StripFilename( chDir );	 
 	
-	for ( int i=0; i < ARRAYSIZE( g_pInstallFiles ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( g_pInstallFiles ); i++ )
 	{
-		char filename[MAX_PATH];
+		char filename[SOURCE_MAX_PATH];
 		V_ComposeFileName( chDir, g_pInstallFiles[i], filename, sizeof( filename ) );
 		
 		if ( _access( filename, 0 ) != 0 )
 		{
-			char szErrorMessage[MAX_PATH];
+			char szErrorMessage[SOURCE_MAX_PATH];
 			
 			V_snprintf( szErrorMessage, sizeof( szErrorMessage ), "Required installation file missing: %s", filename );
 

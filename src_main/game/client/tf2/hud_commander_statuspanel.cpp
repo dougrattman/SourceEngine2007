@@ -14,7 +14,7 @@
 #include <vgui/ISurface.h>
 #include <vgui/IScheme.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CCommanderStatusPanel *g_pCommanderStatusPanel = NULL;
@@ -60,9 +60,9 @@ void CCommanderStatusPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 	BaseClass::ApplySchemeSettings(pScheme);
 
 	m_hFont = pScheme->GetFont( "Trebuchet20" );
-	// FIXME:  Outline, weight 1000
+	// TODO(d.rattman):  Outline, weight 1000
 	m_hFontText = pScheme->GetFont( "Trebuchet18" );
-	// FIXME:  Outline, weight 700
+	// TODO(d.rattman):  Outline, weight 700
 }
 
 

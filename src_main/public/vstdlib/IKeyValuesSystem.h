@@ -14,7 +14,7 @@ using HKeySymbol = i32;
 // Purpose: Interface to shared data repository for KeyValues (included in
 // vgui_controls.lib) allows for central data storage point of KeyValues symbol
 // table.
-abstract_class IKeyValuesSystem {
+the_interface IKeyValuesSystem {
  public:
   // Registers the size of the KeyValues in the specified instance
   // so it can build a properly sized memory pool for the KeyValues objects

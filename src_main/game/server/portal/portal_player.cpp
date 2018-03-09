@@ -514,7 +514,7 @@ void CPortal_Player::UpdateExpression(void) {
     return;
   }
 
-  char szScene[MAX_PATH];
+  char szScene[SOURCE_MAX_PATH];
   result->GetResponse(szScene, sizeof(szScene));
 
   // Ignore updates that choose the same scene
@@ -878,7 +878,7 @@ void CPortal_Player::SetupBones(matrix3x4_t *pBoneToWorld, int boneMask) {
   // Adjust hit boxes based on IK driven offset.
   Vector adjOrigin = GetAbsOrigin() + Vector(0, 0, m_flEstIkOffset);
 
-  // FIXME: pass this into Studio_BuildMatrices to skip transforms
+  // TODO(d.rattman): pass this into Studio_BuildMatrices to skip transforms
   CBoneBitList boneComputed;
   if (m_pIk) {
     m_iIKCounter++;
@@ -1840,7 +1840,7 @@ void CPortal_Player::UpdatePortalViewAreaBits(unsigned char *pvs, int pvssize) {
 
   unsigned char *portalTempBits =
       (unsigned char *)stackalloc(sizeof(unsigned char) * 32 * iPortalCount);
-  COMPILE_TIME_ASSERT((sizeof(unsigned char) * 32) >=
+  static_assert((sizeof(unsigned char) * 32) >=
                       sizeof(((CPlayerLocalData *)0)->m_chAreaBits));
 
   // setup area bits for these portals

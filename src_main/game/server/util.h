@@ -72,7 +72,7 @@ T *_CreateEntity(T *newClass, const char *className) {
   _CreateEntityTemplate((newClass *)NULL, className)
 
 // This is the glue that hooks .MAP entity class names to our CPP classes
-abstract_class IEntityFactoryDictionary {
+the_interface IEntityFactoryDictionary {
  public:
   virtual void InstallFactory(IEntityFactory * pFactory,
                               const char *pClassName) = 0;
@@ -90,7 +90,7 @@ inline bool CanCreateEntityClass(const char *pszClassname) {
           EntityFactoryDictionary()->FindFactory(pszClassname) != NULL);
 }
 
-abstract_class IEntityFactory {
+the_interface IEntityFactory {
  public:
   virtual IServerNetworkable *Create(const char *pClassName) = 0;
   virtual void Destroy(IServerNetworkable * pNetworkable) = 0;

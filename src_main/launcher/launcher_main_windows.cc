@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <tuple>
 
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
 #ifdef OS_WIN
@@ -17,8 +16,9 @@
 #endif
 
 #include "appframework/AppFramework.h"
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 #include "engine_launcher_api.h"
-#include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
@@ -69,7 +69,7 @@ SpewRetval_t LauncherSpewFunc(_In_ SpewType_t spew_type,
 
 const ch *ComputeBaseDirectoryFromCommandLine(
     _In_ const ICommandLine *command_line) {
-  static ch base_directory[MAX_PATH] = {0};
+  static ch base_directory[SOURCE_MAX_PATH] = {0};
   const ch *cmd_base_directory{command_line->CheckParm(
       source::tier0::command_line_switches::baseDirectory)};
 
@@ -97,9 +97,9 @@ inline u32 GetExecutableName(_In_ ch *exe_name, usize exe_name_length) {
 }
 
 std::tuple<const ch *, u32> ComputeBaseDirectoryFromExePath() {
-  static ch base_directory[MAX_PATH];
+  static ch base_directory[SOURCE_MAX_PATH];
   const u32 return_code{
-      GetExecutableName(base_directory, ARRAYSIZE(base_directory))};
+      GetExecutableName(base_directory, SOURCE_ARRAYSIZE(base_directory))};
 
   if (return_code == NO_ERROR) {
     ch *last_backward_slash{strrchr(base_directory, '\\')};
@@ -204,12 +204,12 @@ std::tuple<bool, u32> InitTextModeIfNeeded(
 void RemoveSpuriousGameParameters(ICommandLine *const command_line) {
   // Find the last -game parameter.
   usize count_game_args = 0;
-  ch last_game_arg[MAX_PATH];
+  ch last_game_arg[SOURCE_MAX_PATH];
 
   for (usize i = 0; i < command_line->ParmCount() - 1; i++) {
     if (Q_stricmp(command_line->GetParm(i),
                   source::tier0::command_line_switches::kGamePath) == 0) {
-      Q_snprintf(last_game_arg, ARRAYSIZE(last_game_arg), "\"%s\"",
+      Q_snprintf(last_game_arg, SOURCE_ARRAYSIZE(last_game_arg), "\"%s\"",
                  command_line->GetParm(i + 1));
       ++count_game_args;
       ++i;
@@ -231,8 +231,8 @@ void RelaunchWithNewLanguageViaSteam() {
   if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Valve\\Source",
                     REG_OPTION_RESERVED, KEY_ALL_ACCESS,
                     &source_key) == NO_ERROR) {
-    ch relaunch_url[MAX_PATH];
-    DWORD relaunch_url_length = ARRAYSIZE(relaunch_url);
+    ch relaunch_url[SOURCE_MAX_PATH];
+    DWORD relaunch_url_length = SOURCE_ARRAYSIZE(relaunch_url);
 
     if (RegQueryValueExA(source_key, "Relaunch URL", nullptr, nullptr,
                          (LPBYTE)relaunch_url,
@@ -379,7 +379,7 @@ u32 RunSteamApplication(_In_ ICommandLine *command_line,
 }  // namespace
 
 // The real entry point for the application
-DLL_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
+SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   // First, since almost all depends on this.
   SetAppInstance(instance);
   SpewOutputFunc(LauncherSpewFunc);

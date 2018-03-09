@@ -24,7 +24,7 @@
 //@todo: bad dependency!
 #include "ai_navigator.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define NUM_NPC_DEBUG_OVERLAYS 50
@@ -103,7 +103,7 @@ Navigation_t CAI_Pathfinder::ComputeWaypointType(CAI_Node **ppNodes,
   for (int link = 0; link < pNode->NumLinks(); link++) {
     if (pNode->GetLinkByIndex(link)->DestNodeID(parentID) == destID) {
       // BRJ 10/1/02
-      // FIXME: pNPC->CapabilitiesGet() is actually the mechanism by which
+      // TODO(d.rattman): pNPC->CapabilitiesGet() is actually the mechanism by which
       // fliers filter out the bitfields in the waypoint type (most importantly,
       // bits_MOVE_CAP_GROUND) that would cause the waypoint distance to be
       // computed in a 2D, as opposed to 3D fashion This is a super-scary weak
@@ -184,7 +184,7 @@ AI_Waypoint_t *CAI_Pathfinder::MakeRouteFromParents(int *parentArray,
     Navigation_t waypointType = ComputeWaypointType(pAInode, currentID, destID);
 
     // BRJ 10/1/02
-    // FIXME: It appears potentially possible for us to compute waypoints
+    // TODO(d.rattman): It appears potentially possible for us to compute waypoints
     // here which the NPC is not capable of traversing (because
     // pNPC->CapabilitiesGet() in ComputeWaypointType() above filters it out).
     // It's also possible if none of the lines have an appropriate DestNodeID.
@@ -314,7 +314,7 @@ AI_Waypoint_t *CAI_Pathfinder::FindBestPath(int startID, int endID) {
 
       if (!IsLinkUsable(nodeLink, smallestID)) continue;
 
-      // FIXME: the cost function should take into account Node costs (danger,
+      // TODO(d.rattman): the cost function should take into account Node costs (danger,
       // flanking, etc).
       int moveType =
           nodeLink->m_iAcceptedMoveTypes[GetHullType()] & CapabilitiesGet();
@@ -485,11 +485,11 @@ AI_Waypoint_t *CAI_Pathfinder::FindShortRandomPath(int startID,
     // Now add in new neighbors, pick links in different order ever time
     pAInode[neighborID]->ShuffleLinks();
     for (int link = 0; link < pAInode[neighborID]->NumLinks(); link++) {
-      if (numStaleNeighbors == ARRAYSIZE(pStaleNeighbor)) {
+      if (numStaleNeighbors == SOURCE_ARRAYSIZE(pStaleNeighbor)) {
         AssertMsg(0, "Array overflow");
         return NULL;
       }
-      if (numNeighbors == ARRAYSIZE(pStaleNeighbor)) {
+      if (numNeighbors == SOURCE_ARRAYSIZE(pStaleNeighbor)) {
         AssertMsg(0, "Array overflow");
         return NULL;
       }
@@ -697,7 +697,7 @@ AI_Waypoint_t *CAI_Pathfinder::RouteToNode(const Vector &vecOrigin,
 
   // Check if vecOrigin is already at the smallest node
 
-  // FIXME: an equals check is a bit sloppy, this should be a tolerance
+  // TODO(d.rattman): an equals check is a bit sloppy, this should be a tolerance
   const Vector &vecNodePosition =
       GetNetwork()->GetNode(nodeID)->GetPosition(GetHullType());
   if (vecOrigin == vecNodePosition) {
@@ -726,7 +726,7 @@ AI_Waypoint_t *CAI_Pathfinder::RouteFromNode(const Vector &vecOrigin,
   buildFlags |= bits_BUILD_GET_CLOSE;
 
   // Check if vecOrigin is already at the smallest node
-  // FIXME: an equals check is a bit sloppy, this should be a tolerance
+  // TODO(d.rattman): an equals check is a bit sloppy, this should be a tolerance
   CAI_Node *pNode = GetNetwork()->GetNode(nodeID);
   const Vector &vecNodePosition = pNode->GetPosition(GetHullType());
 
@@ -946,7 +946,7 @@ AI_Waypoint_t *CAI_Pathfinder::BuildFlyRoute(const Vector &vStart,
 //-----------------------------------------------------------------------------
 bool CAI_Pathfinder::CanGiveWay(const Vector &vStart, const Vector &vEnd,
                                 CBaseEntity *pBlocker) {
-  // FIXME: make this a CAI_BaseNPC member function
+  // TODO(d.rattman): make this a CAI_BaseNPC member function
   CAI_BaseNPC *pNPCBlocker = pBlocker->MyNPCPointer();
   if (pNPCBlocker && pNPCBlocker->edict()) {
     Disposition_t eDispBlockerToMe = pNPCBlocker->IRelationType(GetOuter());
@@ -956,7 +956,7 @@ bool CAI_Pathfinder::CanGiveWay(const Vector &vStart, const Vector &vEnd,
 
     return false;
 
-    // FIXME: this is called in route creation, not navigation.  It shouldn't
+    // TODO(d.rattman): this is called in route creation, not navigation.  It shouldn't
     // actually make anyone get out of their way, just see if they'll honor the
     // request. things like locked doors, enemies and such should refuse, all
     // others shouldn't. things like breakables should know who is trying to
@@ -1007,7 +1007,7 @@ AI_Waypoint_t *CAI_Pathfinder::BuildTriangulationRoute(
   AI_Waypoint_t *pWayPoint2 =
       new AI_Waypoint_t(vEnd, flYaw, navType, endFlags, nodeID);
 
-  // FIXME: Compute a reasonable yaw here
+  // TODO(d.rattman): Compute a reasonable yaw here
   AI_Waypoint_t *waypoint1 =
       new AI_Waypoint_t(vApex, 0, navType, bits_WP_TO_DETOUR, NO_NODE);
   waypoint1->SetNext(pWayPoint2);
@@ -1053,7 +1053,7 @@ AI_Waypoint_t *CAI_Pathfinder::BuildRouteThroughPoints(
   int nCurIndex = nStartIndex;
   int nNextIndex;
 
-  // FIXME: Must be able to move to the first position (these needs some
+  // TODO(d.rattman): Must be able to move to the first position (these needs some
   // parameterization)
   pMoveProbe->MoveLimit(navType, GetOuter()->GetAbsOrigin(),
                         vecPoints[nStartIndex], MASK_NPCSOLID, pTarget,
@@ -1239,8 +1239,8 @@ AI_Waypoint_t *CAI_Pathfinder::BuildOBBAvoidanceRoute(
 
   // Find the two points nearest our goals
   int nStartPoint =
-      ClosestPointToPosition(vStart, vecPoints, ARRAYSIZE(vecPoints));
-  int nEndPoint = ClosestPointToPosition(vEnd, vecPoints, ARRAYSIZE(vecPoints));
+      ClosestPointToPosition(vStart, vecPoints, SOURCE_ARRAYSIZE(vecPoints));
+  int nEndPoint = ClosestPointToPosition(vEnd, vecPoints, SOURCE_ARRAYSIZE(vecPoints));
 
   // We won't be able to build a route if we're moving no distance between
   // points
@@ -1249,15 +1249,15 @@ AI_Waypoint_t *CAI_Pathfinder::BuildOBBAvoidanceRoute(
   // Find the shortest path around this wound polygon (direction is how to step
   // through array)
   int nDirection = ShortestDirectionThroughPoints(
-      vStart, nStartPoint, nEndPoint, vecPoints, ARRAYSIZE(vecPoints));
+      vStart, nStartPoint, nEndPoint, vecPoints, SOURCE_ARRAYSIZE(vecPoints));
 
   // Attempt to build a route in our direction
   AI_Waypoint_t *pRoute = BuildRouteThroughPoints(
-      vecPoints, ARRAYSIZE(vecPoints), nDirection, nStartPoint, nEndPoint,
+      vecPoints, SOURCE_ARRAYSIZE(vecPoints), nDirection, nStartPoint, nEndPoint,
       navType, (CBaseEntity *)pTarget);
   if (pRoute == NULL) {
     // Failed that way, so try the opposite
-    pRoute = BuildRouteThroughPoints(vecPoints, ARRAYSIZE(vecPoints),
+    pRoute = BuildRouteThroughPoints(vecPoints, SOURCE_ARRAYSIZE(vecPoints),
                                      (-nDirection), nStartPoint, nEndPoint,
                                      navType, (CBaseEntity *)pTarget);
     if (pRoute == NULL) return NULL;
@@ -1537,7 +1537,7 @@ bool CAI_Pathfinder::CheckStaleNavTypeRoute(Navigation_t navType,
   }
 
   // Next try to triangulate
-  // FIXME: Since blocked dist is an unreliable number, this computation is
+  // TODO(d.rattman): Since blocked dist is an unreliable number, this computation is
   // bogus
   Vector vecDelta;
   VectorSubtract(vEnd, vStart, vecDelta);
@@ -1636,7 +1636,7 @@ class CPathfindNearestNodeFilter : public INearestNodeFilter {
         m_moveTypes(buildFlags & (bits_BUILD_GROUND | bits_BUILD_FLY |
                                   bits_BUILD_JUMP | bits_BUILD_CLIMB)),
         m_pRoute(NULL) {
-    COMPILE_TIME_ASSERT(bits_BUILD_GROUND == bits_CAP_MOVE_GROUND &&
+    static_assert(bits_BUILD_GROUND == bits_CAP_MOVE_GROUND &&
                         bits_BUILD_FLY == bits_CAP_MOVE_FLY &&
                         bits_BUILD_JUMP == bits_CAP_MOVE_JUMP &&
                         bits_BUILD_CLIMB == bits_CAP_MOVE_CLIMB);
@@ -1816,10 +1816,10 @@ bool CAI_Pathfinder::TestTriangulationRoute(Navigation_t navType,
 // Output :
 //-----------------------------------------------------------------------------
 
-// FIXME: this has no concept that the blocker may not be exactly along the
+// TODO(d.rattman): this has no concept that the blocker may not be exactly along the
 // vecStart, vecEnd vector.
-// FIXME: it should take a position (and size?) to avoid
-// FIXME: this does the position checks in the same order as GiveWay() so they
+// TODO(d.rattman): it should take a position (and size?) to avoid
+// TODO(d.rattman): this does the position checks in the same order as GiveWay() so they
 // tend to fight each other when both are active
 #define MAX_TRIAGULATION_DIST (32 * 12)
 bool CAI_Pathfinder::Triangulate(Navigation_t navType, const Vector &vecStart,

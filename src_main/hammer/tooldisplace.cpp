@@ -20,7 +20,7 @@
 #include "ChunkFile.h"
 #include "ToolManager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //=============================================================================
@@ -56,7 +56,7 @@ CToolDisplace::CToolDisplace()
 	m_EditDispHandle = EDITDISPHANDLE_INVALID;
 
 	// load filters from file
-	static char szProgramDir[MAX_PATH];
+	static char szProgramDir[SOURCE_MAX_PATH];
 	APP()->GetDirectory( DIR_PROGRAM, szProgramDir );
 	strcat( szProgramDir, "filters\\dispfilters.txt" );
 	LoadFilters( szProgramDir );

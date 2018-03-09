@@ -34,8 +34,8 @@
 //-----------------------------------------------------------------------------
 struct CClientPathRecord
 {
-	char m_szDepotPath[MAX_PATH];
-	char m_szClientPath[MAX_PATH];
+	char m_szDepotPath[SOURCE_MAX_PATH];
+	char m_szClientPath[SOURCE_MAX_PATH];
 	bool m_bNegative;
 };
 
@@ -127,8 +127,8 @@ private:
 	bool m_bConnectedToServer;
 	P4Client_t m_ActiveClient;
 	CUtlVector< CClientPathRecord >	m_ClientMapping;
-	char m_szDepotRoot[_MAX_PATH];
-	char m_szLocalRoot[_MAX_PATH];
+	char m_szDepotRoot[SOURCE_MAX_PATH];
+	char m_szLocalRoot[SOURCE_MAX_PATH];
 	int m_iDepotRootLength;
 	int m_iLocalRootLength;
 	CUtlString m_sChangeListName, m_sCachedChangeListNum;
@@ -157,7 +157,7 @@ public:
 	~CScopedClientSpec();
 
 private:
-	char m_pOldClientSpec[MAX_PATH];
+	char m_pOldClientSpec[SOURCE_MAX_PATH];
 	bool m_bClientSpecNeedsRestore;
 };
 
@@ -188,14 +188,14 @@ public:
 	~CScopedFileClientSpec();
 
 private:
-	char m_pOldClientSpec[MAX_PATH];
+	char m_pOldClientSpec[SOURCE_MAX_PATH];
 	bool m_bClientSpecNeedsRestore;
 };
 
 CScopedFileClientSpec::CScopedFileClientSpec( const char *pFullPath )
 {
 	m_bClientSpecNeedsRestore = false;
-	char pClientSpec[MAX_PATH];
+	char pClientSpec[SOURCE_MAX_PATH];
 	if ( p4.GetClientSpecForFile( pFullPath, pClientSpec, sizeof(pClientSpec) ) )
 	{
 		Q_strncpy( m_pOldClientSpec, p4.GetClientApi().GetClient().Text(), sizeof(m_pOldClientSpec) );
@@ -226,14 +226,14 @@ public:
 	~CScopedDirClientSpec();
 
 private:
-	char m_pOldClientSpec[MAX_PATH];
+	char m_pOldClientSpec[SOURCE_MAX_PATH];
 	bool m_bClientSpecNeedsRestore;
 };
 
 CScopedDirClientSpec::CScopedDirClientSpec( const char *pFullPathDir )
 {
 	m_bClientSpecNeedsRestore = false;
-	char pClientSpec[MAX_PATH];
+	char pClientSpec[SOURCE_MAX_PATH];
 	if ( p4.GetClientSpecForDirectory( pFullPathDir, pClientSpec, sizeof(pClientSpec) ) )
 	{
 		Q_strncpy( m_pOldClientSpec, p4.GetClientApi().GetClient().Text(), sizeof(m_pOldClientSpec) );
@@ -264,14 +264,14 @@ public:
 	~CScopedPathClientSpec();
 
 private:
-	char m_pOldClientSpec[MAX_PATH];
+	char m_pOldClientSpec[SOURCE_MAX_PATH];
 	bool m_bClientSpecNeedsRestore;
 };
 
 CScopedPathClientSpec::CScopedPathClientSpec( const char *pPathID )
 {
 	m_bClientSpecNeedsRestore = false;
-	char pClientSpec[MAX_PATH];
+	char pClientSpec[SOURCE_MAX_PATH];
 	if ( p4.GetClientSpecForPath( pPathID, pClientSpec, sizeof(pClientSpec) ) )
 	{
 		Q_strncpy( m_pOldClientSpec, p4.GetClientApi().GetClient().Text(), sizeof(m_pOldClientSpec) );
@@ -365,8 +365,8 @@ private:
 		}
 
 		// parse
-		char szVar[_MAX_PATH];
-		char szInfo[_MAX_PATH];
+		char szVar[SOURCE_MAX_PATH];
+		char szInfo[SOURCE_MAX_PATH];
 		SplitP4Output( data, szVar, szInfo, sizeof( szVar ) );
 
 		// emit
@@ -390,7 +390,7 @@ public:
 		// search for the paths - this string gets all revisions of a file, 
 		// from the version they have locally to the current version
 		// this is so we can see if the local files are out of date
-		char szSearch[MAX_PATH];
+		char szSearch[SOURCE_MAX_PATH];
 		Q_snprintf(szSearch, sizeof(szSearch), "%s/*", dir);
 
 		// gets directories first
@@ -455,7 +455,7 @@ private:
 	void ComputeLocalFileNames( CUtlVector<P4File_t> &fileList )
 	{
 		// Need to construct valid local paths since opened doesn't do it for us
-		char pMatchPattern[MAX_PATH];
+		char pMatchPattern[SOURCE_MAX_PATH];
 		Q_snprintf( pMatchPattern, sizeof(pMatchPattern), "//%s/", p4.GetClientApi().GetClient().Text() );
 		int nLen = Q_strlen( pMatchPattern );
 
@@ -469,7 +469,7 @@ private:
 			if ( Q_stristr( pClientPath, pMatchPattern ) != pClientPath )
 				continue;
 
-			char pLocalPath[MAX_PATH];
+			char pLocalPath[SOURCE_MAX_PATH];
 			Q_snprintf( pLocalPath, sizeof(pLocalPath), "%s\\%s", p4.GetLocalRoot(), pClientPath + nLen );  
 			Q_FixSlashes( pLocalPath );
 			fileList[i].m_sLocalFile = pLocalPath;
@@ -485,7 +485,7 @@ private:
 			if ( !fileList[i].m_bDir )
 				continue;
 
-			char pLocalPath[MAX_PATH];
+			char pLocalPath[SOURCE_MAX_PATH];
 			const char *pDepotPath = p4.String( fileList[i].m_sDepotFile );
 			if ( !p4.DepotFileToLocalFile( pDepotPath, pLocalPath, sizeof(pLocalPath) ) )
 				continue;
@@ -534,7 +534,7 @@ private:
 		else
 		{
 			// extract the path
-			char pFilePath[_MAX_PATH];
+			char pFilePath[SOURCE_MAX_PATH];
 			Q_strncpy( pFilePath, szInfo, sizeof( pFilePath ) );
 			char *pFileName = Q_strrchr(pFilePath, '/');
 			if (pFileName)
@@ -601,7 +601,7 @@ public:
 		// search for the paths - this string gets all revisions of a file, 
 		// from the version they have locally to the current version
 		// this is so we can see if the local files are out of date
-		char szSearch[MAX_PATH];
+		char szSearch[SOURCE_MAX_PATH];
 		if (bDir)
 		{
 			Q_snprintf(szSearch, sizeof(szSearch), "%s/...", path);
@@ -708,7 +708,7 @@ class CClientspecMap
 public:
 	char m_szFullClientspec[CLIENTSPEC_BUFFER_SIZE];
 	CUtlVector<CClientPathRecord> m_PathMap;
-	char m_szLocalPath[_MAX_PATH];
+	char m_szLocalPath[SOURCE_MAX_PATH];
 
 	void ReadClientspec(const char *clientspec)
 	{
@@ -960,8 +960,8 @@ public:
 private:
 	virtual void OutputInfo(char level, const_char *data)
 	{
-		char szCmd[_MAX_PATH];
-		char szInfo[_MAX_PATH];
+		char szCmd[SOURCE_MAX_PATH];
+		char szInfo[SOURCE_MAX_PATH];
 
 		SplitP4Output(data, szCmd, szInfo, sizeof(szCmd));
 
@@ -1400,7 +1400,7 @@ void CP4::RefreshClientData()
 bool CP4::DepotFileToLocalFile( const char *pDepotFile, char *pLocalPath, int nBufLen )
 {
 	// Need to construct valid local paths since opened doesn't do it for us
-	char pClientPattern[MAX_PATH];
+	char pClientPattern[SOURCE_MAX_PATH];
 	Q_snprintf( pClientPattern, sizeof(pClientPattern), "//%s/", m_Client.GetClient().Text() );
 	int nClientLen = Q_strlen( pClientPattern );
 
@@ -1418,8 +1418,8 @@ bool CP4::DepotFileToLocalFile( const char *pDepotFile, char *pLocalPath, int nB
 		if ( !bRecursive && !bInDirectory )
 			continue;
 
-		// FIXME: Do this fixup when we create m_ClientMapping?
-		char pMatchingString[MAX_PATH];
+		// TODO(d.rattman): Do this fixup when we create m_ClientMapping?
+		char pMatchingString[SOURCE_MAX_PATH];
 		Q_strncpy( pMatchingString, pDepotPath, bRecursive ? nLen-2 : nLen );
 		if ( Q_stristr( pDepotFile, pMatchingString ) != pDepotFile )
 			continue;
@@ -1440,7 +1440,7 @@ bool CP4::DepotFileToLocalFile( const char *pDepotFile, char *pLocalPath, int nB
 		if ( !bClientRecursive && !bClientInDirectory )
 			continue;
 
-		char pTruncatedClientPath[MAX_PATH];
+		char pTruncatedClientPath[SOURCE_MAX_PATH];
 		Q_strncpy( pTruncatedClientPath, pClientPath, bClientRecursive ? nPathLen-2 : nPathLen );
  		if ( Q_stristr( pTruncatedClientPath, pClientPattern ) != pTruncatedClientPath )
 			continue;												   
@@ -1741,15 +1741,15 @@ bool CP4::GetClientSpecForDirectory( const char *pFullPathDir, char *pClientSpec
 	if ( !IsConnectedToServer() )
 		return false;
 
-	char pCurPath[ MAX_PATH ];
+	char pCurPath[ SOURCE_MAX_PATH ];
 	Q_strncpy( pCurPath, pFullPathDir, sizeof(pCurPath) );
 	Q_StripTrailingSlash( pCurPath );
 
 	do
 	{
-		char pP4ConfigPath[MAX_PATH];
-		Q_strncpy( pP4ConfigPath, pCurPath, MAX_PATH );
-		Q_strncat( pP4ConfigPath, "\\p4config", MAX_PATH, MAX_PATH );
+		char pP4ConfigPath[SOURCE_MAX_PATH];
+		Q_strncpy( pP4ConfigPath, pCurPath, SOURCE_MAX_PATH );
+		Q_strncat( pP4ConfigPath, "\\p4config", SOURCE_MAX_PATH, SOURCE_MAX_PATH );
 		if ( g_pFileSystem->FileExists( pP4ConfigPath ) )
 		{
 			char temp[1024];
@@ -1800,7 +1800,7 @@ bool CP4::GetClientSpecForDirectory( const char *pFullPathDir, char *pClientSpec
 bool CP4::GetClientSpecForFile( const char *pFullPath, char *pClientSpec, int nMaxLen )
 {
 	// Strip off the file name
-	char pCurPath[MAX_PATH];
+	char pCurPath[SOURCE_MAX_PATH];
 	Q_strncpy( pCurPath, pFullPath, sizeof(pCurPath) );
 	Q_StripFilename( pCurPath );
 
@@ -1827,11 +1827,11 @@ bool CP4::GetClientSpecForPath( const char *pPathId, char *pClientSpec, int nMax
 	if ( g_pFileSystem->GetSearchPath( pPathId, false, pPathBuf, sizeof(pPathBuf) ) == 0 )
 		return false;
 
-	// FIXME: Would be faster to not check for duplication and just
+	// TODO(d.rattman): Would be faster to not check for duplication and just
 	// pick the first client spec it sees. Should I not test the additional paths?
 	bool bFirstPath = true;
 	bool bFoundClientSpec = false;
-	char pTempClientSpec[MAX_PATH];
+	char pTempClientSpec[SOURCE_MAX_PATH];
 	char *pPath = pPathBuf;
 	while ( pPath )
 	{
@@ -1990,16 +1990,16 @@ bool CP4::PerformPerforceOp( PerforceOp_t op, int nCount, const char **ppFullPat
 	if ( nCount == 0 )
 		return true;
 
-	char pOldClientSpec[MAX_PATH];
+	char pOldClientSpec[SOURCE_MAX_PATH];
 	Q_strncpy( pOldClientSpec, m_Client.GetClient().Text(), sizeof(pOldClientSpec) );
 
-	char pCurrentClientSpec[MAX_PATH];
+	char pCurrentClientSpec[SOURCE_MAX_PATH];
  	Q_strncpy( pCurrentClientSpec, pOldClientSpec, sizeof(pCurrentClientSpec) );
 
 	int nFirstIndex = 0;
 	while ( nFirstIndex < nCount )
 	{
-		char pClientSpec[MAX_PATH];
+		char pClientSpec[SOURCE_MAX_PATH];
 
 		bool bChangeSpec = false;
 		int i;
@@ -2199,7 +2199,7 @@ void CP4::OpenFileInP4Win( const char *pFullPath )
 	if ( !IsConnectedToServer() )
 		return;
 
-	char pClientSpec[MAX_PATH];
+	char pClientSpec[SOURCE_MAX_PATH];
 	char pSystem[512];
 	if ( GetClientSpecForFile( pFullPath, pClientSpec, sizeof(pClientSpec) ) )
 	{

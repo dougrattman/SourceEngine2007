@@ -29,7 +29,7 @@ void AppShutdown(CAppSystemGroup *app_system_group);
 
 // Macros to create singleton application objects for windowed + console apps.
 #define DEFINE_WINDOWED_APPLICATION_OBJECT_GLOBALVAR(_globalVarName) \
-  i32 __stdcall WinMain(HINSTANCE instance, HINSTANCE prev_instance, \
+  i32 SOURCE_STDCALL WinMain(HINSTANCE instance, HINSTANCE prev_instance, \
                         LPSTR cmd_line, i32 cmd_show) {              \
     return AppMain(instance, prev_instance, cmd_line, cmd_show,      \
                    &_globalVarName);                                 \

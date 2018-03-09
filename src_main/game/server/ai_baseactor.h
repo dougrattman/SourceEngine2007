@@ -47,7 +47,7 @@ class CAI_BaseActor : public CAI_ExpresserHost<CAI_BaseHumanoid>
 
 public:
 
-	// FIXME: this method is lame, isn't there some sort of template thing that would get rid of the Outer pointer?
+	// TODO(d.rattman): this method is lame, isn't there some sort of template thing that would get rid of the Outer pointer?
 
 	void	Init( PoseParameter_t &index, const char *szName ) { index = (PoseParameter_t)LookupPoseParameter( szName ); };
 	void	Set( PoseParameter_t index, float flValue ) { SetPoseParameter( (int)index, flValue ); }
@@ -221,7 +221,7 @@ private:
 	CAI_InterestTarget		m_syntheticLookQueue;
 
 	CAI_InterestTarget		m_randomLookQueue;
-	float 		m_flNextRandomLookTime;	// FIXME: move to scene
+	float 		m_flNextRandomLookTime;	// TODO(d.rattman): move to scene
 
 	//---------------------------------
 

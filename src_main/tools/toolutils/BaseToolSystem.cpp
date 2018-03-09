@@ -40,7 +40,7 @@
 #include "dmserializers/idmserializers.h"
 #include "tier2/renderutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -377,7 +377,7 @@ void CBaseToolSystem::OnToolActivate()
 	m_bIsActive = true;
 	UpdateUIVisibility( );
 
-	// FIXME: Note that this is necessary because IsGameInputEnabled depends on m_bIsActive at the moment
+	// TODO(d.rattman): Note that this is necessary because IsGameInputEnabled depends on m_bIsActive at the moment
 	OnModeChanged();
 
 	input()->SetModalSubTree( VGui_GetToolRootPanel(), GetVPanel(), IsGameInputEnabled() );
@@ -391,7 +391,7 @@ void CBaseToolSystem::OnToolDeactivate()
 	m_bIsActive = false;
  	UpdateUIVisibility( );
 
-	// FIXME: Note that this is necessary because IsGameInputEnabled depends on m_bIsActive at the moment
+	// TODO(d.rattman): Note that this is necessary because IsGameInputEnabled depends on m_bIsActive at the moment
 	OnModeChanged();
 
 	input()->ReleaseModalSubTree();

@@ -51,7 +51,7 @@ bool CWeaponInfiltrator::ComputeEMPFireState( void )
 {
 	if (IsOwnerEMPed())
 	{
-		// FIXME: Need a sound
+		// TODO(d.rattman): Need a sound
 		//UTIL_EmitSound( pPlayer->pev, CHAN_WEAPON, g_pszEMPGatlingFizzle, 1.0, ATTN_NORM );
 		return false;
 	}

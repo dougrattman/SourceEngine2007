@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "packfile.h"
 
@@ -162,7 +162,7 @@ struct PackFileAppendInfo_t {
   int64 m_iOriginalFileSize;
   int m_iFilesInPack;
   packfile64_t *m_pPackFiles;
-  char m_szNewFileName[_MAX_PATH];
+  char m_szNewFileName[SOURCE_MAX_PATH];
   int64 m_iNewFileLength;
 };
 

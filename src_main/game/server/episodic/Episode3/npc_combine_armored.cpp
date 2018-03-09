@@ -9,7 +9,7 @@
 #include "weapon_physcannon.h"
 #include "hl2_gamerules.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_combine_armored_health( "sk_combine_armored_health","0");
@@ -130,7 +130,7 @@ void CNPC_Combine_Armored::SpawnArmorPieces( void )
 		{ "attach_chest_armor",			"models/combine_armor_chest.mdl" },
 	};
 
-	for ( int i = 0; i < ARRAYSIZE(ArmorPiecesPositions); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE(ArmorPiecesPositions); i++ )
 	{
 		CArmorPiece *pArmor = (CArmorPiece *)CBaseEntity::CreateNoSpawn( "combine_armor_piece", GetAbsOrigin(), GetAbsAngles(), this );
 		pArmor->SetModelName( MAKE_STRING(ArmorPiecesPositions[i].pszModel) );

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -37,7 +37,6 @@
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -220,13 +219,14 @@ IIndexBuffer::~IIndexBuffer() {}
 // Backward compat mesh code; will go away soon
 //
 //-----------------------------------------------------------------------------
-abstract_class CBaseMeshDX8 : public CMeshBase {
+the_interface CBaseMeshDX8 : public CMeshBase {
  public:
   // constructor, destructor
   CBaseMeshDX8();
   virtual ~CBaseMeshDX8();
 
-  // FIXME: Make this work! Unsupported methods of IIndexBuffer + IVertexBuffer
+  // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer +
+  // IVertexBuffer
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc) {
     Assert(0);
     return false;
@@ -321,7 +321,7 @@ abstract_class CBaseMeshDX8 : public CMeshBase {
   // Returns the number of indices in a mesh..
   virtual int IndexCount() const = 0;
 
-  // FIXME: Make this work!
+  // TODO(d.rattman): Make this work!
   virtual MaterialIndexFormat_t IndexFormat() const {
     return MATERIAL_INDEX_FORMAT_16BIT;
   }
@@ -1141,8 +1141,8 @@ bool CIndexBufferDx8::Allocate() {
   Assert(!m_pIndexBuffer);
   m_nFirstUnwrittenOffset = 0;
 
-  // FIXME: This doesn't really work for dynamic buffers; dynamic buffers
-  // can't have mixed-type indices in them. Bleah.
+  // TODO(d.rattman): This doesn't really work for dynamic buffers; dynamic
+  // buffers can't have mixed-type indices in them. Bleah.
   D3DFORMAT format = (m_IndexFormat == MATERIAL_INDEX_FORMAT_32BIT)
                          ? D3DFMT_INDEX32
                          : D3DFMT_INDEX16;
@@ -1158,7 +1158,7 @@ bool CIndexBufferDx8::Allocate() {
   if ((hr == D3DERR_OUTOFVIDEOMEMORY) || (hr == E_OUTOFMEMORY)) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
-    // FIXME: need to record this
+    // TODO(d.rattman): need to record this
     Dx9Device()->EvictManagedResources();
     hr = Dx9Device()->CreateIndexBuffer(m_nBufferSize, usage, format,
                                         D3DPOOL_DEFAULT, &m_pIndexBuffer, NULL);
@@ -1193,7 +1193,7 @@ bool CIndexBufferDx8::Allocate() {
 }
 
 void CIndexBufferDx8::Free() {
-  // FIXME:	Unlock(0);
+  // TODO(d.rattman):	Unlock(0);
   if (m_pIndexBuffer) {
 #ifdef _DEBUG
     --s_nBufferCount;
@@ -1310,7 +1310,7 @@ bool CIndexBufferDx8::Lock(int nMaxIndexCount, bool bAppend,
          (nMaxIndexCount <= m_nIndexCount));
   Assert(m_IndexFormat != MATERIAL_INDEX_FORMAT_UNKNOWN);
 
-  // FIXME: Why do we need to sync matrices now?
+  // TODO(d.rattman): Why do we need to sync matrices now?
   ShaderUtil()->SyncMatrices();
   g_ShaderMutex.Lock();
 
@@ -1519,7 +1519,7 @@ bool CVertexBufferDx8::Allocate() {
   if ((hr == D3DERR_OUTOFVIDEOMEMORY) || (hr == E_OUTOFMEMORY)) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
-    // FIXME: need to record this
+    // TODO(d.rattman): need to record this
     Dx9Device()->EvictManagedResources();
     hr = Dx9Device()->CreateVertexBuffer(m_nBufferSize, usage, 0, pool,
                                          &m_pVertexBuffer, NULL);
@@ -1549,7 +1549,7 @@ bool CVertexBufferDx8::Allocate() {
 }
 
 void CVertexBufferDx8::Free() {
-  // FIXME:	Unlock(0);
+  // TODO(d.rattman):	Unlock(0);
   if (m_pVertexBuffer) {
 #ifdef _DEBUG
     --s_nBufferCount;
@@ -1653,7 +1653,7 @@ bool CVertexBufferDx8::Lock(int nMaxVertexCount, bool bAppend,
          (nMaxVertexCount <= m_nVertexCount));
   Assert(m_VertexFormat != VERTEX_FORMAT_UNKNOWN);
 
-  // FIXME: Why do we need to sync matrices now?
+  // TODO(d.rattman): Why do we need to sync matrices now?
   ShaderUtil()->SyncMatrices();
   g_ShaderMutex.Lock();
 
@@ -1772,8 +1772,8 @@ void CVertexBufferDx8::HandlePerFrameTextureStats(int nFrame) {
 //-----------------------------------------------------------------------------
 // Helpers with meshdescs...
 //-----------------------------------------------------------------------------
-// FIXME: add compression-agnostic read-accessors (which decompress and return
-// by value, checking desc.m_CompressionType)
+// TODO(d.rattman): add compression-agnostic read-accessors (which decompress
+// and return by value, checking desc.m_CompressionType)
 inline D3DXVECTOR3 &Position(MeshDesc_t const &desc, int vert) {
   return *(D3DXVECTOR3 *)((unsigned char *)desc.m_pPosition +
                           vert * desc.m_VertexSize_Position);
@@ -1959,8 +1959,8 @@ void CBaseMeshDX8::Spew(int nVertexCount, int nIndexCount,
   // This has regressed.
   int i;
 
-  // FIXME: just fall back to the base class (CVertexBufferBase) version of this
-  // function!
+  // TODO(d.rattman): just fall back to the base class (CVertexBufferBase)
+  // version of this function!
 
 #ifdef _DEBUG
   if (m_pMaterial) {
@@ -2069,8 +2069,8 @@ void CBaseMeshDX8::ValidateData(int nVertexCount, int nIndexCount,
 #ifdef VALIDATE_DEBUG
   int i;
 
-  // FIXME: just fall back to the base class (CVertexBufferBase) version of this
-  // function!
+  // TODO(d.rattman): just fall back to the base class (CVertexBufferBase)
+  // version of this function!
 
   // This is needed so buffering can just use this
   VertexFormat_t fmt = m_pMaterial->GetVertexUsage();
@@ -2576,7 +2576,7 @@ int CMeshDX8::NumPrimitives(int nVertexCount, int nIndexCount) const {
 //-----------------------------------------------------------------------------
 #ifdef _DEBUG
 static void OutputVertexFormat(VertexFormat_t format) {
-  // FIXME: this is a duplicate of the function in meshdx8.cpp
+  // TODO(d.rattman): this is a duplicate of the function in meshdx8.cpp
   VertexCompressionType_t compressionType = CompressionType(format);
 
   if (format & VERTEX_POSITION) {
@@ -2618,8 +2618,8 @@ static void OutputVertexFormat(VertexFormat_t format) {
 #endif
 
 bool CMeshDX8::IsValidVertexFormat(VertexFormat_t vertexFormat) {
-  // FIXME: Make this a debug-only check on say 6th July 2007 (after a week or
-  // so's testing)
+  // TODO(d.rattman): Make this a debug-only check on say 6th July 2007 (after a
+  // week or so's testing)
   //        (i.e. avoid the 360 release build perf. hit for when we ship)
   bool bCheckCompression = (m_VertexFormat & VERTEX_FORMAT_COMPRESSED) &&
                            ((vertexFormat == VERTEX_FORMAT_INVALID) ||
@@ -2716,7 +2716,8 @@ bool CMeshDX8::IsValidVertexFormat(VertexFormat_t vertexFormat) {
 // Stream source setting methods
 //-----------------------------------------------------------------------------
 void CMeshDX8::SetVertexIDStreamState() {
-  // FIXME: this method duplicates the code in CMeshMgr::SetVertexIDStreamState
+  // TODO(d.rattman): this method duplicates the code in
+  // CMeshMgr::SetVertexIDStreamState
 
   if (IsX360()) return;
 
@@ -3547,7 +3548,8 @@ void CTempMeshDX8::UnlockMesh(int nVertexCount, int nIndexCount,
 // Sets the primitive type
 //-----------------------------------------------------------------------------
 void CTempMeshDX8::SetPrimitiveType(MaterialPrimitiveType_t type) {
-  // FIXME: Support MATERIAL_INSTANCED_QUADS for CTempMeshDX8 (X360 only)
+  // TODO(d.rattman): Support MATERIAL_INSTANCED_QUADS for CTempMeshDX8 (X360
+  // only)
   Assert((type != MATERIAL_INSTANCED_QUADS) /* || IsX360() */);
   m_Type = type;
 }
@@ -3615,8 +3617,8 @@ void CTempMeshDX8::CopyToMeshBuilder(
   Assert(endOffset >= 0 && endOffset <= m_VertexData.Count() &&
          endOffset >= startOffset);
   if (endOffset > startOffset) {
-    // FIXME: make this a method of CMeshBuilder (so the 'Position' pointer
-    // accessor can be removed)
+    // TODO(d.rattman): make this a method of CMeshBuilder (so the 'Position'
+    // pointer accessor can be removed)
     //        make sure it takes a VertexFormat_t parameter for src/dest match
     //        validation
     memcpy((void *)builder.Position(), &m_VertexData[startOffset],
@@ -4054,7 +4056,7 @@ void CBufferedMeshDX8::ValidateData(int nVertexCount, int nIndexCount,
 // Sets the flex mesh to render with this mesh
 //-----------------------------------------------------------------------------
 void CBufferedMeshDX8::SetFlexMesh(IMesh *pMesh, int nVertexOffsetInBytes) {
-  // FIXME: Probably are situations where we don't need to flush,
+  // TODO(d.rattman): Probably are situations where we don't need to flush,
   // but this is going to look different in a very short while, so I'm not going
   // to bother
   ShaderAPI()->FlushBufferedPrimitives();
@@ -4487,7 +4489,7 @@ void CMeshMgr::Flush() { m_BufferedMesh.Flush(); }
 IMesh *CMeshMgr::CreateStaticMesh(VertexFormat_t format,
                                   const char *pTextureBudgetGroup,
                                   IMaterial *pMaterial) {
-  // FIXME: Use a fixed-size allocator
+  // TODO(d.rattman): Use a fixed-size allocator
   CMeshDX8 *pNewMesh = new CMeshDX8(pTextureBudgetGroup);
   pNewMesh->SetVertexFormat(format);
   if (pMaterial != NULL) {
@@ -4538,7 +4540,7 @@ void CMeshMgr::CopyStaticMeshIndexBufferToTempMeshIndexBuffer(
 
 IMesh *CMeshMgr::GetFlexMesh() {
   if (g_pMaterialSystemHardwareConfig->SupportsPixelShaders_2_b()) {
-    // FIXME: Kinda ugly size.. 28 bytes
+    // TODO(d.rattman): Kinda ugly size.. 28 bytes
     m_DynamicFlexMesh.SetVertexFormat(VERTEX_POSITION | VERTEX_NORMAL |
                                       VERTEX_WRINKLE |
                                       VERTEX_FORMAT_USE_EXACT_FORMAT);
@@ -4636,7 +4638,7 @@ IMesh *CMeshMgr::GetDynamicMesh(IMaterial *pMaterial,
 
   // Note this works because we're guaranteed to not be using a buffered mesh
   // when we have overrides on
-  // FIXME: Make work for temp meshes
+  // TODO(d.rattman): Make work for temp meshes
   if (pMesh == &m_DynamicMesh) {
     CBaseMeshDX8 *pBaseVertex = static_cast<CBaseMeshDX8 *>(pVertexOverride);
     if (pBaseVertex) {
@@ -4779,8 +4781,8 @@ int CMeshMgr::GetMaxVerticesToRender(IMaterial *pMaterial) {
 
   // Be conservative, assume no compression (in here, we don't know if the
   // caller will used a compressed VB or not)
-  // FIXME: allow the caller to specify which compression type should be used to
-  // compute size from the vertex format
+  // TODO(d.rattman): allow the caller to specify which compression type should
+  // be used to compute size from the vertex format
   //        (this can vary between multiple VBs/Meshes using the same material)
   VertexFormat_t fmt = pMaterial->GetVertexFormat() & ~VERTEX_FORMAT_COMPRESSED;
   int nMaxVerts =
@@ -4865,7 +4867,7 @@ IVertexBuffer *CMeshMgr::CreateVertexBuffer(ShaderBufferType_t type,
                                             VertexFormat_t fmt,
                                             int nVertexCount,
                                             const char *pBudgetGroup) {
-  // FIXME: Use a fixed-size allocator
+  // TODO(d.rattman): Use a fixed-size allocator
   CVertexBufferDx8 *pNewVertexBuffer =
       new CVertexBufferDx8(type, fmt, nVertexCount, pBudgetGroup);
   return pNewVertexBuffer;
@@ -5055,7 +5057,7 @@ bool CMeshMgr::SetRenderState(int nVertexOffsetInBytes, int nFirstVertexIdx,
   // MESHFIXME : This path is only used for the new index/vertex buffer
   // interfaces.
 #if 0
-	// FIXME
+	// TODO(d.rattman):
 	if ( !IsValidVertexFormat( vertexFormat ) )
 	{
 		Warning( "Material %s is being applied to a model, you need $model=1 in the .vmt file!\n",
@@ -5076,7 +5078,7 @@ void CMeshMgr::BindVertexBuffer(int nStreamID, IVertexBuffer *pVertexBuffer,
                                 int nOffsetInBytes, int nFirstVertex,
                                 int nVertexCount, VertexFormat_t fmt,
                                 int nRepetitions) {
-  // FIXME: Multiple stream support isn't implemented yet
+  // TODO(d.rattman): Multiple stream support isn't implemented yet
   Assert(nStreamID == 0);
 
   m_pCurrentVertexBuffer = static_cast<CVertexBufferDx8 *>(pVertexBuffer);
@@ -5165,8 +5167,8 @@ void CMeshMgr::RenderPassWithVertexAndIndexBuffers(void) {
             assert_cast<CIndexBufferDx8 *>(m_pCurrentIndexBuffer);
         if (m_PrimitiveType == MATERIAL_TRIANGLES ||
             m_PrimitiveType == MATERIAL_TRIANGLE_STRIP) {
-          // FIXME: need to be able to deal with multiple stream here, but don't
-          // bother for now.
+          // TODO(d.rattman): need to be able to deal with multiple stream here,
+          // but don't bother for now.
           int j;
           int numVerts = m_pVertexCount[0];
           for (j = 0; j < m_nNumIndices; j++) {

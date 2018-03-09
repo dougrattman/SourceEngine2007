@@ -8,7 +8,7 @@
 
 class CSaveRestoreData;
 
-abstract_class ISaveRestore {
+the_interface ISaveRestore {
  public:
   virtual void Init(void) = 0;
   virtual void Shutdown(void) = 0;

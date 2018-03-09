@@ -14,7 +14,7 @@
 #include "clientsideeffects.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool g_FXCreationAllowed = false;
@@ -180,7 +180,7 @@ void CEffectsList::RemoveEffect( int effectIndex )
 
 	pEffect->Destroy();
 
-	delete pEffect;	//FIXME: Yes, no?
+	delete pEffect;	//TODO(d.rattman): Yes, no?
 }
 
 //-----------------------------------------------------------------------------

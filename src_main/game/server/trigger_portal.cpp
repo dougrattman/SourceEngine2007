@@ -12,7 +12,7 @@
 #include "player_pickup.h"
 #include "vphysics/friction.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define TRIGGER_DISABLED_THINK			"PortalDisabledThink"

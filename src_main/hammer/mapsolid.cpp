@@ -9,7 +9,7 @@
 #include "BrushOps.h"
 #include "GlobalFunctions.h"
 #include "MapDefs.h"		// dvs: For COORD_NOTINIT
-#include "MapView2D.h" // dvs FIXME: For HitTest2D implementation
+#include "MapView2D.h" // dvs TODO(d.rattman): For HitTest2D implementation
 #include "MapWorld.h"
 #include "MapSolid.h"
 #include "Options.h"
@@ -21,7 +21,7 @@
 #include "camera.h"
 #include "ssolid.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

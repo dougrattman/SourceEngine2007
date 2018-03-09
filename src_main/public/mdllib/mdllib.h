@@ -6,15 +6,15 @@
 #include "appframework/IAppSystem.h"
 #include "tier1/utlbuffer.h"
 
-abstract_class IMdlLib;
-abstract_class IMdlStripInfo;
+the_interface IMdlLib;
+the_interface IMdlStripInfo;
 
 //-----------------------------------------------------------------------------
 // Purpose: Interface to accessing model data operations
 //-----------------------------------------------------------------------------
 #define MDLLIB_INTERFACE_VERSION "VMDLLIB001"
 
-abstract_class IMdlLib : public IAppSystem {
+the_interface IMdlLib : public IAppSystem {
   //
   // Stripping routines
   //
@@ -40,7 +40,7 @@ abstract_class IMdlLib : public IAppSystem {
   virtual bool CreateNewStripInfo(IMdlStripInfo * *ppStripInfo) = 0;
 };
 
-abstract_class IMdlStripInfo {
+the_interface IMdlStripInfo {
   //
   // Serialization
   //

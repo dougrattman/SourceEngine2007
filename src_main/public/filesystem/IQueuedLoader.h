@@ -49,7 +49,7 @@ enum ResourcePreload_t {
   RESOURCEPRELOAD_COUNT
 };
 
-abstract_class IResourcePreload {
+the_interface IResourcePreload {
  public:
   // Called during preload phase for ALL the resources expected by the level.
   // Caller should not do i/o but generate AddJob() requests. Resources that
@@ -78,7 +78,7 @@ class CResourcePreload : public IResourcePreload {
 };
 
 // UI can install progress notification
-abstract_class ILoaderProgress {
+the_interface ILoaderProgress {
  public:
   // implementation must ignore UpdateProgress() if not scoped by Begin/End
   virtual void BeginProgress() = 0;
@@ -94,7 +94,7 @@ abstract_class ILoaderProgress {
 #define LOADER_DETAIL_PURGES (1 << 3)
 
 #define QUEUEDLOADER_INTERFACE_VERSION "QueuedLoaderVersion001"
-abstract_class IQueuedLoader : public IAppSystem {
+the_interface IQueuedLoader : public IAppSystem {
  public:
   virtual void InstallLoader(ResourcePreload_t type,
                              IResourcePreload * pLoader) = 0;

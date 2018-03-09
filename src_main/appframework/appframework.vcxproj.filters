@@ -9,7 +9,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\public\filesystem_init.cpp">
+    <ClCompile Include="..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="app_system_group.cc">

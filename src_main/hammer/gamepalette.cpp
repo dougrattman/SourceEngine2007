@@ -17,7 +17,7 @@
 #pragma warning(disable:4701 4702 4530)
 #include <fstream>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #pragma warning(pop)
@@ -65,10 +65,10 @@ CGamePalette::~CGamePalette()
 
 BOOL CGamePalette::Create(LPCTSTR pszFile)
 {
-	char szRootDir[MAX_PATH];
-	char szFullPath[MAX_PATH];
+	char szRootDir[SOURCE_MAX_PATH];
+	char szFullPath[SOURCE_MAX_PATH];
 	APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-	Q_MakeAbsolutePath( szFullPath, MAX_PATH, pszFile, szRootDir ); 
+	Q_MakeAbsolutePath( szFullPath, SOURCE_MAX_PATH, pszFile, szRootDir ); 
 
 	strFile = szFullPath;
 

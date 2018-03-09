@@ -1489,9 +1489,9 @@ bool HtmlWindow::CheckIsLink(IHTMLElement *el, const char *type) {
   HRESULT hr = el->get_tagName(&tag);
 
   if (SUCCEEDED(hr) && tag) {
-    _bstr_t p = _bstr_t{tag, false};
-    const char *tag = static_cast<char *>(p);
-    if (!Q_stricmp(tag, type)) {
+    bstr_t p = bstr_t{tag, false};
+    const char *tag_value = static_cast<char *>(p);
+    if (!Q_stricmp(tag_value, type)) {
       // its a link
       is_link = true;
     }
@@ -2102,7 +2102,7 @@ HRESULT FS_IOleInPlaceFrame::RemoveMenus(HMENU hmenuShared) {
 
 HRESULT FS_IOleInPlaceFrame::SetStatusText(LPCOLESTR pszStatusText) {
   DEBUG("IOleInPlaceFrame::SetStatusText");
-  // FIXME
+  // TODO(d.rattman):
   if (m_fs->m_window->GetEvents()) {
     char tmp[512];
     WideCharToMultiByte(CP_ACP, 0, pszStatusText, -1, tmp, 512, NULL, NULL);

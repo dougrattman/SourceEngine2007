@@ -213,7 +213,7 @@ void CDispMeshEvent::GetVirtualMesh(void *userData, virtualmeshlist_t *pList) {
   pList->vertexCount = m_verts.Count();
   pList->surfacePropsIndex = 0;  // doesn't matter here, reset at runtime
   pList->pHull = NULL;
-  int indexMax = ARRAYSIZE(pList->indices);
+  int indexMax = SOURCE_ARRAYSIZE(pList->indices);
   int indexCount = std::min(m_indexCount, indexMax);
   Assert(m_indexCount < indexMax);
   Q_memcpy(pList->indices, m_pIndices, sizeof(*m_pIndices) * indexCount);
@@ -233,7 +233,7 @@ void CDispMeshEvent::GetTrianglesInSphere(void *userData, const Vector &center,
                                           virtualmeshtrianglelist_t *pList) {
   Assert(userData == ((void *)this));
   pList->triangleCount = m_indexCount / 3;
-  int indexMax = ARRAYSIZE(pList->triangleIndices);
+  int indexMax = SOURCE_ARRAYSIZE(pList->triangleIndices);
   int indexCount = std::min(m_indexCount, indexMax);
   Assert(m_indexCount < MAX_VIRTUAL_TRIANGLES * 3);
   Q_memcpy(pList->triangleIndices, m_pIndices,

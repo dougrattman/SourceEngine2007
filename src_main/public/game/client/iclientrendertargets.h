@@ -15,7 +15,7 @@ class IMaterialSystemHardwareConfig;
 // Purpose: Exposes interfaces to the engine which allow the client to setup
 // their own render targets during the proper period of material system's init.
 //---------------------------------------------------------------------------------------------------
-abstract_class IClientRenderTargets {
+the_interface IClientRenderTargets {
  public:
   // Pass the material system interface to the client-- Their Material System
   // singleton has not been created at the time they receive this call.

@@ -31,10 +31,10 @@
 // and to make it a deliberate compile time choice to keep the fast path.
 #undef WaitForSingleObject
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define DISABLE_ASYNC
 #endif
 
@@ -210,11 +210,11 @@ enum FSAsyncMode_t {
 
 //---------------------------------------------------------
 
-COMPILE_TIME_ASSERT(FSASYNC_OK == JOB_OK);
-COMPILE_TIME_ASSERT(FSASYNC_STATUS_PENDING == JOB_STATUS_PENDING);
-COMPILE_TIME_ASSERT(FSASYNC_STATUS_INPROGRESS == JOB_STATUS_INPROGRESS);
-COMPILE_TIME_ASSERT(FSASYNC_STATUS_ABORTED == JOB_STATUS_ABORTED);
-COMPILE_TIME_ASSERT(FSASYNC_STATUS_UNSERVICED == JOB_STATUS_UNSERVICED);
+static_assert(FSASYNC_OK == JOB_OK);
+static_assert(FSASYNC_STATUS_PENDING == JOB_STATUS_PENDING);
+static_assert(FSASYNC_STATUS_INPROGRESS == JOB_STATUS_INPROGRESS);
+static_assert(FSASYNC_STATUS_ABORTED == JOB_STATUS_ABORTED);
+static_assert(FSASYNC_STATUS_UNSERVICED == JOB_STATUS_UNSERVICED);
 
 //---------------------------------------------------------
 // A standard filesystem job

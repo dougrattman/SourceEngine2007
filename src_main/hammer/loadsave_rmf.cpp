@@ -14,7 +14,7 @@
 #include "VisGroup.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CMapWorld *pLoadingWorld;
@@ -130,17 +130,17 @@ int CMapFace::SerializeRMF(std::fstream &file, BOOL fIsStoring) {
       // Didn't have smooth/material groups:
       file.read((char *)&OldTex, 40);
       file.read((char *)&OldTex,
-                sizeof(OldTex.texture) - (MAX_PATH) + sizeof(OldTex.rotate) +
+                sizeof(OldTex.texture) - (SOURCE_MAX_PATH) + sizeof(OldTex.rotate) +
                     sizeof(OldTex.shift) + sizeof(OldTex.scale));
     } else if (fThisVersion < 1.7f) {
       // No quake2 fields yet and smaller texture size.
       file.read((char *)&OldTex, 40);
       file.read((char *)&OldTex.rotate,
-                sizeof(OldTex) - (sizeof(int) * 3) - MAX_PATH);
+                sizeof(OldTex) - (sizeof(int) * 3) - SOURCE_MAX_PATH);
     } else if (fThisVersion < 1.8f) {
-      // Texture name field changed from 40 to MAX_PATH in size.
+      // Texture name field changed from 40 to SOURCE_MAX_PATH in size.
       file.read((char *)&OldTex, 40);
-      file.read((char *)&OldTex.rotate, sizeof(OldTex) - MAX_PATH);
+      file.read((char *)&OldTex.rotate, sizeof(OldTex) - SOURCE_MAX_PATH);
     } else if (fThisVersion < 2.2f) {
       file.read((char *)&OldTex, sizeof(OldTex));
     } else {
@@ -211,7 +211,7 @@ int CMapFace::SerializeRMF(std::fstream &file, BOOL fIsStoring) {
     }
 
     if (texture.texture[1] == ':') {
-      char szBuf[MAX_PATH];
+      char szBuf[SOURCE_MAX_PATH];
       char *psz;
       strcpy(szBuf, texture.texture);
       psz = strstr(szBuf, "textures\\");
@@ -776,7 +776,7 @@ int CMapWorld::SerializeRMF(std::fstream &file, BOOL fIsStoring) {
 
     if (g_pGameConfig->GetTextureFormat() == tfVMT) {
       // do batch search and replace of textures from trans.txt if it exists.
-      char translationFilename[MAX_PATH];
+      char translationFilename[SOURCE_MAX_PATH];
       Q_snprintf(translationFilename, sizeof(translationFilename),
                  "materials/trans.txt");
       FileHandle_t searchReplaceFP = fopen(translationFilename, "r");

@@ -29,7 +29,7 @@ extern ConVar tf_knockdowntime;
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Damage CVars
@@ -605,7 +605,7 @@ void CWeaponCombatShield::RemoveShieldHealth( float flHealth )
 //-----------------------------------------------------------------------------
 void CWeaponCombatShield::ShieldRechargeThink( void )
 {
-// FIXME:
+// TODO(d.rattman):
 //xxx
 #if !defined( CLIENT_DLL )
 	if ( GetShieldHealth() >= 1.0 )

@@ -44,7 +44,7 @@
 #undef GetCurrentDirectory
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -56,10 +56,8 @@ using namespace vgui;
 
 static int s_nLastSortColumn = 0;
 
-static int ListFileNameSortFunc(ListPanel *pPanel, const ListPanelItem &item1, const ListPanelItem &item2 )
+static int ListFileNameSortFunc([[maybe_unused]] ListPanel *pPanel, const ListPanelItem &item1, const ListPanelItem &item2 )
 {
-	NOTE_UNUSED( pPanel );
-
 	bool dir1 = item1.kv->GetInt("directory") == 1;
 	bool dir2 = item2.kv->GetInt("directory") == 1;
 
@@ -514,7 +512,7 @@ void FileOpenDialog::Init( const char *title, KeyValues *pContextKeyValues )
 
 	// list panel
 	m_pFileList = new ListPanel(this, "FileList");
-	for ( int i = 0; i < ARRAYSIZE( g_ColInfo ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( g_ColInfo ); ++i )
 	{
 		const ColumnInfo_t& info = g_ColInfo[ i ];
 
@@ -694,9 +692,9 @@ void FileOpenDialog::OnKeyCodeTyped(KeyCode code)
 //-----------------------------------------------------------------------------
 void FileOpenDialog::PopulateDriveList()
 {
-	char fullpath[MAX_PATH * 4];
-	char subDirPath[MAX_PATH * 4];
-	GetCurrentDirectory(fullpath, sizeof(fullpath) - MAX_PATH);
+	char fullpath[SOURCE_MAX_PATH * 4];
+	char subDirPath[SOURCE_MAX_PATH * 4];
+	GetCurrentDirectory(fullpath, sizeof(fullpath) - SOURCE_MAX_PATH);
 	Q_strncpy(subDirPath, fullpath, sizeof( subDirPath ) );
 
 	m_pFullPathEdit->DeleteAllItems();
@@ -809,7 +807,7 @@ void FileOpenDialog::OnNewFolder()
 //-----------------------------------------------------------------------------
 void FileOpenDialog::OnOpenInExplorer()
 {
-	char pCurrentDirectory[MAX_PATH];
+	char pCurrentDirectory[SOURCE_MAX_PATH];
 	GetCurrentDirectory( pCurrentDirectory, sizeof(pCurrentDirectory) );
 #if !defined( _X360 )
 	ShellExecute( NULL, NULL, pCurrentDirectory, NULL, NULL, SW_SHOWNORMAL );
@@ -884,7 +882,7 @@ void FileOpenDialog::SetStartDirectory( const char *dir )
 	// Store this in the start directory list
 	if ( m_nStartDirContext != s_StartDirContexts.InvalidIndex() )
 	{
-		char pDirBuf[MAX_PATH];
+		char pDirBuf[SOURCE_MAX_PATH];
 		GetCurrentDirectory( pDirBuf, sizeof(pDirBuf) );
 		s_StartDirContexts[ m_nStartDirContext ] = pDirBuf;
 	}
@@ -943,11 +941,11 @@ void FileOpenDialog::GetSelectedFileName(char *buf, int bufSize)
 //-----------------------------------------------------------------------------
 void FileOpenDialog::NewFolder( char const *folderName )
 {
-	char pCurrentDirectory[MAX_PATH];
+	char pCurrentDirectory[SOURCE_MAX_PATH];
 	GetCurrentDirectory( pCurrentDirectory, sizeof(pCurrentDirectory) );
 
-	char pFullPath[MAX_PATH];
-	char pNewFolderName[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
+	char pNewFolderName[SOURCE_MAX_PATH];
 	Q_strncpy( pNewFolderName, folderName, sizeof(pNewFolderName) );
 	int i = 2;
 	do
@@ -972,8 +970,8 @@ void FileOpenDialog::NewFolder( char const *folderName )
 //-----------------------------------------------------------------------------
 void FileOpenDialog::MoveUpFolder()
 {
-	char fullpath[MAX_PATH * 4];
-	GetCurrentDirectory(fullpath, sizeof(fullpath) - MAX_PATH);
+	char fullpath[SOURCE_MAX_PATH * 4];
+	GetCurrentDirectory(fullpath, sizeof(fullpath) - SOURCE_MAX_PATH);
 
 	// strip it back
 	char *pos = strrchr(fullpath, '\\');
@@ -1005,8 +1003,8 @@ void FileOpenDialog::MoveUpFolder()
 //-----------------------------------------------------------------------------
 void FileOpenDialog::ValidatePath()
 {
-	char fullpath[MAX_PATH * 4];
-	GetCurrentDirectory(fullpath, sizeof(fullpath) - MAX_PATH);
+	char fullpath[SOURCE_MAX_PATH * 4];
+	GetCurrentDirectory(fullpath, sizeof(fullpath) - SOURCE_MAX_PATH);
 	Q_RemoveDotSlashes( fullpath );
 
 	// ensure to add '\' to end of path
@@ -1124,8 +1122,8 @@ void FileOpenDialog::PopulateFileList()
 	m_pFileList->DeleteAllItems();
 	
 	// get the current directory
-	char currentDir[MAX_PATH * 4];
-	char dir[MAX_PATH * 4];
+	char currentDir[SOURCE_MAX_PATH * 4];
+	char dir[SOURCE_MAX_PATH * 4];
 	char filterList[MAX_FILTER_LENGTH+1];
 	GetCurrentDirectory(currentDir, sizeof(dir));
 
@@ -1168,7 +1166,7 @@ void FileOpenDialog::PopulateFileList()
 				break;
 			}
 
-			Q_snprintf(dir, MAX_PATH*4, "%s%s", currentDir, curFilter);
+			Q_snprintf(dir, SOURCE_MAX_PATH*4, "%s%s", currentDir, curFilter);
 
 			// open the directory and walk it, loading files
 			findHandle = ::FindFirstFile(dir, &findData);
@@ -1292,7 +1290,7 @@ bool FileOpenDialog::ExtensionMatchesFilter( const char *pExt )
 		if ( !Q_stricmp( curFilter, "*" ) || !Q_stricmp( curFilter, "*.*" ) )
 			return true;
 
-		// FIXME: This isn't exactly right, but tough cookies;
+		// TODO(d.rattman): This isn't exactly right, but tough cookies;
 		// it assumes the first two characters of the filter are *.
 		Assert( curFilter[0] == '*' && curFilter[1] == '.' );
 		if ( !Q_stricmp( &curFilter[2], pExt ) )
@@ -1340,7 +1338,7 @@ void FileOpenDialog::ChooseExtension( char *pExt, int nBufLen )
 		if ( !Q_stricmp( curFilter, "*" ) || !Q_stricmp( curFilter, "*.*" ) )
 			continue;
 
-		// FIXME: This isn't exactly right, but tough cookies;
+		// TODO(d.rattman): This isn't exactly right, but tough cookies;
 		// it assumes the first two characters of the filter are *.
 		Assert( curFilter[0] == '*' && curFilter[1] == '.' );
 		Q_strncpy( pExt, &curFilter[1], nBufLen );
@@ -1357,7 +1355,7 @@ void FileOpenDialog::SaveFileToStartDirContext( const char *pFullPath )
 	if ( m_nStartDirContext == s_StartDirContexts.InvalidIndex() )
 		return;
 
-	char pPath[MAX_PATH];
+	char pPath[SOURCE_MAX_PATH];
 	pPath[0] = 0;
 	Q_ExtractFilePath( pFullPath, pPath, sizeof(pPath) );
 	s_StartDirContexts[ m_nStartDirContext ] = pPath;
@@ -1397,7 +1395,7 @@ void FileOpenDialog::OnSelectFolder()
 	ValidatePath();
 
 	// construct a file path
-	char pFileName[MAX_PATH];
+	char pFileName[SOURCE_MAX_PATH];
 	GetSelectedFileName( pFileName, sizeof( pFileName ) );
 
 	Q_StripTrailingSlash( pFileName );
@@ -1419,10 +1417,10 @@ void FileOpenDialog::OnSelectFolder()
 	}
 
 	// Compute the full path
-	char pFullPath[MAX_PATH * 4];
+	char pFullPath[SOURCE_MAX_PATH * 4];
 	if ( !Q_IsAbsolutePath( pFileName ) )
 	{
-		GetCurrentDirectory(pFullPath, sizeof(pFullPath) - MAX_PATH);
+		GetCurrentDirectory(pFullPath, sizeof(pFullPath) - SOURCE_MAX_PATH);
 		strcat( pFullPath, pFileName );
 		if ( !pFileName[0] )
 		{
@@ -1457,7 +1455,7 @@ void FileOpenDialog::OnOpen()
 	ValidatePath();
 
 	// construct a file path
-	char pFileName[MAX_PATH];
+	char pFileName[SOURCE_MAX_PATH];
 	GetSelectedFileName( pFileName, sizeof( pFileName ) );
 
 	int nLen = Q_strlen( pFileName );
@@ -1481,10 +1479,10 @@ void FileOpenDialog::OnOpen()
 	}
 	 
 	// Compute the full path
-	char pFullPath[MAX_PATH * 4];
+	char pFullPath[SOURCE_MAX_PATH * 4];
 	if ( !Q_IsAbsolutePath( pFileName ) )
 	{
-		GetCurrentDirectory(pFullPath, sizeof(pFullPath) - MAX_PATH);
+		GetCurrentDirectory(pFullPath, sizeof(pFullPath) - SOURCE_MAX_PATH);
 		strcat(pFullPath, pFileName);
 		if ( !pFileName[0] )
 		{

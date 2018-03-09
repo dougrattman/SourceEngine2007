@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // Purpose: Base Panel for engine vgui panels ( can handle some drawing stuff )
 //-----------------------------------------------------------------------------
-abstract_class CBasePanel : public vgui::Panel {
+the_interface CBasePanel : public vgui::Panel {
   typedef vgui::Panel BaseClass;
 
  public:

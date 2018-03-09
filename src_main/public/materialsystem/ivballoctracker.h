@@ -20,7 +20,7 @@
 #define VB_ALLOC_TRACKER_INTERFACE_VERSION "VBAllocTracker001"
 
 // Interface to the VB mem alloc tracker
-abstract_class IVBAllocTracker {
+the_interface IVBAllocTracker {
  public:
   // This should be called wherever VertexBuffers are allocated
   virtual void CountVB(void* buffer, bool isDynamic, int bufferSize,

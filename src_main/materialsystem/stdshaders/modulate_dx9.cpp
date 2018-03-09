@@ -13,7 +13,7 @@
 #include "cpp_shader_constant_register_map.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 #include "cloak_blended_pass_helper.h"
 
@@ -171,7 +171,7 @@ BEGIN_VS_SHADER( Modulate_DX9,
 
 				// HACK:  add 1 texcoord if these verts are too thin (to do with how we
 				//        bind stream 2 - see CShaderShadowDX8::VertexShaderVertexFormat)
-				// FIXME: instead of this, don't add stream 2 elements to all vertex decls!
+				// TODO(d.rattman): instead of this, don't add stream 2 elements to all vertex decls!
 				if ( !( flags & VERTEX_COLOR ) && ( numTexCoords == 0 ) )
 				{
 					numTexCoords = 1;

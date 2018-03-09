@@ -1,8 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Unique ID generation
 
 #include "tier1/uniqueid.h"
+
+#include "build/include/build_config.h"
 
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"  // UUIDCreate
@@ -12,15 +14,14 @@
 #include "tier1/checksum_crc.h"
 #endif
 
+#include "tier0/include/basetypes.h"
 #include "tier0/include/platform.h"
 #include "tier1/utlbuffer.h"
 
-
 // Creates a new unique id
-
 void CreateUniqueId(UniqueId_t *pDest) {
-#ifdef IS_WINDOWS_PC
-  COMPILE_TIME_ASSERT(sizeof(UUID) == sizeof(*pDest));
+#ifdef OS_WIN
+  static_assert(sizeof(UUID) == sizeof(*pDest));
   UuidCreate((UUID *)pDest);
 #else
   // X360/linux TBD: Need a real UUID Implementation
@@ -28,9 +29,7 @@ void CreateUniqueId(UniqueId_t *pDest) {
 #endif
 }
 
-
 // Creates a new unique id from a string representation of one
-
 bool UniqueIdFromString(UniqueId_t *pDest, const char *pBuf, int nMaxLen) {
   if (nMaxLen == 0) {
     nMaxLen = Q_strlen(pBuf);
@@ -48,8 +47,8 @@ bool UniqueIdFromString(UniqueId_t *pDest, const char *pBuf, int nMaxLen) {
     ++pTemp;
   }
 
-#ifdef IS_WINDOWS_PC
-  COMPILE_TIME_ASSERT(sizeof(UUID) == sizeof(*pDest));
+#ifdef OS_WIN
+  static_assert(sizeof(UUID) == sizeof(*pDest));
 
   if (RPC_S_OK != UuidFromString((unsigned char *)pTemp, (UUID *)pDest)) {
     InvalidateUniqueId(pDest);
@@ -71,9 +70,7 @@ bool UniqueIdFromString(UniqueId_t *pDest, const char *pBuf, int nMaxLen) {
   return true;
 }
 
-
 // Sets an object ID to be an invalid state
-
 void InvalidateUniqueId(UniqueId_t *pDest) {
   Assert(pDest);
   memset(pDest, 0, sizeof(UniqueId_t));
@@ -93,7 +90,7 @@ void UniqueIdToString(const UniqueId_t &id, char *pBuf, int nMaxLen) {
   pBuf[0] = 0;
 
 // X360TBD: Need a real UUID Implementation
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
   UUID *self = (UUID *)&id;
 
   unsigned char *outstring = NULL;
@@ -111,8 +108,7 @@ void CopyUniqueId(const UniqueId_t &src, UniqueId_t *pDest) {
 }
 
 bool Serialize(CUtlBuffer &buf, const UniqueId_t &src) {
-// X360TBD: Need a real UUID Implementation
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
   if (buf.IsText()) {
     UUID *pId = (UUID *)&src;
 
@@ -143,5 +139,6 @@ bool Unserialize(CUtlBuffer &buf, UniqueId_t &dest) {
   } else {
     buf.Get(&dest, sizeof(UniqueId_t));
   }
+
   return buf.IsValid();
 }

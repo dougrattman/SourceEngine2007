@@ -1,12 +1,12 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/threadtools.h"
 
 #ifdef OS_WIN
 #include <process.h>
 #elif OS_POSIX
-typedef i32 (*PTHREAD_START_ROUTINE)(void *lpThreadParameter);
-typedef PTHREAD_START_ROUTINE LPTHREAD_START_ROUTINE;
+using PTHREAD_START_ROUTINE = i32 (*)(void *lpThreadParameter);
+using LPTHREAD_START_ROUTINE = PTHREAD_START_ROUTINE;
 #include <errno.h>
 #include <pthread.h>
 #include <sched.h>
@@ -14,13 +14,14 @@ typedef PTHREAD_START_ROUTINE LPTHREAD_START_ROUTINE;
 #include <sys/time.h>
 #include <exception>
 #define GetLastError() errno
-typedef void *LPVOID;
 #endif
 
 #include <memory.h>
 #include <memory>
 #include "base/include/windows/windows_light.h"
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 #include "tier0/include/vcrmode.h"
 
 #include "tier0/include/memdbgon.h"
@@ -37,8 +38,8 @@ MSVC_END_WARNING_OVERRIDE_SCOPE()
 #endif
 
 #ifdef OS_WIN
-COMPILE_TIME_ASSERT(TT_SIZEOF_CRITICALSECTION == sizeof(CRITICAL_SECTION));
-COMPILE_TIME_ASSERT(TT_INFINITE == INFINITE);
+static_assert(TT_SIZEOF_CRITICALSECTION == sizeof(CRITICAL_SECTION));
+static_assert(TT_INFINITE == INFINITE);
 #endif
 
 // Simple thread functions.
@@ -52,15 +53,11 @@ struct ThreadProcInfo_t {
   void *pParam;
 };
 
-//---------------------------------------------------------
-
-static u32 __stdcall ThreadProcConvert(void *pParam) {
+static u32 SOURCE_STDCALL ThreadProcConvert(void *pParam) {
   ThreadProcInfo_t info = *((ThreadProcInfo_t *)pParam);
   delete ((ThreadProcInfo_t *)pParam);
   return (*info.pfnThread)(info.pParam);
 }
-
-//---------------------------------------------------------
 
 ThreadHandle_t CreateSimpleThread(ThreadFunc_t pfnThread, void *pParam,
                                   ThreadId_t *pID, u32 stackSize) {
@@ -233,9 +230,9 @@ void ThreadSetDebugName(ThreadId_t id, const ch *pszName) {
 #endif
 }
 
-COMPILE_TIME_ASSERT(TW_FAILED == WAIT_FAILED);
-COMPILE_TIME_ASSERT(TW_TIMEOUT == WAIT_TIMEOUT);
-COMPILE_TIME_ASSERT(WAIT_OBJECT_0 == 0);
+static_assert(TW_FAILED == WAIT_FAILED);
+static_assert(TW_TIMEOUT == WAIT_TIMEOUT);
+static_assert(WAIT_OBJECT_0 == 0);
 
 #ifdef OS_WIN
 i32 ThreadWaitForObjects(i32 nEvents, const HANDLE *pHandles, bool bWaitAll,
@@ -267,8 +264,6 @@ CThreadSyncObject::CThreadSyncObject()
 {
 }
 
-//---------------------------------------------------------
-
 CThreadSyncObject::~CThreadSyncObject() {
 #ifdef OS_WIN
   if (m_hSyncObject) {
@@ -285,8 +280,6 @@ CThreadSyncObject::~CThreadSyncObject() {
 #endif
 }
 
-//---------------------------------------------------------
-
 bool CThreadSyncObject::operator!() const {
 #ifdef OS_WIN
   return !m_hSyncObject;
@@ -294,8 +287,6 @@ bool CThreadSyncObject::operator!() const {
   return !m_bInitalized;
 #endif
 }
-
-//---------------------------------------------------------
 
 void CThreadSyncObject::AssertUseable() {
 #ifdef THREADS_DEBUG
@@ -306,8 +297,6 @@ void CThreadSyncObject::AssertUseable() {
 #endif
 #endif
 }
-
-//---------------------------------------------------------
 
 bool CThreadSyncObject::Wait(u32 dwTimeout) {
 #ifdef THREADS_DEBUG
@@ -367,8 +356,6 @@ CThreadEvent::CThreadEvent(bool bManualReset) {
 
 //
 
-//---------------------------------------------------------
-
 bool CThreadEvent::Set() {
   AssertUseable();
 #ifdef OS_WIN
@@ -381,8 +368,6 @@ bool CThreadEvent::Set() {
   return ret == 0;
 #endif
 }
-
-//---------------------------------------------------------
 
 bool CThreadEvent::Reset() {
 #ifdef THREADS_DEBUG
@@ -397,8 +382,6 @@ bool CThreadEvent::Reset() {
   return true;
 #endif
 }
-
-//---------------------------------------------------------
 
 bool CThreadEvent::Check() {
 #ifdef THREADS_DEBUG
@@ -435,8 +418,6 @@ CThreadSemaphore::CThreadSemaphore(long initialValue, long maxValue) {
   }
 }
 
-//---------------------------------------------------------
-
 bool CThreadSemaphore::Release(long releaseCount, long *pPreviousCount) {
 #ifdef THRDTOOL_DEBUG
   AssertUseable();
@@ -453,8 +434,6 @@ _Acquires_lock_(this->m_hSyncObject) CThreadFullMutex::CThreadFullMutex(
   AssertMsg1(m_hSyncObject, "Failed to create mutex (error 0x%x)",
              GetLastError());
 }
-
-//---------------------------------------------------------
 
 _Releases_lock_(this->m_hSyncObject) bool CThreadFullMutex::Release() {
 #ifdef THRDTOOL_DEBUG
@@ -478,8 +457,6 @@ CThreadLocalBase::CThreadLocalBase() {
 #endif
 }
 
-//---------------------------------------------------------
-
 CThreadLocalBase::~CThreadLocalBase() {
 #ifdef OS_WIN
   if (m_index != 0xFFFFFFFF) TlsFree(m_index);
@@ -488,8 +465,6 @@ CThreadLocalBase::~CThreadLocalBase() {
   pthread_key_delete(m_index);
 #endif
 }
-
-//---------------------------------------------------------
 
 void *CThreadLocalBase::Get() const {
 #ifdef OS_WIN
@@ -501,8 +476,6 @@ void *CThreadLocalBase::Get() const {
   return value;
 #endif
 }
-
-//---------------------------------------------------------
 
 void CThreadLocalBase::Set(void *value) {
 #ifdef OS_WIN
@@ -1091,8 +1064,6 @@ void CThreadSpinRWLock::UnlockWrite() {
 
 CThreadLocalPtr<CThread> g_pCurThread;
 
-//---------------------------------------------------------
-
 CThread::CThread()
     :
 #ifdef OS_WIN
@@ -1104,8 +1075,6 @@ CThread::CThread()
       m_flags{0} {
   m_szName[0] = '\0';
 }
-
-//---------------------------------------------------------
 
 CThread::~CThread() {
 #ifdef OS_WIN
@@ -1132,8 +1101,6 @@ CThread::~CThread() {
   }
 }
 
-//---------------------------------------------------------
-
 const ch *CThread::GetName() {
   AUTO_LOCK(m_Lock);
   if (!m_szName[0]) {
@@ -1148,15 +1115,11 @@ const ch *CThread::GetName() {
   return m_szName;
 }
 
-//---------------------------------------------------------
-
 void CThread::SetName(const ch *pszName) {
   AUTO_LOCK(m_Lock);
   strncpy(m_szName, pszName, sizeof(m_szName) - 1);
   m_szName[sizeof(m_szName) - 1] = 0;
 }
-
-//---------------------------------------------------------
 
 bool CThread::Start(u32 nBytesStack) {
   AUTO_LOCK(m_Lock);
@@ -1225,11 +1188,7 @@ bool CThread::Start(u32 nBytesStack) {
 #endif
 }
 
-//---------------------------------------------------------
-//
 // Return true if the thread exists. false otherwise
-//
-
 bool CThread::IsAlive() {
   DWORD dwExitCode;
 
@@ -1242,8 +1201,6 @@ bool CThread::IsAlive() {
 #endif
   );
 }
-
-//---------------------------------------------------------
 
 bool CThread::Join(u32 timeout) {
 #ifdef OS_WIN
@@ -1263,27 +1220,17 @@ bool CThread::Join(u32 timeout) {
   return true;
 }
 
-//---------------------------------------------------------
-
 #ifdef OS_WIN
 
 HANDLE CThread::GetThreadHandle() { return m_hThread; }
-
-//---------------------------------------------------------
 
 u32 CThread::GetThreadId() { return m_threadId; }
 
 #endif
 
-//---------------------------------------------------------
-
 i32 CThread::GetResult() { return m_result; }
 
-//---------------------------------------------------------
-//
 // Forcibly, abnormally, but relatively cleanly stop the thread
-//
-
 void CThread::Stop(i32 exitCode) {
   if (!IsAlive()) return;
 
@@ -1304,8 +1251,6 @@ void CThread::Stop(i32 exitCode) {
     AssertMsg(0, "Only thread can stop self: Use a higher-level protocol");
 }
 
-//---------------------------------------------------------
-
 i32 CThread::GetPriority() const {
 #ifdef OS_WIN
   return GetThreadPriority(m_hThread);
@@ -1317,8 +1262,6 @@ i32 CThread::GetPriority() const {
 #endif
 }
 
-//---------------------------------------------------------
-
 bool CThread::SetPriority(i32 priority) {
 #ifdef OS_WIN
   return ThreadSetPriority((ThreadHandle_t)m_hThread, priority);
@@ -1326,8 +1269,6 @@ bool CThread::SetPriority(i32 priority) {
   return ThreadSetPriority((ThreadHandle_t)m_threadId, priority);
 #endif
 }
-
-//---------------------------------------------------------
 
 u32 CThread::Suspend() {
 #ifdef OS_WIN
@@ -1338,8 +1279,6 @@ u32 CThread::Suspend() {
 #endif
 }
 
-//---------------------------------------------------------
-
 u32 CThread::Resume() {
 #ifdef OS_WIN
   return (ResumeThread(m_hThread) != 0);
@@ -1348,8 +1287,6 @@ u32 CThread::Resume() {
   return 0;
 #endif
 }
-
-//---------------------------------------------------------
 
 bool CThread::Terminate(i32 exitCode) {
 #ifdef OS_WIN
@@ -1366,20 +1303,12 @@ bool CThread::Terminate(i32 exitCode) {
   return true;
 }
 
-//---------------------------------------------------------
-//
 // Get the Thread object that represents the current thread, if any.
 // Can return nullptr if the current thread was not created using
 // CThread
-//
-
 CThread *CThread::GetCurrentCThread() { return g_pCurThread; }
 
-//---------------------------------------------------------
-//
 // Offer a context switch. Under Win32, equivalent to Sleep(0)
-//
-
 void CThread::Yield() {
 #ifdef OS_WIN
   ::Sleep(0);
@@ -1388,13 +1317,9 @@ void CThread::Yield() {
 #endif
 }
 
-//---------------------------------------------------------
-//
 // This method causes the current thread to yield and not to be
 // scheduled for further execution until a certain amount of real
 // time has elapsed, more or less.
-//
-
 void CThread::Sleep(u32 duration) {
 #ifdef OS_WIN
   ::Sleep(duration);
@@ -1403,15 +1328,10 @@ void CThread::Sleep(u32 duration) {
 #endif
 }
 
-//---------------------------------------------------------
-
 bool CThread::Init() { return true; }
-
-//---------------------------------------------------------
 
 void CThread::OnExit() {}
 
-//---------------------------------------------------------
 #ifdef OS_WIN
 bool CThread::WaitForCreateComplete(CThreadEvent *pEvent) {
   // Force serialized thread creation...
@@ -1424,13 +1344,9 @@ bool CThread::WaitForCreateComplete(CThreadEvent *pEvent) {
 }
 #endif
 
-//---------------------------------------------------------
-
 CThread::ThreadProc_t CThread::GetThreadProc() { return ThreadProc; }
 
-//---------------------------------------------------------
-
-u32 __stdcall CThread::ThreadProc(LPVOID pv) {
+u32 SOURCE_STDCALL CThread::ThreadProc(void *pv) {
 #ifdef OS_POSIX
   ThreadInit_t *pInit = (ThreadInit_t *)pv;
 #else
@@ -1463,7 +1379,8 @@ u32 __stdcall CThread::ThreadProc(LPVOID pv) {
   if (!Plat_IsInDebugSession() && (pThread->m_flags & SUPPORT_STOP_PROTOCOL)) {
     try {
       pThread->m_result = pThread->Run();
-    } catch (...) {
+    } catch (...) {  //-V565
+      Warning("Thread %u has encountered exception.\n", pThread->GetThreadId());
     }
   } else {
     pThread->m_result = pThread->Run();
@@ -1482,8 +1399,6 @@ u32 __stdcall CThread::ThreadProc(LPVOID pv) {
   return pInit->pThread->m_result;
 }
 
-//
-
 #ifdef OS_WIN
 CWorkerThread::CWorkerThread()
     : m_EventSend(true),      // must be manual-reset for PeekCall()
@@ -1492,28 +1407,18 @@ CWorkerThread::CWorkerThread()
       m_Param(0),
       m_ReturnVal(0) {}
 
-//---------------------------------------------------------
-
 i32 CWorkerThread::CallWorker(u32 dw, u32 timeout,
                               bool fBoostWorkerPriorityToMaster) {
   return Call(dw, timeout, fBoostWorkerPriorityToMaster);
 }
 
-//---------------------------------------------------------
-
 i32 CWorkerThread::CallMaster(u32 dw, u32 timeout) {
   return Call(dw, timeout, false);
 }
 
-//---------------------------------------------------------
-
 HANDLE CWorkerThread::GetCallHandle() { return m_EventSend; }
 
-//---------------------------------------------------------
-
 u32 CWorkerThread::GetCallParam() const { return m_Param; }
-
-//---------------------------------------------------------
 
 i32 CWorkerThread::BoostPriority() {
   i32 iInitialPriority = GetPriority();
@@ -1522,10 +1427,8 @@ i32 CWorkerThread::BoostPriority() {
   return iInitialPriority;
 }
 
-//---------------------------------------------------------
-
-static u32 __stdcall DefaultWaitFunc(u32 nHandles, const HANDLE *pHandles,
-                                     i32 bWaitAll, u32 timeout) {
+static u32 SOURCE_STDCALL DefaultWaitFunc(u32 nHandles, const HANDLE *pHandles,
+                                          i32 bWaitAll, u32 timeout) {
   return VCRHook_WaitForMultipleObjects(nHandles, (const void **)pHandles,
                                         bWaitAll, timeout);
 }
@@ -1558,11 +1461,7 @@ i32 CWorkerThread::Call(u32 dwParam, u32 timeout, bool fBoostPriority,
   return m_ReturnVal;
 }
 
-//---------------------------------------------------------
-//
 // Wait for a request from the client
-//
-//---------------------------------------------------------
 i32 CWorkerThread::WaitForReply(u32 timeout) {
   return WaitForReply(timeout, nullptr);
 }
@@ -1608,17 +1507,10 @@ i32 CWorkerThread::WaitForReply(u32 timeout, WaitFunc_t pfnWait) {
   return m_ReturnVal;
 }
 
-//---------------------------------------------------------
-//
 // Wait for a request from the client
-//
-//---------------------------------------------------------
-
 bool CWorkerThread::WaitForCall(u32 *pResult) {
   return WaitForCall(TT_INFINITE, pResult);
 }
-
-//---------------------------------------------------------
 
 bool CWorkerThread::WaitForCall(u32 dwTimeout, u32 *pResult) {
   bool returnVal = m_EventSend.Wait(dwTimeout);
@@ -1626,11 +1518,7 @@ bool CWorkerThread::WaitForCall(u32 dwTimeout, u32 *pResult) {
   return returnVal;
 }
 
-//---------------------------------------------------------
-//
 // is there a request?
-//
-
 bool CWorkerThread::PeekCall(u32 *pParam) {
   if (!m_EventSend.Check()) {
     return false;
@@ -1642,11 +1530,7 @@ bool CWorkerThread::PeekCall(u32 *pParam) {
   }
 }
 
-//---------------------------------------------------------
-//
 // Reply to the request
-//
-
 void CWorkerThread::Reply(u32 dw) {
   m_Param = 0;
   m_ReturnVal = dw;

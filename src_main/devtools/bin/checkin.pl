@@ -4,7 +4,7 @@ use strict;
 # CONFIG VARS
 ###################################################
 
-# FIXME: load these from a separate file so that each user can have their own config without editingthis file.
+# TODO(d.rattman): load these from a separate file so that each user can have their own config without editingthis file.
 my $g_P4UserName = "gary";
 
 my $g_LocalBaseDir = "u:\\hl2";
@@ -24,7 +24,7 @@ my $g_MainBranchSubdir = "src_main";
 
 my $g_UseIncredibuildForMain = 1;
 
-# FIXME: need to make this work for those that don't work on HL2.
+# TODO(d.rattman): need to make this work for those that don't work on HL2.
 my $g_LocalBranchHasHL1Port = 0;
 my $g_LocalBranchHasCSPort = 0;
 my $g_LocalBranchHasTF2 = 0;
@@ -115,7 +115,7 @@ sub SSGet
 	my $workingdir;
 	while( <SS> )
 	{
-		# FIXME: clean up this output.
+		# TODO(d.rattman): clean up this output.
 		$_ =~ s/\n//;
 		if( m/^\$/ )
 		{
@@ -346,7 +346,7 @@ sub SyncLocalBranchSource
 {
 	&CD( $g_LocalBranchDir );
 	&RunCmd( "p4mf.bat $g_LocalBranchName $g_LocalBranchClient pause" );
-	# FIXME: This needs to specify the changelist since p4mf makes a new changelist.
+	# TODO(d.rattman): This needs to specify the changelist since p4mf makes a new changelist.
 #	&RunCmd( "p4 submit" );
 
 }
@@ -390,7 +390,7 @@ sub SyncLocalBranchContent
 		{
 			&FastSSGet( $g_LocalBaseDir, "hl2" );
 		}
-		# FIXME: screwed on tf2 here.
+		# TODO(d.rattman): screwed on tf2 here.
 	}
 }
 

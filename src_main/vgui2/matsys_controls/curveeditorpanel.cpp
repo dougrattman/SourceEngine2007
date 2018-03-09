@@ -157,7 +157,7 @@ void CCurveEditorPanel::Paint( void )
 
 	int x0 = 0, y0 = 0;
 
-	// FIXME: Add method to draw multiple lines DrawPolyLine connects the 1st and last points... bleah
+	// TODO(d.rattman): Add method to draw multiple lines DrawPolyLine connects the 1st and last points... bleah
 	vgui::surface()->DrawSetColor( 0, 0, 0, 255 );
 	for ( int i = 0; i < w; ++i )
 	{

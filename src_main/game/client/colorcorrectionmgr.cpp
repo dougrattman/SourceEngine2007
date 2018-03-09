@@ -74,7 +74,7 @@ void CColorCorrectionMgr::SetColorCorrectionWeight( ClientCCHandle_t h, float fl
 		ColorCorrectionHandle_t ccHandle = (ColorCorrectionHandle_t)h;
 		pRenderContext->SetLookupWeight( ccHandle, flWeight );
 
-		// FIXME: NOTE! This doesn't work if the same handle has
+		// TODO(d.rattman): NOTE! This doesn't work if the same handle has
 		// its weight set twice with no intervening calls to ResetColorCorrectionWeights
 		// which, at the moment, is true
 		if ( flWeight != 0.0f )
@@ -87,7 +87,7 @@ void CColorCorrectionMgr::SetColorCorrectionWeight( ClientCCHandle_t h, float fl
 void CColorCorrectionMgr::ResetColorCorrectionWeights()
 {
 	VPROF_("ResetColorCorrectionWeights", 2, VPROF_BUDGETGROUP_OTHER_UNACCOUNTED, false, 0);
-	// FIXME: Where should I put this? It needs to happen prior to SimulateEntities()
+	// TODO(d.rattman): Where should I put this? It needs to happen prior to SimulateEntities()
 	// which is where the client thinks for c_colorcorrection + c_colorcorrectionvolumes
 	// update the color correction weights.
 	CMatRenderContextPtr pRenderContext( g_pMaterialSystem );

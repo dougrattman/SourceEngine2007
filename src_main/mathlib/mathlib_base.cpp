@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Math primitives.
 
-// FIXME: As soon as all references to mathlib.c are gone, include it in here
+// TODO(d.rattman): As soon as all references to mathlib.c are gone, include it
+// in here
 
 //#define _VPROF_MATHLIB
 #include "mathlib/mathlib.h"
@@ -11,7 +12,7 @@
 #include <memory.h>
 #include <cmath>
 
-#include "mathlib/amd3dx.h"
+#include "deps/amd3dx/include/amd3dx.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/ssequaternion.h"
 #include "mathlib/vector.h"
@@ -22,7 +23,6 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 bool s_bMathlibInitialized = false;
@@ -50,7 +50,7 @@ f32 _rsqrtf(f32 x) {
   return 1.f / _sqrtf(x);
 }
 
-f32 FASTCALL _VectorNormalize(Vector &vec) {
+f32 SOURCE_FASTCALL _VectorNormalize(Vector &vec) {
 #ifdef _VPROF_MATHLIB
   VPROF_BUDGET("_VectorNormalize", "Mathlib");
 #endif
@@ -70,7 +70,7 @@ f32 FASTCALL _VectorNormalize(Vector &vec) {
 
 // TODO: Add fast C VectorNormalizeFast.
 // Perhaps use approximate rsqrt trick, if the accuracy isn't too bad.
-void FASTCALL _VectorNormalizeFast(Vector &vec) {
+void SOURCE_FASTCALL _VectorNormalizeFast(Vector &vec) {
   Assert(s_bMathlibInitialized);
 
   // FLT_EPSILON is added to the radius to eliminate the possibility of divide
@@ -94,8 +94,8 @@ f32 _InvRSquared(const f32 *v) {
 f32 (*pfSqrt)(f32 x) = _sqrtf;
 f32 (*pfRSqrt)(f32 x) = _rsqrtf;
 f32 (*pfRSqrtFast)(f32 x) = _rsqrtf;
-f32(FASTCALL *pfVectorNormalize)(Vector &v) = _VectorNormalize;
-void(FASTCALL *pfVectorNormalizeFast)(Vector &v) = _VectorNormalizeFast;
+f32(SOURCE_FASTCALL *pfVectorNormalize)(Vector &v) = _VectorNormalize;
+void(SOURCE_FASTCALL *pfVectorNormalizeFast)(Vector &v) = _VectorNormalizeFast;
 f32 (*pfInvRSquared)(const f32 *v) = _InvRSquared;
 void (*pfFastSinCos)(f32 x, f32 *s, f32 *c) = SinCos;
 f32 (*pfFastCos)(f32 x) = cosf;
@@ -1123,7 +1123,7 @@ bool SolveInverseQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3,
                            f32 &a, f32 &b, f32 &c) {
   f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3);
 
-  // FIXME: check with some sort of epsilon
+  // TODO(d.rattman): check with some sort of epsilon
   if (det == 0.0) return false;
 
   a = (x3 * (-y1 + y2) + x2 * (y1 - y3) + x1 * (-y2 + y3)) / det;
@@ -1186,7 +1186,7 @@ bool SolveInverseReciprocalQuadratic(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3,
                                      f32 y3, f32 &a, f32 &b, f32 &c) {
   f32 det = (x1 - x2) * (x1 - x3) * (x2 - x3) * y1 * y2 * y3;
 
-  // FIXME: check with some sort of epsilon
+  // TODO(d.rattman): check with some sort of epsilon
   if (det == 0.0) return false;
 
   a = (x1 * y1 * (y2 - y3) + x3 * (y1 - y2) * y3 + x2 * y2 * (-y1 + y3)) / det;
@@ -1261,7 +1261,7 @@ f32 SmoothCurve_Tweak(f32 x, f32 flPeakPos, f32 flPeakSharpness) {
 void QuaternionAlign(const Quaternion &p, const Quaternion &q, Quaternion &qt) {
   Assert(s_bMathlibInitialized);
 
-  // FIXME: can this be done with a quat dot product?
+  // TODO(d.rattman): can this be done with a quat dot product?
 
   int i;
   // decide if one of the quaternions is backwards
@@ -1481,9 +1481,9 @@ void QuaternionScale(const Quaternion &p, f32 t, Quaternion &q) {
 
   f32 r;
 
-  // FIXME: nick, this isn't overly sensitive to accuracy, and it may be faster
-  // to use the cos part (w) of the quaternion (sin(omega)*N,cos(omega)) to
-  // figure the new scale.
+  // TODO(d.rattman): nick, this isn't overly sensitive to accuracy, and it may
+  // be faster to use the cos part (w) of the quaternion
+  // (sin(omega)*N,cos(omega)) to figure the new scale.
   f32 sinom = sqrt(DotProduct(&p.x, &p.x));
   sinom = std::min(sinom, 1.f);
 
@@ -1644,8 +1644,8 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles) {
 #endif
 
 #if 1
-  // FIXME: doing it this way calculates too much data, needs to do an optimized
-  // version...
+  // TODO(d.rattman): doing it this way calculates too much data, needs to do an
+  // optimized version...
   matrix3x4_t matrix;
   QuaternionMatrix(q, matrix);
   MatrixAngles(matrix, angles);
@@ -1658,7 +1658,7 @@ void QuaternionAngles(const Quaternion &q, QAngle &angles) {
   m23 = (2.0f * q.y * q.z) + (2.0f * q.w * q.x);
   m33 = (2.0f * q.w * q.w) + (2.0f * q.z * q.z) - 1.0f;
 
-  // FIXME: this code has a singularity near PITCH +-90
+  // TODO(d.rattman): this code has a singularity near PITCH +-90
   angles[YAW] = RAD2DEG(atan2(m12, m11));
   angles[PITCH] = RAD2DEG(asin(-m13));
   angles[ROLL] = RAD2DEG(atan2(m23, m33));
@@ -1763,8 +1763,8 @@ void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
   Vector vecLeft;
   VectorMultiply(vecRight, -1.0f, vecLeft);
 
-  // FIXME: Don't know why, but this doesn't match at all with other result
-  // so we can't use this super-fast way.
+  // TODO(d.rattman): Don't know why, but this doesn't match at all with other
+  // result so we can't use this super-fast way.
   /*
   // Find the trace of the matrix:
   f32 flTrace = vecForward.x + vecLeft.y + vecUp.z + 1.0f;
@@ -1823,7 +1823,7 @@ void BasisToQuaternion(const Vector &vecForward, const Vector &vecRight,
   //	Assert( fabs(q.w - q2.w) < 1e-3 );
 }
 
-// FIXME: Optimize!
+// TODO(d.rattman): Optimize!
 void MatrixQuaternion(const matrix3x4_t &mat, Quaternion &q) {
   QAngle angles;
   MatrixAngles(mat, angles);
@@ -1838,8 +1838,8 @@ void QuaternionAngles(const Quaternion &q, RadianEuler &angles) {
   Assert(s_bMathlibInitialized);
   Assert(q.IsValid());
 
-  // FIXME: doing it this way calculates too much data, needs to do an optimized
-  // version...
+  // TODO(d.rattman): doing it this way calculates too much data, needs to do an
+  // optimized version...
   matrix3x4_t matrix;
   QuaternionMatrix(q, matrix);
   MatrixAngles(matrix, angles);
@@ -2808,7 +2808,7 @@ void MathLib_Init(f32 gamma, f32 texGamma, f32 brightness, int overbright,
                   bool bAllowMMX) {
   if (s_bMathlibInitialized) return;
 
-  // FIXME: Hook SSE into VectorAligned + Vector4DAligned
+  // TODO(d.rattman): Hook SSE into VectorAligned + Vector4DAligned
 
   // Grab the processor information:
   const CPUInformation &pi = GetCPUInformation();

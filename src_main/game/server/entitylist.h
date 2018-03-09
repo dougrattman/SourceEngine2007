@@ -17,7 +17,7 @@
 
 class IEntityListener;
 
-abstract_class CBaseEntityClassList
+the_interface CBaseEntityClassList
 {
 public:
 	CBaseEntityClassList();
@@ -59,7 +59,7 @@ public:
 };
 
 // Derive a class from this if you want to filter entity list searches
-abstract_class IEntityFindFilter
+the_interface IEntityFindFilter
 {
 public:
 	virtual bool ShouldFindEntity( CBaseEntity *pEntity ) = 0;
@@ -308,7 +308,7 @@ struct notify_system_event_params_t
 };
 
 
-abstract_class INotify
+the_interface INotify
 {
 public:
 	// Add notification for an entity

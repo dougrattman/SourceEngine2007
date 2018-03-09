@@ -156,15 +156,15 @@ struct GSPolicyResponse_t
 extern "C"
 {	
 	// C functions we export for the C API, maps to ISteamUser functions 
-	DLL_EXPORT void Steam_LogOn( HSteamUser hUser, HSteamPipe hSteamPipe, uint64_t ulSteamID );
-	DLL_EXPORT void Steam_LogOff( HSteamUser hUser, HSteamPipe hSteamPipe );
-	DLL_EXPORT bool Steam_BLoggedOn( HSteamUser hUser, HSteamPipe hSteamPipe );
-	DLL_EXPORT bool Steam_BConnected( HSteamUser hUser, HSteamPipe hSteamPipe );
-	DLL_EXPORT bool Steam_BGetCallback( HSteamPipe hSteamPipe, CallbackMsg_t *pCallbackMsg, HSteamCall *phSteamCall );
-	DLL_EXPORT void Steam_FreeLastCallback( HSteamPipe hSteamPipe );
-	DLL_EXPORT int Steam_GSGetSteamGameConnectToken( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbBlobMax );
-	DLL_EXPORT int Steam_InitiateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbMaxBlob, uint64_t steamID, int nGameAppID, uint32_t unIPServer, uint16_t usPortServer, bool bSecure );
-	DLL_EXPORT void Steam_TerminateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, uint32_t unIPServer, uint16_t usPortServer );
+	SOURCE_API_EXPORT void Steam_LogOn( HSteamUser hUser, HSteamPipe hSteamPipe, uint64_t ulSteamID );
+	SOURCE_API_EXPORT void Steam_LogOff( HSteamUser hUser, HSteamPipe hSteamPipe );
+	SOURCE_API_EXPORT bool Steam_BLoggedOn( HSteamUser hUser, HSteamPipe hSteamPipe );
+	SOURCE_API_EXPORT bool Steam_BConnected( HSteamUser hUser, HSteamPipe hSteamPipe );
+	SOURCE_API_EXPORT bool Steam_BGetCallback( HSteamPipe hSteamPipe, CallbackMsg_t *pCallbackMsg, HSteamCall *phSteamCall );
+	SOURCE_API_EXPORT void Steam_FreeLastCallback( HSteamPipe hSteamPipe );
+	SOURCE_API_EXPORT int Steam_GSGetSteamGameConnectToken( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbBlobMax );
+	SOURCE_API_EXPORT int Steam_InitiateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, void *pBlob, int cbMaxBlob, uint64_t steamID, int nGameAppID, uint32_t unIPServer, uint16_t usPortServer, bool bSecure );
+	SOURCE_API_EXPORT void Steam_TerminateGameConnection( HSteamUser hUser, HSteamPipe hSteamPipe, uint32_t unIPServer, uint16_t usPortServer );
 
 
 	typedef bool (*PFNSteam_BGetCallback)( HSteamPipe hSteamPipe, CallbackMsg_t *pCallbackMsg, HSteamCall *phSteamCall );

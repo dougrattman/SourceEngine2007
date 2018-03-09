@@ -424,7 +424,7 @@ struct msurface1_t {
 struct msurfacenormal_t {
   unsigned int firstvertnormal;
   //	unsigned short	firstvertnormal;
-  // FIXME: Should I just point to the leaf here since it has this
+  // TODO(d.rattman): Should I just point to the leaf here since it has this
   // data?????????????
   //	short fogVolumeID; // -1 if not in fog
 };

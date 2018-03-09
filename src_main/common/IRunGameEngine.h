@@ -10,7 +10,7 @@
 #endif
 
 // Purpose: Interface to running the game engine
-abstract_class IRunGameEngine : public IBaseInterface {
+the_interface IRunGameEngine : public IBaseInterface {
  public:
   // Returns true if the engine is running, false otherwise.
   virtual bool IsRunning() = 0;

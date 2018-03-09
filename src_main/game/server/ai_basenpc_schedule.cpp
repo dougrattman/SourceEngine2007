@@ -33,7 +33,7 @@
 #include "tier0/include/vcrmode.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar ai_task_pre_script;
@@ -775,7 +775,7 @@ void CAI_BaseNPC::MaintainSchedule(void) {
         g_AITaskTimings[curTiming].runTimer.End();
 
         // don't do this again this frame
-        // FIXME: RunTask() should eat some of the clock, depending on what it
+        // TODO(d.rattman): RunTask() should eat some of the clock, depending on what it
         // has done runTask = false;
 
         if (!TaskIsComplete()) {
@@ -936,7 +936,7 @@ bool CAI_BaseNPC::FindCoverFromEnemy(bool bNodesOnly, float flMinDistance,
 
   if (!GetNavigator()->SetGoal(goal)) return false;
 
-  // FIXME: add to goal
+  // TODO(d.rattman): add to goal
   if (GetHintNode()) {
     GetNavigator()->SetArrivalActivity(GetCoverActivity(GetHintNode()));
     GetNavigator()->SetArrivalDirection(GetHintNode()->GetDirection());
@@ -1102,7 +1102,7 @@ void CAI_BaseNPC::StartScriptMoveToTargetTask(int task) {
             return;
           }
 
-          // FIXME: scripted sequences don't actually know how to handle
+          // TODO(d.rattman): scripted sequences don't actually know how to handle
           // failure, but we're failing.  This is serious
           DevWarning("%s %s failed Urgent Movement, abandoning schedule\n",
                      GetDebugName(), TaskName(task));
@@ -1934,7 +1934,7 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
             AI_NavGoal_t goal(coverPos, ACT_RUN);
             GetNavigator()->SetGoal(goal, AIN_CLEAR_PREVIOUS_STATE);
 
-            // FIXME: What exactly is this doing internally?
+            // TODO(d.rattman): What exactly is this doing internally?
             m_flMoveWaitFinished = gpGlobals->curtime + pTask->flTaskData;
             TaskComplete();
             return;
@@ -2553,7 +2553,7 @@ void CAI_BaseNPC::StartTask(const Task_t *pTask) {
           m_flPlaybackRate = 0;
         }
       } else if (m_scriptState != SCRIPT_CUSTOM_MOVE_TO_MARK) {
-        // FIXME: too many ss assume its safe to leave the npc is whatever
+        // TODO(d.rattman): too many ss assume its safe to leave the npc is whatever
         // sequence they were in before, so only slam their activity
         //		  if they're playing a recognizable movement animation
         //
@@ -3654,7 +3654,7 @@ void CAI_BaseNPC::SetTurnActivity(void) {
   float flYD;
   flYD = GetMotor()->DeltaIdealYaw();
 
-  // FIXME: unknown case, update yaw should catch these
+  // TODO(d.rattman): unknown case, update yaw should catch these
   /*
   if (GetMotor()->AddTurnGesture( flYD ))
   {

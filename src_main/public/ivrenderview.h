@@ -152,7 +152,7 @@ class IVRenderView {
 
   // Draw brush model that has no origin/angles change ( uses identity transform
   // )
-  // FIXME, Material proxy IClientEntity *baseentity is unused right now, use
+  // TODO(d.rattman): Material proxy IClientEntity *baseentity is unused right now, use
   // DrawBrushModel for brushes with
   //  proxies for now.
   virtual void DrawIdentityBrushModel(IWorldRenderList *pList,
@@ -201,7 +201,7 @@ class IVRenderView {
 
   // Draw lights
   virtual void DrawLights(void) = 0;
-  // FIXME:  This function is a stub, doesn't do anything in the engine right
+  // TODO(d.rattman):  This function is a stub, doesn't do anything in the engine right
   // now
   virtual void DrawMaskEntities(void) = 0;
 

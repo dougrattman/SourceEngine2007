@@ -19,7 +19,7 @@
 
 #if ENABLE_VB_ALLOC_TRACKER
 
-// FIXME: combine this into the lower bits of VertexFormat_t
+// TODO(d.rattman): combine this into the lower bits of VertexFormat_t
 typedef uint64_t VertexElementMap_t;
 
 enum Saving_t {
@@ -156,7 +156,7 @@ class CVBAllocTracker : public IVBAllocTracker {
 
 #if ENABLE_VB_ALLOC_TRACKER
 
-// FIXME: do this in a better way:
+// TODO(d.rattman): do this in a better way:
 static const ElementData positionElement = {VERTEX_ELEMENT_POSITION, 12, 12, 8,
                                             "POSITION    "};  // (UNDONE: need
                                                               // vertex shader
@@ -263,7 +263,7 @@ static const ElementData texCoord2D6Element = {
 static const ElementData texCoord2D7Element = {
     VERTEX_ELEMENT_TEXCOORD2D_7, 8, 8, 4, "TEXCOORD2D_7"};  // (unused)
 static const ElementData texCoord3D0Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_0, 12, 12, 8, "TEXCOORD3D_0"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_0, 12, 12, 8, "TEXCOORD3D_0"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -272,7 +272,7 @@ static const ElementData texCoord3D0Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D1Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_1, 12, 12, 8, "TEXCOORD3D_1"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_1, 12, 12, 8, "TEXCOORD3D_1"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -281,7 +281,7 @@ static const ElementData texCoord3D1Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D2Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_2, 12, 12, 8, "TEXCOORD3D_2"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_2, 12, 12, 8, "TEXCOORD3D_2"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -290,7 +290,7 @@ static const ElementData texCoord3D2Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D3Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_3, 12, 12, 8, "TEXCOORD3D_3"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_3, 12, 12, 8, "TEXCOORD3D_3"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -299,7 +299,7 @@ static const ElementData texCoord3D3Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D4Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_4, 12, 12, 8, "TEXCOORD3D_4"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_4, 12, 12, 8, "TEXCOORD3D_4"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -308,7 +308,7 @@ static const ElementData texCoord3D4Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D5Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_5, 12, 12, 8, "TEXCOORD3D_5"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_5, 12, 12, 8, "TEXCOORD3D_5"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -317,7 +317,7 @@ static const ElementData texCoord3D5Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D6Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_6, 12, 12, 8, "TEXCOORD3D_6"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_6, 12, 12, 8, "TEXCOORD3D_6"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -326,7 +326,7 @@ static const ElementData texCoord3D6Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord3D7Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_7, 12, 12, 8, "TEXCOORD3D_7"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD3D_7, 12, 12, 8, "TEXCOORD3D_7"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -335,7 +335,7 @@ static const ElementData texCoord3D7Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D0Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_0, 16, 16, 8, "TEXCOORD4D_0"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_0, 16, 16, 8, "TEXCOORD4D_0"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -344,7 +344,7 @@ static const ElementData texCoord4D0Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D1Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_1, 16, 16, 8, "TEXCOORD4D_1"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_1, 16, 16, 8, "TEXCOORD4D_1"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -353,7 +353,7 @@ static const ElementData texCoord4D1Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D2Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_2, 16, 16, 8, "TEXCOORD4D_2"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_2, 16, 16, 8, "TEXCOORD4D_2"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -362,7 +362,7 @@ static const ElementData texCoord4D2Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D3Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_3, 16, 16, 8, "TEXCOORD4D_3"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_3, 16, 16, 8, "TEXCOORD4D_3"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -371,7 +371,7 @@ static const ElementData texCoord4D3Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D4Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_4, 16, 16, 8, "TEXCOORD4D_4"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_4, 16, 16, 8, "TEXCOORD4D_4"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -380,7 +380,7 @@ static const ElementData texCoord4D4Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D5Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_5, 16, 16, 8, "TEXCOORD4D_5"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_5, 16, 16, 8, "TEXCOORD4D_5"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -389,7 +389,7 @@ static const ElementData texCoord4D5Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D6Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_6, 16, 16, 8, "TEXCOORD4D_6"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_6, 16, 16, 8, "TEXCOORD4D_6"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -398,7 +398,7 @@ static const ElementData texCoord4D6Element = {
                                                               // account for
                                                               // clamping)
 static const ElementData texCoord4D7Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_7, 16, 16, 8, "TEXCOORD4D_7"};  // FIXME: used
+    VERTEX_ELEMENT_TEXCOORD4D_7, 16, 16, 8, "TEXCOORD4D_7"};  // TODO(d.rattman): used
                                                               // how much?
                                                               // (UNDONE:
                                                               // need vertex
@@ -623,11 +623,11 @@ VertexElementMap_t CVBAllocTracker::ComputeElementMap(VertexFormat_t fmt,
     if (vertexSize != 0) {
       // Make sure elementTable above matches external computations of vertex
       // size
-      // FIXME: make this assert dependent on whether the current VB is
+      // TODO(d.rattman): make this assert dependent on whether the current VB is
       // compressed or not
       VertexCompressionType_t compressionType = CompressionType(fmt);
       bool isCompressedAlloc = (compressionType == VERTEX_COMPRESSION_ON);
-      // FIXME: once we've finalised which elements we're compressing for ship,
+      // TODO(d.rattman): once we've finalised which elements we're compressing for ship,
       // update
       //        elementTable to reflect that and re-enable this assert for
       //        compressed verts

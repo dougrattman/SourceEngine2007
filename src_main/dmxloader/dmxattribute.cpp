@@ -5,7 +5,7 @@
 #include "tier1/uniqueid.h"
 #include "tier1/utlbufferutil.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -55,19 +55,19 @@ static size_t s_pAttributeSize[AT_TYPE_COUNT] = {
 struct CSizeTest {
   CSizeTest() {
     // test internal value attribute sizes
-    COMPILE_TIME_ASSERT(sizeof(int) == 4);
-    COMPILE_TIME_ASSERT(sizeof(float) == 4);
-    COMPILE_TIME_ASSERT(sizeof(bool) <= 4);
-    COMPILE_TIME_ASSERT(sizeof(Color) == 4);
-    COMPILE_TIME_ASSERT(sizeof(Vector2D) == 8);
-    COMPILE_TIME_ASSERT(sizeof(Vector) == 12);
-    COMPILE_TIME_ASSERT(sizeof(Vector4D) == 16);
-    COMPILE_TIME_ASSERT(sizeof(QAngle) == 12);
-    COMPILE_TIME_ASSERT(sizeof(Quaternion) == 16);
-    COMPILE_TIME_ASSERT(sizeof(VMatrix) == 64);
-    COMPILE_TIME_ASSERT(sizeof(CUtlString) == 16);
-    COMPILE_TIME_ASSERT(sizeof(CUtlBinaryBlock) == 16);
-    COMPILE_TIME_ASSERT(sizeof(DmObjectId_t) == 16);
+    static_assert(sizeof(int) == 4);
+    static_assert(sizeof(float) == 4);
+    static_assert(sizeof(bool) <= 4);
+    static_assert(sizeof(Color) == 4);
+    static_assert(sizeof(Vector2D) == 8);
+    static_assert(sizeof(Vector) == 12);
+    static_assert(sizeof(Vector4D) == 16);
+    static_assert(sizeof(QAngle) == 12);
+    static_assert(sizeof(Quaternion) == 16);
+    static_assert(sizeof(VMatrix) == 64);
+    static_assert(sizeof(CUtlString) == 16);
+    static_assert(sizeof(CUtlBinaryBlock) == 16);
+    static_assert(sizeof(DmObjectId_t) == 16);
   };
 };
 static CSizeTest g_sizeTest;

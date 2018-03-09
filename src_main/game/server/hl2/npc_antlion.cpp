@@ -35,7 +35,7 @@
 #include "grenade_spit.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Debug visualization
@@ -627,7 +627,7 @@ void CNPC_Antlion::MeleeAttack(float distance, float damage, QAngle &viewPunch,
   if (pHurt) {
     vecForceDir = (pHurt->WorldSpaceCenter() - WorldSpaceCenter());
 
-    // FIXME: Until the interaction is setup, kill combine soldiers in one hit
+    // TODO(d.rattman): Until the interaction is setup, kill combine soldiers in one hit
     // -- jdw
     if (FClassnameIs(pHurt, "npc_combine_s")) {
       CTakeDamageInfo dmgInfo(this, this, pHurt->m_iHealth + 25, DMG_SLASH);
@@ -688,7 +688,7 @@ bool CNPC_Antlion::FindChasePosition(const Vector &targetPos, Vector &result) {
     result += -runDir * random->RandomInt(64, 128);
     result += vRight * random->RandomInt(-128, 128);
 
-    // FIXME: We need to do a more robust search here
+    // TODO(d.rattman): We need to do a more robust search here
     // Find a ground position and try to get there
     if (GetGroundPosition(result, result)) return true;
   }
@@ -891,7 +891,7 @@ bool CNPC_Antlion::InnateWeaponLOSCondition(const Vector &ownerPos,
 }
 
 //
-//	FIXME: Create this in a better fashion!
+//	TODO(d.rattman): Create this in a better fashion!
 //
 
 Vector VecCheckThrowTolerance(CBaseEntity *pEdict, const Vector &vecSpot1,
@@ -1435,7 +1435,7 @@ void CNPC_Antlion::StartTask(const Task_t *pTask) {
     case TASK_ANTLION_FACE_BUGBAIT:
 
       // Must have a saved sound
-      // FIXME: This isn't assured to be still pointing to the right place, need
+      // TODO(d.rattman): This isn't assured to be still pointing to the right place, need
       // to protect this
       if (!m_bHasHeardSound) {
         TaskFail("No remembered bug bait sound to run to!");
@@ -1449,7 +1449,7 @@ void CNPC_Antlion::StartTask(const Task_t *pTask) {
 
     case TASK_ANTLION_GET_PATH_TO_BUGBAIT: {
       // Must have a saved sound
-      // FIXME: This isn't assured to be still pointing to the right place, need
+      // TODO(d.rattman): This isn't assured to be still pointing to the right place, need
       // to protect this
       if (!m_bHasHeardSound) {
         TaskFail("No remembered bug bait sound to run to!");
@@ -1471,7 +1471,7 @@ void CNPC_Antlion::StartTask(const Task_t *pTask) {
                                 ANTLION_BUGBAIT_NAV_TOLERANCE);
 
           if (GetNavigator()->SetGoal(nearGoal, AIN_CLEAR_PREVIOUS_STATE)) {
-            // FIXME: HACK! The internal pathfinding is setting this without our
+            // TODO(d.rattman): HACK! The internal pathfinding is setting this without our
             // consent, so override it!
             ClearCondition(COND_TASK_FAILED);
 
@@ -1713,7 +1713,7 @@ void CNPC_Antlion::RunTask(const Task_t *pTask) {
     case TASK_ANTLION_FACE_BUGBAIT:
 
       // Must have a saved sound
-      // FIXME: This isn't assured to be still pointing to the right place, need
+      // TODO(d.rattman): This isn't assured to be still pointing to the right place, need
       // to protect this
       if (!m_bHasHeardSound) {
         TaskFail("No remembered bug bait sound to run to!");
@@ -1972,7 +1972,7 @@ bool CNPC_Antlion::ShouldJump(void) {
     return false;
 
   // Don't retest if the target hasn't moved enough
-  // FIXME: Check your own distance from last attempt as well
+  // TODO(d.rattman): Check your own distance from last attempt as well
   if (((m_vecLastJumpAttempt - vecPredictedPos).LengthSqr()) < (128 * 128)) {
     m_flJumpTime = gpGlobals->curtime + random->RandomFloat(1.0f, 2.0f);
     return false;
@@ -2433,7 +2433,7 @@ void CNPC_Antlion::CascadePush(const Vector &vecForce) {
   // Make antlions flip all around us!
   CBaseEntity *pEnemySearch[32];
   int nNumEnemies = UTIL_EntitiesInBox(
-      pEnemySearch, ARRAYSIZE(pEnemySearch), vecPushBack - Vector(48, 48, 0),
+      pEnemySearch, SOURCE_ARRAYSIZE(pEnemySearch), vecPushBack - Vector(48, 48, 0),
       vecPushBack + Vector(48, 48, 64), FL_NPC);
   for (int i = 0; i < nNumEnemies; i++) {
     // We only care about antlions
@@ -2810,7 +2810,7 @@ bool CNPC_Antlion::Alone(void) {
 //-----------------------------------------------------------------------------
 void CNPC_Antlion::StartJump(void) {
   if (m_bForcedStuckJump == false) {
-    // FIXME: Why must this be true?
+    // TODO(d.rattman): Why must this be true?
     // Must be jumping at an enemy
     // if ( GetEnemy() == NULL )
     //	return;
@@ -3704,7 +3704,7 @@ void CNPC_Antlion::Touch(CBaseEntity *pOther) {
   // See if the touching entity is a vehicle
   CBasePlayer *pPlayer = ToBasePlayer(AI_GetSinglePlayer());
 
-  // FIXME: Technically we'll want to check to see if a vehicle has touched us
+  // TODO(d.rattman): Technically we'll want to check to see if a vehicle has touched us
   // with the player OR NPC driver
 
   if (pPlayer && pPlayer->IsInAVehicle()) {
@@ -3835,7 +3835,7 @@ bool CNPC_Antlion::OverrideMoveFacing(const AILocalMoveGoal_t &move,
       AddFacingTarget(pSound->GetSoundOrigin(), 1.0, 0.5f);
     }
   } else if (GetEnemy() && GetNavigator()->GetMovementActivity() == ACT_RUN) {
-    // FIXME: this will break scripted sequences that walk when they have an
+    // TODO(d.rattman): this will break scripted sequences that walk when they have an
     // enemy
     Vector vecEnemyLKP = GetEnemyLKP();
     if (UTIL_DistApprox(vecEnemyLKP, GetAbsOrigin()) < 512) {
@@ -4026,7 +4026,7 @@ void CNPC_Antlion::InputJumpAtTarget(inputdata_t &inputdata) {
   // Get the direction and speed to our target
   Vector vecJumpDir = (pJumpTarget->GetAbsOrigin() - GetAbsOrigin());
   VectorNormalize(vecJumpDir);
-  vecJumpDir *= 800.0f;  // FIXME: We'd like to pass this in as a parameter, but
+  vecJumpDir *= 800.0f;  // TODO(d.rattman): We'd like to pass this in as a parameter, but
                          // comma delimited lists are bad
   m_vecSavedJump = vecJumpDir;
 

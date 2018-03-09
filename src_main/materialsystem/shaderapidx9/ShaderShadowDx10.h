@@ -147,7 +147,7 @@ public:
 
 	virtual void DisableFogGammaCorrection( bool bDisable )
 	{
-		//FIXME: empty for now.
+		//TODO(d.rattman): empty for now.
 	}
 
 	// Alpha to coverage

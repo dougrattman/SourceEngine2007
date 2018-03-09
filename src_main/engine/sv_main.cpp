@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "server_pch.h"
 
@@ -47,6 +47,7 @@
 #include "DownloadListGenerator.h"
 #include "LocalNetworkBackdoor.h"
 #include "SourceAppInfo.h"
+#include "audio/public/ivoicecodec.h"
 #include "cbenchmark.h"
 #include "cl_rcon.h"
 #include "client.h"
@@ -165,7 +166,7 @@ static ConVar sv_contact("sv_contact", "", FCVAR_NOTIFY,
 static ConVar sv_cacheencodedents("sv_cacheencodedents", "1", 0,
                                   "If set to 1, does an optimization to "
                                   "prevent extra SendTable_Encode calls.");
-ConVar sv_voicecodec("sv_voicecodec", "vaudio_speex", 0,
+ConVar sv_voicecodec("sv_voicecodec", SPEEX_VOICE_CODEC, 0,
                      "Specifies which voice codec DLL to use in a game. Set to "
                      "the name of the DLL without the extension.");
 static ConVar sv_voiceenable(
@@ -632,7 +633,8 @@ int SV_BuildSendTablesArray(ServerClass *pClasses, SendTable **pTables,
 // datatables with props excluded.
 void SV_InitSendTables(ServerClass *pClasses) {
   SendTable *pTables[MAX_DATATABLES];
-  int nTables = SV_BuildSendTablesArray(pClasses, pTables, ARRAYSIZE(pTables));
+  int nTables =
+      SV_BuildSendTablesArray(pClasses, pTables, SOURCE_ARRAYSIZE(pTables));
 
   SendTable_Init(pTables, nTables);
 }
@@ -700,7 +702,7 @@ void SV_InitGameDLL(void) {
     bool bVerifiedMod = false;
 
     // find the game dir we're running
-    for (int i = 0; i < ARRAYSIZE(g_ModDirPermissions); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ModDirPermissions); i++) {
       if (!Q_stricmp(COM_GetModDirectory(),
                      g_ModDirPermissions[i].m_pchGameDir)) {
         // we've found the mod, make sure we own the app
@@ -1709,7 +1711,7 @@ void CGameServer::ReloadWhitelist(const char *pMapName) {
               pGlobalWhitelistFilename);
 
     // Load the per-map whitelist.
-    char testFilename[MAX_PATH] = "maps";
+    char testFilename[SOURCE_MAX_PATH] = "maps";
     V_AppendSlash(testFilename, sizeof(testFilename));
     V_strncat(testFilename, pMapName, sizeof(testFilename));
     V_strncat(testFilename, pMapWhitelistSuffix, sizeof(testFilename));
@@ -1902,8 +1904,8 @@ bool CGameServer::SpawnServer(char *mapname, char *startspot) {
   g_ServerGlobalVariables.curtime = GetTime();
 
   // Load the world model.
-  char szModelName[MAX_PATH];
-  char szNameOnDisk[MAX_PATH];
+  char szModelName[SOURCE_MAX_PATH];
+  char szNameOnDisk[SOURCE_MAX_PATH];
   Q_snprintf(szModelName, sizeof(szModelName), "maps/%s.bsp", mapname);
   GetMapNameOnDisk(szNameOnDisk, szModelName, sizeof(szNameOnDisk));
   g_pFileSystem->AddSearchPath(szNameOnDisk, "GAME", PATH_ADD_TO_HEAD);

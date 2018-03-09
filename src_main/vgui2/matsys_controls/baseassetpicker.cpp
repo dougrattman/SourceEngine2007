@@ -1,10 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-//=============================================================================
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "matsys_controls/BaseAssetPicker.h"
+#include "base/include/macros.h"
 #include "filesystem.h"
 #include "tier1/keyvalues.h"
 #include "tier1/utlntree.h"
@@ -179,7 +176,7 @@ void CAssetTreeView::AddDirectoryToTreeView(int nParentItemIndex,
   const char *pDirName = m_DirectoryStructure[hPath].Get();
   KeyValues *kv = new KeyValues("node", "text", pDirName);
 
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   Q_snprintf(pFullPath, sizeof(pFullPath), "%s/%s", pFullParentPath, pDirName);
   Q_FixSlashes(pFullPath);
   Q_strlower(pFullPath);
@@ -306,7 +303,7 @@ bool CAssetTreeView::SelectFolder_R(int nItemID, const char *pPath) {
 }
 
 void CAssetTreeView::SelectFolder(const char *pSubDir, const char *pPath) {
-  char pTemp[MAX_PATH];
+  char pTemp[SOURCE_MAX_PATH];
   Q_snprintf(pTemp, sizeof(pTemp), "%s\\%s", pSubDir, pPath);
   Q_StripTrailingSlash(pTemp);
 
@@ -328,7 +325,7 @@ void CAssetTreeView::ApplySchemeSettings(IScheme *pScheme) {
 // Cache of asset data so we don't need to rebuild all the time
 //
 //-----------------------------------------------------------------------------
-DECLARE_POINTER_HANDLE(AssetList_t);
+SOURCE_DECLARE_POINTER_HANDLE(AssetList_t);
 #define ASSET_LIST_INVALID ((AssetList_t)(0xFFFF))
 
 class CAssetCache {
@@ -479,13 +476,13 @@ void CAssetCache::BuildModList() {
     Q_StripTrailingSlash(pPath);
     Q_FixSlashes(pPath);
 
-    char pModName[MAX_PATH];
+    char pModName[SOURCE_MAX_PATH];
     Q_FileBase(pPath, pModName, sizeof(pModName));
 
     // Always start in an asset-specific directory
-    //		char pAssetPath[MAX_PATH];
-    //		Q_snprintf( pAssetPath, MAX_PATH, "%s\\%s", pPath,
-    //m_pAssetSubDir
+    //		char pAssetPath[SOURCE_MAX_PATH];
+    //		Q_snprintf( pAssetPath, SOURCE_MAX_PATH, "%s\\%s", pPath,
+    // m_pAssetSubDir
     //); 		Q_FixSlashes( pPath );
 
     int i = m_ModList.AddToTail();
@@ -512,7 +509,7 @@ void CAssetCache::AddAssetToList(CachedAssetList_t &list,
 //-----------------------------------------------------------------------------
 bool CAssetCache::DoesExtensionMatch(CachedAssetList_t &info,
                                      const char *pFileName) {
-  char pChildExt[MAX_PATH];
+  char pChildExt[SOURCE_MAX_PATH];
   Q_ExtractFileExtension(pFileName, pChildExt, sizeof(pChildExt));
 
   // Check the extension matches
@@ -540,8 +537,9 @@ bool CAssetCache::AddFilesInDirectory(CachedAssetList_t &list,
   int nSubDirLen = list.m_pSubDir ? Q_strlen(list.m_pSubDir) : 0;
   const char *pszFileName = pStartingFile;
   while (pszFileName) {
-    char pRelativeChildPath[MAX_PATH];
-    Q_snprintf(pRelativeChildPath, MAX_PATH, "%s\\%s", pFilePath, pszFileName);
+    char pRelativeChildPath[SOURCE_MAX_PATH];
+    Q_snprintf(pRelativeChildPath, SOURCE_MAX_PATH, "%s\\%s", pFilePath,
+               pszFileName);
 
     if (g_pFullFileSystem->FindIsDirectory(list.m_hFind)) {
       if (Q_strnicmp(pszFileName, ".", 2) && Q_strnicmp(pszFileName, "..", 3)) {
@@ -554,7 +552,7 @@ bool CAssetCache::AddFilesInDirectory(CachedAssetList_t &list,
     } else {
       // Check the extension matches
       if (DoesExtensionMatch(list, pszFileName)) {
-        char pFullAssetPath[MAX_PATH];
+        char pFullAssetPath[SOURCE_MAX_PATH];
         g_pFullFileSystem->RelativePathToFullPath(
             pRelativeChildPath, "GAME", pFullAssetPath, sizeof(pFullAssetPath));
 
@@ -609,8 +607,8 @@ bool CAssetCache::ContinueSearchForAssets(AssetList_t hList, float flDuration) {
 
     const char *pStartingFile;
     if (list.m_hFind == FILESYSTEM_INVALID_FIND_HANDLE) {
-      char pSearchString[MAX_PATH];
-      Q_snprintf(pSearchString, MAX_PATH, "%s\\*", pFilePath);
+      char pSearchString[SOURCE_MAX_PATH];
+      Q_snprintf(pSearchString, SOURCE_MAX_PATH, "%s\\*", pFilePath);
 
       // get the list of files
       pStartingFile =
@@ -1258,7 +1256,7 @@ void CBaseAssetPicker::OnItemSelected(KeyValues *kv) {
 
     // Fill in the full path
     int nModIndex = GetSelectedAssetModIndex();
-    char pBuf[MAX_PATH];
+    char pBuf[SOURCE_MAX_PATH];
     Q_snprintf(pBuf, sizeof(pBuf), "%s\\%s\\%s",
                s_AssetCache.ModInfo(nModIndex).m_Path.Get(), m_pAssetSubDir,
                pSelectedAsset);

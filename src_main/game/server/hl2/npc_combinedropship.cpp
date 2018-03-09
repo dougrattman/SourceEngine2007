@@ -30,7 +30,7 @@
 #include "soundent.h"
 #include "soundenvelope.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Spawnflags
@@ -1348,7 +1348,7 @@ void CNPC_CombineDropship::Flight(void) {
 // Deals damage to what's behing carried
 //------------------------------------------------------------------------------
 int CNPC_CombineDropship::OnTakeDamage_Alive(const CTakeDamageInfo &inputInfo) {
-  // FIXME: To make this work for CRATE_STRIDER or CRATE_APC, we need to
+  // TODO(d.rattman): To make this work for CRATE_STRIDER or CRATE_APC, we need to
   // add code to the strider + apc to make them not take double-damage from
   // rockets (owing to the blast hitting the crate + the dropship). See the
   // dropship container code above to see how to do it.
@@ -2433,7 +2433,7 @@ void CNPC_CombineDropship::InputNPCFinishDustoff(inputdata_t &inputdata) {
         COND_PHYSICS_DAMAGE,
         COND_REPEATED_DAMAGE,
     };
-    pNPC->SetIgnoreConditions(g_Conditions, ARRAYSIZE(g_Conditions));
+    pNPC->SetIgnoreConditions(g_Conditions, SOURCE_ARRAYSIZE(g_Conditions));
   }
 
   // Unload the next troop

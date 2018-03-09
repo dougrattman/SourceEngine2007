@@ -66,7 +66,7 @@ bool CUnitTestApp::Create()
 	// run for as long as possible
 	SpewOutputFunc( UnitTestSpew );
 
-	// FIXME: This list of dlls should come from the unittests themselves
+	// TODO(d.rattman): This list of dlls should come from the unittests themselves
 	AppSystemInfo_t appSystems[] = 
 	{
 		{ "vstdlib.dll",			PROCESS_UTILS_INTERFACE_VERSION },

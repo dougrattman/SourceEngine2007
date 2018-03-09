@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // LZSS Codec. Designed for fast cheap gametime encoding/decoding.
 // Compression results are	not aggresive as other alogrithms, but gets 2:1
@@ -12,9 +12,7 @@
 #define LZSS_LOOKSHIFT 4
 #define LZSS_LOOKAHEAD (1 << LZSS_LOOKSHIFT)
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
-
 
 // Returns true if buffer is compressed.
 
@@ -27,7 +25,6 @@ bool CLZSS::IsCompressed(unsigned char *pInput) {
   // unrecognized
   return false;
 }
-
 
 // Returns uncompressed size of compressed input buffer. Used for allocating
 // output buffer for decompression. Returns 0 if input buffer is not compressed.
@@ -183,7 +180,6 @@ unsigned char *CLZSS::CompressNoAlloc(unsigned char *pInput, int inputLength,
   return pStart;
 }
 
-
 // Compress an input buffer. Caller must free output compressed buffer.
 // Returns NULL if compression failed (i.e. compression yielded worse results)
 
@@ -199,7 +195,6 @@ unsigned char *CLZSS::Compress(unsigned char *pInput, int inputLength,
 
   return pStart;
 }
-
 
 // Uncompress a buffer, Returns the uncompressed size. Caller must provide an
 // adequate sized output buffer or memory corruption will occur.

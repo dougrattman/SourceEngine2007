@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:	CValObject is used for tracking individual objects that report
 // in to CValidator.  Whenever a new object reports in (via CValidator::Push),
@@ -8,7 +8,6 @@
 #define SOURCE_TIER0_INCLUDE_VALOBJECT_H_
 
 #include "base/include/base_types.h"
-#include "build/include/build_config.h"
 
 #ifdef DBGFLAG_VALIDATE
 class CValObject {

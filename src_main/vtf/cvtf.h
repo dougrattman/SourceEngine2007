@@ -353,7 +353,7 @@ class CVTFTexture : public IVTFTexture {
   Vector m_vecReflectivity;
   float m_flBumpScale;
 
-  // FIXME: Do I need this?
+  // TODO(d.rattman): Do I need this?
   int m_iStartFrame;
 
   // Low res data

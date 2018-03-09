@@ -130,7 +130,7 @@ struct ShadowShaderState_t {
 //-----------------------------------------------------------------------------
 // The shader setup API
 //-----------------------------------------------------------------------------
-abstract_class IShaderShadowDX8 : public IShaderShadow {
+the_interface IShaderShadowDX8 : public IShaderShadow {
  public:
   // Initializes it
   virtual void Init() = 0;

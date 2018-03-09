@@ -4,7 +4,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
-#else _LINUX
+#else OS_POSIX
 #include <netinet/in.h>
 #include <pwd.h>
 #include <sys/socket.h>
@@ -22,7 +22,7 @@
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vcrmode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PHONE_HOME_TIMEOUT 1.5f
@@ -68,7 +68,7 @@ class CPhoneHome : public IPhoneHome {
         *identifer-- = 0;
       }
 
-      // FIXME:  Don't hardcode CSER ip, get from Steam!!!
+      // TODO(d.rattman):  Don't hardcode CSER ip, get from Steam!!!
       if (NET_StringToAdr("207.173.177.12:27013", &m_cserIP)) {
         m_bPhoneHome = true;
 
@@ -340,7 +340,7 @@ class CPhoneHome : public IPhoneHome {
     return false;
   }
 
-  // FIXME, this is BS
+  // TODO(d.rattman): this is BS
   bool IsExternalBuild() {
     if (CommandLine()->FindParm("-publicbuild")) {
       return true;

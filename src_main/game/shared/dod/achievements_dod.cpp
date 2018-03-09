@@ -156,8 +156,8 @@ class CAchievementDODCustomMaps : public CBaseAchievement
 
 		if ( pAttacker == pLocalPlayer && pVictim->GetTeamNumber() != pAttacker->GetTeamNumber() )
 		{
-			char szMap[MAX_PATH];
-			Q_FileBase( engine->GetLevelName(), szMap, ARRAYSIZE( szMap ) );
+			char szMap[SOURCE_MAX_PATH];
+			Q_FileBase( engine->GetLevelName(), szMap, SOURCE_ARRAYSIZE( szMap ) );
 
 			if ( !IsOfficialMap( szMap ) && !HasPlayedThisCustomMap() )
 			{
@@ -182,7 +182,7 @@ class CAchievementDODCustomMaps : public CBaseAchievement
 	{
 		bool bFound = false;
 	
-		for ( int i=0;i<ARRAYSIZE(pszOfficialMaps);i++ )
+		for ( int i=0;i<SOURCE_ARRAYSIZE(pszOfficialMaps);i++ )
 		{
 			if ( FStrEq( pszMapName, pszOfficialMaps[i] ) )
 			{

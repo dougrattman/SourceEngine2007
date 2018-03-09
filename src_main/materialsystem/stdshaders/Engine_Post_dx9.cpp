@@ -127,7 +127,7 @@ BEGIN_VS_SHADER_FLAGS( Engine_Post_dx9, "Engine post-processing effects (softwar
 		DYNAMIC_STATE
 		{
 			BindTexture( SHADER_SAMPLER0, BASETEXTURE, -1 );
-			// FIXME: need to set FBTEXTURE to be point-sampled (will speed up this shader significantly on 360)
+			// TODO(d.rattman): need to set FBTEXTURE to be point-sampled (will speed up this shader significantly on 360)
 			//        and assert that it's set to SHADER_TEXWRAPMODE_CLAMP (since the shader will sample offscreen)
 			BindTexture( SHADER_SAMPLER1, FBTEXTURE,   -1 );
 

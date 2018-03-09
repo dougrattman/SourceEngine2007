@@ -9,7 +9,7 @@
 #include "materialsystem/IMaterialVar.h"
 #include "debugoverlay_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class C_FleshEffectTarget;
@@ -177,7 +177,7 @@ void CFleshInteriorMaterialProxy::OnBind( C_BaseEntity *pEnt )
 	};
 
 	float vEffectCenterRadius[4];
-	for ( int i = 0; i < ARRAYSIZE( pParams ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( pParams ); i++ )
 	{
 		if ( i < g_FleshProxyTargets.Count() )
 		{

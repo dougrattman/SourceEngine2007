@@ -1167,19 +1167,19 @@ struct  hostent
 #endif
 #define getenv		XBX_getenv
 #define _getenv		XBX_getenv
-FORCEINLINE char *XBX_getenv(const char *name) { return NULL; }
+SOURCE_FORCEINLINE char *XBX_getenv(const char *name) { return NULL; }
 
 #ifdef _putenv
 	#undef _putenv
 #endif
 #define _putenv		XBX_putenv
-FORCEINLINE int XBX_putenv(const char *name) { return -1; }
+SOURCE_FORCEINLINE int XBX_putenv(const char *name) { return -1; }
 
 #ifdef GetEnvironmentVariable
 	#undef GetEnvironmentVariable
 #endif
 #define GetEnvironmentVariable XBX_GetEnvironmentVariable
-FORCEINLINE DWORD XBX_GetEnvironmentVariable( LPCTSTR lpName, LPTSTR lpBuffer, DWORD nSize ) { return 0; }
+SOURCE_FORCEINLINE DWORD XBX_GetEnvironmentVariable( LPCTSTR lpName, LPTSTR lpBuffer, DWORD nSize ) { return 0; }
 
 #ifdef unlink
 	#undef unlink
@@ -1223,9 +1223,9 @@ SOURCE_TIER0_API int XBX_access( const char *path, int mode );
 	#undef _chdir
 #endif
 #define _chdir XBX_chdir
-FORCEINLINE int XBX_chdir(  const char *dirname ) { return -1; }
+SOURCE_FORCEINLINE int XBX_chdir(  const char *dirname ) { return -1; }
 
-FORCEINLINE BOOL SetPriorityClass( HANDLE hProcess, DWORD dwPriorityClass ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL SetPriorityClass( HANDLE hProcess, DWORD dwPriorityClass ) { return FALSE; }
 
 SOURCE_TIER0_API int MessageBox( HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType );
 
@@ -1235,237 +1235,237 @@ SOURCE_TIER0_API int MessageBox( HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, U
 #define GetModuleFileName XBX_GetModuleFileName
 SOURCE_TIER0_API DWORD XBX_GetModuleFileName( HMODULE hModule, LPTSTR lpFilename, DWORD nSize );
 
-//FORCEINLINE int WSAStartup( WORD wVersionRequested, LPWSADATA lpWSAData ) { return WSASYSNOTREADY; }
-//FORCEINLINE int WSACleanup(void) { return WSANOTINITIALISED; }
+//SOURCE_FORCEINLINE int WSAStartup( WORD wVersionRequested, LPWSADATA lpWSAData ) { return WSASYSNOTREADY; }
+//SOURCE_FORCEINLINE int WSACleanup(void) { return WSANOTINITIALISED; }
 
-FORCEINLINE HRESULT CoInitialize( LPVOID pvReserved ) { return S_OK; }
-FORCEINLINE void CoUninitialize( void ) { }
+SOURCE_FORCEINLINE HRESULT CoInitialize( LPVOID pvReserved ) { return S_OK; }
+SOURCE_FORCEINLINE void CoUninitialize( void ) { }
 
-FORCEINLINE LRESULT	DefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { return 0L; }
-FORCEINLINE void PostQuitMessage(int nExitCode) { }
+SOURCE_FORCEINLINE LRESULT	DefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { return 0L; }
+SOURCE_FORCEINLINE void PostQuitMessage(int nExitCode) { }
 
-FORCEINLINE HANDLE GetStdHandle( DWORD ) { return 0; }
+SOURCE_FORCEINLINE HANDLE GetStdHandle( DWORD ) { return 0; }
 
-FORCEINLINE BOOL GetConsoleScreenBufferInfo( HANDLE, PCONSOLE_SCREEN_BUFFER_INFO ) { return false; }
+SOURCE_FORCEINLINE BOOL GetConsoleScreenBufferInfo( HANDLE, PCONSOLE_SCREEN_BUFFER_INFO ) { return false; }
 
-FORCEINLINE COORD GetLargestConsoleWindowSize( HANDLE ) { COORD c = { 0, 0 }; return c; }
+SOURCE_FORCEINLINE COORD GetLargestConsoleWindowSize( HANDLE ) { COORD c = { 0, 0 }; return c; }
 
-FORCEINLINE BOOL SetConsoleWindowInfo( HANDLE, BOOL, SMALL_RECT* ) { return false; }
+SOURCE_FORCEINLINE BOOL SetConsoleWindowInfo( HANDLE, BOOL, SMALL_RECT* ) { return false; }
 
-FORCEINLINE BOOL SetConsoleScreenBufferSize( HANDLE, COORD ) { return false; }
+SOURCE_FORCEINLINE BOOL SetConsoleScreenBufferSize( HANDLE, COORD ) { return false; }
 
-FORCEINLINE BOOL ReadConsoleOutputCharacter( HANDLE, LPTSTR, DWORD, COORD, LPDWORD ) { return false; }
+SOURCE_FORCEINLINE BOOL ReadConsoleOutputCharacter( HANDLE, LPTSTR, DWORD, COORD, LPDWORD ) { return false; }
 
-FORCEINLINE BOOL WriteConsoleInput( HANDLE, CONST INPUT_RECORD*, DWORD, LPDWORD ) { return false; }
+SOURCE_FORCEINLINE BOOL WriteConsoleInput( HANDLE, CONST INPUT_RECORD*, DWORD, LPDWORD ) { return false; }
 
-FORCEINLINE HWND GetDesktopWindow(VOID) { return (HWND)0; }
+SOURCE_FORCEINLINE HWND GetDesktopWindow(VOID) { return (HWND)0; }
 
-FORCEINLINE int GetWindowText( HWND, LPTSTR, int ) { return 0; }
+SOURCE_FORCEINLINE int GetWindowText( HWND, LPTSTR, int ) { return 0; }
 
-FORCEINLINE UINT RegisterWindowMessage(LPCTSTR lpString) { return 0xC000; }
+SOURCE_FORCEINLINE UINT RegisterWindowMessage(LPCTSTR lpString) { return 0xC000; }
 
-FORCEINLINE HWND FindWindow(LPCTSTR lpClassName, LPCTSTR lpWindowName) { return NULL; }
+SOURCE_FORCEINLINE HWND FindWindow(LPCTSTR lpClassName, LPCTSTR lpWindowName) { return NULL; }
 
-FORCEINLINE BOOL EnumWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam) { return FALSE; }
+SOURCE_FORCEINLINE BOOL EnumWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam) { return FALSE; }
 
-FORCEINLINE BOOL PostMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) { return FALSE; }
+SOURCE_FORCEINLINE BOOL PostMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) { return FALSE; }
 
-FORCEINLINE BOOL SystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni) { return FALSE; }
+SOURCE_FORCEINLINE BOOL SystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni) { return FALSE; }
 
-FORCEINLINE BOOL SetForegroundWindow(HWND hWnd) { return TRUE; }
+SOURCE_FORCEINLINE BOOL SetForegroundWindow(HWND hWnd) { return TRUE; }
 
-FORCEINLINE HDC	BeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint) { return NULL; }
+SOURCE_FORCEINLINE HDC	BeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint) { return NULL; }
 
-FORCEINLINE BOOL EndPaint(HWND hWnd, CONST PAINTSTRUCT *lpPaint) { return TRUE; }
+SOURCE_FORCEINLINE BOOL EndPaint(HWND hWnd, CONST PAINTSTRUCT *lpPaint) { return TRUE; }
 
-FORCEINLINE BOOL AdjustWindowRectEx(LPRECT lpRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) { return TRUE; }
+SOURCE_FORCEINLINE BOOL AdjustWindowRectEx(LPRECT lpRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) { return TRUE; }
 
-FORCEINLINE LONG ChangeDisplaySettings(LPDEVMODE lpDevMode, DWORD dwflags) { return DISP_CHANGE_SUCCESSFUL; }
+SOURCE_FORCEINLINE LONG ChangeDisplaySettings(LPDEVMODE lpDevMode, DWORD dwflags) { return DISP_CHANGE_SUCCESSFUL; }
 
-FORCEINLINE DWORD GetFileType(HANDLE hFile) { return FILE_TYPE_DISK; }
+SOURCE_FORCEINLINE DWORD GetFileType(HANDLE hFile) { return FILE_TYPE_DISK; }
 
-FORCEINLINE BOOL FileTimeToDosDateTime(const FILETIME* lpFileTime, LPWORD lpFatDate, LPWORD lpFatTime)
+SOURCE_FORCEINLINE BOOL FileTimeToDosDateTime(const FILETIME* lpFileTime, LPWORD lpFatDate, LPWORD lpFatTime)
 {
 	*lpFatDate = 0;
 	*lpFatTime = 0;
 	return TRUE;
 }
 
-FORCEINLINE BOOL SetViewportOrgEx( HDC, int, int, LPPOINT ) { return false; }
+SOURCE_FORCEINLINE BOOL SetViewportOrgEx( HDC, int, int, LPPOINT ) { return false; }
 
-FORCEINLINE BOOL MoveWindow( HWND, int, int, int, int, BOOL ) { return false; }
+SOURCE_FORCEINLINE BOOL MoveWindow( HWND, int, int, int, int, BOOL ) { return false; }
 
-FORCEINLINE int ShowCursor( BOOL ) { return 0; }
+SOURCE_FORCEINLINE int ShowCursor( BOOL ) { return 0; }
 
-FORCEINLINE HFONT CreateFontA( int, int, int, int, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPCSTR) { return 0; }
+SOURCE_FORCEINLINE HFONT CreateFontA( int, int, int, int, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPCSTR) { return 0; }
 
-FORCEINLINE int DrawText( HDC, LPCTSTR, int, LPRECT, UINT ) { return 0; }
+SOURCE_FORCEINLINE int DrawText( HDC, LPCTSTR, int, LPRECT, UINT ) { return 0; }
 
-FORCEINLINE int SetBkMode( HDC, int ) { return 0; }
+SOURCE_FORCEINLINE int SetBkMode( HDC, int ) { return 0; }
 
-FORCEINLINE COLORREF SetTextColor( HDC, COLORREF col ) { return col; }
+SOURCE_FORCEINLINE COLORREF SetTextColor( HDC, COLORREF col ) { return col; }
 
-FORCEINLINE HBRUSH CreateSolidBrush( COLORREF ) { return 0; }
+SOURCE_FORCEINLINE HBRUSH CreateSolidBrush( COLORREF ) { return 0; }
 
-FORCEINLINE BOOL Rectangle( HDC, int, int, int, int ) { return false; }
+SOURCE_FORCEINLINE BOOL Rectangle( HDC, int, int, int, int ) { return false; }
 
-FORCEINLINE HANDLE LoadImage( HINSTANCE, LPCSTR, UINT, int, int, UINT) { return 0; }
-FORCEINLINE HANDLE LoadImageA( HINSTANCE, LPCSTR, UINT, int, int, UINT) { return 0; }
+SOURCE_FORCEINLINE HANDLE LoadImage( HINSTANCE, LPCSTR, UINT, int, int, UINT) { return 0; }
+SOURCE_FORCEINLINE HANDLE LoadImageA( HINSTANCE, LPCSTR, UINT, int, int, UINT) { return 0; }
 
-FORCEINLINE HICON LoadIcon( HINSTANCE hInstance, ULONG_PTR lpIconName) { return 0; }
+SOURCE_FORCEINLINE HICON LoadIcon( HINSTANCE hInstance, ULONG_PTR lpIconName) { return 0; }
 
-FORCEINLINE COLORREF SetPixel( HDC, int, int, COLORREF col ) { return col; }
+SOURCE_FORCEINLINE COLORREF SetPixel( HDC, int, int, COLORREF col ) { return col; }
 
-FORCEINLINE BOOL BitBlt( HDC, int, int, int, int, HDC, int, int, DWORD ) { return false; }
+SOURCE_FORCEINLINE BOOL BitBlt( HDC, int, int, int, int, HDC, int, int, DWORD ) { return false; }
 
-FORCEINLINE HGDIOBJ GetStockObject( int ) { return 0; }
+SOURCE_FORCEINLINE HGDIOBJ GetStockObject( int ) { return 0; }
 
-FORCEINLINE int GetObject( HGDIOBJ, int, LPVOID ) { return 0; }
+SOURCE_FORCEINLINE int GetObject( HGDIOBJ, int, LPVOID ) { return 0; }
 
-FORCEINLINE int GetDIBits( HDC, HBITMAP, UINT, UINT, LPVOID, LPBITMAPINFO, UINT ) { return 0; }
+SOURCE_FORCEINLINE int GetDIBits( HDC, HBITMAP, UINT, UINT, LPVOID, LPBITMAPINFO, UINT ) { return 0; }
 
-FORCEINLINE HDC GetDC(HWND hWnd) { return (HDC)0x12345678; }
+SOURCE_FORCEINLINE HDC GetDC(HWND hWnd) { return (HDC)0x12345678; }
 
-FORCEINLINE void ReleaseDC(HWND hWnd, HDC hDC) { }
+SOURCE_FORCEINLINE void ReleaseDC(HWND hWnd, HDC hDC) { }
 
-FORCEINLINE HDC CreateCompatibleDC( HDC ) { return 0; }
+SOURCE_FORCEINLINE HDC CreateCompatibleDC( HDC ) { return 0; }
 
-FORCEINLINE HBITMAP CreateCompatibleBitmap( HDC, int, int ) { return 0; }
+SOURCE_FORCEINLINE HBITMAP CreateCompatibleBitmap( HDC, int, int ) { return 0; }
 
-FORCEINLINE HBITMAP CreateDIBSection( HDC, CONST BITMAPINFO *, UINT, VOID **ppBits, HANDLE, DWORD) { ppBits = NULL; return 0; }
+SOURCE_FORCEINLINE HBITMAP CreateDIBSection( HDC, CONST BITMAPINFO *, UINT, VOID **ppBits, HANDLE, DWORD) { ppBits = NULL; return 0; }
 
-FORCEINLINE BOOL InvalidateRect( HWND, const RECT*, bool ) { return false; }
+SOURCE_FORCEINLINE BOOL InvalidateRect( HWND, const RECT*, bool ) { return false; }
 
-FORCEINLINE UINT joyGetDevCaps( UINT uJoyID, JOYCAPS* pjc, UINT cbjc) {	return 0; }
+SOURCE_FORCEINLINE UINT joyGetDevCaps( UINT uJoyID, JOYCAPS* pjc, UINT cbjc) {	return 0; }
 
-FORCEINLINE UINT joyGetPosEx( UINT uJoyID, LPJOYINFOEX pji) { return 0; }
+SOURCE_FORCEINLINE UINT joyGetPosEx( UINT uJoyID, LPJOYINFOEX pji) { return 0; }
 
-FORCEINLINE UINT joyGetNumDevs(void) { return 0; }
+SOURCE_FORCEINLINE UINT joyGetNumDevs(void) { return 0; }
 
-FORCEINLINE HKL GetKeyboardLayout( DWORD ) { return NULL; }
+SOURCE_FORCEINLINE HKL GetKeyboardLayout( DWORD ) { return NULL; }
 
-FORCEINLINE HKL LoadKeyboardLayout( LPCTSTR, UINT ) { return NULL; }
+SOURCE_FORCEINLINE HKL LoadKeyboardLayout( LPCTSTR, UINT ) { return NULL; }
 
-FORCEINLINE UINT MapVirtualKeyEx( UINT, UINT, HKL ) { return 0; }
+SOURCE_FORCEINLINE UINT MapVirtualKeyEx( UINT, UINT, HKL ) { return 0; }
 
-FORCEINLINE SHORT GetKeyState( int nVirtKey ) { return 0; }
+SOURCE_FORCEINLINE SHORT GetKeyState( int nVirtKey ) { return 0; }
 
-FORCEINLINE BOOL PeekMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg) {	return FALSE; }
+SOURCE_FORCEINLINE BOOL PeekMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg) {	return FALSE; }
 
-FORCEINLINE BOOL TranslateMessage(CONST MSG *lpMsg) { return FALSE; }
+SOURCE_FORCEINLINE BOOL TranslateMessage(CONST MSG *lpMsg) { return FALSE; }
 
-FORCEINLINE BOOL DispatchMessage(CONST MSG *lpMsg) { return FALSE; }
+SOURCE_FORCEINLINE BOOL DispatchMessage(CONST MSG *lpMsg) { return FALSE; }
 
-FORCEINLINE BOOL UpdateWindow(HWND hWnd) { return FALSE; }
+SOURCE_FORCEINLINE BOOL UpdateWindow(HWND hWnd) { return FALSE; }
 
-FORCEINLINE LONG RegOpenKeyEx( HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult ) {	return -1; }
+SOURCE_FORCEINLINE LONG RegOpenKeyEx( HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult ) {	return -1; }
 
-FORCEINLINE LONG RegQueryValueEx( HKEY hKey, LPCTSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData ) { return -1; }
+SOURCE_FORCEINLINE LONG RegQueryValueEx( HKEY hKey, LPCTSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData ) { return -1; }
 
-FORCEINLINE LONG RegCreateKeyEx( HKEY hKey, LPCTSTR lpSubKey, DWORD Reserved, LPTSTR lpClass, DWORD dwOptions, REGSAM samDesired, LPSECURITY_ATTRIBUTES lpSecurityAttributes, PHKEY phkResult, LPDWORD lpdwDisposition ) { return -1; }
+SOURCE_FORCEINLINE LONG RegCreateKeyEx( HKEY hKey, LPCTSTR lpSubKey, DWORD Reserved, LPTSTR lpClass, DWORD dwOptions, REGSAM samDesired, LPSECURITY_ATTRIBUTES lpSecurityAttributes, PHKEY phkResult, LPDWORD lpdwDisposition ) { return -1; }
 
-FORCEINLINE LONG RegSetValueEx( HKEY hKey, LPCTSTR lpValueName, DWORD Reserved, DWORD dwType, const BYTE* lpData, DWORD cbData ) { return -1; }
+SOURCE_FORCEINLINE LONG RegSetValueEx( HKEY hKey, LPCTSTR lpValueName, DWORD Reserved, DWORD dwType, const BYTE* lpData, DWORD cbData ) { return -1; }
 
-FORCEINLINE LONG RegDeleteValue( HKEY hKey, LPCTSTR lpValueName ) { return -1; }
+SOURCE_FORCEINLINE LONG RegDeleteValue( HKEY hKey, LPCTSTR lpValueName ) { return -1; }
 
-FORCEINLINE LONG RegCloseKey( HKEY hKey ) {	return -1; }
+SOURCE_FORCEINLINE LONG RegCloseKey( HKEY hKey ) {	return -1; }
 
-FORCEINLINE BOOL ClientToScreen( HWND hwnd, LPPOINT lpPoint )
+SOURCE_FORCEINLINE BOOL ClientToScreen( HWND hwnd, LPPOINT lpPoint )
 {
 	lpPoint->x = 0;
 	lpPoint->y = 0;
 	return TRUE;
 }
 
-FORCEINLINE BOOL SetCursorPos( int x, int y ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL SetCursorPos( int x, int y ) { return FALSE; }
 
-FORCEINLINE BOOL UnregisterClass( LPCTSTR lpClassNAme, HINSTANCE hInstance ) { return TRUE; }
-FORCEINLINE BOOL UnregisterClassW( LPCWSTR lpClassNAme, HINSTANCE hInstance ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL UnregisterClass( LPCTSTR lpClassNAme, HINSTANCE hInstance ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL UnregisterClassW( LPCWSTR lpClassNAme, HINSTANCE hInstance ) { return TRUE; }
 
-FORCEINLINE	HCURSOR LoadCursor( HINSTANCE, LPCTSTR lpCursorName ) { return NULL; }
+SOURCE_FORCEINLINE	HCURSOR LoadCursor( HINSTANCE, LPCTSTR lpCursorName ) { return NULL; }
 
-FORCEINLINE HWND GetParent( HWND hWnd ) { return NULL; }
+SOURCE_FORCEINLINE HWND GetParent( HWND hWnd ) { return NULL; }
 
-FORCEINLINE BOOL EnumChildWindows( HWND hWndParent, WNDENUMPROC lpEnumFunc, LPARAM lParam ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL EnumChildWindows( HWND hWndParent, WNDENUMPROC lpEnumFunc, LPARAM lParam ) { return FALSE; }
 
-FORCEINLINE BOOL IsIconic( HWND hWnd ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL IsIconic( HWND hWnd ) { return FALSE; }
 
-FORCEINLINE BOOL DestroyCursor( HCURSOR hCursor ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL DestroyCursor( HCURSOR hCursor ) { return TRUE; }
 
-FORCEINLINE HCURSOR LoadCursorFromFile( LPCTSTR lpFileName ) { return NULL; }
+SOURCE_FORCEINLINE HCURSOR LoadCursorFromFile( LPCTSTR lpFileName ) { return NULL; }
 
-FORCEINLINE HCURSOR SetCursor( HCURSOR hCursor ) { return NULL; }
+SOURCE_FORCEINLINE HCURSOR SetCursor( HCURSOR hCursor ) { return NULL; }
 
-FORCEINLINE BOOL GetCursorPos( LPPOINT lpPoint ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL GetCursorPos( LPPOINT lpPoint ) { return TRUE; }
 
-FORCEINLINE BOOL ScreenToClient( HWND hWnd, LPPOINT lpPoint ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL ScreenToClient( HWND hWnd, LPPOINT lpPoint ) { return TRUE; }
 
-FORCEINLINE HWND SetCapture( HWND hWnd ) { return NULL; }
+SOURCE_FORCEINLINE HWND SetCapture( HWND hWnd ) { return NULL; }
 
-FORCEINLINE BOOL ReleaseCapture() { return TRUE; }
+SOURCE_FORCEINLINE BOOL ReleaseCapture() { return TRUE; }
 
-FORCEINLINE BOOL DeleteObject( HGDIOBJ hObject ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL DeleteObject( HGDIOBJ hObject ) { return TRUE; }
 
-FORCEINLINE BOOL DeleteDC( HDC hdc ) { return TRUE; }
+SOURCE_FORCEINLINE BOOL DeleteDC( HDC hdc ) { return TRUE; }
 
-FORCEINLINE HGDIOBJ SelectObject( HDC hdc, HGDIOBJ hgdiobj ) { return NULL; }
+SOURCE_FORCEINLINE HGDIOBJ SelectObject( HDC hdc, HGDIOBJ hgdiobj ) { return NULL; }
 
-FORCEINLINE BOOL GetComputerName( LPTSTR lpBuffer, LPDWORD nSize ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL GetComputerName( LPTSTR lpBuffer, LPDWORD nSize ) { return FALSE; }
 
-FORCEINLINE BOOL GetUserName( LPTSTR lpBuffer, LPDWORD nSize ) { return FALSE; }
+SOURCE_FORCEINLINE BOOL GetUserName( LPTSTR lpBuffer, LPDWORD nSize ) { return FALSE; }
 
-FORCEINLINE UINT SetErrorMode( UINT mode ) { return 0; }
+SOURCE_FORCEINLINE UINT SetErrorMode( UINT mode ) { return 0; }
 
-FORCEINLINE MCIERROR mciGetDeviceID( LPCTSTR ) { return 0; }
+SOURCE_FORCEINLINE MCIERROR mciGetDeviceID( LPCTSTR ) { return 0; }
 
-FORCEINLINE MCIERROR mciSendString( LPCTSTR lpszCommand, LPTSTR lpszReturnString, UINT cchReturn, HANDLE hwndCallback ) { return 0; }
+SOURCE_FORCEINLINE MCIERROR mciSendString( LPCTSTR lpszCommand, LPTSTR lpszReturnString, UINT cchReturn, HANDLE hwndCallback ) { return 0; }
 
-FORCEINLINE MCIERROR mciSendCommand( MCIDEVICEID, UINT, DWORD, DWORD ) { return (UINT)MCIERR_DRIVER; } 
+SOURCE_FORCEINLINE MCIERROR mciSendCommand( MCIDEVICEID, UINT, DWORD, DWORD ) { return (UINT)MCIERR_DRIVER; } 
 
-FORCEINLINE BOOL mciGetErrorString( MCIERROR, LPTSTR, UINT ) { return false; };
+SOURCE_FORCEINLINE BOOL mciGetErrorString( MCIERROR, LPTSTR, UINT ) { return false; };
 
-FORCEINLINE int UuidCreate( UUID *newId ) { return 0; };
+SOURCE_FORCEINLINE int UuidCreate( UUID *newId ) { return 0; };
 
-FORCEINLINE HANDLE CreateFileMapping( HANDLE, LPSECURITY_ATTRIBUTES, DWORD, DWORD, DWORD, LPCTSTR ) { return NULL; }
+SOURCE_FORCEINLINE HANDLE CreateFileMapping( HANDLE, LPSECURITY_ATTRIBUTES, DWORD, DWORD, DWORD, LPCTSTR ) { return NULL; }
 
-FORCEINLINE LPVOID MapViewOfFile( HANDLE, DWORD, DWORD, DWORD, SIZE_T ) { return NULL; }
+SOURCE_FORCEINLINE LPVOID MapViewOfFile( HANDLE, DWORD, DWORD, DWORD, SIZE_T ) { return NULL; }
 
-FORCEINLINE BOOL UnmapViewOfFile( LPCVOID ) { return false; }
+SOURCE_FORCEINLINE BOOL UnmapViewOfFile( LPCVOID ) { return false; }
 
-FORCEINLINE BOOL GetVersionEx( LPOSVERSIONINFO lpVersionInfo ) { lpVersionInfo->dwPlatformId = VER_PLATFORM_WIN32_NT; return true; }
+SOURCE_FORCEINLINE BOOL GetVersionEx( LPOSVERSIONINFO lpVersionInfo ) { lpVersionInfo->dwPlatformId = VER_PLATFORM_WIN32_NT; return true; }
 
-FORCEINLINE BOOL GlobalMemoryStatusEx( LPMEMORYSTATUSEX lpBuffer ) { return false; }
+SOURCE_FORCEINLINE BOOL GlobalMemoryStatusEx( LPMEMORYSTATUSEX lpBuffer ) { return false; }
 
-FORCEINLINE BOOL TerminateThread( HANDLE hThread, DWORD dwExitCode ) { return false; }
+SOURCE_FORCEINLINE BOOL TerminateThread( HANDLE hThread, DWORD dwExitCode ) { return false; }
 
-FORCEINLINE BOOL HttpQueryInfo( HINTERNET hRequest, DWORD dwInfoLevel, LPVOID lpBuffer, LPDWORD lpdwBufferLength, LPDWORD lpdwIndex ) { return false; }
+SOURCE_FORCEINLINE BOOL HttpQueryInfo( HINTERNET hRequest, DWORD dwInfoLevel, LPVOID lpBuffer, LPDWORD lpdwBufferLength, LPDWORD lpdwIndex ) { return false; }
 
-FORCEINLINE struct hostent FAR * _stdcall FAR gethostbyname( const char FAR * name ) { return NULL; }
+SOURCE_FORCEINLINE struct hostent FAR * _stdcall FAR gethostbyname( const char FAR * name ) { return NULL; }
 
-FORCEINLINE BOOL InternetReadFile(HINTERNET hFile, LPVOID lpBuffer, DWORD dwNumberOfBytesToRead, LPDWORD lpdwNumberOfBytesRead ) { return false; }
+SOURCE_FORCEINLINE BOOL InternetReadFile(HINTERNET hFile, LPVOID lpBuffer, DWORD dwNumberOfBytesToRead, LPDWORD lpdwNumberOfBytesRead ) { return false; }
 
-FORCEINLINE BOOL InternetCloseHandle( HINTERNET hInternet ) { return false; }
+SOURCE_FORCEINLINE BOOL InternetCloseHandle( HINTERNET hInternet ) { return false; }
 
-FORCEINLINE BOOL InternetCrackUrl( LPCSTR lpszUrl, DWORD dwUrlLength, DWORD dwFlags, LPURL_COMPONENTS lpUrlComponents ) { return false; }
+SOURCE_FORCEINLINE BOOL InternetCrackUrl( LPCSTR lpszUrl, DWORD dwUrlLength, DWORD dwFlags, LPURL_COMPONENTS lpUrlComponents ) { return false; }
 
-FORCEINLINE HINTERNET InternetOpen( LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy OPTIONAL, LPCSTR lpszProxyBypass OPTIONAL, DWORD dwFlags ) { return 0; }
+SOURCE_FORCEINLINE HINTERNET InternetOpen( LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy OPTIONAL, LPCSTR lpszProxyBypass OPTIONAL, DWORD dwFlags ) { return 0; }
 
-FORCEINLINE INTERNET_STATUS_CALLBACK InternetSetStatusCallback( HINTERNET hInternet, INTERNET_STATUS_CALLBACK lpfnInternetCallback ) { return NULL; }
+SOURCE_FORCEINLINE INTERNET_STATUS_CALLBACK InternetSetStatusCallback( HINTERNET hInternet, INTERNET_STATUS_CALLBACK lpfnInternetCallback ) { return NULL; }
 
-FORCEINLINE HINTERNET InternetOpenUrl( HINTERNET hInternet, LPCSTR lpszUrl,LPCSTR lpszHeaders OPTIONAL, DWORD dwHeadersLength, DWORD dwFlags, DWORD_PTR dwContext ) { return 0; }
+SOURCE_FORCEINLINE HINTERNET InternetOpenUrl( HINTERNET hInternet, LPCSTR lpszUrl,LPCSTR lpszHeaders OPTIONAL, DWORD dwHeadersLength, DWORD dwFlags, DWORD_PTR dwContext ) { return 0; }
 
-FORCEINLINE BOOL TerminateProcess( HANDLE, UINT ) { return false; }
+SOURCE_FORCEINLINE BOOL TerminateProcess( HANDLE, UINT ) { return false; }
 
-FORCEINLINE DWORD MsgWaitForMultipleObjects( DWORD, CONST HANDLE*, BOOL, DWORD, DWORD ) { return 0; }
+SOURCE_FORCEINLINE DWORD MsgWaitForMultipleObjects( DWORD, CONST HANDLE*, BOOL, DWORD, DWORD ) { return 0; }
 
-FORCEINLINE int gethostname( char *dest, int len ) { strncpy( dest, "localhost", len ); return 0; }
+SOURCE_FORCEINLINE int gethostname( char *dest, int len ) { strncpy( dest, "localhost", len ); return 0; }
 
-FORCEINLINE BOOL GetProcessTimes( HANDLE, LPFILETIME ft1, LPFILETIME ft2, LPFILETIME ft3, LPFILETIME ft4 ) { return false; }
+SOURCE_FORCEINLINE BOOL GetProcessTimes( HANDLE, LPFILETIME ft1, LPFILETIME ft2, LPFILETIME ft3, LPFILETIME ft4 ) { return false; }
 
-//FORCEINLINE time_t Time(time_t *today) {  ULARGE_INTEGER ul; GetSystemTimeAsFileTime( (FILETIME*)&ul ); if(today) *today=ul.QuadPart; return ul.QuadPart; }
-FORCEINLINE long Time(long *today) {  ULARGE_INTEGER ul; GetSystemTimeAsFileTime( (FILETIME*)&ul ); if(today) *today=ul.QuadPart; return ul.QuadPart; }
+//SOURCE_FORCEINLINE time_t Time(time_t *today) {  ULARGE_INTEGER ul; GetSystemTimeAsFileTime( (FILETIME*)&ul ); if(today) *today=ul.QuadPart; return ul.QuadPart; }
+SOURCE_FORCEINLINE long Time(long *today) {  ULARGE_INTEGER ul; GetSystemTimeAsFileTime( (FILETIME*)&ul ); if(today) *today=ul.QuadPart; return ul.QuadPart; }
 
-FORCEINLINE BOOL CreateProcess( LPCSTR lpApplicationName, 
+SOURCE_FORCEINLINE BOOL CreateProcess( LPCSTR lpApplicationName, 
 					 LPSTR lpCommandLine, 
 					 LPSECURITY_ATTRIBUTES lpProcessAttributes, 
 					 LPSECURITY_ATTRIBUTES lpThreadAttributes, 
@@ -1479,14 +1479,14 @@ FORCEINLINE BOOL CreateProcess( LPCSTR lpApplicationName,
 
 SOURCE_TIER0_API DWORD g_dwProcessAffinityMask;
 
-FORCEINLINE bool GetProcessAffinityMask( HANDLE hProcess, DWORD *lpProcessAffinityMask, DWORD *lpSystemAffinityMask )
+SOURCE_FORCEINLINE bool GetProcessAffinityMask( HANDLE hProcess, DWORD *lpProcessAffinityMask, DWORD *lpSystemAffinityMask )
 {
 	*lpProcessAffinityMask = g_dwProcessAffinityMask;
 	*lpSystemAffinityMask = 0x01;
 	return true;
 }
 
-FORCEINLINE bool SetProcessAffinityMask( HANDLE hProcess, DWORD dwProcessAffinityMask )
+SOURCE_FORCEINLINE bool SetProcessAffinityMask( HANDLE hProcess, DWORD dwProcessAffinityMask )
 {
 	if ( dwProcessAffinityMask == 0 )
 	{
@@ -1498,7 +1498,7 @@ FORCEINLINE bool SetProcessAffinityMask( HANDLE hProcess, DWORD dwProcessAffinit
 	return true;
 }
 
-FORCEINLINE DWORD_PTR SetThreadAffinityMask( HANDLE hThread, DWORD_PTR dwThreadAffinityMask ) 
+SOURCE_FORCEINLINE DWORD_PTR SetThreadAffinityMask( HANDLE hThread, DWORD_PTR dwThreadAffinityMask ) 
 {
 	if ( dwThreadAffinityMask == 0 )
 	{
@@ -1526,12 +1526,12 @@ FORCEINLINE DWORD_PTR SetThreadAffinityMask( HANDLE hThread, DWORD_PTR dwThreadA
 // snd_win.cpp
 class IAudioDevice;
 class CAudioSource;
-FORCEINLINE IAudioDevice *Audio_CreateWaveDevice( void ) { return NULL; }
-FORCEINLINE IAudioDevice *Audio_CreateDirectSoundDevice( void ) { return NULL; }
-FORCEINLINE CAudioSource* Voice_SetupAudioSource( int soundsource, int entchannel ) { return NULL; }
+SOURCE_FORCEINLINE IAudioDevice *Audio_CreateWaveDevice( void ) { return NULL; }
+SOURCE_FORCEINLINE IAudioDevice *Audio_CreateDirectSoundDevice( void ) { return NULL; }
+SOURCE_FORCEINLINE CAudioSource* Voice_SetupAudioSource( int soundsource, int entchannel ) { return NULL; }
 
 // snd_wave_source.cpp
-FORCEINLINE float GetMP3Duration_Helper( char const *filename ) { return 0.f; }
+SOURCE_FORCEINLINE float GetMP3Duration_Helper( char const *filename ) { return 0.f; }
 
 // Steam API stubs
 class ISteamClient;
@@ -1542,19 +1542,19 @@ class ISteamUserStats;
 class ISteamFriends;
 class ISteamMasterServerUpdater;
 enum EServerMode;
-FORCEINLINE ISteamClient				*SteamClient() { return NULL; }
-FORCEINLINE ISteamGameServer			*SteamGameServer() { return NULL; }
-FORCEINLINE ISteamUtils					*SteamGameServerUtils() { return NULL; }
-FORCEINLINE ISteamUtils					*SteamUtils() { return NULL; }
-FORCEINLINE ISteamUser					*SteamUser() { return NULL; }
-FORCEINLINE ISteamUserStats				*SteamUserStats() { return NULL; }
-FORCEINLINE ISteamFriends				*SteamFriends() { return NULL; }
-FORCEINLINE ISteamMasterServerUpdater	*SteamMasterServerUpdater() { return NULL; }
-FORCEINLINE bool SteamGameServer_Init( uint32 unIP, uint16 usPort, uint16 usGamePort, uint16 usSpectatorPort, uint16 usQueryPort, EServerMode eServerMode, int nGameAppId, const char *pchGameDir, const char *pchVersionString ) { return false; }
-FORCEINLINE void SteamGameServer_Shutdown() {}
-FORCEINLINE void SteamGameServer_RunCallbacks() {}
+SOURCE_FORCEINLINE ISteamClient				*SteamClient() { return NULL; }
+SOURCE_FORCEINLINE ISteamGameServer			*SteamGameServer() { return NULL; }
+SOURCE_FORCEINLINE ISteamUtils					*SteamGameServerUtils() { return NULL; }
+SOURCE_FORCEINLINE ISteamUtils					*SteamUtils() { return NULL; }
+SOURCE_FORCEINLINE ISteamUser					*SteamUser() { return NULL; }
+SOURCE_FORCEINLINE ISteamUserStats				*SteamUserStats() { return NULL; }
+SOURCE_FORCEINLINE ISteamFriends				*SteamFriends() { return NULL; }
+SOURCE_FORCEINLINE ISteamMasterServerUpdater	*SteamMasterServerUpdater() { return NULL; }
+SOURCE_FORCEINLINE bool SteamGameServer_Init( uint32 unIP, uint16 usPort, uint16 usGamePort, uint16 usSpectatorPort, uint16 usQueryPort, EServerMode eServerMode, int nGameAppId, const char *pchGameDir, const char *pchVersionString ) { return false; }
+SOURCE_FORCEINLINE void SteamGameServer_Shutdown() {}
+SOURCE_FORCEINLINE void SteamGameServer_RunCallbacks() {}
 
-FORCEINLINE int getch( void ) { return 0; }
+SOURCE_FORCEINLINE int getch( void ) { return 0; }
 
 SOURCE_TIER0_API LONG			GetWindowLong( HWND hWnd, int nIndex );
 SOURCE_TIER0_API LONG			SetWindowLong( HWND hWnd, int nIndex, LONG dwNewLong );

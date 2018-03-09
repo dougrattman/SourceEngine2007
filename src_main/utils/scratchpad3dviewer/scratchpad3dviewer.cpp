@@ -822,7 +822,7 @@ void AppInit()
 		Sys_Quit();
 	}
 
-	// FIXME: I took this out of scratchpad 3d, not sure if this is even necessary any more
+	// TODO(d.rattman): I took this out of scratchpad 3d, not sure if this is even necessary any more
 	pFileSystem->AddSearchPath( ".", "PLATFORM" );	
 
 	g_pScratchPad = new CScratchPad3D( pFilename, pFileSystem, false );

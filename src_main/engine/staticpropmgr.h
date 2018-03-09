@@ -1,27 +1,28 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // This file contains a little interface to deal with static prop collisions
 
 #ifndef STATICPROPMGR_H
 #define STATICPROPMGR_H
 
+#include "base/include/macros.h"
 #include "engine/IStaticPropMgr.h"
 #include "mathlib/vector.h"
 
-// FIXME: Remove! Only here for the test against old code
+// TODO(d.rattman): Remove! Only here for the test against old code
 #include "enginetrace.h"
 
 //-----------------------------------------------------------------------------
 // foward declarations
 //-----------------------------------------------------------------------------
 class ICollideable;
-FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
 class IPooledVBAllocator;
 
 //-----------------------------------------------------------------------------
 // The engine's static prop manager
 //-----------------------------------------------------------------------------
-abstract_class IStaticPropMgrEngine {
+the_interface IStaticPropMgrEngine {
  public:
   virtual bool Init() = 0;
   virtual void Shutdown() = 0;

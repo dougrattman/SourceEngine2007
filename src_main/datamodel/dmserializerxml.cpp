@@ -291,7 +291,7 @@ bool CXMLSerializer::Serialize(CUtlBuffer &outBuf, CDmElement *pRoot) {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Replace this with our own parser! Or make Parsifal not be a
+// TODO(d.rattman): Replace this with our own parser! Or make Parsifal not be a
 // statically-linked DLL
 //-----------------------------------------------------------------------------
 class CXMLUnserializationState {
@@ -675,7 +675,7 @@ int CXMLUnserializationState::StartAttributeElement(
 }
 
 int CXMLUnserializationState::EndAttributeElement(const char *pAttributeName) {
-  // FIXME: Make this work!
+  // TODO(d.rattman): Make this work!
 
   //	const char *pActualAttributeName =
   //m_ParseStack.Top().m_pElement->GetAttributeValueString( "type" ); 	if (
@@ -717,7 +717,7 @@ int CXMLUnserializationState::StartChildElement(const char *pElementType) {
     int i = m_ParseStack.Push();
     m_ParseStack[i].m_Type = ParseState_t::ATTRIBUTE_ELEMENT_ARRAY_REFERENCE;
 
-    // FIXME: Push state for parsing external child
+    // TODO(d.rattman): Push state for parsing external child
     return XML_OK;
   }
 
@@ -833,7 +833,7 @@ int CXMLUnserializationState::CharactersAttribute(const XMLCH *pChars,
     return XML_ABORT;
   }
 
-  // FIXME: This totally sucks. Finish getting CUtlBuffer into the attributes.
+  // TODO(d.rattman): This totally sucks. Finish getting CUtlBuffer into the attributes.
   char *pBuf = (char *)stackalloc(cbChars + 1);
   memcpy(pBuf, (char *)pChars, cbChars);
   pBuf[cbChars] = 0;
@@ -885,7 +885,7 @@ int CXMLUnserializationState::Characters(const XMLCH *pChars, int cbChars) {
       return CharactersAttribute(pChars, cbChars);
 
     default:
-      // FIXME: Should I warn + abort?
+      // TODO(d.rattman): Should I warn + abort?
       return XML_OK;
   }
 }

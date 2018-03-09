@@ -67,7 +67,6 @@
 // Projective textures
 #include "c_env_projected_texture.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 static void testfreezeframe_f(void) { view->FreezeFrame(3.0); }
@@ -89,10 +88,11 @@ static ConVar cl_maxrenderable_dist(
     "cl_maxrenderable_dist", "3000", FCVAR_CHEAT,
     "Max distance from the camera at which things will be rendered");
 
-ConVar r_entityclips("r_entityclips",
-                     "1");  // FIXME: Nvidia drivers before 81.94 on cards that
-                            // support user clip planes will have problems with
-                            // this, require driver update? Detect and disable?
+ConVar r_entityclips(
+    "r_entityclips",
+    "1");  // TODO(d.rattman): Nvidia drivers before 81.94 on cards that
+           // support user clip planes will have problems with
+           // this, require driver update? Detect and disable?
 
 // Matches the version in the engine
 static ConVar r_drawopaqueworld("r_drawopaqueworld", "1", FCVAR_CHEAT);
@@ -109,7 +109,8 @@ static ConVar r_drawopaquerenderables("r_drawopaquerenderables", "1",
                                       FCVAR_CHEAT);
 static ConVar r_threaded_renderables("r_threaded_renderables", "0");
 
-// FIXME: This is not static because we needed to turn it off for TF2 playtests
+// TODO(d.rattman): This is not static because we needed to turn it off for TF2
+// playtests
 ConVar r_DrawDetailProps("r_DrawDetailProps", "1", FCVAR_NONE,
                          "0=Off, 1=Normal, 2=Wireframe");
 
@@ -989,7 +990,7 @@ void CViewRender::DrawViewModels(const CViewSetup &view, bool drawViewmodel) {
   const bool bUseDepthHack = true;
 #endif
 
-  // FIXME: Add code to read the current depth range
+  // TODO(d.rattman): Add code to read the current depth range
   float depthmin = 0.0f;
   float depthmax = 1.0f;
 
@@ -1059,7 +1060,7 @@ bool CViewRender::ShouldDrawBrushModels(void) {
 void CViewRender::PerformScreenSpaceEffects(int x, int y, int w, int h) {
   VPROF("CViewRender::PerformScreenSpaceEffects()");
 
-  // FIXME: Screen-space effects are busted in the editor
+  // TODO(d.rattman): Screen-space effects are busted in the editor
   if (engine->IsHammerRunning()) return;
 
   g_pScreenSpaceEffects->RenderEffects(x, y, w, h);
@@ -1314,7 +1315,7 @@ static void GetFogColor(fogparams_t *pFogParams, float *pColor) {
 
       float flBlendFactor = 0.5 * forward.Dot(pFogParams->dirPrimary) + 0.5;
 
-      // FIXME: convert to linear colorspace
+      // TODO(d.rattman): convert to linear colorspace
       pColor[0] = flPrimaryColor[0] * flBlendFactor +
                   flSecondaryColor[0] * (1 - flBlendFactor);
       pColor[1] = flPrimaryColor[1] * flBlendFactor +
@@ -1456,7 +1457,7 @@ static void GetSkyboxFogColor(float *pColor) {
       float flBlendFactor =
           0.5 * forward.Dot(local->m_skybox3d.fog.dirPrimary) + 0.5;
 
-      // FIXME: convert to linear colorspace
+      // TODO(d.rattman): convert to linear colorspace
       pColor[0] =
           local->m_skybox3d.fog.colorPrimary.GetR() * flBlendFactor +
           local->m_skybox3d.fog.colorSecondary.GetR() * (1 - flBlendFactor);
@@ -1569,7 +1570,7 @@ void CViewRender::RenderPlayerSprites() {
 // Sets up, cleans up the main 3D view
 //-----------------------------------------------------------------------------
 void CViewRender::SetupMain3DView(const CViewSetup &view, int &nClearFlags) {
-  // FIXME: I really want these fields removed from CViewSetup
+  // TODO(d.rattman): I really want these fields removed from CViewSetup
   // and passed in as independent flags
   // Clear the color here if requested.
   nClearFlags &= ~VIEW_CLEAR_DEPTH;
@@ -1832,7 +1833,7 @@ void CViewRender::RenderView(const CViewSetup &view, int nClearFlags,
       tempView.fov = ScaleFOVByWidthRatio(
           tempView.fov, tempView.m_flAspectRatio / (4.0f / 3.0f));
       tempView.m_bDoBloomAndToneMapping =
-          false;  // FIXME: Hack to get Mark up and running
+          false;  // TODO(d.rattman): Hack to get Mark up and running
       m_bDrawOverlay = false;
       RenderView(tempView, m_OverlayClearFlags, m_OverlayDrawFlags);
       m_CurrentView = currentView;
@@ -2019,14 +2020,14 @@ void CViewRender::DetermineWaterRenderInfo(
                                               MATERIAL_VAR_TYPE_TEXTURE);
   }
 
-  // Brian says FIXME: I disabled cheap water LOD when local specular is
-  // specified. There are very few places that appear to actually take advantage
-  // of it (places where water is in the PVS, but outside of LOD range). It was
-  // 2 hours before code lock, and I had the choice of either doubling fill-rate
-  // everywhere by making cheap water lod actually work (the water LOD wasn't
-  // actually rendering!!!) or to just always render the reflection + refraction
-  // if there's a local specular specified. Note that water LOD *does* work with
-  // refract-only water
+  // Brian says TODO(d.rattman): I disabled cheap water LOD when local specular
+  // is specified. There are very few places that appear to actually take
+  // advantage of it (places where water is in the PVS, but outside of LOD
+  // range). It was 2 hours before code lock, and I had the choice of either
+  // doubling fill-rate everywhere by making cheap water lod actually work (the
+  // water LOD wasn't actually rendering!!!) or to just always render the
+  // reflection + refraction if there's a local specular specified. Note that
+  // water LOD *does* work with refract-only water
 
   // Gary says: I'm reverting this change so that water LOD works on dx9 for
   // ep2.
@@ -2544,9 +2545,7 @@ void CViewRender::ViewDrawScene_Intro(const CViewSetup &view, int nClearFlags,
   pRenderContext->MatrixMode(MATERIAL_PROJECTION);
   pRenderContext->PopMatrix();
 
-  // Draw the starfield
-  // FIXME
-  // blur?
+  // TODO(d.rattman): Draw the starfield
 
   // Disable fog for the rest of the stuff
   DisableFog();
@@ -2674,10 +2673,10 @@ void CViewRender::DrawMonitors(const CViewSetup &cameraView) {
   g_bRenderingCameraView = true;
 #endif
 
-  // FIXME: this should check for the ability to do a render target maybe
-  // instead.
-  // FIXME: shouldn't have to truck through all of the visible entities for
-  // this!!!!
+  // TODO(d.rattman): this should check for the ability to do a render target
+  // maybe instead.
+  // TODO(d.rattman): shouldn't have to truck through all of the visible
+  // entities for this!!!!
   ITexture *pCameraTarget = GetCameraTexture();
   int width = pCameraTarget->GetActualWidth();
   int height = pCameraTarget->GetActualHeight();
@@ -2835,8 +2834,9 @@ void CRendering3dView::SetupRenderablesList(int viewID) {
     float fMaxDist = cl_maxrenderable_dist.GetFloat();
 
     // Shadowing light typically has a smaller farz than cl_maxrenderable_dist
-    setupInfo.m_flRenderDistSq =
-        (viewID == VIEW_SHADOW_DEPTH_TEXTURE) ? std::min(zFar, fMaxDist) : fMaxDist;
+    setupInfo.m_flRenderDistSq = (viewID == VIEW_SHADOW_DEPTH_TEXTURE)
+                                     ? std::min(zFar, fMaxDist)
+                                     : fMaxDist;
     setupInfo.m_flRenderDistSq *= setupInfo.m_flRenderDistSq;
 
     ClientLeafSystem()->BuildRenderablesList(setupInfo);
@@ -5161,7 +5161,8 @@ void CUnderWaterView::Setup(const CViewSetup &view, bool bDrawSkybox,
 //
 //-----------------------------------------------------------------------------
 void CUnderWaterView::Draw() {
-  // FIXME: The 3d skybox shouldn't be drawn when the eye is under water
+  // TODO(d.rattman): The 3d skybox shouldn't be drawn when the eye is under
+  // water
 
   VPROF("CViewRender::ViewDrawScene_EyeUnderWater");
 

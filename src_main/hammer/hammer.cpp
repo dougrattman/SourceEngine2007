@@ -59,7 +59,7 @@
 #include "utlmap.h"
 #include "vgui_controls/Controls.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -289,7 +289,7 @@ bool CHammer::Connect(CreateInterfaceFn factory) {
 
   // ensure we're in the same directory as the .EXE
   char *p;
-  GetModuleFileName(NULL, m_szAppDir, MAX_PATH);
+  GetModuleFileName(NULL, m_szAppDir, SOURCE_MAX_PATH);
   p = strrchr(m_szAppDir, '\\');
   if (p) {
     // chop off \wc.exe
@@ -307,7 +307,7 @@ bool CHammer::Connect(CreateInterfaceFn factory) {
 
   // Default location for GameConfig.txt is the same directory as Hammer.exe but
   // this may be overridden on the command line
-  char szGameConfigDir[MAX_PATH];
+  char szGameConfigDir[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_PROGRAM, szGameConfigDir);
   Options.configs.m_strConfigDir = szGameConfigDir;
   CHammerCmdLine cmdInfo;
@@ -463,7 +463,7 @@ void CHammer::GetDirectory(DirIndex_t dir, char *p) {
     case DIR_MATERIALS: {
       strcpy(p, g_pGameConfig->m_szModDir);
       EnsureTrailingBackslash(p);
-      Q_strcat(p, "materials\\", MAX_PATH);
+      Q_strcat(p, "materials\\", SOURCE_MAX_PATH);
       break;
     }
 
@@ -557,20 +557,20 @@ void CHammer::Help(const char *pszTopic) {
   //
   // Get the directory that the help file should be in (our program directory).
   //
-  /*char szHelpDir[MAX_PATH];
+  /*char szHelpDir[SOURCE_MAX_PATH];
   GetDirectory(DIR_PROGRAM, szHelpDir);
 
   //
   // Find the application that is associated with compiled HTML files.
   //
-  char szHelpExe[MAX_PATH];
+  char szHelpExe[SOURCE_MAX_PATH];
   HINSTANCE hResult = FindExecutable("wc.chm", szHelpDir, szHelpExe);
   if (hResult > (HINSTANCE)32)
   {
           //
           // Build the full topic with which to launch the help application.
           //
-          char szParam[2 * MAX_PATH];
+          char szParam[2 * SOURCE_MAX_PATH];
           strcpy(szParam, szHelpDir);
           strcat(szParam, "wc.chm");
           if (pszTopic != NULL)
@@ -588,7 +588,7 @@ void CHammer::Help(const char *pszTopic) {
 
   if (hResult <= (HINSTANCE)32)
   {
-          char szError[MAX_PATH];
+          char szError[SOURCE_MAX_PATH];
           sprintf(szError, "The help system could not be launched. The the
   following error was returned:\n%s (0x%X)", GetErrorString(), hResult);
           AfxMessageBox(szError);
@@ -597,7 +597,7 @@ void CHammer::Help(const char *pszTopic) {
 }
 
 static SpewRetval_t HammerDbgOutput(SpewType_t spewType, char const *pMsg) {
-  // FIXME: The messages we're getting from the material system
+  // TODO(d.rattman): The messages we're getting from the material system
   // are ones that we really don't care much about.
   // I'm disabling this for now, we need to decide about what to do with this
 
@@ -626,7 +626,7 @@ void UpdatePrefabs_Init() {
   // Watch the prefabs tree for file or directory creation
   // and deletion.
   if (dwChangeHandle == NULL) {
-    char szPrefabDir[MAX_PATH];
+    char szPrefabDir[SOURCE_MAX_PATH];
     APP()->GetDirectory(DIR_PREFABS, szPrefabDir);
 
     dwChangeHandle = FindFirstChangeNotification(
@@ -876,7 +876,7 @@ statically #endif
   initInfo.m_pFileSystem = g_pFullFileSystem;
   initInfo.m_pDirectoryName = g_pGameConfig->m_szModDir;
   if (!initInfo.m_pDirectoryName[0]) {
-    static char pTempBuf[MAX_PATH];
+    static char pTempBuf[SOURCE_MAX_PATH];
     APP()->GetDirectory(DIR_PROGRAM, pTempBuf);
     strcat(pTempBuf, "..\\hl2");
     initInfo.m_pDirectoryName = pTempBuf;
@@ -916,7 +916,7 @@ statically #endif
   LoadFileSystemDialogModule();
 
   // Load detail object descriptions.
-  char szGameDir[_MAX_PATH];
+  char szGameDir[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_MOD, szGameDir);
   DetailObjects::LoadEmitDetailObjectDictionary(szGameDir);
 
@@ -1160,8 +1160,8 @@ void CAboutDlg::DoDataExchange(CDataExchange *pDX) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CAboutDlg::OnOrder() {
-  char szBuf[MAX_PATH];
-  GetWindowsDirectory(szBuf, MAX_PATH);
+  char szBuf[SOURCE_MAX_PATH];
+  GetWindowsDirectory(szBuf, SOURCE_MAX_PATH);
   strcat(szBuf, "\\notepad.exe");
   _spawnl(_P_NOWAIT, szBuf, szBuf, "order.txt", NULL);
 }
@@ -1242,8 +1242,8 @@ BOOL CAboutDlg::OnInitDialog(void) {
   //
   CWnd *pWnd = GetDlgItem(IDC_BUILD_NUMBER);
   if (pWnd != NULL) {
-    char szTemp1[MAX_PATH];
-    char szTemp2[MAX_PATH];
+    char szTemp1[SOURCE_MAX_PATH];
+    char szTemp2[SOURCE_MAX_PATH];
     int nBuild = build_number();
     pWnd->GetWindowText(szTemp1, sizeof(szTemp1));
     sprintf(szTemp2, szTemp1, nBuild);
@@ -1254,7 +1254,7 @@ BOOL CAboutDlg::OnInitDialog(void) {
   // For SDK builds, append "SDK" to the version number.
   //
 #ifdef SDK_BUILD
-  char szTemp[MAX_PATH];
+  char szTemp[SOURCE_MAX_PATH];
   GetWindowText(szTemp, sizeof(szTemp));
   strcat(szTemp, " SDK");
   SetWindowText(szTemp);
@@ -1297,7 +1297,7 @@ void CHammer::OnFileNew(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CHammer::OnFileOpen(void) {
-  static char szInitialDir[MAX_PATH] = "";
+  static char szInitialDir[SOURCE_MAX_PATH] = "";
   if (szInitialDir[0] == '\0') {
     strcpy(szInitialDir, g_pGameConfig->szMapDir);
   }
@@ -1370,7 +1370,7 @@ CDocument *CHammer::OpenDocumentFile(LPCTSTR lpszFileName) {
   }
 
   if (((CMapDoc *)pDoc)->IsAutosave()) {
-    char szRenameMessage[MAX_PATH + MAX_PATH + 256];
+    char szRenameMessage[SOURCE_MAX_PATH + SOURCE_MAX_PATH + 256];
     CString newMapPath = *((CMapDoc *)pDoc)->AutosavedFrom();
 
     sprintf(szRenameMessage,
@@ -1403,10 +1403,10 @@ BOOL CHammer::PreTranslateMessage(MSG *pMsg) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CHammer::LoadSequences(void) {
-  char szRootDir[MAX_PATH];
-  char szFullPath[MAX_PATH];
+  char szRootDir[SOURCE_MAX_PATH];
+  char szFullPath[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-  Q_MakeAbsolutePath(szFullPath, MAX_PATH, "CmdSeq.wc", szRootDir);
+  Q_MakeAbsolutePath(szFullPath, SOURCE_MAX_PATH, "CmdSeq.wc", szRootDir);
   std::ifstream file(szFullPath, std::ios::in | std::ios::binary);
 
   if (!file.is_open()) return;  // none to load
@@ -1450,10 +1450,10 @@ void CHammer::LoadSequences(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CHammer::SaveSequences(void) {
-  char szRootDir[MAX_PATH];
-  char szFullPath[MAX_PATH];
+  char szRootDir[SOURCE_MAX_PATH];
+  char szFullPath[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-  Q_MakeAbsolutePath(szFullPath, MAX_PATH, "CmdSeq.wc", szRootDir);
+  Q_MakeAbsolutePath(szFullPath, SOURCE_MAX_PATH, "CmdSeq.wc", szRootDir);
   std::ofstream file(szFullPath, std::ios::out | std::ios::binary);
 
   // write header
@@ -1666,7 +1666,7 @@ int CHammer::GetNextAutosaveNumber(
   oldestAutosaveTime.dwHighDateTime = 0;
   oldestAutosaveTime.dwLowDateTime = 0;
 
-  char szRootDir[MAX_PATH];
+  char szRootDir[SOURCE_MAX_PATH];
   APP()->GetDirectory(DIR_AUTOSAVE, szRootDir);
   CString strAutosaveDirectory(szRootDir);
 
@@ -1779,7 +1779,7 @@ void CHammer::Autosave(void) {
   autosaveFiles.SetLessFunc(LessFunc);
 
   if (pDoc && pDoc->NeedsAutosave()) {
-    char szRootDir[MAX_PATH];
+    char szRootDir[SOURCE_MAX_PATH];
     APP()->GetDirectory(DIR_AUTOSAVE, szRootDir);
     CString strAutosaveDirectory(szRootDir);
 
@@ -1836,7 +1836,7 @@ void CHammer::Autosave(void) {
 
       WIN32_FIND_DATA fileData = autosaveFiles.Element(nFirstElementIndex);
       DWORD dwOldestFileSize = fileData.nFileSizeLow;
-      char filename[MAX_PATH];
+      char filename[SOURCE_MAX_PATH];
       strcpy(filename, fileData.cFileName);
       DeleteFile(strAutosaveDirectory + filename);
       dwTotalAutosaveDirectorySize -= dwOldestFileSize;
@@ -1863,7 +1863,7 @@ bool CHammer::VerifyAutosaveDirectory(char *szAutosaveDirectory) const {
   HANDLE hDir;
   HANDLE hTestFile;
 
-  char szRootDir[MAX_PATH];
+  char szRootDir[SOURCE_MAX_PATH];
   if (szAutosaveDirectory) {
     strcpy(szRootDir, szAutosaveDirectory);
     EnsureTrailingBackslash(szRootDir);
@@ -1942,7 +1942,7 @@ bool CHammer::VerifyAutosaveDirectory(char *szAutosaveDirectory) const {
 void CHammer::LoadLastGoodSave(void) {
   CString strLastGoodSave =
       APP()->GetProfileString("General", "Last Good Save", "");
-  char szMapDir[MAX_PATH];
+  char szMapDir[SOURCE_MAX_PATH];
   strcpy(szMapDir, g_pGameConfig->szMapDir);
   CDocument *pCurrentDoc;
 
@@ -1954,7 +1954,7 @@ void CHammer::LoadLastGoodSave(void) {
       return;
     }
 
-    char szAutoSaveDir[MAX_PATH];
+    char szAutoSaveDir[SOURCE_MAX_PATH];
     APP()->GetDirectory(DIR_AUTOSAVE, szAutoSaveDir);
 
     if (!((CMapDoc *)pCurrentDoc)->IsAutosave() &&
@@ -1962,8 +1962,8 @@ void CHammer::LoadLastGoodSave(void) {
       // This handles the case where someone recovers from a crash and tries to
       // load an autosave file that doesn't have the new autosave chunk in it It
       // assumes the file should go into the gameConfig map directory
-      char szRenameMessage[MAX_PATH + MAX_PATH + 256];
-      char szLastSaveCopy[MAX_PATH];
+      char szRenameMessage[SOURCE_MAX_PATH + SOURCE_MAX_PATH + 256];
+      char szLastSaveCopy[SOURCE_MAX_PATH];
       Q_strcpy(szLastSaveCopy, strLastGoodSave);
       char *pszFileName = Q_strrchr(strLastGoodSave, '\\') + 1;
       char *pszFileNameEnd = Q_strrchr(strLastGoodSave, '_');

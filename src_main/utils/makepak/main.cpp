@@ -51,7 +51,7 @@ bool AddListOfFilesToPack(const char *pakfile, const char *filelist)
 			break;
 
 		// strip out the path name (so any findfirst/next will work)
-		char szPath[_MAX_PATH];
+		char szPath[SOURCE_MAX_PATH];
 		strncpy(szPath, token, sizeof(szPath));
 		char *slash = strrchr(szPath, '\\');
 		if (slash)
@@ -77,7 +77,7 @@ bool AddListOfFilesToPack(const char *pakfile, const char *filelist)
 				// add in the file
 				bAddedFile = true;
 
-				char fullPath[_MAX_PATH];
+				char fullPath[SOURCE_MAX_PATH];
 				_snprintf(fullPath, sizeof(fullPath), "%s%s", szPath, finddata.name);
 				if (!Pack_AppendFile(pakfile, fullPath))
 				{
@@ -114,7 +114,7 @@ void main(int argc, char *argv[])
 		return;
 	}
 
-	char currentDir[_MAX_PATH];
+	char currentDir[SOURCE_MAX_PATH];
 	_getcwd(currentDir, sizeof(currentDir));
 
 	if (argc >= 4)

@@ -42,7 +42,7 @@
 #include "gamestats.h"
 #include "gameinterface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define COMMAND_CHANGE_TEAM "changeteam"
@@ -2351,7 +2351,7 @@ CDODPlayerStateInfo* CDODPlayer::State_LookupInfo( DODPlayerState state )
 		{ STATE_OBSERVER_MODE,	"STATE_OBSERVER_MODE",	&CDODPlayer::State_Enter_OBSERVER_MODE,	NULL, &CDODPlayer::State_PreThink_OBSERVER_MODE }
 	};
 
-	for ( int i=0; i < ARRAYSIZE( playerStateInfos ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( playerStateInfos ); i++ )
 	{
 		if ( playerStateInfos[i].m_iPlayerState == state )
 			return &playerStateInfos[i];
@@ -3624,7 +3624,7 @@ void CDODPlayer::SetupBones( matrix3x4_t *pBoneToWorld, int boneMask )
 	// Adjust hit boxes based on IK driven offset.
 	Vector adjOrigin = GetAbsOrigin() + Vector( 0, 0, m_flEstIkOffset );
 
-	// FIXME: pass this into Studio_BuildMatrices to skip transforms
+	// TODO(d.rattman): pass this into Studio_BuildMatrices to skip transforms
 	CBoneBitList boneComputed;
 	if ( m_pIk )
 	{

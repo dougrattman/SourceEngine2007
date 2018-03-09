@@ -11,7 +11,7 @@
 #include "refract_model_vs11.inc"
 #include "refract_world_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAXBLUR 1
@@ -165,7 +165,7 @@ BEGIN_VS_SHADER( Refract_DX80,
 				pShaderShadow->EnableDepthWrites( false );
 			}
 
-			// Alpha test: FIXME: shouldn't this be handled in Shader_t::SetInitialShadowState
+			// Alpha test: TODO(d.rattman): shouldn't this be handled in Shader_t::SetInitialShadowState
 			pShaderShadow->EnableAlphaTest( IS_FLAG_SET(MATERIAL_VAR_ALPHATEST) );
 
 			// If envmap is not specified, the alpha channel is the translucency

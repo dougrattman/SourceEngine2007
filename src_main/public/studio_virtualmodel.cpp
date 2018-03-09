@@ -9,7 +9,7 @@
 #include "tier1/utldict.h"
 #include "tier1/utlmap.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
@@ -95,7 +95,7 @@ void virtualmodel_t::AppendModels(int group, const studiohdr_t *pStudioHdr) {
     const studiohdr_t *pTmpHdr =
         pStudioHdr->FindModel(&tmp, pStudioHdr->pModelGroup(j)->pszName());
     if (pTmpHdr) {
-      if (nValidIncludes >= ARRAYSIZE(list)) {
+      if (nValidIncludes >= SOURCE_ARRAYSIZE(list)) {
         // would cause stack overflow
         Assert(0);
         break;
@@ -293,7 +293,7 @@ void virtualmodel_t::AppendBonemap(int group, const studiohdr_t *pStudioHdr) {
         m_group[group].masterBone[j] = k;
         m_group[group].boneMap[k] = j;
 
-        // FIXME: these runtime messages don't display in hlmv
+        // TODO(d.rattman): these runtime messages don't display in hlmv
         if ((pStudioHdr->pBone(j)->parent == -1) ||
             (pBaseStudioHdr->pBone(k)->parent == -1)) {
           if ((pStudioHdr->pBone(j)->parent != -1) ||

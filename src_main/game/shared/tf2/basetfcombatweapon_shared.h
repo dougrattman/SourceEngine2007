@@ -45,7 +45,7 @@ public:
 
 	virtual int		GetImpactScale( void ) { return 1; };
 
-	// FIXME: why are these virtual?
+	// TODO(d.rattman): why are these virtual?
 	virtual float	SequenceDuration( int iSequence );
 	virtual float	SequenceDuration( void ) { return SequenceDuration( GetSequence() ); }
 

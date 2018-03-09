@@ -13,7 +13,7 @@
 #include "tier0/include/dbg.h"
 #include "trace.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define UNINIT -99999.0
@@ -81,7 +81,7 @@ float IntersectRayWithTriangle(const Ray_t &ray, const Vector &v1,
     if (DotProduct(normal, ray.m_Delta) >= 0.0f) return -1.0f;
   }
 
-  // FIXME: This is inaccurate, but fast for boxes
+  // TODO(d.rattman): This is inaccurate, but fast for boxes
   // We want to do a fast separating axis implementation here
   // with a swept triangle along the reverse direction of the ray.
 
@@ -550,7 +550,7 @@ bool IsOBBIntersectingOBB(const Vector &vecOrigin1, const QAngle &vecAngles1,
                           const Vector &vecOrigin2, const QAngle &vecAngles2,
                           const Vector &boxMin2, const Vector &boxMax2,
                           float flTolerance) {
-  // FIXME: Simple case AABB check doesn't work because the min and max extents
+  // TODO(d.rattman): Simple case AABB check doesn't work because the min and max extents
   // are not oriented based on the angle this fast check would only be good for
   // cubes.
   /*if ( vecAngles1 == vecAngles2 )
@@ -576,7 +576,7 @@ bool IsOBBIntersectingOBB(const Vector &vecOrigin1, const QAngle &vecAngles1,
 //-----------------------------------------------------------------------------
 // returns true if there's an intersection between box and ray
 //-----------------------------------------------------------------------------
-bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
                                    const Vector &origin, const Vector &vecDelta,
                                    float flTolerance) {
 #if USE_SIMD_RAY_CHECKS
@@ -635,7 +635,7 @@ bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
   Assert(boxMin[1] <= boxMax[1]);
   Assert(boxMin[2] <= boxMax[2]);
 
-  // FIXME: Surely there's a faster way
+  // TODO(d.rattman): Surely there's a faster way
   float tmin = -FLT_MAX;
   float tmax = FLT_MAX;
 
@@ -681,7 +681,7 @@ bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
 //-----------------------------------------------------------------------------
 // returns true if there's an intersection between box and ray
 //-----------------------------------------------------------------------------
-bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
                                    const Vector &origin, const Vector &vecDelta,
                                    const Vector &vecInvDelta,
                                    float flTolerance) {
@@ -742,7 +742,7 @@ bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
   Assert(boxMin[1] <= boxMax[1]);
   Assert(boxMin[2] <= boxMax[2]);
 
-  // FIXME: Surely there's a faster way
+  // TODO(d.rattman): Surely there's a faster way
   float tmin = -FLT_MAX;
   float tmax = FLT_MAX;
 
@@ -790,7 +790,7 @@ bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
 //-----------------------------------------------------------------------------
 // Intersects a ray with a aabb, return true if they intersect
 //-----------------------------------------------------------------------------
-bool FASTCALL IsBoxIntersectingRay(const Vector &vecBoxMin,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &vecBoxMin,
                                    const Vector &vecBoxMax, const Ray_t &ray,
                                    float flTolerance) {
   if (!ray.m_IsSwept) {
@@ -819,7 +819,7 @@ bool FASTCALL IsBoxIntersectingRay(const Vector &vecBoxMin,
 // returns true if there's an intersection between box and ray (SIMD version)
 //-----------------------------------------------------------------------------
 
-bool FASTCALL IsBoxIntersectingRay(
+bool SOURCE_FASTCALL IsBoxIntersectingRay(
     const fltx4 &inBoxMin, const fltx4 &inBoxMax, const fltx4 &origin,
     const fltx4 &delta, const fltx4 &invDelta,  // ray parameters
     const fltx4 &vTolerance  ///< eg from ReplicateX4(flTolerance)
@@ -863,7 +863,7 @@ bool FASTCALL IsBoxIntersectingRay(
   return IsAllZeros(separation);
 }
 
-bool FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin, const fltx4 &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin, const fltx4 &boxMax,
                                    const Ray_t &ray, float flTolerance) {
   fltx4 rayStart = LoadAlignedSIMD(ray.m_Start);
   fltx4 rayExtents = LoadAlignedSIMD(ray.m_Extents);
@@ -1137,7 +1137,7 @@ bool IntersectRayWithOBB(const Vector &vecRayStart, const Vector &vecRayDelta,
                          const matrix3x4_t &matOBBToWorld,
                          const Vector &vecOBBMins, const Vector &vecOBBMaxs,
                          float flTolerance, BoxTraceInfo_t *pTrace) {
-  // FIXME: Two transforms is pretty expensive. Should we optimize this?
+  // TODO(d.rattman): Two transforms is pretty expensive. Should we optimize this?
   Vector start, delta;
   VectorITransform(vecRayStart, matOBBToWorld, start);
   VectorIRotate(vecRayDelta, matOBBToWorld, delta);
@@ -1155,7 +1155,7 @@ bool IntersectRayWithOBB(const Vector &vecRayStart, const Vector &vecRayDelta,
                          float flTolerance, CBaseTrace *pTrace) {
   Collision_ClearTrace(vecRayStart, vecRayDelta, pTrace);
 
-  // FIXME: Make it work with tolerance
+  // TODO(d.rattman): Make it work with tolerance
   Assert(flTolerance == 0.0f);
 
   // OPTIMIZE: Store this in the box instead of computing it here
@@ -1436,7 +1436,7 @@ bool IntersectRayWithOBB(const Ray_t &ray, const matrix3x4_t &matOBBToWorld,
   VectorAdd(vecLocalRayOrigin, vecLocalRayDirection, vecLocalRayEnd);
 
   for (i = 0; i < 15; ++i) {
-    // FIXME: Not particularly optimal since there's a lot of 0's in the plane
+    // TODO(d.rattman): Not particularly optimal since there's a lot of 0's in the plane
     // normals
     float flStartDot = DotProduct(pPlaneNormal[i], vecLocalRayOrigin);
     float flEndDot = DotProduct(pPlaneNormal[i], vecLocalRayEnd);

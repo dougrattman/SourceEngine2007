@@ -95,7 +95,7 @@ int CNormalList::FindOrAddNormal(Vector const &vNormal) {
   return m_Normals.AddToTail(vNormal);
 }
 
-// FIXME: HACK until the plane normals are made more happy
+// TODO(d.rattman): HACK until the plane normals are made more happy
 void GetBumpNormals(const float *sVect, const float *tVect,
                     const Vector &flatNormal, const Vector &phongNormal,
                     Vector bumpNormals[NUM_BUMP_VECTS]) {
@@ -248,7 +248,7 @@ void PairEdges(void) {
           // add to neighbor list
           tmpneighbor[m] = vertexface[n][k];
           numneighbors++;
-          if (numneighbors > ARRAYSIZE(tmpneighbor)) {
+          if (numneighbors > SOURCE_ARRAYSIZE(tmpneighbor)) {
             Error("Stack overflow in neighbors\n");
           }
         }
@@ -1312,7 +1312,7 @@ void BuildVisForLightEnvironment(void) {
       // to sky may have been culled.  Try tracing to find sky.
       if (dleafs[iLeaf].flags & LEAF_FLAGS_RADIAL) {
         if (CanLeafTraceToSky(iLeaf)) {
-          // FIXME: Should make a version that checks if we hit 2D skyboxes.. oh
+          // TODO(d.rattman): Should make a version that checks if we hit 2D skyboxes.. oh
           // well.
           dleafs[iLeaf].flags |= LEAF_FLAGS_SKY;
         }
@@ -1478,7 +1478,7 @@ void ExportDirectLightsToWorldLights() {
     wl->type = dl->light.type;
     wl->style = dl->light.style;
     VectorCopy(dl->light.origin, wl->origin);
-    // FIXME: why does vrad want 0 to 255 and not 0 to 1??
+    // TODO(d.rattman): why does vrad want 0 to 255 and not 0 to 1??
     VectorScale(dl->light.intensity, (1.0 / 255.0), wl->intensity);
     VectorCopy(dl->light.normal, wl->normal);
     wl->stopdot = dl->light.stopdot;
@@ -2239,7 +2239,7 @@ static void ComputeIlluminationPointAndNormalsSSE(lightinfo_t const &l,
   bool computeNormals =
       (pInfo->m_NormalCount > 1 && (pInfo->m_IsDispFace || !l.isflat));
 
-  // FIXME: move sample point off the surface a bit, this is done so that
+  // TODO(d.rattman): move sample point off the surface a bit, this is done so that
   // light sampling will not be affected by a bug	where raycasts will
   // intersect with the face being lit. We really should just have that
   // logic in GatherSampleLight
@@ -2842,7 +2842,7 @@ void BuildFacelights(int iThread, int facenum) {
 
   if (g_bInterrupt) return;
 
-  // FIXME: Is there a better way to do this? Like, in RunThreadsOn, for
+  // TODO(d.rattman): Is there a better way to do this? Like, in RunThreadsOn, for
   // instance? Don't pay this cost unless we have to; this is super
   // perf-critical code.
   if (g_pIncremental) {

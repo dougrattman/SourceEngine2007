@@ -134,7 +134,7 @@ template< class T >
 T* CNetworkSystem::CreateNetworkEvent()
 {
 	// Increase the size of m_EventMessageBuffer if this assertion fails
-	COMPILE_TIME_ASSERT( sizeof(T) <= sizeof( m_EventMessageBuffer ) );
+	static_assert( sizeof(T) <= sizeof( m_EventMessageBuffer ) );
 	return (T*)CreateNetworkEvent( sizeof(T) );
 }
 

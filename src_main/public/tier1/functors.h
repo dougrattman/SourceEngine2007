@@ -630,7 +630,7 @@
 //
 
 
-abstract_class CFunctor : public IRefCounted {
+the_interface CFunctor : public IRefCounted {
  public:
   CFunctor() {
 #ifdef DEBUG

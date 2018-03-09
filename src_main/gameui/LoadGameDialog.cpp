@@ -12,7 +12,7 @@
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

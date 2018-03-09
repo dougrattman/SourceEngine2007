@@ -17,7 +17,7 @@
 class IServer;
 class INetMessage;
 
-abstract_class IClient : public INetChannelHandler
+the_interface IClient : public INetChannelHandler
 {
 public:
 	virtual	~IClient() {}

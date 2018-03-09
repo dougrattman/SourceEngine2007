@@ -237,7 +237,7 @@ CIndexBuffer::CIndexBuffer(D3DDeviceWrapper *pD3D, int count,
   if ((hr == D3DERR_OUTOFVIDEOMEMORY) || (hr == E_OUTOFMEMORY)) {
     // Don't have the memory for this.  Try flushing all managed resources
     // out of vid mem and try again.
-    // FIXME: need to record this
+    // TODO(d.rattman): need to record this
     pD3D->EvictManagedResources();
     hr = pD3D->CreateIndexBuffer(count * IndexSize(), desc.Usage, desc.Format,
                                  desc.Pool, &m_pIB, NULL);

@@ -620,7 +620,7 @@ void CShaderShadowDX8::BlendFuncSeparateAlpha(ShaderBlendFactor_t srcFactor,
 void CShaderShadowDX8::PolyMode(ShaderPolyModeFace_t face,
                                 ShaderPolyMode_t polyMode) {
   // DX8 can't handle different modes on front and back faces
-  // FIXME:	Assert( face == SHADER_POLYMODEFACE_FRONT_AND_BACK );
+  // TODO(d.rattman):	Assert( face == SHADER_POLYMODEFACE_FRONT_AND_BACK );
   if (face == SHADER_POLYMODEFACE_BACK) return;
 
   D3DFILLMODE fillMode;
@@ -889,7 +889,7 @@ void CShaderShadowDX8::VertexShaderVertexFormat(unsigned int nFlags,
   // Avoid an error if vertex stream 0 is too narrow
   if (CVertexBufferBase::VertexFormatSize(m_ShadowShaderState.m_VertexUsage) <=
       16) {
-    // FIXME: this is only necessary because we
+    // TODO(d.rattman): this is only necessary because we
     //          (a) put the flex normal/position stream in ALL vertex decls
     //          (b) bind stream 0's VB to stream 2 if there is no actual flex
     //          data
@@ -1559,9 +1559,9 @@ void CShaderShadowDX8::DisableFogGammaCorrection(bool bDisable) {
 
 void CShaderShadowDX8::SetDiffuseMaterialSource(
     ShaderMaterialSource_t materialSource) {
-  COMPILE_TIME_ASSERT(D3DMCS_MATERIAL == SHADER_MATERIALSOURCE_MATERIAL);
-  COMPILE_TIME_ASSERT(D3DMCS_COLOR1 == SHADER_MATERIALSOURCE_COLOR1);
-  COMPILE_TIME_ASSERT(D3DMCS_COLOR2 == SHADER_MATERIALSOURCE_COLOR2);
+  static_assert(D3DMCS_MATERIAL == SHADER_MATERIALSOURCE_MATERIAL);
+  static_assert(D3DMCS_COLOR1 == SHADER_MATERIALSOURCE_COLOR1);
+  static_assert(D3DMCS_COLOR2 == SHADER_MATERIALSOURCE_COLOR2);
   Assert(materialSource == SHADER_MATERIALSOURCE_MATERIAL ||
          materialSource == SHADER_MATERIALSOURCE_COLOR1 ||
          materialSource == SHADER_MATERIALSOURCE_COLOR2);

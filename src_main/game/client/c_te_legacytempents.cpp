@@ -488,7 +488,7 @@ bool C_LocalTempEntity::Frame(float frametime, int framenumber) {
   }
 
   if (flags & FTENT_SMOKETRAIL) {
-    Assert(!"FIXME:  Rework smoketrail to be client side\n");
+    Assert(!"TODO(d.rattman):  Rework smoketrail to be client side\n");
   }
 
   // add gravity if we didn't collide in this frame
@@ -1656,10 +1656,10 @@ void CTempEnts::MuzzleFlash(const Vector &pos1, const QAngle &angles, int type,
 
     case MUZZLEFLASH_COMBINE:
       if (firstPerson) {
-        // FIXME: These should go away
+        // TODO(d.rattman): These should go away
         MuzzleFlash_Combine_Player(hEntity, 1);
       } else {
-        // FIXME: These should go away
+        // TODO(d.rattman): These should go away
         MuzzleFlash_Combine_NPC(hEntity, 1);
       }
       break;
@@ -2009,7 +2009,7 @@ int CTempEnts::AddVisibleTempEntity(C_LocalTempEntity *pEntity) {
     maxs[i] = pEntity->GetAbsOrigin()[i] + model_maxs[i];
   }
 
-  // FIXME: Vis isn't setup by the time we get here, so this call fails if
+  // TODO(d.rattman): Vis isn't setup by the time we get here, so this call fails if
   //		  you try to add a tempent before the first frame is drawn, and
   // it's 		  one frame behind the rest of the time. Fix this.
   // does the box intersect a visible leaf?

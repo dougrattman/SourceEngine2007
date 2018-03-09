@@ -34,7 +34,7 @@ enum
 //-----------------------------------------------------------------------------
 // Purpose: Interface for lecacy temp entities
 //-----------------------------------------------------------------------------
-abstract_class ITempEnts
+the_interface ITempEnts
 {
 public:
 	virtual  ~ITempEnts() {}

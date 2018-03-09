@@ -12,7 +12,7 @@
 #include "tier0/include/vprof.h"
 #include "tier1/bitbuf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static char s_text[1024];
@@ -212,14 +212,14 @@ const char *g_MostCommonPrefixes[] = {"materials", "models", "sounds",
                                       "scripts"};
 
 static int FindCommonPathID(const char *pPathID) {
-  for (int i = 0; i < ARRAYSIZE(g_MostCommonPathIDs); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPathIDs); i++) {
     if (V_stricmp(pPathID, g_MostCommonPathIDs[i]) == 0) return i;
   }
   return -1;
 }
 
 static int FindCommonPrefix(const char *pStr) {
-  for (int i = 0; i < ARRAYSIZE(g_MostCommonPrefixes); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_MostCommonPrefixes); i++) {
     if (V_stristr(pStr, g_MostCommonPrefixes[i]) == pStr) {
       int iNextChar = V_strlen(g_MostCommonPrefixes[i]);
       if (pStr[iNextChar] == '/' || pStr[iNextChar] == '\\') return i;
@@ -267,7 +267,7 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   int iCode = buffer.ReadUBitLong(2);
   if (iCode == 0) {
     buffer.ReadString(m_szPathID, sizeof(m_szPathID));
-  } else if ((iCode - 1) < ARRAYSIZE(g_MostCommonPathIDs)) {
+  } else if ((iCode - 1) < SOURCE_ARRAYSIZE(g_MostCommonPathIDs)) {
     V_strncpy(m_szPathID, g_MostCommonPathIDs[iCode - 1], sizeof(m_szPathID));
   } else {
     Assert(!"Invalid path ID code in CLC_FileCRCCheck");
@@ -278,8 +278,8 @@ bool CLC_FileCRCCheck::ReadFromBuffer(bf_read &buffer) {
   iCode = buffer.ReadUBitLong(3);
   if (iCode == 0) {
     buffer.ReadString(m_szFilename, sizeof(m_szFilename));
-  } else if ((iCode - 1) < ARRAYSIZE(g_MostCommonPrefixes)) {
-    char szTemp[MAX_PATH];
+  } else if ((iCode - 1) < SOURCE_ARRAYSIZE(g_MostCommonPrefixes)) {
+    char szTemp[SOURCE_MAX_PATH];
     buffer.ReadString(szTemp, sizeof(szTemp));
     V_snprintf(m_szFilename, sizeof(m_szFilename), "%s%c%s",
                g_MostCommonPrefixes[iCode - 1], CORRECT_PATH_SEPARATOR, szTemp);

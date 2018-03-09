@@ -228,7 +228,7 @@ void CServerTools::DispatchSpawn( void *pEntity )
 //-----------------------------------------------------------------------------
 void CServerTools::ReloadParticleDefintions( const char *pFileName, const void *pBufData, int nLen )
 {
-	// FIXME: Use file name to determine if we care about this data
+	// TODO(d.rattman): Use file name to determine if we care about this data
 	CUtlBuffer buf( pBufData, nLen, CUtlBuffer::READ_ONLY );
 	g_pParticleSystemMgr->ReadParticleConfigFile( buf, true );
 }

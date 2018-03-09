@@ -27,7 +27,7 @@
 #include "engine/ienginesound.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Must match resource/tf_objects.txt!!!
@@ -132,8 +132,8 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 		if ( assister_name )
 		{
 			char szKillerBuf[MAX_PLAYER_NAME_LENGTH*2];
-			Q_snprintf( szKillerBuf, ARRAYSIZE(szKillerBuf), "%s + %s", msg.Killer.szName, assister_name );
-			Q_strncpy( msg.Killer.szName, szKillerBuf, ARRAYSIZE( msg.Killer.szName ) );
+			Q_snprintf( szKillerBuf, SOURCE_ARRAYSIZE(szKillerBuf), "%s + %s", msg.Killer.szName, assister_name );
+			Q_strncpy( msg.Killer.szName, szKillerBuf, SOURCE_ARRAYSIZE( msg.Killer.szName ) );
 			if ( iLocalPlayerIndex == iAssisterID )
 			{
 				msg.bLocalPlayerInvolved = true;
@@ -180,7 +180,7 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 				const wchar_t *wszLocalizedObjectName = g_pVGuiLocalize->Find( szLocalizedObjectNames[iObjectType] );
 				if ( wszLocalizedObjectName )
 				{
-					g_pVGuiLocalize->ConvertUnicodeToANSI( wszLocalizedObjectName, szLocalizedObjectName, ARRAYSIZE( szLocalizedObjectName ) );
+					g_pVGuiLocalize->ConvertUnicodeToANSI( wszLocalizedObjectName, szLocalizedObjectName, SOURCE_ARRAYSIZE( szLocalizedObjectName ) );
 				}
 				else
 				{
@@ -192,12 +192,12 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 				if ( msg.Victim.szName[0] )
 				{
 					char szVictimBuf[MAX_PLAYER_NAME_LENGTH*2];
-					Q_snprintf( szVictimBuf, ARRAYSIZE(szVictimBuf), "%s (%s)", szLocalizedObjectName, msg.Victim.szName );
-					Q_strncpy( msg.Victim.szName, szVictimBuf, ARRAYSIZE( msg.Victim.szName ) );
+					Q_snprintf( szVictimBuf, SOURCE_ARRAYSIZE(szVictimBuf), "%s (%s)", szLocalizedObjectName, msg.Victim.szName );
+					Q_strncpy( msg.Victim.szName, szVictimBuf, SOURCE_ARRAYSIZE( msg.Victim.szName ) );
 				}
 				else
 				{
-					Q_strncpy( msg.Victim.szName, szLocalizedObjectName, ARRAYSIZE( msg.Victim.szName ) );
+					Q_strncpy( msg.Victim.szName, szLocalizedObjectName, SOURCE_ARRAYSIZE( msg.Victim.szName ) );
 				}
 				
 			}
@@ -211,14 +211,14 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 		switch ( iCustomDamage )
 		{
 		case TF_DMG_CUSTOM_BACKSTAB:
-			Q_strncpy( msg.szIcon, "d_backstab", ARRAYSIZE( msg.szIcon ) );
+			Q_strncpy( msg.szIcon, "d_backstab", SOURCE_ARRAYSIZE( msg.szIcon ) );
 			break;
 		case TF_DMG_CUSTOM_HEADSHOT:
-			Q_strncpy( msg.szIcon, "d_headshot", ARRAYSIZE( msg.szIcon ) );
+			Q_strncpy( msg.szIcon, "d_headshot", SOURCE_ARRAYSIZE( msg.szIcon ) );
 			break;
 		case TF_DMG_CUSTOM_BURNING:
 			// special-case if custom kill is burning; if the attacker is dead we can't get weapon information, so force flamethrower as weapon
-			Q_strncpy( msg.szIcon, "d_flamethrower", ARRAYSIZE( msg.szIcon ) );
+			Q_strncpy( msg.szIcon, "d_flamethrower", SOURCE_ARRAYSIZE( msg.szIcon ) );
 			msg.wzInfoText[0] = 0;
 			break;
 		case TF_DMG_CUSTOM_SUICIDE:
@@ -252,9 +252,9 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 			return;
 
 		int iIndex = msg.Killer.iTeam - FIRST_GAME_TEAM;
-		Assert( iIndex < ARRAYSIZE( szCaptureIcons ) );
+		Assert( iIndex < SOURCE_ARRAYSIZE( szCaptureIcons ) );
 
-		Q_strncpy( msg.szIcon, bDefense ? szDefenseIcons[iIndex] : szCaptureIcons[iIndex], ARRAYSIZE( msg.szIcon ) );
+		Q_strncpy( msg.szIcon, bDefense ? szDefenseIcons[iIndex] : szCaptureIcons[iIndex], SOURCE_ARRAYSIZE( msg.szIcon ) );
 	}
 }
 
@@ -264,8 +264,8 @@ void CTFHudDeathNotice::OnGameEvent( IGameEvent *event, DeathNoticeItem &msg )
 void CTFHudDeathNotice::AddAdditionalMsg( int iKillerID, int iVictimID, const char *pMsgKey )
 {
 	DeathNoticeItem &msg2 = m_DeathNotices[AddDeathNoticeItem()];
-	Q_strncpy( msg2.Killer.szName, g_PR->GetPlayerName( iKillerID ), ARRAYSIZE( msg2.Killer.szName ) );
-	Q_strncpy( msg2.Victim.szName, g_PR->GetPlayerName( iVictimID ), ARRAYSIZE( msg2.Victim.szName ) );
+	Q_strncpy( msg2.Killer.szName, g_PR->GetPlayerName( iKillerID ), SOURCE_ARRAYSIZE( msg2.Killer.szName ) );
+	Q_strncpy( msg2.Victim.szName, g_PR->GetPlayerName( iVictimID ), SOURCE_ARRAYSIZE( msg2.Victim.szName ) );
 	const wchar_t *wzMsg =  g_pVGuiLocalize->Find( pMsgKey );
 	if ( wzMsg )
 	{

@@ -11,7 +11,7 @@
 #include "basepanel.h"
 #include "matchmakingbasepanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //---------------------------------------------------------
@@ -117,7 +117,7 @@ void CBaseDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	m_pTitle->SetFgColor( pScheme->GetColor( "MatchmakingDialogTitleColor", Color( 200, 184, 151, 255 ) ) );
 
-	char szResourceName[MAX_PATH];
+	char szResourceName[SOURCE_MAX_PATH];
 	Q_snprintf( szResourceName, sizeof( szResourceName ), "%s.res", GetName() );
 	KeyValues *pKeys = BasePanel()->GetConsoleControlSettings()->FindKey( szResourceName );
 	LoadControlSettings( "NULL", NULL, pKeys );

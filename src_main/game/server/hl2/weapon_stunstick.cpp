@@ -11,7 +11,7 @@
 #include "weapon_stunstick.h"
 #include "IEffects.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar    sk_plr_dmg_stunstick	( "sk_plr_dmg_stunstick","0");
@@ -177,7 +177,7 @@ void CWeaponStunStick::ImpactEffect( trace_t &traceHit )
 	//Glowing spark effect for hit
 	//UTIL_DecalTrace( &m_trLineHit, "PlasmaGlowFade" );
 	
-	//FIXME: need new decals
+	//TODO(d.rattman): need new decals
 	UTIL_ImpactTrace( &traceHit, DMG_CLUB );
 }
 
@@ -310,14 +310,14 @@ void CWeaponStunStick::SetStunState( bool state )
 
 	if ( m_bActive )
 	{
-		//FIXME: START - Move to client-side
+		//TODO(d.rattman): START - Move to client-side
 
 		Vector vecAttachment;
 
 		GetAttachment( 1, vecAttachment );
 		g_pEffects->Sparks( vecAttachment );
 
-		//FIXME: END - Move to client-side
+		//TODO(d.rattman): END - Move to client-side
 
 		EmitSound( "Weapon_StunStick.Activate" );
 	}

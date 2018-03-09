@@ -13,7 +13,7 @@
 #include "effect_color_tables.h"
 #include "te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern const char* g_pModelNameLaser;
@@ -935,7 +935,7 @@ void CNPC_Combine_Cannon::RunTask( const Task_t *pTask )
 			{
 				bool bPlayerIsEnemy = ( m_hBarrageTarget && m_hBarrageTarget->IsPlayer() );
 				bool bBarrageFinished = m_flBarrageDuration < gpGlobals->curtime;
-				bool bNoShot = ( QuerySeeEntity( m_hBarrageTarget ) == false );	// FIXME: Store this info off better
+				bool bNoShot = ( QuerySeeEntity( m_hBarrageTarget ) == false );	// TODO(d.rattman): Store this info off better
 				bool bSeePlayer = HasCondition( COND_SEE_PLAYER	);
 				
 				// Treat the player differently to normal NPCs

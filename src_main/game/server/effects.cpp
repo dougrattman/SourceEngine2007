@@ -30,7 +30,7 @@
 #include "precipitation_shared.h"
 #include "shot_manipulator.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_FUNNEL_REVERSE			1 // funnel effect repels particles instead of attracting them.
@@ -1539,8 +1539,8 @@ public:
 	DECLARE_SERVERCLASS();
 
 private:
-#ifdef _LINUX
-	CEnvWindShared m_EnvWindShared; // FIXME - fails to compile as networked var due to operator= problem
+#ifdef OS_POSIX
+	CEnvWindShared m_EnvWindShared; // TODO(d.rattman): fails to compile as networked var due to operator= problem
 #else
 	CNetworkVarEmbedded( CEnvWindShared, m_EnvWindShared );
 #endif

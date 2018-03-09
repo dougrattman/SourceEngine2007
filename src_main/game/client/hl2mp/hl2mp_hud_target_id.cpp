@@ -14,7 +14,7 @@
 #include "vgui/ILocalize.h"
 #include "hl2mp_gamerules.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PLAYER_HINT_DISTANCE	150
@@ -171,8 +171,8 @@ void CTargetID::Paint()
 
 			if ( bShowHealth )
 			{
-				_snwprintf( wszHealthText, ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) );
-				wszHealthText[ ARRAYSIZE(wszHealthText)-1 ] = '\0';
+				_snwprintf( wszHealthText, SOURCE_ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) );
+				wszHealthText[ SOURCE_ARRAYSIZE(wszHealthText)-1 ] = '\0';
 			}
 		}
 

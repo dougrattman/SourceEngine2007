@@ -16,7 +16,7 @@
 #include "ai_tacticalservices.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define GOAL_POSITION_INVALID Vector(FLT_MAX, FLT_MAX, FLT_MAX)
@@ -269,7 +269,7 @@ void CAI_StandoffBehavior::Spawn() {
 void CAI_StandoffBehavior::BeginScheduleSelection() {
   m_fTakeCover = true;
 
-  // FIXME: Improve!!!
+  // TODO(d.rattman): Improve!!!
   GetOuter()->GetShotRegulator()->GetBurstShotCountRange(&m_nSavedMinShots,
                                                          &m_nSavedMaxShots);
   GetOuter()->GetShotRegulator()->GetRestInterval(&m_flSavedMinRest,
@@ -304,7 +304,7 @@ void CAI_StandoffBehavior::EndScheduleSelection() {
   m_vecStandoffGoalPosition = GOAL_POSITION_INVALID;
   GetOuter()->m_flDistTooFar = m_SavedDistTooFar;
 
-  // FIXME: Improve!!!
+  // TODO(d.rattman): Improve!!!
   GetOuter()->GetShotRegulator()->SetBurstShotCountRange(m_nSavedMinShots,
                                                          m_nSavedMaxShots);
   GetOuter()->GetShotRegulator()->SetRestInterval(m_flSavedMinRest,
@@ -1062,7 +1062,7 @@ void CAI_MappedActivityBehavior_Temporary::UpdateTranslateActivityMap() {
 
   CBaseCombatWeapon *pWeapon = GetOuter()->GetActiveWeapon();
   const char *pszWeaponClass = (pWeapon) ? pWeapon->GetClassname() : "";
-  for (int i = 0; i < ARRAYSIZE(mappings); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(mappings); i++) {
     if (!mappings[i].pszWeapon ||
         stricmp(mappings[i].pszWeapon, pszWeaponClass) == 0) {
       if (HaveSequenceForActivity(mappings[i].translation) ||

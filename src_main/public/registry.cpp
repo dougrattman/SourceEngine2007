@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 #include "base/include/windows/windows_light.h"
 
 #include "iregistry.h"
@@ -286,4 +286,4 @@ void CRegistry::Shutdown(void) {
   m_bValid = false;
   VCRHook_RegCloseKey(m_hKey);
 }
-#endif  // _LINUX
+#endif  // OS_POSIX

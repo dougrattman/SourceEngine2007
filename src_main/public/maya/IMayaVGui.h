@@ -29,7 +29,7 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Factory for creating vgui windows
 //-----------------------------------------------------------------------------
-abstract_class IMayaVguiWindowFactory
+the_interface IMayaVguiWindowFactory
 {
 public:
 	virtual void CreateVguiWindow( const char *pPanelName ) = 0; 
@@ -41,7 +41,7 @@ public:
 // Interface for dealing with vgui focus issues across all plugins
 //-----------------------------------------------------------------------------
 #define MAYA_VGUI_INTERFACE_VERSION "VMayaVGui001"
-abstract_class IMayaVGui : public IAppSystem
+the_interface IMayaVGui : public IAppSystem
 {
 public:
 	virtual void InstallVguiWindowFactory( const char *pWindowTypeName, IMayaVguiWindowFactory *pFactory ) = 0;

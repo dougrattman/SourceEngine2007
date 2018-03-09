@@ -372,7 +372,7 @@ bool CDmePresetGroup::ExportToTXT(
   buf.Printf("$keys ");
   int nExportedControlCount = exportedControls.Count();
   for (int i = 0; i < nExportedControlCount; ++i) {
-    char pTempBuf[MAX_PATH];
+    char pTempBuf[SOURCE_MAX_PATH];
 
     ExportedControl_t &control = exportedControls[i];
     if (!control.m_bIsStereo) {
@@ -690,7 +690,7 @@ bool CDmePresetGroup::ExportToVFE(
   pData += sizeof(char *) * nTotalControlCount;
   int j = 0;
   for (i = 0; i < nExportedControlCount; ++i) {
-    char pTempBuf[MAX_PATH];
+    char pTempBuf[SOURCE_MAX_PATH];
 
     ExportedControl_t &control = exportedControls[i];
     if (!control.m_bIsStereo) {
@@ -1114,13 +1114,13 @@ void CModelPresetGroupManager::LoadModelPresets(const char *pModelName,
                                                 PresetGroupList_t &list) {
   list.RemoveAll();
 
-  char pPresetPath[MAX_PATH];
+  char pPresetPath[SOURCE_MAX_PATH];
   Q_ExtractFilePath(pModelName, pPresetPath, sizeof(pPresetPath));
 
-  char pPresetNameBuf[MAX_PATH];
+  char pPresetNameBuf[SOURCE_MAX_PATH];
   Q_StripExtension(pModelName, pPresetNameBuf, sizeof(pPresetNameBuf));
   int nLen = Q_strlen(pPresetNameBuf);
-  Q_snprintf(&pPresetNameBuf[nLen], MAX_PATH - nLen, "*.pre");
+  Q_snprintf(&pPresetNameBuf[nLen], SOURCE_MAX_PATH - nLen, "*.pre");
 
   CDisableUndoScopeGuard sg;
 
@@ -1128,7 +1128,7 @@ void CModelPresetGroupManager::LoadModelPresets(const char *pModelName,
   const char *pFileName =
       g_pFullFileSystem->FindFirstEx(pPresetNameBuf, "GAME", &fh);
   for (; pFileName; pFileName = g_pFullFileSystem->FindNext(fh)) {
-    char pRelativePresetPath[MAX_PATH];
+    char pRelativePresetPath[SOURCE_MAX_PATH];
     Q_ComposeFileName(pPresetPath, pFileName, pRelativePresetPath,
                       sizeof(pRelativePresetPath));
 

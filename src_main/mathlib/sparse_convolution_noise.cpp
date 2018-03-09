@@ -11,7 +11,7 @@
 #include "mathlib/vector.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // generate high quality noise based upon "sparse convolution". HIgher quality

@@ -18,7 +18,7 @@
 	#include "portal_util_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Use this to disable caching and other optimizations in senses
@@ -246,7 +246,7 @@ bool CAI_Senses::SeeEntity( CBaseEntity *pSightEnt )
 
 CBaseEntity *CAI_Senses::GetFirstSeenEntity( AISightIter_t *pIter, seentype_t iSeenType ) const
 { 
-	COMPILE_TIME_ASSERT( sizeof( AISightIter_t ) == sizeof( AISightIterVal_t ) );
+	static_assert( sizeof( AISightIter_t ) == sizeof( AISightIterVal_t ) );
 	
 	AISightIterVal_t *pIterVal = (AISightIterVal_t *)pIter;
 	
@@ -254,7 +254,7 @@ CBaseEntity *CAI_Senses::GetFirstSeenEntity( AISightIter_t *pIter, seentype_t iS
 	pIterVal->SeenArray = (char)iSeenType;
 	int iFirstArray = ( iSeenType == SEEN_ALL ) ? 0 : iSeenType;
 
-	for ( int i = iFirstArray; i < ARRAYSIZE( m_SeenArrays ); i++ )
+	for ( int i = iFirstArray; i < SOURCE_ARRAYSIZE( m_SeenArrays ); i++ )
 	{
 		if ( m_SeenArrays[i]->Count() != 0 )
 		{
@@ -276,7 +276,7 @@ CBaseEntity *CAI_Senses::GetNextSeenEntity( AISightIter_t *pIter ) const
 	{
 		AISightIterVal_t *pIterVal = (AISightIterVal_t *)pIter;
 		
-		for ( int i = pIterVal->array;  i < ARRAYSIZE( m_SeenArrays ); i++ )
+		for ( int i = pIterVal->array;  i < SOURCE_ARRAYSIZE( m_SeenArrays ); i++ )
 		{
 			for ( int j = pIterVal->iNext; j < m_SeenArrays[i]->Count(); j++ )
 			{

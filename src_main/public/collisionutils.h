@@ -265,27 +265,27 @@ bool IsOBBIntersectingOBB(const Vector &vecOrigin1, const QAngle &vecAngles1,
 //
 //-----------------------------------------------------------------------------
 
-bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
                                    const Vector &origin, const Vector &delta,
                                    float flTolerance = 0.0f);
 
-bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
                                    const Ray_t &ray, float flTolerance = 0.0f);
 
-bool FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const Vector &boxMin, const Vector &boxMax,
                                    const Vector &origin, const Vector &delta,
                                    const Vector &invDelta,
                                    float flTolerance = 0.0f);
 
 // On the PC, we can't pass fltx4's in registers like this. On the x360, it is
 // much better if we do.
-bool FASTCALL IsBoxIntersectingRay(
+bool SOURCE_FASTCALL IsBoxIntersectingRay(
     const fltx4 &boxMin, const fltx4 &boxMax, const fltx4 &origin,
     const fltx4 &delta, const fltx4 &invDelta,  // ray parameters
     const fltx4 &vTolerance = Four_Zeros  ///< eg from ReplicateX4(flTolerance)
 );
 
-bool inline FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin,
+bool inline SOURCE_FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin,
                                           const fltx4 &boxMax,
                                           const fltx4 &origin,
                                           const fltx4 &delta,
@@ -294,7 +294,7 @@ bool inline FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin,
                               ReciprocalSIMD(delta), ReplicateX4(flTolerance));
 }
 
-bool FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin, const fltx4 &boxMax,
+bool SOURCE_FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin, const fltx4 &boxMax,
                                    const Ray_t &ray, float flTolerance = 0.0f);
 
 //-----------------------------------------------------------------------------
@@ -307,7 +307,7 @@ bool FASTCALL IsBoxIntersectingRay(const fltx4 &boxMin, const fltx4 &boxMax,
 bool IsPointInBox(const Vector &pt, const Vector &boxMin, const Vector &boxMax);
 
 // SIMD version
-FORCEINLINE bool IsPointInBox(const fltx4 &pt, const fltx4 &boxMin,
+SOURCE_FORCEINLINE bool IsPointInBox(const fltx4 &pt, const fltx4 &boxMin,
                               const fltx4 &boxMax) {
   fltx4 greater = CmpGtSIMD(pt, boxMax);
   fltx4 less = CmpLtSIMD(pt, boxMin);

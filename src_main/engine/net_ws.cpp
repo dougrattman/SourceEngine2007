@@ -6,7 +6,7 @@
 #include "net_ws_queued_packet_sender.h"
 #include "tier1/lzss.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define NET_COMPRESSION_STACKBUF_SIZE 4096
@@ -1823,7 +1823,7 @@ int NET_SendLong(INetChannel *chan, int sock, SOCKET s, const char FAR *buf,
     // where, if you send 6 UDP packets without giving up your timeslice, it'll
     // just discard the 7th and later packets until you Sleep(). Linux doesn't
     // have that problem so it has no need for a queue.
-#ifndef _LINUX
+#ifndef OS_POSIX
     if (netchan && (!bFirstSend || net_queued_packet_thread.GetInt() ==
                                        NET_QUEUED_PACKET_THREAD_DEBUG_VALUE)) {
       uint32_t delay =
@@ -2452,7 +2452,7 @@ void NET_SetMutiplayer(bool multiplayer) {
 }
 
 void NET_Init(bool is_dedicated) {
-#ifndef _LINUX
+#ifndef OS_POSIX
   if (CommandLine()->FindParm("-NoQueuedPacketThread")) {
     Warning(
         "Found -NoQueuedPacketThread, so no queued packet thread will be "

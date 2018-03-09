@@ -26,7 +26,7 @@ extern ConVar hud_fastswitch;
 //-----------------------------------------------------------------------------
 // Purpose: Base class for tf2 & hl2 weapon selection hud elements
 //-----------------------------------------------------------------------------
-abstract_class CBaseHudWeaponSelection : public CHudElement
+the_interface CBaseHudWeaponSelection : public CHudElement
 {
 	DECLARE_CLASS( CBaseHudWeaponSelection, CHudElement );
 

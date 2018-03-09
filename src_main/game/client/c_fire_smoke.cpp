@@ -13,7 +13,7 @@
 #include "studio.h"
 #include "tier0/include/icommandline.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN(SmokeStackMaterials)
@@ -166,7 +166,7 @@ void C_FireSmoke::Start(void) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME: what's the right way to do this?
+// Purpose: TODO(d.rattman): what's the right way to do this?
 //-----------------------------------------------------------------------------
 void C_FireSmoke::StartClientOnly(void) {
   Start();
@@ -299,7 +299,7 @@ void C_EntityFlame::OnDataChanged(DataUpdateType_t updateType) {
     CreateEffect();
   }
 
-  // FIXME: This is a bit of a shady path
+  // TODO(d.rattman): This is a bit of a shady path
   if (updateType == DATA_UPDATE_DATATABLE_CHANGED) {
     // If our owner changed, then recreate the effect
     if (m_hEntAttached != m_hOldAttached) {

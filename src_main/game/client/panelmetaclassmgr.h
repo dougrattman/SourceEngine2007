@@ -24,7 +24,7 @@ class Panel;
 //-----------------------------------------------------------------------------
 // Class factory interface for metaclasses
 //-----------------------------------------------------------------------------
-abstract_class IPanelFactory {
+the_interface IPanelFactory {
  public:
   // Creation, destruction methods
   virtual vgui::Panel* Create(const char* pMetaClassName, KeyValues* pKeyValues,
@@ -36,7 +36,7 @@ abstract_class IPanelFactory {
 // A metaclass is simply an association of panel implementation class with
 // various initialization data
 //-----------------------------------------------------------------------------
-abstract_class IPanelMetaClassMgr {
+the_interface IPanelMetaClassMgr {
  public:
   // Call this to load up a file containing metaclass definitions
   virtual void LoadMetaClassDefinitionFile(const char* pFileName) = 0;

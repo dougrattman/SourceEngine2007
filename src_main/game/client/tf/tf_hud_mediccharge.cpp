@@ -19,7 +19,7 @@
 #include "tf_weapon_medigun.h"
 #include <vgui_controls/AnimationController.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

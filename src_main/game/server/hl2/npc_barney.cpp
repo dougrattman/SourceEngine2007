@@ -31,7 +31,7 @@
 #include "sceneentity.h"
 #include "ai_behavior_functank.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define BARNEY_MODEL "models/barney.mdl"

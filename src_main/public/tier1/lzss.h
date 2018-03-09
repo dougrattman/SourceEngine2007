@@ -7,7 +7,7 @@
 #ifndef SOURCE_TIER1_LZSS_H_
 #define SOURCE_TIER1_LZSS_H_
 
-#include "tier0/include/calling_conventions.h"
+#include "base/include/compiler_specific.h"
 
 #define LZSS_ID (('S' << 24) | ('S' << 16) | ('Z' << 8) | ('L'))
 
@@ -31,7 +31,7 @@ class CLZSS {
   unsigned int GetActualSize(unsigned char *pInput);
 
   // Windowsize must be a power of two.
-  FORCEINLINE CLZSS(int nWindowSize = DEFAULT_LZSS_WINDOW_SIZE);
+  SOURCE_FORCEINLINE CLZSS(int nWindowSize = DEFAULT_LZSS_WINDOW_SIZE);
 
  private:
   // Expected to be sixteen bytes.
@@ -53,6 +53,6 @@ class CLZSS {
   int m_nWindowSize;
 };
 
-FORCEINLINE CLZSS::CLZSS(int nWindowSize) { m_nWindowSize = nWindowSize; }
+SOURCE_FORCEINLINE CLZSS::CLZSS(int nWindowSize) { m_nWindowSize = nWindowSize; }
 
 #endif  // SOURCE_TIER1_LZSS_H_

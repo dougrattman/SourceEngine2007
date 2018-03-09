@@ -140,9 +140,11 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;kernel32.lib;user32.lib;ws2_32.lib</AdditionalDependencies>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -197,9 +199,11 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;kernel32.lib;user32.lib;ws2_32.lib</AdditionalDependencies>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -261,9 +265,11 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;kernel32.lib;user32.lib;ws2_32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -322,9 +328,11 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;kernel32.lib;user32.lib;ws2_32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -335,10 +343,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="assert_dialog.cc" />
-    <ClCompile Include="base_types.cc" />
+    <ClCompile Include="platform_assert_dialog.cc" />
     <ClCompile Include="command_line.cc" />
-    <ClCompile Include="cpu.cc" />
+    <ClCompile Include="platform_cpu.cc" />
     <ClCompile Include="dbg.cc" />
     <ClCompile Include="dll_main.cc" />
     <ClCompile Include="fast_timer.cc" />
@@ -365,7 +372,6 @@
     <ClCompile Include="platform.cc" />
     <ClCompile Include="progress_bar.cc" />
     <ClCompile Include="system_information.cc" />
-    <ClCompile Include="thread.cc" />
     <ClCompile Include="thread_tools.cc">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4652 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/wd4652 %(AdditionalOptions)</AdditionalOptions>
@@ -375,15 +381,11 @@
     <ClCompile Include="tslist.cc" />
     <ClCompile Include="vcr_mode.cc" />
     <ClCompile Include="vprof.cc" />
-    <ClCompile Include="win32_console_io.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extendedtrace.h" />
     <ClInclude Include="include\basetypes.h" />
-    <ClInclude Include="include\calling_conventions.h" />
     <ClInclude Include="include\command_line_switches.h" />
-    <ClInclude Include="include\commonmacros.h" />
-    <ClInclude Include="include\compiler_specific_macroses.h" />
     <ClInclude Include="include\dbg.h" />
     <ClInclude Include="include\dbgflag.h" />
     <ClInclude Include="include\fasttimer.h" />
@@ -411,7 +413,7 @@
     <ClInclude Include="include\vprof.h" />
     <ClInclude Include="include\wchartypes.h" />
     <ClInclude Include="instance.h" />
-    <ClInclude Include="memstd.h" />
+    <ClInclude Include="mem_std.h" />
     <ClInclude Include="mem_helpers.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

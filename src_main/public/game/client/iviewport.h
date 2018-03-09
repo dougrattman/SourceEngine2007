@@ -8,7 +8,7 @@
 
 class KeyValues;
 
-abstract_class IViewPortPanel {
+the_interface IViewPortPanel {
  public:
   virtual ~IViewPortPanel(){};
 
@@ -29,7 +29,7 @@ abstract_class IViewPortPanel {
   virtual void SetParent(vgui::VPANEL parent) = 0;
 };
 
-abstract_class IViewPort {
+the_interface IViewPort {
  public:
   virtual void UpdateAllPanels(void) = 0;
   virtual void ShowPanel(const char *pName, bool state) = 0;

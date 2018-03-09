@@ -22,7 +22,7 @@ enum RenderTargetType_t {
   RENDER_TARGET_ONLY_DEPTH = 4,
 };
 
-abstract_class ITextureInternal : public ITexture {
+the_interface ITextureInternal : public ITexture {
  public:
   virtual void Bind(Sampler_t sampler) = 0;
   virtual void Bind(Sampler_t sampler1, int nFrame,

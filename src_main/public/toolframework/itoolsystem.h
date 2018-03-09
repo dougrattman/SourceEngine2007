@@ -47,7 +47,7 @@ public:
 	virtual bool	CanQuit() = 0; 
 
 	// Called when another system wiches to post a message to the tool and/or a specific entity
-	// FIXME:  Are KeyValues too inefficient here?
+	// TODO(d.rattman):  Are KeyValues too inefficient here?
     virtual void	PostMessage( HTOOLHANDLE hEntity, KeyValues *message ) = 0;
 
 	// Called oncer per frame even when no level is loaded... (call ProcessMessages())

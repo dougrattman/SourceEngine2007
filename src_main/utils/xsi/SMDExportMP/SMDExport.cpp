@@ -188,7 +188,7 @@ int	RemoveUnusedBones = 1;
 CSIBCArray<XSI::CRef>	g_pModelArray;
 CSIBCArray<XSI::CRef>	g_pEnvelopeArray;
 
-char	g_szFilename[MAX_PATH];
+char	g_szFilename[SOURCE_MAX_PATH];
 
 namespace XSI
 {
@@ -348,7 +348,7 @@ void	SMDExport()
 		return;
 
 	// FileName
-	memset ( g_szFilename,0, sizeof (char) * MAX_PATH );
+	memset ( g_szFilename,0, sizeof (char) * SOURCE_MAX_PATH );
 
 	Parameter parm = prop.GetParameters().GetItem(L"Filename" );
 	CString	str = parm.GetValue();
@@ -563,9 +563,9 @@ HRESULT WINAPI XSIOnCommand
 	if ( V_VT(&in_pArgs[3]) != VT_I2 ) return E_INVALIDARG;
 	if ( V_VT(&in_pArgs[4]) != VT_I2 ) return E_INVALIDARG;
 
-  	char l_szString[MAX_PATH];
+  	char l_szString[SOURCE_MAX_PATH];
 
-	memset ( l_szString,0,MAX_PATH );
+	memset ( l_szString,0,SOURCE_MAX_PATH );
 	wcstombs( l_szString, in_pArgs[0].bstrVal, wcslen (in_pArgs[0].bstrVal));
 
 	if ( in_pArgs[1].vt == 2 )
@@ -669,9 +669,9 @@ void ConvertdotXSI ( SI_Char *in_szFilename )
 
 	Triangle.SetNodeList ( &Nodes );
 	
-	SI_Char	l_szDrive[MAX_PATH];
-	SI_Char	l_szPath[MAX_PATH];
-	SI_Char l_szFilename[MAX_PATH];
+	SI_Char	l_szDrive[SOURCE_MAX_PATH];
+	SI_Char	l_szPath[SOURCE_MAX_PATH];
+	SI_Char l_szFilename[SOURCE_MAX_PATH];
 
 	CSIBCString	l_szAnimFilename;
 	CSIBCString	l_szRefFilename;
@@ -1025,7 +1025,7 @@ void ConvertdotXSI ( SI_Char *in_szFilename )
 						}
 					}
 					
-					char mess[MAX_PATH];
+					char mess[SOURCE_MAX_PATH];
 					sprintf ( mess, "Processing ShapeAnimation at frame %d", k );
 					
 					wchar_t*l_wszString = NULL;
@@ -1458,7 +1458,7 @@ void	ExportSkeletonData ( CSIBCArray<XSI::X3DObject>& in_pModelList, SMDSkeleton
 						}
 						
 					}
-					char mess[MAX_PATH];
+					char mess[SOURCE_MAX_PATH];
 					sprintf ( mess, "Processing frame %d", k );
 					
 					wchar_t*l_wszString = NULL;

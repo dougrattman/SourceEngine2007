@@ -404,7 +404,7 @@ int main( int argc, char **argv )
 
 					const char *dir = argv[6];
 
-					char searchString[MAX_PATH*2];
+					char searchString[SOURCE_MAX_PATH*2];
 					Q_strncpy( searchString, dir, sizeof( searchString ) );
 					Q_AppendSlash( searchString, sizeof( searchString ) );
 					Q_strncat( searchString, "*.dat", sizeof( searchString ), COPY_ALL_CHARACTERS );
@@ -414,7 +414,7 @@ int main( int argc, char **argv )
 					const char *filename = g_pFullFileSystem->FindFirst( searchString, &findHandle );
 					while ( filename )
 					{
-						char fullFileName[MAX_PATH*2];
+						char fullFileName[SOURCE_MAX_PATH*2];
 
 						Q_strncpy( fullFileName, dir, sizeof( fullFileName ) );
 						Q_AppendSlash( fullFileName, sizeof( fullFileName ) );

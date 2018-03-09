@@ -31,7 +31,7 @@
 #include "vgui_controls/messagedialog.h"
 #include "vguimatsurface/imatsystemsurface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void S_BlockSound();
@@ -109,10 +109,10 @@ void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
 
   char options[] = {1};
   setsockopt(temp_socket, SOL_SOCKET, SO_BROADCAST, options,
-             ARRAYSIZE(options));
+             SOURCE_ARRAYSIZE(options));
 
   char host_name[256];
-  gethostname(host_name, ARRAYSIZE(host_name));
+  gethostname(host_name, SOURCE_ARRAYSIZE(host_name));
 
   hostent *hInfo = gethostbyname(host_name);
   if (hInfo) {
@@ -138,9 +138,9 @@ void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
 }
 
 HICON LoadGameWindowIcon(IFileSystem *file_system) {
-  char local_icon_path[MAX_PATH];
+  char local_icon_path[SOURCE_MAX_PATH];
   if (file_system->GetLocalPath("resource/game.ico", local_icon_path,
-                                ARRAYSIZE(local_icon_path))) {
+                                SOURCE_ARRAYSIZE(local_icon_path))) {
     file_system->GetLocalCopy(local_icon_path);
     return (HICON)LoadImageA(nullptr, local_icon_path, IMAGE_ICON, 0, 0,
                              LR_LOADFROMFILE | LR_DEFAULTSIZE);
@@ -222,7 +222,7 @@ class CGame : public IGame {
     KeyValues *modinfo{new KeyValues("ModInfo")};
     if (modinfo->LoadFromFile(g_pFileSystem, "gameinfo.txt")) {
       Q_strncpy(window_name, modinfo->GetString("game"),
-                ARRAYSIZE(window_name));
+                SOURCE_ARRAYSIZE(window_name));
     }
 
     char const *game_type{modinfo->GetString("type")};
@@ -232,12 +232,12 @@ class CGame : public IGame {
     modinfo->deleteThis();
 
     if (!window_name[0]) {
-      Q_strncpy(window_name, "HALF-LIFE 2", ARRAYSIZE(window_name));
+      Q_strncpy(window_name, "HALF-LIFE 2", SOURCE_ARRAYSIZE(window_name));
     }
 
     wch unicode_window_name[512];
     ::MultiByteToWideChar(CP_UTF8, 0, window_name, -1, unicode_window_name,
-                          ARRAYSIZE(unicode_window_name));
+                          SOURCE_ARRAYSIZE(unicode_window_name));
 
     // Oops, we didn't clean up the class registration from last cycle which
     // might mean that the wndproc pointer is bogus
@@ -357,7 +357,7 @@ class CGame : public IGame {
 #ifndef SWDS
 
     // Wait for the mode to change and stabilized
-    // FIXME: There's really no way to know when this is completed, so we have
+    // TODO(d.rattman): There's really no way to know when this is completed, so we have
     // to guess a time that will mostly be correct
     if (videomode->IsWindowedMode() == false) {
       Sleep(1000);
@@ -365,7 +365,7 @@ class CGame : public IGame {
 
     bool bEndGame = CommandLine()->CheckParm("-endgamevid");
     bool bRecap =
-        CommandLine()->CheckParm("-recapvid");  // FIXME: This is a temp
+        CommandLine()->CheckParm("-recapvid");  // TODO(d.rattman): This is a temp
                                                 // addition until the
                                                 // movie playback is
                                                 // centralized -- jdw
@@ -409,7 +409,7 @@ class CGame : public IGame {
       }
 
       // get the path to the avi file and play it.
-      char localPath[MAX_PATH];
+      char localPath[SOURCE_MAX_PATH];
       g_pFileSystem->GetLocalPath(com_token, localPath, sizeof(localPath));
       PlayVideoAndWait(localPath);
       localPath[0] = 0;  // just to make sure we don't play the same avi file
@@ -846,7 +846,7 @@ class CGame : public IGame {
 
       // Wait until the next frame is ready
       while (BinkWait(hBINK)) {
-        // FIXME: Bink recommends a higher precision than this
+        // TODO(d.rattman): Bink recommends a higher precision than this
         Sleep(1);
       }
 

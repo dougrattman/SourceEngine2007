@@ -5,7 +5,7 @@
 //			Try the new Alyx Brite toothpaste!
 //			Alyx lederhosen!
 //
-//			FIXME: need a better comment block
+//			TODO(d.rattman): need a better comment block
 //
 
 
@@ -39,7 +39,7 @@
 
 extern Vector PointOnLineNearestPoint(const Vector& vStartPos, const Vector& vEndPos, const Vector& vPoint);
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool g_HackOutland10DamageHack;
@@ -554,7 +554,7 @@ void CNPC_Alyx::ReadinessLevelChanged( int iPriorLevel )
 		GetShotRegulator()->FireNoEarlierThan( gpGlobals->curtime + 0.5 );
 	}
 
-	// FIXME: Are there certain animations that we DO want to interrupt?
+	// TODO(d.rattman): Are there certain animations that we DO want to interrupt?
 	if ( HasActiveLayer() )
 		return;
 
@@ -573,7 +573,7 @@ void CNPC_Alyx::ReadinessLevelChanged( int iPriorLevel )
 			{ AIRL_STIMULATED, AIRL_RELAXED, ACT_IDLE, ACT_READINESS_STIMULATED_TO_RELAXED, }
 		};
 
-		for ( int i = 0; i < ARRAYSIZE( readinessTransitions ); i++ )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE( readinessTransitions ); i++ )
 		{
 			if ( GetIdealActivity() != readinessTransitions[i].requiredActivity )
 				continue;
@@ -2228,7 +2228,7 @@ void CNPC_Alyx::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 {
 	BaseClass::TraceAttack( info, vecDir, ptr );
 
-	// FIXME: hack until some way of removing decals after healing
+	// TODO(d.rattman): hack until some way of removing decals after healing
 	m_fNoDamageDecal = true;
 }
 
@@ -3277,7 +3277,7 @@ void CNPC_Alyx::InputVehiclePunted( inputdata_t &inputdata )
 	// If we're in a vehicle, complain about being punted
 	if ( IsInAVehicle() && GetVehicleEntity() == inputdata.pCaller )
 	{
-		// FIXME: Pass this up into the behavior?
+		// TODO(d.rattman): Pass this up into the behavior?
 		SpeakIfAllowed( TLK_PASSENGER_PUNTED );
 	}
 }

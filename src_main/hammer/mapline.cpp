@@ -25,7 +25,7 @@
 #include "materialsystem/IMesh.h"
 #include "Material.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS(CMapLine);
@@ -391,7 +391,7 @@ void CMapLine::Render3D(CRender3D *pRender)
 	CMatRenderContextPtr pRenderContext( MaterialSystemInterface() );
 	IMesh* pMesh = pRenderContext->GetDynamicMesh();
 
-	// FIXME: Can't do this...! glLineWidth(2);
+	// TODO(d.rattman): Can't do this...! glLineWidth(2);
 
 	meshBuilder.Begin( pMesh, MATERIAL_LINES, 1 );
 

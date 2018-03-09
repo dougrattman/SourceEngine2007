@@ -19,9 +19,9 @@ typedef enum
 	ACT_RESET = 0, 	// Set m_Activity to this invalid value to force a reset to m_IdealActivity
 	ACT_IDLE,
 	ACT_TRANSITION,
-	ACT_COVER, 		// FIXME: obsolete? redundant with ACT_COVER_LOW?
-	ACT_COVER_MED, 	// FIXME: unsupported?
-	ACT_COVER_LOW, 	// FIXME: rename ACT_IDLE_CROUCH?
+	ACT_COVER, 		// TODO(d.rattman): obsolete? redundant with ACT_COVER_LOW?
+	ACT_COVER_MED, 	// TODO(d.rattman): unsupported?
+	ACT_COVER_LOW, 	// TODO(d.rattman): rename ACT_IDLE_CROUCH?
 	ACT_WALK,
 	ACT_WALK_AIM,
 	ACT_WALK_CROUCH,
@@ -34,8 +34,8 @@ typedef enum
 	ACT_SCRIPT_CUSTOM_MOVE,
 	ACT_RANGE_ATTACK1,
 	ACT_RANGE_ATTACK2,
-	ACT_RANGE_ATTACK1_LOW,		// FIXME: not used yet, crouched versions of the range attack
-	ACT_RANGE_ATTACK2_LOW,		// FIXME: not used yet, crouched versions of the range attack
+	ACT_RANGE_ATTACK1_LOW,		// TODO(d.rattman): not used yet, crouched versions of the range attack
+	ACT_RANGE_ATTACK2_LOW,		// TODO(d.rattman): not used yet, crouched versions of the range attack
 	ACT_DIESIMPLE,
 	ACT_DIEBACKWARD,
 	ACT_DIEFORWARD,
@@ -60,9 +60,9 @@ typedef enum
 	ACT_ROLL_RIGHT, // tuck and roll, right
 	ACT_TURN_LEFT, // turn quickly left (stationary)
 	ACT_TURN_RIGHT, // turn quickly right (stationary)
-	ACT_CROUCH, 	// FIXME: obsolete? only used be soldier (the act of crouching down from a standing position)
-	ACT_CROUCHIDLE, // FIXME: obsolete? only used be soldier (holding body in crouched position (loops))
-	ACT_STAND, 	// FIXME: obsolete? should be transition (the act of standing from a crouched position)
+	ACT_CROUCH, 	// TODO(d.rattman): obsolete? only used be soldier (the act of crouching down from a standing position)
+	ACT_CROUCHIDLE, // TODO(d.rattman): obsolete? only used be soldier (holding body in crouched position (loops))
+	ACT_STAND, 	// TODO(d.rattman): obsolete? should be transition (the act of standing from a crouched position)
 	ACT_USE,
 	ACT_SIGNAL1,
 	ACT_SIGNAL2,
@@ -78,8 +78,8 @@ typedef enum
 
 	ACT_LOOKBACK_RIGHT,		// look back over shoulder without turning around.
 	ACT_LOOKBACK_LEFT,
-	ACT_COWER, 	// FIXME: unused, should be more extreme version of crouching
-	ACT_SMALL_FLINCH,		// FIXME: needed? shouldn't flinching be down with overlays?
+	ACT_COWER, 	// TODO(d.rattman): unused, should be more extreme version of crouching
+	ACT_SMALL_FLINCH,		// TODO(d.rattman): needed? shouldn't flinching be down with overlays?
 	ACT_BIG_FLINCH,		
 	ACT_MELEE_ATTACK1,
 	ACT_MELEE_ATTACK2,
@@ -93,7 +93,7 @@ typedef enum
 	ACT_DROP_WEAPON_SHOTGUN,
 	ACT_PICKUP_GROUND,		// pick up something in front of you on the ground
 	ACT_PICKUP_RACK,		// pick up something from a rack or shelf in front of you.
-	ACT_IDLE_ANGRY, // FIXME: being used as an combat ready idle?  alternate idle animation in which the monster is clearly agitated. (loop)
+	ACT_IDLE_ANGRY, // TODO(d.rattman): being used as an combat ready idle?  alternate idle animation in which the monster is clearly agitated. (loop)
 
 	ACT_IDLE_RELAXED,
 	ACT_IDLE_STIMULATED,
@@ -134,7 +134,7 @@ typedef enum
 	ACT_RUN_HURT, // limp  (loop)
 	ACT_SPECIAL_ATTACK1,	// very monster specific special attacks.
 	ACT_SPECIAL_ATTACK2,	
-	ACT_COMBAT_IDLE,		// FIXME: unused?  agitated idle.
+	ACT_COMBAT_IDLE,		// TODO(d.rattman): unused?  agitated idle.
 	ACT_WALK_SCARED,
 	ACT_RUN_SCARED,
 	ACT_VICTORY_DANCE,		// killed a player, do a victory dance.
@@ -172,8 +172,8 @@ typedef enum
 	ACT_GESTURE_RANGE_ATTACK2,
 	ACT_GESTURE_MELEE_ATTACK1,
 	ACT_GESTURE_MELEE_ATTACK2,
-	ACT_GESTURE_RANGE_ATTACK1_LOW,	// FIXME: not used yet, crouched versions of the range attack
-	ACT_GESTURE_RANGE_ATTACK2_LOW,	// FIXME: not used yet, crouched versions of the range attack
+	ACT_GESTURE_RANGE_ATTACK1_LOW,	// TODO(d.rattman): not used yet, crouched versions of the range attack
+	ACT_GESTURE_RANGE_ATTACK2_LOW,	// TODO(d.rattman): not used yet, crouched versions of the range attack
 
 	ACT_MELEE_ATTACK_SWING_GESTURE,
 
@@ -215,7 +215,7 @@ typedef enum
 	ACT_DO_NOT_DISTURB,
 
 	// viewmodel (weapon) activities
-	// FIXME: move these to the specific viewmodels, no need to make global
+	// TODO(d.rattman): move these to the specific viewmodels, no need to make global
 	ACT_VM_DRAW,
 	ACT_VM_HOLSTER,
 	ACT_VM_IDLE,

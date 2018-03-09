@@ -91,7 +91,7 @@ private:
 //
 // HeadcrabCanister Factory Interface
 //
-abstract_class IHeadcrabCanisterFactory
+the_interface IHeadcrabCanisterFactory
 {
 public:
 

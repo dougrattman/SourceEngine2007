@@ -1,9 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ISTUDIORENDER_H
 #define ISTUDIORENDER_H
 
 #include "appframework/IAppSystem.h"
+#include "base/include/macros.h"
 #include "datacache/imdlcache.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialsystem.h"
@@ -15,9 +16,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
-//-----------------------------------------------------------------------------
-// forward declarations
-//-----------------------------------------------------------------------------
 struct studiohdr_t;
 struct studiomeshdata_t;
 class Vector;
@@ -74,7 +72,7 @@ struct StudioRenderConfig_t {
 //-----------------------------------------------------------------------------
 // Studio render interface
 //-----------------------------------------------------------------------------
-DECLARE_POINTER_HANDLE(StudioDecalHandle_t);
+SOURCE_DECLARE_POINTER_HANDLE(StudioDecalHandle_t);
 #define STUDIORENDER_DECAL_INVALID ((StudioDecalHandle_t)0)
 
 enum { ADDDECAL_TO_ALL_LODS = -1 };
@@ -106,7 +104,8 @@ enum {
 //-----------------------------------------------------------------------------
 // Standard model vertex formats
 //-----------------------------------------------------------------------------
-// FIXME: remove these (materials/shaders should drive vertex format). Need to
+// TODO(d.rattman): remove these (materials/shaders should drive vertex format).
+// Need to
 //        list required forcedmaterialoverrides in models/bsps (rather than
 //        all models supporting all possible overrides, as they do currently).
 #define VERTEX_TEXCOORD0_2D (((uint64_t)2) << (TEX_COORD_SIZE_BIT + (3 * 0)))
@@ -220,7 +219,7 @@ struct GetTriangles_Output_t {
 //-----------------------------------------------------------------------------
 #define STUDIO_DATA_CACHE_INTERFACE_VERSION "VStudioDataCache005"
 
-abstract_class IStudioDataCache : public IAppSystem {
+the_interface IStudioDataCache : public IAppSystem {
  public:
   virtual bool VerifyHeaders(studiohdr_t * pStudioHdr) = 0;
   virtual vertexFileHeader_t *CacheVertexData(studiohdr_t * pStudioHdr) = 0;
@@ -231,7 +230,7 @@ abstract_class IStudioDataCache : public IAppSystem {
 //-----------------------------------------------------------------------------
 #define STUDIO_RENDER_INTERFACE_VERSION "VStudioRender025"
 
-abstract_class IStudioRender : public IAppSystem {
+the_interface IStudioRender : public IAppSystem {
  public:
   virtual void BeginFrame(void) = 0;
   virtual void EndFrame(void) = 0;
@@ -258,8 +257,8 @@ abstract_class IStudioRender : public IAppSystem {
                                 const Vector &worldPosition) = 0;
 
   // Methods related to lighting state
-  // NOTE: SetAmbientLightColors assumes that the arraysize is the same as
-  // returned from GetNumAmbientLightSamples
+  // NOTE: SetAmbientLightColors assumes that the SOURCE_ARRAYSIZE is the same
+  // as returned from GetNumAmbientLightSamples
   virtual int GetNumAmbientLightSamples() = 0;
   virtual const Vector *GetAmbientLightDirections() = 0;
   virtual void SetAmbientLightColors(const Vector4D *pAmbientOnlyColors) = 0;

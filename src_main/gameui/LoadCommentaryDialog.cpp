@@ -21,7 +21,7 @@
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -79,7 +79,7 @@ class CCommentaryItemPanel : public vgui::EditablePanel {
 
   void SetCommentaryInfo(CommentaryItem_t &item) {
     // set the bitmap to display
-    char tga[_MAX_PATH];
+    char tga[SOURCE_MAX_PATH];
     Q_strncpy(tga, item.szMapFileName, sizeof(tga));
     char *ext = strstr(tga, ".txt");
     if (ext) {
@@ -223,7 +223,7 @@ int CLoadCommentaryDialog::GetSelectedItemIndex() {
 //-----------------------------------------------------------------------------
 void CLoadCommentaryDialog::ScanCommentaryFiles() {
   // populate list box with all saved games on record:
-  char szDirectory[_MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
   Q_snprintf(szDirectory, sizeof(szDirectory), "maps/*commentary.txt");
 
   // clear the current list
@@ -234,7 +234,7 @@ void CLoadCommentaryDialog::ScanCommentaryFiles() {
   FileFindHandle_t handle;
   const char *pFileName = g_pFullFileSystem->FindFirst(szDirectory, &handle);
   while (pFileName) {
-    char szFileName[_MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFileName, sizeof(szFileName), "maps/%s", pFileName);
 
     // Only load save games from the current mod's save dir
@@ -325,7 +325,7 @@ void CLoadCommentaryDialog::ParseCommentaryFile(char const *pszFileName,
     CommentaryItem_t item;
     Q_strncpy(item.szMapFileName, pszFileName, sizeof(item.szMapFileName));
 
-    char mapname[_MAX_PATH];
+    char mapname[SOURCE_MAX_PATH];
     Q_strncpy(mapname, pszFileName, sizeof(item.szMapName));
     char *ext = strstr(mapname, "_commentary");
     *ext = '\0';

@@ -321,6 +321,6 @@ float4 main( PS_INPUT i ) : COLOR
 
 	bool bWriteDepthToAlpha = ( WRITE_DEPTH_TO_DESTALPHA != 0 ) && ( WRITEWATERFOGTODESTALPHA == 0 );
 
-	//FIXME: need to take dowaterfog into consideration
+	//TODO(d.rattman): need to take dowaterfog into consideration
 	return FinalOutput( float4( result, alpha ), fogFactor, PIXELFOGTYPE, TONEMAP_SCALE_LINEAR, bWriteDepthToAlpha, vProjPos.z );
 }

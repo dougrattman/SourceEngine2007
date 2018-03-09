@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: LIFO from disassembly of Windows API and
 // http://perso.wanadoo.fr/gmem/evenements/jim2002/articles/L17_Fober.pdf
@@ -8,7 +8,6 @@
 #ifndef SOURCE_TIER0_INCLUDE_TSLIST_H_
 #define SOURCE_TIER0_INCLUDE_TSLIST_H_
 
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
 #if defined(ARCH_CPU_X86_64)
@@ -19,8 +18,10 @@
 #include "base/include/windows/windows_light.h"
 #endif
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform.h"
 #include "tier0/include/threadtools.h"
 #include "tier0/include/tier0_api.h"
 
@@ -38,8 +39,8 @@
 #define TSQUEUE_BAD_NODE_LINK ((Node_t *)0xdeadbeef)
 #endif
 
-#define TSLIST_HEAD_ALIGN DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
-#define TSLIST_NODE_ALIGN DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
+#define TSLIST_HEAD_ALIGN alignas(TSLIST_HEAD_ALIGNMENT)
+#define TSLIST_NODE_ALIGN alignas(TSLIST_NODE_ALIGNMENT)
 
 SOURCE_TIER0_API bool RunTSQueueTests(i32 nListSize = 10000, i32 nTests = 1);
 SOURCE_TIER0_API bool RunTSListTests(i32 nListSize = 10000, i32 nTests = 1);
@@ -49,8 +50,8 @@ SOURCE_TIER0_API bool RunTSListTests(i32 nListSize = 10000, i32 nTests = 1);
 //#define USE_NATIVE_SLIST
 
 #ifdef USE_NATIVE_SLIST
-typedef SLIST_ENTRY TSLNodeBase_t;
-typedef SLIST_HEADER TSLHead_t;
+using TSLNodeBase_t = SLIST_ENTRY;
+using TSLHead_t = SLIST_HEADER;
 #else
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
@@ -187,7 +188,7 @@ template <typename T>
 class TSLIST_HEAD_ALIGN CTSSimpleList : public CTSListBase {
  public:
   void Push(T *pNode) {
-    COMPILE_TIME_ASSERT(sizeof(T) >= sizeof(TSLNodeBase_t));
+    static_assert(sizeof(T) >= sizeof(TSLNodeBase_t));
     CTSListBase::Push((TSLNodeBase_t *)pNode);
   }
 
@@ -312,7 +313,7 @@ class TSLIST_HEAD_ALIGN CTSQueue {
   };
 
   CTSQueue() {
-    COMPILE_TIME_ASSERT(sizeof(Node_t) >= sizeof(TSLNodeBase_t));
+    static_assert(sizeof(Node_t) >= sizeof(TSLNodeBase_t));
     if (((usize)&m_Head) % TSLIST_HEAD_ALIGNMENT != 0) {
       Error("CTSQueue: Misaligned queue\n");
       DebuggerBreak();
@@ -371,7 +372,7 @@ class TSLIST_HEAD_ALIGN CTSQueue {
 
   bool Validate() {
     bool bResult = true;
-    i32 nNodes = 0;
+    isize nNodes = 0;
     if (m_Tail.value.pNode->pNext != End()) {
       DebuggerBreakIfDebugging();
       bResult = false;

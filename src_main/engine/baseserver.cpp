@@ -4,7 +4,7 @@
 
 #if defined(_WIN32)
 #include "base/include/windows/windows_light.h"  // FILETIME
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #include <asm/param.h>  // for HZ
 #include <netinet/in.h>
 #include <sys/sysinfo.h>
@@ -2107,7 +2107,7 @@ void CBaseServer::RecalculateTags(void) {
   bRecalculatingTags = true;
 
   // Check convars first
-  for (int i = 0; i < ARRAYSIZE(convars_to_check_for_tags); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(convars_to_check_for_tags); i++) {
     ConVar *pConVar = g_pCVar->FindVar(convars_to_check_for_tags[i].pszConVar);
     if (pConVar) {
       const char *pszDef = pConVar->GetDefault();

@@ -11,7 +11,7 @@
 #include "Options.h"
 #include "shlobj.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -280,8 +280,8 @@ void COPTBuild::OnBrowseBspdir()
 	m_cBSPDir.GetWindowText(str);
 	EditorUtil_ConvertPath(str, true);
 
-	char szTemp[MAX_PATH];
-	Q_strncpy(szTemp, str, MAX_PATH);
+	char szTemp[SOURCE_MAX_PATH];
+	Q_strncpy(szTemp, str, SOURCE_MAX_PATH);
 
 	BROWSEINFO bi;
 	memset(&bi, 0, sizeof bi);

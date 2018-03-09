@@ -15,7 +15,7 @@
 #include "inputsystem/iinputsystem.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 vgui::KeyCode KeyCode_VirtualKeyToVGUI(int key) {

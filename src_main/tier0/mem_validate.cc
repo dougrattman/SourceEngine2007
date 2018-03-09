@@ -320,7 +320,7 @@ void CValidateAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {
 
 void CValidateAlloc::PopAllocDbgInfo() { g_pActualAlloc->PopAllocDbgInfo(); }
 
-// FIXME: Remove when we make our own heap! Crt stuff we're currently using
+// TODO(d.rattman): Remove when we make our own heap! Crt stuff we're currently using
 
 long CValidateAlloc::CrtSetBreakAlloc(long lNewBreakAlloc) {
   return g_pActualAlloc->CrtSetBreakAlloc(lNewBreakAlloc);

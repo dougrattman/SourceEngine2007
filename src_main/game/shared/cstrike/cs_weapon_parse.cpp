@@ -85,7 +85,7 @@ CCSWeaponInfo g_EquipmentInfo[MAX_EQUIPMENT];
 
 void PrepareEquipmentInfo( void )
 {
-	memset( g_EquipmentInfo, 0, ARRAYSIZE( g_EquipmentInfo ) );
+	memset( g_EquipmentInfo, 0, SOURCE_ARRAYSIZE( g_EquipmentInfo ) );
 
 	g_EquipmentInfo[2].SetWeaponPrice( CSGameRules()->GetBlackMarketPriceForWeapon( WEAPON_KEVLAR ) );
 	g_EquipmentInfo[2].SetDefaultPrice( KEVLAR_PRICE );

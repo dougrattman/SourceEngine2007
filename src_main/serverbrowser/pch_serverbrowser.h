@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 #undef CreateDialog
 
 #include <direct.h>

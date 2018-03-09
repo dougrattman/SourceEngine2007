@@ -51,7 +51,7 @@ protected:
 	void VerifyInstallFiles();
 	
 	bool DoStartExisting();
-	bool NukeDirectory( const char *pDir, char errorFile[MAX_PATH] );
+	bool NukeDirectory( const char *pDir, char errorFile[SOURCE_MAX_PATH] );
 	bool DoUninstall( bool bShowMessage );
 
 	// Generated message map functions

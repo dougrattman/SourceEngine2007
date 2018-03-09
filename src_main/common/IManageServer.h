@@ -7,7 +7,7 @@
 
 // Purpose: basic callback interface for the manage server list, to update
 // status text et al
-abstract_class IManageServer : public IBaseInterface {
+the_interface IManageServer : public IBaseInterface {
  public:
   // activates the manage page
   virtual void ShowPage() = 0;

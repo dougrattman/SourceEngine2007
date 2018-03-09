@@ -1,4 +1,4 @@
-Copyright © 1996-2018, Valve Corporation, All rights reserved.
+Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 THIS DOCUMENT DESCRIBES A CONTRACT BETWEEN YOU AND VALVE CORPORATION ("Valve"). 
 PLEASE READ IT BEFORE DOWNLOADING OR USING THE SOURCE ENGINE ("ENGINE"). BY 
@@ -38,9 +38,43 @@ Valve at sourceengine@valvesoftware.com.
 
 The Source engine and Valve games use Third Party code for certain functions.  The 
 required legal notices for using such code are reproduced below in accordance with 
-Valve’s obligations to provide such notices:
+Valveâ€™s obligations to provide such notices:
 
-- Bink SDK 1.9c is licensed as follows:
+- AMD3DX, located at deps/amd3dx, is licensed as follows:
+  """
+    Copyright (c) 1999 Advanced Micro Devices, Inc.
+
+    LIMITATION OF LIABILITY:  THE MATERIALS ARE PROVIDED *AS IS* WITHOUT ANY
+    EXPRESS OR IMPLIED WARRANTY OF ANY KIND INCLUDING WARRANTIES OF
+    MERCHANTABILITY, NONINFRINGEMENT OF THIRD-PARTY INTELLECTUAL PROPERTY, OR
+    FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL AMD OR ITS SUPPLIERS BE
+    LIABLE FOR ANY DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR
+    LOSS OF PROFITS, BUSINESS INTERRUPTION, LOSS OF INFORMATION) ARISING OUT OF THE
+    USE OF OR INABILITY TO USE THE MATERIALS, EVEN IF AMD HAS BEEN ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGES.  BECAUSE SOME JURISDICTIONS PROHIBIT THE EXCLUSION
+    OR LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES, THE ABOVE
+    LIMITATION MAY NOT APPLY TO YOU.
+
+    AMD does not assume any responsibility for any errors which may appear in the
+    Materials nor any responsibility to support or update the Materials.  AMD
+    retains the right to make changes to its test specifications at any time,
+    without notice.
+
+    NO SUPPORT OBLIGATION: AMD is not obligated to furnish, support, or make any
+    further information, software, technical information, know-how, or show-how
+    available to you.
+
+    So that all may benefit from your experience, please report  any  problems
+    or  suggestions about this software to 3dsdk.support@amd.com
+
+    AMD Developer Technologies, M/S 585
+    Advanced Micro Devices, Inc.
+    5900 E. Ben White Blvd.
+    Austin, TX 78741
+    3dsdk.support@amd.com 
+  """
+
+- Bink SDK 1.9c, located at deps/bink, is licensed as follows:
   """
     The product name Bink, Bink Video, and the Bink logo are all copyrighted and
     trademarked by RAD Game Tools, Inc. Copyright 1994-2008 RAD Game Tools, Inc.
@@ -53,7 +87,7 @@ Valve’s obligations to provide such notices:
     license agreements are fair, and that our software is reasonably priced for 
     the quality and effort we have put into it. Using our software in ways other
     than allowed by your license agreement violates federal, civil, and criminal
-    law. We rely primarily on your good faith not to violate our copyright; 
+    law. We rely primarily on your good faith not to violate our copyright;
     please respect it. 
 
     This software and documentation are provided "as is" without warranty of any
@@ -96,39 +130,51 @@ Valve’s obligations to provide such notices:
     trademarks or registered trademarks of their respective companies. 
 
     For technical support, e-mail Bink3@radgametools.com 
-    © Copyright 1994-2008 RAD Game Tools, Inc. All Rights Reserved. 
+    Â© Copyright 1994-2008 RAD Game Tools, Inc. All Rights Reserved. 
   """
 
-- Celt Codec is licensed as follows:
+- bzip2/libzip2 version 1.0.6, located at deps/bzip2, is licensed as follows:
   """
-    Copyright 2001-2009 Jean-Marc Valin, Timothy B. Terriberry,
-                        CSIRO, and other contributors
+    This program, "bzip2", the associated library "libbzip2", and all
+    documentation, are copyright (C) 1996-2010 Julian R Seward.  All
+    rights reserved.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
     are met:
 
-    - Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
 
-    - Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
+    2. The origin of this software must not be misrepresented; you must 
+       not claim that you wrote the original software.  If you use this 
+       software in a product, an acknowledgment in the product 
+       documentation would be appreciated but is not required.
 
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-    A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    3. Altered source versions must be plainly marked as such, and must
+       not be misrepresented as being the original software.
+
+    4. The name of the author may not be used to endorse or promote 
+       products derived from this software without specific prior written 
+       permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+    OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+    GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
     NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    Julian Seward, jseward@bzip.org
+    bzip2/libbzip2 version 1.0.6 of 6 September 2010
   """
 
-- Chromium is licensed as follows:
+- Chromium, code distributed with LICENSE at places, is licensed as follows:
   """
     Copyright 2015 The Chromium Authors. All rights reserved.
 
@@ -212,6 +258,16 @@ Valve’s obligations to provide such notices:
     THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  """
+
+- ICE (64-bit private key block cipher), is licensed as follows:
+  """
+    Written by Matthew Kwan - July 1996
+ 
+    The ICE algorithm is public domain, and source code can be downloaded from
+    this page (http://www.darkside.com.au/ice/). There are no patents or 
+    copyrights, so its use is unrestricted. Naturally, if you do decide to use
+    it, the author would love to hear about it.
   """
 
 - JPEG image support:
@@ -629,7 +685,7 @@ Valve’s obligations to provide such notices:
     to this file, however, are subject to the LGPL or CPL terms.
   """
 
-- Miles Sound System 6.6g is licensed as follows:
+- Miles Sound System 6.6g, located at deps/miles, is licensed as follows:
   """
     Author: John Miles
     Copyright (C) 1991-2004, RAD Game Tools, Inc.
@@ -637,9 +693,31 @@ Valve’s obligations to provide such notices:
     Contact RAD Game Tools at 425-893-4300 for technical support.
   """
 
-- SPEEX Codec is licensed as follows:
+- S3TC (NVTC) is licensed as follows:
   """
-    Copyright (C) 2002-2006 Jean-Marc Valin
+    Copyright (c) 1997-8  S3 Inc.  All Rights Reserved.
+ 
+    Module Name:  s3_intrf.h
+ 
+    Purpose:  Constant, structure, and prototype definitions for S3TC
+    interface to DX surface
+ 
+    Author:  Dan Hung, Martin Hoffesommer
+ 
+    Revision History:
+    version Beta 1.00.00-98-03-26
+  """
+
+- SPEEX Codec 1.2.0, located at deps/speex, is licensed as follows:
+  """
+    Copyright 2002-2008 	Xiph.org Foundation
+    Copyright 2002-2008 	Jean-Marc Valin
+    Copyright 2005-2007	Analog Devices Inc.
+    Copyright 2005-2008	Commonwealth Scientific and Industrial Research 
+                            Organisation (CSIRO)
+    Copyright 1993, 2002, 2006 David Rowe
+    Copyright 2003 		EpicGames
+    Copyright 1992-1994	Jutta Degener, Carsten Bormann
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -669,59 +747,100 @@ Valve’s obligations to provide such notices:
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   """
 
-- Xzip/Xunzip is licensed as follows:
+- PVCS Tracker Toolkit API v. 400005, located at deps/trktool, is licensed
+  as follows:
   """
-    This is version 2002-Feb-16 of the Info-ZIP copyright and license. The 
-    definitive version of this document should be available at 
+    Copyright 1992-1999 Merant, Inc.  All rights reserved.
+
+    PVCS Tracker Toolkit API
+  """
+
+- Xzip/XUnzip are licensed as follows:
+  """
+    XZip/XUnzip   Version 1.3
+
+    Authors:      Mark Adler et al. (see below)
+
+    Modified by:  Lucian Wischik
+                  lu@wischik.com
+
+    Version 1.0   - Turned C files into just a single CPP file
+                  - Made them compile cleanly as C++ files
+                  - Gave them simpler APIs
+                  - Added the ability to zip/unzip directly in memory without
+                    any intermediate files
+
+    Modified by:  Hans Dietrich
+                  hdietrich@gmail.com
+
+    Version 1.3:  - Corrected size bug introduced by 1.2
+
+    Version 1.2:  - Many bug fixes.  See CodeProject article for list.
+
+    Version 1.1:  - Added Unicode support to CreateZip() and ZipAdd()
+                  - Changed file names to avoid conflicts with Lucian's files
+
+    Lucian Wischik's comments:
+    --------------------------
+    THIS FILE is almost entirely based upon code by Info-ZIP.
+    It has been modified by Lucian Wischik.
+    The original code may be found at http:www.info-zip.org
+    The original copyright text follows.
+
+    Original authors' comments:
+    ---------------------------
+    This is version 2002-Feb-16 of the Info-ZIP copyright and license. The
+    definitive version of this document should be available at
     ftp:ftp.info-zip.org/pub/infozip/license.html indefinitely.
-   
+
     Copyright (c) 1990-2002 Info-ZIP.  All rights reserved.
-  
+
     For the purposes of this copyright and license, "Info-ZIP" is defined as
     the following set of individuals:
-  
-    Mark Adler, John Bush, Karl Davis, Harald Denker, Jean-Michel Dubois,
-    Jean-loup Gailly, Hunter Goatley, Ian Gorman, Chris Herborth, Dirk Haase,
-    Greg Hartwig, Robert Heath, Jonathan Hudson, Paul Kienitz, 
-    David Kirschbaum, Johnny Lee, Onno van der Linden, Igor Mandrichenko, 
-    Steve P. Miller, Sergio Monesi, Keith Owens, George Petrov, Greg Roelofs, 
-    Kai Uwe Rommel, Steve Salisbury, Dave Smith, Christian Spieler, 
-    Antoine Verheijen, Paul von Behren, Rich Wales, Mike White
-  
+
+      Mark Adler, John Bush, Karl Davis, Harald Denker, Jean-Michel Dubois,
+      Jean-loup Gailly, Hunter Goatley, Ian Gorman, Chris Herborth, Dirk Haase,
+      Greg Hartwig, Robert Heath, Jonathan Hudson, Paul Kienitz,
+      David Kirschbaum, Johnny Lee, Onno van der Linden, Igor Mandrichenko,
+      Steve P. Miller, Sergio Monesi, Keith Owens, George Petrov, Greg Roelofs,
+      Kai Uwe Rommel, Steve Salisbury, Dave Smith, Christian Spieler,
+      Antoine Verheijen, Paul von Behren, Rich Wales, Mike White
+
     This software is provided "as is", without warranty of any kind, express
     or implied.  In no event shall Info-ZIP or its contributors be held liable
     for any direct, indirect, incidental, special or consequential damages
     arising out of the use of or inability to use this software.
-  
+
     Permission is granted to anyone to use this software for any purpose,
     including commercial applications, and to alter it and redistribute it
     freely, subject to the following restrictions:
-  
-    1. Redistributions of source code must retain the above copyright notice,
-        definition, disclaimer, and this list of conditions.
-  
-    2. Redistributions in binary form (compiled executables) must reproduce 
-        the above copyright notice, definition, disclaimer, and this list of 
-        conditions in documentation and/or other materials provided with the 
-        distribution. The sole exception to this condition is redistribution 
-        of a standard UnZipSFX binary as part of a self-extracting archive; 
-        that is permitted without inclusion of this license, as long as the 
-        normal UnZipSFX banner has not been removed from the binary or disabled.
-  
-    3. Altered versions--including, but not limited to, ports to new 
-        operating systems, existing ports with new graphical interfaces, and 
-        dynamic, shared, or static library versions--must be plainly marked 
-        as such and must not be misrepresented as being the original source.  
-        Such altered versions also must not be misrepresented as being 
-        Info-ZIP releases--including, but not limited to, labeling of the 
-        altered versions with the names "Info-ZIP" (or any variation thereof, 
-        including, but not limited to, different capitalizations), 
-        "Pocket UnZip", "WiZ" or "MacZip" without the explicit permission of 
-        Info-ZIP.  Such altered versions are further prohibited from 
-        misrepresentative use of the Zip-Bugs or Info-ZIP e-mail addresses or 
-        of the Info-ZIP URL(s).
-  
-    4. Info-ZIP retains the right to use the names "Info-ZIP", "Zip", "UnZip",
-        "UnZipSFX", "WiZ", "Pocket UnZip", "Pocket Zip", and "MacZip" for its 
-        own source and binary releases.
+
+      1. Redistributions of source code must retain the above copyright notice,
+          definition, disclaimer, and this list of conditions.
+
+      2. Redistributions in binary form (compiled executables) must reproduce
+          the above copyright notice, definition, disclaimer, and this list of
+          conditions in documentation and/or other materials provided with the
+          distribution. The sole exception to this condition is redistribution
+          of a standard UnZipSFX binary as part of a self-extracting archive;
+          that is permitted without inclusion of this license, as long as the
+          normal UnZipSFX banner has not been removed from the binary or
+          disabled.
+
+      3. Altered versions--including, but not limited to, ports to new
+          operating systems, existing ports with new graphical interfaces, and
+          dynamic, shared, or static library versions--must be plainly marked
+          as such and must not be misrepresented as being the original source.
+          Such altered versions also must not be misrepresented as being
+          Info-ZIP releases--including, but not limited to, labeling of the
+          altered versions with the names "Info-ZIP" (or any variation thereof,
+          including, but not limited to, different capitalizations),
+          "Pocket UnZip", "WiZ" or "MacZip" without the explicit permission of
+          Info-ZIP.  Such altered versions are further prohibited from
+          misrepresentative use of the Zip-Bugs or Info-ZIP e-mail addresses or
+          of the Info-ZIP URL(s).
+
+      4. Info-ZIP retains the right to use the names "Info-ZIP", "Zip", "UnZip",
+          "UnZipSFX", "WiZ", "Pocket UnZip", "Pocket Zip", and "MacZip" for its
+          own source and binary releases.
   """

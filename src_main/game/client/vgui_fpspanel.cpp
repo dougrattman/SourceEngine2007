@@ -431,7 +431,7 @@ void CBlockingFileIOPanel::Paint() {
     IBlockingFileItemList *list = filesystem->RetrieveBlockingFileAccessInfo();
     if (list) {
       int i;
-      int c = ARRAYSIZE(m_History);
+      int c = SOURCE_ARRAYSIZE(m_History);
       for (i = 0; i < c; ++i) {
         m_History[i].m_flCurrent = 0.0f;
       }

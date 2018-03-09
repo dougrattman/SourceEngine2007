@@ -40,7 +40,7 @@
 #include "vehicle_base.h"
 #include "vphysics_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DOOR_HARDWARE_GROUP 1
@@ -2708,7 +2708,7 @@ void CPhysicsProp::VPhysicsCollision(int index, gamevcollisionevent_t *pEvent) {
             pEvent->postVelocity[!index] * pEvent->pObjects[!index]->GetMass();
       }
 
-      // FIXME: this doesn't pass in who is responsible if some other entity
+      // TODO(d.rattman): this doesn't pass in who is responsible if some other entity
       // "caused" this collision
       PhysCallbackDamage(this,
                          CTakeDamageInfo(pHitEntity, pHitEntity, damageForce,
@@ -2993,7 +2993,7 @@ CBaseEntity *BreakModelCreateSingle(CBaseEntity *pOwner, breakmodel_t *pModel,
     }
 
     IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-    int count = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+    int count = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
     if (count) {
       for (int i = 0; i < count; i++) {
         pList[i]->SetVelocity(&velocity, &angVelocity);
@@ -3577,7 +3577,7 @@ void CBasePropDoor::InputOpenAwayFrom(inputdata_t &inputdata) {
 //-----------------------------------------------------------------------------
 // Purpose:
 //
-// FIXME: This function should be combined with DoorOpen, but doing that
+// TODO(d.rattman): This function should be combined with DoorOpen, but doing that
 //		  could break existing content. Fix after shipping!
 //
 // Input  : *pOpenAwayFrom -

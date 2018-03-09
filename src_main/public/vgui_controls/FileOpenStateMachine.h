@@ -26,7 +26,7 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Interface for things using the file open state machine
 //-----------------------------------------------------------------------------
-abstract_class IFileOpenStateMachineClient
+the_interface IFileOpenStateMachineClient
 {
 public:
 	// Called by to allow clients to set up the save dialog

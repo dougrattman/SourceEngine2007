@@ -332,7 +332,7 @@ void CDmeLogLayerHelper::Simplify( float flThreshhold )
 
 	for ( nFirstKey = 1; nFirstKey < nKeys; ++nFirstKey )
 	{
-		// FIXME: Should we use a tolerance check here?
+		// TODO(d.rattman): Should we use a tolerance check here?
 		if ( m_values[ nFirstKey ] != m_values[ nFirstKey - 1 ] )
 			break;
 	}
@@ -340,7 +340,7 @@ void CDmeLogLayerHelper::Simplify( float flThreshhold )
 
 	for ( nLastKey = nKeys; --nLastKey >= 1; )
 	{
-		// FIXME: Should we use a tolerance check here?
+		// TODO(d.rattman): Should we use a tolerance check here?
 		if ( m_values[ nLastKey ] != m_values[ nLastKey - 1 ] )
 			break;
 	}
@@ -497,8 +497,8 @@ static CFlexAnimationTrack *FindOrCreateTrack( CChoreoEvent *pEvent, const char 
 //-----------------------------------------------------------------------------
 void GetStereoFlexControllerRange( float *pMin, float *pMax, studiohdr_t *pStudioHdr, const char *pFlexName )
 {
-	char pRightBuf[MAX_PATH];
-	char pLeftBuf[MAX_PATH];
+	char pRightBuf[SOURCE_MAX_PATH];
+	char pLeftBuf[SOURCE_MAX_PATH];
 	Q_snprintf( pRightBuf, sizeof(pRightBuf), "right_%s", pFlexName );
 	Q_snprintf( pLeftBuf, sizeof(pLeftBuf), "left_%s", pFlexName );
 
@@ -513,7 +513,7 @@ void GetStereoFlexControllerRange( float *pMin, float *pMax, studiohdr_t *pStudi
 			return;
 		}
 
-		// FIXME: Probably want to get the left + right controller + find the min and max of each, but this is unnecessary.
+		// TODO(d.rattman): Probably want to get the left + right controller + find the min and max of each, but this is unnecessary.
 		if ( !Q_stricmp( pFlexControllerName, pRightBuf ) )
 		{
 			*pMin = pFlex->min;
@@ -839,13 +839,13 @@ bool ImportLogsIntoVCD( const char *pFacFullPath, const char *pVCDInFullPath, co
 
 	Msg( "Removed %d samples\n", CDmeLogLayerHelper::TotalRemovedPoints() );
 
-	char pTemp[MAX_PATH];
+	char pTemp[SOURCE_MAX_PATH];
 	if ( !Q_IsAbsolutePath( pVCDOutPath ) )
 	{
 		g_pFullFileSystem->RelativePathToFullPath( pVCDOutPath, NULL, pTemp, sizeof(pTemp) );
 		if ( !Q_IsAbsolutePath( pTemp ) )
 		{
-			char pDir[MAX_PATH];
+			char pDir[SOURCE_MAX_PATH];
 			if ( g_pFullFileSystem->GetCurrentDirectory( pDir, sizeof(pDir) ) )
 			{
 				Q_ComposeFileName( pDir, pVCDOutPath, pTemp, sizeof(pTemp) );

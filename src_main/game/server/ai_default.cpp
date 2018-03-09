@@ -16,7 +16,7 @@
 #include "igamesystem.h"
 #include "ai_network.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CAI_Schedule *CAI_BaseNPC::ScheduleInList( const char *pName, CAI_Schedule **pList, int listCount )
@@ -252,7 +252,7 @@ bool CAI_BaseNPC::LoadDefaultSchedules(void)
 
 int CAI_BaseNPC::TranslateSchedule( int scheduleType )
 {
-	// FIXME: Where should this go now?
+	// TODO(d.rattman): Where should this go now?
 #if 0
 	if (scheduleType >= LAST_SHARED_SCHEDULE)
 	{
@@ -312,13 +312,13 @@ int CAI_BaseNPC::TranslateSchedule( int scheduleType )
 
 	case SCHED_IDLE_STAND:
 		{
-			// FIXME: crows are set into IDLE_STAND as an failure schedule, not sure if ALERT_STAND or COMBAT_STAND is a better choice
+			// TODO(d.rattman): crows are set into IDLE_STAND as an failure schedule, not sure if ALERT_STAND or COMBAT_STAND is a better choice
 			// Assert( m_NPCState == NPC_STATE_IDLE );
 		}
 		break;
 	case SCHED_IDLE_WANDER:
 		{
-			// FIXME: citizen interaction only, no idea what the state is.
+			// TODO(d.rattman): citizen interaction only, no idea what the state is.
 			// Assert( m_NPCState == NPC_STATE_IDLE );
 		}
 		break;
@@ -337,14 +337,14 @@ int CAI_BaseNPC::TranslateSchedule( int scheduleType )
 
 	case SCHED_ALERT_FACE:
 		{
-			// FIXME: default AI can pick this when in idle state
+			// TODO(d.rattman): default AI can pick this when in idle state
 			// Assert( m_NPCState == NPC_STATE_ALERT );
 		}
 		break;
 	case SCHED_ALERT_SCAN:
 	case SCHED_ALERT_STAND:
 		{
-			// FIXME: rollermines use this when they're being held
+			// TODO(d.rattman): rollermines use this when they're being held
 			// Assert( m_NPCState == NPC_STATE_ALERT );
 		}
 		break;
@@ -355,13 +355,13 @@ int CAI_BaseNPC::TranslateSchedule( int scheduleType )
 		break;
 	case SCHED_COMBAT_FACE:
 		{
-			// FIXME: failure schedule for SCHED_PATROL which can be called when in alert
+			// TODO(d.rattman): failure schedule for SCHED_PATROL which can be called when in alert
 			// Assert( m_NPCState == NPC_STATE_COMBAT );
 		}
 		break;
 	case SCHED_COMBAT_STAND:
 		{
-			// FIXME: never used?
+			// TODO(d.rattman): never used?
 		}
 		break;
 	case SCHED_COMBAT_WALK:

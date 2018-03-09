@@ -10,7 +10,7 @@
 #include "Selection.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -233,7 +233,7 @@ int FindReplace(CMapEntity *pEntity, FindObject_t &FindObject,
   for (int i = pEntity->GetFirstKeyValue(); i != pEntity->GetInvalidKeyValue();
        i = pEntity->GetNextKeyValue(i)) {
     const char *pszValue = pEntity->GetKeyValue(i);
-    char szNewValue[MAX_PATH];
+    char szNewValue[SOURCE_MAX_PATH];
     if (pszValue &&
         ReplaceString(szNewValue, pszValue, FindObject, pszReplace)) {
       const char *pszKey = pEntity->GetKey(i);
@@ -251,7 +251,7 @@ int FindReplace(CMapEntity *pEntity, FindObject_t &FindObject,
   for (int i = 0; i < nConnCount; i++) {
     CEntityConnection *pConn = pEntity->Connections_Get(i);
     if (pConn) {
-      char szNewValue[MAX_PATH];
+      char szNewValue[SOURCE_MAX_PATH];
 
       if (ReplaceString(szNewValue, pConn->GetTargetName(), FindObject,
                         pszReplace)) {

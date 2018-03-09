@@ -3,7 +3,7 @@
 #ifndef TALKNPC_H
 #define TALKNPC_H
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #undef time
 #include <ctime>
 #endif

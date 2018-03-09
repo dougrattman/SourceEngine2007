@@ -6,7 +6,7 @@
 #include "mathlib/ssemath.h"
 #include "tier1/utlbuffer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ void CDmxElement::RenameAttribute(const char *pAttributeName,
 // Find an attribute by name-based lookup
 //-----------------------------------------------------------------------------
 int CDmxElement::FindAttribute(const char *pAttributeName) const {
-  // FIXME: The cost here is O(log M) + O(log N)
+  // TODO(d.rattman): The cost here is O(log M) + O(log N)
   // where log N is the binary search for the symbol match
   // and log M is the binary search for the attribute name->symbol
   // We can eliminate log M by using a hash table in the symbol lookup

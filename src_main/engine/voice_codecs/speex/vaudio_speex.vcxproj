@@ -127,17 +127,14 @@
       </Outputs>
     </CustomBuildStep>
     <Link>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -187,16 +184,13 @@
       </Outputs>
     </CustomBuildStep>
     <Link>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>.\Release/speex.lib</ImportLibrary>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -244,15 +238,12 @@
       </Outputs>
     </CustomBuildStep>
     <Link>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
-      <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -300,14 +291,11 @@
       </Outputs>
     </CustomBuildStep>
     <Link>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
-      <ImportLibrary>.\Debug/speex.lib</ImportLibrary>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -327,16 +315,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tier0\include\memoverride.cc" />
-    <ClCompile Include="..\frame_encoder\voice_codec_frame.cpp" />
-    <ClCompile Include="VoiceEncoder_Speex.cpp" />
+    <ClCompile Include="..\frame_encoder\frame_voice_codec.cc" />
+    <ClCompile Include="speex_voice_codec.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\public\tier1\interface.h" />
-    <ClInclude Include="..\..\audio\public\ivoicecodec.h" />
-    <ClInclude Include="..\frame_encoder\iframeencoder.h" />
-    <ClInclude Include="VoiceEncoder_Speex.h" />
+    <ClInclude Include="..\frame_encoder\frame_voice_codec.h" />
+    <ClInclude Include="..\frame_encoder\iframe_encoder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\deps\speex\win32\VS2017\libspeex\libspeex.vcxproj">
+      <Project>{e972c52f-9e85-4d65-b19c-031e511e9db4}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\tier0\tier0.vcxproj">
       <Project>{c503fc17-bc81-4434-abf9-e5b00d39365c}</Project>
     </ProjectReference>
@@ -345,9 +334,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\vstdlib\vstdlib.vcxproj">
       <Project>{08257043-fe59-4e3f-8c99-a181397052d0}</Project>
-    </ProjectReference>
-    <ProjectReference Include="speex-1.2.0\win32\VS2008\libspeex\libspeex.vcxproj">
-      <Project>{e972c52f-9e85-4d65-b19c-031e511e9db4}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

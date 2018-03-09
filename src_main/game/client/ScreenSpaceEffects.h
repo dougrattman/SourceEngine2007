@@ -19,7 +19,7 @@ class KeyValues;
 //------------------------------------------------------------------------------
 // Simple base class for screen space post-processing effects
 //------------------------------------------------------------------------------
-abstract_class IScreenSpaceEffect
+the_interface IScreenSpaceEffect
 {
 public:
 
@@ -38,7 +38,7 @@ public:
 //------------------------------------------------------------------------------
 // Interface class for managing screen space post-processing effects
 //------------------------------------------------------------------------------
-abstract_class IScreenSpaceEffectManager
+the_interface IScreenSpaceEffectManager
 {
 public:
 

@@ -16,7 +16,7 @@
 #pragma once
 #endif
 
-abstract_class IVModeManager
+the_interface IVModeManager
 {
 public:
 	virtual void	Init( void ) = 0;

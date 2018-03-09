@@ -9,7 +9,7 @@
 #include <bitbuf.h>
 #include "ragdoll_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -447,7 +447,7 @@ void C_CHostage::UpdateClientSideAnimation()
 		"head_roll"
 	};
 	CStudioHdr *pStudioHdr = GetModelPtr();
-	for ( int i=0; i < ARRAYSIZE( setToZero ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( setToZero ); i++ )
 	{
 		int index = LookupPoseParameter( pStudioHdr, setToZero[i] );
 		if ( index >= 0 )

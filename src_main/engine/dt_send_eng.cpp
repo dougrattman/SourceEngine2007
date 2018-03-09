@@ -8,7 +8,7 @@
 #include "dt_instrumentation_server.h"
 #include "dt_stack.h"
 #include "packed_entity.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/vprof.h"
@@ -66,7 +66,7 @@ class CPropCullStack : public CDatatableStack {
           // Add ALL properties under this proxy because the previous state
           // didn't have any of them.
           for (int i = 0; i < pNode->m_nRecursiveProps; i++) {
-            if (m_nNewProxyProps < ARRAYSIZE(m_NewProxyProps)) {
+            if (m_nNewProxyProps < SOURCE_ARRAYSIZE(m_NewProxyProps)) {
               m_NewProxyProps[m_nNewProxyProps] =
                   pNode->m_iFirstRecursiveProp + i;
             } else {
@@ -486,7 +486,7 @@ int SendTable_WriteAllDeltaProps(const SendTable *pTable, const void *pFromData,
 
   int nDeltaProps = SendTable_CalcDelta(pTable, pFromData, nFromDataBits,
                                         pToData, nToDataBits, deltaProps,
-                                        ARRAYSIZE(deltaProps), nObjectID);
+                                        SOURCE_ARRAYSIZE(deltaProps), nObjectID);
 
   // Write the properties.
   SendTable_WritePropList(pTable,

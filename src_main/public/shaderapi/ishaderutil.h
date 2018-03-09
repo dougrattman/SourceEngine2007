@@ -20,7 +20,7 @@ struct ShaderColorCorrectionInfo_t;
 
 #define SHADER_UTIL_INTERFACE_VERSION "VShaderUtil001"
 
-abstract_class IShaderUtil : public IAppSystem {
+the_interface IShaderUtil : public IAppSystem {
  public:
   // Method to allow clients access to the MaterialSystem_Config
   virtual MaterialSystem_Config_t &GetConfig() = 0;

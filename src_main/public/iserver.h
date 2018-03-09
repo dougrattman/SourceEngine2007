@@ -13,7 +13,7 @@ class IClient;
 
 typedef struct player_info_s player_info_t;
 
-abstract_class IServer : public IConnectionlessPacketHandler {
+the_interface IServer : public IConnectionlessPacketHandler {
  public:
   virtual ~IServer() {}
 

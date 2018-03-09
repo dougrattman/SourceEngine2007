@@ -21,7 +21,7 @@
 #include "ai_senses.h"
 #include "soundent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar monk_headshot_freq( "monk_headshot_freq", "2" );
@@ -151,7 +151,7 @@ int CNPC_Monk::GetSoundInterests()
 //-----------------------------------------------------------------------------
 void CNPC_Monk::BuildScheduleTestBits( void )
 {
-	// FIXME: we need a way to make scenes non-interruptible
+	// TODO(d.rattman): we need a way to make scenes non-interruptible
 #if 0
 	if ( IsCurSchedule( SCHED_RANGE_ATTACK1 ) || IsCurSchedule( SCHED_SCENE_GENERIC ) )
 	{

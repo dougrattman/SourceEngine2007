@@ -26,7 +26,7 @@
 #include "viewrender.h"
 #include "vstdlib/jobthread.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class VMatrix;  // forward decl
@@ -99,7 +99,7 @@ class CClientLeafSystem : public IClientLeafSystem,
   virtual CClientLeafSubSystemData *GetSubSystemDataInLeaf(int leaf,
                                                            int nSubSystemIdx);
 
-  // FIXME: There's an incestuous relationship between DetailObjectSystem
+  // TODO(d.rattman): There's an incestuous relationship between DetailObjectSystem
   // and the ClientLeafSystem. Maybe they should be the same system?
   virtual void GetDetailObjectsInLeaf(int leaf, int &firstDetailObject,
                                       int &detailObjectCount);
@@ -383,7 +383,7 @@ void DefaultRenderBoundsWorldspace(IClientRenderable *pRenderable,
   Vector mins, maxs;
   pRenderable->GetRenderBounds(mins, maxs);
 
-  // FIXME: Should I just use a sphere here?
+  // TODO(d.rattman): Should I just use a sphere here?
   // Another option is to pass the OBB down the tree; makes for a better fit
   // Generate a world-aligned AABB
   const QAngle &angles = pRenderable->GetRenderAngles();
@@ -500,7 +500,7 @@ void CClientLeafSystem::LevelShutdownPostEntity() {
 
   // delete subsystem data
   for (int i = 0; i < m_Leaf.Count(); i++) {
-    for (int j = 0; j < ARRAYSIZE(m_Leaf[i].m_pSubSystemData); j++) {
+    for (int j = 0; j < SOURCE_ARRAYSIZE(m_Leaf[i].m_pSubSystemData); j++) {
       if (m_Leaf[i].m_pSubSystemData[j]) {
         delete m_Leaf[i].m_pSubSystemData[j];
         m_Leaf[i].m_pSubSystemData[j] = NULL;
@@ -620,7 +620,7 @@ void CClientLeafSystem::NewRenderable(IClientRenderable *pRenderable,
 
 void CClientLeafSystem::CreateRenderableHandle(IClientRenderable *pRenderable,
                                                bool bIsStaticProp) {
-  // FIXME: The argument is unnecessary if we could get this next line to work
+  // TODO(d.rattman): The argument is unnecessary if we could get this next line to work
   // the reason why we can't is because currently there are IClientRenderables
   // which don't correctly implement GetRefEHandle.
 
@@ -1373,7 +1373,7 @@ static RenderGroup_t DetectBucketedRenderGroup(RenderGroup_t group,
       80.f,   // player size
       30.f,   // crate size
   };
-  Assert(ARRAYSIZE(arrThresholds) + 1 >=
+  Assert(SOURCE_ARRAYSIZE(arrThresholds) + 1 >=
          RENDER_GROUP_CFG_NUM_OPAQUE_ENT_BUCKETS);
   Assert(group >= RENDER_GROUP_OPAQUE_STATIC &&
          group <= RENDER_GROUP_OPAQUE_ENTITY);
@@ -1550,7 +1550,7 @@ void CClientLeafSystem::CollateRenderablesInLeaf(
       IClientRenderable *pRenderable =
           DetailObjectSystem()->GetDetailModel(idx);
 
-      // FIXME: This if check here is necessary because the detail object system
+      // TODO(d.rattman): This if check here is necessary because the detail object system
       // also maintains lists of sprites...
       if (pRenderable) {
         if (pRenderable->IsTransparent()) {

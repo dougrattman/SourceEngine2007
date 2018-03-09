@@ -13,7 +13,7 @@
 #include "h_cycler.h"
 #include "Sprite.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define FCYCLER_NOTSOLID		0x0001
@@ -215,7 +215,7 @@ void CCycler::InputSetSequence( inputdata_t &inputdata )
 	}
 }
 
-// FIXME: this doesn't work anymore, and hasn't for a while now.
+// TODO(d.rattman): this doesn't work anymore, and hasn't for a while now.
 
 class CWeaponCycler : public CBaseCombatWeapon
 {

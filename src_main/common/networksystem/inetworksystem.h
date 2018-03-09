@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef INETWORKSYSTEM_H
 #define INETWORKSYSTEM_H
@@ -33,7 +33,7 @@ enum ConnectionStatus_t {
 };
 
 // This interface encompasses a one-way communication path between two machines
-abstract_class INetChannel {
+the_interface INetChannel {
  public:
   virtual const netadr_t &GetRemoteAddress(void) const = 0;
 
@@ -72,7 +72,7 @@ struct NetworkMessageReceivedEvent_t : public NetworkEvent_t {
 // Main interface for low-level networking (packet sending). This is a low-level
 // interface
 #define NETWORKSYSTEM_INTERFACE_VERSION "NetworkSystemVersion001"
-abstract_class INetworkSystem : public IAppSystem {
+the_interface INetworkSystem : public IAppSystem {
  public:
   // Installs network message factories to be used with all connections
   virtual bool RegisterMessage(INetworkMessage * msg) = 0;

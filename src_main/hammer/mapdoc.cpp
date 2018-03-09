@@ -65,7 +65,7 @@
 #include "hammer.h"
 #include "ibsplighting.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include ".\mapdoc.h"
 #include "tier0/include/memdbgon.h"
 
@@ -305,7 +305,7 @@ struct ReplaceTexInfo_t {
 };
 
 struct FindEntity_t {
-  char szClassName[MAX_PATH];  //
+  char szClassName[SOURCE_MAX_PATH];  //
   Vector Pos;                  //
   CMapEntity *pEntityFound;    // Points to object found, NULL if unsuccessful.
 };
@@ -1409,7 +1409,7 @@ ChunkFileResult_t CMapDoc::LoadAutosaveKeyCallback(const char *szKey,
                                                    CMapDoc *pDoc) {
   if (!stricmp(szKey, "originalname")) {
     pDoc->m_bIsAutosave = true;
-    char szTempName[MAX_PATH];
+    char szTempName[SOURCE_MAX_PATH];
     Q_strcpy(szTempName, szValue);
     Q_FixSlashes(szTempName, '\\');
     pDoc->m_strAutosavedFrom = szTempName;
@@ -1544,7 +1544,7 @@ void CMapDoc::Postload(void) {
   // Do batch search and replace of textures from trans.txt if it exists.
   //
   pProgDlg->SetWindowText("Updating Texture Names...");
-  char translationFilename[MAX_PATH];
+  char translationFilename[SOURCE_MAX_PATH];
   Q_snprintf(translationFilename, sizeof(translationFilename),
              "materials/trans.txt");
   FileHandle_t searchReplaceFP = g_pFileSystem->Open(translationFilename, "r");
@@ -2295,7 +2295,7 @@ BOOL CMapDoc::OnSaveDocument(LPCTSTR lpszPathName) {
   //
   // If a file with the same name exists, back it up before saving the new one.
   //
-  char szFile[MAX_PATH];
+  char szFile[SOURCE_MAX_PATH];
   strcpy(szFile, lpszPathName);
   szFile[strlen(szFile) - 1] = 'x';
 
@@ -2303,7 +2303,7 @@ BOOL CMapDoc::OnSaveDocument(LPCTSTR lpszPathName) {
     if (!CopyFile(lpszPathName, szFile, FALSE)) {
       DWORD dwError = GetLastError();
 
-      char szError[_MAX_PATH];
+      char szError[SOURCE_MAX_PATH];
       wsprintf(szError,
                "Hammer was unable to backup the existing file \"%s\" (Error: "
                "0x%lX). Please verify that the there is space on the hard "
@@ -2346,7 +2346,7 @@ BOOL CMapDoc::OnSaveDocument(LPCTSTR lpszPathName) {
   //
   std::fstream file(lpszPathName, std::ios::out | std::ios::binary);
   if (!file.is_open()) {
-    char szError[_MAX_PATH];
+    char szError[SOURCE_MAX_PATH];
     wsprintf(szError,
              "Hammer was unable to open the file \"%s\" for writing. Please "
              "verify that the file is writable and that the path exists.",
@@ -2569,7 +2569,7 @@ static BOOL SelectInBox(CMapClass *pObject, SelectBoxInfo_t *pInfo) {
     return TRUE;
   }
 
-  // FIXME: We're calling PrepareSelection on nearly everything in the world,
+  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the world,
   // then doing the box test against the object that we get back from that!
   // We should use the octree to cull out most of the world up front.
   CMapClass *pSelObject = pObject->PrepareSelection(pInfo->eSelectMode);
@@ -2610,7 +2610,7 @@ static BOOL SelectInLogicalBox(CMapClass *pObject,
       !pObject->IsVisibleLogical())
     return TRUE;
 
-  // FIXME: Box selection doesn't work when this is uncommented. Why?
+  // TODO(d.rattman): Box selection doesn't work when this is uncommented. Why?
   // Skip anything with children. We only are interested in leaf objects because
   // PrepareSelection will call up to tree to get the proper ancestor.
   //	if ( pObject->GetChildCount() )
@@ -2628,7 +2628,7 @@ static BOOL SelectInLogicalBox(CMapClass *pObject,
   // Skip clutter helpers.
   if (pObject->IsClutter()) return TRUE;
 
-  // FIXME: We're calling PrepareSelection on nearly everything in the world,
+  // TODO(d.rattman): We're calling PrepareSelection on nearly everything in the world,
   // then doing the box test against the object that we get back from that!
   // We should use the octree to cull out most of the world up front.
   CMapClass *pSelObject = pObject->PrepareSelection(pInfo->eSelectMode);
@@ -3999,7 +3999,7 @@ void CMapDoc::OnEditSelectall(void) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CMapDoc::OnFileSaveAs(void) {
-  static char szBaseDir[MAX_PATH] = "";
+  static char szBaseDir[SOURCE_MAX_PATH] = "";
 
   bool bSave = true;
   CString str;
@@ -4063,7 +4063,7 @@ void CMapDoc::OnFileSaveAs(void) {
 
     if (access(str, 0) != -1) {
       // The file exists.
-      char szConfirm[_MAX_PATH];
+      char szConfirm[SOURCE_MAX_PATH];
 
       if (access(str, 2) == -1) {
         // The file is read-only
@@ -5360,7 +5360,7 @@ bool CMapDoc::ExpandTargetNameKeywords(char *szNewTargetName,
       // we search for the highest instance number.
       //
       if (pszTargetName != NULL) {
-        char szTemp[MAX_PATH];
+        char szTemp[SOURCE_MAX_PATH];
         strcpy(szTemp, pszTargetName);
 
         int nPrefixLen = strlen(szPrefix);
@@ -5423,7 +5423,7 @@ bool CMapDoc::DoExpandKeywords(CMapClass *pObject, CMapWorld *pWorld,
   if (pEditGameClass != NULL) {
     const char *pszOldTargetName = pEditGameClass->GetKeyValue("targetname");
     if (pszOldTargetName != NULL) {
-      char szNewTargetName[MAX_PATH];
+      char szNewTargetName[SOURCE_MAX_PATH];
       if (ExpandTargetNameKeywords(szNewTargetName, pszOldTargetName, pWorld)) {
         strcpy(szOldKeyword, pszOldTargetName);
         strcpy(szNewKeyword, szNewTargetName);
@@ -5482,7 +5482,7 @@ void CMapDoc::RenameEntities(CMapClass *pRoot, CMapWorld *pWorld,
   if (!bMakeUnique && (!szAddPrefix || (szAddPrefix[0] == '\0'))) return;
 
   CUtlVector<const char *> oldNames;
-  char szName[MAX_PATH];
+  char szName[SOURCE_MAX_PATH];
 
   // find all names we have to replace
   if (GetName(pRoot, szName)) {
@@ -5519,8 +5519,8 @@ void CMapDoc::RenameEntities(CMapClass *pRoot, CMapWorld *pWorld,
 //			pWorld -
 //-----------------------------------------------------------------------------
 void CMapDoc::ExpandObjectKeywords(CMapClass *pObject, CMapWorld *pWorld) {
-  char szOldName[MAX_PATH];
-  char szNewName[MAX_PATH];
+  char szOldName[SOURCE_MAX_PATH];
+  char szNewName[SOURCE_MAX_PATH];
 
   if (DoExpandKeywords(pObject, pWorld, szOldName, szNewName)) {
     pObject->ReplaceTargetname(szOldName, szNewName);
@@ -5881,7 +5881,7 @@ void CMapDoc::OnViewShowModelsIn2D(void) {
 }
 
 void CMapDoc::OnViewShowHelpers(void) {
-  // FIXME: this only sets the handle mode for the active document's selection
+  // TODO(d.rattman): this only sets the handle mode for the active document's selection
   // tool!
   Options.SetShowHelpers(!Options.GetShowHelpers());
   UpdateVisibilityAll();
@@ -6048,12 +6048,12 @@ void CMapDoc::OnToolsCreateprefab(void) {
   // Get a file to save the prefab into. The first time through the default
   // folder is the prefabs folder.
   //
-  static char szBaseDir[MAX_PATH] = "";
+  static char szBaseDir[SOURCE_MAX_PATH] = "";
   if (szBaseDir[0] == '\0') {
     APP()->GetDirectory(DIR_PREFABS, szBaseDir);
   }
 
-  char szFilename[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   if (!GetSaveAsFilename(szBaseDir, szFilename, sizeof(szFilename))) {
     return;
   }
@@ -6430,7 +6430,7 @@ static BOOL BatchReplaceTextureCallback(CMapClass *pObject,
   CMapSolid *solid;
   int numFaces, i;
   CMapFace *face;
-  char szCurrentTexture[MAX_PATH];
+  char szCurrentTexture[SOURCE_MAX_PATH];
 
   solid = (CMapSolid *)pObject;
   numFaces = solid->GetFaceCount();
@@ -7146,7 +7146,7 @@ void CMapDoc::OnUpdateToggle3DGrid(CCmdUI *pCmdUI) {
 }
 
 static void SetFilenameExtension(CString &fileName, const char *pExt) {
-  char *p = fileName.GetBuffer(MAX_PATH);
+  char *p = fileName.GetBuffer(SOURCE_MAX_PATH);
   p = strrchr(p, '.');
   if (p) {
     strcpy(p, pExt);
@@ -7713,7 +7713,7 @@ CMapWorld *CMapDoc::CordonCreateWorld() {
 
   // make bigger box
   for (int i = 0; i < 3; i++) {
-    // dvs: FIXME: vbsp barfs if I go all the way out to the full mins & maxs
+    // dvs: TODO(d.rattman): vbsp barfs if I go all the way out to the full mins & maxs
     bigbounds.bmins[i] = g_MIN_MAP_COORD + 8;
     if (bigbounds.bmins[i] > m_vCordonMins[i]) {
       bigbounds.bmins[i] = g_MIN_MAP_COORD;
@@ -7947,7 +7947,7 @@ ChunkFileResult_t CMapDoc::SaveVersionInfoVMF(CChunkFile *pFile,
     eResult = pFile->BeginChunk("autosave");
 
     if (eResult == ChunkFile_Ok) {
-      char szOriginalName[MAX_PATH];
+      char szOriginalName[SOURCE_MAX_PATH];
       strcpy(szOriginalName, GetPathName());
       if (strlen(szOriginalName) == 0) {
         strcpy(szOriginalName, g_pGameConfig->szMapDir);
@@ -8551,7 +8551,7 @@ void CMapDoc::InternalEnableLightPreview(bool bCustomFilename) {
 		strFile = m_strLastExportFileName;
 
 	// Convert the extension to .bsp
-	char *p = strFile.GetBuffer(MAX_PATH);
+	char *p = strFile.GetBuffer(SOURCE_MAX_PATH);
 	char *ext = strrchr(p, '.');
 	if( ext )
 	{
@@ -8566,7 +8566,7 @@ void CMapDoc::InternalEnableLightPreview(bool bCustomFilename) {
 		*cur = '\\';
 	}
 
-	char fileName[MAX_PATH];
+	char fileName[SOURCE_MAX_PATH];
 
 	char *pLastSlash = p;
 	char *pTest;
@@ -8584,7 +8584,7 @@ void CMapDoc::InternalEnableLightPreview(bool bCustomFilename) {
 
 
 	// Use <mod directory> + "/maps/" + <filename>
-	char fullPath[MAX_PATH*2];
+	char fullPath[SOURCE_MAX_PATH*2];
 	sprintf( fullPath, "%s\\maps\\%s", g_pGameConfig->m_szModDir, fileName );
 
 	
@@ -8681,7 +8681,7 @@ void CMapDoc::OnUpdateLightPreview() {
   if (!m_pBSPLighting) return;
 
   // Save out a file with just the ents.
-  char szFile[MAX_PATH];
+  char szFile[SOURCE_MAX_PATH];
   strcpy(szFile, GetPathName());
   szFile[strlen(szFile) - 1] = 'e';
 

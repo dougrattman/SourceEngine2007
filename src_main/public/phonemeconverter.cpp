@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <cstdio>
 #include <cstring>
@@ -82,7 +82,7 @@ static PhonemeMap_t g_Phonemes[] = {
 // Output : const char
 //-----------------------------------------------------------------------------
 const char *ConvertPhoneme(int code) {
-  for (int i = 0; i < ARRAYSIZE(g_Phonemes); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (test->code == code) return test->string;
   }
@@ -97,7 +97,7 @@ const char *ConvertPhoneme(int code) {
 // Output : int
 //-----------------------------------------------------------------------------
 int TextToPhoneme(const char *text) {
-  for (int i = 0; i < ARRAYSIZE(g_Phonemes); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (!stricmp(test->string, text)) return test->code;
   }
@@ -112,7 +112,7 @@ int TextToPhoneme(const char *text) {
 // Output : float
 //-----------------------------------------------------------------------------
 float WeightForPhonemeCode(int code) {
-  for (int i = 0; i < ARRAYSIZE(g_Phonemes); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (test->code == code) return test->weight;
   }
@@ -127,7 +127,7 @@ float WeightForPhonemeCode(int code) {
 // Output : float
 //-----------------------------------------------------------------------------
 float WeightForPhoneme(char *text) {
-  for (int i = 0; i < ARRAYSIZE(g_Phonemes); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (!stricmp(test->string, text)) return test->weight;
   }
@@ -136,7 +136,7 @@ float WeightForPhoneme(char *text) {
   return 1.0f;
 }
 
-int NumPhonemes() { return ARRAYSIZE(g_Phonemes); }
+int NumPhonemes() { return SOURCE_ARRAYSIZE(g_Phonemes); }
 
 const char *NameForPhonemeByIndex(int index) {
   Assert(index >= 0 && index < NumPhonemes());
@@ -149,7 +149,7 @@ const char *NameForPhonemeByIndex(int index) {
 // Output : int
 //-----------------------------------------------------------------------------
 int TextToPhonemeIndex(const char *text) {
-  for (int i = 0; i < ARRAYSIZE(g_Phonemes); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
     if (!stricmp(test->string, text)) return i;
   }

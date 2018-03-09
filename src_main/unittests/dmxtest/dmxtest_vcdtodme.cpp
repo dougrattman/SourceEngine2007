@@ -62,8 +62,8 @@ DEFINE_TESTCASE_NOSUITE( DmxTestVcdToDme )
 	g_pDmElementFramework->BeginEdit();
 
 	const char *pFileName = vcdtestfile;
-	char pFullPathName[ MAX_PATH ];
-	char pDir[ MAX_PATH ];
+	char pFullPathName[ SOURCE_MAX_PATH ];
+	char pDir[ SOURCE_MAX_PATH ];
 	if ( g_pFullFileSystem->GetCurrentDirectory( pDir, sizeof( pDir ) ) )
 	{
 		V_ComposeFileName( pDir, vcdtestfile, pFullPathName, sizeof( pFullPathName ) );

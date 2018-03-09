@@ -6,7 +6,7 @@
 #include "base/include/windows/windows_light.h"
 #endif
 
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/fasttimer.h"
 #include "tier0/include/icommandline.h"
@@ -38,7 +38,7 @@ inline void ServiceJobAndRelease(CJob *pJob, int iThread = -1) {
 MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()
 MSVC_DISABLE_WARNING(4324)
 
-class ALIGN16 CJobQueue {
+class alignas(16) CJobQueue {
  public:
   CJobQueue() : m_nItems(0), m_nMaxItems(INT_MAX) {}
 
@@ -275,11 +275,11 @@ class CJobThread : public CWorkerThread {
 
  private:
   unsigned Wait(int nHandles, HANDLE *pHandles) {
-    unsigned waitResult;
+    [[maybe_unused]] unsigned waitResult;
 #ifdef _DEBUG
     while ((waitResult = WaitForMultipleObjects(nHandles, pHandles, FALSE,
                                                 10)) == WAIT_TIMEOUT) {
-      NOTE_UNUSED(waitResult);  // break here
+      ;  // break here
     }
 #else
     waitResult = WaitForMultipleObjects(nHandles, pHandles, FALSE, INFINITE);
@@ -308,7 +308,7 @@ class CJobThread : public CWorkerThread {
 
     ++m_pOwner->m_nIdleThreads;
     m_IdleEvent.Set();
-    while (!bExit && (waitResult = Wait(ARRAYSIZE(waitHandles), waitHandles)) !=
+    while (!bExit && (waitResult = Wait(SOURCE_ARRAYSIZE(waitHandles), waitHandles)) !=
                          WAIT_FAILED) {
       if (PeekCall()) {
         switch (GetCallParam()) {
@@ -510,9 +510,8 @@ void CThreadPool::AddJob(CJob *pJob) {
 
   if (!pJob->CanExecute()) {
     // Already handled
-    ExecuteOnce(
-        Warning("Attempted to add job to job queue that has already been "
-                "completed.\n"));
+    Warning("Attempted to add job to job queue that has already been "
+                "completed.\n");
     return;
   }
 
@@ -564,8 +563,8 @@ void CThreadPool::ChangePriority(CJob *pJob, JobPriority_t priority) {
     pJob->SetPriority(priority);
     m_SharedQueue.Push(pJob);
   } else {
-    ExecuteOnce(if (pJob->GetPriority() != priority) DevMsg(
-        "CThreadPool::RemoveJob not implemented right now."));
+    if (pJob->GetPriority() != priority) DevMsg(
+        "CThreadPool::RemoveJob not implemented right now.");
   }
 }
 
@@ -818,7 +817,7 @@ CJob *CThreadPool::GetDummyJob() {
   return &dummyJob;
 }
 
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 
 IThreadPool *g_pThreadPool = NULL;
 
@@ -840,7 +839,7 @@ JOB_INTERFACE void DestroyThreadPool(IThreadPool *pPool) {}
 
 #endif
 
-#if !defined(_LINUX)
+#if !defined(OS_POSIX)
 namespace ThreadPoolTest {
 int g_iSleep;
 
@@ -898,13 +897,13 @@ void Test(bool bDistribute, bool bSleep = true, bool bFinishExecute = false,
         }
 
         CCountJob jobs[4000];
-        g_nTotalToComplete = ARRAYSIZE(jobs);
+        g_nTotalToComplete = SOURCE_ARRAYSIZE(jobs);
 
         CFastTimer timer, suspendTimer;
 
         suspendTimer.Start();
         timer.Start();
-        for (int j = 0; j < ARRAYSIZE(jobs); j++) {
+        for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
           jobs[j].SetFlags(JF_QUEUE);
           jobs[j].bDoWork = bDoWork;
           g_pTestThreadPool->AddJob(&jobs[j]);
@@ -927,7 +926,7 @@ void Test(bool bDistribute, bool bSleep = true, bool bFinishExecute = false,
         g_done.Reset();
 
         int counts[8] = {0};
-        for (int j = 0; j < ARRAYSIZE(jobs); j++) {
+        for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
           if (jobs[j].GetServiceThread() != -1) {
             counts[jobs[j].GetServiceThread()]++;
             jobs[j].ClearServiceThread();
@@ -968,8 +967,8 @@ class CExecuteTestJob : public CJob {
     }
 
     for (size_t i = 0; i < 50; ++i) {
-      const unsigned int hash1{HashBlock(memory, ARRAYSIZE(memory))},
-          hash2{HashBlock(memory, ARRAYSIZE(memory))};  //-V656
+      const unsigned int hash1{HashBlock(memory, SOURCE_ARRAYSIZE(memory))},
+          hash2{HashBlock(memory, SOURCE_ARRAYSIZE(memory))};  //-V656
 
       (void)sqrt((float)hash1 + (float)hash2 + 10.0f);  //-V530
     }
@@ -1022,7 +1021,7 @@ void TestForcedExecute() {
       g_pTestThreadPool->Start(params, "Tst");
 
       static CExecuteTestJob jobs[4000];
-      for (int j = 0; j < ARRAYSIZE(jobs); j++) {
+      for (int j = 0; j < SOURCE_ARRAYSIZE(jobs); j++) {
         g_ReadyToExecute = FALSE;
 
         for (int k = 0; k < i; k++) {
@@ -1134,4 +1133,4 @@ void RunThreadPoolTests() {
   ThreadPoolTest::TestForcedExecute();
 }
 
-#endif  // _LINUX
+#endif  // OS_POSIX

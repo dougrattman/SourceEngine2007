@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef PHONEMEEXTRACTOR_H
 #define PHONEMEEXTRACTOR_H
@@ -19,7 +19,7 @@ typedef enum {
   SR_RESULT_FAILED
 } SR_RESULT;
 
-abstract_class IPhonemeExtractor {
+the_interface IPhonemeExtractor {
  public:
   virtual PE_APITYPE GetAPIType() const = 0;
 

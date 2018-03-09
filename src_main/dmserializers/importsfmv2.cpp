@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <climits>
 #include "datamodel/dmelement.h"
@@ -66,7 +66,7 @@ static LayerType_t g_LayerTypes[] = {
 };
 
 int GetLogType(char const *type) {
-  int c = ARRAYSIZE(g_LayerTypes);
+  int c = SOURCE_ARRAYSIZE(g_LayerTypes);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(type, g_LayerTypes[i].logtype))
       return g_LayerTypes[i].datatype;
@@ -75,7 +75,7 @@ int GetLogType(char const *type) {
 }
 
 char const *GetLogLayerType(int nDataType) {
-  int c = ARRAYSIZE(g_LayerTypes);
+  int c = SOURCE_ARRAYSIZE(g_LayerTypes);
   for (int i = 0; i < c; ++i) {
     if (nDataType == g_LayerTypes[i].datatype)
       return g_LayerTypes[i].loglayertype;
@@ -84,7 +84,7 @@ char const *GetLogLayerType(int nDataType) {
 }
 
 char const *GetLogLayerType(char const *logType) {
-  int c = ARRAYSIZE(g_LayerTypes);
+  int c = SOURCE_ARRAYSIZE(g_LayerTypes);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(logType, g_LayerTypes[i].logtype))
       return g_LayerTypes[i].loglayertype;

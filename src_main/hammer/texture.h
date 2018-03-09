@@ -146,7 +146,7 @@ class CTexture : public IEditorTexture
 
 		bool m_bHasAlpha;
 
-		char m_szName[MAX_PATH];
+		char m_szName[SOURCE_MAX_PATH];
 
 		void *m_pImageData;
 };

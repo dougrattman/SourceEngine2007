@@ -91,8 +91,8 @@ IFileSystem *g_pFileSystem = NULL;
 
 bool g_bInError = false;
 
-static char gamedir[MAX_PATH];        // full path to gamedir U:\main\game\ep2
-static char gamedirsimple[MAX_PATH];  // just short name:  ep2
+static char gamedir[SOURCE_MAX_PATH];        // full path to gamedir U:\main\game\ep2
+static char gamedirsimple[SOURCE_MAX_PATH];  // just short name:  ep2
 
 // Filesystem dialog module wrappers.
 CSysModule *g_pFSDialogModule = 0;
@@ -191,7 +191,7 @@ class TestWindow : public CVGuiPanelWnd, public IFacePoserToolWindow {
 };
 
 //-----------------------------------------------------------------------------
-// FIXME: Remove this crap (from cmdlib.cpp)
+// TODO(d.rattman): Remove this crap (from cmdlib.cpp)
 // We can't include cmdlib owing to appframework incompatibilities
 //-----------------------------------------------------------------------------
 void Q_mkdir(const char *path) {
@@ -257,7 +257,7 @@ char *ExpandPath(char *path) {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Move into appsystem framework
+// TODO(d.rattman): Move into appsystem framework
 //-----------------------------------------------------------------------------
 void LoadFileSystemDialogModule() {
   Assert(!g_pFSDialogModule);
@@ -724,7 +724,7 @@ class CMDLViewerModelTab : public CTabWindow {
     int idx = getSelectedIndex();
     if (idx < 0) return;
 
-    // FIXME: Do any necessary window resetting here!!!
+    // TODO(d.rattman): Do any necessary window resetting here!!!
     g_pControlPanel->ChangeModel(models->GetModelFileName(idx));
   }
 
@@ -1428,7 +1428,7 @@ void MDLViewer::LoadModel_Steam() {
   pDlg->SetFilterMdlAndJpgFiles(true);
 
   if (pDlg->DoModal() == IDOK) {
-    char filename[MAX_PATH];
+    char filename[SOURCE_MAX_PATH];
     pDlg->GetFilename(filename, sizeof(filename));
     LoadModelFile(filename);
   }

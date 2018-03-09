@@ -25,11 +25,11 @@
 #include "IGameUIFuncs.h" // for key bindings
 #include <igameresources.h>
 #include <game/client/iviewport.h>
-#include <cstdlib> // MAX_PATH define
+#include <cstdlib> // SOURCE_MAX_PATH define
 #include <cstdio>
 #include "tier1/byteswap.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IGameUIFuncs *gameuifuncs; // for key binding details
@@ -187,7 +187,7 @@ void CTeamMenu::LoadMapPage( const char *mapName )
 	// Save off the map name so we can re-load the page in ApplySchemeSettings().
 	Q_strncpy( m_szMapName, mapName, strlen( mapName ) + 1 );
 	
-	char mapRES[ MAX_PATH ];
+	char mapRES[ SOURCE_MAX_PATH ];
 
 	char uilanguage[ 64 ];
 	engine->GetUILanguage( uilanguage, sizeof( uilanguage ) );
@@ -209,10 +209,10 @@ void CTeamMenu::LoadMapPage( const char *mapName )
 	if( bFoundHTML || g_pFullFileSystem->FileExists( mapRES ) )
 	{
 		// it's a local HTML file
-		char localURL[ _MAX_PATH + 7 ];
+		char localURL[ SOURCE_MAX_PATH + 7 ];
 		Q_strncpy( localURL, "file://", sizeof( localURL ) );
 
-		char pPathData[ _MAX_PATH ];
+		char pPathData[ SOURCE_MAX_PATH ];
 		g_pFullFileSystem->GetLocalPath( mapRES, pPathData, sizeof(pPathData) );
 		Q_strncat( localURL, pPathData, sizeof( localURL ), COPY_ALL_CHARACTERS );
 

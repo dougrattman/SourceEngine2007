@@ -11,7 +11,7 @@
 #include "c_vehicle_crane.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int ScreenTransform( const Vector& point, Vector& screen );
@@ -124,7 +124,7 @@ void C_PropCrane::GetVehicleViewPosition( int nRole, Vector *pAbsOrigin, QAngle 
 //-----------------------------------------------------------------------------
 void C_PropCrane::GetVehicleClipPlanes( float &flZNear, float &flZFar ) const
 {
-	// FIXME: Need something a better long-term, this fixes the buggy.
+	// TODO(d.rattman): Need something a better long-term, this fixes the buggy.
 	flZNear = 6;
 }
 

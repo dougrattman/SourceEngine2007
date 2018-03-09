@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Converts .vmt material paths to texture map names
 //			Does so via VPROJECT parsing gameinfo.txt and then searching
@@ -266,8 +266,8 @@ void CVsVmtToTexNode::VmtError(
 
 	if ( texturePath == "" )
 	{
-		char pTmpBuf0[ MAX_PATH ];
-		char pTmpBuf1[ MAX_PATH ];
+		char pTmpBuf0[ SOURCE_MAX_PATH ];
+		char pTmpBuf1[ SOURCE_MAX_PATH ];
 
 		const char *const vproject( getenv( "VPROJECT" ) );
 		if ( vproject && *vproject != '\0' )
@@ -312,13 +312,13 @@ void CVsVmtToTexNode::VmtToTex(
 	// Q_PATHSEP == Quoted Path Separator!
 #ifdef _WIN32
 #define Q_PATHSEP "\\"
-#elif _LINUX
+#elif OS_POSIX
 #define Q_PATHSEP "/"
 #endif
 
 	// Convert material path into a .vmt file
-	char pTmpBuf0[ MAX_PATH ] = { "materials" };
-	char pTmpBuf1[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ] = { "materials" };
+	char pTmpBuf1[ SOURCE_MAX_PATH ];
 
 	Q_ComposeFileName( pTmpBuf0, materialPath.asChar(), pTmpBuf1, sizeof( pTmpBuf1 ) );
 	Q_SetExtension( pTmpBuf1, ".vmt", sizeof( pTmpBuf1 ) );

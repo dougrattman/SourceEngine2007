@@ -54,7 +54,7 @@ enum LevelLoadingProgress_e {
 //-----------------------------------------------------------------------------
 // Purpose: Centerpoint for handling all user interface in the engine
 //-----------------------------------------------------------------------------
-abstract_class IEngineVGuiInternal : public IEngineVGui {
+the_interface IEngineVGuiInternal : public IEngineVGui {
  public:
   virtual void Init() = 0;
   virtual void Connect() = 0;

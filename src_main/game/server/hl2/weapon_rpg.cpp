@@ -36,7 +36,7 @@
 	extern int g_interactionPlayerLaunchedRPG;
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	RPG_SPEED	1500
@@ -476,7 +476,7 @@ void CMissile::GetShootPosition( CLaserDot *pLaserDot, Vector *pShootPosition )
 {
 	if ( pLaserDot->GetOwnerEntity() != NULL )
 	{
-		//FIXME: Do we care this isn't exactly the muzzle position?
+		//TODO(d.rattman): Do we care this isn't exactly the muzzle position?
 		*pShootPosition = pLaserDot->GetOwnerEntity()->WorldSpaceCenter();
 	}
 	else
@@ -1772,7 +1772,7 @@ Vector CWeaponRPG::GetLaserPosition( void )
 	if ( m_hLaserDot != NULL )
 		return m_hLaserDot->GetAbsOrigin();
 
-	//FIXME: The laser dot sprite is not active, this code should not be allowed!
+	//TODO(d.rattman): The laser dot sprite is not active, this code should not be allowed!
 	assert(0);
 	return vec3_origin;
 }

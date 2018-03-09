@@ -213,7 +213,7 @@ public:  // Server Hooks
 
 public:  // Other Hooks
 	// If any tool returns false, the engine will not actually quit
-	// FIXME:  Not implemented yet
+	// TODO(d.rattman):  Not implemented yet
 	virtual bool	CanQuit() = 0;
 
 	// Called at end of Host_Init

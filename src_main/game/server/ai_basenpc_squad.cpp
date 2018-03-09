@@ -18,7 +18,7 @@
 #include "ai_hint.h"
 #include "IEffects.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ bool CAI_BaseNPC::IsValidCover( const Vector &vecCoverLocation, CAI_Hint const *
 	// Make sure my hull can fit at this node before accepting it. 
 	// Could be another NPC there or it could be blocked
 	// ----------------------------------------------------------------
-	// FIXME: shouldn't this see that if I crouch behind it it'll be safe?
+	// TODO(d.rattman): shouldn't this see that if I crouch behind it it'll be safe?
 	Vector startPos = vecCoverLocation;
 	startPos.z -= GetHullMins().z;  // Move hull bottom up to node
 	Vector endPos	= startPos;

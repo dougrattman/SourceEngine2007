@@ -210,7 +210,7 @@ void CTriggerWeaponDissolve::DissolveThink(void) {
       // This must be the last weapon for us to care
       if (numWeapons > 1) continue;
 
-      // FIXME: Make them do this on a stagger!
+      // TODO(d.rattman): Make them do this on a stagger!
 
       // All conduits send power to the weapon
       for (int i = 0; i < m_pConduitPoints.Count(); i++) {

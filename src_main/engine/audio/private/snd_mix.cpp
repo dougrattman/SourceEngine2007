@@ -10,17 +10,14 @@
 #include "icliententity.h"
 #include "icliententitylist.h"
 #include "mouthinfo.h"
-
-// memdbgon must be the last include file in a .cpp file!!!
+#include "build/include/build_config.h"
+ 
 #include "tier0/include/memdbgon.h"
 
-#if defined __i386__ && !defined __linux__
+#if defined ARCH_CPU_X86 && !defined __linux__
 #define id386 1
 #else
 #define id386 0
-#endif  // __i386__
-
-#if defined(_WIN32) && id386
 #endif
 
 // NOTE: !!!!!! YOU MUST UPDATE SND_MIXA.S IF THIS VALUE IS CHANGED !!!!!
@@ -41,7 +38,7 @@ bool DSP_RoomDSPIsOff(void);
 bool BChannelLowVolume(channel_t *pch, int vol_min);
 void ChannelCopyVolumes(channel_t *pch, int *pvolume_dest, int ivol_start,
                         int cvol);
-float ChannelLoudestCurVolume(const channel_t *RESTRICT pch);
+float ChannelLoudestCurVolume(const channel_t *SOURCE_RESTRICT pch);
 
 extern int g_soundtime;
 extern float host_frametime;

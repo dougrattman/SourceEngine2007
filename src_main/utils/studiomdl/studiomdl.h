@@ -63,7 +63,7 @@ EXTERN	char		outname[1024];
 //EXTERN	char		g_pPlatformName[1024];
 EXTERN  qboolean	cdset;
 EXTERN  int			numdirs;
-EXTERN	char		cddir[32][MAX_PATH];
+EXTERN	char		cddir[32][SOURCE_MAX_PATH];
 EXTERN	int			numcdtextures;
 EXTERN	char *		cdtextures[16];
 EXTERN  char		fullpath[1024];
@@ -74,8 +74,8 @@ EXTERN  float		g_currentscale;
 EXTERN  RadianEuler	g_defaultrotation;
 
 
-EXTERN	char		defaulttexture[16][MAX_PATH];
-EXTERN	char		sourcetexture[16][MAX_PATH];
+EXTERN	char		defaulttexture[16][SOURCE_MAX_PATH];
+EXTERN	char		sourcetexture[16][SOURCE_MAX_PATH];
 
 EXTERN	int			numrep;
 
@@ -578,7 +578,7 @@ struct s_animation_t
 	bool			doesOverride;
 	int				index;
 	char			name[MAXSTUDIONAME];
-	char			filename[MAX_PATH];
+	char			filename[SOURCE_MAX_PATH];
 
 	/*
 	int				animsubindex;
@@ -586,7 +586,7 @@ struct s_animation_t
 	// For sharing outside of current .mdl file
 	bool			shared_group_checkvalidity;
 	bool			shared_group_valid;
-	char			shared_animgroup_file[ MAX_PATH ]; // share file name
+	char			shared_animgroup_file[ SOURCE_MAX_PATH ]; // share file name
 	char			shared_animgroup_name[ MAXSTUDIONAME ]; // group name in share file
 	int				shared_group_subindex;
 	studioanimhdr_t *shared_group_header;
@@ -614,7 +614,7 @@ struct s_animation_t
 	RadianEuler		rotation; 
 
 	s_source_t		*source;
-	char			animationname[MAX_PATH];
+	char			animationname[SOURCE_MAX_PATH];
 
 	Vector 			bmin;
 	Vector			bmax;
@@ -779,7 +779,7 @@ struct s_poseparameter_t
 	int		flags;
 	float	loop;
 };
-EXTERN s_poseparameter_t g_pose[32]; // FIXME: this shouldn't be hard coded
+EXTERN s_poseparameter_t g_pose[32]; // TODO(d.rattman): this shouldn't be hard coded
 
 
 EXTERN int g_numxnodes;
@@ -797,7 +797,7 @@ struct rgb2_t
 	float r, g, b, a;
 };
 
-// FIXME: what about texture overrides inline with loading models
+// TODO(d.rattman): what about texture overrides inline with loading models
 enum TextureFlags_t
 {
 	RELATIVE_TEXTURE_PATH_SPECIFIED = 0x1
@@ -805,7 +805,7 @@ enum TextureFlags_t
 
 struct s_texture_t
 {
-	char	name[MAX_PATH];
+	char	name[SOURCE_MAX_PATH];
 	int		flags;
 	int		parent;
 	int		material;
@@ -872,7 +872,7 @@ struct s_loddata_t
 class s_sourceanim_t
 {
 public:
-	char animationname[MAX_PATH];
+	char animationname[SOURCE_MAX_PATH];
 	int numframes;
 	int startframe;
 	int endframe;
@@ -891,7 +891,7 @@ public:
 // raw off-disk source files.  Raw data should be not processed.
 struct s_source_t
 {
-	char	filename[MAX_PATH];
+	char	filename[SOURCE_MAX_PATH];
 	int 	time;	// time stamp
 
 	bool	isActiveModel;
@@ -992,7 +992,7 @@ struct s_eyeball_t
 struct s_model_t
 {
 	char name[MAXSTUDIONAME];
-	char filename[MAX_PATH];
+	char filename[SOURCE_MAX_PATH];
 
 	// needs local scaling and rotation paramaters
 	s_source_t	 *source; // index into source table
@@ -1067,7 +1067,7 @@ struct s_flexkey_t
 	int	 flexpair;
 	
 	s_source_t	 *source; // index into source table
-	char animationname[MAX_PATH];
+	char animationname[SOURCE_MAX_PATH];
 
 	int	imodel;
 	int	frame;
@@ -1116,7 +1116,7 @@ EXTERN s_flexrule_t g_flexrule[MAXSTUDIOFLEXRULES];
 
 struct s_combinationcontrol_t
 {
-	char name[MAX_PATH];
+	char name[SOURCE_MAX_PATH];
 };
 
 struct s_combinationrule_t

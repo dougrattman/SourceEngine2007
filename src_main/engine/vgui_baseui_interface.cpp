@@ -81,7 +81,7 @@
 #include "vgui_DebugSystemPanel.h"
 #include "vgui_askconnectpanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -722,7 +722,7 @@ void CEngineVGui::Init() {
   // Each mod acn have its own language.txt in addition to the
   // valve_%%langauge%%.txt file under defaultgamedir. load mod-specific
   // localization file for kb_act.lst, user.scr, settings.scr, etc.
-  char szFileName[MAX_PATH];
+  char szFileName[SOURCE_MAX_PATH];
   Q_snprintf(szFileName, sizeof(szFileName) - 1, "resource/%s_%%language%%.txt",
              GetCurrentMod());
   szFileName[sizeof(szFileName) - 1] = '\0';
@@ -1398,7 +1398,7 @@ bool CEngineVGui::Key_Event(const InputEvent_t &event) {
 
   if (g_pMatSystemSurface && g_pMatSystemSurface->HandleInputEvent(event)) {
     // always let the engine handle the console keys
-    // FIXME: Do a lookup of the key bound to toggleconsole
+    // TODO(d.rattman): Do a lookup of the key bound to toggleconsole
     // want to cache it off so the lookup happens only when keys are bound?
     if (code == KEY_BACKQUOTE) return false;
     return true;

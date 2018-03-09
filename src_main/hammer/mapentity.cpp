@@ -13,7 +13,7 @@
 #include "MapSolid.h"
 #include "MapSprite.h"
 #include "MapSweptPlayerHull.h"
-#include "MapView2D.h"  // dvs FIXME: For HitTest2D implementation
+#include "MapView2D.h"  // dvs TODO(d.rattman): For HitTest2D implementation
 #include "MapViewLogical.h"
 #include "MapWorld.h"
 #include "Options.h"
@@ -26,7 +26,7 @@
 #include "hammer.h"
 #include "hammer_mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS(CMapEntity)
@@ -347,7 +347,7 @@ void CMapEntity::AddHelpersForClass(GDclass *pClass, bool bLoading) {
     //
     // Look for keys that define helpers.
     //
-    // FIXME: make this totally data driven like the helper factory, or better
+    // TODO(d.rattman): make this totally data driven like the helper factory, or better
     //		  yet, like the LINK_ENTITY_TO_CLASS stuff in the game DLL
     int nVarCount = pClass->GetVariableCount();
     for (int i = 0; i < nVarCount; i++) {
@@ -735,7 +735,7 @@ static inline void BuildNewTargetName(const char *pOldName,
   // wildcards when we replace the name.
   //
   // For example, "oldname*" would become "newname*" instead of just "newname"
-  // FIXME: ??? handle different-length names with wildcards, eg. "old_vort*" =>
+  // TODO(d.rattman): ??? handle different-length names with wildcards, eg. "old_vort*" =>
   // "new_weasel*"
   const char *pszWildcard = strchr(pOldName, '*');
   if (pszWildcard) {

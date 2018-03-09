@@ -167,7 +167,7 @@ class CSaveRestoreFileSystem : public ISaveRestoreFileSystem {
   unsigned int CompressedSize(const char *pFileName);
 
   CUtlSymbol AddString(const char *str) {
-    char szString[MAX_PATH];
+    char szString[SOURCE_MAX_PATH];
     Q_strncpy(szString, str, sizeof(szString));
     return m_pSaveDirectory->m_SymbolTable.AddString(Q_strlower(szString));
   }
@@ -644,11 +644,11 @@ void CSaveRestoreFileSystem::DirectorCopyToMemory(const char *pPath,
        i = GetDirectory().NextInorder(i)) {
     SaveFile_t &file = GetFile(i);
     const char *pName = GetString(file.name);
-    char szFileName[MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     if (Q_stristr(pName, ".hl")) {
       int fileSize = CompressedSize(pName);
       if (fileSize) {
-        Assert(Q_strlen(pName) <= MAX_PATH);
+        Assert(Q_strlen(pName) <= SOURCE_MAX_PATH);
 
         memset(szFileName, 0, sizeof(szFileName));
         Q_strncpy(szFileName, pName, sizeof(szFileName));
@@ -707,14 +707,14 @@ void CSaveRestoreFileSystem::DirectoryCopy(const char *pPath,
     const char *pName = GetString(file.name);
     if (Q_stristr(pName, ".hl")) {
       // Account for the lump header size
-      nWriteSize += MAX_PATH + sizeof(int) + file.nCompressedSize;
+      nWriteSize += SOURCE_MAX_PATH + sizeof(int) + file.nCompressedSize;
     }
   }
 
   // Fail to write
 #if defined(_X360)
   if (nWriteSize > XBX_SAVEGAME_BYTES) {
-    // FIXME: This error is now lost in the ether!
+    // TODO(d.rattman): This error is now lost in the ether!
     return;
   }
 #endif
@@ -735,11 +735,11 @@ void CSaveRestoreFileSystem::DirectoryCopy(const char *pPath,
     if (Q_stristr(pName, ".hl")) {
       int fileSize = CompressedSize(pName);
       if (fileSize) {
-        Assert(Q_strlen(pName) <= MAX_PATH);
+        Assert(Q_strlen(pName) <= SOURCE_MAX_PATH);
 
         g_pFileSystem->AsyncAppend(pDestFileName,
-                                   memcpy(new char[MAX_PATH], pName, MAX_PATH),
-                                   MAX_PATH, true);
+                                   memcpy(new char[SOURCE_MAX_PATH], pName, SOURCE_MAX_PATH),
+                                   SOURCE_MAX_PATH, true);
         g_pFileSystem->AsyncAppend(pDestFileName, new int(fileSize),
                                    sizeof(int), true);
 
@@ -760,11 +760,11 @@ bool CSaveRestoreFileSystem::DirectoryExtract(FileHandle_t pFile, int fileCount,
                                               bool bIsXSave) {
   int fileSize;
   FileHandle_t pCopy;
-  char fileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
 
   // Read compressed files from disk into the virtual directory
   for (int i = 0; i < fileCount; i++) {
-    Read(fileName, MAX_PATH, pFile);
+    Read(fileName, SOURCE_MAX_PATH, pFile);
     Read(&fileSize, sizeof(int), pFile);
     if (!fileSize) return false;
 
@@ -871,7 +871,7 @@ void CSaveRestoreFileSystem::DirectoryClear(const char *pPath, bool bIsXSave) {
 // Purpose: Transfer all save files from memory to disk.
 //-----------------------------------------------------------------------------
 void CSaveRestoreFileSystem::WriteSaveDirectoryToDisk(void) {
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
 
   int i = GetDirectory().FirstInorder();
   while (GetDirectory().IsValidIndex(i)) {
@@ -893,7 +893,7 @@ void CSaveRestoreFileSystem::WriteSaveDirectoryToDisk(void) {
 //-----------------------------------------------------------------------------
 void CSaveRestoreFileSystem::LoadSaveDirectoryFromDisk(const char *pPath) {
   char const *findfn;
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
 
   findfn = Sys_FindFirstEx(pPath, "DEFAULT_WRITE_PATH", NULL, 0);
 
@@ -962,13 +962,13 @@ CON_COMMAND(dump_x360_saves, "Dump X360 save games to disk") {
     return;
   }
 
-  char szInName[MAX_PATH];        // Read path from the container
-  char szOutName[MAX_PATH];       // Output path to the disk
-  char szFileNameBase[MAX_PATH];  // Name of the file minus directories or
+  char szInName[SOURCE_MAX_PATH];        // Read path from the container
+  char szOutName[SOURCE_MAX_PATH];       // Output path to the disk
+  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories or
                                   // extensions
   FileFindHandle_t findHandle;
 
-  char szSearchPath[MAX_PATH];
+  char szSearchPath[SOURCE_MAX_PATH];
   Q_snprintf(szSearchPath, sizeof(szSearchPath), "%s:\\*.*", GetCurrentMod());
 
   const char *pFileName = g_pFileSystem->FindFirst(szSearchPath, &findHandle);
@@ -1009,13 +1009,13 @@ CON_COMMAND(dump_x360_cfg, "Dump X360 config files to disk") {
     return;
   }
 
-  char szInName[MAX_PATH];        // Read path from the container
-  char szOutName[MAX_PATH];       // Output path to the disk
-  char szFileNameBase[MAX_PATH];  // Name of the file minus directories or
+  char szInName[SOURCE_MAX_PATH];        // Read path from the container
+  char szOutName[SOURCE_MAX_PATH];       // Output path to the disk
+  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories or
                                   // extensions
   FileFindHandle_t findHandle;
 
-  char szSearchPath[MAX_PATH];
+  char szSearchPath[SOURCE_MAX_PATH];
   Q_snprintf(szSearchPath, sizeof(szSearchPath), "cfg:\\*.*");
 
   const char *pFileName = g_pFileSystem->FindFirst(szSearchPath, &findHandle);
@@ -1076,7 +1076,7 @@ static bool FileCopy(FileHandle_t pOutput, FileHandle_t pInput, int fileSize) {
 }
 
 struct filelistelem_t {
-  char szFileName[MAX_PATH];
+  char szFileName[SOURCE_MAX_PATH];
 };
 
 //-----------------------------------------------------------------------------
@@ -1176,7 +1176,7 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
     g_pFileSystem->AsyncFinishAllWrites();
 
     // build the directory list
-    char basefindfn[MAX_PATH];
+    char basefindfn[SOURCE_MAX_PATH];
     const char *findfn = Sys_FindFirstEx(pPath, "DEFAULT_WRITE_PATH",
                                          basefindfn, sizeof(basefindfn));
     while (findfn) {
@@ -1189,7 +1189,7 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
     Sys_FindClose();
 
     // write the list of files to the save file
-    char szName[MAX_PATH];
+    char szName[SOURCE_MAX_PATH];
     for (int i = 0; i < list.Count(); i++) {
       if (!bIsXSave) {
         Q_snprintf(szName, sizeof(szName), "%s%s", saverestore->GetSaveDir(),
@@ -1203,12 +1203,12 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
 
       int fileSize = g_pFileSystem->Size(szName);
       if (fileSize) {
-        Assert(sizeof(list[i].szFileName) == MAX_PATH);
+        Assert(sizeof(list[i].szFileName) == SOURCE_MAX_PATH);
 
         SaveMsg("DirectoryCopy: AsyncAppend %s, %s\n", szName, pDestFileName);
         g_pFileSystem->AsyncAppend(
             pDestFileName,
-            memcpy(new char[MAX_PATH], list[i].szFileName, MAX_PATH), MAX_PATH,
+            memcpy(new char[SOURCE_MAX_PATH], list[i].szFileName, SOURCE_MAX_PATH), SOURCE_MAX_PATH,
             true);  // Filename can only be as long as a map name + extension
         g_pFileSystem->AsyncAppend(pDestFileName, new int(fileSize),
                                    sizeof(int), true);
@@ -1223,12 +1223,12 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
   bool DirectoryExtract(FileHandle_t pFile, int fileCount, bool bIsXSave) {
     int fileSize;
     FileHandle_t pCopy;
-    char szName[MAX_PATH], fileName[MAX_PATH];
+    char szName[SOURCE_MAX_PATH], fileName[SOURCE_MAX_PATH];
     bool success = true;
 
     for (int i = 0; i < fileCount && success; i++) {
       // Filename can only be as long as a map name + extension
-      if (g_pSaveRestoreFileSystem->Read(fileName, MAX_PATH, pFile) != MAX_PATH)
+      if (g_pSaveRestoreFileSystem->Read(fileName, SOURCE_MAX_PATH, pFile) != SOURCE_MAX_PATH)
         return false;
 
       if (g_pSaveRestoreFileSystem->Read(&fileSize, sizeof(int), pFile) !=
@@ -1276,7 +1276,7 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
   //-----------------------------------------------------------------------------
   void DirectoryClear(const char *pPath, bool bIsXSave) {
     char const *findfn;
-    char szPath[MAX_PATH];
+    char szPath[SOURCE_MAX_PATH];
 
     findfn = Sys_FindFirstEx(pPath, "DEFAULT_WRITE_PATH", NULL, 0);
     while (findfn != NULL) {

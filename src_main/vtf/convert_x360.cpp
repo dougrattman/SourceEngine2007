@@ -445,7 +445,7 @@ bool SerializeImageData(IVTFTexture *pSourceVTF, int frame, int face, int mip,
 bool ConvertVTFTo360Format(const char *pDebugName, CUtlBuffer &sourceBuf,
                            CUtlBuffer &targetBuf,
                            CompressFunc_t pCompressFunc) {
-#ifdef _LINUX
+#ifdef OS_POSIX
   return false;  // horrible gotos causing gcc headaches
 #else
   bool bRetVal;

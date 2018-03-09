@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of CSmdExport
 //
@@ -2067,10 +2067,10 @@ std::string CSmdExport::PrettyPrint(
 	const double &d )
 {
 	static int count( 0 );
-	static char buf[ MAX_PATH ];
+	static char buf[ SOURCE_MAX_PATH ];
 
 	*buf = '\0';
-	_snprintf( buf, MAX_PATH - 1, "%11.6lf", d );
+	_snprintf( buf, SOURCE_MAX_PATH - 1, "%11.6lf", d );
 	buf[ sizeof( buf ) - 1 ] = '\0';
 
 	if ( strchr( buf, '.' ) )

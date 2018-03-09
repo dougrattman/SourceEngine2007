@@ -23,7 +23,7 @@
 #include "npc_headcrab.h"
 #include "npcevent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define BREATH_VOL_MAX 0.6
@@ -350,7 +350,7 @@ void CNPC_PoisonZombie::Spawn(void) {
 // Purpose: Returns a moan sound for this class of zombie.
 //-----------------------------------------------------------------------------
 const char *CNPC_PoisonZombie::GetMoanSound(int nSound) {
-  return pMoanSounds[nSound % ARRAYSIZE(pMoanSounds)];
+  return pMoanSounds[nSound % SOURCE_ARRAYSIZE(pMoanSounds)];
 }
 
 //-----------------------------------------------------------------------------
@@ -581,12 +581,12 @@ void CNPC_PoisonZombie::BreatheOffShort(void) {
     ENVELOPE_CONTROLLER.SoundPlayEnvelope(
         m_pFastBreathSound, SOUNDCTRL_CHANGE_VOLUME,
         envPoisonZombieBreatheVolumeOffShort,
-        ARRAYSIZE(envPoisonZombieBreatheVolumeOffShort));
+        SOURCE_ARRAYSIZE(envPoisonZombieBreatheVolumeOffShort));
   } else {
     ENVELOPE_CONTROLLER.SoundPlayEnvelope(
         m_pSlowBreathSound, SOUNDCTRL_CHANGE_VOLUME,
         envPoisonZombieBreatheVolumeOffShort,
-        ARRAYSIZE(envPoisonZombieBreatheVolumeOffShort));
+        SOURCE_ARRAYSIZE(envPoisonZombieBreatheVolumeOffShort));
   }
 }
 
@@ -676,7 +676,7 @@ void CNPC_PoisonZombie::HandleAnimEvent(animevent_t *pEvent) {
 // Purpose: Returns the index of a randomly chosen crab to throw.
 //-----------------------------------------------------------------------------
 int CNPC_PoisonZombie::RandomThrowCrab(void) {
-  // FIXME: this could take a long time, theoretically
+  // TODO(d.rattman): this could take a long time, theoretically
   int nCrab = -1;
   do {
     int nTest = random->RandomInt(0, 2);
@@ -942,7 +942,7 @@ void CNPC_PoisonZombie::FootstepSound(bool fRightFoot) {
   if (ShouldPlayFootstepMoan()) {
     m_flNextMoanSound = gpGlobals->curtime;
     MoanSound(envPoisonZombieMoanVolumeFast,
-              ARRAYSIZE(envPoisonZombieMoanVolumeFast));
+              SOURCE_ARRAYSIZE(envPoisonZombieMoanVolumeFast));
   }
 }
 

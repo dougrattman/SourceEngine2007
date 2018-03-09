@@ -699,7 +699,7 @@ int CAI_PassengerBehaviorCompanion::SelectScheduleInsideVehicle( void )
 //-----------------------------------------------------------------------------
 int CAI_PassengerBehaviorCompanion::SelectScheduleOutsideVehicle( void )
 {
-	// FIXME: How can we get in here?
+	// TODO(d.rattman): How can we get in here?
 	Assert( m_hVehicle );
 	if ( m_hVehicle == NULL )
 		return SCHED_NONE;
@@ -970,7 +970,7 @@ void CAI_PassengerBehaviorCompanion::EnterVehicle( void )
 	m_flEnterBeginTime = gpGlobals->curtime;
 	
 	// Remove this flag because we're sitting so close we always think we're going to hit the player
-	// FIXME: We need to store this state so we don't incorrectly restore it later
+	// TODO(d.rattman): We need to store this state so we don't incorrectly restore it later
 	GetOuter()->CapabilitiesRemove( bits_CAP_NO_HIT_PLAYER );
 
 	// Discard enemies quickly
@@ -1015,10 +1015,10 @@ void CAI_PassengerBehaviorCompanion::FinishExitVehicle( void )
 	m_nExitAttempts = 0;
 	m_VehicleMonitor.ClearMark();
 
-	// FIXME: We need to store this state so we don't incorrectly restore it later
+	// TODO(d.rattman): We need to store this state so we don't incorrectly restore it later
 	GetOuter()->CapabilitiesAdd( bits_CAP_NO_HIT_PLAYER );
 
-	// FIXME: Restore this properly
+	// TODO(d.rattman): Restore this properly
 	GetOuter()->GetEnemies()->SetEnemyDiscardTime( AI_DEF_ENEMY_DISCARD_TIME );
 
 	SpeakIfAllowed( TLK_PASSENGER_FINISH_EXIT );
@@ -1136,7 +1136,7 @@ bool CAI_PassengerBehaviorCompanion::CanExitAtPosition( const Vector &vecTestPos
 		return false;
 
 	// Trace down to the ground
-	// FIXME: This piece of code is redundant and happening in IsValidTransitionPoint() as well
+	// TODO(d.rattman): This piece of code is redundant and happening in IsValidTransitionPoint() as well
 	/*
 	Vector vecGroundPos;
 	if ( FindGroundAtPosition( vecTestPos, GetOuter()->StepHeight(), 64.0f, &vecGroundPos ) == false )
@@ -1149,7 +1149,7 @@ bool CAI_PassengerBehaviorCompanion::CanExitAtPosition( const Vector &vecTestPos
 	CTraceFilterVehicleTransition skipFilter( GetOuter(), m_hVehicle, COLLISION_GROUP_NONE );
 	
 	// These are very approximated (and magical) numbers to allow passengers greater head room and leg room when transitioning
-	Vector vecMins = GetOuter()->GetHullMins() + Vector( 0, 0, GetOuter()->StepHeight()*2.0f ); // FIXME: 
+	Vector vecMins = GetOuter()->GetHullMins() + Vector( 0, 0, GetOuter()->StepHeight()*2.0f ); // TODO(d.rattman): 
 	Vector vecMaxs = GetOuter()->GetHullMaxs() - Vector( 0, 0, GetOuter()->StepHeight() );
 	
 	UTIL_TraceHull( GetOuter()->GetAbsOrigin(), vecGroundPos, vecMins, vecMaxs, MASK_NPCSOLID, &skipFilter, &tr );
@@ -1795,7 +1795,7 @@ void CAI_PassengerBehaviorCompanion::CalculateBodyLean( void )
 	float flLateralDisp = SimpleSplineRemapVal( m_vehicleState.m_vecLastAngles.z, 100.0f, -100.0f, -1.0f, 1.0f );
 	flLateralDisp = std::clamp( flLateralDisp, -1.0f, 1.0f );
 
-	// FIXME: Framerate dependent!
+	// TODO(d.rattman): Framerate dependent!
 	m_flLastLateralLean = ( m_flLastLateralLean * 0.2f ) + ( flLateralDisp * 0.8f );
 
 	// Here we can make Alyx do something different on an "extreme" lean condition
@@ -1817,7 +1817,7 @@ bool CAI_PassengerBehaviorCompanion::CanFidget( void )
 	if ( m_flNextFidgetTime > gpGlobals->curtime )
 		return false;
 
-	// FIXME: Really we want to check our readiness level at this point
+	// TODO(d.rattman): Really we want to check our readiness level at this point
 	if ( GetOuter()->GetEnemy() != NULL )
 		return false;
 

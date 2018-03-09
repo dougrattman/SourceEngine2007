@@ -17,7 +17,7 @@
 #include "hl2mp_gamerules.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ITEM_PICKUP_BOX_BLOAT		24
@@ -335,7 +335,7 @@ bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPlayer )
 
 	Vector vecEndPos = pPlayer->EyePosition();
 
-	// FIXME: This is the simple first try solution towards the problem.  We need to take edges and shape more into account
+	// TODO(d.rattman): This is the simple first try solution towards the problem.  We need to take edges and shape more into account
 	//		  for this to be fully robust.
 
 	// Trace between to see if we're occluded
@@ -344,7 +344,7 @@ bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPlayer )
 	UTIL_TraceLine( vecStartPos, vecEndPos, MASK_SOLID, &filter, &tr );
 
 	// Occluded
-	// FIXME: For now, we exclude starting in solid because there are cases where this doesn't matter
+	// TODO(d.rattman): For now, we exclude starting in solid because there are cases where this doesn't matter
 	if ( tr.fraction < 1.0f )
 		return false;
 

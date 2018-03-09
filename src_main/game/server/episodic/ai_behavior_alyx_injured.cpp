@@ -1,6 +1,6 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose: FIXME: This will ultimately become a more generic implementation
+// Purpose: TODO(d.rattman): This will ultimately become a more generic implementation
 //
 //=============================================================================
 
@@ -90,7 +90,7 @@ void CAI_BehaviorAlyxInjured::PopulateActivityMap( void )
 	m_ActivityMap.RemoveAll();
 
 	// Add all translations
-	for ( int i = 0; i < ARRAYSIZE( map ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( map ); i++ )
 	{
 		Assert( m_ActivityMap.Find( map[i].activity ) == m_ActivityMap.InvalidIndex() );
 		m_ActivityMap.Insert( map[i].activity, map[i].translation );
@@ -431,7 +431,7 @@ void CAI_BehaviorAlyxInjured::GatherConditions( void )
 		CBasePlayer *pPlayer = UTIL_PlayerByIndex( 1 );
 		if ( pPlayer != NULL )
 		{
-			// FIXME: This distance may need to be the length of the shortest walked path between the follower and the target
+			// TODO(d.rattman): This distance may need to be the length of the shortest walked path between the follower and the target
 
 			// Get our approximate distance to the player
 			float flDistToPlayer = UTIL_DistApprox2D( GetOuter()->GetAbsOrigin(), pPlayer->GetAbsOrigin() );
@@ -449,7 +449,7 @@ void CAI_BehaviorAlyxInjured::GatherConditions( void )
 		// Yell for help!
 		if ( bWarnPlayer )
 		{
-			// FIXME: This should be routed through the normal speaking code with a system to emit from the player's suit.
+			// TODO(d.rattman): This should be routed through the normal speaking code with a system to emit from the player's suit.
 			
 			CBasePlayer *pPlayer = UTIL_PlayerByIndex( 1 );
 			//float flPlayerDistSqr = ( GetOuter()->GetAbsOrigin() - pPlayer->GetAbsOrigin() ).LengthSqr();
@@ -561,7 +561,7 @@ AI_BEGIN_CUSTOM_SCHEDULE_PROVIDER( CAI_BehaviorAlyxInjured )
 
 		"	Tasks"
 		"		 TASK_STOP_MOVING			0"
-		"		 TASK_SET_ACTIVITY			ACTIVITY:ACT_IDLE" // FIXME: Scared idle?
+		"		 TASK_SET_ACTIVITY			ACTIVITY:ACT_IDLE" // TODO(d.rattman): Scared idle?
 		"		 TASK_FACE_ENEMY			0"
 		""
 		"	Interrupts"

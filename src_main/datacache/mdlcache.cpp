@@ -113,7 +113,7 @@ struct studiodata_t {
 
 DEFINE_FIXEDSIZE_ALLOCATOR_MT(studiodata_t, 128, CMemoryPool::GROW_SLOW);
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CTempAllocHelper {
@@ -180,15 +180,15 @@ unsigned ComputeHardwareDataSize(studiohwdata_t *pData) {
 }
 #endif
 
-static void MakeFilename(char szFileName[MAX_PATH], studiohdr_t *pStudioHdr,
+static void MakeFilename(char szFileName[SOURCE_MAX_PATH], studiohdr_t *pStudioHdr,
                          const char *pszExtension) {
-  char szBaseModelName[MAX_PATH];
+  char szBaseModelName[SOURCE_MAX_PATH];
 
-  Q_StripExtension(pStudioHdr->pszName(), szBaseModelName, MAX_PATH);
-  Q_snprintf(szFileName, MAX_PATH, "models/%s%s", szBaseModelName,
+  Q_StripExtension(pStudioHdr->pszName(), szBaseModelName, SOURCE_MAX_PATH);
+  Q_snprintf(szFileName, SOURCE_MAX_PATH, "models/%s%s", szBaseModelName,
              pszExtension);
   Q_FixSlashes(szFileName);
-#ifdef _LINUX
+#ifdef OS_POSIX
   Q_strlower(szFileName);
 #endif
 }
@@ -797,7 +797,7 @@ const char *CMDLCache::GetActualModelName(MDLHandle_t handle) {
 MDLHandle_t CMDLCache::FindMDL(const char *pMDLRelativePath) {
   // can't trust provided path
   // ensure provided path correctly resolves (Dictionary is case-insensitive)
-  char szFixedName[MAX_PATH];
+  char szFixedName[SOURCE_MAX_PATH];
   V_strncpy(szFixedName, pMDLRelativePath, sizeof(szFixedName));
   V_RemoveDotSlashes(szFixedName, '/');
 
@@ -852,7 +852,7 @@ int CMDLCache::GetRef(MDLHandle_t handle) {
 void CMDLCache::UnserializeVCollide(MDLHandle_t handle, bool synchronousLoad) {
   VPROF("CMDLCache::UnserializeVCollide");
 
-  // FIXME: Should the vcollde be played into cacheable memory?
+  // TODO(d.rattman): Should the vcollde be played into cacheable memory?
   studiodata_t *pStudioData = m_MDLDict[handle];
 
   int iAsync = GetAsyncInfoIndex(handle, MDLCACHE_VCOLLIDE);
@@ -881,11 +881,11 @@ void CMDLCache::UnserializeVCollide(MDLHandle_t handle, bool synchronousLoad) {
       }
     }
 
-    char pFileName[MAX_PATH];
-    Q_strncpy(pFileName, GetActualModelName(handle), MAX_PATH);
+    char pFileName[SOURCE_MAX_PATH];
+    Q_strncpy(pFileName, GetActualModelName(handle), SOURCE_MAX_PATH);
     Q_SetExtension(pFileName, ".phy", sizeof(pFileName));
     Q_FixSlashes(pFileName);
-#ifdef _LINUX
+#ifdef OS_POSIX
     Q_strlower(pFileName);
 #endif
     bool bAsyncLoad = mod_load_vcollide_async.GetBool() && !synchronousLoad;
@@ -1037,7 +1037,7 @@ unsigned char *CMDLCache::UnserializeAnimBlock(MDLHandle_t handle, int nBlock) {
   if (iAsync == NO_ASYNC) {
     studiohdr_t *pStudioHdr = GetStudioHdr(handle);
 
-    // FIXME: For consistency, the block name maybe shouldn't have 'model' in
+    // TODO(d.rattman): For consistency, the block name maybe shouldn't have 'model' in
     // it.
     char const *pModelName = pStudioHdr->pszAnimBlockName();
     mstudioanimblock_t *pBlock = pStudioHdr->pAnimBlock(nBlock);
@@ -1047,10 +1047,10 @@ unsigned char *CMDLCache::UnserializeAnimBlock(MDLHandle_t handle, int nBlock) {
     // allocate space in the cache
     pStudioData->m_pAnimBlock[nBlock] = NULL;
 
-    char pFileName[MAX_PATH];
+    char pFileName[SOURCE_MAX_PATH];
     Q_strncpy(pFileName, pModelName, sizeof(pFileName));
     Q_FixSlashes(pFileName);
-#ifdef _LINUX
+#ifdef OS_POSIX
     Q_strlower(pFileName);
 #endif
     MdlCacheMsg("MDLCache: Begin load Anim Block %s (block %i)\n",
@@ -1161,7 +1161,7 @@ int CMDLCache::GetAutoplayList(MDLHandle_t handle,
     return pVirtualModel->m_autoplaySequences.Count();
   }
 
-  // FIXME: Should we cache autoplay info here on demand instead of in
+  // TODO(d.rattman): Should we cache autoplay info here on demand instead of in
   // unserializeMDL?
   studiodata_t *pStudioData = m_MDLDict[handle];
   if (pAutoplayList) {
@@ -1179,7 +1179,7 @@ void CMDLCache::AllocateVirtualModel(MDLHandle_t handle) {
   Assert(pStudioData->m_pVirtualModel == NULL);
   pStudioData->m_pVirtualModel = new virtualmodel_t;
 
-  // FIXME: The old code slammed these; could have leaked memory?
+  // TODO(d.rattman): The old code slammed these; could have leaked memory?
   Assert(pStudioData->m_nAnimBlockCount == 0);
   Assert(pStudioData->m_pAnimBlock == NULL);
 }
@@ -1319,7 +1319,7 @@ bool CMDLCache::LoadHardwareData(MDLHandle_t handle) {
 
     // load and persist the vtx file
     // use model name for correct path
-    char pFileName[MAX_PATH];
+    char pFileName[SOURCE_MAX_PATH];
     MakeFilename(pFileName, pStudioHdr, GetVTXExtension());
 
     MdlCacheMsg("MDLCache: Begin load VTX %s\n", GetModelName(handle));
@@ -1538,7 +1538,7 @@ void CMDLCache::RestoreMaterialSystemObjects(int nChangeFlags) {
       MdlCacheMsg("MDLCache: Free VVD\n");
       MdlCacheMsg("MDLCache: Free VTX\n");
 
-      // FIXME: Do we have to free m_MDLCache + m_VertexCache?
+      // TODO(d.rattman): Do we have to free m_MDLCache + m_VertexCache?
       // Certainly we have to free m_IndexCache, cause that's a dx-level
       // specific vtx file.
       ClearAsync(i, MDLCACHE_STUDIOHWDATA, 0, true);
@@ -1588,7 +1588,7 @@ static bool MdlcacheCreateCallback(const char *pSourceName,
     if (bytes) {
       // If the file was an .mdl, attempt to swap the .ani as well
       if (Q_stristr(pSourceName, ".mdl")) {
-        char szANISourceName[MAX_PATH];
+        char szANISourceName[SOURCE_MAX_PATH];
         Q_StripExtension(pSourceName, szANISourceName, sizeof(szANISourceName));
         Q_strncat(szANISourceName, ".ani", sizeof(szANISourceName),
                   COPY_ALL_CHARACTERS);
@@ -1661,7 +1661,7 @@ studiohdr_t *CMDLCache::UnserializeMDL(MDLHandle_t handle, void *pData,
     m_MDLDict[handle]->m_nFlags |= STUDIODATA_FLAGS_LOCKED_MDL;
   }
 
-  // FIXME: Is there any way we can compute the size to load *before* loading in
+  // TODO(d.rattman): Is there any way we can compute the size to load *before* loading in
   // and read directly into cache memory? It would be nice to reduce cache
   // overhead here. move the complete, relocatable model to the cache
   memcpy(pHdr, pStudioHdrIn, pStudioHdrIn->length);
@@ -1688,10 +1688,10 @@ bool CMDLCache::ReadMDLFile(MDLHandle_t handle, const char *pMDLFileName,
                             CUtlBuffer &buf) {
   VPROF("CMDLCache::ReadMDLFile");
 
-  char pFileName[MAX_PATH];
+  char pFileName[SOURCE_MAX_PATH];
   Q_strncpy(pFileName, pMDLFileName, sizeof(pFileName));
   Q_FixSlashes(pFileName);
-#ifdef _LINUX
+#ifdef OS_POSIX
   Q_strlower(pFileName);
 #endif
 
@@ -1849,7 +1849,7 @@ void CMDLCache::TouchAllData(MDLHandle_t handle) {
       MDLHandle_t childHandle =
           (MDLHandle_t)(uintptr_t)pVModel->m_group[i].cache;
       if (childHandle != MDLHANDLE_INVALID) {
-        // FIXME: Should this be calling TouchAllData on the child?
+        // TODO(d.rattman): Should this be calling TouchAllData on the child?
         GetStudioHdr(childHandle);
       }
     }
@@ -2136,7 +2136,7 @@ bool CMDLCache::VerifyHeaders(studiohdr_t *pStudioHdr) {
     return true;
   }
 
-  char pFileName[MAX_PATH];
+  char pFileName[SOURCE_MAX_PATH];
 
   MakeFilename(pFileName, pStudioHdr, ".vvd");
 
@@ -2425,7 +2425,7 @@ bool CMDLCache::ProcessDataIntoCache(MDLHandle_t handle,
       m_pMeshCacheSection->Unlock(pStudioDataCurrent->m_VertexCache);
       m_pMeshCacheSection->Age(pStudioDataCurrent->m_VertexCache);
 
-      // FIXME: thin VVD data on PC too (have to address alt-tab, various
+      // TODO(d.rattman): thin VVD data on PC too (have to address alt-tab, various
       // DX8/DX7/debug software paths in studiorender, tools, etc)
       static bool bCompressedVVDs =
           CommandLine()->CheckParm("-no_compressed_vvds") == NULL;
@@ -2440,8 +2440,8 @@ bool CMDLCache::ProcessDataIntoCache(MDLHandle_t handle,
         MdlCacheMsg("MDLCache: Finish load anim block %s (block %i)\n",
                     pStudioHdrCurrent->pszName(), iAnimBlock);
 
-        char pCacheName[MAX_PATH];
-        Q_snprintf(pCacheName, MAX_PATH, "%s (block %i)",
+        char pCacheName[SOURCE_MAX_PATH];
+        Q_snprintf(pCacheName, SOURCE_MAX_PATH, "%s (block %i)",
                    pStudioHdrCurrent->pszName(), iAnimBlock);
 
         CacheData(&pStudioDataCurrent->m_pAnimBlock[iAnimBlock], pData,
@@ -2760,7 +2760,7 @@ vertexFileHeader_t *CMDLCache::BuildAndCacheVertexData(
 // Load and cache model's specified dynamic data
 //-----------------------------------------------------------------------------
 vertexFileHeader_t *CMDLCache::LoadVertexData(studiohdr_t *pStudioHdr) {
-  char pFileName[MAX_PATH];
+  char pFileName[SOURCE_MAX_PATH];
   MDLHandle_t handle;
 
   Assert(pStudioHdr);
@@ -3029,8 +3029,8 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
     return true;
   }
 
-  char szFilename[MAX_PATH];
-  char szNameOnDisk[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
+  char szNameOnDisk[SOURCE_MAX_PATH];
   V_strncpy(szFilename, GetActualModelName(handle), sizeof(szFilename));
   V_StripExtension(szFilename, szFilename, sizeof(szFilename));
 
@@ -3056,7 +3056,7 @@ bool CMDLCache::PreloadModel(MDLHandle_t handle) {
 
   if (bNeedsVTX) {
     // vtx extensions are .xxx.vtx, need to re-form as, ???.xxx.yyy.vtx
-    char szTempName[MAX_PATH];
+    char szTempName[SOURCE_MAX_PATH];
     V_snprintf(szNameOnDisk, sizeof(szNameOnDisk), "%s%s", szFilename,
                GetVTXExtension());
     V_StripExtension(szNameOnDisk, szTempName, sizeof(szTempName));

@@ -8,7 +8,7 @@
 #include "npc_vehicledriver.h"
 #include "vehicle_apc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_APCDRIVER_NO_ROCKET_ATTACK	0x10000

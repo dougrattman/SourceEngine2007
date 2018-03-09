@@ -2,7 +2,7 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER(WorldTwoTextureBlend, WorldTwoTextureBlend_DX6)
@@ -54,7 +54,7 @@ SHADER_DRAW {
     DetailAlphaMaskPass1(pShaderShadow, pShaderAPI, params, detailScale);
     DetailAlphaMaskPass2(pShaderShadow, pShaderAPI, detailScale);
   } else {
-    // FIXME: add multitexture support!
+    // TODO(d.rattman): add multitexture support!
     NormalModePass1(pShaderShadow, pShaderAPI);
     NormalModePass2(pShaderShadow, pShaderAPI, params, detailScale);
     NormalModePass3(pShaderShadow, pShaderAPI, params, detailScale);

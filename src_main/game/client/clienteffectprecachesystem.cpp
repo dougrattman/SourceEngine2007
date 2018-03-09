@@ -10,7 +10,7 @@
 #include "ClientEffectPrecacheSystem.h"
 #include "particles/particles.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //Global singelton accessor
@@ -31,7 +31,7 @@ void CClientEffectPrecacheSystem::LevelInitPreEntity( void )
 		m_Effects[i]->Cache();
 	}
 	
-	//FIXME: Double check this
+	//TODO(d.rattman): Double check this
 	//Finally, force the cache of these materials
 	materials->CacheUsedMaterials();
 

@@ -15,7 +15,7 @@
 //=========================================================
 // Machine gun base class
 //=========================================================
-abstract_class CHLMachineGun : public CBaseHLCombatWeapon
+the_interface CHLMachineGun : public CBaseHLCombatWeapon
 {
 public:
 	DECLARE_CLASS( CHLMachineGun, CBaseHLCombatWeapon );

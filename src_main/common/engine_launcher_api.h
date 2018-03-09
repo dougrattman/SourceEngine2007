@@ -32,7 +32,7 @@ enum {
 };
 
 // Main engine interface to launcher + tools
-abstract_class IEngineAPI : public IAppSystem {
+the_interface IEngineAPI : public IAppSystem {
  public:
   // This function must be called before init
   virtual void SetStartupInfo(StartupInfo_t & info) = 0;

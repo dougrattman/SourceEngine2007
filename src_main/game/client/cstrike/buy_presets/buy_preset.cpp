@@ -15,7 +15,7 @@
 #include "vgui/ILocalize.h"
 #include <vgui_controls/Controls.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar cl_rebuy;

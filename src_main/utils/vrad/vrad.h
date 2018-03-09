@@ -15,7 +15,7 @@
 #include "polylib.h"
 #include "raytrace.h"
 #include "threads.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "worldsize.h"
 
 #ifdef _WIN32
@@ -96,49 +96,49 @@ struct LightingValue_t {
   Vector m_vecLighting;
   float m_flDirectSunAmount;
 
-  FORCEINLINE bool IsValid(void) const {
+  SOURCE_FORCEINLINE bool IsValid(void) const {
     return (m_vecLighting.x >= 0 && m_vecLighting.y >= 0 &&
             m_vecLighting.z >= 0 && m_vecLighting.x < 1e10 &&
             m_vecLighting.y < 1e10 && m_vecLighting.z < 1e10);
   }
 
-  FORCEINLINE void Zero(void) {
+  SOURCE_FORCEINLINE void Zero(void) {
     m_vecLighting.Init(0, 0, 0);
     m_flDirectSunAmount = 0.0;
   }
 
-  FORCEINLINE void Scale(float m_flScale) {
+  SOURCE_FORCEINLINE void Scale(float m_flScale) {
     m_vecLighting *= m_flScale;
     m_flDirectSunAmount *= m_flScale;
   }
 
-  FORCEINLINE void AddWeighted(LightingValue_t const &src, float flWeight) {
+  SOURCE_FORCEINLINE void AddWeighted(LightingValue_t const &src, float flWeight) {
     m_vecLighting += flWeight * src.m_vecLighting;
     m_flDirectSunAmount += flWeight * src.m_flDirectSunAmount;
   }
 
-  FORCEINLINE void AddWeighted(Vector const &src, float flWeight) {
+  SOURCE_FORCEINLINE void AddWeighted(Vector const &src, float flWeight) {
     m_vecLighting += flWeight * src;
   }
 
-  FORCEINLINE float Intensity(void) const {
+  SOURCE_FORCEINLINE float Intensity(void) const {
     return m_vecLighting.x + m_vecLighting.y + m_vecLighting.z;
   }
 
-  FORCEINLINE void AddLight(float flAmount, Vector const &vecColor,
+  SOURCE_FORCEINLINE void AddLight(float flAmount, Vector const &vecColor,
                             float flSunAmount = 0.0) {
     VectorMA(m_vecLighting, flAmount, vecColor, m_vecLighting);
     m_flDirectSunAmount += flSunAmount;
     Assert(this->IsValid());
   }
 
-  FORCEINLINE void AddLight(LightingValue_t const &src) {
+  SOURCE_FORCEINLINE void AddLight(LightingValue_t const &src) {
     m_vecLighting += src.m_vecLighting;
     m_flDirectSunAmount += src.m_flDirectSunAmount;
     Assert(this->IsValid());
   }
 
-  FORCEINLINE void Init(float x, float y, float z) {
+  SOURCE_FORCEINLINE void Init(float x, float y, float z) {
     m_vecLighting.Init(x, y, z);
     m_flDirectSunAmount = 0.0;
   }
@@ -310,7 +310,7 @@ extern int dlight_map;
 extern float g_flMaxDispSampleSize;
 extern float g_SunAngularExtent;
 
-extern char source[MAX_PATH];
+extern char source[SOURCE_MAX_PATH];
 
 // Used by incremental lighting to trivial-reject faces.
 // There is a bit in here for each face telling whether or not any of the

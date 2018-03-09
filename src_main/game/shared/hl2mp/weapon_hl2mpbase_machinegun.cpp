@@ -15,7 +15,7 @@
 #include "weapon_hl2mpbase_machinegun.h"
 #include "in_buttons.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_NETWORKCLASS_ALIASED( HL2MPMachineGun, DT_HL2MPMachineGun )

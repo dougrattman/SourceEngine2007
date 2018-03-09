@@ -266,7 +266,7 @@ static void SetupLinkerSettings(ProjectInfo_t& info)
 	// Hook in the static library path
 	CString libPath;
 
-	// FIXME: Still haven't decided on build-specific publish dir
+	// TODO(d.rattman): Still haven't decided on build-specific publish dir
 
 	if (info.m_Public)
 	{

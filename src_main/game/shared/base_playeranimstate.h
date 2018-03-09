@@ -56,7 +56,7 @@ public:
 // CBasePlayerAnimState declaration.
 // ------------------------------------------------------------------------------------------------ //
 
-abstract_class CBasePlayerAnimState : virtual public IPlayerAnimState
+the_interface CBasePlayerAnimState : virtual public IPlayerAnimState
 {
 public:
 	DECLARE_CLASS_NOBASE( CBasePlayerAnimState );

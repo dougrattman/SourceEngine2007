@@ -20,7 +20,7 @@
 
 #include "c_sceneentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -110,10 +110,10 @@ bool C_SceneEntity::GetHWMorphSceneFileName( const char *pFilename, char *pHWMFi
 	}
 
 	// Find the hardware morph scene name and pass that along as well.
-	char szScene[MAX_PATH];
+	char szScene[SOURCE_MAX_PATH];
 	V_strcpy( szScene, pFilename );
 
-	char szSceneHWM[MAX_PATH];
+	char szSceneHWM[SOURCE_MAX_PATH];
 	szSceneHWM[0] = '\0';
 
 	char *pszToken = strtok( szScene, "/\\" );
@@ -305,11 +305,11 @@ void C_SceneEntity::PostDataUpdate( DataUpdateType_t updateType )
 	BaseClass::PostDataUpdate( updateType );
 
 	char const *str = GetSceneFileName();
-	char szFilename[MAX_PATH];
-	Assert( V_strlen( str ) < MAX_PATH );
+	char szFilename[SOURCE_MAX_PATH];
+	Assert( V_strlen( str ) < SOURCE_MAX_PATH );
 	V_strcpy( szFilename, str );
 
-	char szSceneHWM[MAX_PATH];
+	char szSceneHWM[SOURCE_MAX_PATH];
 	if ( GetHWMorphSceneFileName( szFilename, szSceneHWM ) )
 	{
 		V_strcpy( szFilename, szSceneHWM );
@@ -523,7 +523,7 @@ void C_SceneEntity::StartEvent( float currenttime, CChoreoScene *scene, CChoreoE
 		{
 			if ( IsClientOnly() && pActor )
 			{
-				// FIXME: dB hack.  soundlevel needs to be moved into inside of wav?
+				// TODO(d.rattman): dB hack.  soundlevel needs to be moved into inside of wav?
 				soundlevel_t iSoundlevel = SNDLVL_TALKING;
 				if ( event->GetParameters2() )
 				{
@@ -598,7 +598,7 @@ void C_SceneEntity::DispatchStartSpeak( CChoreoScene *scene, C_BaseFlex *actor, 
 		es.m_flSoundTime = soundtime;
 
 		// No CC since we do it manually
-		// FIXME:  This will  change
+		// TODO(d.rattman):  This will  change
 		es.m_bEmitCloseCaption = false;
 		es.m_pSoundName = event->GetParameters();
 

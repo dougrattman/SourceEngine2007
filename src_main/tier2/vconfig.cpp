@@ -4,6 +4,8 @@
 
 #include "tier2/vconfig.h"
 
+#include "tier0/include/platform.h"
+
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
 
@@ -130,7 +132,7 @@ bool RemoveObsoleteVConfigRegistrySetting(const char *pValueName,
 
 
 bool ConvertObsoleteVConfigRegistrySetting(const char *pValueName) {
-  char szValue[MAX_PATH];
+  char szValue[SOURCE_MAX_PATH];
   if (RemoveObsoleteVConfigRegistrySetting(pValueName, szValue,
                                            sizeof(szValue))) {
     // Set it up the correct way

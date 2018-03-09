@@ -41,7 +41,7 @@ class CAI_NetworkManager;
 //
 //-----------------------------------------------------------------------------
 
-abstract_class INearestNodeFilter
+the_interface INearestNodeFilter
 {
 public:
 	virtual bool IsValid( CAI_Node *pNode ) = 0;

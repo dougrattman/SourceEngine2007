@@ -13,11 +13,11 @@
 #include "props.h"
 #include "vphysics/object_hash.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #undef LOCAL_STEP_SIZE
-// FIXME: this should be based in their hull width
+// TODO(d.rattman): this should be based in their hull width
 #define LOCAL_STEP_SIZE 16.0f  // 8 // 16
 
 // If set to 1, results will be drawn for moveprobes done by player-selected
@@ -634,7 +634,7 @@ bool CAI_MoveProbe::TestGroundMove(const Vector &vecActualStart,
     return false;
   }
 
-  // FIXME: If you started on a ledge and ended on a ledge,
+  // TODO(d.rattman): If you started on a ledge and ended on a ledge,
   // should it return an error condition (that you hit the world)?
   // Certainly not for Step(), but maybe for GroundMoveLimit()?
 
@@ -815,7 +815,7 @@ void CAI_MoveProbe::JumpMoveLimit(const Vector &vecStart, const Vector &vecEnd,
     return;
   }
 
-  // FIXME: add max jump velocity callback?  Look at the velocity in the jump
+  // TODO(d.rattman): add max jump velocity callback?  Look at the velocity in the jump
   // animation?  use ideal running speed?
   float maxHorzVel = GetOuter()->GetMaxJumpSpeed();
 
@@ -844,7 +844,7 @@ void CAI_MoveProbe::JumpMoveLimit(const Vector &vecStart, const Vector &vecEnd,
       vecFrom, vecTo, gravity.z, &minJumpHeight, maxHorzVel, &vecApex);
   float baselineJumpHeight = minJumpHeight;
 
-  // FIXME: this is a binary search, which really isn't the right thing to do.
+  // TODO(d.rattman): this is a binary search, which really isn't the right thing to do.
   // If there's a gap the npc can jump through, this won't reliably find it. The
   // only way I can think to do this is a linear search trying ever higher jumps
   // until the gap is either found or the jump is illegal.
@@ -866,7 +866,7 @@ void CAI_MoveProbe::JumpMoveLimit(const Vector &vecStart, const Vector &vecEnd,
       bool bMadeIt = true;
 
       // this sweeps out a rough approximation of the jump
-      // FIXME: this won't reliably hit the apex
+      // TODO(d.rattman): this won't reliably hit the apex
       for (float flTime = 0; flTime < jumpTime - 0.01; flTime += timeStep) {
         trace_t trace;
 
@@ -879,7 +879,7 @@ void CAI_MoveProbe::JumpMoveLimit(const Vector &vecStart, const Vector &vecEnd,
 
         if (trace.startsolid ||
             trace.fraction <
-                0.99)  // FIXME: getting inconsistant trace fractions, revisit
+                0.99)  // TODO(d.rattman): getting inconsistant trace fractions, revisit
                        // after Jay resolves collision eplisons
         {
           // NDebugOverlay::Box( trace.endpos, WorldAlignMins(),

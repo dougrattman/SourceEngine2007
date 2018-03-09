@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datamodel/dmelement.h"
 #include "Color.h"
@@ -14,7 +14,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utllinkedlist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -121,8 +121,7 @@ void CDmElement::Purge() {
   while (m_pAttributes) {
 #if defined(_DEBUG)
     // So you can see what attribute is being destroyed
-    const char *pName = m_pAttributes->GetName();
-    NOTE_UNUSED(pName);
+    [[maybe_unused]] const char *pName = m_pAttributes->GetName();
 #endif
     CDmAttribute *pNext = m_pAttributes->NextAttribute();
     CDmAttribute::DestroyAttribute(m_pAttributes);

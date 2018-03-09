@@ -52,7 +52,7 @@
 #include "vcollide_parse.h"
 #include "vehicle_base.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int g_interactionPlayerLaunchedRPG = 0;
@@ -636,7 +636,7 @@ void CNPC_Strider::InitBoneFollowers(void) {
   if (m_BoneFollowerManager.GetNumBoneFollowers() != 0) return;
 
   // Init our followers
-  m_BoneFollowerManager.InitBoneFollowers(this, ARRAYSIZE(pFollowerBoneNames),
+  m_BoneFollowerManager.InitBoneFollowers(this, SOURCE_ARRAYSIZE(pFollowerBoneNames),
                                           pFollowerBoneNames);
 }
 
@@ -3226,7 +3226,7 @@ bool CNPC_Strider::OverrideMove(float flInterval) {
     SetHeight(newHeight);
   }
 
-  // FIXME: where should this go?
+  // TODO(d.rattman): where should this go?
   MaintainTurnActivity();
 
   return false;
@@ -3730,7 +3730,7 @@ void CNPC_Strider::VPhysicsShadowCollision(int index,
                             (m_iMaxHealth / 3) + 1,
                             DMG_BLAST | DMG_PREVENT_PHYSICS_FORCE);
 
-    // FIXME: is there a better way for physics objects to keep track of what
+    // TODO(d.rattman): is there a better way for physics objects to keep track of what
     // root entity responsible for them moving?
     CBasePlayer *pPlayer = pOther->HasPhysicsAttacker(1.0);
     if (pPlayer) {

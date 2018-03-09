@@ -41,7 +41,7 @@
 #define CTFTeam C_TFTeam
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"	
 
 ConVar inv_demo( "inv_demo","0", FCVAR_REPLICATED, "Invasion demo." );
@@ -435,7 +435,7 @@ void LoadObjectInfos( IBaseFileSystem *pFileSystem )
 	}
 
 	// Now read each class's information in.
-	for ( int iObj=0; iObj < ARRAYSIZE( g_ObjectInfos ); iObj++ )
+	for ( int iObj=0; iObj < SOURCE_ARRAYSIZE( g_ObjectInfos ); iObj++ )
 	{
 		CObjectInfo *pInfo = &g_ObjectInfos[iObj];
 		KeyValues *pSub = pValues->FindKey( pInfo->m_pObjectName );

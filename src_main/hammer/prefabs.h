@@ -218,7 +218,7 @@ public:
 
 protected:
 
-	char m_szFolderName[MAX_PATH];
+	char m_szFolderName[SOURCE_MAX_PATH];
 
 friend class CPrefab;
 };

@@ -11,7 +11,7 @@
 #include "inputsystem/InputEnums.h"
 
 // Main interface for input. This is a low-level interface.
-abstract_class IInputSystem : public IAppSystem {
+the_interface IInputSystem : public IAppSystem {
  public:
   // Attach, detach input system from a particular window
   // This window should be the root window for the application
@@ -69,7 +69,7 @@ abstract_class IInputSystem : public IAppSystem {
   // Sample the joystick and append events to the input queue
   virtual void SampleDevices(void) = 0;
 
-  // FIXME: Currently force-feedback is only supported on the Xbox 360
+  // TODO(d.rattman): Currently force-feedback is only supported on the Xbox 360
   virtual void SetRumble(float fLeftMotor, float fRightMotor,
                          int userId = INVALID_USER_ID) = 0;
   virtual void StopRumble(void) = 0;
@@ -90,7 +90,7 @@ abstract_class IInputSystem : public IAppSystem {
   virtual void SleepUntilInput(int nMaxSleepTimeMS = -1) = 0;
 
   // Convert back + forth between virtual codes + button codes
-  // FIXME: This is a temporary piece of code
+  // TODO(d.rattman): This is a temporary piece of code
   virtual ButtonCode_t VirtualKeyToButtonCode(int nVirtualKey) const = 0;
   virtual int ButtonCodeToVirtualKey(ButtonCode_t code) const = 0;
   virtual ButtonCode_t ScanCodeToButtonCode(int lParam) const = 0;

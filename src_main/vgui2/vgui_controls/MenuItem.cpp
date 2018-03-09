@@ -15,7 +15,7 @@
 #include <vgui_controls/MenuItem.h>
 #include <vgui_controls/TextImage.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;

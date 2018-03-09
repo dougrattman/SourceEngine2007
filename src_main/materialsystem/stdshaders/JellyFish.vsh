@@ -68,7 +68,7 @@ mov $vertToEye.xyz, -$viewPos
 &Normalize( $vertToEye );
 
 dp3 $viewNormal.x, $vertToEye, $viewNormal
-add $viewNormal.x, $viewNormal.x, $SHADER_SPECIFIC_CONST_5 ; FIXME
+add $viewNormal.x, $viewNormal.x, $SHADER_SPECIFIC_CONST_5 ; TODO(d.rattman):
 
 &FreeRegister( \$vertToEye );
 

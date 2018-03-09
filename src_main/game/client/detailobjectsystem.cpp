@@ -37,7 +37,7 @@
 
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DETAIL_SPRITE_MATERIAL "detail/detailsprites"
@@ -872,7 +872,7 @@ void CDetailModel::GetColorModulation(float *color) {
 // Is the model itself translucent, regardless of modulation?
 //-----------------------------------------------------------------------------
 bool CDetailModel::IsDetailModelTranslucent() {
-  // FIXME: This is only true for my first pass of this feature
+  // TODO(d.rattman): This is only true for my first pass of this feature
   if (m_Type >= DETAIL_PROP_TYPE_SPRITE) return true;
 
   return modelinfo->IsTranslucent(GetModel());
@@ -1479,7 +1479,7 @@ void CDetailObjectSystem::BeginTranslucentDetailRendering() {
 // Gets a particular detail object
 //-----------------------------------------------------------------------------
 IClientRenderable *CDetailObjectSystem::GetDetailModel(int idx) {
-  // FIXME: This is necessary because we have intermixed models + sprites
+  // TODO(d.rattman): This is necessary because we have intermixed models + sprites
   // in a single list (m_DetailObjects)
   if (m_DetailObjects[idx].GetType() != DETAIL_PROP_TYPE_MODEL) return NULL;
 
@@ -1821,7 +1821,7 @@ void CDetailObjectSystem::UnserializeFastSprite(FastSpriteX4_t *pSpritex4,
 //-----------------------------------------------------------------------------
 void CDetailObjectSystem::RenderOpaqueDetailObjects(int nLeafCount,
                                                     LeafIndex_t *pLeafList) {
-  // FIXME: Implement!
+  // TODO(d.rattman): Implement!
 }
 
 //-----------------------------------------------------------------------------
@@ -1834,7 +1834,7 @@ int CDetailObjectSystem::CountSpritesInLeafList(int nLeafCount,
   int nPropCount = 0;
   int nFirstDetailObject, nDetailObjectCount;
   for (int i = 0; i < nLeafCount; ++i) {
-    // FIXME: This actually counts *everything* in the leaf, which is ok for now
+    // TODO(d.rattman): This actually counts *everything* in the leaf, which is ok for now
     // given how we're using it
     ClientLeafSystem()->GetDetailObjectsInLeaf(pLeafList[i], nFirstDetailObject,
                                                nDetailObjectCount);
@@ -1878,7 +1878,7 @@ int CDetailObjectSystem::CountSpriteQuadsInLeafList(
   int nQuadCount = 0;
   int nFirstDetailObject, nDetailObjectCount;
   for (int i = 0; i < nLeafCount; ++i) {
-    // FIXME: This actually counts *everything* in the leaf, which is ok for now
+    // TODO(d.rattman): This actually counts *everything* in the leaf, which is ok for now
     // given how we're using it
     ClientLeafSystem()->GetDetailObjectsInLeaf(pLeafList[i], nFirstDetailObject,
                                                nDetailObjectCount);
@@ -1986,7 +1986,7 @@ static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
                                   MAGIC_NUMBER};
 static fltx4 Four_255s = {255.0, 255.0, 255.0, 255.0};
 
-static __declspec(align(16)) int32_t And255Mask[4] = {0xff, 0xff, 0xff, 0xff};
+static alignas(16) int32_t And255Mask[4] = {0xff, 0xff, 0xff, 0xff};
 #define PIXMASK (*(reinterpret_cast<fltx4 *>(&And255Mask)))
 
 int CDetailObjectSystem::BuildOutSortedSprites(CFastDetailLeafSpriteList *pData,
@@ -2099,7 +2099,7 @@ void CDetailObjectSystem::RenderFastSprites(const Vector &viewOrigin,
                                             int nLeafCount,
                                             LeafIndex_t const *pLeafList) {
   // Here, we must draw all detail objects back-to-front
-  // FIXME: Cache off a sorted list so we don't have to re-sort every frame
+  // TODO(d.rattman): Cache off a sorted list so we don't have to re-sort every frame
 
   // Count the total # of detail quads we possibly could render
   int nMaxInLeaf;
@@ -2154,7 +2154,7 @@ void CDetailObjectSystem::RenderFastSprites(const Vector &viewOrigin,
       FastSpriteQuadBuildoutBufferNonSIMDView_t const *pQuadBuffer =
           (FastSpriteQuadBuildoutBufferNonSIMDView_t const *)m_pBuildoutBuffer;
 
-      COMPILE_TIME_ASSERT(sizeof(FastSpriteQuadBuildoutBufferNonSIMDView_t) ==
+      static_assert(sizeof(FastSpriteQuadBuildoutBufferNonSIMDView_t) ==
                           sizeof(FastSpriteQuadBuildoutBufferX4_t));
 
       while (nCount) {
@@ -2242,7 +2242,7 @@ void CDetailObjectSystem::RenderTranslucentDetailObjects(
   RenderFastSprites(viewOrigin, viewForward, viewRight, viewUp, nLeafCount,
                     pLeafList);
 
-  // FIXME: Cache off a sorted list so we don't have to re-sort every frame
+  // TODO(d.rattman): Cache off a sorted list so we don't have to re-sort every frame
 
   // Count the total # of detail quads we possibly could render
   int nQuadCount = CountSpriteQuadsInLeafList(nLeafCount, pLeafList);

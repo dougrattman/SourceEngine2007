@@ -7,14 +7,14 @@
 static const char *g_SvPure2_ProtectedDirs[] = {"sound", "models", "materials"};
 
 static bool IsProtectedBySvPure2(const char *pFilename) {
-  for (int i = 0; i < ARRAYSIZE(g_SvPure2_ProtectedDirs); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_SvPure2_ProtectedDirs); i++) {
     const char *pProtectedDir = g_SvPure2_ProtectedDirs[i];
     int len = V_strlen(pProtectedDir);
 
     if (V_strlen(pFilename) < len + 1) return false;
 
     char tempStr[512];
-    Assert(len < ARRAYSIZE(tempStr));
+    Assert(len < SOURCE_ARRAYSIZE(tempStr));
     memcpy(tempStr, pFilename, len);
     tempStr[len] = 0;
 
@@ -62,7 +62,7 @@ void CPureServerWhitelist::Term() {
 bool CPureServerWhitelist::LoadFromKeyValues(KeyValues *kv) {
   for (KeyValues *pCurItem = kv->GetFirstValue(); pCurItem;
        pCurItem = pCurItem->GetNextValue()) {
-    char szPathName[MAX_PATH];
+    char szPathName[SOURCE_MAX_PATH];
     const char *pKeyValue = pCurItem->GetName();
     const char *pModifiers = pCurItem->GetString();
     if (!pKeyValue || !pModifiers) continue;
@@ -114,7 +114,7 @@ bool CPureServerWhitelist::LoadFromKeyValues(KeyValues *kv) {
       pList = &m_FileCommands;
 
     // If it's a directory command, get rid of the *.* or ...
-    char filePath[MAX_PATH];
+    char filePath[SOURCE_MAX_PATH];
     if (pList == &m_RecursiveDirCommands || pList == &m_NonRecursiveDirCommands)
       V_ExtractFilePath(pValue, filePath, sizeof(filePath));
     else
@@ -161,7 +161,7 @@ void CPureServerWhitelist::PrintCommand(
     const char *pFileSpec, const char *pExt, int maxPathnameLen,
     CPureServerWhitelist::CCommand *pCommand) {
   // Get rid of the trailing slash if there is one.
-  char tempFileSpec[MAX_PATH];
+  char tempFileSpec[SOURCE_MAX_PATH];
   V_strncpy(tempFileSpec, pFileSpec, sizeof(tempFileSpec));
   int len = V_strlen(tempFileSpec);
   if (len > 0 &&
@@ -301,7 +301,7 @@ void CPureServerWhitelist::DecodeCommandList(
 
     pCommand->m_LoadOrder = buf.GetUnsignedShort();
 
-    char str[MAX_PATH];
+    char str[SOURCE_MAX_PATH];
     buf.GetString(str, sizeof(str) - 1);
     V_FixSlashes(str);
 
@@ -316,7 +316,7 @@ CPureServerWhitelist::CCommand *CPureServerWhitelist::GetBestEntry(
   // the whitelist, we just ignore the path ID.
 
   // Make sure we have a relative pathname with fixed slashes..
-  char relativeFilename[MAX_PATH];
+  char relativeFilename[SOURCE_MAX_PATH];
   V_strncpy(relativeFilename, pFilename, sizeof(relativeFilename));
 
   // Convert the path to relative if necessary.
@@ -326,7 +326,7 @@ CPureServerWhitelist::CCommand *CPureServerWhitelist::GetBestEntry(
     V_FixSlashes(relativeFilename);
 
     // Get the directory this thing is in.
-    char relativeDir[MAX_PATH];
+    char relativeDir[SOURCE_MAX_PATH];
     if (!V_ExtractFilePath(relativeFilename, relativeDir, sizeof(relativeDir)))
       relativeDir[0] = 0;
 

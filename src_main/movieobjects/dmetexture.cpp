@@ -134,11 +134,11 @@ int CDmeBaseTexture::CalcTextureFlags( int nDepth ) const
 
 	if ( nDepth > 1 )
 	{
-		// FIXME: Volume textures don't currently support DXT compression
+		// TODO(d.rattman): Volume textures don't currently support DXT compression
 		nFlags &= ~TEXTUREFLAGS_HINT_DXT5;
 		nFlags |= TEXTUREFLAGS_NOCOMPRESS;
 
-		// FIXME: Volume textures don't currently support NICE filtering
+		// TODO(d.rattman): Volume textures don't currently support NICE filtering
 		nFlags &= ~TEXTUREFLAGS_NICEFILTERED;
 	}
 
@@ -223,7 +223,7 @@ void CDmeTexture::OnDestruction()
 //-----------------------------------------------------------------------------
 void CDmeTexture::Resolve()
 {
-	// FIXME: Could change this to not shutdown if only the bits have changed
+	// TODO(d.rattman): Could change this to not shutdown if only the bits have changed
 	m_Texture.Shutdown();
 
 	int nFrameCount = m_Images.Count();
@@ -237,7 +237,7 @@ void CDmeTexture::Resolve()
 	int nDepth = pImage->m_Depth;
 	ImageFormat srcFormat = pImage->Format();
 
-	// FIXME: How should this work exactly?
+	// TODO(d.rattman): How should this work exactly?
 	int nFlags = CalcTextureFlags( nDepth );
 
 	m_pVTFTexture->Init( nWidth, nHeight, nDepth, srcFormat, nFlags, nFrameCount );

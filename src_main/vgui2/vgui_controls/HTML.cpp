@@ -284,9 +284,9 @@ void HTML::OpenURL(const char *URL, bool force) {
     const char *baseDir = getenv("HTML_OFFLINE_DIR");
     if (baseDir) {
       // get the app we need to run
-      char htmlLocation[_MAX_PATH];
+      char htmlLocation[SOURCE_MAX_PATH];
       char otherName[128];
-      char fileLocation[_MAX_PATH];
+      char fileLocation[SOURCE_MAX_PATH];
 
       if (!g_pFullFileSystem->FileExists(baseDir)) {
         _snprintf(otherName, sizeof(otherName), "%senglish.html", OFFLINE_FILE);

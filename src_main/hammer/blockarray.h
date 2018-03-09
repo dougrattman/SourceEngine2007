@@ -11,7 +11,7 @@
 
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 template <class T, int nBlockSize, int nMaxBlocks>
@@ -73,7 +73,7 @@ void BlockArray<T,nBlockSize,nMaxBlocks>::
 	if(nNewBlocks != nBlocks)
 	{
 		// Make sure we don't get an overrun.
-		if ( nNewBlocks > ARRAYSIZE( Blocks ) )
+		if ( nNewBlocks > SOURCE_ARRAYSIZE( Blocks ) )
 		{
 			Error( "BlockArray< ?, %d, %d > - too many blocks needed.", nBlockSize, nMaxBlocks );
 		}

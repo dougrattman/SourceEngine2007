@@ -63,7 +63,7 @@ extern ConVar r_avglightmap;
 =================
 V_CheckGamma
 
-FIXME:  Define this as a change function to the ConVar's below rather than
+TODO(d.rattman):  Define this as a change function to the ConVar's below rather than
 polling it every frame.  Note, still need to make sure it gets called very first
 time through frame loop.
 =================
@@ -212,7 +212,7 @@ class CVRenderView : public IVRenderView, public ISpatialLeafEnumerator {
     OcclusionSystem()->DrawDebugOverlays();
   }
 
-  FORCEINLINE void CheckBlend(void) {
+  SOURCE_FORCEINLINE void CheckBlend(void) {
     g_bIsBlendingOrModulating = (r_blend != 1.0) || (r_colormod[0] != 1.0) ||
                                 (r_colormod[1] != 1.0) ||
                                 (r_colormod[2] != 1.0);

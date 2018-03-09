@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef CSERSERVERPROTOCOL_ENGINE_H
 #define CSERSERVERPROTOCOL_ENGINE_H
@@ -110,14 +110,14 @@ typedef enum {
 
 #define M2C_ACKBUGREPORT 'p'
 
-typedef enum {
+enum EBugReportAckEnum {
   BR_UNKNOWN = 0,
   BR_NO_FILES,
   BR_REQEST_FILES,
 
   // Must be last
   BR_NUM_TYPES
-} EBugReportAckEnum;
+};
 
 // M2C_ACKBUGREPORT details
 //	u8(protocol okay (bool))

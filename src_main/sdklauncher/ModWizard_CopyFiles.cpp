@@ -23,8 +23,8 @@ extern bool IsGameSubscribed( int nSteamAppId );
 class CTempDirectory
 {
 public:
-	char m_FullName[MAX_PATH];
-	char m_FullOutName[MAX_PATH];
+	char m_FullName[SOURCE_MAX_PATH];
+	char m_FullOutName[SOURCE_MAX_PATH];
 };
 
 
@@ -84,10 +84,10 @@ bool CModWizardSubPanel_CopyFiles::BuildCopyFiles_R( const char *pSourceDir, con
 		// Skip the "." and ".." directories.
 		if ( pFilename[0] != '.' )
 		{
-			char fullName[MAX_PATH];
+			char fullName[SOURCE_MAX_PATH];
 			Q_snprintf( fullName, sizeof( fullName ), "%s%c%s", pSourceDir, CORRECT_PATH_SEPARATOR, pFilename );
 
-			char fullOutName[MAX_PATH];
+			char fullOutName[SOURCE_MAX_PATH];
 			Q_snprintf( fullOutName, sizeof( fullOutName ), "%s%c%s", pOutputDirName, CORRECT_PATH_SEPARATOR, pFilename );
 			
 			// We were doing this for Linux but disabled it.
@@ -159,10 +159,10 @@ bool CModWizardSubPanel_CopyFiles::BuildCopyFilesForMappings( char **pMappings, 
 bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
-	char outputUIDir[MAX_PATH], outputResourceDir[MAX_PATH], outputScriptsDir[MAX_PATH];
+	char outputUIDir[SOURCE_MAX_PATH], outputResourceDir[SOURCE_MAX_PATH], outputScriptsDir[SOURCE_MAX_PATH];
 	Q_snprintf( outputUIDir, sizeof( outputUIDir ), "%sResource%cUI", m_OutModGamedirName, CORRECT_PATH_SEPARATOR );
 	Q_snprintf( outputResourceDir, sizeof( outputResourceDir ), "%sresource", m_OutModGamedirName );
 	Q_snprintf( outputScriptsDir, sizeof( outputScriptsDir ), "%sscripts", m_OutModGamedirName );
@@ -178,7 +178,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2()
 		"src_mod\\ep1", "*.*", outputSrcDirName
 	};
 
-	char outputGamedirNameNoSlash[MAX_PATH];
+	char outputGamedirNameNoSlash[SOURCE_MAX_PATH];
 	Q_strncpy( outputGamedirNameNoSlash, m_OutModGamedirName, sizeof( outputGamedirNameNoSlash ) );
 	if ( strlen( outputGamedirNameNoSlash ) > 0 )
 		outputGamedirNameNoSlash[strlen(outputGamedirNameNoSlash)-1] = 0;
@@ -205,11 +205,11 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2()
 		"%modname%", m_ModName
 	};
 	
-	retVal = CopyWithReplacements("CreateModFiles\\hl2\\gameinfo_ep1.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements("CreateModFiles\\hl2\\gameinfo_ep1.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 	
 	if ( retVal &&
-	     BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		 BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+	     BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		 BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -225,10 +225,10 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2()
 bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
-	char outputUIDir[MAX_PATH], outputResourceDir[MAX_PATH], outputScriptsDir[MAX_PATH];
+	char outputUIDir[SOURCE_MAX_PATH], outputResourceDir[SOURCE_MAX_PATH], outputScriptsDir[SOURCE_MAX_PATH];
 	Q_snprintf( outputUIDir, sizeof( outputUIDir ), "%sResource%cUI", m_OutModGamedirName, CORRECT_PATH_SEPARATOR );
 	Q_snprintf( outputResourceDir, sizeof( outputResourceDir ), "%sresource", m_OutModGamedirName );
 	Q_snprintf( outputScriptsDir, sizeof( outputScriptsDir ), "%sscripts", m_OutModGamedirName );
@@ -244,7 +244,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2()
 		"src_mod\\orangebox", "*.*", outputSrcDirName
 	};
 
-	char outputGamedirNameNoSlash[MAX_PATH];
+	char outputGamedirNameNoSlash[SOURCE_MAX_PATH];
 	Q_strncpy( outputGamedirNameNoSlash, m_OutModGamedirName, sizeof( outputGamedirNameNoSlash ) );
 	if ( strlen( outputGamedirNameNoSlash ) > 0 )
 		outputGamedirNameNoSlash[strlen(outputGamedirNameNoSlash)-1] = 0;
@@ -271,11 +271,11 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2()
 		"%modname%", m_ModName
 	};
 
-	retVal = CopyWithReplacements("CreateModFiles\\hl2\\gameinfo_ob.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements("CreateModFiles\\hl2\\gameinfo_ob.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 
 	if ( retVal &&
-		BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+		BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -291,7 +291,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2()
 bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_FromScratch()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
 	// These go into c:\mymod
@@ -317,11 +317,11 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_FromScratch()
 		"%modname%", m_ModName
 	};
 	
-	retVal = CopyWithReplacements( "CreateModFiles\\base\\gameinfo_ep1.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements( "CreateModFiles\\base\\gameinfo_ep1.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 	
 	if ( retVal &&
-	     BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		 BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+	     BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		 BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -337,7 +337,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_FromScratch()
 bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_FromScratch()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
 	// These go into c:\mymod
@@ -363,11 +363,11 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_FromScratch()
 		"%modname%", m_ModName
 	};
 
-	retVal = CopyWithReplacements( "CreateModFiles\\base\\gameinfo_ob.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements( "CreateModFiles\\base\\gameinfo_ob.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 
 	if ( retVal &&
-		BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+		BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -383,10 +383,10 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_FromScratch()
 bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2MP()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
-	char outputUIDir[MAX_PATH], outputResourceDir[MAX_PATH], outputScriptsDir[MAX_PATH];
+	char outputUIDir[SOURCE_MAX_PATH], outputResourceDir[SOURCE_MAX_PATH], outputScriptsDir[SOURCE_MAX_PATH];
 	Q_snprintf( outputUIDir, sizeof( outputUIDir ), "%sResource%cUI", m_OutModGamedirName, CORRECT_PATH_SEPARATOR );
 	Q_snprintf( outputResourceDir, sizeof( outputResourceDir ), "%sresource", m_OutModGamedirName );
 	Q_snprintf( outputScriptsDir, sizeof( outputScriptsDir ), "%sscripts", m_OutModGamedirName );
@@ -402,7 +402,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2MP()
 		"src_mod\\orangebox", "*.*", outputSrcDirName
 	};
 
-	char outputGamedirNameNoSlash[MAX_PATH];
+	char outputGamedirNameNoSlash[SOURCE_MAX_PATH];
 	Q_strncpy( outputGamedirNameNoSlash, m_OutModGamedirName, sizeof( outputGamedirNameNoSlash ) );
 	if ( strlen( outputGamedirNameNoSlash ) > 0 )
 		outputGamedirNameNoSlash[strlen(outputGamedirNameNoSlash)-1] = 0;
@@ -423,11 +423,11 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2MP()
 		"%modname%", m_ModName
 	};
 
-	retVal = CopyWithReplacements( "CreateModFiles\\hl2mp\\gameinfo_ob.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements( "CreateModFiles\\hl2mp\\gameinfo_ob.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 
 	if ( retVal && 
-		BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+		BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -443,10 +443,10 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_HL2MP()
 bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2MP()
 {
 	bool retVal = false;
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s%s", m_OutputDirName, "src" );
 
-	char outputUIDir[MAX_PATH], outputResourceDir[MAX_PATH], outputScriptsDir[MAX_PATH];
+	char outputUIDir[SOURCE_MAX_PATH], outputResourceDir[SOURCE_MAX_PATH], outputScriptsDir[SOURCE_MAX_PATH];
 	Q_snprintf( outputUIDir, sizeof( outputUIDir ), "%sResource%cUI", m_OutModGamedirName, CORRECT_PATH_SEPARATOR );
 	Q_snprintf( outputResourceDir, sizeof( outputResourceDir ), "%sresource", m_OutModGamedirName );
 	Q_snprintf( outputScriptsDir, sizeof( outputScriptsDir ), "%sscripts", m_OutModGamedirName );
@@ -462,7 +462,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2MP()
 		"src_mod\\ep1", "*.*", outputSrcDirName
 	};
 
-	char outputGamedirNameNoSlash[MAX_PATH];
+	char outputGamedirNameNoSlash[SOURCE_MAX_PATH];
 	Q_strncpy( outputGamedirNameNoSlash, m_OutModGamedirName, sizeof( outputGamedirNameNoSlash ) );
 	if ( strlen( outputGamedirNameNoSlash ) > 0 )
 		outputGamedirNameNoSlash[strlen(outputGamedirNameNoSlash)-1] = 0;
@@ -483,11 +483,11 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2MP()
 		"%modname%", m_ModName
 	};
 	
-	retVal = CopyWithReplacements( "CreateModFiles\\hl2mp\\gameinfo_ep1.txt", replacements, ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
+	retVal = CopyWithReplacements( "CreateModFiles\\hl2mp\\gameinfo_ep1.txt", replacements, SOURCE_ARRAYSIZE( replacements ), "%s%s", m_OutModGamedirName, "gameinfo.txt" );
 	
 	if ( retVal && 
-	     BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) ) &&
-		 BuildCopyFilesForMappings( content_mappings, ARRAYSIZE( content_mappings ) ) )
+	     BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) ) &&
+		 BuildCopyFilesForMappings( content_mappings, SOURCE_ARRAYSIZE( content_mappings ) ) )
 	{
 		retVal = true;
 	}
@@ -502,7 +502,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_HL2MP()
 
 bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_SourceCodeOnly()
 {
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s", m_OutputDirName );
 	int len = strlen( outputSrcDirName );
 	if ( len > 0 && PATHSEPARATOR( outputSrcDirName[len-1] ) )
@@ -513,13 +513,13 @@ bool CModWizardSubPanel_CopyFiles_Ep1::BuildCopyFilesForMod_SourceCodeOnly()
 		"src_mod\\ep1", "*.*", outputSrcDirName
 	};
 
-	return BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) );
+	return BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) );
 }
 
 
 bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_SourceCodeOnly()
 {
-	char outputSrcDirName[MAX_PATH];
+	char outputSrcDirName[SOURCE_MAX_PATH];
 	Q_snprintf( outputSrcDirName, sizeof( outputSrcDirName ), "%s", m_OutputDirName );
 	int len = strlen( outputSrcDirName );
 	if ( len > 0 && PATHSEPARATOR( outputSrcDirName[len-1] ) )
@@ -530,7 +530,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::BuildCopyFilesForMod_SourceCodeOnly
 		"src_mod\\orangebox", "*.*", outputSrcDirName
 	};
 
-	return BuildCopyFilesForMappings( sources_mappings, ARRAYSIZE( sources_mappings ) );
+	return BuildCopyFilesForMappings( sources_mappings, SOURCE_ARRAYSIZE( sources_mappings ) );
 }
 
 
@@ -573,13 +573,13 @@ void CModWizardSubPanel_CopyFiles::OnTick()
 		// Get the output dir name sans the slash at the end.
 		if ( m_ModType != ModType_SourceCodeOnly )
 		{
-			char outModGamedirNameNoSlash[MAX_PATH];
+			char outModGamedirNameNoSlash[SOURCE_MAX_PATH];
 			Assert( m_OutModGamedirName[strlen(m_OutModGamedirName)-1] == CORRECT_PATH_SEPARATOR );
 			Q_StrSlice( m_OutModGamedirName, 0, -1, outModGamedirNameNoSlash, sizeof( outModGamedirNameNoSlash ) );
 
 			// Figure out the steam directory. Starting with gamedir, which is
 			// 
-			char steamdir[MAX_PATH];
+			char steamdir[SOURCE_MAX_PATH];
 			Q_strncpy( steamdir, gamedir, sizeof( steamdir ) );	// c:\valve\steam\steamapps\name\sourcesdk\launcher
 			Q_StripLastDir( steamdir, sizeof( steamdir ) );		// c:\valve\steam\steamapps\name\sourcesdk
 			Q_StripLastDir( steamdir, sizeof( steamdir ) );		// c:\valve\steam\steamapps\name
@@ -589,7 +589,7 @@ void CModWizardSubPanel_CopyFiles::OnTick()
 
 
 			// Setup the path to their hl2 game folder.
-			char hl2dir[MAX_PATH];
+			char hl2dir[SOURCE_MAX_PATH];
 			Q_strncpy( hl2dir, gamedir, sizeof( hl2dir ) );	// c:\valve\steam\steamapps\name\sourcesdk\launcher
 			Q_StripLastDir( hl2dir, sizeof( hl2dir ) );		// c:\valve\steam\steamapps\name\sourcesdk
 			Q_StripLastDir( hl2dir, sizeof( hl2dir ) );		// c:\valve\steam\steamapps\name
@@ -629,12 +629,12 @@ void CModWizardSubPanel_CopyFiles::OnTick()
 				"run_studiomdl.bat",
 				"run_hammer.bat"	
 			};
-			for ( int iFilename=0; iFilename < ARRAYSIZE( filenames ); iFilename++ )
+			for ( int iFilename=0; iFilename < SOURCE_ARRAYSIZE( filenames ); iFilename++ )
 			{
-				char srcFilename[MAX_PATH];
+				char srcFilename[SOURCE_MAX_PATH];
 				Q_snprintf( srcFilename, sizeof( srcFilename ), "CreateModFiles\\%s", filenames[iFilename] );
 				if ( !CopyWithReplacements( 
-						srcFilename, replacements, ARRAYSIZE( replacements ), 
+						srcFilename, replacements, SOURCE_ARRAYSIZE( replacements ), 
 						"%s%s", m_OutputDirName, filenames[iFilename] ) )
 				{
 					vgui::ivgui()->RemoveTickSignal( GetVPanel() );
@@ -655,7 +655,7 @@ void CModWizardSubPanel_CopyFiles::OnTick()
 			if ( m_iCurCopyFile >= m_FileCopyInfos.Count() )
 			{
 				// Also, add a game configuration.
-				char modGamedirNoSlash[MAX_PATH];
+				char modGamedirNoSlash[SOURCE_MAX_PATH];
 				Q_strncpy( modGamedirNoSlash, m_OutModGamedirName, sizeof( modGamedirNoSlash ) );
 				if ( strlen( modGamedirNoSlash ) > 0 )
 				{
@@ -734,7 +734,7 @@ bool IsVCProjFile( const char *pFilename )
 
 bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles( CFileCopyInfo *pInfo, bool &bErrorStatus )
 {
-	char replaceWith[MAX_PATH] = {0};
+	char replaceWith[SOURCE_MAX_PATH] = {0};
 	const char *replacements[] = 
 	{
 		"..\\..\\game\\sdksample\\", replaceWith, 
@@ -748,7 +748,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles
 	{
 		bErrorStatus = true;
 		Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
-		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 
 		return true;
 	}
@@ -760,7 +760,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 
 		return true;
@@ -773,7 +773,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 
 		return true;
@@ -786,7 +786,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 
 		return true;
@@ -797,7 +797,7 @@ bool CModWizardSubPanel_CopyFiles_OrangeBox::HandleReplacements_GameProjectFiles
 
 bool CModWizardSubPanel_CopyFiles_Ep1::HandleReplacements_GameProjectFiles( CFileCopyInfo *pInfo, bool &bErrorStatus )
 {
-	char replaceWith[MAX_PATH] = {0};
+	char replaceWith[SOURCE_MAX_PATH] = {0};
 	const char *replacements[] = 
 	{
 		"..\\..\\game\\sdksample\\", replaceWith, 
@@ -813,7 +813,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::HandleReplacements_GameProjectFiles( CFil
 	{
 		bErrorStatus = true;
 		Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
-		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 
 		return true;
 	}
@@ -827,7 +827,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::HandleReplacements_GameProjectFiles( CFil
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 			
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 
 		return true;
@@ -842,7 +842,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::HandleReplacements_GameProjectFiles( CFil
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 		
 		return true;
@@ -857,7 +857,7 @@ bool CModWizardSubPanel_CopyFiles_Ep1::HandleReplacements_GameProjectFiles( CFil
 		{
 			Q_snprintf( replaceWith, sizeof( replaceWith ), "%s", m_OutModGamedirName );
 
-			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
+			bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, replacements, SOURCE_ARRAYSIZE( replacements ), "%s", pInfo->m_OutFilename );
 		}
 		
 		return true;
@@ -878,7 +878,7 @@ bool CModWizardSubPanel_CopyFiles::HandleReplacements_GenericVCProj( CFileCopyIn
 			"..\\game\\bin", "..\\bin"
 		};
 
-		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, vcprojReplacements, ARRAYSIZE( vcprojReplacements ), "%s", pInfo->m_OutFilename );
+		bErrorStatus = CopyWithReplacements( pInfo->m_InFilename, vcprojReplacements, SOURCE_ARRAYSIZE( vcprojReplacements ), "%s", pInfo->m_OutFilename );
 		return true;
 	}
 

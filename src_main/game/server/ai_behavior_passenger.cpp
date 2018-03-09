@@ -159,7 +159,7 @@ void CAI_PassengerBehavior::ExitVehicle(void) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME - This should move into something a bit more flexible
+// TODO(d.rattman): This should move into something a bit more flexible
 //-----------------------------------------------------------------------------
 void CAI_PassengerBehavior::AddPhysicsPush(float force) {
   /*
@@ -169,7 +169,9 @@ void CAI_PassengerBehavior::AddPhysicsPush(float force) {
   impulse.z = -0.75;
   VectorNormalize( impulse );
   Vector vecForce = impulse * force;
-  
+  
+
+
 
   m_hVehicle->VPhysicsGetObject()->ApplyForceOffset( vecForce,
   GetOuter()->GetAbsOrigin() );
@@ -571,7 +573,7 @@ bool CAI_PassengerBehavior::GetExitPoint(int nSequence, Vector *vecExitPoint,
 //-----------------------------------------------------------------------------
 bool CAI_PassengerBehavior::ReserveEntryPoint(
     VehicleSeatQuery_e eSeatSearchType) {
-  // FIXME: Move all this logic into the NPC_EnterVehicle function?
+  // TODO(d.rattman): Move all this logic into the NPC_EnterVehicle function?
   // Find any seat to get into
   int nSeatID = m_hVehicle->GetServerVehicle()->NPC_GetAvailableSeat(
       GetOuter(), GetRoleName(), eSeatSearchType);
@@ -713,7 +715,7 @@ int CAI_PassengerBehavior::FindExitSequence(void) {
 //-----------------------------------------------------------------------------
 bool CAI_PassengerBehavior::ReserveExitPoint(void) {
   // Cannot exit while we're upside down
-  // FIXME: This is probably redundant!
+  // TODO(d.rattman): This is probably redundant!
   if (m_hVehicle->IsOverturned()) return false;
 
   // Find the exit activity to use
@@ -1050,11 +1052,10 @@ void CAI_PassengerBehavior::GetTransitionAnimationIdeal(
 }
 
 //-----------------------------------------------------------------------------
-//	FIXME:	This is basically a complete duplication of GetIntervalMovement
-//			which doesn't remove the x and z components of the
-// angles. This 			should be consolidated to not replicate so
-// much
-// code! -- jdw
+//	TODO(d.rattman):	This is basically a complete duplication of
+//GetIntervalMovement 			which doesn't remove the x and z components of the
+// angles. This 			should be consolidated to not replicate
+// so much code! -- jdw
 //-----------------------------------------------------------------------------
 bool CAI_PassengerBehavior::LocalIntervalMovement(float flInterval,
                                                   bool &bMoveSeqFinished,
@@ -1499,7 +1500,7 @@ bool CAI_PassengerBehavior::SpeakIfAllowed(
     AIConcept_t concept, const char *modifiers /*= NULL*/,
     bool bRespondingToPlayer /*= false*/, char *pszOutResponseChosen /*= NULL*/,
     size_t bufsize /*= 0*/) {
-  // FIXME: Store this cast off?
+  // TODO(d.rattman): Store this cast off?
   CAI_PlayerAlly *pAlly = dynamic_cast<CAI_PlayerAlly *>(GetOuter());
   if (pAlly != NULL)
     return pAlly->SpeakIfAllowed(concept, modifiers, bRespondingToPlayer,
@@ -1617,7 +1618,7 @@ AI_BEGIN_CUSTOM_SCHEDULE_PROVIDER(CAI_PassengerBehavior) {
   DECLARE_TASK(TASK_PASSENGER_DETACH_FROM_VEHICLE)
   DECLARE_TASK(TASK_PASSENGER_SET_IDEAL_ENTRY_YAW)
 
-  // FIXME: Move to companion
+  // TODO(d.rattman): Move to companion
   DEFINE_SCHEDULE(
       SCHED_PASSENGER_ENTER_VEHICLE,
 

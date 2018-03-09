@@ -155,7 +155,7 @@ class CHardwareConfig : public IHardwareConfigInternal {
   void SetupHardwareCaps(const ShaderDeviceInfo_t &mode,
                          const HardwareCaps_t &actualCaps);
 
-  // FIXME: This is for backward compat only.. don't use these
+  // TODO(d.rattman): This is for backward compat only.. don't use these
   void SetupHardwareCaps(int nDXLevel, const HardwareCaps_t &actualCaps);
   HardwareCaps_t &ActualCapsForEdit() { return m_ActualCaps; }
   HardwareCaps_t &CapsForEdit() { return m_Caps; }

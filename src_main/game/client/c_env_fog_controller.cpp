@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "c_env_fog_controller.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_NETWORKCLASS_ALIASED( FogController, DT_FogController )

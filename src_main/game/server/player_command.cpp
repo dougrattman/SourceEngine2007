@@ -12,7 +12,7 @@
 #include "tier0/include/vprof.h"
 #include "usercmd.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IGameMovement *g_pGameMovement;
@@ -342,7 +342,7 @@ void CPlayerMove::RunCommand(CBasePlayer *player, CUserCmd *ucmd,
   // Latch in impulse.
   if (ucmd->impulse) {
     // Discard impulse commands unless the vehicle allows them.
-    // FIXME: UsingStandardWeapons seems like a bad filter for this. The
+    // TODO(d.rattman): UsingStandardWeapons seems like a bad filter for this. The
     // flashlight is an impulse command, for example.
     if (!pVehicle || player->UsingStandardWeaponsInVehicle()) {
       player->m_nImpulse = ucmd->impulse;

@@ -1,11 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_INCLUDE_VALIDATOR_H_
 #define SOURCE_TIER0_INCLUDE_VALIDATOR_H_
 
 #include "base/include/base_types.h"
-#include "build/include/build_config.h"
-
 #include "tier0/include/valobject.h"
 
 #ifdef DBGFLAG_VALIDATE

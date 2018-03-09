@@ -15,7 +15,7 @@ class CDmElement;
 //-----------------------------------------------------------------------------
 // Serialization class for Key Values
 //-----------------------------------------------------------------------------
-abstract_class CImportKeyValueBase : public IDmSerializer {
+the_interface CImportKeyValueBase : public IDmSerializer {
  public:
   // Inherited from IDMSerializer
   virtual bool StoresVersionInFile() const { return false; }

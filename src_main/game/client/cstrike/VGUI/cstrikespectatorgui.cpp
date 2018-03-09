@@ -1623,8 +1623,8 @@ void CCSMapOverview::SetMap(const char * levelname)
 		return;// No map image, so no radar image
 	}
 
-	char radarFileName[MAX_PATH];
-	Q_snprintf(radarFileName, MAX_PATH, "%s_radar", m_MapKeyValues->GetString("material"));
+	char radarFileName[SOURCE_MAX_PATH];
+	Q_snprintf(radarFileName, SOURCE_MAX_PATH, "%s_radar", m_MapKeyValues->GetString("material"));
 	m_nRadarMapTextureID = surface()->CreateNewTextureID();
 	surface()->DrawSetTextureFile(m_nRadarMapTextureID, radarFileName, true, false);
 	int radarWide = -1;
@@ -1651,10 +1651,10 @@ void CCSMapOverview::SetMap(const char * levelname)
 bool CCSMapOverview::CreateRadarImage(const char *mapName, const char * radarFileName)
 {
 #ifdef GENERATE_RADAR_FILE
-	char fullFileName[MAX_PATH];
-	Q_snprintf(fullFileName, MAX_PATH, "materials/%s.vtf", mapName);
-	char fullRadarFileName[MAX_PATH];
-	Q_snprintf(fullRadarFileName, MAX_PATH, "materials/%s.vtf", radarFileName);
+	char fullFileName[SOURCE_MAX_PATH];
+	Q_snprintf(fullFileName, SOURCE_MAX_PATH, "materials/%s.vtf", mapName);
+	char fullRadarFileName[SOURCE_MAX_PATH];
+	Q_snprintf(fullRadarFileName, SOURCE_MAX_PATH, "materials/%s.vtf", radarFileName);
 
 	// Not found, so try to make one
 	FileHandle_t fp;
@@ -1702,8 +1702,8 @@ bool CCSMapOverview::CreateRadarImage(const char *mapName, const char * radarFil
 		buf.Purge();
 
 		// And need a vmt file to go with it.
-		char vmtFilename[MAX_PATH];
-		Q_snprintf(vmtFilename, MAX_PATH, "%s", fullRadarFileName);
+		char vmtFilename[SOURCE_MAX_PATH];
+		Q_snprintf(vmtFilename, SOURCE_MAX_PATH, "%s", fullRadarFileName);
 		char *extension = &vmtFilename[Q_strlen(vmtFilename) - 3];
 		*extension++ = 'v';
 		*extension++ = 'm';

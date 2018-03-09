@@ -31,7 +31,7 @@
 #include "server.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar demo_recordcommands(
@@ -1234,7 +1234,7 @@ void CDemoPlayer::InterpolateViewpoint(void) {
       }
     }
 
-    // FIXME: This should be velocity based maybe?
+    // TODO(d.rattman): This should be velocity based maybe?
     if ((vel > demo_interplimit.GetFloat()) ||
         (angVel > demo_avellimit.GetFloat()) || m_bResetInterpolation) {
       m_bResetInterpolation = false;

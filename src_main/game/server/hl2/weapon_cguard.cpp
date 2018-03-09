@@ -17,7 +17,7 @@
 #include "te_particlesystem.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //Concussive explosion entity
@@ -383,7 +383,7 @@ void CWeaponCGuard::PrimaryAttack( void )
 //-----------------------------------------------------------------------------
 void CWeaponCGuard::ItemPostFrame( void )
 {
-	//FIXME: UpdateLasers();
+	//TODO(d.rattman): UpdateLasers();
 
 	if ( ( m_flChargeTime < gpGlobals->curtime ) && ( m_bFired == false ) )
 	{

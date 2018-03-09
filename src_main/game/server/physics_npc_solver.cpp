@@ -10,7 +10,7 @@
 #include "ai_basenpc.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -131,7 +131,7 @@ void CPhysicsNPCSolver::BecomePenetrationSolver()
 	{
 		m_allowIntersection = true;
 		IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-		int listCount = pEntity->VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+		int listCount = pEntity->VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 		PhysDisableEntityCollisions( m_hNPC, pEntity );
 		m_pController = physenv->CreateMotionController( this );
 		for ( int i = 0; i < listCount; i++ )

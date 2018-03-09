@@ -27,7 +27,7 @@ CEntityPanel::CEntityPanel( vgui::Panel *pParent, const char *panelName )
 	SetPaintBackgroundEnabled( false );
 	m_pBaseEntity = NULL;
 
-	// FIXME: ComputeParent is yucky... can we be rid of it?
+	// TODO(d.rattman): ComputeParent is yucky... can we be rid of it?
 	if (!pParent)
 	{
 		ComputeParent();

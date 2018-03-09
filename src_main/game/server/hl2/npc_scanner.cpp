@@ -23,7 +23,7 @@
 #include "spotlightend.h"
 #include "weapon_physcannon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -1567,7 +1567,7 @@ Vector CNPC_CScanner::SpotlightCurrentPos(void) {
 // Purpose: Update the direction and position of my spotlight
 //------------------------------------------------------------------------------
 void CNPC_CScanner::SpotlightUpdate(void) {
-  // FIXME: JDW - E3 Hack
+  // TODO(d.rattman): JDW - E3 Hack
   if (m_bNoLight) {
     if (m_hSpotlight) {
       SpotlightDestroy();
@@ -1841,7 +1841,7 @@ void CNPC_CScanner::StartTask(const Task_t *pTask) {
       }
 
       if (GetTarget()) {
-        // FIXME: Tweak
+        // TODO(d.rattman): Tweak
         // Vector idealPos = IdealGoalForMovement( InspectTargetPosition(),
         // GetAbsOrigin(), 128.0f, 128.0f );
 
@@ -2325,7 +2325,7 @@ void CNPC_CScanner::MoveToPhotograph(float flInterval) {
 
   MoveToTarget(flInterval, idealPos);
 
-  // FIXME: Re-implement?
+  // TODO(d.rattman): Re-implement?
 
   /*
   // ------------------------------------------------

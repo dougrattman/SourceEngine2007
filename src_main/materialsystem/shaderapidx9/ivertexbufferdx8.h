@@ -12,7 +12,7 @@
 
 #include "IVertexBuffer.h"
 
-abstract_class IVertexBufferDX8 : public IVertexBuffer
+the_interface IVertexBufferDX8 : public IVertexBuffer
 {
 public:
 	// TEMPORARY!

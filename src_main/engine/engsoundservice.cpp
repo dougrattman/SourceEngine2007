@@ -32,7 +32,7 @@
 #include "vstdlib/random.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void Snd_Restart_f();
@@ -62,7 +62,7 @@ class CEngineSoundServices : public ISoundServices {
     // Entity has been deleted
     IClientEntity *pClientEntity = entitylist->GetClientEntity(entIndex);
     if (!pClientEntity) {
-      // FIXME:  Should this assert?
+      // TODO(d.rattman):  Should this assert?
       return false;
     }
 
@@ -200,7 +200,7 @@ class CEngineSoundServices : public ISoundServices {
 
   virtual void GetAllSoundFilesReferencedInReslists(
       CUtlRBTree<FileNameHandle_t, int> &list) {
-    char reslistdir[MAX_PATH];
+    char reslistdir[SOURCE_MAX_PATH];
     Q_strncpy(reslistdir, MapReslistGenerator().GetResListDirectory(),
               sizeof(reslistdir));
     list.RemoveAll();

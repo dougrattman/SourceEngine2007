@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of CVmfImport
 //
@@ -1603,7 +1603,7 @@ void CVmfImport::GetTexturePathsFromMaterialPath(
 	MString mat = materialPath;
 	mat = "materials/" + mat;
 	mat += ".vmt";
-	char localPath[ MAX_PATH ];
+	char localPath[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->RelativePathToFullPath(
 		mat.asChar(), "game", localPath, sizeof( localPath ) );
 
@@ -1648,7 +1648,7 @@ MString CVmfImport::GetTgaFromTexturePath(
 
 	MString vtf = MString( "materials/" ) + texturePath + ".vtf";
 
-	char localPath[ MAX_PATH ];
+	char localPath[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->RelativePathToFullPath(
 		vtf.asChar(), "game", localPath, sizeof( localPath ) );
 	Q_FixSlashes( localPath, '/' );
@@ -1675,9 +1675,9 @@ MString CVmfImport::GetTgaFromTexturePath(
 
 	// Couldn't find the texture by the default methods... revert to path searching
 
-	char searchPath[ MAX_PATH ];
+	char searchPath[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->GetSearchPath( "GAME", false, searchPath, sizeof( searchPath ) );
-	const char *pEnd( searchPath + MAX_PATH );
+	const char *pEnd( searchPath + SOURCE_MAX_PATH );
 	for ( char *pC( searchPath ); *pC && pC != pEnd; ++pC )
 	{
 		if ( *pC == '\\' )
@@ -2267,8 +2267,8 @@ MString CVmfImport::TextureArchive(
 	if ( m_optTextureArchive.length() == 0 )
 		return filename;
 
-	char buf0[ MAX_PATH ];
-	char buf1[ MAX_PATH ];
+	char buf0[ SOURCE_MAX_PATH ];
+	char buf1[ SOURCE_MAX_PATH ];
 
 	Q_strcpy( buf0, filename.asChar() );
 	Q_FixSlashes( buf0 );

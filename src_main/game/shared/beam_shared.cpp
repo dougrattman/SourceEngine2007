@@ -27,7 +27,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define BEAM_DEFAULT_HALO_SCALE 10
@@ -110,7 +110,7 @@ static void *SendProxy_SendPredictableId(const SendProp *pProp,
   int id_player_index = pEntity->m_PredictableID->GetPlayer();
   int owner_player_index = pOwner->entindex() - 1;
   // Only send to owner player
-  // FIXME:  Is this ever not the case due to the SetOnly call?
+  // TODO(d.rattman):  Is this ever not the case due to the SetOnly call?
   if (id_player_index != owner_player_index) return NULL;
 
   pRecipients->SetOnly(owner_player_index);
@@ -458,7 +458,7 @@ const Vector &CBeam::GetAbsEndPos(void) const {
 
   if (!const_cast<CBeam *>(this)->GetMoveParent()) return m_vecEndPos.Get();
 
-  // FIXME: Cache this off?
+  // TODO(d.rattman): Cache this off?
   static Vector vecAbsPos;
   VectorTransform(m_vecEndPos, EntityToWorldTransform(), vecAbsPos);
   return vecAbsPos;
@@ -491,7 +491,7 @@ const Vector &C_Beam::GetAbsEndPos(void) const {
 
   if (!const_cast<C_Beam *>(this)->GetMoveParent()) return m_vecEndPos.Get();
 
-  // FIXME: Cache this off?
+  // TODO(d.rattman): Cache this off?
   VectorTransform(m_vecEndPos, EntityToWorldTransform(), vecEndAbsPosition);
   return vecEndAbsPosition;
 }
@@ -619,7 +619,7 @@ void CBeam::SplineInit(int nNumEnts, CBaseEntity **pEntList, int *attachment) {
 }
 
 void CBeam::RelinkBeam(void) {
-  // FIXME: Why doesn't this just define the absbox too?
+  // TODO(d.rattman): Why doesn't this just define the absbox too?
   // It seems that we don't need to recompute the absbox
   // in CBaseEntity::SetObjectCollisionBox, in fact the absbox
   // computed there seems way too big
@@ -943,7 +943,7 @@ void CBeam::AddEntity(void) {
     return;
   }
 
-  // FIXME: If we're hooked up to an attachment point, then recompute our bounds
+  // TODO(d.rattman): If we're hooked up to an attachment point, then recompute our bounds
   // every frame
   if (m_hAttachEntity[0].Get() || m_hAttachEntity[1].Get()) {
     // Compute the bounds here...

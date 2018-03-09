@@ -261,7 +261,7 @@ void CInputSystem::PostXKeyEvent(int userId, xKey_t xKey, int nSample) {
     SetPrimaryUserId(userId);
   }
 
-  // FIXME: Uncomment userId when we support multiple controllers
+  // TODO(d.rattman): Uncomment userId when we support multiple controllers
   int nMsgUserId = 0;  // userId;
   int nSampleThreshold = 0;
 

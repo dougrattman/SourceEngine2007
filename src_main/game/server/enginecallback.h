@@ -12,7 +12,7 @@
 #include "eiface.h"
 #endif
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define random random_valve// stdlib.h defined random()..., and so does vstdlib/random.h
 #endif
 

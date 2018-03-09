@@ -51,7 +51,7 @@ class PackedEntity;
 class INetworkStringTable;
 class CEntityReadInfo;
 
-abstract_class CBaseClientState : public INetChannelHandler,
+the_interface CBaseClientState : public INetChannelHandler,
                                   public IConnectionlessPacketHandler,
                                   public IServerMessageHandler {
  public:

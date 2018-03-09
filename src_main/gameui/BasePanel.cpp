@@ -64,7 +64,7 @@
 #include "vgui_controls/QueryBox.h"
 #include "xbox/xboxstubs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Windows helpfully #define's this to MessageBoxA, we're using vgui::MessageBox
@@ -585,7 +585,7 @@ static int CC_GameMenuCompletionFunc(
   CUtlRBTree<CUtlString> symbols(0, 0, UtlStringLessFunc);
 
   int i;
-  int c = ARRAYSIZE(g_rgValidCommands);
+  int c = SOURCE_ARRAYSIZE(g_rgValidCommands);
   for (i = 0; i < c; ++i) {
     if (Q_strnicmp(g_rgValidCommands[i], substring, checklen)) continue;
 
@@ -1180,7 +1180,7 @@ void CBasePanel::ApplySchemeSettings(IScheme *pScheme) {
 
   // work out which background image to use
   // pc uses blurry backgrounds based on the background level
-  char background[MAX_PATH], filename[MAX_PATH];
+  char background[SOURCE_MAX_PATH], filename[SOURCE_MAX_PATH];
   engine->GetMainMenuBackgroundName(background, sizeof(background));
   Q_snprintf(filename, sizeof(filename), "console/%s%s", background,
              (bIsWidescreen ? "_widescreen" : ""));
@@ -1598,7 +1598,7 @@ void CBasePanel::OnCompletedAsyncDeviceAttached(
     // Invalidate the device
     XBX_SetStorageDeviceId(XBX_INVALID_STORAGE_ID);
 
-    // FIXME: We don't know which device failed!
+    // TODO(d.rattman): We don't know which device failed!
     // Pop a dialog explaining that the user's data is corrupt
     BasePanel()->ShowMessageDialog(MD_STORAGE_DEVICES_CORRUPT);
   }
@@ -1629,7 +1629,7 @@ void CBasePanel::OnCompletedAsyncDeviceAttached(
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME: Only TF takes this path...
+// Purpose: TODO(d.rattman): Only TF takes this path...
 //-----------------------------------------------------------------------------
 bool CBasePanel::ValidateStorageDevice(void) { return true; }
 
@@ -2301,7 +2301,7 @@ void CBasePanel::SystemNotification(const int notification) {
     if (m_hLoadGameDialog_Xbox.Get())
       m_hLoadGameDialog_Xbox->OnCommand("RefreshSaveGames");
 
-    // FIXME: This code is incorrect, they do NOT need a storage device, it is
+    // TODO(d.rattman): This code is incorrect, they do NOT need a storage device, it is
     // only recommended that they do
     if (GameUI().IsInLevel()) {
       // They wanted to use a storage device and are already playing!
@@ -2678,7 +2678,7 @@ void CFooterPanel::ClearButtons(void) {
 void CFooterPanel::AddNewButtonLabel(const char *text, const char *icon) {
   ButtonLabel_t *button = new ButtonLabel_t;
 
-  Q_strncpy(button->name, text, MAX_PATH);
+  Q_strncpy(button->name, text, SOURCE_MAX_PATH);
   button->bVisible = true;
 
   // Button icons are a single character

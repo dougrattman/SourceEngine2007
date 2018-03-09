@@ -11,7 +11,7 @@
 
 #include <limits.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LayerSelectionData_t::DataLayer_t::DataLayer_t(float frac, CDmeLogLayer *layer)
@@ -93,8 +93,8 @@ float DmeLog_TimeSelection_t::GetAmountForTime(DmeTime_t dmetime) const {
 
   float t = dmetime.GetSeconds();
 
-  // FIXME, this is slow, we should cache this maybe?
-  COMPILE_TIME_ASSERT(TS_TIME_COUNT == 4);
+  // TODO(d.rattman): this is slow, we should cache this maybe?
+  static_assert(TS_TIME_COUNT == 4);
   float times[TS_TIME_COUNT];
   times[0] = m_nTimes[0].GetSeconds();
   times[1] = m_nTimes[1].GetSeconds();
@@ -386,7 +386,7 @@ float Curve_Interpolate(float t, DmeTime_t times[4], const float values[4],
     }
   }
 
-  // FIXME:  This means we can only work with curves that range from 0.0
+  // TODO(d.rattman):  This means we can only work with curves that range from 0.0
   // to 1.0f!!!
   float retval = std::clamp(vOut.y, fmin, fmax);
   return retval;
@@ -1158,7 +1158,7 @@ void CDmeTypedLogLayer<T>::RemoveKey(int nKeyIndex,
 
 //-----------------------------------------------------------------------------
 // Sets a key, removes all keys after this time
-// FIXME: This needs to account for interpolation!!!
+// TODO(d.rattman): This needs to account for interpolation!!!
 //-----------------------------------------------------------------------------
 template <class T>
 void CDmeTypedLogLayer<T>::SetKey(DmeTime_t time, const T &value,
@@ -1403,7 +1403,7 @@ void CDmeTypedLogLayer<T>::SetKeyValue(int nKey, const T &value) {
 //-----------------------------------------------------------------------------
 template <class T>
 void CDmeTypedLogLayer<T>::Resample(DmeFramerate_t samplerate) {
-  // FIXME:  Might have to revisit how to determine "curve types" for "resampled
+  // TODO(d.rattman):  Might have to revisit how to determine "curve types" for "resampled
   // points...
   Assert(!IsUsingCurveTypes());
 
@@ -1640,13 +1640,13 @@ void CDmeTypedLogLayer<T>::RemoveRedundantKeys() {
     // Skip preceeding and ending keys that have the same value
     int nFirstKey, nLastKey;
     for (nFirstKey = 1; nFirstKey < nKeys; ++nFirstKey) {
-      // FIXME: Should we use a tolerance check here?
+      // TODO(d.rattman): Should we use a tolerance check here?
       if (GetKeyValue(nFirstKey) != GetKeyValue(nFirstKey - 1)) break;
     }
     --nFirstKey;
 
     for (nLastKey = nKeys; --nLastKey >= 1;) {
-      // FIXME: Should we use a tolerance check here?
+      // TODO(d.rattman): Should we use a tolerance check here?
       if (GetKeyValue(nLastKey) != GetKeyValue(nLastKey - 1)) break;
     }
 
@@ -2835,7 +2835,7 @@ template <class T>
 void CDmeTypedLog<T>::SetCurveInfo(CDmeCurveInfo *pCurveInfo) {
   Assert(!pCurveInfo || dynamic_cast<CDmeTypedCurveInfo<T> *>(pCurveInfo));
   m_CurveInfo = pCurveInfo;
-  OnUsingCurveTypesChanged();  // FIXME: Is this really necessary?
+  OnUsingCurveTypesChanged();  // TODO(d.rattman): Is this really necessary?
                                // OnAttributeChanged should have already called
                                // this!
 }
@@ -3705,7 +3705,7 @@ void CDmeTypedLog<T>::_StampKeyAtHeadResample(
       (CDmAttributeInfo<T>::ATTRIBUTE_TYPE == AT_QUATERNION);
   bool bPerformInterpolation = bUsePresetRules || bIsStampingQuaternions;
 
-  // FIXME: Preset value should never be NULL. We need to grab it from the
+  // TODO(d.rattman): Preset value should never be NULL. We need to grab it from the
   // attribute
   bool bUsePresetValue =
       bUsePresetRules && params.m_pPresetValue &&
@@ -3870,7 +3870,7 @@ void CDmeTypedLog<T>::_StampKeyFilteredByTimeSelection(
   // preset being applied
   bool bUsePresetRules = (RECORD_PRESET == params.GetRecordingMode());
 
-  // FIXME: Preset value should never be NULL. We need to grab it from the
+  // TODO(d.rattman): Preset value should never be NULL. We need to grab it from the
   // attribute
   const T &interpTarget = (bUsePresetRules && params.m_pPresetValue)
                               ? params.m_pPresetValue->GetValue<T>()
@@ -5100,7 +5100,7 @@ void CDmeTypedLog<T>::PasteAndRescaleSamples(
     double flFactor = (tKeyTime - tStartTime[nState][0]).GetTenthsOfMS() *
                       pScaleFactor[nState];
 
-    // FIXME: Fix the algorithm, then uncomment to get time-scaled falloff
+    // TODO(d.rattman): Fix the algorithm, then uncomment to get time-scaled falloff
     // regions
     //		if ( nState == PASTE_STATE_RAMP_IN || nState ==
     // PASTE_STATE_RAMP_OUT

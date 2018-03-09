@@ -33,7 +33,7 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define CRAB_ATTN_IDLE (float)1.5
@@ -1111,7 +1111,7 @@ void CBaseHeadcrab::JumpFromCanister() {
   // Check to see if the player is within jump range. If so, jump at him!
   bool bJumpedAtEnemy = false;
 
-  // FIXME: Can't use GetEnemy() here because enemy only updates during
+  // TODO(d.rattman): Can't use GetEnemy() here because enemy only updates during
   // schedules which are interruptible by COND_NEW_ENEMY or COND_LOST_ENEMY
   CBaseEntity *pEnemy = BestEnemy();
   if (pEnemy) {
@@ -2161,7 +2161,7 @@ void CHeadcrab::DeathSound(const CTakeDamageInfo &info) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CHeadcrab::TelegraphSound(void) {
-  // FIXME: Need a real one
+  // TODO(d.rattman): Need a real one
   EmitSound("NPC_HeadCrab.Alert");
 }
 
@@ -2442,7 +2442,7 @@ void CFastHeadcrab::StartTask(const Task_t *pTask) {
         GetMoveProbe()->MoveLimit(NAV_JUMP, GetAbsOrigin(), tr.endpos,
                                   MASK_NPCSOLID, GetEnemy(), &moveTrace);
 
-        // FIXME: Where should this happen?
+        // TODO(d.rattman): Where should this happen?
         m_vecJumpVel = moveTrace.vJumpVelocity;
 
         if (!IsMoveBlocked(moveTrace)) {

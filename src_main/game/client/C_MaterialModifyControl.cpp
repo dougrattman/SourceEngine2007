@@ -14,7 +14,7 @@
 #include "BaseAnimatedTextureProxy.h"
 #include "toolframework_client.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MATERIAL_MODIFY_STRING_SIZE			255
@@ -50,7 +50,7 @@ struct materialfloatlerpcommands_t
 };
 
 //------------------------------------------------------------------------------
-// FIXME: This really should inherit from something	more lightweight
+// TODO(d.rattman): This really should inherit from something	more lightweight
 //------------------------------------------------------------------------------
 
 class C_MaterialModifyControl : public C_BaseEntity

@@ -10,7 +10,7 @@ typedef unsigned int ManageServerUIHandle_t;
 class IManageServer;
 
 // Purpose: Interface to server administration functions
-abstract_class IAdminServer : public IBaseInterface {
+the_interface IAdminServer : public IBaseInterface {
  public:
   // opens a manage server dialog for a local server
   virtual ManageServerUIHandle_t OpenManageServerDialog(

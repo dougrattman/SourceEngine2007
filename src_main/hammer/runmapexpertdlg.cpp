@@ -13,7 +13,7 @@
 #include "RunMapExpertDlg.h"
 #include "RunMapCfgDlg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -422,9 +422,9 @@ void CRunMapExpertDlg::UpdateCommandWithEditFields(int iIndex)
 	PCCOMMAND pCommand = GetCommandAtIndex(&iIndex);
 	
 	// update command struct with edit fields:
-	m_cCommand.GetWindowText(pCommand->szRun, MAX_PATH);
-	m_cParameters.GetWindowText(pCommand->szParms, MAX_PATH);
-	m_cEnsureFn.GetWindowText(pCommand->szEnsureFn, MAX_PATH);
+	m_cCommand.GetWindowText(pCommand->szRun, SOURCE_MAX_PATH);
+	m_cParameters.GetWindowText(pCommand->szParms, SOURCE_MAX_PATH);
+	m_cEnsureFn.GetWindowText(pCommand->szEnsureFn, SOURCE_MAX_PATH);
 	pCommand->bUseProcessWnd = m_cUseProcessWnd.GetCheck();
 	pCommand->bEnsureCheck = m_cEnsureCheck.GetCheck();
 

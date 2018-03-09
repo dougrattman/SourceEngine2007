@@ -11,7 +11,7 @@
 #include "colorcorrectionmgr.h"
 #include "materialsystem/materialsystemutil.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -42,7 +42,7 @@ private:
 	float	m_minFalloff;
 	float	m_maxFalloff;
 	float	m_flCurWeight;
-	char	m_netLookupFilename[MAX_PATH];
+	char	m_netLookupFilename[SOURCE_MAX_PATH];
 
 	bool	m_bEnabled;
 
@@ -87,8 +87,8 @@ void C_ColorCorrection::OnDataChanged(DataUpdateType_t updateType)
 	{
 		if ( m_CCHandle == INVALID_CLIENT_CCHANDLE )
 		{
-			char filename[MAX_PATH];
-			Q_strncpy( filename, m_netLookupFilename, MAX_PATH );
+			char filename[SOURCE_MAX_PATH];
+			Q_strncpy( filename, m_netLookupFilename, SOURCE_MAX_PATH );
 
 			m_CCHandle = g_pColorCorrectionMgr->AddColorCorrection( filename );
 			SetNextClientThink( ( m_CCHandle != INVALID_CLIENT_CCHANDLE ) ? CLIENT_THINK_ALWAYS : CLIENT_THINK_NEVER );

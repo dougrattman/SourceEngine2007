@@ -30,7 +30,7 @@ enum
 	MM_SAY_TEAM,
 };
 
-abstract_class IClientMode
+the_interface IClientMode
 {
 // Misc.
 public:

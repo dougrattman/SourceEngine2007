@@ -10,7 +10,7 @@
 #include "vgui_rootpanel_dod.h"
 #include "vgui/ivgui.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 C_DODRootPanel *g_pRootPanel = NULL;

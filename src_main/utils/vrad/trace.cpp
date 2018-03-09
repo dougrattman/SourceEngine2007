@@ -187,12 +187,12 @@ void DM_ClipBoxToBrush(CToolTrace *trace, const Vector &mins,
       side = &dbrushsides[brush->firstside + i];
       plane = dplanes + side->planenum;
 
-      // FIXME: special case for axial
+      // TODO(d.rattman): special case for axial
 
       // general box case
       // push the plane out apropriately for mins/maxs
 
-      // FIXME: use signbits into 8 way lookup for each mins/maxs
+      // TODO(d.rattman): use signbits into 8 way lookup for each mins/maxs
       ofs.x = (plane->normal.x < 0) ? maxs.x : mins.x;
       ofs.y = (plane->normal.y < 0) ? maxs.y : mins.y;
       ofs.z = (plane->normal.z < 0) ? maxs.z : mins.z;
@@ -239,7 +239,7 @@ void DM_ClipBoxToBrush(CToolTrace *trace, const Vector &mins,
       side = &dbrushsides[brush->firstside + i];
       plane = dplanes + side->planenum;
 
-      // FIXME: special case for axial
+      // TODO(d.rattman): special case for axial
 
       // special point case
       // don't ray trace against bevel planes

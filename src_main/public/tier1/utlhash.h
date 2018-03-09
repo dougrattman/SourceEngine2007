@@ -5,8 +5,8 @@
 
 #include <cassert>
 #include <climits>
-#include "tier0/include/commonmacros.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/macros.h"
+#include "base/include/compiler_specific.h"
 #include "tier1/generichash.h"
 #include "tier1/utllinkedlist.h"
 #include "tier1/utlmemory.h"

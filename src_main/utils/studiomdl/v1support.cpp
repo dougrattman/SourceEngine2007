@@ -127,7 +127,7 @@ void ParseFaceData( s_source_t *psource, int material, s_face_t *pFace )
 		scale_vertex( p );
 		
 		// continue parsing more bones.
-		// FIXME: don't we have a built in parser that'll do this?
+		// TODO(d.rattman): don't we have a built in parser that'll do this?
 		if (iCount > 4)
 		{
 			int k;
@@ -218,7 +218,7 @@ void Grab_Triangles( s_source_t *psource )
 	//
 	int texture;
 	int material;
-	char texturename[MAX_PATH];
+	char texturename[SOURCE_MAX_PATH];
 
 	while (1) 
 	{

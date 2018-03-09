@@ -9,7 +9,7 @@
 #include "collisionutils.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_ACTOR_AS_ACTIVATOR (1 << 0)

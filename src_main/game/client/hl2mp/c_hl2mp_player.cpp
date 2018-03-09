@@ -664,7 +664,7 @@ void C_HL2MP_Player::ItemPreFrame( void )
 	// Disallow shooting while zooming
 	if ( m_nButtons & IN_ZOOM )
 	{
-		//FIXME: Held weapons like the grenade get sad when this happens
+		//TODO(d.rattman): Held weapons like the grenade get sad when this happens
 		m_nButtons &= ~(IN_ATTACK|IN_ATTACK2);
 	}
 

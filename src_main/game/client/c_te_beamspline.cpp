@@ -14,7 +14,7 @@
 #include "c_basetempentity.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_SPLINE_POINTS 16

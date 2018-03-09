@@ -264,7 +264,7 @@ Activity CWeaponCrowbar::ChooseIntersectionPointAndActivity( trace_t &hitTrace, 
 //-----------------------------------------------------------------------------
 void CWeaponCrowbar::ImpactEffect( void )
 {
-	//FIXME: need new decals
+	//TODO(d.rattman): need new decals
 	UTIL_ImpactTrace( &m_traceHit, DMG_CLUB );
 }
 

@@ -340,7 +340,7 @@ float4 main( PS_INPUT i ) : COLOR
 	}
 #endif
 
-	// FIXME: This could be done per vertex!
+	// TODO(d.rattman): This could be done per vertex!
 	diffuseLighting *= g_DiffuseModulation.rgb;
 	alpha *= g_DiffuseModulation.a;
 	

@@ -2237,8 +2237,7 @@ void SceneRampTool::OnEdgeProperties()
 	PostDataChanged( undotext );
 }
 
-void SceneRampTool::GetWorkList( bool reflect, CUtlVector< SceneRampTool * >& list )
+void SceneRampTool::GetWorkList([[maybe_unused]] bool reflect, CUtlVector< SceneRampTool * >& list )
 {
-	NOTE_UNUSED( reflect );
 	list.AddToTail( this );
 }

@@ -52,7 +52,7 @@ bool CShaderDeviceMgrDx8::Connect(CreateInterfaceFn factory) {
     return false;
   }
 
-  // FIXME: Want this to be here, but we can't because Steam
+  // TODO(d.rattman): Want this to be here, but we can't because Steam
   // hasn't had it's application ID set up yet.
 
   //	InitAdapterInfo();
@@ -71,8 +71,8 @@ void CShaderDeviceMgrDx8::Disconnect() {
 }
 
 InitReturnVal_t CShaderDeviceMgrDx8::Init() {
-  // FIXME: Remove call to InitAdapterInfo once Steam startup issues are
-  // resolved. Do it in Connect instead.
+  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
+  // are resolved. Do it in Connect instead.
   InitAdapterInfo();
 
   return INIT_OK;
@@ -338,7 +338,7 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   if (FAILED(hr)) return false;
 
   Q_strncpy(pCaps->m_pDriverName, ident.Description,
-            std::min(ARRAYSIZE(ident.Description),
+            std::min(SOURCE_ARRAYSIZE(ident.Description),
                      (usize)MATERIAL_ADAPTER_NAME_LENGTH));
   pCaps->m_VendorID = ident.VendorId;
   pCaps->m_DeviceID = ident.DeviceId;
@@ -596,11 +596,11 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
                                 D3DFMT_X8R8G8B8, D3DUSAGE_QUERY_VERTEXTEXTURE,
                                 D3DRTYPE_TEXTURE, D3DFMT_R32F) == S_OK);
 
-  // FIXME: vs30 has a fixed setting here at 4.
+  // TODO(d.rattman): vs30 has a fixed setting here at 4.
   // Future hardware will need some other way of computing this.
   pCaps->m_nVertexTextureCount = pCaps->m_bSupportsVertexTextures ? 4 : 0;
 
-  // FIXME: How do I actually compute this?
+  // TODO(d.rattman): How do I actually compute this?
   pCaps->m_nMaxVertexTextureDimension =
       pCaps->m_bSupportsVertexTextures ? 4096 : 0;
 
@@ -720,8 +720,8 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   }
   pCaps->m_nDXSupportLevel = pCaps->m_nMaxDXSupportLevel;
 
-  // FIXME: m_nDXSupportLevel is uninitialised at this point!! Need to relocate
-  // this test:
+  // TODO(d.rattman): m_nDXSupportLevel is uninitialised at this point!! Need to
+  // relocate this test:
   int nModelIndex = pCaps->m_nDXSupportLevel < 90 ? VERTEX_SHADER_MODEL - 10
                                                   : VERTEX_SHADER_MODEL;
   pCaps->m_MaxVertexShaderBlendMatrices =
@@ -775,7 +775,7 @@ void CShaderDeviceMgrDx8::ComputeDXSupportLevel(HardwareCaps_t &caps) {
   // 98 = DX9 XBox360
   // NOTE: 82 = NVidia nv3x cards, which can't run dx9 fast
 
-  // FIXME: Improve this!! There should be a whole list of features
+  // TODO(d.rattman): Improve this!! There should be a whole list of features
   // we require in order to be considered a DX7 board, DX8 board, etc.
 
   if (caps.m_SupportsShaderModel_3_0)  // Note that we don't tie vertex textures
@@ -823,8 +823,8 @@ void CShaderDeviceMgrDx8::ComputeDXSupportLevel(HardwareCaps_t &caps) {
 // Gets the number of adapters...
 //-----------------------------------------------------------------------------
 int CShaderDeviceMgrDx8::GetAdapterCount() const {
-  // FIXME: Remove call to InitAdapterInfo once Steam startup issues are
-  // resolved.
+  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
+  // are resolved.
   const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
 
   return adapters_.Count();
@@ -835,8 +835,8 @@ int CShaderDeviceMgrDx8::GetAdapterCount() const {
 //-----------------------------------------------------------------------------
 void CShaderDeviceMgrDx8::GetAdapterInfo(int nAdapter,
                                          MaterialAdapterInfo_t &info) const {
-  // FIXME: Remove call to InitAdapterInfo once Steam startup issues are
-  // resolved.
+  // TODO(d.rattman): Remove call to InitAdapterInfo once Steam startup issues
+  // are resolved.
   const_cast<CShaderDeviceMgrDx8 *>(this)->InitAdapterInfo();
 
   Assert((nAdapter >= 0) && (nAdapter < adapters_.Count()));
@@ -850,7 +850,7 @@ void CShaderDeviceMgrDx8::GetAdapterInfo(int nAdapter,
 bool CShaderDeviceMgrDx8::SetAdapter(int nAdapter, int nAdapterFlags) {
   LOCK_SHADERAPI();
 
-  // FIXME:
+  // TODO(d.rattman):
   //	g_pShaderDeviceDx8->m_bReadPixelsEnabled = (nAdapterFlags &
   // MATERIAL_INIT_READ_PIXELS_ENABLED) != 0;
 
@@ -1056,7 +1056,7 @@ u64 CShaderDeviceMgrDx8::GetVidMemBytes(u32 adapter_idx) const {
 //-----------------------------------------------------------------------------
 
 #if 0
-// FIXME: Enable after I've separated it out from shaderapidx8 a little better
+// TODO(d.rattman): Enable after I've separated it out from shaderapidx8 a little better
 static CShaderDeviceDx8 s_ShaderDeviceDX8;
 CShaderDeviceDx8* g_pShaderDeviceDx8 = &s_ShaderDeviceDX8;
 #endif
@@ -1316,8 +1316,9 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
         ComputeMultisampleType(info.m_nAASamples);
     DWORD nQualityLevel;
 
-    // FIXME: Should we add the quality level to the ShaderAdapterMode_t struct?
-    // 16x on nVidia refers to CSAA or "Coverage Sampled Antialiasing"
+    // TODO(d.rattman): Should we add the quality level to the
+    // ShaderAdapterMode_t struct? 16x on nVidia refers to CSAA or "Coverage
+    // Sampled Antialiasing"
     const HardwareCaps_t &adapterCaps =
         g_ShaderDeviceMgrDx8.GetHardwareCaps(nAdapter);
     if ((info.m_nAASamples == 16) &&
@@ -1730,7 +1731,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
   g_pShaderDeviceMgrDx8->GetCurrentModeInfo(&mode, nAdapter);
   m_AdapterFormat = mode.m_Format;
 
-  // FIXME: Need to do this prior to SetPresentParameters. Fix.
+  // TODO(d.rattman): Need to do this prior to SetPresentParameters. Fix.
   // Make it part of HardwareCaps_t
   InitializeColorInformation(nAdapter, SOURCE_DX9_DEVICE_TYPE, m_AdapterFormat);
 
@@ -1835,7 +1836,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
   g_pHardwareConfig->SetupHardwareCaps(
       info, g_ShaderDeviceMgrDx8.GetHardwareCaps(nAdapter));
 
-  // FIXME: Bake this into hardware config
+  // TODO(d.rattman): Bake this into hardware config
   // What texture formats do we support?
   if (D3DSupportsCompressedTextures()) {
     g_pHardwareConfig->CapsForEdit().m_SupportsCompressedTextures =
@@ -1892,7 +1893,7 @@ void CShaderDeviceDx8::AllocFrameSyncObjects(void) {
     return;
   }
 
-  // FIXME FIXME FIXME!!!!!  Need to record this.
+  // TODO(d.rattman): Need to record this.
   HRESULT hr =
       Dx9Device()->CreateQuery(D3DQUERYTYPE_EVENT, &m_pFrameSyncQueryObject);
   if (hr == D3DERR_NOTAVAILABLE) {
@@ -1914,7 +1915,7 @@ void CShaderDeviceDx8::FreeFrameSyncObjects(void) {
 
   FreeFrameSyncTextureObject();
 
-  // FIXME FIXME FIXME!!!!!  Need to record this.
+  // TODO(d.rattman): Need to record this.
   if (m_pFrameSyncQueryObject) {
 #ifdef _DEBUG
     int nRetVal =
@@ -1950,7 +1951,7 @@ void CShaderDeviceDx8::OtherAppInitializing(bool initializing) {
 bool CShaderDeviceDx8::TryDeviceReset() {
   if (IsX360()) return true;
 
-  // FIXME: Make this rebuild the Dx9Device from scratch!
+  // TODO(d.rattman): Make this rebuild the Dx9Device from scratch!
   // Helps with compatibility
   HRESULT hr = Dx9Device()->Reset(&m_PresentParameters);
   return !FAILED(hr);
@@ -2086,7 +2087,7 @@ ConVar mat_forcelostdevice("mat_forcelostdevice", "0");
 
 void CShaderDeviceDx8::CheckDeviceLost(bool bOtherAppInitializing) {
 #if !defined(_X360)
-  // FIXME: We could also queue up if WM_SIZE changes and look at that
+  // TODO(d.rattman): We could also queue up if WM_SIZE changes and look at that
   // but that seems to only make sense if we have resizable windows where
   // we do *not* allocate buffers as large as the entire current video mode
   // which we're not doing

@@ -133,7 +133,7 @@ class ITerrainMod {
 
 namespace VEngineServerV21 {
 
-abstract_class IVEngineServer {
+the_interface IVEngineServer {
  public:
   // Tell engine to change level ( "changelevel s1\n" or "changelevel2 s1 s2\n"
   // )
@@ -370,7 +370,7 @@ abstract_class IVEngineServer {
   virtual void ApplyTerrainMod(TerrainModType type,
                                CTerrainModParams const &params) = 0;
 
-  // Save/restore wrapper - FIXME:  At some point we should move this to it's
+  // Save/restore wrapper - TODO(d.rattman):  At some point we should move this to it's
   // own interface
   virtual bool LoadGameState(char const *pMapName, bool createPlayers) = 0;
   virtual void LoadAdjacentEnts(const char *pOldLevel,
@@ -457,7 +457,7 @@ abstract_class IVEngineServer {
 
 namespace ServerGameDLLV3 {
 
-abstract_class IServerGameDLL {
+the_interface IServerGameDLL {
  public:
   // Initialize the game (one-time call when the DLL is first loaded )
   // Return false if there is an error during startup.
@@ -557,7 +557,7 @@ abstract_class IServerGameDLL {
 
 namespace ServerGameEntsV1 {
 
-abstract_class IServerGameEnts {
+the_interface IServerGameEnts {
  public:
   virtual ~IServerGameEnts() {}
 
@@ -594,7 +594,7 @@ abstract_class IServerGameEnts {
 
 namespace ServerGameClientsV3 {
 
-abstract_class IServerGameClients {
+the_interface IServerGameClients {
  public:
   // Get server maxplayers and lower bound for same
   virtual void GetPlayerLimits(int &minplayers, int &maxplayers,
@@ -663,7 +663,7 @@ abstract_class IServerGameClients {
 
 namespace UploadGameStatsV1 {
 
-abstract_class IUploadGameStats {
+the_interface IUploadGameStats {
  public:
   // Note that this call will block the server until the upload is completed, so
   // use only at levelshutdown if at all.

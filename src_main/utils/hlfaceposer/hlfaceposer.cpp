@@ -101,7 +101,7 @@ void SetCloseCaptionLanguageId( int id, bool force /* = false */ )
 		char const *suffix = CSentence::NameForLanguage( id );
 		if ( Q_stricmp( suffix, "unknown_language" ) )
 		{
-			char fn[ MAX_PATH ];
+			char fn[ SOURCE_MAX_PATH ];
 			Q_snprintf( fn, sizeof( fn ), "resource/closecaption_%s.txt", suffix );
 
 			g_pLocalize->RemoveAll();
@@ -277,8 +277,8 @@ bool MakeFileWriteablePrompt( const char *filename, char const *promptTitle )
 void FPCopyFile( const char *source, const char *dest, bool bCheckOut )
 {
 	Assert( filesystem );
-	char fullpaths[ MAX_PATH ];
-	char fullpathd[ MAX_PATH ];
+	char fullpaths[ SOURCE_MAX_PATH ];
+	char fullpathd[ SOURCE_MAX_PATH ];
 
 	if ( !Q_IsAbsolutePath( source ) )
 	{
@@ -289,14 +289,14 @@ void FPCopyFile( const char *source, const char *dest, bool bCheckOut )
 		Q_strncpy( fullpaths, source, sizeof(fullpaths) );
 	}
 
-	Q_strncpy( fullpathd, fullpaths, MAX_PATH );
+	Q_strncpy( fullpathd, fullpaths, SOURCE_MAX_PATH );
 	char *pSubdir = Q_stristr( fullpathd, source );
 	if ( pSubdir )
 	{
 		*pSubdir = 0;
 	}
-	Q_AppendSlash( fullpathd, MAX_PATH );
-	Q_strncat( fullpathd, dest, MAX_PATH, MAX_PATH );
+	Q_AppendSlash( fullpathd, SOURCE_MAX_PATH );
+	Q_strncat( fullpathd, dest, SOURCE_MAX_PATH, SOURCE_MAX_PATH );
 
 	Q_FixSlashes( fullpaths );
 	Q_FixSlashes( fullpathd );
@@ -421,7 +421,7 @@ void FacePoser_SaveWindowPositions( char const *name, bool visible, int x, int y
 	SaveViewerSettingsInt( subkey, zoomed );
 }
 
-static char g_PhonemeRoot[ MAX_PATH ] = { 0 };
+static char g_PhonemeRoot[ SOURCE_MAX_PATH ] = { 0 };
 void FacePoser_SetPhonemeRootDir( char const *pchRootDir )
 {
 	Q_strncpy( g_PhonemeRoot, pchRootDir, sizeof( g_PhonemeRoot ) );
@@ -446,7 +446,7 @@ void FacePoser_EnsurePhonemesLoaded( void )
 		"_weak",
 	};
 
-	for ( int i = 0 ; i < ARRAYSIZE( ext ); ++i )
+	for ( int i = 0 ; i < SOURCE_ARRAYSIZE( ext ); ++i )
 	{
 		char clname[ 256 ];
 		Q_snprintf( clname, sizeof( clname ), "%sphonemes%s", g_PhonemeRoot, ext[ i ] );
@@ -455,7 +455,7 @@ void FacePoser_EnsurePhonemesLoaded( void )
 
 		if ( !expressions->FindClass( clname, false ) )
 		{
-			char clfile[ MAX_PATH ];
+			char clfile[ SOURCE_MAX_PATH ];
 			Q_snprintf( clfile, sizeof( clfile ), "expressions/%sphonemes%s.txt", g_PhonemeRoot, ext[ i ] );
 			Q_FixSlashes( clfile );
 			Q_strlower( clfile );

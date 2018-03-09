@@ -263,7 +263,7 @@ static inline void SV_WritePropsFromPackedEntity(CEntityWriteInfo &u,
 
         pTo->GetRecipients(), pTo->GetNumRecipients(),
 
-        pSendProps, ARRAYSIZE(pSendProps));
+        pSendProps, SOURCE_ARRAYSIZE(pSendProps));
   } else {
     // this is a HLTV relay proxy
     bufStart = *u.m_pBuf;
@@ -397,7 +397,7 @@ static inline void SV_DetermineUpdateType(CEntityWriteInfo &u) {
 
   int checkProps[MAX_DATATABLE_PROPS];
   int nCheckProps = u.m_pNewPack->GetPropsChangedAfterTick(
-      u.m_pFromSnapshot->m_nTickCount, checkProps, ARRAYSIZE(checkProps));
+      u.m_pFromSnapshot->m_nTickCount, checkProps, SOURCE_ARRAYSIZE(checkProps));
 
   if (nCheckProps == -1) {
     // check failed, we have to recalc delta props based on from & to snapshot
@@ -423,7 +423,7 @@ static inline void SV_DetermineUpdateType(CEntityWriteInfo &u) {
 
     nCheckProps = SendTable_CalcDelta(
         u.m_pOldPack->m_pServerClass->m_pTable, pOldData, nOldBits, pNewData,
-        nNewBits, checkProps, ARRAYSIZE(checkProps), u.m_nNewEntity);
+        nNewBits, checkProps, SOURCE_ARRAYSIZE(checkProps), u.m_nNewEntity);
   }
 
 #ifndef NO_VCR

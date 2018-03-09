@@ -85,7 +85,7 @@ class CCommandItem : public CMenuItem {
 
   bool m_bHasFocus;
 
-  char m_szCommand[MAX_PATH];
+  char m_szCommand[SOURCE_MAX_PATH];
 };
 
 //-----------------------------------------------------------------------

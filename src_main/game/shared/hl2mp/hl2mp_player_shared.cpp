@@ -34,7 +34,7 @@ const char *CHL2MP_Player::GetPlayerModelSoundPrefix( void )
 
 void CHL2MP_Player::PrecacheFootStepSounds( void )
 {
-	int iFootstepSounds = ARRAYSIZE( g_ppszPlayerSoundPrefixNames );
+	int iFootstepSounds = SOURCE_ARRAYSIZE( g_ppszPlayerSoundPrefixNames );
 	int i;
 
 	for ( i = 0; i < iFootstepSounds; ++i )
@@ -450,7 +450,7 @@ void CPlayerAnimState::ComputePoseParam_BodyLookYaw( void )
 
 		// Standing still for a while, rotate feet around to face forward
 		// Or rotated too far
-		// FIXME:  Play an in place turning animation
+		// TODO(d.rattman):  Play an in place turning animation
 		if ( rotated_too_far || 
 			( gpGlobals->curtime > m_flLastTurnTime + mp_facefronttime.GetFloat() ) )
 		{
@@ -512,7 +512,7 @@ void CPlayerAnimState::ComputePoseParam_BodyLookYaw( void )
 	GetOuter()->SetPoseParameter( upper_body_yaw, std::clamp( m_flCurrentTorsoYaw, -60.0f, 60.0f ) );
 
 	/*
-	// FIXME: Adrian, what is this?
+	// TODO(d.rattman): Adrian, what is this?
 	int body_yaw = GetOuter()->LookupPoseParameter( "body_yaw" );
 
 	if ( body_yaw >= 0 )

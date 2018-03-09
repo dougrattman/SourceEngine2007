@@ -9,7 +9,7 @@
 #include "tier0/include/dbg.h"
 #include "mathlib/mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 struct InterpolatorNameMap_t
@@ -55,7 +55,7 @@ int Interpolator_InterpolatorForName( char const *name )
 char const *Interpolator_NameForInterpolator( int type, bool printname )
 {
 	int i = (int)type;
-	int c = ARRAYSIZE( g_InterpolatorNameMap );
+	int c = SOURCE_ARRAYSIZE( g_InterpolatorNameMap );
 	if ( i < 0 || i >= c )
 	{
 		Assert( "!Interpolator_NameForInterpolator:  bogus type!" );
@@ -152,7 +152,7 @@ void Interpolator_CurveInterpolatorsForType( int type, int& inbound, int& outbou
 
 int Interpolator_CurveTypeForHotkey( int key )
 {
-	int c = ARRAYSIZE( g_CurveNameMap );
+	int c = SOURCE_ARRAYSIZE( g_CurveNameMap );
 	for ( int i = 0; i < c; ++i )
 	{
 		CurveNameMap_t *slot = &g_CurveNameMap[ i ];
@@ -466,7 +466,7 @@ void Interpolator_CurveInterpolate_NonNormalized( int interpolationType,
 	case INTERPOLATE_KOCHANEK_BARTELS_LATE:
 	case INTERPOLATE_SIMPLE_CUBIC:
 	case INTERPOLATE_BSPLINE:
-		// FIXME, since this ignores vPre and vNext we could omit computing them aove
+		// TODO(d.rattman): since this ignores vPre and vNext we could omit computing them aove
 		QuaternionSlerp( vStart, vEnd, f, vOut );
 		break;
 	case INTERPOLATE_EASE_IN:

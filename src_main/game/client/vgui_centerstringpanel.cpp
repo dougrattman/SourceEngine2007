@@ -17,7 +17,7 @@
 #include <vgui/ISurface.h>
 #include <vgui/IScheme.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -204,7 +204,7 @@ void CCenterStringLabel::OnTick( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Output : Returns true on success, false on failure.
-// FIXME, this has dependencies on the engine that should go away
+// TODO(d.rattman): this has dependencies on the engine that should go away
 //-----------------------------------------------------------------------------
 bool CCenterStringLabel::ShouldDraw( void )
 {

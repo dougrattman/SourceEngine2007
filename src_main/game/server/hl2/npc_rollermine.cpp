@@ -34,7 +34,7 @@
 #include "vehicle_base.h"
 #include "vphysics/constraints.h"
 #include "vstdlib/random.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ROLLERMINE_MAX_TORQUE_FACTOR 5
@@ -660,7 +660,7 @@ void CNPC_RollerMine::WakeNeighbors() {
 
   CBaseEntity *entityList[64];
   Vector range(ROLLERMINE_WAKEUP_DIST, ROLLERMINE_WAKEUP_DIST, 64);
-  int boxCount = UTIL_EntitiesInBox(entityList, ARRAYSIZE(entityList),
+  int boxCount = UTIL_EntitiesInBox(entityList, SOURCE_ARRAYSIZE(entityList),
                                     GetAbsOrigin() - range,
                                     GetAbsOrigin() + range, FL_NPC);
   // NDebugOverlay::Box( GetAbsOrigin(), -range, range, 255, 0, 0, 64, 10.0 );
@@ -1654,7 +1654,7 @@ void CNPC_RollerMine::SpikeTouch(CBaseEntity *pOther) {
   EmitSound( "NPC_RollerMine.Warn" );
   */
 
-  // FIXME: Either explode within certain rules, never explode, or just shock
+  // TODO(d.rattman): Either explode within certain rules, never explode, or just shock
   // the hit victim
 }
 
@@ -2005,7 +2005,7 @@ int CNPC_RollerMine::CountRollersOnMyVehicle(
   CBaseEntity *entityList[64];
   Vector range(256, 256, 256);
   pRollerList->AddToTail(this);
-  int boxCount = UTIL_EntitiesInBox(entityList, ARRAYSIZE(entityList),
+  int boxCount = UTIL_EntitiesInBox(entityList, SOURCE_ARRAYSIZE(entityList),
                                     GetAbsOrigin() - range,
                                     GetAbsOrigin() + range, FL_NPC);
   for (int i = 0; i < boxCount; i++) {
@@ -2340,7 +2340,7 @@ void CNPC_RollerMine::PreDetonate(void) {
 void CNPC_RollerMine::Explode(void) {
   m_takedamage = DAMAGE_NO;
 
-  // FIXME: Hack to make thrown mines more deadly and fun
+  // TODO(d.rattman): Hack to make thrown mines more deadly and fun
   float expDamage = m_bIsPrimed ? 100 : 25;
 
   // If we've been hacked and we're blowing up cause we've been shut down then

@@ -23,7 +23,7 @@
 
 #include <game/client/iviewport.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -194,10 +194,10 @@ void CTextWindow::ShowFile( const char *filename )
 	if  ( Q_stristr( filename, ".htm" ) || Q_stristr( filename, ".html" ) )
 	{
 		// it's a local HTML file
-		char localURL[ _MAX_PATH + 7 ];
+		char localURL[ SOURCE_MAX_PATH + 7 ];
 		Q_strncpy( localURL, "file://", sizeof( localURL ) );
 		
-		char pPathData[ _MAX_PATH ];
+		char pPathData[ SOURCE_MAX_PATH ];
 		g_pFullFileSystem->GetLocalPath( filename, pPathData, sizeof(pPathData) );
 		Q_strncat( localURL, pPathData, sizeof( localURL ), COPY_ALL_CHARACTERS );
 

@@ -18,7 +18,7 @@
 #include <vgui_controls/Panel.h>
 #include <vgui/ISurface.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -100,7 +100,7 @@ bool CHudTrain::ShouldDraw( void )
 //-----------------------------------------------------------------------------
 void CHudTrain::Paint()
 {
-	// FIXME:  Rewrite using vgui materials if we still do this type of train UI!!!
+	// TODO(d.rattman):  Rewrite using vgui materials if we still do this type of train UI!!!
 }
 
 //-----------------------------------------------------------------------------

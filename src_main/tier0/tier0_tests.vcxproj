@@ -49,7 +49,7 @@
     <IntDir>$(SolutionDir)..\build\$(PlatformShortName)\$(Configuration)\$(ProjectName)\intermediate\</IntDir>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="include\base_types_test.cc" />
+    <ClCompile Include="include\coomon_macroses_test.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

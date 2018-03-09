@@ -239,7 +239,7 @@ public:
 // will get the callbacks it needs to simulate and render the particles.
 //-----------------------------------------------------------------------------
 
-abstract_class IParticleEffect
+the_interface IParticleEffect
 {
 // Overridables.
 public:

@@ -22,7 +22,7 @@
 #define CRecipientFilter C_RecipientFilter
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar sv_soundemitter_trace("sv_soundemitter_trace", "0",
@@ -157,7 +157,7 @@ class CSoundEmitterSystem : public CBaseGameSystem {
     filesystem->CreateDirHierarchy("reslists", "DEFAULT_WRITE_PATH");
 
     // open the new level reslist
-    char path[_MAX_PATH];
+    char path[SOURCE_MAX_PATH];
     Q_snprintf(path, sizeof(path), "reslists\\%s.snd",
                gpGlobals->mapname.ToCStr());
     m_hPrecacheLogFile = filesystem->Open(path, "wt", "GAME");

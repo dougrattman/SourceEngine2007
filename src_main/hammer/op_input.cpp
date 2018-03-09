@@ -15,7 +15,7 @@
 #include "MainFrm.h"
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -232,7 +232,7 @@ void COP_Input::AddEntityConnections(const char *pTargetName, CMapEntity *pTestE
 			
 				// Build the string for the delay.
 				float fDelay = pConnection->GetDelay();
-				char szTemp[MAX_PATH];
+				char szTemp[SOURCE_MAX_PATH];
 				sprintf(szTemp, "%.2f", fDelay);
 				m_ListCtrl.SetItemText(nItemCount, DELAY_COLUMN, szTemp);
 				m_ListCtrl.SetItemText(nItemCount, ONLY_ONCE_COLUMN, (pConnection->GetTimesToFire() == EVENT_FIRE_ALWAYS) ? "No" : "Yes");
@@ -366,7 +366,7 @@ BOOL COP_Input::OnInitDialog(void)
 		CAnchorDef( IDC_MARK, k_eSimpleAnchorBottomSide ),
 		CAnchorDef( IDC_INFO_TEXT, k_eSimpleAnchorBottomSide )
 	};
-	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, ARRAYSIZE( anchorDefs ) );
+	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, SOURCE_ARRAYSIZE( anchorDefs ) );
 
 	return(TRUE);
 }
@@ -659,7 +659,7 @@ void COP_Input::UpdateConnectionList(void)
 //-----------------------------------------------------------------------------
 void COP_Input::UpdateColumnHeaderText(int nColumn, bool bIsSortColumn, SortDirection_t eDirection)
 {
-	char szHeaderText[MAX_PATH];
+	char szHeaderText[SOURCE_MAX_PATH];
 
 	LVCOLUMN Column;
 	memset(&Column, 0, sizeof(Column));

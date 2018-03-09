@@ -22,7 +22,7 @@
 #include "matsys_controls/gamefiletreeview.h"
 #include "matsys_controls/matsyscontrols.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -311,7 +311,7 @@ void CMDLSequencePicker::PlaySelectedActivity( )
 		mstudioseqdesc_t &seqdesc = pstudiohdr->pSeqdesc( i );
 		if ( stricmp( seqdesc.pszActivityName(), pActivityName ) == 0 )
 		{
-			// FIXME: Add weighted sequence selection logic?
+			// TODO(d.rattman): Add weighted sequence selection logic?
 			m_pMDLPreview->SetSequence( i );
 			break;
 		}
@@ -420,10 +420,10 @@ void CMDLSequencePicker::OnFileSelected()
 
 	const char *pFullPathName = pkv->GetString( "path" );
 
-	char pRelativePathName[MAX_PATH];
+	char pRelativePathName[SOURCE_MAX_PATH];
 	g_pFullFileSystem->FullPathToRelativePath( pFullPathName, pRelativePathName, sizeof(pRelativePathName) );
 
-	// FIXME: Check that we're not actually opening the wrong file!!
+	// TODO(d.rattman): Check that we're not actually opening the wrong file!!
 	SelectMDL( pRelativePathName );
 }
 

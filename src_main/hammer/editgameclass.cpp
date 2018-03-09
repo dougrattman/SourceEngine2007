@@ -26,7 +26,7 @@
 #include "fgdlib/GameData.h"
 #include "mathlib/Mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -544,7 +544,7 @@ ChunkFileResult_t CEditGameClass::LoadKeyCallback(
   // Set the "output" from the passed in parameter
   pConnection->SetOutputName(szKey);
 
-  char szToken[MAX_PATH];
+  char szToken[SOURCE_MAX_PATH];
 
   //
   // Parse the target name.

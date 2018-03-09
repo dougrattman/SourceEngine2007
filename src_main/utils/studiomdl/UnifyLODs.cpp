@@ -294,7 +294,7 @@ s_source_t* GetModelLODSource( const char *pModelName,
 
 	for( int i = 0; i < scriptLOD.modelReplacements.Count(); i++ )
 	{
-		// FIXME: Should we strip off path information?
+		// TODO(d.rattman): Should we strip off path information?
 //		char* pSlash = strrchr( pTempBuf1, '\\' );
 //		char* pSlash2 = strrchr( pTempBuf1, '/' );
 //		if (pSlash2 > pSlash)
@@ -503,8 +503,8 @@ static s_mesh_t *FindMeshByMaterial( s_source_t *pSrc, int nMaterialID )
 
 static s_mesh_t *FindOrCullMesh( int nLodID, s_source_t *pSrc, int nMaterialID )
 {
-	char	baseMeshName[MAX_PATH];
-	char	baseRemovalName[MAX_PATH];
+	char	baseMeshName[SOURCE_MAX_PATH];
+	char	baseRemovalName[SOURCE_MAX_PATH];
 
 	// possibly marked for removal via $removemesh
 	// determine mesh name
@@ -1126,7 +1126,7 @@ static void CreateLODVertsInDictionary( int nLodID, const s_source_t *pRootLODSr
 		CollapseBoneWeights( idealVertex.m_BoneWeight );
 		SortBoneWeightByWeight( idealVertex.m_BoneWeight );
 
-		// FIXME: this is marking bones based on the slammed vertex data
+		// TODO(d.rattman): this is marking bones based on the slammed vertex data
 		MarkBonesUsedByLod( idealVertex.m_BoneWeight, nLodID );
 
 		// tag ideal vertex as being part of the current lod
@@ -1245,7 +1245,7 @@ static void BuildBoneLODMapping( CUtlVector<int> &boneMap, int lodID )
 		}
 		else if ( j == -1)
 		{
-			// FIXME: is this really an error?  It could just be  replacement command for bone that doesnt' exist anymore.
+			// TODO(d.rattman): is this really an error?  It could just be  replacement command for bone that doesnt' exist anymore.
 			if (g_verbose)
 			{
 				MdlWarning( "Couldn't replace unknown bone \"%s\" with \"%s\"\n", src, dst );
@@ -1253,7 +1253,7 @@ static void BuildBoneLODMapping( CUtlVector<int> &boneMap, int lodID )
 		}
 		else
 		{
-			// FIXME: is this really an error?  It could just be  replacement command for bone that doesnt' exist anymore.
+			// TODO(d.rattman): is this really an error?  It could just be  replacement command for bone that doesnt' exist anymore.
 			if (g_verbose)
 			{
 				MdlWarning( "Couldn't replace bone \"%s\" with unknown \"%s\"\n", src, dst );

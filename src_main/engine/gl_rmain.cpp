@@ -31,7 +31,7 @@
 #include "tier0/include/vprof.h"
 #include "tier1/utlstack.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar r_waterforceexpensive;
@@ -353,7 +353,7 @@ void CRender::FrameBegin(void) {
     // This has to be before R_AnimateLight because it uses it to
     // set the frame number of changed lightstyles
 
-    // FIXME: Why isn't this being done in DrawSceneBegin
+    // TODO(d.rattman): Why isn't this being done in DrawSceneBegin
     // or some other client-side simulation of state?
     r_framecount++;
     R_AnimateLight();

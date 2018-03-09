@@ -416,7 +416,7 @@ void CTFStatsSummaryPanel::UpdateClassDetails()
 
 	// display the record for each stat
 	int iRow = 0;
-	for ( int i = 0; i < ARRAYSIZE( classDetails ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( classDetails ); i++ )
 	{
 		TFStatType_t statType = classDetails[i].statType;
 
@@ -464,7 +464,7 @@ void CTFStatsSummaryPanel::UpdateClassDetails()
 		else
 		{
 			// all other stats are just shown as a #
-			swprintf_s( wzStatNum, ARRAYSIZE( wzStatNum ), L"%d", iMaxVal );
+			swprintf_s( wzStatNum, SOURCE_ARRAYSIZE( wzStatNum ), L"%d", iMaxVal );
 		}
 
 		if ( TF_CLASS_UNDEFINED == m_iSelectedClass && iMaxVal > 0 )
@@ -559,14 +559,14 @@ void CTFStatsSummaryPanel::InitBarChartComboBox( ComboBox *pComboBox )
 	pComboBox->SetFont( hFont );
 	pComboBox->RemoveAll();
 	// add all the options to the combo box
-	for ( int i=0; i < ARRAYSIZE( initData ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( initData ); i++ )
 	{
 		KeyValues *pKeyValues = new KeyValues( "data" );
 		pKeyValues->SetInt( "stattype", initData[i].statType );
 		pKeyValues->SetInt( "statdisplay", initData[i].statDisplay );
 		pComboBox->AddItem(  g_pVGuiLocalize->Find( initData[i].szName ), pKeyValues );
 	}
-	pComboBox->SetNumberOfEditLines( ARRAYSIZE( initData ) );
+	pComboBox->SetNumberOfEditLines( SOURCE_ARRAYSIZE( initData ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -581,7 +581,7 @@ void CTFStatsSummaryPanel::SetValueAsClass( const char *pDialogVariable, int iVa
 		wchar_t *wzLocalizedClassName = g_pVGuiLocalize->Find( g_aPlayerClassNames[iPlayerClass] );
 		wchar_t wzVal[16];
 		wchar_t wzMsg[128];
-		_itow_s( iValue, wzVal, ARRAYSIZE( wzVal ), 10 );
+		_itow_s( iValue, wzVal, SOURCE_ARRAYSIZE( wzVal ), 10 );
 		g_pVGuiLocalize->ConstructString( wzMsg, sizeof( wzMsg ), wzScoreAsClassFmt, 2, wzVal, wzLocalizedClassName );
 		m_pPlayerData->SetDialogVariable( pDialogVariable, wzMsg );
 	}
@@ -807,12 +807,12 @@ const char *CTFStatsSummaryPanel::RenderValue( float flValue, TFStatType_t statT
 	else if ( SHOW_AVG == statDisplay )
 	{	
 		// if it's an average, render as a float w/2 decimal places
-		Q_snprintf( szValue, ARRAYSIZE( szValue ), "%.2f", flValue );
+		Q_snprintf( szValue, SOURCE_ARRAYSIZE( szValue ), "%.2f", flValue );
 	}
 	else
 	{
 		// otherwise, render as an integer
-		Q_snprintf( szValue, ARRAYSIZE( szValue ), "%d", (int) flValue );
+		Q_snprintf( szValue, SOURCE_ARRAYSIZE( szValue ), "%d", (int) flValue );
 	}
 
 	return szValue;

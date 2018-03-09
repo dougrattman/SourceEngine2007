@@ -14,7 +14,7 @@
 #include "tier0/include/vprof.h"
 #include "toolframework_client.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ static inline void RecordDecal( const Vector &pos, const Vector &start,
 
 	if ( clienttools->IsInRecordingMode() )
 	{
-		// FIXME: Can't record on entities yet
+		// TODO(d.rattman): Can't record on entities yet
 		if ( entity != 0 )
 			return;
 

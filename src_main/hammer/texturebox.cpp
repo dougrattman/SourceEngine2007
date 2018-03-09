@@ -13,7 +13,7 @@
 #include "TextureSystem.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -117,7 +117,7 @@ void CTextureBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		}
 		else
 		{
-			char szName[MAX_PATH];
+			char szName[SOURCE_MAX_PATH];
 			int iLen = pTex->GetShortName(szName);
 
 			// when we get here, we are drawing a regular graphic. we
@@ -245,7 +245,7 @@ void CTextureBox::RebuildMRU(void)
 		IEditorTexture *pTex = g_Textures.MRUGet(nMRU);
 		if (pTex != NULL)
 		{
-			char szBuf[MAX_PATH];
+			char szBuf[SOURCE_MAX_PATH];
 			pTex->GetShortName(szBuf);
 
 			int nIndex = InsertString(nStrCount, szBuf);
@@ -274,7 +274,7 @@ void CTextureBox::RebuildMRU(void)
 
 void CTextureBox::NotifyNewMaterial( IEditorTexture *pTex )
 {
-	char szStr[MAX_PATH];
+	char szStr[SOURCE_MAX_PATH];
 	pTex->GetShortName( szStr );
 	int iItem = AddString( szStr );
 	if ( iItem != CB_ERR )
@@ -332,7 +332,7 @@ void CTextureBox::LoadGraphicList(void)
 		IEditorTexture *pTex = g_Textures.MRUGet(nMRU);
 		if (pTex != NULL)
 		{
-			char szStr[MAX_PATH];
+			char szStr[SOURCE_MAX_PATH];
 			pTex->GetShortName(szStr);
 			AddString(szStr);
 			SetItemDataPtr(nStrCount, (void *)pTex);
@@ -357,7 +357,7 @@ void CTextureBox::LoadGraphicList(void)
 	IEditorTexture *pTex = g_Textures.EnumActiveTextures(&nIndex, g_pGameConfig->GetTextureFormat());
 	while (pTex != NULL)
 	{
-		char szStr[MAX_PATH];
+		char szStr[SOURCE_MAX_PATH];
 		pTex->GetShortName(szStr);
 		int err = AddString(szStr);
 		Assert( (err != CB_ERR) && (err != CB_ERRSPACE) );
@@ -378,7 +378,7 @@ void CTextureBox::LoadGraphicList(void)
 		IEditorTexture *pTexSearch = (IEditorTexture *)GetItemDataPtr(i);
 		if (pTexSearch != NULL)
 		{
-			char szName[MAX_PATH];
+			char szName[SOURCE_MAX_PATH];
 			pTexSearch->GetShortName(szName);
 
 			if ((szName[0] != 0) && (szName[0] != '*') && (szName[0] != '+') && (szName[0] != '!') && (strstr(szName, "door") == NULL))
@@ -442,7 +442,7 @@ LRESULT CTextureBox::OnSelectString(WPARAM wParam, LPARAM lParam)
 		pTex = (IEditorTexture *)GetItemDataPtr(i);
 		if (pTex != NULL)
 		{
-			char szName[MAX_PATH];
+			char szName[SOURCE_MAX_PATH];
 			pTex->GetShortName(szName);
 			if (!stricmp(szName, pszSelect))
 			{

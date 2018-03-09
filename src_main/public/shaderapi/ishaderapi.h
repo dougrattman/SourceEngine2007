@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ISHADERAPI_H
 #define ISHADERAPI_H
 
+#include "base/include/macros.h"
 #include "materialsystem/deformations.h"
 #include "mathlib/vector4d.h"
 #include "shaderapi/IShaderDevice.h"
@@ -126,7 +127,7 @@ struct ShaderRasterState_t {
 //-----------------------------------------------------------------------------
 // Used for occlusion queries
 //-----------------------------------------------------------------------------
-DECLARE_POINTER_HANDLE(ShaderAPIOcclusionQuery_t);
+SOURCE_DECLARE_POINTER_HANDLE(ShaderAPIOcclusionQuery_t);
 #define INVALID_SHADERAPI_OCCLUSION_QUERY_HANDLE ((ShaderAPIOcclusionQuery_t)0)
 
 enum ShaderAPIOcclusionQueryResult_t {
@@ -140,7 +141,7 @@ enum ShaderAPIOcclusionQueryResult_t {
 // This is what the material system gets to see.
 //-----------------------------------------------------------------------------
 #define SHADERAPI_INTERFACE_VERSION "ShaderApi029"
-abstract_class IShaderAPI : public IShaderDynamicAPI {
+the_interface IShaderAPI : public IShaderDynamicAPI {
  public:
   //
   // NOTE: These methods have been ported to DX10

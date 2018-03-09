@@ -104,7 +104,7 @@ typedef void (*FnChangeCallback_t)(IConVar *var, const char *pOldValue,
 
 // Abstract interface for ConVars
 
-abstract_class IConVar {
+the_interface IConVar {
  public:
   // Value set
   virtual void SetValue(const char *pValue) = 0;

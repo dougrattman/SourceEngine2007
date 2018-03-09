@@ -21,7 +21,7 @@
 #include "physics_prop_ragdoll.h"
 #include "te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define HAND_LEFT 0
@@ -91,7 +91,7 @@ ConVar sk_vortigaunt_vital_antlion_worker_dmg(
 
 ConVar g_debug_vortigaunt_aim("g_debug_vortigaunt_aim", "0");
 
-// FIXME: Move to shared code!
+// TODO(d.rattman): Move to shared code!
 #define VORTFX_ZAPBEAM 0  // Beam that damages the target
 #define VORTFX_ARMBEAM 1  // Smaller beams from the hands as we charge up
 
@@ -637,7 +637,7 @@ int CNPC_Vortigaunt::NumAntlionsInRadius(float flRadius) {
   CBaseEntity *sEnemySearch[16];
   int nNumAntlions = 0;
   int nNumEnemies = UTIL_EntitiesInBox(
-      sEnemySearch, ARRAYSIZE(sEnemySearch),
+      sEnemySearch, SOURCE_ARRAYSIZE(sEnemySearch),
       GetAbsOrigin() - Vector(flRadius, flRadius, flRadius),
       GetAbsOrigin() + Vector(flRadius, flRadius, flRadius), FL_NPC);
   for (int i = 0; i < nNumEnemies; i++) {
@@ -1051,7 +1051,7 @@ void CNPC_Vortigaunt::Precache() {
   // HACK: Only precache this for EP2 because reslists cannot be rebuilt -
   // 08/22/07 - jdw
   if (hl2_episodic.GetBool()) {
-    char modDir[MAX_PATH];
+    char modDir[SOURCE_MAX_PATH];
     if (UTIL_GetModDir(modDir, sizeof(modDir))) {
       if (!Q_stricmp(modDir, "ep2")) {
         PrecacheMaterial("effects/rollerglow");
@@ -1207,7 +1207,8 @@ int CNPC_Vortigaunt::TranslateSchedule(int scheduleType) {
       case SCHED_CHASE_ENEMY:
       case SCHED_ESTABLISH_LINE_OF_FIRE:
       case SCHED_ESTABLISH_LINE_OF_FIRE_FALLBACK:
-              
+              
+
               // Don't go running off after an enemy just because we're in an
       attack delay!  This has to do with
               // the base systems assuming that held weapons are driving certain
@@ -1541,7 +1542,7 @@ void CNPC_Vortigaunt::MaintainHealSchedule(void) {
   CBasePlayer *pPlayer = AI_GetSinglePlayer();
   if (pPlayer == NULL) return;
 
-  // FIXME: How can this happen?
+  // TODO(d.rattman): How can this happen?
   if (m_AssaultBehavior.GetOuter() != NULL) {
     // Interrupt us on an urgent assault
     if (m_AssaultBehavior.IsRunning() &&
@@ -1556,7 +1557,7 @@ void CNPC_Vortigaunt::MaintainHealSchedule(void) {
 
   // If we're in the healing phase, heal our target (if able)
   if (m_eHealState == HEAL_STATE_HEALING) {
-    // FIXME: We need to have better logic controlling this
+    // TODO(d.rattman): We need to have better logic controlling this
     if (HasCondition(COND_VORTIGAUNT_HEAL_VALID)) {
       if (m_flNextHealTokenTime < gpGlobals->curtime) {
         CBasePlayer *pPlayer = ToBasePlayer(m_hHealTarget);
@@ -1596,7 +1597,8 @@ void CNPC_Vortigaunt::MaintainHealSchedule(void) {
 
       // Increment a counter to let us know how long we've failed
       m_flHealHinderedTime += gpGlobals->curtime - GetLastThink();
-      
+      
+
       if ( m_flHealHinderedTime > 2.0f )
       {
               // If too long, stop trying
@@ -1776,7 +1778,7 @@ void CNPC_Vortigaunt::StartHandGlow(int beamType, int nHand) {
     case VORTIGAUNT_BEAM_HEAL:
     case VORTIGAUNT_BEAM_ZAP: {
       // Validate the hand's range
-      if (nHand >= ARRAYSIZE(m_hHandEffect)) return;
+      if (nHand >= SOURCE_ARRAYSIZE(m_hHandEffect)) return;
 
       // Start up
       if (m_hHandEffect[nHand] == NULL) {
@@ -2290,7 +2292,7 @@ void CNPC_Vortigaunt::DispelAntlions(const Vector &vecOrigin, float flRadius,
   trace_t tr;
   CBaseEntity *pEnemySearch[32];
   int nNumEnemies = UTIL_EntitiesInBox(
-      pEnemySearch, ARRAYSIZE(pEnemySearch),
+      pEnemySearch, SOURCE_ARRAYSIZE(pEnemySearch),
       vecOrigin - Vector(flRadius, flRadius, flRadius),
       vecOrigin + Vector(flRadius, flRadius, flRadius), FL_NPC);
   for (int i = 0; i < nNumEnemies; i++) {
@@ -2385,11 +2387,11 @@ void CNPC_Vortigaunt::SetScriptedScheduleIgnoreConditions(
                                    COND_VORTIGAUNT_HEAL_TARGET_BEHIND_US,
                                    COND_VORTIGAUNT_HEAL_VALID};
 
-  ClearIgnoreConditions(g_VortConditions, ARRAYSIZE(g_VortConditions));
+  ClearIgnoreConditions(g_VortConditions, SOURCE_ARRAYSIZE(g_VortConditions));
 
   // Ignore these if we're damage only
   if (interrupt > GENERAL_INTERRUPTABILITY)
-    SetIgnoreConditions(g_VortConditions, ARRAYSIZE(g_VortConditions));
+    SetIgnoreConditions(g_VortConditions, SOURCE_ARRAYSIZE(g_VortConditions));
 }
 
 //-----------------------------------------------------------------------------
@@ -2977,7 +2979,7 @@ void CVortigauntChargeToken::SeekTouch(CBaseEntity *pOther) {
   CBasePlayer *pPlayer = ToBasePlayer(pOther);
   if (pPlayer == NULL) return;
 
-  // FIXME: This probably isn't that interesting for single player missions
+  // TODO(d.rattman): This probably isn't that interesting for single player missions
   if (pPlayer != m_hTarget) return;
 
   // TODO: Play a special noise for this event!

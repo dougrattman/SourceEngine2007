@@ -134,10 +134,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <ShowProgress>NotSet</ShowProgress>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\common;..\..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -147,6 +143,8 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>d3d10.lib;dxgi.lib;kernel32.lib;ole32.lib;oleaut32.lib;user32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -194,10 +192,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <ShowProgress>NotSet</ShowProgress>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\common;..\..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -206,6 +200,8 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>d3d10.lib;dxgi.lib;kernel32.lib;ole32.lib;oleaut32.lib;user32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -255,10 +251,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <ShowProgress>NotSet</ShowProgress>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\common;..\..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -270,6 +262,8 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>d3d10.lib;dxgi.lib;kernel32.lib;ole32.lib;oleaut32.lib;user32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -318,10 +312,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <ShowProgress>NotSet</ShowProgress>
-      <OutputFile>$(TargetPath)</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\common;..\..\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -332,6 +322,8 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <LargeAddressAware>true</LargeAddressAware>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>d3d10.lib;dxgi.lib;kernel32.lib;ole32.lib;oleaut32.lib;user32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -353,7 +345,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="colorformatdx8.cpp" />
     <ClCompile Include="cvballoctracker.cpp" />
     <ClCompile Include="d3d_async.cpp" />
     <ClCompile Include="hardwareconfig.cpp" />
@@ -370,7 +361,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="meshdx8.cpp" />
     <ClCompile Include="recording.cpp" />
     <ClCompile Include="shaderapibase.cpp" />
     <ClCompile Include="shaderapidx10.cpp">
@@ -379,7 +369,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="shaderapidx8.cpp" />
     <ClCompile Include="shaderdevicebase.cpp" />
     <ClCompile Include="shaderdevicedx10.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -387,40 +376,19 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="shaderdevicedx8.cpp" />
     <ClCompile Include="shadershadowdx10.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DX10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="shadershadowdx8.cpp" />
-    <ClCompile Include="texturedx8.cpp" />
-    <ClCompile Include="TransitionTable.cpp" />
-    <ClCompile Include="vertexdecl.cpp" />
-    <ClCompile Include="vertexshaderdx8.cpp" />
     <ClCompile Include="wmi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\dx10sdk\lib\x86\d3d10.lib" />
-    <Library Include="..\..\dx10sdk\lib\x86\d3d9.lib" />
     <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx10.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx10d.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx9.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx9d.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <Library Include="..\..\dx10sdk\lib\x86\dxgi.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\dx10sdk\Include\D3DX10math.inl" />
@@ -473,6 +441,9 @@
     <ProjectReference Include="..\..\bitmap\bitmap.vcxproj">
       <Project>{d98f41bd-a135-4fea-a53a-c6553419da29}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\deps\bzip2\libbz2.vcxproj">
+      <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\mathlib\mathlib.vcxproj">
       <Project>{8be8d44d-b656-40c7-83d2-d51309021093}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -486,10 +457,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\tier2\tier2.vcxproj">
       <Project>{5edc148b-acf5-49da-a05c-924e2b162750}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\utils\bzip2\bzip2.vcxproj">
-      <Project>{beffacd2-07b1-4cb3-a65e-92fceb8fea77}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\..\vstdlib\vstdlib.vcxproj">

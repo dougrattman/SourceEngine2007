@@ -15,7 +15,7 @@
 #include "ObjectProperties.h"
 #include "VisGroup.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const char *NO_GROUP_STRING = "(no group)";
@@ -246,7 +246,7 @@ BOOL COP_Groups::OnInitDialog()
 		CAnchorDef( IDC_GROUPS, k_eSimpleAnchorAllSides ),
 		CAnchorDef( IDC_EDITGROUPS, k_eSimpleAnchorBottomRight )
 	};
-	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, ARRAYSIZE( anchorDefs ) );
+	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, SOURCE_ARRAYSIZE( anchorDefs ) );
 
 	return TRUE;
 }

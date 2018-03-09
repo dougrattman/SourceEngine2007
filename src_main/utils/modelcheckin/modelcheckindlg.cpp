@@ -319,8 +319,8 @@ static int FixupFileName( char const* pInFile, char* pOutBuf )
 CModelCheckInDlg::ProjectType_t CModelCheckInDlg::ComputeRelativeFileName( char const* pInFile, char* pRelativeFile )
 {
 	// Depending on which project is selected, strip out the game directory
-	char tempIn[MAX_PATH];
-	char tempPath[MAX_PATH];
+	char tempIn[SOURCE_MAX_PATH];
+	char tempPath[SOURCE_MAX_PATH];
 
 	FixupFileName( pInFile, tempIn );
 
@@ -389,8 +389,8 @@ CModelCheckInDlg::ProjectType_t CModelCheckInDlg::GetFileNames( char const* pTit
 		"Model Files (*.mdl)|*.mdl||" );
 	
 	// Set up initial paths
-	char pCwd[MAX_PATH];
-	_getcwd( pCwd, MAX_PATH );
+	char pCwd[SOURCE_MAX_PATH];
+	_getcwd( pCwd, SOURCE_MAX_PATH );
 															   
 	// Setup the title and initial directory
 	CString temp = AfxGetApp()->GetProfileString( MDL_CHECKOUT_REG_CLASS, 
@@ -403,11 +403,11 @@ CModelCheckInDlg::ProjectType_t CModelCheckInDlg::GetFileNames( char const* pTit
 		return PROJECT_ERROR;
 	
 	// Get the relative file name
-	static char relativeFile[MAX_PATH];
+	static char relativeFile[SOURCE_MAX_PATH];
 	ProjectType_t projectType = ComputeRelativeFileName( dlg.GetPathName(), relativeFile );
 	if (projectType == PROJECT_ERROR)
 	{
-		char buf[MAX_PATH];
+		char buf[SOURCE_MAX_PATH];
 		sprintf( buf, "%s\nwas not found under either game directory!\n", dlg.GetPathName() );
 		MessageBox( buf, "Error!" );
 		return PROJECT_ERROR;
@@ -435,7 +435,7 @@ CModelCheckInDlg::ProjectType_t CModelCheckInDlg::GetFileNames( char const* pTit
 	if (pExt)
 		*pExt = 0;
 
-	static char destPath[MAX_PATH];
+	static char destPath[SOURCE_MAX_PATH];
 	FixupFileName( dlg.GetPathName(), destPath );
 	pSlash = strrchr( destPath, '/' );
 	if (pSlash)

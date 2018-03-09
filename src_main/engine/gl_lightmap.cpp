@@ -22,7 +22,7 @@
 #include "view.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // Only enable this if you are testing lightstyle performance.
 //#define UPDATE_LIGHTSTYLES_EVERY_FRAME
 
-ALIGN128 Vector4D
+alignas(128) Vector4D
     blocklights[NUM_BUMP_VECTS + 1][MAX_LIGHTMAP_DIM_INCLUDING_BORDER *
                                     MAX_LIGHTMAP_DIM_INCLUDING_BORDER];
 
@@ -182,7 +182,7 @@ static void AddSingleDynamicLightToBumpLighting(
     float perpDistSq, float lightRadiusSq, Vector *pBumpBasis,
     const Vector &luxelBasePosition) {
   Vector local;
-  // FIXME: For now, only elights can be spotlights
+  // TODO(d.rattman): For now, only elights can be spotlights
   // the lightmap computation could get expensive for spotlights...
   Assert(dl.m_OuterAngle == 0.0f);
 
@@ -221,7 +221,7 @@ static void AddSingleDynamicLightToBumpLighting(
   // the intensity of the flat lightmap the exact same way here as when
   // we've got a non-bumped surface.
 
-  // Then, I compute an actual light direction vector per luxel (FIXME:
+  // Then, I compute an actual light direction vector per luxel (TODO(d.rattman):
   // !!expensive!!) and compute what light would have to come in along that
   // direction in order to produce the same illumination on the flat lightmap.
   // That's computed by dividing the flat lightmap color by n dot l.
@@ -635,7 +635,7 @@ static void AccumulateBumpedLightstyles(ColorRGBExp32 *pLightmap,
 // because the e component of the colors is signed, we need to mask
 // off the corresponding channel in the intermediate halfword expansion
 // when we combine it with the unsigned unpack for the other channels
-static const int32_t ALIGN16 g_SIMD_HalfWordMask[4] = {0x0000000, 0x0000FFFF,
+static const int32_t alignas(16) g_SIMD_HalfWordMask[4] = {0x0000000, 0x0000FFFF,
                                                        0x0000000, 0x0000FFFF};
 static const fltx4 vOneOverTwoFiftyFive = {1.0f / 255.0f, 1.0f / 255.0f,
                                            1.0f / 255.0f, 1.0f / 255.0f};
@@ -647,10 +647,10 @@ static const fltx4 vOneOverTwoFiftyFive = {1.0f / 255.0f, 1.0f / 255.0f,
 // above. This function makes heavy use of the special XBOX360 opcodes for
 // packing and unpacking integer d3d data. (Not available in SSE, sadly.)
 static void AccumulateLightstyles_EightAtAtime(
-    ColorRGBExp32 *RESTRICT
+    ColorRGBExp32 *SOURCE_RESTRICT
         pLightmap,  // the input lightmap (not necessarily aligned)
     int lightmapSize, fltx4 vScalar,
-    Vector4D *RESTRICT bLights  // pointer to the blocklights row we'll be
+    Vector4D *SOURCE_RESTRICT bLights  // pointer to the blocklights row we'll be
                                 // writing into -- should be cache aligned, but
                                 // only hurts perf if it's not
 ) {
@@ -854,7 +854,7 @@ static void AccumulateLightstyles_EightAtAtime(
 }
 
 // just like XMLoadByte4 only no asserts
-FORCEINLINE XMVECTOR LoadSignedByte4NoAssert(CONST XMBYTE4 *pSource) {
+SOURCE_FORCEINLINE XMVECTOR LoadSignedByte4NoAssert(CONST XMBYTE4 *pSource) {
   XMVECTOR V;
 
   V = __lvlx(pSource, 0);
@@ -943,9 +943,9 @@ static void AccumulateLightstylesFlat(ColorRGBExp32 *pLightmap,
   }
 }
 
-static void AccumulateBumpedLightstyles(ColorRGBExp32 *RESTRICT pLightmap,
+static void AccumulateBumpedLightstyles(ColorRGBExp32 *SOURCE_RESTRICT pLightmap,
                                         int lightmapSize, fltx4 vScalar) {
-  COMPILE_TIME_ASSERT(
+  static_assert(
       sizeof(ColorRGBExp32) ==
       4);  // This function is carefully scheduled around four-uint8_t colors
 
@@ -954,7 +954,7 @@ static void AccumulateBumpedLightstyles(ColorRGBExp32 *RESTRICT pLightmap,
   vScalar = __vrlimi(vScalar, Four_Zeros, 1, 0);
 
   /*
-  ColorRGBExp32 * RESTRICT pBumpedLightmaps[3];
+  ColorRGBExp32 * SOURCE_RESTRICT pBumpedLightmaps[3];
   pBumpedLightmaps[1] = pLightmap + lightmapSize;
   pBumpedLightmaps[2] = pLightmap + 2 * lightmapSize;
   pBumpedLightmaps[3] = pLightmap + 3 * lightmapSize;
@@ -1176,7 +1176,7 @@ static void UpdateLightmapTextures(SurfaceHandle_t surfID, bool needsBumpmap) {
     offsetIntoLightmapPage[1] = MSurf_OffsetIntoLightmapPage(surfID)[1];
     Assert(MSurf_MaterialSortID(surfID) >= 0 &&
            MSurf_MaterialSortID(surfID) < g_WorldStaticMeshes.Count());
-    // FIXME: Should differentiate between bumped and unbumped since the perf
+    // TODO(d.rattman): Should differentiate between bumped and unbumped since the perf
     // characteristics are completely different?
     //		MarkPage( materialSortInfoArray[MSurf_MaterialSortID( surfID
     //)].lightmapPageID );
@@ -1448,7 +1448,7 @@ void GL_RebuildLightmaps(void) { g_RebuildLightmaps = true; }
 #ifdef UPDATE_LIGHTSTYLES_EVERY_FRAME
 ConVar mat_updatelightstyleseveryframe("mat_updatelightstyleseveryframe", "0");
 #endif
-void FASTCALL R_RenderDynamicLightmaps(dlight_t *pLights,
+void SOURCE_FASTCALL R_RenderDynamicLightmaps(dlight_t *pLights,
                                        ICallQueue *pCallQueue,
                                        SurfaceHandle_t surfID,
                                        const matrix3x4_t &xform) {

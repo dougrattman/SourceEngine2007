@@ -1,11 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef PIXELWRITER_H
 #define PIXELWRITER_H
 
 #ifdef _WIN32
-#define FORCEINLINE_PIXEL FORCEINLINE
-#elif _LINUX
+#define FORCEINLINE_PIXEL SOURCE_FORCEINLINE
+#elif OS_POSIX
 #define FORCEINLINE_PIXEL inline
 #else
 #error "implement me"
@@ -22,32 +22,34 @@
 
 class CPixelWriter {
  public:
-  FORCEINLINE void SetPixelMemory(ImageFormat format, void *pMemory,
-                                  int stride);
-  FORCEINLINE void *GetPixelMemory() { return m_pBase; }
+  SOURCE_FORCEINLINE void SetPixelMemory(ImageFormat format, void *pMemory,
+                                         int stride);
+  SOURCE_FORCEINLINE void *GetPixelMemory() { return m_pBase; }
 
-  FORCEINLINE void Seek(int x, int y);
-  FORCEINLINE void *SkipBytes(int n);
-  FORCEINLINE void SkipPixels(int n);
-  FORCEINLINE void WritePixel(int r, int g, int b, int a = 255);
-  FORCEINLINE void WritePixelNoAdvance(int r, int g, int b, int a = 255);
-  FORCEINLINE void WritePixelSigned(int r, int g, int b, int a = 255);
-  FORCEINLINE void WritePixelNoAdvanceSigned(int r, int g, int b, int a = 255);
-  FORCEINLINE void ReadPixelNoAdvance(int &r, int &g, int &b, int &a);
+  SOURCE_FORCEINLINE void Seek(int x, int y);
+  SOURCE_FORCEINLINE void *SkipBytes(int n);
+  SOURCE_FORCEINLINE void SkipPixels(int n);
+  SOURCE_FORCEINLINE void WritePixel(int r, int g, int b, int a = 255);
+  SOURCE_FORCEINLINE void WritePixelNoAdvance(int r, int g, int b, int a = 255);
+  SOURCE_FORCEINLINE void WritePixelSigned(int r, int g, int b, int a = 255);
+  SOURCE_FORCEINLINE void WritePixelNoAdvanceSigned(int r, int g, int b,
+                                                    int a = 255);
+  SOURCE_FORCEINLINE void ReadPixelNoAdvance(int &r, int &g, int &b, int &a);
 
   // Floating point formats
-  FORCEINLINE void WritePixelNoAdvanceF(float r, float g, float b,
-                                        float a = 1.0f);
-  FORCEINLINE void WritePixelF(float r, float g, float b, float a = 1.0f);
+  SOURCE_FORCEINLINE void WritePixelNoAdvanceF(float r, float g, float b,
+                                               float a = 1.0f);
+  SOURCE_FORCEINLINE void WritePixelF(float r, float g, float b,
+                                      float a = 1.0f);
 
   // SIMD formats
-  FORCEINLINE void WritePixel(FLTX4 rgba);
-  FORCEINLINE void WritePixelNoAdvance(FLTX4 rgba);
+  SOURCE_FORCEINLINE void WritePixel(FLTX4 rgba);
+  SOURCE_FORCEINLINE void WritePixelNoAdvance(FLTX4 rgba);
 
-  FORCEINLINE unsigned char GetPixelSize() { return m_Size; }
+  SOURCE_FORCEINLINE unsigned char GetPixelSize() { return m_Size; }
 
-  FORCEINLINE bool IsUsingFloatFormat() const;
-  FORCEINLINE unsigned char *GetCurrentPixel() { return m_pBits; }
+  SOURCE_FORCEINLINE bool IsUsingFloatFormat() const;
+  SOURCE_FORCEINLINE unsigned char *GetCurrentPixel() { return m_pBits; }
 
  private:
   enum {
@@ -249,17 +251,10 @@ FORCEINLINE_PIXEL void CPixelWriter::SetPixelMemory(ImageFormat format,
     case IMAGE_FORMAT_LINEAR_RGBA16161616:
 #endif
       m_Size = 8;
-      if (!IsX360()) {
-        m_RShift = 0;
-        m_GShift = 16;
-        m_BShift = 32;
-        m_AShift = 48;
-      } else {
-        m_RShift = 48;
-        m_GShift = 32;
-        m_BShift = 16;
-        m_AShift = 0;
-      }
+      m_RShift = 0;
+      m_GShift = 16;
+      m_BShift = 32;
+      m_AShift = 48;
       m_RMask = 0xFFFF;
       m_GMask = 0xFFFF;
       m_BMask = 0xFFFF;
@@ -278,7 +273,7 @@ FORCEINLINE_PIXEL void CPixelWriter::SetPixelMemory(ImageFormat format,
       m_BMask = 0x00;
       m_AMask = 0x00;
       break;
-    // FIXME: Add more color formats as need arises
+    // TODO(d.rattman): Add more color formats as need arises
     default: {
       static bool format_error_printed[NUM_IMAGE_FORMATS];
       if (!format_error_printed[format]) {
@@ -303,7 +298,7 @@ FORCEINLINE_PIXEL void CPixelWriter::Seek(int x, int y) {
 //-----------------------------------------------------------------------------
 // Skips n bytes:
 //-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void *CPixelWriter::SkipBytes(int n) RESTRICT {
+FORCEINLINE_PIXEL void *CPixelWriter::SkipBytes(int n) SOURCE_RESTRICT {
   m_pBits += n;
   return m_pBits;
 }

@@ -21,7 +21,7 @@
 #include "TextureSystem.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #pragma warning(disable:4244)
@@ -202,7 +202,7 @@ BOOL CGameConfig::Import(std::fstream& file, float fVersion)
 //-----------------------------------------------------------------------------
 bool CGameConfig::Load(KeyValues *pkv)
 {
-	char szKey[MAX_PATH];
+	char szKey[SOURCE_MAX_PATH];
 
 	// We should at least be able to get the game name and the game dir.
 	Q_strncpy(szName, pkv->GetName(), sizeof(szName));
@@ -258,7 +258,7 @@ bool CGameConfig::Load(KeyValues *pkv)
 
 	SetCordonTexture( pkvHammer->GetString("CordonTexture", "BLACK") );
 
-	char szExcludeDir[MAX_PATH];
+	char szExcludeDir[SOURCE_MAX_PATH];
 	m_MaterialExcludeCount = pkvHammer->GetInt("MaterialExcludeCount");
 	for (int i = 0; i < m_MaterialExcludeCount; i++)
 	{
@@ -302,7 +302,7 @@ bool CGameConfig::Save(KeyValues *pkv)
 	//
 	for (int i = 0; i < nGDFiles; i++)
 	{
-		char szKey[MAX_PATH];
+		char szKey[SOURCE_MAX_PATH];
 		sprintf(szKey, "GameData%d", i);
 		pkvHammer->SetString(szKey, GDFiles.GetAt(i));
 	}
@@ -325,7 +325,7 @@ bool CGameConfig::Save(KeyValues *pkv)
 
 	pkvHammer->SetString("CordonTexture", m_szCordonTexture);
 
-	char szExcludeDir[MAX_PATH];
+	char szExcludeDir[SOURCE_MAX_PATH];
 	pkvHammer->SetInt("MaterialExcludeCount", m_MaterialExcludeCount);
 	for (int i = 0; i < m_MaterialExcludeCount; i++)
 	{
@@ -433,11 +433,11 @@ void CGameConfig::LoadGDFiles(void)
 	GD.ClearData();
 	
 	// Save the old working directory
-	char szOldDir[MAX_PATH];
+	char szOldDir[SOURCE_MAX_PATH];
 	_getcwd( szOldDir, sizeof(szOldDir) );
 
 	// Set our working directory properly
-	char szAppDir[MAX_PATH];
+	char szAppDir[SOURCE_MAX_PATH];
 	APP()->GetDirectory( DIR_PROGRAM, szAppDir );
 	_chdir( szAppDir );
 
@@ -482,11 +482,11 @@ bool FindFileInTree(const char *szFile, const char *szStartDir, char *szFoundPat
 		return false;
 	}
 
-	char szRoot[MAX_PATH];
+	char szRoot[SOURCE_MAX_PATH];
 	strcpy(szRoot, szStartDir);
 	Q_AppendSlash(szRoot, sizeof(szRoot));
 
-	char szTemp[MAX_PATH];
+	char szTemp[SOURCE_MAX_PATH];
 	do
 	{
 		strcpy(szTemp, szRoot);
@@ -544,7 +544,7 @@ bool FindSteamUserDir(const char *szAppDir, const char *szSteamDir, char *szStea
 	return false;
 }
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
@@ -567,7 +567,7 @@ void CGameConfig::ParseGameInfo()
 
 	pkv->deleteThis();
 
-	char szAppDir[MAX_PATH];
+	char szAppDir[SOURCE_MAX_PATH];
 	APP()->GetDirectory(DIR_PROGRAM, szAppDir);
 	if (!FindFileInTree("steam.exe", szAppDir, m_szSteamDir))
 	{
@@ -588,16 +588,16 @@ void CGameConfig::ParseGameInfo()
 const char *CGameConfig::GetMod()
 {
 	// Strip path from modDir
-	char szModPath[MAX_PATH];
-	static char szMod[MAX_PATH];
-	Q_strncpy( szModPath, m_szModDir, MAX_PATH );
+	char szModPath[SOURCE_MAX_PATH];
+	static char szMod[SOURCE_MAX_PATH];
+	Q_strncpy( szModPath, m_szModDir, SOURCE_MAX_PATH );
 	Q_StripTrailingSlash( szModPath );
 	if ( !szModPath[0] )
 	{
 		Q_strcpy( szModPath, "hl2" );
 	}
 
-	Q_FileBase( szModPath, szMod, MAX_PATH );
+	Q_FileBase( szModPath, szMod, SOURCE_MAX_PATH );
 
 	return szMod;
 }
@@ -607,11 +607,11 @@ const char *CGameConfig::GetGame()
 	return "hl2";
 
 //	// Strip path from modDir
-//	char szGamePath[MAX_PATH];
-//	static char szGame[MAX_PATH];
-//	Q_strncpy( szGamePath, m_szGameDir, MAX_PATH );
+//	char szGamePath[SOURCE_MAX_PATH];
+//	static char szGame[SOURCE_MAX_PATH];
+//	Q_strncpy( szGamePath, m_szGameDir, SOURCE_MAX_PATH );
 //	Q_StripTrailingSlash( szGamePath );
-//	Q_FileBase( szGamePath, szGame, MAX_PATH );
+//	Q_FileBase( szGamePath, szGame, SOURCE_MAX_PATH );
 
 //	return szGame;
 }

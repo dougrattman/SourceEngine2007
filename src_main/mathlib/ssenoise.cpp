@@ -11,7 +11,7 @@
 #include "mathlib/vector.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "noisedata.h"
 #include "tier0/include/memdbgon.h"
 
@@ -20,7 +20,7 @@
 static fltx4 Four_MagicNumbers = {MAGIC_NUMBER, MAGIC_NUMBER, MAGIC_NUMBER,
                                   MAGIC_NUMBER};
 
-static ALIGN16 i32 idx_mask[4] = {0xffff, 0xffff, 0xffff, 0xffff};
+static alignas(16) i32 idx_mask[4] = {0xffff, 0xffff, 0xffff, 0xffff};
 
 #define MASK255 (*((fltx4 *)(&idx_mask)))
 
@@ -43,7 +43,7 @@ fltx4 NoiseSIMD(const fltx4 &x, const fltx4 &y, const fltx4 &z) {
   fltx4 lattice100 = Four_Zeros, lattice101 = Four_Zeros,
         lattice110 = Four_Zeros, lattice111 = Four_Zeros;
 
-  // FIXME: Converting the input vectors to int indices will cause
+  // TODO(d.rattman): Converting the input vectors to int indices will cause
   // load-hit-stores (48 bytes)
   //        Converting the indexed noise values back to vectors will cause more
   //        (128 bytes) The noise table could store vectors if we chunked it

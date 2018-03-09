@@ -11,7 +11,7 @@
 #include "vgui_controls/ComboBox.h"
 #include "datamodel/dmelement.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

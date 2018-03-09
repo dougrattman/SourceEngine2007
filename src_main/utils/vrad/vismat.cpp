@@ -9,9 +9,9 @@ static MessageBuffer mb;
 
 #define HALFBIT
 
-extern char source[MAX_PATH];
-extern char vismatfile[_MAX_PATH];
-extern char incrementfile[_MAX_PATH];
+extern char source[SOURCE_MAX_PATH];
+extern char vismatfile[SOURCE_MAX_PATH];
+extern char incrementfile[SOURCE_MAX_PATH];
 extern bool incremental;
 
 /*
@@ -36,7 +36,7 @@ class CTransferMaker {
   CTransferMaker(transfer_t *all_transfers);
   ~CTransferMaker();
 
-  FORCEINLINE void TestMakeTransfer(Vector start, Vector stop, int ndxShooter,
+  SOURCE_FORCEINLINE void TestMakeTransfer(Vector start, Vector stop, int ndxShooter,
                                     int ndxReciever) {
     g_RtEnv.AddToRayStream(m_RayStream, start, stop, &m_pResults[m_nTests]);
     m_pShooterPatches[m_nTests] = ndxShooter;
@@ -146,7 +146,7 @@ void TestPatchToPatch(int ndxPatch1, int ndxPatch2, int head,
 
     VectorSubtract(patch->origin, patch2->origin, tmp);
     // SQRT( 1/4 )
-    // FIXME: should be based on form-factor (ie. include visible angle, etc)
+    // TODO(d.rattman): should be based on form-factor (ie. include visible angle, etc)
     if (DotProduct(tmp, tmp) * 0.0625 < patch2->area) {
       TestPatchToPatch(ndxPatch1, patch2->child1, head, transfers,
                        transferMaker, iThread);

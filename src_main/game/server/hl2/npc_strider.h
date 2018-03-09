@@ -37,7 +37,7 @@ void AdjustStriderNodePosition(CAI_Network *pNetwork, CAI_Node *pNode);
 //
 //-----------------------------------------------------------------------------
 
-abstract_class IMinigunHost {
+the_interface IMinigunHost {
  public:
   virtual void ShootMinigun(const Vector *pTarget, float aimError,
                             const Vector &vecSpread = vec3_origin) = 0;
@@ -49,7 +49,7 @@ abstract_class IMinigunHost {
   virtual CAI_BaseNPC *GetEntity() = 0;
 };
 
-abstract_class IStriderMinigunHost : public IMinigunHost {
+the_interface IStriderMinigunHost : public IMinigunHost {
  public:
   virtual float GetMinigunRateOfFire() = 0;
   virtual float GetMinigunOnTargetTime() = 0;
@@ -485,7 +485,7 @@ class CNPC_Strider : public CAI_BlendingHost<CAI_BaseNPC>,
   float m_idealHeight;
   float m_HeightVelocity;
 
-  // FIXME: move to a base class to handle turning for blended movement derived
+  // TODO(d.rattman): move to a base class to handle turning for blended movement derived
   // characters
   float m_prevYaw;
   float m_doTurn;

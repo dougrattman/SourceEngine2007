@@ -1,16 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-// light structure definitions.
 #ifndef SOURCE_MATHLIB_LIGHTDESC_H_
 #define SOURCE_MATHLIB_LIGHTDESC_H_
 
 #include "base/include/base_types.h"
 #include "mathlib/ssemath.h"
 #include "mathlib/vector.h"
-
-
-// Light structure
-
 
 enum LightType_t {
   MATERIAL_LIGHT_DISABLE = 0,
@@ -55,9 +50,7 @@ struct LightDesc_t {
 
   LightDesc_t(void) {}
 
-  // constructors for various useful subtypes
-
-  /// a point light with infinite range
+  // a point light with infinite range
   LightDesc_t(Vector const &pos, Vector const &color)
       : m_Color{color}, m_Position{pos} {
     m_Type = MATERIAL_LIGHT_POINT;
@@ -68,8 +61,8 @@ struct LightDesc_t {
     RecalculateDerivedValues();
   }
 
-  /// a simple light. cone boundaries in radians. you pass a look_at point and
-  /// the direciton is derived from that.
+  // a simple light. cone boundaries in radians. you pass a look_at point and
+  // the direciton is derived from that.
   LightDesc_t(Vector const &pos, Vector const &color, Vector const &point_at,
               f32 inner_cone_boundary, f32 outer_cone_boundary)
       : m_Type{MATERIAL_LIGHT_SPOT},
@@ -90,7 +83,7 @@ struct LightDesc_t {
     RecalculateDerivedValues();
   }
 
-  /// Given 4 points and 4 normals, ADD lighting from this light into "color".
+  // Given 4 points and 4 normals, ADD lighting from this light into "color".
   void ComputeLightAtPoints(const FourVectors &pos, const FourVectors &normal,
                             FourVectors &color,
                             bool DoHalfLambert = false) const;
@@ -108,9 +101,9 @@ struct LightDesc_t {
   void SetupNewStyleAttenuation(f32 fFiftyPercentDistance,
                                 f32 fZeroPercentDistance);
 
-  /// given a direction relative to the light source position, is this ray
-  /// within the light cone (for spotlights..non spots consider all rays to be
-  /// within their cone)
+  // given a direction relative to the light source position, is this ray
+  // within the light cone (for spotlights..non spots consider all rays to be
+  // within their cone)
   bool IsDirectionWithinLightCone(Vector const &rdir) const {
     return ((m_Type != MATERIAL_LIGHT_SPOT) ||
             (rdir.Dot(m_Direction) >= m_PhiDot));

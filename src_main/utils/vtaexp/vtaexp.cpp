@@ -126,7 +126,7 @@ int VtaExportClass::DoExport(const TCHAR *name,ExpInterface *ei,Interface *i, BO
 
 	// Break up filename, re-assemble longer versions
 	TSTR strPath, strFile, strExt;
-	TCHAR szFile[MAX_PATH];
+	TCHAR szFile[SOURCE_MAX_PATH];
 	SplitFilename(TSTR(name), &strPath, &strFile, &strExt);
 		sprintf(szFile,  "%s\\%s.%s",  (char*)strPath, (char*)strFile, DEFAULT_EXT);
 

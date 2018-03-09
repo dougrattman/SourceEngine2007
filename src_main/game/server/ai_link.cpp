@@ -14,7 +14,7 @@
 #include "cbase.h"
 #include "ai_link.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

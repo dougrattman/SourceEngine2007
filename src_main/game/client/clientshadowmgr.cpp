@@ -82,7 +82,6 @@
 #include "viewrender.h"
 #include "vstdlib/jobthread.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 static ConVar r_flashlightdrawfrustum("r_flashlightdrawfrustum", "0");
@@ -262,7 +261,7 @@ void CTextureAllocator::Reset() {
   m_Fragments.EnsureCapacity(256);
 
   // Set up the block sizes....
-  // FIXME: Improve heuristic?!?
+  // TODO(d.rattman): Improve heuristic?!?
 #if !defined(_X360)
   m_Blocks[0].m_FragmentPower =
       MAX_TEXTURE_POWER - 4;  // 128 cells at ExE resolution
@@ -1066,7 +1065,7 @@ void CVisibleShadowList::EnumShadow(unsigned short clientShadowHandle) {
     return;
 
   // Compute a sphere surrounding the shadow
-  // FIXME: This doesn't account for children of hierarchy... too bad!
+  // TODO(d.rattman): This doesn't account for children of hierarchy... too bad!
   Vector vecAbsCenter;
   float flRadius;
   s_ClientShadowMgr.ComputeBoundingSphere(pRenderable, vecAbsCenter, flRadius);
@@ -1076,7 +1075,7 @@ void CVisibleShadowList::EnumShadow(unsigned short clientShadowHandle) {
   s_ClientShadowMgr.ComputeShadowBBox(pRenderable, vecAbsCenter, flRadius,
                                       &vecAbsMins, &vecAbsMaxs);
 
-  // FIXME: Add distance check here?
+  // TODO(d.rattman): Add distance check here?
 
   // Make sure it's in the frustum. If it isn't it's not interesting
   if (engine->CullBox(vecAbsMins, vecAbsMaxs)) return;
@@ -1774,8 +1773,8 @@ ClientShadowHandle_t CClientShadowMgr::CreateProjectedTexture(
   if (flags & SHADOW_FLAGS_FLASHLIGHT) {
     // don't use SHADOW_CACHE_VERTS with projective lightsources since we expect
     // that they will change every frame.
-    // FIXME: might want to make it cache optionally if it's an entity light
-    // that is static.
+    // TODO(d.rattman): might want to make it cache optionally if it's an entity
+    // light that is static.
     createShadowFlags = SHADOW_FLASHLIGHT;
   } else {
     createShadowFlags = SHADOW_CACHE_VERTS;
@@ -2294,9 +2293,9 @@ void CClientShadowMgr::BuildOrthoShadow(IClientRenderable* pRenderable,
                            MAX_FALLOFF_AMOUNT, pRenderable->GetRenderOrigin());
 
   // Compute extra clip planes to prevent poke-thru
-  // FIXME!!!!!!!!!!!!!!  Removing this for now since it seems to mess up the
+  // TODO(d.rattman): Removing this for now since it seems to mess up the
   // blobby shadows.
-  //	ComputeExtraClipPlanes( pEnt, handle, vec, mins, maxs, localShadowDir );
+  // ComputeExtraClipPlanes( pEnt, handle, vec, mins, maxs, localShadowDir );
 
   // Add the shadow to the client leaf system so it correctly marks
   // leafs as being affected by a particular shadow
@@ -2638,7 +2637,7 @@ void CClientShadowMgr::AddChildBounds(matrix3x4_t& matWorldToBBox,
   IClientRenderable* pChild = pParent->FirstShadowChild();
   while (pChild) {
     // Transform the child bbox into the space of the main bbox
-    // FIXME: Optimize this?
+    // TODO(d.rattman): Optimize this?
     if (GetActualShadowCastType(pChild) != SHADOWS_NONE) {
       pChild->GetShadowRenderBounds(vecChildMins, vecChildMaxs,
                                     SHADOWS_RENDER_TO_TEXTURE);
@@ -2978,10 +2977,10 @@ void CClientShadowMgr::UpdateShadow(ClientShadowHandle_t handle, bool force) {
     return;
   }
 
-  // FIXME: NOTE! Because this is called from PreRender, the falloff bias is
-  // off by a frame. We could move the code in PreRender to occur after world
-  // list building is done to fix this issue.
-  // Don't bother with it if the shadow is totally transparent
+  // TODO(d.rattman): NOTE! Because this is called from PreRender, the falloff
+  // bias is off by a frame. We could move the code in PreRender to occur after
+  // world list building is done to fix this issue. Don't bother with it if the
+  // shadow is totally transparent
   const ShadowInfo_t& shadowInfo = shadowmgr->GetInfo(shadow.m_ShadowHandle);
   if (shadowInfo.m_FalloffBias == 255) {
     shadowmgr->EnableShadow(shadow.m_ShadowHandle, false);
@@ -3061,8 +3060,8 @@ void CClientShadowMgr::UpdateProjectedTextureInternal(
 
     shadowmgr->EnableShadow(shadow.m_ShadowHandle, true);
 
-    // FIXME: What's the difference between brush and model shadows for light
-    // projectors? Answer: nothing.
+    // TODO(d.rattman): What's the difference between brush and model shadows
+    // for light projectors? Answer: nothing.
     UpdateBrushShadow(NULL, handle);
   } else {
     Assert(shadow.m_Flags & SHADOW_FLAGS_SHADOW);
@@ -3432,7 +3431,8 @@ void CClientShadowMgr::RemoveAllShadowsFromReceiver(
       break;
 
       //	default:
-      //		// FIXME: How do deal with this stuff? Add a method to
+      //		// TODO(d.rattman): How do deal with this stuff? Add a
+      // method to
       // IClientRenderable? 		C_BaseEntity* pEnt =
       // static_cast<C_BaseEntity*>(pRenderable);
       //		pEnt->RemoveAllShadows();
@@ -3715,8 +3715,9 @@ int CClientShadowMgr::BuildActiveShadowDepthList(
                                viewSetup.zNear, viewSetup.zFar, viewSetup.fov,
                                viewSetup.m_flAspectRatio, viewFrustum);
 
-    // FIXME: Could do other sorts of culling here, such as frustum-frustum
-    // test, distance etc. If it's not in the view frustum, move on
+    // TODO(d.rattman): Could do other sorts of culling here, such as
+    // frustum-frustum test, distance etc. If it's not in the view frustum, move
+    // on
     if (R_CullBox(vecAbsMins, vecAbsMaxs, viewFrustum)) {
       shadowmgr->SetFlashlightDepthTexture(shadow.m_ShadowHandle, NULL, 0);
       continue;
@@ -3771,7 +3772,7 @@ void CClientShadowMgr::ComputeShadowDepthTextures(const CViewSetup& viewSetup) {
   // Build list of active render-to-texture shadows
   ClientShadowHandle_t pActiveDepthShadows[1024];
   int nActiveDepthShadowCount = BuildActiveShadowDepthList(
-      viewSetup, ARRAYSIZE(pActiveDepthShadows), pActiveDepthShadows);
+      viewSetup, SOURCE_ARRAYSIZE(pActiveDepthShadows), pActiveDepthShadows);
 
   // Iterate over all existing textures and allocate shadow textures
   bool bDebugFrustum = r_flashlightdrawfrustum.GetBool();
@@ -3864,7 +3865,7 @@ void CClientShadowMgr::ComputeShadowTextures(const CViewSetup& view,
   int nCount = s_VisibleShadowList.FindShadows(&view, leafCount, pLeafList);
   if (nCount == 0) return;
 
-  // FIXME: Add heuristics based on distance, etc. to futz with
+  // TODO(d.rattman): Add heuristics based on distance, etc. to futz with
   // the shadow allocator + to select blobby shadows
 
   CMatRenderContextPtr pRenderContext(materials);
@@ -3880,7 +3881,7 @@ void CClientShadowMgr::ComputeShadowTextures(const CViewSetup& view,
   pRenderContext->SetHeightClipMode(MATERIAL_HEIGHTCLIPMODE_DISABLE);
 
   // No projection matrix (orthographic mode)
-  // FIXME: Make it work for projective shadows?
+  // TODO(d.rattman): Make it work for projective shadows?
   pRenderContext->MatrixMode(MATERIAL_PROJECTION);
   pRenderContext->PushMatrix();
   pRenderContext->LoadIdentity();

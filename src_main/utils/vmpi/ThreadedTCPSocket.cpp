@@ -1,10 +1,10 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the entry point for the console application.
 
 #include "IThreadedTCPSocket.h"
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>
 
@@ -346,7 +346,7 @@ class CThreadedTCPSocket : public IThreadedTCPSocket {
       HANDLE handles[] = {m_hExitThreadsEvent.GetEventHandle(),
                           m_hSendCompletionEvent.GetEventHandle(),
                           m_hReadyToSendEvent.GetEventHandle()};
-      int nHandles = ARRAYSIZE(handles);
+      int nHandles = SOURCE_ARRAYSIZE(handles);
 
       // While waiting for send completion, don't handle "ready to send" events.
       if (m_bWaitingForSendCompletion) --nHandles;
@@ -511,7 +511,7 @@ class CThreadedTCPSocket : public IThreadedTCPSocket {
                         m_hRecvEvent.GetEventHandle()};
 
     while (1) {
-      DWORD waitValue = WaitForMultipleObjects(ARRAYSIZE(handles), handles,
+      DWORD waitValue = WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles,
                                                FALSE, KEEPALIVE_TIMEOUT);
       switch (waitValue) {
         case WAIT_TIMEOUT: {

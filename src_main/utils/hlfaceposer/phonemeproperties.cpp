@@ -24,7 +24,7 @@ static HWND		*g_rgButtons = NULL;
 #define PHONEME_GAP			10
 #define PHONEME_VGAP		5
 
-typedef long (__stdcall *WINPROCTYPE)( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+typedef long (SOURCE_STDCALL *WINPROCTYPE)( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 static WINPROCTYPE lpfnOldButtonProc;
 
 static BOOL CALLBACK PhonemeBtnProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )

@@ -16,7 +16,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlstring.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -76,7 +75,7 @@ static bool Unserialize(CUtlBuffer &buf, DmUnknownAttribute_t &dest) {
 //-----------------------------------------------------------------------------
 // Internal interface for dealing with generic attribute operations
 //-----------------------------------------------------------------------------
-abstract_class IDmAttributeOp {
+the_interface IDmAttributeOp {
  public:
   virtual void *CreateAttributeData() = 0;
   virtual void DestroyAttributeData(void *pData) = 0;
@@ -182,12 +181,12 @@ void DeleteData(void *pData) {
 struct CSizeTest {
   CSizeTest() {
     // test internal value attribute sizes
-    COMPILE_TIME_ASSERT(sizeof(int) == 4);
-    COMPILE_TIME_ASSERT(sizeof(float) == 4);
-    COMPILE_TIME_ASSERT(sizeof(bool) <= 4);
-    COMPILE_TIME_ASSERT(sizeof(Color) == 4);
-    COMPILE_TIME_ASSERT(sizeof(DmElementAttribute_t) <= 8);
-    COMPILE_TIME_ASSERT(sizeof(Vector2D) == 8);
+    static_assert(sizeof(int) == 4);
+    static_assert(sizeof(float) == 4);
+    static_assert(sizeof(bool) <= 4);
+    static_assert(sizeof(Color) == 4);
+    static_assert(sizeof(DmElementAttribute_t) <= 8);
+    static_assert(sizeof(Vector2D) == 8);
   }
 };
 static CSizeTest g_sizeTest;
@@ -1693,9 +1692,9 @@ CDmAttribute::CDmAttribute(CDmElement *pOwner, DmAttributeType_t type,
 
 void CDmAttribute::Init(CDmElement *pOwner, DmAttributeType_t type,
                         const char *pAttributeName) {
-  // FIXME - this is just here temporarily to catch old code trying to create
-  // type and id attributes this shouldn't actually be illegal, since users
-  // should be able to create attributes of whatever name they want
+  // TODO(d.rattman): This is just here temporarily to catch old code trying to
+  // create type and id attributes this shouldn't actually be illegal, since
+  // users should be able to create attributes of whatever name they want
   Assert(V_strcmp(pAttributeName, "type") && V_strcmp(pAttributeName, "id"));
 
   m_pOwner = pOwner;
@@ -1843,7 +1842,7 @@ void CDmAttribute::PreChanged() {
     m_pOwner->PreAttributeChanged(this);
   }
 
-  // FIXME: What about mailing lists?
+  // TODO(d.rattman): What about mailing lists?
 }
 
 void CDmAttribute::OnChanged(bool bArrayCountChanged, bool bIsTopological) {

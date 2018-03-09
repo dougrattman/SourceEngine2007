@@ -10,7 +10,7 @@
 #include "animation.h"
 #include "activitylist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC( CActAnimating )

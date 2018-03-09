@@ -98,7 +98,7 @@ void CObjectMannedPlasmagun::Precache()
 //-----------------------------------------------------------------------------
 void CObjectMannedPlasmagun::SetupTeamModel( void )
 {
-	// FIXME: When adding in build animations here, make sure C_ObjectBaseMannedGun::OnDataChanged
+	// TODO(d.rattman): When adding in build animations here, make sure C_ObjectBaseMannedGun::OnDataChanged
 	// does the right thing on the client!!
 	if ( GetTeamNumber() == TEAM_HUMANS )
 	{

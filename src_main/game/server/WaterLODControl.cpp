@@ -7,11 +7,11 @@
 
 #include "cbase.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //------------------------------------------------------------------------------
-// FIXME: This really should inherit from something	more lightweight
+// TODO(d.rattman): This really should inherit from something	more lightweight
 //------------------------------------------------------------------------------
 
 

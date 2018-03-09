@@ -20,7 +20,7 @@
 #include "collisionutils.h"
 #include "te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -211,7 +211,7 @@ void CNPC_Surface::VPhysicsCollision( int index, gamevcollisionevent_t *pEvent )
 		Vector rad = pos - fountainOrigin;
 		//pos += (rad * 0.25f);
 		data.m_vOrigin = pos + Vector(0, 0, 5.0f);
-		// FIXME: needs to be the correct vector for the impact!
+		// TODO(d.rattman): needs to be the correct vector for the impact!
 		rad.NormalizeInPlace();
 		data.m_vNormal = rad;//Vector( 0, 0, 1 );
 		data.m_flScale = 10.0f;
@@ -374,7 +374,7 @@ void CNPC_Surface::ApplyDamageForce( const CTakeDamageInfo &info )
 	float flMinDist2 = (10 * m_flRadius);
 	flMinDist2 = flMinDist2 * flMinDist2;
 
-	// FIXME: this needs a better algorithm for radiating the force
+	// TODO(d.rattman): this needs a better algorithm for radiating the force
 	float flForce = info.GetDamageForce().Length();
 	flMinDist2 *= std::max( 1.0, sqrt( flForce / 1000 ));
 
@@ -476,7 +476,7 @@ bool CNPC_Surface::TestCollision( const Ray_t &ray, unsigned int fContentsMask, 
 	}
 	else
 	{
-		// FIXME: This isn't a valid test, Jay needs to make it real
+		// TODO(d.rattman): This isn't a valid test, Jay needs to make it real
 		Vector vecMin = Vector( -m_flRadius, -m_flRadius, -m_flRadius) - ray.m_Extents;
 		Vector vecMax = Vector( m_flRadius, m_flRadius, m_flRadius) + ray.m_Extents;
 
@@ -741,7 +741,7 @@ void CLennardJonesForce::AddForces( IPhysicsObject **pObject, int nObjects, floa
 	m_fMaxRepulsion = lj_MaxRepulsion.GetFloat();
 	m_fMaxAttraction = lj_MaxAttraction.GetFloat();
 
-	// FIXME: this isn't thread safe
+	// TODO(d.rattman): this isn't thread safe
 	static SmartArray<ImpParticle> imp_particles_sa; // This doesn't specify alignment, might have problems with SSE
 	while(imp_particles_sa.size < nObjects)
 	{
@@ -1043,7 +1043,7 @@ bool CNPC_BlobFountain::CreateVPhysics( bool bFromRestore )
 
 	int nMaterialIndex = physprops->GetSurfaceIndex("water");
 
-	// FIXME: don't hardcode the number of particles
+	// TODO(d.rattman): don't hardcode the number of particles
 	m_nActiveParticles = 1000;
 
 	//bool result = BaseClass::CreateVPhysics( bFromRestore );
@@ -1385,7 +1385,7 @@ bool CNPC_BlobFountain::CreateVPhysics( bool bFromRestore )
 
 	int nMaterialIndex = physprops->GetSurfaceIndex("water");
 
-	// FIXME: don't hardcode the number of particles
+	// TODO(d.rattman): don't hardcode the number of particles
 	m_nActiveParticles = 300;
 
 	//bool result = BaseClass::CreateVPhysics( bFromRestore );
@@ -1544,7 +1544,7 @@ void CNPC_BlobArmTest::Spawn( void )
 
 bool CNPC_BlobArmTest::CreateVPhysics( bool bFromRestore )
 {
-	// FIXME: don't hardcode the number of particles
+	// TODO(d.rattman): don't hardcode the number of particles
 	m_nActiveParticles = 128;
 
 	bool result = BaseClass::CreateVPhysics( bFromRestore );
@@ -1571,7 +1571,7 @@ void CNPC_BlobArmTest::RunAI( void )
 	int nArmLength = MoveTowardsGoal( );
 
 
-	// FIXME: this isn't thread safe
+	// TODO(d.rattman): this isn't thread safe
 	static SmartArray<ImpParticle> imp_particles_sa; // This doesn't specify alignment, might have problems with SSE
 	while(imp_particles_sa.size < m_nActiveParticles)
 	{
@@ -1951,7 +1951,7 @@ void CNPC_BlobDemoMonster::Spawn( void )
 
 bool CNPC_BlobDemoMonster::CreateVPhysics( bool bFromRestore )
 {
-	// FIXME: don't hardcode the number of particles
+	// TODO(d.rattman): don't hardcode the number of particles
 	m_nActiveParticles = 256;
 	m_flRadius = 6.5;
 
@@ -2082,7 +2082,7 @@ void CNPC_BlobDemoMonster::RepulseNeighbors()
 	float flNearbyDistance = m_flRadius * sv_surface_nearby.GetFloat();
 
 	int i, j;
-	// FIXME: this isn't thread safe
+	// TODO(d.rattman): this isn't thread safe
 	static SmartArray<ImpParticle> imp_particles_sa; // This doesn't specify alignment, might have problems with SSE
 	while(imp_particles_sa.size < m_nActiveParticles)
 	{

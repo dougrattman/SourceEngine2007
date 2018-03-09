@@ -107,7 +107,7 @@ unsigned int CFSIOWriteBinary::tell(int file) {
   return g_pFullFileSystem->Tell((FileHandle_t)file);
 }
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 
 // Returns the duration of a wav file
 

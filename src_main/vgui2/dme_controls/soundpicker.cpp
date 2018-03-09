@@ -21,10 +21,10 @@
 #include "soundemittersystem/isoundemittersystembase.h"
 #include "mathlib/mathlib.h"
 
-// FIXME: Move sound code out of the engine + into a library!
+// TODO(d.rattman): Move sound code out of the engine + into a library!
 #include "toolframework/ienginetool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

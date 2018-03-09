@@ -30,7 +30,7 @@ CInputSystem::CInputSystem() {
   m_PrimaryUserId = INVALID_USER_ID;
   m_uiMouseWheel = 0;
   m_bXController = false;
-  COMPILE_TIME_ASSERT((MAX_JOYSTICKS + 7) >> 3 << sizeof(unsigned short));
+  static_assert((MAX_JOYSTICKS + 7) >> 3 << sizeof(unsigned short));
 
   m_pXInputDLL = NULL;
 }
@@ -189,7 +189,7 @@ AnalogCode_t CInputSystem::StringToAnalogCode(const char *pString) const {
 
 //-----------------------------------------------------------------------------
 // Convert back + forth between virtual codes + button codes
-// FIXME: This is a temporary piece of code
+// TODO(d.rattman): This is a temporary piece of code
 //-----------------------------------------------------------------------------
 ButtonCode_t CInputSystem::VirtualKeyToButtonCode(int nVirtualKey) const {
   return ButtonCode_VirtualKeyToButtonCode(nVirtualKey);
@@ -469,7 +469,7 @@ inline LRESULT CInputSystem::ChainWindowMessage(HWND hwnd, UINT uMsg,
   if (m_ChainedWndProc)
     return CallWindowProc(m_ChainedWndProc, hwnd, uMsg, wParam, lParam);
 
-  // FIXME: This comment is lifted from vguimatsurface;
+  // TODO(d.rattman): This comment is lifted from vguimatsurface;
   // may not apply in future when the system is completed.
 
   // This means the application is driving the messages (calling our window

@@ -43,7 +43,7 @@
 #include "vgui_surfacelib/FontManager.h"
 #include "vgui_surfacelib/Win32Font.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef PlaySound
@@ -2386,7 +2386,7 @@ void CWin32Surface::PaintTraverse(VPANEL panel) {
   END_TIMER("Paint time: %.2fms\n");
 }
 
-// FIXME: write these functions!
+// TODO(d.rattman): write these functions!
 void CWin32Surface::RestrictPaintToSinglePanel(VPANEL panel) {}
 
 void CWin32Surface::SetModalPanel(VPANEL) {}
@@ -2730,7 +2730,7 @@ void CWin32Surface::GetTextSize(HFont font, const wchar_t *text, int &wide,
 // for now)
 //-----------------------------------------------------------------------------
 bool CWin32Surface::AddCustomFontFile(const char *fontFileName) {
-  char fullPath[MAX_PATH];
+  char fullPath[SOURCE_MAX_PATH];
   g_pFullFileSystem->GetLocalPath(fontFileName, fullPath, sizeof(fullPath));
   m_CustomFontFileNames.AddToTail(fontFileName);
   return (::AddFontResource(fullPath) > 0);
@@ -2804,7 +2804,7 @@ void CWin32Surface::GetAbsoluteWindowBounds(int &x, int &y, int &wide,
 // Input  : *fileName - name of the wav file
 //-----------------------------------------------------------------------------
 void CWin32Surface::PlaySound(const char *fileName) {
-  char localPath[MAX_PATH];
+  char localPath[SOURCE_MAX_PATH];
   if (!g_pFullFileSystem->GetLocalPath(fileName, localPath, sizeof(localPath)))
     return;
 

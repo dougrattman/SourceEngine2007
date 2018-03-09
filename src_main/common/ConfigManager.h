@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
@@ -14,12 +14,12 @@
 #define TOKEN_TOOLS "Tools"
 
 struct defaultConfigInfo_t {
-  char gameName[MAX_PATH];
-  char gameDir[MAX_PATH];
-  char FGD[MAX_PATH];
-  char steamPath[MAX_PATH];
-  char defaultPointEntity[MAX_PATH];
-  char exeName[MAX_PATH];
+  char gameName[SOURCE_MAX_PATH];
+  char gameDir[SOURCE_MAX_PATH];
+  char FGD[SOURCE_MAX_PATH];
+  char steamPath[SOURCE_MAX_PATH];
+  char defaultPointEntity[SOURCE_MAX_PATH];
+  char exeName[SOURCE_MAX_PATH];
   int steamAppID;
 };
 
@@ -93,7 +93,7 @@ class CGameConfigManager {
   loadStatus_t
       m_LoadStatus;    // Holds various state about what occured while loading
   KeyValues *m_pData;  // Data as read from configuration file
-  char m_szBaseDirectory[MAX_PATH];  // Default directory
+  char m_szBaseDirectory[SOURCE_MAX_PATH];  // Default directory
   eSDKEpochs
       m_eSDKEpoch;  // Holds the "working version" of the SDK for times when we
                     // need to create an older set of game configurations. This

@@ -1194,11 +1194,11 @@ void mxExpressionTray::OnModelChanged()
 			return;
 
 		// See if per-model overrides exist for this model
-		char fn[ MAX_PATH ];
+		char fn[ SOURCE_MAX_PATH ];
 		Q_snprintf( fn, sizeof( fn ), "expressions/%s/phonemes/phonemes.txt", models->GetActiveModelName() );
 
 		// Load appropriate classes
-		char rootDir[ MAX_PATH ];
+		char rootDir[ SOURCE_MAX_PATH ];
 		Q_snprintf( rootDir, sizeof( rootDir ), "%s/phonemes/", models->GetActiveModelName() );
 		FacePoser_SetPhonemeRootDir( rootDir );
 

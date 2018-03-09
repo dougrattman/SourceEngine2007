@@ -16,10 +16,10 @@
 #include "tier1/UtlVector.h"
 #include "tier1/netadr.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-abstract_class IVProfData {
+the_interface IVProfData {
  public:
   virtual void OnRemoteGroupData(const void *data, int len) = 0;
   virtual void OnRemoteData(const void *data, int len) = 0;

@@ -8,7 +8,7 @@
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
 #include "winsock.h"
-#elif _LINUX
+#elif OS_POSIX
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #define SOCKET int

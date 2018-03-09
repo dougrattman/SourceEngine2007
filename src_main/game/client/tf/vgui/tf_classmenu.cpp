@@ -88,7 +88,7 @@ CTFClassMenu::CTFClassMenu( IViewPort *pViewPort ) : CClassMenu( pViewPort )
 	Q_memset( m_pClassButtons, 0, sizeof( m_pClassButtons ) );
 
 #ifndef _X360
-	char tempName[MAX_PATH];
+	char tempName[SOURCE_MAX_PATH];
 	for ( int i = 0 ; i < CLASS_COUNT_IMAGES ; ++i )
 	{
 		Q_snprintf( tempName, sizeof( tempName ), "countImage%d", i );

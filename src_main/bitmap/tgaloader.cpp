@@ -11,7 +11,7 @@
 #include "tier1/utlvector.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 namespace TGALoader {

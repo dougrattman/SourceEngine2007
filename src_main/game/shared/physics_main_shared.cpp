@@ -23,7 +23,7 @@
 	#include "portal_util_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // memory pool for storing links between entities
@@ -129,7 +129,7 @@ public:
 
 	CDataObjectAccessSystem()
 	{
-		COMPILE_TIME_ASSERT( NUM_DATAOBJECT_TYPES <= MAX_ACCESSORS );
+		static_assert( NUM_DATAOBJECT_TYPES <= MAX_ACCESSORS );
 
 		Q_memset( m_Accessors, 0, sizeof( m_Accessors ) );
 	}
@@ -306,7 +306,7 @@ int CWatcherList::GetCallbackObjects( IWatcherCallback **pList, int listMax )
 void CWatcherList::NotifyPositionChanged( CBaseEntity *pEntity )
 {
 	IWatcherCallback *pCallbacks[1024]; // HACKHACK: Assumes this list is big enough
-	int count = GetCallbackObjects( pCallbacks, ARRAYSIZE(pCallbacks) );
+	int count = GetCallbackObjects( pCallbacks, SOURCE_ARRAYSIZE(pCallbacks) );
 	for ( int i = 0; i < count; i++ )
 	{
 		IPositionWatcher *pWatcher = assert_cast<IPositionWatcher *>(pCallbacks[i]);
@@ -320,7 +320,7 @@ void CWatcherList::NotifyPositionChanged( CBaseEntity *pEntity )
 void CWatcherList::NotifyVPhysicsStateChanged( IPhysicsObject *pPhysics, CBaseEntity *pEntity, bool bAwake )
 {
 	IWatcherCallback *pCallbacks[1024];	// HACKHACK: Assumes this list is big enough!
-	int count = GetCallbackObjects( pCallbacks, ARRAYSIZE(pCallbacks) );
+	int count = GetCallbackObjects( pCallbacks, SOURCE_ARRAYSIZE(pCallbacks) );
 	for ( int i = 0; i < count; i++ )
 	{
 		IVPhysicsWatcher *pWatcher = assert_cast<IVPhysicsWatcher *>(pCallbacks[i]);
@@ -1111,7 +1111,7 @@ unsigned int CBaseEntity::PhysicsSolidMaskForEntity( void ) const
 //-----------------------------------------------------------------------------
 void CBaseEntity::UpdateWaterState()
 {
-	// FIXME: This computation is nonsensical for rigid child attachments
+	// TODO(d.rattman): This computation is nonsensical for rigid child attachments
 	// Should we just grab the type + level of the parent?
 	// Probably for rigid children anyways...
 

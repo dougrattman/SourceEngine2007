@@ -22,7 +22,7 @@ bool NET_Init() {
 
   if (error_code != ERROR_SUCCESS) {
     char error_message[256];
-    Q_snprintf(error_message, ARRAYSIZE(error_message),
+    Q_snprintf(error_message, SOURCE_ARRAYSIZE(error_message),
                "Winsock 2.2 unavailable, error code 0x%x...", error_code);
     sys->Printf("%s", error_message);
     Plat_DebugString(error_message);
@@ -47,7 +47,7 @@ void MiniDumpFunction(unsigned int nExceptionCode,
 int main(int argc, char **argv);
 
 // Main dedicated server entry point.
-DLL_EXPORT int DedicatedMain(HINSTANCE instance, int show_cmd) {
+SOURCE_API_EXPORT int DedicatedMain(HINSTANCE instance, int show_cmd) {
   SetAppInstance(instance);
 
   CommandLine()->CreateCmdLine(VCRHook_GetCommandLine());

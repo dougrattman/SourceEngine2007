@@ -44,7 +44,7 @@
 	#include "hltvdirector.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ITEM_RESPAWN_TIME	10.0f
@@ -373,7 +373,7 @@ CTFGameRules::CTFGameRules()
 	ResetMapTime();
 
 	// Create the team managers
-//	for ( int i = 0; i < ARRAYSIZE( teamnames ); i++ )
+//	for ( int i = 0; i < SOURCE_ARRAYSIZE( teamnames ); i++ )
 //	{
 //		CTeam *pTeam = static_cast<CTeam*>(CreateEntityByName( "tf_team" ));
 //		pTeam->Init( sTeamNames[i], i );
@@ -1869,7 +1869,7 @@ const char *CTFGameRules::GetKillingWeaponName( const CTakeDamageInfo &info, CTF
 
 	// strip certain prefixes from inflictor's classname
 	const char *prefix[] = { "tf_weapon_grenade_", "tf_weapon_", "NPC_", "func_" };
-	for ( int i = 0; i< ARRAYSIZE( prefix ); i++ )
+	for ( int i = 0; i< SOURCE_ARRAYSIZE( prefix ); i++ )
 	{
 		// if prefix matches, advance the string pointer past the prefix
 		int len = Q_strlen( prefix[i] );
@@ -2154,8 +2154,8 @@ void CTFGameRules::SendWinPanelInfo( void )
 
 			// set the player index and their round score in the event
 			char szPlayerIndexVal[64]="", szPlayerScoreVal[64]="";
-			Q_snprintf( szPlayerIndexVal, ARRAYSIZE( szPlayerIndexVal ), "player_%d", i+ 1 );
-			Q_snprintf( szPlayerScoreVal, ARRAYSIZE( szPlayerScoreVal ), "player_%d_points", i+ 1 );
+			Q_snprintf( szPlayerIndexVal, SOURCE_ARRAYSIZE( szPlayerIndexVal ), "player_%d", i+ 1 );
+			Q_snprintf( szPlayerScoreVal, SOURCE_ARRAYSIZE( szPlayerScoreVal ), "player_%d_points", i+ 1 );
 			winEvent->SetInt( szPlayerIndexVal, vecPlayerScore[i].iPlayerIndex );
 			winEvent->SetInt( szPlayerScoreVal, vecPlayerScore[i].iRoundScore );				
 		}
@@ -2980,7 +2980,7 @@ void CTFGameRules::FireGameEvent( IGameEvent *event )
 		// award a capture to all capping players
 		const char *cappers = event->GetString( "cappers" );
 
-		Q_strncpy( m_szMostRecentCappers, cappers, ARRAYSIZE( m_szMostRecentCappers ) );	
+		Q_strncpy( m_szMostRecentCappers, cappers, SOURCE_ARRAYSIZE( m_szMostRecentCappers ) );	
 		for ( int i =0; i < Q_strlen( cappers ); i++ )
 		{
 			int iPlayerIndex = (int) cappers[i];
@@ -3336,13 +3336,13 @@ const char *CTFGameRules::GetVideoFileForMap( bool bWithExtension /*= true*/ )
 	}
 #endif
 
-	static char strFullpath[MAX_PATH];
-	Q_strncpy( strFullpath, "media/", MAX_PATH );	// Assume we must play out of the media directory
-	Q_strncat( strFullpath, mapname, MAX_PATH );
+	static char strFullpath[SOURCE_MAX_PATH];
+	Q_strncpy( strFullpath, "media/", SOURCE_MAX_PATH );	// Assume we must play out of the media directory
+	Q_strncat( strFullpath, mapname, SOURCE_MAX_PATH );
 
 	if ( bWithExtension )
 	{
-		Q_strncat( strFullpath, ".bik", MAX_PATH );		// Assume we're a .bik extension type
+		Q_strncat( strFullpath, ".bik", SOURCE_MAX_PATH );		// Assume we're a .bik extension type
 	}
 
 	return strFullpath;

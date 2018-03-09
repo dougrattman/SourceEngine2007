@@ -58,7 +58,7 @@ class C_BaseEntity;
 struct vrect_t;
 class C_BaseViewModel;
 
-abstract_class IViewRender
+the_interface IViewRender
 {
 public:
 	// SETUP

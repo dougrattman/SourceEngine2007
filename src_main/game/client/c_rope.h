@@ -243,7 +243,7 @@ void Rope_ResetCounters();
 //
 // Rope Manager
 //
-abstract_class IRopeManager
+the_interface IRopeManager
 {
 public:
 	virtual  ~IRopeManager() {}

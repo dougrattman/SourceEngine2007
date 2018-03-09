@@ -20,7 +20,7 @@ extern IMaterialSystem *materials;
 #include "tier2/tier2.h"
 #include "vphysics_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern bool g_bServerGameDLLGreaterThanV4;
@@ -714,8 +714,8 @@ void CollisionBSPData_LoadBrushSides(CCollisionBSPData *pBSPData,
       int firstInputSide = pBrush->firstbrushside;
       pBrush->firstbrushside = outBrushSide;
       for (j = 0; j < pBrush->numsides; j++) {
-        cbrushside_t *RESTRICT pSide = &pBSPData->map_brushsides[outBrushSide];
-        dbrushside_t *RESTRICT pInputSide = in + firstInputSide + j;
+        cbrushside_t *SOURCE_RESTRICT pSide = &pBSPData->map_brushsides[outBrushSide];
+        dbrushside_t *SOURCE_RESTRICT pInputSide = in + firstInputSide + j;
         pSide->plane = &pBSPData->map_planes[pInputSide->planenum];
         int t = pInputSide->texinfo;
         if (t >= map_texinfo.Size()) {

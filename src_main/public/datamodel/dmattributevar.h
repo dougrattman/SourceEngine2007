@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DMATTRIBUTEVAR_H
 #define DMATTRIBUTEVAR_H
@@ -716,7 +716,7 @@ class CDmrElementArray
         pAttribute =
             pElement->CreateAttribute(pAttributeName, AT_ELEMENT_ARRAY);
 
-        // FIXME: Should we do this?
+        // TODO(d.rattman): Should we do this?
         pAttribute->SetElementTypeSymbol(T::GetStaticTypeSymbol());
       }
     }

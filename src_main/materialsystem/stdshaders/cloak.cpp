@@ -42,7 +42,7 @@ BEGIN_VS_SHADER( Cloak_DX90, "Help for Cloak" )
 		SHADER_PARAM( RIMLIGHTBOOST, SHADER_PARAM_TYPE_FLOAT, "1.0", "Boost for rim lights" )
 		SHADER_PARAM( RIMMASK, SHADER_PARAM_TYPE_BOOL, "0", "Indicates whether or not to use alpha channel of exponent texture to mask the rim term" )
 	END_SHADER_PARAMS
-// FIXME: doesn't support Fresnel!
+// TODO(d.rattman): doesn't support Fresnel!
 
 	void SetupVars( Cloak_DX9_Vars_t& info )
 	{

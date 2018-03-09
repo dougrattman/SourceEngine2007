@@ -17,7 +17,7 @@
 #include "tier1/convar.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define sign(a) (((a) < 0) ? -1 : (((a) > 0) ? 1 : 0))
@@ -81,7 +81,7 @@ void CStudioRender::R_StudioEyeballPosition(const mstudioeyeball_t *peyeball,
   pstate->mat[0][3] = -DotProduct(&pstate->org[0], pstate->mat[0]) + 0.5f;
   pstate->mat[1][3] = -DotProduct(&pstate->org[0], pstate->mat[1]) + 0.5f;
 
-  // FIXME: push out vertices for cornea
+  // TODO(d.rattman): push out vertices for cornea
 }
 
 //-----------------------------------------------------------------------------
@@ -98,7 +98,7 @@ void CStudioRender::R_StudioEyelidFACS(const mstudioeyeball_t *peyeball,
   float upperlid = DEG2RAD(9.5);
   float lowerlid = DEG2RAD(-26.4);
 
-  // FIXME: Crash workaround
+  // TODO(d.rattman): Crash workaround
   Vector vecNormTarget;
   vecNormTarget.Init(peyeball->uppertarget[0], peyeball->uppertarget[1],
                      peyeball->uppertarget[2]);
@@ -415,7 +415,7 @@ class CGlintTextureRegenerator : public ITextureRegenerator {
 
     CStudioRender::GlintRenderData_t pRenderData[16];
     int nGlintCount = m_pStudioRender->BuildGlintRenderData(
-        pRenderData, ARRAYSIZE(pRenderData), m_pState, *m_pVRight, *m_pVUp,
+        pRenderData, SOURCE_ARRAYSIZE(pRenderData), m_pState, *m_pVRight, *m_pVUp,
         *m_pROrigin);
 
     // setup glint texture
@@ -574,7 +574,7 @@ ITexture *CStudioRender::RenderGlintTexture(const eyeballstate_t *pState,
                                             const Vector &vup,
                                             const Vector &r_origin) {
   GlintRenderData_t pRenderData[16];
-  int nGlintCount = BuildGlintRenderData(pRenderData, ARRAYSIZE(pRenderData),
+  int nGlintCount = BuildGlintRenderData(pRenderData, SOURCE_ARRAYSIZE(pRenderData),
                                          pState, vright, vup, r_origin);
 
   if (nGlintCount == 0) return m_pGlintLODTexture;
@@ -715,7 +715,7 @@ void CStudioRender::R_StudioEyeballGlint(const eyeballstate_t *pstate,
     float pixelArea = pRenderContext->ComputePixelWidthOfSphere(
         pstate->org, pstate->peyeball->radius);
     if (
-        // FIXME: this backface doesn't work for something that isn't a plane.
+        // TODO(d.rattman): this backface doesn't work for something that isn't a plane.
         // DotProduct( pstate->forward, m_ViewPlaneNormal ) > 0.0f ||
         pixelArea < m_pRC->m_Config.fEyeGlintPixelWidthLODThreshold) {
       // use black glint texture
@@ -774,7 +774,7 @@ void CStudioRender::ComputeGlintTextureProjection(eyeballstate_t const *pState,
 
 void CStudioRender::R_MouthComputeLightingValues(float &fIllum,
                                                  Vector &forward) {
-  // FIXME: this needs to get the mouth index from the shader
+  // TODO(d.rattman): this needs to get the mouth index from the shader
   mstudiomouth_t *pMouth = m_pStudioHdr->pMouth(0);
 
   fIllum = m_pFlexWeights[pMouth->flexdesc];
@@ -800,7 +800,7 @@ static unsigned int forwardVarCache = 0;
 void CStudioRender::R_MouthSetupVertexShader(IMaterial *pMaterial) {
   if (!pMaterial) return;
 
-  // FIXME: this needs to get the mouth index from the shader
+  // TODO(d.rattman): this needs to get the mouth index from the shader
   mstudiomouth_t *pMouth = m_pStudioHdr->pMouth(0);
 
   // Don't deal with illum gamma, we apply it at a different point

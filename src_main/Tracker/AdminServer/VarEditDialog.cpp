@@ -1,4 +1,4 @@
-// Copyright © 1996-2002, Valve LLC, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "VarEditDialog.h"
 
@@ -54,7 +54,7 @@ void CVarEditDialog::Activate(vgui::Panel *actionSignalTarget,
     for (KeyValues *kv = m_pRules->FindKey("list", true)->GetFirstSubKey();
          kv != NULL; kv = kv->GetNextKey()) {
       Assert(0);
-      // FIXME: This Assert doesn't compile
+      // TODO(d.rattman): This Assert doesn't compile
       //			Assert(index++ == atoi(kv->GetName()));
       m_pComboEdit->AddItem(kv->GetString(), NULL);
     }

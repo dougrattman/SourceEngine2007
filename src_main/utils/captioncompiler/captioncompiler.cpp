@@ -495,10 +495,10 @@ int CCompileCaptionsApp::Main() {
 
   PrintHeader();
 
-  char binaries[MAX_PATH];
-  Q_strncpy(binaries, gamedir, MAX_PATH);
+  char binaries[SOURCE_MAX_PATH];
+  Q_strncpy(binaries, gamedir, SOURCE_MAX_PATH);
   Q_StripTrailingSlash(binaries);
-  Q_strncat(binaries, "/../bin", MAX_PATH, MAX_PATH);
+  Q_strncat(binaries, "/../bin", SOURCE_MAX_PATH, SOURCE_MAX_PATH);
 
   char outfile[512];
   if (Q_stristr(worklist[worklist.Count() - 1].String(), gamedir)) {

@@ -1,12 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines SIMD "structure of arrays" classes and functions.
 
 #ifndef SOURCE_MATHLIB_SSEQUATMATH_H_
 #define SOURCE_MATHLIB_SSEQUATMATH_H_
 
-#include "base/include/base_types.h"
 #include "mathlib/ssemath.h"
+
+#include "base/include/base_types.h"
+#include "tier0/include/floattypes.h"
 
 // Use this #define to allow SSE versions of Quaternion math
 // to exist on PC.
@@ -32,55 +34,30 @@
 // the traditional x87 FPU operations altogether and make everything use
 // the SSE2 registers, which lessens this problem a little.
 
-// permitted only on 360, as we've done careful tuning on its Altivec math:
-
-//---------------------------------------------------------------------
 // Load/store quaternions
-//---------------------------------------------------------------------
-#ifndef _X360
 #if ALLOW_SIMD_QUATERNION_MATH
 // Using STDC or SSE
-FORCEINLINE fltx4 LoadAlignedSIMD(const QuaternionAligned &pSIMD) {
+SOURCE_FORCEINLINE fltx4 LoadAlignedSIMD(const QuaternionAligned &pSIMD) {
   fltx4 retval = LoadAlignedSIMD(pSIMD.Base());
   return retval;
 }
 
-FORCEINLINE fltx4 LoadAlignedSIMD(const QuaternionAligned *RESTRICT pSIMD) {
+SOURCE_FORCEINLINE fltx4
+LoadAlignedSIMD(const QuaternionAligned *SOURCE_RESTRICT pSIMD) {
   fltx4 retval = LoadAlignedSIMD(pSIMD);
   return retval;
 }
 
-FORCEINLINE void StoreAlignedSIMD(QuaternionAligned *RESTRICT pSIMD,
-                                  const fltx4 &a) {
+SOURCE_FORCEINLINE void StoreAlignedSIMD(
+    QuaternionAligned *SOURCE_RESTRICT pSIMD, const fltx4 &a) {
   StoreAlignedSIMD(pSIMD->Base(), a);
 }
 #endif
-#else
-
-// for the transitional class -- load a QuaternionAligned
-FORCEINLINE fltx4 LoadAlignedSIMD(const QuaternionAligned& pSIMD) {
-  fltx4 retval = XMLoadVector4A(pSIMD.Base());
-  return retval;
-}
-
-FORCEINLINE fltx4 LoadAlignedSIMD(const QuaternionAligned* RESTRICT pSIMD) {
-  fltx4 retval = XMLoadVector4A(pSIMD);
-  return retval;
-}
-
-FORCEINLINE void StoreAlignedSIMD(QuaternionAligned* RESTRICT pSIMD,
-                                  const fltx4& a) {
-  XMStoreVector4A(pSIMD->Base(), a);
-}
-
-#endif
 
 #if ALLOW_SIMD_QUATERNION_MATH
-//---------------------------------------------------------------------
 // Make sure quaternions are within 180 degrees of one another, if not, reverse
 // q
-//---------------------------------------------------------------------
-FORCEINLINE fltx4 QuaternionAlignSIMD(const fltx4 &p, const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionAlignSIMD(const fltx4 &p, const fltx4 &q) {
   // decide if one of the quaternions is backwards
   fltx4 a = SubSIMD(p, q);
   fltx4 b = AddSIMD(p, q);
@@ -91,12 +68,10 @@ FORCEINLINE fltx4 QuaternionAlignSIMD(const fltx4 &p, const fltx4 &q) {
   return result;
 }
 
-//---------------------------------------------------------------------
 // Normalize Quaternion
-//---------------------------------------------------------------------
 #if USE_STDC_FOR_SIMD
 
-FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
   fltx4 radius, result;
   radius = Dot4SIMD(q, q);
 
@@ -114,7 +89,7 @@ FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
 #else
 
 // SSE + X360 implementation
-FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
   fltx4 radius, result, mask;
   radius = Dot4SIMD(q, q);
   mask = CmpEqSIMD(radius, Four_Zeros);  // all ones iff radius = 0
@@ -125,11 +100,9 @@ FORCEINLINE fltx4 QuaternionNormalizeSIMD(const fltx4 &q) {
 
 #endif
 
-//---------------------------------------------------------------------
 // 0.0 returns p, 1.0 return q.
-//---------------------------------------------------------------------
-FORCEINLINE fltx4 QuaternionBlendNoAlignSIMD(const fltx4 &p, const fltx4 &q,
-                                             f32 t) {
+SOURCE_FORCEINLINE fltx4 QuaternionBlendNoAlignSIMD(const fltx4 &p,
+                                                    const fltx4 &q, f32 t) {
   fltx4 sclp, sclq, result;
   sclq = ReplicateX4(t);
   sclp = SubSIMD(Four_Ones, sclq);
@@ -138,10 +111,9 @@ FORCEINLINE fltx4 QuaternionBlendNoAlignSIMD(const fltx4 &p, const fltx4 &q,
   return QuaternionNormalizeSIMD(result);
 }
 
-//---------------------------------------------------------------------
 // Blend Quaternions
-//---------------------------------------------------------------------
-FORCEINLINE fltx4 QuaternionBlendSIMD(const fltx4 &p, const fltx4 &q, f32 t) {
+SOURCE_FORCEINLINE fltx4 QuaternionBlendSIMD(const fltx4 &p, const fltx4 &q,
+                                             f32 t) {
   // decide if one of the quaternions is backwards
   fltx4 q2, result;
   q2 = QuaternionAlignSIMD(p, q);
@@ -149,13 +121,10 @@ FORCEINLINE fltx4 QuaternionBlendSIMD(const fltx4 &p, const fltx4 &q, f32 t) {
   return result;
 }
 
-//---------------------------------------------------------------------
 // Multiply Quaternions
-//---------------------------------------------------------------------
-#ifndef _X360
 
 // SSE and STDC
-FORCEINLINE fltx4 QuaternionMultSIMD(const fltx4 &p, const fltx4 &q) {
+SOURCE_FORCEINLINE fltx4 QuaternionMultSIMD(const fltx4 &p, const fltx4 &q) {
   // decide if one of the quaternions is backwards
   fltx4 q2, result;
   q2 = QuaternionAlignSIMD(p, q);
@@ -174,49 +143,16 @@ FORCEINLINE fltx4 QuaternionMultSIMD(const fltx4 &p, const fltx4 &q) {
   return result;
 }
 
-#else
-
-// X360
-extern const fltx4 g_QuatMultRowSign[4];
-FORCEINLINE fltx4 QuaternionMultSIMD(const fltx4 &p, const fltx4 &q) {
-  fltx4 q2, row, result;
-  q2 = QuaternionAlignSIMD(p, q);
-
-  row = XMVectorSwizzle(q2, 3, 2, 1, 0);
-  row = MulSIMD(row, g_QuatMultRowSign[0]);
-  result = Dot4SIMD(row, p);
-
-  row = XMVectorSwizzle(q2, 2, 3, 0, 1);
-  row = MulSIMD(row, g_QuatMultRowSign[1]);
-  row = Dot4SIMD(row, p);
-  result = __vrlimi(result, row, 4, 0);
-
-  row = XMVectorSwizzle(q2, 1, 0, 3, 2);
-  row = MulSIMD(row, g_QuatMultRowSign[2]);
-  row = Dot4SIMD(row, p);
-  result = __vrlimi(result, row, 2, 0);
-
-  row = MulSIMD(q2, g_QuatMultRowSign[3]);
-  row = Dot4SIMD(row, p);
-  result = __vrlimi(result, row, 1, 0);
-  return result;
-}
-
-#endif
-
-//---------------------------------------------------------------------
 // Quaternion scale
-//---------------------------------------------------------------------
-#ifndef _X360
 
 // SSE and STDC
-FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
+SOURCE_FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
   f32 r;
   fltx4 q;
 
-  // FIXME: nick, this isn't overly sensitive to accuracy, and it may be faster
-  // to use the cos part (w) of the quaternion (sin(omega)*N,cos(omega)) to
-  // figure the new scale.
+  // TODO(d.rattman): nick, this isn't overly sensitive to accuracy, and it may
+  // be faster to use the cos part (w) of the quaternion
+  // (sin(omega)*N,cos(omega)) to figure the new scale.
   f32 sinom =
       sqrt(SubFloat(p, 0) * SubFloat(p, 0) + SubFloat(p, 1) * SubFloat(p, 1) +
            SubFloat(p, 2) * SubFloat(p, 2));
@@ -241,46 +177,11 @@ FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
   return q;
 }
 
-#else
-
-// X360
-FORCEINLINE fltx4 QuaternionScaleSIMD(const fltx4 &p, f32 t) {
-  fltx4 sinom = Dot3SIMD(p, p);
-  sinom = SqrtSIMD(sinom);
-  sinom = MinSIMD(sinom, Four_Ones);
-  fltx4 sinsom = ArcSinSIMD(sinom);
-  fltx4 t4 = ReplicateX4(t);
-  sinsom = MulSIMD(sinsom, t4);
-  sinsom = SinSIMD(sinsom);
-  sinom = AddSIMD(sinom, Four_Epsilons);
-  sinom = ReciprocalSIMD(sinom);
-  t4 = MulSIMD(sinsom, sinom);
-  fltx4 result = MulSIMD(p, t4);
-
-  // rescale rotation
-  sinsom = MulSIMD(sinsom, sinsom);
-  fltx4 r = SubSIMD(Four_Ones, sinsom);
-  r = MaxSIMD(r, Four_Zeros);
-  r = SqrtSIMD(r);
-
-  // keep sign of rotation
-  fltx4 cmp = CmpGeSIMD(p, Four_Zeros);
-  r = MaskedAssign(cmp, r, NegSIMD(r));
-
-  result = __vrlimi(result, r, 1, 0);
-  return result;
-}
-
-#endif
-
-
 // Quaternion sphereical linear interpolation
 
-#ifndef _X360
-
 // SSE and STDC
-FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
-                                             f32 t) {
+SOURCE_FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p,
+                                                    const fltx4 &q, f32 t) {
   f32 omega, cosom, sinom, sclp, sclq;
 
   fltx4 result;
@@ -319,17 +220,8 @@ FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
   return result;
 }
 
-#else
-
-// X360
-FORCEINLINE fltx4 QuaternionSlerpNoAlignSIMD(const fltx4 &p, const fltx4 &q,
+SOURCE_FORCEINLINE fltx4 QuaternionSlerpSIMD(const fltx4 &p, const fltx4 &q,
                                              f32 t) {
-  return XMQuaternionSlerp(p, q, t);
-}
-
-#endif
-
-FORCEINLINE fltx4 QuaternionSlerpSIMD(const fltx4 &p, const fltx4 &q, f32 t) {
   fltx4 q2, result;
   q2 = QuaternionAlignSIMD(p, q);
   result = QuaternionSlerpNoAlignSIMD(p, q2, t);

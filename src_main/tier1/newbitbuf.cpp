@@ -8,7 +8,7 @@
 #include "mathlib/vector.h"
 #include "tier1/strtools.h"
 
-// FIXME: Can't use this until we get multithreaded allocations in tier0 working
+// TODO(d.rattman): Can't use this until we get multithreaded allocations in tier0 working
 // for tools This is used by VVIS and fails to link NOTE: This must be the last
 // file included!!!
 //#include "tier0/include/memdbgon.h"
@@ -283,7 +283,7 @@ bool CBitWrite::WriteBitsFromBuffer(bf_read *pIn, int nBits) {
 }
 
 void CBitWrite::WriteBitAngles(const QAngle &fa) {
-  // FIXME:
+  // TODO(d.rattman):
   Vector tmp(fa.x, fa.y, fa.z);
   WriteBitVec3Coord(tmp);
 }

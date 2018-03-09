@@ -13,7 +13,7 @@
 #include "ai_behavior_lead.h"
 #include "gameinterface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern CServerGameDLL g_ServerGameDLL;
@@ -141,7 +141,7 @@ public:
 	CConceptInfoMap() :
 	  CUtlMap<AIConcept_t, ConceptInfo_t *>( CaselessStringLessThan )
 	  {
-		  for ( int i = 0; i < ARRAYSIZE(g_ConceptInfos); i++ )
+		  for ( int i = 0; i < SOURCE_ARRAYSIZE(g_ConceptInfos); i++ )
 		  {
 			  Insert( g_ConceptInfos[i].concept, &g_ConceptInfos[i] );
 		  }
@@ -165,7 +165,7 @@ CAI_AllySpeechManager::~CAI_AllySpeechManager()
 void CAI_AllySpeechManager::Spawn()
 {
 	Assert( g_ConceptInfoMap.Count() != 0 );
-	for ( int i = 0; i < ARRAYSIZE(g_ConceptInfos); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE(g_ConceptInfos); i++ )
 		m_ConceptTimers.Insert( AllocPooledString( g_ConceptInfos[i].concept ), CSimpleSimTimer() );
 }
 
@@ -1216,8 +1216,8 @@ void CAI_PlayerAlly::PainSound( const CTakeDamageInfo &info )
 //-----------------------------------------------------------------------------
 CBaseEntity *CAI_PlayerAlly::EyeLookTarget( void )
 {
-	// FIXME: this should be in the VCD
-	// FIXME: this is dead code
+	// TODO(d.rattman): this should be in the VCD
+	// TODO(d.rattman): this is dead code
 	if (GetExpresser()->IsSpeaking() && GetSpeechTarget() != NULL)
 	{
 		return GetSpeechTarget();

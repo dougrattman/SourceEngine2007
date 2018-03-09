@@ -5,7 +5,7 @@
 
 #include <climits>
 #include "tier0/include/basetypes.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 
 class CBitVecAccessor {
@@ -532,7 +532,7 @@ inline CBitVecT<BASE_OPS>::CBitVecT() {
   // generate a compile error if sizeof(int) is not 4 (HACK: can't use the
   // preprocessor so use the compiler)
 
-  COMPILE_TIME_ASSERT(sizeof(int) == 4);
+  static_assert(sizeof(int) == 4);
 
   // Initialize bitstring by clearing all bits
   ClearAll();
@@ -545,7 +545,7 @@ inline CBitVecT<BASE_OPS>::CBitVecT(int numBits) : BASE_OPS(numBits) {
   // generate a compile error if sizeof(int) is not 4 (HACK: can't use the
   // preprocessor so use the compiler)
 
-  COMPILE_TIME_ASSERT(sizeof(int) == 4);
+  static_assert(sizeof(int) == 4);
 
   // Initialize bitstring by clearing all bits
   ClearAll();
@@ -842,7 +842,7 @@ inline bool CBitVecT<BASE_OPS>::Compare(const CBitVecT<BASE_OPS> &other,
       other.CBitVecT<BASE_OPS>::GetEndMask();  // external semantics of const
                                                // retained
 
-  int nBytes = PAD_NUMBER(nBits, 8) >> 3;
+  int nBytes = SOURCE_PAD_NUMBER(nBits, 8) >> 3;
 
   return (memcmp(Base(), other.Base(), nBytes) == 0);
 }
@@ -903,7 +903,7 @@ inline int CVarBitVecBase::FindNextSetBit(int startBit) const {
         if (elem) return FirstBitInWord(elem, lastWord << 5);
       }
     } else {
-      const uint32_t *RESTRICT pCurElem = Base() + wordIndex;
+      const uint32_t *SOURCE_RESTRICT pCurElem = Base() + wordIndex;
       unsigned int elem = *pCurElem;
       elem &= startMask;
       do {
@@ -946,7 +946,7 @@ inline int CFixedBitVecBase<NUM_BITS>::FindNextSetBit(int startBit) const {
       }
     }
     else {
-      const uint32_t *RESTRICT pCurElem = Base() + wordIndex;
+      const uint32_t *SOURCE_RESTRICT pCurElem = Base() + wordIndex;
       unsigned int elem = *pCurElem;
       elem &= startMask;
       do {
@@ -965,7 +965,7 @@ inline int CFixedBitVecBase<NUM_BITS>::FindNextSetBit(int startBit) const {
 // Unrolled loops for some common sizes
 
 template <>
-FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<256> >::And(
+SOURCE_FORCEINLINE void CBitVecT<CFixedBitVecBase<256> >::And(
     const CBitVecT &addStr, CBitVecT *out) const {
   uint32_t *pDest = out->Base();
   const uint32_t *pOperand1 = Base();
@@ -982,7 +982,7 @@ FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<256> >::And(
 }
 
 template <>
-FORCEINLINE_TEMPLATE bool CBitVecT<CFixedBitVecBase<256> >::IsAllClear(
+SOURCE_FORCEINLINE bool CBitVecT<CFixedBitVecBase<256> >::IsAllClear(
     void) const {
   const uint32_t *pInts = Base();
   return (pInts[0] == 0 && pInts[1] == 0 && pInts[2] == 0 && pInts[3] == 0 &&
@@ -990,7 +990,7 @@ FORCEINLINE_TEMPLATE bool CBitVecT<CFixedBitVecBase<256> >::IsAllClear(
 }
 
 template <>
-FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<256> >::CopyTo(
+SOURCE_FORCEINLINE void CBitVecT<CFixedBitVecBase<256> >::CopyTo(
     CBitVecT *out) const {
   uint32_t *pDest = out->Base();
   const uint32_t *pInts = Base();
@@ -1006,7 +1006,7 @@ FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<256> >::CopyTo(
 }
 
 template <>
-FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<128> >::And(
+SOURCE_FORCEINLINE void CBitVecT<CFixedBitVecBase<128> >::And(
     const CBitVecT &addStr, CBitVecT *out) const {
   uint32_t *pDest = out->Base();
   const uint32_t *pOperand1 = Base();
@@ -1019,14 +1019,14 @@ FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<128> >::And(
 }
 
 template <>
-FORCEINLINE_TEMPLATE bool CBitVecT<CFixedBitVecBase<128> >::IsAllClear(
+SOURCE_FORCEINLINE bool CBitVecT<CFixedBitVecBase<128> >::IsAllClear(
     void) const {
   const uint32_t *pInts = Base();
   return (pInts[0] == 0 && pInts[1] == 0 && pInts[2] == 0 && pInts[3] == 0);
 }
 
 template <>
-FORCEINLINE_TEMPLATE void CBitVecT<CFixedBitVecBase<128> >::CopyTo(
+SOURCE_FORCEINLINE void CBitVecT<CFixedBitVecBase<128> >::CopyTo(
     CBitVecT *out) const {
   uint32_t *pDest = out->Base();
   const uint32_t *pInts = Base();

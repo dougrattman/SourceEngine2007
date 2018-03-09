@@ -17,7 +17,7 @@
 #include "skin_ps30.inc"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar mat_fullbright( "mat_fullbright", "0", FCVAR_CHEAT );
@@ -268,7 +268,7 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 		bool bHasEnvmap = !bHasFlashlight && params[info.m_nEnvmap]->IsTexture();
 		bool bHasNormal = params[info.m_nBumpmap]->IsTexture();
 
-		// Alpha test: FIXME: shouldn't this be handled in CBaseVSShader::SetInitialShadowState
+		// Alpha test: TODO(d.rattman): shouldn't this be handled in CBaseVSShader::SetInitialShadowState
 		pShaderShadow->EnableAlphaTest( bIsAlphaTested );
 
 		if( info.m_nAlphaTestReference != -1 && params[info.m_nAlphaTestReference]->GetFloatValue() > 0.0f )

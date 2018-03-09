@@ -1621,8 +1621,8 @@ bool CDmxEdit::CreateExpressionFilesFromCachedPresets() const
 
 	CDisableUndoScopeGuard sgDisableUndo;
 
-	char buf[ MAX_PATH ];
-	char buf1[ MAX_PATH ];
+	char buf[ SOURCE_MAX_PATH ];
+	char buf1[ SOURCE_MAX_PATH ];
 
 	if ( !m_pMesh )
 		return false;

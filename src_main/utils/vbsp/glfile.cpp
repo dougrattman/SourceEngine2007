@@ -15,7 +15,7 @@ int PortalVisibleSides(portal_t *p) {
   // same contents never create a face
   if (fcon == bcon) return 0;
 
-  // FIXME: is this correct now?
+  // TODO(d.rattman): is this correct now?
   if (!fcon) return 1;
   if (!bcon) return 2;
   return 0;

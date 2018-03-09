@@ -28,7 +28,7 @@
 #include "vstdlib/random.h"
 #include "weapon_physcannon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int g_fCombineQuestion;  // true if an idle grunt asked a question. Cleared when
@@ -880,7 +880,7 @@ void CNPC_Combine::StartTask(const Task_t *pTask) {
       if (GetHintGroup() == NULL_STRING) {
         CBaseEntity *pEntity = GetEnemy();
 
-        // FIXME: this should be generalized by the schedules that are selected,
+        // TODO(d.rattman): this should be generalized by the schedules that are selected,
         // or in the definition of what "cover" means (i.e., trace attack
         // vulnerability vs. physical attack vulnerability
         if (pEntity) {
@@ -1432,7 +1432,7 @@ int CNPC_Combine::SelectCombatSchedule() {
     if (GetEnemy() != NULL) {
       // only try to take cover if we actually have an enemy!
 
-      // FIXME: need to take cover for enemy dealing the damage
+      // TODO(d.rattman): need to take cover for enemy dealing the damage
 
       // A standing guy will either crouch or run.
       // A crouching guy tries to stay stuck in.
@@ -1916,7 +1916,7 @@ int CNPC_Combine::TranslateSchedule(int scheduleType) {
     case SCHED_COMBINE_ASSAULT: {
       CBaseEntity *pEntity = GetEnemy();
 
-      // FIXME: this should be generalized by the schedules that are selected,
+      // TODO(d.rattman): this should be generalized by the schedules that are selected,
       // or in the definition of what "cover" means (i.e., trace attack
       // vulnerability vs. physical attack vulnerability
       if (pEntity && pEntity->MyNPCPointer()) {
@@ -2256,8 +2256,8 @@ Vector CNPC_Combine::Weapon_ShootPosition() {
     }
   }
 
-  // FIXME: rename this "estimated" since it's not based on animation
-  // FIXME: the orientation won't be correct when testing from arbitary
+  // TODO(d.rattman): rename this "estimated" since it's not based on animation
+  // TODO(d.rattman): the orientation won't be correct when testing from arbitary
   // positions for arbitary angles
 
   if (bStanding) {
@@ -2530,7 +2530,7 @@ bool CNPC_Combine::CheckCanThrowGrenade(const Vector &vecTarget) {
   // ---------------------------------------------------------------------
   // Check that throw is legal and clear
   // ---------------------------------------------------------------------
-  // FIXME: this is only valid for hand grenades, not RPG's
+  // TODO(d.rattman): this is only valid for hand grenades, not RPG's
   Vector vecToss;
   Vector vecMins = -Vector(4, 4, 4);
   Vector vecMaxs = Vector(4, 4, 4);

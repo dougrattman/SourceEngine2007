@@ -12,7 +12,7 @@
 #include "c_obj_respawn_station.h"
 #include "C_BaseTFPlayer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

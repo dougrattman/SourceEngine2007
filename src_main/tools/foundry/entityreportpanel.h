@@ -58,7 +58,7 @@ private:
 	MESSAGE_FUNC_PARAMS( OnButtonToggled, "ButtonToggled", kv );
 	MESSAGE_FUNC( OnDeleteEntities, "DeleteEntities" );
 
-	// FIXME: Necessary because SetSelected doesn't cause a ButtonToggled message to trigger
+	// TODO(d.rattman): Necessary because SetSelected doesn't cause a ButtonToggled message to trigger
 	MESSAGE_FUNC_PARAMS( OnCheckButtonChecked, "CheckButtonChecked", kv );
 	MESSAGE_FUNC_PARAMS( OnRadioButtonChecked, "RadioButtonChecked", kv );
 

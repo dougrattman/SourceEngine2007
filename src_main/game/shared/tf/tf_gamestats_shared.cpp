@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.//
 //
 // Purpose: 
 //
@@ -147,9 +147,9 @@ void TFReportedStats_t::AppendCustomDataToSaveBuffer( CUtlBuffer &SaveBuffer )
 		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_MAPHEADER, 1, sizeof( TF_Gamestats_LevelStats_t::LevelHeader_t ), static_cast<void*>( &pCurrentMap->m_Header ) );
 		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_MAPDEATH, pCurrentMap->m_aPlayerDeaths.Count(), sizeof( TF_Gamestats_LevelStats_t::PlayerDeathsLump_t ), static_cast<void*>( pCurrentMap->m_aPlayerDeaths.Base() ) );
 		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_MAPDAMAGE, pCurrentMap->m_aPlayerDamage.Count(), sizeof( TF_Gamestats_LevelStats_t::PlayerDamageLump_t ), static_cast<void*>( pCurrentMap->m_aPlayerDamage.Base() ) );
-		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_CLASS, ARRAYSIZE( pCurrentMap->m_aClassStats ), sizeof( pCurrentMap->m_aClassStats[0] ), 
+		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_CLASS, SOURCE_ARRAYSIZE( pCurrentMap->m_aClassStats ), sizeof( pCurrentMap->m_aClassStats[0] ), 
 			static_cast<void*>( pCurrentMap->m_aClassStats ) );
-		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_WEAPON, ARRAYSIZE( pCurrentMap->m_aWeaponStats ), sizeof( pCurrentMap->m_aWeaponStats[0] ), 
+		CBaseGameStats::AppendLump( MAX_LUMP_COUNT, SaveBuffer, TFSTATS_LUMP_WEAPON, SOURCE_ARRAYSIZE( pCurrentMap->m_aWeaponStats ), sizeof( pCurrentMap->m_aWeaponStats[0] ), 
 			static_cast<void*>( pCurrentMap->m_aWeaponStats ) );
 	}
 
@@ -239,14 +239,14 @@ bool TFReportedStats_t::LoadCustomDataFromBuffer( CUtlBuffer &LoadBuffer )
 		case TFSTATS_LUMP_CLASS:
 			{
 				Assert( m_pCurrentGame );
-				Assert ( iLumpCount == ARRAYSIZE( m_pCurrentGame->m_aClassStats ) );
-				if ( iLumpCount == ARRAYSIZE( m_pCurrentGame->m_aClassStats ) )
+				Assert ( iLumpCount == SOURCE_ARRAYSIZE( m_pCurrentGame->m_aClassStats ) );
+				if ( iLumpCount == SOURCE_ARRAYSIZE( m_pCurrentGame->m_aClassStats ) )
 				{
-					CBaseGameStats::LoadLump( LoadBuffer, ARRAYSIZE( m_pCurrentGame->m_aClassStats ), sizeof( m_pCurrentGame->m_aClassStats[0] ), 
+					CBaseGameStats::LoadLump( LoadBuffer, SOURCE_ARRAYSIZE( m_pCurrentGame->m_aClassStats ), sizeof( m_pCurrentGame->m_aClassStats[0] ), 
 						m_pCurrentGame->m_aClassStats );
 
 					// quick sanity check on some data -- we get some stat files that start out OK but are corrupted later in the file
-					for ( int i = 0; i < ARRAYSIZE( m_pCurrentGame->m_aClassStats ); i++ )
+					for ( int i = 0; i < SOURCE_ARRAYSIZE( m_pCurrentGame->m_aClassStats ); i++ )
 					{
 						TF_Gamestats_ClassStats_t &classStats = m_pCurrentGame->m_aClassStats[i];
 						if ( ( classStats.iSpawns < 0 ) || ( classStats.iSpawns > 10000 ) || ( classStats.iTotalTime < 0 ) || ( classStats.iTotalTime > 36000 * 20 ) ||
@@ -266,10 +266,10 @@ bool TFReportedStats_t::LoadCustomDataFromBuffer( CUtlBuffer &LoadBuffer )
 		case TFSTATS_LUMP_WEAPON:
 			{
 				Assert( m_pCurrentGame );
-				Assert ( iLumpCount == ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ) );
-				if ( iLumpCount == ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ) )
+				Assert ( iLumpCount == SOURCE_ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ) );
+				if ( iLumpCount == SOURCE_ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ) )
 				{
-					CBaseGameStats::LoadLump( LoadBuffer, ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ), sizeof( m_pCurrentGame->m_aWeaponStats[0] ), 
+					CBaseGameStats::LoadLump( LoadBuffer, SOURCE_ARRAYSIZE( m_pCurrentGame->m_aWeaponStats ), sizeof( m_pCurrentGame->m_aWeaponStats[0] ), 
 						m_pCurrentGame->m_aWeaponStats );
 
 					// quick sanity check on some data -- we get some stat files that start out OK but are corrupted later in the file

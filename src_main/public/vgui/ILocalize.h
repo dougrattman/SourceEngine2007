@@ -7,13 +7,6 @@
 #include "tier1/KeyValues.h"
 #include "vgui/VGUI.h"
 
-// unicode character type
-// for more unicode manipulation functions #include <cwchar>
-#ifndef _WCHAR_T_DEFINED
-typedef unsigned short wchar_t;
-#define _WCHAR_T_DEFINED
-#endif
-
 namespace vgui {
 // direct references to localized strings
 typedef unsigned long StringIndex_t;
@@ -21,7 +14,7 @@ const unsigned long INVALID_STRING_INDEX = (unsigned long)-1;
 
 // Purpose: Handles localization of text, looks up string names and returns the
 // localized unicode text
-abstract_class ILocalize {
+the_interface ILocalize {
  public:
   // adds the contents of a file to the localization table
   virtual bool AddFile(const char *fileName, const char *pPathID = NULL,

@@ -1,18 +1,24 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER0_INCLUDE_FLOATTYPES_H_
 #define SOURCE_TIER0_INCLUDE_FLOATTYPES_H_
 
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
 #ifdef OS_WIN
 #include <corecrt.h>
-#include <sal.h>
 #endif
+
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
 
 // In case this ever changes.
 #define M_PI 3.14159265358979323846
+
+template <typename T>
+constexpr const inline T fsel(T comparand, T high_value, T low_value) {
+  return comparand >= 0 ? high_value : low_value;
+}
 
 // This assumes the ANSI/IEEE 754-1985 standard.
 #ifdef __cplusplus
@@ -36,7 +42,7 @@ constexpr inline f32 FloatMakeNegative(f32 f) {
   return BitsToFloat(FloatBits(f) | 0x80000000);  //-V112
 }
 
-#ifdef OS_WIN
+#ifdef COMPILER_MSVC
 // Just use prototype from cmath.
 extern "C" {
 _Check_return_ _CRT_JIT_INTRINSIC f64 __cdecl fabs(_In_ f64 _X);

@@ -8,7 +8,7 @@
 #include "stdafx.h"
 #include "MapDoc.h"
 #include "MainFrm.h"
-#include "MapView2D.h"			// FIXME: for MapView2D::updTool
+#include "MapView2D.h"			// TODO(d.rattman): for MapView2D::updTool
 #include "ToolAxisHandle.h"
 #include "ToolDecal.h"
 #include "ToolDisplace.h"
@@ -33,7 +33,7 @@
 #include "ToolMaterial.h"
 #include "ChunkFile.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CToolManager s_DummyToolmanager;
@@ -246,7 +246,7 @@ void CToolManager::SetTool(ToolID_t eNewTool)
 		pNewTool->Activate();
 	}
 
-	// FIXME: When we start up, we end up here before the main window is created because
+	// TODO(d.rattman): When we start up, we end up here before the main window is created because
 	//		  CFaceEditDispPage::OnSetActive() calls SetTool(TOOL_FACEEDIT_DISP). This
 	//		  behavior is rather nonsensical during startup.
 	CMainFrame *pwndMain = GetMainWnd();

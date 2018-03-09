@@ -61,7 +61,7 @@ CStaticCollisionPolyhedronCache::~CStaticCollisionPolyhedronCache( void )
 void CStaticCollisionPolyhedronCache::LevelInitPreEntity( void )
 {
 
-	// FIXME: Fast updates would be nice but this method doesn't work with the recent changes to standard containers.
+	// TODO(d.rattman): Fast updates would be nice but this method doesn't work with the recent changes to standard containers.
 	// For now we're going with the quick fix of always doing a full update. -Jeep
 
 //	if( Q_stricmp( m_CachedMap, MapName() ) != 0 )

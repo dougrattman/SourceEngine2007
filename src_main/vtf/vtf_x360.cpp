@@ -17,7 +17,7 @@
 #include "mathlib/mathlib.h"
 #include "tier1/lzmaDecoder.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

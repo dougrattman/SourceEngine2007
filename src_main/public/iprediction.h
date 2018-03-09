@@ -26,7 +26,7 @@ class IMoveHelper;
 //-----------------------------------------------------------------------------
 // Purpose: Engine interface into client side prediction system
 //-----------------------------------------------------------------------------
-abstract_class IPrediction
+the_interface IPrediction
 {
 public:
 	virtual ~IPrediction( void ) {};

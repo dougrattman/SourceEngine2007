@@ -13,7 +13,7 @@ class CGameTrace;
 typedef CGameTrace trace_t;
 class IClientUnknown;
 
-abstract_class ICollideable {
+the_interface ICollideable {
  public:
   // Gets at the entity handle associated with the collideable
   virtual IHandleEntity* GetEntityHandle() = 0;

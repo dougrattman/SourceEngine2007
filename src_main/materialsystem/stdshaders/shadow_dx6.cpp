@@ -2,7 +2,7 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER(Shadow, Shadow_DX6)
@@ -13,7 +13,7 @@ BEGIN_SHADER_PARAMS
 END_SHADER_PARAMS
 
 SHADER_INIT_PARAMS() {
-  // FIXME: Need fallback for dx5, don't fade out shadows, just pop them out
+  // TODO(d.rattman): Need fallback for dx5, don't fade out shadows, just pop them out
 
   /*
   The alpha blending state either must be:

@@ -16,7 +16,7 @@
 #include "vgui_avatarimage.h"
 #include "vgui_controls/AnimationController.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DECLARE_HUDELEMENT_DEPTH(CDODWinPanel_Allies, 1);  // 1 is foreground

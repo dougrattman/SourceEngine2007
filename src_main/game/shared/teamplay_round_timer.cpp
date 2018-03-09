@@ -62,7 +62,7 @@ enum
 	RT_WARNING_TIME_START,
 };
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern bool IsInCommentaryMode();

@@ -42,7 +42,7 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_MESSAGE_SIZE 2500
@@ -97,9 +97,9 @@ struct MsgData {
     currentMsg = NULL;
   }
 
-  byte userdata[PAD_NUMBER(MAX_USER_MSG_DATA,
+  byte userdata[SOURCE_PAD_NUMBER(MAX_USER_MSG_DATA,
                            4)];  // buffer for outgoing user messages
-  byte entitydata[PAD_NUMBER(MAX_ENTITY_MSG_DATA,
+  byte entitydata[SOURCE_PAD_NUMBER(MAX_ENTITY_MSG_DATA,
                              4)];  // buffer for outgoing entity messages
 
   IRecipientFilter *filter;  // clients who get this message

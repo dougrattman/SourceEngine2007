@@ -21,7 +21,7 @@ class CEmptyMesh : public IMesh {
   CEmptyMesh(bool bIsDynamic);
   virtual ~CEmptyMesh();
 
-  // FIXME: Make this work! Unsupported methods of IIndexBuffer + IVertexBuffer
+  // TODO(d.rattman): Make this work! Unsupported methods of IIndexBuffer + IVertexBuffer
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc);
   virtual void Unlock(int nWrittenIndexCount, IndexDesc_t &desc);
   virtual void ModifyBegin(bool bReadOnly, int nFirstIndex, int nIndexCount,
@@ -292,7 +292,7 @@ class CShaderDeviceEmpty : public IShaderDevice {
 
 static CShaderDeviceEmpty s_ShaderDeviceEmpty;
 
-// FIXME: Remove; it's for backward compat with the materialsystem only for now
+// TODO(d.rattman): Remove; it's for backward compat with the materialsystem only for now
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderDeviceEmpty, IShaderDevice,
                                   SHADER_DEVICE_INTERFACE_VERSION,
                                   s_ShaderDeviceEmpty)
@@ -1054,7 +1054,7 @@ class CShaderAPIEmpty : public IShaderAPI,
 static CShaderAPIEmpty g_ShaderAPIEmpty;
 static CShaderShadowEmpty g_ShaderShadow;
 
-// FIXME: Remove; it's for backward compat with the materialsystem only for now
+// TODO(d.rattman): Remove; it's for backward compat with the materialsystem only for now
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CShaderAPIEmpty, IShaderAPI,
                                   SHADERAPI_INTERFACE_VERSION, g_ShaderAPIEmpty)
 
@@ -1119,7 +1119,7 @@ bool CShaderDeviceMgrEmpty::SetAdapter(int nAdapter, int nFlags) {
   return true;
 }
 
-// FIXME: Is this a public interface? Might only need to be private to shaderapi
+// TODO(d.rattman): Is this a public interface? Might only need to be private to shaderapi
 CreateInterfaceFn CShaderDeviceMgrEmpty::SetMode(
     void *hWnd, int nAdapter, const ShaderDeviceInfo_t &mode) {
   return ShaderInterfaceFactory;

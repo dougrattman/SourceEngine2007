@@ -27,7 +27,7 @@
 #include "vgui_controls/Splitter.h"
 #include "vgui_controls/TextEntry.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -531,7 +531,7 @@ void CAssetBuilder::RefreshSourceList() {
     m_hMakefile->GetSources(pSourceTypes[i].m_pTypeName, sources);
     int nCount = sources.Count();
     for (int j = 0; j < nCount; ++j) {
-      char pFullPath[MAX_PATH];
+      char pFullPath[SOURCE_MAX_PATH];
       m_hMakefile->GetSourceFullPath(sources[j], pFullPath, sizeof(pFullPath));
 
       KeyValues *pItemKeys =
@@ -607,11 +607,11 @@ void CAssetBuilder::OnPicked(KeyValues *kv) {
 
   DmeMakefileType_t *pType = pMakeFile->GetMakefileType();
 
-  char pContext[MAX_PATH];
+  char pContext[SOURCE_MAX_PATH];
   Q_snprintf(pContext, sizeof(pContext), "asset_builder_session_%s",
              pType->m_pTypeName);
 
-  char pStartingDir[MAX_PATH];
+  char pStartingDir[SOURCE_MAX_PATH];
   pMakeFile->GetDefaultDirectory(pType->m_pDefaultDirectoryID, pStartingDir,
                                  sizeof(pStartingDir));
   g_pFullFileSystem->CreateDirHierarchy(pStartingDir);
@@ -858,11 +858,11 @@ void CAssetBuilder::OnFileSelected(KeyValues *kv) {
 void CAssetBuilder::ShowSourceFileBrowser(const char *pTitle,
                                           DmeMakefileType_t *pSourceType,
                                           KeyValues *pDialogKeys) {
-  char pContext[MAX_PATH];
+  char pContext[SOURCE_MAX_PATH];
   Q_snprintf(pContext, sizeof(pContext), "asset_builder_session_%s",
              pSourceType->m_pTypeName);
 
-  char pStartingDir[MAX_PATH];
+  char pStartingDir[SOURCE_MAX_PATH];
   m_hMakefile->GetDefaultDirectory(pSourceType->m_pDefaultDirectoryID,
                                    pStartingDir, sizeof(pStartingDir));
   g_pFullFileSystem->CreateDirHierarchy(pStartingDir);
@@ -1078,7 +1078,7 @@ void CAssetBuilder::OnLoadSourceFile() {
   CDmeSource *pSource = GetSelectedSource();
   if (!pSource) return;
 
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   m_hMakefile->GetSourceFullPath(pSource, pFullPath, sizeof(pFullPath));
 
   {
@@ -1260,7 +1260,7 @@ void CAssetBuilderFrame::SetupFileOpenDialog(vgui::FileOpenDialog *pDialog,
                                              const char *pFileFormat,
                                              KeyValues *pContextKeyValues) {
   // Compute starting directory
-  char pStartingDir[MAX_PATH];
+  char pStartingDir[SOURCE_MAX_PATH];
   GetModContentSubdirectory("", pStartingDir, sizeof(pStartingDir));
 
   if (bOpenFile) {
@@ -1338,7 +1338,7 @@ void CAssetBuilderFrame::UpdateFileName() {
     pFileName = "<unnamed>";
   }
 
-  char pBuf[2 * MAX_PATH];
+  char pBuf[2 * SOURCE_MAX_PATH];
   if (m_TitleString.Get()) {
     Q_snprintf(pBuf, sizeof(pBuf), "%s - %s - %s%s", m_TitleString.Get(),
                pMakefileType->m_pHumanReadableName, pFileName,
@@ -1428,16 +1428,16 @@ void CAssetBuilderFrame::OnPicked(KeyValues *kv) {
 
   DmeMakefileType_t *pType = pMakeFile->GetMakefileType();
 
-  char pContext[MAX_PATH];
+  char pContext[SOURCE_MAX_PATH];
   Q_snprintf(pContext, sizeof(pContext), "asset_builder_session_%s",
              pType->m_pTypeName);
 
-  char pStartingDir[MAX_PATH];
+  char pStartingDir[SOURCE_MAX_PATH];
   pMakeFile->GetDefaultDirectory(pType->m_pDefaultDirectoryID, pStartingDir,
                                  sizeof(pStartingDir));
   g_pFullFileSystem->CreateDirHierarchy(pStartingDir);
 
-  char pTitle[MAX_PATH];
+  char pTitle[SOURCE_MAX_PATH];
   Q_snprintf(pTitle, sizeof(pTitle), "Select %s File Name",
              pType->m_pHumanReadableName);
 

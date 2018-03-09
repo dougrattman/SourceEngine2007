@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Model loading / unloading interface
 
@@ -471,8 +471,8 @@ void COverlayMgr::AddFragmentListToRenderList(int nSortGroup,
   OverlayFragmentHandle_t i;
   for (i = iFragment; i != OVERLAY_FRAGMENT_INVALID; i = m_aFragments.Next(i)) {
     // Make sure we don't add the fragment twice...
-    // FIXME: I currently have no way of ensuring a fragment doesn't end up in 2
-    // sort groups which would cause all manner of nastiness.
+    // TODO(d.rattman): I currently have no way of ensuring a fragment doesn't
+    // end up in 2 sort groups which would cause all manner of nastiness.
     moverlayfragment_t *pFragment = GetOverlayFragment(i);
     if (!bDisp && pFragment->m_nRenderFrameID == g_OverlayRenderFrameID)
       continue;
@@ -664,7 +664,7 @@ void COverlayMgr::RenderOverlays(int nSortGroup) {
             }
           }
 
-          // FIXME: Make this part of a single loop?
+          // TODO(d.rattman): Make this part of a single loop?
           nVertCount -= 2;
           for (iVert = 0; iVert < nVertCount; ++iVert) {
             meshBuilder.FastIndex(nIndex);
@@ -780,7 +780,7 @@ void COverlayMgr::Surf_PostClipFragment(moverlay_t *pOverlay,
       overlay_vertex.texCoord[iTexCoord][1] = vecTexCoord.y;
     }
 
-    // Normals : FIXME this isn't an interpolated normal.
+    // TODO(d.rattman): this isn't an interpolated normal.
     overlay_vertex.normal = vNormal;
 
     // Lightmap coordinates.

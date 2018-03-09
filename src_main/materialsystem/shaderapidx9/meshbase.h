@@ -7,7 +7,7 @@
 #include "materialsystem/imaterial.h"
 
 // Base vertex buffer
-abstract_class CVertexBufferBase : public IVertexBuffer {
+the_interface CVertexBufferBase : public IVertexBuffer {
   // Methods of IVertexBuffer
  public:
   virtual void Spew(int nVertexCount, const VertexDesc_t &desc);
@@ -35,7 +35,7 @@ abstract_class CVertexBufferBase : public IVertexBuffer {
 //-----------------------------------------------------------------------------
 // Base index buffer
 //-----------------------------------------------------------------------------
-abstract_class CIndexBufferBase : public IIndexBuffer {
+the_interface CIndexBufferBase : public IIndexBuffer {
   // Methods of IIndexBuffer
  public:
   virtual void Spew(int nIndexCount, const IndexDesc_t &desc);
@@ -90,7 +90,7 @@ inline void ComputeVertexDesc(unsigned char *pBuffer,
   int i;
   int *pVertexSizesToSet[64];
   int nVertexSizesToSet = 0;
-  static ALIGN32 ModelVertexDX8_t temp[4];
+  static alignas(32) ModelVertexDX8_t temp[4];
   float *dummyData =
       (float
            *)&temp;  // should be larger than any CMeshBuilder command can set.
@@ -199,7 +199,7 @@ inline void ComputeVertexDesc(unsigned char *pBuffer,
     int nSize = TexCoordSize(i, vertexFormat);
     if (nSize != 0) {
       desc.m_pTexCoord[i] = reinterpret_cast<float *>(pBuffer + offset);
-      // FIXME: compress texcoords to SHORT2N/SHORT4N, with a scale rolled into
+      // TODO(d.rattman): compress texcoords to SHORT2N/SHORT4N, with a scale rolled into
       // the texture transform
       VertexElement_t texCoordElements[4] = {
           VERTEX_ELEMENT_TEXCOORD1D_0, VERTEX_ELEMENT_TEXCOORD2D_0,

@@ -47,7 +47,7 @@ public:
 };
 
 // This is provided by each mod to access data that may not be the same across mods.
-abstract_class IVoiceStatusHelper
+the_interface IVoiceStatusHelper
 {
 public:
 	virtual 		~IVoiceStatusHelper()	{}

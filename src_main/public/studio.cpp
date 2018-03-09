@@ -5,7 +5,7 @@
 #include "datacache/imdlcache.h"
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -458,7 +458,7 @@ int studiohdr_t::GetTransition(int iFrom, int iTo) const {
 
   return iTo;
   /*
-  FIXME: not connected
+  TODO(d.rattman): not connected
   virtualmodel_t *pVModel = (virtualmodel_t *)GetVirtualModel();
   Assert( pVModel );
 
@@ -699,10 +699,9 @@ const studiohdr_t *CStudioHdr::GroupStudioHdr(int i) const {
 
   if (!m_pStudioHdrCache.IsValidIndex(i)) {
     const char *pszName = (m_pStudioHdr) ? m_pStudioHdr->pszName() : "<<0>>";
-    ExecuteNTimes(
-        5, Warning("Invalid index passed to CStudioHdr(%s)::GroupStudioHdr(): "
+    Warning("Invalid index passed to CStudioHdr(%s)::GroupStudioHdr(): "
                    "%d, but max is %d [%d]\n",
-                   pszName, i, m_pStudioHdrCache.Count()));
+                   pszName, i, m_pStudioHdrCache.Count());
     DebuggerBreakIfDebugging();
     return m_pStudioHdr;  // return something known to probably exist, certainly
                           // things will be messed up, but hopefully not crash
@@ -998,7 +997,7 @@ int CStudioHdr::GetTransition(int iFrom, int iTo) const {
 
   return iTo;
   /*
-  FIXME: not connected
+  TODO(d.rattman): not connected
   virtualmodel_t *pVModel = (virtualmodel_t *)GetVirtualModel();
   Assert( pVModel );
 
@@ -1132,7 +1131,7 @@ int CStudioHdr::RemapAnimBone(int iAnim, int iLocalBone) const {
 void CStudioHdr::RunFlexRules(const float *src, float *dest) {
   int i, j;
 
-  // FIXME: this shouldn't be needed, flex without rules should be stripped in
+  // TODO(d.rattman): this shouldn't be needed, flex without rules should be stripped in
   // studiomdl
   for (i = 0; i < numflexdesc(); i++) {
     dest[i] = 0;
@@ -1564,7 +1563,7 @@ int CStudioHdr::CActivityToSequenceMapping::NumSequencesForActivity(
 
 // double-check that the data I point to hasn't changed
 bool CStudioHdr::CActivityToSequenceMapping::ValidateAgainst(
-    const CStudioHdr *RESTRICT pstudiohdr) RESTRICT {
+    const CStudioHdr *SOURCE_RESTRICT pstudiohdr) SOURCE_RESTRICT {
   if (m_bIsInitialized) {
     return m_expectedPStudioHdr == pstudiohdr->GetRenderHdr() &&
            m_expectedVModel == pstudiohdr->GetVirtualModel();
@@ -1575,7 +1574,7 @@ bool CStudioHdr::CActivityToSequenceMapping::ValidateAgainst(
 }
 
 void CStudioHdr::CActivityToSequenceMapping::SetValidationPair(
-    const CStudioHdr *RESTRICT pstudiohdr) RESTRICT {
+    const CStudioHdr *SOURCE_RESTRICT pstudiohdr) SOURCE_RESTRICT {
   m_expectedPStudioHdr = pstudiohdr->GetRenderHdr();
   m_expectedVModel = pstudiohdr->GetVirtualModel();
 }

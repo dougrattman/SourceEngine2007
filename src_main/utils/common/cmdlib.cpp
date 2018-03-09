@@ -2,7 +2,9 @@
 
 #include "cmdlib.h"
 
-#ifdef IS_WINDOWS_PC
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
 #include <direct.h>
 #include "base/include/windows/windows_light.h"
 #endif
@@ -560,12 +562,12 @@ FileHandle_t SafeOpenWrite(const char *filename) {
 }
 
 #define MAX_CMDLIB_BASE_PATHS 10
-static char g_pBasePaths[MAX_CMDLIB_BASE_PATHS][MAX_PATH];
+static char g_pBasePaths[MAX_CMDLIB_BASE_PATHS][SOURCE_MAX_PATH];
 static int g_NumBasePaths = 0;
 
 void CmdLib_AddBasePath(const char *pPath) {
   if (g_NumBasePaths < MAX_CMDLIB_BASE_PATHS) {
-    Q_strncpy(g_pBasePaths[g_NumBasePaths], pPath, MAX_PATH);
+    Q_strncpy(g_pBasePaths[g_NumBasePaths], pPath, SOURCE_MAX_PATH);
     Q_FixSlashes(g_pBasePaths[g_NumBasePaths]);
     g_NumBasePaths++;
   } else {
@@ -604,7 +606,7 @@ FileHandle_t SafeOpenRead(const char *filename) {
     filename = filename + pathLength;
     int i;
     for (i = 0; i < g_NumBasePaths; i++) {
-      char tmp[MAX_PATH];
+      char tmp[SOURCE_MAX_PATH];
       strcpy(tmp, g_pBasePaths[i]);
       strcat(tmp, filename);
       f = g_pFileSystem->Open(tmp, "rb");
@@ -686,7 +688,7 @@ void SaveFile(const char *filename, void *buffer, int count) {
 Extract file parts
 ====================
 */
-// FIXME: should include the slash, otherwise
+// TODO(d.rattman): should include the slash, otherwise
 // backing to an empty path will be wrong when appending a slash
 
 /*

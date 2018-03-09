@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_surfacelib/Win32Font.h"
 
@@ -13,7 +13,6 @@
 #include "utlbuffer.h"
 #include "vgui/ISurface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 bool s_bSupportsUnicode = false;
@@ -435,56 +434,45 @@ void CWin32Font::SetAsActiveFont(HDC hdc) {
 //-----------------------------------------------------------------------------
 void CWin32Font::GetCharABCWidths(int ch, int &a, int &b, int &c) {
   Assert(IsValid());
-#if defined(_X360)
-  if (ch < ABCWIDTHS_CACHE_SIZE) {
-    // use the cache entry
-    a = m_ABCWidthsCache[ch].a;
-    b = m_ABCWidthsCache[ch].b;
-    c = m_ABCWidthsCache[ch].c;
-  } else
-#endif
-  {
+  // look for it in the cache
+  abc_cache_t finder = {(wchar_t)ch};
 
-    // look for it in the cache
-    abc_cache_t finder = {(wchar_t)ch};
-
-    unsigned short i = m_ExtendedABCWidthsCache.Find(finder);
-    if (m_ExtendedABCWidthsCache.IsValidIndex(i)) {
-      a = m_ExtendedABCWidthsCache[i].abc.a;
-      b = m_ExtendedABCWidthsCache[i].abc.b;
-      c = m_ExtendedABCWidthsCache[i].abc.c;
-      return;
-    }
-
-    // not in the cache, get from windows (this call is a little slow)
-    ABC abc;
-    if (::GetCharABCWidthsW(m_hDC, ch, ch, &abc) ||
-        ::GetCharABCWidthsA(m_hDC, ch, ch, &abc)) {
-      a = abc.abcA;
-      b = abc.abcB;
-      c = abc.abcC;
-    } else {
-      // wide character version failed, try the old api function
-      SIZE size;
-      char mbcs[6] = {0};
-      wchar_t wch = ch;
-      ::WideCharToMultiByte(CP_ACP, 0, &wch, 1, mbcs, sizeof(mbcs), NULL, NULL);
-      if (::GetTextExtentPoint32(m_hDC, mbcs, strlen(mbcs), &size)) {
-        a = c = 0;
-        b = size.cx;
-      } else {
-        // failed to get width, just use the max width
-        a = c = 0;
-        b = m_iMaxCharWidth;
-      }
-    }
-
-    // add to the cache
-    finder.abc.a = a - m_iBlur - m_iOutlineSize;
-    finder.abc.b = b + ((m_iBlur + m_iOutlineSize) * 2) + m_iDropShadowOffset;
-    finder.abc.c = c - m_iBlur - m_iDropShadowOffset - m_iOutlineSize;
-    m_ExtendedABCWidthsCache.Insert(finder);
+  unsigned short i = m_ExtendedABCWidthsCache.Find(finder);
+  if (m_ExtendedABCWidthsCache.IsValidIndex(i)) {
+    a = m_ExtendedABCWidthsCache[i].abc.a;
+    b = m_ExtendedABCWidthsCache[i].abc.b;
+    c = m_ExtendedABCWidthsCache[i].abc.c;
+    return;
   }
+
+  // not in the cache, get from windows (this call is a little slow)
+  ABC abc;
+  if (::GetCharABCWidthsW(m_hDC, ch, ch, &abc) ||
+      ::GetCharABCWidthsA(m_hDC, ch, ch, &abc)) {
+    a = abc.abcA;
+    b = abc.abcB;
+    c = abc.abcC;
+  } else {
+    // wide character version failed, try the old api function
+    SIZE size;
+    char mbcs[6] = {0};
+    wchar_t wch = ch;
+    ::WideCharToMultiByte(CP_ACP, 0, &wch, 1, mbcs, sizeof(mbcs), NULL, NULL);
+    if (::GetTextExtentPoint32(m_hDC, mbcs, strlen(mbcs), &size)) {
+      a = c = 0;
+      b = size.cx;
+    } else {
+      // failed to get width, just use the max width
+      a = c = 0;
+      b = m_iMaxCharWidth;
+    }
+  }
+
+  // add to the cache
+  finder.abc.a = a - m_iBlur - m_iOutlineSize;
+  finder.abc.b = b + ((m_iBlur + m_iOutlineSize) * 2) + m_iDropShadowOffset;
+  finder.abc.c = c - m_iBlur - m_iDropShadowOffset - m_iOutlineSize;
+  m_ExtendedABCWidthsCache.Insert(finder);
 }
 
 //-----------------------------------------------------------------------------

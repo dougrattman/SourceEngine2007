@@ -17,7 +17,7 @@
 #include "p4lib/ip4.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -37,7 +37,7 @@ PerforceFileExplorer::PerforceFileExplorer( Panel *pParent, const char *pPanelNa
 	m_pFullPathCombo = new ComboBox( this, "FullPathCombo", 8, false );
 	m_pFullPathCombo->GetTooltip()->SetTooltipFormatToSingleLine();
 
-	char pFullPath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
 	g_pFullFileSystem->GetCurrentDirectory( pFullPath, sizeof(pFullPath) );
 	SetCurrentDirectory( pFullPath );
 
@@ -107,11 +107,11 @@ void PerforceFileExplorer::SetCurrentDirectory( const char *pFullPath )
 	PopulateFileList();
 	PopulateDriveList();
 
-	char pCurrentDirectory[ MAX_PATH ];
+	char pCurrentDirectory[ SOURCE_MAX_PATH ];
 	m_pFullPathCombo->GetText( pCurrentDirectory, sizeof(pCurrentDirectory) );
 	if ( Q_stricmp( m_CurrentDirectory.Get(), pCurrentDirectory ) )
 	{
-		char pNewDirectory[ MAX_PATH ];
+		char pNewDirectory[ SOURCE_MAX_PATH ];
 		Q_snprintf( pNewDirectory, sizeof(pNewDirectory), "%s\\", m_CurrentDirectory.Get() );
 		m_pFullPathCombo->SetText( pNewDirectory );
 		m_pFullPathCombo->GetTooltip()->SetText( pNewDirectory );
@@ -124,8 +124,8 @@ void PerforceFileExplorer::SetCurrentDirectory( const char *pFullPath )
 //-----------------------------------------------------------------------------
 void PerforceFileExplorer::PopulateDriveList()
 {
-	char pFullPath[MAX_PATH * 4];
-	char pSubDirPath[MAX_PATH * 4];
+	char pFullPath[SOURCE_MAX_PATH * 4];
+	char pSubDirPath[SOURCE_MAX_PATH * 4];
 	Q_strncpy( pFullPath, m_CurrentDirectory.Get(), sizeof( pFullPath ) );
 	Q_strncpy( pSubDirPath, m_CurrentDirectory.Get(), sizeof( pSubDirPath ) );
 
@@ -175,8 +175,8 @@ void PerforceFileExplorer::PopulateFileList()
 	m_pFileList->RemoveAllFiles();
 	
 	// Create filter string
-	char pFullFoundPath[MAX_PATH];
-	char pFilter[MAX_PATH+3];
+	char pFullFoundPath[SOURCE_MAX_PATH];
+	char pFilter[SOURCE_MAX_PATH+3];
 	Q_snprintf( pFilter, sizeof(pFilter), "%s\\*.*", m_CurrentDirectory.Get() );
 
 	// Find all files on disk
@@ -233,7 +233,7 @@ void PerforceFileExplorer::OnTextChanged( KeyValues *kv )
 	// first check which control had its text changed!
 	if ( pPanel == m_pFullPathCombo )
 	{
-		char pCurrentDirectory[ MAX_PATH ];
+		char pCurrentDirectory[ SOURCE_MAX_PATH ];
 		m_pFullPathCombo->GetText( pCurrentDirectory, sizeof(pCurrentDirectory) );
 		SetCurrentDirectory( pCurrentDirectory );
 		return;
@@ -263,7 +263,7 @@ void PerforceFileExplorer::OnItemDoubleClicked()
 //-----------------------------------------------------------------------------
 void PerforceFileExplorer::OnFolderUp()
 {
-	char pUpDirectory[MAX_PATH];
+	char pUpDirectory[SOURCE_MAX_PATH];
 	Q_strncpy( pUpDirectory, m_CurrentDirectory.Get(), sizeof(pUpDirectory) );
 	Q_StripLastDir( pUpDirectory, sizeof(pUpDirectory) );
 	Q_StripTrailingSlash( pUpDirectory );

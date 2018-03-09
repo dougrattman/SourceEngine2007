@@ -35,7 +35,7 @@
 #include "particle_parse.h"
 #include "particle_system.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 inline void TraceHull_SkipPhysics( const Vector &vecAbsStart, const Vector &vecAbsEnd, const Vector &hullMin, 
@@ -601,8 +601,8 @@ impactdamagetable_t gAntlionGuardImpactDamageTable =
 	antlionGuardLinearTable,
 	antlionGuardAngularTable,
 	
-	ARRAYSIZE(antlionGuardLinearTable),
-	ARRAYSIZE(antlionGuardAngularTable),
+	SOURCE_ARRAYSIZE(antlionGuardLinearTable),
+	SOURCE_ARRAYSIZE(antlionGuardAngularTable),
 
 	200*200,// minimum linear speed squared
 	180*180,// minimum angular speed squared (360 deg/s to cause spin/slice damage)
@@ -1103,7 +1103,7 @@ bool CNPC_AntlionGuard::ShouldCharge( const Vector &startPos, const Vector &endP
 		}
 	}
 
-	//FIXME: We'd like to exclude small physics objects from this check!
+	//TODO(d.rattman): We'd like to exclude small physics objects from this check!
 
 	// We only need to hit the endpos with the edge of our bounding box
 	Vector vecDir = endPos - startPos;
@@ -1342,7 +1342,7 @@ float CNPC_AntlionGuard::MaxYawSpeed( void )
 		if ( dist > 512 )
 			return 16.0f;
 
-		//FIXME: Alter by skill level
+		//TODO(d.rattman): Alter by skill level
 		float yawSpeed = RemapVal( dist, 0, 512, 1.0f, 2.0f );
 		yawSpeed = std::clamp( yawSpeed, 1.0f, 2.0f );
 
@@ -1503,7 +1503,7 @@ void CNPC_AntlionGuard::Shove( void )
 					Pickup_OnPhysGunDrop( pVictim, NULL, LAUNCHED_BY_CANNON );
 				}
 
-				// FIXME: This causes NPCs that are not physically motivated to hop into the air strangely -- jdw
+				// TODO(d.rattman): This causes NPCs that are not physically motivated to hop into the air strangely -- jdw
 				// pVictim->ApplyAbsVelocityImpulse( BodyDirection2D() * 400 + Vector( 0, 0, 250 ) );
 			}
 
@@ -1783,7 +1783,7 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 				// Factor out mass
 				vecShoveVel *= physObj->GetMass();
 				
-				// FIXME: We need to restore this on the object at some point if we do this!
+				// TODO(d.rattman): We need to restore this on the object at some point if we do this!
 				float flDragCoef = 0.0f;
 				physObj->SetDragCoefficient( &flDragCoef, &flDragCoef );
 			}
@@ -1795,7 +1795,7 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 				if ( flTargetDist > 1024 )
 					flTargetDist = 1024;
 
-				vecShoveVel *= flTargetDist * 3 * physObj->GetMass();	//FIXME: Scale by skill
+				vecShoveVel *= flTargetDist * 3 * physObj->GetMass();	//TODO(d.rattman): Scale by skill
 				vecShoveVel[2] += physObj->GetMass() * 350.0f;
 			}
 
@@ -1933,7 +1933,7 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 
 		if ( random->RandomInt( 0, 10 ) < 6 )
 		{
-			duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardFastGrowl, ARRAYSIZE(envAntlionGuardFastGrowl) );
+			duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardFastGrowl, SOURCE_ARRAYSIZE(envAntlionGuardFastGrowl) );
 		}
 		else
 		{
@@ -1958,8 +1958,8 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 	{
 		StartSounds();
 
-		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark1, ARRAYSIZE(envAntlionGuardBark1) );
-		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark2, ARRAYSIZE(envAntlionGuardBark2) );
+		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark1, SOURCE_ARRAYSIZE(envAntlionGuardBark1) );
+		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark2, SOURCE_ARRAYSIZE(envAntlionGuardBark2) );
 		
 		m_flAngerNoiseTime = gpGlobals->curtime + duration + random->RandomFloat( 2.0f, 4.0f );
 
@@ -1974,7 +1974,7 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 	{
 		StartSounds();
 
-		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardFastGrowl, ARRAYSIZE(envAntlionGuardFastGrowl) );
+		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardFastGrowl, SOURCE_ARRAYSIZE(envAntlionGuardFastGrowl) );
 		
 		m_flAngerNoiseTime = gpGlobals->curtime + duration + random->RandomFloat( 2.0f, 4.0f );
 
@@ -1991,8 +1991,8 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 	{
 		StartSounds();
 
-		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardPain1, ARRAYSIZE(envAntlionGuardPain1) );
-		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark2, ARRAYSIZE(envAntlionGuardBark2) );
+		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardPain1, SOURCE_ARRAYSIZE(envAntlionGuardPain1) );
+		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardBark2, SOURCE_ARRAYSIZE(envAntlionGuardBark2) );
 		
 		ENVELOPE_CONTROLLER.SoundChangeVolume( m_pBreathSound, 0.0f, 0.1f );
 		ENVELOPE_CONTROLLER.SoundChangeVolume( m_pGrowlIdleSound, 0.0f, 0.1f );
@@ -2005,7 +2005,7 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 	{	
 		StartSounds();
 
-		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardSqueeze, ARRAYSIZE(envAntlionGuardSqueeze) );
+		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardSqueeze, SOURCE_ARRAYSIZE(envAntlionGuardSqueeze) );
 		
 		ENVELOPE_CONTROLLER.SoundChangeVolume( m_pBreathSound, 0.6f, random->RandomFloat( 2.0f, 4.0f ) );
 		ENVELOPE_CONTROLLER.SoundChangePitch( m_pBreathSound, random->RandomInt( 60, 80 ), random->RandomFloat( 2.0f, 4.0f ) );
@@ -2039,8 +2039,8 @@ void CNPC_AntlionGuard::HandleAnimEvent( animevent_t *pEvent )
 	{	
 		StartSounds();
 
-		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardGrunt, ARRAYSIZE(envAntlionGuardGrunt) );
-		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardGrunt2, ARRAYSIZE(envAntlionGuardGrunt2) );
+		float duration = ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pConfusedSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardGrunt, SOURCE_ARRAYSIZE(envAntlionGuardGrunt) );
+		ENVELOPE_CONTROLLER.SoundPlayEnvelope( m_pGrowlHighSound, SOUNDCTRL_CHANGE_VOLUME, envAntlionGuardGrunt2, SOURCE_ARRAYSIZE(envAntlionGuardGrunt2) );
 		
 		ENVELOPE_CONTROLLER.SoundChangeVolume( m_pBreathSound, 0.0f, 0.1f );
 		ENVELOPE_CONTROLLER.SoundChangeVolume( m_pGrowlIdleSound, 0.0f, 0.1f );
@@ -2333,7 +2333,7 @@ void CNPC_AntlionGuard::StartTask( const Task_t *pTask )
 			dirToTarget.z = 0;
 
 			//Validate it's still close enough to shove
-			//FIXME: Real numbers
+			//TODO(d.rattman): Real numbers
 			if ( distToTarget > 256.0f )
 			{
 				RememberFailedPhysicsTarget( m_hPhysicsTarget );
@@ -3151,7 +3151,7 @@ void CNPC_AntlionGuard::SummonAntlions( void )
 
 	// Only spawn up to our max count
 	int iSpawnPoint = 0;
-	for ( int i = 0; (m_iNumLiveAntlions < ANTLIONGUARD_SUMMON_COUNT) && (iSpawnPoint < ARRAYSIZE(sAntlionSpawnPositions)); i++ )
+	for ( int i = 0; (m_iNumLiveAntlions < ANTLIONGUARD_SUMMON_COUNT) && (iSpawnPoint < SOURCE_ARRAYSIZE(sAntlionSpawnPositions)); i++ )
 	{
 		// Determine spawn position for the antlion
 		Vector vecSpawn = GetAbsOrigin() + ( sAntlionSpawnPositions[iSpawnPoint].flForward * vecForward ) + ( sAntlionSpawnPositions[iSpawnPoint].flRight * vecRight );
@@ -4406,7 +4406,7 @@ bool CNPC_AntlionGuard::OverrideMoveFacing( const AILocalMoveGoal_t &move, float
 	CBaseEntity	*pFaceTarget = NULL;
 	bool		bFaceTarget = false;
 
-	// FIXME: this will break scripted sequences that walk when they have an enemy
+	// TODO(d.rattman): this will break scripted sequences that walk when they have an enemy
 	if ( m_hChargeTarget )
 	{
 		vecFacePosition = m_hChargeTarget->GetAbsOrigin();

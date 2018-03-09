@@ -9,7 +9,7 @@
 #include "c_te_effect_dispatch.h"
 #include "hud.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void BloodSplatCallback( const CEffectData & data )
@@ -26,7 +26,7 @@ void BloodSplatCallback( const CEffectData & data )
 	// Draw the ammo label
 	CHudTexture	*pSplat = gHUD.GetIcon( "hud_blood1" );
 	
-  // FIXME:  This can only occur during vgui::Paint() stuff
+  // TODO(d.rattman):  This can only occur during vgui::Paint() stuff
 	pSplat->DrawSelf( x, y, gHUD.m_clrNormal);
 */
 }

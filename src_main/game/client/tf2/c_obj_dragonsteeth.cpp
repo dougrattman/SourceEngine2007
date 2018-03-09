@@ -9,7 +9,7 @@
 #include "commanderoverlay.h"
 #include "c_baseobject.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

@@ -10,7 +10,7 @@
 #include "waterbullet.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define WATERBULLET_INITIAL_SPEED		1000.0

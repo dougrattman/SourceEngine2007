@@ -497,7 +497,7 @@ void WriteResizeInfoFile( const char *pBaseDir, const char *pSubDir, const char 
 
 void RunVTexOnFile( const char *pBaseDir, const char *pFilename )
 {
-	char executableDir[MAX_PATH];
+	char executableDir[SOURCE_MAX_PATH];
 	GetModuleFileName( NULL, executableDir, sizeof( executableDir ) );
 	
 	char *pLastSlash = std::max( strrchr( executableDir, '/' ), strrchr( executableDir, '\\' ) );
@@ -507,7 +507,7 @@ void RunVTexOnFile( const char *pBaseDir, const char *pFilename )
 	*pLastSlash = 0;
 
 	// Set the vproject environment variable (vtex doesn't allow game yet).
-	char envStr[MAX_PATH];
+	char envStr[SOURCE_MAX_PATH];
 	_snprintf( envStr, sizeof( envStr ), "vproject=%s", pBaseDir );
 	putenv( envStr );
 

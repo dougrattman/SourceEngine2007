@@ -48,7 +48,7 @@ public:
 #else
 	virtual void	Spawn();
 
-	// FIXME: How should this work? This is a hack to get things working
+	// TODO(d.rattman): How should this work? This is a hack to get things working
 	virtual const unsigned char *GetEncryptionKey( void ) { return NULL; }
 #endif
 

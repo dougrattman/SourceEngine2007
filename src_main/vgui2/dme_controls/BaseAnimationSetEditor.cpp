@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: 
 //
@@ -31,7 +31,7 @@
 #include "movieobjects/dmegamemodel.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -56,7 +56,7 @@ static AnimSetLayout_t g_AnimSetLayout[] =
 
 static const char *NameForLayout( CBaseAnimationSetEditor::EAnimSetLayout_t layout, bool menu )
 {
-	int c = ARRAYSIZE( g_AnimSetLayout );
+	int c = SOURCE_ARRAYSIZE( g_AnimSetLayout );
 	for ( int i = 0; i < c; ++i )
 	{
 		const AnimSetLayout_t& data = g_AnimSetLayout[ i ];
@@ -71,7 +71,7 @@ static const char *NameForLayout( CBaseAnimationSetEditor::EAnimSetLayout_t layo
 
 static CBaseAnimationSetEditor::EAnimSetLayout_t LayoutForName( const char *name )
 {
-	int c = ARRAYSIZE( g_AnimSetLayout );
+	int c = SOURCE_ARRAYSIZE( g_AnimSetLayout );
 	for ( int i = 0; i < c; ++i )
 	{
 		const AnimSetLayout_t& data = g_AnimSetLayout[ i ];
@@ -171,7 +171,7 @@ void CBaseAnimationSetEditor::OnButtonToggled( KeyValues *params )
 
 	if ( ptr == m_pSelectionModeType )
 	{
-	// FIXME, could do this with MESSAGE_FUNC_PARAMS and look up "panel" ptr and compare to figure out which button was manipulated...
+	// TODO(d.rattman): could do this with MESSAGE_FUNC_PARAMS and look up "panel" ptr and compare to figure out which button was manipulated...
 	g_pMovieMaker->SetTimeSelectionModeType( !m_pSelectionModeType->IsSelected() ? CIFMTool::MODE_DETACHED : CIFMTool::MODE_ATTACHED );
 	}
 	else
@@ -825,18 +825,18 @@ void CBaseAnimationSetEditor::OnImportAnimation( KeyValues *pParams )
 	// Compute starting directory
 	CDmeGameModel *pGameModel = m_AnimSet->GetValueElement< CDmeGameModel >( "gameModel" );
 
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	if ( !pGameModel )
 	{
 		GetModContentSubdirectory( "models", pStartingDir, sizeof(pStartingDir) );
 	}
 	else
 	{
-		char pModelName[ MAX_PATH ];
+		char pModelName[ SOURCE_MAX_PATH ];
 		studiohdr_t *pStudioHdr = pGameModel->GetStudioHdr();
 		Q_StripExtension( pStudioHdr->name, pModelName, sizeof(pModelName) );
 
-		char pRelativePath[ MAX_PATH ];
+		char pRelativePath[ SOURCE_MAX_PATH ];
 		Q_snprintf( pRelativePath, sizeof(pRelativePath), "models/%s/animations/dmx", pModelName );
 		GetModContentSubdirectory( pRelativePath, pStartingDir, sizeof(pStartingDir) );
 		if ( !g_pFullFileSystem->IsDirectory( pStartingDir ) )
@@ -868,7 +868,7 @@ void CBaseAnimationSetEditor::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog
 	bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
 	// Compute starting directory
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( "scenes", pStartingDir, sizeof(pStartingDir) );
 
 	Assert( !bOpenFile );
@@ -920,7 +920,7 @@ void CBaseAnimationSetEditor::OnOpenContextMenu( KeyValues *params )
 
 	m_hContextMenu = new Menu( this, "ActionMenu" );
 
-	int c = ARRAYSIZE( g_AnimSetLayout );
+	int c = SOURCE_ARRAYSIZE( g_AnimSetLayout );
 	for ( int i = 0; i < c; ++i )
 	{
 		const AnimSetLayout_t& data = g_AnimSetLayout[ i ];

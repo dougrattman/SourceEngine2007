@@ -10,7 +10,7 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // -------------------------------------------------------------------------------------------
@@ -1009,7 +1009,7 @@ void MatrixBuildScale(VMatrix &dst, const Vector &scale) {
 
 void MatrixBuildPerspective(VMatrix &dst, f32 fovX, f32 fovY, f32 zNear,
                             f32 zFar) {
-  // FIXME: collapse all of this into one matrix after we figure out what all
+  // TODO(d.rattman): collapse all of this into one matrix after we figure out what all
   // should be in here.
   f32 width = 2 * zNear * tan(fovX * (M_PI / 180.0f) * 0.5f);
   f32 height = 2 * zNear * tan(fovY * (M_PI / 180.0f) * 0.5f);
@@ -1066,7 +1066,7 @@ static inline void CalculateAABBForNormalizedFrustum_Helper(
 
 void CalculateAABBFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                               Vector *pMins, Vector *pMaxs) {
-  // FIXME: Could maybe do better than the compile with all of these multiplies
+  // TODO(d.rattman): Could maybe do better than the compile with all of these multiplies
   // by 0 and 1.
   ClearBounds(*pMins, *pMaxs);
   CalculateAABBForNormalizedFrustum_Helper(0, 0, 0, volumeToWorld, *pMins,
@@ -1101,7 +1101,7 @@ void CalculateAABBFromProjectionMatrix(const VMatrix &worldToVolume,
 void CalculateSphereFromProjectionMatrixInverse(const VMatrix &volumeToWorld,
                                                 Vector *pCenter,
                                                 f32 *pflRadius) {
-  // FIXME: Could maybe do better than the compile with all of these multiplies
+  // TODO(d.rattman): Could maybe do better than the compile with all of these multiplies
   // by 0 and 1.
 
   // Need 3 points: the endpoint of the line through the center of the near +
@@ -1208,7 +1208,7 @@ void FrustumPlanesFromMatrix(const VMatrix &clipToWorld, Frustum_t &frustum) {
 
 void MatrixBuildOrtho(VMatrix &dst, f64 left, f64 top, f64 right,
                       f64 bottom, f64 zNear, f64 zFar) {
-  // FIXME: This is being used incorrectly! Should read:
+  // TODO(d.rattman): This is being used incorrectly! Should read:
   // D3DXMatrixOrthoOffCenterRH( &matrix, left, right, bottom, top, zNear, zFar
   // ); Which is certainly why we need these extra -1 scales in y. Bleah
 

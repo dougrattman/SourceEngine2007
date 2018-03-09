@@ -44,7 +44,7 @@ void CMaterialDict::Shutdown( )
 	// Clean up all materials..
 	RemoveAllMaterials();
 
-	// FIXME: Could dump list here...
+	// TODO(d.rattman): Could dump list here...
 	m_MissingList.RemoveAll();
 
 }

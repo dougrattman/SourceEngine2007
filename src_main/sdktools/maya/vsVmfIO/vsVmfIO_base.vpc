@@ -102,7 +102,7 @@ $Project
 			$File	"$SRCDIR\public\disp_powerinfo.cpp"
 			$File	"$SRCDIR\public\filesystem.h"
 			$File	"$SRCDIR\public\filesystem_helpers.cpp"
-			$File	"$SRCDIR\public\filesystem_init.cpp"
+			$File	"$SRCDIR\public\filesystem_init.cc"
 			$File	"$SRCDIR\public\interpolatortypes.cpp"
 			$File	"$SRCDIR\public\interpolatortypes.h"
 			$File	"$SRCDIR\public\loadcmdline.cpp"

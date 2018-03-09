@@ -121,7 +121,7 @@ void mxExpressionSlider::setValue( int barnum, float value )
 	}
 
 	BoundValue();
-	// FIXME: delay this until all sliders are set
+	// TODO(d.rattman): delay this until all sliders are set
 	if (!m_bPaired || barnum == 1)
 		redraw();
 }

@@ -51,7 +51,7 @@ static bool g_bUsedAsLaunchableDLL = false;
 static bool g_bNoTga = false;
 static bool g_bNoPsd = false;
 
-static char g_ForcedOutputDir[MAX_PATH];
+static char g_ForcedOutputDir[SOURCE_MAX_PATH];
 
 #define MAX_VMT_PARAMS 16
 
@@ -190,7 +190,7 @@ struct VTexConfigInfo_t {
     VTF_INPUTSRC_CRC = MK_VTF_RSRC_ID('C', 'R', 'C')
   };
 
-  char m_SrcName[MAX_PATH];
+  char m_SrcName[SOURCE_MAX_PATH];
 
   VTexConfigInfo_t(void) {
     m_nStartFrame = -1;
@@ -232,7 +232,7 @@ struct VTexConfigInfo_t {
   bool IsSettings0Valid(void) const {
     TextureSettingsEx_t exSettingsEmpty;
     memset(&exSettingsEmpty, 0, sizeof(exSettingsEmpty));
-    COMPILE_TIME_ASSERT(sizeof(m_exSettings0) == sizeof(exSettingsEmpty));
+    static_assert(sizeof(m_exSettings0) == sizeof(exSettingsEmpty));
     return !!memcmp(&m_exSettings0, &exSettingsEmpty, sizeof(m_exSettings0));
   }
 
@@ -276,10 +276,10 @@ void VTexConfigInfo_t::ParseOptionKey(const char *pKeyName,
   } else if (!stricmp(pKeyName, "volumetexture")) {
     m_nVolumeTextureDepth = atoi(pKeyValue);
 
-    // FIXME: Volume textures don't currently support DXT compression
+    // TODO(d.rattman): Volume textures don't currently support DXT compression
     m_vtfProcOptions.flags0 |= VtfProcessingOptions::OPT_NOCOMPRESS;
 
-    // FIXME: Volume textures don't currently support NICE filtering
+    // TODO(d.rattman): Volume textures don't currently support NICE filtering
     m_vtfProcOptions.flags0 &= ~VtfProcessingOptions::OPT_FILTER_NICE;
   } else if (!stricmp(pKeyName, "spheremap_x")) {
     if (iValue) m_LookDir = LOOK_DOWN_X;
@@ -668,7 +668,7 @@ void MakeSrcFileName(char *pSrcName, unsigned int flags,
   if (bNormalToDUDV) {
     char *pNormalString = Q_stristr((char *)pFullNameWithoutExtension, "_dudv");
     if (pNormalString) {
-      Q_strncpy(tempBuf, pFullNameWithoutExtension, ARRAYSIZE(tempBuf));
+      Q_strncpy(tempBuf, pFullNameWithoutExtension, SOURCE_ARRAYSIZE(tempBuf));
       char *dudv = Q_stristr(tempBuf, "_dudv");
       Q_strcpy(dudv, "_normal");
       pFullNameWithoutExtension = tempBuf;
@@ -1361,7 +1361,7 @@ void PreprocessSkyBox(char *pFullNameWithoutExtension, int *iSkyboxFace) {
     // Make sure there really is a 2 letter extension.
     char *pEnd = &pFullNameWithoutExtension[len - 2];
     *iSkyboxFace = -1;
-    for (int i = 0; i < ARRAYSIZE(g_CubemapFacingNames); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(g_CubemapFacingNames); i++) {
       if (stricmp(pEnd, g_CubemapFacingNames[i]) == 0) {
         *iSkyboxFace = i;
         break;
@@ -1469,7 +1469,7 @@ static void SetTextureLodData(IVTFTexture *pTexture,
 
 static void AttachShtFile(const char *pFullNameWithoutExtension,
                           IVTFTexture *pTexture, CRC32_t *puiHash) {
-  char shtName[MAX_PATH];
+  char shtName[SOURCE_MAX_PATH];
   Q_strncpy(shtName, pFullNameWithoutExtension, sizeof(shtName));
   Q_SetExtension(shtName, ".sht", sizeof(shtName));
 
@@ -1959,7 +1959,7 @@ bool GetOutputDir(const char *inputName, char *outputDir) {
     strcpy(outputDir, g_ForcedOutputDir);
   } else {
     // Is inputName a relative path?
-    char buf[MAX_PATH];
+    char buf[SOURCE_MAX_PATH];
     Q_MakeAbsolutePath(buf, sizeof(buf), inputName, NULL);
     Q_FixSlashes(buf);
 
@@ -1980,13 +1980,13 @@ bool GetOutputDir(const char *inputName, char *outputDir) {
 }
 
 bool IsCube(const char *inputName) {
-  char tgaName[MAX_PATH];
+  char tgaName[SOURCE_MAX_PATH];
   // Do Strcmp for ".hdr" to make sure we aren't ripping too much stuff off.
-  Q_StripExtension(inputName, tgaName, MAX_PATH);
+  Q_StripExtension(inputName, tgaName, SOURCE_MAX_PATH);
   const char *pInputExtension = inputName + Q_strlen(tgaName);
-  Q_strncat(tgaName, "rt", MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(tgaName, pInputExtension, MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(tgaName, GetSourceExtension(), MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(tgaName, "rt", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(tgaName, pInputExtension, SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(tgaName, GetSourceExtension(), SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
   struct _stat buf;
   if (_stat(tgaName, &buf) != -1) {
     return true;
@@ -1997,7 +1997,7 @@ bool IsCube(const char *inputName) {
 
 int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
                const char *extension) {
-  char filename[MAX_PATH] = {0};
+  char filename[SOURCE_MAX_PATH] = {0};
 
   BOOL bMoreFiles = FindNextFile(hResult, &wfd);
 
@@ -2009,7 +2009,7 @@ int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
 
     // If it's a subdirectory, just recurse down it
     if ((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-      char subdir[MAX_PATH];
+      char subdir[SOURCE_MAX_PATH];
       sprintf(subdir, "%s\\%s", basedir, wfd.cFileName);
 
       // Recurse
@@ -2033,7 +2033,7 @@ int Find_Files(WIN32_FIND_DATA &wfd, HANDLE &hResult, const char *basedir,
     // Exists, so don't overwrite it
     if (access(filename, 0) != -1) return FF_TRYAGAIN;
 
-    char texturename[_MAX_PATH] = {0};
+    char texturename[SOURCE_MAX_PATH] = {0};
     char *p = (char *)basedir;
 
     // Skip over the base path to get a material system relative path
@@ -2471,7 +2471,7 @@ int CVTex::VTex(int argc, char **argv) {
   for (; i < argc; i++) {
     if (argv[i][0] == '-') continue;  // Assuming flags
 
-    char pInputBaseName[MAX_PATH];
+    char pInputBaseName[SOURCE_MAX_PATH];
     Q_strncpy(pInputBaseName, argv[i], sizeof(pInputBaseName));
     // int maxlen = Q_strlen( pInputBaseName ) + 1;
 
@@ -2481,7 +2481,7 @@ int CVTex::VTex(int argc, char **argv) {
     }
 
     char search[128];
-    char basedir[MAX_PATH];
+    char basedir[SOURCE_MAX_PATH];
     char ext[_MAX_EXT];
     char filename[_MAX_FNAME];
 

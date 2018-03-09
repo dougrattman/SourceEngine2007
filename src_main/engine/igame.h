@@ -7,7 +7,7 @@
 #include "base/include/base_types.h"
 #include "tier1/interface.h"
 
-abstract_class IGame {
+the_interface IGame {
  public:
   virtual ~IGame() {}
 

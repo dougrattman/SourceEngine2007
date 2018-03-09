@@ -18,7 +18,7 @@
 #include "vgui_controls/Button.h"
 #include "matsys_controls/matsyscontrols.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -303,7 +303,7 @@ void CSequencePicker::PlayActivity( const char *pActivityName )
 		mstudioseqdesc_t &seqdesc = pstudiohdr->pSeqdesc( i );
 		if ( stricmp( seqdesc.pszActivityName(), pActivityName ) == 0 )
 		{
-			// FIXME: Add weighted sequence selection logic?
+			// TODO(d.rattman): Add weighted sequence selection logic?
 			m_pMDLPreview->SetSequence( i );
 			break;
 		}

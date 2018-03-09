@@ -8,7 +8,7 @@
 #include "triggers.h"
 #include "soundenvelope.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_max_super_armor( "sk_max_super_armor","500");

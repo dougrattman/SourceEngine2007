@@ -159,7 +159,7 @@ class CMatCallQueue {
 //-----------------------------------------------------------------------------
 // Additional interfaces used internally to the library
 //-----------------------------------------------------------------------------
-abstract_class IMaterialSystemInternal : public IMaterialSystem {
+the_interface IMaterialSystemInternal : public IMaterialSystem {
  public:
   // Returns the current material
   virtual IMaterial *GetCurrentMaterial() = 0;
@@ -176,7 +176,7 @@ abstract_class IMaterialSystemInternal : public IMaterialSystem {
   virtual void ForceDepthFuncEquals(bool bEnable) = 0;
   virtual enum MaterialHeightClipMode_t GetHeightClipMode(void) = 0;
 
-  // FIXME: Remove? Here for debugging shaders in CShaderSystem
+  // TODO(d.rattman): Remove? Here for debugging shaders in CShaderSystem
   virtual void AddMaterialToMaterialList(IMaterialInternal * pMaterial) = 0;
   virtual void RemoveMaterial(IMaterialInternal * pMaterial) = 0;
   virtual void RemoveMaterialSubRect(IMaterialInternal * pMaterial) = 0;

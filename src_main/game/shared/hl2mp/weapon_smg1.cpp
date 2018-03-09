@@ -23,7 +23,7 @@
 #define CWeaponSMG1 C_WeaponSMG1
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SMG1_GRENADE_DAMAGE 100.0f
@@ -258,7 +258,7 @@ const WeaponProficiencyInfo_t *CWeaponSMG1::GetProficiencyValues()
 		{ 1.00,		1.0		},
 	};
 
-	COMPILE_TIME_ASSERT( ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( SOURCE_ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return proficiencyTable;
 }

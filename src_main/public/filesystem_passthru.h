@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef FILESYSTEM_PASSTHRU_H
 #define FILESYSTEM_PASSTHRU_H
@@ -163,7 +163,7 @@ class CFileSystemPassThru : public CInternalFileSystemPassThru<IFileSystem> {
     char str[8192];
     va_list marker;
     va_start(marker, pFormat);
-    _vsnprintf_s(str, ARRAYSIZE(str) - 1, pFormat, marker);
+    _vsnprintf_s(str, SOURCE_ARRAYSIZE(str) - 1, pFormat, marker);
     va_end(marker);
     return m_pFileSystemPassThru->FPrintf(file, "%s", str);
   }

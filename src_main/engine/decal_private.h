@@ -20,7 +20,7 @@ struct decal_t {
   DispDecalHandle_t
       m_DispDecal;  // Handle to displacement decals associated with this
 
-  // FIXME:
+  // TODO(d.rattman):
   // make dx and dy in decal space and get rid of position, so that
   // position can be rederived from the decal basis.
   Vector position;  // location of the decal center in world space.

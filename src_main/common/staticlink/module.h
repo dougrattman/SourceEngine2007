@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 // cannot be part of precompiled header chain
 #if defined(_WIN32) && defined(_STATIC_LINKED)

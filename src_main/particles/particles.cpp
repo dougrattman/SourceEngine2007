@@ -23,7 +23,7 @@
 #include "tier2/tier2.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -720,8 +720,8 @@ void CWorldCollideContextData::operator delete(void *pData, int nBlockUse,
 // Constructor, destructor
 //-----------------------------------------------------------------------------
 CParticleCollection::CParticleCollection() {
-  COMPILE_TIME_ASSERT((MAX_RANDOM_FLOATS & (MAX_RANDOM_FLOATS - 1)) == 0);
-  COMPILE_TIME_ASSERT(sizeof(s_pRandomFloats) / sizeof(float) >=
+  static_assert((MAX_RANDOM_FLOATS & (MAX_RANDOM_FLOATS - 1)) == 0);
+  static_assert(sizeof(s_pRandomFloats) / sizeof(float) >=
                       MAX_RANDOM_FLOATS);
 
   m_pNextDef = m_pPrevDef = NULL;
@@ -803,7 +803,7 @@ CParticleCollection::~CParticleCollection(void) {
     MemAlloc_FreeAligned(m_pOperatorContextData);
   }
 
-  for (int i = 0; i < ARRAYSIZE(m_pCollisionCacheData); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_pCollisionCacheData); i++) {
     if (m_pCollisionCacheData[i]) {
       delete m_pCollisionCacheData[i];
     }
@@ -825,7 +825,7 @@ void CParticleCollection::Init(CParticleSystemDefinition *pDef, float flDelay,
   // Initialize sheet data
   m_Sheet.Set(g_pParticleSystemMgr->FindOrLoadSheet(pDef->GetMaterial()));
 
-  // FIXME: This seed needs to be recorded per instance!
+  // TODO(d.rattman): This seed needs to be recorded per instance!
   m_bIsScrubbable = (nRandomSeed != 0);
   if (m_bIsScrubbable) {
     m_nRandomSeed = nRandomSeed;
@@ -1467,7 +1467,7 @@ void CParticleCollection::SkipToTime(float t) {
     m_fl4CurTime = ReplicateX4(t);
     m_nParticleFlags &= ~PCFLAGS_FIRST_FRAME;
 
-    // FIXME: In future, we may have to tell operators, initializers about this
+    // TODO(d.rattman): In future, we may have to tell operators, initializers about this
     // too
     int nEmitterCount = m_pDef->m_Emitters.Count();
     int i;
@@ -1706,7 +1706,7 @@ void CParticleCollection::Simulate(float dt) {
   // Bloat the bounding box by bounds around the control point
   BloatBoundsUsingControlPoint();
 
-  // FIXME: Is there a way of doing this iteratively?
+  // TODO(d.rattman): Is there a way of doing this iteratively?
   //	RecomputeBounds();
 }
 
@@ -1756,7 +1756,7 @@ void CParticleCollection::CopyInitialAttributeValues(int nStartParticle,
                                                      int nNumParticles) {
   if (m_nPerParticleReadInitialAttributeMask == 0) return;
 
-  // FIXME: Do SSE copy here
+  // TODO(d.rattman): Do SSE copy here
   for (int i = nStartParticle; i < nStartParticle + nNumParticles; i++) {
     for (int nAttr = 0; nAttr < MAX_PARTICLE_ATTRIBUTES; ++nAttr) {
       if (m_nPerParticleReadInitialAttributeMask & (1 << nAttr)) {
@@ -1850,7 +1850,7 @@ void CParticleCollection::GetControlPointOrientationAtTime(int nControlPoint,
                                                            Vector *pUp) {
   Assert(m_pDef->ReadsControlPoint(nControlPoint));
 
-  // FIXME: Use quaternion lerp to get control point transform at time
+  // TODO(d.rattman): Use quaternion lerp to get control point transform at time
   *pForward = m_ControlPoints[nControlPoint].m_ForwardVector;
   *pRight = m_ControlPoints[nControlPoint].m_RightVector;
   *pUp = m_ControlPoints[nControlPoint].m_UpVector;
@@ -1863,7 +1863,7 @@ void CParticleCollection::GetControlPointTransformAtTime(int nControlPoint,
   Vector vecControlPoint;
   GetControlPointAtTime(nControlPoint, flTime, &vecControlPoint);
 
-  // FIXME: Use quaternion lerp to get control point transform at time
+  // TODO(d.rattman): Use quaternion lerp to get control point transform at time
   Vector left;
   VectorMultiply(m_ControlPoints[nControlPoint].m_RightVector, -1.0f, left);
   pMat->Init(m_ControlPoints[nControlPoint].m_ForwardVector, left,
@@ -2650,10 +2650,10 @@ bool CParticleSystemMgr::ReadParticleConfigFile(const char *pFileName,
     ++pFileName;
   }
 
-  char pFallbackBuf[MAX_PATH];
+  char pFallbackBuf[SOURCE_MAX_PATH];
   if (IsPC()) {
     // Look for fallback particle systems
-    char pTemp[MAX_PATH];
+    char pTemp[SOURCE_MAX_PATH];
     Q_StripExtension(pFileName, pTemp, sizeof(pTemp));
     const char *pExt = Q_GetFileExtension(pFileName);
     if (!pExt) {
@@ -3001,7 +3001,7 @@ void CParticleSystemMgr::DumpProfileInformation(void) {
                                  p->m_nMaxParticles);
   }
   g_pFullFileSystem->FPrintf(fh, "\n\nopname, total time, max time\n");
-  for (int i = 0; i < ARRAYSIZE(m_ParticleOperators); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
     for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
       float flmax = m_ParticleOperators[i][j]->MaximumRecordedExecutionTime();
       float fltotal = m_ParticleOperators[i][j]->TotalRecordedExecutionTime();
@@ -3024,7 +3024,7 @@ void CParticleSystemMgr::CommitProfileInformation(bool bCommit) {
       if (bCommit) p->m_flTotalSimTime += p->m_flUncomittedTotalSimTime;
       p->m_flUncomittedTotalSimTime = 0.;
     }
-    for (int i = 0; i < ARRAYSIZE(m_ParticleOperators); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(m_ParticleOperators); i++) {
       for (int j = 0; j < m_ParticleOperators[i].Count(); j++) {
         if (bCommit)
           m_ParticleOperators[i][j]->m_flTotalExecutionTime +=
@@ -3054,7 +3054,7 @@ void CParticleSystemMgr::DrawRenderCache(bool bShadowDepth) {
     int nCacheCount = m_RenderCache[iRenderCache].m_ParticleCollections.Count();
     if (nCacheCount == 0) continue;
 
-    // FIXME: When rendering shadow depth, do it all in 1 batch
+    // TODO(d.rattman): When rendering shadow depth, do it all in 1 batch
     IMaterial *pMaterial = bShadowDepth
                                ? m_pShadowDepthMaterial
                                : m_RenderCache[iRenderCache].m_pMaterial;
@@ -3077,7 +3077,7 @@ void CParticleSystemMgr::DrawRenderCache(bool bShadowDepth) {
       int nBatchStepCount = batch.m_BatchStep.Count();
       for (int j = 0; j < nBatchStepCount; ++j) {
         const BatchStep_t &step = batch.m_BatchStep[j];
-        // FIXME: this will break if it ever calls into
+        // TODO(d.rattman): this will break if it ever calls into
         // C_OP_RenderSprites::Render[TwoSequence]SpriteCard()
         //        (need to protect against that and/or split the meshBuilder
         //        batch to support that path here)

@@ -8,7 +8,7 @@
 #include "mathlib/vector.h"
 #include "tier1/strtools.h"
 
-// FIXME: Can't use this until we get multithreaded allocations in tier0 working
+// TODO(d.rattman): Can't use this until we get multithreaded allocations in tier0 working
 // for tools This is used by VVIS and fails to link NOTE: This must be the last
 // file included!!!
 //#include "tier0/include/memdbgon.h"
@@ -401,8 +401,8 @@ void old_bf_write::WriteBitCoord(const float f) {
 void old_bf_write::WriteBitFloat(float val) {
   long intVal;
 
-  COMPILE_TIME_ASSERT(sizeof(long) == sizeof(float));
-  COMPILE_TIME_ASSERT(sizeof(float) == 4);
+  static_assert(sizeof(long) == sizeof(float));
+  static_assert(sizeof(float) == 4);
 
   intVal = *((long *)&val);
   WriteUBitLong(intVal, 32);
@@ -459,7 +459,7 @@ void old_bf_write::WriteBitVec3Normal(const Vector &fa) {
 }
 
 void old_bf_write::WriteBitAngles(const QAngle &fa) {
-  // FIXME:
+  // TODO(d.rattman):
   Vector tmp(fa.x, fa.y, fa.z);
   WriteBitVec3Coord(tmp);
 }
@@ -932,7 +932,7 @@ int64_t old_bf_read::ReadLongLong() {
 
 float old_bf_read::ReadFloat() {
   float ret;
-  COMPILE_TIME_ASSERT(sizeof(ret) == 4);
+  static_assert(sizeof(ret) == 4);
   ReadBits(&ret, 32);
 
   // Swap the float, since ReadBits reads raw data

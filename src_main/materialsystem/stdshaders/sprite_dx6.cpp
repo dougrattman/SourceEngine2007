@@ -7,7 +7,7 @@
 #include <cstring>
 #include "const.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // WARNING!  Change these in engine/SpriteGn.h if you change them here!
@@ -32,8 +32,8 @@ SHADER_PARAM(IGNOREVERTEXCOLORS, SHADER_PARAM_TYPE_BOOL, "1",
 END_SHADER_PARAMS
 
 SHADER_INIT_PARAMS() {
-  // FIXME: This can share code with sprite.cpp
-  // FIXME: Not sure if this is the best solution, but it's a very]
+  // TODO(d.rattman): This can share code with sprite.cpp
+  // TODO(d.rattman): Not sure if this is the best solution, but it's a very]
   // easy one. When graphics aren't enabled, we oftentimes need to get
   // at the parameters of a shader. Therefore, we must set the default
   // values in a separate phase from when we load resources.

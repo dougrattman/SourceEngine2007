@@ -12,7 +12,7 @@
 #include "bone_setup.h"
 #include "tier3/tier3.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Fixme, this might not be the best spot for this
@@ -272,7 +272,7 @@ void CDmeMDL::Draw( const matrix3x4_t &shapeToWorld, CDmeDrawSettings *pDrawSett
 	info.m_bStaticLighting = false;
 	info.m_Lod = m_nLOD;
 
-	// FIXME: Deal with lighting
+	// TODO(d.rattman): Deal with lighting
 	for ( int i = 0; i < 6; ++ i )
 	{
 		info.m_vecAmbientCube[i].Init( 1, 1, 1 );
@@ -296,7 +296,7 @@ void CDmeMDL::Draw( const matrix3x4_t &shapeToWorld, CDmeDrawSettings *pDrawSett
 	}
 	g_pStudioRender->SetEyeViewTarget( info.m_pStudioHdr, info.m_Body, vecWorldViewTarget );
 
-	// FIXME: Why is this necessary!?!?!?
+	// TODO(d.rattman): Why is this necessary!?!?!?
 	CMatRenderContextPtr pRenderContext( g_pMaterialSystem );
 	if ( !m_bDrawInEngine )
 	{
@@ -322,7 +322,7 @@ void CDmeMDL::Draw( const matrix3x4_t &shapeToWorld, CDmeDrawSettings *pDrawSett
 	g_pStudioRender->DrawModel( NULL, info, pBoneToWorld, pFlexWeights, NULL,
 		vecModelOrigin, STUDIORENDER_DRAW_ENTIRE_MODEL );
 
-	// FIXME: Why is this necessary!?!?!?
+	// TODO(d.rattman): Why is this necessary!?!?!?
 	if ( !m_bDrawInEngine )
 	{
 		pRenderContext->CullMode( MATERIAL_CULLMODE_CW );
@@ -354,7 +354,7 @@ void CDmeMDL::SetUpBones( CStudioHdr &studioHdr, const matrix3x4_t& shapeToWorld
 	}
 	float flCycle = ( m_flTime * m_flPlaybackRate ) / nFrameCount;
 
-	// FIXME: We're always wrapping; may want to determing if we should clamp
+	// TODO(d.rattman): We're always wrapping; may want to determing if we should clamp
 	flCycle -= (int)(flCycle);
 
 	Vector		pos[MAXSTUDIOBONES];
@@ -363,7 +363,7 @@ void CDmeMDL::SetUpBones( CStudioHdr &studioHdr, const matrix3x4_t& shapeToWorld
 	InitPose( &studioHdr, pos, q, BoneMask( ) );
 	AccumulatePose( &studioHdr, NULL, pos, q, m_nSequence, flCycle, pPoseParameter, BoneMask( ), 1.0f, m_flTime );
 
-	// FIXME: Try enabling this?
+	// TODO(d.rattman): Try enabling this?
 //	CalcAutoplaySequences( pStudioHdr, NULL, pos, q, pPoseParameter, BoneMask( ), flTime );
 
 	// Root transform

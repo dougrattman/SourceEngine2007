@@ -1061,7 +1061,7 @@ D3DMULTISAMPLE_TYPE CTextureHeap::GetBackBufferMultiSampleType()
 
 	// 2xMSAA at 640x480 and 848x480 are the only supported multisample mode on 360 (2xMSAA for 720p would
 	// use predicated tiling, which would require a rewrite of *all* our render target code)
-	// FIXME: shuffle the EDRAM surfaces to allow 4xMSAA for standard def
+	// TODO(d.rattman): shuffle the EDRAM surfaces to allow 4xMSAA for standard def
 	//        (they would overlap & trash each other with the current allocation scheme)
 	D3DMULTISAMPLE_TYPE backBufferMultiSampleType = g_pShaderDevice->IsAAEnabled() ? D3DMULTISAMPLE_2_SAMPLES : D3DMULTISAMPLE_NONE;
 	Assert( ( g_pShaderDevice->IsAAEnabled() == false ) || (backHeight == 480) );

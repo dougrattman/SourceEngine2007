@@ -15,7 +15,7 @@
 #include "../common/blobulator/Physics/PhysTiler.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class C_OP_RandomForce : public CParticleOperatorInstance {

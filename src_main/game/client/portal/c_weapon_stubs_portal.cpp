@@ -9,7 +9,7 @@
 #include "basehlcombatweapon_shared.h"
 #include "c_basehlcombatweapon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 STUB_WEAPON_CLASS( cycler_weapon, WeaponCycler, C_BaseCombatWeapon );

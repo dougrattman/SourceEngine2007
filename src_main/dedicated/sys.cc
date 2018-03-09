@@ -80,14 +80,14 @@ void CSys::UpdateStatus(int force) {
   last_time = current_time;
 
   char szMap[64], szHostname[128];
-  auto [fps, n, nMax] = engine->GetStatus(szMap, ARRAYSIZE(szMap));
+  auto [fps, n, nMax] = engine->GetStatus(szMap, SOURCE_ARRAYSIZE(szMap));
 
-  engine->GetHostname(szHostname, ARRAYSIZE(szHostname));
+  engine->GetHostname(szHostname, SOURCE_ARRAYSIZE(szHostname));
 
   console.SetTitle(szHostname);
 
   char szPrompt[256];
-  Q_snprintf(szPrompt, ARRAYSIZE(szPrompt), "%.1f fps %2i/%2i on map %16s", fps,
+  Q_snprintf(szPrompt, SOURCE_ARRAYSIZE(szPrompt), "%.1f fps %2i/%2i on map %16s", fps,
              n, nMax, szMap);
 
   console.SetStatusLine(szPrompt);
@@ -108,7 +108,7 @@ void CSys::Printf(const char *fmt, ...) {
   char szText[1024];
 
   va_start(argptr, fmt);
-  Q_vsnprintf(szText, ARRAYSIZE(szText), fmt, argptr);
+  Q_vsnprintf(szText, SOURCE_ARRAYSIZE(szText), fmt, argptr);
   va_end(argptr);
 
   // Get Current text and append it.

@@ -16,7 +16,7 @@
 #include "movevars_shared.h"
 #include "iviewrender.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int ScreenTransform( const Vector& point, Vector& screen );
@@ -208,7 +208,7 @@ void C_PropVehicleDriveable::GetVehicleViewPosition( int nRole, Vector *pAbsOrig
 //-----------------------------------------------------------------------------
 void C_PropVehicleDriveable::GetVehicleClipPlanes( float &flZNear, float &flZFar ) const
 {
-	// FIXME: Need something a better long-term, this fixes the buggy.
+	// TODO(d.rattman): Need something a better long-term, this fixes the buggy.
 	flZNear = 6;
 }
 

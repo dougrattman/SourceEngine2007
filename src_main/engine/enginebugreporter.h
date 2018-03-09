@@ -7,7 +7,7 @@ namespace vgui {
 class Panel;
 };
 
-abstract_class IEngineBugReporter {
+the_interface IEngineBugReporter {
  public:
   typedef enum {
     BR_AUTOSELECT = 0,

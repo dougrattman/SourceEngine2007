@@ -11,7 +11,7 @@
 #include "vgui_BitmapButton.h"
 #include "vgui_bitmapimage.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ bool CBitmapButton::Init(KeyValues *pInitData) {
 void CBitmapButton::ApplySettings(KeyValues *pInitData) {
   BaseClass::ApplySettings(pInitData);
 
-  COMPILE_TIME_ASSERT(BUTTON_STATE_COUNT == 4);
+  static_assert(BUTTON_STATE_COUNT == 4);
   const char *pSectionName[BUTTON_STATE_COUNT] = {
       "enabledImage", "mouseOverImage", "pressedImage", "disabledImage"};
 

@@ -10,7 +10,7 @@
 #include "point_camera.h"
 #include "ai_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Used by server and client to calculate our FOV blend at any given frame

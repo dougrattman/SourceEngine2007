@@ -25,7 +25,7 @@
 #include "tier0/include/dbg.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -566,7 +566,7 @@ static void ProcessLightmapSample(const ProcessLightmapSampleData_t &data,
                                   const Vector &vTangentS,
                                   const Vector &vTangentT, int t, int s,
                                   int tmax, int smax) {
-#if !defined(_LINUX)
+#if !defined(OS_POSIX)
   float distSqr = data.m_vLightOrigin.DistToSqr(vPos);
   if (distSqr < data.m_LightDistSqr) {
     float scale = (distSqr != 0.0f) ? data.m_ooQuadraticAttn / distSqr : 1.0f;
@@ -589,7 +589,7 @@ static void ProcessLightmapSampleBumped(const ProcessLightmapSampleData_t &data,
                                         const Vector &vTangentS,
                                         const Vector &vTangentT, int t, int s,
                                         int tmax, int smax) {
-#if !defined(_LINUX)
+#if !defined(OS_POSIX)
   float distSqr = data.m_vLightOrigin.DistToSqr(vPos);
   if (distSqr < data.m_LightDistSqr) {
     float scale = (distSqr != 0.0f) ? data.m_ooQuadraticAttn / distSqr : 1.0f;
@@ -640,7 +640,7 @@ static void ProcessLightmapSampleAlpha(const ProcessLightmapSampleData_t &data,
                                        const Vector &vTangentS,
                                        const Vector &vTangentT, int t, int s,
                                        int tmax, int smax) {
-#if !defined(_LINUX)
+#if !defined(OS_POSIX)
   float distSqr = data.m_vLightOrigin.DistToSqr(vPos);
   if (distSqr < data.m_LightDistSqr) {
     float scale = (distSqr != 0.0f) ? data.m_ooQuadraticAttn / distSqr : 1.0f;
@@ -1038,12 +1038,12 @@ bool CDispInfo::TestRay(Ray_t const &ray, float start, float end, float &dist,
 const CPowerInfo *CDispInfo::GetPowerInfo() const { return m_pPowerInfo; }
 
 CDispNeighbor *CDispInfo::GetEdgeNeighbor(int index) {
-  Assert(index >= 0 && index < ARRAYSIZE(m_EdgeNeighbors));
+  Assert(index >= 0 && index < SOURCE_ARRAYSIZE(m_EdgeNeighbors));
   return &m_EdgeNeighbors[index];
 }
 
 CDispCornerNeighbors *CDispInfo::GetCornerNeighbors(int index) {
-  Assert(index >= 0 && index < ARRAYSIZE(m_CornerNeighbors));
+  Assert(index >= 0 && index < SOURCE_ARRAYSIZE(m_CornerNeighbors));
   return &m_CornerNeighbors[index];
 }
 

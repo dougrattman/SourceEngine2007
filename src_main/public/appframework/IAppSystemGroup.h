@@ -27,7 +27,7 @@ enum { APP_MODULE_INVALID = static_cast<AppModule_t>(~0) };
 
 // NOTE: The following methods must be implemented in your application although
 // they can be empty implementations if you like...
-abstract_class IAppSystemGroup {
+the_interface IAppSystemGroup {
  public:
   // An installed application creation function, you should tell the group
   // the DLLs and the singleton interfaces you want to instantiate. Return false
@@ -192,7 +192,7 @@ class CSteamAppSystemGroup : public CAppSystemGroup {
   virtual CSysModule *LoadModuleDLL(const ch *module_dll_name);
 
   IFileSystem *m_pFileSystem;
-  ch m_pGameInfoPath[MAX_PATH];
+  ch m_pGameInfoPath[SOURCE_MAX_PATH];
 };
 
 // Helper empty decorator implementation of an IAppSystemGroup.

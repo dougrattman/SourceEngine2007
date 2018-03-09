@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/mempool.h"
 
@@ -6,6 +6,7 @@
 #include <malloc.h>
 #include <memory.h>
 #include <cstdio>
+#include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
@@ -14,14 +15,11 @@
 
 MemoryPoolReportFunc_t CMemoryPool::g_ReportFunc = 0;
 
-
 // Error reporting...  (debug only)
-
 
 void CMemoryPool::SetErrorReportFunc(MemoryPoolReportFunc_t func) {
   g_ReportFunc = func;
 }
-
 
 // Purpose: Constructor
 
@@ -42,7 +40,6 @@ CMemoryPool::CMemoryPool(int blockSize, int numElements, int growMode,
   AddNewBlob();
 }
 
-
 // Purpose: Frees the memory contained in the mempool, and invalidates it for
 //			any further use.
 // Input  : *memPool - the mempool to shutdown
@@ -54,7 +51,6 @@ CMemoryPool::~CMemoryPool() {
   Clear();
 }
 
-
 // Resets the pool
 
 void CMemoryPool::Init() {
@@ -63,7 +59,6 @@ void CMemoryPool::Init() {
   m_pHeadOfFreeList = 0;
   m_BlobHead.m_pNext = m_BlobHead.m_pPrev = &m_BlobHead;
 }
-
 
 // Frees everything
 
@@ -77,9 +72,7 @@ void CMemoryPool::Clear() {
   Init();
 }
 
-
 // Purpose: Reports memory leaks
-
 
 void CMemoryPool::ReportLeaks() {
   if (!g_ReportFunc) return;
@@ -121,7 +114,6 @@ void CMemoryPool::ReportLeaks() {
   g_ReportFunc("\'\n");
 #endif  // _DEBUG
 }
-
 
 // Purpose:
 
@@ -177,7 +169,6 @@ void *CMemoryPool::Alloc() { return Alloc(m_BlockSize); }
 
 void *CMemoryPool::AllocZero() { return AllocZero(m_BlockSize); }
 
-
 // Purpose: Allocs a single block of memory from the pool.
 // Input  : amount -
 
@@ -213,7 +204,6 @@ void *CMemoryPool::Alloc(size_t amount) {
   return returnBlock;
 }
 
-
 // Purpose: Allocs a single block of memory from the pool, zeroes the memory
 // before returning Input  : amount -
 
@@ -224,7 +214,6 @@ void *CMemoryPool::AllocZero(size_t amount) {
   }
   return mem;
 }
-
 
 // Purpose: Frees a block of memory
 // Input  : *memBlock - the memory to free

@@ -18,7 +18,7 @@
 #include "tier1/convar.h"
 #include "vgui_baseui_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CMatchmaking s_Matchmaking;
@@ -177,7 +177,7 @@ void CMatchmaking::AddSessionPropertyInternal(KeyValues *pProperty) {
       ctx.dwValue = val;
 
       // Set the display string for gameUI
-      char szBuffer[MAX_PATH];
+      char szBuffer[SOURCE_MAX_PATH];
       g_ClientDLL->GetPropertyDisplayString(ctx.dwContextId, ctx.dwValue,
                                             szBuffer, sizeof(szBuffer));
       pProperty->SetString("displaystring", szBuffer);
@@ -212,7 +212,7 @@ void CMatchmaking::AddSessionPropertyInternal(KeyValues *pProperty) {
       }
 
       // Build out the property keyvalues for gameUI
-      char szBuffer[MAX_PATH];
+      char szBuffer[SOURCE_MAX_PATH];
       g_ClientDLL->GetPropertyDisplayString(prop.dwPropertyId, prop.value.nData,
                                             szBuffer, sizeof(szBuffer));
       pProperty->SetString("displaystring", szBuffer);
@@ -745,7 +745,7 @@ void CMatchmaking::OnLevelLoadingFinished() {
   // Test code to force a disconnect at end of map load
   // 	if ( !IsServer() )
   // 	{
-  // 		char cmd[MAX_PATH];
+  // 		char cmd[SOURCE_MAX_PATH];
   // 		Q_snprintf( cmd, sizeof( cmd ), "connect 127.0.0.1\n" );
   // 		Cbuf_AddText( cmd );
   // 		return;
@@ -1261,7 +1261,7 @@ void CMatchmaking::ChangeTeam(const char *pTeamName) {
 // Purpose: Handle various matchmaking checkpoint messages
 //-----------------------------------------------------------------------------
 bool CMatchmaking::ProcessCheckpoint(MM_Checkpoint *pMsg) {
-#ifdef _LINUX
+#ifdef OS_POSIX
   return false;
 #else
   switch (pMsg->m_Checkpoint) {
@@ -1345,7 +1345,7 @@ bool CMatchmaking::ProcessCheckpoint(MM_Checkpoint *pMsg) {
       SetPreventFullServerStartup(false, "CHECKPOINT_CONNECT\n");
 
       if (!IsServer()) {
-        char cmd[MAX_PATH];
+        char cmd[SOURCE_MAX_PATH];
         Q_snprintf(cmd, sizeof(cmd), "connect %d.%d.%d.%d", m_Host.m_adr.ip[0],
                    m_Host.m_adr.ip[1], m_Host.m_adr.ip[2], m_Host.m_adr.ip[3]);
         Cbuf_AddText(cmd);

@@ -146,7 +146,7 @@ void CFileSystemOpenDlg::OnOK() {
 
     // Translate .jpg to .mdl?
     if (m_bFilterMdlAndJpgFiles) {
-      char tempFilename[MAX_PATH];
+      char tempFilename[SOURCE_MAX_PATH];
       Q_strncpy(tempFilename, fullFilename, sizeof(tempFilename));
       char *pPos = strrchr(tempFilename, '.');
       if (pPos) {
@@ -653,7 +653,7 @@ void CFileSystemOpenDlg::OnDblclkFileList(NMHDR *pNMHDR, LRESULT *pResult) {
 }
 
 void CFileSystemOpenDlg::OnUpButton() {
-  char str[MAX_PATH];
+  char str[SOURCE_MAX_PATH];
   Q_strncpy(str, m_CurrentDir, sizeof(str));
   Q_StripLastDir(str, sizeof(str));
 
@@ -766,7 +766,7 @@ class CFileSystemOpenDialogWrapper : public IFileSystemOpenDialog {
     m_bLastModalWasWindowsDialog = true;
 
     // Get the full filename, then make sure it's a relative path.
-    char defExt[MAX_PATH] = {0};
+    char defExt[SOURCE_MAX_PATH] = {0};
     if (m_pDialog->m_FileMasks.Count() > 0) {
       CString ext =
           m_pDialog->m_FileMasks[m_pDialog->m_FileMasks.Count() - 1].Right(4);
@@ -774,10 +774,10 @@ class CFileSystemOpenDialogWrapper : public IFileSystemOpenDialog {
       if (pStr[0] == '.') Q_strncpy(defExt, pStr + 1, sizeof(defExt));
     }
 
-    char pFileNameBuf[MAX_PATH];
+    char pFileNameBuf[SOURCE_MAX_PATH];
     const char *pFileName = m_pDialog->m_pFileSystem->RelativePathToFullPath(
         m_pDialog->m_CurrentDir, m_pDialog->m_PathIDString, pFileNameBuf,
-        MAX_PATH);
+        SOURCE_MAX_PATH);
     Q_strcat(pFileNameBuf, "\\", sizeof(pFileNameBuf));
 
     // Build the list of file filters.
@@ -837,7 +837,7 @@ class CFileSystemOpenDialogWrapper : public IFileSystemOpenDialog {
   CFileSystemOpenDlg *m_pDialog;
   HWND m_hParentWnd;
 
-  char m_RelativeFilename[MAX_PATH];
+  char m_RelativeFilename[SOURCE_MAX_PATH];
   bool m_bLastModalWasWindowsDialog;
 };
 

@@ -3,7 +3,7 @@
 #ifndef SOURCE_TIER1_STRTOOLS_H_
 #define SOURCE_TIER1_STRTOOLS_H_
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <ctype.h>
 #include <cwchar>
 #endif
@@ -61,7 +61,7 @@ int _V_wcslen(const char *file, int line, const wchar_t *pwch);
 
 #else
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 inline char *strupr(char *start) {
   char *str = start;
   while (str && *str) {
@@ -80,7 +80,7 @@ inline char *strlwr(char *start) {
   return start;
 }
 
-#endif  // _LINUX
+#endif  // OS_POSIX
 
 inline void V_memset(void *dest, int fill, int count) {
   memset(dest, fill, count);
@@ -176,14 +176,14 @@ typedef char *va_list;
 
 #endif  // _VA_LIST_DEFINED
 
-#elif _LINUX
+#elif OS_POSIX
 #include <cstdarg>
 #endif
 
 #ifdef _WIN32
 #define CORRECT_PATH_SEPARATOR '\\'
 #define INCORRECT_PATH_SEPARATOR '/'
-#elif _LINUX
+#elif OS_POSIX
 #define CORRECT_PATH_SEPARATOR '/'
 #define INCORRECT_PATH_SEPARATOR '\\'
 #endif

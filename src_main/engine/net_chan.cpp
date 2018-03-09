@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: net_chan.cpp: implementation of the CNetChan_t struct.
 
@@ -6,8 +6,8 @@
 
 #include "net_chan.h"
 
-#include "../utils/bzip2/bzlib.h"
 #include "demo.h"
+#include "deps/bzip2/bzlib.h"
 #include "filesystem_engine.h"
 #include "host.h"
 #include "inetmsghandler.h"
@@ -19,7 +19,6 @@
 #include "tier1/convar.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 ConVar net_showudp("net_showudp", "0", 0,
@@ -272,7 +271,7 @@ void CNetChan::UncompressFragments(dataFragments_t *data) {
   if (!data->isCompressed) return;
 
   // allocate buffer for uncompressed data, align to 4 bytes boundary
-  char *newbuffer = new char[PAD_NUMBER(data->nUncompressedSize, 4)];
+  char *newbuffer = new char[SOURCE_PAD_NUMBER(data->nUncompressedSize, 4)];
   unsigned int uncompressedSize = data->nUncompressedSize;
 
   // uncompress data
@@ -890,7 +889,7 @@ bool CNetChan::CreateFragmentsFromBuffer(bf_write *buffer, int stream) {
 
     int totalBytes = Bits2Bytes(data->bits + buffer->GetNumBitsWritten());
 
-    totalBytes = PAD_NUMBER(totalBytes, 4);  // align to 4 bytes boundary
+    totalBytes = SOURCE_PAD_NUMBER(totalBytes, 4);  // align to 4 bytes boundary
 
     if (totalBytes < NET_MAX_PAYLOAD && data->buffer) {
       // we have enough space for it, create new larger mem buffer
@@ -912,7 +911,7 @@ bool CNetChan::CreateFragmentsFromBuffer(bf_write *buffer, int stream) {
   if (!data) {
     int totalBytes = Bits2Bytes(buffer->GetNumBitsWritten());
 
-    totalBytes = PAD_NUMBER(totalBytes, 4);  // align to 4 bytes boundary
+    totalBytes = SOURCE_PAD_NUMBER(totalBytes, 4);  // align to 4 bytes boundary
 
     data = new dataFragments_t;
     data->bytes = 0;  // not filled yet
@@ -1205,7 +1204,7 @@ bool CNetChan::ReadSubChannelData(bf_read &buf, int stream) {
     }
 
     data->bits = data->bytes * 8;
-    data->buffer = new char[PAD_NUMBER(data->bytes, 4)];
+    data->buffer = new char[SOURCE_PAD_NUMBER(data->bytes, 4)];
     data->asTCP = false;
     data->numFragments = BYTES2FRAGMENTS(data->bytes);
     data->ackedFragments = 0;
@@ -1502,8 +1501,8 @@ int CNetChan::SendDatagram(bf_write *datagram) {
     }
   }
 
-  // FIXME:  This isn't actually correct since compression might make the main
-  // payload usage a bit smaller
+  // TODO(d.rattman):  This isn't actually correct since compression might make
+  // the main payload usage a bit smaller
   bool bSendVoice =
       IsX360() && (m_StreamVoice.GetNumBitsWritten() > 0 &&
                    m_StreamVoice.GetNumBitsWritten() < send.GetNumBitsLeft());

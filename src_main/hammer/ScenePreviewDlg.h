@@ -52,7 +52,7 @@ private:
 	
 	int m_iLastEventPlayed;	// Last sound event we handled.
 	double m_flStartTime;	// When we started playing the scene.
-	char m_SceneFilename[MAX_PATH];
+	char m_SceneFilename[SOURCE_MAX_PATH];
 };
 
 

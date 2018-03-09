@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: XMA Decoding
 
@@ -10,7 +10,7 @@
 #include "tier1/mempool.h"
 #include "tier1/utllinkedlist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUG_XMA
@@ -755,7 +755,7 @@ bool CAudioMixerWaveXMA::IsReadyToMix() {
 bool CAudioMixerWaveXMA::ShouldContinueMixing() {
   if (!IsRetail() && m_Error && snd_xma_spew_warnings.GetBool()) {
     const char *pErrorString;
-    if (m_Error < 0 && -m_Error < ARRAYSIZE(g_XMAErrorStrings)) {
+    if (m_Error < 0 && -m_Error < SOURCE_ARRAYSIZE(g_XMAErrorStrings)) {
       pErrorString = g_XMAErrorStrings[-m_Error];
     } else {
       pErrorString = g_XMAErrorStrings[0];

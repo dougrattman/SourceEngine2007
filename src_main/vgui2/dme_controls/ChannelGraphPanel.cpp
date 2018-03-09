@@ -12,7 +12,7 @@
 #include <vgui/IVGui.h>
 #include "vgui/IInput.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -281,7 +281,7 @@ void CChannelGraphPanel::Paint()
 	// draw plotted graph
 	for ( int i = 0; i < nComponents; ++i )
 	{
-		Color &color = s_componentColors[ i % ARRAYSIZE( s_componentColors ) ];
+		Color &color = s_componentColors[ i % SOURCE_ARRAYSIZE( s_componentColors ) ];
 		surface()->DrawSetColor( color );
 
 		int lastx = -1;

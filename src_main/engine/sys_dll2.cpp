@@ -492,7 +492,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     editor_hwnd_ = nullptr;
 
     // One-time setup
-    // FIXME: OnStartup + OnShutdown should be removed + moved into the launcher
+    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into the launcher
     // or the launcher code should be merged into the engine into the code in
     // OnStartup/OnShutdown
     if (!OnStartup(startup_info_.m_pInstance, startup_info_.m_pInitialMod)) {
@@ -563,7 +563,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
   // Start/stop running the simulation
   void ActivateSimulation(bool bActive) override {
-    // FIXME: Not sure what will happen in this case
+    // TODO(d.rattman): Not sure what will happen in this case
     if (eng->GetState() != IEngine::DLL_ACTIVE &&
         eng->GetState() != IEngine::DLL_PAUSED) {
       return;
@@ -572,7 +572,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     bool bCurrentlyActive = eng->GetState() != IEngine::DLL_PAUSED;
     if (bActive == bCurrentlyActive) return;
 
-    // FIXME: Should attachment/detachment be part of the state machine in
+    // TODO(d.rattman): Should attachment/detachment be part of the state machine in
     // IEngine?
     if (!bActive) {
       eng->SetNextState(IEngine::DLL_PAUSED);
@@ -583,15 +583,15 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
       eng->SetNextState(IEngine::DLL_ACTIVE);
 
       // Start accepting input from the new window
-      // FIXME: What if the attachment fails?
+      // TODO(d.rattman): What if the attachment fails?
       game->InputAttachToGameWindow();
     }
   }
 
   // Reset the map we're on
   void SetMap(const char *pMapName) override {
-    char map_buffer[MAX_PATH];
-    Q_snprintf(map_buffer, ARRAYSIZE(map_buffer), "map %s", pMapName);
+    char map_buffer[SOURCE_MAX_PATH];
+    Q_snprintf(map_buffer, SOURCE_ARRAYSIZE(map_buffer), "map %s", pMapName);
     Cbuf_AddText(map_buffer);
   }
 
@@ -666,7 +666,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     }
 
     // Closes down things that were set up in OnStartup
-    // FIXME: OnStartup + OnShutdown should be removed + moved into the launcher
+    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into the launcher
     // or the launcher code should be merged into the engine into the code in
     // OnStartup/OnShutdown
     OnShutdown();
@@ -678,14 +678,14 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   void SetRegistryMod(const char *pModName);
 
   // One-time setup, based on the initially selected mod
-  // FIXME: This should move into the launcher!
+  // TODO(d.rattman): This should move into the launcher!
   bool OnStartup(void *pInstance, const char *pStartupModName) {
     // This fixes a bug on certain machines where the input will
     // stop coming in for about 1 second when someone hits a key.
     // (true means to disable priority boost)
     SetThreadPriorityBoost(GetCurrentThread(), TRUE);
 
-    // FIXME: Turn videomode + game into IAppSystems?
+    // TODO(d.rattman): Turn videomode + game into IAppSystems?
 
     // Try to create the window
     COM_TimestampedLog("game->Init");
@@ -732,7 +732,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   }
 
   // One-time shutdown (shuts down stuff set up in OnStartup)
-  // FIXME: This should move into the launcher!
+  // TODO(d.rattman): This should move into the launcher!
   void OnShutdown() {
     if (videomode) {
       videomode->Shutdown();
@@ -767,7 +767,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     Host_ReadPreStartupConfiguration();
 
     // Create the game window now that we have a search path
-    // FIXME: Deal with initial window width + height better
+    // TODO(d.rattman): Deal with initial window width + height better
     if (!videomode || !videomode->CreateGameWindow(
                           g_pMaterialSystemConfig->m_VideoMode.m_Width,
                           g_pMaterialSystemConfig->m_VideoMode.m_Height,
@@ -793,7 +793,7 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
 
   // Initializes, shuts down the registry
   bool InitRegistry(const char *pModName) {
-    char szRegSubPath[MAX_PATH];
+    char szRegSubPath[SOURCE_MAX_PATH];
     Q_snprintf(szRegSubPath, sizeof(szRegSubPath), "%s\\%s", "Source",
                pModName);
     return registry->Init(szRegSubPath);

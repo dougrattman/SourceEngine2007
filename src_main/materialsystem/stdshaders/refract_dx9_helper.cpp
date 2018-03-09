@@ -15,7 +15,7 @@
 
 #define MAXBLUR 1
 
-// FIXME: doesn't support fresnel!
+// TODO(d.rattman): doesn't support fresnel!
 void InitParamsRefract_DX9( CBaseVSShader *pShader, IMaterialVar** params, const char *pMaterialName, Refract_DX9_Vars_t &info )
 {
 	SET_FLAGS2( MATERIAL_VAR2_NEEDS_TANGENT_SPACES );
@@ -134,7 +134,7 @@ void DrawRefract_DX9( CBaseVSShader *pShader, IMaterialVar** params, IShaderDyna
 
 		pShaderShadow->EnableDepthWrites( bWriteZ );
 
-		// Alpha test: FIXME: shouldn't this be handled in Shader_t::SetInitialShadowState
+		// Alpha test: TODO(d.rattman): shouldn't this be handled in Shader_t::SetInitialShadowState
 		pShaderShadow->EnableAlphaTest( IS_FLAG_SET(MATERIAL_VAR_ALPHATEST) );
 
 		// If envmap is not specified, the alpha channel is the translucency

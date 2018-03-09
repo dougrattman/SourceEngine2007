@@ -35,7 +35,7 @@
 // We're testing 2 normal compression methods
 // One compressed normals+tangents into a SHORT2 each (8 bytes total)
 // The other compresses them together, into a single UBYTE4 (4 bytes total)
-// FIXME: pick one or the other, compare lighting quality in important cases
+// TODO(d.rattman): pick one or the other, compare lighting quality in important cases
 #define COMPRESSED_NORMALS_SEPARATETANGENTS_SHORT2	0
 #define COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4	1
 //#define COMPRESSED_NORMALS_TYPE  COMPRESSED_NORMALS_SEPARATETANGENTS_SHORT2
@@ -203,7 +203,7 @@ void _DecompressShort2Normal( float2 inputNormal, out float3 outputNormal )
 // Decompress normal+tangent together
 void _DecompressShort2NormalTangent( float2 inputNormal, float2 inputTangent, out float3 outputNormal, out float4 outputTangent )
 {
-	// FIXME: if we end up sticking with the SHORT2 format, pack the normal and tangent into a single SHORT4 element
+	// TODO(d.rattman): if we end up sticking with the SHORT2 format, pack the normal and tangent into a single SHORT4 element
 	//        (that would make unpacking normal+tangent here together much cheaper than the sum of their parts)
 	_DecompressShort2Normal(  inputNormal,  outputNormal  );
 	_DecompressShort2Tangent( inputTangent, outputTangent );

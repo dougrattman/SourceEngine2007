@@ -9,7 +9,7 @@
 #include "trains.h"
 #include "ai_trackpather.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	TRACKPATHER_DEBUG_LEADING	1
@@ -253,7 +253,7 @@ CPathTrack *CAI_TrackPather::BestPointOnPath( CPathTrack *pPath, const Vector &t
 	// If the path node we're trying to use is not valid, then we're done.
 	if ( CPathTrack::ValidPath( pPath ) == NULL )
 	{
-		//FIXME: Implement
+		//TODO(d.rattman): Implement
 		Assert(0);
 		return NULL;
 	}
@@ -726,7 +726,7 @@ void CAI_TrackPather::ComputePointAlongCurrentPath( float flDistance, float flPe
 				flDistance -= flPathDist;
 				*pTarget = pTravPath->GetAbsOrigin();
 
-				// FIXME: Reduce the distance further based on the angle between this segment + the next
+				// TODO(d.rattman): Reduce the distance further based on the angle between this segment + the next
 				continue;
 			}
 			
@@ -793,7 +793,7 @@ CPathTrack *CAI_TrackPather::FindClosestPointOnPath( CPathTrack *pPath,
 	// If the path node we're trying to use is not valid, then we're done.
 	if ( CPathTrack::ValidPath( pPath ) == NULL )
 	{
-		//FIXME: Implement
+		//TODO(d.rattman): Implement
 		Assert(0);
 		return NULL;
 	}

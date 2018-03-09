@@ -17,7 +17,7 @@
 
 #include "configs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern CGameConfigManager	g_ConfigManager;
@@ -36,7 +36,7 @@ void UtlStrcpy( CUtlVector<char> &dest, const char *pSrc )
 //-----------------------------------------------------------------------------
 const char *GetIniFilePath( void )
 {
-	static char iniFilePath[MAX_PATH] = {0};
+	static char iniFilePath[SOURCE_MAX_PATH] = {0};
 	if ( iniFilePath[0] == 0 )
 	{
 		Q_strncpy( iniFilePath, GetSDKLauncherBinDirectory(), sizeof( iniFilePath ) );
@@ -87,12 +87,12 @@ bool AddConfig( const char *pModName, const char *pModDirectory, ModType_t modTy
 	// Default executable
 	Q_strncpy( newInfo.exeName, "hl2.exe", sizeof( newInfo.exeName ) );
 
-	char szPath[MAX_PATH];
+	char szPath[SOURCE_MAX_PATH];
 	Q_strncpy( szPath, pModDirectory, sizeof( szPath ) );
 	Q_StripLastDir( szPath, sizeof( szPath ) );
 	Q_StripTrailingSlash( szPath );
 
-	char fullDir[MAX_PATH];
+	char fullDir[SOURCE_MAX_PATH];
 	g_ConfigManager.GetRootGameDirectory( fullDir, sizeof( fullDir ), g_ConfigManager.GetRootDirectory(), "half-life 2" );
 	
 	// Add the config into our file

@@ -15,10 +15,10 @@
 #include "vgui/ivgui.h"
 #include "mathlib/mathlib.h"
 
-// FIXME: Move sound code out of the engine + into a library!
+// TODO(d.rattman): Move sound code out of the engine + into a library!
 #include "toolframework/ienginetool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -61,15 +61,15 @@ void CSoundRecordPanel::DoModal( const char *pFileName )
 {
 	Assert( EngineTool() );
 
-	char pRelativeWAVPath[MAX_PATH];
+	char pRelativeWAVPath[SOURCE_MAX_PATH];
 	g_pFullFileSystem->FullPathToRelativePath( pFileName, pRelativeWAVPath, sizeof(pRelativeWAVPath) );
 
 	// Check to see if this file is not hidden owing to search paths
 	bool bBadDirectory = false;
-	char pRelativeDir[MAX_PATH];
+	char pRelativeDir[SOURCE_MAX_PATH];
 	Q_strncpy( pRelativeDir, pRelativeWAVPath, sizeof( pRelativeDir ) );
 	Q_StripFilename( pRelativeDir );
-	char pFoundFullPath[MAX_PATH];
+	char pFoundFullPath[SOURCE_MAX_PATH];
 	g_pFullFileSystem->RelativePathToFullPath( pRelativeDir, "MOD", pFoundFullPath, sizeof( pFoundFullPath ) );
 	if ( StringHasPrefix( pFileName, pFoundFullPath ) )
 	{

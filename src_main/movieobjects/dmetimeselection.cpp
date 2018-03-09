@@ -71,7 +71,7 @@ float CDmeTimeSelection::GetAmountForTime( DmeTime_t t, DmeTime_t curtime )
 
 	float minfrac = 0.0f;
 
-	// FIXME, this is slow, we should cache this maybe?
+	// TODO(d.rattman): this is slow, we should cache this maybe?
 	DmeTime_t times[ 4 ];
 	times[ 0 ] = GetAbsFalloff( curtime, 0 );
 	times[ 1 ] = GetAbsHold( curtime, 0 );
@@ -135,7 +135,7 @@ void CDmeTimeSelection::GetAlphaForTime( DmeTime_t t, DmeTime_t curtime, u8& alp
 
 	u8 minAlpha = 31;
 
-	// FIXME, this is slow, we should cache this maybe?
+	// TODO(d.rattman): this is slow, we should cache this maybe?
 	DmeTime_t times[ 4 ];
 	times[ 0 ] = GetAbsFalloff( curtime, 0 );
 	times[ 1 ] = GetAbsHold( curtime, 0 );

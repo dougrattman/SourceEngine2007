@@ -116,7 +116,7 @@ static const char *s_pDependentMaterialVar[] = {
 
 static const char *FindDependentMaterial(const char *pMaterialName,
                                          const char **ppMaterialVar = NULL) {
-  // FIXME: This is a terrible way of doing this! It creates a dependency
+  // TODO(d.rattman): This is a terrible way of doing this! It creates a dependency
   // between vbsp and *all* code which reads dependent materials from
   // materialvars At the time of writing this function, that means the engine +
   // studiorender. We need a better way of figuring out how to do this, but for
@@ -142,7 +142,7 @@ static const char *FindDependentMaterial(const char *pMaterialName,
     }
 
 #ifdef _DEBUG
-    // FIXME: Note that this code breaks if a material has more than 1 dependent
+    // TODO(d.rattman): Note that this code breaks if a material has more than 1 dependent
     // material
     ++i;
     static char pDependentMaterialName2[MAX_MATERIAL_NAME];
@@ -180,19 +180,19 @@ static bool LoadSrcVTFFiles(IVTFTexture *pSrcVTFTextures[6],
         "$basetexture", NULL);  // Since we're setting it to black anyway, just
                                 // use $basetexture for HDR
     const char *vtfName = pSkyTextureVar->GetStringValue();
-    char srcVTFFileName[MAX_PATH];
-    Q_snprintf(srcVTFFileName, MAX_PATH, "materials/%s.vtf", vtfName);
+    char srcVTFFileName[SOURCE_MAX_PATH];
+    Q_snprintf(srcVTFFileName, SOURCE_MAX_PATH, "materials/%s.vtf", vtfName);
 
     CUtlBuffer buf;
     if (!g_pFullFileSystem->ReadFile(srcVTFFileName, NULL, buf)) {
       // Try looking for a compressed HDR texture
       if (bHDR) {
-        /* // FIXME: We need a way to uncompress this format!
+        /* // TODO(d.rattman): We need a way to uncompress this format!
         bool bHDRCompressed = true;
 
         pSkyTextureVar = pSkyboxMaterial->FindVar( "$hdrcompressedTexture", NULL
         ); vtfName = pSkyTextureVar->GetStringValue(); Q_snprintf(
-        srcVTFFileName, MAX_PATH, "materials/%s.vtf", vtfName );
+        srcVTFFileName, SOURCE_MAX_PATH, "materials/%s.vtf", vtfName );
 
         if ( !g_pFullFileSystem->ReadFile( srcVTFFileName, NULL, buf ) )
         */
@@ -262,8 +262,8 @@ void CreateDefaultCubemaps(bool bHDR) {
   // NOTE: This implementation depends on the fact that all VTF files contain
   // all mipmap levels
   const char *pSkyboxBaseName = FindSkyboxMaterialName();
-  char skyboxMaterialName[MAX_PATH];
-  Q_snprintf(skyboxMaterialName, MAX_PATH, "skybox/%s", pSkyboxBaseName);
+  char skyboxMaterialName[SOURCE_MAX_PATH];
+  Q_snprintf(skyboxMaterialName, SOURCE_MAX_PATH, "skybox/%s", pSkyboxBaseName);
 
   IVTFTexture *pSrcVTFTextures[6];
 
@@ -318,7 +318,7 @@ void CreateDefaultCubemaps(bool bHDR) {
         int iSrcMipSize =
             pSrcVTFTextures[iFace]->ComputeMipSize(iMip + iMipLevelOffset);
 
-        // !!! FIXME: Set this to black until HDR cubemaps are built properly!
+        // !!! TODO(d.rattman): Set this to black until HDR cubemaps are built properly!
         memset(pDstBits, 0, iSize);
         continue;
 
@@ -435,8 +435,8 @@ void CreateDefaultCubemaps(bool bHDR) {
   // spit out all of the ones that are attached to world geometry.
   int i;
   for (i = 0; i < s_DefaultCubemapNames.Count(); i++) {
-    char vtfName[MAX_PATH];
-    VTFNameToHDRVTFName(s_DefaultCubemapNames[i], vtfName, MAX_PATH, bHDR);
+    char vtfName[SOURCE_MAX_PATH];
+    VTFNameToHDRVTFName(s_DefaultCubemapNames[i], vtfName, SOURCE_MAX_PATH, bHDR);
     if (FileExistsInPak(pak, vtfName)) {
       continue;
     }
@@ -507,7 +507,7 @@ static bool PatchEnvmapForMaterialAndDependents(const char *pMaterialName,
   // Do *NOT* patch the material if there is an $envmap specified and it's not
   // 'env_cubemap'
 
-  // FIXME: It's theoretically ok to patch the material if $envmap is not
+  // TODO(d.rattman): It's theoretically ok to patch the material if $envmap is not
   // specified, because we're using the 'replace' block, which will only add the
   // env_cubemap if $envmap is specified in the source material. But it will
   // fail if someone adds a specific non-env_cubemap $envmap to the source
@@ -545,7 +545,7 @@ static bool PatchEnvmapForMaterialAndDependents(const char *pMaterialName,
 
   char pDependentPatchedMaterialName[1024];
   if (bDependentMaterialPatched) {
-    // FIXME: Annoying! I either have to pass back the patched dependent
+    // TODO(d.rattman): Annoying! I either have to pass back the patched dependent
     // material name or reconstruct it. Both are sucky.
     GeneratePatchedName(pDependentMaterial, info, true,
                         pDependentPatchedMaterialName, 1024);

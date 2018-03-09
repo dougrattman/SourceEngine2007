@@ -15,7 +15,7 @@
 #include "dme_controls/sequencepicker.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

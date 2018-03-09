@@ -131,7 +131,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -185,7 +185,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -242,7 +242,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -302,7 +302,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -336,31 +336,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="bugreporter_public.cpp" />
-    <ClCompile Include="bugreporter_upload.cpp" />
+    <ClCompile Include="bugreporter_public.cc" />
+    <ClCompile Include="bugreporter_upload.cc" />
+    <ClCompile Include="shared_file_system.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\bugreporter_public\bugreporter_public.h" />
-    <ClInclude Include="..\..\public\appframework\IAppSystem.h" />
+    <ClInclude Include="..\..\common\bugreporter\bugreporter.h" />
     <ClInclude Include="..\..\public\blockingudpsocket.h" />
-    <ClInclude Include="..\..\public\Color.h" />
-    <ClInclude Include="..\..\public\commonmacros.h" />
-    <ClInclude Include="..\..\public\filesystem.h" />
-    <ClInclude Include="..\..\public\mathlib\IceKey.H" />
-    <ClInclude Include="..\..\public\protected_things.h" />
-    <ClInclude Include="..\..\public\string_t.h" />
-    <ClInclude Include="..\..\public\tier0\basetypes.h" />
-    <ClInclude Include="..\..\public\tier0\dbg.h" />
-    <ClInclude Include="..\..\public\tier0\fasttimer.h" />
-    <ClInclude Include="..\..\public\tier0\mem.h" />
-    <ClInclude Include="..\..\public\tier0\memdbgoff.h" />
-    <ClInclude Include="..\..\public\tier0\memdbgon.h" />
-    <ClInclude Include="..\..\public\tier0\platform.h" />
-    <ClInclude Include="..\..\public\tier1\utlmemory.h" />
-    <ClInclude Include="..\..\public\tier1\utlrbtree.h" />
-    <ClInclude Include="..\..\public\vstdlib\IKeyValuesSystem.h" />
-    <ClInclude Include="..\..\public\vstdlib\strtools.h" />
-    <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
+    <ClInclude Include="shared_file_system.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\mathlib\mathlib.vcxproj">

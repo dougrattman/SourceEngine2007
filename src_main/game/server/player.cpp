@@ -86,7 +86,7 @@ ConVar sv_bonus_challenge(
     "sv_bonus_challenge", "0", FCVAR_REPLICATED,
     "Set to values other than 0 to select a bonus map challenge type.");
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar old_armor("player_old_armor", "0");
@@ -1999,7 +1999,9 @@ void CBasePlayer::StartDeathCam( void )
                 {
                         pNewSpot = gEntList.FindEntityByClassname( pSpot,
 "info_intermission");
-                        
+                        
+
+
 
                         if ( pNewSpot )
                         {
@@ -2522,7 +2524,7 @@ bool CBasePlayer::CanPickupObject(CBaseEntity *pObject, float massLimit,
   if (pObject->GetMoveType() != MOVETYPE_VPHYSICS) return false;
 
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = pObject->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = pObject->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
 
   // Must have a physics object
   if (!count) return false;
@@ -3015,7 +3017,7 @@ void CBasePlayer::PhysicsSimulate(void) {
   }
 
   // Restore the true server clock
-  // FIXME:  Should this occur after simulation of children so
+  // TODO(d.rattman):  Should this occur after simulation of children so
   //  that they are in the timespace of the player?
   gpGlobals->curtime = savetime;
   gpGlobals->frametime = saveframetime;
@@ -3464,9 +3466,13 @@ void CBasePlayer::PreThink(void) {
                 Health kit			- Immediate stop to
    acid/chemical, fire or freeze damage. Radiation Shower	- Immediate stop
    to radiation damage, acid/chemical or fire damage.
-                
+                
 
-        
+
+
+        
+
+
 
 */
 
@@ -3646,7 +3652,9 @@ for 3 seconds. Will not work if player was gibbed. Single use. Long Jump Used by
 hitting the ??? key(s). Caused the player to further than normal. SCUBA Used
 automatically after picked up and after player enters the water. Works for N
 seconds. Single use.
-        
+        
+
+
 
 Things powered by the battery
 
@@ -3660,7 +3668,9 @@ Things powered by the battery
                 Uses N watts for each use. Each use lasts M seconds.
         Alien Shield
                 Augments armor. Reduces Armor drain by one half
- 
+ 
+
+
 
 */
 
@@ -4878,7 +4888,7 @@ void CBasePlayer::LeaveVehicle(const Vector &vecExitPoint,
   Vector vNewPos = GetAbsOrigin();
   QAngle qAngles = GetAbsAngles();
   if (vecExitPoint == vec3_origin) {
-    // FIXME: this might fail to find a safe exit point!!
+    // TODO(d.rattman): this might fail to find a safe exit point!!
     pVehicle->GetPassengerExitPoint(nRole, &vNewPos, &qAngles);
   } else {
     vNewPos = vecExitPoint;

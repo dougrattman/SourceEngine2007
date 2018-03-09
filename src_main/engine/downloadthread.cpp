@@ -5,7 +5,7 @@
 
 #ifdef _WIN32
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 #undef fopen
 #endif
 
@@ -91,7 +91,7 @@ static const char *StateString(DWORD dwStatus) {
  * Callback function to update status information for a download (connecting to
  * server, etc)
  */
-void __stdcall DownloadStatusCallback(HINTERNET hOpenResource, DWORD dwContext,
+void SOURCE_STDCALL DownloadStatusCallback(HINTERNET hOpenResource, DWORD dwContext,
                                       DWORD dwStatus, LPVOID pStatusInfo,
                                       DWORD dwStatusInfoLength) {
   RequestContext *rc = (RequestContext *)pStatusInfo;
@@ -152,7 +152,7 @@ void ReadData(RequestContext &rc) {
       // of the file.
 
       // if the file doesn't exist, write it out
-      char path[_MAX_PATH];
+      char path[SOURCE_MAX_PATH];
       Q_snprintf(path, sizeof(path), "%s\\%s", rc.basePath, rc.gamePath);
       struct stat buf;
       int rt = stat(path, &buf);
@@ -280,7 +280,7 @@ static inline void DumpHeaders(RequestContext &rc) {
  * Main download thread function - implements a (partial) synchronous HTTP
  * download.
  */
-DWORD __stdcall DownloadThread(void *voidPtr) {
+DWORD SOURCE_STDCALL DownloadThread(void *voidPtr) {
   RequestContext &rc = *(RequestContext *)voidPtr;
 
   URL_COMPONENTS url;

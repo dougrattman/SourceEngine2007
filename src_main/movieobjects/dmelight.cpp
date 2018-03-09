@@ -12,7 +12,7 @@
 #include "movieobjects_interfaces.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -89,7 +89,7 @@ void CDmeLight::SetupRenderState( int nLightIndex )
 	LightDesc_t desc;
 	if ( GetLightDesc( &desc ) )
 	{
-		// FIXME: Should we pass the light color in?
+		// TODO(d.rattman): Should we pass the light color in?
 		CMatRenderContextPtr pRenderContext( g_pMaterialSystem );
 		pRenderContext->SetLight( nLightIndex, desc );
 	}

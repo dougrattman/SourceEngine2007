@@ -15,7 +15,7 @@ char *GetLastErrorString() {
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Default language
                 (LPTSTR)&system_msg, 0, nullptr);
 
-  strncpy_s(error_msg, system_msg, ARRAYSIZE(error_msg));
+  strncpy_s(error_msg, system_msg, SOURCE_ARRAYSIZE(error_msg));
   LocalFree(system_msg);
 
   return error_msg;

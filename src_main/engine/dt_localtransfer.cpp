@@ -10,7 +10,7 @@
 #include "tier1/convar.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PROP_INDEX_VECTOR_ELEM_MARKER 0x8000

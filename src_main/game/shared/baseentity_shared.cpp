@@ -49,7 +49,7 @@ ConVar hl2_episodic( "hl2_episodic", "0", FCVAR_REPLICATED );
 
 #include "rumble_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef GAME_DLL
@@ -731,7 +731,7 @@ BASEPTR	CBaseEntity::ThinkSet( BASEPTR func, float thinkTime, const char *szCont
 {
 #if !defined( CLIENT_DLL )
 #ifdef _DEBUG
-	COMPILE_TIME_ASSERT( sizeof(func) == 4 );
+	static_assert( sizeof(func) == 4 );
 #endif
 #endif
 
@@ -1604,7 +1604,7 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 	traceFilter.AddEntityToIgnore( info.m_pAdditionalIgnoreEnt );
 
 #if defined( HL2_EPISODIC ) && defined( GAME_DLL )
-	// FIXME: We need to emulate this same behavior on the client as well -- jdw
+	// TODO(d.rattman): We need to emulate this same behavior on the client as well -- jdw
 	// Also ignore a vehicle we're a passenger in
 	if ( MyCombatCharacterPointer() != NULL && MyCombatCharacterPointer()->IsInAVehicle() )
 	{
@@ -2370,7 +2370,7 @@ void CBaseEntity::CollisionRulesChanged()
 			Assert(0);
 		}
 		IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-		int count = VPhysicsGetObjectList( pList, ARRAYSIZE(pList) );
+		int count = VPhysicsGetObjectList( pList, SOURCE_ARRAYSIZE(pList) );
 		for ( int i = 0; i < count; i++ )
 		{
 			if ( pList[i] != NULL ) //this really shouldn't happen, but it does >_<

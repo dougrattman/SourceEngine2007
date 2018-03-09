@@ -180,7 +180,7 @@ bool CVcdUpdateApp::UpdateVcd( CChoreoScene *pScene, const VcdUpdateInfo_t& info
 	float pPoseParameters[MAXSTUDIOPOSEPARAM];
 	memset( pPoseParameters, 0, MAXSTUDIOPOSEPARAM * sizeof(float) ); 
 
-	char pModelPath[MAX_PATH];
+	char pModelPath[SOURCE_MAX_PATH];
 	if ( pStudioHdr )
 	{
 		g_pFullFileSystem->FullPathToRelativePathEx( info.m_pChangedMDLFile, "GAME", pModelPath, sizeof(pModelPath) );
@@ -207,10 +207,10 @@ bool CVcdUpdateApp::UpdateVcd( CChoreoScene *pScene, const VcdUpdateInfo_t& info
 				if ( !pWavFile )
 					continue;
 
-				char pRelativeWAVFile[MAX_PATH];
+				char pRelativeWAVFile[SOURCE_MAX_PATH];
 				Q_ComposeFileName( "sound", pWavFile, pRelativeWAVFile, sizeof(pRelativeWAVFile) );
 
-				char pFullWAVFile[MAX_PATH];
+				char pFullWAVFile[SOURCE_MAX_PATH];
 				g_pFullFileSystem->RelativePathToFullPath( pRelativeWAVFile, "GAME", pFullWAVFile, sizeof(pFullWAVFile) );
 
 				if ( Q_stricmp( pFullWAVFile, info.m_pChangedWAVFile ) )
@@ -295,7 +295,7 @@ void CVcdUpdateApp::UpdateVcd( const char *pFullPath, const VcdUpdateInfo_t& inf
 	// Check for validity.
 	if ( info.m_bWarnNotMatchingMDL || info.m_bWarnMissingMDL )
 	{
-		char pBaseModelName[MAX_PATH];
+		char pBaseModelName[SOURCE_MAX_PATH];
 		int nActorCount = pScene->GetNumActors();
 		for ( int i = 0; i < nActorCount; ++i )
 		{
@@ -342,7 +342,7 @@ void CVcdUpdateApp::UpdateVcdFiles( const VcdUpdateInfo_t& info )
 	studiohdr_t *pStudioHdr = NULL;
 	if ( info.m_pChangedMDLFile )
 	{
-		char pRelativeModelPath[MAX_PATH];
+		char pRelativeModelPath[SOURCE_MAX_PATH];
 		g_pFullFileSystem->FullPathToRelativePathEx( info.m_pChangedMDLFile, "GAME", pRelativeModelPath, sizeof(pRelativeModelPath) );
 		Q_SetExtension( pRelativeModelPath, ".mdl", sizeof(pRelativeModelPath) );
 		MDLHandle_t hMDL = g_pMDLCache->FindMDL( pRelativeModelPath );
@@ -372,7 +372,7 @@ void CVcdUpdateApp::UpdateVcdFiles( const VcdUpdateInfo_t& info )
 	int nCount = dirs.Count();
 	for ( int i = 0; i < nCount; ++i )
 	{
-		char pScenePath[MAX_PATH];
+		char pScenePath[SOURCE_MAX_PATH];
 		Q_ComposeFileName( dirs[i], "scenes", pScenePath, sizeof(pScenePath) );
 		AddFilesToList( vcds, pScenePath, NULL, "vcd" );
 	}
@@ -413,11 +413,11 @@ int CVcdUpdateApp::Main()
 	}
 
 	// Determine full paths
-	char pFullMDLPath[MAX_PATH];
-	char pFullWAVPath[MAX_PATH];
+	char pFullMDLPath[SOURCE_MAX_PATH];
+	char pFullWAVPath[SOURCE_MAX_PATH];
 	if ( info.m_pChangedMDLFile )
 	{
-		char pRelativeMDLPath[MAX_PATH];
+		char pRelativeMDLPath[SOURCE_MAX_PATH];
 		if ( !Q_IsAbsolutePath( info.m_pChangedMDLFile ) )
 		{
 			Q_ComposeFileName( "models", info.m_pChangedMDLFile, pRelativeMDLPath, sizeof(pRelativeMDLPath) );
@@ -427,7 +427,7 @@ int CVcdUpdateApp::Main()
 	}
 	if ( info.m_pChangedWAVFile )
 	{
-		char pRelativeWAVPath[MAX_PATH];
+		char pRelativeWAVPath[SOURCE_MAX_PATH];
 		if ( !Q_IsAbsolutePath( info.m_pChangedWAVFile ) )
 		{
 			Q_ComposeFileName( "sound", info.m_pChangedWAVFile, pRelativeWAVPath, sizeof(pRelativeWAVPath) );

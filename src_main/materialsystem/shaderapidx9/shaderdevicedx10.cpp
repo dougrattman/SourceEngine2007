@@ -181,26 +181,26 @@ bool CShaderDeviceMgrDx10::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   pCaps->m_MaxTextureWidth = D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;
   pCaps->m_MaxTextureHeight = D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;
   pCaps->m_MaxTextureDepth = D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
-  pCaps->m_MaxTextureAspectRatio = 1024;  // FIXME
-  pCaps->m_MaxPrimitiveCount = 65536;     // FIXME
+  pCaps->m_MaxTextureAspectRatio = 1024;
+  pCaps->m_MaxPrimitiveCount = 65536;
   pCaps->m_ZBiasAndSlopeScaledDepthBiasSupported = true;
   pCaps->m_SupportsMipmapping = true;
   pCaps->m_SupportsOverbright = true;
   pCaps->m_SupportsCubeMaps = true;
-  pCaps->m_NumPixelShaderConstants = 1024;   // FIXME
-  pCaps->m_NumVertexShaderConstants = 1024;  // FIXME
+  pCaps->m_NumPixelShaderConstants = 1024;
+  pCaps->m_NumVertexShaderConstants = 1024;
   pCaps->m_TextureMemorySize = desc.DedicatedVideoMemory;
   pCaps->m_MaxNumLights = 4;
   pCaps->m_SupportsHardwareLighting = false;
   pCaps->m_MaxBlendMatrices = 0;
   pCaps->m_MaxBlendMatrixIndices = 0;
-  pCaps->m_MaxVertexShaderBlendMatrices = 53;  // FIXME
+  pCaps->m_MaxVertexShaderBlendMatrices = 53;
   pCaps->m_SupportsMipmappedCubemaps = true;
   pCaps->m_SupportsNonPow2Textures = true;
   pCaps->m_nDXSupportLevel = 100;
   pCaps->m_PreferDynamicTextures = false;
   pCaps->m_HasProjectedBumpEnv = true;
-  pCaps->m_MaxUserClipPlanes = 6;  // FIXME
+  pCaps->m_MaxUserClipPlanes = 6;
   pCaps->m_HDRType = bForceFloatHDR ? HDR_TYPE_FLOAT : HDR_TYPE_INTEGER;
   pCaps->m_SupportsSRGB = true;
   pCaps->m_bSupportsSpheremapping = true;
@@ -213,7 +213,7 @@ bool CShaderDeviceMgrDx10::ComputeCapsFromD3D(HardwareCaps_t *pCaps,
   pCaps->m_bFogColorSpecifiedInLinearSpace = (desc.VendorId == VENDORID_NVIDIA);
   pCaps->m_nVertexTextureCount = 16;
   pCaps->m_nMaxVertexTextureDimension = D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;
-  pCaps->m_bSupportsAlphaToCoverage = false;  // FIXME
+  pCaps->m_bSupportsAlphaToCoverage = false;
   pCaps->m_bSupportsShadowDepthTextures = true;
   pCaps->m_bSupportsFetch4 = (desc.VendorId == VENDORID_ATI);
 #if defined(COMPRESSED_NORMAL_FORMATS)
@@ -293,8 +293,8 @@ IDXGIOutput *CShaderDeviceMgrDx10::GetAdapterOutput(int nAdapter) const {
     HRESULT hr = pOutput->GetDesc(&desc);
     if (FAILED(hr)) continue;
 
-    // FIXME: Is this what I want? Or should I be looking at other fields,
-    // like DXGI_MODE_ROTATION_IDENTITY?
+    // TODO(d.rattman): Is this what I want? Or should I be looking at other
+    // fields, like DXGI_MODE_ROTATION_IDENTITY?
     if (!desc.AttachedToDesktop) continue;
 
     return pOutput;
@@ -369,7 +369,7 @@ void CShaderDeviceMgrDx10::GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
 //-----------------------------------------------------------------------------
 void CShaderDeviceMgrDx10::GetCurrentModeInfo(ShaderDisplayMode_t *pInfo,
                                               int nAdapter) const {
-  // FIXME: Implement!
+  // TODO(d.rattman): Implement!
   Assert(0);
 }
 
@@ -409,11 +409,6 @@ CreateInterfaceFn CShaderDeviceMgrDx10::SetMode(
     nDXLevel = adapters_[nAdapter].m_ActualCaps.m_nMaxDXSupportLevel;
   }
   nDXLevel = GetClosestActualDXLevel(nDXLevel);
-
-  if (nDXLevel < 100) {
-    // Fall back to the Dx9 implementations
-    return g_pShaderDeviceMgrDx8->SetMode(hWnd, nAdapter, mode);
-  }
 
   if (g_pShaderAPI) {
     g_pShaderAPI->OnDeviceShutdown();
@@ -498,7 +493,7 @@ bool CShaderDeviceDx10::InitDevice(void *hWnd, int nAdapter,
   sd.SwapEffect = mode.m_nBackBufferCount > 1 ? DXGI_SWAP_EFFECT_SEQUENTIAL
                                               : DXGI_SWAP_EFFECT_DISCARD;
 
-  // FIXME: Chicken + egg problem with SampleDesc.
+  // TODO(d.rattman): Chicken + egg problem with SampleDesc.
   sd.SampleDesc.Count = mode.m_nAASamples ? mode.m_nAASamples : 1;
   sd.SampleDesc.Quality = mode.m_nAAQuality;
 
@@ -598,7 +593,7 @@ void CShaderDeviceDx10::SpewDriverInfo() const { Warning("Dx10 Driver!\n"); }
 // Swap buffers
 //-----------------------------------------------------------------------------
 void CShaderDeviceDx10::Present() {
-  // FIXME: Deal with window occlusion, alt-tab, etc.
+  // TODO(d.rattman): Deal with window occlusion, alt-tab, etc.
   HRESULT hr = m_pSwapChain->Present(0, 0);
   if (FAILED(hr)) {
     Assert(0);
@@ -831,8 +826,8 @@ ID3D10InputLayout *CShaderDeviceDx10::GetInputLayout(
     VertexShaderHandle_t hShader, VertexFormat_t format) {
   if (hShader == VERTEX_SHADER_HANDLE_INVALID) return NULL;
 
-  // FIXME: VertexFormat_t is not the appropriate way of specifying this
-  // because it has no stream information
+  // TODO(d.rattman): VertexFormat_t is not the appropriate way of specifying
+  // this because it has no stream information
   InputLayout_t insert;
   insert.m_VertexFormat = format;
 

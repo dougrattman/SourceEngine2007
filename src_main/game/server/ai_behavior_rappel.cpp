@@ -8,7 +8,7 @@
 #include "eventqueue.h"
 #include "rope.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC(CAI_RappelBehavior)
@@ -278,7 +278,7 @@ void CAI_RappelBehavior::GatherConditions() {
           GetOuter()->TranslateActivity(ACT_GESTURE_RANGE_ATTACK1);
       Assert(activity != ACT_INVALID);
       GetOuter()->AddGesture(activity);
-      // FIXME: this seems a bit wacked
+      // TODO(d.rattman): this seems a bit wacked
       GetOuter()->Weapon_SetActivity(
           GetOuter()->Weapon_TranslateActivity(ACT_RANGE_ATTACK1), 0);
 

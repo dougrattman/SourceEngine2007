@@ -70,10 +70,10 @@ static const Language_t s_LanguageNames[] = {
 // Purpose: find the language by name
 //-----------------------------------------------------------------------------
 ELanguage PchLanguageToELanguage(const char *pchShortName, ELanguage eDefault) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (!pchShortName) return eDefault;
 
-  for (uint32_t iLang = 0; iLang < ARRAYSIZE(s_LanguageNames); ++iLang) {
+  for (uint32_t iLang = 0; iLang < SOURCE_ARRAYSIZE(s_LanguageNames); ++iLang) {
     if (!Q_stricmp(pchShortName, s_LanguageNames[iLang].m_pchShortName)) {
       return s_LanguageNames[iLang].m_ELanguage;
     }
@@ -88,7 +88,7 @@ ELanguage PchLanguageToELanguage(const char *pchShortName, ELanguage eDefault) {
 //-----------------------------------------------------------------------------
 ELanguage PchLanguageICUCodeToELanguage(const char *pchICUCode,
                                         ELanguage eDefault) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (!pchICUCode) return eDefault;
 
   // Match to no more than the param length so either a short 'en' or
@@ -97,12 +97,12 @@ ELanguage PchLanguageICUCodeToELanguage(const char *pchICUCode,
 
   // we only have 5 character ICU codes so this should be enough room
   char rchCleanedCode[6];
-  Q_strncpy(rchCleanedCode, pchICUCode, ARRAYSIZE(rchCleanedCode));
+  Q_strncpy(rchCleanedCode, pchICUCode, SOURCE_ARRAYSIZE(rchCleanedCode));
   if (nLen >= 3 && rchCleanedCode[2] == '-') {
     rchCleanedCode[2] = '_';
   }
 
-  for (uint32_t iLang = 0; iLang < ARRAYSIZE(s_LanguageNames); ++iLang) {
+  for (uint32_t iLang = 0; iLang < SOURCE_ARRAYSIZE(s_LanguageNames); ++iLang) {
     if (!Q_strnicmp(rchCleanedCode, s_LanguageNames[iLang].m_pchICUName,
                     nLen)) {
       return s_LanguageNames[iLang].m_ELanguage;
@@ -117,7 +117,7 @@ ELanguage PchLanguageICUCodeToELanguage(const char *pchICUCode,
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetLanguageShortName(ELanguage eLang) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (s_LanguageNames[eLang + 1].m_ELanguage == eLang) {
     return s_LanguageNames[eLang + 1].m_pchShortName;
   }
@@ -130,7 +130,7 @@ const char *GetLanguageShortName(ELanguage eLang) {
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetLanguageName(ELanguage eLang) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (s_LanguageNames[eLang + 1].m_ELanguage == eLang) {
     return s_LanguageNames[eLang + 1].m_pchName;
   }
@@ -143,9 +143,9 @@ const char *GetLanguageName(ELanguage eLang) {
 // Purpose: return the ICU code used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetLanguageICUName(ELanguage eLang) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (s_LanguageNames[eLang + 1].m_ELanguage == eLang) {
-    Assert(eLang + 1 < ARRAYSIZE(s_LanguageNames));
+    Assert(eLang + 1 < SOURCE_ARRAYSIZE(s_LanguageNames));
     return s_LanguageNames[eLang + 1].m_pchICUName;
   }
 
@@ -157,7 +157,7 @@ const char *GetLanguageICUName(ELanguage eLang) {
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetLanguageVGUILocalization(ELanguage eLang) {
-  COMPILE_TIME_ASSERT(ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
+  static_assert(SOURCE_ARRAYSIZE(s_LanguageNames) == k_Lang_MAX + 1);
   if (s_LanguageNames[eLang + 1].m_ELanguage == eLang) {
     return s_LanguageNames[eLang + 1].m_pchVGUILocalizationName;
   }

@@ -161,7 +161,7 @@ static void PortalStats_UpdateFileList( void )
 		// Skip it if it's a directory
 		if( !filesystem->FindIsDirectory( fileHandle ) )
 		{
-			char szRelativeFileName[_MAX_PATH];
+			char szRelativeFileName[SOURCE_MAX_PATH];
 			Q_snprintf( szRelativeFileName, sizeof( szRelativeFileName ), "customstats/%s", pszFileName );
 
 			// Only load files from the current mod's directory hierarchy

@@ -14,7 +14,7 @@
 #include "materialsystem/imaterialsystem.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -427,7 +427,7 @@ bool ClipRect( const vgui::Vertex_t &inUL, const vgui::Vertex_t &inLR,
 		}
 		else
 		{
-			// FIXME, this isn't right
+			// TODO(d.rattman): this isn't right
 			pOutUL->m_TexCoord = inUL.m_TexCoord;
 			pOutLR->m_TexCoord = inLR.m_TexCoord;
 		}

@@ -13,7 +13,7 @@ class IDedicatedServerAPI;
 extern IDedicatedServerAPI *engine;
 
 // Inner loop: initialize, shutdown main systems, load steam to
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define DEDICATED_BASECLASS CTier2SteamApp
 #else
 #define DEDICATED_BASECLASS CVguiSteamApp

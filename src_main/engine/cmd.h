@@ -86,7 +86,7 @@ enum cmd_source_t {
   src_command  // from the command buffer
 };
 
-// FIXME: Move these into a field of CCommand?
+// TODO(d.rattman): Move these into a field of CCommand?
 extern cmd_source_t cmd_source;
 extern int cmd_clientslot;
 

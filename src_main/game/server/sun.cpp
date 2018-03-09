@@ -11,7 +11,7 @@
 #include "sun_shared.h"
 #include "map_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CSun : public CBaseEntity
@@ -147,7 +147,7 @@ void CSun::Activate()
 		const char *pExtension = V_GetFileExtension( STRING( m_strMaterial ) );
 		if ( !pExtension )
 		{
-			char szFixedString[MAX_PATH];
+			char szFixedString[SOURCE_MAX_PATH];
 			V_strncpy( szFixedString, STRING( m_strMaterial ), sizeof( szFixedString ) );
 			V_strncat( szFixedString, ".vmt", sizeof( szFixedString ) );
 			m_strMaterial = AllocPooledString( szFixedString );
@@ -163,7 +163,7 @@ void CSun::Activate()
 		const char *pExtension = V_GetFileExtension( STRING( m_strOverlayMaterial ) );
 		if ( !pExtension )
 		{
-			char szFixedString[MAX_PATH];
+			char szFixedString[SOURCE_MAX_PATH];
 			V_strncpy( szFixedString, STRING( m_strOverlayMaterial ), sizeof( szFixedString ) );
 			V_strncat( szFixedString, ".vmt", sizeof( szFixedString ) );
 			m_strOverlayMaterial = AllocPooledString( szFixedString );

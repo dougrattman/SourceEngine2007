@@ -12,7 +12,7 @@
 #include "view.h"
 #include "vehicle_viewblend_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int ScreenTransform( const Vector& point, Vector& screen );
@@ -160,7 +160,7 @@ void C_PropCannon::GetVehicleViewPosition( int nRole, Vector *pAbsOrigin, QAngle
 //-----------------------------------------------------------------------------
 void C_PropCannon::GetVehicleClipPlanes( float &flZNear, float &flZFar ) const
 {
-	// FIXME: Need something a better long-term, this fixes the buggy.
+	// TODO(d.rattman): Need something a better long-term, this fixes the buggy.
 	flZNear = 6;
 }
 

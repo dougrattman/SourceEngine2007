@@ -4,7 +4,7 @@
 
 #include <locale.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern int
@@ -33,8 +33,8 @@ bool VGui_InitInterfacesList(const char *moduleName,
 #endif
   // keep a record of this module name
   strncpy(g_szControlsModuleName, moduleName,
-          ARRAYSIZE(g_szControlsModuleName));
-  g_szControlsModuleName[ARRAYSIZE(g_szControlsModuleName) - 1] = 0;
+          SOURCE_ARRAYSIZE(g_szControlsModuleName));
+  g_szControlsModuleName[SOURCE_ARRAYSIZE(g_szControlsModuleName) - 1] = 0;
 
   // initialize our locale (must be done for every vgui dll/exe)
   // "" makes it use the default locale, required to make iswprint() work

@@ -9,7 +9,7 @@
 #include "shake.h"
 #include "voice_gamemgr.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void RegisterUserMessages()

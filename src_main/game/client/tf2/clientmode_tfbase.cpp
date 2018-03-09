@@ -14,7 +14,7 @@
 #include <vgui/IScheme.h>
 #include "filesystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -51,9 +51,9 @@ CMinimapPanel *ClientModeTFBase::GetMinimap( void )
 // Purpose: 
 //-----------------------------------------------------------------------------
 
-// FIXME: Remove if this ever becomes true for HL2 (I expect it will)
+// TODO(d.rattman): Remove if this ever becomes true for HL2 (I expect it will)
 ConVar 	r_radiosity		( "r_radiosity", "2" );		// do full radiosity calc?
-// FIXME: Remove when we reactivate detail props
+// TODO(d.rattman): Remove when we reactivate detail props
 extern ConVar r_DrawDetailProps;
 
 void ClientModeTFBase::Init()
@@ -61,7 +61,7 @@ void ClientModeTFBase::Init()
 	BaseClass::Init();
 	C_BaseTFCombatWeapon::CreateCrosshairPanels();
 
-	// FIXME: For playtests, turn off detail props. They're causing perf problems
+	// TODO(d.rattman): For playtests, turn off detail props. They're causing perf problems
 	r_DrawDetailProps.SetValue("0");
 
 	// Turn lighting into a mode where we use better computation for the ambient

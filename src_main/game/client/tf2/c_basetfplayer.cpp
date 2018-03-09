@@ -32,7 +32,7 @@
 #include "weapon_selection.h"
 #include "ClientEffectPrecacheSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -526,7 +526,7 @@ void C_BaseTFPlayer::Clear()
 	m_pSapperAttachmentStatus = NULL;
 	
 	int i;
-	for ( i=0; i < ARRAYSIZE( m_BoostModelAngles ); i++ )
+	for ( i=0; i < SOURCE_ARRAYSIZE( m_BoostModelAngles ); i++ )
 	{
 		m_BoostModelAngles[i] = RandomFloat( 0, 360 );
 	}
@@ -636,7 +636,7 @@ bool C_BaseTFPlayer::ShouldDraw()
 //-----------------------------------------------------------------------------
 ShadowType_t C_BaseTFPlayer::ShadowCastType()
 {
-	// FIXME: This check can be removed once we've dealt with the interpolation problem
+	// TODO(d.rattman): This check can be removed once we've dealt with the interpolation problem
 	C_BaseTFPlayer *local = C_BaseTFPlayer::GetLocalPlayer();
 	if (local == this)
 		return SHADOWS_NONE;
@@ -1906,7 +1906,7 @@ void C_BaseTFPlayer::SetMovementCamoSuppression( float amount )
 //-----------------------------------------------------------------------------
 void C_BaseTFPlayer::CheckMovementCamoSuppression( void )
 {
-	// FIXME: Don't bother with suppression during deployment...
+	// TODO(d.rattman): Don't bother with suppression during deployment...
 	if ( m_bDeployed )
 	{
 		m_flMovementCamoSuppression	= 0;

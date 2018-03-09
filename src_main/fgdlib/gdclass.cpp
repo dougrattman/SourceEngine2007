@@ -815,7 +815,7 @@ bool GDclass::ParseVariables(TokenReader &tr) {
     if (pDupVar) {
       // Same name, different type.
       if (pDupVar->GetType() != var->GetType()) {
-        char szError[_MAX_PATH];
+        char szError[SOURCE_MAX_PATH];
 
         sprintf(szError,
                 "%s: Variable '%s' is multiply defined with different types.",

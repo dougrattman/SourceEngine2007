@@ -221,7 +221,7 @@ inline void LeftRightToValueBalance( float *pValue, float *pBalance, float flLef
 //-----------------------------------------------------------------------------
 // A cache of preset groups to be associated with specific models
 //-----------------------------------------------------------------------------
-abstract_class IModelPresetGroupManager
+the_interface IModelPresetGroupManager
 {
 public:
 	virtual void AssociatePresetsWithFile( DmFileId_t fileId ) = 0;

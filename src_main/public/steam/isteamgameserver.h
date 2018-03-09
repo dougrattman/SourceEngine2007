@@ -122,20 +122,20 @@ struct GSClientSteam2Accept_t
 
 
 // C-API versions of the interface functions
-DLL_EXPORT void *Steam_GetGSHandle( HSteamUser hUser, HSteamPipe hSteamPipe );
-DLL_EXPORT bool Steam_GSSendSteam2UserConnect( void *phSteamHandle, uint32_t unUserID, const void *pvRawKey, uint32_t unKeyLen, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie );
-DLL_EXPORT bool Steam_GSSendSteam3UserConnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unIPPublic, const void *pvCookie, uint32_t cubCookie );
-DLL_EXPORT bool Steam_GSSendUserDisconnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unUserID );
-DLL_EXPORT bool Steam_GSSendUserStatusResponse( void *phSteamHandle, uint64_t ulSteamID, int nSecondsConnected, int nSecondsSinceLast );
-DLL_EXPORT bool Steam_GSUpdateStatus( void *phSteamHandle, int cPlayers, int cPlayersMax, int cBotPlayers, const char *pchServerName, const char *pchMapName );
-DLL_EXPORT bool Steam_GSRemoveUserConnect( void *phSteamHandle, uint32_t unUserID );
-DLL_EXPORT void Steam_GSSetSpawnCount( void *phSteamHandle, uint32_t ucSpawn );
-DLL_EXPORT bool Steam_GSGetSteam2GetEncryptionKeyToSendToNewClient( void *phSteamHandle, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey );
-DLL_EXPORT void Steam_GSLogOn( void *phSteamHandle );
-DLL_EXPORT void Steam_GSLogOff( void *phSteamHandle );
-DLL_EXPORT bool Steam_GSBLoggedOn( void *phSteamHandle );
-DLL_EXPORT bool Steam_GSSetServerType( void *phSteamHandle, int32_t nAppIdServed, uint32_t unServerFlags, uint32_t unGameIP, uint32_t unGamePort, const char *pchGameDir, const char *pchVersion );
-DLL_EXPORT bool Steam_GSBSecure( void *phSteamHandle );
-DLL_EXPORT uint64_t Steam_GSGetSteamID( void *phSteamHandle );
+SOURCE_API_EXPORT void *Steam_GetGSHandle( HSteamUser hUser, HSteamPipe hSteamPipe );
+SOURCE_API_EXPORT bool Steam_GSSendSteam2UserConnect( void *phSteamHandle, uint32_t unUserID, const void *pvRawKey, uint32_t unKeyLen, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie );
+SOURCE_API_EXPORT bool Steam_GSSendSteam3UserConnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unIPPublic, const void *pvCookie, uint32_t cubCookie );
+SOURCE_API_EXPORT bool Steam_GSSendUserDisconnect( void *phSteamHandle, uint64_t ulSteamID, uint32_t unUserID );
+SOURCE_API_EXPORT bool Steam_GSSendUserStatusResponse( void *phSteamHandle, uint64_t ulSteamID, int nSecondsConnected, int nSecondsSinceLast );
+SOURCE_API_EXPORT bool Steam_GSUpdateStatus( void *phSteamHandle, int cPlayers, int cPlayersMax, int cBotPlayers, const char *pchServerName, const char *pchMapName );
+SOURCE_API_EXPORT bool Steam_GSRemoveUserConnect( void *phSteamHandle, uint32_t unUserID );
+SOURCE_API_EXPORT void Steam_GSSetSpawnCount( void *phSteamHandle, uint32_t ucSpawn );
+SOURCE_API_EXPORT bool Steam_GSGetSteam2GetEncryptionKeyToSendToNewClient( void *phSteamHandle, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey );
+SOURCE_API_EXPORT void Steam_GSLogOn( void *phSteamHandle );
+SOURCE_API_EXPORT void Steam_GSLogOff( void *phSteamHandle );
+SOURCE_API_EXPORT bool Steam_GSBLoggedOn( void *phSteamHandle );
+SOURCE_API_EXPORT bool Steam_GSSetServerType( void *phSteamHandle, int32_t nAppIdServed, uint32_t unServerFlags, uint32_t unGameIP, uint32_t unGamePort, const char *pchGameDir, const char *pchVersion );
+SOURCE_API_EXPORT bool Steam_GSBSecure( void *phSteamHandle );
+SOURCE_API_EXPORT uint64_t Steam_GSGetSteamID( void *phSteamHandle );
 
 #endif // ISTEAMGAMESERVER_H

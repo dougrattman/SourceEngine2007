@@ -10,7 +10,7 @@
 #include "OP_Entity.h"
 #include "ObjectProperties.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ BOOL COP_Flags::OnInitDialog()
 	{
 		CAnchorDef( IDC_CHECKLIST, k_eSimpleAnchorAllSides )
 	};
-	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, ARRAYSIZE( anchorDefs ) );
+	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, SOURCE_ARRAYSIZE( anchorDefs ) );
 	
 	return TRUE;	             
 }

@@ -24,7 +24,7 @@ class Panel;
 typedef unsigned long HFont;
 }
 
-abstract_class IMessageChars
+the_interface IMessageChars
 {
 public:
 	enum

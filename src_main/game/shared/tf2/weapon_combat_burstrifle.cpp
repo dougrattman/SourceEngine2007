@@ -19,7 +19,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -184,7 +184,7 @@ void CWeaponCombatBurstRifle::PrimaryAttack( void )
 
 		// Note the additional seed because otherwise we get the same set of random #'s and will get stuck
 		//  in an infinite loop here potentially
-		// FIXME:  Can we use a gaussian random # function instead?  ywb
+		// TODO(d.rattman):  Can we use a gaussian random # function instead?  ywb
 		x1 = SHARED_RANDOMFLOAT_SEED( -0.5, 0.5, ++seed );
 		x2 = SHARED_RANDOMFLOAT_SEED( -0.5, 0.5, ++seed );
 		y1 = SHARED_RANDOMFLOAT_SEED( -0.5, 0.5, ++seed );

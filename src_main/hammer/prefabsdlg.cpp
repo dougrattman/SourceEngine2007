@@ -16,7 +16,7 @@
 #include "EditPrefabDlg.h"
 #include "MapDoc.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ void CPrefabsDlg::OnAddobject()
 		return;	// aborted
 
 	// add all these files .. 
-	char szDir[MAX_PATH], szFiles[2048];
+	char szDir[SOURCE_MAX_PATH], szFiles[2048];
 	memcpy(szFiles, dlg.m_ofn.lpstrFile, dlg.m_ofn.nMaxFile);
 	strcpy(szDir, dlg.m_ofn.lpstrFile);
 
@@ -96,7 +96,7 @@ void CPrefabsDlg::OnAddobject()
 	CPrefab::EnableCaching(FALSE);
 
 	// get files
-	char szFile[MAX_PATH];
+	char szFile[SOURCE_MAX_PATH];
 	CString strFullPath;
 	int iItem = m_Objects.GetItemCount();
 	while(1)

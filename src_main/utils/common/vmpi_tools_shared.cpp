@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vmpi_tools_shared.h"
 
@@ -65,7 +65,7 @@ bool SharedDispatch(MessageBuffer *pBuf, int iSource, int iPacketID) {
           if (!szFolder) szFolder = "c:";
 
           // Base module name
-          char chModuleName[_MAX_PATH], *pModuleName = chModuleName;
+          char chModuleName[SOURCE_MAX_PATH], *pModuleName = chModuleName;
           ::GetModuleFileName(NULL, chModuleName,
                               sizeof(chModuleName) / sizeof(chModuleName[0]));
 
@@ -82,7 +82,7 @@ bool SharedDispatch(MessageBuffer *pBuf, int iSource, int iPacketID) {
           ++s_numMiniDumps;
 
           // Prepare the filename
-          char chSaveFileName[2 * _MAX_PATH] = {0};
+          char chSaveFileName[2 * SOURCE_MAX_PATH] = {0};
           sprintf(chSaveFileName,
                   "%s\\vmpi_%s_on_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp", szFolder,
                   pModuleName, VMPI_GetMachineName(iSource),
@@ -138,7 +138,7 @@ void SendDBInfo(const CDBInfo *pInfo, unsigned long jobPrimaryID) {
   const void *pChunks[] = {cPacketInfo, pInfo, &jobPrimaryID};
   int chunkLengths[] = {2, sizeof(CDBInfo), sizeof(jobPrimaryID)};
 
-  VMPI_SendChunks(pChunks, chunkLengths, ARRAYSIZE(pChunks), VMPI_PERSISTENT);
+  VMPI_SendChunks(pChunks, chunkLengths, SOURCE_ARRAYSIZE(pChunks), VMPI_PERSISTENT);
 }
 
 void RecvDBInfo(CDBInfo *pInfo, unsigned long *pJobPrimaryID) {
@@ -205,7 +205,7 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
     if (pvExceptionInfo) {
       struct _EXCEPTION_POINTERS *pvExPointers =
           (struct _EXCEPTION_POINTERS *)pvExceptionInfo;
-      wchar_t tchMinidumpFileName[_MAX_PATH] = {0};
+      wchar_t tchMinidumpFileName[SOURCE_MAX_PATH] = {0};
       bool bSucceededWritingMinidump = WriteMiniDumpUsingExceptionInfo(
           pvExPointers->ExceptionRecord->ExceptionCode, pvExPointers,
           (MINIDUMP_TYPE)(MiniDumpWithDataSegs |
@@ -233,7 +233,7 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
 
 // This is called if we crash inside our crash handler. It just terminates the
 // process immediately.
-LONG __stdcall VMPI_SecondExceptionFilter(
+LONG SOURCE_STDCALL VMPI_SecondExceptionFilter(
     struct _EXCEPTION_POINTERS *ExceptionInfo) {
   TerminateProcess(GetCurrentProcess(), 2);
   return EXCEPTION_EXECUTE_HANDLER;  // (never gets here anyway)
@@ -275,7 +275,7 @@ void VMPI_ExceptionFilter(unsigned long uCode, void *pvExceptionInfo) {
       ERR_RECORD(EXCEPTION_ACCESS_VIOLATION),
   };
 
-  int nErrors = ARRAYSIZE(errors);
+  int nErrors = SOURCE_ARRAYSIZE(errors);
   int i = 0;
   const char *pchReason = NULL;
   char chUnknownBuffer[32];

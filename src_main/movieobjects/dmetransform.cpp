@@ -9,7 +9,7 @@
 #include "mathlib/vector.h"
 #include "mathlib/mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -34,7 +34,7 @@ void CDmeTransform::OnDestruction()
 
 
 //-----------------------------------------------------------------------------
-// FIXME: Replace this with actual methods to do editing
+// TODO(d.rattman): Replace this with actual methods to do editing
 //-----------------------------------------------------------------------------
 void CDmeTransform::SetTransform( const matrix3x4_t &transform )
 {

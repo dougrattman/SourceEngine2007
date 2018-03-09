@@ -15,7 +15,7 @@
 #include "tier1/keyvalues.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IFileSystem *filesystem;
@@ -1780,7 +1780,7 @@ public:
 		const char *pActivityName = ActivityList_NameForIndex( activityIndex );
 		if ( !pActivityName )
 		{
-			AssertOnce( activityIndex == -1 ); // FIXME: whatever activity this was, it's now being saved out as ACT_RESET
+			AssertOnce( activityIndex == -1 ); // TODO(d.rattman): whatever activity this was, it's now being saved out as ACT_RESET
 			pActivityName = ActivityList_NameForIndex( 0 );
 		}
 		int len = strlen(pActivityName) + 1;

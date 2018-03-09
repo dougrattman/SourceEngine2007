@@ -1,10 +1,11 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/imageformat.h"
+#include "build/include/build_config.h"
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
 #endif
 
@@ -17,7 +18,7 @@
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 typedef int32_t *DWORD_PTR;
 #endif
 
@@ -450,13 +451,13 @@ static inline void DecodeAlpha3BitLinear(CDestPixel *pImPos,
 template <class CDestPixel>
 static void ConvertFromDXT1(const uint8_t *src, CDestPixel *dst, int width,
                             int height) {
-  COMPILE_TIME_ASSERT(sizeof(BGRA8888_t) == 4);
-  COMPILE_TIME_ASSERT(sizeof(RGBA8888_t) == 4);
-  COMPILE_TIME_ASSERT(sizeof(RGB888_t) == 3);
-  COMPILE_TIME_ASSERT(sizeof(BGR888_t) == 3);
-  COMPILE_TIME_ASSERT(sizeof(BGR565_t) == 2);
-  COMPILE_TIME_ASSERT(sizeof(BGRA5551_t) == 2);
-  COMPILE_TIME_ASSERT(sizeof(BGRA4444_t) == 2);
+  static_assert(sizeof(BGRA8888_t) == 4);
+  static_assert(sizeof(RGBA8888_t) == 4);
+  static_assert(sizeof(RGB888_t) == 3);
+  static_assert(sizeof(BGR888_t) == 3);
+  static_assert(sizeof(BGR565_t) == 2);
+  static_assert(sizeof(BGRA5551_t) == 2);
+  static_assert(sizeof(BGRA4444_t) == 2);
 
   int realWidth = 0;
   int realHeight = 0;
@@ -734,7 +735,7 @@ static DWORD GetDXTCEncodeType(ImageFormat imageFormat) {
 bool ConvertToATIxN(const uint8_t *src, ImageFormat srcImageFormat,
                     uint8_t *dst, ImageFormat dstImageFormat, int width,
                     int height, int srcStride, int dstStride) {
-#if !defined(_X360) && !defined(_LINUX)
+#if !defined(_X360) && !defined(OS_POSIX)
 
   // from rgb(a) to ATIxN
   if (srcStride != 0 || dstStride != 0) return false;
@@ -782,7 +783,7 @@ bool ConvertToATIxN(const uint8_t *src, ImageFormat srcImageFormat,
 bool ConvertToDXT(const uint8_t *src, ImageFormat srcImageFormat, uint8_t *dst,
                   ImageFormat dstImageFormat, int width, int height,
                   int srcStride, int dstStride) {
-#if !defined(_X360) && !defined(_LINUX)
+#if !defined(_X360) && !defined(OS_POSIX)
   // from rgb(a) to dxtN
   if (srcStride != 0 || dstStride != 0) return false;
 
@@ -1913,7 +1914,7 @@ void BGRA4444ToRGBA8888(const uint8_t *src, uint8_t *dst, int numPixels) {
     int alpha = (*pSrcShort >> 12) & 0xF;
 
     // Expand to 8 bits
-    // FIXME: shouldn't this be (red << 4) | red?
+    // TODO(d.rattman): shouldn't this be (red << 4) | red?
     dst[0] = (red << 4) | (red >> 4);
     dst[1] = (green << 4) | (green >> 4);
     dst[2] = (blue << 4) | (blue >> 4);

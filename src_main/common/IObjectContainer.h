@@ -7,7 +7,7 @@
 
 #include "tier1/interface.h"
 
-abstract_class IObjectContainer {
+the_interface IObjectContainer {
  public:
   virtual void Init() = 0;
 

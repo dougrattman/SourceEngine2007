@@ -6,19 +6,18 @@
 #ifndef SOURCE_TIER1_GENERICHASH_H_
 #define SOURCE_TIER1_GENERICHASH_H_
 
-#include "tier0/include/calling_conventions.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 
-unsigned FASTCALL HashString(const char *pszKey);
-unsigned FASTCALL HashStringCaseless(const char *pszKey);
-unsigned FASTCALL HashStringCaselessConventional(const char *pszKey);
-unsigned FASTCALL Hash4(const void *pKey);
-unsigned FASTCALL Hash8(const void *pKey);
-unsigned FASTCALL Hash12(const void *pKey);
-unsigned FASTCALL Hash16(const void *pKey);
-unsigned FASTCALL HashBlock(const void *pKey, unsigned size);
+unsigned SOURCE_FASTCALL HashString(const char *pszKey);
+unsigned SOURCE_FASTCALL HashStringCaseless(const char *pszKey);
+unsigned SOURCE_FASTCALL HashStringCaselessConventional(const char *pszKey);
+unsigned SOURCE_FASTCALL Hash4(const void *pKey);
+unsigned SOURCE_FASTCALL Hash8(const void *pKey);
+unsigned SOURCE_FASTCALL Hash12(const void *pKey);
+unsigned SOURCE_FASTCALL Hash16(const void *pKey);
+unsigned SOURCE_FASTCALL HashBlock(const void *pKey, unsigned size);
 
-unsigned FASTCALL HashInt(const int key);
+unsigned SOURCE_FASTCALL HashInt(const int key);
 
 inline unsigned HashIntConventional(const int n)  // faster but less effective
 {

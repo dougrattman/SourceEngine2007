@@ -342,7 +342,7 @@ void CHumanPDAPanel::OnTick()
 	if ( !pOwner )
 		return;
 
-	// FIXME: Check build state??
+	// TODO(d.rattman): Check build state??
 
 	int objectType = builder->m_iCurrentObject;
 	CObjectInfo const *info = GetObjectInfo( objectType );

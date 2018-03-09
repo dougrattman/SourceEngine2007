@@ -2,10 +2,10 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-// FIXME!!  This version doesn't support vertexalpha to make it blend to
+// TODO(d.rattman): This version doesn't support vertexalpha to make it blend to
 // white!!!
 DEFINE_FALLBACK_SHADER(Modulate, Modulate_DX6)
 

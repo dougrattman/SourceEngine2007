@@ -8,7 +8,7 @@
 #include "smoke_fog_overlay.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static IMaterial* g_pSmokeFogMaterial = NULL;

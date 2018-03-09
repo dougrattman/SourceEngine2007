@@ -32,7 +32,7 @@
 #include "env_debughistory.h"
 #include "tier1/callqueue.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -2213,7 +2213,7 @@ void CProp_Portal::InputFizzle( inputdata_t &inputdata )
 //-----------------------------------------------------------------------------
 void CProp_Portal::InputNewLocation( inputdata_t &inputdata )
 {
-	char sLocationStats[MAX_PATH];
+	char sLocationStats[SOURCE_MAX_PATH];
 	Q_strncpy( sLocationStats, inputdata.value.String(), sizeof(sLocationStats) );
 
 	// first 3 are location of new origin

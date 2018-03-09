@@ -26,7 +26,7 @@
 #include "vgui_key_translation.h"
 
 #define PROTECTED_THINGS_DISABLE
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef ShellExecute
@@ -197,8 +197,8 @@ class CSystem : public ISystem {
   // timer data
   double m_flFrameTime;
   KeyValues *m_pUserConfigData;
-  char m_szFileName[MAX_PATH];
-  char m_szPathID[MAX_PATH];
+  char m_szFileName[SOURCE_MAX_PATH];
+  char m_szPathID[SOURCE_MAX_PATH];
 };
 
 CSystem g_System;
@@ -707,7 +707,7 @@ int CSystem::GetAvailableDrives(char *buf, int bufLen) {
 // specified path
 //-----------------------------------------------------------------------------
 double CSystem::GetFreeDiskSpace(const char *path) {
-  char buf[_MAX_PATH];
+  char buf[SOURCE_MAX_PATH];
   strcpy(buf, path);
   // strip of to first slash (to make it look like 'x:\')
   char *slash = strstr(buf, "\\");
@@ -844,7 +844,7 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
                              const char *workingDirectory,
                              const char *iconFile) {
   bool bSuccess = false;
-  char temp[MAX_PATH];
+  char temp[SOURCE_MAX_PATH];
   strcpy(temp, linkFileName);
 
   // make sure it doesn't already exist
@@ -870,9 +870,9 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
     IPersistFile *ppf;
     hr = psl->QueryInterface(IID_PPV_ARGS(&ppf));
     if (SUCCEEDED(hr)) {
-      wchar_t wsz[MAX_PATH];
+      wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
       hr = ppf->Save(wsz, TRUE);
       if (SUCCEEDED(hr)) {
         bSuccess = true;
@@ -890,7 +890,7 @@ bool CSystem::CreateShortcut(const char *linkFileName, const char *targetPath,
 bool CSystem::GetShortcutTarget(const char *linkFileName, char *targetPath,
                                 char *arguments, int destBufferSizes) {
 #ifndef _X360
-  char temp[MAX_PATH];
+  char temp[SOURCE_MAX_PATH];
   strcpy(temp, linkFileName);
   strlwr(temp);
 
@@ -906,9 +906,9 @@ bool CSystem::GetShortcutTarget(const char *linkFileName, char *targetPath,
     // Bind the ShellLink object to the Persistent File
     hres = psl->QueryInterface(IID_PPV_ARGS(&ppf));
     if (SUCCEEDED(hres)) {
-      wchar_t wsz[MAX_PATH];
+      wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
 
       // Read the link into the persistent file
       hres = ppf->Load(wsz, 0);
@@ -940,7 +940,7 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
                                    const char *workingDirectory) {
 #ifndef _X360
   bool bSuccess = false;
-  char temp[MAX_PATH];
+  char temp[SOURCE_MAX_PATH];
   strcpy(temp, linkFileName);
   strlwr(temp);
 
@@ -953,9 +953,9 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
     // Bind the ShellLink object to the Persistent File
     hres = psl->QueryInterface(IID_PPV_ARGS(&ppf));
     if (SUCCEEDED(hres)) {
-      wchar_t wsz[MAX_PATH];
+      wchar_t wsz[SOURCE_MAX_PATH];
       // Get a UNICODE wide string wsz from the link path
-      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, MAX_PATH);
+      MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, temp, -1, wsz, SOURCE_MAX_PATH);
 
       // Read the link into the persistent file
       hres = ppf->Load(wsz, 0);
@@ -983,7 +983,7 @@ bool CSystem::ModifyShortcutTarget(const char *linkFileName,
 //-----------------------------------------------------------------------------
 const char *CSystem::GetDesktopFolderPath() {
 #ifndef _X360
-  static char folderPath[MAX_PATH];
+  static char folderPath[SOURCE_MAX_PATH];
   folderPath[0] = 0;
 
   // try the custom regkey

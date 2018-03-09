@@ -3,9 +3,9 @@
 #include "disp_powerinfo.h"
 
 #include "disp_common.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // ------------------------------------------------------------------------ //
@@ -466,7 +466,7 @@ class CPowerInfoInitializer {
 static CPowerInfoInitializer g_PowerInfoInitializer;
 
 const CPowerInfo *GetPowerInfo(int iPower) {
-  Assert(iPower >= 0 && iPower < ARRAYSIZE(g_PowerInfos));
+  Assert(iPower >= 0 && iPower < SOURCE_ARRAYSIZE(g_PowerInfos));
   Assert(g_PowerInfos[iPower]);
   return g_PowerInfos[iPower];
 }

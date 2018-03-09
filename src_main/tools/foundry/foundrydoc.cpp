@@ -311,7 +311,7 @@ void CFoundryDoc::AddVMFEntities( CUtlBuffer &entityBuf, const char *pActualEnti
 
 			entityBuf.Printf( "\"%s\" ", pAttribute->GetName() );
 
-			// FIXME: Set up standard delimiters
+			// TODO(d.rattman): Set up standard delimiters
 			entityBuf.PutChar( '\"' );
 			pAttribute->Serialize( entityBuf );
 			entityBuf.PutString( "\"\n" );

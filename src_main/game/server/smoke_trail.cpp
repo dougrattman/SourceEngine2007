@@ -9,7 +9,7 @@
 #include "smoke_trail.h"
 #include "dt_send.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SMOKETRAIL_ENTITYNAME		"env_smoketrail"

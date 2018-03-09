@@ -25,7 +25,7 @@
 #include "gameweaponmanager.h"
 #include "vehicle_base.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_combine_s_health( "sk_combine_s_health","0");
@@ -154,7 +154,7 @@ void CNPC_CombineS::ClearAttackConditions( )
 
 void CNPC_CombineS::PrescheduleThink( void )
 {
-	/*//FIXME: This doesn't need to be in here, it's all debug info
+	/*//TODO(d.rattman): This doesn't need to be in here, it's all debug info
 	if( HasCondition( COND_HEAR_PHYSICS_DANGER ) )
 	{
 		// Don't react unless we see the item!!

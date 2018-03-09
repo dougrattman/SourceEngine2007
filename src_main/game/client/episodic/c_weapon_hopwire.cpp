@@ -12,7 +12,7 @@
 #include "particles_simple.h"
 #include "particles_attractor.h"
 
-// FIXME: Move out
+// TODO(d.rattman): Move out
 extern void DrawSpriteTangentSpace( const Vector &vecOrigin, float flWidth, float flHeight, color32 color );
 
 #define	EXPLOSION_DURATION	3.0f
@@ -280,7 +280,7 @@ int C_HopwireExplosion::DrawModel( int flags )
 	float scaleY = ( sin1 * sin2 ) * 32.0f;
 	float scaleX = (sin2 * sin2) * 32.0f;
 
-	// FIXME: The ball needs to sort properly at all times
+	// TODO(d.rattman): The ball needs to sort properly at all times
 	static color32 white = {255,255,255,255};
 	DrawSpriteTangentSpace( GetRenderOrigin() + ( CurrentViewForward() * 128.0f ), scale+scaleX, scale+scaleY, white );
 

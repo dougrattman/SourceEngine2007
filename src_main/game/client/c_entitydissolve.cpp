@@ -16,7 +16,7 @@
 #include "studio.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN(PrecacheEffectBuild)
@@ -473,7 +473,7 @@ void C_EntityDissolve::ClientThink(void) {
   if ((!m_pController) && (m_nDissolveType == ENTITY_DISSOLVE_NORMAL) &&
       pAnimating->IsRagdoll()) {
     IPhysicsObject *ppList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-    int nCount = pAnimating->VPhysicsGetObjectList(ppList, ARRAYSIZE(ppList));
+    int nCount = pAnimating->VPhysicsGetObjectList(ppList, SOURCE_ARRAYSIZE(ppList));
     if (nCount > 0) {
       m_pController = physenv->CreateMotionController(this);
       for (int i = 0; i < nCount; ++i) {
@@ -509,7 +509,7 @@ void C_EntityDissolve::ClientThink(void) {
 
     RemoveFromLeafSystem();
 
-    // FIXME: Ick!
+    // TODO(d.rattman): Ick!
     // Adrian: I'll assume we don't need the ragdoll either so I'll remove that
     // too.
     if (m_bLinkedToServerEnt == false) {

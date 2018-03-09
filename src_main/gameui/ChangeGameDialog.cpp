@@ -10,7 +10,7 @@
 #include "tier1/keyvalues.h"
 #include "vgui_controls/ListPanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -47,7 +47,7 @@ CChangeGameDialog::~CChangeGameDialog() {}
 //-----------------------------------------------------------------------------
 void CChangeGameDialog::LoadModList() {
   // look for third party games
-  char szSearchPath[_MAX_PATH + 5];
+  char szSearchPath[SOURCE_MAX_PATH + 5];
   Q_strncpy(szSearchPath, "*.*", sizeof(szSearchPath));
 
   // use local filesystem since it has to look outside path system, and will
@@ -63,7 +63,7 @@ void CChangeGameDialog::LoadModList() {
       if ((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
           (Q_strnicmp(wfd.cFileName, ".", 1))) {
         // Check for dlls\*.dll
-        char szDllDirectory[MAX_PATH + 16];
+        char szDllDirectory[SOURCE_MAX_PATH + 16];
         Q_snprintf(szDllDirectory, sizeof(szDllDirectory), "%s\\gameinfo.txt",
                    wfd.cFileName);
 

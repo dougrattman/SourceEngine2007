@@ -21,7 +21,7 @@
 #include "tier1/utlbuffer.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar rr_debugresponses(
@@ -475,7 +475,7 @@ struct Rule {
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-abstract_class CResponseSystem : public IResponseSystem {
+the_interface CResponseSystem : public IResponseSystem {
  public:
   CResponseSystem();
   ~CResponseSystem();
@@ -1613,14 +1613,14 @@ void CResponseSystem::Precache() {
           break;
         case RESPONSE_SCENE: {
           // fixup $gender references
-          char file[_MAX_PATH];
+          char file[SOURCE_MAX_PATH];
           Q_strncpy(file, response.value, sizeof(file));
           char *gender = strstr(file, "$gender");
           if (gender) {
             // replace with male & female
             const char *postGender = gender + strlen("$gender");
             *gender = 0;
-            char genderFile[_MAX_PATH];
+            char genderFile[SOURCE_MAX_PATH];
             // male
             Q_snprintf(genderFile, sizeof(genderFile), "%smale%s", file,
                        postGender);
@@ -2547,7 +2547,7 @@ class CDefaultResponseSystem : public CResponseSystem, public CAutoGameSystem {
     // All user installed systems are init'd by PrecacheCustomResponseSystem
     // which will call sys->Precache() on the ones being used
 
-    // FIXME:  This is SLOW the first time you run the engine (can take 3 - 10
+    // TODO(d.rattman):  This is SLOW the first time you run the engine (can take 3 - 10
     // seconds!!!)
     if (ShouldPrecache()) {
       Precache();

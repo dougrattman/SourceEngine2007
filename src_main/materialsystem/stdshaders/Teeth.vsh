@@ -66,7 +66,7 @@ alloc $linearColor
 
 alloc $tmp
 
-mul $linearColor.xyz, $SHADER_SPECIFIC_CONST_0.w, $linearColor	; FIXME Color darkened by illumination factor
+mul $linearColor.xyz, $SHADER_SPECIFIC_CONST_0.w, $linearColor	; TODO(d.rattman): Color darkened by illumination factor
 dp3 $tmp, $worldNormal, $SHADER_SPECIFIC_CONST_0					; Figure out mouth forward dot normal
 max	$tmp, $cZero, $tmp						; clamp from 0 to 1
 mul $linearColor.xyz, $tmp, $linearColor	; Darken by forward dot normal too

@@ -147,7 +147,7 @@ protected:
 	// Does this path track have LOS to the target?
 	bool HasLOSToTarget( CPathTrack *pTrack );
 
-	// FIXME: Work this back into the base class
+	// TODO(d.rattman): Work this back into the base class
 	virtual bool ShouldUseFixedPatrolLogic() { return false; }
 
 	// Deal with teleportation

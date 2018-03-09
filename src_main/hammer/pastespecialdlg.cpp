@@ -10,7 +10,7 @@
 
 #pragma warning(disable:4244)
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

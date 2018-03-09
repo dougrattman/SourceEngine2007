@@ -36,7 +36,7 @@
 #include "weapon_physcannon.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // When the engine is running and the manhack is operating under power
@@ -364,7 +364,7 @@ void CNPC_Manhack::Event_Killed(const CTakeDamageInfo &info) {
   } else {
     m_bGib = false;
 
-    // FIXME: These don't stay with the ragdolls currently -- jdw
+    // TODO(d.rattman): These don't stay with the ragdolls currently -- jdw
     // Long fadeout on the sprites!!
     KillSprites(0.0f);
   }
@@ -483,7 +483,7 @@ void CNPC_Manhack::TakeDamageFromPhysicsImpact(int index,
         pEvent->postVelocity[!index] * pEvent->pObjects[!index]->GetMass();
   }
 
-  // FIXME: this doesn't pass in who is responsible if some other entity
+  // TODO(d.rattman): this doesn't pass in who is responsible if some other entity
   // "caused" this collision
   PhysCallbackDamage(this,
                      CTakeDamageInfo(pHitEntity, pHitEntity, damageForce,
@@ -622,7 +622,7 @@ int CNPC_Manhack::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
     m_flBladeSpeed = 20.0;
 
     // respond to physics
-    // FIXME: shouldn't this happen in a base class?  Anyway to prevent it from
+    // TODO(d.rattman): shouldn't this happen in a base class?  Anyway to prevent it from
     // happening twice?
     VPhysicsTakeDamage(info);
 
@@ -697,7 +697,7 @@ int CNPC_Manhack::OnTakeDamage_Alive(const CTakeDamageInfo &info) {
 
     tdInfo.SetDamageForce(vecBestDir * info.GetDamage() * 200);
 
-    // FIXME: shouldn't this happen in a base class?  Anyway to prevent it from
+    // TODO(d.rattman): shouldn't this happen in a base class?  Anyway to prevent it from
     // happening twice?
     VPhysicsTakeDamage(tdInfo);
 
@@ -1667,7 +1667,7 @@ void CNPC_Manhack::MoveExecute_Alive(float flInterval) {
 
   Vector vCurrentVelocity = GetCurrentVelocity();
 
-  // FIXME: move this
+  // TODO(d.rattman): move this
   VPhysicsGetObject()->Wake();
 
   if (m_fEnginePowerScale < GetMaxEnginePower() &&
@@ -1707,7 +1707,7 @@ void CNPC_Manhack::MoveExecute_Alive(float flInterval) {
 
         Vector offsetSpeed = GetCurrentVelocity() * flDot;
 
-        // FIXME: This code sucks -- jdw
+        // TODO(d.rattman): This code sucks -- jdw
 
         offsetDir.z = 0.0f;
         m_vForceVelocity += (offsetDir * (offsetSpeed.Length2D() * 0.25f));
@@ -2348,7 +2348,7 @@ void CNPC_Manhack::StartTask(const Task_t *pTask) {
     case TASK_GET_PATH_TO_PLAYER: {
       BaseClass::StartTask(pTask);
       /*
-      // FIXME: why were these tasks considered bad?
+      // TODO(d.rattman): why were these tasks considered bad?
       _asm
       {
               int	3;
@@ -2772,7 +2772,7 @@ void CNPC_Manhack::UpdatePanels(void) {
     panelPosition = UTIL_Approach(0.0f, panelPosition, 25.0f);
   }
 
-  // FIXME: If we're going to have all these be equal, there's no need for 4
+  // TODO(d.rattman): If we're going to have all these be equal, there's no need for 4
   // poses..
   SetPoseParameter(m_iPanel1, panelPosition);
   SetPoseParameter(m_iPanel2, panelPosition);
@@ -2824,7 +2824,7 @@ void CNPC_Manhack::StopBurst(bool bInterruptSchedule /*= false*/) {
   ShowHostile(false);
 
   // Stop our burst timers
-  m_flNextBurstTime = gpGlobals->curtime + 2.0f;  // FIXME: Skill level based
+  m_flNextBurstTime = gpGlobals->curtime + 2.0f;  // TODO(d.rattman): Skill level based
   m_flBurstDuration = gpGlobals->curtime - 0.1f;
 
   if (bInterruptSchedule) {

@@ -62,7 +62,7 @@ VS_OUTPUT main( const VS_INPUT v )
 	float3 worldVertToEyeVector = VSHADER_VECT_SCALE * (cEyePos - worldPos);
 	o.worldVertToEyeVector = worldVertToEyeVector;
 
-	// FIXME: need to add a normalMapTransform to all of the water shaders.
+	// TODO(d.rattman): need to add a normalMapTransform to all of the water shaders.
 	//o.normalMapTexCoord.x = dot( v.vNormalMapCoord, cNormalMapTransform[0] ) + cNormalMapTransform[0].w;
 	//o.normalMapTexCoord.y = dot( v.vNormalMapCoord, cNormalMapTransform[1] ) + cNormalMapTransform[1].w;
 	o.normalMapTexCoord = v.vNormalMapCoord;

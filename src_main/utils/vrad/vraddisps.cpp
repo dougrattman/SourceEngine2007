@@ -29,7 +29,7 @@ class CBSPDispFaceListEnumerator : public ISpatialLeafEnumerator,
   bool EnumerateLeaf(int ndxLeaf, int context);
 
   // IBSPTreeDataEnumerator
-  bool FASTCALL EnumerateElement(int userId, int context);
+  bool SOURCE_FASTCALL EnumerateElement(int userId, int context);
 
  public:
   CUtlVector<CVRADDispColl *> m_DispList;
@@ -44,7 +44,7 @@ class CBSPDispRayEnumerator : public ISpatialLeafEnumerator,
   bool EnumerateLeaf(int ndxLeaf, int context);
 
   // IBSPTreeDataEnumerator
-  bool FASTCALL EnumerateElement(int userId, int context);
+  bool SOURCE_FASTCALL EnumerateElement(int userId, int context);
 };
 
 //
@@ -196,7 +196,7 @@ bool CBSPDispFaceListEnumerator::EnumerateLeaf(int ndxLeaf, int context) {
 }
 
 // IBSPTreeDataEnumerator
-bool FASTCALL CBSPDispFaceListEnumerator::EnumerateElement(int userId,
+bool SOURCE_FASTCALL CBSPDispFaceListEnumerator::EnumerateElement(int userId,
                                                            int context) {
   return s_DispMgr.DispFaceList_EnumerateElement(userId, context);
 }
@@ -208,7 +208,7 @@ bool CBSPDispRayEnumerator::EnumerateLeaf(int ndxLeaf, int context) {
   return s_DispMgr.DispRay_EnumerateLeaf(ndxLeaf, context);
 }
 
-bool FASTCALL CBSPDispRayEnumerator::EnumerateElement(int userId, int context) {
+bool SOURCE_FASTCALL CBSPDispRayEnumerator::EnumerateElement(int userId, int context) {
   return s_DispMgr.DispRay_EnumerateElement(userId, context);
 }
 
@@ -221,7 +221,7 @@ class CBSPDispRayDistanceEnumerator : public IBSPTreeDataEnumerator {
   CBSPDispRayDistanceEnumerator() : m_Distance(1.0f), m_pSurface(0) {}
 
   // IBSPTreeDataEnumerator
-  bool FASTCALL EnumerateElement(int userId, int context) {
+  bool SOURCE_FASTCALL EnumerateElement(int userId, int context) {
     return s_DispMgr.DispRayDistance_EnumerateElement(userId, this);
   }
 
@@ -1404,7 +1404,7 @@ bool CVRadDispMgr::BuildDispSamples(lightinfo_t *pLightInfo,
   int ndxU, ndxV;
 
   // NOTE: These allocations are necessary to avoid stack overflow
-  // FIXME: Solve with storing global per-thread temp buffers if there's
+  // TODO(d.rattman): Solve with storing global per-thread temp buffers if there's
   // a performance problem with this solution...
   bool bTempAllocationNecessary =
       ((height + 1) * (width + 1)) > SINGLE_BRUSH_MAP;

@@ -49,7 +49,7 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Allows the doc to call back into the CommEdit editor tool
 //-----------------------------------------------------------------------------
-abstract_class IPetDocCallback
+the_interface IPetDocCallback
 {
 public:
 	// Called by the doc when the data changes
@@ -60,7 +60,7 @@ public:
 //-----------------------------------------------------------------------------
 // Global methods of the commedit tool
 //-----------------------------------------------------------------------------
-abstract_class IPetTool
+the_interface IPetTool
 {
 public:
 	// Gets at the rool panel (for modal dialogs)

@@ -1,19 +1,24 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_MATHLIB_VECTOR_H_
 #define SOURCE_MATHLIB_VECTOR_H_
 
 #include <float.h>
-#include <xmmintrin.h>
 #include <algorithm>
 #include <cmath>
-#include <cstdlib>  // For rand(). We really need a library!
+#include <cstdlib>  // std::rand.
+
+#include "build/include/build_config.h"
+
+#if defined(COMPILER_MSVC) && defined(ARCH_CPU_X86)
+#include <xmmintrin.h>  // SSE* intrinsics.
+#endif
 
 #include "base/include/base_types.h"
 #include "mathlib/math_pfns.h"
 #include "mathlib/vector2d.h"
-#include "tier0/include/basetypes.h"  // For f32, put this somewhere else?
 #include "tier0/include/dbg.h"
+#include "tier0/include/floattypes.h"
 #include "tier0/include/threadtools.h"
 
 // Uncomment this to add extra Asserts to check for NANs, uninitialized vecs,
@@ -79,14 +84,14 @@ class Vector {
   bool operator!=(const Vector& v) const;
 
   // arithmetic operations
-  FORCEINLINE Vector& operator+=(const Vector& v);
-  FORCEINLINE Vector& operator-=(const Vector& v);
-  FORCEINLINE Vector& operator*=(const Vector& v);
-  FORCEINLINE Vector& operator*=(f32 s);
-  FORCEINLINE Vector& operator/=(const Vector& v);
-  FORCEINLINE Vector& operator/=(f32 s);
-  FORCEINLINE Vector& operator+=(f32 fl);  ///< broadcast add
-  FORCEINLINE Vector& operator-=(f32 fl);  ///< broadcast sub
+  SOURCE_FORCEINLINE Vector& operator+=(const Vector& v);
+  SOURCE_FORCEINLINE Vector& operator-=(const Vector& v);
+  SOURCE_FORCEINLINE Vector& operator*=(const Vector& v);
+  SOURCE_FORCEINLINE Vector& operator*=(f32 s);
+  SOURCE_FORCEINLINE Vector& operator/=(const Vector& v);
+  SOURCE_FORCEINLINE Vector& operator/=(f32 s);
+  SOURCE_FORCEINLINE Vector& operator+=(f32 fl);  ///< broadcast add
+  SOURCE_FORCEINLINE Vector& operator-=(f32 fl);  ///< broadcast sub
 
   // negate the vector components
   void Negate();
@@ -95,7 +100,7 @@ class Vector {
   inline f32 Length() const;
 
   // Get the vector's magnitude squared.
-  FORCEINLINE f32 LengthSqr(void) const {
+  SOURCE_FORCEINLINE f32 LengthSqr(void) const {
     CHECK_VALID(*this);
     return (x * x + y * y + z * z);
   }
@@ -111,7 +116,8 @@ class Vector {
   bool IsLengthLessThan(f32 val) const;
 
   // check if a vector is within the box defined by two other vectors
-  FORCEINLINE bool WithinAABox(Vector const& boxmin, Vector const& boxmax);
+  SOURCE_FORCEINLINE bool WithinAABox(Vector const& boxmin,
+                                      Vector const& boxmax);
 
   // Get the distance from this vector to the other one.
   f32 DistTo(const Vector& vOther) const;
@@ -120,7 +126,7 @@ class Vector {
   // NJS: note, VC wasn't inlining it correctly in several deeply nested inlines
   // due to being an 'out of line' inline. may be able to tidy this up after
   // switching to VC7
-  FORCEINLINE f32 DistToSqr(const Vector& vOther) const {
+  SOURCE_FORCEINLINE f32 DistToSqr(const Vector& vOther) const {
     Vector delta;
 
     delta.x = x - vOther.x;
@@ -182,12 +188,12 @@ class Vector {
 #endif
 };
 
-#define USE_M64S ((!defined(_X360)) && (!defined(_LINUX)))
+#define USE_M64S ((!defined(_X360)) && (!defined(OS_POSIX)))
 
 //=========================================================
 // 4D Short Vector (aligned on 8-u8 boundary)
 //=========================================================
-class ALIGN8 ShortVector {
+class alignas(8) ShortVector {
  public:
   i16 x, y, z, w;
 
@@ -216,13 +222,13 @@ class ALIGN8 ShortVector {
   bool operator!=(const ShortVector& v) const;
 
   // Arithmetic operations
-  FORCEINLINE ShortVector& operator+=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator-=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator*=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator*=(f32 s);
-  FORCEINLINE ShortVector& operator/=(const ShortVector& v);
-  FORCEINLINE ShortVector& operator/=(f32 s);
-  FORCEINLINE ShortVector operator*(f32 fl) const;
+  SOURCE_FORCEINLINE ShortVector& operator+=(const ShortVector& v);
+  SOURCE_FORCEINLINE ShortVector& operator-=(const ShortVector& v);
+  SOURCE_FORCEINLINE ShortVector& operator*=(const ShortVector& v);
+  SOURCE_FORCEINLINE ShortVector& operator*=(f32 s);
+  SOURCE_FORCEINLINE ShortVector& operator/=(const ShortVector& v);
+  SOURCE_FORCEINLINE ShortVector& operator/=(f32 s);
+  SOURCE_FORCEINLINE ShortVector operator*(f32 fl) const;
 
  private:
   // No copy constructors allowed if we're in optimal mode
@@ -264,13 +270,13 @@ class IntVector4D {
   bool operator!=(const IntVector4D& v) const;
 
   // Arithmetic operations
-  FORCEINLINE IntVector4D& operator+=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator-=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator*=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator*=(f32 s);
-  FORCEINLINE IntVector4D& operator/=(const IntVector4D& v);
-  FORCEINLINE IntVector4D& operator/=(f32 s);
-  FORCEINLINE IntVector4D operator*(f32 fl) const;
+  SOURCE_FORCEINLINE IntVector4D& operator+=(const IntVector4D& v);
+  SOURCE_FORCEINLINE IntVector4D& operator-=(const IntVector4D& v);
+  SOURCE_FORCEINLINE IntVector4D& operator*=(const IntVector4D& v);
+  SOURCE_FORCEINLINE IntVector4D& operator*=(f32 s);
+  SOURCE_FORCEINLINE IntVector4D& operator/=(const IntVector4D& v);
+  SOURCE_FORCEINLINE IntVector4D& operator/=(f32 s);
+  SOURCE_FORCEINLINE IntVector4D operator*(f32 fl) const;
 
  private:
   // No copy constructors allowed if we're in optimal mode
@@ -314,7 +320,7 @@ class TableVector {
 
 // Here's where we add all those lovely SSE optimized routines
 
-class ALIGN16 VectorAligned : public Vector {
+class alignas(16) VectorAligned : public Vector {
  public:
   inline VectorAligned(void){};
   inline VectorAligned(f32 X, f32 Y, f32 Z) { Init(X, Y, Z); }
@@ -344,20 +350,22 @@ class ALIGN16 VectorAligned : public Vector {
 // Vector related operations
 
 // Vector clear
-FORCEINLINE void VectorClear(Vector& a);
+SOURCE_FORCEINLINE void VectorClear(Vector& a);
 
 // Copy
-FORCEINLINE void VectorCopy(const Vector& src, Vector& dst);
+SOURCE_FORCEINLINE void VectorCopy(const Vector& src, Vector& dst);
 
 // Vector arithmetic
-FORCEINLINE void VectorAdd(const Vector& a, const Vector& b, Vector& result);
-FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b,
-                                Vector& result);
-FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& result);
-FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b,
-                                Vector& result);
-FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& result);
-FORCEINLINE void VectorDivide(const Vector& a, const Vector& b, Vector& result);
+SOURCE_FORCEINLINE void VectorAdd(const Vector& a, const Vector& b,
+                                  Vector& result);
+SOURCE_FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b,
+                                       Vector& result);
+SOURCE_FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& result);
+SOURCE_FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b,
+                                       Vector& result);
+SOURCE_FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& result);
+SOURCE_FORCEINLINE void VectorDivide(const Vector& a, const Vector& b,
+                                     Vector& result);
 inline void VectorScale(const Vector& in, f32 scale, Vector& result);
 inline void VectorMA(const Vector& start, f32 scale, const Vector& direction,
                      Vector& dest);
@@ -369,14 +377,14 @@ bool VectorsAreEqual(const Vector& src1, const Vector& src2,
 #define VectorExpand(v) (v).x, (v).y, (v).z
 
 // Normalization
-// FIXME: Can't use quite yet
+// TODO(d.rattman): Can't use quite yet
 // f32 VectorNormalize( Vector& v );
 
 // Length
 inline f32 VectorLength(const Vector& v);
 
 // Dot Product
-FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b);
+SOURCE_FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b);
 
 // Cross product
 void CrossProduct(const Vector& a, const Vector& b, Vector& result);
@@ -510,7 +518,7 @@ inline bool Vector::operator!=(const Vector& src) const {
 
 // Copy
 
-FORCEINLINE void VectorCopy(const Vector& src, Vector& dst) {
+SOURCE_FORCEINLINE void VectorCopy(const Vector& src, Vector& dst) {
   CHECK_VALID(src);
   dst.x = src.x;
   dst.y = src.y;
@@ -534,7 +542,7 @@ inline void Vector::Negate() {
   z = -z;
 }
 
-FORCEINLINE Vector& Vector::operator+=(const Vector& v) {
+SOURCE_FORCEINLINE Vector& Vector::operator+=(const Vector& v) {
   CHECK_VALID(*this);
   CHECK_VALID(v);
   x += v.x;
@@ -543,7 +551,7 @@ FORCEINLINE Vector& Vector::operator+=(const Vector& v) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator-=(const Vector& v) {
+SOURCE_FORCEINLINE Vector& Vector::operator-=(const Vector& v) {
   CHECK_VALID(*this);
   CHECK_VALID(v);
   x -= v.x;
@@ -552,7 +560,7 @@ FORCEINLINE Vector& Vector::operator-=(const Vector& v) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator*=(f32 fl) {
+SOURCE_FORCEINLINE Vector& Vector::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -560,7 +568,7 @@ FORCEINLINE Vector& Vector::operator*=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator*=(const Vector& v) {
+SOURCE_FORCEINLINE Vector& Vector::operator*=(const Vector& v) {
   CHECK_VALID(v);
   x *= v.x;
   y *= v.y;
@@ -570,7 +578,7 @@ FORCEINLINE Vector& Vector::operator*=(const Vector& v) {
 }
 
 // this ought to be an opcode.
-FORCEINLINE Vector& Vector::operator+=(f32 fl) {
+SOURCE_FORCEINLINE Vector& Vector::operator+=(f32 fl) {
   x += fl;
   y += fl;
   z += fl;
@@ -578,7 +586,7 @@ FORCEINLINE Vector& Vector::operator+=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator-=(f32 fl) {
+SOURCE_FORCEINLINE Vector& Vector::operator-=(f32 fl) {
   x -= fl;
   y -= fl;
   z -= fl;
@@ -586,7 +594,7 @@ FORCEINLINE Vector& Vector::operator-=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator/=(f32 fl) {
+SOURCE_FORCEINLINE Vector& Vector::operator/=(f32 fl) {
   Assert(fl != 0.0f);
   f32 oofl = 1.0f / fl;
   x *= oofl;
@@ -596,7 +604,7 @@ FORCEINLINE Vector& Vector::operator/=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE Vector& Vector::operator/=(const Vector& v) {
+SOURCE_FORCEINLINE Vector& Vector::operator/=(const Vector& v) {
   CHECK_VALID(v);
   Assert(v.x != 0.0f && v.y != 0.0f && v.z != 0.0f);
   x /= v.x;
@@ -617,15 +625,15 @@ inline void ShortVector::Init(i16 ix, i16 iy, i16 iz, i16 iw) {
   w = iw;
 }
 
-FORCEINLINE void ShortVector::Set(const ShortVector& vOther) {
+SOURCE_FORCEINLINE void ShortVector::Set(const ShortVector& vOther) {
   x = vOther.x;
   y = vOther.y;
   z = vOther.z;
   w = vOther.w;
 }
 
-FORCEINLINE void ShortVector::Set(const i16 ix, const i16 iy, const i16 iz,
-                                  const i16 iw) {
+SOURCE_FORCEINLINE void ShortVector::Set(const i16 ix, const i16 iy,
+                                         const i16 iz, const i16 iw) {
   x = ix;
   y = iy;
   z = iz;
@@ -662,7 +670,7 @@ inline bool ShortVector::operator!=(const ShortVector& src) const {
 
 // standard math operations
 
-FORCEINLINE ShortVector& ShortVector::operator+=(const ShortVector& v) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator+=(const ShortVector& v) {
   x += v.x;
   y += v.y;
   z += v.z;
@@ -670,7 +678,7 @@ FORCEINLINE ShortVector& ShortVector::operator+=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator-=(const ShortVector& v) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator-=(const ShortVector& v) {
   x -= v.x;
   y -= v.y;
   z -= v.z;
@@ -678,7 +686,7 @@ FORCEINLINE ShortVector& ShortVector::operator-=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator*=(f32 fl) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -686,7 +694,7 @@ FORCEINLINE ShortVector& ShortVector::operator*=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator*=(const ShortVector& v) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator*=(const ShortVector& v) {
   x *= v.x;
   y *= v.y;
   z *= v.z;
@@ -694,7 +702,7 @@ FORCEINLINE ShortVector& ShortVector::operator*=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator/=(f32 fl) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator/=(f32 fl) {
   Assert(fl != 0.0f);
   f32 oofl = 1.0f / fl;
   x *= oofl;
@@ -704,7 +712,7 @@ FORCEINLINE ShortVector& ShortVector::operator/=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE ShortVector& ShortVector::operator/=(const ShortVector& v) {
+SOURCE_FORCEINLINE ShortVector& ShortVector::operator/=(const ShortVector& v) {
   Assert(v.x != 0 && v.y != 0 && v.z != 0 && v.w != 0);
   x /= v.x;
   y /= v.y;
@@ -713,8 +721,8 @@ FORCEINLINE ShortVector& ShortVector::operator/=(const ShortVector& v) {
   return *this;
 }
 
-FORCEINLINE void ShortVectorMultiply(const ShortVector& src, f32 fl,
-                                     ShortVector& res) {
+SOURCE_FORCEINLINE void ShortVectorMultiply(const ShortVector& src, f32 fl,
+                                            ShortVector& res) {
   Assert(IsFinite(fl));
   res.x = src.x * fl;
   res.y = src.y * fl;
@@ -722,7 +730,7 @@ FORCEINLINE void ShortVectorMultiply(const ShortVector& src, f32 fl,
   res.w = src.w * fl;
 }
 
-FORCEINLINE ShortVector ShortVector::operator*(f32 fl) const {
+SOURCE_FORCEINLINE ShortVector ShortVector::operator*(f32 fl) const {
   ShortVector res;
   ShortVectorMultiply(*this, fl, res);
   return res;
@@ -739,15 +747,15 @@ inline void IntVector4D::Init(int ix, int iy, int iz, int iw) {
   w = iw;
 }
 
-FORCEINLINE void IntVector4D::Set(const IntVector4D& vOther) {
+SOURCE_FORCEINLINE void IntVector4D::Set(const IntVector4D& vOther) {
   x = vOther.x;
   y = vOther.y;
   z = vOther.z;
   w = vOther.w;
 }
 
-FORCEINLINE void IntVector4D::Set(const int ix, const int iy, const int iz,
-                                  const int iw) {
+SOURCE_FORCEINLINE void IntVector4D::Set(const int ix, const int iy,
+                                         const int iz, const int iw) {
   x = ix;
   y = iy;
   z = iz;
@@ -784,7 +792,7 @@ inline bool IntVector4D::operator!=(const IntVector4D& src) const {
 
 // standard math operations
 
-FORCEINLINE IntVector4D& IntVector4D::operator+=(const IntVector4D& v) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator+=(const IntVector4D& v) {
   x += v.x;
   y += v.y;
   z += v.z;
@@ -792,7 +800,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator+=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator-=(const IntVector4D& v) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator-=(const IntVector4D& v) {
   x -= v.x;
   y -= v.y;
   z -= v.z;
@@ -800,7 +808,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator-=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator*=(f32 fl) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator*=(f32 fl) {
   x *= fl;
   y *= fl;
   z *= fl;
@@ -808,7 +816,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator*=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator*=(const IntVector4D& v) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator*=(const IntVector4D& v) {
   x *= v.x;
   y *= v.y;
   z *= v.z;
@@ -816,7 +824,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator*=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator/=(f32 fl) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator/=(f32 fl) {
   Assert(fl != 0.0f);
   f32 oofl = 1.0f / fl;
   x *= oofl;
@@ -826,7 +834,7 @@ FORCEINLINE IntVector4D& IntVector4D::operator/=(f32 fl) {
   return *this;
 }
 
-FORCEINLINE IntVector4D& IntVector4D::operator/=(const IntVector4D& v) {
+SOURCE_FORCEINLINE IntVector4D& IntVector4D::operator/=(const IntVector4D& v) {
   Assert(v.x != 0 && v.y != 0 && v.z != 0 && v.w != 0);
   x /= v.x;
   y /= v.y;
@@ -835,8 +843,8 @@ FORCEINLINE IntVector4D& IntVector4D::operator/=(const IntVector4D& v) {
   return *this;
 }
 
-FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, f32 fl,
-                                     IntVector4D& res) {
+SOURCE_FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, f32 fl,
+                                            IntVector4D& res) {
   Assert(IsFinite(fl));
   res.x = src.x * fl;
   res.y = src.y * fl;
@@ -844,7 +852,7 @@ FORCEINLINE void IntVector4DMultiply(const IntVector4D& src, f32 fl,
   res.w = src.w * fl;
 }
 
-FORCEINLINE IntVector4D IntVector4D::operator*(f32 fl) const {
+SOURCE_FORCEINLINE IntVector4D IntVector4D::operator*(f32 fl) const {
   IntVector4D res;
   IntVector4DMultiply(*this, fl, res);
   return res;
@@ -852,7 +860,7 @@ FORCEINLINE IntVector4D IntVector4D::operator*(f32 fl) const {
 
 // =======================
 
-FORCEINLINE void VectorAdd(const Vector& a, const Vector& b, Vector& c) {
+SOURCE_FORCEINLINE void VectorAdd(const Vector& a, const Vector& b, Vector& c) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   c.x = a.x + b.x;
@@ -860,7 +868,8 @@ FORCEINLINE void VectorAdd(const Vector& a, const Vector& b, Vector& c) {
   c.z = a.z + b.z;
 }
 
-FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b, Vector& c) {
+SOURCE_FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b,
+                                       Vector& c) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   c.x = a.x - b.x;
@@ -868,7 +877,7 @@ FORCEINLINE void VectorSubtract(const Vector& a, const Vector& b, Vector& c) {
   c.z = a.z - b.z;
 }
 
-FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& c) {
+SOURCE_FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& c) {
   CHECK_VALID(a);
   Assert(IsFinite(b));
   c.x = a.x * b;
@@ -876,7 +885,8 @@ FORCEINLINE void VectorMultiply(const Vector& a, f32 b, Vector& c) {
   c.z = a.z * b;
 }
 
-FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b, Vector& c) {
+SOURCE_FORCEINLINE void VectorMultiply(const Vector& a, const Vector& b,
+                                       Vector& c) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   c.x = a.x * b.x;
@@ -889,7 +899,7 @@ inline void VectorScale(const Vector& in, f32 scale, Vector& result) {
   VectorMultiply(in, scale, result);
 }
 
-FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& c) {
+SOURCE_FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& c) {
   CHECK_VALID(a);
   Assert(b != 0.0f);
   f32 oob = 1.0f / b;
@@ -898,7 +908,8 @@ FORCEINLINE void VectorDivide(const Vector& a, f32 b, Vector& c) {
   c.z = a.z * oob;
 }
 
-FORCEINLINE void VectorDivide(const Vector& a, const Vector& b, Vector& c) {
+SOURCE_FORCEINLINE void VectorDivide(const Vector& a, const Vector& b,
+                                     Vector& c) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   Assert((b.x != 0.0f) && (b.y != 0.0f) && (b.z != 0.0f));
@@ -907,7 +918,7 @@ FORCEINLINE void VectorDivide(const Vector& a, const Vector& b, Vector& c) {
   c.z = a.z / b.z;
 }
 
-// FIXME: Remove
+// TODO(d.rattman): Remove
 // For backwards compatability
 inline void Vector::MulAdd(const Vector& a, const Vector& b, f32 scalar) {
   CHECK_VALID(a);
@@ -947,7 +958,7 @@ inline Vector& AllocTempVector() {
 
 // dot, cross
 
-FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b) {
+SOURCE_FORCEINLINE f32 DotProduct(const Vector& a, const Vector& b) {
   CHECK_VALID(a);
   CHECK_VALID(b);
   return (a.x * b.x + a.y * b.y + a.z * b.z);
@@ -996,7 +1007,7 @@ inline f32 Vector::Length(void) const {
 // Normalization
 
 /*
-// FIXME: Can't use until we're un-macroed in mathlib.h
+// TODO(d.rattman): Can't use until we're un-macroed in mathlib.h
 inline f32 VectorNormalize( Vector& v )
 {
         Assert( v.IsValid() );
@@ -1007,7 +1018,7 @@ inline f32 VectorNormalize( Vector& v )
         }
         else
         {
-                // FIXME:
+                // TODO(d.rattman):
                 // Just copying the existing implemenation; shouldn't res.z ==
 0? v.x = v.y = 0.0f; v.z = 1.0f;
         }
@@ -1280,7 +1291,7 @@ inline bool QuaternionsAreEqual(const Quaternion& src1, const Quaternion& src2,
 
 // Here's where we add all those lovely SSE optimized routines
 
-class ALIGN16 QuaternionAligned : public Quaternion {
+class alignas(16) QuaternionAligned : public Quaternion {
  public:
   inline QuaternionAligned(void){};
   inline QuaternionAligned(f32 X, f32 Y, f32 Z, f32 W) { Init(X, Y, Z, W); }
@@ -1752,22 +1763,29 @@ inline void AngularImpulseToQAngle(const AngularImpulse& impulse,
 
 extern f32 (*pfInvRSquared)(const f32* v);
 
-FORCEINLINE f32 InvRSquared(f32 const* v) { return (*pfInvRSquared)(v); }
-FORCEINLINE f32 InvRSquared(const Vector& v) { return InvRSquared(&v.x); }
+SOURCE_FORCEINLINE f32 InvRSquared(f32 const* v) { return (*pfInvRSquared)(v); }
+SOURCE_FORCEINLINE f32 InvRSquared(const Vector& v) {
+  return InvRSquared(&v.x);
+}
 
-extern f32(FASTCALL* pfVectorNormalize)(Vector& v);
+extern f32(SOURCE_FASTCALL* pfVectorNormalize)(Vector& v);
 
-// FIXME: Change this back to a #define once we get rid of the f32 version
-FORCEINLINE f32 VectorNormalize(Vector& v) { return (*pfVectorNormalize)(v); }
-// FIXME: Obsolete version of VectorNormalize, once we remove all the friggin
-// f32*s
-FORCEINLINE f32 VectorNormalize(f32* v) {
+// TODO(d.rattman): Change this back to a #define once we get rid of the f32
+// version
+SOURCE_FORCEINLINE f32 VectorNormalize(Vector& v) {
+  return (*pfVectorNormalize)(v);
+}
+// TODO(d.rattman): Obsolete version of VectorNormalize, once we remove all the
+// friggin f32*s
+SOURCE_FORCEINLINE f32 VectorNormalize(f32* v) {
   return VectorNormalize(*(reinterpret_cast<Vector*>(v)));
 }
 
-extern void(FASTCALL* pfVectorNormalizeFast)(Vector& v);
+extern void(SOURCE_FASTCALL* pfVectorNormalizeFast)(Vector& v);
 
-FORCEINLINE void VectorNormalizeFast(Vector& v) { (*pfVectorNormalizeFast)(v); }
+SOURCE_FORCEINLINE void VectorNormalizeFast(Vector& v) {
+  (*pfVectorNormalizeFast)(v);
+}
 
 inline f32 Vector::NormalizeInPlace() { return VectorNormalize(*this); }
 

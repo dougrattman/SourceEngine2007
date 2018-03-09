@@ -34,7 +34,7 @@
 // ADVISOR_MSG_START_BEAM etc)
 #include "npc_advisor_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -1774,7 +1774,7 @@ static impactentry_t advisorAngularTable[] = {
 static impactdamagetable_t gAdvisorImpactDamageTable = {
     advisorLinearTable, advisorAngularTable,
 
-    ARRAYSIZE(advisorLinearTable), ARRAYSIZE(advisorAngularTable),
+    SOURCE_ARRAYSIZE(advisorLinearTable), SOURCE_ARRAYSIZE(advisorAngularTable),
 
     200 * 200,  // minimum linear speed squared
     180 * 180,  // minimum angular speed squared (360 deg/s to cause spin/slice

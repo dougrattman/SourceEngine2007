@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2006, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: an entity which turns on and off counting and display of the particle
 // performance metric
@@ -9,7 +9,7 @@
 #include "baseentity.h"
 #include "entityoutput.h"
 #include "tier1/convar.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

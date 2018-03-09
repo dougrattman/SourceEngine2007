@@ -20,7 +20,7 @@
 #include "VConfigDialog.h"
 #include "ConfigManager.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define VCONFIG_MAIN_PATH_ID	"MAIN"
@@ -52,7 +52,7 @@ void UtlStrcpy( CUtlVector<char> &dest, const char *pSrc )
 //-----------------------------------------------------------------------------
 const char *GetBaseDirectory( void )
 {
-	static char path[MAX_PATH] = {0};
+	static char path[SOURCE_MAX_PATH] = {0};
 	if ( path[0] == 0 )
 	{
 		GetModuleFileName( (HMODULE)GetAppInstance(), path, sizeof( path ) );
@@ -96,12 +96,12 @@ bool AddConfig( int configID )
 	// Default executable
 	Q_strncpy( newInfo.exeName, "hl2.exe", sizeof( newInfo.exeName ) );
 
-	char szPath[MAX_PATH];
+	char szPath[SOURCE_MAX_PATH];
 	Q_strncpy( szPath, pModDirectory, sizeof( szPath ) );
 	Q_StripLastDir( szPath, sizeof( szPath ) );
 	Q_StripTrailingSlash( szPath );
 
-	char fullDir[MAX_PATH];
+	char fullDir[SOURCE_MAX_PATH];
 	g_ConfigManager.GetRootGameDirectory( fullDir, sizeof( fullDir ), g_ConfigManager.GetRootDirectory(), "half-life 2" );
 	
 	return g_ConfigManager.AddDefaultConfig( newInfo, gameBlock, szPath, fullDir );
@@ -231,7 +231,7 @@ void UpdateConfigsStatus_Init( void )
 	// Watch our config file for changes
 	if ( g_dwChangeHandle == NULL)
 	{
-		char szConfigDir[MAX_PATH];
+		char szConfigDir[SOURCE_MAX_PATH];
 		Q_strncpy( szConfigDir, GetBaseDirectory(), sizeof( szConfigDir ) );
 
 		g_dwChangeHandle = FindFirstChangeNotification( 
@@ -241,7 +241,7 @@ void UpdateConfigsStatus_Init( void )
  
 		if ( g_dwChangeHandle == INVALID_HANDLE_VALUE )
 		{
-			// FIXME: Unable to watch the file
+			// TODO(d.rattman): Unable to watch the file
 		}
 	}
 }	 
@@ -391,7 +391,7 @@ void ShutdownVGUI( void )
 //-----------------------------------------------------------------------------
 void SetMayaScriptSettings( )
 {
-	char pMayaScriptPath[ MAX_PATH ];
+	char pMayaScriptPath[ SOURCE_MAX_PATH ];
 	Q_snprintf( pMayaScriptPath, sizeof(pMayaScriptPath), "%%VPROJECT%%\\..\\sdktools\\maya\\7.0\\modules\\utilities\\scripts" );
 	SetVConfigRegistrySetting( "MAYA_SCRIPT_PATH", pMayaScriptPath, false );
 }
@@ -405,16 +405,16 @@ void SetXSIScriptSettings( )
 	// Determine the currently installed version of XSI
 	char *pXSIVersion = "5.1";
 	
-	// FIXME: We need a way of knowing the current version of XSI being used 
+	// TODO(d.rattman): We need a way of knowing the current version of XSI being used 
 	// so we can set up the appropriate search paths. There's no easy way of doing this currently
 	// so I'm defining my own environment variable
-	char pXSIVersionBuf[ MAX_PATH ];
+	char pXSIVersionBuf[ SOURCE_MAX_PATH ];
 	if ( GetVConfigRegistrySetting( "XSI_VERSION", pXSIVersionBuf, sizeof(pXSIVersionBuf) ) )
 	{
 		pXSIVersion = pXSIVersionBuf;
 	}
 
-	char pXSIPluginPath[ MAX_PATH ];
+	char pXSIPluginPath[ SOURCE_MAX_PATH ];
 	Q_snprintf( pXSIPluginPath, sizeof(pXSIPluginPath), "%%VPROJECT%%\\..\\sdktools\\xsi\\%s\\valvesource", pXSIVersion );
 	SetVConfigRegistrySetting( "XSI_PLUGINS", pXSIPluginPath, false );
 	SetVConfigRegistrySetting( "XSI_VERSION", pXSIVersion, false );
@@ -428,7 +428,7 @@ void SetXSIScriptSettings( )
 
 void SetPathSettings( )
 {
-	char pPathBuf[ MAX_PATH*32 ];
+	char pPathBuf[ SOURCE_MAX_PATH*32 ];
 	if ( GetVConfigRegistrySetting( "PATH", pPathBuf, sizeof(pPathBuf) ) )
 	{
 		Q_FixSlashes( pPathBuf );
@@ -547,7 +547,7 @@ bool CVConfigApp::PreInit()
 	FileSystem_SetErrorMode( FS_ERRORMODE_AUTO );
 
 	// We only want to use the gameinfo.txt that is in the bin\vconfig directory.
-	char dirName[MAX_PATH];
+	char dirName[SOURCE_MAX_PATH];
 	Q_strncpy( dirName, GetBaseDirectory(), sizeof( dirName ) );
 	Q_AppendSlash( dirName, sizeof( dirName ) );
 	Q_strncat( dirName, "vconfig", sizeof( dirName ), COPY_ALL_CHARACTERS );

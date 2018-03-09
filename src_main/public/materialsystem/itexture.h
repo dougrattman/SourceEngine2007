@@ -16,7 +16,7 @@ struct Rect_t;
 // cause this interface to be called. It will also be called upon
 // mode switch, or on other occasions where the bits are discarded.
 //-----------------------------------------------------------------------------
-abstract_class ITextureRegenerator {
+the_interface ITextureRegenerator {
  public:
   // This will be called when the texture bits need to be regenerated.
   // Use the VTFTexture interface, which has been set up with the
@@ -31,7 +31,7 @@ abstract_class ITextureRegenerator {
   virtual void Release() = 0;
 };
 
-abstract_class ITexture {
+the_interface ITexture {
  public:
   // Various texture polling methods
   virtual const char *GetName(void) const = 0;

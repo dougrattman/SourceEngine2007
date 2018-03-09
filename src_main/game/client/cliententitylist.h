@@ -35,7 +35,7 @@ class C_BaseEntity;
   	   
 class IClientEntityListener;
 
-abstract_class C_BaseEntityClassList
+the_interface C_BaseEntityClassList
 {
 public:
 	C_BaseEntityClassList();

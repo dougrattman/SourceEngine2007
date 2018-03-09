@@ -15,7 +15,7 @@
 #include "vguiscreen.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define VIEWMODEL_ANIMATION_PARITY_BITS 3
@@ -124,7 +124,7 @@ void CBaseViewModel::SpawnControlPanels()
 
 	MDLCACHE_CRITICAL_SECTION();
 
-	// FIXME: Deal with dynamically resizing control panels?
+	// TODO(d.rattman): Deal with dynamically resizing control panels?
 
 	// If we're attached to an entity, spawn control panels on it instead of use
 	CBaseAnimating *pEntityToSpawnOn = this;
@@ -439,7 +439,7 @@ void CBaseViewModel::CalcViewModelLag( Vector& origin, QAngle& angles, QAngle& o
 			flSpeed *= flScale;
 		}
 
-		// FIXME:  Needs to be predictable?
+		// TODO(d.rattman):  Needs to be predictable?
 		VectorMA( m_vecLastFacing, flSpeed * gpGlobals->frametime, vDifference, m_vecLastFacing );
 		// Make sure it doesn't grow out of control!!!
 		VectorNormalize( m_vecLastFacing );
@@ -463,7 +463,7 @@ void CBaseViewModel::CalcViewModelLag( Vector& origin, QAngle& angles, QAngle& o
 		angles = vOriginalAngles;
 	}
 
-	//FIXME: These are the old settings that caused too many exposed polys on some models
+	//TODO(d.rattman): These are the old settings that caused too many exposed polys on some models
 	VectorMA( origin, -pitch * 0.035f,	forward,	origin );
 	VectorMA( origin, -pitch * 0.03f,		right,	origin );
 	VectorMA( origin, -pitch * 0.02f,		up,		origin);

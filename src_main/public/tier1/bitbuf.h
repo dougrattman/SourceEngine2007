@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // NOTE: old_bf_read is guaranteed to return zeros if it overflows.
 
@@ -9,14 +9,11 @@
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
-
+#include "tier0/include/platform.h"
 
 // Forward declarations.
-
-
 class Vector;
 class QAngle;
-
 
 // You can define a handler function that will be called in case of
 // out-of-range values and overruns here.
@@ -24,8 +21,6 @@ class QAngle;
 // NOTE: the handler is only called in debug mode.
 //
 // Call SetBitBufErrorHandler to install a handler.
-
-
 typedef enum {
   BITBUFERROR_VALUE_OUT_OF_RANGE =
       0,                       // Tried to write a value with too few bits.
@@ -50,18 +45,14 @@ extern void InternalBitBufErrorHandler(BitBufErrorType errorType,
 // handler.
 void SetBitBufErrorHandler(BitBufErrorHandler fn);
 
-
 // Helpers.
 
-
 inline int BitByte(int bits) {
-  // return PAD_NUMBER( bits, 8 ) >> 3;
+  // return SOURCE_PAD_NUMBER( bits, 8 ) >> 3;
   return (bits + 7) >> 3;
 }
 
-
 // Used for serialization
-
 
 class old_bf_write {
  public:
@@ -178,9 +169,7 @@ class old_bf_write {
   const char *m_pDebugName;
 };
 
-
 // Inlined methods
-
 
 // How many bytes are filled in?
 inline int old_bf_write::GetNumBytesWritten() { return BitByte(m_iCurBit); }
@@ -296,9 +285,7 @@ inline void old_bf_write::WriteUBitLong(unsigned int curData, int numbits,
   m_iCurBit += numbits;
 }
 
-
 // This is useful if you just want a buffer to write into on the stack.
-
 
 template <int SIZE>
 class old_bf_write_static : public old_bf_write {
@@ -308,9 +295,7 @@ class old_bf_write_static : public old_bf_write {
   char m_StaticData[SIZE];
 };
 
-
 // Used for unserialization
-
 
 class old_bf_read {
  public:
@@ -358,7 +343,9 @@ class old_bf_read {
   // Get the base pointer.
   const unsigned char *GetBasePointer() { return m_pData; }
 
-  FORCEINLINE int TotalBytesAvailable(void) const { return m_nDataBytes; }
+  SOURCE_FORCEINLINE int TotalBytesAvailable(void) const {
+    return m_nDataBytes;
+  }
 
   // Read a list of bits in..
   void ReadBits(void *pOut, int nBits);
@@ -454,9 +441,7 @@ class old_bf_read {
   const char *m_pDebugName;
 };
 
-
 // Inlines.
-
 
 inline int old_bf_read::GetNumBytesRead() { return BitByte(m_iCurBit); }
 
@@ -512,8 +497,8 @@ inline int old_bf_read::ReadOneBit() {
 inline float old_bf_read::ReadBitFloat() {
   long val;
 
-  COMPILE_TIME_ASSERT(sizeof(float) == sizeof(long));
-  COMPILE_TIME_ASSERT(sizeof(float) == 4);
+  static_assert(sizeof(float) == sizeof(long));
+  static_assert(sizeof(float) == 4);
 
   if (CheckForOverflow(32)) return 0.0f;
 
@@ -582,9 +567,9 @@ class CBitBuffer {
     m_nDataBytes = 0;
   }
 
-  FORCEINLINE void SetOverflowFlag() { m_bOverflow = true; }
+  SOURCE_FORCEINLINE void SetOverflowFlag() { m_bOverflow = true; }
 
-  FORCEINLINE bool IsOverflowed(void) const { return m_bOverflow; }
+  SOURCE_FORCEINLINE bool IsOverflowed(void) const { return m_bOverflow; }
 
   static const uint32_t s_nMaskTable[33];  // 0 1 3 7 15 ..
 };
@@ -618,18 +603,18 @@ class CBitWrite : public CBitBuffer {
     TempFlush();
     Assert((!m_pData) || m_bFlushed);
   }
-  FORCEINLINE int GetNumBitsLeft(void) const {
+  SOURCE_FORCEINLINE int GetNumBitsLeft(void) const {
     return m_nOutBitsAvail + (32 * (m_pBufferEnd - m_pDataOut - 1));
   }
 
-  FORCEINLINE void Reset() {
+  SOURCE_FORCEINLINE void Reset() {
     m_bOverflow = false;
     m_nOutBitsAvail = 32;
     m_pDataOut = m_pData;
     m_nOutBufWord = 0;
   }
 
-  FORCEINLINE void TempFlush() {
+  SOURCE_FORCEINLINE void TempFlush() {
     // someone wants to know how much data we have written, or the pointer to
     // it, so we'd better make sure we write our data
     if (m_nOutBitsAvail != 32) {
@@ -643,49 +628,51 @@ class CBitWrite : public CBitBuffer {
     }
   }
 
-  FORCEINLINE unsigned char *GetBasePointer() {
+  SOURCE_FORCEINLINE unsigned char *GetBasePointer() {
     TempFlush();
     return reinterpret_cast<unsigned char *>(m_pData);
   }
 
-  FORCEINLINE unsigned char *GetData() { return GetBasePointer(); }
+  SOURCE_FORCEINLINE unsigned char *GetData() { return GetBasePointer(); }
 
-  FORCEINLINE void Finish();
-  FORCEINLINE void Flush();
-  FORCEINLINE void FlushNoCheck();
-  FORCEINLINE void WriteOneBit(int nValue);
-  FORCEINLINE void WriteOneBitNoCheck(int nValue);
-  FORCEINLINE void WriteUBitLong(unsigned int data, int numbits,
-                                 bool bCheckRange = true);
-  FORCEINLINE void WriteSBitLong(int data, int numbits);
-  FORCEINLINE void WriteUBitVar(unsigned int data);
-  FORCEINLINE void WriteBitFloat(float flValue);
-  FORCEINLINE void WriteFloat(float flValue);
+  SOURCE_FORCEINLINE void Finish();
+  SOURCE_FORCEINLINE void Flush();
+  SOURCE_FORCEINLINE void FlushNoCheck();
+  SOURCE_FORCEINLINE void WriteOneBit(int nValue);
+  SOURCE_FORCEINLINE void WriteOneBitNoCheck(int nValue);
+  SOURCE_FORCEINLINE void WriteUBitLong(unsigned int data, int numbits,
+                                        bool bCheckRange = true);
+  SOURCE_FORCEINLINE void WriteSBitLong(int data, int numbits);
+  SOURCE_FORCEINLINE void WriteUBitVar(unsigned int data);
+  SOURCE_FORCEINLINE void WriteBitFloat(float flValue);
+  SOURCE_FORCEINLINE void WriteFloat(float flValue);
   bool WriteBits(const void *pInData, int nBits);
   void WriteBytes(const void *pBuf, int nBytes);
   void SeekToBit(int nSeekPos);
 
-  FORCEINLINE int GetNumBitsWritten(void) const {
+  SOURCE_FORCEINLINE int GetNumBitsWritten(void) const {
     return (32 - m_nOutBitsAvail) + (32 * (m_pDataOut - m_pData));
   }
 
-  FORCEINLINE int GetNumBytesWritten(void) const {
+  SOURCE_FORCEINLINE int GetNumBytesWritten(void) const {
     return (GetNumBitsWritten() + 7) >> 3;
   }
 
-  FORCEINLINE void WriteLong(long val) { WriteSBitLong(val, 32); }
+  SOURCE_FORCEINLINE void WriteLong(long val) { WriteSBitLong(val, 32); }
 
-  FORCEINLINE void WriteChar(int val) { WriteSBitLong(val, sizeof(char) << 3); }
+  SOURCE_FORCEINLINE void WriteChar(int val) {
+    WriteSBitLong(val, sizeof(char) << 3);
+  }
 
-  FORCEINLINE void WriteByte(int val) {
+  SOURCE_FORCEINLINE void WriteByte(int val) {
     WriteUBitLong(val, sizeof(unsigned char) << 3, false);
   }
 
-  FORCEINLINE void WriteShort(int val) {
+  SOURCE_FORCEINLINE void WriteShort(int val) {
     WriteSBitLong(val, sizeof(short) << 3);
   }
 
-  FORCEINLINE void WriteWord(int val) {
+  SOURCE_FORCEINLINE void WriteWord(int val) {
     WriteUBitLong(val, sizeof(unsigned short) << 3);
   }
 
@@ -744,8 +731,9 @@ void CBitWrite::WriteOneBit(int nValue) {
   }
 }
 
-FORCEINLINE void CBitWrite::WriteUBitLong(unsigned int nData, int nNumBits,
-                                          bool bCheckRange) {
+SOURCE_FORCEINLINE void CBitWrite::WriteUBitLong(unsigned int nData,
+                                                 int nNumBits,
+                                                 bool bCheckRange) {
 #ifdef _DEBUG
   // Make sure it doesn't overflow.
   if (bCheckRange && nNumBits < 32) {
@@ -774,11 +762,11 @@ FORCEINLINE void CBitWrite::WriteUBitLong(unsigned int nData, int nNumBits,
   }
 }
 
-FORCEINLINE void CBitWrite::WriteSBitLong(int nData, int nNumBits) {
+SOURCE_FORCEINLINE void CBitWrite::WriteSBitLong(int nData, int nNumBits) {
   WriteUBitLong((uint32_t)nData, nNumBits, false);
 }
 
-FORCEINLINE void CBitWrite::WriteUBitVar(unsigned int data) {
+SOURCE_FORCEINLINE void CBitWrite::WriteUBitVar(unsigned int data) {
   if ((data & 0xf) == data) {
     WriteUBitLong(0, 2);
     WriteUBitLong(data, 4);
@@ -798,11 +786,11 @@ FORCEINLINE void CBitWrite::WriteUBitVar(unsigned int data) {
   }
 }
 
-FORCEINLINE void CBitWrite::WriteBitFloat(float flValue) {
+SOURCE_FORCEINLINE void CBitWrite::WriteBitFloat(float flValue) {
   WriteUBitLong(*((uint32_t *)&flValue), 32);
 }
 
-FORCEINLINE void CBitWrite::WriteFloat(float flValue) {
+SOURCE_FORCEINLINE void CBitWrite::WriteFloat(float flValue) {
   // Pre-swap the float, since WriteBits writes raw data
   LittleFloat(&flValue, &flValue);
   WriteUBitLong(*((uint32_t *)&flValue), 32);
@@ -828,36 +816,40 @@ class CBitRead : public CBitBuffer {
 
   CBitRead(void) : CBitBuffer() {}
 
-  FORCEINLINE int Tell(void) const { return GetNumBitsRead(); }
+  SOURCE_FORCEINLINE int Tell(void) const { return GetNumBitsRead(); }
 
-  FORCEINLINE size_t TotalBytesAvailable(void) const { return m_nDataBytes; }
+  SOURCE_FORCEINLINE size_t TotalBytesAvailable(void) const {
+    return m_nDataBytes;
+  }
 
-  FORCEINLINE int GetNumBitsLeft() const { return m_nDataBits - Tell(); }
+  SOURCE_FORCEINLINE int GetNumBitsLeft() const { return m_nDataBits - Tell(); }
 
-  FORCEINLINE int GetNumBytesLeft() const { return GetNumBitsLeft() >> 3; }
+  SOURCE_FORCEINLINE int GetNumBytesLeft() const {
+    return GetNumBitsLeft() >> 3;
+  }
 
   bool Seek(int nPosition);
 
-  FORCEINLINE bool SeekRelative(int nOffset) {
+  SOURCE_FORCEINLINE bool SeekRelative(int nOffset) {
     return Seek(GetNumBitsRead() + nOffset);
   }
 
-  FORCEINLINE unsigned char const *GetBasePointer() {
+  SOURCE_FORCEINLINE unsigned char const *GetBasePointer() {
     return reinterpret_cast<unsigned char const *>(m_pData);
   }
 
   void StartReading(const void *pData, int nBytes, int iStartBit = 0,
                     int nBits = -1);
 
-  FORCEINLINE int GetNumBitsRead(void) const;
+  SOURCE_FORCEINLINE int GetNumBitsRead(void) const;
 
-  FORCEINLINE void GrabNextDWord(bool bOverFlowImmediately = false);
-  FORCEINLINE void FetchNext();
-  FORCEINLINE unsigned int ReadUBitLong(int numbits);
-  FORCEINLINE int ReadSBitLong(int numbits);
-  FORCEINLINE unsigned int ReadUBitVar();
-  FORCEINLINE unsigned int PeekUBitLong(int numbits);
-  FORCEINLINE float ReadBitFloat();
+  SOURCE_FORCEINLINE void GrabNextDWord(bool bOverFlowImmediately = false);
+  SOURCE_FORCEINLINE void FetchNext();
+  SOURCE_FORCEINLINE unsigned int ReadUBitLong(int numbits);
+  SOURCE_FORCEINLINE int ReadSBitLong(int numbits);
+  SOURCE_FORCEINLINE unsigned int ReadUBitVar();
+  SOURCE_FORCEINLINE unsigned int PeekUBitLong(int numbits);
+  SOURCE_FORCEINLINE float ReadBitFloat();
   float ReadBitCoord();
   float ReadBitCoordMP(bool bIntegral, bool bLowPrecision);
   float ReadBitNormal();
@@ -868,13 +860,13 @@ class CBitRead : public CBitBuffer {
   float ReadBitAngle(int numbits);
 
   // Returns 0 or 1.
-  FORCEINLINE int ReadOneBit();
-  FORCEINLINE int ReadLong();
-  FORCEINLINE int ReadChar();
-  FORCEINLINE int ReadByte();
-  FORCEINLINE int ReadShort();
-  FORCEINLINE int ReadWord();
-  FORCEINLINE float ReadFloat();
+  SOURCE_FORCEINLINE int ReadOneBit();
+  SOURCE_FORCEINLINE int ReadLong();
+  SOURCE_FORCEINLINE int ReadChar();
+  SOURCE_FORCEINLINE int ReadByte();
+  SOURCE_FORCEINLINE int ReadShort();
+  SOURCE_FORCEINLINE int ReadWord();
+  SOURCE_FORCEINLINE float ReadFloat();
   void ReadBits(void *pOut, int nBits);
 
   // Returns false if bufLen isn't large enough to hold the
@@ -897,7 +889,7 @@ class CBitRead : public CBitBuffer {
   int64_t ReadLongLong();
 };
 
-FORCEINLINE int CBitRead::GetNumBitsRead(void) const {
+SOURCE_FORCEINLINE int CBitRead::GetNumBitsRead(void) const {
   if (!m_pData)  // pesky 0 ptr bitbufs. these happen.
     return 0;
   int nCurOfs = (32 - m_nBitsAvail) +
@@ -906,7 +898,7 @@ FORCEINLINE int CBitRead::GetNumBitsRead(void) const {
   return std::min(nCurOfs + nAdjust, m_nDataBits);
 }
 
-FORCEINLINE void CBitRead::GrabNextDWord(bool bOverFlowImmediately) {
+SOURCE_FORCEINLINE void CBitRead::GrabNextDWord(bool bOverFlowImmediately) {
   if (m_pDataIn == m_pBufferEnd) {
     m_nBitsAvail = 1;  // so that next read will run out of words
     m_nInBufWord = 0;
@@ -922,7 +914,7 @@ FORCEINLINE void CBitRead::GrabNextDWord(bool bOverFlowImmediately) {
   }
 }
 
-FORCEINLINE void CBitRead::FetchNext() {
+SOURCE_FORCEINLINE void CBitRead::FetchNext() {
   m_nBitsAvail = 32;
   GrabNextDWord(false);
 }
@@ -959,7 +951,7 @@ unsigned int CBitRead::ReadUBitLong(int numbits) {
   }
 }
 
-FORCEINLINE unsigned int CBitRead::PeekUBitLong(int numbits) {
+SOURCE_FORCEINLINE unsigned int CBitRead::PeekUBitLong(int numbits) {
   int nSaveBA = m_nBitsAvail;
   int nSaveW = m_nInBufWord;
   uint32_t const *pSaveP = m_pDataIn;
@@ -970,22 +962,22 @@ FORCEINLINE unsigned int CBitRead::PeekUBitLong(int numbits) {
   return nRet;
 }
 
-FORCEINLINE int CBitRead::ReadSBitLong(int numbits) {
+SOURCE_FORCEINLINE int CBitRead::ReadSBitLong(int numbits) {
   int nRet = ReadUBitLong(numbits);
   // sign extend
   return (nRet << (32 - numbits)) >> (32 - numbits);
 }
 
-FORCEINLINE int CBitRead::ReadLong() {
+SOURCE_FORCEINLINE int CBitRead::ReadLong() {
   return (int)ReadUBitLong(sizeof(long) << 3);
 }
 
-FORCEINLINE float CBitRead::ReadFloat() {
+SOURCE_FORCEINLINE float CBitRead::ReadFloat() {
   uint32_t nUval = ReadUBitLong(sizeof(long) << 3);
   return *((float *)&nUval);
 }
 
-FORCEINLINE unsigned int CBitRead::ReadUBitVar() {
+SOURCE_FORCEINLINE unsigned int CBitRead::ReadUBitVar() {
   switch (ReadUBitLong(2)) {
     case 0:
       return ReadUBitLong(4);
@@ -1001,7 +993,7 @@ FORCEINLINE unsigned int CBitRead::ReadUBitVar() {
   }
 }
 
-FORCEINLINE float CBitRead::ReadBitFloat() {
+SOURCE_FORCEINLINE float CBitRead::ReadBitFloat() {
   uint32_t nvalue = ReadUBitLong(32);
   return *((float *)&nvalue);
 }
@@ -1014,34 +1006,34 @@ int CBitRead::ReadShort() { return ReadSBitLong(sizeof(short) << 3); }
 
 int CBitRead::ReadWord() { return ReadUBitLong(sizeof(unsigned short) << 3); }
 
-#define WRAP_READ(bc)                                                          \
-                                                                               \
-  class bf_read : public bc {                                                  \
-   public:                                                                     \
-    FORCEINLINE bf_read(void) : bc() {}                                        \
-                                                                               \
-    FORCEINLINE bf_read(const void *pData, int nBytes, int nBits = -1)         \
-        : bc(pData, nBytes, nBits) {}                                          \
-                                                                               \
-    FORCEINLINE bf_read(const char *pDebugName, const void *pData, int nBytes, \
-                        int nBits = -1)                                        \
-        : bc(pDebugName, pData, nBytes, nBits) {}                              \
+#define WRAP_READ(bc)                                                         \
+                                                                              \
+  class bf_read : public bc {                                                 \
+   public:                                                                    \
+    SOURCE_FORCEINLINE bf_read(void) : bc() {}                                \
+                                                                              \
+    SOURCE_FORCEINLINE bf_read(const void *pData, int nBytes, int nBits = -1) \
+        : bc(pData, nBytes, nBits) {}                                         \
+                                                                              \
+    SOURCE_FORCEINLINE bf_read(const char *pDebugName, const void *pData,     \
+                               int nBytes, int nBits = -1)                    \
+        : bc(pDebugName, pData, nBytes, nBits) {}                             \
   };
 
-#define WRAP_WRITE(bc)                                                    \
-                                                                          \
-  class bf_write : public bc {                                            \
-   public:                                                                \
-    FORCEINLINE bf_write(void) : bc() {}                                  \
-    FORCEINLINE bf_write(void *pData, int nBytes, int nMaxBits = -1)      \
-        : bc(pData, nBytes, nMaxBits) {}                                  \
-                                                                          \
-    FORCEINLINE bf_write(const char *pDebugName, void *pData, int nBytes, \
-                         int nMaxBits = -1)                               \
-        : bc(pDebugName, pData, nBytes, nMaxBits) {}                      \
+#define WRAP_WRITE(bc)                                                      \
+                                                                            \
+  class bf_write : public bc {                                              \
+   public:                                                                  \
+    SOURCE_FORCEINLINE bf_write(void) : bc() {}                             \
+    SOURCE_FORCEINLINE bf_write(void *pData, int nBytes, int nMaxBits = -1) \
+        : bc(pData, nBytes, nMaxBits) {}                                    \
+                                                                            \
+    SOURCE_FORCEINLINE bf_write(const char *pDebugName, void *pData,        \
+                                int nBytes, int nMaxBits = -1)              \
+        : bc(pDebugName, pData, nBytes, nMaxBits) {}                        \
   };
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 WRAP_READ(old_bf_read);
 #else
 WRAP_READ(CBitRead);

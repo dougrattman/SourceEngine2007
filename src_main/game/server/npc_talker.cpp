@@ -6,7 +6,7 @@
 #include "npcevent.h"
 #include "scriptevent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_SIMPLE_DATADESC(CNPCSimpleTalkerExpresser)
@@ -51,7 +51,7 @@ bool CNPCSimpleTalker::KeyValue(const char *szKeyName, const char *szValue) {
 
 void CNPCSimpleTalker::Precache(void) {
   /*
-  // FIXME:  Need to figure out how to hook these...
+  // TODO(d.rattman):  Need to figure out how to hook these...
   if ( m_iszUse != NULL_STRING )
           GetExpresser()->ModifyConcept( TLK_STARTFOLLOW, STRING( m_iszUse ) );
   if ( m_iszUnUse != NULL_STRING )
@@ -328,7 +328,7 @@ void CNPCSimpleTalker::AlertFriends(CBaseEntity *pKiller) {
           CNPCSimpleTalker *pTalkNPC = (CNPCSimpleTalker *)pFriend;
 
           if (pTalkNPC && pTalkNPC->IsOkToCombatSpeak()) {
-            // FIXME: need to check CanSpeakConcept?
+            // TODO(d.rattman): need to check CanSpeakConcept?
             pTalkNPC->Speak(TLK_BETRAYED);
           }
         } else {

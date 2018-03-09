@@ -290,9 +290,9 @@ const char *g_pszHintMessages[] =
 int GetWeaponId( const char *pszWeaponName )
 {
 	// if this doesn't match, you need to add missing weapons to the array
-	assert( ARRAYSIZE( g_aWeaponNames ) == ( TF_WEAPON_COUNT + 1 ) );
+	assert( SOURCE_ARRAYSIZE( g_aWeaponNames ) == ( TF_WEAPON_COUNT + 1 ) );
 
-	for ( int iWeapon = 0; iWeapon < ARRAYSIZE( g_aWeaponNames ); ++iWeapon )
+	for ( int iWeapon = 0; iWeapon < SOURCE_ARRAYSIZE( g_aWeaponNames ); ++iWeapon )
 	{
 		if ( !Q_stricmp( pszWeaponName, g_aWeaponNames[iWeapon] ) )
 			return iWeapon;
@@ -308,9 +308,9 @@ int GetWeaponId( const char *pszWeaponName )
 const char *WeaponIdToAlias( int iWeapon )
 {
 	// if this doesn't match, you need to add missing weapons to the array
-	assert( ARRAYSIZE( g_aWeaponNames ) == ( TF_WEAPON_COUNT + 1 ) );
+	assert( SOURCE_ARRAYSIZE( g_aWeaponNames ) == ( TF_WEAPON_COUNT + 1 ) );
 
-	if ( ( iWeapon >= ARRAYSIZE( g_aWeaponNames ) ) || ( iWeapon < 0 ) )
+	if ( ( iWeapon >= SOURCE_ARRAYSIZE( g_aWeaponNames ) ) || ( iWeapon < 0 ) )
 		return NULL;
 
 	return g_aWeaponNames[iWeapon];
@@ -330,7 +330,7 @@ int GetWeaponFromDamage( const CTakeDamageInfo &info )
 
 	if ( !Q_strnicmp( killer_weapon_name, "tf_projectile", 13 ) )
 	{
-		for( int i = 0; i < ARRAYSIZE( g_szProjectileNames ); i++ )
+		for( int i = 0; i < SOURCE_ARRAYSIZE( g_szProjectileNames ); i++ )
 		{
 			if ( !Q_stricmp( &killer_weapon_name[ 3 ], g_szProjectileNames[ i ] ) )
 			{
@@ -475,7 +475,7 @@ void LoadObjectInfos( IBaseFileSystem *pFileSystem )
 	}
 
 	// Now read each class's information in.
-	for ( int iObj=0; iObj < ARRAYSIZE( g_ObjectInfos ); iObj++ )
+	for ( int iObj=0; iObj < SOURCE_ARRAYSIZE( g_ObjectInfos ); iObj++ )
 	{
 		CObjectInfo *pInfo = &g_ObjectInfos[iObj];
 		KeyValues *pSub = pValues->FindKey( pInfo->m_pObjectName );

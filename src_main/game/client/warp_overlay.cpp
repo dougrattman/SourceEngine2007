@@ -10,7 +10,7 @@
 #include "particles_simple.h"
 #include "ClientEffectPrecacheSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheEffectWarp )
@@ -43,7 +43,7 @@ void CWarpOverlay::Draw( bool bCacheFullSceneState )
 	
 	CMatRenderContextPtr pRenderContext( materials );
 	
-	//FIXME: Allow multiple?
+	//TODO(d.rattman): Allow multiple?
 	for( int iSprite=0; iSprite < m_nSprites; iSprite++ )
 	{
 		CGlowSprite *pSprite = &m_Sprites[iSprite];

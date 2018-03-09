@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IVMODELRENDER_H
 #define IVMODELRENDER_H
 
+#include "base/include/macros.h"
 #include "istudiorender.h"
 #include "mathlib/mathlib.h"
 #include "tier1/interface.h"
@@ -19,7 +20,7 @@ struct studiohdr_t;
 class IMaterial;
 class CStudioHdr;
 
-FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
 
 //-----------------------------------------------------------------------------
 // Model rendering state
@@ -77,7 +78,7 @@ struct StaticPropRenderInfo_t {
 };
 
 // UNDONE: Move this to hud export code, subsume previous functions
-abstract_class IVModelRender {
+the_interface IVModelRender {
  public:
   virtual int DrawModel(int flags, IClientRenderable *pRenderable,
                         ModelInstanceHandle_t instance, int entity_index,
@@ -101,10 +102,10 @@ abstract_class IVModelRender {
   virtual void DestroyInstance(ModelInstanceHandle_t handle) = 0;
 
   // Associates a particular lighting condition with a model instance handle.
-  // FIXME: This feature currently only works for static props. To make it work
-  // for entities, etc., we must clean up the lightcache handles as the model
-  // instances are removed. At the moment, since only the static prop manager
-  // uses this, it cleans up all LightCacheHandles at level shutdown.
+  // TODO(d.rattman): This feature currently only works for static props. To
+  // make it work for entities, etc., we must clean up the lightcache handles as
+  // the model instances are removed. At the moment, since only the static prop
+  // manager uses this, it cleans up all LightCacheHandles at level shutdown.
   virtual void SetStaticLighting(ModelInstanceHandle_t handle,
                                  LightCacheHandle_t * pHandle) = 0;
   virtual LightCacheHandle_t GetStaticLighting(

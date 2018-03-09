@@ -21,7 +21,7 @@
 #include "baseviewmodel.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const float MAX_SPRITE_SCALE = 64.0f;
@@ -229,7 +229,7 @@ void CSprite::Spawn(void) {
 
   if (scale < 0 || scale > MAX_SPRITE_SCALE) {
 #if !defined(CLIENT_DLL)
-#ifndef _LINUX
+#ifndef OS_POSIX
     DevMsg("LEVEL DESIGN ERROR: Sprite %s with bad scale %f [0..%f]\n",
            GetDebugName(), m_flSpriteScale, MAX_SPRITE_SCALE);
 #endif

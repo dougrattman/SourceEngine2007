@@ -85,7 +85,7 @@ private:
 	float m_flLastClassChangeTime;		// Time when player last changed class
 	float m_flTeamplayStartTime;		// Time when player joined a non-spectating team.  Not updated if she switches game teams; cleared if she joins spectator
 	float m_iMiniroundsCompleted;		// # of minirounds played since game start (for maps that have minirounds)
-	char  m_szMap[MAX_PATH]; // file base of map name, cached since we access it frequently in this form
+	char  m_szMap[SOURCE_MAX_PATH]; // file base of map name, cached since we access it frequently in this form
 	bool  m_bDirty;  // do we have interesting state that needs to be saved
 	bool  m_bGlobalStateLoaded; // have we loaded global state
 

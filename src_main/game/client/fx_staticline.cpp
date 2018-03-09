@@ -13,7 +13,7 @@
 #include "materialsystem/IMesh.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /*

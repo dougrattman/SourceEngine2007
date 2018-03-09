@@ -429,7 +429,7 @@ void CFileSystem_Steam::FS_setbufsize(FILE *fp, unsigned nBytes) {}
 //-----------------------------------------------------------------------------
 WaitForResourcesHandle_t CFileSystem_Steam::WaitForResources(
     const char *resourcelist) {
-  char szResourceList[MAX_PATH];
+  char szResourceList[SOURCE_MAX_PATH];
   Q_strncpy(szResourceList, resourcelist, sizeof(szResourceList));
   Q_DefaultExtension(szResourceList, ".lst", sizeof(szResourceList));
 
@@ -847,9 +847,9 @@ void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
     char *pPath = getenv("PATH");
 
     // Use the .EXE name to determine the root directory
-    char srchPath[MAX_PATH];
+    char srchPath[SOURCE_MAX_PATH];
     HINSTANCE hInstance = (HINSTANCE)GetModuleHandle(0);
-    if (!GetModuleFileName(hInstance, srchPath, MAX_PATH)) {
+    if (!GetModuleFileName(hInstance, srchPath, SOURCE_MAX_PATH)) {
       ::MessageBox(0, "Failed calling GetModuleFileName",
                    "Half-Life Steam Filesystem Error", MB_OK);
       return;
@@ -899,7 +899,7 @@ void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
 CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
                                           const char *pPathID,
                                           bool bValidatedDllOnly) {
-  char szNewPath[MAX_PATH];
+  char szNewPath[SOURCE_MAX_PATH];
   CBaseFileSystem::ParsePathID(pFileName, pPathID, szNewPath);
 
   // File must end in .dll
@@ -926,7 +926,7 @@ CSysModule *CFileSystem_Steam::LoadModule(const char *pFileName,
     if (m_SearchPaths[i].GetPackFile()) continue;
 
     if (m_SearchPaths[i].GetPathID() == lookup) {
-      char newPathName[MAX_PATH];
+      char newPathName[SOURCE_MAX_PATH];
       Q_snprintf(newPathName, sizeof(newPathName), "%s%s",
                  m_SearchPaths[i].GetPathString(),
                  szNewPath);  // append the path to this dir.

@@ -1,4 +1,4 @@
-// Copyright © 2005-2017, Valve Corporation, All rights reserved.
+// Copyright Â© 2005-2017, Valve Corporation, All rights reserved.
 //
 // Purpose:	A utility for a discrete job-oriented worker thread.
 //
@@ -30,6 +30,7 @@
 
 #include <climits>
 
+#include "base/include/macros.h"
 #include "tier0/include/threadtools.h"
 #include "tier1/functors.h"
 #include "tier1/refcount.h"
@@ -43,13 +44,13 @@
 #endif
 
 #ifdef VSTDLIB_DLL_EXPORT
-#define JOB_INTERFACE DLL_EXPORT
-#define JOB_OVERLOAD DLL_GLOBAL_EXPORT
-#define JOB_CLASS DLL_CLASS_EXPORT
+#define JOB_INTERFACE SOURCE_API_EXPORT
+#define JOB_OVERLOAD SOURCE_API_GLOBAL_EXPORT
+#define JOB_CLASS SOURCE_API_CLASS_EXPORT
 #else
-#define JOB_INTERFACE DLL_IMPORT
-#define JOB_OVERLOAD DLL_GLOBAL_IMPORT
-#define JOB_CLASS DLL_CLASS_IMPORT
+#define JOB_INTERFACE SOURCE_API_IMPORT
+#define JOB_OVERLOAD SOURCE_API_GLOBAL_IMPORT
+#define JOB_CLASS SOURCE_API_CLASS_IMPORT
 #endif
 
 class CJob;
@@ -120,7 +121,7 @@ enum ThreadPoolMessages_t {
   TPM_SUSPEND,  // Suspend after next operation
 };
 
-abstract_class IThreadPool : public IRefCounted {
+the_interface IThreadPool : public IRefCounted {
  public:
   virtual ~IThreadPool(){};
 
@@ -406,7 +407,7 @@ JOB_INTERFACE IThreadPool *g_pThreadPool;
 // Class to combine the metadata for an operation and the ability to perform
 // the operation. Meant for inheritance. All functions inline, defers to
 // executor
-DECLARE_POINTER_HANDLE(ThreadPoolData_t);
+SOURCE_DECLARE_POINTER_HANDLE(ThreadPoolData_t);
 #define JOB_NO_DATA ((ThreadPoolData_t)-1)
 
 class CJob : public CRefCounted1<IRefCounted, CRefCountServiceMT> {

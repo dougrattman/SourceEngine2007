@@ -25,7 +25,7 @@
 ConVar r_DrawBeams("r_DrawBeams", "1", FCVAR_CHEAT,
                    "0=Off, 1=Normal, 2=Wireframe");
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool g_BeamCreationAllowed = false;
@@ -345,7 +345,7 @@ void Beam_t::ComputeBounds() {
 
     case TE_BEAMDISK:
     case TE_BEAMCYLINDER: {
-      // FIXME: This isn't quite right for the cylinder
+      // TODO(d.rattman): This isn't quite right for the cylinder
 
       // Here, delta[2] is the radius
       int radius = delta[2];

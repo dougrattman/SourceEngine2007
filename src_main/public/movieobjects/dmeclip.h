@@ -444,7 +444,7 @@ public:
 	void CollectOperators( CUtlVector< DmElementHandle_t > &operators );
 
 	// Helper for overlays
-	// FIXME: Change this to use CDmeMaterials
+	// TODO(d.rattman): Change this to use CDmeMaterials
 	IMaterial *GetOverlayMaterial();
 	void SetOverlay( const char *pMaterialName );
 	float GetOverlayAlpha();

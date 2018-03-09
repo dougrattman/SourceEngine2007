@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IHAMMER_H
 #define IHAMMER_H
@@ -14,7 +14,7 @@ class IStudioDataCache;
 enum RequestRetval_t { REQUEST_OK = 0, REQUEST_QUIT };
 
 // Interface used to drive hammer
-abstract_class IHammer : public IAppSystem {
+the_interface IHammer : public IAppSystem {
  public:
   virtual bool HammerPreTranslateMessage(MSG * pMsg) = 0;
   virtual bool HammerIsIdleMessage(MSG * pMsg) = 0;

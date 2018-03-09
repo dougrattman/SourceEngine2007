@@ -105,7 +105,7 @@ bool CPetTool::Init( )
 	g_pParticleSystemMgr->AddBuiltinRenderingOperators();
 
 	// Create a directory for particles if it doesn't exist
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( "particles", pStartingDir, sizeof(pStartingDir) );
 	g_pFullFileSystem->CreateDirHierarchy( pStartingDir );
 
@@ -153,7 +153,7 @@ void CPetTool::Think( bool finalTick )
 	if ( IsActiveTool() )
 	{
 		// Force resolve calls to happen
-		// FIXME: Shouldn't this not have to happen here?
+		// TODO(d.rattman): Shouldn't this not have to happen here?
 		CUtlVector< IDmeOperator* > operators;
 		g_pDmElementFramework->SetOperators( operators );
 		g_pDmElementFramework->Operate( true );
@@ -512,7 +512,7 @@ void CPetTool::CreateTools( CPetDoc *doc )
 //-----------------------------------------------------------------------------
 void CPetTool::InitTools()
 {
-	// FIXME: There are no tool windows here; how should this work?
+	// TODO(d.rattman): There are no tool windows here; how should this work?
 	// These panels are saved
 	windowposmgr->RegisterPanel( "properties", m_hProperties, false );
 	windowposmgr->RegisterPanel( "particlesystemdefinitionbrowser", m_hParticleSystemDefinitionBrowser, false );
@@ -912,7 +912,7 @@ void CPetTool::OnFileOperationCompleted( const char *pFileType, bool bWroteFile,
 //-----------------------------------------------------------------------------
 void CPetTool::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog, bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 
 	GetModSubdirectory( "particles", pStartingDir, sizeof(pStartingDir) );
 

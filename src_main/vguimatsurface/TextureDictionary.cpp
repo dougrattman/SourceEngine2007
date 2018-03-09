@@ -18,7 +18,7 @@
 #include "materialsystem/ITexture.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define TEXTURE_ID_UNKNOWN	-1
@@ -541,7 +541,7 @@ void CMatSystemTexture::SetMaterial( IMaterial *pMaterial )
 	m_s0 = flPixelCenterX;
 	m_t0 = flPixelCenterY;
 
-	// FIXME: Old code used +, it should be - yes?!??!
+	// TODO(d.rattman): Old code used +, it should be - yes?!??!
 	m_s1 = 1.0 - flPixelCenterX;
 	m_t1 = 1.0 - flPixelCenterY;
 

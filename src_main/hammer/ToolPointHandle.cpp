@@ -6,7 +6,7 @@
 
 #include "stdafx.h"
 #include "History.h"
-#include "MainFrm.h"			// FIXME: For ObjectProperties
+#include "MainFrm.h"			// TODO(d.rattman): For ObjectProperties
 #include "MapDoc.h"
 #include "MapView2D.h"
 #include "MapPointHandle.h"
@@ -17,7 +17,7 @@
 #include "ToolPointHandle.h"
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

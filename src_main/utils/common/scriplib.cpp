@@ -283,7 +283,7 @@ bool ExpandMacroToken(char *&token_p) {
 ==============
 ==============
 */
-// FIXME: this should create a new script context so the individual tokens in
+// TODO(d.rattman): this should create a new script context so the individual tokens in
 // the variable can be parsed
 bool ExpandVariableToken(char *&token_p) {
   if (*script->script_p == '$') {
@@ -723,7 +723,7 @@ bool CScriptLib::ReadFileToBuffer(const char *pSourceName, CUtlBuffer &buffer,
 bool CScriptLib::WriteBufferToFile(const char *pTargetName, CUtlBuffer &buffer,
                                    DiskWriteMode_t writeMode) {
   char *ptr;
-  char dirPath[MAX_PATH];
+  char dirPath[SOURCE_MAX_PATH];
 
   bool bSuccess = true;
 
@@ -811,7 +811,7 @@ void CScriptLib::DeleteTemporaryFiles(const char *pFileMask) {
   }
 
   if (pEnv) {
-    char tempPath[MAX_PATH];
+    char tempPath[SOURCE_MAX_PATH];
     strcpy(tempPath, pEnv);
     V_AppendSlash(tempPath, sizeof(tempPath));
     strcat(tempPath, pFileMask);
@@ -829,8 +829,8 @@ void CScriptLib::DeleteTemporaryFiles(const char *pFileMask) {
 //-----------------------------------------------------------------------------
 int CScriptLib::GetFileList(const char *pDirPath, const char *pPattern,
                             CUtlVector<fileList_t> &fileList) {
-  char sourcePath[MAX_PATH];
-  char fullPath[MAX_PATH];
+  char sourcePath[SOURCE_MAX_PATH];
+  char fullPath[SOURCE_MAX_PATH];
   bool bFindDirs;
 
   fileList.Purge();
@@ -875,7 +875,7 @@ int CScriptLib::GetFileList(const char *pDirPath, const char *pPattern,
 
     if (!stricmp(findData.name, "..")) continue;
 
-    char fileName[MAX_PATH];
+    char fileName[SOURCE_MAX_PATH];
     strcpy(fileName, sourcePath);
     strcat(fileName, findData.name);
 
@@ -918,9 +918,9 @@ void CScriptLib::RecurseFileTree_r(const char *pDirPath, int depth,
 //-----------------------------------------------------------------------------
 int CScriptLib::FindFiles(char *pFileMask, bool bRecurse,
                           CUtlVector<fileList_t> &fileList) {
-  char dirPath[MAX_PATH];
-  char pattern[MAX_PATH];
-  char extension[MAX_PATH];
+  char dirPath[SOURCE_MAX_PATH];
+  char pattern[SOURCE_MAX_PATH];
+  char extension[SOURCE_MAX_PATH];
 
   // get path only
   strcpy(dirPath, pFileMask);

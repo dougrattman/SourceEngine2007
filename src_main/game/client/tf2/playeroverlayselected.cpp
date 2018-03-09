@@ -82,7 +82,7 @@ void CHudPlayerOverlaySelected::SetImages( BitmapImage *pImage[4] )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME:  Use materials for corners, not just procedural drawing?
+// Purpose: TODO(d.rattman):  Use materials for corners, not just procedural drawing?
 //-----------------------------------------------------------------------------
 void CHudPlayerOverlaySelected::Paint( void )
 {

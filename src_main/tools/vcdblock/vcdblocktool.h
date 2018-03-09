@@ -44,7 +44,7 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Allows the doc to call back into the VcdBlock editor tool
 //-----------------------------------------------------------------------------
-abstract_class IVcdBlockDocCallback
+the_interface IVcdBlockDocCallback
 {
 public:
 	// Called by the doc when the data changes
@@ -55,7 +55,7 @@ public:
 //-----------------------------------------------------------------------------
 // Global methods of the VCD Blocking tool
 //-----------------------------------------------------------------------------
-abstract_class IVcdBlockTool
+the_interface IVcdBlockTool
 {
 public:
 	// Gets at the rool panel (for modal dialogs)

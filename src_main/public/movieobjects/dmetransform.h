@@ -27,7 +27,7 @@ class CDmeTransform : public CDmElement
 	DEFINE_ELEMENT( CDmeTransform, CDmElement );
 
 public:
-	// FIXME: Replace this with actual methods to do editing
+	// TODO(d.rattman): Replace this with actual methods to do editing
 	// (scale/shear, etc.)
 	void SetTransform( const matrix3x4_t &transform );
 	void GetTransform( matrix3x4_t &transform );

@@ -6,12 +6,12 @@
 #include "cbase.h"
 #include "func_ladder.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: A transient entity used to construct a true CFuncLadder
-// FIXME:  THIS ENTITY IS OBSOLETE NOW, SHOULD BE REMOVED FROM HERE AND .FGD AT SOME POINT!!!
+// TODO(d.rattman):  THIS ENTITY IS OBSOLETE NOW, SHOULD BE REMOVED FROM HERE AND .FGD AT SOME POINT!!!
 //-----------------------------------------------------------------------------
 class CFuncLadderEndPoint : public CBaseEntity
 {

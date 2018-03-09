@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "texturemanager.h"
 
@@ -799,7 +799,7 @@ void CTextureManager::ReleaseTextures(void) {
 // Request a texture ID
 //-----------------------------------------------------------------------------
 int CTextureManager::RequestNextTextureID() {
-  // FIXME: Deal better with texture ids
+  // TODO(d.rattman): Deal better with texture ids
   // The range between 19000 and 21000 are used for standard textures +
   // lightmaps
   if (m_iNextTexID == 19000) {
@@ -975,8 +975,8 @@ ITextureInternal *CTextureManager::CreateProceduralTexture(
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Need some better understanding of when textures should be added to
-// the texture dictionary here. Is it only for files, for example?
+// TODO(d.rattman): Need some better understanding of when textures should be
+// added to the texture dictionary here. Is it only for files, for example?
 // Texture dictionary...
 //-----------------------------------------------------------------------------
 ITextureInternal *CTextureManager::LoadTexture(const char *pTextureName,
@@ -994,7 +994,8 @@ ITextureInternal *CTextureManager::LoadTexture(const char *pTextureName,
     // Stick the texture onto the board
     pNewTexture->Download();
 
-    // FIXME: If there's been an error loading, we don't also want this error...
+    // TODO(d.rattman): If there's been an error loading, we don't also want
+    // this error...
   }
 
   return pNewTexture;
@@ -1003,7 +1004,7 @@ ITextureInternal *CTextureManager::LoadTexture(const char *pTextureName,
 ITextureInternal *CTextureManager::FindTexture(const char *pTextureName) {
   if (!pTextureName || pTextureName[0] == 0) return NULL;
 
-  char szCleanName[MAX_PATH];
+  char szCleanName[SOURCE_MAX_PATH];
   NormalizeTextureName(pTextureName, szCleanName, sizeof(szCleanName));
 
   int i = m_TextureList.Find(szCleanName);
@@ -1042,7 +1043,7 @@ void CTextureManager::AddTextureAlias(const char *pAlias,
                                       const char *pRealName) {
   if ((pAlias == NULL) || (pRealName == NULL)) return;  // invalid alias
 
-  char szCleanName[MAX_PATH];
+  char szCleanName[SOURCE_MAX_PATH];
   int index = m_TextureAliases.Find(
       NormalizeTextureName(pAlias, szCleanName, sizeof(szCleanName)));
 
@@ -1063,7 +1064,7 @@ void CTextureManager::AddTextureAlias(const char *pAlias,
 void CTextureManager::RemoveTextureAlias(const char *pAlias) {
   if (pAlias == NULL) return;
 
-  char szCleanName[MAX_PATH];
+  char szCleanName[SOURCE_MAX_PATH];
   int index = m_TextureAliases.Find(
       NormalizeTextureName(pAlias, szCleanName, sizeof(szCleanName)));
   if (index == m_TextureAliases.InvalidIndex()) return;  // not found
@@ -1089,7 +1090,7 @@ void CTextureManager::SetExcludedTextures(const char *pScriptName) {
   // get optional script
   CUtlBuffer excludeBuffer(0, 0, CUtlBuffer::TEXT_BUFFER);
   if (g_pFullFileSystem->ReadFile(pScriptName, NULL, excludeBuffer)) {
-    char szToken[MAX_PATH];
+    char szToken[SOURCE_MAX_PATH];
     while (1) {
       // must support spaces in names without quotes
       // have to brute force parse up to a valid line
@@ -1132,7 +1133,7 @@ void CTextureManager::SetExcludedTextures(const char *pScriptName) {
         }
       }
 
-      char szCleanName[MAX_PATH];
+      char szCleanName[SOURCE_MAX_PATH];
       NormalizeTextureName(pTextureName, szCleanName, sizeof(szCleanName));
 
       if (m_TextureExcludes.Find(szCleanName) !=

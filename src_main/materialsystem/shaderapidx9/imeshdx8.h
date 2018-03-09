@@ -6,7 +6,7 @@
 #include "meshbase.h"
 #include "shaderapi/ishaderAPI.h"
 
-abstract_class IMeshMgr {
+the_interface IMeshMgr {
  public:
   // Initialize, shutdown
   virtual void Init() = 0;

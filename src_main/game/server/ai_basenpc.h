@@ -434,7 +434,7 @@ bool FBoxVisible(CBaseEntity *pLooker, CBaseEntity *pTarget);
 bool FBoxVisible(CBaseEntity *pLooker, CBaseEntity *pTarget,
                  Vector &vecTargetOrigin, float flSize = 0.0);
 
-// FIXME: move to utils?
+// TODO(d.rattman): move to utils?
 float DeltaV(float v0, float v1, float d);
 float ChangeDistance(float flInterval, float flGoalDistance,
                      float flGoalVelocity, float flCurVelocity,
@@ -3212,7 +3212,7 @@ inline float CAI_Component::GetLastThink(const char *szContext) {
 }
 
 // ============================================================================
-abstract_class INPCInteractive {
+the_interface INPCInteractive {
  public:
   virtual bool CanInteractWith(CAI_BaseNPC * pUser) = 0;
   virtual bool HasBeenInteractedWith() = 0;

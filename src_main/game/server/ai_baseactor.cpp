@@ -12,7 +12,7 @@
 #include "saverestore_utlvector.h"
 #include "sceneentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar flex_minplayertime("flex_minplayertime", "5");
@@ -159,7 +159,7 @@ static char const *g_ServerSideFlexControllers[] = {
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CAI_BaseActor::IsServerSideFlexController(char const *szName) {
-  int c = ARRAYSIZE(g_ServerSideFlexControllers);
+  int c = SOURCE_ARRAYSIZE(g_ServerSideFlexControllers);
   for (int i = 0; i < c; ++i) {
     if (!Q_stricmp(szName, g_ServerSideFlexControllers[i])) return true;
   }
@@ -214,7 +214,7 @@ bool CAI_BaseActor::StartSceneEvent(CSceneEventInfo *info, CChoreoScene *scene,
   Assert(info->m_pScene);
   Assert(info->m_pEvent);
 
-  // FIXME: this code looks duplicated
+  // TODO(d.rattman): this code looks duplicated
   switch (info->m_pEvent->GetType()) {
     case CChoreoEvent::FACE: {
       return BaseClass::StartSceneEvent(info, scene, event, actor, pTarget);
@@ -230,12 +230,12 @@ bool CAI_BaseActor::StartSceneEvent(CSceneEventInfo *info, CChoreoScene *scene,
         m_flBlinktime = gpGlobals->curtime +
                         std::max(flDuration, random->RandomFloat(1.5, 4.5));
       } else if (stricmp(event->GetParameters(), "AI_HOLSTER") == 0) {
-        // FIXME: temp code for test
+        // TODO(d.rattman): temp code for test
         info->m_nType = SCENE_AI_HOLSTER;
         info->m_iLayer = HolsterWeapon();
         return true;
       } else if (stricmp(event->GetParameters(), "AI_UNHOLSTER") == 0) {
-        // FIXME: temp code for test
+        // TODO(d.rattman): temp code for test
         info->m_nType = SCENE_AI_UNHOLSTER;
         info->m_iLayer = UnholsterWeapon();
         return true;
@@ -287,7 +287,7 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
   Assert(info->m_pScene);
   Assert(info->m_pEvent);
 
-  // FIXME: this code looks duplicated
+  // TODO(d.rattman): this code looks duplicated
   switch (info->m_pEvent->GetType()) {
     case CChoreoEvent::FACE: {
       // make sure target exists
@@ -476,7 +476,7 @@ bool CAI_BaseActor::ProcessSceneEvent(CSceneEventInfo *info,
             info->m_flNext = gpGlobals->curtime + remaining;
           }
 
-          // FIXME: needs to handle scene pause
+          // TODO(d.rattman): needs to handle scene pause
           return true;
         case SCENE_AI_DISABLEAI:
           if (!(GetState() == NPC_STATE_SCRIPT ||
@@ -521,7 +521,7 @@ bool CAI_BaseActor::RandomFaceFlex(CSceneEventInfo *info, CChoreoScene *scene,
         // local index
         int index = FlexControllerLocalToGlobal(pSettinghdr, pWeights->key);
 
-        // FIXME: this is supposed to blend based on pWeight->influence, but the
+        // TODO(d.rattman): this is supposed to blend based on pWeight->influence, but the
         // order is wrong... float value = GetFlexWeight( index ) * (1 - scale *
         // pWeights->influence) + scale * pWeights->weight;
 
@@ -560,7 +560,7 @@ bool CAI_BaseActor::ClearSceneEvent(CSceneEventInfo *info, bool fastKill,
   Assert(info->m_pScene);
   Assert(info->m_pEvent);
 
-  // FIXME: this code looks duplicated
+  // TODO(d.rattman): this code looks duplicated
   switch (info->m_pEvent->GetType()) {
     case CChoreoEvent::FACE: {
       return BaseClass::ClearSceneEvent(info, fastKill, canceled);
@@ -790,7 +790,7 @@ bool CAI_BaseActor::SetAccumulatedYawAndUpdate(void) {
 //-----------------------------------------------------------------------------
 
 void CAI_BaseActor::UpdateBodyControl() {
-  // FIXME: only during idle, or in response to accel/decel
+  // TODO(d.rattman): only during idle, or in response to accel/decel
   // Set( m_ParameterBodyTransY, Get( m_FlexweightMoveRightLeft ) );
   // Set( m_ParameterBodyTransX, Get( m_FlexweightMoveForwardBack ) );
   // Set( m_ParameterBodyLift, Get( m_FlexweightMoveUpDown ) );
@@ -862,7 +862,8 @@ void CAI_BaseActor::UpdateHeadControl(const Vector &vHeadTarget,
             // Msg("bias %f %f %f\n", angBias.x, angBias.y, angBias.z );
 
             Vector tmp1, tmp2;
-            
+            
+
 
 
 
@@ -1335,7 +1336,7 @@ void CAI_BaseActor::MaintainLookTargets(float flInterval) {
   // cached versions of the current eye position
   Vector vEyePosition = EyePosition();
 
-  // FIXME: make this client side and automatic
+  // TODO(d.rattman): make this client side and automatic
   // set gesture positions
   Set(m_ParameterGestureHeight, Get(m_FlexweightGestureUpDown));
   Set(m_ParameterGestureWidth, Get(m_FlexweightGestureRightLeft));
@@ -1507,7 +1508,7 @@ void CAI_BaseActor::MaintainLookTargets(float flInterval) {
     }
   }
 
-  // FIXME: add blink when changing targets
+  // TODO(d.rattman): add blink when changing targets
   if (m_hLookTarget != hTarget) {
     m_flBlinktime -= 0.5;
     m_hLookTarget = hTarget;

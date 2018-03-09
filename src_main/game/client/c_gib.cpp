@@ -8,7 +8,7 @@
 #include "vcollide_parse.h"
 #include "c_gib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //NOTENOTE: This is not yet coupled with the server-side implementation of CGib

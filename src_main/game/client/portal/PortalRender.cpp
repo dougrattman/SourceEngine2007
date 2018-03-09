@@ -552,7 +552,7 @@ bool CPortalRender::DrawPortalsUsingStencils( CViewRender *pViewRender )
 
         m_RecursiveViewComplexFrustums[0].RemoveAll(); //clear any garbage leftover in the complex frustums from last frame
 
-		pRenderContext->ClearBuffers( false, false, true ); //FIXME: We should clear the stencils with the existing depth clear for this frame
+		pRenderContext->ClearBuffers( false, false, true ); //TODO(d.rattman): We should clear the stencils with the existing depth clear for this frame
 	}
 
 	if( m_RecursiveViewComplexFrustums[m_iViewRecursionLevel].Count() == 0 )
@@ -896,7 +896,7 @@ void CPortalRenderable::ShiftFogForExitPortalView() const
 
 	fFogStart += fDistModifier;
 	fFogEnd += fDistModifier;
-	//fFogZ += something; //FIXME: find out what the hell to do with this
+	//fFogZ += something; //TODO(d.rattman): find out what the hell to do with this
 
 	pRenderContext->FogStart( fFogStart );
 	pRenderContext->FogEnd( fFogEnd );

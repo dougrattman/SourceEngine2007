@@ -9,7 +9,7 @@
 #include "stdafx.h"
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
-#elif _LINUX
+#elif OS_POSIX
 #define stricmp strcasecmp
 #endif
 #include "KeyValues.h"

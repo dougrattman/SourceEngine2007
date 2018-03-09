@@ -11,7 +11,7 @@
 #include "iefx.h"
 #include "decals.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 PMaterialHandle	g_Material_Blood[2] = { NULL, NULL };

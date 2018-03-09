@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2008, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //  STATIC: "HALFLAMBERT"			"0..1"
 //  STATIC: "USE_WITH_2B"			"0..1"
 //  STATIC: "DECAL"					"0..1" [vs30]
@@ -145,11 +145,11 @@ VS_OUTPUT main( const VS_INPUT v )
 #endif
 
  	// Needed for water fog alpha and diffuse lighting
-	// FIXME: we shouldn't have to compute this all the time.
+	// TODO(d.rattman): we shouldn't have to compute this all the time.
 	o.worldPos_projPosZ = float4( worldPos, projPos.z );
 
 	// Needed for cubemapping + parallax mapping
-	// FIXME: We shouldn't have to compute this all the time.
+	// TODO(d.rattman): We shouldn't have to compute this all the time.
 	//o.worldVertToEyeVectorXYZ_tangentSpaceVertToEyeVectorZ.xyz = VSHADER_VECT_SCALE * (cEyePos - worldPos);
 	o.worldVertToEyeVectorXYZ_tangentSpaceVertToEyeVectorZ.xyz = normalize( cEyePos.xyz - worldPos.xyz );
 

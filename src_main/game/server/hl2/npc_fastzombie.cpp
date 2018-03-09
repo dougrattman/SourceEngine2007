@@ -27,7 +27,7 @@
 #include "episodic/ai_behavior_passenger_zombie.h"
 #endif  // HL2_EPISODIC
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define FASTZOMBIE_IDLE_PITCH 35
@@ -600,7 +600,7 @@ void CFastZombie::PrescheduleThink(void) {
 void CFastZombie::SoundInit(void) {
   if (!m_pMoanSound) {
     // !!!HACKHACK - kickstart the moan sound. (sjb)
-    MoanSound(envFastZombieMoanVolume, ARRAYSIZE(envFastZombieMoanVolume));
+    MoanSound(envFastZombieMoanVolume, SOURCE_ARRAYSIZE(envFastZombieMoanVolume));
 
     // Clear the commands that the base class gave the moaning sound channel.
     ENVELOPE_CONTROLLER.CommandClear(m_pMoanSound);
@@ -828,7 +828,7 @@ int CFastZombie::MeleeAttack1Conditions(float flDot, float flDist) {
 // Purpose: Returns a moan sound for this class of zombie.
 //-----------------------------------------------------------------------------
 const char *CFastZombie::GetMoanSound(int nSound) {
-  return pMoanSounds[nSound % ARRAYSIZE(pMoanSounds)];
+  return pMoanSounds[nSound % SOURCE_ARRAYSIZE(pMoanSounds)];
 }
 
 //-----------------------------------------------------------------------------
@@ -884,11 +884,11 @@ void CFastZombie::PainSound(const CTakeDamageInfo &info) {
   if (m_pLayer2)
     ENVELOPE_CONTROLLER.SoundPlayEnvelope(m_pLayer2, SOUNDCTRL_CHANGE_VOLUME,
                                           envFastZombieVolumePain,
-                                          ARRAYSIZE(envFastZombieVolumePain));
+                                          SOURCE_ARRAYSIZE(envFastZombieVolumePain));
   if (m_pMoanSound)
     ENVELOPE_CONTROLLER.SoundPlayEnvelope(
         m_pMoanSound, SOUNDCTRL_CHANGE_VOLUME, envFastZombieInverseVolumePain,
-        ARRAYSIZE(envFastZombieInverseVolumePain));
+        SOURCE_ARRAYSIZE(envFastZombieInverseVolumePain));
 }
 
 //-----------------------------------------------------------------------------
@@ -1016,7 +1016,7 @@ void CFastZombie::HandleAnimEvent(animevent_t *pEvent) {
                                            random->RandomFloat(100, 150), 0.0);
       ENVELOPE_CONTROLLER.SoundPlayEnvelope(
           m_pLayer2, SOUNDCTRL_CHANGE_VOLUME, envFastZombieVolumeClimb,
-          ARRAYSIZE(envFastZombieVolumeClimb));
+          SOURCE_ARRAYSIZE(envFastZombieVolumeClimb));
     }
 
     return;
@@ -1596,7 +1596,7 @@ void CFastZombie::BeginNavJump(void) {
 
   ENVELOPE_CONTROLLER.SoundPlayEnvelope(m_pLayer2, SOUNDCTRL_CHANGE_VOLUME,
                                         envFastZombieVolumeJump,
-                                        ARRAYSIZE(envFastZombieVolumeJump));
+                                        SOURCE_ARRAYSIZE(envFastZombieVolumeJump));
 }
 
 //=========================================================
@@ -1629,7 +1629,7 @@ void CFastZombie::EndAttackJump(void) {}
 // Purpose:
 //-----------------------------------------------------------------------------
 void CFastZombie::BuildScheduleTestBits(void) {
-  // FIXME: This is probably the desired call to make, but it opts into an
+  // TODO(d.rattman): This is probably the desired call to make, but it opts into an
   // untested base class path, we'll need to
   //		  revisit this and figure out if we want that. -- jdw
   // BaseClass::BuildScheduleTestBits();
@@ -1796,7 +1796,7 @@ void CFastZombie::VPhysicsCollision(int index, gamevcollisionevent_t *pEvent) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME: Fold this into LeapAttack using different jump targets!
+// Purpose: TODO(d.rattman): Fold this into LeapAttack using different jump targets!
 //-----------------------------------------------------------------------------
 void CFastZombie::VehicleLeapAttack(void) {
   CBaseEntity *pEnemy = GetEnemy();
@@ -1813,7 +1813,7 @@ void CFastZombie::VehicleLeapAttack(void) {
   // Take him off ground so engine doesn't instantly reset FL_ONGROUND.
   UTIL_SetOrigin(this, GetLocalOrigin() + Vector(0, 0, 1));
 
-  // FIXME: This should be the exact position we'll enter at, but this
+  // TODO(d.rattman): This should be the exact position we'll enter at, but this
   // approximates it generally
   // vecEnemyPos[2] += 16;
 
@@ -1838,7 +1838,7 @@ bool CFastZombie::CanEnterVehicle(CPropJeepEpisodic *pVehicle) {
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: FIXME: Move into behavior?
+// Purpose: TODO(d.rattman): Move into behavior?
 // Input  : *pOther -
 //-----------------------------------------------------------------------------
 void CFastZombie::VehicleLeapAttackTouch(CBaseEntity *pOther) {
@@ -1914,7 +1914,7 @@ DECLARE_ANIMEVENT(AE_FASTZOMBIE_CLIMB_LEFT)
 DECLARE_ANIMEVENT(AE_FASTZOMBIE_CLIMB_RIGHT)
 
 #ifdef HL2_EPISODIC
-// FIXME: Move!
+// TODO(d.rattman): Move!
 DECLARE_ANIMEVENT(AE_PASSENGER_PHYSICS_PUSH)
 DECLARE_ANIMEVENT(AE_FASTZOMBIE_VEHICLE_LEAP)
 DECLARE_ANIMEVENT(AE_FASTZOMBIE_VEHICLE_SS_DIE)

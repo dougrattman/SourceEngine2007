@@ -13,7 +13,7 @@
 #include "ai_routedist.h"
 #include "ai_route.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_SIMPLE_DATADESC(CAI_Path)
@@ -408,7 +408,7 @@ const Vector& CAI_Path::BaseGoalPosition() const
 	}
 #endif
 
-	// FIXME: A little risky; store the base if this becomes a problem
+	// TODO(d.rattman): A little risky; store the base if this becomes a problem
 	static Vector vecResult;
 	VectorSubtract(	m_goalPos, m_vecTargetOffset, vecResult );
 	return vecResult;
@@ -528,7 +528,7 @@ void CAI_Path::Clear( void )
 	m_routeStartTime	= FLT_MAX;
 
 	m_goalTolerance		= 0.0;					// How close do we need to get to the goal
-	// FIXME: split m_goalTolerance into m_buildTolerance and m_moveTolerance, let them be seperatly controllable.
+	// TODO(d.rattman): split m_goalTolerance into m_buildTolerance and m_moveTolerance, let them be seperatly controllable.
 
 	m_activity			= ACT_INVALID;
 	m_sequence			= ACT_INVALID;

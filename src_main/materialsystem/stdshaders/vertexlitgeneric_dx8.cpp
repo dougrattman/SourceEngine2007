@@ -14,7 +14,7 @@
 #include "flesh_interior_blended_pass_helper.h"
 #include "cloak_blended_pass_helper.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( VertexLitGeneric, VertexLitGeneric_DX8 )
@@ -507,8 +507,8 @@ BEGIN_VS_SHADER( VertexLitGeneric_DX8,
 
 			int fmt = VERTEX_POSITION | VERTEX_NORMAL;
 
-			// FIXME: We could enable this, but we'd never get it working on dx7 or lower
-			// FIXME: This isn't going to work until we make more vertex shaders that
+			// TODO(d.rattman): We could enable this, but we'd never get it working on dx7 or lower
+			// TODO(d.rattman): This isn't going to work until we make more vertex shaders that
 			// pass the vertex color and alpha values through.
 #if 0
 			if ( IS_FLAG_SET( MATERIAL_VAR_VERTEXCOLOR ) || IS_FLAG_SET( MATERIAL_VAR_VERTEXALPHA ) )

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "common.h"
 
@@ -33,7 +33,6 @@
 #include "language.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // Things in other C files.
@@ -69,7 +68,7 @@ especially over ISDN / T1 lines.  If there is a cache directory
 specified, when a file is found by the normal search path, it will be mirrored
 into the cache directory, then opened there.
 
-FIXME:
+TODO(d.rattman):
 The file "parms.txt" will be read out of the game directory and appended to the
 current command line arguments to allow different games to initialize startup
 parms differently.  This could be used to add a "-sspeed 22050" for the high
@@ -88,10 +87,10 @@ void COM_ExplainDisconnection(bool bPrint, const char *fmt, ...) {
   char string[1024];
 
   va_start(argptr, fmt);
-  Q_vsnprintf(string, ARRAYSIZE(string), fmt, argptr);
+  Q_vsnprintf(string, SOURCE_ARRAYSIZE(string), fmt, argptr);
   va_end(argptr);
 
-  Q_strncpy(gszDisconnectReason, string, ARRAYSIZE(gszDisconnectReason));
+  Q_strncpy(gszDisconnectReason, string, SOURCE_ARRAYSIZE(gszDisconnectReason));
   gfExtendedError = true;
 
   if (bPrint) {
@@ -563,7 +562,7 @@ uint8_t *COM_LoadFile(const char *path, int usehunk, int *pLength) {
         buf = loadbuf;
     } break;
     case 5:
-      buf = (uint8_t *)malloc(bufSize);  // YWB:  FIXME, this is evil.
+      buf = (uint8_t *)malloc(bufSize);  // TODO(d.rattman): This is evil.
       break;
     default:
       Sys_Error("COM_LoadFile: bad usehunk");
@@ -654,7 +653,7 @@ void COM_SetupLogDir(const char *mapname) {
   // set the log directory
   if (mapname && CommandLine()->FindParm("-uselogdir")) {
     int i;
-    char sRelativeLogDir[MAX_PATH];
+    char sRelativeLogDir[SOURCE_MAX_PATH];
     for (i = 0; i < MAX_LOG_DIRECTORIES; i++) {
       Q_snprintf(sRelativeLogDir, sizeof(sRelativeLogDir), "logs/%s/%04i",
                  mapname, i);
@@ -678,7 +677,7 @@ void COM_SetupLogDir(const char *mapname) {
         pathsetup = true;
 
         // Set the search path
-        char sLogDir[MAX_PATH];
+        char sLogDir[SOURCE_MAX_PATH];
         Q_snprintf(sLogDir, sizeof(sLogDir), "%s/%s", gameDir, sRelativeLogDir);
         g_pFileSystem->AddSearchPath(sLogDir, "LOGDIR");
       }
@@ -696,7 +695,7 @@ COM_GetModDirectory - return the final directory in the game dir (i.e "cstrike",
 ================
 */
 const char *COM_GetModDirectory() {
-  static char modDir[MAX_PATH];
+  static char modDir[SOURCE_MAX_PATH];
   if (Q_strlen(modDir) == 0) {
     const char *gamedir = CommandLine()->ParmValue(
         "-game", CommandLine()->ParmValue("-defaultgamedir", "hl2"));
@@ -783,7 +782,7 @@ void COM_InitFilesystem(const char *pFullModPath) {
     const int nSteamAppId =
         modinfo->FindKey("FileSystem")->GetInt("SteamAppId", 215);
     ELanguage eAudioLanguage = k_Lang_English;
-    char szAudioLanguageRegKey[MAX_PATH];
+    char szAudioLanguageRegKey[SOURCE_MAX_PATH];
     long lRegValue;
 
     // Construct registry key path
@@ -813,10 +812,10 @@ void COM_InitFilesystem(const char *pFullModPath) {
 
         if (V_stricmp(pPathID, "game") == 0 &&
             (NULL == V_strstr(pLocation, "|gameinfo_path|"))) {
-          char *szFullSearchPath = new char[MAX_PATH];
+          char *szFullSearchPath = new char[SOURCE_MAX_PATH];
 
-          Q_snprintf(szFullSearchPath, MAX_PATH, "%s%c%s_%s%c", com_basedir,
-                     CORRECT_PATH_SEPARATOR, pLocation,
+          Q_snprintf(szFullSearchPath, SOURCE_MAX_PATH, "%s%c%s_%s%c",
+                     com_basedir, CORRECT_PATH_SEPARATOR, pLocation,
                      GetLanguageShortName(eAudioLanguage),
                      CORRECT_PATH_SEPARATOR);
           vSearchPaths.AddToHead(szFullSearchPath);
@@ -873,6 +872,12 @@ const char *COM_DXLevelToString(int dxlevel) {
         } else {
           return "9.0 (full-precision)";
         }
+      case 95:
+        if (bHalfPrecision) {
+          return "9.0+ (half-precision)";
+        } else {
+          return "9.0+ (full-precision)";
+        }
       default:
         return "UNKNOWN";
     }
@@ -897,6 +902,12 @@ const char *COM_DXLevelToString(int dxlevel) {
           return "gamemode - 9.0 (half-precision)";
         } else {
           return "gamemode - 9.0 (full-precision)";
+        }
+      case 95:
+        if (bHalfPrecision) {
+          return "gamemode - 9.0+ (half-precision)";
+        } else {
+          return "gamemode - 9.0+ (full-precision)";
         }
       default:
         return "gamemode";

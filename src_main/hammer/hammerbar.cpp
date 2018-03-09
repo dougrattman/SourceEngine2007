@@ -19,7 +19,7 @@
 #include "HammerBar.h"
 #include "hammer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_MESSAGE_MAP(CHammerBar, CDialogBar)

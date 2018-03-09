@@ -5,7 +5,7 @@
 #include "hltvdirector.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar tv_delay("tv_delay", "30", 0,

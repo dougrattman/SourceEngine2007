@@ -10,8 +10,8 @@
 #include "tier1/utlvector.h"
 
 #ifdef _WIN32
-#define FORCEINLINE_CVAR FORCEINLINE
-#elif _LINUX
+#define FORCEINLINE_CVAR SOURCE_FORCEINLINE
+#elif OS_POSIX
 #define FORCEINLINE_CVAR inline
 #else
 #error "implement me"
@@ -85,7 +85,7 @@ class ConCommandBase {
                               IConCommandBaseAccessor *pAccessor);
   friend void ConVar_PublishToVXConsole();
 
-  // FIXME: Remove when ConVar changes are done
+  // TODO(d.rattman): Remove when ConVar changes are done
   friend class CDefaultCvar;
 
  public:
@@ -210,7 +210,7 @@ inline const char *CCommand::GetCommandString() const {
 }
 
 inline const char *CCommand::Arg(int nIndex) const {
-  // FIXME: Many command handlers appear to not be particularly careful
+  // TODO(d.rattman): Many command handlers appear to not be particularly careful
   // about checking for valid argc range. For now, we're going to
   // do the extra check and return an empty string if it's out of range
   if (nIndex < 0 || nIndex >= m_nArgc) return "";

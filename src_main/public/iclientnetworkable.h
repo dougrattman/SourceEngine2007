@@ -37,11 +37,11 @@ enum DataUpdateType_t
 //	DATA_UPDATE_ENTERED_PVS,
 	DATA_UPDATE_DATATABLE_CHANGED,
 //	DATA_UPDATE_LEFT_PVS,
-//	DATA_UPDATE_DESTROYED,		// FIXME: Could enable this, but it's a little worrying
+//	DATA_UPDATE_DESTROYED,		// TODO(d.rattman): Could enable this, but it's a little worrying
   		// since it changes a bunch of existing code
 };
 
-abstract_class IClientNetworkable
+the_interface IClientNetworkable
 {
 public:
 	// Gets at the containing class...

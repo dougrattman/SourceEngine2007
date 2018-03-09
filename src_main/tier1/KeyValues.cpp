@@ -4,7 +4,7 @@
 
 #if defined(_WIN32)
 #include "base/include/windows/windows_light.h"  // for WideCharToMultiByte and MultiByteToWideChar
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #include <cwchar>  // wcslen()
 #define _alloca alloca
 #endif
@@ -18,7 +18,7 @@
 #include "tier1/utlvector.h"
 #include "vstdlib/IKeyValuesSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // just needed for error messages
@@ -976,16 +976,16 @@ const wchar_t *KeyValues::GetWString(const char *keyName,
     wchar_t wbuf[64];
     switch (dat->m_iDataType) {
       case TYPE_FLOAT:
-        swprintf(wbuf, ARRAYSIZE(wbuf), L"%f", dat->m_flValue);
+        swprintf(wbuf, SOURCE_ARRAYSIZE(wbuf), L"%f", dat->m_flValue);
         SetWString(keyName, wbuf);
         break;
       case TYPE_INT:
       case TYPE_PTR:
-        swprintf(wbuf, ARRAYSIZE(wbuf), L"%d", dat->m_iValue);
+        swprintf(wbuf, SOURCE_ARRAYSIZE(wbuf), L"%d", dat->m_iValue);
         SetWString(keyName, wbuf);
         break;
       case TYPE_UINT64: {
-        swprintf(wbuf, ARRAYSIZE(wbuf), L"%I64i",
+        swprintf(wbuf, SOURCE_ARRAYSIZE(wbuf), L"%I64i",
                  *((uint64_t *)(dat->m_sValue)));
         SetWString(keyName, wbuf);
       } break;

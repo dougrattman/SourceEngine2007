@@ -12,7 +12,7 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Gamma conversion support
@@ -39,7 +39,7 @@ static f32 g_Mathlib_LinearToGamma[256];  // linear (0..1) to gamma (0..1)
 // onto SIMD registers easily if needed (used by SSE version of lightmaps)
 // TODO: move this into the one DLL that actually uses it, instead of statically
 // linking it everywhere via mathlib.
-ALIGN128 f32 power2_n[256] =  // 2**(index - 128) / 255
+alignas(128) f32 power2_n[256] =  // 2**(index - 128) / 255
     {1.152445441982634800E-041, 2.304890883965269600E-041,
      4.609781767930539200E-041, 9.219563535861078400E-041,
      1.843912707172215700E-040, 3.687825414344431300E-040,
@@ -388,7 +388,7 @@ u8 LinearToScreenGamma(f32 f) {
 
 void ColorRGBExp32ToVector(const ColorRGBExp32 &in, Vector &out) {
   Assert(s_bMathlibInitialized);
-  // FIXME: Why is there a factor of 255 built into this?
+  // TODO(d.rattman): Why is there a factor of 255 built into this?
   out.x = 255.0f * TexLightToLinear(in.r, in.exponent);
   out.y = 255.0f * TexLightToLinear(in.g, in.exponent);
   out.z = 255.0f * TexLightToLinear(in.b, in.exponent);

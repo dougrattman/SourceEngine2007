@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Real-Time Hierarchical Profiling
 
@@ -7,7 +7,6 @@
 
 #include "base/include/base_types.h"
 #include "build/include/build_config.h"
-
 #include "tier0/include/dbg.h"
 #include "tier0/include/fasttimer.h"
 #include "tier0/include/threadtools.h"
@@ -336,8 +335,9 @@ enum VProfReportType_t {
   VPRT_LIST_BY_PEAK_OVER_AVERAGE = (1 << 8),
   VPRT_LIST_TOP_ITEMS_ONLY = (1 << 9),
 
-  VPRT_FULL = (0xffffffff & ~(VPRT_HIERARCHY_TIME_PER_FRAME_AND_COUNT_ONLY |
-                              VPRT_LIST_TOP_ITEMS_ONLY)),
+  VPRT_FULL =
+      (0xffffffff & ~(VPRT_HIERARCHY_TIME_PER_FRAME_AND_COUNT_ONLY |  //-V112
+                      VPRT_LIST_TOP_ITEMS_ONLY)),
 };
 
 enum CounterGroup_t {
@@ -398,7 +398,7 @@ class SOURCE_TIER0_API_CLASS CVProfile {
 #if !defined(NDEBUG)
       // 360 doesn't want this to allow tier0 debug/release .def files to match
       if (bAssertAccounted) {
-        // FIXME
+        // TODO(d.rattman):
         AssertOnce(m_pCurNode->GetBudgetGroupID() != 0);
       }
 #endif

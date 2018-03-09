@@ -21,7 +21,7 @@
 #include "commandbuilder.h"
 #include "tier1/convar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar mat_fullbright("mat_fullbright", "0", FCVAR_CHEAT);
@@ -320,7 +320,7 @@ void InitVertexLitGeneric_DX9(CBaseVSShader *pShader, IMaterialVar **params,
   }
 }
 
-// FIXME:
+// TODO(d.rattman):
 // From revision #18 of this file in staging:
 //     "Quick fix to keep Phong shader from being run if the mat_bumpmap convar
 //     is set to zero."
@@ -459,7 +459,7 @@ static void DrawVertexLitGeneric_DX9_Internal(
       bHasNormal = true;
 
       bool bHalfLambert = IS_FLAG_SET(MATERIAL_VAR_HALFLAMBERT);
-      // Alpha test: FIXME: shouldn't this be handled in
+      // Alpha test: TODO(d.rattman): shouldn't this be handled in
       // CBaseVSShader::SetInitialShadowState
       pShaderShadow->EnableAlphaTest(bIsAlphaTested);
 

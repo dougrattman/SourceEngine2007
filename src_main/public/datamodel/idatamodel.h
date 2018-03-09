@@ -1,4 +1,4 @@
-// Copyright © 1996-2004, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IDATAMODEL_H
 #define IDATAMODEL_H
@@ -83,7 +83,7 @@ enum DmAttributeReferenceIterator_t {
 //-----------------------------------------------------------------------------
 // element framework interface
 //-----------------------------------------------------------------------------
-abstract_class IDmElementFramework : public IAppSystem {
+the_interface IDmElementFramework : public IAppSystem {
  public:
   // Methods of IAppSystem
   virtual bool Connect(CreateInterfaceFn factory) = 0;
@@ -116,7 +116,7 @@ extern IDmElementFramework *g_pDmElementFramework;
 // datamodel operator interface - for all elements that need to be sorted in the
 // operator dependency graph
 //-----------------------------------------------------------------------------
-abstract_class IDmeOperator {
+the_interface IDmeOperator {
  public:
   virtual bool IsDirty() = 0;  // ie needs to operate
   virtual void Operate() = 0;
@@ -217,7 +217,7 @@ class IElementForKeyValueCallback {
 // it's time to clean up the clipboard data in case the application
 //  had some dynamically allocated data attached to a KV SetPtr object...
 //-----------------------------------------------------------------------------
-abstract_class IClipboardCleanup {
+the_interface IClipboardCleanup {
  public:
   virtual void ReleaseClipboardData(CUtlVector<KeyValues *> & list) = 0;
 };
@@ -262,7 +262,7 @@ enum DmNotifyFlags_t {
 
 };
 
-abstract_class IDmNotify {
+the_interface IDmNotify {
  public:
   // See DmNotifySource_t and DmNotifyFlags_t
   virtual void NotifyDataChanged(const char *pReason, int nNotifySource,
@@ -283,7 +283,7 @@ struct UndoInfo_t {
 //-----------------------------------------------------------------------------
 // Interface for undo
 //-----------------------------------------------------------------------------
-abstract_class IUndoElement {
+the_interface IUndoElement {
  public:
   virtual void Undo() = 0;
   virtual void Redo() = 0;

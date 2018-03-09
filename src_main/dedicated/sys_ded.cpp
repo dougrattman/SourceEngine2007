@@ -52,7 +52,7 @@ extern char *gpszCvars;
 
 IDedicatedServerAPI *engine = NULL;
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 extern char g_szEXEName[256];
 #endif
 
@@ -243,13 +243,13 @@ int CDedicatedAppSystemGroup::Main() {
     // mount the caches
     if (CommandLine()->CheckParm("-steam")) {
       // Add a search path for the base dir
-      char fullLocationPath[MAX_PATH];
-      if (_getcwd(fullLocationPath, MAX_PATH)) {
+      char fullLocationPath[SOURCE_MAX_PATH];
+      if (_getcwd(fullLocationPath, SOURCE_MAX_PATH)) {
         g_pFullFileSystem->AddSearchPath(fullLocationPath, "MAIN");
       }
 
       // Find the gameinfo.txt for our mod and mount it's caches
-      char gameInfoFilename[MAX_PATH];
+      char gameInfoFilename[SOURCE_MAX_PATH];
       Q_snprintf(gameInfoFilename, sizeof(gameInfoFilename) - 1,
                  "%s\\gameinfo.txt", CommandLine()->ParmValue("-game", "hl2"));
       KeyValues *gameData = new KeyValues("GameInfo");
@@ -306,7 +306,7 @@ bool GetExecutableName(char *out, int nMaxLen) {
     return false;
   }
   return true;
-#elif _LINUX
+#elif OS_POSIX
   Q_strncpy(out, g_szEXEName, nMaxLen);
   return true;
 #endif
@@ -398,7 +398,7 @@ bool CDedicatedSteamApplication::Create() {
 
 // Main entry point for dedicated server, shared between win32 and linux
 int main(int argc, char **argv) {
-#ifndef _LINUX
+#ifndef OS_POSIX
   _asm
   {
 		fninit
@@ -407,7 +407,7 @@ int main(int argc, char **argv) {
 
   SetupFPUControlWord();
 
-#ifdef _LINUX
+#ifdef OS_POSIX
   strcpy(g_szEXEName, *argv);
   // Store off command line for argument searching
   BuildCmdLine(argc, argv);
@@ -437,8 +437,8 @@ int main(int argc, char **argv) {
 
   // Figure out the directory the executable is running from and make that be
   // the current working directory
-  char pBasedir[MAX_PATH];
-  UTIL_ComputeBaseDir(pBasedir, MAX_PATH);
+  char pBasedir[SOURCE_MAX_PATH];
+  UTIL_ComputeBaseDir(pBasedir, SOURCE_MAX_PATH);
   _chdir(pBasedir);
 
   // Rehook the command line through VCR mode.

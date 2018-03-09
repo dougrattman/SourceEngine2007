@@ -183,7 +183,7 @@ class CAI_StandoffBehavior : public CAI_MappedActivityBehavior_Temporary {
   CSimTimer m_TimePreventForceNewEnemy;
   CRandSimTimer m_RandomCoverChangeTimer;
 
-  // FIXME: TEMPORARY! REMOVE
+  // TODO(d.rattman): TEMPORARY! REMOVE
   int m_nSavedMinShots, m_nSavedMaxShots;
   float m_flSavedMinRest, m_flSavedMaxRest;
 

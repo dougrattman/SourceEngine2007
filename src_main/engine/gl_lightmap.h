@@ -34,7 +34,7 @@ void R_BuildLightMap(struct dlight_t *pLights, class ICallQueue *pCallQueue,
                      SurfaceHandle_t surfID, const matrix3x4_t &entityToWorld);
 void R_RedownloadAllLightmaps();
 void GL_RebuildLightmaps(void);
-void FASTCALL R_RenderDynamicLightmaps(dlight_t *pLights,
+void SOURCE_FASTCALL R_RenderDynamicLightmaps(dlight_t *pLights,
                                        ICallQueue *pCallQueue,
                                        SurfaceHandle_t surfID,
                                        const matrix3x4_t &entityToWorld);

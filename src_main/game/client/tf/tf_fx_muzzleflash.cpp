@@ -280,7 +280,7 @@ void C_MuzzleFlashModel::SetIs3rdPersonFlash( bool bEnable )
 					   
 bool C_MuzzleFlashModel::SetupBones( matrix3x4_t *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime )
 {
-	// FIXME: This is an incredibly brutal hack to get muzzle flashes positioned correctly for recording
+	// TODO(d.rattman): This is an incredibly brutal hack to get muzzle flashes positioned correctly for recording
 	// NOTE: The correct, long-term solution, is to make weapon models
 	// always store the 3rd person model and to have view model entities
 	// always store the 1st person model. I didn't have time to do that for Leipzig.
@@ -323,7 +323,7 @@ void C_MuzzleFlashModel::GetToolRecordingState( KeyValues *msg )
 		BaseEntityRecordingState_t *pBaseEntity = (BaseEntityRecordingState_t*)msg->GetPtr( "baseentity" );
 		pBaseEntity->m_nOwner = pParent->entindex();
 
-		// FIXME: This recording path is a giant hack in a cascading series of hacks
+		// TODO(d.rattman): This recording path is a giant hack in a cascading series of hacks
 		C_BaseCombatWeapon *pParentWeapon = dynamic_cast<C_BaseCombatWeapon*>( pParent );
 		if ( pParentWeapon )
 		{

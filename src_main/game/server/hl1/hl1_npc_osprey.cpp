@@ -916,7 +916,7 @@ void CBaseHelicopter::FlyPathCorners( void )
 		{
 			m_vecDesiredPosition = GetGoalEnt()->GetLocalOrigin();
 
-			// FIXME: orienation removed from path_corners!
+			// TODO(d.rattman): orienation removed from path_corners!
 			AngleVectors( GetGoalEnt()->GetLocalAngles(), &m_vecGoalOrientation );
 		}
 	}
@@ -941,7 +941,7 @@ void CBaseHelicopter::FlyPathCorners( void )
 			{
 				m_vecDesiredPosition = GetGoalEnt()->GetAbsOrigin();
 			
-				// FIXME: orienation removed from path_corners!
+				// TODO(d.rattman): orienation removed from path_corners!
 				AngleVectors( GetGoalEnt()->GetLocalAngles(), &m_vecGoalOrientation );
 
 				// NDebugOverlay::Box( m_vecDesiredPosition, Vector( -16, -16, -16 ), Vector( 16, 16, 16 ), 0,255,0, false, 30.0);
@@ -977,7 +977,7 @@ void CBaseHelicopter::UpdatePlayerDopplerShift( )
 		CBaseEntity *pPlayer = NULL;
 
 		// UNDONE: this needs to send different sounds to every player for multiplayer.	
-		// FIXME: this isn't the correct way to find a player!!!
+		// TODO(d.rattman): this isn't the correct way to find a player!!!
 		pPlayer = gEntList.FindEntityByName( NULL, "!player" );
 		if (pPlayer)
 		{
@@ -1110,7 +1110,7 @@ void CBaseHelicopter::Flight( void )
 	ApplyGeneralDrag();
 	
 	// apply power to stay correct height
-	// FIXME: these need to be per class variables
+	// TODO(d.rattman): these need to be per class variables
 #define MAX_FORCE		80
 #define FORCE_POSDELTA	12	
 #define FORCE_NEGDELTA	8

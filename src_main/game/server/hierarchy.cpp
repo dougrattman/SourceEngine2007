@@ -10,7 +10,7 @@
 #include "cbase.h"
 #include "hierarchy.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ void TransferChildren( CBaseEntity *pOldParent, CBaseEntity *pNewParent )
 		UnlinkChild( pOldParent, pChild );
 		LinkChild( pNewParent, pChild );
 
-		// FIXME: This is a hack to guarantee update of the local origin, angles, etc.
+		// TODO(d.rattman): This is a hack to guarantee update of the local origin, angles, etc.
 		pChild->m_vecAbsOrigin.Init( FLT_MAX, FLT_MAX, FLT_MAX );
 		pChild->m_angAbsRotation.Init( FLT_MAX, FLT_MAX, FLT_MAX );
 		pChild->m_vecAbsVelocity.Init( FLT_MAX, FLT_MAX, FLT_MAX );

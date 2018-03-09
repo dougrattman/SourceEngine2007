@@ -1,14 +1,8 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//===========================================================================//
+
 #include "interface.h"
 
 #include "base/include/windows/windows_light.h"
-//#include "..\..\tracker\common\winlite.h"
 #include "vgui_controls/Controls.h"
 #include "vgui/vgui.h"
 #include "VGUI\IPanel.h"
@@ -62,7 +56,7 @@ static CreateInterfaceFn s_pFactoryList[2];
 
 void *VGuiFactory( const char *pName, int *pReturnCode )
 {
-	for ( int i = 0; i < ARRAYSIZE( s_pFactoryList ); ++i )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( s_pFactoryList ); ++i )
 	{
 		void *pInterface = s_pFactoryList[i]( pName, pReturnCode );
 		if ( pInterface )

@@ -16,7 +16,7 @@ enum : int {
 };
 
 // Texture manager interface
-abstract_class ITextureManager {
+the_interface ITextureManager {
  public:
   // Initialization + shutdown
   virtual void Init(int nFlags) = 0;

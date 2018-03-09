@@ -669,7 +669,7 @@
     <ClInclude Include="transformdlg.h">
       <Filter>Source Files\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\deps\amd3dx\include\amd3dx.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\public\arraystack.h">
@@ -941,7 +941,7 @@
     <ClCompile Include="..\public\filesystem_helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\public\filesystem_init.cpp">
+    <ClCompile Include="..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FilteredComboBox.cpp">

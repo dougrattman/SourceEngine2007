@@ -122,8 +122,8 @@ CSteamApplication::CSteamApplication(CSteamAppSystemGroup *pAppSystemGroup) {
 bool CSteamApplication::Create() {
   FileSystem_SetErrorMode(FS_ERRORMODE_AUTO);
 
-  ch pFileSystemDLL[MAX_PATH];
-  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, MAX_PATH, m_bSteam) !=
+  ch pFileSystemDLL[SOURCE_MAX_PATH];
+  if (FileSystem_GetFileSystemDLLName(pFileSystemDLL, SOURCE_MAX_PATH, m_bSteam) !=
       FS_OK)
     return false;
 

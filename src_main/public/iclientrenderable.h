@@ -53,7 +53,7 @@ enum ShadowType_t
 // number of views.
 //
 // If no views had the entity, then it is called with bInPVS=false after rendering.
-abstract_class IPVSNotify
+the_interface IPVSNotify
 {
 public:
 	virtual void OnPVSStatusChanged( bool bInPVS ) = 0;
@@ -63,7 +63,7 @@ public:
 //-----------------------------------------------------------------------------
 // Purpose: All client entities must implement this interface.
 //-----------------------------------------------------------------------------
-abstract_class IClientRenderable
+the_interface IClientRenderable
 {
 public:
 	// Gets at the containing class...
@@ -173,7 +173,7 @@ public:
 
 // This class can be used to implement default versions of some of the 
 // functions of IClientRenderable.
-abstract_class CDefaultClientRenderable : public IClientUnknown, public IClientRenderable
+the_interface CDefaultClientRenderable : public IClientUnknown, public IClientRenderable
 {
 public:
 	CDefaultClientRenderable()

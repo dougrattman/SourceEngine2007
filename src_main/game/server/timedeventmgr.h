@@ -25,7 +25,7 @@
 class CTimedEventMgr;
 
 
-abstract_class IEventRegisterCallback
+the_interface IEventRegisterCallback
 {
 public:
 	virtual void FireEvent() = 0;

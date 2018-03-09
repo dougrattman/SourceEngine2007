@@ -26,7 +26,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #if defined( CLIENT_DLL )
@@ -346,7 +346,7 @@ void CWeaponCombatPlasmaRifle::ClientThink( )
 			return;
 		}
 
-		// FIXME: dl->origin should be based on the attachment point
+		// TODO(d.rattman): dl->origin should be based on the attachment point
 		dlight_t *dl = effects->CL_AllocDlight( entindex() );
 		dl->origin = GetRenderOrigin();
 		if (GetTeamNumber() == 1)
@@ -443,7 +443,7 @@ int CWeaponCombatPlasmaRifle::DrawModel( int flags )
 
 	if (IsCarrierAlive())
 	{
-		// FIXME: Maybe do some client-side simulation on the size?
+		// TODO(d.rattman): Maybe do some client-side simulation on the size?
 		// It may get jerky otherwise
 
 		// Draw the charging effect

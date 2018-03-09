@@ -12,8 +12,8 @@
 
 // UNDONE: Do these need GameInit/GameShutdown as well?
 // UNDONE: Remove the Pre/Post entity semantics and rely on system ordering?
-// FIXME: Remove all ifdef CLIENT_DLL if we can...
-abstract_class IGameSystem {
+// TODO(d.rattman): Remove all ifdef CLIENT_DLL if we can...
+the_interface IGameSystem {
  public:
   // GameSystems are expected to implement these methods.
   virtual char const *Name() = 0;

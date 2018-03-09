@@ -1,8 +1,6 @@
-//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Rendering and mouse handling in the 2D view.
-//
-//============================================================================//
 
 #include "stdafx.h"
 #include "MapView2DBase.h"
@@ -26,14 +24,14 @@
 #include "Render2D.h"
 #include "TitleWnd.h"
 #include "ToolManager.h"
-#include "ToolMorph.h"		// FIXME: remove
+#include "ToolMorph.h"		// TODO(d.rattman): remove
 #include "ToolInterface.h"
 #include "MapPlayerHullHandle.h"
 #include "vgui_controls/EditablePanel.h"
 #include "camera.h"
 #include "material.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

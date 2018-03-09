@@ -23,7 +23,7 @@
 #include "weapon_hl2mpbasehlmpcombatweapon.h"
 #include "effect_dispatch_data.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define BOLT_MODEL			"models/crossbow_bolt.mdl"
@@ -305,7 +305,7 @@ void CCrossbowBolt::BoltTouch( CBaseEntity *pOther )
 				SetThink( &CCrossbowBolt::SUB_Remove );
 				SetNextThink( gpGlobals->curtime + 2.0f );
 				
-				//FIXME: We actually want to stick (with hierarchy) to what we've hit
+				//TODO(d.rattman): We actually want to stick (with hierarchy) to what we've hit
 				SetMoveType( MOVETYPE_NONE );
 			
 				Vector vForward;

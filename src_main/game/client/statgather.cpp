@@ -9,7 +9,7 @@
 #include "cbase.h"
 #include "statgather.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -138,8 +138,8 @@ char const *CStatsRecorder::GetPerfStatsString( int iType )
 		int dest_width,dest_height;
 		pRenderContext->GetRenderTargetDimensions( dest_width, dest_height );
 
-		char szMap[MAX_PATH+1]="";
-		Q_FileBase( engine->GetLevelName(), szMap, ARRAYSIZE( szMap ) );
+		char szMap[SOURCE_MAX_PATH+1]="";
+		Q_FileBase( engine->GetLevelName(), szMap, SOURCE_ARRAYSIZE( szMap ) );
 
 		V_snprintf( s_cPerfString, sizeof( s_cPerfString ), 
 			"PERFDATA:AvgFps=%4.2f MinFps=%4.2f MaxFps=%4.2f CPUID=\"%s\" CPUGhz=%2.2f "

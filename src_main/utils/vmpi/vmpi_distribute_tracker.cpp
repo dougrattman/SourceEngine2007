@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include <conio.h>
 #include <io.h>
@@ -8,7 +8,7 @@
 #include "utlvector.h"
 #include "vmpi.h"
 #include "vmpi_distribute_work.h"
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #define EVENT_TYPE_SEND_WORK_UNIT 0
 #define EVENT_TYPE_WU_STARTED 1
@@ -85,8 +85,8 @@ static LRESULT CALLBACK TrackerWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
   switch (uMsg) {
     case WM_PAINT: {
       // Do one pass for each color..
-      HBRUSH hStateColors[ARRAYSIZE(g_StateColors)];
-      for (int i = 0; i < ARRAYSIZE(hStateColors); i++)
+      HBRUSH hStateColors[SOURCE_ARRAYSIZE(g_StateColors)];
+      for (int i = 0; i < SOURCE_ARRAYSIZE(hStateColors); i++)
         hStateColors[i] = CreateSolidBrush(g_StateColors[i]);
 
       // Copy the WU statuses.
@@ -102,7 +102,7 @@ static LRESULT CALLBACK TrackerWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
       PAINTSTRUCT ps;
       HDC hDC = BeginPaint(hwnd, &ps);
-      for (int iState = 0; iState < ARRAYSIZE(hStateColors); iState++) {
+      for (int iState = 0; iState < SOURCE_ARRAYSIZE(hStateColors); iState++) {
         HGDIOBJ hOldObj = SelectObject(hDC, hStateColors[iState]);
 
         for (int iWU = 0; iWU < wuStatus.Count(); iWU++) {

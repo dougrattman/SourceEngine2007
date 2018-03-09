@@ -27,7 +27,7 @@
 #include "entitylist.h"
 #include "scripted.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar ai_task_pre_script("ai_task_pre_script", "0", FCVAR_NONE);
@@ -172,7 +172,7 @@ void CAI_ScriptedSequence::ScriptEntityCancel(CBaseEntity *pentCine,
       }
     }
 
-    // FIXME: this needs to be done in a cine cleanup function
+    // TODO(d.rattman): this needs to be done in a cine cleanup function
     pCineTarget->m_iDelay = 0;
 
     if (bPretendSuccess) {
@@ -683,7 +683,7 @@ void CAI_ScriptedSequence::StartScript(void) {
 
     pTarget->SetIdealState(NPC_STATE_SCRIPT);
 
-    // FIXME: not sure why this is happening, or what to do about truely dormant
+    // TODO(d.rattman): not sure why this is happening, or what to do about truely dormant
     // NPCs
     if (pTarget->IsEFlagSet(EFL_NO_THINK_FUNCTION) &&
         pTarget->GetNextThink() != TICK_NEVER_THINK) {
@@ -712,8 +712,8 @@ void CAI_ScriptedSequence::ScriptThink(void) {
     CancelScript();
     DevMsg(2, "scripted_sequence %d:\"%s\" can't find NPC \"%s\"\n", entindex(),
            GetDebugName(), STRING(m_iszEntity));
-    // FIXME: just trying again is bad.  This should fire an output instead.
-    // FIXME: Think about puting output triggers in both StartScript() and
+    // TODO(d.rattman): just trying again is bad.  This should fire an output instead.
+    // TODO(d.rattman): Think about puting output triggers in both StartScript() and
     // CancelScript().
     SetNextThink(gpGlobals->curtime + 1.0f);
   }
@@ -1558,10 +1558,10 @@ void CAI_ScriptedSchedule::ScriptThink(void) {
   if (!success) {
     DevMsg(2, "scripted_schedule \"%s\" can't find NPC \"%s\"\n",
            GetDebugName(), STRING(m_iszEntity));
-    // FIXME: just trying again is bad.  This should fire an output instead.
-    // FIXME: Think about puting output triggers on success true and sucess
+    // TODO(d.rattman): just trying again is bad.  This should fire an output instead.
+    // TODO(d.rattman): Think about puting output triggers on success true and sucess
     // false
-    // FIXME: also needs to check the result of StartSchedule(), which can fail
+    // TODO(d.rattman): also needs to check the result of StartSchedule(), which can fail
     // and not complain
     SetNextThink(gpGlobals->curtime + 1.0f);
   } else {
@@ -1629,7 +1629,7 @@ void CAI_ScriptedSchedule::StartSchedule(CAI_BaseNPC *pTarget) {
 
   pTarget->ForceDecisionThink();
 
-  Assert(m_nForceState >= 0 && m_nForceState < ARRAYSIZE(forcedStatesMap));
+  Assert(m_nForceState >= 0 && m_nForceState < SOURCE_ARRAYSIZE(forcedStatesMap));
 
   NPC_STATE forcedState = forcedStatesMap[m_nForceState];
 

@@ -25,7 +25,7 @@ CCSClassInfo g_ClassInfos[] =
 
 const CCSClassInfo* GetCSClassInfo( int i )
 {
-	Assert( i >= 0 && i < ARRAYSIZE( g_ClassInfos ) );
+	Assert( i >= 0 && i < SOURCE_ARRAYSIZE( g_ClassInfos ) );
 	return &g_ClassInfos[i];
 }
 
@@ -45,5 +45,5 @@ const char *TerroristPlayerModelStrings[] =
 	"models/player/t_arctic.mdl",
 	"models/player/t_guerilla.mdl",
 };
-CUtlVectorInitialized< const char * > CTPlayerModels( CTPlayerModelStrings, ARRAYSIZE( CTPlayerModelStrings ) );
-CUtlVectorInitialized< const char * > TerroristPlayerModels( TerroristPlayerModelStrings, ARRAYSIZE( TerroristPlayerModelStrings ) );
+CUtlVectorInitialized< const char * > CTPlayerModels( CTPlayerModelStrings, SOURCE_ARRAYSIZE( CTPlayerModelStrings ) );
+CUtlVectorInitialized< const char * > TerroristPlayerModels( TerroristPlayerModelStrings, SOURCE_ARRAYSIZE( TerroristPlayerModelStrings ) );

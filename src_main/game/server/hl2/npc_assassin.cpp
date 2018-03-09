@@ -16,7 +16,7 @@
 #include "AI_SquadSlot.h"
 #include "ai_moveprobe.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_assassin_health( "sk_assassin_health","150");
@@ -828,7 +828,7 @@ const Vector &CNPC_Assassin::GetViewOffset( void )
 {
 	static Vector eyeOffset;
 
-	//FIXME: Use eye attachment?
+	//TODO(d.rattman): Use eye attachment?
 	// If we're crouching, offset appropriately
 	if ( ( GetActivity() == ACT_ASSASSIN_PERCH ) ||
 		 ( GetActivity() == ACT_RANGE_ATTACK1 ) )
@@ -954,7 +954,7 @@ void CNPC_Assassin::GatherEnemyConditions( CBaseEntity *pEnemy )
 
 		float	enemyDot = DotProduct( enemyBodyDir, enemyDir );
 
-		//FIXME: Need to refine this a bit
+		//TODO(d.rattman): Need to refine this a bit
 		if ( enemyDot > 0.97f )
 		{
 			SetCondition( COND_ASSASSIN_ENEMY_TARGETTING_ME );

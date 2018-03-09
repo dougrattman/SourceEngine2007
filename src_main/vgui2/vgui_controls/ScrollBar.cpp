@@ -17,7 +17,7 @@
 #include <vgui_controls/Button.h>
 #include <vgui_controls/Controls.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -137,7 +137,7 @@ ScrollBar::ScrollBar(Panel *parent, const char *panelName, bool vertical) : Pane
 
 	if (vertical)
 	{
-		// FIXME: proportional changes needed???
+		// TODO(d.rattman): proportional changes needed???
 		SetSlider(new ScrollBarSlider(NULL, NULL, true));
 		SetButton(new ScrollBarButton(NULL, NULL, "t"), 0);
 		SetButton(new ScrollBarButton(NULL, NULL, "u"), 1);

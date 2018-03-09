@@ -20,7 +20,7 @@
 #define SF_CROW_FLYING		16
 
 #define CROW_TAKEOFF_SPEED		170
-#define CROW_AIRSPEED 220 // FIXME: should be about 440, but I need to add acceleration
+#define CROW_AIRSPEED 220 // TODO(d.rattman): should be about 440, but I need to add acceleration
 
 //
 // Custom schedules.

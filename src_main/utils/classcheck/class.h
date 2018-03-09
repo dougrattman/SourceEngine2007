@@ -122,7 +122,7 @@ public:
 	bool			CheckForMissingTypeDescriptionFields( int& missingcount, bool createtds = false );
 	bool			CheckForMissingPredictionFields( int& missingcount, bool createtds = false );
 	bool			CheckForPredictionFieldsInRecvTableNotMarkedAsSuchCorrectly( int& missingcount );
-	void			AddVariable( int protection, char *type, char *name, bool array, char *arraysize = 0 );
+	void			AddVariable( int protection, char *type, char *name, bool array, char *SOURCE_ARRAYSIZE = 0 );
 
 	// Parsing helper methods
 	bool			ParseProtection( char *&input, int &protection );

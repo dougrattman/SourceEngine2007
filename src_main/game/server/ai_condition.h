@@ -68,7 +68,7 @@ enum SCOND_t
 	COND_TASK_FAILED,
 	COND_SCHEDULE_DONE,
 	COND_SMELL,
-	COND_TOO_CLOSE_TO_ATTACK, // FIXME: most of this next group are meaningless since they're shared between all attack checks!
+	COND_TOO_CLOSE_TO_ATTACK, // TODO(d.rattman): most of this next group are meaningless since they're shared between all attack checks!
 	COND_TOO_FAR_TO_ATTACK,
 	COND_NOT_FACING_ATTACK,
 	COND_WEAPON_HAS_LOS,

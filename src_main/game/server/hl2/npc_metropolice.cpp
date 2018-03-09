@@ -18,7 +18,7 @@
 #include "soundent.h"
 #include "weapon_stunstick.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define SF_METROPOLICE_					0x00010000
@@ -1107,7 +1107,7 @@ const int MAX_MAX_PISTOL_BURST = 8;
 void CNPC_MetroPolice::OnUpdateShotRegulator() {
   BaseClass::OnUpdateShotRegulator();
 
-  // FIXME: This code (except the burst interval) could be used for all weapon
+  // TODO(d.rattman): This code (except the burst interval) could be used for all weapon
   // types
   if (Weapon_OwnsThisType("weapon_pistol")) {
     if (m_nBurstMode == BURST_NOT_ACTIVE) {
@@ -3626,7 +3626,7 @@ void CNPC_MetroPolice::AnnounceHarrassment(void) {
       "METROPOLICE_BACK_UP_C",
   };
 
-  m_Sentences.Speak(pWarnings[random->RandomInt(0, ARRAYSIZE(pWarnings) - 1)],
+  m_Sentences.Speak(pWarnings[random->RandomInt(0, SOURCE_ARRAYSIZE(pWarnings) - 1)],
                     SENTENCE_PRIORITY_MEDIUM, SENTENCE_CRITERIA_NORMAL);
 }
 
@@ -4468,7 +4468,7 @@ void CNPC_MetroPolice::BuildScheduleTestBits(void) {
     SetCustomInterruptCondition(COND_METROPOLICE_PHYSOBJECT_ASSAULT);
   }
 
-  // FIXME: Always interrupt for now
+  // TODO(d.rattman): Always interrupt for now
   if (!IsInAScript() && !IsCurSchedule(SCHED_METROPOLICE_SHOVE) &&
       !IsCurSchedule(SCHED_MELEE_ATTACK1) && !IsCurSchedule(SCHED_RELOAD) &&
       !IsCurSchedule(SCHED_METROPOLICE_ACTIVATE_BATON)) {
@@ -4531,7 +4531,7 @@ void CNPC_MetroPolice::GatherConditions(void) {
 
   CBasePlayer *pPlayer = UTIL_PlayerByIndex(1);
 
-  // FIXME: Player can be NULL here during level transitions.
+  // TODO(d.rattman): Player can be NULL here during level transitions.
   if (!pPlayer) return;
 
   float distToPlayerSqr =
@@ -5301,7 +5301,7 @@ DEFINE_SCHEDULE(
 
     "	Tasks"
     "		TASK_STOP_MOVING				0"
-    "		TASK_FACE_PLAYER				0.1"  // FIXME:
+    "		TASK_FACE_PLAYER				0.1"  // TODO(d.rattman):
                                                                       // This
                                                                       // needs
                                                                       // to be

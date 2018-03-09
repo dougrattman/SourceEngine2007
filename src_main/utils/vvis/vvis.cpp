@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -364,7 +364,7 @@ void LoadPortals(char *name) {
     // If we're using MPI, copy off the file to a temporary first. This will
     // download the file from the MPI master, then we get to use nice functions
     // like fscanf on it.
-    char tempPath[MAX_PATH], tempFile[MAX_PATH];
+    char tempPath[SOURCE_MAX_PATH], tempFile[SOURCE_MAX_PATH];
     if (GetTempPath(sizeof(tempPath), tempPath) == 0) {
       Error("LoadPortals: GetTempPath failed.\n");
     }
@@ -568,7 +568,7 @@ static void GetBoundsForFace(int faceID, Vector &faceMin, Vector &faceMax) {
   }
 }
 
-// FIXME: should stick this in mathlib
+// TODO(d.rattman): should stick this in mathlib
 static float GetMinDistanceBetweenBoundingBoxes(const Vector &min1,
                                                 const Vector &max1,
                                                 const Vector &min2,
@@ -606,15 +606,15 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
   // doing anything.
   if (((dleafs[leafNum].contents & CONTENTS_TESTFOGVOLUME) == 0) &&
       (dleafs[leafNum].leafWaterDataID == -1))
-    return 65535;  // FIXME: make a define for this.
+    return 65535;  // TODO(d.rattman): make a define for this.
 
   // First get the vis data..
   int cluster = dleafs[leafNum].cluster;
-  if (cluster < 0) return 65535;  // FIXME: make a define for this.
+  if (cluster < 0) return 65535;  // TODO(d.rattman): make a define for this.
 
   DecompressVis(&dvisdata[dvis->bitofs[cluster][DVIS_PVS]], uncompressed);
 
-  float minDist = 65535.0f;  // FIXME: make a define for this.
+  float minDist = 65535.0f;  // TODO(d.rattman): make a define for this.
 
   Vector leafMin, leafMax;
 
@@ -659,7 +659,7 @@ static float CalcDistanceFromLeafToWater(int leafNum) {
           // compare the bounding box of the face with the bounding
           // box of the leaf that we are looking from and see
           // what the closest distance is.
-          // FIXME: this could be a face/face distance between the water
+          // TODO(d.rattman): this could be a face/face distance between the water
           // face and the bounding volume of the leaf.
 
           // Get the bounding box of the face

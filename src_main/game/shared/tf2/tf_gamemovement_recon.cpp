@@ -505,7 +505,7 @@ bool CTFGameMovementRecon::CheckForwardJump( bool bWasInAir )
 //-----------------------------------------------------------------------------
 bool CTFGameMovementRecon::CheckJumpButton()
 {
-	// FIXME: Refactor this so we don't have this complicated duplicate
+	// TODO(d.rattman): Refactor this so we don't have this complicated duplicate
 	// code here + in gamemovement.cpp
 
 	if ( player->pl.deadflag )

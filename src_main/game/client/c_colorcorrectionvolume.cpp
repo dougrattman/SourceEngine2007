@@ -11,11 +11,11 @@
 #include "materialsystem/materialsystemutil.h"
 #include "colorcorrectionmgr.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //------------------------------------------------------------------------------
-// FIXME: This really should inherit from something	more lightweight
+// TODO(d.rattman): This really should inherit from something	more lightweight
 //------------------------------------------------------------------------------
 
 
@@ -40,7 +40,7 @@ public:
 
 private:
 	float	m_Weight;
-	char	m_lookupFilename[MAX_PATH];
+	char	m_lookupFilename[SOURCE_MAX_PATH];
 
 	ClientCCHandle_t m_CCHandle;
 };
@@ -82,8 +82,8 @@ void C_ColorCorrectionVolume::OnDataChanged(DataUpdateType_t updateType)
 	{
 		if ( m_CCHandle == INVALID_CLIENT_CCHANDLE )
 		{
-			char filename[MAX_PATH];
-			Q_strncpy( filename, m_lookupFilename, MAX_PATH );
+			char filename[SOURCE_MAX_PATH];
+			Q_strncpy( filename, m_lookupFilename, SOURCE_MAX_PATH );
 
 			m_CCHandle = g_pColorCorrectionMgr->AddColorCorrection( filename );
 			SetNextClientThink( ( m_CCHandle != INVALID_CLIENT_CCHANDLE ) ? CLIENT_THINK_ALWAYS : CLIENT_THINK_NEVER );

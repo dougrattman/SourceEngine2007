@@ -33,7 +33,7 @@
 
 #include "engine/IEngineSound.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -1317,7 +1317,7 @@ void CMP3Player::PopulateTree()
 // Instead of including windows.h
 extern "C"
 {
-	extern int __stdcall CopyFileA( char *pszSource, char *pszDest, int bFailIfExists );
+	extern int SOURCE_STDCALL CopyFileA( char *pszSource, char *pszDest, int bFailIfExists );
 };
 
 void CMP3Player::GetLocalCopyOfSong( const MP3File_t &mp3, char *outsong, size_t outlen )
@@ -2384,7 +2384,7 @@ void CMP3Player::SaveSettings()
 
 		bpr( 0, buf, "settings\n{\n" );
 
-		// FIXME:  Move to function if there are more settings to save...
+		// TODO(d.rattman):  Move to function if there are more settings to save...
 		if ( UTL_INVAL_SYMBOL != m_PlayListFileName )
 		{
 			bpr( 1, buf, "mostrecentplaylist \"%s\"\n", m_PlayListFileName.String() );

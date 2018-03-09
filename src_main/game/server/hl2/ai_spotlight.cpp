@@ -7,7 +7,7 @@
 #include "beam_shared.h"
 #include "spotlightend.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

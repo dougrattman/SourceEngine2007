@@ -15,7 +15,7 @@
 #include "iclientmode.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 struct creditname_t {
@@ -376,9 +376,9 @@ void CHudCredits::DrawLogo(void) {
   char szLogoFont[64];
 
   if (hl2_episodic.GetBool()) {
-    Q_snprintf(szLogoFont, ARRAYSIZE(szLogoFont), "ClientTitleFont");
+    Q_snprintf(szLogoFont, SOURCE_ARRAYSIZE(szLogoFont), "ClientTitleFont");
   } else {
-    Q_snprintf(szLogoFont, ARRAYSIZE(szLogoFont), "WeaponIcons");
+    Q_snprintf(szLogoFont, SOURCE_ARRAYSIZE(szLogoFont), "WeaponIcons");
   }
 
   vgui::HScheme scheme = vgui::scheme()->GetScheme("ClientScheme");

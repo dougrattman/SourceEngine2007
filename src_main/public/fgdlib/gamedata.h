@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
@@ -21,7 +21,7 @@ typedef void (*GameDataMessageFunc_t)(int level, const char *fmt, ...);
 // FGD-based AutoMaterialExclusion data
 
 struct FGDMatExlcusions_s {
-  char szDirectory[MAX_PATH];  // Where we store the material exclusion
+  char szDirectory[SOURCE_MAX_PATH];  // Where we store the material exclusion
                                // directories
   bool bUserGenerated;  // If the user specified this ( default:  false -- FGD
                         // defined )
@@ -30,13 +30,13 @@ struct FGDMatExlcusions_s {
 // FGD-based AutoVisGroup data
 
 struct FGDVisGroupsBaseClass_s {
-  char szClass[MAX_PATH];  // i.e. Scene Logic, Sounds, etc   "Custom\Point
+  char szClass[SOURCE_MAX_PATH];  // i.e. Scene Logic, Sounds, etc   "Custom\Point
                            // Entities\Lights"
   // CUtlStringList szEntities;  // i.e. func_viscluster
 };
 
 struct FGDAutoVisGroups_s {
-  char szParent[MAX_PATH];  // i.e. Custom, SFM, etc
+  char szParent[SOURCE_MAX_PATH];  // i.e. Custom, SFM, etc
   // i.e. Scene Logic, Sounds, etc
   CUtlVector<FGDVisGroupsBaseClass_s> m_Classes;
 };

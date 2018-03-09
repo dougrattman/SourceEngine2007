@@ -19,7 +19,7 @@
 #include "vstdlib/random.h"
 #include "base/include/windows/windows_light.h"  // FILETIME
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #include "tier1/UtlVector.h"
@@ -95,7 +95,7 @@ class CAsyncCtxSaveGame : public CBasePanel::CAsyncJobContext {
   virtual void Completed();
 
  public:
-  char m_szFilename[MAX_PATH];
+  char m_szFilename[SOURCE_MAX_PATH];
   CSaveGameDialogXbox *m_pSaveGameDlg;
 };
 
@@ -137,7 +137,7 @@ void CSaveGameDialogXbox::InitiateSaving() {
   // Kick off saving
   char *szFilename = pAsyncCtx->m_szFilename;
   const int maxFilenameLen = sizeof(pAsyncCtx->m_szFilename);
-  char szCmd[MAX_PATH];
+  char szCmd[SOURCE_MAX_PATH];
 
   // See if this is the "new save game" slot
   if (bNewSave) {
@@ -169,7 +169,7 @@ void CSaveGameDialogXbox::SaveCompleted(CAsyncCtxSaveGame *pCtx) {
   char const *szFilename = pCtx->m_szFilename;
 
   // We should now be saved so get the new desciption back from the file
-  char szDirectory[MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
   Q_snprintf(szDirectory, sizeof(szDirectory), "%s:/%s", COM_GetModDirectory(),
              szFilename);
 

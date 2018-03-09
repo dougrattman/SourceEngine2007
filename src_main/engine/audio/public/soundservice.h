@@ -21,7 +21,7 @@ struct StartSoundParams_t;
 // Note that some of these currently suggest that certain functionality would
 // like to exist at a deeper layer so systems like audio can take advantage of
 // them directly (toml 05-02-02)
-abstract_class ISoundServices {
+the_interface ISoundServices {
  public:
   // Allocate a block of memory that will be automatically
   // cleaned up on level change

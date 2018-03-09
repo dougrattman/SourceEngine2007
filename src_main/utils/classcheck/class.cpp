@@ -797,7 +797,7 @@ static int GetTypeSize( CClass *cl, CClassVariable *var )
 }
 
 
-void CClass::AddVariable( int protection, char *type, char *name, bool array, char *arraysize )
+void CClass::AddVariable( int protection, char *type, char *name, bool array, char *SOURCE_ARRAYSIZE )
 {
 	CClassVariable *var = AddVar( name );
 	if ( !var )
@@ -812,7 +812,7 @@ void CClass::AddVariable( int protection, char *type, char *name, bool array, ch
 	if ( array )
 	{
 		var->m_bIsArray = true;
-		strcpy( var->m_szArraySize, arraysize );
+		strcpy( var->m_szArraySize, SOURCE_ARRAYSIZE );
 	}
 	else
 	{

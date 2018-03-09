@@ -34,7 +34,7 @@ public:
 	virtual void FrameUpdatePostEntityThinkAllTools() = 0;
 
 	virtual void PreClientUpdateAllTools() = 0;
-	// FIXME:  PostClientUpdateAllTools()???
+	// TODO(d.rattman):  PostClientUpdateAllTools()???
 
 	// The server uses this to call into the tools to get the actual
 	// entities to spawn on startup

@@ -13,7 +13,7 @@
 #include "tempent.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SLIDESHOW_LIST_BUFFER_MAX 8192u
@@ -173,8 +173,8 @@ void C_SlideshowDisplay::ClientThink(void) {
 
 void C_SlideshowDisplay::BuildSlideShowImagesList(void) {
   FileFindHandle_t matHandle;
-  char szDirectory[_MAX_PATH];
-  char szMatFileName[_MAX_PATH] = {'\0'};
+  char szDirectory[SOURCE_MAX_PATH];
+  char szMatFileName[SOURCE_MAX_PATH] = {'\0'};
   char szFileBuffer[SLIDESHOW_LIST_BUFFER_MAX];
   char *pchCurrentLine = NULL;
 
@@ -231,7 +231,7 @@ void C_SlideshowDisplay::BuildSlideShowImagesList(void) {
   int iSlideIndex = 0;
 
   while (szMatFileName[0]) {
-    char szFileName[_MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFileName, sizeof(szFileName), "vgui/%s/%s",
                m_szSlideshowDirectory, szMatFileName);
     szFileName[Q_strlen(szFileName) - 4] = '\0';
@@ -239,7 +239,7 @@ void C_SlideshowDisplay::BuildSlideShowImagesList(void) {
     int iMatIndex = ::GetMaterialIndex(szFileName);
 
     // Get material keywords
-    char szFullFileName[_MAX_PATH];
+    char szFullFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFullFileName, sizeof(szFullFileName), "materials/vgui/%s/%s",
                m_szSlideshowDirectory, szMatFileName);
 

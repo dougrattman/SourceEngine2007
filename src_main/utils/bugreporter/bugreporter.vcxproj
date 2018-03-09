@@ -131,7 +131,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -141,8 +140,9 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>trktooln.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;trktooln.lib</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\trktool</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -185,7 +185,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -194,8 +193,9 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>trktooln.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;trktooln.lib</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\trktool</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -242,7 +242,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -254,8 +253,9 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>trktooln.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;trktooln.lib</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\trktool</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -302,7 +302,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -313,8 +312,9 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>trktooln.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;trktooln.lib</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\trktool</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -335,29 +335,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="bugreporter.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\common\bugreporter\bugreporter.h" />
-    <ClInclude Include="..\..\public\appframework\IAppSystem.h" />
-    <ClInclude Include="..\..\public\Color.h" />
-    <ClInclude Include="..\..\public\commonmacros.h" />
-    <ClInclude Include="..\..\public\filesystem.h" />
-    <ClInclude Include="..\..\public\protected_things.h" />
-    <ClInclude Include="..\..\public\string_t.h" />
-    <ClInclude Include="..\..\public\tier0\basetypes.h" />
-    <ClInclude Include="..\..\public\tier0\dbg.h" />
-    <ClInclude Include="..\..\public\tier0\fasttimer.h" />
-    <ClInclude Include="..\..\public\tier0\mem.h" />
-    <ClInclude Include="..\..\public\tier0\memdbgoff.h" />
-    <ClInclude Include="..\..\public\tier0\memdbgon.h" />
-    <ClInclude Include="..\..\public\tier0\platform.h" />
-    <ClInclude Include="..\..\public\tier1\utlmemory.h" />
-    <ClInclude Include="..\..\public\tier1\utlrbtree.h" />
-    <ClInclude Include="..\..\public\vstdlib\IKeyValuesSystem.h" />
-    <ClInclude Include="..\..\public\vstdlib\strtools.h" />
-    <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
-    <ClInclude Include="trktool.h" />
+    <ClCompile Include="bugreporter.cc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\tier0\tier0.vcxproj">
@@ -369,6 +347,10 @@
     <ProjectReference Include="..\..\vstdlib\vstdlib.vcxproj">
       <Project>{08257043-fe59-4e3f-8c99-a181397052d0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\common\bugreporter\bugreporter.h" />
+    <ClInclude Include="..\..\deps\trktool\trktool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

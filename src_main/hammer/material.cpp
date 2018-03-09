@@ -37,7 +37,7 @@
 #include "vstdlib/cvar.h"
 #include "interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -54,7 +54,7 @@ extern void ScaleBitmap(CSize sizeSrc, CSize sizeDest, char *src, char *dest);
 
 struct MaterialCacheEntry_t
 {
-	char szName[MAX_PATH];		//
+	char szName[SOURCE_MAX_PATH];		//
 	CMaterial *pMaterial;		//
 	int nRefCount;				//
 };
@@ -419,7 +419,7 @@ CMaterial::~CMaterial(void)
 		m_pData = NULL;
 	}
 
-	/* FIXME: Texture manager shuts down after the material system
+	/* TODO(d.rattman): Texture manager shuts down after the material system
 	if (m_pMaterial)
 	{
 		m_pMaterial->DecrementReferenceCount();
@@ -547,7 +547,7 @@ void CMaterial::EnumerateMaterials( IMaterialEnumerator *pEnum, const char *szRo
 //-----------------------------------------------------------------------------
 bool CMaterial::ShouldSkipMaterial(const char *pszName, int nFlags)
 {
-	static char szStrippedName[MAX_PATH];
+	static char szStrippedName[SOURCE_MAX_PATH];
 
 	// if NULL skip it
 	if( !pszName )
@@ -611,8 +611,8 @@ CMaterial *CMaterial::CreateMaterial(const char *pszMaterialName, bool bLoadImme
 	Assert( pMaterial );
 
 	// Store off the material name so we can load it later if we need to
-	Q_snprintf( pMaterial->m_szFileName, MAX_PATH, pszMaterialName );
-	Q_snprintf( pMaterial->m_szName, MAX_PATH, pszMaterialName );
+	Q_snprintf( pMaterial->m_szFileName, SOURCE_MAX_PATH, pszMaterialName );
+	Q_snprintf( pMaterial->m_szName, SOURCE_MAX_PATH, pszMaterialName );
 
 	//
 	// Find the material by name and load it.
@@ -742,7 +742,7 @@ void CMaterial::DrawIcon( CDC *pDC, CMaterial* pIcon, RECT& dstRect )
 	RECT rect, dst;
 	rect.left = 0; rect.right = pIcon->GetWidth();
 
-	// FIXME: Workaround the fact that materials must be power of 2, I want 12 bite
+	// TODO(d.rattman): Workaround the fact that materials must be power of 2, I want 12 bite
 	rect.top = 2; rect.bottom = pIcon->GetHeight() - 2;
 
 	dst = dstRect;
@@ -970,7 +970,7 @@ NoData:
 		pDC->FillRect(rcCaption, &brCaption);
 
 		// draw name
-		char szShortName[MAX_PATH];
+		char szShortName[SOURCE_MAX_PATH];
 		int iLen = GetShortName(szShortName);
 		pDC->TextOut(rect.left, rect.bottom - (iFontHeight + 4), szShortName, iLen);
 

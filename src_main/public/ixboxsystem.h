@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Interface to Xbox 360 system functions. Helps deal with the async
 // system and Live functions by either providing a handle for the caller to
@@ -13,7 +13,7 @@
 typedef void *AsyncHandle_t;
 typedef void *XboxHandle_t;
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 typedef void *HANDLE;
 #define ERROR_SUCCESS 0
 #define ERROR_IO_PENDING 1
@@ -24,7 +24,7 @@ typedef void *HANDLE;
 //-----------------------------------------------------------------------------
 // Xbox system interface
 //-----------------------------------------------------------------------------
-abstract_class IXboxSystem {
+the_interface IXboxSystem {
  public:
   virtual AsyncHandle_t CreateAsyncHandle(void) = 0;
   virtual void ReleaseAsyncHandle(AsyncHandle_t handle) = 0;

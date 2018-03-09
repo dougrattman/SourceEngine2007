@@ -110,7 +110,7 @@ BEGIN_VS_SHADER( Core_DX90,
 
 			if( nPass == 0 )
 			{
-				// Alpha test: FIXME: shouldn't this be handled in Shader_t::SetInitialShadowState
+				// Alpha test: TODO(d.rattman): shouldn't this be handled in Shader_t::SetInitialShadowState
 				pShaderShadow->EnableAlphaTest( IS_FLAG_SET(MATERIAL_VAR_ALPHATEST) );
 			}
 			else

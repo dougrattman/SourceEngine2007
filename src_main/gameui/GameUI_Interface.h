@@ -136,7 +136,7 @@ private:
 	int m_iFriendsLoadPauseFrames;
 
 	char m_szPreviousStatusText[128];
-	char m_szPlatformDir[MAX_PATH];
+	char m_szPlatformDir[SOURCE_MAX_PATH];
 
 	vgui::DHANDLE<class CCDKeyEntryDialog> m_hCDKeyEntryDialog;
 };

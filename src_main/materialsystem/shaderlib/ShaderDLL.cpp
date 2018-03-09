@@ -13,7 +13,7 @@
 #include "tier1/tier1.h"
 #include "tier1/utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

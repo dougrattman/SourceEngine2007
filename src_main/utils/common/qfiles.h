@@ -10,7 +10,7 @@
 
 #include "bspfile.h"
 #include "tier0/include/basetypes.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "worldsize.h"
 
 #define MAX_OSPATH 260

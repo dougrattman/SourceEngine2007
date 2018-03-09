@@ -80,7 +80,7 @@
 #define SURF_TRANS 0x0010
 #define SURF_NOPORTAL 0x0020  // the surface can not have a portal placed on it
 #define SURF_TRIGGER \
-  0x0040  // FIXME: This is an xbox hack to work around elimination of trigger
+  0x0040  // TODO(d.rattman): This is an xbox hack to work around elimination of trigger
           // surfaces, which breaks occluders
 #define SURF_NODRAW 0x0080  // don't bother referencing the texture
 

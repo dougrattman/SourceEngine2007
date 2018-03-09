@@ -9,7 +9,7 @@
 #include "cdll_client_int.h"
 #include "ixboxsystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Default global instance.  Mods should override this.

@@ -82,7 +82,7 @@ struct ShadowClipState_t {
   int m_TempCount;
   int m_ClipCount;
   ShadowVertex_t m_pTempVertices[SHADOW_VERTEX_TEMP_COUNT];
-  ShadowVertex_t* RESTRICT m_ppClipVertices[2][SHADOW_VERTEX_TEMP_COUNT];
+  ShadowVertex_t* SOURCE_RESTRICT m_ppClipVertices[2][SHADOW_VERTEX_TEMP_COUNT];
 };
 
 //-----------------------------------------------------------------------------
@@ -338,8 +338,8 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
                              ShadowBuildInfo_t* pBuild);
 
   // Applies a shadow to all surfaces in the leaf
-  void ApplyShadowToLeaf(const Shadow_t& shadow, mleaf_t* RESTRICT pLeaf,
-                         ShadowBuildInfo_t* RESTRICT pBuild);
+  void ApplyShadowToLeaf(const Shadow_t& shadow, mleaf_t* SOURCE_RESTRICT pLeaf,
+                         ShadowBuildInfo_t* SOURCE_RESTRICT pBuild);
 
   // These functions deal with creation of render sort ids
   void SetMaterial(Shadow_t& shadow, IMaterial* pMaterial,
@@ -418,7 +418,7 @@ class CShadowMgr : public IShadowMgrInternal, ISpatialLeafEnumerator {
   // Project vertices into shadow space
   bool ProjectVerticesIntoShadowSpace(const VMatrix& modelToShadow,
                                       float maxDist, int count,
-                                      Vector** RESTRICT ppPosition,
+                                      Vector** SOURCE_RESTRICT ppPosition,
                                       ShadowClipState_t& clip);
 
   // Copies vertex info from the clipped vertices
@@ -570,7 +570,7 @@ void CShadowMgr::LevelInit(int nSurfCount) {
 
   // NOTE: Need to memset to 0 if we switch to integer SurfaceBoundsCacheIndex_t
   // here
-  COMPILE_TIME_ASSERT(sizeof(SurfaceBoundsCacheIndex_t) == 2);
+  static_assert(sizeof(SurfaceBoundsCacheIndex_t) == 2);
   memset(m_pSurfaceBounds, 0xFF,
          nSurfCount * sizeof(SurfaceBoundsCacheIndex_t));
 }
@@ -1037,7 +1037,7 @@ void CShadowMgr::AddSurfaceToFlashlightMaterialBuckets(ShadowHandle_t handle,
 //-----------------------------------------------------------------------------
 void CShadowMgr::AddSurfaceToShadow(ShadowHandle_t handle,
                                     SurfaceHandle_t surfID) {
-  // FIXME: We could make this work, but there's a perf cost...
+  // TODO(d.rattman): We could make this work, but there's a perf cost...
   // Basically, we'd need to have a separate rendering batch for
   // each translucent material the shadow is projected onto. The
   // material alpha would have to be taken into account, so that
@@ -1073,7 +1073,7 @@ void CShadowMgr::RemoveSurfaceFromShadow(ShadowHandle_t handle,
                                          SurfaceHandle_t surfID) {
   // Find the decal associated with the handle that lies on the surface
 
-  // FIXME: Linear search; bleah.
+  // TODO(d.rattman): Linear search; bleah.
   // Luckily the search is probably over only a couple items at most
   // Linear searching over the shadow surfaces so we can remove the entry
   // in the shadow surface list if we find a match
@@ -1086,7 +1086,7 @@ void CShadowMgr::RemoveSurfaceFromShadow(ShadowHandle_t handle,
       // associated with a particular shadow per surface
       RemoveShadowDecalFromSurface(surfID, decalHandle);
 
-      // FIXME: Could check the shadow doesn't appear again in the list
+      // TODO(d.rattman): Could check the shadow doesn't appear again in the list
       return;
     }
 
@@ -1146,9 +1146,9 @@ void CShadowMgr::RemoveAllShadowsFromSurface(SurfaceHandle_t surfID) {
 //-----------------------------------------------------------------------------
 void CShadowMgr::AddShadowToModel(ShadowHandle_t handle,
                                   ModelInstanceHandle_t model) {
-  // FIXME: Add culling here based on the model bbox
+  // TODO(d.rattman): Add culling here based on the model bbox
   // and the shadow bbox
-  // FIXME:
+  // TODO(d.rattman):
   /*
   // Trivial bbox reject.
   Vector bbMin, bbMax;
@@ -1255,7 +1255,7 @@ void CShadowMgr::ApplyShadowToSurface(ShadowBuildInfo_t& build,
   // At this point, we want to do fast culling to see whether we actually
   // should apply the shadow or not before actually adding it to any lists
 
-  // FIXME: implement
+  // TODO(d.rattman): implement
   // Put the texture extents into shadow space; see if there's an intersection
   // If not, we can early out
 
@@ -1319,7 +1319,7 @@ void CShadowMgr::EnableShadow(ShadowHandle_t handle, bool bEnable) {
 
     m_Shadows[handle].m_Flags |= SHADOW_DISABLED;
   } else {
-    // FIXME: Could make this recompute the cache...
+    // TODO(d.rattman): Could make this recompute the cache...
     m_Shadows[handle].m_Flags &= ~SHADOW_DISABLED;
   }
 }
@@ -1607,8 +1607,8 @@ void CShadowMgr::ApplyFlashlightToLeaf(const Shadow_t& shadow, mleaf_t* pLeaf,
 // Applies a shadow to all surfaces in the leaf
 //-----------------------------------------------------------------------------
 void CShadowMgr::ApplyShadowToLeaf(const Shadow_t& shadow,
-                                   mleaf_t* RESTRICT pLeaf,
-                                   ShadowBuildInfo_t* RESTRICT pBuild) {
+                                   mleaf_t* SOURCE_RESTRICT pLeaf,
+                                   ShadowBuildInfo_t* SOURCE_RESTRICT pBuild) {
   // Iterate over all surfaces in the leaf, check for backfacing
   // and apply the shadow to the surface if it's not backfaced.
   // Note that this really only indicates that the shadow may potentially
@@ -1631,7 +1631,7 @@ void CShadowMgr::ApplyShadowToLeaf(const Shadow_t& shadow,
     if (!MSurf_AreDynamicShadowsEnabled(surfID)) continue;
 
     // Backface cull
-    const cplane_t* RESTRICT pSurfPlane = &MSurf_Plane(surfID);
+    const cplane_t* SOURCE_RESTRICT pSurfPlane = &MSurf_Plane(surfID);
     bool bInFront;
     if ((MSurf_Flags(surfID) & SURFDRAW_NOCULL) == 0) {
       if (DotProduct(pSurfPlane->normal, pBuild->m_ProjectionDirection) >
@@ -1718,7 +1718,7 @@ void CShadowMgr::AddShadowToBrushModel(ShadowHandle_t handle, model_t* pModel,
   // Don't compute the surface cache if shadows are off..
   if (!r_shadows.GetInt()) return;
 
-  const Shadow_t* RESTRICT pShadow = &m_Shadows[handle];
+  const Shadow_t* SOURCE_RESTRICT pShadow = &m_Shadows[handle];
 
   // Transform the shadow ray direction into model space
   Vector shadowDirInModelSpace;
@@ -1743,13 +1743,13 @@ void CShadowMgr::AddShadowToBrushModel(ShadowHandle_t handle, model_t* pModel,
       // FLASHLIGHTFIXME: should do backface culling for projective light
       // sources. Don't bother with backfacing surfaces
       if ((nFlags & SURFDRAW_NOCULL) == 0) {
-        const cplane_t* RESTRICT pSurfPlane = &MSurf_Plane(surfID);
+        const cplane_t* SOURCE_RESTRICT pSurfPlane = &MSurf_Plane(surfID);
         float dot = DotProduct(shadowDirInModelSpace, pSurfPlane->normal);
         if (dot > 0) continue;
       }
     }
 
-    // FIXME: We may want to do some more high-level per-surface culling
+    // TODO(d.rattman): We may want to do some more high-level per-surface culling
     // If so, it'll be added to ApplyShadowToSurface. Call it instead.
     AddSurfaceToShadow(handle, surfID);
   }
@@ -1795,7 +1795,7 @@ void CShadowMgr::AddShadowsOnSurfaceToRenderList(
 }
 
 void CShadowMgr::ClearShadowRenderList() {
-  COMPILE_TIME_ASSERT(sizeof(ShadowDecalHandle_t) == 2);
+  static_assert(sizeof(ShadowDecalHandle_t) == 2);
 
   // Clear out the render list
   if (m_RenderQueue.Count() > 0) {
@@ -2025,7 +2025,7 @@ static void ShadowClip(ShadowClipState_t& clip, Clipper& clipper) {
 //-----------------------------------------------------------------------------
 bool CShadowMgr::ProjectVerticesIntoShadowSpace(const VMatrix& modelToShadow,
                                                 float maxDist, int count,
-                                                Vector** RESTRICT ppPosition,
+                                                Vector** SOURCE_RESTRICT ppPosition,
                                                 ShadowClipState_t& clip) {
   bool insideVolume = false;
 
@@ -3264,7 +3264,7 @@ void CShadowMgr::RenderFlashlights(bool bDoMasking,
 #if NEWMESH
         indexBufferBuilder.End(
             false);  // haven't tested this one yet (flashlights)
-        // FIXME: IMaterial::GetVertexFormat() should do this stripping (add a
+        // TODO(d.rattman): IMaterial::GetVertexFormat() should do this stripping (add a
         // separate 'SupportsCompression' accessor)
         VertexFormat_t vertexFormat =
             materialSortInfoArray[sortID].material->GetVertexFormat() &

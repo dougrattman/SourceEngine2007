@@ -33,7 +33,7 @@
 #include "tier2/tier2.h"
 #include "worldsize.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // EMIT_SURFACE LIGHTS:
@@ -176,7 +176,7 @@ class CBaseLightCache : public LightingStateInfo_t {
       m_DynamicLightingState;  // This includes m_LightStyleLightingState
   int m_LastFrameUpdated_DynamicLighting;
 
-  // FIXME: could just use m_LightStyleWorldLights.Count() if we are a static
+  // TODO(d.rattman): could just use m_LightStyleWorldLights.Count() if we are a static
   // prop
   int m_LightingFlags; /* LightCacheFlags_t */
   int leaf;
@@ -302,9 +302,9 @@ void R_StudioInitLightingCache(void) {
 
   memset(lightcache, 0, sizeof(lightcache));
 
-  for (i = 0; i < ARRAYSIZE(lightcache); i++) lightcache[i].bucket = 0xFFFF;
+  for (i = 0; i < SOURCE_ARRAYSIZE(lightcache); i++) lightcache[i].bucket = 0xFFFF;
 
-  for (i = 0; i < ARRAYSIZE(lightbuckets); i++) lightbuckets[i] = 0xFFFF;
+  for (i = 0; i < SOURCE_ARRAYSIZE(lightbuckets); i++) lightbuckets[i] = 0xFFFF;
 
   unsigned short last = LIGHT_LRU_HEAD_INDEX;
   // Link every node into the LRU
@@ -586,13 +586,13 @@ static void ComputeAmbientFromSphericalSamples(const Vector &start,
   dworldlight_t *pSkylight = FindAmbientLight();
 
   Vector radcolor[NUMRANDOMNORMALS];
-  Assert(cached_r_lightcache_numambientsamples <= ARRAYSIZE(radcolor));
+  Assert(cached_r_lightcache_numambientsamples <= SOURCE_ARRAYSIZE(radcolor));
 
   // sample world by casting N rays distributed across a sphere
   Vector upend;
   int i;
   for (i = 0; i < cached_r_lightcache_numambientsamples; i++) {
-    // FIXME: a good optimization would be to scale this per leaf
+    // TODO(d.rattman): a good optimization would be to scale this per leaf
     VectorMA(start, COORD_EXTENT * 1.74, g_anorms[i], upend);
 
     // Now that we've got a ray, see what surface we've hit
@@ -1078,14 +1078,14 @@ bool ComputeVertexLightingFromSphericalSamples(const Vector &vecVertex,
     float flDot = DotProduct(vecNormal, s_raddir[i]);
     if (flDot < 0.0f) continue;
 
-    // FIXME: a good optimization would be to scale this per leaf
+    // TODO(d.rattman): a good optimization would be to scale this per leaf
     VectorMA(vecVertex, COORD_EXTENT * 1.74, s_raddir[i], upend);
 
     // Now that we've got a ray, see what surface we've hit
     SurfaceHandle_t surfID = R_LightVec(vecVertex, upend, false, color);
     if (!IS_SURF_VALID(surfID)) continue;
 
-    // FIXME: Maybe make sure we aren't obstructed by static props?
+    // TODO(d.rattman): Maybe make sure we aren't obstructed by static props?
     // To do this, R_LightVec would need to return distance of hit...
     // Or, we need another arg to R_LightVec to return black when hitting a
     // static prop
@@ -1111,7 +1111,7 @@ bool ComputeVertexLightingFromSphericalSamples(const Vector &vecVertex,
   for (i = 0; i < host_state.worldbrush->numworldlights; ++i) {
     dworldlight_t *wl = &host_state.worldbrush->worldlights[i];
 
-    // FIXME: This is sort of a hack; only one skylight is allowed in the
+    // TODO(d.rattman): This is sort of a hack; only one skylight is allowed in the
     // lighting...
     if ((wl->type == emit_skylight) && bHasSkylight) continue;
 
@@ -1144,7 +1144,7 @@ bool ComputeVertexLightingFromSphericalSamples(const Vector &vecVertex,
 //-----------------------------------------------------------------------------
 static int FindDarkestWorldLight(int numLights, float *pLightIllum,
                                  float newIllum) {
-  // FIXME: make the list sorted?
+  // TODO(d.rattman): make the list sorted?
   int minLightIndex = -1;
   float minillum = newIllum;
   for (int j = 0; j < numLights; ++j) {
@@ -1167,7 +1167,7 @@ static void AddWorldLightToLightCube(dworldlight_t *pWorldLight,
   if (ratio == 0.0f) return;
 
   // add whatever didn't stay in the list to lightBoxColor
-  // FIXME: This method is a guess, I don't know how it should be done
+  // TODO(d.rattman): This method is a guess, I don't know how it should be done
   const Vector *pBoxDir = g_pStudioRender->GetAmbientLightDirections();
 
   for (int j = g_pStudioRender->GetNumAmbientLightSamples(); --j >= 0;) {
@@ -1231,7 +1231,7 @@ static const uint8_t *AddWorldLightToLightingState(
   Assert(lightingState.numlights >= 0 &&
          lightingState.numlights <= MAXLOCALLIGHTS);
 
-  // FIXME: This is sort of a hack; only one skylight is allowed in the
+  // TODO(d.rattman): This is sort of a hack; only one skylight is allowed in the
   // lighting...
   if ((pWorldLight->type == emit_skylight) && info.m_LightingStateHasSkylight)
     return pVis;
@@ -1280,7 +1280,7 @@ static const uint8_t *AddWorldLightToLightingState(
   // It can't be a local light if it's too dark
   // See the comment titled "EMIT_SURFACE LIGHTS" at the top for info.
   if (pWorldLight->type == emit_surface ||
-      illum >= r_worldlightmin.GetFloat())  // FIXME: tune this value
+      illum >= r_worldlightmin.GetFloat())  // TODO(d.rattman): tune this value
   {
     int nWorldLights = std::min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
                            r_worldlights.GetInt());
@@ -1300,7 +1300,7 @@ static const uint8_t *AddWorldLightToLightingState(
     int minLightIndex = FindDarkestWorldLight(
         lightingState.numlights, info.m_pIllum, dynamic ? 100000 : illum);
     if (minLightIndex != -1) {
-      // FIXME: We're sorting by ratio here instead of illum cause we either
+      // TODO(d.rattman): We're sorting by ratio here instead of illum cause we either
       // have to store more memory or do more computations; I'm not
       // convinced it's any better of a metric though, so ratios for now...
 
@@ -1308,7 +1308,7 @@ static const uint8_t *AddWorldLightToLightingState(
       swap(pWorldLight, lightingState.locallight[minLightIndex]);
       swap(illum, info.m_pIllum[minLightIndex]);
 
-      // FIXME: Avoid these recomputations
+      // TODO(d.rattman): Avoid these recomputations
       // But I don't know how to do it without storing a ton of data
       // per cache entry... yuck!
 
@@ -1545,7 +1545,7 @@ static const uint8_t *ComputeDynamicLighting(lightcache_t *pCache,
     pVis = AddDLights(info, pCache->m_DynamicLightingState, origin, leaf, pVis);
 
     // Finally, add in elights
-    // FIXME: Do we actually use these?
+    // TODO(d.rattman): Do we actually use these?
     pVis = AddELights(info, pCache->m_DynamicLightingState, origin, leaf, pVis);
 
     pCache->m_LastFrameUpdated_DynamicLighting = r_framecount;
@@ -1564,7 +1564,7 @@ static const uint8_t *ComputeDynamicLighting(lightcache_t *pCache,
 static void AddWorldLightToLightingStateForStaticProps(
     dworldlight_t *pWorldLight, LightingState_t &lightingState,
     LightingStateInfo_t &info, PropLightcache_t *pCache, bool dynamic = false) {
-  // FIXME: This is sort of a hack; only one skylight is allowed in the
+  // TODO(d.rattman): This is sort of a hack; only one skylight is allowed in the
   // lighting...
   if ((pWorldLight->type == emit_skylight) && info.m_LightingStateHasSkylight)
     return;
@@ -1603,7 +1603,7 @@ static void AddWorldLightToLightingStateForStaticProps(
   // It can't be a local light if it's too dark
   // See the comment titled "EMIT_SURFACE LIGHTS" at the top for info.
   if (pWorldLight->type == emit_surface ||
-      illum >= r_worldlightmin.GetFloat())  // FIXME: tune this value
+      illum >= r_worldlightmin.GetFloat())  // TODO(d.rattman): tune this value
   {
     int nWorldLights = std::min(g_pMaterialSystemHardwareConfig->MaxNumLights(),
                            r_worldlights.GetInt());
@@ -1622,7 +1622,7 @@ static void AddWorldLightToLightingStateForStaticProps(
     int minLightIndex = FindDarkestWorldLight(
         lightingState.numlights, info.m_pIllum, dynamic ? 100000 : illum);
     if (minLightIndex != -1) {
-      // FIXME: We're sorting by ratio here instead of illum cause we either
+      // TODO(d.rattman): We're sorting by ratio here instead of illum cause we either
       // have to store more memory or do more computations; I'm not
       // convinced it's any better of a metric though, so ratios for now...
 
@@ -1630,7 +1630,7 @@ static void AddWorldLightToLightingStateForStaticProps(
       swap(pWorldLight, lightingState.locallight[minLightIndex]);
       swap(illum, info.m_pIllum[minLightIndex]);
 
-      // FIXME: Avoid these recomputations
+      // TODO(d.rattman): Avoid these recomputations
       // But I don't know how to do it without storing a ton of data
       // per cache entry... yuck!
 
@@ -1771,7 +1771,7 @@ static void AddStaticLighting(CBaseLightCache *pCache, const Vector &origin,
 static bool IsCachedLightStylesValid(CBaseLightCache *pCache) {
   if (!pCache->HasLightStyle()) return true;
 
-  // FIXME: Can this start at 1, or is 0 required?
+  // TODO(d.rattman): Can this start at 1, or is 0 required?
   for (int i = 1; i < MAX_LIGHTSTYLES; ++i) {
     int byte = i >> 3;
     int bit = i & 0x7;
@@ -1957,7 +1957,7 @@ static void BuildStaticLightingCacheLightStyleInfo(PropLightcache_t *pcache,
       // Figure out the PVS info for this static prop
       pVis = CM_ClusterPVS(CM_LeafCluster(pcache->leaf));
     }
-    // FIXME: Could do better here if we had access to the list of leaves that
+    // TODO(d.rattman): Could do better here if we had access to the list of leaves that
     // this static prop is in.  For now, we use the lighting origin.
     if (pVis[wl->cluster >> 3] & (1 << (wl->cluster & 7))) {
       // Use the maximum illumination to cull out lights that are far away.
@@ -2588,7 +2588,7 @@ static bool IsDynamicLight(dworldlight_t *pWorldLight) {
   // NOTE: This only works because we're using some implementation details
   // that the dynamic lights are stored in a little static array
   return (pWorldLight >= s_pDynamicLight &&
-          pWorldLight < &s_pDynamicLight[ARRAYSIZE(s_pDynamicLight)]);
+          pWorldLight < &s_pDynamicLight[SOURCE_ARRAYSIZE(s_pDynamicLight)]);
 }
 
 //-----------------------------------------------------------------------------

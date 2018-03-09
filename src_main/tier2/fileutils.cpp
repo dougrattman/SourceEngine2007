@@ -119,7 +119,7 @@ int UpdateOrCreate(const char *pSourceName, char *pTargetName, int targetLen,
   
   if (pTargetName) {
     // caller could supply source as PC or 360 name, we want the PC filename
-    char szFixedSourceName[MAX_PATH];
+    char szFixedSourceName[SOURCE_MAX_PATH];
     pSourceName = RestoreFilename(pSourceName, szFixedSourceName,
                                   sizeof(szFixedSourceName));
     // caller wants us to provide 360 named version of source
@@ -152,8 +152,8 @@ void GetSearchPath(CUtlVector<CUtlString> &path, const char *pPathID) {
 
 void AddFilesToList(CUtlVector<CUtlString> &list, const char *pDirectory,
                     const char *pPathID, const char *pExtension) {
-  char pSearchString[MAX_PATH];
-  Q_snprintf(pSearchString, MAX_PATH, "%s\\*", pDirectory);
+  char pSearchString[SOURCE_MAX_PATH];
+  Q_snprintf(pSearchString, SOURCE_MAX_PATH, "%s\\*", pDirectory);
 
   bool bIsAbsolute = Q_IsAbsolutePath(pDirectory);
 
@@ -165,8 +165,8 @@ void AddFilesToList(CUtlVector<CUtlString> &list, const char *pDirectory,
   // add all the items
   CUtlVector<CUtlString> subDirs;
   for (; pFoundFile; pFoundFile = g_pFullFileSystem->FindNext(hFind)) {
-    char pChildPath[MAX_PATH];
-    Q_snprintf(pChildPath, MAX_PATH, "%s\\%s", pDirectory, pFoundFile);
+    char pChildPath[SOURCE_MAX_PATH];
+    Q_snprintf(pChildPath, SOURCE_MAX_PATH, "%s\\%s", pDirectory, pFoundFile);
 
     if (g_pFullFileSystem->FindIsDirectory(hFind)) {
       if (Q_strnicmp(pFoundFile, ".", 2) && Q_strnicmp(pFoundFile, "..", 3)) {
@@ -178,7 +178,7 @@ void AddFilesToList(CUtlVector<CUtlString> &list, const char *pDirectory,
     // Check the extension matches
     if (Q_stricmp(Q_GetFileExtension(pFoundFile), pExtension)) continue;
 
-    char pFullPathBuf[MAX_PATH];
+    char pFullPathBuf[SOURCE_MAX_PATH];
     char *pFullPath = pFullPathBuf;
     if (!bIsAbsolute) {
       g_pFullFileSystem->RelativePathToFullPath(

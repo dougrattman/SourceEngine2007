@@ -1,10 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+
 #include "cbase.h"
+
 #include "dt_utlvector_recv.h"
 #include "bone_setup.h"
 #include "c_ai_basenpc.h"
@@ -16,6 +13,7 @@
 
 #include "tier0/include/vprof.h"
 #include "soundinfo.h"
+#include "base/include/compiler_specific.h"
 
 // TODO: These should be in public by the time the SDK ships
 #if 1
@@ -29,7 +27,7 @@
 	#include "../../common/blobulator/Implicit/ImpTiler2.h"
 	#include "../../common/blobulator/Implicit/UserFunctions2.h"
 #endif
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -407,7 +405,7 @@ bool C_NPC_Surface::UsesFullFrameBufferTexture()
 	return m_pMaterial->NeedsFullFrameBufferTexture();
 }
 
-__forceinline float sqr(float a) { return a*a; }
+SOURCE_FORCEINLINE float sqr(float a) { return a*a; }
 
 Vector lastPoint0Pos;
 

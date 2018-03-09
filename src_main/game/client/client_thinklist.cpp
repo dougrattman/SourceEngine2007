@@ -8,7 +8,7 @@
 
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CClientThinkList g_ClientThinkList;

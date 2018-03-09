@@ -380,7 +380,7 @@ bool CChoreoScene::IsRestoring() { return m_bRestoring; }
 
 void CChoreoScene::SetRestoring(bool bRestoring) { m_bRestoring = bRestoring; }
 
-abstract_class IChoreoStringPool {
+the_interface IChoreoStringPool {
  public:
   virtual short FindOrAddString(const char *pString) = 0;
   virtual bool GetString(short stringId, char *buff, int buffSize) = 0;

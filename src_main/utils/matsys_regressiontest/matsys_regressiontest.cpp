@@ -254,7 +254,7 @@ void Shader_Init( HWND mainWindow )
 	LoadMaterialSystem();
 	Assert( g_pMaterialSystem );
 
-	// FIXME: Where do we put this?
+	// TODO(d.rattman): Where do we put this?
 	const char* pDLLName;
 	pDLLName = "shaderapidx9";
 
@@ -408,8 +408,8 @@ bool Init( const char* pCommands)
 
 static char *GetBaseDir( const char *pszBuffer )
 {
-	static char	basedir[ MAX_PATH ];
-	char szBuffer[ MAX_PATH ];
+	static char	basedir[ SOURCE_MAX_PATH ];
+	char szBuffer[ SOURCE_MAX_PATH ];
 	int j;
 	char *pBuffer = NULL;
 
@@ -897,7 +897,7 @@ Versions with DETAIL aren't implemented yet in HLSL, but we'll go ahead and test
 																		pKeyValues->SetFloat( "$alpha", 0.6f );
 																	}
 
-																	// FIXME: ignoring fogtype for now.
+																	// TODO(d.rattman): ignoring fogtype for now.
 																	// hack hack - LEAK - need to figure out how to clear a material out.
 																	g_pProceduralMaterial = g_pMaterialSystem->CreateMaterial( "test", pKeyValues );
 																	g_pProceduralMaterial->Refresh();
@@ -906,7 +906,7 @@ Versions with DETAIL aren't implemented yet in HLSL, but we'll go ahead and test
 																	DrawBackground();
 																	DrawQuad( g_CheckerboardLightmapInfo );
 																	EndFrame();
-																	char filename[MAX_PATH];
+																	char filename[SOURCE_MAX_PATH];
 																	sprintf( filename, "%s\\lightmappedgeneric_dx80", CommandLine()->ParmValue( "-targetdir" ) );
 																	
 																	if( BUMPMAP ) Q_strcat( filename, "_BUMPMAP", sizeof(filename) );
@@ -984,9 +984,9 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstance, LPSTR pCommands, INT )
 	char* pPath = getenv("PATH");
 
 	// Use the .EXE name to determine the root directory
-	char moduleName[ MAX_PATH ];
+	char moduleName[ SOURCE_MAX_PATH ];
 	char szBuffer[ 4096 ];
-	if ( !GetModuleFileName( hInstance, moduleName, MAX_PATH ) )
+	if ( !GetModuleFileName( hInstance, moduleName, SOURCE_MAX_PATH ) )
 	{
 		MessageBox( 0, "Failed calling GetModuleFileName", "Launcher Error", MB_OK );
 		return 0;

@@ -242,9 +242,9 @@ void RoundInfoOverlay::Update( const char *szMapName )
 {
 	KeyValues *kvCapPoints = NULL;
 
-	char strFullpath[MAX_PATH];
-	Q_strncpy( strFullpath, "resource/roundinfo/", MAX_PATH );	// Assume we must play out of the media directory
-	Q_strncat( strFullpath, szMapName, MAX_PATH );
+	char strFullpath[SOURCE_MAX_PATH];
+	Q_strncpy( strFullpath, "resource/roundinfo/", SOURCE_MAX_PATH );	// Assume we must play out of the media directory
+	Q_strncat( strFullpath, szMapName, SOURCE_MAX_PATH );
 
 #ifdef _X360
 	char *pExt = Q_stristr( strFullpath, ".360" );
@@ -254,7 +254,7 @@ void RoundInfoOverlay::Update( const char *szMapName )
 	}
 #endif
 
-	Q_strncat( strFullpath, ".res", MAX_PATH );		// Assume we're a .res extension type
+	Q_strncat( strFullpath, ".res", SOURCE_MAX_PATH );		// Assume we're a .res extension type
 
 	if ( g_pFullFileSystem->FileExists( strFullpath ), "MOD" )
 	{

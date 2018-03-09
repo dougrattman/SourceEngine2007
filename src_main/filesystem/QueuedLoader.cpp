@@ -58,7 +58,7 @@
 #include "vstdlib/jobthread.h"
 #include "xbox/xboxstubs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define PRIORITY_HIGH 1
@@ -193,7 +193,7 @@ class CQueuedLoader : public CTier2AppSystem<IQueuedLoader> {
   int m_nSubmitCount;
   unsigned int m_StartTime;
   unsigned int m_EndTime;
-  char m_szMapNameToCompareSame[MAX_PATH];
+  char m_szMapNameToCompareSame[SOURCE_MAX_PATH];
 
   CUtlFilenameSymbolTable m_Filenames;
   CTSList<FileJob_t *> m_PendingJobs;
@@ -302,7 +302,7 @@ void CQueuedLoader::BuildResources(IResourcePreload *pLoader,
     pList->RedoSort();
 
     for (int i = 0; i < pList->Count(); i++) {
-      char szFilename[MAX_PATH];
+      char szFilename[SOURCE_MAX_PATH];
       g_QueuedLoader.GetFilename(pList->Element(i), szFilename,
                                  sizeof(szFilename));
       if (szFilename[0]) {
@@ -327,7 +327,7 @@ void CQueuedLoader::BuildMaterialResources(IResourcePreload *pLoader,
                                            float *pBuildTime) {
   float t0 = Plat_FloatTime();
 
-  char szLastFilename[MAX_PATH];
+  char szLastFilename[SOURCE_MAX_PATH];
   szLastFilename[0] = '\0';
 
   // ensure cubemaps are first
@@ -336,7 +336,7 @@ void CQueuedLoader::BuildMaterialResources(IResourcePreload *pLoader,
   // run a clean operation to cull the non-patched env_cubemap materials, which
   // are not built directly
   for (int i = 0; i < pList->Count(); i++) {
-    char szFilename[MAX_PATH];
+    char szFilename[SOURCE_MAX_PATH];
     char *pFilename = g_QueuedLoader.GetFilename(pList->Element(i), szFilename,
                                                  sizeof(szFilename));
     if (!V_stristr(pFilename, "maps\\")) {
@@ -430,7 +430,7 @@ void IOComputationJob(FileJob_t *pFileJob, void *pData, int nSize,
 
     if ((spewDetail & LOADER_DETAIL_COMPLETIONS) ||
         ((spewDetail & LOADER_DETAIL_LATECOMPLETIONS) && pLateString[0])) {
-      char szFilename[MAX_PATH];
+      char szFilename[SOURCE_MAX_PATH];
       g_QueuedLoader.GetFilename(pFileJob->m_hFilename, szFilename,
                                  sizeof(szFilename));
       Msg("QueuedLoader: Computation:%8.8x, Size:%7d %s%s\n",
@@ -439,7 +439,7 @@ void IOComputationJob(FileJob_t *pFileJob, void *pData, int nSize,
   }
 
   if (loaderError != LOADERERROR_NONE && pFileJob->m_bFileExists) {
-    char szFilename[MAX_PATH];
+    char szFilename[SOURCE_MAX_PATH];
     g_QueuedLoader.GetFilename(pFileJob->m_hFilename, szFilename,
                                sizeof(szFilename));
     Warning("QueuedLoader:: I/O Error on %s\n", szFilename);
@@ -586,8 +586,8 @@ bool CQueuedLoader::CResourceNameLessFunc::Less(
   switch ((int)pCtx) {
     case RESOURCEPRELOAD_MATERIAL: {
       // Cubemap materials are expected to be at top of list
-      char szNameLHS[MAX_PATH];
-      char szNameRHS[MAX_PATH];
+      char szNameLHS[SOURCE_MAX_PATH];
+      char szNameRHS[SOURCE_MAX_PATH];
 
       const char *pNameLHS = g_QueuedLoader.GetFilename(hFilenameLHS, szNameLHS,
                                                         sizeof(szNameLHS));
@@ -664,8 +664,8 @@ bool CQueuedLoader::CFileJobsLessFunc::Less(FileJob_t *const &pFileJobLHS,
     return pFileJobLHS->m_nStartOffset < pFileJobRHS->m_nStartOffset;
   }
 
-  char szFilenameLHS[MAX_PATH];
-  char szFilenameRHS[MAX_PATH];
+  char szFilenameLHS[SOURCE_MAX_PATH];
+  char szFilenameRHS[SOURCE_MAX_PATH];
   g_QueuedLoader.GetFilename(pFileJobLHS->m_hFilename, szFilenameLHS,
                              sizeof(szFilenameLHS));
   g_QueuedLoader.GetFilename(pFileJobRHS->m_hFilename, szFilenameRHS,
@@ -723,7 +723,7 @@ void CQueuedLoader::SubmitPendingJobs() {
   FileAsyncRequest_t asyncRequest;
   asyncRequest.pfnCallback = IOAsyncCallback;
 
-  char szFilename[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   for (int i = 0; i < sortedFiles.Count(); i++) {
     FileJob_t *pFileJob = sortedFiles[i];
 
@@ -808,7 +808,7 @@ bool CQueuedLoader::AddJob(const LoaderJob_t *pLoaderJob) {
   bool bExists = false;
 
   char *pFullPath;
-  char szFullPath[MAX_PATH];
+  char szFullPath[SOURCE_MAX_PATH];
   if (V_IsAbsolutePath(pLoaderJob->m_pFilename)) {
     // an absolute path is trusted, take as is
     pFullPath = (char *)pLoaderJob->m_pFilename;
@@ -855,7 +855,7 @@ bool CQueuedLoader::AddJob(const LoaderJob_t *pLoaderJob) {
   if (!pLoaderJob->m_pCallback) {
     // track anonymous jobs
     AUTO_LOCK_FM(m_Mutex);
-    char szFixedName[MAX_PATH];
+    char szFixedName[SOURCE_MAX_PATH];
     V_strncpy(szFixedName, pLoaderJob->m_pFilename, sizeof(szFixedName));
     V_FixSlashes(szFixedName);
     m_AnonymousJobs.Insert(szFixedName, pFileJob);
@@ -886,7 +886,7 @@ void CQueuedLoader::AddMapResource(const char *pFilename) {
   }
 
   // normalize the provided name as a filename
-  char szFilename[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   V_strncpy(szFilename, pFilename, sizeof(szFilename));
   V_FixSlashes(szFilename);
   V_strlower(szFilename);
@@ -910,7 +910,7 @@ bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename,
   Assert(ThreadInMainThread());
   Assert(pFilename && pCallback && !m_bBatching);
 
-  char szFixedName[MAX_PATH];
+  char szFixedName[SOURCE_MAX_PATH];
   V_strncpy(szFixedName, pFilename, sizeof(szFixedName));
   V_FixSlashes(szFixedName);
   pFilename = szFixedName;
@@ -951,7 +951,7 @@ bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename, void **pData,
   Assert(ThreadInMainThread());
   Assert(pFilename && !m_bBatching);
 
-  char szFixedName[MAX_PATH];
+  char szFixedName[SOURCE_MAX_PATH];
   V_strncpy(szFixedName, pFilename, sizeof(szFixedName));
   V_FixSlashes(szFixedName);
   pFilename = szFixedName;
@@ -1115,7 +1115,7 @@ void CQueuedLoader::SpewInfo() {
         lastPriority = pFileJob->m_Priority;
       }
 
-      char szAnonymousString[MAX_PATH];
+      char szAnonymousString[SOURCE_MAX_PATH];
       const char *pAnonymousStatus = "";
       if (!pFileJob->m_pCallback) {
         V_snprintf(szAnonymousString, sizeof(szAnonymousString), "(%s) ",
@@ -1129,7 +1129,7 @@ void CQueuedLoader::SpewInfo() {
         }
       }
 
-      char szFilename[MAX_PATH];
+      char szFilename[SOURCE_MAX_PATH];
       Msg("Submit:%5dms AsyncDuration:%5dms Tag:%d Thread:%8.8x Size:%7d "
           "%s%s\n",
           pFileJob->m_SubmitTime - m_StartTime, asyncDuration,
@@ -1290,7 +1290,7 @@ void CQueuedLoader::GetJobRequests() {
   float flProgress = PROGRESS_PARSEDRESLIST;
   while (true) {
     bool bIsDone = true;
-    for (int i = 0; i < ARRAYSIZE(jobs); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
       if (!jobs[i]->IsFinished()) {
         bIsDone = false;
         break;
@@ -1310,7 +1310,7 @@ void CQueuedLoader::GetJobRequests() {
     }
   }
 
-  for (int i = 0; i < ARRAYSIZE(jobs); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
     jobs[i]->Release();
   }
 
@@ -1399,7 +1399,7 @@ void CQueuedLoader::ParseResourceList(CUtlBuffer &resourceList) {
   // parse resource list into known types
   characterset_t breakSet;
   CharacterSetBuild(&breakSet, "");
-  char szToken[MAX_PATH];
+  char szToken[SOURCE_MAX_PATH];
   for (;;) {
     int nTokenSize =
         resourceList.ParseToken(&breakSet, szToken, sizeof(szToken));

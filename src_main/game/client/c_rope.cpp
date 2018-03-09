@@ -19,7 +19,7 @@
 #include "tier1/memstack.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void RecvProxy_RecomputeSprings(const CRecvProxyData *pData, void *pStruct,
@@ -1366,7 +1366,7 @@ bool C_RopeKeyframe::DetectRestingState(bool &bApplyWind) {
   if (m_bNewDataThisFrame) {
     // Simulate if anything about us changed this frame, such as our position
     // due to hierarchy.
-    // FIXME: this won't work when hierarchy is client side
+    // TODO(d.rattman): this won't work when hierarchy is client side
     return false;
   }
 

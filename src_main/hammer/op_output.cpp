@@ -38,7 +38,7 @@
 #include "options.h"
 #include ".\op_output.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -221,14 +221,14 @@ void COP_OutputPickEntityTarget::OnNotifyPickEntity(CToolPickEntity *pTool)
 		{
 			case IDC_EDIT_CONN_TARGET:
 			{
-				// FIXME: this should be called automatically, but it isn't
+				// TODO(d.rattman): this should be called automatically, but it isn't
 				m_pDlg->m_ComboTarget.SelectItem(pszName);
 				break;
 			}
 
 			case IDC_EDIT_CONN_PARAM:
 			{
-				// FIXME: this should be called automatically, but it isn't
+				// TODO(d.rattman): this should be called automatically, but it isn't
 				m_pDlg->GetDlgItem(m_nDlgItem)->SetWindowText(pszName);
 				m_pDlg->OnEditUpdateParam();
 				break;
@@ -455,7 +455,7 @@ void COP_Output::AddEntityConnections(CMapEntity *pEntity, bool bFirst)
 
 				// Build the string for the delay.
 				float fDelay = pConnection->GetDelay();
-				char szTemp[MAX_PATH];
+				char szTemp[SOURCE_MAX_PATH];
 				sprintf(szTemp, "%.2f", fDelay);
 				m_ListCtrl.SetItemText(nItemCount, DELAY_COLUMN, szTemp);
 
@@ -596,7 +596,7 @@ void COP_Output::UpdateEditControls(void)
 		m_CheckBoxFireOnce.SetCheck(m_bFireOnce);
 
 		CEdit *pDelayEdit = ( CEdit* )GetDlgItem( IDC_EDIT_CONN_DELAY );
-		char szTemp[MAX_PATH];
+		char szTemp[SOURCE_MAX_PATH];
 		sprintf(szTemp, "%.2f", m_fDelay);
 		pDelayEdit->SetWindowText(szTemp);
 		
@@ -1039,7 +1039,7 @@ BOOL COP_Output::OnInitDialog(void)
 		CAnchorDef( IDC_DELETE, k_eSimpleAnchorBottomSide ),
 		CAnchorDef( IDC_SHOWHIDDENTARGETS, k_eSimpleAnchorBottomRight )		
 	};
-	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, ARRAYSIZE( anchorDefs ) );
+	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, SOURCE_ARRAYSIZE( anchorDefs ) );
 
 	// Set the last state this was at.
 	m_ctlShowHiddenTargetsAsBroken.SetCheck( ShouldShowHiddenTargets() );
@@ -1477,7 +1477,7 @@ void COP_Output::SetSelectedConnections(CEntityConnectionList &List)
 //-----------------------------------------------------------------------------
 void COP_Output::UpdateColumnHeaderText(int nColumn, bool bIsSortColumn, SortDirection_t eDirection)
 {
-	char szHeaderText[MAX_PATH];
+	char szHeaderText[SOURCE_MAX_PATH];
 
 	LVCOLUMN Column;
 	memset(&Column, 0, sizeof(Column));
@@ -2081,7 +2081,7 @@ void COP_Output::FilterEntityOutputs(CMapEntity *pEntity)
 	//
 	// Remove any outputs from the combo box that are not in the class.
 	//
-	char szText[MAX_PATH];
+	char szText[SOURCE_MAX_PATH];
 
 	int nCount = m_ComboOutput.GetCount();
 	if (nCount > 0)

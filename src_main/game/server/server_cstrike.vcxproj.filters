@@ -2537,7 +2537,7 @@
     <ClInclude Include="cstrike\hostage\cs_simple_hostage.h">
       <Filter>Source Files\CounterStrike DLL\Hostage</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\ammodef.h">
@@ -3155,7 +3155,7 @@
     <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\winlite.h">
+    <ClInclude Include="..\..\base\include\windows\windows_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\worldsize.h">

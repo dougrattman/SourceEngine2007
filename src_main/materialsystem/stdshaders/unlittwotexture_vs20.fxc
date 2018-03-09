@@ -55,7 +55,7 @@ VS_OUTPUT main( const VS_INPUT v )
 	o.fog = o.fogFactorW.w;
 #endif	
 	// Needed for water fog alpha; 
-	// FIXME: we shouldn't have to compute this all thie time.
+	// TODO(d.rattman): we shouldn't have to compute this all thie time.
 	o.worldPos_projPosZ = float4( worldPos.xyz, projPos.z );
 
 	// Base texture coordinates

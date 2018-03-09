@@ -11,7 +11,7 @@
 #include "debugoverlay.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -118,12 +118,12 @@ int R_TryLightMarkSurface(dlight_t *light, msurfacelighting_t *pLighting,
   // it hits
   mtexinfo_t *tex;
 
-  // FIXME: No worky for brush models
+  // TODO(d.rattman): No worky for brush models
 
   // Find the perpendicular distance to the surface we're lighting
   // NOTE: Allow some stuff that's slightly behind it because view models can
   // get behind walls
-  // FIXME: We should figure out a better way to deal with view models
+  // TODO(d.rattman): We should figure out a better way to deal with view models
   float perpDistSq = DotProduct(light->origin, MSurf_Plane(surfID).normal) -
                      MSurf_Plane(surfID).dist;
   if (perpDistSq < DLIGHT_BEHIND_PLANE_DIST) return 0;
@@ -375,11 +375,11 @@ static void ComputeLightmapColorFromAverage(msurfacelighting_t *pLighting,
 //-----------------------------------------------------------------------------
 // Tests a particular surface
 //-----------------------------------------------------------------------------
-static bool FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID, float f,
+static bool SOURCE_FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID, float f,
                                                Vector &c,
                                                LightVecState_t &state) {
   // no lightmaps on this surface? punt...
-  // FIXME: should be water surface?
+  // TODO(d.rattman): should be water surface?
   if (MSurf_Flags(surfID) & SURFDRAW_NOLIGHT) return false;
 
   // Compute the actual point
@@ -400,7 +400,7 @@ static bool FASTCALL FindIntersectionAtSurface(SurfaceHandle_t surfID, float f,
   if (s < pLighting->m_LightmapMins[0] || t < pLighting->m_LightmapMins[1])
     return false;
 
-  // assuming a square lightmap (FIXME: which ain't always the case),
+  // assuming a square lightmap (TODO(d.rattman): which ain't always the case),
   // lets see if it lies in that rectangle. If not, punt...
   float ds = s - pLighting->m_LightmapMins[0];
   float dt = t - pLighting->m_LightmapMins[1];
@@ -567,7 +567,7 @@ static void AddDisplacementsInLeafToTestList(mleaf_t *pLeaf,
 //-----------------------------------------------------------------------------
 
 // returns surfID
-static SurfaceHandle_t FASTCALL FindIntersectionSurfaceAtLeaf(
+static SurfaceHandle_t SOURCE_FASTCALL FindIntersectionSurfaceAtLeaf(
     mleaf_t *pLeaf, float start, float end, Vector &c, LightVecState_t &state) {
   Vector pt;
   SurfaceHandle_t closestSurfID = SURFACE_HANDLE_INVALID;
@@ -637,13 +637,13 @@ SurfaceHandle_t RecursiveLightPoint(mnode_t *node, float start, float end,
                                     Vector &c, LightVecState_t &state) {
   // didn't hit anything
   if (node->contents >= 0) {
-    // FIXME: Should we always do this? It could get expensive...
+    // TODO(d.rattman): Should we always do this? It could get expensive...
     // Check all the faces at the leaves
     return FindIntersectionSurfaceAtLeaf((mleaf_t *)node, start, end, c, state);
   }
 
   // Determine which side of the node plane our points are on
-  // FIXME: optimize for axial
+  // TODO(d.rattman): optimize for axial
   cplane_t *plane = node->plane;
 
   float startDotN = DotProduct(state.m_Ray.m_Start, plane->normal);

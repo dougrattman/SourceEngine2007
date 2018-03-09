@@ -19,7 +19,7 @@
 #include "dme_controls/dmecontrols.h"
 #include "dme_controls/dmecontrols_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -52,7 +52,7 @@ vgui::Panel *CAttributeElementPickerPanel::GetDataPanel()
 
 void CAttributeElementPickerPanel::Apply()
 {
-	// FIXME: Implement when needed
+	// TODO(d.rattman): Implement when needed
 	Assert( 0 );
 }
 
@@ -102,7 +102,7 @@ void CAttributeElementPickerPanel::ShowPickerDialog()
 	if ( !pInfo )
 		return;
 
-	// FIXME: Sucky. Should we make GetElementChoiceList return a DmeHandleVec_t? 
+	// TODO(d.rattman): Sucky. Should we make GetElementChoiceList return a DmeHandleVec_t? 
 	ElementChoiceList_t choices;
 	CUtlVector< DmePickerInfo_t > vec;
 	if ( ElementPropertiesChoices()->GetElementChoiceList( pInfo->GetChoiceType(), GetPanelElement(), GetAttributeName(), IsArrayEntry(), choices ) )

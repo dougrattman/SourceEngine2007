@@ -20,7 +20,7 @@
 // NOTE: This must be the last file included!!!
 #include "tier0/include/memdbgon.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #define _finite finite
 #endif
 
@@ -479,7 +479,7 @@ bool CMaterialSystem::Connect(CreateInterfaceFn factory) {
       MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION, 0);
   if (!g_pHWConfig) return false;
 
-  // FIXME: ShaderAPI, ShaderDevice, and ShaderShadow should only come in after
+  // TODO(d.rattman): ShaderAPI, ShaderDevice, and ShaderShadow should only come in after
   // setting mode
   g_pShaderAPI =
       (IShaderAPI *)m_ShaderAPIFactory(SHADERAPI_INTERFACE_VERSION, 0);
@@ -594,7 +594,7 @@ InitReturnVal_t CMaterialSystem::Init() {
   // to know this so that we set up the editor materials properly. If we don't
   // do this, we never allocate the white lightmap, for example. We can remove
   // this when we update the SDK!!
-  char szExeName[_MAX_PATH];
+  char szExeName[SOURCE_MAX_PATH];
   if (::GetModuleFileName((HINSTANCE)GetModuleHandle(NULL), szExeName,
                           sizeof(szExeName))) {
     char szRight[20];
@@ -898,7 +898,7 @@ bool CMaterialSystem::SetMode(void *hwnd,
   TextureManager()->FreeStandardRenderTargets();
   TextureManager()->AllocateStandardRenderTargets();
 
-  // FIXME: There's gotta be a better way of doing this?
+  // TODO(d.rattman): There's gotta be a better way of doing this?
   // After the first mode set, make sure to download any textures created
   // before the first mode set. After the first mode set, all textures
   // will be reloaded via the reaquireresources call. Same goes for procedural
@@ -1022,7 +1022,7 @@ void CMaterialSystem::RestoreShaderObjects(CreateInterfaceFn shaderFactory,
 
   // NOTE: render targets must be restored first, then vb/ibs, then managed
   // textures
-  // FIXME: Gotta restore lightmap pages + standard textures before restore
+  // TODO(d.rattman): Gotta restore lightmap pages + standard textures before restore
   // funcs are called because they use them both.
   TextureManager()->RestoreRenderTargets();
   AllocateStandardTextures();
@@ -2736,7 +2736,7 @@ void CMaterialSystem::EndFrame(void) {
           .GetCallQueueInternal()
           ->QueueCall(g_pShaderAPI, &IShaderAPI::ReleaseThreadOwnership);
       m_iCurQueuedContext =
-          ((m_iCurQueuedContext + 1) % ARRAYSIZE(m_QueuedRenderContexts));
+          ((m_iCurQueuedContext + 1) % SOURCE_ARRAYSIZE(m_QueuedRenderContexts));
       m_QueuedRenderContexts[m_iCurQueuedContext].BeginQueue(pPrevContext);
       m_QueuedRenderContexts[m_iCurQueuedContext]
           .GetCallQueueInternal()
@@ -2785,7 +2785,7 @@ void CMaterialSystem::EndFrame(void) {
     }
 
     m_ThreadMode = nextThreadMode;
-#ifndef _LINUX
+#ifndef OS_POSIX
     Assert(g_MatSysMutex.GetOwnerId() == 0);
 #endif
 
@@ -2798,7 +2798,7 @@ void CMaterialSystem::EndFrame(void) {
     switch (m_ThreadMode) {
       case MATERIAL_SINGLE_THREADED:
         m_pRenderContext.Set(&m_HardwareRenderContext);
-        for (int i = 0; i < ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
           Assert(m_QueuedRenderContexts[i].IsInitialized());
           m_QueuedRenderContexts[i].Term();
         }
@@ -2806,7 +2806,7 @@ void CMaterialSystem::EndFrame(void) {
 
       case MATERIAL_QUEUED_SINGLE_THREADED:
       case MATERIAL_QUEUED_THREADED:
-        for (int i = 0; i < ARRAYSIZE(m_QueuedRenderContexts); i++) {
+        for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
           if (!m_QueuedRenderContexts[i].IsInitialized()) {
             m_QueuedRenderContexts[i].Init(this, &m_HardwareRenderContext);
           }
@@ -3075,7 +3075,7 @@ int CMaterialSystem::GetShaders(int nFirstShader, int nMaxCount,
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Is there a better way of doing this?
+// TODO(d.rattman): Is there a better way of doing this?
 // Returns shader flag names for editors to be able to edit them
 //-----------------------------------------------------------------------------
 int CMaterialSystem::ShaderFlagCount() const {
@@ -3092,7 +3092,7 @@ const char *CMaterialSystem::ShaderFlagName(int nIndex) const {
 void CMaterialSystem::GetShaderFallback(const char *pShaderName,
                                         char *pFallbackShader,
                                         int nFallbackLength) {
-  // FIXME: This is pretty much a hack. We need a better way for the
+  // TODO(d.rattman): This is pretty much a hack. We need a better way for the
   // editor to get ahold of shader fallbacks
   int nCount = ShaderCount();
   IShader **ppShaderList = (IShader **)_alloca(nCount * sizeof(IShader));
@@ -3111,7 +3111,7 @@ void CMaterialSystem::GetShaderFallback(const char *pShaderName,
     }
 
     // Found a match
-    // FIXME: Theoretically, getting fallbacks should require a param list
+    // TODO(d.rattman): Theoretically, getting fallbacks should require a param list
     // In practice, it looks rare or maybe even neved done
     const char *pFallback = ppShaderList[i]->GetFallbackShader(NULL);
     if (!pFallback) {
@@ -3415,7 +3415,7 @@ void CMaterialSystem::UpdateLightmap(int lightmapPageID, int lightmapSize[2],
         lightmapPageID, lightmapSize, offsetIntoLightmapPage, pFloatImage,
         pFloatImageBump1, pFloatImageBump2, pFloatImageBump3);
   } else {
-    ExecuteOnce(DebuggerBreakIfDebugging());
+    DebuggerBreakIfDebugging();
   }
 }
 
@@ -3484,7 +3484,7 @@ void CMaterialSystem::UnbindMaterial(IMaterial *pMaterial) {
 //
 //-----------------------------------------------------------------------------
 void CMaterialSystem::CompactMemory() {
-  for (int i = 0; i < ARRAYSIZE(m_QueuedRenderContexts); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_QueuedRenderContexts); i++) {
     m_QueuedRenderContexts[i].CompactMemory();
   }
 }

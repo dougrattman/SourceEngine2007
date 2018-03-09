@@ -23,7 +23,7 @@
 #include "DispSew.h"
 #include "builddisp.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CToolDisplace* GetDisplacementTool() { return dynamic_cast<CToolDisplace*>(ToolManager()->GetToolForID(TOOL_FACEEDIT_DISP)); }

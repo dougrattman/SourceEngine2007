@@ -16,7 +16,7 @@ class CChoreoEvent;
 
 //-----------------------------------------------------------------------------
 // Purpose: For section start/end
-// FIXME: Finish this
+// TODO(d.rattman): Finish this
 //-----------------------------------------------------------------------------
 class CChoreoGlobalEventWidget : public CChoreoWidget
 {

@@ -540,7 +540,7 @@ class CGameID {
     m_gameID.m_nAppID = nAppID;
     m_gameID.m_nType = k_EGameIDTypeGameMod;
 
-    char rgchModDir[MAX_PATH];
+    char rgchModDir[SOURCE_MAX_PATH];
     Q_FileBase(pchModPath, rgchModDir, sizeof(rgchModDir));
     CRC32_t crc32;
     CRC32_Init(&crc32);

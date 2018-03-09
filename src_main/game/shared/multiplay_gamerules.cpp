@@ -32,7 +32,7 @@
 #include "voice_gamemgr.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 REGISTER_GAMERULES_CLASS(CMultiplayRules);
@@ -971,9 +971,9 @@ void CMultiplayRules::GetNextLevelName(char *pszNextMap, int bufsize) {
 
             // If the engine doesn't consider it a valid map remove it from the
             // lists
-            char szWarningMessage[MAX_PATH];
+            char szWarningMessage[SOURCE_MAX_PATH];
             V_snprintf(
-                szWarningMessage, MAX_PATH,
+                szWarningMessage, SOURCE_MAX_PATH,
                 "Invalid map '%s' included in map cycle file. Ignored.\n",
                 m_MapList[i]);
             Warning(szWarningMessage);

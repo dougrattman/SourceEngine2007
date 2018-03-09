@@ -51,7 +51,6 @@
 #include "tier1/lzmaDecoder.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // #define VISUALIZE_TIME_AVERAGE 1
@@ -852,7 +851,7 @@ class CModelRender
     CColorMeshData *m_pColorMeshData;
     int m_nMeshes;
     unsigned int m_nRootLOD;
-    char m_szFilename[MAX_PATH];
+    char m_szFilename[SOURCE_MAX_PATH];
   };
   void StaticPropColorMeshCallback(void *pContext, const void *pData,
                                    int numReadBytes,
@@ -997,8 +996,8 @@ class CResourcePreloadPropLighting : public CResourcePreload {
       return true;
     }
 
-    char szBasename[MAX_PATH];
-    char szFilename[MAX_PATH];
+    char szBasename[SOURCE_MAX_PATH];
+    char szFilename[SOURCE_MAX_PATH];
     V_FileBase(pName, szBasename, sizeof(szBasename));
     V_snprintf(szFilename, sizeof(szFilename), "%s.vhv", szBasename);
 
@@ -1671,7 +1670,7 @@ void CModelRender::StudioSetupLighting(
 // Uses this material instead of the one the model was compiled with
 //-----------------------------------------------------------------------------
 
-// FIXME: a duplicate of what's in CEngineTool::GetLightingConditions
+// TODO(d.rattman): a duplicate of what's in CEngineTool::GetLightingConditions
 int GetLightingConditions(const Vector &vecLightingOrigin, Vector *pColors,
                           int nMaxLocalLights, LightDesc_t *pLocalLights,
                           ITexture *&pEnvCubemapTexture) {
@@ -1702,8 +1701,8 @@ int GetLightingConditions(const Vector &vecLightingOrigin, Vector *pColors,
 #endif
 }
 
-// FIXME: a duplicate of what's in CCDmeMdlRenderable<T>::SetUpLighting and
-// CDmeEmitter::SetUpLighting
+// TODO(d.rattman): a duplicate of what's in
+// CCDmeMdlRenderable<T>::SetUpLighting and CDmeEmitter::SetUpLighting
 void CModelRender::SetupLighting(const Vector &vecCenter) {
 #ifndef SWDS
   // Set up lighting conditions
@@ -2233,9 +2232,9 @@ int CModelRender::DrawModel(int flags, IClientRenderable *pRenderable,
 int CModelRender::ComputeLOD(const ModelRenderInfo_t &info,
                              studiohwdata_t *pStudioHWData) {
   int lod = r_lod.GetInt();
-  // FIXME!!!  This calc should be in studiorender, not here!!!!!  But since the
-  // bone setup is done here, and we need the bone mask, we'll do it here for
-  // now.
+  // TODO(d.rattman): This calc should be in studiorender, not here!!!!!  But
+  // since the bone setup is done here, and we need the bone mask, we'll do it
+  // here for now.
   if (lod == -1) {
     CMatRenderContextPtr pRenderContext(materials);
     float screenSize = pRenderContext->ComputePixelWidthOfSphere(
@@ -3041,7 +3040,7 @@ matrix3x4_t *CModelRender::DrawModelShadowSetup(
   model_t const *pModel = pRenderable->GetModel();
   if (!pModel) return NULL;
 
-  // FIXME: Make brush shadows work
+  // TODO(d.rattman): Make brush shadows work
   if (pModel->type != mod_studio) return NULL;
 
   Assert(modelloader->IsLoaded(pModel) && (pModel->type == mod_studio));
@@ -3164,7 +3163,7 @@ void CModelRender::InitColormeshParams(ModelInstance_t &instance,
         pColorMeshParams->m_nVertexes[pColorMeshParams->m_nMeshes++] =
             pMesh->m_pMeshGroup[groupID].m_NumVertices;
         Assert(pColorMeshParams->m_nMeshes <=
-               ARRAYSIZE(pColorMeshParams->m_nVertexes));
+               SOURCE_ARRAYSIZE(pColorMeshParams->m_nVertexes));
 
         pColorMeshParams->m_nTotalVertexes +=
             pMesh->m_pMeshGroup[groupID].m_NumVertices;
@@ -3176,7 +3175,7 @@ void CModelRender::InitColormeshParams(ModelInstance_t &instance,
 //-----------------------------------------------------------------------------
 // Allocates the static prop color data meshes
 //-----------------------------------------------------------------------------
-// FIXME? : Move this to StudioRender?
+// TODO(d.rattman): Move this to StudioRender?
 CColorMeshData *CModelRender::FindOrCreateStaticPropColorData(
     ModelInstanceHandle_t handle) {
   if (handle == MODEL_INSTANCE_INVALID ||
@@ -3217,7 +3216,7 @@ CColorMeshData *CModelRender::FindOrCreateStaticPropColorData(
 //-----------------------------------------------------------------------------
 // Allocates the static prop color data meshes
 //-----------------------------------------------------------------------------
-// FIXME? : Move this to StudioRender?
+// TODO(d.rattman): Move this to StudioRender?
 void CModelRender::ProtectColorDataIfQueued(DataCacheHandle_t hColorMesh) {
   if (hColorMesh != DC_INVALID_HANDLE) {
     CMatRenderContextPtr pRenderContext(materials);
@@ -3475,7 +3474,7 @@ void CModelRender::ValidateStaticPropColorData(ModelInstanceHandle_t handle) {
 
   // fetch the header
   CUtlBuffer utlBuf;
-  char fileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
   if (g_pMaterialSystemHardwareConfig->GetHDRType() == HDR_TYPE_NONE ||
       g_bBakedPropLightingNoSeparateHDR) {
     Q_snprintf(fileName, sizeof(fileName), "sp_%d.vhv",
@@ -3605,7 +3604,7 @@ bool CModelRender::LoadStaticPropColorData(IHandleEntity *pProp,
   }
 
   // each static prop has its own compiled color mesh
-  char fileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
   if (g_pMaterialSystemHardwareConfig->GetHDRType() == HDR_TYPE_NONE ||
       g_bBakedPropLightingNoSeparateHDR) {
     Q_snprintf(fileName, sizeof(fileName), "sp_%d.vhv",
@@ -3683,7 +3682,7 @@ bool CModelRender::UpdateStaticPropColorData(IHandleEntity *pProp,
     bDebugColor = true;
   }
 
-  // FIXME? : Move this to StudioRender?
+  // TODO(d.rattman): Move this to StudioRender?
   ModelInstance_t &inst = m_ModelInstances[handle];
   Assert(inst.m_pModel);
   Assert(modelloader->IsLoaded(inst.m_pModel) &&
@@ -3875,7 +3874,7 @@ bool CModelRender::UpdateStaticPropColorData(IHandleEntity *pProp,
 }
 
 //-----------------------------------------------------------------------------
-// FIXME? : Move this to StudioRender?
+// TODO(d.rattman): Move this to StudioRender?
 //-----------------------------------------------------------------------------
 void CModelRender::DestroyStaticPropColorData(ModelInstanceHandle_t handle) {
 #ifndef SWDS
@@ -3963,10 +3962,10 @@ ModelInstanceHandle_t CModelRender::CreateInstance(
 //-----------------------------------------------------------------------------
 void CModelRender::SetStaticLighting(ModelInstanceHandle_t handle,
                                      LightCacheHandle_t *pCache) {
-  // FIXME: If we make static lighting available for client-side props,
-  // we must clean up the lightcache handles as the model instances are removed.
-  // At the moment, since only the static prop manager uses this, it cleans up
-  // all LightCacheHandles at level shutdown.
+  // TODO(d.rattman): If we make static lighting available for client-side
+  // props, we must clean up the lightcache handles as the model instances are
+  // removed. At the moment, since only the static prop manager uses this, it
+  // cleans up all LightCacheHandles at level shutdown.
 
   // The reason I moved the lightcache handles into here is because this place
   // needs to know about lighting overrides when restoring meshes for alt-tab
@@ -4224,12 +4223,12 @@ void CModelRender::AddDecal(ModelInstanceHandle_t handle, Ray_t const &ray,
   w *= 0.5f;
   h *= 0.5f;
 
-  // FIXME: For now, don't render fading decals on props...
+  // TODO(d.rattman): For now, don't render fading decals on props...
   bool found = false;
   pDecalMaterial->FindVar("$decalFadeDuration", &found, false);
   if (found) return;
 
-  // FIXME: Pass w and h into AddDecal
+  // TODO(d.rattman): Pass w and h into AddDecal
   float radius = (w > h) ? w : h;
 
   ModelInstance_t &inst = m_ModelInstances[handle];

@@ -29,7 +29,7 @@ typedef enum
 } OrderEventType;
 
 
-abstract_class COrderEvent_Base
+the_interface COrderEvent_Base
 {
 public:
 	virtual OrderEventType	GetType() = 0;

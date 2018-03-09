@@ -91,7 +91,7 @@
 #if defined(_vsnprintf)
 #undef _vsnprintf
 #endif
-#define _vsnprintf vsnprintf__HEY_YOU__USE_VSTDLIB
+#define _ vsnprintf__HEY_YOU__USE_VSTDLIB
 
 #if defined(_vsnwprintf)
 #undef _vsnwprintf

@@ -27,7 +27,7 @@
 #include "soundenvelope.h"
 #include "soundflags.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void ExpandBBox(Vector &vecMins, Vector &vecMaxs);
@@ -743,7 +743,7 @@ void CBaseHelicopter::UpdatePlayerDopplerShift() {
 
     // UNDONE: this needs to send different sounds to every player for
     // multiplayer.
-    // FIXME: this isn't the correct way to find a player!!!
+    // TODO(d.rattman): this isn't the correct way to find a player!!!
     pPlayer = gEntList.FindEntityByName(NULL, "!player");
     if (pPlayer) {
       Vector dir;
@@ -911,7 +911,7 @@ void CBaseHelicopter::Flight(void) {
   ApplyGeneralDrag();
 
   // apply power to stay correct height
-  // FIXME: these need to be per class variables
+  // TODO(d.rattman): these need to be per class variables
 #define MAX_FORCE 80
 #define FORCE_POSDELTA 12
 #define FORCE_NEGDELTA 8
@@ -1075,7 +1075,7 @@ void CBaseHelicopter::FlyTouch(CBaseEntity *pOther) {
     //		tr = CBaseEntity::GetTouchTrace();
 
     // UNDONE, do a real bounce
-    // FIXME: This causes bad problems, so we just ignore it right now
+    // TODO(d.rattman): This causes bad problems, so we just ignore it right now
     // ApplyAbsVelocityImpulse( tr.plane.normal * (GetAbsVelocity().Length() +
     // 200) );
   }

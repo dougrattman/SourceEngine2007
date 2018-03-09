@@ -22,7 +22,7 @@ enum { TREEDATA_INVALID_HANDLE = (BSPTreeDataHandle_t)~0 };
 // implement a class that can answer the 5 questions in the Query interface
 // about the spatial subdivision. For example, a K-D tree or a BSP tree could
 // implement this interface
-abstract_class ISpatialLeafEnumerator {
+the_interface ISpatialLeafEnumerator {
  public:
   // call back with a leaf and a context
   // The context is completely user defined; it's passed into the enumeration
@@ -34,7 +34,7 @@ abstract_class ISpatialLeafEnumerator {
   virtual bool EnumerateLeaf(int leaf, int context) = 0;
 };
 
-abstract_class ISpatialQuery {
+the_interface ISpatialQuery {
  public:
   // Returns the number of leaves
   virtual int LeafCount() const = 0;
@@ -57,13 +57,13 @@ abstract_class ISpatialQuery {
 // This is a parasitic class that attaches data to the leaves specified by the
 // ISpatialQuery sent in to the initialization function. It can't exist without
 // a spatial partition of some sort to hold onto.
-abstract_class IBSPTreeDataEnumerator {
+the_interface IBSPTreeDataEnumerator {
  public:
   // call back with a userId and a context
-  virtual bool FASTCALL EnumerateElement(int userId, int context) = 0;
+  virtual bool SOURCE_FASTCALL EnumerateElement(int userId, int context) = 0;
 };
 
-abstract_class IBSPTreeData {
+the_interface IBSPTreeData {
  public:
   virtual ~IBSPTreeData();
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Memory allocation!
 
@@ -15,8 +15,6 @@
 #define PvAlloc malloc
 #define PvExpand _expand
 #endif
-
-#undef max
 
 namespace {
 constexpr usize MAX_STACK_DEPTH{64};

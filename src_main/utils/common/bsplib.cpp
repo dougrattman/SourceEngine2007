@@ -22,9 +22,6 @@
 #include "vtf/vtf.h"
 #include "zip_utils.h"
 
-// Boundary each lump should be aligned to
-#define LUMP_ALIGNMENT 4
-
 // Data descriptions for byte swapping - only needed
 // for structures that are written to file for use by the game.
 BEGIN_BYTESWAP_DATADESC(dheader_t)
@@ -480,7 +477,7 @@ static const char *s_LumpNames[] = {
 };
 
 const char *GetLumpName(unsigned int lumpnum) {
-  if (lumpnum >= ARRAYSIZE(s_LumpNames)) {
+  if (lumpnum >= SOURCE_ARRAYSIZE(s_LumpNames)) {
     return "UNKNOWN";
   }
   return s_LumpNames[lumpnum];
@@ -2478,8 +2475,8 @@ bool GenerateNextLumpFileName(const char *bspfilename, char *lumpfilename,
 void WriteLumpToFile(char *filename, int lump) {
   if (!HasLump(lump)) return;
 
-  char lumppre[MAX_PATH];
-  if (!GenerateNextLumpFileName(filename, lumppre, MAX_PATH)) {
+  char lumppre[SOURCE_MAX_PATH];
+  if (!GenerateNextLumpFileName(filename, lumppre, SOURCE_MAX_PATH)) {
     Warning("Failed to find valid lump filename for bsp %s.\n", filename);
     return;
   }
@@ -3249,7 +3246,7 @@ bool CToolBSPTree::EnumerateLeavesAlongRay(Ray_t const &ray,
     return EnumerateLeavesInBox_R(0, mins, maxs, pEnum, context);
   }
 
-  // FIXME: Extruded ray not implemented yet
+  // TODO(d.rattman): Extruded ray not implemented yet
   Assert(ray.m_IsRay);
 
   Vector end;
@@ -3270,7 +3267,7 @@ ISpatialQuery *ToolBSPTree() {
 // Enumerates nodes in front to back order...
 //-----------------------------------------------------------------------------
 
-// FIXME: Do we want this in the IBSPTree interface?
+// TODO(d.rattman): Do we want this in the IBSPTree interface?
 
 static bool EnumerateNodesAlongRay_R(int node, Ray_t const &ray, float start,
                                      float end, IBSPNodeEnumerator *pEnum,
@@ -3526,7 +3523,7 @@ void ConvertPakFileContents(const char *pInFilename) {
   int id = -1;
   int fileSize;
   while (1) {
-    char relativeName[MAX_PATH];
+    char relativeName[SOURCE_MAX_PATH];
     id = GetNextFilename(GetPakFile(), id, relativeName, sizeof(relativeName),
                          fileSize);
     if (id == -1) break;
@@ -3637,7 +3634,7 @@ void ConvertPakFileContents(const char *pInFilename) {
 
   // strip ldr version of hdr files
   for (int i = 0; i < hdrFiles.Count(); i++) {
-    char ldrFileName[MAX_PATH];
+    char ldrFileName[SOURCE_MAX_PATH];
 
     strcpy(ldrFileName, hdrFiles[i].String());
 
@@ -3660,7 +3657,7 @@ void ConvertPakFileContents(const char *pInFilename) {
   s_pakFile = newPakFile;
 }
 
-void SetAlignedLumpPosition(int lumpnum, int alignment = LUMP_ALIGNMENT) {
+void SetAlignedLumpPosition(int lumpnum, int alignment = 4) {
   g_pBSPHeader->lumps[lumpnum].fileofs =
       AlignFilePosition(g_hBSPFile, alignment);
 }
@@ -4554,12 +4551,12 @@ bool GetBSPDependants(const char *pBSPFilename, CUtlVector<CUtlString> *pList) {
 
   LoadBSPFile(pBSPFilename);
 
-  char szBspName[MAX_PATH];
+  char szBspName[SOURCE_MAX_PATH];
   V_FileBase(pBSPFilename, szBspName, sizeof(szBspName));
   V_SetExtension(szBspName, ".bsp", sizeof(szBspName));
 
   // get embedded pak files, and internals
-  char szFilename[MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   int fileSize;
   int fileId = -1;
   for (;;) {

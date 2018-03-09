@@ -5,7 +5,7 @@
 #include "vgui/ISurface.h"
 #include "vgui/KeyCode.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -50,7 +50,7 @@ bool lessFunc(const int &lhs, const int &rhs) { return lhs < rhs; }
 // Purpose: converts a button name string to the equivalent keycode
 //-----------------------------------------------------------------------------
 int StringToButtonCode(const char *name) {
-  for (int i = 0; i < ARRAYSIZE(s_ControllerButtons); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(s_ControllerButtons); ++i) {
     if (!Q_stricmp(s_ControllerButtons[i].name, name))
       return s_ControllerButtons[i].code;
   }

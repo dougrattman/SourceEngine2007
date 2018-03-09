@@ -49,7 +49,7 @@ CVehicleTeleportStation::CVehicleTeleportStation()
 {
 	g_AllTeleportStations.AddToTail( this );
 	
-	//FIXME: we should be able to use clientside animation on this vehicle, but prediction is messing it
+	//TODO(d.rattman): we should be able to use clientside animation on this vehicle, but prediction is messing it
 	//up right now.
 	//UseClientSideAnimation();
 }

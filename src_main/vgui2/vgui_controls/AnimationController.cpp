@@ -19,7 +19,7 @@
 #include "mathlib/mathlib.h"
 #include "tier1/mempool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/dbg.h"
 // for SRC
 #include "tier0/include/memdbgon.h"
@@ -175,7 +175,7 @@ AnimationController::RelativeAlignmentLookup
 //-----------------------------------------------------------------------------
 AnimationController::RelativeAlignment AnimationController::LookupAlignment(
     char const *token) {
-  int c = ARRAYSIZE(g_AlignmentLookup);
+  int c = SOURCE_ARRAYSIZE(g_AlignmentLookup);
 
   for (int i = 0; i < c; i++) {
     if (!Q_stricmp(token, g_AlignmentLookup[i].name)) {

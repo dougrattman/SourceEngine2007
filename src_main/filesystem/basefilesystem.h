@@ -24,7 +24,7 @@
 
 #include "tier0/include/threadtools.h"
 #include "tier1/utldict.h"
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #include <unistd.h>  // unlink
 #include "linux_support.h"
 #define HANDLE int
@@ -59,14 +59,14 @@
 #ifdef _WIN32
 #define CORRECT_PATH_SEPARATOR '\\'
 #define INCORRECT_PATH_SEPARATOR '/'
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #define CORRECT_PATH_SEPARATOR '/'
 #define INCORRECT_PATH_SEPARATOR '\\'
 #endif
 
 #ifdef _WIN32
 #define PATHSEPARATOR(c) ((c) == '\\' || (c) == '/')
-#elif defined(_LINUX)
+#elif defined(OS_POSIX)
 #define PATHSEPARATOR(c) ((c) == '/')
 #endif  //_WIN32
 
@@ -340,7 +340,7 @@ class CFileLoadInfo {
 
 //-----------------------------------------------------------------------------
 
-abstract_class CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
+the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   friend class CPackFileHandle;
   friend class CPackFile;
   friend class CXZipPackFile;
@@ -363,7 +363,7 @@ abstract_class CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
   void ShutdownAsync();
 
   void ParsePathID(const char *&pFilename, const char *&pPathID,
-                   char tempPathID[MAX_PATH]);
+                   char tempPathID[SOURCE_MAX_PATH]);
 
   // file handling
   virtual FileHandle_t Open(const char *pFileName, const char *pOptions,
@@ -698,7 +698,7 @@ abstract_class CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
                          const char **ppszFilename, const char *pszPathID,
                          PathTypeFilter_t pathTypeFilter = FILTER_NONE)
         : m_iCurrent(-1), m_PathTypeFilter(pathTypeFilter) {
-      char tempPathID[MAX_PATH];
+      char tempPathID[SOURCE_MAX_PATH];
       if (*ppszFilename && (*ppszFilename)[0] == '/' &&
           (*ppszFilename)[1] ==
               '/')  // ONLY '//' (and not '\\') for our special format
@@ -767,7 +767,7 @@ abstract_class CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
     CSearchPath m_EmptySearchPath;
     CPathIDInfo m_EmptyPathIDInfo;
     PathTypeFilter_t m_PathTypeFilter;
-    char m_Filename[MAX_PATH];  // set for relative names only
+    char m_Filename[SOURCE_MAX_PATH];  // set for relative names only
   };
 
   friend class CSearchPathsIterator;

@@ -134,9 +134,9 @@ void PrintQTree(struct QuantizedValue const *p, int idlevel) {
     printf("}\n");
     for (i = 0; i < idlevel; i++) printf(" ");
     printf("Mins={");
-    for (i = 0; i < current_ndims; i++) printf("%u,", (uint32_t)p->Mins[i]);
+    for (i = 0; i < current_ndims; i++) printf("%u,", (u32)p->Mins[i]);
     printf("} Maxs={");
-    for (i = 0; i < current_ndims; i++) printf("%u,", (uint32_t)p->Maxs[i]);
+    for (i = 0; i < current_ndims; i++) printf("%u,", (u32)p->Maxs[i]);
     printf("}\n");
     PrintQTree(p->Children[0], idlevel + 2);
     PrintQTree(p->Children[1], idlevel + 2);

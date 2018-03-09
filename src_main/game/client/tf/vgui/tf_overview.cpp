@@ -835,7 +835,7 @@ void CTFMapOverview::UpdateMapOverlayTexture()
 
 
 /*
-	char tempfile[MAX_PATH];
+	char tempfile[SOURCE_MAX_PATH];
 	Q_snprintf( tempfile, sizeof( tempfile ), "overviews/%s_%s_%s_%s", levelname, roundname, capname, teamname );
 
 	// TODO release old texture ?

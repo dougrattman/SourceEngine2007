@@ -29,7 +29,7 @@
 #include "engine/IEngineSound.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	HOUNDEYE_MAX_ATTACK_RADIUS		500

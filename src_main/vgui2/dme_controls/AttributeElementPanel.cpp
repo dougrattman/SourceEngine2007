@@ -13,7 +13,7 @@
 #include "datamodel/dmelement.h"
 #include "movieobjects/dmeeditortypedictionary.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -33,7 +33,7 @@ CAttributeElementPanel::CAttributeElementPanel( vgui::Panel *parent, const Attri
 
 void CAttributeElementPanel::Apply()
 {
-	// FIXME: Implement when needed
+	// TODO(d.rattman): Implement when needed
 	Assert( 0 );
 }
 

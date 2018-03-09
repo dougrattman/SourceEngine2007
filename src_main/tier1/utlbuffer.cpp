@@ -10,7 +10,7 @@
 #include "tier1/characterset.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -1244,7 +1244,7 @@ void CUtlBuffer::SeekPut(SeekType_t type, int offset) {
   }
 
   // Force a write of the data
-  // FIXME: We could make this more optimal potentially by writing out
+  // TODO(d.rattman): We could make this more optimal potentially by writing out
   // the entire buffer if you seek outside the current range
 
   // NOTE: This call will write and will also seek the file to nNextPut.

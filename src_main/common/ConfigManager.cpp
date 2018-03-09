@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "ConfigManager.h"
 
@@ -10,11 +10,11 @@
 #include "KeyValues.h"
 #include "SourceAppInfo.h"
 #include "UtlBuffer.h"
+#include "base/include/windows/windows_light.h"
 #include "filesystem_tools.h"
 #include "interface.h"
 #include "steam.h"
 #include "tier0/include/icommandline.h"
-#include "base/include/windows/windows_light.h"
 
 #include "tier0/include/memdbgon.h"
 
@@ -204,7 +204,7 @@ bool CGameConfigManager::LoadConfigsInternal(const char *baseDir,
   }
 
   // Make a full path name
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
   Q_snprintf(szPath, sizeof(szPath), "%s\\%s", GetBaseDirectory(),
              GAME_CONFIG_FILENAME);
 
@@ -409,16 +409,16 @@ bool CGameConfigManager::AddDefaultConfig(const defaultConfigInfo_t &info,
   newConfig->SetName(info.gameName);
 
   // Game's root directory (with special steam name handling)
-  char rootGameDir[MAX_PATH];
+  char rootGameDir[SOURCE_MAX_PATH];
   GetRootGameDirectory(rootGameDir, sizeof(rootGameDir), rootDirectory,
                        info.steamPath);
 
   // Game's content directory
-  char contentRootDir[MAX_PATH];
+  char contentRootDir[SOURCE_MAX_PATH];
   GetRootContentDirectory(contentRootDir, sizeof(contentRootDir),
                           rootDirectory);
 
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
 
   // Game directory
   Q_snprintf(szPath, sizeof(szPath), "%s\\%s", rootGameDir, info.gameDir);
@@ -435,7 +435,7 @@ bool CGameConfigManager::AddDefaultConfig(const defaultConfigInfo_t &info,
   hammerBlock->SetString("DefaultPointEntity", info.defaultPointEntity);
 
   // Fill in the default VMF directory
-  char contentMapDir[MAX_PATH];
+  char contentMapDir[SOURCE_MAX_PATH];
   Q_snprintf(contentMapDir, sizeof(contentMapDir), "%s\\%s\\mapsrc",
              contentRootDir, info.gameDir);
   hammerBlock->SetString("MapDir", contentMapDir);
@@ -517,7 +517,7 @@ bool CGameConfigManager::CreateAllDefaultConfigs(void) {
   GetDefaultGameBlock(gameBlock);
 
   // Make a full path name
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
   Q_snprintf(szPath, sizeof(szPath), "%s\\%s", GetBaseDirectory(),
              GAME_CONFIG_FILENAME);
 
@@ -552,8 +552,8 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
 
   int i;
   int nStrlen;
-  char szSectionName[MAX_PATH];
-  char textBuffer[MAX_PATH];
+  char szSectionName[SOURCE_MAX_PATH];
+  char textBuffer[SOURCE_MAX_PATH];
 
   // Parse all the configs
   for (int nConfig = 0; nConfig < nNumConfigs; nConfig++) {
@@ -583,7 +583,7 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
 
       // Get all FGDs
       do {
-        char szGameData[MAX_PATH];
+        char szGameData[SOURCE_MAX_PATH];
 
         sprintf(szGameData, "GameData%d", i);
         nStrlen =
@@ -599,11 +599,11 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
       hammerBlock->SetInt(
           "TextureFormat",
           GetPrivateProfileInt(szSectionName, "TextureFormat",
-                               5 /*FIXME: tfVMT*/, iniFilePath));
+                               5 /*TODO(d.rattman): tfVMT*/, iniFilePath));
       hammerBlock->SetInt(
-          "MapFormat",
-          GetPrivateProfileInt(szSectionName, "MapFormat",
-                               4 /*FIXME: mfHalfLife2*/, iniFilePath));
+          "MapFormat", GetPrivateProfileInt(szSectionName, "MapFormat",
+                                            4 /*TODO(d.rattman): mfHalfLife2*/,
+                                            iniFilePath));
 
       // Default texture scale
       GetPrivateProfileString(szSectionName, "DefaultTextureScale", "1",
@@ -618,7 +618,7 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
       hammerBlock->SetInt(
           "DefaultLightmapScale",
           GetPrivateProfileInt(szSectionName, "DefaultLightmapScale",
-                               16 /*FIXME: DEFAULT_LIGHTMAP_SCALE*/,
+                               16 /*TODO(d.rattman): DEFAULT_LIGHTMAP_SCALE*/,
                                iniFilePath));
 
       GetPrivateProfileString(szSectionName, "GameExe", "", textBuffer,
@@ -666,7 +666,7 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
       int materialExcludeCount = atoi(textBuffer);
       hammerBlock->SetInt("MaterialExcludeCount", materialExcludeCount);
 
-      char excludeDir[MAX_PATH];
+      char excludeDir[SOURCE_MAX_PATH];
 
       // Write out all excluded directories
       for (i = 0; i < materialExcludeCount; i++) {
@@ -678,7 +678,7 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
     }
   }
   // Make a full path name
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
   Q_snprintf(szPath, sizeof(szPath), "%s\\%s", GetBaseDirectory(),
              GAME_CONFIG_FILENAME);
 
@@ -687,7 +687,7 @@ bool CGameConfigManager::ConvertGameConfigsINI(void) {
   SaveUtlBufferToFile(buffer, szPath);
 
   // Rename the old INI file
-  char newFilePath[MAX_PATH];
+  char newFilePath[SOURCE_MAX_PATH];
   Q_snprintf(newFilePath, sizeof(newFilePath), "%s.OLD", iniFilePath);
 
   rename(iniFilePath, newFilePath);
@@ -711,7 +711,7 @@ bool CGameConfigManager::SaveConfigs(const char *baseDir) {
   }
 
   // Make a full path name
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
   Q_strncpy(szPath, GetBaseDirectory(), sizeof(szPath));
   Q_AppendSlash(szPath, sizeof(szPath));
   Q_strncat(szPath, GAME_CONFIG_FILENAME, sizeof(szPath), COPY_ALL_CHARACTERS);
@@ -733,7 +733,7 @@ const char *CGameConfigManager::GetBaseDirectory(void) {
 // Purpose: Find the root directory
 //-----------------------------------------------------------------------------
 const char *CGameConfigManager::GetRootDirectory(void) {
-  static char path[MAX_PATH] = {0};
+  static char path[SOURCE_MAX_PATH] = {0};
   if (path[0] == 0) {
     Q_strncpy(path, GetBaseDirectory(), sizeof(path));
     Q_StripLastDir(path, sizeof(path));  // Get rid of the 'bin' directory
@@ -782,7 +782,7 @@ KeyValues *CGameConfigManager::GetGameSubBlock(const char *keyName) {
 // Purpose: Get the gamecfg.ini file for conversion
 //-----------------------------------------------------------------------------
 const char *CGameConfigManager::GetIniFilePath(void) {
-  static char iniFilePath[MAX_PATH] = {0};
+  static char iniFilePath[SOURCE_MAX_PATH] = {0};
   if (iniFilePath[0] == 0) {
     Q_strncpy(iniFilePath, GetBaseDirectory(), sizeof(iniFilePath));
     Q_strncat(iniFilePath, "\\gamecfg.ini", sizeof(iniFilePath),
@@ -802,7 +802,7 @@ bool CGameConfigManager::ResetConfigs(const char *baseDir /*= NULL*/) {
   }
 
   // Make a full path name
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
   Q_snprintf(szPath, sizeof(szPath), "%s\\%s", GetBaseDirectory(),
              GAME_CONFIG_FILENAME);
 
@@ -858,7 +858,7 @@ bool CGameConfigManager::GetDefaultGameBlock(KeyValues *pIn) {
 
   if (pIn == NULL) return false;
 
-  char szPath[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
 
   // Add all default configs
   int nNumConfigs = defaultConfigs.Count();

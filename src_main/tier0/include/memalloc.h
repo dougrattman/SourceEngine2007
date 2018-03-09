@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This header should never be used directly from leaf code!!!
 // Instead, just add the file memoverride.cc into your project and all this
@@ -24,8 +24,8 @@
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
 #include <cstddef>
-#include "tier0/include/commonmacros.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
+#include "base/include/macros.h"  // IsPowerOfTwo
 #include "tier0/include/mem.h"
 
 struct _CrtMemState;
@@ -36,7 +36,7 @@ using MemAllocFailHandler_t = usize (*)(usize);
 
 // NOTE! This should never be called directly from leaf code
 // Just use new,delete,malloc,free etc. They will call into this eventually
-abstract_class IMemAlloc {
+the_interface IMemAlloc {
  public:
   // Release versions
   virtual void *Alloc(usize nSize) = 0;
@@ -58,7 +58,7 @@ abstract_class IMemAlloc {
   virtual void PushAllocDbgInfo(const ch *pFileName, i32 nLine) = 0;
   virtual void PopAllocDbgInfo() = 0;
 
-  // FIXME: Remove when we have our own allocator
+  // TODO(d.rattman): Remove when we have our own allocator
   // these methods of the Crt debug code is used in our codebase currently
   virtual long CrtSetBreakAlloc(long lNewBreakAlloc) = 0;
   virtual i32 CrtSetReportMode(i32 nReportType, i32 nReportMode) = 0;
@@ -68,11 +68,11 @@ abstract_class IMemAlloc {
   virtual i32 CrtSetDbgFlag(i32 nNewFlag) = 0;
   virtual void CrtMemCheckpoint(_CrtMemState * pState) = 0;
 
-  // FIXME: Make a better stats interface
+  // TODO(d.rattman): Make a better stats interface
   virtual void DumpStats() = 0;
   virtual void DumpStatsFileBase(ch const *pchFileBase) = 0;
 
-  // FIXME: Remove when we have our own allocator
+  // TODO(d.rattman): Remove when we have our own allocator
   virtual void *CrtSetReportFile(i32 nRptType, void *hFile) = 0;
   virtual void *CrtSetReportHook(void *pfnNewHook) = 0;
   virtual i32 CrtDbgReport(i32 nRptType, const ch *szFile, i32 nLine, const ch *szModule,

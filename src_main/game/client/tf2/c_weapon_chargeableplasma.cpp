@@ -180,7 +180,7 @@ void C_WeaponCombat_ChargeablePlasma::ClientThink( )
 	m_flPower = (gpGlobals->curtime - m_flChargeStartTime) / BALL_GROW_TIME;
 	m_flPower = std::clamp( m_flPower, 0, 1 );
 
-	// FIXME: dl->origin should be based on the attachment point
+	// TODO(d.rattman): dl->origin should be based on the attachment point
 	dlight_t *dl = effects->CL_AllocDlight( entindex() );
 	dl->origin = GetRenderOrigin();
 

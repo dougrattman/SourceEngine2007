@@ -10,7 +10,7 @@
 #include "ai_behavior_operator.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //=============================================================================
@@ -198,7 +198,7 @@ void CAI_OperatorBehavior::StartTask( const Task_t *pTask )
 				AI_NavGoal_t nearGoal( GOALTYPE_LOCATION_NEAREST_NODE, m_hTargetObject->GetAbsOrigin(), AIN_DEF_ACTIVITY, 256 );
 				if ( GetNavigator()->SetGoal( nearGoal, AIN_CLEAR_PREVIOUS_STATE ) )
 				{
-					//FIXME: HACK! The internal pathfinding is setting this without our consent, so override it!
+					//TODO(d.rattman): HACK! The internal pathfinding is setting this without our consent, so override it!
 					ClearCondition( COND_TASK_FAILED );
 					GetNavigator()->SetArrivalDirection( m_hTargetObject->GetAbsAngles() );
 					TaskComplete();

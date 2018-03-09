@@ -275,7 +275,7 @@ void CDemoUIPanel::OnLoad() {
     }
   }
   if (m_hFileOpenDialog) {
-    char startPath[MAX_PATH];
+    char startPath[SOURCE_MAX_PATH];
     Q_strncpy(startPath, com_gamedir, sizeof(startPath));
     Q_FixSlashes(startPath);
     m_hFileOpenDialog->SetStartDirectory(startPath);
@@ -717,7 +717,7 @@ void CDemoUIPanel2::OnLoad() {
     }
   }
   if (m_hFileOpenDialog) {
-    char startPath[MAX_PATH];
+    char startPath[SOURCE_MAX_PATH];
     Q_strncpy(startPath, com_gamedir, sizeof(startPath));
     Q_FixSlashes(startPath);
     m_hFileOpenDialog->SetStartDirectory(startPath);

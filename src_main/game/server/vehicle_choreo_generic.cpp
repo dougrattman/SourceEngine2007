@@ -20,7 +20,7 @@
 #include "vehicle_choreo_generic_shared.h"
 #include "ai_utils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	VEHICLE_HITBOX_DRIVER		1
@@ -728,7 +728,7 @@ void CPropVehicleChoreoGeneric::InputEnterVehicle( inputdata_t &inputdata )
 	// Force us to drop anything we're holding
 	pPlayer->ForceDropOfCarriedPhysObjects();
 
-	// FIXME: I hate code like this. I should really add a parameter to HandlePassengerEntry
+	// TODO(d.rattman): I hate code like this. I should really add a parameter to HandlePassengerEntry
 	//		  to allow entry into locked vehicles
 	bool bWasLocked = m_bLocked;
 	m_bLocked = false;
@@ -845,7 +845,7 @@ void CChoreoGenericServerVehicle::ItemPostFrame( CBasePlayer *player )
 //-----------------------------------------------------------------------------
 void CChoreoGenericServerVehicle::GetVehicleViewPosition( int nRole, Vector *pAbsOrigin, QAngle *pAbsAngles, float *pFOV /*= NULL*/ )
 {
-	// FIXME: This needs to be reconciled with the other versions of this function!
+	// TODO(d.rattman): This needs to be reconciled with the other versions of this function!
 	Assert( nRole == VEHICLE_ROLE_DRIVER );
 	CBasePlayer *pPlayer = ToBasePlayer( GetDrivableVehicle()->GetDriver() );
 	Assert( pPlayer );

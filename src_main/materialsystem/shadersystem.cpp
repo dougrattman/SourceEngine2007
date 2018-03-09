@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -330,8 +330,8 @@ void CShaderSystem::LoadAllShaderDLLs() {
 
   char shader_dll_name[32];
   for (i = 6; i <= dx_support_level; ++i) {
-    Q_snprintf(shader_dll_name, ARRAYSIZE(shader_dll_name), "stdshader_dx%d",
-               i);
+    Q_snprintf(shader_dll_name, SOURCE_ARRAYSIZE(shader_dll_name),
+               "stdshader_dx%d", i);
     LoadShaderDLL(shader_dll_name);
   }
 
@@ -403,7 +403,8 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath) {
 #if defined(_WIN32) && !defined(_X360)
 // Instead of including windows.h
 extern "C" {
-extern void *__stdcall GetProcAddress(void *hModule, const char *pszProcName);
+extern void *SOURCE_STDCALL GetProcAddress(void *hModule,
+                                           const char *pszProcName);
 };
 #endif
 
@@ -491,7 +492,8 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath, const char *pPathID,
     return false;
   }
 
-  // FIXME: We need to do some sort of shader validation here for anticheat.
+  // TODO(d.rattman): We need to do some sort of shader validation here for
+  // anticheat.
 
   // Now replace any existing shader
   int nShaderDLLIndex = FindShaderDLL(pFullPath);
@@ -512,8 +514,8 @@ bool CShaderSystem::LoadShaderDLL(const char *pFullPath, const char *pPathID,
   // Add the shaders to the dictionary of shaders...
   SetupShaderDictionary(nShaderDLLIndex);
 
-  // FIXME: Fix up existing materials that were using shaders that have
-  // been reloaded?
+  // TODO(d.rattman): Fix up existing materials that were using shaders that
+  // have been reloaded?
 
   return true;
 }
@@ -535,7 +537,7 @@ int CShaderSystem::FindShaderDLL(const char *pFullPath) {
 void CShaderSystem::UnloadShaderDLL(int nShaderDLLIndex) {
   if (nShaderDLLIndex < 0) return;
 
-  // FIXME: Do some sort of fixup of materials to determine which
+  // TODO(d.rattman): Do some sort of fixup of materials to determine which
   // materials are referencing shaders in this DLL?
   CleanupShaderDictionary(nShaderDLLIndex);
   IShaderDLLInternal *pShaderDLL = m_ShaderDLLs[nShaderDLLIndex].m_pShaderDLL;
@@ -652,7 +654,7 @@ void CShaderSystem::CleanupShaderDictionary(int nShaderDLLIndex) {}
 // Finds a shader in the shader dictionary
 //-----------------------------------------------------------------------------
 IShader *CShaderSystem::FindShader(char const *pShaderName) {
-  // FIXME: What kind of search order should we use here?
+  // TODO(d.rattman): What kind of search order should we use here?
   // I'm currently assuming last added, first searched.
   for (int i = m_ShaderDLLs.Count(); --i >= 0;) {
     ShaderDLLInfo_t &info = m_ShaderDLLs[i];
@@ -1322,8 +1324,8 @@ void CShaderSystem::DrawElements(IShader *pShader, IMaterialVar **params,
     g_pShaderAPI->SetSkinningMatrices();
   }
 
-  // FIXME: need one conditional that we calculate once a frame for debug or not
-  // with everything debug under that.
+  // TODO(d.rattman): need one conditional that we calculate once a frame for
+  // debug or not with everything debug under that.
   if ((g_config.bMeasureFillRate || g_config.bVisualizeFillRate) &&
       ((materialVarFlags & MATERIAL_VAR_USE_IN_FILLRATE_MODE) == 0)) {
     DrawMeasureFillRate(pRenderState, mod, vertexCompression);
@@ -1536,7 +1538,7 @@ void CShaderSystem::DrawNormalMap(IShader *pShader, IMaterialVar **ppParams,
 bool CShaderSystem::DrawEnvmapMask(IShader *pShader, IMaterialVar **ppParams,
                                    ShaderRenderState_t *pRenderState,
                                    VertexCompressionType_t vertexCompression) {
-  // FIXME!  Make this work with fixed function.
+  // TODO(d.rattman): Make this work with fixed function.
   int vertexFormat = pRenderState->m_VertexFormat;
   bool bUsesVertexShader =
       (VertexFlags(vertexFormat) & VERTEX_FORMAT_VERTEX_SHADER) != 0;
@@ -1710,7 +1712,7 @@ void CShaderSystem::LoadBumpMap(IMaterialVar *pTextureVar,
   pTexture = TextureManager()->FindOrLoadTexture(pTextureVar->GetStringValue(),
                                                  pTextureGroupName);
 
-  // FIXME: Make a bumpmap error texture
+  // TODO(d.rattman): Make a bumpmap error texture
   if (!pTexture) {
     pTexture = TextureManager()->ErrorTexture();
   }
@@ -1741,17 +1743,17 @@ void CShaderSystem::LoadCubeMap(IMaterialVar **ppParams,
     SetFlags2(ppParams, MATERIAL_VAR2_USES_ENV_CUBEMAP);
   } else {
     ITextureInternal *pTexture;
-    char textureName[MAX_PATH];
-    Q_strncpy(textureName, pTextureVar->GetStringValue(), MAX_PATH);
+    char textureName[SOURCE_MAX_PATH];
+    Q_strncpy(textureName, pTextureVar->GetStringValue(), SOURCE_MAX_PATH);
     if (HardwareConfig()->GetHDRType() != HDR_TYPE_NONE) {
       // Overload the texture name to ".hdr.vtf" (instead of .vtf) if we are
       // running with HDR enabled.
-      Q_strncat(textureName, ".hdr", MAX_PATH, COPY_ALL_CHARACTERS);
+      Q_strncat(textureName, ".hdr", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
     }
     pTexture = TextureManager()->FindOrLoadTexture(textureName,
                                                    TEXTURE_GROUP_CUBE_MAP);
 
-    // FIXME: Make a cubemap error texture
+    // TODO(d.rattman): Make a cubemap error texture
     if (!pTexture) {
       pTexture = TextureManager()->ErrorTexture();
     }

@@ -284,7 +284,7 @@ static bool ShutdownExistingSteamProcess( const char *pSteamPath )
 bool CopyFilesRecursively( const char *pSrcPath, const char *pDestPath )
 {
 	// Create a file that makes steam not delete different DLLs
-	char pSearchStr[MAX_PATH];
+	char pSearchStr[SOURCE_MAX_PATH];
 	_snprintf( pSearchStr, sizeof(pSearchStr), "%s*", pSrcPath );
 
 	WIN32_FIND_DATA find;
@@ -309,8 +309,8 @@ bool CopyFilesRecursively( const char *pSrcPath, const char *pDestPath )
 		if ( !strcmp( find.cFileName, "." ) || !strcmp( find.cFileName, ".." ) )
 			continue;
 
-		char pSrcChildPath[MAX_PATH];
-		char pDestChildPath[MAX_PATH];
+		char pSrcChildPath[SOURCE_MAX_PATH];
+		char pDestChildPath[SOURCE_MAX_PATH];
 
 		// Deal with directories
 		if ( ( find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) && ( ( find.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ) == 0 ) )
@@ -355,11 +355,11 @@ bool CopyFilesRecursively( const char *pSrcPath, const char *pDestPath )
 static bool CopyFilesIntoPosition( const char *pSteamPath )
 {
 	// Create a file that makes steam not delete different DLLs
-	char pSteamRoot[MAX_PATH];
+	char pSteamRoot[SOURCE_MAX_PATH];
 	strncpy( pSteamRoot, pSteamPath, sizeof(pSteamRoot) );
 	StripFileName( pSteamRoot );
 
-	char pSrcRoot[MAX_PATH];
+	char pSrcRoot[SOURCE_MAX_PATH];
 	if ( !::GetModuleFileName( ( HINSTANCE )GetModuleHandle( NULL ), pSrcRoot, sizeof(pSrcRoot) ) )
 	{
 		printf( "Unable to find rpt launch path!\n" );
@@ -377,7 +377,7 @@ static bool CopyFilesIntoPosition( const char *pSteamPath )
 static bool LaunchNewSteamProcess( const char *pSteamPath )
 {
 	// Create a file that makes steam not delete different DLLs
-	char pCfgPath[MAX_PATH];
+	char pCfgPath[SOURCE_MAX_PATH];
 	strncpy( pCfgPath, pSteamPath, sizeof(pCfgPath) );
 	size_t nUsed = StripFileName( pCfgPath );
 	strncpy( &pCfgPath[nUsed], "steam.cfg", sizeof(pCfgPath) - nUsed );
@@ -431,7 +431,7 @@ int main( int argc, char **argv )
 	}
 
 	// Detect the currently running version of steam
-	char pSteamPath[MAX_PATH];
+	char pSteamPath[SOURCE_MAX_PATH];
 	if ( !DetectSteamPath( pSteamPath, sizeof(pSteamPath) ) )
 	{
 		printf( "rpt: Unable to detect steam installation path! Aborting...\n" );

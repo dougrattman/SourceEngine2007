@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #undef PROTECT_FILEIO_FUNCTIONS
-#ifndef _LINUX
+#ifndef OS_POSIX
 #undef fopen
 #endif
 #define FKG_FORCED_USAGE  // GetVersionInfo is deprecated, but we need it.
@@ -67,7 +67,6 @@
 #endif
 #include "zip/XZip.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #ifdef GetUserName
@@ -157,7 +156,7 @@ void DisplaySystemVersion(char *osversion, size_t maxlen) {
 
       // Display version, service pack (if any), and build number.
       char build[256];
-      Q_snprintf(build, ARRAYSIZE(build), "%s (Build %u) version %u.%u",
+      Q_snprintf(build, SOURCE_ARRAYSIZE(build), "%s (Build %u) version %u.%u",
                  osvi.szCSDVersion, osvi.dwBuildNumber, osvi.dwMajorVersion,
                  osvi.dwMinorVersion);
       Q_strncat(osversion, build, maxlen, COPY_ALL_CHARACTERS);
@@ -500,7 +499,7 @@ class CBugUIPanel : public vgui::Frame {
   bool m_bHidGameUIForSnapshot;
   int m_nSnapShotFrame;
 
-  char m_szVMFContentDirFullpath[MAX_PATH];
+  char m_szVMFContentDirFullpath[SOURCE_MAX_PATH];
 
   vgui::DHANDLE<vgui::FileOpenDialog> m_hFileOpenDialog;
   vgui::DHANDLE<vgui::DirectorySelectDialog> m_hDirectorySelectDialog;
@@ -1090,7 +1089,7 @@ void CBugUIPanel::OnIncludeFile() {
     }
   }
   if (m_hFileOpenDialog) {
-    char startPath[MAX_PATH];
+    char startPath[SOURCE_MAX_PATH];
     Q_strncpy(startPath, com_gamedir, sizeof(startPath));
     Q_FixSlashes(startPath);
     m_hFileOpenDialog->SetStartDirectory(startPath);
@@ -1442,33 +1441,33 @@ void CBugUIPanel::OnSubmit() {
   m_pBugReporter->StartNewBugReport();
 
   char temp[80];
-  m_pTitle->GetText(temp, sizeof(temp));
+  m_pTitle->GetText(temp, SOURCE_ARRAYSIZE(temp));
 
   if (host_state.worldmodel) {
     char mapname[256];
     CL_SetupMapName(modelloader->GetName(host_state.worldmodel), mapname,
-                    sizeof(mapname));
+                    SOURCE_ARRAYSIZE(mapname));
 
-    Q_snprintf(title, sizeof(title), "%s: %s", mapname, temp);
+    Q_snprintf(title, SOURCE_ARRAYSIZE(title), "%s: %s", mapname, temp);
   } else {
-    Q_snprintf(title, sizeof(title), "%s", temp);
+    Q_snprintf(title, SOURCE_ARRAYSIZE(title), "%s", temp);
   }
 
   Msg("title:  %s\n", title);
 
-  m_pDescription->GetText(desc, sizeof(desc));
+  m_pDescription->GetText(desc, SOURCE_ARRAYSIZE(desc));
 
   Msg("description:  %s\n", desc);
 
-  m_pLevelName->GetText(level, sizeof(level));
-  m_pPosition->GetText(position, sizeof(position));
-  m_pOrientation->GetText(orientation, sizeof(orientation));
-  m_pBuildNumber->GetText(build, sizeof(build));
+  m_pLevelName->GetText(level, SOURCE_ARRAYSIZE(level));
+  m_pPosition->GetText(position, SOURCE_ARRAYSIZE(position));
+  m_pOrientation->GetText(orientation, SOURCE_ARRAYSIZE(orientation));
+  m_pBuildNumber->GetText(build, SOURCE_ARRAYSIZE(build));
 
   if (g_pFileSystem->IsSteam()) {
-    Q_strncat(build, " (Steam)", sizeof(build), COPY_ALL_CHARACTERS);
+    Q_strncat(build, " (Steam)", SOURCE_ARRAYSIZE(build), COPY_ALL_CHARACTERS);
   } else {
-    Q_strncat(build, " (VSS)", sizeof(build), COPY_ALL_CHARACTERS);
+    Q_strncat(build, " (VSS)", SOURCE_ARRAYSIZE(build), COPY_ALL_CHARACTERS);
   }
 
   MaterialAdapterInfo_t info;
@@ -1481,7 +1480,7 @@ void CBugUIPanel::OnSubmit() {
         g_pMaterialSystemHardwareConfig->GetDXSupportLevel());
   }
 
-  Q_snprintf(driverinfo, sizeof(driverinfo),
+  Q_snprintf(driverinfo, SOURCE_ARRAYSIZE(driverinfo),
              "Driver Name:  %s\nVendorId / DeviceId:  0x%x / 0x%x\nSubSystem / "
              "Rev:  0x%x / 0x%x\nDXLevel:  %s\nVid:  %i x %i\nFramerate:  %.3f",
              info.m_pDriverName, info.m_VendorID, info.m_DeviceID,
@@ -1489,7 +1488,7 @@ void CBugUIPanel::OnSubmit() {
              videomode->GetModeWidth(), videomode->GetModeHeight(),
              g_fFramesPerSecond);
 
-  Msg("%s", driverinfo);
+  Msg("%s\n", driverinfo);
 
   int latency = 0;
   if (cl.m_NetChannel) {
@@ -1665,7 +1664,7 @@ void CBugUIPanel::OnSubmit() {
   m_pBugReporter->SetDXVersion(vHigh, vLow, info.m_VendorID, info.m_DeviceID);
 
   char osversion[256];
-  DisplaySystemVersion(osversion, ARRAYSIZE(osversion));
+  DisplaySystemVersion(osversion, SOURCE_ARRAYSIZE(osversion));
   m_pBugReporter->SetOSVersion(osversion);
 
   m_pBugReporter->ResetIncludedFiles();
@@ -1834,7 +1833,7 @@ void CBugUIPanel::OnFinishBugReport() {
       }
     }
   } else {
-    Warning("Unable to post bug report to database\n");
+    Warning("Unable to post bug report to database.\n");
   }
 
   if (!success) {
@@ -2525,7 +2524,7 @@ int CBugUIPanel::GetArea() {
   gamedir = Q_strrchr(gamedir, '\\') + 1;
 
   for (int i = 0; i < m_pBugReporter->GetAreaMapCount(); i++) {
-    char szAreaMap[MAX_PATH];
+    char szAreaMap[SOURCE_MAX_PATH];
     Q_strcpy(szAreaMap, m_pBugReporter->GetAreaMap(i));
     char *pszAreaDir = Q_strrchr(szAreaMap, '@');
     char *pszAreaPrefix = Q_strrchr(szAreaMap, '%');
@@ -2541,7 +2540,7 @@ int CBugUIPanel::GetArea() {
       return 0;
     }
 
-    char szDirectory[MAX_PATH];
+    char szDirectory[SOURCE_MAX_PATH];
     Q_memmove(szDirectory, pszAreaDir, iDirLength);
     szDirectory[iDirLength] = 0;
 

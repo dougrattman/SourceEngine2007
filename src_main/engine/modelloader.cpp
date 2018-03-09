@@ -54,7 +54,7 @@
 #include "tier2/tier2.h"
 #include "vphysics_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar mat_loadtextures("mat_loadtextures", "1", FCVAR_CHEAT);
@@ -98,7 +98,7 @@ static CUtlVector<dgamelump_t> g_GameLumpDict;
 static char g_GameLumpFilename[128];
 static void *g_pGameLumpData;
 
-// FIXME/TODO:  Right now Host_FreeToLowMark unloads all models including studio
+// TODO(d.rattman): Right now Host_FreeToLowMark unloads all models including studio
 //  models that have Cache_Alloc data, too.  This needs to be fixed before
 //  shipping
 
@@ -337,7 +337,7 @@ void CMapLoadHelper::Init(model_t *pMapModel, const char *loadname) {
     Q_strncpy(s_szMapName, pMapModel->szName, sizeof(s_szMapName));
   }
 
-  char szNameOnDisk[MAX_PATH];
+  char szNameOnDisk[SOURCE_MAX_PATH];
   GetMapNameOnDisk(szNameOnDisk, s_szMapName, sizeof(szNameOnDisk));
   s_MapFileHandle = g_pFileSystem->OpenEx(szNameOnDisk, "rb",
                                           IsX360() ? FSOPEN_NEVERINPACK : 0,
@@ -382,9 +382,9 @@ void CMapLoadHelper::Init(model_t *pMapModel, const char *loadname) {
     // Now find and open our lump files, and create the master list of them.
     for (int iIndex = 0; iIndex < MAX_LUMPFILES; iIndex++) {
       lumpfileheader_t lumpHeader;
-      char lumpfilename[MAX_PATH];
+      char lumpfilename[SOURCE_MAX_PATH];
 
-      GenerateLumpFileName(s_szMapName, lumpfilename, MAX_PATH, iIndex);
+      GenerateLumpFileName(s_szMapName, lumpfilename, SOURCE_MAX_PATH, iIndex);
       if (!g_pFileSystem->FileExists(lumpfilename)) break;
 
       // Open the lump file
@@ -440,7 +440,7 @@ void CMapLoadHelper::InitFromMemory(model_t *pMapModel, const void *pData,
   Q_strncpy(s_szMapName, pMapModel->szName, sizeof(s_szMapName));
   V_FileBase(s_szMapName, s_szLoadName, sizeof(s_szLoadName));
 
-  char szNameOnDisk[MAX_PATH];
+  char szNameOnDisk[SOURCE_MAX_PATH];
   GetMapNameOnDisk(szNameOnDisk, s_szMapName, sizeof(szNameOnDisk));
 
   s_MapBuffer.SetExternalBuffer((void *)pData, nDataSize, nDataSize);
@@ -611,7 +611,7 @@ CMapLoadHelper::CMapLoadHelper(int lumpToLoad) {
     m_nLumpVersion = s_MapLumpFiles[lumpToLoad].header.lumpVersion;
 
     // Store off the lump file name
-    GenerateLumpFileName(s_szLoadName, m_szLumpFilename, MAX_PATH,
+    GenerateLumpFileName(s_szLoadName, m_szLumpFilename, SOURCE_MAX_PATH,
                          s_MapLumpFiles[lumpToLoad].lumpfileindex);
   }
 
@@ -1990,7 +1990,7 @@ void Mod_LoadLeafWaterData(void) {
 //-----------------------------------------------------------------------------
 void Mod_LoadCubemapSamples(void) {
   char textureName[512];
-  char loadName[MAX_PATH];
+  char loadName[SOURCE_MAX_PATH];
   dcubemapsample_t *in;
   mcubemapsample_t *out;
   int count, i;
@@ -2088,7 +2088,7 @@ void Mod_LoadLeafMinDistToWater(void) {
   int i;
   bool foundOne = false;
   for (i = 0; i < (int)(lh.LumpSize() / sizeof(*pTmp)); i++) {
-    if (pTmp[i] != 65535)  // FIXME: make a marcro for this.
+    if (pTmp[i] != 65535)  // TODO(d.rattman): make a marcro for this.
     {
       foundOne = true;
       break;
@@ -2328,7 +2328,7 @@ bool Mod_LoadGameLump(int lumpId, void *pOutBuffer, int size) {
     }
   } else {
     // Load file into buffer
-    char szNameOnDisk[MAX_PATH];
+    char szNameOnDisk[SOURCE_MAX_PATH];
     GetMapNameOnDisk(szNameOnDisk, g_GameLumpFilename, sizeof(szNameOnDisk));
     FileHandle_t fileHandle = g_pFileSystem->Open(szNameOnDisk, "rb");
     if (fileHandle == FILESYSTEM_INVALID_HANDLE) {
@@ -2366,7 +2366,7 @@ bool Mod_LoadGameLump(int lumpId, void *pOutBuffer, int size) {
 void Mod_LoadGameLumpDict(void) {
   CMapLoadHelper lh(LUMP_GAME_LUMP);
 
-  // FIXME: This is brittle. If we ever try to load two game lumps
+  // TODO(d.rattman): This is brittle. If we ever try to load two game lumps
   // (say, in multiple BSP files), the dictionary info I store here will get
   // whacked
 
@@ -2476,7 +2476,7 @@ void CMDLCacheNotify::ComputeModelFlags(model_t *pModel, MDLHandle_t handle) {
 
   IMaterial *materials[128];
   int materialCount =
-      Mod_GetModelMaterials(pModel, ARRAYSIZE(materials), materials);
+      Mod_GetModelMaterials(pModel, SOURCE_ARRAYSIZE(materials), materials);
 
   for (int i = 0; i < materialCount; ++i) {
     IMaterial *pMaterial = materials[i];
@@ -2540,7 +2540,7 @@ void CMDLCacheNotify::OnDataLoaded(MDLCacheDataType_t type,
 
   switch (type) {
     case MDLCACHE_STUDIOHDR: {
-      // FIXME: This code only works because it assumes StudioHdr
+      // TODO(d.rattman): This code only works because it assumes StudioHdr
       // is loaded before VCollide.
       SetBoundsFromStudioHdr(pModel, handle);
     } break;
@@ -2622,12 +2622,12 @@ class CResourcePreloadModel : public CResourcePreload {
 
         // 360 reads its specialized bsp into memory,
         // up to the pack lump, which is guranateed last
-        char szLoadName[MAX_PATH];
+        char szLoadName[SOURCE_MAX_PATH];
         V_FileBase(pMapModel->szName, szLoadName, sizeof(szLoadName));
         CMapLoadHelper::Init(pMapModel, szLoadName);
         int nBytesToRead = CMapLoadHelper::LumpOffset(LUMP_PAKFILE);
         CMapLoadHelper::Shutdown();
-        char szNameOnDisk[MAX_PATH];
+        char szNameOnDisk[SOURCE_MAX_PATH];
         GetMapNameOnDisk(szNameOnDisk, pMapModel->szName, sizeof(szNameOnDisk));
 
         // create a loader job to perform i/o operation to mount the .bsp
@@ -2656,7 +2656,7 @@ class CResourcePreloadModel : public CResourcePreload {
     } else if (modType == mod_studio) {
       MEM_ALLOC_CREDIT_("CResourcePreloadModel(MDL)");
 
-      char szFilename[MAX_PATH];
+      char szFilename[SOURCE_MAX_PATH];
       V_ComposeFileName("models", pName, szFilename, sizeof(szFilename));
 
       // find model or create empty entry
@@ -3040,14 +3040,14 @@ model_t *CModelLoader::LoadModel(model_t *mod, REFERENCETYPE *pReferencetype) {
       // it's called twice. The second invocation is harmless. Add to file
       // system before loading so referenced objects in map can use the
       // filename.
-      char szNameOnDisk[MAX_PATH];
+      char szNameOnDisk[SOURCE_MAX_PATH];
       GetMapNameOnDisk(szNameOnDisk, mod->szName, sizeof(szNameOnDisk));
       g_pFileSystem->AddSearchPath(szNameOnDisk, "GAME", PATH_ADD_TO_HEAD);
 
       // the map may have explicit texture exclusion
       // the texture state needs to be established before any loading work
       if (IsX360() || mat_excludetextures.GetBool()) {
-        char szExcludePath[MAX_PATH];
+        char szExcludePath[SOURCE_MAX_PATH];
         sprintf(szExcludePath, "//MOD/maps/%s_exclude.lst", m_szLoadName);
         g_pMaterialSystem->SetExcludedTextures(szExcludePath);
       }
@@ -3110,7 +3110,7 @@ static void BuildSpriteLoadName(const char *pName, char *pOut, int outLen,
       Q_strncpy(pOut, pName, outLen);
     }
   } else {
-    char szBase[MAX_PATH];
+    char szBase[SOURCE_MAX_PATH];
     Q_FileBase(pName, szBase, sizeof(szBase));
     Q_snprintf(pOut, outLen, "sprites/%s", szBase);
   }
@@ -3129,8 +3129,8 @@ int CModelLoader::GetModelFileSize(char const *name) {
 
   int size = -1;
   if (Q_stristr(model->szName, ".spr") || Q_stristr(model->szName, ".vmt")) {
-    char spritename[MAX_PATH];
-    Q_StripExtension(va("materials/%s", model->szName), spritename, MAX_PATH);
+    char spritename[SOURCE_MAX_PATH];
+    Q_StripExtension(va("materials/%s", model->szName), spritename, SOURCE_MAX_PATH);
     Q_DefaultExtension(spritename, ".vmt", sizeof(spritename));
 
     size = COM_FileSize(spritename);
@@ -3203,7 +3203,7 @@ void CModelLoader::ReloadFilesInList(IFileList *pFilesToReload) {
           // have changed.
           IMaterial *pMaterials[128];
           int nMaterials = g_pStudioRender->GetMaterialList(
-              pStudioHdr, ARRAYSIZE(pMaterials), &pMaterials[0]);
+              pStudioHdr, SOURCE_ARRAYSIZE(pMaterials), &pMaterials[0]);
 
           for (int i = 0; i < nMaterials; i++) {
             if (pMaterials[i] && pMaterials[i]->WasReloadedFromWhitelist()) {
@@ -3372,7 +3372,7 @@ void Mod_RecomputeTranslucency(model_t *mod, int nSkin, int nBody,
 
       IMaterial *pMaterials[128];
       int materialCount = g_pStudioRender->GetMaterialListFromBodyAndSkin(
-          mod->studio, nSkin, nBody, ARRAYSIZE(pMaterials), pMaterials);
+          mod->studio, nSkin, nBody, SOURCE_ARRAYSIZE(pMaterials), pMaterials);
       for (int i = 0; i < materialCount; i++) {
         if (pMaterials[i] != NULL) {
           // Bind material first so all material proxies execute
@@ -3417,7 +3417,7 @@ int Mod_GetMaterialCount(model_t *mod) {
     } break;
 
     case mod_studio: {
-      // FIXME: This should return the list of all materials
+      // TODO(d.rattman): This should return the list of all materials
       // across all LODs if we every decide to implement this
       Assert(0);
     } break;
@@ -3501,7 +3501,7 @@ static void MarkWaterSurfaces_ProcessLeafNode(mleaf_t *pLeaf) {
     MSurf_Flags(surfID) |= flags;
   }
 
-  // FIXME: This is somewhat bogus, but I can do it quickly, and it's
+  // TODO(d.rattman): This is somewhat bogus, but I can do it quickly, and it's
   // not clear I need to solve the harder problem.
 
   // If any portion of a displacement surface hits a water surface,
@@ -3975,7 +3975,7 @@ static void GetSpriteInfo(const char *pName, bool bIsAVI, bool bIsBIK,
   nFrameCount = 1;
   nWidth = nHeight = 1;
 
-  // FIXME: The reason we are putting logic related to AVIs here,
+  // TODO(d.rattman): The reason we are putting logic related to AVIs here,
   // logic which is duplicated in the client DLL related to loading sprites,
   // is that this code gets run on dedicated servers also.
   IMaterial *pMaterial = NULL;
@@ -4047,9 +4047,9 @@ void CModelLoader::Sprite_LoadModel(model_t *mod) {
   mod->mins = mod->maxs = Vector(0, 0, 0);
 
   // Figure out the real load name..
-  char loadName[MAX_PATH];
+  char loadName[SOURCE_MAX_PATH];
   bool bIsAVI, bIsBIK;
-  BuildSpriteLoadName(mod->szName, loadName, MAX_PATH, bIsAVI, bIsBIK);
+  BuildSpriteLoadName(mod->szName, loadName, SOURCE_MAX_PATH, bIsAVI, bIsBIK);
   GetSpriteInfo(loadName, bIsAVI, bIsBIK, mod->sprite.width, mod->sprite.height,
                 mod->sprite.numframes);
 
@@ -4067,7 +4067,7 @@ void CModelLoader::Sprite_UnloadModel(model_t *mod) {
   Assert(!(mod->nLoadFlags & FMODELLOADER_REFERENCEMASK));
   mod->nLoadFlags &= ~FMODELLOADER_LOADED;
 
-  char loadName[MAX_PATH];
+  char loadName[SOURCE_MAX_PATH];
   bool bIsAVI, bIsBIK;
   BuildSpriteLoadName(mod->szName, loadName, sizeof(loadName), bIsAVI, bIsBIK);
 
@@ -4249,7 +4249,7 @@ void CModelLoader::Studio_LoadModel(model_t *pModel, bool bTouchAllData) {
 
   IMaterial *pMaterials[128];
   int nMaterials = g_pStudioRender->GetMaterialList(
-      pStudioHdr, ARRAYSIZE(pMaterials), &pMaterials[0]);
+      pStudioHdr, SOURCE_ARRAYSIZE(pMaterials), &pMaterials[0]);
   for (int i = 0; i < nMaterials; i++) {
     // Up the reference to all of this model's materials (decremented during
     // UnloadModel) otherwise the post-load purge will discard materials whose
@@ -4279,7 +4279,7 @@ void CModelLoader::Studio_UnloadModel(model_t *pModel) {
     // remove the added reference to all of this model's materials
     IMaterial *pMaterials[128];
     int nMaterials =
-        Mod_GetModelMaterials(pModel, ARRAYSIZE(pMaterials), &pMaterials[0]);
+        Mod_GetModelMaterials(pModel, SOURCE_ARRAYSIZE(pMaterials), &pMaterials[0]);
     for (int j = 0; j < nMaterials; j++) {
       pMaterials[j]->DecrementReferenceCount();
     }
@@ -4488,8 +4488,8 @@ bool CModelLoader::Map_IsValid(char const *pBaseMapName) {
   }
 
   FileHandle_t mapfile;
-  char mapname[MAX_PATH];
-  V_snprintf(mapname, ARRAYSIZE(mapname), "maps/%s.bsp", pBaseMapName);
+  char mapname[SOURCE_MAX_PATH];
+  V_snprintf(mapname, SOURCE_ARRAYSIZE(mapname), "maps/%s.bsp", pBaseMapName);
 
   mapfile = g_pFileSystem->OpenEx(mapname, "rb", 0, "GAME");
   if (mapfile != FILESYSTEM_INVALID_HANDLE) {
@@ -4578,7 +4578,7 @@ void CModelLoader::UnloadModel(model_t *pModel) {
       Map_UnloadModel(pModel);
 
       // Remove from file system
-      char szNameOnDisk[MAX_PATH];
+      char szNameOnDisk[SOURCE_MAX_PATH];
       GetMapNameOnDisk(szNameOnDisk, pModel->szName, sizeof(szNameOnDisk));
       g_pFileSystem->RemoveSearchPath(szNameOnDisk, "GAME");
 

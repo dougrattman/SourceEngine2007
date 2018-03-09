@@ -10,7 +10,7 @@ class KeyValues;
 // This interface is actually exported by the shader API DLL.
 #define DEBUG_TEXTURE_INFO_VERSION "DebugTextureInfo001"
 
-abstract_class IDebugTextureInfo {
+the_interface IDebugTextureInfo {
  public:
   // Use this to turn on the mode where it builds the debug texture list.
   // At the end of the next frame, GetDebugTextureList() will return a valid

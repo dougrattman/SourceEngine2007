@@ -272,7 +272,7 @@ MDLViewer::MDLViewer() : mxWindow(0, 0, 0, 0, 0, g_appTitle, mxWindow::Normal) {
 
   LoadViewerRootSettings();
 
-  // FIXME: where do I actually find the domain size of the viewport, especially
+  // TODO(d.rattman): where do I actually find the domain size of the viewport, especially
   // for multi-monitor try to catch weird initialization error
   if (g_viewerSettings.xpos < -16384) g_viewerSettings.xpos = 20;
   if (g_viewerSettings.ypos < -16384) g_viewerSettings.ypos = 20;
@@ -315,7 +315,7 @@ void MDLViewer::Refresh(void) {
   g_pStudioModel->ReleaseStudioModel();
   g_pMDLCache->Flush();
   if (recentFiles[0][0] != '\0') {
-    char szFile[MAX_PATH];
+    char szFile[SOURCE_MAX_PATH];
     strcpy(szFile, recentFiles[0]);
     g_pMaterialSystem->ReloadMaterials();
     d_cpl->loadModel(szFile);
@@ -437,7 +437,7 @@ void MDLViewer::DumpText(const char *pszFile) {
 const char *MDLViewer::SteamGetOpenFilename() {
   if (!g_FSDialogFactory) return NULL;
 
-  static char filename[MAX_PATH];
+  static char filename[SOURCE_MAX_PATH];
 
   IFileSystemOpenDialog *pDlg;
   pDlg = (IFileSystemOpenDialog *)g_FSDialogFactory(
@@ -502,7 +502,7 @@ int MDLViewer::handleEvent(mxEvent *event) {
         } break;
 
         case IDC_FILE_UNLOADMERGEDMODEL: {
-          // FIXME: move to d_cpl
+          // TODO(d.rattman): move to d_cpl
           if (g_pStudioExtraModel[0]) {
             strcpy(g_viewerSettings.mergeModelFile[0], "");
             g_pStudioExtraModel[0]->FreeModel(false);
@@ -909,7 +909,7 @@ int CHLModelViewerApp::Main() {
   }
 
   if (pMdlName && Q_stristr(pMdlName, ".mdl")) {
-    char absPath[MAX_PATH];
+    char absPath[SOURCE_MAX_PATH];
     Q_MakeAbsolutePath(absPath, sizeof(absPath), pMdlName);
 
     if (CommandLine()->FindParm("-screenshot")) {

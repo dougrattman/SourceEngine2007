@@ -1,10 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+
 #include <stdio.h>
 #include "hlfaceposer.h"
 #include "RampTool.h"
@@ -2372,8 +2367,7 @@ void RampTool::OnEdgeProperties()
 	PostDataChanged( undotext );
 }
 
-void RampTool::GetWorkList( bool reflect, CUtlVector< RampTool * >& list )
+void RampTool::GetWorkList([[maybe_unused]] bool reflect, CUtlVector< RampTool * >& list )
 {
-	NOTE_UNUSED( reflect );
 	list.AddToTail( this );
 }

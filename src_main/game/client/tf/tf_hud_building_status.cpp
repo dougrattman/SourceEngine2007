@@ -25,7 +25,7 @@
 #include "c_obj_teleporter.h"
 #include "c_obj_sapper.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class C_ObjectSentrygun;

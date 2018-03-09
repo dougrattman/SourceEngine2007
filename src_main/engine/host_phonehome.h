@@ -5,7 +5,7 @@
 
 #include "tier1/interface.h"
 
-abstract_class IPhoneHome {
+the_interface IPhoneHome {
  public:
   enum {
     PHONE_MSG_UNKNOWN = 0,

@@ -17,7 +17,7 @@
 #include "toolframework/itoolframework.h"
 #include "toolframework_client.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -373,7 +373,7 @@ bool C_BaseCombatWeapon::ShouldDraw( void )
 	if ( m_iWorldModelIndex == 0 )
 		return false;
 
-	// FIXME: All weapons with owners are set to transmit in CBaseCombatWeapon::UpdateTransmitState,
+	// TODO(d.rattman): All weapons with owners are set to transmit in CBaseCombatWeapon::UpdateTransmitState,
 	// even if they have EF_NODRAW set, so we have to check this here. Ideally they would never
 	// transmit except for the weapons owned by the local player.
 	if ( IsEffectActive( EF_NODRAW ) )
@@ -411,7 +411,7 @@ bool C_BaseCombatWeapon::ShouldDraw( void )
 		return bIsActive;
 	}
 
-	// FIXME: We may want to only show active weapons on NPCs
+	// TODO(d.rattman): We may want to only show active weapons on NPCs
 	// These are carried by AIs; always show them
 	return true;
 }
@@ -477,7 +477,7 @@ void C_BaseCombatWeapon::EnsureCorrectRenderingModel()
 	}
 
 	// BRJ 10/14/02
-	// FIXME: Remove when Yahn's client-side prediction is done
+	// TODO(d.rattman): Remove when Yahn's client-side prediction is done
 	// It's a hacky workaround for the model indices fighting
 	// (GetRenderBounds uses the model index, which is for the view model)
 	SetModelIndex( GetWorldModelIndex() );

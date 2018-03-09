@@ -559,13 +559,13 @@ class CUtlIntrusiveList {
  public:
   T *m_pHead;
 
-  FORCEINLINE CUtlIntrusiveList(void) { m_pHead = NULL; }
+  SOURCE_FORCEINLINE CUtlIntrusiveList(void) { m_pHead = NULL; }
 
-  FORCEINLINE void AddToHead(T *node) {
+  SOURCE_FORCEINLINE void AddToHead(T *node) {
     IntrusiveList::AddToHead(m_pHead, node);
   }
 
-  FORCEINLINE void AddToTail(T *node) {
+  SOURCE_FORCEINLINE void AddToTail(T *node) {
     IntrusiveList::AddToTail(m_pHead, node);
   }
 
@@ -604,10 +604,10 @@ class CUtlIntrusiveList {
 template <class T>
 class CUtlIntrusiveDList : public CUtlIntrusiveList<T> {
  public:
-  FORCEINLINE void AddToHead(T *node) {
+  SOURCE_FORCEINLINE void AddToHead(T *node) {
     IntrusiveList::AddToDHead(CUtlIntrusiveList<T>::m_pHead, node);
   }
-  FORCEINLINE void AddToTail(T *node) {
+  SOURCE_FORCEINLINE void AddToTail(T *node) {
     IntrusiveList::AddToDTail(CUtlIntrusiveList<T>::m_pHead, node);
   }
 

@@ -1,8 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Memory allocation!
 
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
+
+#include "tier0/include/memalloc.h"
 
 #include <malloc.h>
 #include <climits>
@@ -10,14 +12,18 @@
 #include <map>
 #include <set>
 
+#include "base/include/compiler_specific.h"
 #include "mem_helpers.h"
-#include "tier0/include/compiler_specific_macroses.h"
 #include "tier0/include/dbg.h"
-#include "tier0/include/memalloc.h"
+#include "tier0/include/fasttimer.h"
 #include "tier0/include/threadtools.h"
 
 #ifdef OS_WIN
 #include <crtdbg.h>
+
+#ifndef SOURCE_MEM_NORMAL_BLOCK
+#define SOURCE_MEM_NORMAL_BLOCK _NORMAL_BLOCK
+#endif
 #endif
 
 #if (defined(NDEBUG) && defined(USE_MEM_DEBUG))
@@ -49,7 +55,7 @@ static ch s_szStatsComment[256];
 #pragma comment(lib, "Dbghelp.lib")
 
 #pragma auto_inline(off)
-__declspec(naked) DWORD GetEIP() {
+MSVC_NAKED DWORD GetEIP() {
   __asm
   {
 		mov eax, [ebp + 4]
@@ -254,8 +260,9 @@ inline void *InternalMalloc(usize nSize, const ch *pFileName, i32 nLine) {
   pInternalMem->m_pFileName = pFileName;
   pInternalMem->m_nLineNumber = nLine;
 #else
-  pInternalMem = (DbgMemHeader_t *)_malloc_dbg(nSize + sizeof(DbgMemHeader_t),
-                                               _NORMAL_BLOCK, pFileName, nLine);
+  pInternalMem =
+      (DbgMemHeader_t *)_malloc_dbg(nSize + sizeof(DbgMemHeader_t),
+                                    SOURCE_MEM_NORMAL_BLOCK, pFileName, nLine);
   if (!pInternalMem) return nullptr;
 #endif
 
@@ -277,8 +284,8 @@ inline void *InternalRealloc(void *pMem, usize nNewSize, const ch *pFileName,
   pInternalMem->m_nLineNumber = nLine;
 #else
   pInternalMem = (DbgMemHeader_t *)_realloc_dbg(
-      pInternalMem, nNewSize + sizeof(DbgMemHeader_t), _NORMAL_BLOCK, pFileName,
-      nLine);
+      pInternalMem, nNewSize + sizeof(DbgMemHeader_t), SOURCE_MEM_NORMAL_BLOCK,
+      pFileName, nLine);
   if (!pInternalMem) return nullptr;
 #endif
 
@@ -293,7 +300,7 @@ inline void InternalFree(void *pMem) {
 #ifdef NDEBUG
   free(pInternalMem);
 #else
-  _free_dbg(pInternalMem, _NORMAL_BLOCK);
+  _free_dbg(pInternalMem, SOURCE_MEM_NORMAL_BLOCK);
 #endif
 }
 
@@ -305,7 +312,8 @@ inline usize InternalMSize(void *pMem) {
 #ifdef NDEBUG
   return _msize(pInternalMem) - sizeof(DbgMemHeader_t);
 #else
-  return _msize_dbg(pInternalMem, _NORMAL_BLOCK) - sizeof(DbgMemHeader_t);
+  return _msize_dbg(pInternalMem, SOURCE_MEM_NORMAL_BLOCK) -
+         sizeof(DbgMemHeader_t);
 #endif
 #endif  // OS_POSIX
 }
@@ -330,7 +338,7 @@ class CNoRecurseAllocator {
   typedef T &reference;
   typedef const T &const_reference;
   typedef std::size_t size_type;
-  typedef std::isize difference_type;
+  typedef std::ptrdiff_t difference_type;
 
   CNoRecurseAllocator() {}
   CNoRecurseAllocator(const CNoRecurseAllocator &) {}
@@ -420,7 +428,7 @@ class CDbgMemAlloc : public IMemAlloc {
   virtual i32 CrtSetDbgFlag(i32 nNewFlag);
   virtual void CrtMemCheckpoint(_CrtMemState *pState);
 
-  // FIXME: Remove when we have our own allocator
+  // TODO(d.rattman): Remove when we have our own allocator
   virtual void *CrtSetReportFile(i32 nRptType, void *hFile);
   virtual void *CrtSetReportHook(void *pfnNewHook);
   virtual i32 CrtDbgReport(i32 nRptType, const ch *szFile, i32 nLine,
@@ -505,18 +513,17 @@ class CDbgMemAlloc : public IMemAlloc {
   // is a client of this library; want to avoid circular dependency
 
   // Maps file name to info
-  typedef std::map<
-      MemInfoKey_t, MemInfo_t, std::less<MemInfoKey_t>,
-      CNoRecurseAllocator<std::pair<const MemInfoKey_t, MemInfo_t> > >
-      StatMap_t;
-  typedef StatMap_t::iterator StatMapIter_t;
-  typedef StatMap_t::value_type StatMapEntry_t;
+  using StatMap_t =
+      std::map<MemInfoKey_t, MemInfo_t, std::less<MemInfoKey_t>,
+               CNoRecurseAllocator<std::pair<const MemInfoKey_t, MemInfo_t> > >;
+  using StatMapIter_t = StatMap_t::iterator;
+  using StatMapEntry_t = StatMap_t::value_type;
 
-  typedef std::set<const ch *, CStringLess, CNoRecurseAllocator<const ch *> >
-      Filenames_t;
+  using Filenames_t =
+      std::set<const ch *, CStringLess, CNoRecurseAllocator<const ch *> >;
 
   // Heap reporting method
-  typedef void (*HeapReportFunc_t)(ch const *pFormat, ...);
+  using HeapReportFunc_t = void (*)(ch const *pFormat, ...);
 
  private:
   // Returns the actual debug info
@@ -541,7 +548,7 @@ class CDbgMemAlloc : public IMemAlloc {
   const ch *GetAllocatonFileName(void *pMem);
   i32 GetAllocatonLineNumber(void *pMem);
 
-  // FIXME: specify a spew output func for dumping stats
+  // TODO(d.rattman): specify a spew output func for dumping stats
   // Stat output
   void DumpMemInfo(const ch *pAllocationName, i32 line, const MemInfo_t &info);
   void DumpFileStats();
@@ -648,7 +655,7 @@ void *CDbgMemAlloc::Alloc(usize nSize) {
                   i32 x = 3;
           }
   */
-  ch szModule[MAX_PATH];
+  ch szModule[SOURCE_MAX_PATH];
   if (GetCallerModule(szModule)) {
     return Alloc(nSize, szModule, 0);
   } else {
@@ -668,8 +675,8 @@ void *CDbgMemAlloc::Realloc(void *pMem, usize nSize) {
                   i32 x = 3;
           }
   */
-  // FIXME: Should these gather stats?
-  ch szModule[MAX_PATH];
+  // TODO(d.rattman): Should these gather stats?
+  ch szModule[SOURCE_MAX_PATH];
   if (GetCallerModule(szModule)) {
     return Realloc(pMem, nSize, szModule, 0);
   } else {
@@ -679,7 +686,7 @@ void *CDbgMemAlloc::Realloc(void *pMem, usize nSize) {
 }
 
 void CDbgMemAlloc::Free(void *pMem) {
-  // FIXME: Should these gather stats?
+  // TODO(d.rattman): Should these gather stats?
   Free(pMem, g_pszUnknown, 0);
   //	free( pMem );
 }
@@ -969,7 +976,8 @@ usize CDbgMemAlloc::GetSize(void *pMem) {
   return pMem ? InternalMSize(pMem) : CalcHeapUsed();
 }
 
-// FIXME: Remove when we make our own heap! Crt stuff we're currently using
+// TODO(d.rattman): Remove when we make our own heap! Crt stuff we're currently
+// using
 
 long CDbgMemAlloc::CrtSetBreakAlloc(long lNewBreakAlloc) {
 #ifdef OS_POSIX
@@ -1033,7 +1041,7 @@ void CDbgMemAlloc::CrtMemCheckpoint(_CrtMemState *pState) {
 #endif
 }
 
-// FIXME: Remove when we have our own allocator
+// TODO(d.rattman): Remove when we have our own allocator
 void *CDbgMemAlloc::CrtSetReportFile(i32 nRptType, void *hFile) {
 #ifdef OS_POSIX
   return 0;
@@ -1112,7 +1120,7 @@ void CDbgMemAlloc::DumpFileStats() {
 void CDbgMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
   HEAP_LOCK();
 
-  ch szFileName[MAX_PATH];
+  ch szFileName[SOURCE_MAX_PATH];
   static i32 s_FileCount = 0;
   if (m_OutputFunc == DefaultHeapReportFunc) {
     const ch *pPath = "";

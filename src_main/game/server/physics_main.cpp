@@ -1,14 +1,12 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Physics simulation for non-havok/ipion objects
-//
-// $NoKeywords: $
 
 #include "cbase.h"
 
 #ifdef _WIN32
 #include "typeinfo.h"
-#elif _LINUX
+#elif OS_POSIX
 #include <typeinfo>
 #else
 #error "need typeinfo defined"
@@ -31,13 +29,10 @@
 #include "vphysics_interface.h"
 #include "vphysicsupdateai.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 extern ConVar think_limit;
-#ifdef _XBOX
 ConVar vprof_think_limit("vprof_think_limit", "0");
-#endif
 
 ConVar vprof_scope_entity_thinks("vprof_scope_entity_thinks", "0");
 ConVar vprof_scope_entity_gamephys("vprof_scope_entity_gamephys", "0");
@@ -50,7 +45,7 @@ static void Physics_TraceEntity(CBaseEntity *pBaseEntity,
                                 const Vector &vecAbsStart,
                                 const Vector &vecAbsEnd, unsigned int mask,
                                 trace_t *ptr) {
-  // FIXME: I really am not sure the best way of doing this
+  // TODO(d.rattman): I really am not sure the best way of doing this
   // The TraceHull code below for shots will make sure the object passes
   // through shields which do not block that damage type. It will also
   // send messages to the shields that they've been hit.
@@ -394,7 +389,7 @@ bool CPhysicsPushedEntities::SpeculativelyCheckPush(PhysicsPushedInfo_t &info,
   }
 
   // Check to see if we're still blocked by the pushers
-  // FIXME: If the trace fraction == 0 can we early out also?
+  // TODO(d.rattman): If the trace fraction == 0 can we early out also?
   info.m_bBlocked = !IsPushedPositionValid(pBlocker);
 
   if (!info.m_bBlocked) return true;
@@ -466,9 +461,10 @@ void CPhysicsPushedEntities::FinishPushers() {
     PhysicsPusherInfo_t &info = m_rgPusher[i];
 
     // Cause touch functions to be called
-    // FIXME: Need to make moved entities not touch triggers until we know we're
-    // ok
-    // FIXME: it'd be better for the engine to just have a touch method
+    // TODO(d.rattman): Need to make moved entities not touch triggers until we
+    // know we're ok
+    // TODO(d.rattman): it'd be better for the engine to just have a touch
+    // method
     info.m_pEntity->PhysicsTouchTriggers(&info.m_vecStartAbsOrigin);
 
     info.m_pEntity->UpdatePhysicsShadowToCurrentPosition(gpGlobals->frametime);
@@ -516,7 +512,8 @@ void CPhysicsPushedEntities::FinishPush(
     CBaseEntity *pPushedEntity = info.m_pEntity;
 
     // Cause touch functions to be called
-    // FIXME: it'd be better for the engine to just have a touch method
+    // TODO(d.rattman): it'd be better for the engine to just have a touch
+    // method
     info.m_pEntity->PhysicsTouchTriggers(&info.m_vecStartAbsOrigin);
     info.m_pEntity->UpdatePhysicsShadowToCurrentPosition(gpGlobals->frametime);
     CAI_BaseNPC *pNPC = info.m_pEntity->MyNPCPointer();
@@ -552,9 +549,9 @@ void CPhysicsPushedEntities::StoreMovedEntities(physicspushlist_t &list) {
   list.localOrigin = m_rootPusherStartLocalOrigin;
   list.localAngles = m_rootPusherStartLocalAngles;
   list.pushedCount = CountMovedEntities();
-  Assert(list.pushedCount < ARRAYSIZE(list.pushedEnts));
-  if (list.pushedCount > ARRAYSIZE(list.pushedEnts)) {
-    list.pushedCount = ARRAYSIZE(list.pushedEnts);
+  Assert(list.pushedCount < SOURCE_ARRAYSIZE(list.pushedEnts));
+  if (list.pushedCount > SOURCE_ARRAYSIZE(list.pushedEnts)) {
+    list.pushedCount = SOURCE_ARRAYSIZE(list.pushedEnts);
   }
   for (int i = 0; i < list.pushedCount; i++) {
     list.pushedEnts[i] = m_rgMoved[i].m_pEntity;
@@ -652,7 +649,7 @@ class CPushBlockerEnum : public IPartitionEnumerator {
     for (int i = 0; i < m_collisionGroupCount; i++) {
       if (m_collisionGroups[i] == collisionGroup) return;
     }
-    if (m_collisionGroupCount < ARRAYSIZE(m_collisionGroups)) {
+    if (m_collisionGroupCount < SOURCE_ARRAYSIZE(m_collisionGroups)) {
       m_collisionGroups[m_collisionGroupCount] = collisionGroup;
       m_collisionGroupCount++;
     }
@@ -1008,7 +1005,7 @@ void CBaseEntity::PhysicsDispatchThink(BASEPTR thinkFunc) {
 #ifdef _WIN32
         Msg("%s(%s) thinking for %.02f ms!!!\n", GetClassname(),
             typeid(this).raw_name(), time);
-#elif _LINUX
+#elif OS_POSIX
         Msg("%s(%s) thinking for %.02f ms!!!\n", GetClassname(),
             typeid(this).name(), time);
 #else
@@ -1037,7 +1034,7 @@ void CBaseEntity::PhysicsCheckSweep(const Vector &vecAbsStart,
 // Purpose: The basic solid body movement attempt/clip that slides along
 // multiple planes Input  : time - Amount of time to try moving for
 //			*steptrace - if not NULL, the trace results of any
-//vertical  wall hit will be stored
+// vertical  wall hit will be stored
 // Output : int - the clipflags if the velocity was modified (hit something
 // solid)
 //   1 = floor
@@ -1195,14 +1192,14 @@ int CBaseEntity::PhysicsTryMove(float flTime, trace_t *steptrace) {
 //-----------------------------------------------------------------------------
 // Purpose: Applies 1/2 gravity to falling movetype step objects
 //			Simulation should be done assuming average velocity over
-//the  time
+// the  time
 //			interval.  Since that would effect a lot of code, and
-//since  most of 			that code is going away, it's easier to
-//just add in the
+// since  most of 			that code is going away, it's easier to
+// just add in the
 // average effect 			of gravity on the velocity over the
 // interval at the beginning of similation,
 //			then add it in again at the end of simulation so that
-//the  final velocity is 			correct for the entire interval.
+// the  final velocity is 			correct for the entire interval.
 //-----------------------------------------------------------------------------
 void CBaseEntity::PhysicsAddHalfGravity(float timestep) {
   VPROF("CBaseEntity::PhysicsAddHalfGravity");
@@ -1251,7 +1248,7 @@ void CBaseEntity::PhysicsPushEntity(const Vector &push, trace_t *pTrace) {
   if (pTrace->fraction) {
     SetAbsOrigin(pTrace->endpos);
 
-    // FIXME(ywb):  Should we try to enable this here
+    // TODO(d.rattman): Should we try to enable this here
     // WakeRestingObjects();
   }
 
@@ -1351,8 +1348,8 @@ void CBaseEntity::PerformPush(float movetime) {
         // will attempt to advance local time. Choose the one that's
         // the greater of the two from push + move
 
-        // FIXME: Should we really be doing them both simultaneously??
-        // FIXME: Choose the *greater* of the two?!? That's strange...
+        // TODO(d.rattman): Should we really be doing them both simultaneously??
+        // TODO(d.rattman): Choose the *greater* of the two?!? That's strange...
         float flInitialLocalTime = m_flLocalTime;
 
         // moving and rotating, so rotate first, then move

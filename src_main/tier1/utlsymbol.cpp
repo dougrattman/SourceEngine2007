@@ -8,7 +8,7 @@
 #include "tier1/keyvalues.h"
 #include "tier1/stringpool.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define INVALID_STRING_INDEX CStringPoolIndex(0xFFFF, 0xFFFF)
@@ -246,7 +246,7 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindOrAddFileName(
   }
 
   // Fix slashes+dotslashes and make lower case first..
-  char fn[MAX_PATH];
+  char fn[SOURCE_MAX_PATH];
   Q_strncpy(fn, pFileName, sizeof(fn));
   Q_RemoveDotSlashes(fn);
 #ifdef _WIN32
@@ -254,9 +254,9 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindOrAddFileName(
 #endif
 
   // Split the filename into constituent parts
-  char basepath[MAX_PATH];
+  char basepath[SOURCE_MAX_PATH];
   Q_ExtractFilePath(fn, basepath, sizeof(basepath));
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   Q_strncpy(filename, fn + Q_strlen(basepath), sizeof(filename));
 
   // not found, lock and look again
@@ -284,7 +284,7 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindFileName(const char *pFileName) {
   }
 
   // Fix slashes+dotslashes and make lower case first..
-  char fn[MAX_PATH];
+  char fn[SOURCE_MAX_PATH];
   Q_strncpy(fn, pFileName, sizeof(fn));
   Q_RemoveDotSlashes(fn);
 #ifdef _WIN32
@@ -292,9 +292,9 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindFileName(const char *pFileName) {
 #endif
 
   // Split the filename into constituent parts
-  char basepath[MAX_PATH];
+  char basepath[SOURCE_MAX_PATH];
   Q_ExtractFilePath(fn, basepath, sizeof(basepath));
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   Q_strncpy(filename, fn + Q_strlen(basepath), sizeof(filename));
 
   FileNameHandleInternal_t handle;

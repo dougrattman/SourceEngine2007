@@ -42,7 +42,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef CLIENT_DLL
@@ -2361,7 +2361,7 @@ const CDODViewVectors *CDODGameRules::GetDODViewVectors() const
 			{ STATE_GAME_OVER,	"STATE_GAME_OVER",	NULL, NULL, NULL },
 		};
 
-		for ( int i=0; i < ARRAYSIZE( playerStateInfos ); i++ )
+		for ( int i=0; i < SOURCE_ARRAYSIZE( playerStateInfos ); i++ )
 		{
 			if ( playerStateInfos[i].m_iRoundState == state )
 				return &playerStateInfos[i];

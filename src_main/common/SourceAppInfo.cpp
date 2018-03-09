@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: languages definition
 
@@ -31,7 +31,7 @@ static SourceAppInfo_t s_SteamAppInfo[] = {
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetAppFullName(ESourceApp eSourceApp) {
-  Assert(ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
+  static_assert(SOURCE_ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {
     return s_SteamAppInfo[eSourceApp].m_pchFullName;
   }
@@ -44,7 +44,7 @@ const char *GetAppFullName(ESourceApp eSourceApp) {
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const char *GetAppModName(ESourceApp eSourceApp) {
-  Assert(ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
+  static_assert(SOURCE_ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {
     return s_SteamAppInfo[eSourceApp].m_pchModName;
   }
@@ -57,7 +57,7 @@ const char *GetAppModName(ESourceApp eSourceApp) {
 // Purpose: return the short string name used for this language by SteamUI
 //-----------------------------------------------------------------------------
 const int GetAppSteamAppId(ESourceApp eSourceApp) {
-  Assert(ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
+  static_assert(SOURCE_ARRAYSIZE(s_SteamAppInfo) == k_App_MAX);
   if (s_SteamAppInfo[eSourceApp].m_ESourceApp == eSourceApp) {
     return s_SteamAppInfo[eSourceApp].m_nSteamAppId;
   }

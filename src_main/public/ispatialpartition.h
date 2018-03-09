@@ -96,7 +96,7 @@ class IPartitionQueryCallback {
 //-----------------------------------------------------------------------------
 enum { PARTITION_INVALID_HANDLE = (SpatialPartitionHandle_t)~0 };
 
-abstract_class ISpatialPartition {
+the_interface ISpatialPartition {
  public:
   virtual ~ISpatialPartition();
 

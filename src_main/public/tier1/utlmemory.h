@@ -6,7 +6,7 @@
 #define SOURCE_TIER1_UTLMEMORY_H_
 
 #include <cstring>
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/memalloc.h"
 #include "tier0/include/platform.h"
@@ -724,7 +724,7 @@ CUtlMemoryAligned<T, nAlignment>::CUtlMemoryAligned(int nGrowSize,
   this->ValidateGrowSize();
 
   // Alignment must be a power of two
-  COMPILE_TIME_ASSERT((nAlignment & (nAlignment - 1)) == 0);
+  static_assert((nAlignment & (nAlignment - 1)) == 0);
   Assert((nGrowSize >= 0) &&
          (nGrowSize != CUtlMemory<T>::EXTERNAL_BUFFER_MARKER));
   if (CUtlMemory<T>::m_nAllocationCount) {

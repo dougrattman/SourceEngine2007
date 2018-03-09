@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of CVsVmtToTex
 //
@@ -250,8 +250,8 @@ MStatus CVsVmtToTex::VmtPathToMaterialPath(
 	const MString &vmtPath,
 	MString &materialPath )
 {
-	char pTmpBuf0[ MAX_PATH ];
-	char pTmpBuf1[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
+	char pTmpBuf1[ SOURCE_MAX_PATH ];
 
 	MString ext;
 
@@ -415,7 +415,7 @@ void VmtPathFromRelativePath(
 {
 	vmtPath = "materials/" + materialPath + ".vmt";
 	Q_FixSlashes( const_cast< char * >( vmtPath.asChar() ) );
-	char pTmpBuf0[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->RelativePathToFullPath( vmtPath.asChar(), "game", pTmpBuf0, sizeof( pTmpBuf0 ) );
 	Q_FixSlashes( pTmpBuf0 );
 	vmtPath = pTmpBuf0;
@@ -431,7 +431,7 @@ void VtfPathFromRelativePath(
 {
 	vtfPath = "materials/" + materialPath + ".vtf";
 	Q_FixSlashes( const_cast< char * >( vtfPath.asChar() ) );
-	char pTmpBuf0[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->RelativePathToFullPath( vtfPath.asChar(), "game", pTmpBuf0, sizeof( pTmpBuf0 ) );
 	Q_FixSlashes( pTmpBuf0 );
 	vtfPath = pTmpBuf0;
@@ -448,8 +448,8 @@ void TgaPathFromRelativePath(
 	tgaPath = "materials/" + materialPath + ".vtf";
 	Q_FixSlashes( const_cast< char * >( tgaPath.asChar() ) );
 
-	char pTmpBuf0[ MAX_PATH ];
-	char pTmpBuf1[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
+	char pTmpBuf1[ SOURCE_MAX_PATH ];
 	g_pFullFileSystem->RelativePathToFullPath( tgaPath.asChar(), "game", pTmpBuf0, sizeof( pTmpBuf0 ) );
 	Q_FixSlashes( pTmpBuf0, '/' );
 	Q_StrSubst( pTmpBuf0, "/materials/", "/materialsrc/", pTmpBuf1, sizeof( pTmpBuf1 ) );
@@ -475,8 +475,8 @@ MStatus CVsVmtToTex::CalcPaths(
 	MString gamePath;
 	GetGamePath( path, gamePath );
 
-	char pTmpBuf0[ MAX_PATH ];
-	char pTmpBuf1[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
+	char pTmpBuf1[ SOURCE_MAX_PATH ];
 
 	Q_strncpy( pTmpBuf0, gamePath.asChar(), sizeof( pTmpBuf0 ) );
 	Q_FixSlashes( pTmpBuf0 );
@@ -577,7 +577,7 @@ MStatus AddToPerforce(
 	SpewOutputFunc_t oldSpewOutputFunc = GetSpewOutputFunc();
 	SpewOutputFunc( SpewIgnoreFunc );
 
-	char pTmpBuf0[ MAX_PATH ];
+	char pTmpBuf0[ SOURCE_MAX_PATH ];
 	if ( g_pFullFileSystem->RelativePathToFullPath( path.asChar(), "game", pTmpBuf0, sizeof( pTmpBuf0 ) ) == NULL )
 	{
 		Q_strncpy( pTmpBuf0, path.asChar(), sizeof( pTmpBuf0 ) );

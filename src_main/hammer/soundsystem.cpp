@@ -15,11 +15,11 @@
 #include "ScenePreviewDlg.h"
 #include "soundchars.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
-// FIXME: Put gamesounds parsing into shared code somewhere
+// TODO(d.rattman): Put gamesounds parsing into shared code somewhere
 #define MANIFEST_FILE			"scripts/game_sounds_manifest.txt"
 #define SOUNDGENDER_MACRO		"$gender"
 #define SOUNDGENDER_MACRO_LENGTH 7		// Length of above including $
@@ -143,7 +143,7 @@ char *CSoundSystem::AddStringToCache( SoundType_t type, const char *pString )
 		pCache = m_SoundList[type].m_pStrings;
 	}
 
-	char fixedString[MAX_PATH];
+	char fixedString[SOURCE_MAX_PATH];
 	V_strncpy( fixedString, pString, sizeof( fixedString ) );
 	V_FixSlashes( fixedString );
 	copyLen = V_strlen( fixedString ) + 1;
@@ -161,7 +161,7 @@ char *CSoundSystem::AddStringToCache( SoundType_t type, const char *pString )
 //-----------------------------------------------------------------------------
 void CSoundSystem::AddSoundToList( SoundType_t type, const char *pSoundName, const char *pActualFile, const char *pSourceFile )
 {
-	// FIXME: Optimize the allocation pattern?
+	// TODO(d.rattman): Optimize the allocation pattern?
 	int i = m_SoundList[type].m_Sounds.AddToTail();
 	SoundInfo_t &info = m_SoundList[type].m_Sounds[i];
 
@@ -358,7 +358,7 @@ void CSoundSystem::AddGameSoundToList( const char *pGameSound, char const *pFile
 	AddSoundToList( SOUND_TYPE_GAMESOUND, pGameSound, temp, pSourceFile );
 }
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgoff.h"
 
 //-----------------------------------------------------------------------------
@@ -440,7 +440,7 @@ bool CSoundSystem::BuildGameSoundList()
 
 bool CSoundSystem::FindSoundByName( const char *pFilename, SoundType_t *type, int *nIndex )
 {
-	char searchStr[MAX_PATH];
+	char searchStr[SOURCE_MAX_PATH];
 	V_strncpy( searchStr, pFilename, sizeof( searchStr ) );
 	V_FixSlashes( searchStr );
 	
@@ -463,7 +463,7 @@ bool CSoundSystem::FindSoundByName( const char *pFilename, SoundType_t *type, in
 
 bool CSoundSystem::PlayScene( const char *pFileName )
 {
-	char fullFilename[MAX_PATH];
+	char fullFilename[SOURCE_MAX_PATH];
 	V_snprintf( fullFilename, sizeof( fullFilename ), "scenes%c%s", CORRECT_PATH_SEPARATOR, pFileName );
 	CChoreoScene *pScene = HammerLoadScene( fullFilename );
 	if ( !pScene )
@@ -494,8 +494,8 @@ bool CSoundSystem::Play( SoundType_t type, int nIndex )
 	// Voiceover files have this.
 	pFileName = PSkipSoundChars( pFileName );
 
-	char pRelativePath[MAX_PATH];
-	Q_snprintf( pRelativePath, MAX_PATH, "sound/%s", pFileName );
+	char pRelativePath[SOURCE_MAX_PATH];
+	Q_snprintf( pRelativePath, SOURCE_MAX_PATH, "sound/%s", pFileName );
 
 	// Stop any previously-playing sound.
 	StopSound();
@@ -535,11 +535,11 @@ void CSoundSystem::OpenSource( SoundType_t type, int nIndex )
 	const char *pFileName = SoundSourceFile( type, nIndex );
 	if ( pFileName )
 	{
-		char pRelativePath[MAX_PATH];
-		Q_snprintf( pRelativePath, MAX_PATH, "%s", pFileName );
+		char pRelativePath[SOURCE_MAX_PATH];
+		Q_snprintf( pRelativePath, SOURCE_MAX_PATH, "%s", pFileName );
 
-		char pFullPath[MAX_PATH];
-		if ( g_pFullFileSystem->GetLocalPath( pRelativePath, pFullPath, MAX_PATH ) )
+		char pFullPath[SOURCE_MAX_PATH];
+		if ( g_pFullFileSystem->GetLocalPath( pRelativePath, pFullPath, SOURCE_MAX_PATH ) )
 		{
 			ShellExecute( NULL, "open", pFullPath, NULL, NULL, SW_SHOWNORMAL );
 		}

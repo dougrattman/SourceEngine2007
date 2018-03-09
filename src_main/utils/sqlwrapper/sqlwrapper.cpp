@@ -48,7 +48,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
     return TRUE;
 }
-#elif _LINUX
+#elif OS_POSIX
 void __attribute__ ((constructor)) app_init(void);
 void app_init(void)
 {

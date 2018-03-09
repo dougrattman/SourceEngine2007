@@ -10,7 +10,7 @@
 #include "networksystem/inetworkmessage.h"
 #include "networksystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -609,12 +609,10 @@ int CNetChannel::ProcessPacketHeader( bf_read& message )
 	int sequence	= message.ReadLong();
 	int sequence_ack= message.ReadLong();
 	int flags		= message.ReadByte();
-	int relState	= message.ReadByte();	// reliable state of 8 subchannels
+  [[maybe_unused]] int relState	= message.ReadByte();	// reliable state of 8 subchannels
 	int nChoked		= 0;	// read later if choked flag is set
 	//int i,j;
-
-	NOTE_UNUSED( relState );
-
+  
 	if ( flags & PACKET_FLAG_CHOKED )
 		nChoked = message.ReadByte(); 
 

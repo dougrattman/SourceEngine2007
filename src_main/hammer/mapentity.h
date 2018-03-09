@@ -9,7 +9,7 @@
 #pragma once
 
 #include "MapClass.h"
-#include "MapFace.h"			// FIXME: For PLANE definition.
+#include "MapFace.h"			// TODO(d.rattman): For PLANE definition.
 #include "EditGameClass.h"
 
 

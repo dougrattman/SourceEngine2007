@@ -9,7 +9,7 @@
 #include "mathlib/vmatrix.h"
 
 #ifndef CLIENT_DLL
-class SINGLE_INHERITANCE CBaseEntity;
+class MSVC_SINGLE_INHERITANCE CBaseEntity;
 #endif
 
 class Vector;
@@ -48,7 +48,7 @@ const int SIZE_BLOCK_NAME_BUF = 31 + 1;
 
 //-------------------------------------
 
-abstract_class ISaveRestoreBlockHandler {
+the_interface ISaveRestoreBlockHandler {
  public:
   virtual const char *GetBlockName() = 0;
 
@@ -69,7 +69,7 @@ abstract_class ISaveRestoreBlockHandler {
 
 //-------------------------------------
 
-abstract_class ISaveRestoreBlockSet : public ISaveRestoreBlockHandler {
+the_interface ISaveRestoreBlockSet : public ISaveRestoreBlockHandler {
  public:
   virtual void AddBlockHandler(ISaveRestoreBlockHandler * pHandler) = 0;
   virtual void RemoveBlockHandler(ISaveRestoreBlockHandler * pHandler) = 0;
@@ -82,7 +82,7 @@ extern ISaveRestoreBlockSet *g_pGameSaveRestoreBlockSet;
 
 //-------------------------------------
 
-abstract_class CDefSaveRestoreBlockHandler : public ISaveRestoreBlockHandler {
+the_interface CDefSaveRestoreBlockHandler : public ISaveRestoreBlockHandler {
   virtual const char *GetBlockName() = 0;
 
   virtual void PreSave(CSaveRestoreData *) {}
@@ -102,7 +102,7 @@ abstract_class CDefSaveRestoreBlockHandler : public ISaveRestoreBlockHandler {
 //
 //-----------------------------------------------------------------------------
 
-abstract_class ISave {
+the_interface ISave {
  public:
   //---------------------------------
   // Logging
@@ -247,7 +247,7 @@ abstract_class ISave {
 //
 //-----------------------------------------------------------------------------
 
-abstract_class IRestore {
+the_interface IRestore {
  public:
   //---------------------------------
 
@@ -369,7 +369,7 @@ struct SaveRestoreFieldInfo_t {
   typedescription_t *pTypeDesc;
 };
 
-abstract_class ISaveRestoreOps {
+the_interface ISaveRestoreOps {
  public:
   // save data type interface
   virtual void Save(const SaveRestoreFieldInfo_t &fieldInfo, ISave *pSave) = 0;

@@ -25,7 +25,7 @@
 #include "GlobalFunctions.h"
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //
@@ -749,7 +749,7 @@ BOOL CObjectProperties::SetupPages(void)
 
 	// First, remove pages that we don't want visible.
 	// Also store if they're visible.
-	for ( int i=0; i < ARRAYSIZE( pages ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( pages ); i++ )
 	{
 		pages[i].m_bIsVisible = ( GetPageIndex( pages[i].m_pPage ) != -1 );
 		if ( pages[i].m_bIsVisible && !pages[i].m_bWantVisible)
@@ -762,12 +762,12 @@ BOOL CObjectProperties::SetupPages(void)
 	
 	// We're about to add pages, but it'll only add them to the right of what's already there, 
 	// so we must get rid of anything to the right of our leftmost addition.
-	for ( int i=0; i < ARRAYSIZE( pages ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( pages ); i++ )
 	{
 		if ( !pages[i].m_bIsVisible && pages[i].m_bWantVisible )
 		{
 			// Ok, page i needs to be on, so nuke everything to the right of it.
-			for ( int j=i+1; j < ARRAYSIZE( pages ); j++ )
+			for ( int j=i+1; j < SOURCE_ARRAYSIZE( pages ); j++ )
 			{
 				if ( pages[j].m_bIsVisible )
 				{
@@ -779,7 +779,7 @@ BOOL CObjectProperties::SetupPages(void)
 		}
 	}
 	
-	for ( int i=0; i < ARRAYSIZE( pages ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( pages ); i++ )
 	{
 		if ( !pages[i].m_bIsVisible && pages[i].m_bWantVisible )
 			AddPage( pages[i].m_pPage );
@@ -1083,7 +1083,7 @@ void CObjectProperties::ReloadData()
 		//
 		// Set the window title to include the object's description.
 		//
-		char szTitle[MAX_PATH];
+		char szTitle[SOURCE_MAX_PATH];
 		sprintf(szTitle, "Object Properties: %s", pobj->GetDescription());
 		SetWindowText(szTitle);
 	}
@@ -1137,7 +1137,7 @@ void CObjectProperties::UpdateAnchors( CWnd *pPage )
 		CAnchorDef( hTab, k_eSimpleAnchorAllSides ),
 		CAnchorDef( pPage ? pPage->GetSafeHwnd() : (HWND)NULL, k_eSimpleAnchorAllSides )
 	};
-	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, ARRAYSIZE( anchorDefs ) );
+	m_AnchorMgr.Init( GetSafeHwnd(), anchorDefs, SOURCE_ARRAYSIZE( anchorDefs ) );
 }
 
 
@@ -1170,7 +1170,7 @@ void CObjectProperties::OnShowWindow(BOOL bShow, UINT nStatus)
 	//VPROF_BUDGET( "CObjectProperties::OnShowWindow", "Object Properties" );
 
 	// Forget the last active page when the window is hidden or shown.
-	// FIXME: SetupPages calls SaveActivePage, so we must switch to page 0 here
+	// TODO(d.rattman): SetupPages calls SaveActivePage, so we must switch to page 0 here
 	SetActivePage(0);
 	m_pLastActivePage = NULL;
 

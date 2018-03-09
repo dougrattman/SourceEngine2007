@@ -15,7 +15,7 @@
 #include "ClientEffectPrecacheSystem.h"
 #include "particles_ez.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_CLIENTCLASS_DT_NOBASE( C_Func_Dust, DT_Func_Dust, CFunc_Dust )
@@ -268,7 +268,7 @@ void FX_Dust( const Vector &vecOrigin, const Vector &vecDirection, float flSize,
 	if (speed > 48.0f )
 		speed = 48.0f;
 
-	//FIXME: Better sampling area
+	//TODO(d.rattman): Better sampling area
 	Vector offset = vecOrigin + ( vecDirection * flSize );
 
 	//Find area ambient light color and use it to tint smoke

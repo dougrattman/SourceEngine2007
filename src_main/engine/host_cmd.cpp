@@ -57,7 +57,7 @@
 #include "ixboxsystem.h"
 extern IXboxSystem *g_pXboxSystem;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define STEAM_PREFIX "STEAM_"
@@ -166,7 +166,7 @@ void Host_Quit_f(void) {
 //-----------------------------------------------------------------------------
 CON_COMMAND(_restart, "Shutdown and restart the engine.") {
   /*
-  // FIXME:  How to handle restarts?
+  // TODO(d.rattman):  How to handle restarts?
 #ifndef SWDS
   if ( !EngineTool_CheckQuitHandlers() )
   {
@@ -293,7 +293,7 @@ CON_COMMAND(status, "Display map and connection status.") {
   mapInfo.skill = skill.GetInt();
 
   // generate the qualified path where .sav files are expected to be written
-  char savePath[MAX_PATH];
+  char savePath[SOURCE_MAX_PATH];
   V_snprintf(savePath, sizeof(savePath), "%s", saverestore->GetSaveDir());
   V_StripTrailingSlash(savePath);
   g_pFileSystem->RelativePathToFullPath(savePath, "MOD", mapInfo.savePath,
@@ -302,7 +302,7 @@ CON_COMMAND(status, "Display map and connection status.") {
 
   if (pName[0]) {
     // generate the qualified path from where the map was loaded
-    char mapPath[MAX_PATH];
+    char mapPath[SOURCE_MAX_PATH];
     Q_snprintf(mapPath, sizeof(mapPath), "maps/%s.360.bsp", pName);
     g_pFileSystem->GetLocalPath(mapPath, mapInfo.mapPath,
                                 sizeof(mapInfo.mapPath));

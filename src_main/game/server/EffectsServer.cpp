@@ -11,7 +11,7 @@
 #include "decals.h"
 #include "IEffects.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern short		g_sModelIndexSmoke;			// (in combatweapon.cpp) holds the index for the smoke cloud
@@ -42,7 +42,7 @@ public:
 	virtual void EnergySplash( const Vector &position, const Vector &direction, bool bExplosive = false );
 	virtual void Ricochet( const Vector &position, const Vector &direction );
 
-	// FIXME: Should these methods remain in this interface? Or go in some 
+	// TODO(d.rattman): Should these methods remain in this interface? Or go in some 
 	// other client-server neutral interface?
 	virtual float Time();
 	virtual bool IsServer();
@@ -184,7 +184,7 @@ void CEffectsServer::Ricochet( const Vector &position, const Vector &direction )
 
 
 //-----------------------------------------------------------------------------
-// FIXME: Should these methods remain in this interface? Or go in some 
+// TODO(d.rattman): Should these methods remain in this interface? Or go in some 
 // other client-server neutral interface?
 //-----------------------------------------------------------------------------
 float CEffectsServer::Time()

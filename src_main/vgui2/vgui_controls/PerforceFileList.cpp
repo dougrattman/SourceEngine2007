@@ -13,15 +13,12 @@
 #include "tier1/keyvalues.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
 
-static int ListFileNameSortFunc(ListPanel *pPanel, const ListPanelItem &item1,
+static int ListFileNameSortFunc([[maybe_unused]] ListPanel *pPanel, const ListPanelItem &item1,
                                 const ListPanelItem &item2) {
-  NOTE_UNUSED(pPanel);
-
   bool dir1 = item1.kv->GetInt("directory") == 1;
   bool dir2 = item2.kv->GetInt("directory") == 1;
 
@@ -131,7 +128,7 @@ PerforceFileList::PerforceFileList(Panel *pParent, const char *pPanelName)
   m_bShowDeletedFiles = false;
 
   // list panel
-  for (int i = 0; i < ARRAYSIZE(g_ColInfo); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ColInfo); ++i) {
     const ColumnInfo_t &info = g_ColInfo[i];
 
     AddColumnHeader(i, info.columnName, info.columnText, info.startingWidth,
@@ -184,7 +181,7 @@ void PerforceFileList::ShowDeletedFiles(bool bShowDeletedFiles) {
 //-----------------------------------------------------------------------------
 void PerforceFileList::AddItemToDirectoryList(const char *pFullPath,
                                               int nItemID, bool bIsDirectory) {
-  char pDirectoryBuf[MAX_PATH];
+  char pDirectoryBuf[SOURCE_MAX_PATH];
   Q_ExtractFilePath(pFullPath, pDirectoryBuf, sizeof(pDirectoryBuf));
   Q_StripTrailingSlash(pDirectoryBuf);
   pFullPath = pDirectoryBuf;
@@ -194,7 +191,7 @@ void PerforceFileList::AddItemToDirectoryList(const char *pFullPath,
   if (i != m_Directories.InvalidIndex()) {
     pInfo = &m_Directories[i];
   } else {
-    char pClientSpec[MAX_PATH];
+    char pClientSpec[SOURCE_MAX_PATH];
     if (!p4->GetClientSpecForDirectory(pFullPath, pClientSpec,
                                        sizeof(pClientSpec))) {
       pClientSpec[0] = 0;
@@ -297,7 +294,7 @@ int PerforceFileList::AddFile(const char *pFullPath, int nFileExists,
     return InvalidItemID();
   }
 
-  char pFixedPath[MAX_PATH];
+  char pFixedPath[SOURCE_MAX_PATH];
   Q_strncpy(pFixedPath, pFullPath, sizeof(pFixedPath));
   Q_FixSlashes(pFixedPath);
 

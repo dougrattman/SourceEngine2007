@@ -15,7 +15,7 @@ struct democmdinfo_t;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-abstract_class IDemoActionManager {
+the_interface IDemoActionManager {
  public:
   virtual ~IDemoActionManager(void) {}
 

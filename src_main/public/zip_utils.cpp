@@ -78,7 +78,7 @@ END_BYTESWAP_DATADESC()
 class CWin32File {
  public:
   static HANDLE CreateTempFile(CUtlString &WritePath, CUtlString &FileName) {
-    char tempFileName[MAX_PATH];
+    char tempFileName[SOURCE_MAX_PATH];
     if (WritePath.IsEmpty()) {
       // use a safe name in the cwd
       char *pBuffer = tmpnam(NULL);
@@ -94,7 +94,7 @@ class CWin32File {
       V_snprintf(tempFileName, sizeof(tempFileName), "_%s.tmp", pBuffer);
     } else {
       // generate safe name at the desired prefix
-      char uniqueFilename[MAX_PATH];
+      char uniqueFilename[SOURCE_MAX_PATH];
       SYSTEMTIME sysTime;
       GetLocalTime(&sysTime);
       sprintf(uniqueFilename, "%d_%d_%d_%d_%d.tmp", sysTime.wDay, sysTime.wHour,
@@ -144,7 +144,7 @@ class CWin32File {
 // avoid duplication of code. Files may be written to a CUtlBuffer or a
 // filestream
 
-abstract_class IWriteStream {
+the_interface IWriteStream {
  public:
   virtual void Put(const void *pMem, int size) = 0;
   virtual unsigned int Tell(void) = 0;

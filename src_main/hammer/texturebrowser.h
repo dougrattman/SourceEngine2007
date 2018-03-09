@@ -66,7 +66,7 @@ protected:
 
 	static CStringArray m_FilterHistory;
 	static int m_nFilterHistory;
-	static char m_szLastKeywords[MAX_PATH];	// The text in the keywords combo when the user last exited the browser.
+	static char m_szLastKeywords[SOURCE_MAX_PATH];	// The text in the keywords combo when the user last exited the browser.
 
 	CComboBox m_cSizeList;
 	CStatic m_cCurName;

@@ -9,7 +9,7 @@
 #include "ienginevgui.h"
 #include "c_tf2rootpanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 C_TF2RootPanel *g_pTF2RootPanel = NULL;

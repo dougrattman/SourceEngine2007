@@ -52,7 +52,7 @@ typedef CBaseHandle EntityHandle_t;
 // Functions the engine provides to IGameMovement to assist in its movement.
 //-----------------------------------------------------------------------------
 
-abstract_class IMoveHelper
+the_interface IMoveHelper
 {
 public:
 	// Call this to set the singleton

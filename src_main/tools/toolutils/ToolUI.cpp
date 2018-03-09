@@ -15,7 +15,7 @@
 #include "tier1/keyvalues.h"
 #include "toolutils/toolmenubar.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

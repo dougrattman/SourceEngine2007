@@ -17,7 +17,7 @@
 #include "vehicle_base.h"
 #include "vphysics/constraints.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CPropCannon;
@@ -645,7 +645,7 @@ CPropCannon *CCannonServerVehicle::GetCannon(void) {
 bool CPropCannon::CreateVPhysics(void) {
   BaseClass::CreateVPhysics();
   m_BoneFollowerManager.InitBoneFollowers(
-      this, ARRAYSIZE(pCannonFollowerBoneNames), pCannonFollowerBoneNames);
+      this, SOURCE_ARRAYSIZE(pCannonFollowerBoneNames), pCannonFollowerBoneNames);
   return true;
 }
 

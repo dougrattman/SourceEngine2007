@@ -35,7 +35,7 @@ extern CDmeEditorTypeDictionary *g_pEditorTypeDict;
 //-----------------------------------------------------------------------------
 // Allows the doc to call back into the Foundry editor tool
 //-----------------------------------------------------------------------------
-abstract_class IFoundryDocCallback
+the_interface IFoundryDocCallback
 {
 public:
 	// Called by the doc when the data changes
@@ -46,7 +46,7 @@ public:
 //-----------------------------------------------------------------------------
 // Global methods of the foundry tool
 //-----------------------------------------------------------------------------
-abstract_class IFoundryTool
+the_interface IFoundryTool
 {
 public:
 	// Gets at the rool panel (for modal dialogs)

@@ -30,8 +30,8 @@ bool immediatedelete = false;
 bool printwhitelist = false;
 bool showmapfileusage = false;
 
-static char modname[MAX_PATH];
-static char g_szReslistDir[ MAX_PATH ] = "reslists/";
+static char modname[SOURCE_MAX_PATH];
+static char g_szReslistDir[ SOURCE_MAX_PATH ] = "reslists/";
 
 namespace UnusedContent
 {
@@ -740,7 +740,7 @@ void BuildFileList_R( int depth, CUtlVector< FileEntry >& files, CUtlVector< Fil
 			if (!stricmp(wfd.cFileName, "vssver.scc"))
 				continue;
 
-			char filename[ MAX_PATH ];
+			char filename[ SOURCE_MAX_PATH ];
 			if ( dirlen <= skipchars )
 			{
 				Q_snprintf( filename, sizeof( filename ), "%s", wfd.cFileName );
@@ -878,7 +878,7 @@ void BuildCheckdirList()
 	}
 	else
 	{
-		int c = ARRAYSIZE( directories_to_check );
+		int c = SOURCE_ARRAYSIZE( directories_to_check );
 		int i;
 		for ( i = 0; i < c; ++i )
 		{
@@ -886,7 +886,7 @@ void BuildCheckdirList()
 		}
 
 		// add the list of dirs to ignore from the others lists
-		c = ARRAYSIZE( directories_to_ignore );
+		c = SOURCE_ARRAYSIZE( directories_to_ignore );
 		for ( i = 0; i < c; ++i )
 		{
 			AddIgnoredir( directories_to_ignore[ i ] );
@@ -1079,7 +1079,7 @@ void ParseFilesFromResList( UnusedContent::CUtlSymbol & resfilesymbol, CUtlRBTre
 
 	int offset = Q_strlen( gamedir );
 
-	char basedir[MAX_PATH];
+	char basedir[SOURCE_MAX_PATH];
 	Q_strncpy( basedir, gamedir, sizeof( basedir ) );
 	if ( !Q_StripLastDir( basedir, sizeof( basedir ) ) )
 		Error( "Can't get basedir from %s.", gamedir );

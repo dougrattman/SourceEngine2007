@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "avi/iavi.h"
 
@@ -279,13 +279,13 @@ void CAviFile::CreateVideoStreams(const AVIParams_t &params, void *hWnd) {
   Q_memset(&compression, 0, sizeof(compression));
 
   // Choose DIVX compressor for now
-  Warning("FIXME:  DIVX only for now\n");
+  Warning("TODO(d.rattman):  DIVX only for now\n");
   compression.fccHandler = mmioFOURCC('d', 'i', 'b', ' ');
 
   AVICOMPRESSOPTIONS *aopts[1];
   aopts[0] = &compression;
 
-  // FIXME:  This won't work so well in full screen!!!
+  // TODO(d.rattman): This won't work so well in full screen!!!
   BOOL res = (BOOL)AVISaveOptions((HWND)hWnd, 0, 1, &m_pVideoStream, aopts);
   if (!res) {
     m_bValid = false;
@@ -387,7 +387,7 @@ void CAviFile::AppendMovieFrame(const BGR888_t *pRGBData) {
   HGDIOBJ hOldObject = SelectObject(m_memdc, m_DIBSection);
 
   // Update the DIBSection bits
-  // FIXME: Have to invert this vertically since passing in negative
+  // TODO(d.rattman): Have to invert this vertically since passing in negative
   // biHeights in the m_bih field doesn't make the system know it's a top-down
   // AVI
   int scanlines = 0;
@@ -615,8 +615,8 @@ void CAVIMaterial::DestroyProceduralTexture() {
 // Initializes, shuts down the procedural material
 //-----------------------------------------------------------------------------
 void CAVIMaterial::CreateProceduralMaterial(const char *pMaterialName) {
-  // FIXME: gak, this is backwards.  Why doesn't the material just see that it
-  // has a funky basetexture?
+  // TODO(d.rattman): gak, this is backwards.  Why doesn't the material just see
+  // that it has a funky basetexture?
   char vmtfilename[512];
   Q_strcpy(vmtfilename, pMaterialName);
   Q_SetExtension(vmtfilename, ".vmt", sizeof(vmtfilename));
@@ -641,8 +641,8 @@ void CAVIMaterial::DestroyProceduralMaterial() { m_Material.Shutdown(); }
 void CAVIMaterial::SetTime(float flTime) {
   if (m_pAVIStream) {
     // Round to the nearest frame
-    // FIXME: Strangely, AVIStreamTimeToSample gets off by several frames if
-    // you're a ways down the stream
+    // TODO(d.rattman): Strangely, AVIStreamTimeToSample gets off by several
+    // frames if you're a ways down the stream
     //		int nCurrentSample = AVIStreamTimeToSample( m_pAVIStream, (
     // flTime
     //+  0.5f / m_nFrameRate )* 1000.0f );

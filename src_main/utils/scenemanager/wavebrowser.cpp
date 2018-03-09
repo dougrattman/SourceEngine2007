@@ -190,7 +190,7 @@ public:
 
 	struct FileTreePath
 	{
-		char	path[ MAX_PATH ];
+		char	path[ SOURCE_MAX_PATH ];
 	};
 
 	static bool FileTreeLessFunc( const FileTreePath &lhs, const FileTreePath &rhs )
@@ -888,8 +888,7 @@ CWaveFile	*CWaveBrowser::FindEntry( char const *wavname, bool jump /*= false*/ )
 	{
 		CWaveFile *wav = m_AllSounds[ idx ];
 #if defined( _DEBUG )
-		char const *name = wav->GetName();
-		NOTE_UNUSED( name );
+    [[maybe_unused]] char const *name = wav->GetName();
 #endif
 
 		if ( jump )

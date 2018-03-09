@@ -23,7 +23,7 @@
 #include "WorldSize.h"
 #include "mapdisp.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BOOL CheckFace(Vector *Points, int nPoints, Vector* pNormal, float dist, CCheckFaceInfo *pInfo)

@@ -30,7 +30,7 @@ typedef CGameTrace trace_t;
 // Client-server neutral effects interface
 //-----------------------------------------------------------------------------
 #define IEFFECTS_INTERFACE_VERSION	"IEffects001"
-abstract_class IEffects : public IPredictionSystem
+the_interface IEffects : public IPredictionSystem
 {
 public:
 	//
@@ -63,7 +63,7 @@ public:
 
 	virtual void Ricochet( const Vector &position, const Vector &direction ) = 0;
 
-	// FIXME: Should these methods remain in this interface? Or go in some 
+	// TODO(d.rattman): Should these methods remain in this interface? Or go in some 
 	// other client-server neutral interface?
 	virtual float Time() = 0;
 	virtual bool IsServer() = 0;

@@ -11,7 +11,7 @@
 #include "ai_playerally.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( ai_speechfilter, CAI_SpeechFilter );

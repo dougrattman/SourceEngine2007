@@ -19,7 +19,7 @@
 #include "vgui/VGUI.h"
 #include "fontabc.h"
 
-abstract_class ITextMessage 
+the_interface ITextMessage 
 {
 public:
 	virtual void		SetPosition( int x, int y ) = 0;

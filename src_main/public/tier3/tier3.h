@@ -46,7 +46,7 @@ extern vgui::IPanel *g_pVGuiPanel;
 extern vgui::ILocalize *g_pVGuiLocalize;
 extern vgui::ISchemeManager *g_pVGuiSchemeManager;
 extern vgui::ISystem *g_pVGuiSystem;
-extern IDataCache *g_pDataCache;  // FIXME: Should IDataCache be in tier2?
+extern IDataCache *g_pDataCache;  // TODO(d.rattman): Should IDataCache be in tier2?
 extern IMDLCache *g_pMDLCache;
 extern IMDLCache *mdlcache;
 extern IAvi *g_pAVI;

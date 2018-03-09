@@ -310,7 +310,7 @@ enum {
   //         if 255, then index = next uint8_t + 255
   //         3 bytes for barycentric coordinates
   // The game lump is a method of adding game-specific lumps
-  // FIXME: Eventually, all lumps could use the game lump system
+  // TODO(d.rattman): Eventually, all lumps could use the game lump system
   LUMP_GAME_LUMP = 35,
   LUMP_LEAFWATERDATA = 36,
   LUMP_PRIMITIVES = 37,
@@ -639,7 +639,7 @@ class ddispinfo_t {
   CDispNeighbor m_EdgeNeighbors[4];  // Indexed by NEIGHBOREDGE_ defines.
   CDispCornerNeighbors m_CornerNeighbors[4];  // Indexed by CORNER_ defines.
 
-  enum unnamed { ALLOWEDVERTS_SIZE = PAD_NUMBER(MAX_DISPVERTS, 32) / 32 };
+  enum unnamed { ALLOWEDVERTS_SIZE = SOURCE_PAD_NUMBER(MAX_DISPVERTS, 32) / 32 };
   unsigned long m_AllowedVerts[ALLOWEDVERTS_SIZE];  // This is built based on
                                                     // the layout and sizes of
                                                     // our neighbors and tells
@@ -686,7 +686,7 @@ struct dface_t {
   short texinfo;
   // This is a union under the assumption that a fog volume boundary (ie. water
   // surface) isn't a displacement map.
-  // FIXME: These should be made a union with a flags or type field for which
+  // TODO(d.rattman): These should be made a union with a flags or type field for which
   // one it is if we can add more to this.
   //	union
   //	{

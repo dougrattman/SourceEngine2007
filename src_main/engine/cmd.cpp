@@ -25,7 +25,7 @@
 #include "vstdlib/random.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // This denotes an execution marker in the command stream.
@@ -202,7 +202,7 @@ void Cbuf_Execute() {
 
   if (!ThreadInMainThread()) {
     Warning("Executing command outside main loop thread\n");
-    ExecuteOnce(DebuggerBreakIfDebugging());
+    DebuggerBreakIfDebugging();
   }
 
   LOCK_COMMAND_BUFFER();
@@ -241,7 +241,7 @@ static char const *Cmd_TranslateFileAssociation(char const *param) {
   // must have an extension to map
   if (!extension) return retval;
 
-  int c = ARRAYSIZE(g_FileAssociations);
+  int c = SOURCE_ARRAYSIZE(g_FileAssociations);
   for (int i = 0; i < c; i++) {
     FileAssociationInfo &info = g_FileAssociations[i];
 
@@ -546,7 +546,7 @@ CON_COMMAND_AUTOCOMPLETEFILE(exec, Cmd_Exec_f, "Execute script file.", "cfg",
                              cfg);
 
 void Cmd_Init(void) {
-  Sys_CreateFileAssociations(ARRAYSIZE(g_FileAssociations), g_FileAssociations);
+  Sys_CreateFileAssociations(SOURCE_ARRAYSIZE(g_FileAssociations), g_FileAssociations);
 }
 
 //-----------------------------------------------------------------------------
@@ -563,7 +563,7 @@ void Cmd_Shutdown(void) {
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Remove this! This is a temporary hack to deal with backward compat
+// TODO(d.rattman): Remove this! This is a temporary hack to deal with backward compat
 //-----------------------------------------------------------------------------
 void Cmd_Dispatch(const ConCommandBase *pCommand, const CCommand &command) {
   ConCommand *pConCommand =
@@ -640,7 +640,7 @@ static bool ShouldPreventClientCommand(const ConCommandBase *pCommand) {
 
 //-----------------------------------------------------------------------------
 // A complete command line has been parsed, so try to execute it
-// FIXME: lookupnoadd the token to speed search?
+// TODO(d.rattman): lookupnoadd the token to speed search?
 //-----------------------------------------------------------------------------
 const ConCommandBase *Cmd_ExecuteCommand(const CCommand &command,
                                          cmd_source_t src, int nClientSlot) {

@@ -18,7 +18,7 @@
 #include "util.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define iabs(i) (((i) >= 0) ? (i) : -(i))
@@ -240,7 +240,7 @@ int CStudioHdr::CActivityToSequenceMapping::SelectWeightedSequence(
                "reinitializing its activity mapping! Now performing emergency "
                "reinitialization.",
                pstudiohdr->pszName());
-    ExecuteOnce(DebuggerBreakIfDebugging());
+    DebuggerBreakIfDebugging();
     Reinitialize(pstudiohdr);
   }
 
@@ -499,7 +499,7 @@ int GetAnimationEvent(CStudioHdr *pstudiohdr, int sequence,
     if (pevent[index].cycle >= flStart && pevent[index].cycle < flEnd) {
       bOverlapEvent = true;
     }
-    // FIXME: doesn't work with animations being played in reverse
+    // TODO(d.rattman): doesn't work with animations being played in reverse
     else if ((seqdesc.flags & STUDIO_LOOPING) && flEnd < flStart) {
       if (pevent[index].cycle >= flStart || pevent[index].cycle < flEnd) {
         bOverlapEvent = true;

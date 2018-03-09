@@ -256,7 +256,7 @@ BEGIN_PREDICTION_DATA( CShieldMobile )
 	DEFINE_FIELD( m_nNextThinkTick, FIELD_INTEGER ),
 	DEFINE_FIELD( m_tmpAngLockedAngles, FIELD_VECTOR ),
 
-	// FIXME: How can I make this work now that I have an embedded collision property?
+	// TODO(d.rattman): How can I make this work now that I have an embedded collision property?
 //	DEFINE_PRED_FIELD( m_vecMins, FIELD_VECTOR, FTYPEDESC_INSENDTABLE | FTYPEDESC_OVERRIDE | FTYPEDESC_NOERRORCHECK ),
 //	DEFINE_PRED_FIELD( m_vecMaxs, FIELD_VECTOR, FTYPEDESC_INSENDTABLE | FTYPEDESC_OVERRIDE | FTYPEDESC_NOERRORCHECK ),
 
@@ -647,7 +647,7 @@ void CShieldMobile::SimulateShield( void )
 
 	if (ctx.m_vecStartDelta != vec3_origin)
 	{
-		// FIXME: Brutal hack; needed because IntersectRayWithTriangle misses stuff
+		// TODO(d.rattman): Brutal hack; needed because IntersectRayWithTriangle misses stuff
 		// especially with short rays; I'm not sure what to do about this.
 		// This basically simulates a shield thickness of 15 units
 		ctx.m_vecEndDelta = ctx.m_vecStartDelta;

@@ -682,8 +682,8 @@ MString CVsVmtNode::EvaluateMaterial( const MString &vmtPath )
 	if ( nShaders <= 0 )
 		return MString( "ERROR: Cannot Find Any Shaders" );
 
-	char buf0[ MAX_PATH ];
-	char buf1[ MAX_PATH ];
+	char buf0[ SOURCE_MAX_PATH ];
+	char buf1[ SOURCE_MAX_PATH ];
 
 	// Clean up the passed material name
 	if ( !g_pFullFileSystem->FullPathToRelativePath( vmtPath.asChar(), buf0, sizeof( buf0 ) ) )

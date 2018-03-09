@@ -23,7 +23,7 @@
 #include "vgui/VGUI.h"
 #include "vgui_internal.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 SHORT System_GetKeyState(int virtualKeyCode);  // in System.cpp, a hack to only
@@ -459,7 +459,7 @@ void CInputWin32::InitInputContext(InputContext_t *pContext) {
 }
 
 void CInputWin32::ResetInputContext(HInputContext context) {
-  // FIXME: Needs to release various keys, mouse buttons, etc...?
+  // TODO(d.rattman): Needs to release various keys, mouse buttons, etc...?
   // At least needs to cause things to lose focus
   InitInputContext(GetInputContext(context));
 }
@@ -1509,7 +1509,7 @@ void CInputWin32::UpdateButtonState(const InputEvent_t &event) {
       // NOTE: data2 is the virtual key code (data1 contains the scan-code one)
       ButtonCode_t code = (ButtonCode_t)event.m_nData2;
 
-      // FIXME: Workaround hack
+      // TODO(d.rattman): Workaround hack
       if (IsKeyCode(code) || IsJoystickCode(code)) {
         SetKeyCodeState(code, (event.m_nType != IE_ButtonReleased));
         break;

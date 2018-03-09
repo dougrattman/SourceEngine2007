@@ -73,7 +73,7 @@ int C_ObjectSentrygun::DrawModel( int flags )
 		float flTime = std::min( gpGlobals->curtime - m_flStartedTurtlingAt, SENTRY_TURTLE_TIME );
 		float flPercent = 1 - (SENTRY_TURTLE_TIME - flTime) / SENTRY_TURTLE_TIME;
 
-		// FIXME: This is totally wrong!!!
+		// TODO(d.rattman): This is totally wrong!!!
 		Vector vNewOrigin = GetLocalOrigin();
 		vNewOrigin.z -= (CollisionProp()->OBBSize().z * flPercent);
 		SetLocalOrigin( vNewOrigin );
@@ -86,7 +86,7 @@ int C_ObjectSentrygun::DrawModel( int flags )
 			float flTime = std::min( gpGlobals->curtime - m_flStartedUnTurtlingAt, SENTRY_TURTLE_TIME );
 			float flPercent = (SENTRY_TURTLE_TIME - flTime) / SENTRY_TURTLE_TIME;
 			
-		// FIXME: This is totally wrong!!!
+		// TODO(d.rattman): This is totally wrong!!!
 			Vector vNewOrigin = GetLocalOrigin();
 			vNewOrigin.z -= (CollisionProp()->OBBSize().z * flPercent);
 			SetLocalOrigin( vNewOrigin );

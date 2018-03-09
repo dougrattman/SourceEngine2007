@@ -100,7 +100,7 @@ static FloatBitMap_t *CreateFBM( const char * fname )
 		// now, process bitmaps, performing copy operations specified by {} syntax
 		for(int i=0; i < Images.Count(); i++)
 		{
-			char fnamebuf[MAX_PATH];
+			char fnamebuf[SOURCE_MAX_PATH];
 			strcpy( fnamebuf, Images[i] );
 			char * pBrace=strchr( fnamebuf, '{' );
 			if ( pBrace )
@@ -555,9 +555,9 @@ void main(int argc,char **argv)
 		return;
 	}
 
-	char pMksFileBuf[MAX_PATH];
-	char pShtFileBuf[MAX_PATH];
-	char pTgaFileBuf[MAX_PATH];
+	char pMksFileBuf[SOURCE_MAX_PATH];
+	char pShtFileBuf[SOURCE_MAX_PATH];
+	char pTgaFileBuf[SOURCE_MAX_PATH];
 
 	const char *pSourceFile;
 	const char *pShtFile;

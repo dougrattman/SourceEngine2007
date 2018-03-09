@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 
-// FIXME: change the name of this to something more specific.
+// TODO(d.rattman): change the name of this to something more specific.
 typedef struct
 {
 } _Position;

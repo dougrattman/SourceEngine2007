@@ -27,7 +27,7 @@
 #include "prop_portal_shared.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar func_break_max_pieces("func_break_max_pieces", "15",
@@ -205,11 +205,11 @@ bool CBreakable::KeyValue(const char *szKeyName, const char *szValue) {
     m_iszGibModel = AllocPooledString(szValue);
   } else if (FStrEq(szKeyName, "spawnobject")) {
     int object = atoi(szValue);
-    if (object > 0 && object < ARRAYSIZE(pSpawnObjects))
+    if (object > 0 && object < SOURCE_ARRAYSIZE(pSpawnObjects))
       m_iszSpawnObject = MAKE_STRING(pSpawnObjects[object]);
   } else if (FStrEq(szKeyName, "propdata")) {
     int pdata = atoi(szValue);
-    if (pdata > 0 && pdata < ARRAYSIZE(pFGDPropData)) {
+    if (pdata > 0 && pdata < SOURCE_ARRAYSIZE(pFGDPropData)) {
       m_iszPropData = MAKE_STRING(pFGDPropData[pdata]);
     } else if (pdata) {
       // If you've hit this warning, it's probably because someone's added a new
@@ -429,7 +429,7 @@ void CBreakable::Precache(void) {
     }
   } else {
     // Actually, precache all possible objects...
-    for (int i = 0; i < ARRAYSIZE(pSpawnObjects); ++i) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(pSpawnObjects); ++i) {
       if (!pSpawnObjects[i]) continue;
 
       if (!Q_strnicmp(pSpawnObjects[i], "unused", Q_strlen("unused"))) continue;

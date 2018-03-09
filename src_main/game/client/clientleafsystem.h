@@ -79,7 +79,7 @@ enum { CLIENT_LEAF_SHADOW_INVALID_HANDLE = (ClientLeafShadowHandle_t)~0 };
 //-----------------------------------------------------------------------------
 // The client leaf system
 //-----------------------------------------------------------------------------
-abstract_class IClientLeafShadowEnum {
+the_interface IClientLeafShadowEnum {
  public:
   // The user ID is the id passed into CreateShadow
   virtual void EnumShadow(ClientShadowHandle_t userId) = 0;
@@ -99,7 +99,7 @@ class CClientLeafSubSystemData {
 //-----------------------------------------------------------------------------
 // The client leaf system
 //-----------------------------------------------------------------------------
-abstract_class IClientLeafSystem : public IClientLeafSystemEngine,
+the_interface IClientLeafSystem : public IClientLeafSystemEngine,
                                    public IGameSystemPerFrame {
  public:
   // Adds and removes renderables from the leaf lists

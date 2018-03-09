@@ -437,7 +437,7 @@ void CVMTTool::InitEditorDict()
 {
 	CDmeEditorAttributeInfo *pInfo;
 
-	// FIXME: This eventually will move to an .fgd-like file.
+	// TODO(d.rattman): This eventually will move to an .fgd-like file.
 	g_pEditorTypeDict = CreateElement< CDmeEditorTypeDictionary >( "DmeEditorTypeDictionary", DMFILEID_INVALID );
 	m_toolElements.AddToTail( g_pEditorTypeDict->GetHandle() );
 
@@ -750,8 +750,8 @@ void CVMTTool::PostMessage( HTOOLHANDLE hEntity, KeyValues *message )
 	{
 		const char *pMaterialName = message->GetString( "material", "debug/debugempty" );
 
-		char pLocalPath[ MAX_PATH ];
-		char pAbsPath[ MAX_PATH ];
+		char pLocalPath[ SOURCE_MAX_PATH ];
+		char pAbsPath[ SOURCE_MAX_PATH ];
 		if ( pMaterialName[0] == '/' && pMaterialName[1] == '/' && pMaterialName[2] != '/' )
 		{
 			Q_strncpy( pAbsPath, pMaterialName, sizeof(pAbsPath) );
@@ -813,7 +813,7 @@ void CVMTTool::OnFileOperationCompleted( const char *pFileType, bool bWroteFile,
 void CVMTTool::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog, bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
 	// Compute starting directory
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 	GetModSubdirectory( "materials", pStartingDir, sizeof(pStartingDir) );
 
 	if ( bOpenFile )
@@ -1085,7 +1085,7 @@ void CVMTTool::InitTools()
 {
 	ShowElementProperties();
 
-	// FIXME: There are no tool windows here; how should this work?
+	// TODO(d.rattman): There are no tool windows here; how should this work?
 	// These panels are saved
 	windowposmgr->RegisterPanel( "properties", m_hProperties, false );
 	windowposmgr->RegisterPanel( "vmtpanel", m_hVMTPreview, false );

@@ -726,14 +726,14 @@ void CServerRemoteAccess::GetMapList(CUtlBuffer &value) {
 
   char const *findfn = Sys_FindFirst(mapwild, NULL, 0);
   while (findfn) {
-    char curDir[MAX_PATH];
-    _snprintf(curDir, MAX_PATH, "maps/%s", findfn);
-    g_pFileSystem->GetLocalPath(curDir, curDir, MAX_PATH);
+    char curDir[SOURCE_MAX_PATH];
+    _snprintf(curDir, SOURCE_MAX_PATH, "maps/%s", findfn);
+    g_pFileSystem->GetLocalPath(curDir, curDir, SOURCE_MAX_PATH);
 
     // limit maps displayed to ones for the mod only
     if (strstr(curDir, friendly_com_gamedir)) {
       // clean up the map name
-      char mapName[MAX_PATH];
+      char mapName[SOURCE_MAX_PATH];
       strcpy(mapName, findfn);
       char *extension = strstr(mapName, ".bsp");
       if (extension) {

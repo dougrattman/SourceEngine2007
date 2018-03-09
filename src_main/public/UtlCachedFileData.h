@@ -18,7 +18,7 @@
 
 // Cacheable types must derive from this and implement the appropriate
 // methods...
-abstract_class IBaseCacheInfo {
+the_interface IBaseCacheInfo {
  public:
   virtual void Save(CUtlBuffer & buf) = 0;
   virtual void Restore(CUtlBuffer & buf) = 0;

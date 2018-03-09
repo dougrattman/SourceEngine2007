@@ -42,8 +42,8 @@ using namespace vgui;
 class CTempDirName
 {
 public:
-	char m_SrcDirName[MAX_PATH];
-	char m_DestDirName[MAX_PATH];
+	char m_SrcDirName[SOURCE_MAX_PATH];
+	char m_DestDirName[SOURCE_MAX_PATH];
 };
 
 
@@ -54,8 +54,8 @@ public:
 class CMinFootprintFilename
 {
 public:
-	char m_SrcFilename[MAX_PATH];
-	char m_DestFilename[MAX_PATH];
+	char m_SrcFilename[SOURCE_MAX_PATH];
+	char m_DestFilename[SOURCE_MAX_PATH];
 	int m_Flags;	// Combination of MF_ flags.
 };
 
@@ -216,25 +216,25 @@ public:
 			ModConfigsHelper mch;
 			const CUtlVector<char *> &modDirs = mch.getModDirsVector();
 			vgui::MessageBox *alert = NULL;
-			char szProblemMods[5*MAX_PATH];
+			char szProblemMods[5*SOURCE_MAX_PATH];
 			bool bProblemModExists = false;
 			
 			// Set up the error string
-			Q_strncpy(szProblemMods, "The SteamAppId values for the following mods should be changed from 220 to 215:\r\n\r\n", 5*MAX_PATH);
+			Q_strncpy(szProblemMods, "The SteamAppId values for the following mods should be changed from 220 to 215:\r\n\r\n", 5*SOURCE_MAX_PATH);
 
 			// Iterate through the mods and check which ones have outdated SteamAppIds
 			for ( int i = 0; i < modDirs.Count(); i++ )
 			{
 				// Construct full path to mod directory
-				char szDirPath[MAX_PATH];
-				char szGameConfigPath[MAX_PATH];
-				Q_strncpy( szDirPath, mch.getSourceModBaseDir(), MAX_PATH );
-				Q_strncat( szDirPath, "\\", MAX_PATH , COPY_ALL_CHARACTERS );
-				Q_strncat( szDirPath, modDirs[i], MAX_PATH , COPY_ALL_CHARACTERS );
+				char szDirPath[SOURCE_MAX_PATH];
+				char szGameConfigPath[SOURCE_MAX_PATH];
+				Q_strncpy( szDirPath, mch.getSourceModBaseDir(), SOURCE_MAX_PATH );
+				Q_strncat( szDirPath, "\\", SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
+				Q_strncat( szDirPath, modDirs[i], SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
 
 				// Check for the existence of gameinfo.txt
-				Q_strncpy( szGameConfigPath, szDirPath, MAX_PATH );
-				Q_strncat( szGameConfigPath, "\\gameinfo.txt", MAX_PATH , COPY_ALL_CHARACTERS );
+				Q_strncpy( szGameConfigPath, szDirPath, SOURCE_MAX_PATH );
+				Q_strncat( szGameConfigPath, "\\gameinfo.txt", SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
 				FileHandle_t fpGameInfo = g_pFullFileSystem->Open( szGameConfigPath, "rb" );
 
 				// GameInfo.txt exists so let's inspect it...
@@ -255,8 +255,8 @@ public:
                   if ( GetAppSteamAppId( k_App_HL2 ) == iAppId)
 						{
 							bProblemModExists = true;
-							Q_strncat( szProblemMods, modDirs[i], MAX_PATH , COPY_ALL_CHARACTERS );
-							Q_strncat( szProblemMods, "\r\n", MAX_PATH , COPY_ALL_CHARACTERS );
+							Q_strncat( szProblemMods, modDirs[i], SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
+							Q_strncat( szProblemMods, "\r\n", SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
 						}
 					}
 				}
@@ -266,7 +266,7 @@ public:
 			if (bProblemModExists)
 			{
 				// Amend the warning message text
-				Q_strncat( szProblemMods, "\r\nIf you did not author any of the above mods you can ignore this message.\r\nIf you did author any of the above mods you should change the SteamAppId\nvalue in the gameinfo.txt file for each mod listed above.\r\n", 5*MAX_PATH , COPY_ALL_CHARACTERS );
+				Q_strncat( szProblemMods, "\r\nIf you did not author any of the above mods you can ignore this message.\r\nIf you did author any of the above mods you should change the SteamAppId\nvalue in the gameinfo.txt file for each mod listed above.\r\n", 5*SOURCE_MAX_PATH , COPY_ALL_CHARACTERS );
 			
 				// Pop up a message box 
 				alert = new vgui::MessageBox( "Warning", szProblemMods );
@@ -319,7 +319,7 @@ void AddMinFootprintFile( CUtlVector<CMinFootprintFilename> &filenames, const ch
 void GetMinFootprintFiles_R( CUtlVector<CMinFootprintFilename> &filenames, const char *pSrcDirName, const char *pDestDirName )
 {
 	// pDirName\*.*
-	char wildcard[MAX_PATH];
+	char wildcard[SOURCE_MAX_PATH];
 	Q_strncpy( wildcard, pSrcDirName, sizeof( wildcard ) );
 	Q_AppendSlash( wildcard, sizeof( wildcard ) );
 	Q_strncat( wildcard, "*.*", sizeof( wildcard ), COPY_ALL_CHARACTERS );
@@ -336,7 +336,7 @@ void GetMinFootprintFiles_R( CUtlVector<CMinFootprintFilename> &filenames, const
 	{
 		if ( Q_stricmp( pFilename, "." ) != 0 && Q_stricmp( pFilename, ".." ) != 0 )
 		{
-			char fullSrcFilename[MAX_PATH], fullDestFilename[MAX_PATH];
+			char fullSrcFilename[SOURCE_MAX_PATH], fullDestFilename[SOURCE_MAX_PATH];
 			Q_snprintf( fullSrcFilename, sizeof( fullSrcFilename ), "%s%c%s", pSrcDirName, CORRECT_PATH_SEPARATOR, pFilename );
 			Q_snprintf( fullDestFilename, sizeof( fullDestFilename ), "%s%c%s", pDestDirName, CORRECT_PATH_SEPARATOR, pFilename );
 
@@ -417,7 +417,7 @@ void DumpMinFootprintFiles( bool bForceRefresh )
 			const char *pSrcMapping  = pCur->GetString( "src" );
 			const char *pDestMapping = pCur->GetString( "dest" );
 
-			char destDir[MAX_PATH], destDirTemp[MAX_PATH];
+			char destDir[SOURCE_MAX_PATH], destDirTemp[SOURCE_MAX_PATH];
 			Q_snprintf( destDirTemp, sizeof( destDirTemp ), "%s%c%s", GetSDKLauncherBaseDirectory(), CORRECT_PATH_SEPARATOR, pDestMapping );
 			Q_MakeAbsolutePath( destDir, sizeof( destDir ), destDirTemp );
 
@@ -442,7 +442,7 @@ void DumpMinFootprintFiles( bool bForceRefresh )
 				pDestMapping += strlen( ALWAYS_COPY_PREFIX );
 			}
 
-			char destFile[MAX_PATH], destFileTemp[MAX_PATH];
+			char destFile[SOURCE_MAX_PATH], destFileTemp[SOURCE_MAX_PATH];
 			Q_snprintf( destFileTemp, sizeof( destFileTemp ), "%s%c%s", GetSDKLauncherBaseDirectory(), CORRECT_PATH_SEPARATOR, pDestMapping );
 			Q_MakeAbsolutePath( destFile, sizeof( destFile ), destFileTemp );
 
@@ -454,7 +454,7 @@ void DumpMinFootprintFiles( bool bForceRefresh )
 		else if ( ( Q_stricmp( pCur->GetName(), "create_directory" ) == 0 ) && bVersionChanged )
 		{
 			// Create an empty directory?
-			char destFile[MAX_PATH], destFileTemp[MAX_PATH];
+			char destFile[SOURCE_MAX_PATH], destFileTemp[SOURCE_MAX_PATH];
 			Q_snprintf( destFileTemp, sizeof( destFileTemp ), "%s%c%s", GetSDKLauncherBaseDirectory(), CORRECT_PATH_SEPARATOR, pCur->GetString() );
 			Q_MakeAbsolutePath( destFile, sizeof( destFile ), destFileTemp );
 

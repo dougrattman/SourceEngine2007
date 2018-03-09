@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of ValveMaya::CDmeImport
 //
@@ -475,8 +475,8 @@ void CDmeImport::DmeMeshToMayaMesh( CDmeMesh *pDmeMesh,	const MObject &parentObj
 	CUtlVector< CShadingGroup > shadingGroups;
 
 	// For storing material names
-	char buf0[ MAX_PATH ];
-	char buf1[ MAX_PATH ];
+	char buf0[ SOURCE_MAX_PATH ];
+	char buf1[ SOURCE_MAX_PATH ];
 
 	{
 		int faceCount( 0 );			// Number of faces & size of mPolygonCounts

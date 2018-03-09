@@ -20,7 +20,7 @@
 #include "tier1/utlrbtree.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Let scene linger for 1/4 second so blends can finish
@@ -2756,7 +2756,7 @@ float CChoreoScene::SnapTime(float t) {
 
   t = (float)itime / fps;
 
-  // FIXME:  If FPS is set and "using grid", snap to proper fractional time
+  // TODO(d.rattman):  If FPS is set and "using grid", snap to proper fractional time
   // value
   return t;
 }
@@ -3182,7 +3182,7 @@ bool CChoreoScene::RestoreFromBinaryBuffer(CUtlBuffer &buf,
 
   m_bIgnorePhonemes = (buf.GetUnsignedChar() != 0);
 
-  // FIXME:  Are these ever needed on restore?
+  // TODO(d.rattman):  Are these ever needed on restore?
   //	ReconcileTags();
   //	ReconcileGestureTimes();
 

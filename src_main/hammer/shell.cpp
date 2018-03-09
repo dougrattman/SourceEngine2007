@@ -13,7 +13,7 @@
 #include "hammer.h"
 #include "filesystem_helpers.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -123,15 +123,15 @@ bool CShell::DoVersionCheck(const char *pszArguments)
 {
 	if (m_pDoc != NULL)
 	{
-		char szEngineMapPath[MAX_PATH];
+		char szEngineMapPath[SOURCE_MAX_PATH];
 		int nEngineMapVersion;
 
 		if (sscanf(pszArguments, "%s %d", szEngineMapPath, &nEngineMapVersion) == 2)
 		{
-			char szEngineMapName[MAX_PATH];
+			char szEngineMapName[SOURCE_MAX_PATH];
 			_splitpath(szEngineMapPath, NULL, NULL, szEngineMapName, NULL);
 
-			char szDocName[MAX_PATH];
+			char szDocName[SOURCE_MAX_PATH];
 			_splitpath(m_pDoc->GetPathName(), NULL, NULL, szDocName, NULL);
 
 			int nDocVersion = m_pDoc->GetDocVersion();
@@ -181,7 +181,7 @@ bool CShell::EntityCreate(const char *pszCommand, const char *pszArguments)
 		float x;
 		float y;
 		float z;
-		char szClassName[MAX_PATH];
+		char szClassName[SOURCE_MAX_PATH];
 
 		if (sscanf(pszArguments, "%s %f %f %f", szClassName, &x, &y, &z) == 4)
 		{
@@ -207,7 +207,7 @@ bool CShell::EntityDelete(const char *pszCommand, const char *pszArguments)
 		float x;
 		float y;
 		float z;
-		char szClassName[MAX_PATH];
+		char szClassName[SOURCE_MAX_PATH];
 
 		if (sscanf(pszArguments, "%s %f %f %f", szClassName, &x, &y, &z) == 4)
 		{
@@ -247,7 +247,7 @@ bool CShell::EntityRotateIncremental(const char *pszCommand, const char *pszArgu
 			pBuffer = ParseFile( pBuffer, token, NULL );
 			if ( pBuffer )
 			{
-				Q_strncpy( szArgs[arg], token, ARRAYSIZE(szArgs[arg]) );
+				Q_strncpy( szArgs[arg], token, SOURCE_ARRAYSIZE(szArgs[arg]) );
 				arg++;
 			}
 		}
@@ -294,7 +294,7 @@ bool CShell::EntitySetKeyValue(const char *pszCommand, const char *pszArguments)
 			pBuffer = ParseFile( pBuffer, token, NULL );
 			if ( pBuffer )
 			{
-				Q_strncpy( szArgs[arg], token, ARRAYSIZE(szArgs[arg]) );
+				Q_strncpy( szArgs[arg], token, SOURCE_ARRAYSIZE(szArgs[arg]) );
 				arg++;
 			}
 		}
@@ -359,7 +359,7 @@ bool CShell::NodeCreate(const char *pszCommand, const char *pszArguments)
 		float y;
 		float z;
 		int nID;
-		char szClassName[MAX_PATH];
+		char szClassName[SOURCE_MAX_PATH];
 
 		if (sscanf(pszArguments, "%s %d %f %f %f", szClassName, &nID, &x, &y, &z) == 5)
 		{

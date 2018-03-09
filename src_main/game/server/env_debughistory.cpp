@@ -7,7 +7,7 @@
 #include "isaverestore.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Number of characters worth of debug to use per history category

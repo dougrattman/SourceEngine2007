@@ -13,7 +13,7 @@
 #include "basecombatcharacter.h"
 #include "decals.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_ENEMY_FINDER_CHECK_VIS (1 << 16)

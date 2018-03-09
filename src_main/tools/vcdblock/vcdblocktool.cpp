@@ -683,7 +683,7 @@ void CVcdBlockTool::InitTools()
 {
 	ShowElementProperties();
 
-	// FIXME: There are no tool windows here; how should this work?
+	// TODO(d.rattman): There are no tool windows here; how should this work?
 	// These panels are saved
 	windowposmgr->RegisterPanel( "properties", m_hProperties, false );
 	windowposmgr->RegisterPanel( "entityreport", m_hInfoTargetBrowser, false );
@@ -915,7 +915,7 @@ void CVcdBlockTool::OnSaveAs()
 
 void CVcdBlockTool::OnRestartLevel()
 {
-	// FIXME: We may want to use this instead of completely restarting,
+	// TODO(d.rattman): We may want to use this instead of completely restarting,
 	// but it's less well tested.  Should be a lot faster though
 
 	// Reloads the map, entities only, will reload every entity 
@@ -1134,7 +1134,7 @@ void CVcdBlockTool::OnFileOperationCompleted( const char *pFileType, bool bWrote
 //-----------------------------------------------------------------------------
 void CVcdBlockTool::SetupFileOpenDialog( vgui::FileOpenDialog *pDialog, bool bOpenFile, const char *pFileFormat, KeyValues *pContextKeyValues )
 {
-	char pStartingDir[ MAX_PATH ];
+	char pStartingDir[ SOURCE_MAX_PATH ];
 
 	if ( !Q_stricmp( pFileFormat, "bsp" ) )
 	{

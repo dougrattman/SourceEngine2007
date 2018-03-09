@@ -12,7 +12,7 @@
 #include "shadow_vs14.inc"
 #include "unlitgeneric_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 DEFINE_FALLBACK_SHADER( Shadow, Shadow_DX8 )
@@ -24,7 +24,7 @@ BEGIN_VS_SHADER_FLAGS( Shadow_DX8, "Help for Shadow_DX8", SHADER_NOT_EDITABLE )
 
 	SHADER_INIT_PARAMS()
 	{
-		// FIXME: Need fallback for dx5, don't fade out shadows, just pop them out
+		// TODO(d.rattman): Need fallback for dx5, don't fade out shadows, just pop them out
 		/*
 		The alpha blending state either must be:
 		Src Color * Dst Color + Dst Color * 0	

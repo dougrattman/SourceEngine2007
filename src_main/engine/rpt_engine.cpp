@@ -183,7 +183,7 @@ CON_COMMAND_F(rpt_start, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
   RPTClient().SetPassword(args.Arg(1));
   RPTClient().CreateListenSocket(rptAddr);
 
-  char pDir[MAX_PATH];
+  char pDir[SOURCE_MAX_PATH];
   int nDay, nMonth, nYear;
   GetCurrentDate(&nDay, &nMonth, &nYear);
   Q_snprintf(pDir, sizeof(pDir), "rpt/%d_%d_%d", nMonth, nDay, nYear);
@@ -261,7 +261,7 @@ static bool PlayerIsValveEmployee(int nClientSlot) {
 
   CSteamID steamIDForPlayer(pi.friendsID, 1, k_EUniversePublic,
                             k_EAccountTypeIndividual);
-  for (int i = 0; i < ARRAYSIZE(s_pValveIDs); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(s_pValveIDs); i++) {
     if (steamIDForPlayer.ConvertToUint64() == (s_pValveIDs[i] ^ s_ValveMask))
       return true;
   }

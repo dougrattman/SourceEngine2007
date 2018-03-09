@@ -32,7 +32,7 @@ struct opendata_t
 };
 
 
-abstract_class CBasePropDoor : public CDynamicProp
+the_interface CBasePropDoor : public CDynamicProp
 {
 public:
 
@@ -86,7 +86,7 @@ protected:
 		DOOR_STATE_AJAR,
 	};
 
-	// dvs: FIXME: make these private
+	// dvs: TODO(d.rattman): make these private
 	void DoorClose();
 
 	CBasePropDoor *GetMaster( void ) { return m_hMaster; }
@@ -188,7 +188,7 @@ private:
 	string_t m_SoundOpen;
 	string_t m_SoundClose;
 
-	// dvs: FIXME: can we remove m_flSpeed from CBaseEntity?
+	// dvs: TODO(d.rattman): can we remove m_flSpeed from CBaseEntity?
 	//float m_flSpeed; // Rotation speed when opening or closing in degrees per second.
 
 	DECLARE_DATADESC();

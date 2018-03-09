@@ -22,11 +22,11 @@ struct CombinerEntry
 		startoffset = 0.0f;
 	}
 
-	char	wavefile[ MAX_PATH ];
+	char	wavefile[ SOURCE_MAX_PATH ];
 	float	startoffset;
 };
 
-abstract_class ISoundCombiner
+the_interface ISoundCombiner
 {
 public:
 	virtual ~ISoundCombiner() {}

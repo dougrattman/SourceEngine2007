@@ -1,9 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IDATACACHE_H
 #define IDATACACHE_H
 
 #include "appframework/IAppSystem.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 
 class IDataCache;
@@ -28,7 +29,7 @@ typedef uint32_t DataCacheClientID_t;
 //---------------------------------------------------------
 // Cache-defined handle for a cache item
 //---------------------------------------------------------
-FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
 typedef memhandle_t DataCacheHandle_t;
 #define DC_INVALID_HANDLE ((DataCacheHandle_t)0)
 
@@ -153,7 +154,7 @@ enum DataCacheAddFlags_t {
 // areas of the cache with thier own memory constraints and common
 // management.
 //-----------------------------------------------------------------------------
-abstract_class IDataCacheSection {
+the_interface IDataCacheSection {
  public:
   //--------------------------------------------------------
 
@@ -300,7 +301,7 @@ abstract_class IDataCacheSection {
 // Purpose: Connection between the cache and the owner of a cache section
 //
 //-----------------------------------------------------------------------------
-abstract_class IDataCacheClient {
+the_interface IDataCacheClient {
  public:
   //--------------------------------------------------------
   //
@@ -343,7 +344,7 @@ class CDefaultDataCacheClient : public IDataCacheClient {
 // Purpose: The global shared cache. Manages sections and overall budgets.
 //
 //-----------------------------------------------------------------------------
-abstract_class IDataCache : public IAppSystem {
+the_interface IDataCache : public IAppSystem {
  public:
   //--------------------------------------------------------
   // Purpose: Controls cache size.

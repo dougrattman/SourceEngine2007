@@ -60,7 +60,7 @@ struct RoundStats_t
 	RoundStats_t() { Reset(); };
 
 	void Reset() {
-		for ( int i = 0; i < ARRAYSIZE( m_iStat ); i++ )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE( m_iStat ); i++ )
 		{
  m_iStat[i] = 0;
 		}
@@ -68,7 +68,7 @@ struct RoundStats_t
 
 	void AccumulateRound( const RoundStats_t &other )
 	{
-		for ( int i = 0; i < ARRAYSIZE( m_iStat ); i++ )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE( m_iStat ); i++ )
 		{
  m_iStat[i] += other.m_iStat[i];
 		}
@@ -165,11 +165,11 @@ public:
 		m_aPlayerDeaths.AddVectorToTail( pOther->m_aPlayerDeaths );
 		m_aPlayerDamage.AddVectorToTail( pOther->m_aPlayerDamage );
 		int i;
-		for ( i = 0; i < ARRAYSIZE( m_aClassStats ); i++ )
+		for ( i = 0; i < SOURCE_ARRAYSIZE( m_aClassStats ); i++ )
 		{
  m_aClassStats[i].Accumulate( pOther->m_aClassStats[i] );
 		}
-		for ( i = 0; i < ARRAYSIZE( m_aWeaponStats ); i++ )
+		for ( i = 0; i < SOURCE_ARRAYSIZE( m_aWeaponStats ); i++ )
 		{
  m_aWeaponStats[i].Accumulate( pOther->m_aWeaponStats[i] );
 		}

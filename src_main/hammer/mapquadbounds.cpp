@@ -17,7 +17,7 @@
 #include "mapsolid.h"
 #include "mapentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -89,7 +89,7 @@ void CMapQuadBounds::PresaveWorld(void)
 			//
 			CMapFace *pFace = pSolid->GetFace(i);
 
-			char szCurrentTexture[MAX_PATH];
+			char szCurrentTexture[SOURCE_MAX_PATH];
 			pFace->GetTextureName(szCurrentTexture);
 			int nPoints = pFace->GetPointCount();
 

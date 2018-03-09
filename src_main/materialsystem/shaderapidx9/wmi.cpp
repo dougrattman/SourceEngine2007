@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "resource.h"
 
@@ -12,7 +12,7 @@
 
 #include "base/include/windows/com_ptr.h"
 #include "base/include/windows/scoped_com_initializer.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 
 #pragma comment(lib, "wbemuuid.lib")

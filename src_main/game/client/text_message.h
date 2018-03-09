@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-abstract_class IHudTextMessage
+the_interface IHudTextMessage
 {
 public:
 	virtual char *LocaliseTextString( const char *msg, char *dst_buffer, int buffer_size ) = 0;

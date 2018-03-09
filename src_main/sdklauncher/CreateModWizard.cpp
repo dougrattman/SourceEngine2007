@@ -34,7 +34,7 @@ bool CreateFullDirectory( const char *pDirName )
 {
 	CUtlVector<char*> dirs;
 	const char *separators[2] = {"\\", "/"};
-	Q_SplitString2( pDirName, separators, ARRAYSIZE( separators ), dirs );
+	Q_SplitString2( pDirName, separators, SOURCE_ARRAYSIZE( separators ), dirs );
 
 	if ( dirs.Count() == 0 )
 		return false;

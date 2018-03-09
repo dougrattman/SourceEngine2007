@@ -92,7 +92,7 @@ void VGUIMessageBox(vgui::Panel *pParent, const char *pTitle, const char *pMsg,
 // Purpose: Places all the info from the vgui controls into the QCInfo struct
 //-----------------------------------------------------------------------------
 void QCInfo::SyncFromControls() {
-  char tempText[MAX_PATH];
+  char tempText[SOURCE_MAX_PATH];
 
   vgui::Panel *pTargetField = pQCGenerator->FindChildByName("staticPropCheck");
   bStaticProp = ((CheckButton *)pTargetField)->IsSelected();
@@ -113,23 +113,23 @@ void QCInfo::SyncFromControls() {
   bAutomass = ((CheckButton *)pTargetField)->IsSelected();
 
   pTargetField = pQCGenerator->FindChildByName("massField");
-  ((TextEntry *)pTargetField)->GetText(tempText, MAX_PATH);
+  ((TextEntry *)pTargetField)->GetText(tempText, SOURCE_MAX_PATH);
   fMass = atof(tempText);
 
   pTargetField = pQCGenerator->FindChildByName("scaleField");
-  ((TextEntry *)pTargetField)->GetText(tempText, MAX_PATH);
+  ((TextEntry *)pTargetField)->GetText(tempText, SOURCE_MAX_PATH);
   fScale = atof(tempText);
 
   pTargetField = pQCGenerator->FindChildByName("collisionSMDField");
-  ((TextEntry *)pTargetField)->GetText(tempText, MAX_PATH);
+  ((TextEntry *)pTargetField)->GetText(tempText, SOURCE_MAX_PATH);
   Q_strcpy(pszCollisionPath, tempText);
 
   pTargetField = pQCGenerator->FindChildByName("surfacePropertyDropDown");
-  ((ComboBox *)pTargetField)->GetText(tempText, MAX_PATH);
+  ((ComboBox *)pTargetField)->GetText(tempText, SOURCE_MAX_PATH);
   Q_strcpy(pszSurfaceProperty, tempText);
 
   pTargetField = pQCGenerator->FindChildByName("materialsField");
-  ((TextEntry *)pTargetField)->GetText(tempText, MAX_PATH);
+  ((TextEntry *)pTargetField)->GetText(tempText, SOURCE_MAX_PATH);
   Q_strcpy(pszMaterialPath, tempText);
 
   LODs.RemoveAll();
@@ -150,7 +150,7 @@ void QCInfo::SyncFromControls() {
 // controls
 //-----------------------------------------------------------------------------
 void QCInfo::SyncToControls() {
-  char tempText[MAX_PATH];
+  char tempText[SOURCE_MAX_PATH];
 
   vgui::Panel *pTargetField = pQCGenerator->FindChildByName("staticPropCheck");
   ((CheckButton *)pTargetField)->SetSelected(bStaticProp);
@@ -187,7 +187,7 @@ void QCInfo::SyncToControls() {
   pTargetField = pQCGenerator->FindChildByName("surfacePropertyDropDown");
   int numItems = ((ComboBox *)pTargetField)->GetItemCount();
   for (int i = 0; i < numItems; i++) {
-    ((ComboBox *)pTargetField)->GetItemText(i, tempText, MAX_PATH);
+    ((ComboBox *)pTargetField)->GetItemText(i, tempText, SOURCE_MAX_PATH);
     if (!Q_strcmp(tempText, pszSurfaceProperty)) {
       ((ComboBox *)pTargetField)->SetItemEnabled(i, true);
       ((ComboBox *)pTargetField)->SetText(tempText);
@@ -431,8 +431,8 @@ bool CQCGenerator::GenerateQCFile() {
   // to write out when the QC file is created
   char *nameBegin = strrchr(m_QCInfo_t.pszSMDPath, '\\');
 
-  char szPath[MAX_PATH];
-  char szName[MAX_PATH];
+  char szPath[SOURCE_MAX_PATH];
+  char szName[SOURCE_MAX_PATH];
   Q_strncpy(szPath, m_QCInfo_t.pszSMDPath,
             nameBegin - m_QCInfo_t.pszSMDPath + 2);
   strcpy(szName, szPath);
@@ -452,7 +452,7 @@ bool CQCGenerator::GenerateQCFile() {
   // write qc header
   g_pFullFileSystem->FPrintf(pSaveFile, "//\n// .qc file version 1.0\n\n");
   // write out modelname info
-  char szModelName[MAX_PATH];
+  char szModelName[SOURCE_MAX_PATH];
   char *modelStart = strrchrcount(szName, '\\', 2) + 1;
   char *modelEnd = strrchr(szName, '.');
   Q_strncpy(szModelName, modelStart, modelEnd - modelStart + 1);
@@ -528,8 +528,8 @@ bool CQCGenerator::GenerateQCFile() {
 
   g_pFullFileSystem->Close(pSaveFile);
 
-  char szCommand[MAX_PATH];
-  char szGamePath[MAX_PATH];
+  char szCommand[SOURCE_MAX_PATH];
+  char szGamePath[SOURCE_MAX_PATH];
 
   char studiomdlPath[512];
   g_pFullFileSystem->RelativePathToFullPath(
@@ -658,7 +658,7 @@ void CQCGenerator::EditLOD() {
 void CQCGenerator::OnNewLODText() {
   KeyValues *pEditItem = m_pLODPanel->GetItem(m_nSelectedSequence);
   KeyValues *pListItem = pEditItem;
-  wchar_t szEditText[MAX_PATH];
+  wchar_t szEditText[SOURCE_MAX_PATH];
 
   pEditItem = pEditItem->GetFirstValue();
   const char *name = pEditItem->GetName();
@@ -666,7 +666,7 @@ void CQCGenerator::OnNewLODText() {
     pEditItem = pEditItem->GetNextValue();
     name = pEditItem->GetName();
   }
-  m_pLODEdit->GetText(szEditText, MAX_PATH);
+  m_pLODEdit->GetText(szEditText, SOURCE_MAX_PATH);
 
   pListItem->SetWString(name, szEditText);
 

@@ -20,7 +20,7 @@
 #include "materialsystem/IMesh.h"
 #include "Material.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_MAPCLASS( CMapKeyFrame );
@@ -451,7 +451,7 @@ void CMapKeyFrame::BuildPathSegment( CMapKeyFrame *pPrev )
 		}
 		else
 		{
-			// FIXME: If we aren't connected to an animator yet, just draw straight lines. This code is never hit, because
+			// TODO(d.rattman): If we aren't connected to an animator yet, just draw straight lines. This code is never hit, because
 			//		 BuildPathSegment is only called from CMapAnimator. To make matters worse, we can only reliably find
 			//		 pPrev through an animator.
 			CMapAnimator::GetAnimationAtTime( this, pPrev, MoveTime() * (float)( i + 1) / (float)MAX_LINE_POINTS, m_LinePoints[i], qAngles, 0, 0 );

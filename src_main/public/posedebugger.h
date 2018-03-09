@@ -10,7 +10,7 @@ class IClientNetworkable;
 class CStudioHdr;
 class CIKContext;
 
-abstract_class IPoseDebugger {
+the_interface IPoseDebugger {
  public:
   virtual void StartBlending(IClientNetworkable * pEntity,
                              const CStudioHdr *pStudioHdr) = 0;

@@ -16,7 +16,7 @@
 #include "engine/ivdebugoverlay.h"
 #include "tier0/include/icommandline.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Only allow recursive references to be 8 levels deep.

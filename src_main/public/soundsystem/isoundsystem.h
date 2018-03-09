@@ -47,7 +47,7 @@ enum FindAudioSourceFlags_t
 //-----------------------------------------------------------------------------
 #define SOUNDSYSTEM_INTERFACE_VERSION "SoundSystem001"
 
-abstract_class ISoundSystem : public IAppSystem
+the_interface ISoundSystem : public IAppSystem
 {
 public:
 	virtual void		Update( float time ) = 0;

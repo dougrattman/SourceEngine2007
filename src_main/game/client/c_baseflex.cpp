@@ -18,7 +18,7 @@
 #include "toolframework_client.h"
 #include "tools/bonelist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 bool UseHWMorphVCDs();
@@ -92,10 +92,10 @@ bool GetHWMExpressionFileName(const char *pFilename, char *pHWMFilename) {
   }
 
   // Find the hardware morph scene name and pass that along as well.
-  char szExpression[MAX_PATH];
+  char szExpression[SOURCE_MAX_PATH];
   V_strcpy(szExpression, pFilename);
 
-  char szExpressionHWM[MAX_PATH];
+  char szExpressionHWM[SOURCE_MAX_PATH];
   szExpressionHWM[0] = '\0';
 
   char *pszToken = strtok(szExpression, "/\\");
@@ -335,8 +335,8 @@ class CFlexSceneFileManager : CAutoGameSystem {
         "heavy", "pyro",   "spy",     "engineer",
     };
 
-    char fn[MAX_PATH];
-    for (int i = 0; i < ARRAYSIZE(pTFClasses); ++i) {
+    char fn[SOURCE_MAX_PATH];
+    for (int i = 0; i < SOURCE_ARRAYSIZE(pTFClasses); ++i) {
       Q_snprintf(fn, sizeof(fn), "player/%s/phonemes/phonemes", pTFClasses[i]);
       FindSceneFile(NULL, fn, true);
       Q_snprintf(fn, sizeof(fn), "player/%s/phonemes/phonemes_weak",
@@ -395,12 +395,12 @@ class CFlexSceneFileManager : CAutoGameSystem {
 
   void *FindSceneFile(C_BaseFlex *instance, const char *filename,
                       bool allowBlockingIO) {
-    char szFilename[MAX_PATH];
-    Assert(V_strlen(filename) < MAX_PATH);
+    char szFilename[SOURCE_MAX_PATH];
+    Assert(V_strlen(filename) < SOURCE_MAX_PATH);
     V_strcpy(szFilename, filename);
 
 #if defined(TF_CLIENT_DLL)
-    char szHWMFilename[MAX_PATH];
+    char szHWMFilename[SOURCE_MAX_PATH];
     if (GetHWMExpressionFileName(szFilename, szHWMFilename)) {
       V_strcpy(szFilename, szHWMFilename);
     }
@@ -539,7 +539,7 @@ Vector C_BaseFlex::SetViewTarget(CStudioHdr *pStudioHdr) {
     Vector local;
     VectorITransform(tmp, attToWorld, local);
 
-    // FIXME: clamp distance to something based on eyeball distance
+    // TODO(d.rattman): clamp distance to something based on eyeball distance
     if (local.x < 6) {
       local.x = 6;
     }
@@ -568,7 +568,7 @@ Vector C_BaseFlex::SetViewTarget(CStudioHdr *pStudioHdr) {
     eyeDeflect.x = 0;
 
     // reduce deflection the more the eye is off center
-    // FIXME: this angles make no damn sense
+    // TODO(d.rattman): this angles make no damn sense
     eyeDeflect = eyeDeflect * (local.x * local.x);
     local = local + eyeDeflect;
     VectorNormalize(local);
@@ -817,7 +817,7 @@ void C_BaseFlex::AddVisemesForSentence(Emphasized_Phoneme *classes,
       if (t2 > 1) t2 = 1;
       if (t1 < 0) t1 = 0;
 
-      // FIXME: simple box filter.  Should use something fancier
+      // TODO(d.rattman): simple box filter.  Should use something fancier
       scale = (t2 - t1);
 
       AddViseme(classes, emphasis_intensity, phoneme->GetPhonemeCode(), scale,
@@ -902,7 +902,7 @@ void C_BaseFlex::GetToolRecordingState(KeyValues *msg) {
 
   ProcessSceneEvents(true);
 
-  // FIXME: shouldn't this happen at runtime?
+  // TODO(d.rattman): shouldn't this happen at runtime?
   // initialize the models local to global flex controller mappings
   if (hdr->pFlexcontroller(LocalFlexController_t(0))->localToGlobal == -1) {
     for (i = LocalFlexController_t(0); i < hdr->numflexcontrollers(); i++) {
@@ -933,7 +933,7 @@ void C_BaseFlex::GetToolRecordingState(KeyValues *msg) {
   if (m_iBlink == -1) m_iBlink = AddGlobalFlexController("blink");
   g_flexweight[m_iBlink] = 0;
 
-  // FIXME: this needs a better algorithm
+  // TODO(d.rattman): this needs a better algorithm
   // blink the eyes
   float t = (m_blinktime - gpGlobals->curtime) * M_PI * 0.5 *
             (1.0 / g_CV_BlinkDuration.GetFloat());
@@ -1028,7 +1028,7 @@ void C_BaseFlex::SetupWeights(const matrix3x4_t *pBoneToWorld,
 
   memset(g_flexweight, 0, sizeof(g_flexweight));
 
-  // FIXME: this should assert then, it's too complex a class for the model
+  // TODO(d.rattman): this should assert then, it's too complex a class for the model
   if (hdr->numflexcontrollers() == 0) {
     int nSizeInBytes = nFlexWeightCount * sizeof(float);
     memset(pFlexWeights, 0, nSizeInBytes);
@@ -1042,7 +1042,7 @@ void C_BaseFlex::SetupWeights(const matrix3x4_t *pBoneToWorld,
 
   ProcessSceneEvents(true);
 
-  // FIXME: shouldn't this happen at runtime?
+  // TODO(d.rattman): shouldn't this happen at runtime?
   // initialize the models local to global flex controller mappings
   if (hdr->pFlexcontroller(LocalFlexController_t(0))->localToGlobal == -1) {
     for (i = LocalFlexController_t(0); i < hdr->numflexcontrollers(); i++) {
@@ -1075,7 +1075,7 @@ void C_BaseFlex::SetupWeights(const matrix3x4_t *pBoneToWorld,
     m_iBlink = AddGlobalFlexController("blink");
   }
 
-  // FIXME: this needs a better algorithm
+  // TODO(d.rattman): this needs a better algorithm
   // blink the eyes
   float flBlinkDuration = g_CV_BlinkDuration.GetFloat();
   float flOOBlinkDuration =
@@ -1152,7 +1152,7 @@ int C_BaseFlex::AddGlobalFlexController(char *szName) {
   if (g_numflexcontrollers < MAXSTUDIOFLEXCTRL * 4) {
     g_flexcontroller[g_numflexcontrollers++] = strdup(szName);
   } else {
-    // FIXME: missing runtime error condition
+    // TODO(d.rattman): missing runtime error condition
   }
   return i;
 }
@@ -1472,7 +1472,7 @@ void C_BaseFlex::ProcessSceneEvents(bool bFlexEvents) {
     CSceneEventInfo *info = &m_SceneEvents[i];
     Assert(info);
 
-    // FIXME:  Need a safe handle to m_pEvent in case of memory deletion?
+    // TODO(d.rattman):  Need a safe handle to m_pEvent in case of memory deletion?
     CChoreoEvent *event = info->m_pEvent;
     Assert(event);
 

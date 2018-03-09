@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -596,7 +596,7 @@ std::string CVProjectUtil::WriteQc(
 std::string CVProjectUtil::FullPath(
 	const std::string &path )
 {
-	char fullpath[ _MAX_PATH ];
+	char fullpath[ SOURCE_MAX_PATH ];
 	return std::string( _fullpath( fullpath, path.c_str(), sizeof( fullpath ) ) );
 }
 

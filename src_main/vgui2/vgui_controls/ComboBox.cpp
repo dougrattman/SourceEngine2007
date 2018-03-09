@@ -23,7 +23,7 @@
 
 #include <ctype.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -589,7 +589,7 @@ void ComboBox::OnMenuClose()
 
 //-----------------------------------------------------------------------------
 // Purpose: Handles hotkey accesses
-// FIXME: make this open different directions as necessary see menubutton.
+// TODO(d.rattman): make this open different directions as necessary see menubutton.
 //-----------------------------------------------------------------------------
 void ComboBox::DoClick()
 {

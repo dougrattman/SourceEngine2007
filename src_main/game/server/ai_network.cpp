@@ -17,7 +17,7 @@
 #include "world.h"
 #include "ai_moveprobe.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar ai_no_node_cache( "ai_no_node_cache", "0" );
@@ -33,7 +33,7 @@ CAI_Network*		g_pBigAINet;
 
 //-----------------------------------------------------------------------------
 
-abstract_class INodeListFilter
+the_interface INodeListFilter
 {
 public:
 	virtual bool	NodeIsValid( CAI_Node &node ) = 0;

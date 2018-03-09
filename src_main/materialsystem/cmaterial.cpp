@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of a material
 
@@ -653,9 +653,9 @@ void CMaterial::InitializeMaterialProxy(KeyValues *pFallbackKeyValues) {
     } else {
       ppProxies[proxyCount] = pProxy;
       ++proxyCount;
-      if (proxyCount >= ARRAYSIZE(ppProxies)) {
+      if (proxyCount >= SOURCE_ARRAYSIZE(ppProxies)) {
         Warning("Error: Material \"%s\" has more than %d proxies!\n", GetName(),
-                ARRAYSIZE(ppProxies));
+                SOURCE_ARRAYSIZE(ppProxies));
         break;
       }
     }
@@ -1219,7 +1219,7 @@ KeyValues *CMaterial::InitializeShader(KeyValues &keyValues,
   KeyValues *pCurrentFallback = &keyValues;
   KeyValues *pFallbackSection = 0;
 
-  char szShaderName[MAX_PATH];
+  char szShaderName[SOURCE_MAX_PATH];
   char const *pShaderName = pCurrentFallback->GetName();
   if (!pShaderName) {
     // I'm not quite sure how this can happen, but we'll see...
@@ -1766,7 +1766,7 @@ void CMaterial::DecideShouldReloadFromWhitelist(IFileList *pFilesToReload) {
   // Materials loaded with an absolute pathname are usually debug materials.
   if (V_IsAbsolutePath(GetName())) return;
 
-  char vmtFilename[MAX_PATH];
+  char vmtFilename[SOURCE_MAX_PATH];
   V_ComposeFileName("materials", GetName(), vmtFilename, sizeof(vmtFilename));
   V_strncat(vmtFilename, ".vmt", sizeof(vmtFilename));
 
@@ -2015,7 +2015,7 @@ int CMaterial::GetNumAnimationFrames() {
   if (m_representativeTexture) {
     return m_representativeTexture->GetNumAnimationFrames();
   } else {
-#ifndef _LINUX
+#ifndef OS_POSIX
     Warning(
         "CMaterial::GetNumAnimationFrames:\nno representative texture for "
         "material %s\n",
@@ -2255,7 +2255,7 @@ PreviewImageRetVal_t CMaterial::GetPreviewImage(unsigned char *pData, int width,
     goto fail;
   }
 
-  // FIXME: Make sure the preview image size requested is the same
+  // TODO(d.rattman): Make sure the preview image size requested is the same
   // size as mip level 0 of the texture
   Assert((width == pVTFTexture->Width()) && (height == pVTFTexture->Height()));
 
@@ -2296,7 +2296,7 @@ IMaterialVar *CMaterial::FindVar(char const *pVarName, bool *pFound,
                                  bool complain) {
   PrecacheVars();
 
-  // FIXME: Could look for flags here too...
+  // TODO(d.rattman): Could look for flags here too...
 
   MaterialVarSym_t sym = IMaterialVar::FindSymbol(pVarName);
   if (sym != UTL_INVAL_SYMBOL) {
@@ -2336,7 +2336,7 @@ IMaterialVar *CMaterial::FindVarFast(char const *pVarName,
     if (pToken->varIndex < m_VarCount &&
         m_pShaderParams[pToken->varIndex]->GetNameAsSymbol() == pToken->symbol)
       return m_pShaderParams[pToken->varIndex];
-    // FIXME: Could look for flags here too...
+    // TODO(d.rattman): Could look for flags here too...
     if (!IMaterialVar::SymbolMatches(pVarName, pToken->symbol)) {
       pToken->symbol = IMaterialVar::FindSymbol(pVarName);
     }
@@ -2500,7 +2500,7 @@ void CMaterial::DrawMesh(VertexCompressionType_t vertexCompression) {
     }
 #endif
     if ((GetMaterialVarFlags() & MATERIAL_VAR_NO_DRAW) == 0) {
-      const char *pName = m_pShader->GetName();
+      [[maybe_unused]] const char *pName = m_pShader->GetName();
       ShaderSystem()->DrawElements(m_pShader, m_pShaderParams,
                                    &m_ShaderRenderState, vertexCompression,
                                    m_ChangeID ^ g_nDebugVarsSignature);
@@ -2762,7 +2762,7 @@ void ExpandPatchFile(KeyValues &keyValues, KeyValues &patchKeyValues,
 bool LoadVMTFile(KeyValues &vmtKeyValues, KeyValues &patchKeyValues,
                  const char *pMaterialName, bool bAbsolutePath,
                  CUtlVector<FileNameHandle_t> *pIncludes) {
-  char pFileName[MAX_PATH];
+  char pFileName[SOURCE_MAX_PATH];
   const char *pPathID = "GAME";
   if (!bAbsolutePath) {
     Q_snprintf(pFileName, sizeof(pFileName), "materials/%s.vmt", pMaterialName);

@@ -9,7 +9,7 @@
 #include "stdafx.h"
 #include "AutoSelCombo.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -69,7 +69,7 @@ void CAutoSelComboBox::OnUpdateText(void)
 	int nEditStart = LOWORD(dwEditSel);
 	int nEditEnd = HIWORD(dwEditSel);
 
-	char szTypedText[MAX_PATH];
+	char szTypedText[SOURCE_MAX_PATH];
 	GetWindowText(szTypedText, sizeof(szTypedText));
 
 	//

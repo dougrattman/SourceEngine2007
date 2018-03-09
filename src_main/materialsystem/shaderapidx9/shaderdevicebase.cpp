@@ -27,7 +27,8 @@ bool g_bUseShaderMutex = false;  // Shader mutex globals
 bool g_bShaderAccessDisallowed;
 CShaderMutex g_ShaderMutex;
 
-// FIXME: Hack related to setting command-line values for convars. Remove!!!
+// TODO(d.rattman): Hack related to setting command-line values for convars.
+// Remove!!!
 class CShaderAPIConVarAccessor : public IConCommandBaseAccessor {
  public:
   bool RegisterConCommandBase(ConCommandBase *pCommand) override {
@@ -66,11 +67,11 @@ void *ShaderDeviceFactory(const char *pName, int *pReturnCode) {
     *pReturnCode = IFACE_OK;
   }
 
-  void *the_interface = s_TempFactory(pName, pReturnCode);
-  if (the_interface) return the_interface;
+  void *an_interface = s_TempFactory(pName, pReturnCode);
+  if (an_interface) return an_interface;
 
-  the_interface = Sys_GetFactoryThis()(pName, pReturnCode);
-  if (the_interface) return the_interface;
+  an_interface = Sys_GetFactoryThis()(pName, pReturnCode);
+  if (an_interface) return an_interface;
 
   if (pReturnCode) {
     *pReturnCode = IFACE_FAILED;
@@ -398,7 +399,7 @@ KeyValues *CShaderDeviceMgrBase::ReadDXSupportKeyValues() {
 
   char temp_path[1024];
   if (g_pFullFileSystem->GetSearchPath("GAME", false, temp_path,
-                                       ARRAYSIZE(temp_path)) > 1) {
+                                       SOURCE_ARRAYSIZE(temp_path)) > 1) {
     // Is there a mod-specific override file?
     KeyValues *dx_support_override_config = new KeyValues("dxsupport_override");
     if (dx_support_override_config->LoadFromFile(
@@ -587,8 +588,8 @@ bool CShaderDeviceMgrBase::GetRecommendedConfigurationInfo(
     KeyValues *gpu_mat_picmip_config =
         gpu_memory_config->FindKey("ConVar.mat_picmip", false);
 
-    // FIXME: Man, is this brutal. If it wasn't 1 day till orange box ship, I'd
-    // do something in dxsupport maybe
+    // TODO(d.rattman): Man, is this brutal. If it wasn't 1 day till orange box
+    // ship, I'd do something in dxsupport maybe
     if (gpu_mat_picmip_config &&
         ((nDXLevel == caps.m_nMaxDXSupportLevel) || (gpu_memory_in_mb < 100))) {
       KeyValues *common_mat_picmip_config =
@@ -744,8 +745,8 @@ static BOOL CALLBACK EnumWindowsProcNotThis(HWND hWnd, LPARAM lParam) {
 // Adds a hook to let us know when other instances are setting the mode
 static LRESULT CALLBACK ShaderApiDx9WndProc(HWND hWnd, UINT msg, WPARAM wParam,
                                             LPARAM lParam) {
-  // FIXME: Should these IPC messages tell when an app has focus or not?
-  // If so, we'd want to totally disable the shader api layer when an app
+  // TODO(d.rattman): Should these IPC messages tell when an app has focus or
+  // not? If so, we'd want to totally disable the shader api layer when an app
   // doesn't have focus.
 
   // Look for the special IPC message that tells us we're trying to set
@@ -827,7 +828,7 @@ void CShaderDeviceBase::SendIPCMessage(IPCMessage_t msg) {
 
 // Find view
 int CShaderDeviceBase::FindView(void *hWnd) const {
-  /* FIXME: Is this necessary?
+  /* TODO(d.rattman): Is this necessary?
   // Look for the view in the list of views
   for (int i = m_Views.Count(); --i >= 0; )
   {
@@ -874,7 +875,7 @@ void CShaderDeviceBase::RemoveView(void *hWnd) {
   int i = FindView(hwnd);
   if (i >= 0)
   {
-  // FIXME		m_Views[i].m_pSwapChain->Release();
+  // TODO(d.rattman): m_Views[i].m_pSwapChain->Release();
   m_Views.FastRemove(i);
   }
   */

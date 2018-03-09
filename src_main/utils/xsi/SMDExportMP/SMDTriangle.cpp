@@ -155,7 +155,7 @@ SI_Error SMDEnvelope::Write ( FILE* l_fptr, int rigid, SMDNodeList* in_pNodeList
 	// Get default texture name
 	//
 
-	char l_szDefaultTextureName[MAX_PATH];
+	char l_szDefaultTextureName[SOURCE_MAX_PATH];
 	XSI::OGLTexture l_pDefaultTexture = m_pModel.GetMaterial().GetOGLTexture();
 
 	if ( !l_pDefaultTexture.IsValid() )
@@ -166,8 +166,8 @@ SI_Error SMDEnvelope::Write ( FILE* l_fptr, int rigid, SMDNodeList* in_pNodeList
 
 		W2AHelper2 ( l_szDefaultTextureName, l_pDefaultTexture.GetFullName().GetWideString() );
 		
-		char l_szTextureFile[MAX_PATH];
-		char l_szTextureExt[MAX_PATH];
+		char l_szTextureFile[SOURCE_MAX_PATH];
+		char l_szTextureExt[SOURCE_MAX_PATH];
 		
 		_splitpath ( l_szDefaultTextureName, NULL, NULL, l_szTextureFile, l_szTextureExt );
 		sprintf ( l_szDefaultTextureName, "%s%s",  l_szTextureFile, l_szTextureExt );
@@ -247,8 +247,8 @@ SI_Error SMDEnvelope::Write ( FILE* l_fptr, int rigid, SMDNodeList* in_pNodeList
 
 		W2AHelper2 ( matList[matList.GetUsed()-1].texture, l_pTexture.GetFullName().GetWideString() );
 
-		char l_szTextureFile[MAX_PATH];
-		char l_szTextureExt[MAX_PATH];
+		char l_szTextureFile[SOURCE_MAX_PATH];
+		char l_szTextureExt[SOURCE_MAX_PATH];
 
 		_splitpath ( matList[matList.GetUsed()-1].texture, NULL, NULL, l_szTextureFile, l_szTextureExt );
 		sprintf ( matList[matList.GetUsed()-1].texture, "%s%s",  l_szTextureFile, l_szTextureExt );

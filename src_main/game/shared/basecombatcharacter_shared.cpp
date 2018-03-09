@@ -8,7 +8,7 @@
 #include "cbase.h"
 #include "ammodef.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ void CBaseCombatCharacter::RemoveAllAmmo( )
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: This is a sort of hack back-door only used by physgun!
+// TODO(d.rattman): This is a sort of hack back-door only used by physgun!
 //-----------------------------------------------------------------------------
 void CBaseCombatCharacter::SetAmmoCount( int iCount, int iAmmoIndex )
 {

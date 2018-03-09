@@ -1112,26 +1112,26 @@ static void SetToneMapScale(IMatRenderContext *pRenderContext, float newvalue,
   mat_hdr_tonemapscale.SetValue(newvalue);
   pRenderContext->SetGoalToneMappingScale(newvalue);
 
-  if (s_nInAverage < ARRAYSIZE(s_MovingAverageToneMapScale)) {
+  if (s_nInAverage < SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale)) {
     s_MovingAverageToneMapScale[s_nInAverage++] = newvalue;
   } else {
     // scroll, losing oldest
-    for (int i = 0; i < ARRAYSIZE(s_MovingAverageToneMapScale) - 1; i++)
+    for (int i = 0; i < SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale) - 1; i++)
       s_MovingAverageToneMapScale[i] = s_MovingAverageToneMapScale[i + 1];
-    s_MovingAverageToneMapScale[ARRAYSIZE(s_MovingAverageToneMapScale) - 1] =
+    s_MovingAverageToneMapScale[SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale) - 1] =
         newvalue;
   }
 
   // now, use the average of the last tonemap calculations as our goal scale
   if (s_nInAverage ==
-      ARRAYSIZE(s_MovingAverageToneMapScale))  // got full buffer yet?
+      SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale))  // got full buffer yet?
   {
     float avg = 0.;
     float sumweights = 0;
-    int sample_pt = ARRAYSIZE(s_MovingAverageToneMapScale) / 2;
-    for (int i = 0; i < ARRAYSIZE(s_MovingAverageToneMapScale); i++) {
+    int sample_pt = SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale) / 2;
+    for (int i = 0; i < SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale); i++) {
       float weight = abs(i - sample_pt) *
-                     (1.0 / (ARRAYSIZE(s_MovingAverageToneMapScale) / 2));
+                     (1.0 / (SOURCE_ARRAYSIZE(s_MovingAverageToneMapScale) / 2));
       sumweights += weight;
       avg += weight * s_MovingAverageToneMapScale[i];
     }
@@ -1523,7 +1523,7 @@ static void DoPreBloomTonemapping(IMatRenderContext *pRenderContext, int nX,
   // Update HDR histogram before bloom
   if (mat_dynamic_tonemapping.GetInt() || mat_show_histogram.GetInt()) {
     if (s_bScreenEffectTextureIsUpdated == false) {
-      // FIXME: nX/nY/nWidth/nHeight are used here, but the equivalent
+      // TODO(d.rattman): nX/nY/nWidth/nHeight are used here, but the equivalent
       // parameters are ignored in Generate8BitBloomTexture
       UpdateScreenEffectTexture(0, nX, nY, nWidth, nHeight, true);
       s_bScreenEffectTextureIsUpdated = true;
@@ -1752,7 +1752,7 @@ void DoEnginePostProcessing(int x, int y, int w, int h, bool bFlashlightIsOn,
         // when run outside the debugger for some mods (DoD). This forces it to
         // skip a frame, ensuring we don't get the weird texture crash we
         // otherwise would.
-        // FIXME: This will be removed when the true cause is found [added: Main
+        // TODO(d.rattman): This will be removed when the true cause is found [added: Main
         // CL 144694]
         static bool bFirstFrame = !IsX360();
         if (!bFirstFrame || !bPerformColCorrect) {

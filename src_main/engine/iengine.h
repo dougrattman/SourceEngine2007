@@ -6,7 +6,7 @@
 #include "base/include/base_types.h"
 #include "tier1/interface.h"
 
-abstract_class IEngine {
+the_interface IEngine {
  public:
   enum { QUIT_NOTQUITTING = 0, QUIT_TODESKTOP, QUIT_RESTART };
 

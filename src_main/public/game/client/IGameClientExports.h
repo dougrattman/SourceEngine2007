@@ -9,7 +9,7 @@
 // Purpose: Exports a set of functions for the GameUI interface to interact with
 // the game client
 //-----------------------------------------------------------------------------
-abstract_class IGameClientExports : public IBaseInterface {
+the_interface IGameClientExports : public IBaseInterface {
  public:
 #ifndef _XBOX
   // ingame voice manipulation

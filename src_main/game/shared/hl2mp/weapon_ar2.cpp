@@ -21,7 +21,7 @@
 #include "effect_dispatch_data.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef CLIENT_DLL
@@ -306,7 +306,7 @@ const WeaponProficiencyInfo_t *CWeaponAR2::GetProficiencyValues()
 		{ 1.00,		1.0		},
 	};
 
-	COMPILE_TIME_ASSERT( ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
+	static_assert( SOURCE_ARRAYSIZE(proficiencyTable) == WEAPON_PROFICIENCY_PERFECT + 1);
 
 	return proficiencyTable;
 }

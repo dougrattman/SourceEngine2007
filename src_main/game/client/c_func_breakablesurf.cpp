@@ -11,7 +11,7 @@
 #include "materialsystem/IMaterialVar.h"
 #include "model_types.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_NUM_PANELS 16
@@ -225,7 +225,7 @@ void C_BreakableSurface::SetPanelStale(int nWidth, int nHeight, bool value) {
 void C_BreakableSurface::OnRestore() {
   BaseClass::OnRestore();
 
-  // FIXME:  This restores the general state, but not the random edge bits
+  // TODO(d.rattman):  This restores the general state, but not the random edge bits
   //  those would need to be serialized separately...
   // traverse everthing and restore bits
   // Initialize panels

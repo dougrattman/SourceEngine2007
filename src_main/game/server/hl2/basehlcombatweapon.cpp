@@ -10,7 +10,7 @@
 #include "in_buttons.h"
 #include "soundent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_SERVERCLASS_ST(CHLMachineGun, DT_HLMachineGun)
@@ -433,7 +433,7 @@ int CHLSelectFireMachineGun::WeaponRangeAttack1Condition(float flDot,
 //-----------------------------------------------------------------------------
 int CHLSelectFireMachineGun::WeaponRangeAttack2Condition(float flDot,
                                                          float flDist) {
-  return COND_NONE;  // FIXME: disabled for now
+  return COND_NONE;  // TODO(d.rattman): disabled for now
 
   // m_iClip2 == -1 when no secondary clip is used
   if (m_iClip2 == 0 && UsesSecondaryAmmo()) {

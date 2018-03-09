@@ -19,7 +19,7 @@
 #include "vstdlib/random.h"
 #include "gamestats.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sk_auto_reload_time;
@@ -104,7 +104,7 @@ END_DATADESC()
 
 acttable_t	CWeaponShotgun::m_acttable[] = 
 {
-	{ ACT_IDLE,						ACT_IDLE_SMG1,					true },	// FIXME: hook to shotgun unique
+	{ ACT_IDLE,						ACT_IDLE_SMG1,					true },	// TODO(d.rattman): hook to shotgun unique
 
 	{ ACT_RANGE_ATTACK1,			ACT_RANGE_ATTACK_SHOTGUN,			true },
 	{ ACT_RELOAD,					ACT_RELOAD_SHOTGUN,					false },

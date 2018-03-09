@@ -69,7 +69,7 @@ void printusage(void) {
   printf("processgamestats game datafile [describe only]\n\n");
   printf("valid gamenames:\n");
 
-  for (int i = 0; i < ARRAYSIZE(g_ParseFuncs); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ParseFuncs); ++i) {
     printf("  %s\n", g_ParseFuncs[i].pchGameName);
   }
 
@@ -102,7 +102,7 @@ void BuildFileList_R(CUtlVector<CUtlSymbol> &files, char const *dir,
       int len = strlen(wfd.cFileName);
       if (len > extlen) {
         if (!stricmp(&wfd.cFileName[len - extlen], extension)) {
-          char filename[MAX_PATH];
+          char filename[SOURCE_MAX_PATH];
           Q_snprintf(filename, sizeof(filename), "%s\\%s", dir, wfd.cFileName);
           _strlwr(filename);
 
@@ -501,7 +501,7 @@ int main(int argc, char *argv[]) {
   DataParseFunc parseFunc = NULL;
   PostImportFunc postImportFunc = NULL;
   ParseCurrentUserIDFunc parseUserIDFunc = NULL;
-  for (int i = 0; i < ARRAYSIZE(g_ParseFuncs); ++i) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ParseFuncs); ++i) {
     if (!Q_stricmp(g_ParseFuncs[i].pchGameName, gamename)) {
       parseFunc = g_ParseFuncs[i].pfnParseFunc;
       postImportFunc = g_ParseFuncs[i].pfnPostImport;
@@ -519,7 +519,7 @@ int main(int argc, char *argv[]) {
 
   CUtlVector<CUtlSymbol> files;
   if (describeonly || Q_stristr(argv[dirArg], ".dat")) {
-    char filename[MAX_PATH];
+    char filename[SOURCE_MAX_PATH];
     Q_snprintf(filename, sizeof(filename), "%s", argv[dirArg]);
     _strlwr(filename);
     Q_FixSlashes(filename);
@@ -818,5 +818,5 @@ char const *s_PerfKeyList[] = {
 void ProcessPerfData(IMySQL *pSQL, char const *pTableName,
                      char const *pPerfData) {
   InsertKeyDataIntoTable(pSQL, pTableName, pPerfData, s_PerfKeyList,
-                         ARRAYSIZE(s_PerfKeyList));
+                         SOURCE_ARRAYSIZE(s_PerfKeyList));
 }

@@ -225,7 +225,7 @@ bool CPortalRenderable_FlatBasic::CalcFrustumThroughPortal( const Vector &ptCurr
 	int iNextViewRecursionLevel = iViewRecursionLevel + 1;
 
 	if( (iViewRecursionLevel == 0) && 
-		( (ptCurrentViewOrigin - m_ptOrigin).LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT) ) )//FIXME: Player closeness check might need reimplementation
+		( (ptCurrentViewOrigin - m_ptOrigin).LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT) ) )//TODO(d.rattman): Player closeness check might need reimplementation
 	{
 		//calculations are most likely going to be completely useless, return nothing
 		return false;
@@ -916,7 +916,7 @@ void CPortalRenderable_FlatBasic::DrawRenderFixMesh( const IMaterial *pMaterialO
 	if( (vPortalCenterToCamera.Dot( m_vForward ) < -1.0f) ) //camera coplanar (to 1.0 units) or in front of portal plane
 		return;
 
-	if( vPortalCenterToCamera.LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT) ) //FIXME: Player closeness check might need reimplementation
+	if( vPortalCenterToCamera.LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT) ) //TODO(d.rattman): Player closeness check might need reimplementation
 	{
 		//if the player is this close to the portal, immediately get rid of any static it has as well as draw the fix
 		m_fStaticAmount = 0.0f;
@@ -1222,7 +1222,7 @@ void CPortalRenderable_FlatBasic::DrawPortal( void )
 			{
 				DrawSimplePortalMesh( m_Materials.m_Portal_Refract[ ( ( m_bIsPortal2 ) ? ( 1 ) : ( 0 ) ) ] );
 			}
-			DrawSimplePortalMesh( m_Materials.m_PortalStaticOverlay[((m_bIsPortal2)?(1):(0))] ); //FIXME: find out why the projection mesh screws up at the second level of rendering in -nouserclip situations
+			DrawSimplePortalMesh( m_Materials.m_PortalStaticOverlay[((m_bIsPortal2)?(1):(0))] ); //TODO(d.rattman): find out why the projection mesh screws up at the second level of rendering in -nouserclip situations
 		}
 
 		EndPortalPixelVisibilityQuery();
@@ -1252,7 +1252,7 @@ bool CPortalRenderable_FlatBasic::ShouldUpdatePortalView_BasedOnView( const CVie
 	Vector vCameraPos = currentView.origin;
 
 	if( (g_pPortalRender->GetViewRecursionLevel() == 0) &&
-		((m_ptOrigin - vCameraPos).LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT)) ) //FIXME: Player closeness check might need reimplementation
+		((m_ptOrigin - vCameraPos).LengthSqr() < (PORTAL_HALF_HEIGHT * PORTAL_HALF_HEIGHT)) ) //TODO(d.rattman): Player closeness check might need reimplementation
 	{
 		return true; //fudgery time. The player might not be able to see the surface, but they can probably see the render fix
 	}

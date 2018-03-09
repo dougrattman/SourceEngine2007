@@ -7,7 +7,7 @@
 
 typedef int FileTransferID_t;
 
-abstract_class CFileTransferMgr {
+the_interface CFileTransferMgr {
  public:
   CFileTransferMgr();
   virtual ~CFileTransferMgr();

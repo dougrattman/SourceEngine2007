@@ -271,7 +271,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\unittests\$
     <ClInclude Include="..\..\public\materialsystem\imaterialsystemhardwareconfig.h" />
     <ClInclude Include="..\..\public\materialsystem\imaterialsystemstats.h" />
     <ClInclude Include="..\..\public\materialsystem\materialsystem_config.h" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\compressed_vector.h" />
     <ClInclude Include="..\..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\..\public\mathlib\vector.h" />

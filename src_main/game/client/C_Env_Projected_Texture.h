@@ -51,7 +51,7 @@ private:
 	bool	m_bCameraSpace;
 	color32	m_cLightColor;
 	float	m_flAmbient;
-	char	m_SpotlightTextureName[ MAX_PATH ];
+	char	m_SpotlightTextureName[ SOURCE_MAX_PATH ];
 	int		m_nSpotlightTextureFrame;
 	int		m_nShadowQuality;
 	bool	m_bCurrentShadow;

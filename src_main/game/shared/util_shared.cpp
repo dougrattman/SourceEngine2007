@@ -21,7 +21,7 @@
 bool NPC_CheckBrushExclude(CBaseEntity *pEntity, CBaseEntity *pBrush);
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar r_visualizetraces("r_visualizetraces", "0", FCVAR_CHEAT);
@@ -222,10 +222,10 @@ bool StandardFilterRules(IHandleEntity *pHandleEntity, int fContentsMask) {
   if (!(fContentsMask & CONTENTS_WINDOW) && pCollide->IsTransparent())
     return false;
 
-  // FIXME: this is to skip BSP models that are entities that can be
+  // TODO(d.rattman): this is to skip BSP models that are entities that can be
   // potentially moved/deleted, similar to a monster but doors don't seem to
   // be flagged as monsters
-  // FIXME: the FL_WORLDBRUSH looked promising, but it needs to be set on
+  // TODO(d.rattman): the FL_WORLDBRUSH looked promising, but it needs to be set on
   // everything that's actually a worldbrush and it currently isn't
   if (!(fContentsMask & CONTENTS_MOVEABLE) &&
       (pCollide->GetMoveType() ==
@@ -888,7 +888,7 @@ void UTIL_DecodeICE(unsigned char *buffer, int size, const unsigned char *key) {
 
   int blockSize = ice.blockSize();
 
-  unsigned char *temp = (unsigned char *)_alloca(PAD_NUMBER(size, blockSize));
+  unsigned char *temp = (unsigned char *)_alloca(SOURCE_PAD_NUMBER(size, blockSize));
   unsigned char *p1 = buffer;
   unsigned char *p2 = temp;
 

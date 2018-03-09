@@ -23,12 +23,12 @@
 #include "sv_main.h"
 #include "tier1/UtlLinkedList.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // copy message data from in to out buffer
 #define CopyDataInToOut(msg)                            \
-  int size = PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4); \
+  int size = SOURCE_PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4); \
   uint8_t *buffer = (byte *)stackalloc(size);           \
   msg->m_DataIn.ReadBits(buffer, msg->m_nLength);       \
   msg->m_DataOut.StartWriting(buffer, size, msg->m_nLength);
@@ -438,7 +438,7 @@ bool CHLTVClientState::ProcessVoiceInit(SVC_VoiceInit *msg) {
 }
 
 bool CHLTVClientState::ProcessVoiceData(SVC_VoiceData *msg) {
-  int size = PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4);
+  int size = SOURCE_PAD_NUMBER(Bits2Bytes(msg->m_nLength), 4);
   uint8_t *buffer = (byte *)stackalloc(size);
   msg->m_DataIn.ReadBits(buffer, msg->m_nLength);
   msg->m_DataOut = buffer;

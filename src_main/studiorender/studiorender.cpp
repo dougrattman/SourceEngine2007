@@ -18,7 +18,7 @@
 #include "tier1/strtools.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -272,7 +272,7 @@ void CStudioRender::Shutdown(void) {
 void CStudioRender::SetLightingRenderState() {
   CMatRenderContextPtr pRenderContext(g_pMaterialSystem);
 
-  // FIXME: What happens when we use the fixed function pipeline but vertex
+  // TODO(d.rattman): What happens when we use the fixed function pipeline but vertex
   // shaders are active? For the time being this only works because everything
   // that does vertex lighting does, in fact, have a vertex shader which is used
   // to render it.
@@ -478,7 +478,7 @@ void CStudioRender::DrawModelStaticProp(const DrawModelInfo_t &info,
 
   // If we're not shadow depth mapping
   if ((flags & STUDIORENDER_SHADOWDEPTHTEXTURE) == 0) {
-    // FIXME: Should this occur in a separate call?
+    // TODO(d.rattman): Should this occur in a separate call?
     // Draw all the decals on this model
     if ((flags & STUDIORENDER_DRAW_GROUP_MASK) !=
         STUDIORENDER_DRAW_TRANSLUCENT_ONLY) {

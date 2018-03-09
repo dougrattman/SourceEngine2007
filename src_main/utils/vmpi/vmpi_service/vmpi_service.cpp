@@ -41,8 +41,8 @@ char *g_pPassword = NULL;	// Set if this service is using a pw.
 ISocket *g_pSocket = NULL;
 int g_SocketPort = -1;		// Which port we were able to bind the port on.
 
-char g_RunningProcess_ExeName[MAX_PATH] = {0};
-char g_RunningProcess_MapName[MAX_PATH] = {0};
+char g_RunningProcess_ExeName[SOURCE_MAX_PATH] = {0};
+char g_RunningProcess_MapName[SOURCE_MAX_PATH] = {0};
 HANDLE g_hRunningProcess = NULL;
 HANDLE g_hRunningThread = NULL;
 DWORD g_dwRunningProcessId = 0;
@@ -77,8 +77,8 @@ int g_CurJobID[4];
 int g_CurJobPriority = -1;	// VMPI priority of the currently-running job.
 
 // The directory we're running in.
-char g_BaseAppPath[MAX_PATH];
-char g_FileCachePath[MAX_PATH];	// [base app path]\vmpi_service_cache.
+char g_BaseAppPath[SOURCE_MAX_PATH];
+char g_FileCachePath[SOURCE_MAX_PATH];	// [base app path]\vmpi_service_cache.
 
 
 // Different modes this app can run in.
@@ -694,7 +694,7 @@ void GetArgsFromBuffer(
 }
 
 
-bool GetDLLFilename( CUtlVector<char*> &newArgv, char pDLLFilename[MAX_PATH] )
+bool GetDLLFilename( CUtlVector<char*> &newArgv, char pDLLFilename[SOURCE_MAX_PATH] )
 {
 	char *argStr = newArgv[0];
 	int argLen = strlen( argStr );
@@ -704,15 +704,15 @@ bool GetDLLFilename( CUtlVector<char*> &newArgv, char pDLLFilename[MAX_PATH] )
 	if ( Q_stricmp( &argStr[argLen-4], ".exe" ) != 0 )
 		return false;
 		
-	char baseFilename[MAX_PATH];
-	Q_strncpy( baseFilename, argStr, MAX_PATH );
-	baseFilename[ std::min( MAX_PATH-1, argLen-4 ) ] = 0;
+	char baseFilename[SOURCE_MAX_PATH];
+	Q_strncpy( baseFilename, argStr, SOURCE_MAX_PATH );
+	baseFilename[ std::min( SOURCE_MAX_PATH-1, argLen-4 ) ] = 0;
 	
 	// First try _dll.dll (src_main), then try .dll (rel).
-	V_snprintf( pDLLFilename, MAX_PATH, "%s_dll.dll", baseFilename );
+	V_snprintf( pDLLFilename, SOURCE_MAX_PATH, "%s_dll.dll", baseFilename );
 	if ( _access( pDLLFilename, 0 ) != 0 )
 	{
-		V_snprintf( pDLLFilename, MAX_PATH, "%s.dll", baseFilename );
+		V_snprintf( pDLLFilename, SOURCE_MAX_PATH, "%s.dll", baseFilename );
 	}
 
 	return true;
@@ -1131,7 +1131,7 @@ bool StartDownloadingAppFiles(
 	}
 
 	// Clear all the files in the directory.
-	char searchStr[MAX_PATH];
+	char searchStr[SOURCE_MAX_PATH];
 	V_ComposeFileName( cacheDir, "*.*", searchStr, sizeof( searchStr ) );
 	_finddata_t findData;
 	intptr_t ret = _findfirst( searchStr, &findData );
@@ -1142,7 +1142,7 @@ bool StartDownloadingAppFiles(
 			if ( findData.name[0] == '.' )
 				continue;
 			
-			char fullFilename[MAX_PATH];
+			char fullFilename[SOURCE_MAX_PATH];
 			V_ComposeFileName( cacheDir, findData.name, fullFilename, sizeof( fullFilename ) );
 			if ( _unlink( fullFilename ) != 0 )
 			{
@@ -1177,7 +1177,7 @@ bool StartDownloadingAppFiles(
 	delete newArgv[0];
 	newArgv[0] = pExeName;
 
-	char fullExeFilename[MAX_PATH];
+	char fullExeFilename[SOURCE_MAX_PATH];
 	V_ComposeFileName( g_BaseAppPath, "vmpi_transfer.exe", fullExeFilename, sizeof( fullExeFilename ) );
 	
 	CUtlVector<char*> downloaderArgs;
@@ -1233,7 +1233,7 @@ void SendPatchCommandToUIs( DWORD dwInstallerProcessId )
 	data.AddMultipleToTail( V_strlen( g_FileCachePath ) + 1, g_FileCachePath );
 	
 	// Second argument is the command line.
-	char waitAndRestartExe[MAX_PATH], serviceUIExe[MAX_PATH], commandLine[1024 * 8];
+	char waitAndRestartExe[SOURCE_MAX_PATH], serviceUIExe[SOURCE_MAX_PATH], commandLine[1024 * 8];
 	V_ComposeFileName( g_FileCachePath, "WaitAndRestart.exe", waitAndRestartExe, sizeof( waitAndRestartExe ) );
 	V_ComposeFileName( g_BaseAppPath, "vmpi_service_ui.exe", serviceUIExe, sizeof( serviceUIExe ) ); // We're running the UI from the same directory this exe is in.
 	char strSeconds[64];
@@ -1280,7 +1280,7 @@ bool CheckDownloaderFinished()
 	g_Waiting_hProcess = NULL;
 
 	// Ok, it's done. Did it finish successfully?
-	char testFilename[MAX_PATH];
+	char testFilename[SOURCE_MAX_PATH];
 	V_ComposeFileName( g_FileCachePath, "ReadyToGo.txt", testFilename, sizeof( testFilename ) );
 	if ( _access( testFilename, 0 ) != 0 )
 		return false;
@@ -1299,7 +1299,7 @@ bool CheckDownloaderFinished()
 		}
 	}
 
-	char DLLFilename[MAX_PATH];
+	char DLLFilename[SOURCE_MAX_PATH];
 	if ( FindArg( __argc, __argv, "-TryDLLMode" ) && 
 		g_RunMode == RUNMODE_CONSOLE && 
 		GetDLLFilename( g_Waiting_Argv, DLLFilename ) &&
@@ -1421,7 +1421,7 @@ void HandlePacket_LOOKING_FOR_WORKERS( bf_read &buf, const CIPAddr &ipFrom )
 		g_Waiting_bShowAppWindow = true;
 
 	// Copy all the files from the master and put them in our cache dir to run with.
-	char cacheDir[MAX_PATH];
+	char cacheDir[SOURCE_MAX_PATH];
 	if ( StartDownloadingAppFiles( newArgv, cacheDir, sizeof( cacheDir ), g_Waiting_bShowAppWindow, &g_Waiting_hProcess, bPatching ) )
 	{
 		// After it's downloaded, we want it to switch to the main connection port.

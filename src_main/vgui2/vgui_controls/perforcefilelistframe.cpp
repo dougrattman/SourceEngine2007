@@ -15,7 +15,7 @@
 #include "vgui_controls/splitter.h"
 #include "vgui_controls/textentry.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ COperationFileListFrame::COperationFileListFrame(
     m_pDescription->SetText("<enter description here>");
   }
 
-  // FIXME: Might be nice to have checkboxes per row
+  // TODO(d.rattman): Might be nice to have checkboxes per row
   m_pFileBrowser = new vgui::ListPanel(pBrowserParent, "Browser");
   m_pFileBrowser->AddColumnHeader(0, "operation", "Operation", 52, 0);
   m_pFileBrowser->AddColumnHeader(1, "filename", pColumnHeader, 128,
@@ -381,7 +381,7 @@ void CPerforceFileListFrame::AddFile(const char *pRelativePath,
   if (m_Action < PERFORCE_ACTION_FILE_REVERT) {
     // If the file wasn't found on the disk, then abort
     if (g_pFullFileSystem->FileExists(pRelativePath, pPathId)) {
-      char pFullPath[MAX_PATH];
+      char pFullPath[SOURCE_MAX_PATH];
       g_pFullFileSystem->RelativePathToFullPath(pRelativePath, pPathId,
                                                 pFullPath, sizeof(pFullPath));
       AddFileForOpen(pFullPath);
@@ -392,7 +392,7 @@ void CPerforceFileListFrame::AddFile(const char *pRelativePath,
   // Deal with submit, revert
 
   // First, handle the case where the file exists on the drive
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   if (g_pFullFileSystem->FileExists(pRelativePath, pPathId)) {
     g_pFullFileSystem->RelativePathToFullPath(pRelativePath, pPathId, pFullPath,
                                               sizeof(pFullPath));
@@ -412,8 +412,8 @@ void CPerforceFileListFrame::AddFile(const char *pRelativePath,
   // Using the client spec of the path, we need to piece together
   // the full path; the full path unfortunately is usually ambiguous:
   // you can never exactly know which mod it came from.
-  char pTemp[MAX_PATH];
-  char pSearchString[MAX_PATH];
+  char pTemp[SOURCE_MAX_PATH];
+  char pSearchString[SOURCE_MAX_PATH];
   Q_strncpy(pSearchString, pRelativePath, sizeof(pSearchString));
   Q_FixSlashes(pSearchString);
 

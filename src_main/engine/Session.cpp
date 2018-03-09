@@ -1,7 +1,5 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "base/include/windows/windows_light.h"
-
 #include "Session.h"
 
 #include "hl2orange.spa.h"
@@ -10,12 +8,13 @@
 #include "tier0/include/dbg.h"
 #include "tier0/include/tslist.h"
 #include "tier1/UtlLinkedList.h"
+#include "build/include/build_config.h"
 
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"  // for CloseHandle()
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IXboxSystem *g_pXboxSystem;
@@ -288,7 +287,7 @@ void CSession::UpdateCreating() {
 // Purpose: Cancel async session creation
 //-----------------------------------------------------------------------------
 void CSession::CancelCreateSession() {
-#ifndef _LINUX
+#ifndef OS_POSIX
   if (m_SessionState != SESSION_STATE_CREATING) return;
 
   g_pXboxSystem->CancelOverlappedOperation(&m_hCreateHandle);

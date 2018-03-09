@@ -33,7 +33,7 @@ enum { DISP_SHADOW_HANDLE_INVALID = (DispShadowHandle_t)~0 };
 //-----------------------------------------------------------------------------
 // Displacement interface to the engine (and WorldCraft?)
 //-----------------------------------------------------------------------------
-abstract_class IDispInfo {
+the_interface IDispInfo {
  public:
   virtual ~IDispInfo() {}
 

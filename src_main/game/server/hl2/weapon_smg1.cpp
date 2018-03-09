@@ -15,7 +15,7 @@
 #include "rumble_shared.h"
 #include "soundent.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sk_plr_dmg_smg1_grenade;
@@ -167,7 +167,7 @@ void CWeaponSMG1::Equip(CBaseCombatCharacter *pOwner) {
 void CWeaponSMG1::FireNPCPrimaryAttack(CBaseCombatCharacter *pOperator,
                                        Vector &vecShootOrigin,
                                        Vector &vecShootDir) {
-  // FIXME: use the returned number of bullets to account for >10hz firerate
+  // TODO(d.rattman): use the returned number of bullets to account for >10hz firerate
   WeaponSoundRealtime(SINGLE_NPC);
 
   CSoundEnt::InsertSound(SOUND_COMBAT | SOUND_CONTEXT_GUNFIRE,
@@ -221,7 +221,7 @@ void CWeaponSMG1::Operator_HandleAnimEvent(animevent_t *pEvent,
       FireNPCPrimaryAttack(pOperator, vecShootOrigin, vecShootDir);
     } break;
 
-      /*//FIXME: Re-enable
+      /*//TODO(d.rattman): Re-enable
       case EVENT_WEAPON_AR2_GRENADE:
       {
       CAI_BaseNPC *npc = pOperator->MyNPCPointer();
@@ -240,7 +240,7 @@ void CWeaponSMG1::Operator_HandleAnimEvent(animevent_t *pEvent,
       pGrenade->m_pMyWeaponAR2	= this;
       pGrenade->SetDamage(sk_npc_dmg_ar2_grenade.GetFloat());
 
-      // FIXME: arrgg ,this is hard coded into the weapon???
+      // TODO(d.rattman): arrgg ,this is hard coded into the weapon???
       m_flNextGrenadeCheck = gpGlobals->curtime + 6;// wait six seconds before
       even looking again to see if a grenade can be thrown.
 
@@ -454,7 +454,7 @@ int CWeaponSMG1::WeaponRangeAttack2Condition(float flDot, float flDist) {
   // ---------------------------------------------------------------------
   // Check that throw is legal and clear
   // ---------------------------------------------------------------------
-  // FIXME: speed is based on difficulty...
+  // TODO(d.rattman): speed is based on difficulty...
 
   Vector vecToss =
       VecCheckThrow(this, npcOwner->GetLocalOrigin() + Vector(0, 0, 60),
@@ -481,7 +481,7 @@ const WeaponProficiencyInfo_t *CWeaponSMG1::GetProficiencyValues() {
       {5.0 / 3.0, 0.75}, {1.00, 1.0},
   };
 
-  COMPILE_TIME_ASSERT(ARRAYSIZE(proficiencyTable) ==
+  static_assert(SOURCE_ARRAYSIZE(proficiencyTable) ==
                       WEAPON_PROFICIENCY_PERFECT + 1);
 
   return proficiencyTable;

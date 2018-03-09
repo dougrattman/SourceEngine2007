@@ -3,7 +3,7 @@
 #ifndef MIXER_CONTROLS_H
 #define MIXER_CONTROLS_H
 
-abstract_class IMixerControls {
+the_interface IMixerControls {
  protected:
   virtual ~IMixerControls() {}
 

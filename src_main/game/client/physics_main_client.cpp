@@ -9,7 +9,7 @@
 #include "typeinfo.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -20,7 +20,7 @@ static void Physics_TraceHull( C_BaseEntity* pBaseEntity, const Vector &vecStart
 	const Vector &vecEnd, const Vector &hullMin, const Vector &hullMax,	
 	unsigned int mask, trace_t *ptr )
 {
-	// FIXME: I really am not sure the best way of doing this
+	// TODO(d.rattman): I really am not sure the best way of doing this
 	// The TraceHull code below for shots will make sure the object passes
 	// through shields which do not block that damage type. It will also 
 	// send messages to the shields that they've been hit.

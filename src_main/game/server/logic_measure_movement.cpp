@@ -8,7 +8,7 @@
 #include "cbase.h"
 #include "baseentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ void CLogicMeasureMovement::SetTargetReference( const char *pName )
 //-----------------------------------------------------------------------------
 void CLogicMeasureMovement::MeasureThink( )
 {
-	// FIXME: This is a hack to make measuring !player simpler. The player isn't
+	// TODO(d.rattman): This is a hack to make measuring !player simpler. The player isn't
 	// created at Activate time, so m_hMeasureTarget may be NULL because of that.
 	if ( !m_hMeasureTarget.Get() && !Q_strnicmp( STRING(m_strMeasureTarget), "!player", 8 ) )
 	{
@@ -176,7 +176,7 @@ void CLogicMeasureMovement::MeasureThink( )
 			AngleIMatrix( m_hMeasureTarget->EyeAngles(), m_hMeasureTarget->EyePosition(), matWorldToMeasure );
 			break;
 
-		// FIXME: Could add attachment point measurement here easily
+		// TODO(d.rattman): Could add attachment point measurement here easily
 		}
 
 		ConcatTransforms( matWorldToMeasure, m_hMeasureReference->EntityToWorldTransform(), matRefToMeasure );

@@ -61,7 +61,7 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern bool g_bTestMoveTypeStepSimulation;
@@ -292,7 +292,7 @@ SendPropDataTable("AnimTimeMustBeFirst", 0,
                       SendProxy_SendPredictableId),
 #endif
 
-    // FIXME: Collapse into another flag field?
+    // TODO(d.rattman): Collapse into another flag field?
     SendPropInt(SENDINFO(m_bSimulatedEveryTick), 1, SPROP_UNSIGNED),
     SendPropInt(SENDINFO(m_bAnimatedEveryTick), 1, SPROP_UNSIGNED),
     SendPropBool(SENDINFO(m_bAlternateSorting)),
@@ -300,8 +300,8 @@ SendPropDataTable("AnimTimeMustBeFirst", 0,
     END_SEND_TABLE()
 
         CBaseEntity::CBaseEntity(bool bServerOnly) {
-  COMPILE_TIME_ASSERT(MOVETYPE_LAST < (1 << MOVETYPE_MAX_BITS));
-  COMPILE_TIME_ASSERT(MOVECOLLIDE_COUNT < (1 << MOVECOLLIDE_MAX_BITS));
+  static_assert(MOVETYPE_LAST < (1 << MOVETYPE_MAX_BITS));
+  static_assert(MOVECOLLIDE_COUNT < (1 << MOVECOLLIDE_MAX_BITS));
 
 #ifdef _DEBUG
   // necessary since in debug, we initialize vectors to NAN for debugging
@@ -369,7 +369,7 @@ extern bool g_bDisableEhandleAccess;
 // Purpose: See note below
 //-----------------------------------------------------------------------------
 CBaseEntity::~CBaseEntity() {
-  // FIXME: This can't be called from UpdateOnRemove! There's at least one
+  // TODO(d.rattman): This can't be called from UpdateOnRemove! There's at least one
   // case where friction sounds are added between the call to UpdateOnRemove +
   // ~CBaseEntity
   PhysCleanupFrictionSounds(this);
@@ -1352,7 +1352,7 @@ int CBaseEntity::VPhysicsTakeDamage(const CTakeDamageInfo &info) {
     } else if ((gameFlags & FVPHYSICS_PART_OF_RAGDOLL) &&
                (gameFlags & FVPHYSICS_CONSTRAINT_STATIC)) {
       IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-      int count = VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+      int count = VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
       for (int i = 0; i < count; i++) {
         if (!(pList[i]->GetGameFlags() & FVPHYSICS_CONSTRAINT_STATIC)) {
           pList[i]->ApplyForceOffset(force, offset);
@@ -2374,7 +2374,7 @@ int CBaseEntity::VPhysicsGetObjectList(IPhysicsObject **pList, int listMax) {
 //-----------------------------------------------------------------------------
 bool CBaseEntity::VPhysicsIsFlesh(void) {
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < count; i++) {
     int material = pList[i]->GetMaterialIndex();
     const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(material);
@@ -2414,7 +2414,7 @@ bool CBaseEntity::FVisible(CBaseEntity *pEntity, int traceMask,
   if (pEntity->GetFlags() & FL_NOTARGET) return false;
 
 #if HL1_DLL
-  // FIXME: only block LOS through opaque water
+  // TODO(d.rattman): only block LOS through opaque water
   // don't look through water
   if ((m_nWaterLevel != 3 && pEntity->m_nWaterLevel == 3) ||
       (m_nWaterLevel == 3 && pEntity->m_nWaterLevel == 0))
@@ -2474,7 +2474,7 @@ bool CBaseEntity::FVisible(const Vector &vecTarget, int traceMask,
 #if HL1_DLL
 
   // don't look through water
-  // FIXME: only block LOS through opaque water
+  // TODO(d.rattman): only block LOS through opaque water
   bool inWater =
       (UTIL_PointContents(vecTarget) & (CONTENTS_SLIME | CONTENTS_WATER))
           ? true
@@ -2587,7 +2587,7 @@ bool CBaseEntity::PassesDamageFilter(const CTakeDamageInfo &info) {
   return true;
 }
 
-FORCEINLINE bool NamesMatch(const char *pszQuery, string_t nameToMatch) {
+SOURCE_FORCEINLINE bool NamesMatch(const char *pszQuery, string_t nameToMatch) {
   if (nameToMatch == NULL_STRING) return (*pszQuery == 0 || *pszQuery == '*');
 
   const char *pszNameToMatch = STRING(nameToMatch);
@@ -3131,7 +3131,7 @@ int CBaseEntity::ShouldTransmit(const CCheckTransmitInfo *pInfo) {
 
   CBasePlayer *pRecipientPlayer = static_cast<CBasePlayer *>(pRecipientEntity);
 
-  // FIXME: Refactor once notion of "team" is moved into HL2 code
+  // TODO(d.rattman): Refactor once notion of "team" is moved into HL2 code
   // Team rules may tell us that we should
   if (pRecipientPlayer->GetTeam()) {
     if (pRecipientPlayer->GetTeam()->ShouldTransmitToPlayer(pRecipientPlayer,
@@ -3962,7 +3962,7 @@ void CBaseEntity::Teleport(const Vector *newPosition, const QAngle *newAngles,
   Assert(g_TeleportStack[index] == this);
   g_TeleportStack.FastRemove(index);
 
-  // FIXME: add an initializer function to StepSimulationData
+  // TODO(d.rattman): add an initializer function to StepSimulationData
   StepSimulationData *step =
       (StepSimulationData *)GetDataObject(STEPSIMULATION);
   if (step) {
@@ -5125,7 +5125,7 @@ void CBaseEntity::CalcAbsoluteVelocity() {
   m_vecAbsVelocity += pMoveParent->GetAbsVelocity();
 }
 
-// FIXME: While we're using (dPitch, dYaw, dRoll) as our local angular velocity
+// TODO(d.rattman): While we're using (dPitch, dYaw, dRoll) as our local angular velocity
 // representation, we can't actually solve this problem
 /*
 void CBaseEntity::CalcAbsoluteAngularVelocity()
@@ -5240,7 +5240,7 @@ void CBaseEntity::SetAbsAngles(const QAngle &absAngles) {
   // This is necessary to get the other fields of m_rgflCoordinateFrame ok
   CalcAbsolutePosition();
 
-  // FIXME: The normalize caused problems in server code like
+  // TODO(d.rattman): The normalize caused problems in server code like
   // momentary_rot_button that isn't
   //        handling things like +/-180 degrees properly. This should be
   //        revisited.
@@ -5308,7 +5308,7 @@ void CBaseEntity::SetAbsVelocity(const Vector &vecAbsVelocity) {
   m_vecVelocity = vNew;
 }
 
-// FIXME: While we're using (dPitch, dYaw, dRoll) as our local angular velocity
+// TODO(d.rattman): While we're using (dPitch, dYaw, dRoll) as our local angular velocity
 // representation, we can't actually solve this problem
 /*
 void CBaseEntity::SetAbsAngularVelocity( const QAngle &vecAbsAngVelocity )
@@ -5369,7 +5369,7 @@ void CBaseEntity::SetLocalAngles(const QAngle &angles) {
   // a bunch of time in interpolation if we don't have to invalidate everything
   // and sometimes it's off by a normalization amount
 
-  // FIXME: The normalize caused problems in server code like
+  // TODO(d.rattman): The normalize caused problems in server code like
   // momentary_rot_button that isn't
   //        handling things like +/-180 degrees properly. This should be
   //        revisited.
@@ -5401,7 +5401,7 @@ void CBaseEntity::SetLocalAngularVelocity(const QAngle &vecAngVelocity) {
 // Sets the local position from a transform
 //-----------------------------------------------------------------------------
 void CBaseEntity::SetLocalTransform(const matrix3x4_t &localTransform) {
-  // FIXME: Should angles go away? Should we just use transforms?
+  // TODO(d.rattman): Should angles go away? Should we just use transforms?
   Vector vecLocalOrigin;
   QAngle vecLocalAngles;
   MatrixGetColumn(localTransform, 3, vecLocalOrigin);
@@ -5428,7 +5428,7 @@ bool CBaseEntity::IsFloating() {
   physprops->GetPhysicsProperties(nMaterialIndex, &flDensity, &flThickness,
                                   &flFriction, &flElasticity);
 
-  // FIXME: This really only works for water at the moment..
+  // TODO(d.rattman): This really only works for water at the moment..
   // Owing the check for density == 1000
   return (flDensity < 1000.0f);
 }
@@ -5799,7 +5799,7 @@ void CBaseEntity::InputEnableShadow(inputdata_t &inputdata) {
 // Input  : &inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputAddOutput(inputdata_t &inputdata) {
-  char sOutputName[MAX_PATH];
+  char sOutputName[SOURCE_MAX_PATH];
   Q_strncpy(sOutputName, inputdata.value.String(), sizeof(sOutputName));
   char *sChar = strchr(sOutputName, ' ');
   if (sChar) {
@@ -5860,7 +5860,7 @@ void CBaseEntity::DispatchResponse(const char *conceptName) {
         break;
       }
 
-      // FIXME:  Get pitch from npc?
+      // TODO(d.rattman):  Get pitch from npc?
       CPASAttenuationFilter filter(this);
       CBaseEntity::EmitSentenceByIndex(filter, entindex(), CHAN_VOICE,
                                        sentenceIndex, 1, result.GetSoundLevel(),
@@ -6065,7 +6065,7 @@ bool CBaseEntity::ComputeStepSimulationNetworkAngles(StepSimulationData *step) {
     QuaternionBlend(pOlder->qRotation, pNewer->qRotation, frac, outangles);
     QuaternionAngles(outangles, step->m_angNetworkAngles);
   } else {
-    // FIXME: enable spline interpolation when turning is debounced.
+    // TODO(d.rattman): enable spline interpolation when turning is debounced.
     Quaternion outangles;
     Hermite_Spline(step->m_Previous2.qRotation, step->m_Previous.qRotation,
                    step->m_Next.qRotation, frac, outangles);

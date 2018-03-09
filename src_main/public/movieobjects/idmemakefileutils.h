@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =====//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Interface for makefiles to build differently depending on where they are run
 // from
@@ -31,7 +31,7 @@ enum CompilationState_t : int {
   COMPILATION_FAILED,
 };
 
-abstract_class IDmeMakefileUtils : public IAppSystem {
+the_interface IDmeMakefileUtils : public IAppSystem {
  public:
   // Methods related to compilation
   virtual void PerformCompile(CDmElement * pElement,

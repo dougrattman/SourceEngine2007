@@ -1990,7 +1990,7 @@ inline void COcclusionSystem::IntersectWithNearPlane(const Vector &vecStart,
 
 //-----------------------------------------------------------------------------
 // Clips a surface to the near clip plane
-// FIXME: This blows: a *third* S-H clipper in the engine! All because the
+// TODO(d.rattman): This blows: a *third* S-H clipper in the engine! All because the
 // vertex formats are different owing to different goals of the 3 clippers
 //-----------------------------------------------------------------------------
 static Vector s_TempVertMemory[256];

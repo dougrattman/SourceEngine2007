@@ -13,7 +13,7 @@
 #include "c_te_particlesystem.h"
 #include "particles_ez.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DUST_STARTSIZE		16
@@ -37,7 +37,7 @@ public:
 
 	void UpdateVelocity( SimpleParticle *pParticle, float timeDelta )
 	{
-		//FIXME: Incorrect
+		//TODO(d.rattman): Incorrect
 		pParticle->m_vecVelocity *= 0.9f;
 	}
 

@@ -148,7 +148,7 @@ void CVMTPanel::PerformLayout()
 		m_pHorizontalBar->SetRangeWindow( m_iViewableWidth );
 		m_pHorizontalBar->SetRange( 0, iMaterialWidth );	
 
-		// FIXME: Change scroll amount based on how much is not visible?
+		// TODO(d.rattman): Change scroll amount based on how much is not visible?
 		m_pHorizontalBar->SetButtonPressedScrollValue( 5 );
 	}
 
@@ -428,7 +428,7 @@ void CVMTPanel::OnPaint3D()
 
 	// Draw a background (translucent objects will appear that way)
 
-	// FIXME: Draw the outline of this panel?
+	// TODO(d.rattman): Draw the outline of this panel?
 
 //	pRenderContext->CullMode(MATERIAL_CULLMODE_CCW);
 

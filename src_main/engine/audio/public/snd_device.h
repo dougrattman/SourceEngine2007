@@ -42,7 +42,7 @@ struct channel_t;
 // functionality?
 
 // General interface to an audio device
-abstract_class IAudioDevice {
+the_interface IAudioDevice {
  public:
   // Detect the sound hardware and create a compatible device
   // NOTE: This should NEVER fail. There is a function called

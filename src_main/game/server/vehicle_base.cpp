@@ -19,7 +19,6 @@
 #include "vcollide_parse.h"
 #include "vehicle_base.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define SF_PROP_VEHICLE_ALWAYSTHINK 0x00000001
@@ -30,44 +29,44 @@ extern ConVar g_debug_vehicledriver;
 // CFourWheelServerVehicle
 BEGIN_SIMPLE_DATADESC_(CFourWheelServerVehicle, CBaseServerVehicle)
 
-DEFINE_EMBEDDED(m_ViewSmoothing),
+  DEFINE_EMBEDDED(m_ViewSmoothing),
 
-    END_DATADESC()
+END_DATADESC()
 
-    // CPropVehicle
-    BEGIN_DATADESC(CPropVehicle)
+// CPropVehicle
+BEGIN_DATADESC(CPropVehicle)
 
-        DEFINE_EMBEDDED(m_VehiclePhysics),
+  DEFINE_EMBEDDED(m_VehiclePhysics),
 
-    // These are necessary to save here because the 'owner' of these fields must
-    // be the prop_vehicle
-    DEFINE_PHYSPTR(m_VehiclePhysics.m_pVehicle),
-    DEFINE_PHYSPTR_ARRAY(m_VehiclePhysics.m_pWheels),
+      // These are necessary to save here because the 'owner' of these fields
+      // must be the prop_vehicle
+      DEFINE_PHYSPTR(m_VehiclePhysics.m_pVehicle),
+      DEFINE_PHYSPTR_ARRAY(m_VehiclePhysics.m_pWheels),
 
-    DEFINE_FIELD(m_nVehicleType, FIELD_INTEGER),
+      DEFINE_FIELD(m_nVehicleType, FIELD_INTEGER),
 
-    // Physics Influence
-    DEFINE_FIELD(m_hPhysicsAttacker, FIELD_EHANDLE),
-    DEFINE_FIELD(m_flLastPhysicsInfluenceTime, FIELD_TIME),
+      // Physics Influence
+      DEFINE_FIELD(m_hPhysicsAttacker, FIELD_EHANDLE),
+      DEFINE_FIELD(m_flLastPhysicsInfluenceTime, FIELD_TIME),
 
 #ifdef HL2_EPISODIC
-    DEFINE_UTLVECTOR(m_hPhysicsChildren, FIELD_EHANDLE),
+      DEFINE_UTLVECTOR(m_hPhysicsChildren, FIELD_EHANDLE),
 #endif  // HL2_EPISODIC
 
-    // Keys
-    DEFINE_KEYFIELD(m_vehicleScript, FIELD_STRING, "VehicleScript"),
-    DEFINE_FIELD(m_vecSmoothedVelocity, FIELD_VECTOR),
+      // Keys
+      DEFINE_KEYFIELD(m_vehicleScript, FIELD_STRING, "VehicleScript"),
+      DEFINE_FIELD(m_vecSmoothedVelocity, FIELD_VECTOR),
 
-    // Inputs
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "Throttle", InputThrottle),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "Steer", InputSteering),
-    DEFINE_INPUTFUNC(FIELD_FLOAT, "Action", InputAction),
-    DEFINE_INPUTFUNC(FIELD_VOID, "HandBrakeOn", InputHandBrakeOn),
-    DEFINE_INPUTFUNC(FIELD_VOID, "HandBrakeOff", InputHandBrakeOff),
+      // Inputs
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "Throttle", InputThrottle),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "Steer", InputSteering),
+      DEFINE_INPUTFUNC(FIELD_FLOAT, "Action", InputAction),
+      DEFINE_INPUTFUNC(FIELD_VOID, "HandBrakeOn", InputHandBrakeOn),
+      DEFINE_INPUTFUNC(FIELD_VOID, "HandBrakeOff", InputHandBrakeOff),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(prop_vehicle, CPropVehicle);
+LINK_ENTITY_TO_CLASS(prop_vehicle, CPropVehicle);
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -289,7 +288,7 @@ IMPLEMENT_SERVERCLASS_ST(CPropVehicleDriveable, DT_PropVehicleDriveable)
 
 SendPropEHandle(SENDINFO(m_hPlayer)),
     //	SendPropFloat(SENDINFO_DT_NAME(m_controls.throttle, m_throttle), 8,
-    //SPROP_ROUNDUP,	0.0f,	1.0f),
+    // SPROP_ROUNDUP,	0.0f,	1.0f),
     SendPropInt(SENDINFO(m_nSpeed), 8), SendPropInt(SENDINFO(m_nRPM), 13),
     SendPropFloat(SENDINFO(m_flThrottle), 0, SPROP_NOSCALE),
     SendPropInt(SENDINFO(m_nBoostTimeLeft), 8),
@@ -305,47 +304,48 @@ SendPropEHandle(SENDINFO(m_hPlayer)),
     END_SEND_TABLE();
 
 BEGIN_DATADESC(CPropVehicleDriveable)
-// Inputs
-DEFINE_INPUTFUNC(FIELD_VOID, "Lock", InputLock),
-    DEFINE_INPUTFUNC(FIELD_VOID, "Unlock", InputUnlock),
-    DEFINE_INPUTFUNC(FIELD_VOID, "TurnOn", InputTurnOn),
-    DEFINE_INPUTFUNC(FIELD_VOID, "TurnOff", InputTurnOff),
-    DEFINE_INPUT(m_bHasGun, FIELD_BOOLEAN, "EnableGun"),
+  // Inputs
+  DEFINE_INPUTFUNC(FIELD_VOID, "Lock", InputLock),
+      DEFINE_INPUTFUNC(FIELD_VOID, "Unlock", InputUnlock),
+      DEFINE_INPUTFUNC(FIELD_VOID, "TurnOn", InputTurnOn),
+      DEFINE_INPUTFUNC(FIELD_VOID, "TurnOff", InputTurnOff),
+      DEFINE_INPUT(m_bHasGun, FIELD_BOOLEAN, "EnableGun"),
 
-    // Outputs
-    DEFINE_OUTPUT(m_playerOn, "PlayerOn"),
-    DEFINE_OUTPUT(m_playerOff, "PlayerOff"),
-    DEFINE_OUTPUT(m_pressedAttack, "PressedAttack"),
-    DEFINE_OUTPUT(m_pressedAttack2, "PressedAttack2"),
-    DEFINE_OUTPUT(m_attackaxis, "AttackAxis"),
-    DEFINE_OUTPUT(m_attack2axis, "Attack2Axis"),
-    DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE),
+      // Outputs
+      DEFINE_OUTPUT(m_playerOn, "PlayerOn"),
+      DEFINE_OUTPUT(m_playerOff, "PlayerOff"),
+      DEFINE_OUTPUT(m_pressedAttack, "PressedAttack"),
+      DEFINE_OUTPUT(m_pressedAttack2, "PressedAttack2"),
+      DEFINE_OUTPUT(m_attackaxis, "AttackAxis"),
+      DEFINE_OUTPUT(m_attack2axis, "Attack2Axis"),
+      DEFINE_FIELD(m_hPlayer, FIELD_EHANDLE),
 
-    DEFINE_EMBEDDEDBYREF(m_pServerVehicle),
-    DEFINE_FIELD(m_nSpeed, FIELD_INTEGER), DEFINE_FIELD(m_nRPM, FIELD_INTEGER),
-    DEFINE_FIELD(m_flThrottle, FIELD_FLOAT),
-    DEFINE_FIELD(m_nBoostTimeLeft, FIELD_INTEGER),
-    DEFINE_FIELD(m_nHasBoost, FIELD_INTEGER),
-    DEFINE_FIELD(m_nScannerDisabledWeapons, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_nScannerDisabledVehicle, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bUnableToFire, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_vecEyeExitEndpoint, FIELD_POSITION_VECTOR),
-    DEFINE_FIELD(m_vecGunCrosshair, FIELD_VECTOR),
+      DEFINE_EMBEDDEDBYREF(m_pServerVehicle),
+      DEFINE_FIELD(m_nSpeed, FIELD_INTEGER),
+      DEFINE_FIELD(m_nRPM, FIELD_INTEGER),
+      DEFINE_FIELD(m_flThrottle, FIELD_FLOAT),
+      DEFINE_FIELD(m_nBoostTimeLeft, FIELD_INTEGER),
+      DEFINE_FIELD(m_nHasBoost, FIELD_INTEGER),
+      DEFINE_FIELD(m_nScannerDisabledWeapons, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_nScannerDisabledVehicle, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bUnableToFire, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_vecEyeExitEndpoint, FIELD_POSITION_VECTOR),
+      DEFINE_FIELD(m_vecGunCrosshair, FIELD_VECTOR),
 
-    DEFINE_FIELD(m_bEngineLocked, FIELD_BOOLEAN),
-    DEFINE_KEYFIELD(m_bLocked, FIELD_BOOLEAN, "VehicleLocked"),
-    DEFINE_FIELD(m_flMinimumSpeedToEnterExit, FIELD_FLOAT),
-    DEFINE_FIELD(m_bEnterAnimOn, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_bExitAnimOn, FIELD_BOOLEAN),
-    DEFINE_FIELD(m_flTurnOffKeepUpright, FIELD_TIME),
-    // DEFINE_FIELD( m_flNoImpactDamageTime, FIELD_TIME ),
+      DEFINE_FIELD(m_bEngineLocked, FIELD_BOOLEAN),
+      DEFINE_KEYFIELD(m_bLocked, FIELD_BOOLEAN, "VehicleLocked"),
+      DEFINE_FIELD(m_flMinimumSpeedToEnterExit, FIELD_FLOAT),
+      DEFINE_FIELD(m_bEnterAnimOn, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_bExitAnimOn, FIELD_BOOLEAN),
+      DEFINE_FIELD(m_flTurnOffKeepUpright, FIELD_TIME),
+      // DEFINE_FIELD( m_flNoImpactDamageTime, FIELD_TIME ),
 
-    DEFINE_FIELD(m_hNPCDriver, FIELD_EHANDLE),
-    DEFINE_FIELD(m_hKeepUpright, FIELD_EHANDLE),
+      DEFINE_FIELD(m_hNPCDriver, FIELD_EHANDLE),
+      DEFINE_FIELD(m_hKeepUpright, FIELD_EHANDLE),
 
-    END_DATADESC()
+END_DATADESC()
 
-        LINK_ENTITY_TO_CLASS(prop_vehicle_driveable, CPropVehicleDriveable);
+LINK_ENTITY_TO_CLASS(prop_vehicle_driveable, CPropVehicleDriveable);
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -493,7 +493,7 @@ void CPropVehicleDriveable::GetVectors(Vector *pForward, Vector *pRight,
 // Purpose: AngleVectors equivalent that accounts for the hacked 90 degree
 // rotation of vehicles
 //			BUGBUG: VPhysics is hardcoded so that vehicles must face
-//down Y instead of X like everything else
+// down Y instead of X like everything else
 //-----------------------------------------------------------------------------
 void CPropVehicleDriveable::VehicleAngleVectors(const QAngle &angles,
                                                 Vector *pForward,
@@ -959,7 +959,7 @@ bool CPropVehicleDriveable::NPC_AddPassenger(CAI_BaseNPC *pPassenger,
                                              string_t strRoleName,
                                              int nSeatID) {
   // Must be allowed to enter
-  if (NPC_CanEnterVehicle(pPassenger, true /*FIXME*/) == false) return false;
+  if (NPC_CanEnterVehicle(pPassenger, true) == false) return false;
 
   IServerVehicle *pVehicleServer = GetServerVehicle();
   if (pVehicleServer != NULL)
@@ -975,7 +975,7 @@ bool CPropVehicleDriveable::NPC_AddPassenger(CAI_BaseNPC *pPassenger,
 //-----------------------------------------------------------------------------
 bool CPropVehicleDriveable::NPC_RemovePassenger(CAI_BaseNPC *pPassenger) {
   // Must be allowed to exit
-  if (NPC_CanExitVehicle(pPassenger, true /*FIXME*/) == false) return false;
+  if (NPC_CanExitVehicle(pPassenger, true) == false) return false;
 
   IServerVehicle *pVehicleServer = GetServerVehicle();
   if (pVehicleServer != NULL)

@@ -20,7 +20,7 @@ class Vector;
 //-----------------------------------------------------------------------------
 // The rotor wash shooter. It emits gibs when pushed by a rotor wash
 //-----------------------------------------------------------------------------
-abstract_class IRotorWashShooter
+the_interface IRotorWashShooter
 {
 public:
 	virtual CBaseEntity *DoWashPush( float flWashStartTime, const Vector &vecForce ) = 0;

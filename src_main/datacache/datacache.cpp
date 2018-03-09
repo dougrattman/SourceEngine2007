@@ -1,8 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datacache/idatacache.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <malloc.h>
 #endif
 
@@ -1024,8 +1024,6 @@ unsigned CDataCache::Flush(bool bUnlockedOnly, bool bNotify) {
 //-----------------------------------------------------------------------------
 void CDataCache::OutputReport(DataCacheReportType_t reportType,
                               const char *pszSection) {
-  int i;
-
   AUTO_LOCK(m_mutex);
   int bytesUsed = m_LRU.UsedSize();
   int bytesTotal = m_LRU.TargetSize();
@@ -1049,28 +1047,28 @@ void CDataCache::OutputReport(DataCacheReportType_t reportType,
   if (reportType == DC_DETAIL_REPORT) {
     CUtlRBTree<memhandle_t, int> sortedbysize(0, 0,
                                               SortMemhandlesBySizeLessFunc);
-    for (i = 0; i < lockedlist.Count(); ++i) {
+    for (int i = 0; i < lockedlist.Count(); ++i) {
       if (!pSection || AccessItem(lockedlist[i])->pSection == pSection)
         sortedbysize.Insert(lockedlist[i]);
     }
 
-    for (i = 0; i < lruList.Count(); ++i) {
+    for (int i = 0; i < lruList.Count(); ++i) {
       if (!pSection || AccessItem(lruList[i])->pSection == pSection)
         sortedbysize.Insert(lruList[i]);
     }
 
-    for (i = sortedbysize.FirstInorder(); i != sortedbysize.InvalidIndex();
+    for (int i = sortedbysize.FirstInorder(); i != sortedbysize.InvalidIndex();
          i = sortedbysize.NextInorder(i)) {
       OutputItemReport(sortedbysize[i]);
     }
     OutputReport(DC_SUMMARY_REPORT, pszSection);
   } else if (reportType == DC_DETAIL_REPORT_LRU) {
-    for (i = 0; i < lockedlist.Count(); ++i) {
+    for (int i = 0; i < lockedlist.Count(); ++i) {
       if (!pSection || AccessItem(lockedlist[i])->pSection == pSection)
         OutputItemReport(lockedlist[i]);
     }
 
-    for (i = 0; i < lruList.Count(); ++i) {
+    for (int i = 0; i < lruList.Count(); ++i) {
       if (!pSection || AccessItem(lruList[i])->pSection == pSection)
         OutputItemReport(lruList[i]);
     }
@@ -1091,14 +1089,14 @@ void CDataCache::OutputReport(DataCacheReportType_t reportType,
       DataCacheItem_t *pItem;
       int sectionBytes = 0;
       int sectionCount = 0;
-      for (i = 0; i < lockedlist.Count(); ++i) {
+      for (int i = 0; i < lockedlist.Count(); ++i) {
         if (AccessItem(lockedlist[i])->pSection == pSection) {
           pItem = g_DataCache.m_LRU.GetResource_NoLockNoLRUTouch(lockedlist[i]);
           sectionBytes += pItem->size;
           sectionCount++;
         }
       }
-      for (i = 0; i < lruList.Count(); ++i) {
+      for (int i = 0; i < lruList.Count(); ++i) {
         if (AccessItem(lruList[i])->pSection == pSection) {
           pItem = g_DataCache.m_LRU.GetResource_NoLockNoLRUTouch(lruList[i]);
           sectionBytes += pItem->size;

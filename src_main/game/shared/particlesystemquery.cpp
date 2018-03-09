@@ -22,7 +22,7 @@
 #include "ai_utils.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -96,7 +96,7 @@ void CParticleSystemQuery::GetLightingAtPoint( const Vector& vecOrigin, Color &c
 {
 #ifdef GAME_DLL
 
-	// FIXME: Go through to the engine from the server to get these values
+	// TODO(d.rattman): Go through to the engine from the server to get these values
 	cTint.SetColor( 255, 255, 255, 255 );
 
 #else
@@ -113,7 +113,7 @@ void CParticleSystemQuery::GetLightingAtPoint( const Vector& vecOrigin, Color &c
 	}
 	else
 	{
-		// FIXME: Go through to the engine from the server to get these values
+		// TODO(d.rattman): Go through to the engine from the server to get these values
 		cTint.SetColor( 255, 255, 255, 255 );
  	}
 
@@ -560,7 +560,7 @@ static CollisionGroupNameRecord_t s_NameMap[]={
 
 int CParticleSystemQuery::GetCollisionGroupFromName( const char *pszCollisionGroupName )
 {
-	for(int i = 0; i < ARRAYSIZE( s_NameMap ); i++ )
+	for(int i = 0; i < SOURCE_ARRAYSIZE( s_NameMap ); i++ )
 	{
 		if ( ! stricmp( s_NameMap[i].m_pszGroupName, pszCollisionGroupName ) )
 			return s_NameMap[i].m_nGroupID;

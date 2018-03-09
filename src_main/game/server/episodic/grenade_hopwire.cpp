@@ -15,7 +15,7 @@
 #include "physics_prop_ragdoll.h"
 #include "movevars_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar hopwire_vortex( "hopwire_vortex", "0" );
@@ -107,7 +107,7 @@ void CGravityVortexController::PullPlayersInRange( void )
 	Vector	vecForce = GetAbsOrigin() - pPlayer->WorldSpaceCenter();
 	float	dist = VectorNormalize( vecForce );
 	
-	// FIXME: Need a more deterministic method here
+	// TODO(d.rattman): Need a more deterministic method here
 	if ( dist < 128.0f )
 	{
 		// Kill the player (with falling death sound and effects)
@@ -259,7 +259,7 @@ void CGravityVortexController::PullThink( void )
 		float	dist2D = VectorNormalize( vecForce2D );
 		float	dist = VectorNormalize( vecForce );
 		
-		// FIXME: Need a more deterministic method here
+		// TODO(d.rattman): Need a more deterministic method here
 		if ( dist < 48.0f )
 		{
 			ConsumeEntity( pEnts[i] );
@@ -378,7 +378,7 @@ bool CGrenadeHopwire::CreateVPhysics()
 //-----------------------------------------------------------------------------
 void CGrenadeHopwire::Precache( void )
 {
-	// FIXME: Replace
+	// TODO(d.rattman): Replace
 	//PrecacheSound("NPC_Strider.Shoot");
 	//PrecacheSound("d3_citadel.weapon_zapper_beam_loop2");
 
@@ -420,10 +420,10 @@ void CGrenadeHopwire::KillStriders( void )
 	AddPointToBounds( -Vector( MAX_STRIDER_STUN_DISTANCE_VERT, MAX_STRIDER_STUN_DISTANCE_VERT, MAX_STRIDER_STUN_DISTANCE_VERT ), mins, maxs );
 	AddPointToBounds(  Vector( MAX_STRIDER_STUN_DISTANCE_VERT, MAX_STRIDER_STUN_DISTANCE_VERT, MAX_STRIDER_STUN_DISTANCE_VERT ), mins, maxs );
 
-	// FIXME: It's probably much faster to simply iterate over the striders in the map, rather than any entity in the radius - jdw
+	// TODO(d.rattman): It's probably much faster to simply iterate over the striders in the map, rather than any entity in the radius - jdw
 
 	// Find any striders in range of us
-	int numTargets = UTIL_EntitiesInBox( pEnts, ARRAYSIZE( pEnts ), GetAbsOrigin()+mins, GetAbsOrigin()+maxs, FL_NPC );
+	int numTargets = UTIL_EntitiesInBox( pEnts, SOURCE_ARRAYSIZE( pEnts ), GetAbsOrigin()+mins, GetAbsOrigin()+maxs, FL_NPC );
 	float targetDistHorz, targetDistVert;
 
 	for ( int i = 0; i < numTargets; i++ )
@@ -489,7 +489,7 @@ void CGrenadeHopwire::CombatThink( void )
 	// Do special behaviors if there are any striders in the area
 	KillStriders();
 
-	// FIXME: Replace
+	// TODO(d.rattman): Replace
 	//EmitSound("NPC_Strider.Shoot");
 	//EmitSound("d3_citadel.weapon_zapper_beam_loop2");
 

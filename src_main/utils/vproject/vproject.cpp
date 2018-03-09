@@ -367,7 +367,7 @@ void ShowPopupMenu( HWND hWnd, bool bUseCachedMenuPos )
 	}
 
 	// Insert projects
-	char szMenuItem[MAX_PATH];
+	char szMenuItem[SOURCE_MAX_PATH];
 	for ( int nIndex = 0; nIndex < g_numProjects; nIndex++ )
 	{
 		strcpy( szMenuItem, g_projects[nIndex].pName );
@@ -560,7 +560,7 @@ bool Startup()
 	char* vproject = getenv( "vproject" );
 	if ( vproject && vproject[0] )
 	{
-		char temp[MAX_PATH];
+		char temp[SOURCE_MAX_PATH];
 		strcpy( temp, vproject );
 		Sys_NormalizePath( temp, false );
 		for ( i=0; i<g_numProjects; i++ )

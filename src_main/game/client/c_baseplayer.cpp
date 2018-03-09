@@ -1,8 +1,6 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =====//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Client-side CBasePlayer.
-//
-//			- Manages the player's flashlight effect.
 
 #include "cbase.h"
 
@@ -41,7 +39,6 @@
 #include "voice_status.h"
 #include "weapon_selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 // Don't alias here
@@ -66,9 +63,7 @@ static Vector WALL_MAX(WALL_OFFSET, WALL_OFFSET, WALL_OFFSET);
 bool CommentaryModeShouldSwallowInput(C_BasePlayer *pPlayer);
 
 extern ConVar default_fov;
-#ifndef _XBOX
 extern ConVar sensitivity;
-#endif
 
 static C_BasePlayer *s_pLocalPlayer = NULL;
 
@@ -1009,7 +1004,7 @@ void C_BasePlayer::Flashlight(void) {
 // list
 //-----------------------------------------------------------------------------
 void C_BasePlayer::AddEntity(void) {
-  // FIXME/UNDONE:  Should the local player say yes to adding itself now
+  // TODO(d.rattman): Should the local player say yes to adding itself now
   // and then, when it ges time to render and it shouldn't still do the render
   // with STUDIO_EVENTS set so that its attachment points will get updated even
   // if not in third person?
@@ -1094,7 +1089,7 @@ void C_BasePlayer::CreateWaterEffects(void) {
 
     pParticle->m_vecVelocity = RandomVector(-2.0f, 2.0f);
 
-    // FIXME: We should tint these based on the water's fog value!
+    // TODO(d.rattman): We should tint these based on the water's fog value!
     float color = random->RandomInt(32, 128);
     pParticle->m_uchColor[0] = color;
     pParticle->m_uchColor[1] = color;
@@ -1512,7 +1507,7 @@ int C_BasePlayer::GetUserID(void) {
 
 // For weapon prediction
 void C_BasePlayer::SetAnimation(PLAYER_ANIM playerAnim) {
-  // FIXME
+  // TODO(d.rattman): Hop! Were is animation?
 }
 
 void C_BasePlayer::UpdateClientData(void) {
@@ -1739,7 +1734,7 @@ void C_BasePlayer::PlayPlayerJingle() {
 
 // Stuff for prediction
 void C_BasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeat) {
-  // FIXME:  Do something here?
+  // TODO(d.rattman):  Do something here?
 }
 
 //-----------------------------------------------------------------------------

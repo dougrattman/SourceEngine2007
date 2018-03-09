@@ -16,7 +16,7 @@
 #include "soundent.h"
 #include "logicrelay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 const int SF_REMOVE_ON_FIRE				= 0x001;	// Relay will remove itself after being triggered.

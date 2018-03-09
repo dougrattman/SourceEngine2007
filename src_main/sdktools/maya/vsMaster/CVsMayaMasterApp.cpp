@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -337,7 +337,7 @@ bool CVsMayaMasterApp::PreInit( )
 
 	if ( g_pFullFileSystem )
 	{
-		char pPlatformPath[MAX_PATH];
+		char pPlatformPath[SOURCE_MAX_PATH];
 		Q_snprintf( pPlatformPath, sizeof(pPlatformPath), "%s\\..\\platform", GetGameInfoPath() );
 
 		g_pFullFileSystem->AddSearchPath( pPlatformPath, "PLATFORM" );

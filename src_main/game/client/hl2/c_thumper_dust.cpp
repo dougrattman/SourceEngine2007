@@ -11,7 +11,7 @@
 #include "particlemgr.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define THUMPER_DUST_LIFETIME 2.0f
@@ -31,7 +31,7 @@ class ThumperDustEmitter : public CSimpleEmitter {
     // Float up when lifetime is half gone.
     pParticle->m_vecVelocity[2] -= (8.0f * timeDelta);
 
-    // FIXME: optimize this....
+    // TODO(d.rattman): optimize this....
     pParticle->m_vecVelocity *= ExponentialDecay(0.9, 0.03, timeDelta);
   }
 

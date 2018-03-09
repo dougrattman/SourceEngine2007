@@ -148,6 +148,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -206,6 +207,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -270,6 +272,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -332,6 +335,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -379,7 +383,7 @@
     <ClInclude Include="..\public\materialsystem\imaterialvar.h" />
     <ClInclude Include="..\public\materialsystem\imesh.h" />
     <ClInclude Include="..\public\materialsystem\itexture.h" />
-    <ClInclude Include="..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\public\mathlib\compressed_vector.h" />
     <ClInclude Include="..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\public\mathlib\vector.h" />

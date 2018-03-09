@@ -1,10 +1,10 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #include "clipboardmanager.h"
 #include "datamodel.h"
 #include "tier1/KeyValues.h"
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 #define USE_WINDOWS_CLIPBOARD
 #endif
 

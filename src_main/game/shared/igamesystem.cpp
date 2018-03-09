@@ -15,7 +15,7 @@
 #include "xbox/xbox_console.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Pointer to a member method of IGameSystem
@@ -343,10 +343,8 @@ void IGameSystem::PreClientUpdateAllSystems()
 //-----------------------------------------------------------------------------
 // Invokes a method on all installed game systems in proper order
 //-----------------------------------------------------------------------------
-void InvokeMethod( GameSystemFunc_t f, char const *timed /*=0*/ )
+void InvokeMethod( GameSystemFunc_t f, [[maybe_unused]] char const *timed /*=0*/ )
 {
-	NOTE_UNUSED( timed );
-
 	int i;
 	int c = s_GameSystems.Count();
 	for ( i = 0; i < c ; ++i )
@@ -362,10 +360,8 @@ void InvokeMethod( GameSystemFunc_t f, char const *timed /*=0*/ )
 //-----------------------------------------------------------------------------
 // Invokes a method on all installed game systems in proper order
 //-----------------------------------------------------------------------------
-void InvokePerFrameMethod( PerFrameGameSystemFunc_t f, char const *timed /*=0*/ )
+void InvokePerFrameMethod( PerFrameGameSystemFunc_t f, [[maybe_unused]] char const *timed /*=0*/ )
 {
-	NOTE_UNUSED( timed );
-
 	int i;
 	int c = s_GameSystemsPerFrame.Count();
 	for ( i = 0; i < c ; ++i )

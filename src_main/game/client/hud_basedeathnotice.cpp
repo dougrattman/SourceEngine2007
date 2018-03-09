@@ -22,7 +22,7 @@
 
 #include "hud_basedeathnotice.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar hud_deathnotice_time( "hud_deathnotice_time", "6", 0 );
@@ -157,10 +157,10 @@ void CHudBaseDeathNotice::Paint()
 
 		// draw a background panel for the message
 		Vertex_t vert[NUM_BACKGROUND_COORD];
-		GetBackgroundPolygonVerts( x, y+1, x+iTotalWide, y+iLineTall-1, ARRAYSIZE( vert ), vert );		
+		GetBackgroundPolygonVerts( x, y+1, x+iTotalWide, y+iLineTall-1, SOURCE_ARRAYSIZE( vert ), vert );		
 		surface()->DrawSetTexture( -1 );
 		surface()->DrawSetColor( msg.bLocalPlayerInvolved ? m_clrLocalBGColor : m_clrBaseBGColor );
-		surface()->DrawTexturedPolygon( ARRAYSIZE( vert ), vert );
+		surface()->DrawTexturedPolygon( SOURCE_ARRAYSIZE( vert ), vert );
 
 		x += xMargin;
 			
@@ -298,8 +298,8 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 		m_DeathNotices[iMsg].bLocalPlayerInvolved = bLocalPlayerInvolved;
 		m_DeathNotices[iMsg].Killer.iTeam = g_PR->GetTeam( killer );
 		m_DeathNotices[iMsg].Victim.iTeam = g_PR->GetTeam( victim );
-		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, killer_name, ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
-		Q_strncpy( m_DeathNotices[iMsg].Victim.szName, victim_name, ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
+		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, killer_name, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
+		Q_strncpy( m_DeathNotices[iMsg].Victim.szName, victim_name, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
 		if ( killedwith && *killedwith )
 		{
 			Q_snprintf( m_DeathNotices[iMsg].szIcon, sizeof(m_DeathNotices[iMsg].szIcon), "d_%s", killedwith );
@@ -317,7 +317,7 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 			else if ( ( event->GetInt( "damagebits" ) & DMG_VEHICLE ) || ( 0 == Q_stricmp( m_DeathNotices[iMsg].szIcon, "d_tracktrain" ) ) )
 			{
 				// special case icon for hit-by-vehicle death
-				Q_strncpy( m_DeathNotices[iMsg].szIcon, "d_vehicle", ARRAYSIZE( m_DeathNotices[iMsg].szIcon ) );
+				Q_strncpy( m_DeathNotices[iMsg].szIcon, "d_vehicle", SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].szIcon ) );
 			}			
 		}
 
@@ -350,7 +350,7 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 	} 
 	else if ( FStrEq( "teamplay_point_captured", pszEventName ) )
 	{
-		GetLocalizedControlPointName( event, m_DeathNotices[iMsg].Victim.szName, ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
+		GetLocalizedControlPointName( event, m_DeathNotices[iMsg].Victim.szName, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
 
 		// Array of capper indices
 		const char *cappers = event->GetString("cappers");
@@ -391,12 +391,12 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 	} 
 	else if ( FStrEq( "teamplay_capture_blocked", pszEventName ) )
 	{
-		GetLocalizedControlPointName( event, m_DeathNotices[iMsg].Victim.szName, ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
+		GetLocalizedControlPointName( event, m_DeathNotices[iMsg].Victim.szName, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Victim.szName ) );
 		V_wcsncpy( m_DeathNotices[iMsg].wzInfoText, g_pVGuiLocalize->Find( "#Msg_Defended" ), sizeof( m_DeathNotices[iMsg].wzInfoText ) );
 
 		int iPlayerIndex = event->GetInt( "blocker" );
 		const char *blocker_name = g_PR->GetPlayerName( iPlayerIndex );
-		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, blocker_name, ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
+		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, blocker_name, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
 		m_DeathNotices[iMsg].Killer.iTeam = g_PR->GetTeam( iPlayerIndex );
 		if ( iLocalPlayerIndex == iPlayerIndex )
 			m_DeathNotices[iMsg].bLocalPlayerInvolved = true;
@@ -444,7 +444,7 @@ void CHudBaseDeathNotice::FireGameEvent( IGameEvent *event )
 
 		int iPlayerIndex = event->GetInt( "player" );
 		const char *szPlayerName = g_PR->GetPlayerName( iPlayerIndex );
-		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, szPlayerName, ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
+		Q_strncpy( m_DeathNotices[iMsg].Killer.szName, szPlayerName, SOURCE_ARRAYSIZE( m_DeathNotices[iMsg].Killer.szName ) );
 		m_DeathNotices[iMsg].Killer.iTeam = g_PR->GetTeam( iPlayerIndex );
 		if ( iLocalPlayerIndex == iPlayerIndex )
 			m_DeathNotices[iMsg].bLocalPlayerInvolved = true;
@@ -538,7 +538,7 @@ void CHudBaseDeathNotice::GetBackgroundPolygonVerts( int x0, int y0, int x1, int
 void CHudBaseDeathNotice::CalcRoundedCorners()
 {
 	// generate the offset geometry for upper left corner
-	int iMax = ARRAYSIZE( m_CornerCoord );
+	int iMax = SOURCE_ARRAYSIZE( m_CornerCoord );
 	for ( int i = 0; i < iMax; i++ )
 	{
 		m_CornerCoord[i].x = m_flCornerRadius * ( 1 - cos( ( (float) i / (float) (iMax - 1 ) ) * ( M_PI / 2 ) ) );
@@ -556,7 +556,7 @@ CHudTexture *CHudBaseDeathNotice::GetIcon( const char *szIcon, bool bInvert )
 	{
 		// change prefix from d_ to dneg_
 		char szIconTmp[255] = "dneg_";
-		V_strcat( szIconTmp, szIcon+2, ARRAYSIZE( szIconTmp ) );
+		V_strcat( szIconTmp, szIcon+2, SOURCE_ARRAYSIZE( szIconTmp ) );
 		CHudTexture *pIcon = gHUD.GetIcon( szIconTmp );
 		// return inverted version if found
 		if ( pIcon )

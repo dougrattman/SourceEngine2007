@@ -10,7 +10,7 @@
 #include "tier1/utlsymbol.h"
 #include "utlmap.h"
 
-abstract_class ISaveRestoreFileSystem {
+the_interface ISaveRestoreFileSystem {
  public:
   virtual FileHandle_t Open(const char *pFileName, const char *pOptions,
                             const char *pathID = NULL) = 0;

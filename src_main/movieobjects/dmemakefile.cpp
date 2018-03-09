@@ -13,7 +13,7 @@
 #include "tier3/tier3.h"
 #include "filesystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -155,7 +155,7 @@ bool CDmeMakefile::GetOutputName( char *pFullPath, int nBufLen )
 {
 	pFullPath[0] = 0;
 
-	char pOutputPath[MAX_PATH];
+	char pOutputPath[SOURCE_MAX_PATH];
 	if ( !GetDefaultDirectory( GetOutputDirectoryID(), pOutputPath, sizeof(pOutputPath) ) )
 		return false;
 
@@ -193,7 +193,7 @@ bool CDmeMakefile::GetDefaultDirectory( const char *pDefaultDirectoryID, char *p
 
 	if ( StringHasPrefix( pDefaultDirectoryID, "makefiledir:" ) )
 	{
-		char pMakefilePath[MAX_PATH];
+		char pMakefilePath[SOURCE_MAX_PATH];
 		GetMakefilePath( pMakefilePath, sizeof(pMakefilePath) );
 		pDefaultDirectoryID += 12;
 		Q_ComposeFileName( pMakefilePath, pDefaultDirectoryID, pFullPath, nBufLen );
@@ -203,23 +203,23 @@ bool CDmeMakefile::GetDefaultDirectory( const char *pDefaultDirectoryID, char *p
 
 	if ( StringHasPrefix( pDefaultDirectoryID, "makefilegamedir:" ) )
 	{
-		char pMakefilePath[MAX_PATH];
+		char pMakefilePath[SOURCE_MAX_PATH];
 		GetMakefilePath( pMakefilePath, sizeof(pMakefilePath) );
 
-		char pModContentDirectory[MAX_PATH];
+		char pModContentDirectory[SOURCE_MAX_PATH];
 		GetModContentSubdirectory( NULL, pModContentDirectory, sizeof(pModContentDirectory) );
 
-		char pRelativePath[MAX_PATH];
+		char pRelativePath[SOURCE_MAX_PATH];
 		if ( !Q_MakeRelativePath( pMakefilePath, pModContentDirectory, pRelativePath, sizeof(pRelativePath) ) )
 		{
 			pFullPath[0] = 0;
 			return false;
 		}
 
-		char pModDirectory[MAX_PATH];
+		char pModDirectory[SOURCE_MAX_PATH];
 		GetModSubdirectory( NULL, pModDirectory, sizeof(pModDirectory) );
 
-		char pMakefileGamePath[MAX_PATH];
+		char pMakefileGamePath[SOURCE_MAX_PATH];
 		Q_ComposeFileName( pModDirectory, pRelativePath, pMakefileGamePath, sizeof(pMakefileGamePath) );
 
 		pDefaultDirectoryID += 16;
@@ -245,7 +245,7 @@ void CDmeMakefile::RelativePathToFullPath( const char *pRelativePath, char *pFul
 		pFullPath[0] = 0;
 		return;
 	}
-	char pRootDir[ MAX_PATH ];
+	char pRootDir[ SOURCE_MAX_PATH ];
 	GetMakefilePath( pRootDir, sizeof(pRootDir) );
 	Q_ComposeFileName( pRootDir, pRelativePath, pFullPath, nBufLen );
 	Q_RemoveDotSlashes( pFullPath );
@@ -262,7 +262,7 @@ void CDmeMakefile::FullPathToRelativePath( const char *pFullPath, char *pRelativ
 		pRelativePath[0] = 0;
 		return;
 	}
-	char pRootDir[ MAX_PATH ];
+	char pRootDir[ SOURCE_MAX_PATH ];
 	GetMakefilePath( pRootDir, sizeof(pRootDir) );
 	if ( pRootDir[0] )
 	{
@@ -300,7 +300,7 @@ CDmeSource *CDmeMakefile::AddSource( const char *pSourceType, const char *pFullP
 		return NULL;
 	}
 
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	FullPathToRelativePath( pFullPath, pRelativePath, sizeof( pRelativePath ) );
 	pSource->SetRelativeFileName( pRelativePath );
 	m_Sources.AddToTail( pSource );
@@ -313,7 +313,7 @@ CDmeSource *CDmeMakefile::AddSource( const char *pSourceType, const char *pFullP
 //-----------------------------------------------------------------------------
 CDmeSource *CDmeMakefile::FindSource( const char *pSourceType, const char *pFullPath )
 {
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	FullPathToRelativePath( pFullPath, pRelativePath, sizeof( pRelativePath ) );
 	int nCount = m_Sources.Count();
 	for ( int i = 0; i < nCount; ++i )
@@ -333,7 +333,7 @@ CDmeSource *CDmeMakefile::FindSource( const char *pSourceType, const char *pFull
 //-----------------------------------------------------------------------------
 CDmeSource *CDmeMakefile::SetSingleSource( const char *pSourceType, const char *pFullPath )
 {
-	// FIXME: we maybe shouldn't remove everything if the source can't be created for some reason?
+	// TODO(d.rattman): we maybe shouldn't remove everything if the source can't be created for some reason?
 	RemoveAllSources( pSourceType );
 	return AddSource( pSourceType, pFullPath );
 }
@@ -344,14 +344,14 @@ CDmeSource *CDmeMakefile::SetSingleSource( const char *pSourceType, const char *
 //-----------------------------------------------------------------------------
 void CDmeMakefile::SetSourceFullPath( CDmeSource *pSource, const char *pFullPath )
 {
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	FullPathToRelativePath( pFullPath, pRelativePath, sizeof( pRelativePath ) );
 
 	if ( Q_stricmp( pRelativePath, pSource->GetRelativeFileName() ) )
 	{
 		pSource->SetRelativeFileName( pRelativePath );
 
-		// FIXME: Should we delete the dependent makefile?
+		// TODO(d.rattman): Should we delete the dependent makefile?
 		pSource->SetDependentMakefile( NULL );
 	}
 }
@@ -417,7 +417,7 @@ void CDmeMakefile::RemoveSource( CDmeSource *pSource )
 
 void CDmeMakefile::RemoveSource( const char *pSourceType, const char *pFullPath )
 {
-	char pRelativePath[MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	FullPathToRelativePath( pFullPath, pRelativePath, sizeof( pRelativePath ) );
 	int nCount = m_Sources.Count();
 	for ( int i = 0; i < nCount; ++i )
@@ -471,8 +471,8 @@ bool CDmeMakefile::HasSourceOfType( const char *pSourceType )
 //-----------------------------------------------------------------------------
 bool CDmeMakefile::UpdateSourceNames( const char *pOldRootDir, const char *pNewRootDir, bool bApplyChanges )
 { 
-	char pOldSourcePath[ MAX_PATH ];
-	char pNewSourcePath[ MAX_PATH ];
+	char pOldSourcePath[ SOURCE_MAX_PATH ];
+	char pNewSourcePath[ SOURCE_MAX_PATH ];
 
 	int nCount = m_Sources.Count();
 	for ( int i = 0; i < nCount; ++i )
@@ -521,8 +521,8 @@ bool CDmeMakefile::SetFileName( const char *pFileName )
 	if ( !Q_IsAbsolutePath( pFileName ) )
 		return false;
 
-	char pOldRootDir[ MAX_PATH ];
-	char pNewRootDir[ MAX_PATH ];
+	char pOldRootDir[ SOURCE_MAX_PATH ];
+	char pNewRootDir[ SOURCE_MAX_PATH ];
 	GetMakefilePath( pOldRootDir,  sizeof(pOldRootDir) );
 	Q_ExtractFilePath( pFileName, pNewRootDir, sizeof(pNewRootDir) );
 
@@ -581,7 +581,7 @@ void CDmeMakefile::SetAssociation( CDmeSource *pSource, CDmeMakefile *pSourceMak
 		CDmeMakefile *pDependentMakeFile = m_Sources[i]->GetDependentMakefile();
 		if ( pSourceMakefile != pDependentMakeFile )
 		{
-			// FIXME: Should I recursively delete pDependentMakeFile ?
+			// TODO(d.rattman): Should I recursively delete pDependentMakeFile ?
 			m_Sources[i]->SetDependentMakefile( pSourceMakefile );
 		}
 		return;

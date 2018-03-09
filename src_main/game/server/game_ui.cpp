@@ -14,7 +14,7 @@
 #include "player.h"
 #include "util.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //----------------------------------------------------------------
@@ -265,7 +265,7 @@ void CGameUI::Think(void) {
   SetNextThink(gpGlobals->curtime);
 
   // Deactivate if they jump or press +use.
-  // FIXME: prevent the use from going through in player.cpp
+  // TODO(d.rattman): prevent the use from going through in player.cpp
   if (((pPlayer->m_afButtonPressed & IN_USE) &&
        (m_spawnflags & SF_GAMEUI_USE_DEACTIVATES)) ||
       ((pPlayer->m_afButtonPressed & IN_JUMP) &&

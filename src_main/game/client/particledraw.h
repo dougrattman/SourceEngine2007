@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //
 
-// FIXME: Should we just pass the Particle draw members directly as
+// TODO(d.rattman): Should we just pass the Particle draw members directly as
 // arguments to IParticleEffect::SimulateAndRender?
 
 // This file defines and implements the ParticleDraw class, which is used

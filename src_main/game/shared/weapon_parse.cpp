@@ -10,7 +10,7 @@
 #include "tier1/keyvalues.h"
 #include "utldict.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // The sound categories found in the weapon classname.txt files
@@ -77,7 +77,7 @@ WEAPON_FILE_INFO_HANDLE LookupWeaponInfoSlot(const char *name) {
   return m_WeaponInfoDatabase.Find(name);
 }
 
-// FIXME, handle differently?
+// TODO(d.rattman): handle differently?
 static FileWeaponInfo_t gNullWeaponInfo;
 
 //-----------------------------------------------------------------------------
@@ -348,7 +348,7 @@ void FileWeaponInfo_t::Parse(KeyValues *pKeyValuesData,
   // Weapon scripts should use the flag names.
   iFlags = pKeyValuesData->GetInt("item_flags", ITEM_FLAG_LIMITINWORLD);
 
-  for (int i = 0; i < ARRAYSIZE(g_ItemFlags); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_ItemFlags); i++) {
     int iVal = pKeyValuesData->GetInt(g_ItemFlags[i].m_pFlagName, -1);
     if (iVal == 0) {
       iFlags &= ~g_ItemFlags[i].m_iFlagValue;

@@ -125,11 +125,11 @@ VS_OUTPUT main( const VS_INPUT v )
 	o.fog = o.fogFactorW;
 #endif
  	// Needed for water fog alpha and diffuse lighting 
-	// FIXME: we shouldn't have to compute this all the time.
+	// TODO(d.rattman): we shouldn't have to compute this all the time.
 	o.worldPos_projPosZ = float4( worldPos, projPos.z );
 
 	// Needed for cubemapping + parallax mapping
-	// FIXME: We shouldn't have to compute this all the time.
+	// TODO(d.rattman): We shouldn't have to compute this all the time.
 	o.worldVertToEyeVectorXYZ_tangentSpaceVertToEyeVectorZ.xyz = VSHADER_VECT_SCALE * (cEyePos - worldPos);
 
 	// Scalar light attenuation (mouth darkening applied in pixel shader)

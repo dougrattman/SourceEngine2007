@@ -15,7 +15,7 @@ class Vector;
 
 class OverlayText_t;
 
-abstract_class IVDebugOverlay {
+the_interface IVDebugOverlay {
  public:
   virtual void AddEntityTextOverlay(int ent_index, int line_offset,
                                     float duration, int r, int g, int b, int a,

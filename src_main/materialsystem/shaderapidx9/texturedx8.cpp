@@ -533,7 +533,7 @@ static void BlitVolumeBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
   }
 }
 
-// FIXME: How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED?  I used to
+// TODO(d.rattman): How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED?  I used to
 // use CopyRects for this.  UpdateSurface doesn't work because it can't blit to
 // anything besides D3DPOOL_DEFAULT. We use this only in the case where we need
 // to create a < 4x4 miplevel for a compressed texture.  We end up creating a

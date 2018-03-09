@@ -87,7 +87,7 @@ OUTPUTS:
 
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ISaveRestoreOps *variantFuncs;	// function pointer set for save/restoring variants
@@ -1374,7 +1374,7 @@ bool variant_t::Convert( fieldtype_t newType )
 					CBaseEntity *ent = NULL;
 					if ( iszVal != NULL_STRING )
 					{
-						// FIXME: do we need to pass an activator in here?
+						// TODO(d.rattman): do we need to pass an activator in here?
 						ent = gEntList.FindEntityByName( NULL, iszVal );
 					}
 					SetEntity( ent );
@@ -1419,7 +1419,7 @@ bool variant_t::Convert( fieldtype_t newType )
 //-----------------------------------------------------------------------------
 const char *variant_t::ToString( void ) const
 {
-	COMPILE_TIME_ASSERT( sizeof(string_t) == sizeof(int) );
+	static_assert( sizeof(string_t) == sizeof(int) );
 
 	static char szBuf[512];
 

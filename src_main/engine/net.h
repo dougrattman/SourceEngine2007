@@ -73,7 +73,7 @@
 // This is the largest packet that can come in/out over the wire, before
 // processing the header
 //  bytes will be stripped by the networking channel layer
-#define NET_MAX_MESSAGE PAD_NUMBER((NET_MAX_PAYLOAD + HEADER_BYTES), 16)
+#define NET_MAX_MESSAGE SOURCE_PAD_NUMBER((NET_MAX_PAYLOAD + HEADER_BYTES), 16)
 
 #define NET_HEADER_FLAG_SPLITPACKET -2
 #define NET_HEADER_FLAG_COMPRESSEDPACKET -3

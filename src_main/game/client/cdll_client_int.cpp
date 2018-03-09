@@ -93,7 +93,7 @@
 #include "PortalRender.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IClientMode *GetClientModeNormal();
@@ -1551,7 +1551,7 @@ void OnRenderStart() {
         "OnRenderStart->CViewRender::SetUpView");  // pops in
                                                    // CViewRender::SetUpView
 
-    // FIXME: This needs to be done before the player moves; it forces
+    // TODO(d.rattman): This needs to be done before the player moves; it forces
     // aiments the player may be attached to to forcibly update their position
     C_BaseEntity::MarkAimEntsDirty();
   }
@@ -1584,7 +1584,7 @@ void OnRenderStart() {
   // This must occur prior to SimulatEntities,
   // which is where the client thinks for c_colorcorrection +
   // c_colorcorrectionvolumes update the color correction weights.
-  // FIXME: The place where IGameSystem::Update is called should be in here
+  // TODO(d.rattman): The place where IGameSystem::Update is called should be in here
   // so we don't have to explicitly call ResetColorCorrectionWeights +
   // SimulateEntities, etc.
   g_pColorCorrectionMgr->ResetColorCorrectionWeights();

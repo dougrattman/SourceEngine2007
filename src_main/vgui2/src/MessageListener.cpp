@@ -8,7 +8,7 @@
 #include "vgui/IClientPanel.h"
 #include "vgui/IVGUI.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 namespace vgui {
@@ -35,7 +35,7 @@ void CMessageListener::Message(VPanel* pSender, VPanel* pReceiver,
   char const* pReceiverClass = "unknown class";
   if (pReceiver) pReceiverClass = pReceiver->Client()->GetClassName();
 
-  // FIXME: Make a bunch of filters here
+  // TODO(d.rattman): Make a bunch of filters here
 
   // filter out key focus messages
   if (!strcmp(pKeyValues->GetName(), "KeyFocusTicked")) {

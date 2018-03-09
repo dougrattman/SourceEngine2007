@@ -25,7 +25,7 @@
 #include "engine/ivmodelinfo.h"
 #include "c_te_effect_dispatch.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_VISIBLE_BUILDPOINT_DISTANCE		(400 * 400)
@@ -354,7 +354,7 @@ void C_BaseObject::HighlightBuildPoints( int flags )
 						vecBPAngles.x += 90;
 					}
 
-					// FIXME: This truly sucks! The bone cache should use
+					// TODO(d.rattman): This truly sucks! The bone cache should use
 					// render location for this computation instead of directly accessing AbsAngles
 					// Necessary for bone cache computations to work
 					pPlacementObj->SetAbsOrigin( vecBPOrigin );

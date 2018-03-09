@@ -22,7 +22,7 @@
 #include "TextureSystem.h"
 #include "MapDisp.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #pragma optimize("g", off)
@@ -965,7 +965,7 @@ int CMapWorld::SerializeMAP(std::fstream &file, BOOL fIsStoring, BoundBox *pInte
 			int nGraphicsFiles = g_Textures.FilesGetCount();
 			for (int i = 0; i < nGraphicsFiles; i++)
 			{
-				char szFile[MAX_PATH];
+				char szFile[SOURCE_MAX_PATH];
 				GRAPHICSFILESTRUCT gf;
 
 				g_Textures.FilesGetInfo(&gf, i);
@@ -1149,7 +1149,7 @@ int CMapWorld::SerializeMAP(std::fstream &file, BOOL fIsStoring, BoundBox *pInte
 		if (g_pGameConfig->GetTextureFormat() == tfVMT)
 		{
 			// do batch search and replace of textures from trans.txt if it exists.
-			char translationFilename[MAX_PATH];
+			char translationFilename[SOURCE_MAX_PATH];
 			Q_snprintf( translationFilename, sizeof( translationFilename ), "materials/trans.txt" );
 			if( CMapDoc::GetActiveMapDoc() )
 			{

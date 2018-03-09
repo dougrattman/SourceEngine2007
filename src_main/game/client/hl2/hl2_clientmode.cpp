@@ -10,7 +10,7 @@
 #include "clientmode_hlnormal.h"
 #include "panelmetaclassmgr.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // default FOV for HL2

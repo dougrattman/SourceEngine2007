@@ -114,7 +114,7 @@ inline VertexCompressionType_t CompressionType(VertexFormat_t vertexFormat) {
 //-----------------------------------------------------------------------------
 // VertexElement_t (enumerates all usable vertex elements)
 //-----------------------------------------------------------------------------
-// FIXME: unify this with VertexFormat_t (i.e. construct the lower bits of
+// TODO(d.rattman): unify this with VertexFormat_t (i.e. construct the lower bits of
 // VertexFormat_t with "1 << (VertexElement_t)element")
 enum VertexElement_t {
   VERTEX_ELEMENT_NONE = -1,
@@ -181,151 +181,151 @@ inline void Detect_VertexElement_t_Changes(
   // Make it harder for someone to change VertexElement_t without noticing that
   // dependent code (GetVertexElementSize, VertexElementToDeclType,
   // CVBAllocTracker) needs updating
-  COMPILE_TIME_ASSERT(VERTEX_ELEMENT_NUMELEMENTS == 48);
+  static_assert(VERTEX_ELEMENT_NUMELEMENTS == 48);
   switch (element) {
     case VERTEX_ELEMENT_POSITION:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_POSITION == 0);
+      static_assert(VERTEX_ELEMENT_POSITION == 0);
       break;
     case VERTEX_ELEMENT_NORMAL:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_NORMAL == 1);
+      static_assert(VERTEX_ELEMENT_NORMAL == 1);
       break;
     case VERTEX_ELEMENT_COLOR:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_COLOR == 2);
+      static_assert(VERTEX_ELEMENT_COLOR == 2);
       break;
     case VERTEX_ELEMENT_SPECULAR:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_SPECULAR == 3);
+      static_assert(VERTEX_ELEMENT_SPECULAR == 3);
       break;
     case VERTEX_ELEMENT_TANGENT_S:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TANGENT_S == 4);
+      static_assert(VERTEX_ELEMENT_TANGENT_S == 4);
       break;
     case VERTEX_ELEMENT_TANGENT_T:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TANGENT_T == 5);
+      static_assert(VERTEX_ELEMENT_TANGENT_T == 5);
       break;
     case VERTEX_ELEMENT_WRINKLE:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_WRINKLE == 6);
+      static_assert(VERTEX_ELEMENT_WRINKLE == 6);
       break;
     case VERTEX_ELEMENT_BONEINDEX:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_BONEINDEX == 7);
+      static_assert(VERTEX_ELEMENT_BONEINDEX == 7);
       break;
     case VERTEX_ELEMENT_BONEWEIGHTS1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_BONEWEIGHTS1 == 8);
+      static_assert(VERTEX_ELEMENT_BONEWEIGHTS1 == 8);
       break;
     case VERTEX_ELEMENT_BONEWEIGHTS2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_BONEWEIGHTS2 == 9);
+      static_assert(VERTEX_ELEMENT_BONEWEIGHTS2 == 9);
       break;
     case VERTEX_ELEMENT_BONEWEIGHTS3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_BONEWEIGHTS3 == 10);
+      static_assert(VERTEX_ELEMENT_BONEWEIGHTS3 == 10);
       break;
     case VERTEX_ELEMENT_BONEWEIGHTS4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_BONEWEIGHTS4 == 11);
+      static_assert(VERTEX_ELEMENT_BONEWEIGHTS4 == 11);
       break;
     case VERTEX_ELEMENT_USERDATA1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_USERDATA1 == 12);
+      static_assert(VERTEX_ELEMENT_USERDATA1 == 12);
       break;
     case VERTEX_ELEMENT_USERDATA2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_USERDATA2 == 13);
+      static_assert(VERTEX_ELEMENT_USERDATA2 == 13);
       break;
     case VERTEX_ELEMENT_USERDATA3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_USERDATA3 == 14);
+      static_assert(VERTEX_ELEMENT_USERDATA3 == 14);
       break;
     case VERTEX_ELEMENT_USERDATA4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_USERDATA4 == 15);
+      static_assert(VERTEX_ELEMENT_USERDATA4 == 15);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_0:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_0 == 16);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_0 == 16);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_1 == 17);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_1 == 17);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_2 == 18);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_2 == 18);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_3 == 19);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_3 == 19);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_4 == 20);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_4 == 20);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_5:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_5 == 21);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_5 == 21);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_6:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_6 == 22);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_6 == 22);
       break;
     case VERTEX_ELEMENT_TEXCOORD1D_7:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD1D_7 == 23);
+      static_assert(VERTEX_ELEMENT_TEXCOORD1D_7 == 23);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_0:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_0 == 24);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_0 == 24);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_1 == 25);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_1 == 25);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_2 == 26);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_2 == 26);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_3 == 27);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_3 == 27);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_4 == 28);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_4 == 28);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_5:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_5 == 29);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_5 == 29);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_6:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_6 == 30);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_6 == 30);
       break;
     case VERTEX_ELEMENT_TEXCOORD2D_7:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD2D_7 == 31);
+      static_assert(VERTEX_ELEMENT_TEXCOORD2D_7 == 31);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_0:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_0 == 32);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_0 == 32);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_1 == 33);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_1 == 33);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_2 == 34);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_2 == 34);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_3 == 35);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_3 == 35);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_4 == 36);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_4 == 36);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_5:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_5 == 37);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_5 == 37);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_6:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_6 == 38);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_6 == 38);
       break;
     case VERTEX_ELEMENT_TEXCOORD3D_7:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD3D_7 == 39);
+      static_assert(VERTEX_ELEMENT_TEXCOORD3D_7 == 39);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_0:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_0 == 40);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_0 == 40);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_1:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_1 == 41);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_1 == 41);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_2:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_2 == 42);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_2 == 42);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_3:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_3 == 43);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_3 == 43);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_4:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_4 == 44);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_4 == 44);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_5:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_5 == 45);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_5 == 45);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_6:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_6 == 46);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_6 == 46);
       break;
     case VERTEX_ELEMENT_TEXCOORD4D_7:
-      COMPILE_TIME_ASSERT(VERTEX_ELEMENT_TEXCOORD4D_7 == 47);
+      static_assert(VERTEX_ELEMENT_TEXCOORD4D_7 == 47);
       break;
     default:
       Assert(0);  // Invalid input or VertexElement_t has definitely changed
@@ -336,7 +336,7 @@ inline void Detect_VertexElement_t_Changes(
 // We're testing 2 normal compression methods
 // One compressed normals+tangents into a SHORT2 each (8 bytes total)
 // The other compresses them together, into a single UBYTE4 (4 bytes total)
-// FIXME: pick one or the other, compare lighting quality in important cases
+// TODO(d.rattman): pick one or the other, compare lighting quality in important cases
 #define COMPRESSED_NORMALS_SEPARATETANGENTS_SHORT2 0
 #define COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4 1
 //#define COMPRESSED_NORMALS_TYPE  COMPRESSED_NORMALS_SEPARATETANGENTS_SHORT2
@@ -536,7 +536,7 @@ enum MaterialVarFlags2_t {
       (MATERIAL_VAR2_LIGHTING_VERTEX_LIT | MATERIAL_VAR2_LIGHTING_LIGHTMAP |
        MATERIAL_VAR2_LIGHTING_BUMPED_LIGHTMAP),
 
-  // FIXME: Should this be a part of the above lighting enums?
+  // TODO(d.rattman): Should this be a part of the above lighting enums?
   MATERIAL_VAR2_DIFFUSE_BUMPMAPPED_MODEL = (1 << 4),
   MATERIAL_VAR2_USES_ENV_CUBEMAP = (1 << 5),
   MATERIAL_VAR2_NEEDS_TANGENT_SPACES = (1 << 6),
@@ -568,7 +568,7 @@ enum PreviewImageRetVal_t {
 //-----------------------------------------------------------------------------
 // material interface
 //-----------------------------------------------------------------------------
-abstract_class IMaterial {
+the_interface IMaterial {
  public:
   // Get the name of the material.  This is a full path to
   // the vmt file starting from "hl2/materials" (or equivalent) without

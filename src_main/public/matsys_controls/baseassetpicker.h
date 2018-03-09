@@ -1,193 +1,182 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-//=============================================================================
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASEASSETPICKER_H
 #define BASEASSETPICKER_H
-#ifdef _WIN32
-#pragma once
-#endif
 
+#include "base/include/macros.h"
+#include "filesystem.h"
+#include "tier1/utllinkedlist.h"
+#include "tier1/utlstring.h"
 #include "vgui_controls/EditablePanel.h"
 #include "vgui_controls/Frame.h"
-#include "tier1/utlstring.h"
-#include "tier1/utllinkedlist.h"
-#include "filesystem.h"
-
 
 //-----------------------------------------------------------------------------
 // Forward declarations
 //-----------------------------------------------------------------------------
 class CAssetTreeView;
-namespace vgui
-{
-	class Panel;
+namespace vgui {
+class Panel;
 }
-FORWARD_DECLARE_HANDLE( AssetList_t );
+SOURCE_FORWARD_DECLARE_HANDLE(AssetList_t);
 
 typedef unsigned short DirHandle_t;
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Base class for choosing raw assets
 //-----------------------------------------------------------------------------
-class CBaseAssetPicker : public vgui::EditablePanel
-{
-	DECLARE_CLASS_SIMPLE( CBaseAssetPicker, vgui::EditablePanel );
+class CBaseAssetPicker : public vgui::EditablePanel {
+  DECLARE_CLASS_SIMPLE(CBaseAssetPicker, vgui::EditablePanel);
 
-public:
-	CBaseAssetPicker( vgui::Panel *pParent, const char *pAssetType, 
-		const char *pExt, const char *pSubDir, const char *pTextType );
-	~CBaseAssetPicker();
+ public:
+  CBaseAssetPicker(vgui::Panel *pParent, const char *pAssetType,
+                   const char *pExt, const char *pSubDir,
+                   const char *pTextType);
+  ~CBaseAssetPicker();
 
-	// overridden frame functions
-	virtual void OnTick();
-	virtual bool HasUserConfigSettings();
-	virtual void ApplyUserConfigSettings( KeyValues *pUserConfig );
-	virtual void GetUserConfigSettings( KeyValues *pUserConfig );
-	virtual void OnCommand( const char *pCommand );
+  // overridden frame functions
+  virtual void OnTick();
+  virtual bool HasUserConfigSettings();
+  virtual void ApplyUserConfigSettings(KeyValues *pUserConfig);
+  virtual void GetUserConfigSettings(KeyValues *pUserConfig);
+  virtual void OnCommand(const char *pCommand);
 
-	// Purpose: 
-	virtual void OnKeyCodeTyped( vgui::KeyCode code );
+  // Purpose:
+  virtual void OnKeyCodeTyped(vgui::KeyCode code);
 
-	// Returns the selected asset name
-	int GetSelectedAssetCount();
-	const char *GetSelectedAsset( int nAssetIndex = -1 );
+  // Returns the selected asset name
+  int GetSelectedAssetCount();
+  const char *GetSelectedAsset(int nAssetIndex = -1);
 
-	// Is multiselect enabled?
-	bool IsMultiselectEnabled() const;
+  // Is multiselect enabled?
+  bool IsMultiselectEnabled() const;
 
-	// Sets the initial selected asset
-	void SetInitialSelection( const char *pAssetName );
+  // Sets the initial selected asset
+  void SetInitialSelection(const char *pAssetName);
 
-	// Set/get the filter
-	void SetFilter( const char *pFilter );
-	const char *GetFilter();
+  // Set/get the filter
+  void SetFilter(const char *pFilter);
+  const char *GetFilter();
 
-	// Purpose: refreshes the file tree
-	void RefreshFileTree();
+  // Purpose: refreshes the file tree
+  void RefreshFileTree();
 
-	virtual void Activate();
+  virtual void Activate();
 
-protected:
-	// Creates standard controls. Allows the derived class to
-	// add these controls to various splitter windows
-	void CreateStandardControls( vgui::Panel *pParent, bool bAllowMultiselect = false );
+ protected:
+  // Creates standard controls. Allows the derived class to
+  // add these controls to various splitter windows
+  void CreateStandardControls(vgui::Panel *pParent,
+                              bool bAllowMultiselect = false);
 
-	// Allows the picker to browse multiple asset types
-	void AddExtension( const char *pExtension );
+  // Allows the picker to browse multiple asset types
+  void AddExtension(const char *pExtension);
 
-	// Derived classes have this called when the previewed asset changes
-	virtual void OnSelectedAssetPicked( const char *pAssetName ) {}
+  // Derived classes have this called when the previewed asset changes
+  virtual void OnSelectedAssetPicked(const char *pAssetName) {}
 
-	// Derived classes have this called when the next selected asset is selected by default
-	virtual void OnNextSelectionIsDefault() {}
+  // Derived classes have this called when the next selected asset is selected
+  // by default
+  virtual void OnNextSelectionIsDefault() {}
 
-	// Request focus of the filter box
-	void RequestFilterFocus();
+  // Request focus of the filter box
+  void RequestFilterFocus();
 
-	// Rescan assets
-	void RescanAssets();
+  // Rescan assets
+  void RescanAssets();
 
-	MESSAGE_FUNC_PARAMS( OnTextChanged, "TextChanged", kv );
-	MESSAGE_FUNC_PARAMS( OnItemSelected, "ItemSelected", kv );
-	MESSAGE_FUNC_PARAMS( OnCheckButtonChecked, "CheckButtonChecked", kv );
-	MESSAGE_FUNC( OnFileSelected, "TreeViewItemSelected" );
-	
-private:
-	struct AssetInfo_t
-	{
-		int m_nAssetIndex;
-		int m_nItemId;
-	};
+  MESSAGE_FUNC_PARAMS(OnTextChanged, "TextChanged", kv);
+  MESSAGE_FUNC_PARAMS(OnItemSelected, "ItemSelected", kv);
+  MESSAGE_FUNC_PARAMS(OnCheckButtonChecked, "CheckButtonChecked", kv);
+  MESSAGE_FUNC(OnFileSelected, "TreeViewItemSelected");
 
-	void BuildAssetNameList();
-	void RefreshAssetList( );
-	int GetSelectedAssetModIndex( );
+ private:
+  struct AssetInfo_t {
+    int m_nAssetIndex;
+    int m_nItemId;
+  };
 
-	// Is a particular asset visible?
-	bool IsAssetVisible( int nAssetIndex );
+  void BuildAssetNameList();
+  void RefreshAssetList();
+  int GetSelectedAssetModIndex();
 
-	// Recursively add all files matching the wildcard under this directory
-	void AddAssetToList( int nAssetIndex );
+  // Is a particular asset visible?
+  bool IsAssetVisible(int nAssetIndex);
 
-	// Update column headers
-	void UpdateAssetColumnHeader( );
+  // Recursively add all files matching the wildcard under this directory
+  void AddAssetToList(int nAssetIndex);
 
-	vgui::Splitter *m_pAssetSplitter;
-	CAssetTreeView* m_pFileTree;
-	vgui::CheckButton* m_pSubDirCheck;
-	vgui::TextEntry *m_pFilter;
-	vgui::ListPanel *m_pAssetBrowser;
-	vgui::TextEntry *m_pFullPath;
-	vgui::ComboBox *m_pModSelector;
-	vgui::Button *m_pRescanButton;
+  // Update column headers
+  void UpdateAssetColumnHeader();
 
-	AssetList_t m_hAssetList;
-	CUtlString m_FolderFilter;
-	CUtlString m_Filter;
-	CUtlString m_SelectedAsset;
-	CUtlVector< AssetInfo_t > m_AssetList;
-	const char *m_pAssetType;
-	const char *m_pAssetTextType;
-	const char *m_pAssetExt;
-	const char *m_pAssetSubDir;
-	CUtlVector< const char * > m_ExtraAssetExt;
-	bool m_bBuiltAssetList : 1;
-	bool m_bFirstAssetScan : 1;
-	bool m_bFinishedAssetListScan : 1;
-	int m_nCurrentModFilter;
-	int m_nMatchingAssets;
-	bool m_bSubDirCheck;
+  vgui::Splitter *m_pAssetSplitter;
+  CAssetTreeView *m_pFileTree;
+  vgui::CheckButton *m_pSubDirCheck;
+  vgui::TextEntry *m_pFilter;
+  vgui::ListPanel *m_pAssetBrowser;
+  vgui::TextEntry *m_pFullPath;
+  vgui::ComboBox *m_pModSelector;
+  vgui::Button *m_pRescanButton;
 
-	friend class CBaseAssetPickerFrame;
+  AssetList_t m_hAssetList;
+  CUtlString m_FolderFilter;
+  CUtlString m_Filter;
+  CUtlString m_SelectedAsset;
+  CUtlVector<AssetInfo_t> m_AssetList;
+  const char *m_pAssetType;
+  const char *m_pAssetTextType;
+  const char *m_pAssetExt;
+  const char *m_pAssetSubDir;
+  CUtlVector<const char *> m_ExtraAssetExt;
+  bool m_bBuiltAssetList : 1;
+  bool m_bFirstAssetScan : 1;
+  bool m_bFinishedAssetListScan : 1;
+  int m_nCurrentModFilter;
+  int m_nMatchingAssets;
+  bool m_bSubDirCheck;
+
+  friend class CBaseAssetPickerFrame;
 };
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Modal dialog for asset picker
 //-----------------------------------------------------------------------------
-class CBaseAssetPickerFrame : public vgui::Frame
-{
-	DECLARE_CLASS_SIMPLE( CBaseAssetPickerFrame, vgui::Frame );
+class CBaseAssetPickerFrame : public vgui::Frame {
+  DECLARE_CLASS_SIMPLE(CBaseAssetPickerFrame, vgui::Frame);
 
-public:
-	CBaseAssetPickerFrame( vgui::Panel *pParent );
-	~CBaseAssetPickerFrame();
+ public:
+  CBaseAssetPickerFrame(vgui::Panel *pParent);
+  ~CBaseAssetPickerFrame();
 
-	// Inherited from Frame
-	virtual void OnCommand( const char *pCommand );
+  // Inherited from Frame
+  virtual void OnCommand(const char *pCommand);
 
-	// Purpose: Activate the dialog
-	// The message "AssetSelected" will be sent if an asset is picked
-	// Pass in optional keyvalues to add to the message
-	void DoModal( KeyValues *pContextKeyValues = NULL );
+  // Purpose: Activate the dialog
+  // The message "AssetSelected" will be sent if an asset is picked
+  // Pass in optional keyvalues to add to the message
+  void DoModal(KeyValues *pContextKeyValues = NULL);
 
-	// Sets the initial selected asset
-	void SetInitialSelection( const char *pAssetName );
+  // Sets the initial selected asset
+  void SetInitialSelection(const char *pAssetName);
 
-	// Set/get the filter
-	void SetFilter( const char *pFilter );
-	const char *GetFilter();
+  // Set/get the filter
+  void SetFilter(const char *pFilter);
+  const char *GetFilter();
 
-protected:
-	// Allows the derived class to create the picker
-	void SetAssetPicker( CBaseAssetPicker* pPicker ); 
-	CBaseAssetPicker* GetAssetPicker() { return m_pPicker; }
+ protected:
+  // Allows the derived class to create the picker
+  void SetAssetPicker(CBaseAssetPicker *pPicker);
+  CBaseAssetPicker *GetAssetPicker() { return m_pPicker; }
 
-	// Posts a message (passing the key values)
-	void PostMessageAndClose( KeyValues *pKeyValues );
+  // Posts a message (passing the key values)
+  void PostMessageAndClose(KeyValues *pKeyValues);
 
-private:
-	void CleanUpMessage();
+ private:
+  void CleanUpMessage();
 
-	CBaseAssetPicker *m_pPicker;
-	vgui::Button *m_pOpenButton;
-	vgui::Button *m_pCancelButton;
-	KeyValues *m_pContextKeyValues;
+  CBaseAssetPicker *m_pPicker;
+  vgui::Button *m_pOpenButton;
+  vgui::Button *m_pCancelButton;
+  KeyValues *m_pContextKeyValues;
 };
 
-
-#endif // BASEASSETPICKER_H
+#endif  // BASEASSETPICKER_H

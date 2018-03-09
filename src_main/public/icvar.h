@@ -15,7 +15,7 @@ class Color;
 using CVarDLLIdentifier_t = int;
 
 // Used to display console messages
-abstract_class IConsoleDisplayFunc {
+the_interface IConsoleDisplayFunc {
  public:
   virtual void ColorPrint(const Color &clr, const char *pMessage) = 0;
   virtual void Print(const char *pMessage) = 0;
@@ -24,7 +24,7 @@ abstract_class IConsoleDisplayFunc {
 
 // Purpose: Applications can implement this to modify behavior in ICvar
 #define CVAR_QUERY_INTERFACE_VERSION "VCvarQuery001"
-abstract_class ICvarQuery : public IAppSystem {
+the_interface ICvarQuery : public IAppSystem {
  public:
   // Can these two convars be aliased?
   virtual bool AreConVarsLinkable(const ConVar *child,
@@ -32,7 +32,7 @@ abstract_class ICvarQuery : public IAppSystem {
 };
 
 // Purpose: DLL interface to ConVars/ConCommands
-abstract_class ICvar : public IAppSystem {
+the_interface ICvar : public IAppSystem {
  public:
   // Allocate a unique DLL identifier
   virtual CVarDLLIdentifier_t AllocateDLLIdentifier() = 0;

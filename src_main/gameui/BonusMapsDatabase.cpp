@@ -17,7 +17,7 @@
 #include "tier1/convar.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MOD_DIR ("MOD")
@@ -31,7 +31,7 @@ bool WriteBonusMapSavedData(KeyValues *data) {
 
   data->RecursiveSaveToFile(file_buffer, 0);
 
-  char file_name[_MAX_PATH];
+  char file_name[SOURCE_MAX_PATH];
   Q_snprintf(file_name, sizeof(file_name), "save/bonus_maps_data.bmd");
 
   bool was_file_saved =
@@ -296,7 +296,7 @@ bool CBonusMapsDatabase::ReadBonusMapSaveData(void) {
     return false;
   }
 
-  char szFilename[_MAX_PATH];
+  char szFilename[SOURCE_MAX_PATH];
   Q_snprintf(szFilename, sizeof(szFilename), "save/bonus_maps_data.bmd");
 
   m_pBonusMapSavedData->LoadFromFile(g_pFullFileSystem, szFilename, NULL);
@@ -364,7 +364,7 @@ void CBonusMapsDatabase::ScanBonusMaps(void) {
   m_fCurrentCompletion = 0.0f;
 
   // populate list box with all bonus maps in the current path
-  char szDirectory[_MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
 
   if (Q_strcmp(m_szCurrentPath, ".") == 0) {
     // We're at the root, so look at the directories in the manifest
@@ -554,7 +554,7 @@ float CBonusMapsDatabase::GetCompletionPercentage(void) {
 }
 
 int CBonusMapsDatabase::NumAdvancedComplete(void) {
-  char szCurrentPath[_MAX_PATH];
+  char szCurrentPath[SOURCE_MAX_PATH];
   Q_strcpy(szCurrentPath, m_szCurrentPath);
   int iDirDepth = m_iDirDepth;
 
@@ -583,7 +583,7 @@ int CBonusMapsDatabase::NumAdvancedComplete(void) {
 }
 
 void CBonusMapsDatabase::NumMedals(int piNumMedals[3]) {
-  char szCurrentPath[_MAX_PATH];
+  char szCurrentPath[SOURCE_MAX_PATH];
   Q_strcpy(szCurrentPath, m_szCurrentPath);
   int iDirDepth = m_iDirDepth;
 
@@ -624,7 +624,7 @@ void CBonusMapsDatabase::NumMedals(int piNumMedals[3]) {
 
 void CBonusMapsDatabase::AddBonus(const char *pCurrentPath,
                                   const char *pDirFileName, bool bIsFolder) {
-  char szFileName[_MAX_PATH];
+  char szFileName[SOURCE_MAX_PATH];
   Q_snprintf(szFileName, sizeof(szFileName), "%s%s", pCurrentPath,
              pDirFileName);
 
@@ -636,7 +636,7 @@ void CBonusMapsDatabase::AddBonus(const char *pCurrentPath,
 
 void CBonusMapsDatabase::BuildSubdirectoryList(const char *pCurrentPath,
                                                bool bOutOfRoot) {
-  char szDirectory[_MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
   Q_snprintf(szDirectory, sizeof(szDirectory), "%s*", pCurrentPath);
 
   FileFindHandle_t dirHandle;
@@ -657,7 +657,7 @@ void CBonusMapsDatabase::BuildSubdirectoryList(const char *pCurrentPath,
     if (!bOutOfRoot)
       AddBonus(pCurrentPath, pDirFileName, true);
     else {
-      char szFileName[_MAX_PATH];
+      char szFileName[SOURCE_MAX_PATH];
       Q_snprintf(szFileName, sizeof(szFileName), "%s%s", pCurrentPath,
                  pDirFileName);
       AddBonus("", szFileName, true);
@@ -671,7 +671,7 @@ void CBonusMapsDatabase::BuildSubdirectoryList(const char *pCurrentPath,
 
 void CBonusMapsDatabase::BuildBonusMapsList(const char *pCurrentPath,
                                             bool bOutOfRoot) {
-  char szDirectory[_MAX_PATH];
+  char szDirectory[SOURCE_MAX_PATH];
   Q_snprintf(szDirectory, sizeof(szDirectory), "%s*.bns", pCurrentPath);
 
   FileFindHandle_t mapHandle;
@@ -689,7 +689,7 @@ void CBonusMapsDatabase::BuildBonusMapsList(const char *pCurrentPath,
     if (!bOutOfRoot)
       AddBonus(pCurrentPath, pMapFileName, false);
     else {
-      char szFileName[_MAX_PATH];
+      char szFileName[SOURCE_MAX_PATH];
       Q_snprintf(szFileName, sizeof(szFileName), "%s%s", pCurrentPath,
                  pMapFileName);
       AddBonus("", szFileName, false);
@@ -709,7 +709,7 @@ void CBonusMapsDatabase::ParseBonusMapData(char const *pszFileName,
                                            bool bIsFolder) {
   if (!pszFileName || !pszShortName) return;
 
-  char szMapInfo[_MAX_PATH];
+  char szMapInfo[SOURCE_MAX_PATH];
 
   // if it's a directory, there's no optional info
   if (bIsFolder) {

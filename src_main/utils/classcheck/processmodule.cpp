@@ -1659,7 +1659,7 @@ void CCodeProcessor::SetupIncludePath( const char *sourcetreebase, const char *s
 {
 	CleanupIncludePath();
 
-	char path[MAX_PATH];
+	char path[SOURCE_MAX_PATH];
 	sprintf( path, "%s\\%s", sourcetreebase, subdir );
 	strlwr( path );
 	AddIncludePath( path );

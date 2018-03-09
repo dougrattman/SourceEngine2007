@@ -18,7 +18,7 @@
 #include "tier0/include/vcrmode.h"
 #include "zone.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAXPRINTMSG 8192
@@ -56,7 +56,7 @@ static const char *GetTimestampString() {
 
   tm today;
   VCRHook_LocalTime(&today);
-  Q_snprintf(timestamp, ARRAYSIZE(timestamp), "%02i/%02i/%04i - %02i:%02i:%02i",
+  Q_snprintf(timestamp, SOURCE_ARRAYSIZE(timestamp), "%02i/%02i/%04i - %02i:%02i:%02i",
              today.tm_mon + 1, today.tm_mday, 1900 + today.tm_year,
              today.tm_hour, today.tm_min, today.tm_sec);
 
@@ -208,7 +208,7 @@ void Con_ClearNotify() {
 #endif  // SWDS
 
 void Con_Init() {
-#ifdef _LINUX
+#ifdef OS_POSIX
   con_debuglog = false;  // the dedicated server's console will handle this
   con_debuglogmapprefixed = false;
 #else
@@ -222,7 +222,7 @@ void Con_Init() {
       g_pFileSystem->RemoveFile(GetConsoleLogFilename(), "GAME");
     }
   }
-#endif  // !_LINUX
+#endif  // !OS_POSIX
 
   con_initialized = true;
 }
@@ -857,11 +857,11 @@ void CConPanel::PaintBackground() {
   if (!Con_IsVisible()) return;
 
   char version[100];
-  Q_snprintf(version, ARRAYSIZE(version), "Source Engine %i (build %d)",
+  Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Source Engine %i (build %d)",
              PROTOCOL_VERSION, build_number());
   wchar_t unicode_version[200];
   g_pVGuiLocalize->ConvertANSIToUnicode(version, unicode_version,
-                                        ARRAYSIZE(unicode_version));
+                                        SOURCE_ARRAYSIZE(unicode_version));
 
   vgui::surface()->DrawSetTextColor(Color(255, 255, 255, 255));
 
@@ -872,17 +872,17 @@ void CConPanel::PaintBackground() {
 
   if (cl.IsActive()) {
     if (cl.m_NetChannel->IsLoopback()) {
-      Q_snprintf(version, ARRAYSIZE(version), "Map '%s'",
+      Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Map '%s'",
                  cl.m_szLevelNameShort);
     } else {
-      Q_snprintf(version, ARRAYSIZE(version), "Server '%s' Map '%s'",
+      Q_snprintf(version, SOURCE_ARRAYSIZE(version), "Server '%s' Map '%s'",
                  cl.m_NetChannel->GetRemoteAddress().ToString(),
                  cl.m_szLevelNameShort);
     }
 
     wchar_t unicode_map_and_server[200];
     g_pVGuiLocalize->ConvertANSIToUnicode(version, unicode_map_and_server,
-                                          ARRAYSIZE(unicode_map_and_server));
+                                          SOURCE_ARRAYSIZE(unicode_map_and_server));
 
     const int tall = vgui::surface()->GetFontTall(m_hFont);
     const int x = wide - DrawTextLen(m_hFont, unicode_map_and_server) - 2;

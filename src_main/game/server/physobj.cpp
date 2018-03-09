@@ -25,7 +25,7 @@
 #include "decals.h"
 #include "bone_setup.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar debug_physimpact("debug_physimpact", "0" );
@@ -1392,7 +1392,7 @@ void CPhysConvert::InputConvertTarget( inputdata_t &inputdata )
 	while ( (pEntity = gEntList.FindEntityByName( pEntity, m_target, NULL, inputdata.pActivator, inputdata.pCaller )) != NULL )
 	{
 		entlist[count++] = pEntity;
-		if ( count >= ARRAYSIZE(entlist) )
+		if ( count >= SOURCE_ARRAYSIZE(entlist) )
 			break;
 	}
 
@@ -1716,7 +1716,7 @@ void CPhysMagnet::VPhysicsCollision( int index, gamevcollisionevent_t *pEvent )
 			fixed.constraint.forceLimit = lbs2kg(m_forceLimit);
 			fixed.constraint.torqueLimit = lbs2kg(m_torqueLimit);
 
-			// FIXME: Use the magnet's constraint group.
+			// TODO(d.rattman): Use the magnet's constraint group.
 			//newEntityOnMagnet.pConstraint = physenv->CreateFixedConstraint( pMagnetPhysObject, pPhysics, m_pConstraintGroup, fixed );
 			newEntityOnMagnet.pConstraint = physenv->CreateFixedConstraint( pMagnetPhysObject, pPhysics, NULL, fixed );
 		}

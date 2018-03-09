@@ -31,7 +31,7 @@
 IClientEntityList *entitylist = NULL;
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar sv_debugmanualmode("sv_debugmanualmode", "0", 0,
@@ -157,7 +157,7 @@ static inline void SV_PackEntity(int edictIdx, edict_t *edict,
                                        pPrevFrame->GetNumBits(), packedData,
                                        writeBuf.GetNumBitsWritten(),
 
-                                       deltaProps, ARRAYSIZE(deltaProps),
+                                       deltaProps, SOURCE_ARRAYSIZE(deltaProps),
 
                                        edictIdx);
 

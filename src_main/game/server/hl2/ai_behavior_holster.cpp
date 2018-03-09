@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "ai_behavior_holster.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC( CAI_HolsterBehavior )

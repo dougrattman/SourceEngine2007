@@ -11,7 +11,7 @@
 
 #include "cl_rcon.h"
 
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <asm/ioctls.h>
 #include <errno.h>
 #include <netinet/tcp.h>
@@ -33,7 +33,7 @@
 #include "vprof_engine.h"
 #include "zip/xunzip.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CRPTClient : public CRConClient {
@@ -644,14 +644,14 @@ void CRConClient::GrabConsoleLog() {
 // We've got data from the server, save it
 //-----------------------------------------------------------------------------
 void CRConClient::SaveRemoteScreenshot(const void *pBuffer, int nBufLen) {
-  char pScreenshotPath[MAX_PATH];
+  char pScreenshotPath[SOURCE_MAX_PATH];
   do {
     Q_snprintf(pScreenshotPath, sizeof(pScreenshotPath),
                "%s/screenshot%04d.jpg", m_RemoteFileDir.Get(),
                m_nScreenShotIndex++);
   } while (g_pFullFileSystem->FileExists(pScreenshotPath, "MOD"));
 
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   GetModSubdirectory(pScreenshotPath, pFullPath, sizeof(pFullPath));
   HZIP hZip = OpenZip((void *)pBuffer, nBufLen, ZIP_MEMORY);
 
@@ -667,13 +667,13 @@ void CRConClient::SaveRemoteScreenshot(const void *pBuffer, int nBufLen) {
 void CRConClient::SaveRemoteConsoleLog(const void *pBuffer, int nBufLen) {
   if (nBufLen == 0) return;
 
-  char pLogPath[MAX_PATH];
+  char pLogPath[SOURCE_MAX_PATH];
   do {
     Q_snprintf(pLogPath, sizeof(pLogPath), "%s/console%04d.log",
                m_RemoteFileDir.Get(), m_nConsoleLogIndex++);
   } while (g_pFullFileSystem->FileExists(pLogPath, "MOD"));
 
-  char pFullPath[MAX_PATH];
+  char pFullPath[SOURCE_MAX_PATH];
   GetModSubdirectory(pLogPath, pFullPath, sizeof(pFullPath));
   HZIP hZip = OpenZip((void *)pBuffer, nBufLen, ZIP_MEMORY);
 

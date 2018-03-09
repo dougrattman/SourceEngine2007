@@ -72,7 +72,7 @@ typedef CBaseActionEditDialog *(*DEMOACTIONEDIT_FUNC)(CDemoEditorPanel *parent,
                                                       CBaseDemoAction *action,
                                                       bool newaction);
 
-abstract_class CBaseDemoAction {
+the_interface CBaseDemoAction {
  public:
   CBaseDemoAction();
   virtual ~CBaseDemoAction();

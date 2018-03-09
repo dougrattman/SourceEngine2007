@@ -12,7 +12,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -30,11 +29,11 @@ struct AttributeRemap_t {
 };
 
 static AttributeRemap_t s_pAttributeRemap[] = {
-    {"type", "_type"},  // FIXME - remove this once we've made type no longer be
-                        // an attribute
+    {"type", "_type"},  // TODO(d.rattman): remove this once we've made type no
+                        // longer be an attribute
     {"name", "_name"},
-    {"id", "_id"},  // FIXME - remove this once we've made id no longer be an
-                    // attribute
+    {"id", "_id"},  // TODO(d.rattman): remove this once we've made id no longer
+                    // be an attribute
     {NULL, NULL}};
 
 //-----------------------------------------------------------------------------
@@ -230,7 +229,7 @@ DmElementHandle_t CDmSerializerKeyValues::CreateDmElement(
 //-----------------------------------------------------------------------------
 DmAttributeType_t CDmSerializerKeyValues::DetermineAttributeType(
     KeyValues *pKeyValues) {
-  // FIXME: Add detection of vectors/matrices?
+  // TODO(d.rattman): Add detection of vectors/matrices?
   switch (pKeyValues->GetDataType()) {
     default:
     case KeyValues::TYPE_NONE:

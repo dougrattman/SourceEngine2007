@@ -91,7 +91,7 @@ int CPortal_CollisionEvent::ShouldCollide( IPhysicsObject *pObj0, IPhysicsObject
 								{
 									if( (pSimulators[1-i]->m_DataAccess.Simulation.Dynamic.EntFlags[pEntities[1-i]->entindex()] & PSEF_IS_IN_PORTAL_HOLE) == 0 )
 										return 0; //require that the entity be in the portal hole before colliding with transformed geometry
-									//FIXME: The above requirement might fail horribly for transformed collision blocking the portal from the other side and fast moving objects
+									//TODO(d.rattman): The above requirement might fail horribly for transformed collision blocking the portal from the other side and fast moving objects
 								}	
 							}
 							break;

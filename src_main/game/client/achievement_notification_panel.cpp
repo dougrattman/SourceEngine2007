@@ -18,7 +18,7 @@
 #include "ienginevgui.h"
 #include "steam/steam_api.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -125,8 +125,8 @@ void CAchievementNotificationPanel::FireGameEvent(IGameEvent *event) {
       wchar_t szText[512] = L"";
       wchar_t szNumFound[16] = L"";
       wchar_t szNumTotal[16] = L"";
-      _snwprintf(szNumFound, ARRAYSIZE(szNumFound), L"%i", iCur);
-      _snwprintf(szNumTotal, ARRAYSIZE(szNumTotal), L"%i", iMax);
+      _snwprintf(szNumFound, SOURCE_ARRAYSIZE(szNumFound), L"%i", iCur);
+      _snwprintf(szNumTotal, SOURCE_ARRAYSIZE(szNumTotal), L"%i", iMax);
 
       const wchar_t *pchFmt =
           g_pVGuiLocalize->Find("#GameUI_Achievement_Progress_Fmt");
@@ -170,7 +170,7 @@ void CAchievementNotificationPanel::AddNotification(const char *szIconBaseName,
   int iQueueItem = m_queueNotification.AddToTail();
   Notification_t &notification = m_queueNotification[iQueueItem];
   Q_strncpy(notification.szIconBaseName, szIconBaseName,
-            ARRAYSIZE(notification.szIconBaseName));
+            SOURCE_ARRAYSIZE(notification.szIconBaseName));
   Q_wcsncpy(notification.szHeading, pHeading, sizeof(notification.szHeading));
   Q_wcsncpy(notification.szTitle, pTitle, sizeof(notification.szTitle));
 
@@ -261,7 +261,7 @@ CON_COMMAND_F(achievement_notification_test, "Test the hud notification UI",
 	if ( event )
 	{
 		const char *szTestStr[] = { "TF_GET_HEADSHOTS", "TF_PLAY_GAME_EVERYMAP", "TF_PLAY_GAME_EVERYCLASS", "TF_GET_HEALPOINTS" };
-		event->SetString( "achievement_name", szTestStr[iCount%ARRAYSIZE(szTestStr)] );
+		event->SetString( "achievement_name", szTestStr[iCount%SOURCE_ARRAYSIZE(szTestStr)] );
 		event->SetInt( "cur_val", ( iCount%9 ) + 1 );
 		event->SetInt( "max_val", 10 );
 		gameeventmanager->FireEvent( event );

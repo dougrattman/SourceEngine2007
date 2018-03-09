@@ -256,7 +256,7 @@ class CMapDoc : public CDocument
 		void GetBestVisiblePoint(Vector &ptOrg);
 		void Paste(CMapObjectList &Objects, CMapWorld *pSourceWorld, CMapWorld *pDestWorld, Vector vecOffset, QAngle vecRotate, CMapClass *pParent, bool bMakeEntityNamesUnique, const char *pszEntityNamePrefix);
 
-		// FIXME: refactor these!
+		// TODO(d.rattman): refactor these!
 		void CloneObjects(const CMapObjectList &Objects);
 		void NudgeObjects(const Vector &Delta, bool bClone);
 		void GetNudgeVector(const Vector& vHorz, const Vector& vVert, int nChar, bool bSnap, Vector &vecNudge);

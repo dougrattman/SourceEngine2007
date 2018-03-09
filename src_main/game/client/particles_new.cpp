@@ -212,7 +212,7 @@ void CNewParticleEffect::SetControlPoint(int nWhichPoint, const Vector &v) {
 void CNewParticleEffect::RecordControlPointOrientation(int nWhichPoint) {
   if (m_nToolParticleEffectId != TOOLPARTICLESYSTEMID_INVALID &&
       clienttools->IsInRecordingMode()) {
-    // FIXME: Make a more direct way of getting
+    // TODO(d.rattman): Make a more direct way of getting
     QAngle angles;
     VectorAngles(m_ControlPoints[nWhichPoint].m_ForwardVector,
                  m_ControlPoints[nWhichPoint].m_UpVector, angles);

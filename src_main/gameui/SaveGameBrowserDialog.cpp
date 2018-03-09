@@ -679,7 +679,7 @@ void CSaveGameBrowserDialog::PreScroll( EScrollDirection dir )
 //-----------------------------------------------------------------------------
 void CSaveGameBrowserDialog::PostScroll( EScrollDirection dir )
 {
-	// FIXME: Nothing to do here...
+	// TODO(d.rattman): Nothing to do here...
 }
 
 //-----------------------------------------------------------------------------
@@ -1318,7 +1318,7 @@ void CSaveGameBrowserDialog::ScanSavedGames( bool bIgnoreAutosave )
 	CUtlVector<SaveGameDescription_t> saveGames;
 
 	// Get the search path
-	char szDirectory[_MAX_PATH];
+	char szDirectory[SOURCE_MAX_PATH];
 
 	if ( IsX360() )
 		Q_snprintf( szDirectory, sizeof( szDirectory ), "%s:/*", COM_GetModDirectory() );
@@ -1339,7 +1339,7 @@ void CSaveGameBrowserDialog::ScanSavedGames( bool bIgnoreAutosave )
 			continue;
 		}
 
-		char szFileName[_MAX_PATH];
+		char szFileName[SOURCE_MAX_PATH];
 
 		if ( IsX360() )
 			Q_snprintf(szFileName, sizeof( szFileName ), "%s:/%s", COM_GetModDirectory(), pFileName );

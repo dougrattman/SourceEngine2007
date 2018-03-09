@@ -456,7 +456,7 @@ void CDmeDagRenderPanel::Paint()
 		}
 	}
 
-	// FIXME: Shouldn't this happen at the application level?
+	// TODO(d.rattman): Shouldn't this happen at the application level?
 	// run the machinery - apply, resolve, dependencies, operate, resolve
 	{
 		CDisableUndoScopeGuard guard;
@@ -649,7 +649,7 @@ void CDmeDagRenderPanel::SelectAnimation( int nIndex )
 	m_hCurrentAnimation = NULL;
 	if ( m_hAnimationList.Get() && ( nIndex >= 0 ) )
 	{
-		// FIXME: How is this actually going to work?
+		// TODO(d.rattman): How is this actually going to work?
 		m_hCurrentAnimation = m_hAnimationList->GetAnimation( nIndex );
 	}
 	RebuildOperatorList();
@@ -660,7 +660,7 @@ void CDmeDagRenderPanel::SelectVertexAnimation( int nIndex )
 	m_hCurrentVertexAnimation = NULL;
 	if ( m_hVertexAnimationList.Get() && ( nIndex >= 0 ) )
 	{
-		// FIXME: How is this actually going to work?
+		// TODO(d.rattman): How is this actually going to work?
 		m_hCurrentVertexAnimation = m_hVertexAnimationList->GetAnimation( nIndex );
 	}
 	RebuildOperatorList();

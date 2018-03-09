@@ -16,7 +16,7 @@
 #include "materialsystem/IMesh.h"
 #include "view.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 /*
@@ -141,7 +141,7 @@ void CFXDiscreetLine::Draw( double frametime )
 
 		float color = (int) 255.0f * flAlpha;
 
-		//FIXME: for now no coloration
+		//TODO(d.rattman): for now no coloration
 		VectorMA( vecStart, -flScale, cross, tmp );
 		meshBuilder.Position3fv( tmp.Base() );
 		meshBuilder.TexCoord2f( 0, 1.0f, 0.0f );
@@ -209,7 +209,7 @@ void CFXDiscreetLine::Draw( double frametime )
 
 		meshBuilder.Begin( pMesh, MATERIAL_QUADS, 1 );
 
-		//FIXME: for now no coloration
+		//TODO(d.rattman): for now no coloration
 		VectorMA( vecStart, -m_fScale, cross, tmp );
 		meshBuilder.Position3fv( tmp.Base() );
 		meshBuilder.TexCoord2f( 0, 1.0f, 0.0f );

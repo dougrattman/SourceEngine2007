@@ -22,7 +22,7 @@
 #include "hl2_player.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar g_debug_vehiclesound("g_debug_vehiclesound", "0", FCVAR_CHEAT);
@@ -473,7 +473,7 @@ void CBaseServerVehicle::GetPassengerSeatPoint(int nRole, Vector *pPoint,
     int nFeetAttachmentIndex = pAnimating->LookupAttachment(pAttachmentName);
     int nIdleSequence = pAnimating->SelectWeightedSequence(ACT_IDLE);
     if (nFeetAttachmentIndex > 0 && nIdleSequence != -1) {
-      // FIXME: This really wants to be a faster query than this implementation!
+      // TODO(d.rattman): This really wants to be a faster query than this implementation!
       Vector vecOrigin;
       QAngle vecAngles;
       if (GetLocalAttachmentAtTime(nIdleSequence, nFeetAttachmentIndex, 0.0f,
@@ -1662,7 +1662,7 @@ const char *pSoundStateNames[] = {
 
 static int SoundStateIndexFromName(const char *pName) {
   for (int i = 0; i < SS_NUM_STATES; i++) {
-    Assert(i < ARRAYSIZE(pSoundStateNames));
+    Assert(i < SOURCE_ARRAYSIZE(pSoundStateNames));
     if (!strcmpi(pSoundStateNames[i], pName)) return i;
   }
   return -1;
@@ -2362,7 +2362,7 @@ void CBaseServerVehicle::RestorePassengerInfo(void) {
     m_bParsedAnimations = true;
   }
 
-  // FIXME: If a passenger cannot fix-up its indices, it must be removed from
+  // TODO(d.rattman): If a passenger cannot fix-up its indices, it must be removed from
   // the vehicle!
 
   // Fix-up every passenger with updated indices

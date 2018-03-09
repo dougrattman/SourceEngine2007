@@ -22,7 +22,7 @@
 #include "team_control_point_master.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifndef CLIENT_DLL
@@ -1002,7 +1002,7 @@ CGameRulesRoundStateInfo *CTeamplayRoundBasedRules::State_LookupInfo(
       {GR_STATE_GAME_OVER, "GR_STATE_GAME_OVER", NULL, NULL, NULL},
   };
 
-  for (int i = 0; i < ARRAYSIZE(playerStateInfos); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(playerStateInfos); i++) {
     if (playerStateInfos[i].m_iRoundState == state) return &playerStateInfos[i];
   }
 

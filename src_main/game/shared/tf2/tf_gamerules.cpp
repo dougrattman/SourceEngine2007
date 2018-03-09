@@ -53,7 +53,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 REGISTER_GAMERULES_CLASS( CTeamFortress );
@@ -502,7 +502,7 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 				{
 					// We have to be relatively close to the object too...
 
-					// FIXME: When I put in a better dismantle solution (namely send the dismantle 
+					// TODO(d.rattman): When I put in a better dismantle solution (namely send the dismantle 
 					// command along with a cancledismantle command), re-enable this.
 					// Also, need to solve the problem of control panels on large objects
 					// For the battering ram, for instance, this distance is too far.
@@ -776,7 +776,7 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 		bool done;
 		do 
 		{
-			// FIXME: Optimize so we don't test the same ray but start at the
+			// TODO(d.rattman): Optimize so we don't test the same ray but start at the
 			// previous collision point
 			done = true;
 			UTIL_TraceEntity( pEntity, src, end, mask, pTrace );
@@ -806,7 +806,7 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 						// only this time we can't let the shield register a collision
 						damage *= 1.0f - pShield->ProtectionAmount( damageType );
 
-						// FIXME: DMG_BULLET should be something else
+						// TODO(d.rattman): DMG_BULLET should be something else
 						pShield->RegisterPassThru( vecDir, damageType, pTrace );
 						pShield->ActivateCollisions( false );
 
@@ -1860,7 +1860,7 @@ REGISTER_GAMERULES_CLASS( CTeamFortress );
 
 	void InitBodyQue(void)
 	{
-		// FIXME: Make this work
+		// TODO(d.rattman): Make this work
 	}
 
 #endif
@@ -2110,7 +2110,7 @@ void CTeamFortress::FireBullets( const CTakeDamageInfo &info, int cShots, const 
 
 			// Note the additional seed because otherwise we get the same set of random #'s and will get stuck
 			//  in an infinite loop here potentially
-			// FIXME:  Can we use a gaussian random # function instead?  ywb
+			// TODO(d.rattman):  Can we use a gaussian random # function instead?  ywb
 			if ( CBaseEntity::GetPredictionRandomSeed() != -1 )
 			{
 				x1 = SHARED_RANDOMFLOAT_SEED( -0.5, 0.5, ++seed );

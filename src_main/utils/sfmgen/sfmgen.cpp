@@ -372,7 +372,7 @@ void CSFMGenApp::UniqueifyNames( CUtlVector< SFMInfo_t > &infoList )
 void CSFMGenApp::SaveSFMFile( CDmElement *pRoot, const char *pOutputDir, const char *pFileName )
 {
 	// Construct actual file name from the model name + dmx file name
-	char pFullPathBuf[MAX_PATH];
+	char pFullPathBuf[SOURCE_MAX_PATH];
 	Q_snprintf( pFullPathBuf, sizeof(pFullPathBuf), "%s/%s.dmx", pOutputDir, pFileName );
 	const char *pFullPath = pFullPathBuf;
 
@@ -410,8 +410,8 @@ CDmeSoundClip *CSFMGenApp::CreateSoundClip( CDmeFilmClip *pShot, const char *pAn
 	}
 
 	// Get the sound duration
-	char pFullPath[MAX_PATH];
-	char pRelativePath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
+	char pRelativePath[SOURCE_MAX_PATH];
 	const char *pWavFile = PSkipSoundChars( params.soundname );
 	Q_ComposeFileName( "sound", pWavFile, pRelativePath, sizeof(pRelativePath) );
 	g_pFullFileSystem->RelativePathToFullPath( pRelativePath, "GAME", pFullPath, sizeof(pFullPath) );
@@ -576,7 +576,7 @@ void CSFMGenApp::GenerateSFMFile( const SFMGenInfo_t& sfmGenInfo, const SFMInfo_
 
 		if ( pExportFacPath )
 		{
-			char pFACFileName[MAX_PATH];
+			char pFACFileName[SOURCE_MAX_PATH];
 			Q_ComposeFileName( pExportFacPath, info.m_DMXFileName, pFACFileName, sizeof(pFACFileName) );
 			Q_SetExtension( pFACFileName, ".dmx", sizeof(pFACFileName) ); 
 			ExportFacialAnimation( pFACFileName, pMovie, pShot, pAnimationSet );
@@ -596,7 +596,7 @@ static void ComputeFullPath( const char *pRelativeDir, char *pFullPath, int nBuf
 {
 	if ( !Q_IsAbsolutePath( pRelativeDir ) )
 	{
-		char pDir[MAX_PATH];
+		char pDir[SOURCE_MAX_PATH];
 		if ( g_pFullFileSystem->GetCurrentDirectory( pDir, sizeof(pDir) ) )
 		{
 			Q_ComposeFileName( pDir, pRelativeDir, pFullPath, nBufLen );
@@ -619,7 +619,7 @@ static void ComputeFullPath( const char *pRelativeDir, char *pFullPath, int nBuf
 //-----------------------------------------------------------------------------
 void CSFMGenApp::GenerateSFMFiles( SFMGenInfo_t& info )
 {
-	char pRelativeModelPath[MAX_PATH];
+	char pRelativeModelPath[SOURCE_MAX_PATH];
 	Q_ComposeFileName( "models", info.m_pModelName, pRelativeModelPath, sizeof(pRelativeModelPath) );
 	Q_SetExtension( pRelativeModelPath, ".mdl", sizeof(pRelativeModelPath) );
 	MDLHandle_t hMDL = g_pMDLCache->FindMDL( pRelativeModelPath );
@@ -656,8 +656,8 @@ void CSFMGenApp::GenerateSFMFiles( SFMGenInfo_t& info )
 	UniqueifyNames( infoList );
 
 	// Construct full path to the output directories
-	char pFullPath[MAX_PATH];
-	char pFullFacPathBuf[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
+	char pFullFacPathBuf[SOURCE_MAX_PATH];
 	const char *pExportFacPath = NULL;
 	ComputeFullPath( info.m_pOutputDirectory, pFullPath, sizeof(pFullPath) );
 	if ( info.m_pExportFacDirectory )

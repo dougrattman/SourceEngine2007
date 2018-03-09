@@ -27,7 +27,7 @@
 #include "tier1/keyvalues.h"
 #include "dod_gamerules.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CDODViewRender g_ViewRender;

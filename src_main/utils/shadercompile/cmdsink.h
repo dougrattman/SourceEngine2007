@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Command sink interface implementation.
 
@@ -57,8 +57,8 @@ class CResponseFiles : public IResponse {
   void ReadListingFile();  //!< Reads the listing buffer if not read yet
 
  protected:
-  char m_szFileResult[MAX_PATH];   //!< Name of the result file
-  char m_szFileListing[MAX_PATH];  //!< Name of the listing file
+  char m_szFileResult[SOURCE_MAX_PATH];   //!< Name of the result file
+  char m_szFileListing[SOURCE_MAX_PATH];  //!< Name of the listing file
 
   FILE *m_fResult;   //!< Result file (NULL if not open)
   FILE *m_fListing;  //!< Listing file (NULL if not open)

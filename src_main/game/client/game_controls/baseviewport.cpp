@@ -45,7 +45,7 @@
 #include "iclientmode.h"
 #include "ienginevgui.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IViewPort *gViewPortInterface = NULL;

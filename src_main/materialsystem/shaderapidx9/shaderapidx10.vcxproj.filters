@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="colorformatdx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cvballoctracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,9 +42,6 @@
     <ClCompile Include="meshdx10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="meshdx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="recording.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,50 +51,18 @@
     <ClCompile Include="shaderapidx10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shaderapidx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="shaderdevicebase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shaderdevicedx10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shaderdevicedx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="shadershadowdx10.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shadershadowdx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="texturedx8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TransitionTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="vertexdecl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="vertexshaderdx8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wmi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\dx10sdk\lib\x86\d3d10.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\dx10sdk\lib\x86\d3d9.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
-    <Library Include="..\..\dx10sdk\lib\x86\dxgi.lib">
-      <Filter>Link Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\dx10sdk\Include\D3DX10math.inl">
@@ -237,15 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx10.lib">
-      <Filter>Link Libraries</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx10d.lib">
-      <Filter>Link Libraries</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx9.lib">
-      <Filter>Link Libraries</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\dx10sdk\lib\x86\d3dx9d.lib">
       <Filter>Link Libraries</Filter>
     </CustomBuild>
   </ItemGroup>

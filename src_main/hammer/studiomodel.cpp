@@ -34,7 +34,7 @@
 #include "camera.h"
 #include "options.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -84,7 +84,7 @@ int CStudioModelCache::m_nItems = 0;
 //-----------------------------------------------------------------------------
 StudioModel *CStudioModelCache::FindModel(const char *pszModelPath)
 {
-	char testPath[MAX_PATH];
+	char testPath[SOURCE_MAX_PATH];
 	V_strncpy( testPath, pszModelPath, sizeof( testPath ) );
 	V_FixSlashes( testPath );
 	
@@ -94,7 +94,7 @@ StudioModel *CStudioModelCache::FindModel(const char *pszModelPath)
 	//
 	for (int i = 0; i < m_nItems; i++)
 	{
-		char testPath2[MAX_PATH];
+		char testPath2[SOURCE_MAX_PATH];
 		V_strncpy( testPath2, m_Cache[i].pszPath, sizeof( testPath2 ) );
 		V_FixSlashes( testPath2 );
 		
@@ -294,7 +294,7 @@ void CStudioFileChangeWatcher::Init()
 
 void CStudioFileChangeWatcher::OnFileChange( const char *pRelativeFilename, const char *pFullFilename )
 {
-	char relativeFilename[MAX_PATH];
+	char relativeFilename[SOURCE_MAX_PATH];
 	V_ComposeFileName( "models", pRelativeFilename, relativeFilename, sizeof( relativeFilename ) );
 	V_FixSlashes( relativeFilename );
 	
@@ -309,13 +309,13 @@ void CStudioFileChangeWatcher::OnFileChange( const char *pRelativeFilename, cons
 		 V_stricmp( pExt, "vvd" ) == 0 )
 	{
 		// Ok, it's at least related to a model. Flush out the model.
-		char tempFilename[MAX_PATH];
+		char tempFilename[SOURCE_MAX_PATH];
 		V_strncpy( tempFilename, relativeFilename, pExt - relativeFilename );
 		
 		// Now it might have a "dx80" or "dx90" or some other extension. Get rid of that too.
 		const char *pTestFilename = V_UnqualifiedFileName( tempFilename );
 		const char *pExt = V_GetFileExtension( pTestFilename );
-		char filename[MAX_PATH];
+		char filename[SOURCE_MAX_PATH];
 		if ( pExt )
 			V_strncpy( filename, tempFilename, pExt - tempFilename );
 		else

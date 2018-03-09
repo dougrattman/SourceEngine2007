@@ -42,7 +42,7 @@
 #include "hl2_player.h"
 #endif //HL2_DLL
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern Vector PointOnLineNearestPoint(const Vector& vStartPos, const Vector& vEndPos, const Vector& vPoint);
@@ -723,7 +723,7 @@ static Vector gTankSpread[] =
 	Vector( 0.1, 0.1, 0.1 ),	// large cone
 	Vector( 0.25, 0.25, 0.25 ),	// extra-large cone
 };
-#define MAX_FIRING_SPREADS ARRAYSIZE(gTankSpread)
+#define MAX_FIRING_SPREADS SOURCE_ARRAYSIZE(gTankSpread)
 
 
 //-----------------------------------------------------------------------------
@@ -1996,7 +1996,7 @@ void CFuncTank::AimFuncTankAtTarget( void )
 	Vector vecLocalOrigin = m_parentMatrix.WorldToLocal( vecAimOrigin );
 	angles = AimBarrelAt( vecLocalOrigin );
 
-	// FIXME: These need to be the clamped angles
+	// TODO(d.rattman): These need to be the clamped angles
 	float distX, distY;
 	bool bClamped = RotateTankToAngles( angles, &distX, &distY );
 	if ( bClamped )
@@ -2150,7 +2150,7 @@ void CFuncTank::DoMuzzleFlash( void )
 			data.m_nAttachmentIndex = m_nBarrelAttachment;
 			data.m_nEntIndex = pAnim->entindex();
 			
-			// FIXME: Create a custom entry here!
+			// TODO(d.rattman): Create a custom entry here!
 			DispatchEffect( "ChopperMuzzleFlash", data );
 		}
 		else

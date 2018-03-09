@@ -14,12 +14,12 @@
 #include "worldtwotextureblend_ps20.inc"
 #include "worldtwotextureblend_ps20b.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar r_flashlight_version2;
 
-// FIXME: Need to make a dx9 version so that "CENTROID" works.
+// TODO(d.rattman): Need to make a dx9 version so that "CENTROID" works.
 BEGIN_VS_SHADER( WorldTwoTextureBlend, 
 			  "Help for WorldTwoTextureBlend" )
 
@@ -176,7 +176,7 @@ END_SHADER_PARAMS
 		{
 			int nShadowFilterMode = 0;
 
-			// Alpha test: FIXME: shouldn't this be handled in Shader_t::SetInitialShadowState
+			// Alpha test: TODO(d.rattman): shouldn't this be handled in Shader_t::SetInitialShadowState
 			pShaderShadow->EnableAlphaTest( bIsAlphaTested );
 			if( hasFlashlight )
 			{

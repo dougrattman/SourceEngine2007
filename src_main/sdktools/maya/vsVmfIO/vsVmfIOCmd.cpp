@@ -1,4 +1,4 @@
-//======= Copyright © 1996-2006, Valve Corporation, All rights reserved. ======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of CVsVmfCmd
 //
@@ -308,7 +308,7 @@ void CVsVmfCmd::SetVmfImportOpts(
 	if ( mArgDatabase.isFlagSet( kOptTextureArchive ) )
 	{
 		mArgDatabase.getFlagArgument( kOptTextureArchive, 0, vmfImport.m_optTextureArchive );
-		char buf0[ MAX_PATH ];
+		char buf0[ SOURCE_MAX_PATH ];
 		Q_strcpy( buf0, vmfImport.m_optTextureArchive.asChar() );
 		Q_FixSlashes( buf0 );
 		Q_FixSlashes( buf0, '/' );

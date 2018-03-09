@@ -11,7 +11,7 @@
 #include "mathlib/vector.h"
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // see knuth volume 3 for insight.
@@ -21,7 +21,7 @@ class SIMDRandStreamContext {
   fltx4 *m_pRand_J, *m_pRand_K;
 
  public:
-  void Seed(uint32_t seed) {
+  void Seed(u32 seed) {
     m_pRand_J = m_RandY + 23;
     m_pRand_K = m_RandY + 54;
     for (int i = 0; i < 55; i++) {
@@ -57,7 +57,7 @@ static SIMDRandStreamContext
 
 static volatile int s_nRandContextsInUse[MAX_SIMULTANEOUS_RANDOM_STREAMS];
 
-void SeedRandSIMD(uint32_t seed) {
+void SeedRandSIMD(u32 seed) {
   for (int i = 0; i < MAX_SIMULTANEOUS_RANDOM_STREAMS; i++)
     s_SIMDRandContexts[i].Seed(seed + i);
 }

@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =====//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Describes the way to compile a MDL file (eventual replacement for qc)
 //
@@ -127,7 +127,7 @@ public:
 	virtual DmeMakefileType_t *GetMakefileType() { return NULL; }
 	virtual DmeMakefileType_t* GetSourceTypes() { Assert(0); return NULL; }
 
-	// FIXME: Should we have output types? Not sure...
+	// TODO(d.rattman): Should we have output types? Not sure...
 	virtual void GetOutputs( CUtlVector<CUtlString> &fullPaths ) { Assert(0); }
 
 	// Converts the m_pDefaultDirectoryID field of the DmeMakefileType_t to a full path

@@ -26,7 +26,7 @@
 #include "util.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CRagdollLowViolenceManager g_RagdollLVManager;
@@ -531,7 +531,7 @@ bool RagdollIsAsleep(const ragdoll_t &ragdoll) {
 void RagdollSolveSeparation(ragdoll_t &ragdoll, CBaseEntity *pEntity) {
   byte needsFix[256];
   int fixCount = 0;
-  Assert(ragdoll.listCount <= ARRAYSIZE(needsFix));
+  Assert(ragdoll.listCount <= SOURCE_ARRAYSIZE(needsFix));
   for (int i = 0; i < ragdoll.listCount; i++) {
     needsFix[i] = 0;
     const ragdollelement_t &element = ragdoll.list[i];

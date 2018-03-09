@@ -79,7 +79,7 @@ protected:
 	ButtonCode_t m_iJumpKey;
 	ButtonCode_t m_iScoreBoardKey;
 
-	char m_szMapName[ MAX_PATH ];
+	char m_szMapName[ SOURCE_MAX_PATH ];
 };
 
 

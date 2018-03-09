@@ -41,7 +41,7 @@ typedef int QueryCvarCookie_t;
 //-----------------------------------------------------------------------------
 // Purpose: callbacks the engine exposes to the 3rd party plugins (ala MetaMod)
 //-----------------------------------------------------------------------------
-abstract_class IServerPluginCallbacks {
+the_interface IServerPluginCallbacks {
  public:
   // Initialize the plugin to run
   // Return false if there is an error during startup.
@@ -130,7 +130,7 @@ typedef enum {
 //-----------------------------------------------------------------------------
 // Purpose: functions that only 3rd party plugins need
 //-----------------------------------------------------------------------------
-abstract_class IServerPluginHelpers {
+the_interface IServerPluginHelpers {
  public:
   // creates an onscreen menu with various option buttons
   //	The keyvalues param can contain these fields:

@@ -18,10 +18,10 @@
 #include "MapView2D.h"
 #include "MapSolid.h"
 #include "Camera.h"
-#include "ObjectProperties.h"  // FIXME: For ObjectProperties::RefreshData
+#include "ObjectProperties.h"  // TODO(d.rattman): For ObjectProperties::RefreshData
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define OVERLAY_TOOL_SNAP_DISTANCE	35.0f

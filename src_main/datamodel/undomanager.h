@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
@@ -89,7 +89,7 @@ class CUndoManager {
 inline bool CUndoManager::IsEnabled() const { return m_bEnabled; }
 
 inline void CUndoManager::NotifyState(int nNotifyFlags) {
-  // FIXME: Should suppress prevent notification being sent,
+  // TODO(d.rattman): Should suppress prevent notification being sent,
   // or prevent notification flags from being set in the first place?
   m_nNotifyFlags |= nNotifyFlags;
 }

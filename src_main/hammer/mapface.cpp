@@ -27,7 +27,7 @@
 #include "mathlib/vector.h"
 #include "options.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUGPTS
@@ -45,7 +45,7 @@
 //
 struct LoadFace_t {
   CMapFace *pFace;
-  char szTexName[MAX_PATH];
+  char szTexName[SOURCE_MAX_PATH];
 };
 
 BOOL CheckFace(Vector *Points, int nPoints, Vector *normal, float dist,
@@ -1557,7 +1557,7 @@ void CMapFace::DrawFace(Color &pColor, EditorRenderMode_t mode) {
                              Points[nPoint][2]);
     }
 
-    // FIXME: no smoothing group information
+    // TODO(d.rattman): no smoothing group information
     meshBuilder.Normal3fv(plane.normal.Base());
     meshBuilder.TangentS3fv(m_pTangentAxes[nPoint].tangent.Base());
     meshBuilder.TangentT3fv(m_pTangentAxes[nPoint].binormal.Base());
@@ -1705,7 +1705,7 @@ void CMapFace::RenderTextureAxes(CRender3D *pRender, int nCount,
 //-----------------------------------------------------------------------------
 void CMapFace::Render3DGrids(CRender3D *pRender, int nCount,
                              CMapFace **ppFaces) {
-  // FIXME: Optimize this to render all of them in a single call
+  // TODO(d.rattman): Optimize this to render all of them in a single call
   for (int i = 0; i < nCount; ++i) {
     ppFaces[i]->Render3DGrid(pRender);
   }
@@ -2453,7 +2453,7 @@ ChunkFileResult_t CMapFace::SaveVMF(CChunkFile *pFile, CSaveInfo *pSaveInfo) {
   }
 
   if (eResult == ChunkFile_Ok) {
-    char szTexture[MAX_PATH];
+    char szTexture[SOURCE_MAX_PATH];
     strcpy(szTexture, texture.texture);
     strupr(szTexture);
 

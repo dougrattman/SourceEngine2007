@@ -26,7 +26,7 @@ class ICollideable;
 //-----------------------------------------------------------------------------
 // Interface for static props
 //-----------------------------------------------------------------------------
-abstract_class IStaticPropMgr {
+the_interface IStaticPropMgr {
  public:
   // Create physics representations of props
   virtual void CreateVPhysicsRepresentations(IPhysicsEnvironment * physenv,
@@ -46,7 +46,7 @@ abstract_class IStaticPropMgr {
   virtual ICollideable *GetStaticPropByIndex(int propIndex) = 0;
 };
 
-abstract_class IStaticPropMgrClient : public IStaticPropMgr {
+the_interface IStaticPropMgrClient : public IStaticPropMgr {
  public:
   // Recomputes the static prop opacity given a view origin
   virtual void ComputePropOpacity(const Vector &viewOrigin, float factor) = 0;

@@ -1,15 +1,16 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef LIGHTCACHE_H
 #define LIGHTCACHE_H
 
+#include "base/include/macros.h"
 #include "mathlib/vector.h"
 
 #define MAXLOCALLIGHTS 4
 
 class IHandleEntity;
 struct dworldlight_t;
-FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(LightCacheHandle_t);
 
 struct LightingState_t;
 

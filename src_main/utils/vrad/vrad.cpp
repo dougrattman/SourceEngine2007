@@ -63,17 +63,17 @@ Vector ambient(0, 0, 0);
 float lightscale = 1.0;
 float dlight_threshold = 0.1;  // was DIRECT_LIGHT constant
 
-char source[MAX_PATH] = "";
-char platformPath[MAX_PATH] = "";
+char source[SOURCE_MAX_PATH] = "";
+char platformPath[SOURCE_MAX_PATH] = "";
 
-char level_name[MAX_PATH] = "";  // map filename, without extension or path info
+char level_name[SOURCE_MAX_PATH] = "";  // map filename, without extension or path info
 
-char global_lights[MAX_PATH] = "";
-char designer_lights[MAX_PATH] = "";
-char level_lights[MAX_PATH] = "";
+char global_lights[SOURCE_MAX_PATH] = "";
+char designer_lights[SOURCE_MAX_PATH] = "";
+char level_lights[SOURCE_MAX_PATH] = "";
 
-char vismatfile[_MAX_PATH] = "";
-char incrementfile[_MAX_PATH] = "";
+char vismatfile[SOURCE_MAX_PATH] = "";
+char incrementfile[SOURCE_MAX_PATH] = "";
 
 IIncremental *g_pIncremental = 0;
 bool g_bInterrupt = false;  // Wsed with background lighting in WC. Tells VRAD
@@ -271,7 +271,7 @@ void LightForTexture(const char *name, Vector &result) {
 
   result[0] = result[1] = result[2] = 0;
 
-  char baseFilename[MAX_PATH];
+  char baseFilename[SOURCE_MAX_PATH];
 
   if (Q_strncmp("maps/", name, 5) == 0) {
     // this might be a patch texture for cubemaps.  try to parse out the
@@ -568,7 +568,7 @@ void MakePatchForFace(int fn, winding_t *w) {
     patch->chop = maxchop;
   }
 
-  // FIXME: If we wanted to add a dependency from vrad to the material system,
+  // TODO(d.rattman): If we wanted to add a dependency from vrad to the material system,
   // we could do this. It would add a bunch of file accesses, though:
 
   /*
@@ -806,7 +806,7 @@ void SubdividePatch(int ndxPatch) {
   int ndxChild1Patch = CreateChildPatch(ndxPatch, o1, area1, center1);
   int ndxChild2Patch = CreateChildPatch(ndxPatch, o2, area2, center2);
 
-  // FIXME: This could go into CreateChildPatch if child1, child2 were stored in
+  // TODO(d.rattman): This could go into CreateChildPatch if child1, child2 were stored in
   // the patch as child[0], child[1]
   patch = &g_Patches.Element(ndxPatch);
   patch->child1 = ndxChild1Patch;
@@ -1047,7 +1047,7 @@ void MakeTransfer(int ndxPatch1, int ndxPatch2, transfer_t *all_transfers)
 
   transfer->patch = pPatch2 - g_Patches.Base();
 
-  // FIXME: why is this not trans?
+  // TODO(d.rattman): why is this not trans?
   transfer->transfer = trans;
 
 #if 0
@@ -1413,7 +1413,7 @@ void GatherLight(int threadnum, void *pUserData) {
 
       // force the base lightmap to use the flat normal instead of the phong
       // normal
-      // FIXME: why does the patch not use the phong normal?
+      // TODO(d.rattman): why does the patch not use the phong normal?
       normals[0] = patch->normal;
 
       for (i = 0; i < NUM_BUMP_VECTS + 1; i++) {
@@ -1598,7 +1598,7 @@ void RadWorld_Start() {
         float scale = VectorNormalize(tmp);
         // only rescale them if the current scale is "tighter" than the desired
         // scale
-        // FIXME: since this writes out to the BSP file every run, once it's set
+        // TODO(d.rattman): since this writes out to the BSP file every run, once it's set
         // high it can't be reset to a lower value.
         if (fabs(scale) > luxeldensity) {
           if (scale < 0) {
@@ -1881,7 +1881,7 @@ void LoadPhysicsDLL(void) { PhysicsDLLPath("VPHYSICS.DLL"); }
 void InitDumpPatchesFiles() {
   for (int iStyle = 0; iStyle < 4; ++iStyle) {
     for (int iBump = 0; iBump < 4; ++iBump) {
-      char szFilename[MAX_PATH];
+      char szFilename[SOURCE_MAX_PATH];
       sprintf(szFilename, "samples_style%d_bump%d.txt", iStyle, iBump);
       pFileSamples[iStyle][iBump] = g_pFileSystem->Open(szFilename, "w");
       if (!pFileSamples[iStyle][iBump]) {
@@ -1945,7 +1945,7 @@ void VRAD_LoadBSP(char const *pFilename) {
   Q_DefaultExtension(incrementfile, ".r0", sizeof(incrementfile));
   Q_DefaultExtension(source, ".bsp", sizeof(source));
 
-  GetPlatformMapPath(source, platformPath, 0, MAX_PATH);
+  GetPlatformMapPath(source, platformPath, 0, SOURCE_MAX_PATH);
 
   Msg("Loading %s\n", platformPath);
   VMPI_SetCurrentStage("LoadBSPFile");

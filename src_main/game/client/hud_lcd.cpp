@@ -31,7 +31,7 @@
 #include "xbox/xbox_win32stubs.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define G15_RESOURCE_FILE "resource/g15.res"
@@ -443,7 +443,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 					if ( ag->m_dwNextUpdateTime > dwCurTime )
 						break;
 
-					// FIXME: encode update interval in text file
+					// TODO(d.rattman): encode update interval in text file
 					ag->m_dwNextUpdateTime = dwCurTime + 1000;
 
 					// Blow away current data

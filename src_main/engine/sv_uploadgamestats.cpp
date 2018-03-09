@@ -1,11 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include "base/include/windows/windows_light.h"
 
 #include <rpc.h>
 #include <winsock.h>
-#elif _LINUX
+#elif OS_POSIX
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #include <netinet/in.h>
@@ -66,21 +66,21 @@ using namespace GameStatsHarvester;
 
 // TODO: cut protocol version down to u8 if possible, to reduce bandwidth usage
 // for very frequent but tiny commands.
-typedef u32 ProtocolVersion_t;
+typedef u32 ProtocolVersion;
 
-typedef u8 ProtocolAcceptanceFlag_t;
-typedef u8 ProtocolUnacceptableAck_t;
+typedef u8 ProtocolAcceptanceFlag;
+typedef u8 ProtocolUnacceptableAck;
 
-typedef u32 MessageSequenceId_t;
+typedef u32 MessageSequenceId;
 
-typedef u32 ServerSessionHandle_t;
-typedef u32 ClientSessionHandle_t;
+typedef u32 ServerSessionHandle;
+typedef u32 ClientSessionHandle;
 
-typedef u32 NetworkTransactionId_t;
+typedef u32 NetworkTransactionId;
 
 // Command codes are intentionally as small as possible to minimize bandwidth
 // usage for very frequent but tiny commands (e.g. GDS 'FindServer' commands).
-typedef u8 Command_t;
+typedef u8 Command;
 
 // ... likewise response codes are as small as possible - we use this when we
 // ... can and revert to large types on a case by case basis.
@@ -96,41 +96,41 @@ typedef u8 CommandResponse_t;
 
 // We support u16 or u32 (obviously switching between them breaks existing
 // protocols unless all components are switched simultaneously).
-typedef u32 NetworkMessageLengthPrefix_t;
+typedef u32 NetworkMessageLengthPrefix;
 
 // Similarly, strings should be preceeded by their length.
-typedef u16 StringLengthPrefix_t;
+typedef u16 StringLengthPrefix;
 
-const ProtocolAcceptanceFlag_t cuProtocolIsNotAcceptable =
-    static_cast<ProtocolAcceptanceFlag_t>(0);
+const ProtocolAcceptanceFlag cuProtocolIsNotAcceptable =
+    static_cast<ProtocolAcceptanceFlag>(0);
 
-const ProtocolAcceptanceFlag_t cuProtocolIsAcceptable =
-    static_cast<ProtocolAcceptanceFlag_t>(1);
+const ProtocolAcceptanceFlag cuProtocolIsAcceptable =
+    static_cast<ProtocolAcceptanceFlag>(1);
 
-const Command_t cuMaxCommand = static_cast<Command_t>(255);
+const Command cuMaxCommand = static_cast<Command>(255);
 
 const CommandResponse_t cuMaxCommandResponse =
     static_cast<CommandResponse_t>(255);
 
 // This is for mapping requests back to error ids for placing into the database
 // appropriately.
-typedef u32 ContextID_t;
+typedef u32 ContextID;
 
 // This is the version of the protocol used by latest-build clients.
-const ProtocolVersion_t cuCurrentProtocolVersion = 1;
+const ProtocolVersion cuCurrentProtocolVersion = 1;
 
 // This is the minimum protocol version number that the client must
 // be able to speak in order to communicate with the server.
 // The client sends its protocol version this before every command, and if we
 // don't support that version anymore then we tell it nicely.  The client
 // should respond by doing an auto-update.
-const ProtocolVersion_t cuRequiredProtocolVersion = 1;
+const ProtocolVersion cuRequiredProtocolVersion = 1;
 
 namespace Commands {
-const Command_t cuGracefulClose = 0;
-const Command_t cuSendGameStats = 1;
-const Command_t cuNumCommands = 2;
-const Command_t cuNoCommandReceivedYet = cuMaxCommand;
+const Command cuGracefulClose = 0;
+const Command cuSendGameStats = 1;
+const Command cuNumCommands = 2;
+const Command cuNoCommandReceivedYet = cuMaxCommand;
 }  // namespace Commands
 
 namespace HarvestFileCommand {
@@ -716,8 +716,8 @@ bool CWin32UploadGameStats::SendUploadCommand(EGameStatsUploadStatus& status,
   // Send upload command
   buf.Purge();
 
-  NetworkMessageLengthPrefix_t messageSize(
-      sizeof(Command_t) + sizeof(ContextID_t) +
+  NetworkMessageLengthPrefix messageSize(
+      sizeof(Command) + sizeof(ContextID) +
       sizeof(HarvestFileCommand::FileSize_t) +
       sizeof(HarvestFileCommand::SendMethod_t) +
       sizeof(HarvestFileCommand::FileSize_t));
@@ -834,7 +834,7 @@ bool CWin32UploadGameStats::SendGracefulClose(EGameStatsUploadStatus& status,
   // Now send disconnect command
   buf.Purge();
 
-  size_t messageSize = sizeof(Command_t);
+  size_t messageSize = sizeof(Command);
 
   buf.PutInt((int)messageSize);
   buf.PutChar(Commands::cuGracefulClose);
@@ -960,7 +960,7 @@ EGameStatsUploadStatus Win32UploadGameStatsBlocking(
       adr.sin_port = htons(harvester_port);
 #ifdef _WIN32
       adr.sin_addr.S_un.S_addr = harvester_ip;
-#elif _LINUX
+#elif OS_POSIX
       adr.sin_addr.s_addr = harvester_ip;
 #endif
 

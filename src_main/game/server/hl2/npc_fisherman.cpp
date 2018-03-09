@@ -31,7 +31,7 @@
 #include "engine/IEngineSound.h"
 #include "sceneentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define FISHERMAN_MODEL "models/lostcoast/fisherman/fisherman.mdl"

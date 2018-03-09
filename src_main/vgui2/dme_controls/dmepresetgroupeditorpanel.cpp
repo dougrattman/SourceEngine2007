@@ -851,7 +851,7 @@ void CDmePresetGroupEditorPanel::SetupFileOpenDialog(
     pDialog->SetTitle("Export Preset File", true);
   }
 
-  char pPresetPath[MAX_PATH];
+  char pPresetPath[SOURCE_MAX_PATH];
   if (!Q_stricmp(pFileFormat, PRESET_FILE_FORMAT)) {
     GetModSubdirectory("models", pPresetPath, sizeof(pPresetPath));
     pDialog->SetStartDirectoryContext("preset_importexport", pPresetPath);

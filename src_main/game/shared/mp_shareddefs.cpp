@@ -76,9 +76,9 @@ const char *g_pszMPConcepts[] =
 int GetMPConceptIndexFromString( const char *pszConcept )
 {
 	// Make sure our concept string and enum arrays are the same length
-	Assert( ARRAYSIZE( g_pszMPConcepts ) == MP_TF_CONCEPT_COUNT );
+	Assert( SOURCE_ARRAYSIZE( g_pszMPConcepts ) == MP_TF_CONCEPT_COUNT );
 
-	for ( int iConcept = 0; iConcept < ARRAYSIZE( g_pszMPConcepts ); ++iConcept )
+	for ( int iConcept = 0; iConcept < SOURCE_ARRAYSIZE( g_pszMPConcepts ); ++iConcept )
 	{
 		if ( !Q_stricmp( pszConcept, g_pszMPConcepts[iConcept] ) )
 			return iConcept;

@@ -31,7 +31,7 @@
 
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar metropolice_move_and_melee;
@@ -235,7 +235,7 @@ void CWeaponStunStick::ImpactEffect( trace_t &traceHit )
 
 //#endif
 
-	//FIXME: need new decals
+	//TODO(d.rattman): need new decals
 	UTIL_ImpactTrace( &traceHit, DMG_CLUB );
 }
 
@@ -419,7 +419,7 @@ void CWeaponStunStick::SetStunState( bool state )
 
 	if ( m_bActive )
 	{
-		//FIXME: START - Move to client-side
+		//TODO(d.rattman): START - Move to client-side
 
 		Vector vecAttachment;
 		QAngle vecAttachmentAngles;
@@ -427,7 +427,7 @@ void CWeaponStunStick::SetStunState( bool state )
 		GetAttachment( 1, vecAttachment, vecAttachmentAngles );
 		g_pEffects->Sparks( vecAttachment );
 
-		//FIXME: END - Move to client-side
+		//TODO(d.rattman): END - Move to client-side
 
 		EmitSound( "Weapon_StunStick.Activate" );
 	}
@@ -673,7 +673,7 @@ bool C_WeaponStunStick::InSwing( void )
 {
 	int activity = GetActivity();
 
-	// FIXME: This is needed until the actual animation works
+	// TODO(d.rattman): This is needed until the actual animation works
 	if ( IsCarriedByLocalPlayer() == false )
 		return true;
 
@@ -792,7 +792,7 @@ void C_WeaponStunStick::DrawFirstPersonEffects( void )
 
 	CMatRenderContextPtr pRenderContext( materials );
 	IMaterial *pMaterial = materials->FindMaterial( STUNSTICK_GLOW_MATERIAL_NOZ, NULL, false );
-	// FIXME: Needs to work with new IMaterial system!
+	// TODO(d.rattman): Needs to work with new IMaterial system!
 	pRenderContext->Bind( pMaterial );
 
 	// Find where we are in the fade

@@ -71,7 +71,7 @@
 #include "engine/IEngineSound.h"
 #include "sharedInterface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ void CEnvWindShared::UpdateWindSound( float flTotalWindSpeed )
 		float flDuration = random->RandomFloat( 1.0f, 2.0f );
 		CSoundEnvelopeController &controller = CSoundEnvelopeController::GetController();
 
-		// FIXME: Tweak with these numbers
+		// TODO(d.rattman): Tweak with these numbers
 		float flNormalizedWindSpeed = flTotalWindSpeed / 150.0f;
 		if (flNormalizedWindSpeed > 1.0f)
 			flNormalizedWindSpeed = 1.0f;
@@ -225,7 +225,7 @@ float CEnvWindShared::WindThink( float flTime )
 			// If we reached a steady state, we don't need to be called until the switch time
 			// Otherwise, we should be called immediately
 
-			// FIXME: If we ever call this from prediction, we'll need
+			// TODO(d.rattman): If we ever call this from prediction, we'll need
 			// to only update the sound if it's a new time
 			// Or, we'll need to update the sound elsewhere.
 			// Update the sound....

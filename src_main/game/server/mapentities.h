@@ -15,7 +15,7 @@
 
 // This class provides hooks into the map-entity loading process that allows CS to do some tricks
 // when restarting the round. The main trick it tries to do is recreate all 
-abstract_class IMapEntityFilter
+the_interface IMapEntityFilter
 {
 public:
 	virtual bool ShouldCreateEntity( const char *pClassname ) = 0;

@@ -19,7 +19,7 @@
 #include "fx_water.h"
 #include "tempentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define __EXPLOSION_DEBUG 0
@@ -182,7 +182,7 @@ void C_BaseExplosionEffect::Create(const Vector &position, float force,
   }
 
   CreateDebris();
-  // FIXME: CreateDynamicLight();
+  // TODO(d.rattman): CreateDynamicLight();
   CreateMisc();
 }
 
@@ -219,7 +219,7 @@ void C_BaseExplosionEffect::CreateCore(void) {
     m_Material_Smoke = g_Mat_DustPuff[1];
   }
 
-  // FIXME: Better sampling area
+  // TODO(d.rattman): Better sampling area
   offset = m_vecOrigin + (m_vecDirection * 32.0f);
 
   // Find area ambient light color and use it to tint smoke
@@ -1043,7 +1043,7 @@ void C_WaterExplosionEffect::CreateDebris(void) {
   pSimple->SetSortOrigin(m_vecOrigin);
   pSimple->SetNearClip(64, 128);
 
-  // FIXME: Better sampling area
+  // TODO(d.rattman): Better sampling area
   offset = m_vecOrigin + (m_vecDirection * 64.0f);
 
   // Find area ambient light color and use it to tint bubbles

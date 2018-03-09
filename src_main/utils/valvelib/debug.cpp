@@ -19,7 +19,7 @@ LONG AssertReallyBusy = -1;
 
 BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine)
 {
-	TCHAR szMessage[_MAX_PATH*2];
+	TCHAR szMessage[SOURCE_MAX_PATH*2];
 
 	InterlockedDecrement(&AssertReallyBusy);
 
@@ -27,7 +27,7 @@ BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine)
 	wsprintf(szMessage, _T("File %hs, Line %d"),
 		lpszFileName, nLine);
 
-	TCHAR szT[_MAX_PATH*2 + 20];
+	TCHAR szT[SOURCE_MAX_PATH*2 + 20];
 	wsprintf(szT, _T("Assertion Failed: %s\n"), szMessage);
 	OutputDebugString(szT);
 

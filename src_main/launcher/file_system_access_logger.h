@@ -24,7 +24,7 @@ class FileSystemAccessLogger {
  private:
   bool is_active_;
   const ch *base_directory_;
-  ch current_directory_[MAX_PATH];
+  ch current_directory_[SOURCE_MAX_PATH];
   const ICommandLine *command_line_;
 
   // persistent across restarts

@@ -20,7 +20,7 @@ namespace vgui
 	class Panel;
 }
 
-abstract_class ILoadingDisc
+the_interface ILoadingDisc
 {
 public:
 	virtual void		Create( vgui::VPANEL parent ) = 0;

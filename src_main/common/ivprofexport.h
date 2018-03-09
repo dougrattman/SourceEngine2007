@@ -6,7 +6,7 @@
 #include "Color.h"
 #include "tier0/include/vprof.h"
 
-abstract_class IVProfExport {
+the_interface IVProfExport {
  public:
   enum : int { MAX_BUDGETGROUP_TIMES = 512 };
 

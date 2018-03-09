@@ -73,7 +73,7 @@ protected:
 
 	vgui::ImagePanel	*m_pMapImage;
 
-	char 	m_szMapName[MAX_PATH];
+	char 	m_szMapName[SOURCE_MAX_PATH];
 
 	vgui::CKeyRepeatHandler	m_KeyRepeat;
 };

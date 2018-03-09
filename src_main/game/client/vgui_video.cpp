@@ -13,7 +13,7 @@
 #include "vgui/ISurface.h"
 #include "vgui/IVGui.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 VideoPanel::VideoPanel(unsigned int nXPos, unsigned int nYPos,
@@ -78,7 +78,7 @@ bool VideoPanel::BeginPlayback(const char *pFilename) {
   if (m_BIKHandle == BIKHANDLE_INVALID) return false;
 
   // We want to be the sole audio source
-  // FIXME: This may not always be true!
+  // TODO(d.rattman): This may not always be true!
   enginesound->NotifyBeginMoviePlayback();
 
   int nWidth, nHeight;
@@ -316,14 +316,14 @@ CON_COMMAND(playvideo, "Plays a video: <filename> [width height]") {
   unsigned int nScreenWidth = Q_atoi(args[2]);
   unsigned int nScreenHeight = Q_atoi(args[3]);
 
-  char strFullpath[MAX_PATH];
+  char strFullpath[SOURCE_MAX_PATH];
   Q_strncpy(strFullpath, "media/",
-            MAX_PATH);  // Assume we must play out of the media directory
-  char strFilename[MAX_PATH];
-  Q_StripExtension(args[1], strFilename, MAX_PATH);
-  Q_strncat(strFullpath, args[1], MAX_PATH);
+            SOURCE_MAX_PATH);  // Assume we must play out of the media directory
+  char strFilename[SOURCE_MAX_PATH];
+  Q_StripExtension(args[1], strFilename, SOURCE_MAX_PATH);
+  Q_strncat(strFullpath, args[1], SOURCE_MAX_PATH);
   Q_strncat(strFullpath, ".bik",
-            MAX_PATH);  // Assume we're a .bik extension type
+            SOURCE_MAX_PATH);  // Assume we're a .bik extension type
 
   if (nScreenWidth == 0) {
     nScreenWidth = ScreenWidth();
@@ -352,14 +352,14 @@ CON_COMMAND(playvideo_exitcommand,
   unsigned int nScreenWidth = ScreenWidth();
   unsigned int nScreenHeight = ScreenHeight();
 
-  char strFullpath[MAX_PATH];
+  char strFullpath[SOURCE_MAX_PATH];
   Q_strncpy(strFullpath, "media/",
-            MAX_PATH);  // Assume we must play out of the media directory
-  char strFilename[MAX_PATH];
-  Q_StripExtension(args[1], strFilename, MAX_PATH);
-  Q_strncat(strFullpath, args[1], MAX_PATH);
+            SOURCE_MAX_PATH);  // Assume we must play out of the media directory
+  char strFilename[SOURCE_MAX_PATH];
+  Q_StripExtension(args[1], strFilename, SOURCE_MAX_PATH);
+  Q_strncat(strFullpath, args[1], SOURCE_MAX_PATH);
   Q_strncat(strFullpath, ".bik",
-            MAX_PATH);  // Assume we're a .bik extension type
+            SOURCE_MAX_PATH);  // Assume we're a .bik extension type
 
   char *pExitCommand = Q_strstr(args.GetCommandString(), args[2]);
 

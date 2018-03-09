@@ -34,7 +34,7 @@
 #include "soundflags.h"
 #include "soundservice.h"
 #include "tier0/include/basetypes.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/platform.h"

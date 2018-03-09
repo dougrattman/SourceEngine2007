@@ -40,7 +40,7 @@
 #include "vgui/Cursor.h"
 #include "ToolCamera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #pragma warning(disable:4244 4305)
@@ -297,8 +297,8 @@ void CMapView3D::SetDrawType(DrawType_t eDrawType)
 		//			const char *pFullPathName = pMapDoc->GetPathName();
 		//			if ( pFullPathName && pFullPathName[0] )
 		//			{
-		//				char buf[MAX_PATH];
-		//				Q_FileBase( pFullPathName, buf,	MAX_PATH );
+		//				char buf[SOURCE_MAX_PATH];
+		//				Q_FileBase( pFullPathName, buf,	SOURCE_MAX_PATH );
 		//	
 		//				// Don't do it if we're untitled
 		//				//if ( !Q_stristr( buf, "untitled" ) )

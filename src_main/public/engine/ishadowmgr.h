@@ -79,7 +79,7 @@ struct FlashlightState_t;
 //-----------------------------------------------------------------------------
 // The engine's interface to the shadow manager
 //-----------------------------------------------------------------------------
-abstract_class IShadowMgr {
+the_interface IShadowMgr {
  public:
   // Create, destroy shadows (see ShadowCreateFlags_t for creationFlags)
   virtual ShadowHandle_t CreateShadow(IMaterial * pMaterial,

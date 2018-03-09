@@ -13,7 +13,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CSceneImage : public ISceneImage {
@@ -256,7 +256,7 @@ bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
   while (pPath) {
     int currentCount = vcdFileList.Count();
 
-    char szPath[MAX_PATH];
+    char szPath[SOURCE_MAX_PATH];
     V_ComposeFileName(pPath, "scenes/*.vcd", szPath, sizeof(szPath));
 
     scriptlib->FindFiles(szPath, true, vcdFileList);
@@ -366,7 +366,7 @@ bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
 
     // name needs to be normalized for determinstic later CRC name calc
     // calc crc based on scenes\anydir\anyscene.vcd
-    char szCleanName[MAX_PATH];
+    char szCleanName[SOURCE_MAX_PATH];
     V_strncpy(szCleanName, g_SceneFiles[i].fileName.String(),
               sizeof(szCleanName));
     V_strlower(szCleanName);

@@ -19,7 +19,7 @@
 #include "ai_hint.h"
 #include "scripted.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //=============================================================================
@@ -441,10 +441,10 @@ bool CAI_BaseNPC::AutoMovement( float flInterval, CBaseEntity *pTarget, AIMoveTr
 			}
 			else
 			{
-				// FIXME: here's no direct interface to a fly motor, plus this needs to support a state where going through the world is okay.
-				// FIXME: add callbacks into the script system for validation
-				// FIXME: add function on scripts to force only legal movements
-				// FIXME: GetIntervalMovement deals in Local space, nor global.  Currently now way to communicate that through these interfaces.
+				// TODO(d.rattman): here's no direct interface to a fly motor, plus this needs to support a state where going through the world is okay.
+				// TODO(d.rattman): add callbacks into the script system for validation
+				// TODO(d.rattman): add function on scripts to force only legal movements
+				// TODO(d.rattman): GetIntervalMovement deals in Local space, nor global.  Currently now way to communicate that through these interfaces.
 				SetLocalOrigin( newPos );
 				SetLocalAngles( newAngles );
 				return true;
@@ -488,7 +488,7 @@ float CAI_BaseNPC::GetTimeToNavGoal()
 
 	float flSpeed = GetIdealSpeed();
 
-	// FIXME: needs to consider stopping time!
+	// TODO(d.rattman): needs to consider stopping time!
 	if (flSpeed > 0 && flDist > 0)
 	{
 		return flDist / flSpeed;

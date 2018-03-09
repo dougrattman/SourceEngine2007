@@ -36,7 +36,7 @@ static unsigned g_nRandomValues[256] = {
 
 // String
 
-unsigned FASTCALL HashString(const char *pszKey) {
+unsigned SOURCE_FASTCALL HashString(const char *pszKey) {
   const u8 *k = (const u8 *)pszKey;
   unsigned even = 0, odd = 0, n;
 
@@ -54,7 +54,7 @@ unsigned FASTCALL HashString(const char *pszKey) {
 
 // Case-insensitive string
 
-unsigned FASTCALL HashStringCaseless(const char *pszKey) {
+unsigned SOURCE_FASTCALL HashStringCaseless(const char *pszKey) {
   const u8 *k = (const u8 *)pszKey;
   unsigned even = 0, odd = 0, n;
 
@@ -72,7 +72,7 @@ unsigned FASTCALL HashStringCaseless(const char *pszKey) {
 
 // 32 bit conventional case-insensitive string
 
-unsigned FASTCALL HashStringCaselessConventional(const char *pszKey) {
+unsigned SOURCE_FASTCALL HashStringCaselessConventional(const char *pszKey) {
   unsigned hash = 0xAAAAAAAA;  // Alternating 1's and 0's to maximize the effect
                                // of the later multiply and add
 
@@ -86,7 +86,7 @@ unsigned FASTCALL HashStringCaselessConventional(const char *pszKey) {
 
 // int hash
 
-unsigned FASTCALL HashInt(const int n) {
+unsigned SOURCE_FASTCALL HashInt(const int n) {
   unsigned even = g_nRandomValues[n & 0xff],
            odd = g_nRandomValues[((n >> 8) & 0xff)];
 
@@ -101,7 +101,7 @@ unsigned FASTCALL HashInt(const int n) {
 
 // 4-byte hash
 
-unsigned FASTCALL Hash4(const void *pKey) {
+unsigned SOURCE_FASTCALL Hash4(const void *pKey) {
   const uint32_t *p = (const uint32_t *)pKey;
   unsigned even, odd, n;
   n = *p;
@@ -119,7 +119,7 @@ unsigned FASTCALL Hash4(const void *pKey) {
 
 // 8-byte hash
 
-unsigned FASTCALL Hash8(const void *pKey) {
+unsigned SOURCE_FASTCALL Hash8(const void *pKey) {
   const uint32_t *p = (const uint32_t *)pKey;
   unsigned even, odd, n;
   n = *p;
@@ -143,7 +143,7 @@ unsigned FASTCALL Hash8(const void *pKey) {
 
 // 12-byte hash
 
-unsigned FASTCALL Hash12(const void *pKey) {
+unsigned SOURCE_FASTCALL Hash12(const void *pKey) {
   const uint32_t *p = (const uint32_t *)pKey;
   unsigned even, odd, n;
   n = *p;
@@ -173,7 +173,7 @@ unsigned FASTCALL Hash12(const void *pKey) {
 
 // 16-byte hash
 
-unsigned FASTCALL Hash16(const void *pKey) {
+unsigned SOURCE_FASTCALL Hash16(const void *pKey) {
   const uint32_t *p = (const uint32_t *)pKey;
   unsigned even, odd, n;
   n = *p;
@@ -209,7 +209,7 @@ unsigned FASTCALL Hash16(const void *pKey) {
 
 // Arbitrary fixed length hash
 
-unsigned FASTCALL HashBlock(const void *pKey, unsigned size) {
+unsigned SOURCE_FASTCALL HashBlock(const void *pKey, unsigned size) {
   const u8 *k = (const u8 *)pKey;
   unsigned even = 0, odd = 0, n;
 

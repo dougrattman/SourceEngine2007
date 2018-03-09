@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This is just a little redirection tool to get all the dls in bin.
 
@@ -10,12 +10,12 @@
 #include <cstdlib>
 #include <cstring>
 
-#define MAX_PATH PATH_MAX
+#define SOURCE_MAX_PATH PATH_MAX
 
 int main(int argc, char *argv[]) {
   // Must add 'bin' to the path....
   char *path_env = getenv("LD_LIBRARY_PATH");
-  char cwd[MAX_PATH];
+  char cwd[SOURCE_MAX_PATH];
   if (!getcwd(cwd, sizeof(cwd))) {
     fprintf(stderr, "getcwd failed (%s)\n", strerror(errno));
     return errno;

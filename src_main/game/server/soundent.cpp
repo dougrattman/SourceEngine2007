@@ -6,7 +6,7 @@
 #include "soundent.h"
 #include "world.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -644,7 +644,7 @@ CSound *CSoundEnt::GetLoudestSoundOfType(int iType,
     if (pSound && pSound->m_iType == iType && pSound->ValidateOwner()) {
       flDist = (pSound->GetSoundOrigin() - vecEarPosition).Length();
 
-      // FIXME: This doesn't match what's in Listen()
+      // TODO(d.rattman): This doesn't match what's in Listen()
       // flDist = UTIL_DistApprox( pSound->GetSoundOrigin(), vecEarPosition );
 
       if (flDist <= pSound->m_iVolume && flDist < flBestDist) {

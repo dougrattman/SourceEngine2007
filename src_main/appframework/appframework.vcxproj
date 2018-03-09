@@ -277,7 +277,7 @@
     <Bscmake />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\public\filesystem_init.cc" />
     <ClCompile Include="app_system_group.cc" />
     <ClCompile Include="vgui_mat_sys_app.cc" />
     <ClCompile Include="windows_app.cc" />

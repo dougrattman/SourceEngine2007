@@ -81,11 +81,11 @@ LINK_ENTITY_TO_CLASS( obj_portable_power_generator, CObjectBuffStation );
 CObjectBuffStation::CObjectBuffStation()
 {
 	// Verify networking data.
-	COMPILE_TIME_ASSERT( BUFF_STATION_MAX_PLAYERS < ( 1 << BUFF_STATION_MAX_PLAYER_BITS ) );
-	COMPILE_TIME_ASSERT( BUFF_STATION_MAX_PLAYERS >= ( 1 << ( BUFF_STATION_MAX_PLAYER_BITS - 1 ) ) );
+	static_assert( BUFF_STATION_MAX_PLAYERS < ( 1 << BUFF_STATION_MAX_PLAYER_BITS ) );
+	static_assert( BUFF_STATION_MAX_PLAYERS >= ( 1 << ( BUFF_STATION_MAX_PLAYER_BITS - 1 ) ) );
 
-	COMPILE_TIME_ASSERT( BUFF_STATION_MAX_OBJECTS < ( 1 << BUFF_STATION_MAX_OBJECT_BITS ) );
-	COMPILE_TIME_ASSERT( BUFF_STATION_MAX_OBJECTS >= ( 1 << ( BUFF_STATION_MAX_OBJECT_BITS - 1 ) ) );
+	static_assert( BUFF_STATION_MAX_OBJECTS < ( 1 << BUFF_STATION_MAX_OBJECT_BITS ) );
+	static_assert( BUFF_STATION_MAX_OBJECTS >= ( 1 << ( BUFF_STATION_MAX_OBJECT_BITS - 1 ) ) );
 
 	// Uses the client-side animation system.
 	UseClientSideAnimation();

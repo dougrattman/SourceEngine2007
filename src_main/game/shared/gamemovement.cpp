@@ -17,7 +17,6 @@
 #include "hl_movedata.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 #define STOP_EPSILON 0.1
@@ -699,7 +698,7 @@ CBaseHandle CGameMovement::TestPlayerPosition(const Vector &pos,
 
 /*
 
-// FIXME FIXME:  Does this need to be hooked up?
+// TODO(d.rattman): Does this need to be hooked up?
 bool CGameMovement::IsWet() const
 {
         return ((pev->flags & FL_INRAIN) != 0) || (m_WetTime >=
@@ -726,8 +725,8 @@ void CGameMovement::PlantFootprint( surfacedata_t *psurface )
                 }
                 else
                 {
-                        // FIXME: Activate this once we decide to pull the
-trigger on it.
+                        // TODO(d.rattman): Activate this once we decide to pull
+the trigger on it.
                         // NOTE: We could add in snow, mud, others here
 //			switch(psurface->gameMaterial)
 //			{
@@ -3027,7 +3026,7 @@ int CGameMovement::CheckStuck() {
   }
 
   // Deal with stuckness...
-#ifndef _LINUX
+#ifndef OS_POSIX
   if (developer.GetBool()) {
     bool isServer = player->IsServer();
     engine->Con_NPrintf(isServer, "%s stuck on object %i/%s",
@@ -4115,7 +4114,7 @@ void CGameMovement::PerformFlyCollisionResolution(trace_t &pm, Vector &move) {
   switch (player->GetMoveCollide()) {
     case MOVECOLLIDE_FLY_CUSTOM:
       // Do nothing; the velocity should have been modified by touch
-      // FIXME: It seems wrong for touch to modify velocity
+      // TODO(d.rattman): It seems wrong for touch to modify velocity
       // given that it can be called in a number of places
       // where collision resolution do *not* in fact occur
 

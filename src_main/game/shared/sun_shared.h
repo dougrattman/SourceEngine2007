@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-//FIXME: It strikes me that the usefulness of this header file is now diminished
+//TODO(d.rattman): It strikes me that the usefulness of this header file is now diminished
 
 #define MAX_SUN_LAYERS 4
 

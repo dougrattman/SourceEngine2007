@@ -400,8 +400,8 @@ void CSlideshowDisplay::RestoreControlPanels(void) {
 
 void CSlideshowDisplay::BuildSlideShowImagesList(void) {
   FileFindHandle_t matHandle;
-  char szDirectory[_MAX_PATH];
-  char szMatFileName[_MAX_PATH] = {'\0'};
+  char szDirectory[SOURCE_MAX_PATH];
+  char szMatFileName[SOURCE_MAX_PATH] = {'\0'};
   char szFileBuffer[SLIDESHOW_LIST_BUFFER_MAX];
   char *pchCurrentLine = NULL;
 
@@ -458,7 +458,7 @@ void CSlideshowDisplay::BuildSlideShowImagesList(void) {
   int iSlideIndex = 0;
 
   while (szMatFileName[0]) {
-    char szFileName[_MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFileName, sizeof(szFileName), "vgui/%s/%s",
                m_szSlideshowDirectory.Get(), szMatFileName);
     szFileName[Q_strlen(szFileName) - 4] = '\0';
@@ -466,7 +466,7 @@ void CSlideshowDisplay::BuildSlideShowImagesList(void) {
     PrecacheMaterial(szFileName);
 
     // Get material keywords
-    char szFullFileName[_MAX_PATH];
+    char szFullFileName[SOURCE_MAX_PATH];
     Q_snprintf(szFullFileName, sizeof(szFullFileName), "materials/vgui/%s/%s",
                m_szSlideshowDirectory.Get(), szMatFileName);
 

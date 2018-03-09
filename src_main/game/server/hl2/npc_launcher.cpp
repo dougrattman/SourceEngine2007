@@ -11,7 +11,7 @@
 #include "grenade_pathfollower.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define LAUNCHER_REST_TIME 3

@@ -11,7 +11,7 @@ class CUtlBuffer;
 class CDemoFile;
 class ServerClass;
 
-abstract_class IDemoRecorder {
+the_interface IDemoRecorder {
  public:
   ~IDemoRecorder() {}
 
@@ -40,7 +40,7 @@ abstract_class IDemoRecorder {
   virtual void ResetDemoInterpolation() = 0;
 };
 
-abstract_class IDemoPlayer {
+the_interface IDemoPlayer {
  public:
   virtual ~IDemoPlayer(){};
 
@@ -76,7 +76,7 @@ abstract_class IDemoPlayer {
   virtual void ResetDemoInterpolation() = 0;
 };
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 extern IDemoPlayer *demoplayer;      // reference to current demo player
 extern IDemoRecorder *demorecorder;  // reference to current demo recorder
 #endif

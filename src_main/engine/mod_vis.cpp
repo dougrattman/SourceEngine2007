@@ -12,7 +12,7 @@
 #include "tier1/UtlLinkedList.h"
 #include "view_shared.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar r_novis("r_novis", "0", FCVAR_CHEAT, "Turn off the PVS.");
@@ -91,7 +91,7 @@ static void VisMark_Cached(const VisCacheEntry &cache,
   visframe = r_visframecount;
 
   count = cache.leaflist.Count();
-  const unsigned short *RESTRICT pSrc = cache.leaflist.Base();
+  const unsigned short *SOURCE_RESTRICT pSrc = cache.leaflist.Base();
 
   while (count >= 8) {
     worldbrush.leafs[pSrc[0]].visframe = visframe;

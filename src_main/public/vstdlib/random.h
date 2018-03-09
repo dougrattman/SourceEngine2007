@@ -13,7 +13,7 @@
 #define NTAB 32
 
 // A generator of uniformly distributed random numbers
-abstract_class IUniformRandomStream {
+the_interface IUniformRandomStream {
  public:
   // Sets the seed of the random number generator
   virtual void SetSeed(int seed) = 0;

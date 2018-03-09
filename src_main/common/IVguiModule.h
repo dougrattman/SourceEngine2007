@@ -7,7 +7,7 @@
 #include "vgui/VGUI.h"
 
 // Purpose: Standard interface to loading vgui modules
-abstract_class IVGuiModule : public IBaseInterface {
+the_interface IVGuiModule : public IBaseInterface {
  public:
   // called first to setup the module with the vgui
   // returns true on success, false on failure

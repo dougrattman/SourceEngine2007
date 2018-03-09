@@ -21,7 +21,6 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 static ConVar scene_showlook(
@@ -282,7 +281,7 @@ bool CBaseFlex::ClearSceneEvent(CSceneEventInfo *info, bool fastKill,
   Assert(info->m_pScene);
   Assert(info->m_pEvent);
 
-  // FIXME: this code looks duplicated
+  // TODO(d.rattman): this code looks duplicated
   switch (info->m_pEvent->GetType()) {
     case CChoreoEvent::GESTURE:
     case CChoreoEvent::SEQUENCE: {
@@ -505,7 +504,7 @@ bool CBaseFlex::HandleStartGestureSceneEvent(CSceneEventInfo *info,
     return false;
   }
 
-  // FIXME: this seems like way too much code
+  // TODO(d.rattman): this seems like way too much code
   info->m_bIsGesture = false;
   KeyValues *seqKeyValues = GetSequenceKeyValues(info->m_nSequence);
   if (seqKeyValues) {
@@ -520,8 +519,8 @@ bool CBaseFlex::HandleStartGestureSceneEvent(CSceneEventInfo *info,
       }
     }
 
-    // FIXME: fixup tags that should be set as "linear", should be done in
-    // faceposer
+    // TODO(d.rattman): fixup tags that should be set as "linear", should be
+    // done in faceposer
     char szStartLoop[CEventAbsoluteTag::MAX_EVENTTAG_LENGTH] = {"loop"};
     char szEndLoop[CEventAbsoluteTag::MAX_EVENTTAG_LENGTH] = {"end"};
 
@@ -570,7 +569,7 @@ bool CBaseFlex::HandleStartGestureSceneEvent(CSceneEventInfo *info,
           for (pkvTags = pkvFaceposer->GetFirstSubKey(); pkvTags;
                pkvTags = pkvTags->GetNextKey()) {
             int maxFrame =
-                animdesc.numframes - 2;  // FIXME: this is off by one!
+                animdesc.numframes - 2;  // TODO(d.rattman): this is off by one!
 
             if (maxFrame > 0) {
               float percentage = (float)pkvTags->GetInt() / maxFrame;
@@ -604,9 +603,10 @@ bool CBaseFlex::HandleStartGestureSceneEvent(CSceneEventInfo *info,
   }
 
   // initialize posture suppression
-  // FIXME: move priority of base animation so that layers can be inserted
-  // before
-  // FIXME: query stopping, post idle layer to figure out correct weight
+  // TODO(d.rattman): move priority of base animation so that layers can be
+  // inserted before
+  // TODO(d.rattman): query stopping, post idle layer to figure out correct
+  // weight
   //			GetIdleLayerWeight()?
   if (!info->m_bIsGesture && IsMoving()) {
     info->m_flWeight = 0.0;
@@ -705,7 +705,7 @@ bool CBaseFlex::StartSceneEvent(CSceneEventInfo *info, CChoreoScene *scene,
     case CChoreoEvent::FACE:
       return StartFacingSceneEvent(info, scene, event, actor, pTarget);
 
-    // FIXME: move this to an CBaseActor
+    // TODO(d.rattman): move this to an CBaseActor
     case CChoreoEvent::MOVETO:
       return StartMoveToSceneEvent(info, scene, event, actor, pTarget);
 
@@ -804,7 +804,7 @@ bool CBaseFlex::CheckSceneEventCompletion(CSceneEventInfo *info,
             // Msg("%.1f: preload (%s:%.1f) %.1f %.1f\n", currenttime,
             // event->GetName(), event->GetEndTime(), preload, t );
 
-            // FIXME: t is zero if no path can be built!
+            // TODO(d.rattman): t is zero if no path can be built!
 
             if (t > 0.0f && t <= preload) {
               return true;
@@ -815,9 +815,9 @@ bool CBaseFlex::CheckSceneEventCompletion(CSceneEventInfo *info,
           return true;
         } else if (info->m_bStarted &&
                    !npc->IsCurSchedule(SCHED_SCENE_GENERIC)) {
-          // FIXME: There's still a hole in the logic is the save happens
-          // immediately after the SS steals the npc but before their AI has run
-          // again
+          // TODO(d.rattman): There's still a hole in the logic is the save
+          // happens immediately after the SS steals the npc but before their AI
+          // has run again
           Warning(
               "%s : %8.2f: waiting for actor %s to complete MOVETO but actor "
               "not in SCHED_SCENE_GENERIC\n",
@@ -853,7 +853,8 @@ void CBaseFlex::ProcessSceneEvents(void) {
     CSceneEventInfo *info = &m_SceneEvents[i];
     Assert(info);
 
-    // FIXME:  Need a safe handle to m_pEvent in case of memory deletion?
+    // TODO(d.rattman):  Need a safe handle to m_pEvent in case of memory
+    // deletion?
     CChoreoEvent *event = info->m_pEvent;
     Assert(event);
 
@@ -1173,7 +1174,7 @@ bool CBaseFlex::ProcessFacingSceneEvent(CSceneEventInfo *info,
 
     // Msg("%f : %f - %f\n", scene->GetTime(), event->GetStartTime(),
     // event->GetEndTime() );
-    // FIXME: why are the splines ill behaved at the end?
+    // TODO(d.rattman): why are the splines ill behaved at the end?
     float intensity = event->GetIntensity(scene->GetTime());
     if (info->m_bIsMoving) {
       myNpc->AddFacingTarget(info->m_hTarget, intensity, 0.2);
@@ -1237,7 +1238,7 @@ bool CBaseFlex::ProcessMoveToSceneEvent(CSceneEventInfo *info,
   // make sure target exists
   if (info->m_hTarget == NULL) return false;
 
-  // FIXME: move to CBaseActor or BaseNPC
+  // TODO(d.rattman): move to CBaseActor or BaseNPC
   CAI_BaseNPC *myNpc = MyNPCPointer();
   if (!myNpc) return false;
 
@@ -1644,8 +1645,9 @@ bool CBaseFlex::ProcessGestureSceneEvent(CSceneEventInfo *info,
 
   if (info->m_iLayer >= 0) {
     // this happens after StudioFrameAdvance()
-    // FIXME; this needs to be adjusted by npc offset to scene time? Known?
-    // FIXME: what should this do when the scene loops?
+    // TODO(d.rattman): this needs to be adjusted by npc offset to scene time?
+    // Known?
+    // TODO(d.rattman): what should this do when the scene loops?
     float duration = event->GetDuration();
     float flEventCycle = (scene->GetTime() - event->GetStartTime()) / duration;
     float flCycle =
@@ -1771,7 +1773,7 @@ bool CBaseFlex::ProcessSequenceSceneEvent(CSceneEventInfo *info,
     }
   }
 
-  // FIXME: clean up cycle index from restart
+  // TODO(d.rattman): clean up cycle index from restart
   return true;
 }
 
@@ -1830,7 +1832,7 @@ float CBaseFlex::PlayAutoGeneratedSoundScene(const char *soundname) {
   return InstancedAutoGeneratedSoundScene(this, soundname);
 }
 
-// FIXME: move to CBaseActor
+// TODO(d.rattman): move to CBaseActor
 bool CBaseFlex::EnterSceneSequence(CChoreoScene *scene, CChoreoEvent *event,
                                    bool bRestart) {
   CAI_BaseNPC *myNpc = MyNPCPointer();
@@ -1952,9 +1954,10 @@ void CBaseFlex::DoBodyLean(void) {
       vecPos = m_vecPrevOrigin + m_vecPrevVelocity;
 
       float decay = ExponentialDecay(0.5, 0.1, dt);
-      m_vecShift = m_vecShift * (decay) +
-                   (vecOrigin - vecPos) * (1.f - decay);  // FIXME: Scale this
-      m_vecLean = (vecOrigin - vecPos) * 1.0;             // FIXME: Scale this
+      m_vecShift =
+          m_vecShift * (decay) +
+          (vecOrigin - vecPos) * (1.f - decay);  // TODO(d.rattman): Scale this
+      m_vecLean = (vecOrigin - vecPos) * 1.0;    // TODO(d.rattman): Scale this
     } else {
       m_vecPrevVelocity = vecDelta;
       float decay = ExponentialDecay(0.5, 0.1, dt);
@@ -2510,7 +2513,7 @@ void CFlexCycler::Think(void) {
   }
 
   // Handle any facial animation from scene playback
-  // FIXME: do we still actually need flex cyclers?
+  // TODO(d.rattman): do we still actually need flex cyclers?
   // AddSceneSceneEvents();
 }
 

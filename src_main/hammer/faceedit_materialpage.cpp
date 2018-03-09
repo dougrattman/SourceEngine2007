@@ -27,7 +27,7 @@
 #include "ToolManager.h"
 #include "Selection.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -715,8 +715,8 @@ void CFaceEditMaterialPage::Apply( CMapFace *pOnlyFace, int flags )
 		//
 		if ((flags & FACE_APPLY_MATERIAL) && (pTex != NULL))
 		{
-			char szCurrentTexName[MAX_PATH];
-			char szNewTexName[MAX_PATH];
+			char szCurrentTexName[SOURCE_MAX_PATH];
+			char szNewTexName[SOURCE_MAX_PATH];
 
 			pFace->GetTextureName( szCurrentTexName );
 			pTex->GetShortName( szNewTexName );
@@ -1578,7 +1578,7 @@ void CFaceEditMaterialPage::NotifyGraphicsChanged( void )
 	
 	m_TextureGroupList.Invalidate();
 
-	char szName[MAX_PATH];
+	char szName[SOURCE_MAX_PATH];
 	m_TextureGroupList.GetLBText(m_TextureGroupList.GetCurSel(), szName);
 	g_Textures.SetActiveGroup(szName);
 
@@ -1649,7 +1649,7 @@ void CFaceEditMaterialPage::OnChangeTextureGroup( void )
 	//
 	// Set the active texture group by name.
 	//
-	char szName[MAX_PATH];
+	char szName[SOURCE_MAX_PATH];
 	m_TextureGroupList.GetLBText(iGroup, szName);
 	g_Textures.SetActiveGroup(szName);
 

@@ -23,7 +23,7 @@
 #include "clientmode.h"
 #include <vgui_controls/AnimationController.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar overview_health( "overview_health", "1", FCVAR_ARCHIVE | FCVAR_CLIENTCMD_CAN_EXECUTE, "Show player's health in map overview.\n" );
@@ -826,7 +826,7 @@ void CMapOverview::SetMap(const char * levelname)
 
 	m_MapKeyValues = new KeyValues( levelname );
 
-	char tempfile[MAX_PATH];
+	char tempfile[SOURCE_MAX_PATH];
 	Q_snprintf( tempfile, sizeof( tempfile ), "resource/overviews/%s.txt", levelname );
 	
 	if ( !m_MapKeyValues->LoadFromFile( g_pFullFileSystem, tempfile, "GAME" ) )

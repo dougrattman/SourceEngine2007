@@ -14,7 +14,7 @@
 #include "cbase.h"
 #include "entityoutput.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define FGUNTARGET_START_ON			0x0001

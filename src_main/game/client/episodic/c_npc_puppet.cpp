@@ -61,7 +61,7 @@ void C_NPC_Puppet::BuildTransformations(CStudioHdr *pStudioHdr, Vector *pos,
       pTarget->GetAttachment(m_nTargetAttachment, matTarget);
 
       MatrixCopy(matTarget, GetBoneForWrite(0));
-      boneComputed.ClearAll();  // FIXME: Why is this calculated already?
+      boneComputed.ClearAll();  // TODO(d.rattman): Why is this calculated already?
       boneComputed.MarkBone(0);
     }
   }

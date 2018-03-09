@@ -10,7 +10,7 @@
 #include "debug_leafvis.h"
 #include "tier0/include/fasttimer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar r_ClipAreaPortals("r_ClipAreaPortals", "1", FCVAR_CHEAT);
@@ -98,7 +98,7 @@ struct portalclip_t {
 // Transforms and clips the portal's verts to the view frustum. Returns false
 // if the verts lie outside the frustum.
 static inline bool GetPortalScreenExtents(dareaportal_t *pPortal,
-                                          portalclip_t *RESTRICT clip,
+                                          portalclip_t *SOURCE_RESTRICT clip,
                                           CPortalRect &portalRect,
                                           float *pReflectionWaterHeight) {
   portalRect.left = portalRect.bottom = 1e24;

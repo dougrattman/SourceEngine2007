@@ -6,7 +6,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>  // INADDR_ANY defn
-#elif _LINUX
+#elif OS_POSIX
 #include <netinet/in.h>
 #endif
 

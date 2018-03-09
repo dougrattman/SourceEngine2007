@@ -16,7 +16,7 @@
 #include "voice_mixer_controls.h"
 #include "voice_wavefile.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void Voice_EndChannel(int iChannel);
@@ -271,14 +271,14 @@ class CVoiceWriter {
       if (data->m_Buffer.TellPut() <= 0) continue;
 
       int index = data->m_pChannel - g_VoiceChannels;
-      Assert(index >= 0 && index < ARRAYSIZE(g_VoiceChannels));
+      Assert(index >= 0 && index < SOURCE_ARRAYSIZE(g_VoiceChannels));
 
-      char path[MAX_PATH];
+      char path[SOURCE_MAX_PATH];
       Q_snprintf(path, sizeof(path), "%s/voice",
                  g_pSoundServices->GetGameDir());
       g_pFileSystem->CreateDirHierarchy(path);
 
-      char fn[MAX_PATH];
+      char fn[SOURCE_MAX_PATH];
       Q_snprintf(fn, sizeof(fn), "%s/pl%02d_slot%d-time%d.wav", path, index,
                  data->m_nCount, (int)g_pSoundServices->GetClientTime());
 

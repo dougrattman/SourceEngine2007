@@ -36,7 +36,7 @@
 #include <sys/stat.h>
 #include "sdklauncher_main.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -53,7 +53,7 @@ char g_engineDir[50];
 void OpenLocalizedURL( const char *lpszLocalName )
 {
 	// Find and convert the localized unicode string
-	char pURLStr[MAX_PATH];
+	char pURLStr[SOURCE_MAX_PATH];
 	wchar_t *pURLUni = g_pVGuiLocalize->Find( lpszLocalName );
 	g_pVGuiLocalize->ConvertUnicodeToANSI( pURLUni, pURLStr, sizeof( pURLStr ) );
 
@@ -369,7 +369,7 @@ void CSDKLauncherDialog::Launch( int hActiveListItem, bool bForce )
 		if ( !bForce && Q_stristr( pStr, "%gamedir%" ) )
 		{
 			// Make sure the currently-selected gamedir is valid and has a gameinfo.txt in it.
-			char testStr[MAX_PATH];
+			char testStr[SOURCE_MAX_PATH];
 			Q_strncpy( testStr, pModDir, sizeof( testStr ) );
 			Q_AppendSlash( testStr, sizeof( testStr ) );
 			Q_strncat( testStr, "gameinfo.txt", sizeof( testStr ), COPY_ALL_CHARACTERS );
@@ -615,7 +615,7 @@ void CSDKLauncherDialog::PopulateCurrentGameCombo( bool bSelectLast )
 
 	ParseConfigs( configs );
 
-	char szGame[MAX_PATH];
+	char szGame[SOURCE_MAX_PATH];
 	GetVConfigRegistrySetting( GAMEDIR_TOKEN, szGame, sizeof( szGame ) );
 
 	int activeConfig = -1;
@@ -700,13 +700,13 @@ void CSDKLauncherDialog::OnTextChanged( KeyValues *pkv )
 //-----------------------------------------------------------------------------
 void CSDKLauncherDialog::RefreshConfigs( void )
 {
-	char szGameConfigDir[MAX_PATH];
+	char szGameConfigDir[SOURCE_MAX_PATH];
 
 	V_strcpy( szGameConfigDir, GetSDKLauncherBinDirectory() );
-	V_AppendSlash( szGameConfigDir, MAX_PATH );
-	V_strncat( szGameConfigDir, g_engineDir, MAX_PATH );
-	V_AppendSlash( szGameConfigDir, MAX_PATH );
-	V_strncat( szGameConfigDir, "bin", MAX_PATH );
+	V_AppendSlash( szGameConfigDir, SOURCE_MAX_PATH );
+	V_strncat( szGameConfigDir, g_engineDir, SOURCE_MAX_PATH );
+	V_AppendSlash( szGameConfigDir, SOURCE_MAX_PATH );
+	V_strncat( szGameConfigDir, "bin", SOURCE_MAX_PATH );
 
 	// Set directory in which GameConfig.txt is found
 	g_ConfigManager.SetBaseDirectory( szGameConfigDir );

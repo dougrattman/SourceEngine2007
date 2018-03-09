@@ -23,7 +23,7 @@ namespace vgui
 	class Panel;
 }
 
-abstract_class IProfiling
+the_interface IProfiling
 {
 public:
 	virtual void		Create( vgui::VPANEL parent ) = 0;

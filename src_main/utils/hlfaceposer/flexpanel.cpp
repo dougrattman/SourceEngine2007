@@ -312,14 +312,14 @@ int FlexPanel::handleEvent (mxEvent *event)
 					}
 				}
 
-				// FIXME: Needs to drive the current actor, not model
+				// TODO(d.rattman): Needs to drive the current actor, not model
 
 				// Go from global to local indices
 				LocalFlexController_t localflex = FindFlexControllerIndexByName( models->GetActiveStudioModel(), GetGlobalFlexControllerName( flex ) );
 				if ( localflex >= 0 )
 				{
 					// Update the face
-					// FIXME: I'm not sure this is needed anymore....
+					// TODO(d.rattman): I'm not sure this is needed anymore....
 					models->GetActiveStudioModel()->SetFlexController( localflex, value * influ );
 					if (flex2 != flex)
 					{

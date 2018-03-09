@@ -10,7 +10,7 @@
 
 #include "waterdudv_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_VS_SHADER( Water_DuDv, "Help for Water_DuDv" )

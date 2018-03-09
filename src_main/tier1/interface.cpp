@@ -29,7 +29,7 @@
 #include "tier0/include/threadtools.h"
 #include "tier1/strtools.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // InterfaceReg.
@@ -129,11 +129,11 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
 #endif
 
   char fixed_library_path[1024];
-  Q_strncpy(fixed_library_path, library_path, ARRAYSIZE(fixed_library_path));
+  Q_strncpy(fixed_library_path, library_path, SOURCE_ARRAYSIZE(fixed_library_path));
 
   if (!Q_stristr(fixed_library_path, module_extension))
     Q_strncat(fixed_library_path, module_addition,
-              ARRAYSIZE(fixed_library_path));
+              SOURCE_ARRAYSIZE(fixed_library_path));
 
   Q_FixSlashes(fixed_library_path);
 
@@ -174,7 +174,7 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
 
   if (!Q_IsAbsolutePath(module_name) &&
       // Full path wasn't passed in, using the current working dir.
-      _getcwd(current_directory, ARRAYSIZE(current_directory))) {
+      _getcwd(current_directory, SOURCE_ARRAYSIZE(current_directory))) {
     size_t current_directory_length = strlen(current_directory) - 1;
 
     if (current_directory[current_directory_length] == '/' ||
@@ -185,10 +185,10 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
     char absolute_module_name[1024];
     if (strstr(module_name, "bin/") == module_name) {
       // Don't make bin/bin path.
-      Q_snprintf(absolute_module_name, ARRAYSIZE(absolute_module_name), "%s/%s",
+      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name), "%s/%s",
                  current_directory, module_name);
     } else {
-      Q_snprintf(absolute_module_name, ARRAYSIZE(absolute_module_name),
+      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name),
                  "%s/bin/%s", current_directory, module_name);
     }
 

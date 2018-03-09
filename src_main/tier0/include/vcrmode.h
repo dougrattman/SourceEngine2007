@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: VCR mode records a client's game and allows you to
 // play it back and reproduce it exactly. When playing it back, nothing
@@ -10,14 +10,15 @@
 #ifndef SOURCE_TIER0_INCLUDE_VCRMODE_H_
 #define SOURCE_TIER0_INCLUDE_VCRMODE_H_
 
-#include "base/include/base_types.h"
 #include "build/include/build_config.h"
 
 #ifdef OS_WIN
 #include <process.h>
 #endif
 
-#include "tier0/include/platform.h"
+#include "base/include/base_types.h"
+#include "base/include/compiler_specific.h"
+#include "tier0/include/tier0_api.h"
 #include "tier0/include/vcr_shared.h"
 
 #ifdef OS_POSIX
@@ -41,14 +42,14 @@ ch *GetCommandLine();
   { x; }
 #endif
 
-abstract_class IVCRHelpers {
+the_interface IVCRHelpers {
  public:
   virtual void ErrorMessage(const ch *pMsg) = 0;
   virtual void *GetMainWindow() = 0;
 };
 
 // Used by the vcrtrace program.
-abstract_class IVCRTrace {
+the_interface IVCRTrace {
  public:
   virtual VCREvent ReadEvent() = 0;
   virtual void Read(void *pDest, i32 size) = 0;
@@ -58,10 +59,10 @@ struct InputEvent_t;
 
 enum VCRMode_t { VCR_Invalid = -1, VCR_Disabled = 0, VCR_Record, VCR_Playback };
 
-typedef struct VCR_s {
+struct VCR_t {
   // Start VCR record or play.
-  BOOL (*Start)
-  (ch const *file_name, bool should_record, IVCRHelpers *vcr_helpers);
+  i32 (*Start)(ch const *file_name, bool should_record,
+               IVCRHelpers *vcr_helpers);
   void (*End)();
 
   // Used by the VCR trace app.
@@ -193,10 +194,9 @@ typedef struct VCR_s {
 
   unsigned long (*Hook_WaitForMultipleObjects)(u32 handles_count,
                                                const void **handles,
-                                               BOOL is_wait_all,
+                                               i32 is_wait_all,
                                                u32 milliseconds);
-
-} VCR_t;
+};
 
 #ifndef NO_VCR
 

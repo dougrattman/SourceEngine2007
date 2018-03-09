@@ -19,7 +19,7 @@
 #include "tier1/keyvalues.h"
 #include "hltvcamera.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #ifdef CSTRIKE_DLL
@@ -355,9 +355,9 @@ void C_BaseViewModel::UpdateAnimationParity( void )
 	if ( m_nOldAnimationParity != m_nAnimationParity && !GetPredictable() )
 	{
 		float curtime = (pPlayer && IsIntermediateDataAllocated()) ? pPlayer->GetFinalPredictedTime() : gpGlobals->curtime;
-		// FIXME: this is bad
+		// TODO(d.rattman): this is bad
 		// Simulate a networked m_flAnimTime and m_flCycle
-		// FIXME:  Do we need the magic 0.1?
+		// TODO(d.rattman):  Do we need the magic 0.1?
 		SetCycle( 0.0f ); // GetSequenceCycleRate( GetSequence() ) * 0.1;
 		m_flAnimTime = curtime;
 	}

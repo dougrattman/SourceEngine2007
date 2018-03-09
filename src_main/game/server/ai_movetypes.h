@@ -85,12 +85,12 @@ struct AIMoveTrace_t
 	Vector vHitNormal; 	// The normal of a hit, if any. vec3_origin if none. Can be none even if "hit"
 	CBaseEntity* 	pObstruction; // The obstruction I bumped into (if any)
 	float flTotalDist;
-	float  flDistObstructed; 	// FIXME: This is a strange number. In the case
+	float  flDistObstructed; 	// TODO(d.rattman): This is a strange number. In the case
    		// of calling MoveLimit with navtype NAV_GROUND,
    		// it represents a 2D distance to the obstruction.
    		// In the case of other navtypes, it represents a
    		// 3D distance to the obstruction
-	Vector  vJumpVelocity; // FIXME: Remove this; it's bogus
+	Vector  vJumpVelocity; // TODO(d.rattman): Remove this; it's bogus
    		// It's only returned by JumpMoveLimit
    		// which seems to be a bogus concept to begin with
 	float flStepUpDistance;
@@ -179,7 +179,7 @@ enum AIMotorMoveResult_t
 // notify and receive guidance from higher level-classes
 //-----------------------------------------------------------------------------
 
-abstract_class IAI_MovementSink
+the_interface IAI_MovementSink
 {
 public:
 	//---------------------------------

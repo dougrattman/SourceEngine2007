@@ -10,7 +10,7 @@
 #include "datamodel/dmelementfactoryhelper.h"
 #include "tier2/fileutils.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -119,19 +119,19 @@ void CDmeDCCMakefile::GetOutputs( CUtlVector<CUtlString> &fullPaths )
 {
 	fullPaths.RemoveAll();
 
-	char pOutputName[MAX_PATH];
+	char pOutputName[SOURCE_MAX_PATH];
 	Q_FileBase( GetFileName(), pOutputName, sizeof(pOutputName) );
 	if ( !pOutputName[0] )
 		return;
 
-	// FIXME: We need to come up with an appropriate directory structure for export
-	char pOutputDir[MAX_PATH];
+	// TODO(d.rattman): We need to come up with an appropriate directory structure for export
+	char pOutputDir[SOURCE_MAX_PATH];
 	GetMakefilePath( pOutputDir, sizeof(pOutputDir) );
 	if ( !pOutputDir[0] )
 		return;
 
 	Q_StripTrailingSlash( pOutputDir );
-	char pFullPath[MAX_PATH];
+	char pFullPath[SOURCE_MAX_PATH];
 	Q_snprintf( pFullPath, sizeof(pFullPath), "%s\\%s.dmx", pOutputDir, pOutputName );
 	fullPaths.AddToTail( pFullPath );
 }

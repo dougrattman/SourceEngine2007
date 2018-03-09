@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BONE_SETUP_H
 #define BONE_SETUP_H
 
+#include "base/include/macros.h"
 #include "bitvec.h"
 #include "cmodel.h"
 #include "studio.h"
@@ -13,7 +14,7 @@ class CBoneAccessor;
 
 // This provides access to networked arrays, so if this code actually changes a
 // value, the entity is marked as changed.
-abstract_class IParameterAccess {
+the_interface IParameterAccess {
  public:
   virtual float GetParameter(int iParam) = 0;
   virtual void SetParameter(int iParam, float flValue) = 0;
@@ -381,7 +382,7 @@ const char *Studio_GetDefaultSurfaceProps(CStudioHdr *pstudiohdr);
 float Studio_GetMass(CStudioHdr *pstudiohdr);
 const char *Studio_GetKeyValueText(const CStudioHdr *pStudioHdr, int iSequence);
 
-FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
 struct bonecacheparams_t {
   CStudioHdr *pStudioHdr;
   matrix3x4_t *pBoneToWorld;

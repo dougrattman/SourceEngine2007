@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "particles/particles.h"
 
@@ -16,7 +16,6 @@
 #include "tier2/renderutils.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 void CParticleOperatorInstance::InitScalarAttributeRandomRangeBlock(
@@ -157,7 +156,7 @@ void C_INIT_CreateOnModel::InitNewParticlesScalar(
     Vector vecPnts[100];  // minimize stack usage
     Vector vecUVW[100];
     int nHitBoxIndex[100];
-    int nToDo = std::min(ARRAYSIZE(vecPnts), (size_t)nParticleCount);
+    int nToDo = std::min(SOURCE_ARRAYSIZE(vecPnts), (size_t)nParticleCount);
 
     Assert(m_nControlPointNumber <= pParticles->GetHighestControlPoint());
 
@@ -349,7 +348,7 @@ void C_INIT_CreateWithinSphere::InitNewParticlesScalar(
     xyz[4] = randpos.y;
     xyz[8] = randpos.z;
 
-    // FIXME: Remove this into a speed setting initializer
+    // TODO(d.rattman): Remove this into a speed setting initializer
     if (pxyz && (nAttributeWriteMask & PARTICLE_ATTRIBUTE_PREV_XYZ_MASK)) {
       Vector poffset(0, 0, 0);
       if (m_fSpeedMax > 0.0) {
@@ -1397,8 +1396,8 @@ class C_INIT_RandomColor : public CParticleOperatorInstance {
     // If we're factoring in luminosity or tint, then get our lighting info for
     // this position
     if (m_flTintPerc) {
-      // FIXME: Really, we want the emission point for each particle, but for
-      // now, we do it more cheaply Get our control point
+      // TODO(d.rattman): Really, we want the emission point for each particle,
+      // but for now, we do it more cheaply Get our control point
       Vector vecOrigin;
       pParticles->GetControlPointAtTime(0, pParticles->m_flCurTime, &vecOrigin);
 
@@ -2129,7 +2128,7 @@ void C_INIT_RemapScalar::InitNewParticlesScalar(CParticleCollection *pParticles,
     flMax = std::clamp(m_flOutputMax, 0.0f, 1.0f);
   }
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (; nParticleCount--; start_p++) {
     pCreationTime = pParticles->GetFloatAttributePtr(
         PARTICLE_ATTRIBUTE_CREATION_TIME, start_p);
@@ -2557,35 +2556,11 @@ void C_INIT_CreateInHierarchy::InitNewParticlesScalar(
     Vector Pnt = L0 + (L1 - L0) * t;
 
     Pnt += randpos;
-    // Optional Culling based on configurable trace distance.  Failing particle
-    // are destroyed
-    // disabled for now.
-    // if ( m_flTraceDist != 0.0f )
-    //{
-    //	// Trace down
-    //	Vector TraceDir=Vector(0, 0, -1);
-    //	// now set the trace distance
-    //	// note - probably need to offset Pnt upwards for some fudge factor on
-    // irregular surfaces 	CBaseTrace tr; 	Vector RayStart=Pnt; 	float
-    // flRadius = m_flTraceDist; g_pParticleSystemMgr->Query()->TraceLine(
-    // RayStart, ( RayStart + ( TraceDir * flRadius ) ), MASK_SOLID, NULL,
-    // COLLISION_GROUP_NONE, &tr ); 	if ( tr.fraction == 1.0 )
-    //	{
-    //		//If the trace hit nothing, kill the particle.
-    //		pParticles->KillParticle( start_p );
-    //	}
-    //	else
-    //	{
-    //		//If we hit something, set particle position to collision
-    // position 		Pnt += tr.endpos;
-    //		//FIXME - if we add a concept of a particle normal (for example,
-    // aligned quads or decals, set it here)
-    //	}
-    //}
 
     xyz[0] = Pnt.x;
     xyz[4] = Pnt.y;
     xyz[8] = Pnt.z;
+
     if (pxyz && (nAttributeWriteMask & PARTICLE_ATTRIBUTE_PREV_XYZ_MASK)) {
       pxyz[0] = Pnt.x;
       pxyz[4] = Pnt.y;
@@ -2654,7 +2629,7 @@ void C_INIT_RemapScalarToVector::InitNewParticlesScalar(
     CParticleCollection *pParticles, int start_p, int nParticleCount,
     int nAttributeWriteMask, void *pContext) const {
   const float *pCreationTime;
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (; nParticleCount--; start_p++) {
     pCreationTime = pParticles->GetFloatAttributePtr(
         PARTICLE_ATTRIBUTE_CREATION_TIME, start_p);
@@ -3295,7 +3270,7 @@ void C_INIT_RemapCPtoScalar::InitNewParticlesScalar(
 
   float flInput = vecControlPoint[m_nField];
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (; nParticleCount--; start_p++) {
     pCreationTime = pParticles->GetFloatAttributePtr(
         PARTICLE_ATTRIBUTE_CREATION_TIME, start_p);
@@ -3410,7 +3385,7 @@ void C_INIT_RemapCPtoVector::InitNewParticlesScalar(
     vOutputMaxLocal = vecTransformLocal;
   }
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (; nParticleCount--; start_p++) {
     const float *pCreationTime = pParticles->GetFloatAttributePtr(
         PARTICLE_ATTRIBUTE_CREATION_TIME, start_p);
@@ -3655,7 +3630,7 @@ void C_INIT_DistanceToCPInit::InitNewParticlesScalar(
   Vector vecControlPoint1 =
       pParticles->GetControlPointAtCurrentTime(m_nStartCP);
 
-  // FIXME: SSE-ize
+  // TODO(d.rattman): SSE-ize
   for (; nParticleCount--; start_p++) {
     Vector vecPosition2;
     const float *pXYZ =

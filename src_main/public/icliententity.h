@@ -17,7 +17,7 @@ struct SpatializationInfo_t;
 //-----------------------------------------------------------------------------
 // Purpose: All client entities must implement this interface.
 //-----------------------------------------------------------------------------
-abstract_class IClientEntity : public IClientUnknown,
+the_interface IClientEntity : public IClientUnknown,
                                public IClientRenderable,
                                public IClientNetworkable,
                                public IClientThinkable {

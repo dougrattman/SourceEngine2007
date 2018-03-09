@@ -245,7 +245,7 @@ CSoundParametersInternal *CSoundEntry::GetSoundParameters()
 
 bool CSoundEntry::IsCheckedOut() const
 {
-	// FIXME:  This could use the wave state or the script state?
+	// TODO(d.rattman):  This could use the wave state or the script state?
 	return false;
 }
 

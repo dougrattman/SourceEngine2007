@@ -33,7 +33,7 @@
 #include "tier0/include/icommandline.h"
 // clang-format on
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define INSIGNIA_MODEL "models/chefhat.mdl"
@@ -390,13 +390,13 @@ void CNPC_Citizen::Precache() {
   PrecacheInstancedScene("scenes/Expressions/CitizenCombat_loop.vcd");
 
   for (int i = 0; i < STATES_WITH_EXPRESSIONS; i++) {
-    for (int j = 0; j < ARRAYSIZE(ScaredExpressions[i].szExpressions); j++) {
+    for (int j = 0; j < SOURCE_ARRAYSIZE(ScaredExpressions[i].szExpressions); j++) {
       PrecacheInstancedScene(ScaredExpressions[i].szExpressions[j]);
     }
-    for (int j = 0; j < ARRAYSIZE(NormalExpressions[i].szExpressions); j++) {
+    for (int j = 0; j < SOURCE_ARRAYSIZE(NormalExpressions[i].szExpressions); j++) {
       PrecacheInstancedScene(NormalExpressions[i].szExpressions[j]);
     }
-    for (int j = 0; j < ARRAYSIZE(AngryExpressions[i].szExpressions); j++) {
+    for (int j = 0; j < SOURCE_ARRAYSIZE(AngryExpressions[i].szExpressions); j++) {
       PrecacheInstancedScene(AngryExpressions[i].szExpressions[j]);
     }
   }
@@ -409,7 +409,7 @@ void CNPC_Citizen::Precache() {
 void CNPC_Citizen::PrecacheAllOfType(CitizenType_t type) {
   if (m_Type == CT_UNIQUE) return;
 
-  int nHeads = ARRAYSIZE(g_ppszRandomHeads);
+  int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomHeads);
   int i;
   for (i = 0; i < nHeads; ++i) {
     if (!IsExcludedHead(type, false, i)) {
@@ -578,7 +578,7 @@ void CNPC_Citizen::SelectModel() {
     Q_strncpy(szMapName, STRING(gpGlobals->mapname), sizeof(szMapName));
     Q_strlower(szMapName);
 
-    for (int i = 0; i < ARRAYSIZE(CitizenTypeMappings); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(CitizenTypeMappings); i++) {
       if (Q_stristr(szMapName, CitizenTypeMappings[i].pszMapTag)) {
         m_Type = CitizenTypeMappings[i].type;
         break;
@@ -604,22 +604,22 @@ void CNPC_Citizen::SelectModel() {
       return;
     } else {
       // Count the heads
-      int headCounts[ARRAYSIZE(g_ppszRandomHeads)] = {0};
+      int headCounts[SOURCE_ARRAYSIZE(g_ppszRandomHeads)] = {0};
       int i;
 
       for (i = 0; i < g_AI_Manager.NumAIs(); i++) {
         CNPC_Citizen *pCitizen =
             dynamic_cast<CNPC_Citizen *>(g_AI_Manager.AccessAIs()[i]);
         if (pCitizen && pCitizen != this && pCitizen->m_iHead >= 0 &&
-            pCitizen->m_iHead < ARRAYSIZE(g_ppszRandomHeads)) {
+            pCitizen->m_iHead < SOURCE_ARRAYSIZE(g_ppszRandomHeads)) {
           headCounts[pCitizen->m_iHead]++;
         }
       }
 
       // Find all candidates
-      CUtlVectorFixed<HeadCandidate_t, ARRAYSIZE(g_ppszRandomHeads)> candidates;
+      CUtlVectorFixed<HeadCandidate_t, SOURCE_ARRAYSIZE(g_ppszRandomHeads)> candidates;
 
-      for (i = 0; i < ARRAYSIZE(g_ppszRandomHeads); i++) {
+      for (i = 0; i < SOURCE_ARRAYSIZE(g_ppszRandomHeads); i++) {
         if (!gender || g_ppszRandomHeads[i][0] == gender) {
           if (!IsExcludedHead(m_Type, IsMedic(), i)) {
             HeadCandidate_t candidate = {i, headCounts[i]};
@@ -654,7 +654,7 @@ void CNPC_Citizen::SelectModel() {
     else {
       pszModelName++;
       if (m_iHead == -1) {
-        for (int i = 0; i < ARRAYSIZE(g_ppszRandomHeads); i++) {
+        for (int i = 0; i < SOURCE_ARRAYSIZE(g_ppszRandomHeads); i++) {
           if (Q_stricmp(g_ppszRandomHeads[i], pszModelName) == 0) {
             m_iHead = i;
             break;
@@ -1793,19 +1793,19 @@ const char *CNPC_Citizen::SelectRandomExpressionForState(NPC_STATE state) {
   switch (m_ExpressionType) {
     case CIT_EXP_SCARED: {
       int iRandom = RandomInt(
-          0, ARRAYSIZE(ScaredExpressions[iExpressionState].szExpressions) - 1);
+          0, SOURCE_ARRAYSIZE(ScaredExpressions[iExpressionState].szExpressions) - 1);
       return ScaredExpressions[iExpressionState].szExpressions[iRandom];
     }
 
     case CIT_EXP_NORMAL: {
       int iRandom = RandomInt(
-          0, ARRAYSIZE(NormalExpressions[iExpressionState].szExpressions) - 1);
+          0, SOURCE_ARRAYSIZE(NormalExpressions[iExpressionState].szExpressions) - 1);
       return NormalExpressions[iExpressionState].szExpressions[iRandom];
     }
 
     case CIT_EXP_ANGRY: {
       int iRandom = RandomInt(
-          0, ARRAYSIZE(AngryExpressions[iExpressionState].szExpressions) - 1);
+          0, SOURCE_ARRAYSIZE(AngryExpressions[iExpressionState].szExpressions) - 1);
       return AngryExpressions[iExpressionState].szExpressions[iRandom];
     }
 
@@ -1910,7 +1910,7 @@ Vector CNPC_Citizen::GetActualShootPosition(const Vector &shootOrigin) {
 
       // Find a clear shot by checking for clear shots around it
       float flShotOffsets[] = {512, -512, 128, -128};
-      for (int i = 0; i < ARRAYSIZE(flShotOffsets); i++) {
+      for (int i = 0; i < SOURCE_ARRAYSIZE(flShotOffsets); i++) {
         Vector vecTest = vecTarget + (vecRight * flShotOffsets[i]);
         // Add some random height to it
         vecTest.z += RandomFloat(-512, 512);

@@ -21,7 +21,7 @@
 #include "vgui/keycode.h"
 #include "vguicenterprint.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define CHAT_WIDTH_PERCENTAGE 0.6f
@@ -323,7 +323,7 @@ CBaseHudChatInputLine::CBaseHudChatInputLine(CBaseHudChat *parent,
 void CBaseHudChatInputLine::ApplySchemeSettings(vgui::IScheme *pScheme) {
   BaseClass::ApplySchemeSettings(pScheme);
 
-  // FIXME:  Outline
+  // TODO(d.rattman):  Outline
   vgui::HFont hFont = pScheme->GetFont("ChatFont");
 
   m_pPrompt->SetFont(hFont);

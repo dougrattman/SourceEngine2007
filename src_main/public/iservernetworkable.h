@@ -32,7 +32,7 @@ class CBaseNetworkable;
 class CCheckTransmitInfo {
  public:
   edict_t *m_pClientEnt;  // pointer to receiver edict
-  uint8_t m_PVS[PAD_NUMBER(MAX_MAP_CLUSTERS, 8) / 8];
+  uint8_t m_PVS[SOURCE_PAD_NUMBER(MAX_MAP_CLUSTERS, 8) / 8];
   int m_nPVSSize;  // PVS size in bytes
 
   CBitVec<MAX_EDICTS>

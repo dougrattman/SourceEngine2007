@@ -8,7 +8,7 @@
 #include "tfc_team.h"
 #include "entitylist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -254,7 +254,7 @@ void CTFCTeam::Init( const char *pName, int iNumber )
 color32 CTFCTeam::GetTeamColor()
 {
 	int i = GetTeamNumber();
-	if ( i >= 0 && i < ARRAYSIZE( rgbcolors ) )
+	if ( i >= 0 && i < SOURCE_ARRAYSIZE( rgbcolors ) )
 	{
 		return Vector255ToRGBColor( rgbcolors[i] );
 	}

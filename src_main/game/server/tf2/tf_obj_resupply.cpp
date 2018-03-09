@@ -125,7 +125,7 @@ bool CObjectResupply::ClientCommand( CBaseTFPlayer *pPlayer, const char *pCmd, I
 		RESUPPLY_ALL_COST
 	};
 
-	COMPILE_TIME_ASSERT( RESUPPLY_BUY_TYPE_COUNT == 4 );
+	static_assert( RESUPPLY_BUY_TYPE_COUNT == 4 );
 
 	if ( FStrEq( pCmd, "buy" ) )
 	{

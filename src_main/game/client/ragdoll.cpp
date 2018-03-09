@@ -503,7 +503,7 @@ void C_ServerRagdoll::BuildTransformations(CStudioHdr *hdr, Vector *pos,
         matrix3x4_t &matrix = GetBoneForWrite(index);
 
         if (m_flBlendWeightCurrent != 0.0f && pSeqDesc &&
-            // FIXME: this bone access is illegal
+            // TODO(d.rattman): this bone access is illegal
             pSeqDesc->weight(index) != 0.0f) {
           // Use the animated bone position instead
           boneSimulated[index] = false;

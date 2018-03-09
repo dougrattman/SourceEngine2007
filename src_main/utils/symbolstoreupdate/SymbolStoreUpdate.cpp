@@ -466,7 +466,7 @@ FileUpdateStatus_t UpdateFileInSymbolStore( CFileInfo *pInfo )
 
 const char *SetPathToExeDirectory()
 {
-	static char filename[MAX_PATH];
+	static char filename[SOURCE_MAX_PATH];
 	if ( GetModuleFileName( GetModuleHandle( NULL ), filename, sizeof( filename ) ) == 0 )
 		Error( "GetModuleFileNameEx failed.\n" );
 

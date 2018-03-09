@@ -5,7 +5,7 @@
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_ALIAS_NAME 32
@@ -160,7 +160,7 @@ void CCommandBuffer::GetNextCommandLength(const char *pText, int nMaxLen,
       if (!bIsQuoted && c == ';') break;
     }
 
-    // FIXME: This is legacy behavior; should we not break if a \n is inside a
+    // TODO(d.rattman): This is legacy behavior; should we not break if a \n is inside a
     // quoted string?
     if (c == '\n') break;
   }

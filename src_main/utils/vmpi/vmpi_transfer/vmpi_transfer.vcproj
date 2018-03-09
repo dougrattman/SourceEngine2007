@@ -410,7 +410,7 @@
 				Name="Public Header Files"
 				>
 				<File
-					RelativePath="..\..\..\public\mathlib\amd3dx.h"
+					RelativePath="..\..\..\deps\amd3dx\include\amd3dx.h"
 					>
 				</File>
 				<File

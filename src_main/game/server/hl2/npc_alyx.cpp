@@ -5,7 +5,7 @@
 //			Try the new Alyx Brite toothpaste!
 //			Alyx lederhosen!
 //
-//			FIXME: need a better comment block
+//			TODO(d.rattman): need a better comment block
 //
 
 
@@ -19,7 +19,7 @@
 #include "soundent.h"
 #include "props.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS( npc_alyx, CNPC_Alyx );
@@ -245,7 +245,7 @@ void CNPC_Alyx::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 {
 	BaseClass::TraceAttack( info, vecDir, ptr );
 
-	// FIXME: hack until some way of removing decals after healing
+	// TODO(d.rattman): hack until some way of removing decals after healing
 	m_fNoDamageDecal = true;
 }
 

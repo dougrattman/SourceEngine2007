@@ -43,7 +43,7 @@
 // For character manipulations isupper/tolower
 #include <ctype.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define KEYNAME_NAME "Name"
@@ -915,7 +915,7 @@ void CRenderTextureEditor::SetDispInfo(KeyValues *kv, int iHint) {
             // Format:   maps/mapname/[matname]_x_y_z
             bRealMaterial = false;
 
-            char chName[MAX_PATH];
+            char chName[SOURCE_MAX_PATH];
             Q_strncpy(chName, pMat->GetName() + 5, sizeof(chName) - 1);
 
             if (char *szMatName = strchr(chName, '/')) {
@@ -2087,7 +2087,7 @@ void CTextureListPanel::PerformLayout() {
                             m_pAllTextures,  m_pViewTextures,
                             m_pFilteringChk, m_pCopyToClipboardButton};
 
-  for (int i = 0; i < ARRAYSIZE(buttons); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(buttons); i++) {
     buttons[i]->SetPos(x, yOffset);
     buttons[i]->SetWide(w / 2);
     yOffset += buttons[i]->GetTall();
@@ -2130,7 +2130,7 @@ void CTextureListPanel::PerformLayout() {
                   {m_pFilteringChk, 60},
                   {m_pFilteringText, 130}};
 
-    for (int k = 0; k < ARRAYSIZE(layout); ++k) {
+    for (int k = 0; k < SOURCE_ARRAYSIZE(layout); ++k) {
       layout[k].pPanel->SetPos(xOffset, 2);
       iWidth = layout[k].iWidth;
       iWidth = std::min(w - xOffset - 30, iWidth);
@@ -2210,7 +2210,7 @@ void KeepSpecialKeys(KeyValues *textureList, bool bServiceKeys) {
 void KeepKeysMatchingFilter(KeyValues *textureList, char const *szFilter) {
   if (!szFilter || !*szFilter) return;
 
-  char chFilter[MAX_PATH] = {0}, chName[MAX_PATH] = {0};
+  char chFilter[SOURCE_MAX_PATH] = {0}, chName[SOURCE_MAX_PATH] = {0};
 
   Q_strncpy(chFilter, szFilter, sizeof(chFilter) - 1);
   ToLowerInplace(chFilter);
@@ -2459,7 +2459,7 @@ void CTextureListPanel::Paint() {
 
   // If filtering is enabled, then do filtering
   if (m_pFilteringChk->IsSelected() && m_pFilteringText->GetTextLength()) {
-    char chFilterString[MAX_PATH];
+    char chFilterString[SOURCE_MAX_PATH];
     m_pFilteringText->GetText(chFilterString, sizeof(chFilterString) - 1);
     chFilterString[sizeof(chFilterString) - 1] = 0;
     KeepKeysMatchingFilter(textureList.Get(), chFilterString);

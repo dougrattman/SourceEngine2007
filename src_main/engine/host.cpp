@@ -359,7 +359,7 @@ ConVar threadpool_reserve(
     "Consume the specified number of threads in the thread pool", 0, 0, 0, 0,
     &OnChangeThreadReserve);
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 CON_COMMAND(threadpool_cycle_reserve,
             "Cycles threadpool reservation by powers of 2") {
   int nCores = g_pThreadPool->NumThreads() + 1;
@@ -576,7 +576,7 @@ void Host_Error(const char *error, ...) {
 //******************************************
 void UseDefaultBindings(void) {
   FileHandle_t f;
-  char szFileName[_MAX_PATH];
+  char szFileName[SOURCE_MAX_PATH];
   char token[1024];
   char szKeyName[256];
 
@@ -644,7 +644,7 @@ void Host_WriteConfiguration(const char *dirname, const char *filename) {
     }
 
     // Generate a new .cfg file.
-    char szFileName[MAX_PATH];
+    char szFileName[SOURCE_MAX_PATH];
     CUtlBuffer configBuff(0, 0, CUtlBuffer::TEXT_BUFFER);
 
     Q_snprintf(szFileName, sizeof(szFileName), "%s/%s", dirname, filename);
@@ -786,7 +786,7 @@ void Host_ReadPreStartupConfiguration() {
   };
 
   // loop through looking for all the cvars to apply
-  for (int i = 0; i < ARRAYSIZE(s_PreStartupConfigConVars); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(s_PreStartupConfigConVars); i++) {
     const char *search = Q_stristr(configBuffer, s_PreStartupConfigConVars[i]);
     if (search) {
       // read over the token
@@ -1085,7 +1085,7 @@ void Host_BuildConVarUpdateMessage(NET_SetConVar *cvarMsg, int flags,
 }
 
 #if defined(_WIN32) && !defined(SWDS)
-// FIXME: move me somewhere more appropriate
+// TODO(d.rattman): move me somewhere more appropriate
 void CL_SendVoicePacket(bool bFinal) {
 #if !defined(NO_VOICE)
   if (!Voice_IsRecording()) return;
@@ -1866,7 +1866,7 @@ void _Host_RunFrame(float time) {
 
     shouldrender = !sv.IsDedicated();
 
-    // FIXME:  Could track remainder as fractional ticks instead of msec
+    // TODO(d.rattman):  Could track remainder as fractional ticks instead of msec
     prevremainder = host_remainder;
     if (prevremainder < 0) prevremainder = 0;
 
@@ -2792,7 +2792,7 @@ void Host_Changelevel(bool loadfromsavedgame, const char *mapname,
   }
 
 #ifndef SWDS
-  // FIXME:  Even needed?
+  // TODO(d.rattman):  Even needed?
   if (demoplayer->IsPlayingBack()) {
     ConMsg("Changelevel invalid during demo playback\n");
     return;
@@ -2976,9 +2976,9 @@ bool Host_NewGame(char *mapName, bool loadGame, bool bBackgroundLevel,
   VPROF("Host_NewGame");
   COM_TimestampedLog("Host_NewGame");
 
-  char previousMapName[MAX_PATH];
-  char dxMapName[MAX_PATH];
-  GetPlatformMapPath(mapName, dxMapName, MAX_PATH);
+  char previousMapName[SOURCE_MAX_PATH];
+  char dxMapName[SOURCE_MAX_PATH];
+  GetPlatformMapPath(mapName, dxMapName, SOURCE_MAX_PATH);
   Q_strncpy(previousMapName, host_map.GetString(), sizeof(previousMapName));
   host_map.SetValue(dxMapName);
 

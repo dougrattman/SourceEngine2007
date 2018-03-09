@@ -13,7 +13,7 @@
 #include "ToolManager.h"
 #include "history.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -99,7 +99,7 @@ void CMapViewLogical::OnInitialUpdate(void)
 	SetZoom(0);  // Zoom out as far as possible.
 	UpdateClientView();
 	CMapView2DBase::OnInitialUpdate();
-	// FIXME: Hardcoded light gray background - should be from a new "Logical View" options settings dialog
+	// TODO(d.rattman): Hardcoded light gray background - should be from a new "Logical View" options settings dialog
 	m_ClearColor.SetColor( BACKGROUND, BACKGROUND, BACKGROUND, 255 );  
 	m_clrGrid.SetColor( MID, MID, MID, 255 );
 }
@@ -340,7 +340,7 @@ void CMapViewLogical::DrawConnectingWire( float x, float y, CMapEntity *pSource,
 {
 	CRender2D *pRender = GetRender();
 	  
-	// FIXME: Deal with bad input type
+	// TODO(d.rattman): Deal with bad input type
 	Vector2D vecEndPosition, vecConnector;
 	pTarget->GetLogicalConnectionPosition( LOGICAL_CONNECTION_INPUT, vecConnector );
 	vecEndPosition = vecConnector;

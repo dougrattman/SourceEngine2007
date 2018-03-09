@@ -59,7 +59,7 @@ BEGIN_VS_SHADER( LightmappedReflective_DX90, "Help for Lightmapped Reflective" )
 
 	SHADER_FALLBACK
 	{
-		// FIXME: Create dx8 level fallback if we use this feature out of the SFM
+		// TODO(d.rattman): Create dx8 level fallback if we use this feature out of the SFM
 		return 0;
 	}
 

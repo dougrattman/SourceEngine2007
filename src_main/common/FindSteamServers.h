@@ -1,4 +1,5 @@
-//*********** (C) Copyright 2003 Valve Corporation All rights reserved. ***********
+//*********** (C) Copyright 2003 Valve Corporation All rights reserved.
+//***********
 //
 // The copyright to the contents herein is the property of Valve, L.L.C.
 // The contents may be used and/or copied only with the written permission of
@@ -9,7 +10,7 @@
 //
 // Contents:
 //
-//		
+//
 //
 // Authors:	Taylor Sherman
 //
@@ -19,39 +20,34 @@
 //
 // Things to do:
 //
-//		
+//
 //
 //*****************************************************************************
 
 #ifndef INCLUDED_STEAM_FINDSTEAMSERVERS_H
 #define INCLUDED_STEAM_FINDSTEAMSERVERS_H
 
-
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
-#pragma once
-#endif
-
 #ifdef STEAM_FINDSERVERS_STATIC_LIB
 
-	#define STEAM_FSS_CALL
-	#define STEAM_FSS_API
+#define STEAM_FSS_CALL
+#define STEAM_FSS_API
 
 #else
 
-	#ifndef STEAM_API
-		#ifdef STEAM_EXPORTS
- #define STEAM_API __declspec(dllexport)
-		#else
- #define STEAM_API __declspec(dllimport)
-		#endif
-	#endif
+#ifndef STEAM_API
+#ifdef STEAM_EXPORTS
+#define STEAM_API __declspec(dllexport)
+#else
+#define STEAM_API __declspec(dllimport)
+#endif
+#endif
 
-	#ifndef STEAM_CALL
-		#define STEAM_CALL __cdecl
-	#endif
+#ifndef STEAM_CALL
+#define STEAM_CALL __cdecl
+#endif
 
-	#define STEAM_FSS_CALL STEAM_CALL
-	#define STEAM_FSS_API STEAM_API
+#define STEAM_FSS_CALL STEAM_CALL
+#define STEAM_FSS_API STEAM_API
 #endif
 
 #include <climits>
@@ -64,28 +60,28 @@
 ******************************************************************************/
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-
-enum
-{
-	eSteamFindSteamServersLibraryError = -1,
-	eSteamFindSteamServersLibraryBusy = -2
+enum {
+  eSteamFindSteamServersLibraryError = -1,
+  eSteamFindSteamServersLibraryBusy = -2
 };
 
 // returns number of IP addresses returned by the GDS for this server type
 // negative return means error
-STEAM_FSS_API int STEAM_FSS_CALL SteamFindServersNumServers(ESteamServerType eServerType);
+STEAM_FSS_API int STEAM_FSS_CALL
+SteamFindServersNumServers(ESteamServerType eServerType);
 
 // Get nth ipaddr:port for this server type
 // buffer needs to be 22 chars long: aaa.bbb.ccc.ddd:12345 plus 0
 //
 // returns 0 if succsessful, negative is error
-STEAM_FSS_API int STEAM_FSS_CALL SteamFindServersIterateServer(ESteamServerType eServerType, unsigned int nServer, char *szIpAddrPort, int szIpAddrPortLen);
+STEAM_FSS_API int STEAM_FSS_CALL SteamFindServersIterateServer(
+    ESteamServerType eServerType, unsigned int nServer, char *szIpAddrPort,
+    int szIpAddrPortLen);
 
-STEAM_FSS_API const char * STEAM_FSS_CALL SteamFindServersGetErrorString();
+STEAM_FSS_API const char *STEAM_FSS_CALL SteamFindServersGetErrorString();
 
 #ifdef __cplusplus
 }

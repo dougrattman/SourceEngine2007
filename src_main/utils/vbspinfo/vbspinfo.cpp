@@ -417,7 +417,7 @@ void main (int argc, char **argv)
 			OpenBSPFile(source);
 
 			// If the filename doesn't have a path, prepend with the current directory
-			char fullbspname[MAX_PATH];
+			char fullbspname[SOURCE_MAX_PATH];
 			_fullpath( fullbspname, source, sizeof( fullbspname ) );
 
 			for ( int extract = 0; extract < HEADER_LUMPS; extract++ )

@@ -21,7 +21,7 @@
 #include "debugtangentspace.inc"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_SHADER( DebugTangentSpace, "Help for DebugTangentSpace" )

@@ -1,11 +1,22 @@
-// Purpose: Header file for the C++ ICE encryption class.
-// Taken from public domain code, as written by Matthew Kwan - July 1996
-// http://www.darkside.com.au/ice/
+/*
+ * Header file for the C++ ICE encryption class.
+ *
+ * Written by Matthew Kwan - July 1996
+ *
+ * The ICE algorithm is public domain, and source code can be downloaded from
+ * this page (http://www.darkside.com.au/ice/). There are no patents or
+ * copyrights, so its use is unrestricted. Naturally, if you do decide to use
+ * it, the author would love to hear about it.
+ *
+ * As of 28 November 1998 there have been two changes to the ICE source code.
+ * The first fixes a bug in the C and C++ versions that caused incorrect
+ * encryption when compiled for 16-bit integers. The second changes the API for
+ * the encrypt and decrypt functions to be void rather than returning a
+ * redundant pointer to the result (which no-one ever used).
+ */
 
 #ifndef _IceKey_H
 #define _IceKey_H
-
-#include "base/include/base_types.h"
 
 /*
 The IceKey class is used for encrypting and decrypting 64-bit blocks of data
@@ -42,18 +53,17 @@ class IceKey {
   IceKey(int n);
   ~IceKey();
 
-  void set(const u8 *key);
+  void set(const unsigned char *key);
 
-  void encrypt(const u8 *plaintext, u8 *ciphertext) const;
+  void encrypt(const unsigned char *plaintext, unsigned char *ciphertext) const;
 
-  void decrypt(const u8 *ciphertext, u8 *plaintext) const;
+  void decrypt(const unsigned char *ciphertext, unsigned char *plaintext) const;
 
   int keySize() const;
-
   int blockSize() const;
 
  private:
-  void scheduleBuild(u16 *k, int n, const int *keyrot);
+  void scheduleBuild(unsigned short *k, int n, const int *keyrot);
 
   int _size;
   int _rounds;

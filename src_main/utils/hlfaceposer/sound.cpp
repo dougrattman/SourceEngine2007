@@ -1469,7 +1469,7 @@ void CFacePoserSound::SetupWeights( void )
 							if (t1 < 0)
 								t1 = 0;
 
-							// FIXME: simple box filter.  Should use something fancier
+							// TODO(d.rattman): simple box filter.  Should use something fancier
 							scale = (t2 - t1);
 
 							AddViseme( emphasis_intensity, model, phoneme->GetPhonemeCode(), scale );

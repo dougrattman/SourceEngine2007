@@ -26,7 +26,7 @@
 #include "utlhash.h"
 #include "worldsize.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CVoxelTree;
@@ -2607,7 +2607,7 @@ void CSpatialPartition::ElementMoved(SpatialPartitionHandle_t handle,
   EntityInfo_t &entityInfo = EntityInfo(handle);
   SpatialPartitionListMask_t listMask = entityInfo.m_fList;
 
-  COMPILE_TIME_ASSERT(CLIENT_TREE != SERVER_TREE);
+  static_assert(CLIENT_TREE != SERVER_TREE);
 
   if (listMask & PARTITION_ALL_CLIENT_EDICTS) {
     m_VoxelTrees[CLIENT_TREE].ElementMoved(handle, mins, maxs);
@@ -2681,7 +2681,7 @@ void CSpatialPartition::InsertIntoTree(SpatialPartitionHandle_t hPartition,
   EntityInfo_t &entityInfo = EntityInfo(hPartition);
   SpatialPartitionListMask_t listMask = entityInfo.m_fList;
 
-  COMPILE_TIME_ASSERT(CLIENT_TREE != SERVER_TREE);
+  static_assert(CLIENT_TREE != SERVER_TREE);
 
   if ((listMask & PARTITION_ALL_CLIENT_EDICTS) &&
       !(entityInfo.m_flags & IN_CLIENT_TREE)) {

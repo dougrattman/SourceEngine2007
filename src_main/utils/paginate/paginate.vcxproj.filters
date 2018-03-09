@@ -48,7 +48,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\tier0\basetypes.h">

@@ -1394,7 +1394,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance
 	{
 		// Copy file again and this time look for the . from .gl? so we can concatenate .prt
 		// and open the portal file.
-		char szTempCmd[MAX_PATH];
+		char szTempCmd[SOURCE_MAX_PATH];
 		strcpy(szTempCmd, pFileName);
 		char *pTmp = szTempCmd;
 		while (pTmp && *pTmp && *pTmp != '.')

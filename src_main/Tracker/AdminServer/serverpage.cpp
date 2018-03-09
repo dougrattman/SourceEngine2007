@@ -124,7 +124,7 @@ VInternetDlg::VInternetDlg( unsigned int userid ) : Frame(NULL, "VInternetDlg")
 	/*m_pServerSession = new CServerSession();
 
 	// load networking dll
-	char szDLL[_MAX_PATH];
+	char szDLL[SOURCE_MAX_PATH];
 
 	// now load the net interface so we can use it
 	g_pFullFileSystem->GetLocalPath("Friends/TrackerNET.dll", szDLL);

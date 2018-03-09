@@ -40,7 +40,7 @@
 #include "physics_bone_follower.h"
 #endif  // HL2_EPISODIC
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // -------------------------------------
@@ -457,7 +457,7 @@ class CNPC_AttackHelicopter : public CBaseHelicopter {
   virtual void DoImpactEffect(trace_t &tr, int nDamageType);
   virtual void DoMuzzleFlash(void);
 
-  // FIXME: Work this back into the base class
+  // TODO(d.rattman): Work this back into the base class
   virtual bool ShouldUseFixedPatrolLogic() { return true; }
 
  protected:
@@ -1672,7 +1672,7 @@ bool CNPC_AttackHelicopter::FVisible(CBaseEntity *pEntity, int traceMask,
   if (pEntity->GetFlags() & FL_NOTARGET) return false;
 
 #if 0
-	// FIXME: only block LOS through opaque water
+	// TODO(d.rattman): only block LOS through opaque water
 	// don't look through water
 	if ((m_nWaterLevel != 3 && pEntity->m_nWaterLevel == 3) 
 		|| (m_nWaterLevel == 3 && pEntity->m_nWaterLevel == 0))
@@ -1811,7 +1811,7 @@ void CNPC_AttackHelicopter::ShootAtPlayer(const Vector &vBasePos,
     // Find something interesting around the enemy to shoot instead of just
     // missing.
     if (nActualTargets > nNearbyTargetCount) {
-      // FIXME: Constrain to the firing cone?
+      // TODO(d.rattman): Constrain to the firing cone?
       ppNearbyTargets[nNearbyTargetCount]->CollisionProp()->RandomPointInBounds(
           Vector(.25, .25, .25), Vector(.75, .75, .75), &info.m_vecDirShooting);
       info.m_vecDirShooting -= vBasePos;
@@ -2025,7 +2025,7 @@ void CNPC_AttackHelicopter::ShootAtVehicle(const Vector &vBasePos,
     }
 
     // We opt out of the rest of the function
-    // FIXME: Should we emulate the below functionality and have half the
+    // TODO(d.rattman): Should we emulate the below functionality and have half the
     // bullets attempt to miss admirably? -- jdw
     return;
   }
@@ -2081,7 +2081,7 @@ void CNPC_AttackHelicopter::ShootAtVehicle(const Vector &vBasePos,
       vecFireDirection -= vBasePos;
       VectorNormalize(vecFireDirection);
 
-      // FIXME: Constrain to the firing cone?
+      // TODO(d.rattman): Constrain to the firing cone?
 
       // I put in all the default arguments simply so I could guarantee the
       // first shot of one of the bursts always hits
@@ -2400,7 +2400,7 @@ bool CNPC_AttackHelicopter::IsValidZapTarget(CBaseEntity *pTarget) {
 
   Assert(pTarget);
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = pTarget->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = pTarget->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < count; i++) {
     int material = pList[i]->GetMaterialIndex();
     const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(material);
@@ -4460,7 +4460,7 @@ void CNPC_AttackHelicopter::Hunt(void) {
     return;
   }
 
-  // FIXME: Hack to allow us to change the firing distance
+  // TODO(d.rattman): Hack to allow us to change the firing distance
   SetFarthestPathDist(GetMaxFiringDistance());
 
   UpdateEnemy();
@@ -4524,7 +4524,7 @@ void CNPC_AttackHelicopter::InitBoneFollowers(void) {
   if (m_BoneFollowerManager.GetNumBoneFollowers() != 0) return;
 
   // Init our followers
-  m_BoneFollowerManager.InitBoneFollowers(this, ARRAYSIZE(pFollowerBoneNames),
+  m_BoneFollowerManager.InitBoneFollowers(this, SOURCE_ARRAYSIZE(pFollowerBoneNames),
                                           pFollowerBoneNames);
 }
 #endif  // HL2_EPISODIC

@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IFILESYSTEMOPENDIALOG_H
 #define IFILESYSTEMOPENDIALOG_H
@@ -9,7 +9,7 @@
 
 class IFileSystem;
 
-abstract_class IFileSystemOpenDialog {
+the_interface IFileSystemOpenDialog {
  public:
   // You must call this first to set the hwnd.
   virtual void Init(CreateInterfaceFn factory, void *parentHwnd) = 0;

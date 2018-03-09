@@ -5,7 +5,7 @@
 #include "optimize.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void CStudioRenderContext::GetTriangles(const DrawModelInfo_t &info,

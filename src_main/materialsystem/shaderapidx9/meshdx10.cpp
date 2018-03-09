@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #define NOMINMAX
 
@@ -20,11 +20,8 @@
 #include "tier2/tier2.h"
 #include "utlvector.h"
 
-//-----------------------------------------------------------------------------
-//
-// Dx10 implementation of a vertex buffer
-//
-//-----------------------------------------------------------------------------
+IVertexBuffer::~IVertexBuffer() {}
+IIndexBuffer::~IIndexBuffer() {}
 
 //-----------------------------------------------------------------------------
 // globals
@@ -188,7 +185,7 @@ bool CVertexBufferDx10::Lock(int nMaxVertexCount, bool bAppend,
          (nMaxVertexCount <= m_nVertexCount));
   Assert(m_VertexFormat != 0);
 
-  // FIXME: Why do we need to sync matrices now?
+  // TODO(d.rattman): Why do we need to sync matrices now?
   ShaderUtil()->SyncMatrices();
   g_ShaderMutex.Lock();
 
@@ -457,7 +454,7 @@ bool CIndexBufferDx10::Lock(int nMaxIndexCount, bool bAppend,
          (nMaxIndexCount <= m_nIndexCount));
   Assert(m_IndexFormat != MATERIAL_INDEX_FORMAT_UNKNOWN);
 
-  // FIXME: Why do we need to sync matrices now?
+  // TODO(d.rattman): Why do we need to sync matrices now?
   ShaderUtil()->SyncMatrices();
   g_ShaderMutex.Lock();
 

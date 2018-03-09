@@ -17,7 +17,7 @@
 #include "te_effect_dispatch.h"
 #include "vehicle_base.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define STICK_EXTENTS 400.0f
@@ -365,7 +365,7 @@ void CFourWheelVehiclePhysics::Spawn() {
 bool CFourWheelVehiclePhysics::Initialize(const char *pVehicleScript,
                                           unsigned int nVehicleType) {
   // Ok, turn on the simulation now
-  // FIXME: Disabling collisions here is necessary because we seem to be
+  // TODO(d.rattman): Disabling collisions here is necessary because we seem to be
   // getting a one-frame collision between the old + new collision models
   if (m_pOuter->VPhysicsGetObject()) {
     m_pOuter->VPhysicsGetObject()->EnableCollisions(false);

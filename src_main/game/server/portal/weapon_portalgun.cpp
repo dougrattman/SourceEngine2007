@@ -205,7 +205,7 @@ void CWeaponPortalgun::Think( void )
 	m_fCanPlacePortal2OnThisSurface = ( ( m_bCanFirePortal2 ) ? ( FirePortal( true, 0, 2 ) ) : ( 0.0f ) );
 
 	// Draw obtained portal color chips
-	int iSlot1State = ( ( m_bCanFirePortal1 ) ? ( 0 ) : ( 1 ) ); // FIXME: Portal gun might have only red but not blue;
+	int iSlot1State = ( ( m_bCanFirePortal1 ) ? ( 0 ) : ( 1 ) ); // TODO(d.rattman): Portal gun might have only red but not blue;
 	int iSlot2State = ( ( m_bCanFirePortal2 ) ? ( 0 ) : ( 1 ) );
 
 	SetBodygroup( 1, iSlot1State );

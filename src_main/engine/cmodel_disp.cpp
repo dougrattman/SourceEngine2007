@@ -13,7 +13,7 @@
 #include "vphysics_interface.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 int g_DispCollTreeCount = 0;
@@ -225,7 +225,7 @@ class CVirtualTerrain : public IVirtualMeshEvent {
     int index = (int)userData;
     pList->triangleCount = g_pDispCollTrees[index].AABBTree_GetTrisInSphere(
         center, radius, pList->triangleIndices,
-        ARRAYSIZE(pList->triangleIndices));
+        SOURCE_ARRAYSIZE(pList->triangleIndices));
   }
   void LevelInit(dphysdisp_t *pLump, int lumpSize) {
     if (!pLump) {
@@ -335,7 +335,7 @@ void CM_TestInDispTree(TraceInfo_t *pTraceInfo, cleaf_t *pLeaf,
     for (int i = 0; i < pLeaf->dispCount; i++) {
       int dispIndex =
           pTraceInfo->m_pBSPData->map_dispList[pLeaf->dispListStart + i];
-      alignedbbox_t *RESTRICT pDispBounds = &g_pDispBounds[dispIndex];
+      alignedbbox_t *SOURCE_RESTRICT pDispBounds = &g_pDispBounds[dispIndex];
 
       // Respect trace contents
       if (!(pDispBounds->GetContents() & collisionMask)) continue;
@@ -500,7 +500,7 @@ void CM_PostTraceToDispTree(TraceInfo_t *pTraceInfo) {
 // New Collision!
 //-----------------------------------------------------------------------------
 template <bool IS_POINT>
-void FASTCALL CM_TraceToDispTree(TraceInfo_t *pTraceInfo,
+void SOURCE_FASTCALL CM_TraceToDispTree(TraceInfo_t *pTraceInfo,
                                  CDispCollTree *pDispTree, float startFrac,
                                  float endFrac) {
   Ray_t ray;
@@ -536,11 +536,11 @@ void FASTCALL CM_TraceToDispTree(TraceInfo_t *pTraceInfo,
   // startFrac, endFrac, pTrace, bRayCast );
 }
 
-template void FASTCALL CM_TraceToDispTree<true>(TraceInfo_t *pTraceInfo,
+template void SOURCE_FASTCALL CM_TraceToDispTree<true>(TraceInfo_t *pTraceInfo,
                                                 CDispCollTree *pDispTree,
                                                 float startFrac, float endFrac);
 
-template void FASTCALL CM_TraceToDispTree<false>(TraceInfo_t *pTraceInfo,
+template void SOURCE_FASTCALL CM_TraceToDispTree<false>(TraceInfo_t *pTraceInfo,
                                                  CDispCollTree *pDispTree,
                                                  float startFrac,
                                                  float endFrac);

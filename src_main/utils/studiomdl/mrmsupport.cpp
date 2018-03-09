@@ -86,7 +86,7 @@ int SortAndBalanceBones( int iCount, int iMaxCount, int bones[], float weights[]
 	if (t <= 0.0)
 	{
 		// missing weights?, go ahead and evenly share?
-		// FIXME: shouldn't this error out?
+		// TODO(d.rattman): shouldn't this error out?
 		t = 1.0 / iCount;
 
 		for (i = 0; i < iCount; i++)
@@ -210,7 +210,7 @@ void Grab_Materiallist( s_source_t *psource )
 		if (fgets( g_szLine, sizeof( g_szLine ), g_fpInput ) != NULL) 
 		{
 			// char name[256];
-			char path[MAX_PATH];
+			char path[SOURCE_MAX_PATH];
 			rgb2_t a, d, s;
 			float g;
 			int j;

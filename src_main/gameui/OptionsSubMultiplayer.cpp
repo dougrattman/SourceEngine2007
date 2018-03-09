@@ -47,7 +47,7 @@
 #include "jpeglib/jpeglib.h"
 #undef JPEGLIB_USE_STDIO
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -564,17 +564,17 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
   surface()->SetCursor(dc_hourglass);
 
   // get the extension of the file we're to convert
-  char extension[MAX_PATH];
+  char extension[SOURCE_MAX_PATH];
   const char *constchar = fullpath + strlen(fullpath);
   while ((constchar > fullpath) && (*(constchar - 1) != '.')) {
     --constchar;
   }
-  Q_strncpy(extension, constchar, MAX_PATH);
+  Q_strncpy(extension, constchar, SOURCE_MAX_PATH);
 
   bool deleteIntermediateTGA = false;
   bool deleteIntermediateVTF = false;
   bool convertTGAToVTF = true;
-  char tgaPath[MAX_PATH * 2];
+  char tgaPath[SOURCE_MAX_PATH * 2];
   char *c;
   bool failed = false;
 
@@ -589,7 +589,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
     }
     *c = 0;
 
-    char origpath[MAX_PATH * 2];
+    char origpath[SOURCE_MAX_PATH * 2];
     Q_strncpy(origpath, tgaPath, sizeof(origpath));
 
     int index = 0;
@@ -710,7 +710,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
     }
 
     if (!failed) {
-      char tempPath[MAX_PATH * 2];
+      char tempPath[SOURCE_MAX_PATH * 2];
       Q_strncpy(tempPath, tgaPath, sizeof(tempPath));
 
       errcode = ConvertTGAToVTF(tempPath);
@@ -753,9 +753,9 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
     }
   }
 
-  char finalPath[MAX_PATH * 2];
+  char finalPath[SOURCE_MAX_PATH * 2];
   finalPath[0] = 0;
-  char vtfPath[MAX_PATH * 2];
+  char vtfPath[SOURCE_MAX_PATH * 2];
   vtfPath[0] = 0;
 
   if (!failed) {
@@ -809,8 +809,8 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
       // refresh the logo list so the new spray shows up.
       InitLogoList(m_pLogoList);
 
-      char rootFilename[MAX_PATH];
-      Q_strncpy(rootFilename, vtfFilename, MAX_PATH);
+      char rootFilename[SOURCE_MAX_PATH];
+      Q_strncpy(rootFilename, vtfFilename, SOURCE_MAX_PATH);
 
       // get the root filename so we can select in the spray list.
       rootFilename[strlen(rootFilename) - 4] = 0;
@@ -1684,7 +1684,7 @@ ConversionErrorType COptionsSubMultiplayer::WriteSprayVMT(const char *vtfPath) {
   }
 
   // make the vmt filename
-  char vmtPath[MAX_PATH * 4];
+  char vmtPath[SOURCE_MAX_PATH * 4];
   Q_strncpy(vmtPath, vtfPath, sizeof(vmtPath));
   char *c = vmtPath + strlen(vmtPath);
   while ((c > vmtPath) && (*(c - 1) != '.')) {
@@ -1693,7 +1693,7 @@ ConversionErrorType COptionsSubMultiplayer::WriteSprayVMT(const char *vtfPath) {
   Q_strncpy(c, "vmt", sizeof(vmtPath) - (c - vmtPath));
 
   // get the root filename for the vtf file
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   while ((c > vmtPath) && (*(c - 1) != '/') && (*(c - 1) != '\\')) {
     --c;
   }
@@ -1774,8 +1774,8 @@ void COptionsSubMultiplayer::InitLogoList(CLabeledCommandComboBox *cb) {
 void COptionsSubMultiplayer::SelectLogo(const char *logoName) {
   int numEntries = m_pLogoList->GetItemCount();
   int index;
-  wchar_t itemText[MAX_PATH];
-  wchar_t itemToSelectText[MAX_PATH];
+  wchar_t itemText[SOURCE_MAX_PATH];
+  wchar_t itemToSelectText[SOURCE_MAX_PATH];
 
   // convert the logo filename to unicode
   g_pVGuiLocalize->ConvertANSIToUnicode(logoName, itemToSelectText,

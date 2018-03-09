@@ -105,7 +105,7 @@ extern ConVar sk_healthkit;
 #include "GameStats.h"
 #include "tier1/utlbuffer.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //#define DEBUG_LOOK
@@ -619,7 +619,7 @@ ConVar ai_block_damage("ai_block_damage", "0");
 
 bool CAI_BaseNPC::PassesDamageFilter(const CTakeDamageInfo &info) {
   if (ai_block_damage.GetBool()) return false;
-  // FIXME: hook a friendly damage filter to the npc instead?
+  // TODO(d.rattman): hook a friendly damage filter to the npc instead?
   if ((CapabilitiesGet() & bits_CAP_FRIENDLY_DMG_IMMUNE) &&
       info.GetAttacker() && info.GetAttacker() != this) {
     // check attackers relationship with me
@@ -1235,7 +1235,7 @@ void BulletWizz(Vector vecSrc, Vector vecEndPos, edict_t *pShooter,
     vecPlayerPath = pPlayer->EarPosition() - vecSrc;
     flDist = DotProduct(vecPlayerPath, vecBulletDir);
     vecNearestPoint = vecSrc + vecBulletDir * flDist;
-    // FIXME: minus m_vecViewOffset?
+    // TODO(d.rattman): minus m_vecViewOffset?
     flBulletDist = (vecNearestPoint - pPlayer->EarPosition()).Length();
   }
 }
@@ -1378,7 +1378,7 @@ void CBaseEntity::HandleShotImpactingGlass(const FireBulletsInfo_t &info,
       penetrationTrace.fraction == 1.0f)
     return;
 
-  // FIXME: This is technically frustrating MultiDamage, but multiple shots
+  // TODO(d.rattman): This is technically frustrating MultiDamage, but multiple shots
   // hitting multiple targets in one call 		 would do exactly the
   // same anyway...
 
@@ -1666,14 +1666,14 @@ void CAI_BaseNPC::SetScriptedScheduleIgnoreConditions(
       COND_RECEIVED_ORDERS,
   };
 
-  ClearIgnoreConditions(g_GeneralConditions, ARRAYSIZE(g_GeneralConditions));
-  ClearIgnoreConditions(g_DamageConditions, ARRAYSIZE(g_DamageConditions));
+  ClearIgnoreConditions(g_GeneralConditions, SOURCE_ARRAYSIZE(g_GeneralConditions));
+  ClearIgnoreConditions(g_DamageConditions, SOURCE_ARRAYSIZE(g_DamageConditions));
 
   if (interrupt > GENERAL_INTERRUPTABILITY)
-    SetIgnoreConditions(g_GeneralConditions, ARRAYSIZE(g_GeneralConditions));
+    SetIgnoreConditions(g_GeneralConditions, SOURCE_ARRAYSIZE(g_GeneralConditions));
 
   if (interrupt > DAMAGEORDEATH_INTERRUPTABILITY)
-    SetIgnoreConditions(g_DamageConditions, ARRAYSIZE(g_DamageConditions));
+    SetIgnoreConditions(g_DamageConditions, SOURCE_ARRAYSIZE(g_DamageConditions));
 }
 
 //-----------------------------------------------------------------------------
@@ -1805,7 +1805,7 @@ void CAI_BaseNPC::OnLooked(int iDistance) {
 
   bool bHadSeePlayer = HasCondition(COND_SEE_PLAYER);
 
-  ClearConditions(conditionsToClear, ARRAYSIZE(conditionsToClear));
+  ClearConditions(conditionsToClear, SOURCE_ARRAYSIZE(conditionsToClear));
 
   AISightIter_t iter;
   CBaseEntity *pSightEnt;
@@ -1892,7 +1892,7 @@ void CAI_BaseNPC::OnListened() {
       COND_SMELL,
   };
 
-  ClearConditions(conditionsToClear, ARRAYSIZE(conditionsToClear));
+  ClearConditions(conditionsToClear, SOURCE_ARRAYSIZE(conditionsToClear));
 
   pCurrentSound = GetSenses()->GetFirstHeardSound(&iter);
 
@@ -2352,7 +2352,7 @@ bool CAI_BaseNPC::FInAimCone(const Vector &vecSpot) {
   float flDot = DotProduct(los, facingDir);
 
   if (CapabilitiesGet() & bits_CAP_AIM_GUN) {
-    // FIXME: query current animation for ranges
+    // TODO(d.rattman): query current animation for ranges
     return (flDot > DOT_30DEGREE);
   }
 
@@ -2710,7 +2710,7 @@ void CAI_BaseNPC::RunAnimation(void) {
       m_Activity == ACT_IDLE && IsActivityFinished()) {
     int iSequence;
 
-    // FIXME: this doesn't reissue a translation, so if the idle activity
+    // TODO(d.rattman): this doesn't reissue a translation, so if the idle activity
     // translation changes over time, it'll never get reset
     if (SequenceLoops()) {
       // animation does loop, which means we're playing subtle idle. Might need
@@ -3014,7 +3014,7 @@ void CAI_BaseNPC::UpdateEfficiency(bool bInPVS) {
   int iPVSOffset = (bInPVS) ? 0 : NO_PVS_OFFSET;
   int iMapping = iStateOffset + iPVSOffset + iFacingOffset + range;
 
-  Assert(iMapping < ARRAYSIZE(mappings));
+  Assert(iMapping < SOURCE_ARRAYSIZE(mappings));
 
   AI_Efficiency_t efficiency = mappings[iMapping];
 
@@ -3838,7 +3838,7 @@ void CAI_BaseNPC::GatherAttackConditions(CBaseEntity *pTarget, float flDist) {
 
   bool bWeaponIsReady = (GetActiveWeapon() && !IsWeaponStateChanging());
 
-  // FIXME: move this out of here
+  // TODO(d.rattman): move this out of here
   if ((capability & bits_CAP_WEAPON_RANGE_ATTACK1) && bWeaponIsReady) {
     AI_PROFILE_SCOPE(
         CAI_BaseNPC_GatherAttackConditions_WeaponRangeAttack1Condition);
@@ -4018,7 +4018,7 @@ void CAI_BaseNPC::ClearSenseConditions(void) {
       COND_SMELL,
   };
 
-  ClearConditions(conditionsToClear, ARRAYSIZE(conditionsToClear));
+  ClearConditions(conditionsToClear, SOURCE_ARRAYSIZE(conditionsToClear));
 }
 
 //-----------------------------------------------------------------------------
@@ -4031,7 +4031,7 @@ void CAI_BaseNPC::CheckOnGround(void) {
     if (GetMoveParent() != NULL) return;
 
     // NPCs in scripts with the fly flag shouldn't fall.
-    // FIXME: should NPCS with FL_FLY ever fall? Doesn't seem like they should.
+    // TODO(d.rattman): should NPCS with FL_FLY ever fall? Doesn't seem like they should.
     if ((GetState() == NPC_STATE_SCRIPT) && (GetFlags() & FL_FLY)) return;
 
     if ((GetNavType() == NAV_GROUND) && (GetMoveType() != MOVETYPE_VPHYSICS) &&
@@ -4528,7 +4528,7 @@ NPC_STATE CAI_BaseNPC::SelectScriptIdealState() {
 // Output : NPC_STATE - the suggested ideal state based on current conditions.
 //-----------------------------------------------------------------------------
 NPC_STATE CAI_BaseNPC::SelectIdealState(void) {
-  // dvs: FIXME: lots of side effecty code in here!! this function should ONLY
+  // dvs: TODO(d.rattman): lots of side effecty code in here!! this function should ONLY
   // return an ideal state!
 
   // ---------------------------
@@ -4689,7 +4689,7 @@ bool CAI_BaseNPC::WeaponLOSCondition(const Vector &ownerPos,
 	Vector xaxis;
 	VectorSubtract( targetPos, ownerPos, xaxis );
 
-	// FIXME: Insert angle test here?
+	// TODO(d.rattman): Insert angle test here?
 	float flAngle = acos( xaxis.z / xaxis.Length() );
 
 	xaxis.z = 0.0f;
@@ -5122,7 +5122,7 @@ float CAI_BaseNPC::GetGoalRepathTolerance(CBaseEntity *pGoalEnt,
   float distToGoal = (GetAbsOrigin() - curTargetPos).Length() -
                      GetNavigator()->GetArrivalDistance();
   float distMoved1Sec = GetSmoothedVelocity().Length();
-  float result = 120;  // FIXME: why 120?
+  float result = 120;  // TODO(d.rattman): why 120?
 
   if (distMoved1Sec > 0.0) {
     float t = distToGoal / distMoved1Sec;
@@ -5144,7 +5144,7 @@ void CAI_BaseNPC::UpdateEnemyPos() {
   if (!GetNavigator()->IsInterruptable()) return;
 
   if (m_AnyUpdateEnemyPosTimer.Expired() && m_UpdateEnemyPosTimer.Expired()) {
-    // FIXME: does GetGoalRepathTolerance() limit re-routing enough to remove
+    // TODO(d.rattman): does GetGoalRepathTolerance() limit re-routing enough to remove
     // this? m_UpdateEnemyPosTimer.Set( 0.5, 1.0 );
 
     // If my enemy has moved significantly, or if the enemy has changed update
@@ -5159,11 +5159,11 @@ void CAI_BaseNPC::UpdateEnemyPos() {
             GetGoalRepathTolerance(GetEnemy(), GOALTYPE_ENEMY,
                                    GetNavigator()->GetGoalPos(), vEnemyLKP);
         if ((GetNavigator()->GetGoalPos() - vEnemyLKP).Length() > tolerance) {
-          // FIXME: when fleeing crowds, won't this severely limit the
+          // TODO(d.rattman): when fleeing crowds, won't this severely limit the
           // effectiveness of each individual?  Shouldn't this be a mutex that's
           // held for some period so that at least one attacker is effective?
           m_AnyUpdateEnemyPosTimer.Set(
-              0.1);  // FIXME: what's a reasonable interval?
+              0.1);  // TODO(d.rattman): what's a reasonable interval?
           if (!GetNavigator()->RefindPathToGoal(false)) {
             TaskFail(FAIL_NO_ROUTE);
           }
@@ -5178,7 +5178,7 @@ void CAI_BaseNPC::UpdateEnemyPos() {
 //-----------------------------------------------------------------------------
 void CAI_BaseNPC::UpdateTargetPos() {
   // BRJ 10/7/02
-  // FIXME: make this check time based instead of distance based!
+  // TODO(d.rattman): make this check time based instead of distance based!
 
   // Don't perform path recomputations during a climb or a jump
   if (!GetNavigator()->IsInterruptable()) return;
@@ -5361,7 +5361,7 @@ Activity CAI_BaseNPC::TranslateActivity(Activity idealActivity,
     static CUtlVector<Activity> sUniqueActivities;
 
     if (!sUniqueActivities.Find(weaponTranslation)) {
-      // FIXME: warning
+      // TODO(d.rattman): warning
       DevWarning("%s missing activity \"%s\" needed by weapon\"%s\"\n",
                  GetClassname(), GetActivityName(weaponTranslation),
                  GetActiveWeapon()->GetClassname());
@@ -5510,7 +5510,7 @@ void CAI_BaseNPC::SetActivityAndSequence(Activity NewActivity, int iSequence,
 //-----------------------------------------------------------------------------
 void CAI_BaseNPC::SetActivity(Activity NewActivity) {
   // If I'm already doing the NewActivity I can bail.
-  // FIXME: Should this be based on the current translated activity and ideal
+  // TODO(d.rattman): Should this be based on the current translated activity and ideal
   // translated activity (calculated below)?
   //		  The old code only cared about the logical activity, not
   // translated.
@@ -6061,7 +6061,7 @@ void CAI_BaseNPC::NPCInit(void) {
 
 #ifdef _DEBUG
   // Make sure that the bounding box is appropriate for the hull size...
-  // FIXME: We can't test vphysics objects because NPCInit occurs before
+  // TODO(d.rattman): We can't test vphysics objects because NPCInit occurs before
   // VPhysics is set up
   if (GetSolid() != SOLID_VPHYSICS && !IsSolidFlagSet(FSOLID_NOT_SOLID)) {
     if (!IsNavHullValid()) {
@@ -6717,7 +6717,7 @@ void CAI_BaseNPC::TaskMovementComplete(void) {
       break;
 
     case TASKSTATUS_RUN_TASK:
-      // FIXME: find out how to safely restart movement
+      // TODO(d.rattman): find out how to safely restart movement
       // Warning( "Movement completed twice!\n" );
       // Assert( 0 );
       break;
@@ -7340,7 +7340,7 @@ void CAI_BaseNPC::HandleAnimEvent(animevent_t *pEvent) {
       if (m_hCine != NULL) {
         m_hCine->FireScriptEvent(atoi(pEvent->options));
       } else {
-        // FIXME: look so see if it's playing a vcd and fire those instead
+        // TODO(d.rattman): look so see if it's playing a vcd and fire those instead
         // AssertOnce( 0 );
       }
       break;
@@ -7481,7 +7481,7 @@ void CAI_BaseNPC::HandleAnimEvent(animevent_t *pEvent) {
       if ((pWeapon) && (pEvent->options)) {
         Activity act = (Activity)pWeapon->LookupActivity(pEvent->options);
         if (act != ACT_INVALID) {
-          // FIXME: where should the duration come from? normally it would come
+          // TODO(d.rattman): where should the duration come from? normally it would come
           // from the current sequence
           Weapon_SetActivity(act, 0);
         }
@@ -7651,7 +7651,7 @@ void CAI_BaseNPC::HandleAnimEvent(animevent_t *pEvent) {
             }
 
             if (act != ACT_INVALID) {
-              // FIXME: where should the duration come from? normally it would
+              // TODO(d.rattman): where should the duration come from? normally it would
               // come from the current sequence
               Weapon_SetActivity(act, 0);
             }
@@ -7714,7 +7714,7 @@ void CAI_BaseNPC::HandleAnimEvent(animevent_t *pEvent) {
         }
       }
 
-      // FIXME: why doesn't this code pass unhandled events down to its parent?
+      // TODO(d.rattman): why doesn't this code pass unhandled events down to its parent?
       // Came from my weapon?
       // Adrian I'll clean this up once the old event system is phased out.
       if (pEvent->pSource != this ||
@@ -8073,7 +8073,7 @@ int CAI_BaseNPC::DrawDebugTextOverlays(void) {
     // --------------
     static const char *pStateNames[] = {
         "None", "Idle", "Alert", "Combat", "Scripted", "PlayDead", "Dead"};
-    if ((int)m_NPCState < ARRAYSIZE(pStateNames)) {
+    if ((int)m_NPCState < SOURCE_ARRAYSIZE(pStateNames)) {
       Q_snprintf(tempstr, sizeof(tempstr), "Stat: %s, ",
                  pStateNames[m_NPCState]);
       EntityText(text_offset, tempstr, 0);
@@ -8104,8 +8104,8 @@ int CAI_BaseNPC::DrawDebugTextOverlays(void) {
     int navTypeIndex = (int)GetNavType() + 1;
     static const char *pMoveNames[] = {"None", "Ground", "Jump", "Fly",
                                        "Climb"};
-    Assert(navTypeIndex >= 0 && navTypeIndex < ARRAYSIZE(pMoveNames));
-    if (navTypeIndex < ARRAYSIZE(pMoveNames)) {
+    Assert(navTypeIndex >= 0 && navTypeIndex < SOURCE_ARRAYSIZE(pMoveNames));
+    if (navTypeIndex < SOURCE_ARRAYSIZE(pMoveNames)) {
       Q_snprintf(tempstr, sizeof(tempstr), "Move: %s, ",
                  pMoveNames[navTypeIndex]);
       EntityText(text_offset, tempstr, 0);
@@ -8328,7 +8328,7 @@ void CAI_BaseNPC::ReportAIState(void) {
                                       "Scripted", "PlayDead", "Dead"};
 
   DevMsg("%s: ", GetClassname());
-  if ((int)m_NPCState < ARRAYSIZE(pStateNames))
+  if ((int)m_NPCState < SOURCE_ARRAYSIZE(pStateNames))
     DevMsg("State: %s, ", pStateNames[m_NPCState]);
 
   if (m_Activity != ACT_INVALID && m_IdealActivity != ACT_INVALID) {
@@ -8929,7 +8929,7 @@ CBaseEntity *CAI_BaseNPC::FindNamedEntity(const char *name,
   } else if (!stricmp(name, "!self") || !stricmp(name, "!target1")) {
     return this;
   } else if (!stricmp(name, "!nearestfriend") || !stricmp(name, "!friend")) {
-    // FIXME: look at CBaseEntity *CNPCSimpleTalker::FindNearestFriend(bool
+    // TODO(d.rattman): look at CBaseEntity *CNPCSimpleTalker::FindNearestFriend(bool
     // fPlayer) punt for now
     return (CBaseEntity *)AI_GetSinglePlayer();
   } else if (!stricmp(name, "self")) {
@@ -9463,7 +9463,7 @@ void CAI_BaseNPC::OnScheduleChange(void) {
   VacateStrategySlot();
 
   // If I still have have a route, clear it
-  // FIXME: Routes should only be cleared inside of tasks (kenb)
+  // TODO(d.rattman): Routes should only be cleared inside of tasks (kenb)
   GetNavigator()->ClearGoal();
 
   UnlockBestSound();
@@ -11053,7 +11053,7 @@ bool CAI_BaseNPC::OnUpcomingPropDoor(AILocalMoveGoal_t *pMoveGoal,
     opendata_t opendata;
     pDoor->GetNPCOpenData(this, opendata);
 
-    // dvs: FIXME: local route might not be sufficient
+    // dvs: TODO(d.rattman): local route might not be sufficient
     pOpenDoorRoute = GetPathfinder()->BuildLocalRoute(
         GetLocalOrigin(), opendata.vecStandPos, NULL,
         bits_WP_TO_DOOR | bits_WP_DONT_SIMPLIFY, NO_NODE,
@@ -11067,7 +11067,7 @@ bool CAI_BaseNPC::OnUpcomingPropDoor(AILocalMoveGoal_t *pMoveGoal,
       }
 
       // Attach the door to the waypoint so we open it when we get there.
-      // dvs: FIXME: this is kind of bullshit, I need to find the exact waypoint
+      // dvs: TODO(d.rattman): this is kind of bullshit, I need to find the exact waypoint
       // to open the door
       //		should I just walk the path until I find it?
       pOpenDoorRoute->m_hData = pDoor;
@@ -11136,7 +11136,7 @@ void CAI_BaseNPC::OnDoorFullyOpen(CBasePropDoor *pDoor) {
 // opening. Input  : pDoor -
 //-----------------------------------------------------------------------------
 void CAI_BaseNPC::OnDoorBlocked(CBasePropDoor *pDoor) {
-  // dvs: FIXME: do something so that we don't loop forever trying to open this
+  // dvs: TODO(d.rattman): do something so that we don't loop forever trying to open this
   // door
   //		not clearing out the door handle will cause the NPC to
   // invalidate  the connection
@@ -12588,7 +12588,7 @@ void CAI_BaseNPC::CleanupForcedInteraction(void) {
 // Purpose: Calculate a position to move to so that I can interact with my
 //			target NPC.
 //
-//			FIXME: THIS ONLY WORKS FOR INTERACTIONS THAT REQUIRE THE
+//			TODO(d.rattman): THIS ONLY WORKS FOR INTERACTIONS THAT REQUIRE THE
 // TARGET
 //				  NPC TO BE SOME DISTANCE DIRECTLY IN FRONT OF
 // ME.

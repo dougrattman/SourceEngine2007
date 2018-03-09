@@ -16,7 +16,7 @@
 #include "item_dynamic_resupply.h"
 #include "npc_vortigaunt_episodic.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar	sk_grubnugget_health_small( "sk_grubnugget_health_small", "1" );
@@ -370,7 +370,7 @@ void CAntlionGrub::Spawn( void )
 
 	SetModel( ANTLIONGRUB_MODEL );
 	
-	// FIXME: This is a big perf hit with the number of grubs we're using! - jdw
+	// TODO(d.rattman): This is a big perf hit with the number of grubs we're using! - jdw
 	CreateGlow();
 
 	SetSolid( SOLID_BBOX );
@@ -958,7 +958,7 @@ void CGrubNugget::VPhysicsCollision( int index, gamevcollisionevent_t *pEvent )
 			damageForce = pEvent->postVelocity[!index] * pEvent->pObjects[!index]->GetMass();
 		}
 
-		// FIXME: this doesn't pass in who is responsible if some other entity "caused" this collision
+		// TODO(d.rattman): this doesn't pass in who is responsible if some other entity "caused" this collision
 		PhysCallbackDamage( this, CTakeDamageInfo( pHitEntity, pHitEntity, damageForce, damagePos, damage, damageType ), *pEvent, index );
 	}
 

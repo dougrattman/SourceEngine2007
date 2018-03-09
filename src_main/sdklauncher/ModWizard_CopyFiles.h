@@ -52,8 +52,8 @@ namespace vgui
 				Q_strncpy( m_OutFilename, pOut, sizeof( m_OutFilename ) );
 			}
 
-			char m_InFilename[MAX_PATH];
-			char m_OutFilename[MAX_PATH];
+			char m_InFilename[SOURCE_MAX_PATH];
+			char m_OutFilename[SOURCE_MAX_PATH];
 		};
 
 	protected:
@@ -80,9 +80,9 @@ namespace vgui
 		Label *m_pFinishedLabel;
 		ProgressBar *m_pProgressBar;
 
-		char m_OutputDirName[MAX_PATH];		// c:\mymod
-		char m_OutModGamedirName[MAX_PATH];	// c:\mymod\mymod
-		char m_ModName[MAX_PATH];			// mymod
+		char m_OutputDirName[SOURCE_MAX_PATH];		// c:\mymod
+		char m_OutModGamedirName[SOURCE_MAX_PATH];	// c:\mymod\mymod
+		char m_ModName[SOURCE_MAX_PATH];			// mymod
 		ModType_t m_ModType;
 	};
 

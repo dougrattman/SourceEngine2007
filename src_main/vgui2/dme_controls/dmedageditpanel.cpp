@@ -762,7 +762,7 @@ void CDmeCombinationOperatorPanel::OnTick()
 			}
 		}
     
-		// FIXME: Shouldn't this happen at the application level?
+		// TODO(d.rattman): Shouldn't this happen at the application level?
 		// run the machinery - apply, resolve, dependencies, operate, resolve
 		CUtlVector< IDmeOperator* > operators;
 		operators.AddToTail( m_hCombinationOperator );

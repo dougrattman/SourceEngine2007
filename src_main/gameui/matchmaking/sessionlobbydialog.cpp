@@ -13,7 +13,7 @@
 #include "vgui/ISurface.h"
 #include "vgui_controls/ImagePanel.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CSessionLobbyDialog *g_pLobbyDialog;
@@ -286,7 +286,7 @@ void CSessionLobbyDialog::UpdatePlayerCountDisplay(int iTeam) {
   wchar_t *wzPlayersFmt = g_pVGuiLocalize->Find(
       ct != 1 ? "#TF_ScoreBoard_Players" : "#TF_ScoreBoard_Player");
   wchar_t wzPlayerCt[8];
-  _itow_s(ct, wzPlayerCt, ARRAYSIZE(wzPlayerCt), 10);
+  _itow_s(ct, wzPlayerCt, SOURCE_ARRAYSIZE(wzPlayerCt), 10);
   g_pVGuiLocalize->ConstructString(wszString, sizeof(wszString), wzPlayersFmt,
                                    1, wzPlayerCt);
 
@@ -386,13 +386,13 @@ void CSessionLobbyDialog::UpdatePlayerInfo(uint64_t nPlayerId,
   }
 
   if (bHost) {
-    wchar_t wszString[MAX_PATH];
-    wchar_t wszHostname[MAX_PATH];
+    wchar_t wszString[SOURCE_MAX_PATH];
+    wchar_t wszHostname[SOURCE_MAX_PATH];
     wchar_t *wzHostFmt = g_pVGuiLocalize->Find("#TF_Lobby_Host");
     g_pVGuiLocalize->ConvertANSIToUnicode(pName, wszHostname,
                                           sizeof(wszHostname));
 
-    swprintf(wszString, ARRAYSIZE(wszString), L"%s\n%s", wzHostFmt,
+    swprintf(wszString, SOURCE_ARRAYSIZE(wszString), L"%s\n%s", wzHostFmt,
              wszHostname);
 
     m_pHostLabel->SetText(wszString);
@@ -427,7 +427,7 @@ void CSessionLobbyDialog::SetLobbyReadyState(int nPlayersNeeded) {
       wzWaitingFmt = g_pVGuiLocalize->Find("#TF_WaitingForPlayersFmt");
     }
     wchar_t wzPlayers[8];
-    _itow_s(nPlayersNeeded, wzPlayers, ARRAYSIZE(wzPlayers), 10);
+    _itow_s(nPlayersNeeded, wzPlayers, SOURCE_ARRAYSIZE(wzPlayers), 10);
     g_pVGuiLocalize->ConstructString(wszWaiting, sizeof(wszWaiting),
                                      wzWaitingFmt, 1, wzPlayers);
     m_pLobbyStateLabel->SetText(wszWaiting);
@@ -446,15 +446,15 @@ void CSessionLobbyDialog::UpdateCountdown(int seconds) {
   }
 
   // Set the text in the countdown label
-  wchar_t wszCountdown[MAX_PATH];
-  wchar_t wszSeconds[MAX_PATH];
+  wchar_t wszCountdown[SOURCE_MAX_PATH];
+  wchar_t wszSeconds[SOURCE_MAX_PATH];
   wchar_t *wzCountdownFmt;
   if (seconds != 1) {
     wzCountdownFmt = g_pVGuiLocalize->Find("#TF_StartingInSecs");
   } else {
     wzCountdownFmt = g_pVGuiLocalize->Find("#TF_StartingInSec");
   }
-  _itow_s(seconds, wszSeconds, ARRAYSIZE(wszSeconds), 10);
+  _itow_s(seconds, wszSeconds, SOURCE_ARRAYSIZE(wszSeconds), 10);
   g_pVGuiLocalize->ConstructString(wszCountdown, sizeof(wszCountdown),
                                    wzCountdownFmt, 1, wszSeconds);
 

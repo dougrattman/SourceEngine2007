@@ -11,7 +11,7 @@
 #include "networkstringtable_clientdll.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ void C_ParticleSystem::PostDataUpdate( DataUpdateType_t updateType )
 	BaseClass::PostDataUpdate( updateType );
 
 	// Always restart if just created and updated
-	// FIXME: Does this play fairly with PVS?
+	// TODO(d.rattman): Does this play fairly with PVS?
 	if ( updateType == DATA_UPDATE_CREATED )
 	{
 		if ( m_bActive )

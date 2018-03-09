@@ -112,17 +112,15 @@ bool CRC_File(CRC32_t *crcvalue, const char *pszFileName) {
 
 // YWB:  5/18
 /*
-===================
 bool CRC_MapFile(unsigned short *crcvalue, char *pszFileName)
 
   Computes CRC for given map file.  If there is an error opening/reading the
 file, returns false, otherwise returns true and sets the crc value passed to it.
 The value should be initialized with CRC_Init
 
-  For map (.bsp) files, the entity lump is not included in the CRC.
-  //FIXME make this work
- ==================
- */
+For map (.bsp) files, the entity lump is not included in the CRC.
+
+TODO(d.rattman) Make this work*/
 bool CRC_MapFile(CRC32_t *crcvalue, const char *pszFileName) {
   FileHandle_t fp;
   uint8_t chunk[1024];

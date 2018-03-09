@@ -69,7 +69,7 @@ void ModConfigsHelper::setSourceModBaseDir()
 */
 void ModConfigsHelper::EnumerateModDirs()
 {
-	char szWildCardPath[MAX_PATH];
+	char szWildCardPath[SOURCE_MAX_PATH];
 	WIN32_FIND_DATA wfd;
 
 	Q_strncpy( szWildCardPath, m_sourceModBaseDir, sizeof( szWildCardPath ) );

@@ -38,7 +38,7 @@ class IBehaviorBackBridge;
 
 //-------------------------------------
 
-abstract_class CAI_BehaviorBase : public CAI_Component {
+the_interface CAI_BehaviorBase : public CAI_Component {
   DECLARE_CLASS(CAI_BehaviorBase, CAI_Component)
  public:
   CAI_BehaviorBase(CAI_BaseNPC *pOuter = NULL)
@@ -342,7 +342,7 @@ class CAI_Behavior
 // what base class would do or control order in which it's donw
 //-----------------------------------------------------------------------------
 
-abstract_class IBehaviorBackBridge {
+the_interface IBehaviorBackBridge {
  public:
   virtual void BackBridge_GatherConditions() = 0;
   virtual int BackBridge_SelectSchedule() = 0;

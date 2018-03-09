@@ -18,7 +18,7 @@
 #include "c_weapon_portalgun.h"
 #include "igameuifuncs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	HEALTH_WARNING_THRESHOLD	25

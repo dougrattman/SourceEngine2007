@@ -19,7 +19,7 @@
 #include "info_darknessmode_lightsource.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar ai_debug_follow("ai_debug_follow", "0");
@@ -2004,7 +2004,7 @@ static AI_FollowSlot_t g_SimpleFollowFormationSlots[] = {
 static AI_FollowFormation_t g_SimpleFollowFormation = {
     "Simple",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_SimpleFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_SimpleFollowFormationSlots),
     168,  // followPointTolerance
     36,   // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2031,7 +2031,7 @@ static AI_FollowSlot_t g_WideFollowFormationSlots[] = {
 static AI_FollowFormation_t g_WideFollowFormation = {
     "Wide",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_WideFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_WideFollowFormationSlots),
     168,  // followPointTolerance
     72,   // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2056,7 +2056,7 @@ static AI_FollowSlot_t g_AntlionFollowFormationSlots[] = {
 static AI_FollowFormation_t g_AntlionFollowFormation = {
     "Antlion",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_AntlionFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_AntlionFollowFormationSlots),
     168,   // followPointTolerance
     36,    // targetMoveTolerance
     60,    // repathOnRouteTolerance
@@ -2081,7 +2081,7 @@ static AI_FollowSlot_t g_CommanderFollowFormationSlots[] = {
 static AI_FollowFormation_t g_CommanderFollowFormation = {
     "Commander",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_CommanderFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_CommanderFollowFormationSlots),
     168,  // followPointTolerance
     6,    // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2104,7 +2104,7 @@ static AI_FollowSlot_t g_TightFollowFormationSlots[] = {
 static AI_FollowFormation_t g_TightFollowFormation = {
     "Tight",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_CommanderFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_CommanderFollowFormationSlots),
     48,   // followPointTolerance
     6,    // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2131,7 +2131,7 @@ static AI_FollowSlot_t g_MediumFollowFormationSlots[] = {
 static AI_FollowFormation_t g_MediumFollowFormation = {
     "Medium",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_MediumFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_MediumFollowFormationSlots),
     168,  // followPointTolerance
     36,   // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2166,7 +2166,7 @@ static AI_FollowSlot_t g_SidekickFollowFormationSlots[] = {
 static AI_FollowFormation_t g_SidekickFollowFormation = {
     "Sidekick",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS | AIFF_REQUIRE_LOS_OUTSIDE_COMBAT,
-    ARRAYSIZE(g_SidekickFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_SidekickFollowFormationSlots),
     168,  // followPointTolerance
     36,   // targetMoveTolerance
     60,   // repathOnRouteTolerance
@@ -2190,7 +2190,7 @@ static AI_FollowSlot_t g_HunterFollowFormationSlots[] = {
 static AI_FollowFormation_t g_HunterFollowFormation = {
     "Hunter",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS,
-    ARRAYSIZE(g_HunterFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_HunterFollowFormationSlots),
     48,    // followPointTolerance
     48,    // targetMoveTolerance
     60,    // 180,						//
@@ -2226,7 +2226,7 @@ static AI_FollowSlot_t g_VortigauntFollowFormationSlots[] = {
 static AI_FollowFormation_t g_VortigauntFollowFormation = {
     "Vortigaunt",
     AIFF_DEFAULT | AIFF_USE_FOLLOW_POINTS | AIFF_REQUIRE_LOS_OUTSIDE_COMBAT,
-    ARRAYSIZE(g_VortigauntFollowFormationSlots),
+    SOURCE_ARRAYSIZE(g_VortigauntFollowFormationSlots),
     168,        // followPointTolerance
     36,         // targetMoveTolerance
     60,         // repathOnRouteTolerance
@@ -2252,8 +2252,8 @@ AI_FollowFormation_t *g_AI_Formations[] = {
 AI_FollowFormation_t *AIGetFormation(AI_Formations_t formation) {
   if (formation < 0)
     formation = (AI_Formations_t)0;
-  else if (formation >= ARRAYSIZE(g_AI_Formations))
-    formation = (AI_Formations_t)(ARRAYSIZE(g_AI_Formations) - 1);
+  else if (formation >= SOURCE_ARRAYSIZE(g_AI_Formations))
+    formation = (AI_Formations_t)(SOURCE_ARRAYSIZE(g_AI_Formations) - 1);
 
   return g_AI_Formations[formation];
 }

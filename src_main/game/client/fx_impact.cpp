@@ -14,7 +14,7 @@
 #include "c_impact_effects.h"
 #include "tier0/include/vprof.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar  r_drawflecks( "r_drawflecks", "1" );
@@ -56,7 +56,7 @@ IterationRetval_t CRagdollEnumerator::EnumElement( IHandleEntity *pHandleEntity 
 		pModel->ImpactTrace( &tr, m_iDamageType, NULL );
 		m_bHit = true;
 
-		//FIXME: Yes?  No?
+		//TODO(d.rattman): Yes?  No?
 		return ITERATION_STOP;
 	}
 

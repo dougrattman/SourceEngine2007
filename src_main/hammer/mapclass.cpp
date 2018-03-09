@@ -21,7 +21,7 @@ int CMapAtom::s_nObjectIDCtr = 1;
 
 static CUtlVector<MCMSTRUCT> s_Classes;
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -318,7 +318,7 @@ void CMapClass::SetCullBoxFromFaceList( CMapFaceList *pFaces )
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the bbox for 2D rendering of this object.
-//			FIXME: this can be removed if we do all our 2D rendering in this->Render2D.
+//			TODO(d.rattman): this can be removed if we do all our 2D rendering in this->Render2D.
 // Input  : mins - receives the minima for culling
 //			maxs - receives the maxima for culling.
 //-----------------------------------------------------------------------------
@@ -1604,7 +1604,7 @@ void CMapClass::SetEditorKeyValue(const char *szKey, const char *szValue)
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the origin of this object and its children.
-//			FIXME: Should our children necessarily have the same origin as us?
+//			TODO(d.rattman): Should our children necessarily have the same origin as us?
 //				   Seems like we should translate our children by our origin delta
 //-----------------------------------------------------------------------------
 void CMapClass::SetOrigin( Vector &origin )

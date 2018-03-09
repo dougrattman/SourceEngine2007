@@ -40,7 +40,7 @@
 #include "tier2/renderutils.h"
 #include "vcollide_parse.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -308,7 +308,7 @@ class CStaticProp : public IClientUnknown,
   unsigned char m_Flags;
   unsigned short m_FirstLeaf;
   unsigned short m_LeafCount;
-  CBaseHandle m_EntHandle;  // FIXME: Do I need client + server handles?
+  CBaseHandle m_EntHandle;  // TODO(d.rattman): Do I need client + server handles?
   ClientRenderHandle_t m_RenderHandle;
   unsigned short m_FadeIndex;  // Index into the m_StaticPropFade dictionary
   float m_flForcedFadeScale;
@@ -324,7 +324,7 @@ class CStaticProp : public IClientUnknown,
   Vector m_WorldRenderBBoxMin;
   Vector m_WorldRenderBBoxMax;
 
-  // FIXME: This sucks. Need to store the lighting origin off
+  // TODO(d.rattman): This sucks. Need to store the lighting origin off
   // because the time at which the static props are unserialized
   // doesn't necessarily match the time at which we can initialize the light
   // cache
@@ -534,7 +534,7 @@ bool CStaticProp::Init(int index, StaticPropLump_t &lump, model_t *pModel) {
       break;
 
     default: {
-      char szModel[MAX_PATH];
+      char szModel[SOURCE_MAX_PATH];
       Q_strncpy(szModel,
                 m_pModel ? modelloader->GetName(m_pModel) : "unknown model",
                 sizeof(szModel));
@@ -569,7 +569,7 @@ bool CStaticProp::Init(int index, StaticPropLump_t &lump, model_t *pModel) {
   TransformAABB(m_ModelToWorld, m_RenderBBoxMin, m_RenderBBoxMax,
                 m_WorldRenderBBoxMin, m_WorldRenderBBoxMax);
 
-  // FIXME: Sucky, but unless we want to re-read the static prop lump when the
+  // TODO(d.rattman): Sucky, but unless we want to re-read the static prop lump when the
   // client is initialized (possible, but also gross), we need to cache off the
   // illum center now
   if (lump.m_Flags & STATIC_PROP_USE_LIGHTING_ORIGIN) {
@@ -601,7 +601,7 @@ const Vector &CStaticProp::OBBMins() const {
     return m_pModel->mins;
   }
   Vector &tv = AllocTempVector();
-  // FIXME: why doesn't this just return m_RenderBBoxMin?
+  // TODO(d.rattman): why doesn't this just return m_RenderBBoxMin?
   VectorSubtract(m_WorldRenderBBoxMin, GetCollisionOrigin(), tv);
   return tv;
 }
@@ -611,7 +611,7 @@ const Vector &CStaticProp::OBBMaxs() const {
     return m_pModel->maxs;
   }
   Vector &tv = AllocTempVector();
-  // FIXME: why doesn't this just return m_RenderBBoxMax?
+  // TODO(d.rattman): why doesn't this just return m_RenderBBoxMax?
   VectorSubtract(m_WorldRenderBBoxMax, GetCollisionOrigin(), tv);
   return tv;
 }
@@ -1007,7 +1007,7 @@ void CStaticProp::InsertPropIntoKDTree() {
       physcollision->CollideGetAABB(&mins, &maxs, pCollide->solids[0], m_Origin,
                                     m_Angles);
     } else {
-      char szModel[MAX_PATH];
+      char szModel[SOURCE_MAX_PATH];
       Q_strncpy(szModel, modelloader->GetName(m_pModel), sizeof(szModel));
       Warning("SOLID_VPHYSICS static prop with no vphysics model! (%s)\n",
               szModel);
@@ -1069,7 +1069,7 @@ void CStaticProp::CreateVPhysics(IPhysicsEnvironment *pPhysEnv,
     physcollision->VPhysicsKeyParserDestroy(pParse);
   } else {
     if (m_nSolidType != SOLID_BBOX) {
-      char szModel[MAX_PATH];
+      char szModel[SOURCE_MAX_PATH];
       Q_strncpy(szModel,
                 m_pModel ? modelloader->GetName(m_pModel) : "unknown model",
                 sizeof(szModel));
@@ -1565,7 +1565,7 @@ void CStaticPropMgr::GetAllStaticPropsInOBB(
       // if all 6 planes failed to eliminate the extents, the OBB and prop
       // intersect
 
-      // FIXME: Halfspace elimination will never remove props that do intersect,
+      // TODO(d.rattman): Halfspace elimination will never remove props that do intersect,
       // but leaves some false positives in some cases.
 
       pOutput->AddToTail(pProp);
@@ -1921,7 +1921,7 @@ void CStaticPropMgr::TraceRayAgainstStaticProp(const Ray_t &ray,
   CStaticProp &prop = m_StaticProps[staticPropIndex];
 
   if (prop.GetSolid() != SOLID_NONE) {
-    // FIXME: Better bloat?
+    // TODO(d.rattman): Better bloat?
     // Bloat a little bit so we get the intersection
     Ray_t temp = ray;
     temp.m_Delta *= 1.1f;
@@ -1975,8 +1975,8 @@ void CStaticPropMgr::AddDecalToStaticProp(Vector const &rayStart,
     noPokethru = true;
   }
 
-  // FIXME: Pass in decal up?
-  // FIXME: What to do about the body parameter?
+  // TODO(d.rattman): Pass in decal up?
+  // TODO(d.rattman): What to do about the body parameter?
   Vector up(0, 0, 1);
   modelrender->AddDecal(prop.GetModelInstance(), ray, up, decalIndex, 0,
                         noPokethru);

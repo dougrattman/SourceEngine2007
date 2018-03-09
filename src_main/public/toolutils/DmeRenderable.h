@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =====//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Base decorator class to make a DME renderable 
 //
@@ -253,7 +253,7 @@ void CDmeRenderable<T>::GetRenderBoundsWorldspace( Vector& absMins, Vector& absM
 	Vector mins, maxs;
 	GetRenderBounds( mins, maxs );
 
-	// FIXME: Should I just use a sphere here?
+	// TODO(d.rattman): Should I just use a sphere here?
 	// Another option is to pass the OBB down the tree; makes for a better fit
 	// Generate a world-aligned AABB
 	const QAngle& angles = GetRenderAngles();

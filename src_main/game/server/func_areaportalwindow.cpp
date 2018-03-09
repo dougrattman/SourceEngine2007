@@ -9,7 +9,7 @@
 #include "func_areaportalwindow.h"
 #include "entitylist.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // The server will still send entities through a window even after it opaque 

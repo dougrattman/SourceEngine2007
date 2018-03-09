@@ -13,7 +13,7 @@
 #include "ai_speech.h"
 #include "sceneentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Minimum time between leader nags

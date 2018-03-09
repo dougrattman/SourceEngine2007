@@ -1411,7 +1411,7 @@ bool CWeaponCSBase::IsUseable()
 
 		lastspeed = speed;
 
-		//FIXME: This maximum speed value must come from the server.
+		//TODO(d.rattman): This maximum speed value must come from the server.
 		//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
 		

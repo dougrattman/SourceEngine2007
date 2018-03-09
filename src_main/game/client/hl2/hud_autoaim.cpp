@@ -14,7 +14,7 @@
 #include "vgui_controls/Panel.h"
 #include "view_scene.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar hud_draw_active_reticle("hud_draw_active_reticle", "0");

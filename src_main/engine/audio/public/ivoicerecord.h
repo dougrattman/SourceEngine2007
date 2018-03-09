@@ -7,7 +7,7 @@
 
 // This is the voice recording interface. It provides 16-bit signed mono data
 // from a mic at some sample rate.
-abstract_class IVoiceRecord {
+the_interface IVoiceRecord {
  protected:
   virtual ~IVoiceRecord() {}
 

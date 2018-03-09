@@ -426,7 +426,7 @@ void CM_TestInDispTree(TraceInfo_t *pTraceInfo, cleaf_t *pLeaf,
                        Vector const &boxMax, int collisionMask,
                        trace_t *pTrace);
 template <bool IS_POINT>
-void FASTCALL CM_TraceToDispTree(TraceInfo_t *pTraceInfo,
+void SOURCE_FASTCALL CM_TraceToDispTree(TraceInfo_t *pTraceInfo,
                                  CDispCollTree *pDispTree, float startFrac,
                                  float endFrac);
 void CM_PostTraceToDispTree(TraceInfo_t *pTraceInfo);
@@ -438,7 +438,7 @@ void CM_PostTraceToDispTree(TraceInfo_t *pTraceInfo);
 
 void CM_TestBoxInBrush(const Vector &mins, const Vector &maxs, const Vector &p1,
                        trace_t *trace, cbrush_t *brush, BOOL bDispSurf);
-void FASTCALL CM_RecursiveHullCheck(TraceInfo_t *pTraceInfo, int num,
+void SOURCE_FASTCALL CM_RecursiveHullCheck(TraceInfo_t *pTraceInfo, int num,
                                     const float p1f, const float p2f);
 
 //=============================================================================
@@ -446,7 +446,7 @@ void FASTCALL CM_RecursiveHullCheck(TraceInfo_t *pTraceInfo, int num,
 inline bool TraceInfo_t::Visit(cbrush_t *pBrush, int ndxBrush,
                                TraceCounter_t cachedCount,
                                TraceCounter_t *pCachedCounters) {
-  TraceCounter_t *RESTRICT pCounter = pCachedCounters + ndxBrush;
+  TraceCounter_t *SOURCE_RESTRICT pCounter = pCachedCounters + ndxBrush;
 
   if (*pCounter == cachedCount) {
     return false;
@@ -456,9 +456,9 @@ inline bool TraceInfo_t::Visit(cbrush_t *pBrush, int ndxBrush,
   return true;
 }
 
-FORCEINLINE bool TraceInfo_t::Visit(int dispCounter, TraceCounter_t cachedCount,
+SOURCE_FORCEINLINE bool TraceInfo_t::Visit(int dispCounter, TraceCounter_t cachedCount,
                                     TraceCounter_t *pCachedCounters) {
-  TraceCounter_t *RESTRICT pCounter = pCachedCounters + dispCounter;
+  TraceCounter_t *SOURCE_RESTRICT pCounter = pCachedCounters + dispCounter;
 
   if (*pCounter == cachedCount) {
     return false;
@@ -468,11 +468,11 @@ FORCEINLINE bool TraceInfo_t::Visit(int dispCounter, TraceCounter_t cachedCount,
   return true;
 }
 
-FORCEINLINE bool TraceInfo_t::Visit(cbrush_t *pBrush, int ndxBrush) {
+SOURCE_FORCEINLINE bool TraceInfo_t::Visit(cbrush_t *pBrush, int ndxBrush) {
   return Visit(pBrush, ndxBrush, GetCount(), GetBrushCounters());
 }
 
-FORCEINLINE bool TraceInfo_t::Visit(int dispIndex) {
+SOURCE_FORCEINLINE bool TraceInfo_t::Visit(int dispIndex) {
   return Visit(dispIndex, GetCount(), GetDispCounters());
 }
 

@@ -127,13 +127,13 @@ void CHL2MP_Player::Precache(void) {
   PrecacheModel("sprites/glow01.vmt");
 
   // Precache Citizen models
-  int nHeads = ARRAYSIZE(g_ppszRandomCitizenModels);
+  int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
   int i;
 
   for (i = 0; i < nHeads; ++i) PrecacheModel(g_ppszRandomCitizenModels[i]);
 
   // Precache Combine Models
-  nHeads = ARRAYSIZE(g_ppszRandomCombineModels);
+  nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
 
   for (i = 0; i < nHeads; ++i) PrecacheModel(g_ppszRandomCombineModels[i]);
 
@@ -303,7 +303,7 @@ void CHL2MP_Player::PickupObject(CBaseEntity *pObject, bool bLimitMassAndSize) {
 }
 
 bool CHL2MP_Player::ValidatePlayerModel(const char *pModel) {
-  int iModels = ARRAYSIZE(g_ppszRandomCitizenModels);
+  int iModels = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
   int i;
 
   for (i = 0; i < iModels; ++i) {
@@ -312,7 +312,7 @@ bool CHL2MP_Player::ValidatePlayerModel(const char *pModel) {
     }
   }
 
-  iModels = ARRAYSIZE(g_ppszRandomCombineModels);
+  iModels = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
 
   for (i = 0; i < iModels; ++i) {
     if (!Q_stricmp(g_ppszRandomCombineModels[i], pModel)) {
@@ -343,7 +343,7 @@ void CHL2MP_Player::SetPlayerTeamModel(void) {
 
   if (GetTeamNumber() == TEAM_COMBINE) {
     if (Q_stristr(szModelName, "models/human")) {
-      int nHeads = ARRAYSIZE(g_ppszRandomCombineModels);
+      int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
 
       g_iLastCombineModel = (g_iLastCombineModel + 1) % nHeads;
       szModelName = g_ppszRandomCombineModels[g_iLastCombineModel];
@@ -352,7 +352,7 @@ void CHL2MP_Player::SetPlayerTeamModel(void) {
     m_iModelType = TEAM_COMBINE;
   } else if (GetTeamNumber() == TEAM_REBELS) {
     if (!Q_stristr(szModelName, "models/human")) {
-      int nHeads = ARRAYSIZE(g_ppszRandomCitizenModels);
+      int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
 
       g_iLastCitizenModel = (g_iLastCitizenModel + 1) % nHeads;
       szModelName = g_ppszRandomCitizenModels[g_iLastCitizenModel];
@@ -389,14 +389,14 @@ void CHL2MP_Player::SetPlayerModel(void) {
   }
 
   if (GetTeamNumber() == TEAM_COMBINE) {
-    int nHeads = ARRAYSIZE(g_ppszRandomCombineModels);
+    int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCombineModels);
 
     g_iLastCombineModel = (g_iLastCombineModel + 1) % nHeads;
     szModelName = g_ppszRandomCombineModels[g_iLastCombineModel];
 
     m_iModelType = TEAM_COMBINE;
   } else if (GetTeamNumber() == TEAM_REBELS) {
-    int nHeads = ARRAYSIZE(g_ppszRandomCitizenModels);
+    int nHeads = SOURCE_ARRAYSIZE(g_ppszRandomCitizenModels);
 
     g_iLastCitizenModel = (g_iLastCitizenModel + 1) % nHeads;
     szModelName = g_ppszRandomCitizenModels[g_iLastCitizenModel];
@@ -688,7 +688,7 @@ void CHL2MP_Player::SetAnimation(PLAYER_ANIM playerAnim) {
   if (idealActivity == ACT_HL2MP_GESTURE_RANGE_ATTACK) {
     RestartGesture(Weapon_TranslateActivity(idealActivity));
 
-    // FIXME: this seems a bit wacked
+    // TODO(d.rattman): this seems a bit wacked
     Weapon_SetActivity(Weapon_TranslateActivity(ACT_RANGE_ATTACK1), 0);
 
     return;
@@ -1319,7 +1319,7 @@ CHL2MPPlayerStateInfo *CHL2MP_Player::State_LookupInfo(HL2MPPlayerState state) {
        &CHL2MP_Player::State_Enter_OBSERVER_MODE, NULL,
        &CHL2MP_Player::State_PreThink_OBSERVER_MODE}};
 
-  for (int i = 0; i < ARRAYSIZE(playerStateInfos); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(playerStateInfos); i++) {
     if (playerStateInfos[i].m_iPlayerState == state)
       return &playerStateInfos[i];
   }

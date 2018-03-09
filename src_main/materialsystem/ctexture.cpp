@@ -1,13 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef PROTECTED_THINGS_ENABLE
 #undef PROTECTED_THINGS_ENABLE
 #endif
 
+#include "build/include/build_config.h"
 #include "tier0/include/platform.h"
 
 // HACK: Need ShellExecute for PSD updates
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"
 
 #include <direct.h>
@@ -165,7 +166,7 @@ class CTexture : public ITextureInternal {
   // Loads up information about the texture
   virtual void Precache();
 
-  // FIXME: Bogus methods... can we please delete these?
+  // TODO(d.rattman): Bogus methods... can we please delete these?
   virtual void GetLowResColorSample(float s, float t, float *color) const;
 
   // Gets texture resource data of the specified type.
@@ -359,8 +360,8 @@ class CTexture : public ITextureInternal {
 
   // lowresimage info - used for getting color data from a texture
   // without having a huge system mem overhead.
-  // FIXME: We should keep this in compressed form. .is currently decompressed
-  // at load time.
+  // TODO(d.rattman): We should keep this in compressed form. .is currently
+  // decompressed at load time.
   unsigned char *m_pLowResImage;
 
   ITextureRegenerator *m_pTextureRegenerator;
@@ -482,7 +483,7 @@ class CReferenceToHandleTexture : public ITextureInternal {
   // Loads up information about the texture
   virtual void Precache() { NULL; }
 
-  // FIXME: Bogus methods... can we please delete these?
+  // TODO(d.rattman): Bogus methods... can we please delete these?
   virtual void GetLowResColorSample(float s, float t, float *color) const {
     NULL;
   }
@@ -615,7 +616,7 @@ CReferenceToHandleTexture::~CReferenceToHandleTexture() {
 
 void CReferenceToHandleTexture::SetName(char const *szName) {
   // normalize and convert to a symbol
-  char szCleanName[MAX_PATH];
+  char szCleanName[SOURCE_MAX_PATH];
   m_Name = NormalizeTextureName(szName, szCleanName, sizeof(szCleanName));
 
 #ifdef _DEBUG
@@ -1252,9 +1253,9 @@ void CTexture::AllocateShaderAPITextures() {
   if (IsProcedural()) {
     // This is sort of hacky... should we store the # of copies in the VTF?
     if (!(m_nFlags & TEXTUREFLAGS_SINGLECOPY)) {
-      // FIXME: That 6 there is heuristically what I came up with what I
-      // need to get eyes not to stall on map alyx3. We need a better way
-      // of determining how many copies of the texture we should store.
+      // TODO(d.rattman): That 6 there is heuristically what I came up with what
+      // I need to get eyes not to stall on map alyx3. We need a better way of
+      // determining how many copies of the texture we should store.
       nCopies = 6;
     }
   }
@@ -1306,7 +1307,7 @@ void CTexture::FreeShaderAPITextures() {
     // Release the frames
     for (int i = m_nFrameCount; --i >= 0;) {
       if (g_pShaderAPI->IsTexture(m_pTextureHandles[i])) {
-#ifndef _LINUX
+#ifndef OS_POSIX
         Assert(_heapchk() == _HEAPOK);
 #endif
 
@@ -1705,7 +1706,7 @@ void CTexture::Bind(Sampler_t sampler1, int nFrame,
                     Sampler_t sampler2 /* = -1 */) {
   if (g_pShaderDevice->IsUsingGraphics()) {
     if (nFrame < 0 || nFrame >= m_nFrameCount) {
-      // FIXME: Use the well-known 'error' id instead of frame 0
+      // TODO(d.rattman): Use the well-known 'error' id instead of frame 0
       nFrame = 0;
       //			Assert(0);
     }
@@ -1723,7 +1724,7 @@ void CTexture::Bind(Sampler_t sampler1, int nFrame,
 void CTexture::BindVertexTexture(VertexTextureSampler_t sampler, int nFrame) {
   if (g_pShaderDevice->IsUsingGraphics()) {
     if (nFrame < 0 || nFrame >= m_nFrameCount) {
-      // FIXME: Use the well-known 'error' id instead of frame 0
+      // TODO(d.rattman): Use the well-known 'error' id instead of frame 0
       nFrame = 0;
       //			Assert(0);
     }
@@ -1782,9 +1783,8 @@ void CTexture::IncrementReferenceCount(void) { ++m_nRefCount; }
 void CTexture::DecrementReferenceCount(void) {
   --m_nRefCount;
 
-  /* FIXME: Probably have to remove this from the texture manager too..?
-  if (IsProcedural() && (m_nRefCount < 0))
-          delete this;
+  /* TODO(d.rattman): Probably have to remove this from the texture manager
+  too..? if (IsProcedural() && (m_nRefCount < 0)) delete this;
   */
 }
 
@@ -1801,7 +1801,7 @@ const char *CTexture::GetTextureGroupName() const {
 
 void CTexture::SetName(const char *pName) {
   // normalize and convert to a symbol
-  char szCleanName[MAX_PATH];
+  char szCleanName[SOURCE_MAX_PATH];
   m_Name = NormalizeTextureName(pName, szCleanName, sizeof(szCleanName));
 
 #ifdef _DEBUG
@@ -2304,7 +2304,7 @@ void CTexture::GetFilename(char *pOut, int maxLen) const {
 void CTexture::ReloadFilesInList(IFileList *pFilesToReload) {
   if (IsProcedural() || IsRenderTarget()) return;
 
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   GetFilename(filename, sizeof(filename));
   if (pFilesToReload->IsFileInList(filename)) {
     Download();
@@ -2578,7 +2578,8 @@ IVTFTexture *CTexture::ReconstructPartialProceduralBits(const Rect_t *pRect,
 // Regenerates the bits of a texture within a particular rectangle
 //-----------------------------------------------------------------------------
 void CTexture::ReconstructPartialTexture(const Rect_t *pRect) {
-  // FIXME: for now, only procedural textures can handle sub-rect specification.
+  // TODO(d.rattman): for now, only procedural textures can handle sub-rect
+  // specification.
   Assert(IsProcedural());
 
   // Also, we need procedural textures that have only a single copy!!
@@ -2588,7 +2589,7 @@ void CTexture::ReconstructPartialTexture(const Rect_t *pRect) {
   Rect_t vtfRect;
   IVTFTexture *pVTFTexture = ReconstructPartialProceduralBits(pRect, &vtfRect);
 
-  // FIXME: for now, depth textures do not work with this.
+  // TODO(d.rattman): for now, depth textures do not work with this.
   Assert(pVTFTexture->Depth() == 1);
 
   // Make sure we've allocated the API textures
@@ -2694,7 +2695,7 @@ void CTexture::ReconstructTexture() {
   int oldMipCount = m_nActualMipCount;
   int oldFrameCount = m_nFrameCount;
 
-  // FIXME: Should RenderTargets be a special case of Procedural?
+  // TODO(d.rattman): Should RenderTargets be a special case of Procedural?
   char *pResolvedFilename = NULL;
   IVTFTexture *pVTFTexture = NULL;
   char pCacheFileName[MATERIAL_MAX_PATH] = {0};
@@ -3050,7 +3051,7 @@ bool CTexture::UpdateExcludedState(void) {
 //
 //////////////////////////////////////////////////////////////////////////
 
-#ifdef IS_WINDOWS_PC
+#ifdef OS_WIN
 static bool SetBufferValue(char *chTxtFileBuffer, char const *szLookupKey,
                            char const *szNewValue) {
   bool bResult = false;
@@ -3219,7 +3220,8 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
           sprintf(chMaxHeight, "%d", iMaxHeight);
 
       // We have the texture and path to its content
-      char chResolveName[MAX_PATH] = {0}, chResolveNameArg[MAX_PATH] = {0};
+      char chResolveName[SOURCE_MAX_PATH] = {0},
+           chResolveNameArg[SOURCE_MAX_PATH] = {0};
       Q_snprintf(chResolveNameArg, sizeof(chResolveNameArg) - 1,
                  "materials/%s" TEXTURE_FNAME_EXTENSION, szTx);
       char *szTextureContentPath =
@@ -3261,7 +3263,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
 
         CUtlBuffer bufTxtFileBuffer(0, 0, CUtlBuffer::TEXT_BUFFER);
         g_pFullFileSystem->ReadFile(szTextureContentPath, 0, bufTxtFileBuffer);
-        for (int k = 0; k < 1024; ++k) bufTxtFileBuffer.PutChar(0);
+        for (int z = 0; z < 1024; ++z) bufTxtFileBuffer.PutChar(0);
 
         // Now fix maxwidth/maxheight settings
         SetBufferValue((char *)bufTxtFileBuffer.Base(), "maxwidth", chMaxWidth);
@@ -3292,8 +3294,8 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
       // 2.psd
       sprintf(pExtPut, ".psd");
       if (g_pFullFileSystem->FileExists(szTextureContentPath)) {
-        char chCommand[MAX_PATH];
-        char szTxtFileName[MAX_PATH] = {0};
+        char chCommand[SOURCE_MAX_PATH];
+        char szTxtFileName[SOURCE_MAX_PATH] = {0};
         GetModSubdirectory("tmp_lod_psdinfo.txt", szTxtFileName,
                            sizeof(szTxtFileName));
         sprintf(chCommand, "/C psdinfo \"%s\" > \"%s\"", szTextureContentPath,
@@ -3303,7 +3305,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
 
         CUtlBuffer bufTxtFileBuffer(0, 0, CUtlBuffer::TEXT_BUFFER);
         g_pFullFileSystem->ReadFile(szTxtFileName, 0, bufTxtFileBuffer);
-        for (int k = 0; k < 1024; ++k) bufTxtFileBuffer.PutChar(0);
+        for (int g = 0; g < 1024; ++g) bufTxtFileBuffer.PutChar(0);
 
         // Now fix maxwidth/maxheight settings
         SetBufferValue((char *)bufTxtFileBuffer.Base(), "maxwidth", chMaxWidth);

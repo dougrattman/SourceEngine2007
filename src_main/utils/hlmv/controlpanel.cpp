@@ -373,7 +373,7 @@ void CBoneControlWindow::Init( )
 	m_cSurfaceProp = new mxChoice( this, left, top + 85, 140, 22, IDC_BONE_SURFACEPROP );
 	mxToolTip::add (m_cSurfaceProp, "Select a surface property to apply to the bone");
 
-	// FIXME: We can't read the surface props yet because the vphysics path isn't known!!!
+	// TODO(d.rattman): We can't read the surface props yet because the vphysics path isn't known!!!
 	// This will only add 'default' to the list
 	ReadPhysicsMaterials( m_cSurfaceProp );
 
@@ -1124,7 +1124,7 @@ int CBoneControlWindow::handleEvent (mxEvent *event)
 
 	if ( event->event == mxEvent::KeyDown )
 	{
-		// FIXME: calling this forces the edit box to lose position
+		// TODO(d.rattman): calling this forces the edit box to lose position
  		// OnHitboxChanged( );
 		return 1;
 	}

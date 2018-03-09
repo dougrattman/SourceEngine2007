@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // These methods of the spatial partition manager are only used in the engine
 //-----------------------------------------------------------------------------
-abstract_class ISpatialPartitionInternal : public ISpatialPartition {
+the_interface ISpatialPartitionInternal : public ISpatialPartition {
  public:
   // Call this to clear out the spatial partition and to re-initialize
   // it given a particular world size

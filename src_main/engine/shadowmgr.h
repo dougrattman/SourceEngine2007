@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SHADOWMGR_H
 #define SHADOWMGR_H
@@ -7,6 +7,7 @@
 #include "mathlib/ssemath.h"
 #include "mathlib/vmatrix.h"
 #include "surfacehandle.h"
+#include "tier0/include/floattypes.h"
 
 //-----------------------------------------------------------------------------
 // Forward declarations
@@ -43,7 +44,7 @@ struct ShadowDecalRenderInfo_t {
 //-----------------------------------------------------------------------------
 // Shadow-related functionality internal to the engine
 //-----------------------------------------------------------------------------
-abstract_class IShadowMgrInternal : public IShadowMgr {
+the_interface IShadowMgrInternal : public IShadowMgr {
  public:
   virtual void LevelInit(int nSurfCount) = 0;
   virtual void LevelShutdown() = 0;

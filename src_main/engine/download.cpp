@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Implementation file for optional HTTP asset downloading
 // Author: Matthew D. Campbell (matt@turtlerockstudios.com), 2004
@@ -12,8 +12,8 @@
 
 #include <WinInet.h>
 #include <cassert>
-#include "../utils/bzip2/bzlib.h"
 #include "client.h"
+#include "deps/bzip2/bzlib.h"
 #include "download.h"
 #include "download_internal.h"
 #include "filesystem.h"
@@ -23,7 +23,6 @@
 #include "tier1/keyvalues.h"
 #include "vgui_baseui_interface.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
@@ -65,9 +64,10 @@ class DownloadCache {
  private:
   KeyValues *m_cache;
 
-  void GetCacheFilename(const RequestContext *rc, char cachePath[_MAX_PATH]);
+  void GetCacheFilename(const RequestContext *rc,
+                        char cachePath[SOURCE_MAX_PATH]);
   void GenerateCacheFilename(const RequestContext *rc,
-                             char cachePath[_MAX_PATH]);
+                             char cachePath[SOURCE_MAX_PATH]);
 
   void BuildKeyNames(const char *gamePath);  ///< Convenience function to build
                                              ///< the keys to index into m_cache
@@ -121,7 +121,7 @@ void DownloadCache::Init() {
 void DownloadCache::GetCachedData(RequestContext *rc) {
   if (!m_cache) return;
 
-  char cachePath[_MAX_PATH];
+  char cachePath[SOURCE_MAX_PATH];
   GetCacheFilename(rc, cachePath);
 
   if (!(*cachePath)) return;
@@ -163,7 +163,7 @@ static bool DecompressBZipToDisk(const char *outFilename,
   delete[] tmpDir;
 
   // open the file for writing
-  char fullSrcPath[MAX_PATH];
+  char fullSrcPath[SOURCE_MAX_PATH];
   Q_MakeAbsolutePath(fullSrcPath, sizeof(fullSrcPath), srcFilename,
                      com_gamedir);
 
@@ -225,7 +225,7 @@ void DownloadCache::PersistToDisk(const RequestContext *rc) {
   if (!m_cache) return;
 
   if (rc && rc->data && rc->nBytesTotal) {
-    char gamePath[MAX_PATH];
+    char gamePath[SOURCE_MAX_PATH];
     if (rc->bIsBZ2) {
       Q_StripExtension(rc->gamePath, gamePath, sizeof(gamePath));
     } else {
@@ -254,7 +254,7 @@ void DownloadCache::PersistToDisk(const RequestContext *rc) {
 
       if (success) {
         // write succeeded.  remove any old data from the cache.
-        char cachePath[_MAX_PATH];
+        char cachePath[SOURCE_MAX_PATH];
         GetCacheFilename(rc, cachePath);
         if (cachePath[0]) {
           g_pFileSystem->RemoveFile(cachePath, NULL);
@@ -281,7 +281,7 @@ void DownloadCache::PersistToCache(const RequestContext *rc) {
   if (!m_cache || !rc || !rc->data || !rc->nBytesTotal || !rc->nBytesCurrent)
     return;
 
-  char cachePath[_MAX_PATH];
+  char cachePath[SOURCE_MAX_PATH];
   GenerateCacheFilename(rc, cachePath);
 
   FileHandle_t fp = g_pFileSystem->Open(cachePath, "wb");
@@ -295,20 +295,20 @@ void DownloadCache::PersistToCache(const RequestContext *rc) {
 
 //--------------------------------------------------------------------------------------------------------------
 void DownloadCache::GetCacheFilename(const RequestContext *rc,
-                                     char cachePath[_MAX_PATH]) {
+                                     char cachePath[SOURCE_MAX_PATH]) {
   BuildKeyNames(rc->gamePath);
   const char *path = m_cache->GetString(m_cachefileKey, NULL);
   if (!path || strncmp(path, CacheDirectory, strlen(CacheDirectory))) {
     cachePath[0] = 0;
     return;
   }
-  strncpy(cachePath, path, _MAX_PATH);
-  cachePath[_MAX_PATH - 1] = 0;
+  strncpy(cachePath, path, SOURCE_MAX_PATH);
+  cachePath[SOURCE_MAX_PATH - 1] = 0;
 }
 
 //--------------------------------------------------------------------------------------------------------------
 void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
-                                          char cachePath[_MAX_PATH]) {
+                                          char cachePath[SOURCE_MAX_PATH]) {
   GetCacheFilename(rc, cachePath);
   BuildKeyNames(rc->gamePath);
 
@@ -324,7 +324,7 @@ void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
       gameFilename = std::max(lastSlash, lastBackslash) + 1;
     }
     for (int i = 0; i < 1000; ++i) {
-      Q_snprintf(cachePath, _MAX_PATH, "%s/%s%4.4d", CacheDirectory,
+      Q_snprintf(cachePath, SOURCE_MAX_PATH, "%s/%s%4.4d", CacheDirectory,
                  gameFilename, i);
       if (!g_pFileSystem->FileExists(cachePath)) {
         m_cache->SetString(m_cachefileKey, cachePath);
@@ -334,7 +334,7 @@ void DownloadCache::GenerateCacheFilename(const RequestContext *rc,
       }
     }
     // all 1000 were invalid?!?
-    Q_snprintf(cachePath, _MAX_PATH, "%s/overflow", CacheDirectory);
+    Q_snprintf(cachePath, SOURCE_MAX_PATH, "%s/overflow", CacheDirectory);
     // ConDColorMsg( DownloadColor,"DownloadCache::GenerateCacheFilename() set
     // %s = %s\n", m_cachefileKey, cachePath );
     m_cache->SetString(m_cachefileKey, cachePath);

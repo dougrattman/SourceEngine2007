@@ -12,7 +12,7 @@
 // typedefs to allow use of delegation macros
 typedef Vector4D LightCube_t[6];
 
-abstract_class IMatRenderContextInternal : public IMatRenderContext {
+the_interface IMatRenderContextInternal : public IMatRenderContext {
   // For now, stuck implementing these until IMaterialSystem is reworked
   bool Connect(CreateInterfaceFn) { return true; }
   void Disconnect() {}

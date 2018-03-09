@@ -974,7 +974,7 @@ bool CNPC_Tentacle::CreateVPhysics( void )
 
 		pPhysics->SetCallbackFlags( flags );
 	}
-	m_BoneFollowerManager.InitBoneFollowers( this, ARRAYSIZE(pTentacleFollowerBoneNames), pTentacleFollowerBoneNames );
+	m_BoneFollowerManager.InitBoneFollowers( this, SOURCE_ARRAYSIZE(pTentacleFollowerBoneNames), pTentacleFollowerBoneNames );
 
 	return true;
 }

@@ -29,7 +29,7 @@ void R_LightAmbient_4D(const Vector& normal, Vector4D* pLightBoxColor,
                        Vector& lv);
 void R_LightStrengthWorld(const Vector& vert, int lightcount,
                           LightDesc_t* pLightDesc, lightpos_t* light);
-float FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+float SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
                                            const Vector& delta);
 
 // Copies lighting state into a buffer, returns number of lights copied
@@ -40,7 +40,7 @@ int CopyLocalLightingState(int nMaxLights, LightDesc_t* pDest, int nLightCount,
 // SSE optimized versions
 void R_LightAmbient_4D(const FourVectors& normal, Vector4D* pLightBoxColor,
                        FourVectors& lv);
-__m128 FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
+__m128 SOURCE_FASTCALL R_WorldLightDistanceFalloff(const LightDesc_t* wl,
                                             const FourVectors& delta);
 #endif
 

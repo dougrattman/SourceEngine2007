@@ -229,7 +229,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
   <ItemGroup>
     <ClCompile Include="..\..\common\ConfigManager.cpp" />
     <ClCompile Include="..\..\common\SourceAppInfo.cpp" />
-    <ClCompile Include="..\..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\..\public\filesystem_init.cc" />
     <ClCompile Include="..\..\tier0\include\memoverride.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>

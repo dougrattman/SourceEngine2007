@@ -13,7 +13,7 @@
 #include "dod_shareddefs.h"
 #include "c_dod_playerresource.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

@@ -22,7 +22,7 @@
 #include "view.h"
 #include "view_scene.h"
 #include "vstdlib/jobthread.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern IParticleSystemQuery *g_pParticleSystemQuery;

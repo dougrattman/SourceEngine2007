@@ -42,7 +42,7 @@ namespace vgui
 	private:
 		Label *m_pFinishedText;
 		CheckButton *m_pOpenReadme;
-		char m_OutputDirName[MAX_PATH];		// c:\mymod
+		char m_OutputDirName[SOURCE_MAX_PATH];		// c:\mymod
 	};
 
 }

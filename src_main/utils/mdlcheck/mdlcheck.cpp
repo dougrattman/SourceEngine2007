@@ -17,12 +17,12 @@ bool checkani = false;
 
 struct QCFile
 {
-	char outputmodel[ MAX_PATH ];
+	char outputmodel[ SOURCE_MAX_PATH ];
 };
 
 struct ModelFile
 {
-	char qcfile[ MAX_PATH ];
+	char qcfile[ SOURCE_MAX_PATH ];
 	int version;
 	bool needsrecompile;
 	int toobig;
@@ -107,7 +107,7 @@ void BuildFileList_R( CUtlVector< CUtlSymbol >& files, char const *dir, char con
 				}
 				else if ( !stricmp( &wfd.cFileName[ len - extlen ], extension ) )
 				{
-					char filename[ MAX_PATH ];
+					char filename[ SOURCE_MAX_PATH ];
 					Q_snprintf( filename, sizeof( filename ), "%s\\%s", dir, wfd.cFileName );
 					_strlwr( filename );
 
@@ -179,8 +179,8 @@ bool AddModelNameFromSource( CUtlDict< ModelFile, int >& models, char const *fil
 	int idx = models.Find( modelname );
 	if ( idx != models.InvalidIndex() )
 	{
-		char shortname[ MAX_PATH ];
-		char shortname2[ MAX_PATH ];
+		char shortname[ SOURCE_MAX_PATH ];
+		char shortname2[ SOURCE_MAX_PATH ];
 		strcpy( shortname, &filename[ offset ] );
 		strcpy( shortname2, &models[ idx ].qcfile[ offset ] );
 
@@ -276,7 +276,7 @@ bool ValidateModelFile( char const *modelname, int offset )
 	}
 
 	// See if there's a .qc which builds this model
-	char shortname[ MAX_PATH ];
+	char shortname[ SOURCE_MAX_PATH ];
 	strcpy( shortname, &modelname[ offset ] );
 
 	Q_FixSlashes( shortname );

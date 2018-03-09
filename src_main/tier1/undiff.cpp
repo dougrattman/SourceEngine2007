@@ -9,7 +9,7 @@
 #include "tier1/diff.h"
 #include "mathlib/mathlib.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void ApplyDiffs(uint8 const *OldBlock, uint8 const *DiffList,

@@ -23,7 +23,7 @@ CHardwareConfig::CHardwareConfig() {
   memset(&m_UnOverriddenCaps, 0, sizeof(HardwareCaps_t));
   m_bHDREnabled = false;
 
-  // FIXME: This is kind of a hack to deal with DX8 worldcraft startup.
+  // TODO(d.rattman): This is kind of a hack to deal with DX8 worldcraft startup.
   // We can at least have this much texture
   m_Caps.m_MaxTextureWidth = m_Caps.m_MaxTextureHeight =
       m_Caps.m_MaxTextureDepth = 256;

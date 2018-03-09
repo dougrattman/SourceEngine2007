@@ -14,7 +14,7 @@
 #include "physics_npc_solver.h"
 #include "soundenvelope.h"
 #include "vphysics/friction.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static void PlatSpawnInsideTrigger(edict_t *pevPlatform);
@@ -842,7 +842,7 @@ void CFuncTrain::Next(void) {
 
     // This is supposed to place the center of the func_train at the target's
     // origin.
-    // FIXME: This is totally busted! It's using the wrong space for the
+    // TODO(d.rattman): This is totally busted! It's using the wrong space for the
     // computation...
     UTIL_SetOrigin(this,
                    pTarg->GetLocalOrigin() - CollisionProp()->OBBCenter());
@@ -858,7 +858,7 @@ void CFuncTrain::Next(void) {
 
     // This is supposed to place the center of the func_train at the target's
     // origin.
-    // FIXME: This is totally busted! It's using the wrong space for the
+    // TODO(d.rattman): This is totally busted! It's using the wrong space for the
     // computation...
     LinearMove(pTarg->GetLocalOrigin() - CollisionProp()->OBBCenter(),
                m_flSpeed);
@@ -881,7 +881,7 @@ void CFuncTrain::Activate(void) {
 
     // This is supposed to place the center of the func_train at the target's
     // origin.
-    // FIXME: This is totally busted! It's using the wrong space for the
+    // TODO(d.rattman): This is totally busted! It's using the wrong space for the
     // computation...
     UTIL_SetOrigin(this, m_hCurrentTarget->GetLocalOrigin() -
                              CollisionProp()->OBBCenter());
@@ -1652,7 +1652,7 @@ void CFuncTrackTrain::UpdateTrainOrientation(CPathTrack *pPrev,
                                              CPathTrack *pNext,
                                              const Vector &nextPos,
                                              float flInterval) {
-  // FIXME: old way of doing fixed orienation trains, remove!
+  // TODO(d.rattman): old way of doing fixed orienation trains, remove!
   if (HasSpawnFlags(SF_TRACKTRAIN_FIXED_ORIENTATION)) return;
 
   // Trains *can* work in local space, but only if all elements of the track
@@ -1682,7 +1682,7 @@ void CFuncTrackTrain::UpdateTrainOrientation(CPathTrack *pPrev,
 //-----------------------------------------------------------------------------
 // Purpose: Adjusts our angles as we hit each path track. This is for support of
 //			trains with wheels that round corners a la HL1 trains.
-// FIXME: move into path_track, have the angles come back from LookAhead
+// TODO(d.rattman): move into path_track, have the angles come back from LookAhead
 //-----------------------------------------------------------------------------
 void CFuncTrackTrain::UpdateOrientationAtPathTracks(CPathTrack *pPrev,
                                                     CPathTrack *pNext,
@@ -1722,7 +1722,7 @@ void CFuncTrackTrain::UpdateOrientationAtPathTracks(CPathTrack *pPrev,
 // Purpose: Blends our angles using one of two orientation blending types.
 //			ASSUMES that eOrientationType is either LinearBlend or
 // EaseInEaseOut.
-//			FIXME: move into path_track, have the angles come back
+//			TODO(d.rattman): move into path_track, have the angles come back
 // from LookAhead
 //-----------------------------------------------------------------------------
 void CFuncTrackTrain::UpdateOrientationBlend(

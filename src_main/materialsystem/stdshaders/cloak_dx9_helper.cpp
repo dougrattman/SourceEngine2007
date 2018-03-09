@@ -15,7 +15,7 @@
 
 static ConVar r_lightwarpidentity("r_lightwarpidentity", "0", FCVAR_CHEAT);
 
-// FIXME: doesn't support fresnel!
+// TODO(d.rattman): doesn't support fresnel!
 void InitParamsCloak_DX9(CBaseVSShader *pShader, IMaterialVar **params,
                          const char *pMaterialName, Cloak_DX9_Vars_t &info) {
   SET_FLAGS2(MATERIAL_VAR2_NEEDS_TANGENT_SPACES);

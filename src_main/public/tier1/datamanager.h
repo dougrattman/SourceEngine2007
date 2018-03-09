@@ -1,13 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_RESOURCEMANAGER_H_
 #define SOURCE_TIER1_RESOURCEMANAGER_H_
 
+#include "base/include/macros.h"
 #include "tier0/include/threadtools.h"
 #include "tier1/utlmultilist.h"
 #include "tier1/utlvector.h"
 
-FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
 
 #define INVALID_MEMHANDLE ((memhandle_t)0xffffffff)
 
@@ -227,8 +228,6 @@ class CDataManager : public CDataManagerBase {
 
   MUTEX_TYPE m_mutex;
 };
-
-
 
 inline unsigned short CDataManagerBase::FromHandle(memhandle_t handle) {
   unsigned int fullWord = (unsigned int)handle;

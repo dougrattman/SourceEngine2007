@@ -9,10 +9,10 @@
 
 #include "overlay_fit_vs11.inc"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-// FIXME: Need to make a dx9 version so that "CENTROID" works.
+// TODO(d.rattman): Need to make a dx9 version so that "CENTROID" works.
 
 BEGIN_VS_SHADER_FLAGS( Overlay_Fit, "Help for TerrainTest2", SHADER_NOT_EDITABLE )
 

@@ -22,7 +22,7 @@
 #include "particle_simple3D.h"
 #include "particle_parse.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheEffectBloodSpray )
@@ -463,7 +463,7 @@ void FX_BloodBulletImpact( const Vector &origin, const Vector &normal, float sca
 	//C_BaseEntity::EmitSound( filter, SOUND_FROM_WORLD, CHAN_VOICE, "Physics.WaterSplash", 1.0, ATTN_NORM, 0, 100, &origin );
 }
 
-// FIXME: This will be simplified when the initializer can take color parameters as an input
+// TODO(d.rattman): This will be simplified when the initializer can take color parameters as an input
 //	      For now, we use different systems
 
 struct ParticleForBlood_t
@@ -478,8 +478,8 @@ ParticleForBlood_t	bloodCallbacks[] =
 	{ BLOOD_COLOR_GREEN,	"blood_impact_green_01" },
 	{ BLOOD_COLOR_YELLOW,	"blood_impact_yellow_01" },
 #if defined( HL2_EPISODIC )
-	{ BLOOD_COLOR_ANTLION,			"blood_impact_antlion_01" },		// FIXME: Move to Base HL2
-	{ BLOOD_COLOR_ZOMBIE,			"blood_impact_zombie_01" },			// FIXME: Move to Base HL2
+	{ BLOOD_COLOR_ANTLION,			"blood_impact_antlion_01" },		// TODO(d.rattman): Move to Base HL2
+	{ BLOOD_COLOR_ZOMBIE,			"blood_impact_zombie_01" },			// TODO(d.rattman): Move to Base HL2
 	{ BLOOD_COLOR_ANTLION_WORKER,	"blood_impact_antlion_worker_01" },
 #endif // HL2_EPISODIC
 };
@@ -504,7 +504,7 @@ void BloodImpactCallback( const CEffectData & data )
 	bool bFoundBlood = false;
 
 	// Find which sort of blood we are
-	for ( int i = 0; i < ARRAYSIZE( bloodCallbacks ); i++ )
+	for ( int i = 0; i < SOURCE_ARRAYSIZE( bloodCallbacks ); i++ )
 	{
 		if ( bloodCallbacks[i].nColor == data.m_nColor )
 		{

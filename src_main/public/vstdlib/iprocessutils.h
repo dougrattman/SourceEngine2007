@@ -17,7 +17,7 @@ enum {
 
 // Interface for makefiles to build differently depending on where they are run
 // from.
-abstract_class IProcessUtils : public IAppSystem {
+the_interface IProcessUtils : public IAppSystem {
  public:
   // Starts, stops a process
   virtual ProcessHandle_t StartProcess(const ch *pCommandLine,

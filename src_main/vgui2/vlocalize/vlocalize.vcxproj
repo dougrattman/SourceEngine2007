@@ -266,7 +266,7 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
     <ClInclude Include="..\..\public\tier1\utlvector.h" />
     <ClInclude Include="..\..\public\vstdlib\strtools.h" />
     <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
-    <ClInclude Include="..\..\public\winlite.h" />
+    <ClInclude Include="..\..\base\include\windows\windows_light.h" />
     <ClInclude Include="..\controls\VGUI_Button.h" />
     <ClInclude Include="..\controls\VGUI_Controls.h" />
     <ClInclude Include="..\controls\VGUI_EditablePanel.h" />

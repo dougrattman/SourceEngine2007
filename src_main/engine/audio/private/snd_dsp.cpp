@@ -8306,7 +8306,7 @@ void DSP_CheckRestorePresets() {
   g_bNeedPresetRestore = false;
 
   int i;
-  int c = ARRAYSIZE(g_PreserveDSP);
+  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
 
   // Restore
   for (i = 0; i < c; ++i) {
@@ -8352,7 +8352,7 @@ void DSP_ClearState() {
   // convars and bootstrap the dsp system into using them for a few frames
 
   int i;
-  int c = ARRAYSIZE(g_PreserveDSP);
+  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
 
   for (i = 0; i < c; ++i) {
     PreserveDSP_t &slot = g_PreserveDSP[i];
@@ -9022,7 +9022,7 @@ load_exit:
 //  could be extended to other stuff
 //-----------------------------------------------------------------------------
 void DSP_FastReset(int dspType) {
-  int c = ARRAYSIZE(g_PreserveDSP);
+  int c = SOURCE_ARRAYSIZE(g_PreserveDSP);
 
   // Restore
   for (int i = 0; i < c; ++i) {

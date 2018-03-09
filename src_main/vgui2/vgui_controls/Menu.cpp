@@ -126,7 +126,7 @@ int Menu::AddMenuItem(MenuItem *panel) {
 // Remove a single item
 //-----------------------------------------------------------------------------
 void Menu::DeleteItem(int itemID) {
-  // FIXME: This doesn't work with separator panels yet
+  // TODO(d.rattman): This doesn't work with separator panels yet
   Assert(m_SeparatorPanels.Count() == 0);
 
   m_MenuItems[itemID]->MarkForDeletion();

@@ -24,7 +24,6 @@
 #define IsPC() true
 #define IsConsole() false
 #define IsX360() false
-#define IS_WINDOWS_PC
 #elif defined(OS_POSIX)
 #define IsPC() true
 #define IsConsole() false

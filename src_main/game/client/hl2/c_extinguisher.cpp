@@ -13,7 +13,7 @@
 #include "hud.h"
 #include "ClientEffectPrecacheSystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CLIENTEFFECT_REGISTER_BEGIN( PrecacheExtinguisher )
@@ -175,7 +175,7 @@ void C_ExtinguisherJet::Update( float fTimeDelta )
 
 	AngleVectors( GetAbsAngles(), &shotDir, &vRight, &vUp );
 	
-	//FIXME: Muzzle point is incorrect on the model!
+	//TODO(d.rattman): Muzzle point is incorrect on the model!
 	if ( m_bUseMuzzlePoint )
 	{
 		shotDir.Negate();
@@ -196,7 +196,7 @@ void C_ExtinguisherJet::Update( float fTimeDelta )
 	
 		float tempDelta = fTimeDelta;
 		
-		//FIXME: All particles need to be within this loop
+		//TODO(d.rattman): All particles need to be within this loop
 		while( m_ParticleSpawn.NextEvent( tempDelta ) )
 		{
 			pParticle = (SimpleParticle *) m_pEmitter->AddParticle( sizeof(SimpleParticle), m_MaterialHandle, GetAbsOrigin() );

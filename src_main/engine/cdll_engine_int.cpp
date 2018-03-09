@@ -81,7 +81,7 @@
 #include "vphysics_interface.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -327,7 +327,7 @@ class CEngineClient : public IVEngineClient {
   float GetSentenceLength(CAudioSource *pAudioSource);
   bool IsStreaming(CAudioSource *pAudioSource) const;
 
-  // FIXME, move entirely to client .dll
+  // TODO(d.rattman): move entirely to client .dll
   void GetViewAngles(QAngle &va);
   void SetViewAngles(QAngle &va);
   int GetMaxClients(void);
@@ -702,7 +702,7 @@ bool CEngineClient::IsStreaming(CAudioSource *pAudioSource) const {
   return false;
 }
 
-// FIXME, move entirely to client .dll
+// TODO(d.rattman): move entirely to client .dll
 void CEngineClient::GetViewAngles(QAngle &va) { VectorCopy(cl.viewangles, va); }
 
 void CEngineClient::SetViewAngles(QAngle &va) {
@@ -807,13 +807,13 @@ bool CEngineClient::CullBox(const Vector &mins, const Vector &maxs) {
 const char *CEngineClient::GetGameDirectory(void) { return com_gamedir; }
 
 const VMatrix &CEngineClient::WorldToScreenMatrix() {
-  // FIXME: this is only valid if we're currently rendering.  If not, it should
+  // TODO(d.rattman): this is only valid if we're currently rendering.  If not, it should
   // use the player, or it really should pass one in.
   return g_EngineRenderer->WorldToScreenMatrix();
 }
 
 const VMatrix &CEngineClient::WorldToViewMatrix() {
-  // FIXME: this is only valid if we're currently rendering.  If not, it should
+  // TODO(d.rattman): this is only valid if we're currently rendering.  If not, it should
   // use the player, or it really should pass one in.
   return g_EngineRenderer->ViewMatrix();
 }
@@ -1282,7 +1282,7 @@ static void ClientDLL_InitRecvTableMgr() {
   int nRecvTables = 0;
   for (ClientClass *pCur = ClientDLL_GetAllClasses(); pCur;
        pCur = pCur->m_pNext) {
-    ErrorIfNot(nRecvTables < ARRAYSIZE(pRecvTables),
+    ErrorIfNot(nRecvTables < SOURCE_ARRAYSIZE(pRecvTables),
                ("ClientDLL_InitRecvTableMgr: overflowed MAX_DATATABLES"));
 
     pRecvTables[nRecvTables] = pCur->m_pRecvTable;

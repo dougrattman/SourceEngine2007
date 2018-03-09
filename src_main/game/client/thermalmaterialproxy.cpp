@@ -76,7 +76,7 @@ bool CThermalMaterialProxy::Init( IMaterial *pMaterial, KeyValues* pKeyValues  )
 
 void CThermalMaterialProxy::OnBind( C_BaseEntity *pEntity )
 {
-// FIXME, enable this later
+// TODO(d.rattman): enable this later
 return;
 
 	if( !m_ThermalVar )

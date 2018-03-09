@@ -51,7 +51,7 @@ void PortalPhysFrame(float deltaTime);  // small wrapper for PhysFrame that
 
 void PrecachePhysicsSounds(void);
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar phys_speeds("phys_speeds", "0");
@@ -724,7 +724,7 @@ static void UpdateEntityPenetrationFlag(CBaseEntity *pEntity,
                                         bool isPenetrating) {
   if (!pEntity) return;
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < count; i++) {
     if (!pList[i]->IsStatic()) {
       if (isPenetrating) {
@@ -1112,7 +1112,7 @@ void PhysGetMassCenterOverride(CBaseEntity *pEntity, vcollide_t *pCollide,
 
 float PhysGetEntityMass(CBaseEntity *pEntity) {
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int physCount = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int physCount = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   float otherMass = 0;
   for (int i = 0; i < physCount; i++) {
     otherMass += pList[i]->GetMass();
@@ -1214,7 +1214,7 @@ static void OutputVPhysicsDebugInfo(CBaseEntity *pEntity) {
     }
 
     IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-    int physCount = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+    int physCount = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
     if (physCount) {
       if (physCount > 1) {
         for (int i = 0; i < physCount; i++) {
@@ -1714,7 +1714,7 @@ void PhysForceEntityToSleep(CBaseEntity *pEntity, IPhysicsObject *pObject) {
   DevMsg(2, "Putting entity to sleep: %s\n", pEntity->GetClassname());
   MEM_ALLOC_CREDIT();
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int physCount = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int physCount = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < physCount; i++) {
     PhysForceClearVelocity(pList[i]);
     pList[i]->Sleep();
@@ -1754,7 +1754,7 @@ void CCollisionEvent::Friction(IPhysicsObject *pObject, float energy,
 friction_t *CCollisionEvent::FindFriction(CBaseEntity *pObject) {
   friction_t *pFree = NULL;
 
-  for (int i = 0; i < ARRAYSIZE(m_current); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_current); i++) {
     if (!m_current[i].pObject && !pFree) pFree = &m_current[i];
 
     if (m_current[i].pObject == pObject) return &m_current[i];
@@ -1849,7 +1849,7 @@ float CCollisionEvent::DeltaTimeSinceLastFluid(CBaseEntity *pEntity) {
 }
 
 void CCollisionEvent::UpdateFrictionSounds(void) {
-  for (int i = 0; i < ARRAYSIZE(m_current); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_current); i++) {
     if (m_current[i].patch) {
       if (m_current[i].flLastUpdateTime < (gpGlobals->curtime - 0.1f)) {
         // friction wasn't updated the last 100msec, assume fiction finished
@@ -2138,7 +2138,7 @@ int CCollisionEvent::AddDamageInflictor(IPhysicsObject *pInflictorPhysics,
         static_cast<CBaseEntity *>(pInflictorPhysics->GetGameData());
     if (pEntity) {
       IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-      int physCount = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+      int physCount = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
       if (physCount > 1) {
         int currentIndex = addIndex;
         for (int i = 0; i < physCount; i++) {
@@ -2159,7 +2159,7 @@ int CCollisionEvent::AddDamageInflictor(IPhysicsObject *pInflictorPhysics,
 }
 
 void CCollisionEvent::LevelShutdown(void) {
-  for (int i = 0; i < ARRAYSIZE(m_current); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_current); i++) {
     if (m_current[i].patch) {
       ShutdownFriction(m_current[i]);
     }
@@ -2211,7 +2211,7 @@ void CCollisionEvent::EndTouch(IPhysicsObject *pObject1,
 
   // contact point deleted, but entities are still touching?
   IPhysicsObject *list[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = pEntity1->VPhysicsGetObjectList(list, ARRAYSIZE(list));
+  int count = pEntity1->VPhysicsGetObjectList(list, SOURCE_ARRAYSIZE(list));
 
   int contactCount = 0;
   for (int i = 0; i < count; i++) {
@@ -2521,7 +2521,7 @@ void PhysCallbackRemove(IServerNetworkable *pRemove) {
 
 void PhysSetEntityGameFlags(CBaseEntity *pEntity, unsigned short flags) {
   IPhysicsObject *pList[VPHYSICS_MAX_OBJECT_LIST_COUNT];
-  int count = pEntity->VPhysicsGetObjectList(pList, ARRAYSIZE(pList));
+  int count = pEntity->VPhysicsGetObjectList(pList, SOURCE_ARRAYSIZE(pList));
   for (int i = 0; i < count; i++) {
     PhysSetGameFlags(pList[i], flags);
   }

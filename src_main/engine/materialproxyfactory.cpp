@@ -9,7 +9,7 @@
 #include "toolframework/itoolframework.h"
 #include "toolframework/itoolsystem.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 extern CSysModule *g_ClientDLLModule;
 

@@ -45,7 +45,7 @@ private:
 	// This is stored in the ParticleEffectBinding now.
 	//matrix3x4_t	m_matTransform;
 
-	//FIXME: Bones here as well...
+	//TODO(d.rattman): Bones here as well...
 };
 
 #endif // PARTICLES_LOCALSPACE_H

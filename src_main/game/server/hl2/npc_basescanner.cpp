@@ -12,7 +12,7 @@
 #include "npcevent.h"
 #include "weapon_physcannon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar g_debug_basescanner("g_debug_basescanner", "0", FCVAR_CHEAT);
@@ -442,7 +442,7 @@ void CNPC_BaseScanner::TakeDamageFromPhysicsImpact(
         pEvent->postVelocity[!index] * pEvent->pObjects[!index]->GetMass();
   }
 
-  // FIXME: this doesn't pass in who is responsible if some other entity
+  // TODO(d.rattman): this doesn't pass in who is responsible if some other entity
   // "caused" this collision
   PhysCallbackDamage(this,
                      CTakeDamageInfo(pHitEntity, pHitEntity, damageForce,
@@ -521,7 +521,7 @@ void CNPC_BaseScanner::Gib(void) {
     m_pSmokeTrail = NULL;
   }
 
-  // FIXME: This is because we couldn't save/load the CTakeDamageInfo.
+  // TODO(d.rattman): This is because we couldn't save/load the CTakeDamageInfo.
   // because it's midnight before the teamwide playtest. Real solution
   // is to add a datadesc to CTakeDamageInfo
   if (m_KilledInfo.GetInflictor()) {
@@ -783,7 +783,7 @@ void CNPC_BaseScanner::SpeakSentence(int sentenceType) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CNPC_BaseScanner::InputSetFlightSpeed(inputdata_t &inputdata) {
-  // FIXME: Currently unsupported
+  // TODO(d.rattman): Currently unsupported
 
   /*
   m_flFlightSpeed = inputdata.value.Int();
@@ -1051,7 +1051,7 @@ Vector CNPC_BaseScanner::IdealGoalForMovement(const Vector &goalPos,
     vIdealPos.z += (MinGroundDist() * (1.0f - tr.fraction));
   }
 
-  // FIXME: We also need to make sure that we fit here at all, and if not, chose
+  // TODO(d.rattman): We also need to make sure that we fit here at all, and if not, chose
   // a new spot
 
   // Debug tools
@@ -1094,7 +1094,7 @@ void CNPC_BaseScanner::MoveToAttack(float flInterval) {
 
   MoveToTarget(flInterval, idealPos);
 
-  // FIXME: Re-implement?
+  // TODO(d.rattman): Re-implement?
 
   /*
   // ---------------------------------------------------------
@@ -1655,7 +1655,7 @@ DEFINE_SCHEDULE(
     "	Tasks"
     "		 TASK_SCANNER_SET_FLY_CHASE			0"
     "		 TASK_SET_TOLERANCE_DISTANCE		64"
-    "		 TASK_GET_PATH_TO_TARGET			0"  // FIXME:
+    "		 TASK_GET_PATH_TO_TARGET			0"  // TODO(d.rattman):
                                                                     // This is
                                                                     // wrong!
     "		 TASK_RUN_PATH						0"

@@ -148,6 +148,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -206,6 +207,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -270,6 +272,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />
@@ -332,6 +335,7 @@
       <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
       <LargeAddressAware>true</LargeAddressAware>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
     </Link>
     <Xdcmake />
     <Bscmake />

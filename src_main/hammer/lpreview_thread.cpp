@@ -13,7 +13,7 @@
 #include "mathlib/simdvectormatrix.h"
 #include "raytrace.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 CInterlockedInt n_gbufs_queued;
@@ -510,7 +510,7 @@ void CLightingPreviewThread::HandleGBuffersMessage(MessageToLPreview &msg_in) {
       msg_in.m_pDefferedRenderingBMs[2]->RGBAData);
 
   m_LastEyePosition = msg_in.m_EyePosition;
-  for (int i = 0; i < ARRAYSIZE(msg_in.m_pDefferedRenderingBMs); i++)
+  for (int i = 0; i < SOURCE_ARRAYSIZE(msg_in.m_pDefferedRenderingBMs); i++)
     delete msg_in.m_pDefferedRenderingBMs[i];
   n_gbufs_queued--;
   m_nBitmapGenerationCounter = msg_in.m_nBitmapGenerationCounter;

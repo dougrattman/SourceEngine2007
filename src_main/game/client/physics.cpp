@@ -19,7 +19,7 @@
 #include "vphysics/constraints.h"
 #include "vphysics/object_hash.h"
 #include "vphysics_sound.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // file system interface
@@ -31,7 +31,7 @@ ConVar cl_phys_timescale(
 
 void PrecachePhysicsSounds(void);
 
-// FIXME: Replicated from server end, consolidate?
+// TODO(d.rattman): Replicated from server end, consolidate?
 
 extern IVEngineClient *engine;
 
@@ -649,7 +649,7 @@ void CCollisionEvent::Friction(IPhysicsObject *pObject, float energy,
 friction_t *CCollisionEvent::FindFriction(CBaseEntity *pObject) {
   friction_t *pFree = NULL;
 
-  for (int i = 0; i < ARRAYSIZE(m_current); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_current); i++) {
     if (!m_current[i].pObject && !pFree) pFree = &m_current[i];
 
     if (m_current[i].pObject == pObject) return &m_current[i];
@@ -666,7 +666,7 @@ void CCollisionEvent::ShutdownFriction(friction_t &friction) {
 }
 
 void CCollisionEvent::UpdateFrictionSounds(void) {
-  for (int i = 0; i < ARRAYSIZE(m_current); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_current); i++) {
     if (m_current[i].patch) {
       if (m_current[i].flLastUpdateTime < (gpGlobals->curtime - 0.1f)) {
         // friction wasn't updated the last 100msec, assume fiction finished
@@ -706,7 +706,7 @@ static int BestAxisMatchingNormal(matrix3x4_t &matrix, const Vector &normal) {
 //-----------------------------------------------------------------------------
 void PhysicsSplash(IPhysicsFluidController *pFluid, IPhysicsObject *pObject,
                    CBaseEntity *pEntity) {
-  // FIXME: For now just allow ragdolls for E3 - jdw
+  // TODO(d.rattman): For now just allow ragdolls for E3 - jdw
   if ((pObject->GetGameFlags() & FVPHYSICS_PART_OF_RAGDOLL) == false) return;
 
   Vector velocity;
@@ -892,7 +892,7 @@ void CCollisionEvent::FluidStartTouch(IPhysicsObject *pObject,
 void CCollisionEvent::FluidEndTouch(IPhysicsObject *pObject,
                                     IPhysicsFluidController *pFluid) {
   CallbackContext callback(this);
-  // FIXME: Do nothing for now
+  // TODO(d.rattman): Do nothing for now
 }
 
 IPhysicsObject *GetWorldPhysObject(void) { return g_PhysWorldObject; }

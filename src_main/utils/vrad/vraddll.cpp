@@ -140,7 +140,7 @@ void CVRadDLL::GetBSPInfo(CBSPInfo *pInfo) {
 }
 
 bool CVRadDLL::DoIncrementalLight(char const *pVMFFile) {
-  char tempPath[MAX_PATH], tempFilename[MAX_PATH];
+  char tempPath[SOURCE_MAX_PATH], tempFilename[SOURCE_MAX_PATH];
   GetTempPath(sizeof(tempPath), tempPath);
   GetTempFileName(tempPath, "vmf_entities_", 0, tempFilename);
 

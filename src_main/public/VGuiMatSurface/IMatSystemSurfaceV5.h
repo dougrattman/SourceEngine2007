@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IMATSYSTEMSURFACEV5_H
 #define IMATSYSTEMSURFACEV5_H
@@ -79,7 +79,7 @@ class IMatSystemSurface : public SurfaceV30::ISurface {
 }  // namespace MatSystemSurfaceV5
 
 //-----------------------------------------------------------------------------
-// FIXME: This works around using scoped interfaces w/ EXPOSE_SINGLE_INTERFACE
+// TODO(d.rattman): This works around using scoped interfaces w/ EXPOSE_SINGLE_INTERFACE
 //-----------------------------------------------------------------------------
 class IMatSystemSurfaceV5 : public MatSystemSurfaceV5::IMatSystemSurface {
  public:

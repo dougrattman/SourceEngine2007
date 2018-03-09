@@ -308,7 +308,7 @@ class FloatImagePyramid_t {
 
   FloatBitMap_t *Level(int lvl) const {
     Assert(lvl < m_nLevels);
-    Assert(lvl < ARRAYSIZE(m_pLevels));
+    Assert(lvl < SOURCE_ARRAYSIZE(m_pLevels));
     return m_pLevels[lvl];
   }
   // rebuild all levels above the specified level

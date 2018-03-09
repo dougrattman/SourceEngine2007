@@ -922,7 +922,7 @@ void CSoundBrowser::OnRemoveSound()
 		CSoundEntry *se = m_CurrentSelection[ i ];
 		Assert( se );
 
-		// FIXME: See if still referenced by a vcd?
+		// TODO(d.rattman): See if still referenced by a vcd?
 
 		g_pSoundEmitterSystem->RemoveSound( se->GetName() );
 		m_AllSounds.FindAndRemove( se );

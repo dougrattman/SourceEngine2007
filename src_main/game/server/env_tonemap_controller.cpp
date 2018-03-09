@@ -6,7 +6,7 @@
 
 #include "entityoutput.h"
 #include "tier1/convar.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar mat_hdr_tonemapscale("mat_hdr_tonemapscale", "1.0", FCVAR_CHEAT,

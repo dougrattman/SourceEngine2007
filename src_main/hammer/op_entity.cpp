@@ -35,7 +35,7 @@
 
 extern GameData *pGD;  // current game data
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #pragma warning(disable : 4355)
@@ -227,7 +227,7 @@ void CPickAnglesTarget::OnNotifyPickAngles(const Vector &vecPos) {
         pEntity->SetKeyValue("pitch", szPitch);
       }
 
-      // FIXME: this should be called automatically, but it isn't
+      // TODO(d.rattman): this should be called automatically, but it isn't
       m_pDlg->OnChangeSmartcontrol();
     }
   }
@@ -429,7 +429,7 @@ BOOL COP_Entity::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult) {
 
       // Now sort by this column.
       m_iSortColumn = std::max(
-          0, std::min(pListView->iSubItem, ARRAYSIZE(g_ColumnSortFunctions) - 1));
+          0, std::min(pListView->iSubItem, SOURCE_ARRAYSIZE(g_ColumnSortFunctions) - 1));
       ResortItems();
     }
   }
@@ -1085,7 +1085,7 @@ void COP_Entity::PresentProperties() {
     // assertion.
     Assert(m_pDisplayClass->GetVariableCount() <= GD_MAX_VARIABLES);
 
-    for (int i = 0; i < ARRAYSIZE(m_VarMap); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(m_VarMap); i++) {
       m_VarMap[i] = -1;
     }
 
@@ -1138,7 +1138,7 @@ void COP_Entity::PresentProperties() {
 void COP_Entity::ClearVarList() {
   m_VarList.DeleteAllItems();
 
-  for (int i = 0; i < ARRAYSIZE(m_VarMap); i++) m_VarMap[i] = -1;
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_VarMap); i++) m_VarMap[i] = -1;
 }
 
 //-----------------------------------------------------------------------------
@@ -1317,7 +1317,7 @@ void COP_Entity::UpdateAnchors() {
       CAnchorDef(IDC_ADDKEYVALUE, k_eSimpleAnchorRightSide),
       CAnchorDef(IDC_REMOVEKEYVALUE, k_eSimpleAnchorRightSide)};
   CUtlVector<CAnchorDef> defs;
-  defs.CopyArray(anchorDefs, ARRAYSIZE(anchorDefs));
+  defs.CopyArray(anchorDefs, SOURCE_ARRAYSIZE(anchorDefs));
 
   for (int i = 0; i < m_SmartControls.Count(); i++) {
     defs.AddToTail(CAnchorDef(m_SmartControls[i]->GetSafeHwnd(),
@@ -1406,7 +1406,7 @@ void COP_Entity::SetCurKey(LPCTSTR pszKey) {
       // found it here -
       SetCurVarListSelection(i);
 
-      // FIXME: Ideally we'd only call OnSelChangeKeyvalues if the selection
+      // TODO(d.rattman): Ideally we'd only call OnSelChangeKeyvalues if the selection
       // index
       //        actually changed, but that makes the keyvalue text not refresh
       //        properly
@@ -1976,7 +1976,7 @@ void COP_Entity::SetSmartControlText(const char *pszText) {
     m_pSmartControl->SetWindowText(pszText);
   }
 
-  // FIXME: this should be called automatically, but it isn't
+  // TODO(d.rattman): this should be called automatically, but it isn't
   OnChangeSmartcontrol();
 }
 
@@ -2333,7 +2333,7 @@ void COP_Entity::SetSmartedit(bool bSet) {
   //
   // Hide or show all controls after and including "delete kv" button.
   //
-  for (int i = 0; i < ARRAYSIZE(g_DumbEditControls); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_DumbEditControls); i++) {
     CWnd *pWnd = GetDlgItem(g_DumbEditControls[i]);
     if (pWnd) pWnd->ShowWindow(m_bSmartedit ? SW_HIDE : SW_SHOW);
   }
@@ -2357,7 +2357,7 @@ void COP_Entity::SetReadOnly(bool bReadOnly) {
   //
   // Hide or show all controls after and including "delete kv" button.
   //
-  for (int i = 0; i < ARRAYSIZE(g_DumbEditControls); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(g_DumbEditControls); i++) {
     CWnd *pWnd = GetDlgItem(g_DumbEditControls[i]);
     if (pWnd) pWnd->EnableWindow(!bReadOnly);
   }
@@ -2493,7 +2493,7 @@ void COP_Entity::BrowseTextures(const char *szFilter) {
     IEditorTexture *pTex =
         g_Textures.FindActiveTexture(pBrowser->m_cTextureWindow.szCurTexture);
 
-    char szName[MAX_PATH];
+    char szName[SOURCE_MAX_PATH];
     if (pTex) {
       pTex->GetShortName(szName);
     } else {
@@ -2781,7 +2781,7 @@ void COP_Entity::OnBrowse(void) {
   //
   switch (m_eEditType) {
     case ivStudioModel: {
-      static char szInitialDir[MAX_PATH] = "models";
+      static char szInitialDir[SOURCE_MAX_PATH] = "models";
       pszInitialDir = szInitialDir;
 
       pDlg->AddFileMask("*.jpg");
@@ -2844,7 +2844,7 @@ void COP_Entity::OnBrowse(void) {
     //
     // Save the default folder for next time.
     //
-    pDlg->GetFilename(pszInitialDir, MAX_PATH);
+    pDlg->GetFilename(pszInitialDir, SOURCE_MAX_PATH);
     char *pchSlash = strrchr(pszInitialDir, '\\');
     if (pchSlash != NULL) {
       *pchSlash = '\0';
@@ -2854,7 +2854,7 @@ void COP_Entity::OnBrowse(void) {
       //
       // Reverse the slashes, because the engine expects them that way.
       //
-      char szTemp[MAX_PATH];
+      char szTemp[SOURCE_MAX_PATH];
       pDlg->GetFilename(szTemp, sizeof(szTemp));
       for (unsigned int i = 0; i < strlen(szTemp); i++) {
         if (szTemp[i] == '\\') {
@@ -3115,7 +3115,7 @@ void COP_Entity::GetFaceIDListsForKey(CMapFaceIDList &FullFaces,
 //			PartialFaces -
 //			pszKey - the name of the key.
 //-----------------------------------------------------------------------------
-// dvs: FIXME: try to eliminate this function
+// dvs: TODO(d.rattman): try to eliminate this function
 void COP_Entity::GetFaceListsForKey(CMapFaceList &FullFaces,
                                     CMapFaceList &PartialFaces,
                                     const char *pszKey) {
@@ -3655,7 +3655,7 @@ void COP_Entity::GetItemColor(int iItem, COLORREF *pBackgroundColor,
 
 bool COP_Entity::CustomDrawItemValue(const LPDRAWITEMSTRUCT p,
                                      const RECT *pRect) {
-  if (!m_bSmartedit || p->itemID < 0 || p->itemID >= ARRAYSIZE(m_VarMap) ||
+  if (!m_bSmartedit || p->itemID < 0 || p->itemID >= SOURCE_ARRAYSIZE(m_VarMap) ||
       m_VarMap[p->itemID] < 0)
     return false;
 

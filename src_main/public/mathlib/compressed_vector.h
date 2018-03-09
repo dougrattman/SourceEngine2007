@@ -5,27 +5,27 @@
 
 #include <float.h>
 #include <cmath>
-#include <cstdlib>  // For rand(). We really need a library!
+#include <cstdlib>  // std::rand
 
 #include "base/include/base_types.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
-#include "tier0/include/basetypes.h"  // For f32, put this somewhere else?
 #include "tier0/include/dbg.h"
 
-//=========================================================
-// fit a 3D vector into 32 bits
-//=========================================================
-
+// 32 bit vector.
 class Vector32 {
  public:
-  // Construction/destruction:
   Vector32();
   Vector32(f32 X, f32 Y, f32 Z);
 
-  // assignment
   Vector32 &operator=(const Vector &vOther);
-  operator Vector();
+
+  operator Vector() const {
+    static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};    
+    f32 fexp = expScale[exp] / 512.0f;
+    
+    return Vector{(((int)x) - 512) * fexp, (((int)y) - 512) * fexp, (((int)z) - 512) * fexp};
+  }
 
  private:
   u16 x : 10;
@@ -55,23 +55,7 @@ inline Vector32 &Vector32::operator=(const Vector &vOther) {
   return *this;
 }
 
-inline Vector32::operator Vector() {
-  Vector tmp;
-
-  static f32 expScale[4] = {4.0f, 16.0f, 32.f, 64.f};
-
-  f32 fexp = expScale[exp] / 512.0f;
-
-  tmp.x = (((int)x) - 512) * fexp;
-  tmp.y = (((int)y) - 512) * fexp;
-  tmp.z = (((int)z) - 512) * fexp;
-  return tmp;
-}
-
-//=========================================================
-// Fit a unit vector into 32 bits
-//=========================================================
-
+// Unit 32 bits vector.
 class Normal32 {
  public:
   // Construction/destruction:
@@ -80,7 +64,17 @@ class Normal32 {
 
   // assignment
   Normal32 &operator=(const Vector &vOther);
-  operator Vector();
+
+  operator Vector() const {
+    Vector tmp;
+    tmp.x = ((int)x - 16384) * (1 / 16384.0);
+    tmp.y = ((int)y - 16384) * (1 / 16384.0);
+    tmp.z = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y);
+
+    if (zneg) tmp.z = -tmp.z;
+
+    return tmp;
+  }
 
  private:
   u16 x : 15;
@@ -100,30 +94,25 @@ inline Normal32 &Normal32::operator=(const Vector &vOther) {
   return *this;
 }
 
-inline Normal32::operator Vector() {
-  Vector tmp;
-
-  tmp.x = ((int)x - 16384) * (1 / 16384.0);
-  tmp.y = ((int)y - 16384) * (1 / 16384.0);
-  tmp.z = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y);
-  if (zneg) tmp.z = -tmp.z;
-  return tmp;
-}
-
-//=========================================================
-// 64 bit Quaternion
-//=========================================================
-
+// 64 bit Quaternion.
 class Quaternion64 {
  public:
-  // Construction/destruction:
   Quaternion64();
   Quaternion64(f32 X, f32 Y, f32 Z);
 
-  // assignment
-  // Quaternion& operator=(const Quaternion64 &vOther);
   Quaternion64 &operator=(const Quaternion &vOther);
-  operator Quaternion();
+
+  operator Quaternion() const {
+    Quaternion tmp;
+
+    // shift to -1048576, + 1048575, then round down slightly to -1.0 < x < 1.0
+    tmp.x = ((int)x - 1048576) * (1 / 1048576.5f);
+    tmp.y = ((int)y - 1048576) * (1 / 1048576.5f);
+    tmp.z = ((int)z - 1048576) * (1 / 1048576.5f);
+    tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
+    if (wneg) tmp.w = -tmp.w;
+    return tmp;
+  }
 
  private:
   u64 x : 21;
@@ -131,18 +120,6 @@ class Quaternion64 {
   u64 z : 21;
   u64 wneg : 1;
 };
-
-inline Quaternion64::operator Quaternion() {
-  Quaternion tmp;
-
-  // shift to -1048576, + 1048575, then round down slightly to -1.0 < x < 1.0
-  tmp.x = ((int)x - 1048576) * (1 / 1048576.5f);
-  tmp.y = ((int)y - 1048576) * (1 / 1048576.5f);
-  tmp.z = ((int)z - 1048576) * (1 / 1048576.5f);
-  tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
-  if (wneg) tmp.w = -tmp.w;
-  return tmp;
-}
 
 inline Quaternion64 &Quaternion64::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
@@ -154,20 +131,24 @@ inline Quaternion64 &Quaternion64::operator=(const Quaternion &vOther) {
   return *this;
 }
 
-//=========================================================
-// 48 bit Quaternion
-//=========================================================
-
+// 48 bit Quaternion.
 class Quaternion48 {
  public:
-  // Construction/destruction:
   Quaternion48();
   Quaternion48(f32 X, f32 Y, f32 Z);
 
-  // assignment
-  // Quaternion& operator=(const Quaternion48 &vOther);
   Quaternion48 &operator=(const Quaternion &vOther);
-  operator Quaternion();
+
+  operator Quaternion() const {
+    Quaternion tmp;
+
+    tmp.x = ((int)x - 32768) * (1 / 32768.0);
+    tmp.y = ((int)y - 32768) * (1 / 32768.0);
+    tmp.z = ((int)z - 16384) * (1 / 16384.0);
+    tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
+    if (wneg) tmp.w = -tmp.w;
+    return tmp;
+  }
 
  private:
   u16 x : 16;
@@ -175,17 +156,6 @@ class Quaternion48 {
   u16 z : 15;
   u16 wneg : 1;
 };
-
-inline Quaternion48::operator Quaternion() {
-  Quaternion tmp;
-
-  tmp.x = ((int)x - 32768) * (1 / 32768.0);
-  tmp.y = ((int)y - 32768) * (1 / 32768.0);
-  tmp.z = ((int)z - 16384) * (1 / 16384.0);
-  tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
-  if (wneg) tmp.w = -tmp.w;
-  return tmp;
-}
 
 inline Quaternion48 &Quaternion48::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
@@ -197,20 +167,24 @@ inline Quaternion48 &Quaternion48::operator=(const Quaternion &vOther) {
   return *this;
 }
 
-//=========================================================
-// 32 bit Quaternion
-//=========================================================
-
+// 32 bit Quaternion.
 class Quaternion32 {
  public:
-  // Construction/destruction:
   Quaternion32();
   Quaternion32(f32 X, f32 Y, f32 Z);
 
-  // assignment
-  // Quaternion& operator=(const Quaternion48 &vOther);
   Quaternion32 &operator=(const Quaternion &vOther);
-  operator Quaternion();
+
+  operator Quaternion() const {
+    Quaternion tmp;
+
+    tmp.x = ((int)x - 1024) * (1 / 1024.0);
+    tmp.y = ((int)y - 512) * (1 / 512.0);
+    tmp.z = ((int)z - 512) * (1 / 512.0);
+    tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
+    if (wneg) tmp.w = -tmp.w;
+    return tmp;
+  }
 
  private:
   u32 x : 11;
@@ -218,17 +192,6 @@ class Quaternion32 {
   u32 z : 10;
   u32 wneg : 1;
 };
-
-inline Quaternion32::operator Quaternion() {
-  Quaternion tmp;
-
-  tmp.x = ((int)x - 1024) * (1 / 1024.0);
-  tmp.y = ((int)y - 512) * (1 / 512.0);
-  tmp.z = ((int)z - 512) * (1 / 512.0);
-  tmp.w = sqrt(1 - tmp.x * tmp.x - tmp.y * tmp.y - tmp.z * tmp.z);
-  if (wneg) tmp.w = -tmp.w;
-  return tmp;
-}
 
 inline Quaternion32 &Quaternion32::operator=(const Quaternion &vOther) {
   CHECK_VALID(vOther);
@@ -240,34 +203,25 @@ inline Quaternion32 &Quaternion32::operator=(const Quaternion &vOther) {
   return *this;
 }
 
-//=========================================================
-// 16 bit f32
-//=========================================================
+constexpr i32 float32bias = 127;
+constexpr i32 float16bias = 15;
+constexpr f32 maxfloat16bits = 65504.0f;
 
-const int float32bias = 127;
-const int float16bias = 15;
-
-const f32 maxfloat16bits = 65504.0f;
-
+// 16 bit f32.
 class float16 {
  public:
-  // float16() {}
-  // float16( f32 f ) { m_storage.rawWord = ConvertFloatTo16bits(f); }
-
   void Init() { m_storage.rawWord = 0; }
-  //	float16& operator=(const float16 &other) { m_storage.rawWord =
-  // other.m_storage.rawWord; return *this; } 	float16& operator=(const f32
-  //&other) { m_storage.rawWord = ConvertFloatTo16bits(other); return *this; }
-  //	operator u16 () { return m_storage.rawWord; }
-  //	operator f32 () { return Convert16bitFloatTo32bits( m_storage.rawWord
-  //); }
+  
   u16 GetBits() const { return m_storage.rawWord; }
+
   f32 GetFloat() const { return Convert16bitFloatTo32bits(m_storage.rawWord); }
+
   void SetFloat(f32 in) { m_storage.rawWord = ConvertFloatTo16bits(in); }
 
   bool IsInfinity() const {
     return m_storage.bits.biased_exponent == 31 && m_storage.bits.mantissa == 0;
   }
+
   bool IsNaN() const {
     return m_storage.bits.biased_exponent == 31 && m_storage.bits.mantissa != 0;
   }
@@ -275,13 +229,10 @@ class float16 {
   bool operator==(const float16 other) const {
     return m_storage.rawWord == other.m_storage.rawWord;
   }
+
   bool operator!=(const float16 other) const {
     return m_storage.rawWord != other.m_storage.rawWord;
   }
-
-  //	bool operator< (const f32 other) const	   { return GetFloat() <
-  // other; } 	bool operator> (const f32 other) const	   { return
-  // GetFloat() > other; }
 
  protected:
   union float32bits {
@@ -305,6 +256,7 @@ class float16 {
   static bool IsNaN(float16bits in) {
     return in.bits.biased_exponent == 31 && in.bits.mantissa != 0;
   }
+
   static bool IsInfinity(float16bits in) {
     return in.bits.biased_exponent == 31 && in.bits.mantissa == 0;
   }
@@ -416,21 +368,18 @@ class float16_with_assign : public float16 {
     m_storage.rawWord = ((float16_with_assign &)other).m_storage.rawWord;
     return *this;
   }
+
   float16 &operator=(const f32 &other) {
     m_storage.rawWord = ConvertFloatTo16bits(other);
     return *this;
   }
-  //	operator u16 () const { return m_storage.rawWord; }
+
   operator f32() const { return Convert16bitFloatTo32bits(m_storage.rawWord); }
 };
 
-//=========================================================
-// Fit a 3D vector in 48 bits
-//=========================================================
-
+// 48 bit 3D vector.
 class Vector48 {
  public:
-  // Construction/destruction:
   Vector48() {}
   Vector48(f32 X, f32 Y, f32 Z) {
     x.SetFloat(X);
@@ -438,9 +387,11 @@ class Vector48 {
     z.SetFloat(Z);
   }
 
-  // assignment
   Vector48 &operator=(const Vector &vOther);
-  operator Vector();
+
+  operator Vector() const {
+    return Vector{x.GetFloat(), y.GetFloat(), z.GetFloat()};
+  }
 
   const f32 operator[](int i) const {
     return (((float16 *)this)[i]).GetFloat();
@@ -460,59 +411,34 @@ inline Vector48 &Vector48::operator=(const Vector &vOther) {
   return *this;
 }
 
-inline Vector48::operator Vector() {
-  Vector tmp;
-
-  tmp.x = x.GetFloat();
-  tmp.y = y.GetFloat();
-  tmp.z = z.GetFloat();
-
-  return tmp;
-}
-
-//=========================================================
-// Fit a 2D vector in 32 bits
-//=========================================================
-
+// 32 bit 2D vector.
 class Vector2d32 {
  public:
-  // Construction/destruction:
   Vector2d32() {}
   Vector2d32(f32 X, f32 Y) {
     x.SetFloat(X);
     y.SetFloat(Y);
   }
 
-  // assignment
   Vector2d32 &operator=(const Vector &vOther);
   Vector2d32 &operator=(const Vector2D &vOther);
 
-  operator Vector2D();
+  operator Vector2D() const {
+    return Vector2D{x.GetFloat(), y.GetFloat()};
+  }
 
-  void Init(f32 ix = 0.f, f32 iy = 0.f);
+  void Init(f32 ix = 0.f, f32 iy = 0.f) {
+    x.SetFloat(ix);
+    y.SetFloat(iy);
+  }
 
   float16_with_assign x;
   float16_with_assign y;
 };
 
 inline Vector2d32 &Vector2d32::operator=(const Vector2D &vOther) {
-  x.SetFloat(vOther.x);
-  y.SetFloat(vOther.y);
+  Init(vOther.x, vOther.y);
   return *this;
-}
-
-inline Vector2d32::operator Vector2D() {
-  Vector2D tmp;
-
-  tmp.x = x.GetFloat();
-  tmp.y = y.GetFloat();
-
-  return tmp;
-}
-
-inline void Vector2d32::Init(f32 ix, f32 iy) {
-  x.SetFloat(ix);
-  y.SetFloat(iy);
 }
 
 #endif  // SOURCE_MATHLIB_COMPRESSED_VECTOR_H_

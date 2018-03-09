@@ -289,7 +289,7 @@ void CVMTDoc::CopyParamsFromVMT( CDmElement *pVMT )
 void CVMTDoc::SetupPreviewMaterial( )
 {
 	// Extract a material name from the material
-	char pLocalName[MAX_PATH];
+	char pLocalName[SOURCE_MAX_PATH];
 
 	// relative paths can be passed in for in-game material picking
 	if ( !g_pFileSystem->FullPathToRelativePath( m_pFileName, pLocalName, sizeof(pLocalName) ) )
@@ -301,7 +301,7 @@ void CVMTDoc::SetupPreviewMaterial( )
 		goto noMaterialConnection;
 
 	// Skip the '/' also
-	char pMaterialName[MAX_PATH];
+	char pMaterialName[SOURCE_MAX_PATH];
 	Q_StripExtension( pLocalName + 10, pMaterialName, sizeof(pMaterialName) );
 	IMaterial *pMaterial = g_pMaterialSystem->FindMaterial( pMaterialName, "Editable material", false );
 	if ( !pMaterial || pMaterial->IsErrorMaterial() )
@@ -348,7 +348,7 @@ bool CVMTDoc::LoadFromFile( const char *pFileName )
 	if ( !pVMT )
 		return false;
 
-	// FIXME: This is necessary so that all shader parameters appear in
+	// TODO(d.rattman): This is necessary so that all shader parameters appear in
 	// the same order, with the same type, as what you'd get using File->New.
 	// If we added a dependency to the material system into dmserializers,
 	// we could avoid this work here (I think!).
@@ -424,7 +424,7 @@ CDmElement* CVMTDoc::ExtractDefaultParameters( )
 			continue;
 		}
 
-		// FIXME: We can't do this.. the defaults in the strings need to be changed to 
+		// TODO(d.rattman): We can't do this.. the defaults in the strings need to be changed to 
 		// make it so they actually match the true defaults
 		continue;
 
@@ -432,7 +432,7 @@ CDmElement* CVMTDoc::ExtractDefaultParameters( )
 		nCount = m_pCurrentIShader->GetNumParams();
 		for ( i = 0; i < nCount; ++i )
 		{
-			// FIXME: Check type matches
+			// TODO(d.rattman): Check type matches
 			if ( Q_stricmp( pShaderParam, m_pCurrentIShader->GetParamName( i ) ) )
 				continue;
 
@@ -590,7 +590,7 @@ void CVMTDoc::RemoveUnusedShaderParams( CDmElement *pMaterial, IShader *pShader,
 		nCount = pShader->GetNumParams();
 		for ( i = 0; i < nCount; ++i )
 		{
-			// FIXME: Check type matches
+			// TODO(d.rattman): Check type matches
 			if ( !Q_stricmp( pShaderParam, pShader->GetParamName( i ) ) )
 				break;
 		}
@@ -610,7 +610,7 @@ void CVMTDoc::RemoveUnusedShaderParams( CDmElement *pMaterial, IShader *pShader,
 			nCount = pOldShader->GetNumParams();
 			for ( i = 0; i < nCount; ++i )
 			{
-				// FIXME: Check type matches
+				// TODO(d.rattman): Check type matches
 				if ( Q_stricmp( pShaderParam, pOldShader->GetParamName( i ) ) )
 					continue;
 
@@ -717,7 +717,7 @@ CDmAttribute* CVMTDoc::AddAttributeForShaderParameter( CDmElement *pMaterial, co
 //-----------------------------------------------------------------------------
 bool CVMTDoc::SetVMatrixParamValue( CDmAttribute *pAttribute, const char *pValue )
 {
-	// FIXME: Change default strings to match DME?
+	// TODO(d.rattman): Change default strings to match DME?
 	// Then we could remove this crap
 	VMatrix mat;
 	int count = sscanf( pValue, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
@@ -864,7 +864,7 @@ bool CVMTDoc::SetColorParamValue( CDmAttribute *pAttribute, const char *pValue )
 //-----------------------------------------------------------------------------
 void CVMTDoc::SetAttributeValueFromDefault( CDmElement *pMaterial, CDmAttribute *pAttribute, const char *pValue )
 {
-	// FIXME: Change default strings to match DME?
+	// TODO(d.rattman): Change default strings to match DME?
 	// Then we could remove this crap
 	switch ( pAttribute->GetType() )
 	{

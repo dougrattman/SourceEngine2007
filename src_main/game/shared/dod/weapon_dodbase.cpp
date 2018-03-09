@@ -1137,7 +1137,7 @@ void CWeaponDODBase::Smack()
 
 		lastspeed = speed;
 
-		//FIXME: This maximum speed value must come from the server.
+		//TODO(d.rattman): This maximum speed value must come from the server.
 		//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
 		float bob_offset = RemapVal( speed, 0, 320, 0.0f, 1.0f );

@@ -44,7 +44,7 @@ protected:
 	
 	typedef struct
 	{
-		char filename[_MAX_PATH];
+		char filename[SOURCE_MAX_PATH];
 		CBuySubMenu *panel;
 	} SubMenuEntry_t;
 

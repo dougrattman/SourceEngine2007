@@ -8,7 +8,7 @@
 
 struct MovieInfo_t;
 
-abstract_class IVideoMode {
+the_interface IVideoMode {
  public:
   virtual ~IVideoMode() {}
 

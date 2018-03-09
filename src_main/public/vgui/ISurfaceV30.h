@@ -362,7 +362,7 @@ namespace SurfaceV30
 } // end namespace
 
 //-----------------------------------------------------------------------------
-// FIXME: This works around using scoped interfaces w/ EXPOSE_SINGLE_INTERFACE
+// TODO(d.rattman): This works around using scoped interfaces w/ EXPOSE_SINGLE_INTERFACE
 //-----------------------------------------------------------------------------
 class ISurfaceV30 : public SurfaceV30::ISurface
 {

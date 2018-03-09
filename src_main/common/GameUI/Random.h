@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Generalized 32-bit random number generator
 //			Range is 0x00000000 - 0x7FFFFFFF

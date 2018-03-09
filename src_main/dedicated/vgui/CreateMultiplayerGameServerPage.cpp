@@ -22,7 +22,7 @@
 #include "vgui_controls/MessageBox.h"
 #include "vstdlib/random.h"  // for SRC
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -402,7 +402,7 @@ void CCreateMultiplayerGameServerPage::OnCommand(const char *cmd) {
             CUtlVector<unsigned int> depList;
             MountDependencies(iAppId, depList);
 
-            char gameinfoFilename[MAX_PATH];
+            char gameinfoFilename[SOURCE_MAX_PATH];
             Q_snprintf(gameinfoFilename, sizeof(gameinfoFilename),
                        "%s\\gameinfo.txt", m_iServer.gameDir);
             g_pFullFileSystem->GetLocalCopy(gameinfoFilename);
@@ -432,7 +432,7 @@ bool CCreateMultiplayerGameServerPage::LaunchOldDedicatedServer(
     if (iSteamAppId != -1) {
       if (IsEp1EraAppID(iSteamAppId)) {
         // Old-skool app. Launch the old dedicated server.
-        char steamDir[MAX_PATH];
+        char steamDir[SOURCE_MAX_PATH];
         if (!system()->GetRegistryString(
                 "HKEY_CURRENT_USER\\Software\\Valve\\Steam\\SteamPath",
                 steamDir, sizeof(steamDir)))
@@ -499,7 +499,7 @@ void CCreateMultiplayerGameServerPage::LoadMODList() {
   LoadModListInDirectory(".");
 
   // Also, check in SourceMods.
-  char sourceModsDir[MAX_PATH];
+  char sourceModsDir[SOURCE_MAX_PATH];
   if (system()->GetRegistryString(
           "HKEY_CURRENT_USER\\Software\\Valve\\Steam\\SourceModInstallPath",
           sourceModsDir, sizeof(sourceModsDir)))
@@ -510,7 +510,7 @@ void CCreateMultiplayerGameServerPage::LoadMODList() {
 
 void CCreateMultiplayerGameServerPage::LoadModListInDirectory(
     const char *pDirectoryName) {
-  char searchString[MAX_PATH * 2];
+  char searchString[SOURCE_MAX_PATH * 2];
   Q_strncpy(searchString, pDirectoryName, sizeof(searchString));
   Q_AppendSlash(searchString, sizeof(searchString));
   Q_strncat(searchString, "*.*", sizeof(searchString), COPY_ALL_CHARACTERS);
@@ -521,7 +521,7 @@ void CCreateMultiplayerGameServerPage::LoadModListInDirectory(
   while (filename) {
     // add to the mod list
     if (filename[0] != '.' && g_pFullFileSystem->FindIsDirectory(findHandle)) {
-      char fullFilename[MAX_PATH];
+      char fullFilename[SOURCE_MAX_PATH];
       if (Q_stricmp(pDirectoryName, ".") == 0) {
         // If we don't do this, then the games in hlds_steamgames.vdf will get
         // listed twice since their gamedir is listed as "cstrike" and "hl2mp",

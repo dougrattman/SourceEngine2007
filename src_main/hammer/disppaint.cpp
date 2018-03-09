@@ -16,7 +16,7 @@
 #include "History.h"
 #include "DispSew.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DISPPAINT_RADIUS_OUTER_CLAMP	0.01f

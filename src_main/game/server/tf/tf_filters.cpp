@@ -8,7 +8,7 @@
 #include "team_control_point.h"
 #include "tf_gamerules.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //=============================================================================

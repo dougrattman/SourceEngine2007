@@ -26,7 +26,7 @@
 #include "tier1/keyvalues.h"
 #include "tier3/tier3.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -434,7 +434,7 @@ bool CDmeMesh::AddVertexDelta(CDmeVertexData *pBaseState, void *pVertexData,
     const CUtlVector<int> &list =
         pBaseState->FindVertexIndicesFromDataIndex(nBaseFieldIndex, nDataIndex);
     Assert(list.Count() > 0);
-    // FIXME: Average everything in the list.. shouldn't be necessary though
+    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
     float flSpeed = speedDelta.Get(speedIndices.Get(list[0]));
     float flActualWeight = Lerp(flSpeed, flLaggedWeight, flWeight);
 
@@ -522,7 +522,7 @@ bool CDmeMesh::AddStereoVertexDelta(
       const CUtlVector<int> &list = pBaseState->FindVertexIndicesFromDataIndex(
           nBaseFieldIndex, nDataIndex);
       Assert(list.Count() > 0);
-      // FIXME: Average everything in the list.. shouldn't be necessary though
+      // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
       float flRightAmount = balanceDelta[balanceIndices[list[0]]];
       float flWeight = Lerp(flRightAmount, flLeftWeight, flRightWeight);
 
@@ -547,7 +547,7 @@ bool CDmeMesh::AddStereoVertexDelta(
     const CUtlVector<int> &list =
         pBaseState->FindVertexIndicesFromDataIndex(nBaseFieldIndex, nDataIndex);
     Assert(list.Count() > 0);
-    // FIXME: Average everything in the list.. shouldn't be necessary though
+    // TODO(d.rattman): Average everything in the list.. shouldn't be necessary though
     float flRightAmount = balanceDelta[balanceIndices[list[0]]];
     float flWeight = Lerp(flRightAmount, flLeftWeight, flRightWeight);
     float flLaggedWeight =
@@ -617,7 +617,7 @@ bool CDmeMesh::BuildDeltaMesh(int nVertices,
         flLeftWeightLagged <= 0.0f && flRightWeightLagged <= 0.0f)
       continue;
 
-    // FIXME: Need to make balanced versions of texcoord + color
+    // TODO(d.rattman): Need to make balanced versions of texcoord + color
     bool bWrinkle;
     CDmeVertexDeltaData *pDeltaState = GetDeltaState(i);
     AddStereoVertexDelta<Vector>(pBindState, &pRenderDelta->m_vecDeltaPosition,
@@ -1384,10 +1384,10 @@ VertexFormat_t CDmeMesh::ComputeHwMeshVertexFormat(void) {
                                 VERTEX_BONEWEIGHT(2) | VERTEX_BONE_INDEX |
                                 (bIsDX7 ? 0 : VERTEX_USERDATA_SIZE(4));
 
-  // FIXME: set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
+  // TODO(d.rattman): set VERTEX_FORMAT_COMPRESSED if there are no artifacts and if it
   // saves enough memory (use 'mem_dumpvballocs') vertexFormat |=
   // VERTEX_FORMAT_COMPRESSED;
-  // FIXME: check for and strip unused vertex elements (see 'bHasNormals', etc,
+  // TODO(d.rattman): check for and strip unused vertex elements (see 'bHasNormals', etc,
   // in CreateHwMesh below)
 
   return vertexFormat;
@@ -1480,7 +1480,7 @@ IMesh *CDmeMesh::CreateHwMesh(CDmeFaceSet *pFaceSet) {
       meshBuilder.Color4ub(255, 255, 255, 255);
     }
 
-    // FIXME: Note that this will break once we exceeed the max joint count
+    // TODO(d.rattman): Note that this will break once we exceeed the max joint count
     // that the hardware can handle
     const float *pJointWeight = pBind->GetJointWeights(vi);
     const int *pJointIndices = pBind->GetJointIndices(vi);
@@ -1526,7 +1526,7 @@ void CDmeMesh::ComputeTriangulatedIndices(const CDmeVertexData *pBaseState,
                                           CDmeFaceSet *pFaceSet,
                                           int nFirstIndex, int *pIndices,
                                           int nOutCount) {
-  // FIXME: Come up with a more efficient way of computing this
+  // TODO(d.rattman): Come up with a more efficient way of computing this
   // This involves a bunch of recomputation of distances
   float flMinDistance = FLT_MAX;
   int nMinIndex = 0;
@@ -1744,7 +1744,7 @@ void CDmeMesh::ComputeDefaultTangentData(CDmeVertexData *pVertexData,
       pVertexData->FindFieldIndex(CDmeVertexData::FIELD_TEXCOORD);
   if (posField < 0 || uvField < 0 || normalField < 0) return;
 
-  // FIXME: Need to do a pass to make sure no vertex is referenced by
+  // TODO(d.rattman): Need to do a pass to make sure no vertex is referenced by
   // multiple facesets that have different materials in them.
   // In that case, we need to add extra copies of that vertex and modify
   // the face set data to refer to the new vertices
@@ -1762,7 +1762,7 @@ void CDmeMesh::ComputeDefaultTangentData(CDmeVertexData *pVertexData,
 
   ComputeTriangleTangets(pVertexData, triangles);
 
-  // FIXME: We could do a pass to determine the unique combinations of
+  // TODO(d.rattman): We could do a pass to determine the unique combinations of
   // position + tangent indices in the vertex data. We only need to have
   // a unique tangent for each of these unique vertices. For simplicity
   // (and speed), I'll assume all tangents are unique per vertex.
@@ -3058,7 +3058,7 @@ CDmeVertexDeltaData *CDmeMesh::ModifyOrCreateDeltaStateFromBaseState(
 
   if (nSuperior > 0) {
     UniqueId_t id;
-    char idBuf[MAX_PATH];
+    char idBuf[SOURCE_MAX_PATH];
 
     CDmeVertexData *pTmpBaseState = NULL;
     do {

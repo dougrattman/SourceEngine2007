@@ -45,7 +45,7 @@ public:
 	DECLARE_DATADESC();
 };
 
-abstract_class CBaseNPCMaker : public CBaseEntity
+the_interface CBaseNPCMaker : public CBaseEntity
 {
 public:
 	DECLARE_CLASS( CBaseNPCMaker, CBaseEntity );

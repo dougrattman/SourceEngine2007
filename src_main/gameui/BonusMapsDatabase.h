@@ -149,7 +149,7 @@ private:
 	bool	m_bHasLoadedSaveData;
 
 	int		m_iDirDepth;
-	char	m_szCurrentPath[_MAX_PATH];
+	char	m_szCurrentPath[SOURCE_MAX_PATH];
 	float	m_fCurrentCompletion;
 	int		m_iCompletableLevels;
 

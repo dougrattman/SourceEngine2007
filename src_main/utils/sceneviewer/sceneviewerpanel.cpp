@@ -469,7 +469,7 @@ void CSceneViewerPanel::SetupFileOpenDialog(
 {
 	if ( m_fileDirectory.IsEmpty() )
 	{
-		char pStartingDir[ MAX_PATH ];
+		char pStartingDir[ SOURCE_MAX_PATH ];
 		if ( !vgui::system()->GetRegistryString(
 			"HKEY_CURRENT_USER\\Software\\Valve\\sceneviewer\\dmxfiles\\opendir", pStartingDir, sizeof( pStartingDir ) ) )
 		{
@@ -515,7 +515,7 @@ bool CSceneViewerPanel::OnReadFileFromDisk(
 {
 	// Regardless if the file sucessfully loaded or not, save the directory portion to use next time
 	{
-		char buf[ MAX_PATH ];
+		char buf[ SOURCE_MAX_PATH ];
 		Q_strncpy( buf, pFileName, sizeof( buf ) );
 		Q_FixSlashes( buf );
 		Q_StripFilename( buf );
@@ -1148,14 +1148,14 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 	FieldIndex_t speed = pVertexData->CreateField( CDmeVertexData::FIELD_MORPH_SPEED );
 	pVertexData->CreateJointWeightsAndIndices( nPerVertexBoneCount, &jointWeight, &jointIndex );
 
-	int nPosCount = ARRAYSIZE(g_pPosition);
-	int nNormCount = ARRAYSIZE(g_pNormal);
-	int nUVCount = ARRAYSIZE(g_pUV);
-	int nColorCount = ARRAYSIZE(g_pColor);
-	int nBalanceCount = ARRAYSIZE(g_pBalance);
-	int nSpeedCount = ARRAYSIZE(g_pSpeed);
-	int nBoneIndices = ARRAYSIZE(g_pBoneIndices);
-	int nBoneWeights = ARRAYSIZE(g_pBoneWeights);
+	int nPosCount = SOURCE_ARRAYSIZE(g_pPosition);
+	int nNormCount = SOURCE_ARRAYSIZE(g_pNormal);
+	int nUVCount = SOURCE_ARRAYSIZE(g_pUV);
+	int nColorCount = SOURCE_ARRAYSIZE(g_pColor);
+	int nBalanceCount = SOURCE_ARRAYSIZE(g_pBalance);
+	int nSpeedCount = SOURCE_ARRAYSIZE(g_pSpeed);
+	int nBoneIndices = SOURCE_ARRAYSIZE(g_pBoneIndices);
+	int nBoneWeights = SOURCE_ARRAYSIZE(g_pBoneWeights);
 	Assert( nBoneIndices == nPerVertexBoneCount * nPosCount );
 	Assert( nBoneWeights == nPerVertexBoneCount * nPosCount );
 
@@ -1183,12 +1183,12 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 	pVertexData->AddVertexData( speed, nSpeedCount );
 	pVertexData->SetVertexData( speed, 0, nSpeedCount, AT_FLOAT, g_pSpeed );
 
-	int nIndexCount = ARRAYSIZE(g_pPositionIndices);
-	Assert( nIndexCount == ARRAYSIZE(g_pNormalIndices) );
-	Assert( nIndexCount == ARRAYSIZE(g_pUVIndices) );
-	Assert( nIndexCount == ARRAYSIZE(g_pColorIndices) );
-	Assert( nIndexCount == ARRAYSIZE(g_pBalanceIndices) );
-	Assert( nIndexCount == ARRAYSIZE(g_pSpeedIndices) );
+	int nIndexCount = SOURCE_ARRAYSIZE(g_pPositionIndices);
+	Assert( nIndexCount == SOURCE_ARRAYSIZE(g_pNormalIndices) );
+	Assert( nIndexCount == SOURCE_ARRAYSIZE(g_pUVIndices) );
+	Assert( nIndexCount == SOURCE_ARRAYSIZE(g_pColorIndices) );
+	Assert( nIndexCount == SOURCE_ARRAYSIZE(g_pBalanceIndices) );
+	Assert( nIndexCount == SOURCE_ARRAYSIZE(g_pSpeedIndices) );
 
 	pVertexData->AddVertexIndices( nIndexCount );
 	pVertexData->SetVertexIndices( pos, 0, nIndexCount, g_pPositionIndices );
@@ -1198,14 +1198,14 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 	pVertexData->SetVertexIndices( balance, 0, nIndexCount, g_pBalanceIndices );
 	pVertexData->SetVertexIndices( speed, 0, nIndexCount, g_pSpeedIndices );
 
-	int nFaceIndexCount = ARRAYSIZE(g_pFaceIndices);
+	int nFaceIndexCount = SOURCE_ARRAYSIZE(g_pFaceIndices);
 	pFaceSet->AddIndices( nFaceIndexCount );
 	pFaceSet->SetIndices( 0, nFaceIndexCount, g_pFaceIndices );
 	pFaceSet->SetMaterial( pMaterial );
 
 	CDmeVertexDeltaData *pDeltaData = pMesh->FindOrCreateDeltaState( "delta1" );
 	FieldIndex_t deltaPos = pDeltaData->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	int nDeltaPosCount = ARRAYSIZE( g_pPositionDelta );
+	int nDeltaPosCount = SOURCE_ARRAYSIZE( g_pPositionDelta );
 
 	pDeltaData->AddVertexData( deltaPos, nDeltaPosCount );
 	pDeltaData->SetVertexData( deltaPos, 0, nDeltaPosCount, AT_VECTOR3, g_pPositionDelta );
@@ -1213,7 +1213,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	pDeltaData = pMesh->FindOrCreateDeltaState( "delta1a" );
 	deltaPos = pDeltaData->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	nDeltaPosCount = ARRAYSIZE( g_pPositionDelta1a );
+	nDeltaPosCount = SOURCE_ARRAYSIZE( g_pPositionDelta1a );
 
 	pDeltaData->AddVertexData( deltaPos, nDeltaPosCount );
 	pDeltaData->SetVertexData( deltaPos, 0, nDeltaPosCount, AT_VECTOR3, g_pPositionDelta1a );
@@ -1221,7 +1221,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	CDmeVertexDeltaData *pDeltaData2 = pMesh->FindOrCreateDeltaState( "delta2" );
 	FieldIndex_t deltaPos2 = pDeltaData2->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	int nDeltaPosCount2 = ARRAYSIZE( g_pPositionDelta2 );
+	int nDeltaPosCount2 = SOURCE_ARRAYSIZE( g_pPositionDelta2 );
 
 	pDeltaData2->AddVertexData( deltaPos2, nDeltaPosCount2 );
 	pDeltaData2->SetVertexData( deltaPos2, 0, nDeltaPosCount2, AT_VECTOR3, g_pPositionDelta2 );
@@ -1229,7 +1229,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	pDeltaData2 = pMesh->FindOrCreateDeltaState( "delta2a" );
 	deltaPos2 = pDeltaData2->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	nDeltaPosCount2 = ARRAYSIZE( g_pPositionDelta2a );
+	nDeltaPosCount2 = SOURCE_ARRAYSIZE( g_pPositionDelta2a );
 
 	pDeltaData2->AddVertexData( deltaPos2, nDeltaPosCount2 );
 	pDeltaData2->SetVertexData( deltaPos2, 0, nDeltaPosCount2, AT_VECTOR3, g_pPositionDelta2a );
@@ -1237,7 +1237,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	pDeltaData2 = pMesh->FindOrCreateDeltaState( "delta2c" );
 	deltaPos2 = pDeltaData2->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	nDeltaPosCount2 = ARRAYSIZE( g_pPositionDelta2c );
+	nDeltaPosCount2 = SOURCE_ARRAYSIZE( g_pPositionDelta2c );
 
 	pDeltaData2->AddVertexData( deltaPos2, nDeltaPosCount2 );
 	pDeltaData2->SetVertexData( deltaPos2, 0, nDeltaPosCount2, AT_VECTOR3, g_pPositionDelta2c );
@@ -1245,7 +1245,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	CDmeVertexDeltaData *pDeltaData12 = pMesh->FindOrCreateDeltaState( "delta1_delta2" );
 	FieldIndex_t deltaPos12 = pDeltaData12->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	int nDeltaPosCount12 = ARRAYSIZE( g_pPositionDelta12 );
+	int nDeltaPosCount12 = SOURCE_ARRAYSIZE( g_pPositionDelta12 );
 
 	pDeltaData12->AddVertexData( deltaPos12, nDeltaPosCount12 );
 	pDeltaData12->SetVertexData( deltaPos12, 0, nDeltaPosCount12, AT_VECTOR3, g_pPositionDelta12 );
@@ -1253,7 +1253,7 @@ CDmeModel *CSceneViewerPanel::CreateNewMeshDag( CDmeMesh **ppMesh, DmFileId_t fi
 
 	CDmeVertexDeltaData *pDeltaData3 = pMesh->FindOrCreateDeltaState( "delta3" );
 	FieldIndex_t deltaPos3 = pDeltaData3->CreateField( CDmeVertexDeltaData::FIELD_POSITION );
-	int nDeltaPosCount3 = ARRAYSIZE( g_pPositionDelta3 );
+	int nDeltaPosCount3 = SOURCE_ARRAYSIZE( g_pPositionDelta3 );
 
 	pDeltaData3->AddVertexData( deltaPos3, nDeltaPosCount3 );
 	pDeltaData3->SetVertexData( deltaPos3, 0, nDeltaPosCount3, AT_VECTOR3, g_pPositionDelta3 );
@@ -1389,8 +1389,8 @@ void CSceneViewerPanel::OnNew()
 
 	const char *ppDominators[] = { "delta1", "delta2" };
 	const char *ppSuppressors[] = { "delta3" };
-	pComboOp->AddDominationRule( ARRAYSIZE(ppDominators), ppDominators, ARRAYSIZE(ppSuppressors), ppSuppressors );
-	pComboOp->AddDominationRule( ARRAYSIZE(ppSuppressors), ppSuppressors, ARRAYSIZE(ppDominators), ppDominators );
+	pComboOp->AddDominationRule( SOURCE_ARRAYSIZE(ppDominators), ppDominators, SOURCE_ARRAYSIZE(ppSuppressors), ppSuppressors );
+	pComboOp->AddDominationRule( SOURCE_ARRAYSIZE(ppSuppressors), ppSuppressors, SOURCE_ARRAYSIZE(ppDominators), ppDominators );
 
 	CDmeAnimationList *pAnimationList = CreateNewJointAnimation( pModel );
 	CDmeAnimationList *pVertexAnimationList = CreateNewVertexAnimation( pMesh, pComboOp );

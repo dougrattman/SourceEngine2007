@@ -11,7 +11,7 @@
 #include "TemplateEntities.h"
 #include "point_template.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define SF_ENTMAKER_AUTOSPAWN				0x0001

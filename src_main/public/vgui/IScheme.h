@@ -61,7 +61,7 @@ class ISchemeManager : public IBaseInterface {
   // This can only be called at certain times, like during paint()
   // It will assert-fail if you call it at the wrong time...
 
-  // FIXME: This interface should go away!!! It's an icky back-door
+  // TODO(d.rattman): This interface should go away!!! It's an icky back-door
   // If you're using this interface, try instead to cache off the information
   // in ApplySchemeSettings
   virtual IScheme *GetIScheme(HScheme scheme) = 0;

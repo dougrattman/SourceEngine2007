@@ -5,18 +5,18 @@
 #include <cstdio>
 #include "tier0/include/dbg.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
-#ifdef _LINUX
-#define __stdcall
+#ifdef OS_POSIX
+#define SOURCE_STDCALL
 #endif
 
-#ifndef _LINUX
+#ifndef OS_POSIX
 // NOTE - linux doesn't need any of this code!
 
 extern "C" {
-extern void __stdcall Sleep(unsigned long ms);
+extern void SOURCE_STDCALL Sleep(unsigned long ms);
 };
 
 class CFileRead {
@@ -372,7 +372,7 @@ void CScratchPad3D::Clear() {
   while ((fp = m_pFileSystem->Open(m_pFilename, "wb")) == NULL) {
 #ifdef _WIN32
     Sleep(5);
-#elif _LINUX
+#elif OS_POSIX
     usleep(5);
 #endif
   }
@@ -388,7 +388,7 @@ void CScratchPad3D::Flush() {
   while ((fp = m_pFileSystem->Open(m_pFilename, "ab+")) == NULL) {
 #ifdef _WIN32
     Sleep(5);
-#elif _LINUX
+#elif OS_POSIX
     usleep(5);
 #endif
   }
@@ -543,4 +543,4 @@ IScratchPad3D *ScratchPad3D_Create(char const *pFilename) {
   CScratchPad3D *pRet = new CScratchPad3D(pFilename, pFileSystem, true);
   return pRet;
 }
-#endif  // _LINUX
+#endif  // OS_POSIX

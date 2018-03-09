@@ -50,7 +50,7 @@
 
 
 #include "cs_blackmarket.h"
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -388,7 +388,7 @@ ConVar cl_autohelp(
 
 	void InitBodyQue(void)
 	{
-		// FIXME: Make this work
+		// TODO(d.rattman): Make this work
 	}
 
 
@@ -603,7 +603,7 @@ ConVar cl_autohelp(
 		m_bDontUploadStats = false;
 
 		// Create the team managers
-		for ( int i = 0; i < ARRAYSIZE( sTeamNames ); i++ )
+		for ( int i = 0; i < SOURCE_ARRAYSIZE( sTeamNames ); i++ )
 		{
 			CTeam *pTeam = static_cast<CTeam*>(CreateEntityByName( "cs_team_manager" ));
 			pTeam->Init( sTeamNames[i], i );

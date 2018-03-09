@@ -1,6 +1,6 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "winlite.h"
+#include "base/include/windows/windows_light.h"
 
 #include <winsock2.h>
 
@@ -163,7 +163,7 @@ class CWorkerMulticastListener {
     const void *pChunks[4] = {packetID, &requestID, (void *)pFilename, pPathID};
     int chunkLengths[4] = {sizeof(packetID), sizeof(requestID),
                            strlen(pFilename) + 1, strlen(pPathID) + 1};
-    VMPI_SendChunks(pChunks, chunkLengths, ARRAYSIZE(pChunks), 0);
+    VMPI_SendChunks(pChunks, chunkLengths, SOURCE_ARRAYSIZE(pChunks), 0);
 
     // Wait for the file ID to come back.
     CFileResponse response;
@@ -317,10 +317,10 @@ class CWorkerMulticastListener {
 
     // Setup a filename to print some debug spew with.
     char printableFilename[58];
-    if (V_strlen(pFilename) > ARRAYSIZE(printableFilename) - 1) {
+    if (V_strlen(pFilename) > SOURCE_ARRAYSIZE(printableFilename) - 1) {
       V_strncpy(printableFilename, "[...]", sizeof(printableFilename));
       V_strncat(printableFilename,
-                &pFilename[V_strlen(pFilename) - ARRAYSIZE(printableFilename) +
+                &pFilename[V_strlen(pFilename) - SOURCE_ARRAYSIZE(printableFilename) +
                            1 + V_strlen(printableFilename)],
                 sizeof(printableFilename));
     } else {
@@ -412,7 +412,7 @@ class CWorkerMulticastListener {
         pTestFile->m_bGotCompressedSize = true;
         pTestFile->m_CompressedData.SetSize(pInfo->m_CompressedSize);
         pTestFile->m_UncompressedData.SetSize(pInfo->m_UncompressedSize);
-        pTestFile->m_ChunksReceived.SetSize(PAD_NUMBER(pInfo->m_nChunks, 8) /
+        pTestFile->m_ChunksReceived.SetSize(SOURCE_PAD_NUMBER(pInfo->m_nChunks, 8) /
                                             8);
         pTestFile->m_nChunksToReceive = pInfo->m_nChunks;
         memset(pTestFile->m_ChunksReceived.Base(), 0,

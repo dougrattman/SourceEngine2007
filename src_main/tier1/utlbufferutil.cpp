@@ -17,7 +17,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlstring.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -37,7 +37,7 @@ void SetSerializationArrayDelimiter(const char *pDelimiter) {
 static void SerializeFloat(CUtlBuffer &buf, float f) {
   Assert(buf.IsText());
 
-  // FIXME: Print this in a way that we never lose precision
+  // TODO(d.rattman): Print this in a way that we never lose precision
   char pTemp[256];
   int nLen = Q_snprintf(pTemp, sizeof(pTemp), "%.10f", f);
   while (nLen > 0 && pTemp[nLen - 1] == '0') {
@@ -114,7 +114,7 @@ bool Serialize(CUtlBuffer &buf, const float &src) {
 
 bool Unserialize(CUtlBuffer &buf, float &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f", &dest);
     return (nRetVal == 1) && buf.IsValid();
   }
@@ -138,7 +138,7 @@ bool Serialize(CUtlBuffer &buf, const Vector2D &src) {
 
 bool Unserialize(CUtlBuffer &buf, Vector2D &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f %f", &dest.x, &dest.y);
     return (nRetVal == 2) && buf.IsValid();
   }
@@ -161,7 +161,7 @@ bool Serialize(CUtlBuffer &buf, const Vector &src) {
 
 bool Unserialize(CUtlBuffer &buf, Vector &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f %f %f", &dest.x, &dest.y, &dest.z);
     return (nRetVal == 3) && buf.IsValid();
   }
@@ -186,7 +186,7 @@ bool Serialize(CUtlBuffer &buf, const Vector4D &src) {
 
 bool Unserialize(CUtlBuffer &buf, Vector4D &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f %f %f %f", &dest.x, &dest.y, &dest.z, &dest.w);
     return (nRetVal == 4) && buf.IsValid();
   }
@@ -211,7 +211,7 @@ bool Serialize(CUtlBuffer &buf, const QAngle &src) {
 
 bool Unserialize(CUtlBuffer &buf, QAngle &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f %f %f", &dest.x, &dest.y, &dest.z);
     return (nRetVal == 3) && buf.IsValid();
   }
@@ -236,7 +236,7 @@ bool Serialize(CUtlBuffer &buf, const Quaternion &src) {
 
 bool Unserialize(CUtlBuffer &buf, Quaternion &dest) {
   if (buf.IsText()) {
-    // FIXME: Print this in a way that we never lose precision
+    // TODO(d.rattman): Print this in a way that we never lose precision
     int nRetVal = buf.Scanf("%f %f %f %f", &dest.x, &dest.y, &dest.z, &dest.w);
     return (nRetVal == 4) && buf.IsValid();
   }

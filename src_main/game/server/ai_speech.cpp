@@ -12,7 +12,7 @@
 #include "sceneentity.h"
 #include "tier1/keyvalues.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DEBUG_AISPEECH 1
@@ -747,7 +747,7 @@ void CAI_Expresser::SetSpokeConcept(AIConcept_t concept, AI_Response *response,
       delete r;
     }
 
-    // FIXME:  Are we leaking AI_Responses?
+    // TODO(d.rattman):  Are we leaking AI_Responses?
     slot->response = response;
   }
 
@@ -822,7 +822,7 @@ void CAI_ExpresserHost_NPC_DoModifyOrAppendCriteria(CAI_BaseNPC *pSpeaker,
 
   static const char *pStateNames[] = {"None",     "Idle",     "Alert", "Combat",
                                       "Scripted", "PlayDead", "Dead"};
-  if ((int)pSpeaker->m_NPCState < ARRAYSIZE(pStateNames)) {
+  if ((int)pSpeaker->m_NPCState < SOURCE_ARRAYSIZE(pStateNames)) {
     set.AppendCriteria(
         "npcstate",
         UTIL_VarArgs("[NPCState::%s]", pStateNames[pSpeaker->m_NPCState]));

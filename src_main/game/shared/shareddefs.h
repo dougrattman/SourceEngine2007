@@ -451,8 +451,8 @@ enum {
   BLOOD_COLOR_MECH,
 
 #if defined(HL2_EPISODIC)
-  BLOOD_COLOR_ANTLION,  // FIXME: Move to Base HL2
-  BLOOD_COLOR_ZOMBIE,   // FIXME: Move to Base HL2
+  BLOOD_COLOR_ANTLION,  // TODO(d.rattman): Move to Base HL2
+  BLOOD_COLOR_ZOMBIE,   // TODO(d.rattman): Move to Base HL2
   BLOOD_COLOR_ANTLION_WORKER,
 #endif  // HL2_EPISODIC
 };
@@ -527,7 +527,7 @@ enum : int {
                   // when not solid
   EFL_TOUCHING_FLUID = (1 << 19),  // Used to determine if an entity is floating
 
-  // FIXME: Not really sure where I should add this...
+  // TODO(d.rattman): Not really sure where I should add this...
   EFL_IS_BEING_LIFTED_BY_BARNACLE = (1 << 20),
   EFL_NO_ROTORWASH_PUSH = (1 << 21),  // I shouldn't be pushed by the rotorwash
   EFL_NO_THINK_FUNCTION = (1 << 22),

@@ -43,7 +43,7 @@ enum MDLCacheDataType_t {
   MDLCACHE_DECODEDANIMBLOCK,
 };
 
-abstract_class IMDLCacheNotify {
+the_interface IMDLCacheNotify {
  public:
   // Called right after the data is loaded
   virtual void OnDataLoaded(MDLCacheDataType_t type, MDLHandle_t handle) = 0;
@@ -74,7 +74,7 @@ enum MDLCacheFlush_t {
 namespace MDLCacheV4
 {
 
-abstract_class IMDLCache : public IAppSystem
+the_interface IMDLCache : public IAppSystem
 {
 public:
         // Used to install callbacks for when data is loaded + unloaded
@@ -145,7 +145,7 @@ cache has been out of the locked state (EVIL) virtual int
 //-----------------------------------------------------------------------------
 #define MDLCACHE_INTERFACE_VERSION "MDLCache004"
 
-abstract_class IMDLCache : public IAppSystem {
+the_interface IMDLCache : public IAppSystem {
  public:
   // Used to install callbacks for when data is loaded + unloaded
   // Returns the prior notify

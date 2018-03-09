@@ -10,52 +10,37 @@
 **
 ** Contents:
 **
-**		This file provides the public interface to the Steam service.  This
-**		interface is described in the SDK documentation.
+**		This file provides the public interface to the Steam service.
+*This *		interface is described in the SDK documentation.
 **
 ******************************************************************************/
-
 
 #ifndef INCLUDED_STEAMWRITEMINIDUMP_H
 #define INCLUDED_STEAMWRITEMINIDUMP_H
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
-#pragma once
-#endif
-
 #ifndef INCLUDED_STEAM_COMMON_STEAMCOMMON_H
-	#include "SteamCommon.h"
+#include "SteamCommon.h"
 #endif
-
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 #ifdef _WIN32
 /*
 ** Write minidump using result of GetExceptionInformation() in an __except block
 */
-STEAM_API void STEAM_CALL	SteamWriteMiniDumpUsingExceptionInfo
-	( 
-	unsigned int uStructuredExceptionCode, 
-	struct _EXCEPTION_POINTERS * pExceptionInfo
-	);
+STEAM_API void STEAM_CALL SteamWriteMiniDumpUsingExceptionInfo(
+    unsigned int uStructuredExceptionCode,
+    struct _EXCEPTION_POINTERS *pExceptionInfo);
 
-STEAM_API void STEAM_CALL	SteamWriteMiniDumpUsingExceptionInfoWithBuildId
-	( 
-	unsigned int uStructuredExceptionCode, 
-	struct _EXCEPTION_POINTERS * pExceptionInfo,
-	unsigned int uBuildID
-	);
+STEAM_API void STEAM_CALL SteamWriteMiniDumpUsingExceptionInfoWithBuildId(
+    unsigned int uStructuredExceptionCode,
+    struct _EXCEPTION_POINTERS *pExceptionInfo, unsigned int uBuildID);
 
-STEAM_API void STEAM_CALL	SteamWriteMiniDumpSetComment
-	(
-	const char *cszComment
-	);
+STEAM_API void STEAM_CALL SteamWriteMiniDumpSetComment(const char *cszComment);
 
-#endif // _WIN32
+#endif  // _WIN32
 
 #ifdef __cplusplus
 }

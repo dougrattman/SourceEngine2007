@@ -12,7 +12,7 @@
 #include "tier1/convar.h"
 #include "vstdlib/random.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar mm_minplayers(

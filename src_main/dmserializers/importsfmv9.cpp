@@ -1,4 +1,4 @@
-// Copyright © 1996-2006, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: fixed "color" attribute of lights to be of type Color, rather than
 // Vector4 this should have been put in a *long* time ago, but I somehow missed

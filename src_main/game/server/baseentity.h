@@ -24,7 +24,7 @@ class IEntitySaveUtils;
 class CRecipientFilter;
 
 // Matching the high level concept is significantly better than other criteria
-// FIXME:  Could do this in the script file by making it required and bumping up
+// TODO(d.rattman):  Could do this in the script file by making it required and bumping up
 // weighting there instead...
 #define CONCEPT_WEIGHT 5.0f
 
@@ -488,7 +488,7 @@ class CBaseEntity : public IServerEntity {
   // virtual methods; you can override these
  public:
   // Owner entity.
-  // FIXME: These are virtual only because of CNodeEnt
+  // TODO(d.rattman): These are virtual only because of CNodeEnt
   CBaseEntity *GetOwnerEntity() const;
   virtual void SetOwnerEntity(CBaseEntity *pOwner);
   void SetEffectEntity(CBaseEntity *pEffectEnt);
@@ -1035,7 +1035,7 @@ class CBaseEntity : public IServerEntity {
   // even-hackier global trace vars)
   static const trace_t &GetTouchTrace(void);
 
-  // FIXME: Should be private, but I can't make em private just yet
+  // TODO(d.rattman): Should be private, but I can't make em private just yet
   void PhysicsImpact(CBaseEntity *other, trace_t &trace);
   void PhysicsMarkEntitiesAsTouching(CBaseEntity *other, trace_t &trace);
   void PhysicsMarkEntitiesAsTouchingEventDriven(CBaseEntity *other,
@@ -1130,19 +1130,19 @@ class CBaseEntity : public IServerEntity {
   void FunctionCheck(void *pFunction, const char *name);
 
   ENTITYFUNCPTR TouchSet(ENTITYFUNCPTR func, char *name) {
-    COMPILE_TIME_ASSERT(sizeof(func) == 4);
+    static_assert(sizeof(func) == 4);
     m_pfnTouch = func;
     FunctionCheck(*(reinterpret_cast<void **>(&m_pfnTouch)), name);
     return func;
   }
   USEPTR UseSet(USEPTR func, char *name) {
-    COMPILE_TIME_ASSERT(sizeof(func) == 4);
+    static_assert(sizeof(func) == 4);
     m_pfnUse = func;
     FunctionCheck(*(reinterpret_cast<void **>(&m_pfnUse)), name);
     return func;
   }
   ENTITYFUNCPTR BlockedSet(ENTITYFUNCPTR func, char *name) {
-    COMPILE_TIME_ASSERT(sizeof(func) == 4);
+    static_assert(sizeof(func) == 4);
     m_pfnBlocked = func;
     FunctionCheck(*(reinterpret_cast<void **>(&m_pfnBlocked)), name);
     return func;
@@ -1235,7 +1235,7 @@ class CBaseEntity : public IServerEntity {
   void SetLocalAngularVelocity(const QAngle &vecAngVelocity);
   const QAngle &GetLocalAngularVelocity() const;
 
-  // FIXME: While we're using (dPitch, dYaw, dRoll) as our local angular
+  // TODO(d.rattman): While we're using (dPitch, dYaw, dRoll) as our local angular
   // velocity representation, we can't actually solve this problem
   //	void SetAbsAngularVelocity( const QAngle &vecAngVelocity );
   //	const QAngle&	GetAbsAngularVelocity( ) const;
@@ -1245,7 +1245,7 @@ class CBaseEntity : public IServerEntity {
 
   virtual Vector GetSmoothedVelocity(void);
 
-  // FIXME: Figure out what to do about this
+  // TODO(d.rattman): Figure out what to do about this
   virtual void GetVelocity(Vector *vVelocity,
                            AngularImpulse *vAngVelocity = NULL);
 
@@ -1522,7 +1522,7 @@ class CBaseEntity : public IServerEntity {
   bool IsPlayerSimulated(void) const;
   CBasePlayer *GetSimulatingPlayer(void);
 #endif
-  // FIXME: Make these private!
+  // TODO(d.rattman): Make these private!
   void PhysicsCheckForEntityUntouch(void);
   bool PhysicsRunThink(thinkmethods_t thinkMethod = THINK_FIRE_ALL_FUNCTIONS);
   bool PhysicsRunSpecificThink(int nContextIndex, BASEPTR thinkFunc);
@@ -1696,7 +1696,7 @@ class CBaseEntity : public IServerEntity {
   // Which frame did I simulate?
   int m_nSimulationTick;
 
-  // FIXME: Make this private! Still too many references to do so...
+  // TODO(d.rattman): Make this private! Still too many references to do so...
   CNetworkVar(int, m_spawnflags);
 
  private:
@@ -1719,7 +1719,7 @@ class CBaseEntity : public IServerEntity {
   CNetworkVar(unsigned char, m_MoveCollide);
 
   // Our immediate parent in the movement hierarchy.
-  // FIXME: clarify m_pParent vs. m_pMoveParent
+  // TODO(d.rattman): clarify m_pParent vs. m_pMoveParent
   CNetworkHandle(CBaseEntity, m_hMoveParent);
   // cached child list
   EHANDLE m_hMoveChild;
@@ -1815,7 +1815,7 @@ class CBaseEntity : public IServerEntity {
   CNetworkQAngle(m_angRotation);
   CBaseHandle m_RefEHandle;
 
-  // was pev->view_ofs ( FIXME:  Move somewhere up the hierarch, CBaseAnimating,
+  // was pev->view_ofs ( TODO(d.rattman):  Move somewhere up the hierarch, CBaseAnimating,
   // etc. )
   CNetworkVectorForDerived(m_vecViewOffset);
 
@@ -1847,7 +1847,7 @@ class CBaseEntity : public IServerEntity {
   static int m_nPredictionRandomSeed;
   static CBasePlayer *m_pPredictionPlayer;
 
-  // FIXME: Make hierarchy a member of CBaseEntity
+  // TODO(d.rattman): Make hierarchy a member of CBaseEntity
   // or a contained private class...
   friend void UnlinkChild(CBaseEntity *pParent, CBaseEntity *pChild);
   friend void LinkChild(CBaseEntity *pParent, CBaseEntity *pChild);
@@ -1988,7 +1988,7 @@ inline CBaseEntity *CBaseEntity::NextMovePeer(void) {
   return m_hMovePeer.Get();
 }
 
-// FIXME: Remove this! There shouldn't be a difference between moveparent +
+// TODO(d.rattman): Remove this! There shouldn't be a difference between moveparent +
 // parent
 inline CBaseEntity *CBaseEntity::GetParent() { return m_pParent.Get(); }
 
@@ -2200,7 +2200,7 @@ inline const QAngle &CBaseEntity::GetLocalAngularVelocity() const {
 }
 
 /*
-// FIXME: While we're using (dPitch, dYaw, dRoll) as our local angular velocity
+// TODO(d.rattman): While we're using (dPitch, dYaw, dRoll) as our local angular velocity
 // representation, we can't actually solve this problem
 inline const QAngle &CBaseEntity::GetAbsAngularVelocity( ) const
 {

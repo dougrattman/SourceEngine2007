@@ -9,7 +9,7 @@
 #include "base/include/windows/windows_light.h"
 
 #include <winsock.h>
-#elif _LINUX
+#elif OS_POSIX
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -21,7 +21,7 @@
 #error "implement me"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Purpose: Implements INetAPI

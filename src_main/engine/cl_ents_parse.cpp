@@ -18,7 +18,7 @@
 #include "net_synctags.h"
 #include "netmessages.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar cl_flushentitypacket(
@@ -456,7 +456,7 @@ void CL_MarkEntitiesOutOfPVS(CBitVec<MAX_EDICTS> *pvs_flags) {
     IClientNetworkable *ent = entitylist->GetClientNetworkable(i);
     if (!ent) continue;
 
-    // FIXME: We can remove IClientEntity here if we keep track of the
+    // TODO(d.rattman): We can remove IClientEntity here if we keep track of the
     // last frame's entity_in_pvs
     bool curstate = !ent->IsDormant();
     bool newstate = pvs_flags->Get(i) ? true : false;

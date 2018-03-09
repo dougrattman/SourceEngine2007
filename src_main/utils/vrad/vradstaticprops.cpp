@@ -307,7 +307,7 @@ bool LoadStudioCollisionModel(char const *pModelName, CUtlBuffer &buf) {
 
 bool LoadVTXFile(char const *pModelName, const studiohdr_t *pStudioHdr,
                  CUtlBuffer &buf) {
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
 
   // construct filename
   Q_StripExtension(pModelName, filename, sizeof(filename));
@@ -409,7 +409,7 @@ class CShadowTextureList {
   // This loads a vtf and converts it to RGB8888 format
   unsigned char *LoadVTFRGB8888(const char *pName, int *pWidth, int *pHeight,
                                 bool *pClampU, bool *pClampV) {
-    char szPath[MAX_PATH];
+    char szPath[SOURCE_MAX_PATH];
     Q_strncpy(szPath, "materials/", sizeof(szPath));
     Q_strncat(szPath, pName, sizeof(szPath), COPY_ALL_CHARACTERS);
     Q_strncat(szPath, ".vtf", sizeof(szPath), COPY_ALL_CHARACTERS);
@@ -494,7 +494,7 @@ class CShadowTextureList {
     for (int i = 0; i < pHdr->numtextures; i++) {
       int textureIndex = -1;
       // try to add each texture to the transparent shadow manager
-      char szPath[MAX_PATH];
+      char szPath[SOURCE_MAX_PATH];
 
       // iterate quietly through all specified directories until a valid
       // material is found
@@ -1142,7 +1142,7 @@ void CVradStaticPropMgr::ComputeLighting(
 // Write the lighitng to bsp pak lump
 //-----------------------------------------------------------------------------
 void CVradStaticPropMgr::SerializeLighting() {
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   CUtlBuffer utlBuf;
 
   // illuminate them all
@@ -1152,7 +1152,7 @@ void CVradStaticPropMgr::SerializeLighting() {
     return;
   }
 
-  char mapName[MAX_PATH];
+  char mapName[SOURCE_MAX_PATH];
   Q_FileBase(source, mapName, sizeof(mapName));
 
   int size;
@@ -1712,7 +1712,7 @@ const vertexFileHeader_t *mstudiomodel_t::CacheVertexData(void *pModelData) {
 
   // mandatory callback to make requested data resident
   // load and persist the vertex file
-  char fileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
   strcpy(fileName, "models/");
   strcat(fileName, pActiveStudioHdr->pszName());
   Q_StripExtension(fileName, fileName, sizeof(fileName));

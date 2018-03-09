@@ -17,7 +17,7 @@
 // for the 2/5/03 demo
 #include "c_demo_entities.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 

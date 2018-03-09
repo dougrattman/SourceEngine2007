@@ -23,7 +23,7 @@
 	#include "ilagcompensationmanager.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 IMPLEMENT_NETWORKCLASS_ALIASED( BaseHL2MPBludgeonWeapon, DT_BaseHL2MPBludgeonWeapon )
@@ -224,7 +224,7 @@ Activity CBaseHL2MPBludgeonWeapon::ChooseIntersectionPointAndActivity( trace_t &
 //-----------------------------------------------------------------------------
 bool CBaseHL2MPBludgeonWeapon::ImpactWater( const Vector &start, const Vector &end )
 {
-	//FIXME: This doesn't handle the case of trying to splash while being underwater, but that's not going to look good
+	//TODO(d.rattman): This doesn't handle the case of trying to splash while being underwater, but that's not going to look good
 	//		 right now anyway...
 	
 	// We must start outside the water
@@ -271,7 +271,7 @@ void CBaseHL2MPBludgeonWeapon::ImpactEffect( trace_t &traceHit )
 	if ( ImpactWater( traceHit.startpos, traceHit.endpos ) )
 		return;
 
-	//FIXME: need new decals
+	//TODO(d.rattman): need new decals
 	UTIL_ImpactTrace( &traceHit, DMG_CLUB );
 }
 

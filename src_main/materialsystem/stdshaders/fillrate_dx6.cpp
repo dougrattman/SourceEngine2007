@@ -8,7 +8,7 @@
 
 #include "shaderlib/CShader.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_SHADER_FLAGS( Fillrate_DX6, "Help for Fillrate_DX6", SHADER_NOT_EDITABLE )

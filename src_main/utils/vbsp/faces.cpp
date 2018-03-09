@@ -1502,7 +1502,7 @@ static void SubdivideFaceBySubdivSize(face_t *f, float subdivsize) {
            &numTristripIndices, &pStripIndices);
   Assert(pStripIndices);
 
-  // FIXME: Should also call ComputeVertexPermutation and reorder the verts.
+  // TODO(d.rattman): Should also call ComputeVertexPermutation and reorder the verts.
 
   for (i = 0; i < numTristripIndices; i++) {
     Assert(pStripIndices[i] >= newPrim.firstVert &&

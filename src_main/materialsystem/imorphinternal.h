@@ -24,7 +24,7 @@ class ITextureInternal;
 //-----------------------------------------------------------------------------
 // Render context for morphs
 //-----------------------------------------------------------------------------
-abstract_class IMorphMgrRenderContext
+the_interface IMorphMgrRenderContext
 {
 public:
 };
@@ -35,7 +35,7 @@ public:
 // Morph data class 
 //
 //-----------------------------------------------------------------------------
-abstract_class IMorphInternal : public IMorph
+the_interface IMorphInternal : public IMorph
 {
 public:
 	virtual void Init( MorphFormat_t format, const char *pDebugName ) = 0;
@@ -47,7 +47,7 @@ public:
 //-----------------------------------------------------------------------------
 // Morph manager class
 //-----------------------------------------------------------------------------
-abstract_class IMorphMgr
+the_interface IMorphMgr
 {
 public:
 	// Allocate,free scratch textures + materials

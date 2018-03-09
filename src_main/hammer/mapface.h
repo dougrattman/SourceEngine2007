@@ -1,16 +1,7 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved.
-//=======//
-//
-// Purpose:
-//
-//=============================================================================//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef MAPFACE_H
 #define MAPFACE_H
-
-#ifdef _WIN32
-#pragma once
-#endif
 
 #pragma warning(push, 1)
 #pragma warning(disable : 4701 4702 4530)
@@ -137,7 +128,7 @@ enum TextureJustification_t {
 // Serialized data structure. Do not modify!
 //
 struct TEXTURE_21 {
-  char texture[MAX_PATH];
+  char texture[SOURCE_MAX_PATH];
   float rotate;
   float shift[2];
   float scale[2];
@@ -154,7 +145,7 @@ struct TEXTURE_21 {
 // Serialized data structure. Do not modify!
 //
 struct TEXTURE_33 {
-  char texture[MAX_PATH];
+  char texture[SOURCE_MAX_PATH];
   float UAxis[4];  // Must remain float[4] for RMF serialization.
   float VAxis[4];  // Must remain float[4] for RMF serialization.
   float rotate;
@@ -167,7 +158,7 @@ struct TEXTURE_33 {
 };
 
 struct TEXTURE {
-  char texture[MAX_PATH];
+  char texture[SOURCE_MAX_PATH];
   Vector4D UAxis;
   Vector4D VAxis;
   float rotate;

@@ -15,16 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="assert_dialog.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cpu.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dll_main.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="base_types.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="command_line.cc">
@@ -46,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="platform.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thread.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tslist.cc">
@@ -78,10 +66,13 @@
     <ClCompile Include="vcr_mode.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="win32_console_io.cc">
+    <ClCompile Include="instance.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="instance.cc">
+    <ClCompile Include="platform_assert_dialog.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platform_cpu.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +83,7 @@
     <ClInclude Include="mem_helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="memstd.h">
+    <ClInclude Include="mem_std.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wchartypes.h">
@@ -101,16 +92,7 @@
     <ClInclude Include="include\basetypes.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\calling_conventions.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="include\command_line_switches.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\commonmacros.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\compiler_specific_macroses.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="include\dbg.h">

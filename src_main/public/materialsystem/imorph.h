@@ -47,7 +47,7 @@ struct MorphWeight_t {
 //-----------------------------------------------------------------------------
 // Interface to the morph
 //-----------------------------------------------------------------------------
-abstract_class IMorph {
+the_interface IMorph {
  public:
   // Locks the morph, destroys any existing contents
   virtual void Lock(float flFloatToFixedScale = 1.0f) = 0;

@@ -311,7 +311,7 @@ public:
 
 	struct FileTreePath
 	{
-		char	path[ MAX_PATH ];
+		char	path[ SOURCE_MAX_PATH ];
 	};
 
 	static bool FileTreeLessFunc( const FileTreePath &lhs, const FileTreePath &rhs )

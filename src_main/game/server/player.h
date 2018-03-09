@@ -853,7 +853,7 @@ class CBasePlayer : public CBaseCombatCharacter {
   // Used by gamemovement to check if the entity is stuck.
   int m_StuckLast;
 
-  // FIXME: Make these protected or private!
+  // TODO(d.rattman): Make these protected or private!
 
   // This player's data that should only be replicated to
   //  the player and not to other players.
@@ -920,7 +920,7 @@ class CBasePlayer : public CBaseCombatCharacter {
   void CalcObserverView(Vector &eyeOrigin, QAngle &eyeAngles, float &fov);
   void CalcViewModelView(const Vector &eyeOrigin, const QAngle &eyeAngles);
 
-  // FIXME: Make these private! (tf_player uses them)
+  // TODO(d.rattman): Make these private! (tf_player uses them)
 
   // Secondary point to derive PVS from when zoomed in with binoculars/sniper
   // rifle.  The PVS is

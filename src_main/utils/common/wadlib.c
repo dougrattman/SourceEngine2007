@@ -22,7 +22,7 @@
 #endif
 #include "cmdlib.h"
 #include "wadlib.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 
 /*
 ============================================================================
@@ -302,7 +302,7 @@ void	AddLump (char *name, void *buffer, int length, int type, int compress)
 	info->type = type;
 	info->compression = compress;
 	
-// FIXME: do compression
+// TODO(d.rattman): do compression
 
 	SafeWrite (outwad, buffer, length);
 }

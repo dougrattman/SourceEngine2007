@@ -13,7 +13,7 @@
 
 #include "movieobjects_interfaces.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -164,7 +164,7 @@ void CDmeTrack::AddClip( CDmeClip *clip )
 {
 	if ( clip->GetClipType() == GetClipType() )
 	{
-		// FIXME: In the case of a non-overlapped track,
+		// TODO(d.rattman): In the case of a non-overlapped track,
 		// we could optimize this to insert the clip in sorted order,
 		// then fix overlaps (fixing overlaps requires a sorted list)
 		Assert( FindClip( clip ) < 0 );
@@ -645,7 +645,7 @@ CDmeClip* CDmeTrack::FindPrevFilmClip( CDmeClip *pClip )
 	if ( !pClip )
 		return m_Clips[ m_Clips.Count() - 1 ];
 
-	// FIXME: Could use a binary search here based on time.
+	// TODO(d.rattman): Could use a binary search here based on time.
 	// Probably doesn't matter though, since there will usually not be a ton of tracks
 	CDmeClip *pPrevClip = NULL;
 

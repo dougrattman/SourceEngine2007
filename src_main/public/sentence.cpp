@@ -10,7 +10,7 @@
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
-#include "tier0/include/commonmacros.h"
+#include "base/include/macros.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/utlbuffer.h"
 
@@ -423,7 +423,7 @@ void CSentence::ParseWords(CUtlBuffer &buf) {
       buf.GetString(token);
 
       char phonemename[256];
-      Q_strncpy(phonemename, token, ARRAYSIZE(phonemename));
+      Q_strncpy(phonemename, token, SOURCE_ARRAYSIZE(phonemename));
 
       buf.GetString(token);
       float tagstart = atof(token);

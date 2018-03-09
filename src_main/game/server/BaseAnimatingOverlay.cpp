@@ -11,7 +11,7 @@
 #include "dt_utlvector_send.h"
 #include "saverestore_utlvector.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar ai_sequence_debug;
@@ -355,7 +355,7 @@ void CAnimationLayer::DispatchAnimEvents(CBaseAnimating *eventHandler,
   }
   */
 
-  // FIXME: does not handle negative framerates!
+  // TODO(d.rattman): does not handle negative framerates!
   int index = 0;
   while ((index = GetAnimationEvent(pstudiohdr, m_nSequence, &event, flStart,
                                     flEnd, index)) != 0) {

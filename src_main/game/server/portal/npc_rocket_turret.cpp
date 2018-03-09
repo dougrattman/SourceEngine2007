@@ -25,7 +25,7 @@
 
 //#include "ndebugoverlay.h" 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define	ROCKET_TURRET_RANGE		8192
@@ -416,7 +416,7 @@ void CNPC_RocketTurret::Spawn( void )
 
 bool CNPC_RocketTurret::CreateVPhysics( void )
 {
-	m_BoneFollowerManager.InitBoneFollowers( this, ARRAYSIZE(pRocketTurretFollowerBoneNames), pRocketTurretFollowerBoneNames );
+	m_BoneFollowerManager.InitBoneFollowers( this, SOURCE_ARRAYSIZE(pRocketTurretFollowerBoneNames), pRocketTurretFollowerBoneNames );
 	BaseClass::CreateVPhysics();
 	return true;
 }

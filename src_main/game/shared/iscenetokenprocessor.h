@@ -5,7 +5,7 @@
 
 #include "tier0/include/platform.h"
 
-abstract_class ISceneTokenProcessor {
+the_interface ISceneTokenProcessor {
  public:
   virtual const char *CurrentToken(void) = 0;
   virtual bool GetToken(bool crossline) = 0;

@@ -1,32 +1,32 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef COLOR_H
 #define COLOR_H
 
 #include <memory.h>
-#include <cstdint>
 #include <type_traits>
+#include "base/include/base_types.h"
 
-// Purpose: Basic handler for an rgb set of colors.
+// Basic handler for an rgb set of colors.
 class Color {
  public:
   Color() { memset(this, 0, sizeof(*this)); }
-  Color(uint8_t r, uint8_t g, uint8_t b) { SetColor(r, g, b, 0); }
-  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) { SetColor(r, g, b, a); }
+  Color(u8 r, u8 g, u8 b) { SetColor(r, g, b, 0); }
+  Color(u8 r, u8 g, u8 b, u8 a) { SetColor(r, g, b, a); }
 
   // set the color
   // r - red component (0-255)
   // g - green component (0-255)
   // b - blue component (0-255)
   // a - alpha component, controls transparency (0 - transparent, 255 - opaque);
-  void SetColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 0) {
+  void SetColor(u8 r, u8 g, u8 b, u8 a = 0) {
     _color[0] = r;
     _color[1] = g;
     _color[2] = b;
     _color[3] = a;
   }
 
-  void GetColor(uint8_t &r, uint8_t &g, uint8_t &b, uint8_t &a) const {
+  void GetColor(u8 &r, u8 &g, u8 &b, u8 &a) const {
     r = _color[0];
     g = _color[1];
     b = _color[2];
@@ -45,13 +45,13 @@ class Color {
     return *(reinterpret_cast<const uint32_t *>(this));
   }
 
-  inline uint8_t r() const { return _color[0]; }
-  inline uint8_t g() const { return _color[1]; }
-  inline uint8_t b() const { return _color[2]; }
-  inline uint8_t a() const { return _color[3]; }
+  inline u8 r() const { return _color[0]; }
+  inline u8 g() const { return _color[1]; }
+  inline u8 b() const { return _color[2]; }
+  inline u8 a() const { return _color[3]; }
 
-  uint8_t &operator[](size_t index) { return _color[index]; }
-  const uint8_t &operator[](size_t index) const { return _color[index]; }
+  u8 &operator[](usize index) { return _color[index]; }
+  const u8 &operator[](usize index) const { return _color[index]; }
 
   bool operator==(const Color &rhs) const {
     return memcmp(this, &rhs, sizeof(*this)) == 0;
@@ -67,7 +67,7 @@ class Color {
   Color(const Color &rhs) { SetRawColor(rhs.GetRawColor()); }
 
  private:
-  uint8_t _color[4];
+  u8 _color[4];  //-V112
 };
 
 static_assert(

@@ -40,7 +40,7 @@ void CDmxSerializationDictionary::BuildElementList_R(CDmxElement *pElement,
                                                      bool bIsRoot) {
   if (!pElement) return;
 
-  // FIXME: Right here we should ask the element if it's an external
+  // TODO(d.rattman): Right here we should ask the element if it's an external
   // file reference and exit immediately if so.
 
   // This means we've already encountered this guy.

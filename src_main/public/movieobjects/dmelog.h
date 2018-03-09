@@ -121,7 +121,7 @@ struct LayerSelectionData_t {
 //-----------------------------------------------------------------------------
 // CDmeLogLayer - abstract base class
 //-----------------------------------------------------------------------------
-abstract_class CDmeLogLayer : public CDmElement {
+the_interface CDmeLogLayer : public CDmElement {
   friend class CDmeLog;
 
   DEFINE_ELEMENT(CDmeLogLayer, CDmElement);
@@ -221,7 +221,7 @@ CDmeLogLayer *CreateLayer(CDmeTypedLog<T> *ownerLog);
 //-----------------------------------------------------------------------------
 // CDmeLogLayer - abstract base class
 //-----------------------------------------------------------------------------
-abstract_class CDmeCurveInfo : public CDmElement {
+the_interface CDmeCurveInfo : public CDmElement {
   DEFINE_ELEMENT(CDmeCurveInfo, CDmElement);
 
  public:
@@ -247,7 +247,7 @@ class CDmeTypedLogLayer;
 //-----------------------------------------------------------------------------
 // CDmeLog - abstract base class
 //-----------------------------------------------------------------------------
-abstract_class CDmeLog : public CDmElement {
+the_interface CDmeLog : public CDmElement {
   DEFINE_ELEMENT(CDmeLog, CDmElement);
 
  public:
@@ -397,7 +397,7 @@ abstract_class CDmeLog : public CDmElement {
   // accessors for CurveInfo data
   int GetDefaultCurveType() const;
 
-  // FIXME - this should really be in the CurveInfo
+  // TODO(d.rattman): this should really be in the CurveInfo
   //         but the animset editor currently asks for these, without having set
   //         a curveinfo...
   void SetMinValue(float val);

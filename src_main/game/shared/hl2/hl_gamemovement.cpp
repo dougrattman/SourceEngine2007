@@ -9,7 +9,7 @@
 #include "utlrbtree.h"
 #include "hl2_shareddefs.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar sv_autoladderdismount( "sv_autoladderdismount", "1", FCVAR_REPLICATED, "Automatically dismount from ladders when you reach the end (don't have to +USE)." );
@@ -172,7 +172,7 @@ void CHL2GameMovement::StartForcedMove( bool mounting, float transit_speed, cons
 		valid );
 	if ( !valid )
 	{
-		// FIXME:  Play a deny sound?
+		// TODO(d.rattman):  Play a deny sound?
 		if ( lm->m_hReservedSpot )
 		{
 			UTIL_Remove( lm->m_hReservedSpot );

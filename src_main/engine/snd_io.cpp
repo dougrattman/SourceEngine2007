@@ -24,14 +24,14 @@ class COM_IOReadBinary : public IFileReadBinary {
 // directory
 int COM_IOReadBinary::open(const char *pFileName) {
   char namebuffer[512];
-  Q_strncpy(namebuffer, "sound", ARRAYSIZE(namebuffer));
+  Q_strncpy(namebuffer, "sound", SOURCE_ARRAYSIZE(namebuffer));
 
   // the server is sending back sound names with slashes in front...
   if (pFileName[0] != '/' && pFileName[0] != '\\') {
-    Q_strncat(namebuffer, "/", ARRAYSIZE(namebuffer), COPY_ALL_CHARACTERS);
+    Q_strncat(namebuffer, "/", SOURCE_ARRAYSIZE(namebuffer), COPY_ALL_CHARACTERS);
   }
 
-  Q_strncat(namebuffer, pFileName, ARRAYSIZE(namebuffer), COPY_ALL_CHARACTERS);
+  Q_strncat(namebuffer, pFileName, SOURCE_ARRAYSIZE(namebuffer), COPY_ALL_CHARACTERS);
 
   FileHandle_t hFile = g_pFileSystem->Open(namebuffer, "rb", "GAME");
 

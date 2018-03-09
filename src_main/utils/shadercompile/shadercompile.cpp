@@ -1,4 +1,4 @@
-// Copyright © 1996-2005, Valve Corporation, All rights reserved.
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the entry point for the console application.
 
@@ -108,8 +108,8 @@ char *PrettyPrintNumber(uint64_t k) {
 }
 
 const char *g_pShaderPath = NULL;
-char g_WorkerTempPath[MAX_PATH];
-char g_ExeDir[MAX_PATH];
+char g_WorkerTempPath[SOURCE_MAX_PATH];
+char g_ExeDir[SOURCE_MAX_PATH];
 #ifdef DEBUGFP
 FILE *g_WorkerDebugFp = NULL;
 #endif
@@ -119,7 +119,7 @@ bool g_bVerbose = false;
 bool g_bIsX360 = false;
 bool g_bSuppressWarnings = false;
 
-FORCEINLINE long AsTargetLong(long x) {
+SOURCE_FORCEINLINE long AsTargetLong(long x) {
   return ((g_bIsX360) ? (BigLong(x)) : (x));
 }
 
@@ -291,50 +291,50 @@ template <class MT_MUTEX_TYPE = CThreadFastMutex>
 class CSwitchableMutex {
  public:
  public:
-  FORCEINLINE explicit CSwitchableMutex(Mode eMode,
+  SOURCE_FORCEINLINE explicit CSwitchableMutex(Mode eMode,
                                         MT_MUTEX_TYPE *pMtMutex = NULL)
       : m_pMtx(pMtMutex), m_pUseMtx(eMode ? pMtMutex : NULL) {}
 
  public:
-  FORCEINLINE void SetMtMutex(MT_MUTEX_TYPE *pMtMutex) {
+  SOURCE_FORCEINLINE void SetMtMutex(MT_MUTEX_TYPE *pMtMutex) {
     m_pMtx = pMtMutex;
     m_pUseMtx = (m_pUseMtx ? pMtMutex : NULL);
   }
-  FORCEINLINE void SetThreadedMode(Mode eMode) {
+  SOURCE_FORCEINLINE void SetThreadedMode(Mode eMode) {
     m_pUseMtx = (eMode ? m_pMtx : NULL);
   }
 
  public:
-  FORCEINLINE void Lock() {
+  SOURCE_FORCEINLINE void Lock() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx) pUseMtx->Lock();
   }
-  FORCEINLINE void Unlock() {
+  SOURCE_FORCEINLINE void Unlock() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx) pUseMtx->Unlock();
   }
 
-  FORCEINLINE bool TryLock() {
+  SOURCE_FORCEINLINE bool TryLock() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx)
       return pUseMtx->TryLock();
     else
       return true;
   }
-  FORCEINLINE bool AssertOwnedByCurrentThread() {
+  SOURCE_FORCEINLINE bool AssertOwnedByCurrentThread() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx)
       return pUseMtx->AssertOwnedByCurrentThread();
     else
       return true;
   }
-  FORCEINLINE void SetTrace(bool b) {
+  SOURCE_FORCEINLINE void SetTrace(bool b) {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx) pUseMtx->SetTrace(b);
   }
 
-  FORCEINLINE uint32_t GetOwnerId() {
+  SOURCE_FORCEINLINE uint32_t GetOwnerId() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx)
       return pUseMtx->GetOwnerId();
     else
       return 0;
   }
-  FORCEINLINE int GetDepth() {
+  SOURCE_FORCEINLINE int GetDepth() {
     if (MT_MUTEX_TYPE *pUseMtx = m_pUseMtx)
       return pUseMtx->GetDepth();
     else
@@ -367,7 +367,7 @@ class CGlobalMutexAutoLock {
 // Access to global data should be synchronized by these global locks
 #define GLOBAL_DATA_MTX_LOCK() Threading::g_mtxGlobal.Lock()
 #define GLOBAL_DATA_MTX_UNLOCK() Threading::g_mtxGlobal.Unlock()
-#define GLOBAL_DATA_MTX_LOCK_AUTO Threading::CGlobalMutexAutoLock UNIQUE_ID;
+#define GLOBAL_DATA_MTX_LOCK_AUTO Threading::CGlobalMutexAutoLock SOURCE_UNIQUE_ID;
 
 CDispatchReg g_DistributeWorkReg(WORKUNIT_PACKETID, DistributeWorkDispatch);
 
@@ -812,7 +812,7 @@ static void WriteShaderFiles(const char *pShaderName) {
   //
   // Shader vcs file name
   //
-  char szVCSfilename[MAX_PATH];
+  char szVCSfilename[SOURCE_MAX_PATH];
   GetVCSFilenames(szVCSfilename, shaderInfo);
 
   if (bShaderFailed) {
@@ -1948,7 +1948,7 @@ void Worker_GetLocalCopyOfShaders(void) {
     }
 
     // Grab just the filename.
-    char justFilename[MAX_PATH];
+    char justFilename[SOURCE_MAX_PATH];
     char *pLastSlash =
         std::max(strrchr(pszLineToCopy, '/'), strrchr(pszLineToCopy, '\\'));
     if (pLastSlash)
@@ -1987,7 +1987,7 @@ void Worker_GetLocalCopyOfShaders(void) {
 
 void Worker_GetLocalCopyOfBinary(const char *pFilename) {
   CUtlBuffer fileBuf;
-  char tmpFilename[MAX_PATH];
+  char tmpFilename[SOURCE_MAX_PATH];
   sprintf(tmpFilename, "%s\\%s", g_ExeDir, pFilename);
   if (g_bVerbose) printf("trying to open: %s\n", tmpFilename);
 
@@ -2005,7 +2005,7 @@ void Worker_GetLocalCopyOfBinary(const char *pFilename) {
   fclose(fp);
   fileBuf.SeekPut(CUtlBuffer::SEEK_HEAD, nBytesRead);
 
-  char newFilename[MAX_PATH];
+  char newFilename[SOURCE_MAX_PATH];
   sprintf(newFilename, "%s%s", g_WorkerTempPath, pFilename);
 
   FILE *fp2 = fopen(newFilename, "wb");
@@ -2074,7 +2074,7 @@ void SetupPaths(int argc, char **argv) {
   GetTempPath(sizeof(g_WorkerTempPath), g_WorkerTempPath);
 
   strcat(g_WorkerTempPath, "shadercompiletemp\\");
-  char tmp[MAX_PATH];
+  char tmp[SOURCE_MAX_PATH];
   sprintf(tmp, "rd /s /q \"%s\"", g_WorkerTempPath);
   system(tmp);
   _mkdir(g_WorkerTempPath);
@@ -2089,7 +2089,7 @@ void SetupPaths(int argc, char **argv) {
 void SetupDebugFile(void) {
 #ifdef DEBUGFP
   const char *pComputerName = getenv("COMPUTERNAME");
-  char filename[MAX_PATH];
+  char filename[SOURCE_MAX_PATH];
   sprintf(filename, "\\\\fileserver\\user\\gary\\debug\\%s.txt", pComputerName);
   g_WorkerDebugFp = fopen(filename, "w");
   Assert(g_WorkerDebugFp);

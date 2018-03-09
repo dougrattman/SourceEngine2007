@@ -323,7 +323,7 @@
     <ClCompile Include="..\..\public\disp_common.cpp" />
     <ClCompile Include="..\..\public\disp_powerinfo.cpp" />
     <ClCompile Include="..\..\public\filesystem_helpers.cpp" />
-    <ClCompile Include="..\..\public\filesystem_init.cpp" />
+    <ClCompile Include="..\..\public\filesystem_init.cc" />
     <ClCompile Include="..\..\public\loadcmdline.cpp" />
     <ClCompile Include="..\..\public\lumpfiles.cpp" />
     <ClCompile Include="..\..\public\scratchpad3d.cpp" />
@@ -396,7 +396,7 @@
     <ClInclude Include="..\..\public\gamebspfile.h" />
     <ClInclude Include="..\..\public\ImageLoader.h" />
     <ClInclude Include="..\..\public\iscratchpad3d.h" />
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h" />
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h" />
     <ClInclude Include="..\..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\..\public\mathlib\vector.h" />

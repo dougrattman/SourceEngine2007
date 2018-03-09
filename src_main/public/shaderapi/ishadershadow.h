@@ -200,7 +200,7 @@ enum PolygonOffsetMode_t {
 //-----------------------------------------------------------------------------
 // the shader API interface (methods called from shaders)
 //-----------------------------------------------------------------------------
-abstract_class IShaderShadow {
+the_interface IShaderShadow {
  public:
   // Sets the default *shadow* state
   virtual void SetDefaultState() = 0;

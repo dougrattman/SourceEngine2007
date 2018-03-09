@@ -50,7 +50,7 @@
 #include "npc_alyx_episodic.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar weapon_showproficiency;
@@ -127,8 +127,8 @@ static impactdamagetable_t gCappedPlayerImpactDamageTable = {
     cappedPlayerLinearTable,
     cappedPlayerAngularTable,
 
-    ARRAYSIZE(cappedPlayerLinearTable),
-    ARRAYSIZE(cappedPlayerAngularTable),
+    SOURCE_ARRAYSIZE(cappedPlayerLinearTable),
+    SOURCE_ARRAYSIZE(cappedPlayerAngularTable),
 
     24 * 24.0f,    // minimum linear speed
     360 * 360.0f,  // minimum angular speed
@@ -152,7 +152,7 @@ bool Flashlight_UseLegacyVersion(void) {
   // If this is the first run through, cache off what the answer should be
   // (cannot change during a session)
   if (g_bCacheLegacyFlashlightStatus) {
-    char modDir[MAX_PATH];
+    char modDir[SOURCE_MAX_PATH];
     if (UTIL_GetModDir(modDir, sizeof(modDir)) == false) return false;
 
     g_bUseLegacyFlashlight =
@@ -767,7 +767,7 @@ void CHL2_Player::PreThink(void) {
     bool bOnBarnacle = false;
     CNPC_Barnacle *pBarnacle = NULL;
     do {
-      // FIXME: Not a good or fast solution, but maybe it will catch the bug!
+      // TODO(d.rattman): Not a good or fast solution, but maybe it will catch the bug!
       pBarnacle = (CNPC_Barnacle *)gEntList.FindEntityByClassname(
           pBarnacle, "npc_barnacle");
       if (pBarnacle) {
@@ -801,7 +801,7 @@ void CHL2_Player::PreThink(void) {
     }
   } else {
     if (m_nButtons & IN_ZOOM) {
-      // FIXME: Held weapons like the grenade get sad when this happens
+      // TODO(d.rattman): Held weapons like the grenade get sad when this happens
 #ifdef HL2_EPISODIC
       // Episodic allows players to zoom while using a func_tank
       CBaseCombatWeapon *pWep = GetActiveWeapon();
@@ -2629,7 +2629,7 @@ void CHL2_Player::UpdateWeaponPosture(void) {
         if (dis == D_LI) {
           // We're over a friendly, drop our weapon
           if (Weapon_Lower() == false) {
-            // FIXME: We couldn't lower our weapon!
+            // TODO(d.rattman): We couldn't lower our weapon!
           }
 
           return;
@@ -2638,7 +2638,7 @@ void CHL2_Player::UpdateWeaponPosture(void) {
     }
 
     if (Weapon_Ready() == false) {
-      // FIXME: We couldn't raise our weapon!
+      // TODO(d.rattman): We couldn't raise our weapon!
     }
   }
 

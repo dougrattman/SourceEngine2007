@@ -13,7 +13,7 @@
 
 #include "playerclass_info_parse.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static CUtlDict< FilePlayerClassInfo_t*, unsigned short > m_PlayerClassInfoDatabase;
@@ -68,7 +68,7 @@ PLAYERCLASS_FILE_INFO_HANDLE LookupPlayerClassInfoSlot( const char *name )
 
 
 
-// FIXME, handle differently?
+// TODO(d.rattman): handle differently?
 static FilePlayerClassInfo_t gNullPlayerClassInfo;
 
 

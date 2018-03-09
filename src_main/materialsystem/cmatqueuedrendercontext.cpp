@@ -402,7 +402,7 @@ class CMatQueuedMesh : public IMesh {
         FastCopy((uint8_t *)desc.m_pIndices, (uint8_t *)pIndexData,
                  nIndices * sizeof(*pIndexData));
       } else {
-        ALIGN16 uint16_t tempIndices[16];
+        alignas(16) uint16_t tempIndices[16];
 
         int i = 0;
         if ((size_t)desc.m_pIndices % 4 == 2) {
@@ -410,7 +410,7 @@ class CMatQueuedMesh : public IMesh {
           i++;
         }
         while (i < nIndices) {
-          int nToCopy = std::min(ARRAYSIZE(tempIndices), (usize)nIndices - i);
+          int nToCopy = std::min(SOURCE_ARRAYSIZE(tempIndices), (usize)nIndices - i);
           for (int j = 0; j < nToCopy; j++) {
             tempIndices[j] = pIndexData[i + j] + desc.m_nFirstVertex;
           }
@@ -494,7 +494,7 @@ class CMatQueuedMesh : public IMesh {
 
   virtual IMesh *GetMesh() { return this; }
 
-  // FIXME: Implement!
+  // TODO(d.rattman): Implement!
   virtual bool Lock(int nMaxIndexCount, bool bAppend, IndexDesc_t &desc) {
     Assert(0);
     return false;
@@ -812,7 +812,7 @@ void CMatQueuedRenderContext::SetLightingOrigin(const Vector &vLightingOrigin) {
 //
 //-----------------------------------------------------------------------------
 void CMatQueuedRenderContext::SetAmbientLightCube(LightCube_t cube) {
-  // FIXME: does compiler do the right thing, is envelope needed?
+  // TODO(d.rattman): does compiler do the right thing, is envelope needed?
   m_queue.QueueCall(m_pHardwareContext, &IMatRenderContext::SetAmbientLightCube,
                     CUtlEnvelope<Vector4D>(&cube[0], 6));
 }
@@ -1036,7 +1036,7 @@ int CMatQueuedRenderContext::GetMaxVerticesToRender(IMaterial *pMaterial) {
 
   // Be conservative, assume no compression (in here, we don't know if the
   // caller will used a compressed VB or not)
-  // FIXME: allow the caller to specify which compression type should be used to
+  // TODO(d.rattman): allow the caller to specify which compression type should be used to
   // compute size from the vertex format
   //        (this can vary between multiple VBs/Meshes using the same material)
   VertexFormat_t materialFormat =

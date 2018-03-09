@@ -21,7 +21,7 @@
 #include "trains.h"
 #include "vehicle_base.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define DRIVER_DEBUG_PATH 1

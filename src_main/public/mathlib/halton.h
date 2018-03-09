@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // halton.h - classes, etc for generating numbers using the Halton pseudo-random
-// sequence.  See http://halton-sequences.wikiverse.org/.
+// sequence.  See https://en.wikipedia.org/wiki/Halton_sequence.
 //
 // what this function is useful for is any sort of sampling/integration problem
 // where you want to solve it by random sampling. Each call the NextValue()
@@ -20,38 +20,38 @@
 
 #include "base/include/base_types.h"
 #include "mathlib/vector.h"
-#include "tier0/include/basetypes.h"
+#include "tier0/include/floattypes.h"
 
 class HaltonSequenceGenerator_t {
-  int seed;
-  int base;
-  f32 fbase;  //< base as a f32
-
  public:
-  HaltonSequenceGenerator_t(int base);  //< base MUST be prime, >=2
+  HaltonSequenceGenerator_t(i32 base);  // < base MUST be prime, >= 2
+  f32 GetElement(i32 element);
 
-  f32 GetElement(int element);
+  inline f32 NextValue() { return GetElement(seed++); }
 
-  inline f32 NextValue(void) { return GetElement(seed++); }
+ private:
+  i32 seed;
+  i32 base;
+  f32 fbase;  //< base as a f32
 };
 
 //< pseudo-random sphere sampling
 class DirectionalSampler_t {
-  HaltonSequenceGenerator_t zdot;
-  HaltonSequenceGenerator_t vrot;
-
  public:
-  DirectionalSampler_t(void) : zdot(2), vrot(3) {}
+  DirectionalSampler_t() : zdot(2), vrot(3) {}
 
-  Vector NextValue(void) {
-    f32 zvalue = zdot.NextValue();
-    zvalue = 2 * zvalue - 1.0;  // map from 0..1 to -1..1
-    f32 phi = acos(zvalue);
+  Vector NextValue() {
+    // map from 0..1 to -1..1
+    f32 zvalue = 2 * zdot.NextValue() - 1.0f;
     // now, generate a random rotation angle for x/y
     f32 theta = 2.0 * M_PI * vrot.NextValue();
+    f32 phi = acos(zvalue);
     f32 sin_p = sin(phi);
-    return Vector(cos(theta) * sin_p, sin(theta) * sin_p, zvalue);
+    return Vector{cos(theta) * sin_p, sin(theta) * sin_p, zvalue};
   }
+
+ private:
+  HaltonSequenceGenerator_t zdot, vrot;
 };
 
 #endif  // SOURCE_MATHLIB_HALTON_H_

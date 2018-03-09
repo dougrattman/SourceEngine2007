@@ -13,13 +13,13 @@
 #include "ehandle.h"
 
 // inherit from this interface to be able to call WatchPositionChanges
-abstract_class IWatcherCallback
+the_interface IWatcherCallback
 {
 public:
 	virtual ~IWatcherCallback() {}
 };
 
-abstract_class IPositionWatcher : public IWatcherCallback
+the_interface IPositionWatcher : public IWatcherCallback
 {
 public:
 	virtual void NotifyPositionChanged( CBaseEntity *pEntity ) = 0;
@@ -32,7 +32,7 @@ void RemovePositionWatcher( CBaseEntity *pWatcher, CBaseEntity *pMovingEntity );
 
 
 // inherit from this interface to be able to call WatchPositionChanges
-abstract_class IVPhysicsWatcher : public IWatcherCallback
+the_interface IVPhysicsWatcher : public IWatcherCallback
 {
 public:
 	virtual void NotifyVPhysicsStateChanged( IPhysicsObject *pPhysics, CBaseEntity *pEntity, bool bAwake ) = 0;

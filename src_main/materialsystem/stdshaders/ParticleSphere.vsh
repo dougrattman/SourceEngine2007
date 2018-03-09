@@ -85,7 +85,7 @@ mov		a0.x, $vTexCoord0.z
 mov		oT0, $vTexCoord0
 mov		oT2.xyz, $vColor
 
-; FIXME : the rest of this needs to use AllocateRegister
+; TODO(d.rattman): : the rest of this needs to use AllocateRegister
 
 ;------------------------------------------------------------------------------
 ; Generate a tangent space and rotate L.

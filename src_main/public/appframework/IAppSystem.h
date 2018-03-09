@@ -20,7 +20,7 @@ enum InitReturnVal_t {
   INIT_LAST_VAL,
 };
 
-abstract_class IAppSystem {
+the_interface IAppSystem {
  public:
   // Here's where the app systems get to learn about each other.
   virtual bool Connect(CreateInterfaceFn factory) = 0;
@@ -75,7 +75,7 @@ class CTier0AppSystem : public CBaseAppSystem<IInterface> {
 
 // This is the version of IAppSystem shipped 10/15/04
 // NOTE: Never change this!!!
-abstract_class IAppSystemV0 {
+the_interface IAppSystemV0 {
  public:
   // Here's where the app systems get to learn about each other.
   virtual bool Connect(CreateInterfaceFn factory) = 0;

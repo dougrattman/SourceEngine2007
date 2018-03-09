@@ -94,7 +94,7 @@ bool C_PortalGhostRenderable::SetupBones( matrix3x4_t *pBoneToWorldOut, int nMax
 	{
 		if( pBoneToWorldOut )
 		{
-			for( int i = 0; i != nMaxBones; ++i ) //FIXME: nMaxBones is most definitely greater than the actual number of bone transforms actually used, find the subset somehow
+			for( int i = 0; i != nMaxBones; ++i ) //TODO(d.rattman): nMaxBones is most definitely greater than the actual number of bone transforms actually used, find the subset somehow
 			{
 				pBoneToWorldOut[i] = (m_matGhostTransform * pBoneToWorldOut[i]).As3x4();
 			}

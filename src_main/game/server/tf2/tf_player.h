@@ -362,7 +362,7 @@ public:
 	virtual CBasePlayer *GetAssistant( void );
 
 public:
-	// FIXME: Make these private
+	// TODO(d.rattman): Make these private
 
 	// Menu-related goodies
 	CMenu	*m_pCurrentMenu;

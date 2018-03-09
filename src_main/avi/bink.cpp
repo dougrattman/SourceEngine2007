@@ -516,10 +516,10 @@ static inline int ComputeGreaterPowerOfTwo(int n) {
 void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
   int nWidth, nHeight;
 
-  char textureName[MAX_PATH];
-  Q_strncpy(textureName, pTextureName, MAX_PATH - 1);
+  char textureName[SOURCE_MAX_PATH];
+  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Y", MAX_PATH);
+  Q_strncat(textureName, "Y", SOURCE_MAX_PATH);
 
   unsigned int nTextureFlags =
       (TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT | TEXTUREFLAGS_NOMIP |
@@ -533,18 +533,18 @@ void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
   m_TextureY->SetTextureRegenerator(&m_YTextureRegenerator);
 
 #ifdef SUPPORT_BINK_ALPHA
-  Q_strncpy(textureName, pTextureName, MAX_PATH - 1);
+  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "A", MAX_PATH);
+  Q_strncat(textureName, "A", SOURCE_MAX_PATH);
 
   m_TextureA.InitProceduralTexture(textureName, "bik", nWidth, nHeight,
                                    IMAGE_FORMAT_I8, nTextureFlags);
   m_TextureA->SetTextureRegenerator(&m_ATextureRegenerator);
 #endif
 
-  Q_strncpy(textureName, pTextureName, MAX_PATH - 1);
+  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Cr", MAX_PATH);
+  Q_strncat(textureName, "Cr", SOURCE_MAX_PATH);
 
   nWidth = ComputeGreaterPowerOfTwo(m_buffers.cRcBBufferWidth);
   nHeight = ComputeGreaterPowerOfTwo(m_buffers.cRcBBufferHeight);
@@ -552,9 +552,9 @@ void CBIKMaterial::CreateProceduralTextures(const char *pTextureName) {
                                     IMAGE_FORMAT_I8, nTextureFlags);
   m_TextureCr->SetTextureRegenerator(&m_CrTextureRegenerator);
 
-  Q_strncpy(textureName, pTextureName, MAX_PATH - 1);
+  Q_strncpy(textureName, pTextureName, SOURCE_MAX_PATH - 1);
   Q_StripExtension(textureName, textureName, sizeof(textureName));
-  Q_strncat(textureName, "Cb", MAX_PATH);
+  Q_strncat(textureName, "Cb", SOURCE_MAX_PATH);
 
   m_TextureCb.InitProceduralTexture(textureName, "bik", nWidth, nHeight,
                                     IMAGE_FORMAT_I8, nTextureFlags);
@@ -581,7 +581,7 @@ void CBIKMaterial::DestroyProceduralTextures() {
 // Initializes, shuts down the procedural material
 //-----------------------------------------------------------------------------
 void CBIKMaterial::CreateProceduralMaterial(const char *pMaterialName) {
-  // FIXME: gak, this is backwards.  Why doesn't the material just see that it
+  // TODO(d.rattman): gak, this is backwards.  Why doesn't the material just see that it
   // has a funky basetexture?
   char vmtfilename[512];
   Q_strcpy(vmtfilename, pMaterialName);

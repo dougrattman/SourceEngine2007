@@ -124,7 +124,7 @@ void ApplyOutlineToTexture(int rgbaWide, int rgbaTall, unsigned char *rgba,
 //-----------------------------------------------------------------------------
 // Purpose: Gets the blur value for a single pixel
 //-----------------------------------------------------------------------------
-FORCEINLINE void GetBlurValueForPixel(unsigned char *src, int blur,
+SOURCE_FORCEINLINE void GetBlurValueForPixel(unsigned char *src, int blur,
                                       float *gaussianDistribution, int srcX,
                                       int srcY, int rgbaWide, int rgbaTall,
                                       unsigned char *dest) {

@@ -10,7 +10,7 @@
 #include "sharedInterface.h"
 #include "mathlib/vmatrix.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 #define ROTATION_SPEED 90.0f

@@ -553,7 +553,7 @@ void C_ObjectBaseMannedGun::OnDataChanged( DataUpdateType_t updateType )
 
 	if ( updateType == DATA_UPDATE_CREATED )
 	{
-		// FIXME: Will this work with build animations models?
+		// TODO(d.rattman): Will this work with build animations models?
 
 		m_nBarrelAttachment = LookupAttachment( "barrel" );
 		m_nBarrelPivotAttachment = LookupAttachment( "barrelpivot" );

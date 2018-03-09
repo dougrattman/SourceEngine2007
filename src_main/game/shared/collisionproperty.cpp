@@ -27,7 +27,7 @@
 
 #include "predictable_entity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ void CDirtySpatialPartitionEntityList::OnPreQuery( SpatialPartitionListMask_t li
 	if ( !( listMask & PARTITION_CLIENT_GAME_EDICTS ) )
 		return;
 
-	// FIXME: This should really be an assertion... feh!
+	// TODO(d.rattman): This should really be an assertion... feh!
 	if ( !C_BaseEntity::IsAbsRecomputationsEnabled() )
 	{
 		m_mutex.Lock();
@@ -696,7 +696,7 @@ const model_t* CCollisionProperty::GetCollisionModel()
 
 //-----------------------------------------------------------------------------
 // Collision methods implemented in the entity
-// FIXME: This shouldn't happen there!!
+// TODO(d.rattman): This shouldn't happen there!!
 //-----------------------------------------------------------------------------
 bool CCollisionProperty::TestCollision( const Ray_t &ray, unsigned int fContentsMask, trace_t& tr )
 {
@@ -967,7 +967,7 @@ void CCollisionProperty::ComputeCollisionSurroundingBox( bool bUseVPhysics, Vect
 
 	// NOTE: For solid none, we are still going to use the bounds; necessary because
 	// the surrounding box is used for the PVS...
-	// FIXME: Should we make some other call for the PVS stuff?? If so, we should return
+	// TODO(d.rattman): Should we make some other call for the PVS stuff?? If so, we should return
 	// a point bounds for SOLID_NONE...
 //	if ( GetSolid() == SOLID_NONE )
 //	{

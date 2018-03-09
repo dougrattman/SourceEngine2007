@@ -23,7 +23,7 @@
 #include "c_dod_playerresource.h"
 #include "c_dod_objective_resource.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 ConVar hud_deathnotice_time( "hud_deathnotice_time", "6", 0 );

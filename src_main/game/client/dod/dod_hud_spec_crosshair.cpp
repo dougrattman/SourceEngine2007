@@ -14,7 +14,7 @@
 #include "vgui/ISurface.h"
 #include "IVRenderView.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //ConVar crosshair( "crosshair", "1", FCVAR_ARCHIVE );

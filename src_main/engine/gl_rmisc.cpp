@@ -30,7 +30,7 @@
 #include "vmodes.h"
 #include "vtf/vtf.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 void Linefile_Read_f();
@@ -222,7 +222,7 @@ void R_LevelInit(void) {
   R_LoadSkys();
   R_InitStudio();
 
-  // FIXME: Is this the best place to initialize the kd tree when we're
+  // TODO(d.rattman): Is this the best place to initialize the kd tree when we're
   // client-only?
   if (!sv.IsActive()) {
     g_pShadowMgr->LevelShutdown();
@@ -244,7 +244,7 @@ void R_LevelInit(void) {
 
   UpdateMaterialSystemConfig();
 
-  // FIXME: E3 2003 HACK
+  // TODO(d.rattman): E3 2003 HACK
   if (mat_levelflush.GetBool()) {
     bool bOnLevelShutdown = false;
     materials->ResetTempHWMemory(bOnLevelShutdown);

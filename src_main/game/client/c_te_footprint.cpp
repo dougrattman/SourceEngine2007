@@ -13,7 +13,7 @@
 #include "tier0/include/vprof.h"
 
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void C_TEFootprintDecal::PostDataUpdate( DataUpdateType_t updateType )
 {
 	VPROF( "C_TEFootprintDecal::PostDataUpdate" );
 
-	// FIXME: Make this choose the decal based on material type
+	// TODO(d.rattman): Make this choose the decal based on material type
 	if ( r_decals.GetInt() )
 	{
 		C_BaseEntity *ent = cl_entitylist->GetEnt( m_nEntity );

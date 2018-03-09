@@ -39,7 +39,7 @@ enum ShadowReceiver_t
 //-----------------------------------------------------------------------------
 // The class responsible for dealing with shadows on the client side
 //-----------------------------------------------------------------------------
-abstract_class IClientShadowMgr : public IGameSystemPerFrame
+the_interface IClientShadowMgr : public IGameSystemPerFrame
 {
 public:
 	// Create, destroy shadows

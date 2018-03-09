@@ -307,7 +307,7 @@ private:
 	void				SetDirty( bool dirty, bool clearundo = true );
 	bool				GetDirty( void );
 
-	// FIXME:  Do something else here
+	// TODO(d.rattman):  Do something else here
 	void				ResampleChunk( IterateOutputRIFF& store, void *format, int chunkname, char *buffer, int buffersize, int start_silence = 0, int end_silence = 0 );
 
 	// Mouse control over selected samples

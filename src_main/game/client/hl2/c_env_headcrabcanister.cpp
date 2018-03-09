@@ -11,7 +11,7 @@
 #include "env_headcrabcanister_shared.h"
 #include "baseparticleentity.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------

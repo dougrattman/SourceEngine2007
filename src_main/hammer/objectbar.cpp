@@ -23,7 +23,7 @@
 #include "mathlib/vector.h"
 #include "mapview2d.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -78,7 +78,7 @@ END_MESSAGE_MAP()
 //-----------------------------------------------------------------------------
 static int FindSolidType( const char *pName )
 {
-	for ( int i=0; i < ARRAYSIZE( SolidTypes ); i++ )
+	for ( int i=0; i < SOURCE_ARRAYSIZE( SolidTypes ); i++ )
 	{
 		if ( Q_stricmp( pName, SolidTypes[i].pszName ) == 0 )
 			return i;

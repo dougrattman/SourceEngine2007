@@ -16,7 +16,7 @@
 #include "OptionProperties.h"
 #include <process.h>
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -119,10 +119,10 @@ int COptionsConfigs::ImportOldGameConfigs(const char *pszFileName)
 {
 	int nConfigsRead = 0;
 
-	char szRootDir[MAX_PATH];
-	char szFullPath[MAX_PATH];
+	char szRootDir[SOURCE_MAX_PATH];
+	char szFullPath[SOURCE_MAX_PATH];
 	APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-	Q_MakeAbsolutePath( szFullPath, MAX_PATH, pszFileName, szRootDir );
+	Q_MakeAbsolutePath( szFullPath, SOURCE_MAX_PATH, pszFileName, szRootDir );
 	std::fstream file( szFullPath, std::ios::in | std::ios::binary );
 	if (file.is_open())
 	{
@@ -244,12 +244,12 @@ int COptionsConfigs::LoadGameConfigs()
 	if (nConfigsRead > 0)
 	{
 		// This will cause a double conversion, from .wc to .ini to .txt, but oh well...
-		char szRootDir[MAX_PATH];
-		char szFullPath[MAX_PATH];
+		char szRootDir[SOURCE_MAX_PATH];
+		char szFullPath[SOURCE_MAX_PATH];
 		APP()->GetDirectory(DIR_PROGRAM, szRootDir);
-		Q_MakeAbsolutePath( szFullPath, MAX_PATH, "GameCfg.wc", szRootDir );
+		Q_MakeAbsolutePath( szFullPath, SOURCE_MAX_PATH, "GameCfg.wc", szRootDir );
 		remove( szFullPath );
-		char szSaveName[MAX_PATH];
+		char szSaveName[SOURCE_MAX_PATH];
 		strcpy(szSaveName, m_strConfigDir);
 		Q_AppendSlash(szSaveName, sizeof(szSaveName));
 		Q_strcat(szSaveName, "GameCfg.ini", sizeof(szSaveName));
@@ -305,7 +305,7 @@ void COptionsConfigs::SaveGameConfigs()
 			pConfig = pGame->CreateNewKey();
 			if ( pConfig == NULL )
 			{
-				// FIXME: fatal error
+				// TODO(d.rattman): fatal error
 				return;
 			}
 		}
@@ -504,7 +504,7 @@ bool COptions::Init(void)
 
 		pMainWnd->UpdateAllDocViews( MAPVIEW_OPTIONS_CHANGED );
 		
-		// FIXME: can't do this before the filesystem is initialized
+		// TODO(d.rattman): can't do this before the filesystem is initialized
 		//pMainWnd->GlobalNotify(WM_GAME_CHANGED);
 	}
 
@@ -656,7 +656,7 @@ bool COptions::Read(void)
 	general.bUseVGUIModelBrowser = APP()->GetProfileInt(pszGeneral, "VGUI Model Browser", TRUE);	
 	general.bShowHiddenTargetsAsBroken = APP()->GetProfileInt(pszGeneral, "Show Hidden Targets As Broken", TRUE);	
 	
-	char szDefaultAutosavePath[MAX_PATH];
+	char szDefaultAutosavePath[SOURCE_MAX_PATH];
 	strcpy( szDefaultAutosavePath, APP()->GetProfileString(pszGeneral, "Directory", "C:"));
 	strcat( szDefaultAutosavePath, "\\HammerAutosave\\" );
 	strcpy( general.szAutosaveDir, APP()->GetProfileString("General", "Autosave Dir", szDefaultAutosavePath));

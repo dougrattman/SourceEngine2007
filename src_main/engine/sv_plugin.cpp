@@ -69,8 +69,8 @@ CPlugin::~CPlugin() {
 // Purpose: loads and initializes a plugin
 //---------------------------------------------------------------------------------
 bool CPlugin::Load(const char *fileName) {
-  char fixedFileName[MAX_PATH];
-  Q_strncpy(fixedFileName, fileName, ARRAYSIZE(fixedFileName));
+  char fixedFileName[SOURCE_MAX_PATH];
+  Q_strncpy(fixedFileName, fileName, SOURCE_ARRAYSIZE(fixedFileName));
   Q_FixSlashes(fixedFileName);
 
   m_pPluginModule = g_pFileSystem->LoadModule(fixedFileName, NULL, false);

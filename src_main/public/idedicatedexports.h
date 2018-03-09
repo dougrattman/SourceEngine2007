@@ -6,7 +6,7 @@
 #include "appframework/IAppSystem.h"
 #include "tier1/interface.h"
 
-abstract_class IDedicatedExports : public IAppSystem {
+the_interface IDedicatedExports : public IAppSystem {
  public:
   virtual void Sys_Printf(char *text) = 0;
   virtual void RunServer() = 0;

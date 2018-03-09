@@ -2453,7 +2453,7 @@
     <ClInclude Include="game_controls\classmenu.h">
       <Filter>Header Files\game_controls header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\public\mathlib\amd3dx.h">
+    <ClInclude Include="..\..\deps\amd3dx\include\amd3dx.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\vgui_controls\AnimationController.h">

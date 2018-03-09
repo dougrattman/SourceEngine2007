@@ -12,7 +12,7 @@
 #include "tier2/fileutils.h"
 #include "tier2/tier2.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 namespace TGAWriter {
@@ -52,7 +52,7 @@ static inline void myfwrite(void const *data, int size1, int size2,
 }
 
 
-// FIXME: assumes that we don't need to do gamma correction.
+// TODO(d.rattman): assumes that we don't need to do gamma correction.
 
 bool WriteToBuffer(unsigned char *pImageData, CUtlBuffer &buffer, int width,
                    int height, ImageFormat srcFormat, ImageFormat dstFormat) {

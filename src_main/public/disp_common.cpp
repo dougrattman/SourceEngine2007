@@ -5,7 +5,7 @@
 #include "builddisp.h"
 #include "disp_powerinfo.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 class CNodeVert {
@@ -727,8 +727,7 @@ void AddNeighbor(CCoreDispInfo *pMain,
 
   // Make sure this slot isn't used on either displacement.
   if (pSub->IsValid() || pNeighborSub->IsValid()) {
-    ExecuteOnce(
-        Warning("Found a displacement edge abutting multiple other edges.\n"));
+    Warning("Found a displacement edge abutting multiple other edges.\n");
     return;
   }
 

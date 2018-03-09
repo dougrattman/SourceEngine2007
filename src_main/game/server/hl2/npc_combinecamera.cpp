@@ -35,7 +35,7 @@
 #include "IEffects.h"
 #include "animation.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 // Debug visualization
@@ -413,7 +413,7 @@ int CNPC_CombineCamera::OnTakeDamage(const CTakeDamageInfo &inputInfo)
 
 		RemoveFlag(FL_NPC); // why are they set in the first place???
 
-		// FIXME: This needs to throw a ragdoll gib or something other than animating the retraction -- jdw
+		// TODO(d.rattman): This needs to throw a ragdoll gib or something other than animating the retraction -- jdw
 
 		ExplosionCreate(GetAbsOrigin(), GetLocalAngles(), this, 100, 100, false);
 		SetThink(&CNPC_CombineCamera::DeathThink);

@@ -126,7 +126,7 @@ void ED_AllowImmediateReuse() {
 ED_Free
 
 Marks the edict as free
-FIXME: walk all entities and NULL out references to this entity
+TODO(d.rattman): walk all entities and NULL out references to this entity
 =================
 */
 void ED_Free(edict_t *ed) {

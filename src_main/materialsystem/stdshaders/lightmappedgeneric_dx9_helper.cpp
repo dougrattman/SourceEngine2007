@@ -436,7 +436,7 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 			if ( pShaderShadow )
 			{
 
-				// Alpha test: FIXME: shouldn't this be handled in Shader_t::SetInitialShadowState
+				// Alpha test: TODO(d.rattman): shouldn't this be handled in Shader_t::SetInitialShadowState
 				pShaderShadow->EnableAlphaTest( bIsAlphaTested );
 				if ( info.m_nAlphaTestReference != -1 && params[info.m_nAlphaTestReference]->GetFloatValue() > 0.0f )
 				{

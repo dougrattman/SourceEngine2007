@@ -49,7 +49,7 @@
 #include "vstdlib/random.h"
 #include "weapon_physcannon.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sk_npc_head;
@@ -1122,7 +1122,7 @@ void CNPC_BaseZombie::Ignite(float flFlameLifetime, bool bNPCOnly, float flSize,
           (ZOMBIE_BURN_TIME + random->RandomFloat(-ZOMBIE_BURN_TIME_NOISE,
                                                   ZOMBIE_BURN_TIME_NOISE))));
 
-  // FIXME: use overlays when they come online
+  // TODO(d.rattman): use overlays when they come online
   // AddOverlay( ACT_ZOM_WALK_ON_FIRE, false );
   if (!m_ActBusyBehavior.IsActive()) {
     Activity activity = GetActivity();
@@ -1374,7 +1374,7 @@ void CNPC_BaseZombie::HandleAnimEvent(animevent_t *pEvent) {
       // wailing.
       m_flNextMoanSound = gpGlobals->curtime;
       MoanSound(envDefaultZombieMoanVolumeFast,
-                ARRAYSIZE(envDefaultZombieMoanVolumeFast));
+                SOURCE_ARRAYSIZE(envDefaultZombieMoanVolumeFast));
     }
     return;
   }
@@ -2246,7 +2246,7 @@ void CNPC_BaseZombie::ReleaseHeadcrab(const Vector &vecOrigin,
 
     pCrab->GetMotor()->SetIdealYaw(GetAbsAngles().y);
 
-    // FIXME: npc's with multiple headcrabs will need some way to query
+    // TODO(d.rattman): npc's with multiple headcrabs will need some way to query
     // different attachments. NOTE: this has till after spawn is called so that
     // the model is set up
     int iCrabAttachment = LookupAttachment("headcrab");
@@ -2327,7 +2327,7 @@ void CNPC_BaseZombie::SetHeadcrabSpawnLocation(int iCrabAttachment,
   MatrixAngles(spawnOrigin, vecAngles, vecOrigin);
   pCrab->SetAbsOrigin(vecOrigin);
 
-  // FIXME: head crabs don't like pitch or roll!
+  // TODO(d.rattman): head crabs don't like pitch or roll!
   vecAngles.z = 0;
 
   pCrab->SetAbsAngles(vecAngles);

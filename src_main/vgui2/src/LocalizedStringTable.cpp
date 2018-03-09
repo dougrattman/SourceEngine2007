@@ -17,7 +17,7 @@
 #include "vgui/ISystem.h"
 #include "vgui_internal.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -210,7 +210,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
   static const char *const ENGLISH_STRING = "english";
   static const int MAX_LANGUAGE_NAME_LENGTH = 64;
   char language[MAX_LANGUAGE_NAME_LENGTH];
-  char fileName[MAX_PATH];
+  char fileName[SOURCE_MAX_PATH];
   int offs = 0;
   bool success = false;
 
@@ -295,7 +295,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
   // for "GAME" when running -game episodic, it'll show:
   // "basedir/episodic/;basedir/hl2"
   // HACK HACK - why do this? Why not let the filesystem be smart?
-  char searchPaths[MAX_PATH * 50];  // allow for 50 search paths
+  char searchPaths[SOURCE_MAX_PATH * 50];  // allow for 50 search paths
   Verify(g_pFullFileSystem->GetSearchPath(pPathID, true, searchPaths,
                                           sizeof(searchPaths)) <
          sizeof(searchPaths));
@@ -313,7 +313,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
     // older ones, so we add them to a list in reverse order
     for (char *path = strtok(searchPaths, ";"); path;
          path = strtok(NULL, ";")) {
-      char fullpath[MAX_PATH];
+      char fullpath[SOURCE_MAX_PATH];
       Q_snprintf(fullpath, sizeof(fullpath), "%s%s", path, fileName);
       Q_FixSlashes(fullpath);
       Q_strlower(fullpath);
@@ -486,7 +486,7 @@ bool CLocalizedStringTable::AddAllLanguageFiles(const char *baseFileName) {
   bool success = true;
 
   // work out the path the files are in
-  char szFilePath[MAX_PATH];
+  char szFilePath[SOURCE_MAX_PATH];
   Q_strncpy(szFilePath, baseFileName, sizeof(szFilePath));
   char *lastSlash = strrchr(szFilePath, '\\');
   if (!lastSlash) {
@@ -500,14 +500,14 @@ bool CLocalizedStringTable::AddAllLanguageFiles(const char *baseFileName) {
 
   // iterate through and add all the languages (for development)
   // the longest string out of all the languages will be used
-  char szSearchPath[MAX_PATH];
+  char szSearchPath[SOURCE_MAX_PATH];
   Q_snprintf(szSearchPath, sizeof(szSearchPath), "%s*.txt", baseFileName);
 
   FileFindHandle_t hFind = NULL;
   const char *file = g_pFullFileSystem->FindFirst(szSearchPath, &hFind);
   while (file) {
     // re-add in the search path
-    char szFile[MAX_PATH];
+    char szFile[SOURCE_MAX_PATH];
     Q_snprintf(szFile, sizeof(szFile), "%s%s", szFilePath, file);
 
     // add the file

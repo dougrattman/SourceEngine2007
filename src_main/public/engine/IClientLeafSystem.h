@@ -45,7 +45,7 @@ enum RenderGroup_t {
 //-----------------------------------------------------------------------------
 // The client leaf system
 //-----------------------------------------------------------------------------
-abstract_class IClientLeafSystemEngine {
+the_interface IClientLeafSystemEngine {
  public:
   // Adds and removes renderables from the leaf lists
   // CreateRenderableHandle stores the handle inside pRenderable.

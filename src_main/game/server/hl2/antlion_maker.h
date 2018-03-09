@@ -117,7 +117,7 @@ protected:
 	void		PoolRegenThink( void );
 
 protected:
-	// FIXME: The m_strSpawnGroup is redundant to the m_iszDestinationGroup in the base class NPC template maker
+	// TODO(d.rattman): The m_strSpawnGroup is redundant to the m_iszDestinationGroup in the base class NPC template maker
 	string_t	m_strSpawnGroup;	// if present, spawn children on the nearest node of this group (to the player)
 	string_t	m_strSpawnTarget;	// name of target to spawn near
 	float		m_flSpawnRadius;	// radius around target to attempt to spawn in

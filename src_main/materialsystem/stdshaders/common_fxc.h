@@ -41,7 +41,7 @@ static const HALF3 bumpBasisTranspose[3] = {
 
 HALF3 CalcReflectionVectorNormalized( HALF3 normal, HALF3 eyeVector )
 {
-	// FIXME: might be better of normalizing with a normalizing cube map and
+	// TODO(d.rattman): might be better of normalizing with a normalizing cube map and
 	// get rid of the dot( normal, normal )
 	// compute reflection vector r = 2 * ((n dot v)/(n dot n)) n - v
 	return 2.0 * ( dot( normal, eyeVector ) / dot( normal, normal ) ) * normal - eyeVector;
@@ -49,7 +49,7 @@ HALF3 CalcReflectionVectorNormalized( HALF3 normal, HALF3 eyeVector )
 
 HALF3 CalcReflectionVectorUnnormalized( HALF3 normal, HALF3 eyeVector )
 {
-	// FIXME: might be better of normalizing with a normalizing cube map and
+	// TODO(d.rattman): might be better of normalizing with a normalizing cube map and
 	// get rid of the dot( normal, normal )
 	// compute reflection vector r = 2 * ((n dot v)/(n dot n)) n - v
 	//  multiply all values through by N.N.  uniformly scaling reflection vector won't affect result
@@ -131,7 +131,7 @@ float3 DecompressHDR( float4 input )
 
 float4 CompressHDR( float3 input )
 {
-	// FIXME: want to use min so that we clamp to white, but what happens if we 
+	// TODO(d.rattman): want to use min so that we clamp to white, but what happens if we 
 	// have an albedo component that's less than 1/MAX_HDR_OVERBRIGHT?
 	//	float fMax = std::max( std::max( color.r, color.g ), color.b );
 	float4 output;

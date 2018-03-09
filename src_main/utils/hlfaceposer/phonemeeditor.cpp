@@ -4790,7 +4790,7 @@ CPhonemeTag *PhonemeEditor::GetPhonemeTagUnderMouse( int mx, int my )
 	if ( !m_pWaveFile )
 		return NULL;
 
-	// FIXME:  Don't read from file, read from arrays after LISET finishes
+	// TODO(d.rattman):  Don't read from file, read from arrays after LISET finishes
 	// Deterime if phoneme boundary is under the cursor
 	//
 	RECT rc;
@@ -8187,7 +8187,7 @@ void PhonemeEditor::Emphasis_Redraw( CChoreoWidgetDrawHelper& drawHelper, RECT& 
 
 	float running_length = m_pWaveFile->GetRunningLength();
 
-	// FIXME: adjust this based on framerate....
+	// TODO(d.rattman): adjust this based on framerate....
 	float timeperpixel = GetTimePerPixel();
 
 	float starttime, endtime;

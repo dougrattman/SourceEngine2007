@@ -125,7 +125,7 @@ bool AutoAddGestureKeys(CChoreoEvent *e, CStudioHdr *pStudioHdr,
     }
   }
 
-  // FIXME: lookup linear tags in sequence data
+  // TODO(d.rattman): lookup linear tags in sequence data
   {
     CEventAbsoluteTag *ptag;
     ptag = e->FindAbsoluteTag(CChoreoEvent::ORIGINAL, szStartLoop);

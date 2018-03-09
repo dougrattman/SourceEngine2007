@@ -45,7 +45,7 @@
 #include "tier0/include/platform.h"
 #include "tier0/include/systeminformation.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 static ConVar cl_timeout("cl_timeout", "30", FCVAR_ARCHIVE,
@@ -571,7 +571,7 @@ void CClientState::Clear(void) {
 }
 
 void CClientState::ClearSounds() {
-  int c = ARRAYSIZE(sound_precache);
+  int c = SOURCE_ARRAYSIZE(sound_precache);
   for (int i = 0; i < c; ++i) {
     sound_precache[i].SetSound(NULL);
   }
@@ -1251,7 +1251,7 @@ void CClientState::CheckFileCRCsWithServer() {
 
   CUnverifiedCRCFile crcFiles[nBatchSize];
   int count =
-      g_pFileSystem->GetUnverifiedCRCFiles(crcFiles, ARRAYSIZE(crcFiles));
+      g_pFileSystem->GetUnverifiedCRCFiles(crcFiles, SOURCE_ARRAYSIZE(crcFiles));
   if (count == 0) return;
 
   // Send the messages to the server.
@@ -1301,15 +1301,15 @@ bool CheckSimpleMaterial(IMaterial *pMaterial) {
 //-----------------------------------------------------------------------------
 int FindFilenameInStringTable(INetworkStringTable *table,
                               const char *searchFname) {
-  char searchFilename[MAX_PATH];
-  char tableFilename[MAX_PATH];
+  char searchFilename[SOURCE_MAX_PATH];
+  char tableFilename[SOURCE_MAX_PATH];
 
-  Q_strncpy(searchFilename, searchFname, MAX_PATH);
+  Q_strncpy(searchFilename, searchFname, SOURCE_MAX_PATH);
   Q_FixSlashes(searchFilename);
 
   for (int i = 0; i < table->GetNumStrings(); ++i) {
     const char *tableFname = table->GetString(i);
-    Q_strncpy(tableFilename, tableFname, MAX_PATH);
+    Q_strncpy(tableFilename, tableFname, SOURCE_MAX_PATH);
     Q_FixSlashes(tableFilename);
 
     if (!Q_strcasecmp(searchFilename, tableFilename)) {
@@ -1557,7 +1557,7 @@ void CClientState::ConsistencyCheck(bool bChanged) {
         // Check each texture
         IMaterial *model_materials[128];
         int materialCount = Mod_GetModelMaterials(
-            pModel, ARRAYSIZE(model_materials), model_materials);
+            pModel, SOURCE_ARRAYSIZE(model_materials), model_materials);
 
         for (int j = 0; j < materialCount; ++j) {
           IMaterial *pMaterial = model_materials[j];

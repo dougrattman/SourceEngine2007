@@ -62,7 +62,7 @@ data field should not be broadcasted to clients, use the type "local".
 class KeyValues;
 class CGameEvent;
 
-abstract_class IGameEvent
+the_interface IGameEvent
 {
 public:
 	virtual ~IGameEvent() {};
@@ -85,7 +85,7 @@ public:
 };
 
 
-abstract_class IGameEventListener2
+the_interface IGameEventListener2
 {
 public:
 	virtual	~IGameEventListener2( void ) {};
@@ -95,7 +95,7 @@ public:
 	virtual void FireGameEvent( IGameEvent *event ) = 0;
 };
 
-abstract_class IGameEventManager2 : public IBaseInterface
+the_interface IGameEventManager2 : public IBaseInterface
 {
 public:
 	virtual	~IGameEventManager2( void ) {};
@@ -138,7 +138,7 @@ public:
 
 // the old game event manager interface, don't use it. Rest is legacy support:
 
-abstract_class IGameEventListener
+the_interface IGameEventListener
 {
 public:
 	virtual	~IGameEventListener( void ) {};
@@ -148,7 +148,7 @@ public:
 	virtual void FireGameEvent( KeyValues * event) = 0;
 };
 
-abstract_class IGameEventManager : public IBaseInterface
+the_interface IGameEventManager : public IBaseInterface
 {
 public:
 	virtual	~IGameEventManager( void ) {};

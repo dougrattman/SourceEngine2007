@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ICOLORCORRECTIONTOOLS_H
 #define ICOLORCORRECTIONTOOLS_H
@@ -9,7 +9,7 @@ class Panel;
 
 class IColorOperation;
 
-abstract_class IColorCorrectionTools {
+the_interface IColorCorrectionTools {
  public:
   virtual void Init(void) = 0;
   virtual void Shutdown(void) = 0;

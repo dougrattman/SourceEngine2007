@@ -14,7 +14,7 @@
 #include "server.h"
 #include "sv_main.h"
 #include "tier1/convar.h"
-#ifdef _LINUX
+#ifdef OS_POSIX
 #include <wctype.h>
 #endif
 
@@ -242,12 +242,12 @@ void CCvarUtilities::SetDirect(ConVar *var, const char *value) {
 #ifndef SWDS
     if (sv.IsDedicated()) {
       // Dedicated servers don't have g_pVGuiLocalize, so fall back
-      mbstowcs(unicode, pszValue, ARRAYSIZE(unicode));
+      mbstowcs(unicode, pszValue, SOURCE_ARRAYSIZE(unicode));
     } else {
       g_pVGuiLocalize->ConvertANSIToUnicode(pszValue, unicode, sizeof(unicode));
     }
 #else
-    mbstowcs(unicode, pszValue, ARRAYSIZE(unicode));
+    mbstowcs(unicode, pszValue, SOURCE_ARRAYSIZE(unicode));
 #endif
     wchar_t newUnicode[512];
 
@@ -385,7 +385,7 @@ bool CCvarUtilities::IsCommand(const CCommand &args) {
       return true;
     }
 
-    // FIXME:  Do we need a case where cmd_source == src_client?
+    // TODO(d.rattman):  Do we need a case where cmd_source == src_client?
     Assert(cmd_source != src_client);
   }
 
@@ -495,7 +495,7 @@ bool CCvarUtilities::IsValidToggleCommand(const char *cmd) {
     }
   }
 
-  // FIXME:  Do we need a case where cmd_source == src_client?
+  // TODO(d.rattman):  Do we need a case where cmd_source == src_client?
   Assert(cmd_source != src_client);
   return true;
 }
@@ -603,7 +603,7 @@ static void PrintListHeader(FileHandle_t &f) {
 
   csvflagstr[0] = 0;
 
-  int c = ARRAYSIZE(g_ConVarFlags);
+  int c = SOURCE_ARRAYSIZE(g_ConVarFlags);
   for (int i = 0; i < c; ++i) {
     char csvf[64];
 
@@ -628,21 +628,21 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
   flagstr[0] = 0;
   csvflagstr[0] = 0;
 
-  size_t c = ARRAYSIZE(g_ConVarFlags);
+  size_t c = SOURCE_ARRAYSIZE(g_ConVarFlags);
   for (size_t i = 0; i < c; ++i) {
     char fl[32];
     char csvf[64];
 
     ConVarFlags_t &entry = g_ConVarFlags[i];
     if (var->IsFlagSet(entry.bit)) {
-      Q_snprintf(fl, ARRAYSIZE(fl), ", %s", entry.shortdesc);
-      Q_strncat(flagstr, fl, ARRAYSIZE(flagstr), COPY_ALL_CHARACTERS);
-      Q_snprintf(csvf, ARRAYSIZE(csvf), "\"%s\",", entry.desc);
+      Q_snprintf(fl, SOURCE_ARRAYSIZE(fl), ", %s", entry.shortdesc);
+      Q_strncat(flagstr, fl, SOURCE_ARRAYSIZE(flagstr), COPY_ALL_CHARACTERS);
+      Q_snprintf(csvf, SOURCE_ARRAYSIZE(csvf), "\"%s\",", entry.desc);
     } else {
-      Q_snprintf(csvf, ARRAYSIZE(csvf), ",");
+      Q_snprintf(csvf, SOURCE_ARRAYSIZE(csvf), ",");
     }
 
-    Q_strncat(csvflagstr, csvf, ARRAYSIZE(csvflagstr), COPY_ALL_CHARACTERS);
+    Q_strncat(csvflagstr, csvf, SOURCE_ARRAYSIZE(csvflagstr), COPY_ALL_CHARACTERS);
   }
 
   char valstr[32];
@@ -650,19 +650,19 @@ static void PrintCvar(const ConVar *var, bool logging, FileHandle_t &f) {
 
   // Clean up integers
   if (var->GetInt() == (int)var->GetFloat()) {
-    Q_snprintf(valstr, ARRAYSIZE(valstr), "%-8i", var->GetInt());
+    Q_snprintf(valstr, SOURCE_ARRAYSIZE(valstr), "%-8i", var->GetInt());
   } else {
-    Q_snprintf(valstr, ARRAYSIZE(valstr), "%-8.3f", var->GetFloat());
+    Q_snprintf(valstr, SOURCE_ARRAYSIZE(valstr), "%-8.3f", var->GetFloat());
   }
 
   // Print to console
   ConMsg(
       "%-40s : %-8s : %-16s : %s\n", var->GetName(), valstr, flagstr,
-      StripTabsAndReturns(var->GetHelpText(), tempbuff, ARRAYSIZE(tempbuff)));
+      StripTabsAndReturns(var->GetHelpText(), tempbuff, SOURCE_ARRAYSIZE(tempbuff)));
   if (logging) {
     g_pFileSystem->FPrintf(
         f, "\"%s\",\"%s\",%s,\"%s\"\n", var->GetName(), valstr, csvflagstr,
-        StripQuotes(var->GetHelpText(), tempbuff, ARRAYSIZE(tempbuff)));
+        StripQuotes(var->GetHelpText(), tempbuff, SOURCE_ARRAYSIZE(tempbuff)));
   }
 }
 
@@ -676,7 +676,7 @@ static void PrintCommand(const ConCommand *cmd, bool logging, FileHandle_t &f) {
 
     emptyflags[0] = 0;
 
-    int c = ARRAYSIZE(g_ConVarFlags);
+    int c = SOURCE_ARRAYSIZE(g_ConVarFlags);
     for (int i = 0; i < c; ++i) {
       char csvf[64];
       Q_snprintf(csvf, sizeof(csvf), ",");
@@ -912,7 +912,7 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
     ConMsg("Usage:  findflags <string>\n");
     ConMsg("Available flags to search for: \n");
 
-    for (int i = 0; i < ARRAYSIZE(g_ConVarFlags); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ConVarFlags); i++) {
       ConMsg("   - %s\n", g_ConVarFlags[i].desc);
     }
     return;
@@ -927,7 +927,7 @@ void CCvarUtilities::CvarFindFlags_f(const CCommand &args) {
     if (var->IsFlagSet(FCVAR_DEVELOPMENTONLY) || var->IsFlagSet(FCVAR_HIDDEN))
       continue;
 
-    for (int i = 0; i < ARRAYSIZE(g_ConVarFlags); i++) {
+    for (int i = 0; i < SOURCE_ARRAYSIZE(g_ConVarFlags); i++) {
       if (!var->IsFlagSet(g_ConVarFlags[i].bit)) continue;
 
       if (!V_stristr(g_ConVarFlags[i].desc, search)) continue;

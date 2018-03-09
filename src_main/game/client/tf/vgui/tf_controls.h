@@ -114,8 +114,8 @@ private:
 	struct FooterButton_t
 	{
 		bool	bVisible;
-		char	name[MAX_PATH];
-		wchar_t	text[MAX_PATH];
+		char	name[SOURCE_MAX_PATH];
+		wchar_t	text[SOURCE_MAX_PATH];
 		wchar_t	icon[3]; // icon can be one or two characters
 	};
 

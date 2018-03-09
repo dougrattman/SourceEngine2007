@@ -1,6 +1,6 @@
-//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 //
-// Purpose:  Utility class to help in socket creation. Works for clients +
+// Purpose: Utility class to help in socket creation. Works for clients +
 // servers
 
 #if defined(_WIN32)
@@ -10,7 +10,7 @@
 #undef SetPort  // winsock screws with the SetPort string... *sigh*
 #define socklen_t int
 #define MSG_NOSIGNAL 0
-#elif _LINUX
+#elif OS_POSIX
 #include <errno.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -22,16 +22,16 @@
 #define ioctlsocket ioctl
 #endif
 
-#include "tier0/include/dbg.h"
 #include "server.h"
 #include "socketcreator.h"
+#include "tier0/include/dbg.h"
 
 #include "tier0/include/memdbgon.h"
 
 bool SocketWouldBlock() {
 #ifdef _WIN32
   return (WSAGetLastError() == WSAEWOULDBLOCK);
-#elif _LINUX
+#elif OS_POSIX
   return (errno == EAGAIN || errno == EWOULDBLOCK);
 #endif
 }
@@ -124,7 +124,7 @@ void CSocketCreator::ProcessAccept() {
   newSocket = accept(m_hListenSocket, &sa, (socklen_t *)&nLengthAddr);
   if (newSocket == -1) {
     if (!SocketWouldBlock()
-#ifdef _LINUX
+#ifdef OS_POSIX
         && errno != EINTR
 #endif
     ) {

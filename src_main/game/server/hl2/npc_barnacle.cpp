@@ -29,7 +29,7 @@
 #include "npc_antlion.h"
 #endif
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 extern ConVar sv_gravity;
@@ -124,7 +124,10 @@ CNPC_Barnacle::~CNPC_Barnacle(void) {
 /*
 
         input LetGo(void) : "Let go of anything I am holding."
-        
+        
+
+
+
 
 
         output OnGrab(string)    : "When I attach my tongue to something"
@@ -1789,7 +1792,7 @@ void CNPC_Barnacle::UpdateTongue(void) {
   float flRestStretch = (BARNACLE_TONGUE_TIP_MASS * sv_gravity.GetFloat()) /
                         BARNACLE_TONGUE_SPRING_CONSTANT_HANGING;
 
-  // FIXME: HACK!!!! The code above doesn't quite make the tip end up in the
+  // TODO(d.rattman): HACK!!!! The code above doesn't quite make the tip end up in the
   // right place. but it should. So, we're gonna hack it the rest of the way.
   flRestStretch += 4;
 
@@ -1803,7 +1806,7 @@ void CNPC_Barnacle::SpawnDeathGibs(void) {
   bool bDroppedAny = false;
 
   // Drop a random number of gibs
-  for (int i = 0; i < ARRAYSIZE(m_szGibNames); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_szGibNames); i++) {
     if (random->RandomInt(0, 1)) {
       CGib::SpawnSpecificGibs(this, 1, 32, 1, m_szGibNames[i]);
       bDroppedAny = true;
@@ -1930,7 +1933,7 @@ void CNPC_Barnacle::WaitTillDead(void) {
   }
 
   // Keep moving the tongue to its dead position
-  // FIXME: This stupid algorithm is necessary because
+  // TODO(d.rattman): This stupid algorithm is necessary because
   // I can't seem to get reproduceable behavior from springs
   bool bTongueInPosition = false;
   float flDist = m_vecRoot.Get().z - m_vecTip.Get().z;
@@ -2033,7 +2036,7 @@ static impactentry_t barnacleAngularTable[] = {
 static impactdamagetable_t gBarnacleImpactDamageTable = {
     barnacleLinearTable, barnacleAngularTable,
 
-    ARRAYSIZE(barnacleLinearTable), ARRAYSIZE(barnacleAngularTable),
+    SOURCE_ARRAYSIZE(barnacleLinearTable), SOURCE_ARRAYSIZE(barnacleAngularTable),
 
     24 * 24,    // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -2065,7 +2068,7 @@ void CNPC_Barnacle::Precache() {
   PrecacheModel("models/barnacle.mdl");
 
   // Precache all gibs
-  for (int i = 0; i < ARRAYSIZE(m_szGibNames); i++) {
+  for (int i = 0; i < SOURCE_ARRAYSIZE(m_szGibNames); i++) {
     PrecacheModel(m_szGibNames[i]);
   }
 

@@ -1,17 +1,14 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DISPCOLL_COMMON_H
 #define DISPCOLL_COMMON_H
-#pragma once
 
+#include "base/include/macros.h"
 #include "bitvec.h"
 #include "builddisp.h"
 #include "cmodel.h"
 #include "trace.h"
+
 #ifdef ENGINE_DLL
 #include "../engine/zone.h"
 #endif
@@ -24,7 +21,7 @@ template <typename T>
 class CDispVector : public CUtlVector<T, CUtlMemoryAligned<T, 16> > {};
 #endif
 
-FORWARD_DECLARE_HANDLE(memhandle_t);
+SOURCE_FORWARD_DECLARE_HANDLE(memhandle_t);
 
 #define DISPCOLL_TREETRI_SIZE MAX_DISPTRIS
 #define DISPCOLL_DIST_EPSILON 0.03125f
@@ -292,7 +289,7 @@ class CDispCollTree {
                                            RayDispOutput_t &output,
                                            CDispCollTri **pImpactTri);
 
-  int FORCEINLINE BuildRayLeafList(int iNode, rayleaflist_t &list);
+  int SOURCE_FORCEINLINE BuildRayLeafList(int iNode, rayleaflist_t &list);
 
   struct AABBTree_TreeTrisSweepTest_Args_t {
     AABBTree_TreeTrisSweepTest_Args_t(const Ray_t &ray,
@@ -322,8 +319,8 @@ class CDispCollTree {
 
   inline bool FacePlane(const Ray_t &ray, const Vector &rayDir,
                         CDispCollTri *pTri, CDispCollHelper *pHelper);
-  bool FORCEINLINE AxisPlanesXYZ(const Ray_t &ray, CDispCollTri *pTri,
-                                 CDispCollHelper *pHelper);
+  bool SOURCE_FORCEINLINE AxisPlanesXYZ(const Ray_t &ray, CDispCollTri *pTri,
+                                        CDispCollHelper *pHelper);
   inline bool EdgeCrossAxisX(const Ray_t &ray, unsigned short iPlane,
                              CDispCollHelper *pHelper);
   inline bool EdgeCrossAxisY(const Ray_t &ray, unsigned short iPlane,
@@ -335,9 +332,11 @@ class CDispCollTree {
                                 const Vector &vecNormal, float flDist,
                                 CDispCollHelper *pHelper);
   template <int AXIS>
-  bool FORCEINLINE TestOneAxisPlaneMin(const Ray_t &ray, CDispCollTri *pTri);
+  bool SOURCE_FORCEINLINE TestOneAxisPlaneMin(const Ray_t &ray,
+                                              CDispCollTri *pTri);
   template <int AXIS>
-  bool FORCEINLINE TestOneAxisPlaneMax(const Ray_t &ray, CDispCollTri *pTri);
+  bool SOURCE_FORCEINLINE TestOneAxisPlaneMax(const Ray_t &ray,
+                                              CDispCollTri *pTri);
   template <int AXIS>
   bool EdgeCrossAxis(const Ray_t &ray, unsigned short iPlane,
                      CDispCollHelper *pHelper);
@@ -351,7 +350,7 @@ class CDispCollTree {
                                  const Vector &vecBoxExtents,
                                  Vector &vecBoxPoint);
   int AddPlane(const Vector &vecNormal);
-  bool FORCEINLINE IsLeafNode(int iNode);
+  bool SOURCE_FORCEINLINE IsLeafNode(int iNode);
 
  public:
   Vector m_mins;  // Bounding box of the displacement surface and base face
@@ -388,7 +387,7 @@ class CDispCollTree {
   size_t m_nSize;
 };
 
-FORCEINLINE bool CDispCollTree::IsLeafNode(int iNode) {
+SOURCE_FORCEINLINE bool CDispCollTree::IsLeafNode(int iNode) {
   return iNode >= m_nodes.Count() ? true : false;
 }
 

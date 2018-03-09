@@ -12,7 +12,7 @@
 #include "studio.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 
@@ -187,7 +187,7 @@ void CDmeModel::LoadJointTransform( CDmeDag *pJoint, CDmeTransformList *pBindPos
 	if ( nJointIndex < 0 )
 		return;
 
-	// FIXME: Sucky search here necessary to find bone matrix index
+	// TODO(d.rattman): Sucky search here necessary to find bone matrix index
 	matrix3x4_t	jointToWorld, jointToParent;
 	pTransform->GetTransform( jointToParent );
 	ConcatTransforms( parentToWorld, jointToParent, jointToWorld );

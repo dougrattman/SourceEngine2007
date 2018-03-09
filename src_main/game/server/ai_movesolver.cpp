@@ -5,7 +5,7 @@
 #include "ai_movesolver.h"
 #include "ndebugoverlay.h"
 
-// memdbgon must be the last include file in a .cpp file!!!
+ 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ bool CAI_MoveSolver::Solve(const AI_MoveSuggestion_t *pSuggestions,
   constexpr int NUM_SOLUTIONS = 120;
   constexpr int SOLUTION_ANG = 360 / NUM_SOLUTIONS;
 
-  COMPILE_TIME_ASSERT((360 % NUM_SOLUTIONS) == 0);
+  static_assert((360 % NUM_SOLUTIONS) == 0);
 
   struct Solution_t {
     // The sum bias

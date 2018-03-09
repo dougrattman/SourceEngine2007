@@ -22,8 +22,8 @@ namespace vgui
 #define offsetof(s,m)	(size_t)&(((s *)0)->m)
 #endif
 
-#ifndef ARRAYSIZE
-#define ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
+#ifndef SOURCE_ARRAYSIZE
+#define SOURCE_ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
 #endif
 
 
@@ -58,7 +58,7 @@ struct MessageMapItem_t
 	const char *name;
 	// VC6 aligns this to 16-bytes.  Since some of the code has been compiled with VC6,
 	// we need to enforce the alignment on later compilers to remain compatible.
-	ALIGN16 MessageFunc_t func;
+	alignas(16) MessageFunc_t func;
 
 	int numParams;
 
@@ -300,7 +300,7 @@ struct PanelMap_t
 
 // could embed typeid() into here as well?
 #define IMPLEMENT_PANELMAP( derivedClass, baseClass ) \
-	vgui::PanelMap_t derivedClass::m_PanelMap = { derivedClass::m_MessageMap, ARRAYSIZE(derivedClass::m_MessageMap), #derivedClass, &baseClass::m_PanelMap }; \
+	vgui::PanelMap_t derivedClass::m_PanelMap = { derivedClass::m_MessageMap, SOURCE_ARRAYSIZE(derivedClass::m_MessageMap), #derivedClass, &baseClass::m_PanelMap }; \
 	vgui::PanelMap_t *derivedClass::GetPanelMap( void ) { return &m_PanelMap; }
 
 typedef vgui::Panel *( *PANELCREATEFUNC )( void );

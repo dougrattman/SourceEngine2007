@@ -13,7 +13,7 @@
 #include "nvtc.h"
 
 #include "tier0/include/basetypes.h"
-#include "tier0/include/compiler_specific_macroses.h"
+#include "base/include/compiler_specific.h"
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 #include "tier1/utlmemory.h"

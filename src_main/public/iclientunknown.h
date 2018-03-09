@@ -26,7 +26,7 @@ class IClientThinkable;
 
 // This is the client's version of IUnknown. We may want to use a QueryInterface-like
 // mechanism if this gets big.
-abstract_class IClientUnknown : public IHandleEntity
+the_interface IClientUnknown : public IHandleEntity
 {
 public:
 	virtual ICollideable*		GetCollideable() = 0;

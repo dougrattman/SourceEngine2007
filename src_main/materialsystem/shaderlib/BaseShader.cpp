@@ -70,7 +70,7 @@ static ShaderParamInfo_t s_StandardParams[NUM_SHADER_MATERIAL_VARS] = {
 
 //-----------------------------------------------------------------------------
 // Gets the standard shader parameter names
-// FIXME: Turn this into one function?
+// TODO(d.rattman): Turn this into one function?
 //-----------------------------------------------------------------------------
 int CBaseShader::GetNumParams() const { return NUM_SHADER_MATERIAL_VARS; }
 
@@ -414,7 +414,7 @@ void CBaseShader::GetColorParameter(IMaterialVar** params,
 }
 
 //-----------------------------------------------------------------------------
-// FIXME: Figure out a better way to do this?
+// TODO(d.rattman): Figure out a better way to do this?
 //-----------------------------------------------------------------------------
 int CBaseShader::ComputeModulationFlags(IMaterialVar** params,
                                         IShaderDynamicAPI* pShaderAPI) {
