@@ -364,7 +364,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{0B49
 		deps\amd3dx\include\amd3dx.h = deps\amd3dx\include\amd3dx.h
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bzip2", "bzip2", "{415AF1B6-7674-4292-A0B0-B2177783CFDE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libbz2", "libbz2", "{415AF1B6-7674-4292-A0B0-B2177783CFDE}"
 	ProjectSection(SolutionItems) = preProject
 		deps\libbz2\blocksort.c = deps\libbz2\blocksort.c
 		deps\libbz2\bz-common.xsl = deps\libbz2\bz-common.xsl
@@ -427,7 +427,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bzip2", "bzip2", "{415AF1B6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\libbz2\libbz2.vcxproj", "{15E54334-3F4D-4571-9781-473E5F89D2B1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "speex", "speex", "{83010A1A-8FBB-4E79-83C9-6C8AD8F2107C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libspeex", "libspeex", "{83010A1A-8FBB-4E79-83C9-6C8AD8F2107C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libspeex", "deps\libspeex\win32\VS2017\libspeex\libspeex.vcxproj", "{E972C52F-9E85-4D65-B19C-031E511E9DB4}"
 EndProject
@@ -437,11 +437,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trktool", "trktool", "{0315
 		deps\trktool\trktooln.lib = deps\trktool\trktooln.lib
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xzip", "xzip", "{7F35931E-B712-4FC6-9C00-405A5129FA70}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libxzip", "libxzip", "{7F35931E-B712-4FC6-9C00-405A5129FA70}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxzip", "deps\libxzip\libxzip.vcxproj", "{ADB3939B-7067-46DD-AE77-6023974A5CB9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunzip", "xunzip", "{72C7A42C-8AC4-449C-AD97-E5E85603E896}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libxunzip", "libxunzip", "{72C7A42C-8AC4-449C-AD97-E5E85603E896}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxunzip", "deps\libxunzip\libxunzip.vcxproj", "{977DB2CD-9905-4624-9618-40614833B94B}"
 EndProject
