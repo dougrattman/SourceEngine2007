@@ -43,9 +43,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\public\mathlib\IceKey.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\public\tier1\interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -5,7 +5,7 @@
 #include "util_shared.h"
 
 #include "IEffects.h"
-#include "mathlib/IceKey.H"
+#include "deps/libice/IceKey.h"
 #include "mathlib/mathlib.h"
 #include "model_types.h"
 #include "particle_parse.h"

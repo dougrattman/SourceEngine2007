@@ -2072,7 +2072,6 @@
     <ClInclude Include="..\public\mathlib\bumpvects.h" />
     <ClInclude Include="..\public\mathlib\compressed_light_cube.h" />
     <ClInclude Include="..\public\mathlib\compressed_vector.h" />
-    <ClInclude Include="..\public\mathlib\IceKey.H" />
     <ClInclude Include="..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\public\mathlib\polyhedron.h" />
     <ClInclude Include="..\public\mathlib\vector.h" />
@@ -2496,6 +2495,9 @@
     </ProjectReference>
     <ProjectReference Include="..\deps\libbz2\libbz2.vcxproj">
       <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\deps\libice\libice.vcxproj">
+      <Project>{e408b2fb-dfe8-4dd2-a25f-17d2cf6f653b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\deps\libjpeg\jpeg.vcxproj">
       <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>

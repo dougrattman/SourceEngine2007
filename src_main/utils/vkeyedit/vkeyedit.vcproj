@@ -196,9 +196,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\public\mathlib\IceKey.H">
-			</File>
-			<File
 				RelativePath="..\..\public\tier1\interface.h">
 			</File>
 			<File

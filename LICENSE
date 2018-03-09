@@ -260,7 +260,8 @@ Valve’s obligations to provide such notices:
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   """
 
-- ICE (64-bit private key block cipher), is licensed as follows:
+- ICE (64-bit private key block cipher), located at deps/libice, is licensed
+  as follows:
   """
     Written by Matthew Kwan - July 1996
  

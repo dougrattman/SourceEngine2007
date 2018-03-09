@@ -154,7 +154,6 @@
     <ResourceCompile Include="vkeyedit.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\public\mathlib\IceKey.H" />
     <ClInclude Include="..\..\public\tier1\interface.h" />
     <ClInclude Include="..\..\public\tier1\KeyValues.h" />
     <ClInclude Include="..\..\public\tier1\utlbuffer.h" />

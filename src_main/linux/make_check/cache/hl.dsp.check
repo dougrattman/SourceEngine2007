@@ -66955,11 +66955,6 @@ SOURCE=.\hltvdirector.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\IceKey.cpp
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
 SOURCE=..\game_shared\ichoreoeventcallback.h
 # End Source File
 # Begin Source File
@@ -68800,10 +68795,6 @@ SOURCE=..\game_shared\groundlink.h
 # Begin Source File
 
 SOURCE=..\public\appframework\IAppSystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\public\IceKey.H
 # End Source File
 # Begin Source File
 

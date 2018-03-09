@@ -273,7 +273,6 @@
     <ClCompile Include="bumpvects.cpp" />
     <ClCompile Include="color_conversion.cpp" />
     <ClCompile Include="halton.cpp" />
-    <ClCompile Include="IceKey.cpp" />
     <ClCompile Include="imagequant.cpp" />
     <ClCompile Include="lightdesc.cpp" />
     <ClCompile Include="mathlib_base.cpp" />
@@ -300,7 +299,6 @@
     <ClInclude Include="..\public\mathlib\compressed_light_cube.h" />
     <ClInclude Include="..\public\mathlib\compressed_vector.h" />
     <ClInclude Include="..\public\mathlib\halton.h" />
-    <ClInclude Include="..\public\mathlib\IceKey.H" />
     <ClInclude Include="..\public\mathlib\lightdesc.h" />
     <ClInclude Include="..\public\mathlib\mathlib.h" />
     <ClInclude Include="..\public\mathlib\math_pfns.h" />

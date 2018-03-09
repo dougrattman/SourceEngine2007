@@ -17,7 +17,7 @@
 #include "blockingudpsocket.h"
 #include "cserserverprotocol_engine.h"
 #include "filesystem_tools.h"
-#include "mathlib/icekey.h"
+#include "deps/libice/IceKey.h"
 #include "shared_file_system.h"
 #include "steamcommon.h"
 #include "tier0/include/basetypes.h"

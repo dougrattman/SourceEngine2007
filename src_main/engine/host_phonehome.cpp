@@ -16,7 +16,7 @@
 #include "cserserverprotocol_engine.h"
 #include "host.h"
 #include "host_phonehome.h"
-#include "mathlib/IceKey.H"
+#include "deps/libice/IceKey.h"
 #include "net.h"
 #include "quakedef.h"
 #include "tier0/include/icommandline.h"

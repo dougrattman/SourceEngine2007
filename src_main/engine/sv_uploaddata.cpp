@@ -14,7 +14,7 @@
 #include "blockingudpsocket.h"
 #include "cserserverprotocol_engine.h"
 #include "host.h"
-#include "mathlib/IceKey.H"
+#include "deps/libice/IceKey.h"
 #include "net.h"
 #include "tier1/bitbuf.h"
 #include "tier1/keyvalues.h"

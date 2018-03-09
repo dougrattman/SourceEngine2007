@@ -1722,6 +1722,9 @@
       <Project>{df73ed14-5c01-4b79-916b-1c6ac39e90f9}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\..\deps\libice\libice.vcxproj">
+      <Project>{e408b2fb-dfe8-4dd2-a25f-17d2cf6f653b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\dmxloader\dmxloader.vcxproj">
       <Project>{5f5b0fbe-d3e6-4653-a23f-e8b6b8a5fc0e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

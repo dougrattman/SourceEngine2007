@@ -250,9 +250,6 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
     <None Include="vice.vpc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\public\mathlib\IceKey.H" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@
  * NOTE: register keyword is deprecated, so its usages are removed.
  */
 
-#include "mathlib/IceKey.H"
+#include "IceKey.h"
 
 /* Structure of a single round subkey */
 class IceSubkey {
@@ -60,8 +60,7 @@ static const int ice_keyrot[16] = {0, 1, 2, 3, 2, 1, 3, 0,
  * subtractions are replaced by XOR.
  */
 
-static unsigned int gf_mult(unsigned int a, unsigned int b,
-                            unsigned int m) {
+static unsigned int gf_mult(unsigned int a, unsigned int b, unsigned int m) {
   unsigned int res = 0;
 
   while (b) {

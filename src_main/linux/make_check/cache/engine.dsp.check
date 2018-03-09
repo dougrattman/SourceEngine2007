@@ -1791,14 +1791,6 @@ SOURCE=.\host_state.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\IceKey.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\public\IceKey.H
-# End Source File
-# Begin Source File
-
 SOURCE=..\Public\ImageLoader.cpp
 # End Source File
 # Begin Source File

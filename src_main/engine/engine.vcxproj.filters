@@ -1370,9 +1370,6 @@
     <ClInclude Include="..\public\ibxmovietools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\mathlib\IceKey.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\iclient.h">
       <Filter>Header Files</Filter>
     </ClInclude>

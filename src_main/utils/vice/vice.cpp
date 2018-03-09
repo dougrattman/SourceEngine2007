@@ -23,7 +23,7 @@
 #include "tier0/include/icommandline.h"
 #include "base/include/windows/windows_light.h"
 
-#include "mathlib/IceKey.h"
+#include "deps/libice/IceKey.h"
 #include <filesystem_tools.h>
 
 #define FF_TRYAGAIN 1

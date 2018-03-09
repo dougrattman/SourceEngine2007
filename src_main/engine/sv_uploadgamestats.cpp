@@ -24,7 +24,7 @@
 #include "host_phonehome.h"
 #include "iregistry.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
-#include "mathlib/IceKey.H"
+#include "deps/libice/IceKey.h"
 #include "net.h"
 #include "quakedef.h"
 #include "steam/steam_api.h"
