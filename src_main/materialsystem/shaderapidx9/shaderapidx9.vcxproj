@@ -404,7 +404,7 @@
     <ProjectReference Include="..\..\bitmap\bitmap.vcxproj">
       <Project>{d98f41bd-a135-4fea-a53a-c6553419da29}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\deps\bzip2\libbz2.vcxproj">
+    <ProjectReference Include="..\..\deps\libbz2\libbz2.vcxproj">
       <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\mathlib\mathlib.vcxproj">

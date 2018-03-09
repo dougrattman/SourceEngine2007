@@ -529,7 +529,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server (LostCoast)", "game\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jpeg", "deps\libjpeg\jpeg.vcxproj", "{019DBD2A-273D-4BA4-BF86-B5EFE2ED76B1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\bzip2\libbz2.vcxproj", "{15E54334-3F4D-4571-9781-473E5F89D2B1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\libbz2\libbz2.vcxproj", "{15E54334-3F4D-4571-9781-473E5F89D2B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxunzip", "deps\xunzip\libxunzip.vcxproj", "{977DB2CD-9905-4624-9618-40614833B94B}"
 EndProject

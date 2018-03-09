@@ -274,7 +274,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xwad", "utils\xwad\xwad.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vlocalize", "vgui2\vlocalize\vlocalize.vcxproj", "{6A1DCFA8-FB4D-4DA0-9596-A4DEDA7006CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\bzip2\libbz2.vcxproj", "{15E54334-3F4D-4571-9781-473E5F89D2B1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "deps\libbz2\libbz2.vcxproj", "{15E54334-3F4D-4571-9781-473E5F89D2B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jpeg", "deps\libjpeg\jpeg.vcxproj", "{019DBD2A-273D-4BA4-BF86-B5EFE2ED76B1}"
 EndProject

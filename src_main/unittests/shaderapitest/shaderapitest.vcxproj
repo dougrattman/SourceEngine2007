@@ -236,7 +236,6 @@ call ..\..\devtools\bin\vsign.bat -noforcewritable ..\..\..\game\bin\$(TargetFil
     <ClCompile Include="shaderapitest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\lib\common\vc7\bzip2.lib" />
     <Library Include="..\..\lib\public\appframework.lib" />
     <Library Include="..\..\lib\public\tier0.lib" />
     <Library Include="..\..\lib\public\tier1.lib" />

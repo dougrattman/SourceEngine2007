@@ -7,7 +7,7 @@
 #include "net_chan.h"
 
 #include "demo.h"
-#include "deps/bzip2/bzlib.h"
+#include "deps/libbz2/bzlib.h"
 #include "filesystem_engine.h"
 #include "host.h"
 #include "inetmsghandler.h"

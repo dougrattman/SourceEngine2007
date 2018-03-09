@@ -11,7 +11,7 @@
 #include "Color.h"
 #include "ShaderAPIDX8_Global.h"
 #include "datacache/idatacache.h"
-#include "deps/bzip2/bzlib.h"
+#include "deps/libbz2/bzlib.h"
 #include "filesystem.h"
 #include "filesystem/IQueuedLoader.h"
 #include "ishadersystem.h"

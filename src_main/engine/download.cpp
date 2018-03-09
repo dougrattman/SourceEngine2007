@@ -13,7 +13,7 @@
 #include <WinInet.h>
 #include <cassert>
 #include "client.h"
-#include "deps/bzip2/bzlib.h"
+#include "deps/libbz2/bzlib.h"
 #include "download.h"
 #include "download_internal.h"
 #include "filesystem.h"
@@ -147,7 +147,7 @@ void DownloadCache::GetCachedData(RequestContext *rc) {
 
 //--------------------------------------------------------------------------------------------------------------
 /**
- *  Takes a data stream compressed with bzip2, and writes it out to disk,
+ *  Takes a data stream compressed with libbz2, and writes it out to disk,
  * uncompresses it, and deletes the compressed version.
  */
 static bool DecompressBZipToDisk(const char *outFilename,

@@ -8,7 +8,7 @@
 #endif
 
 #include "convar.h"
-#include "deps/bzip2/bzlib.h"
+#include "deps/libbz2/bzlib.h"
 #include "filesystem_engine.h"
 #include "inetmsghandler.h"
 #include "matchmaking.h"

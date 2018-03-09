@@ -14,7 +14,7 @@
 #include "FileSystem.h"
 #include "appframework/tier2app.h"
 #include "base/include/windows/windows_light.h"
-#include "deps/bzip2/bzlib.h"
+#include "deps/libbz2/bzlib.h"
 #include "filesystem_init.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "materialsystem/imesh.h"
