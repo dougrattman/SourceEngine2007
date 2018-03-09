@@ -65,7 +65,7 @@
 #ifndef SWDS
 #include "cl_steamauth.h"
 #endif
-#include "deps/xzip/XZip.h"
+#include "deps/libxzip/XZip.h"
 
 #include "tier0/include/memdbgon.h"
 

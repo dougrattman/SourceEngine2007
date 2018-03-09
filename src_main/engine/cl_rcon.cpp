@@ -31,7 +31,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier2/fileutils.h"
 #include "vprof_engine.h"
-#include "deps/xunzip/xunzip.h"
+#include "deps/libxunzip/xunzip.h"
 
  
 #include "tier0/include/memdbgon.h"

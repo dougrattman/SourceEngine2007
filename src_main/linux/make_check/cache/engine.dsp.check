@@ -4341,7 +4341,7 @@ SOURCE=..\Public\worldsize.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\deps\xzip\XZip.h
+SOURCE=..\deps\libxzip\XZip.h
 # End Source File
 # Begin Source File
 

@@ -2465,7 +2465,7 @@
     <ClInclude Include="..\public\xwvfile.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\deps\xzip\XZip.h">
+    <ClInclude Include="..\deps\libxzip\XZip.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\public\zip_uncompressed.h">

@@ -8,7 +8,7 @@
 #ifndef SWDS
 #include "base/include/windows/windows_light.h"
 
-#include "deps\xzip\XZip.h"
+#include "deps/libxzip/XZip.h"
 #endif
 
 #include "PlayerState.h"

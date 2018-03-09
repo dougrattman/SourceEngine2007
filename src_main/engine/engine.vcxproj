@@ -2231,7 +2231,7 @@
     <ClInclude Include="..\public\vtf\vtf.h" />
     <ClInclude Include="..\public\worldsize.h" />
     <ClInclude Include="..\public\xwvfile.h" />
-    <ClInclude Include="..\deps\xzip\XZip.h" />
+    <ClInclude Include="..\deps\libxzip\XZip.h" />
     <ClInclude Include="..\public\zip_uncompressed.h" />
     <ClInclude Include="audio\audio_pch.h" />
     <ClInclude Include="audio\private\circularbuffer.h" />
@@ -2500,10 +2500,10 @@
     <ProjectReference Include="..\deps\libjpeg\jpeg.vcxproj">
       <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\deps\xunzip\libxunzip.vcxproj">
+    <ProjectReference Include="..\deps\libxunzip\libxunzip.vcxproj">
       <Project>{977db2cd-9905-4624-9618-40614833b94b}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\deps\xzip\libxzip.vcxproj">
+    <ProjectReference Include="..\deps\libxzip\libxzip.vcxproj">
       <Project>{adb3939b-7067-46dd-ae77-6023974a5cb9}</Project>
     </ProjectReference>
     <ProjectReference Include="..\dmxloader\dmxloader.vcxproj">

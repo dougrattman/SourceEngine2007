@@ -439,11 +439,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trktool", "trktool", "{0315
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xzip", "xzip", "{7F35931E-B712-4FC6-9C00-405A5129FA70}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxzip", "deps\xzip\libxzip.vcxproj", "{ADB3939B-7067-46DD-AE77-6023974A5CB9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxzip", "deps\libxzip\libxzip.vcxproj", "{ADB3939B-7067-46DD-AE77-6023974A5CB9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunzip", "xunzip", "{72C7A42C-8AC4-449C-AD97-E5E85603E896}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxunzip", "deps\xunzip\libxunzip.vcxproj", "{977DB2CD-9905-4624-9618-40614833B94B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxunzip", "deps\libxunzip\libxunzip.vcxproj", "{977DB2CD-9905-4624-9618-40614833B94B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libjpeg", "libjpeg", "{6B3ABC84-51F4-40FB-AE53-797D48F9ED7B}"
 EndProject
