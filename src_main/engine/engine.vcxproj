@@ -390,8 +390,6 @@
     </ClCompile>
     <ClCompile Include="..\public\vallocator.cpp" />
     <ClCompile Include="..\public\vgui_controls\vgui_controls.cpp" />
-    <ClCompile Include="..\public\XUnzip.cpp" />
-    <ClCompile Include="..\public\XZip.cpp" />
     <ClCompile Include="audio\audio_pch.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\engine\audio\public;..\engine\audio\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\engine\audio\public;..\engine\audio\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -2236,7 +2234,7 @@
     <ClInclude Include="..\public\vtf\vtf.h" />
     <ClInclude Include="..\public\worldsize.h" />
     <ClInclude Include="..\public\xwvfile.h" />
-    <ClInclude Include="..\public\zip\XZip.h" />
+    <ClInclude Include="..\deps\xzip\XZip.h" />
     <ClInclude Include="..\public\zip_uncompressed.h" />
     <ClInclude Include="audio\audio_pch.h" />
     <ClInclude Include="audio\private\circularbuffer.h" />
@@ -2501,6 +2499,12 @@
     </ProjectReference>
     <ProjectReference Include="..\deps\bzip2\libbz2.vcxproj">
       <Project>{15e54334-3f4d-4571-9781-473e5f89d2b1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\deps\xunzip\libxunzip.vcxproj">
+      <Project>{977db2cd-9905-4624-9618-40614833b94b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\deps\xzip\libxzip.vcxproj">
+      <Project>{adb3939b-7067-46dd-ae77-6023974a5cb9}</Project>
     </ProjectReference>
     <ProjectReference Include="..\dmxloader\dmxloader.vcxproj">
       <Project>{5f5b0fbe-d3e6-4653-a23f-e8b6b8a5fc0e}</Project>

@@ -99,7 +99,7 @@
 #include <time.h>
 #include <windows.h>
 
-#include "zip/xzip.h"
+#include "xzip.h"
 
 #pragma warning(disable : 4996)  // disable bogus deprecation warning
 
@@ -3201,7 +3201,7 @@ ZRESULT ZipAdd(HZIP hz, const TCHAR *dstzn, void *src, unsigned int len,
                             (LPCWSTR)dstzn,    // wide-character string
                             -1,                // number of chars in string
                             szDest,            // buffer for new string
-                            SOURCE_MAX_PATH * 2 - 2,  // size of buffer
+                            MAX_PATH * 2 - 2,  // size of buffer
                             NULL,              // default for unmappable chars
                             NULL);             // set when default char used
     if (nActualChars == 0) return ZR_ARGS;

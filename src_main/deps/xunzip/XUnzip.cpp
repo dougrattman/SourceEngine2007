@@ -102,7 +102,7 @@
 #include <time.h>
 #include <windows.h>
 
-#include "zip/XUnzip.h"
+#include "XUnzip.h"
 
 #pragma warning(disable : 4996)  // disable bogus deprecation warning
 

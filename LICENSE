@@ -755,7 +755,8 @@ Valve’s obligations to provide such notices:
     PVCS Tracker Toolkit API
   """
 
-- Xzip/XUnzip are licensed as follows:
+- Xzip/XUnzip 1.3, located at deps/xzip and deps/xunzip, are licensed as
+  follows:
   """
     XZip/XUnzip   Version 1.3
 

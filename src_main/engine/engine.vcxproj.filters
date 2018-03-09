@@ -423,12 +423,6 @@
     <ClCompile Include="xboxsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\public\XUnzip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\public\XZip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="zone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2480,7 +2474,7 @@
     <ClInclude Include="..\public\xwvfile.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\zip\XZip.h">
+    <ClInclude Include="..\deps\xzip\XZip.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\public\zip_uncompressed.h">

@@ -2462,10 +2462,6 @@ SOURCE=.\World.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\XZip.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Zone.cpp
 # End Source File
 # End Group
@@ -4358,7 +4354,7 @@ SOURCE=..\Public\worldsize.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\public\zip\XZip.h
+SOURCE=..\deps\xzip\XZip.h
 # End Source File
 # Begin Source File
 
