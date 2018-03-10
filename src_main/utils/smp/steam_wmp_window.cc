@@ -11,7 +11,6 @@
 
 extern HWND g_hBlackFadingWindow;
 extern SteamWMPWindow* g_pFrame;
-extern wchar_t* g_lpCommandLine;
 extern bool g_bFrameCreated;
 extern double g_timeAtFadeStart;
 extern bool g_bFadeIn;
@@ -209,6 +208,10 @@ bool SetFullScreen(bool should_go_fullscreen) {
     }
   }
 
+  if (!is_fullscreen) {
+    ShowCursor(TRUE);
+  }
+
   return true;
 }
 
@@ -236,6 +239,7 @@ LRESULT SteamWMPWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam,
   CComPtr<IConnectionPointContainer> spConnectionContainer;
   CComWMPEventDispatch* pEventListener = nullptr;
   CComPtr<IWMPEvents> spEventListener;
+  CComPtr<IWMPSettings> spWMPSettings;
   HRESULT hr;
   RECT rcClient;
 
@@ -243,14 +247,13 @@ LRESULT SteamWMPWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam,
   popup_menu_ = 0;
 
   // create window
-
   GetClientRect(&rcClient);
-  window_.Create(m_hWnd, rcClient, nullptr,
-                 WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
-  if (nullptr == window_.m_hWnd) goto FAILURE;
+  HWND hwnd =
+      window_.Create(m_hWnd, rcClient, nullptr,
+                     WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
+  if (!hwnd) goto FAILURE;
 
   // load OCX in window
-
   hr = window_.QueryHost(&spHost);
   if (ShowFailureMessage(hr)) goto FAILURE;
 
@@ -262,7 +265,6 @@ LRESULT SteamWMPWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam,
   if (ShowFailureMessage(hr)) goto FAILURE;
 
   // start listening to events
-
   hr = CComWMPEventDispatch::CreateInstance(&pEventListener);
   spEventListener = pEventListener;
   if (ShowFailureMessage(hr)) goto FAILURE;
@@ -283,27 +285,28 @@ LRESULT SteamWMPWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam,
   hr = connection_point_->Advise(spEventListener, &advise_cookie_);
   if (ShowFailureMessage(hr)) goto FAILURE;
 
-  IWMPSettings* spWMPSettings;
-  g_spWMPPlayer->get_settings(&spWMPSettings);
-  if (spWMPSettings) {
-    spWMPSettings->put_volume(100);
-  }
+  hr = g_spWMPPlayer->get_settings(&spWMPSettings);
+  if (ShowFailureMessage(hr)) goto FAILURE;
 
-  g_spWMPPlayer->put_enableContextMenu(VARIANT_FALSE);
+  hr = spWMPSettings->put_volume(100);
+  if (ShowFailureMessage(hr)) goto FAILURE;
+
+  hr = g_spWMPPlayer->put_enableContextMenu(VARIANT_FALSE);
+  if (ShowFailureMessage(hr)) goto FAILURE;
 
   // set the url of the movie
   hr = g_spWMPPlayer->put_URL(bstr_t{g_URL.c_str()});
-  if (FAILED(hr)) OutputDebugString(_T("put_URL failed\n"));
+  if (ShowFailureMessage(hr)) goto FAILURE;
 
   return 0;
 
 FAILURE:
-  OutputDebugString(_T("CWMPHost::OnCreate FAILED!\n"));
+  OutputDebugString(_T("SteamWMPWindow::OnCreate FAILED!\n"));
   DestroyWindow();
+
   if (g_hBlackFadingWindow) {
     ::DestroyWindow(g_hBlackFadingWindow);
   }
-  //	::PostQuitMessage(0);
   return 0;
 }
 
@@ -379,12 +382,12 @@ LRESULT SteamWMPWindow::OnSize(UINT /* uMsg */, WPARAM wParam, LPARAM lParam,
 }
 
 LRESULT SteamWMPWindow::OnContextMenu(UINT /* uMsg */, WPARAM /* wParam */,
-                                      LPARAM lParam, BOOL& /* lResult */) {
+                                      LPARAM lParam, BOOL& is_handled) {
   if (!popup_menu_) {
     popup_menu_ = CreatePopupMenu();
-    AppendMenuW(popup_menu_, MF_STRING, ID_HALF_SIZE, _T("Zoom 50%"));
+    // AppendMenuW(popup_menu_, MF_STRING, ID_HALF_SIZE, _T("Zoom 50%"));
     AppendMenuW(popup_menu_, MF_STRING, ID_FULL_SIZE, _T("Zoom 100%"));
-    AppendMenuW(popup_menu_, MF_STRING, ID_DOUBLE_SIZE, _T("Zoom 200%"));
+    // AppendMenuW(popup_menu_, MF_STRING, ID_DOUBLE_SIZE, _T("Zoom 200%"));
     AppendMenuW(popup_menu_, MF_STRING, ID_STRETCH_TO_FIT,
                 _T("Stretch to fit window"));
   }

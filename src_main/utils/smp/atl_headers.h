@@ -16,8 +16,6 @@
 
 #include <atlbase.h>
 
-extern CComModule _Module;
-
 #include <afxres.h>
 #include <atlcom.h>
 #include <atlctl.h>
