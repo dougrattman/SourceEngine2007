@@ -1,14 +1,15 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef STDAFX_H_
-#define STDAFX_H_
+#ifndef ATL_HEADERS_H_
+#define ATL_HEADERS_H_
 
 #ifndef STRICT
 #define STRICT
 #endif
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501
+// Windows 10 features.
+#define _WIN32_WINNT 0x0A00
 #endif
 
 #define _ATL_APARTMENT_THREADED
@@ -22,4 +23,4 @@ extern CComModule _Module;
 #include <atlctl.h>
 #include <atlhost.h>
 
-#endif  // !STDAFX_H_
+#endif  // !ATL_HEADERS_H_

@@ -1,11 +1,12 @@
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
+#include "steam_wmp_events.h"
 
-#include "CWMPEventDispatch.h"
-#include "CWMPHost.h"
+#include "steam_wmp_window.h"
 
 extern HWND g_hBlackFadingWindow;
 extern CComPtr<IWMPPlayer> g_spWMPPlayer;
-extern CWMPHost* g_pFrame;
+extern SteamWMPWindow* g_pFrame;
 extern double g_timeAtFadeStart;
 extern bool g_bFadeIn;
 
@@ -16,14 +17,14 @@ bool SetFullScreen(bool bWantToBeFullscreen);
 bool IsVideoPlaying();
 void PlayVideo(bool bPlay);
 bool ShowFadeWindow(bool bShow);
-void LogPlayerEvent(EventType_t e, float pos);
-void LogPlayerEvent(EventType_t e);
+void LogPlayerEvent(EventType e, double pos);
+HRESULT LogPlayerEvent(EventType e);
 
-HRESULT CWMPEventDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
-                                  WORD wFlags, DISPPARAMS FAR* pDispParams,
-                                  VARIANT FAR* pVarResult,
-                                  EXCEPINFO FAR* pExcepInfo,
-                                  unsigned int FAR* puArgErr) {
+HRESULT SteamWMPEvents::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
+                               WORD wFlags, DISPPARAMS FAR* pDispParams,
+                               VARIANT FAR* pVarResult,
+                               EXCEPINFO FAR* pExcepInfo,
+                               unsigned int FAR* puArgErr) {
   if (!pDispParams) return E_POINTER;
 
   if (pDispParams->cNamedArgs != 0) return DISP_E_NONAMEDARGS;
@@ -250,14 +251,14 @@ HRESULT CWMPEventDispatch::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
       break;
   }
 
-  return (hr);
+  return hr;
 }
 
 // Sent when the control changes OpenState
-void CWMPEventDispatch::OpenStateChange(long NewState) { return; }
+void SteamWMPEvents::OpenStateChange(long NewState) {}
 
 // Sent when the control changes PlayState
-void CWMPEventDispatch::PlayStateChange(long NewState) {
+void SteamWMPEvents::PlayStateChange(long NewState) {
   WMPPlayState playstate;
   if (g_spWMPPlayer->get_playState(&playstate) == S_OK) {
     switch (playstate) {
@@ -297,124 +298,100 @@ void CWMPEventDispatch::PlayStateChange(long NewState) {
 }
 
 // Sent when the audio language changes
-void CWMPEventDispatch::AudioLanguageChange(long LangID) { return; }
+void SteamWMPEvents::AudioLanguageChange(long LangID) {}
 
 // Sent when the status string changes
-void CWMPEventDispatch::StatusChange() {}
+void SteamWMPEvents::StatusChange() {}
 
 // Sent when a synchronized command or URL is received
-void CWMPEventDispatch::ScriptCommand(BSTR scType, BSTR Param) { return; }
+void SteamWMPEvents::ScriptCommand(BSTR scType, BSTR Param) {}
 
 // Sent when a new stream is encountered (obsolete)
-void CWMPEventDispatch::NewStream() { return; }
+void SteamWMPEvents::NewStream() {}
 
 // Sent when the control is disconnected from the server (obsolete)
-void CWMPEventDispatch::Disconnect(long Result) { return; }
+void SteamWMPEvents::Disconnect(long Result) {}
 
 // Sent when the control begins or ends buffering
-void CWMPEventDispatch::Buffering(VARIANT_BOOL Start) { return; }
+void SteamWMPEvents::Buffering(VARIANT_BOOL Start) {}
 
 // Sent when the control has an error condition
-void CWMPEventDispatch::Error() { return; }
+void SteamWMPEvents::Error() {}
 
 // Sent when the control has an warning condition (obsolete)
-void CWMPEventDispatch::Warning(long WarningType, long Param,
-                                BSTR Description) {
-  return;
-}
+void SteamWMPEvents::Warning(long WarningType, long Param, BSTR Description) {}
 
 // Sent when the media has reached end of stream
-void CWMPEventDispatch::EndOfStream(long Result) { return; }
+void SteamWMPEvents::EndOfStream(long Result) {}
 
 // Indicates that the current position of the movie has changed
-void CWMPEventDispatch::PositionChange(double oldPosition, double newPosition) {
+void SteamWMPEvents::PositionChange(double oldPosition, double newPosition) {
   LogPlayerEvent(ET_SCRUBFROM, (float)oldPosition);
   LogPlayerEvent(ET_SCRUBTO, (float)newPosition);
 }
 
 // Sent when a marker is reached
-void CWMPEventDispatch::MarkerHit(long MarkerNum) { return; }
+void SteamWMPEvents::MarkerHit(long MarkerNum) {}
 
 // Indicates that the unit used to express duration and position has changed
-void CWMPEventDispatch::DurationUnitChange(long NewDurationUnit) { return; }
+void SteamWMPEvents::DurationUnitChange(long NewDurationUnit) {}
 
 // Indicates that the CD ROM media has changed
-void CWMPEventDispatch::CdromMediaChange(long CdromNum) { return; }
+void SteamWMPEvents::CdromMediaChange(long CdromNum) {}
 
 // Sent when a playlist changes
-void CWMPEventDispatch::PlaylistChange(IDispatch* Playlist,
-                                       WMPPlaylistChangeEventType change) {
-  return;
-}
+void SteamWMPEvents::PlaylistChange(IDispatch* Playlist,
+                                    WMPPlaylistChangeEventType change) {}
 
 // Sent when the current playlist changes
-void CWMPEventDispatch::CurrentPlaylistChange(
-    WMPPlaylistChangeEventType change) {
-  return;
-}
+void SteamWMPEvents::CurrentPlaylistChange(WMPPlaylistChangeEventType change) {}
 
 // Sent when a current playlist item becomes available
-void CWMPEventDispatch::CurrentPlaylistItemAvailable(BSTR bstrItemName) {
-  return;
-}
+void SteamWMPEvents::CurrentPlaylistItemAvailable(BSTR bstrItemName) {}
 
 // Sent when a media object changes
-void CWMPEventDispatch::MediaChange(IDispatch* Item) { return; }
+void SteamWMPEvents::MediaChange(IDispatch* Item) {}
 
 // Sent when a current media item becomes available
-void CWMPEventDispatch::CurrentMediaItemAvailable(BSTR bstrItemName) { return; }
+void SteamWMPEvents::CurrentMediaItemAvailable(BSTR bstrItemName) {}
 
 // Sent when the item selection on the current playlist changes
-void CWMPEventDispatch::CurrentItemChange(IDispatch* pdispMedia) { return; }
+void SteamWMPEvents::CurrentItemChange(IDispatch* pdispMedia) {}
 
 // Sent when the media collection needs to be requeried
-void CWMPEventDispatch::MediaCollectionChange() { return; }
+void SteamWMPEvents::MediaCollectionChange() {}
 
 // Sent when an attribute string is added in the media collection
-void CWMPEventDispatch::MediaCollectionAttributeStringAdded(
-    BSTR bstrAttribName, BSTR bstrAttribVal) {
-  return;
-}
+void SteamWMPEvents::MediaCollectionAttributeStringAdded(BSTR bstrAttribName,
+                                                         BSTR bstrAttribVal) {}
 
 // Sent when an attribute string is removed from the media collection
-void CWMPEventDispatch::MediaCollectionAttributeStringRemoved(
-    BSTR bstrAttribName, BSTR bstrAttribVal) {
-  return;
+void SteamWMPEvents::MediaCollectionAttributeStringRemoved(BSTR bstrAttribName,
+                                                           BSTR bstrAttribVal) {
 }
 
 // Sent when an attribute string is changed in the media collection
-void CWMPEventDispatch::MediaCollectionAttributeStringChanged(
-    BSTR bstrAttribName, BSTR bstrOldAttribVal, BSTR bstrNewAttribVal) {
-  return;
-}
+void SteamWMPEvents::MediaCollectionAttributeStringChanged(
+    BSTR bstrAttribName, BSTR bstrOldAttribVal, BSTR bstrNewAttribVal) {}
 
 // Sent when playlist collection needs to be requeried
-void CWMPEventDispatch::PlaylistCollectionChange() { return; }
+void SteamWMPEvents::PlaylistCollectionChange() {}
 
 // Sent when a playlist is added to the playlist collection
-void CWMPEventDispatch::PlaylistCollectionPlaylistAdded(BSTR bstrPlaylistName) {
-  return;
-}
+void SteamWMPEvents::PlaylistCollectionPlaylistAdded(BSTR bstrPlaylistName) {}
 
 // Sent when a playlist is removed from the playlist collection
-void CWMPEventDispatch::PlaylistCollectionPlaylistRemoved(
-    BSTR bstrPlaylistName) {
-  return;
-}
+void SteamWMPEvents::PlaylistCollectionPlaylistRemoved(BSTR bstrPlaylistName) {}
 
 // Sent when a playlist has been set or reset as deleted
-void CWMPEventDispatch::PlaylistCollectionPlaylistSetAsDeleted(
-    BSTR bstrPlaylistName, VARIANT_BOOL varfIsDeleted) {
-  return;
-}
+void SteamWMPEvents::PlaylistCollectionPlaylistSetAsDeleted(
+    BSTR bstrPlaylistName, VARIANT_BOOL varfIsDeleted) {}
 
 // Playlist playback mode has changed
-void CWMPEventDispatch::ModeChange(BSTR ModeName, VARIANT_BOOL NewValue) {
-  return;
-}
+void SteamWMPEvents::ModeChange(BSTR ModeName, VARIANT_BOOL NewValue) {}
 
 // Sent when the media object has an error condition
-void CWMPEventDispatch::MediaError(IDispatch* pMediaObject) {
+void SteamWMPEvents::MediaError(IDispatch* media_object) {
   while (ShowCursor(TRUE) < 0)
     ;
 
@@ -423,52 +400,59 @@ void CWMPEventDispatch::MediaError(IDispatch* pMediaObject) {
     g_pFrame->ShowWindow(SW_HIDE);
   }
 
-  CComPtr<IWMPMedia> spWMPMedia;
-  if (pMediaObject) {
-    pMediaObject->QueryInterface(&spWMPMedia);
-  }
-  if (spWMPMedia) {
-    BSTR bstr;
-    spWMPMedia->get_sourceURL(&bstr);
-    char str[1024];
-    sprintf(str, "Unable to open media: %s\n", CW2T(bstr));
-    MessageBox(NULL, str, "Media Error", MB_OK | MB_ICONERROR);
-  } else {
-    MessageBox(NULL, "Media Error", "Media Error", MB_OK | MB_ICONERROR);
+  CComPtr<IWMPMedia> wmp_media;
+  if (media_object) {
+    media_object->QueryInterface(&wmp_media);
   }
 
-  g_pFrame->PostMessage(WM_CLOSE);
+  if (wmp_media) {
+    BSTR source_url;
+    HRESULT hr = wmp_media->get_sourceURL(&source_url);
+
+    wchar_t error_message[1024];
+    wsprintfW(error_message, _T("Unable to open media: %s\n"),
+              SUCCEEDED(hr) ? CW2T(source_url).operator wchar_t*() : _T("N/A"));
+
+    MessageBoxW(nullptr, error_message, _T("Steam Media Player - Media Error"),
+                MB_OK | MB_ICONERROR);
+
+    SysFreeString(source_url);
+  } else {
+    MessageBoxW(nullptr, _T("Media Error"),
+                _T("Steam Media Player - Media Error"), MB_OK | MB_ICONERROR);
+  }
+
+  g_pFrame->PostMessageW(WM_CLOSE);
 }
 
 // Current playlist switch with no open state change
-void CWMPEventDispatch::OpenPlaylistSwitch(IDispatch* pItem) { return; }
+void SteamWMPEvents::OpenPlaylistSwitch(IDispatch* pItem) {}
 
 // Sent when the current DVD domain changes
-void CWMPEventDispatch::DomainChange(BSTR strDomain) { return; }
+void SteamWMPEvents::DomainChange(BSTR strDomain) {}
 
 // Sent when display switches to player application
-void CWMPEventDispatch::SwitchedToPlayerApplication() {}
+void SteamWMPEvents::SwitchedToPlayerApplication() {}
 
 // Sent when display switches to control
-void CWMPEventDispatch::SwitchedToControl() {}
+void SteamWMPEvents::SwitchedToControl() {}
 
 // Sent when the player docks or undocks
-void CWMPEventDispatch::PlayerDockedStateChange() {}
+void SteamWMPEvents::PlayerDockedStateChange() {}
 
 // Sent when the OCX reconnects to the player
-void CWMPEventDispatch::PlayerReconnect() {}
+void SteamWMPEvents::PlayerReconnect() {}
 
 // Occurs when a user clicks the mouse
-void CWMPEventDispatch::Click(short nButton, short nShiftState, long fX,
-                              long fY) {
+void SteamWMPEvents::Click(short nButton, short nShiftState, long fX, long fY) {
   if (IsFullScreen()) {
     SetFullScreen(false);
   }
 }
 
 // Occurs when a user double-clicks the mouse
-void CWMPEventDispatch::DoubleClick(short nButton, short nShiftState, long fX,
-                                    long fY) {
+void SteamWMPEvents::DoubleClick(short nButton, short nShiftState, long fX,
+                                 long fY) {
   // the controls are just drawn into the main window, wheras the video has its
   // own window this check allows us to only fullscreen on doubleclick within
   // the video area
@@ -480,36 +464,32 @@ void CWMPEventDispatch::DoubleClick(short nButton, short nShiftState, long fX,
 }
 
 // Occurs when a key is pressed
-void CWMPEventDispatch::KeyDown(short nKeyCode, short nShiftState) {
-#if 1
+void SteamWMPEvents::KeyDown(short nKeyCode, short nShiftState) {
   if (!g_pFrame) return;
 
   BOOL rval;
-  if (nShiftState & 4)  // 4 is the alt keymask
-  {
+  // 4 is the alt keymask
+  if (nShiftState & 4) {
     g_pFrame->OnSysKeyDown(WM_KEYDOWN, nKeyCode, 0, rval);
   } else {
     g_pFrame->OnKeyDown(WM_KEYDOWN, nKeyCode, 0, rval);
   }
-#endif
 }
 
 // Occurs when a key is pressed and released
-void CWMPEventDispatch::KeyPress(short nKeyAscii) { return; }
+void SteamWMPEvents::KeyPress(short nKeyAscii) {}
 
 // Occurs when a key is released
-void CWMPEventDispatch::KeyUp(short nKeyCode, short nShiftState) { return; }
+void SteamWMPEvents::KeyUp(short nKeyCode, short nShiftState) {}
 
 // Occurs when a mouse button is pressed
-void CWMPEventDispatch::MouseDown(short nButton, short nShiftState, long fX,
-                                  long fY) {}
+void SteamWMPEvents::MouseDown(short nButton, short nShiftState, long fX,
+                               long fY) {}
 
 // Occurs when a mouse pointer is moved
-void CWMPEventDispatch::MouseMove(short nButton, short nShiftState, long fX,
-                                  long fY) {
-  return;
-}
+void SteamWMPEvents::MouseMove(short nButton, short nShiftState, long fX,
+                               long fY) {}
 
 // Occurs when a mouse button is released
-void CWMPEventDispatch::MouseUp(short nButton, short nShiftState, long fX,
-                                long fY) {}
+void SteamWMPEvents::MouseUp(short nButton, short nShiftState, long fX,
+                             long fY) {}

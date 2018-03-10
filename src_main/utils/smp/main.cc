@@ -1,21 +1,19 @@
-// smp.cpp : Main window procedure
-//
+// Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#include "stdafx.h"
+#include "atl_headers.h"
 
 #include <commctrl.h>
-#include <math.h>
 #include <psapi.h>
+#include <cmath>
 #include <cstdio>
 #include <fstream>
 #include <string>
-#include <strstream>
 #include <vector>
-#include "../../base/include/windows/windows_light.h"
-#include "../../deps/libice/IceKey.h"
-#include "CWMPHost.h"
+
+#include "deps/libice/IceKey.h"
 #include "initguid.h"
 #include "resource.h"
+#include "steam_wmp_window.h"
 
 CComModule _Module;
 
@@ -32,8 +30,8 @@ HINSTANCE g_hInstance;
 HWND g_hBlackFadingWindow = 0;
 bool g_bFadeIn = true;
 bool g_bFrameCreated = false;
-CWMPHost g_frame;
-CWMPHost *g_pFrame = NULL;
+SteamWMPWindow g_frame;
+SteamWMPWindow *g_pFrame = nullptr;
 HDC g_hdcCapture = 0;
 HDC g_hdcBlend = 0;
 HBITMAP g_hbmCapture = 0;
@@ -43,98 +41,28 @@ HMONITOR g_hMonitor = 0;
 int g_screenWidth = 0;
 int g_screenHeight = 0;
 
-LPTSTR g_lpCommandLine = NULL;
-std::string g_redirectTarget;
-std::string g_URL;
+wchar_t *g_lpCommandLine = nullptr;
+std::wstring g_redirectTarget;
+std::wstring g_URL;
 bool g_bReportStats = false;
 bool g_bUseLocalSteamServer = false;
 
 double g_timeAtFadeStart = 0.0;
 int g_nBlurSteps = 0;
 
-void LogPlayerEvent(EventType_t e);
-
-enum OSVersion {
-  OSV_95,
-  OSV_95OSR2,
-  OSV_98,
-  OSV_98SE,
-  OSV_ME,
-  OSV_NT4,
-  OSV_2000,
-  OSV_SERVER2003,
-  OSV_XP,
-  OSV_XPSP1,
-  OSV_XPSP2,
-  OSV_XPSP3,
-  OSV_VISTA,
-  OSV_UNKNOWN,
-};
-
-OSVersion DetectOSVersion() {
-  OSVERSIONINFO version;
-  version.dwOSVersionInfoSize = sizeof(version);
-  GetVersionEx(&version);
-  if (version.dwPlatformId & VER_PLATFORM_WIN32_WINDOWS) {
-    if (version.dwMajorVersion != 4) return OSV_UNKNOWN;
-
-    switch (version.dwMinorVersion) {
-      case 0:
-        return strstr(version.szCSDVersion, _TEXT(" C")) == version.szCSDVersion
-                   ? OSV_95OSR2
-                   : OSV_95;
-      case 10:
-        return (strstr(version.szCSDVersion, _TEXT(" A")) ==
-                version.szCSDVersion) ||
-                       (strstr(version.szCSDVersion, _TEXT(" B")) ==
-                        version.szCSDVersion)
-                   ? OSV_98SE
-                   : OSV_98;
-      case 90:
-        return OSV_ME;
-    }
-  } else if (version.dwPlatformId & VER_PLATFORM_WIN32_NT) {
-    if (version.dwMajorVersion == 4) return OSV_NT4;  // or mabye NT3.5???
-
-    if (version.dwMajorVersion == 6) return OSV_VISTA;
-
-    if (version.dwMajorVersion != 5) return OSV_UNKNOWN;
-
-    switch (version.dwMinorVersion) {
-      case 0:
-        return OSV_2000;
-      case 1: {
-        if (version.szCSDVersion == NULL) return OSV_XP;
-
-        if (strstr(version.szCSDVersion, _TEXT("Service Pack 1")) != NULL)
-          return OSV_XPSP1;
-
-        if (strstr(version.szCSDVersion, _TEXT("Service Pack 2")) != NULL)
-          return OSV_XPSP2;
-
-        if (strstr(version.szCSDVersion, _TEXT("Service Pack 3")) != NULL)
-          return OSV_XPSP3;
-      }
-      case 2:
-        return OSV_SERVER2003;  // or maybe XP64???
-    }
-  }
-
-  return OSV_UNKNOWN;
-}
-
-const OSVersion g_osVersion = DetectOSVersion();
+HRESULT LogPlayerEvent(EventType e);
+bool ShowFailureMessage(HRESULT hr);
 
 #define BLUR
 
 #define USE_D3D8
 #ifdef USE_D3D8
 
-#include <d3d8.h>
-IDirect3D8 *g_pD3D = NULL;
-IDirect3DDevice8 *g_pd3dDevice = NULL;
-IDirect3DVertexBuffer8 *g_pDrawVB = NULL;
-IDirect3DTexture8 *g_pImg = NULL;
+#include <d3d9.h>
+IDirect3D9 *g_pD3D = nullptr;
+IDirect3DDevice9 *g_pd3dDevice = nullptr;
+IDirect3DVertexBuffer9 *g_pDrawVB = nullptr;
+IDirect3DTexture9 *g_pImg = nullptr;
 int g_nDrawStride = 0;
 DWORD g_dwDrawFVF = 0;
 
@@ -142,10 +70,10 @@ DWORD g_dwDrawFVF = 0;
 
 int g_nBlurStride = 0;
 DWORD g_dwBlurFVF = 0;
-IDirect3DVertexBuffer8 *g_pBlurVB = NULL;
-IDirect3DTexture8 *g_pTex = NULL;
-IDirect3DTexture8 *g_pRT = NULL;
-IDirect3DSurface8 *g_pBackBuf = NULL;
+IDirect3DVertexBuffer9 *g_pBlurVB = nullptr;
+IDirect3DTexture9 *g_pTex = nullptr;
+IDirect3DTexture9 *g_pRT = nullptr;
+IDirect3DSurface9 *g_pBackBuf = nullptr;
 
 #endif  // BLUR
 
@@ -154,105 +82,133 @@ IDirect3DSurface8 *g_pBackBuf = NULL;
 DWORD g_dwUseVMROverlayOldValue = 0;
 bool g_bUseVMROverlayValueExists = false;
 
-void SetRegistryValue(const char *pKeyName, const char *pValueName,
-                      DWORD dwValue, DWORD &dwOldValue, bool &bValueExisted) {
-  HKEY hKey = 0;
-  LONG rval = RegCreateKeyEx(HKEY_CURRENT_USER, pKeyName, 0, NULL,
-                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
-                             &hKey, NULL);
-  if (rval != ERROR_SUCCESS) {
-    OutputDebugString("unable to open registry key: ");
-    OutputDebugString(pKeyName);
-    OutputDebugString("\n");
-    return;
+LONG SetRegistryValue(const wchar_t *key_name, const wchar_t *value_name,
+                      DWORD value, DWORD &old_Value, bool &was_value_set) {
+  HKEY key = nullptr;
+  LSTATUS return_code = RegCreateKeyExW(HKEY_CURRENT_USER, key_name, 0, nullptr,
+                                        REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+                                        nullptr, &key, nullptr);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to open registry key: "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
+    return return_code;
   }
 
-  DWORD dwType = 0;
-  DWORD dwSize = sizeof(dwOldValue);
+  DWORD key_type = 0, value_size = sizeof(old_Value);
 
   // amusingly enough, if pValueName doesn't exist, RegQueryValueEx returns
   // ERROR_FILE_NOT_FOUND
-  rval = RegQueryValueEx(hKey, pValueName, NULL, &dwType, (LPBYTE)&dwOldValue,
-                         &dwSize);
-  bValueExisted = (rval == ERROR_SUCCESS);
+  return_code = RegQueryValueExW(key, value_name, nullptr, &key_type,
+                                 (LPBYTE)&old_Value, &value_size);
+  was_value_set = return_code == ERROR_SUCCESS;
 
-  rval = RegSetValueEx(hKey, pValueName, 0, REG_DWORD, (CONST BYTE *)&dwValue,
-                       sizeof(dwValue));
-  if (rval != ERROR_SUCCESS) {
-    OutputDebugString("unable to write registry value ");
-    OutputDebugString(pValueName);
-    OutputDebugString(" in key ");
-    OutputDebugString(pKeyName);
-    OutputDebugString("\n");
+  return_code = RegSetValueExW(key, value_name, 0, REG_DWORD,
+                               (const BYTE *)&value, sizeof(value));
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to write registry value "));
+    OutputDebugString(value_name);
+    OutputDebugString(_T(" in key "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
   }
 
-  RegCloseKey(hKey);
+  return_code = RegCloseKey(key);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to close registry key "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
+  }
+
+  return return_code;
 }
 
-void RestoreRegistryValue(const char *pKeyName, const char *pValueName,
-                          DWORD dwOldValue, bool bValueExisted) {
-  HKEY hKey = 0;
-  LONG rval = RegCreateKeyEx(HKEY_CURRENT_USER, pKeyName, 0, NULL,
-                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
-                             &hKey, NULL);
-  if (rval != ERROR_SUCCESS) {
-    OutputDebugString("unable to open registry key: ");
-    OutputDebugString(pKeyName);
-    OutputDebugString("\n");
-    return;
+LONG RestoreRegistryValue(const wchar_t *key_name, const wchar_t *value_name,
+                          DWORD old_value, bool has_old_value) {
+  HKEY key = nullptr;
+  LONG return_code = RegCreateKeyExW(HKEY_CURRENT_USER, key_name, 0, nullptr,
+                                     REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+                                     nullptr, &key, nullptr);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to open registry key: "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
+    return return_code;
   }
 
-  if (bValueExisted) {
-    rval = RegSetValueEx(hKey, pValueName, 0, REG_DWORD,
-                         (CONST BYTE *)&dwOldValue, sizeof(dwOldValue));
+  if (has_old_value) {
+    return_code = RegSetValueExW(key, value_name, 0, REG_DWORD,
+                                 (const BYTE *)&old_value, sizeof(old_value));
+    if (return_code != ERROR_SUCCESS) {
+      OutputDebugString(_T("Can't restore registry key's "));
+      OutputDebugString(key_name);
+      OutputDebugString(_T(" value "));
+      OutputDebugString(value_name);
+    }
   } else {
-    rval = RegDeleteValue(hKey, pValueName);
-  }
-  if (rval != ERROR_SUCCESS) {
-    OutputDebugString("SetRegistryValue FAILED!\n");
+    return_code = RegDeleteValueW(key, value_name);
+    if (return_code != ERROR_SUCCESS) {
+      OutputDebugString(_T("Can't delete registry key's "));
+      OutputDebugString(key_name);
+      OutputDebugString(_T(" value "));
+      OutputDebugString(value_name);
+    }
   }
 
-  RegCloseKey(hKey);
+  return_code = RegCloseKey(key);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to close registry key "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
+  }
+
+  return return_code;
 }
 
-bool GetRegistryString(const char *pKeyName, const char *pValueName,
-                       const char *pValueString, int nValueLen) {
-  HKEY hKey = 0;
-  LONG rval = RegCreateKeyEx(HKEY_CURRENT_USER, pKeyName, 0, NULL,
-                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
-                             &hKey, NULL);
-  if (rval != ERROR_SUCCESS) {
-    OutputDebugString("unable to open registry key: ");
-    OutputDebugString(pKeyName);
-    OutputDebugString("\n");
+bool GetRegistryString(const wchar_t *key_name, const wchar_t *value_name,
+                       const wchar_t *value_string, DWORD value_length) {
+  HKEY key = nullptr;
+  LONG return_code = RegCreateKeyEx(HKEY_CURRENT_USER, key_name, 0, nullptr,
+                                    REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+                                    nullptr, &key, nullptr);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to open registry key: "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
     return false;
   }
 
-  DWORD dwType = 0;
-  rval = RegQueryValueEx(hKey, pValueName, NULL, &dwType, (LPBYTE)pValueString,
-                         (DWORD *)&nValueLen);
+  DWORD key_type = 0;
+  return_code = RegQueryValueEx(key, value_name, nullptr, &key_type,
+                                (LPBYTE)value_string, (DWORD *)&value_length);
+  const bool was_key_read = return_code == ERROR_SUCCESS && key_type == REG_SZ;
 
-  RegCloseKey(hKey);
+  return_code = RegCloseKey(key);
+  if (return_code != ERROR_SUCCESS) {
+    OutputDebugString(_T("unable to close registry key "));
+    OutputDebugString(key_name);
+    OutputDebugString(_T("\n"));
+  }
 
-  if (rval != ERROR_SUCCESS || dwType != REG_SZ) {
-    OutputDebugString("unable to read registry string: ");
-    OutputDebugString(pValueName);
-    OutputDebugString("\n");
+  if (!was_key_read) {
+    OutputDebugString(_T("unable to read registry string: "));
+    OutputDebugString(value_name);
+    OutputDebugString(_T("\n"));
     return false;
   }
 
   return true;
 }
 
-struct EventData_t {
-  EventData_t(int t, float pos, EventType_t e)
-      : time(t), position(pos), event(e) {}
-  int time;           // real time
-  float position;     // movie position
-  EventType_t event;  // event type
+struct EventData {
+  EventData(int t, double pos, EventType e)
+      : time{t}, position{pos}, event{e} {}
+  int time;         // real time
+  double position;  // movie position
+  EventType event;  // event type
 };
 
-const char *GetEventName(EventType_t event) {
+const char *GetEventName(EventType event) {
   switch (event) {
     case ET_APPLAUNCH:
       return "al";
@@ -306,26 +262,25 @@ const char *GetEventName(EventType_t event) {
   }
 }
 
-std::vector<EventData_t> g_events;
+std::vector<EventData> g_events;
 
-void LogPlayerEvent(EventType_t e, float pos) {
+void LogPlayerEvent(EventType e, double pos) {
   if (!g_bReportStats) return;
 
   static int s_firstTick = GetTickCount();
   int time = GetTickCount() - s_firstTick;
 
-#if 0
-	char msg[ 256 ];
-	sprintf( msg, "event %s at time %d and pos %d\n", GetEventName( e ), time, int( 1000 * pos ) );
-	OutputDebugString( msg );
-#endif
+  wchar_t msg[256];
+  wsprintfW(msg, _T("event %s at time %d and pos %.2f\n"), GetEventName(e),
+            time, 1000 * pos);
+  OutputDebugString(msg);
 
   bool bDropEvent = false;
 
-  int nEvents = g_events.size();
+  size_t nEvents = g_events.size();
   if ((e == ET_STEPFWD || e == ET_STEPBCK) && nEvents >= 2) {
-    const EventData_t &e1 = g_events[nEvents - 1];
-    const EventData_t &e2 = g_events[nEvents - 2];
+    const EventData &e1 = g_events[nEvents - 1];
+    const EventData &e2 = g_events[nEvents - 2];
     if ((e1.event == e || e1.event == ET_REPEAT) && e2.event == e) {
       // only store starting and ending stepfwd or stepbck events, since there
       // can be so many also keep events that are more than a second apart
@@ -341,9 +296,9 @@ void LogPlayerEvent(EventType_t e, float pos) {
   }
 
   if (bDropEvent) {
-    g_events[nEvents - 1] = EventData_t(time, pos, ET_REPEAT);
+    g_events[nEvents - 1] = EventData(time, pos, ET_REPEAT);
   } else {
-    g_events.push_back(EventData_t(time, pos, e));
+    g_events.push_back(EventData(time, pos, e));
   }
 }
 
@@ -393,30 +348,31 @@ void WriteUUID(std::ostream &os, const UUID &uuid) {
 
 bool QueryOrGenerateUserID(UUID &userId) {
   HKEY hKey = 0;
-  LONG rval = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Valve\\Steam", 0,
-                             NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
-                             NULL, &hKey, NULL);
+  LONG rval = RegCreateKeyEx(HKEY_CURRENT_USER, _T("Software\\Valve\\Steam"), 0,
+                             nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+                             nullptr, &hKey, nullptr);
   if (rval != ERROR_SUCCESS) {
     UuidCreate(&userId);
     return false;
   }
 
   DWORD dwType = 0;
-  unsigned char idstr[40];
+  unsigned short idstr[40];
   DWORD dwSize = sizeof(idstr);
 
-  rval = RegQueryValueEx(hKey, "smpid", NULL, &dwType, (LPBYTE)idstr, &dwSize);
+  rval = RegQueryValueEx(hKey, _T("smpid"), nullptr, &dwType, (LPBYTE)idstr,
+                         &dwSize);
   if (rval != ERROR_SUCCESS || dwType != REG_SZ) {
     UuidCreate(&userId);
 
-    unsigned char *outstring = NULL;
+    unsigned short *outstring = nullptr;
     UuidToString(&userId, &outstring);
-    if (outstring == NULL || *outstring == '\0') {
+    if (outstring == nullptr || *outstring == '\0') {
       RegCloseKey(hKey);
       return false;
     }
 
-    rval = RegSetValueEx(hKey, "smpid", 0, REG_SZ, (CONST BYTE *)outstring,
+    rval = RegSetValueEx(hKey, _T("smpid"), 0, REG_SZ, (CONST BYTE *)outstring,
                          sizeof(idstr));
 
     RpcStringFree(&outstring);
@@ -431,53 +387,54 @@ bool QueryOrGenerateUserID(UUID &userId) {
   return true;
 }
 
-void PrintStats(const char *pStatsFilename) {
-  std::ofstream os(pStatsFilename, std::ios_base::out | std::ios_base::binary);
+void PrintStats(const wchar_t *pStatsFilename) {
+  std::wofstream os(pStatsFilename, std::ios_base::out | std::ios_base::binary);
 
   // user id
   UUID userId;
   QueryOrGenerateUserID(userId);
-  unsigned char *userIdStr;
-  UuidToStringA(&userId, &userIdStr);
-  os << userIdStr << "\n";
+  unsigned short *userIdStr;
+  UuidToString(&userId, &userIdStr);
+  os << userIdStr << _T("\n");
   RpcStringFree(&userIdStr);
 
   // filename
-  int nOffset = g_URL.find_last_of("/\\");
+  size_t nOffset = g_URL.find_last_of(_T("/\\"));
   if (nOffset == g_URL.npos) nOffset = 0;
-  std::string filename = g_URL.substr(nOffset + 1);
-  os << filename << '\n';
+
+  std::wstring filename = g_URL.substr(nOffset + 1);
+  os << filename << _T('\n');
 
   // number of events
-  int nEvents = g_events.size();
-  os << nEvents << "\n";
+  size_t nEvents = g_events.size();
+  os << nEvents << _T("\n");
 
   // event data (tab-delimited)
   for (int i = 0; i < nEvents; ++i) {
-    os << GetEventName(g_events[i].event) << "\t";
-    os << g_events[i].time << "\t";
-    os << int(1000 * g_events[i].position) << "\n";
+    os << GetEventName(g_events[i].event) << _T("\t");
+    os << g_events[i].time << L"\t";
+    os << int(1000 * g_events[i].position) << _T("\n");
   }
 }
 
 void UploadStats() {
-  char pathname[256];
-  if (!GetRegistryString("Software\\Valve\\Steam", "SteamExe", pathname,
+  wchar_t pathname[256];
+  if (!GetRegistryString(_T("Software\\Valve\\Steam"), _T("SteamExe"), pathname,
                          sizeof(pathname)))
     return;
 
-  char *pExeName = strrchr(pathname, '/');
+  wchar_t *pExeName = wcsrchr(pathname, L'/');
   if (!pExeName) return;
 
-  *pExeName = '\0';  // truncate exe filename to just pathname
+  *pExeName = _T('\0');  // truncate exe filename to just pathname
 
-  char filename[256];
-  sprintf(filename, "%s/smpstats.txt", pathname);
+  wchar_t filename[256];
+  wsprintf(filename, _T("%s/smpstats.txt"), pathname);
 
   PrintStats(filename);
 
-  ::ShellExecuteA(NULL, "open", "steam://smp/smpstats.txt", NULL, NULL,
-                  SW_SHOWNORMAL);
+  ShellExecute(nullptr, _T("open"), _T("steam://smp/smpstats.txt"), nullptr,
+               nullptr, SW_SHOWNORMAL);
 }
 
 void RestoreRegistry() {
@@ -486,8 +443,9 @@ void RestoreRegistry() {
 
   s_bDone = true;
   RestoreRegistryValue(
-      "Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings",
-      "UseVMROverlay", g_dwUseVMROverlayOldValue, g_bUseVMROverlayValueExists);
+      _T("Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings"),
+      _T("UseVMROverlay"), g_dwUseVMROverlayOldValue,
+      g_bUseVMROverlayValueExists);
 }
 
 #ifdef USE_D3D8
@@ -495,39 +453,44 @@ void RestoreRegistry() {
 void CleanupD3D() {
   if (g_pDrawVB) {
     g_pDrawVB->Release();
-    g_pDrawVB = NULL;
+    g_pDrawVB = nullptr;
   }
   if (g_pImg) {
     g_pImg->Release();
-    g_pImg = NULL;
+    g_pImg = nullptr;
   }
 #ifdef BLUR
   if (g_pBackBuf) {
     g_pBackBuf->Release();
-    g_pBackBuf = NULL;
+    g_pBackBuf = nullptr;
   }
   if (g_pBlurVB) {
     g_pBlurVB->Release();
-    g_pBlurVB = NULL;
+    g_pBlurVB = nullptr;
   }
   if (g_pTex) {
     g_pTex->Release();
-    g_pTex = NULL;
+    g_pTex = nullptr;
   }
   if (g_pRT) {
     g_pRT->Release();
-    g_pRT = NULL;
+    g_pRT = nullptr;
   }
 #endif  // BLUR
   if (g_pd3dDevice) {
     g_pd3dDevice->Release();
-    g_pd3dDevice = NULL;
+    g_pd3dDevice = nullptr;
   }
   if (g_pD3D) {
     g_pD3D->Release();
-    g_pD3D = NULL;
+    g_pD3D = nullptr;
   }
 }
+
+struct VertexShaderInfo {
+  IDirect3DVertexShader9 *Shader;
+  IDirect3DVertexDeclaration9 *Declaration;
+};
 
 void InitTextureStageState(int nStage, DWORD dwColorOp, DWORD dwColorArg1,
                            DWORD dwColorArg2,
@@ -537,30 +500,116 @@ void InitTextureStageState(int nStage, DWORD dwColorOp, DWORD dwColorArg1,
   g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_COLORARG2, dwColorArg2);
   g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_COLORARG0, dwColorArg0);
   g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
-  g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_ADDRESSU,
-                                     D3DTADDRESS_CLAMP);
-  g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_ADDRESSV,
-                                     D3DTADDRESS_CLAMP);
-  g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_MAGFILTER, D3DTEXF_LINEAR);
-  g_pd3dDevice->SetTextureStageState(nStage, D3DTSS_MINFILTER, D3DTEXF_LINEAR);
+  g_pd3dDevice->SetSamplerState(nStage, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+  g_pd3dDevice->SetSamplerState(nStage, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+  g_pd3dDevice->SetSamplerState(nStage, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+  g_pd3dDevice->SetSamplerState(nStage, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+}
+
+HRESULT STDMETHODCALLTYPE CopyRects(IDirect3DDevice9 *pD3D9Device,
+                                    IDirect3DSurface9 *pSourceSurface,
+                                    const RECT *pSourceRectsArray, UINT cRects,
+                                    IDirect3DSurface9 *pDestinationSurface,
+                                    const POINT *pDestPointsArray) {
+  if (pSourceSurface == nullptr || pDestinationSurface == nullptr ||
+      pSourceSurface == pDestinationSurface) {
+    return D3DERR_INVALIDCALL;
+  }
+
+  D3DSURFACE_DESC SourceDesc, DestinationDesc;
+  pSourceSurface->GetDesc(&SourceDesc);
+  pDestinationSurface->GetDesc(&DestinationDesc);
+
+  if (SourceDesc.Format != DestinationDesc.Format) {
+    return D3DERR_INVALIDCALL;
+  }
+
+  HRESULT hr = D3DERR_INVALIDCALL;
+
+  if (cRects == 0) {
+    cRects = 1;
+  }
+
+  for (UINT i = 0; i < cRects; i++) {
+    RECT SourceRect, DestinationRect;
+
+    if (pSourceRectsArray != nullptr) {
+      SourceRect = pSourceRectsArray[i];
+    } else {
+      SourceRect.left = 0;
+      SourceRect.right = SourceDesc.Width;
+      SourceRect.top = 0;
+      SourceRect.bottom = SourceDesc.Height;
+    }
+
+    if (pDestPointsArray != nullptr) {
+      DestinationRect.left = pDestPointsArray[i].x;
+      DestinationRect.right =
+          DestinationRect.left + (SourceRect.right - SourceRect.left);
+      DestinationRect.top = pDestPointsArray[i].y;
+      DestinationRect.bottom =
+          DestinationRect.top + (SourceRect.bottom - SourceRect.top);
+    } else {
+      DestinationRect = SourceRect;
+    }
+
+    if (SourceDesc.Pool == D3DPOOL_MANAGED ||
+        DestinationDesc.Pool != D3DPOOL_DEFAULT) {
+      hr = D3DERR_INVALIDCALL;
+    } else if (SourceDesc.Pool == D3DPOOL_DEFAULT) {
+      hr = pD3D9Device->StretchRect(pSourceSurface, &SourceRect,
+                                    pDestinationSurface, &DestinationRect,
+                                    D3DTEXF_NONE);
+    } else if (SourceDesc.Pool == D3DPOOL_SYSTEMMEM) {
+      const POINT pt = {DestinationRect.left, DestinationRect.top};
+
+      hr = pD3D9Device->UpdateSurface(pSourceSurface, &SourceRect,
+                                      pDestinationSurface, &pt);
+    }
+
+    if (FAILED(hr)) {
+      break;
+    }
+  }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE SetVertexShader(IDirect3DDevice9 *pd3dDevice,
+                                          DWORD Handle) {
+  HRESULT hr;
+
+  if ((Handle & 0x80000000) == 0) {
+    pd3dDevice->SetVertexShader(nullptr);
+    hr = pd3dDevice->SetFVF(Handle);
+  } else {
+    const DWORD handleMagic = Handle << 1;
+    VertexShaderInfo *const ShaderInfo = reinterpret_cast<VertexShaderInfo *>(
+        static_cast<UINT_PTR>(handleMagic));
+
+    hr = pd3dDevice->SetVertexShader(ShaderInfo->Shader);
+    pd3dDevice->SetVertexDeclaration(ShaderInfo->Declaration);
+  }
+
+  return hr;
 }
 
 bool InitD3D(HWND hWnd, bool blur) {
-  g_pD3D = Direct3DCreate8(D3D_SDK_VERSION);
+  g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
   if (!g_pD3D) {
-    OutputDebugString("Direct3DCreate8 FAILED!\n");
+    OutputDebugString(_T("Direct3DCreate9 FAILED!\n"));
     CleanupD3D();
     return false;
   }
 
-  D3DDISPLAYMODE d3ddm;
+  D3DDISPLAYMODE d3ddm{0};
   bool bFound = false;
   int nAdapters = g_pD3D->GetAdapterCount();
   int nAdapterIndex = 0;
   for (; nAdapterIndex < nAdapters; ++nAdapterIndex) {
     if (g_pD3D->GetAdapterMonitor(nAdapterIndex) == g_hMonitor) {
       if (FAILED(g_pD3D->GetAdapterDisplayMode(nAdapterIndex, &d3ddm))) {
-        OutputDebugString("GetAdapterDisplayMode FAILED!\n");
+        OutputDebugString(_T("GetAdapterDisplayMode FAILED!\n"));
         CleanupD3D();
         return false;
       }
@@ -573,7 +622,8 @@ bool InitD3D(HWND hWnd, bool blur) {
     }
   }
   if (!bFound) {
-    OutputDebugString("Starting monitor not found when creating D3D device!\n");
+    OutputDebugString(
+        _T("Starting monitor not found when creating D3D device!\n"));
     CleanupD3D();
     return false;
   }
@@ -586,15 +636,15 @@ bool InitD3D(HWND hWnd, bool blur) {
   d3dpp.BackBufferCount = 1;
   d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
   d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-  d3dpp.hDeviceWindow = NULL;
+  d3dpp.hDeviceWindow = nullptr;
   d3dpp.Windowed = FALSE;
   d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-  d3dpp.FullScreen_PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+  d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 
   if (FAILED(g_pD3D->CreateDevice(nAdapterIndex, D3DDEVTYPE_HAL, hWnd,
                                   D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp,
                                   &g_pd3dDevice))) {
-    OutputDebugString("CreateDevice FAILED!\n");
+    OutputDebugString(_T("CreateDevice FAILED!\n"));
     CleanupD3D();
     return false;
   }
@@ -613,25 +663,25 @@ bool InitD3D(HWND hWnd, bool blur) {
   g_dwDrawFVF = D3DFVF_XYZ | D3DFVF_TEX1;
   g_nDrawStride = sizeof(drawverts) / 4;
 
-  if (FAILED(g_pd3dDevice->CreateVertexBuffer(sizeof(drawverts),
-                                              D3DUSAGE_WRITEONLY, g_dwDrawFVF,
-                                              D3DPOOL_MANAGED, &g_pDrawVB))) {
-    OutputDebugString("CreateVertexBuffer( g_pDrawVB ) FAILED!\n");
+  if (FAILED(g_pd3dDevice->CreateVertexBuffer(
+          sizeof(drawverts), D3DUSAGE_WRITEONLY, g_dwDrawFVF, D3DPOOL_MANAGED,
+          &g_pDrawVB, nullptr))) {
+    OutputDebugString(_T("CreateVertexBuffer( g_pDrawVB ) FAILED!\n"));
     CleanupD3D();
     return false;
   }
 
   BYTE *pDrawVBMem;
-  if (FAILED(g_pDrawVB->Lock(0, sizeof(drawverts), &pDrawVBMem, 0))) {
-    OutputDebugString("g_pDrawVB->Lock FAILED!\n");
+  if (FAILED(g_pDrawVB->Lock(0, sizeof(drawverts), (void **)&pDrawVBMem, 0))) {
+    OutputDebugString(_T("g_pDrawVB->Lock FAILED!\n"));
     CleanupD3D();
     return false;
   }
   memcpy(pDrawVBMem, drawverts, sizeof(drawverts));
   g_pDrawVB->Unlock();
 
-  g_pd3dDevice->SetStreamSource(0, g_pDrawVB, g_nDrawStride);
-  g_pd3dDevice->SetVertexShader(g_dwDrawFVF);
+  g_pd3dDevice->SetStreamSource(0, g_pDrawVB, 0, g_nDrawStride);
+  SetVertexShader(g_pd3dDevice, g_dwDrawFVF);
 #ifdef BLUR
   if (blur) {
     float f = 2.0f / (2.0f + sqrt(2.0f));
@@ -651,17 +701,18 @@ bool InitD3D(HWND hWnd, bool blur) {
     g_dwBlurFVF = D3DFVF_XYZ | D3DFVF_TEX4;
     g_nBlurStride = sizeof(blurverts) / 4;
 
-    if (FAILED(g_pd3dDevice->CreateVertexBuffer(sizeof(blurverts),
-                                                D3DUSAGE_WRITEONLY, g_dwBlurFVF,
-                                                D3DPOOL_MANAGED, &g_pBlurVB))) {
-      OutputDebugString("CreateVertexBuffer( g_pBlurVB ) FAILED!\n");
+    if (FAILED(g_pd3dDevice->CreateVertexBuffer(
+            sizeof(blurverts), D3DUSAGE_WRITEONLY, g_dwBlurFVF, D3DPOOL_MANAGED,
+            &g_pBlurVB, nullptr))) {
+      OutputDebugString(_T("CreateVertexBuffer( g_pBlurVB ) FAILED!\n"));
       CleanupD3D();
       return false;
     }
 
     BYTE *pBlurVBMem;
-    if (FAILED(g_pBlurVB->Lock(0, sizeof(blurverts), &pBlurVBMem, 0))) {
-      OutputDebugString("g_pBlurVB->Lock FAILED!\n");
+    if (FAILED(
+            g_pBlurVB->Lock(0, sizeof(blurverts), (void **)&pBlurVBMem, 0))) {
+      OutputDebugString(_T("g_pBlurVB->Lock FAILED!\n"));
       CleanupD3D();
       return false;
     }
@@ -673,15 +724,15 @@ bool InitD3D(HWND hWnd, bool blur) {
   // create and fill texture
   if (FAILED(g_pd3dDevice->CreateTexture(g_screenWidth, g_screenHeight, 1, 0,
                                          D3DFMT_A8R8G8B8, D3DPOOL_MANAGED,
-                                         &g_pImg))) {
-    OutputDebugString("CreateTexture( g_pImg ) FAILED!\n");
+                                         &g_pImg, nullptr))) {
+    OutputDebugString(_T("CreateTexture( g_pImg ) FAILED!\n"));
     CleanupD3D();
     return false;
   }
 
   D3DLOCKED_RECT lockedRect;
-  if (FAILED(g_pImg->LockRect(0, &lockedRect, NULL, 0))) {
-    OutputDebugString("g_pImg->LockRect FAILED!\n");
+  if (FAILED(g_pImg->LockRect(0, &lockedRect, nullptr, 0))) {
+    OutputDebugString(_T("g_pImg->LockRect FAILED!\n"));
     CleanupD3D();
     return false;
   }
@@ -701,7 +752,7 @@ bool InitD3D(HWND hWnd, bool blur) {
 
   if (GetDIBits(g_hdcCapture, g_hbmCapture, 0, g_screenHeight, lockedRect.pBits,
                 &bitmapInfo, DIB_RGB_COLORS) != g_screenHeight) {
-    OutputDebugString("GetDIBits FAILED to get the full image!\n");
+    OutputDebugString(_T("GetDIBits FAILED to get the full image!\n"));
   }
 
   g_pImg->UnlockRect(0);
@@ -710,28 +761,28 @@ bool InitD3D(HWND hWnd, bool blur) {
   if (blur) {
     if (FAILED(g_pd3dDevice->CreateTexture(
             g_screenWidth, g_screenHeight, 1, D3DUSAGE_RENDERTARGET,
-            D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pTex))) {
-      OutputDebugString("CreateTexture( g_pTex ) FAILED!\n");
+            D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pTex, nullptr))) {
+      OutputDebugString(_T("CreateTexture( g_pTex ) FAILED!\n"));
       CleanupD3D();
       return false;
     }
 
     if (FAILED(g_pd3dDevice->CreateTexture(
             g_screenWidth, g_screenHeight, 1, D3DUSAGE_RENDERTARGET,
-            D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pRT))) {
-      OutputDebugString("CreateTexture( g_pRT ) FAILED!\n");
+            D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pRT, nullptr))) {
+      OutputDebugString(_T("CreateTexture( g_pRT ) FAILED!\n"));
       CleanupD3D();
       return false;
     }
 
-    IDirect3DSurface8 *pTexSurf = NULL;
+    IDirect3DSurface9 *pTexSurf = nullptr;
     g_pTex->GetSurfaceLevel(0, &pTexSurf);
-    IDirect3DSurface8 *pImgSurf = NULL;
+    IDirect3DSurface9 *pImgSurf = nullptr;
     g_pImg->GetSurfaceLevel(0, &pImgSurf);
 
     RECT rect = {0, 0, g_screenWidth, g_screenHeight};
     POINT pt = {0, 0};
-    g_pd3dDevice->CopyRects(pImgSurf, &rect, 1, pTexSurf, &pt);
+    CopyRects(g_pd3dDevice, pImgSurf, &rect, 1, pTexSurf, &pt);
 
     pTexSurf->Release();
     pImgSurf->Release();
@@ -758,18 +809,44 @@ bool InitD3D(HWND hWnd, bool blur) {
   return true;
 }
 
+HRESULT STDMETHODCALLTYPE SetRenderTarget(IDirect3DDevice9 *pD3D9Device,
+                                          IDirect3DSurface9 *pRenderTarget,
+                                          IDirect3DSurface9 *pNewZStencil) {
+  HRESULT hr;
+
+  if (pRenderTarget != nullptr) {
+    hr = pD3D9Device->SetRenderTarget(0, pRenderTarget);
+
+    if (FAILED(hr)) {
+      return hr;
+    }
+  }
+
+  if (pNewZStencil != nullptr) {
+    hr = pD3D9Device->SetDepthStencilSurface(pNewZStencil);
+
+    if (FAILED(hr)) {
+      return hr;
+    }
+  } else {
+    pD3D9Device->SetDepthStencilSurface(nullptr);
+  }
+
+  return D3D_OK;
+}
+
 void DrawD3DFade(BYTE fade, bool blur) {
   if (g_pd3dDevice) {
 #ifdef BLUR
     if (g_pTex) {
       if (blur) {
-        IDirect3DSurface8 *pRTSurf = NULL;
+        IDirect3DSurface9 *pRTSurf = nullptr;
         g_pRT->GetSurfaceLevel(0, &pRTSurf);
-        g_pd3dDevice->SetRenderTarget(pRTSurf, NULL);
+        SetRenderTarget(g_pd3dDevice, pRTSurf, nullptr);
 
         if (g_pBackBuf) {
           g_pBackBuf->Release();
-          g_pBackBuf = NULL;
+          g_pBackBuf = nullptr;
         }
 
         g_pd3dDevice->BeginScene();
@@ -786,8 +863,8 @@ void DrawD3DFade(BYTE fade, bool blur) {
         g_pd3dDevice->SetTextureStageState(3, D3DTSS_COLOROP,
                                            D3DTOP_MULTIPLYADD);
 
-        g_pd3dDevice->SetStreamSource(0, g_pBlurVB, g_nBlurStride);
-        g_pd3dDevice->SetVertexShader(g_dwBlurFVF);
+        g_pd3dDevice->SetStreamSource(0, g_pBlurVB, 0, g_nBlurStride);
+        SetVertexShader(g_pd3dDevice, g_dwBlurFVF);
 
         DWORD quarter = 0x3f | (0x3f << 8) | (0x3f << 16) | (0x3f << 24);
         g_pd3dDevice->SetRenderState(D3DRS_TEXTUREFACTOR, quarter);
@@ -797,39 +874,40 @@ void DrawD3DFade(BYTE fade, bool blur) {
 
         pRTSurf->Release();
 
-        g_pd3dDevice->GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO, &g_pBackBuf);
-        g_pd3dDevice->SetRenderTarget(g_pBackBuf, NULL);
+        g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_pBackBuf);
+        SetRenderTarget(g_pd3dDevice, g_pBackBuf, nullptr);
 
-        IDirect3DTexture8 *pTemp = g_pTex;
+        IDirect3DTexture9 *pTemp = g_pTex;
         g_pTex = g_pRT;
         g_pRT = pTemp;
 
         g_pd3dDevice->SetTexture(0, g_pTex);
-        g_pd3dDevice->SetTexture(1, NULL);
-        g_pd3dDevice->SetTexture(2, NULL);
-        g_pd3dDevice->SetTexture(3, NULL);
+        g_pd3dDevice->SetTexture(1, nullptr);
+        g_pd3dDevice->SetTexture(2, nullptr);
+        g_pd3dDevice->SetTexture(3, nullptr);
 
         g_pd3dDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
         g_pd3dDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
         g_pd3dDevice->SetTextureStageState(3, D3DTSS_COLOROP, D3DTOP_DISABLE);
 
-        g_pd3dDevice->SetStreamSource(0, g_pDrawVB, g_nDrawStride);
-        g_pd3dDevice->SetVertexShader(g_dwDrawFVF);
+        g_pd3dDevice->SetStreamSource(0, g_pDrawVB, 0, g_nDrawStride);
+        SetVertexShader(g_pd3dDevice, g_dwDrawFVF);
       }
     }
 #endif
 
     g_pd3dDevice->BeginScene();
 
-    //					DWORD factor = 0xff | ( fade << 8 ) | ( fade << 16 )
-    //| ( fade
+    //					DWORD factor = 0xff | ( fade << 8 ) | (
+    // fade
+    //<< 16 ) | ( fade
     //<< 24 );
     DWORD factor = fade | (fade << 8) | (fade << 16) | (fade << 24);
     g_pd3dDevice->SetRenderState(D3DRS_TEXTUREFACTOR, factor);
     g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
     g_pd3dDevice->EndScene();
-    g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
+    g_pd3dDevice->Present(nullptr, nullptr, nullptr, nullptr);
   }
 }
 
@@ -864,12 +942,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
         g_pFrame->PostMessage(WM_DESTROY, 0, 0);
       }
 
-      InvalidateRect(hWnd, NULL, TRUE);
+      InvalidateRect(hWnd, nullptr, TRUE);
 
       SetTimer(hWnd, ID_SKIP_FADE_TIMER, 1000,
-               NULL);  // if the fade doesn't start in 1 second, then just jump
-                       // to the video
-      SetTimer(hWnd, ID_DRAW_TIMER, 10, NULL);  // draw timer
+               nullptr);  // if the fade doesn't start in 1 second, then just
+                          // jump to the video
+      SetTimer(hWnd, ID_DRAW_TIMER, 10, nullptr);  // draw timer
     } break;
 
 #ifdef USE_D3D8
@@ -888,9 +966,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                               double(s_nPerformanceFrequency.QuadPart);
 
           KillTimer(hWnd, ID_SKIP_FADE_TIMER);
-          SetTimer(hWnd, ID_SKIP_FADE_TIMER, 100 + UINT(FADE_TIME * 1000),
-                   NULL);  // restart skip fade timer and give it an extra 100ms
-                           // to allow the fade to draw fully black once
+          SetTimer(
+              hWnd, ID_SKIP_FADE_TIMER, 100 + UINT(FADE_TIME * 1000),
+              nullptr);  // restart skip fade timer and give it an extra 100ms
+                         // to allow the fade to draw fully black once
         }
 
         LARGE_INTEGER time;
@@ -932,7 +1011,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 
         if (!PatBlt(g_hdcBlend, 0, 0, g_screenWidth, g_screenHeight,
                     BLACKNESS)) {
-          OutputDebugString("PatBlt FAILED!\n");
+          OutputDebugString(_T("PatBlt FAILED!\n"));
         }
 
         //				fade = 128;
@@ -940,16 +1019,16 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
         if (!::AlphaBlend(g_hdcBlend, 0, 0, g_screenWidth, g_screenHeight,
                           g_hdcCapture, 0, 0, g_screenWidth, g_screenHeight,
                           blendfunc)) {
-          OutputDebugString("AlphaBlend FAILED!\n");
+          OutputDebugString(_T("AlphaBlend FAILED!\n"));
         }
 
         if (!BitBlt((HDC)wparam, 0, 0, g_screenWidth, g_screenHeight,
                     g_hdcBlend, 0, 0, SRCCOPY)) {
-          OutputDebugString("BitBlt FAILED!\n");
+          OutputDebugString(_T("BitBlt FAILED!\n"));
         }
 
 //			ReleaseDC( hWnd, hdc );
-//			RedrawWindow( hWnd, NULL, NULL, RDW_FRAME |
+//			RedrawWindow( hWnd, nullptr, nullptr, RDW_FRAME |
 // RDW_INVALIDATE
 //);
 #endif  // USE_D3D8
@@ -976,7 +1055,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
           */
           if (wparam == ID_DRAW_TIMER) {
             //					UpdateWindow( hWnd );
-            //					InvalidateRect( hWnd, NULL, TRUE
+            //					InvalidateRect( hWnd, nullptr,
+            // TRUE
             //); 					break;
           }
         }
@@ -1005,17 +1085,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
           //				OutputDebugString( "Create WMP frame\n"
           //);
 
-          if (g_osVersion < OSV_XP) {
-            g_pFrame->Create(GetDesktopWindow(), rcPos,
-                             _T( "Steam Media Player" ), WS_OVERLAPPEDWINDOW, 0,
-                             (UINT)0);
-          } else {
-            g_pFrame->Create(GetDesktopWindow(), rcPos,
-                             _T( "Steam Media Player" ),
-                             WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, (UINT)0);
+          g_pFrame->Create(GetDesktopWindow(), rcPos, _T("Steam Media Player"),
+                           WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, (UINT)0);
 
-            g_pFrame->ShowWindow(SW_SHOW);
-          }
+          g_pFrame->ShowWindow(SW_SHOW);
 
           //				OutputDebugString( "Create WMP frame -
           // done\n"
@@ -1036,7 +1109,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
       break;
 
     case WM_DESTROY:
-      g_hBlackFadingWindow = NULL;
+      g_hBlackFadingWindow = nullptr;
 
 #ifdef USE_D3D8
       CleanupD3D();
@@ -1046,7 +1119,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam) {
         g_bFrameCreated = false;
 
         g_pFrame->DestroyWindow();
-        g_pFrame = NULL;
+        g_pFrame = nullptr;
       }
 
       ::PostQuitMessage(0);
@@ -1061,34 +1134,25 @@ bool ShowFadeWindow(bool bShow) {
     g_timeAtFadeStart = 0.0;
     g_bFadeIn = false;
 
-    SetTimer(g_hBlackFadingWindow, ID_DRAW_TIMER, 10, NULL);
+    SetTimer(g_hBlackFadingWindow, ID_DRAW_TIMER, 10, nullptr);
 
     if (g_pFrame) {
       g_pFrame->ShowWindow(SW_HIDE);
     }
 #ifdef USE_D3D8
-    if (g_osVersion < OSV_XP) {
-      ::SetWindowPos(g_hBlackFadingWindow, HWND_TOPMOST, 0, 0, 0, 0,
-                     SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-    }
     InitD3D(g_hBlackFadingWindow, false);
 #else   // USE_D3D8
     ::SetWindowPos(g_hBlackFadingWindow, HWND_TOPMOST, 0, 0, 0, 0,
                    SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 //		::ShowWindow( g_hBlackFadingWindow, SW_SHOWMAXIMIZED );
 #endif  // USE_D3D8
-    InvalidateRect(g_hBlackFadingWindow, NULL, TRUE);
+    InvalidateRect(g_hBlackFadingWindow, nullptr, TRUE);
   } else {
-    if (g_osVersion < OSV_XP) {
-      //			OutputDebugString( "hiding fade window\n" );
-      ShowWindow(g_hBlackFadingWindow, SW_HIDE);
-    } else {
-      //			OutputDebugString( "Deferring erase on fade
-      // window\n" );
-      ::SetWindowPos(g_hBlackFadingWindow, HWND_BOTTOM, 0, 0, 0, 0,
-                     SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW |
-                         SWP_NOACTIVATE | SWP_DEFERERASE);
-    }
+    //			OutputDebugString( "Deferring erase on fade
+    // window\n" );
+    ::SetWindowPos(g_hBlackFadingWindow, HWND_BOTTOM, 0, 0, 0, 0,
+                   SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW |
+                       SWP_NOACTIVATE | SWP_DEFERERASE);
   }
   return true;
 }
@@ -1096,7 +1160,7 @@ bool ShowFadeWindow(bool bShow) {
 HWND CreateFullscreenWindow(bool bFadeIn) {
   if (g_hBlackFadingWindow) return g_hBlackFadingWindow;
 
-  static s_bRegistered = false;
+  static bool s_bRegistered = false;
   if (!s_bRegistered) {
     WNDCLASS wc;
     wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -1104,11 +1168,11 @@ HWND CreateFullscreenWindow(bool bFadeIn) {
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = g_hInstance;
-    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor = NULL;
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = "myclass";
+    wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+    wc.hCursor = nullptr;
+    wc.hbrBackground = nullptr;
+    wc.lpszMenuName = nullptr;
+    wc.lpszClassName = _T("myclass");
 
     if (!RegisterClass(&wc)) return 0;
 
@@ -1120,9 +1184,6 @@ HWND CreateFullscreenWindow(bool bFadeIn) {
 #ifndef USE_D3D8
   windowStyle |= WS_MAXIMIZE | WS_EX_TOPMOST | WS_VISIBLE;
 #endif
-  if (g_osVersion < OSV_XP) {
-    windowStyle |= WS_MAXIMIZE | WS_EX_TOPMOST | WS_VISIBLE;
-  }
 
   MONITORINFO mi;
   mi.cbSize = sizeof(mi);
@@ -1131,15 +1192,13 @@ HWND CreateFullscreenWindow(bool bFadeIn) {
   }
 
   g_hBlackFadingWindow = CreateWindow(
-      "myclass", _T( "Steam Media Player" ), windowStyle, mi.rcMonitor.left,
+      _T("myclass"), _T("Steam Media Player"), windowStyle, mi.rcMonitor.left,
       mi.rcMonitor.top, mi.rcMonitor.right - mi.rcMonitor.left,
-      mi.rcMonitor.bottom - mi.rcMonitor.top, NULL, NULL, g_hInstance, NULL);
+      mi.rcMonitor.bottom - mi.rcMonitor.top, nullptr, nullptr, g_hInstance,
+      nullptr);
 #ifndef USE_D3D8
   ShowWindow(g_hBlackFadingWindow, SW_SHOWMAXIMIZED);
 #endif
-  if (g_osVersion < OSV_XP) {
-    ShowWindow(g_hBlackFadingWindow, SW_SHOWMAXIMIZED);
-  }
 
   while (ShowCursor(FALSE) >= 0)
     ;
@@ -1155,7 +1214,7 @@ bool CreateDesktopBitmaps() {
   g_screenWidth = mi.rcMonitor.right - mi.rcMonitor.left;
   g_screenHeight = mi.rcMonitor.bottom - mi.rcMonitor.top;
 
-  HDC hdcScreen = CreateDC(mi.szDevice, mi.szDevice, NULL, NULL);
+  HDC hdcScreen = CreateDC(mi.szDevice, mi.szDevice, nullptr, nullptr);
   if (!hdcScreen) return false;
 
   g_hdcCapture = CreateCompatibleDC(hdcScreen);
@@ -1163,20 +1222,20 @@ bool CreateDesktopBitmaps() {
   if (!g_hdcCapture || !g_hdcBlend) return false;
 
   if ((GetDeviceCaps(hdcScreen, SHADEBLENDCAPS) & SB_CONST_ALPHA) == 0) {
-    OutputDebugString("display doesn't support AlphaBlend!\n");
+    OutputDebugString(_T("display doesn't support AlphaBlend!\n"));
   }
 
   if ((GetDeviceCaps(hdcScreen, RASTERCAPS) & RC_BITBLT) == 0) {
-    OutputDebugString("display doesn't support BitBlt!\n");
+    OutputDebugString(_T("display doesn't support BitBlt!\n"));
   }
 
   if (GetDeviceCaps(hdcScreen, BITSPIXEL) < 32) {
-    OutputDebugString("display doesn't support 32bpp!\n");
+    OutputDebugString(_T("display doesn't support 32bpp!\n"));
   }
 
   if (g_screenWidth != GetDeviceCaps(hdcScreen, HORZRES) ||
       g_screenHeight != GetDeviceCaps(hdcScreen, VERTRES)) {
-    OutputDebugString("Screen DC size differs from monitor size!\n");
+    OutputDebugString(_T("Screen DC size differs from monitor size!\n"));
   }
 
   g_hbmCapture =
@@ -1197,87 +1256,91 @@ bool CreateDesktopBitmaps() {
   return true;
 }
 
-void PrintLastError(const char *pPrefix) {
-#ifdef _DEBUG
-  DWORD dw = GetLastError();
+void PrintLastError(const wchar_t *message,
+                    const DWORD error_code = GetLastError()) {
+#ifndef NDEBUG
+  wchar_t *buffer;
+  FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+                     FORMAT_MESSAGE_IGNORE_INSERTS,
+                 nullptr, error_code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                 (wchar_t *)&buffer, 0, nullptr);
 
-  LPVOID lpMsgBuf;
-  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (LPTSTR)&lpMsgBuf, 0, NULL);
+  OutputDebugString(message);
 
-  OutputDebugString(pPrefix);
-  char msg[256];
-  sprintf(msg, "(%d) ", dw);
-  OutputDebugString(msg);
-  OutputDebugString((char *)lpMsgBuf);
+  wchar_t full_message[256];
+  wsprintfW(full_message, _T("(%d) "), error_code);
 
-  LocalFree(lpMsgBuf);
+  OutputDebugString(full_message);
+  OutputDebugString(buffer);
+
+  LocalFree(buffer);
 #endif
 }
 
 void KillOtherSMPs() {
-  DWORD nBytesReturned = 0;
-  DWORD procIds[1024];
-  if (!EnumProcesses(procIds, sizeof(procIds), &nBytesReturned)) {
-    PrintLastError("EnumProcesses Error: ");
+  DWORD process_bytes = 0, process_ids[1024];
+  if (!EnumProcesses(process_ids, sizeof(process_ids), &process_bytes)) {
+    PrintLastError(_T("EnumProcesses Error: "));
     return;
   }
 
-  DWORD dwCurrentProcessId = GetCurrentProcessId();
+  const DWORD pid = GetCurrentProcessId();
+  const size_t process_ids_count = process_bytes / sizeof(DWORD);
 
-  int nProcIds = nBytesReturned / sizeof(DWORD);
-  for (int i = 0; i < nProcIds; ++i) {
-    if (procIds[i] == dwCurrentProcessId) continue;
+  for (size_t i = 0; i < process_ids_count; ++i) {
+    if (process_ids[i] == pid) continue;
 
-    if (procIds[i] == 0)  // system idle process
-      continue;
+    // system idle process
+    if (process_ids[i] == 0) continue;
 
-    HANDLE hProcess = OpenProcess(
+    HANDLE process = OpenProcess(
         PROCESS_TERMINATE | PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE,
-        procIds[i]);
-    if (!hProcess) {
-      PrintLastError("OpenProcess Error: ");
+        process_ids[i]);
+    if (!process) {
+      PrintLastError(_T("OpenProcess Error: "));
       continue;
     }
 
-    HMODULE hMod[1];
-    DWORD cbNeeded;
-    if (!EnumProcessModules(hProcess, hMod, sizeof(hMod), &cbNeeded)) {
-      PrintLastError("EnumProcessModules Error: ");
+    HMODULE modules[1];
+    DWORD cb_needed;
+    if (!EnumProcessModules(process, modules, sizeof(modules), &cb_needed)) {
+      PrintLastError(_T("EnumProcessModules Error: "));
       continue;
     }
 
-    char processName[1024];
-    int nChars = GetModuleBaseName(hProcess, hMod[0], processName,
-                                   sizeof(processName) / sizeof(char));
-    if (nChars >= sizeof(processName)) {
-      PrintLastError("GetModuleBaseName Error: ");
+    wchar_t process_name[1024];
+    const DWORD chars_count = GetModuleBaseNameW(
+        process, modules[0], process_name, ARRAYSIZE(process_name));
+    if (chars_count >= ARRAYSIZE(process_name)) {
+      PrintLastError(_T("GetModuleBaseName Error: "));
       continue;
     }
 
-    if (strcmp(processName, "smp.exe") == 0) {
-      OutputDebugString("!!! Killing smp.exe !!!\n");
-      TerminateProcess(hProcess, 0);
+    if (wcscmp(process_name, _T("smp.exe")) == 0) {
+      OutputDebugString(_T("Killing smp.exe\n"));
+      if (!TerminateProcess(process, 0)) {
+        PrintLastError(_T("TerminateProcess smp.exe Error: "));
+      }
     }
 
-    if (!CloseHandle(hProcess)) {
-      PrintLastError("CloseHandle Error: ");
+    if (!CloseHandle(process)) {
+      PrintLastError(_T("CloseHandle Error: "));
       continue;
     }
   }
 }
 
-void ParseCommandLine(const char *cmdline, std::vector<std::string> &params) {
-  params.push_back("");
+std::vector<std::wstring> ParseCommandLine(const wchar_t *command_line) {
+  std::vector<std::wstring> params;
+  params.push_back(_T(""));
 
-  bool quoted = false;
-  for (const char *cp = cmdline; *cp; ++cp) {
-    if (*cp == '\"') {
-      quoted = !quoted;
-    } else if (isspace(*cp) && !quoted) {
+  bool is_quoted = false;
+  for (const wchar_t *cp = command_line; *cp; ++cp) {
+    if (*cp == _T('\"')) {
+      is_quoted = !is_quoted;
+    } else if (iswspace(*cp) && !is_quoted) {
       if (!params.back().empty()) {
-        params.push_back("");
+        params.push_back(_T(""));
       }
     } else {
       params.back().push_back(*cp);
@@ -1287,31 +1350,30 @@ void ParseCommandLine(const char *cmdline, std::vector<std::string> &params) {
   if (params.back().empty()) {
     params.pop_back();
   }
+
+  return params;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
-                                HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine,
-                                int /*nShowCmd*/) {
-  g_hInstance = hInstance;
+int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, wchar_t *command_line, int) {
+  if (command_line == nullptr || *command_line == L'\0') return 0;
+
+  g_hInstance = instance;
+  g_lpCommandLine = command_line;
 
   KillOtherSMPs();
 
-  g_lpCommandLine = lpCmdLine;
-  if (lpCmdLine == NULL || *lpCmdLine == '\0') return 0;
+  const std::vector<std::wstring> params = ParseCommandLine(command_line);
+  const size_t params_size = params.size();
 
-  std::vector<std::string> params;
-  ParseCommandLine(lpCmdLine, params);
-  int nParams = params.size();
-  for (int i = 0; i < nParams; ++i) {
+  for (size_t i = 0; i < params_size; ++i) {
     if (params[i][0] == '-' || params[i][0] == '/') {
-      const char *pOption = params[i].c_str() + 1;
-      if (strcmp(pOption, "reportstats") == 0) {
+      const wchar_t *key = params[i].c_str() + 1;
+
+      if (wcscmp(key, _T("reportstats")) == 0) {
         g_bReportStats = true;
-      } else if (strcmp(pOption, "localsteamserver") == 0) {
+      } else if (wcscmp(key, _T("localsteamserver")) == 0) {
         g_bUseLocalSteamServer = true;
-      } else if (strcmp(pOption, "redirect") == 0) {
+      } else if (wcscmp(key, _T("redirect")) == 0) {
         ++i;
         g_redirectTarget = params[i];
       }
@@ -1321,45 +1383,60 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
   }
 
   SetRegistryValue(
-      "Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings",
-      "UseVMROverlay", 0, g_dwUseVMROverlayOldValue,
+      _T("Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings"),
+      _T("UseVMROverlay"), 0, g_dwUseVMROverlayOldValue,
       g_bUseVMROverlayValueExists);
   atexit(RestoreRegistry);
 
-  LogPlayerEvent(ET_APPLAUNCH, 0.0f);
+  LogPlayerEvent(ET_APPLAUNCH, 0.0);
 
-  lpCmdLine = GetCommandLine();  // this line necessary for _ATL_MIN_CRT
+  command_line = GetCommandLine();  // this line necessary for _ATL_MIN_CRT
 
-  CoInitialize(0);
-  _Module.Init(ObjectMap, hInstance, &LIBID_ATLLib);
+  HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED |
+                                           COINIT_DISABLE_OLE1DDE |
+                                           COINIT_SPEED_OVER_MEMORY);
+  if (FAILED(hr)) {
+    ShowFailureMessage(hr);
+    return hr;
+  }
 
-  ::InitCommonControls();
+  hr = _Module.Init(ObjectMap, instance, &LIBID_ATLLib);
+  if (FAILED(hr)) {
+    ShowFailureMessage(hr);
+    return hr;
+  }
+
+  InitCommonControls();
 
   POINT pt;
   GetCursorPos(&pt);
   g_hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
 
   if (!CreateDesktopBitmaps()) {
-    OutputDebugString("CreateDesktopBitmaps FAILED!\n");
+    OutputDebugString(_T("CreateDesktopBitmaps FAILED!\n"));
   }
 
   ShowCursor(FALSE);
   CreateFullscreenWindow(true);
 
   MSG msg;
-  while (GetMessage(&msg, 0, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+  BOOL message_code;
+  while ((message_code = GetMessageW(&msg, nullptr, 0, 0)) != 0) {
+    if (message_code != -1) {
+      TranslateMessage(&msg);
+      DispatchMessageW(&msg);
+    } else {
+      OutputDebugString(_T("GetMessageW FAILED!\n"));
+      break;
+    }
   }
 
   LogPlayerEvent(ET_APPEXIT);
-  if (g_bReportStats) {
-    UploadStats();
-  }
+  if (g_bReportStats) UploadStats();
 
   if (!g_redirectTarget.empty()) {
-    ::ShellExecuteA(NULL, "open", g_redirectTarget.c_str(), NULL, NULL,
-                    SW_SHOWNORMAL);
+    ShellExecuteW(nullptr, _T("open"), g_redirectTarget.c_str(), nullptr,
+                  nullptr, SW_SHOWNORMAL);
   }
 
   _Module.Term();
@@ -1367,5 +1444,5 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
   RestoreRegistry();
 
-  return 0;
+  return msg.wParam;
 }
