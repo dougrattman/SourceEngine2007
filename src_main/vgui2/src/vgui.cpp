@@ -636,7 +636,7 @@ bool CVGui::DispatchMessages() {
             strcmp(messageItem->_params->GetName(), "MouseFocusTicked") &&
             strcmp(messageItem->_params->GetName(), "KeyFocusTicked") &&
             strcmp(messageItem->_params->GetName(), "CursorMoved")) {
-          if (!stricmp(messageItem->_params->GetName(), "command")) {
+          if (!_stricmp(messageItem->_params->GetName(), "command")) {
             g_pIVgui->DPrintf2("%s Queue dispatching command( %s, %s -- %i )\n",
                                qname, messageItem->_params->GetName(),
                                messageItem->_params->GetString("command"),
@@ -741,8 +741,8 @@ void CVGui::PostMessage(VPANEL target, KeyValues *params, VPANEL from,
   messageItem._messageID = m_iCurrentMessageID++;
 
   /* message debug code
-  //if ( stricmp(messageItem._params->GetName(),"CursorMoved") &&
-  stricmp(messageItem._params->GetName(),"KeyFocusTicked"))
+  //if ( _stricmp(messageItem._params->GetName(),"CursorMoved") &&
+  _stricmp(messageItem._params->GetName(),"KeyFocusTicked"))
   {
           g_pIVgui->DPrintf2( "posting( %s -- %i )\n",
   messageItem._params->GetName(), messageItem._messageID );

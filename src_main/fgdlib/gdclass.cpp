@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved
 
 #include "fgdlib/GDClass.h"
 
@@ -270,7 +270,7 @@ CClassInput *GDclass::FindInput(const char *szName) {
   int nCount = GetInputCount();
   for (int i = 0; i < nCount; i++) {
     CClassInput *pInput = GetInput(i);
-    if (!stricmp(pInput->GetName(), szName)) {
+    if (!_stricmp(pInput->GetName(), szName)) {
       return (pInput);
     }
   }
@@ -285,7 +285,7 @@ CClassOutput *GDclass::FindOutput(const char *szName) {
   int nCount = GetOutputCount();
   for (int i = 0; i < nCount; i++) {
     CClassOutput *pOutput = GetOutput(i);
-    if (!stricmp(pOutput->GetName(), szName)) {
+    if (!_stricmp(pOutput->GetName(), szName)) {
       return (pOutput);
     }
   }
@@ -782,7 +782,7 @@ bool GDclass::ParseVariables(TokenReader &tr) {
       break;
     }
 
-    if (!stricmp(szToken, "input")) {
+    if (!_stricmp(szToken, "input")) {
       if (!ParseInput(tr)) {
         return (false);
       }
@@ -790,7 +790,7 @@ bool GDclass::ParseVariables(TokenReader &tr) {
       continue;
     }
 
-    if (!stricmp(szToken, "output")) {
+    if (!_stricmp(szToken, "output")) {
       if (!ParseOutput(tr)) {
         return (false);
       }
@@ -798,7 +798,7 @@ bool GDclass::ParseVariables(TokenReader &tr) {
       continue;
     }
 
-    if (!stricmp(szToken, "key")) {
+    if (!_stricmp(szToken, "key")) {
       GDGetToken(tr, szToken, sizeof(szToken));
     }
 
@@ -817,9 +817,9 @@ bool GDclass::ParseVariables(TokenReader &tr) {
       if (pDupVar->GetType() != var->GetType()) {
         char szError[SOURCE_MAX_PATH];
 
-        sprintf(szError,
-                "%s: Variable '%s' is multiply defined with different types.",
-                GetName(), var->GetName());
+        sprintf_s(szError,
+                  "%s: Variable '%s' is multiply defined with different types.",
+                  GetName(), var->GetName());
         GDError(tr, szError);
       }
     }
@@ -856,7 +856,7 @@ GDinputvariable *GDclass::GetVariableAt(int iIndex) {
 GDinputvariable *GDclass::VarForName(const char *pszName, int *piIndex) {
   for (int i = 0; i < GetVariableCount(); i++) {
     GDinputvariable *pVar = GetVariableAt(i);
-    if (!strcmpi(pVar->GetName(), pszName)) {
+    if (!_strcmpi(pVar->GetName(), pszName)) {
       if (piIndex) piIndex[0] = i;
       return pVar;
     }
@@ -872,7 +872,7 @@ void GDclass::GetHelperForGDVar(GDinputvariable *pVar,
     CHelperInfo *pHelper = GetHelper(i);
     int nParamCount = pHelper->GetParameterCount();
     for (int j = 0; j < nParamCount; j++) {
-      if (!strcmpi(pszName, pHelper->GetParameter(j))) {
+      if (!_strcmpi(pszName, pHelper->GetParameter(j))) {
         pszHelperName->AddToTail(pHelper->GetName());
       }
     }

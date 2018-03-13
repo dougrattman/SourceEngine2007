@@ -1,52 +1,41 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#if !defined(AFX_STDAFX_H__4F9B2A8A_E38D_4917_BA99_46DF8EC095C9__INCLUDED_)
-#define AFX_STDAFX_H__4F9B2A8A_E38D_4917_BA99_46DF8EC095C9__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef AFX_STDAFX_H_
+#define AFX_STDAFX_H_
 
 #include "tier0/include/wchartypes.h"
 
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+// Nobody needs it.
+#define NOMINMAX
+
+#include <afxext.h>  // MFC extensions
+#include <afxwin.h>  // MFC core and standard components
 
 #ifndef _AFX_NO_OLE_SUPPORT
-#include <afxole.h>         // MFC OLE classes
-#include <afxodlgs.h>       // MFC OLE dialog classes
-#include <afxdisp.h>        // MFC Automation classes
-#endif // _AFX_NO_OLE_SUPPORT
-
+#include <afxdisp.h>   // MFC Automation classes
+#include <afxodlgs.h>  // MFC OLE dialog classes
+#include <afxole.h>    // MFC OLE classes
+#endif                 // _AFX_NO_OLE_SUPPORT
 
 #ifndef _AFX_NO_DB_SUPPORT
-#include <afxdb.h>			// MFC ODBC database classes
-#endif // _AFX_NO_DB_SUPPORT
+#include <afxdb.h>  // MFC ODBC database classes
+#endif              // _AFX_NO_DB_SUPPORT
 
 #ifndef _AFX_NO_DAO_SUPPORT
-#include <afxdao.h>			// MFC DAO database classes
-#endif // _AFX_NO_DAO_SUPPORT
+#include <afxdao.h>  // MFC DAO database classes
+#endif               // _AFX_NO_DAO_SUPPORT
 
-#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
+#include <afxdtctl.h>  // MFC support for Internet Explorer 4 Common Controls
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC support for Windows Common Controls
+#include <afxcmn.h>  // MFC support for Windows Common Controls
 #include <afxpriv.h>
-#endif // _AFX_NO_AFXCMN_SUPPORT
-
+#endif  // _AFX_NO_AFXCMN_SUPPORT
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+// Microsoft Visual C++ will insert additional declarations immediately before
+// the previous line.
 
-#endif // !defined(AFX_STDAFX_H__4F9B2A8A_E38D_4917_BA99_46DF8EC095C9__INCLUDED_)
+#endif  // !AFX_STDAFX_H_

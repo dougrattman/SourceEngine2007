@@ -77,7 +77,7 @@ bool CCvarTextEntry::HasBeenModified() {
   char szText[MAX_CVAR_TEXT];
   GetText(szText, MAX_CVAR_TEXT);
 
-  return stricmp(szText, m_pszStartValue);
+  return _stricmp(szText, m_pszStartValue);
 }
 
 void CCvarTextEntry::OnTextChanged() {

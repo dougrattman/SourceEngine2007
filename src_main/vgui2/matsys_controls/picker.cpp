@@ -31,7 +31,7 @@ static int __cdecl PickerBrowserSortFunc( vgui::ListPanel *pPanel, const ListPan
 {
 	const char *string1 = item1.kv->GetString("choice");
 	const char *string2 = item2.kv->GetString("choice");
-	return stricmp( string1, string2 );
+	return _stricmp( string1, string2 );
 }
 
 

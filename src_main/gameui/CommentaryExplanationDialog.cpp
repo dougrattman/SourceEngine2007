@@ -56,10 +56,10 @@ void CCommentaryExplanationDialog::OnKeyCodePressed(KeyCode code) {
 // Purpose: handles button commands
 //-----------------------------------------------------------------------------
 void CCommentaryExplanationDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "ok")) {
+  if (!_stricmp(command, "ok")) {
     Close();
     BasePanel()->FadeToBlackAndRunEngineCommand(m_pszFinishCommand);
-  } else if (!stricmp(command, "cancel") || !stricmp(command, "close")) {
+  } else if (!_stricmp(command, "cancel") || !_stricmp(command, "close")) {
     Close();
   } else {
     BaseClass::OnCommand(command);

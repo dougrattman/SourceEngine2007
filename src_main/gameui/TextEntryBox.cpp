@@ -85,7 +85,7 @@ void CTextEntryBox::PerformLayout()
 //--------------------------------------------------------------------------------------------------------------
 void CTextEntryBox::OnCommand(const char *command)
 {
-	if (!stricmp(command, "Ok"))
+	if (!_stricmp(command, "Ok"))
 	{
 		if (m_pCvarEntry)
 		{

@@ -58,7 +58,7 @@ bool AreAssertsEnabledInFileLine(const ch *file_name, i32 line) {
   for (AssertDisable *it{g_pAssertDisables}; it; it = next) {
     next = it->next;
 
-    if (stricmp(file_name, it->fileName) == 0) {
+    if (_stricmp(file_name, it->fileName) == 0) {
       // Are asserts disabled in the whole file?
       bool are_asserts_enabled{true};
       if (it->lineMin == -1 && it->lineMax == -1) are_asserts_enabled = false;
@@ -98,8 +98,8 @@ AssertDisable *CreateNewAssertDisable(const ch *pFilename) {
   assert_disable->lineMin = assert_disable->lineMax = -1;
   assert_disable->ignoreTimes = -1;
 
-  strncpy(assert_disable->fileName, g_Info.fileName,
-          SOURCE_ARRAYSIZE(assert_disable->fileName) - 1);
+  strncpy_s(assert_disable->fileName, g_Info.fileName,
+            SOURCE_ARRAYSIZE(assert_disable->fileName) - 1);
   assert_disable->fileName[SOURCE_ARRAYSIZE(assert_disable->fileName) - 1] = 0;
 
   return assert_disable;

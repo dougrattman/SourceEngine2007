@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:	Deals with remote perf testing on customer machines
 
@@ -184,8 +184,13 @@ CON_COMMAND_F(rpt_start, "", FCVAR_DONTRECORD | FCVAR_HIDDEN) {
   RPTClient().CreateListenSocket(rptAddr);
 
   char pDir[SOURCE_MAX_PATH];
-  int nDay, nMonth, nYear;
-  GetCurrentDate(&nDay, &nMonth, &nYear);
+  tm now;
+  VCRHook_LocalTime(&now);
+
+  int nDay = now.tm_mday;
+  int nMonth = now.tm_mon + 1;
+  int nYear = now.tm_year + 1900;
+
   Q_snprintf(pDir, sizeof(pDir), "rpt/%d_%d_%d", nMonth, nDay, nYear);
   RPTClient().SetRemoteFileDirectory(pDir);
 

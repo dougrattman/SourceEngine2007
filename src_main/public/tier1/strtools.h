@@ -1,7 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_STRTOOLS_H_
 #define SOURCE_TIER1_STRTOOLS_H_
+
+#include "build/include/build_config.h"
 
 #ifdef OS_POSIX
 #include <ctype.h>
@@ -17,7 +19,6 @@ class CUtlMemory;
 template <class T, class A>
 class CUtlVector;
 
-
 // Portable versions of standard string functions
 
 void _V_memset(const char *file, int line, void *dest, int fill, int count);
@@ -28,15 +29,64 @@ void _V_memmove(const char *file, int line, void *dest, const void *src,
 int _V_memcmp(const char *file, int line, const void *m1, const void *m2,
               int count);
 int _V_strlen(const char *file, int line, const char *str);
-void _V_strcpy(const char *file, int line, char *dest, const char *src);
+
+inline char *V_strcpy(char *dest, size_t size, char const *src) {
+#ifdef OS_WIN
+  strcpy_s(dest, size, src);
+  return dest;
+#else
+#error Please, define safe strcpy for your platform at tier1/strtools.h
+#endif  // OS_WIN
+}
+extern "C++" {
+template <size_t size>
+inline char *V_strcpy(char (&dest)[size], char const *src) {
+  V_strcpy(dest, size, src);
+  return dest;
+}
+}
+// inline void V_strcpy(char *dest, const char *src) { strcpy(dest, src); }
+
 char *_V_strrchr(const char *file, int line, const char *s, char c);
 int _V_strcmp(const char *file, int line, const char *s1, const char *s2);
 int _V_wcscmp(const char *file, int line, const wchar_t *s1, const wchar_t *s2);
 int _V_stricmp(const char *file, int line, const char *s1, const char *s2);
 char *_V_strstr(const char *file, int line, const char *s1, const char *search);
-char *_V_strupr(const char *file, int line, char *start);
-char *_V_strlower(const char *file, int line, char *start);
 int _V_wcslen(const char *file, int line, const wchar_t *pwch);
+
+inline char *V_strupr(char *dest, size_t size) {
+#ifdef OS_WIN
+  _strupr_s(dest, size);
+  return dest;
+#else
+#error Please, define safe _strupr for your platform at tier1/strtools.h
+#endif  // OS_WIN
+}
+extern "C++" {
+template <size_t size>
+inline char *V_strupr(char (&dest)[size]) {
+  V_strupr(dest, size);
+  return dest;
+}
+}
+// inline char *V_strupr(char *start) { return _strupr(start); }
+
+inline char *V_strlower(char *dest, size_t size) {
+#ifdef OS_WIN
+  _strlwr_s(dest, size);
+  return dest;
+#else
+#error Please, define safe _strlwr for your platform at tier1/strtools.h
+#endif  // OS_WIN
+}
+extern "C++" {
+template <size_t size>
+inline char *V_strlower(char (&dest)[size]) {
+  V_strlower(dest, size);
+  return dest;
+}
+}
+// inline char *V_strlower(char *start) { return _strlwr(start); }
 
 #ifdef _DEBUG
 
@@ -49,14 +99,11 @@ int _V_wcslen(const char *file, int line, const wchar_t *pwch);
 #define V_memcmp(m1, m2, count) \
   _V_memcmp(__FILE__, __LINE__, (m1), (m2), (count))
 #define V_strlen(str) _V_strlen(__FILE__, __LINE__, (str))
-#define V_strcpy(dest, src) _V_strcpy(__FILE__, __LINE__, (dest), (src))
 #define V_strrchr(s, c) _V_strrchr(__FILE__, __LINE__, (s), (c))
 #define V_strcmp(s1, s2) _V_strcmp(__FILE__, __LINE__, (s1), (s2))
 #define V_wcscmp(s1, s2) _V_wcscmp(__FILE__, __LINE__, (s1), (s2))
 #define V_stricmp(s1, s2) _V_stricmp(__FILE__, __LINE__, (s1), (s2))
 #define V_strstr(s1, search) _V_strstr(__FILE__, __LINE__, (s1), (search))
-#define V_strupr(start) _V_strupr(__FILE__, __LINE__, (start))
-#define V_strlower(start) _V_strlower(__FILE__, __LINE__, (start))
 #define V_wcslen(pwch) _V_wcslen(__FILE__, __LINE__, (pwch))
 
 #else
@@ -95,7 +142,7 @@ inline int V_memcmp(const void *m1, const void *m2, int count) {
   return memcmp(m1, m2, count);
 }
 inline int V_strlen(const char *str) { return (int)strlen(str); }
-inline void V_strcpy(char *dest, const char *src) { strcpy(dest, src); }
+
 inline int V_wcslen(const wchar_t *pwch) { return (int)wcslen(pwch); }
 inline char *V_strrchr(const char *s, char c) { return (char *)strrchr(s, c); }
 inline int V_strcmp(const char *s1, const char *s2) { return strcmp(s1, s2); }
@@ -108,8 +155,6 @@ inline int V_stricmp(const char *s1, const char *s2) {
 inline char *V_strstr(const char *s1, const char *search) {
   return (char *)strstr(s1, search);
 }
-inline char *V_strupr(char *start) { return _strupr(start); }
-inline char *V_strlower(char *start) { return _strlwr(start); }
 
 #endif
 
@@ -336,9 +381,7 @@ inline void V_strcat(char *dest, const char *src, int cchDest) {
   V_strncat(dest, src, cchDest, COPY_ALL_CHARACTERS);
 }
 
-
 // generic unique name helper functions
-
 
 // returns startindex if none found, 2 if "prefix" found, and n+1 if "prefixn"
 // found

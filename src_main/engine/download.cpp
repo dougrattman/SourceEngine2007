@@ -34,8 +34,9 @@ Color DownloadCompleteColor(100, 200, 100, 255);
 
 //--------------------------------------------------------------------------------------------------------------
 static char *CloneString(const char *original) {
-  char *newString = new char[Q_strlen(original) + 1];
-  Q_strcpy(newString, original);
+  size_t size = Q_strlen(original) + 1;
+  char *newString = new char[size];
+  Q_strcpy(newString, size, original);
 
   return newString;
 }
@@ -421,7 +422,7 @@ bool DownloadManager::HasMapBeenDownloadedFromServer(
 
   for (int i = 0; i < m_downloadedMaps.Count(); ++i) {
     const char *oldServerMapName = m_downloadedMaps[i];
-    if (oldServerMapName && !stricmp(serverMapName, oldServerMapName)) {
+    if (oldServerMapName && !_stricmp(serverMapName, oldServerMapName)) {
       return true;
     }
   }

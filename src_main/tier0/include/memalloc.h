@@ -263,8 +263,11 @@ struct MemAllocFileLine_t {
 
 #define MEMALLOC_DEFINE_EXTERNAL_TRACKING(tag)                                          \
   static CUtlMap<void *, MemAllocFileLine_t, i32> g_##tag##Allocs(DefLessFunc(void *)); \
-  static const ch *g_psz##tag##Alloc = strcpy(                                          \
-      (ch *)g_pMemAlloc->Alloc(strlen(#tag "Alloc") + 1, "intentional leak", 0), #tag "Alloc");
+  static const size_t g_length##tag##Alloc = strlen(#tag "Alloc") + 1;                  \
+  static ch *g_psz##tag##Alloc =                                                        \
+      (ch *)g_pMemAlloc->Alloc(g_length##tag##Alloc, "intentional leak", 0);            \
+  static const errno_t g_unused##tag##Alloc =                                           \
+      strcpy_s(g_psz##tag##Alloc, g_length##tag##Alloc, #tag "Alloc");
 
 #define MemAlloc_RegisterExternalAllocation(tag, p, size)                        \
   if (!p)                                                                        \

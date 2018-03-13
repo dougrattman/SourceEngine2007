@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dme_controls/AssetBuilder.h"
 
@@ -27,7 +27,6 @@
 #include "vgui_controls/Splitter.h"
 #include "vgui_controls/TextEntry.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -428,8 +427,8 @@ void CAssetBuilder::BuildFileIDList(CDmeMakefile *pMakeFile,
   }
 
   int nSourceCount = pMakeFile->GetSourceCount();
-  for (int i = 0; i < nSourceCount; ++i) {
-    CDmeSource *pSource = pMakeFile->GetSource(i);
+  for (int j = 0; j < nSourceCount; ++j) {
+    CDmeSource *pSource = pMakeFile->GetSource(j);
     BuildFileIDList(pSource->GetDependentMakefile(), fileIds);
   }
 }
@@ -947,8 +946,8 @@ void CAssetBuilder::OnOpenContextMenu(KeyValues *kv) {
   bool bShowLoadSourceFile = false;
   bool bHasValidSourceFile = false;
   if (nCount == 1 && nItemID != -1) {
-    KeyValues *kv = m_pSourcesList->GetItem(nItemID);
-    CDmeSource *pSource = GetElementKeyValue<CDmeSource>(kv, "dmeSource");
+    KeyValues *dme_kv = m_pSourcesList->GetItem(nItemID);
+    CDmeSource *pSource = GetElementKeyValue<CDmeSource>(dme_kv, "dmeSource");
     if (pSource) {
       bHasValidSourceFile = pSource->GetRelativeFileName()[0] != 0;
       if (m_hMakefile->FindDependentMakefile(pSource)) {

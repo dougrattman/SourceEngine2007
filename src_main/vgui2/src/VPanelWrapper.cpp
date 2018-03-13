@@ -244,7 +244,7 @@ class VPanelWrapper : public vgui::IPanel {
 
     // assert that the specified vpanel is from the same module as requesting
     // the cast
-    if (stricmp(GetModuleName(vguiPanel), moduleName)) {
+    if (_stricmp(GetModuleName(vguiPanel), moduleName)) {
       // assert(!("GetPanel() used to retrieve a Panel * from a different dll
       // than which which it was created. This is bad, you can't pass Panel *
       // across dll boundaries else you'll break the versioning.  Please only

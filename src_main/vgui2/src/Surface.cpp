@@ -1346,7 +1346,7 @@ void CWin32Surface::DrawSetTextureFile(int id, const char *filename,
                                        bool forceReload /*= false*/) {
   Texture *texture = GetTextureById(id);
 
-  if (!texture || stricmp(filename, texture->_filename) || forceReload) {
+  if (!texture || _stricmp(filename, texture->_filename) || forceReload) {
     // no texture, or the filename is different;  load the new texture
     if (!texture) {
       // allocate a new texture

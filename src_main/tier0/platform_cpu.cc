@@ -114,9 +114,9 @@ ch* GetCpuVendorId() {
   memset(vendor_id, 0, sizeof(vendor_id));
   if (!cpuid(0, unused, registers[0], registers[2], registers[1])) {
 #ifdef ARCH_CPU_X86
-    strcpy(vendor_id, "Generic_x86");
+    strcpy_s(vendor_id, "Generic_x86");
 #elif defined(ARCH_CPU_X86_64)
-    strcpy(vendor_id, "Generic_x86_64");
+    strcpy_s(vendor_id, "Generic_x86_64");
 #else
 #error Please, define CPU architecture for your CPU in tier0/cpu.cc
 #endif

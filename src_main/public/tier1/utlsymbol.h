@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines a symbol table,
 
@@ -10,15 +10,10 @@
 #include "tier1/utlrbtree.h"
 #include "tier1/utlvector.h"
 
-
-// forward declarations
-
 class CUtlSymbolTable;
 class CUtlSymbolTableMT;
 
-
 // This is a symbol, which is a easier way of dealing with strings.
-
 typedef unsigned short UtlSymId_t;
 
 #define UTL_INVAL_SYMBOL ((UtlSymId_t)~0)
@@ -71,15 +66,10 @@ class CUtlSymbol {
   friend class CCleanupUtlSymbolTable;
 };
 
-
-// CUtlSymbolTable:
-// description:
 //    This class defines a symbol table, which allows us to perform mappings
 //    of strings to symbols and back. The symbol class itself contains
 //    a static version of this class for creating global strings, but this
 //    class can also be instanced to create local symbol tables.
-
-
 class CUtlSymbolTable {
  public:
   // constructor, destructor
@@ -183,15 +173,12 @@ class CUtlSymbolTableMT : private CUtlSymbolTable {
   mutable CThreadSpinRWLock m_lock;
 };
 
-
 // CUtlFilenameSymbolTable:
 // description:
 //    This class defines a symbol table of individual filenames, stored more
 //	  efficiently than a standard symbol table.  Internally filenames are
 // broken 	  up into file and path entries, and a file handle class allows
 // convenient 	  access to these.
-
-
 // The handle is a CUtlSymbol for the dirname and the same for the filename, the
 // accessor
 //  copies them into a static char buffer for return.

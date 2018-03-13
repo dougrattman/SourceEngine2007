@@ -206,7 +206,7 @@ class CHammerCmdLine : public CCommandLineInfo {
   }
 
   void ParseParam(LPCTSTR lpszParam, BOOL bFlag, BOOL bLast) {
-    if ((!m_bGame) && (bFlag && !stricmp(lpszParam, "game"))) {
+    if ((!m_bGame) && (bFlag && !_stricmp(lpszParam, "game"))) {
       m_bGame = true;
     } else if (m_bGame) {
       if (!bFlag) {
@@ -214,13 +214,13 @@ class CHammerCmdLine : public CCommandLineInfo {
       }
 
       m_bGame = false;
-    } else if (bFlag && !strcmpi(lpszParam, "nologo")) {
+    } else if (bFlag && !_strcmpi(lpszParam, "nologo")) {
       m_bShowLogo = false;
-    } else if (bFlag && !strcmpi(lpszParam, "makelib")) {
+    } else if (bFlag && !_strcmpi(lpszParam, "makelib")) {
       bMakeLib = TRUE;
     } else if (!bFlag && bMakeLib) {
       MakePrefabLibrary(lpszParam);
-    } else if ((!m_bConfigDir) && (bFlag && !stricmp(lpszParam, "configdir"))) {
+    } else if ((!m_bConfigDir) && (bFlag && !_stricmp(lpszParam, "configdir"))) {
       m_bConfigDir = true;
     } else if (m_bConfigDir) {
       if (!bFlag) {

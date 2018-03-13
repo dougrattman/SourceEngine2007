@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This module implements the subset of MPI that VRAD and VVIS use.
 
@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include "IThreadedTCPSocket.h"
+#include "base/include/windows/windows_light.h"
 #include "bitbuf.h"
 #include "checksum_md5.h"
 #include "filesystem.h"
@@ -22,7 +23,6 @@
 #include "utlvector.h"
 #include "vmpi_distribute_work.h"
 #include "vstdlib/random.h"
-#include "base/include/windows/windows_light.h"
 
 #define DEFAULT_MAX_WORKERS \
   32  // Unless they specify -mpi_MaxWorkers, it will stop accepting workers
@@ -162,7 +162,7 @@ class CDependencyInfo {
  public:
   CDependencyFile *FindFile(const char *pFilename) {
     for (int i = 0; i < m_Files.Count(); i++) {
-      if (stricmp(pFilename, m_Files[i]->m_Name) == 0) return m_Files[i];
+      if (_stricmp(pFilename, m_Files[i]->m_Name) == 0) return m_Files[i];
     }
     return NULL;
   }
@@ -291,7 +291,7 @@ class CVMPIConnectionCreator : public IHandlerCreator {
 const char *VMPI_FindArg(int argc, char **argv, const char *pName,
                          const char *pDefault) {
   for (int i = 0; i < argc; i++) {
-    if (stricmp(argv[i], pName) == 0) {
+    if (_stricmp(argv[i], pName) == 0) {
       if ((i + 1) < argc)
         return argv[i + 1];
       else
@@ -1687,8 +1687,8 @@ bool VMPI_GetNextMessage(MessageBuffer *pBuf, int *pSource,
   DWORD timeout = startTimeout;
 
   while (1) {
-    DWORD ret =
-        WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles, FALSE, timeout);
+    DWORD ret = WaitForMultipleObjects(SOURCE_ARRAYSIZE(handles), handles,
+                                       FALSE, timeout);
     if (ret == WAIT_TIMEOUT) {
       return false;
     } else if (ret == WAIT_OBJECT_0) {

@@ -2290,11 +2290,11 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
   SignalUpdate(EVTYPE_FACE_CHANGED);
   CMapFace *pFace = pLoadFace->pFace;
 
-  if (!stricmp(szKey, "id")) {
+  if (!_stricmp(szKey, "id")) {
     CChunkFile::ReadKeyValueInt(szValue, pFace->m_nFaceID);
-  } else if (!stricmp(szKey, "rotation")) {
+  } else if (!_stricmp(szKey, "rotation")) {
     pFace->texture.rotate = atof(szValue);
-  } else if (!stricmp(szKey, "plane")) {
+  } else if (!_stricmp(szKey, "plane")) {
     int nRead =
         sscanf(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
                &pFace->plane.planepts[0][0], &pFace->plane.planepts[0][1],
@@ -2307,9 +2307,9 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
       // TODO: need specific error message
       return (ChunkFile_Fail);
     }
-  } else if (!stricmp(szKey, "material")) {
+  } else if (!_stricmp(szKey, "material")) {
     strcpy(pLoadFace->szTexName, szValue);
-  } else if (!stricmp(szKey, "uaxis")) {
+  } else if (!_stricmp(szKey, "uaxis")) {
     int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pFace->texture.UAxis[0],
                        &pFace->texture.UAxis[1], &pFace->texture.UAxis[2],
                        &pFace->texture.UAxis[3], &pFace->texture.scale[0]);
@@ -2318,7 +2318,7 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
       // TODO: need specific error message
       return (ChunkFile_Fail);
     }
-  } else if (!stricmp(szKey, "vaxis")) {
+  } else if (!_stricmp(szKey, "vaxis")) {
     int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pFace->texture.VAxis[0],
                        &pFace->texture.VAxis[1], &pFace->texture.VAxis[2],
                        &pFace->texture.VAxis[3], &pFace->texture.scale[1]);
@@ -2327,9 +2327,9 @@ ChunkFileResult_t CMapFace::LoadKeyCallback(const char *szKey,
       // TODO: need specific error message
       return (ChunkFile_Fail);
     }
-  } else if (!stricmp(szKey, "lightmapscale")) {
+  } else if (!_stricmp(szKey, "lightmapscale")) {
     pFace->texture.nLightmapScale = atoi(szValue);
-  } else if (!stricmp(szKey, "smoothing_groups")) {
+  } else if (!_stricmp(szKey, "smoothing_groups")) {
     pFace->m_fSmoothingGroups = atoi(szValue);
   }
 

@@ -34,16 +34,16 @@ using isize = std::ptrdiff_t;
 
 // These strict synonyms are for floating point types.
 using f32 = float;
-static_assert(
-    sizeof(f32) == 4,
-    "f32 should be 4 bytes length. "
-    "Please, define 4 bytes f32 for your platform in base/base_types.h.");
+static_assert(sizeof(f32) == 4,
+              "f32 should be 4 bytes length. "
+              "Please, define 4 bytes float for your platform in "
+              "base/include/base_types.h.");
 
 using f64 = double;
-static_assert(
-    sizeof(f64) == 8,
-    "f64 should be 8 bytes length. "
-    "Please, define 8 bytes f64 for your platform in base/base_types.h.");
+static_assert(sizeof(f64) == 8,
+              "f64 should be 8 bytes length. "
+              "Please, define 8 bytes double for your platform in "
+              "base/include/base_types.h.");
 
 // Easy to use void type.
 using v = void;

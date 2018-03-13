@@ -88,8 +88,10 @@ the_interface IGameUI {
   virtual void BonusMapChallengeUpdate(
       const char *pchFileName, const char *pchMapName,
       const char *pchChallengeName, int iBest) = 0;
-  virtual void BonusMapChallengeNames(char *pchFileName, char *pchMapName,
-                                      char *pchChallengeName) = 0;
+  virtual void BonusMapChallengeNames(char *pchFileName, size_t file_name_size,
+                                      char *pchMapName, size_t map_name_size,
+                                      char *pchChallengeName,
+                                      size_t challenge_name_size) = 0;
   virtual void BonusMapChallengeObjectives(int &iBronze, int &iSilver,
                                            int &iGold) = 0;
   virtual void BonusMapDatabaseSave(void) = 0;
@@ -102,14 +104,14 @@ the_interface IGameUI {
   // X360 Storage device validation:
   //		returns true right away if storage device has been previously
   // selected. 		otherwise returns false and will set the variable
-  // pointed by pStorageDeviceValidated to 1 	  once the storage device is selected
-  // by user.
+  // pointed by pStorageDeviceValidated to 1 	  once the storage device is
+  // selected by user.
   virtual bool ValidateStorageDevice(int *pStorageDeviceValidated) = 0;
 
   virtual void SetProgressOnStart() = 0;
   virtual void OnDisconnectFromServer(uint8_t eSteamLoginFailure) = 0;
 };
 
-#define GAMEUI_INTERFACE_VERSION "GameUI011"
+#define GAMEUI_INTERFACE_VERSION "GameUI012"
 
 #endif  // IGAMEUI_H

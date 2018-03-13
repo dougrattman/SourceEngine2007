@@ -98,7 +98,7 @@ public:
 
 	virtual void OnCommand(const char *command)
 	{
-		if (!stricmp(command, "OK"))
+		if (!_stricmp(command, "OK"))
 		{
 			PostActionSignal(new KeyValues("CreateDirectory", "dir", GetControlString("NameEntry")));
 			Close();
@@ -353,7 +353,7 @@ void DirectorySelectDialog::BuildDriveChoices()
 	{
 		kv->SetString("drive", pBuf);
 		int itemID = m_pDriveCombo->AddItem(pBuf, kv);
-		if (!stricmp(pBuf, m_szCurrentDrive))
+		if (!_stricmp(pBuf, m_szCurrentDrive))
 		{
 			m_pDriveCombo->ActivateItem(itemID);
 		}
@@ -496,7 +496,7 @@ void DirectorySelectDialog::OnTextChanged()
 	if (!kv)
 		return;
 	const char *newDrive = kv->GetString("drive");
-	if (stricmp(newDrive, m_szCurrentDrive))
+	if (_stricmp(newDrive, m_szCurrentDrive))
 	{
 		// drive changed, reset
 		SetStartDirectory(newDrive);
@@ -552,11 +552,11 @@ void DirectorySelectDialog::OnClose()
 //-----------------------------------------------------------------------------
 void DirectorySelectDialog::OnCommand(const char *command)
 {
-	if (!stricmp(command, "Cancel"))
+	if (!_stricmp(command, "Cancel"))
 	{
 		Close();
 	}
-	else if (!stricmp(command, "Select"))
+	else if (!_stricmp(command, "Select"))
 	{
 		// path selected
 		int selectedIndex = m_pDirTree->GetFirstSelectedItem();
@@ -568,7 +568,7 @@ void DirectorySelectDialog::OnCommand(const char *command)
 			Close();
 		}
 	}
-	else if (!stricmp(command, "Create"))
+	else if (!_stricmp(command, "Create"))
 	{
 		int selectedIndex = m_pDirTree->GetFirstSelectedItem();
 		if (m_pDirTree->IsItemIDValid(selectedIndex))

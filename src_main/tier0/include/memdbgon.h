@@ -126,29 +126,25 @@ inline void *MemAlloc_InlineCallocMemset(void *pMem, usize nCount,
 // Make sure we don't define strdup twice
 #if !defined(MEMDBGON_H)
 
-inline ch *MemAlloc_StrDup(const ch *pString, const ch *pFileName, u32 nLine) {
-  ch *pMemory;
+inline ch *MemAlloc_StrDup(const ch *string, const ch *file_name, u32 line) {
+  if (string) {
+    usize size = strlen(string) + 1;
+    ch *memory = (ch *)g_pMemAlloc->Alloc(size, file_name, line);
 
-  if (!pString) return nullptr;
-
-  usize len = strlen(pString) + 1;
-  if ((pMemory = (ch *)g_pMemAlloc->Alloc(len, pFileName, nLine)) != nullptr) {
-    return strcpy(pMemory, pString);
+    if (memory != nullptr && !strcpy_s(memory, size, string)) return memory;
   }
 
   return nullptr;
 }
 
-inline wch *MemAlloc_WcStrDup(const wch *pString, const ch *pFileName,
-                              u32 nLine) {
-  wch *pMemory;
+inline wch *MemAlloc_WcStrDup(const wch *string, const ch *file_name,
+                              u32 line) {
+  if (string) {
+    usize size = wcslen(string) + 1;
+    wch *memory =
+        (wch *)g_pMemAlloc->Alloc(size * sizeof(wch), file_name, line);
 
-  if (!pString) return nullptr;
-
-  usize len = (wcslen(pString) + 1);
-  if ((pMemory = (wch *)g_pMemAlloc->Alloc(len * sizeof(wch), pFileName,
-                                           nLine)) != nullptr) {
-    return wcscpy(pMemory, pString);
+    if (memory != nullptr && !wcscpy_s(memory, size, string)) return memory;
   }
 
   return nullptr;

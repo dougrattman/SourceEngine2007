@@ -2489,21 +2489,10 @@ inline void CShaderAPIDx8::SetScissorRect(const int nLeft, const int nTop,
 
 inline void CShaderAPIDx8::SetRenderStateForce(D3DRENDERSTATETYPE state,
                                                DWORD val) {
-#if (!defined(_X360))
-  {
-    if (IsDeactivated()) return;
+  if (!IsDeactivated()) {
+    Dx9Device()->SetRenderState(state, val);
+    m_DynamicState.m_RenderState[state] = val;
   }
-#else
-  {
-    Assert(state != D3DRS_NOTSUPPORTED);  // Use SetSupportedRenderStateForce()
-                                          // macro to avoid this at compile time
-    // if ( state == D3DRS_NOTSUPPORTED )
-    //	return;
-  }
-#endif
-
-  Dx9Device()->SetRenderState(state, val);
-  m_DynamicState.m_RenderState[state] = val;
 }
 
 //-----------------------------------------------------------------------------
@@ -9586,6 +9575,10 @@ IDirect3DSurface *CShaderAPIDx8::GetBackBufferImage(Rect_t *pSrcRect,
   HRESULT hr;
   D3DSURFACE_DESC desc;
 
+#ifdef _DEBUG
+  int nRenderTargetRefCount = 0;
+#endif
+
   FlushBufferedPrimitives();
 
   // Get the current render target
@@ -9681,7 +9674,7 @@ IDirect3DSurface *CShaderAPIDx8::GetBackBufferImage(Rect_t *pSrcRect,
 
   pTmpSurface->Release();
 #ifdef _DEBUG
-  int nRenderTargetRefCount =
+  nRenderTargetRefCount =
 #endif
       pRenderTarget->Release();
   Assert(nRenderTargetRefCount == 1);

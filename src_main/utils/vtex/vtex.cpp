@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "ivtex.h"
 
@@ -670,7 +670,7 @@ void MakeSrcFileName(char *pSrcName, unsigned int flags,
     if (pNormalString) {
       Q_strncpy(tempBuf, pFullNameWithoutExtension, SOURCE_ARRAYSIZE(tempBuf));
       char *dudv = Q_stristr(tempBuf, "_dudv");
-      Q_strcpy(dudv, "_normal");
+      Q_strcpy(dudv, SOURCE_ARRAYSIZE(tempBuf) - (dudv - tempBuf), "_normal");
       pFullNameWithoutExtension = tempBuf;
     } else {
       Assert(Q_stristr((char *)pFullNameWithoutExtension, "_dudv"));
@@ -1986,7 +1986,8 @@ bool IsCube(const char *inputName) {
   const char *pInputExtension = inputName + Q_strlen(tgaName);
   Q_strncat(tgaName, "rt", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
   Q_strncat(tgaName, pInputExtension, SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
-  Q_strncat(tgaName, GetSourceExtension(), SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
+  Q_strncat(tgaName, GetSourceExtension(), SOURCE_MAX_PATH,
+            COPY_ALL_CHARACTERS);
   struct _stat buf;
   if (_stat(tgaName, &buf) != -1) {
     return true;

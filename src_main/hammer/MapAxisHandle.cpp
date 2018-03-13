@@ -316,7 +316,7 @@ void CMapAxisHandle::SetRenderColor(color32 rgbColor) {}
 //-----------------------------------------------------------------------------
 void CMapAxisHandle::OnParentKeyChanged(const char *szKey,
                                         const char *szValue) {
-  if (!stricmp(szKey, m_szKeyName)) {
+  if (!_stricmp(szKey, m_szKeyName)) {
     Vector vecOrigin1;
     Vector vecOrigin2;
 

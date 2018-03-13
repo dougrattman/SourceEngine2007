@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Helper methods + classes for file access
 
@@ -11,7 +11,6 @@
 
 ConVar fs_convert("fs_convert", "1", 0,
                   "Allow Xbox 360 files to be generated at runtime");
-
 
 // Builds a directory which is a subdirectory of the current mod
 
@@ -34,7 +33,6 @@ void GetModSubdirectory(const char *pSubDir, char *pBuf, int nBufLen) {
   Q_FixSlashes(pBuf);
 }
 
-
 // Builds a directory which is a subdirectory of the current mod's *content*
 
 void GetModContentSubdirectory(const char *pSubDir, char *pBuf, int nBufLen) {
@@ -50,7 +48,6 @@ void GetModContentSubdirectory(const char *pSubDir, char *pBuf, int nBufLen) {
   }
 }
 
-
 // Purpose: Generates an Xbox 360 filename from a PC filename
 
 char *CreateX360Filename(const char *pSourceName, char *pTargetName,
@@ -64,7 +61,6 @@ char *CreateX360Filename(const char *pSourceName, char *pTargetName,
 
   return pTargetName;
 }
-
 
 // Purpose: Generates a PC filename from a possible 360 name.
 // Strips the .360. from filename.360.extension.
@@ -100,7 +96,6 @@ char *RestoreFilename(const char *pSourceName, char *pTargetName,
   return (char *)pSourceName;
 }
 
-
 // Generate an Xbox 360 file if it doesn't exist or is out of date. This
 // function determines the source and target path and whether the file needs to
 // be generated. The caller provides a callback function to do the actual
@@ -111,12 +106,11 @@ char *RestoreFilename(const char *pSourceName, char *pTargetName,
 int UpdateOrCreate(const char *pSourceName, char *pTargetName, int targetLen,
                    const char *pPathID, CreateCallback_t pfnCreate, bool bForce,
                    void *pExtraData) {
-  
   // Will re-activate later code after shipping, and pursue.
   // The data conversions are requiring a greater complexity, or are cross
   // dependent. New work needs to be done for a stable long term developer
   // friendly solution.
-  
+
   if (pTargetName) {
     // caller could supply source as PC or 360 name, we want the PC filename
     char szFixedSourceName[SOURCE_MAX_PATH];
@@ -129,7 +123,6 @@ int UpdateOrCreate(const char *pSourceName, char *pTargetName, int targetLen,
   // no conversion are performed by the game at runtime anymore...
   return UOC_NOT_CREATED;
 }
-
 
 // Returns the search path as a list of paths
 
@@ -147,55 +140,59 @@ void GetSearchPath(CUtlVector<CUtlString> &path, const char *pPathID) {
   path.AddToTail(pBuf);
 }
 
-
 // Builds a list of all files under a directory with a particular extension
-
 void AddFilesToList(CUtlVector<CUtlString> &list, const char *pDirectory,
                     const char *pPathID, const char *pExtension) {
   char pSearchString[SOURCE_MAX_PATH];
   Q_snprintf(pSearchString, SOURCE_MAX_PATH, "%s\\*", pDirectory);
 
-  bool bIsAbsolute = Q_IsAbsolutePath(pDirectory);
+  bool is_absolute = Q_IsAbsolutePath(pDirectory);
 
   // get the list of files
-  FileFindHandle_t hFind;
-  const char *pFoundFile =
-      g_pFullFileSystem->FindFirstEx(pSearchString, pPathID, &hFind);
+  FileFindHandle_t find_handle;
+  const char *found_file =
+      g_pFullFileSystem->FindFirstEx(pSearchString, pPathID, &find_handle);
 
   // add all the items
-  CUtlVector<CUtlString> subDirs;
-  for (; pFoundFile; pFoundFile = g_pFullFileSystem->FindNext(hFind)) {
-    char pChildPath[SOURCE_MAX_PATH];
-    Q_snprintf(pChildPath, SOURCE_MAX_PATH, "%s\\%s", pDirectory, pFoundFile);
+  CUtlVector<CUtlString> sub_dirs;
+  for (; found_file; found_file = g_pFullFileSystem->FindNext(find_handle)) {
+    char child_path[SOURCE_MAX_PATH];
+    Q_snprintf(child_path, SOURCE_ARRAYSIZE(child_path), "%s\\%s", pDirectory,
+               found_file);
 
-    if (g_pFullFileSystem->FindIsDirectory(hFind)) {
-      if (Q_strnicmp(pFoundFile, ".", 2) && Q_strnicmp(pFoundFile, "..", 3)) {
-        subDirs.AddToTail(pChildPath);
+    if (g_pFullFileSystem->FindIsDirectory(find_handle)) {
+      if (Q_strnicmp(found_file, ".", 2) && Q_strnicmp(found_file, "..", 3)) {
+        sub_dirs.AddToTail(child_path);
       }
       continue;
     }
 
     // Check the extension matches
-    if (Q_stricmp(Q_GetFileExtension(pFoundFile), pExtension)) continue;
+    if (Q_stricmp(Q_GetFileExtension(found_file), pExtension)) continue;
 
-    char pFullPathBuf[SOURCE_MAX_PATH];
-    char *pFullPath = pFullPathBuf;
-    if (!bIsAbsolute) {
+    char full_path_buffer[SOURCE_MAX_PATH];
+    size_t full_path_size{SOURCE_ARRAYSIZE(full_path_buffer)};
+    char *full_path = full_path_buffer;
+
+    if (!is_absolute) {
       g_pFullFileSystem->RelativePathToFullPath(
-          pChildPath, pPathID, pFullPathBuf, sizeof(pFullPathBuf));
+          child_path, pPathID, full_path_buffer,
+          SOURCE_ARRAYSIZE(full_path_buffer));
     } else {
-      pFullPath = pChildPath;
+      full_path = child_path;
+      full_path_size = SOURCE_ARRAYSIZE(child_path);
     }
 
-    strlwr(pFullPath);
-    Q_FixSlashes(pFullPath);
-    list.AddToTail(pFullPath);
+    _strlwr_s(full_path, full_path_size);
+    Q_FixSlashes(full_path);
+
+    list.AddToTail(full_path);
   }
 
-  g_pFullFileSystem->FindClose(hFind);
+  g_pFullFileSystem->FindClose(find_handle);
 
-  int nCount = subDirs.Count();
-  for (int i = 0; i < nCount; ++i) {
-    AddFilesToList(list, subDirs[i], pPathID, pExtension);
+  int subdirs_count = sub_dirs.Count();
+  for (int i = 0; i < subdirs_count; ++i) {
+    AddFilesToList(list, sub_dirs[i], pPathID, pExtension);
   }
 }

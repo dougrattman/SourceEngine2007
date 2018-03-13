@@ -83,23 +83,23 @@ void COptionsSubKeyboard::OnKeyCodeTyped(vgui::KeyCode code) {
 
 // Purpose: command handler
 void COptionsSubKeyboard::OnCommand(const char *command) {
-  if (!stricmp(command, "Defaults")) {
+  if (!_stricmp(command, "Defaults")) {
     // open a box asking if we want to restore defaults
     QueryBox *box = new QueryBox("#GameUI_KeyboardSettings",
                                  "#GameUI_KeyboardSettingsText");
     box->AddActionSignalTarget(this);
     box->SetOKCommand(new KeyValues("Command", "command", "DefaultsOK"));
     box->DoModal();
-  } else if (!stricmp(command, "DefaultsOK")) {
+  } else if (!_stricmp(command, "DefaultsOK")) {
     // Restore defaults from default keybindings file
     FillInDefaultBindings();
     m_pKeyBindList->RequestFocus();
-  } else if (!m_pKeyBindList->IsCapturing() && !stricmp(command, "ChangeKey")) {
+  } else if (!m_pKeyBindList->IsCapturing() && !_stricmp(command, "ChangeKey")) {
     m_pKeyBindList->StartCaptureMode(dc_blank);
-  } else if (!m_pKeyBindList->IsCapturing() && !stricmp(command, "ClearKey")) {
+  } else if (!m_pKeyBindList->IsCapturing() && !_stricmp(command, "ClearKey")) {
     OnKeyCodePressed(KEY_DELETE);
     m_pKeyBindList->RequestFocus();
-  } else if (!stricmp(command, "Advanced")) {
+  } else if (!_stricmp(command, "Advanced")) {
     OpenKeyboardAdvancedDialog();
   } else {
     BaseClass::OnCommand(command);
@@ -162,7 +162,7 @@ void COptionsSubKeyboard::ParseActionDescriptions(void) {
     // Skip '======' rows
     if (szDescription[0] != '=') {
       // Flag as special header row if binding is "blank"
-      if (!stricmp(szBinding, "blank")) {
+      if (!_stricmp(szBinding, "blank")) {
         // add header item
         m_pKeyBindList->AddSection(++sectionIndex, szDescription);
         m_pKeyBindList->AddColumnToSection(
@@ -204,7 +204,7 @@ KeyValues *COptionsSubKeyboard::GetItemForBinding(const char *binding) {
     const char *bindString = bindingItem->GetString();
 
     // Check the "Binding" key
-    if (!stricmp(bindString, binding)) return item;
+    if (!_stricmp(bindString, binding)) return item;
   }
   // Didn't find it
   return NULL;
@@ -215,7 +215,7 @@ KeyValues *COptionsSubKeyboard::GetItemForBinding(const char *binding) {
 //			*keyname - The key to be added
 void COptionsSubKeyboard::AddBinding(KeyValues *item, const char *keyname) {
   // See if it's already there as a binding
-  if (!stricmp(item->GetString("Key", ""), keyname)) return;
+  if (!_stricmp(item->GetString("Key", ""), keyname)) return;
 
   // Make sure it doesn't live anywhere
   RemoveKeyFromBindItems(item, keyname);
@@ -232,7 +232,7 @@ void COptionsSubKeyboard::AddBinding(KeyValues *item, const char *keyname) {
 
     const char *curbinding = curitem->GetString("Binding", "");
 
-    if (!stricmp(curbinding, binding)) {
+    if (!_stricmp(curbinding, binding)) {
       curitem->SetString("Key", keyname);
       m_pKeyBindList->InvalidateItem(i);
     }
@@ -274,7 +274,7 @@ void COptionsSubKeyboard::RemoveKeyFromBindItems(KeyValues *org_item,
     if (!item) continue;
 
     // If it's bound to the primary: then remove it
-    if (!stricmp(pszKey, item->GetString("Key", ""))) {
+    if (!_stricmp(pszKey, item->GetString("Key", ""))) {
       bool bClearEntry = true;
 
       if (org_item) {
@@ -283,7 +283,7 @@ void COptionsSubKeyboard::RemoveKeyFromBindItems(KeyValues *org_item,
         // list if they point to the same command.
         const char *org_binding = org_item->GetString("Binding", "");
         const char *binding = item->GetString("Binding", "");
-        if (!stricmp(org_binding, binding)) {
+        if (!_stricmp(org_binding, binding)) {
           bClearEntry = false;
         }
       }
@@ -446,7 +446,7 @@ void COptionsSubKeyboard::FillInDefaultBindings(void) {
     data = UTIL_Parse(data, cmd, sizeof(cmd));
     if (strlen(cmd) <= 0) break;
 
-    if (!stricmp(cmd, "bind")) {
+    if (!_stricmp(cmd, "bind")) {
       // Key name
       char szKeyName[256];
       data = UTIL_Parse(data, szKeyName, sizeof(szKeyName));
@@ -623,7 +623,7 @@ class COptionsSubKeyboardAdvancedDlg : public vgui::Frame {
   }
 
   virtual void OnCommand(const char *command) {
-    if (!stricmp(command, "OK")) {
+    if (!_stricmp(command, "OK")) {
       // apply the data
       OnApplyData();
       Close();

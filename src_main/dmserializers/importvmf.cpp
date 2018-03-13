@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "datamodel/dmattribute.h"
 #include "datamodel/dmelement.h"
@@ -139,7 +139,7 @@ bool CImportVMF::SerializeOther(CUtlBuffer &buf, CDmAttribute *pOther,
     int nLen = Q_strlen(pElementName) + 1;
     char *pTemp = (char *)_alloca(nLen);
     Q_strncpy(pTemp, pElementName, nLen);
-    Q_strlower(pTemp);
+    Q_strlower(pTemp, nLen);
     buf.Printf("%s\n", pTemp);
     buf.Printf("{\n");
     buf.PushTab();
@@ -181,9 +181,8 @@ bool CImportVMF::SerializeEntityEditorKey(CUtlBuffer &buf,
     buf.Printf("\"color\" \"%d %d %d\"\n", c.r(), c.g(), c.b());
   }
 
-  PrintIntAttribute(pEditorElement, buf,
-                    "id");  // TODO(d.rattman): id is a DmObjectId_t!!! This should never
-                            // print anything!
+  // TODO(d.rattman): id is a DmObjectId_t!!! This should never print anything!
+  PrintIntAttribute(pEditorElement, buf, "id");
   PrintStringAttribute(pEditorElement, buf, "comments");
   PrintBoolAttribute(pEditorElement, buf, "visgroupshown");
   PrintBoolAttribute(pEditorElement, buf, "visgroupautoshown");
@@ -211,8 +210,8 @@ bool CImportVMF::SerializeEntityEditorKey(CUtlBuffer &buf,
 // Writes out all entities
 //-----------------------------------------------------------------------------
 bool CImportVMF::SerializeEntities(CUtlBuffer &buf, CDmAttribute *pEntities) {
-  // TODO(d.rattman): Make this serialize in the order in which it appears in the FGD
-  // to minimize diffs
+  // TODO(d.rattman): Make this serialize in the order in which it appears in
+  // the FGD to minimize diffs
   CDmrElementArray<> array(pEntities);
 
   int nCount = array.Count();
@@ -311,7 +310,8 @@ bool CImportVMF::UnserializeEntityEditorKey(CDmAttribute *pEditorAttribute,
   }
 
   int r, g, b;
-  if (sscanf(pKeyValues->GetString("color", ""), "%d %d %d", &r, &g, &b) == 3) {
+  if (sscanf_s(pKeyValues->GetString("color", ""), "%d %d %d", &r, &g, &b) ==
+      3) {
     Color c(r, g, b, 255);
     if (!pEditor->SetValue("color", c)) return false;
   }
@@ -360,9 +360,9 @@ bool CImportVMF::UnserializeEntityKey(CDmAttribute *pEntities,
   // Read the actual fields
   for (KeyValues *pField = pKeyValues->GetFirstValue(); pField != NULL;
        pField = pField->GetNextValue()) {
-    // TODO(d.rattman): Knowing the FGD here would be useful for type determination.
-    // Look up the field by name based on class name
-    // In the meantime, just use the keyvalues type?
+    // TODO(d.rattman): Knowing the FGD here would be useful for type
+    // determination. Look up the field by name based on class name In the
+    // meantime, just use the keyvalues type?
     char pFieldName[512];
     Q_strncpy(pFieldName, pField->GetName(), sizeof(pFieldName));
     Q_strlower(pFieldName);
@@ -397,11 +397,11 @@ bool CImportVMF::UnserializeEntityKey(CDmAttribute *pEntities,
 
         // Look for vectors
         Vector4D v;
-        if (sscanf(pString, "%f %f %f %f", &v.x, &v.y, &v.z, &v.w) == 4) {
+        if (sscanf_s(pString, "%f %f %f %f", &v.x, &v.y, &v.z, &v.w) == 4) {
           if (!pEntity->SetValue(pFieldName, v)) return false;
           CDmAttribute *pAttribute = pEntity->GetAttribute(pFieldName);
           pAttribute->AddFlag(FATTRIB_USERDEFINED);
-        } else if (sscanf(pString, "%f %f %f", &v.x, &v.y, &v.z) == 3) {
+        } else if (sscanf_s(pString, "%f %f %f", &v.x, &v.y, &v.z) == 3) {
           if (!pEntity->SetValue(pFieldName, v.AsVector3D())) {
             QAngle ang(v.x, v.y, v.z);
             if (!pEntity->SetValue(pFieldName, ang)) return false;

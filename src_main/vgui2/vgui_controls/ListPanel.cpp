@@ -740,7 +740,7 @@ void ListPanel::RemoveColumn(int col) {
 //-----------------------------------------------------------------------------
 int ListPanel::FindColumn(const char *columnName) {
   for (int i = 0; i < m_CurrentColumns.Count(); i++) {
-    if (!stricmp(columnName,
+    if (!_stricmp(columnName,
                  m_ColumnsData[m_CurrentColumns[i]].m_pHeader->GetName())) {
       return i;
     }
@@ -816,7 +816,7 @@ int ListPanel::GetItemCount(void) { return m_VisibleItems.Count(); }
 //-----------------------------------------------------------------------------
 int ListPanel::GetItem(const char *itemName) {
   FOR_EACH_LL(m_DataItems, i) {
-    if (!stricmp(m_DataItems[i]->kv->GetName(), itemName)) {
+    if (!_stricmp(m_DataItems[i]->kv->GetName(), itemName)) {
       return i;
     }
   }

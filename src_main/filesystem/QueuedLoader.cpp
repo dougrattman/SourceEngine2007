@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Queued Loading of map resources. !!!!Specifically!!! designed for the map
 // loading process.
@@ -36,12 +36,9 @@
 //
 // Late added jobs are non-optimal (should have been in reslist), warned, but
 // handled.
-//
-//===========================================================================//
 
 #include "basefilesystem.h"
 
-#include "basefilesystem.h"
 #include "filesystem/IQueuedLoader.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/tslist.h"
@@ -56,9 +53,7 @@
 #include "tier1/utlstring.h"
 #include "tier2/tier2.h"
 #include "vstdlib/jobthread.h"
-#include "xbox/xboxstubs.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define PRIORITY_HIGH 1
@@ -69,11 +64,11 @@
 #define MAIN_THREAD_YIELD_TIME 20
 
 // discrete stages in the preload process to tick the progress bar
-#define PROGRESS_START 0.10f
-#define PROGRESS_GOTRESLIST 0.12f
-#define PROGRESS_PARSEDRESLIST 0.15f
-#define PROGRESS_CREATEDRESOURCES 0.20f
-#define PROGRESS_PREPURGE 0.22f
+#define PROGRESS_START 0.10
+#define PROGRESS_GOTRESLIST 0.12
+#define PROGRESS_PARSEDRESLIST 0.15
+#define PROGRESS_CREATEDRESOURCES 0.20
+#define PROGRESS_PREPURGE 0.22
 #define PROGRESS_IO 0.25f  // up to 1.0
 
 struct FileJob_t {
@@ -111,7 +106,7 @@ class CDummyProgress : public ILoaderProgress {
 static CDummyProgress s_DummyProgress;
 
 class CQueuedLoader : public CTier2AppSystem<IQueuedLoader> {
-  typedef CTier2AppSystem<IQueuedLoader> BaseClass;
+  using BaseClass = CTier2AppSystem<IQueuedLoader>;
 
  public:
   CQueuedLoader();
@@ -171,9 +166,9 @@ class CQueuedLoader : public CTier2AppSystem<IQueuedLoader> {
       ResourceList_t;
 
   static void BuildResources(IResourcePreload *pLoader, ResourceList_t *pList,
-                             float *pBuildTime);
+                             double *pBuildTime);
   static void BuildMaterialResources(IResourcePreload *pLoader,
-                                     ResourceList_t *pList, float *pBuildTime);
+                                     ResourceList_t *pList, double *pBuildTime);
 
   void PurgeQueue();
   void CleanQueue();
@@ -205,7 +200,7 @@ class CQueuedLoader : public CTier2AppSystem<IQueuedLoader> {
   CUtlSortVector<FileNameHandle_t, CResourceNameLessFunc>
       m_ResourceNames[RESOURCEPRELOAD_COUNT];
   IResourcePreload *m_pLoaders[RESOURCEPRELOAD_COUNT];
-  float m_LoaderTimes[RESOURCEPRELOAD_COUNT];
+  double m_LoaderTimes[RESOURCEPRELOAD_COUNT];
   ILoaderProgress *m_pProgress;
   CThreadFastMutex m_Mutex;
 };
@@ -245,15 +240,17 @@ const char *g_ResourceLoaderNames[RESOURCEPRELOAD_COUNT] = {
 
 static CInterlockedInt g_nActiveJobs;
 static CInterlockedInt g_nQueuedJobs;
-static CInterlockedInt
-    g_nHighPriorityJobs;  // tracks jobs that must finish during preload
-static CInterlockedInt
-    g_nJobsToFinishBeforePlay;  // tracks jobs that must finish before gameplay
-static CInterlockedInt
-    g_nIOMemory;  // tracks I/O data from async delivery until consumed
-static CInterlockedInt g_nAnonymousIOMemory;  // tracks anonymous I/O data from
-                                              // async delivery until consumed
-static CInterlockedInt g_SuspendIO;           // used to throttle the I/O
+// tracks jobs that must finish during preload
+static CInterlockedInt g_nHighPriorityJobs;
+// tracks jobs that must finish before gameplay
+static CInterlockedInt g_nJobsToFinishBeforePlay;
+// tracks I/O data from async delivery until consumed
+static CInterlockedInt g_nIOMemory;
+// tracks anonymous I/O data from async delivery until consumed used to throttle
+// the I/O
+static CInterlockedInt g_SuspendIO;
+static CInterlockedInt g_nAnonymousIOMemory;
+
 static int g_nIOMemoryPeak;
 static int g_nAnonymousIOMemoryPeak;
 static int g_nHighIOSuspensionMark;
@@ -265,9 +262,6 @@ ConVar loader_spew_info(
 
 CON_COMMAND(loader_dump_table, "") { g_QueuedLoader.SpewInfo(); }
 
-//-----------------------------------------------------------------------------
-// Constructor
-//-----------------------------------------------------------------------------
 CQueuedLoader::CQueuedLoader() : BaseClass(false) {
   m_bStarted = false;
   m_bActive = false;
@@ -285,108 +279,107 @@ CQueuedLoader::CQueuedLoader() : BaseClass(false) {
   InstallLoader(RESOURCEPRELOAD_ANONYMOUS, &s_ResourcePreloadAnonymous);
 }
 
-//-----------------------------------------------------------------------------
-// Destructor
-//-----------------------------------------------------------------------------
 CQueuedLoader::~CQueuedLoader() {}
 
-//-----------------------------------------------------------------------------
 // Computation job to build out objects
-//-----------------------------------------------------------------------------
-void CQueuedLoader::BuildResources(IResourcePreload *pLoader,
-                                   ResourceList_t *pList, float *pBuildTime) {
-  float t0 = Plat_FloatTime();
+void CQueuedLoader::BuildResources(IResourcePreload *preloader,
+                                   ResourceList_t *resources_list,
+                                   double *build_time) {
+  f64 t0 = Plat_FloatTime();
 
-  Assert(pLoader);
-  if (pLoader) {
-    pList->RedoSort();
+  Assert(preloader);
+  if (preloader) {
+    resources_list->RedoSort();
 
-    for (int i = 0; i < pList->Count(); i++) {
-      char szFilename[SOURCE_MAX_PATH];
-      g_QueuedLoader.GetFilename(pList->Element(i), szFilename,
-                                 sizeof(szFilename));
-      if (szFilename[0]) {
-        if (!pLoader->CreateResource(szFilename)) {
-          Warning("QueuedLoader: Failed to create resource %s\n", szFilename);
-        }
+    char file_name[SOURCE_MAX_PATH];
+
+    for (int i = 0; i < resources_list->Count(); i++) {
+      g_QueuedLoader.GetFilename(resources_list->Element(i), file_name,
+                                 SOURCE_ARRAYSIZE(file_name));
+
+      if (file_name[0] && !preloader->CreateResource(file_name)) {
+        Warning("QueuedLoader: Failed to create resource %s\n", file_name);
       }
     }
   }
 
   // finished with list
-  pList->Purge();
+  resources_list->Purge();
 
-  *pBuildTime = Plat_FloatTime() - t0;
+  *build_time = Plat_FloatTime() - t0;
 }
 
-//-----------------------------------------------------------------------------
 // Computation job to build out material objects
-//-----------------------------------------------------------------------------
-void CQueuedLoader::BuildMaterialResources(IResourcePreload *pLoader,
-                                           ResourceList_t *pList,
-                                           float *pBuildTime) {
-  float t0 = Plat_FloatTime();
+void CQueuedLoader::BuildMaterialResources(IResourcePreload *preloader,
+                                           ResourceList_t *resources_list,
+                                           double *build_time) {
+  f64 t0 = Plat_FloatTime();
 
-  char szLastFilename[SOURCE_MAX_PATH];
-  szLastFilename[0] = '\0';
+  char last_file_name[SOURCE_MAX_PATH];
+  last_file_name[0] = '\0';
 
   // ensure cubemaps are first
-  pList->RedoSort();
+  resources_list->RedoSort();
 
   // run a clean operation to cull the non-patched env_cubemap materials, which
   // are not built directly
-  for (int i = 0; i < pList->Count(); i++) {
-    char szFilename[SOURCE_MAX_PATH];
-    char *pFilename = g_QueuedLoader.GetFilename(pList->Element(i), szFilename,
-                                                 sizeof(szFilename));
-    if (!V_stristr(pFilename, "maps\\")) {
+  for (int i = 0; i < resources_list->Count(); i++) {
+    char file_name_buffer[SOURCE_MAX_PATH];
+    char *file_name =
+        g_QueuedLoader.GetFilename(resources_list->Element(i), file_name_buffer,
+                                   SOURCE_ARRAYSIZE(file_name_buffer));
+
+    if (!V_stristr(file_name, "maps\\")) {
       // list is sorted, first non-cubemap marks end of relevant list
       break;
     }
 
     // skip past maps/mapname/
-    pFilename += 5;
-    pFilename = strchr(pFilename, '\\') + 1;
+    file_name += 5;
+    file_name = strchr(file_name, '\\') + 1;
+
     // back up until end of material name is found, need to strip off
     // _%d_%d_%d.vmt
-    char *pEndFilename = V_stristr(pFilename, ".vmt");
-    if (!pEndFilename) {
-      pEndFilename = pFilename + strlen(pFilename);
+    char *end_file_name = V_stristr(file_name, ".vmt");
+    if (!end_file_name) {
+      end_file_name = file_name + strlen(file_name);
     }
-    int numUnderscores = 3;
-    while (pEndFilename != pFilename && numUnderscores > 0) {
-      pEndFilename--;
-      if (pEndFilename[0] == '_') {
-        numUnderscores--;
+
+    int underscores_count = 3;
+    while (end_file_name != file_name && underscores_count > 0) {
+      end_file_name--;
+      if (end_file_name[0] == '_') {
+        underscores_count--;
       }
     }
-    if (numUnderscores == 0) {
-      *pEndFilename = '\0';
-      if (!V_strcmp(szLastFilename, pFilename)) {
+
+    if (underscores_count == 0) {
+      *end_file_name = '\0';
+      if (!V_strcmp(last_file_name, file_name)) {
         // same cubemap material base already processed, skip it
         continue;
       }
-      V_strncpy(szLastFilename, pFilename, sizeof(szLastFilename));
 
-      strcat(pFilename, ".vmt");
-      FileNameHandle_t hFilename = g_QueuedLoader.FindFilename(pFilename);
-      if (hFilename) {
-        pList->Remove(hFilename);
-      }
+      V_strncpy(last_file_name, file_name, sizeof(last_file_name));
+      strcat_s(
+          file_name,
+          &file_name_buffer[0] + SOURCE_ARRAYSIZE(file_name_buffer) - file_name,
+          ".vmt");
+
+      FileNameHandle_t handle = g_QueuedLoader.FindFilename(file_name);
+      if (handle) resources_list->Remove(handle);
     }
   }
 
   // process clean list
-  BuildResources(pLoader, pList, pBuildTime);
+  BuildResources(preloader, resources_list, build_time);
 
-  *pBuildTime = Plat_FloatTime() - t0;
+  *build_time = Plat_FloatTime() - t0;
 }
 
-//-----------------------------------------------------------------------------
 // Called by multiple worker threads.  Throttle the I/O to ensure too many
 // buffers don't flood the work queue. Anonymous I/O is allowed to grow
 // unbounded.
-//-----------------------------------------------------------------------------
 void AdjustAsyncIOSpeed() {
   // throttle back the I/O to keep the pending buffers from exhausting memory
   if (g_SuspendIO == 0) {
@@ -414,9 +407,7 @@ void AdjustAsyncIOSpeed() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Computation job to do work after IO, runs callback
-//-----------------------------------------------------------------------------
 void IOComputationJob(FileJob_t *pFileJob, void *pData, int nSize,
                       LoaderError_t loaderError) {
   int spewDetail = g_QueuedLoader.GetSpewDetail();
@@ -489,10 +480,9 @@ void IOComputationJob(FileJob_t *pFileJob, void *pData, int nSize,
   AdjustAsyncIOSpeed();
 }
 
-//-----------------------------------------------------------------------------
 // Computation job to do work after anonymous job was asynchronously claimed,
 // runs callback.
-//-----------------------------------------------------------------------------
+
 void FinishAnonymousJob(FileJob_t *pFileJob, QueuedLoaderCallback_t pCallback,
                         void *pContext, void *pContext2) {
   // regardless of error, call job callback so caller can do cleanup of their
@@ -511,10 +501,9 @@ void FinishAnonymousJob(FileJob_t *pFileJob, QueuedLoaderCallback_t pCallback,
   g_nAnonymousIOMemory -= pFileJob->m_nActualBytesRead;
 }
 
-//-----------------------------------------------------------------------------
 // Callback from I/O job thread. Purposely lightweight as possible to keep i/o
 // from stalling.
-//-----------------------------------------------------------------------------
+
 void IOAsyncCallback(const FileAsyncRequest_t &asyncRequest, int numReadBytes,
                      FSAsyncStatus_t asyncStatus) {
   FileJob_t *pFileJob = (FileJob_t *)asyncRequest.pContext;
@@ -561,25 +550,22 @@ void IOAsyncCallback(const FileAsyncRequest_t &asyncRequest, int numReadBytes,
   --g_nActiveJobs;
 }
 
-//-----------------------------------------------------------------------------
 // Public method to filename dictionary
-//-----------------------------------------------------------------------------
+
 char *CQueuedLoader::GetFilename(const FileNameHandle_t hFilename, char *pBuff,
                                  int nBuffSize) {
   m_Filenames.String(hFilename, pBuff, nBuffSize);
   return pBuff;
 }
 
-//-----------------------------------------------------------------------------
 // Public method to filename dictionary
-//-----------------------------------------------------------------------------
+
 FileNameHandle_t CQueuedLoader::FindFilename(const char *pFilename) {
   return m_Filenames.FindFileName(pFilename);
 }
 
-//-----------------------------------------------------------------------------
 // Sort function for resource names.
-//-----------------------------------------------------------------------------
+
 bool CQueuedLoader::CResourceNameLessFunc::Less(
     const FileNameHandle_t &hFilenameLHS, const FileNameHandle_t &hFilenameRHS,
     void *pCtx) {
@@ -608,11 +594,10 @@ bool CQueuedLoader::CResourceNameLessFunc::Less(
   }
 }
 
-//-----------------------------------------------------------------------------
 // Resolve filenames to expected disc layout order as...
 // bsp, graphs, platform, hl2, episodic, ep2, tf, portal, non-zip
 // see XGD layout.
-//-----------------------------------------------------------------------------
+
 int CQueuedLoader::CFileJobsLessFunc::GetLayoutOrderForFilename(
     const char *pFilename) {
   bool bIsLocalizedZip = false;
@@ -648,9 +633,8 @@ int CQueuedLoader::CFileJobsLessFunc::GetLayoutOrderForFilename(
   return bIsLocalizedZip ? 10 * order : order;
 }
 
-//-----------------------------------------------------------------------------
 // Sort function, high priority jobs sort first, then offset, then zip
-//-----------------------------------------------------------------------------
+
 bool CQueuedLoader::CFileJobsLessFunc::Less(FileJob_t *const &pFileJobLHS,
                                             FileJob_t *const &pFileJobRHS,
                                             void *pCtx) {
@@ -681,9 +665,8 @@ bool CQueuedLoader::CFileJobsLessFunc::Less(FileJob_t *const &pFileJobLHS,
   return CaselessStringLessThan(szFilenameLHS, szFilenameRHS);
 }
 
-//-----------------------------------------------------------------------------
 // Dump the queue contents to the file system.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::SubmitPendingJobs() {
   // prevents contention between I/O and main thread attempting to submit
   if (ThreadInMainThread() && g_nActiveJobs != 0) {
@@ -773,9 +756,8 @@ void CQueuedLoader::SubmitPendingJobs() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Add to queue
-//-----------------------------------------------------------------------------
+
 bool CQueuedLoader::AddJob(const LoaderJob_t *pLoaderJob) {
   if (!m_bActive) {
     return false;
@@ -873,12 +855,11 @@ bool CQueuedLoader::AddJob(const LoaderJob_t *pLoaderJob) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Allows an external system to append to a map's reslist. The next map load
 // will append these specified files. Unhandled resources will just get
 // quietly discarded.  An external system could use this to patch a hole
 // or prevent a purge.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::AddMapResource(const char *pFilename) {
   if (!pFilename || !pFilename[0]) {
     // pointless
@@ -899,11 +880,10 @@ void CQueuedLoader::AddMapResource(const char *pFilename) {
   m_AdditionalResources.AddString(szFilename);
 }
 
-//-----------------------------------------------------------------------------
 // Asynchronous claim for an anonymous job.
 // This allows loaders with deep dependencies to get their data in flight, and
 // then claim it when the they are in a state to consume it.
-//-----------------------------------------------------------------------------
+
 bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename,
                                       QueuedLoaderCallback_t pCallback,
                                       void *pContext, void *pContext2) {
@@ -941,11 +921,10 @@ bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Synchronous claim for an anonymous job. This allows loaders
 // with deep dependencies to get their data in flight, and then claim it
 // when the they are in a state to consume it.
-//-----------------------------------------------------------------------------
+
 bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename, void **pData,
                                       int *pDataSize, LoaderError_t *pError) {
   Assert(ThreadInMainThread());
@@ -995,10 +974,9 @@ bool CQueuedLoader::ClaimAnonymousJob(const char *pFilename, void **pData,
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // End of batching. High priority jobs are guaranteed completed before function
 // returns.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::SubmitBatchedJobsAndWait() {
   // end of batching
   m_bBatching = false;
@@ -1047,9 +1025,8 @@ void CQueuedLoader::SubmitBatchedJobsAndWait() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Clean queue of stale entries. Active entries are skipped.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::CleanQueue() {
   for (int i = 0; i < RESOURCEPRELOAD_COUNT; i++) {
     m_ResourceNames[i].Purge();
@@ -1074,14 +1051,12 @@ void CQueuedLoader::CleanQueue() {
   m_Filenames.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
 // Abandon queue
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::PurgeQueue() {}
 
-//-----------------------------------------------------------------------------
 // Spew info abut queued load
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::SpewInfo() {
   Msg("Queued Loader:\n\n");
 
@@ -1156,9 +1131,8 @@ void CQueuedLoader::SpewInfo() {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Initialization
-//-----------------------------------------------------------------------------
+
 InitReturnVal_t CQueuedLoader::Init() {
   InitReturnVal_t nRetVal = BaseClass::Init();
   if (nRetVal != INIT_OK) {
@@ -1168,14 +1142,12 @@ InitReturnVal_t CQueuedLoader::Init() {
   return INIT_OK;
 }
 
-//-----------------------------------------------------------------------------
 // Shutdown
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::Shutdown() { BaseClass::Shutdown(); }
 
-//-----------------------------------------------------------------------------
 // Install a type specific interface from managing system.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::InstallLoader(ResourcePreload_t type,
                                   IResourcePreload *pLoader) {
   m_pLoaders[type] = pLoader;
@@ -1185,9 +1157,8 @@ void CQueuedLoader::InstallProgress(ILoaderProgress *pProgress) {
   m_pProgress = pProgress;
 }
 
-//-----------------------------------------------------------------------------
 // Invoke the loader systems to purge dead resources
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::PurgeUnreferencedResources() {
   ResourcePreload_t purgeOrder[RESOURCEPRELOAD_COUNT];
 
@@ -1211,9 +1182,8 @@ void CQueuedLoader::PurgeUnreferencedResources() {
   m_pProgress->UpdateProgress(PROGRESS_PREPURGE);
 }
 
-//-----------------------------------------------------------------------------
 // Invoke the loader systems to purge all resources, if possible
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::PurgeAll() {
   ResourcePreload_t purgeOrder[RESOURCEPRELOAD_COUNT];
 
@@ -1236,9 +1206,8 @@ void CQueuedLoader::PurgeAll() {
   *m_szMapNameToCompareSame = 0;
 }
 
-//-----------------------------------------------------------------------------
 // Invoke the loader systems to request i/o jobs, which are batched.
-//-----------------------------------------------------------------------------
+
 void CQueuedLoader::GetJobRequests() {
   COM_TimestampedLog("CQueuedLoader::GetJobRequests - Start");
 
@@ -1246,7 +1215,7 @@ void CQueuedLoader::GetJobRequests() {
   m_bCanBatch = true;
   m_bBatching = true;
 
-  float t0 = Plat_FloatTime();
+  f64 t0 = Plat_FloatTime();
   CJob *jobs[5];
 
   // cubemap textures must be first to install correctly before their cubemap
@@ -1283,11 +1252,11 @@ void CQueuedLoader::GetJobRequests() {
       &m_LoaderTimes[RESOURCEPRELOAD_ANONYMOUS]);
 
   // all jobs must finish
-  float flLastUpdateT = -1000.0f;
+  f64 flLastUpdateT = -1000.0;
   // Update as if this takes 2 seconds
-  float flDelta =
-      (PROGRESS_CREATEDRESOURCES - PROGRESS_PARSEDRESLIST) * 0.03 / 2.0f;
-  float flProgress = PROGRESS_PARSEDRESLIST;
+  f64 flDelta =
+      (PROGRESS_CREATEDRESOURCES - PROGRESS_PARSEDRESLIST) * 0.03 / 2.0;
+  f64 flProgress = PROGRESS_PARSEDRESLIST;
   while (true) {
     bool bIsDone = true;
     for (int i = 0; i < SOURCE_ARRAYSIZE(jobs); i++) {
@@ -1299,11 +1268,11 @@ void CQueuedLoader::GetJobRequests() {
     if (bIsDone) break;
 
     // Can't sleep; that will allow this thread to be used by the thread pool
-    float newt = Plat_FloatTime();
+    f64 newt = Plat_FloatTime();
     if (newt - flLastUpdateT > .03) {
       m_pProgress->UpdateProgress(flProgress);
       flProgress = std::clamp(flProgress + flDelta, PROGRESS_PARSEDRESLIST,
-                         PROGRESS_CREATEDRESOURCES);
+                              PROGRESS_CREATEDRESOURCES);
 
       // Necessary to take into account any waits for vsync
       flLastUpdateT = Plat_FloatTime();
@@ -1392,9 +1361,7 @@ void CQueuedLoader::AddResourceToTable(const char *pFilename) {
   m_ResourceNames[type].InsertNoSort(hFilename);
 }
 
-//-----------------------------------------------------------------------------
 // Parse the raw resource list into resource dictionaries
-//-----------------------------------------------------------------------------
 void CQueuedLoader::ParseResourceList(CUtlBuffer &resourceList) {
   // parse resource list into known types
   characterset_t breakSet;
@@ -1430,30 +1397,22 @@ void CQueuedLoader::ParseResourceList(CUtlBuffer &resourceList) {
   m_pProgress->UpdateProgress(PROGRESS_PARSEDRESLIST);
 }
 
-//-----------------------------------------------------------------------------
 // Mark the start of the queued loading process.
-//-----------------------------------------------------------------------------
 bool CQueuedLoader::BeginMapLoading(const char *pMapName, bool bLoadForHDR,
                                     bool bOptimizeMapReload) {
   return false;
 }
 
-//-----------------------------------------------------------------------------
 // Signal the end of the queued loading process, i/o will still be in progress.
-//-----------------------------------------------------------------------------
-void CQueuedLoader::EndMapLoading(bool bAbort) {
-  if (!m_bStarted) {
-    // already stopped or never started
-    return;
-  }
+void CQueuedLoader::EndMapLoading(bool is_abort) {
+  // already stopped or never started
+  if (!m_bStarted) return;
 
-  /////////////////////////////////////////////////////
-  // TBD: Cannot abort!!!! feature has not been done //
-  /////////////////////////////////////////////////////
-  bAbort = false;
+  // TODO(d.rattman): Cannot abort!!!! feature has not been done
+  is_abort = false;
 
   if (m_bActive) {
-    if (bAbort) {
+    if (is_abort) {
       PurgeQueue();
     } else {
       // finish all outstanding priority jobs
@@ -1470,7 +1429,7 @@ void CQueuedLoader::EndMapLoading(bool bAbort) {
     // transmit the end map event
     for (int i = RESOURCEPRELOAD_UNKNOWN + 1; i < RESOURCEPRELOAD_COUNT; i++) {
       if (m_pLoaders[i]) {
-        m_pLoaders[i]->OnEndMapLoading(bAbort);
+        m_pLoaders[i]->OnEndMapLoading(is_abort);
       }
     }
 
@@ -1504,33 +1463,21 @@ void CQueuedLoader::EndMapLoading(bool bAbort) {
   m_bStarted = false;
 }
 
-//-----------------------------------------------------------------------------
 // Returns true if loader is accepting queue requests.
-//-----------------------------------------------------------------------------
 bool CQueuedLoader::IsMapLoading() const { return m_bActive; }
 
-//-----------------------------------------------------------------------------
-// Returns true if loader is working on same map as last load
-//-----------------------------------------------------------------------------
+// Returns true if loader is working on same map as last load.
 bool CQueuedLoader::IsSameMapLoading() const { return m_bActive && m_bSameMap; }
 
-//-----------------------------------------------------------------------------
 // Returns true if the loader is idle, indicates all i/o and work has completed.
-//-----------------------------------------------------------------------------
 bool CQueuedLoader::IsFinished() const {
-  return (m_bActive == false && g_nActiveJobs == 0 && g_nQueuedJobs == 0);
+  return m_bActive == false && g_nActiveJobs == 0 && g_nQueuedJobs == 0;
 }
 
-//-----------------------------------------------------------------------------
-// Returns true if loader is batching
-//-----------------------------------------------------------------------------
+// Returns true if loader is batching.
 bool CQueuedLoader::IsBatching() const { return m_bBatching; }
 
 int CQueuedLoader::GetSpewDetail() const {
-  int spewDetail = loader_spew_info.GetInt();
-  if (spewDetail <= 0) {
-    return spewDetail;
-  }
-
-  return 1 << (spewDetail - 1);
+  const int spew_detail = loader_spew_info.GetInt();
+  return spew_detail <= 0 ? spew_detail : (1 << (spew_detail - 1));
 }

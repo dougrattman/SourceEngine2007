@@ -1,8 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "BonusMapsDatabase.h"
 
@@ -17,7 +13,6 @@
 #include "tier1/convar.h"
 #include "tier1/keyvalues.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define MOD_DIR ("MOD")
@@ -484,12 +479,13 @@ void CBonusMapsDatabase::SetCurrentChallengeNames(
   Q_strcpy(m_CurrentChallengeNames.szChallengeName, pchChallengeName);
 }
 
-void CBonusMapsDatabase::GetCurrentChallengeNames(char *pchFileName,
-                                                  char *pchMapName,
-                                                  char *pchChallengeName) {
-  Q_strcpy(pchFileName, m_CurrentChallengeNames.szFileName);
-  Q_strcpy(pchMapName, m_CurrentChallengeNames.szMapName);
-  Q_strcpy(pchChallengeName, m_CurrentChallengeNames.szChallengeName);
+void CBonusMapsDatabase::GetCurrentChallengeNames(
+    char *pchFileName, size_t file_name_size, char *pchMapName,
+    size_t map_name_size, char *pchChallengeName, size_t challenge_name_size) {
+  Q_strcpy(pchFileName, file_name_size, m_CurrentChallengeNames.szFileName);
+  Q_strcpy(pchMapName, map_name_size, m_CurrentChallengeNames.szMapName);
+  Q_strcpy(pchChallengeName, challenge_name_size,
+           m_CurrentChallengeNames.szChallengeName);
 }
 
 void CBonusMapsDatabase::SetCurrentChallengeObjectives(int iBronze, int iSilver,

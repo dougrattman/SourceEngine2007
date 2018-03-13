@@ -242,7 +242,7 @@ class CGameMenu : public vgui::Menu {
   virtual void OnCommand(const char *command) {
     m_KeyRepeat.Reset();
 
-    if (!stricmp(command, "Open")) {
+    if (!_stricmp(command, "Open")) {
       MoveToFront();
       RequestFocus();
     } else {

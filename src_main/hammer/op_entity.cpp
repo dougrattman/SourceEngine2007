@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved. ====
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved. ====
 
 #include "stdafx.h"
 
@@ -35,7 +35,6 @@
 
 extern GameData *pGD;  // current game data
 
- 
 #include "tier0/include/memdbgon.h"
 
 #pragma warning(disable : 4355)
@@ -178,7 +177,7 @@ END_MESSAGE_MAP()
 //-----------------------------------------------------------------------------
 // Purpose: Called by the angles picker tool when a target point is picked. This
 //			stuffs the angles into the smartedit control so that the
-//entity 			points at the target position.
+// entity 			points at the target position.
 //-----------------------------------------------------------------------------
 void CPickAnglesTarget::OnNotifyPickAngles(const Vector &vecPos) {
   CMapDoc *pDoc = CMapDoc::GetActiveMapDoc();
@@ -209,7 +208,7 @@ void CPickAnglesTarget::OnNotifyPickAngles(const Vector &vecPos) {
 
       // HACK: lights negate pitch
       if (pEntity->GetClassName() &&
-          (!strnicmp(pEntity->GetClassName(), "light_", 6))) {
+          (!_strnicmp(pEntity->GetClassName(), "light_", 6))) {
         angFace[PITCH] *= -1;
       }
 
@@ -221,7 +220,7 @@ void CPickAnglesTarget::OnNotifyPickAngles(const Vector &vecPos) {
 
       // HACK: lights have a separate "pitch" key
       if (pEntity->GetClassName() &&
-          (!strnicmp(pEntity->GetClassName(), "light_", 6))) {
+          (!_strnicmp(pEntity->GetClassName(), "light_", 6))) {
         char szPitch[20];
         sprintf(szPitch, "%.0f", angFace[PITCH]);
         pEntity->SetKeyValue("pitch", szPitch);
@@ -428,8 +427,9 @@ BOOL COP_Entity::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult) {
       LPNMLISTVIEW pListView = (LPNMLISTVIEW)lParam;
 
       // Now sort by this column.
-      m_iSortColumn = std::max(
-          0, std::min(pListView->iSubItem, SOURCE_ARRAYSIZE(g_ColumnSortFunctions) - 1));
+      m_iSortColumn =
+          std::max(0, std::min(pListView->iSubItem,
+                               SOURCE_ARRAYSIZE(g_ColumnSortFunctions) - 1));
       ResortItems();
     }
   }
@@ -511,8 +511,9 @@ void DumpKeyvalues(WCKeyValues &kv) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Adds an object's keys to our list of keys. If a given key is already
-//			in the list, it is either ignored or set to a "different" if
-//the value 			is different from the value in our list.
+//			in the list, it is either ignored or set to a
+//"different"
+// if the value 			is different from the value in our list.
 // Input  : pEdit - Object whose keys are to be added to our list.
 //-----------------------------------------------------------------------------
 void COP_Entity::MergeObjectKeyValues(CEditGameClass *pEdit) {
@@ -537,10 +538,10 @@ void COP_Entity::MergeObjectKeyValues(CEditGameClass *pEdit) {
 //-----------------------------------------------------------------------------
 // Purpose: Updates the dialog's keyvalue data with a given keyvalue. If the
 //			data can be merged in with existing data in a meaningful
-//manner, 			that will be done. If not, VALUE_DIFFERENT_STRING will be set to
-//			indicate that not all objects have the same value for the
-//key.
-// Input  : pszKey -
+// manner, 			that will be done. If not,
+// VALUE_DIFFERENT_STRING
+// will be set to 			indicate that not all objects have the
+// same value for the key. Input  : pszKey -
 //-----------------------------------------------------------------------------
 void COP_Entity::MergeKeyValue(char const *pszKey) {
   // VPROF_BUDGET( "COP_Entity::MergeKeyValue", "Object Properties" );
@@ -581,7 +582,7 @@ void COP_Entity::MergeKeyValue(char const *pszKey) {
           // "different". We'll catch the main angles control below, since it's
           // supported even for objects of an unknown class.
           //
-          if (stricmp(pVar->GetName(), "angles")) {
+          if (_stricmp(pVar->GetName(), "angles")) {
             m_SmartAngle.SetDifferent(true);
           }
           break;
@@ -596,7 +597,7 @@ void COP_Entity::MergeKeyValue(char const *pszKey) {
     //
     m_kv.SetValue(pszKey, VALUE_DIFFERENT_STRING);
 
-    if (!stricmp(pszKey, "angles")) {
+    if (!_stricmp(pszKey, "angles")) {
       // We can't merge angles, so set the main angles control to "different".
       m_Angle.SetDifferent(true);
     }
@@ -709,7 +710,7 @@ void COP_Entity::UpdateData(int Mode, PVOID pData) {
     CString str = m_cClasses.GetCurrentItem();
     if (m_bClassSelectionEmpty) str = "";
 
-    if (strcmpi(str, pEdit->GetClassName())) {
+    if (_strcmpi(str, pEdit->GetClassName())) {
       //
       // Not the same - set class to be blank and
       // disable smartedit.
@@ -778,7 +779,7 @@ void COP_Entity::StopPicking(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Called manually from CObjectProperties::OnApply because the Apply
 //			button is implemented in a nonstandard way. I'm not sure
-//why.
+// why.
 //-----------------------------------------------------------------------------
 BOOL COP_Entity::OnApply(void) {
   m_pLastSmartControlVar =
@@ -826,7 +827,7 @@ void COP_Entity::ApplyKeyValueToObject(CEditGameClass *pObject,
         // FACEID TODO: Optimize so that we only call StringToFaceList once per
         // keyvalue
         //		 instead of once per keyvalue per entity being applied
-        //to.
+        // to.
         CMapFaceIDList FullFaceList;
         CMapFaceIDList PartialFaceList;
         pWorld->FaceID_StringToFaceIDLists(&FullFaceList, &PartialFaceList,
@@ -1034,7 +1035,7 @@ void COP_Entity::RefreshKVListValues(const char *pOnlyThisVar) {
             // They can look at the full filename in the smart control if they
             // want.
             const char *pLastSlash = std::max(strrchr(pUnformattedValue, '\\'),
-                                         strrchr(pUnformattedValue, '/'));
+                                              strrchr(pUnformattedValue, '/'));
             if (pLastSlash) {
               Q_strncpy(tmpValueBuf, pLastSlash + 1, sizeof(tmpValueBuf));
               pValue = tmpValueBuf;
@@ -1099,7 +1100,7 @@ void COP_Entity::PresentProperties() {
       //
       // Spawnflags are handled separately - don't add that key.
       //
-      if (strcmpi(pVar->GetName(), SPAWNFLAGS_KEYNAME) != 0) {
+      if (_strcmpi(pVar->GetName(), SPAWNFLAGS_KEYNAME) != 0) {
         int iItem = m_VarList.InsertItem(i, pVar->GetLongName());
         m_VarList.SetItemData(iItem, (DWORD)pVar->GetName());
       }
@@ -1165,7 +1166,7 @@ void COP_Entity::RemoveBlankKeys(void) {
 			if ( pVar )
 			{
 				char szDefault[MAX_KEYVALUE_LEN];
-				pVar->GetDefault( szDefault );
+				pVar->GetDefault(szDefault, SOURCE_ARRAYSIZE(szDefault));
 				if ( szDefault[0] != '\0' )
 				{
 					bRemove = false;
@@ -1406,12 +1407,12 @@ void COP_Entity::SetCurKey(LPCTSTR pszKey) {
       // found it here -
       SetCurVarListSelection(i);
 
-      // TODO(d.rattman): Ideally we'd only call OnSelChangeKeyvalues if the selection
-      // index
+      // TODO(d.rattman): Ideally we'd only call OnSelChangeKeyvalues if the
+      // selection index
       //        actually changed, but that makes the keyvalue text not refresh
       //        properly
       //		  when multiselecting entities with a sidelist key
-      //selected.
+      // selected.
       if (m_bSmartedit) {
         OnSelchangeKeyvalues();
       }
@@ -1450,7 +1451,7 @@ void COP_Entity::DestroySmartControls(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Creates the smart controls based on the given type. Deletes any
 //			smart controls that are not appropriate to the given
-//type.
+// type.
 // Input  : eType - Type of keyvalue for which to create controls.
 //-----------------------------------------------------------------------------
 void COP_Entity::CreateSmartControls(GDinputvariable *pVar,
@@ -1571,7 +1572,7 @@ CRect COP_Entity::CalculateSmartControlRect() {
 void COP_Entity::CreateSmartControls_Angle(GDinputvariable *pVar,
                                            CRect &ctrlrect, HFONT hControlFont,
                                            bool *bShowSmartAngles) {
-  if (stricmp(pVar->GetName(), "angles")) {
+  if (_stricmp(pVar->GetName(), "angles")) {
     *bShowSmartAngles = true;
 
     CRect rectAngleBox;
@@ -1591,7 +1592,7 @@ void COP_Entity::CreateSmartControls_Angle(GDinputvariable *pVar,
     // Update the smart control with the current value
     LPCTSTR pszValue = m_kv.GetValue(pVar->GetName());
     if (pszValue != NULL) {
-      if (!stricmp(pszValue, VALUE_DIFFERENT_STRING)) {
+      if (!_stricmp(pszValue, VALUE_DIFFERENT_STRING)) {
         m_SmartAngle.SetDifferent(true);
       } else {
         m_SmartAngle.SetDifferent(false);
@@ -1966,8 +1967,8 @@ void COP_Entity::CreateSmartControls_PickButton(GDinputvariable *pVar,
 void COP_Entity::SetSmartControlText(const char *pszText) {
   // dvs: HACK: the smart control should be completely self-contained, the
   // dialog
-  //		should only set the type of the edited variable, then just set & get
-  //text
+  //		should only set the type of the edited variable, then just set &
+  // get text
   CTargetNameComboBox *pCombo =
       dynamic_cast<CTargetNameComboBox *>(m_pSmartControl);
   if (pCombo) {
@@ -2050,7 +2051,8 @@ void COP_Entity::OnSelchangeKeyvalues(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Used only in standard (non-SmartEdit) mode. Called when the contents
 //			of the value edit control change. This is where the edit
-//control 			contents are converted to keyvalue data in standard mode.
+// control 			contents are converted to keyvalue data in
+// standard mode.
 //-----------------------------------------------------------------------------
 void COP_Entity::OnChangeKeyorValue(void) {
   if (m_bIgnoreKVChange) {
@@ -2090,7 +2092,7 @@ void COP_Entity::OnChangeKeyorValue(void) {
     // This code should only be hit as a result of user input in the edit
     // control! If they changed the "angles" key, update the main angles
     // control.
-    if (!stricmp(szKey, "angles")) {
+    if (!_stricmp(szKey, "angles")) {
       m_Angle.SetDifferent(false);
       m_Angle.SetAngles(szValue, true);
     }
@@ -2192,7 +2194,7 @@ void COP_Entity::AssignClassDefaults(GDclass *pClass, GDclass *pOldClass) {
     LPCTSTR p = m_kv.GetValue(pVar->GetName(), &iIndex);
 
     // Always reset spawnflags.
-    if (!strcmpi(pVar->GetName(), SPAWNFLAGS_KEYNAME)) {
+    if (!_strcmpi(pVar->GetName(), SPAWNFLAGS_KEYNAME)) {
       unsigned long nOriginalFlagsValue = 0;
       if (p) {
         sscanf(p, "%lu", &nOriginalFlagsValue);
@@ -2268,7 +2270,7 @@ void COP_Entity::UpdateEditClass(const char *pszClass, bool bForce) {
   // Remove unused keyvalues.
   //
   if (m_pEditClass != pOldEditClass && m_pEditClass && pOldEditClass &&
-      strcmpi(pszClass, "multi_manager")) {
+      _strcmpi(pszClass, "multi_manager")) {
     int iNext;
     for (int i = m_kv.GetFirst(); i != m_kv.GetInvalidIndex(); i = iNext) {
       iNext = m_kv.GetNext(i);
@@ -2520,8 +2522,9 @@ void COP_Entity::OnChangeSmartcontrol(void) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Used only in SmartEdit mode. Called when the contents of the value
-//			edit control change. This is where the edit control contents
-//are 			converted to keyvalue data in SmartEdit mode.
+//			edit control change. This is where the edit control
+// contents are 			converted to keyvalue data in SmartEdit
+// mode.
 //-----------------------------------------------------------------------------
 void COP_Entity::InternalOnChangeSmartcontrol(const char *szValue) {
   // VPROF_BUDGET( "COP_Entity::OnChangeSmartcontrol", "Object Properties" );
@@ -2565,7 +2568,7 @@ void COP_Entity::InternalOnChangeSmartcontrol(const char *szValue) {
     // edit control!
     if (pVar->GetType() == ivAngle) {
       // If they changed the "angles" key, update the main angles control.
-      if (!stricmp(pVar->GetName(), "angles")) {
+      if (!_stricmp(pVar->GetName(), "angles")) {
         m_Angle.SetDifferent(false);
         m_Angle.SetAngles(strValue, true);
       }
@@ -2879,7 +2882,7 @@ void COP_Entity::OnCopy(void) {
   bKvClipEmpty = FALSE;
   for (int i = m_kv.GetFirst(); i != m_kv.GetInvalidIndex();
        i = m_kv.GetNext(i)) {
-    if (stricmp(m_kv.GetKey(i), "origin")) {
+    if (_stricmp(m_kv.GetKey(i), "origin")) {
       kvClipboard.SetValue(m_kv.GetKey(i), m_kv.GetValue(i));
     }
   }
@@ -3071,7 +3074,7 @@ void COP_Entity::OnPaste(void) {
 //-----------------------------------------------------------------------------
 // Purpose: For the given key name, builds a list of faces that are common
 //			to all entitie being edited and a list of faces that are
-//found in at 			least one entity being edited.
+// found in at 			least one entity being edited.
 // Input  : FullFaces -
 //			PartialFaces -
 //			pszKey - the name of the key.
@@ -3110,7 +3113,7 @@ void COP_Entity::GetFaceIDListsForKey(CMapFaceIDList &FullFaces,
 //-----------------------------------------------------------------------------
 // Purpose: For the given key name, builds a list of faces that are common
 //			to all entitie being edited and a list of faces that are
-//found in at 			least one entity being edited.
+// found in at 			least one entity being edited.
 // Input  : FullFaces -
 //			PartialFaces -
 //			pszKey - the name of the key.
@@ -3454,7 +3457,7 @@ void CMyComboBox::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
 //-----------------------------------------------------------------------------
 // Purpose: Gets the new face ID list from the pick face tool and updates the
 //			contents of the edit control with space-delimited face
-//IDs.
+// IDs.
 //-----------------------------------------------------------------------------
 void COP_Entity::UpdatePickFaceText(CToolPickFace *pTool) {
   char szList[KEYVALUE_MAX_VALUE_LENGTH];
@@ -3655,8 +3658,8 @@ void COP_Entity::GetItemColor(int iItem, COLORREF *pBackgroundColor,
 
 bool COP_Entity::CustomDrawItemValue(const LPDRAWITEMSTRUCT p,
                                      const RECT *pRect) {
-  if (!m_bSmartedit || p->itemID < 0 || p->itemID >= SOURCE_ARRAYSIZE(m_VarMap) ||
-      m_VarMap[p->itemID] < 0)
+  if (!m_bSmartedit || p->itemID < 0 ||
+      p->itemID >= SOURCE_ARRAYSIZE(m_VarMap) || m_VarMap[p->itemID] < 0)
     return false;
 
   if (!m_pDisplayClass) return false;

@@ -153,7 +153,7 @@ void CCreateMultiplayerGameServerPage::LoadMaps(const char *pszPathID) {
 
     //!! hack: strip out single player HL maps
     // this needs to be specified in a seperate file
-    if (!stricmp(ModInfo().GetGameName(), "Half-Life") &&
+    if (!_stricmp(ModInfo().GetGameName(), "Half-Life") &&
         (map_name[0] == 'c' || map_name[0] == 't') && map_name[2] == 'a' &&
         map_name[1] >= '0' && map_name[1] <= '5') {
       goto nextFile;
@@ -189,7 +189,7 @@ void CCreateMultiplayerGameServerPage::LoadMapList() {
   // iterate the filesystem getting the list of all the files
   // UNDONE: steam wants this done in a special way, need to support that
   const char *pathID = "MOD";
-  if (!stricmp(ModInfo().GetGameName(), "Half-Life")) {
+  if (!_stricmp(ModInfo().GetGameName(), "Half-Life")) {
     pathID = NULL;  // hl is the base dir
   }
 
@@ -214,7 +214,7 @@ void CCreateMultiplayerGameServerPage::LoadMapList() {
 bool CCreateMultiplayerGameServerPage::IsRandomMapSelected() {
   const char *mapname =
       m_pMapList->GetActiveItemUserData()->GetString("mapname");
-  if (!stricmp(mapname, RANDOM_MAP)) {
+  if (!_stricmp(mapname, RANDOM_MAP)) {
     return true;
   }
   return false;
@@ -246,7 +246,7 @@ void CCreateMultiplayerGameServerPage::SetMap(const char *mapName) {
   for (int i = 0; i < m_pMapList->GetItemCount(); i++) {
     if (!m_pMapList->IsItemIDValid(i)) continue;
 
-    if (!stricmp(m_pMapList->GetItemUserData(i)->GetString("mapname"),
+    if (!_stricmp(m_pMapList->GetItemUserData(i)->GetString("mapname"),
                  mapName)) {
       m_pMapList->ActivateItem(i);
       break;

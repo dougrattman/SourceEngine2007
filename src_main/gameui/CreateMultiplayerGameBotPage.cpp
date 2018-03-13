@@ -47,7 +47,7 @@ extern void UTIL_StripInvalidCharacters(char *pszInput);
 void CCreateMultiplayerGameBotPage::SetJoinTeamCombo(const char *team) {
   if (team) {
     for (int i = 0; joinTeamArg[i]; ++i)
-      if (!stricmp(team, joinTeamArg[i])) {
+      if (!_stricmp(team, joinTeamArg[i])) {
         m_joinTeamCombo->ActivateItemByRow(i);
         return;
       }
@@ -60,7 +60,7 @@ void CCreateMultiplayerGameBotPage::SetJoinTeamCombo(const char *team) {
 void CCreateMultiplayerGameBotPage::SetChatterCombo(const char *chatter) {
   if (chatter) {
     for (int i = 0; chatterArg[i]; ++i)
-      if (!stricmp(chatter, chatterArg[i])) {
+      if (!_stricmp(chatter, chatterArg[i])) {
         m_chatterCombo->ActivateItemByRow(i);
         return;
       }

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "choreoevent.h"
 
@@ -15,7 +15,6 @@
 #include "tier1/strtools.h"
 #include "tier1/utlbuffer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 int CChoreoEvent::s_nGlobalID = 1;
@@ -1864,7 +1863,7 @@ void CChoreoEvent::RemoveRelativeTag(const char *tagname) {
     CEventRelativeTag *prt = &m_RelativeTags[i];
     if (!prt) continue;
 
-    if (!stricmp(prt->GetName(), tagname)) {
+    if (!_stricmp(prt->GetName(), tagname)) {
       m_RelativeTags.Remove(i);
       return;
     }
@@ -1880,7 +1879,7 @@ CEventRelativeTag *CChoreoEvent::FindRelativeTag(const char *tagname) {
     CEventRelativeTag *prt = &m_RelativeTags[i];
     if (!prt) continue;
 
-    if (!stricmp(prt->GetName(), tagname)) {
+    if (!_stricmp(prt->GetName(), tagname)) {
       return prt;
     }
   }
@@ -1976,7 +1975,7 @@ void CChoreoEvent::RemoveTimingTag(const char *tagname) {
     CFlexTimingTag *ptt = &m_TimingTags[i];
     if (!ptt) continue;
 
-    if (!stricmp(ptt->GetName(), tagname)) {
+    if (!_stricmp(ptt->GetName(), tagname)) {
       m_TimingTags.Remove(i);
       return;
     }
@@ -1992,7 +1991,7 @@ CFlexTimingTag *CChoreoEvent::FindTimingTag(const char *tagname) {
     CFlexTimingTag *ptt = &m_TimingTags[i];
     if (!ptt) continue;
 
-    if (!stricmp(ptt->GetName(), tagname)) {
+    if (!_stricmp(ptt->GetName(), tagname)) {
       return ptt;
     }
   }
@@ -2067,7 +2066,7 @@ void CChoreoEvent::RemoveAllTracks(void) {
 CFlexAnimationTrack *CChoreoEvent::FindTrack(const char *controllername) {
   for (int i = 0; i < GetNumFlexAnimationTracks(); i++) {
     CFlexAnimationTrack *t = GetFlexAnimationTrack(i);
-    if (t && !stricmp(t->GetFlexControllerName(), controllername)) {
+    if (t && !_stricmp(t->GetFlexControllerName(), controllername)) {
       return t;
     }
   }
@@ -2271,7 +2270,7 @@ CEventAbsoluteTag *CChoreoEvent::FindAbsoluteTag(AbsTagType type,
     CEventAbsoluteTag *ptag = &m_AbsoluteTags[type][i];
     if (!ptag) continue;
 
-    if (!stricmp(ptag->GetName(), tagname)) {
+    if (!_stricmp(ptag->GetName(), tagname)) {
       return ptag;
     }
   }
@@ -2315,7 +2314,7 @@ void CChoreoEvent::RemoveAbsoluteTag(AbsTagType type, const char *tagname) {
     CEventAbsoluteTag *ptag = &m_AbsoluteTags[type][i];
     if (!ptag) continue;
 
-    if (!stricmp(ptag->GetName(), tagname)) {
+    if (!_stricmp(ptag->GetName(), tagname)) {
       m_AbsoluteTags[type].Remove(i);
       return;
     }
@@ -2338,14 +2337,14 @@ bool CChoreoEvent::VerifyTagOrder() {
 
     CEventAbsoluteTag *t1 = &m_AbsoluteTags[CChoreoEvent::PLAYBACK][i];
 
-    if (stricmp(ptag->GetName(), t1->GetName()) == 0) continue;
+    if (_stricmp(ptag->GetName(), t1->GetName()) == 0) continue;
 
     bInOrder = false;
     for (int j = i + 1; j < m_AbsoluteTags[CChoreoEvent::PLAYBACK].Size();
          j++) {
       CEventAbsoluteTag *t2 = &m_AbsoluteTags[CChoreoEvent::PLAYBACK][j];
 
-      if (stricmp(ptag->GetName(), t2->GetName()) == 0) {
+      if (_stricmp(ptag->GetName(), t2->GetName()) == 0) {
         temp = *t1;
         *t1 = *t2;
         *t2 = temp;
@@ -2387,32 +2386,6 @@ float CChoreoEvent::GetBoundedAbsoluteTagPercentage(AbsTagType type,
     */
     return 1.0;  // 1.5;
   }
-
-  /*
-  {
-          float duration = GetDuration();
-          
-
-
-
-
-
-
-
-
-
-
-
-
-          if ( type == SHIFTED )
-          {
-                  float seqduration;
-                  GetGestureSequenceDuration( seqduration );
-                  return seqduration;
-          }
-          return duration;
-  }
-  */
 
   CEventAbsoluteTag *tag = GetAbsoluteTag(type, tagnum);
   Assert(tag);

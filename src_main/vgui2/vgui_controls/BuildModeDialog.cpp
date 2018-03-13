@@ -147,7 +147,7 @@ class BuildModeLocalizedStringEditDialog : public Frame {
   }
 
   virtual void OnCommand(const char *command) {
-    if (!stricmp(command, "OK")) {
+    if (!_stricmp(command, "OK")) {
       //!! apply changes
     } else {
       BaseClass::OnCommand(command);
@@ -576,15 +576,15 @@ void BuildModeDialog::SetActiveControl(Panel *controlToEdit) {
     // default the data type to a string
     int datat = TYPE_STRING;
 
-    if (!stricmp(dataType, "int")) {
+    if (!_stricmp(dataType, "int")) {
       datat = TYPE_STRING;  //!! just for now
-    } else if (!stricmp(dataType, "alignment")) {
+    } else if (!_stricmp(dataType, "alignment")) {
       datat = TYPE_ALIGNMENT;
-    } else if (!stricmp(dataType, "autoresize")) {
+    } else if (!_stricmp(dataType, "autoresize")) {
       datat = TYPE_AUTORESIZE;
-    } else if (!stricmp(dataType, "corner")) {
+    } else if (!_stricmp(dataType, "corner")) {
       datat = TYPE_CORNER;
-    } else if (!stricmp(dataType, "localize")) {
+    } else if (!_stricmp(dataType, "localize")) {
       datat = TYPE_LOCALIZEDSTRING;
     }
 
@@ -755,24 +755,24 @@ void BuildModeDialog::UpdateEditControl(PanelItem_t &panelItem,
 // Purpose: Called when one of the buttons is pressed
 //-----------------------------------------------------------------------------
 void BuildModeDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "Save")) {
+  if (!_stricmp(command, "Save")) {
     // apply the current data and save it to disk
     ApplyDataToControls();
     if (m_pBuildGroup->SaveControlSettings()) {
       // disable save button until another change has been made
       m_pSaveButton->SetEnabled(false);
     }
-  } else if (!stricmp(command, "Exit")) {
+  } else if (!_stricmp(command, "Exit")) {
     // exit build mode
     ExitBuildMode();
-  } else if (!stricmp(command, "Apply")) {
+  } else if (!_stricmp(command, "Apply")) {
     // apply data to controls
     ApplyDataToControls();
-  } else if (!stricmp(command, "DeletePanel")) {
+  } else if (!_stricmp(command, "DeletePanel")) {
     OnDeletePanel();
-  } else if (!stricmp(command, "RevertToSaved")) {
+  } else if (!_stricmp(command, "RevertToSaved")) {
     RevertToSaved();
-  } else if (!stricmp(command, "ShowHelp")) {
+  } else if (!_stricmp(command, "ShowHelp")) {
     ShowHelp();
   } else {
     BaseClass::OnCommand(command);
@@ -995,7 +995,7 @@ void BuildModeDialog::OnTextChanged(Panel *panel) {
     char newFile[512];
     m_pFileSelectionCombo->GetText(newFile, sizeof(newFile));
 
-    if (stricmp(newFile, m_pBuildGroup->GetResourceName()) != 0) {
+    if (_stricmp(newFile, m_pBuildGroup->GetResourceName()) != 0) {
       // file has changed, reload
       SetActiveControl(NULL);
       m_pBuildGroup->ChangeControlSettingsFile(newFile);
@@ -1006,7 +1006,7 @@ void BuildModeDialog::OnTextChanged(Panel *panel) {
   if (panel == m_pAddNewControlCombo) {
     char buf[40];
     m_pAddNewControlCombo->GetText(buf, 40);
-    if (stricmp(buf, "None") != 0) {
+    if (_stricmp(buf, "None") != 0) {
       OnNewControl(buf);
       // reset box back to None
       m_pAddNewControlCombo->ActivateItemByRow(0);

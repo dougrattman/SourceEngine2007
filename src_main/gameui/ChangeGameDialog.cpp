@@ -105,7 +105,7 @@ void CChangeGameDialog::LoadModList() {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CChangeGameDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "OK")) {
+  if (!_stricmp(command, "OK")) {
     if (m_pModList->GetSelectedItemsCount() > 0) {
       KeyValues *kv = m_pModList->GetItem(m_pModList->GetSelectedItem(0));
       if (kv) {
@@ -119,7 +119,7 @@ void CChangeGameDialog::OnCommand(const char *command) {
         engine->ClientCmd_Unrestricted("_restart\n");
       }
     }
-  } else if (!stricmp(command, "Cancel")) {
+  } else if (!_stricmp(command, "Cancel")) {
     Close();
   } else {
     BaseClass::OnCommand(command);

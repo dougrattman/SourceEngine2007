@@ -1229,7 +1229,7 @@ void CNewGameDialog::OnClose(void) {
 void CNewGameDialog::OnCommand(const char *command) {
   bool bReset = true;
 
-  if (!stricmp(command, "Play")) {
+  if (!_stricmp(command, "Play")) {
     if (m_bMapStarting) return;
 
     if (GameUI().IsConsoleUI()) {
@@ -1254,22 +1254,22 @@ void CNewGameDialog::OnCommand(const char *command) {
     } else {
       StartGame();
     }
-  } else if (!stricmp(command, "Next")) {
+  } else if (!_stricmp(command, "Next")) {
     if (m_bMapStarting) return;
 
     ScrollSelectionPanels(SCROLL_LEFT);
     bReset = false;
-  } else if (!stricmp(command, "Prev")) {
+  } else if (!_stricmp(command, "Prev")) {
     if (m_bMapStarting) return;
 
     ScrollSelectionPanels(SCROLL_RIGHT);
     bReset = false;
-  } else if (!stricmp(command, "Mode_Next")) {
+  } else if (!_stricmp(command, "Mode_Next")) {
     if (m_bMapStarting) return;
 
     ScrollBonusSelection(SCROLL_LEFT);
     bReset = false;
-  } else if (!stricmp(command, "Mode_Prev")) {
+  } else if (!_stricmp(command, "Mode_Prev")) {
     if (m_bMapStarting) return;
 
     ScrollBonusSelection(SCROLL_RIGHT);

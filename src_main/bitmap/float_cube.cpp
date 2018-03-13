@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/float_bm.h"
 
@@ -45,7 +45,7 @@ static char const *namepts[6] = {"%sbk.pfm", "%sdn.pfm", "%sft.pfm",
 FloatCubeMap_t::FloatCubeMap_t(char const *basename) {
   for (int f = 0; f < 6; f++) {
     char fnamebuf[512];
-    sprintf(fnamebuf, namepts[f], basename);
+    sprintf_s(fnamebuf, namepts[f], basename);
     face_maps[f].LoadFromPFM(fnamebuf);
   }
 }
@@ -53,7 +53,7 @@ FloatCubeMap_t::FloatCubeMap_t(char const *basename) {
 void FloatCubeMap_t::WritePFMs(char const *basename) {
   for (int f = 0; f < 6; f++) {
     char fnamebuf[512];
-    sprintf(fnamebuf, namepts[f], basename);
+    sprintf_s(fnamebuf, namepts[f], basename);
     face_maps[f].WritePFM(fnamebuf);
   }
 }

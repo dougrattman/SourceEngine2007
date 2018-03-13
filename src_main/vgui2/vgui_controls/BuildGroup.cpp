@@ -1105,7 +1105,7 @@ Panel *BuildGroup::FieldNameTaken(const char *fieldName) {
     Panel *panel = _panelDar[i].Get();
     if (!panel) continue;
 
-    if (!stricmp(panel->GetName(), fieldName)) {
+    if (!_stricmp(panel->GetName(), fieldName)) {
       return panel;
     }
   }
@@ -1138,7 +1138,7 @@ void BuildGroup::GetSettings(KeyValues *resourceData) {
     }
 
     // Don't save the setting of the buildmodedialog
-    if (!stricmp(panel->GetName(), "BuildDialog")) continue;
+    if (!_stricmp(panel->GetName(), "BuildDialog")) continue;
 
     // get the keys section from the data file
     if (panel->GetName() && *panel->GetName()) {

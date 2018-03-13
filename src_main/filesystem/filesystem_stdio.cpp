@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "basefilesystem.h"
 
@@ -22,14 +22,11 @@
 #include "tier1/fmtstr.h"
 #include "tier1/utlrbtree.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static_assert(SEEK_CUR == FILESYSTEM_SEEK_CURRENT);
 static_assert(SEEK_SET == FILESYSTEM_SEEK_HEAD);
 static_assert(SEEK_END == FILESYSTEM_SEEK_TAIL);
-
-//-----------------------------------------------------------------------------
 
 class CFileSystem_Stdio : public CBaseFileSystem {
  public:
@@ -89,9 +86,8 @@ class CFileSystem_Stdio : public CBaseFileSystem {
   bool m_bCanAsync;
 };
 
-//-----------------------------------------------------------------------------
 // Per-file worker classes
-//-----------------------------------------------------------------------------
+
 the_interface CStdFilesystemFile {
  public:
   virtual ~CStdFilesystemFile() {}
@@ -135,8 +131,6 @@ class CStdioFile : public CStdFilesystemFile {
 
   FILE *m_pFile;
 };
-
-//-----------------------------------------------------------------------------
 
 #ifdef _WIN32
 class CWin32ReadOnlyFile : public CStdFilesystemFile {
@@ -183,9 +177,8 @@ class CWin32ReadOnlyFile : public CStdFilesystemFile {
 
 #endif
 
-//-----------------------------------------------------------------------------
 // singleton
-//-----------------------------------------------------------------------------
+
 CFileSystem_Stdio g_FileSystem_Stdio;
 #if defined(_WIN32) && defined(DEDICATED)
 CBaseFileSystem *BaseFileSystem_Stdio(void) { return &g_FileSystem_Stdio; }
@@ -208,8 +201,6 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CFileSystem_Stdio, IBaseFileSystem,
 
 #endif
 
-//-----------------------------------------------------------------------------
-
 #ifndef _RETAIL
 bool UseOptimalBufferAllocation() {
   static bool bUseOptimalBufferAllocation =
@@ -229,22 +220,19 @@ ConVar filesystem_max_stdio_read("filesystem_max_stdio_read",
                                  IsX360() ? "64" : "16", 0, "");
 ConVar filesystem_report_buffered_io("filesystem_report_buffered_io", "0");
 
-//-----------------------------------------------------------------------------
 // constructor
-//-----------------------------------------------------------------------------
+
 CFileSystem_Stdio::CFileSystem_Stdio() {
   m_bMounted = false;
   m_bCanAsync = true;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose:
-//-----------------------------------------------------------------------------
+
 CFileSystem_Stdio::~CFileSystem_Stdio() { Assert(!m_bMounted); }
 
-//-----------------------------------------------------------------------------
 // QueryInterface:
-//-----------------------------------------------------------------------------
+
 void *CFileSystem_Stdio::QueryInterface(const char *pInterfaceName) {
   // We also implement the IMatSystemSurface interface
   if (!Q_strncmp(pInterfaceName, FILESYSTEM_INTERFACE_VERSION,
@@ -254,8 +242,6 @@ void *CFileSystem_Stdio::QueryInterface(const char *pInterfaceName) {
   return CBaseFileSystem::QueryInterface(pInterfaceName);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::GetOptimalIOConstraints(FileHandle_t hFile,
                                                 unsigned *pOffsetAlign,
                                                 unsigned *pSizeAlign,
@@ -290,8 +276,6 @@ bool CFileSystem_Stdio::GetOptimalIOConstraints(FileHandle_t hFile,
   return (sectorSize > 1);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void *CFileSystem_Stdio::AllocOptimalReadBuffer(FileHandle_t hFile,
                                                 unsigned nSize,
                                                 unsigned nOffset) {
@@ -327,8 +311,6 @@ void *CFileSystem_Stdio::AllocOptimalReadBuffer(FileHandle_t hFile,
   return _aligned_malloc(nAllocSize, nAllocAlignment);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::FreeOptimalReadBuffer(void *p) {
   if (!UseOptimalBufferAllocation()) {
     CBaseFileSystem::FreeOptimalReadBuffer(p);
@@ -340,9 +322,6 @@ void CFileSystem_Stdio::FreeOptimalReadBuffer(void *p) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 FILE *CFileSystem_Stdio::FS_fopen(const char *filename, const char *options,
                                   unsigned flags, int64_t *size,
                                   CFileLoadInfo *pInfo) {
@@ -364,50 +343,32 @@ FILE *CFileSystem_Stdio::FS_fopen(const char *filename, const char *options,
   return (FILE *)pFile;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::FS_setbufsize(FILE *fp, unsigned nBytes) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   pFile->FS_setbufsize(nBytes);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::FS_fclose(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   pFile->FS_fclose();
   delete pFile;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::FS_fseek(FILE *fp, int64_t pos, int seekType) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   pFile->FS_fseek(pos, seekType);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 long CFileSystem_Stdio::FS_ftell(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_ftell();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_feof(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_feof();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CFileSystem_Stdio::FS_fread(void *dest, size_t destSize, size_t size,
                                    FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
@@ -418,9 +379,6 @@ size_t CFileSystem_Stdio::FS_fread(void *dest, size_t destSize, size_t size,
   return nBytesRead;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CFileSystem_Stdio::FS_fwrite(const void *src, size_t size, FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
 
@@ -429,57 +387,37 @@ size_t CFileSystem_Stdio::FS_fwrite(const void *src, size_t size, FILE *fp) {
   return nBytesWritten;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::FS_setmode(FILE *fp, FileMode_t mode) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_setmode(mode);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CFileSystem_Stdio::FS_vfprintf(FILE *fp, const char *fmt, va_list list) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_vfprintf(fmt, list);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_ferror(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_ferror();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_fflush(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_fflush();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 char *CFileSystem_Stdio::FS_fgets(char *dest, int destSize, FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_fgets(dest, destSize);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *path -
-//			pmode -
-// Output : int
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_chmod(const char *path, int pmode) {
   if (!path) return -1;
 
   int rt = _chmod(path, pmode);
-#if !defined(_WIN32)
+
+#ifndef OS_WIN
   if (rt == -1) {
     const char *file = findFileInDirCaseInsensitive(path);
     if (file) {
@@ -490,9 +428,6 @@ int CFileSystem_Stdio::FS_chmod(const char *path, int pmode) {
   return rt;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_stat(const char *path, struct _stat *buf) {
   if (!path) {
     return -1;
@@ -510,39 +445,25 @@ int CFileSystem_Stdio::FS_stat(const char *path, struct _stat *buf) {
   return rt;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 HANDLE CFileSystem_Stdio::FS_FindFirstFile(const char *findname,
                                            WIN32_FIND_DATA *dat) {
   return ::FindFirstFile(findname, dat);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) {
   return (::FindNextFile(handle, dat) != 0);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::FS_FindClose(HANDLE handle) {
   return (::FindClose(handle) != 0);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::FS_GetSectorSize(FILE *fp) {
   CStdFilesystemFile *pFile = ((CStdFilesystemFile *)fp);
   return pFile->FS_GetSectorSize();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: files are always immediately available on disk
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::IsFileImmediatelyAvailable(const char *pFileName) {
   return true;
 }
@@ -550,14 +471,11 @@ bool CFileSystem_Stdio::IsFileImmediatelyAvailable(const char *pFileName) {
 // enable this if you want the stdio filesystem to pretend it's steam, and make
 // people wait for resources
 //#define DEBUG_WAIT_FOR_RESOURCES_API
-
 #if defined(DEBUG_WAIT_FOR_RESOURCES_API)
 static float g_flDebugProgress = 0.0f;
 #endif
 
-//-----------------------------------------------------------------------------
 // Purpose: steam call, unnecessary in stdio
-//-----------------------------------------------------------------------------
 WaitForResourcesHandle_t CFileSystem_Stdio::WaitForResources(
     const char *resourcelist) {
 #if defined(DEBUG_WAIT_FOR_RESOURCES_API)
@@ -567,9 +485,7 @@ WaitForResourcesHandle_t CFileSystem_Stdio::WaitForResources(
   return 1;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: steam call, unnecessary in stdio
-//-----------------------------------------------------------------------------
 bool CFileSystem_Stdio::GetWaitForResourcesProgress(
     WaitForResourcesHandle_t handle, float *progress /* out */,
     bool *complete /* out */) {
@@ -588,57 +504,41 @@ bool CFileSystem_Stdio::GetWaitForResourcesProgress(
   return true;
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: steam call, unnecessary in stdio
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::CancelWaitForResources(
     WaitForResourcesHandle_t handle) {}
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void CFileSystem_Stdio::GetLocalCopy(const char *pFileName) {
   // do nothing. . everything is local.
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 int CFileSystem_Stdio::HintResourceNeed(const char *hintlist,
                                         int forgetEverything) {
   // do nothing. . everything is local.
   return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 CStdioFile *CStdioFile::FS_fopen(const char *filename, const char *options,
                                  int64_t *size) {
-  FILE *pFile = NULL;
-
-  // stop newline characters at end of filename
+  // Stop newline characters at end of filename
   Assert(!strchr(filename, '\n') && !strchr(filename, '\r'));
 
-  pFile = fopen(filename, options);
-  if (pFile && size) {
-    // todo: replace with filelength()?
+  FILE *fd;
+  if (!fopen_s(&fd, filename, options) && size) {
+    // TODO(d.rattman): Replace with filelength()?
     struct _stat buf;
     int rt = _stat(filename, &buf);
-    if (rt == 0) {
-      *size = buf.st_size;
-    }
+    if (rt == 0) *size = buf.st_size;
   }
 
-#if !defined _WIN32
-  if (!pFile && !strchr(options, 'w') &&
-      !strchr(options, '+'))  // try opening the lower cased version
-  {
+#ifndef OS_WIN
+  // try opening the lower cased version
+  if (!fd && !strchr(options, 'w') && !strchr(options, '+')) {
     const char *file = findFileInDirCaseInsensitive(filename);
     if (file) {
-      pFile = fopen(file, options);
+      fd = fopen(file, options);
 
-      if (pFile && size) {
+      if (fd && size) {
         // todo: replace with filelength()?
         struct _stat buf;
         int rt = _stat(file, &buf);
@@ -650,47 +550,25 @@ CStdioFile *CStdioFile::FS_fopen(const char *filename, const char *options,
   }
 #endif
 
-  if (pFile) {
-    return new CStdioFile(pFile);
-  }
-
-  return NULL;
+  return fd ? new CStdioFile(fd) : nullptr;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CStdioFile::FS_setbufsize(unsigned nBytes) {
 #ifdef _WIN32
   setvbuf(m_pFile, NULL, nBytes ? _IOFBF : _IONBF, nBytes);
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CStdioFile::FS_fclose() { fclose(m_pFile); }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CStdioFile::FS_fseek(int64_t pos, int seekType) {
   fseek(m_pFile, pos, seekType);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 long CStdioFile::FS_ftell() { return ftell(m_pFile); }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CStdioFile::FS_feof() { return feof(m_pFile); }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CStdioFile::FS_fread(void *dest, size_t destSize, size_t size) {
   // read (size) of bytes to ensure truncated reads returns bytes read and not 0
   return fread(dest, 1, size, m_pFile);
@@ -698,13 +576,9 @@ size_t CStdioFile::FS_fread(void *dest, size_t destSize, size_t size) {
 
 #define WRITE_CHUNK (size_t)(256 * 1024)
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//
 // This routine breaks data into chunks if the amount to be written is beyond
 // WRITE_CHUNK (256kb) Windows can fail on monolithic writes of ~12MB or more,
 // so we work around that here
-//-----------------------------------------------------------------------------
 size_t CStdioFile::FS_fwrite(const void *src, size_t size) {
   if (size > WRITE_CHUNK) {
     size_t remaining = size;
@@ -729,9 +603,6 @@ size_t CStdioFile::FS_fwrite(const void *src, size_t size) {
                                          // bytes, so it return bytes)
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 bool CStdioFile::FS_setmode(FileMode_t mode) {
 #ifdef _WIN32
   int fd = _fileno(m_pFile);
@@ -742,41 +613,27 @@ bool CStdioFile::FS_setmode(FileMode_t mode) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CStdioFile::FS_vfprintf(const char *fmt, va_list list) {
   return vfprintf(m_pFile, fmt, list);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CStdioFile::FS_ferror() { return ferror(m_pFile); }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CStdioFile::FS_fflush() { return fflush(m_pFile); }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 char *CStdioFile::FS_fgets(char *dest, int destSize) {
   return fgets(dest, destSize, m_pFile);
 }
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
+
 #ifdef _WIN32
 
 ConVar filesystem_use_overlapped_io("filesystem_use_overlapped_io", "1", 0, "");
 #define UseOverlappedIO() filesystem_use_overlapped_io.GetBool()
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
+
 int GetSectorSize(const char *pszFilename) {
   if ((!pszFilename[0] || !pszFilename[1]) ||
       (pszFilename[0] == '\\' && pszFilename[1] == '\\') ||
@@ -833,9 +690,7 @@ int GetSectorSize(const char *pszFilename) {
 #endif
 }
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
 
 class CThreadIOEventPool {
  public:
@@ -865,17 +720,14 @@ class CThreadIOEventPool {
 
 CThreadIOEventPool g_ThreadIOEvents;
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
+
 bool CWin32ReadOnlyFile::CanOpen(const char *filename, const char *options) {
   return (options[0] == 'r' && options[1] == 'b' && options[2] == 0 &&
           filesystem_native.GetBool());
 }
 
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
 
 static HANDLE OpenWin32File(const char *filename, bool bOverlapped,
                             bool bUnbuffered, int64_t *pFileSize) {
@@ -941,9 +793,6 @@ CWin32ReadOnlyFile *CWin32ReadOnlyFile::FS_fopen(const char *filename,
                                 bOverlapped);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CWin32ReadOnlyFile::FS_fclose() {
   if (m_hFileUnbuffered != INVALID_HANDLE_VALUE) {
     CloseHandle(m_hFileUnbuffered);
@@ -954,9 +803,6 @@ void CWin32ReadOnlyFile::FS_fclose() {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 void CWin32ReadOnlyFile::FS_fseek(int64_t pos, int seekType) {
   switch (seekType) {
     case SEEK_SET:
@@ -973,22 +819,13 @@ void CWin32ReadOnlyFile::FS_fseek(int64_t pos, int seekType) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 long CWin32ReadOnlyFile::FS_ftell() { return m_ReadPos; }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 int CWin32ReadOnlyFile::FS_feof() { return (m_ReadPos >= m_Size); }
 
 // Ends up on a thread's stack
 #define READ_TEMP_BUFFER (256 * 1024)
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
   VPROF_BUDGET("CWin32ReadOnlyFile::FS_fread",
                VPROF_BUDGETGROUP_OTHER_FILESYSTEM);
@@ -1119,9 +956,6 @@ size_t CWin32ReadOnlyFile::FS_fread(void *dest, size_t destSize, size_t size) {
   return result;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: low-level filesystem wrapper
-//-----------------------------------------------------------------------------
 char *CWin32ReadOnlyFile::FS_fgets(char *dest, int destSize) {
   if (FS_feof()) {
     return NULL;

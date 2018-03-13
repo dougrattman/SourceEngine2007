@@ -65,7 +65,7 @@ int g_nPropsDecoded = 0;
 
 RecvTable *FindRecvTable(const char *pName) {
   FOR_EACH_LL(g_RecvTables, i) {
-    if (stricmp(g_RecvTables[i]->GetName(), pName) == 0) return g_RecvTables[i];
+    if (_stricmp(g_RecvTables[i]->GetName(), pName) == 0) return g_RecvTables[i];
   }
   return 0;
 }
@@ -74,7 +74,7 @@ static CClientSendTable *FindClientSendTable(const char *pName) {
   FOR_EACH_LL(g_ClientSendTables, i) {
     CClientSendTable *pTable = g_ClientSendTables[i];
 
-    if (stricmp(pTable->GetName(), pName) == 0) return pTable;
+    if (_stricmp(pTable->GetName(), pName) == 0) return pTable;
   }
 
   return NULL;
@@ -118,7 +118,7 @@ static RecvProp *FindRecvProp(RecvTable *pTable, const char *pName) {
   for (int i = 0; i < pTable->GetNumProps(); i++) {
     RecvProp *pProp = pTable->GetProp(i);
 
-    if (stricmp(pProp->GetName(), pName) == 0) return pProp;
+    if (_stricmp(pProp->GetName(), pName) == 0) return pProp;
   }
 
   return NULL;

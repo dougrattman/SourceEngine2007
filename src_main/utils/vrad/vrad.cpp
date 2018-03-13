@@ -191,13 +191,13 @@ void ReadLightFile(char *filename) {
   while (CmdLib_FGets(buf, sizeof(buf), f)) {
     // check ldr/hdr
     char *scan = buf;
-    if (!strnicmp("hdr:", scan, 4)) {
+    if (!_strnicmp("hdr:", scan, 4)) {
       scan += 4;
       if (!g_bHDR) {
         continue;
       }
     }
-    if (!strnicmp("ldr:", scan, 4)) {
+    if (!_strnicmp("ldr:", scan, 4)) {
       scan += 4;
       if (g_bHDR) {
         continue;
@@ -411,7 +411,7 @@ void ProcessSkyCameras() {
   for (i = 0; i < num_entities; ++i) {
     entity_t *e = &entities[i];
     const char *name = ValueForKey(e, "classname");
-    if (stricmp(name, "sky_camera")) continue;
+    if (_stricmp(name, "sky_camera")) continue;
 
     Vector origin;
     GetVectorForKey(e, "origin", origin);
@@ -2101,9 +2101,9 @@ int ParseCommandLine(int argc, char **argv, bool *onlydetail) {
   for (i = 1; i < argc; i++) {
     if (!Q_stricmp(argv[i], "-StaticPropLighting")) {
       g_bStaticPropLighting = true;
-    } else if (!stricmp(argv[i], "-StaticPropNormals")) {
+    } else if (!_stricmp(argv[i], "-StaticPropNormals")) {
       g_bShowStaticPropNormals = true;
-    } else if (!stricmp(argv[i], "-OnlyStaticProps")) {
+    } else if (!_stricmp(argv[i], "-OnlyStaticProps")) {
       g_bOnlyStaticProps = true;
     } else if (!Q_stricmp(argv[i], "-StaticPropPolys")) {
       g_bStaticPropPolys = true;
@@ -2215,10 +2215,10 @@ int ParseCommandLine(int argc, char **argv, bool *onlydetail) {
         Warning("Error: expected a sample size after '-maxdispsamplesize'\n");
         return 1;
       }
-    } else if (stricmp(argv[i], "-StopOnExit") == 0) {
+    } else if (_stricmp(argv[i], "-StopOnExit") == 0) {
       g_bStopOnExit = true;
-    } else if (stricmp(argv[i], "-steam") == 0) {
-    } else if (stricmp(argv[i], "-allowdebug") == 0) {
+    } else if (_stricmp(argv[i], "-steam") == 0) {
+    } else if (_stricmp(argv[i], "-allowdebug") == 0) {
       // Don't need to do anything, just don't error out.
     } else if (!Q_stricmp(argv[i], CMDLINEOPTION_NOVCONFIG)) {
     } else if (!Q_stricmp(argv[i], "-vproject") ||
@@ -2324,7 +2324,7 @@ int ParseCommandLine(int argc, char **argv, bool *onlydetail) {
     // something valid like -game, it would skip it.
     else if (!Q_strncasecmp(argv[i], "-mpi", 4) ||
              !Q_strncasecmp(argv[i - 1], "-mpi", 4)) {
-      if (stricmp(argv[i], "-mpi") == 0) g_bUseMPI = true;
+      if (_stricmp(argv[i], "-mpi") == 0) g_bUseMPI = true;
 
       // Any other args that start with -mpi are ok too.
       if (i == argc - 1 && V_stricmp(argv[i], "-mpi_ListParams") != 0) break;

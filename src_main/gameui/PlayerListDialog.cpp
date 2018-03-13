@@ -130,7 +130,7 @@ void CPlayerListDialog::RefreshPlayerProperties() {
 // Purpose: Handles the AddFriend command
 //-----------------------------------------------------------------------------
 void CPlayerListDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "Mute")) {
+  if (!_stricmp(command, "Mute")) {
     ToggleMuteStateOfSelectedUser();
   } else {
     BaseClass::OnCommand(command);

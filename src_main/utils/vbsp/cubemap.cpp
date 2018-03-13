@@ -909,7 +909,7 @@ void Cubemap_AddUnreferencedCubemaps() {
 
     // find or add
     for (j = 0; j < s_DefaultCubemapNames.Count(); ++j) {
-      if (!stricmp(s_DefaultCubemapNames[j], pTextureName)) {
+      if (!_stricmp(s_DefaultCubemapNames[j], pTextureName)) {
         // already added
         break;
       }

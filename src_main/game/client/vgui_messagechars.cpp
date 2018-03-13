@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -197,9 +197,10 @@ int CMessageCharsPanel::AddText(float flTime, vgui::HFont hCustomFont, int x,
 
   Assert(!msg->text);
 
-  msg->text = new char[Q_strlen(data) + 1];
+  size_t size = Q_strlen(data) + 1;
+  msg->text = new char[size];
   Assert(msg->text);
-  Q_strcpy(msg->text, data);
+  Q_strcpy(msg->text, size, data);
 
   if (flTime)
     msg->fTTL = gpGlobals->curtime + flTime;

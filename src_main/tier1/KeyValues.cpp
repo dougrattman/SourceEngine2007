@@ -18,7 +18,6 @@
 #include "tier1/utlvector.h"
 #include "vstdlib/IKeyValuesSystem.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // just needed for error messages
@@ -1032,7 +1031,7 @@ Color KeyValues::GetColor(const char *keyName) {
     } else if (dat->m_iDataType == TYPE_STRING) {
       // parse the colors out of the string
       float a, b, c, d;
-      sscanf(dat->m_sValue, "%f %f %f %f", &a, &b, &c, &d);
+      sscanf_s(dat->m_sValue, "%f %f %f %f", &a, &b, &c, &d);
       color[0] = (unsigned char)a;
       color[1] = (unsigned char)b;
       color[2] = (unsigned char)c;
@@ -1961,8 +1960,8 @@ void KeyValues::UnpackIntoStructure(
         Vector *dest_v = (Vector *)dest_field;
         char const *src_string =
             GetString(pUnpackTable->m_pKeyName, pUnpackTable->m_pKeyDefault);
-        if ((!src_string) || (sscanf(src_string, "%f %f %f", &(dest_v->x),
-                                     &(dest_v->y), &(dest_v->z)) != 3))
+        if ((!src_string) || (sscanf_s(src_string, "%f %f %f", &(dest_v->x),
+                                       &(dest_v->y), &(dest_v->z)) != 3))
           dest_v->Init(0, 0, 0);
       } break;
 
@@ -1970,8 +1969,9 @@ void KeyValues::UnpackIntoStructure(
         float *dest_f = (float *)dest_field;
         char const *src_string =
             GetString(pUnpackTable->m_pKeyName, pUnpackTable->m_pKeyDefault);
-        if ((!src_string) || (sscanf(src_string, "%f %f %f %f", dest_f,
-                                     dest_f + 1, dest_f + 2, dest_f + 3)) != 4)
+        if ((!src_string) ||
+            (sscanf_s(src_string, "%f %f %f %f", dest_f, dest_f + 1, dest_f + 2,
+                      dest_f + 3)) != 4)
           memset(dest_f, 0, 4 * sizeof(float));
       } break;
 
@@ -1980,17 +1980,16 @@ void KeyValues::UnpackIntoStructure(
         char const *src_string =
             GetString(pUnpackTable->m_pKeyName, pUnpackTable->m_pKeyDefault);
         if ((!src_string) ||
-            (sscanf(src_string, "%f %f", dest_f, dest_f + 1)) != 2)
+            (sscanf_s(src_string, "%f %f", dest_f, dest_f + 1)) != 2)
           memset(dest_f, 0, 2 * sizeof(float));
       } break;
 
       case UNPACK_TYPE_STRING: {
         char *dest_s = (char *)dest_field;
-        strncpy(
-            dest_s,
+        strncpy_s(
+            dest_s, pUnpackTable->m_nFieldSize,
             GetString(pUnpackTable->m_pKeyName, pUnpackTable->m_pKeyDefault),
             pUnpackTable->m_nFieldSize);
-
       } break;
 
       case UNPACK_TYPE_INT: {
@@ -2010,8 +2009,8 @@ void KeyValues::UnpackIntoStructure(
           dest_v->z = c.b();
         } else {
           if (pUnpackTable->m_pKeyDefault)
-            sscanf(pUnpackTable->m_pKeyDefault, "%f %f %f", &(dest_v->x),
-                   &(dest_v->y), &(dest_v->z));
+            sscanf_s(pUnpackTable->m_pKeyDefault, "%f %f %f", &(dest_v->x),
+                     &(dest_v->y), &(dest_v->z));
           else
             dest_v->Init(0, 0, 0);
         }

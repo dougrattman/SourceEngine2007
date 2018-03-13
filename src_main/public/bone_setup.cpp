@@ -4904,7 +4904,7 @@ int Studio_FindAttachment(const CStudioHdr *pStudioHdr,
   if (pStudioHdr && pStudioHdr->SequencesAvailable()) {
     // Extract the bone index from the name
     for (int i = 0; i < pStudioHdr->GetNumAttachments(); i++) {
-      if (!stricmp(pAttachmentName, pStudioHdr->pAttachment(i).pszName())) {
+      if (!_stricmp(pAttachmentName, pStudioHdr->pAttachment(i).pszName())) {
         return i;
       }
     }

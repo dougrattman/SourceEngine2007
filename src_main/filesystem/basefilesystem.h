@@ -454,7 +454,7 @@ the_interface CBaseFileSystem : public CTier1AppSystem<IFileSystem> {
                               const char *pPathID = NULL);
   virtual bool SetFileWritable(char const *pFileName, bool writable,
                                const char *pPathID = 0);
-  virtual void FileTimeToString(char *pString, int maxChars, long fileTime);
+  virtual void FileTimeToString(char *pString, size_t maxChars, long fileTime);
 
   virtual const char *FindFirst(const char *pWildCard,
                                 FileFindHandle_t *pHandle);

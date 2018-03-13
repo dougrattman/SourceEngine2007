@@ -399,7 +399,7 @@ void LoadPortals(char *name) {
 
   if (fscanf(f, "%79s\n%i\n%i\n", magic, &portalclusters, &g_numportals) != 3)
     Error("LoadPortals %s: failed to read header", name);
-  if (stricmp(magic, PORTALFILE))
+  if (_stricmp(magic, PORTALFILE))
     Error("LoadPortals %s: not a portal file", name);
 
   Msg("%4i portalclusters\n", portalclusters);
@@ -759,7 +759,7 @@ float DetermineVisRadius() {
   // Check the max vis range to determine the vis radius
   for (int i = 0; i < num_entities; ++i) {
     const char *pEntity = ValueForKey(&entities[i], "classname");
-    if (!stricmp(pEntity, "env_fog_controller")) {
+    if (!_stricmp(pEntity, "env_fog_controller")) {
       flRadius = FloatForKey(&entities[i], "farz");
       if (flRadius == 0.0f) flRadius = -1.0f;
       break;
@@ -824,7 +824,7 @@ int ParseCommandLine(int argc, char **argv) {
     // something valid like -game, it would skip it.
     else if (!Q_strncasecmp(argv[i], "-mpi", 4) ||
              !Q_strncasecmp(argv[i - 1], "-mpi", 4)) {
-      if (stricmp(argv[i], "-mpi") == 0) g_bUseMPI = true;
+      if (_stricmp(argv[i], "-mpi") == 0) g_bUseMPI = true;
 
       // Any other args that start with -mpi are ok too.
       if (i == argc - 1) break;

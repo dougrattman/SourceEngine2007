@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines a symbol table.
 
@@ -8,23 +8,13 @@
 #include "tier1/keyvalues.h"
 #include "tier1/stringpool.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define INVALID_STRING_INDEX CStringPoolIndex(0xFFFF, 0xFFFF)
-
 #define MIN_STRING_POOL_SIZE 2048
-
-
-// globals
-
 
 CUtlSymbolTableMT *CUtlSymbol::s_pSymbolTable = 0;
 bool CUtlSymbol::s_bAllowStaticSymbolTable = true;
-
-
-// symbol methods
-
 
 void CUtlSymbol::Initialize() {
   // If this assert fails, then the module that this call is in has chosen to
@@ -41,9 +31,7 @@ void CUtlSymbol::Initialize() {
   }
 }
 
-
 // Purpose: Singleton to delete table on exit from module
-
 class CCleanupUtlSymbolTable {
  public:
   ~CCleanupUtlSymbolTable() {
@@ -59,10 +47,7 @@ CUtlSymbolTableMT *CUtlSymbol::CurrTable() {
   return s_pSymbolTable;
 }
 
-
 // string->symbol->string
-
-
 CUtlSymbol::CUtlSymbol(const char *pStr) {
   m_Id = CurrTable()->AddString(pStr);
 }
@@ -73,19 +58,13 @@ void CUtlSymbol::DisableStaticSymbolTable() {
   s_bAllowStaticSymbolTable = false;
 }
 
-
 // checks if the symbol matches a string
-
-
 bool CUtlSymbol::operator==(const char *pStr) const {
   if (m_Id == UTL_INVAL_SYMBOL) return false;
   return strcmp(String(), pStr) == 0;
 }
 
-
 // symbol table stuff
-
-
 inline const char *CUtlSymbolTable::StringFromIndex(
     const CStringPoolIndex &index) const {
   Assert(index.m_iPool < m_StringPools.Count());
@@ -113,11 +92,8 @@ bool CUtlSymbolTable::CLess::operator()(const CStringPoolIndex &i1,
   if (!pTable->m_bInsensitive)
     return strcmp(str1, str2) < 0;
   else
-    return strcmpi(str1, str2) < 0;
+    return _strcmpi(str1, str2) < 0;
 }
-
-
-// constructor, destructor
 
 CUtlSymbolTable::CUtlSymbolTable(int growSize, int initSize,
                                  bool caseInsensitive)
@@ -160,10 +136,7 @@ int CUtlSymbolTable::FindPoolWithSpace(int len) const {
   return -1;
 }
 
-
 // Finds and/or creates a symbol based on the string
-
-
 CUtlSymbol CUtlSymbolTable::AddString(const char *pString) {
   if (!pString) return CUtlSymbol(UTL_INVAL_SYMBOL);
 
@@ -205,10 +178,7 @@ CUtlSymbol CUtlSymbolTable::AddString(const char *pString) {
   return CUtlSymbol(idx);
 }
 
-
 // Look up the string associated with a particular symbol
-
-
 const char *CUtlSymbolTable::String(CUtlSymbol id) const {
   if (!id.IsValid()) return "";
 
@@ -216,10 +186,7 @@ const char *CUtlSymbolTable::String(CUtlSymbol id) const {
   return StringFromIndex(m_Lookup[id]);
 }
 
-
 // Remove all symbols in the table.
-
-
 void CUtlSymbolTable::RemoveAll() {
   m_Lookup.Purge();
 
@@ -227,11 +194,6 @@ void CUtlSymbolTable::RemoveAll() {
 
   m_StringPools.RemoveAll();
 }
-
-
-// Purpose:
-// Input  : *pFileName -
-// Output : FileNameHandle_t
 
 FileNameHandle_t CUtlFilenameSymbolTable::FindOrAddFileName(
     const char *pFileName) {
@@ -250,7 +212,7 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindOrAddFileName(
   Q_strncpy(fn, pFileName, sizeof(fn));
   Q_RemoveDotSlashes(fn);
 #ifdef _WIN32
-  strlwr(fn);
+  _strlwr_s(fn);
 #endif
 
   // Split the filename into constituent parts
@@ -288,7 +250,7 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindFileName(const char *pFileName) {
   Q_strncpy(fn, pFileName, sizeof(fn));
   Q_RemoveDotSlashes(fn);
 #ifdef _WIN32
-  strlwr(fn);
+  _strlwr_s(fn);
 #endif
 
   // Split the filename into constituent parts
@@ -308,11 +270,6 @@ FileNameHandle_t CUtlFilenameSymbolTable::FindFileName(const char *pFileName) {
 
   return *(FileNameHandle_t *)(&handle);
 }
-
-
-// Purpose:
-// Input  : handle -
-// Output : const char
 
 bool CUtlFilenameSymbolTable::String(const FileNameHandle_t &handle, char *buf,
                                      int buflen) {

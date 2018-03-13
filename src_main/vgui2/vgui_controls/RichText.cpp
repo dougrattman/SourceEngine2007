@@ -1966,7 +1966,7 @@ void RichText::OnSliderMoved() {
 // Purpose:
 //-----------------------------------------------------------------------------
 bool RichText::RequestInfo(KeyValues *outputData) {
-  if (!stricmp(outputData->GetName(), "GetText")) {
+  if (!_stricmp(outputData->GetName(), "GetText")) {
     wchar_t wbuf[512];
     GetText(0, wbuf, sizeof(wbuf));
     outputData->SetWString("text", wbuf);

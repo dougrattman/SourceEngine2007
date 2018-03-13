@@ -145,7 +145,7 @@ CMapClass *CMapOverlayTransition::CopyFrom( CMapClass *pObject, bool bUpdateDepe
 void CMapOverlayTransition::OnParentKeyChanged( const char* szKey, const char* szValue )
 {
 	// Material data.
-	if ( !stricmp( szKey, "material" ) )
+	if ( !_stricmp( szKey, "material" ) )
 	{
 		IEditorTexture *pTex = g_Textures.FindActiveTexture( szValue );
 		if ( pTex )
@@ -155,35 +155,35 @@ void CMapOverlayTransition::OnParentKeyChanged( const char* szKey, const char* s
 	}
 
 	// Texture data.
-	if ( !stricmp( szKey, "LengthTexcoordStart" ) )	
+	if ( !_stricmp( szKey, "LengthTexcoordStart" ) )	
 	{ 
 		m_ShoreData.m_vecLengthTexcoord[0] = atof( szValue );
 	}
-	if ( !stricmp( szKey, "LengthTexcoordEnd" ) )	
+	if ( !_stricmp( szKey, "LengthTexcoordEnd" ) )	
 	{ 
 		m_ShoreData.m_vecLengthTexcoord[1] = atof( szValue );
 	}
-	if ( !stricmp( szKey, "WidthTexcoordStart" ) )	
+	if ( !_stricmp( szKey, "WidthTexcoordStart" ) )	
 	{ 
 		m_ShoreData.m_vecWidthTexcoord[0] = atof( szValue );
 	}
-	if ( !stricmp( szKey, "WidthTexcoordEnd" ) )	
+	if ( !_stricmp( szKey, "WidthTexcoordEnd" ) )	
 	{ 
 		m_ShoreData.m_vecWidthTexcoord[1] = atof( szValue );
 	}
 
 	// Width data.
-	if ( !stricmp( szKey, "Width1" ) )	
+	if ( !_stricmp( szKey, "Width1" ) )	
 	{ 
 		m_ShoreData.m_flWidths[0] = atof( szValue );
 	}
-	if ( !stricmp( szKey, "Width2" ) )	
+	if ( !_stricmp( szKey, "Width2" ) )	
 	{ 
 		m_ShoreData.m_flWidths[1] = atof( szValue );
 	}
 
 	// Debug data.
-	if ( !stricmp( szKey, "DebugDraw" ) )
+	if ( !_stricmp( szKey, "DebugDraw" ) )
 	{
 		m_bDebugDraw = true;
 		if ( atoi( szValue ) == 0 )
@@ -272,7 +272,7 @@ bool CMapOverlayTransition::BuildFaceCaches( void )
 			if ( pSideList )
 			{
 				// Check name.
-				if ( !stricmp( "sides" ,pSideList->GetKeyName() ) )
+				if ( !_stricmp( "sides" ,pSideList->GetKeyName() ) )
 				{
 					int nFaceCount = pSideList->GetFaceCount();
 					for ( int iFace = 0; iFace < nFaceCount; ++iFace )
@@ -280,7 +280,7 @@ bool CMapOverlayTransition::BuildFaceCaches( void )
 						m_aFaceCache1.AddToTail( pSideList->GetFace( iFace ) );
 					}
 				}
-				else if ( !stricmp( "sides2", pSideList->GetKeyName() ) )
+				else if ( !_stricmp( "sides2", pSideList->GetKeyName() ) )
 				{
 					int nFaceCount = pSideList->GetFaceCount();
 					for ( int iFace = 0; iFace < nFaceCount; ++iFace )

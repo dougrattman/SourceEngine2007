@@ -231,7 +231,7 @@ void COPTTextures::OnAddtexfile2()
 		
 		
 		if (AfxMessageBox("Add all subdirectories as separate Texture Groups?", MB_YESNO) == IDYES)
-		//if (!strcmpi("\\textures", &szPathName[strlen(szPathName) - strlen("\\textures")]))
+		//if (!_strcmpi("\\textures", &szPathName[strlen(szPathName) - strlen("\\textures")]))
 		{
 			char szNewPath[SOURCE_MAX_PATH];
 			strcpy(szNewPath, szPathName);

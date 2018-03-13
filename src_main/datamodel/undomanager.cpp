@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "undomanager.h"
 #include "datamodel.h"
@@ -51,7 +51,7 @@ void CUndoManager::Trace(const char *fmt, ...) {
   char str[2048];
   va_list argptr;
   va_start(argptr, fmt);
-  _vsnprintf(str, sizeof(str) - 1, fmt, argptr);
+  _vsnprintf_s(str, SOURCE_ARRAYSIZE(str) - 1, fmt, argptr);
   va_end(argptr);
   str[sizeof(str) - 1] = 0;
 

@@ -284,9 +284,6 @@ struct CPUInformation {
 // Query CPU information.
 SOURCE_TIER0_API const CPUInformation &GetCPUInformation();
 
-// Get current date.
-SOURCE_TIER0_API void GetCurrentDate(i32 *pDay, i32 *pMonth, i32 *pYear);
-
 // Thread related functions
 
 // Registers the current thread with Tier0's thread management system.

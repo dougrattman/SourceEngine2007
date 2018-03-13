@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_
 #define BASE_WINDOWS_INCLUDE_SCOPED_ERROR_MODE_H_
@@ -10,6 +10,7 @@ namespace source::windows {
 // Scoped error mode.
 class ScopedErrorMode {
  public:
+  // Set error mode |error_mode| in scope.
   explicit ScopedErrorMode(const UINT error_mode)
       : old_error_mode_{SetErrorMode(GetErrorMode() | error_mode)},
         new_error_mode_{GetErrorMode()} {}

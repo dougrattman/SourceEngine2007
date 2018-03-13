@@ -82,7 +82,7 @@ void CAutoSelComboBox::OnUpdateText(void)
 
 	bool bSearched = false;
 	int nIndex = CB_ERR;
-	if (strnicmp(szTypedText, m_szLastText, nTypedLen))
+	if (_strnicmp(szTypedText, m_szLastText, nTypedLen))
 	{
 		nIndex = FindString(-1, szTypedText);
 		bSearched = true;

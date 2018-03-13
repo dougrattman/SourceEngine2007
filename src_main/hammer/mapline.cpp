@@ -326,12 +326,12 @@ void CMapLine::OnParentKeyChanged( const char* key, const char* value )
 	CMapWorld *pWorld = (CMapWorld *)GetWorldObject(this);
 	if (pWorld != NULL)
 	{
-		if (stricmp(key, m_szStartValueKey) == 0)
+		if (_stricmp(key, m_szStartValueKey) == 0)
 		{
 			m_pStartEntity = (CMapEntity *)UpdateDependency(m_pStartEntity, pWorld->FindChildByKeyValue(m_szStartKey, value));
 			BuildLine();
 		}
-		else if (stricmp(key, m_szEndValueKey) == 0)
+		else if (_stricmp(key, m_szEndValueKey) == 0)
 		{
 			m_pEndEntity = (CMapEntity *)UpdateDependency(m_pEndEntity, pWorld->FindChildByKeyValue(m_szEndKey, value));
 			BuildLine();

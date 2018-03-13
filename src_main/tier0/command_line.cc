@@ -139,8 +139,8 @@ void CCommandLine::LoadParametersFromFile(const ch *&file_name_start,
   if (*file_name_start) file_name_start++;
 
   // Now read in parameters from file
-  FILE *file = fopen(file_name, "r");
-  if (file) {
+  FILE *file;
+  if (!fopen_s(&file, file_name, "r")) {
     i32 c = fgetc(file);
 
     while (c != EOF) {
@@ -300,11 +300,11 @@ void CCommandLine::AppendParm(const ch *param, const ch *value) {
 
   if (!command_line_) {
     command_line_ = new ch[param_length];
-    strcpy(command_line_, param);
+    strcpy_s(command_line_, param_length, param);
 
     if (value) {
-      strcat(command_line_, " ");
-      strcat(command_line_, value);
+      strcat_s(command_line_, param_length, " ");
+      strcat_s(command_line_, param_length, value);
     }
 
     ParseCommandLine();
@@ -319,13 +319,14 @@ void CCommandLine::AppendParm(const ch *param, const ch *value) {
   ch *command_line = new ch[param_length];
   memset(command_line, 0, param_length);
 
-  strcpy(command_line, command_line_);  // Copy old command line.
-  strcat(command_line, " ");            // Put in a space.
-  strcat(command_line, param);
+  strcpy_s(command_line, param_length,
+           command_line_);                    // Copy old command line.
+  strcat_s(command_line, param_length, " ");  // Put in a space.
+  strcat_s(command_line, param_length, param);
 
   if (value) {
-    strcat(command_line, " ");
-    strcat(command_line, value);
+    strcat_s(command_line, param_length, " ");
+    strcat_s(command_line, param_length, value);
   }
 
   // Kill off the old one

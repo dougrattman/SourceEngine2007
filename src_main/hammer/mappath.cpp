@@ -552,15 +552,15 @@ UNDONE: Nobody uses the path tool because the user interface is so poor.
 
 CChunkFileResult_t CMapPathNode::LoadKeyCallback(const char *szKey, const char *szValue, CMapPathNode *pNode)
 {
-	if (!stricmp(szKey, "origin"))
+	if (!_stricmp(szKey, "origin"))
 	{
 		CChunkFile::ReadKeyValueVector3(szValue, pNode->pos);
 	}
-	else if (!stricmp(szKey, "id"))
+	else if (!_stricmp(szKey, "id"))
 	{
 		CChunkFile::ReadKeyValueInt(szValue, &pNode->dwID);
 	}
-	else if (!stricmp(szKey, "name"))
+	else if (!_stricmp(szKey, "name"))
 	{
 		strcpy(pNode->szName, szValue);
 	}
@@ -636,15 +636,15 @@ ChunkFileResult_t CMapPathNode::SaveVMF(CChunkFile *pFile, CSaveInfo *pSaveInfo)
 //-----------------------------------------------------------------------------
 CChunkFileResult_t CMapPath::LoadKeyCallback(const char *szKey, const char *szValue, CMapPath *pPath)
 {
-	if (!stricmp(szKey, "name"))
+	if (!_stricmp(szKey, "name"))
 	{
 		pPath->SetName(szValue);
 	}
-	else if (!stricmp(szKey, "classname"))
+	else if (!_stricmp(szKey, "classname"))
 	{
 		pPath->SetClass(szValue);
 	}
-	else if (!stricmp(szKey, "direction"))
+	else if (!_stricmp(szKey, "direction"))
 	{
 		CChunkFile::ReadKeyValueInt(szValue, &pPath->m_iDirection);
 	}

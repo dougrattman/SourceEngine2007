@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef WCKEYVALUES_H
 #define WCKEYVALUES_H
@@ -62,8 +62,8 @@ void MDkeyvalue::Set(const char *pszKey, const char *pszValue) {
   Assert(pszKey);
   Assert(pszValue);
 
-  strcpy(szKey, pszKey);
-  strcpy(szValue, pszValue);
+  strcpy_s(szKey, pszKey);
+  strcpy_s(szValue, pszValue);
 }
 
 //-----------------------------------------------------------------------------

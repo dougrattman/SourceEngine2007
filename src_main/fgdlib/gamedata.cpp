@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved. ====
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved. ====
 
 #include "fgdlib/GameData.h"
 
@@ -117,7 +117,7 @@ bool GDError(TokenReader &tr, const char *error, ...) {
   char szBuf[128];
   va_list vl;
   va_start(vl, error);
-  vsprintf(szBuf, error, vl);
+  vsprintf_s(szBuf, error, vl);
   va_end(vl);
 
   if (g_pMsgFunc) {
@@ -452,14 +452,14 @@ GDclass *GameData::BeginInstanceRemap(const char *pszClassName,
   m_InstanceAngle = Angle;
   AngleMatrix(m_InstanceAngle, m_InstanceOrigin, m_InstanceMat);
 
-  strcpy(m_InstancePrefix, pszInstancePrefix);
+  strcpy_s(m_InstancePrefix, pszInstancePrefix);
 
   if (m_InstanceClass) {
     delete m_InstanceClass;
     m_InstanceClass = NULL;
   }
 
-  if (strcmpi(pszClassName, "info_overlay_accessor") ==
+  if (_strcmpi(pszClassName, "info_overlay_accessor") ==
       0) {  // yucky hack for a made up entity in the bsp process
     pszClassName = "info_overlay";
   }
@@ -514,7 +514,8 @@ static bool CUtlType_LessThan(const GDIV_TYPE &type1, const GDIV_TYPE &type2) {
 //			pszOutValue - the new value if changed
 //-----------------------------------------------------------------------------
 bool GameData::RemapKeyValue(const char *pszKey, const char *pszInValue,
-                             char *pszOutValue, TNameFixup NameFixup) {
+                             char *pszOutValue, size_t maxOutValueSize,
+                             TNameFixup NameFixup) {
   if (RemapOperation.Count() == 0) {
     RemapOperation.SetLessFunc(&CUtlType_LessThan);
     RemapOperation.Insert(ivAngle, REMAP_ANGLE);
@@ -540,21 +541,22 @@ bool GameData::RemapKeyValue(const char *pszKey, const char *pszInValue,
     return false;
   }
 
-  strcpy(pszOutValue, pszInValue);
+  strcpy_s(pszOutValue, maxOutValueSize, pszInValue);
 
   switch (RemapOperation[KVRemapIndex]) {
     case REMAP_NAME:
       if (KVType != ivInstanceVariable) {
-        RemapNameField(pszInValue, pszOutValue, NameFixup);
+        RemapNameField(pszInValue, pszOutValue, maxOutValueSize, NameFixup);
       }
       break;
 
     case REMAP_POSITION: {
       Vector inPoint(0.0f, 0.0f, 0.0f), outPoint;
 
-      sscanf(pszInValue, "%f %f %f", &inPoint.x, &inPoint.y, &inPoint.z);
+      sscanf_s(pszInValue, "%f %f %f", &inPoint.x, &inPoint.y, &inPoint.z);
       VectorTransform(inPoint, m_InstanceMat, outPoint);
-      sprintf(pszOutValue, "%g %g %g", outPoint.x, outPoint.y, outPoint.z);
+      sprintf_s(pszOutValue, maxOutValueSize, "%g %g %g", outPoint.x,
+                outPoint.y, outPoint.z);
     } break;
 
     case REMAP_ANGLE:
@@ -563,13 +565,14 @@ bool GameData::RemapKeyValue(const char *pszKey, const char *pszInValue,
         QAngle inAngles(0.0f, 0.0f, 0.0f), outAngles;
         matrix3x4_t angToWorld, localMatrix;
 
-        sscanf(pszInValue, "%f %f %f", &inAngles.x, &inAngles.y, &inAngles.z);
+        sscanf_s(pszInValue, "%f %f %f", &inAngles.x, &inAngles.y, &inAngles.z);
 
         AngleMatrix(inAngles, angToWorld);
         MatrixMultiply(m_InstanceMat, angToWorld, localMatrix);
         MatrixAngles(localMatrix, outAngles);
 
-        sprintf(pszOutValue, "%g %g %g", outAngles.x, outAngles.y, outAngles.z);
+        sprintf_s(pszOutValue, maxOutValueSize, "%g %g %g", outAngles.x,
+                  outAngles.y, outAngles.z);
       }
       break;
 
@@ -579,19 +582,20 @@ bool GameData::RemapKeyValue(const char *pszKey, const char *pszInValue,
         QAngle inAngles(0.0f, 0.0f, 0.0f), outAngles;
         matrix3x4_t angToWorld, localMatrix;
 
-        sscanf(pszInValue, "%f", &inAngles.x);  // just the pitch
+        sscanf_s(pszInValue, "%f", &inAngles.x);  // just the pitch
         inAngles.x = -inAngles.x;
 
         AngleMatrix(inAngles, angToWorld);
         MatrixMultiply(m_InstanceMat, angToWorld, localMatrix);
         MatrixAngles(localMatrix, outAngles);
 
-        sprintf(pszOutValue, "%g", -outAngles.x);  // just the pitch
+        sprintf_s(pszOutValue, maxOutValueSize, "%g",
+                  -outAngles.x);  // just the pitch
       }
       break;
   }
 
-  return (strcmpi(pszInValue, pszOutValue) != 0);
+  return _strcmpi(pszInValue, pszOutValue) != 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -603,24 +607,26 @@ bool GameData::RemapKeyValue(const char *pszKey, const char *pszInValue,
 //			pszOutValue - the new value if changed
 //-----------------------------------------------------------------------------
 bool GameData::RemapNameField(const char *pszInValue, char *pszOutValue,
-                              TNameFixup NameFixup) {
-  strcpy(pszOutValue, pszInValue);
+                              size_t maxOutValueSize, TNameFixup NameFixup) {
+  strcpy_s(pszOutValue, maxOutValueSize, pszInValue);
 
   if (pszInValue[0] &&
       pszInValue[0] != '@') {  // ! at the start of a value means it is global
                                // and should not be remaped
     switch (NameFixup) {
       case NAME_FIXUP_PREFIX:
-        sprintf(pszOutValue, "%s-%s", m_InstancePrefix, pszInValue);
+        sprintf_s(pszOutValue, maxOutValueSize, "%s-%s", m_InstancePrefix,
+                  pszInValue);
         break;
 
       case NAME_FIXUP_POSTFIX:
-        sprintf(pszOutValue, "%s-%s", pszInValue, m_InstancePrefix);
+        sprintf_s(pszOutValue, maxOutValueSize, "%s-%s", pszInValue,
+                  m_InstancePrefix);
         break;
     }
   }
 
-  return (strcmpi(pszInValue, pszOutValue) != 0);
+  return _strcmpi(pszInValue, pszOutValue) != 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -641,7 +647,7 @@ bool GameData::LoadFGDMaterialExclusions(TokenReader &tr) {
     } else if (GDGetToken(tr, szToken, sizeof(szToken), STRING)) {
       // Make sure we haven't loaded this from another FGD
       for (int i = 0; i < m_FGDMaterialExclusions.Count(); i++) {
-        if (!stricmp(szToken, m_FGDMaterialExclusions[i].szDirectory)) {
+        if (!_stricmp(szToken, m_FGDMaterialExclusions[i].szDirectory)) {
           bMatchFound = true;
           break;
         }
@@ -751,5 +757,4 @@ bool GameData::LoadFGDAutoVisGroups(TokenReader &tr) {
   return (FALSE);
 }
 
- 
 #include "tier0/include/memdbgoff.h"

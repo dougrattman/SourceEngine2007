@@ -190,7 +190,7 @@ bool AddMacroToStack(char *macroname) {
 
   int i;
   for (i = 0; i < nummacros; i++) {
-    if (strcmpi(macrolist[i]->filename, &macroname[1]) == 0) {
+    if (_strcmpi(macrolist[i]->filename, &macroname[1]) == 0) {
       break;
     }
   }
@@ -256,7 +256,7 @@ bool ExpandMacroToken(char *&token_p) {
     // lookup macro parameter
     int index = 0;
     for (index = 0; index < script->nummacroparams; index++) {
-      if (stricmp(script->macroparam[index], tp) == 0) break;
+      if (_stricmp(script->macroparam[index], tp) == 0) break;
     }
     if (index >= script->nummacroparams) {
       Error("unknown macro token \"%s\" in %s\n", tp, script->filename);
@@ -488,15 +488,15 @@ skipspace:
   *token_p = 0;
 
   // check for other commands
-  if (!stricmp(token, "$include")) {
+  if (!_stricmp(token, "$include")) {
     GetToken(false);
     AddScriptToStack(token);
     return GetToken(crossline);
-  } else if (!stricmp(token, "$definemacro")) {
+  } else if (!_stricmp(token, "$definemacro")) {
     GetToken(false);
     DefineMacro(token);
     return GetToken(crossline);
-  } else if (!stricmp(token, "$definevariable")) {
+  } else if (!_stricmp(token, "$definevariable")) {
     GetToken(false);
     DefineVariable(token);
     return GetToken(crossline);
@@ -591,7 +591,7 @@ skipspace:
 
   *token_p = 0;
 
-  if (!stricmp(token, "$include")) {
+  if (!_stricmp(token, "$include")) {
     GetToken(false);
     AddScriptToStack(token);
     return GetToken(crossline);
@@ -871,9 +871,9 @@ int CScriptLib::GetFileList(const char *pDirPath, const char *pPattern,
       if (findData.attrib & _A_SUBDIR) continue;
     }
 
-    if (!stricmp(findData.name, ".")) continue;
+    if (!_stricmp(findData.name, ".")) continue;
 
-    if (!stricmp(findData.name, "..")) continue;
+    if (!_stricmp(findData.name, "..")) continue;
 
     char fileName[SOURCE_MAX_PATH];
     strcpy(fileName, sourcePath);

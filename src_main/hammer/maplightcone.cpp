@@ -459,11 +459,11 @@ void CMapLightCone::OnParentKeyChanged(const char *szKey, const char *szValue)
 {
 	bool bRebuild = true;
 
-	if (!stricmp(szKey, "angles"))
+	if (!_stricmp(szKey, "angles"))
 	{
 		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 	}
-	else if (!stricmp(szKey, m_szColorKeyName))
+	else if (!_stricmp(szKey, m_szColorKeyName))
 	{
 		int nRed;
 		int nGreen;
@@ -476,51 +476,51 @@ void CMapLightCone::OnParentKeyChanged(const char *szKey, const char *szValue)
 		b = m_LightColor.z = nBlue;
 		m_fBrightness = nBrightness;
 	}
-	else if (!stricmp(szKey, "pitch"))
+	else if (!_stricmp(szKey, "pitch"))
 	{
 		// Pitch
 		m_bPitchSet = true;
 		m_fPitch = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_constant_attn"))
+	else if (!_stricmp(szKey, "_constant_attn"))
 	{
 		// Constant attenuation
 		m_fConstantAttn = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_linear_attn"))
+	else if (!_stricmp(szKey, "_linear_attn"))
 	{
 		// Linear attenuation
 		m_fLinearAttn = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_quadratic_attn"))
+	else if (!_stricmp(szKey, "_quadratic_attn"))
 	{
 		// Quadratic attenuation
 		m_fQuadraticAttn = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_exponent"))
+	else if (!_stricmp(szKey, "_exponent"))
 	{
 		// Focus
 		m_fFocus = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_fifty_percent_distance"))
+	else if (!_stricmp(szKey, "_fifty_percent_distance"))
 	{
 		// Focus
 		m_fFiftyPercentDistance = atof(szValue);
 	}
-	else if (!stricmp(szKey, "_zero_percent_distance"))
+	else if (!_stricmp(szKey, "_zero_percent_distance"))
 	{
 		// Focus
 		m_fZeroPercentDistance = atof(szValue);
 	}
-	else if (!stricmp(szKey, m_szInnerConeKeyName) || !stricmp(szKey, m_szOuterConeKeyName))
+	else if (!_stricmp(szKey, m_szInnerConeKeyName) || !_stricmp(szKey, m_szOuterConeKeyName))
 	{
 		// check both of these together since they might be the same key.
-		if( !stricmp(szKey, m_szInnerConeKeyName ))
+		if( !_stricmp(szKey, m_szInnerConeKeyName ))
 		{
 			// Inner Cone angle
 			m_fInnerConeAngle = atof(szValue);
 		}
-		if( !stricmp(szKey, m_szOuterConeKeyName ))
+		if( !_stricmp(szKey, m_szOuterConeKeyName ))
 		{
 			// Outer Cone angle
 			m_fOuterConeAngle = atof(szValue);

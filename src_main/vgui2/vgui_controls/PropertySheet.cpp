@@ -993,7 +993,7 @@ void PropertySheet::SetPageEnabled(const char *title, bool state)
 		{
 			char tmp[50];
 			m_PageTabs[i]->GetText(tmp,50);
-			if (!strnicmp(title,tmp,strlen(tmp)))
+			if (!_strnicmp(title,tmp,strlen(tmp)))
 			{	
 				m_PageTabs[i]->SetEnabled(state);
 			}
@@ -1295,7 +1295,7 @@ void PropertySheet::OnTextChanged(Panel *panel,const wchar_t *wszText)
 void PropertySheet::OnCommand(const char *command)
 {
     // propogate the close command to our parent
-	if (!stricmp(command, "Close") && GetVParent())
+	if (!_stricmp(command, "Close") && GetVParent())
     {
 		CallParentFunction(new KeyValues("Command", "command", command));
     }

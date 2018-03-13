@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -42,7 +42,7 @@ using namespace vgui;
 // Purpose: returns a pointer to the 'count' occurence of a character from the
 // end of a string
 //			returns 0 of there aren't 'count' number of the
-//character in the string
+// character in the string
 //-----------------------------------------------------------------------------
 char *strrchrcount(char *string, int character, int count) {
   int j = count;
@@ -242,13 +242,14 @@ void CBrowseButton::SetActionMessage() {
   SetCommand(newActionMessage);
 }
 
-const char *ParseKeyvalue(const char *pBuffer, char *key, char *value) {
+static const char *ParseKeyvalue(const char *pBuffer, char *key,
+                                 size_t key_size, char *value) {
   char com_token[1024];
 
   pBuffer = (const char *)ParseFile(pBuffer, com_token, NULL);
   if (Q_strlen(com_token) < MAX_KEYVALUE) {
     Q_strncpy(key, com_token, MAX_KEYVALUE);
-    Q_strlower(key);
+    Q_strlower(key, key_size);
   }
   // no value on a close brace
   if (!Q_strcmp(key, "}")) {
@@ -259,7 +260,7 @@ const char *ParseKeyvalue(const char *pBuffer, char *key, char *value) {
   pBuffer = (const char *)ParseFile(pBuffer, com_token, NULL);
   if (Q_strlen(com_token) < MAX_KEYVALUE) {
     Q_strncpy(value, com_token, MAX_KEYVALUE);
-    Q_strlower(value);
+    Q_strlower(value, key_size);
   }
 
   return pBuffer;
@@ -318,7 +319,9 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
     // hl2 directory 		that contains the file.  It potentially needs to
     // search the entire drive or prompt for the location
     char *pszEndGamePath = Q_strrchr(szGamePath, '\\');
-    Q_strcpy(pszEndGamePath, "\\hl2");
+    Q_strcpy(pszEndGamePath,
+             SOURCE_ARRAYSIZE(szGamePath) - (pszEndGamePath - szGamePath),
+             "\\hl2");
     sprintf(szSearchPath, "%s%s", szGamePath, pSurfacePropFilename);
     fp = g_pFullFileSystem->Open(szSearchPath, "rb");
   }
@@ -335,13 +338,13 @@ CQCGenerator::CQCGenerator(vgui::Panel *pParent, const char *pszPath,
 
   // filling up the surface property dropdown
   while (szSurfacePropContents) {
-    szSurfacePropContents = ParseKeyvalue(szSurfacePropContents, key, value);
+    szSurfacePropContents =
+        ParseKeyvalue(szSurfacePropContents, key, SOURCE_ARRAYSIZE(key), value);
     ((ComboBox *)pSurfacePropDropDown)->AddItem(key, NULL);
     while (szSurfacePropContents) {
-      szSurfacePropContents = ParseKeyvalue(szSurfacePropContents, key, value);
-      if (!stricmp(key, "}")) {
-        break;
-      }
+      szSurfacePropContents = ParseKeyvalue(szSurfacePropContents, key,
+                                            SOURCE_ARRAYSIZE(key), value);
+      if (!_stricmp(key, "}")) break;
     }
   }
   m_QCInfo_t.SyncToControls();

@@ -177,7 +177,7 @@ void CTestScriptMgr::CheckPoint(const char *pName) {
   if (!IsInitted() || IsTimerWaiting()) return;
 
   if (testscript_debug.GetInt()) {
-    if (stricmp(pName, "frame_end") != 0) {
+    if (_stricmp(pName, "frame_end") != 0) {
       Msg("TESTSCRIPT: CheckPoint -> '%s'.\n", pName);
     }
   }
@@ -337,7 +337,7 @@ void CTestScriptMgr::ErrorIfNotInitted() {
 void CTestScriptMgr::SetWaitCheckPoint(const char *pCheckPointName,
                                        bool bOnce) {
   if (testscript_debug.GetInt()) {
-    if (stricmp(pCheckPointName, "frame_end") != 0) {
+    if (_stricmp(pCheckPointName, "frame_end") != 0) {
       Msg("TESTSCRIPT: waiting for checkpoint '%s'%s\n", pCheckPointName,
           bOnce ? " (once)." : ".");
     }

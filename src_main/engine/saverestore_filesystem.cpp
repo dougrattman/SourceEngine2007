@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Filesystem abstraction for CSaveRestore - allows for storing temp
 // save files either in memory or on disk.
@@ -737,9 +737,10 @@ void CSaveRestoreFileSystem::DirectoryCopy(const char *pPath,
       if (fileSize) {
         Assert(Q_strlen(pName) <= SOURCE_MAX_PATH);
 
-        g_pFileSystem->AsyncAppend(pDestFileName,
-                                   memcpy(new char[SOURCE_MAX_PATH], pName, SOURCE_MAX_PATH),
-                                   SOURCE_MAX_PATH, true);
+        g_pFileSystem->AsyncAppend(
+            pDestFileName,
+            memcpy(new char[SOURCE_MAX_PATH], pName, SOURCE_MAX_PATH),
+            SOURCE_MAX_PATH, true);
         g_pFileSystem->AsyncAppend(pDestFileName, new int(fileSize),
                                    sizeof(int), true);
 
@@ -964,8 +965,8 @@ CON_COMMAND(dump_x360_saves, "Dump X360 save games to disk") {
 
   char szInName[SOURCE_MAX_PATH];        // Read path from the container
   char szOutName[SOURCE_MAX_PATH];       // Output path to the disk
-  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories or
-                                  // extensions
+  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories
+                                         // or extensions
   FileFindHandle_t findHandle;
 
   char szSearchPath[SOURCE_MAX_PATH];
@@ -1011,8 +1012,8 @@ CON_COMMAND(dump_x360_cfg, "Dump X360 config files to disk") {
 
   char szInName[SOURCE_MAX_PATH];        // Read path from the container
   char szOutName[SOURCE_MAX_PATH];       // Output path to the disk
-  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories or
-                                  // extensions
+  char szFileNameBase[SOURCE_MAX_PATH];  // Name of the file minus directories
+                                         // or extensions
   FileFindHandle_t findHandle;
 
   char szSearchPath[SOURCE_MAX_PATH];
@@ -1208,7 +1209,9 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
         SaveMsg("DirectoryCopy: AsyncAppend %s, %s\n", szName, pDestFileName);
         g_pFileSystem->AsyncAppend(
             pDestFileName,
-            memcpy(new char[SOURCE_MAX_PATH], list[i].szFileName, SOURCE_MAX_PATH), SOURCE_MAX_PATH,
+            memcpy(new char[SOURCE_MAX_PATH], list[i].szFileName,
+                   SOURCE_MAX_PATH),
+            SOURCE_MAX_PATH,
             true);  // Filename can only be as long as a map name + extension
         g_pFileSystem->AsyncAppend(pDestFileName, new int(fileSize),
                                    sizeof(int), true);
@@ -1228,7 +1231,8 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
 
     for (int i = 0; i < fileCount && success; i++) {
       // Filename can only be as long as a map name + extension
-      if (g_pSaveRestoreFileSystem->Read(fileName, SOURCE_MAX_PATH, pFile) != SOURCE_MAX_PATH)
+      if (g_pSaveRestoreFileSystem->Read(fileName, SOURCE_MAX_PATH, pFile) !=
+          SOURCE_MAX_PATH)
         return false;
 
       if (g_pSaveRestoreFileSystem->Read(&fileSize, sizeof(int), pFile) !=

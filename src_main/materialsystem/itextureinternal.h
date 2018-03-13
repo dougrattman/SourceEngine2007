@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef ITEXTUREINTERNAL_H
 #define ITEXTUREINTERNAL_H
@@ -129,7 +129,7 @@ inline char *NormalizeTextureName(const char *pName, char *pOutName,
     Q_strncpy(pOutName, pName, nOutNameSize);
   }
 
-  Q_strlower(pOutName);
+  Q_strlower(pOutName, nOutNameSize);
   Q_FixSlashes(pOutName, '/');
 
   return pOutName;

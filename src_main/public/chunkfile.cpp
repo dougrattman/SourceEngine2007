@@ -126,7 +126,7 @@ ChunkHandler_t CChunkHandlerMap::GetHandler(const char *pszChunkName,
                                             void **ppData) {
   ChunkHandlerInfoNode_t *pNode = m_pHandlers;
   while (pNode != NULL) {
-    if (!stricmp(pNode->Handler.szChunkName, pszChunkName)) {
+    if (!_stricmp(pNode->Handler.szChunkName, pszChunkName)) {
       *ppData = pNode->Handler.pData;
       return (pNode->Handler.pfnHandler);
     }
@@ -420,7 +420,7 @@ ChunkFileResult_t CChunkFile::ReadNext(char *szName, char *szValue,
 
         switch (eNextTokenType) {
           case OPERATOR: {
-            if (!stricmp(szNext, "{")) {
+            if (!_stricmp(szNext, "{")) {
               // Beginning of new chunk.
               m_nCurrentDepth++;
               eChunkType = ChunkType_Chunk;
@@ -454,7 +454,7 @@ ChunkFileResult_t CChunkFile::ReadNext(char *szName, char *szValue,
       }
 
       case OPERATOR: {
-        if (!stricmp(szName, "}")) {
+        if (!_stricmp(szName, "}")) {
           // End of current chunk.
           m_nCurrentDepth--;
           return (ChunkFile_EndOfChunk);

@@ -17,21 +17,21 @@ int g_nMapFileVersion;
 //-----------------------------------------------------------------------------
 ChunkFileResult_t LoadEntityKeyCallback(const char *szKey, const char *szValue,
                                         LoadEntity_t *pLoadEntity) {
-  if (!stricmp(szKey, "classname")) {
-    if (!stricmp(szValue, "func_detail")) {
+  if (!_stricmp(szKey, "classname")) {
+    if (!_stricmp(szValue, "func_detail")) {
       pLoadEntity->nBaseContents = CONTENTS_DETAIL;
-    } else if (!stricmp(szValue, "func_ladder")) {
+    } else if (!_stricmp(szValue, "func_ladder")) {
       pLoadEntity->nBaseContents = CONTENTS_LADDER;
-    } else if (!stricmp(szValue, "func_water")) {
+    } else if (!_stricmp(szValue, "func_water")) {
       pLoadEntity->nBaseContents = CONTENTS_WATER;
     }
-  } else if (!stricmp(szKey, "id")) {
+  } else if (!_stricmp(szKey, "id")) {
     // UNDONE: flag entity errors by ID instead of index
     // g_MapError.EntityState( atoi( szValue ) );
     // rename this field since DME code uses this name
     SetKeyValue(pLoadEntity->pEntity, "hammerid", szValue);
     return (ChunkFile_Ok);
-  } else if (!stricmp(szKey, "mapversion")) {
+  } else if (!_stricmp(szKey, "mapversion")) {
     // .vmf map revision number
     g_MapRevision = atoi(szValue);
     SetKeyValue(pLoadEntity->pEntity, szKey, szValue);

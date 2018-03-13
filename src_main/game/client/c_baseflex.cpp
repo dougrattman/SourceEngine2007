@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -18,7 +18,6 @@
 #include "toolframework_client.h"
 #include "tools/bonelist.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 bool UseHWMorphVCDs();
@@ -74,10 +73,9 @@ BEGIN_PREDICTION_DATA(C_BaseFlex)
 
 END_PREDICTION_DATA()
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-bool GetHWMExpressionFileName(const char *pFilename, char *pHWMFilename) {
+#if defined(TF_CLIENT_DLL)
+static bool GetHWMExpressionFileName(const char *pFilename, char *pHWMFilename,
+                                     size_t hwm_file_name_size) {
   // Are we even using hardware morph?
   if (!UseHWMorphVCDs()) return false;
 
@@ -87,7 +85,7 @@ bool GetHWMExpressionFileName(const char *pFilename, char *pHWMFilename) {
   // Check to see if we already have an player/hwm/* filename.
   if ((V_strstr(pFilename, "player/hwm") != NULL) ||
       (V_strstr(pFilename, "player\\hwm") != NULL)) {
-    V_strcpy(pHWMFilename, pFilename);
+    V_strcpy(pHWMFilename, hwm_file_name_size, pFilename);
     return true;
   }
 
@@ -114,6 +112,7 @@ bool GetHWMExpressionFileName(const char *pFilename, char *pHWMFilename) {
   V_strcpy(pHWMFilename, szExpressionHWM);
   return true;
 }
+#endif
 
 C_BaseFlex::C_BaseFlex()
     : m_iv_viewtarget("C_BaseFlex::m_iv_viewtarget"),
@@ -401,7 +400,8 @@ class CFlexSceneFileManager : CAutoGameSystem {
 
 #if defined(TF_CLIENT_DLL)
     char szHWMFilename[SOURCE_MAX_PATH];
-    if (GetHWMExpressionFileName(szFilename, szHWMFilename)) {
+    if (GetHWMExpressionFileName(szFilename, szHWMFilename,
+                                 SOURCE_ARRAYSIZE(szHWMFilename))) {
       V_strcpy(szFilename, szHWMFilename);
     }
 #endif
@@ -1028,7 +1028,8 @@ void C_BaseFlex::SetupWeights(const matrix3x4_t *pBoneToWorld,
 
   memset(g_flexweight, 0, sizeof(g_flexweight));
 
-  // TODO(d.rattman): this should assert then, it's too complex a class for the model
+  // TODO(d.rattman): this should assert then, it's too complex a class for the
+  // model
   if (hdr->numflexcontrollers() == 0) {
     int nSizeInBytes = nFlexWeightCount * sizeof(float);
     memset(pFlexWeights, 0, nSizeInBytes);
@@ -1472,7 +1473,8 @@ void C_BaseFlex::ProcessSceneEvents(bool bFlexEvents) {
     CSceneEventInfo *info = &m_SceneEvents[i];
     Assert(info);
 
-    // TODO(d.rattman):  Need a safe handle to m_pEvent in case of memory deletion?
+    // TODO(d.rattman):  Need a safe handle to m_pEvent in case of memory
+    // deletion?
     CChoreoEvent *event = info->m_pEvent;
     Assert(event);
 

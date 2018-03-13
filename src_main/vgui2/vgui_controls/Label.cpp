@@ -747,7 +747,7 @@ TextImage *Label::GetTextImage()
 //-----------------------------------------------------------------------------
 bool Label::RequestInfo(KeyValues *outputData)
 {
-	if (!stricmp(outputData->GetName(), "GetText"))
+	if (!_stricmp(outputData->GetName(), "GetText"))
 	{
 		wchar_t wbuf[256];
 		_textImage->GetText(wbuf, 255);
@@ -1019,7 +1019,7 @@ void Label::GetSettings( KeyValues *outResourceData )
 	// label settings
 	char buf[256];
 	_textImage->GetUnlocalizedText( buf, 255 );
-	if (!strnicmp(buf, "#var_", 5))
+	if (!_strnicmp(buf, "#var_", 5))
 	{
 		// strip off the variable prepender on save
 		outResourceData->SetString( "labelText", buf + 5 );
@@ -1094,39 +1094,39 @@ void Label::ApplySettings( KeyValues *inResourceData )
 	const char *alignmentString = inResourceData->GetString( "textAlignment", "" );
 	int align = -1;
 
-	if ( !stricmp(alignmentString, "north-west") )
+	if ( !_stricmp(alignmentString, "north-west") )
 	{
 		align = a_northwest;
 	}
-	else if ( !stricmp(alignmentString, "north") )
+	else if ( !_stricmp(alignmentString, "north") )
 	{
 		align = a_north;
 	}
-	else if ( !stricmp(alignmentString, "north-east") )
+	else if ( !_stricmp(alignmentString, "north-east") )
 	{
 		align = a_northeast;
 	}
-	else if ( !stricmp(alignmentString, "west") )
+	else if ( !_stricmp(alignmentString, "west") )
 	{
 		align = a_west;
 	}
-	else if ( !stricmp(alignmentString, "center") )
+	else if ( !_stricmp(alignmentString, "center") )
 	{
 		align = a_center;
 	}
-	else if ( !stricmp(alignmentString, "east") )
+	else if ( !_stricmp(alignmentString, "east") )
 	{
 		align = a_east;
 	}
-	else if ( !stricmp(alignmentString, "south-west") )
+	else if ( !_stricmp(alignmentString, "south-west") )
 	{
 		align = a_southwest;
 	}
-	else if ( !stricmp(alignmentString, "south") )
+	else if ( !_stricmp(alignmentString, "south") )
 	{
 		align = a_south;
 	}
-	else if ( !stricmp(alignmentString, "south-east") )
+	else if ( !_stricmp(alignmentString, "south-east") )
 	{
 		align = a_southeast;
 	}

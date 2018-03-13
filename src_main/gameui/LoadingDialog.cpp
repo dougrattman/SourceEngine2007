@@ -509,13 +509,13 @@ void CLoadingDialog::OnClose() {
 // Purpose: command handler
 //-----------------------------------------------------------------------------
 void CLoadingDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "Cancel")) {
+  if (!_stricmp(command, "Cancel")) {
     // disconnect from the server
     engine->ClientCmd_Unrestricted("disconnect\n");
 
     // close
     Close();
-  } else if (!stricmp(command, "Login")) {
+  } else if (!_stricmp(command, "Login")) {
     GameUI().RefreshSteamLogin();
 
     // close

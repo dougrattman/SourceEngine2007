@@ -129,7 +129,7 @@ void CContentControlDialog::Explain(char const *fmt, ...) {
 // Input  : *command -
 //-----------------------------------------------------------------------------
 void CContentControlDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "Ok")) {
+  if (!_stricmp(command, "Ok")) {
     bool canclose = false;
 
     char pw1[256];
@@ -141,7 +141,7 @@ void CContentControlDialog::OnCommand(const char *command) {
     // Get text and check
     //        bool enabled = PasswordEnabled(); //( m_szGorePW[0]!=0 ) ? true :
     //        false;
-    //		bool pwMatch = stricmp( pw1, pw2 ) == 0 ? true : false;
+    //		bool pwMatch = _stricmp( pw1, pw2 ) == 0 ? true : false;
 
     if (IsPasswordEnabledInDialog()) {
       canclose = DisablePassword(pw1);
@@ -156,7 +156,7 @@ void CContentControlDialog::OnCommand(const char *command) {
     if (canclose) {
       OnClose();
     }
-  } else if (!stricmp(command, "Cancel")) {
+  } else if (!_stricmp(command, "Cancel")) {
     OnClose();
   } else {
     BaseClass::OnCommand(command);
@@ -282,7 +282,7 @@ bool CContentControlDialog::EnablePassword(const char *newPW) {
               }
               else
               {
-                      if ( stricmp( oldPW, digestedPW ) )
+                      if ( _stricmp( oldPW, digestedPW ) )
                       {
                               // Warn that password is invalid
                               Explain( "#GameUI_IncorrectPassword" );
@@ -305,7 +305,7 @@ bool CContentControlDialog::DisablePassword(const char *oldPW) {
   char digestedPW[128];
   HashPassword(oldPW, digestedPW, sizeof(digestedPW));
 
-  if (stricmp(m_szGorePW, digestedPW)) {
+  if (_stricmp(m_szGorePW, digestedPW)) {
     Explain("#GameUI_IncorrectPassword");
     return false;
   }

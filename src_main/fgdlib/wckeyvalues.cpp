@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "fgdlib/WCKeyValues.h"
 
@@ -122,7 +122,7 @@ void WCKeyValuesT<Base>::RemoveKey(const char *pszKey) {
 template <class Base>
 void WCKeyValuesT<Base>::SetValue(const char *pszKey, int iValue) {
   char szValue[100];
-  itoa(iValue, szValue, 10);
+  _itoa_s(iValue, szValue, 10);
 
   SetValue(pszKey, szValue);
 }

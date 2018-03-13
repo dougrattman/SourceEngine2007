@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "sceneimage.h"
 
@@ -13,7 +13,6 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlvector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CSceneImage : public ISceneImage {
@@ -36,7 +35,6 @@ struct SceneFile_t {
   CUtlVector<short> soundList;
 };
 CUtlVector<SceneFile_t> g_SceneFiles;
-
 
 // Helper for parsing scene data file
 
@@ -144,7 +142,6 @@ class CChoreoStringPool : public IChoreoStringPool {
 };
 CChoreoStringPool g_ChoreoStringPool;
 
-
 // Helper for crawling events to determine sounds
 
 void FindSoundsInEvent(CChoreoEvent *pEvent, CUtlVector<short> &soundList) {
@@ -166,7 +163,6 @@ void FindSoundsInEvent(CChoreoEvent *pEvent, CUtlVector<short> &soundList) {
     }
   }
 }
-
 
 // Create binary compiled version of VCD. Stores to a dictionary for later
 // post processing
@@ -236,7 +232,6 @@ class CSceneImageEntryLessFunc {
   }
 };
 
-
 // A Scene image file contains all the compiled .XCD
 
 bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
@@ -252,7 +247,9 @@ bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
   char searchPaths[512];
   g_pFullFileSystem->GetSearchPath("GAME", false, searchPaths,
                                    sizeof(searchPaths));
-  char *pPath = strtok(searchPaths, ";");
+  char *nextPath;
+
+  char *pPath = strtok_s(searchPaths, ";", &nextPath);
   while (pPath) {
     int currentCount = vcdFileList.Count();
 
@@ -264,7 +261,7 @@ bool CSceneImage::CreateSceneImageFile(CUtlBuffer &targetBuffer,
     Msg("Scenes: Searching '%s' - Found %d scenes.\n", szPath,
         vcdFileList.Count() - currentCount);
 
-    pPath = strtok(NULL, ";");
+    pPath = strtok_s(NULL, ";", &nextPath);
   }
 
   if (!vcdFileList.Count()) {

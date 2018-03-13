@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "bitmap/float_bm.h"
 
@@ -567,9 +567,9 @@ void FloatBitMap_t::Poisson(FloatBitMap_t *deltas[4], int n_iters,
                           Alpha(x * 2 + xi, y * 2 + yi));
             }
     char fname[80];
-    sprintf(fname, "sub%dx%d.tga", tmp->Width, tmp->Height);
+    sprintf_s(fname, "sub%dx%d.tga", tmp->Width, tmp->Height);
     tmp->WriteTGAFile(fname);
-    sprintf(fname, "submrg%dx%d.tga", tmp->Width, tmp->Height);
+    sprintf_s(fname, "submrg%dx%d.tga", tmp->Width, tmp->Height);
     WriteTGAFile(fname);
     delete tmp;
     for (int i = 0; i < NDELTAS; i++) delete lowdeltas[i];

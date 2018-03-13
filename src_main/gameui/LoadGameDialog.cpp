@@ -46,7 +46,7 @@ CLoadGameDialog::~CLoadGameDialog() {}
 // Purpose:
 //-----------------------------------------------------------------------------
 void CLoadGameDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "loadsave")) {
+  if (!_stricmp(command, "loadsave")) {
     int saveIndex = GetSelectedItemSaveIndex();
     if (m_SaveGames.IsValidIndex(saveIndex)) {
       const char *shortName = m_SaveGames[saveIndex].szShortName;
@@ -61,7 +61,7 @@ void CLoadGameDialog::OnCommand(const char *command) {
         OnClose();
       }
     }
-  } else if (!stricmp(command, "Delete")) {
+  } else if (!_stricmp(command, "Delete")) {
     int saveIndex = GetSelectedItemSaveIndex();
     if (m_SaveGames.IsValidIndex(saveIndex)) {
       // confirm the deletion
@@ -72,7 +72,7 @@ void CLoadGameDialog::OnCommand(const char *command) {
       box->SetOKCommand(new KeyValues("Command", "command", "DeleteConfirmed"));
       box->DoModal();
     }
-  } else if (!stricmp(command, "DeleteConfirmed")) {
+  } else if (!_stricmp(command, "DeleteConfirmed")) {
     int saveIndex = GetSelectedItemSaveIndex();
     if (m_SaveGames.IsValidIndex(saveIndex)) {
       DeleteSaveGame(m_SaveGames[saveIndex].szFileName);

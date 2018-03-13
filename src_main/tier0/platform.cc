@@ -99,18 +99,6 @@ u64 Plat_PerformanceFrequency() {
   return 1;
 }
 
-void GetCurrentDate(i32 *pDay, i32 *pMonth, i32 *pYear) {
-  struct tm *pNewTime;
-  time_t long_time;
-
-  time(&long_time);                 /* Get time as long integer. */
-  pNewTime = localtime(&long_time); /* Convert to local time. */
-
-  *pDay = pNewTime->tm_mday;
-  *pMonth = pNewTime->tm_mon + 1;
-  *pYear = pNewTime->tm_year + 1900;
-}
-
 bool vtune(bool resume) {
   static bool bInitialized = false;
   static void(__cdecl * VTResume)(void) = nullptr;

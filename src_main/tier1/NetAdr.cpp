@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/netadr.h"
 
@@ -12,7 +12,6 @@ typedef int socklen_t;
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -187,7 +186,7 @@ void netadr_t::SetFromString(const char *pch, bool bUseDNS) {
 
   if (pch[0] >= '0' && pch[0] <= '9' && strchr(pch, '.')) {
     int n1, n2, n3, n4, n5;
-    int nRes = sscanf(pch, "%d.%d.%d.%d:%d", &n1, &n2, &n3, &n4, &n5);
+    int nRes = sscanf_s(pch, "%d.%d.%d.%d:%d", &n1, &n2, &n3, &n4, &n5);
     if (nRes >= 4) {
       SetIP(n1, n2, n3, n4);
     }

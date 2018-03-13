@@ -84,7 +84,9 @@ class GDinputvariable {
 
   inline void GetDefault(int *pnStore) { pnStore[0] = m_nDefault; }
 
-  inline void GetDefault(char *pszStore) { strcpy(pszStore, m_szDefault); }
+  inline void GetDefault(char *pszStore, size_t maxSize) {
+    strcpy_s(pszStore, maxSize, m_szDefault);
+  }
 
   GDIV_TYPE GetTypeFromToken(const char *pszToken);
   trtoken_t GetStoreAsFromType(GDIV_TYPE eType);

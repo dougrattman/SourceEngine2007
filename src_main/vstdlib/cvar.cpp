@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vstdlib/cvar.h"
 
@@ -287,7 +287,8 @@ void CCvar::UnregisterConCommand(ConCommandBase *pCommandToRemove) {
 
   pCommandToRemove->m_bRegistered = false;
 
-  // TODO(d.rattman): Should we make this a doubly-linked list? Would remove faster
+  // TODO(d.rattman): Should we make this a doubly-linked list? Would remove
+  // faster
   ConCommandBase *pPrev = nullptr;
   for (ConCommandBase *pCommand = m_pConCommandList; pCommand;
        pCommand = pCommand->m_pNext) {
@@ -479,7 +480,7 @@ void CCvar::ConsoleColorPrintf(const Color &clr, const char *pFormat,
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf(temp, sizeof(temp) - 1, pFormat, argptr);
+  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
   va_end(argptr);
   temp[sizeof(temp) - 1] = 0;
 
@@ -500,7 +501,7 @@ void CCvar::ConsolePrintf(const char *pFormat, ...) const {
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf(temp, sizeof(temp) - 1, pFormat, argptr);
+  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
   va_end(argptr);
   temp[sizeof(temp) - 1] = 0;
 
@@ -520,7 +521,7 @@ void CCvar::ConsoleDPrintf(const char *pFormat, ...) const {
   char temp[8192];
   va_list argptr;
   va_start(argptr, pFormat);
-  _vsnprintf(temp, sizeof(temp) - 1, pFormat, argptr);
+  _vsnprintf_s(temp, sizeof(temp) - 1, pFormat, argptr);
   va_end(argptr);
   temp[sizeof(temp) - 1] = 0;
 

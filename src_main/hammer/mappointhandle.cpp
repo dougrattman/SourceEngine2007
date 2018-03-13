@@ -43,7 +43,7 @@ CMapClass *CMapPointHandle::Create(CHelperInfo *pHelperInfo,
                                    CMapEntity *pParent) {
   static const char *pszDefaultKeyName = "origin";
 
-  bool bDrawLineToParent = !stricmp(pHelperInfo->GetName(), "vecline");
+  bool bDrawLineToParent = !_stricmp(pHelperInfo->GetName(), "vecline");
 
   const char *pszKey = pHelperInfo->GetParameter(0);
   if (pszKey == NULL) {
@@ -286,7 +286,7 @@ void CMapPointHandle::SetRenderColor(color32 rgbColor) {}
 //-----------------------------------------------------------------------------
 void CMapPointHandle::OnParentKeyChanged(const char *szKey,
                                          const char *szValue) {
-  if (stricmp(szKey, m_szKeyName) == 0) {
+  if (_stricmp(szKey, m_szKeyName) == 0) {
     sscanf(szValue, "%f %f %f", &m_Origin.x, &m_Origin.y, &m_Origin.z);
     CalcBounds();
   }

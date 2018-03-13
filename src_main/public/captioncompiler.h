@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef CAPTIONCOMPILER_H
 #define CAPTIONCOMPILER_H
@@ -35,7 +35,7 @@ struct CaptionLookup_t {
     int len = Q_strlen(string);
     char *tempstr = (char *)_alloca(len + 1);
     Q_strncpy(tempstr, string, len + 1);
-    Q_strlower(tempstr);
+    Q_strlower(tempstr, len + 1);
     CRC32_t temp;
     CRC32_Init(&temp);
     CRC32_ProcessBuffer(&temp, tempstr, len);

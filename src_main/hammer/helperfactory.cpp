@@ -120,7 +120,7 @@ CMapClass *CHelperFactory::CreateHelper(CHelperInfo *pHelperInfo,
     //
     // If the function was found in the table, create the helper and return it.
     //
-    if (!stricmp(HelperFactoryMap[i].pszName, pHelperInfo->GetName())) {
+    if (!_stricmp(HelperFactoryMap[i].pszName, pHelperInfo->GetName())) {
       CMapClass *pHelper = HelperFactoryMap[i].pfnFactory(pHelperInfo, pParent);
       return (pHelper);
     }

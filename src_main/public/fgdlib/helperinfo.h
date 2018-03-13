@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef HELPERINFO_H
 #define HELPERINFO_H
@@ -59,23 +59,22 @@ inline CHelperInfo::~CHelperInfo(void) {
 //-----------------------------------------------------------------------------
 inline bool CHelperInfo::AddParameter(const char *pszParameter) {
   if ((pszParameter != NULL) && (pszParameter[0] != '\0')) {
-    int nLen = strlen(pszParameter);
+    size_t nLen = strlen(pszParameter);
 
     if (nLen > 0) {
-      char *pszNew = new char[nLen + 1];
+      size_t size{nLen + 1};
+      char *pszNew = new char[size];
       if (pszNew != NULL) {
-        strcpy(pszNew, pszParameter);
+        strcpy_s(pszNew, size, pszParameter);
         m_Parameters.AddToTail(pszNew);
-        return (true);
+        return true;
       }
     }
   }
 
-  return (false);
+  return false;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 inline const char *CHelperInfo::GetParameter(int nIndex) const {
   if (nIndex >= m_Parameters.Count()) return NULL;
 
@@ -88,7 +87,7 @@ inline const char *CHelperInfo::GetParameter(int nIndex) const {
 //-----------------------------------------------------------------------------
 inline void CHelperInfo::SetName(const char *pszName) {
   if (pszName != NULL) {
-    strcpy(m_szName, pszName);
+    strcpy_s(m_szName, pszName);
   }
 }
 

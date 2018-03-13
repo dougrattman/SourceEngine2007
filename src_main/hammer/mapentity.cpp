@@ -57,7 +57,7 @@ static CMapObjectList FoundEntities;
 //-----------------------------------------------------------------------------
 static BOOL FindKeyValue(CMapEntity *pEntity, MDkeyvalue *pKV) {
   LPCTSTR pszValue = pEntity->GetKeyValue(pKV->szKey);
-  if (!pszValue || strcmpi(pszValue, pKV->szValue)) {
+  if (!pszValue || _strcmpi(pszValue, pKV->szValue)) {
     return TRUE;
   }
 
@@ -98,14 +98,14 @@ int CompareEntityNames(const char *szName1, const char *szName2) {
 
   if (nCompareLen != -1) {
     if (nCompareLen > 0) {
-      return strnicmp(szName1, szName2, nCompareLen);
+      return _strnicmp(szName1, szName2, nCompareLen);
     }
 
     // One of the strings had a wildcard as the first character.
     return 0;
   }
 
-  return stricmp(szName1, szName2);
+  return _stricmp(szName1, szName2);
 }
 
 //-----------------------------------------------------------------------------
@@ -474,7 +474,7 @@ CMapClass *CMapEntity::CopyFrom(CMapClass *pobj, bool bUpdateDependencies) {
   const char *pszNewTargetName = CEditGameClass::GetKeyValue("targetname");
 
   if ((bUpdateDependencies) && (pszNewTargetName != NULL)) {
-    if (stricmp(szOldTargetName, pszNewTargetName) != 0) {
+    if (_stricmp(szOldTargetName, pszNewTargetName) != 0) {
       UpdateAllDependencies(this);
     }
   }
@@ -604,7 +604,7 @@ ChunkFileResult_t CMapEntity::LoadVMF(CChunkFile *pFile) {
 ChunkFileResult_t CMapEntity::LoadKeyCallback(const char *szKey,
                                               const char *szValue,
                                               CMapEntity *pEntity) {
-  if (!stricmp(szKey, "id")) {
+  if (!_stricmp(szKey, "id")) {
     pEntity->SetID(atoi(szValue));
   } else {
     //
@@ -643,7 +643,7 @@ ChunkFileResult_t CMapEntity::LoadHiddenCallback(CChunkFile *pFile,
 ChunkFileResult_t CMapEntity::LoadEditorKeyCallback(const char *szKey,
                                                     const char *szValue,
                                                     CMapEntity *pMapEntity) {
-  if (!stricmp(szKey, "logicalpos")) {
+  if (!_stricmp(szKey, "logicalpos")) {
     CChunkFile::ReadKeyValueVector2(szValue, pMapEntity->m_vecLogicalPosition);
     return ChunkFile_Ok;
   }
@@ -885,7 +885,7 @@ void CMapEntity::CalculateTypeFlags(void) {
   const char *pszClassName = GetClassName();
   if (pszClassName != NULL)
     for (int i = 0; i < NELEMS(s_ClassFlagsTable); i++)
-      if (!stricmp(pszClassName, s_ClassFlagsTable[i].m_pClassname))
+      if (!_stricmp(pszClassName, s_ClassFlagsTable[i].m_pClassname))
         m_EntityTypeFlags |= s_ClassFlagsTable[i].m_nFlagsToOR;
 }
 
@@ -1137,8 +1137,8 @@ void CMapEntity::OnPreClone(CMapClass *pClone, CMapWorld *pWorld,
     // dvs: TODO: make this FGD-driven instead of hardcoded, see also
     // MapKeyFrame.cpp dvs: TODO: use letters of the alphabet between adjacent
     // numbers, ie path2a path2b, etc.
-    if (!stricmp(GetClassName(), "path_corner") ||
-        !stricmp(GetClassName(), "path_track")) {
+    if (!_stricmp(GetClassName(), "path_corner") ||
+        !_stricmp(GetClassName(), "path_track")) {
       //
       // Generate a new name for the clone.
       //
@@ -1175,8 +1175,8 @@ void CMapEntity::OnClone(CMapClass *pClone, CMapWorld *pWorld,
   CMapClass::OnClone(pClone, pWorld, OriginalList, NewList);
 
   if (OriginalList.Count() == 1) {
-    if (!stricmp(GetClassName(), "path_corner") ||
-        !stricmp(GetClassName(), "path_track")) {
+    if (!_stricmp(GetClassName(), "path_corner") ||
+        !_stricmp(GetClassName(), "path_track")) {
       // dvs: TODO: make this FGD-driven instead of hardcoded, see also
       // MapKeyFrame.cpp dvs: TODO: use letters of the alphabet between adjacent
       // numbers, ie path2a path2b, etc.
@@ -1262,7 +1262,7 @@ void CMapEntity::OnKeyValueChanged(const char *pszKey, const char *pszOldValue,
   // Changing our movement parent. Store a pointer to the movement parent
   // for when we're playing animations.
   //
-  if (!stricmp(pszKey, "parentname")) {
+  if (!_stricmp(pszKey, "parentname")) {
     CMapWorld *pWorld = (CMapWorld *)GetWorldObject(this);
     if (pWorld != NULL) {
       CMapEntity *pMoveParent = (CMapEntity *)UpdateDependency(
@@ -1274,8 +1274,8 @@ void CMapEntity::OnKeyValueChanged(const char *pszKey, const char *pszOldValue,
   // Changing our model - rebuild the helpers from scratch.
   // dvs: this could probably go away - move support into the helper code.
   //
-  else if (!stricmp(pszKey, "model")) {
-    if (stricmp(pszOldValue, pszValue) != 0) {
+  else if (!_stricmp(pszKey, "model")) {
+    if (_stricmp(pszOldValue, pszValue) != 0) {
       // We don't call SetKeyValue during VMF load.
       UpdateHelpers(false);
     }
@@ -1284,8 +1284,8 @@ void CMapEntity::OnKeyValueChanged(const char *pszKey, const char *pszOldValue,
   // If our targetname has changed, we have to relink EVERYTHING, not
   // just our dependents, because someone else may point to our new targetname.
   //
-  else if (!stricmp(pszKey, "targetname") &&
-           (stricmp(pszOldValue, pszValue) != 0)) {
+  else if (!_stricmp(pszKey, "targetname") &&
+           (_stricmp(pszOldValue, pszValue) != 0)) {
     UpdateAllDependencies(this);
   }
   SignalChanged();
@@ -1408,7 +1408,7 @@ CMapEntity *CMapEntity::FindChildByKeyValue(LPCSTR key, LPCSTR value) {
   int index;
   LPCSTR val = CEditGameClass::GetKeyValue(key, &index);
 
-  if (val && value && !stricmp(value, val)) {
+  if (val && value && !_stricmp(value, val)) {
     return this;
   }
 
@@ -1777,7 +1777,7 @@ void CMapEntity::Render2D(CRender2D *pRender) {
   // HACK: don't draw the forward vector for lights, they negate pitch. The
   // model helper will handle it.
   if ((GetSelectionState() != SELECT_NONE) &&
-      (!GetClassName() || (strnicmp(GetClassName(), "light_", 6) != 0)) &&
+      (!GetClassName() || (_strnicmp(GetClassName(), "light_", 6) != 0)) &&
       (GetKeyValue("angles") != NULL)) {
     Vector vecOrigin;
     GetOrigin(vecOrigin);

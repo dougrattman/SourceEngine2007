@@ -621,7 +621,7 @@ CDummyMaterial g_DummyMaterial;
 IMaterial *g_pDummyMaterial = &g_DummyMaterial;
 
 void *DummyMaterialSystemFactory(const char *pName, int *pReturnCode) {
-  if (stricmp(pName, MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION) == 0)
+  if (_stricmp(pName, MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION) == 0)
     return &g_DummyHardwareConfig;
 
   else

@@ -55,7 +55,7 @@ bool MatchString(const char *pszString, FindObject_t &FindObject) {
       return (!strcmp(pszString, FindObject.strFindText));
     }
 
-    return (!stricmp(pszString, FindObject.strFindText));
+    return (!_stricmp(pszString, FindObject.strFindText));
   }
 
   if (FindObject.bCaseSensitive) {
@@ -84,7 +84,7 @@ bool ReplaceString(char *pszOut, const char *pszIn, FindObject_t &FindObject,
       return true;
     }
 
-    if (!stricmp(pszIn, FindObject.strFindText)) {
+    if (!_stricmp(pszIn, FindObject.strFindText)) {
       strcpy(pszOut, pszReplace);
       return true;
     }

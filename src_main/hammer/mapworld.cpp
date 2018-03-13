@@ -301,7 +301,7 @@ CMapClass *CMapWorld::CopyFrom(CMapClass *pobj, bool bUpdateDependencies)
 	const char *pszNewTargetName = CEditGameClass::GetKeyValue("targetname");
 	if ((bUpdateDependencies) && (pszNewTargetName != NULL))
 	{
-		if (stricmp(szOldTargetName, pszNewTargetName) != 0)
+		if (_stricmp(szOldTargetName, pszNewTargetName) != 0)
 		{
 			UpdateAllDependencies(this);
 		}
@@ -910,11 +910,11 @@ ChunkFileResult_t CMapWorld::LoadHiddenCallback(CChunkFile *pFile, CMapWorld *pW
 //-----------------------------------------------------------------------------
 ChunkFileResult_t CMapWorld::LoadKeyCallback(const char *szKey, const char *szValue, CMapWorld *pWorld)
 {
-	if (!stricmp(szKey, "id"))
+	if (!_stricmp(szKey, "id"))
 	{
 		pWorld->SetID(atoi(szValue));
 	}
-	else if (stricmp(szKey, "mapversion") != 0)
+	else if (_stricmp(szKey, "mapversion") != 0)
 	{
 		pWorld->SetKeyValue(szKey, szValue);
 	}
@@ -1742,7 +1742,7 @@ bool CMapWorld::FindEntitiesByKeyValue(CMapEntityList &Found, const char *pszKey
 
 			if ( pszThisValue != NULL )
 			{
-				if (( pszValue != NULL ) && ( !stricmp( pszValue, pszThisValue )))
+				if (( pszValue != NULL ) && ( !_stricmp( pszValue, pszThisValue )))
 				{
 					Found.AddToTail( pEntity );
 				}

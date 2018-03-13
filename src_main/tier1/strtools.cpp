@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: String Tools
 
@@ -135,20 +135,12 @@ int _V_wcscmp(const char *file, int line, const wchar_t *s1,
 }
 
 int _V_stricmp(const char *file, int line, const char *s1, const char *s2) {
-  return stricmp(s1, s2);
+  return _stricmp(s1, s2);
 }
 
 char *_V_strstr(const char *file, int line, const char *s1,
                 const char *search) {
   return (char *)strstr(s1, search);
-}
-
-char *_V_strupr(const char *file, int line, char *start) {
-  return strupr(start);
-}
-
-char *_V_strlower(const char *file, int line, char *start) {
-  return strlwr(start);
 }
 
 int V_strncmp(const char *s1, const char *s2, int count) {
@@ -202,7 +194,7 @@ int V_strncasecmp(const char *s1, const char *s2, int n) {
   return 0;  // n characters compared the same
 }
 
-int V_strcasecmp(const char *s1, const char *s2) { return stricmp(s1, s2); }
+int V_strcasecmp(const char *s1, const char *s2) { return _stricmp(s1, s2); }
 
 int V_strnicmp(const char *s1, const char *s2, int n) {
   Assert(n >= 0);

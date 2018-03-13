@@ -769,7 +769,7 @@ class COptionsSubVideoAdvancedDlg : public vgui::Frame {
   }
 
   virtual void OnCommand(const char *command) {
-    if (!stricmp(command, "OK")) {
+    if (!_stricmp(command, "OK")) {
       if (RequiresRestart()) {
         // Bring up the confirmation dialog
         QueryBox *box = new QueryBox("#GameUI_SettingRequiresDisconnect_Title",

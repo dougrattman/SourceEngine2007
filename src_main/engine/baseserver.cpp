@@ -122,7 +122,7 @@ static void SetMasterServerKeyValue(ISteamMasterServerUpdater *pUpdater,
   // For protected cvars, don't send the string
   if (var.IsFlagSet(FCVAR_PROTECTED)) {
     // If it has a value string and the string is not "none"
-    if ((strlen(var.GetString()) > 0) && stricmp(var.GetString(), "none")) {
+    if ((strlen(var.GetString()) > 0) && _stricmp(var.GetString(), "none")) {
       pUpdater->SetKeyValue(var.GetName(), "1");
     } else {
       pUpdater->SetKeyValue(var.GetName(), "0");

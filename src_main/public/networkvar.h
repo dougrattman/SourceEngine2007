@@ -639,13 +639,17 @@ class CNetworkHandleBase : public CNetworkVarBase<CBaseHandle, Changer> {
   NETWORK_VAR_END(color32, name, CNetworkColor32Base, NetworkStateChanged)
 
 #define CNetworkString(name, length)                                   \
+  template <size_t>                                                    \
   class NetworkVar_##name;                                             \
+  template <size_t>                                                    \
   friend class NetworkVar_##name;                                      \
   typedef ThisClass MakeANetworkVar_##name;                            \
+  template <size_t len = length>                                       \
   class NetworkVar_##name {                                            \
    public:                                                             \
     operator const char *() const { return m_Value; }                  \
     const char *Get() const { return m_Value; }                        \
+    const size_t Size() const { return len; }                          \
     char *GetForModify() {                                             \
       NetworkStateChanged();                                           \
       return m_Value;                                                  \
@@ -659,9 +663,9 @@ class CNetworkHandleBase : public CNetworkVarBase<CBaseHandle, Changer> {
     }                                                                  \
                                                                        \
    private:                                                            \
-    char m_Value[length];                                              \
+    char m_Value[len];                                                 \
   };                                                                   \
-  NetworkVar_##name name;
+  NetworkVar_##name<> name;
 
 // Use this to define networked arrays.
 // You can access elements for reading with operator[], and you can set elements

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/stringpool.h"
 
@@ -7,33 +7,19 @@
 #include "tier1/generichash.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-
 // Purpose: Comparison function for string sorted associative data structures
-
 
 bool StrLess(const char* const& pszLeft, const char* const& pszRight) {
   return (Q_stricmp(pszLeft, pszRight) < 0);
 }
 
-
-
-
 CStringPool::CStringPool() : m_Strings(32, 256, StrLess) {}
-
-
-
 
 CStringPool::~CStringPool() { FreeAll(); }
 
-
-
-
 unsigned int CStringPool::Count() const { return m_Strings.Count(); }
-
-
 
 const char* CStringPool::Find(const char* pszValue) {
   unsigned short i = m_Strings.Find(pszValue);
@@ -48,14 +34,11 @@ const char* CStringPool::Allocate(const char* pszValue) {
   bool bNew = (i == m_Strings.InvalidIndex());
   if (!bNew) return m_Strings[i];
 
-  char* pszNew = strdup(pszValue);
+  char* pszNew = _strdup(pszValue);
   m_Strings.Insert(pszNew);
 
   return pszNew;
 }
-
-
-
 
 void CStringPool::FreeAll() {
   unsigned short i = m_Strings.FirstInorder();
@@ -65,9 +48,6 @@ void CStringPool::FreeAll() {
   }
   m_Strings.RemoveAll();
 }
-
-
-
 
 CCountedStringPool::CCountedStringPool() {
   MEM_ALLOC_CREDIT();
@@ -176,8 +156,9 @@ unsigned short CCountedStringPool::ReferenceStringHandle(
   m_Elements[nCurrentBucket].nNextElement = m_HashTable[nHashBucketIndex];
   m_HashTable[nHashBucketIndex] = nCurrentBucket;
 
-  m_Elements[nCurrentBucket].pString = new char[Q_strlen(pIntrinsic) + 1];
-  Q_strcpy(m_Elements[nCurrentBucket].pString, pIntrinsic);
+  size_t size = Q_strlen(pIntrinsic) + 1;
+  m_Elements[nCurrentBucket].pString = new char[size];
+  Q_strcpy(m_Elements[nCurrentBucket].pString, size, pIntrinsic);
 
   return nCurrentBucket;
 }

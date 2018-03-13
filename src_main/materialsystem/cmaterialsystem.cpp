@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "pch_materialsystem.h"
 
@@ -479,8 +479,8 @@ bool CMaterialSystem::Connect(CreateInterfaceFn factory) {
       MATERIALSYSTEM_HARDWARECONFIG_INTERFACE_VERSION, 0);
   if (!g_pHWConfig) return false;
 
-  // TODO(d.rattman): ShaderAPI, ShaderDevice, and ShaderShadow should only come in after
-  // setting mode
+  // TODO(d.rattman): ShaderAPI, ShaderDevice, and ShaderShadow should only come
+  // in after setting mode
   g_pShaderAPI =
       (IShaderAPI *)m_ShaderAPIFactory(SHADERAPI_INTERFACE_VERSION, 0);
   if (!g_pShaderAPI) return false;
@@ -1022,8 +1022,8 @@ void CMaterialSystem::RestoreShaderObjects(CreateInterfaceFn shaderFactory,
 
   // NOTE: render targets must be restored first, then vb/ibs, then managed
   // textures
-  // TODO(d.rattman): Gotta restore lightmap pages + standard textures before restore
-  // funcs are called because they use them both.
+  // TODO(d.rattman): Gotta restore lightmap pages + standard textures before
+  // restore funcs are called because they use them both.
   TextureManager()->RestoreRenderTargets();
   AllocateStandardTextures();
   GetLightmaps()->RestoreLightmapPages();
@@ -1421,7 +1421,7 @@ void CMaterialSystem::WriteConfigurationInfoToConVars(
     // check if legal
     bool bLegalVar = false;
     for (int i = 0; i < NELEMS(pConvarsAllowedInDXSupport); i++) {
-      if (!stricmp(pConvarsAllowedInDXSupport[i], pConfigName)) {
+      if (!_stricmp(pConvarsAllowedInDXSupport[i], pConfigName)) {
         bLegalVar = true;
         break;
       }
@@ -2012,7 +2012,7 @@ IMaterial *CMaterialSystem::FindProceduralMaterial(
   int nLen = Q_strlen(pMaterialName) + 1;
   char *pTemp = (char *)stackalloc(nLen);
   Q_strncpy(pTemp, pMaterialName, nLen);
-  Q_strlower(pTemp);
+  Q_strlower(pTemp, nLen);
   Q_FixSlashes(pTemp, '/');
 
   // 'true' causes the search to find procedural materials
@@ -2048,7 +2048,7 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
   int nLen = Q_strlen(pMaterialName) + 1;
   char *pTemp = (char *)stackalloc(nLen);
   Q_StripExtension(pMaterialName, pTemp, nLen);
-  Q_strlower(pTemp);
+  Q_strlower(pTemp, nLen);
   Q_FixSlashes(pTemp, '/');
   Assert(nLen >= Q_strlen(pTemp) + 1);
 
@@ -2116,7 +2116,7 @@ IMaterial *CMaterialSystem::FindMaterial(char const *pMaterialName,
     nLen = Q_strlen(pTemp) + 1;
     char *name = (char *)stackalloc(nLen);
     Q_strncpy(name, pTemp, nLen);
-    Q_strlower(name);
+    Q_strlower(name, nLen);
 
     if (m_MaterialDict.NoteMissing(name)) {
       if (pComplainPrefix) {
@@ -2735,8 +2735,8 @@ void CMaterialSystem::EndFrame(void) {
       m_QueuedRenderContexts[m_iCurQueuedContext]
           .GetCallQueueInternal()
           ->QueueCall(g_pShaderAPI, &IShaderAPI::ReleaseThreadOwnership);
-      m_iCurQueuedContext =
-          ((m_iCurQueuedContext + 1) % SOURCE_ARRAYSIZE(m_QueuedRenderContexts));
+      m_iCurQueuedContext = ((m_iCurQueuedContext + 1) %
+                             SOURCE_ARRAYSIZE(m_QueuedRenderContexts));
       m_QueuedRenderContexts[m_iCurQueuedContext].BeginQueue(pPrevContext);
       m_QueuedRenderContexts[m_iCurQueuedContext]
           .GetCallQueueInternal()
@@ -2855,7 +2855,7 @@ int __cdecl MaterialNameCompareFunc(const void *elem1, const void *elem2) {
       g_MaterialSystem.GetMaterialInternal(*(MaterialHandle_t *)elem2);
 
   // case insensitive to group similar named materials
-  return stricmp(pMaterialA->GetName(), pMaterialB->GetName());
+  return _stricmp(pMaterialA->GetName(), pMaterialB->GetName());
 }
 
 void CMaterialSystem::DebugPrintUsedMaterials(const char *pSearchSubString,
@@ -3022,7 +3022,7 @@ void CMaterialSystem::ToggleSuppressMaterial(char const *pMaterialName) {
   IMaterial *pMaterial = GetFirstMaterial();
   while (pMaterial)
   {
-          if (stricmp(pMaterial->GetName(), pMaterialName))
+          if (_stricmp(pMaterial->GetName(), pMaterialName))
           {
                   IMaterialInternal* pMatInt =
   static_cast<IMaterialInternal*>(pMaterial); pMatInt->ToggleSuppression();
@@ -3111,8 +3111,8 @@ void CMaterialSystem::GetShaderFallback(const char *pShaderName,
     }
 
     // Found a match
-    // TODO(d.rattman): Theoretically, getting fallbacks should require a param list
-    // In practice, it looks rare or maybe even neved done
+    // TODO(d.rattman): Theoretically, getting fallbacks should require a param
+    // list In practice, it looks rare or maybe even neved done
     const char *pFallback = ppShaderList[i]->GetFallbackShader(NULL);
     if (!pFallback) {
       Q_strncpy(pFallbackShader, pShaderName, nFallbackLength);

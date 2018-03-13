@@ -181,11 +181,11 @@ bool CSchemeManager::BitmapHandleSearchFunc(const CachedBitmapHandle_t &lhs,
                                             const CachedBitmapHandle_t &rhs) {
   // a NULL bitmap indicates to use the search string instead
   if (lhs.bitmap && rhs.bitmap) {
-    return stricmp(lhs.bitmap->GetName(), rhs.bitmap->GetName()) > 0;
+    return _stricmp(lhs.bitmap->GetName(), rhs.bitmap->GetName()) > 0;
   } else if (lhs.bitmap) {
-    return stricmp(lhs.bitmap->GetName(), s_pszSearchString) > 0;
+    return _stricmp(lhs.bitmap->GetName(), s_pszSearchString) > 0;
   }
-  return stricmp(s_pszSearchString, rhs.bitmap->GetName()) > 0;
+  return _stricmp(s_pszSearchString, rhs.bitmap->GetName()) > 0;
 }
 
 CSchemeManager g_Scheme;
@@ -268,7 +268,7 @@ HScheme CSchemeManager::FindLoadedScheme(const char *fileName) {
   // Find the scheme in the list of already loaded schemes
   for (int i = 1; i < m_Schemes.Count(); i++) {
     char const *schemeFileName = m_Schemes[i]->GetFileName();
-    if (!stricmp(schemeFileName, fileName)) return i;
+    if (!_stricmp(schemeFileName, fileName)) return i;
   }
 
   return 0;
@@ -814,7 +814,7 @@ HScheme CSchemeManager::GetDefaultScheme() { return 1; }
 //-----------------------------------------------------------------------------
 HScheme CSchemeManager::GetScheme(const char *tag) {
   for (int i = 1; i < m_Schemes.Count(); i++) {
-    if (!stricmp(tag, m_Schemes[i]->GetName())) {
+    if (!_stricmp(tag, m_Schemes[i]->GetName())) {
       return i;
     }
   }
@@ -1003,7 +1003,7 @@ HFont CScheme::FindFontInAliasList(const char *fontName) {
   // TODO(d.rattman): Slow!!!
   for (int i = m_FontAliases.Count(); --i >= 0;) {
     //		const char *name = m_FontAliases[i]._fontName.String();
-    if (!strnicmp(fontName, m_FontAliases[i]._fontName.String(),
+    if (!_strnicmp(fontName, m_FontAliases[i]._fontName.String(),
                   FONT_ALIAS_NAME_LENGTH))
       return m_FontAliases[i]._font;
   }
@@ -1107,14 +1107,14 @@ int CScheme::GetMinimumFontHeightForCurrentLanguage() {
   }
 
   if (bValid) {
-    if (!stricmp(language, "korean") || !stricmp(language, "tchinese") ||
-        !stricmp(language, "schinese") || !stricmp(language, "japanese")) {
+    if (!_stricmp(language, "korean") || !_stricmp(language, "tchinese") ||
+        !_stricmp(language, "schinese") || !_stricmp(language, "japanese")) {
       // the bitmap-based fonts for these languages simply don't work with a pt.
       // size of less than 9 (13 pixels)
       return 13;
     }
 
-    if (!stricmp(language, "thai")) {
+    if (!_stricmp(language, "thai")) {
       // thai has problems below 18 pts
       return 18;
     }

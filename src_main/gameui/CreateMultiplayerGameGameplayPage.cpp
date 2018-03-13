@@ -88,7 +88,7 @@ const char *CCreateMultiplayerGameGameplayPage::GetValue(
     const char *cvarName, const char *defaultValue) {
   for (mpcontrol_t *mp = m_pList; mp != NULL; mp = mp->next) {
     Panel *control = mp->pControl;
-    if (control && !stricmp(mp->GetName(), cvarName)) {
+    if (control && !_stricmp(mp->GetName(), cvarName)) {
       KeyValues *data = new KeyValues("GetText");
       static char buf[128];
       if (control && control->RequestInfo(data)) {

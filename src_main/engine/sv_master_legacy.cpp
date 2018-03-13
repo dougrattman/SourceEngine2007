@@ -220,11 +220,11 @@ void Info_SetValueForStarKey(char *s, const char *key, const char *value,
   while (*v) {
     c = (unsigned char)*v++;
     // client only allows highbits on name
-    if (stricmp(key, "name") != 0) {
+    if (_stricmp(key, "name") != 0) {
       c &= 127;
       if (c < 32 || c > 127) continue;
       // auto lowercase team
-      if (stricmp(key, "team") == 0) c = tolower(c);
+      if (_stricmp(key, "team") == 0) c = tolower(c);
     }
     if (c > 13) *s++ = c;
   }
@@ -1087,7 +1087,7 @@ void CMaster::ReplyRules(netadr_t &from, CBaseServer *pServer) {
     if (var->IsFlagSet(FCVAR_PROTECTED)) {
       // If it has a value string and the string is not "none"
       if ((((ConVar *)var)->GetString()[0] != '\0') &&
-          stricmp(((ConVar *)var)->GetString(), "none")) {
+          _stricmp(((ConVar *)var)->GetString(), "none")) {
         buf.WriteString("1");
       } else {
         buf.WriteString("0");

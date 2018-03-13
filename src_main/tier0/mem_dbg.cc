@@ -381,7 +381,7 @@ bool operator!=(const CNoRecurseAllocator<T1> &,
 class CStringLess {
  public:
   bool operator()(const ch *pszLeft, const ch *pszRight) const {
-    return stricmp(pszLeft, pszRight) < 0;
+    return _stricmp(pszLeft, pszRight) < 0;
   }
 };
 
@@ -497,7 +497,7 @@ class CDbgMemAlloc : public IMemAlloc {
     MemInfoKey_t(const ch *pFileName, i32 line)
         : m_pFileName(pFileName), m_nLine(line) {}
     bool operator<(const MemInfoKey_t &key) const {
-      i32 iret = stricmp(m_pFileName, key.m_pFileName);
+      i32 iret = _stricmp(m_pFileName, key.m_pFileName);
       if (iret < 0) return true;
 
       if (iret > 0) return false;
@@ -706,9 +706,9 @@ void CDbgMemAlloc::PushAllocDbgInfo(const ch *pFileName, i32 nLine) {
 
   ++g_nDbgInfoStackDepth;
   Assert(g_nDbgInfoStackDepth < DBG_INFO_STACK_DEPTH);
-  g_DbgInfoStack[g_nDbgInfoStackDepth].m_pFileName =
+  g_DbgInfoStack[static_cast<usize>(g_nDbgInfoStackDepth)].m_pFileName =
       FindOrCreateFilename(pFileName);
-  g_DbgInfoStack[g_nDbgInfoStackDepth].m_nLine = nLine;
+  g_DbgInfoStack[static_cast<usize>(g_nDbgInfoStackDepth)].m_nLine = nLine;
 }
 
 void CDbgMemAlloc::PopAllocDbgInfo() {
@@ -735,9 +735,9 @@ void CDbgMemAlloc::GetActualDbgInfo(const ch *&pFileName, i32 &nLine) {
     g_nDbgInfoStackDepth = -1;
   }
 
-  if (g_nDbgInfoStackDepth >= 0 && g_DbgInfoStack[0].m_pFileName) {
-    pFileName = g_DbgInfoStack[0].m_pFileName;
-    nLine = g_DbgInfoStack[0].m_nLine;
+  if (g_nDbgInfoStackDepth >= 0 && g_DbgInfoStack[0u].m_pFileName) {
+    pFileName = g_DbgInfoStack[0u].m_pFileName;
+    nLine = g_DbgInfoStack[0u].m_nLine;
   }
 }
 
@@ -1149,8 +1149,7 @@ void CDbgMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
 
     ++s_FileCount;
 
-    s_DbgFile = fopen(szFileName, "wt");
-    if (!s_DbgFile) return;
+    if (fopen_s(&s_DbgFile, szFileName, "wt")) return;
   }
 
   m_OutputFunc(

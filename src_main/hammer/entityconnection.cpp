@@ -263,7 +263,7 @@ bool CEntityConnection::ValidateTarget( const CMapEntityList *pEntityList, bool 
 		return false;
 
 	// These procedural names are always assumed to exist.
-	if (!stricmp(pszTarget, "!activator") || !stricmp(pszTarget, "!caller") || !stricmp(pszTarget, "!player") || !stricmp(pszTarget, "!self"))
+	if (!_stricmp(pszTarget, "!activator") || !_stricmp(pszTarget, "!caller") || !_stricmp(pszTarget, "!player") || !_stricmp(pszTarget, "!self"))
 		return true;
 
 	FOR_EACH_OBJ( *pEntityList, pos )
@@ -288,7 +288,7 @@ bool CEntityConnection::ValidateInput(const char* pszTarget, const char *pszInpu
 {
 	// Allow any input into !activator and !player.
 	// dvs: TODO: pass in the entity to resolve !self and check input list
-	if (!stricmp(pszTarget, "!activator") || !stricmp(pszTarget, "!caller") || !stricmp(pszTarget, "!player") || !stricmp(pszTarget, "!self"))
+	if (!_stricmp(pszTarget, "!activator") || !_stricmp(pszTarget, "!caller") || !_stricmp(pszTarget, "!player") || !_stricmp(pszTarget, "!self"))
 	{
 		return true;
 	}
@@ -580,11 +580,11 @@ int CALLBACK CEntityConnection::CompareOutputNames(CEntityConnection *pConn1, CE
 
 	if (eDirection == Sort_Ascending)
 	{
-		nReturn = stricmp(pConn1->GetOutputName(), pConn2->GetOutputName());
+		nReturn = _stricmp(pConn1->GetOutputName(), pConn2->GetOutputName());
 	}
 	else
 	{
-		nReturn = stricmp(pConn2->GetOutputName(), pConn1->GetOutputName());
+		nReturn = _stricmp(pConn2->GetOutputName(), pConn1->GetOutputName());
 	}
 
 	//
@@ -608,11 +608,11 @@ int CALLBACK CEntityConnection::CompareInputNames(CEntityConnection *pConn1, CEn
 
 	if (eDirection == Sort_Ascending)
 	{
-		nReturn = stricmp(pConn1->GetInputName(), pConn2->GetInputName());
+		nReturn = _stricmp(pConn1->GetInputName(), pConn2->GetInputName());
 	}
 	else
 	{
-		nReturn = stricmp(pConn2->GetInputName(), pConn1->GetInputName());
+		nReturn = _stricmp(pConn2->GetInputName(), pConn1->GetInputName());
 	}
 
 	//

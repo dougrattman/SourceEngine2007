@@ -291,7 +291,7 @@ IEditorTexture *CTextureSystem::FindActiveTexture(LPCSTR pszInputName, int *piIn
 	//
 	// Check the cache first.
 	//
-	if (m_pLastTex && !stricmp(pszName, m_pLastTex->GetName()))
+	if (m_pLastTex && !_stricmp(pszName, m_pLastTex->GetName()))
 	{
 		if (piIndex)
 		{
@@ -371,7 +371,7 @@ IEditorTexture *CTextureSystem::FindActiveTexture(LPCSTR pszInputName, int *piIn
 		for (int nDummy = 0; nDummy < nDummyCount; nDummy++)
 		{
 			IEditorTexture *pTex = m_pActiveContext->Dummies.Element(nDummy);
-			if (!strcmpi(pszName, pTex->GetName()))
+			if (!_strcmpi(pszName, pTex->GetName()))
 			{
 				m_pLastTex = pTex;
 				m_nLastIndex = -1;
@@ -485,7 +485,7 @@ void CTextureSystem::SetActiveGroup(const char *pcszName)
 	for (int i = 0; i < iCount; i++)
 	{
 		CTextureGroup *pGroup = m_pActiveContext->Groups.Element(i);
-		if (!strcmpi(pGroup->GetName(), pcszName))
+		if (!_strcmpi(pGroup->GetName(), pcszName))
 		{
 			m_pActiveGroup = pGroup;
 			return;
@@ -824,7 +824,7 @@ static int __cdecl SortTexturesProc(IEditorTexture * const *elem1, IEditorTextur
 	if (IsSortChr(ch1) && !IsSortChr(ch2))
 	{
 		int iFamilyLen = strlen(pszName1+2);
-		int iFamily = strnicmp(pszName1+2, pszName2, iFamilyLen);
+		int iFamily = _strnicmp(pszName1+2, pszName2, iFamilyLen);
 		if (!iFamily)
 		{
 			return(-1);	// same family - put elem1 before elem2
@@ -834,7 +834,7 @@ static int __cdecl SortTexturesProc(IEditorTexture * const *elem1, IEditorTextur
 	else if (!IsSortChr(ch1) && IsSortChr(ch2))
 	{
 		int iFamilyLen = strlen(pszName2+2);
-		int iFamily = strnicmp(pszName1, pszName2+2, iFamilyLen);
+		int iFamily = _strnicmp(pszName1, pszName2+2, iFamilyLen);
 		if (!iFamily)
 		{
 			return(1);	// same family - put elem2 before elem1
@@ -844,7 +844,7 @@ static int __cdecl SortTexturesProc(IEditorTexture * const *elem1, IEditorTextur
 	else if (IsSortChr(ch1) && IsSortChr(ch2))
 	{
 		// do family name sorting
-		int iFamily = strcmpi(pszName1+2, pszName2+2);
+		int iFamily = _strcmpi(pszName1+2, pszName2+2);
 
 		if (!iFamily)
 		{
@@ -856,7 +856,7 @@ static int __cdecl SortTexturesProc(IEditorTexture * const *elem1, IEditorTextur
 		return(iFamily);
 	}
 
-	return(strcmpi(pszName1, pszName2));
+	return(_strcmpi(pszName1, pszName2));
 }
 
 
@@ -1180,7 +1180,7 @@ void CTextureSystem::RegisterTextureKeywords( IEditorTexture *pTexture )
 			for( int pos=0; pos < m_Keywords.Count(); pos++ )
 			{
 				const char *pszTest = m_Keywords.Element(pos);
-				if (!stricmp(pszTest, pch))
+				if (!_stricmp(pszTest, pch))
 				{
 					bFound = true;
 					break;

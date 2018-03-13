@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_TOKENREADER_H_
 #define SOURCE_TIER1_TOKENREADER_H_
@@ -19,7 +19,7 @@ typedef enum {
   IDENT
 } trtoken_t;
 
-#define IsToken(s1, s2) !strcmpi(s1, s2)
+#define IsToken(s1, s2) !_strcmpi(s1, s2)
 
 #define MAX_TOKEN 128 + 1
 #define MAX_IDENT 64 + 1
@@ -57,7 +57,6 @@ class TokenReader : private std::ifstream {
   bool m_bStuffed;
   trtoken_t m_eStuffed;
 };
-
 
 // Purpose: Returns the total number of parsing errors since this file was
 // opened.

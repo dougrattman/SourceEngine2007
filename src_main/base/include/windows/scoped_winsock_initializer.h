@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
 #define SOURCE_BASE_WINDOWS_INCLUDE_SCOPED_WINSOCK_INITIALIZER_H_
@@ -16,9 +16,11 @@ enum class WinsockVersion : WORD { Version2_2 = MAKEWORD(2, 2) };
 // Scoped winsock initializer.
 class ScopedWinsockInitializer {
  public:
+  // Initializes winsock with version |version|.
   ScopedWinsockInitializer(WinsockVersion version)  //-V730
       : version_{version}, wsa_data_{Initialize(this, version)} {}
 
+  // Get winsock initialization error code.
   DWORD error_code() const { return error_code_; }
 
   ~ScopedWinsockInitializer() {

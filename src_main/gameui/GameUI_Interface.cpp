@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements all the functions exported by the GameUI dll
 //
@@ -12,8 +12,8 @@
 #include <io.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "tier0/include/dbg.h"
 #include <cstdio>
+#include "tier0/include/dbg.h"
 
 #ifdef SendMessage
 #undef SendMessage
@@ -63,14 +63,9 @@
 #include "tier1/keyvalues.h"
 #include "tier3/tier3.h"
 
-#if defined(_X360)
-#include "xbox/xbox_win32stubs.h"
-#endif
-
 #include "engine/IEngineSound.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 IGameUIFuncs *gameuifuncs = NULL;
@@ -266,12 +261,15 @@ void CGameUI::BonusMapChallengeUpdate(const char *pchFileName,
   }
 }
 
-void CGameUI::BonusMapChallengeNames(char *pchFileName, char *pchMapName,
-                                     char *pchChallengeName) {
+void CGameUI::BonusMapChallengeNames(char *pchFileName, size_t file_name_size,
+                                     char *pchMapName, size_t map_name_size,
+                                     char *pchChallengeName,
+                                     size_t challenge_name_size) {
   if (!pchFileName || !pchMapName || !pchChallengeName) return;
 
-  BonusMapsDatabase()->GetCurrentChallengeNames(pchFileName, pchMapName,
-                                                pchChallengeName);
+  BonusMapsDatabase()->GetCurrentChallengeNames(
+      pchFileName, file_name_size, pchMapName, map_name_size, pchChallengeName,
+      challenge_name_size);
 }
 
 void CGameUI::BonusMapChallengeObjectives(int &iBronze, int &iSilver,
@@ -806,7 +804,7 @@ bool CGameUI::SetProgressBarStatusText(const char *statusText) {
 
   if (!statusText) return false;
 
-  if (!stricmp(statusText, m_szPreviousStatusText)) return false;
+  if (!_stricmp(statusText, m_szPreviousStatusText)) return false;
 
   g_hLoadingDialog->SetStatusText(statusText);
   Q_strncpy(m_szPreviousStatusText, statusText, sizeof(m_szPreviousStatusText));

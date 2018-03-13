@@ -19,7 +19,7 @@ class ScopedComInitializer {
   , thread_id_ { GetCurrentThreadId() }
 #endif
   {}
-
+  // Free COM at the end of scope lifetime.
   ~ScopedComInitializer() {
 #ifndef NDEBUG
     const DWORD this_thread_id{GetCurrentThreadId()};

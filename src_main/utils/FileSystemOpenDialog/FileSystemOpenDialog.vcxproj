@@ -303,6 +303,9 @@
     <ResourceCompile Include="FileSystemOpenDialog.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\deps\libjpeg\jpeg.vcxproj">
+      <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\tier0\tier0.vcxproj">
       <Project>{c503fc17-bc81-4434-abf9-e5b00d39365c}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

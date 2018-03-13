@@ -94,7 +94,7 @@ void CMapQuadBounds::PresaveWorld(void)
 			int nPoints = pFace->GetPointCount();
 
 			// Ignore no draw surfaces
-			if (stricmp(szCurrentTexture, "tools/toolsnodraw"))
+			if (_stricmp(szCurrentTexture, "tools/toolsnodraw"))
 			{
 				if (bFound)
 				{

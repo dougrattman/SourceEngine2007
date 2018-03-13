@@ -1,9 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//=============================================================================
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 #undef CreateDialog
@@ -16,11 +11,15 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "tier0/include/memdbgoff.h"
-#include "tier0/include/memdbgon.h"
-#include "vgui_controls/Frame.h"
-#include "vgui_controls/pch_vgui_controls.h"
 #include "vstdlib/pch_vstdlib.h"
+
+#include "tier0/include/memdbgoff.h"
+
+#include "vgui_controls/pch_vgui_controls.h"
+
+#include "vgui_controls/Frame.h"
+
+#include "tier0/include/memdbgon.h"
 
 #include "tier3/tier3.h"
 

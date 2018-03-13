@@ -801,7 +801,7 @@ int RunVBSP(int argc, char **argv) {
   Msg("Valve Software - vbsp.exe (%s)\n", __DATE__);
 
   for (i = 1; i < argc; i++) {
-    if (!stricmp(argv[i], "-threads")) {
+    if (!_stricmp(argv[i], "-threads")) {
       numthreads = atoi(argv[i + 1]);
       i++;
     } else if (!Q_stricmp(argv[i], "-glview")) {

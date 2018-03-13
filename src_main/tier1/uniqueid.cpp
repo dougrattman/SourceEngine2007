@@ -3,10 +3,9 @@
 // Purpose: Unique ID generation
 
 #include "tier1/uniqueid.h"
-
 #include "build/include/build_config.h"
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #include "base/include/windows/windows_light.h"  // UUIDCreate
 
 #include <Rpc.h>

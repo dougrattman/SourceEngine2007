@@ -837,8 +837,8 @@ static void CheckValidTarget(CMapEntity *pEntity, const char *pFieldName,
   if (!pTargetName) return;
 
   // These procedural names are always assumed to exist.
-  if (!stricmp(pTargetName, "!activator") || !stricmp(pTargetName, "!caller") ||
-      !stricmp(pTargetName, "!player") || !stricmp(pTargetName, "!self"))
+  if (!_stricmp(pTargetName, "!activator") || !_stricmp(pTargetName, "!caller") ||
+      !_stricmp(pTargetName, "!player") || !_stricmp(pTargetName, "!self"))
     return;
 
   CMapDoc *pDoc = CMapDoc::GetActiveMapDoc();
@@ -1078,7 +1078,7 @@ static BOOL _CheckBadConnections(CMapEntity *pEntity, CListBox *pList) {
   // = 0; i < nConnCount; i++)
   //{
   //	CEntityConnection *pConn = pEntity->Connections_Get(i);
-  //	if (!stricmp(pConn->GetInputName(), "kill"))
+  //	if (!_stricmp(pConn->GetInputName(), "kill"))
   //	{
   //	}
   //}

@@ -663,7 +663,7 @@ void CVProfile::GetBudgetGroupColor(i32 budgetGroupID, i32 &r, i32 &g, i32 &b,
 // return -1 if it doesn't exist.
 i32 CVProfile::FindBudgetGroupName(const ch *pBudgetGroupName) {
   for (isize i = 0; i < m_nBudgetGroupNames; i++) {
-    if (stricmp(pBudgetGroupName, m_pBudgetGroups[i].m_pName) == 0) {
+    if (_stricmp(pBudgetGroupName, m_pBudgetGroups[i].m_pName) == 0) {
       return i;
     }
   }
@@ -672,8 +672,11 @@ i32 CVProfile::FindBudgetGroupName(const ch *pBudgetGroupName) {
 
 i32 CVProfile::AddBudgetGroupName(const ch *pBudgetGroupName, i32 budgetFlags) {
   MEM_ALLOC_CREDIT();
-  ch *pNewString = new ch[strlen(pBudgetGroupName) + 1];
-  strcpy(pNewString, pBudgetGroupName);
+
+  usize size{strlen(pBudgetGroupName) + 1};
+  ch *pNewString = new ch[size];
+  strcpy_s(pNewString, size, pBudgetGroupName);
+
   if (m_nBudgetGroupNames + 1 > m_nBudgetGroupNamesAllocated) {
     m_nBudgetGroupNamesAllocated *= 2;
     m_nBudgetGroupNamesAllocated =
@@ -739,7 +742,7 @@ i32 *CVProfile::FindOrCreateCounter(const ch *pName,
   }
   i32 i;
   for (i = 0; i < m_NumCounters; i++) {
-    if (stricmp(m_CounterNames[i], pName) == 0) {
+    if (_stricmp(m_CounterNames[i], pName) == 0) {
       // found it!
       return &m_Counters[i];
     }
@@ -747,11 +750,15 @@ i32 *CVProfile::FindOrCreateCounter(const ch *pName,
 
   // NOTE: These get freed in ~CVProfile.
   MEM_ALLOC_CREDIT();
-  ch *pNewName = new ch[strlen(pName) + 1];
-  strcpy(pNewName, pName);
+
+  usize size{strlen(pName) + 1};
+  ch *pNewName = new ch[size];
+  strcpy_s(pNewName, size, pName);
+
   m_Counters[m_NumCounters] = 0;
   m_CounterGroups[m_NumCounters] = (ch)eCounterGroup;
   m_CounterNames[m_NumCounters++] = pNewName;
+
   return &m_Counters[m_NumCounters - 1];
 }
 

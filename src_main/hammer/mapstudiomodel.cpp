@@ -59,8 +59,8 @@ CMapClass *CMapStudioModel::CreateMapStudioModel(CHelperInfo *pHelperInfo, CMapE
 	//
 	if (pszModel != NULL)
 	{
-		bool bLightProp = !stricmp(pHelperInfo->GetName(), "lightprop");
-		bool bOrientedBounds = (bLightProp | !stricmp(pHelperInfo->GetName(), "studioprop"));
+		bool bLightProp = !_stricmp(pHelperInfo->GetName(), "lightprop");
+		bool bOrientedBounds = (bLightProp | !_stricmp(pHelperInfo->GetName(), "studioprop"));
 		return CreateMapStudioModel(pszModel, bOrientedBounds, bLightProp);
 	}
 
@@ -306,36 +306,36 @@ void CMapStudioModel::Initialize(void)
 //-----------------------------------------------------------------------------
 void CMapStudioModel::OnParentKeyChanged(const char* szKey, const char* szValue)
 {
-	if (!stricmp(szKey, "angles"))
+	if (!_stricmp(szKey, "angles"))
 	{
 		sscanf(szValue, "%f %f %f", &m_Angles[PITCH], &m_Angles[YAW], &m_Angles[ROLL]);
 		PostUpdate(Notify_Changed);
 	}
-	else if (!stricmp(szKey, "pitch"))
+	else if (!_stricmp(szKey, "pitch"))
 	{
 		m_flPitch = atof(szValue);
 		m_bPitchSet = true;
 
 		PostUpdate(Notify_Changed);
 	}
-	else if (!stricmp(szKey, "skin"))
+	else if (!_stricmp(szKey, "skin"))
 	{
 		m_Skin = atoi(szValue);
 		PostUpdate(Notify_Changed);
 	}
-	else if (!stricmp(szKey, "fademindist"))
+	else if (!_stricmp(szKey, "fademindist"))
 	{
 		m_flFadeMinDist = atoi(szValue);
 	}
-	else if (!stricmp(szKey, "fademaxdist"))
+	else if (!_stricmp(szKey, "fademaxdist"))
 	{
 		m_flFadeMaxDist = atoi(szValue);
 	}
-	else if (!stricmp(szKey, "screenspacefade"))
+	else if (!_stricmp(szKey, "screenspacefade"))
 	{
 		m_bScreenSpaceFade = (atoi(szValue) != 0);
 	}
-	else if (!stricmp(szKey, "fadescale"))
+	else if (!_stricmp(szKey, "fadescale"))
 	{
 		m_flFadeScale = atof(szValue);
 	}

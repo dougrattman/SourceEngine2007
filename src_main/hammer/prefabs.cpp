@@ -56,7 +56,7 @@ typedef struct {
 CPrefabLibrary *CreatePrefabLibrary(const char *szFile) {
   CPrefabLibrary *pLibrary;
 
-  if (stricmp(&szFile[strlen(szFile) - 2], ".ol") != 0) {
+  if (_stricmp(&szFile[strlen(szFile) - 2], ".ol") != 0) {
     pLibrary = new CPrefabLibraryVMF;
   } else {
     pLibrary = new CPrefabLibraryRMF;
@@ -161,11 +161,11 @@ CPrefab::pfiletype_t CPrefab::CheckFileType(LPCTSTR pszFilename) {
   // first check extensions
   const char *p = strrchr(pszFilename, '.');
   if (p) {
-    if (!strcmpi(p, ".rmf"))
+    if (!_strcmpi(p, ".rmf"))
       return pftRMF;
-    else if (!strcmpi(p, ".map"))
+    else if (!_strcmpi(p, ".map"))
       return pftMAP;
-    else if (!strcmpi(p, ".os"))
+    else if (!_strcmpi(p, ".os"))
       return pftScript;
   }
 
@@ -184,7 +184,7 @@ CPrefab::pfiletype_t CPrefab::CheckFileType(LPCTSTR pszFilename) {
   }
 
   // check 2: script
-  if (!strnicmp(szBuf, "[Script", 7)) {
+  if (!_strnicmp(szBuf, "[Script", 7)) {
     return pftScript;
   }
 
@@ -235,7 +235,7 @@ void CPrefabLibrary::FreePrefabs() {
 // Output : static int
 //-----------------------------------------------------------------------------
 static int __cdecl SortPrefabs(CPrefab *a, CPrefab *b) {
-  return (strcmpi(a->GetName(), b->GetName()));
+  return (_strcmpi(a->GetName(), b->GetName()));
 }
 
 //-----------------------------------------------------------------------------
@@ -460,7 +460,7 @@ CPrefabLibraryRMF::~CPrefabLibraryRMF() {}
 // not. Input  : szFilename - Path of a prefab library or folder.
 //-----------------------------------------------------------------------------
 bool CPrefabLibraryRMF::IsFile(const char *szFilename) {
-  return (strcmpi(m_strOpenFileName, szFilename) == 0);
+  return (_strcmpi(m_strOpenFileName, szFilename) == 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -752,7 +752,7 @@ CPrefabLibraryVMF::~CPrefabLibraryVMF() {}
 // not. Input  : szFilename - Path of a prefab library or folder.
 //-----------------------------------------------------------------------------
 bool CPrefabLibraryVMF::IsFile(const char *szFilename) {
-  return (strcmpi(m_szFolderName, szFilename) == 0);
+  return (_strcmpi(m_szFolderName, szFilename) == 0);
 }
 
 //-----------------------------------------------------------------------------

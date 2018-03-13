@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Defines the interface to a game class as defined by the game data
 // file (FGD). Each class is type of entity that can be placed in the editor and
@@ -211,7 +211,7 @@ const char *GDclass::GetDescription(void) {
 //-----------------------------------------------------------------------------
 bool GDclass::IsClass(const char *pszClass) {
   Assert(pszClass != NULL);
-  return (!stricmp(pszClass, m_szName));
+  return (!_stricmp(pszClass, m_szName));
 }
 
 //-----------------------------------------------------------------------------
@@ -219,8 +219,8 @@ bool GDclass::IsClass(const char *pszClass) {
 // false if not.
 //-----------------------------------------------------------------------------
 bool GDclass::IsNodeClass(const char *pszClassName) {
-  return ((strnicmp(pszClassName, "info_node", 9) == 0) &&
-          (stricmp(pszClassName, "info_node_link") != 0));
+  return ((_strnicmp(pszClassName, "info_node", 9) == 0) &&
+          (_stricmp(pszClassName, "info_node_link") != 0));
 }
 
 //-----------------------------------------------------------------------------

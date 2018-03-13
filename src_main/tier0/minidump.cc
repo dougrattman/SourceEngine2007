@@ -50,17 +50,19 @@ bool WriteMiniDumpUsingExceptionInfo(
   if (address_error_code == NO_ERROR && miniDumpWriteDump) {
     // create a unique filename for the minidump based on the current time and
     // module name
-    time_t currTime = ::time(nullptr);
-    struct tm *pTime = ::localtime(&currTime);
+    time_t time_now = ::time(nullptr);
+    tm local_time_now;
+    localtime_s(&local_time_now, &time_now);
+
     ++g_nMinidumpsWritten;
 
     // strip off the rest of the path from the .exe name
     wch module_name[SOURCE_MAX_PATH];
     ::GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
     wch *pch = wcsrchr(module_name, L'.');
-    if (pch) {
-      *pch = L'\0';
-    }
+
+    if (pch) *pch = L'\0';
+
     pch = wcsrchr(module_name, L'\\');
     if (pch) {
       // move past the last slash
@@ -72,13 +74,13 @@ bool WriteMiniDumpUsingExceptionInfo(
     _snwprintf_s(file_name, SOURCE_ARRAYSIZE(file_name),
                  L"%s_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp", pch ? pch : L"unknown",
                  g_bWritingNonfatalMinidump ? L"assert" : L"crash",
-                 pTime->tm_year + 1900, /* Year less 2000 */
-                 pTime->tm_mon + 1,     /* month (0 - 11 : 0 = January) */
-                 pTime->tm_mday,        /* day of month (1 - 31) */
-                 pTime->tm_hour,        /* hour (0 - 23) */
-                 pTime->tm_min,         /* minutes (0 - 59) */
-                 pTime->tm_sec,         /* seconds (0 - 59) */
-                 g_nMinidumpsWritten    // ensures the filename is unique
+                 local_time_now.tm_year + 1900, /* Year less 2000 */
+                 local_time_now.tm_mon + 1, /* month (0 - 11 : 0 = January) */
+                 local_time_now.tm_mday,    /* day of month (1 - 31) */
+                 local_time_now.tm_hour,    /* hour (0 - 23) */
+                 local_time_now.tm_min,     /* minutes (0 - 59) */
+                 local_time_now.tm_sec,     /* seconds (0 - 59) */
+                 g_nMinidumpsWritten        // ensures the filename is unique
     );
 
     BOOL bMinidumpResult = FALSE;
@@ -115,8 +117,8 @@ bool WriteMiniDumpUsingExceptionInfo(
     // mark any failed minidump writes by renaming them
     if (!bMinidumpResult) {
       wch failed_file_name[SOURCE_MAX_PATH];
-      _snwprintf_s(failed_file_name, SOURCE_ARRAYSIZE(failed_file_name), L"(failed)%s",
-                   file_name);
+      _snwprintf_s(failed_file_name, SOURCE_ARRAYSIZE(failed_file_name),
+                   L"(failed)%s", file_name);
       _wrename(file_name, failed_file_name);
     }
   }

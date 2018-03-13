@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef FILESYSTEM_PASSTHRU_H
 #define FILESYSTEM_PASSTHRU_H
@@ -12,15 +12,12 @@
 #undef AsyncReadMutiple
 #endif
 
-//
 // These classes pass all filesystem interface calls through to another
 // filesystem interface. They can be used anytime you want to override a couple
 // things in a filesystem. VMPI uses this to override the base filesystem calls
 // while allowing the rest of the filesystem functionality to work on the
 // master.
-//
-
-template <class Base>
+template <typename Base>
 class CInternalFileSystemPassThru : public Base {
  public:
   CInternalFileSystemPassThru() { m_pBaseFileSystemPassThru = NULL; }
@@ -142,7 +139,8 @@ class CFileSystemPassThru : public CInternalFileSystemPassThru<IFileSystem> {
   virtual bool IsDirectory(const char *pFileName, const char *pathID) {
     return m_pFileSystemPassThru->IsDirectory(pFileName, pathID);
   }
-  virtual void FileTimeToString(char *pStrip, int maxCharsIncludingTerminator,
+  virtual void FileTimeToString(char *pStrip,
+                                size_t maxCharsIncludingTerminator,
                                 long fileTime) {
     m_pFileSystemPassThru->FileTimeToString(pStrip, maxCharsIncludingTerminator,
                                             fileTime);

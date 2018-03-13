@@ -268,39 +268,39 @@ void CBitmapImagePanel::ApplySettings(KeyValues *inResourceData)
 	{
 		int align = -1;
 
-		if ( !stricmp(keyString, "north-west") )
+		if ( !_stricmp(keyString, "north-west") )
 		{
 			align = Label::a_northwest;
 		}
-		else if ( !stricmp(keyString, "north") )
+		else if ( !_stricmp(keyString, "north") )
 		{
 			align = Label::a_north;
 		}
-		else if ( !stricmp(keyString, "north-east") )
+		else if ( !_stricmp(keyString, "north-east") )
 		{
 			align = Label::a_northeast;
 		}
-		else if ( !stricmp(keyString, "west") )
+		else if ( !_stricmp(keyString, "west") )
 		{
 			align = Label::a_west;
 		}
-		else if ( !stricmp(keyString, "center") )
+		else if ( !_stricmp(keyString, "center") )
 		{
 			align = Label::a_center;
 		}
-		else if ( !stricmp(keyString, "east") )
+		else if ( !_stricmp(keyString, "east") )
 		{
 			align = Label::a_east;
 		}
-		else if ( !stricmp(keyString, "south-west") )
+		else if ( !_stricmp(keyString, "south-west") )
 		{
 			align = Label::a_southwest;
 		}
-		else if ( !stricmp(keyString, "south") )
+		else if ( !_stricmp(keyString, "south") )
 		{
 			align = Label::a_south;
 		}
-		else if ( !stricmp(keyString, "south-east") )
+		else if ( !_stricmp(keyString, "south-east") )
 		{
 			align = Label::a_southeast;
 		}

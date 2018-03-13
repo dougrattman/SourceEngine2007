@@ -198,7 +198,7 @@ void LocalTransfer_InitFastCopy(
     const RecvProp *pRecvProp = pDecoder->GetProp(iProp);
 
     if (pRecvProp) {
-      Assert(stricmp(pSendProp->GetName(), pRecvProp->GetName()) == 0);
+      Assert(_stricmp(pSendProp->GetName(), pRecvProp->GetName()) == 0);
 
       CUtlVector<CFastLocalTransferPropInfo> *pList =
           &pPrecalc->m_FastLocalTransfer.m_OtherProps;
@@ -533,7 +533,7 @@ void LocalTransfer_TransferEntity(const CBaseEdict *pEdict,
                   unsigned char *pRecvBase = clientStack.GetCurStructBase();
                   if ( pSendBase && pRecvBase )
                   {
-                          Assert( stricmp( pSendProp->GetName(),
+                          Assert( _stricmp( pSendProp->GetName(),
   pRecvProp->GetName() ) == 0 );
 
                           g_PropTypeFns[pRecvProp->GetType()].FastCopy(

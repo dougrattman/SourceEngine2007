@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "fgdlib/InputOutput.h"
 
@@ -74,7 +74,7 @@ const char *CClassInputOutputBase::GetTypeText(void) {
 //-----------------------------------------------------------------------------
 InputOutputType_t CClassInputOutputBase::SetType(const char *szType) {
   for (int i = 0; i < sizeof(TypeMap) / sizeof(TypeMap[0]); i++) {
-    if (!stricmp(TypeMap[i].pszName, szType)) {
+    if (!_stricmp(TypeMap[i].pszName, szType)) {
       m_eType = TypeMap[i].eType;
       return (m_eType);
     }
@@ -88,7 +88,7 @@ InputOutputType_t CClassInputOutputBase::SetType(const char *szType) {
 //-----------------------------------------------------------------------------
 CClassInputOutputBase &CClassInputOutputBase::operator=(
     CClassInputOutputBase &Other) {
-  strcpy(m_szName, Other.m_szName);
+  strcpy_s(m_szName, Other.m_szName);
   m_eType = Other.m_eType;
 
   //
@@ -96,8 +96,9 @@ CClassInputOutputBase &CClassInputOutputBase::operator=(
   //
   delete m_pszDescription;
   if (Other.m_pszDescription != NULL) {
-    m_pszDescription = new char[strlen(Other.m_pszDescription) + 1];
-    strcpy(m_pszDescription, Other.m_pszDescription);
+    size_t size{strlen(Other.m_pszDescription) + 1};
+    m_pszDescription = new char[size];
+    strcpy_s(m_pszDescription, size, Other.m_pszDescription);
   } else {
     m_pszDescription = NULL;
   }

@@ -190,8 +190,8 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
   if (len == -1) return SPEW_ABORT;
 
   /* Create the message.... */
-  i32 val = _vsnprintf(&message[len], SOURCE_ARRAYSIZE(message) - len - 1,
-                       pMsgFormat, args);
+  i32 val = _vsnprintf_s(&message[len], SOURCE_ARRAYSIZE(message) - len,
+                         SOURCE_ARRAYSIZE(message) - len - 1, pMsgFormat, args);
   if (val == -1) return SPEW_ABORT;
 
   len += val;
@@ -200,7 +200,7 @@ static SpewRetval_t SpewMessage_(SpewType_t spewType, const ch* pGroupName,
 
   // Add \n for warning and assert
   if ((spewType == SPEW_ASSERT)) {
-    len += sprintf(&message[len], "\n");
+    len += sprintf_s(&message[len], SOURCE_ARRAYSIZE(message) - len, "\n");
   }
 
   /* use normal assert here; to avoid recursion. */
@@ -252,7 +252,7 @@ bool FindSpewGroup(const ch* pGroupName, i32* pInd) {
     i32 e = (i32)(s_GroupCount - 1);
     while (s <= e) {
       i32 m = (s + e) >> 1;
-      i32 cmp = stricmp(pGroupName, s_pSpewGroups[m].m_GroupName);
+      i32 cmp = _stricmp(pGroupName, s_pSpewGroups[m].m_GroupName);
       if (!cmp) {
         *pInd = m;
         return true;
@@ -658,11 +658,11 @@ void SpewActivate(const ch* pGroupName, i32 level) {
     }
 
     Assert(strlen(pGroupName) < MAX_GROUP_NAME_LENGTH);
-    strcpy(s_pSpewGroups[ind].m_GroupName, pGroupName);
+    strcpy_s(s_pSpewGroups[ind].m_GroupName, pGroupName);
 
     // Update standard groups
     for (i32 i = 0; i < GROUP_COUNT; ++i) {
-      if ((s_pGroupIndices[i] < 0) && !stricmp(s_pGroupNames[i], pGroupName)) {
+      if ((s_pGroupIndices[i] < 0) && !_stricmp(s_pGroupNames[i], pGroupName)) {
         s_pGroupIndices[i] = ind;
         break;
       }
@@ -672,8 +672,8 @@ void SpewActivate(const ch* pGroupName, i32 level) {
 }
 
 bool Plat_SimpleLog(const ch* file, i32 line) {
-  FILE* f = fopen("simple.log", "at+");
-  bool ok = !!f;
+  FILE* f;
+  bool ok = !fopen_s(&f, "simple.log", "at+");
   if (ok) {
     ok = fprintf(f, "%s:%i\n", file, line) != 0;
     fclose(f);
@@ -717,8 +717,8 @@ void COM_TimestampedLog(ch const* fmt, ...) {
     is_first_time_write = true;
   }
 
-  FILE* f = fopen("timestamped.log", "at+");
-  if (f) {
+  FILE* f;
+  if (!fopen_s(&f, "timestamped.log", "at+")) {
     fprintf(f, "%8.4f / %8.4f:  %s\n", curent_stamp, curent_stamp - last_stamp,
             log_buffer);
     fclose(f);

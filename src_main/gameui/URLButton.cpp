@@ -316,8 +316,8 @@ void URLButton::FireActionSignal() {
   // message-based action signal
   if (_actionMessage) {
     // see if it's a url
-    if (!stricmp(_actionMessage->GetName(), "command") &&
-        !strnicmp(_actionMessage->GetString("command", ""), "url ",
+    if (!_stricmp(_actionMessage->GetName(), "command") &&
+        !_strnicmp(_actionMessage->GetString("command", ""), "url ",
                   strlen("url ")) &&
         strstr(_actionMessage->GetString("command", ""), "://")) {
       // it's a command to launch a url, run it
@@ -332,10 +332,10 @@ void URLButton::FireActionSignal() {
 // Purpose: gets info about the button
 //-----------------------------------------------------------------------------
 bool URLButton::RequestInfo(KeyValues *outputData) {
-  if (!stricmp(outputData->GetName(), "GetState")) {
+  if (!_stricmp(outputData->GetName(), "GetState")) {
     outputData->SetInt("state", IsSelected());
     return true;
-  } else if (!stricmp(outputData->GetName(), "GetCommand")) {
+  } else if (!_stricmp(outputData->GetName(), "GetCommand")) {
     if (_actionMessage) {
       outputData->SetString("command",
                             _actionMessage->GetString("command", ""));

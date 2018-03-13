@@ -661,10 +661,10 @@ int CSaveRestore::SaveGameSlot(const char *pSaveName, const char *pSaveComment,
 
   // Output to disk
   bool bClearFile = true;
-  bool bIsQuick = (stricmp(pSaveName, "quick") == 0);
-  bool bIsAutosave = (!bIsQuick && stricmp(pSaveName, "autosave") == 0);
+  bool bIsQuick = (_stricmp(pSaveName, "quick") == 0);
+  bool bIsAutosave = (!bIsQuick && _stricmp(pSaveName, "autosave") == 0);
   bool bIsAutosaveDangerous =
-      (!bIsAutosave && stricmp(pSaveName, "autosavedangerous") == 0);
+      (!bIsAutosave && _stricmp(pSaveName, "autosavedangerous") == 0);
   if (bIsQuick || bIsAutosave || bIsAutosaveDangerous) {
     bClearFile = false;
     SaveMsg("Queue AgeSaveList\n");
@@ -2387,7 +2387,7 @@ int EntryInTable(CSaveRestoreData *pSaveData, const char *pMapName, int index) {
 
   index++;
   for (i = index; i < pSaveData->levelInfo.connectionCount; i++) {
-    if (!stricmp(pSaveData->levelInfo.levelList[i].mapName, pMapName)) return i;
+    if (!_stricmp(pSaveData->levelInfo.levelList[i].mapName, pMapName)) return i;
   }
 
   return -1;
@@ -2404,7 +2404,7 @@ void LandmarkOrigin(CSaveRestoreData *pSaveData, Vector &output,
   int i;
 
   for (i = 0; i < pSaveData->levelInfo.connectionCount; i++) {
-    if (!stricmp(pSaveData->levelInfo.levelList[i].landmarkName,
+    if (!_stricmp(pSaveData->levelInfo.levelList[i].landmarkName,
                  pLandmarkName)) {
       VectorCopy(pSaveData->levelInfo.levelList[i].vecLandmarkOrigin, output);
       return;
@@ -2437,13 +2437,13 @@ void CSaveRestore::LoadAdjacentEnts(const char *pOldLevel,
   for (i = 0; i < currentLevelData.levelInfo.connectionCount; i++) {
     // make sure the previous level is in the connection list so we can
     // bring over the player.
-    if (!strcmpi(currentLevelData.levelInfo.levelList[i].mapName, pOldLevel)) {
+    if (!_strcmpi(currentLevelData.levelInfo.levelList[i].mapName, pOldLevel)) {
       foundprevious = true;
     }
 
     for (test = 0; test < i; test++) {
       // Only do maps once
-      if (!stricmp(currentLevelData.levelInfo.levelList[i].mapName,
+      if (!_stricmp(currentLevelData.levelInfo.levelList[i].mapName,
                    currentLevelData.levelInfo.levelList[test].mapName))
         break;
     }
@@ -2470,7 +2470,7 @@ void CSaveRestore::LoadAdjacentEnts(const char *pOldLevel,
                      pLandmarkName);
       VectorSubtract(landmarkOrigin, pSaveData->levelInfo.vecLandmarkOffset,
                      pSaveData->levelInfo.vecLandmarkOffset);
-      if (!stricmp(currentLevelData.levelInfo.levelList[i].mapName, pOldLevel))
+      if (!_stricmp(currentLevelData.levelInfo.levelList[i].mapName, pOldLevel))
         flags |= FENTTABLE_PLAYER;
 
       index = -1;

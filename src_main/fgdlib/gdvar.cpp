@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "fgdlib/gdvar.h"
 
@@ -79,7 +79,7 @@ GDinputvariable::GDinputvariable(const char *szType, const char *szName) {
   m_pszDescription = NULL;
 
   m_eType = GetTypeFromToken(szType);
-  strcpy(m_szName, szName);
+  strcpy_s(m_szName, szName);
 }
 
 //-----------------------------------------------------------------------------
@@ -95,17 +95,18 @@ GDinputvariable::~GDinputvariable(void) {
 //-----------------------------------------------------------------------------
 GDinputvariable &GDinputvariable::operator=(GDinputvariable &Other) {
   m_eType = Other.GetType();
-  strcpy(m_szName, Other.m_szName);
-  strcpy(m_szLongName, Other.m_szLongName);
-  strcpy(m_szDefault, Other.m_szDefault);
+  strcpy_s(m_szName, Other.m_szName);
+  strcpy_s(m_szLongName, Other.m_szLongName);
+  strcpy_s(m_szDefault, Other.m_szDefault);
 
   //
   // Copy the description.
   //
   delete[] m_pszDescription;
   if (Other.m_pszDescription != NULL) {
-    m_pszDescription = new char[strlen(Other.m_pszDescription) + 1];
-    strcpy(m_pszDescription, Other.m_pszDescription);
+    size_t size{strlen(Other.m_pszDescription) + 1};
+    m_pszDescription = new char[size];
+    strcpy_s(m_pszDescription, size, Other.m_pszDescription);
   } else {
     m_pszDescription = NULL;
   }
@@ -334,7 +335,7 @@ BOOL GDinputvariable::InitFromTokens(TokenReader &tr) {
     //
     // Default long name is short name.
     //
-    strcpy(m_szLongName, m_szName);
+    strcpy_s(m_szLongName, m_szName);
   }
 
   //
@@ -378,7 +379,7 @@ BOOL GDinputvariable::InitFromTokens(TokenReader &tr) {
 
       // store bitflag value
       GDGetToken(tr, szToken, sizeof(szToken), INTEGER);
-      sscanf(szToken, "%lu", &ivi.iValue);
+      sscanf_s(szToken, "%lu", &ivi.iValue);
 
       // colon..
       if (!GDSkipToken(tr, OPERATOR, ":")) {
@@ -389,7 +390,7 @@ BOOL GDinputvariable::InitFromTokens(TokenReader &tr) {
       if (!GDGetToken(tr, szToken, sizeof(szToken), STRING)) {
         return FALSE;
       }
-      strcpy(ivi.szCaption, szToken);
+      strcpy_s(ivi.szCaption, szToken);
 
       // colon..
       if (!GDSkipToken(tr, OPERATOR, ":")) {
@@ -425,7 +426,7 @@ BOOL GDinputvariable::InitFromTokens(TokenReader &tr) {
       // store choice value
       GDGetToken(tr, szToken, sizeof(szToken), ttype);
       ivi.iValue = 0;
-      strcpy(ivi.szValue, szToken);
+      strcpy_s(ivi.szValue, szToken);
 
       // colon
       if (!GDSkipToken(tr, OPERATOR, ":")) {
@@ -437,7 +438,7 @@ BOOL GDinputvariable::InitFromTokens(TokenReader &tr) {
         return FALSE;
       }
 
-      strcpy(ivi.szCaption, szToken);
+      strcpy_s(ivi.szCaption, szToken);
 
       m_Items.AddToTail(ivi);
     }
@@ -459,7 +460,7 @@ void GDinputvariable::FromKeyValue(MDkeyvalue *pkv) {
   trtoken_t eStoreAs = GetStoreAsFromType(m_eType);
 
   if (eStoreAs == STRING) {
-    strcpy(m_szValue, pkv->szValue);
+    strcpy_s(m_szValue, pkv->szValue);
   } else if (eStoreAs == INTEGER) {
     m_nValue = atoi(pkv->szValue);
   }
@@ -546,7 +547,7 @@ void GDinputvariable::ResetDefaults(void) {
     }
   } else {
     m_nValue = m_nDefault;
-    strcpy(m_szValue, m_szDefault);
+    strcpy_s(m_szValue, m_szDefault);
   }
 }
 
@@ -555,14 +556,14 @@ void GDinputvariable::ResetDefaults(void) {
 // Input  : pkv - Pointer to the key value object to receive the encoded string.
 //-----------------------------------------------------------------------------
 void GDinputvariable::ToKeyValue(MDkeyvalue *pkv) {
-  strcpy(pkv->szKey, m_szName);
+  strcpy_s(pkv->szKey, m_szName);
 
   trtoken_t eStoreAs = GetStoreAsFromType(m_eType);
 
   if (eStoreAs == STRING) {
-    strcpy(pkv->szValue, m_szValue);
+    strcpy_s(pkv->szValue, m_szValue);
   } else if (eStoreAs == INTEGER) {
-    itoa(m_nValue, pkv->szValue, 10);
+    _itoa_s(m_nValue, pkv->szValue, 10);
   }
 }
 
@@ -575,7 +576,7 @@ void GDinputvariable::ToKeyValue(MDkeyvalue *pkv) {
 const char *GDinputvariable::ItemStringForValue(const char *szValue) {
   int nCount = m_Items.Count();
   for (int i = 0; i < nCount; i++) {
-    if (!stricmp(m_Items[i].szValue, szValue)) {
+    if (!_stricmp(m_Items[i].szValue, szValue)) {
       return (m_Items[i].szCaption);
     }
   }
@@ -592,7 +593,7 @@ const char *GDinputvariable::ItemStringForValue(const char *szValue) {
 const char *GDinputvariable::ItemValueForString(const char *szString) {
   int nCount = m_Items.Count();
   for (int i = 0; i < nCount; i++) {
-    if (!strcmpi(m_Items[i].szCaption, szString)) {
+    if (!_strcmpi(m_Items[i].szCaption, szString)) {
       return (m_Items[i].szValue);
     }
   }

@@ -1105,20 +1105,19 @@ const ch *CThread::GetName() {
   AUTO_LOCK(m_Lock);
   if (!m_szName[0]) {
 #ifdef OS_WIN
-    _snprintf(m_szName, sizeof(m_szName) - 1, "Thread(%p/%p)", this, m_hThread);
+    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%p/%p)", this,
+                m_hThread);
 #elif OS_POSIX
-    _snprintf(m_szName, sizeof(m_szName) - 1, "Thread(%0x%x/0x%x)", this,
-              m_threadId);
+    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%0x%x/0x%x)", this,
+                m_threadId);
 #endif
-    m_szName[sizeof(m_szName) - 1] = 0;
   }
   return m_szName;
 }
 
 void CThread::SetName(const ch *pszName) {
   AUTO_LOCK(m_Lock);
-  strncpy(m_szName, pszName, sizeof(m_szName) - 1);
-  m_szName[sizeof(m_szName) - 1] = 0;
+  strncpy_s(m_szName, pszName, SOURCE_ARRAYSIZE(m_szName) - 1);
 }
 
 bool CThread::Start(u32 nBytesStack) {

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tmessage.h"
 
@@ -10,7 +10,6 @@
 #include "tier0/include/icommandline.h"
 #include "tier1/characterset.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define MSGFILE_NAME 0
@@ -347,7 +346,10 @@ void TextMessageParse(uint8_t *pMemFile, int fileSize) {
             ConDMsg("Error parsing file!\n");
             return;
           }
-          Q_strcpy(nameHeap + lastNamePos, currentName);
+          Q_strcpy(
+              nameHeap + lastNamePos,
+              SOURCE_ARRAYSIZE(nameHeap) - (&nameHeap[lastNamePos] - nameHeap),
+              currentName);
 
           // Terminate text in-place in the memory file (it's temporary memory
           // that will be deleted) If the string starts with #, it's a
@@ -424,8 +426,8 @@ void TextMessageParse(uint8_t *pMemFile, int fileSize) {
   messageSize = (messageCount * sizeof(client_textmessage_t));
 
   // Must malloc because we need to be able to clear it after initialization
-  gMessageTable =
-      (client_textmessage_t *)malloc(textHeapSize + nameHeapSize + messageSize);
+  size_t size = textHeapSize + nameHeapSize + messageSize;
+  gMessageTable = (client_textmessage_t *)malloc(size);
 
   // Copy table over
   memcpy(gMessageTable, textMessages, messageSize);
@@ -444,7 +446,9 @@ void TextMessageParse(uint8_t *pMemFile, int fileSize) {
     if (gMessageTable[i].pClearMessage) {
       gMessageTable[i].pClearMessage += nameOffset;
     }
-    Q_strcpy(pCurrentText, gMessageTable[i].pMessage);  // Copy text over
+    Q_strcpy(pCurrentText,
+             (uintptr_t)gMessageTable + size - (uintptr_t)pCurrentText,
+             gMessageTable[i].pMessage);  // Copy text over
     gMessageTable[i].pMessage = pCurrentText;
     pCurrentText += strlen(pCurrentText) + 1;
   }

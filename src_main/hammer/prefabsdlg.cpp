@@ -340,7 +340,7 @@ void CPrefabsDlg::OnExportobject()
 			if(iPos != -1)
 			{
 				char *p = strFilename.GetBuffer(0);
-				if(!strnicmp(p+iPos+1, "map", 3))
+				if(!_strnicmp(p+iPos+1, "map", 3))
 					dwFlags = CPrefab::lsMAP;
 			}
 

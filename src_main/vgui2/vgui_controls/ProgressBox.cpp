@@ -285,7 +285,7 @@ void ProgressBox::OnTick()
 //-----------------------------------------------------------------------------
 void ProgressBox::OnCommand(const char *command)
 {
-	if (!stricmp(command, "Cancel"))
+	if (!_stricmp(command, "Cancel"))
 	{
 		OnCancel();
 	}

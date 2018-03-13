@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmserializerkeyvalues.h"
 #include <limits.h>
@@ -238,20 +238,20 @@ DmAttributeType_t CDmSerializerKeyValues::DetermineAttributeType(
 
     case KeyValues::TYPE_STRING: {
       float f1, f2, f3, f4;
-      if (sscanf(pKeyValues->GetString(), "%f %f %f %f", &f1, &f2, &f3, &f4) ==
-          4)
+      if (sscanf_s(pKeyValues->GetString(), "%f %f %f %f", &f1, &f2, &f3,
+                   &f4) == 4)
         return AT_VECTOR4;
-      if (sscanf(pKeyValues->GetString(), "%f %f %f", &f1, &f2, &f3) == 3)
+      if (sscanf_s(pKeyValues->GetString(), "%f %f %f", &f1, &f2, &f3) == 3)
         return AT_VECTOR3;
-      if (sscanf(pKeyValues->GetString(), "%f %f", &f1, &f2) == 2)
+      if (sscanf_s(pKeyValues->GetString(), "%f %f", &f1, &f2) == 2)
         return AT_VECTOR2;
 
       int i = pKeyValues->GetInt(NULL, INT_MAX);
-      if ((sscanf(pKeyValues->GetString(), "%d", &i) == 1) &&
+      if ((sscanf_s(pKeyValues->GetString(), "%d", &i) == 1) &&
           (!strchr(pKeyValues->GetString(), '.')))
         return AT_INT;
 
-      if (sscanf(pKeyValues->GetString(), "%f", &f1) == 1) return AT_FLOAT;
+      if (sscanf_s(pKeyValues->GetString(), "%f", &f1) == 1) return AT_FLOAT;
 
       return AT_STRING;
     }
@@ -281,7 +281,7 @@ void CDmSerializerKeyValues::UnserializeAttribute(CDmElement *pElement,
 
   // Convert to lower case
   CUtlString pLowerName = pAttributeName;
-  Q_strlower(pLowerName.Get());
+  Q_strlower(pLowerName.Get(), pLowerName.Length() + 1);
 
   // Rename "type", "name", or "id" fields, since they are special fields
   for (int i = 0; s_pAttributeRemap[i].m_pKeyValuesName; ++i) {

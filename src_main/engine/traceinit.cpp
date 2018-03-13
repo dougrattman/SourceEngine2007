@@ -112,7 +112,7 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
     if (f->referencecount) break;
   }
 
-  if (f && f->referencecount && stricmp(f->shutdownname, shutdown)) {
+  if (f && f->referencecount && _stricmp(f->shutdownname, shutdown)) {
     if (!f->warningprinted) {
       f->warningprinted = true;
       // Msg( "Shutdown function %s called out of order, expecting %s\n",
@@ -123,7 +123,7 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
   for (i = 0; i < m_nNumFuncs[listnum]; i++) {
     InitFunc *ff = m_Funcs[listnum][i];
 
-    if (!stricmp(ff->shutdownname, shutdown)) {
+    if (!_stricmp(ff->shutdownname, shutdown)) {
       Assert(ff->referencecount);
       // f->shutdowntime = Plat_FloatTime();
       ff->referencecount--;

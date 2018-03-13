@@ -1143,7 +1143,7 @@ int Panel::FindChildIndexByName(const char *childName) {
     Panel *pChild = GetChild(i);
     if (!pChild) continue;
 
-    if (!stricmp(pChild->GetName(), childName)) {
+    if (!_stricmp(pChild->GetName(), childName)) {
       return i;
     }
   }
@@ -1160,7 +1160,7 @@ Panel *Panel::FindChildByName(const char *childName, bool recurseDown) {
     Panel *pChild = GetChild(i);
     if (!pChild) continue;
 
-    if (!stricmp(pChild->GetName(), childName)) {
+    if (!_stricmp(pChild->GetName(), childName)) {
       return pChild;
     }
 
@@ -1183,7 +1183,7 @@ Panel *Panel::FindSiblingByName(const char *siblingName) {
   for (int i = 0; i < siblingCount; i++) {
     VPANEL sibling = ipanel()->GetChild(GetVParent(), i);
     Panel *panel = ipanel()->GetPanel(sibling, GetControlsModuleName());
-    if (!stricmp(panel->GetName(), siblingName)) {
+    if (!_stricmp(panel->GetName(), siblingName)) {
       return panel;
     }
   }
@@ -4169,7 +4169,7 @@ class CBoolProperty : public vgui::IPanelAnimationPropertyConverter {
   virtual void InitFromDefault(Panel *panel, PanelAnimationMapEntry *entry) {
     void *data = (void *)((*entry->m_pfnLookup)(panel));
     bool b = false;
-    if (!stricmp(entry->defaultvalue(), "true") ||
+    if (!_stricmp(entry->defaultvalue(), "true") ||
         atoi(entry->defaultvalue()) != 0) {
       b = true;
     }
@@ -4393,7 +4393,7 @@ PanelAnimationMapEntry *Panel::FindPanelAnimationEntry(char const *scriptname,
   for (int i = 0; i < c; i++) {
     PanelAnimationMapEntry *e = &map->entries[i];
 
-    if (!stricmp(e->name(), scriptname)) {
+    if (!_stricmp(e->name(), scriptname)) {
       return e;
     }
   }
@@ -5619,7 +5619,7 @@ class CPanelMessageMapDictionary {
 };
 
 char const *CPanelMessageMapDictionary::StripNamespace(char const *className) {
-  if (!strnicmp(className, "vgui::", 6)) {
+  if (!_strnicmp(className, "vgui::", 6)) {
     return className + 6;
   }
   return className;
@@ -5685,7 +5685,7 @@ class CPanelKeyBindingMapDictionary {
 
 char const *CPanelKeyBindingMapDictionary::StripNamespace(
     char const *className) {
-  if (!strnicmp(className, "vgui::", 6)) {
+  if (!_strnicmp(className, "vgui::", 6)) {
     return className + 6;
   }
   return className;

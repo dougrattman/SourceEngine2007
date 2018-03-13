@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <vstdlib/IKeyValuesSystem.h>
 
@@ -8,13 +8,11 @@
 #include "tier1/memstack.h"
 #include "tier1/utlsymbol.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef NO_SBH  // no need to pool if using tier0 small block heap
 #define KEYVALUES_USE_POOL 1
 #endif
-
 
 // Purpose: Central storage point for KeyValues memory and symbols
 
@@ -79,13 +77,11 @@ class CKeyValuesSystem : public IKeyValuesSystem {
 // EXPOSE_SINGLE_INTERFACE(CKeyValuesSystem, IKeyValuesSystem,
 // KEYVALUES_INTERFACE_VERSION);
 
-
 // Instance singleton and expose interface to rest of code
 
 static CKeyValuesSystem g_KeyValuesSystem;
 
 IKeyValuesSystem *KeyValuesSystem() { return &g_KeyValuesSystem; }
-
 
 // Purpose: Constructor
 
@@ -110,7 +106,6 @@ CKeyValuesSystem::CKeyValuesSystem()
   m_iMaxKeyValuesSize = sizeof(KeyValues);
 }
 
-
 // Purpose: Destructor
 
 CKeyValuesSystem::~CKeyValuesSystem() {
@@ -133,7 +128,6 @@ CKeyValuesSystem::~CKeyValuesSystem() {
   delete m_pMemPool;
 #endif
 }
-
 
 // Purpose: registers the size of the KeyValues in the specified instance
 //			so it can build a properly sized memory pool for the
@@ -160,7 +154,6 @@ static void KVLeak(char const *fmt, ...) {
 }
 #endif
 
-
 // Purpose: allocates a KeyValues object from the shared mempool
 
 void *CKeyValuesSystem::AllocKeyValuesMemory(int size) {
@@ -179,7 +172,6 @@ void *CKeyValuesSystem::AllocKeyValuesMemory(int size) {
 #endif
 }
 
-
 // Purpose: frees a KeyValues object from the shared mempool
 
 void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
@@ -189,7 +181,6 @@ void CKeyValuesSystem::FreeKeyValuesMemory(void *pMem) {
   free(pMem);
 #endif
 }
-
 
 // Purpose: symbol table access (used for key names)
 
@@ -205,7 +196,7 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
   int i = 0;
   hash_item_t *item = &m_HashTable[hash];
   while (1) {
-    if (!stricmp(name, (char *)m_Strings.GetBase() + item->stringIndex)) {
+    if (!_stricmp(name, (char *)m_Strings.GetBase() + item->stringIndex)) {
       return (HKeySymbol)item->stringIndex;
     }
 
@@ -227,13 +218,17 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
 
       // build up the new item
       item->next = NULL;
-      char *pString = (char *)m_Strings.Alloc(strlen(name) + 1);  //-V814
-      if (!pString) {
+
+      size_t size{strlen(name) + 1};
+      char *the_string = (char *)m_Strings.Alloc(size);  //-V814
+      if (!the_string) {
         Error("Out of keyvalue string space");
         return -1;
       }
-      item->stringIndex = pString - (char *)m_Strings.GetBase();
-      strcpy(pString, name);
+
+      item->stringIndex = the_string - (char *)m_Strings.GetBase();
+      strcpy_s(the_string, size, name);
+
       return (HKeySymbol)item->stringIndex;
     }
 
@@ -245,7 +240,6 @@ HKeySymbol CKeyValuesSystem::GetSymbolForString(const char *name,
   return (-1);
 }
 
-
 // Purpose: symbol table access
 
 const char *CKeyValuesSystem::GetStringForSymbol(HKeySymbol symbol) {
@@ -254,7 +248,6 @@ const char *CKeyValuesSystem::GetStringForSymbol(HKeySymbol symbol) {
   }
   return ((char *)m_Strings.GetBase() + (size_t)symbol);
 }
-
 
 // Purpose: adds KeyValues record into global list so we can track memory leaks
 
@@ -267,7 +260,6 @@ void CKeyValuesSystem::AddKeyValuesToMemoryLeakList(void *pMem,
 #endif
 }
 
-
 // Purpose: used to track memory leaks
 
 void CKeyValuesSystem::RemoveKeyValuesFromMemoryLeakList(void *pMem) {
@@ -278,7 +270,6 @@ void CKeyValuesSystem::RemoveKeyValuesFromMemoryLeakList(void *pMem) {
   m_KeyValuesTrackingList.RemoveAt(index);
 #endif
 }
-
 
 // Purpose: generates a simple hash value for a string
 

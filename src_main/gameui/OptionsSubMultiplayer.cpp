@@ -524,14 +524,14 @@ COptionsSubMultiplayer::~COptionsSubMultiplayer() {}
 // Purpose:
 //-----------------------------------------------------------------------------
 void COptionsSubMultiplayer::OnCommand(const char *command) {
-  if (!stricmp(command, "Advanced")) {
+  if (!_stricmp(command, "Advanced")) {
 #ifndef _XBOX
     if (!m_hMultiplayerAdvancedDialog.Get()) {
       m_hMultiplayerAdvancedDialog = new CMultiplayerAdvancedDialog(this);
     }
     m_hMultiplayerAdvancedDialog->Activate();
 #endif
-  } else if (!stricmp(command, "ImportSprayImage")) {
+  } else if (!_stricmp(command, "ImportSprayImage")) {
     if (m_hImportSprayDialog == NULL) {
       m_hImportSprayDialog =
           new FileOpenDialog(NULL, "#GameUI_ImportSprayImage", true);
@@ -580,7 +580,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
 
   Q_strncpy(tgaPath, fullpath, sizeof(tgaPath));
 
-  if (stricmp(extension, "tga")) {
+  if (_stricmp(extension, "tga")) {
     // construct a .tga version of this file path.
 
     c = tgaPath + strlen(tgaPath);
@@ -598,7 +598,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
       ++index;
     } while (_access(tgaPath, 0) != -1);
 
-    if (!stricmp(extension, "jpg") || !stricmp(extension, "jpeg")) {
+    if (!_stricmp(extension, "jpg") || !_stricmp(extension, "jpeg")) {
       // convert from the jpeg file format to the TGA file format
       errcode = ConvertJPEGToTGA(fullpath, tgaPath);
       if (errcode == CE_SUCCESS) {
@@ -633,7 +633,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
           errorDialog->DoModal();
         }
       }
-    } else if (!stricmp(extension, "bmp")) {
+    } else if (!_stricmp(extension, "bmp")) {
       // convert from the bmp file format to the TGA file format
       errcode = ConvertBMPToTGA(fullpath, tgaPath);
 
@@ -669,7 +669,7 @@ void COptionsSubMultiplayer::OnFileSelected(const char *fullpath) {
           errorDialog->DoModal();
         }
       }
-    } else if (!stricmp(extension, "vtf")) {
+    } else if (!_stricmp(extension, "vtf")) {
       // if the file is already in the vtf format there's no need to convert it.
       convertTGAToVTF = false;
     }
@@ -1826,7 +1826,7 @@ void FindVMTFilesInFolder(const char *pFolder, const char *pFolderName,
   const char *modelfile = cl_modelfile.GetString();
 
   while (fn) {
-    if (!stricmp(fn, ".") || !stricmp(fn, "..")) {
+    if (!_stricmp(fn, ".") || !_stricmp(fn, "..")) {
       fn = g_pFullFileSystem->FindNext(fh);
       continue;
     }
@@ -1868,7 +1868,7 @@ void FindVMTFilesInFolder(const char *pFolder, const char *pFolderName,
         Q_FileBase(modelfile, realname, sizeof(realname));
         Q_FileBase(filename, filename, sizeof(filename));
 
-        if (!stricmp(filename, realname)) {
+        if (!_stricmp(filename, realname)) {
           iInitialItem = iCount;
         }
 
@@ -2072,7 +2072,7 @@ void COptionsSubMultiplayer::InitAdvCrosshairStyleList(
         // check to see if this is the one we have set
         Q_snprintf(filename, sizeof(filename), "materials/vgui/crosshairs/%s",
                    fn);
-        if (!stricmp(filename, crosshairfile)) {
+        if (!_stricmp(filename, crosshairfile)) {
           initialItem = i;
         }
 

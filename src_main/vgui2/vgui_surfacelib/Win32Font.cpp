@@ -93,7 +93,7 @@ bool CWin32Font::Create(const char *windowsFontName, int tall, int weight,
       (flags & vgui::ISurface::FONTFLAG_SYMBOL) ? SYMBOL_CHARSET : ANSI_CHARSET;
 
   // hack for japanese win98 support
-  if (!stricmp(windowsFontName, "win98japanese")) {
+  if (!_stricmp(windowsFontName, "win98japanese")) {
     // use any font that contains the japanese charset
     charset = SHIFTJIS_CHARSET;
     m_szName = "Tahoma";
@@ -405,7 +405,7 @@ void CWin32Font::GetCharRGBA(wchar_t ch, int rgbaWide, int rgbaTall,
 //-----------------------------------------------------------------------------
 bool CWin32Font::IsEqualTo(const char *windowsFontName, int tall, int weight,
                            int blur, int scanlines, int flags) {
-  if (!stricmp(windowsFontName, m_szName.String()) && m_iTall == tall &&
+  if (!_stricmp(windowsFontName, m_szName.String()) && m_iTall == tall &&
       m_iWeight == weight && m_iBlur == blur && m_iFlags == flags)
     return true;
 

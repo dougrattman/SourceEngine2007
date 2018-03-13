@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: CBaseFileSystem Async Operation
 //
@@ -31,7 +31,6 @@
 // and to make it a deliberate compile time choice to keep the fast path.
 #undef WaitForSingleObject
 
- 
 #include "tier0/include/memdbgon.h"
 
 #ifdef OS_POSIX
@@ -124,7 +123,7 @@ class CAsyncOpenedFiles {
 
     int iEntry = m_map.Find(szFixedName);
     if (iEntry == m_map.InvalidIndex()) {
-      iEntry = m_map.Insert(strdup(szFixedName), new AsyncOpenedFile_t);
+      iEntry = m_map.Insert(_strdup(szFixedName), new AsyncOpenedFile_t);
     } else {
       m_map[iEntry]->AddRef();
     }
@@ -248,7 +247,7 @@ class CFileAsyncReadJob : public CFileAsyncJob, protected FileAsyncRequest_t {
 #if defined(TRACK_BLOCKING_IO)
     m_Timer.Start();
 #endif
-    pszFilename = strdup(fromRequest.pszFilename);
+    pszFilename = _strdup(fromRequest.pszFilename);
     Q_FixSlashes(const_cast<char *>(pszFilename));
 
     pContext = this;
@@ -371,7 +370,7 @@ class CFileAsyncWriteJob : public CFileAsyncJob {
 #if defined(TRACK_BLOCKING_IO)
     m_Timer.Start();
 #endif
-    m_pszFilename = strdup(pszFilename);
+    m_pszFilename = _strdup(pszFilename);
     g_nAsyncWriteJobs++;
 
     SetFlags(GetFlags() | JF_SERIAL);
@@ -452,8 +451,8 @@ class CFileAsyncAppendFileJob : public CFileAsyncJob {
 #if defined(TRACK_BLOCKING_IO)
     m_Timer.Start();
 #endif
-    m_pszAppendTo = strdup(pszAppendTo);
-    m_pszAppendFrom = strdup(pszAppendFrom);
+    m_pszAppendTo = _strdup(pszAppendTo);
+    m_pszAppendFrom = _strdup(pszAppendFrom);
     Q_FixSlashes(const_cast<char *>(m_pszAppendTo));
     Q_FixSlashes(const_cast<char *>(m_pszAppendFrom));
     g_nAsyncWriteJobs++;

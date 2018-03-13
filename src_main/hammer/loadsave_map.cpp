@@ -907,7 +907,7 @@ int CEditGameClass::SerializeMAP(std::fstream& file, BOOL fIsStoring)
 						//
 						// Only write the key value if it is non-zero.
 						//
-						if ((pKey->szKey[0] != 0) && (pKey->szValue[0] != 0) && (stricmp(pKey->szValue, "0")))
+						if ((pKey->szKey[0] != 0) && (pKey->szValue[0] != 0) && (_stricmp(pKey->szValue, "0")))
 						{
 							iRvl = pKey->SerializeMAP(file, fIsStoring);
 							if (iRvl != fileOk)

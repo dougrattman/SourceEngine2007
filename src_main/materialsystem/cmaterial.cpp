@@ -432,7 +432,7 @@ CMaterial::CMaterial(char const *materialName, const char *pTextureGroupName,
 
   // Strip off the extension
   Q_StripExtension(materialName, pTemp, len + 1);
-  Q_strlower(pTemp);
+  Q_strlower(pTemp, len + 1);
 
   // Convert it to a symbol
   m_Name = pTemp;
@@ -1001,13 +1001,13 @@ bool CMaterial::ShouldSkipVar(KeyValues *pVar, bool *pWasConditional) {
       bToggle = true;
     }
 
-    if (!stricmp(pCond, "hdr")) {
+    if (!_stricmp(pCond, "hdr")) {
       bShouldSkip = (HardwareConfig()->GetHDRType() == HDR_TYPE_NONE);
-    } else if (!stricmp(pCond, "srgb")) {
+    } else if (!_stricmp(pCond, "srgb")) {
       bShouldSkip = (!HardwareConfig()->UsesSRGBCorrectBlending());
-    } else if (!stricmp(pCond, "ldr")) {
+    } else if (!_stricmp(pCond, "ldr")) {
       bShouldSkip = (HardwareConfig()->GetHDRType() != HDR_TYPE_NONE);
-    } else if (!stricmp(pCond, "360")) {
+    } else if (!_stricmp(pCond, "360")) {
       bShouldSkip = !IsX360();
     } else
       Warning("unrecognized conditional test %s in %s\n", pVarName, GetName());
@@ -1084,7 +1084,7 @@ int CMaterial::ParseMaterialVars(IShader *pShader, KeyValues &keyValues,
         int i;
         for (i = numParams; i < varCount; ++i) {
           Assert(ppVars[i]);
-          if (!stricmp(ppVars[i]->GetName(), pVar->GetName())) break;
+          if (!_stricmp(ppVars[i]->GetName(), pVar->GetName())) break;
         }
         if (i != varCount) {
           if (!pOverride[i] || parsingOverrides) {
@@ -2716,7 +2716,7 @@ void ExpandPatchFile(KeyValues &keyValues, KeyValues &patchKeyValues,
 
   // Recurse down through all patch files:
   int count = 0;
-  while (count < 10 && stricmp(keyValues.GetName(), "patch") == 0) {
+  while (count < 10 && _stricmp(keyValues.GetName(), "patch") == 0) {
     //		WriteKeyValuesToFile( "patch.txt", keyValues );
 
     // Accumulate the new patch keys from this file

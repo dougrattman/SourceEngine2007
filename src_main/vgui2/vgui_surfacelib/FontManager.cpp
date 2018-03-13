@@ -100,7 +100,7 @@ bool CFontManager::SetFontGlyphSet(HFont font, const char *windowsFontName,
       // font cannot provide asian glyphs and just supports the normal range
       // create the asian version of the font
       const char *localizedFontName = GetForeignFallbackFontName();
-      if (winFont && !stricmp(localizedFontName, windowsFontName)) {
+      if (winFont && !_stricmp(localizedFontName, windowsFontName)) {
         // it's the same font and can support the full range
         m_FontAmalgams[font].AddFont(winFont, 0x0000, 0xFFFF);
         return true;
@@ -250,7 +250,7 @@ void CFontManager::SetFontScale(vgui::HFont font, float sx, float sy) {
 //-----------------------------------------------------------------------------
 vgui::HFont CFontManager::GetFontByName(const char *name) {
   for (int i = 1; i < m_FontAmalgams.Count(); i++) {
-    if (!stricmp(name, m_FontAmalgams[i].Name())) {
+    if (!_stricmp(name, m_FontAmalgams[i].Name())) {
       return i;
     }
   }
@@ -383,7 +383,7 @@ FallbackFont_t g_FallbackFonts[] = {
 //-----------------------------------------------------------------------------
 bool CFontManager::IsFontForeignLanguageCapable(const char *windowsFontName) {
   for (int i = 0; g_szValidAsianFonts[i] != NULL; i++) {
-    if (!stricmp(g_szValidAsianFonts[i], windowsFontName)) return true;
+    if (!_stricmp(g_szValidAsianFonts[i], windowsFontName)) return true;
   }
 
   // typeface isn't supported by asian languages
@@ -396,7 +396,7 @@ bool CFontManager::IsFontForeignLanguageCapable(const char *windowsFontName) {
 const char *CFontManager::GetFallbackFontName(const char *windowsFontName) {
   int i;
   for (i = 0; g_FallbackFonts[i].font != NULL; i++) {
-    if (!stricmp(g_FallbackFonts[i].font, windowsFontName))
+    if (!_stricmp(g_FallbackFonts[i].font, windowsFontName))
       return g_FallbackFonts[i].fallbackFont;
   }
 
@@ -429,7 +429,7 @@ const char *CFontManager::GetForeignFallbackFontName() {
 
   int i;
   for (i = 0; g_Win98ForeignFallbackFonts[i].language != NULL; i++) {
-    if (!stricmp(g_Win98ForeignFallbackFonts[i].language, m_szLanguage))
+    if (!_stricmp(g_Win98ForeignFallbackFonts[i].language, m_szLanguage))
       return g_Win98ForeignFallbackFonts[i].fallbackFont;
   }
 

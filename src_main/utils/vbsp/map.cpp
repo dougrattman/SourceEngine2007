@@ -696,7 +696,7 @@ ChunkFileResult_t LoadDispDistancesCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispDistancesKeyCallback(const char *szKey,
                                                const char *szValue,
                                                mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -783,32 +783,32 @@ ChunkFileResult_t LoadDispInfoCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispInfoKeyCallback(const char *szKey,
                                           const char *szValue,
                                           mapdispinfo_t *pMapDispInfo) {
-  if (!stricmp(szKey, "power")) {
+  if (!_stricmp(szKey, "power")) {
     CChunkFile::ReadKeyValueInt(szValue, pMapDispInfo->power);
   }
 #ifdef VSVMFIO
-  else if (!stricmp(szKey, "elevation")) {
+  else if (!_stricmp(szKey, "elevation")) {
     CChunkFile::ReadKeyValueFloat(szValue, pMapDispInfo->m_elevation);
   }
 #endif  // VSVMFIO
-  else if (!stricmp(szKey, "uaxis")) {
+  else if (!_stricmp(szKey, "uaxis")) {
     CChunkFile::ReadKeyValueVector3(szValue, pMapDispInfo->uAxis);
-  } else if (!stricmp(szKey, "vaxis")) {
+  } else if (!_stricmp(szKey, "vaxis")) {
     CChunkFile::ReadKeyValueVector3(szValue, pMapDispInfo->vAxis);
-  } else if (!stricmp(szKey, "startposition")) {
+  } else if (!_stricmp(szKey, "startposition")) {
     CChunkFile::ReadKeyValueVector3(szValue, pMapDispInfo->startPosition);
-  } else if (!stricmp(szKey, "flags")) {
+  } else if (!_stricmp(szKey, "flags")) {
     CChunkFile::ReadKeyValueInt(szValue, pMapDispInfo->flags);
   }
 #if 0  // old data
-	else if (!stricmp( szKey, "alpha" ) )
+	else if (!_stricmp( szKey, "alpha" ) )
 	{
 		CChunkFile::ReadKeyValueVector4( szValue, pMapDispInfo->alphaValues );
 	}
 #endif
-  else if (!stricmp(szKey, "mintess")) {
+  else if (!_stricmp(szKey, "mintess")) {
     CChunkFile::ReadKeyValueInt(szValue, pMapDispInfo->minTess);
-  } else if (!stricmp(szKey, "smooth")) {
+  } else if (!_stricmp(szKey, "smooth")) {
     CChunkFile::ReadKeyValueFloat(szValue, pMapDispInfo->smoothingAngle);
   }
 
@@ -837,7 +837,7 @@ ChunkFileResult_t LoadDispNormalsCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispNormalsKeyCallback(const char *szKey,
                                              const char *szValue,
                                              mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -889,7 +889,7 @@ ChunkFileResult_t LoadDispOffsetsCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispOffsetsKeyCallback(const char *szKey,
                                              const char *szValue,
                                              mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -927,7 +927,7 @@ ChunkFileResult_t LoadDispOffsetNormalsCallback(CChunkFile *pFile,
 
 ChunkFileResult_t LoadDispOffsetNormalsKeyCallback(
     const char *szKey, const char *szValue, mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -980,7 +980,7 @@ ChunkFileResult_t LoadDispAlphasCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispAlphasKeyCallback(const char *szKey,
                                             const char *szValue,
                                             mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -1014,7 +1014,7 @@ ChunkFileResult_t LoadDispTriangleTagsCallback(CChunkFile *pFile,
 ChunkFileResult_t LoadDispTriangleTagsKeyCallback(const char *szKey,
                                                   const char *szValue,
                                                   mapdispinfo_t *pMapDispInfo) {
-  if (!strnicmp(szKey, "row", 3)) {
+  if (!_strnicmp(szKey, "row", 3)) {
     char szBuf[MAX_KEYVALUE_LEN];
     strcpy(szBuf, szValue);
 
@@ -1146,7 +1146,7 @@ ChunkFileResult_t HandleNoDynamicShadowsEnt(entity_t *pMapEnt) {
 
 static ChunkFileResult_t LoadOverlayDataTransitionKeyCallback(
     const char *szKey, const char *szValue, mapoverlay_t *pOverlay) {
-  if (!stricmp(szKey, "material")) {
+  if (!_stricmp(szKey, "material")) {
     // Get the material name.
     const char *pMaterialName = szValue;
     if (g_ReplaceMaterials) {
@@ -1160,31 +1160,31 @@ static ChunkFileResult_t LoadOverlayDataTransitionKeyCallback(
       return ChunkFile_Fail;
     }
     strcpy(pOverlay->szMaterialName, pMaterialName);
-  } else if (!stricmp(szKey, "StartU")) {
+  } else if (!_stricmp(szKey, "StartU")) {
     CChunkFile::ReadKeyValueFloat(szValue, pOverlay->flU[0]);
-  } else if (!stricmp(szKey, "EndU")) {
+  } else if (!_stricmp(szKey, "EndU")) {
     CChunkFile::ReadKeyValueFloat(szValue, pOverlay->flU[1]);
-  } else if (!stricmp(szKey, "StartV")) {
+  } else if (!_stricmp(szKey, "StartV")) {
     CChunkFile::ReadKeyValueFloat(szValue, pOverlay->flV[0]);
-  } else if (!stricmp(szKey, "EndV")) {
+  } else if (!_stricmp(szKey, "EndV")) {
     CChunkFile::ReadKeyValueFloat(szValue, pOverlay->flV[1]);
-  } else if (!stricmp(szKey, "BasisOrigin")) {
+  } else if (!_stricmp(szKey, "BasisOrigin")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecOrigin);
-  } else if (!stricmp(szKey, "BasisU")) {
+  } else if (!_stricmp(szKey, "BasisU")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecBasis[0]);
-  } else if (!stricmp(szKey, "BasisV")) {
+  } else if (!_stricmp(szKey, "BasisV")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecBasis[1]);
-  } else if (!stricmp(szKey, "BasisNormal")) {
+  } else if (!_stricmp(szKey, "BasisNormal")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecBasis[2]);
-  } else if (!stricmp(szKey, "uv0")) {
+  } else if (!_stricmp(szKey, "uv0")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecUVPoints[0]);
-  } else if (!stricmp(szKey, "uv1")) {
+  } else if (!_stricmp(szKey, "uv1")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecUVPoints[1]);
-  } else if (!stricmp(szKey, "uv2")) {
+  } else if (!_stricmp(szKey, "uv2")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecUVPoints[2]);
-  } else if (!stricmp(szKey, "uv3")) {
+  } else if (!_stricmp(szKey, "uv3")) {
     CChunkFile::ReadKeyValueVector3(szValue, pOverlay->vecUVPoints[3]);
-  } else if (!stricmp(szKey, "sides")) {
+  } else if (!_stricmp(szKey, "sides")) {
     const char *pSideList = szValue;
     char *pTmpList = (char *)_alloca(strlen(pSideList) + 1);
     strcpy(pTmpList, pSideList);
@@ -1543,7 +1543,7 @@ entity_t *EntityByName(char const *pTestName) {
     entity_t *e = &entities[i];
 
     const char *pName = ValueForKey(e, "targetname");
-    if (stricmp(pName, pTestName) == 0) return e;
+    if (_stricmp(pName, pTestName) == 0) return e;
   }
 
   return 0;
@@ -1826,7 +1826,7 @@ ChunkFileResult_t LoadSideCallback(CChunkFile *pFile, LoadSide_t *pSideInfo) {
 //-----------------------------------------------------------------------------
 ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
                                       LoadSide_t *pSideInfo) {
-  if (!stricmp(szKey, "plane")) {
+  if (!_stricmp(szKey, "plane")) {
     int nRead = sscanf(szValue, "(%f %f %f) (%f %f %f) (%f %f %f)",
                        &pSideInfo->planepts[0][0], &pSideInfo->planepts[0][1],
                        &pSideInfo->planepts[0][2], &pSideInfo->planepts[1][0],
@@ -1837,7 +1837,7 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
     if (nRead != 9) {
       g_MapError.ReportError("parsing plane definition");
     }
-  } else if (!stricmp(szKey, "material")) {
+  } else if (!_stricmp(szKey, "material")) {
     // Get the material name.
     if (g_ReplaceMaterials) {
       szValue = ReplaceMaterialName(szValue);
@@ -1854,7 +1854,7 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
 
     pSideInfo->pSide->contents = textureref[mt].contents;
     pSideInfo->pSide->surf = pSideInfo->td.flags;
-  } else if (!stricmp(szKey, "uaxis")) {
+  } else if (!_stricmp(szKey, "uaxis")) {
     int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pSideInfo->td.UAxis[0],
                        &pSideInfo->td.UAxis[1], &pSideInfo->td.UAxis[2],
                        &pSideInfo->td.shift[0],
@@ -1862,7 +1862,7 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
     if (nRead != 5) {
       g_MapError.ReportError("parsing U axis definition");
     }
-  } else if (!stricmp(szKey, "vaxis")) {
+  } else if (!_stricmp(szKey, "vaxis")) {
     int nRead = sscanf(szValue, "[%f %f %f %f] %f", &pSideInfo->td.VAxis[0],
                        &pSideInfo->td.VAxis[1], &pSideInfo->td.VAxis[2],
                        &pSideInfo->td.shift[1],
@@ -1870,7 +1870,7 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
     if (nRead != 5) {
       g_MapError.ReportError("parsing V axis definition");
     }
-  } else if (!stricmp(szKey, "lightmapscale")) {
+  } else if (!_stricmp(szKey, "lightmapscale")) {
     pSideInfo->td.lightmapWorldUnitsPerLuxel = atoi(szValue);
     if (pSideInfo->td.lightmapWorldUnitsPerLuxel == 0.0f) {
       g_MapError.ReportWarning("luxel size of 0");
@@ -1880,14 +1880,14 @@ ChunkFileResult_t LoadSideKeyCallback(const char *szKey, const char *szValue,
     if (pSideInfo->td.lightmapWorldUnitsPerLuxel < g_minLuxelScale) {
       pSideInfo->td.lightmapWorldUnitsPerLuxel = g_minLuxelScale;
     }
-  } else if (!stricmp(szKey, "contents")) {
+  } else if (!_stricmp(szKey, "contents")) {
     pSideInfo->pSide->contents |= atoi(szValue);
-  } else if (!stricmp(szKey, "flags")) {
+  } else if (!_stricmp(szKey, "flags")) {
     pSideInfo->td.flags |= atoi(szValue);
     pSideInfo->pSide->surf = pSideInfo->td.flags;
-  } else if (!stricmp(szKey, "id")) {
+  } else if (!_stricmp(szKey, "id")) {
     pSideInfo->pSide->id = atoi(szValue);
-  } else if (!stricmp(szKey, "smoothing_groups")) {
+  } else if (!_stricmp(szKey, "smoothing_groups")) {
     pSideInfo->pSide->smoothingGroups = atoi(szValue);
   }
 
@@ -2090,7 +2090,7 @@ ChunkFileResult_t LoadSolidCallback(CChunkFile *pFile,
 //-----------------------------------------------------------------------------
 ChunkFileResult_t LoadSolidKeyCallback(const char *szKey, const char *szValue,
                                        mapbrush_t *pLoadBrush) {
-  if (!stricmp(szKey, "id")) {
+  if (!_stricmp(szKey, "id")) {
     pLoadBrush->id = atoi(szValue);
     g_MapError.BrushState(pLoadBrush->id);
   }

@@ -374,7 +374,7 @@ the_interface IBaseFileSystem {
   // Main file system interface
   //-----------------------------------------------------------------------------
 
-#define FILESYSTEM_INTERFACE_VERSION "VFileSystem017"
+#define FILESYSTEM_INTERFACE_VERSION "VFileSystem018"
 
 the_interface IFileSystem : public IAppSystem, public IBaseFileSystem {
  public:
@@ -456,8 +456,8 @@ the_interface IFileSystem : public IAppSystem, public IBaseFileSystem {
   // File I/O and info
   virtual bool IsDirectory(const char *pFileName, const char *pathID = 0) = 0;
 
-  virtual void FileTimeToString(char *pStrip, int maxCharsIncludingTerminator,
-                                long fileTime) = 0;
+  virtual void FileTimeToString(
+      char *pStrip, size_t maxCharsIncludingTerminator, long fileTime) = 0;
 
   //--------------------------------------------------------
   // Open file operations

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Serialization/unserialization buffer.
 
@@ -7,11 +7,9 @@
 #include "filesystem.h"
 #include "tier2/tier2.h"
 
-
 // default stream chunk size
 
 enum { DEFAULT_STREAM_CHUNK_SIZE = 16 * 1024 };
-
 
 // Constructor, destructor
 
@@ -33,12 +31,12 @@ CUtlStreamBuffer::CUtlStreamBuffer(const char *pFileName, const char *pPath,
   if (bDelayOpen) {
     int nFileNameLen = Q_strlen(pFileName);
     m_pFileName = new char[nFileNameLen + 1];
-    Q_strcpy(m_pFileName, pFileName);
+    Q_strcpy(m_pFileName, nFileNameLen + 1, pFileName);
 
     if (pPath) {
-      int nPathLen = Q_strlen(pPath);
-      m_pPath = new char[nPathLen + 1];
-      Q_strcpy(m_pPath, pPath);
+      size_t nPathLen = Q_strlen(pPath) + 1;
+      m_pPath = new char[nPathLen];
+      Q_strcpy(m_pPath, nPathLen, pPath);
     } else {
       m_pPath = new char[1];
       m_pPath[0] = 0;
@@ -102,7 +100,6 @@ void CUtlStreamBuffer::Close() {
 
 CUtlStreamBuffer::~CUtlStreamBuffer() { Close(); }
 
-
 // Open the file. normally done in constructor
 
 void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
@@ -142,7 +139,6 @@ void CUtlStreamBuffer::Open(const char *pFileName, const char *pPath,
   }
 }
 
-
 // Is the file open?
 
 bool CUtlStreamBuffer::IsOpen() const {
@@ -151,7 +147,6 @@ bool CUtlStreamBuffer::IsOpen() const {
   // Delayed open case
   return (m_pFileName != 0);
 }
-
 
 // Grow allocation size to fit requested size
 
@@ -164,7 +159,6 @@ void CUtlStreamBuffer::GrowAllocatedSize(int nSize) {
     m_Memory.Grow(nNewSize - Size());
   }
 }
-
 
 // Load up more of the stream when we overflow
 
@@ -205,7 +199,6 @@ bool CUtlStreamBuffer::StreamPutOverflow(int nSize) {
   return true;
 }
 
-
 // Reads bytes from the file; fixes up maxput if necessary and 0 terminates
 
 int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
@@ -245,7 +238,6 @@ int CUtlStreamBuffer::ReadBytesFromFile(int nBytesToRead, int nReadOffset) {
   return nBytesRead;
 }
 
-
 // Load up more of the stream when we overflow
 
 bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
@@ -281,7 +273,6 @@ bool CUtlStreamBuffer::StreamGetOverflow(int nSize) {
   m_nOffset = TellGet();
   return (nBytesRead + nUnreadBytes >= nSize);
 }
-
 
 // open file unless already failed to open
 

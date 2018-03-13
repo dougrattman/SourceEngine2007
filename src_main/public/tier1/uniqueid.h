@@ -1,23 +1,20 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_UNIQUEID_H_
 #define SOURCE_TIER1_UNIQUEID_H_
 
 #include "tier1/strtools.h"
 
-
 // Forward declarations
 
 struct UniqueId_t;
 class CUtlBuffer;
-
 
 // Defines a globally unique ID
 
 struct UniqueId_t {
   unsigned char m_Value[16];
 };
-
 
 // Methods related to unique ids
 

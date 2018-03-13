@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -230,12 +230,12 @@ class CMaterialSubRect : public IMaterialInternal {
   }
 
   // diffuse bump lightmap?
-  //	bool				IsUsingDiffuseBumpedLighting() const			{
-  //return m_pChainMaterial->IsUsingDiffuseBumpedLighting(); }
+  //	bool				IsUsingDiffuseBumpedLighting() const
+  //{ return m_pChainMaterial->IsUsingDiffuseBumpedLighting(); }
 
   // lightmap?
-  //	bool				IsUsingLightmap() const							{
-  //return m_pChainMaterial->IsUsingLightmap(); }
+  //	bool				IsUsingLightmap() const
+  //{ return m_pChainMaterial->IsUsingLightmap(); }
 
   // Gets the vertex usage flags
   VertexFormat_t GetVertexUsage() const {
@@ -405,7 +405,7 @@ CMaterialSubRect::CMaterialSubRect(const char *pMaterialName,
   int len = Q_strlen(pMaterialName);
   char *pTemp = (char *)_alloca(len + 1);
   Q_strncpy(pTemp, pMaterialName, len + 1);
-  Q_strlower(pTemp);
+  Q_strlower(pTemp, len + 1);
   pTemp[len - 4] = '\0';
   m_symName = pTemp;
 
@@ -599,8 +599,8 @@ void CMaterialSubRect::Precache() {
 bool CMaterialSubRect::PrecacheVars(KeyValues *pVMTKeyValues,
                                     KeyValues *pPatchKeyValues,
                                     CUtlVector<FileNameHandle_t> *pIncludes) {
-  // TODO(d.rattman):  Should call through to the parent material for all of this???
-  // We should get both parameters or neither
+  // TODO(d.rattman):  Should call through to the parent material for all of
+  // this??? We should get both parameters or neither
   Assert((pVMTKeyValues == NULL) ? (pPatchKeyValues == NULL)
                                  : (pPatchKeyValues != NULL));
 

@@ -326,23 +326,23 @@ void CMapCylinder::OnNotifyDependent(CMapClass *pObject,
 void CMapCylinder::OnParentKeyChanged(const char *key, const char *value) {
   CMapWorld *pWorld = (CMapWorld *)GetWorldObject(this);
   if (pWorld != NULL) {
-    if (stricmp(key, m_szStartValueKey) == 0) {
+    if (_stricmp(key, m_szStartValueKey) == 0) {
       m_pStartEntity = (CMapEntity *)UpdateDependency(
           m_pStartEntity, pWorld->FindChildByKeyValue(m_szStartKey, value));
       BuildCylinder();
-    } else if (stricmp(key, m_szEndValueKey) == 0) {
+    } else if (_stricmp(key, m_szEndValueKey) == 0) {
       m_pEndEntity = (CMapEntity *)UpdateDependency(
           m_pEndEntity, pWorld->FindChildByKeyValue(m_szEndKey, value));
       BuildCylinder();
     }
 
-    if (m_pStartEntity && stricmp(key, m_szStartRadiusKey) == 0) {
+    if (m_pStartEntity && _stricmp(key, m_szStartRadiusKey) == 0) {
       const char *pRadiusKey = m_pStartEntity->GetKeyValue(m_szStartRadiusKey);
       m_flStartRadius = pRadiusKey ? atof(pRadiusKey) : 0.0f;
       BuildCylinder();
     }
 
-    if (m_pEndEntity && stricmp(key, m_szEndRadiusKey) == 0) {
+    if (m_pEndEntity && _stricmp(key, m_szEndRadiusKey) == 0) {
       const char *pRadiusKey = m_pEndEntity->GetKeyValue(m_szEndRadiusKey);
       m_flEndRadius = pRadiusKey ? atof(pRadiusKey) : 0.0f;
       BuildCylinder();

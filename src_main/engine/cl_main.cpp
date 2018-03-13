@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "client_pch.h"
 
@@ -57,7 +57,6 @@
 #include "vox.h"
 #include "vstdlib/random.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IVEngineClient *engineClient;
@@ -401,7 +400,8 @@ bool CL_CheckCRCs(const char *pszMap) {
   // Check to see that our copy of the client side dll matches the server's.
   // Client side DLL  CRC check.
   char client_dll_name[MAX_QPATH];  // Client side DLL being used.
-  Q_snprintf(client_dll_name, SOURCE_ARRAYSIZE(client_dll_name), "bin\\client.dll");
+  Q_snprintf(client_dll_name, SOURCE_ARRAYSIZE(client_dll_name),
+             "bin\\client.dll");
 
   CRC32_t clientDllCRC;
   if (!CRC_File(&clientDllCRC, client_dll_name) &&
@@ -2192,8 +2192,9 @@ CON_COMMAND_F(setinfo, "Addes a new user info value",
     }
   } else {
     // cvar not found, create it now
-    char *pszString = new char[Q_strlen(name) + 1];
-    Q_strcpy(pszString, name);
+    size_t size = Q_strlen(name) + 1;
+    char *pszString = new char[size];
+    Q_strcpy(pszString, size, name);
 
     pCommand =
         new ConVar(pszString, "", FCVAR_USERINFO, "Custom user info value");

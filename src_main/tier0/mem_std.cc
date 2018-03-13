@@ -626,8 +626,8 @@ void CStdMemAlloc::DumpStatsFileBase(ch const *pchFileBase) {
   ch filename[512];
   _snprintf_s(filename, SOURCE_ARRAYSIZE(filename) - 1, "%s.txt", pchFileBase);
 
-  FILE *pFile = fopen(filename, "wt");
-  if (pFile) {
+  FILE *pFile;
+  if (!fopen_s(&pFile, filename, "wt")) {
     fprintf(pFile, "\nSBH:\n");
     m_SmallBlockHeap.DumpStats(pFile);  // Dump statistics to small block heap
     fclose(pFile);

@@ -67,7 +67,7 @@ class CUtlHashDict {
     CCompare(int ignored) {}
 
     bool operator()(const Entry_t &entry1, const Entry_t &entry2) const {
-      return !((bCaseInsensitive) ? stricmp(entry1.pszSymbol, entry2.pszSymbol)
+      return !((bCaseInsensitive) ? _stricmp(entry1.pszSymbol, entry2.pszSymbol)
                                   : strcmp(entry1.pszSymbol, entry2.pszSymbol));
     }
   };

@@ -412,7 +412,7 @@ void CConsolePanel::RebuildCompletionList(const char *text) {
         continue;
       }
 
-      if (!strnicmp(text, cmd->GetName(), len)) {
+      if (!_strnicmp(text, cmd->GetName(), len)) {
         // match found, add to list
         CompletionItem *item = new CompletionItem();
         m_CompletionList.AddToTail(item);
@@ -845,13 +845,13 @@ void CConsolePanel::AddToHistory(const char *commandText,
     item = &m_CommandHistory[i];
     if (!item) continue;
 
-    if (stricmp(item->GetText(), command)) continue;
+    if (_stricmp(item->GetText(), command)) continue;
 
     if (extra || item->GetExtra()) {
       if (!extra || !item->GetExtra()) continue;
 
-      // stricmp so two commands with the same starting text get added
-      if (stricmp(item->GetExtra(), extra)) continue;
+      // _stricmp so two commands with the same starting text get added
+      if (_stricmp(item->GetExtra(), extra)) continue;
     }
     m_CommandHistory.Remove(i);
   }

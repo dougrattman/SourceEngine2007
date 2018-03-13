@@ -73,8 +73,8 @@ class GameData {
                               const char *pszInstancePrefix, Vector &Origin,
                               QAngle &Angle);
   bool RemapKeyValue(const char *pszKey, const char *pszInValue,
-                     char *pszOutValue, TNameFixup NameFixup);
-  bool RemapNameField(const char *pszInValue, char *pszOutValue,
+                     char *pszOutValue, size_t maxOutValueSize, TNameFixup NameFixup);
+  bool RemapNameField(const char *pszInValue, char *pszOutValue, size_t maxOutValueSize,
                       TNameFixup NameFixup);
   bool LoadFGDMaterialExclusions(TokenReader &tr);
   bool LoadFGDAutoVisGroups(TokenReader &tr);

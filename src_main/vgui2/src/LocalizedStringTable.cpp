@@ -255,7 +255,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
     // LOAD THE LOCALIZED FILE IF IT'S NOT ENGLISH
     // append the language
     if (bValid) {
-      if (strlen(language) != 0 && stricmp(language, ENGLISH_STRING) != 0) {
+      if (strlen(language) != 0 && _stricmp(language, ENGLISH_STRING) != 0) {
         // copy out the initial part of the string
         offs = langptr - szFileName;
         strncpy(fileName, szFileName, offs);
@@ -412,7 +412,7 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
       ConvertUnicodeToANSI(keytoken, key, sizeof(key));
 
       // if we have a C++ style comment, read to end of line and continue
-      if (!strnicmp(key, "//", 2)) {
+      if (!_strnicmp(key, "//", 2)) {
         data = ReadToEndOfLine(data);
         continue;
       }
@@ -426,25 +426,25 @@ bool CLocalizedStringTable::AddFile(const char *szFileName, const char *pPathID,
       if (!valuetoken[0] && !bQuoted) break;  // we've hit the null terminator
 
       if (state == STATE_BASE) {
-        if (!stricmp(key, "Language")) {
+        if (!_stricmp(key, "Language")) {
           // copy out our language setting
           char value[MAX_LOCALIZED_CHARS];
           ConvertUnicodeToANSI(valuetoken, value, sizeof(value));
           strncpy(m_szLanguage, value, sizeof(m_szLanguage) - 1);
-        } else if (!stricmp(key, "Tokens")) {
+        } else if (!_stricmp(key, "Tokens")) {
           state = STATE_TOKENS;
-        } else if (!stricmp(key, "}")) {
+        } else if (!_stricmp(key, "}")) {
           // we've hit the end
           break;
         }
       } else if (state == STATE_TOKENS) {
-        if (!stricmp(key, "}")) {
+        if (!_stricmp(key, "}")) {
           // end of tokens
           state = STATE_BASE;
         } else {
           // skip our [english] beginnings (in non-english files)
           if ((bEnglishFile) ||
-              (!bEnglishFile && strnicmp(key, "[english]", 9))) {
+              (!bEnglishFile && _strnicmp(key, "[english]", 9))) {
             // Check for a conditional tag
             bool bAccepted = true;
             wchar_t conditional[MAX_LOCALIZED_CHARS];
@@ -621,7 +621,7 @@ bool CLocalizedStringTable::SymLess(localizedstring_t const &i1,
                          ? i2.pszValueString
                          : &g_StringTable.m_Names[i2.nameIndex];
 
-  return stricmp(str1, str2) < 0;
+  return _stricmp(str1, str2) < 0;
 }
 
 //-----------------------------------------------------------------------------

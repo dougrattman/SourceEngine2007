@@ -476,7 +476,7 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
   // see if we have a custom handler for this
   bool bURLHandled = false;
   for (int i = 0; i < m_CustomURLHandlers.Count(); i++) {
-    if (!strnicmp(m_CustomURLHandlers[i].url, url,
+    if (!_strnicmp(m_CustomURLHandlers[i].url, url,
                   strlen(m_CustomURLHandlers[i].url))) {
       // we have a custom handler
       Panel *target = m_CustomURLHandlers[i].hPanel;
@@ -495,8 +495,8 @@ bool HTML::OnStartURL(const char *url, const char *target, bool first) {
 
   if (m_bNewWindowsOnly) {
     if (target &&
-        (!stricmp(target, "_blank") ||
-         !stricmp(target, "_new")))  // only allow NEW windows (_blank ones)
+        (!_stricmp(target, "_blank") ||
+         !_stricmp(target, "_new")))  // only allow NEW windows (_blank ones)
     {
       return true;
     } else {

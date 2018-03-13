@@ -1,167 +1,157 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-
 
 #ifndef BONUSMAPSDATABASE_H
 #define BONUSMAPSDATABASE_H
-#ifdef _WIN32
-#pragma once
-#endif
-
 
 #include "tier1/UtlVector.h"
 
+struct ChallengeDescription_t {
+  char szName[32];
+  char szComment[256];
 
-struct ChallengeDescription_t
-{
-	char szName[32];
-	char szComment[256];
+  int iType;
 
-	int iType;
+  int iBronze;
+  int iSilver;
+  int iGold;
 
-	int iBronze;
-	int iSilver;
-	int iGold;
-
-	int iBest;
+  int iBest;
 };
 
-struct BonusMapDescription_t
-{
-	bool bIsFolder;
+struct BonusMapDescription_t {
+  bool bIsFolder;
 
-	char szShortName[64];
-	char szFileName[128];
+  char szShortName[64];
+  char szFileName[128];
 
-	char szMapFileName[128];
-	char szChapterName[128];
-	char szImageName[128];
+  char szMapFileName[128];
+  char szChapterName[128];
+  char szImageName[128];
 
-	char szMapName[64];
-	char szComment[256];
+  char szMapName[64];
+  char szComment[256];
 
-	bool bLocked;
-	bool bComplete;
+  bool bLocked;
+  bool bComplete;
 
-	CUtlVector<ChallengeDescription_t>	*m_pChallenges;
+  CUtlVector<ChallengeDescription_t> *m_pChallenges;
 
-	BonusMapDescription_t( void )
-	{
-		bIsFolder = false;
+  BonusMapDescription_t(void) {
+    bIsFolder = false;
 
-		szShortName[ 0 ] = '\0';
-		szFileName[ 0 ] = '\0';
+    szShortName[0] = '\0';
+    szFileName[0] = '\0';
 
-		szMapFileName[ 0 ] = '\0';
-		szChapterName[ 0 ] = '\0';
-		szImageName[ 0 ] = '\0';
+    szMapFileName[0] = '\0';
+    szChapterName[0] = '\0';
+    szImageName[0] = '\0';
 
-		szMapName[ 0 ] = '\0';
-		szComment[ 0 ] = '\0';
+    szMapName[0] = '\0';
+    szComment[0] = '\0';
 
-		bLocked = false;
-		bComplete = false;
+    bLocked = false;
+    bComplete = false;
 
-		m_pChallenges = NULL;
-	}
+    m_pChallenges = NULL;
+  }
 };
 
-struct BonusMapChallenge_t
-{
-	char szFileName[128];
-	char szMapName[32];
-	char szChallengeName[32];
-	int iBest;
+struct BonusMapChallenge_t {
+  char szFileName[128];
+  char szMapName[32];
+  char szChallengeName[32];
+  int iBest;
 };
-
 
 class KeyValues;
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Keeps track of bonus maps on disk
 //-----------------------------------------------------------------------------
-class CBonusMapsDatabase
-{
+class CBonusMapsDatabase {
+ public:
+  CBonusMapsDatabase(void);
+  ~CBonusMapsDatabase();
 
-public:
-	CBonusMapsDatabase( void );
-	~CBonusMapsDatabase();
+  bool ReadBonusMapSaveData(void);
+  bool WriteSaveData(void);
 
-	bool ReadBonusMapSaveData( void );
-	bool WriteSaveData( void );
+  const char *GetPath(void) { return m_szCurrentPath; }
+  void RootPath(void);
+  void AppendPath(const char *pchAppend);
+  void BackPath(void);
+  void SetPath(const char *pchPath, int iDirDepth);
 
-	const char * GetPath( void ) { return m_szCurrentPath; }
-	void RootPath( void );
-	void AppendPath( const char *pchAppend );
-	void BackPath( void );
-	void SetPath( const char *pchPath, int iDirDepth );
+  void ClearBonusMapsList(void);
+  void ScanBonusMaps(void);
+  void RefreshMapData(void);
 
-	void ClearBonusMapsList( void );
-	void ScanBonusMaps( void );
-	void RefreshMapData( void );
+  int BonusCount(void);
+  BonusMapDescription_t *GetBonusData(int iIndex) {
+    return &(m_BonusMaps[iIndex]);
+  }
+  int InvalidIndex(void) { return m_BonusMaps.InvalidIndex(); }
+  bool IsValidIndex(int iIndex) { return m_BonusMaps.IsValidIndex(iIndex); }
 
-	int BonusCount( void );
-	BonusMapDescription_t * GetBonusData( int iIndex ) { return &(m_BonusMaps[ iIndex ]); }
-	int InvalidIndex( void ) { return m_BonusMaps.InvalidIndex(); }
-	bool IsValidIndex( int iIndex ) { return m_BonusMaps.IsValidIndex( iIndex ); }
+  bool GetBlink(void);
+  void SetBlink(bool bState);
 
-	bool GetBlink( void );
-	void SetBlink( bool bState );
+  bool BonusesUnlocked(void);
 
-	bool BonusesUnlocked( void );
+  void SetCurrentChallengeNames(const char *pchFileName, const char *pchMapName,
+                                const char *pchChallengeName);
+  void GetCurrentChallengeNames(char *pchFileName, size_t file_name_size,
+                                char *pchMapName, size_t map_name_size,
+                                char *pchChallengeName,
+                                size_t challenge_name_size);
+  void SetCurrentChallengeObjectives(int iBronze, int iSilver, int iGold);
+  void GetCurrentChallengeObjectives(int &iBronze, int &iSilver, int &iGold);
 
-	void SetCurrentChallengeNames( const char *pchFileName, const char *pchMapName, const char *pchChallengeName );
-	void GetCurrentChallengeNames( char *pchFileName, char *pchMapName, char *pchChallengeName );
-	void SetCurrentChallengeObjectives( int iBronze, int iSilver, int iGold );
-	void GetCurrentChallengeObjectives( int &iBronze, int &iSilver, int &iGold );
+  bool SetBooleanStatus(const char *pchName, const char *pchFileName,
+                        const char *pchMapName, bool bValue);
+  bool SetBooleanStatus(const char *pchName, int iIndex, bool bValue);
+  bool UpdateChallengeBest(const char *pchFileName, const char *pchMapName,
+                           const char *pchChallengeName, int iBest);
 
-	bool SetBooleanStatus( const char *pchName, const char *pchFileName, const char *pchMapName, bool bValue );
-	bool SetBooleanStatus( const char *pchName, int iIndex, bool bValue );
-	bool UpdateChallengeBest( const char *pchFileName, const char *pchMapName, const char *pchChallengeName, int iBest );
+  float GetCompletionPercentage(void);
 
-	float GetCompletionPercentage( void );
+  int NumAdvancedComplete(void);
+  void NumMedals(int piNumMedals[3]);
 
-	int NumAdvancedComplete( void );
-	void NumMedals( int piNumMedals[ 3 ] );
+ private:
+  void AddBonus(const char *pCurrentPath, const char *pDirFileName,
+                bool bIsFolder);
+  void BuildSubdirectoryList(const char *pCurrentPath, bool bOutOfRoot);
+  void BuildBonusMapsList(const char *pCurrentPath, bool bOutOfRoot);
 
-private:
+  void ParseBonusMapData(char const *pszFileName, char const *pszShortName,
+                         bool bIsFolder);
 
-	void AddBonus( const char *pCurrentPath, const char *pDirFileName, bool bIsFolder );
-	void BuildSubdirectoryList( const char *pCurrentPath, bool bOutOfRoot );
-	void BuildBonusMapsList( const char *pCurrentPath, bool bOutOfRoot );
+ private:
+  KeyValues *m_pBonusMapsManifest;
 
-	void ParseBonusMapData( char const *pszFileName, char const *pszShortName, bool bIsFolder );
+  CUtlVector<BonusMapDescription_t> m_BonusMaps;
 
-private:
+  KeyValues *m_pBonusMapSavedData;
+  bool m_bSavedDataChanged;
 
-	KeyValues	*m_pBonusMapsManifest;
+  int m_iX360BonusesUnlocked;  // Only used on 360
+  bool m_bHasLoadedSaveData;
 
-	CUtlVector<BonusMapDescription_t>	m_BonusMaps;
+  int m_iDirDepth;
+  char m_szCurrentPath[SOURCE_MAX_PATH];
+  float m_fCurrentCompletion;
+  int m_iCompletableLevels;
 
-	KeyValues	*m_pBonusMapSavedData;
-	bool		m_bSavedDataChanged;
-
-	int		m_iX360BonusesUnlocked;		// Only used on 360
-	bool	m_bHasLoadedSaveData;
-
-	int		m_iDirDepth;
-	char	m_szCurrentPath[SOURCE_MAX_PATH];
-	float	m_fCurrentCompletion;
-	int		m_iCompletableLevels;
-
-	BonusMapChallenge_t		m_CurrentChallengeNames;
-	ChallengeDescription_t	m_CurrentChallengeObjectives;
+  BonusMapChallenge_t m_CurrentChallengeNames;
+  ChallengeDescription_t m_CurrentChallengeObjectives;
 };
 
-
-void GetChallengeMedals( ChallengeDescription_t *pChallengeDescription, int &iBest, int &iEarnedMedal, int &iNext, int &iNextMedal );
-CBonusMapsDatabase *BonusMapsDatabase( void );
+void GetChallengeMedals(ChallengeDescription_t *pChallengeDescription,
+                        int &iBest, int &iEarnedMedal, int &iNext,
+                        int &iNextMedal);
+CBonusMapsDatabase *BonusMapsDatabase(void);
 
 extern const char g_pszMedalNames[4][8];
 
-
-#endif // BONUSMAPSDATABASE_H
+#endif  // BONUSMAPSDATABASE_H

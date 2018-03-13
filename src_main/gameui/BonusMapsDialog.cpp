@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "BonusMapsDialog.h"
 
@@ -19,7 +19,6 @@
 #include "vgui_controls/PanelListPanel.h"
 #include "vgui_controls/QueryBox.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -28,21 +27,23 @@ using namespace vgui;
 
 extern const char *COM_GetModDirectory(void);
 
-bool ConstructFullImagePath(const char *pCurrentPath, const char *pchImageName,
-                            char *pchImageFileName) {
+static bool ConstructFullImagePath(const char *pCurrentPath,
+                                   const char *pchImageName,
+                                   char *pchImageFileName,
+                                   size_t image_file_name_size) {
   char *ext = Q_strstr(pchImageName, ".tga");
   if (ext) {
     // Use the specified image
     if (pchImageName[0] != '.')
-      Q_snprintf(pchImageFileName, SOURCE_MAX_PATH, "%s", pchImageName);
+      Q_snprintf(pchImageFileName, image_file_name_size, "%s", pchImageName);
     else
-      Q_snprintf(pchImageFileName, SOURCE_MAX_PATH, "%s/%s", pCurrentPath,
+      Q_snprintf(pchImageFileName, image_file_name_size, "%s/%s", pCurrentPath,
                  pchImageName);
 
     return true;
   }
 
-  Q_strcpy(pchImageFileName, pchImageName);
+  Q_strcpy(pchImageFileName, image_file_name_size, pchImageName);
 
   return false;
 }
@@ -99,7 +100,8 @@ class CBonusMapPanel : public vgui::EditablePanel {
       } else {
         // Use the specified image
         bIsTGA = ConstructFullImagePath(pCurrentPath, map.szImageName,
-                                        szImageFileName);
+                                        szImageFileName,
+                                        SOURCE_ARRAYSIZE(szImageFileName));
       }
     } else {
       if (map.szImageName[0] == '\0') {
@@ -108,7 +110,8 @@ class CBonusMapPanel : public vgui::EditablePanel {
         Q_snprintf(szImpliedTgaName, sizeof(szImpliedTgaName), "%s.tga",
                    map.szMapFileName);
         bIsTGA = ConstructFullImagePath(pCurrentPath, szImpliedTgaName,
-                                        szImageFileName);
+                                        szImageFileName,
+                                        SOURCE_ARRAYSIZE(szImageFileName));
 
         // if it doesn't exist use default bonus map icon
         if (!g_pFullFileSystem->FileExists(szImageFileName, "MOD")) {
@@ -118,7 +121,8 @@ class CBonusMapPanel : public vgui::EditablePanel {
       } else {
         // Use the specified image
         bIsTGA = ConstructFullImagePath(pCurrentPath, map.szImageName,
-                                        szImageFileName);
+                                        szImageFileName,
+                                        SOURCE_ARRAYSIZE(szImageFileName));
       }
     }
 
@@ -300,7 +304,8 @@ void CBonusMapsDialog::BuildMapsList(void) {
   SetControlVisible("ImportBonusMaps", bIsRoot);
 
   char szDisplayPath[SOURCE_MAX_PATH];
-  Q_snprintf(szDisplayPath, SOURCE_MAX_PATH, "%s/", BonusMapsDatabase()->GetPath());
+  Q_snprintf(szDisplayPath, SOURCE_MAX_PATH, "%s/",
+             BonusMapsDatabase()->GetPath());
 
   SetControlString("FileName", szDisplayPath);
   SetControlString("CommentLabel", "");
@@ -654,7 +659,7 @@ void CBonusMapsDialog::ApplySchemeSettings(IScheme *pScheme) {
 // Purpose:
 //-----------------------------------------------------------------------------
 void CBonusMapsDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "loadbonusmap")) {
+  if (!_stricmp(command, "loadbonusmap")) {
     int mapIndex = GetSelectedItemBonusMapIndex();
     if (BonusMapsDatabase()->IsValidIndex(mapIndex)) {
       BonusMapDescription_t *pBonusMap =
@@ -723,7 +728,7 @@ void CBonusMapsDialog::OnCommand(const char *command) {
         }
       }
     }
-  } else if (!stricmp(command, "back")) {
+  } else if (!_stricmp(command, "back")) {
     BonusMapsDatabase()->BackPath();
 
     // repopulate list with current directory
@@ -737,7 +742,7 @@ void CBonusMapsDialog::OnCommand(const char *command) {
     RefreshDialog(NULL);
 
     m_pGameList->MoveScrollBarToTop();
-  } else if (!stricmp(command, "ImportBonusMaps")) {
+  } else if (!_stricmp(command, "ImportBonusMaps")) {
     if (m_hImportBonusMapsDialog == NULL) {
       m_hImportBonusMapsDialog =
           new FileOpenDialog(NULL, "#GameUI_ImportBonusMaps", true);

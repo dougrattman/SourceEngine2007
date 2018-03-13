@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/memstack.h"
 
@@ -24,11 +24,7 @@ MSVC_DISABLE_WARNING(4073)
 MSVC_END_WARNING_OVERRIDE_SCOPE()
 #endif
 
-
-
 MEMALLOC_DEFINE_EXTERNAL_TRACKING(CMemoryStack);
-
-
 
 CMemoryStack::CMemoryStack()
     : m_pBase(NULL),
@@ -234,5 +230,3 @@ void CMemoryStack::PrintContents() {
   Msg("Total used memory:      %d\n", GetUsed());
   Msg("Total committed memory: %d\n", GetSize());
 }
-
-

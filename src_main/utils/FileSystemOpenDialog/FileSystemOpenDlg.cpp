@@ -1,10 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "stdafx.h"
 
 #include "FileSystemOpenDlg.h"
-#include "ifilesystemopendialog.h"
 #include "deps/libjpeg/jpeglib.h"
+#include "ifilesystemopendialog.h"
 #include "resource.h"
 #include "utldict.h"
 
@@ -14,14 +14,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CFileInfo::CFileInfo() { m_pBitmap = NULL; }
+CFileInfo::CFileInfo() : m_pBitmap{nullptr} {}
 
 CFileInfo::~CFileInfo() {}
 
-/////////////////////////////////////////////////////////////////////////////
 // This caches the thumbnail bitmaps we generate to speed up browsing.
-/////////////////////////////////////////////////////////////////////////////
-
 class CBitmapCache {
  public:
   CBitmapCache() {
@@ -93,9 +90,6 @@ class CBitmapCache {
 
 CBitmapCache g_BitmapCache;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSystemOpenDlg dialog
-
 CFileSystemOpenDlg::CFileSystemOpenDlg(CreateInterfaceFn factory, CWnd *pParent)
     : CDialog(CFileSystemOpenDlg::IDD, pParent) {
   //{{AFX_DATA_INIT(CFileSystemOpenDlg)
@@ -128,9 +122,6 @@ ON_NOTIFY(LVN_ITEMCHANGED, IDC_FILE_LIST, OnItemchangedFileList)
 ON_WM_KEYDOWN()
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// CFileSystemOpenDlg message handlers
 
 void CFileSystemOpenDlg::OnOK() {
   // Make sure it's a valid filename.

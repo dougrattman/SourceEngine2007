@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "build/include/build_config.h"
 
@@ -37,7 +37,6 @@
 #undef GetCurrentDirectory
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar fs_report_sync_opens("fs_report_sync_opens", "0", 0,
@@ -303,22 +302,31 @@ InitReturnVal_t CBaseFileSystem::Init() {
   m_BSPPathID = g_PathIDTable.AddString("BSP");
   m_GamePathID = g_PathIDTable.AddString("GAME");
 
-  if (getenv("fs_debug")) {
+  char fs_debug_env[512];
+  size_t fs_debug_env_size;
+
+  if (!getenv_s(&fs_debug_env_size, fs_debug_env, "fs_debug") &&
+      fs_debug_env_size > 0) {
     m_bOutputDebugString = true;
   }
 
-  const char *logFileName = CommandLine()->ParmValue("-fs_log");
-  if (logFileName) {
-    m_pLogFile = fopen(logFileName, "w");  // STEAM OK
-    if (!m_pLogFile) return INIT_FAILED;
-    fprintf(m_pLogFile, "@echo off\n");
-    fprintf(m_pLogFile, "setlocal\n");
-    const char *fs_target = CommandLine()->ParmValue("-fs_target");
-    if (fs_target) {
-      fprintf(m_pLogFile, "set fs_target=\"%s\"\n", fs_target);
+  const char *log_file_name = CommandLine()->ParmValue("-fs_log");
+  if (log_file_name) {
+    // STEAM OK
+    if (!fopen_s(&m_pLogFile, log_file_name, "w")) {
+      fprintf_s(m_pLogFile, "@echo off\n");
+      fprintf_s(m_pLogFile, "setlocal\n");
+
+      const char *fs_target = CommandLine()->ParmValue("-fs_target");
+      if (fs_target) {
+        fprintf_s(m_pLogFile, "set fs_target=\"%s\"\n", fs_target);
+      }
+
+      fprintf_s(m_pLogFile, "if \"%%fs_target%%\" == \"\" goto error\n");
+      fprintf_s(m_pLogFile, "@echo on\n");
+    } else {
+      return INIT_FAILED;
     }
-    fprintf(m_pLogFile, "if \"%%fs_target%%\" == \"\" goto error\n");
-    fprintf(m_pLogFile, "@echo on\n");
   }
 
   InitAsync();
@@ -501,7 +509,7 @@ FILE *CBaseFileSystem::Trace_FOpen(const char *filename, const char *options,
 
 void CBaseFileSystem::GetFileNameForHandle(FileHandle_t handle, char *buf,
                                            size_t buflen) {
-  strcpy(buf, "Unknown");
+  strcpy_s(buf, buflen, "Unknown");
   /*
   CFileHandle *fh = ( CFileHandle *)handle;
   if ( !fh )
@@ -663,7 +671,7 @@ bool CBaseFileSystem::AddPackFileFromPath(const char *pPath,
                                           bool bCheckForAppendedPack,
                                           const char *pathID) {
   char fullpath[SOURCE_MAX_PATH];
-  _snprintf(fullpath, sizeof(fullpath), "%s%s", pPath, pakfile);
+  _snprintf_s(fullpath, SOURCE_ARRAYSIZE(fullpath), "%s%s", pPath, pakfile);
   Q_FixSlashes(fullpath);
 
   struct _stat buf;
@@ -1994,29 +2002,34 @@ void CBaseFileSystem::RemoveAllSearchPaths() {
 }
 
 void CBaseFileSystem::LogFileAccess(const char *pFullFileName) {
-  if (!m_pLogFile) {
-    return;
-  }
-  char buf[1024];
+  if (!m_pLogFile) return;
+
+  char log_buffer[1024];
 #if BSPOUTPUT
-  Q_snprintf(buf, sizeof(buf), "%s\n%s\n", pShortFileName, pFullFileName);
-  fprintf(m_pLogFile, "%s", buf);  // STEAM OK
+  Q_snprintf(log_buffer, SOURCE_ARRAYSIZE(log_buffer), "%s\n%s\n",
+             pShortFileName, pFullFileName);
+  fprintf(m_pLogFile, "%s", log_buffer);  // STEAM OK
 #else
   char cwd[MAX_FILEPATH];
-  _getcwd(cwd, MAX_FILEPATH - 1);
-  Q_strcat(cwd, "\\", sizeof(cwd));
+  if (!_getcwd(cwd, MAX_FILEPATH - 1)) return;
+
+  Q_strcat(cwd, "\\", SOURCE_ARRAYSIZE(cwd));
+
   if (Q_strnicmp(cwd, pFullFileName, strlen(cwd)) == 0) {
-    const char *pFileNameWithoutExeDir = pFullFileName + strlen(cwd);
-    char targetPath[MAX_FILEPATH];
-    strcpy(targetPath, "%fs_target%\\");
-    strcat(targetPath, pFileNameWithoutExeDir);
-    Q_snprintf(buf, sizeof(buf), "copy \"%s\" \"%s\"\n", pFullFileName,
-               targetPath);
-    char tmp[MAX_FILEPATH];
-    Q_strncpy(tmp, targetPath, sizeof(tmp));
-    Q_StripFilename(tmp);
-    fprintf(m_pLogFile, "mkdir \"%s\"\n", tmp);  // STEAM OK
-    fprintf(m_pLogFile, "%s", buf);              // STEAM OK
+    const char *just_file_name = pFullFileName + strlen(cwd);
+    char target_path[MAX_FILEPATH];
+
+    strcpy_s(target_path, "%fs_target%\\");
+    strcat_s(target_path, just_file_name);
+    Q_snprintf(log_buffer, SOURCE_ARRAYSIZE(log_buffer), "copy \"%s\" \"%s\"\n",
+               pFullFileName, target_path);
+
+    char target_dir[MAX_FILEPATH];
+    Q_strncpy(target_dir, target_path, SOURCE_ARRAYSIZE(target_dir));
+    Q_StripFilename(target_dir);
+
+    fprintf_s(m_pLogFile, "mkdir \"%s\"\n", target_dir);  // STEAM OK
+    fprintf_s(m_pLogFile, "%s", log_buffer);              // STEAM OK
   } else {
     Assert(0);
   }
@@ -2062,7 +2075,7 @@ class CFileOpenInfo {
   void SetResolvedFilename(const char *pStr) {
     if (m_ppszResolvedFilename) {
       Assert(!(*m_ppszResolvedFilename));
-      *m_ppszResolvedFilename = strdup(pStr);
+      *m_ppszResolvedFilename = _strdup(pStr);
     }
   }
 
@@ -2348,10 +2361,10 @@ void CBaseFileSystem::ParsePathID(const char *&pFilename, const char *&pPathID,
 
   if (!pFilename || pFilename[0] == 0) return;
 
-  // TODO(d.rattman): Pain! Backslashes are used to denote network drives, forward to
-  // denote path ids HOORAY! We call FixSlashes everywhere. That will definitely
-  // not work I'm not changing it yet though because I don't know how painful
-  // the bugs would be that would be generated
+  // TODO(d.rattman): Pain! Backslashes are used to denote network drives,
+  // forward to denote path ids HOORAY! We call FixSlashes everywhere. That will
+  // definitely not work I'm not changing it yet though because I don't know how
+  // painful the bugs would be that would be generated
   bool bIsForwardSlash = (pFilename[0] == '/' && pFilename[1] == '/');
   //	bool bIsBackwardSlash = ( pFilename[0] == '\\' && pFilename[1] == '\\'
   //);
@@ -2367,7 +2380,8 @@ void CBaseFileSystem::ParsePathID(const char *&pFilename, const char *&pPathID,
   // Parse out the path ID.
   const char *pIn = &pFilename[2];
   char *pOut = tempPathID;
-  while (*pIn && !PATHSEPARATOR(*pIn) && (pOut - tempPathID) < (SOURCE_MAX_PATH - 1)) {
+  while (*pIn && !PATHSEPARATOR(*pIn) &&
+         (pOut - tempPathID) < (SOURCE_MAX_PATH - 1)) {
     *pOut++ = *pIn++;
   }
 
@@ -2919,7 +2933,7 @@ int CBaseFileSystem::FPrintf(FileHandle_t file, const char *pFormat, ...) {
   }
 
   char buffer[65535];
-  int len = vsprintf(buffer, pFormat, args);
+  int len = vsprintf_s(buffer, pFormat, args);
   len = fh->Write(buffer, len);
   va_end(args);
 
@@ -3135,8 +3149,8 @@ bool CBaseFileSystem::ShouldGameReloadFile(const char *pFilename) {
   }
 
   CFileInfo *fileInfos[256];
-  int nFileInfos =
-      m_FileTracker.GetFileInfos(fileInfos, SOURCE_ARRAYSIZE(fileInfos), pFilename);
+  int nFileInfos = m_FileTracker.GetFileInfos(
+      fileInfos, SOURCE_ARRAYSIZE(fileInfos), pFilename);
   if (nFileInfos == 0) {
     // Ain't heard of this file. It probably came from a BSP or a pak file.
     if (m_WhitelistSpewFlags & WHITELIST_SPEW_DONT_RELOAD_FILES) {
@@ -3398,11 +3412,14 @@ void CBaseFileSystem::SetWhitelistSpewFlags(int flags) {
 //			fileTime -
 //-----------------------------------------------------------------------------
 void CBaseFileSystem::FileTimeToString(char *pString,
-                                       int maxCharsIncludingTerminator,
-                                       long fileTime) {
-  time_t time = fileTime;
-  strncpy(pString, ctime(&time), maxCharsIncludingTerminator);
-  pString[maxCharsIncludingTerminator - 1] = '\0';
+                                       size_t maxCharsIncludingTerminator,
+                                       long file_time) {
+  time_t the_time = file_time;
+  char time_string[32];
+
+  if (!ctime_s(time_string, SOURCE_ARRAYSIZE(time_string), &the_time)) {
+    strcpy_s(pString, maxCharsIncludingTerminator, time_string);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -4399,27 +4416,27 @@ void CBaseFileSystem::BlockingFileAccess_LeaveCriticalSection() {
 bool CBaseFileSystem::GetFileTypeForFullPath(char const *pFullPath,
                                              wchar_t *buf,
                                              size_t bufSizeInBytes) {
-#if !defined(_X360) && !defined(OS_POSIX)
-  wchar_t wcharpath[512];
-  ::MultiByteToWideChar(CP_UTF8, 0, pFullPath, -1, wcharpath,
-                        sizeof(wcharpath) / sizeof(wchar_t));
-  wcharpath[(sizeof(wcharpath) / sizeof(wchar_t)) - 1] = L'\0';
+  const size_t buffer_size_in_words{bufSizeInBytes / sizeof(wchar_t)};
 
-  SHFILEINFOW info = {0};
-  DWORD_PTR dwResult =
-      SHGetFileInfoW(wcharpath, 0, &info, sizeof(info), SHGFI_TYPENAME);
-  if (dwResult) {
-    wcsncpy(buf, info.szTypeName, (bufSizeInBytes / sizeof(wchar_t)));
-    buf[(bufSizeInBytes / sizeof(wchar_t)) - 1] = L'\0';
+#ifndef OS_POSIX
+  wchar_t unc_path[512];
+  ::MultiByteToWideChar(CP_UTF8, 0, pFullPath, -1, unc_path,
+                        SOURCE_ARRAYSIZE(unc_path));
+  unc_path[SOURCE_ARRAYSIZE(unc_path)] = L'\0';
+
+  SHFILEINFOW info{0};
+  DWORD_PTR return_code =
+      SHGetFileInfoW(unc_path, 0, &info, sizeof(info), SHGFI_TYPENAME);
+  if (return_code) {
+    wcsncpy_s(buf, buffer_size_in_words, info.szTypeName, buffer_size_in_words);
     return true;
-  } else
-#endif
-  {
-    char ext[32];
-    Q_ExtractFileExtension(pFullPath, ext, sizeof(ext));
-    _snwprintf(buf, (bufSizeInBytes / sizeof(wchar_t)) - 1, L".%S", ext);
-    buf[(bufSizeInBytes / sizeof(wchar_t)) - 1] = L'\0';
   }
+#endif
+
+  char ext[32];
+  Q_ExtractFileExtension(pFullPath, ext, SOURCE_ARRAYSIZE(ext));
+  _snwprintf_s(buf, buffer_size_in_words, buffer_size_in_words - 1, L".%S",
+               ext);
   return false;
 }
 

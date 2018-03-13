@@ -85,7 +85,7 @@ CChangeTrack *GetChangeTrack(const char *pName) {
   FOR_EACH_LL(g_Tracks, i) {
     CChangeTrack *pCur = g_Tracks[i];
 
-    if (stricmp(pCur->m_pName, pName) == 0) return pCur;
+    if (_stricmp(pCur->m_pName, pName) == 0) return pCur;
   }
 
   CChangeTrack *pCur = new CChangeTrack;

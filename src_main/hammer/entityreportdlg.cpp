@@ -301,14 +301,14 @@ BOOL AddEntityToList(CMapEntity *pEntity, CEntityReportDlg *pDlg) {
         !pDlg->m_szFilterValue.IsEmpty()) {
       // first, check key
       if (pDlg->m_szFilterKey.IsEmpty() ||
-          !strcmpi(pDlg->m_szFilterKey, pEntity->GetKey(i))) {
+          !_strcmpi(pDlg->m_szFilterKey, pEntity->GetKey(i))) {
         // now, check value
         char szTmp1[128], szTmp2[128];
         strcpy(szTmp1, pEntity->GetKeyValue(i));
         strupr(szTmp1);
         strcpy(szTmp2, pDlg->m_szFilterValue);
         if ((!pDlg->m_bExact && strstr(szTmp1, szTmp2)) ||
-            !strcmpi(szTmp1, szTmp2)) {
+            !_strcmpi(szTmp1, szTmp2)) {
           bAdd = TRUE;
         }
       }

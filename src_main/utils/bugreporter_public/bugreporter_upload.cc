@@ -16,8 +16,8 @@
 #include <memory>
 #include "blockingudpsocket.h"
 #include "cserserverprotocol_engine.h"
-#include "filesystem_tools.h"
 #include "deps/libice/IceKey.h"
+#include "filesystem_tools.h"
 #include "shared_file_system.h"
 #include "steamcommon.h"
 #include "tier0/include/basetypes.h"
@@ -324,7 +324,10 @@ class Win32UploadBugReport {
 
     // Run the state machine
     while (true) {
-      Assert(states_[current_state_].first == current_state_);
+      Assert(
+          states_[static_cast<std::underlying_type_t<decltype(current_state_)>>(
+                      current_state_)]
+              .state == current_state_);
 
       ProtocolStateHandlerFunc handler =
           states_[static_cast<std::underlying_type_t<decltype(current_state_)>>(

@@ -486,7 +486,7 @@ void CTextureWindow::OnPaint(void)
 	{
 		TE.pTex->GetShortName(szDrawTexture);
 
-		if (!strcmpi(szCurTexture, szDrawTexture))
+		if (!_strcmpi(szCurTexture, szDrawTexture))
 		{
 			rectHighlight = TE.texrect;
 			rectHighlight.InflateRect(2, 4);

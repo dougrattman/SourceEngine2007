@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
 
@@ -7,10 +7,10 @@
 #include <ctype.h>
 #include <cassert>
 #include <cstdlib>
+#include "base/include/macros.h"
 #include "mathlib/mathlib.h"
 #include "mathlib/vector.h"
 #include "tier0/include/basetypes.h"
-#include "base/include/macros.h"
 #include "tier1/checksum_crc.h"
 #include "tier1/utlbuffer.h"
 
@@ -336,11 +336,10 @@ char const *CSentence::NameForLanguage(int language) {
 // Output : int
 //-----------------------------------------------------------------------------
 int CSentence::LanguageForName(char const *name) {
-  int l;
-  for (l = 0; l < CC_NUM_LANGUAGES; l++) {
+  for (int l = 0; l < CC_NUM_LANGUAGES; l++) {
     CCLanguage *entry = &g_CCLanguageLookup[l];
     Assert(entry->type == l);
-    if (!stricmp(entry->name, name)) return l;
+    if (!_stricmp(entry->name, name)) return l;
   }
   return -1;
 }
@@ -376,7 +375,7 @@ void CSentence::ParsePlaintext(CUtlBuffer &buf) {
   text[0] = 0;
   while (1) {
     buf.GetString(token);
-    if (!stricmp(token, "}")) break;
+    if (!_stricmp(token, "}")) break;
 
     Q_strncat(text, token, sizeof(text), COPY_ALL_CHARACTERS);
     Q_strncat(text, " ", sizeof(text), COPY_ALL_CHARACTERS);
@@ -392,9 +391,9 @@ void CSentence::ParseWords(CUtlBuffer &buf) {
 
   while (1) {
     buf.GetString(token);
-    if (!stricmp(token, "}")) break;
+    if (!_stricmp(token, "}")) break;
 
-    if (stricmp(token, "WORD")) break;
+    if (_stricmp(token, "WORD")) break;
 
     buf.GetString(token);
     Q_strncpy(word, token, sizeof(word));
@@ -412,11 +411,11 @@ void CSentence::ParseWords(CUtlBuffer &buf) {
     AddWordTag(wt);
 
     buf.GetString(token);
-    if (stricmp(token, "{")) break;
+    if (_stricmp(token, "{")) break;
 
     while (1) {
       buf.GetString(token);
-      if (!stricmp(token, "}")) break;
+      if (!_stricmp(token, "}")) break;
 
       // Parse phoneme
       int code = atoi(token);
@@ -448,7 +447,7 @@ void CSentence::ParseEmphasis(CUtlBuffer &buf) {
   char token[4096];
   while (1) {
     buf.GetString(token);
-    if (!stricmp(token, "}")) break;
+    if (!_stricmp(token, "}")) break;
 
     char t[256];
     Q_strncpy(t, token, sizeof(t));
@@ -477,16 +476,16 @@ void CSentence::ParseCloseCaption(CUtlBuffer &buf) {
     //   PHRASE unicode streamlength "streambytes" starttime endtime
     // }
     buf.GetString(token);
-    if (!stricmp(token, "}")) break;
+    if (!_stricmp(token, "}")) break;
 
     buf.GetString(token);
-    if (stricmp(token, "{")) break;
+    if (_stricmp(token, "{")) break;
 
     buf.GetString(token);
     while (1) {
-      if (!stricmp(token, "}")) break;
+      if (!_stricmp(token, "}")) break;
 
-      if (stricmp(token, "PHRASE")) break;
+      if (_stricmp(token, "PHRASE")) break;
 
       char cc_type[32];
       char cc_stream[4096];
@@ -498,9 +497,9 @@ void CSentence::ParseCloseCaption(CUtlBuffer &buf) {
       Q_strncpy(cc_type, token, sizeof(cc_type));
 
       bool unicode = false;
-      if (!stricmp(cc_type, "unicode")) {
+      if (!_stricmp(cc_type, "unicode")) {
         unicode = true;
-      } else if (stricmp(cc_type, "char")) {
+      } else if (_stricmp(cc_type, "char")) {
         Assert(0);
       }
 
@@ -526,7 +525,7 @@ void CSentence::ParseOptions(CUtlBuffer &buf) {
   char token[4096];
   while (1) {
     buf.GetString(token);
-    if (!stricmp(token, "}")) break;
+    if (!_stricmp(token, "}")) break;
 
     if (Q_strlen(token) == 0) break;
 
@@ -536,9 +535,9 @@ void CSentence::ParseOptions(CUtlBuffer &buf) {
     buf.GetString(token);
     Q_strncpy(value, token, sizeof(value));
 
-    if (!strcmpi(key, "voice_duck")) {
+    if (!_strcmpi(key, "voice_duck")) {
       SetVoiceDuck(atoi(value) ? true : false);
-    } else if (!strcmpi(key, "checksum")) {
+    } else if (!_strcmpi(key, "checksum")) {
       SetDataCheckSum((unsigned int)atoi(value));
     }
   }
@@ -560,19 +559,19 @@ void CSentence::ParseDataVersionOnePointZero(CUtlBuffer &buf) {
     Q_strncpy(section, token, sizeof(section));
 
     buf.GetString(token);
-    if (stricmp(token, "{")) break;
+    if (_stricmp(token, "{")) break;
 
-    if (!stricmp(section, "PLAINTEXT")) {
+    if (!_stricmp(section, "PLAINTEXT")) {
       ParsePlaintext(buf);
-    } else if (!stricmp(section, "WORDS")) {
+    } else if (!_stricmp(section, "WORDS")) {
       ParseWords(buf);
-    } else if (!stricmp(section, "EMPHASIS")) {
+    } else if (!_stricmp(section, "EMPHASIS")) {
       ParseEmphasis(buf);
-    } else if (!stricmp(section, "CLOSECAPTION")) {
+    } else if (!_stricmp(section, "CLOSECAPTION")) {
       // NOTE:  CLOSECAPTION IS NO LONGER VALID
       // This just skips the section of data.
       ParseCloseCaption(buf);
-    } else if (!stricmp(section, "OPTIONS")) {
+    } else if (!_stricmp(section, "OPTIONS")) {
       ParseOptions(buf);
     }
   }
@@ -871,7 +870,7 @@ void CSentence::InitFromBuffer(CUtlBuffer &buf) {
   char token[4096];
   buf.GetString(token);
 
-  if (stricmp(token, "VERSION")) return;
+  if (_stricmp(token, "VERSION")) return;
 
   buf.GetString(token);
   if (atof(token) == 1.0f) {

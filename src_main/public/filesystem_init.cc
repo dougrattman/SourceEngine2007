@@ -235,29 +235,33 @@ void AddGameBinDir(IFileSystem *pFileSystem, const ch *pLocation) {
 
 KeyValues *ReadKeyValuesFile(const ch *pFilename) {
   // Read in the gameinfo.txt file and 0-terminate it.
-  FILE *fp = fopen(pFilename, "rb");
-  if (!fp) return nullptr;
+  FILE *fd;
+  if (!fopen_s(&fd, pFilename, "rb")) {
+    CUtlVector<ch> buf;
 
-  CUtlVector<ch> buf;
-  fseek(fp, 0, SEEK_END);
-  buf.SetSize(ftell(fp) + 1);
-  fseek(fp, 0, SEEK_SET);
-  fread(buf.Base(), 1, buf.Count() - 1, fp);
+    fseek(fd, 0, SEEK_END);
+    buf.SetSize(ftell(fd) + 1);
 
-  fclose(fp);
-  buf[buf.Count() - 1] = 0;
+    fseek(fd, 0, SEEK_SET);
+    fread(buf.Base(), 1, buf.Count() - 1, fd);
 
-  KeyValues *kv = new KeyValues("");
-  if (!kv->LoadFromBuffer(pFilename, buf.Base())) {
-    kv->deleteThis();
-    return nullptr;  //-V773
+    fclose(fd);
+    buf[buf.Count() - 1] = '\0';
+
+    KeyValues *kv = new KeyValues("");
+    if (!kv->LoadFromBuffer(pFilename, buf.Base())) {
+      kv->deleteThis();
+      return nullptr;  //-V773
+    }
+
+    return kv;
   }
 
-  return kv;
+  return nullptr;
 }
 
 static bool Sys_GetExecutableName(ch *out, i32 len) {
-#if defined(OS_WIN)
+#ifdef OS_WIN
   if (!::GetModuleFileName((HINSTANCE)GetModuleHandle(nullptr), out, len)) {
     return false;
   }
@@ -279,9 +283,15 @@ bool FileSystem_GetExecutableDir(ch *exedir, i32 exeDirLen) {
     const ch *pProject = GetVProjectCmdLineValue();
     if (!pProject) {
       // Check their registry.
-      pProject = getenv(GAMEDIR_TOKEN);
+      ch env_token[SOURCE_MAX_PATH];
+      size_t env_token_size;
+
+      pProject = !getenv_s(&env_token_size, env_token, GAMEDIR_TOKEN) &&
+                         env_token_size > 0
+                     ? env_token
+                     : nullptr;
     }
-    if (pProject) {
+    if (pProject && pProject[0]) {
       Q_snprintf(exedir, exeDirLen, "%s%c..%cbin", pProject,
                  CORRECT_PATH_SEPARATOR, CORRECT_PATH_SEPARATOR);
       return true;
@@ -604,7 +614,7 @@ static FSReturnCode_t TryLocateGameInfoFile(ch *pOutDir, i32 outDirLen,
   Q_strncpy(pOutDir, spchCopyNameBuffer.Get(), outDirLen);
   pOutDir[outDirLen - 1] = 0;
   if (ch *pchContentFix = Q_stristr(pOutDir, "/content/")) {
-    sprintf(pchContentFix, "/game/");
+    sprintf_s(pchContentFix, outDirLen - (pchContentFix - pOutDir), "/game/");
     memmove(pchContentFix + 6, pchContentFix + 9,
             pOutDir + outDirLen - (pchContentFix + 9));
 
@@ -681,9 +691,14 @@ FSReturnCode_t LocateGameInfoFile(const CFSSteamSetupInfo &fsInfo, ch *pOutDir,
       return FS_OK;
   }
 
+  // Check their registry.
+  ch env_token[SOURCE_MAX_PATH];
+  size_t env_token_size;
+
   // Try to use the environment variable / registry
-  if ((pProject = getenv(GAMEDIR_TOKEN)) != nullptr &&
-      (Q_MakeAbsolutePath(pOutDir, outDirLen, pProject), 1) &&
+  if (!getenv_s(&env_token_size, env_token, GAMEDIR_TOKEN) &&
+      env_token_size > 0 &&
+      (Q_MakeAbsolutePath(pOutDir, outDirLen, env_token), 1) &&
       FS_OK == TryLocateGameInfoFile(pOutDir, outDirLen, false))
     return FS_OK;
 

@@ -1249,7 +1249,7 @@ void COptionsDialogXbox::FillInDefaultBindings(void) {
     data = UTIL_Parse(data, cmd, sizeof(cmd));
     if (strlen(cmd) <= 0) break;
 
-    if (!stricmp(cmd, "bind")) {
+    if (!_stricmp(cmd, "bind")) {
       // Key name
       char szKeyName[256];
       data = UTIL_Parse(data, szKeyName, sizeof(szKeyName));

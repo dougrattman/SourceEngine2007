@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include <cstdio>
 #include <cstring>
@@ -99,7 +99,7 @@ const char *ConvertPhoneme(int code) {
 int TextToPhoneme(const char *text) {
   for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
-    if (!stricmp(test->string, text)) return test->code;
+    if (!_stricmp(test->string, text)) return test->code;
   }
 
   Warning("Unrecognized phoneme %s\n", text);
@@ -129,7 +129,7 @@ float WeightForPhonemeCode(int code) {
 float WeightForPhoneme(char *text) {
   for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
-    if (!stricmp(test->string, text)) return test->weight;
+    if (!_stricmp(test->string, text)) return test->weight;
   }
 
   Warning("WeightForPhoneme:: Unrecognized phoneme %s\n", text);
@@ -151,7 +151,7 @@ const char *NameForPhonemeByIndex(int index) {
 int TextToPhonemeIndex(const char *text) {
   for (int i = 0; i < SOURCE_ARRAYSIZE(g_Phonemes); ++i) {
     PhonemeMap_t *test = &g_Phonemes[i];
-    if (!stricmp(test->string, text)) return i;
+    if (!_stricmp(test->string, text)) return i;
   }
 
   return -1;

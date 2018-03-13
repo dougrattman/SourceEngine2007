@@ -1095,8 +1095,8 @@ void CMasterMulticastThread::DecrementChunkRefCount(int iFile, int iChunk) {
 int CMasterMulticastThread::FindFile(const char *pName, const char *pPathID) {
   FOR_EACH_LL(m_Files, i) {
     CMulticastFile *pFile = m_Files[i];
-    if (stricmp(pFile->GetFilename(), pName) == 0 &&
-        stricmp(pFile->GetPathID(), pPathID) == 0)
+    if (_stricmp(pFile->GetFilename(), pName) == 0 &&
+        _stricmp(pFile->GetPathID(), pPathID) == 0)
       return i;
   }
   return -1;

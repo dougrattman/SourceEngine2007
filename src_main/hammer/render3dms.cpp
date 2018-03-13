@@ -902,7 +902,7 @@ static void AddEntityLightToLightList(
     new_l.m_Range = 0;
 
     if ((!s_bAddedLightEnvironmentAlready) &&
-        (!stricmp(pszClassName, "light_environment"))) {
+        (!_stricmp(pszClassName, "light_environment"))) {
       // lets add the sun to the list!
       new_l.m_Type = MATERIAL_LIGHT_DIRECTIONAL;
       if (ParseLightGeneric(e, new_l)) {
@@ -927,14 +927,14 @@ static void AddEntityLightToLightList(
           listout.AddToTail(new_l);
         }
       }
-    } else if ((!stricmp(pszClassName, "light"))) {
+    } else if ((!_stricmp(pszClassName, "light"))) {
       // add point light to list
       new_l.m_Type = MATERIAL_LIGHT_POINT;
       if (ParseLightGeneric(e, new_l)) {
         new_l.RecalculateDerivedValues();
         listout.AddToTail(new_l);
       }
-    } else if ((!stricmp(pszClassName, "light_spot"))) {
+    } else if ((!_stricmp(pszClassName, "light_spot"))) {
       // add point light to list
       new_l.m_Type = MATERIAL_LIGHT_SPOT;
       if (ParseLightGeneric(e, new_l)) {

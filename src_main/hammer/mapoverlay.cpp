@@ -1438,7 +1438,7 @@ void CMapOverlay::OnParentKeyChanged( const char* szKey, const char* szValue )
 	CMapSideList::OnParentKeyChanged( szKey, szValue );
 
 	// Read side data.
-	if ( !stricmp( szKey, "sides" ) )	
+	if ( !_stricmp( szKey, "sides" ) )	
 	{ 
 		if ( m_Faces.Count() > 0 )
 		{
@@ -1448,49 +1448,49 @@ void CMapOverlay::OnParentKeyChanged( const char* szKey, const char* szValue )
 
 	// Read geometry data.
 	float flDummy;
-	if ( !stricmp( szKey, "uv0" ) )     
+	if ( !_stricmp( szKey, "uv0" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[0].x, &m_Handles.m_vecBasisCoords[0].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[0] = ( int )flDummy;
 	}
-	if ( !stricmp( szKey, "uv1" ) )     
+	if ( !_stricmp( szKey, "uv1" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[1].x, &m_Handles.m_vecBasisCoords[1].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[1] = ( int )flDummy; 
 	}
-	if ( !stricmp( szKey, "uv2" ) )     
+	if ( !_stricmp( szKey, "uv2" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[2].x, &m_Handles.m_vecBasisCoords[2].y, &flDummy ); 
 		m_Basis.m_nAxesFlip[2] = ( int )flDummy; 
 	}
-	if ( !stricmp( szKey, "uv3" ) )     
+	if ( !_stricmp( szKey, "uv3" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Handles.m_vecBasisCoords[3].x, &m_Handles.m_vecBasisCoords[3].y, &flDummy ); 
 	}
 
 	// Read basis data.
-	if ( !stricmp( szKey, "BasisOrigin" ) )     
+	if ( !_stricmp( szKey, "BasisOrigin" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Basis.m_vecOrigin.x, &m_Basis.m_vecOrigin.y, &m_Basis.m_vecOrigin.z ); 
 	}
 
-	if ( !stricmp( szKey, "BasisU" ) )     
+	if ( !_stricmp( szKey, "BasisU" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_U].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_U].z ); 
 	}
 
-	if ( !stricmp( szKey, "BasisV" ) )     
+	if ( !_stricmp( szKey, "BasisV" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_V].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_V].z ); 
 	}
 
-	if ( !stricmp( szKey, "BasisNormal" ) )     
+	if ( !_stricmp( szKey, "BasisNormal" ) )     
 	{ 
 		sscanf( szValue, "%f %f %f", &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].x, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].y, &m_Basis.m_vecAxes[OVERLAY_BASIS_NORMAL].z ); 
 	}
 
 	// Read material data.
-	if ( !stricmp( szKey, "material" ) )
+	if ( !_stricmp( szKey, "material" ) )
 	{
 		// Get the new material.
 		IEditorTexture *pTex = g_Textures.FindActiveTexture( szValue );
@@ -1501,19 +1501,19 @@ void CMapOverlay::OnParentKeyChanged( const char* szKey, const char* szValue )
 		m_Material.m_pTexture = pTex;
 	}
 
-	if ( !stricmp( szKey, "StartU" ) )	
+	if ( !_stricmp( szKey, "StartU" ) )	
 	{ 
 		m_Material.m_vecTextureU.x = atof( szValue ); 
 	}
-	if ( !stricmp( szKey, "EndU" ) )	
+	if ( !_stricmp( szKey, "EndU" ) )	
 	{ 
 		m_Material.m_vecTextureU.y = atof( szValue ); 
 	}
-	if ( !stricmp( szKey, "StartV" ) )	
+	if ( !_stricmp( szKey, "StartV" ) )	
 	{ 
 		m_Material.m_vecTextureV.x = atof( szValue ); 
 	}
-	if ( !stricmp( szKey, "EndV" ) )	
+	if ( !_stricmp( szKey, "EndV" ) )	
 	{ 
 		m_Material.m_vecTextureV.y = atof( szValue ); 
 	}

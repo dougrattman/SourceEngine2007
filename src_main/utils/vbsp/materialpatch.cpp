@@ -306,7 +306,7 @@ static void InsertKeyValues(KeyValues &dst, KeyValues &src,
 
 static void ExpandPatchFile(KeyValues &keyValues) {
   int nCount = 0;
-  while (nCount < 10 && stricmp(keyValues.GetName(), "patch") == 0) {
+  while (nCount < 10 && _stricmp(keyValues.GetName(), "patch") == 0) {
     //		WriteKeyValuesToFile( "patch.txt", keyValues );
     const char *pIncludeFileName = keyValues.GetString("include");
     if (!pIncludeFileName) return;

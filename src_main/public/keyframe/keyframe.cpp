@@ -311,11 +311,11 @@ void CPositionInterpolator_Rope::InterpolatePosition(float time, Vector &vOut) {
 
 bool CPositionInterpolator_Rope::ProcessKey(char const *pName,
                                             char const *pValue) {
-  if (stricmp(pName, "Slack") == 0) {
+  if (_stricmp(pName, "Slack") == 0) {
     m_flSlack = atof(pValue) + ROPESLACK_FUDGEFACTOR;
     m_bChange = true;
     return true;
-  } else if (stricmp(pName, "Type") == 0) {
+  } else if (_stricmp(pName, "Type") == 0) {
     int iType = atoi(pValue);
     if (iType == 0)
       m_nSegments = ROPE_MAX_SEGMENTS;

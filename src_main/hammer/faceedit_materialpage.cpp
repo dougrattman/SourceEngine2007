@@ -721,7 +721,7 @@ void CFaceEditMaterialPage::Apply( CMapFace *pOnlyFace, int flags )
 			pFace->GetTextureName( szCurrentTexName );
 			pTex->GetShortName( szNewTexName );
 
-			if( stricmp( szCurrentTexName, szNewTexName ) != 0 )
+			if( _stricmp( szCurrentTexName, szNewTexName ) != 0 )
 			{
 				pFace->SetTexture( szNewTexName );
 			}

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Voice / Sentence streaming & parsing code
 
@@ -1858,7 +1858,8 @@ void VOX_TouchSound(const char *pszin, CUtlDict<int, int> &filelist,
 //			sentenceIndex - global sentence table index for any data
 // that is 							parsed out
 //-----------------------------------------------------------------------------
-void VOX_ParseLineCommands(char *pSentenceData, int sentenceIndex) {
+void VOX_ParseLineCommands(char *pSentenceData, size_t sentence_data_size,
+                           int sentenceIndex) {
   char tempBuffer[512];
   char *pNext, *pStart;
   int length, tempBufferPos = 0;
@@ -1962,7 +1963,7 @@ void VOX_ParseLineCommands(char *pSentenceData, int sentenceIndex) {
     tempBuffer[tempBufferPos] = 0;
 
     // Copy it over the original data
-    Q_strcpy(pStart, tempBuffer);
+    Q_strcpy(pStart, sentence_data_size, tempBuffer);
   }
 }
 
@@ -2247,15 +2248,12 @@ int VOX_ListFileIsLoaded(const char *psentenceFileName) {
 // Input  : *psentenceFileName -
 //-----------------------------------------------------------------------------
 void VOX_ListMarkFileLoaded(const char *psentenceFileName) {
-  filelist_t *pEntry;
-  char *pName;
-
-  pEntry =
-      (filelist_t *)malloc(sizeof(filelist_t) + strlen(psentenceFileName) + 1);
+  size_t size{sizeof(filelist_t) + strlen(psentenceFileName) + 1};
+  filelist_t *pEntry = (filelist_t *)malloc(size);
 
   if (pEntry) {
-    pName = (char *)(pEntry + 1);
-    Q_strcpy(pName, psentenceFileName);
+    char *pName = (char *)(pEntry + 1);
+    Q_strcpy(pName, size - (pName - (char *)pEntry), psentenceFileName);
 
     pEntry->pFileName = pName;
     pEntry->pNext = g_pSentenceFileList;
@@ -2293,9 +2291,6 @@ void VOX_CompactSentenceFile() {
 // sentence name so we can search later.
 
 void VOX_ReadSentenceFile(const char *psentenceFileName) {
-  char *pch;
-  uint8_t *pFileData;
-  int fileSize;
   char c;
   char *pchlast, *pSentenceData;
   characterset_t whitespace;
@@ -2312,14 +2307,13 @@ void VOX_ReadSentenceFile(const char *psentenceFileName) {
 
   // load file
 
-  FileHandle_t file;
-  file = g_pFileSystem->Open(psentenceFileName, "rb");
+  FileHandle_t file = g_pFileSystem->Open(psentenceFileName, "rb");
   if (FILESYSTEM_INVALID_HANDLE == file) {
     DevMsg("Couldn't load %s\n", psentenceFileName);
     return;
   }
 
-  fileSize = g_pFileSystem->Size(file);
+  int fileSize = g_pFileSystem->Size(file);
   if (fileSize <= 0) {
     DevMsg("VOX_ReadSentenceFile: %s has invalid size %i\n", psentenceFileName,
            fileSize);
@@ -2327,7 +2321,7 @@ void VOX_ReadSentenceFile(const char *psentenceFileName) {
     return;
   }
 
-  pFileData =
+  uint8_t *pFileData =
       (uint8_t *)g_pFileSystem->AllocOptimalReadBuffer(file, fileSize + 1);
   if (!pFileData) {
     DevMsg("VOX_ReadSentenceFile: %s couldn't allocate %i bytes for data\n",
@@ -2345,7 +2339,7 @@ void VOX_ReadSentenceFile(const char *psentenceFileName) {
   // Make sure we end with a 0 terminator
   pFileData[fileSize] = 0;
 
-  pch = (char *)pFileData;
+  char *pch = (char *)pFileData;
   pchlast = pch + fileSize;
   CharacterSetBuild(&whitespace, "\n\r\t ");
   const char *pName = 0;
@@ -2396,7 +2390,8 @@ void VOX_ReadSentenceFile(const char *psentenceFileName) {
       VOX_GroupAdd(pName);
       int index = g_Sentences.Size() - 1;
       // The current sentence has an index of count-1
-      VOX_ParseLineCommands(pSentenceData, index);
+      VOX_ParseLineCommands(
+          pSentenceData, fileSize - (pSentenceData - (char *)pFileData), index);
     }
   }
   // now compact the file data in memory
@@ -2448,7 +2443,7 @@ char *VOX_LookupString(const char *pSentenceName, int *psentencenum,
   for (i = 0; i < c; i++) {
     char const *name = g_Sentences[i].pName;
 
-    if (!stricmp(pSentenceName, name)) {
+    if (!_stricmp(pSentenceName, name)) {
       if (psentencenum) {
         *psentencenum = i;
       }

@@ -54,61 +54,61 @@ void FixGameVars(char *pszSrc, char *pszDst, BOOL bUseQuotes)
 					bInQuote = TRUE;
 				}
 
-				if(!strnicmp(pSrc, "file", 4))
+				if(!_strnicmp(pSrc, "file", 4))
 				{
 					pSrc += 4;
 					strcpy(pDst, pszDocName);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "ext", 3))
+				else if(!_strnicmp(pSrc, "ext", 3))
 				{
 					pSrc += 3;
 					strcpy(pDst, pszDocExt);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "path", 4))
+				else if(!_strnicmp(pSrc, "path", 4))
 				{
 					pSrc += 4;
 					strcpy(pDst, pszDocPath);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "exedir", 6))
+				else if(!_strnicmp(pSrc, "exedir", 6))
 				{
 					pSrc += 6;
 					strcpy(pDst, g_pGameConfig->m_szGameExeDir);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "bspdir", 6))
+				else if(!_strnicmp(pSrc, "bspdir", 6))
 				{
 					pSrc += 6;
 					strcpy(pDst, g_pGameConfig->szBSPDir);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "bsp_exe", 7))
+				else if(!_strnicmp(pSrc, "bsp_exe", 7))
 				{
 					pSrc += 7;
 					strcpy(pDst, g_pGameConfig->szBSP);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "vis_exe", 7))
+				else if(!_strnicmp(pSrc, "vis_exe", 7))
 				{
 					pSrc += 7;
 					strcpy(pDst, g_pGameConfig->szVIS);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "light_exe", 9))
+				else if(!_strnicmp(pSrc, "light_exe", 9))
 				{
 					pSrc += 9;
 					strcpy(pDst, g_pGameConfig->szLIGHT);
 					pDst += strlen(pDst);
 				}
-				else if(!strnicmp(pSrc, "game_exe", 8))
+				else if(!_strnicmp(pSrc, "game_exe", 8))
 				{
 					pSrc += 8;
 					strcpy(pDst, g_pGameConfig->szExecutable);
 					pDst += strlen(pDst);
 				}
-				else if (!strnicmp(pSrc, "gamedir", 7))
+				else if (!_strnicmp(pSrc, "gamedir", 7))
 				{
 					pSrc += 7;
 					strcpy(pDst, g_pGameConfig->m_szModDir);
@@ -319,7 +319,7 @@ bool RunCommands(CCommandArray& Commands, LPCTSTR pszOrigDocName)
 					RemoveQuotes(ppParms[2]);
 					
 					// don't copy if we're already there
-					if (stricmp(ppParms[1], ppParms[2]) && 					
+					if (_stricmp(ppParms[1], ppParms[2]) && 					
 							(!CopyFile(ppParms[1], ppParms[2], FALSE)))
 					{
 						bError = TRUE;

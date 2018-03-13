@@ -70,14 +70,14 @@
 #include "tier0/include/memdbgon.h"
 
 #define KeyInt(key, dest)                       \
-  if (stricmp(szKey, key) != 0)                 \
+  if (_stricmp(szKey, key) != 0)                 \
     ;                                           \
   else {                                        \
     CChunkFile::ReadKeyValueInt(szValue, dest); \
   }
 
 #define KeyBool(key, dest)                       \
-  if (stricmp(szKey, key) != 0)                  \
+  if (_stricmp(szKey, key) != 0)                  \
     ;                                            \
   else {                                         \
     CChunkFile::ReadKeyValueBool(szValue, dest); \
@@ -565,7 +565,7 @@ void CMapDoc::AssignToVisGroups(void) {
     int nKeyCount = pChild->GetEditorKeyCount();
     for (int i = 0; i < nKeyCount; i++) {
       const char *pszKey = pChild->GetEditorKey(i);
-      if (!stricmp(pszKey, "visgroupid")) {
+      if (!_stricmp(pszKey, "visgroupid")) {
         const char *pszVisGroupID = pChild->GetEditorKeyValue(i);
         Assert(pszVisGroupID != NULL);
         if (pszVisGroupID != NULL) {
@@ -582,7 +582,7 @@ void CMapDoc::AssignToVisGroups(void) {
             }
           }
         }
-      } else if (!stricmp(pszKey, "colorvisgroupid")) {
+      } else if (!_stricmp(pszKey, "colorvisgroupid")) {
         const char *pszVisGroupID = pChild->GetEditorKeyValue(i);
         Assert(pszVisGroupID != NULL);
         if (pszVisGroupID != NULL) {
@@ -894,7 +894,7 @@ BOOL CMapDoc::FindEntityCallback(CMapClass *pObject, FindEntity_t *pFindInfo) {
     Pos[2] = rint(Pos[2]);
 
     if (VectorCompare(Pos, pFindInfo->Pos)) {
-      if (stricmp(pEntity->GetClassName(), pFindInfo->szClassName) == 0) {
+      if (_stricmp(pEntity->GetClassName(), pFindInfo->szClassName) == 0) {
         pFindInfo->pEntityFound = pEntity;
         return (FALSE);
       }
@@ -1407,7 +1407,7 @@ ChunkFileResult_t CMapDoc::LoadAutosaveCallback(CChunkFile *pFile,
 ChunkFileResult_t CMapDoc::LoadAutosaveKeyCallback(const char *szKey,
                                                    const char *szValue,
                                                    CMapDoc *pDoc) {
-  if (!stricmp(szKey, "originalname")) {
+  if (!_stricmp(szKey, "originalname")) {
     pDoc->m_bIsAutosave = true;
     char szTempName[SOURCE_MAX_PATH];
     Q_strcpy(szTempName, szValue);
@@ -1426,11 +1426,11 @@ ChunkFileResult_t CMapDoc::LoadCordonCallback(CChunkFile *pFile,
 ChunkFileResult_t CMapDoc::LoadCordonKeyCallback(const char *szKey,
                                                  const char *szValue,
                                                  CMapDoc *pDoc) {
-  if (!stricmp(szKey, "mins")) {
+  if (!_stricmp(szKey, "mins")) {
     CChunkFile::ReadKeyValuePoint(szValue, pDoc->m_vCordonMins);
-  } else if (!stricmp(szKey, "maxs")) {
+  } else if (!_stricmp(szKey, "maxs")) {
     CChunkFile::ReadKeyValuePoint(szValue, pDoc->m_vCordonMaxs);
-  } else if (!stricmp(szKey, "active")) {
+  } else if (!_stricmp(szKey, "active")) {
     bool bActive;
     CChunkFile::ReadKeyValueBool(szValue, bActive);
     pDoc->SetCordoning(bActive);
@@ -2211,9 +2211,9 @@ BOOL CMapDoc::OnOpenDocument(LPCTSTR lpszPathName) {
   BOOL bRMF = FALSE;
   BOOL bMAP = FALSE;
 
-  if (!stricmp(lpszPathName + strlen(lpszPathName) - 3, "rmf")) {
+  if (!_stricmp(lpszPathName + strlen(lpszPathName) - 3, "rmf")) {
     bRMF = TRUE;
-  } else if (!stricmp(lpszPathName + strlen(lpszPathName) - 3, "map")) {
+  } else if (!_stricmp(lpszPathName + strlen(lpszPathName) - 3, "map")) {
     bMAP = TRUE;
   }
 
@@ -2319,9 +2319,9 @@ BOOL CMapDoc::OnSaveDocument(LPCTSTR lpszPathName) {
   //
   BOOL bRMF = FALSE;
   BOOL bMAP = FALSE;
-  if (!stricmp(lpszPathName + strlen(lpszPathName) - 3, "rmf")) {
+  if (!_stricmp(lpszPathName + strlen(lpszPathName) - 3, "rmf")) {
     bRMF = TRUE;
-  } else if (!stricmp(lpszPathName + strlen(lpszPathName) - 3, "map")) {
+  } else if (!_stricmp(lpszPathName + strlen(lpszPathName) - 3, "map")) {
     bMAP = TRUE;
   }
 
@@ -5380,8 +5380,8 @@ bool CMapDoc::ExpandTargetNameKeywords(char *szNewTargetName,
           // number from between them and check it against our highest instance
           // number.
           //
-          if ((strnicmp(szTemp, szPrefix, nPrefixLen) == 0) &&
-              (stricmp(pszTempSuffix, szSuffix) == 0)) {
+          if ((_strnicmp(szTemp, szPrefix, nPrefixLen) == 0) &&
+              (_stricmp(pszTempSuffix, szSuffix) == 0)) {
             *pszTempSuffix = '\0';
 
             bool bAllDigits = true;
@@ -6214,7 +6214,7 @@ static char *FindInString(char *pszSub, char *pszMain) {
 
   while (p[0]) {
     if (ch1 == toupper(p[0])) {
-      if (!strnicmp(pszSub, p, nSub)) return p;
+      if (!_strnicmp(pszSub, p, nSub)) return p;
     }
     ++p;
   }
@@ -6247,7 +6247,7 @@ static BOOL ReplaceTexFunc(CMapSolid *pSolid, ReplaceTexInfo_t *pInfo) {
     switch (pInfo->iAction) {
       case 0:  // replace exact matches only:
       {
-        if (!strcmpi(pszFaceTex, pInfo->szFind)) {
+        if (!_strcmpi(pszFaceTex, pInfo->szFind)) {
           if (bMarkOnly) {
             bDoMarkSolid = TRUE;
             break;
@@ -6437,7 +6437,7 @@ static BOOL BatchReplaceTextureCallback(CMapClass *pObject,
   for (i = 0; i < numFaces; i++) {
     face = solid->GetFace(i);
     face->GetTextureName(szCurrentTexture);
-    if (stricmp(szCurrentTexture, pInfo->szFindTexName) == 0) {
+    if (_stricmp(szCurrentTexture, pInfo->szFindTexName) == 0) {
       face->SetTexture(pInfo->szReplaceTexName);
     }
   }

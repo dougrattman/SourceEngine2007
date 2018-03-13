@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements the big scary boom-boom machine Antlions fear.
 
@@ -132,18 +132,18 @@ BEGIN_DATADESC(CSlideshowDisplay)
 END_DATADESC()
 
 IMPLEMENT_SERVERCLASS_ST(CSlideshowDisplay, DT_SlideshowDisplay)
-SendPropBool(SENDINFO(m_bEnabled)), SendPropString(SENDINFO(m_szDisplayText)),
-    SendPropString(SENDINFO(m_szSlideshowDirectory)),
-    SendPropArray3(SENDINFO_ARRAY3(m_chCurrentSlideLists),
-                   SendPropInt(SENDINFO_ARRAY(m_chCurrentSlideLists), 8,
-                               SPROP_UNSIGNED)),
-    SendPropFloat(SENDINFO(m_fMinSlideTime), 11, 0, 0.0f, 20.0f),
-    SendPropFloat(SENDINFO(m_fMaxSlideTime), 11, 0, 0.0f, 20.0f),
-    SendPropInt(SENDINFO(m_iCycleType), 2, SPROP_UNSIGNED),
-    SendPropBool(SENDINFO(m_bNoListRepeats)),
-    END_SEND_TABLE()
+  SendPropBool(SENDINFO(m_bEnabled)), SendPropString(SENDINFO(m_szDisplayText)),
+      SendPropString(SENDINFO(m_szSlideshowDirectory)),
+      SendPropArray3(SENDINFO_ARRAY3(m_chCurrentSlideLists),
+                     SendPropInt(SENDINFO_ARRAY(m_chCurrentSlideLists), 8,
+                                 SPROP_UNSIGNED)),
+      SendPropFloat(SENDINFO(m_fMinSlideTime), 11, 0, 0.0f, 20.0f),
+      SendPropFloat(SENDINFO(m_fMaxSlideTime), 11, 0, 0.0f, 20.0f),
+      SendPropInt(SENDINFO(m_iCycleType), 2, SPROP_UNSIGNED),
+      SendPropBool(SENDINFO(m_bNoListRepeats)),
+END_SEND_TABLE()
 
-        CSlideshowDisplay::~CSlideshowDisplay() {
+CSlideshowDisplay::~CSlideshowDisplay() {
   int i;
   // Kill the control panels
   for (i = m_hScreens.Count(); --i >= 0;) {
@@ -209,7 +209,7 @@ void CSlideshowDisplay::SetTransmit(CCheckTransmitInfo *pInfo, bool bAlways) {
 }
 
 void CSlideshowDisplay::Spawn(void) {
-  Q_strcpy(m_szSlideshowDirectory.GetForModify(),
+  Q_strcpy(m_szSlideshowDirectory.GetForModify(), m_szSlideshowDirectory.Size(),
            m_String_tSlideshowDirectory.ToCStr());
   Precache();
 
@@ -278,7 +278,8 @@ void CSlideshowDisplay::InputDisable(inputdata_t &inputdata) { Disable(); }
 void CSlideshowDisplay::InputEnable(inputdata_t &inputdata) { Enable(); }
 
 void CSlideshowDisplay::InputSetDisplayText(inputdata_t &inputdata) {
-  Q_strcpy(m_szDisplayText.GetForModify(), inputdata.value.String());
+  Q_strcpy(m_szDisplayText.GetForModify(), m_szDisplayText.Size(),
+           inputdata.value.String());
 }
 
 void CSlideshowDisplay::InputRemoveAllSlides(inputdata_t &inputdata) {

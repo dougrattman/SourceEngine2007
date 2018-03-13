@@ -82,9 +82,7 @@ void VCR_Debug(const ch *message, ...) {
 
   EnterCriticalSection(&g_DebugFileCS);
 
-  if (!g_pDebugFile) g_pDebugFile = fopen("vcrdebug.txt", "wt");
-
-  if (g_pDebugFile) {
+  if (g_pDebugFile || !fopen_s(&g_pDebugFile, "vcrdebug.txt", "wt")) {
     vfprintf(g_pDebugFile, message, marker);
     fflush(g_pDebugFile);
   }
@@ -319,8 +317,7 @@ static BOOL VCR_StartWrite(const ch *vcr_file_path) {
   if (!strstr(command_line, "-nosound"))
     Error("VCR record: must use -nosound.");
 
-  g_pVCRFile = fopen(vcr_file_path, "wb");
-  if (g_pVCRFile) {
+  if (!fopen_s(&g_pVCRFile, vcr_file_path, "wb")) {
     // Write the version.
     u32 version = VCRFILE_VERSION;
     VCR_Write(&version, sizeof(version));
@@ -333,8 +330,7 @@ static BOOL VCR_StartWrite(const ch *vcr_file_path) {
 }
 
 static BOOL VCR_StartRead(const ch *vcr_file_path) {
-  g_pVCRFile = fopen(vcr_file_path, "rb");
-  if (g_pVCRFile) {
+  if (!fopen_s(&g_pVCRFile, vcr_file_path, "rb")) {
     // Get the file length.
     _fseeki64(g_pVCRFile, 0, SEEK_END);
     g_FileLen = _ftelli64(g_pVCRFile);
@@ -970,13 +966,13 @@ i32 VCR_Hook_ReadConsoleInput(void *hInput, void *pRecs, i32 nMaxRecs,
   return ret;
 }
 
-void VCR_Hook_LocalTime(struct tm *today) {
+void VCR_Hook_LocalTime(tm *today) {
   // We just provide a wrapper on this function so we can protect access to
   // time() everywhere.
   time_t ltime;
   time(&ltime);
-  tm *pTime = localtime(&ltime);
-  memcpy(today, pTime, sizeof(*today));
+
+  localtime_s(today, &ltime);
 
   // Preamble.
   if (!IsVCRModeEnabledForThisThread()) return;

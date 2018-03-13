@@ -15,6 +15,7 @@
 #include "mathlib/compressed_vector.h"
 #include "mathlib/ssemath.h"
 #include "tier0/include/dbg.h"
+#include "tier0/include/platform_detection.h"
 
 //-----------------------------------------------------------------------------
 // Color writing class

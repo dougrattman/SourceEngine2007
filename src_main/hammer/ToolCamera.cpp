@@ -225,11 +225,11 @@ void Camera3D::RenderTool2D(CRender2D *pRender)
 //-----------------------------------------------------------------------------
 ChunkFileResult_t Camera3D::LoadCameraKeyCallback(const char *szKey, const char *szValue, CAMSTRUCT *pCam)
 {
-	if (!stricmp(szKey, "look"))
+	if (!_stricmp(szKey, "look"))
 	{
 		CChunkFile::ReadKeyValueVector3(szValue, pCam->position[MoveLook]);
 	}
-	else if (!stricmp(szKey, "position"))
+	else if (!_stricmp(szKey, "position"))
 	{
 		CChunkFile::ReadKeyValueVector3(szValue, pCam->position[MovePos]);
 	}
@@ -247,7 +247,7 @@ ChunkFileResult_t Camera3D::LoadCameraKeyCallback(const char *szKey, const char 
 //-----------------------------------------------------------------------------
 ChunkFileResult_t Camera3D::LoadCamerasKeyCallback(const char *szKey, const char *szValue, Camera3D *pCameras)
 {
-	if (!stricmp(szKey, "activecamera"))
+	if (!_stricmp(szKey, "activecamera"))
 	{
 		pCameras->m_iActiveCamera = atoi(szValue);
 	}

@@ -53,7 +53,7 @@ CSpriteModel *CSpriteCache::CreateSprite(const char *pszSpritePath)
 	//
 	for (int i = 0; i < m_nItems; i++)
 	{
-		if (!stricmp(pszSpritePath, m_Cache[i].pszPath))
+		if (!_stricmp(pszSpritePath, m_Cache[i].pszPath))
 		{
 			m_Cache[i].nRefCount++;
 			return(m_Cache[i].pSprite);

@@ -1,9 +1,8 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/utlstring.h"
 
 #include "tier1/strtools.h"
-
 
 // Base class, containing simple memory management
 
@@ -91,7 +90,6 @@ bool CUtlBinaryBlock::operator==(const CUtlBinaryBlock &src) const {
 
   return !memcmp(src.Get(), Get(), Length());
 }
-
 
 // Simple string class.
 
@@ -250,9 +248,9 @@ int CUtlString::Format(const char *pFormat, ...) {
 
   va_start(marker, pFormat);
 #ifdef _WIN32
-  int len = _vsnprintf(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
+  int len = _vsnprintf_s(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
 #elif OS_POSIX
-  int len = vsnprintf(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
+  int len = vsnprintf_s(tmpBuf, sizeof(tmpBuf) - 1, pFormat, marker);
 #else
 #error "define vsnprintf type."
 #endif
@@ -268,7 +266,6 @@ int CUtlString::Format(const char *pFormat, ...) {
 
   return len;
 }
-
 
 // Strips the trailing slash
 

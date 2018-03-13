@@ -455,10 +455,10 @@ static bool ShallWarnTx(KeyValues *kv, ITexture *tx) {
       (TEXTUREFLAGS_NOLOD | TEXTUREFLAGS_NOMIP | TEXTUREFLAGS_ONEBITALPHA))
     return true;
 
-  if (stricmp("DXT1", kv->GetString(KEYNAME_FORMAT)) &&
-      stricmp("DXT5", kv->GetString(KEYNAME_FORMAT)) &&
-      stricmp("ATI1N", kv->GetString(KEYNAME_FORMAT)) &&
-      stricmp("ATI2N", kv->GetString(KEYNAME_FORMAT)))
+  if (_stricmp("DXT1", kv->GetString(KEYNAME_FORMAT)) &&
+      _stricmp("DXT5", kv->GetString(KEYNAME_FORMAT)) &&
+      _stricmp("ATI1N", kv->GetString(KEYNAME_FORMAT)) &&
+      _stricmp("ATI2N", kv->GetString(KEYNAME_FORMAT)))
     return true;
 
   if (kv->GetInt(KEYNAME_SIZE) > g_warn_texkbytes) return true;
@@ -643,7 +643,7 @@ void DisplaySelectedTextures() {
         int numParams = pMat->ShaderParamCount();
         IMaterialVar **arrVars = pMat->GetShaderParams();
         for (int idxParam = 0; idxParam < numParams; ++idxParam) {
-          // 					if ( !stricmp( arrVars[ idxParam
+          // 					if ( !_stricmp( arrVars[ idxParam
           // ]->GetName(),
           // "$ignorez" ) )
           // 					{
@@ -683,7 +683,7 @@ void DisplaySelectedTextures() {
       int numParams = pMat->ShaderParamCount();
       IMaterialVar **arrVars = pMat->GetShaderParams();
       for (int idxParam = 0; idxParam < numParams; ++idxParam) {
-        // 				if ( bRemovedSelection && !stricmp(
+        // 				if ( bRemovedSelection && !_stricmp(
         // arrVars[ idxParam ]->GetName(), "$ignorez" ) )
         // 				{
         // 					arrVars[ idxParam
@@ -905,7 +905,7 @@ void CRenderTextureEditor::SetDispInfo(KeyValues *kv, int iHint) {
         ITexture *pTex = arrVars[idxParam]->GetTextureValue();
         if (!pTex || pTex->IsError()) continue;
 
-        if (!stricmp(pTex->GetName(), szTextureName)) {
+        if (!_stricmp(pTex->GetName(), szTextureName)) {
           bool bRealMaterial = true;
 
           if (StringHasPrefix(pMat->GetName(), "debug/debugtexture"))
@@ -1054,7 +1054,7 @@ void CRenderTextureEditor::PerformLayout() {
 void CRenderTextureEditor::OnCommand(const char *command) {
   BaseClass::OnCommand(command);
 
-  if (!stricmp(command, "Explore") && m_pInfo) {
+  if (!_stricmp(command, "Explore") && m_pInfo) {
     char chResolveName[256] = {0}, chResolveNameArg[256] = {0};
     Q_snprintf(chResolveNameArg, sizeof(chResolveNameArg) - 1,
                "materials/%s.vtf", m_pInfo->GetString(KEYNAME_NAME));
@@ -1066,7 +1066,7 @@ void CRenderTextureEditor::OnCommand(const char *command) {
     vgui::system()->ShellExecuteEx("open", "explorer.exe", params);
   }
 
-  if (!stricmp(command, "Reload") && m_lstMaterials.Count()) {
+  if (!_stricmp(command, "Reload") && m_lstMaterials.Count()) {
     CUtlBuffer bufCommand(0, 0, CUtlBuffer::TEXT_BUFFER);
     int idxMaterial = 0;
 
@@ -1101,13 +1101,13 @@ void CRenderTextureEditor::OnCommand(const char *command) {
     }
   }
 
-  if (!stricmp(command, "CopyTxt")) {
+  if (!_stricmp(command, "CopyTxt")) {
     char const *szName = (char const *)m_bufInfoText.Base();
     if (!m_bufInfoText.TellPut() || !szName) szName = "";
     vgui::system()->SetClipboardText(szName, strlen(szName) + 1);
   }
 
-  if (!stricmp(command, "CopyImg")) {
+  if (!_stricmp(command, "CopyImg")) {
     int x = 0, y = 0;
     this->LocalToScreen(x, y);
 
@@ -1116,14 +1116,14 @@ void CRenderTextureEditor::OnCommand(const char *command) {
                                       y + GetTall());
   }
 
-  if (!stricmp(command, "FlashBtn")) {
+  if (!_stricmp(command, "FlashBtn")) {
     MatViewOverride::RequestSelectNone();
     MatViewOverride::RequestSelected(m_lstMaterials.Count(),
                                      m_lstMaterials.Base());
     mat_texture_list_off_f();
   }
 
-  if ((!stricmp(command, "size-") || !stricmp(command, "size+")) && m_pInfo) {
+  if ((!_stricmp(command, "size-") || !_stricmp(command, "size+")) && m_pInfo) {
     bool bSizeUp = (command[4] == '+');
     bool bResult = AdjustTextureSize(m_pInfo->GetString(KEYNAME_NAME), bSizeUp);
     if (bResult) {
@@ -1272,7 +1272,7 @@ void CRenderTextureEditor::Paint() {
     if ((iTxWidth > g_warn_texdimensions) || (iTxHeight > g_warn_texdimensions))
       sprintf(chLine1 + strlen(chLine1), "  Dimensions(%dx%d)", iTxWidth,
               iTxHeight);
-    if (stricmp(szTxFormat, "DXT1") && stricmp(szTxFormat, "DXT5"))
+    if (_stricmp(szTxFormat, "DXT1") && _stricmp(szTxFormat, "DXT5"))
       sprintf(chLine1 + strlen(chLine1), "  Format(%s)", szTxFormat);
     if (pMatTexture->GetFlags() & TEXTUREFLAGS_NOLOD)
       sprintf(chLine1 + strlen(chLine1), "  NoLod");
@@ -1339,7 +1339,7 @@ void CRenderTextureEditor::Paint() {
   y += TILE_TEXT + TILE_BORDER;
 
   // Images placement
-  bool bHasAlpha = !!stricmp(szTxFormat, "DXT1");
+  bool bHasAlpha = !!_stricmp(szTxFormat, "DXT1");
 
   int extTxWidth = TILE_SIZE;
   int extTxHeight = TILE_SIZE;
@@ -1721,7 +1721,7 @@ void CRenderTexturesListViewPanel::RenderTile(int iTile, int x, int y) {
   y += TILE_TEXT + TILE_BORDER / 2;
 
   // Images placement
-  bool bHasAlpha = m_bPaintAlpha && stricmp(szTxFormat, "DXT1");
+  bool bHasAlpha = m_bPaintAlpha && _stricmp(szTxFormat, "DXT1");
 
   int extTxWidth = TILE_SIZE;
   int extTxHeight = TILE_SIZE;
@@ -2192,10 +2192,10 @@ void KeepSpecialKeys(KeyValues *textureList, bool bServiceKeys) {
 
     char const *szName = pCur->GetString(KEYNAME_NAME);
     if (StringHasPrefix(szName, "_") || StringHasPrefix(szName, "[") ||
-        !stricmp(szName, "backbuffer") ||
+        !_stricmp(szName, "backbuffer") ||
         StringHasPrefix(szName, "colorcorrection") ||
-        !stricmp(szName, "depthbuffer") || !stricmp(szName, "frontbuffer") ||
-        !stricmp(szName, "normalize") || !*szName) {
+        !_stricmp(szName, "depthbuffer") || !_stricmp(szName, "frontbuffer") ||
+        !_stricmp(szName, "normalize") || !*szName) {
       bIsServiceKey = true;
     }
 

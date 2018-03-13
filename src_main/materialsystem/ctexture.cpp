@@ -3172,7 +3172,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
   szCmd = args.Arg(1);
   Msg("mat_texture_list_txlod_sync %s...\n", szCmd);
 
-  if (!stricmp(szCmd, "reset")) {
+  if (!_stricmp(szCmd, "reset")) {
     for (int k = 0; k < s_OverrideMap.GetNumStrings(); ++k) {
       char const *szTx = s_OverrideMap.String(k);
       s_OverrideMap[k] = OverrideInfo();  // Reset the override info
@@ -3190,7 +3190,7 @@ CON_COMMAND_F(mat_texture_list_txlod_sync,
     s_OverrideMap.Purge();
     Msg("mat_texture_list_txlod_sync reset : completed.\n");
     return;
-  } else if (!stricmp(szCmd, "save")) {
+  } else if (!_stricmp(szCmd, "save")) {
     CP4Requirement p4req;
     if (!p4) g_p4factory->SetDummyMode(true);
 

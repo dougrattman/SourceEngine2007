@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "studio.h"
 
@@ -9,7 +9,6 @@
 #include "tier1/utldict.h"
 #include "tier1/utlmap.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern IFileSystem *g_pFileSystem;
@@ -111,9 +110,9 @@ void virtualmodel_t::AppendModels(int group, const studiohdr_t *pStudioHdr) {
     m_group.EnsureCapacity(m_group.Count() + nValidIncludes);
     for (j = 0; j < nValidIncludes; j++) {
       MEM_ALLOC_CREDIT();
-      int group = m_group.AddToTail();
-      m_group[group].cache = list[j].handle;
-      AppendModels(group, list[j].pHdr);
+      int g = m_group.AddToTail();
+      m_group[g].cache = list[j].handle;
+      AppendModels(g, list[j].pHdr);
     }
   }
 
@@ -148,7 +147,7 @@ void virtualmodel_t::AppendSequences(int group, const studiohdr_t *pStudioHdr) {
       for (k = 0; k < numCheck; k++) {
         const studiohdr_t *hdr = m_group[seq[k].group].GetStudioHdr();
         char *s2 = hdr->pLocalSeqdesc(seq[k].index)->pszLabel();
-        if (!stricmp(s1, s2)) {
+        if (!_stricmp(s1, s2)) {
           break;
         }
       }
@@ -227,7 +226,7 @@ void virtualmodel_t::AppendAnimations(int group,
                        .GetStudioHdr()
                        ->pLocalAnimdesc(anim[k].index)
                        ->pszName();
-        if (stricmp(s1, s2) == 0) {
+        if (_stricmp(s1, s2) == 0) {
           break;
         }
       }
@@ -284,8 +283,8 @@ void virtualmodel_t::AppendBonemap(int group, const studiohdr_t *pStudioHdr) {
       // NOTE: studiohdr has a bone table - using the table is ~5% faster than
       // this for alyx.mdl on a P4/3.2GHz
       for (k = 0; k < pBaseStudioHdr->numbones; k++) {
-        if (stricmp(pStudioHdr->pBone(j)->pszName(),
-                    pBaseStudioHdr->pBone(k)->pszName()) == 0) {
+        if (_stricmp(pStudioHdr->pBone(j)->pszName(),
+                     pBaseStudioHdr->pBone(k)->pszName()) == 0) {
           break;
         }
       }
@@ -348,7 +347,7 @@ void virtualmodel_t::AppendAttachments(int group,
                      ->pLocalAttachment(attachment[k].index)
                      ->pszName();
 
-      if (stricmp(s1, s2) == 0) {
+      if (_stricmp(s1, s2) == 0) {
         break;
       }
     }
@@ -408,7 +407,7 @@ void virtualmodel_t::AppendPoseParameters(int group,
                      ->pLocalPoseParameter(pose[k].index)
                      ->pszName();
 
-      if (stricmp(s1, s2) == 0) {
+      if (_stricmp(s1, s2) == 0) {
         break;
       }
     }
@@ -424,10 +423,12 @@ void virtualmodel_t::AppendPoseParameters(int group,
       mstudioposeparamdesc_t *pPose2 =
           m_group[pose[k].group].GetStudioHdr()->pLocalPoseParameter(
               pose[k].index);
-      float start =
-          std::min(pPose2->end, std::min(pPose1->end, std::min(pPose2->start, pPose1->start)));
-      float end =
-          std::max(pPose2->end, std::max(pPose1->end, std::max(pPose2->start, pPose1->start)));
+      float start = std::min(
+          pPose2->end,
+          std::min(pPose1->end, std::min(pPose2->start, pPose1->start)));
+      float end = std::max(
+          pPose2->end,
+          std::max(pPose1->end, std::max(pPose2->start, pPose1->start)));
       pPose2->start = start;
       pPose2->end = end;
     }
@@ -461,7 +462,7 @@ void virtualmodel_t::AppendNodes(int group, const studiohdr_t *pStudioHdr) {
       char *s2 = m_group[node[k].group].GetStudioHdr()->pszLocalNodeName(
           node[k].index);
 
-      if (stricmp(s1, s2) == 0) {
+      if (_stricmp(s1, s2) == 0) {
         break;
       }
     }

@@ -618,7 +618,8 @@ printf( NULL );
 // The "int dummy" parameter is so that the callers can be unique so that the
 // linker won't use its /opt:icf optimization to collapse them together. This
 // makes reading the call stack easier.
-[[noreturn]] void __cdecl WriteMiniDumpOrBreak(int dummy, const char *pchName) {
+[[noreturn]] void __cdecl WriteMiniDumpOrBreak(int dummy,
+                                               const wchar_t *pchName) {
   if (Plat_IsInDebugSession()) {
     __debugbreak();
     // Continue at your peril...
@@ -629,12 +630,18 @@ printf( NULL );
   }
 }
 
-void __cdecl VPureCall() { WriteMiniDumpOrBreak(0, "PureClass"); }
+void __cdecl VPureCall() {
+  WriteMiniDumpOrBreak(0, L"Pure virtual function call");
+}
 
 void VInvalidParameterHandler(const wchar_t *expression,
                               const wchar_t *function, const wchar_t *file,
                               unsigned int line, uintptr_t pReserved) {
-  WriteMiniDumpOrBreak(1, "InvalidParameterHandler");
+  wchar_t parameter_info[1024];
+  swprintf_s(parameter_info, L"Invalid parameter: %s (func %s) (%u) (expr %s)",
+             file, function, line, expression);
+
+  WriteMiniDumpOrBreak(1, parameter_info);
 }
 
 // Restore compiler optimizations.

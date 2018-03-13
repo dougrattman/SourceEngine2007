@@ -47,7 +47,7 @@ CSaveGameDialog::~CSaveGameDialog() {}
 // Purpose: Saves game
 //-----------------------------------------------------------------------------
 void CSaveGameDialog::OnCommand(const char *command) {
-  if (!stricmp(command, "loadsave")) {
+  if (!_stricmp(command, "loadsave")) {
     int saveIndex = GetSelectedItemSaveIndex();
     if (m_SaveGames.IsValidIndex(saveIndex)) {
       // see if we're overwriting
@@ -65,7 +65,7 @@ void CSaveGameDialog::OnCommand(const char *command) {
         box->DoModal();
       }
     }
-  } else if (!stricmp(command, "SaveOverwriteConfirmed")) {
+  } else if (!_stricmp(command, "SaveOverwriteConfirmed")) {
     int saveIndex = GetSelectedItemSaveIndex();
     if (m_SaveGames.IsValidIndex(saveIndex)) {
       // delete any existing save

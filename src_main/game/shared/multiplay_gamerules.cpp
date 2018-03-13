@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Contains the implementation of game rules for multiplayer.
 
@@ -32,7 +32,6 @@
 #include "voice_gamemgr.h"
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 REGISTER_GAMERULES_CLASS(CMultiplayRules);
@@ -917,10 +916,10 @@ void CMultiplayRules::GoToIntermission(void) {
   }
 }
 
-void StripChar(char *szBuffer, const char cWhiteSpace) {
+void StripChar(char *szBuffer, size_t buffer_size, const char cWhiteSpace) {
   while (char *pSpace = strchr(szBuffer, cWhiteSpace)) {
     char *pNextChar = pSpace + sizeof(char);
-    V_strcpy(pSpace, pNextChar);
+    V_strcpy(pSpace, buffer_size - (pSpace - szBuffer), pNextChar);
   }
 }
 
@@ -961,10 +960,11 @@ void CMultiplayRules::GetNextLevelName(char *pszNextMap, int bufsize) {
 
         for (int i = 0; i < m_MapList.Count(); i++) {
           bool bIgnore = false;
+          size_t map_name_size{strlen(m_MapList[i])};
 
           // Strip out the spaces in the name
-          StripChar(m_MapList[i], '\r');
-          StripChar(m_MapList[i], ' ');
+          StripChar(m_MapList[i], map_name_size, '\r');
+          StripChar(m_MapList[i], map_name_size, ' ');
 
           if (!engine->IsMapValid(m_MapList[i])) {
             bIgnore = true;

@@ -1,11 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #if !defined(AFX_STDAFX_H__2871A74F_7D2F_4026_9DB0_DBACAFB3B7F5__INCLUDED_)
 #define AFX_STDAFX_H__2871A74F_7D2F_4026_9DB0_DBACAFB3B7F5__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif  // _MSC_VER > 1000
 
 // Windows 7 features.
 #define _WIN32_WINNT 0x0501
@@ -15,7 +11,8 @@
 #include "tier0/include/vprof.h"
 #include "tier0/include/wchartypes.h"
 
-#define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
+// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN
 
 #include <afxext.h>  // MFC extensions
 #include <afxwin.h>  // MFC core and standard components

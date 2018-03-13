@@ -1,8 +1,9 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "studiorender.h"
 
 #include <malloc.h>
+#include "base/include/compiler_specific.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"
 #include "materialsystem/imaterialvar.h"
@@ -15,14 +16,12 @@
 #include "optimize.h"
 #include "studio.h"
 #include "studiorendercontext.h"
-#include "base/include/compiler_specific.h"
 #include "tier0/include/vprof.h"
 #include "tier2/tier2.h"
 
 //#define PROFILE_STUDIO VPROF
 #define PROFILE_STUDIO
 
- 
 #include "tier0/include/memdbgon.h"
 
 typedef void (*SoftwareProcessMeshFunc_t)(
@@ -2004,8 +2003,8 @@ void CStudioRender::R_StudioProcessFlexedMesh(mstudiomesh_t *pmesh,
       int n = pGroupToMesh[j];
       mstudiovertex_t &vert = pVertices[n];
 
-      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
-      // The data must exist in the 0th hardware matrix
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one
+      // bone The data must exist in the 0th hardware matrix
 
       // Here, we are doing HW skinning, so we need to simply copy over the flex
       if (m_VertexCache.IsVertexFlexed(n)) {
@@ -2048,8 +2047,8 @@ void CStudioRender::R_StudioProcessFlexedMesh(mstudiomesh_t *pmesh,
       int n = pGroupToMesh[j];
       mstudiovertex_t &vert = pVertices[n];
 
-      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
-      // The data must exist in the 0th hardware matrix
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one
+      // bone The data must exist in the 0th hardware matrix
 
       // Here, we are doing HW skinning, so we need to simply copy over the flex
       if (m_VertexCache.IsVertexFlexed(n)) {
@@ -2704,8 +2703,8 @@ int CStudioRender::R_StudioDrawEyeball(IMatRenderContext *pRenderContext,
 
       meshBuilder.TexCoord2fv(0, vert.m_vecTexCoord.Base());
 
-      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one bone
-      // The data must exist in the 0th hardware matrix
+      // TODO(d.rattman): For now, flexed hw-skinned meshes can only have one
+      // bone The data must exist in the 0th hardware matrix
       meshBuilder.BoneWeight(0, 1.0f);
       meshBuilder.BoneWeight(1, 0.0f);
       meshBuilder.BoneWeight(2, 0.0f);
@@ -2936,7 +2935,7 @@ int CStudioRender::R_StudioDrawPoints(IMatRenderContext *pRenderContext,
     if (!pMaterial) continue;
 
 #ifdef _DEBUG
-    [[maybe_unused]] char const *materialName = pMaterial->GetName()
+    [[maybe_unused]] char const *materialName = pMaterial->GetName();
 #endif
     // Set up flex data
     m_VertexCache.SetMesh(i);

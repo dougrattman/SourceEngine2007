@@ -1,10 +1,6 @@
-//===== Copyright © 1996-2007, Valve Corporation, All rights reserved. ======//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: shader for drawing sprites as cards, with animation frame lerping
-//
-// $Header: $
-// $NoKeywords: $
-//===========================================================================//
 
 #include "BaseVSShader.h"
 
@@ -25,7 +21,6 @@
 
 #include "tier0/include/icommandline.h"  //command line
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define DEFAULT_PARTICLE_FEATHERING_ENABLED 1
@@ -404,8 +399,8 @@ SHADER_DRAW {
 
     // set fade constants in vsconsts 8 and 9
     float flMaxDistance = params[MAXDISTANCE]->GetFloatValue();
-    float flStartFade =
-        std::max(1.0f, flMaxDistance - params[FARFADEINTERVAL]->GetFloatValue());
+    float flStartFade = std::max(
+        1.0f, flMaxDistance - params[FARFADEINTERVAL]->GetFloatValue());
 
     float VC0[8] = {params[MINSIZE]->GetFloatValue(),
                     params[MAXSIZE]->GetFloatValue(),
@@ -426,8 +421,8 @@ SHADER_DRAW {
                    params[OVERBRIGHTFACTOR]->GetFloatValue(),
                    params[ADDSELF]->GetFloatValue(), 0.0f};
 
-    if (bDX8 && (!bAdditive2ndTexture))  // deal with 0..1 limit for pix shader
-                                         // constants
+    if (bDX8 && (!bAdditive2ndTexture))  // deal with 0..1 limit for
+                                         // pix shader constants
     {
       C0[2] *= 0.25f;
       C0[1] *= 0.25f;

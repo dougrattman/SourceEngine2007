@@ -67,7 +67,7 @@ void CLabeledCommandComboBox::OnTextChanged(char const *text) {
   int i;
   for (i = 0; i < m_Items.Size(); i++) {
     COMMANDITEM *item = &m_Items[i];
-    if (!stricmp(item->name, text)) {
+    if (!_stricmp(item->name, text)) {
       //	engine->pfnClientCmd( item->command );
       m_iCurrentSelection = i;
       break;

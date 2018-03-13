@@ -255,7 +255,7 @@ void COptionsSubVoice::EndTestMicrophone()
 //-----------------------------------------------------------------------------
 void COptionsSubVoice::OnCommand( const char *command)
 {
-    if (!stricmp(command, "TestMicrophone"))
+    if (!_stricmp(command, "TestMicrophone"))
     {
         if (!m_bVoiceOn)
         {

@@ -504,11 +504,11 @@ void CServerRemoteAccess::RespondString(ra_listener_id listener, int requestID,
 //-----------------------------------------------------------------------------
 void CServerRemoteAccess::SetValue(const char *variable, const char *value) {
   // check for special types
-  if (!stricmp(variable, "map")) {
+  if (!_stricmp(variable, "map")) {
     // push a map change command
     Cbuf_AddText(va("changelevel %s\n", value));
     Cbuf_Execute();
-  } else if (!stricmp(variable, "mapcycle")) {
+  } else if (!_stricmp(variable, "mapcycle")) {
     // write out a new mapcycle file
     ConVarRef mapcycle("mapcyclefile");
     if (mapcycle.IsValid()) {
@@ -556,29 +556,29 @@ bool CServerRemoteAccess::LookupValue(const char *variable, CUtlBuffer &value) {
   if (strval) {
     value.PutString(strval);
     value.PutChar(0);
-  } else if (!stricmp(variable, "stats")) {
+  } else if (!_stricmp(variable, "stats")) {
     char stats[512];
     GetStatsString(stats, sizeof(stats));
     value.PutString(stats);
     value.PutChar(0);
-  } else if (!stricmp(variable, "banlist")) {
+  } else if (!_stricmp(variable, "banlist")) {
     // returns a list of banned users and ip's
     GetUserBanList(value);
-  } else if (!stricmp(variable, "playerlist")) {
+  } else if (!_stricmp(variable, "playerlist")) {
     GetPlayerList(value);
-  } else if (!stricmp(variable, "maplist")) {
+  } else if (!_stricmp(variable, "maplist")) {
     GetMapList(value);
-  } else if (!stricmp(variable, "uptime")) {
+  } else if (!_stricmp(variable, "uptime")) {
     int timeSeconds = (int)(Plat_FloatTime());
     value.PutInt(timeSeconds);
     value.PutChar(0);
-  } else if (!stricmp(variable, "ipaddress")) {
+  } else if (!_stricmp(variable, "ipaddress")) {
     char addr[25];
     Q_snprintf(addr, sizeof(addr), "%s:%i", net_local_adr.ToString(true),
                sv.GetUDPPort());
     value.PutString(addr);
     value.PutChar(0);
-  } else if (!stricmp(variable, "mapcycle")) {
+  } else if (!_stricmp(variable, "mapcycle")) {
     ConVarRef mapcycle("mapcyclefile");
     if (mapcycle.IsValid()) {
       // send the mapcycle list file

@@ -507,7 +507,7 @@ bool CMsgHandler::ProcessMessage( netadr_t *from, CMsgBuffer *msg )
 		msg->Push();
 		str = msg->ReadString();
 		msg->Pop();
-		if ( str && str[ 0 ] && !stricmp( m_szString, str ) )
+		if ( str && str[ 0 ] && !_stricmp( m_szString, str ) )
 		{
 			bret = Process( from, msg );
 		}
@@ -609,7 +609,7 @@ CSocket::CSocket( const char *socketname, int port /*= -1*/ ) : m_SendBuffer(soc
 	}
 
 	// LATER: Support specifying interface name
-	//if (!net_interface || !net_interface[0] || !stricmp(net_interface, "localhost"))
+	//if (!net_interface || !net_interface[0] || !_stricmp(net_interface, "localhost"))
 	address.sin_addr.s_addr = INADDR_ANY;
 	//else
 	//	NET_StringToSockaddr (net_interface, (struct sockaddr *)&address);

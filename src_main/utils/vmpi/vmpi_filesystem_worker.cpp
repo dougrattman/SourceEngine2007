@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -319,10 +319,11 @@ class CWorkerMulticastListener {
     char printableFilename[58];
     if (V_strlen(pFilename) > SOURCE_ARRAYSIZE(printableFilename) - 1) {
       V_strncpy(printableFilename, "[...]", sizeof(printableFilename));
-      V_strncat(printableFilename,
-                &pFilename[V_strlen(pFilename) - SOURCE_ARRAYSIZE(printableFilename) +
-                           1 + V_strlen(printableFilename)],
-                sizeof(printableFilename));
+      V_strncat(
+          printableFilename,
+          &pFilename[V_strlen(pFilename) - SOURCE_ARRAYSIZE(printableFilename) +
+                     1 + V_strlen(printableFilename)],
+          sizeof(printableFilename));
     } else {
       V_strncpy(printableFilename, pFilename, sizeof(printableFilename));
     }
@@ -412,8 +413,8 @@ class CWorkerMulticastListener {
         pTestFile->m_bGotCompressedSize = true;
         pTestFile->m_CompressedData.SetSize(pInfo->m_CompressedSize);
         pTestFile->m_UncompressedData.SetSize(pInfo->m_UncompressedSize);
-        pTestFile->m_ChunksReceived.SetSize(SOURCE_PAD_NUMBER(pInfo->m_nChunks, 8) /
-                                            8);
+        pTestFile->m_ChunksReceived.SetSize(
+            SOURCE_PAD_NUMBER(pInfo->m_nChunks, 8) / 8);
         pTestFile->m_nChunksToReceive = pInfo->m_nChunks;
         memset(pTestFile->m_ChunksReceived.Base(), 0,
                pTestFile->m_ChunksReceived.Count());
@@ -445,7 +446,7 @@ class CWorkerMulticastListener {
 
         int iChunkStart = iChunk * iChunkPayloadSize;
         int iChunkEnd = std::min(iChunkStart + iChunkPayloadSize,
-                            pTestFile->m_CompressedData.Count());
+                                 pTestFile->m_CompressedData.Count());
         int chunkLen = iChunkEnd - iChunkStart;
 
         if (chunkLen != payloadLen) {
@@ -521,8 +522,8 @@ class CWorkerMulticastListener {
     FOR_EACH_LL(m_WorkerFiles, i) {
       CWorkerFile *pWorkerFile = m_WorkerFiles[i];
 
-      if (stricmp(pWorkerFile->GetFilename(), pFilename) == 0 &&
-          stricmp(pWorkerFile->GetPathID(), pPathID) == 0)
+      if (_stricmp(pWorkerFile->GetFilename(), pFilename) == 0 &&
+          _stricmp(pWorkerFile->GetPathID(), pPathID) == 0)
         return pWorkerFile;
     }
     return NULL;
