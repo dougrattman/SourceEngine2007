@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dt_localtransfer.h"
 
@@ -10,7 +10,6 @@
 #include "tier1/convar.h"
 #include "utldict.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define PROP_INDEX_VECTOR_ELEM_MARKER 0x8000
@@ -224,7 +223,7 @@ void LocalTransfer_InitFastCopy(
       } else if (pSendProp->GetType() == DPT_Float &&
                  pSendProp->GetProxyFn() == pSendProxies->m_FloatToFloat &&
                  pRecvProp->GetProxyFn() == pRecvProxies->m_FloatToFloat) {
-        Assert(sizeof(int) == sizeof(float));
+        static_assert(sizeof(int) == sizeof(float));
         pList = &pPrecalc->m_FastLocalTransfer.m_FastInt32;
         ++nFastCopyProps;
       } else if (pSendProp->GetType() == DPT_Vector &&

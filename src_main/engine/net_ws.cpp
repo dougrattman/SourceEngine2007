@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "net_ws_headers.h"
 
@@ -6,7 +6,6 @@
 #include "net_ws_queued_packet_sender.h"
 #include "tier1/lzss.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define NET_COMPRESSION_STACKBUF_SIZE 4096
@@ -2011,9 +2010,9 @@ int NET_SendPacket(INetChannel *chan, int sock, const netadr_t &to,
   // Do we need to break this packet up?
   int nMaxRoutable = MAX_ROUTABLE_PAYLOAD;
   if (chan) {
-    nMaxRoutable =
-        std::clamp(chan->GetMaxRoutablePayloadSize(), MIN_USER_MAXROUTABLE_SIZE,
-                   std::min(sv_maxroutable.GetInt(), MAX_USER_MAXROUTABLE_SIZE));
+    nMaxRoutable = std::clamp(
+        chan->GetMaxRoutablePayloadSize(), MIN_USER_MAXROUTABLE_SIZE,
+        std::min(sv_maxroutable.GetInt(), MAX_USER_MAXROUTABLE_SIZE));
   }
 
   if (length <= nMaxRoutable && !(net_queued_packet_thread.GetInt() ==
@@ -2482,15 +2481,15 @@ void NET_Init(bool is_dedicated) {
         source::windows::WinsockVersion::Version2_2};
     const DWORD error_code = scoped_winsock_initializer->error_code();
     if (error_code != ERROR_SUCCESS) {
-      ConWarning("Winsock 2.2 unavailable, error code 0x%x.", error_code);
+      ConWarning("Winsock 2.2 unavailable (0x%.8x).", error_code);
       net_noip = true;
     }
 #endif  // _WIN32
   }
 
-  Assert(SVC_LASTMSG < (1 << NETMSG_TYPE_BITS));
-  Assert(NET_MAX_PAYLOAD < (1 << NET_MAX_PALYLOAD_BITS));
-  Assert(MAX_FILE_SIZE < (1 << MAX_FILE_SIZE_BITS));
+  static_assert(SVC_LASTMSG < (1 << NETMSG_TYPE_BITS));
+  static_assert(NET_MAX_PAYLOAD < (1 << NET_MAX_PALYLOAD_BITS));
+  static_assert(MAX_FILE_SIZE < (1 << MAX_FILE_SIZE_BITS));
 
   net_time = 0.0;
 

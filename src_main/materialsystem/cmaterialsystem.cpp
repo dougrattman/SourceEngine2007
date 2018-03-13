@@ -1112,11 +1112,6 @@ void CMaterialSystem::GenerateConfigFromConfigKeyValues(
   ReadInt(pKeyValues, "DefaultRes", 640, -1, &pConfig->m_VideoMode.m_Width);
   pConfig->m_VideoMode.m_Height = (pConfig->m_VideoMode.m_Width * 3) / 4;
 
-#if defined(_X360)
-  pConfig->m_VideoMode.m_Width = GetSystemMetrics(SM_CXSCREEN);
-  pConfig->m_VideoMode.m_Height = GetSystemMetrics(SM_CYSCREEN);
-#endif
-
   pKeyValues->deleteThis();
 
   WriteConfigurationInfoToConVars(bOverwriteCommandLineValues);

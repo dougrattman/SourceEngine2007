@@ -1226,12 +1226,12 @@ CON_COMMAND(star_memory, "Dump memory stats") {
 #else
   MEMORYSTATUSEX stat{sizeof(MEMORYSTATUSEX)};
   if (GlobalMemoryStatusEx(&stat)) {
-    Msg("Available: %.2f MB, Used: %.2f MB, Free: %.2f MB\n",
+    Msg("Available: %.2f MB, Used: %.2f MB, Free: %.2f MB.\n",
         stat.ullTotalPhys / (1024.0f * 1024.0f) - 32.0f,
         (stat.ullTotalPhys - stat.ullAvailPhys) / (1024.0f * 1024.0f) - 32.0f,
         stat.ullAvailPhys / (1024.0f * 1024.0f));
   } else {
-    Warning("Dump memory stats failed, error code 0x%x\n", GetLastError());
+    Warning("Dump memory stats failed (0x%.8x).\n", GetLastError());
   }
 #endif
 }

@@ -1991,10 +1991,10 @@ void CL_SetSteamCrashComment() {
 
   if (host_state.worldmodel) {
     CL_SetupMapName(modelloader->GetName(host_state.worldmodel), map,
-                    sizeof(map));
+                    SOURCE_ARRAYSIZE(map));
   }
 
-  DisplaySystemVersion(osversion, sizeof(osversion));
+  DisplaySystemVersion(osversion, SOURCE_ARRAYSIZE(osversion));
 
   MaterialAdapterInfo_t info;
   materials->GetDisplayAdapterInfo(materials->GetCurrentAdapter(), info);
@@ -2007,14 +2007,13 @@ void CL_SetSteamCrashComment() {
 
   // Make a string out of the high part and low parts of driver version
   char szDXDriverVersion[64];
-  Q_snprintf(szDXDriverVersion, sizeof(szDXDriverVersion), "%ld.%ld.%ld.%ld",
-             (long)(info.m_nDriverVersionHigh >> 16),
-             (long)(info.m_nDriverVersionHigh & 0xffff),
-             (long)(info.m_nDriverVersionLow >> 16),
-             (long)(info.m_nDriverVersionLow & 0xffff));
+  Q_snprintf(szDXDriverVersion, SOURCE_ARRAYSIZE(szDXDriverVersion),
+             "%u.%u.%u.%u", info.m_nDriverVersionHigh >> 16,
+             info.m_nDriverVersionHigh & 0xffff, info.m_nDriverVersionLow >> 16,
+             info.m_nDriverVersionLow & 0xffff);
 
   Q_snprintf(
-      driverinfo, sizeof(driverinfo),
+      driverinfo, SOURCE_ARRAYSIZE(driverinfo),
       "Driver Name:  %s\nDriver Version: %s\nVendorId / DeviceId:  0x%x / "
       "0x%x\nSubSystem / Rev:  0x%x / 0x%x\nDXLevel:  %s\nVid:  %i x %i",
       info.m_pDriverName, szDXDriverVersion, info.m_VendorID, info.m_DeviceID,
@@ -2036,7 +2035,7 @@ void CL_SetSteamCrashComment() {
   ConVarRef mat_motion_blur_enabled("mat_motion_blur_enabled");
   ConVarRef mat_queue_mode("mat_queue_mode");
 
-  Q_snprintf(videoinfo, sizeof(videoinfo),
+  Q_snprintf(videoinfo, SOURCE_ARRAYSIZE(videoinfo),
              "picmip: %i forceansio: %i trilinear: %i antialias: %i vsync: %i "
              "rootlod: %i reducefillrate: %i\n"
              "shadowrendertotexture: %i r_flashlightdepthtexture %i "
@@ -2050,15 +2049,15 @@ void CL_SetSteamCrashComment() {
              r_waterforcereflectentities.GetInt(),
              mat_motion_blur_enabled.GetInt(), mat_queue_mode.GetInt());
 
-  int latency = 0;
+  float latency = 0;
   if (cl.m_NetChannel) {
-    latency = (int)(1000.0f * cl.m_NetChannel->GetAvgLatency(FLOW_OUTGOING));
+    latency = 1000.0f * cl.m_NetChannel->GetAvgLatency(FLOW_OUTGOING);
   }
 
-  Q_snprintf(misc, sizeof(misc),
-             "skill:%i rate %i update %i cmd %i latency %i msec",
-             skill.GetInt(), cl_rate->GetInt(), (int)cl_updaterate->GetFloat(),
-             (int)cl_cmdrate->GetFloat(), latency);
+  Q_snprintf(misc, SOURCE_ARRAYSIZE(misc),
+             "skill:%i rate %i update %.2f cmd %.2f latency %.2f msec",
+             skill.GetInt(), cl_rate->GetInt(), cl_updaterate->GetFloat(),
+             cl_cmdrate->GetFloat(), latency);
 
   const char *pNetChannel = "Not Connected";
   if (cl.m_NetChannel) {
@@ -2067,7 +2066,7 @@ void CL_SetSteamCrashComment() {
 
   CL_SetPagedPoolInfo();
 
-  Q_snprintf(g_minidumpinfo, sizeof(g_minidumpinfo),
+  Q_snprintf(g_minidumpinfo, SOURCE_ARRAYSIZE(g_minidumpinfo),
              "Map: %s\n"
              "Game: %s\n"
              "Build: %i\n"
@@ -2081,7 +2080,8 @@ void CL_SetSteamCrashComment() {
              CommandLine()->GetCmdLine(), driverinfo, videoinfo, osversion);
 
   char full[4096];
-  Q_snprintf(full, sizeof(full), "%s\n", g_minidumpinfo);
+  Q_snprintf(full, SOURCE_ARRAYSIZE(full), "%s\n", g_minidumpinfo);
+
 #ifndef NO_STEAM
   SteamAPI_SetMiniDumpComment(full);
 #endif

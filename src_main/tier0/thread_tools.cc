@@ -338,8 +338,7 @@ bool CThreadSyncObject::Wait(u32 dwTimeout) {
 CThreadEvent::CThreadEvent(bool bManualReset) {
 #ifdef OS_WIN
   m_hSyncObject = CreateEvent(nullptr, bManualReset, FALSE, nullptr);
-  AssertMsg1(m_hSyncObject, "Failed to create event (error 0x%x)",
-             GetLastError());
+  AssertMsg1(m_hSyncObject, "Failed to create event (0x%.8x)", GetLastError());
 #elif OS_POSIX
   pthread_mutexattr_t Attr;
   pthread_mutexattr_init(&Attr);
@@ -411,7 +410,7 @@ CThreadSemaphore::CThreadSemaphore(long initialValue, long maxValue) {
 
     m_hSyncObject = CreateSemaphore(nullptr, initialValue, maxValue, nullptr);
 
-    AssertMsg1(m_hSyncObject, "Failed to create semaphore (error 0x%x)",
+    AssertMsg1(m_hSyncObject, "Failed to create semaphore (0x%.8x)",
                GetLastError());
   } else {
     m_hSyncObject = nullptr;
@@ -431,8 +430,7 @@ _Acquires_lock_(this->m_hSyncObject) CThreadFullMutex::CThreadFullMutex(
     bool bEstablishInitialOwnership, const ch *pszName) {
   m_hSyncObject = CreateMutex(nullptr, bEstablishInitialOwnership, pszName);
 
-  AssertMsg1(m_hSyncObject, "Failed to create mutex (error 0x%x)",
-             GetLastError());
+  AssertMsg1(m_hSyncObject, "Failed to create mutex (0x%.8x)", GetLastError());
 }
 
 _Releases_lock_(this->m_hSyncObject) bool CThreadFullMutex::Release() {
@@ -816,7 +814,7 @@ bool CThreadMutex::TryLock() {
       // we now own it for the first time. Set owner information
       m_currentOwnerID = thisThreadID;
       if (m_bTrace)
-        Msg("Thread %u now owns lock 0x%x\n", m_currentOwnerID,
+        Msg("Thread %u now owns lock %p\n", m_currentOwnerID,
             (CRITICAL_SECTION *)&m_CriticalSection);
     }
     m_lockCount++;
@@ -1108,7 +1106,7 @@ const ch *CThread::GetName() {
     _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%p/%p)", this,
                 m_hThread);
 #elif OS_POSIX
-    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%0x%x/0x%x)", this,
+    _snprintf_s(m_szName, sizeof(m_szName) - 1, "Thread(%p/0x%x)", this,
                 m_threadId);
 #endif
   }
@@ -1138,7 +1136,7 @@ bool CThread::Start(u32 nBytesStack) {
       nullptr, nBytesStack, (LPTHREAD_START_ROUTINE)GetThreadProc(),
       new ThreadInit_t(init), 0, &m_threadId);
   if (!hThread) {
-    AssertMsg1(0, "Failed to create thread (error 0x%x)", GetLastError());
+    AssertMsg1(0, "Failed to create thread (0x%.8x)", GetLastError());
     return false;
   }
 #elif OS_POSIX
@@ -1148,7 +1146,7 @@ bool CThread::Start(u32 nBytesStack) {
   pthread_attr_setstacksize(&attr, std::max(nBytesStack, 1024 * 1024));
   if (pthread_create(&m_threadId, &attr, GetThreadProc(),
                      new ThreadInit_t(init)) != 0) {
-    AssertMsg1(0, "Failed to create thread (error 0x%x)", GetLastError());
+    AssertMsg1(0, "Failed to create thread (0x%.8x)", GetLastError());
     return false;
   }
   bInitSuccess = true;

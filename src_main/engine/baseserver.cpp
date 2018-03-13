@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // baseserver.cpp: implementation of the CBaseServer class.
 
@@ -1533,8 +1533,6 @@ void CBaseServer::CheckMasterServerRequestRestart() {
   if (!SteamMasterServerUpdater() ||
       !SteamMasterServerUpdater()->WasRestartRequested())
     return;
-#else
-  return;
 #endif
 
   // Connection was rejected by the HLMaster (out of date version)

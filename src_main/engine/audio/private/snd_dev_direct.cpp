@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "audio_pch.h"
 
@@ -13,7 +13,6 @@
 #include "iprediction.h"
 #include "tier0/include/icommandline.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern bool snd_firsttime;
@@ -583,7 +582,7 @@ bool CAudioDirectSound::SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS,
 
   HRESULT hr = lpDS->CreateSoundBuffer(&dsbdesc, &pDSBuf, nullptr);
   if (FAILED(hr)) {
-    Msg("DS::Can't create interleaved sound buffer, error hr 0x%x.\n", hr);
+    Msg("DS::Can't create interleaved sound buffer (0x%.8x).\n", hr);
     return false;
   }
 
@@ -603,32 +602,31 @@ bool CAudioDirectSound::SNDDMA_InitInterleaved(LPDIRECTSOUND8 lpDS,
 
   hr = pDSBuf->Unlock(pBuffer, dwSize, NULL, 0);
   if (FAILED(hr)) {
-    Warning("DS::Can't unlock interleaved sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS::Can't unlock interleaved sound buffer (0x%.8x).\n", hr);
   }
 
   // Make sure mixer is active (this was moved after the zeroing to avoid
   // popping on startup -- at least when using the dx9.0b debug .dlls)
   hr = pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
   if (FAILED(hr)) {
-    Warning("DS::Can't play interleaved sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS::Can't play interleaved sound buffer (0x%.8x).\n", hr);
   }
 
   hr = pDSBuf->Stop();
   if (FAILED(hr)) {
-    Warning("DS::Can't stop interleaved sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS::Can't stop interleaved sound buffer (0x%.8x).\n", hr);
   }
 
   hr = pDSBuf->GetCurrentPosition(&m_outputBufferStartOffset, &dwWrite);
   if (FAILED(hr)) {
     Warning(
-        "DS::Can't get current position interleaved sound buffer, error hr "
-        "0x%x.\n",
+        "DS::Can't get current position interleaved sound buffer (0x%.8x).\n",
         hr);
   }
 
   hr = pDSBuf->Play(0, 0, DSBPLAY_LOOPING);
   if (FAILED(hr)) {
-    Warning("DS::Can't play interleaved sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS::Can't play interleaved sound buffer (0x%.8x).\n", hr);
   }
 
   return true;
@@ -647,14 +645,15 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   if (!m_direct_sound_module) {
     m_direct_sound_module = LoadLibraryW(L"dsound.dll");
     if (m_direct_sound_module == nullptr) {
-      Warning("Couldn't load dsound.dll, error 0x%x.\n", GetLastError());
+      Warning("Couldn't load dsound.dll (0x%.8x).\n", GetLastError());
       return SIS_FAILURE;
     }
 
     ds_create_8_fn = reinterpret_cast<decltype(ds_create_8_fn)>(
         GetProcAddress(m_direct_sound_module, "DirectSoundCreate8"));
     if (!ds_create_8_fn) {
-      Warning("Couldn't find DirectSoundCreate8 in dsound.dll.\n");
+      Warning("Couldn't find DirectSoundCreate8 in dsound.dll (0x%.8x).\n",
+              GetLastError());
       return SIS_FAILURE;
     }
   }
@@ -662,9 +661,8 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   HRESULT hr = (*ds_create_8_fn)(nullptr, &pDS, nullptr);
   if (hr != DS_OK) {
     if (hr != DSERR_ALLOCATED) {
-      DevMsg(
-          "DirectSoundCreate8 failed to create DirectSound8, error hr 0x%x.\n",
-          hr);
+      DevMsg("DirectSoundCreate8 failed to create DirectSound8 (0x%.8x).\n",
+             hr);
       return SIS_FAILURE;
     }
 
@@ -719,7 +717,7 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   hr = pDS->GetCaps(&dscaps);
 
   if (DS_OK != hr) {
-    Warning("Couldn't get DirectSound8 caps, error hr 0x%x.\n", hr);
+    Warning("Couldn't get DirectSound8 caps (0x%.8x).\n", hr);
     Shutdown();
     return SIS_FAILURE;
   }
@@ -734,8 +732,7 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
 
   if (DS_OK != hr) {
     Warning(
-        "Set DirectSound8 cooperative level to exclusive failed, error hr "
-        "0x%x.\n",
+        "Set DirectSound8 cooperative level to exclusive failed (0x%.8x).\n",
         hr);
     Shutdown();
     return SIS_FAILURE;
@@ -765,8 +762,7 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
 
       if (DS_OK != hr) {
         if (snd_firsttime)
-          DevMsg("Set primary DirectSound8 buffer format: no. Error hr 0x%x.\n",
-                 hr);
+          DevMsg("Set primary DirectSound8 buffer format: no (0x%.8x).\n", hr);
       } else {
         if (snd_firsttime)
           DevMsg("Set primary DirectSound8 buffer format: yes\n");
@@ -774,8 +770,7 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
         primary_format_set = true;
       }
     } else {
-      Warning("Create primary DirectSound8 buffer failed, error hr 0x%x.\n",
-              hr);
+      Warning("Create primary DirectSound8 buffer failed (0x%.8x).\n", hr);
     }
   }
 
@@ -817,8 +812,7 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
       hr = pDS->CreateSoundBuffer(&primary_buffer, &pDSBuf, nullptr);
 
       if (DS_OK != hr) {
-        Warning("Create secondary DirectSound8 buffer failed, error hr 0x%x.\n",
-                hr);
+        Warning("Create secondary DirectSound8 buffer failed (0x%.8x).\n", hr);
         Shutdown();
         return SIS_FAILURE;
       }
@@ -1110,7 +1104,7 @@ void DS3D_SetBufferParams(LPDIRECTSOUND3DBUFFER8 pDSBuf3D, D3DVECTOR *pbpos,
 
   HRESULT hr = pDSBuf3D->GetAllParameters(&buffer);
   if (DS_OK != hr) {
-    Warning("DS:3DBuffer get all parameters failed, error code 0x%x.\n", hr);
+    Warning("DS:3DBuffer get all parameters failed (0x%.8x).\n", hr);
   }
 
   buffer.vPosition = position;
@@ -1125,7 +1119,7 @@ void DS3D_SetBufferParams(LPDIRECTSOUND3DBUFFER8 pDSBuf3D, D3DVECTOR *pbpos,
 
   hr = pDSBuf3D->SetAllParameters(&buffer, DS3D_DEFERRED);
   if (DS_OK != hr) {
-    Warning("DS:3DBuffer set all parameters failed, error code 0x%x.\n", hr);
+    Warning("DS:3DBuffer set all parameters failed (0x%.8x).\n", hr);
   }
 }
 
@@ -1161,32 +1155,28 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
 
   hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFL, NULL);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d front left failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:CreateSoundBuffer for 3d front left failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
 
   hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFR, NULL);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d front right failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:CreateSoundBuffer for 3d front right failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
 
   hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufRL, NULL);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d rear left failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:CreateSoundBuffer for 3d rear left failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
 
   hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufRR, NULL);
   if (DS_OK != hr) {
-    Warning("DS:CreateSoundBuffer for 3d rear right failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:CreateSoundBuffer for 3d rear right failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1196,9 +1186,8 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   if (cchan == 5) {
     hr = lpDS->CreateSoundBuffer(&dsbuf, &pDSBufFC, NULL);
     if (DS_OK != hr) {
-      Warning(
-          "DS:CreateSoundBuffer for 3d front center failed, error hr 0x%x.\n",
-          hr);
+      Warning("DS:CreateSoundBuffer for 3d front center failed (0x%.8x).\n",
+              hr);
       ReleaseSurround();
       return FALSE;
     }
@@ -1209,7 +1198,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   hr = pDSBufFL->QueryInterface(IID_IDirectSound3DBufferDef,
                                 (void **)&pDSBuf3DFL);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d front left failed, error hr 0x%x.\n", hr);
+    Warning("DS:Query 3DBuffer for 3d front left failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1217,8 +1206,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   hr = pDSBufFR->QueryInterface(IID_IDirectSound3DBufferDef,
                                 (void **)&pDSBuf3DFR);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d front right failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:Query 3DBuffer for 3d front right failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1226,7 +1214,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   hr = pDSBufRL->QueryInterface(IID_IDirectSound3DBufferDef,
                                 (void **)&pDSBuf3DRL);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d rear left failed, error hr 0x%x.\n", hr);
+    Warning("DS:Query 3DBuffer for 3d rear left failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1234,7 +1222,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
   hr = pDSBufRR->QueryInterface(IID_IDirectSound3DBufferDef,
                                 (void **)&pDSBuf3DRR);
   if (DS_OK != hr) {
-    Warning("DS:Query 3DBuffer for 3d rear right failed, error hr 0x%x.\n", hr);
+    Warning("DS:Query 3DBuffer for 3d rear right failed (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1243,8 +1231,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
     hr = pDSBufFC->QueryInterface(IID_IDirectSound3DBufferDef,
                                   (void **)&pDSBuf3DFC);
     if (DS_OK != hr) {
-      Warning("DS:Query 3DBuffer for 3d front center failed, error hr 0x%x.\n",
-              hr);
+      Warning("DS:Query 3DBuffer for 3d front center failed (0x%.8x).\n", hr);
       ReleaseSurround();
       return FALSE;
     }
@@ -1262,22 +1249,22 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
 
     hr = sound_3d_listener->GetAllParameters(&lparm);
     if (DS_OK != hr) {
-      Warning("DS:3DListener get all parameters failed, error hr 0x%x.\n", hr);
+      Warning("DS:3DListener get all parameters failed (0x%.8x).\n", hr);
     }
 
     // front x,y,z top x,y,z
     hr = sound_3d_listener->SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
                                            DS3D_IMMEDIATE);
     if (DS_OK != hr) {
-      Warning("DS:3DListener set orientation failed, error hr 0x%x.\n", hr);
+      Warning("DS:3DListener set orientation failed (0x%.8x).\n", hr);
     }
 
     hr = sound_3d_listener->SetPosition(0.0f, 0.0f, 0.0f, DS3D_IMMEDIATE);
     if (DS_OK != hr) {
-      Warning("DS:3DListener set position failed, error hr 0x%x.\n", hr);
+      Warning("DS:3DListener set position failed (0x%.8x).\n", hr);
     }
   } else {
-    Warning("DS: failed to get 3D listener interface, error hr 0x%x.\n", hr);
+    Warning("DS: failed to get 3D listener interface (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
@@ -1337,8 +1324,7 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
 
   hr = sound_3d_listener->CommitDeferredSettings();
   if (DS_OK != hr) {
-    Warning("DS:3DListener commit defered settings failed, error hr 0x%x.\n",
-            hr);
+    Warning("DS:3DListener commit defered settings failed (0x%.8x).\n", hr);
   }
 
   m_deviceChannels = 1;  // 1 mono 3d output buffer
@@ -1350,37 +1336,35 @@ bool CAudioDirectSound::SNDDMA_InitSurround(LPDIRECTSOUND8 lpDS,
 
   hr = pDSBufFL->GetCaps(lpdsbc);
   if (DS_OK != hr) {
-    Warning("DS:GetCaps failed for 3d sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS:GetCaps failed for 3d sound buffer (0x%.8x).\n", hr);
     ReleaseSurround();
     return FALSE;
   }
 
   hr = pDSBufFL->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for front left sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS:Play failed for front left sound buffer (0x%.8x).\n", hr);
   }
 
   hr = pDSBufFR->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for front right sound buffer, error hr 0x%x.\n",
-            hr);
+    Warning("DS:Play failed for front right sound buffer (0x%.8x).\n", hr);
   }
 
   hr = pDSBufRL->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for rear left sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS:Play failed for rear left sound buffer (0x%.8x).\n", hr);
   }
 
   hr = pDSBufRR->Play(0, 0, DSBPLAY_LOOPING);
   if (DS_OK != hr) {
-    Warning("DS:Play failed for rear right sound buffer, error hr 0x%x.\n", hr);
+    Warning("DS:Play failed for rear right sound buffer (0x%.8x).\n", hr);
   }
 
   if (cchan == 5) {
     hr = pDSBufFC->Play(0, 0, DSBPLAY_LOOPING);
     if (DS_OK != hr) {
-      Warning("DS:Play failed for front center sound buffer, error hr 0x%x.\n",
-              hr);
+      Warning("DS:Play failed for front center sound buffer (0x%.8x).\n", hr);
     }
   }
 
@@ -1601,13 +1585,12 @@ bool CAudioDirectSound::LockDSBuffer(LPDIRECTSOUNDBUFFER pBuffer,
                              pdwSizeBuffer, nullptr, nullptr, lockFlags)) !=
          DS_OK) {
     if (hr != DSERR_BUFFERLOST) {
-      Msg("DS::Lock sound buffer %s failed, error hr 0x%x.\n", pBufferName, hr);
+      Msg("DS::Lock sound buffer %s failed (0x%.8x).\n", pBufferName, hr);
       return false;
     }
 
     if (++reps > 10000) {
-      Msg("DS::Couldn't restore sound buffer %s, error hr 0x%x.\n", pBufferName,
-          hr);
+      Msg("DS::Couldn't restore sound buffer %s (0x%.8x).\n", pBufferName, hr);
       return false;
     }
   }

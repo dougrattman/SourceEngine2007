@@ -257,15 +257,14 @@ void RelaunchWithNewLanguageViaSteam() {
               : (return_code == 0 ? ERROR_NOT_ENOUGH_MEMORY : return_code);
 
       if (return_code != NO_ERROR) {
-        Warning("Can't relaunch %s, error code 0x%x.", relaunch_url,
-                return_code);
+        Warning("Can't relaunch %s (0x%.8x).", relaunch_url, return_code);
       }
 
       return_code =
           static_cast<u32>(RegDeleteValueW(source_key, L"Relaunch URL"));
 
       if (return_code != NO_ERROR) {
-        Warning("Can't delete registry key value %s, error code 0x%x.",
+        Warning("Can't delete registry key value %s (0x%.8x).",
                 "Software\\Valve\\Source Relaunch URL", return_code);
       }
     }
@@ -273,7 +272,7 @@ void RelaunchWithNewLanguageViaSteam() {
     const u32 return_code = static_cast<u32>(RegCloseKey(source_key));
 
     if (return_code != NO_ERROR) {
-      Warning("Can't close registry key %s, error code 0x%x.",
+      Warning("Can't close registry key %s (0x%.8x).",
               "Software\\Valve\\Source", return_code);
     }
   }
@@ -292,7 +291,7 @@ u32 SetProcessPriorityInternal(_In_z_ const ch *priority_switch,
 
   if (return_code == FALSE) {
     const u32 error_code{GetLastError()};
-    Warning("Can't set process priority by switch %s, error code 0x%x.",
+    Warning("Can't set process priority by switch %s (0x%.8x).",
             priority_switch, error_code);
     return error_code;
   }
@@ -394,7 +393,7 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   // Run in text mode? (No graphics or sound).
   auto [is_text_mode, return_code] = InitTextModeIfNeeded(command_line);
   if (return_code != NO_ERROR) {
-    Error("Can't run in text mode, error code 0x%x.", return_code);
+    Error("Can't run in text mode (0x%.8x).", return_code);
     return return_code;
   }
 
@@ -403,7 +402,7 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
       source::windows::WinsockVersion::Version2_2};
   return_code = scoped_winsock_initializer.error_code();
   if (return_code != NO_ERROR) {
-    Warning("Winsock 2.2 unavailable, error code 0x%x.", return_code);
+    Warning("Winsock 2.2 unavailable, error code 0x%.8x.", return_code);
   }
 
   VCRHelpers vcr_helpers;

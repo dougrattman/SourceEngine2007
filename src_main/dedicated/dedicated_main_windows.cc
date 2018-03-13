@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -10,7 +10,7 @@
 #include "tier0/include/icommandline.h"
 #include "tier1/strtools.h"
 
-#include "base/windows/include/scoped_winsock_initializer.h"
+#include "base/include/windows/scoped_winsock_initializer.h"
 
 static source::windows::ScopedWinsockInitializer *scoped_winsock_initializer =
     nullptr;
@@ -23,7 +23,7 @@ bool NET_Init() {
   if (error_code != ERROR_SUCCESS) {
     char error_message[256];
     Q_snprintf(error_message, SOURCE_ARRAYSIZE(error_message),
-               "Winsock 2.2 unavailable, error code 0x%x...", error_code);
+               "Winsock 2.2 unavailable (0x%.8x)...", error_code);
     sys->Printf("%s", error_message);
     Plat_DebugString(error_message);
     return false;

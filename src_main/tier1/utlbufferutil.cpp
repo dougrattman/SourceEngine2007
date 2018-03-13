@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/utlbufferutil.h"
 
@@ -17,9 +17,7 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlstring.h"
 
- 
 #include "tier0/include/memdbgon.h"
-
 
 // For serialization, set the delimiter rules
 
@@ -30,7 +28,6 @@ void SetSerializationDelimiter(CUtlCharConversion *pConv) { s_pConv = pConv; }
 void SetSerializationArrayDelimiter(const char *pDelimiter) {
   s_pUtlBufferUtilArrayDelim = pDelimiter;
 }
-
 
 // Serialize a floating point number in text mode in a readably friendly fashion
 
@@ -59,7 +56,6 @@ static void SerializeFloats(CUtlBuffer &buf, int nCount, const float *pFloats) {
     }
   }
 }
-
 
 // Serialization methods for basic types
 
@@ -122,7 +118,6 @@ bool Unserialize(CUtlBuffer &buf, float &dest) {
   dest = buf.GetFloat();
   return buf.IsValid();
 }
-
 
 // Attribute types related to vector math
 
@@ -281,7 +276,6 @@ bool Unserialize(CUtlBuffer &buf, VMatrix &dest) {
   return true;
 }
 
-
 // Color attribute
 
 bool Serialize(CUtlBuffer &buf, const Color &src) {
@@ -325,7 +319,6 @@ bool Unserialize( CUtlBuffer &buf, DmObjectId_t &dest )
         return g_pDataModel->Unserialize( buf, &dest );
 }
 */
-
 
 // Binary buffer attribute
 
@@ -435,7 +428,6 @@ bool Unserialize(CUtlBuffer &buf, CUtlBinaryBlock &dest) {
   return true;
 }
 
-
 // String attribute
 
 bool Serialize(CUtlBuffer &buf, const CUtlString &src) {
@@ -444,9 +436,9 @@ bool Serialize(CUtlBuffer &buf, const CUtlString &src) {
 }
 
 bool Unserialize(CUtlBuffer &buf, CUtlString &dest) {
-  int nLen = buf.PeekDelimitedStringLength(s_pConv);
-  dest.SetLength(nLen -
-                 1);  // -1 because the length returned includes space for \0
+  int nLen = buf.PeekDelimitedStringLength(
+      s_pConv);  // -1 because the length returned includes space for \0
+  dest.SetLength(nLen - 1);
   buf.GetDelimitedString(s_pConv, dest.Get(), nLen);
   return buf.IsValid();
 }

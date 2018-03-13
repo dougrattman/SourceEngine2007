@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "sys_mainwind.h"
 
@@ -31,7 +31,6 @@
 #include "vgui_controls/messagedialog.h"
 #include "vguimatsurface/imatsystemsurface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 void S_BlockSound();
@@ -98,7 +97,7 @@ void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
       source::windows::WinsockVersion::Version2_2};
   DWORD error_code = scoped_winsock_initializer.error_code();
   if (error_code != ERROR_SUCCESS) {
-    Warning("Winsock 2.2 unavailable, error code 0x%x.", error_code);
+    Warning("Winsock 2.2 unavailable (0x%.8x).", error_code);
     return;
   }
 
@@ -357,18 +356,18 @@ class CGame : public IGame {
 #ifndef SWDS
 
     // Wait for the mode to change and stabilized
-    // TODO(d.rattman): There's really no way to know when this is completed, so we have
-    // to guess a time that will mostly be correct
+    // TODO(d.rattman): There's really no way to know when this is completed, so
+    // we have to guess a time that will mostly be correct
     if (videomode->IsWindowedMode() == false) {
       Sleep(1000);
     }
 
     bool bEndGame = CommandLine()->CheckParm("-endgamevid");
-    bool bRecap =
-        CommandLine()->CheckParm("-recapvid");  // TODO(d.rattman): This is a temp
-                                                // addition until the
-                                                // movie playback is
-                                                // centralized -- jdw
+    bool bRecap = CommandLine()->CheckParm(
+        "-recapvid");  // TODO(d.rattman): This is a temp
+                       // addition until the
+                       // movie playback is
+                       // centralized -- jdw
 
     if (!bEndGame && !bRecap &&
         (CommandLine()->CheckParm("-dev") ||

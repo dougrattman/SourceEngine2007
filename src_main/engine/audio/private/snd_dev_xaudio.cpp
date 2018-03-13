@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: XAudio2 Version.
 
@@ -130,7 +130,7 @@ CAudioXAudio2::~CAudioXAudio2() { m_pSingleton = nullptr; }
 bool CAudioXAudio2::Init() {
   HRESULT hr = XAudio2Create(&m_pXAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
   if (FAILED(hr)) {
-    Warning("XAudio2Create can't create XAudio2 device, error hr 0x%x.\n", hr);
+    Warning("XAudio2Create can't create XAudio2 device (0x%.8x).\n", hr);
     return false;
   }
 

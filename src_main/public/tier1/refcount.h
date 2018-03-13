@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Tools for correctly implementing & handling reference counted
 // objects.
@@ -8,11 +8,9 @@
 
 #include "tier0/include/threadtools.h"
 
-
 // Purpose:	Implement a standard reference counted interface. Use of this
 // is optional insofar as all the concrete tools only require
 // at compile time that the function signatures match.
-
 
 class IRefCounted {
  public:
@@ -20,9 +18,7 @@ class IRefCounted {
   virtual int Release() = 0;
 };
 
-
 // Purpose:	Release a pointer and mark it NULL
-
 
 template <class REFCOUNTED_ITEM_PTR>
 inline int SafeRelease(REFCOUNTED_ITEM_PTR &pRef) {
@@ -36,9 +32,7 @@ inline int SafeRelease(REFCOUNTED_ITEM_PTR &pRef) {
   return 0;
 }
 
-
 // Purpose:	Maintain a reference across a scope
-
 
 template <class T = IRefCounted>
 class CAutoRef {
@@ -55,18 +49,14 @@ class CAutoRef {
   T *m_pRef;
 };
 
-
 // Purpose:	Do a an inline AddRef then return the pointer, useful when
 // returning an object from a function
-
 
 #define RetAddRef(p) ((p)->AddRef(), (p))
 #define InlineAddRef(p) ((p)->AddRef(), (p))
 
-
 // Purpose:	A class to both hold a pointer to an object and its reference.
 // Base exists to support other cleanup models
-
 
 template <class T>
 class CBaseAutoPtr {
@@ -160,9 +150,7 @@ class CRefPtr : public CBaseAutoPtr<T> {
   }
 };
 
-
 // Purpose:	Traits classes defining reference count threading model
-
 
 class CRefMT {
  public:
@@ -176,10 +164,8 @@ class CRefST {
   static int Decrement(int *p) { return --(*p); }
 };
 
-
 // Purpose:	Actual reference counting implementation. Pulled out to reduce
 // code bloat.
-
 
 template <const bool bSelfDelete, typename CRefThreading = CRefMT>
 class MSVC_NOVTABLE CRefCountServiceBase {
@@ -243,9 +229,7 @@ typedef CRefCountServiceBase<false, CRefMT> CRefCountServiceNoDeleteMT;
 typedef CRefCountServiceNoDeleteMT CRefCountServiceNoDelete;
 typedef CRefCountServiceMT CRefCountService;
 
-
 // Purpose:	Base classes to implement reference counting
-
 
 template <class REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted : public REFCOUNT_SERVICE {
@@ -269,8 +253,8 @@ class MSVC_NOVTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
 
 template <class BASE1, class BASE2, class REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted2 : public BASE1,
-                               public BASE2,
-                               public REFCOUNT_SERVICE {
+                                   public BASE2,
+                                   public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted2() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
@@ -282,9 +266,9 @@ class MSVC_NOVTABLE CRefCounted2 : public BASE1,
 template <class BASE1, class BASE2, class BASE3,
           class REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted3 : public BASE1,
-                               public BASE2,
-                               public BASE3,
-                               public REFCOUNT_SERVICE {
+                                   public BASE2,
+                                   public BASE3,
+                                   public REFCOUNT_SERVICE {
   virtual ~CRefCounted3() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
@@ -295,10 +279,10 @@ class MSVC_NOVTABLE CRefCounted3 : public BASE1,
 template <class BASE1, class BASE2, class BASE3, class BASE4,
           class REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted4 : public BASE1,
-                               public BASE2,
-                               public BASE3,
-                               public BASE4,
-                               public REFCOUNT_SERVICE {
+                                   public BASE2,
+                                   public BASE3,
+                                   public BASE4,
+                                   public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted4() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
@@ -310,21 +294,19 @@ class MSVC_NOVTABLE CRefCounted4 : public BASE1,
 template <class BASE1, class BASE2, class BASE3, class BASE4, class BASE5,
           class REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted5 : public BASE1,
-                               public BASE2,
-                               public BASE3,
-                               public BASE4,
-                               public BASE5,
-                               public REFCOUNT_SERVICE {
+                                   public BASE2,
+                                   public BASE3,
+                                   public BASE4,
+                                   public BASE5,
+                                   public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted5() {}
   int AddRef() { return REFCOUNT_SERVICE::DoAddRef(); }
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-
 // Purpose:	Class to throw around a reference counted item to debug
 // referencing problems
-
 
 template <class BASE_REFCOUNTED, int FINAL_REFS = 0, const char *pszName = NULL>
 class CRefDebug : public BASE_REFCOUNTED {
@@ -332,30 +314,28 @@ class CRefDebug : public BASE_REFCOUNTED {
 #ifdef _DEBUG
   CRefDebug() {
     AssertMsg(GetRefCount() == 1, "Expected initial ref count of 1");
-    DevMsg("%s:create 0x%x\n", (pszName) ? pszName : "", this);
+    DevMsg("%s:create %p\n", (pszName) ? pszName : "", this);
   }
 
   virtual ~CRefDebug() {
     AssertDevMsg(GetRefCount() == FINAL_REFS,
                  "Object still referenced on destroy?");
-    DevMsg("%s:destroy 0x%x\n", (pszName) ? pszName : "", this);
+    DevMsg("%s:destroy %p\n", (pszName) ? pszName : "", this);
   }
 
   int AddRef() {
-    DevMsg("%s:(0x%x)->AddRef() --> %d\n", (pszName) ? pszName : "", this,
+    DevMsg("%s:(%p)->AddRef() --> %d\n", (pszName) ? pszName : "", this,
            GetRefCount() + 1);
     return BASE_REFCOUNTED::AddRef();
   }
 
   int Release() {
-    DevMsg("%s:(0x%x)->Release() --> %d\n", (pszName) ? pszName : "", this,
+    DevMsg("%s:(%p)->Release() --> %d\n", (pszName) ? pszName : "", this,
            GetRefCount() - 1);
     Assert(GetRefCount() > 0);
     return BASE_REFCOUNTED::Release();
   }
 #endif
 };
-
-
 
 #endif  // SOURCE_TIER1_REFCOUNT_H_

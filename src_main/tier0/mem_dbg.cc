@@ -1078,15 +1078,14 @@ i32 CDbgMemAlloc::heapchk() {
 void CDbgMemAlloc::DumpBlockStats(void *p) {
   DbgMemHeader_t *pBlock = (DbgMemHeader_t *)p - 1;
   if (!CrtIsValidHeapPointer(pBlock)) {
-    Msg("0x%x is not valid heap pointer\n", p);
+    Msg("%p is not valid heap pointer\n", p);
     return;
   }
 
   const ch *pFileName = GetAllocatonFileName(p);
   i32 line = GetAllocatonLineNumber(p);
 
-  Msg("0x%x allocated by %s line %d, %d bytes\n", p, pFileName, line,
-      GetSize(p));
+  Msg("%p allocated by %s line %d, %d bytes\n", p, pFileName, line, GetSize(p));
 }
 
 // Stat output

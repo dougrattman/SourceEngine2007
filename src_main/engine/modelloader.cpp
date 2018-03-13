@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Model loading / unloading interface
 
@@ -54,7 +54,6 @@
 #include "tier2/tier2.h"
 #include "vphysics_interface.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar mat_loadtextures("mat_loadtextures", "1", FCVAR_CHEAT);
@@ -98,7 +97,8 @@ static CUtlVector<dgamelump_t> g_GameLumpDict;
 static char g_GameLumpFilename[128];
 static void *g_pGameLumpData;
 
-// TODO(d.rattman): Right now Host_FreeToLowMark unloads all models including studio
+// TODO(d.rattman): Right now Host_FreeToLowMark unloads all models including
+// studio
 //  models that have Cache_Alloc data, too.  This needs to be fixed before
 //  shipping
 
@@ -1524,9 +1524,9 @@ void Mod_LoadFaces(void) {
 
   // align these allocations
   // If you trip one of these, you need to rethink the alignment of the struct
-  Assert(sizeof(msurface1_t) == 16);
-  Assert(sizeof(msurface2_t) == 32);
-  Assert(sizeof(msurfacelighting_t) == 32);
+  static_assert(sizeof(msurface1_t) == 16);
+  static_assert(sizeof(msurface2_t) == 32);
+  static_assert(sizeof(msurfacelighting_t) == 32);
 
   msurface1_t *out1 = Hunk_AllocNameAlignedClear<msurface1_t>(
       count, 16, va("%s [%s]", lh.GetLoadName(), "surface1"));
@@ -3130,7 +3130,8 @@ int CModelLoader::GetModelFileSize(char const *name) {
   int size = -1;
   if (Q_stristr(model->szName, ".spr") || Q_stristr(model->szName, ".vmt")) {
     char spritename[SOURCE_MAX_PATH];
-    Q_StripExtension(va("materials/%s", model->szName), spritename, SOURCE_MAX_PATH);
+    Q_StripExtension(va("materials/%s", model->szName), spritename,
+                     SOURCE_MAX_PATH);
     Q_DefaultExtension(spritename, ".vmt", sizeof(spritename));
 
     size = COM_FileSize(spritename);
@@ -4278,8 +4279,8 @@ void CModelLoader::Studio_UnloadModel(model_t *pModel) {
   if (pModel->nLoadFlags & FMODELLOADER_TOUCHED_MATERIALS) {
     // remove the added reference to all of this model's materials
     IMaterial *pMaterials[128];
-    int nMaterials =
-        Mod_GetModelMaterials(pModel, SOURCE_ARRAYSIZE(pMaterials), &pMaterials[0]);
+    int nMaterials = Mod_GetModelMaterials(pModel, SOURCE_ARRAYSIZE(pMaterials),
+                                           &pMaterials[0]);
     for (int j = 0; j < nMaterials; j++) {
       pMaterials[j]->DecrementReferenceCount();
     }

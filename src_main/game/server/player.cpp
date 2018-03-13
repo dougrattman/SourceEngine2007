@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Functions dealing with the player.
 
@@ -86,7 +86,6 @@ ConVar sv_bonus_challenge(
     "sv_bonus_challenge", "0", FCVAR_REPLICATED,
     "Set to values other than 0 to select a bonus map challenge type.");
 
- 
 #include "tier0/include/memdbgon.h"
 
 static ConVar old_armor("player_old_armor", "0");
@@ -1999,7 +1998,9 @@ void CBasePlayer::StartDeathCam( void )
                 {
                         pNewSpot = gEntList.FindEntityByClassname( pSpot,
 "info_intermission");
-                        
+                        
+
+
 
 
 
@@ -3466,11 +3467,15 @@ void CBasePlayer::PreThink(void) {
                 Health kit			- Immediate stop to
    acid/chemical, fire or freeze damage. Radiation Shower	- Immediate stop
    to radiation damage, acid/chemical or fire damage.
-                
+                
 
 
 
-        
+
+
+        
+
+
 
 
 
@@ -3652,7 +3657,9 @@ for 3 seconds. Will not work if player was gibbed. Single use. Long Jump Used by
 hitting the ??? key(s). Caused the player to further than normal. SCUBA Used
 automatically after picked up and after player enters the water. Works for N
 seconds. Single use.
-        
+        
+
+
 
 
 
@@ -3668,7 +3675,9 @@ Things powered by the battery
                 Uses N watts for each use. Each use lasts M seconds.
         Alien Shield
                 Augments armor. Reduces Armor drain by one half
- 
+ 
+
+
 
 
 
@@ -5112,8 +5121,8 @@ CBaseEntity *FindEntityForward(CBasePlayer *pMe, bool fHull) {
 //-----------------------------------------------------------------------------
 // Purpose: Finds the nearest entity in front of the player of the given
 //			classname, preferring collidable entities, but allows
-// selection of 			enities that are on the other side of walls
-// or objects
+// selection of 			enities that are on the other side of
+// walls or objects
 //
 // Input  :
 // Output :
@@ -5541,7 +5550,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse) {
       if (pEntity) {
         CAI_BaseNPC *pNPC = pEntity->MyNPCPointer();
         if (pNPC != NULL) {
-          Msg("Debugging %s (0x%x)\n", pNPC->GetClassname(), pNPC);
+          Msg("Debugging %s, npc %p.\n", pNPC->GetClassname(), pNPC);
           CAI_BaseNPC::SetDebugNPC(pNPC);
         }
       }
@@ -5907,9 +5916,9 @@ QAngle CBasePlayer::BodyAngles() { return EyeAngles(); }
 //------------------------------------------------------------------------------
 // Purpose : Add noise to BodyTarget() to give enemy a better chance of
 //			 getting a clear shot when the player is peeking above a
-// hole 			 or behind a ladder (eventually the randomly-picked
-// point along the spine will be one that is exposed above the hole or between
-// rungs of a ladder.) Input   : Output  :
+// hole 			 or behind a ladder (eventually the
+// randomly-picked point along the spine will be one that is exposed above the
+// hole or between rungs of a ladder.) Input   : Output  :
 //------------------------------------------------------------------------------
 Vector CBasePlayer::BodyTarget(const Vector &posSrc, bool bNoisy) {
   if (IsInAVehicle()) {
@@ -6908,7 +6917,8 @@ void SendProxy_CropFlagsToPlayerFlagBitsLength(const SendProp *pProp,
 
 BEGIN_SEND_TABLE_NOBASE(CPlayerState, DT_PlayerState)
 SendPropInt(SENDINFO(deadflag), 1, SPROP_UNSIGNED),
-    END_SEND_TABLE()
+END_SEND_TABLE
+()
 
     // --------------------------------------------------------------------------------
     // // This data only gets sent to clients that ARE this player entity.
@@ -6966,7 +6976,8 @@ SendPropInt(SENDINFO(deadflag), 1, SPROP_UNSIGNED),
     SendPropInt(SENDINFO(m_nWaterLevel), 2, SPROP_UNSIGNED),
     SendPropFloat(SENDINFO(m_flLaggedMovementValue), 0, SPROP_NOSCALE),
 
-    END_SEND_TABLE()
+END_SEND_TABLE
+()
 
     // --------------------------------------------------------------------------------
     // // DT_BasePlayer sendtable.
@@ -7007,7 +7018,8 @@ SendPropInt(SENDINFO(deadflag), 1, SPROP_UNSIGNED),
                       &REFERENCE_SEND_TABLE(DT_LocalPlayerExclusive),
                       SendProxy_SendLocalDataTable),
 
-    END_SEND_TABLE()
+END_SEND_TABLE
+()
 
     //=============================================================================
     //

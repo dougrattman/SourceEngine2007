@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier1/interface.h"
 
@@ -29,7 +29,6 @@
 #include "tier0/include/threadtools.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // InterfaceReg.
@@ -129,7 +128,8 @@ HMODULE Sys_LoadLibrary(const char *library_path) {
 #endif
 
   char fixed_library_path[1024];
-  Q_strncpy(fixed_library_path, library_path, SOURCE_ARRAYSIZE(fixed_library_path));
+  Q_strncpy(fixed_library_path, library_path,
+            SOURCE_ARRAYSIZE(fixed_library_path));
 
   if (!Q_stristr(fixed_library_path, module_extension))
     Q_strncat(fixed_library_path, module_addition,
@@ -185,8 +185,8 @@ static HMODULE LoadModuleByRelativePath(const char *module_name) {
     char absolute_module_name[1024];
     if (strstr(module_name, "bin/") == module_name) {
       // Don't make bin/bin path.
-      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name), "%s/%s",
-                 current_directory, module_name);
+      Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name),
+                 "%s/%s", current_directory, module_name);
     } else {
       Q_snprintf(absolute_module_name, SOURCE_ARRAYSIZE(absolute_module_name),
                  "%s/bin/%s", current_directory, module_name);
@@ -203,7 +203,7 @@ static DWORD SpewModuleLoadError(_In_z_ const char *module_name,
                                  _In_ DWORD error_code = GetLastError()) {
   char *system_error;
 
-  if (!FormatMessageA(
+  if (!FormatMessage(
           FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
               FORMAT_MESSAGE_IGNORE_INSERTS,
           nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),

@@ -1,4 +1,4 @@
-// Copyright © 2005-2017, Valve Corporation, All rights reserved.
+// Copyright Â© 2005-2017, Valve Corporation, All rights reserved.
 
 #include "vstdlib/jobthread.h"
 
@@ -308,8 +308,8 @@ class CJobThread : public CWorkerThread {
 
     ++m_pOwner->m_nIdleThreads;
     m_IdleEvent.Set();
-    while (!bExit && (waitResult = Wait(SOURCE_ARRAYSIZE(waitHandles), waitHandles)) !=
-                         WAIT_FAILED) {
+    while (!bExit && (waitResult = Wait(SOURCE_ARRAYSIZE(waitHandles),
+                                        waitHandles)) != WAIT_FAILED) {
       if (PeekCall()) {
         switch (GetCallParam()) {
           case TPM_EXIT:
@@ -510,8 +510,9 @@ void CThreadPool::AddJob(CJob *pJob) {
 
   if (!pJob->CanExecute()) {
     // Already handled
-    Warning("Attempted to add job to job queue that has already been "
-                "completed.\n");
+    Warning(
+        "Attempted to add job to job queue that has already been "
+        "completed.\n");
     return;
   }
 
@@ -563,8 +564,8 @@ void CThreadPool::ChangePriority(CJob *pJob, JobPriority_t priority) {
     pJob->SetPriority(priority);
     m_SharedQueue.Push(pJob);
   } else {
-    if (pJob->GetPriority() != priority) DevMsg(
-        "CThreadPool::RemoveJob not implemented right now.");
+    if (pJob->GetPriority() != priority)
+      DevMsg("CThreadPool::RemoveJob not implemented right now.");
   }
 }
 
@@ -1064,8 +1065,7 @@ void RunThreadPoolTests() {
   const BOOL was_got_affinity_mask{
       GetProcessAffinityMask(GetCurrentProcess(), &mask1, &mask2)};
   if (!was_got_affinity_mask) {
-    Warning("Can't get process affinity mask, error code 0x%x.\n",
-            ::GetLastError());
+    Warning("Can't get process affinity mask (0x%.8x).\n", ::GetLastError());
     mask1 = static_cast<decltype(mask1)>(THREAD_PRIORITY_BELOW_NORMAL);
     mask2 = static_cast<decltype(mask2)>(THREAD_PRIORITY_BELOW_NORMAL);
   }

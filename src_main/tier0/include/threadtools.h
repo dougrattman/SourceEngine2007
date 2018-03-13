@@ -1481,7 +1481,7 @@ inline _Acquires_lock_(this->m_CriticalSection) void CThreadMutex::Lock() {
     // we now own it for the first time.  Set owner information
     m_currentOwnerID = thisThreadID;
     if (m_bTrace)
-      Msg("Thread %u now owns lock 0x%x\n", m_currentOwnerID,
+      Msg("Thread %u now owns lock %p.\n", m_currentOwnerID,
           (CRITICAL_SECTION *)&m_CriticalSection);
   }
   m_lockCount++;
@@ -1496,7 +1496,7 @@ inline _Releases_lock_(this->m_CriticalSection) void CThreadMutex::Unlock() {
   m_lockCount--;
   if (m_lockCount == 0) {
     if (m_bTrace)
-      Msg("Thread %u releasing lock 0x%x\n", m_currentOwnerID,
+      Msg("Thread %u releasing lock %p.\n", m_currentOwnerID,
           (CRITICAL_SECTION *)&m_CriticalSection);
     m_currentOwnerID = 0;
   }
@@ -1507,7 +1507,7 @@ inline _Releases_lock_(this->m_CriticalSection) void CThreadMutex::Unlock() {
 inline bool CThreadMutex::AssertOwnedByCurrentThread() {
 #ifdef THREAD_MUTEX_TRACING_ENABLED
   if (ThreadGetCurrentId() == m_currentOwnerID) return true;
-  AssertMsg3(0, "Expected thread %u as owner of lock 0x%x, but %u owns",
+  AssertMsg3(0, "Expected thread %u as owner of lock %p, but %u owns",
              ThreadGetCurrentId(), (CRITICAL_SECTION *)&m_CriticalSection,
              m_currentOwnerID);
   return false;
