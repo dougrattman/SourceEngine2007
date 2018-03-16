@@ -643,7 +643,8 @@ sndinitstat CAudioDirectSound::SNDDMA_InitDirect() {
   DirectSoundCreate8Fn ds_create_8_fn = nullptr;
 
   if (!m_direct_sound_module) {
-    m_direct_sound_module = LoadLibraryW(L"dsound.dll");
+    m_direct_sound_module =
+        LoadLibraryExW(L"dsound.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (m_direct_sound_module == nullptr) {
       Warning("Couldn't load dsound.dll (0x%.8x).\n", GetLastError());
       return SIS_FAILURE;
