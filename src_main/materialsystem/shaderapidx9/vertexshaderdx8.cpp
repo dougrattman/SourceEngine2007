@@ -4,7 +4,7 @@
 
 #include "VertexShaderDx8.h"
 
-#if defined(_WIN32) && !defined(_X360)
+#if defined(_WIN32)
 #include "base/include/windows/windows_light.h"
 #endif
 #include <cstdlib>
@@ -77,11 +77,7 @@
 // debugging aid
 #define MAX_SHADER_HISTORY 16
 
-#if !defined(_X360)
 #define SHADER_FNAME_EXTENSION ".vcs"
-#else
-#define SHADER_FNAME_EXTENSION ".360.vcs"
-#endif
 
 #ifdef DYNAMIC_SHADER_COMPILE
 volatile static char s_ShaderCompileString[] = "dynamic_shader_compile_is_on";
@@ -823,31 +819,10 @@ static const char *GetShaderSourcePath(void) {
     }
 #else
     {
-#if (defined(_X360))
-      {
-        char hostName[128] = "";
-        const char *pHostName = CommandLine()->ParmValue("-host");
-        if (!pHostName) {
-          // the 360 machine name must be <HostPC>_360
-          DWORD length = sizeof(hostName);
-          DmGetXboxName(hostName, &length);
-          char *p = strstr(hostName, "_360");
-          *p = '\0';
-          pHostName = hostName;
-        }
-
-        Q_snprintf(shaderDir, SOURCE_MAX_PATH, "net:\\smb\\%s\\stdshaders",
-                   pHostName);
-      }
-#else
-      {
-        Q_strncpy(shaderDir, __FILE__, SOURCE_MAX_PATH);
-        Q_StripFilename(shaderDir);
-        Q_StripLastDir(shaderDir, SOURCE_MAX_PATH);
-        Q_strncat(shaderDir, "stdshaders", SOURCE_MAX_PATH,
-                  COPY_ALL_CHARACTERS);
-      }
-#endif
+      Q_strncpy(shaderDir, __FILE__, SOURCE_MAX_PATH);
+      Q_StripFilename(shaderDir);
+      Q_StripLastDir(shaderDir, SOURCE_MAX_PATH);
+      Q_strncat(shaderDir, "stdshaders", SOURCE_MAX_PATH, COPY_ALL_CHARACTERS);
     }
 #endif
   }
@@ -1081,39 +1056,22 @@ class CDxInclude : public ID3DXInclude {
  public:
   CDxInclude(const char *pMainFileName);
 
-#if defined(_X360)
-  virtual HRESULT WINAPI Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
-                              LPCVOID pParentData, LPCVOID *ppData,
-                              UINT *pBytes, LPSTR pFullPath, DWORD cbFullPath);
-#else
   virtual HRESULT WINAPI Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
                               LPCVOID pParentData, LPCVOID *ppData,
                               UINT *pBytes);
-#endif
 
   virtual HRESULT WINAPI Close(LPCVOID pData);
 
  private:
   char m_pBasePath[SOURCE_MAX_PATH];
-
-#if defined(_X360)
-  char m_pFullPath[SOURCE_MAX_PATH];
-#endif
 };
 
 CDxInclude::CDxInclude(const char *pMainFileName) {
   Q_ExtractFilePath(pMainFileName, m_pBasePath, sizeof(m_pBasePath));
 }
 
-#if defined(_X360)
 HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
-                         LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes,
-                         LPSTR pFullPath, DWORD cbFullPath)
-#else
-HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
-                         LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
-#endif
-{
+                         LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) {
   char pTemp[SOURCE_MAX_PATH];
   if (!Q_IsAbsolutePath(pFileName) && (IncludeType == D3DXINC_LOCAL)) {
     Q_ComposeFileName(m_pBasePath, pFileName, pTemp, sizeof(pTemp));
@@ -1127,14 +1085,6 @@ HRESULT CDxInclude::Open(D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName,
   void *pMem = malloc(*pBytes);
   memcpy(pMem, buf.Base(), *pBytes);
   *ppData = pMem;
-
-#if (defined(_X360))
-  {
-    Q_ComposeFileName(m_pBasePath, pFileName, m_pFullPath, sizeof(m_pFullPath));
-    pFullPath = m_pFullPath;
-    cbFullPath = SOURCE_MAX_PATH;
-  }
-#endif
 
   return S_OK;
 }
@@ -1197,13 +1147,6 @@ static const char *FileNameToShaderModel(const char *pShaderName,
 #endif
 
 #ifdef DYNAMIC_SHADER_COMPILE
-
-#if defined(_X360)
-static ConVar mat_flushshaders_generate_updbs(
-    "mat_flushshaders_generate_updbs", "0", 0,
-    "Generates UPDBs whenever you flush shaders.");
-#endif
-
 HardwareShader_t CShaderManager::CompileShader(const char *pShaderName,
                                                int nStaticIndex,
                                                int nDynamicIndex,
@@ -1238,7 +1181,6 @@ HardwareShader_t CShaderManager::CompileShader(const char *pShaderName,
 
   CUtlVector<D3DXMACRO> macros;
   // plus 1 for 0 termination, plus 1 for #define SHADER_MODEL_*, and plus 1 for
-  // #define _X360 on 360
   macros.SetCount(combos.m_DynamicCombos.Count() +
                   combos.m_StaticCombos.Count() + 2 + (IsX360() ? 1 : 0));
 
@@ -1372,7 +1314,6 @@ retry_compile:
         0 /* DWORD Flags */, &pShader, &pErrorMessages,
         NULL /* LPD3DXCONSTANTTABLE *ppConstantTable */);
   } else {
-#if (!defined(_X360))
     {
       if (b30Shader) {
         Warning(
@@ -1384,52 +1325,6 @@ retry_compile:
           pShaderModel, 0 /* DWORD Flags */, &pShader, &pErrorMessages,
           NULL /* LPD3DXCONSTANTTABLE *ppConstantTable */);
     }
-#else
-    {
-      D3DXSHADER_COMPILE_PARAMETERS compileParams;
-      memset(&compileParams, 0, sizeof(compileParams));
-
-      char pUPDBOutputFile[SOURCE_MAX_PATH] = "";  // where we write the file
-      char pUPDBPIXLookup[SOURCE_MAX_PATH] =
-          "";  // where PIX (on a pc) looks for the file
-
-      compileParams.Flags |= D3DXSHADEREX_OPTIMIZE_UCODE;
-
-      if (mat_flushshaders_generate_updbs.GetBool()) {
-        // UPDB generation for PIX debugging
-        compileParams.Flags |= D3DXSHADEREX_GENERATE_UPDB;
-        compileParams.UPDBPath = pUPDBPIXLookup;
-
-        Q_snprintf(pUPDBOutputFile, SOURCE_MAX_PATH,
-                   "%s\\UPDB_X360\\%s_S%d_D%d.updb", GetShaderSourcePath(),
-                   pShaderName, nStaticIndex, nDynamicIndex);
-
-        // replace "net:\smb" with another "\" turning the xbox network address
-        // format into the pc network address format
-        Q_strcpy(pUPDBPIXLookup, &pUPDBOutputFile[7]);
-        pUPDBPIXLookup[0] = '\\';
-      }
-
-      hr = D3DXCompileShaderFromFileEx(
-          filename, macros.Base(), NULL /* LPD3DXINCLUDE */, "main",
-          pShaderModel, 0 /* DWORD Flags */, &pShader, &pErrorMessages,
-          NULL /* LPD3DXCONSTANTTABLE *ppConstantTable */, &compileParams);
-
-      if ((pUPDBOutputFile[0] != '\0') &&
-          compileParams.pUPDBBuffer)  // Did we generate a updb?
-      {
-        CUtlBuffer outbuffer;
-        DWORD dataSize = compileParams.pUPDBBuffer->GetBufferSize();
-        outbuffer.EnsureCapacity(dataSize);
-        memcpy(outbuffer.Base(), compileParams.pUPDBBuffer->GetBufferPointer(),
-               dataSize);
-        outbuffer.SeekPut(CUtlBuffer::SEEK_CURRENT, dataSize);
-        g_pFullFileSystem->WriteFile(pUPDBOutputFile, NULL, outbuffer);
-
-        compileParams.pUPDBBuffer->Release();
-      }
-    }
-#endif
   }
 
   if (hr != D3D_OK) {

@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SHADERDEVICEDX8_H
-#define SHADERDEVICEDX8_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEDX8_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEDX8_H_
 
 #include "base/include/windows/windows_light.h"
 
@@ -300,8 +300,8 @@ class CShaderDeviceDx8 : public CShaderDeviceBase {
 };
 
 // Globals
-class D3DDeviceWrapper;
-D3DDeviceWrapper *Dx9Device();
+class Direct3DDevice9Wrapper;
+Direct3DDevice9Wrapper *Dx9Device();
 
 extern CShaderDeviceDx8 *g_pShaderDeviceDx8;
 
@@ -311,4 +311,4 @@ SOURCE_FORCEINLINE bool CShaderDeviceDx8::IsDeactivated() const {
          m_numReleaseResourcesRefCount;
 }
 
-#endif  // SHADERDEVICEDX8_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEDX8_H_

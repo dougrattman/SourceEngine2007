@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef VERTEXSHADERDX8_H
-#define VERTEXSHADERDX8_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_VERTEXSHADERDX8_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_VERTEXSHADERDX8_H_
 
 #include "locald3dtypes.h"
 #include "shaderapi/ishaderapi.h"
@@ -15,15 +15,8 @@ enum VertexShaderLightTypes_t {
   LIGHT_AMBIENTCUBE = 4,
 };
 
-//-----------------------------------------------------------------------------
 // Vertex + pixel shader manager
-//-----------------------------------------------------------------------------
 the_interface IShaderManager {
- protected:
-  // The current vertex and pixel shader index
-  int m_nVertexShaderIndex;
-  int m_nPixelShaderIndex;
-
  public:
   // Initialize, shutdown
   virtual void Init() = 0;
@@ -48,8 +41,12 @@ the_interface IShaderManager {
                                           int nStaticPshIndex = 0) = 0;
 
   // Sets which dynamic version of the vertex + pixel shader to use
-  SOURCE_FORCEINLINE void SetVertexShaderIndex(int vshIndex);
-  SOURCE_FORCEINLINE void SetPixelShaderIndex(int pshIndex);
+  SOURCE_FORCEINLINE void SetVertexShaderIndex(int vshIndex) {
+    m_nVertexShaderIndex = vshIndex;
+  }
+  SOURCE_FORCEINLINE void SetPixelShaderIndex(int pshIndex) {
+    m_nPixelShaderIndex = pshIndex;
+  }
 
   // Sets the vertex + pixel shader render state
   virtual void SetVertexShader(VertexShader_t shader) = 0;
@@ -69,23 +66,10 @@ the_interface IShaderManager {
   virtual void BindVertexShader(VertexShaderHandle_t shader) = 0;
   virtual void BindPixelShader(PixelShaderHandle_t shader) = 0;
 
-#if defined(_X360)
-  virtual const char *GetActiveVertexShaderName() = 0;
-  virtual const char *GetActivePixelShaderName() = 0;
-#endif
+ protected:
+  // The current vertex and pixel shader index
+  int m_nVertexShaderIndex;
+  int m_nPixelShaderIndex;
 };
 
-//-----------------------------------------------------------------------------
-//
-// Methods related to setting vertex + pixel shader state
-//
-//-----------------------------------------------------------------------------
-SOURCE_FORCEINLINE void IShaderManager::SetVertexShaderIndex(int vshIndex) {
-  m_nVertexShaderIndex = vshIndex;
-}
-
-SOURCE_FORCEINLINE void IShaderManager::SetPixelShaderIndex(int pshIndex) {
-  m_nPixelShaderIndex = pshIndex;
-}
-
-#endif  // VERTEXSHADERDX8_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_VERTEXSHADERDX8_H_

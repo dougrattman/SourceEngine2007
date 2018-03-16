@@ -1,4 +1,4 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2007, Valve Corporation, All rights reserved.
 //
 // Purpose: tracks VB allocations (and compressed/uncompressed vertex memory
 // usage)
@@ -10,12 +10,6 @@
 #include "tier1/convar.h"
 #include "tier1/utlhash.h"
 #include "tier1/utlstack.h"
-
-//-----------------------------------------------------------------------------
-//
-// Types
-//
-//-----------------------------------------------------------------------------
 
 #if ENABLE_VB_ALLOC_TRACKER
 
@@ -148,11 +142,7 @@ class CVBAllocTracker : public IVBAllocTracker {
 #endif  // ENABLE_VB_ALLOC_TRACKER
 };
 
-//-----------------------------------------------------------------------------
-//
 // Global data
-//
-//-----------------------------------------------------------------------------
 
 #if ENABLE_VB_ALLOC_TRACKER
 
@@ -263,149 +253,165 @@ static const ElementData texCoord2D6Element = {
 static const ElementData texCoord2D7Element = {
     VERTEX_ELEMENT_TEXCOORD2D_7, 8, 8, 4, "TEXCOORD2D_7"};  // (unused)
 static const ElementData texCoord3D0Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_0, 12, 12, 8, "TEXCOORD3D_0"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_0, 12, 12, 8,
+    "TEXCOORD3D_0"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D1Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_1, 12, 12, 8, "TEXCOORD3D_1"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_1, 12, 12, 8,
+    "TEXCOORD3D_1"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D2Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_2, 12, 12, 8, "TEXCOORD3D_2"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_2, 12, 12, 8,
+    "TEXCOORD3D_2"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D3Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_3, 12, 12, 8, "TEXCOORD3D_3"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_3, 12, 12, 8,
+    "TEXCOORD3D_3"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D4Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_4, 12, 12, 8, "TEXCOORD3D_4"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_4, 12, 12, 8,
+    "TEXCOORD3D_4"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D5Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_5, 12, 12, 8, "TEXCOORD3D_5"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_5, 12, 12, 8,
+    "TEXCOORD3D_5"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D6Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_6, 12, 12, 8, "TEXCOORD3D_6"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_6, 12, 12, 8,
+    "TEXCOORD3D_6"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord3D7Element = {
-    VERTEX_ELEMENT_TEXCOORD3D_7, 12, 12, 8, "TEXCOORD3D_7"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD3D_7, 12, 12, 8,
+    "TEXCOORD3D_7"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D0Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_0, 16, 16, 8, "TEXCOORD4D_0"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_0, 16, 16, 8,
+    "TEXCOORD4D_0"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D1Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_1, 16, 16, 8, "TEXCOORD4D_1"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_1, 16, 16, 8,
+    "TEXCOORD4D_1"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D2Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_2, 16, 16, 8, "TEXCOORD4D_2"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_2, 16, 16, 8,
+    "TEXCOORD4D_2"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D3Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_3, 16, 16, 8, "TEXCOORD4D_3"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_3, 16, 16, 8,
+    "TEXCOORD4D_3"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D4Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_4, 16, 16, 8, "TEXCOORD4D_4"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_4, 16, 16, 8,
+    "TEXCOORD4D_4"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D5Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_5, 16, 16, 8, "TEXCOORD4D_5"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_5, 16, 16, 8,
+    "TEXCOORD4D_5"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D6Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_6, 16, 16, 8, "TEXCOORD4D_6"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_6, 16, 16, 8,
+    "TEXCOORD4D_6"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData texCoord4D7Element = {
-    VERTEX_ELEMENT_TEXCOORD4D_7, 16, 16, 8, "TEXCOORD4D_7"};  // TODO(d.rattman): used
-                                                              // how much?
-                                                              // (UNDONE:
-                                                              // need vertex
-                                                              // shader to
-                                                              // take scale,
-                                                              // account for
-                                                              // clamping)
+    VERTEX_ELEMENT_TEXCOORD4D_7, 16, 16, 8,
+    "TEXCOORD4D_7"};  // TODO(d.rattman):
+                      // used how much?
+                      // (UNDONE:
+                      // need vertex
+                      // shader to
+                      // take scale,
+                      // account for
+                      // clamping)
 static const ElementData elementTable[VERTEX_ELEMENT_NUMELEMENTS] = {
     positionElement,    normalElement,      colorElement,
     specularElement,    tangentSElement,    tangentTElement,
@@ -623,12 +629,12 @@ VertexElementMap_t CVBAllocTracker::ComputeElementMap(VertexFormat_t fmt,
     if (vertexSize != 0) {
       // Make sure elementTable above matches external computations of vertex
       // size
-      // TODO(d.rattman): make this assert dependent on whether the current VB is
-      // compressed or not
+      // TODO(d.rattman): make this assert dependent on whether the current VB
+      // is compressed or not
       VertexCompressionType_t compressionType = CompressionType(fmt);
       bool isCompressedAlloc = (compressionType == VERTEX_COMPRESSION_ON);
-      // TODO(d.rattman): once we've finalised which elements we're compressing for ship,
-      // update
+      // TODO(d.rattman): once we've finalised which elements we're compressing
+      // for ship, update
       //        elementTable to reflect that and re-enable this assert for
       //        compressed verts
       if (!isCompressedAlloc) {

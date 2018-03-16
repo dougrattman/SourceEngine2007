@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
@@ -12,16 +12,9 @@
 #include "tier0/include/dbg.h"
 #include "tier1/strtools.h"
 
-// Must be last
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Figures out what texture formats we support
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// globals
-//-----------------------------------------------------------------------------
+// Figures out what texture formats we support.
 
 // Texture formats supported by DX driver[vertextexture][render target][non
 // filterable]
@@ -35,9 +28,7 @@ static bool g_bSupportsD16;
 static bool g_bSupportsD24X4S4;
 static bool g_bSupportsD15S1;
 
-//-----------------------------------------------------------------------------
-// Determines what formats we actually *do* support
-//-----------------------------------------------------------------------------
+// Determines what formats we actually *do* support.
 static bool TestTextureFormat(D3DFORMAT format, bool bIsRenderTarget,
                               bool bIsVertexTexture,
                               bool bIsFilterableRequired) {
@@ -71,9 +62,9 @@ static bool TestTextureFormat(D3DFORMAT format, bool bIsRenderTarget,
   return SUCCEEDED(hr);
 }
 
-D3DFORMAT GetNearestD3DColorFormat(ImageFormat fmt, bool isRenderTarget,
-                                   bool bIsVertexTexture,
-                                   bool bIsFilterableRequired) {
+static D3DFORMAT GetNearestD3DColorFormat(ImageFormat fmt, bool isRenderTarget,
+                                          bool bIsVertexTexture,
+                                          bool bIsFilterableRequired) {
   switch (fmt) {
     case IMAGE_FORMAT_RGBA8888:
     case IMAGE_FORMAT_ABGR8888:
@@ -368,25 +359,17 @@ void InitializeColorInformation(UINT displayAdapter, D3DDEVTYPE deviceType,
       D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D16);
   g_bSupportsD16 = !FAILED(hr);
 
-#if !defined(_X360)
   hr = D3D()->CheckDeviceFormat(
       g_DisplayAdapter, g_DeviceType,
       ImageLoader::ImageFormatToD3DFormat(g_DeviceFormat),
       D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D24X4S4);
   g_bSupportsD24X4S4 = !FAILED(hr);
-#else
-  g_bSupportsD24X4S4 = false;
-#endif
 
-#if !defined(_X360)
   hr = D3D()->CheckDeviceFormat(
       g_DisplayAdapter, g_DeviceType,
       ImageLoader::ImageFormatToD3DFormat(g_DeviceFormat),
       D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D15S1);
   g_bSupportsD15S1 = !FAILED(hr);
-#else
-  g_bSupportsD15S1 = false;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -436,16 +419,16 @@ static inline bool IsDepthFormatCompatible(int nAdapter,
       ImageLoader::ImageFormatToD3DFormat(renderTargetFormat);
 
   // Verify that the depth format is compatible.
-  HRESULT hr =
-      D3D()->CheckDepthStencilMatch(nAdapter, SOURCE_DX9_DEVICE_TYPE, d3dDisplayFormat,
-                                    d3dRenderTargetFormat, depthFormat);
+  HRESULT hr = D3D()->CheckDepthStencilMatch(
+      nAdapter, SOURCE_DX9_DEVICE_TYPE, d3dDisplayFormat, d3dRenderTargetFormat,
+      depthFormat);
   return !FAILED(hr);
 }
 
 //-----------------------------------------------------------------------------
 // Finds the nearest supported depth buffer format
 //-----------------------------------------------------------------------------
-D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
+D3DFORMAT FindNearestSupportedDepthFormat(u32 nAdapter,
                                           ImageFormat displayFormat,
                                           ImageFormat renderTargetFormat,
                                           D3DFORMAT depthFormat) {
@@ -454,22 +437,11 @@ D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
          renderTargetFormat != IMAGE_FORMAT_UNKNOWN);
 
   switch (depthFormat) {
-#if defined(_X360)
-    case D3DFMT_D24FS8:
-      return D3DFMT_D24FS8;
-
-    case D3DFMT_LIN_D24S8:
-      if (g_bSupportsD24S8 &&
-          IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
-                                  D3DFMT_LIN_D24S8))
-        return D3DFMT_LIN_D24S8;
-#endif
     case D3DFMT_D24S8:
       if (g_bSupportsD24S8 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24S8))
         return D3DFMT_D24S8;
-#if !defined(_X360)
       if (g_bSupportsD24X4S4 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24X4S4))
@@ -478,7 +450,6 @@ D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D15S1))
         return D3DFMT_D15S1;
-#endif
       if (g_bSupportsD24X8 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24X8))
@@ -498,22 +469,18 @@ D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24S8))
         return D3DFMT_D24S8;
-#if !defined(_X360)
       if (g_bSupportsD24X4S4 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24X4S4))
         return D3DFMT_D24X4S4;
-#endif
       if (g_bSupportsD16 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D16))
         return D3DFMT_D16;
-#if !defined(_X360)
       if (g_bSupportsD15S1 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D15S1))
         return D3DFMT_D15S1;
-#endif
       break;
 
     case D3DFMT_D16:
@@ -521,12 +488,10 @@ D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D16))
         return D3DFMT_D16;
-#if !defined(_X360)
       if (g_bSupportsD15S1 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D15S1))
         return D3DFMT_D15S1;
-#endif
       if (g_bSupportsD24X8 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24X8))
@@ -535,12 +500,10 @@ D3DFORMAT FindNearestSupportedDepthFormat(int nAdapter,
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24S8))
         return D3DFMT_D24S8;
-#if !defined(_X360)
       if (g_bSupportsD24X4S4 &&
           IsDepthFormatCompatible(nAdapter, displayFormat, renderTargetFormat,
                                   D3DFMT_D24X4S4))
         return D3DFMT_D24X4S4;
-#endif
       break;
   }
 
@@ -700,60 +663,3 @@ ImageFormat FindNearestSupportedBackBufferFormat(UINT displayAdapter,
 
   return IMAGE_FORMAT_UNKNOWN;
 }
-
-#if defined(_X360)
-const char *D3DFormatName(D3DFORMAT d3dFormat) {
-  if (IS_D3DFORMAT_SRGB(d3dFormat)) {
-    // sanitize the format from possible sRGB state for comparison purposes
-    d3dFormat = MAKE_NON_SRGB_FMT(d3dFormat);
-  }
-
-  switch (d3dFormat) {
-    case D3DFMT_A8R8G8B8:
-      return "D3DFMT_A8R8G8B8";
-    case D3DFMT_LIN_A8R8G8B8:
-      return "D3DFMT_LIN_A8R8G8B8";
-    case D3DFMT_X8R8G8B8:
-      return "D3DFMT_X8R8G8B8";
-    case D3DFMT_LIN_X8R8G8B8:
-      return "D3DFMT_LIN_X8R8G8B8";
-    case D3DFMT_R5G6B5:
-      return "D3DFMT_R5G6B5";
-    case D3DFMT_X1R5G5B5:
-      return "D3DFMT_X1R5G5B5";
-    case D3DFMT_A1R5G5B5:
-      return "D3DFMT_A1R5G5B5";
-    case D3DFMT_A4R4G4B4:
-      return "D3DFMT_A4R4G4B4";
-    case D3DFMT_L8:
-      return "D3DFMT_L8";
-    case D3DFMT_A8L8:
-      return "D3DFMT_A8L8";
-    case D3DFMT_A8:
-      return "D3DFMT_A8";
-    case D3DFMT_DXT1:
-      return "D3DFMT_DXT1";
-    case D3DFMT_DXT3:
-      return "D3DFMT_DXT3";
-    case D3DFMT_DXT5:
-      return "D3DFMT_DXT5";
-    case D3DFMT_V8U8:
-      return "D3DFMT_V8U8";
-    case D3DFMT_Q8W8V8U8:
-      return "D3DFMT_Q8W8V8U8";
-    case D3DFMT_D16:
-      return "D3DFMT_D16";
-    case D3DFMT_D24S8:
-      return "D3DFMT_D24S8";
-    case D3DFMT_D24FS8:
-      return "D3DFMT_D24FS8";
-    case D3DFMT_LIN_D24S8:
-      return "D3DFMT_LIN_D24S8";
-    case D3DFMT_A16B16G16R16:
-      return "D3DFMT_A16B16G16R16";
-    case D3DFMT_LIN_A16B16G16R16:
-      return "D3DFMT_LIN_A16B16G16R16";
-  }
-  return "???";
-}
-#endif

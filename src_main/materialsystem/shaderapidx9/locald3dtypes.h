@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef LOCALD3DTYPES_H
-#define LOCALD3DTYPES_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_LOCALD3DTYPES_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_LOCALD3DTYPES_H_
 
 #include "base/include/windows/windows_light.h"
 
@@ -100,19 +100,15 @@ class CDx9Types {
 
 typedef void *HardwareShader_t;
 
-//-----------------------------------------------------------------------------
 // The vertex and pixel shader type
-//-----------------------------------------------------------------------------
 typedef int VertexShader_t;
 typedef int PixelShader_t;
 
-//-----------------------------------------------------------------------------
 // Bitpattern for an invalid shader
-//-----------------------------------------------------------------------------
 #define INVALID_SHADER (0xFFFFFFFF)
 #define INVALID_HARDWARE_SHADER (NULL)
 
 #define D3DSAMP_NOTSUPPORTED D3DSAMP_FORCE_DWORD
 #define D3DRS_NOTSUPPORTED D3DRS_FORCE_DWORD
 
-#endif  // LOCALD3DTYPES_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_LOCALD3DTYPES_H_

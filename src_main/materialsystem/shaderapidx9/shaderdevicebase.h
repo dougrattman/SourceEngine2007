@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SHADERDEVICEBASE_H
-#define SHADERDEVICEBASE_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEBASE_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEBASE_H_
 
 #include "base/include/base_types.h"
 
@@ -184,4 +184,4 @@ class CShaderBuffer : public IShaderBuffer {
   T *blob_;
 };
 
-#endif  // SHADERDEVICEBASE_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_SHADERDEVICEBASE_H_

@@ -2004,6 +2004,7 @@ void CBasePlayer::StartDeathCam( void )
 
 
 
+
                         if ( pNewSpot )
                         {
                                 pSpot = pNewSpot;
@@ -3473,7 +3474,9 @@ void CBasePlayer::PreThink(void) {
 
 
 
+
         
+
 
 
 
@@ -3663,6 +3666,7 @@ seconds. Single use.
 
 
 
+
 Things powered by the battery
 
         Armor
@@ -3676,6 +3680,7 @@ Things powered by the battery
         Alien Shield
                 Augments armor. Reduces Armor drain by one half
  
+
 
 
 

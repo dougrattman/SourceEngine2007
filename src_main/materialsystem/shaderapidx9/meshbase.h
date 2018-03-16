@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef MESHBASE_H
-#define MESHBASE_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_MESHBASE_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_MESHBASE_H_
 
 #include "materialsystem/IMesh.h"
 #include "materialsystem/imaterial.h"
@@ -32,9 +32,7 @@ the_interface CVertexBufferBase : public IVertexBuffer {
   const char *m_pBudgetGroupName;
 };
 
-//-----------------------------------------------------------------------------
 // Base index buffer
-//-----------------------------------------------------------------------------
 the_interface CIndexBufferBase : public IIndexBuffer {
   // Methods of IIndexBuffer
  public:
@@ -51,9 +49,7 @@ the_interface CIndexBufferBase : public IIndexBuffer {
   const char *m_pBudgetGroupName;
 };
 
-//-----------------------------------------------------------------------------
 // Base mesh
-//-----------------------------------------------------------------------------
 class CMeshBase : public IMesh {
   // Methods of IMesh
  public:
@@ -81,10 +77,8 @@ class CMeshBase : public IMesh {
   virtual ~CMeshBase();
 };
 
-//-----------------------------------------------------------------------------
 // Utility method for VertexDesc_t (don't want to expose it in public, in
 // imesh.h)
-//-----------------------------------------------------------------------------
 inline void ComputeVertexDesc(unsigned char *pBuffer,
                               VertexFormat_t vertexFormat, VertexDesc_t &desc) {
   int i;
@@ -199,8 +193,8 @@ inline void ComputeVertexDesc(unsigned char *pBuffer,
     int nSize = TexCoordSize(i, vertexFormat);
     if (nSize != 0) {
       desc.m_pTexCoord[i] = reinterpret_cast<float *>(pBuffer + offset);
-      // TODO(d.rattman): compress texcoords to SHORT2N/SHORT4N, with a scale rolled into
-      // the texture transform
+      // TODO(d.rattman): compress texcoords to SHORT2N/SHORT4N, with a scale
+      // rolled into the texture transform
       VertexElement_t texCoordElements[4] = {
           VERTEX_ELEMENT_TEXCOORD1D_0, VERTEX_ELEMENT_TEXCOORD2D_0,
           VERTEX_ELEMENT_TEXCOORD3D_0, VERTEX_ELEMENT_TEXCOORD4D_0};
@@ -270,4 +264,4 @@ inline void ComputeVertexDesc(unsigned char *pBuffer,
   }
 }
 
-#endif  // MESHBASE_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_MESHBASE_H_

@@ -891,14 +891,8 @@ int CShaderDeviceMgrDx8::GetModeCount(int nAdapter) const {
   LOCK_SHADERAPI();
   Assert(m_pD3D && (nAdapter < GetAdapterCount()));
 
-#if !defined(_X360)
   // fixme - what format should I use here?
   return m_pD3D->GetAdapterModeCount(nAdapter, D3DFMT_X8R8G8B8);
-#else
-  return 1;  // Only one mode, which is the current mode set in the 360
-             // dashboard.  Going to fill it in with exactly what the 360 is set
-             // to.
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -912,7 +906,6 @@ void CShaderDeviceMgrDx8::GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
   Assert(m_pD3D && (nAdapter < GetAdapterCount()));
   Assert(nMode < GetModeCount(nAdapter));
 
-#if !defined(_X360)
   HRESULT hr;
   D3DDISPLAYMODE d3dInfo;
 
@@ -925,14 +918,6 @@ void CShaderDeviceMgrDx8::GetModeInfo(ShaderDisplayMode_t *pInfo, int nAdapter,
   pInfo->m_Format = ImageLoader::D3DFormatToImageFormat(d3dInfo.Format);
   pInfo->m_nRefreshRateNumerator = d3dInfo.RefreshRate;
   pInfo->m_nRefreshRateDenominator = 1;
-#else
-  pInfo->m_Format = ImageLoader::D3DFormatToImageFormat(D3DFMT_X8R8G8B8);
-  pInfo->m_nRefreshRateNumerator = 60;
-  pInfo->m_nRefreshRateDenominator = 1;
-
-  pInfo->m_nWidth = GetSystemMetrics(SM_CXSCREEN);
-  pInfo->m_nHeight = GetSystemMetrics(SM_CYSCREEN);
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1115,7 +1100,6 @@ static DWORD ComputeDeviceCreationFlags(D3DCAPS &caps,
 //-----------------------------------------------------------------------------
 D3DMULTISAMPLE_TYPE CShaderDeviceDx8::ComputeMultisampleType(int nSampleCount) {
   switch (nSampleCount) {
-#if !defined(_X360)
     case 2:
       return D3DMULTISAMPLE_2_SAMPLES;
     case 3:
@@ -1146,12 +1130,6 @@ D3DMULTISAMPLE_TYPE CShaderDeviceDx8::ComputeMultisampleType(int nSampleCount) {
       return D3DMULTISAMPLE_15_SAMPLES;
     case 16:
       return D3DMULTISAMPLE_16_SAMPLES;
-#else
-    case 2:
-      return D3DMULTISAMPLE_2_SAMPLES;
-    case 4:
-      return D3DMULTISAMPLE_4_SAMPLES;
-#endif
     default:
     case 0:
     case 1:
@@ -1188,11 +1166,7 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
     // always stencil for dx9/hdr
     m_bUsingStencil = true;
   }
-#if defined(_X360)
-  D3DFORMAT nDepthFormat = ReverseDepthOnX360() ? D3DFMT_D24FS8 : D3DFMT_D24S8;
-#else
   D3DFORMAT nDepthFormat = m_bUsingStencil ? D3DFMT_D24S8 : D3DFMT_D24X8;
-#endif
   m_PresentParameters.AutoDepthStencilFormat = FindNearestSupportedDepthFormat(
       nAdapter, m_AdapterFormat, backBufferFormat, nDepthFormat);
   m_PresentParameters.hDeviceWindow = (HWND)hWnd;
@@ -1203,18 +1177,12 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
     case D3DFMT_D24S8:
       m_iStencilBufferBits = 8;
       break;
-#if defined(_X360)
-    case D3DFMT_D24FS8:
-      m_iStencilBufferBits = 8;
-      break;
-#else
     case D3DFMT_D24X4S4:
       m_iStencilBufferBits = 4;
       break;
     case D3DFMT_D15S1:
       m_iStencilBufferBits = 1;
       break;
-#endif
     default:
       m_iStencilBufferBits = 0;
       m_bUsingStencil = false;  // couldn't acquire a stencil buffer
@@ -1230,9 +1198,6 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
         useDefault ? mode.m_nHeight : info.m_DisplayMode.m_nHeight;
     m_PresentParameters.BackBufferFormat =
         ImageLoader::ImageFormatToD3DFormat(backBufferFormat);
-#if defined(_X360)
-    m_PresentParameters.FrontBufferFormat = D3DFMT_LE_X8R8G8B8;
-#endif
     if (!info.m_bWaitForVSync || CommandLine()->FindParm("-forcenovsync")) {
       m_PresentParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     } else {
@@ -1244,44 +1209,6 @@ void CShaderDeviceDx8::SetPresentParameters(void *hWnd, int nAdapter,
             ? info.m_DisplayMode.m_nRefreshRateNumerator /
                   info.m_DisplayMode.m_nRefreshRateDenominator
             : D3DPRESENT_RATE_DEFAULT;
-
-#if defined(_X360)
-    XVIDEO_MODE videoMode;
-    XGetVideoMode(&videoMode);
-
-    // want 30 for 60Hz, and 25 for 50Hz (PAL)
-    int nNewFpsMax = ((int)(videoMode.RefreshRate + 0.5f)) >> 1;
-    // slam to either 30 or 25 so that we don't end up with any other cases.
-    if (nNewFpsMax < 26) {
-      nNewFpsMax = 25;
-    } else {
-      nNewFpsMax = 30;
-    }
-    DevMsg("*******Monitor refresh is %f, setting fps_max to %d*********\n",
-           videoMode.RefreshRate, nNewFpsMax);
-    ConVarRef fps_max("fps_max");
-    fps_max.SetValue(nNewFpsMax);
-
-    // setup hardware scaling - should be native 720p upsampling to 1080i
-    if (info.m_bScaleToOutputResolution) {
-      m_PresentParameters.VideoScalerParameters.ScalerSourceRect.x2 =
-          m_PresentParameters.BackBufferWidth;
-      m_PresentParameters.VideoScalerParameters.ScalerSourceRect.y2 =
-          m_PresentParameters.BackBufferHeight;
-      m_PresentParameters.VideoScalerParameters.ScaledOutputWidth =
-          videoMode.dwDisplayWidth;
-      m_PresentParameters.VideoScalerParameters.ScaledOutputHeight =
-          videoMode.dwDisplayHeight;
-      DevMsg("VIDEO SCALING: scaling from %dx%d to %dx%d\n",
-             (int)m_PresentParameters.BackBufferWidth,
-             (int)m_PresentParameters.BackBufferHeight,
-             (int)videoMode.dwDisplayWidth, (int)videoMode.dwDisplayHeight);
-    } else {
-      DevMsg("VIDEO SCALING: No scaling: %dx%d\n",
-             (int)m_PresentParameters.BackBufferWidth,
-             (int)m_PresentParameters.BackBufferHeight);
-    }
-#endif
   } else {
     // NJS: We are seeing a lot of time spent in present in some cases when this
     // isn't set.
@@ -1377,9 +1304,7 @@ void CShaderDeviceDx8::ShutdownDevice() {
 #ifdef STUBD3D
     delete (CStubD3DDevice *)Dx9Device();
 #endif
-#if !defined(_X360)
     Dx9Device()->ShutDownDevice();
-#endif
 
     RemoveWindowHook((HWND)m_hWnd);
     m_hWnd = 0;
@@ -1716,7 +1641,7 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 
   HWND hWnd = (HWND)pHWnd;
 
-#if !defined(PIX_INSTRUMENTATION) && !defined(_X360)
+#if !defined(PIX_INSTRUMENTATION)
   D3DPERF_SetOptions(
       1);  // Explicitly disallow PIX instrumented profiling in external builds
 #endif
@@ -1755,65 +1680,8 @@ bool CShaderDeviceDx8::CreateD3DDevice(void *pHWnd, int nAdapter,
 
 #ifdef STUBD3D
   Dx9Device() = new CStubD3DDevice(pD3DDevice, g_pFullFileSystem);
-#elif !defined(_X360)
-  Dx9Device()->SetDevicePtr(pD3DDevice);
 #else
-  m_pD3DDevice = pD3DDevice;
-#endif
-
-#if defined(_X360)
-  // Create the depth buffer, created manually to enable hierarchical z
-  {
-    D3DSURFACE_PARAMETERS DepthStencilParams;
-
-    // Depth is immediately after the back buffer in EDRAM
-    // allocate the hierarchical z tiles at the end of the area so all other
-    // allocations can trivially allocate at 0
-    DepthStencilParams.Base =
-        XGSurfaceSize(m_PresentParameters.BackBufferWidth,
-                      m_PresentParameters.BackBufferHeight,
-                      m_PresentParameters.BackBufferFormat,
-                      m_PresentParameters.MultiSampleType);
-    DepthStencilParams.ColorExpBias = 0;
-    DepthStencilParams.HierarchicalZBase =
-        GPU_HIERARCHICAL_Z_TILES -
-        XGHierarchicalZSize(m_PresentParameters.BackBufferWidth,
-                            m_PresentParameters.BackBufferHeight,
-                            m_PresentParameters.MultiSampleType);
-
-    IDirect3DSurface *pDepthStencilSurface = nullptr;
-    hr = Dx9Device()->CreateDepthStencilSurface(
-        m_PresentParameters.BackBufferWidth,
-        m_PresentParameters.BackBufferHeight,
-        m_PresentParameters.AutoDepthStencilFormat,
-        m_PresentParameters.MultiSampleType,
-        m_PresentParameters.MultiSampleQuality, TRUE, &pDepthStencilSurface,
-        &DepthStencilParams);
-    Assert(SUCCEEDED(hr));
-    if (FAILED(hr)) return false;
-
-    hr = Dx9Device()->SetDepthStencilSurface(pDepthStencilSurface);
-    Assert(SUCCEEDED(hr));
-    if (FAILED(hr)) return false;
-  }
-
-  // Initialize XUI, needed for TTF font rasterization
-  // xui requires and shares our d3d device
-  {
-    hr = XuiRenderInitShared(pD3DDevice, &m_PresentParameters,
-                             XuiD3DXTextureLoader);
-    if (FAILED(hr)) return false;
-
-    XUIInitParams xuiInit;
-    XUI_INIT_PARAMS(xuiInit);
-    xuiInit.dwFlags = XUI_INIT_PARAMS_FLAGS_NONE;
-    xuiInit.pHooks = nullptr;
-    hr = XuiInit(&xuiInit);
-    if (FAILED(hr)) return false;
-
-    hr = XuiRenderCreateDC(&m_hDC);
-    if (FAILED(hr)) return false;
-  }
+  Dx9Device()->SetDevicePtr(pD3DDevice);
 #endif
 
   // CheckDeviceLost();
@@ -2081,12 +1949,11 @@ void CShaderDeviceDx8::MarkDeviceLost() {
 //-----------------------------------------------------------------------------
 // Checks if the device was lost
 //-----------------------------------------------------------------------------
-#if defined(_DEBUG) && !defined(_X360)
+#if defined(_DEBUG)
 ConVar mat_forcelostdevice("mat_forcelostdevice", "0");
 #endif
 
 void CShaderDeviceDx8::CheckDeviceLost(bool bOtherAppInitializing) {
-#if !defined(_X360)
   // TODO(d.rattman): We could also queue up if WM_SIZE changes and look at that
   // but that seems to only make sense if we have resizable windows where
   // we do *not* allocate buffers as large as the entire current video mode
@@ -2174,7 +2041,6 @@ void CShaderDeviceDx8::CheckDeviceLost(bool bOtherAppInitializing) {
 #endif
     ResizeWindow(m_PendingVideoModeChangeConfig);
   }
-#endif
 }
 
 //-----------------------------------------------------------------------------

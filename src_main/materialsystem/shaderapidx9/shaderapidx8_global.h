@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SHADERAPIDX8_GLOBAL_H
-#define SHADERAPIDX8_GLOBAL_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_SHADERAPIDX8_GLOBAL_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_SHADERAPIDX8_GLOBAL_H_
 
 #include "shaderapi_global.h"
 #include "shaderdevicedx8.h"
@@ -9,31 +9,19 @@
 #include "tier0/include/memalloc.h"
 #include "tier2/tier2.h"
 
-//-----------------------------------------------------------------------------
 // Use this to fill in structures with the current board state
-//-----------------------------------------------------------------------------
-
 #ifdef _DEBUG
 #define DEBUG_BOARD_STATE 0
 #endif
 
-#if !defined(_X360)
 #include "d3d_async.h"
-typedef D3DDeviceWrapper D3DDev_t;
-D3DDev_t *Dx9Device();
+Direct3DDevice9Wrapper *Dx9Device();
 IDirect3D9 *D3D();
-#else
-typedef IDirect3DDevice D3DDeviceWrapper;
-#endif
 
-//-----------------------------------------------------------------------------
 // Measures driver allocations
-//-----------------------------------------------------------------------------
 //#define MEASURE_DRIVER_ALLOCATIONS 1
 
-//-----------------------------------------------------------------------------
 // Forward declarations
-//-----------------------------------------------------------------------------
 class IShaderUtil;
 class IVertexBufferDX8;
 class IShaderShadowDX8;
@@ -42,40 +30,28 @@ class IShaderAPIDX8;
 class IFileSystem;
 class IShaderManager;
 
-//-----------------------------------------------------------------------------
 // A new shader draw flag we need to workaround dx8
-//-----------------------------------------------------------------------------
 enum { SHADER_HAS_CONSTANT_COLOR = 0x80000000 };
 
-//-----------------------------------------------------------------------------
 // The main shader API
-//-----------------------------------------------------------------------------
 extern IShaderAPIDX8 *g_pShaderAPIDX8;
 inline IShaderAPIDX8 *ShaderAPI() { return g_pShaderAPIDX8; }
 
-//-----------------------------------------------------------------------------
 // The shader shadow
-//-----------------------------------------------------------------------------
 IShaderShadowDX8 *ShaderShadow();
 
-//-----------------------------------------------------------------------------
 // Manager of all vertex + pixel shaders
-//-----------------------------------------------------------------------------
 inline IShaderManager *ShaderManager() {
   extern IShaderManager *g_pShaderManager;
   return g_pShaderManager;
 }
 
-//-----------------------------------------------------------------------------
 // The mesh manager
-//-----------------------------------------------------------------------------
 IMeshMgr *MeshMgr();
 
-//-----------------------------------------------------------------------------
 // The main hardware config interface
-//-----------------------------------------------------------------------------
 inline IMaterialSystemHardwareConfig *HardwareConfig() {
   return g_pMaterialSystemHardwareConfig;
 }
 
-#endif  // SHADERAPIDX8_GLOBAL_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_SHADERAPIDX8_GLOBAL_H_

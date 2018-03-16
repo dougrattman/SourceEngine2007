@@ -1,7 +1,7 @@
 // Copyright © 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef HARDWARECONFIG_H
-#define HARDWARECONFIG_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_HARDWARECONFIG_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_HARDWARECONFIG_H_
 
 #include "IHardwareConfigInternal.h"
 #include "base/include/base_types.h"
@@ -9,29 +9,20 @@
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
 #include "materialsystem/imaterialsystem.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 struct ShaderDeviceInfo_t;
 
-//-----------------------------------------------------------------------------
 // Vendor IDs sometimes needed for vendor-specific code
-//-----------------------------------------------------------------------------
 #define VENDORID_NVIDIA 0x10DE
 #define VENDORID_ATI 0x1002
 
-//-----------------------------------------------------------------------------
 // ShaderAPI constants
-//-----------------------------------------------------------------------------
 enum : int {
   MAXUSERCLIPPLANES = 6,
   MAX_NUM_LIGHTS = 4,
   MAX_OUTPUTS = 3,
 };
 
-//-----------------------------------------------------------------------------
 // Hardware caps structures
-//-----------------------------------------------------------------------------
 enum CompressedTextureState_t {
   COMPRESSED_TEXTURES_ON,
   COMPRESSED_TEXTURES_OFF,
@@ -144,9 +135,7 @@ struct HardwareCaps_t : public MaterialAdapterInfo_t {
   HDRType_t m_MaxHDRType;
 };
 
-//-----------------------------------------------------------------------------
 // Contains the hardware configuration for the current device
-//-----------------------------------------------------------------------------
 class CHardwareConfig : public IHardwareConfigInternal {
  public:
   CHardwareConfig();
@@ -257,9 +246,7 @@ class CHardwareConfig : public IHardwareConfigInternal {
   bool m_bHDREnabled;
 };
 
-//-----------------------------------------------------------------------------
-// Singleton hardware config
-//-----------------------------------------------------------------------------
+// Singleton hardware config.
 extern CHardwareConfig *g_pHardwareConfig;
 
-#endif  // HARDWARECONFIG_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_HARDWARECONFIG_H_

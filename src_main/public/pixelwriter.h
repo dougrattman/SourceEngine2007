@@ -3,533 +3,447 @@
 #ifndef PIXELWRITER_H
 #define PIXELWRITER_H
 
-#ifdef _WIN32
-#define FORCEINLINE_PIXEL SOURCE_FORCEINLINE
-#elif OS_POSIX
-#define FORCEINLINE_PIXEL inline
-#else
-#error "implement me"
-#endif
-
+#include "base/include/base_types.h"
 #include "bitmap/imageformat.h"
+#include "build/include/build_config.h"
 #include "mathlib/compressed_vector.h"
 #include "mathlib/ssemath.h"
 #include "tier0/include/dbg.h"
-#include "tier0/include/platform_detection.h"
 
-//-----------------------------------------------------------------------------
-// Color writing class
-//-----------------------------------------------------------------------------
-
+// Color writing class.
 class CPixelWriter {
  public:
   SOURCE_FORCEINLINE void SetPixelMemory(ImageFormat format, void *pMemory,
-                                         int stride);
-  SOURCE_FORCEINLINE void *GetPixelMemory() { return m_pBase; }
+                                         u16 stride) {
+    bits_ = (u8 *)pMemory;
+    base_ = bits_;
+    bytes_per_row_ = stride;
+    flags_ = 0;
 
-  SOURCE_FORCEINLINE void Seek(int x, int y);
-  SOURCE_FORCEINLINE void *SkipBytes(int n);
-  SOURCE_FORCEINLINE void SkipPixels(int n);
-  SOURCE_FORCEINLINE void WritePixel(int r, int g, int b, int a = 255);
-  SOURCE_FORCEINLINE void WritePixelNoAdvance(int r, int g, int b, int a = 255);
-  SOURCE_FORCEINLINE void WritePixelSigned(int r, int g, int b, int a = 255);
-  SOURCE_FORCEINLINE void WritePixelNoAdvanceSigned(int r, int g, int b,
-                                                    int a = 255);
-  SOURCE_FORCEINLINE void ReadPixelNoAdvance(int &r, int &g, int &b, int &a);
+    switch (format) {
+      // NOTE: the low order bits are first in this naming convention.
+      case IMAGE_FORMAT_R32F:
+        size_ = 4;
+        r_shift_ = 0;
+        g_shift_ = 0;
+        b_shift_ = 0;
+        a_shift_ = 0;
+        r_mask_ = 0xFFFFFFFF;
+        g_mask_ = 0x0;
+        b_mask_ = 0x0;
+        a_mask_ = 0x0;
+        flags_ |= PIXELWRITER_USING_FLOAT_FORMAT;
+        break;
+
+      case IMAGE_FORMAT_RGBA32323232F:
+        size_ = 16;
+        r_shift_ = 0;
+        g_shift_ = 32;
+        b_shift_ = 64;
+        a_shift_ = 96;
+        r_mask_ = 0xFFFFFFFF;
+        g_mask_ = 0xFFFFFFFF;
+        b_mask_ = 0xFFFFFFFF;
+        a_mask_ = 0xFFFFFFFF;
+        flags_ |= PIXELWRITER_USING_FLOAT_FORMAT;
+        break;
+
+      case IMAGE_FORMAT_RGBA16161616F:
+        size_ = 8;
+        r_shift_ = 0;
+        g_shift_ = 16;
+        b_shift_ = 32;
+        a_shift_ = 48;
+        r_mask_ = 0xFFFF;
+        g_mask_ = 0xFFFF;
+        b_mask_ = 0xFFFF;
+        a_mask_ = 0xFFFF;
+        flags_ |= PIXELWRITER_USING_FLOAT_FORMAT |
+                  PIXELWRITER_USING_16BIT_FLOAT_FORMAT;
+        break;
+
+      case IMAGE_FORMAT_RGBA8888:
+        size_ = 4;
+        r_shift_ = 0;
+        g_shift_ = 8;
+        b_shift_ = 16;
+        a_shift_ = 24;
+        r_mask_ = 0xFF;
+        g_mask_ = 0xFF;
+        b_mask_ = 0xFF;
+        a_mask_ = 0xFF;
+        break;
+
+      // NOTE: the low order bits are first in this naming convention.
+      case IMAGE_FORMAT_BGRA8888:
+        size_ = 4;
+        r_shift_ = 16;
+        g_shift_ = 8;
+        b_shift_ = 0;
+        a_shift_ = 24;
+        r_mask_ = 0xFF;
+        g_mask_ = 0xFF;
+        b_mask_ = 0xFF;
+        a_mask_ = 0xFF;
+        break;
+
+      case IMAGE_FORMAT_BGRX8888:
+        size_ = 4;
+        r_shift_ = 16;
+        g_shift_ = 8;
+        b_shift_ = 0;
+        a_shift_ = 24;
+        r_mask_ = 0xFF;
+        g_mask_ = 0xFF;
+        b_mask_ = 0xFF;
+        a_mask_ = 0x00;
+        break;
+
+      case IMAGE_FORMAT_BGRA4444:
+        size_ = 2;
+        r_shift_ = 4;
+        g_shift_ = 0;
+        b_shift_ = -4;
+        a_shift_ = 8;
+        r_mask_ = 0xF0;
+        g_mask_ = 0xF0;
+        b_mask_ = 0xF0;
+        a_mask_ = 0xF0;
+        break;
+
+      case IMAGE_FORMAT_BGR888:
+        size_ = 3;
+        r_shift_ = 16;
+        g_shift_ = 8;
+        b_shift_ = 0;
+        a_shift_ = 0;
+        r_mask_ = 0xFF;
+        g_mask_ = 0xFF;
+        b_mask_ = 0xFF;
+        a_mask_ = 0x00;
+        break;
+
+      case IMAGE_FORMAT_BGR565:
+        size_ = 2;
+        r_shift_ = 8;
+        g_shift_ = 3;
+        b_shift_ = -3;
+        a_shift_ = 0;
+        r_mask_ = 0xF8;
+        g_mask_ = 0xFC;
+        b_mask_ = 0xF8;
+        a_mask_ = 0x00;
+        break;
+
+      case IMAGE_FORMAT_BGRA5551:
+      case IMAGE_FORMAT_BGRX5551:
+        size_ = 2;
+        r_shift_ = 7;
+        g_shift_ = 2;
+        b_shift_ = -3;
+        a_shift_ = 8;
+        r_mask_ = 0xF8;
+        g_mask_ = 0xF8;
+        b_mask_ = 0xF8;
+        a_mask_ = 0x80;
+        break;
+
+      // GR - alpha format for HDR support.
+      case IMAGE_FORMAT_A8:
+        size_ = 1;
+        r_shift_ = 0;
+        g_shift_ = 0;
+        b_shift_ = 0;
+        a_shift_ = 0;
+        r_mask_ = 0x00;
+        g_mask_ = 0x00;
+        b_mask_ = 0x00;
+        a_mask_ = 0xFF;
+        break;
+
+      case IMAGE_FORMAT_UVWQ8888:
+        size_ = 4;
+        r_shift_ = 0;
+        g_shift_ = 8;
+        b_shift_ = 16;
+        a_shift_ = 24;
+        r_mask_ = 0xFF;
+        g_mask_ = 0xFF;
+        b_mask_ = 0xFF;
+        a_mask_ = 0xFF;
+        break;
+
+      case IMAGE_FORMAT_RGBA16161616:
+        size_ = 8;
+        r_shift_ = 0;
+        g_shift_ = 16;
+        b_shift_ = 32;
+        a_shift_ = 48;
+        r_mask_ = 0xFFFF;
+        g_mask_ = 0xFFFF;
+        b_mask_ = 0xFFFF;
+        a_mask_ = 0xFFFF;
+        break;
+
+      case IMAGE_FORMAT_I8:
+        // whatever goes into R is considered the intensity.
+        size_ = 1;
+        r_shift_ = 0;
+        g_shift_ = 0;
+        b_shift_ = 0;
+        a_shift_ = 0;
+        r_mask_ = 0xFF;
+        g_mask_ = 0x00;
+        b_mask_ = 0x00;
+        a_mask_ = 0x00;
+        break;
+      // TODO(d.rattman): Add more color formats as need arises.
+      default: {
+        static bool is_format_error_printed[NUM_IMAGE_FORMATS];
+        if (!is_format_error_printed[format]) {
+          Assert(0);
+          Warning(
+              "CPixelWriter::SetPixelMemory:  Unsupported image format %i\n",
+              format);
+          is_format_error_printed[format] = true;
+        }
+        // set to zero so that we don't stomp memory for formats that
+        // we don't understand.
+        size_ = 0;
+      } break;
+    }
+  }
+  SOURCE_FORCEINLINE void *GetPixelMemory() const { return base_; }
+
+  // Sets where we're writing to.
+  SOURCE_FORCEINLINE void Seek(i32 x, i32 y) {
+    bits_ = base_ + y * bytes_per_row_ + x * size_;
+  }
+  // Skips n bytes:
+  SOURCE_FORCEINLINE void *SkipBytes(i32 n) SOURCE_RESTRICT {
+    bits_ += n;
+    return bits_;
+  }
+  // Skips n pixels:
+  SOURCE_FORCEINLINE void SkipPixels(i32 n) { SkipBytes(n * size_); }
+  // Writes a pixel, advances the write index.
+  SOURCE_FORCEINLINE void WritePixel(i32 r, i32 g, i32 b, i32 a = 255) {
+    WritePixelNoAdvance(r, g, b, a);
+    bits_ += size_;
+  }
+  // Writes a pixel without advancing the index.
+  SOURCE_FORCEINLINE void WritePixelNoAdvance(i32 r, i32 g, i32 b,
+                                              i32 a = 255) {
+    Assert(!IsUsingFloatFormat());
+
+    if (size_ <= 0) return;
+
+    if (size_ < 5) {
+      u32 val = (r & r_mask_) << r_shift_;
+      val |= (g & g_mask_) << g_shift_;
+      val |= (b_shift_ > 0) ? ((b & b_mask_) << b_shift_)
+                            : ((b & b_mask_) >> -b_shift_);
+      val |= (a & a_mask_) << a_shift_;
+
+      switch (size_) {
+        default:
+          Assert(0);
+          return;
+        case 1: {
+          bits_[0] = (u8)((val & 0xff));
+          return;
+        }
+        case 2: {
+          ((u16 *)bits_)[0] = (u16)((val & 0xffff));
+          return;
+        }
+        case 3: {
+          ((u16 *)bits_)[0] = (u16)((val & 0xffff));
+          bits_[2] = (u8)((val >> 16) & 0xff);
+          return;
+        }
+        case 4: {
+          ((u32 *)bits_)[0] = val;
+          return;
+        }
+      }
+    } else  // RGBA32323232 or RGBA16161616 -- PC only.
+    {
+      i64 val = ((i64)(r & r_mask_)) << r_shift_;
+      val |= ((i64)(g & g_mask_)) << g_shift_;
+      val |= (b_shift_ > 0) ? (((i64)(b & b_mask_)) << b_shift_)
+                            : (((i64)(b & b_mask_)) >> -b_shift_);
+      val |= ((i64)(a & a_mask_)) << a_shift_;
+
+      switch (size_) {
+        case 6: {
+          ((u32 *)bits_)[0] = val & 0xffffffff;
+          ((u16 *)bits_)[2] = (u16)((val >> 32) & 0xffff);
+          return;
+        }
+        case 8: {
+          ((u32 *)bits_)[0] = val & 0xffffffff;
+          ((u32 *)bits_)[1] = (val >> 32) & 0xffffffff;
+          return;
+        }
+        default:
+          Assert(0);
+          return;
+      }
+    }
+  }
+  // Writes a pixel, advances the write index.
+  SOURCE_FORCEINLINE void WritePixelSigned(i32 r, i32 g, i32 b, i32 a = 255) {
+    WritePixelNoAdvanceSigned(r, g, b, a);
+    bits_ += size_;
+  }
+  // Writes a signed pixel without advancing the index.
+  SOURCE_FORCEINLINE void WritePixelNoAdvanceSigned(i32 r, i32 g, i32 b,
+                                                    i32 a = 255) {
+    Assert(!IsUsingFloatFormat());
+
+    if (size_ <= 0) return;
+
+    if (size_ < 5) {
+      i32 val = (r & r_mask_) << r_shift_;
+      val |= (g & g_mask_) << g_shift_;
+      val |= (b_shift_ > 0) ? ((b & b_mask_) << b_shift_)
+                            : ((b & b_mask_) >> -b_shift_);
+      val |= (a & a_mask_) << a_shift_;
+      i8 *pSignedBits = (i8 *)bits_;
+
+      switch (size_) {
+        case 4:
+          pSignedBits[3] = (i8)((val >> 24) & 0xff);
+          // fall through intentionally.
+        case 3:
+          pSignedBits[2] = (i8)((val >> 16) & 0xff);
+          // fall through intentionally.
+        case 2:
+          pSignedBits[1] = (i8)((val >> 8) & 0xff);
+          // fall through intentionally.
+        case 1:
+          pSignedBits[0] = (i8)((val & 0xff));
+          // fall through intentionally.
+          return;
+      }
+    } else {
+      i64 val = ((i64)(r & r_mask_)) << r_shift_;
+      val |= ((i64)(g & g_mask_)) << g_shift_;
+      val |= (b_shift_ > 0) ? (((i64)(b & b_mask_)) << b_shift_)
+                            : (((i64)(b & b_mask_)) >> -b_shift_);
+      val |= ((i64)(a & a_mask_)) << a_shift_;
+      i8 *pSignedBits = (i8 *)bits_;
+
+      switch (size_) {
+        case 8:
+          pSignedBits[7] = (i8)((val >> 56) & 0xff);
+          pSignedBits[6] = (i8)((val >> 48) & 0xff);
+          // fall through intentionally.
+        case 6:
+          pSignedBits[5] = (i8)((val >> 40) & 0xff);
+          pSignedBits[4] = (i8)((val >> 32) & 0xff);
+          // fall through intentionally.
+        case 4:
+          pSignedBits[3] = (i8)((val >> 24) & 0xff);
+          // fall through intentionally.
+        case 3:
+          pSignedBits[2] = (i8)((val >> 16) & 0xff);
+          // fall through intentionally.
+        case 2:
+          pSignedBits[1] = (i8)((val >> 8) & 0xff);
+          // fall through intentionally.
+        case 1:
+          pSignedBits[0] = (i8)((val & 0xff));
+          break;
+        default:
+          Assert(0);
+          return;
+      }
+    }
+  }
+  SOURCE_FORCEINLINE void ReadPixelNoAdvance(i32 &r, i32 &g, i32 &b,
+                                             i32 &a) const {
+    Assert(!IsUsingFloatFormat());
+
+    i32 val = bits_[0];
+    if (size_ > 1) {
+      val |= (i32)bits_[1] << 8;
+      if (size_ > 2) {
+        val |= (i32)bits_[2] << 16;
+        if (size_ > 3) {
+          val |= (i32)bits_[3] << 24;
+        }
+      }
+    }
+
+    r = (val >> r_shift_) & r_mask_;
+    g = (val >> g_shift_) & g_mask_;
+    b = (val >> b_shift_) & b_mask_;
+    a = (val >> a_shift_) & a_mask_;
+  }
 
   // Floating point formats
-  SOURCE_FORCEINLINE void WritePixelNoAdvanceF(float r, float g, float b,
-                                               float a = 1.0f);
-  SOURCE_FORCEINLINE void WritePixelF(float r, float g, float b,
-                                      float a = 1.0f);
+  // Writes a pixel without advancing the index.
+  SOURCE_FORCEINLINE void WritePixelNoAdvanceF(f32 r, f32 g, f32 b,
+                                               f32 a = 1.0f) {
+    Assert(IsUsingFloatFormat());
+
+    if (PIXELWRITER_USING_16BIT_FLOAT_FORMAT & flags_) {
+      float16 fp16[4];
+      fp16[0].SetFloat(r);
+      fp16[1].SetFloat(g);
+      fp16[2].SetFloat(b);
+      fp16[3].SetFloat(a);
+      // fp16
+      u16 pBuf[4] = {0, 0, 0, 0};
+      pBuf[r_shift_ >> 4] |= (fp16[0].GetBits() & r_mask_) << (r_shift_ & 0xF);
+      pBuf[g_shift_ >> 4] |= (fp16[1].GetBits() & g_mask_) << (g_shift_ & 0xF);
+      pBuf[b_shift_ >> 4] |= (fp16[2].GetBits() & b_mask_) << (b_shift_ & 0xF);
+      pBuf[a_shift_ >> 4] |= (fp16[3].GetBits() & a_mask_) << (a_shift_ & 0xF);
+      memcpy(bits_, pBuf, size_);
+    } else {
+      // fp32
+      i32 pBuf[4] = {0, 0, 0, 0};
+      pBuf[r_shift_ >> 5] |= (FloatBits(r) & r_mask_) << (r_shift_ & 0x1F);
+      pBuf[g_shift_ >> 5] |= (FloatBits(g) & g_mask_) << (g_shift_ & 0x1F);
+      pBuf[b_shift_ >> 5] |= (FloatBits(b) & b_mask_) << (b_shift_ & 0x1F);
+      pBuf[a_shift_ >> 5] |= (FloatBits(a) & a_mask_) << (a_shift_ & 0x1F);
+      memcpy(bits_, pBuf, size_);
+    }
+  }
+  // Writes a pixel, advances the write index.
+  SOURCE_FORCEINLINE void WritePixelF(f32 r, f32 g, f32 b, f32 a = 1.0f) {
+    WritePixelNoAdvanceF(r, g, b, a);
+    bits_ += size_;
+  }
 
   // SIMD formats
   SOURCE_FORCEINLINE void WritePixel(FLTX4 rgba);
   SOURCE_FORCEINLINE void WritePixelNoAdvance(FLTX4 rgba);
 
-  SOURCE_FORCEINLINE unsigned char GetPixelSize() { return m_Size; }
+  SOURCE_FORCEINLINE u8 GetPixelSize() const { return size_; }
 
-  SOURCE_FORCEINLINE bool IsUsingFloatFormat() const;
-  SOURCE_FORCEINLINE unsigned char *GetCurrentPixel() { return m_pBits; }
+  SOURCE_FORCEINLINE bool IsUsingFloatFormat() const {
+    return (flags_ & PIXELWRITER_USING_FLOAT_FORMAT) != 0;
+  }
+  SOURCE_FORCEINLINE u8 *GetCurrentPixel() const { return bits_; }
 
  private:
-  enum {
+  enum : u8 {
     PIXELWRITER_USING_FLOAT_FORMAT = 0x01,
     PIXELWRITER_USING_16BIT_FLOAT_FORMAT = 0x02,
     PIXELWRITER_SWAPBYTES = 0x04,
   };
 
-  unsigned char *m_pBase;
-  unsigned char *m_pBits;
-  unsigned short m_BytesPerRow;
-  unsigned char m_Size;
-  unsigned char m_nFlags;
-  signed short m_RShift;
-  signed short m_GShift;
-  signed short m_BShift;
-  signed short m_AShift;
-  unsigned int m_RMask;
-  unsigned int m_GMask;
-  unsigned int m_BMask;
-  unsigned int m_AMask;
+  u8 *base_;
+  u8 *bits_;
+  u16 bytes_per_row_;
+  u8 size_;
+  u8 flags_;
+
+  i16 r_shift_, g_shift_, b_shift_, a_shift_;
+  u32 r_mask_, g_mask_, b_mask_, a_mask_;
 };
-
-FORCEINLINE_PIXEL bool CPixelWriter::IsUsingFloatFormat() const {
-  return (m_nFlags & PIXELWRITER_USING_FLOAT_FORMAT) != 0;
-}
-
-FORCEINLINE_PIXEL void CPixelWriter::SetPixelMemory(ImageFormat format,
-                                                    void *pMemory, int stride) {
-  m_pBits = (unsigned char *)pMemory;
-  m_pBase = m_pBits;
-  m_BytesPerRow = (unsigned short)stride;
-  m_nFlags = 0;
-
-  switch (format) {
-    case IMAGE_FORMAT_R32F:  // NOTE! : the low order bits are first in this
-                             // naming convention.
-      m_Size = 4;
-      m_RShift = 0;
-      m_GShift = 0;
-      m_BShift = 0;
-      m_AShift = 0;
-      m_RMask = 0xFFFFFFFF;
-      m_GMask = 0x0;
-      m_BMask = 0x0;
-      m_AMask = 0x0;
-      m_nFlags |= PIXELWRITER_USING_FLOAT_FORMAT;
-      break;
-
-    case IMAGE_FORMAT_RGBA32323232F:
-      m_Size = 16;
-      m_RShift = 0;
-      m_GShift = 32;
-      m_BShift = 64;
-      m_AShift = 96;
-      m_RMask = 0xFFFFFFFF;
-      m_GMask = 0xFFFFFFFF;
-      m_BMask = 0xFFFFFFFF;
-      m_AMask = 0xFFFFFFFF;
-      m_nFlags |= PIXELWRITER_USING_FLOAT_FORMAT;
-      break;
-
-    case IMAGE_FORMAT_RGBA16161616F:
-      m_Size = 8;
-      m_RShift = 0;
-      m_GShift = 16;
-      m_BShift = 32;
-      m_AShift = 48;
-      m_RMask = 0xFFFF;
-      m_GMask = 0xFFFF;
-      m_BMask = 0xFFFF;
-      m_AMask = 0xFFFF;
-      m_nFlags |=
-          PIXELWRITER_USING_FLOAT_FORMAT | PIXELWRITER_USING_16BIT_FLOAT_FORMAT;
-      break;
-
-    case IMAGE_FORMAT_RGBA8888:
-#if defined(_X360)
-    case IMAGE_FORMAT_LINEAR_RGBA8888:
-#endif
-      m_Size = 4;
-      m_RShift = 0;
-      m_GShift = 8;
-      m_BShift = 16;
-      m_AShift = 24;
-      m_RMask = 0xFF;
-      m_GMask = 0xFF;
-      m_BMask = 0xFF;
-      m_AMask = 0xFF;
-      break;
-
-    case IMAGE_FORMAT_BGRA8888:  // NOTE! : the low order bits are first in this
-                                 // naming convention.
-#if defined(_X360)
-    case IMAGE_FORMAT_LINEAR_BGRA8888:
-#endif
-      m_Size = 4;
-      m_RShift = 16;
-      m_GShift = 8;
-      m_BShift = 0;
-      m_AShift = 24;
-      m_RMask = 0xFF;
-      m_GMask = 0xFF;
-      m_BMask = 0xFF;
-      m_AMask = 0xFF;
-      break;
-
-    case IMAGE_FORMAT_BGRX8888:
-#if defined(_X360)
-    case IMAGE_FORMAT_LINEAR_BGRX8888:
-#endif
-      m_Size = 4;
-      m_RShift = 16;
-      m_GShift = 8;
-      m_BShift = 0;
-      m_AShift = 24;
-      m_RMask = 0xFF;
-      m_GMask = 0xFF;
-      m_BMask = 0xFF;
-      m_AMask = 0x00;
-      break;
-
-    case IMAGE_FORMAT_BGRA4444:
-      m_Size = 2;
-      m_RShift = 4;
-      m_GShift = 0;
-      m_BShift = -4;
-      m_AShift = 8;
-      m_RMask = 0xF0;
-      m_GMask = 0xF0;
-      m_BMask = 0xF0;
-      m_AMask = 0xF0;
-      break;
-
-    case IMAGE_FORMAT_BGR888:
-      m_Size = 3;
-      m_RShift = 16;
-      m_GShift = 8;
-      m_BShift = 0;
-      m_AShift = 0;
-      m_RMask = 0xFF;
-      m_GMask = 0xFF;
-      m_BMask = 0xFF;
-      m_AMask = 0x00;
-      break;
-
-    case IMAGE_FORMAT_BGR565:
-      m_Size = 2;
-      m_RShift = 8;
-      m_GShift = 3;
-      m_BShift = -3;
-      m_AShift = 0;
-      m_RMask = 0xF8;
-      m_GMask = 0xFC;
-      m_BMask = 0xF8;
-      m_AMask = 0x00;
-      break;
-
-    case IMAGE_FORMAT_BGRA5551:
-    case IMAGE_FORMAT_BGRX5551:
-      m_Size = 2;
-      m_RShift = 7;
-      m_GShift = 2;
-      m_BShift = -3;
-      m_AShift = 8;
-      m_RMask = 0xF8;
-      m_GMask = 0xF8;
-      m_BMask = 0xF8;
-      m_AMask = 0x80;
-      break;
-
-    // GR - alpha format for HDR support
-    case IMAGE_FORMAT_A8:
-      m_Size = 1;
-      m_RShift = 0;
-      m_GShift = 0;
-      m_BShift = 0;
-      m_AShift = 0;
-      m_RMask = 0x00;
-      m_GMask = 0x00;
-      m_BMask = 0x00;
-      m_AMask = 0xFF;
-      break;
-
-    case IMAGE_FORMAT_UVWQ8888:
-      m_Size = 4;
-      m_RShift = 0;
-      m_GShift = 8;
-      m_BShift = 16;
-      m_AShift = 24;
-      m_RMask = 0xFF;
-      m_GMask = 0xFF;
-      m_BMask = 0xFF;
-      m_AMask = 0xFF;
-      break;
-
-    case IMAGE_FORMAT_RGBA16161616:
-#if defined(_X360)
-    case IMAGE_FORMAT_LINEAR_RGBA16161616:
-#endif
-      m_Size = 8;
-      m_RShift = 0;
-      m_GShift = 16;
-      m_BShift = 32;
-      m_AShift = 48;
-      m_RMask = 0xFFFF;
-      m_GMask = 0xFFFF;
-      m_BMask = 0xFFFF;
-      m_AMask = 0xFFFF;
-      break;
-
-    case IMAGE_FORMAT_I8:
-      // whatever goes into R is considered the intensity.
-      m_Size = 1;
-      m_RShift = 0;
-      m_GShift = 0;
-      m_BShift = 0;
-      m_AShift = 0;
-      m_RMask = 0xFF;
-      m_GMask = 0x00;
-      m_BMask = 0x00;
-      m_AMask = 0x00;
-      break;
-    // TODO(d.rattman): Add more color formats as need arises
-    default: {
-      static bool format_error_printed[NUM_IMAGE_FORMATS];
-      if (!format_error_printed[format]) {
-        Assert(0);
-        Msg("CPixelWriter::SetPixelMemory:  Unsupported image format %i\n",
-            format);
-        format_error_printed[format] = true;
-      }
-      m_Size = 0;  // set to zero so that we don't stomp memory for formats that
-                   // we don't understand.
-    } break;
-  }
-}
-
-//-----------------------------------------------------------------------------
-// Sets where we're writing to
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::Seek(int x, int y) {
-  m_pBits = m_pBase + y * m_BytesPerRow + x * m_Size;
-}
-
-//-----------------------------------------------------------------------------
-// Skips n bytes:
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void *CPixelWriter::SkipBytes(int n) SOURCE_RESTRICT {
-  m_pBits += n;
-  return m_pBits;
-}
-
-//-----------------------------------------------------------------------------
-// Skips n pixels:
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::SkipPixels(int n) {
-  SkipBytes(n * m_Size);
-}
-
-//-----------------------------------------------------------------------------
-// Writes a pixel without advancing the index		PC ONLY
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::WritePixelNoAdvanceF(float r, float g,
-                                                          float b, float a) {
-  Assert(IsUsingFloatFormat());
-
-  // X360TBD: Not ported
-  Assert(IsPC());
-
-  if (PIXELWRITER_USING_16BIT_FLOAT_FORMAT & m_nFlags) {
-    float16 fp16[4];
-    fp16[0].SetFloat(r);
-    fp16[1].SetFloat(g);
-    fp16[2].SetFloat(b);
-    fp16[3].SetFloat(a);
-    // fp16
-    unsigned short pBuf[4] = {0, 0, 0, 0};
-    pBuf[m_RShift >> 4] |= (fp16[0].GetBits() & m_RMask) << (m_RShift & 0xF);
-    pBuf[m_GShift >> 4] |= (fp16[1].GetBits() & m_GMask) << (m_GShift & 0xF);
-    pBuf[m_BShift >> 4] |= (fp16[2].GetBits() & m_BMask) << (m_BShift & 0xF);
-    pBuf[m_AShift >> 4] |= (fp16[3].GetBits() & m_AMask) << (m_AShift & 0xF);
-    memcpy(m_pBits, pBuf, m_Size);
-  } else {
-    // fp32
-    int pBuf[4] = {0, 0, 0, 0};
-    pBuf[m_RShift >> 5] |= (FloatBits(r) & m_RMask) << (m_RShift & 0x1F);
-    pBuf[m_GShift >> 5] |= (FloatBits(g) & m_GMask) << (m_GShift & 0x1F);
-    pBuf[m_BShift >> 5] |= (FloatBits(b) & m_BMask) << (m_BShift & 0x1F);
-    pBuf[m_AShift >> 5] |= (FloatBits(a) & m_AMask) << (m_AShift & 0x1F);
-    memcpy(m_pBits, pBuf, m_Size);
-  }
-}
-
-//-----------------------------------------------------------------------------
-// Writes a pixel, advances the write index
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::WritePixelF(float r, float g, float b,
-                                                 float a) {
-  WritePixelNoAdvanceF(r, g, b, a);
-  m_pBits += m_Size;
-}
-
-//-----------------------------------------------------------------------------
-// Writes a pixel, advances the write index
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::WritePixel(int r, int g, int b, int a) {
-  WritePixelNoAdvance(r, g, b, a);
-  m_pBits += m_Size;
-}
-
-//-----------------------------------------------------------------------------
-// Writes a pixel, advances the write index
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::WritePixelSigned(int r, int g, int b,
-                                                      int a) {
-  WritePixelNoAdvanceSigned(r, g, b, a);
-  m_pBits += m_Size;
-}
-
-//-----------------------------------------------------------------------------
-// Writes a pixel without advancing the index
-//-----------------------------------------------------------------------------
-FORCEINLINE_PIXEL void CPixelWriter::WritePixelNoAdvance(int r, int g, int b,
-                                                         int a) {
-  Assert(!IsUsingFloatFormat());
-
-  if (m_Size <= 0) {
-    return;
-  }
-  if (m_Size < 5) {
-    unsigned int val = (r & m_RMask) << m_RShift;
-    val |= (g & m_GMask) << m_GShift;
-    val |= (m_BShift > 0) ? ((b & m_BMask) << m_BShift)
-                          : ((b & m_BMask) >> -m_BShift);
-    val |= (a & m_AMask) << m_AShift;
-
-    switch (m_Size) {
-      default:
-        Assert(0);
-        return;
-      case 1: {
-        m_pBits[0] = (unsigned char)((val & 0xff));
-        return;
-      }
-      case 2: {
-        ((unsigned short *)m_pBits)[0] = (unsigned short)((val & 0xffff));
-        return;
-      }
-      case 3: {
-        ((unsigned short *)m_pBits)[0] = (unsigned short)((val & 0xffff));
-        m_pBits[2] = (unsigned char)((val >> 16) & 0xff);
-        return;
-      }
-      case 4: {
-        ((unsigned int *)m_pBits)[0] = val;
-        return;
-      }
-    }
-  } else  // RGBA32323232 or RGBA16161616 -- PC only.
-  {
-    AssertMsg(!IsX360(),
-              "Unsupported lightmap format used in WritePixelNoAdvance(). This "
-              "is a severe performance fault.\n");
-
-    int64_t val = ((int64_t)(r & m_RMask)) << m_RShift;
-    val |= ((int64_t)(g & m_GMask)) << m_GShift;
-    val |= (m_BShift > 0) ? (((int64_t)(b & m_BMask)) << m_BShift)
-                          : (((int64_t)(b & m_BMask)) >> -m_BShift);
-    val |= ((int64_t)(a & m_AMask)) << m_AShift;
-
-    switch (m_Size) {
-      case 6: {
-        ((unsigned int *)m_pBits)[0] = val & 0xffffffff;
-        ((unsigned short *)m_pBits)[2] = (unsigned short)((val >> 32) & 0xffff);
-        return;
-      }
-      case 8: {
-        ((unsigned int *)m_pBits)[0] = val & 0xffffffff;
-        ((unsigned int *)m_pBits)[1] = (val >> 32) & 0xffffffff;
-        return;
-      }
-      default:
-        Assert(0);
-        return;
-    }
-  }
-}
-
-//-----------------------------------------------------------------------------
-// Writes a signed pixel without advancing the index
-//-----------------------------------------------------------------------------
-
-FORCEINLINE_PIXEL void CPixelWriter::WritePixelNoAdvanceSigned(int r, int g,
-                                                               int b, int a) {
-  Assert(!IsUsingFloatFormat());
-
-  if (m_Size <= 0) {
-    return;
-  }
-
-  if (m_Size < 5) {
-    int val = (r & m_RMask) << m_RShift;
-    val |= (g & m_GMask) << m_GShift;
-    val |= (m_BShift > 0) ? ((b & m_BMask) << m_BShift)
-                          : ((b & m_BMask) >> -m_BShift);
-    val |= (a & m_AMask) << m_AShift;
-    signed char *pSignedBits = (signed char *)m_pBits;
-
-    switch (m_Size) {
-      case 4:
-        pSignedBits[3] = (signed char)((val >> 24) & 0xff);
-        // fall through intentionally.
-      case 3:
-        pSignedBits[2] = (signed char)((val >> 16) & 0xff);
-        // fall through intentionally.
-      case 2:
-        pSignedBits[1] = (signed char)((val >> 8) & 0xff);
-        // fall through intentionally.
-      case 1:
-        pSignedBits[0] = (signed char)((val & 0xff));
-        // fall through intentionally.
-        return;
-    }
-  } else {
-    int64_t val = ((int64_t)(r & m_RMask)) << m_RShift;
-    val |= ((int64_t)(g & m_GMask)) << m_GShift;
-    val |= (m_BShift > 0) ? (((int64_t)(b & m_BMask)) << m_BShift)
-                          : (((int64_t)(b & m_BMask)) >> -m_BShift);
-    val |= ((int64_t)(a & m_AMask)) << m_AShift;
-    signed char *pSignedBits = (signed char *)m_pBits;
-
-    switch (m_Size) {
-      case 8:
-        pSignedBits[7] = (signed char)((val >> 56) & 0xff);
-        pSignedBits[6] = (signed char)((val >> 48) & 0xff);
-        // fall through intentionally.
-      case 6:
-        pSignedBits[5] = (signed char)((val >> 40) & 0xff);
-        pSignedBits[4] = (signed char)((val >> 32) & 0xff);
-        // fall through intentionally.
-      case 4:
-        pSignedBits[3] = (signed char)((val >> 24) & 0xff);
-        // fall through intentionally.
-      case 3:
-        pSignedBits[2] = (signed char)((val >> 16) & 0xff);
-        // fall through intentionally.
-      case 2:
-        pSignedBits[1] = (signed char)((val >> 8) & 0xff);
-        // fall through intentionally.
-      case 1:
-        pSignedBits[0] = (signed char)((val & 0xff));
-        break;
-      default:
-        Assert(0);
-        return;
-    }
-  }
-}
-
-FORCEINLINE_PIXEL void CPixelWriter::ReadPixelNoAdvance(int &r, int &g, int &b,
-                                                        int &a) {
-  Assert(!IsUsingFloatFormat());
-
-  int val = m_pBits[0];
-  if (m_Size > 1) {
-    val |= (int)m_pBits[1] << 8;
-    if (m_Size > 2) {
-      val |= (int)m_pBits[2] << 16;
-      if (m_Size > 3) {
-        val |= (int)m_pBits[3] << 24;
-      }
-    }
-  }
-
-  r = (val >> m_RShift) & m_RMask;
-  g = (val >> m_GShift) & m_GMask;
-  b = (val >> m_BShift) & m_BMask;
-  a = (val >> m_AShift) & m_AMask;
-}
 
 #endif  // PIXELWRITER_H

@@ -1,24 +1,20 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef SHADERSHADOWDX8_H
-#define SHADERSHADOWDX8_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_SHADERSHADOWDX8_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_SHADERSHADOWDX8_H_
 
 #include "locald3dtypes.h"
 #include "shaderapi/ishadershadow.h"
 
 class IShaderAPIDX8;
 
-//-----------------------------------------------------------------------------
 // Important enumerations
-//-----------------------------------------------------------------------------
 enum : int {
   MAX_SAMPLERS = 16,
   MAX_TEXTURE_STAGES = 16,
 };
 
-//-----------------------------------------------------------------------------
 // A structure maintaining the shadowed board state
-//-----------------------------------------------------------------------------
 struct TextureStageShadowState_t {
   // State shadowing affects these
   D3DTEXTUREOP m_ColorOp;
@@ -97,11 +93,9 @@ struct ShadowState_t {
   unsigned short m_nReserved2;
 };
 
-//-----------------------------------------------------------------------------
 // These are part of the "shadow" since they describe the shading algorithm
 // but aren't actually captured in the state transition table
 // because it would produce too many transitions
-//-----------------------------------------------------------------------------
 struct ShadowShaderState_t {
   // The vertex + pixel shader group to use...
   VertexShader_t m_VertexShader;
@@ -127,9 +121,7 @@ struct ShadowShaderState_t {
   bool m_nReserved[3];
 };
 
-//-----------------------------------------------------------------------------
 // The shader setup API
-//-----------------------------------------------------------------------------
 the_interface IShaderShadowDX8 : public IShaderShadow {
  public:
   // Initializes it
@@ -149,4 +141,4 @@ the_interface IShaderShadowDX8 : public IShaderShadow {
 
 extern IShaderShadowDX8* g_pShaderShadowDx8;
 
-#endif  // SHADERSHADOWDX8_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_SHADERSHADOWDX8_H_

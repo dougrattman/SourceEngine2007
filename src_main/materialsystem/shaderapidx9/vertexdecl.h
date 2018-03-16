@@ -1,32 +1,18 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-
-#ifndef VERTEXDECL_H
-#define VERTEXDECL_H
-
-#ifdef _WIN32
-#pragma once
-#endif
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_VERTEXDECL_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_VERTEXDECL_H_
 
 #include "locald3dtypes.h"
 #include "materialsystem/IMaterial.h"
 
-
-//-----------------------------------------------------------------------------
 // Gets the declspec associated with a vertex format
-//-----------------------------------------------------------------------------
-IDirect3DVertexDeclaration9 *FindOrCreateVertexDecl( VertexFormat_t fmt, bool bStaticLit, bool bUsingFlex, bool bUsingMorph );
+IDirect3DVertexDeclaration9 *FindOrCreateVertexDecl(VertexFormat_t fmt,
+                                                    bool bStaticLit,
+                                                    bool bUsingFlex,
+                                                    bool bUsingMorph);
 
-//-----------------------------------------------------------------------------
 // Clears out all declspecs
-//-----------------------------------------------------------------------------
-void ReleaseAllVertexDecl( );
+void ReleaseAllVertexDecl();
 
-
-#endif // VERTEXDECL_H 
-
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_VERTEXDECL_H_

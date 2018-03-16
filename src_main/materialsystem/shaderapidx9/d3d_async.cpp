@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Methods for muti-core dx9 threading
 
@@ -9,6 +9,7 @@
 #include "UtlDict.h"
 #include "UtlStringMap.h"
 #include "UtlVector.h"
+#include "base/include/windows/windows_light.h"
 #include "datacache/idatacache.h"
 #include "ishadersystem.h"
 #include "locald3dtypes.h"
@@ -24,11 +25,8 @@
 #include "tier1/utlbuffer.h"
 #include "tier1/utlsymbol.h"
 #include "utllinkedlist.h"
-#include "base/include/windows/windows_light.h"
 
 #include "tier0/include/memdbgon.h"
-
-#if SHADERAPI_USE_SMP
 
 template <class T, int QSIZE>
 class FixedWorkQueue {
@@ -74,10 +72,10 @@ static volatile PushBuffer *PushBuffers[N_PUSH_BUFFERS];
 FixedWorkQueue<PushBuffer *, N_PUSH_BUFFERS> PBQueue;
 
 void __cdecl OurThreadInit(void *ourthis) {
-  ((D3DDeviceWrapper *)ourthis)->RunThread();
+  ((Direct3DDevice9Wrapper *)ourthis)->RunThread();
 }
 
-void D3DDeviceWrapper::RunThread(void) {
+void Direct3DDevice9Wrapper::RunThread(void) {
   SetThreadAffinityMask(GetCurrentThread(), 2);
   for (;;) {
     PushBuffer *Pbuf = PBQueue.GetWorkUnit();
@@ -98,9 +96,9 @@ struct RememberedPointer {
   void *m_pRememberedPtr;
 } RememberedPointerHistory[MAXIMUM_NUMBER_OF_BUFFERS_LOCKED_AT_ONCE];
 
-void D3DDeviceWrapper::SetASyncMode(bool onoff) {
+void Direct3DDevice9Wrapper::SetASyncMode(bool onoff) {
   if (onoff) {
-    if (!m_pASyncThreadHandle) {
+    if (!async_thread_handle_) {
       // allocate push buffers if we need to
       if (PushBuffers[0] == NULL) {
         for (int i = 0; i < N_PUSH_BUFFERS; i++)
@@ -109,14 +107,15 @@ void D3DDeviceWrapper::SetASyncMode(bool onoff) {
       // create thread and init communications
       memset(RememberedPointerHistory, 0, sizeof(RememberedPointerHistory));
       SetThreadAffinityMask(GetCurrentThread(), 1);
-      m_pASyncThreadHandle = _beginthread(OurThreadInit, 128 * 1024, this);
+      async_thread_handle_ = _beginthread(OurThreadInit, 128 * 1024, this);
     }
   } else {
     Synchronize();
   }
 }
 
-PushBuffer *D3DDeviceWrapper::FindFreePushBuffer(PushBufferState newstate) {
+PushBuffer *Direct3DDevice9Wrapper::FindFreePushBuffer(
+    PushBufferState newstate) {
   for (;;) {
     for (int i = 0; i < N_PUSH_BUFFERS; i++) {
       if (PushBuffers[i]->m_State == PUSHBUFFER_AVAILABLE) {
@@ -130,31 +129,32 @@ PushBuffer *D3DDeviceWrapper::FindFreePushBuffer(PushBufferState newstate) {
   }
 }
 
-void D3DDeviceWrapper::GetPushBuffer(void) {
-  m_pCurPushBuffer = FindFreePushBuffer(PUSHBUFFER_BEING_FILLED);
-  m_pOutputPtr = m_pCurPushBuffer->m_BufferData;
-  m_PushBufferFreeSlots = PUSHBUFFER_NELEMS - 1;  // leave room for end marker
+void Direct3DDevice9Wrapper::GetPushBuffer(void) {
+  current_push_buffer_ = FindFreePushBuffer(PUSHBUFFER_BEING_FILLED);
+  output_ptr_ = current_push_buffer_->m_BufferData;
+  push_buffer_free_slots_ = PUSHBUFFER_NELEMS - 1;  // leave room for end marker
 }
 
-void D3DDeviceWrapper::SubmitPushBufferAndGetANewOne(void) {
+void Direct3DDevice9Wrapper::SubmitPushBufferAndGetANewOne(void) {
   // submit the current push buffer
-  if (m_pCurPushBuffer) {
-    if (m_pOutputPtr ==
-        m_pCurPushBuffer->m_BufferData)  // haven't done anyting, don't bother
+  if (current_push_buffer_) {
+    if (output_ptr_ ==
+        current_push_buffer_
+            ->m_BufferData)  // haven't done anyting, don't bother
       return;
-    *(m_pOutputPtr) = PBCMD_END;  // mark end
-    m_pCurPushBuffer->m_State = PUSHBUFFER_SUBMITTED;
+    *(output_ptr_) = PBCMD_END;  // mark end
+    current_push_buffer_->m_State = PUSHBUFFER_SUBMITTED;
     // here, enqueue for task
-    PBQueue.AddWorkUnit(m_pCurPushBuffer);
+    PBQueue.AddWorkUnit(current_push_buffer_);
   }
   GetPushBuffer();
 }
 
-void D3DDeviceWrapper::SubmitIfNotBusy(void) {
+void Direct3DDevice9Wrapper::SubmitIfNotBusy(void) {
   if (PBQueue.IsEmpty()) SubmitPushBufferAndGetANewOne();
 }
 
-void D3DDeviceWrapper::Synchronize(void) {
+void Direct3DDevice9Wrapper::Synchronize(void) {
   if (ASyncMode()) {
     SubmitPushBufferAndGetANewOne();
     // here, wait for queue to become empty
@@ -164,9 +164,10 @@ void D3DDeviceWrapper::Synchronize(void) {
   }
 }
 
-void D3DDeviceWrapper::AsynchronousLock(IDirect3DIndexBuffer9 *ib,
-                                        size_t offset, size_t size, void **ptr,
-                                        DWORD flags, LockedBufferContext *lb) {
+void Direct3DDevice9Wrapper::AsynchronousLock(IDirect3DIndexBuffer9 *ib,
+                                              size_t offset, size_t size,
+                                              void **ptr, DWORD flags,
+                                              LockedBufferContext *lb) {
   if (size <= sizeof(PushBuffers[0]->m_BufferData)) {
     // can use one of our pushbuffers for this
     lb->m_pPushBuffer =
@@ -182,17 +183,18 @@ void D3DDeviceWrapper::AsynchronousLock(IDirect3DIndexBuffer9 *ib,
   }
   // now, push lock commands
   AllocatePushBufferSpace(1 + N_DWORDS_IN_PTR + 3);
-  *(m_pOutputPtr++) = PBCMD_ASYNC_LOCK_IB;
-  *((LPDIRECT3DINDEXBUFFER *)m_pOutputPtr) = ib;
-  m_pOutputPtr += N_DWORDS_IN_PTR;
-  *(m_pOutputPtr++) = offset;
-  *(m_pOutputPtr++) = size;
-  *(m_pOutputPtr++) = flags;
+  *(output_ptr_++) = PBCMD_ASYNC_LOCK_IB;
+  *((LPDIRECT3DINDEXBUFFER *)output_ptr_) = ib;
+  output_ptr_ += N_DWORDS_IN_PTR;
+  *(output_ptr_++) = offset;
+  *(output_ptr_++) = size;
+  *(output_ptr_++) = flags;
 }
 
-void D3DDeviceWrapper::AsynchronousLock(IDirect3DVertexBuffer9 *vb,
-                                        size_t offset, size_t size, void **ptr,
-                                        DWORD flags, LockedBufferContext *lb) {
+void Direct3DDevice9Wrapper::AsynchronousLock(IDirect3DVertexBuffer9 *vb,
+                                              size_t offset, size_t size,
+                                              void **ptr, DWORD flags,
+                                              LockedBufferContext *lb) {
   // we have commands in flight. Need to use temporary memory for this lock.
   // if the size needed is < the amount of space in a push buffer, we can use
   // a push buffer for the buffer. Otherwise, we're going to malloc one.
@@ -211,12 +213,12 @@ void D3DDeviceWrapper::AsynchronousLock(IDirect3DVertexBuffer9 *vb,
   }
   // now, push lock commands
   AllocatePushBufferSpace(1 + N_DWORDS_IN_PTR + 3);
-  *(m_pOutputPtr++) = PBCMD_ASYNC_LOCK_VB;
-  *((LPDIRECT3DVERTEXBUFFER *)m_pOutputPtr) = vb;
-  m_pOutputPtr += N_DWORDS_IN_PTR;
-  *(m_pOutputPtr++) = offset;
-  *(m_pOutputPtr++) = size;
-  *(m_pOutputPtr++) = flags;
+  *(output_ptr_++) = PBCMD_ASYNC_LOCK_VB;
+  *((LPDIRECT3DVERTEXBUFFER *)output_ptr_) = vb;
+  output_ptr_ += N_DWORDS_IN_PTR;
+  *(output_ptr_++) = offset;
+  *(output_ptr_++) = size;
+  *(output_ptr_++) = flags;
 }
 
 inline void RememberLockedPointer(void *key, void *value) {
@@ -247,7 +249,8 @@ inline void *RecallLockedPointer(void *key) {
   return NULL;
 }
 
-void D3DDeviceWrapper::HandleAsynchronousLockVBCommand(uint32_t const *dptr) {
+void Direct3DDevice9Wrapper::HandleAsynchronousLockVBCommand(
+    uint32_t const *dptr) {
   dptr++;
   LPDIRECT3DVERTEXBUFFER vb = *((LPDIRECT3DVERTEXBUFFER *)dptr);
   dptr += N_DWORDS_IN_PTR;
@@ -259,7 +262,8 @@ void D3DDeviceWrapper::HandleAsynchronousLockVBCommand(uint32_t const *dptr) {
   RememberLockedPointer(vb, locked_ptr);
 }
 
-void D3DDeviceWrapper::HandleAsynchronousUnLockVBCommand(uint32_t const *dptr) {
+void Direct3DDevice9Wrapper::HandleAsynchronousUnLockVBCommand(
+    uint32_t const *dptr) {
   dptr++;
   LPDIRECT3DVERTEXBUFFER vb = *((LPDIRECT3DVERTEXBUFFER *)dptr);
   dptr += N_DWORDS_IN_PTR;
@@ -283,7 +287,8 @@ void D3DDeviceWrapper::HandleAsynchronousUnLockVBCommand(uint32_t const *dptr) {
   vb->Unlock();
 }
 
-void D3DDeviceWrapper::HandleAsynchronousLockIBCommand(uint32_t const *dptr) {
+void Direct3DDevice9Wrapper::HandleAsynchronousLockIBCommand(
+    uint32_t const *dptr) {
   dptr++;
   LPDIRECT3DINDEXBUFFER ib = *((LPDIRECT3DINDEXBUFFER *)dptr);
   Assert(ib);
@@ -296,7 +301,8 @@ void D3DDeviceWrapper::HandleAsynchronousLockIBCommand(uint32_t const *dptr) {
   RememberLockedPointer(ib, locked_ptr);
 }
 
-void D3DDeviceWrapper::HandleAsynchronousUnLockIBCommand(uint32_t const *dptr) {
+void Direct3DDevice9Wrapper::HandleAsynchronousUnLockIBCommand(
+    uint32_t const *dptr) {
   dptr++;
   LPDIRECT3DINDEXBUFFER ib = *((LPDIRECT3DINDEXBUFFER *)dptr);
   dptr += N_DWORDS_IN_PTR;
@@ -331,7 +337,7 @@ int n_commands_executed = 0;
 int n_pbs_executed = 0;
 #endif
 
-void D3DDeviceWrapper::ExecutePushBuffer(PushBuffer const *pb) {
+void Direct3DDevice9Wrapper::ExecutePushBuffer(PushBuffer const *pb) {
   uint32_t const *dptr = pb->m_BufferData;
   n_pbs_executed++;
   for (;;) {
@@ -575,5 +581,3 @@ void D3DDeviceWrapper::ExecutePushBuffer(PushBuffer const *pb) {
     }
   }
 }
-
-#endif

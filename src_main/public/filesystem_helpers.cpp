@@ -1,11 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "filesystem_helpers.h"
 
 #include "filesystem.h"
 #include "tier1/characterset.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // wordbreak parsing set

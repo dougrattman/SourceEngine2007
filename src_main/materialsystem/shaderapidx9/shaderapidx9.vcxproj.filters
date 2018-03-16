@@ -103,9 +103,6 @@
     <ClInclude Include="..\..\public\materialsystem\shader_vcs_version.h">
       <Filter>Public Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CMaterialSystemStats.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="colorformatdx8.h">
       <Filter>Header Files</Filter>
     </ClInclude>

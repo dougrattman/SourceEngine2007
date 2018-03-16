@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #undef PROTECTED_THINGS_ENABLE
 #include "vertexdecl.h"  // this includes "base/include/windows/windows_light.h" inside the dx headers
@@ -161,15 +161,8 @@ static D3DDECLTYPE VertexElementToDeclType(
       // vertex element
       Assert(0);
       return D3DDECLTYPE_UNUSED;
-#if !defined(_X360)
     case VERTEX_ELEMENT_BONEINDEX:
       return D3DDECLTYPE_D3DCOLOR;
-#else
-    // UBYTE4 comes in as [0,255] in the shader, which is ideal for bone indices
-    // (unfortunately, UBYTE4 is not universally supported on PC DX8 GPUs)
-    case VERTEX_ELEMENT_BONEINDEX:
-      return D3DDECLTYPE_UBYTE4;
-#endif
     case VERTEX_ELEMENT_BONEWEIGHTS1:
       return D3DDECLTYPE_FLOAT1;
     case VERTEX_ELEMENT_BONEWEIGHTS2:
@@ -415,8 +408,8 @@ void ComputeVertexSpec(VertexFormat_t fmt, D3DVERTEXELEMENT9 *pDecl,
     if ((compressionType == VERTEX_COMPRESSION_ON) &&
         (COMPRESSED_NORMALS_TYPE ==
          COMPRESSED_NORMALS_COMBINEDTANGENTS_UBYTE4)) {
-      // TODO(d.rattman): Normals and tangents are packed together into a single UBYTE4
-      // element,
+      // TODO(d.rattman): Normals and tangents are packed together into a single
+      // UBYTE4 element,
       //        so just point this back at the same data while we're testing
       //        UBYTE4 out.
       pDecl[i].Offset = normalOffset;

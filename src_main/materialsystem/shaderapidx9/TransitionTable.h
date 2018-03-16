@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef TRANSITION_TABLE_H
-#define TRANSITION_TABLE_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_TRANSITION_TABLE_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_TRANSITION_TABLE_H_
 
 #include "shaderapi/ishaderapi.h"
 #include "shadershadowdx8.h"
@@ -12,21 +12,14 @@
 // Required for DEBUG_BOARD_STATE
 #include "shaderapidx8_global.h"
 
-//-----------------------------------------------------------------------------
-// Forward declarations
-//-----------------------------------------------------------------------------
 struct IDirect3DStateBlock9;
 enum RenderStateFunc_t : int;
 enum TextureStateFunc_t : int;
 
-//-----------------------------------------------------------------------------
 // Types related to transition table entries
-//-----------------------------------------------------------------------------
 typedef void (*ApplyStateFunc_t)(const ShadowState_t &shadowState, int arg);
 
-//-----------------------------------------------------------------------------
 // The DX8 implementation of the transition table
-//-----------------------------------------------------------------------------
 class CTransitionTable {
  public:
   struct CurrentTextureStageState_t {
@@ -117,13 +110,32 @@ class CTransitionTable {
   void EnableLinearColorSpaceFrameBuffer(bool bEnable);
 
   // Returns a particular snapshot
-  const ShadowState_t &GetSnapshot(StateSnapshot_t snapshotId) const;
+  // Inline methods
+  const ShadowState_t &GetSnapshot(StateSnapshot_t snapshotId) const {
+    Assert((snapshotId >= 0) && (snapshotId < m_SnapshotList.Count()));
+    return m_ShadowStateList[m_SnapshotList[snapshotId].m_ShadowStateId];
+  }
   const ShadowShaderState_t &GetSnapshotShader(
-      StateSnapshot_t snapshotId) const;
+      StateSnapshot_t snapshotId) const {
+    Assert((snapshotId >= 0) && (snapshotId < m_SnapshotList.Count()));
+    return m_SnapshotList[snapshotId].m_ShaderState;
+  }
 
   // Gets the current shadow state
-  const ShadowState_t *CurrentShadowState() const;
-  const ShadowShaderState_t *CurrentShadowShaderState() const;
+  const ShadowState_t *CurrentShadowState() const {
+    if (m_CurrentShadowId == -1) return NULL;
+
+    Assert((m_CurrentShadowId >= 0) &&
+           (m_CurrentShadowId < m_ShadowStateList.Count()));
+    return &m_ShadowStateList[m_CurrentShadowId];
+  }
+  const ShadowShaderState_t *CurrentShadowShaderState() const {
+    if (m_CurrentShadowId == -1) return NULL;
+
+    Assert((m_CurrentShadowId >= 0) &&
+           (m_CurrentShadowId < m_ShadowStateList.Count()));
+    return &m_SnapshotList[m_CurrentShadowId].m_ShaderState;
+  }
 
   // Return the current shapshot
   int CurrentSnapshot() const { return m_CurrentSnapshotId; }
@@ -309,36 +321,4 @@ class CTransitionTable {
 #endif
 };
 
-//-----------------------------------------------------------------------------
-// Inline methods
-//-----------------------------------------------------------------------------
-inline const ShadowState_t &CTransitionTable::GetSnapshot(
-    StateSnapshot_t snapshotId) const {
-  Assert((snapshotId >= 0) && (snapshotId < m_SnapshotList.Count()));
-  return m_ShadowStateList[m_SnapshotList[snapshotId].m_ShadowStateId];
-}
-
-inline const ShadowShaderState_t &CTransitionTable::GetSnapshotShader(
-    StateSnapshot_t snapshotId) const {
-  Assert((snapshotId >= 0) && (snapshotId < m_SnapshotList.Count()));
-  return m_SnapshotList[snapshotId].m_ShaderState;
-}
-
-inline const ShadowState_t *CTransitionTable::CurrentShadowState() const {
-  if (m_CurrentShadowId == -1) return NULL;
-
-  Assert((m_CurrentShadowId >= 0) &&
-         (m_CurrentShadowId < m_ShadowStateList.Count()));
-  return &m_ShadowStateList[m_CurrentShadowId];
-}
-
-inline const ShadowShaderState_t *CTransitionTable::CurrentShadowShaderState()
-    const {
-  if (m_CurrentShadowId == -1) return NULL;
-
-  Assert((m_CurrentShadowId >= 0) &&
-         (m_CurrentShadowId < m_ShadowStateList.Count()));
-  return &m_SnapshotList[m_CurrentShadowId].m_ShaderState;
-}
-
-#endif  // TRANSITION_TABLE_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_TRANSITION_TABLE_H_

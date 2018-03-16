@@ -1,7 +1,7 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef IMESHDX8_H
-#define IMESHDX8_H
+#ifndef MATERIALSYSTEM_SHADERAPIDX9_IMESHDX8_H_
+#define MATERIALSYSTEM_SHADERAPIDX9_IMESHDX8_H_
 
 #include "meshbase.h"
 #include "shaderapi/ishaderAPI.h"
@@ -105,4 +105,4 @@ the_interface IMeshMgr {
                                       bool *pUnusedTexCoords) = 0;
 };
 
-#endif  // IMESHDX8_H
+#endif  // MATERIALSYSTEM_SHADERAPIDX9_IMESHDX8_H_

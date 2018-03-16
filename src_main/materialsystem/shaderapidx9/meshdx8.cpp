@@ -1977,35 +1977,41 @@ void CBaseMeshDX8::Spew(int nVertexCount, int nIndexCount,
 
   char tempbuf[256];
   char *temp = tempbuf;
-  sprintf(tempbuf, "\nVerts: (Vertex Format %llx)\n", fmt);
+  sprintf_s(tempbuf, "\nVerts: (Vertex Format %llx)\n", fmt);
   Plat_DebugString(tempbuf);
 
   CVertexBufferBase::PrintVertexFormat(fmt);
 
   int numBoneWeights = NumBoneWeights(fmt);
   for (i = 0; i < nVertexCount; ++i) {
-    temp += sprintf(temp, "[%4d] ", i + desc.m_nFirstVertex);
+    temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                      "[%4d] ", i + desc.m_nFirstVertex);
     if (fmt & VERTEX_POSITION) {
       D3DXVECTOR3 &pos = Position(desc, i);
-      temp += sprintf(temp, "P %8.2f %8.2f %8.2f ", pos[0], pos[1], pos[2]);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "P %8.2f %8.2f %8.2f ", pos[0], pos[1], pos[2]);
     }
 
     if (fmt & VERTEX_WRINKLE) {
       float flWrinkle = Wrinkle(desc, i);
-      temp += sprintf(temp, "Wr %8.2f ", flWrinkle);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "Wr %8.2f ", flWrinkle);
     }
 
     if (numBoneWeights > 0) {
-      temp += sprintf(temp, "BW ");
+      temp +=
+          sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp, "BW ");
       float *pWeight = BoneWeight(desc, i);
       for (int j = 0; j < numBoneWeights; ++j) {
-        temp += sprintf(temp, "%1.2f ", pWeight[j]);
+        temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                          "%1.2f ", pWeight[j]);
       }
     }
     if (fmt & VERTEX_BONE_INDEX) {
       unsigned char *pIndex = BoneIndex(desc, i);
-      temp += sprintf(temp, "BI %d %d %d %d ", (int)pIndex[0], (int)pIndex[1],
-                      (int)pIndex[2], (int)pIndex[3]);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "BI %d %d %d %d ", (int)pIndex[0], (int)pIndex[1],
+                        (int)pIndex[2], (int)pIndex[3]);
       Assert(pIndex[0] >= 0 && pIndex[0] < 16);
       Assert(pIndex[1] >= 0 && pIndex[1] < 16);
       Assert(pIndex[2] >= 0 && pIndex[2] < 16);
@@ -2014,52 +2020,58 @@ void CBaseMeshDX8::Spew(int nVertexCount, int nIndexCount,
 
     if (fmt & VERTEX_NORMAL) {
       D3DXVECTOR3 &normal = Normal(desc, i);
-      temp += sprintf(temp, "N %1.2f %1.2f %1.2f ", normal[0], normal[1],
-                      normal[2]);
+      temp +=
+          sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                    "N %1.2f %1.2f %1.2f ", normal[0], normal[1], normal[2]);
     }
 
     if (fmt & VERTEX_COLOR) {
       unsigned char *pColor = Color(desc, i);
-      temp += sprintf(temp, "C b %3d g %3d r %3d a %3d ", pColor[0], pColor[1],
-                      pColor[2], pColor[3]);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "C b %3d g %3d r %3d a %3d ", pColor[0], pColor[1],
+                        pColor[2], pColor[3]);
     }
 
     for (int j = 0; j < VERTEX_MAX_TEXTURE_COORDINATES; ++j) {
       if (TexCoordSize(j, fmt) > 0) {
         D3DXVECTOR2 &texcoord = TexCoord(desc, i, j);
-        temp += sprintf(temp, "T%d %.2f %.2f ", j, texcoord[0], texcoord[1]);
+        temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                          "T%d %.2f %.2f ", j, texcoord[0], texcoord[1]);
       }
     }
 
     if (fmt & VERTEX_TANGENT_S) {
       D3DXVECTOR3 &tangentS = TangentS(desc, i);
-      temp += sprintf(temp, "S %1.2f %1.2f %1.2f ", tangentS[0], tangentS[1],
-                      tangentS[2]);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "S %1.2f %1.2f %1.2f ", tangentS[0], tangentS[1],
+                        tangentS[2]);
     }
 
     if (fmt & VERTEX_TANGENT_T) {
       D3DXVECTOR3 &tangentT = TangentT(desc, i);
-      temp += sprintf(temp, "T %1.2f %1.2f %1.2f ", tangentT[0], tangentT[1],
-                      tangentT[2]);
+      temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp,
+                        "T %1.2f %1.2f %1.2f ", tangentT[0], tangentT[1],
+                        tangentT[2]);
     }
 
-    sprintf(temp, "\n");
+    sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp, "\n");
     Plat_DebugString(tempbuf);
     temp = tempbuf;
   }
 
-  sprintf(tempbuf, "\nIndices: %d\n", nIndexCount);
+  sprintf_s(tempbuf, "\nIndices: %d\n", nIndexCount);
   Plat_DebugString(tempbuf);
   for (i = 0; i < nIndexCount; ++i) {
-    temp += sprintf(temp, "%d ", (int)desc.m_pIndices[i]);
+    temp += sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp, "%d ",
+                      (int)desc.m_pIndices[i]);
     if ((i & 0x0F) == 0x0F) {
-      sprintf(temp, "\n");
+      sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp, "\n");
       Plat_DebugString(tempbuf);
       tempbuf[0] = '\0';
       temp = tempbuf;
     }
   }
-  sprintf(temp, "\n");
+  sprintf_s(temp, tempbuf + SOURCE_ARRAYSIZE(tempbuf) - temp, "\n");
   Plat_DebugString(tempbuf);
 }
 
@@ -4152,9 +4164,9 @@ void CBufferedMeshDX8::LockMesh(int nVertexCount, int nIndexCount,
     char buf[32];
     if (DebugTrace()) {
       if (m_ExtraIndices == 3)
-        sprintf(buf, "Link Index: %d %d\n", m_LastIndex, m_LastIndex);
+        sprintf_s(buf, "Link Index: %d %d\n", m_LastIndex, m_LastIndex);
       else
-        sprintf(buf, "Link Index: %d\n", m_LastIndex);
+        sprintf_s(buf, "Link Index: %d\n", m_LastIndex);
       Plat_DebugString(buf);
     }
     *desc.m_pIndices++ = m_LastIndex;
@@ -4195,7 +4207,7 @@ void CBufferedMeshDX8::UnlockMesh(int nVertexCount, int nIndexCount,
 
       if (DebugTrace()) {
         char buf[32];
-        sprintf(buf, "Link Index: %d\n", *desc.m_pIndices);
+        sprintf_s(buf, "Link Index: %d\n", *desc.m_pIndices);
         Plat_DebugString(buf);
       }
     }

@@ -143,9 +143,7 @@ enum ShaderAPIOcclusionQueryResult_t {
 #define SHADERAPI_INTERFACE_VERSION "ShaderApi029"
 the_interface IShaderAPI : public IShaderDynamicAPI {
  public:
-  //
   // NOTE: These methods have been ported to DX10
-  //
 
   // Viewport methods
   virtual void SetViewports(int nCount, const ShaderViewport_t *pViewports) = 0;
@@ -168,9 +166,7 @@ the_interface IShaderAPI : public IShaderDynamicAPI {
   // Methods related to state objects
   virtual void SetRasterState(const ShaderRasterState_t &state) = 0;
 
-  //
   // NOTE: These methods have not yet been ported to DX10
-  //
 
   // Sets the mode...
   virtual bool SetMode(void *hwnd, int nAdapter,

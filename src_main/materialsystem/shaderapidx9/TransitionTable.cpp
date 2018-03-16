@@ -1,20 +1,19 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "base/include/windows/windows_light.h"
 
 #include "transitiontable.h"
 
+#include "base/include/compiler_specific.h"
 #include "materialsystem/IMaterialSystemHardwareConfig.h"
 #include "recording.h"
 #include "shaderapi/IShaderUtil.h"
 #include "shaderapidx8.h"
 #include "shaderdevicedx8.h"
-#include "base/include/compiler_specific.h"
 #include "tier0/include/vprof.h"
 #include "tier1/convar.h"
 #include "vertexshaderdx8.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -337,10 +336,8 @@ void CTransitionTable::Reset() {
 static inline void SetTextureStageState(int stage,
                                         D3DTEXTURESTAGESTATETYPE state,
                                         DWORD val) {
-#if !defined(_X360)
   Assert(!g_pShaderDeviceDx8->IsDeactivated());
   Dx9Device()->SetTextureStageState(stage, state, val);
-#endif
 }
 
 // Moved to a #define so every instance of this skips unsupported render states
@@ -370,14 +367,14 @@ static inline void SetTextureStageState(int stage,
 
 static bool g_SpewTransitions = false;
 
-#define UPDATE_BOARD_RENDER_STATE(_d3dState, _state)                       \
-  {                                                                        \
-    BoardState().m_##_state = shaderState.m_##_state;                      \
-    if (g_SpewTransitions) {                                               \
-      char buf[128];                                                       \
-      sprintf(buf, "Apply %s : %d\n", #_d3dState, shaderState.m_##_state); \
-      Plat_DebugString(buf);                                               \
-    }                                                                      \
+#define UPDATE_BOARD_RENDER_STATE(_d3dState, _state)                         \
+  {                                                                          \
+    BoardState().m_##_state = shaderState.m_##_state;                        \
+    if (g_SpewTransitions) {                                                 \
+      char buf[128];                                                         \
+      sprintf_s(buf, "Apply %s : %d\n", #_d3dState, shaderState.m_##_state); \
+      Plat_DebugString(buf);                                                 \
+    }                                                                        \
   }
 
 #define UPDATE_BOARD_TEXTURE_STAGE_STATE(_d3dState, _state, _stage) \
@@ -386,22 +383,22 @@ static bool g_SpewTransitions = false;
         shaderState.m_TextureStage[_stage].m_##_state;              \
     if (g_SpewTransitions) {                                        \
       char buf[128];                                                \
-      sprintf(buf, "Apply Tex %s (%d): %d\n", #_d3dState, _stage,   \
-              shaderState.m_TextureStage[_stage].m_##_state);       \
+      sprintf_s(buf, "Apply Tex %s (%d): %d\n", #_d3dState, _stage, \
+                shaderState.m_TextureStage[_stage].m_##_state);     \
       Plat_DebugString(buf);                                        \
     }                                                               \
   }
 
-#define UPDATE_BOARD_SAMPLER_STATE(_d3dState, _state, _stage)            \
-  {                                                                      \
-    BoardState().m_SamplerState[_stage].m_##_state =                     \
-        shaderState.m_SamplerState[_stage].m_##_state;                   \
-    if (g_SpewTransitions) {                                             \
-      char buf[128];                                                     \
-      sprintf(buf, "Apply SamplerSate %s (%d): %d\n", #_d3dState, stage, \
-              shaderState.m_SamplerState[_stage].m_##_state);            \
-      Plat_DebugString(buf);                                             \
-    }                                                                    \
+#define UPDATE_BOARD_SAMPLER_STATE(_d3dState, _state, _stage)              \
+  {                                                                        \
+    BoardState().m_SamplerState[_stage].m_##_state =                       \
+        shaderState.m_SamplerState[_stage].m_##_state;                     \
+    if (g_SpewTransitions) {                                               \
+      char buf[128];                                                       \
+      sprintf_s(buf, "Apply SamplerSate %s (%d): %d\n", #_d3dState, stage, \
+                shaderState.m_SamplerState[_stage].m_##_state);            \
+      Plat_DebugString(buf);                                               \
+    }                                                                      \
   }
 
 #else
@@ -457,26 +454,14 @@ APPLY_TEXTURE_STAGE_STATE_FUNC(D3DTSS_TEXCOORDINDEX, TexCoordIndex)
 
 void ApplyZWriteEnable(const ShadowState_t& shaderState, int arg) {
   SetRenderState(D3DRS_ZWRITEENABLE, shaderState.m_ZWriteEnable);
-#if defined(_X360)
-  // SetRenderState( D3DRS_HIZWRITEENABLE, shaderState.m_ZWriteEnable ?
-  // D3DHIZ_AUTOMATIC : D3DHIZ_DISABLE );
-#endif
-
   UPDATE_BOARD_RENDER_STATE(D3DRS_ZWRITEENABLE, ZWriteEnable);
 }
 
 void ApplySRGBReadEnable(const ShadowState_t& shaderState, int stage) {
-#if (!defined(_X360))
   {
     SetSamplerState(stage, D3DSAMP_SRGBTEXTURE,
                     shaderState.m_SamplerState[stage].m_SRGBReadEnable);
   }
-#else
-  {
-    ShaderAPI()->ApplySRGBReadState(
-        stage, shaderState.m_SamplerState[stage].m_SRGBReadEnable);
-  }
-#endif
 
   UPDATE_BOARD_SAMPLER_STATE(D3DSAMP_SRGBTEXTURE, SRGBReadEnable, stage);
 }
@@ -537,8 +522,8 @@ void CTransitionTable::ApplySRGBWriteEnable(const ShadowState_t& shaderState) {
   BoardState().m_SRGBWriteEnable = shaderState.m_SRGBWriteEnable;
   if (g_SpewTransitions) {
     char buf[128];
-    sprintf(buf, "Apply %s : %d\n", "D3DRS_SRGBWRITEENABLE",
-            shaderState.m_SRGBWriteEnable);
+    sprintf_s(buf, "Apply %s : %d\n", "D3DRS_SRGBWRITEENABLE",
+              shaderState.m_SRGBWriteEnable);
     Plat_DebugString(buf);
   }
 #endif
@@ -563,10 +548,6 @@ void ApplyDepthTest(const ShadowState_t& state, int stage) {
 void CTransitionTable::SetZEnable(D3DZBUFFERTYPE nEnable) {
   if (m_CurrentState.m_ZEnable != nEnable) {
     SetRenderState(D3DRS_ZENABLE, nEnable);
-#if defined(_X360)
-    // SetRenderState( D3DRS_HIZENABLE, nEnable ? D3DHIZ_AUTOMATIC :
-    // D3DHIZ_DISABLE );
-#endif
     m_CurrentState.m_ZEnable = nEnable;
   }
 }
@@ -1069,9 +1050,9 @@ void CTransitionTable::CreateTransitionTableEntry(int to, int from) {
   // You added or removed a state to the enums but not to the function table
   // lists!
   static_assert(sizeof(s_pRenderFunctionTable) ==
-                      sizeof(ApplyStateFunc_t) * RENDER_STATE_COUNT);
+                sizeof(ApplyStateFunc_t) * RENDER_STATE_COUNT);
   static_assert(sizeof(s_pTextureFunctionTable) ==
-                      sizeof(ApplyStateFunc_t) * TEXTURE_STATE_COUNT);
+                sizeof(ApplyStateFunc_t) * TEXTURE_STATE_COUNT);
 
   // If from < 0, that means add *all* transitions into it.
   unsigned short firstElem = m_TransitionOps.Count();
@@ -1215,13 +1196,9 @@ bool CTransitionTable::TestShadowState(const ShadowState_t& state,
   // Just make sure we've got a good snapshot
   RECORD_COMMAND(DX8_VALIDATE_DEVICE, 0);
 
-#if !defined(_X360)
   DWORD numPasses;
   HRESULT hr = Dx9Device()->ValidateDevice(&numPasses);
   bool ok = !FAILED(hr);
-#else
-  bool ok = true;
-#endif
 
   // Now set the board state to match the default state
   ApplyTransition(m_DefaultTransition, m_DefaultStateSnapshot);
@@ -1477,10 +1454,6 @@ void CTransitionTable::ApplyShaderState(
   } else {
     ShaderManager()->SetVertexShader(INVALID_SHADER);
     ShaderManager()->SetPixelShader(INVALID_SHADER);
-#if defined(_X360)
-    // no fixed function support
-    Assert(0);
-#endif
 
 #ifdef DEBUG_BOARD_STATE
     BoardShaderState().m_VertexShader = INVALID_SHADER;
@@ -1551,10 +1524,6 @@ void CTransitionTable::UseDefaultState() {
   m_CurrentState.m_ZFunc = D3DCMP_LESSEQUAL;
   m_CurrentState.m_ZBias = SHADER_POLYOFFSET_DISABLE;
   SetRenderState(D3DRS_ZENABLE, m_CurrentState.m_ZEnable);
-#if defined(_X360)
-  // SetRenderState( D3DRS_HIZENABLE, m_CurrentState.m_ZEnable ?
-  // D3DHIZ_AUTOMATIC : D3DHIZ_DISABLE );
-#endif
   SetRenderState(D3DRS_ZFUNC, m_CurrentState.m_ZFunc);
 
   m_CurrentState.m_AlphaTestEnable = false;
@@ -1639,21 +1608,11 @@ void CTransitionTable::OverrideDepthEnable(bool bEnable, bool bDepthEnable) {
     if (m_CurrentState.m_bOverrideDepthEnable) {
       SetZEnable(D3DZB_TRUE);
       SetRenderState(D3DRS_ZWRITEENABLE, m_CurrentState.m_OverrideZWriteEnable);
-#if defined(_X360)
-      // SetRenderState( D3DRS_HIZWRITEENABLE,
-      // m_CurrentState.m_OverrideZWriteEnable ? D3DHIZ_AUTOMATIC :
-      // D3DHIZ_DISABLE );
-#endif
     } else {
       if (CurrentShadowState()) {
         SetZEnable(CurrentShadowState()->m_ZEnable);
         SetRenderState(D3DRS_ZWRITEENABLE,
                        CurrentShadowState()->m_ZWriteEnable);
-#if defined(_X360)
-        // SetRenderState( D3DRS_HIZWRITEENABLE,
-        // CurrentShadowState()->m_ZWriteEnable ? D3DHIZ_AUTOMATIC :
-        // D3DHIZ_DISABLE );
-#endif
       }
     }
   }
@@ -1681,10 +1640,5 @@ void CTransitionTable::PerformShadowStateOverrides() {
   if (m_CurrentState.m_bOverrideDepthEnable) {
     SetZEnable(D3DZB_TRUE);
     SetRenderState(D3DRS_ZWRITEENABLE, m_CurrentState.m_OverrideZWriteEnable);
-#if defined(_X360)
-    // SetRenderState( D3DRS_HIZWRITEENABLE,
-    // m_CurrentState.m_OverrideZWriteEnable ? D3DHIZ_AUTOMATIC : D3DHIZ_DISABLE
-    // );
-#endif
   }
 }

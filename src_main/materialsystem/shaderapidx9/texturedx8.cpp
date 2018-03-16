@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "TextureDX8.h"
 
@@ -158,21 +158,16 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
   }
 
   if (isCubeMap) {
-#if !defined(_X360)
     hr = Dx9Device()->CreateCubeTexture(
         width, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DCubeTexture, NULL);
-#endif
     pBaseTexture = pD3DCubeTexture;
   } else if (bVolumeTexture) {
-#if !defined(_X360)
     hr = Dx9Device()->CreateVolumeTexture(
         width, height, nDepth, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DVolumeTexture, NULL);
-#endif
     pBaseTexture = pD3DVolumeTexture;
   } else {
-#if !defined(_X360)
     // Override usage and managed params if using special hardware shadow depth
     // map formats...
     if ((d3dFormat == NVFMT_RAWZ) || (d3dFormat == NVFMT_INTZ) ||
@@ -193,7 +188,6 @@ IDirect3DBaseTexture *CreateD3DTexture(int width, int height, int nDepth,
         width, height, numLevels, usage, d3dFormat,
         bManaged ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT, &pD3DTexture, NULL);
 
-#endif
     pBaseTexture = pD3DTexture;
   }
 
@@ -420,7 +414,6 @@ inline int DeterminePowerOfTwo(int val) {
 //-----------------------------------------------------------------------------
 // NOTE: IF YOU CHANGE THIS, CHANGE THE VERSION IN PLAYBACK.CPP!!!!
 // OPTIMIZE??: could lock the texture directly instead of the surface in dx9.
-#if !defined(_X360)
 static void BlitSurfaceBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
                             int srcStride) {
   // Get the level of the texture we want to write into
@@ -478,7 +471,6 @@ static void BlitSurfaceBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
 
   pTextureLevel->Release();
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Blit in bits
@@ -533,15 +525,15 @@ static void BlitVolumeBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
   }
 }
 
-// TODO(d.rattman): How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED?  I used to
-// use CopyRects for this.  UpdateSurface doesn't work because it can't blit to
-// anything besides D3DPOOL_DEFAULT. We use this only in the case where we need
-// to create a < 4x4 miplevel for a compressed texture.  We end up creating a
-// 4x4 system memory texture, and blitting it into the proper miplevel. 6)
-// LockRects should be used for copying between SYSTEMMEM and MANAGED.  For such
-// a small copy, you'd avoid a significant amount of overhead from the old
-// CopyRects code.  Ideally, you should just lock the bottom of MANAGED and
-// generate your sub-4x4 data there.
+// TODO(d.rattman): How do I blit from D3DPOOL_SYSTEMMEM to D3DPOOL_MANAGED?  I
+// used to use CopyRects for this.  UpdateSurface doesn't work because it can't
+// blit to anything besides D3DPOOL_DEFAULT. We use this only in the case where
+// we need to create a < 4x4 miplevel for a compressed texture.  We end up
+// creating a 4x4 system memory texture, and blitting it into the proper
+// miplevel. 6) LockRects should be used for copying between SYSTEMMEM and
+// MANAGED.  For such a small copy, you'd avoid a significant amount of overhead
+// from the old CopyRects code.  Ideally, you should just lock the bottom of
+// MANAGED and generate your sub-4x4 data there.
 
 // NOTE: IF YOU CHANGE THIS, CHANGE THE VERSION IN PLAYBACK.CPP!!!!
 static void BlitTextureBits(TextureLoadInfo_t &info, int xOffset, int yOffset,
@@ -607,11 +599,6 @@ void LoadSubTexture(TextureLoadInfo_t &info, int xOffset, int yOffset,
   Assert(info.m_pSrcData);
   Assert(info.m_pTexture);
 
-#if defined(_X360)
-  // xboxissue - not supporting subrect swizzling
-  Assert(!info.m_bSrcIsTiled);
-#endif
-
 #ifdef _DEBUG
   ImageFormat format = GetImageFormat(info.m_pTexture);
   Assert((format == FindNearestSupportedFormat(format, false, false, false)) &&
@@ -630,7 +617,6 @@ void LoadSubTexture(TextureLoadInfo_t &info, int xOffset, int yOffset,
 #define DONT_CHECK_MEM
 
 int ComputeTextureMemorySize(const GUID &nDeviceGUID, D3DDEVTYPE deviceType) {
-#if !defined(_X360)
   FileHandle_t file =
       g_pFullFileSystem->Open("vidcfg.bin", "rb", "EXECUTABLE_PATH");
   if (file) {
@@ -694,7 +680,4 @@ int ComputeTextureMemorySize(const GUID &nDeviceGUID, D3DDEVTYPE deviceType) {
   }
 
   return totalSize;
-#else
-  return 0;
-#endif
 }
