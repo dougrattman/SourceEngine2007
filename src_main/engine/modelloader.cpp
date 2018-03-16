@@ -1170,10 +1170,10 @@ void Mod_LoadTexinfo(void) {
 }
 
 // code to scan the lightmaps for empty lightstyles
-static void LinearToGamma(unsigned char *pDstRGB, const float *pSrcRGB) {
-  pDstRGB[0] = LinearToScreenGamma(pSrcRGB[0]);
-  pDstRGB[1] = LinearToScreenGamma(pSrcRGB[1]);
-  pDstRGB[2] = LinearToScreenGamma(pSrcRGB[2]);
+static void VectorToGamma(u8 *pDstRGB, const float *pSrcRGB) {
+  pDstRGB[0] = LinearToScreenGamma(pSrcRGB[0] / linearToVectorFactor);
+  pDstRGB[1] = LinearToScreenGamma(pSrcRGB[1] / linearToVectorFactor);
+  pDstRGB[2] = LinearToScreenGamma(pSrcRGB[2] / linearToVectorFactor);
 }
 
 static void CheckSurfaceLighting(SurfaceHandle_t surfID,
@@ -1214,8 +1214,8 @@ static void CheckSurfaceLighting(SurfaceHandle_t surfID,
         maxLen = c.Length();
       }
     }
-    unsigned char color[4];
-    LinearToGamma(color, maxLight.Base());
+    u8 color[4];
+    VectorToGamma(color, maxLight.Base());
     const int minLightVal = 1;
     if (color[0] <= minLightVal && color[1] <= minLightVal &&
         color[2] <= minLightVal) {

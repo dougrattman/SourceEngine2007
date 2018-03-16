@@ -851,6 +851,8 @@ struct ColorRGBExp32 {
   signed char exponent;
 };
 
+constexpr f32 linearToVectorFactor = 255.0f;
+
 void ColorRGBExp32ToVector(const ColorRGBExp32 &in, Vector &out);
 void VectorToColorRGBExp32(const Vector &v, ColorRGBExp32 &c);
 

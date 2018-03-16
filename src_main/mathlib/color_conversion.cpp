@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Color conversion routines.
 
@@ -12,7 +12,6 @@
 #include "tier0/include/basetypes.h"
 #include "tier0/include/dbg.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // Gamma conversion support
@@ -389,9 +388,9 @@ u8 LinearToScreenGamma(f32 f) {
 void ColorRGBExp32ToVector(const ColorRGBExp32 &in, Vector &out) {
   Assert(s_bMathlibInitialized);
   // TODO(d.rattman): Why is there a factor of 255 built into this?
-  out.x = 255.0f * TexLightToLinear(in.r, in.exponent);
-  out.y = 255.0f * TexLightToLinear(in.g, in.exponent);
-  out.z = 255.0f * TexLightToLinear(in.b, in.exponent);
+  out.x = linearToVectorFactor * TexLightToLinear(in.r, in.exponent);
+  out.y = linearToVectorFactor * TexLightToLinear(in.g, in.exponent);
+  out.z = linearToVectorFactor * TexLightToLinear(in.b, in.exponent);
 }
 
 // given a floating point number  f, return an exponent e such that
