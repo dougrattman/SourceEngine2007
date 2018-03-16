@@ -1,8 +1,12 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "host_cmd.h"
 
+#include <cinttypes>
+#include <limits>
 #include "PlayerState.h"
+#include "base/include/windows/product_version.h"
+#include "build/include/build_config.h"
 #include "cdll_engine_int.h"
 #include "cdll_int.h"
 #include "checksum_engine.h"
@@ -43,37 +47,33 @@
 #include "vengineserver_impl.h"
 #include "world.h"
 #include "zone.h"
+
 #ifndef SWDS
 #include "vgui_baseui_interface.h"
 #endif
-#ifdef _WIN32
+
+#ifdef OS_WIN
 #include "sound.h"
 #include "voice.h"
 #endif
-#include "sv_rcon.h"
 
 #include "filesystem/IQueuedLoader.h"
-
 #include "ixboxsystem.h"
+#include "sv_rcon.h"
+
 extern IXboxSystem *g_pXboxSystem;
 
- 
 #include "tier0/include/memdbgon.h"
-
-#define STEAM_PREFIX "STEAM_"
 
 #ifndef SWDS
 bool g_bInEditMode = false;
 bool g_bInCommentaryMode = false;
 #endif
 
-static void host_name_changed_f(IConVar *var, const char *pOldValue,
-                                float flOldValue) {
-  Steam3Server().NotifyOfServerNameChange();
-}
-
 ConVar host_name("hostname", "", 0, "Hostname for server.",
-                 host_name_changed_f);
+                 [](IConVar *var, const ch *pOldValue, f32 flOldValue) {
+                   Steam3Server().NotifyOfServerNameChange();
+                 });
 ConVar host_map("host_map", "", 0, "Current map name.");
 
 ConVar voice_recordtofile("voice_recordtofile", "0", 0,
@@ -83,236 +83,90 @@ ConVar voice_inputfromfile(
     "voice_inputfromfile", "0", 0,
     "Get voice input from 'voice_input.wav' rather than from the microphone.");
 
-char gpszVersionString[32];
-char gpszProductString[32];
-int g_iSteamAppID =
-    215;  // defaults to Source SDK Base (215) if no steam.inf can be found.
+ch gpszVersionString[16], gpszProductString[128];
+// defaults to Source SDK Base (215) if no steam.inf can be found.
+int g_iSteamAppID{215};
 
-// Globals
-int gHostSpawnCount = 0;
+int gHostSpawnCount{0};
 
-// If any quit handlers balk, then aborts quit sequence
+// If any quit handlers balk, then aborts quit sequence.
 bool EngineTool_CheckQuitHandlers();
 
-#if defined(_X360)
-CON_COMMAND(quit_x360, "") {
-  int launchFlags = LF_EXITFROMGAME;
-
-  // allocate the full payload
-  int nPayloadSize = XboxLaunch()->MaxPayloadSize();
-  uint8_t *pPayload = (uint8_t *)stackalloc(nPayloadSize);
-  V_memset(pPayload, 0, sizeof(nPayloadSize));
-
-  // payload is at least the command line
-  // any user data needed must be placed AFTER the command line
-  const char *pCmdLine = CommandLine()->GetCmdLine();
-  int nCmdLineLength = (int)strlen(pCmdLine) + 1;
-  V_memcpy(pPayload, pCmdLine, std::min(nPayloadSize, nCmdLineLength));
-
-  // add any other data here to payload, after the command line
-  // ...
-
-  // storage device may have changed since previous launch
-  XboxLaunch()->SetStorageID(XBX_GetStorageDeviceId());
-
-  // Close the storage devices
-  g_pXboxSystem->CloseContainers();
-  // persist the user id
-  bool bInviteRestart = args.FindArg("invite");
-  DWORD nUserID =
-      (bInviteRestart) ? XBX_GetInvitedUserId() : XBX_GetPrimaryUserId();
-  XboxLaunch()->SetUserID(nUserID);
-
-  if (args.FindArg("restart")) {
-    launchFlags |= LF_GAMERESTART;
-  }
-
-  // If we're relaunching due to invite
-  if (bInviteRestart) {
-    launchFlags |= LF_INVITERESTART;
-    XNKID nSessionID = XBX_GetInviteSessionId();
-    XboxLaunch()->SetInviteSessionID(&nSessionID);
-  }
-
-  bool bLaunch =
-      XboxLaunch()->SetLaunchData(pPayload, nPayloadSize, launchFlags);
-  if (bLaunch) {
-    COM_TimestampedLog("Launching: \"%s\" Flags: 0x%8.8x", pCmdLine,
-                       XboxLaunch()->GetLaunchFlags());
-    g_pMaterialSystem->PersistDisplay();
-    XBX_DisconnectConsoleMonitor();
-    XboxLaunch()->Launch();
-  }
-}
-#endif
-
-/*
-==================
-Host_Quit_f
-==================
-*/
-void Host_Quit_f(void) {
-#if !defined(SWDS)
-  if (!EngineTool_CheckQuitHandlers()) {
-    return;
-  }
-#endif
-
-  HostState_Shutdown();
-}
-
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(_restart, "Shutdown and restart the engine.") {
-  /*
-  // TODO(d.rattman):  How to handle restarts?
-#ifndef SWDS
-  if ( !EngineTool_CheckQuitHandlers() )
-  {
-          return;
-  }
-#endif
-  */
-
   HostState_Restart();
 }
 
 #ifndef SWDS
-//-----------------------------------------------------------------------------
-// A console command to spew out driver information
-//-----------------------------------------------------------------------------
-void Host_LightCrosshair();
+static void Host_LightCrosshair() {
+  if (!host_state.worldmodel) {
+    ConMsg("No world model. Please, start the game.\n");
+    return;
+  }
+
+  Vector end_point, lightmap_color;
+
+  // max_range * sqrt(3)
+  VectorMA(MainViewOrigin(), COORD_EXTENT * 1.74f, MainViewForward(),
+           end_point);
+  R_LightVec(MainViewOrigin(), end_point, true, lightmap_color);
+
+  const u8 r{LinearToTexture(lightmap_color.x)};
+  const u8 g{LinearToTexture(lightmap_color.y)};
+  const u8 b{LinearToTexture(lightmap_color.z)};
+
+  ConMsg("Luxel Value: %" PRIu8 " %" PRIu8 " %" PRIu8 ".\n", r, g, b);
+}
 
 static ConCommand light_crosshair("light_crosshair", Host_LightCrosshair,
                                   "Show texture color at crosshair",
                                   FCVAR_CHEAT);
-
-void Host_LightCrosshair(void) {
-  Vector endPoint;
-  Vector lightmapColor;
-
-  // max_range * sqrt(3)
-  VectorMA(MainViewOrigin(), COORD_EXTENT * 1.74f, MainViewForward(), endPoint);
-
-  R_LightVec(MainViewOrigin(), endPoint, true, lightmapColor);
-  int r = LinearToTexture(lightmapColor.x);
-  int g = LinearToTexture(lightmapColor.y);
-  int b = LinearToTexture(lightmapColor.z);
-
-  ConMsg("Luxel Value: %d %d %d\n", r, g, b);
-}
 #endif
 
-/*
-==================
-Host_Status_PrintClient
+// Print client info to console.
+static void Host_Status_PrintClient(IClient *client, bool should_show_address,
+                                    void (*print)(const ch *fmt, ...)) {
+  INetChannelInfo *client_net_channel_info{client->GetNetChannel()};
 
-Print client info to console
-==================
-*/
-void Host_Status_PrintClient(IClient *client, bool bShowAddress,
-                             void (*print)(const char *fmt, ...)) {
-  INetChannelInfo *nci = client->GetNetChannel();
-
-  const char *state = "challenging";
-
+  const ch *client_state = "challenging";
   if (client->IsActive())
-    state = "active";
+    client_state = "active";
   else if (client->IsSpawned())
-    state = "spawning";
+    client_state = "spawning";
   else if (client->IsConnected())
-    state = "connecting";
+    client_state = "connecting";
 
-  if (nci != NULL) {
-    print("# %2i \"%s\" %s %s %i %i %s", client->GetUserID(),
+  if (client_net_channel_info != nullptr) {
+    print("# %2i \"%s\" %s %s %.2f %.2f %s", client->GetUserID(),
           client->GetClientName(), client->GetNetworkIDString(),
-          COM_FormatSeconds(nci->GetTimeConnected()),
-          (int)(1000.0f * nci->GetAvgLatency(FLOW_OUTGOING)),
-          (int)(100.0f * nci->GetAvgLoss(FLOW_INCOMING)), state);
+          COM_FormatSeconds(client_net_channel_info->GetTimeConnected()),
+          1000.0f * client_net_channel_info->GetAvgLatency(FLOW_OUTGOING),
+          100.0f * client_net_channel_info->GetAvgLoss(FLOW_INCOMING),
+          client_state);
 
-    if (bShowAddress) {
-      print(" %s", nci->GetAddress());
+    if (should_show_address) {
+      print(" %s", client_net_channel_info->GetAddress());
     }
   } else {
     print("#%2i \"%s\" %s %s", client->GetUserID(), client->GetClientName(),
-          client->GetNetworkIDString(), state);
+          client->GetNetworkIDString(), client_state);
   }
 
-  print("\n");
+  print(".\n");
 }
 
-void Host_Client_Printf(const char *fmt, ...) {
-  va_list argptr;
-  char string[1024];
+static void Host_Client_Printf(const ch *fmt, ...) {
+  va_list arg_ptr;
+  ch message[1024];
 
-  va_start(argptr, fmt);
-  Q_vsnprintf(string, sizeof(string), fmt, argptr);
-  va_end(argptr);
+  va_start(arg_ptr, fmt);
+  Q_vsnprintf(message, SOURCE_ARRAYSIZE(message), fmt, arg_ptr);
+  va_end(arg_ptr);
 
-  host_client->ClientPrintf("%s", string);
+  host_client->ClientPrintf("%s", message);
 }
 
-//-----------------------------------------------------------------------------
-// Host_Status_f
-//-----------------------------------------------------------------------------
 CON_COMMAND(status, "Display map and connection status.") {
-  IClient *client;
-  int j;
   void (*print)(const char *fmt, ...);
-
-#if defined(_X360)
-  Vector org;
-  QAngle ang;
-  const char *pName;
-
-  if (cl.IsActive()) {
-    pName = cl.m_szLevelNameShort;
-    org = MainViewOrigin();
-    VectorAngles(MainViewForward(), ang);
-    IClientEntity *localPlayer =
-        entitylist->GetClientEntity(cl.m_nPlayerSlot + 1);
-    if (localPlayer) {
-      org = localPlayer->GetAbsOrigin();
-    }
-  } else {
-    pName = "";
-    org.Init();
-    ang.Init();
-  }
-
-  // send to vxconsole
-  xMapInfo_t mapInfo;
-  mapInfo.position[0] = org[0];
-  mapInfo.position[1] = org[1];
-  mapInfo.position[2] = org[2];
-  mapInfo.angle[0] = ang[0];
-  mapInfo.angle[1] = ang[1];
-  mapInfo.angle[2] = ang[2];
-  mapInfo.build = build_number();
-  mapInfo.skill = skill.GetInt();
-
-  // generate the qualified path where .sav files are expected to be written
-  char savePath[SOURCE_MAX_PATH];
-  V_snprintf(savePath, sizeof(savePath), "%s", saverestore->GetSaveDir());
-  V_StripTrailingSlash(savePath);
-  g_pFileSystem->RelativePathToFullPath(savePath, "MOD", mapInfo.savePath,
-                                        sizeof(mapInfo.savePath));
-  V_FixSlashes(mapInfo.savePath);
-
-  if (pName[0]) {
-    // generate the qualified path from where the map was loaded
-    char mapPath[SOURCE_MAX_PATH];
-    Q_snprintf(mapPath, sizeof(mapPath), "maps/%s.360.bsp", pName);
-    g_pFileSystem->GetLocalPath(mapPath, mapInfo.mapPath,
-                                sizeof(mapInfo.mapPath));
-    Q_FixSlashes(mapInfo.mapPath);
-  } else {
-    mapInfo.mapPath[0] = '\0';
-  }
-
-  XBX_rMapInfo(&mapInfo);
-#endif
 
   if (cmd_source == src_command) {
     if (!sv.IsActive()) {
@@ -324,76 +178,65 @@ CON_COMMAND(status, "Display map and connection status.") {
     print = Host_Client_Printf;
   }
 
-  // ============================================================
   // Server status information.
   print("hostname: %s\n", host_name.GetString());
 
-  const char *pchSecureReasonString = "";
-  bool bGSSecure = Steam3Server().BSecure();
-  if (!bGSSecure && Steam3Server().BWantsSecure()) {
-    if (Steam3Server().BLoggedOn()) {
-      pchSecureReasonString = "(secure mode enabled, connected to Steam3)";
-    } else {
-      pchSecureReasonString = "(secure mode enabled, disconnected from Steam3)";
-    }
+  const char *secure_reason{""};
+  const bool is_secure = Steam3Server().BSecure();
+  if (!is_secure && Steam3Server().BWantsSecure()) {
+    secure_reason = Steam3Server().BLoggedOn()
+                        ? "(secure mode enabled, connected to Steam3)"
+                        : "(secure mode enabled, disconnected from Steam3)";
   }
 
-  print("version : %s/%d %d %s %s\n", gpszVersionString, PROTOCOL_VERSION,
-        build_number(), bGSSecure ? "secure" : "insecure",
-        pchSecureReasonString);
+  print("version : %s/%d %d %s %s.\n", gpszVersionString, PROTOCOL_VERSION,
+        build_number(), is_secure ? "secure" : "insecure", secure_reason);
 
   if (NET_IsMultiplayer()) {
-    print("udp/ip  :  %s:%i\n", net_local_adr.ToString(true), sv.GetUDPPort());
+    print("udp/ip  :  %s:%i.\n", net_local_adr.ToString(true), sv.GetUDPPort());
   }
 
-  print("map     : %s at: %d x, %d y, %d z\n", sv.GetMapName(),
-        (int)MainViewOrigin()[0], (int)MainViewOrigin()[1],
-        (int)MainViewOrigin()[2]);
+  print("map     : %s at: %.2f x, %.2f y, %.2f z.\n", sv.GetMapName(),
+        MainViewOrigin()[0], MainViewOrigin()[1], MainViewOrigin()[2]);
 
   if (hltv && hltv->IsActive()) {
-    print("sourcetv:  port %i, delay %.1fs\n", hltv->GetUDPPort(),
+    print("sourcetv:  port %i, delay %.1fs.\n", hltv->GetUDPPort(),
           hltv->GetDirector()->GetDelay());
   }
 
   int players = sv.GetNumClients();
 
-  print("players : %i (%i max)\n\n", players, sv.GetMaxClients());
-  // ============================================================
+  print("players : %i (%i max).\n\n", players, sv.GetMaxClients());
 
   // Early exit for this server.
   if (args.ArgC() == 2) {
     if (!Q_stricmp(args[1], "short")) {
-      for (j = 0; j < sv.GetClientCount(); j++) {
-        client = sv.GetClient(j);
+      for (int j = 0; j < sv.GetClientCount(); j++) {
+        const IClient *client{sv.GetClient(j)};
 
         if (!client->IsActive()) continue;
 
-        print("#%i - %s\n", j + 1, client->GetClientName());
+        print("#%i - %s.\n", j + 1, client->GetClientName());
       }
       return;
     }
   }
 
-  // the header for the status rows
+  // The header for the status rows.
   print("# userid name uniqueid connected ping loss state");
-  if (cmd_source == src_command) {
-    print(" adr");
-  }
-  print("\n");
+  if (cmd_source == src_command) print(" adr");
+  print(".\n");
 
-  for (j = 0; j < sv.GetClientCount(); j++) {
-    client = sv.GetClient(j);
+  for (int j = 0; j < sv.GetClientCount(); j++) {
+    IClient *client{sv.GetClient(j)};
 
-    if (!client->IsConnected())
-      continue;  // not connected yet, maybe challenging
+    // Not connected yet, maybe challenging.
+    if (!client->IsConnected()) continue;
 
-    Host_Status_PrintClient(client, (cmd_source == src_command), print);
+    Host_Status_PrintClient(client, cmd_source == src_command, print);
   }
 }
 
-//-----------------------------------------------------------------------------
-// Host_Ping_f
-//-----------------------------------------------------------------------------
 CON_COMMAND(ping, "Display ping to server.") {
   if (cmd_source == src_command) {
     Cmd_ForwardToServer(args);
@@ -403,31 +246,30 @@ CON_COMMAND(ping, "Display ping to server.") {
   host_client->ClientPrintf("Client ping times:\n");
 
   for (int i = 0; i < sv.GetClientCount(); i++) {
-    IClient *client = sv.GetClient(i);
+    IClient *client{sv.GetClient(i)};
 
     if (!client->IsConnected() || client->IsFakeClient()) continue;
 
     host_client->ClientPrintf(
-        "%4.0f ms : %s\n",
+        "%4.0f ms : %s.\n",
         1000.0f * client->GetNetChannel()->GetAvgLatency(FLOW_OUTGOING),
         client->GetClientName());
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : editmode -
-//-----------------------------------------------------------------------------
 extern void GetPlatformMapPath(const char *pMapPath, char *pPlatformMapPath,
                                int maxLength);
 
-bool CL_HL2Demo_MapCheck(const char *name) {
+bool CL_HL2Demo_MapCheck(const char *map_name) {
   if (CL_IsHL2Demo() && !sv.IsDedicated()) {
-    if (!Q_stricmp(name, "d1_trainstation_01") ||
-        !Q_stricmp(name, "d1_trainstation_02") ||
-        !Q_stricmp(name, "d1_town_01") || !Q_stricmp(name, "d1_town_01a") ||
-        !Q_stricmp(name, "d1_town_02") || !Q_stricmp(name, "d1_town_03") ||
-        !Q_stricmp(name, "background01") || !Q_stricmp(name, "background03")) {
+    if (!Q_stricmp(map_name, "d1_trainstation_01") ||
+        !Q_stricmp(map_name, "d1_trainstation_02") ||
+        !Q_stricmp(map_name, "d1_town_01") ||
+        !Q_stricmp(map_name, "d1_town_01a") ||
+        !Q_stricmp(map_name, "d1_town_02") ||
+        !Q_stricmp(map_name, "d1_town_03") ||
+        !Q_stricmp(map_name, "background01") ||
+        !Q_stricmp(map_name, "background03")) {
       return true;
     }
     return false;
@@ -436,15 +278,16 @@ bool CL_HL2Demo_MapCheck(const char *name) {
   return true;
 }
 
-bool CL_PortalDemo_MapCheck(const char *name) {
+bool CL_PortalDemo_MapCheck(const char *map_name) {
   if (CL_IsPortalDemo() && !sv.IsDedicated()) {
-    if (!Q_stricmp(name, "testchmb_a_00") ||
-        !Q_stricmp(name, "testchmb_a_01") ||
-        !Q_stricmp(name, "testchmb_a_02") ||
-        !Q_stricmp(name, "testchmb_a_03") ||
-        !Q_stricmp(name, "testchmb_a_04") ||
-        !Q_stricmp(name, "testchmb_a_05") ||
-        !Q_stricmp(name, "testchmb_a_06") || !Q_stricmp(name, "background1")) {
+    if (!Q_stricmp(map_name, "testchmb_a_00") ||
+        !Q_stricmp(map_name, "testchmb_a_01") ||
+        !Q_stricmp(map_name, "testchmb_a_02") ||
+        !Q_stricmp(map_name, "testchmb_a_03") ||
+        !Q_stricmp(map_name, "testchmb_a_04") ||
+        !Q_stricmp(map_name, "testchmb_a_05") ||
+        !Q_stricmp(map_name, "testchmb_a_06") ||
+        !Q_stricmp(map_name, "background1")) {
       return true;
     }
     return false;
@@ -453,11 +296,8 @@ bool CL_PortalDemo_MapCheck(const char *name) {
   return true;
 }
 
-void Host_Map_Helper(const CCommand &args, bool bEditmode, bool bBackground,
-                     bool bCommentary) {
-  int i;
-  char name[MAX_QPATH];
-
+static void Host_Map_Helper(const CCommand &args, bool is_edit_mode,
+                            bool is_background, bool has_commentary) {
   if (cmd_source != src_command) return;
 
   if (args.ArgC() < 2) {
@@ -465,14 +305,15 @@ void Host_Map_Helper(const CCommand &args, bool bEditmode, bool bBackground,
     return;
   }
 
-  GetPlatformMapPath(args[1], name, sizeof(name));
+  char map_path[SOURCE_MAX_PATH];
+  GetPlatformMapPath(args[1], map_path, SOURCE_ARRAYSIZE(map_path));
 
-  COM_TimestampedLog("*** Map Load: %s", name);
+  COM_TimestampedLog("*** Map Load: %s", map_path);
 
   // If I was in edit mode reload config file
   // to overwrite WC edit key bindings
 #if !defined(SWDS)
-  if (!bEditmode) {
+  if (!is_edit_mode) {
     if (g_bInEditMode) {
       // Re-read config from disk
       Host_ReadConfiguration();
@@ -482,94 +323,74 @@ void Host_Map_Helper(const CCommand &args, bool bEditmode, bool bBackground,
     g_bInEditMode = true;
   }
 
-  g_bInCommentaryMode = bCommentary;
+  g_bInCommentaryMode = has_commentary;
 #endif
 
   // If there is a .bsp on the end, strip it off!
-  i = Q_strlen(name);
-  if (i > 4 && !Q_strcasecmp(name + i - 4, ".bsp")) {
-    name[i - 4] = 0;
+  usize i = Q_strlen(map_path);
+  if (i > 4 && !Q_strcasecmp(map_path + i - 4, ".bsp")) {
+    map_path[i - 4] = 0;
   }
 
-  if (!g_pVEngineServer->IsMapValid(name)) {
-    Warning("map load failed: %s not found or invalid\n", name);
+  if (!g_pVEngineServer->IsMapValid(map_path)) {
+    Warning("map load failed: %s not found or invalid\n", map_path);
     return;
   }
 
-  if (!CL_HL2Demo_MapCheck(name)) {
-    Warning("map load failed: %s not found or invalid\n", name);
+  if (!CL_HL2Demo_MapCheck(map_path)) {
+    Warning("map load failed: %s not found or invalid\n", map_path);
     return;
   }
 
-  if (!CL_PortalDemo_MapCheck(name)) {
-    Warning("map load failed: %s not found or invalid\n", name);
+  if (!CL_PortalDemo_MapCheck(map_path)) {
+    Warning("map load failed: %s not found or invalid\n", map_path);
     return;
   }
 
   // Stop demo loop
   cl.demonum = -1;
 
-  Host_Disconnect(false);  // stop old game
-
-  HostState_NewGame(name, false, bBackground);
+  // Stop old game
+  Host_Disconnect(false);
+  HostState_NewGame(map_path, false, is_background);
 
   if (args.ArgC() == 10) {
     if (Q_stricmp(args[2], "setpos") == 0 &&
         Q_stricmp(args[6], "setang") == 0) {
-      Vector newpos;
-      newpos.x = atof(args[3]);
-      newpos.y = atof(args[4]);
-      newpos.z = atof(args[5]);
-
-      QAngle newangle;
-      newangle.x = atof(args[7]);
-      newangle.y = atof(args[8]);
-      newangle.z = atof(args[9]);
+      Vector newpos{strtof(args[3], nullptr), strtof(args[4], nullptr),
+                    strtof(args[5], nullptr)};
+      QAngle newangle{strtof(args[7], nullptr), strtof(args[8], nullptr),
+                      strtof(args[9], nullptr)};
 
       HostState_SetSpawnPoint(newpos, newangle);
     }
   }
 }
 
-/*
-======================
-Host_Map_f
-
-handle a
-map <servername>
-command from the console.  Active clients are kicked off.
-======================
-*/
+// map <servername>
+// command from the console.  Active clients are kicked off.
 void Host_Map_f(const CCommand &args) {
   Host_Map_Helper(args, false, false, false);
 }
 
-//-----------------------------------------------------------------------------
 // handle a map_edit <servername> command from the console.
 // Active clients are kicked off.
 // UNDONE: protect this from use if not in dev. mode
-//-----------------------------------------------------------------------------
 #ifndef SWDS
 CON_COMMAND(map_edit, "") { Host_Map_Helper(args, true, false, false); }
 #endif
 
-//-----------------------------------------------------------------------------
 // Purpose: Runs a map as the background
-//-----------------------------------------------------------------------------
 void Host_Map_Background_f(const CCommand &args) {
   Host_Map_Helper(args, false, true, false);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Runs a map in commentary mode
-//-----------------------------------------------------------------------------
 void Host_Map_Commentary_f(const CCommand &args) {
   Host_Map_Helper(args, false, false, true);
 }
 
-//-----------------------------------------------------------------------------
-// Restarts the current server for a dead player
-//-----------------------------------------------------------------------------
+// Restarts the current server for a dead player.
 CON_COMMAND(restart,
             "Restart the game on the same level (add setpos to jump to current "
             "view position on restart).") {
@@ -584,7 +405,8 @@ CON_COMMAND(restart,
 
   if (cmd_source != src_command) return;
 
-  bool bRememberLocation = (args.ArgC() == 2 && !Q_stricmp(args[1], "setpos"));
+  const bool should_remember_location =
+      args.ArgC() == 2 && !Q_stricmp(args[1], "setpos");
 
   Host_Disconnect(false);  // stop old game
 
@@ -598,12 +420,10 @@ CON_COMMAND(restart,
     return;
   }
 
-  HostState_NewGame(sv.GetMapName(), bRememberLocation, false);
+  HostState_NewGame(sv.GetMapName(), should_remember_location, false);
 }
 
-//-----------------------------------------------------------------------------
 // Restarts the current server for a dead player
-//-----------------------------------------------------------------------------
 CON_COMMAND(reload,
             "Reload the most recent saved game (add setpos to jump to current "
             "view position on reload).") {
@@ -660,10 +480,7 @@ CON_COMMAND(reload,
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Goes to a new map, taking all clients along
-// Output : void Host_Changelevel_f
-//-----------------------------------------------------------------------------
 void Host_Changelevel_f(const CCommand &args) {
   if (args.ArgC() < 2) {
     ConMsg("changelevel <levelname> : continue game on a new level\n");
@@ -693,9 +510,7 @@ void Host_Changelevel_f(const CCommand &args) {
   HostState_ChangeLevelMP(args[1], args[2]);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Changing levels within a unit, uses save/restore
-//-----------------------------------------------------------------------------
 void Host_Changelevel2_f(const CCommand &args) {
   if (args.ArgC() < 2) {
     ConMsg(
@@ -757,95 +572,77 @@ void Host_Changelevel2_f(const CCommand &args) {
   HostState_ChangeLevelSP(args[1], args[2]);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Shut down client connection and any server
-//-----------------------------------------------------------------------------
-void Host_Disconnect(bool bShowMainMenu) {
+void Host_Disconnect(bool should_show_main_menu) {
 #ifndef SWDS
   if (!sv.IsDedicated()) {
-    cl.Disconnect(bShowMainMenu);
+    cl.Disconnect(should_show_main_menu);
   }
 #endif
+
   HostState_GameShutdown();
 }
 
-//-----------------------------------------------------------------------------
 // Kill the client and any local server.
-//-----------------------------------------------------------------------------
 CON_COMMAND(disconnect, "Disconnect game from server.") {
   cl.demonum = -1;
   Host_Disconnect(true);
 }
 
-//-----------------------------------------------------------------------------
-// Output : void Host_Version_f
-//-----------------------------------------------------------------------------
 #define VERSION_KEY "PatchVersion="
 #define PRODUCT_KEY "ProductName="
 #define APPID_KEY "AppID="
-#define PRODUCT_STRING "valve"
-#define VERSION_STRING "1.0.1.0"
 
-void Host_Version(void) {
-  char szFileName[MAX_OSPATH];
-  char *buffer;
-  int bufsize = 0;
-  FileHandle_t fp = NULL;
-  const char *pbuf = NULL;
-  int gotKeys = 0;
+void Host_Version() {
+  Q_strcpy(gpszVersionString, HALFLIFE_VER_PRODUCTVERSION_INFO_STR);
+  Q_strcpy(gpszProductString, HALFLIFE_VER_COMPANYNAME_STR);
 
-  Q_strcpy(gpszVersionString, VERSION_STRING);
-  Q_strcpy(gpszProductString, PRODUCT_STRING);
+  const ch *steam_inf_file_name{"steam.inf"};
 
-  sprintf(szFileName, "steam.inf");
-
-  // Mod's steam.inf is first option, the the steam.inf in the game GCF.
-  fp = g_pFileSystem->Open(szFileName, "r");
+  // Mod's steam.inf is first option, the steam.inf in the game GCF.
+  FileHandle_t fp = g_pFileSystem->Open(steam_inf_file_name, "r");
   if (fp) {
-    bufsize = g_pFileSystem->Size(fp);
-    buffer = (char *)_alloca(bufsize + 1);
-    Assert(buffer);
+    const u32 steam_inf_file_size{g_pFileSystem->Size(fp)};
+    auto *steam_inf_data = (char *)_alloca(steam_inf_file_size + 1);
+    const i32 bytes_read{
+        g_pFileSystem->Read(steam_inf_data, steam_inf_file_size, fp)};
 
-    int iBytesRead = g_pFileSystem->Read(buffer, bufsize, fp);
     g_pFileSystem->Close(fp);
 
-    buffer[iBytesRead] = '\0';
+    steam_inf_data[bytes_read] = '\0';
 
     // Read
-    pbuf = buffer;
+    const char *steam_inf_ptr = steam_inf_data;
+    int gotKeys = 0;
 
-    while (1) {
-      pbuf = COM_Parse(pbuf);
-      if (!pbuf) break;
+    while (true) {
+      steam_inf_ptr = COM_Parse(steam_inf_ptr);
+      if (!steam_inf_ptr) break;
 
-      if (Q_strlen(com_token) <= 0) break;
-
-      if (gotKeys >= 3) {
-        break;
-      }
+      if (Q_strlen(com_token) <= 0 || gotKeys >= 3) break;
 
       if (!Q_strnicmp(com_token, VERSION_KEY, Q_strlen(VERSION_KEY))) {
         Q_strncpy(gpszVersionString, com_token + Q_strlen(VERSION_KEY),
-                  sizeof(gpszVersionString) - 1);
-        gpszVersionString[sizeof(gpszVersionString) - 1] = '\0';
-        gotKeys++;
+                  SOURCE_ARRAYSIZE(gpszVersionString) - 1);
+        gpszVersionString[SOURCE_ARRAYSIZE(gpszVersionString) - 1] = '\0';
+        ++gotKeys;
         continue;
       }
 
       if (!Q_strnicmp(com_token, PRODUCT_KEY, Q_strlen(PRODUCT_KEY))) {
         Q_strncpy(gpszProductString, com_token + Q_strlen(PRODUCT_KEY),
-                  sizeof(gpszProductString) - 1);
-        gpszProductString[sizeof(gpszProductString) - 1] = '\0';
-        gotKeys++;
+                  SOURCE_ARRAYSIZE(gpszProductString) - 1);
+        gpszProductString[SOURCE_ARRAYSIZE(gpszProductString) - 1] = '\0';
+        ++gotKeys;
         continue;
       }
 
       if (!Q_strnicmp(com_token, APPID_KEY, Q_strlen(APPID_KEY))) {
-        char szAppID[32];
-        Q_strncpy(szAppID, com_token + Q_strlen(APPID_KEY),
-                  sizeof(szAppID) - 1);
-        g_iSteamAppID = atoi(szAppID);
-        gotKeys++;
+        char app_id[32];
+        Q_strncpy(app_id, com_token + Q_strlen(APPID_KEY),
+                  SOURCE_ARRAYSIZE(app_id) - 1);
+        g_iSteamAppID = atoi(app_id);
+        ++gotKeys;
         continue;
       }
     }
@@ -858,9 +655,6 @@ CON_COMMAND(version, "Print version info string.") {
   ConMsg("Exe build: " __TIME__ " " __DATE__ " (%i)\n", build_number());
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(pause, "Toggle the server pause state.") {
 #ifndef SWDS
   if (!sv.IsDedicated()) {
@@ -883,9 +677,6 @@ CON_COMMAND(pause, "Toggle the server pause state.") {
                      sv.IsPaused() ? "paused" : "unpaused");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(setpause, "Set the pause state of the server.") {
 #ifndef SWDS
   if (!cl.m_szLevelName[0]) return;
@@ -899,9 +690,6 @@ CON_COMMAND(setpause, "Set the pause state of the server.") {
   sv.SetPaused(true);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(unpause, "Unpause the game.") {
 #ifndef SWDS
   if (!cl.m_szLevelName[0]) return;
@@ -915,156 +703,132 @@ CON_COMMAND(unpause, "Unpause the game.") {
   sv.SetPaused(false);
 }
 
-//-----------------------------------------------------------------------------
 // Kicks a user off of the server using their userid or uniqueid
-//-----------------------------------------------------------------------------
 CON_COMMAND(kickid, "Kick a player by userid or uniqueid, with a message.") {
-  const char *who = "Console";
-  const char *pszArg1 = NULL, *pszMessage = NULL;
-  IClient *client = NULL;
-  int iSearchIndex = -1;
-  char szSearchString[128];
-  int argsStartNum = 1;
-  bool bSteamID = false;
-  int i = 0;
-
   if (args.ArgC() <= 1) {
-    ConMsg("Usage:  kickid < userid | uniqueid > { message }\n");
+    ConMsg("Usage:  kickid <userid | uniqueid> {message}\n");
     return;
   }
 
   // get the first argument
-  pszArg1 = args[1];
+  const char *arg1 = args[1];
+  const char *kick_message = nullptr;
+  const char *kSteamClientPrefix{"STEAM_"};
+  char network_id[128];
 
-  // if the first letter is a charcter then
-  // we're searching for a uniqueid ( e.g. STEAM_ )
-  if (*pszArg1 < '0' || *pszArg1 > '9') {
-    // SteamID (need to reassemble it)
-    if (!Q_strnicmp(pszArg1, STEAM_PREFIX, strlen(STEAM_PREFIX)) &&
+  int user_id = -1;
+  int args_start_count = 1;
+  bool is_steam_id = false;
+
+  // if the first letter is a character then we're searching for a uniqueid
+  // (e.g. STEAM_).
+  if (*arg1 < '0' || *arg1 > '9') {
+    if (!Q_strnicmp(arg1, kSteamClientPrefix, strlen(kSteamClientPrefix)) &&
         Q_strstr(args[2], ":")) {
-      Q_snprintf(szSearchString, sizeof(szSearchString), "%s:%s:%s", pszArg1,
+      // SteamID (need to reassemble it)
+      Q_snprintf(network_id, SOURCE_ARRAYSIZE(network_id), "%s:%s:%s", arg1,
                  args[3], args[5]);
-      argsStartNum = 5;
-      bSteamID = true;
+      args_start_count = 5;
+      is_steam_id = true;
+    } else {
+      // some other ID (e.g. "UNKNOWN", "STEAM_ID_PENDING", "STEAM_ID_LAN")
+      // NOTE: assumed to be one argument
+      Q_snprintf(network_id, SOURCE_ARRAYSIZE(network_id), "%s", arg1);
     }
-    // some other ID (e.g. "UNKNOWN", "STEAM_ID_PENDING", "STEAM_ID_LAN")
-    // NOTE: assumed to be one argument
-    else {
-      Q_snprintf(szSearchString, sizeof(szSearchString), "%s", pszArg1);
-    }
-  }
-  // this is a userid
-  else {
-    iSearchIndex = Q_atoi(pszArg1);
+  } else {
+    // this is a userid
+    user_id = Q_atoi(arg1);
   }
 
   // check for a message
-  if (args.ArgC() > argsStartNum) {
-    int j;
-    int dataLen = 0;
+  if (args.ArgC() > args_start_count) {
+    usize length = 0;
+    kick_message = args.ArgS();
 
-    pszMessage = args.ArgS();
-    for (j = 1; j <= argsStartNum; j++) {
-      dataLen += Q_strlen(args[j]) + 1;  // +1 for the space between args
+    for (int j = 1; j <= args_start_count; j++) {
+      length += Q_strlen(args[j]) + 1;  // +1 for the space between args
     }
 
-    if (bSteamID) {
-      dataLen -= 5;  // SteamIDs don't have spaces between the args[) values
-    }
+    // SteamIDs don't have spaces between the args values
+    if (is_steam_id) length -= 5;
 
-    if (dataLen > Q_strlen(pszMessage))  // saftey check
-    {
-      pszMessage = NULL;
+    // safety check
+    if (length > Q_strlen(kick_message)) {
+      kick_message = nullptr;
     } else {
-      pszMessage += dataLen;
+      kick_message += length;
     }
   }
 
-  // find this client
-  for (i = 0; i < sv.GetClientCount(); i++) {
-    client = sv.GetClient(i);
+  IClient *client = nullptr;
+  int client_idx;
 
-    if (!client->IsConnected()) {
-      continue;
-    }
+  // find this client
+  for (client_idx = 0; client_idx < sv.GetClientCount(); client_idx++) {
+    client = sv.GetClient(client_idx);
+
+    if (!client->IsConnected()) continue;
 
     // searching by UserID
-    if (iSearchIndex != -1) {
-      if (client->GetUserID() == iSearchIndex) {
-        // found!
-        break;
-      }
-    }
-    // searching by UniqueID
-    else {
-      if (Q_stricmp(client->GetNetworkIDString(), szSearchString) == 0) {
-        // found!
-        break;
-      }
+    if (user_id != -1) {
+      // found!
+      if (client->GetUserID() == user_id) break;
+    } else {
+      // searching by UniqueID
+      if (Q_stricmp(client->GetNetworkIDString(), network_id) == 0) break;
     }
   }
 
   // now kick them
-  if (i < sv.GetClientCount()) {
-    if (cmd_source != src_command) {
-      who = host_client->m_Name;
-    }
+  if (client_idx < sv.GetClientCount()) {
+    const char *who_kick =
+        cmd_source != src_command ? host_client->m_Name : "Console";
 
     // can't kick yourself!
-    if (host_client == client && !sv.IsDedicated()) {
-      return;
-    }
+    if (host_client == client && !sv.IsDedicated()) return;
 
-    if (iSearchIndex != -1 || !client->IsFakeClient()) {
-      if (pszMessage) {
-        client->Disconnect("Kicked by %s : %s", who, pszMessage);
+    if (user_id != -1 || !client->IsFakeClient()) {
+      if (kick_message) {
+        client->Disconnect("Kicked by %s : %s.", who_kick, kick_message);
       } else {
-        client->Disconnect("Kicked by %s", who);
+        client->Disconnect("Kicked by %s.", who_kick);
       }
     }
   } else {
-    if (iSearchIndex != -1) {
-      ConMsg("userid \"%d\" not found\n", iSearchIndex);
+    if (user_id != -1) {
+      ConMsg("userid \"%d\" not found.\n", user_id);
     } else {
-      ConMsg("uniqueid \"%s\" not found\n", szSearchString);
+      ConMsg("uniqueid \"%s\" not found.\n", network_id);
     }
   }
 }
 
-/*
-==================
-Host_Kick_f
-
-Kicks a user off of the server using their name
-==================
-*/
+// Kicks a user off of the server using their name
 CON_COMMAND(kick, "Kick a player by name.") {
-  const char *who = "Console";
-  char *pszName = NULL;
-  IClient *client = NULL;
-  int i = 0;
-  char name[64];
-
   if (args.ArgC() <= 1) {
-    ConMsg("Usage:  kick < name >\n");
+    ConMsg("Usage:  kick <name>\n");
     return;
   }
 
+  char name[64];
   // copy the name to a local buffer
   memset(name, 0, sizeof(name));
-  Q_strncpy(name, args.ArgS(), sizeof(name));
-  pszName = name;
+  Q_strncpy(name, args.ArgS(), SOURCE_ARRAYSIZE(name));
+  char *client_name = name;
 
   // safety check
-  if (pszName && pszName[0] != 0) {
+  if (client_name && client_name[0] != '\0') {
     // HACK-HACK
     // check for the name surrounded by quotes (comes in this way from rcon)
-    int len = Q_strlen(pszName) - 1;  // (minus one since we start at 0)
-    if (pszName[0] == '"' && pszName[len] == '"') {
+    usize len = Q_strlen(client_name) - 1;  // (minus one since we start at 0)
+    if (client_name[0] == '"' && client_name[len] == '"') {
       // get rid of the quotes at the beginning and end
-      pszName[len] = 0;
-      pszName++;
+      client_name[len] = '\0';
+      client_name++;
     }
+
+    IClient *client = nullptr;
+    int i;
 
     for (i = 0; i < sv.GetClientCount(); i++) {
       client = sv.GetClient(i);
@@ -1072,146 +836,119 @@ CON_COMMAND(kick, "Kick a player by name.") {
       if (!client->IsConnected()) continue;
 
       // found!
-      if (Q_strcasecmp(client->GetClientName(), pszName) == 0) break;
+      if (Q_strcasecmp(client->GetClientName(), client_name) == 0) break;
     }
+
+    const char *who_kick = "Console";
 
     // now kick them
     if (i < sv.GetClientCount()) {
-      if (cmd_source != src_command) {
-        who = host_client->m_Name;
-      }
+      if (cmd_source != src_command) who_kick = host_client->m_Name;
 
       // can't kick yourself!
       if (host_client == client && !sv.IsDedicated()) return;
 
-      client->Disconnect("Kicked by %s", who);
+      client->Disconnect("Kicked by %s.", who_kick);
     } else {
-      ConMsg("name \"%s\" not found\n", pszName);
+      ConMsg("name \"%s\" not found.\n", client_name);
     }
   }
 }
 
-/*
-===============================================================================
-
-DEBUGGING TOOLS
-
-===============================================================================
-*/
-
-//-----------------------------------------------------------------------------
 // Dump memory stats
-//-----------------------------------------------------------------------------
 CON_COMMAND(memory, "Print memory stats.") {
-  ConMsg("Heap Used:\n");
-  int nTotal = g_pMemAlloc->GetSize(0);
-  if (nTotal == -1) {
-    ConMsg("Corrupted!\n");
+  ConMsg("Heap used:\n");
+
+  const usize total_memory_bytes{g_pMemAlloc->GetSize(nullptr)};
+  if (total_memory_bytes == std::numeric_limits<usize>::max()) {
+    ConMsg("<heap corruption detected>.\n");
   } else {
-    ConMsg("%5.2f MB (%d bytes)\n", nTotal / (1024.0f * 1024.0f), nTotal);
+    ConMsg("%6.2f MB (%zu bytes).\n", total_memory_bytes / (1024.0f * 1024.0f),
+           total_memory_bytes);
   }
 
 #ifdef VPROF_ENABLED
-  ConMsg("\nVideo Memory Used:\n");
-  CVProfile *pProf = &g_VProfCurrentProfile;
-  int prefixLen = strlen("TexGroup_Global_");
-  float total = 0.0f;
-  for (int i = 0; i < pProf->GetNumCounters(); i++) {
-    if (pProf->GetCounterGroup(i) == COUNTER_GROUP_TEXTURE_GLOBAL) {
-      float value = pProf->GetCounterValue(i) * (1.0f / (1024.0f * 1024.0f));
+  ConMsg("\nVideo memory used:\n");
+
+  const CVProfile *profiler{&g_VProfCurrentProfile};
+  f32 total{0.0f};
+
+  for (int i = 0; i < profiler->GetNumCounters(); i++) {
+    if (profiler->GetCounterGroup(i) == COUNTER_GROUP_TEXTURE_GLOBAL) {
+      const f32 value = profiler->GetCounterValue(i) / (1024.0f * 1024.0f);
       total += value;
-      const char *pName = pProf->GetCounterName(i);
-      if (!Q_strnicmp(pName, "TexGroup_Global_", prefixLen)) {
-        pName += prefixLen;
+
+      const char *texture_mem_counter_name{profiler->GetCounterName(i)};
+      if (!Q_strnicmp(texture_mem_counter_name, "TexGroup_Global_",
+                      SOURCE_ARRAYSIZE("TexGroup_Global_") - 1)) {
+        texture_mem_counter_name += SOURCE_ARRAYSIZE("TexGroup_Global_") - 1;
       }
-      ConMsg("%5.2f MB: %s\n", value, pName);
+
+      ConMsg("%6.2f MB: %s.\n", value, texture_mem_counter_name);
     }
   }
+
   ConMsg("------------------\n");
-  ConMsg("%5.2f MB: total\n", total);
+  ConMsg("%6.2f MB: total.\n", total);
 #endif
 
-  ConMsg("\nHunk Memory Used:\n");
+  ConMsg("\nHunk memory used:\n");
   Hunk_Print();
 }
 
-/*
-===============================================================================
-
-DEMO LOOP CONTROL
-
-===============================================================================
-*/
-
 #ifndef SWDS
-
 // MOTODO move all demo commands to demoplayer
 
-//-----------------------------------------------------------------------------
 // Purpose: Gets number of valid demo names
-// Output : int
-//-----------------------------------------------------------------------------
 int Host_GetNumDemos() {
   int c = 0;
-#ifndef SWDS
+
   for (int i = 0; i < MAX_DEMOS; ++i) {
-    const char *demoname = cl.demos[i];
-    if (!demoname[0]) break;
+    const char *demo_name = cl.demos[i];
+    if (!demo_name[0]) break;
 
     ++c;
   }
-#endif
+
   return c;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 void Host_PrintDemoList() {
-  int count = Host_GetNumDemos();
-
+  int demos_count = Host_GetNumDemos();
   int next = cl.demonum;
-  if (next >= count || next < 0) {
-    next = 0;
-  }
 
-#ifndef SWDS
+  if (next >= demos_count || next < 0) next = 0;
+
   for (int i = 0; i < MAX_DEMOS; ++i) {
-    const char *demoname = cl.demos[i];
-    if (!demoname[0]) break;
+    const char *demo_name = cl.demos[i];
+    if (!demo_name[0]) break;
 
-    bool isnextdemo = next == i ? true : false;
+    bool is_next_demo = next == i;
 
-    DevMsg("%3s % 2i : %20s\n", isnextdemo ? "-->" : "   ", i, cl.demos[i]);
+    DevMsg("%3s % 2i : %20s.\n", is_next_demo ? "-->" : "   ", i, cl.demos[i]);
   }
-#endif
 
-  if (!count) {
+  if (!demos_count) {
     DevMsg(
-        "No demos in list, use startdemos <demoname> <demoname2> to specify\n");
+        "No demos in list, use startdemos <demoname> <demoname2> to "
+        "specify.\n");
   }
 }
 
-#ifndef SWDS
-//-----------------------------------------------------------------------------
-//
 // Con commands related to demos, not available on dedicated servers
-//
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 // Purpose: Specify list of demos for the "demos" command
-//-----------------------------------------------------------------------------
 CON_COMMAND(startdemos, "Play demos in demo sequence.") {
   int c = args.ArgC() - 1;
   if (c > MAX_DEMOS) {
-    Msg("Max %i demos in demoloop\n", MAX_DEMOS);
+    Msg("Max %i demos in demoloop.\n", MAX_DEMOS);
     c = MAX_DEMOS;
   }
-  Msg("%i demo(s) in loop\n", c);
+
+  Msg("%i demo(s) in loop.\n", c);
 
   for (int i = 1; i < c + 1; i++) {
-    Q_strncpy(cl.demos[i - 1], args[i], sizeof(cl.demos[0]));
+    Q_strncpy(cl.demos[i - 1], args[i], SOURCE_ARRAYSIZE(cl.demos[0]));
   }
 
   cl.demonum = 0;
@@ -1225,22 +962,20 @@ CON_COMMAND(startdemos, "Play demos in demo sequence.") {
   }
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Return to looping demos, optional resume demo index
-//-----------------------------------------------------------------------------
 CON_COMMAND(demos, "Demo demo file sequence.") {
-  int oldn = cl.demonum;
-  cl.demonum = -1;
+  const int old_demo_num = std::exchange(cl.demonum, -1);
   Host_Disconnect(false);
-  cl.demonum = oldn;
+  cl.demonum = old_demo_num;
 
   if (cl.demonum == -1) cl.demonum = 0;
 
   if (args.ArgC() == 2) {
-    int numdemos = Host_GetNumDemos();
-    if (numdemos >= 1) {
-      cl.demonum = std::clamp(Q_atoi(args[1]), 0, numdemos - 1);
-      DevMsg("Jumping to %s\n", cl.demos[cl.demonum]);
+    int demos_count = Host_GetNumDemos();
+
+    if (demos_count >= 1) {
+      cl.demonum = std::clamp(Q_atoi(args[1]), 0, demos_count - 1);
+      DevMsg("Jumping to %s.\n", cl.demos[cl.demonum]);
     }
   }
 
@@ -1249,82 +984,63 @@ CON_COMMAND(demos, "Demo demo file sequence.") {
   CL_NextDemo();
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Stop current demo
-//-----------------------------------------------------------------------------
 CON_COMMAND_F(stopdemo, "Stop playing back a demo.", FCVAR_DONTRECORD) {
   if (!demoplayer->IsPlayingBack()) return;
 
   Host_Disconnect(true);
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Skip to next demo
-//-----------------------------------------------------------------------------
-CON_COMMAND(nextdemo, "Play next demo in sequence.") {
+CON_COMMAND(nSextdemo, "Play next demo in sequence.") {
   if (args.ArgC() == 2) {
     int numdemos = Host_GetNumDemos();
+
     if (numdemos >= 1) {
       cl.demonum = std::clamp(Q_atoi(args[1]), 0, numdemos - 1);
-      DevMsg("Jumping to %s\n", cl.demos[cl.demonum]);
+      DevMsg("Jumping to %s.\n", cl.demos[cl.demonum]);
     }
   }
+
   Host_EndGame(false, "Moving to next demo...");
 }
 
-//-----------------------------------------------------------------------------
 // Purpose: Print out the current demo play order
-//-----------------------------------------------------------------------------
 CON_COMMAND(demolist, "Print demo sequence list.") { Host_PrintDemoList(); }
 
-//-----------------------------------------------------------------------------
-// Purpose: Host_Soundfade_f
-//-----------------------------------------------------------------------------
 CON_COMMAND_F(soundfade, "Fade client volume.", FCVAR_SERVER_CAN_EXECUTE) {
-  float percent;
-  float inTime, holdTime, outTime;
-
   if (args.ArgC() != 3 && args.ArgC() != 5) {
     Msg("soundfade <percent> <hold> [<out> <int>]\n");
     return;
   }
 
-  percent = std::clamp(atof(args[1]), 0.0, 100.0);
+  f32 percent = std::clamp(strtof(args[1], nullptr), 0.0f, 100.0f);
+  f32 holdTime = std::max(0.0f, strtof(args[2], nullptr));
+  f32 inTime = 0.0f, outTime = 0.0f;
 
-  holdTime = std::max(0.0, atof(args[2]));
-
-  inTime = 0.0f;
-  outTime = 0.0f;
   if (args.ArgC() == 5) {
-    outTime = std::max(0.0, atof(args[3]));
-    inTime = std::max(0.0, atof(args[4]));
+    outTime = std::max(0.0f, strtof(args[3], nullptr));
+    inTime = std::max(0.0f, strtof(args[4], nullptr));
   }
 
   S_SoundFade(percent, holdTime, inTime, outTime);
 }
-
 #endif  // !SWDS
 
-#endif
-
-//-----------------------------------------------------------------------------
-// Shutdown the server
-//-----------------------------------------------------------------------------
 CON_COMMAND(killserver, "Shutdown the server.") {
   Host_Disconnect(true);
 
   if (!sv.IsDedicated()) {
-    // close network sockets
+    // Close network sockets.
     NET_SetMutiplayer(false);
   }
 }
 
-#if !defined(SWDS)
+#ifndef SWDS
 void Host_VoiceRecordStart_f(void) {
   if (cl.IsActive()) {
-    const char *pUncompressedFile = NULL;
-    const char *pDecompressedFile = NULL;
-    const char *pInputFile = NULL;
+    const char *pUncompressedFile = nullptr, *pDecompressedFile = nullptr,
+               *pInputFile = nullptr;
 
     if (voice_recordtofile.GetInt()) {
       pUncompressedFile = "voice_micdata.wav";
@@ -1334,6 +1050,7 @@ void Host_VoiceRecordStart_f(void) {
     if (voice_inputfromfile.GetInt()) {
       pInputFile = "voice_input.wav";
     }
+
 #if !defined(NO_VOICE)
     if (Voice_RecordStart(pUncompressedFile, pDecompressedFile, pInputFile)) {
     }
@@ -1353,16 +1070,9 @@ void Host_VoiceRecordStop_f(void) {
 }
 #endif
 
-//-----------------------------------------------------------------------------
 // Purpose: Wrapper for modelloader->Print() function call
-//-----------------------------------------------------------------------------
 CON_COMMAND(listmodels, "List loaded models.") { modelloader->Print(); }
 
-/*
-==================
-Host_IncrementCVar
-==================
-*/
 CON_COMMAND_F(incrementvar, "Increment specified convar value.",
               FCVAR_DONTRECORD) {
   if (args.ArgC() != 5) {
@@ -1372,81 +1082,75 @@ CON_COMMAND_F(incrementvar, "Increment specified convar value.",
 
   const char *varName = args[1];
   if (!varName) {
-    ConDMsg("Host_IncrementCVar_f without a varname\n");
+    ConDMsg("incrementvar without a varname.\n");
     return;
   }
 
-  ConVar *var = (ConVar *)g_pCVar->FindVar(varName);
-  if (!var) {
-    ConDMsg("cvar \"%s\" not found\n", varName);
+  const ConVar *con_var = (ConVar *)g_pCVar->FindVar(varName);
+  if (!con_var) {
+    ConDMsg("cvar \"%s\" not found.\n", varName);
     return;
   }
 
-  float currentValue = var->GetFloat();
-  float startValue = atof(args[2]);
-  float endValue = atof(args[3]);
-  float delta = atof(args[4]);
-  float newValue = currentValue + delta;
-  if (newValue > endValue) {
-    newValue = startValue;
-  } else if (newValue < startValue) {
-    newValue = endValue;
-  }
+  const f32 current_val{con_var->GetFloat()};
+  const f32 min_val{strtof(args[2], nullptr)};
+  const f32 max_val{strtof(args[3], nullptr)};
+  const f32 delta{strtof(args[4], nullptr)};
+  const f32 new_val{std::clamp(current_val + delta, min_val, max_val)};
 
   // Conver incrementvar command to direct sets to avoid any problems with state
   // in a demo loop.
-  Cbuf_AddText(va("%s %f", varName, newValue));
+  Cbuf_AddText(va("%s %f", varName, new_val));
 
-  ConDMsg("%s = %f\n", var->GetName(), newValue);
+  ConDMsg("%s = %f.\n", con_var->GetName(), new_val);
 }
 
-//-----------------------------------------------------------------------------
-// Host_MultiplyCVar_f
-//-----------------------------------------------------------------------------
 CON_COMMAND_F(multvar, "Multiply specified convar value.", FCVAR_DONTRECORD) {
-  if ((args.ArgC() != 5)) {
-    Warning("Usage: multvar varName minValue maxValue factor\n");
+  if (args.ArgC() != 5) {
+    Warning("Usage: multvar varName minValue maxValue factor.\n");
     return;
   }
 
-  const char *varName = args[1];
-  if (!varName) {
-    ConDMsg("multvar without a varname\n");
+  const char *con_var_name{args[1]};
+  if (!con_var_name) {
+    ConDMsg("multvar without a varname.\n");
     return;
   }
 
-  ConVar *var = (ConVar *)g_pCVar->FindVar(varName);
-  if (!var) {
-    ConDMsg("cvar \"%s\" not found\n", varName);
+  const ConVar *con_var = g_pCVar->FindVar(con_var_name);
+  if (!con_var) {
+    ConDMsg("cvar \"%s\" not found.\n", con_var_name);
     return;
   }
 
-  float currentValue = var->GetFloat();
-  float startValue = atof(args[2]);
-  float endValue = atof(args[3]);
-  float factor = atof(args[4]);
-  float newValue = currentValue * factor;
-  if (newValue > endValue) {
-    newValue = endValue;
-  } else if (newValue < startValue) {
-    newValue = startValue;
-  }
+  const f32 current_val{con_var->GetFloat()};
+  const f32 min_val{strtof(args[2], nullptr)};
+  const f32 max_val{strtof(args[3], nullptr)};
+  const f32 factor{strtof(args[4], nullptr)};
+  const f32 new_val{std::clamp(current_val * factor, min_val, max_val)};
 
   // Conver incrementvar command to direct sets to avoid any problems with state
   // in a demo loop.
-  Cbuf_AddText(va("%s %f", varName, newValue));
+  Cbuf_AddText(va("%s %f", con_var_name, new_val));
 
-  ConDMsg("%s = %f\n", var->GetName(), newValue);
+  ConDMsg("%s = %f.\n", con_var->GetName(), new_val);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CON_COMMAND(dumpstringtables, "Print string tables to console.") {
   SV_PrintStringTables();
 #ifndef SWDS
   CL_PrintStringTables();
 #endif
+}
+
+void Host_Quit_f() {
+#if !defined(SWDS)
+  if (!EngineTool_CheckQuitHandlers()) {
+    return;
+  }
+#endif
+
+  HostState_Shutdown();
 }
 
 // Register shared commands
@@ -1462,14 +1166,12 @@ static ConCommand endvoicerecord("-voicerecord", Host_VoiceRecordStop_f);
 #endif
 
 #ifdef _DEBUG
-//-----------------------------------------------------------------------------
 // Purpose: Force a 0 pointer crash. useful for testing minidumps
-//-----------------------------------------------------------------------------
-void Host_Crash_f() {
-  char *p = 0;
-  *p = 0;
-}
-static ConCommand crash("crash", Host_Crash_f,
+static ConCommand crash("crash",
+                        []() {
+                          char *p = 0;
+                          *p = '\0';
+                        },
                         "Cause the engine to crash (Debug!!)");
 #endif
 
@@ -1492,28 +1194,19 @@ CON_COMMAND_F(flush_locked, "Flush unlocked and locked cache memory.",
 
 CON_COMMAND(cache_print,
             "cache_print [section]\nPrint out contents of cache memory.") {
-  const char *pszSection = NULL;
-  if (args.ArgC() == 2) {
-    pszSection = args[1];
-  }
-  g_pDataCache->OutputReport(DC_DETAIL_REPORT, pszSection);
+  const char *section{args.ArgC() == 2 ? args[1] : nullptr};
+  g_pDataCache->OutputReport(DC_DETAIL_REPORT, section);
 }
 
 CON_COMMAND(cache_print_lru,
             "cache_print_lru [section]\nPrint out contents of cache memory.") {
-  const char *pszSection = NULL;
-  if (args.ArgC() == 2) {
-    pszSection = args[1];
-  }
-  g_pDataCache->OutputReport(DC_DETAIL_REPORT_LRU, pszSection);
+  const char *section{args.ArgC() == 2 ? args[1] : nullptr};
+  g_pDataCache->OutputReport(DC_DETAIL_REPORT_LRU, section);
 }
 
 CON_COMMAND(cache_print_summary,
             "cache_print_summary [section]\nPrint out a summary contents of "
             "cache memory.") {
-  const char *pszSection = NULL;
-  if (args.ArgC() == 2) {
-    pszSection = args[1];
-  }
-  g_pDataCache->OutputReport(DC_SUMMARY_REPORT, pszSection);
+  const char *section{args.ArgC() == 2 ? args[1] : nullptr};
+  g_pDataCache->OutputReport(DC_SUMMARY_REPORT, section);
 }
