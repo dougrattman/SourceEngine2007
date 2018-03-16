@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -18,7 +18,6 @@
 #include "tier1/checksum_crc.h"
 #include "tier1/strtools.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define CC_INSET 12
@@ -2309,57 +2308,57 @@ void OnCaptionLanguageChanged(IConVar *pConVar, const char *pOldString,
   if (!g_pVGuiLocalize) return;
 
   ConVarRef var(pConVar);
+  const char *con_var{var.GetString()};
 
-  char fn[512];
-  Q_snprintf(fn, sizeof(fn), "resource/closecaption_%s.txt", var.GetString());
+  char file_name[SOURCE_MAX_PATH];
+  Q_snprintf(file_name, SOURCE_ARRAYSIZE(file_name),
+             "resource/closecaption_%s.txt", con_var);
 
   // Re-adding the file, even if it's "english" will overwrite the tokens as
-  // needed
-  if (!IsX360()) {
-    g_pVGuiLocalize->AddFile("resource/closecaption_%language%.txt", "GAME",
-                             true);
-  }
+  // needed.
+  g_pVGuiLocalize->AddFile("resource/closecaption_%language%.txt", "GAME",
+                           true);
 
-  char uilanguage[64];
-  engine->GetUILanguage(uilanguage, sizeof(uilanguage));
+  char ui_language[64];
+  engine->GetUILanguage(ui_language, SOURCE_ARRAYSIZE(ui_language));
 
   CHudCloseCaption *hudCloseCaption = GET_HUDELEMENT(CHudCloseCaption);
 
   // If it's not the default, load the language on top of the user's default
   // language
-  if (Q_strlen(var.GetString()) > 0 && Q_stricmp(var.GetString(), uilanguage)) {
-    if (!IsX360()) {
-      if (g_pFullFileSystem->FileExists(fn)) {
-        g_pVGuiLocalize->AddFile(fn, "GAME", true);
-      } else {
-        char fallback[512];
-        Q_snprintf(fallback, sizeof(fallback), "resource/closecaption_%s.txt",
-                   uilanguage);
+  if (Q_strlen(con_var) > 0 && Q_stricmp(con_var, ui_language)) {
+    if (g_pFullFileSystem->FileExists(file_name)) {
+      g_pVGuiLocalize->AddFile(file_name, "GAME", true);
+    } else {
+      char fallback_file_name[512];
+      Q_snprintf(fallback_file_name, SOURCE_ARRAYSIZE(fallback_file_name),
+                 "resource/closecaption_%s.txt", ui_language);
 
-        Msg("%s not found\n", fn);
-        Msg("%s will be used\n", fallback);
-      }
+      Msg("%s not found\n", file_name);
+      Msg("%s will be used\n", fallback_file_name);
     }
 
     if (hudCloseCaption) {
-      char dbfile[512];
-      Q_snprintf(dbfile, sizeof(dbfile), "resource/closecaption_%s.dat",
-                 var.GetString());
-      hudCloseCaption->InitCaptionDictionary(dbfile);
+      char close_file_name[SOURCE_MAX_PATH];
+      Q_snprintf(close_file_name, SOURCE_ARRAYSIZE(close_file_name),
+                 "resource/closecaption_%s.dat", con_var);
+      hudCloseCaption->InitCaptionDictionary(close_file_name);
     }
   } else {
     if (hudCloseCaption) {
-      char dbfile[512];
-      Q_snprintf(dbfile, sizeof(dbfile), "resource/closecaption_%s.dat",
-                 uilanguage);
-      hudCloseCaption->InitCaptionDictionary(dbfile);
+      char close_file_name[SOURCE_MAX_PATH];
+      Q_snprintf(close_file_name, SOURCE_ARRAYSIZE(close_file_name),
+                 "resource/closecaption_%s.dat", ui_language);
+      hudCloseCaption->InitCaptionDictionary(close_file_name);
     }
   }
-  DevMsg("cc_lang = %s\n", var.GetString());
+
+  DevMsg("cc_lang = %s\n",
+         Q_strlen(con_var) > 0 ? con_var : "<empty, used game UI language>");
 }
 
 ConVar cc_lang("cc_lang", "", FCVAR_ARCHIVE,
-               "Current close caption language (emtpy = use game UI language)",
+               "Current close caption language (empty = use game UI language)",
                OnCaptionLanguageChanged);
 
 CON_COMMAND(cc_findsound,
@@ -2448,17 +2447,15 @@ void CHudCloseCaption::FindSound(char const *pchANSI) {
           }
         }
 
-        if (IsPC()) {
-          for (int r = g_pVGuiLocalize->GetFirstStringIndex();
-               r != vgui::INVALID_STRING_INDEX;
-               r = g_pVGuiLocalize->GetNextStringIndex(r)) {
-            const char *strName = g_pVGuiLocalize->GetNameByIndex(r);
+        for (int r = g_pVGuiLocalize->GetFirstStringIndex();
+             r != vgui::INVALID_STRING_INDEX;
+             r = g_pVGuiLocalize->GetNextStringIndex(r)) {
+          const char *strName = g_pVGuiLocalize->GetNameByIndex(r);
 
-            search.SetHash(strName);
+          search.SetHash(strName);
 
-            if (search.hash == lu.hash) {
-              Msg("    '%s' localization matches\n", strName);
-            }
+          if (search.hash == lu.hash) {
+            Msg("    '%s' localization matches\n", strName);
           }
         }
       }
