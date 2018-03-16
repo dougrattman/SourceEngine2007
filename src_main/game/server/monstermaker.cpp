@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: An entity that creates NPCs in the game. There are two types of NPC
 // makers -- one which creates NPCs using a template NPC, and one which creates
@@ -18,7 +18,6 @@
 #include "ndebugoverlay.h"
 #include "props.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static void DispatchActivate(CBaseEntity *pEntity) {
@@ -545,43 +544,41 @@ void CTemplateNPCMaker::Precache() {
   }
 }
 
-#define MAX_DESTINATION_ENTS 100
 CNPCSpawnDestination *CTemplateNPCMaker::FindSpawnDestination() {
-  CNPCSpawnDestination *pDestinations[MAX_DESTINATION_ENTS];
-  CBaseEntity *pEnt = NULL;
-  CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
-  int count = 0;
+  constexpr size_t kMaxNpcSpawnDestinations{100};
+  CNPCSpawnDestination *spawn_destinations[kMaxNpcSpawnDestinations];
 
-  if (!pPlayer) {
-    return NULL;
-  }
+  CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
+  if (!pPlayer) return nullptr;
 
   // Collect all the qualifiying destination ents
-  pEnt = gEntList.FindEntityByName(NULL, m_iszDestinationGroup);
-
-  if (!pEnt) {
+  CBaseEntity *base_entity =
+      gEntList.FindEntityByName(nullptr, m_iszDestinationGroup);
+  if (!base_entity) {
     DevWarning(
         "Template NPC Spawner (%s) doesn't have any spawn destinations!\n",
         GetDebugName());
-    return NULL;
+    return nullptr;
   }
 
-  while (pEnt) {
-    CNPCSpawnDestination *pDestination;
+  size_t count{0};
 
-    pDestination = dynamic_cast<CNPCSpawnDestination *>(pEnt);
+  while (base_entity && count < SOURCE_ARRAYSIZE(spawn_destinations)) {
+    CNPCSpawnDestination *spawn_destination =
+        dynamic_cast<CNPCSpawnDestination *>(base_entity);
 
-    if (pDestination && pDestination->IsAvailable()) {
+    if (spawn_destination && spawn_destination->IsAvailable()) {
       bool fValid = true;
-      Vector vecTest = pDestination->GetAbsOrigin();
+      Vector vecTest = spawn_destination->GetAbsOrigin();
 
       if (m_CriterionVisibility != TS_YN_DONT_CARE) {
         // Right now View Cone check is omitted intentionally.
         Vector vecTopOfHull = NAI_Hull::Maxs(HULL_HUMAN);
         vecTopOfHull.x = 0;
         vecTopOfHull.y = 0;
-        bool fVisible = (pPlayer->FVisible(vecTest) ||
-                         pPlayer->FVisible(vecTest + vecTopOfHull));
+
+        const bool fVisible = pPlayer->FVisible(vecTest) ||
+                              pPlayer->FVisible(vecTest + vecTopOfHull);
 
         if (m_CriterionVisibility == TS_YN_YES) {
           if (!fVisible) fValid = false;
@@ -598,15 +595,22 @@ CNPCSpawnDestination *CTemplateNPCMaker::FindSpawnDestination() {
       }
 
       if (fValid) {
-        pDestinations[count] = pDestination;
-        count++;
+        spawn_destinations[count++] = spawn_destination;
       }
     }
 
-    pEnt = gEntList.FindEntityByName(pEnt, m_iszDestinationGroup);
+    base_entity = gEntList.FindEntityByName(base_entity, m_iszDestinationGroup);
   }
 
-  if (count < 1) return NULL;
+  if (count < 1) return nullptr;
+
+  if (count >= SOURCE_ARRAYSIZE(spawn_destinations)) {
+    DevWarning(
+        "Template NPC Spawner (%s) have too many spawn destinations (%zu), "
+        "only (%zu) allowed!\n",
+        GetDebugName(), count, SOURCE_ARRAYSIZE(spawn_destinations));
+    return nullptr;
+  }
 
   // Now find the nearest/farthest based on distance criterion
   if (m_CriterionDistance == TS_DIST_DONT_CARE) {
@@ -614,53 +618,51 @@ CNPCSpawnDestination *CTemplateNPCMaker::FindSpawnDestination() {
     // location where a hull can fit. Don't try too many times due to
     // performance concerns.
     for (int i = 0; i < 5; i++) {
-      CNPCSpawnDestination *pRandomDest = pDestinations[rand() % count];
+      CNPCSpawnDestination *pRandomDest = spawn_destinations[rand() % count];
 
       if (HumanHullFits(pRandomDest->GetAbsOrigin())) {
         return pRandomDest;
       }
     }
 
-    return NULL;
-  } else {
-    if (m_CriterionDistance == TS_DIST_NEAREST) {
-      float flNearest = FLT_MAX;
-      CNPCSpawnDestination *pNearest = NULL;
+    return nullptr;
+  }
 
-      for (int i = 0; i < count; i++) {
-        Vector vecTest = pDestinations[i]->GetAbsOrigin();
-        float flDist = (vecTest - pPlayer->GetAbsOrigin()).Length();
+  if (m_CriterionDistance == TS_DIST_NEAREST) {
+    float flNearest = FLT_MAX;
+    CNPCSpawnDestination *pNearest = nullptr;
 
-        if (m_iMinSpawnDistance != 0 && m_iMinSpawnDistance > flDist) continue;
+    for (size_t i = 0; i < count; i++) {
+      Vector vecTest = spawn_destinations[i]->GetAbsOrigin();
+      float flDist = (vecTest - pPlayer->GetAbsOrigin()).Length();
 
-        if (flDist < flNearest && HumanHullFits(vecTest)) {
-          flNearest = flDist;
-          pNearest = pDestinations[i];
-        }
+      if (m_iMinSpawnDistance != 0 && m_iMinSpawnDistance > flDist) continue;
+
+      if (flDist < flNearest && HumanHullFits(vecTest)) {
+        flNearest = flDist;
+        pNearest = spawn_destinations[i];
       }
+    }
 
-      return pNearest;
-    } else {
-      float flFarthest = 0;
-      CNPCSpawnDestination *pFarthest = NULL;
+    return pNearest;
+  }
 
-      for (int i = 0; i < count; i++) {
-        Vector vecTest = pDestinations[i]->GetAbsOrigin();
-        float flDist = (vecTest - pPlayer->GetAbsOrigin()).Length();
+  float flFarthest = 0;
+  CNPCSpawnDestination *pFarthest = nullptr;
 
-        if (m_iMinSpawnDistance != 0 && m_iMinSpawnDistance > flDist) continue;
+  for (size_t i = 0; i < count; i++) {
+    Vector vecTest = spawn_destinations[i]->GetAbsOrigin();
+    float flDist = (vecTest - pPlayer->GetAbsOrigin()).Length();
 
-        if (flDist > flFarthest && HumanHullFits(vecTest)) {
-          flFarthest = flDist;
-          pFarthest = pDestinations[i];
-        }
-      }
+    if (m_iMinSpawnDistance != 0 && m_iMinSpawnDistance > flDist) continue;
 
-      return pFarthest;
+    if (flDist > flFarthest && HumanHullFits(vecTest)) {
+      flFarthest = flDist;
+      pFarthest = spawn_destinations[i];
     }
   }
 
-  return NULL;
+  return pFarthest;
 }
 
 //-----------------------------------------------------------------------------
@@ -897,7 +899,7 @@ void CTemplateNPCMaker::MakeNPCInRadius(void) {
 //-----------------------------------------------------------------------------
 // Purpose: Find a place to spawn an npc within my radius.
 //			Right now this function tries to place them on the
-//perimeter of radius.
+// perimeter of radius.
 // Output : false if we couldn't find a spot!
 //-----------------------------------------------------------------------------
 bool CTemplateNPCMaker::PlaceNPCInRadius(CAI_BaseNPC *pNPC) {
