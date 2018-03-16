@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef SOURCE_TIER1_KEYVALUES_H_
 #define SOURCE_TIER1_KEYVALUES_H_
@@ -17,8 +17,7 @@
 class IBaseFileSystem;
 class CUtlBuffer;
 class Color;
-typedef void *FileHandle_t;
-
+using FileHandle_t = void *;
 
 // Purpose: Simple recursive data access class
 // Used in vgui for message parameters and resource files
@@ -335,7 +334,6 @@ struct KeyValuesUnpackStructure {
   size_t m_nFieldOffset;                          // use offsetof to set
   size_t m_nFieldSize;  // for strings or other variable length
 };
-
 
 // inline methods
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "tier0/include/fasttimer.h"
 
@@ -413,7 +413,7 @@ float host_frametime_stddeviation = 0.0f;
 float realtime;  // without any filtering or bounding
 
 int host_framecount;
-static int host_hunklevel;
+static uintptr_t host_hunklevel;
 
 CGameClient *host_client;  // current client
 
@@ -1399,18 +1399,18 @@ void Host_CheckDumpMemoryStats(void) {
   Q_memset(&state, 0, sizeof(state));
   _CrtMemCheckpoint(&state);
 
-  unsigned int size = 0;
-
-  for (int use = 0; use < _MAX_BLOCKS; use++) {
+  usize size = 0;
+  for (usize use = 0; use < _MAX_BLOCKS; use++) {
     size += state.lSizes[use];
   }
+
   Msg("MEMORY:  Run-time Heap\n------------------------------------\n");
 
-  Msg("\tHigh water %s\n", Q_pretifymem(state.lHighWaterCount, 4));
-  Msg("\tCurrent mem %s\n", Q_pretifymem(size, 4));
+  Msg("\tHigh water %s.\n", Q_pretifymem(state.lHighWaterCount, 4));
+  Msg("\tCurrent mem %s.\n", Q_pretifymem(size, 4));
   Msg("------------------------------------\n");
-  int hunk = Hunk_MallocSize();
-  Msg("\tAllocated outside hunk:  %s\n", Q_pretifymem(size - hunk));
+  usize hunk = Hunk_MallocSize();
+  Msg("\tAllocated outside hunk:  %s.\n", Q_pretifymem(size - hunk));
 #endif
 }
 
@@ -1866,7 +1866,8 @@ void _Host_RunFrame(float time) {
 
     shouldrender = !sv.IsDedicated();
 
-    // TODO(d.rattman):  Could track remainder as fractional ticks instead of msec
+    // TODO(d.rattman):  Could track remainder as fractional ticks instead of
+    // msec
     prevremainder = host_remainder;
     if (prevremainder < 0) prevremainder = 0;
 

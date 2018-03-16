@@ -12,140 +12,92 @@
 
 #include "zone.h"
 
+#include "base/include/base_types.h"
 #include "datacache/idatacache.h"
 #include "host.h"
 #include "sys_dll.h"
-#include "tier0/include/basetypes.h"
 #include "tier0/include/icommandline.h"
 #include "tier0/include/memalloc.h"
 #include "tier1/memstack.h"
 #include "tier1/strtools.h"
 
-#define MINIMUM_WIN_MEMORY \
-  0x03000000  // TODO(d.rattman): copy from sys_dll.cpp, find a common header at
-              // some point
+namespace {
+CMemoryStack zone_memory_stack;
 
-CMemoryStack g_HunkMemoryStack;
-#ifdef HUNK_USE_16MB_PAGE
-CMemoryStack g_HunkOverflow;
-static bool g_bWarnedOverflow;
-#endif
+usize GetTargetCacheSize() {
+  usize memory_limit = host_parms.memsize - Hunk_Size();
+  if (memory_limit < 0x100000u) memory_limit = 0x100000u;
 
-static int GetTargetCacheSize() {
-  int nMemLimit = host_parms.memsize - Hunk_Size();
-  if (nMemLimit < 0x100000) {
-    nMemLimit = 0x100000;
-  }
-  return nMemLimit;
+  return memory_limit;
 }
+}  // namespace
 
-/*
-===================
-Hunk_AllocName
-===================
-*/
-void *Hunk_AllocName(int size, const char *name, bool bClear) {
+void *Hunk_AllocName(usize size, const char *name, bool is_clear) {
   MEM_ALLOC_CREDIT();
-  void *p = g_HunkMemoryStack.Alloc(size, bClear);
-  if (p) return p;
-#ifdef HUNK_USE_16MB_PAGE
-  if (!g_bWarnedOverflow) {
-    g_bWarnedOverflow = true;
-    DevMsg("Note: Hunk base page exhausted\n");
-  }
 
-  p = g_HunkOverflow.Alloc(size, bClear);
-  if (p) return p;
-#endif
-  Error("Engine hunk overflow!\n");
-  return NULL;
+  void *memory = zone_memory_stack.Alloc(size, is_clear);
+  if (memory) return memory;
+
+  Error("Engine: Hunk memory allocator overflow, can't alloc %zu bytes.\n",
+        size);
+  return nullptr;
 }
 
-/*
-===================
-Hunk_Alloc
-===================
-*/
-void *Hunk_Alloc(int size, bool bClear) {
+void *Hunk_Alloc(usize size, bool is_clear) {
   MEM_ALLOC_CREDIT();
-  return Hunk_AllocName(size, NULL, bClear);
+
+  return Hunk_AllocName(size, nullptr, is_clear);
 }
 
-int Hunk_LowMark(void) {
-  return (int)(g_HunkMemoryStack.GetCurrentAllocPoint());
+uintptr_t Hunk_LowMark() { return zone_memory_stack.GetCurrentAllocPoint(); }
+
+void Hunk_FreeToLowMark(uintptr_t mark) {
+  Assert(mark < zone_memory_stack.GetSize());
+  zone_memory_stack.FreeToAllocPoint(mark);
 }
 
-void Hunk_FreeToLowMark(int mark) {
-  Assert(mark < g_HunkMemoryStack.GetSize());
-#ifdef HUNK_USE_16MB_PAGE
-  g_HunkOverflow.FreeAll();
-  g_bWarnedOverflow = false;
-#endif
-  g_HunkMemoryStack.FreeToAllocPoint(mark);
-}
+usize Hunk_MallocSize() { return zone_memory_stack.GetSize(); }
 
-int Hunk_MallocSize() {
-#ifdef HUNK_USE_16MB_PAGE
-  return g_HunkMemoryStack.GetSize() + g_HunkOverflow.GetSize();
-#else
-  return g_HunkMemoryStack.GetSize();
-#endif
-}
-
-int Hunk_Size() {
-#ifdef HUNK_USE_16MB_PAGE
-  return g_HunkMemoryStack.GetUsed() + g_HunkOverflow.GetUsed();
-#else
-  return g_HunkMemoryStack.GetUsed();
-#endif
-}
+usize Hunk_Size() { return zone_memory_stack.GetUsed(); }
 
 void Hunk_Print() {
-#ifdef HUNK_USE_16MB_PAGE
-  Msg("Total used memory:      %d (%d/%d)\n", Hunk_Size(),
-      g_HunkMemoryStack.GetUsed(), g_HunkOverflow.GetUsed());
-  Msg("Total committed memory: %d (%d/%d)\n", Hunk_MallocSize(),
-      g_HunkMemoryStack.GetSize(), g_HunkOverflow.GetSize());
-#else
-  Msg("Total used memory:      %d\n", Hunk_Size());
-  Msg("Total committed memory: %d\n", Hunk_MallocSize());
-#endif
+  Msg("Total used memory:      %5.2f MB (%zu bytes).\n",
+      Hunk_Size() / (1024.0f * 1024.0f), Hunk_Size());
+  Msg("Total committed memory: %5.2f MB (%zu bytes).\n",
+      Hunk_MallocSize() / (1024.0f * 1024.0f), Hunk_MallocSize());
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void Memory_Init(void) {
+void Memory_Init() {
   MEM_ALLOC_CREDIT();
-  int nMaxBytes = 64 * 1024 * 1024;
-  const int nMinCommitBytes = 0x8000;
-#ifndef HUNK_USE_16MB_PAGE
-  const int nInitialCommit = 0x280000;
-  while (!g_HunkMemoryStack.Init(nMaxBytes, nMinCommitBytes, nInitialCommit)) {
-    Warning("Unable to allocate %d MB of memory, trying %d MB instead\n",
-            nMaxBytes, nMaxBytes / 2);
-    nMaxBytes /= 2;
-    if (nMaxBytes < MINIMUM_WIN_MEMORY) {
-      Error("Failed to allocate minimum memory requirement for game (%d MB)\n",
-            MINIMUM_WIN_MEMORY / (1024 * 1024));
+
+  usize memory_max_bytes{128 * 1024 * 1024};
+  ConVarRef mem_min_heapsize{"mem_min_heapsize"};
+  const usize minimum_memory_bytes = mem_min_heapsize.GetInt() * 1024 * 1024;
+
+  constexpr usize kMemoryMinCommitBytes{32768};
+  constexpr usize kMemInitialCommitBytes{4 * 1024 * 1024};
+
+  while (!zone_memory_stack.Init(memory_max_bytes, kMemoryMinCommitBytes,
+                                 kMemInitialCommitBytes)) {
+    Warning(
+        "Engine: Unable to allocate %zu MB of memory, trying %zu MB instead.\n",
+        memory_max_bytes / (1024 * 1024), memory_max_bytes / (2 * 1024 * 1024));
+
+    memory_max_bytes /= 2;
+
+    if (memory_max_bytes < minimum_memory_bytes) {
+      Error(
+          "Engine: Failed to allocate minimum memory requirement for game (%zu "
+          "MB).\n",
+          minimum_memory_bytes / (1024 * 1024));
     }
   }
-#else
-  if (!g_HunkMemoryStack.InitPhysical(16 * 1024 * 1024) ||
-      !g_HunkOverflow.Init(nMaxBytes - 16 * 1024 * 1024, nMinCommitBytes)) {
-    Error("Failed to allocate minimum memory requirement for game (%d MB)\n",
-          nMaxBytes);
-  }
 
-#endif
   g_pDataCache->SetSize(GetTargetCacheSize());
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void Memory_Shutdown(void) {
-  g_HunkMemoryStack.FreeAll();
+void Memory_Shutdown() {
+  zone_memory_stack.FreeAll();
 
   // This disconnects the engine data cache
   g_pDataCache->SetSize(0);

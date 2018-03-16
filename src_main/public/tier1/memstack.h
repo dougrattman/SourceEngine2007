@@ -5,114 +5,87 @@
 #ifndef MEMSTACK_H
 #define MEMSTACK_H
 
-#include "tier0/include/basetypes.h"
+#include "base/include/base_types.h"
+#include "build/include/build_config.h"
+
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
 
-typedef unsigned MemoryStackMark_t;
+using MemoryStackMark_t = uintptr_t;
 
 class CMemoryStack {
  public:
   CMemoryStack();
   ~CMemoryStack();
 
-  bool Init(unsigned maxSize = 0, unsigned commitSize = 0,
-            unsigned initialCommit = 0, unsigned alignment = 16);
+  bool Init(usize maxSize = 0, usize commitSize = 0, usize initialCommit = 0,
+            usize alignment = 16);
   void Term();
 
-  int GetSize();
-  int GetMaxSize();
-  int GetUsed();
+  usize GetSize() const {
+#ifdef OS_WIN
+    return commit_limit_ - base_;
+#else
+    return m_maxSize;
+#endif
+  }
+  usize GetMaxSize() const { return max_size_; }
+  usize GetUsed() const { return next_alloc_ - base_; }
 
-  void *SOURCE_RESTRICT Alloc(unsigned bytes, bool bClear = false);
+  void *SOURCE_RESTRICT Alloc(usize bytes, bool is_clear = false) {
+    Assert(base_);
 
-  MemoryStackMark_t GetCurrentAllocPoint();
+    const usize alignment{alignment_};
+
+    bytes = bytes ? AlignValue(bytes, alignment) : alignment;
+
+    void *result = next_alloc_;
+    u8 *next_alloc = next_alloc_ + bytes;
+
+    if (next_alloc <= commit_limit_ || CommitTo(next_alloc)) {
+      if (is_clear) memset(result, 0, bytes);
+
+      next_alloc_ = next_alloc;
+      return result;
+    }
+
+    return nullptr;
+  }
+
+  MemoryStackMark_t GetCurrentAllocPoint() const { return next_alloc_ - base_; }
+
   void FreeToAllocPoint(MemoryStackMark_t mark, bool bDecommit = true);
   void FreeAll(bool bDecommit = true);
 
-  void Access(void **ppRegion, unsigned *pBytes);
+  void Access(void **ppRegion, uintptr_t *pBytes) const;
 
-  void PrintContents();
+  void PrintContents() const;
 
-  void *GetBase();
+  void *GetBase() { return base_; }
   const void *GetBase() const {
     return const_cast<CMemoryStack *>(this)->GetBase();
   }
 
  private:
-  bool CommitTo(uint8_t *SOURCE_RESTRICT);
+  bool CommitTo(u8 *SOURCE_RESTRICT);
 
-  uint8_t *m_pNextAlloc;
-  uint8_t *m_pCommitLimit;
-  uint8_t *m_pAllocLimit;
+  u8 *next_alloc_;
+  u8 *commit_limit_, *alloc_limit_;
+  u8 *base_;
 
-  uint8_t *m_pBase;
+  usize max_size_, alignment_;
 
-  unsigned m_maxSize;
-  unsigned m_alignment;
-#ifdef _WIN32
-  unsigned m_commitSize;
-  unsigned m_minCommit;
+#ifdef OS_WIN
+  usize commit_size_, min_commit_;
 #endif
 };
 
-//-------------------------------------
-
-SOURCE_FORCEINLINE void *SOURCE_RESTRICT CMemoryStack::Alloc(unsigned bytes,
-                                                             bool bClear) {
-  Assert(m_pBase);
-
-  int alignment = m_alignment;
-  if (bytes) {
-    bytes = AlignValue(bytes, alignment);
-  } else {
-    bytes = alignment;
-  }
-
-  void *pResult = m_pNextAlloc;
-  uint8_t *pNextAlloc = m_pNextAlloc + bytes;
-
-  if (pNextAlloc > m_pCommitLimit) {
-    if (!CommitTo(pNextAlloc)) {
-      return NULL;
-    }
-  }
-
-  if (bClear) {
-    memset(pResult, 0, bytes);
-  }
-
-  m_pNextAlloc = pNextAlloc;
-
-  return pResult;
-}
-
-//-------------------------------------
-
-inline int CMemoryStack::GetMaxSize() { return m_maxSize; }
-
-//-------------------------------------
-
-inline int CMemoryStack::GetUsed() { return (m_pNextAlloc - m_pBase); }
-
-//-------------------------------------
-
-inline void *CMemoryStack::GetBase() { return m_pBase; }
-
-//-------------------------------------
-
-inline MemoryStackMark_t CMemoryStack::GetCurrentAllocPoint() {
-  return (m_pNextAlloc - m_pBase);
-}
-
 // The CUtlMemoryStack class:
 // A fixed memory class
-
-template <typename T, typename I, size_t MAX_SIZE, size_t COMMIT_SIZE = 0,
-          size_t INITIAL_COMMIT = 0>
+template <typename T, typename I, usize MAX_SIZE, usize COMMIT_SIZE = 0,
+          usize INITIAL_COMMIT = 0>
 class CUtlMemoryStack {
  public:
-  // constructor, destructor
   CUtlMemoryStack(int nGrowSize = 0, int nInitSize = 0) : m_nAllocated{0} {
     m_MemoryStack.Init(MAX_SIZE * sizeof(T), COMMIT_SIZE * sizeof(T),
                        INITIAL_COMMIT * sizeof(T), 4);

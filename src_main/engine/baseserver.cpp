@@ -95,12 +95,11 @@ ConVar sv_allow_color_correction(
 #define MAX_TAG_STRING_LENGTH 128
 
 extern CNetworkStringTableContainer *networkStringTableContainerServer;
-extern char gpszVersionString[32];
 extern int g_iSteamAppID;
 extern ConVar sv_stressbots;
 
-extern char gpszVersionString[32];
-extern char gpszProductString[32];
+extern char gpszVersionString[16];
+extern char gpszProductString[128];
 
 int g_CurGameServerID = 1;
 

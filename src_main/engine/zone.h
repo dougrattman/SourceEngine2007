@@ -1,21 +1,23 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
-#ifndef ZONE_H
-#define ZONE_H
+#ifndef SOURCE_ENGINE_ZONE_H_
+#define SOURCE_ENGINE_ZONE_H_
+
+#include "base/include/base_types.h"
 
 void Memory_Init();
-void Memory_Shutdown(void);
+void Memory_Shutdown();
 
-void* Hunk_Alloc(int size, bool bClear = true);
-void* Hunk_AllocName(int size, const char* name, bool bClear = true);
+void* Hunk_Alloc(usize size, bool is_null = true);
+void* Hunk_AllocName(usize size, const char* name, bool is_null = true);
 
-int Hunk_LowMark();
-void Hunk_FreeToLowMark(int mark);
+uintptr_t Hunk_LowMark();
+void Hunk_FreeToLowMark(uintptr_t mark);
 
 void Hunk_Check();
 
-int Hunk_MallocSize();
-int Hunk_Size();
+usize Hunk_MallocSize();
+usize Hunk_Size();
 
 void Hunk_Print();
 
@@ -89,4 +91,4 @@ class CHunkMemory {
   int m_nAllocated;
 };
 
-#endif  // ZONE_H
+#endif  // SOURCE_ENGINE_ZONE_H_

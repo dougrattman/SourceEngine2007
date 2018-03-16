@@ -30,8 +30,8 @@ extern ConVar sv_visiblemaxplayers;
 extern ConVar sv_lan;
 extern ConVar sv_tags;
 
-extern char gpszVersionString[32];
-extern char gpszProductString[32];
+extern char gpszVersionString[16];
+extern char gpszProductString[128];
 extern int g_iSteamAppID;
 
 #define MASTER_SERVER_PROTOCOL_VERSION 7
