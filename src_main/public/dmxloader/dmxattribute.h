@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef DMXATTRIBUTE_H
 #define DMXATTRIBUTE_H
@@ -81,8 +81,9 @@ class CDmxAttribute {
   static int AttributeDataSize(DmAttributeType_t type);
 
  private:
-  CDmxAttribute(const char *pAttributeName);
-  CDmxAttribute(CUtlSymbol attributeName);
+  CDmxAttribute(const char *pAttributeName,
+                DmAttributeType_t type = AT_UNKNOWN);
+  CDmxAttribute(CUtlSymbol attributeName, DmAttributeType_t type = AT_UNKNOWN);
   ~CDmxAttribute();
 
   // Allocate, free memory for data

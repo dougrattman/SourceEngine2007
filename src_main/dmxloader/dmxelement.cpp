@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmxloader/dmxelement.h"
 
@@ -6,7 +6,6 @@
 #include "mathlib/ssemath.h"
 #include "tier1/utlbuffer.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -286,16 +285,23 @@ void CDmxElement::UnpackIntoStructure(
       continue;
     }
 
-    CDmxAttribute temp(NULL);
+    // CUtlBuffer is not designed to handle 0 size well, so need type to alloc
+    // memory.
+    CDmxAttribute temp{nullptr, pUnpack->m_AttributeType};
     const CDmxAttribute *pAttribute = GetAttribute(pUnpack->m_pAttributeName);
     if (!pAttribute) {
       if (!pUnpack->m_pDefaultString) continue;
 
       // Convert the default string into the target
       int nLen = Q_strlen(pUnpack->m_pDefaultString);
-      CUtlBuffer buf(pUnpack->m_pDefaultString, nLen,
-                     CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER);
-      temp.Unserialize(pUnpack->m_AttributeType, buf);
+      if (nLen != 0) {
+        CUtlBuffer buf{pUnpack->m_pDefaultString, nLen,
+                       CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER};
+        temp.Unserialize(pUnpack->m_AttributeType, buf);
+      } else {
+        temp.SetValueFromString(pUnpack->m_pDefaultString);
+      }
+
       pAttribute = &temp;
     }
 

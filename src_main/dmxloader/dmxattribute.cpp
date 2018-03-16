@@ -1,11 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "dmxloader/dmxattribute.h"
 
 #include "tier1/uniqueid.h"
 #include "tier1/utlbufferutil.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 //-----------------------------------------------------------------------------
@@ -122,15 +121,16 @@ const char *g_pAttributeTypeName[AT_TYPE_COUNT] = {
 //-----------------------------------------------------------------------------
 // Constructor, destructor
 //-----------------------------------------------------------------------------
-CDmxAttribute::CDmxAttribute(const char *pAttributeName) {
+CDmxAttribute::CDmxAttribute(const char *pAttributeName,
+                             DmAttributeType_t type) {
   m_Name = s_AttributeNameSymbols.AddString(pAttributeName);
-  m_Type = AT_UNKNOWN;
+  m_Type = type;
   m_pData = NULL;
 }
 
-CDmxAttribute::CDmxAttribute(CUtlSymbol attributeName) {
+CDmxAttribute::CDmxAttribute(CUtlSymbol attributeName, DmAttributeType_t type) {
   m_Name = attributeName;
-  m_Type = AT_UNKNOWN;
+  m_Type = type;
   m_pData = NULL;
 }
 
@@ -153,37 +153,38 @@ void CDmxAttribute::AllocateDataMemory(DmAttributeType_t type) {
   m_pData = DMXAlloc(s_pAttributeSize[m_Type]);
 }
 
-#define DESTRUCT_ARRAY(_dataType)                             \
-  \
-case CDmAttributeInfo<CUtlVector<_dataType> >::ATTRIBUTE_TYPE \
-      : Destruct((CUtlVector<_dataType> *)m_pData);           \
-  break;
+#define DESTRUCT_ARRAY(_dataType)                                \
+                                                                 \
+  case CDmAttributeInfo<CUtlVector<_dataType> >::ATTRIBUTE_TYPE: \
+    Destruct((CUtlVector<_dataType> *)m_pData);                  \
+    break;
 
 void CDmxAttribute::FreeDataMemory() {
   if (m_Type != AT_UNKNOWN) {
-    Assert(m_pData != NULL);
-    if (!IsArrayType(m_Type)) {
-      if (m_Type == AT_STRING) {
-        Destruct((CUtlString *)m_pData);
-      } else if (m_Type == AT_VOID) {
-        Destruct((CUtlBinaryBlock *)m_pData);
-      }
-    } else {
-      switch (m_Type) {
-        DESTRUCT_ARRAY(int);
-        DESTRUCT_ARRAY(float);
-        DESTRUCT_ARRAY(bool);
-        DESTRUCT_ARRAY(CUtlString);
-        DESTRUCT_ARRAY(CUtlBinaryBlock);
-        DESTRUCT_ARRAY(DmObjectId_t);
-        DESTRUCT_ARRAY(Color);
-        DESTRUCT_ARRAY(Vector2D);
-        DESTRUCT_ARRAY(Vector);
-        DESTRUCT_ARRAY(Vector4D);
-        DESTRUCT_ARRAY(QAngle);
-        DESTRUCT_ARRAY(Quaternion);
-        DESTRUCT_ARRAY(VMatrix);
-        DESTRUCT_ARRAY(CDmxElement *);
+    if (m_pData != nullptr) {
+      if (!IsArrayType(m_Type)) {
+        if (m_Type == AT_STRING) {
+          Destruct((CUtlString *)m_pData);
+        } else if (m_Type == AT_VOID) {
+          Destruct((CUtlBinaryBlock *)m_pData);
+        }
+      } else {
+        switch (m_Type) {
+          DESTRUCT_ARRAY(int);
+          DESTRUCT_ARRAY(float);
+          DESTRUCT_ARRAY(bool);
+          DESTRUCT_ARRAY(CUtlString);
+          DESTRUCT_ARRAY(CUtlBinaryBlock);
+          DESTRUCT_ARRAY(DmObjectId_t);
+          DESTRUCT_ARRAY(Color);
+          DESTRUCT_ARRAY(Vector2D);
+          DESTRUCT_ARRAY(Vector);
+          DESTRUCT_ARRAY(Vector4D);
+          DESTRUCT_ARRAY(QAngle);
+          DESTRUCT_ARRAY(Quaternion);
+          DESTRUCT_ARRAY(VMatrix);
+          DESTRUCT_ARRAY(CDmxElement *);
+        }
       }
     }
     m_Type = AT_UNKNOWN;
@@ -544,6 +545,8 @@ void CDmxAttribute::SetValueFromString(const char *pValue) {
     default: {
       int nLen = pValue ? Q_strlen(pValue) : 0;
       if (nLen == 0) {
+        // Can be called on empty attribute, so allocate memory.
+        AllocateDataMemory(GetType());
         SetToDefaultValue();
         break;
       }
