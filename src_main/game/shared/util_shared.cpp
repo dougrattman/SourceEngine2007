@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -21,7 +21,6 @@
 bool NPC_CheckBrushExclude(CBaseEntity *pEntity, CBaseEntity *pBrush);
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 ConVar r_visualizetraces("r_visualizetraces", "0", FCVAR_CHEAT);
@@ -153,11 +152,8 @@ Vector SharedRandomVector(const char *sharedname, float minVal, float maxVal,
   RandomSeed(seed);
   // HACK:  Can't call RandomVector/Angle because it uses rand() not vstlib
   // Random*() functions! Get a random vector.
-  Vector random;
-  random.x = RandomFloat(minVal, maxVal);
-  random.y = RandomFloat(minVal, maxVal);
-  random.z = RandomFloat(minVal, maxVal);
-  return random;
+  return Vector{RandomFloat(minVal, maxVal), RandomFloat(minVal, maxVal),
+                RandomFloat(minVal, maxVal)};
 }
 
 QAngle SharedRandomAngle(const char *sharedname, float minVal, float maxVal,
@@ -170,11 +166,8 @@ QAngle SharedRandomAngle(const char *sharedname, float minVal, float maxVal,
 
   // HACK:  Can't call RandomVector/Angle because it uses rand() not vstlib
   // Random*() functions! Get a random vector.
-  Vector random;
-  random.x = RandomFloat(minVal, maxVal);
-  random.y = RandomFloat(minVal, maxVal);
-  random.z = RandomFloat(minVal, maxVal);
-  return QAngle(random.x, random.y, random.z);
+  return QAngle{RandomFloat(minVal, maxVal), RandomFloat(minVal, maxVal),
+                RandomFloat(minVal, maxVal)};
 }
 
 //-----------------------------------------------------------------------------
@@ -225,8 +218,8 @@ bool StandardFilterRules(IHandleEntity *pHandleEntity, int fContentsMask) {
   // TODO(d.rattman): this is to skip BSP models that are entities that can be
   // potentially moved/deleted, similar to a monster but doors don't seem to
   // be flagged as monsters
-  // TODO(d.rattman): the FL_WORLDBRUSH looked promising, but it needs to be set on
-  // everything that's actually a worldbrush and it currently isn't
+  // TODO(d.rattman): the FL_WORLDBRUSH looked promising, but it needs to be
+  // set on everything that's actually a worldbrush and it currently isn't
   if (!(fContentsMask & CONTENTS_MOVEABLE) &&
       (pCollide->GetMoveType() ==
        MOVETYPE_PUSH))  // !(touch->flags & FL_WORLDBRUSH) )
@@ -552,8 +545,8 @@ void UTIL_TraceEntity(CBaseEntity *pEntity, const Vector &vecAbsStart,
   ICollideable *pCollision = pEntity->GetCollideable();
 
   // Adding this assertion here so game code catches it, but really the
-  // assertion belongs in the engine because one day, rotated collideables will
-  // work!
+  // assertion belongs in the engine because one day, rotated collideables
+  // will work!
   Assert(pCollision->GetCollisionAngles() == vec3_angle);
 
   CTraceFilterEntity traceFilter(pEntity, pCollision->GetCollisionGroup());
@@ -576,8 +569,8 @@ void UTIL_TraceEntity(CBaseEntity *pEntity, const Vector &vecAbsStart,
   pCollision = pEntity->GetCollideable();
 
   // Adding this assertion here so game code catches it, but really the
-  // assertion belongs in the engine because one day, rotated collideables will
-  // work!
+  // assertion belongs in the engine because one day, rotated collideables
+  // will work!
   Assert(pCollision->GetCollisionAngles() == vec3_angle);
 
   CTraceFilterEntityIgnoreOther traceFilter(pEntity, pIgnore, nCollisionGroup);
@@ -599,8 +592,8 @@ void UTIL_TraceEntity(CBaseEntity *pEntity, const Vector &vecAbsStart,
   pCollision = pEntity->GetCollideable();
 
   // Adding this assertion here so game code catches it, but really the
-  // assertion belongs in the engine because one day, rotated collideables will
-  // work!
+  // assertion belongs in the engine because one day, rotated collideables
+  // will work!
   Assert(pCollision->GetCollisionAngles() == vec3_angle);
 
 #ifdef PORTAL
@@ -741,9 +734,9 @@ static ConVar violence_agibs("violence_agibs", "1", 0,
                              "Show alien gib entities");
 
 bool UTIL_IsLowViolence(void) {
-  // These convars are no longer necessary -- the engine is the final arbiter of
-  // violence settings -- but they're here for legacy support and for testing
-  // low violence when the engine is in normal violence mode.
+  // These convars are no longer necessary -- the engine is the final arbiter
+  // of violence settings -- but they're here for legacy support and for
+  // testing low violence when the engine is in normal violence mode.
   if (!violence_hblood.GetBool() || !violence_ablood.GetBool() ||
       !violence_hgibs.GetBool() || !violence_agibs.GetBool())
     return true;
@@ -763,9 +756,8 @@ bool UTIL_ShouldShowBlood(int color) {
 }
 
 //------------------------------------------------------------------------------
-// Purpose : Use trace to pass a specific decal type to the entity being decaled
-// Input   :
-// Output  :
+// Purpose : Use trace to pass a specific decal type to the entity being
+// decaled Input   : Output  :
 //------------------------------------------------------------------------------
 void UTIL_DecalTrace(trace_t *pTrace, char const *decalName) {
   if (pTrace->fraction == 1.0) return;
@@ -888,7 +880,8 @@ void UTIL_DecodeICE(unsigned char *buffer, int size, const unsigned char *key) {
 
   int blockSize = ice.blockSize();
 
-  unsigned char *temp = (unsigned char *)_alloca(SOURCE_PAD_NUMBER(size, blockSize));
+  unsigned char *temp =
+      (unsigned char *)_alloca(SOURCE_PAD_NUMBER(size, blockSize));
   unsigned char *p1 = buffer;
   unsigned char *p2 = temp;
 

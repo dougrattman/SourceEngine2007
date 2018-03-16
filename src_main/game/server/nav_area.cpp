@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose:
 //
@@ -21,7 +21,6 @@
 #include "nav_pathfind.h"
 #include "props_shared.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 extern void HintMessageToAllPlayers(const char *message);
@@ -1503,15 +1502,11 @@ bool CNavArea::IsEdge(NavDirType dir) const {
  */
 NavDirType CNavArea::ComputeDirection(Vector *point) const {
   if (point->x >= m_extent.lo.x && point->x <= m_extent.hi.x) {
-    if (point->y < m_extent.lo.y)
-      return NORTH;
-    else if (point->y > m_extent.hi.y)
-      return SOUTH;
+    if (point->y < m_extent.lo.y) return NORTH;
+    if (point->y > m_extent.hi.y) return SOUTH;
   } else if (point->y >= m_extent.lo.y && point->y <= m_extent.hi.y) {
-    if (point->x < m_extent.lo.x)
-      return WEST;
-    else if (point->x > m_extent.hi.x)
-      return EAST;
+    if (point->x < m_extent.lo.x) return WEST;
+    if (point->x > m_extent.hi.x) return EAST;
   }
 
   // find closest direction
@@ -1520,12 +1515,10 @@ NavDirType CNavArea::ComputeDirection(Vector *point) const {
   if (fabs(to.x) > fabs(to.y)) {
     if (to.x > 0.0f) return EAST;
     return WEST;
-  } else {
-    if (to.y > 0.0f) return SOUTH;
-    return NORTH;
   }
 
-  return NUM_DIRECTIONS;
+  if (to.y > 0.0f) return SOUTH;
+  return NORTH;
 }
 
 //--------------------------------------------------------------------------------------------------------------
@@ -2080,7 +2073,7 @@ const Vector &CNavArea::GetCorner(NavCornerType corner) const {
 
   switch (corner) {
     default:
-      Assert(false && "GetCorner: Invalid type");
+      AssertMsg(false, "GetCorner: Invalid type");
     case NORTH_WEST:
       return m_extent.lo;
 

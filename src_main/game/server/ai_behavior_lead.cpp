@@ -13,7 +13,6 @@
 #include "ai_speech.h"
 #include "sceneentity.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // Minimum time between leader nags
@@ -226,11 +225,11 @@ bool CAI_LeadBehavior::GetClosestPointOnRoute(const Vector &targetPos,
   if (!waypoint) {
     // We arrive here twice when lead behaviour starts:
     //	- When the lead behaviour is first enabled. We have no schedule. We want
-    //to know if the player is ahead of us.
+    // to know if the player is ahead of us.
     //	- A frame later when we've chosen to lead the player, but we still
-    //haven't built our route. We know that the 	  the player isn't lagging, so
-    //it's safe to go ahead and simply say he's ahead of us. This avoids
-    //building 	  the temp route twice.
+    // haven't built our route. We know that the 	  the player isn't lagging,
+    // so it's safe to go ahead and simply say he's ahead of us. This avoids
+    // building 	  the temp route twice.
     if (IsCurSchedule(SCHED_LEAD_PLAYER, false)) return true;
 
     // Build a temp route to the gold and use that

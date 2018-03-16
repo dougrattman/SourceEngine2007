@@ -1,4 +1,4 @@
-// Copyright © 1996-2007, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2007, Valve Corporation, All rights reserved.
 //
 // Purpose: This file contains code to allow us to associate client data with
 // bsp leaves.
@@ -26,7 +26,6 @@
 #include "viewrender.h"
 #include "vstdlib/jobthread.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class VMatrix;  // forward decl
@@ -99,8 +98,9 @@ class CClientLeafSystem : public IClientLeafSystem,
   virtual CClientLeafSubSystemData *GetSubSystemDataInLeaf(int leaf,
                                                            int nSubSystemIdx);
 
-  // TODO(d.rattman): There's an incestuous relationship between DetailObjectSystem
-  // and the ClientLeafSystem. Maybe they should be the same system?
+  // TODO(d.rattman): There's an incestuous relationship between
+  // DetailObjectSystem and the ClientLeafSystem. Maybe they should be the same
+  // system?
   virtual void GetDetailObjectsInLeaf(int leaf, int &firstDetailObject,
                                       int &detailObjectCount);
   virtual void SetDetailObjectsInLeaf(int leaf, int firstDetailObject,
@@ -620,9 +620,9 @@ void CClientLeafSystem::NewRenderable(IClientRenderable *pRenderable,
 
 void CClientLeafSystem::CreateRenderableHandle(IClientRenderable *pRenderable,
                                                bool bIsStaticProp) {
-  // TODO(d.rattman): The argument is unnecessary if we could get this next line to work
-  // the reason why we can't is because currently there are IClientRenderables
-  // which don't correctly implement GetRefEHandle.
+  // TODO(d.rattman): The argument is unnecessary if we could get this next line
+  // to work the reason why we can't is because currently there are
+  // IClientRenderables which don't correctly implement GetRefEHandle.
 
   // bool bIsStaticProp = staticpropmgr->IsStaticProp(
   // pRenderable->GetIClientUnknown() );
@@ -1373,8 +1373,8 @@ static RenderGroup_t DetectBucketedRenderGroup(RenderGroup_t group,
       80.f,   // player size
       30.f,   // crate size
   };
-  Assert(SOURCE_ARRAYSIZE(arrThresholds) + 1 >=
-         RENDER_GROUP_CFG_NUM_OPAQUE_ENT_BUCKETS);
+  static_assert(SOURCE_ARRAYSIZE(arrThresholds) + 1 >=
+                RENDER_GROUP_CFG_NUM_OPAQUE_ENT_BUCKETS);
   Assert(group >= RENDER_GROUP_OPAQUE_STATIC &&
          group <= RENDER_GROUP_OPAQUE_ENTITY);
 
@@ -1550,8 +1550,8 @@ void CClientLeafSystem::CollateRenderablesInLeaf(
       IClientRenderable *pRenderable =
           DetailObjectSystem()->GetDetailModel(idx);
 
-      // TODO(d.rattman): This if check here is necessary because the detail object system
-      // also maintains lists of sprites...
+      // TODO(d.rattman): This if check here is necessary because the detail
+      // object system also maintains lists of sprites...
       if (pRenderable) {
         if (pRenderable->IsTransparent()) {
           if (info.m_bDrawTranslucentObjects)  // Don't draw translucent objects

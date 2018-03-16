@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Helper classes and functions for the save/restore system.
 
@@ -41,7 +41,6 @@ void AddRestoredEntity(CBaseEntity *pEntity);
 void AddRestoredEntity(C_BaseEntity *pEntity);
 #endif
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define MAX_ENTITYARRAY 1024
@@ -111,7 +110,7 @@ static void Matrix3x4Offset(matrix3x4_t &dest, const matrix3x4_t &matrixIn,
 //-----------------------------------------------------------------------------
 // Purpose: Search this datamap for the name of this member function
 //			This is used to save/restore function pointers (convert
-//pointer to text)
+// pointer to text)
 // Input  : *function - pointer to member function
 // Output : const char * - function name
 //-----------------------------------------------------------------------------
@@ -119,7 +118,7 @@ const char *UTIL_FunctionToName(datamap_t *pMap, void *function) {
   while (pMap) {
     for (int i = 0; i < pMap->dataNumFields; i++) {
       if (pMap->dataDesc[i].flags & FTYPEDESC_FUNCTIONTABLE) {
-        Assert(sizeof(pMap->dataDesc[i].inputFunc) == sizeof(void *));
+        static_assert(sizeof(pMap->dataDesc[i].inputFunc) == sizeof(void *));
         void *pTest = EXTRACT_VOID_FUNCTIONPTR(pMap->dataDesc[i].inputFunc);
         if (pTest == function) return pMap->dataDesc[i].fieldName;
       }
@@ -132,14 +131,14 @@ const char *UTIL_FunctionToName(datamap_t *pMap, void *function) {
 
 //-----------------------------------------------------------------------------
 // Purpose: Search the datamap for a function named pName
-//			This is used to save/restore function pointers (convert text
-//back to pointer)
+//			This is used to save/restore function pointers (convert
+// text back to pointer)
 // Input  : *pName - name of the member function
 //-----------------------------------------------------------------------------
 void *UTIL_FunctionFromName(datamap_t *pMap, const char *pName) {
   while (pMap) {
     for (int i = 0; i < pMap->dataNumFields; i++) {
-      Assert(sizeof(pMap->dataDesc[i].inputFunc) == sizeof(void *));
+      static_assert(sizeof(pMap->dataDesc[i].inputFunc) == sizeof(void *));
 
       if (pMap->dataDesc[i].flags & FTYPEDESC_FUNCTIONTABLE) {
         if (FStrEq(pName, pMap->dataDesc[i].fieldName)) {
@@ -610,8 +609,8 @@ bool CSave::ShouldSaveField(const void *pData, typedescription_t *pField) {
 
 //-------------------------------------
 // Purpose:	Writes all the fields that are client neutral. In the event of
-//			a librarization of save/restore, these would reside in the
-//library
+//			a librarization of save/restore, these would reside in
+// the library
 //
 
 bool CSave::WriteBasicField(const char *pname, void *pData, datamap_t *pRootMap,
@@ -1083,8 +1082,8 @@ void CSave::WriteEHandle(const EHANDLE *pEHandle, int count) {
 //-------------------------------------
 // Purpose:	Writes all the fields that are not client neutral. In the event
 // of
-//			a librarization of save/restore, these would not reside in
-//the library
+//			a librarization of save/restore, these would not reside
+// in the library
 
 bool CSave::WriteGameField(const char *pname, void *pData, datamap_t *pRootMap,
                            typedescription_t *pField) {
@@ -1203,8 +1202,8 @@ const char *CRestore::StringFromHeaderSymbol(int symbol) {
 
 //-------------------------------------
 // Purpose:	Reads all the fields that are client neutral. In the event of
-//			a librarization of save/restore, these would reside in the
-//library
+//			a librarization of save/restore, these would reside in
+// the library
 
 void CRestore::ReadBasicField(const SaveRestoreRecordHeader_t &header,
                               void *pDest, datamap_t *pRootMap,
@@ -1786,8 +1785,8 @@ int CRestore::ReadEHandle(EHANDLE *pEHandle, int count, int nBytesAvailable) {
 //-------------------------------------
 // Purpose:	Reads all the fields that are not client neutral. In the event
 // of
-//			a librarization of save/restore, these would NOT reside in
-//the library
+//			a librarization of save/restore, these would NOT reside
+// in the library
 
 void CRestore::ReadGameField(const SaveRestoreRecordHeader_t &header,
                              void *pDest, datamap_t *pRootMap,
@@ -2020,7 +2019,7 @@ BEGIN_SIMPLE_DATADESC(entitytable_t)
       DEFINE_FIELD(saveentityindex, FIELD_INTEGER),
       //	DEFINE_FIELD( restoreentityindex, FIELD_INTEGER ),
       //				hEnt		(not saved, this is the
-      //fixup)
+      // fixup)
       DEFINE_FIELD(location, FIELD_INTEGER), DEFINE_FIELD(size, FIELD_INTEGER),
       DEFINE_FIELD(flags, FIELD_INTEGER), DEFINE_FIELD(classname, FIELD_STRING),
       DEFINE_FIELD(globalname, FIELD_STRING),
@@ -2400,9 +2399,8 @@ void CEntitySaveRestoreBlockHandler::Restore(IRestore *pRestore,
     pEntInfo = pSaveData->GetEntityInfo(i);
 
     bool bRestoredCorrectly = false;
-    // TODO(d.rattman): need to translate save spot to real index here using lookup table
-    // transmitted from server
-    // Assert( !"Need translation still" );
+    // TODO(d.rattman): need to translate save spot to real index here using
+    // lookup table transmitted from server Assert( !"Need translation still" );
     if (pEntInfo->restoreentityindex >= 0) {
       if (pEntInfo->restoreentityindex == 0) {
         Assert(!restoredWorld);
@@ -2661,8 +2659,8 @@ int CEntitySaveRestoreBlockHandler::RestoreGlobalEntity(
   // Compute the new global offset
   CBaseEntity *pNewEntity = FindGlobalEntity(className, globalName);
   if (pNewEntity) {
-    //				Msg( "Overlay %s with %s\n", pNewEntity->GetClassname(),
-    //STRING(tmpEnt->classname) );
+    //				Msg( "Overlay %s with %s\n",
+    // pNewEntity->GetClassname(), STRING(tmpEnt->classname) );
     // Tell the restore code we're overlaying a global entity from another level
     restoreHelper.SetGlobalMode(1);  // Don't overwrite global fields
 
@@ -2767,9 +2765,10 @@ CSaveRestoreData *SaveInit(int size) {
 // Purpose:	Serves as holder for a group of sibling save sections. Takes
 //			care of iterating over them, making sure read points are
 //			queued up to the right spot (in case one section due to
-//datadesc 			changes reads less than expected, or doesn't leave the 			read pointer
-//at the right point), and ensuring the read pointer 			is at the end of the entire
-//set when the set read is done.
+// datadesc 			changes reads less than expected, or doesn't
+// leave the 			read pointer at the right point), and ensuring
+// the read pointer 			is at the end of the entire set when the
+// set read is done.
 //-----------------------------------------------------------------------------
 
 struct SaveRestoreBlockHeader_t {

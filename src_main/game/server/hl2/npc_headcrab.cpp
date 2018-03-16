@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implements the headcrab, a tiny, jumpy alien parasite.
 //
@@ -33,7 +33,6 @@
 #include "vstdlib/random.h"
 #include "world.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 #define CRAB_ATTN_IDLE (float)1.5
@@ -464,7 +463,7 @@ void CBaseHeadcrab::ThrowThink(void) {
 // Purpose: Does a jump attack at the given position.
 // Input  : bRandomJump - Just hop in a random direction.
 //			vecPos - Position to jump at, ignored if bRandom is set
-//to true. 			bThrown -
+// to true. 			bThrown -
 //-----------------------------------------------------------------------------
 void CBaseHeadcrab::JumpAttack(bool bRandomJump, const Vector &vecPos,
                                bool bThrown) {
@@ -1111,8 +1110,9 @@ void CBaseHeadcrab::JumpFromCanister() {
   // Check to see if the player is within jump range. If so, jump at him!
   bool bJumpedAtEnemy = false;
 
-  // TODO(d.rattman): Can't use GetEnemy() here because enemy only updates during
-  // schedules which are interruptible by COND_NEW_ENEMY or COND_LOST_ENEMY
+  // TODO(d.rattman): Can't use GetEnemy() here because enemy only updates
+  // during schedules which are interruptible by COND_NEW_ENEMY or
+  // COND_LOST_ENEMY
   CBaseEntity *pEnemy = BestEnemy();
   if (pEnemy) {
     Vector vecDirToEnemy;
@@ -2515,15 +2515,13 @@ float CHeadcrab::MaxYawSpeed(void) {
     default:
       return 30;
   }
-
-  return BaseClass::MaxYawSpeed();
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
 //			In the most cases the base implementation should be
-//called first.
+// called first.
 //-----------------------------------------------------------------------------
 void CBaseHeadcrab::BuildScheduleTestBits(void) {
   if (!IsCurSchedule(SCHED_HEADCRAB_DROWN)) {
@@ -2732,7 +2730,7 @@ int CBlackHeadcrab::TranslateSchedule(int scheduleType) {
 // Purpose: Allows for modification of the interrupt mask for the current
 // schedule.
 //			In the most cases the base implementation should be
-//called first.
+// called first.
 //-----------------------------------------------------------------------------
 void CBlackHeadcrab::BuildScheduleTestBits(void) {
   // Ignore damage if we're attacking or are fleeing and recently flinched.
@@ -2828,8 +2826,8 @@ void CBlackHeadcrab::TouchDamage(CBaseEntity *pOther) {
 //			into two pieces by an explosion.
 // Input  : vecAngles - The yaw direction we should face.
 //			flVelocityScale - A multiplier for our ejection
-// velocity. 			pEnemy - Who we should acquire as our enemy. Usually
-// our zombie host's enemy.
+// velocity. 			pEnemy - Who we should acquire as our enemy.
+// Usually our zombie host's enemy.
 //-----------------------------------------------------------------------------
 void CBlackHeadcrab::Eject(const QAngle &vecAngles, float flVelocityScale,
                            CBaseEntity *pEnemy) {
@@ -2884,7 +2882,7 @@ void CBlackHeadcrab::Panic(float flDuration) {
 //-----------------------------------------------------------------------------
 // Purpose: Black headcrabs have 360-degree vision when they are in the ambush
 //			schedule. This is because they ignore sounds when in
-//ambush, and 			you could walk up behind them without having
+// ambush, and 			you could walk up behind them without having
 // them attack you. 			This vision extends only 24 feet.
 //-----------------------------------------------------------------------------
 #define CRAB_360_VIEW_DIST_SQR (12 * 12 * 24 * 24)

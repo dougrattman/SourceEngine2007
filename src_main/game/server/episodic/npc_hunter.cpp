@@ -1,4 +1,4 @@
-//==== Copyright © 1996-2007, Valve Corporation, All rights reserved. =========
+//==== Copyright Â© 1996-2007, Valve Corporation, All rights reserved. =========
 //
 // Small, fast version of the strider. Goes where striders cannot, such
 // as into buildings. Best killed with physics objects and explosives.
@@ -64,7 +64,6 @@
 #include "weapon_rpg.h"
 #include "weapon_striderbuster.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CNPC_Hunter;
@@ -1048,7 +1047,8 @@ static impactentry_t s_HunterAngularTable[] = {
 impactdamagetable_t s_HunterImpactDamageTable = {
     s_HunterLinearTable, s_HunterAngularTable,
 
-    SOURCE_ARRAYSIZE(s_HunterLinearTable), SOURCE_ARRAYSIZE(s_HunterAngularTable),
+    SOURCE_ARRAYSIZE(s_HunterLinearTable),
+    SOURCE_ARRAYSIZE(s_HunterAngularTable),
 
     24 * 24,    // minimum linear speed squared
     360 * 360,  // minimum angular speed squared (360 deg/s to cause spin/slice
@@ -1873,7 +1873,8 @@ bool CNPC_Hunter::OverrideMoveFacing(const AILocalMoveGoal_t &move,
 
   bool bSideStepping = IsCurSchedule(SCHED_HUNTER_SIDESTEP, false);
 
-  // TODO(d.rattman): this will break scripted sequences that walk when they have an enemy
+  // TODO(d.rattman): this will break scripted sequences that walk when they
+  // have an enemy
   if (GetEnemy() &&
       (bSideStepping ||
        (((GetNavigator()->GetMovementActivity() == ACT_RUN) ||
@@ -2501,10 +2502,9 @@ NPC_STATE CNPC_Hunter::SelectIdealState() {
       }
     }
 
-    default: { return BaseClass::SelectIdealState(); }
+    default:
+      return BaseClass::SelectIdealState();
   }
-
-  return GetIdealState();
 }
 
 //-----------------------------------------------------------------------------
@@ -2524,7 +2524,8 @@ bool CNPC_Hunter::ShouldCharge(const Vector &startPos, const Vector &endPos,
       return false;
   }
 
-  // TODO(d.rattman): We'd like to exclude small physics objects from this check!
+  // TODO(d.rattman): We'd like to exclude small physics objects from this
+  // check!
 
   // We only need to hit the endpos with the edge of our bounding box
   Vector vecDir = endPos - startPos;
@@ -4715,7 +4716,7 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
       {
               // Spray some of the player's blood on the hunter.
               trace_t tr;
-              
+              
 
 
 
@@ -4728,7 +4729,7 @@ CBaseEntity *CNPC_Hunter::MeleeAttack(float flDist, int iDamage,
 vecHunterEyePos, angDiscard );
 
               Vector vecPlayerEyePos = pPlayer->EyePosition();
-              
+              
 
 
 
@@ -4737,7 +4738,7 @@ vecHunterEyePos, angDiscard );
 
               Vector vecDir = vecHunterEyePos - vecPlayerEyePos;
               float flLen = VectorNormalize( vecDir );
-              
+              
 
 
 
@@ -4746,7 +4747,7 @@ vecHunterEyePos, angDiscard );
 
               Vector vecStart = vecPlayerEyePos - ( vecDir * 64 );
               Vector vecEnd = vecPlayerEyePos + ( vecDir * ( flLen + 64 ) );
-              
+              
 
 
 
@@ -4755,7 +4756,7 @@ vecHunterEyePos, angDiscard );
 
               NDebugOverlay::HorzArrow( vecStart, vecEnd, 16, 255, 255, 0, 255,
 false, 10 );
-              
+              
 
 
 

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -1339,12 +1339,7 @@ void CBaseCombatWeapon::ItemPostFrame(void) {
       // secondary fire, but it still stops the crossbow from firing on the 360
       // if the player chooses to hold down their zoom button. (sjb) Orange Box
       // 7/25/2007
-#if !defined(CLIENT_DLL)
-      if (!IsX360() || !ClassMatches("weapon_crossbow"))
-#endif
-      {
-        bFired = true;
-      }
+      bFired = true;
 
       SecondaryAttack();
 

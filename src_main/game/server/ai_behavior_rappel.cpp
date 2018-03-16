@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -8,7 +8,6 @@
 #include "eventqueue.h"
 #include "rope.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 BEGIN_DATADESC(CAI_RappelBehavior)
@@ -297,13 +296,9 @@ int CAI_RappelBehavior::SelectSchedule() {
     return SCHED_RAPPEL;
   }
 
-  if (m_bWaitingToRappel) {
-    return SCHED_RAPPEL_WAIT;
-  } else {
-    return SCHED_RAPPEL;
-  }
+  if (m_bWaitingToRappel) return SCHED_RAPPEL_WAIT;
 
-  return BaseClass::SelectSchedule();
+  return SCHED_RAPPEL;
 }
 
 //-----------------------------------------------------------------------------

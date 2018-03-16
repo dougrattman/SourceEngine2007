@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -794,13 +794,11 @@ Activity CBasePlayerAnimState::BodyYawTranslateActivity(Activity activity) {
     default:
     case TURN_NONE:
       return activity;
+
     case TURN_RIGHT:
     case TURN_LEFT:
       return mp_ik.GetBool() ? ACT_TURN : activity;
   }
-
-  Assert(0);
-  return activity;
 }
 
 const QAngle &CBasePlayerAnimState::GetRenderAngles() { return m_angRender; }

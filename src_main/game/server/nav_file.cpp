@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Reading and writing nav files
 // Author: Michael S. Booth (mike@turtlerockstudios.com), January-September 2003
@@ -44,7 +44,7 @@ class PlaceDirectory {
     int i = m_directory.Find(place);
 
     if (i < 0) {
-      Assert(false && "PlaceDirectory::GetIndex failure");
+      AssertMsg(false, "PlaceDirectory::GetIndex failure");
       return 0;
     }
 
@@ -69,7 +69,7 @@ class PlaceDirectory {
     int i = entry - 1;
 
     if (i >= m_directory.Count()) {
-      Assert(false && "PlaceDirectory::IndexToPlace: Invalid entry");
+      AssertMsg(false, "PlaceDirectory::IndexToPlace: Invalid entry");
       return UNDEFINED_PLACE;
     }
 

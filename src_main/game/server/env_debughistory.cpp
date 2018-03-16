@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -7,7 +7,6 @@
 #include "isaverestore.h"
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // Number of characters worth of debug to use per history category
@@ -39,8 +38,9 @@ class CDebugHistory : public CBaseEntity {
 };
 
 BEGIN_DATADESC(CDebugHistory)
-  // DEFINE_FIELD( m_DebugLines, FIELD_CHARACTER ),		// Not saved because
-  // we write it out manually DEFINE_FIELD( m_DebugLineEnd, FIELD_CHARACTER ),
+  // DEFINE_FIELD( m_DebugLines, FIELD_CHARACTER ),		// Not saved
+  // because we write it out manually DEFINE_FIELD( m_DebugLineEnd,
+  // FIELD_CHARACTER ),
 END_DATADESC()
 
 LINK_ENTITY_TO_CLASS(env_debughistory, CDebugHistory);
@@ -255,8 +255,7 @@ int CDebugHistory::Restore(IRestore &restore) {
 CDebugHistory *GetDebugHistory() {
 #ifdef DISABLE_DEBUG_HISTORY
   return NULL;
-#endif
-
+#else
   if (g_pGameRules && g_pGameRules->IsMultiplayer()) return NULL;
 
   if (s_DebugHistory == NULL) {
@@ -274,6 +273,7 @@ CDebugHistory *GetDebugHistory() {
 
   Assert(s_DebugHistory);
   return s_DebugHistory;
+#endif
 }
 
 //-----------------------------------------------------------------------------

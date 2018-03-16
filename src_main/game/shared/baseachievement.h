@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASEACHIEVEMENT_H
 #define BASEACHIEVEMENT_H
@@ -180,20 +180,19 @@ class CBaseAchievementHelper {
 
 #define DECLARE_ACHIEVEMENT_(className, achievementID, achievementName, \
                              gameDirFilter, iPointValue, bHidden)       \
-  \
-static CBaseAchievement *Create_##className##(void) \
-{                  \
+                                                                        \
+  static CBaseAchievement *Create_##className##(void) {                 \
     CBaseAchievement *pAchievement = new className();                   \
     pAchievement->SetAchievementID(achievementID);                      \
     pAchievement->SetName(achievementName);                             \
     pAchievement->SetPointValue(iPointValue);                           \
     pAchievement->SetHideUntilAchieved(bHidden);                        \
-    if (gameDirFilter) pAchievement->SetGameDirFilter(gameDirFilter);   \
+    if constexpr (gameDirFilter)                                        \
+      pAchievement->SetGameDirFilter(gameDirFilter);                    \
     return pAchievement;                                                \
-  \
-};                                                                      \
-  \
-static CBaseAchievementHelper g_##className##_Helper(Create_##className##);
+  };                                                                    \
+                                                                        \
+  static CBaseAchievementHelper g_##className##_Helper(Create_##className##);
 
 #define DECLARE_ACHIEVEMENT(className, achievementID, achievementName,  \
                             iPointValue)                                \
@@ -202,11 +201,11 @@ static CBaseAchievementHelper g_##className##_Helper(Create_##className##);
 
 #define DECLARE_MAP_EVENT_ACHIEVEMENT_(achievementID, achievementName,      \
                                        gameDirFilter, iPointValue, bHidden) \
-  \
-class CAchievement##achievementID : public CMapAchievement{};               \
-  \
-DECLARE_ACHIEVEMENT_(CAchievement##achievementID, achievementID,            \
-                     achievementName, gameDirFilter, iPointValue, bHidden)
+                                                                            \
+  class CAchievement##achievementID : public CMapAchievement {};            \
+                                                                            \
+  DECLARE_ACHIEVEMENT_(CAchievement##achievementID, achievementID,          \
+                       achievementName, gameDirFilter, iPointValue, bHidden)
 
 #define DECLARE_MAP_EVENT_ACHIEVEMENT(achievementID, achievementName,  \
                                       iPointValue)                     \

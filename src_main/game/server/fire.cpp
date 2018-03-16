@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "cbase.h"
 
@@ -13,7 +13,6 @@
 #include "ndebugoverlay.h"
 #include "tier0/include/vprof.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 /********************************************************************
@@ -278,8 +277,8 @@ bool FireSystem_IsFireInWall(Vector &position, fireType_e type) {
 //-----------------------------------------------------------------------------
 // Purpose: Determines whether or not a new fire may be placed at a given
 // location Input  : &position - where we are trying to put the new fire
-//			separationRadius - the maximum distance fires must be apart
-//from one another
+//			separationRadius - the maximum distance fires must be
+// apart from one another
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool FireSystem_CanAddFire(Vector *position, float separationRadius,
@@ -361,8 +360,8 @@ bool FireSystem_StartFire(const Vector &position, float fireHeight,
   // Must be okay to add fire here
   if (FireSystem_CanAddFire(&testPos, 16.0f, type, flags) == false) {
     CFire *pFires[16];
-    int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), true,
-                                                position, 16.0f);
+    int fireCount = FireSystem_GetFiresInSphere(
+        pFires, SOURCE_ARRAYSIZE(pFires), true, position, 16.0f);
     for (int i = 0; i < fireCount; i++) {
       // add to this fire
       pFires[i]->AddHeat(fireHeight, false);
@@ -411,8 +410,8 @@ bool FireSystem_StartFire(CBaseAnimating *pEntity, float fireHeight,
   if (FireSystem_CanAddFire(&testPos, 16.0f, type, flags) == false) {
     // Contribute heat to all fires within 16 units of this fire.
     CFire *pFires[16];
-    int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), true,
-                                                position, 16.0f);
+    int fireCount = FireSystem_GetFiresInSphere(
+        pFires, SOURCE_ARRAYSIZE(pFires), true, position, 16.0f);
     for (int i = 0; i < fireCount; i++) {
       pFires[i]->AddHeat(fireHeight, false);
     }
@@ -444,8 +443,8 @@ void FireSystem_ExtinguishInRadius(const Vector &origin, float radius,
   float heat = (1 - rate) * fire_extscale.GetFloat();
 
   CFire *pFires[32];
-  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), false,
-                                              origin, radius);
+  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires),
+                                              false, origin, radius);
   for (int i = 0; i < fireCount; i++) {
     pFires[i]->Extinguish(heat);
   }
@@ -463,8 +462,8 @@ void FireSystem_AddHeatInRadius(const Vector &origin, float radius,
 
   CFire *pFires[32];
 
-  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), false,
-                                              origin, radius);
+  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires),
+                                              false, origin, radius);
   for (int i = 0; i < fireCount; i++) {
     pFires[i]->AddHeat(heat);
   }
@@ -814,8 +813,9 @@ bool CFire::GetFireDimensions(Vector *pFireMins, Vector *pFireMaxs) {
   float scale = m_flHeatLevel / m_flMaxHeat;
   float damageRadius = scale * m_flFireSize * FIRE_WIDTH / FIRE_HEIGHT * 0.5;
 
-  damageRadius *= FIRE_SPREAD_DAMAGE_MULTIPLIER;  // TODO(d.rattman): Trying slightly
-                                                  // larger radius for burning
+  damageRadius *=
+      FIRE_SPREAD_DAMAGE_MULTIPLIER;  // TODO(d.rattman): Trying slightly
+                                      // larger radius for burning
 
   if (damageRadius < 16) {
     damageRadius = 16;
@@ -863,8 +863,8 @@ void CFire::Update(float simTime) {
 
   GetFireDimensions(&fireMins, &fireMaxs);
 
-  if (FIRE_SPREAD_DAMAGE_MULTIPLIER !=
-      1.0)  // if set to 1.0, optimizer will remove this code
+  if constexpr (FIRE_SPREAD_DAMAGE_MULTIPLIER !=
+                1.0)  // if set to 1.0, optimizer will remove this code
   {
     fireEntityDamageMins = fireMins / FIRE_SPREAD_DAMAGE_MULTIPLIER;
     fireEntityDamageMaxs = fireMaxs / FIRE_SPREAD_DAMAGE_MULTIPLIER;
@@ -875,15 +875,15 @@ void CFire::Update(float simTime) {
   fireMins += GetAbsOrigin();
   fireMaxs += GetAbsOrigin();
 
-  if (FIRE_SPREAD_DAMAGE_MULTIPLIER != 1.0) {
+  if constexpr (FIRE_SPREAD_DAMAGE_MULTIPLIER != 1.0) {
     fireEntityDamageMins += GetAbsOrigin();
     fireEntityDamageMaxs += GetAbsOrigin();
   }
 
   CBaseEntity *pNearby[256];
   CFire *pFires[16];
-  int nearbyCount =
-      UTIL_EntitiesInBox(pNearby, SOURCE_ARRAYSIZE(pNearby), fireMins, fireMaxs, 0);
+  int nearbyCount = UTIL_EntitiesInBox(pNearby, SOURCE_ARRAYSIZE(pNearby),
+                                       fireMins, fireMaxs, 0);
   int fireCount = 0;
   int i;
 
@@ -1135,8 +1135,8 @@ void CEnvFireSource::Think() {
   SetNextThink(gpGlobals->curtime + FIRESOURCE_THINK_TIME);
 
   CFire *pFires[128];
-  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), false,
-                                              GetAbsOrigin(), m_radius);
+  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires),
+                                              false, GetAbsOrigin(), m_radius);
 
   for (int i = 0; i < fireCount; i++) {
     pFires[i]->AddHeat(m_damage * FIRESOURCE_THINK_TIME);
@@ -1228,8 +1228,8 @@ void CEnvFireSensor::Think() {
 
   float heat = 0;
   CFire *pFires[128];
-  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires), true,
-                                              GetAbsOrigin(), m_radius);
+  int fireCount = FireSystem_GetFiresInSphere(pFires, SOURCE_ARRAYSIZE(pFires),
+                                              true, GetAbsOrigin(), m_radius);
   for (int i = 0; i < fireCount; i++) {
     heat += pFires[i]->GetHeatLevel();
   }
