@@ -1,11 +1,10 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "disp_powerinfo.h"
 
-#include "disp_common.h"
 #include "base/include/macros.h"
+#include "disp_common.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // ------------------------------------------------------------------------ //
@@ -453,7 +452,7 @@ void InitPowerInfo(CPowerInfo *pInfo, int iMaxPower) {
 class CPowerInfoInitializer {
  public:
   CPowerInfoInitializer() {
-    Assert(MAX_MAP_DISP_POWER + 1 == NUM_POWERINFOS);
+    static_assert(MAX_MAP_DISP_POWER + 1 == NUM_POWERINFOS);
 
     for (int i = 0; i <= MAX_MAP_DISP_POWER; i++) {
       if (g_PowerInfos[i]) {

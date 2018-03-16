@@ -783,7 +783,7 @@ CTexture::~CTexture() {
 #ifdef _DEBUG
   if (m_nRefCount != 0) {
     Warning("Reference Count(%d) != 0 in ~CTexture for texture \"%s\"\n",
-            m_nRefCount, m_Name.String());
+            static_cast<i32>(m_nRefCount), m_Name.String());
   }
   if (m_pDebugName) {
     delete[] m_pDebugName;

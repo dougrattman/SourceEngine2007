@@ -1204,7 +1204,7 @@ class CSaveRestoreFileSystemPassthrough : public ISaveRestoreFileSystem {
 
       int fileSize = g_pFileSystem->Size(szName);
       if (fileSize) {
-        Assert(sizeof(list[i].szFileName) == SOURCE_MAX_PATH);
+        static_assert(sizeof(list[i].szFileName) == SOURCE_MAX_PATH);
 
         SaveMsg("DirectoryCopy: AsyncAppend %s, %s\n", szName, pDestFileName);
         g_pFileSystem->AsyncAppend(

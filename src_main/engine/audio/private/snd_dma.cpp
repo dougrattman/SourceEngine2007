@@ -4612,11 +4612,6 @@ int S_StartDynamicSound(StartSoundParams_t &params) {
       (params.flags & SND_IGNORE_PHONEMES) != 0;
   SND_InitMouth(target_chan);
 
-  if (IsX360() && params.delay < 0) {
-    params.delay = 0;
-    target_chan->flags.delayed_start = true;
-  }
-
   // Pre-startup delay.  Compute # of samples over which to mix in zeros from
   // data source before
   //  actually reading first set of samples
@@ -4878,11 +4873,6 @@ int S_StartStaticSound(StartSoundParams_t &params) {
   ch->flags.m_bIgnorePhonemes = (params.flags & SND_IGNORE_PHONEMES) != 0;
   SND_InitMouth(ch);
 
-  if (IsX360() && params.delay < 0) {
-    // X360TEMP: Can't support yet, but going to.
-    params.delay = 0;
-  }
-
   // Pre-startup delay.  Compute # of samples over which to mix in zeros from
   // data source before actually reading first set of samples
   if (params.delay != 0.0f) {
@@ -4974,15 +4964,6 @@ int S_StartStaticSound(StartSoundParams_t &params) {
 }
 
 int S_StartSound(StartSoundParams_t &params) {
-  if (IsX360() && params.delay < 0 && !params.initialStreamPosition &&
-      params.pSfx) {
-    // calculate an initial stream position from the expected sample position
-    float rate = params.pSfx->pSource->SampleRate();
-    int samplePosition = (int)(-params.delay * rate * params.pitch * 0.01f);
-    params.initialStreamPosition =
-        params.pSfx->pSource->SampleToStreamPosition(samplePosition);
-  }
-
   if (params.staticsound) {
     VPROF_("StartStaticSound", 0, VPROF_BUDGETGROUP_OTHER_SOUND, false,
            BUDGETFLAG_OTHER);
