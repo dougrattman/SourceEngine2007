@@ -25,15 +25,15 @@ wstr Localize(const HINSTANCE instance, const UINT message_id) {
   // From https://msdn.microsoft.com/en-us/library/ms647486(v=vs.85).aspx:
   // "If the function succeeds, the return value is the number of characters
   // copied into the buffer, not including the terminating null character, or
-  // zero if the string resource does not exist. To get extended error
+  // zero if the string resource does not exist.  To get extended error
   // information, call GetLastError."
   const int chars_count = LoadStringW(instance, message_id, &message[0],
                                       static_cast<int>(message.capacity()));
   const bool has_load_message_error =
       chars_count == 0 && GetLastError() != NOERROR;
 
-  // Terminate the application when no message found.
-  // Force to localize application correctly.
+  // Terminate the application when no message found.  Force to localize
+  // application correctly.
   if (has_load_message_error) abort();
 
   return message;

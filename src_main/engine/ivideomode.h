@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef IVIDEOMODE_H
 #define IVIDEOMODE_H
@@ -72,8 +72,8 @@ the_interface IVideoMode {
 };
 
 // Utilities for virtual screen coordinates
-#define XRES(x) (x * ((float)videomode->GetModeWidth() / 640.0))
-#define YRES(y) (y * ((float)videomode->GetModeHeight() / 480.0))
+#define XRES(x) (x * ((float)videomode->GetModeWidth() / 640.0f))
+#define YRES(y) (y * ((float)videomode->GetModeHeight() / 480.0f))
 
 // Singleton accessor
 extern IVideoMode *videomode;

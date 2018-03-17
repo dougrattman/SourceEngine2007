@@ -94,10 +94,10 @@ constexpr inline To implicit_cast(const From value) {
 template <typename Dest, typename Source>
 inline Dest bit_cast(const Source& source) {
   static_assert(sizeof(Dest) == sizeof(Source), "Verify sizes are equal.");
-  static_assert(std::is_pod<Source>::value, "Source should be POD.");
-  static_assert(std::is_pod<Dest>::value, "Dest should be POD.");
+  static_assert(std::is_pod<Source>::value, "Verify Source should be POD.");
+  static_assert(std::is_pod<Dest>::value, "Verify Dest should be POD.");
   static_assert(std::is_default_constructible<Dest>::value,
-                "Dest should be default constructible.");
+                "Verify Dest should be default constructible.");
 
   Dest dest;
   std::memcpy(&dest, &source, sizeof(dest));

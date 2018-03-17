@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #if !defined(_STATIC_LINKED) || defined(_SHARED_LIB)
 
@@ -6,7 +6,6 @@
 #include <malloc.h>
 #include "tier0/include/basetypes.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 VStdAllocator g_StdAllocator;
@@ -15,8 +14,9 @@ void *VStdAllocator::Alloc(unsigned long size) {
   if (size) {
     void *ret = malloc(size);
     return ret;
-  } else
-    return 0;
+  }
+
+  return 0;
 }
 
 void VStdAllocator::Free(void *ptr) { free(ptr); }

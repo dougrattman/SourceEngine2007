@@ -10,20 +10,21 @@ namespace source::windows {
 // Scoped error mode.
 class ScopedErrorMode {
  public:
-  // Set error mode |error_mode| in scope.
-  explicit ScopedErrorMode(const UINT error_mode)
+  // Set error mode to |error_mode| for scope.
+  explicit ScopedErrorMode(const UINT error_mode) noexcept
       : old_error_mode_{SetErrorMode(GetErrorMode() | error_mode)},
-        new_error_mode_{GetErrorMode()} {}
+        scoped_error_mode_{GetErrorMode()} {}
 
   ~ScopedErrorMode() {
     // If nobody changed error mode in our scope.
-    if (GetErrorMode() == new_error_mode_) {
+    if (GetErrorMode() == scoped_error_mode_) {
       SetErrorMode(old_error_mode_);
     }
   }
 
  private:
-  const UINT old_error_mode_, new_error_mode_;
+  // Old and scope error modes.
+  const UINT old_error_mode_, scoped_error_mode_;
 
   ScopedErrorMode(const ScopedErrorMode& s) = delete;
   ScopedErrorMode& operator=(const ScopedErrorMode& s) = delete;

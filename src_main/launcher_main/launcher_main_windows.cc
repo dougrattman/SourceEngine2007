@@ -2,7 +2,6 @@
 //
 // Purpose: A redirection tool that allows the DLLs to reside elsewhere.
 
-#include <cstdio>
 #include <tuple>
 
 #include "base/include/base_types.h"
@@ -61,7 +60,7 @@ inline void ShowErrorBox(_In_ wstr message) {
 }
 
 // Show error box with |message| by |error_code|.
-inline u32 NotifyAboutError(_In_z_ const wch *message,
+inline u32 NotifyAboutError(_In_ wstr message,
                             _In_ u32 error_code = GetLastError()) {
   ShowErrorBox(BuildError(message, error_code));
   return error_code;
@@ -72,28 +71,25 @@ inline u32 NotifyAboutError(_In_z_ const wch *message,
 inline u32 NotifyAboutNoLauncherError(_In_ const wstr &launcher_dll_path,
                                       _In_ u32 error_code) {
   wstr user_friendly_message{
-      L"Please, contact support. Failed to load the bin/launcher.dll from " +
+      L"Please, contact support. Failed to load the launcher.dll from " +
       launcher_dll_path};
-  ShowErrorBox(BuildError(user_friendly_message, error_code));
-  return error_code;
+  return NotifyAboutError(user_friendly_message, error_code);
 }
 
 // Show no launcher at path |launcher_dll_path| entry point error box with
 // system-specific error message from error code |error_code|.
 inline u32 NotifyAboutNoEntryPointError(_In_ const wstr &launcher_dll_path,
                                         _In_ u32 error_code) {
-  wstr user_friendly_message{
-      L"Please, contact support. Failed to find the bin/launcher.dll from " +
-      launcher_dll_path + L" entry point."};
-  ShowErrorBox(BuildError(user_friendly_message, error_code));
-  return error_code;
+  wstr user_friendly_message{L"Please, contact support. Failed to find the " +
+                             launcher_dll_path + L" entry point."};
+  return NotifyAboutError(user_friendly_message, error_code);
 }
 
 // Enable termination on heap corruption.
 inline u32 EnableTerminationOnHeapCorruption() {
-  // Enables the terminate-on-corruption feature. If the heap manager detects an
-  // error in any heap used by the process, it calls the Windows Error Reporting
-  // service and terminates the process.
+  // Enables the terminate-on-corruption feature.  If the heap manager detects
+  // an error in any heap used by the process, it calls the Windows Error
+  // Reporting service and terminates the process.
   //
   // See
   // https://msdn.microsoft.com/en-us/library/windows/desktop/aa366705(v=vs.85).aspx
@@ -108,11 +104,11 @@ inline std::tuple<wstr, u32> GetThisModuleFilePath(_In_ HINSTANCE instance) {
   wch this_module_file_path[MAX_PATH];
   // If the function succeeds, the return value is the length of the string that
   // is copied to the buffer, in characters, not including the terminating null
-  // character. If the buffer is too small to hold the module name, the string
+  // character.  If the buffer is too small to hold the module name, the string
   // is truncated to nSize characters including the terminating null character,
   // the function returns nSize, and the function sets the last error to
-  // ERROR_INSUFFICIENT_BUFFER. If the function fails, the return value is 0
-  // (zero). To get extended error information, call GetLastError.
+  // ERROR_INSUFFICIENT_BUFFER.  If the function fails, the return value is 0
+  // (zero).  To get extended error information, call GetLastError.
   //
   // See https://msdn.microsoft.com/en-us/library/ms683197(v=vs.85).aspx
   return GetModuleFileNameW(instance, this_module_file_path,
@@ -128,8 +124,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   // Game uses features of Windows 10.
   if (!IsWindows10OrGreater()) {
     return NotifyAboutError(
-        L"Unfortunately, your operating system is not supported."
-        L" " SOURCE_GAME_NAME L" requires at least Windows 10 to play.",
+        L"Unfortunately, your environment is not supported."
+        L" " SOURCE_GAME_NAME L" requires at least Windows 10 to survive.",
         ERROR_EXE_MACHINE_TYPE_MISMATCH);
   }
 
@@ -142,7 +138,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
       SEM_FAILCRITICALERRORS |
 #endif
       // The system automatically fixes memory alignment faults and makes them
-      // invisible to the application. It does this for the calling process and
+      // invisible to the application.  It does this for the calling process and
       // any descendant processes.
       SEM_NOALIGNMENTFAULTEXCEPT |
       // The system does not display the Windows Error Reporting dialog.
@@ -153,7 +149,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   if (error_code != NOERROR) {
     return NotifyAboutError(
         L"Please, contact support. Failed to enable termination on heap "
-        L"corruption feature.");
+        L"corruption feature for your environment.");
   }
 
   // Use the .exe name to determine the root directory.
@@ -161,7 +157,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE,
   std::tie(this_module_file_path, error_code) = GetThisModuleFilePath(instance);
   if (error_code != NOERROR) {
     return NotifyAboutError(
-        L"Please, contact support. Can't get this app file path.", error_code);
+        L"Please, contact support. Can't get current exe file path.",
+        error_code);
   }
 
   const wstr root_dir{GetDirectoryFromFilePath(this_module_file_path)};

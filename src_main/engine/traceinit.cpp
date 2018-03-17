@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "traceinit.h"
 
@@ -7,23 +7,15 @@
 #include "tier0/include/basetypes.h"
 #include "tier1/UtlVector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 class CInitTracker {
  public:
   enum {
     NUM_LISTS = 4,
   };
 
-  //-----------------------------------------------------------------------------
-  // Purpose:
-  //-----------------------------------------------------------------------------
-  class InitFunc {
-   public:
+  struct InitFunc {
     const char *initname;
     const char *shutdownname;
     int referencecount;
@@ -47,18 +39,12 @@ class CInitTracker {
 
 static CInitTracker g_InitTracker;
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CInitTracker::CInitTracker(void) {
   for (int l = 0; l < NUM_LISTS; l++) {
     m_nNumFuncs[l] = 0;
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
 CInitTracker::~CInitTracker(void) {
   for (int l = 0; l < NUM_LISTS; l++) {
     // assert( m_nNumFuncs[l] == 0 );
@@ -75,11 +61,6 @@ CInitTracker::~CInitTracker(void) {
   }
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *init -
-//			*shutdown -
-//-----------------------------------------------------------------------------
 void CInitTracker::Init(const char *init, const char *shutdown, int listnum) {
   InitFunc *f = new InitFunc;
   Assert(f);
@@ -95,19 +76,14 @@ void CInitTracker::Init(const char *init, const char *shutdown, int listnum) {
   m_nNumFuncs[listnum]++;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *shutdown -
-//-----------------------------------------------------------------------------
 void CInitTracker::Shutdown(const char *shutdown, int listnum) {
   if (!m_nNumFuncs[listnum]) {
     Msg("Mismatched shutdown function %s\n", shutdown);
     return;
   }
 
-  int i = 0;
   InitFunc *f = NULL;
-  for (i = 0; i < m_nNumFuncs[listnum]; i++) {
+  for (int i = 0; i < m_nNumFuncs[listnum]; i++) {
     f = m_Funcs[listnum][i];
     if (f->referencecount) break;
   }
@@ -120,7 +96,7 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
     }
   }
 
-  for (i = 0; i < m_nNumFuncs[listnum]; i++) {
+  for (int i = 0; i < m_nNumFuncs[listnum]; i++) {
     InitFunc *ff = m_Funcs[listnum][i];
 
     if (!_stricmp(ff->shutdownname, shutdown)) {
@@ -134,21 +110,12 @@ void CInitTracker::Shutdown(const char *shutdown, int listnum) {
   Msg("Shutdown function %s not in list!!!\n", shutdown);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *i -
-//			*s -
-//-----------------------------------------------------------------------------
 void TraceInit(const char *i, const char *s, int listnum) {
   g_InitTracker.Init(i, s, listnum);
 
   COM_TimestampedLog("%s", i);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-// Input  : *s -
-//-----------------------------------------------------------------------------
 void TraceShutdown(const char *s, int listnum) {
   g_InitTracker.Shutdown(s, listnum);
 }

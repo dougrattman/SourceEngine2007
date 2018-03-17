@@ -27,7 +27,7 @@
   code MSVC_END_WARNING_OVERRIDE_SCOPE()
 
 // Begins scope with disabling some turned off by default MSVC warnings which
-// can be turned on in case /Wall compiler flag was used. MSVC can't disable
+// can be turned on in case /Wall compiler flag was used.  MSVC can't disable
 // warnings in system headers only for now. See
 // https://docs.microsoft.com/en-us/cpp/preprocessor/compiler-warnings-that-are-off-by-default
 #define MSVC_BEGIN_TURN_OFF_DEFAULT_WARNING_OVERRIDE_SCOPE() \
@@ -73,11 +73,11 @@
 #ifdef COMPILER_MSVC
 // This form of __declspec can be applied to any class declaration, but
 // should only be applied to pure interface classes, that is, classes that
-// will never be instantiated on their own. The __declspec stops the compiler
+// will never be instantiated on their own.  The __declspec stops the compiler
 // from generating code to initialize the vfptr in the constructor(s) and
-// destructor of the class. In many cases, this removes the only references
+// destructor of the class.  In many cases, this removes the only references
 // to the vtable that are associated with the class and, thus, the linker
-// will remove it. Using this form of __declspec can result in a significant
+// will remove it.  Using this form of __declspec can result in a significant
 // reduction in code size.
 //
 // If you attempt to instantiate a class marked with novtable and then access
@@ -89,16 +89,16 @@
 #define MSVC_NOVTABLE
 #endif  // COMPILER_MSVC
 
-// Defines class with (potentially) no virtual table. Useful for pure virtual
+// Defines class with (potentially) no virtual table.  Useful for pure virtual
 // classes aka interfaces in Java/C#.
 #define the_interface class MSVC_NOVTABLE
 
 #ifdef COMPILER_MSVC
 // For functions declared with the naked attribute, the compiler generates code
 // without prolog and epilog code. You can use this feature to write your own
-// prolog/epilog code sequences using inline assembler code. Naked functions are
-// particularly useful in writing virtual device drivers. Note that the naked
-// attribute is only valid on x86 and ARM, and is not available on x64.
+// prolog/epilog code sequences using inline assembler code.  Naked functions
+// are particularly useful in writing virtual device drivers.  Note that the
+// naked attribute is only valid on x86 and ARM, and is not available on x64.
 //
 // See https://docs.microsoft.com/en-us/cpp/cpp/naked-cpp
 #define MSVC_NAKED __declspec(naked)
@@ -113,7 +113,7 @@
 
 // When applied to a function declaration or definition that returns a pointer
 // type, restrict tells the compiler that the function returns an object that is
-// not aliased, that is, referenced by any other pointers. This allows the
+// not aliased, that is, referenced by any other pointers.  This allows the
 // compiler to perform additional optimizations.
 //
 // See https://docs.microsoft.com/en-us/cpp/cpp/restrict
@@ -155,7 +155,7 @@
 #endif  // EXPORT
 
 // Linux had a few areas where it didn't construct objects in the same order
-// that Windows does. So when CVProfile::CVProfile() would access g_pMemAlloc,
+// that Windows does.  So when CVProfile::CVProfile() would access g_pMemAlloc,
 // it would crash because the allocator wasn't initalized yet.
 #if defined COMPILER_GCC || defined COMPILER_CLANG
 #define CONSTRUCT_EARLY __attribute__((init_priority(101)))
@@ -205,8 +205,8 @@
 // code in certain situations.  Several compilers other than MSVC also have an
 // equivilent construct.
 //
-// Essentially the 'Hint' is that the condition specified is assumed to be true
-// at that point in the compilation.  If '0' is passed, then the compiler
+// Essentially the 'the_hint' is that the condition specified is assumed to be
+// true at that point in the compilation.  If '0' is passed, then the compiler
 // assumes that any subsequent code in the same 'basic block' is unreachable,
 // and thus usually removed.
 #ifdef COMPILER_MSVC

@@ -12,9 +12,9 @@
 
 #include "build/include/build_config.h"
 
-// Small and precise synonyms of fixed width standard types.
-// These typedefs are not defined if no types with such characteristics exist,
-// so define for your platform as needed.
+// Small and precise synonyms of fixed width standard types. These aliases are
+// not defined if no types with such characteristics exist, so define for your
+// platform as needed.
 using u8 = std::uint8_t;
 using i8 = std::int8_t;
 

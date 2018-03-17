@@ -13,8 +13,10 @@ namespace source::windows {
 // Initializes COM at scope level.
 class ScopedComInitializer {
  public:
-  // Initializes COM with |coinit| flags in scope.
-  explicit ScopedComInitializer(const COINIT coinit) : hr_ { CoInitializeEx(nullptr, coinit) }
+  // Initializes COM with |coinit| flags for scope.
+  explicit ScopedComInitializer(const COINIT coinit) noexcept : hr_ {
+    CoInitializeEx(nullptr, coinit)
+  }
 #ifndef NDEBUG
   , thread_id_ { GetCurrentThreadId() }
 #endif

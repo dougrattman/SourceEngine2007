@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: This module implements the IVoiceServer interface.
 
@@ -6,7 +6,6 @@
 #include "quakedef.h"
 #include "server.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class CVoiceServer : public IVoiceServer {
@@ -38,6 +37,7 @@ class CVoiceServer : public IVoiceServer {
 
     return true;
   }
+
   virtual bool SetClientProximity(int iReceiver, int iSender,
                                   bool bUseProximity) {
     // Make into client indices..

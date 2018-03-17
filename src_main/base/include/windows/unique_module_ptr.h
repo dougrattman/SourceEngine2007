@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_INCLUDE_WINDOWS_UNIQUE_MODULE_PTR_H_
 #define BASE_INCLUDE_WINDOWS_UNIQUE_MODULE_PTR_H_
@@ -42,11 +42,11 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
                         std::default_delete<module_descriptor>>::unique_ptr;
 
  public:
-  // Check module loaded like pointer.
+  // Check module loaded like this: if (!module) do_smth.
   using std::unique_ptr<module_descriptor,
                         std::default_delete<module_descriptor>>::operator bool;
 
-  // Loads library |library_name| and get unique_module_ptr to it.
+  // Loads library |library_name| and gets (unique_module_ptr, error_code).
   static std::tuple<unique_module_ptr, u32> from_load_library(
       const wstr &library_name) noexcept {
     const HMODULE library{LoadLibraryW(library_name.c_str())};
@@ -55,7 +55,7 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
   }
 
   // Loads library |library_name| with flags |load_flags| and gets
-  // unique_module_ptr to it.
+  // (unique_module_ptr, error_code).
   static std::tuple<unique_module_ptr, u32> from_load_library(
       const wstr &library_name, u32 load_flags) noexcept {
     const HMODULE library{
@@ -64,11 +64,12 @@ class unique_module_ptr : private std::unique_ptr<module_descriptor> {
             library != nullptr ? NO_ERROR : GetLastError()};
   }
 
-  // Gets address of function |function_name| in loaded library module.
+  // Gets (address, error_code) of function |function_name| in loaded library
+  // module.
   template <typename T>
   std::tuple<T, u32> get_address_as(_In_z_ const ch *function_name) const
       noexcept {
-    static_assert(type_traits::is_function_pointer<T>::value,
+    static_assert(type_traits::is_function_pointer_v<T>,
                   "The T should be a function pointer.");
     const auto address =
         reinterpret_cast<T>(GetProcAddress(get(), function_name));

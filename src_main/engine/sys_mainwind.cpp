@@ -115,8 +115,7 @@ void DoSomeSocketStuffInOrderToGetZoneAlarmToNoticeUs() {
 
   hostent *hInfo = gethostbyname(host_name);
   if (hInfo) {
-    sockaddr_in myIpAddress;
-    memset(&myIpAddress, 0, sizeof(myIpAddress));
+    sockaddr_in myIpAddress{0};
     myIpAddress.sin_family = AF_INET;
     myIpAddress.sin_port = htons(27015);  // our normal server port
     myIpAddress.sin_addr.S_un.S_un_b.s_b1 = hInfo->h_addr_list[0][0];

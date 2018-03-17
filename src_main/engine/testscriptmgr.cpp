@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "testscriptmgr.h"
 
@@ -11,17 +11,13 @@
 #include "tier1/strtools.h"
 #include "vstdlib/random.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 CTestScriptMgr g_TestScriptMgr;
 
 ConVar testscript_debug("testscript_debug", "0", 0, "Debug test scripts.");
 
-// ---------------------------------------------------------------------------------------------------
-// // Global console commands the test script manager implements.
-// ---------------------------------------------------------------------------------------------------
-// //
+// Global console commands the test script manager implements.
 CON_COMMAND_EXTERN(Test_Wait, Test_Wait, "") {
   if (args.ArgC() < 2) {
     Error("Test_Wait: requires seconds parameter.");
@@ -137,10 +133,7 @@ CON_COMMAND(Test_StartScript, "Start a test script running..") {
     Warning("Error starting testscript '%s'\n", args[1]);
 }
 
-// ---------------------------------------------------------------------------------------------------
-// // CTestScriptMgr implementation.
-// ---------------------------------------------------------------------------------------------------
-// //
+// CTestScriptMgr implementation.
 CTestScriptMgr::CTestScriptMgr() {
   m_hFile = FILESYSTEM_INVALID_HANDLE;
   m_NextCheckPoint[0] = 0;

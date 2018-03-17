@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "vgui_askconnectpanel.h"
 
@@ -229,7 +229,7 @@ bool IsAskConnectPanelActive(char *pHostName, int maxHostNameBytes) {
   if (pPanel && pPanel->IsVisible() && pPanel->GetAlpha() > 0) {
     pPanel->GetHostName(pHostName, maxHostNameBytes);
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }

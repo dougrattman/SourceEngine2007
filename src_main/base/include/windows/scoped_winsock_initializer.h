@@ -8,6 +8,7 @@
 #include <winsock.h>
 #include <cassert>
 #include <type_traits>
+#include "base/include/base_types.h"
 
 namespace source::windows {
 // Winsock versions.
@@ -17,40 +18,42 @@ enum class WinsockVersion : WORD { Version2_2 = MAKEWORD(2, 2) };
 class ScopedWinsockInitializer {
  public:
   // Initializes winsock with version |version|.
-  ScopedWinsockInitializer(WinsockVersion version)  //-V730
+  ScopedWinsockInitializer(WinsockVersion version) noexcept  //-V730
       : version_{version}, wsa_data_{Initialize(this, version)} {}
 
-  // Get winsock initialization error code.
-  DWORD error_code() const { return error_code_; }
-
   ~ScopedWinsockInitializer() {
-    if (error_code_ == ERROR_SUCCESS) {
-      const int return_code = ::WSACleanup();
-      (void)return_code;
-      assert(return_code == ERROR_SUCCESS);
+    if (error_code_ == NOERROR) {
+      [[maybe_unused]] const int return_code { WSACleanup() };
+      assert(return_code == NOERROR);
     }
   }
 
+  // Get winsock initialization error code.
+  i32 error_code() const noexcept { return error_code_; }
+
  private:
+  // Current winsock version.
   const WinsockVersion version_;
+  // Winosock initialization data.
   const WSAData wsa_data_;
+  // Winsock initialization error code.
   int error_code_;
 
-  static WSAData Initialize(ScopedWinsockInitializer* me,
-                            WinsockVersion version) {
-    WSAData wsa_data;
-    static_assert(
-        std::is_same<WORD,
-                     std::underlying_type<decltype(version)>::type>::value,
-        "Winsock version should be WORD.");
+  // Initializes |me| with winsock version |version|.
+  static WSAData Initialize(ScopedWinsockInitializer* me, WinsockVersion version) noexcept {
+    assert(me != nullptr);
 
-    me->error_code_ = ::WSAStartup(static_cast<WORD>(version), &wsa_data);
+    WSAData wsa_data;
+    static_assert(std::is_same_v<WORD, std::underlying_type<decltype(version)>::type>,
+                  "Winsock version should be WORD.");
+
+    me->error_code_ =
+        WSAStartup(static_cast<std::underlying_type<decltype(version)>::type>(version), &wsa_data);
     return wsa_data;
   }
 
   ScopedWinsockInitializer(const ScopedWinsockInitializer& s) = delete;
-  ScopedWinsockInitializer& operator=(const ScopedWinsockInitializer& s) =
-      delete;
+  ScopedWinsockInitializer& operator=(const ScopedWinsockInitializer& s) = delete;
 };
 }  // namespace source::windows
 

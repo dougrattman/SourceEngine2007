@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASE_INCLUDE_TYPE_TRAITS_H_
 #define BASE_INCLUDE_TYPE_TRAITS_H_
@@ -14,6 +14,10 @@ struct is_function_pointer {
       std::is_pointer<T>::value &&
       std::is_function<typename std::remove_pointer<T>::type>::value;
 };
+
+// Alias for is_function_pointer<T>::value.
+template <typename T>
+constexpr bool is_function_pointer_v = is_function_pointer<T>::value;
 }  // namespace type_traits
 
 #endif  // BASE_INCLUDE_TYPE_TRAITS_H_
