@@ -83,9 +83,10 @@ void FileSystemAccessLogger::Init() {
         "GAME");
   }
 
-  GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_directory_), current_directory_);
+  GetCurrentDirectoryA(SOURCE_ARRAYSIZE(current_directory_),
+                       current_directory_);
   Q_strncat(current_directory_, "\\", SOURCE_ARRAYSIZE(current_directory_), 1);
-  _strlwr(current_directory_);
+  _strlwr_s(current_directory_);
 }
 
 void FileSystemAccessLogger::Shutdown() {

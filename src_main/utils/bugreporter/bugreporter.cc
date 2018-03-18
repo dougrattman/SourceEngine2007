@@ -562,8 +562,11 @@ class BugReporter : public IBugReporter {
 
     // We still don't know the username. . try to get it from the environment
     if (user_name[0] == '\0') {
-      const char *user_name_env{getenv("username")};
-      if (user_name_env) {
+      usize username_size;
+      char user_name_env[50];
+
+      if (!getenv_s(&username_size, user_name_env, "username") &&
+          username_size > 0) {
         Q_strncpy(user_name, user_name_env, SOURCE_ARRAYSIZE(user_name));
         maybe_no_pvcs_install = true;
       }

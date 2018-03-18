@@ -170,20 +170,24 @@ std::tuple<bool, u32> InitTextModeIfNeeded(
 
   u32 return_code{AllocConsole() != FALSE ? NO_ERROR : GetLastError()};
   if (return_code == NO_ERROR) {
+    FILE *dummy;
     // reopen stdin, stout, stderr handles as console window input, output and
     // output.
     return_code =
-        freopen("CONIN$", "rb", stdin) && freopen("CONOUT$", "wb", stdout) &&
-                freopen("CONOUT$", "wb", stderr)
+        !freopen_s(&dummy, "CONIN$", "rb", stdin) &&
+                !freopen_s(&dummy, "CONOUT$", "wb", stdout) &&
+                !freopen_s(&dummy, "CONOUT$", "wb", stderr)
             ? NO_ERROR
             : errno;  // Yea, no direct mapping errno => GetLastError() :(
 
     // freopen set last error in errno (not 0 => not NO_ERROR).
     if (return_code != NO_ERROR) {
+      ch error_description[96];
+      strerror_s(error_description, errno);
       Error(
-          "Can't redirect stdin, stout, stderr to console, error code %d, "
+          "Can't redirect stdin, stout, stderr to console (%d), "
           "message %s.",
-          errno, strerror(errno));
+          errno, error_description);
     }
   }
 
@@ -264,16 +268,18 @@ void RelaunchWithNewLanguageViaSteam() {
           static_cast<u32>(RegDeleteValueW(source_key, L"Relaunch URL"));
 
       if (return_code != NO_ERROR) {
-        Warning("Can't delete registry key value %s (0x%.8x).",
-                "Software\\Valve\\Source Relaunch URL", return_code);
+        Warning(
+            "Can't delete registry key value Software\\Valve\\Source Relaunch "
+            "URL (0x%.8x).",
+            return_code);
       }
     }
 
     const u32 return_code = static_cast<u32>(RegCloseKey(source_key));
 
     if (return_code != NO_ERROR) {
-      Warning("Can't close registry key %s (0x%.8x).",
-              "Software\\Valve\\Source", return_code);
+      Warning("Can't close registry key Software\\Valve\\Source (0x%.8x).",
+              return_code);
     }
   }
 }

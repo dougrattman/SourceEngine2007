@@ -197,8 +197,8 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
 
   int buf_size = (cfg_info.st_size + 1);
   char *buf = new char[buf_size];
-  FILE *fp = fopen(BUGSUB_CONFIG, "rb");
-  if (!fp) {
+  FILE *fp;
+  if (fopen_s(&fp, BUGSUB_CONFIG, "rb")) {
     AssertMsg(0, "failed to open bugreporter options file");
     return false;
   }
@@ -211,12 +211,18 @@ bool BugReporter::Init(CreateInterfaceFn engineFactory) {
     delete buf;
     return false;
   }
-  strncpy(m_BugRootDirectory, m_OptionsFile->GetString("bug_directory", "."),
-          sizeof(m_BugRootDirectory));
+  strncpy_s(m_BugRootDirectory, m_OptionsFile->GetString("bug_directory", "."),
+            sizeof(m_BugRootDirectory));
 
   PopulateLists();
 
-  user_name_ = bug_strings_.AddString(getenv("username"));
+  usize username_size;
+  char username[64];
+
+  user_name_ = bug_strings_.AddString(
+      !getenv_s(&username_size, username, "username") && username_size > 0
+          ? username
+          : nullptr);
   delete buf;
   return true;
 }
@@ -452,8 +458,8 @@ bool BugReporter::CommitBugReport(int &bugSubmissionId) {
   char szBugFileName[1024];
   Q_snprintf(szBugFileName, sizeof(szBugFileName), "%s\\bug.txt",
              m_CurrentBugDirectory);
-  FILE *fp = fopen(szBugFileName, "wb");
-  if (!fp) return false;
+  FILE *fp;
+  if (fopen_s(&fp, szBugFileName, "wb")) return false;
 
   fprintf(fp, "%s", (char *)buf.Base());
   fclose(fp);

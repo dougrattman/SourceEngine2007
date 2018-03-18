@@ -44,7 +44,7 @@ bool SourceAppSystemGroup::Create() {
   file_system->InstallDirtyDiskReportFunc([]() {});
 
   if (FAILED(scoped_com_initializer_.hr())) {
-    Error("COM initialization failed, hr 0x%0.8x.", scoped_com_initializer_.hr());
+    Error("COM initialization failed (0x%0.8x).", scoped_com_initializer_.hr());
     return false;
   }
 
@@ -104,11 +104,10 @@ bool SourceAppSystemGroup::Create() {
 
   // Load the hammer DLL if we're in editor mode.
   if (is_edit_mode_) {
-    AppModule_t hammerModule = LoadModule("hammer_dll.dll");
-    hammer_ = AddSystem<IHammer>(hammerModule, INTERFACEVERSION_HAMMER);
-    if (!hammer_) {
-      return false;
-    }
+    AppModule_t hammer_module = LoadModule("hammer_dll.dll");
+
+    hammer_ = AddSystem<IHammer>(hammer_module, INTERFACEVERSION_HAMMER);
+    if (!hammer_) return false;
   }
 
   // Load up the appropriate shader DLL. This has to be done before connection.
