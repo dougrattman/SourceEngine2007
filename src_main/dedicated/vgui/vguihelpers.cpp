@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include <direct.h>
@@ -17,7 +17,6 @@
 #include "vgui_controls/Controls.h"
 #include "vgui_controls/Panel.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 static CMainPanel *g_pMainPanel = NULL;  // the main panel to show
@@ -39,17 +38,20 @@ int StartVGUI(CreateInterfaceFn dedicatedFactory) {
   vgui::ivgui()->SetSleep(false);
 
   // find our configuration directory
-  char szConfigDir[512];
-  const char *steamPath = getenv("SteamInstallPath");
-  if (steamPath) {
+  char config_dir[SOURCE_MAX_PATH], steam_path[SOURCE_MAX_PATH];
+  usize steam_path_size;
+
+  if (!getenv_s(&steam_path_size, steam_path, "SteamInstallPath") &&
+      steam_path_size > 0) {
     // put the config dir directly under steam
-    Q_snprintf(szConfigDir, sizeof(szConfigDir), "%s/config", steamPath);
+    Q_snprintf(config_dir, SOURCE_ARRAYSIZE(config_dir), "%s/config",
+               steam_path);
   } else {
     // we're not running steam, so just put the config dir under the platform
-    Q_strncpy(szConfigDir, "platform/config", sizeof(szConfigDir));
+    Q_strncpy(config_dir, "platform/config", SOURCE_ARRAYSIZE(config_dir));
   }
   g_pFullFileSystem->CreateDirHierarchy("config", "PLATFORM");
-  g_pFullFileSystem->AddSearchPath(szConfigDir, "CONFIG", PATH_ADD_TO_HEAD);
+  g_pFullFileSystem->AddSearchPath(config_dir, "CONFIG", PATH_ADD_TO_HEAD);
 
   // initialize the user configuration file
   vgui::system()->SetUserConfigFile("DedicatedServerDialogConfig.vdf",

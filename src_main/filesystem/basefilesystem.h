@@ -1,14 +1,11 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
-//
-// Purpose:
-//
-// $NoKeywords: $
-//===========================================================================//
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifndef BASEFILESYSTEM_H
 #define BASEFILESYSTEM_H
 
-#if defined(_WIN32)
+#include "build/include/build_config.h"
+
+#ifdef OS_WIN
 #include <direct.h>
 #include <io.h>
 #include <malloc.h>
@@ -56,7 +53,7 @@
 
 #include "tier0/include/memdbgon.h"
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #define CORRECT_PATH_SEPARATOR '\\'
 #define INCORRECT_PATH_SEPARATOR '/'
 #elif defined(OS_POSIX)
@@ -64,11 +61,11 @@
 #define INCORRECT_PATH_SEPARATOR '\\'
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #define PATHSEPARATOR(c) ((c) == '\\' || (c) == '/')
 #elif defined(OS_POSIX)
 #define PATHSEPARATOR(c) ((c) == '/')
-#endif  //_WIN32
+#endif  // OS_WIN
 
 #define MAX_FILEPATH 512
 

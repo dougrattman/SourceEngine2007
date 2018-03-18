@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // TextConsole.cpp: implementation of the TextConsole class.
 
@@ -73,8 +73,8 @@ int CTextConsole::ReceiveNewline() {
     // line
     if ((m_nInputLine == 0) ||
         (strcmp(m_aszLineBuffer[m_nInputLine - 1], m_szConsoleText))) {
-      strncpy(m_aszLineBuffer[m_nInputLine], m_szConsoleText,
-              MAX_CONSOLE_TEXTLEN);
+      strncpy_s(m_aszLineBuffer[m_nInputLine], m_szConsoleText,
+                MAX_CONSOLE_TEXTLEN);
 
       m_nInputLine++;
 
@@ -140,11 +140,11 @@ void CTextConsole::ReceiveTab() {
 
     if (pszRest) {
       Echo(pszRest);
-      strcat(m_szConsoleText, pszRest);
+      strcat_s(m_szConsoleText, pszRest);
       m_nConsoleTextLen += strlen(pszRest);
 
       Echo(" ");
-      strcat(m_szConsoleText, " ");
+      strcat_s(m_szConsoleText, " ");
       m_nConsoleTextLen++;
     }
   } else {
@@ -250,7 +250,7 @@ void CTextConsole::ReceiveUpArrow() {
   if (m_nBrowseLine == m_nInputLine) {
     if (m_nConsoleTextLen > 0) {
       // Save off current text
-      strncpy(m_szSavedConsoleText, m_szConsoleText, m_nConsoleTextLen);
+      strncpy_s(m_szSavedConsoleText, m_szConsoleText, m_nConsoleTextLen);
       // No terminator, it's a raw buffer we always know the length of
     }
 
@@ -270,7 +270,8 @@ void CTextConsole::ReceiveUpArrow() {
   // copy buffered line
   Echo(m_aszLineBuffer[m_nBrowseLine]);
 
-  strncpy(m_szConsoleText, m_aszLineBuffer[m_nBrowseLine], MAX_CONSOLE_TEXTLEN);
+  strncpy_s(m_szConsoleText, m_aszLineBuffer[m_nBrowseLine],
+            MAX_CONSOLE_TEXTLEN);
   m_nConsoleTextLen = strlen(m_aszLineBuffer[m_nBrowseLine]);
 
   m_nCursorPosition = m_nConsoleTextLen;
@@ -294,7 +295,7 @@ void CTextConsole::ReceiveDownArrow() {
   if (m_nBrowseLine == m_nInputLine) {
     if (m_nSavedConsoleTextLen > 0) {
       // Restore current text
-      strncpy(m_szConsoleText, m_szSavedConsoleText, m_nSavedConsoleTextLen);
+      strncpy_s(m_szConsoleText, m_szSavedConsoleText, m_nSavedConsoleTextLen);
       // No terminator, it's a raw buffer we always know the length of
 
       Echo(m_szConsoleText, m_nSavedConsoleTextLen);
@@ -305,8 +306,8 @@ void CTextConsole::ReceiveDownArrow() {
     // copy buffered line
     Echo(m_aszLineBuffer[m_nBrowseLine]);
 
-    strncpy(m_szConsoleText, m_aszLineBuffer[m_nBrowseLine],
-            MAX_CONSOLE_TEXTLEN);
+    strncpy_s(m_szConsoleText, m_aszLineBuffer[m_nBrowseLine],
+              MAX_CONSOLE_TEXTLEN);
 
     m_nConsoleTextLen = strlen(m_aszLineBuffer[m_nBrowseLine]);
   }

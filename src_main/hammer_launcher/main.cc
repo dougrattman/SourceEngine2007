@@ -21,9 +21,9 @@
 #include "vphysics_interface.h"
 #include "vstdlib/cvar.h"
 
-extern "C" void WriteMiniDumpUsingExceptionInfo(
+void __cdecl WriteMiniDumpUsingExceptionInfo(
     unsigned int uStructuredExceptionCode,
-    struct _EXCEPTION_POINTERS *pExceptionInfo) {
+    EXCEPTION_POINTERS *pExceptionInfo) {
 #ifndef NO_STEAM
   // TODO: dynamically set the minidump comment from contextual info about the
   // crash (i.e current VPROF node)?

@@ -377,8 +377,10 @@ u32 RunSteamApplication(_In_ ICommandLine *command_line,
 }
 }  // namespace
 
-// The real entry point for the application
+// Here app go.
 SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
+  if (instance == nullptr) return ERROR_INVALID_HANDLE;
+
   // First, since almost all depends on this.
   SetAppInstance(instance);
   SpewOutputFunc(LauncherSpewFunc);
@@ -416,6 +418,9 @@ SOURCE_API_EXPORT int LauncherMain(_In_ HINSTANCE instance, _In_ int) {
   }
 
   if (return_code == NO_ERROR) {
+    // Rehook the command line through VCR mode.
+    CommandLine()->CreateCmdLine(VCRHook_GetCommandLine());
+
     // See the function for why we do this.
     RemoveSpuriousGameParameters(command_line);
 

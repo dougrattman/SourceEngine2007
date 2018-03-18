@@ -225,7 +225,7 @@ typedef char *va_list;
 #include <cstdarg>
 #endif
 
-#ifdef _WIN32
+#ifdef OS_WIN
 #define CORRECT_PATH_SEPARATOR '\\'
 #define INCORRECT_PATH_SEPARATOR '/'
 #elif OS_POSIX

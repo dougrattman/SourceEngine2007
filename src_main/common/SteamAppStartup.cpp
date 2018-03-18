@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include "SteamAppStartup.h"
@@ -11,7 +11,9 @@
 #include <cstdio>
 #include <tuple>
 
+#include "base/include/macros.h"
 #include "base/include/windows/windows_light.h"
+#include "tier0/include/platform.h"
 
 #define SOURCE_ENGINE_CMD_LINE_STEAM_ARG "-steam"
 
@@ -53,43 +55,42 @@ bool SaveAppDataToSteam(_In_z_ const char *command_line,
 
 // Purpose: Get steam exe path.
 std::tuple<bool, std::array<char, SOURCE_MAX_PATH>> GetSteamExePath(
-    _In_z_ char *current_dir) {
+    _In_z_count_(size) char *current_dir, _In_ usize size) {
   std::array<char, SOURCE_MAX_PATH> steam_exe_path;
 
   char *slash = strrchr(current_dir, '\\');
   while (slash) {
     // see if steam_dev.exe is in the directory first
     slash[1] = 0;
-    strcat(slash, "steam_dev.exe");
+    strcat_s(slash, current_dir + size - slash, "steam_dev.exe");
 
-    FILE *f = fopen(current_dir, "rb");
-    if (f) {
+    FILE *f;
+    if (!fopen_s(&f, current_dir, "rb")) {
       // found it
       fclose(f);
-      strcpy(steam_exe_path.data(), current_dir);
-      return std::make_tuple(true, steam_exe_path);
+      strcpy_s(steam_exe_path.data(), steam_exe_path.size(), current_dir);
+      return {true, steam_exe_path};
     }
 
     // see if steam.exe is in the directory
     slash[1] = 0;
-    strcat(slash, "steam.exe");
+    strcat_s(slash, current_dir + size - slash, "steam.exe");
 
-    f = fopen(current_dir, "rb");
-    if (f) {
+    if (!fopen_s(&f, current_dir, "rb")) {
       // found it
       fclose(f);
-      strcpy(steam_exe_path.data(), current_dir);
-      return std::make_tuple(true, steam_exe_path);
+      strcpy_s(steam_exe_path.data(), steam_exe_path.size(), current_dir);
+      return {true, steam_exe_path};
     }
 
     // kill the string at the slash
-    slash[0] = 0;
+    slash[0] = '\0';
 
     // move to the previous slash
     slash = strrchr(current_dir, '\\');
   }
 
-  return std::make_tuple(false, steam_exe_path);
+  return {false, steam_exe_path};
 }  // namespace
 
 // Purpose: Find or launch steam and launch app via it.
@@ -102,7 +103,8 @@ bool FindSteamAndLaunchSelfViaIt() {
   // First, search backwards through our current set of directories
   bool return_code;
   std::array<char, SOURCE_MAX_PATH> steam_exe_path;
-  std::tie(return_code, steam_exe_path) = GetSteamExePath(current_dir);
+  std::tie(return_code, steam_exe_path) =
+      GetSteamExePath(current_dir, SOURCE_ARRAYSIZE(current_dir));
 
   if (!return_code) {
     // Still not found, use the one in the registry

@@ -314,6 +314,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows", "windows", "{DA25
 		base\include\windows\product_version.h = base\include\windows\product_version.h
 		base\include\windows\scoped_com_initializer.h = base\include\windows\scoped_com_initializer.h
 		base\include\windows\scoped_error_mode.h = base\include\windows\scoped_error_mode.h
+		base\include\windows\scoped_se_translator.h = base\include\windows\scoped_se_translator.h
 		base\include\windows\scoped_winsock_initializer.h = base\include\windows\scoped_winsock_initializer.h
 		base\include\windows\unique_module_ptr.h = base\include\windows\unique_module_ptr.h
 		base\include\windows\windows_light.h = base\include\windows\windows_light.h

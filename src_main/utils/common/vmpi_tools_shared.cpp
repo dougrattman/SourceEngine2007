@@ -203,10 +203,10 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
 
     // Now attempt to create a minidump with the given exception information
     if (pvExceptionInfo) {
-      struct _EXCEPTION_POINTERS *pvExPointers =
-          (struct _EXCEPTION_POINTERS *)pvExceptionInfo;
+      struct EXCEPTION_POINTERS *pvExPointers =
+          (struct EXCEPTION_POINTERS *)pvExceptionInfo;
       wchar_t tchMinidumpFileName[SOURCE_MAX_PATH] = {0};
-      bool bSucceededWritingMinidump = WriteMiniDumpUsingExceptionInfo(
+      u32 error_code = WriteMiniDumpUsingExceptionInfo(
           pvExPointers->ExceptionRecord->ExceptionCode, pvExPointers,
           (MINIDUMP_TYPE)(MiniDumpWithDataSegs |
                           MiniDumpWithIndirectlyReferencedMemory |
@@ -216,8 +216,8 @@ void VMPI_HandleCrash(const char *pMessage, void *pvExceptionInfo,
           // MiniDumpWithIndirectlyReferencedMemory |
           // MiniDumpWithProcessThreadData | MiniDumpWithPrivateReadWriteMemory
           // ), ( MINIDUMP_TYPE )( MiniDumpNormal ),
-          tchMinidumpFileName);
-      if (bSucceededWritingMinidump) {
+          tchMinidumpFileName, SOURCE_ARRAYSIZE(tchMinidumpFileName));
+      if (error_code == 0) {
         crashMsg[2] = 'f';
         VMPI_SendFileChunk(crashMsg, sizeof(crashMsg), tchMinidumpFileName);
         DeleteFileW(tchMinidumpFileName);

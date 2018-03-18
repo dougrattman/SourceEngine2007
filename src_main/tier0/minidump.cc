@@ -3,9 +3,9 @@
 #include "tier0/include/minidump.h"
 
 #ifdef OS_WIN
-
 #include <ctime>
 
+#include "base/include/windows/scoped_se_translator.h"
 #include "base/include/windows/unique_module_ptr.h"
 #include "tier0/include/dbg.h"
 #include "tier0/include/platform.h"
@@ -18,61 +18,64 @@ static i32 g_nMinidumpsWritten = 0;
 // is in exception mode.
 static bool g_bInException = false;
 
-// Purpose: Creates a new file and dumps the exception info into it
-bool WriteMiniDumpUsingExceptionInfo(
-    u32 uStructuredExceptionCode, _EXCEPTION_POINTERS *pExceptionInfo,
-    MINIDUMP_TYPE minidumpType, wch *ptchMinidumpFileNameBuffer /* = nullptr */
-) {
-  if (ptchMinidumpFileNameBuffer) {
-    *ptchMinidumpFileNameBuffer = L'\0';
-  }
+// Creates a new file and dumps the exception info into it.
+u32 WriteMiniDumpUsingExceptionInfo(u32 se_code, EXCEPTION_POINTERS *se_info,
+                                    MINIDUMP_TYPE minidump_type,
+                                    wch *dump_file_name,
+                                    usize dump_file_name_size) {
+  if (dump_file_name && dump_file_name_size) *dump_file_name = L'\0';
 
-  // Get the function pointer directly so that we don't have to include the
-  // .lib, and that we can easily change it to using our own dll when this code
-  // is used on win98/ME/2K machines
   auto [dbghelp_module, error_code] =
-      source::windows::unique_module_ptr::from_load_library(L"DbgHelp.dll");
-  if (error_code != NO_ERROR || !dbghelp_module) return false;
+      source::windows::unique_module_ptr::from_load_library(
+          L"DbgHelp.dll", LOAD_LIBRARY_SEARCH_SYSTEM32);
 
-  // MiniDumpWriteDumpFunc() function declaration (so we can just get the
-  // function directly from windows)
-  using MiniDumpWriteDumpFunc =
+  using MiniDumpWriteDumpFn =
       BOOL(WINAPI *)(_In_ HANDLE hProcess, _In_ DWORD ProcessId,
                      _In_ HANDLE hFile, _In_ MINIDUMP_TYPE DumpType,
                      _In_opt_ PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
                      _In_opt_ PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
                      _In_opt_ PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
+  MiniDumpWriteDumpFn mini_dump_write_dump{nullptr};
 
-  bool bReturnValue = false;
-  const auto [miniDumpWriteDump, address_error_code] =
-      dbghelp_module.get_address_as<MiniDumpWriteDumpFunc>("MiniDumpWriteDump");
+  if (error_code == NO_ERROR && dbghelp_module) {
+    std::tie(mini_dump_write_dump, error_code) =
+        dbghelp_module.get_address_as<MiniDumpWriteDumpFn>("MiniDumpWriteDump");
+  }
 
-  if (address_error_code == NO_ERROR && miniDumpWriteDump) {
-    // create a unique filename for the minidump based on the current time and
-    // module name
-    time_t time_now = ::time(nullptr);
-    tm local_time_now;
-    localtime_s(&local_time_now, &time_now);
+  // Create a unique filename for the minidump based on the current time and
+  // module name.
+  time_t time_now{time(nullptr)};
+  tm local_time_now;
 
-    ++g_nMinidumpsWritten;
+  if (error_code == NO_ERROR) {
+    error_code = localtime_s(&local_time_now, &time_now);
+  }
 
-    // strip off the rest of the path from the .exe name
-    wch module_name[SOURCE_MAX_PATH];
-    ::GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
-    wch *pch = wcsrchr(module_name, L'.');
+  // Strip off the rest of the path from the .exe name.
+  wch module_name[SOURCE_MAX_PATH];
 
-    if (pch) *pch = L'\0';
+  if (error_code == NO_ERROR) {
+    SetLastError(NOERROR);
+    GetModuleFileNameW(nullptr, module_name, SOURCE_ARRAYSIZE(module_name));
 
-    pch = wcsrchr(module_name, L'\\');
-    if (pch) {
-      // move past the last slash
-      pch++;
-    }
+    error_code = GetLastError();
+  }
 
-    // can't use the normal string functions since we're in tier0
-    wch file_name[SOURCE_MAX_PATH];
+  wch file_name[SOURCE_MAX_PATH];
+  HANDLE minidump_file{nullptr};
+
+  if (error_code == NO_ERROR) {
+    wch *stripped_module_name = wcsrchr(module_name, L'.');
+    if (stripped_module_name) *stripped_module_name = L'\0';
+
+    stripped_module_name = wcsrchr(module_name, L'\\');
+    // Move past the last slash.
+    if (stripped_module_name) stripped_module_name++;
+
+    // Can't use the normal string functions since we're in tier0.
     _snwprintf_s(file_name, SOURCE_ARRAYSIZE(file_name),
-                 L"%s_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp", pch ? pch : L"unknown",
+                 L"%s_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp",
+                 stripped_module_name ? stripped_module_name : L"unknown",
                  g_bWritingNonfatalMinidump ? L"assert" : L"crash",
                  local_time_now.tm_year + 1900, /* Year less 2000 */
                  local_time_now.tm_mon + 1, /* month (0 - 11 : 0 = January) */
@@ -80,60 +83,61 @@ bool WriteMiniDumpUsingExceptionInfo(
                  local_time_now.tm_hour,    /* hour (0 - 23) */
                  local_time_now.tm_min,     /* minutes (0 - 59) */
                  local_time_now.tm_sec,     /* seconds (0 - 59) */
-                 g_nMinidumpsWritten        // ensures the filename is unique
-    );
+                 ++g_nMinidumpsWritten);    // ensures the filename is unique
 
-    BOOL bMinidumpResult = FALSE;
-    HANDLE minidump_file =
-        ::CreateFileW(file_name, GENERIC_WRITE, FILE_SHARE_WRITE, nullptr,
-                      CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    if (minidump_file != INVALID_HANDLE_VALUE) {
-      // dump the exception information into the file
-      _MINIDUMP_EXCEPTION_INFORMATION ex_info;
-      ex_info.ThreadId = ::GetCurrentThreadId();
-      ex_info.ExceptionPointers = pExceptionInfo;
-      ex_info.ClientPointers = FALSE;
+    minidump_file =
+        CreateFileW(file_name, GENERIC_WRITE, FILE_SHARE_WRITE, nullptr,
+                    CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    error_code =
+        minidump_file != INVALID_HANDLE_VALUE ? NOERROR : GetLastError();
+  }
 
-      bMinidumpResult = (*miniDumpWriteDump)(
-          ::GetCurrentProcess(), ::GetCurrentProcessId(), minidump_file,
-          minidumpType, &ex_info, nullptr, nullptr);
-      ::CloseHandle(minidump_file);
+  if (error_code == NOERROR) {
+    // Dump the exception information into the file.
+    MINIDUMP_EXCEPTION_INFORMATION ex_info;
+    ex_info.ThreadId = GetCurrentThreadId();
+    ex_info.ExceptionPointers = se_info;
+    ex_info.ClientPointers = FALSE;
 
-      if (bMinidumpResult) {
-        bReturnValue = true;
+    const BOOL was_written_minidump{(*mini_dump_write_dump)(
+        GetCurrentProcess(), GetCurrentProcessId(), minidump_file,
+        minidump_type, &ex_info, nullptr, nullptr)};
 
-        if (ptchMinidumpFileNameBuffer) {
-          // Copy the file name from "pSrc = rgchFileName" into "pTgt =
-          // ptchMinidumpFileNameBuffer"
-          wch *pTgt = ptchMinidumpFileNameBuffer;
-          wch const *pSrc = file_name;
-          while ((*(pTgt++) = *(pSrc++)) != ch(0)) continue;
-        }
-      }
+    // If the function succeeds, the return value is TRUE; otherwise, the
+    // return value is FALSE.  To retrieve extended error information, call
+    // GetLastError.  Note that the last error will be an HRESULT value.  If
+    // the operation is canceled, the last error code is
+    // HRESULT_FROM_WIN32(ERROR_CANCELLED).
+    // See
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms680360(v=vs.85).aspx
+    error_code = was_written_minidump ? NOERROR : GetLastError();
 
-      // fall through to trying again
+    CloseHandle(minidump_file);
+  }
+
+  if (error_code == NOERROR) {
+    if (dump_file_name) {
+      wcscpy_s(dump_file_name, dump_file_name_size, file_name);
     }
-
-    // mark any failed minidump writes by renaming them
-    if (!bMinidumpResult) {
+  } else {
+    // Mark any failed minidump writes by renaming them.
+    if (minidump_file != INVALID_HANDLE_VALUE) {
       wch failed_file_name[SOURCE_MAX_PATH];
       _snwprintf_s(failed_file_name, SOURCE_ARRAYSIZE(failed_file_name),
                    L"(failed)%s", file_name);
+
       _wrename(file_name, failed_file_name);
     }
   }
 
-  // call the log flush function if one is registered to try to flush any logs
-  // CallFlushLogFunc();
-
-  return bReturnValue;
+  return error_code;
 }
 
-void InternalWriteMiniDumpUsingExceptionInfo(
-    u32 unstructured_exception_code, _EXCEPTION_POINTERS *exception_infos) {
+static void Tier0WriteMiniDump(u32 unstructured_exception_code,
+                               EXCEPTION_POINTERS *exception_infos) {
   // First try to write it with all the indirectly referenced memory (ie: a
   // large file). If that doesn't work, then write a smaller one.
-  MINIDUMP_TYPE minidump_type = static_cast<MINIDUMP_TYPE>(
+  auto minidump_type = static_cast<MINIDUMP_TYPE>(
       MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory);
 
   if (!WriteMiniDumpUsingExceptionInfo(unstructured_exception_code,
@@ -144,53 +148,54 @@ void InternalWriteMiniDumpUsingExceptionInfo(
   }
 }
 
-// minidump function to use
-static FnMiniDump g_pfnWriteMiniDump = InternalWriteMiniDumpUsingExceptionInfo;
+// Minidump function to use.
+static FnMiniDump g_pfnWriteMiniDump{Tier0WriteMiniDump};
 
-// Purpose: Set a function to call which will write our minidump, overriding
-// the default function
+// Set a function to call which will write our minidump, overriding the default
+// function.
 FnMiniDump SetMiniDumpFunction(FnMiniDump pfn) {
-  FnMiniDump pfnTemp = g_pfnWriteMiniDump;
-  g_pfnWriteMiniDump = pfn;
-  return pfnTemp;
+  return std::exchange(g_pfnWriteMiniDump, pfn);
 }
 
-// Purpose: writes out a minidump from the current process
+// Writes out a minidump from the current process.
 void WriteMiniDump() {
   // throw an exception so we can catch it and get the stack info
   g_bWritingNonfatalMinidump = true;
 
   __try {
-    ::RaiseException(0,                         // dwExceptionCode
-                     EXCEPTION_NONCONTINUABLE,  // dwExceptionFlags
-                     0,                         // nNumberOfArguments,
-                     nullptr);                  // const ULONG_PTR* lpArguments
-    // Never get here (non-continuable exception)
-  }
-  // Write the minidump from inside the filter (GetExceptionInformation() is
-  // only valid in the filter)
-  __except (g_pfnWriteMiniDump(0, GetExceptionInformation()),
-            EXCEPTION_EXECUTE_HANDLER) {
+    RaiseException(0, EXCEPTION_NONCONTINUABLE, 0, nullptr);
+    // Never get here (non-continuable exception).
+  } __except (g_pfnWriteMiniDump(0, GetExceptionInformation()),
+              EXCEPTION_EXECUTE_HANDLER) {
+    // Write the minidump from inside the filter (GetExceptionInformation() is
+    // only valid in the filter).
   }
 
   g_bWritingNonfatalMinidump = false;
 }
 
-// Purpose: Catches and writes out any exception throw by the specified function
-void CatchAndWriteMiniDump(FnWMain pfn, i32 argc, ch *argv[]) {
-  if (Plat_IsInDebugSession()) {
-    // don't mask exceptions when running in the debugger
-    pfn(argc, argv);
-  } else {
-    try {
-      _set_se_translator(g_pfnWriteMiniDump);
-      pfn(argc, argv);
-    } catch (...) {
-      g_bInException = true;
-      DMsg("console", 1, "Fatal exception caught, minidump written\n");
-      // handle everything and just quit, we've already written out our minidump
-    }
+// Catches and writes out any exception throw by the specified function.
+i32 CatchAndWriteMiniDump(FnMain main, i32 argc, ch *argv[]) {
+  if (!main) {
+    AssertMsg(0, "No main function");
+    return -2;
   }
-}
 
+  // Don't mask exceptions when running in the debugger
+  if (Plat_IsInDebugSession()) return (*main)(argc, argv);
+
+  try {
+    source::windows::ScopedSeTranslator scoped_se_translator{
+        g_pfnWriteMiniDump};
+
+    return (*main)(argc, argv);
+  } catch (...) {
+    g_bInException = true;
+    DMsg("console", 1, "Fatal exception caught, minidump written.\n");
+    // Handle everything and just quit, we've already written out our
+    // minidump.
+  }
+
+  return -1;
+}
 #endif

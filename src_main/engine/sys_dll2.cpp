@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #include "build/include/build_config.h"
 
@@ -13,6 +13,7 @@
 #include "appframework/IAppSystemGroup.h"
 #include "avi/iavi.h"
 #include "avi/ibik.h"
+#include "base/include/windows/scoped_se_translator.h"
 #include "cdll_engine_int.h"
 #include "cl_main.h"
 #include "client.h"
@@ -388,9 +389,8 @@ class CModAppSystemGroup : public CAppSystemGroup {
 #ifndef SWDS
 extern void S_ClearBuffer();
 
-extern "C" void __cdecl EngineWriteMiniDumpUsingExceptionInfo(
-    unsigned int uStructuredExceptionCode,
-    struct _EXCEPTION_POINTERS *pExceptionInfo) {
+void __cdecl WriteMiniDump(unsigned int uStructuredExceptionCode,
+                           EXCEPTION_POINTERS *pExceptionInfo) {
   WriteMiniDumpUsingExceptionInfo(uStructuredExceptionCode, pExceptionInfo,
                                   MINIDUMP_TYPE::MiniDumpNormal);
 
@@ -492,9 +492,9 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     editor_hwnd_ = nullptr;
 
     // One-time setup
-    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into the launcher
-    // or the launcher code should be merged into the engine into the code in
-    // OnStartup/OnShutdown
+    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into
+    // the launcher or the launcher code should be merged into the engine into
+    // the code in OnStartup/OnShutdown
     if (!OnStartup(startup_info_.m_pInstance, startup_info_.m_pInitialMod)) {
       return HandleSetModeError();
     }
@@ -525,8 +525,10 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
   int Run() override {
 #ifdef OS_WIN
     if (!Plat_IsInDebugSession() && !CommandLine()->FindParm("-nominidumps")) {
-      _set_se_translator(EngineWriteMiniDumpUsingExceptionInfo);
-      // this try block allows the SE translator to work
+      const source::windows::ScopedSeTranslator scoped_se_translator{
+          WriteMiniDump};
+
+      // This try block allows the SE translator to work.
       try {
         return RunListenServer();
       } catch (...) {
@@ -572,8 +574,8 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     bool bCurrentlyActive = eng->GetState() != IEngine::DLL_PAUSED;
     if (bActive == bCurrentlyActive) return;
 
-    // TODO(d.rattman): Should attachment/detachment be part of the state machine in
-    // IEngine?
+    // TODO(d.rattman): Should attachment/detachment be part of the state
+    // machine in IEngine?
     if (!bActive) {
       eng->SetNextState(IEngine::DLL_PAUSED);
 
@@ -666,9 +668,9 @@ class CEngineAPI : public CTier3AppSystem<IEngineAPI> {
     }
 
     // Closes down things that were set up in OnStartup
-    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into the launcher
-    // or the launcher code should be merged into the engine into the code in
-    // OnStartup/OnShutdown
+    // TODO(d.rattman): OnStartup + OnShutdown should be removed + moved into
+    // the launcher or the launcher code should be merged into the engine into
+    // the code in OnStartup/OnShutdown
     OnShutdown();
 
     return nRunResult;

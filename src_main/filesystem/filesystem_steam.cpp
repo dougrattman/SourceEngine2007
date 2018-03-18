@@ -600,25 +600,22 @@ size_t CFileSystem_Steam::FS_vfprintf(FILE *fp, const char *fmt, va_list list) {
 
   // Open the 0 device...used by vfprintf to determine the length of
   // the formatted string.
-  FILE *nullDeviceFP = fopen("nul:", "w");
-  if (!nullDeviceFP) return 0;
+  FILE *nullDeviceFP;
+  if (fopen_s(&nullDeviceFP, "nul:", "w")) return 0;
 
   // Figure out how long the formatted string will be...dump formatted
   // string to the bit bucket.
   blen = vfprintf(nullDeviceFP, fmt, list);
   fclose(nullDeviceFP);
-  if (!blen) {
-    return 0;
-  }
+
+  if (!blen) return 0;
 
   // Get buffer in which to build the formatted string.
   buf = (char *)malloc(blen + 1);
-  if (!buf) {
-    return 0;
-  }
+  if (!buf) return 0;
 
   // Build the formatted string.
-  plen = _vsnprintf(buf, blen, fmt, list);
+  plen = _vsnprintf_s(buf, blen + 1, blen, fmt, list);
   va_end(list);
   if (plen != blen) {
     free(buf);
@@ -764,7 +761,7 @@ HANDLE CFileSystem_Steam::FS_FindFirstFile(const char *findname,
     hResult = INVALID_HANDLE_VALUE;
   } else {
     hResult = (HANDLE)steamResult;
-    strcpy(dat->cFileName, steamFindInfo.cszName);
+    strcpy_s(dat->cFileName, steamFindInfo.cszName);
 
     // NEED TO DEAL WITH THIS STUFF!!!  FORTUNATELY HALF-LIFE DOESN'T USE ANY OF
     // IT AND ARCANUM USES _findfirst() etc.
@@ -808,7 +805,7 @@ bool CFileSystem_Steam::FS_FindNextFile(HANDLE handle, WIN32_FIND_DATA *dat) {
   CheckError(NULL, steamError);
 
   if (result) {
-    strcpy(dat->cFileName, steamFindInfo.cszName);
+    strcpy_s(dat->cFileName, steamFindInfo.cszName);
     if (steamFindInfo.bIsDir)
       dat->dwFileAttributes |= FILE_ATTRIBUTE_DIRECTORY;
     else
@@ -843,9 +840,6 @@ void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
   struct _stat StatBuf;
   TSteamError steamError;
   if (FS_stat(pFileName, &StatBuf) == -1) {
-    // Use the environment search path to try and find it
-    char *pPath = getenv("PATH");
-
     // Use the .EXE name to determine the root directory
     char srchPath[SOURCE_MAX_PATH];
     HINSTANCE hInstance = (HINSTANCE)GetModuleHandle(0);
@@ -862,9 +856,14 @@ void CFileSystem_Steam::GetLocalCopy(const char *pFileName) {
       nBaseLen = pSeperator - srchPath;
     }
 
+    // Use the environment search path to try and find it
+    char pPath[SOURCE_MAX_PATH * 20];
+    usize path_size;
+
     // Extract each section of the path
-    char *pStart = pPath;
-    char *pEnd = 0;
+    const char *pStart =
+        (!getenv_s(&path_size, pPath, "PATH")) && path_size > 0 ? pPath : "";
+    const char *pEnd = 0;
     bool bSearch = true;
     while (pStart && bSearch) {
       pEnd = strstr(pStart, ";");

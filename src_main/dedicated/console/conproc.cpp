@@ -1,13 +1,13 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include "conproc.h"
 
 #include <process.h>
 #include <cstdio>
-#include "isys.h"
-#include "tier0/include/icommandline.h"
 #include "base/include/windows/windows_light.h"
+#include "idedicated_os.h"
+#include "tier0/include/icommandline.h"
 
 static HANDLE heventDone;
 static HANDLE hfileBuffer;
@@ -186,7 +186,7 @@ unsigned _stdcall RequestProc(void *arg) {
 
     // hfileBuffer is invalid.  Just leave.
     if (!pBuffer) {
-      sys->Printf("Request Proc:  Invalid -HFILE handle\n");
+      DedicatedOs()->Printf("Request Proc:  Invalid -HFILE handle\n");
       break;
     }
 
@@ -234,7 +234,6 @@ void InitConProc() {
   HANDLE hFile = (HANDLE)0;
   HANDLE heventParent = (HANDLE)0;
   HANDLE heventChild = (HANDLE)0;
-  int WantHeight = 50;
   const char *p;
 
   // give external front ends a chance to hook into the console
@@ -252,11 +251,11 @@ void InitConProc() {
 
   // ignore if we don't have all the events.
   if (!hFile || !heventParent || !heventChild) {
-    // sys->Printf ("\n\nNo external front end present.\n" );
+    // DedicatedOs()->Printf ("\n\nNo external front end present.\n" );
     return;
   }
 
-  sys->Printf("\n\nInitConProc:  Setting up external control.\n");
+  DedicatedOs()->Printf("\n\nInitConProc:  Setting up external control.\n");
 
   hfileBuffer = hFile;
   heventParentSend = heventParent;
@@ -265,13 +264,13 @@ void InitConProc() {
   // So we'll know when to go away.
   heventDone = CreateEvent(NULL, FALSE, FALSE, NULL);
   if (!heventDone) {
-    sys->Printf("InitConProc:  Couldn't create heventDone\n");
+    DedicatedOs()->Printf("InitConProc:  Couldn't create heventDone\n");
     return;
   }
 
   if (!_beginthreadex(NULL, 0, RequestProc, NULL, 0, &threadAddr)) {
     CloseHandle(heventDone);
-    sys->Printf("InitConProc:  Couldn't create third party thread\n");
+    DedicatedOs()->Printf("InitConProc:  Couldn't create third party thread\n");
     return;
   }
 
@@ -279,6 +278,7 @@ void InitConProc() {
   hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
   hStdin = GetStdHandle(STD_INPUT_HANDLE);
 
+  int WantHeight = 50;
   if (CommandLine()->CheckParm("-conheight", &p) && p) {
     WantHeight = atoi(p);
   }

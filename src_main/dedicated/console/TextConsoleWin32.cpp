@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 // CTextConsoleWin32.cpp: Win32 implementation of the TextConsole class.
 
@@ -9,37 +9,6 @@
 
 BOOL WINAPI ConsoleHandlerRoutine([[maybe_unused]] DWORD CtrlType) {
   return TRUE;
-}
-
-// GetConsoleHwnd() helper function from MSDN Knowledge Base Article Q124103
-// needed, because HWND GetConsoleWindow(VOID) is not avaliable under
-// Win95/98/ME
-
-HWND GetConsoleHwnd() {
-  HWND hwndFound;                // This is what is returned to the caller.
-  char pszNewWindowTitle[1024];  // Contains fabricated WindowTitle
-  char pszOldWindowTitle[1024];  // Contains original WindowTitle
-
-  // Fetch current window title.
-  GetConsoleTitle(pszOldWindowTitle, 1024);
-
-  // Format a "unique" NewWindowTitle.
-  wsprintf(pszNewWindowTitle, "%d/%d", GetTickCount(), GetCurrentProcessId());
-
-  // Change current window title.
-  SetConsoleTitle(pszNewWindowTitle);
-
-  // Ensure window title has been updated.
-  Sleep(40);
-
-  // Look for NewWindowTitle.
-  hwndFound = FindWindow(NULL, pszNewWindowTitle);
-
-  // Restore original window title.
-
-  SetConsoleTitle(pszOldWindowTitle);
-
-  return hwndFound;
 }
 
 bool CTextConsoleWin32::Init(/*IBaseSystem * system*/) {
@@ -54,7 +23,7 @@ bool CTextConsoleWin32::Init(/*IBaseSystem * system*/) {
 
   Attrib = FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_INTENSITY;
 
-  SetWindowPos(GetConsoleHwnd(), HWND_TOP, 0, 0, 0, 0,
+  SetWindowPos(GetConsoleWindow(), HWND_TOP, 0, 0, 0, 0,
                SWP_NOSIZE | SWP_NOREPOSITION | SWP_SHOWWINDOW);
 
   return CTextConsole::Init(/*system */);
@@ -67,7 +36,7 @@ void CTextConsoleWin32::ShutDown() {
 }
 
 void CTextConsoleWin32::SetVisible(bool visible) {
-  ShowWindow(GetConsoleHwnd(), visible ? SW_SHOW : SW_HIDE);
+  ShowWindow(GetConsoleWindow(), visible ? SW_SHOW : SW_HIDE);
   m_ConsoleVisible = visible;
 }
 
@@ -173,8 +142,7 @@ int CTextConsoleWin32::GetWidth() {
 }
 
 void CTextConsoleWin32::SetStatusLine(const char *pszStatus) {
-  strncpy(statusline, pszStatus, 80);
-  statusline[79] = '\0';
+  strncpy_s(statusline, pszStatus, 80);
   UpdateStatus();
 }
 

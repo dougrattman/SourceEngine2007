@@ -6,59 +6,59 @@
 #ifndef SOURCE_TIER1_REFCOUNT_H_
 #define SOURCE_TIER1_REFCOUNT_H_
 
+#include "base/include/compiler_specific.h"
+#include "tier0/include/dbg.h"
 #include "tier0/include/threadtools.h"
 
-// Purpose:	Implement a standard reference counted interface. Use of this
-// is optional insofar as all the concrete tools only require
-// at compile time that the function signatures match.
-
-class IRefCounted {
+// Implement a standard reference counted interface. Use of this is optional
+// insofar as all the concrete tools only require at compile time that the
+// function signatures match.
+the_interface IRefCounted {
  public:
   virtual int AddRef() = 0;
   virtual int Release() = 0;
 };
 
-// Purpose:	Release a pointer and mark it NULL
+// Release a pointer and mark it nullptr.
+template <typename TRefCountedItemPtr>
+inline int SafeRelease(TRefCountedItemPtr &ref) {
+  // Use funny syntax so that this works on "auto pointers".
+  auto *ref_ptr = &ref;
 
-template <class REFCOUNTED_ITEM_PTR>
-inline int SafeRelease(REFCOUNTED_ITEM_PTR &pRef) {
-  // Use funny syntax so that this works on "auto pointers"
-  REFCOUNTED_ITEM_PTR *ppRef = &pRef;
-  if (*ppRef) {
-    int result = (*ppRef)->Release();
-    *ppRef = NULL;
+  if (*ref_ptr) {
+    int result = (*ref_ptr)->Release();
+    *ref_ptr = nullptr;
+
     return result;
   }
+
   return 0;
 }
 
-// Purpose:	Maintain a reference across a scope
-
-template <class T = IRefCounted>
+// Maintain a reference across a scope.
+template <typename T = IRefCounted>
 class CAutoRef {
  public:
-  CAutoRef(T *pRef) : m_pRef(pRef) {
-    if (m_pRef) m_pRef->AddRef();
+  CAutoRef(T *ref) : ref_(ref) {
+    if (ref_) ref_->AddRef();
   }
 
   ~CAutoRef() {
-    if (m_pRef) m_pRef->Release();
+    if (ref_) ref_->Release();
   }
 
  private:
-  T *m_pRef;
+  T *const ref_;
 };
 
-// Purpose:	Do a an inline AddRef then return the pointer, useful when
-// returning an object from a function
-
+// Do a an inline AddRef then return the pointer, useful when returning an
+// object from a function.
 #define RetAddRef(p) ((p)->AddRef(), (p))
 #define InlineAddRef(p) ((p)->AddRef(), (p))
 
-// Purpose:	A class to both hold a pointer to an object and its reference.
-// Base exists to support other cleanup models
-
-template <class T>
+// A class to both hold a pointer to an object and its reference.  Base exists
+// to support other cleanup models.
+template <typename T>
 class CBaseAutoPtr {
  public:
   CBaseAutoPtr() : m_pObject(0) {}
@@ -72,7 +72,7 @@ class CBaseAutoPtr {
   operator T *() { return m_pObject; }
 
   int operator=(int i) {
-    AssertMsg(i == 0, "Only NULL allowed on integer assign");
+    AssertMsg(i == 0, "Only nullptr allowed on integer assign.");
     m_pObject = 0;
     return 0;
   }
@@ -81,13 +81,13 @@ class CBaseAutoPtr {
     return p;
   }
 
-  bool operator!() const { return (!m_pObject); }
+  bool operator!() const { return !m_pObject; }
   bool operator!=(int i) const {
-    AssertMsg(i == 0, "Only NULL allowed on integer compare");
-    return (m_pObject != NULL);
+    AssertMsg(i == 0, "Only nullptr allowed on integer compare.");
+    return (m_pObject != nullptr);
   }
-  bool operator==(const void *p) const { return (m_pObject == p); }
-  bool operator!=(const void *p) const { return (m_pObject != p); }
+  bool operator==(const void *p) const { return m_pObject == p; }
+  bool operator!=(const void *p) const { return m_pObject != p; }
   bool operator==(T *p) const { return operator==((void *)p); }
   bool operator!=(T *p) const { return operator!=((void *)p); }
   bool operator==(const CBaseAutoPtr<T> &p) const {
@@ -112,11 +112,9 @@ class CBaseAutoPtr {
   T *m_pObject;
 };
 
-//---------------------------------------------------------
-
-template <class T>
+template <typename T>
 class CRefPtr : public CBaseAutoPtr<T> {
-  typedef CBaseAutoPtr<T> BaseClass;
+  using BaseClass = CBaseAutoPtr<T>;
 
  public:
   CRefPtr() {}
@@ -150,45 +148,43 @@ class CRefPtr : public CBaseAutoPtr<T> {
   }
 };
 
-// Purpose:	Traits classes defining reference count threading model
-
-class CRefMT {
- public:
+// Traits classes defining reference count threading model
+struct CRefMT {
   static int Increment(int *p) { return ThreadInterlockedIncrement((long *)p); }
   static int Decrement(int *p) { return ThreadInterlockedDecrement((long *)p); }
 };
 
-class CRefST {
- public:
+struct CRefST {
   static int Increment(int *p) { return ++(*p); }
   static int Decrement(int *p) { return --(*p); }
 };
 
-// Purpose:	Actual reference counting implementation. Pulled out to reduce
+// Actual reference counting implementation. Pulled out to reduce
 // code bloat.
-
 template <const bool bSelfDelete, typename CRefThreading = CRefMT>
 class MSVC_NOVTABLE CRefCountServiceBase {
  protected:
-  CRefCountServiceBase() : m_iRefs(1) {}
+  CRefCountServiceBase() : refs_count_(1) {}
 
   virtual ~CRefCountServiceBase() {}
 
   virtual bool OnFinalRelease() { return true; }
 
-  int GetRefCount() const { return m_iRefs; }
+  int GetRefCount() const { return refs_count_; }
 
-  int DoAddRef() { return CRefThreading::Increment(&m_iRefs); }
+  int DoAddRef() { return CRefThreading::Increment(&refs_count_); }
 
   int DoRelease() {
-    int result = CRefThreading::Decrement(&m_iRefs);
+    int result = CRefThreading::Decrement(&refs_count_);
+
     if (result) return result;
     if (OnFinalRelease() && bSelfDelete) delete this;
+
     return 0;
   }
 
  private:
-  int m_iRefs;
+  int refs_count_;
 };
 
 class CRefCountServiceNull {
@@ -200,23 +196,23 @@ class CRefCountServiceNull {
 template <typename CRefThreading = CRefMT>
 class MSVC_NOVTABLE CRefCountServiceDestruct {
  protected:
-  CRefCountServiceDestruct() : m_iRefs(1) {}
+  CRefCountServiceDestruct() : refs_count_(1) {}
 
   virtual ~CRefCountServiceDestruct() {}
 
-  int GetRefCount() const { return m_iRefs; }
+  int GetRefCount() const { return refs_count_; }
 
-  int DoAddRef() { return CRefThreading::Increment(&m_iRefs); }
+  int DoAddRef() { return CRefThreading::Increment(&refs_count_); }
 
   int DoRelease() {
-    int result = CRefThreading::Decrement(&m_iRefs);
+    int result = CRefThreading::Decrement(&refs_count_);
     if (result) return result;
     this->~CRefCountServiceDestruct();
     return 0;
   }
 
  private:
-  int m_iRefs;
+  int refs_count_;
 };
 
 typedef CRefCountServiceBase<true, CRefST> CRefCountServiceST;
@@ -229,9 +225,8 @@ typedef CRefCountServiceBase<false, CRefMT> CRefCountServiceNoDeleteMT;
 typedef CRefCountServiceNoDeleteMT CRefCountServiceNoDelete;
 typedef CRefCountServiceMT CRefCountService;
 
-// Purpose:	Base classes to implement reference counting
-
-template <class REFCOUNT_SERVICE = CRefCountService>
+// Base classes to implement reference counting
+template <typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted : public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted() {}
@@ -239,9 +234,7 @@ class MSVC_NOVTABLE CRefCounted : public REFCOUNT_SERVICE {
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-------------------------------------
-
-template <class BASE1, class REFCOUNT_SERVICE = CRefCountService>
+template <typename BASE1, typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
  public:
   virtual ~CRefCounted1() {}
@@ -249,9 +242,8 @@ class MSVC_NOVTABLE CRefCounted1 : public BASE1, public REFCOUNT_SERVICE {
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-------------------------------------
-
-template <class BASE1, class BASE2, class REFCOUNT_SERVICE = CRefCountService>
+template <typename BASE1, typename BASE2,
+          typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted2 : public BASE1,
                                    public BASE2,
                                    public REFCOUNT_SERVICE {
@@ -261,10 +253,8 @@ class MSVC_NOVTABLE CRefCounted2 : public BASE1,
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-------------------------------------
-
-template <class BASE1, class BASE2, class BASE3,
-          class REFCOUNT_SERVICE = CRefCountService>
+template <typename BASE1, typename BASE2, typename BASE3,
+          typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted3 : public BASE1,
                                    public BASE2,
                                    public BASE3,
@@ -274,10 +264,8 @@ class MSVC_NOVTABLE CRefCounted3 : public BASE1,
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-------------------------------------
-
-template <class BASE1, class BASE2, class BASE3, class BASE4,
-          class REFCOUNT_SERVICE = CRefCountService>
+template <typename BASE1, typename BASE2, typename BASE3, typename BASE4,
+          typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted4 : public BASE1,
                                    public BASE2,
                                    public BASE3,
@@ -289,10 +277,8 @@ class MSVC_NOVTABLE CRefCounted4 : public BASE1,
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-//-------------------------------------
-
-template <class BASE1, class BASE2, class BASE3, class BASE4, class BASE5,
-          class REFCOUNT_SERVICE = CRefCountService>
+template <typename BASE1, typename BASE2, typename BASE3, typename BASE4,
+          typename BASE5, typename REFCOUNT_SERVICE = CRefCountService>
 class MSVC_NOVTABLE CRefCounted5 : public BASE1,
                                    public BASE2,
                                    public BASE3,
@@ -305,11 +291,11 @@ class MSVC_NOVTABLE CRefCounted5 : public BASE1,
   int Release() { return REFCOUNT_SERVICE::DoRelease(); }
 };
 
-// Purpose:	Class to throw around a reference counted item to debug
-// referencing problems
-
-template <class BASE_REFCOUNTED, int FINAL_REFS = 0, const char *pszName = NULL>
-class CRefDebug : public BASE_REFCOUNTED {
+// Class to throw around a reference counted item to debug
+// referencing problems.
+template <typename TBaseRefCounted, int FINAL_REFS = 0,
+          const char *pszName = nullptr>
+class CRefDebug : public TBaseRefCounted {
  public:
 #ifdef _DEBUG
   CRefDebug() {

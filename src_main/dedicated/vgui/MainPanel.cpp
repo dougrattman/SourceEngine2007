@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 
 #ifdef _WIN32
 #include <cstdarg>
@@ -19,7 +19,6 @@
 #include "vgui_controls/Panel.h"
 #include "vgui_controls/ProgressBox.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 using namespace vgui;
@@ -111,8 +110,8 @@ void CMainPanel::StartServer(const char *cvars) {
 
   // make sure we have all the steam content for this mod
   char reslist[SOURCE_MAX_PATH];
-  _snprintf(reslist, sizeof(reslist), "reslists/%s/preload.lst",
-            m_pConfigPage->GetGameName());
+  _snprintf_s(reslist, SOURCE_ARRAYSIZE(reslist), "reslists/%s/preload.lst",
+              m_pConfigPage->GetGameName());
   m_hResourceWaitHandle = g_pFullFileSystem->WaitForResources(reslist);
   if (!m_hResourceWaitHandle) {
     Assert(0);

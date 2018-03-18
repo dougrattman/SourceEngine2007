@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="filesystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\public\filesystem_init.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,12 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\common\SteamAppStartup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sys_common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sys_ded.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="console\conproc.cpp">
@@ -90,7 +81,25 @@
     <ClCompile Include="dedicated_main_windows.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sys.cc">
+    <ClCompile Include="dedicated_main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_steam_application.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_steam_app.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_common.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_exports.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_filesystem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dedicated_os_windows.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,12 +109,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dedicated.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="isys.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="console\conproc.h">
       <Filter>Header Files\console</Filter>
     </ClInclude>
@@ -130,7 +133,25 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\base\windows\include\product_version.h">
+    <ClInclude Include="dedicated_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dedicated_steam_application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dedicated_filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dedicated_steam_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="idedicated_os.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dedicated_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\idedicatedexports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
