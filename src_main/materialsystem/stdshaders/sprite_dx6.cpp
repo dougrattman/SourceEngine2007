@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Implementation of the sprite shader
 
@@ -7,7 +7,6 @@
 #include <cstring>
 #include "const.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 // WARNING!  Change these in engine/SpriteGn.h if you change them here!
@@ -47,15 +46,15 @@ SHADER_INIT_PARAMS() {
   // translate from a string orientation to an enumeration
   if (params[SPRITEORIENTATION]->IsDefined()) {
     const char *orientationString = params[SPRITEORIENTATION]->GetStringValue();
-    if (stricmp(orientationString, "parallel_upright") == 0) {
+    if (_stricmp(orientationString, "parallel_upright") == 0) {
       params[SPRITEORIENTATION]->SetIntValue(SPR_VP_PARALLEL_UPRIGHT);
-    } else if (stricmp(orientationString, "facing_upright") == 0) {
+    } else if (_stricmp(orientationString, "facing_upright") == 0) {
       params[SPRITEORIENTATION]->SetIntValue(SPR_FACING_UPRIGHT);
-    } else if (stricmp(orientationString, "vp_parallel") == 0) {
+    } else if (_stricmp(orientationString, "vp_parallel") == 0) {
       params[SPRITEORIENTATION]->SetIntValue(SPR_VP_PARALLEL);
-    } else if (stricmp(orientationString, "oriented") == 0) {
+    } else if (_stricmp(orientationString, "oriented") == 0) {
       params[SPRITEORIENTATION]->SetIntValue(SPR_ORIENTED);
-    } else if (stricmp(orientationString, "vp_parallel_oriented") == 0) {
+    } else if (_stricmp(orientationString, "vp_parallel_oriented") == 0) {
       params[SPRITEORIENTATION]->SetIntValue(SPR_VP_PARALLEL_ORIENTED);
     } else {
       Warning("error with $spriteOrientation\n");

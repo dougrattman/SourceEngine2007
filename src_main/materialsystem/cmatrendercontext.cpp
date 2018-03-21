@@ -1653,12 +1653,10 @@ void CMatRenderContext::DrawScreenSpaceRectangle(
 
 static int CompareVertexFormats(VertexFormat_t Fmt1, VertexFormat_t Fmt2) {
   if (Fmt1 != Fmt2) {
-    if (Fmt1 > Fmt2)
-      return 1;
-    else
-      return -1;
-  } else
-    return 0;
+    return (Fmt1 > Fmt2) ? 1 : -1;
+  }
+
+  return 0;
 }
 
 int CMatRenderContext::CompareMaterialCombos(IMaterial *pMaterial1,

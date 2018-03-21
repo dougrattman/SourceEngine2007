@@ -2310,7 +2310,8 @@ void CMaterialSystem::ReloadMaterials(const char *pSubString) {
 
     if (strchr(pSubString, chMultiDelim)) {
       arrSearchSubString.SetCount(strlen(pSubString) + 1);
-      strcpy(arrSearchSubString.Base(), pSubString);
+      strcpy_s(arrSearchSubString.Base(), arrSearchSubString.Size(),
+               pSubString);
       for (char *pch = arrSearchSubString.Base(); pch;) {
         char *pchEnd = strchr(pch, chMultiDelim);
         pchEnd ? *(pchEnd++) = 0 : 0;

@@ -969,7 +969,8 @@ void CShaderSystem::InitRenderStateFlags(ShaderRenderState_t *pRenderState,
                   pRenderState->m_Flags &= ~SHADER_NEEDS_BUMPED_LIGHTMAPS;
                   for( int i = 0; i < numParams; i++ )
                   {
-                          if( _stricmp( params[i]->GetName(), "$bumpmap" ) == 0 )
+                          if( _stricmp( params[i]->GetName(), "$bumpmap" ) == 0
+     )
                           {
                                   if( params[i]->IsDefined() )
                                   {
@@ -1046,7 +1047,7 @@ void CShaderSystem::InitStateSnapshots(IShader *pShader, IMaterialVar **params,
   if (IsFlagSet(params, MATERIAL_VAR_DEBUG)) {
     // Putcher breakpoint here to catch the rendering of a material
     // marked for debugging ($debug = 1 in a .vmt file) shadow state version
-    int x = 0;
+    [[maybe_unused]] int x = 0;
   }
 #endif
 

@@ -822,11 +822,11 @@ static IMaterialVar *CreateMatrixMaterialVarFromKeyValue(IMaterial *pMaterial,
 
   VMatrix mat;
   int count =
-      sscanf(pScan, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
-             &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
-             &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
-             &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
-             &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
+      sscanf_s(pScan, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
+               &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
+               &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
+               &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
+               &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
   if (count == 16) {
     return IMaterialVar::Create(pMaterial, pszName, mat);
   }
@@ -834,9 +834,9 @@ static IMaterialVar *CreateMatrixMaterialVarFromKeyValue(IMaterial *pMaterial,
   Vector2D scale, center;
   float angle;
   Vector2D translation;
-  count = sscanf(pScan, " center %f %f scale %f %f rotate %f translate %f %f",
-                 &center.x, &center.y, &scale.x, &scale.y, &angle,
-                 &translation.x, &translation.y);
+  count = sscanf_s(pScan, " center %f %f scale %f %f rotate %f translate %f %f",
+                   &center.x, &center.y, &scale.x, &scale.y, &angle,
+                   &translation.x, &translation.y);
   if (count != 7) return NULL;
 
   VMatrix temp;
@@ -2496,7 +2496,7 @@ void CMaterial::DrawMesh(VertexCompressionType_t vertexCompression) {
     if (GetMaterialVarFlags() & MATERIAL_VAR_DEBUG) {
       // Putcher breakpoint here to catch the rendering of a material
       // marked for debugging ($debug = 1 in a .vmt file) dynamic state version
-      int x = 0;
+      [[maybe_unused]] int x = 0;
     }
 #endif
     if ((GetMaterialVarFlags() & MATERIAL_VAR_NO_DRAW) == 0) {

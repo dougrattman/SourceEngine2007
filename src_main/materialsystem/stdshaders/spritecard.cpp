@@ -4,6 +4,8 @@
 
 #include "BaseVSShader.h"
 
+#include "base/include/compiler_specific.h"
+
 #include "tier1/convar.h"
 
 // STDSHADER_DX9_DLL_EXPORT
@@ -64,61 +66,62 @@ BEGIN_VS_SHADER_FLAGS(Spritecard_DX8, "Help for Spritecard_DX8",
 #endif
 
 BEGIN_SHADER_PARAMS
-SHADER_PARAM(DEPTHBLEND, SHADER_PARAM_TYPE_INTEGER, "0",
-             "fade at intersection boundaries")
-SHADER_PARAM(
-    DEPTHBLENDSCALE, SHADER_PARAM_TYPE_FLOAT, "50.0",
-    "Amplify or reduce DEPTHBLEND fading. Lower values make harder edges.")
-SHADER_PARAM(
-    ORIENTATION, SHADER_PARAM_TYPE_INTEGER, "0",
-    "0 = always face camera, 1 = rotate around z, 2= parallel to ground")
-SHADER_PARAM(ADDBASETEXTURE2, SHADER_PARAM_TYPE_FLOAT, "0.0",
-             "amount to blend second texture into frame by")
-SHADER_PARAM(OVERBRIGHTFACTOR, SHADER_PARAM_TYPE_FLOAT, "1.0",
-             "overbright factor for texture. For HDR effects.")
-SHADER_PARAM(DUALSEQUENCE, SHADER_PARAM_TYPE_INTEGER, "0",
-             "blend two separate animated sequences.")
-SHADER_PARAM(SEQUENCE_BLEND_MODE, SHADER_PARAM_TYPE_INTEGER, "0",
-             "defines the blend mode between the images un dual sequence "
-             "particles. 0 = avg, 1=alpha from first, rgb from 2nd, 2= first "
-             "over second")
-SHADER_PARAM(MAXLUMFRAMEBLEND1, SHADER_PARAM_TYPE_INTEGER, "0",
-             "instead of blending between animation frames for the first "
-             "sequence, select pixels based upon max luminance")
-SHADER_PARAM(MAXLUMFRAMEBLEND2, SHADER_PARAM_TYPE_INTEGER, "0",
-             "instead of blending between animation frames for the 2nd "
-             "sequence, select pixels based upon max luminance")
-SHADER_PARAM(RAMPTEXTURE, SHADER_PARAM_TYPE_TEXTURE, "",
-             "if specified, then the red value of the image is used to index "
-             "this ramp to produce the output color")
-SHADER_PARAM(ZOOMANIMATESEQ2, SHADER_PARAM_TYPE_FLOAT, "1.0",
-             "amount to gradually zoom between frames on the second sequence. "
-             "2.0 will double the size of a frame over its lifetime.")
-SHADER_PARAM(EXTRACTGREENALPHA, SHADER_PARAM_TYPE_INTEGER, "0",
-             "grayscale data sitting in green/alpha channels")
-SHADER_PARAM(ADDOVERBLEND, SHADER_PARAM_TYPE_INTEGER, "0",
-             "use ONE:INVSRCALPHA blending")
-SHADER_PARAM(ADDSELF, SHADER_PARAM_TYPE_FLOAT, "0.0",
-             "amount of base texture to additively blend in")
-SHADER_PARAM(BLENDFRAMES, SHADER_PARAM_TYPE_BOOL, "1",
-             "whether or not to smoothly blend between animated frames")
-SHADER_PARAM(MINSIZE, SHADER_PARAM_TYPE_FLOAT, "0.0",
-             "minimum screen fractional size of particle")
-SHADER_PARAM(STARTFADESIZE, SHADER_PARAM_TYPE_FLOAT, "10.0",
-             "screen fractional size to start fading particle out")
-SHADER_PARAM(ENDFADESIZE, SHADER_PARAM_TYPE_FLOAT, "20.0",
-             "screen fractional size to finish fading particle out")
-SHADER_PARAM(MAXSIZE, SHADER_PARAM_TYPE_FLOAT, "20.0",
-             "maximum screen fractional size of particle")
-SHADER_PARAM(
-    USEINSTANCING, SHADER_PARAM_TYPE_BOOL, "1",
-    "whether to use GPU vertex instancing (submit 1 vert per particle quad)")
-SHADER_PARAM(SPLINETYPE, SHADER_PARAM_TYPE_INTEGER, "0",
-             "spline type 0 = none,  1=ctamull rom")
-SHADER_PARAM(MAXDISTANCE, SHADER_PARAM_TYPE_FLOAT, "100000.0",
-             "maximum distance to draw particles at")
-SHADER_PARAM(FARFADEINTERVAL, SHADER_PARAM_TYPE_FLOAT, "400.0",
-             "interval over which to fade out far away particles")
+  SHADER_PARAM(DEPTHBLEND, SHADER_PARAM_TYPE_INTEGER, "0",
+               "fade at intersection boundaries")
+  SHADER_PARAM(
+      DEPTHBLENDSCALE, SHADER_PARAM_TYPE_FLOAT, "50.0",
+      "Amplify or reduce DEPTHBLEND fading. Lower values make harder edges.")
+  SHADER_PARAM(
+      ORIENTATION, SHADER_PARAM_TYPE_INTEGER, "0",
+      "0 = always face camera, 1 = rotate around z, 2= parallel to ground")
+  SHADER_PARAM(ADDBASETEXTURE2, SHADER_PARAM_TYPE_FLOAT, "0.0",
+               "amount to blend second texture into frame by")
+  SHADER_PARAM(OVERBRIGHTFACTOR, SHADER_PARAM_TYPE_FLOAT, "1.0",
+               "overbright factor for texture. For HDR effects.")
+  SHADER_PARAM(DUALSEQUENCE, SHADER_PARAM_TYPE_INTEGER, "0",
+               "blend two separate animated sequences.")
+  SHADER_PARAM(SEQUENCE_BLEND_MODE, SHADER_PARAM_TYPE_INTEGER, "0",
+               "defines the blend mode between the images un dual sequence "
+               "particles. 0 = avg, 1=alpha from first, rgb from 2nd, 2= first "
+               "over second")
+  SHADER_PARAM(MAXLUMFRAMEBLEND1, SHADER_PARAM_TYPE_INTEGER, "0",
+               "instead of blending between animation frames for the first "
+               "sequence, select pixels based upon max luminance")
+  SHADER_PARAM(MAXLUMFRAMEBLEND2, SHADER_PARAM_TYPE_INTEGER, "0",
+               "instead of blending between animation frames for the 2nd "
+               "sequence, select pixels based upon max luminance")
+  SHADER_PARAM(RAMPTEXTURE, SHADER_PARAM_TYPE_TEXTURE, "",
+               "if specified, then the red value of the image is used to index "
+               "this ramp to produce the output color")
+  SHADER_PARAM(
+      ZOOMANIMATESEQ2, SHADER_PARAM_TYPE_FLOAT, "1.0",
+      "amount to gradually zoom between frames on the second sequence. "
+      "2.0 will double the size of a frame over its lifetime.")
+  SHADER_PARAM(EXTRACTGREENALPHA, SHADER_PARAM_TYPE_INTEGER, "0",
+               "grayscale data sitting in green/alpha channels")
+  SHADER_PARAM(ADDOVERBLEND, SHADER_PARAM_TYPE_INTEGER, "0",
+               "use ONE:INVSRCALPHA blending")
+  SHADER_PARAM(ADDSELF, SHADER_PARAM_TYPE_FLOAT, "0.0",
+               "amount of base texture to additively blend in")
+  SHADER_PARAM(BLENDFRAMES, SHADER_PARAM_TYPE_BOOL, "1",
+               "whether or not to smoothly blend between animated frames")
+  SHADER_PARAM(MINSIZE, SHADER_PARAM_TYPE_FLOAT, "0.0",
+               "minimum screen fractional size of particle")
+  SHADER_PARAM(STARTFADESIZE, SHADER_PARAM_TYPE_FLOAT, "10.0",
+               "screen fractional size to start fading particle out")
+  SHADER_PARAM(ENDFADESIZE, SHADER_PARAM_TYPE_FLOAT, "20.0",
+               "screen fractional size to finish fading particle out")
+  SHADER_PARAM(MAXSIZE, SHADER_PARAM_TYPE_FLOAT, "20.0",
+               "maximum screen fractional size of particle")
+  SHADER_PARAM(
+      USEINSTANCING, SHADER_PARAM_TYPE_BOOL, "1",
+      "whether to use GPU vertex instancing (submit 1 vert per particle quad)")
+  SHADER_PARAM(SPLINETYPE, SHADER_PARAM_TYPE_INTEGER, "0",
+               "spline type 0 = none,  1=ctamull rom")
+  SHADER_PARAM(MAXDISTANCE, SHADER_PARAM_TYPE_FLOAT, "100000.0",
+               "maximum distance to draw particles at")
+  SHADER_PARAM(FARFADEINTERVAL, SHADER_PARAM_TYPE_FLOAT, "400.0",
+               "interval over which to fade out far away particles")
 END_SHADER_PARAMS
 
 SHADER_INIT_PARAMS() {
@@ -367,8 +370,9 @@ SHADER_DRAW {
     if (bDX8)  // bind on 2nd sampelr so we can lerp
       BindTexture(SHADER_SAMPLER1, BASETEXTURE, FRAME);
 
-    if (bDX8 && bAdditive2ndTexture)
+    if (MSVC_SCOPED_DISABLE_WARNING(4127, bDX8 && bAdditive2ndTexture)) {
       BindTexture(SHADER_SAMPLER3, BASETEXTURE, FRAME);
+    }
 
     if (bUseRampTexture && (!bDX8)) {
       BindTexture(SHADER_SAMPLER1, RAMPTEXTURE, FRAME);
@@ -421,9 +425,8 @@ SHADER_DRAW {
                    params[OVERBRIGHTFACTOR]->GetFloatValue(),
                    params[ADDSELF]->GetFloatValue(), 0.0f};
 
-    if (bDX8 && (!bAdditive2ndTexture))  // deal with 0..1 limit for
-                                         // pix shader constants
-    {
+    // deal with 0..1 limit for pix shader constants
+    if (MSVC_SCOPED_DISABLE_WARNING(4127, bDX8 && !bAdditive2ndTexture)) {
       C0[2] *= 0.25f;
       C0[1] *= 0.25f;
     }

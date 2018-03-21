@@ -678,11 +678,11 @@ void CMaterialSubRect::ParseMaterialVars(KeyValues &keyValues) {
     KeyValues *pVar = pKeyValues->GetFirstSubKey();
     while (pVar) {
       if (!Q_strcmp(pVar->GetName(), "$Pos")) {
-        sscanf(pVar->GetString(), "%f %f", &m_vecOffset.x, &m_vecOffset.y);
+        sscanf_s(pVar->GetString(), "%f %f", &m_vecOffset.x, &m_vecOffset.y);
       }
 
       if (!Q_strcmp(pVar->GetName(), "$Size")) {
-        sscanf(pVar->GetString(), "%f %f", &m_vecSize.x, &m_vecSize.y);
+        sscanf_s(pVar->GetString(), "%f %f", &m_vecSize.x, &m_vecSize.y);
       }
 
       if (!Q_strcmp(pVar->GetName(), "$Material")) {
@@ -962,11 +962,11 @@ static IMaterialVar *CreateMatrixMaterialVarFromKeyValue(IMaterial *pMaterial,
 
   VMatrix mat;
   int count =
-      sscanf(pScan, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
-             &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
-             &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
-             &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
-             &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
+      sscanf_s(pScan, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
+               &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
+               &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
+               &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
+               &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
   if (count == 16) {
     return IMaterialVar::Create(pMaterial, pKeyValue->GetName(), mat);
   }
@@ -974,9 +974,9 @@ static IMaterialVar *CreateMatrixMaterialVarFromKeyValue(IMaterial *pMaterial,
   Vector2D scale, center;
   float angle;
   Vector2D translation;
-  count = sscanf(pScan, " center %f %f scale %f %f rotate %f translate %f %f",
-                 &center.x, &center.y, &scale.x, &scale.y, &angle,
-                 &translation.x, &translation.y);
+  count = sscanf_s(pScan, " center %f %f scale %f %f rotate %f translate %f %f",
+                   &center.x, &center.y, &scale.x, &scale.y, &angle,
+                   &translation.x, &translation.y);
   if (count != 7) return NULL;
 
   VMatrix temp;

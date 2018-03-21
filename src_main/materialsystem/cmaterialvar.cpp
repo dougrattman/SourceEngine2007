@@ -1298,11 +1298,11 @@ void CMaterialVar::SetValueAutodetectType(const char *val) {
 
   VMatrix mat;
   int count =
-      sscanf(val, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
-             &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
-             &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
-             &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
-             &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
+      sscanf_s(val, " [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]",
+               &mat.m[0][0], &mat.m[0][1], &mat.m[0][2], &mat.m[0][3],
+               &mat.m[1][0], &mat.m[1][1], &mat.m[1][2], &mat.m[1][3],
+               &mat.m[2][0], &mat.m[2][1], &mat.m[2][2], &mat.m[2][3],
+               &mat.m[3][0], &mat.m[3][1], &mat.m[3][2], &mat.m[3][3]);
   if (count == 16) {
     SetMatrixValue(mat);
     return;
@@ -1311,9 +1311,9 @@ void CMaterialVar::SetValueAutodetectType(const char *val) {
   Vector2D scale, center;
   float angle;
   Vector2D translation;
-  count = sscanf(val, " center %f %f scale %f %f rotate %f translate %f %f",
-                 &center.x, &center.y, &scale.x, &scale.y, &angle,
-                 &translation.x, &translation.y);
+  count = sscanf_s(val, " center %f %f scale %f %f rotate %f translate %f %f",
+                   &center.x, &center.y, &scale.x, &scale.y, &angle,
+                   &translation.x, &translation.y);
   if (count == 7) {
     VMatrix temp;
     MatrixBuildTranslation(mat, -center.x, -center.y, 0.0f);

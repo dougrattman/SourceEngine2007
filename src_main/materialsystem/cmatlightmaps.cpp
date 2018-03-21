@@ -205,7 +205,7 @@ void CMatLightmaps::CleanupLightmaps() {
           (NULL != m_pLightmapDataPtrArray[lightmap])) {
         char szPFMFileName[SOURCE_MAX_PATH];
 
-        sprintf(szPFMFileName, "Lightmap-Page-%d.pfm", lightmap);
+        sprintf_s(szPFMFileName, "Lightmap-Page-%d.pfm", lightmap);
         m_pLightmapDataPtrArray[lightmap]->WritePFM(szPFMFileName);
       }
     }
@@ -804,9 +804,9 @@ void CMatLightmaps::BumpedLightmapBitsToPixelWriter_HDRF(
 // write bumped lightmap update to HDR integer lightmap
 void CMatLightmaps::BumpedLightmapBitsToPixelWriter_HDRI(
     float *SOURCE_RESTRICT pFloatImage, float *SOURCE_RESTRICT pFloatImageBump1,
-    float *SOURCE_RESTRICT pFloatImageBump2, float *SOURCE_RESTRICT pFloatImageBump3,
-    int pLightmapSize[2], int pOffsetIntoLightmapPage[2],
-    FloatBitMap_t *pfmOut) SOURCE_RESTRICT {
+    float *SOURCE_RESTRICT pFloatImageBump2,
+    float *SOURCE_RESTRICT pFloatImageBump3, int pLightmapSize[2],
+    int pOffsetIntoLightmapPage[2], FloatBitMap_t *pfmOut) SOURCE_RESTRICT {
   const int nLightmapSize0 = pLightmapSize[0];
   const int nLightmap0WriterSizeBytes =
       nLightmapSize0 * m_LightmapPixelWriter.GetPixelSize();
@@ -1173,7 +1173,7 @@ void CMatLightmaps::LightmapBitsToPixelWriter_HDRI(
     // Assert((reinterpret_cast<unsigned int>(pSrc) & 15) == 0); // 16-byte
     // aligned?
     static_assert(sizeof(Vector4D) / sizeof(*pSrc) ==
-                        4);  // assert that 1 * 4 = 4
+                  4);  // assert that 1 * 4 = 4
 #ifndef USE_32BIT_LIGHTMAPS_ON_360
 #pragma error("This function only supports 32 bit lightmaps.")
 #endif

@@ -1,4 +1,4 @@
-// Copyright © 1996-2018, Valve Corporation, All rights reserved.
+// Copyright Â© 1996-2018, Valve Corporation, All rights reserved.
 //
 // Purpose: Color correction system
 
@@ -18,7 +18,6 @@
 #include "tier1/generichash.h"
 #include "tier1/utlvector.h"
 
- 
 #include "tier0/include/memdbgon.h"
 
 class ITextureInternal;
@@ -76,7 +75,7 @@ ColorCorrectionLookup_t::~ColorCorrectionLookup_t() {
 
 void ColorCorrectionLookup_t::AllocTexture() {
   char name[64];
-  sprintf(name, "ColorCorrection - %u", m_Handle);
+  sprintf_s(name, "ColorCorrection - %u", m_Handle);
 
   m_pColorCorrectionTexture = ITextureInternal::CreateProceduralTexture(
       name, TEXTURE_GROUP_OTHER, COLOR_CORRECTION_TEXTURE_SIZE,
@@ -345,8 +344,7 @@ ColorCorrectionHandle_t CColorCorrectionSystem::GetLookupHandle(
     const char *pName) {
   // case and slash insensitive
   FileNameHandle_t hName = g_pFullFileSystem->FindOrAddFileName(pName);
-  static_assert(sizeof(FileNameHandle_t) ==
-                      sizeof(ColorCorrectionHandle_t));
+  static_assert(sizeof(FileNameHandle_t) == sizeof(ColorCorrectionHandle_t));
 
   return (ColorCorrectionHandle_t)hName;
 }
@@ -727,7 +725,7 @@ void CColorCorrectionSystem::SetResetable(ColorCorrectionHandle_t handle,
 void CColorCorrectionSystem::GetCurrentColorCorrection(
     ShaderColorCorrectionInfo_t *pInfo) {
   static_assert(COLOR_CORRECTION_MAX_TEXTURES ==
-                      SOURCE_ARRAYSIZE(pInfo->m_pLookupWeights));
+                SOURCE_ARRAYSIZE(pInfo->m_pLookupWeights));
   pInfo->m_bIsEnabled = m_bEnabled && (GetNumLookups() > 0 ||
                                        m_DefaultColorCorrectionWeight != 0.0f);
   pInfo->m_nLookupCount = GetNumLookups();
