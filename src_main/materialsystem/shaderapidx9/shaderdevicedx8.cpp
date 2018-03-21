@@ -1030,7 +1030,8 @@ bool CShaderDeviceMgrDx8::ValidateMode(int nAdapter,
 // Returns the amount of video memory in bytes for a particular adapter
 //-----------------------------------------------------------------------------
 u64 CShaderDeviceMgrDx8::GetVidMemBytes(u32 adapter_idx) const {
-  auto [bytes, error_code] = ::GetVidMemBytes(adapter_idx);
+  u64 bytes;
+  std::tie(bytes, std::ignore) = ::GetVidMemBytes(adapter_idx);
   return bytes;
 }
 

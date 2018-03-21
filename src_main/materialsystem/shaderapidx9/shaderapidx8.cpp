@@ -2383,13 +2383,14 @@ static void CommitSetScissorRect(Direct3DDevice9Wrapper *pDevice,
            (desiredState.m_ScissorRect.top >= 0) &&
            (desiredState.m_ScissorRect.left >= 0));
 
-    std::clamp(desiredState.m_ScissorRect.right, 0L, (long)nWidth);
-    std::clamp(desiredState.m_ScissorRect.left, 0L, (long)nWidth);
-    std::clamp(desiredState.m_ScissorRect.top, 0L, (long)nHeight);
-    std::clamp(desiredState.m_ScissorRect.bottom, 0L, (long)nHeight);
+    RECT scissor_rect = desiredState.m_ScissorRect;
+    scissor_rect.right = std::clamp(scissor_rect.right, 0L, (long)nWidth);
+    scissor_rect.left = std::clamp(scissor_rect.left, 0L, (long)nWidth);
+    scissor_rect.top = std::clamp(scissor_rect.top, 0L, (long)nHeight);
+    scissor_rect.bottom = std::clamp(scissor_rect.bottom, 0L, (long)nHeight);
 
-    Dx9Device()->SetScissorRect(&desiredState.m_ScissorRect);
-    currentState.m_ScissorRect = desiredState.m_ScissorRect;
+    Dx9Device()->SetScissorRect(&scissor_rect);
+    currentState.m_ScissorRect = scissor_rect;
   }
 }
 
@@ -2397,11 +2398,12 @@ static void CommitSetScissorRect(Direct3DDevice9Wrapper *pDevice,
 // If pScissorRect is NULL, disable scissoring by setting the render state
 // If pScissorRect is non-NULL, set the RECT state in Direct3D AND set the
 // renderstate
-inline void CShaderAPIDx8::SetScissorRect(const int nLeft, const int nTop,
-                                          const int nRight, const int nBottom,
+inline void CShaderAPIDx8::SetScissorRect(int nLeft, int nTop, int nRight,
+                                          int nBottom,
                                           const bool bEnableScissor) {
-  Assert((nLeft <= nRight) &&
-         (nTop <= nBottom));  // 360 craps itself if this isn't true
+  // 360 craps itself if this isn't true
+  Assert((nLeft <= nRight) && (nTop <= nBottom));
+
   if (!g_pHardwareConfig->Caps().m_bScissorSupported) return;
 
   // If we're turning it on, check the validity of the rect
@@ -2418,18 +2420,14 @@ inline void CShaderAPIDx8::SetScissorRect(const int nLeft, const int nTop,
     Assert((nRight <= nWidth) && (nBottom <= nHeight) && (nTop >= 0) &&
            (nLeft >= 0));
 
-    std::clamp(nRight, 0, nWidth);
-    std::clamp(nLeft, 0, nWidth);
-    std::clamp(nTop, 0, nHeight);
-    std::clamp(nBottom, 0, nHeight);
+    nRight = std::clamp(nRight, 0, nWidth);
+    nLeft = std::clamp(nLeft, 0, nWidth);
+    nTop = std::clamp(nTop, 0, nHeight);
+    nBottom = std::clamp(nBottom, 0, nHeight);
   }
 
   DWORD dwEnableScissor = bEnableScissor ? TRUE : FALSE;
-  RECT newScissorRect;
-  newScissorRect.left = nLeft;
-  newScissorRect.top = nTop;
-  newScissorRect.right = nRight;
-  newScissorRect.bottom = nBottom;
+  RECT newScissorRect{nLeft, nTop, nRight, nBottom};
 
   if (!m_bResettingRenderState) {
     bool bEnableChanged =
@@ -6463,7 +6461,7 @@ void CShaderAPIDx8::SetRenderTargetEx(
     pZSurface->AddRef();
   } else if (depthTextureHandle == SHADER_RENDERTARGET_NONE) {
     // GR - disable depth buffer
-    pZSurface = NULL;
+    pZSurface = nullptr;
   } else {
     UnbindTexture(depthTextureHandle);
 
@@ -6489,8 +6487,8 @@ void CShaderAPIDx8::SetRenderTargetEx(
 #ifdef _DEBUG
   if (pZSurface) {
     D3DSURFACE_DESC zSurfaceDesc, colorSurfaceDesc;
-    pZSurface->GetDesc(&zSurfaceDesc);
-    pColorSurface->GetDesc(&colorSurfaceDesc);
+    Assert(SUCCEEDED(pZSurface->GetDesc(&zSurfaceDesc)));
+    Assert(SUCCEEDED(pColorSurface->GetDesc(&colorSurfaceDesc)));
     Assert(colorSurfaceDesc.Width <= zSurfaceDesc.Width);
     Assert(colorSurfaceDesc.Height <= zSurfaceDesc.Height);
   }
@@ -6508,14 +6506,15 @@ void CShaderAPIDx8::SetRenderTargetEx(
     // that you want to use the backbuffer as the render target.) hack hack
     // hack!!!!!  If the render target id > 0 and the user passed in NULL,
     // disable the render target
-    Dx9Device()->SetRenderTarget(nRenderTargetID, NULL);
+    Dx9Device()->SetRenderTarget(nRenderTargetID, nullptr);
   } else {
     Dx9Device()->SetRenderTarget(nRenderTargetID, pColorSurface);
   }
 
   // The 0th render target defines which depth buffer we are using, so
-  // don't bother if we are another render target
-  if (nRenderTargetID == 0) {
+  // don't bother if we are another render target. In case no depth surface skip
+  // it.
+  if (nRenderTargetID == 0 && pZSurface != nullptr) {
     Dx9Device()->SetDepthStencilSurface(pZSurface);
   }
 
@@ -6547,8 +6546,6 @@ void CShaderAPIDx8::SetRenderTargetEx(
   m_DynamicState.m_Viewport.Height = (DWORD)-1;
 
   ADD_COMMIT_FUNC(COMMIT_PER_DRAW, COMMIT_ALWAYS, CommitSetViewports);
-
-  //	Assert( ref != 0 );
 }
 
 //-----------------------------------------------------------------------------
